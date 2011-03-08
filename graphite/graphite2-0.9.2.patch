@@ -368,3 +368,15 @@ diff -r 5369cdd12120 src/gr_slot.cpp
  int gr_slot_attr(const gr_slot* p/*not NULL*/, const gr_segment* pSeg/*not NULL*/, gr_attrCode index, gr_uint8 subindex)
  {
      assert(p);
+diff current src/List.h
+--- misc/build/graphite2-0.9.2/src/List.h	Sat Feb 12 22:54:16 2011 +0700
++++ misc/build/graphite2-0.9.2/src/List.h	Fri Feb 18 16:05:40 2011 +0700
+@@ -51,6 +51,6 @@
+     template <typename I> 
+     Vector(I first, const I last)               : m_first(0), m_last(0), m_end(0) { insert(begin(), first, last); }
+-    ~Vector() { free(m_first); }
++    ~Vector() { clear(); free(m_first); }
+     
+     iterator            begin()         { return m_first; }
+     const_iterator      begin() const   { return m_first; }
+
