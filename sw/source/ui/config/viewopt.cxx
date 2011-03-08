@@ -72,6 +72,7 @@ Color SwViewOption::aFieldShadingsColor(COL_LIGHTGRAY);
 Color SwViewOption::aSectionBoundColor(COL_LIGHTGRAY);
 Color SwViewOption::aPageBreakColor(COL_BLUE);
 Color SwViewOption::aScriptIndicatorColor(COL_GREEN);
+Color SwViewOption::aShadowColor(COL_GRAY);
 
 sal_Int32 SwViewOption::nAppearanceFlags = VIEWOPT_DOC_BOUNDARIES|VIEWOPT_OBJECT_BOUNDARIES;
 USHORT SwViewOption::nPixelTwips = 0;   // one pixel on the screen
@@ -418,6 +419,11 @@ Color&   SwViewOption::GetSmarttagColor()
     return aSmarttagColor;
 }
 
+Color&   SwViewOption::GetShadowColor()
+{
+    return aShadowColor;
+}
+
 Color&   SwViewOption::GetFontColor()
 {
     return aFontColor;
@@ -475,6 +481,11 @@ void SwViewOption::ApplyColorConfigValues(const svtools::ColorConfig& rConfig )
     if(aValue.bIsVisible)
         nAppearanceFlags |= VIEWOPT_VISITED_LINKS;
 
+    aValue = rConfig.GetColorValue(svtools::SHADOWCOLOR);
+    aShadowColor.SetColor(aValue.nColor);
+    if(aValue.bIsVisible)
+        nAppearanceFlags |= VIEWOPT_SHADOW;
+
     aDirectCursorColor.SetColor(rConfig.GetColorValue(svtools::WRITERDIRECTCURSOR).nColor);
 
     aTextGridColor.SetColor(rConfig.GetColorValue(svtools::WRITERTEXTGRID).nColor);
@@ -526,6 +537,7 @@ void SwViewOption::SetAppearanceFlag(sal_Int32 nFlag, BOOL bSet, BOOL bSaveInCon
             { VIEWOPT_VISITED_LINKS      ,   svtools::LINKSVISITED },
             { VIEWOPT_FIELD_SHADINGS     ,   svtools::WRITERFIELDSHADINGS },
             { VIEWOPT_SECTION_BOUNDARIES ,   svtools::WRITERSECTIONBOUNDARIES },
+            { VIEWOPT_SHADOW             ,   svtools::SHADOWCOLOR },
             { 0                          ,   svtools::ColorConfigEntryCount }
         };
         sal_uInt16 nPos = 0;

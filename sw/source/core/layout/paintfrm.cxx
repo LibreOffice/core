@@ -5299,20 +5299,23 @@ const sal_Int8 SwPageFrm::mnShadowPxWidth = 10;
                                                  bool bFullBottomShadow,
                                                  bool bRightSidebar )
 {
+    // No shadow in prefs
+    if( !SwViewOption::IsShadow() ) return;
+
     // --> FME 2004-06-24 #i16816# tagged pdf support
     SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, *_pViewShell->GetOut() );
     // <--
 
-    static bool initialized = false;
     static BitmapEx aPageTopRightShadow;
     static BitmapEx aPageBottomRightShadow;
     static BitmapEx aPageBottomLeftShadow;
     static BitmapEx aPageBottomShadowBase;
     static BitmapEx aPageRightShadowBase;
-    static Color aShadowColor( COL_BLACK );
+    static Color aShadowColor;
 
 
-    if(!initialized) {
+    if(aShadowColor != SwViewOption::GetShadowColor() ) {
+        aShadowColor = SwViewOption::GetShadowColor();
         AlphaMask aMask( SW_RES( BMP_PAGE_BOTTOM_RIGHT_SHADOW_MASK ) );
         Bitmap aFilledSquare( Size( mnShadowPxWidth, mnShadowPxWidth ), 24 );
         aFilledSquare.Erase( aShadowColor );
@@ -5332,8 +5335,6 @@ const sal_Int8 SwPageFrm::mnShadowPxWidth = 10;
         aFilledSquare.Erase( aShadowColor );
         aMask = Bitmap( SW_RES( BMP_PAGE_RIGHT_SHADOW_MASK ) );
         aPageRightShadowBase = BitmapEx( aFilledSquare, aMask );
-
-        initialized = true;
     }
 
     SwRect aPaintRect;
