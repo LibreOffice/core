@@ -22,7 +22,7 @@ namespace transex3
 
 bool Treeconfig::parseConfig(){
 
-    string source_config_file = string( static_cast<ByteString>( Export::GetEnv("SOURCE_ROOT_DIR") ).GetBuffer() );
+    string source_config_file = string( static_cast<ByteString>( Export::GetEnv("SRC_ROOT") ).GetBuffer() );
     if( source_config_file.empty() )
     {
         cerr << "Error: no suitable environment set?!?";
@@ -50,13 +50,13 @@ bool Treeconfig::getActiveRepositories( vector<string>& active_repos ){
     string pwd;
     string guessedRepo;
     Export::getCurrentDir( pwd );
-    string source_root = Export::GetEnv( "SOURCE_ROOT_DIR" );
+    string source_root = Export::GetEnv( "SRC_ROOT" );
     string solarsrc    = Export::GetEnv( "SOLARSRC" );
     string partial;
 
     // if we are inside of a repository root then active it otherwise let the app handle the return!
     string::size_type pos = pwd.find_first_of( source_root );
-    if( pos != string::npos && ( pos + source_root.length() +1 ) < pwd.length()){  // I am within SOURCE_ROOT_DIR
+    if( pos != string::npos && ( pos + source_root.length() +1 ) < pwd.length()){  // I am within SRC_ROOT
         partial = pwd.substr( pos + source_root.length() +1  , pwd.length());
         string::size_type nextPart = partial.find_first_of( "/" );
         if( nextPart != string::npos )
@@ -64,7 +64,7 @@ bool Treeconfig::getActiveRepositories( vector<string>& active_repos ){
         else
             guessedRepo = partial;
     }
-    else                              // I am NOT within SOURCE_ROOT_DIR
+    else                              // I am NOT within SRC_ROOT
         hasPath = true;
 
     if( isPresent )
@@ -94,7 +94,7 @@ bool Treeconfig::getActiveRepositories( vector<string>& active_repos ){
     if( !guessedRepo.empty() ){
         active_repos.push_back( guessedRepo );          // add myrepo
     }
-    return hasPath;                                     // are we deep inside of a source tree or outside of SOURCE_ROOT_DIR?
+    return hasPath;                                     // are we deep inside of a source tree or outside of SRC_ROOT?
 }
 
 void Treeconfig::getCurrentDir( string& dir )
@@ -109,7 +109,7 @@ void Treeconfig::getCurrentDir( string& dir )
 
 bool Treeconfig::isConfigFilePresent()
 {
-    string config_file = Export::GetEnv( "SOURCE_ROOT_DIR" );
+    string config_file = Export::GetEnv( "SRC_ROOT" );
     config_file += "/source_config";
 
     struct stat status;

@@ -70,7 +70,9 @@ void SourceTreeIterator::ExecuteDirectory( transex::Directory& aDirectory )
         static rtl::OUString WCARD4 ( RTL_CONSTASCII_USTRINGPARAM("common") );
         static rtl::OUString WCARD5 ( RTL_CONSTASCII_USTRINGPARAM("unxmac") );
         static rtl::OUString WCARD6 ( RTL_CONSTASCII_USTRINGPARAM("unxubt") );
-        static rtl::OUString WCARD7 ( RTL_CONSTASCII_USTRINGPARAM(".svn") );
+        static rtl::OUString WCARD7 ( RTL_CONSTASCII_USTRINGPARAM(".git") );
+        static rtl::OUString WCARD8 ( RTL_CONSTASCII_USTRINGPARAM("clone") );
+        static rtl::OUString WCARD9 ( RTL_CONSTASCII_USTRINGPARAM("install") );
 
 
         if( sDirName.indexOf( WCARD1 , 0 ) > -1 ||
@@ -79,7 +81,9 @@ void SourceTreeIterator::ExecuteDirectory( transex::Directory& aDirectory )
             sDirName.indexOf( WCARD4 , 0 ) > -1 ||
             sDirName.indexOf( WCARD5 , 0 ) > -1 ||
             sDirName.indexOf( WCARD6 , 0 ) > -1 ||
-            sDirName.indexOf( WCARD7 , 0 ) > -1
+            sDirName.indexOf( WCARD7 , 0 ) > -1 ||
+            sDirName.indexOf( WCARD8 , 0 ) > -1 ||
+            sDirName.indexOf( WCARD9 , 0 ) > -1
            )    return;
         //printf("**** %s \n", OUStringToOString( sDirName , RTL_TEXTENCODING_UTF8 , sDirName.getLength() ).getStr() );
 

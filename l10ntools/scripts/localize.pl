@@ -170,11 +170,11 @@ sub splitfile{
     }
     close( MYFILE );
 
-    if( !defined $ENV{SOURCE_ROOT_DIR} ){
-        print "Error, no SOURCE_ROOT_DIR in env found.\n";
+    if( !defined $ENV{SRC_ROOT} ){
+        print "Error, no SRC_ROOT in env found.\n";
         exit( -1 );
     }
-    my $src_root = $ENV{SOURCE_ROOT_DIR};
+    my $src_root = $ENV{SRC_ROOT};
     my $ooo_src_root = $ENV{SRC_ROOT};
     my $so_l10n_path  = $src_root."/sun/l10n_so/source";
     my $ooo_l10n_path = $ooo_src_root."/l10n/source";
@@ -387,7 +387,7 @@ sub collectfiles{
     STDOUT->autoflush( 1 );
 
     my $working_path = getcwd();
-    chdir $ENV{SOURCE_ROOT_DIR}, if defined $ENV{SOURCE_ROOT_DIR};
+    chdir $ENV{SRC_ROOT}, if defined $ENV{SRC_ROOT};
     add_paths( $langhash_ref );
 
     my ( $LOCALIZEPARTICLE , $localizeSDF ) = File::Temp::tempfile();

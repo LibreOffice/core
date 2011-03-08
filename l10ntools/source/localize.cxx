@@ -122,6 +122,56 @@ const char *PositiveList[] = {
     "NULL"
 };
 
+const char *ModuleList[] = {
+    "accessibility",
+    "avmedia",
+    "basctl",
+    "basic",
+    "chart2",
+    "connectivity",
+    "crashrep",
+    "cui",
+    "dbaccess",
+    "desktop",
+    "editeng",
+    "extensions",
+    "filter",
+    "forms",
+    "formula",
+    "fpicker",
+    "framework",
+    "helpcontent2",
+    "instsetoo_native",
+    "mysqlc",
+    "officecfg",
+    "padmin",
+    "readlicense_oo",
+    "reportbuilder",
+    "reportdesign",
+    "sc",
+    "scaddins",
+    "sccomp",
+    "scp2",
+    "sd",
+    "sdext",
+    "setup_native",
+    "sfx2",
+    "shell",
+    "starmath",
+    "svl",
+    "svtools",
+    "svx",
+    "sw",
+    "swext",
+    "sysui",
+    "ucbhelper",
+    "uui",
+    "vcl",
+    "wizards",
+    "xmlsecurity",
+    "NULL",
+};
+
 
 const char PRJ_DIR_NAME[] = "prj";
 const char DLIST_NAME[] = "d.lst";
@@ -263,8 +313,16 @@ const ByteString SourceTreeLocalizer::GetProjectRootRel()
 
 bool skipProject( ByteString sPrj )
 {
-    static const ByteString READLICENSE( "readlicense" );
-    return sPrj.EqualsIgnoreCaseAscii( READLICENSE );
+    int nIndex = 0;
+    bool bReturn = TRUE;
+    ByteString sModule( ModuleList[ nIndex ] );
+    while( !sModule.Equals( "NULL" ) && bReturn ) {
+        if( sPrj.Equals ( sModule ) )
+            bReturn = FALSE;
+        nIndex++;
+        sModule = ModuleList[ nIndex ];
+    }
+    return bReturn;
 }
 
 /*****************************************************************************/
@@ -937,9 +995,9 @@ int _cdecl main( int argc, char *argv[] )
     {
         string curRepository;
         if( has_minor_ext )
-            curRepository = string( Export::GetEnv("SOURCE_ROOT_DIR") ) + "/" + *iter + minor_ext;
+            curRepository = string( Export::GetEnv("SRC_ROOT") ) + "/" + *iter + minor_ext;
         else
-            curRepository = string( Export::GetEnv("SOURCE_ROOT_DIR") ) + "/" + *iter;
+            curRepository = string( Export::GetEnv("SRC_ROOT") ) + "/" + *iter;
         cout << "Localizing repository " << curRepository << "\n";
         SourceTreeLocalizer aIter( ByteString( curRepository.c_str() ) , sVersion , (sOutput.Len() > 0) , bSkipLinks );
         aIter.SetLanguageRestriction( sLanguages );
