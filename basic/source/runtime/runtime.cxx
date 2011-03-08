@@ -981,7 +981,7 @@ SbxVariableRef SbiRuntime::PopVar()
     SbxVariableRef xVar = refExprStk->Get( --nExprLvl );
 #ifdef DBG_UTIL
     if ( xVar->GetName().EqualsAscii( "Cells" ) )
-        DBG_TRACE( "" );
+        OSL_TRACE( "" );
 #endif
     // Methods halten im 0.Parameter sich selbst, also weghauen
     if( xVar->IsA( TYPE(SbxMethod) ) )

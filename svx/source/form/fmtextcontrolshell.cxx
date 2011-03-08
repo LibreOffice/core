@@ -584,7 +584,7 @@ namespace svx
     {
         if ( m_bNeedClipboardInvalidation )
         {
-            DBG_TRACE( "FmTextControlShell::ClipBoard: invalidating clipboard slots" );
+            OSL_TRACE( "FmTextControlShell::ClipBoard: invalidating clipboard slots" );
             m_rBindings.Invalidate( SID_CUT );
             m_rBindings.Invalidate( SID_COPY );
             m_rBindings.Invalidate( SID_PASTE );
@@ -993,7 +993,7 @@ namespace svx
                     bNeedSelection = true;
                     bNeedTextComponent = true;
                     bNeedWriteableControl = true;
-                    DBG_TRACE( "FmTextControlShell::ClipBoard: need to invalidate again" );
+                    OSL_TRACE( "FmTextControlShell::ClipBoard: need to invalidate again" );
                     m_bNeedClipboardInvalidation = true;
                     break;
 
@@ -1193,7 +1193,7 @@ namespace svx
 
         if ( m_xActiveTextComponent.is() )
         {
-            DBG_TRACE( "FmTextControlShell::ClipBoard: stopping timer for clipboard invalidation" );
+            OSL_TRACE( "FmTextControlShell::ClipBoard: stopping timer for clipboard invalidation" );
             m_aClipboardInvalidation.Stop();
         }
         // no more active control
@@ -1258,7 +1258,7 @@ namespace svx
 
         if ( m_xActiveTextComponent.is() )
         {
-            DBG_TRACE( "FmTextControlShell::ClipBoard: starting timer for clipboard invalidation" );
+            OSL_TRACE( "FmTextControlShell::ClipBoard: starting timer for clipboard invalidation" );
             m_aClipboardInvalidation.Start();
         }
 

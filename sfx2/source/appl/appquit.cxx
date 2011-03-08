@@ -81,7 +81,7 @@ BOOL SfxApplication::QueryExit_Impl()
         // Not really exit, only minimize
         InfoBox aInfoBox( NULL, SfxResId(MSG_CANT_QUIT) );
         aInfoBox.Execute();
-        DBG_TRACE( "QueryExit => FALSE (in use)" );
+        OSL_TRACE( "QueryExit => FALSE (in use)" );
         return FALSE;
     }
 

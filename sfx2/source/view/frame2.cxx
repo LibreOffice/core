@@ -122,7 +122,7 @@ long SfxFrameWindow_Impl::Notify( NotifyEvent& rNEvt )
     {
         if ( pView->GetViewShell() && !pView->GetViewShell()->GetUIActiveIPClient_Impl() && !pFrame->IsInPlace() )
         {
-            DBG_TRACE("SfxFrame: GotFocus");
+            OSL_TRACE("SfxFrame: GotFocus");
             pView->MakeActive_Impl( FALSE );
         }
 

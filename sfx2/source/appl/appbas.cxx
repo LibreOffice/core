@@ -192,7 +192,7 @@ void SfxApplication::EnterBasicCall()
 {
     if ( 1 == ++pAppData_Impl->nBasicCallLevel )
     {
-        DBG_TRACE( "SfxShellObject: BASIC-on-demand" );
+        OSL_TRACE( "SfxShellObject: BASIC-on-demand" );
 
         // First load the BASIC
         GetBasic();

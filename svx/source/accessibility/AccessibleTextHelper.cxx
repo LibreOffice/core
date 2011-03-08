@@ -490,12 +490,12 @@ namespace accessibility
             if( bHaveFocus )
             {
                 GotPropertyEvent( uno::makeAny(AccessibleStateType::FOCUSED), AccessibleEventId::STATE_CHANGED );
-                DBG_TRACE("AccessibleTextHelper_Impl::SetShapeFocus(): Parent object received focus" );
+                OSL_TRACE("AccessibleTextHelper_Impl::SetShapeFocus(): Parent object received focus" );
             }
             else
             {
                 LostPropertyEvent( uno::makeAny(AccessibleStateType::FOCUSED), AccessibleEventId::STATE_CHANGED );
-                DBG_TRACE("AccessibleTextHelper_Impl::SetShapeFocus(): Parent object lost focus" );
+                OSL_TRACE("AccessibleTextHelper_Impl::SetShapeFocus(): Parent object lost focus" );
             }
         }
     }
@@ -574,7 +574,7 @@ namespace accessibility
                     // #103998# Not that important, changed from assertion to trace
                     if( mbThisHasFocus )
                     {
-                        DBG_TRACE("AccessibleTextHelper_Impl::UpdateSelection(): Parent has focus!");
+                        OSL_TRACE("AccessibleTextHelper_Impl::UpdateSelection(): Parent has focus!");
                     }
 
                     USHORT nMaxValidParaIndex( static_cast< USHORT >( GetTextForwarder().GetParagraphCount() ) - 1 );

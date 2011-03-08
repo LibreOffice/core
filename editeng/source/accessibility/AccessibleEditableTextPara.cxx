@@ -897,7 +897,7 @@ namespace accessibility
 
 #ifdef DBG_UTIL
         if( !mxParent.is() )
-            DBG_TRACE( "AccessibleEditableTextPara::getAccessibleParent: no frontend set, did somebody forgot to call AccessibleTextHelper::SetEventSource()?");
+            OSL_TRACE( "AccessibleEditableTextPara::getAccessibleParent: no frontend set, did somebody forgot to call AccessibleTextHelper::SetEventSource()?");
 #endif
 
         return mxParent;

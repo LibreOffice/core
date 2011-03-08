@@ -507,7 +507,7 @@ void SfxDispatcher::Pop
         pImp->aToDoStack.Push( SfxToDo_Impl(bPush, bDelete, bUntil, rShell) );
         if ( bFlushed )
         {
-            DBG_TRACE("Unflushed dispatcher!");
+            OSL_TRACE("Unflushed dispatcher!");
             bFlushed = sal_False;
             pImp->bUpdated = sal_False;
 
@@ -1881,7 +1881,7 @@ void SfxDispatcher::FlushImpl()
     DBG_MEMTEST();
     SFX_STACK(SfxDispatcher::FlushImpl);
 
-    DBG_TRACE("Flushing dispatcher!");
+    OSL_TRACE("Flushing dispatcher!");
 
 #ifdef DBG_UTIL
     ByteString aMsg( "SfxDispatcher(" );
@@ -1962,7 +1962,7 @@ void SfxDispatcher::FlushImpl()
     pImp->bFlushing = sal_False;
     pImp->bUpdated = sal_False; // not only when bModify, if Doc/Template-Config
     bFlushed = sal_True;
-    DBG_TRACE("Successfully flushed dispatcher!");
+    OSL_TRACE("Successfully flushed dispatcher!");
 
     // Activate the Shells and possible delete them in the 2nd round
     for ( nToDo = aToDoCopy.Count()-1; nToDo >= 0; --nToDo )
@@ -2689,9 +2689,9 @@ void SfxDispatcher::DebugOutput_Impl() const
     DbgGetData()->nTraceOut = DBG_OUT_FILE;
 
     if (bFlushed)
-        DBG_TRACE("Flushed");
+        OSL_TRACE("Flushed");
     if (pImp->bUpdated)
-        DBG_TRACE("updated");
+        OSL_TRACE("updated");
 
     for ( sal_uInt16 nShell = pImp->aStack.Count(); nShell > 0; --nShell )
     {
