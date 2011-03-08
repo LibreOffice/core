@@ -1082,7 +1082,7 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
         {
             rtl::OUString aName = iter->GetName();
 
-            DBG_TRACESTR(String(iter->GetName()));
+            OSL_TRACE( iter->GetName().getStr() );
 
             bool bData = iter->IsDataLayout();
 
@@ -1313,7 +1313,7 @@ void ScDPSaveDimension::Refresh( const com::sun::star::uno::Reference<
             return;
         if ( pSelectedPage )
         {//check pSelected page
-            DBG_TRACESTR( String(*pSelectedPage) );
+            OSL_TRACE( *pSelectedPage.getStr() );
             if ( pCache->GetIdByItemData( nSrcDim, *pSelectedPage ) == -1 )
             {
                 delete pSelectedPage;
@@ -1351,7 +1351,7 @@ void ScDPSaveDimension::Refresh( const com::sun::star::uno::Reference<
                     if( pReferenceValue->ReferenceItemType == DataPilotFieldReferenceItemType::NAMED )
                     {
                         const ::rtl::OUString& sReferenceFieldName = pReferenceValue->ReferenceField;
-                        DBG_TRACESTR( String(sReferenceFieldName) );
+                        OSL_TRACE( sReferenceFieldName.getStr() );
                         SCCOL nRefDim = pCache->GetDimensionIndex( sReferenceFieldName );
                         bool bValid = true;
                         if ( nRefDim == -1 )
@@ -1359,7 +1359,7 @@ void ScDPSaveDimension::Refresh( const com::sun::star::uno::Reference<
                         else if ( pReferenceValue->ReferenceType != sheet::DataPilotFieldReferenceType::RUNNING_TOTAL )
                         { //running total has not reference item
                             const ::rtl::OUString& sReferenceItemName = pReferenceValue->ReferenceItemName;
-                            DBG_TRACESTR( String(sReferenceItemName) );
+                            OSL_TRACE( sReferenceItemName.getStr() );
                             if ( pCache->GetIdByItemData( nRefDim, sReferenceItemName ) == -1 )
                                 bValid = false;
                         }
