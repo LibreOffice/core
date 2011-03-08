@@ -401,14 +401,14 @@ ModelessDialog RID_SCDLG_FILTER
     };
     HelpButton BTN_HELP
     {
-        Pos = MAP_APPFONT ( 62 , 101 ) ;
+        Pos = MAP_APPFONT ( 72 , 101 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
     MoreButton BTN_MORE
     {
         Pos = MAP_APPFONT ( 6 , 101 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
         TabStop = TRUE ;
         MapUnit = MAP_APPFONT ;
         Delta = 81 ;
