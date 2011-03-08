@@ -2984,7 +2984,7 @@ bool ScDPResultDimension::IsValidEntry( const vector< SCROW >& aMembers ) const
 #ifdef DBG_UTIL
     ByteString strTemp ("IsValidEntry: Member not found, DimName = " );
     strTemp += ByteString( GetName(), RTL_TEXTENCODING_UTF8 );
-    DBG_TRACE( strTemp.GetBuffer() );
+    OSL_TRACE( strTemp.GetBuffer() );
 #endif
     return false;
 }
