@@ -3018,6 +3018,12 @@ void ScTable::SetDrawPageSize(bool bResetStreamValid, bool bUpdateNoteCaptionPos
         SetStreamValid(FALSE);
 }
 
+ScRangeName* ScTable::GetRangeName()
+{
+    if (!mpRangeName)
+        mpRangeName = new ScRangeName(pDocument);
+}
+
 
 ULONG ScTable::GetRowOffset( SCROW nRow ) const
 {

@@ -270,6 +270,7 @@ ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const String& rNewName,
     aTabBgColor( COL_AUTO ),
     nScenarioFlags( 0 ),
     bActiveScenario( FALSE ),
+    mpRangeName(NULL),
     mbPageBreaksValid(false)
 {
 
@@ -337,6 +338,7 @@ ScTable::~ScTable()
     delete pRepeatColRange;
     delete pRepeatRowRange;
     delete pScenarioRanges;
+    delete mpRangeName;
     DestroySortCollator();
 }
 

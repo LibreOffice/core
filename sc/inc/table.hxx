@@ -89,6 +89,7 @@ class ScFlatBoolColSegments;
 struct ScSetStringParam;
 struct ScColWidthParam;
 struct ScColWidthParam;
+class ScRangeName;
 
 typedef boost::unordered_map< ::rtl::OUString, rtl::OUString, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > NameToNameMap;
 
@@ -187,6 +188,7 @@ private:
     USHORT          nScenarioFlags;
     BOOL            bActiveScenario;
     NameToNameMap       localNameToGlobalName;
+    ScRangeName*    mpRangeName;
     bool            mbPageBreaksValid;
 
 friend class ScDocument;                    // fuer FillInfo
@@ -791,6 +793,8 @@ public:
     void        InitSortCollator( const ScSortParam& rPar );
     void        DestroySortCollator();
     void        SetDrawPageSize( bool bResetStreamValid = true, bool bUpdateNoteCaptionPos = true );
+
+    ScRangeName* GetRangeName();
 
 private:
     void        FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
