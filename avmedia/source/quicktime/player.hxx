@@ -52,8 +52,6 @@ public:
 
     bool create( const ::rtl::OUString& rURL );
 
-//    void processMessage( GstMessage *message );
-
     // XPlayer
     virtual void SAL_CALL start(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL stop(  ) throw (::com::sun::star::uno::RuntimeException);
@@ -87,9 +85,7 @@ private:
     ::rtl::OUString         maURL;
 
     QTMovie                 *mpMovie;      // the Movie object
-  /* GST
-    sal_Bool                mbFakeVideo;
-  */
+
     float                   mnUnmutedVolume;
     double                  mnStopTime;
 

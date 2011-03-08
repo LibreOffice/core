@@ -88,7 +88,6 @@ uno::Reference< media::XPlayer > MediaWindowBaseImpl::createPlayer( const ::rtl:
     return xPlayer;
 }
 
-
 // ---------------------------------------------------------------------
 
 void MediaWindowBaseImpl::setURL( const ::rtl::OUString& rURL )
@@ -405,12 +404,7 @@ void MediaWindowBaseImpl::executeMediaItem( const MediaItem& rItem )
             case( MEDIASTATE_PLAY ):
             case( MEDIASTATE_PLAYFFW ):
             {
-/*
-                const double fNewRate = ( ( MEDIASTATE_PLAYFFW == rItem.getState() ) ? AVMEDIA_FFW_PLAYRATE : 1.0 );
 
-                if( getRate() != fNewRate )
-                    setRate( fNewRate );
-*/
                 if( !isPlaying() )
                     start();
             }

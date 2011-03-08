@@ -256,7 +256,6 @@ void SAL_CALL SoundHandler::impl_initService()
 {
 }
 
-
 /*-************************************************************************************************************//**
     @short      standard ctor
     @descr      These initialize a new instance of this class with needed informations for work.

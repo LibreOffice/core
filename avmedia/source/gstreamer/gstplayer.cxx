@@ -295,7 +295,6 @@ bool Player::create( const ::rtl::OUString& rURL )
         bRet = true;
     }
 
-
     if( bRet )
         maURL = rURL;
     else

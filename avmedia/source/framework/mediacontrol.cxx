@@ -93,7 +93,6 @@ MediaControl::MediaControl( Window* pParent, MediaControlStyle eControlStyle ) :
     if( MEDIACONTROLSTYLE_SINGLELINE != meControlStyle )
     {
 
-
         maPlayToolBox.InsertItem( AVMEDIA_TOOLBOXITEM_OPEN, implGetImage( AVMEDIA_IMG_OPEN ), String( AVMEDIA_RESID( AVMEDIA_STR_OPEN ) ) );
         maPlayToolBox.SetHelpId( AVMEDIA_TOOLBOXITEM_OPEN, HID_AVMEDIA_TOOLBOXITEM_OPEN );
 

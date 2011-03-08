@@ -371,7 +371,6 @@ void Window::updatePointer()
     switch( mnPointerType )
     {
         case( awt::SystemPointer::CROSS ): pCursorName = IDC_CROSS; break;
-        //case( awt::SystemPointer::HAND ): pCursorName = IDC_HAND; break;
         case( awt::SystemPointer::MOVE ): pCursorName = IDC_SIZEALL; break;
         case( awt::SystemPointer::WAIT ): pCursorName = IDC_WAIT; break;
 
