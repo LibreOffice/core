@@ -73,9 +73,7 @@
 #include <svx/svdpool.hxx>
 #include <svx/svdview.hxx>
 #include "View.hxx"
-#ifndef SVX_LIGHT
 #include "DrawDocShell.hxx"
-#endif
 #include "ViewShell.hxx"
 #include "DrawViewShell.hxx"
 #include "unoobj.hxx"

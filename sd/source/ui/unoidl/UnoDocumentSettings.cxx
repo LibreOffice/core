@@ -45,23 +45,15 @@
 #include <vcl/svapp.hxx>
 
 #include "drawdoc.hxx"
-#ifndef SVX_LIGHT
 #include "DrawDocShell.hxx"
-#endif
 #include "unomodel.hxx"
 
-#ifndef SVX_LIGHT
 #include "optsitem.hxx"
 #include <sfx2/printer.hxx>
 #include "sdattr.hxx"
-#endif
 #include "../inc/ViewShell.hxx"
 #include "../inc/FrameView.hxx"
-#ifndef SVX_LIGHT
 #include "Outliner.hxx"
-#else
-#include <svx/svdoutl.hxx>
-#endif
 #include <editeng/editstat.hxx>
 #include <svx/unoapi.hxx>
 
@@ -176,7 +168,6 @@ enum SdDocumentSettingsPropertyHandles
             { MAP_LEN("DefaultTabStop"),        HANDLE_TABSTOP,             &::getCppuType((const sal_Int32*)0),    0,  0 },
             { MAP_LEN("PrinterName"),           HANDLE_PRINTERNAME,         &::getCppuType((const OUString*)0),     0,  0 },
             { MAP_LEN("PrinterSetup"),          HANDLE_PRINTERJOB,          &::getCppuType((const uno::Sequence < sal_Int8 > *)0),  0, MID_PRINTER },
-#ifndef SVX_LIGHT
 
             { MAP_LEN("IsPrintPageName"),       HANDLE_PRINTPAGENAME,       &::getBooleanCppuType(),                0,  MID_PRINTER },
             { MAP_LEN("IsPrintDate"),           HANDLE_PRINTDATE,           &::getBooleanCppuType(),                0,  MID_PRINTER },
@@ -188,7 +179,6 @@ enum SdDocumentSettingsPropertyHandles
             { MAP_LEN("IsPrintBookletFront"),   HANDLE_PRINTBOOKLETFRONT,   &::getBooleanCppuType(),                0,  MID_PRINTER },
             { MAP_LEN("IsPrintBookletBack"),    HANDLE_PRINTBOOKLETBACK,    &::getBooleanCppuType(),                0,  MID_PRINTER },
             { MAP_LEN("PrintQuality"),          HANDLE_PRINTQUALITY,        &::getCppuType((const sal_Int32*)0),    0,  MID_PRINTER },
-#endif
             { MAP_LEN("ColorTableURL"),         HANDLE_COLORTABLEURL,       &::getCppuType((const OUString*)0),     0,  0 },
             { MAP_LEN("DashTableURL"),          HANDLE_DASHTABLEURL,        &::getCppuType((const OUString*)0),     0,  0 },
             { MAP_LEN("LineEndTableURL"),       HANDLE_LINEENDTABLEURL,     &::getCppuType((const OUString*)0),     0,  0 },

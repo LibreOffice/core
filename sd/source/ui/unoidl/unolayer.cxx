@@ -42,9 +42,7 @@
 // folgende fuer InsertSdPage()
 #include <svx/svdlayer.hxx>
 
-#ifndef SVX_LIGHT
 #include "DrawDocShell.hxx"
-#endif
 #include <drawdoc.hxx>
 #include <unomodel.hxx>
 #include "unoprnms.hxx"
@@ -268,10 +266,8 @@ void SAL_CALL SdLayer::setPropertyValue( const OUString& aPropertyName, const un
         throw beans::UnknownPropertyException();
     }
 
-#ifndef SVX_LIGHT
     if( pLayerManager->GetDocShell() )
         pLayerManager->GetDocShell()->SetModified();
-#endif
 }
 
 uno::Any SAL_CALL SdLayer::getPropertyValue( const OUString& PropertyName )
@@ -343,7 +339,6 @@ sal_Bool SdLayer::get( LayerAttribute what ) throw()
             }
         }
 
-#ifndef SVX_LIGHT
         // Versuch 2. Info von der FrameView besorgen
         if(pLayerManager->GetDocShell())
         {
@@ -356,7 +351,6 @@ sal_Bool SdLayer::get( LayerAttribute what ) throw()
                 case LOCKED:    return pFrameView->GetLockedLayers().IsSet(pLayer->GetID());
                 }
         }
-#endif
     }
     return sal_False; //TODO: uno::Exception?
 }
@@ -385,7 +379,6 @@ void SdLayer::set( LayerAttribute what, sal_Bool flag ) throw()
             }
         }
 
-#ifndef SVX_LIGHT
         // Versuch 2. Info von der FrameView besorgen
         if(pLayerManager->GetDocShell())
         {
@@ -418,7 +411,6 @@ void SdLayer::set( LayerAttribute what, sal_Bool flag ) throw()
                 return;
             }
         }
-#endif
     }
     //TODO: uno::Exception?
 }

@@ -72,9 +72,7 @@
 #include "ViewShell.hxx"
 #include "unokywds.hxx"
 #include "unopage.hxx"
-#ifndef SVX_LIGHT
 #include "DrawDocShell.hxx"
-#endif
 #include "helpids.h"
 #include "glob.hxx"
 #include "glob.hrc"
