@@ -1702,7 +1702,6 @@ void SdXMLControlShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
         DBG_ASSERT( maFormId.getLength(), "draw:control without a form:id attribute!" );
         if( maFormId.getLength() )
         {
-#ifndef SVX_LIGHT
             if( GetImport().IsFormsSupported() )
             {
                 uno::Reference< awt::XControlModel > xControlModel( GetImport().GetFormImport()->lookupControl( maFormId ), uno::UNO_QUERY );
@@ -1714,7 +1713,6 @@ void SdXMLControlShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
 
                 }
             }
-#endif // #ifndef SVX_LIGHT
         }
 
         SetStyle();
@@ -2512,14 +2510,12 @@ void SdXMLChartShapeContext::StartElement(const uno::Reference< xml::sax::XAttri
                 aAny <<= aCLSID;
                 xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("CLSID") ), aAny );
 
-#ifndef SVX_LIGHT
                 aAny = xProps->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("Model") ) );
                 uno::Reference< frame::XModel > xChartModel;
                 if( aAny >>= xChartModel )
                 {
                     mpChartContext = GetImport().GetChartImport()->CreateChartContext( GetImport(), XML_NAMESPACE_SVG, GetXMLToken(XML_CHART), xChartModel, xAttrList );
                 }
-#endif
             }
         }
 

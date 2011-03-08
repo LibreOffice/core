@@ -601,7 +601,6 @@ ULONG EditView::Read( SvStream& rInput, const String& rBaseURL, EETextFormat eFo
     return rInput.GetError();
 }
 
-#ifndef SVX_LIGHT
 ULONG EditView::Write( SvStream& rOutput, EETextFormat eFormat )
 {
     DBG_CHKTHIS( EditView, 0 );
@@ -610,7 +609,6 @@ ULONG EditView::Write( SvStream& rOutput, EETextFormat eFormat )
     ShowCursor();
     return rOutput.GetError();
 }
-#endif
 
 void EditView::Cut()
 {
@@ -936,30 +934,22 @@ void EditView::CompleteAutoCorrect( Window* pFrameWin )
 
 EESpellState EditView::StartSpeller( sal_Bool bMultipleDoc )
 {
-#ifdef SVX_LIGHT
-    return EE_SPELL_NOSPELLER;
-#else
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     if ( !PIMPEE->GetSpeller().is() )
         return EE_SPELL_NOSPELLER;
 
     return PIMPEE->Spell( this, bMultipleDoc );
-#endif
 }
 
 EESpellState EditView::StartThesaurus()
 {
-#ifdef SVX_LIGHT
-    return EE_SPELL_NOSPELLER;
-#else
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     if ( !PIMPEE->GetSpeller().is() )
         return EE_SPELL_NOSPELLER;
 
     return PIMPEE->StartThesaurus( this );
-#endif
 }
 
 
@@ -967,12 +957,9 @@ void EditView::StartTextConversion(
         LanguageType nSrcLang, LanguageType nDestLang, const Font *pDestFont,
         INT32 nOptions, BOOL bIsInteractive, BOOL bMultipleDoc )
 {
-#ifdef SVX_LIGHT
-#else
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     PIMPEE->Convert( this, nSrcLang, nDestLang, pDestFont, nOptions, bIsInteractive, bMultipleDoc );
-#endif
 }
 
 
@@ -1028,7 +1015,6 @@ static Image lcl_GetImageFromPngUrl( const OUString &rFileUrl )
 
 void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
 {
-#ifndef SVX_LIGHT
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
 
@@ -1302,7 +1288,6 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
             SetSelection( aOldSel );
         }
     }
-#endif
 }
 
 void EditView::SpellIgnoreWord()

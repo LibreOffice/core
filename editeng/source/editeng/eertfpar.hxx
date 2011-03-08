@@ -33,8 +33,6 @@
 #include <editdoc.hxx>
 #include <impedit.hxx>
 
-#ifndef SVX_LIGHT
-
 class EditNodeIdx : public SvxNodeIdx
 {
 private:
@@ -125,7 +123,6 @@ SV_DECL_REF( EditRTFParser )
 SV_IMPL_REF( EditRTFParser );
 
 
-#endif  // !SVX_LIGH
 #endif  //_EERTFPAR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

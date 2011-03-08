@@ -1049,19 +1049,15 @@ XMLShapeImportHelper* SvXMLImport::CreateShapeImport()
     return new XMLShapeImportHelper( *this, mxModel );
 }
 
-#ifndef SVX_LIGHT
 SchXMLImportHelper* SvXMLImport::CreateChartImport()
 {
     return new SchXMLImportHelper();
 }
-#endif
 
-#ifndef SVX_LIGHT
 ::xmloff::OFormLayerXMLImport* SvXMLImport::CreateFormImport()
 {
     return new ::xmloff::OFormLayerXMLImport(*this);
 }
-#endif // #ifndef SVX_LIGHT
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1492,7 +1488,6 @@ void SvXMLImport::AddNumberStyle(sal_Int32 nKey, const OUString& rName)
 
 XMLEventImportHelper& SvXMLImport::GetEventImport()
 {
-#ifndef SVX_LIGHT
     if (!mpEventImportHelper)
     {
         // construct event helper and register StarBasic handler and standard
@@ -1511,7 +1506,6 @@ XMLEventImportHelper& SvXMLImport::GetEventImport()
         mpEventImportHelper->RegisterFactory(sStarBasicCap,
                                             new XMLStarBasicContextFactory());
     }
-#endif
 
     return *mpEventImportHelper;
 }
@@ -1558,10 +1552,8 @@ void SvXMLImport::SetAutoStyles( SvXMLStylesContext *pAutoStyles )
     mxAutoStyles = pAutoStyles;
     GetTextImport()->SetAutoStyles( pAutoStyles );
     GetShapeImport()->SetAutoStylesContext( pAutoStyles );
-#ifndef SVX_LIGHT
     GetChartImport()->SetAutoStylesContext( pAutoStyles );
     GetFormImport()->setAutoStyleContext( pAutoStyles );
-#endif
 }
 
 void SvXMLImport::SetMasterStyles( SvXMLStylesContext *pMasterStyles )

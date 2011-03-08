@@ -51,7 +51,6 @@ namespace svx
 
 #define CONST_CHAR( propname ) propname, sizeof(propname) - 1
 
-#ifndef SVX_LIGHT
     //====================================================================
     //= ODADescriptorImpl
     //====================================================================
@@ -325,67 +324,41 @@ namespace svx
         // don't need to rebuild next time
         m_bSetOutOfDate = sal_True;
     }
-#endif
 
     //====================================================================
     //= ODataAccessDescriptor
     //====================================================================
     //--------------------------------------------------------------------
     ODataAccessDescriptor::ODataAccessDescriptor()
-#ifndef SVX_LIGHT
         :m_pImpl(new ODADescriptorImpl)
-#else
-        :m_pImpl(NULL)
-#endif
     {
     }
 
     //--------------------------------------------------------------------
     ODataAccessDescriptor::ODataAccessDescriptor( const ODataAccessDescriptor& _rSource )
-#ifndef SVX_LIGHT
         :m_pImpl(new ODADescriptorImpl(*_rSource.m_pImpl))
-#else
-        :m_pImpl(NULL)
-#endif
     {
     }
 
     //--------------------------------------------------------------------
     const ODataAccessDescriptor& ODataAccessDescriptor::operator=(const ODataAccessDescriptor& _rSource)
     {
-#ifndef SVX_LIGHT
         delete m_pImpl;
         m_pImpl = new ODADescriptorImpl(*_rSource.m_pImpl);
-#else
-        OSL_ENSURE(sal_False, "ODataAccessDescriptor::operator=: not available in the SVX_LIGHT version!");
-#endif
         return *this;
     }
 
     //--------------------------------------------------------------------
     ODataAccessDescriptor::ODataAccessDescriptor( const Reference< XPropertySet >& _rValues )
-#ifndef SVX_LIGHT
         :m_pImpl(new ODADescriptorImpl)
-#else
-        :m_pImpl(NULL)
-#endif
     {
-#ifndef SVX_LIGHT
         m_pImpl->buildFrom(_rValues);
-#else
-        OSL_ENSURE(sal_False, "ODataAccessDescriptor::ODataAccessDescriptor: not available in the SVX_LIGHT version!");
-#endif
     }
 
     //--------------------------------------------------------------------
     ODataAccessDescriptor::ODataAccessDescriptor( const Any& _rValues )
-#ifndef SVX_LIGHT
         :m_pImpl(new ODADescriptorImpl)
-#else
-        :m_pImpl(NULL)
-#endif
     {
-#ifndef SVX_LIGHT
         // check if we know the format in the Any
         Sequence< PropertyValue > aValues;
         Reference< XPropertySet > xValues;
@@ -393,24 +366,13 @@ namespace svx
             m_pImpl->buildFrom( aValues );
         else if ( _rValues >>= xValues )
             m_pImpl->buildFrom( xValues );
-#else
-        OSL_ENSURE(sal_False, "ODataAccessDescriptor::ODataAccessDescriptor: not available in the SVX_LIGHT version!");
-#endif
     }
 
     //--------------------------------------------------------------------
     ODataAccessDescriptor::ODataAccessDescriptor( const Sequence< PropertyValue >& _rValues )
-#ifndef SVX_LIGHT
         :m_pImpl(new ODADescriptorImpl)
-#else
-        :m_pImpl(NULL)
-#endif
     {
-#ifndef SVX_LIGHT
         m_pImpl->buildFrom(_rValues);
-#else
-        OSL_ENSURE(sal_False, "ODataAccessDescriptor::ODataAccessDescriptor: not available in the SVX_LIGHT version!");
-#endif
     }
 
     //--------------------------------------------------------------------
@@ -422,35 +384,26 @@ namespace svx
     //--------------------------------------------------------------------
     void ODataAccessDescriptor::clear()
     {
-#ifndef SVX_LIGHT
         m_pImpl->m_aValues.clear();
-#endif
     }
 
     //--------------------------------------------------------------------
     void ODataAccessDescriptor::erase(DataAccessDescriptorProperty _eWhich)
     {
-#ifndef SVX_LIGHT
         OSL_ENSURE(has(_eWhich), "ODataAccessDescriptor::erase: invalid call!");
         if (has(_eWhich))
             m_pImpl->m_aValues.erase(_eWhich);
-#endif
     }
 
     //--------------------------------------------------------------------
     sal_Bool ODataAccessDescriptor::has(DataAccessDescriptorProperty _eWhich) const
     {
-#ifndef SVX_LIGHT
         return m_pImpl->m_aValues.find(_eWhich) != m_pImpl->m_aValues.end();
-#else
-        return sal_False;
-#endif
     }
 
     //--------------------------------------------------------------------
     const Any& ODataAccessDescriptor::operator [] ( DataAccessDescriptorProperty _eWhich ) const
     {
-#ifndef SVX_LIGHT
         if (!has(_eWhich))
         {
             OSL_ENSURE(sal_False, "ODataAccessDescriptor::operator[]: invalid acessor!");
@@ -459,58 +412,40 @@ namespace svx
         }
 
         return m_pImpl->m_aValues[_eWhich];
-#else
-        static const Any aDummy;
-        return aDummy;
-#endif
     }
 
     //--------------------------------------------------------------------
     Any& ODataAccessDescriptor::operator[] ( DataAccessDescriptorProperty _eWhich )
     {
-#ifndef SVX_LIGHT
         m_pImpl->invalidateExternRepresentations();
         return m_pImpl->m_aValues[_eWhich];
-#else
-        static const Any aDummy;
-        return aDummy;
-#endif
     }
 
     //--------------------------------------------------------------------
     void ODataAccessDescriptor::initializeFrom(const Reference< XPropertySet >& _rxValues, sal_Bool _bClear)
     {
-#ifndef SVX_LIGHT
         if (_bClear)
             clear();
         m_pImpl->buildFrom(_rxValues);
-#endif
     }
 
     //--------------------------------------------------------------------
     void ODataAccessDescriptor::initializeFrom(const Sequence< PropertyValue >& _rValues, sal_Bool _bClear)
     {
-#ifndef SVX_LIGHT
         if (_bClear)
             clear();
         m_pImpl->buildFrom(_rValues);
-#endif
     }
 
     //--------------------------------------------------------------------
     Sequence< PropertyValue > ODataAccessDescriptor::createPropertyValueSequence()
     {
-#ifndef SVX_LIGHT
         m_pImpl->updateSequence();
         return m_pImpl->m_aAsSequence;
-#else
-        return Sequence< PropertyValue >();
-#endif
     }
     //--------------------------------------------------------------------
     Sequence< Any > ODataAccessDescriptor::createAnySequence()
     {
-#ifndef SVX_LIGHT
         m_pImpl->updateSequence();
         Sequence< Any > aRet(m_pImpl->m_aAsSequence.getLength());
         const PropertyValue* pBegin = m_pImpl->m_aAsSequence.getConstArray();
@@ -518,39 +453,27 @@ namespace svx
         for(sal_Int32 i=0;pBegin != pEnd;++pBegin,++i)
             aRet[i] <<= *pBegin;
         return aRet;
-#else
-        return Sequence< createAnySequence >();
-#endif
     }
 
     //--------------------------------------------------------------------
     Reference< XPropertySet > ODataAccessDescriptor::createPropertySet()
     {
-#ifndef SVX_LIGHT
         m_pImpl->updateSet();
         return m_pImpl->m_xAsSet;
-#else
-        return Reference< XPropertySet >();
-#endif
     }
     //--------------------------------------------------------------------
     ::rtl::OUString ODataAccessDescriptor::getDataSource() const
     {
-#ifndef SVX_LIGHT
         ::rtl::OUString sDataSourceName;
         if ( has(daDataSource) )
             (*this)[daDataSource] >>= sDataSourceName;
         else if ( has(daDatabaseLocation) )
             (*this)[daDatabaseLocation] >>= sDataSourceName;
         return sDataSourceName;
-#else
-        return ::rtl::OUString();
-#endif
     }
     //--------------------------------------------------------------------
     void ODataAccessDescriptor::setDataSource(const ::rtl::OUString& _sDataSourceNameOrLocation)
     {
-#ifndef SVX_LIGHT
         if ( _sDataSourceNameOrLocation.getLength() )
         {
             INetURLObject aURL(_sDataSourceNameOrLocation);
@@ -558,7 +481,6 @@ namespace svx
         }
         else
             (*this)[ daDataSource ] <<= ::rtl::OUString();
-#endif
     }
 
 //........................................................................

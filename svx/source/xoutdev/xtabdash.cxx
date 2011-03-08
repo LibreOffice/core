@@ -31,8 +31,6 @@
 
 // include ---------------------------------------------------------------
 
-#ifndef SVX_LIGHT
-
 #include <com/sun/star/container/XNameContainer.hpp>
 #include "XPropertyTable.hxx"
 #include <unotools/ucbstreamhelper.hxx>
@@ -40,7 +38,6 @@
 #include "xmlxtexp.hxx"
 #include "xmlxtimp.hxx"
 
-#endif
 #include <vcl/svapp.hxx>
 
 #include <tools/urlobj.hxx>

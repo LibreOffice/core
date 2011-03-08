@@ -265,10 +265,8 @@ void ImpEditEngine::InitDoc( BOOL bKeepParaAttribs )
         GetEditEnginePtr()->ParagraphInserted( 0 );
     }
 
-#ifndef SVX_LIGHT
     if ( GetStatus().DoOnlineSpelling() )
         aEditDoc.GetObject( 0 )->CreateWrongList();
-#endif // !SVX_LIGHT
 }
 
 EditPaM ImpEditEngine::DeleteSelected( EditSelection aSel )
@@ -763,9 +761,7 @@ void ImpEditEngine::SetText( const XubString& rText )
     if( !rText.Len() )  // otherwise it must be invalidated later, !bFormatted is enough.
         nCurTextHeight = 0;
     EnableUndo( bUndoCurrentlyEnabled );
-#ifndef SVX_LIGHT
     DBG_ASSERT( !HasUndoManager() || !GetUndoManager().GetUndoActionCount(), "Undo after SetText?" );
-#endif
 }
 
 
@@ -2123,21 +2119,17 @@ void ImpEditEngine::ImpRemoveChars( const EditPaM& rPaM, USHORT nChars, EditUndo
             EditCharAttrib* pAttr = rAttribs[nAttr];
             if ( ( pAttr->GetEnd() >= nStart ) && ( pAttr->GetStart() < nEnd ) )
             {
-#ifndef SVX_LIGHT
                 EditSelection aSel( rPaM );
                 aSel.Max().GetIndex() = aSel.Max().GetIndex() + nChars;
                 EditUndoSetAttribs* pAttrUndo = CreateAttribUndo( aSel, GetEmptyItemSet() );
                 InsertUndo( pAttrUndo );
-#endif
                 break;  // for
             }
         }
         if ( pCurUndo && ( CreateEditPaM( pCurUndo->GetEPaM() ) == rPaM ) )
             pCurUndo->GetStr() += aStr;
-#ifndef SVX_LIGHT
         else
             InsertUndo( new EditUndoRemoveChars( this, CreateEPaM( rPaM ), aStr ) );
-#endif
     }
 
     aEditDoc.RemoveChars( rPaM, nChars );
@@ -2276,7 +2268,6 @@ EditPaM ImpEditEngine::ImpConnectParagraphs( ContentNode* pLeft, ContentNode* pR
 
     GetEditEnginePtr()->ParagraphConnected( aEditDoc.GetPos( pLeft ), aEditDoc.GetPos( pRight ) );
 
-#ifndef SVX_LIGHT
     if ( IsUndoEnabled() && !IsInUndo() )
     {
         InsertUndo( new EditUndoConnectParas( this,
@@ -2284,7 +2275,6 @@ EditPaM ImpEditEngine::ImpConnectParagraphs( ContentNode* pLeft, ContentNode* pR
             pLeft->GetContentAttribs().GetItems(), pRight->GetContentAttribs().GetItems(),
             pLeft->GetStyleSheet(), pRight->GetStyleSheet(), bBackward ) );
     }
-#endif
 
     if ( bBackward )
     {
@@ -2302,7 +2292,6 @@ EditPaM ImpEditEngine::ImpConnectParagraphs( ContentNode* pLeft, ContentNode* pR
     DBG_ASSERT( pRightPortion, "Blind Portion in ImpConnectParagraphs(2)" );
     DBG_ASSERT( nParagraphTobeDeleted == GetParaPortions().GetPos( pRightPortion ), "NodePos != PortionPos?" );
 
-#ifndef SVX_LIGHT
     if ( GetStatus().DoOnlineSpelling() )
     {
         xub_StrLen nEnd = pLeft->Len();
@@ -2322,7 +2311,6 @@ EditPaM ImpEditEngine::ImpConnectParagraphs( ContentNode* pLeft, ContentNode* pR
             }
         }
     }
-#endif
 
     if ( IsCallParaInsertedOrDeleted() )
         GetEditEnginePtr()->ParagraphDeleted( nParagraphTobeDeleted );
@@ -2528,11 +2516,9 @@ void ImpEditEngine::ImpRemoveParagraph( USHORT nPara )
     if ( pNextNode )
         ParaAttribsChanged( pNextNode );
 
-#ifndef SVX_LIGHT
     if ( IsUndoEnabled() && !IsInUndo() )
         InsertUndo( new EditUndoDelContent( this, pNode, nPara ) );
     else
-#endif
     {
         aEditDoc.RemoveItemsFromPool( pNode );
         if ( pNode->GetStyleSheet() )
@@ -2545,7 +2531,6 @@ EditPaM ImpEditEngine::AutoCorrect( const EditSelection& rCurSel, xub_Unicode c,
                                     bool bOverwrite, Window* pFrameWin )
 {
     EditSelection aSel( rCurSel );
-#ifndef SVX_LIGHT
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
     if ( pAutoCorrect )
     {
@@ -2599,7 +2584,6 @@ EditPaM ImpEditEngine::AutoCorrect( const EditSelection& rCurSel, xub_Unicode c,
         // shared we need to reset the value to it's original state.
         pAutoCorrect->SetAutoCorrFlag( CptlSttSntnc, bOldCptlSttSntnc );
     }
-#endif // !SVX_LIGHT
     return aSel.Max();
 }
 
@@ -2752,10 +2736,8 @@ EditPaM ImpEditEngine::ImpInsertText( EditSelection aCurSel, const XubString& rS
                 nEnd -= ( aLine.Len() - nMaxNewChars ); // Then the characters end up in the next paragraph.
                 aLine.Erase( nMaxNewChars );            // Delete the Rest...
             }
-#ifndef SVX_LIGHT
             if ( IsUndoEnabled() && !IsInUndo() )
                 InsertUndo( new EditUndoInsertChars( this, CreateEPaM( aPaM ), aLine ) );
-#endif
             // Tabs ?
             if ( aLine.Search( '\t' ) == STRING_NOTFOUND )
                 aPaM = aEditDoc.InsertText( aPaM, aLine );
@@ -2807,10 +2789,8 @@ EditPaM ImpEditEngine::ImpFastInsertText( EditPaM aPaM, const XubString& rStr )
 
     if ( ( aPaM.GetNode()->Len() + rStr.Len() ) < MAXCHARSINPARA )
     {
-#ifndef SVX_LIGHT
         if ( IsUndoEnabled() && !IsInUndo() )
             InsertUndo( new EditUndoInsertChars( this, CreateEPaM( aPaM ), rStr ) );
-#endif
 
         aPaM = aEditDoc.InsertText( aPaM, rStr );
         TextModified();
@@ -2834,10 +2814,8 @@ EditPaM ImpEditEngine::ImpInsertFeature( EditSelection aCurSel, const SfxPoolIte
     if ( aPaM.GetIndex() >= 0xfffe )
         return aPaM;
 
-#ifndef SVX_LIGHT
     if ( IsUndoEnabled() && !IsInUndo() )
         InsertUndo( new EditUndoInsertFeature( this, CreateEPaM( aPaM ), rItem ) );
-#endif
     aPaM = aEditDoc.InsertFeature( aPaM, rItem );
 
     ParaPortion* pPortion = FindParaPortion( aPaM.GetNode() );
@@ -2868,14 +2846,11 @@ EditPaM ImpEditEngine::ImpInsertParaBreak( const EditPaM& rPaM, BOOL bKeepEnding
         return rPaM;
     }
 
-#ifndef SVX_LIGHT
     if ( IsUndoEnabled() && !IsInUndo() )
         InsertUndo( new EditUndoSplitPara( this, aEditDoc.GetPos( rPaM.GetNode() ), rPaM.GetIndex() ) );
-#endif
 
     EditPaM aPaM( aEditDoc.InsertParaBreak( rPaM, bKeepEndingAttribs ) );
 
-#ifndef SVX_LIGHT
     if ( GetStatus().DoOnlineSpelling() )
     {
         xub_StrLen nEnd = rPaM.GetNode()->Len();
@@ -2907,8 +2882,6 @@ EditPaM ImpEditEngine::ImpInsertParaBreak( const EditPaM& rPaM, BOOL bKeepEnding
         pRWrongs->SetValid(); // otherwise 0 - 0xFFFF
         pRWrongs->MarkInvalid( 0, 1 );  // Only test the first word
     }
-#endif // !SVX_LIGHT
-
 
     ParaPortion* pPortion = FindParaPortion( rPaM.GetNode() );
     DBG_ASSERT( pPortion, "Blind Portion in ImpInsertParaBreak" );
@@ -2930,7 +2903,6 @@ EditPaM ImpEditEngine::ImpInsertParaBreak( const EditPaM& rPaM, BOOL bKeepEnding
 
 EditPaM ImpEditEngine::ImpFastInsertParagraph( USHORT nPara )
 {
-#ifndef SVX_LIGHT
     if ( IsUndoEnabled() && !IsInUndo() )
     {
         if ( nPara )
@@ -2941,16 +2913,13 @@ EditPaM ImpEditEngine::ImpFastInsertParagraph( USHORT nPara )
         else
             InsertUndo( new EditUndoSplitPara( this, 0, 0 ) );
     }
-#endif
 
     ContentNode* pNode = new ContentNode( aEditDoc.GetItemPool() );
     // If flat mode, then later no Font is set:
     pNode->GetCharAttribs().GetDefFont() = aEditDoc.GetDefFont();
 
-#ifndef SVX_LIGHT
     if ( GetStatus().DoOnlineSpelling() )
         pNode->CreateWrongList();
-#endif // !SVX_LIGHT
 
     aEditDoc.Insert( pNode, nPara );
 
@@ -3609,7 +3578,6 @@ void ImpEditEngine::SetActiveView( EditView* pView )
 
 uno::Reference< datatransfer::XTransferable > ImpEditEngine::CreateTransferable( const EditSelection& rSelection ) const
 {
-#ifndef SVX_LIGHT
     EditSelection aSelection( rSelection );
     aSelection.Adjust( GetEditDoc() );
 
@@ -3651,9 +3619,6 @@ uno::Reference< datatransfer::XTransferable > ImpEditEngine::CreateTransferable(
     }
 
     return xDataObj;
-#else
-    return uno::Reference< datatransfer::XTransferable >();
-#endif
 }
 
 EditSelection ImpEditEngine::InsertText( uno::Reference< datatransfer::XTransferable >& rxDataObj, const String& rBaseURL, const EditPaM& rPaM, BOOL bUseSpecial )

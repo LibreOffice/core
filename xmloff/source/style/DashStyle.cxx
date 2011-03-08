@@ -221,8 +221,6 @@ sal_Bool XMLDashStyleImport::importXML(
 // Export
 //-------------------------------------------------------------
 
-#ifndef SVX_LIGHT
-
 XMLDashStyleExport::XMLDashStyleExport( SvXMLExport& rExp )
     : rExport(rExp)
 {
@@ -329,7 +327,5 @@ sal_Bool XMLDashStyleExport::exportXML(
     }
     return bRet;
 }
-
-#endif // #ifndef SVX_LIGHT
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

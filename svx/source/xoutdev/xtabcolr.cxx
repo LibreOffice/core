@@ -29,8 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#ifndef SVX_LIGHT
-
 #include <com/sun/star/container/XNameContainer.hpp>
 #include "XPropertyTable.hxx"
 #include <unotools/ucbstreamhelper.hxx>
@@ -39,8 +37,6 @@
 
 #include "xmlxtexp.hxx"
 #include "xmlxtimp.hxx"
-
-#endif
 
 #include <sfx2/docfile.hxx>
 #include <tools/urlobj.hxx>

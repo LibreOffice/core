@@ -146,8 +146,6 @@ XubString GetSvxString( sal_uInt16 nId )
     return EE_RESSTR( nId );
 }
 
-#ifndef SVX_LIGHT
-
 // -----------------------------------------------------------------------
 
 XubString GetColorString( const Color& rCol )
@@ -186,8 +184,6 @@ XubString GetColorString( const Color& rCol )
     }
     return sStr;
 }
-
-#endif
 
 // -----------------------------------------------------------------------
 

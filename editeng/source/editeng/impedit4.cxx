@@ -147,7 +147,6 @@ EditPaM ImpEditEngine::ReadText( SvStream& rInput, EditSelection aSel )
 
 EditPaM ImpEditEngine::ReadXML( SvStream& rInput, EditSelection aSel )
 {
-#ifndef SVX_LIGHT
     if ( aSel.HasRange() )
         aSel = ImpDeleteSelection( aSel );
 
@@ -156,15 +155,10 @@ EditPaM ImpEditEngine::ReadXML( SvStream& rInput, EditSelection aSel )
     ::SvxReadXML( *GetEditEnginePtr(), rInput, aESel );
 
     return aSel.Max();
-#else
-    return EditPaM();
-#endif
 }
 
 EditPaM ImpEditEngine::ReadRTF( SvStream& rInput, EditSelection aSel )
 {
-#ifndef SVX_LIGHT
-
 #if defined (EDITDEBUG) && !defined( UNX )
     SvFileStream aRTFOut( String( RTL_CONSTASCII_USTRINGPARAM ( "d:\\rtf_in.rtf" ) ), STREAM_WRITE );
     aRTFOut << rInput;
@@ -192,15 +186,10 @@ EditPaM ImpEditEngine::ReadRTF( SvStream& rInput, EditSelection aSel )
         return aSel.Min();
     }
     return xPrsr->GetCurPaM();
-#else
-    return EditPaM();
-#endif
 }
 
 EditPaM ImpEditEngine::ReadHTML( SvStream& rInput, const String& rBaseURL, EditSelection aSel, SvKeyValueIterator* pHTTPHeaderAttrs )
 {
-#ifndef SVX_LIGHT
-
     if ( aSel.HasRange() )
         aSel = ImpDeleteSelection( aSel );
 
@@ -212,9 +201,6 @@ EditPaM ImpEditEngine::ReadHTML( SvStream& rInput, const String& rBaseURL, EditS
         return aSel.Min();
     }
     return xPrsr->GetCurSelection().Max();
-#else
-    return EditPaM();
-#endif
 }
 
 EditPaM ImpEditEngine::ReadBin( SvStream& rInput, EditSelection aSel )
@@ -230,7 +216,6 @@ EditPaM ImpEditEngine::ReadBin( SvStream& rInput, EditSelection aSel )
     return aLastPaM;
 }
 
-#ifndef SVX_LIGHT
 void ImpEditEngine::Write( SvStream& rOutput, EETextFormat eFormat, EditSelection aSel )
 {
     if ( !rOutput.IsWritable() )
@@ -254,7 +239,6 @@ void ImpEditEngine::Write( SvStream& rOutput, EETextFormat eFormat, EditSelectio
         }
     }
 }
-#endif
 
 sal_uInt32 ImpEditEngine::WriteText( SvStream& rOutput, EditSelection aSel )
 {
@@ -332,7 +316,6 @@ sal_uInt32 ImpEditEngine::WriteBin( SvStream& rOutput, EditSelection aSel, BOOL 
     return 0;
 }
 
-#ifndef SVX_LIGHT
 sal_uInt32 ImpEditEngine::WriteXML( SvStream& rOutput, EditSelection aSel )
 {
     ESelection aESel = CreateESel( aSel );
@@ -341,7 +324,6 @@ sal_uInt32 ImpEditEngine::WriteXML( SvStream& rOutput, EditSelection aSel )
 
     return 0;
 }
-#endif
 
 static sal_uInt16 getStylePos( const SfxStyles& rStyles, SfxStyleSheet* pSheet )
 {
@@ -358,7 +340,6 @@ static sal_uInt16 getStylePos( const SfxStyles& rStyles, SfxStyleSheet* pSheet )
 
 sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
 {
-#ifndef SVX_LIGHT
     DBG_ASSERT( GetUpdateMode(), "WriteRTF for UpdateMode = sal_False!" );
     CheckIdleFormatter();
     if ( !IsFormatted() )
@@ -720,9 +701,6 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
 #endif
 
     return rOutput.GetError();
-#else
-    return 0;
-#endif
 }
 
 
@@ -1129,11 +1107,9 @@ EditTextObject* ImpEditEngine::CreateBinTextObject( EditSelection aSel, SfxItemP
             pAttr = GetAttrib( pNode->GetCharAttribs().GetAttribs(), nAttr );
         }
 
-#ifndef SVX_LIGHT
         // If possible online spelling
         if ( bAllowBigObjects && bOnlyFullParagraphs && pNode->GetWrongList() )
             pC->SetWrongList( pNode->GetWrongList()->Clone() );
-#endif // !SVX_LIGHT
 
     }
 
@@ -1200,9 +1176,7 @@ void ImpEditEngine::SetText( const EditTextObject& rTextObject )
     InsertText( rTextObject, EditSelection( aPaM, aPaM ) );
     SetVertical( rTextObject.IsVertical() );
 
-#ifndef SVX_LIGHT
     DBG_ASSERT( !HasUndoManager() || !GetUndoManager().GetUndoActionCount(), "From where comes the Undo in SetText ?!" );
-#endif
     SetUpdateMode( _bUpdate );
     EnableUndo( _bUndo );
 }
@@ -1386,13 +1360,11 @@ EditSelection ImpEditEngine::InsertBinTextObject( BinTextObject& rTextObject, Ed
                 aPaM.GetNode()->CreateDefFont();
         }
 
-#ifndef SVX_LIGHT
         if ( bNewContent && GetStatus().DoOnlineSpelling() && pC->GetWrongList() )
         {
             aPaM.GetNode()->DestroyWrongList(); // otherwise MLK, if list exists...
             aPaM.GetNode()->SetWrongList( pC->GetWrongList()->Clone() );
         }
-#endif // !SVX_LIGHT
 
         // Wrap when followed by other ...
         if ( n < ( nContents-1) )
@@ -1431,10 +1403,8 @@ LanguageType ImpEditEngine::GetLanguage( const EditPaM& rPaM, USHORT* pEndPos ) 
 
 Reference< XSpellChecker1 > ImpEditEngine::GetSpeller()
 {
-#ifndef SVX_LIGHT
     if ( !xSpeller.is() )
         xSpeller = SvxGetSpellChecker();
-#endif
     return xSpeller;
 }
 
@@ -1459,10 +1429,6 @@ SpellInfo * ImpEditEngine::CreateSpellInfo( const EditSelection &rSel, bool bMul
 
 EESpellState ImpEditEngine::Spell( EditView* pEditView, sal_Bool bMultipleDoc )
 {
-#ifdef SVX_LIGHT
-    return EE_SPELL_NOSPELLER;
-#else
-
     DBG_ASSERTWARNING( xSpeller.is(), "No Spell checker set!" );
 
     if ( !xSpeller.is() )
@@ -1504,15 +1470,11 @@ EESpellState ImpEditEngine::Spell( EditView* pEditView, sal_Bool bMultipleDoc )
     delete pSpellInfo;
     pSpellInfo = 0;
     return eState;
-#endif
 }
 
 
 sal_Bool ImpEditEngine::HasConvertibleTextPortion( LanguageType nSrcLang )
 {
-#ifdef SVX_LIGHT
-    return sal_False;
-#else
     sal_Bool    bHasConvTxt = sal_False;
 
     USHORT nParas = pEditEngine->GetParagraphCount();
@@ -1542,7 +1504,6 @@ sal_Bool ImpEditEngine::HasConvertibleTextPortion( LanguageType nSrcLang )
        }
     }
 
-#endif
     return bHasConvTxt;
 }
 
@@ -1552,9 +1513,6 @@ void ImpEditEngine::Convert( EditView* pEditView,
         INT32 nOptions, sal_Bool bIsInteractive, sal_Bool bMultipleDoc )
 {
     // modified version of ImpEditEngine::Spell
-
-#ifdef SVX_LIGHT
-#else
 
     // In MultipleDoc always from the front / rear ...
     if ( bMultipleDoc )
@@ -1635,7 +1593,6 @@ void ImpEditEngine::Convert( EditView* pEditView,
     }
     delete pConvInfo;
     pConvInfo = 0;
-#endif
 }
 
 
@@ -1683,11 +1640,6 @@ void ImpEditEngine::ImpConvert( rtl::OUString &rConvTxt, LanguageType &rConvTxtL
 
     String aRes;
     LanguageType nResLang = LANGUAGE_NONE;
-
-#ifdef SVX_LIGHT
-    rConvTxt = rtl::OUString();
-    rConvTxtLang = LANGUAGE_NONE;
-#else
 
     /* ContentNode* pLastNode = */ aEditDoc.SaveGetObject( aEditDoc.Count()-1 );
 
@@ -1844,16 +1796,11 @@ void ImpEditEngine::ImpConvert( rtl::OUString &rConvTxt, LanguageType &rConvTxtL
     rConvTxt = aRes;
     if (rConvTxt.getLength())
         rConvTxtLang = nResLang;
-#endif
 }
 
 
 Reference< XSpellAlternatives > ImpEditEngine::ImpSpell( EditView* pEditView )
 {
-#ifdef SVX_LIGHT
-    return Reference< XSpellAlternatives >();
-#else
-
     DBG_ASSERT( xSpeller.is(), "No spell checker set!" );
 
     ContentNode* pLastNode = aEditDoc.SaveGetObject( (aEditDoc.Count()-1) );
@@ -1916,7 +1863,6 @@ Reference< XSpellAlternatives > ImpEditEngine::ImpSpell( EditView* pEditView )
     pEditView->pImpEditView->DrawSelection();
     pEditView->ShowCursor( sal_True, sal_False );
     return xSpellAlt;
-#endif
 }
 
 void ImpEditEngine::EndSpelling()
@@ -1982,8 +1928,6 @@ bool ImpEditEngine::SpellSentence(EditView& rEditView,
     ::svx::SpellPortions& rToFill,
     bool /*bIsGrammarChecking*/ )
 {
-#ifdef SVX_LIGHT
-#else
     bool bRet = false;
     EditSelection aCurSel( rEditView.pImpEditView->GetEditSelection() );
     if(!pSpellInfo)
@@ -2037,7 +1981,6 @@ bool ImpEditEngine::SpellSentence(EditView& rEditView,
         //set the selection to the end of the current sentence
         rEditView.pImpEditView->SetEditSelection(aSentencePaM.Max());
     }
-#endif
     return bRet;
 }
 
@@ -2048,8 +1991,6 @@ void ImpEditEngine::AddPortion(
                                 ::svx::SpellPortions& rToFill,
                                 bool bIsField)
 {
-#ifdef SVX_LIGHT
-#else
     if(rSel.HasRange())
     {
         svx::SpellPortion aPortion;
@@ -2064,7 +2005,6 @@ void ImpEditEngine::AddPortion(
         pSpellInfo->aLastSpellContentSelections.push_back(rSel);
 
     }
-#endif
 }
 
 // Adds one or more portions of text to the SpellPortions depending on language changes
@@ -2074,8 +2014,6 @@ void ImpEditEngine::AddPortionIterated(
                             Reference< XSpellAlternatives > xAlt,
                                 ::svx::SpellPortions& rToFill)
 {
-#ifdef SVX_LIGHT
-#else
     if(rSel.Min() != rSel.Max())
     {
         if(xAlt.is())
@@ -2137,15 +2075,12 @@ void ImpEditEngine::AddPortionIterated(
             AddPortion(aSelection, xAlt, rToFill, bIsField);
         }
     }
-#endif
 }
 
 void ImpEditEngine::ApplyChangedSentence(EditView& rEditView,
     const ::svx::SpellPortions& rNewPortions,
     bool bRecheck )
 {
-#ifdef SVX_LIGHT
-#else
     // Note: rNewPortions.size() == 0 is valid and happens when the whole
     // sentence got removed in the dialog
 
@@ -2266,25 +2201,19 @@ void ImpEditEngine::ApplyChangedSentence(EditView& rEditView,
         FormatAndUpdate();
         aEditDoc.SetModified(TRUE);
     }
-#endif
 }
 
 void ImpEditEngine::PutSpellingToSentenceStart( EditView& rEditView )
 {
-#ifdef SVX_LIGHT
-#else
     if( pSpellInfo && pSpellInfo->aLastSpellContentSelections.size() )
     {
         rEditView.pImpEditView->SetEditSelection( pSpellInfo->aLastSpellContentSelections.begin()->Min() );
     }
-
-#endif
 }
 
 
 void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, sal_Bool bSpellAtCursorPos, sal_Bool bInteruptable )
 {
-#ifndef SVX_LIGHT
     /*
      It will iterate over all the paragraphs, paragraphs with only
      invalidated wrong list will be checked ...
@@ -2484,7 +2413,6 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, sal_Bool bSpel
     }
     if ( bRestartTimer )
         aOnlineSpellTimer.Start();
-#endif // !SVX_LIGHT
 }
 
 
@@ -2492,7 +2420,6 @@ EESpellState ImpEditEngine::HasSpellErrors()
 {
     DBG_ASSERT( xSpeller.is(), "No spell checker set!" );
 
-#ifndef SVX_LIGHT
     ContentNode* pLastNode = aEditDoc.SaveGetObject( aEditDoc.Count() - 1 );
     EditSelection aCurSel( aEditDoc.GetStartPaM() );
 
@@ -2517,14 +2444,12 @@ EESpellState ImpEditEngine::HasSpellErrors()
         }
         aCurSel = WordRight( aCurSel.Max(), ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
     }
-#endif
 
     return EE_SPELL_ERRORFOUND;
 }
 
 EESpellState ImpEditEngine::StartThesaurus( EditView* pEditView )
 {
-#ifndef SVX_LIGHT
     EditSelection aCurSel( pEditView->pImpEditView->GetEditSelection() );
     if ( !aCurSel.HasRange() )
         aCurSel = SelectWord( aCurSel, ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
@@ -2548,16 +2473,12 @@ EESpellState ImpEditEngine::StartThesaurus( EditView* pEditView )
 
     delete pDlg;
     return EE_SPELL_OK;
-#else
-    return EE_SPELL_NOSPELLER;
-#endif
 }
 
 sal_uInt16 ImpEditEngine::StartSearchAndReplace( EditView* pEditView, const SvxSearchItem& rSearchItem )
 {
     sal_uInt16 nFound = 0;
 
-#ifndef SVX_LIGHT
     EditSelection aCurSel( pEditView->pImpEditView->GetEditSelection() );
 
     // FIND_ALL is not possible without multiple selection.
@@ -2615,7 +2536,6 @@ sal_uInt16 ImpEditEngine::StartSearchAndReplace( EditView* pEditView, const SvxS
             pEditView->ShowCursor( sal_True, sal_False );
         }
     }
-#endif // !SVX_LIGHT
     return nFound;
 }
 
@@ -2654,7 +2574,6 @@ BOOL ImpEditEngine::Search( const SvxSearchItem& rSearchItem, EditView* pEditVie
 sal_Bool ImpEditEngine::ImpSearch( const SvxSearchItem& rSearchItem,
     const EditSelection& rSearchSelection, const EditPaM& rStartPos, EditSelection& rFoundSel )
 {
-#ifndef SVX_LIGHT
     util::SearchOptions aSearchOptions( rSearchItem.GetSearchOptions() );
     aSearchOptions.Locale = GetLocale( rStartPos );
 
@@ -2721,13 +2640,11 @@ sal_Bool ImpEditEngine::ImpSearch( const SvxSearchItem& rSearchItem,
             return sal_True;
         }
     }
-#endif // !SVX_LIGHT
     return sal_False;
 }
 
 sal_Bool ImpEditEngine::HasText( const SvxSearchItem& rSearchItem )
 {
-#ifndef SVX_LIGHT
     SvxSearchItem aTmpItem( rSearchItem );
     aTmpItem.SetBackward( sal_False );
     aTmpItem.SetSelection( sal_False );
@@ -2736,18 +2653,13 @@ sal_Bool ImpEditEngine::HasText( const SvxSearchItem& rSearchItem )
     EditSelection aDummySel( aStartPaM );
     EditSelection aFoundSel;
     return ImpSearch( aTmpItem, aDummySel, aStartPaM, aFoundSel );
-#else
-    return sal_False;
-#endif
 }
 
 void ImpEditEngine::SetAutoCompleteText( const String& rStr, sal_Bool bClearTipWindow )
 {
-#ifndef SVX_LIGHT
     aAutoCompleteText = rStr;
     if ( bClearTipWindow && pActiveView )
         Help::ShowQuickHelp( pActiveView->GetWindow(), Rectangle(), String(), 0 );
-#endif // !SVX_LIGHT
 }
 
 
@@ -3005,7 +2917,6 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
 
         if (aChanges.size() > 0)
         {
-#ifndef SVX_LIGHT
             // Create a single UndoAction on Demand for all the changes ...
             if ( !pUndo && IsUndoEnabled() && !IsInUndo() )
             {
@@ -3032,7 +2943,6 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
                 else
                     pUndo->SetText( CreateBinTextObject( aSel, NULL ) );
             }
-#endif
 
             // now apply the changes from end to start to leave the offsets of the
             // yet unchanged text parts remain the same.
@@ -3061,14 +2971,12 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
         }
     }
 
-#ifndef SVX_LIGHT
     if ( pUndo )
     {
         ESelection aESel( CreateESel( aNewSel ) );
         pUndo->SetNewSelection( aESel );
         InsertUndo( pUndo );
     }
-#endif
 
     if ( bChanges )
     {

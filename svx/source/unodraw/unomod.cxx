@@ -79,8 +79,6 @@ using namespace ::com::sun::star;
 
 //-////////////////////////////////////////////////////////////////////
 
-#ifndef SVX_LIGHT
-
 class SvxUnoDrawPagesAccess : public ::cppu::WeakImplHelper2< ::com::sun::star::drawing::XDrawPages, ::com::sun::star::lang::XServiceInfo >
 {
 private:
@@ -107,10 +105,8 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 };
-#endif
 //-////////////////////////////////////////////////////////////////////
 
-#ifndef SVX_LIGHT
 const SvEventDescription* ImplGetSupportedMacroItems()
 {
     static const SvEventDescription aMacroDescriptionsImpl[] =
@@ -122,7 +118,6 @@ const SvEventDescription* ImplGetSupportedMacroItems()
 
     return aMacroDescriptionsImpl;
 }
-#endif
 
 //-////////////////////////////////////////////////////////////////////
 
@@ -246,8 +241,6 @@ uno::Sequence< OUString > SvxUnoDrawMSFactory::concatServiceNames( uno::Sequence
     return aSeq;
 }
 
-
-#ifndef SVX_LIGHT
 
 ///
 SvxUnoDrawingModel::SvxUnoDrawingModel( SdrModel* pDoc ) throw()
@@ -750,7 +743,5 @@ com::sun::star::uno::Reference< com::sun::star::container::XIndexReplace > SvxCr
 }
 
 ///////////////////////////////////////////////////////////////////////
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

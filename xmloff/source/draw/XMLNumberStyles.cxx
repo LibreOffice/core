@@ -328,8 +328,6 @@ const SdXMLFixedDataStyle* aSdXMLFixedTimeFormats[SdXMLTimeFormatCount] =
 ///////////////////////////////////////////////////////////////////////
 // export
 
-#ifndef SVX_LIGHT
-
 static void SdXMLExportDataStyleNumber( SdXMLExport& rExport, SdXMLDataStyleNumber& rElement )
 {
     if( rElement.mbDecimal02 )
@@ -491,8 +489,6 @@ OUString SdXMLNumberStylesExporter::getDateStyleName(const sal_Int32 nDateFormat
         return OUString();
     }
 }
-
-#endif // #ifndef SVX_LIGHT
 
 
 ///////////////////////////////////////////////////////////////////////

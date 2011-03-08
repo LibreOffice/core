@@ -325,7 +325,6 @@ SfxItemPresentation SvxSizeItem::GetPresentation
     XubString&          rText, const IntlWrapper *pIntl
 )   const
 {
-#ifndef SVX_LIGHT
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
@@ -351,7 +350,6 @@ SfxItemPresentation SvxSizeItem::GetPresentation
         default: ;//prevent warning
 
     }
-#endif // !SVX_LIGHT
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
@@ -578,7 +576,6 @@ SfxItemPresentation SvxLRSpaceItem::GetPresentation
     XubString&          rText, const IntlWrapper* pIntl
 )   const
 {
-#ifndef SVX_LIGHT
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
@@ -644,7 +641,6 @@ SfxItemPresentation SvxLRSpaceItem::GetPresentation
         }
         default: ;//prevent warning
     }
-#endif // !SVX_LIGHT
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
@@ -935,7 +931,6 @@ SfxItemPresentation SvxULSpaceItem::GetPresentation
     XubString&          rText, const IntlWrapper *pIntl
 )   const
 {
-#ifndef SVX_LIGHT
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
@@ -977,7 +972,6 @@ SfxItemPresentation SvxULSpaceItem::GetPresentation
         }
         default: ;//prevent warning
     }
-#endif
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
@@ -1074,7 +1068,6 @@ SfxItemPresentation SvxPrintItem::GetPresentation
     XubString&          rText, const IntlWrapper *
 )   const
 {
-#ifndef SVX_LIGHT
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
@@ -1093,7 +1086,6 @@ SfxItemPresentation SvxPrintItem::GetPresentation
         }
         default: ;//prevent warning
     }
-#endif // !SVX_LIGHT
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
@@ -1131,7 +1123,6 @@ SfxItemPresentation SvxOpaqueItem::GetPresentation
     XubString&          rText, const IntlWrapper *
 )   const
 {
-#ifndef SVX_LIGHT
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
@@ -1150,7 +1141,6 @@ SfxItemPresentation SvxOpaqueItem::GetPresentation
         }
         default: ;//prevent warning
     }
-#endif // !SVX_LIGHT
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
@@ -1216,7 +1206,6 @@ SfxItemPresentation SvxProtectItem::GetPresentation
     XubString&          rText, const IntlWrapper *
 )   const
 {
-#ifndef SVX_LIGHT
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
@@ -1247,7 +1236,6 @@ SfxItemPresentation SvxProtectItem::GetPresentation
         }
         default: ;//prevent warning
     }
-#endif // !SVX_LIGHT
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
@@ -1441,7 +1429,6 @@ SfxItemPresentation SvxShadowItem::GetPresentation
     XubString&          rText, const IntlWrapper *pIntl
 )   const
 {
-#ifndef SVX_LIGHT
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
@@ -1482,7 +1469,6 @@ SfxItemPresentation SvxShadowItem::GetPresentation
         }
         default: ;//prevent warning
     }
-#endif
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
@@ -1618,7 +1604,6 @@ XubString SvxBorderLine::GetValueString( SfxMapUnit eSrcUnit,
                                       const IntlWrapper* pIntl,
                                       sal_Bool bMetricStr) const
 {
-#ifndef SVX_LIGHT
     sal_uInt16 nResId = 0;
 
     if ( 0 == nDistance )
@@ -1698,9 +1683,6 @@ XubString SvxBorderLine::GetValueString( SfxMapUnit eSrcUnit,
     }
     aStr += sal_Unicode(')');
     return aStr;
-#else
-    return UniString();
-#endif
 }
 
 bool SvxBorderLine::HasPriority( const SvxBorderLine& rOtherLine ) const
@@ -2151,7 +2133,6 @@ SfxItemPresentation SvxBoxItem::GetPresentation
     XubString&          rText, const IntlWrapper *pIntl
 )   const
 {
-#ifndef SVX_LIGHT
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
@@ -2280,7 +2261,6 @@ SfxItemPresentation SvxBoxItem::GetPresentation
         }
         default: ;//prevent warning
     }
-#endif // !SVX_LIGHT
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
@@ -3002,7 +2982,6 @@ SfxItemPresentation SvxFmtBreakItem::GetPresentation
     XubString&          rText, const IntlWrapper *
 )   const
 {
-#ifndef SVX_LIGHT
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
@@ -3015,7 +2994,6 @@ SfxItemPresentation SvxFmtBreakItem::GetPresentation
             return ePres;
         default: ;//prevent warning
     }
-#endif // !SVX_LIGHT
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
@@ -3156,7 +3134,6 @@ SfxItemPresentation SvxFmtKeepItem::GetPresentation
     XubString&          rText, const IntlWrapper *
     ) const
 {
-#ifndef SVX_LIGHT
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
@@ -3175,7 +3152,6 @@ SfxItemPresentation SvxFmtKeepItem::GetPresentation
         }
         default: ;//prevent warning
     }
-#endif
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
@@ -3310,7 +3286,6 @@ SfxItemPresentation SvxLineItem::GetPresentation
     XubString&          rText, const IntlWrapper *pIntl
 )   const
 {
-#ifndef SVX_LIGHT
     rText.Erase();
 
     switch ( ePres )
@@ -3327,7 +3302,6 @@ SfxItemPresentation SvxLineItem::GetPresentation
         }
         default: ;//prevent warning
     }
-#endif
     return SFX_ITEM_PRESENTATION_NONE;
 }
 

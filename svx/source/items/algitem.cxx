@@ -255,7 +255,6 @@ SfxItemPresentation SvxMarginItem::GetPresentation
     XubString&          rText, const IntlWrapper *pIntl
 )   const
 {
-#ifndef SVX_LIGHT
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
@@ -293,7 +292,6 @@ SfxItemPresentation SvxMarginItem::GetPresentation
         }
         default: ; //prevent warning
     }
-#endif
     return SFX_ITEM_PRESENTATION_NONE;
 }
 

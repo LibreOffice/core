@@ -160,12 +160,7 @@ SfxPoolItem** GlobalEditData::GetDefItems()
         ppDefItems[43] = new SvxEmphasisMarkItem( EMPHASISMARK_NONE, EE_CHAR_EMPHASISMARK );
         ppDefItems[44] = new SvxCharReliefItem( RELIEF_NONE, EE_CHAR_RELIEF );
         ppDefItems[45] = new SfxVoidItem( EE_CHAR_RUBI_DUMMY );
-#ifndef SVX_LIGHT
         ppDefItems[46] = new SvXMLAttrContainerItem( EE_CHAR_XMLATTRIBS );
-#else
-        // no need to have alien attributes persistent
-        ppDefItems[46] = new SfxVoidItem( EE_CHAR_XMLATTRIBS );
-#endif // #ifndef SVX_LIGHT
         ppDefItems[47] = new SvxOverlineItem( UNDERLINE_NONE, EE_CHAR_OVERLINE );
 
         // Features

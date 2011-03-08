@@ -1346,7 +1346,6 @@ bool SvxUnoConvertResourceString( USHORT* pSourceResIds, USHORT* pDestResIds, in
 */
 void SvxUnogetApiNameForItem( const sal_Int16 nWhich, const String& rInternalName, rtl::OUString& rApiName ) throw()
 {
-#ifndef SVX_LIGHT
     String aNew = rInternalName;
 
     if( nWhich == XATTR_LINECOLOR )
@@ -1372,7 +1371,6 @@ void SvxUnogetApiNameForItem( const sal_Int16 nWhich, const String& rInternalNam
             }
         }
     }
-#endif
 
     // just use previous name, if nothing else was found.
     rApiName = rInternalName;
@@ -1383,7 +1381,6 @@ void SvxUnogetApiNameForItem( const sal_Int16 nWhich, const String& rInternalNam
 */
 void SvxUnogetInternalNameForItem( const sal_Int16 nWhich, const rtl::OUString& rApiName, String& rInternalName ) throw()
 {
-#ifndef SVX_LIGHT
     String aNew = rApiName;
 
     if( nWhich == XATTR_LINECOLOR )
@@ -1409,7 +1406,6 @@ void SvxUnogetInternalNameForItem( const sal_Int16 nWhich, const rtl::OUString& 
             }
         }
     }
-#endif // !SVX_LIGHT
 
     // just use previous name, if nothing else was found.
     rInternalName = rApiName;

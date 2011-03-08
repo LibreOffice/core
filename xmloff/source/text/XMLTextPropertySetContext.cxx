@@ -79,14 +79,9 @@ SvXMLImportContext *XMLTextPropertySetContext::CreateChildContext(
                                                    rProperties );
         break;
     case CTF_TEXTCOLUMNS:
-#ifndef SVX_LIGHT
         pContext = new XMLTextColumnsContext( GetImport(), nPrefix,
                                                    rLocalName, xAttrList, rProp,
                                                    rProperties );
-#else
-        // create default context to skip content
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
-#endif // #ifndef SVX_LIGHT
         break;
 
     case CTF_DROPCAPFORMAT:
@@ -134,14 +129,12 @@ SvXMLImportContext *XMLTextPropertySetContext::CreateChildContext(
                                            rProperties );
     }
     break;
-#ifndef SVX_LIGHT
     case CTF_SECTION_FOOTNOTE_END:
     case CTF_SECTION_ENDNOTE_END:
         pContext = new XMLSectionFootnoteConfigImport(
             GetImport(), nPrefix, rLocalName, rProperties,
             mxMapper->getPropertySetMapper());
         break;
-#endif // #ifndef SVX_LIGHT
     }
 
     if( !pContext )

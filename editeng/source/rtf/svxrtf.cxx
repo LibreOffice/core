@@ -263,11 +263,9 @@ INSINGLECHAR:
         bNewGroup = false;
         break;
     case RTF_INFO:
-#ifndef SVX_LIGHT
         if (bReadDocInfo && bNewDoc && m_xDocProps.is())
             ReadInfo();
         else
-#endif
             SkipGroup();
         break;
 
@@ -693,7 +691,6 @@ util::DateTime SvxRTFParser::GetDateTimeStamp( )
 
 void SvxRTFParser::ReadInfo( const sal_Char* pChkForVerNo )
 {
-#ifndef SVX_LIGHT
     int _nOpenBrakets = 1, nToken;  // the first was already detected earlier!!
     DBG_ASSERT(m_xDocProps.is(),
         "SvxRTFParser::ReadInfo: no DocumentProperties");
@@ -793,7 +790,6 @@ void SvxRTFParser::ReadInfo( const sal_Char* pChkForVerNo )
         nVersionNo = nVersNo;
 
     SkipToken( -1 );        // the closing brace is evaluated "above"
-#endif
 }
 
 

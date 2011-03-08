@@ -112,25 +112,15 @@ SvXMLImportContext *PagePropertySetContext::CreateChildContext(
         break;
 
     case CTF_PM_TEXTCOLUMNS:
-#ifndef SVX_LIGHT
         pContext = new XMLTextColumnsContext( GetImport(), nPrefix,
                                               rLocalName, xAttrList, rProp,
                                               rProperties );
-#else
-        // create default context to skip content
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
-#endif // #ifndef SVX_LIGHT
         break;
 
     case CTF_PM_FTN_LINE_WEIGTH:
-#ifndef SVX_LIGHT
         pContext = new XMLFootnoteSeparatorImport(
             GetImport(), nPrefix, rLocalName, rProperties,
             mxMapper->getPropertySetMapper(), rProp.mnIndex);
-#else
-        // create default context to skip content
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName);
-#endif // #ifndef SVX_LIGHT
         break;
     }
 

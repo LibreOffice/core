@@ -235,8 +235,6 @@ sal_Bool XMLGradientStyleImport::importXML(
 // Export
 //-------------------------------------------------------------
 
-#ifndef SVX_LIGHT
-
 XMLGradientStyleExport::XMLGradientStyleExport(
     SvXMLExport& rExp )
     : rExport(rExp)
@@ -341,7 +339,5 @@ sal_Bool XMLGradientStyleExport::exportXML(
 
     return bRet;
 }
-
-#endif // #ifndef SVX_LIGHT
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2386,12 +2386,7 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
 
     case XML_TOK_TEXT_INDEX_TITLE:
     case XML_TOK_TEXT_SECTION:
-#ifndef SVX_LIGHT
         pContext = new XMLSectionImportContext( rImport, nPrefix, rLocalName );
-#else
-        // create default context to skip content
-        pContext = new SvXMLImportContext( rImport, nPrefix, rLocalName );
-#endif // #ifndef SVX_LIGHT
         break;
 
     case XML_TOK_TEXT_TOC:
@@ -2401,23 +2396,13 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
     case XML_TOK_TEXT_USER_INDEX:
     case XML_TOK_TEXT_ALPHABETICAL_INDEX:
     case XML_TOK_TEXT_BIBLIOGRAPHY_INDEX:
-#ifndef SVX_LIGHT
         if( XML_TEXT_TYPE_SHAPE != eType )
             pContext = new XMLIndexTOCContext( rImport, nPrefix, rLocalName );
-#else
-        // create default context to skip content
-        pContext = new SvXMLImportContext( rImport, nPrefix, rLocalName );
-#endif // #ifndef SVX_LIGHT
         break;
 
     case XML_TOK_TEXT_TRACKED_CHANGES:
-#ifndef SVX_LIGHT
         pContext = new XMLTrackedChangesImportContext( rImport, nPrefix,
                                                        rLocalName);
-#else
-        // create default context to skip content
-        pContext = new SvXMLImportContext( rImport, nPrefix, rLocalName );
-#endif // #ifndef SVX_LIGHT
         bContent = sal_False;
         break;
 
@@ -2432,12 +2417,7 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
         break;
 
     case XML_TOK_TEXT_FORMS:
-#ifndef SVX_LIGHT
         pContext = rImport.GetFormImport()->createOfficeFormsContext(rImport, nPrefix, rLocalName);
-#else
-        // create default context to skip content
-        pContext = new SvXMLImportContext( rImport, nPrefix, rLocalName );
-#endif // #ifndef SVX_LIGHT
         bContent = sal_False;
         break;
 
@@ -2450,12 +2430,7 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
         break;
 
     case XML_TOK_TEXT_CALCULATION_SETTINGS:
-#ifndef SVX_LIGHT
         pContext = new XMLCalculationSettingsContext ( rImport, nPrefix, rLocalName, xAttrList);
-#else
-        // create default context to skip content
-        pContext = new SvXMLImportContext( rImport, nPrefix, rLocalName );
-#endif // #ifndef SVX_LIGHT
         bContent = sal_False;
     break;
 

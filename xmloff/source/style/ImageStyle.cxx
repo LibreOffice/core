@@ -68,8 +68,6 @@ XMLImageStyle::~XMLImageStyle()
 {
 }
 
-#ifndef SVX_LIGHT
-
 sal_Bool XMLImageStyle::exportXML( const OUString& rStrName, const ::com::sun::star::uno::Any& rValue, SvXMLExport& rExport )
 {
     return ImpExportXML( rStrName, rValue, rExport );
@@ -120,8 +118,6 @@ sal_Bool XMLImageStyle::ImpExportXML( const OUString& rStrName, const uno::Any& 
 
     return bRet;
 }
-
-#endif // #ifndef SVX_LIGHT
 
 sal_Bool XMLImageStyle::importXML( const uno::Reference< xml::sax::XAttributeList >& xAttrList, uno::Any& rValue, OUString& rStrName, SvXMLImport& rImport )
 {

@@ -484,35 +484,20 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleChildContext(
                                                     rLocalName, xAttrList, sal_True );
                 break;
             case XML_TOK_TEXT_NOTE_CONFIG:
-#ifndef SVX_LIGHT
                 pStyle = new XMLFootnoteConfigurationImportContext(GetImport(),
                                                                    p_nPrefix,
                                                                    rLocalName,
                                                                    xAttrList);
-#else
-                // create default context to skip content
-                pStyle = new SvXMLStyleContext( GetImport(), nPrefix, rLocalName, xAttrList );
-#endif // #ifndef SVX_LIGHT
                 break;
 
             case XML_TOK_TEXT_BIBLIOGRAPHY_CONFIG:
-#ifndef SVX_LIGHT
                 pStyle = new XMLIndexBibliographyConfigurationContext(
                     GetImport(), p_nPrefix, rLocalName, xAttrList);
-#else
-                // create default context to skip content
-                pStyle = new SvXMLStyleContext( GetImport(), p_nPrefix, rLocalName, xAttrList );
-#endif // #ifndef SVX_LIGHT
                 break;
 
             case XML_TOK_TEXT_LINENUMBERING_CONFIG:
-#ifndef SVX_LIGHT
                 pStyle = new XMLLineNumberingImportContext(
                     GetImport(), p_nPrefix, rLocalName, xAttrList);
-#else
-                // create default context to skip content
-                pStyle = new SvXMLStyleContext( GetImport(), p_nPrefix, rLocalName, xAttrList );
-#endif // #ifndef SVX_LIGHT
                 break;
 
             //
@@ -714,7 +699,6 @@ UniReference < SvXMLImportPropertyMapper > SvXMLStylesContext::GetImportProperty
         }
         xMapper = mxShapeImpPropMapper;
         break;
-#ifndef SVX_LIGHT
     case XML_STYLE_FAMILY_SCH_CHART_ID:
         if( ! mxChartImpPropMapper.is() )
         {
@@ -723,7 +707,6 @@ UniReference < SvXMLImportPropertyMapper > SvXMLStylesContext::GetImportProperty
         }
         xMapper = mxChartImpPropMapper;
         break;
-#endif
     case XML_STYLE_FAMILY_PAGE_MASTER:
         if( ! mxPageImpPropMapper.is() )
         {

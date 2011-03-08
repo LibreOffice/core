@@ -228,8 +228,6 @@ sal_Bool XMLTransGradientStyleImport::importXML(
 // Export
 //-------------------------------------------------------------
 
-#ifndef SVX_LIGHT
-
 XMLTransGradientStyleExport::XMLTransGradientStyleExport( SvXMLExport& rExp )
     : rExport(rExp)
 {
@@ -326,7 +324,5 @@ sal_Bool XMLTransGradientStyleExport::exportXML(
 
     return bRet;
 }
-
-#endif // #ifndef SVX_LIGHT
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

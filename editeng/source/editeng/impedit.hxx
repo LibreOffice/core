@@ -1108,14 +1108,12 @@ inline void ImpEditEngine::IdleFormatAndUpdate( EditView* pCurView )
     aIdleFormatter.DoIdleFormat( pCurView );
 }
 
-#ifndef SVX_LIGHT
 inline EditUndoManager& ImpEditEngine::GetUndoManager()
 {
     if ( !pUndoManager )
         pUndoManager = new EditUndoManager( this );
     return *pUndoManager;
 }
-#endif
 
 inline ParaPortion* ImpEditEngine::FindParaPortion( ContentNode* pNode ) const
 {

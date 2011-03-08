@@ -46,7 +46,6 @@
 // #90477#
 #include <tools/tenccvt.hxx>
 
-#ifndef SVX_LIGHT
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 //  @@@@  @@@@@  @@@@@@  @@@@@@ @@@@@@ @@  @@ @@@@@@  @@    @@ @@  @@ @@  @@
@@ -127,7 +126,6 @@ void ImpSdrObjTextLink::DataChanged( const String& /*rMimeType*/,
     if (pSdrObj )
         pSdrObj->ReloadLinkedText( bForceReload );
 }
-#endif // SVX_LIGHT
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -151,9 +149,7 @@ ImpSdrObjTextLinkUserData::ImpSdrObjTextLinkUserData(SdrTextObj* pObj1):
 
 ImpSdrObjTextLinkUserData::~ImpSdrObjTextLinkUserData()
 {
-#ifndef SVX_LIGHT
     delete pLink;
-#endif
 }
 
 SdrObjUserData* ImpSdrObjTextLinkUserData::Clone(SdrObject* pObj1) const

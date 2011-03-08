@@ -1149,7 +1149,6 @@ SfxItemPresentation SvxTabStopItem::GetPresentation
 
     if ( ePres > SFX_ITEM_PRESENTATION_NONE )
     {
-#ifndef SVX_LIGHT
         sal_Bool bComma = sal_False;
 
         for ( sal_uInt16 i = 0; i < Count(); ++i )
@@ -1165,7 +1164,6 @@ SfxItemPresentation SvxTabStopItem::GetPresentation
                 bComma = sal_True;
             }
         }
-#endif
     }
     return ePres;
 }

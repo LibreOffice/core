@@ -1061,7 +1061,6 @@ SfxItemPresentation SvxFontHeightItem::GetPresentation
     XubString&          rText, const IntlWrapper *pIntl
 )   const
 {
-#ifndef SVX_LIGHT
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
@@ -1089,7 +1088,6 @@ SfxItemPresentation SvxFontHeightItem::GetPresentation
         }
         default: ; //prevent warning
     }
-#endif
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
@@ -1122,12 +1120,10 @@ void SvxFontHeightItem::SetHeight( sal_uInt32 nNewHeight, const USHORT nNewProp,
 {
     DBG_ASSERT( GetRefCount() == 0, "SetValue() with pooled item" );
 
-#ifndef SVX_LIGHT
     if( SFX_MAPUNIT_RELATIVE != eUnit )
         nHeight = nNewHeight + ::ItemToControl( (short)nNewProp, eUnit,
                                                 SFX_FUNIT_TWIP );
     else
-#endif // !SVX_LIGHT
     if( 100 != nNewProp )
         nHeight = sal_uInt32(( nNewHeight * nNewProp ) / 100 );
     else
@@ -1142,14 +1138,12 @@ void SvxFontHeightItem::SetHeight( sal_uInt32 nNewHeight, USHORT nNewProp,
 {
     DBG_ASSERT( GetRefCount() == 0, "SetValue() with pooled item" );
 
-#ifndef SVX_LIGHT
     if( SFX_MAPUNIT_RELATIVE != eMetric )
         nHeight = nNewHeight +
                 ::ControlToItem( ::ItemToControl((short)nNewProp, eMetric,
                                         SFX_FUNIT_TWIP ), SFX_FUNIT_TWIP,
                                         eCoreMetric );
     else
-#endif // !SVX_LIGHT
     if( 100 != nNewProp )
         nHeight = sal_uInt32(( nNewHeight * nNewProp ) / 100 );
     else
@@ -1268,7 +1262,6 @@ SfxItemPresentation SvxFontWidthItem::GetPresentation
     XubString&          rText, const IntlWrapper *pIntl
 )   const
 {
-#ifndef SVX_LIGHT
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
@@ -1289,7 +1282,6 @@ SfxItemPresentation SvxFontWidthItem::GetPresentation
         }
         default: ; //prevent warning
     }
-#endif
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
@@ -1364,7 +1356,6 @@ SfxItemPresentation SvxTextLineItem::GetPresentation
     XubString&          rText, const IntlWrapper * /*pIntl*/
 )   const
 {
-#ifndef SVX_LIGHT
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
@@ -1378,7 +1369,6 @@ SfxItemPresentation SvxTextLineItem::GetPresentation
             return ePres;
         default: ; //prevent warning
     }
-#endif
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
@@ -2055,7 +2045,6 @@ SfxItemPresentation SvxColorItem::GetPresentation
     XubString&          rText, const IntlWrapper * /*pIntl*/
 )   const
 {
-#ifndef SVX_LIGHT
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
@@ -2067,7 +2056,6 @@ SfxItemPresentation SvxColorItem::GetPresentation
             return ePres;
         default: ; //prevent warning
     }
-#endif
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
@@ -2195,7 +2183,6 @@ SfxItemPresentation SvxKerningItem::GetPresentation
     XubString&          rText, const IntlWrapper *pIntl
 )   const
 {
-#ifndef SVX_LIGHT
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
@@ -2223,7 +2210,6 @@ SfxItemPresentation SvxKerningItem::GetPresentation
         }
         default: ; //prevent warning
     }
-#endif
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
@@ -2608,7 +2594,6 @@ SfxItemPresentation SvxLanguageItem::GetPresentation
     XubString&          rText, const IntlWrapper * /*pIntl*/
 )   const
 {
-#ifndef SVX_LIGHT
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
@@ -2623,7 +2608,6 @@ SfxItemPresentation SvxLanguageItem::GetPresentation
         }
         default: ; //prevent warning
     }
-#endif // !SVX_LIGHT
     return SFX_ITEM_PRESENTATION_NONE;
 }
 

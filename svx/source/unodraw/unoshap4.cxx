@@ -39,10 +39,8 @@
 #include <svx/svdoole2.hxx>
 #include <svx/svdomedia.hxx>
 #include <svx/svdpool.hxx>
-#ifndef SVX_LIGHT
 #include <sot/clsids.hxx>
 #include <sfx2/frmdescr.hxx>
-#endif
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 

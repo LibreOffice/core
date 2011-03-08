@@ -712,9 +712,7 @@ ContentNode::ContentNode( const XubString& rStr, const ContentAttribs& rContentA
 ContentNode::~ContentNode()
 {
     DBG_DTOR( EE_ContentNode, 0 );
-#ifndef SVX_LIGHT
     delete pWrongList;
-#endif
 }
 
 void ContentNode::ExpandAttribs( USHORT nIndex, USHORT nNew, SfxItemPool& rItemPool )
@@ -842,13 +840,11 @@ void ContentNode::ExpandAttribs( USHORT nIndex, USHORT nNew, SfxItemPool& rItemP
     if ( bResort )
         aCharAttribList.ResortAttribs();
 
-#ifndef SVX_LIGHT
     if ( pWrongList )
     {
         BOOL bSep = ( GetChar( nIndex ) == ' ' ) || IsFeature( nIndex );
         pWrongList->TextInserted( nIndex, nNew, bSep );
     }
-#endif // !SVX_LIGHT
 
 #ifdef EDITDEBUG
     DBG_ASSERT( CheckOrderedList( aCharAttribList.GetAttribs(), TRUE ), "Expand: Start List distorted" );
@@ -935,10 +931,8 @@ void ContentNode::CollapsAttribs( USHORT nIndex, USHORT nDeleted, SfxItemPool& r
     if ( bResort )
         aCharAttribList.ResortAttribs();
 
-#ifndef SVX_LIGHT
     if ( pWrongList )
         pWrongList->TextDeleted( nIndex, nDeleted );
-#endif // !SVX_LIGHT
 
 #ifdef EDITDEBUG
     DBG_ASSERT( CheckOrderedList( aCharAttribList.GetAttribs(), TRUE ), "Collaps: Start list distorted" );
@@ -1087,18 +1081,14 @@ void ContentNode::SetStyleSheet( SfxStyleSheet* pS, BOOL bRecalcFont )
 
 void ContentNode::DestroyWrongList()
 {
-#ifndef SVX_LIGHT
     delete pWrongList;
-#endif
     pWrongList = NULL;
 }
 
 void ContentNode::CreateWrongList()
 {
     DBG_ASSERT( !pWrongList, "WrongList already exist!" );
-#ifndef SVX_LIGHT
     pWrongList = new WrongList;
-#endif
 }
 
 void ContentNode::SetWrongList( WrongList* p )

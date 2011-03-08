@@ -1102,7 +1102,6 @@ void ImpEditView::SetInsertMode( sal_Bool bInsert )
 sal_Bool ImpEditView::IsWrongSpelledWord( const EditPaM& rPaM, sal_Bool bMarkIfWrong )
 {
     sal_Bool bIsWrong = sal_False;
-#ifndef SVX_LIGHT
     if ( rPaM.GetNode()->GetWrongList() )
     {
         EditSelection aSel = pEditEngine->pImpEditEngine->SelectWord( rPaM, ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
@@ -1114,14 +1113,12 @@ sal_Bool ImpEditView::IsWrongSpelledWord( const EditPaM& rPaM, sal_Bool bMarkIfW
             DrawSelection();
         }
     }
-#endif // !SVX_LIGHT
     return bIsWrong;
 }
 
 String ImpEditView::SpellIgnoreOrAddWord( sal_Bool bAdd )
 {
     String aWord;
-#ifndef SVX_LIGHT
     if ( pEditEngine->pImpEditEngine->GetSpeller().is() )
     {
         EditPaM aPaM = GetEditSelection().Max();
@@ -1162,7 +1159,6 @@ String ImpEditView::SpellIgnoreOrAddWord( sal_Bool bAdd )
             pEditEngine->pImpEditEngine->StartOnlineSpellTimer();
         }
     }
-#endif // !SVX_LIGHT
     return aWord;
 }
 

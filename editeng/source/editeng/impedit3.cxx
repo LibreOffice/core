@@ -172,7 +172,6 @@ void lcl_DrawRedLines(
     BOOL bVertical,
     BOOL bIsRightToLeft )
 {
-#ifndef SVX_LIGHT
     // Aber nur, wenn Font nicht zu klein...
     long nHght = pOutDev->LogicToPixel( Size( 0, nFontHeight ) ).Height();
     if( WRONG_SHOW_MIN < nHght )
@@ -244,7 +243,6 @@ void lcl_DrawRedLines(
                 bWrong = sal_False;
         }
     }
-#endif // !SVX_LIGHT
 }
 
 Point lcl_ImplCalcRotatedPos( Point rPos, Point rOrigin, double nSin, double nCos )
@@ -1826,7 +1824,6 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
         bHangingPunctuation = ( nBreakPos > nMaxBreakPos ) ? sal_True : sal_False;
         pLine->SetHangingPunctuation( bHangingPunctuation );
 
-    #ifndef SVX_LIGHT
         // Egal ob Trenner oder nicht: Das Wort nach dem Trenner durch
         // die Silbentrennung jagen...
         // nMaxBreakPos ist das letzte Zeichen was in die Zeile passt,
@@ -1921,8 +1918,6 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
                 }
             }
         }
-
-    #endif // !SVX_LIGHT
 
         if ( nBreakPos <= pLine->GetStart() )
         {
@@ -3472,7 +3467,6 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
 
                                     }
 
-#ifndef SVX_LIGHT
                                     if ( GetStatus().DoOnlineSpelling() && pPortion->GetNode()->GetWrongList()->HasWrongs() && pTextPortion->GetLen() )
                                     {
                                         {//#105750# adjust LinePos for superscript or subscript text
@@ -3491,7 +3485,6 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                         lcl_DrawRedLines( pOutDev, aTmpFont.GetSize().Height(), aRedLineTmpPos, nIndex, nIndex + pTextPortion->GetLen(), pDXArray, pPortion->GetNode()->GetWrongList(), nOrientation, aOrigin, IsVertical(), pTextPortion->IsRightToLeft() );
                                         pOutDev->SetLineColor( aOldColor );
                                     }
-#endif // !SVX_LIGHT
                                 }
 
                                 pOutDev->Pop();

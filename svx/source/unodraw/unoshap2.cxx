@@ -1619,11 +1619,9 @@ uno::Sequence< OUString > SAL_CALL SvxShapePolyPolygonBezier::getSupportedServic
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <vcl/cvtgrf.hxx>
 #include <svx/svdograf.hxx>
-#ifndef SVX_LIGHT
 #include <sfx2/docfile.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/fcontnr.hxx>
-#endif
 
 #include "toolkit/unohlp.hxx"
 

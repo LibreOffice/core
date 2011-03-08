@@ -419,10 +419,8 @@ void Outliner::UndoActionEnd( USHORT nId )
 
 void Outliner::InsertUndo( EditUndo* pUndo )
 {
-#ifndef SVX_LIGHT
     DBG_CHKTHIS(Outliner,0);
     pEditEngine->GetUndoManager().AddUndoAction( pUndo, FALSE );
-#endif
 }
 
 BOOL Outliner::IsInUndo()

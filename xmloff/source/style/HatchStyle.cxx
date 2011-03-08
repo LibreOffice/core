@@ -189,8 +189,6 @@ sal_Bool XMLHatchStyleImport::importXML(
 // Export
 //-------------------------------------------------------------
 
-#ifndef SVX_LIGHT
-
 XMLHatchStyleExport::XMLHatchStyleExport( SvXMLExport& rExp )
     : rExport(rExp)
 {
@@ -260,7 +258,5 @@ sal_Bool XMLHatchStyleExport::exportXML(
 
     return bRet;
 }
-
-#endif // #ifndef SVX_LIGHT
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

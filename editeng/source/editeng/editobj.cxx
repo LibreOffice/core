@@ -211,10 +211,8 @@ ContentInfo::ContentInfo( const ContentInfo& rCopyFrom, SfxItemPool& rPoolToUse 
     }
 
     pWrongs = NULL;
-#ifndef SVX_LIGHT
     if ( rCopyFrom.GetWrongList() )
         pWrongs = rCopyFrom.GetWrongList()->Clone();
-#endif // !SVX_LIGHT
 }
 
 ContentInfo::~ContentInfo()
@@ -226,9 +224,7 @@ ContentInfo::~ContentInfo()
         delete pAttr;
     }
     aAttribs.Remove( 0, aAttribs.Count() );
-#ifndef SVX_LIGHT
     delete pWrongs;
-#endif
 }
 
 // #i102062#
@@ -877,14 +873,12 @@ void BinTextObject::ClearPortionInfo()
 
 BOOL BinTextObject::HasOnlineSpellErrors() const
 {
-#ifndef SVX_LIGHT
     for ( USHORT n = 0; n < aContents.Count(); n++ )
     {
         ContentInfo* p = aContents.GetObject( n );
         if ( p->GetWrongList() && p->GetWrongList()->Count() )
             return TRUE;
     }
-#endif // !SVX_LIGHT
     return FALSE;
 
 }

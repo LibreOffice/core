@@ -70,9 +70,7 @@ public:
     // access to all forms
     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>& GetForms( bool _bForceCreate = true ) const;
 
-#ifndef SVX_LIGHT
     FmFormPageImpl& GetImpl() const { return *m_pImpl; }
-#endif // SVX_LIGHT
 
 public:
     const String&       GetName() const { return m_sPageName; }

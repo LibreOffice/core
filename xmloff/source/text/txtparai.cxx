@@ -1696,7 +1696,6 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
         break;
 
     case XML_TOK_TEXT_NOTE:
-#ifndef SVX_LIGHT
         if (rImport.GetTextImport()->IsInFrame())
         {
             // we must not insert footnotes into text frames
@@ -1709,10 +1708,6 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
                                                      *rImport.GetTextImport().get(),
                                                      nPrefix, rLocalName );
         }
-#else
-        // create default context to skip content
-        pContext = new SvXMLImportContext( rImport, nPrefix, rLocalName );
-#endif // #ifndef SVX_LIGHT
         rIgnoreLeadingSpace = sal_False;
         break;
 

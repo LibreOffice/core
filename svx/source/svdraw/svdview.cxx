@@ -1106,13 +1106,11 @@ Pointer SdrView::GetPreferedPointer(const Point& rMousePos, const OutputDevice* 
 
                 // Sind 3D-Objekte selektiert?
                 BOOL b3DObjSelected = FALSE;
-#ifndef SVX_LIGHT
                 for (UINT32 a=0; !b3DObjSelected && a<GetMarkedObjectCount(); a++) {
                     SdrObject* pObj = GetMarkedObjectByIndex(a);
                     if(pObj && pObj->ISA(E3dObject))
                         b3DObjSelected = TRUE;
                 }
-#endif
                 // Falls es um ein 3D-Objekt geht, muss trotz !IsShearAllowed
                 // weitergemacht werden, da es sich um eine Rotation statt um
                 // einen Shear handelt
