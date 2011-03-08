@@ -179,6 +179,11 @@ void ScTable::InsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE
     DecRecalcLevel( false );
 
     InvalidatePageBreaks();
+
+    if (IsStreamValid())
+        // TODO: In the future we may want to check if the table has been
+        // really modified before setting the stream invalid.
+        SetStreamValid(false);
 }
 
 
@@ -224,6 +229,11 @@ void ScTable::DeleteRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE
     DecRecalcLevel();
 
     InvalidatePageBreaks();
+
+    if (IsStreamValid())
+        // TODO: In the future we may want to check if the table has been
+        // really modified before setting the stream invalid.
+        SetStreamValid(false);
 }
 
 
@@ -311,6 +321,11 @@ void ScTable::InsertCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE
     DecRecalcLevel();
 
     InvalidatePageBreaks();
+
+    if (IsStreamValid())
+        // TODO: In the future we may want to check if the table has been
+        // really modified before setting the stream invalid.
+        SetStreamValid(false);
 }
 
 
@@ -371,6 +386,11 @@ void ScTable::DeleteCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE
     DecRecalcLevel();
 
     InvalidatePageBreaks();
+
+    if (IsStreamValid())
+        // TODO: In the future we may want to check if the table has been
+        // really modified before setting the stream invalid.
+        SetStreamValid(false);
 }
 
 
@@ -398,9 +418,12 @@ void ScTable::DeleteArea(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, USH
             aPattern.GetItemSet().Put( ScProtectionAttr( FALSE ) );
             ApplyPatternArea( nCol1, nRow1, nCol2, nRow2, aPattern );
         }
-
-//      DecRecalcLevel();
     }
+
+    if (IsStreamValid())
+        // TODO: In the future we may want to check if the table has been
+        // really modified before setting the stream invalid.
+        SetStreamValid(false);
 }
 
 
@@ -424,6 +447,11 @@ void ScTable::DeleteSelection( USHORT nDelFlag, const ScMarkData& rMark )
         SfxItemPoolCache aCache( pPool, &aSet );
         ApplySelectionCache( &aCache, rMark );
     }
+
+    if (IsStreamValid())
+        // TODO: In the future we may want to check if the table has been
+        // really modified before setting the stream invalid.
+        SetStreamValid(false);
 }
 
 

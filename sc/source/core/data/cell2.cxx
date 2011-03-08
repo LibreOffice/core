@@ -829,11 +829,13 @@ BOOL ScFormulaCell::HasColRowName() const
     return (pCode->GetNextColRowName() != NULL);
 }
 
-void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
+bool ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
                                     const ScRange& r,
                                     SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
                                     ScDocument* pUndoDoc, const ScAddress* pUndoCellPos )
 {
+    bool bCellStateChanged = false;
+
     SCCOL nCol1 = r.aStart.Col();
     SCROW nRow1 = r.aStart.Row();
     SCTAB nTab1 = r.aStart.Tab();
@@ -862,6 +864,7 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
                     nCol = 0;
                 else if ( nCol > MAXCOL )
                     nCol = MAXCOL;
+                bCellStateChanged = aPos.Col() != nCol;
                 aPos.SetCol( nCol );
 //              bPosChanged = TRUE;
             }
@@ -876,6 +879,7 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
                     nRow = 0;
                 else if ( nRow > MAXROW )
                     nRow = MAXROW;
+                bCellStateChanged = aPos.Row() != nRow;
                 aPos.SetRow( nRow );
 //              bPosChanged = TRUE;
             }
@@ -891,6 +895,7 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
                     nTab = 0;
                 else if ( nTab > nMaxTab )
                     nTab = nMaxTab;
+                bCellStateChanged = aPos.Tab() != nTab;
                 aPos.SetTab( nTab );
 //              bPosChanged = TRUE;
             }
@@ -940,6 +945,9 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
             bRangeModified = FALSE;
             bRefSizeChanged = FALSE;
         }
+
+        bCellStateChanged |= bValChanged;
+
         if ( bOnRefMove )
             bOnRefMove = (bValChanged || (aPos != aOldPos));
             // Cell may reference itself, e.g. ocColumn, ocRow without parameter
@@ -1126,6 +1134,7 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
 
         delete pOld;
     }
+    return bCellStateChanged;
 }
 
 void ScFormulaCell::UpdateInsertTab(SCTAB nTable)

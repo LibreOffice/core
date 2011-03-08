@@ -286,7 +286,7 @@ public:
 
     void        ResetChanged( SCROW nStartRow, SCROW nEndRow );
 
-    void        UpdateReference( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
+    bool        UpdateReference( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                      SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
                                      SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
                                      ScDocument* pUndoDoc = NULL );
