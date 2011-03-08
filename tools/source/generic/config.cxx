@@ -779,7 +779,7 @@ Config::Config()
     mbPersistence   = TRUE;
 
 #ifdef DBG_UTIL
-    DBG_TRACE( "Config::Config()" );
+    OSL_TRACE( "Config::Config()" );
 #endif
 }
 
@@ -808,7 +808,7 @@ Config::Config( const XubString& rFileName )
 Config::~Config()
 {
 #ifdef DBG_UTIL
-    DBG_TRACE( "Config::~Config()" );
+    OSL_TRACE( "Config::~Config()" );
 #endif
 
     Flush();

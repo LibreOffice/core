@@ -133,7 +133,7 @@ sal_Bool StdTabController::ImplCreateComponentSequence(
         }
         else
         {
-            DBG_TRACE( "ImplCreateComponentSequence: Control not found" );
+            OSL_TRACE( "ImplCreateComponentSequence: Control not found" );
             bOK = sal_False;
         }
     }

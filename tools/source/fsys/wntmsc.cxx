@@ -827,7 +827,7 @@ BOOL FileStat::Update( const DirEntry& rDirEntry, BOOL bForceAccess )
             if ( aName == "a:" || aName == "b:" )
                 bAccess = FALSE;
             else
-                DBG_TRACE( "FSys: will access removable device!" );
+                OSL_TRACE( "FSys: will access removable device!" );
         if ( bAccess && ( aName == "a:" || aName == "b:" ) ) {
             DBG_WARNING( "floppy will clatter" );
         }

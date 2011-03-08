@@ -51,7 +51,7 @@ DBG_NAMEEX( OutputDevice )
 void OutputDevice::DrawRect( const Rectangle& rRect,
                              ULONG nHorzRound, ULONG nVertRound )
 {
-    DBG_TRACE( "OutputDevice::DrawRoundRect()" );
+    OSL_TRACE( "OutputDevice::DrawRoundRect()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( mpMetaFile )
@@ -110,7 +110,7 @@ void OutputDevice::DrawRect( const Rectangle& rRect,
 
 void OutputDevice::DrawEllipse( const Rectangle& rRect )
 {
-    DBG_TRACE( "OutputDevice::DrawEllipse()" );
+    OSL_TRACE( "OutputDevice::DrawEllipse()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( mpMetaFile )
@@ -161,7 +161,7 @@ void OutputDevice::DrawEllipse( const Rectangle& rRect )
 void OutputDevice::DrawArc( const Rectangle& rRect,
                             const Point& rStartPt, const Point& rEndPt )
 {
-    DBG_TRACE( "OutputDevice::DrawArc()" );
+    OSL_TRACE( "OutputDevice::DrawArc()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( mpMetaFile )
@@ -208,7 +208,7 @@ void OutputDevice::DrawArc( const Rectangle& rRect,
 void OutputDevice::DrawPie( const Rectangle& rRect,
                             const Point& rStartPt, const Point& rEndPt )
 {
-    DBG_TRACE( "OutputDevice::DrawPie()" );
+    OSL_TRACE( "OutputDevice::DrawPie()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( mpMetaFile )
@@ -262,7 +262,7 @@ void OutputDevice::DrawPie( const Rectangle& rRect,
 void OutputDevice::DrawChord( const Rectangle& rRect,
                               const Point& rStartPt, const Point& rEndPt )
 {
-    DBG_TRACE( "OutputDevice::DrawChord()" );
+    OSL_TRACE( "OutputDevice::DrawChord()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( mpMetaFile )

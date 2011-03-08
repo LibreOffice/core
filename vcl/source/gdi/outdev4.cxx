@@ -606,7 +606,7 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
 void OutputDevice::DrawGradient( const Rectangle& rRect,
                                  const Gradient& rGradient )
 {
-    DBG_TRACE( "OutputDevice::DrawGradient()" );
+    OSL_TRACE( "OutputDevice::DrawGradient()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
     DBG_CHKOBJ( &rGradient, Gradient, NULL );
 
@@ -737,7 +737,7 @@ void OutputDevice::DrawGradient( const Rectangle& rRect,
 void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
                                  const Gradient& rGradient )
 {
-    DBG_TRACE( "OutputDevice::DrawGradient()" );
+    OSL_TRACE( "OutputDevice::DrawGradient()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
     DBG_CHKOBJ( &rGradient, Gradient, NULL );
 
@@ -1004,7 +1004,7 @@ void OutputDevice::AddGradientActions( const Rectangle& rRect, const Gradient& r
 
 void OutputDevice::DrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch )
 {
-    DBG_TRACE( "OutputDevice::DrawHatch()" );
+    OSL_TRACE( "OutputDevice::DrawHatch()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     Hatch aHatch( rHatch );

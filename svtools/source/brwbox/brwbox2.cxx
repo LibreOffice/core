@@ -1535,7 +1535,7 @@ void BrowseBox::MouseButtonDown( const MouseEvent& rEvt )
 void BrowseBox::MouseMove( const MouseEvent& rEvt )
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
-    DBG_TRACE( "BrowseBox::MouseMove( MouseEvent )" );
+    OSL_TRACE( "BrowseBox::MouseMove( MouseEvent )" );
 
     Pointer aNewPointer;
 

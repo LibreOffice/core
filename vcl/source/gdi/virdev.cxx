@@ -184,7 +184,7 @@ VirtualDevice::VirtualDevice( const SystemGraphicsData *pData, USHORT nBitCount 
 
 VirtualDevice::~VirtualDevice()
 {
-    DBG_TRACE( "VirtualDevice::~VirtualDevice()" );
+    OSL_TRACE( "VirtualDevice::~VirtualDevice()" );
 
     ImplSVData* pSVData = ImplGetSVData();
 
