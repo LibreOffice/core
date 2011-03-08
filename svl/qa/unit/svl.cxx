@@ -135,8 +135,6 @@ void Test::testNumberFormat()
         "#,##0",
         "#,##0.00",
         "#,###.00",
-        "#,##0_);(#,##0)",
-        "#,##0.00_);(#,##0.00)",
         0
     };
 
@@ -170,6 +168,7 @@ void Test::testNumberFormat()
         "$#,##0;-$#,##0",
         0
     };
+#endif
 
     const char* pDate[] = {
         "MM/DD/YY",
@@ -212,7 +211,6 @@ void Test::testNumberFormat()
         "MM/DD/YY HH:MM AM/PM",
         0
     };
-#endif
 
     const char* pBoolean[] = {
         "BOOLEAN",
@@ -230,19 +228,16 @@ void Test::testNumberFormat()
         size_t nSize;
         const char** pCodes;
     } aTests[] = {
-        { NF_NUMBER_START, NF_NUMBER_END, 8, pNumber },
+        { NF_NUMBER_START, NF_NUMBER_END, 6, pNumber },
         { NF_SCIENTIFIC_START, NF_SCIENTIFIC_END, 2, pScientific },
         { NF_PERCENT_START, NF_PERCENT_END, 2, pPercent },
         { NF_FRACTION_START, NF_FRACTION_END, 4, pFraction },
 #if 0 // TODO: Find out why on some systems the last two currency format codes differ.
         { NF_CURRENCY_START, NF_CURRENCY_END, 6, pCurrency },
-      // After introducing new num. formats, indexes in standard format list
-      // get shifted and 3 items below cease to work
-      // need to investigate why (bubli)
+#endif
         { NF_DATE_START, NF_DATE_END, 21, pDate },
         { NF_TIME_START, NF_TIME_END, 7, pTime },
         { NF_DATETIME_START, NF_DATETIME_END, 2, pDateTime },
-#endif
         { NF_BOOLEAN, NF_BOOLEAN, 1, pBoolean },
         { NF_TEXT, NF_TEXT, 1, pText }
     };
