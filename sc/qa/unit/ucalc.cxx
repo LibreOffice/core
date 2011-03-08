@@ -1112,6 +1112,7 @@ void Test::testExternalRef()
                            aCachedRange.aStart.Col() == 0 && aCachedRange.aEnd.Col() == 1 &&
                            aCachedRange.aStart.Row() == 0 && aCachedRange.aEnd.Row() == 3);
 
+    // Unload the external document shell.
     xExtDocSh->DoClose();
     CPPUNIT_ASSERT_MESSAGE("external document instance should have been unloaded.",
                            findLoadedDocShellByName(aExtDocName) == NULL);
