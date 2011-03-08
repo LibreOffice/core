@@ -281,7 +281,7 @@ sal_Int32 ScDPItemData::Compare( const ScDPItemData& rA,
 void    ScDPItemData::dump() const
 {
     OSL_TRACE( "Numberformat= %o",  nNumFormat );
-    DBG_TRACESTR(aString );
+    OSL_TRACE( aString.GetBuffer() );
     OSL_TRACE( "fValue= %f", fValue );
     OSL_TRACE( "mbFlag= %d", mbFlag);
 }
