@@ -69,6 +69,7 @@
 
 #include "docsh.hxx"
 #include "funcdesc.hxx"
+#include "externalrefmgr.hxx"
 
 #include "dpshttab.hxx"
 #include "dpobject.hxx"
@@ -236,6 +237,7 @@ public:
     void testMatrix();
     void testDataPilot();
     void testSheetCopy();
+    void testExternalRef();
 
     /**
      * Make sure the sheet streams are invalidated properly.
@@ -265,6 +267,7 @@ public:
     CPPUNIT_TEST(testMatrix);
     CPPUNIT_TEST(testDataPilot);
     CPPUNIT_TEST(testSheetCopy);
+    CPPUNIT_TEST(testExternalRef);
     CPPUNIT_TEST(testGraphicsInGroup);
     CPPUNIT_TEST(testStreamValid);
     CPPUNIT_TEST(testFunctionLists);
@@ -883,6 +886,236 @@ void Test::testSheetCopy()
     CPPUNIT_ASSERT_MESSAGE("rows 5 - 10 should be hidden", bHidden && nRow1 == 5 && nRow2 == 10);
     bHidden = m_pDoc->RowHidden(11, 1, &nRow1, &nRow2);
     CPPUNIT_ASSERT_MESSAGE("rows 11 - maxrow should be visible", !bHidden && nRow1 == 11 && nRow2 == MAXROW);
+    m_pDoc->DeleteTab(0);
+}
+
+ScDocShell* findLoadedDocShellByName(const OUString& rName)
+{
+    TypeId aType(TYPE(ScDocShell));
+    ScDocShell* pShell = static_cast<ScDocShell*>(SfxObjectShell::GetFirst(&aType, false));
+    while (pShell)
+    {
+        SfxMedium* pMedium = pShell->GetMedium();
+        if (pMedium)
+        {
+            OUString aName = pMedium->GetName();
+            if (aName.equals(rName))
+                return pShell;
+        }
+        pShell = static_cast<ScDocShell*>(SfxObjectShell::GetNext(*pShell, &aType, false));
+    }
+    return NULL;
+}
+
+ScRange getCachedRange(const ScExternalRefCache::TableTypeRef& pCacheTab)
+{
+    ScRange aRange;
+
+    vector<SCROW> aRows;
+    pCacheTab->getAllRows(aRows);
+    vector<SCROW>::const_iterator itrRow = aRows.begin(), itrRowEnd = aRows.end();
+    bool bFirst = true;
+    for (; itrRow != itrRowEnd; ++itrRow)
+    {
+        SCROW nRow = *itrRow;
+        vector<SCCOL> aCols;
+        pCacheTab->getAllCols(nRow, aCols);
+        vector<SCCOL>::const_iterator itrCol = aCols.begin(), itrColEnd = aCols.end();
+        for (; itrCol != itrColEnd; ++itrCol)
+        {
+            SCCOL nCol = *itrCol;
+            if (bFirst)
+            {
+                aRange.aStart = ScAddress(nCol, nRow, 0);
+                aRange.aEnd = aRange.aStart;
+                bFirst = false;
+            }
+            else
+            {
+                if (nCol < aRange.aStart.Col())
+                    aRange.aStart.SetCol(nCol);
+                else if (aRange.aEnd.Col() < nCol)
+                    aRange.aEnd.SetCol(nCol);
+
+                if (nRow < aRange.aStart.Row())
+                    aRange.aStart.SetRow(nRow);
+                else if (aRange.aEnd.Row() < nRow)
+                    aRange.aEnd.SetRow(nRow);
+            }
+        }
+    }
+    return aRange;
+}
+
+void Test::testExternalRef()
+{
+    ScDocShellRef xExtDocSh = new ScDocShell;
+    OUString aExtDocName(RTL_CONSTASCII_USTRINGPARAM("file:///extdata.fake"));
+    OUString aExtSh1Name(RTL_CONSTASCII_USTRINGPARAM("Data1"));
+    OUString aExtSh2Name(RTL_CONSTASCII_USTRINGPARAM("Data2"));
+    OUString aExtSh3Name(RTL_CONSTASCII_USTRINGPARAM("Data3"));
+    SfxMedium* pMed = new SfxMedium(aExtDocName, STREAM_STD_READWRITE);
+    xExtDocSh->DoInitNew(pMed);
+    CPPUNIT_ASSERT_MESSAGE("external document instance not loaded.",
+                           findLoadedDocShellByName(aExtDocName) != NULL);
+
+    // Populate the external source document.
+    ScDocument* pExtDoc = xExtDocSh->GetDocument();
+    pExtDoc->InsertTab(0, aExtSh1Name);
+    pExtDoc->InsertTab(1, aExtSh2Name);
+    pExtDoc->InsertTab(2, aExtSh3Name);
+
+    OUString name(RTL_CONSTASCII_USTRINGPARAM("Name"));
+    OUString value(RTL_CONSTASCII_USTRINGPARAM("Value"));
+    OUString andy(RTL_CONSTASCII_USTRINGPARAM("Andy"));
+    OUString bruce(RTL_CONSTASCII_USTRINGPARAM("Bruce"));
+    OUString charlie(RTL_CONSTASCII_USTRINGPARAM("Charlie"));
+    OUString david(RTL_CONSTASCII_USTRINGPARAM("David"));
+    OUString edward(RTL_CONSTASCII_USTRINGPARAM("Edward"));
+    OUString frank(RTL_CONSTASCII_USTRINGPARAM("Frank"));
+    OUString george(RTL_CONSTASCII_USTRINGPARAM("George"));
+    OUString henry(RTL_CONSTASCII_USTRINGPARAM("Henry"));
+
+    // Sheet 1
+    pExtDoc->SetString(0, 0, 0, name);
+    pExtDoc->SetString(0, 1, 0, andy);
+    pExtDoc->SetString(0, 2, 0, bruce);
+    pExtDoc->SetString(0, 3, 0, charlie);
+    pExtDoc->SetString(0, 4, 0, david);
+    pExtDoc->SetString(1, 0, 0, value);
+    double val = 10;
+    pExtDoc->SetValue(1, 1, 0, val);
+    val = 11;
+    pExtDoc->SetValue(1, 2, 0, val);
+    val = 12;
+    pExtDoc->SetValue(1, 3, 0, val);
+    val = 13;
+    pExtDoc->SetValue(1, 4, 0, val);
+
+    // Sheet 2 remains empty.
+
+    // Sheet 3
+    pExtDoc->SetString(0, 0, 2, name);
+    pExtDoc->SetString(0, 1, 2, edward);
+    pExtDoc->SetString(0, 2, 2, frank);
+    pExtDoc->SetString(0, 3, 2, george);
+    pExtDoc->SetString(0, 4, 2, henry);
+    pExtDoc->SetString(1, 0, 2, value);
+    val = 99;
+    pExtDoc->SetValue(1, 1, 2, val);
+    val = 98;
+    pExtDoc->SetValue(1, 2, 2, val);
+    val = 97;
+    pExtDoc->SetValue(1, 3, 2, val);
+    val = 96;
+    pExtDoc->SetValue(1, 4, 2, val);
+
+    // Test external refernces on the main document while the external
+    // document is still in memory.
+    OUString test;
+    m_pDoc->InsertTab(0, OUString(RTL_CONSTASCII_USTRINGPARAM("Test Sheet")));
+    m_pDoc->SetString(0, 0, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("='file:///extdata.fake'#Data1.A1")));
+    m_pDoc->GetString(0, 0, 0, test);
+    CPPUNIT_ASSERT_MESSAGE("Value is different from the original", test.equals(name));
+
+    // After the initial access to the external document, the external ref
+    // manager should create sheet cache entries for *all* sheets from that
+    // document.  Note that the doc may have more than 3 sheets but ensure
+    // that the first 3 are what we expect.
+    ScExternalRefManager* pRefMgr = m_pDoc->GetExternalRefManager();
+    sal_uInt16 nFileId = pRefMgr->getExternalFileId(aExtDocName);
+    vector<OUString> aTabNames;
+    pRefMgr->getAllCachedTableNames(nFileId, aTabNames);
+    CPPUNIT_ASSERT_MESSAGE("There should be at least 3 sheets.", aTabNames.size() >= 3);
+    CPPUNIT_ASSERT_MESSAGE("Unexpected sheet name.", aTabNames[0].equals(aExtSh1Name));
+    CPPUNIT_ASSERT_MESSAGE("Unexpected sheet name.", aTabNames[1].equals(aExtSh2Name));
+    CPPUNIT_ASSERT_MESSAGE("Unexpected sheet name.", aTabNames[2].equals(aExtSh3Name));
+
+    m_pDoc->SetString(1, 0, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("='file:///extdata.fake'#Data1.B1")));
+    m_pDoc->GetString(1, 0, 0, test);
+    CPPUNIT_ASSERT_MESSAGE("Value is different from the original", test.equals(value));
+
+    m_pDoc->SetString(0, 1, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("='file:///extdata.fake'#Data1.A2")));
+    m_pDoc->SetString(0, 2, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("='file:///extdata.fake'#Data1.A3")));
+    m_pDoc->SetString(0, 3, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("='file:///extdata.fake'#Data1.A4")));
+    m_pDoc->SetString(0, 4, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("='file:///extdata.fake'#Data1.A5")));
+    m_pDoc->SetString(0, 5, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("='file:///extdata.fake'#Data1.A6")));
+
+    {
+        // Referencing an empty cell should display '0'.
+        const char* pChecks[] = { "Andy", "Bruce", "Charlie", "David", "0" };
+        for (size_t i = 0; i < SAL_N_ELEMENTS(pChecks); ++i)
+        {
+            m_pDoc->GetString(0, static_cast<SCROW>(i+1), 0, test);
+            CPPUNIT_ASSERT_MESSAGE("Unexpected cell value.", test.equalsAscii(pChecks[i]));
+        }
+    }
+    m_pDoc->SetString(1, 1, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("='file:///extdata.fake'#Data1.B2")));
+    m_pDoc->SetString(1, 2, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("='file:///extdata.fake'#Data1.B3")));
+    m_pDoc->SetString(1, 3, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("='file:///extdata.fake'#Data1.B4")));
+    m_pDoc->SetString(1, 4, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("='file:///extdata.fake'#Data1.B5")));
+    m_pDoc->SetString(1, 5, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("='file:///extdata.fake'#Data1.B6")));
+    {
+        double pChecks[] = { 10, 11, 12, 13, 0 };
+        for (size_t i = 0; i < SAL_N_ELEMENTS(pChecks); ++i)
+        {
+            m_pDoc->GetValue(1, static_cast<SCROW>(i+1), 0, val);
+            CPPUNIT_ASSERT_MESSAGE("Unexpected cell value.", val == pChecks[i]);
+        }
+    }
+
+    m_pDoc->SetString(2, 0, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("='file:///extdata.fake'#Data3.A1")));
+    m_pDoc->SetString(2, 1, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("='file:///extdata.fake'#Data3.A2")));
+    m_pDoc->SetString(2, 2, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("='file:///extdata.fake'#Data3.A3")));
+    m_pDoc->SetString(2, 3, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("='file:///extdata.fake'#Data3.A4")));
+    {
+        const char* pChecks[] = { "Name", "Edward", "Frank", "George" };
+        for (size_t i = 0; i < SAL_N_ELEMENTS(pChecks); ++i)
+        {
+            m_pDoc->GetString(2, static_cast<SCROW>(i), 0, test);
+            CPPUNIT_ASSERT_MESSAGE("Unexpected cell value.", test.equalsAscii(pChecks[i]));
+        }
+    }
+
+    m_pDoc->SetString(3, 0, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("='file:///extdata.fake'#Data3.B1")));
+    m_pDoc->SetString(3, 1, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("='file:///extdata.fake'#Data3.B2")));
+    m_pDoc->SetString(3, 2, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("='file:///extdata.fake'#Data3.B3")));
+    m_pDoc->SetString(3, 3, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("='file:///extdata.fake'#Data3.B4")));
+    {
+        const char* pChecks[] = { "Value", "99", "98", "97" };
+        for (size_t i = 0; i < SAL_N_ELEMENTS(pChecks); ++i)
+        {
+            m_pDoc->GetString(3, static_cast<SCROW>(i), 0, test);
+            CPPUNIT_ASSERT_MESSAGE("Unexpected cell value.", test.equalsAscii(pChecks[i]));
+        }
+    }
+
+    // At this point, all accessed cell data from the external document should
+    // have been cached.
+    ScExternalRefCache::TableTypeRef pCacheTab = pRefMgr->getCacheTable(
+        nFileId, aExtSh1Name, false);
+    CPPUNIT_ASSERT_MESSAGE("Cache table for sheet 1 should exist.", pCacheTab.get() != NULL);
+    ScRange aCachedRange = getCachedRange(pCacheTab);
+    CPPUNIT_ASSERT_MESSAGE("Unexpected cached data range.",
+                           aCachedRange.aStart.Col() == 0 && aCachedRange.aEnd.Col() == 1 &&
+                           aCachedRange.aStart.Row() == 0 && aCachedRange.aEnd.Row() == 4);
+
+    // Sheet2 is not referenced at all; the cache table shouldn't even exist.
+    pCacheTab = pRefMgr->getCacheTable(nFileId, aExtSh2Name, false);
+    CPPUNIT_ASSERT_MESSAGE("Cache table for sheet 2 should *not* exist.", pCacheTab.get() == NULL);
+
+    // Sheet3's row 5 is not referenced; it should not be cached.
+    pCacheTab = pRefMgr->getCacheTable(nFileId, aExtSh3Name, false);
+    CPPUNIT_ASSERT_MESSAGE("Cache table for sheet 3 should exist.", pCacheTab.get() != NULL);
+    aCachedRange = getCachedRange(pCacheTab);
+    CPPUNIT_ASSERT_MESSAGE("Unexpected cached data range.",
+                           aCachedRange.aStart.Col() == 0 && aCachedRange.aEnd.Col() == 1 &&
+                           aCachedRange.aStart.Row() == 0 && aCachedRange.aEnd.Row() == 3);
+
+    xExtDocSh->DoClose();
+    CPPUNIT_ASSERT_MESSAGE("external document instance should have been unloaded.",
+                           findLoadedDocShellByName(aExtDocName) == NULL);
+
     m_pDoc->DeleteTab(0);
 }
 
