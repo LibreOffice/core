@@ -194,7 +194,7 @@ ULONG SvFileStream::GetData( void* pData, ULONG nSize )
     aTraceStr += ByteString::CreateFromInt64(nSize);
     aTraceStr += " Bytes from ";
     aTraceStr += ByteString(aFilename, osl_getThreadTextEncoding());
-    DBG_TRACE( aTraceStr.GetBuffer() );
+    OSL_TRACE( aTraceStr.GetBuffer() );
 #endif
 
     ULONG nCount = 0L;
@@ -221,7 +221,7 @@ ULONG SvFileStream::PutData( const void* pData, ULONG nSize )
     aTraceStr += ByteString::CreateFromInt64(nSize);
     aTraceStr += " Bytes to ";
     aTraceStr += ByteString(aFilename, osl_getThreadTextEncoding());
-    DBG_TRACE( aTraceStr.GetBuffer() );
+    OSL_TRACE( aTraceStr.GetBuffer() );
 #endif
 
     ULONG nCount = 0L;
@@ -498,7 +498,7 @@ void SvFileStream::Open( const String& rFilename, StreamMode nOpenMode )
 #ifdef DBG_UTIL
     ByteString aTraceStr( "SvFileStream::Open(): " );
     aTraceStr +=  aFileNameA;
-    DBG_TRACE( aTraceStr.GetBuffer() );
+    OSL_TRACE( aTraceStr.GetBuffer() );
 #endif
 
     APIRET nRet = DosOpen( aFileNameA.GetBuffer(), &pInstanceData->hFile,
@@ -563,7 +563,7 @@ void SvFileStream::Close()
 #ifdef DBG_UTIL
         ByteString aTraceStr( "SvFileStream::Close(): " );
         aTraceStr += ByteString(aFilename, osl_getThreadTextEncoding());
-        DBG_TRACE( aTraceStr.GetBuffer() );
+        OSL_TRACE( aTraceStr.GetBuffer() );
 #endif
 
         if( nLockCounter )
