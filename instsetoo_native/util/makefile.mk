@@ -319,11 +319,11 @@ oxygenofficewithjre_%{$(PKGFORMAT:^".")} :
     $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p OxygenOffice_wJRE -u $(OUT) -buildid $(BUILD) -msitemplate $(MSIOFFICETEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -format $(@:e:s/.//) $(VERBOSESWITCH)
 
 $(foreach,i,$(alllangiso) oxygenofficelanguagepack_$i) : $$@{$(PKGFORMAT:^".")}
-ooolanguagepack_%{$(PKGFORMAT:^".")} :
+oxygenofficelanguagepack_%{$(PKGFORMAT:^".")} :
     $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p OxygenOffice -u $(OUT) -buildid $(BUILD) -msitemplate $(MSILANGPACKTEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -languagepack -format $(@:e:s/.//) $(VERBOSESWITCH)
 
 $(foreach,i,$(alllangiso) oxygenofficehelppack_$i) : $$@{$(PKGFORMAT:^".")}
-ooohelppack_%{$(PKGFORMAT:^".")} :
+oxygenofficehelppack_%{$(PKGFORMAT:^".")} :
     $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p OxygenOffice -u $(OUT) -buildid $(BUILD) -msitemplate $(MSIHELPPACKTEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -helppack -format $(@:e:s/.//) $(VERBOSESWITCH)
 
 .ELSE			# "$(alllangiso)"!=""
