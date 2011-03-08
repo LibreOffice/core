@@ -2805,6 +2805,7 @@ private:
 public:
     GraphiteWinLayout(HDC hDC, const ImplWinFontData& rWFD, ImplWinFontEntry& rWFE);
 
+    ~GraphiteWinLayout() { gr_font_destroy(maImpl.getFont()); }
     // used by upper layers
     virtual bool  LayoutText( ImplLayoutArgs& );    // first step of layout
     virtual void  AdjustLayout( ImplLayoutArgs& );  // adjusting after fallback etc.

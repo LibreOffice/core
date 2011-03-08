@@ -81,6 +81,8 @@ public:
     };
     void addFont(int ppm, gr_font * pFont)
     {
+        if (m_fonts[ppm])
+            gr_font_destroy(m_fonts[ppm]);
         m_fonts[ppm] = pFont;
     }
 private:
@@ -107,7 +109,7 @@ public:
 
 private:
     const gr_face *         mpFace; // not owned by layout
-    gr_font *               mpFont; // owned by layout
+    gr_font *               mpFont; // not owned by layout
     int                     mnSegCharOffset; // relative to ImplLayoutArgs::mpStr
     long                    mnWidth;
     std::vector<int>        mvChar2BaseGlyph;
@@ -150,6 +152,7 @@ public:
 
     virtual ~GraphiteLayout() throw();
     void SetFont(gr_font * pFont) { mpFont = pFont; }
+    gr_font * GetFont() { return mpFont; }
     void SetFeatures(grutils::GrFeatureParser * aFeature) { mpFeatures = aFeature; }
     void SetFontScale(float s) { mfScaling = s; };
     virtual sal_GlyphId getKashidaGlyph(int & width) = 0;

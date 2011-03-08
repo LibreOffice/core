@@ -161,7 +161,7 @@ void GrFeatureParser::setLang(const gr_face * pFace, const rtl::OString & lang)
 {
     FeatId aLang;
     aLang.num = 0;
-    if (lang.getLength() > 2)
+    if (lang.getLength() >= 2)
     {
         for (sal_Int32 i = 0; i < lang.getLength() && i < 3; i++)
         {
@@ -194,17 +194,13 @@ void GrFeatureParser::setLang(const gr_face * pFace, const rtl::OString & lang)
         if (i != gr_face_n_languages(pFace))
         {
             if (mpSettings)
-            {
                 gr_featureval_destroy(mpSettings);
-            }
             mpSettings = gr_face_featureval_for_lang(pFace, maLang.num);
             mnHash = maLang.num;
         }
     }
     if (!mpSettings)
-    {
         mpSettings = gr_face_featureval_for_lang(pFace, 0);
-    }
 }
 
 GrFeatureParser::~GrFeatureParser()
