@@ -271,30 +271,6 @@ ULONG SvFileStream::SeekPos( ULONG nPos )
 
 /*************************************************************************
 |*
-|*    SvFileStream::Tell()
-|*
-*************************************************************************/
-/*
-ULONG SvFileStream::Tell()
-{
-    ULONG nPos = 0L;
-
-    if( IsOpen() )
-    {
-        DWORD nPos;
-        nPos = SetFilePointer(pInstanceData->hFile,0L,NULL,FILE_CURRENT);
-        if( nPos = 0xFFFFFFFF )
-        {
-            SetError( ::GetSvError( GetLastError() ) );
-            nPos = 0L;
-        }
-    }
-    return nPos;
-}
-*/
-
-/*************************************************************************
-|*
 |*    SvFileStream::FlushData()
 |*
 *************************************************************************/
@@ -434,14 +410,6 @@ void SvFileStream::Open( const String& rFilename, StreamMode nMode )
     FSysRedirector::DoRedirect( aFilename );
 #endif
     SetLastError( ERROR_SUCCESS );  // ggf. durch Redirector geaendert!
-
-    /*
-    #ifdef DBG_UTIL
-    String aTraceStr( "SvFileStream::Open(): " );
-    aTraceStr += aFilename;
-    DBG_TRACE( aTraceStr );
-    #endif
-    */
 
     DWORD   nOpenAction;
     DWORD   nShareMode      = FILE_SHARE_READ | FILE_SHARE_WRITE;
