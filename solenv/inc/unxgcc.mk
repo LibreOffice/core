@@ -44,7 +44,7 @@ JAVAFLAGSDEBUG=-g
 #LINKOUTPUT_FILTER=" |& $(SOLARENV)/bin/msg_filter"
 
 # _PTHREADS is needed for the stl
-CDEFS+=-D_PTHREADS -D_REENTRANT -DNEW_SOLAR -D_USE_NAMESPACE=1 -DSTLPORT_VERSION=$(STLPORT_VER)
+CDEFS+=-D_PTHREADS -D_REENTRANT -DNEW_SOLAR -D_USE_NAMESPACE=1
 
 # enable visibility define in "sal/types.h"
 .IF "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
@@ -120,8 +120,7 @@ GCCNUMVER:=$(shell @-$(CXX) $(GCCNUMVERSION_CMD))
 # Compiler flags for enabling optimizations
 .IF "$(PRODUCT)"!=""
 CFLAGSOPT=$(CDEFAULTOPT) # optimizing for products
-.IF "$(USE_SYSTEM_STL)"!="YES" || "$(GCCNUMVER)" <= "000400050000"
-#STLPort headers are full of aliasing warnings and
+.IF "$(GCCNUMVER)" <= "000400050000"
 #At least SLED 10.2 gcc 4.3 overly agressively optimizes
 #uno::Sequence into junk, so only strict-alias on compiler
 #later than 4.5.1
@@ -159,15 +158,26 @@ LINK*=$(CXX)
 LINKC*=$(CC)
 
 # default linker flags
+#
+# The DT RPATH value is used first, before any other path, specifically before
+# the path defined in the LD_LIBRARY_PATH environment variable. This is
+# problematic since it does not allow the user to overwrite the value.
+# Therefore DT_RPATH is deprecated. The introduction of the new variant,
+# DT_RUNPATH, corrects this oversight by requiring the value is used after the
+# path in LD_LIBRARY_PATH.
+#
+# The linker option --enable-new-dtags must be used to also add DT_RUNPATH
+# entry. This will cause both, DT_RPATH and DT_RUNPATH entries, to be created
+#
 LINKFLAGSDEFS*=-Wl,-z,defs
-LINKFLAGSRUNPATH_URELIB=-Wl,-rpath,\''$$ORIGIN'\'
-LINKFLAGSRUNPATH_UREBIN=-Wl,-rpath,\''$$ORIGIN/../lib:$$ORIGIN'\'
+LINKFLAGSRUNPATH_URELIB=-Wl,-rpath,\''$$ORIGIN'\',--enable-new-dtags
+LINKFLAGSRUNPATH_UREBIN=-Wl,-rpath,\''$$ORIGIN/../lib:$$ORIGIN'\',--enable-new-dtags
     #TODO: drop $ORIGIN once no URE executable is also shipped in OOo
-LINKFLAGSRUNPATH_OOO=-Wl,-rpath,\''$$ORIGIN:$$ORIGIN/../ure-link/lib'\'
-LINKFLAGSRUNPATH_SDK=-Wl,-rpath,\''$$ORIGIN/../../ure-link/lib'\'
-LINKFLAGSRUNPATH_BRAND=-Wl,-rpath,\''$$ORIGIN:$$ORIGIN/../basis-link/program:$$ORIGIN/../basis-link/ure-link/lib'\'
+LINKFLAGSRUNPATH_OOO=-Wl,-rpath,\''$$ORIGIN:$$ORIGIN/../ure-link/lib'\',--enable-new-dtags
+LINKFLAGSRUNPATH_SDK=-Wl,-rpath,\''$$ORIGIN/../../ure-link/lib'\',--enable-new-dtags
+LINKFLAGSRUNPATH_BRAND=-Wl,-rpath,\''$$ORIGIN:$$ORIGIN/../basis-link/program:$$ORIGIN/../basis-link/ure-link/lib'\',--enable-new-dtags
 LINKFLAGSRUNPATH_OXT=
-LINKFLAGSRUNPATH_BOXT=-Wl,-rpath,\''$$ORIGIN/../../../basis-link/program'\'
+LINKFLAGSRUNPATH_BOXT=-Wl,-rpath,\''$$ORIGIN/../../../basis-link/program'\',--enable-new-dtags
 LINKFLAGSRUNPATH_NONE=
 # flag -Wl,-z,noexecstack sets the NX bit on the stack
 LINKFLAGS=-Wl,-z,noexecstack -Wl,-z,combreloc $(LINKFLAGSDEFS)
@@ -238,31 +248,6 @@ STDSHLCUIMT+=-Wl,--as-needed $(DL_LIB) $(PTHREAD_LIBS) -lm -Wl,--no-as-needed
 X11LINK_DYNAMIC = -Wl,--as-needed -lXext -lX11 -Wl,--no-as-needed
 
 LIBSALCPPRT*=-Wl,--whole-archive -lsalcpprt -Wl,--no-whole-archive
-
-.IF "$(USE_STLP_DEBUG)" != ""
-.IF "$(STLPORT_VER)" >= "500"
-LIBSTLPORT=$(DYNAMIC) -lstlportstlg
-LIBSTLPORTST=$(STATIC) -lstlportstlg $(DYNAMIC)
-.ELSE
-LIBSTLPORT=$(DYNAMIC) -lstlport_gcc_stldebug
-LIBSTLPORTST=$(STATIC) -lstlport_gcc_stldebug $(DYNAMIC)
-.ENDIF
-.ELSE # "$(USE_STLP_DEBUG)" != ""
-.IF "$(STLPORT_VER)" >= "500"
-LIBSTLPORT=$(DYNAMIC) -lstlport
-LIBSTLPORTST=$(STATIC) -lstlport $(DYNAMIC)
-.ELSE
-LIBSTLPORT=$(DYNAMIC) -lstlport_gcc
-LIBSTLPORTST=$(STATIC) -lstlport_gcc $(DYNAMIC)
-.ENDIF
-.ENDIF # "$(USE_STLP_DEBUG)" != ""
-
-.IF "$(USE_SYSTEM_STL)" == "YES" && "$(DBG_LEVEL)" >= "1"
-# turn on debugging version of libstdc++
-CDEFS += -D_GLIBCXX_DEBUG
-.ENDIF
-
-#FILLUPARC=$(STATIC) -lsupc++ $(DYNAMIC)
 
 # name of library manager
 LIBMGR*=ar

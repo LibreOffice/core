@@ -88,7 +88,7 @@ sub get_patch_file_list
     $patchfilestring =~ s/^\s*\///;
     $patchfilestring =~ s/^\s*\\//;
 
-    my $patchfilesarray = installer::converter::convert_stringlist_into_array_without_linebreak_and_quotes(\$patchfilestring, ",");
+    my $patchfilesarray = installer::converter::convert_stringlist_into_array_without_newline(\$patchfilestring, ",");
 
     return $patchfilesarray;
 }

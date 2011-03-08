@@ -154,7 +154,6 @@ public class FormulaCompiler {
                         bPop = false;
                     } else {
                         tmpTok = (Token)evalStack.pop();
-                        //if (!(isOpenBrace(tmpTok) || isParamDelimiter(tmpTok))) { //Don't output brackets and commas
                         if (!isParamDelimiter(tmpTok)) { //Don't output commas
                             rpnExpr.add(tmpTok);
                         }

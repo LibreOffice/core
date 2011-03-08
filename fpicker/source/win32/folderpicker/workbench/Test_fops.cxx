@@ -86,27 +86,6 @@ using namespace std                     ;
 
 Reference< XMultiServiceFactory >   g_xFactory;
 
-/*
-void CreateDeepDirectory( )
-{
-    // create a deep directory
-
-    OUString aPathURL( L"file:///d|/Deep" );
-    OUString normalizedPath;
-
-    OSL_ASSERT( ::osl::FileBase::E_None == \
-        ::osl::FileBase::getNormalizedPathFromFileURL( aPathURL, normalizedPath ) );
-
-    while( ::osl::FileBase::E_None == osl::Directory::create( normalizedPath ) )
-    {
-        aPathURL += L"/Deep";
-        OSL_ASSERT( ::osl::FileBase::E_None == \
-            ::osl::FileBase::getNormalizedPathFromFileURL( aPathURL, normalizedPath ) );
-    }
-
-}
-*/
-
 //--------------------------------------------------------------
 //  main
 //--------------------------------------------------------------

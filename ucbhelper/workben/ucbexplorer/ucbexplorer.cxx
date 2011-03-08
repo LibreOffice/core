@@ -68,7 +68,8 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::task;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 //=========================================================================
 //
@@ -1084,7 +1085,7 @@ void MyApp::Main()
             cppu::defaultBootstrap_InitialComponentContext() );
         if ( !xCtx.is() )
         {
-            DBG_ERROR( "Error creating initial component context!" );
+            OSL_FAIL( "Error creating initial component context!" );
             return;
         }
 
@@ -1093,13 +1094,13 @@ void MyApp::Main()
 
         if ( !xFac.is() )
         {
-            DBG_ERROR( "No service manager!" );
+            OSL_FAIL( "No service manager!" );
             return;
         }
     }
     catch ( com::sun::star::uno::Exception const & )
     {
-        DBG_ERROR( "Exception during creation of initial component context!" );
+        OSL_FAIL( "Exception during creation of initial component context!" );
         return;
     }
 
@@ -1130,7 +1131,7 @@ void MyApp::Main()
 
     if ( !bSuccess )
     {
-        DBG_ERROR( "Error creating UCB!" );
+        OSL_FAIL( "Error creating UCB!" );
         return;
     }
 

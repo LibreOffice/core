@@ -905,7 +905,7 @@ namespace sdr
             mbEdgesOfMarkedNodesDirty = sal_True;
             maEdgesOfMarkedNodes.Clear();
             maMarkedEdgesOfMarkedNodes.Clear();
-            maAllMarkedObjects.Clear();
+            maAllMarkedObjects.clear();
         }
     }
 
@@ -929,12 +929,10 @@ namespace sdr
         return maMarkedEdgesOfMarkedNodes;
     }
 
-    const List& ViewSelection::GetAllMarkedObjects() const
+    const std::vector<SdrObject*>& ViewSelection::GetAllMarkedObjects() const
     {
         if(mbEdgesOfMarkedNodesDirty)
-        {
             ((ViewSelection*)this)->ImpForceEdgesOfMarkedNodes();
-        }
 
         return maAllMarkedObjects;
     }
@@ -961,7 +959,7 @@ namespace sdr
                 }
             }
 
-            maAllMarkedObjects.Insert(pObj, LIST_APPEND);
+            maAllMarkedObjects.push_back(pObj);
         }
     }
 
@@ -973,7 +971,7 @@ namespace sdr
             maMarkedObjectList.ForceSort();
             maEdgesOfMarkedNodes.Clear();
             maMarkedEdgesOfMarkedNodes.Clear();
-            maAllMarkedObjects.Clear();
+            maAllMarkedObjects.clear();
 
             // #126320# GetMarkCount after ForceSort
             const ULONG nMarkAnz(maMarkedObjectList.GetMarkCount());

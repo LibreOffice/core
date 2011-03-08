@@ -40,7 +40,7 @@
 #include <cmath>
 #include <vector>
 #include <algorithm>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #include "saldata.hxx"
 #include "saldisp.hxx"
@@ -59,8 +59,7 @@ GtkSalGraphics::~GtkSalGraphics()
 {
 }
 
-
-using namespace rtl;
+using ::rtl::OUString;
 
 /*************************************
  * Cached native widget objects
@@ -102,6 +101,7 @@ struct NWFWidgetData
     GtkWidget *  gTreeView;
     GtkWidget *  gHScale;
     GtkWidget *  gVScale;
+    GtkWidget *  gVSeparator;
 
     NWPixmapCacheList* gNWPixmapCacheList;
     NWPixmapCache* gCacheTabItems;
@@ -140,6 +140,7 @@ struct NWFWidgetData
         gTreeView( NULL ),
         gHScale( NULL ),
         gVScale( NULL ),
+        gVSeparator ( NULL ),
         gNWPixmapCacheList( NULL ),
         gCacheTabItems( NULL ),
         gCacheTabPages( NULL )
@@ -149,7 +150,7 @@ struct NWFWidgetData
 // Keep a hash table of Widgets->default flags so that we can
 // easily and quickly reset each to a default state before using
 // them
-static std::hash_map<long, guint>   gWidgetDefaultFlags;
+static boost::unordered_map<long, guint>    gWidgetDefaultFlags;
 static std::vector<NWFWidgetData>   gWidgetData;
 
 static const GtkBorder aDefDefBorder        = { 1, 1, 1, 1 };
@@ -583,10 +584,14 @@ BOOL GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
                 ||  (nPart==PART_THUMB_HORZ)
                 ||  (nPart==PART_THUMB_VERT)
                 ||  (nPart==PART_BUTTON)
+                ||  (nPart==PART_SEPARATOR)
                 )
                                                                 )   ||
         ((nType == CTRL_MENUBAR) &&
-                (   (nPart==PART_ENTIRE_CONTROL) )              )   ||
+                (   (nPart==PART_ENTIRE_CONTROL)
+                ||  (nPart==PART_MENU_ITEM)
+                )
+                                                                )   ||
         ((nType == CTRL_TOOLTIP) &&
                 (   (nPart==PART_ENTIRE_CONTROL) )              )   ||
         ((nType == CTRL_MENU_POPUP) &&
@@ -2513,7 +2518,6 @@ BOOL GtkSalGraphics::NWPaintGTKToolbar(
     gint            g_x=0, g_y=0, g_w=10, g_h=10;
     bool            bPaintButton = true;
     GtkWidget*      pButtonWidget = gWidgetData[m_nScreen].gToolbarButtonWidget;
-    const gchar*    pButtonDetail = "button";
     GdkRectangle    clipRect;
 
     NWEnsureGTKToolbar( m_nScreen );
@@ -2576,7 +2580,6 @@ BOOL GtkSalGraphics::NWPaintGTKToolbar(
             // cf. gtk+/gtk/gtktogglebutton.c (gtk_toggle_button_update_state)
             if( ! (nState & (CTRL_STATE_PRESSED|CTRL_STATE_ROLLOVER)) )
                 stateType = GTK_STATE_ACTIVE;
-            pButtonDetail = "togglebutton";
             bPaintButton = true;
         }
 
@@ -2636,8 +2639,23 @@ BOOL GtkSalGraphics::NWPaintGTKToolbar(
                                stateType,
                                shadowType,
                                &clipRect,
-                               pButtonWidget, pButtonDetail, x, y, w, h );
+                               pButtonWidget, "button", x, y, w, h );
             }
+        }
+        else if(nPart == PART_SEPARATOR )
+        {
+            gtk_paint_vline( gWidgetData[m_nScreen].gVSeparator->style,
+                              gdkDrawable,
+                              GTK_STATE_NORMAL,
+                              &clipRect,
+                              gWidgetData[m_nScreen].gVSeparator,
+                              "vseparator",
+                              y + 4, y + h - 8 /* -2 and -4 is a dirty
+                                                * hack, to fit most gtk
+                                                * style, but it must be
+                                                * fixed, FIXME */,
+                              x
+                              );
         }
     }
 
@@ -3944,6 +3962,8 @@ static void NWEnsureGTKToolbar( int nScreen )
         NWAddWidgetToCacheWindow( gWidgetData[nScreen].gToolbarWidget, nScreen );
         gWidgetData[nScreen].gToolbarButtonWidget = gtk_button_new();
         gWidgetData[nScreen].gToolbarToggleWidget = gtk_toggle_button_new();
+        gWidgetData[nScreen].gVSeparator = gtk_vseparator_new();
+        NWAddWidgetToCacheWindow( gWidgetData[nScreen].gVSeparator, nScreen );
 
         GtkReliefStyle aRelief = GTK_RELIEF_NORMAL;
         gtk_widget_ensure_style( gWidgetData[nScreen].gToolbarWidget );

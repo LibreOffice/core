@@ -60,19 +60,19 @@ published service NumberingRules
     [optional] interface com::sun::star::beans::XPropertySet;
     //-------------------------------------------------------------------------
 
-    /** determins if the margins are absolute or relative
-        to the preceeding numbering level.
+    /** determines if the margins are absolute or relative
+        to the preceding numbering level.
      */
     [optional, property] boolean  IsAbsoluteMargins;
     //-------------------------------------------------------------------------
 
-    /** determins if the numbering rules are automatically created
+    /** determines if the numbering rules are automatically created
         as opposed to numbering rules that are part of a numbering style.
      */
     [optional, property] boolean IsAutomatic;
     //-------------------------------------------------------------------------
 
-    /** determins if the numbering levels are counted coninuously  or if
+    /** determines if the numbering levels are counted continuously  or if
         each numbering level is counted separately.
      */
     [optional, property] boolean IsContinuousNumbering;
@@ -89,7 +89,7 @@ published service NumberingRules
         [optional, property] boolean    NumberingIsOutline;
         //-------------------------------------------------------------------------
 
-        /** the type of numbering (arabic, characters, roman numbers, etc.).
+        /** the type of numbering (Arabic, characters, roman numbers, etc.).
          */
         [optional, property] short    NumberingType;
         //-------------------------------------------------------------------------

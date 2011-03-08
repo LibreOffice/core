@@ -47,7 +47,7 @@ DBG_NAME(SfxInterface)
 //====================================================================
 
 EXTERN_C
-#if defined( PM2 ) && (!defined( CSET ) && !defined ( MTW ) && !defined( WTC ))
+#if defined( PM2 )
 int _stdcall
 #else
 #ifdef WNT
@@ -174,10 +174,7 @@ void SfxInterface::SetSlotMap( SfxSlot& rSlotMap, USHORT nSlotCount )
         USHORT nIter = 1;
         for ( pIter = pSlots; nIter <= nCount; ++pIter, ++nIter )
         {
-            //! hier bitte sinnvoll pruefen
-            //! DBG_ASSERT(!(pIter->IsMode(SFX_SLOT_CACHABLE) &&
-            //!                 pIter->IsMode(SFX_SLOT_VOLATILE)),
-            //!             "invalid Flags" );
+
             DBG_ASSERT( nIter == nCount ||
                         pIter->GetSlotId() != (pIter+1)->GetSlotId(),
                         "doppelte SID" );
@@ -233,7 +230,7 @@ void SfxInterface::SetSlotMap( SfxSlot& rSlotMap, USHORT nSlotCount )
         {
 
             if ( pNext->GetSlotId() <= pIter->GetSlotId() )
-                DBG_ERROR ("Wrong order!");
+                OSL_FAIL("Wrong order!");
 
             if ( pIter->GetKind() == SFX_KIND_ENUM )
             {
@@ -366,7 +363,7 @@ const SfxSlot* SfxInterface::GetRealSlot( const SfxSlot *pSlot ) const
     {
         if(pGenoType)
             return pGenoType->GetRealSlot(pSlot);
-        DBG_ERROR("unknown Slot");
+        OSL_FAIL("unknown Slot");
         return 0;
     }
 
@@ -386,7 +383,7 @@ const SfxSlot* SfxInterface::GetRealSlot( USHORT nSlotId ) const
     {
         if(pGenoType)
             return pGenoType->GetRealSlot(nSlotId);
-        DBG_ERROR("fremder Slot");
+        OSL_FAIL("fremder Slot");
         return 0;
     }
 

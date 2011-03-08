@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 #include "hangulhanjadlg.hxx"
 #include "hangulhanjadlg.hrc"
 #include "commonlingui.hxx"
@@ -58,15 +55,6 @@
 namespace svx
 {
 //.............................................................................
-/*
-    using HangulHanjaConversion::eSimpleConversion;
-    using HangulHanjaConversion::eHangulBracketed;
-    using HangulHanjaConversion::eHanjaBracketed;
-    using HangulHanjaConversion::eRubyHanjaAbove;
-    using HangulHanjaConversion::eRubyHanjaBelow;
-    using HangulHanjaConversion::eRubyHangulAbove;
-    using HangulHanjaConversion::eRubyHangulBelow;
-*/
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::linguistic2;
@@ -918,7 +906,7 @@ namespace svx
             case HHC::eRubyHangulAbove: m_pHangulAbove->Check(); break;
             case HHC::eRubyHangulBelow: m_pHangulBelow->Check(); break;
         default:
-            DBG_ERROR( "HangulHanjaConversionDialog::SetConversionFormat: unknown type!" );
+            OSL_FAIL( "HangulHanjaConversionDialog::SetConversionFormat: unknown type!" );
         }
     }
 
@@ -940,7 +928,7 @@ namespace svx
         if ( m_pHangulBelow->IsChecked() )
             return HHC::eRubyHangulBelow;
 
-        DBG_ERROR( "HangulHanjaConversionDialog::GetConversionFormat: no radio checked?" );
+        OSL_FAIL( "HangulHanjaConversionDialog::GetConversionFormat: no radio checked?" );
         return HHC::eSimpleConversion;
     }
 
@@ -1758,13 +1746,13 @@ namespace svx
 
             //fill found entries into boxes
             sal_uInt32 nCnt = aEntries.getLength();
-            sal_uInt32 n = 0;
             if( nCnt )
             {
                 if( !m_pSuggestions )
                     m_pSuggestions = new SuggestionList( MAXNUM_SUGGESTIONS );
 
                 const OUString* pSugg = aEntries.getConstArray();
+                sal_uInt32 n = 0;
                 while( nCnt )
                 {
                     m_pSuggestions->Set( pSugg[ n ], sal_uInt16( n ) );

@@ -409,7 +409,6 @@ String SvGlobalName::GetHexName() const
 |*    SvGlobalNameList::SvGlobalNameList()
 *************************************************************************/
 SvGlobalNameList::SvGlobalNameList()
-    : aList( 1, 1 )
 {
 }
 
@@ -418,10 +417,14 @@ SvGlobalNameList::SvGlobalNameList()
 *************************************************************************/
 SvGlobalNameList::~SvGlobalNameList()
 {
-    for( ULONG i = Count(); i > 0; i-- )
+    ImpSvGlobalName *pImp = 0;
+    std::vector<ImpSvGlobalName*>::iterator piter;
+
+    for (piter = aList.begin(); piter != aList.end(); ++piter)
     {
-        ImpSvGlobalName * pImp = (ImpSvGlobalName *)aList.GetObject( i -1 );
-        pImp->nRefCount--;
+        pImp = *piter;
+
+        --pImp->nRefCount;
         if( !pImp->nRefCount )
             delete pImp;
     }
@@ -433,7 +436,7 @@ SvGlobalNameList::~SvGlobalNameList()
 void SvGlobalNameList::Append( const SvGlobalName & rName )
 {
     rName.pImp->nRefCount++;
-    aList.Insert( rName.pImp, LIST_APPEND );
+    aList.push_back(rName.pImp);
 }
 
 /*************************************************************************
@@ -441,7 +444,7 @@ void SvGlobalNameList::Append( const SvGlobalName & rName )
 *************************************************************************/
 SvGlobalName SvGlobalNameList::GetObject( ULONG nPos )
 {
-    return SvGlobalName( (ImpSvGlobalName *)aList.GetObject( nPos ) );
+    return SvGlobalName(nPos < aList.size() ? aList[nPos] : NULL);
 }
 
 /*************************************************************************
@@ -449,12 +452,14 @@ SvGlobalName SvGlobalNameList::GetObject( ULONG nPos )
 *************************************************************************/
 BOOL SvGlobalNameList::IsEntry( const SvGlobalName & rName )
 {
-    for( ULONG i = Count(); i > 0; i-- )
+    std::vector<ImpSvGlobalName*>::iterator piter;
+    for (piter = aList.begin(); piter != aList.end(); ++piter)
     {
-        if( *rName.pImp == *(ImpSvGlobalName *)aList.GetObject( i -1 ) )
-            return TRUE;
+        if (*rName.pImp == *(*piter))
+            return true;
     }
-    return FALSE;
+
+    return false;
 }
 
 com::sun::star::uno::Sequence < sal_Int8 > SvGlobalName::GetByteSequence() const

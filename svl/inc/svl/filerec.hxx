@@ -621,7 +621,7 @@ public:
 
 // private: geht nicht, da einige Compiler dann auch vorherige privat machen
     void                NewContent()
-                        { DBG_ERROR( "NewContent() only allowed with args" ); }
+                        { OSL_FAIL( "NewContent() only allowed with args" ); }
 };
 
 //------------------------------------------------------------------------

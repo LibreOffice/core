@@ -346,9 +346,9 @@ void lclDeriveKey( const sal_uInt8* pnHash, sal_uInt32 nHashLen, sal_uInt8* pnKe
         pnBuffer[ i ] ^= pnHash[ i ];
 
     rtlDigest aDigest = rtl_digest_create( rtl_Digest_AlgorithmSHA1 );
-    rtlDigestError aError = rtl_digest_update( aDigest, pnBuffer, sizeof( pnBuffer ) );
+    rtl_digest_update( aDigest, pnBuffer, sizeof( pnBuffer ) );
     sal_uInt8 pnX1[ RTL_DIGEST_LENGTH_SHA1 ];
-    aError = rtl_digest_get( aDigest, pnX1, RTL_DIGEST_LENGTH_SHA1 );
+    rtl_digest_get( aDigest, pnX1, RTL_DIGEST_LENGTH_SHA1 );
     rtl_digest_destroy( aDigest );
 
     memset( pnBuffer, 0x5C, sizeof( pnBuffer ) );
@@ -356,9 +356,9 @@ void lclDeriveKey( const sal_uInt8* pnHash, sal_uInt32 nHashLen, sal_uInt8* pnKe
         pnBuffer[ i ] ^= pnHash[ i ];
 
     aDigest = rtl_digest_create( rtl_Digest_AlgorithmSHA1 );
-    aError = rtl_digest_update( aDigest, pnBuffer, sizeof( pnBuffer ) );
+    rtl_digest_update( aDigest, pnBuffer, sizeof( pnBuffer ) );
     sal_uInt8 pnX2[ RTL_DIGEST_LENGTH_SHA1 ];
-    aError = rtl_digest_get( aDigest, pnX2, RTL_DIGEST_LENGTH_SHA1 );
+    rtl_digest_get( aDigest, pnX2, RTL_DIGEST_LENGTH_SHA1 );
     rtl_digest_destroy( aDigest );
 
     if( nRequiredKeyLen > RTL_DIGEST_LENGTH_SHA1 )
@@ -383,28 +383,28 @@ bool lclGenerateEncryptionKey( const PackageEncryptionInfo& rEncrInfo, const OUS
         ByteOrderConverter::writeLittleEndian( pnPasswordLoc, static_cast< sal_uInt16 >( *pStr ) );
 
     rtlDigest aDigest = rtl_digest_create( rtl_Digest_AlgorithmSHA1 );
-    rtlDigestError aError = rtl_digest_update( aDigest, pnBuffer, nBufferSize );
+    rtl_digest_update( aDigest, pnBuffer, nBufferSize );
     delete[] pnBuffer;
 
     size_t nHashSize = RTL_DIGEST_LENGTH_SHA1 + 4;
     sal_uInt8* pnHash = new sal_uInt8[ nHashSize ];
-    aError = rtl_digest_get( aDigest, pnHash + 4, RTL_DIGEST_LENGTH_SHA1 );
+    rtl_digest_get( aDigest, pnHash + 4, RTL_DIGEST_LENGTH_SHA1 );
     rtl_digest_destroy( aDigest );
 
     for( sal_uInt32 i = 0; i < 50000; ++i )
     {
         ByteOrderConverter::writeLittleEndian( pnHash, i );
         aDigest = rtl_digest_create( rtl_Digest_AlgorithmSHA1 );
-        aError = rtl_digest_update( aDigest, pnHash, nHashSize );
-        aError = rtl_digest_get( aDigest, pnHash + 4, RTL_DIGEST_LENGTH_SHA1 );
+        rtl_digest_update( aDigest, pnHash, nHashSize );
+        rtl_digest_get( aDigest, pnHash + 4, RTL_DIGEST_LENGTH_SHA1 );
         rtl_digest_destroy( aDigest );
     }
 
     memmove( pnHash, pnHash + 4, RTL_DIGEST_LENGTH_SHA1 );
     memset( pnHash + RTL_DIGEST_LENGTH_SHA1, 0, 4 );
     aDigest = rtl_digest_create( rtl_Digest_AlgorithmSHA1 );
-    aError = rtl_digest_update( aDigest, pnHash, nHashSize );
-    aError = rtl_digest_get( aDigest, pnHash, RTL_DIGEST_LENGTH_SHA1 );
+    rtl_digest_update( aDigest, pnHash, nHashSize );
+    rtl_digest_get( aDigest, pnHash, RTL_DIGEST_LENGTH_SHA1 );
     rtl_digest_destroy( aDigest );
 
     lclDeriveKey( pnHash, RTL_DIGEST_LENGTH_SHA1, pnKey, nRequiredKeyLen );
@@ -428,9 +428,9 @@ bool lclGenerateEncryptionKey( const PackageEncryptionInfo& rEncrInfo, const OUS
     EVP_CIPHER_CTX_cleanup( &aes_ctx );
 
     aDigest = rtl_digest_create( rtl_Digest_AlgorithmSHA1 );
-    aError = rtl_digest_update( aDigest, pnVerifier, sizeof( pnVerifier ) );
+    rtl_digest_update( aDigest, pnVerifier, sizeof( pnVerifier ) );
     sal_uInt8 pnSha1Hash[ RTL_DIGEST_LENGTH_SHA1 ];
-    aError = rtl_digest_get( aDigest, pnSha1Hash, RTL_DIGEST_LENGTH_SHA1 );
+    rtl_digest_get( aDigest, pnSha1Hash, RTL_DIGEST_LENGTH_SHA1 );
     rtl_digest_destroy( aDigest );
 
     return memcmp( pnSha1Hash, pnVerifierHash, RTL_DIGEST_LENGTH_SHA1 ) == 0;

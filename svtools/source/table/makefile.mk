@@ -30,7 +30,6 @@ PRJ=..$/..
 ENABLE_EXCEPTIONS=TRUE
 PRJNAME=svtools
 TARGET=table
-#LIBTARGET=NO
 
 # --- Settings -----------------------------------------------------
 
@@ -46,9 +45,6 @@ SLOFILES=\
         $(SLO)$/tablegeometry.obj \
         $(SLO)$/defaultinputhandler.obj \
         $(SLO)$/tabledatawindow.obj
-
-#LIB1TARGET=     $(SLB)$/$(TARGET).lib
-#LIB1OBJFILES=   $(SLOFILES)
 
 # --- Targets ------------------------------------------------------
 

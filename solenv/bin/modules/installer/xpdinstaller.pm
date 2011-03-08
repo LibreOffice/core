@@ -1691,7 +1691,7 @@ sub create_xpd_file_for_systemintegration
         my $infoline = "Creating xpd file for package: $newpackagename\n";
         push( @installer::globals::logfileinfo, $infoline);
 
-        my $childmodule = installer::worker::copy_hash_from_references($module);
+        my $childmodule = {%{$module}};
         $childmodule->{'ParentID'} = $module->{'gid'};  # the module gid is the new parent
         $childmodule->{'InstallOrder'} = $installer::globals::defaultsystemintinstallorder;
         my $number = $i + 1;

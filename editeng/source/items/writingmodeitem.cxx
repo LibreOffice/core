@@ -39,7 +39,6 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
 
-// class SvxWritingModeItem -------------------------------------------------
 
 TYPEINIT1_FACTORY(SvxWritingModeItem, SfxUInt16Item, new SvxWritingModeItem(com::sun::star::text::WritingMode_LR_TB, 0));
 
@@ -66,13 +65,13 @@ SfxPoolItem* SvxWritingModeItem::Clone( SfxItemPool * ) const
 
 SfxPoolItem* SvxWritingModeItem::Create( SvStream & , USHORT  ) const
 {
-    DBG_ERROR("SvxWritingModeItem should not be streamed!");
+    OSL_FAIL("SvxWritingModeItem should not be streamed!");
     return NULL;
 }
 
 SvStream& SvxWritingModeItem::Store( SvStream & rStrm, USHORT  ) const
 {
-    DBG_ERROR("SvxWritingModeItem should not be streamed!");
+    OSL_FAIL("SvxWritingModeItem should not be streamed!");
     return rStrm;
 }
 

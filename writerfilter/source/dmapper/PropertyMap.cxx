@@ -51,23 +51,20 @@ using namespace ::com::sun::star;
 namespace writerfilter {
 namespace dmapper{
 
-/*-- 21.06.2006 09:30:56---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 PropertyMap::PropertyMap() :
     m_cFootnoteSymbol( 0 ),
     m_nFootnoteFontId( -1 )
 {
 }
-/*-- 21.06.2006 09:30:56---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 PropertyMap::~PropertyMap()
 {
 }
-/*-- 20.06.2006 10:23:55---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 uno::Sequence< beans::PropertyValue > PropertyMap::GetPropertyValues()
 {
     if(!m_aValues.getLength() && size())
@@ -113,13 +110,10 @@ uno::Sequence< beans::PropertyValue > PropertyMap::GetPropertyValues()
     }
     return m_aValues;
 }
-/*-------------------------------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void PropertyMap::Insert( PropertyIds eId, bool bIsTextProperty, const uno::Any& rAny, bool bOverwrite )
 {
-//    const ::rtl::OUString& rInsert = PropertyNameSupplier::
-//                           GetPropertyNameSupplier().GetName(eId);
     PropertyMap::iterator aElement = find(PropertyDefinition( eId, bIsTextProperty ) );
     if( aElement != end())
     {
@@ -185,9 +179,8 @@ void PropertyMap::dumpXml( const TagLogger::Pointer_t pLogger ) const
 }
 #endif
 
-/*-- 13.12.2006 10:46:42---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 template<class T>
     struct removeExistingElements : public ::std::unary_function<T, void>
 {
@@ -201,9 +194,8 @@ template<class T>
         rMap.erase( aElement );
   }
 };
-/*-- 13.12.2006 10:46:42---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void PropertyMap::insert( const PropertyMapPtr pMap, bool bOverwrite )
 {
     if( pMap.get() )
@@ -216,25 +208,22 @@ void PropertyMap::insert( const PropertyMapPtr pMap, bool bOverwrite )
         Invalidate();
     }
 }
-/*-- 06.06.2007 15:49:09---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 const uno::Reference< text::XFootnote>&  PropertyMap::GetFootnote() const
 {
     return m_xFootnote;
 }
-/*-- 18.02.2008 11:23:28---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void PropertyMap::insertTableProperties( const PropertyMap* )
 {
 #ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->element("PropertyMap.insertTableProperties");
 #endif
 }
-/*-- 24.07.2006 08:29:01---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 SectionPropertyMap::SectionPropertyMap(bool bIsFirstSection) :
     m_bIsFirstSection( bIsFirstSection )
     ,m_nBorderParams( 0 )
@@ -299,24 +288,21 @@ SectionPropertyMap::SectionPropertyMap(bool bIsFirstSection) :
         m_sFollowPageStyleName = rPropNameSupplier.GetName( PROP_STANDARD );
     }
 }
-/*-- 24.07.2006 08:29:02---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 SectionPropertyMap::~SectionPropertyMap()
 {
     for( sal_Int16 ePos = BORDER_LEFT; ePos <= BORDER_BOTTOM; ++ePos)
         delete m_pBorderLines[ePos];
 }
-/*-- 24.07.2006 08:31:07---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 const ::rtl::OUString&  SectionPropertyMap::GetPageStyleName( bool bFirst )
 {
     return bFirst ? m_sFirstPageStyleName : m_sFollowPageStyleName;
 }
-/*-- 24.07.2006 08:31:07---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void  SectionPropertyMap::SetPageStyleName( bool bFirst, const ::rtl::OUString& rName)
 {
     if( bFirst )
@@ -324,9 +310,8 @@ void  SectionPropertyMap::SetPageStyleName( bool bFirst, const ::rtl::OUString& 
     else
         m_sFollowPageStyleName = rName;
 }
-/*-- 24.07.2006 09:41:20---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 ::rtl::OUString lcl_FindUnusedPageStyleName(const uno::Sequence< ::rtl::OUString >& rPageStyleNames)
 {
     static const sal_Char cDefaultStyle[] = "Converted";
@@ -340,7 +325,7 @@ void  SectionPropertyMap::SetPageStyleName( bool bFirst, const ::rtl::OUString& 
     for( sal_Int32 nStyle = 0; nStyle < rPageStyleNames.getLength(); ++nStyle)
     {
         if( pStyleNames[nStyle].getLength() > nDefaultLength &&
-                !rtl_ustr_compare_WithLength( sDefaultStyle, nDefaultLength, pStyleNames[nStyle], nDefaultLength))
+                !rtl_ustr_compare_WithLength( sDefaultStyle.getStr(), nDefaultLength, pStyleNames[nStyle].getStr(), nDefaultLength))
         {
             sal_Int32 nIndex = pStyleNames[nStyle].copy( nDefaultLength ).toInt32();
             if( nIndex > nMaxIndex)
@@ -352,9 +337,8 @@ void  SectionPropertyMap::SetPageStyleName( bool bFirst, const ::rtl::OUString& 
     return sRet;
 }
 
-/*-- 28.07.2006 13:00:43---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 uno::Reference< beans::XPropertySet > SectionPropertyMap::GetPageStyle(
         const uno::Reference< container::XNameContainer >& xPageStyles,
         const uno::Reference < lang::XMultiServiceFactory >& xTextFactory,
@@ -405,18 +389,16 @@ uno::Reference< beans::XPropertySet > SectionPropertyMap::GetPageStyle(
 
     return xRet;
 }
-/*-- 28.07.2006 10:56:26---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void SectionPropertyMap::SetBorder( BorderPosition ePos, sal_Int32 nLineDistance, const table::BorderLine2& rBorderLine )
 {
     delete m_pBorderLines[ePos];
     m_pBorderLines[ePos] = new table::BorderLine2( rBorderLine );
     m_nBorderDistances[ePos] = nLineDistance;
 }
-/*-- 28.07.2006 10:56:27---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void SectionPropertyMap::ApplyBorderToPageStyles(
             const uno::Reference< container::XNameContainer >& xPageStyles,
             const uno::Reference < lang::XMultiServiceFactory >& xTextFactory,
@@ -438,7 +420,6 @@ void SectionPropertyMap::ApplyBorderToPageStyles(
     uno::Reference< beans::XPropertySet >  xFirst;
     uno::Reference< beans::XPropertySet >  xSecond;
     sal_Int32 nOffsetFrom = (nValue & 0x00E0) >> 5;
-    //sal_Int32 bPageDepth = (nValue & 0x0018) >> 3; //unused infromation: 0 - in front 1 - in back
     //todo: negative spacing (from ww8par6.cxx)
     switch( nValue & 0x07)
     {
@@ -528,9 +509,8 @@ void SectionPropertyMap::SetBorderDistance( uno::Reference< beans::XPropertySet 
     xStyle->setPropertyValue( sBorderDistanceName, uno::makeAny( nDist ));
 }
 
-/*-- 14.12.2006 12:50:06---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 uno::Reference< text::XTextColumns > SectionPropertyMap::ApplyColumnProperties(
                             uno::Reference< beans::XPropertySet > xColumnContainer )
 {
@@ -563,7 +543,6 @@ uno::Reference< text::XTextColumns > SectionPropertyMap::ApplyColumnProperties(
             nColSum = 0;
             for( sal_Int32 nCol = 0; nCol <= m_nColumnCount; ++nCol)
             {
-                //nColSum : nRefValue == (nAbsColWidth + colDist /2) : nRelColWidth;
                 pColumn[nCol].LeftMargin = nCol ? m_aColDistance[nCol - 1 ] / 2 : 0;
                 pColumn[nCol].RightMargin = nCol == m_nColumnCount ? 0 : m_aColDistance[nCol] / 2;
                 pColumn[nCol].Width = sal_Int32((double( m_aColWidth[nCol] + pColumn[nCol].RightMargin + pColumn[nCol].LeftMargin ) + 0.5 ) * fRel );
@@ -592,9 +571,8 @@ uno::Reference< text::XTextColumns > SectionPropertyMap::ApplyColumnProperties(
     return xColumns;
 }
 
-/*-- 20.12.2006 09:44:16---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 bool SectionPropertyMap::HasHeader(bool bFirstPage) const
 {
     bool bRet = false;
@@ -609,9 +587,8 @@ bool SectionPropertyMap::HasHeader(bool bFirstPage) const
     }
     return bRet;
 }
-/*-- 20.12.2006 09:44:16---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 bool SectionPropertyMap::HasFooter(bool bFirstPage) const
 {
     bool bRet = false;
@@ -626,9 +603,8 @@ bool SectionPropertyMap::HasFooter(bool bFirstPage) const
     }
     return bRet;
 }
-/*-- 20.12.2006 09:41:56---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 #define MIN_HEAD_FOOT_HEIGHT 100 //minimum header/footer height
 
 void SectionPropertyMap::CopyLastHeaderFooter( bool bFirstPage, DomainMapper_Impl& rDM_Impl )
@@ -785,9 +761,8 @@ void SectionPropertyMap::PrepareHeaderFooterProperties( bool bFirstPage )
     operator[]( PropertyDefinition( PROP_TOP_MARGIN, false )) = uno::makeAny( m_nTopMargin );
     operator[]( PropertyDefinition( PROP_BOTTOM_MARGIN, false )) = uno::makeAny( m_nBottomMargin );
 }
-/*-- 11.12.2006 08:31:46---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
 {
     PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
@@ -823,10 +798,6 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
     if(m_nBreakType == 0)
     {
         //todo: insert a section or access the already inserted section
-        //-->debug
-//        ::rtl::OUString sSelection = m_xStartingRange->getString();
-//        sSelection.getLength();
-        //-->debug
         uno::Reference< beans::XPropertySet > xSection =
                                     rDM_Impl.appendTextSectionAfter( m_xStartingRange );
         if( m_nColumnCount > 0 && xSection.is())
@@ -840,7 +811,6 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         if( m_nDzaGutter > 0 )
         {
             //todo: iGutterPos from DocProperties are missing
-            // if( m_iGutterPos > 0 ) m_nTopMargin += m_nDzaGutter; else
             if( m_bGutterRTL )
                 m_nRightMargin += m_nDzaGutter;
             else
@@ -848,9 +818,6 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         }
         operator[]( PropertyDefinition( PROP_LEFT_MARGIN, false )) =  uno::makeAny( m_nLeftMargin  );
         operator[]( PropertyDefinition( PROP_RIGHT_MARGIN, false )) = uno::makeAny( m_nRightMargin );
-
-//        if( iGutterPos && fRTLGutter )
-//        m_nTopMargin += nGutter
 
         /*** if headers/footers are available then the top/bottom margins of the
             header/footer are copied to the top/bottom margin of the page
@@ -962,7 +929,6 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
 
         try
         {
-//            if( m_xStartingRange.is() )
             {
                 //now apply this break at the first paragraph of this section
                 uno::Reference< beans::XPropertySet > xRangeProperties;
@@ -995,9 +961,8 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
        }
     }
 }
-/*-- 11.12.2006 08:31:46---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void SectionPropertyMap::_ApplyProperties( uno::Reference< beans::XPropertySet > xStyle )
 {
     PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
@@ -1025,25 +990,21 @@ sal_Int32 lcl_AlignPaperBin( sal_Int32 nSet )
     //todo: find out appropriate conversion
     return nSet;
 }
-/*-- 13.12.2006 15:34:01---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void SectionPropertyMap::SetPaperBin( sal_Int32 nSet )
 {
     m_nPaperBin = lcl_AlignPaperBin( nSet );
 }
-/*-- 13.12.2006 15:34:01---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void SectionPropertyMap::SetFirstPaperBin( sal_Int32 nSet )
 {
     m_nFirstPaperBin = lcl_AlignPaperBin( nSet );
 }
-/*-- 14.06.2007 13:57:42---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 StyleSheetPropertyMap::StyleSheetPropertyMap() :
-//    mnCT_Spacing_after( 0 ),
     mnCT_Spacing_line( 0 ),
     mnCT_Spacing_lineRule( 0 ),
     mbCT_TrPrBase_tblHeader( false ),
@@ -1051,7 +1012,6 @@ StyleSheetPropertyMap::StyleSheetPropertyMap() :
     mnCT_TcPrBase_vAlign( 0 ),
     mnCT_TblWidth_w( 0 ),
     mnCT_TblWidth_type( 0 ),
-//    mbCT_Spacing_afterSet( false ),
     mbCT_Spacing_lineSet( false ),
     mbCT_Spacing_lineRuleSet( false ),
     mbCT_TrPrBase_tblHeaderSet( false ),
@@ -1064,15 +1024,13 @@ StyleSheetPropertyMap::StyleSheetPropertyMap() :
     mnOutlineLevel( -1 )
 {
 }
-/*-- 14.06.2007 13:57:43---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 StyleSheetPropertyMap::~StyleSheetPropertyMap()
 {
 }
-/*-- 28.12.2007 08:19:00---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 ParagraphProperties::ParagraphProperties() :
     m_bFrameMode( false ),
     m_nDropCap(NS_ooxml::LN_Value_wordprocessingml_ST_DropCap_none),
@@ -1095,9 +1053,8 @@ ParagraphProperties::ParagraphProperties() :
     m_nDropCapLength(0)
 {
 }
-/*-- 28.12.2007 08:28:24---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 ParagraphProperties::ParagraphProperties(const ParagraphProperties& rCopy) :
     m_bFrameMode ( rCopy.m_bFrameMode),
     m_nDropCap   ( rCopy.m_nDropCap),
@@ -1123,15 +1080,13 @@ ParagraphProperties::ParagraphProperties(const ParagraphProperties& rCopy) :
     m_xEndingRange( rCopy.m_xEndingRange)
 {
 }
-/*-- 28.12.2007 11:29:18---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 ParagraphProperties::~ParagraphProperties()
 {
 }
-/*-- 28.12.2007 09:05:45---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 int ParagraphProperties::operator==(const ParagraphProperties& rCompare)
 {
     return
@@ -1154,33 +1109,28 @@ int ParagraphProperties::operator==(const ParagraphProperties& rCompare)
         m_yAlign     == rCompare.m_yAlign &&
         m_bAnchorLock== rCompare.m_bAnchorLock;
 }
-/*-- 27.12.2007 13:32:36---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 ParagraphPropertyMap::ParagraphPropertyMap()
 {
 }
-/*-- 27.12.2007 13:32:36---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 ParagraphPropertyMap::~ParagraphPropertyMap()
 {
 }
-/*-- 15.02.2008 16:10:39---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 TablePropertyMap::TablePropertyMap()
 {
 }
-/*-- 15.02.2008 16:10:39---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 TablePropertyMap::~TablePropertyMap()
 {
 }
-/*-- 18.02.2008 10:06:30---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 bool TablePropertyMap::getValue( TablePropertyMapTarget eWhich, sal_Int32& nFill )
 {
     if( eWhich < TablePropertyMapTarget_MAX )
@@ -1195,9 +1145,8 @@ bool TablePropertyMap::getValue( TablePropertyMapTarget eWhich, sal_Int32& nFill
         return false;
     }
 }
-/*-- 18.02.2008 10:07:11---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void TablePropertyMap::setValue( TablePropertyMapTarget eWhich, sal_Int32 nSet )
 {
     if( eWhich < TablePropertyMapTarget_MAX )
@@ -1208,9 +1157,8 @@ void TablePropertyMap::setValue( TablePropertyMapTarget eWhich, sal_Int32 nSet )
     else
         OSL_ENSURE( false, "invalid TablePropertyMapTarget");
 }
-/*-- 18.02.2008 11:23:28---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void TablePropertyMap::insertTableProperties( const PropertyMap* pMap )
 {
 #ifdef DEBUG_DOMAINMAPPER

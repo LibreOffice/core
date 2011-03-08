@@ -119,7 +119,6 @@ SvXMLImportContext *SvxXMLTextImportContext::CreateChildContext( USHORT nPrefix,
 class SvxXMLXTextImportComponent : public SvXMLImport
 {
 public:
-    // #110680#
     SvxXMLXTextImportComponent(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
         const uno::Reference< XText > & xText );
@@ -136,7 +135,6 @@ private:
 
 // --------------------------------------------------------------------
 
-// #110680#
 SvxXMLXTextImportComponent::SvxXMLXTextImportComponent(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
     const uno::Reference< XText > & xText )
@@ -176,14 +174,14 @@ void SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& r
             uno::Reference<lang::XMultiServiceFactory> xServiceFactory( ::comphelper::getProcessServiceFactory() );
             if( !xServiceFactory.is() )
             {
-                DBG_ERROR( "SvxXMLXTableImport::load: got no service manager" );
+                OSL_FAIL( "SvxXMLXTableImport::load: got no service manager" );
                 break;
             }
 
             uno::Reference< xml::sax::XParser > xParser( xServiceFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Parser" ) ) ), uno::UNO_QUERY );
             if( !xParser.is() )
             {
-                DBG_ERROR( "com.sun.star.xml.sax.Parser service missing" );
+                OSL_FAIL( "com.sun.star.xml.sax.Parser service missing" );
                 break;
             }
 
@@ -200,14 +198,14 @@ void SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& r
 
             if( !xSource.is() )
             {
-                DBG_ERROR( "got no data source from medium" );
+                OSL_FAIL( "got no data source from medium" );
                 break;
             }
 
             uno::Reference< XInterface > xPipe( xServiceFactory->createInstance(OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.Pipe") ) ) );
             if( !xPipe.is() )
             {
-                DBG_ERROR( "XMLReader::Read: com.sun.star.io.Pipe service missing" );
+                OSL_FAIL( "XMLReader::Read: com.sun.star.io.Pipe service missing" );
                 break;
             }
 
@@ -227,7 +225,6 @@ void SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& r
 
 */
 
-            // #110680#
             // uno::Reference< XDocumentHandler > xHandler( new SvxXMLXTextImportComponent( xText ) );
             uno::Reference< XDocumentHandler > xHandler( new SvxXMLXTextImportComponent( xServiceFactory, xText ) );
 

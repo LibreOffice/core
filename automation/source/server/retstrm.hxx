@@ -42,8 +42,6 @@ public:
     ~RetStream();
 
     using CmdBaseStream::GenError;
-//    void GenError( comm_ULONG nError, const comm_UniChar* aString, comm_USHORT nLenInChars ){CmdBaseStream::GenError( nError, aString, nLenInChars );}
-//  new
     void GenError( SmartId aUId, String aString );
 
     using CmdBaseStream::GenReturn;
@@ -55,7 +53,6 @@ public:
     void GenReturn( comm_USHORT nRet, SmartId aUId, comm_USHORT nMethod, comm_BOOL bBool ){CmdBaseStream::GenReturn( nRet, &aUId, nMethod, bBool );}
     void GenReturn( comm_USHORT nRet, SmartId aUId, comm_USHORT nMethod, comm_ULONG nNr ){CmdBaseStream::GenReturn( nRet, &aUId, nMethod, nNr );}
 
-//  new
     void GenReturn( USHORT nRet, SmartId aUId, String aString );
     void GenReturn( USHORT nRet, SmartId aUId, SbxValue &aValue );
     void GenReturn( USHORT nRet, SmartId aUId, comm_ULONG nNr, String aString, BOOL bBool );
@@ -72,7 +69,6 @@ public:
     void Write( comm_USHORT nNr ){CmdBaseStream::Write( nNr );}
     void Write( comm_ULONG nNr ){CmdBaseStream::Write( nNr );}
     void Write( comm_BOOL bBool ){CmdBaseStream::Write( bBool );}
-//  new
     void Write( SbxValue &aValue );
 
 // Complex Datatypes to be handled system dependent

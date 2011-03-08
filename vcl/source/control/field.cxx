@@ -1212,7 +1212,7 @@ static FieldUnit ImplMap2FieldUnit( MapUnit meUnit, long& nDecDigits )
         case MAP_TWIP :
             return FUNIT_TWIP;
         default:
-            DBG_ERROR( "default eInUnit" );
+            OSL_FAIL( "default eInUnit" );
             break;
     }
     return FUNIT_NONE;
@@ -1326,7 +1326,7 @@ double MetricField::ConvertDoubleValue( double nValue, USHORT nDigits,
          eInUnit == MAP_APPFONT ||
          eInUnit == MAP_RELATIVE )
     {
-        DBG_ERROR( "invalid parameters" );
+        OSL_FAIL( "invalid parameters" );
         return nValue;
     }
 
@@ -1383,7 +1383,7 @@ double MetricField::ConvertDoubleValue( double nValue, USHORT nDigits,
          eOutUnit == MAP_APPFONT ||
          eOutUnit == MAP_RELATIVE )
     {
-        DBG_ERROR( "invalid parameters" );
+        OSL_FAIL( "invalid parameters" );
         return nValue;
     }
 

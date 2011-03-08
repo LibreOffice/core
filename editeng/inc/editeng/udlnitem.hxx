@@ -54,7 +54,7 @@ public:
     SvxTextLineItem( const FontUnderline eSt,
                      const USHORT nId );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual Methods" from SfxPoolItem
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                             SfxMapUnit eCoreMetric,
                             SfxMapUnit ePresMetric,
@@ -71,7 +71,7 @@ public:
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal,
                                         BYTE nMemberId = 0 );
 
-    // MS VC4.0 kommt durcheinander
+    // MS VC4.0 messes things up
     void                    SetValue( USHORT nNewVal )
                                 {SfxEnumItem::SetValue(nNewVal); }
     virtual int             HasBoolValue() const;

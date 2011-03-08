@@ -31,10 +31,6 @@
 
 #include <sfx2/tbxctrl.hxx>
 
-//----------------------------------------------------------------------------
-//
-//----------------------------------------------------------------------------
-
 class ScTbxInsertCtrl : public SfxToolBoxControl
 {
     USHORT                  nLastSlotId;
@@ -54,36 +50,6 @@ public:
                                               SfxItemState eState,
                                               const SfxPoolItem* pState );
 };
-
-//----------------------------------------------------------------------------
-//
-//----------------------------------------------------------------------------
-/*
-class ScTbxInsertPopup : public SfxPopupWindow
-{
-    SfxToolBoxManager   aTbx;
-    ResId               aRIdWinTemp;
-    ResId               aRIdTbxTemp;
-
-    Link                aTbxClickHdl;
-
-    DECL_LINK( TbxSelectHdl, ToolBox* );
-    DECL_LINK( TbxClickHdl, ToolBox* );
-
-protected:
-    virtual void        PopupModeEnd();
-
-public:
-    ScTbxInsertPopup( USHORT nId, WindowAlign eAlign,
-                        const ResId& rRIdWin, const ResId& rRIdTbx,
-                        SfxBindings& rBindings );
-    ~ScTbxInsertPopup();
-
-    virtual SfxPopupWindow* Clone() const;
-    void StartSelection();
-};
-*/
-
 
 #endif
 

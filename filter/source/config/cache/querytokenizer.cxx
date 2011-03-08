@@ -43,9 +43,8 @@ namespace filter{
 //_______________________________________________
 // definitions
 
-/*-----------------------------------------------
-    01.08.2003 10:42
------------------------------------------------*/
+
+
 QueryTokenizer::QueryTokenizer(const ::rtl::OUString& sQuery)
     : m_bValid(sal_True)
 {
@@ -80,17 +79,15 @@ QueryTokenizer::QueryTokenizer(const ::rtl::OUString& sQuery)
     }
 }
 
-/*-----------------------------------------------
-    01.08.2003 10:28
------------------------------------------------*/
+
+
 QueryTokenizer::~QueryTokenizer()
 {
     /*TODO*/
 }
 
-/*-----------------------------------------------
-    01.08.2003 10:53
------------------------------------------------*/
+
+
 sal_Bool QueryTokenizer::valid() const
 {
     return m_bValid;

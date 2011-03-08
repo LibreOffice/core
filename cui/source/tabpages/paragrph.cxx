@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 #include <svl/style.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
@@ -181,9 +178,6 @@ USHORT GetHtmlMode_Impl(const SfxItemSet& rSet)
 
 IMPL_LINK( SvxStdParagraphTabPage, ELRLoseFocusHdl, Edit *, EMPTYARG )
 {
-//! if ( aLeftIndent.IsRelativeMode() )
-//!     return 0; //!!!
-
     SfxItemPool* pPool = GetItemSet().GetPool();
     DBG_ASSERT( pPool, "Wo ist der Pool" );
     FieldUnit eUnit =
@@ -274,7 +268,7 @@ BOOL SvxStdParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
             break;
 
             default:
-                DBG_ERROR( "unbekannter Type fuer Zeilenabstand." );
+                OSL_FAIL( "unbekannter Type fuer Zeilenabstand." );
                 break;
         }
         eState = GetItemSet().GetItemState( nWhich );
@@ -1003,8 +997,6 @@ void    SvxStdParagraphTabPage::PageCreated(SfxAllItemSet aSet)
                         0x0002 --->EnableRegisterMode()
                         0x0004 --->EnableAutoFirstLine()
                         0x0008 --->EnableNegativeMode()
-
-
             */
     SFX_ITEMSET_ARG (&aSet,pPageWidthItem,SfxUInt16Item,SID_SVXSTDPARAGRAPHTABPAGE_PAGEWIDTH,sal_False);
     SFX_ITEMSET_ARG (&aSet,pFlagSetItem,SfxUInt32Item,SID_SVXSTDPARAGRAPHTABPAGE_FLAGSET,sal_False);
@@ -1710,7 +1702,6 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet& rSet )
             aPagenumEdit.Enable(FALSE);
             aPagenumText.Enable(FALSE);
         }
-//!!!   ApplyCollClickHdl_Impl( &aApplyCollBtn );
 
         if ( !bIsPageModel )
         {
@@ -1936,10 +1927,6 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage( Window* pParent, const SfxItemSe
     aBreakTypeLB        ( this, CUI_RES( LB_BREAKTYPE     )),
     aBreakPositionFT    ( this, CUI_RES( FT_BREAKPOSITION )),
     aBreakPositionLB    ( this, CUI_RES( LB_BREAKPOSITION )),
-//    aPageBox            ( this, CUI_RES( BTN_BREAKPAGE ) ),
-//    aColumnBox          ( this, CUI_RES( BTN_BREAKCOLUMN ) ),
-//    aBeforeBox          ( this, CUI_RES( BTN_PAGEBREAKBEFORE ) ),
-//    aAfterBox           ( this, CUI_RES( BTN_PAGEBREAKAFTER ) ),
     aApplyCollBtn       ( this, CUI_RES( BTN_PAGECOLL ) ),
     aApplyCollBox       ( this, CUI_RES( LB_PAGECOLL ) ),
     aPagenumText        ( this, CUI_RES( FT_PAGENUM ) ),
@@ -2319,17 +2306,10 @@ void lcl_SetBox(const SfxItemSet& rSet, USHORT nSlotId, TriStateBox& rBox)
 void SvxAsianTabPage::Reset( const SfxItemSet& rSet )
 {
     lcl_SetBox(rSet, SID_ATTR_PARA_FORBIDDEN_RULES, aForbiddenRulesCB );
-//  lcl_SetBox(rSet, , aAllowWordBreakCB );
     lcl_SetBox(rSet, SID_ATTR_PARA_HANGPUNCTUATION, aHangingPunctCB );
 
-
     //character distance not yet available
-//  lcl_SetBox(rSet, , aPuntuationCB    );
     lcl_SetBox(rSet, SID_ATTR_PARA_SCRIPTSPACE, aScriptSpaceCB );
-//  lcl_SetBox(rSet, , aAdjustNumbersCB );
-//  aAllowWordBreakCB   .Enable(FALSE);
-//  aPuntuationCB       .Enable(FALSE);
-//  aAdjustNumbersCB    .Enable(FALSE);
 }
 
 IMPL_LINK( SvxAsianTabPage, ClickHdl_Impl, TriStateBox*, pBox )

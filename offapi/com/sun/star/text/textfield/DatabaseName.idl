@@ -36,7 +36,7 @@
 module com { module sun { module star { module text { module textfield {
 
 //=============================================================================
-/** specifies service of text field that displayes the name of a database.
+/** specifies service of text field that displays the name of a database.
     @see com::sun::star::text::TextField
 
     Only one of the properties <member>DataBaseName</member>,

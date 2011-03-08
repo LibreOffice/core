@@ -39,8 +39,8 @@ class SfxStyleSheetPool;
 
 class XEditAttribute
 {
-    friend class ContentInfo;   // fuer DTOR
-    friend class BinTextObject; // fuer DTOR
+    friend class ContentInfo;   // for destructor
+    friend class BinTextObject; // for destructor
 
 private:
     const SfxPoolItem*  pItem;
@@ -161,10 +161,6 @@ private:
     SfxItemSet          aParaAttribs;
     WrongList*          pWrongs;
 
-/* cl removed because not needed anymore since binfilter
-    LoadStoreTempInfos* pTempLoadStoreInfos;
-*/
-
                         ContentInfo( SfxItemPool& rPool );
                         ContentInfo( const ContentInfo& rCopyFrom, SfxItemPool& rPoolToUse  );
 
@@ -193,8 +189,6 @@ public:
 
 typedef ContentInfo* ContentInfoPtr;
 SV_DECL_PTRARR( ContentInfoList, ContentInfoPtr, 1, 4 )
-
-// MT 05/00: Sollte mal direkt EditTextObjekt werden => keine virtuellen Methoden mehr.
 
 class BinTextObject : public EditTextObject, public SfxItemPoolUser
 {
@@ -242,7 +236,7 @@ public:
     USHORT                  GetScriptType() const;
     void                    SetScriptType( USHORT nType );
 
-    USHORT                  GetVersion() const; // Solange der Outliner keine Recordlaenge speichert
+    USHORT                  GetVersion() const; // As long as the outliner does not store any record length
 
     ContentInfo*            CreateAndInsertContent();
     XEditAttribute*         CreateAttrib( const SfxPoolItem& rItem, USHORT nStart, USHORT nEnd );
@@ -296,13 +290,6 @@ public:
 
     BOOL                    IsOwnerOfPool() const       { return bOwnerOfPool; }
     void                    StoreUnicodeStrings( BOOL b ) { bStoreUnicodeStrings = b; }
-
-/* cl removed because not needed anymore since binfilter
-    void                    PrepareStore( SfxStyleSheetPool* pStyleSheetPool );
-    void                    FinishStore();
-    void                    FinishLoad( SfxStyleSheetPool* pStyleSheetPool );
-*/
-
     bool                    operator==( const BinTextObject& rCompare ) const;
 
     // #i102062#

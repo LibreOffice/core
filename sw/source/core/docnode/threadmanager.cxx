@@ -27,7 +27,6 @@
  ************************************************************************/
 #include "precompiled_sw.hxx"
 #include <threadmanager.hxx>
-#include <errhdl.hxx>
 
 #include <algorithm>
 
@@ -35,7 +34,7 @@ using namespace ::com::sun::star;
 
 /** class to manage threads
 
-    OD 2007-01-29 #i73788#
+    #i73788#
 
     @author OD
 */

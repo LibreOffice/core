@@ -322,7 +322,7 @@ void ScUndoInsertCells::Repeat(SfxRepeatTarget& rTarget)
     {
         if ( pPasteUndo )
         {
-            //  #94115# Repeat for paste with inserting cells is handled completely
+            //  Repeat for paste with inserting cells is handled completely
             //  by the Paste undo action
 
             pPasteUndo->Repeat( rTarget );
@@ -1114,7 +1114,7 @@ void ScUndoPaste::Repeat(SfxRepeatTarget& rTarget)
         ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard( pViewSh->GetActiveWin() );
         if (pOwnClip)
         {
-            // #129384# keep a reference in case the clipboard is changed during PasteFromClip
+            // keep a reference in case the clipboard is changed during PasteFromClip
             com::sun::star::uno::Reference<com::sun::star::datatransfer::XTransferable> aOwnClipRef( pOwnClip );
             pViewSh->PasteFromClip( nFlags, pOwnClip->GetDocument(),
                                     aPasteOptions.nFunction, aPasteOptions.bSkipEmpty, aPasteOptions.bTranspose,
@@ -1630,7 +1630,7 @@ void ScUndoSelectionStyle::DoChange( const BOOL bUndo )
             (ScStyleSheet*) pStlPool->Find( aStyleName, SFX_STYLE_FAMILY_PARA );
         if (!pStyleSheet)
         {
-            DBG_ERROR("StyleSheet not found");
+            OSL_FAIL("StyleSheet not found");
             return;
         }
         pDoc->ApplySelectionStyle( *pStyleSheet, aMarkData );
@@ -1668,7 +1668,7 @@ void ScUndoSelectionStyle::Repeat(SfxRepeatTarget& rTarget)
                                             Find( aStyleName, SFX_STYLE_FAMILY_PARA );
         if (!pStyleSheet)
         {
-            DBG_ERROR("StyleSheet not found");
+            OSL_FAIL("StyleSheet not found");
             return;
         }
 

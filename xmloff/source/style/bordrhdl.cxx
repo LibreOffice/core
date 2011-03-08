@@ -198,31 +198,6 @@ void lcl_frmitems_setXMLBorderStyle( table::BorderLine2 & rBorderLine, sal_uInt1
 void lcl_frmitems_setXMLBorderWidth( table::BorderLine &rBorderLine,
                                      sal_uInt16 nWidth, sal_Bool bDouble )
 {
-#ifdef XML_CHECK_UI_CONTSTRAINS
-    const sal_uInt16 *aWidths;
-    sal_uInt16 nSize;
-    if( !bDouble )
-    {
-        aWidths = aSBorderWidths;
-        nSize = sizeof( aSBorderWidths );
-    }
-    else
-    {
-        aWidths = aDBorderWidths;
-        nSize = sizeof( aDBorderWidths );
-    }
-
-    sal_uInt16 i = (nSize / sizeof(sal_uInt16)) - 4;
-    while( i>0 &&
-           nWidth <= ((aWidths[i] + aWidths[i-4]) / 2)  )
-    {
-        i -= 4;
-    }
-
-    rBorderLine.OuterLineWidth = aWidths[i+1];
-    rBorderLine.InnerLineWidth = aWidths[i+2];
-    rBorderLine.LineDistance = aWidths[i+3];
-#else
     if( bDouble )
     {
         const sal_uInt16 *aWidths = aDBorderWidths;
@@ -245,7 +220,6 @@ void lcl_frmitems_setXMLBorderWidth( table::BorderLine &rBorderLine,
         rBorderLine.LineDistance = 0;
 
     }
-#endif
 }
 
 
@@ -283,19 +257,6 @@ sal_Bool XMLBorderWidthHdl::importXML( const OUString& rStrImpValue, uno::Any& r
 
     if( !rUnitConverter.convertMeasure( nOutWidth, aToken, 0, 500 ) )
         return sal_False;
-
-#ifdef XML_CHECK_UI_CONSTRAINS
-    sal_uInt16 nSize = sizeof( aDBorderWidths );
-    for( sal_uInt16 i=0; i < nSize; i += 4 )
-    {
-        if( aDBorderWidths[i+1] == nOutWidth &&
-            aDBorderWidths[i+2] == nInWidth &&
-            aDBorderWidths[i+3] == nDistance )
-            break;
-    }
-
-    sal_uInt16 nWidth = i < nSize ? 0 : nOutWidth + nInWidth + nDistance;
-#endif
 
     table::BorderLine2 aBorderLine;
     if(!(rValue >>= aBorderLine))

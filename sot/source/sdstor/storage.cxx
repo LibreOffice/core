@@ -390,7 +390,7 @@ BOOL SotStorageStream::SetProperty( const String& rName, const ::com::sun::star:
     }
     else
     {
-        DBG_ERROR("Not implemented!");
+        OSL_FAIL("Not implemented!");
         return FALSE;
     }
 }
@@ -404,7 +404,7 @@ BOOL SotStorageStream::GetProperty( const String& rName, ::com::sun::star::uno::
     }
     else
     {
-        DBG_ERROR("Not implemented!");
+        OSL_FAIL("Not implemented!");
         return FALSE;
     }
 }
@@ -418,7 +418,7 @@ BOOL SotStorageStream::GetProperty( const String& rName, ::com::sun::star::uno::
     }
     else
     {
-        DBG_ERROR("Not implemented!");
+        OSL_FAIL("Not implemented!");
         return ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >();
     }
 }
@@ -739,7 +739,7 @@ void SotStorage::RemoveUNOStorageHolder( UNOStorageHolder* pHolder )
     }
     else
     {
-        DBG_ERROR("Not implemented!");
+        OSL_FAIL("Not implemented!");
     }
 }
 

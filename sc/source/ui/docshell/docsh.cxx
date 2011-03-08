@@ -191,7 +191,6 @@ static const sal_Char pFilterRtf[]      = "Rich Text Format (StarCalc)";
 
 SFX_IMPL_INTERFACE(ScDocShell,SfxObjectShell, ScResId(SCSTR_DOCSHELL))
 {
-    SFX_CHILDWINDOW_REGISTRATION( SID_HYPERLINK_INSERT );
 }
 
 //  GlobalName der aktuellen Version:
@@ -225,7 +224,7 @@ void ScDocShell::FillClass( SvGlobalName* pClassName,
     }
     else
     {
-        DBG_ERROR("wat fuer ne Version?");
+        OSL_FAIL("wat fuer ne Version?");
     }
 }
 
@@ -401,7 +400,7 @@ void ScDocShell::AfterXMLLoading(sal_Bool bRet)
     }
     else
     {
-        DBG_ERROR("The Modificator should exist");
+        OSL_FAIL("The Modificator should exist");
     }
 
     aDocument.DisableIdle( FALSE );
@@ -522,7 +521,7 @@ BOOL ScDocShell::Load( SfxMedium& rMedium )
     InitItems();
     CalcOutputFactor();
 
-    // #73762# invalidate eventually temporary table areas
+    // invalidate eventually temporary table areas
     if ( bRet )
         aDocument.InvalidateTableArea();
 
@@ -903,7 +902,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                             }
                             catch ( uno::Exception& )
                             {
-                                DBG_ERROR( "SFX_EVENT_SAVEDOC: caught exception\n" );
+                                OSL_FAIL( "SFX_EVENT_SAVEDOC: caught exception\n" );
                                 SC_MOD()->SetInSharedDocSaving( false );
 
                                 try
@@ -1131,7 +1130,7 @@ BOOL ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 eFormat = EIF_BIFF8;
 
             MakeDrawLayer();                //! im Filter
-            CalcOutputFactor();             // #93255# prepare update of row height
+            CalcOutputFactor();             // prepare update of row height
             ScColumn::bDoubleAlloc = TRUE;
             FltError eError = ScFormatFilter::Get().ScImportExcel( rMedium, &aDocument, eFormat );
             ScColumn::bDoubleAlloc = FALSE;
@@ -1139,7 +1138,7 @@ BOOL ScDocShell::ConvertFrom( SfxMedium& rMedium )
             if ( aDocument.IsChartListenerCollectionNeedsUpdate() )
                 aDocument.UpdateChartListenerCollection();              //! fuer alle Importe?
 
-            // #75299# all graphics objects must have names
+            // all graphics objects must have names
             aDocument.EnsureGraphicNames();
 
             if (eError == SCWARN_IMPORT_RANGE_OVERFLOW)
@@ -1201,7 +1200,7 @@ BOOL ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 }
                 else
                 {
-                    DBG_ERROR( "No Stream" );
+                    OSL_FAIL( "No Stream" );
                 }
             }
 
@@ -1313,7 +1312,7 @@ BOOL ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 }
                 else
                 {
-                    DBG_ERROR( "No Stream" );
+                    OSL_FAIL( "No Stream" );
                 }
             }
 
@@ -1371,7 +1370,7 @@ BOOL ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 }
                 else
                 {
-                    DBG_ERROR( "No Stream" );
+                    OSL_FAIL( "No Stream" );
                 }
             }
 
@@ -1420,7 +1419,7 @@ BOOL ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 }
                 else
                 {
-                    DBG_ERROR( "No Stream" );
+                    OSL_FAIL( "No Stream" );
                 }
             }
 
@@ -1438,7 +1437,7 @@ BOOL ScDocShell::ConvertFrom( SfxMedium& rMedium )
     }
     else
     {
-        DBG_ERROR("Kein Filter bei ConvertFrom");
+        OSL_FAIL("Kein Filter bei ConvertFrom");
     }
 
     InitItems();
@@ -1497,7 +1496,7 @@ BOOL ScDocShell::ConvertFrom( SfxMedium& rMedium )
     FinishedLoading( SFX_LOADED_MAINDOCUMENT | SFX_LOADED_IMAGES );
 
 
-    // #73762# invalidate eventually temporary table areas
+    // invalidate eventually temporary table areas
     if ( bRet )
         aDocument.InvalidateTableArea();
 
@@ -1888,7 +1887,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                 }
                 break;
             default:
-                DBG_ERROR( "ScDocShell::AsciiSave: unknown CellType" );
+                OSL_FAIL( "ScDocShell::AsciiSave: unknown CellType" );
                 aString.Erase();
                 bString = FALSE;
         }
@@ -1931,7 +1930,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                     }
                     else
                     {
-                        // #105549# This is nasty. The Unicode to byte encoding
+                        // This is nasty. The Unicode to byte encoding
                         // may convert typographical quotation marks to ASCII
                         // quotation marks, which may interfer with the delimiter,
                         // so we have to escape delimiters after the string has
@@ -2056,7 +2055,7 @@ BOOL ScDocShell::ConvertTo( SfxMedium &rMed )
     if (aFltName.EqualsAscii(pFilterXML))
     {
         //TODO/LATER: this shouldn't happen!
-        DBG_ERROR("XML filter in ConvertFrom?!");
+        OSL_FAIL("XML filter in ConvertFrom?!");
         bRet = SaveXML( &rMed, NULL );
     }
     else if (aFltName.EqualsAscii(pFilterExcel5) || aFltName.EqualsAscii(pFilterExcel95) ||
@@ -2073,7 +2072,7 @@ BOOL ScDocShell::ConvertTo( SfxMedium &rMed )
                 aDocument.SetExtDocOptions( pExtDocOpt = new ScExtDocOptions );
             pViewShell->GetViewData()->WriteExtOptions( *pExtDocOpt );
 
-            /*  #115980# #i104990# If the imported document contains a medium
+            /*  #i104990# If the imported document contains a medium
                 password, determine if we can save it, otherwise ask the users
                 whether they want to save without it. */
             if( (rMed.GetFilter()->GetFilterFlags() & SFX_FILTER_ENCRYPTION) == 0 )
@@ -2549,7 +2548,7 @@ ScDocShell::ScDocShell( const sal_uInt64 i_nSfxCreationFlags )
 
 ScDocShell::~ScDocShell()
 {
-    ResetDrawObjectShell(); // #55570# falls der Drawing-Layer noch versucht, darauf zuzugreifen
+    ResetDrawObjectShell(); // falls der Drawing-Layer noch versucht, darauf zuzugreifen
 
     SfxStyleSheetPool* pStlPool = aDocument.GetStyleSheetPool();
     if (pStlPool)
@@ -2577,7 +2576,7 @@ ScDocShell::~ScDocShell()
 
     if (pModificator)
     {
-        DBG_ERROR("The Modificator should not exist");
+        OSL_FAIL("The Modificator should not exist");
         delete pModificator;
     }
 }
@@ -2633,7 +2632,7 @@ void ScDocShell::SetDocumentModified( BOOL bIsModified /* = TRUE */ )
 
             //  Detective AutoUpdate:
             //  Update if formulas were modified (DetectiveDirty) or the list contains
-            //  "Trace Error" entries (#75362# - Trace Error can look completely different
+            //  "Trace Error" entries (Trace Error can look completely different
             //  after changes to non-formula cells).
 
             ScDetOpList* pList = aDocument.GetDetOpList();
@@ -2645,7 +2644,7 @@ void ScDocShell::SetDocumentModified( BOOL bIsModified /* = TRUE */ )
             aDocument.SetDetectiveDirty(FALSE);         // always reset, also if not refreshed
         }
 
-        // #b6697848# notify UNO objects after BCA_BRDCST_ALWAYS etc.
+        // notify UNO objects after BCA_BRDCST_ALWAYS etc.
         aDocument.BroadcastUno( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
     }
 }
@@ -2829,11 +2828,11 @@ void ScDocShell::ResetKeyBindings( ScOptionsUtil::KeyBindingType eType )
     aCtrlD.Modifiers = awt::KeyModifier::MOD1;
     aKeys.push_back(&aCtrlD);
 
-    // Ctrl-Shift-D
-    awt::KeyEvent aCtrlShiftD;
-    aCtrlShiftD.KeyCode = awt::Key::D;
-    aCtrlShiftD.Modifiers = awt::KeyModifier::MOD1 | awt::KeyModifier::SHIFT;
-    aKeys.push_back(&aCtrlShiftD);
+    // Alt-Down
+    awt::KeyEvent aAltDown;
+    aAltDown.KeyCode = awt::Key::DOWN;
+    aAltDown.Modifiers = awt::KeyModifier::MOD2;
+    aKeys.push_back(&aAltDown);
 
     // Remove all involved keys first, because swapping commands don't work
     // well without doing this.
@@ -2846,7 +2845,7 @@ void ScDocShell::ResetKeyBindings( ScOptionsUtil::KeyBindingType eType )
             xScAccel->setKeyEvent(aDelete, OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:ClearContents")));
             xScAccel->setKeyEvent(aBackspace, OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Delete")));
             xScAccel->setKeyEvent(aCtrlD, OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:FillDown")));
-            xScAccel->setKeyEvent(aCtrlShiftD, OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DataSelect")));
+            xScAccel->setKeyEvent(aAltDown, OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DataSelect")));
         break;
         case ScOptionsUtil::KEY_OOO_LEGACY:
             xScAccel->setKeyEvent(aDelete, OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Delete")));

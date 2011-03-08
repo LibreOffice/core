@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <tools/resid.hxx>
 #include <unotools/charclass.hxx>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
@@ -364,9 +363,6 @@ BOOL SwTOXIndex::operator==( const SwTOXSortTabBase& rCmpBase )
 //
 // kleiner haengt nur vom Text ab
 
-
-//
-
 BOOL SwTOXIndex::operator<( const SwTOXSortTabBase& rCmpBase )
 {
     SwTOXIndex& rCmp = (SwTOXIndex&)rCmpBase;
@@ -398,9 +394,6 @@ BOOL SwTOXIndex::operator<( const SwTOXSortTabBase& rCmpBase )
 
 //
 // Das Stichwort selbst
-
-
-//
 
 void SwTOXIndex::_GetText( String& rTxt, String& rTxtReading )
 {
@@ -533,7 +526,6 @@ void SwTOXCustom::_GetText( String& rTxt, String &rTxtReading )
 {
     rTxt = aKey;
     rTxtReading = sReading;
-    /// !!!!!!!!!!!!!!
 }
 
 
@@ -621,13 +613,6 @@ void SwTOXPara::_GetText( String& rTxt, String& )
     case nsSwTOXElement::TOX_OUTLINELEVEL:
         {
             xub_StrLen nStt = nStartIndex;
-/* JP 22.01.98:
-    Tabs ueberspringen - macht aber keinen Sinn, solange in der TOX-Form
-    nicht die KapitelNummer eingestellt werden kann
-            const String& rTmp = ((SwTxtNode*)pNd)->GetTxt();
-            while( '\t' == rTmp.GetChar( nStt ) && nStt < rTmp.Len() )
-                ++nStt;
-*/
             rTxt = ((SwTxtNode*)pNd)->GetExpandTxt(
                     nStt,
                     STRING_NOTFOUND == nEndIndex ? STRING_LEN : nEndIndex - nStt);
@@ -664,13 +649,6 @@ void SwTOXPara::FillText( SwTxtNode& rNd, const SwIndex& rInsPos, USHORT ) const
     {
         SwTxtNode* pSrc = (SwTxtNode*)aTOXSources[0].pNd;
         xub_StrLen nStt = nStartIndex;
-/* JP 22.01.98:
-    Tabs ueberspringen - macht aber keinen Sinn, solange in der TOX-Form
-    nicht die KapitelNummer eingestellt werden kann
-        const String& rTxt = pSrc->GetTxt();
-        while( '\t' == rTxt.GetChar( nStt ) && nStt < rTxt.Len() )
-            ++nStt;
-*/
         pSrc->GetExpandTxt( rNd, &rInsPos, nStt,
                 nEndIndex == STRING_LEN ? STRING_LEN : nEndIndex - nStt,
                 FALSE, FALSE, TRUE );
@@ -692,9 +670,6 @@ USHORT SwTOXPara::GetLevel() const
 
     if( nsSwTOXElement::TOX_OUTLINELEVEL == eType && pNd->GetTxtNode() )
     {
-        //USHORT nTmp = ((SwTxtNode*)pNd)->GetTxtColl()->GetOutlineLevel();//#outline level,zhaojianwei
-        //if(nTmp < NO_NUMBERING)
-        //  nRet = nTmp + 1;
         const int nTmp = ((SwTxtNode*)pNd)->GetAttrOutlineLevel();//#outline level,zhaojianwei????
         if(nTmp != 0 )
             nRet = static_cast<USHORT>(nTmp);
@@ -714,41 +689,6 @@ String SwTOXPara::GetURL() const
         {
             const SwTxtNode * pTxtNd = static_cast<const SwTxtNode *>(pNd);
 
-            // --> OD 2009-08-05 #i103265#
-//            //if( MAXLEVEL >= pTxtNd->GetTxtColl()->GetOutlineLevel())  //#outline level,zhaojianwei
-//            if ( pTxtNd->GetAttrOutlineLevel() > 0)  //<-end,zhaojianwei
-//            {
-//                aTxt = '#';
-//                const SwNumRule * pRule = pTxtNd->GetNumRule();
-//                if( pRule )
-//                {
-//                    // dann noch die rel. Nummer davor setzen
-//                    const USHORT nCurrLevel = static_cast<USHORT>(pTxtNd->GetActualListLevel());
-//                    if(nCurrLevel <= MAXLEVEL)
-//                    {
-//                        // --> OD 2005-11-02 #i51089 - TUNING#
-//                        if ( pTxtNd->GetNum() )
-//                        {
-//                            SwNumberTree::tNumberVector aNumVector =
-//                                pTxtNd->GetNumberVector();
-
-//                            for( USHORT n = 0; n <= nCurrLevel; ++n )
-//                            {
-//                                int nNum = aNumVector[ n ];
-//                                nNum -= ( pRule->Get( n ).GetStart() - 1 );
-//                                ( aTxt += String::CreateFromInt32( nNum )) += '.';
-//                            }
-//                        }
-//                        else
-//                        {
-//                            OSL_ENSURE( false,
-//                                    "<SwTOXPara::GetURL()> - text node with numbering rule, but without number. This is a serious defect -> inform OD" );
-//                        }
-//                    }
-//                }
-//                aTxt += pTxtNd->GetExpandTxt();
-//                ( aTxt += cMarkSeperator ).AppendAscii( pMarkToOutline );
-//            }
             SwDoc* pDoc = const_cast<SwDoc*>( pTxtNd->GetDoc() );
             ::sw::mark::IMark const * const pMark = pDoc->getIDocumentMarkAccess()->getMarkForTxtNode(
                                 *(pTxtNd),
@@ -756,7 +696,6 @@ String SwTOXPara::GetURL() const
             aTxt = '#';
             const String aMarkName( pMark->GetName() );
             aTxt += aMarkName;
-            // <--
         }
         break;
 

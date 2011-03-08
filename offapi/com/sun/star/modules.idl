@@ -44,7 +44,7 @@ module awt {};
 
     <p>Making a class accessible starts by supporting the <type
     scope="::com::sun::star::accessibility">XAccessible</type> interface.
-    This interface' only method returns the actual accessibility object, an
+    This interface's only method returns the actual accessibility object, an
     instance of <type
     scope="::com::sun::star::accessibility">XAccessibleContext</type>.
     These two interfaces may be implemented by the same class in which case
@@ -159,7 +159,7 @@ module setup {};
 /// Spreadsheet specific interfaces.
 module sheet {};
 
-/// Formatting and layout style and stylesheet interfaces.
+/// Formatting and layout style and style sheet interfaces.
 module style {};
 
 /// Interfaces for import/export of Scaleable Vector Format.
@@ -192,7 +192,7 @@ module ui {};
 /// Miscellaneous interfaces for sorting, connecting objects etc.
 module util {};
 
-/// Document view specfic interfaces (e.g. selection access and printing).
+/// Document view specific interfaces (e.g. selection access and printing).
 module view {};
 
 /// XML related interfaces.
@@ -204,7 +204,7 @@ module system {};
 /// Package file format interfaces.
 module packages {};
 
-/// image manupulation interfaces.
+/// image manipulation interfaces.
 module image {};
 
 /// interfaces for XForms (XML-based forms) implementation

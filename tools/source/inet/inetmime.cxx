@@ -373,12 +373,11 @@ bool parseParameters(ParameterList const & rInput,
                         break;
                 };
             }
-            pOutput->Insert(new INetContentTypeParameter(p->m_aAttribute,
+            pOutput->Append(new INetContentTypeParameter(p->m_aAttribute,
                                                              p->m_aCharset,
                                                              p->m_aLanguage,
                                                              aValue,
-                                                             !bBadEncoding),
-                                LIST_APPEND);
+                                                             !bBadEncoding));
             p = pNext;
         }
     return true;
@@ -1549,7 +1548,7 @@ const sal_Char * INetMIME::getCharsetName(rtl_TextEncoding eEncoding)
                 return "ISO-10646-UCS-2";
 
             default:
-                DBG_ERROR("INetMIME::getCharsetName(): Unsupported encoding");
+                OSL_FAIL("INetMIME::getCharsetName(): Unsupported encoding");
                 return 0;
         }
 }
@@ -4544,21 +4543,21 @@ INetMIMEEncodedWordOutputSink::operator <<(sal_uInt32 nChar)
 
 void INetContentTypeParameterList::Clear()
 {
-    while (Count() > 0)
-        delete static_cast< INetContentTypeParameter * >(Remove(Count() - 1));
+    maEntries.clear();
 }
 
 //============================================================================
 const INetContentTypeParameter *
 INetContentTypeParameterList::find(const ByteString & rAttribute) const
 {
-    for (ULONG i = 0; i < Count(); ++i)
+    boost::ptr_vector<INetContentTypeParameter>::const_iterator iter;
+    for (iter = maEntries.begin(); iter != maEntries.end(); ++iter)
     {
-        const INetContentTypeParameter * pParameter = GetObject(i);
-        if (pParameter->m_sAttribute.EqualsIgnoreCaseAscii(rAttribute))
-            return pParameter;
+        if (iter->m_sAttribute.EqualsIgnoreCaseAscii(rAttribute))
+            return &(*iter);
     }
-    return 0;
+
+    return NULL;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

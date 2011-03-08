@@ -33,9 +33,6 @@
 #include <vcl/outdev.hxx>
 #include <SwPortionHandler.hxx>
 
-#include "errhdl.hxx"   // ASSERT
-
-#include "txtcfg.hxx"
 #include "porlin.hxx"
 #include "inftxt.hxx"
 #include "portxt.hxx"
@@ -227,7 +224,6 @@ SwLinePortion *SwLinePortion::FindLastPortion()
     // An das Ende wandern und pLinPortion an den letzten haengen ...
     while( pPos->GetPortion() )
     {
-        DBG_LOOP;
         pPos = pPos->GetPortion();
     }
     return pPos;
@@ -271,7 +267,6 @@ SwLinePortion *SwLinePortion::FindPrevPortion( const SwLinePortion *pRoot )
     SwLinePortion *pPos = (SwLinePortion*)pRoot;
     while( pPos->GetPortion() && pPos->GetPortion() != this )
     {
-        DBG_LOOP;
         pPos = pPos->GetPortion();
     }
     OSL_ENSURE( pPos->GetPortion(),

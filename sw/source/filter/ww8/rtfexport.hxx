@@ -30,7 +30,6 @@
 #define _RTFEXPORT_HXX_
 
 #include <set>
-#include "rtfattributeoutput.hxx"
 #include "wrtww8.hxx"
 
 #include <rtl/ustring.hxx>
@@ -38,6 +37,7 @@
 #include <cstdio>
 #include <map>
 
+class RtfAttributeOutput;
 class RtfExportFilter;
 class RtfSdrExport;
 typedef std::map<USHORT,Color> RtfColorTbl;

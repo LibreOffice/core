@@ -143,6 +143,7 @@ public:
     void        SetPatternSimple( const ScPatternAttr* pNew, const SfxItemSet* pSet );
 
     BOOL        SetText( ScBaseCell* pCell );   // TRUE -> pOldPattern vergessen
+    void        SetHashText();
     void        SetTextToWidthOrHash( ScBaseCell* pCell, long nWidth );
     void        SetAutoText( const String& rAutoText );
 
@@ -176,7 +177,6 @@ public:
     BOOL    HasEditCharacters() const;
 
 private:
-    void        SetHashText();
     long        GetMaxDigitWidth();     // in logic units
     long        GetSignWidth();
     long        GetDotWidth();
@@ -212,7 +212,7 @@ ScDrawStringsVars::ScDrawStringsVars(ScOutputData* pData, BOOL bPTL) :
     bPixelToLogic( bPTL )
 {
     ScModule* pScMod = SC_MOD();
-    //  #105733# SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
+    //  SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
     bCellContrast = pOutput->bUseStyleColor &&
             Application::GetSettings().GetStyleSettings().GetHighContrastMode();
 
@@ -376,7 +376,7 @@ void ScDrawStringsVars::SetPattern( const ScPatternAttr* pNew, const SfxItemSet*
             bRotated = FALSE;
             break;
         default:
-            DBG_ERROR("Falscher SvxCellOrientation Wert");
+            OSL_FAIL("Falscher SvxCellOrientation Wert");
             nRot = 0;
             bRotated = FALSE;
             break;
@@ -749,7 +749,7 @@ double ScOutputData::GetStretch()
 {
     if ( pRefDevice->IsMapMode() )
     {
-        //  #95920# If a non-trivial MapMode is set, its scale is now already
+        //  If a non-trivial MapMode is set, its scale is now already
         //  taken into account in the OutputDevice's font handling
         //  (OutputDevice::ImplNewFont, see #95414#).
         //  The old handling below is only needed for pixel output.
@@ -1336,7 +1336,6 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
 
     BOOL bWasIdleDisabled = pDoc->IsIdleDisabled();
     pDoc->DisableIdle( TRUE );
-    Size aMinSize = pRefDevice->PixelToLogic(Size(0,100));      // erst darueber wird ausgegeben
 
     ScDrawStringsVars aVars( this, bPixelToLogic );
 
@@ -1678,8 +1677,12 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
                 {
                     if ( bCellIsValue && ( aAreaParam.mbLeftClip || aAreaParam.mbRightClip ) )
                     {
-                        // Adjust the decimals to fit the available column width.
-                        aVars.SetTextToWidthOrHash(pCell, aAreaParam.mnColWidth - nTotalMargin);
+                        if (bShowFormulas)
+                            aVars.SetHashText();
+                        else
+                            // Adjust the decimals to fit the available column width.
+                            aVars.SetTextToWidthOrHash(pCell, aAreaParam.mnColWidth - nTotalMargin);
+
                         nNeededWidth = aVars.GetTextSize().Width() +
                                     (long) ( aVars.GetLeftTotal() * nPPTX ) +
                                     (long) ( aVars.GetMargin()->GetRightMargin() * nPPTX );
@@ -2363,11 +2366,10 @@ bool EditAlignmentParam::adjustHorAlignment(ScFieldEditEngine* pEngine)
 void ScOutputData::DrawEdit(BOOL bPixelToLogic)
 {
     vcl::PDFExtOutDevData* pPDFData = PTR_CAST( vcl::PDFExtOutDevData, pDev->GetExtOutDevData() );
-    Size aMinSize = pRefDevice->PixelToLogic(Size(0,100));      // erst darueber wird ausgegeben
 
     ScModule* pScMod = SC_MOD();
     sal_Int32 nConfBackColor = pScMod->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
-    //  #105733# SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
+    //  SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
     BOOL bCellContrast = bUseStyleColor &&
             Application::GetSettings().GetStyleSettings().GetHighContrastMode();
 
@@ -2672,7 +2674,7 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                                     }
                                     else
                                     {
-                                        DBG_ERROR("pData == 0");
+                                        OSL_FAIL("pData == 0");
                                     }
                                 }
                                 else
@@ -2700,7 +2702,7 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                             }
                             else
                             {
-                                DBG_ERROR("pCell == NULL");
+                                OSL_FAIL("pCell == NULL");
                             }
 
                             pEngine->SetUpdateMode( TRUE );     // after SetText, before CalcTextWidth/GetTextHeight
@@ -2946,7 +2948,7 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                                     if (aAlignParam.meOrient==SVX_ORIENTATION_STANDARD && !aAlignParam.mbAsianVertical)
                                     {
                                         if (aAlignParam.adjustHorAlignment(pEngine))
-                                            // #55142# reset adjustment for the next cell
+                                            // reset adjustment for the next cell
                                             pOldPattern = NULL;
                                     }
                                     else
@@ -3169,7 +3171,7 @@ void ScOutputData::DrawRotated(BOOL bPixelToLogic)
 
     ScModule* pScMod = SC_MOD();
     sal_Int32 nConfBackColor = pScMod->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
-    //  #105733# SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
+    //  SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
     BOOL bCellContrast = bUseStyleColor &&
             Application::GetSettings().GetStyleSettings().GetHighContrastMode();
 
@@ -3299,11 +3301,7 @@ void ScOutputData::DrawRotated(BOOL bPixelToLogic)
                         if (!bHidden)
                         {
                             long nOutWidth = nCellWidth - 1;
-                            long nOutHeight;
-                            if (pInfo)
-                                nOutHeight = nCellHeight;
-                            else
-                                nOutHeight = (long) ( pDoc->GetRowHeight(nY,nTab) * nPPTY );
+                            long nOutHeight = nCellHeight;
 
                             if ( bMerged )                              // Zusammengefasst
                             {
@@ -3444,7 +3442,7 @@ void ScOutputData::DrawRotated(BOOL bPixelToLogic)
                                         pEngine->SetText(*pData);
                                     else
                                     {
-                                        DBG_ERROR("pData == 0");
+                                        OSL_FAIL("pData == 0");
                                     }
                                 }
                                 else
@@ -3472,7 +3470,7 @@ void ScOutputData::DrawRotated(BOOL bPixelToLogic)
                             }
                             else
                             {
-                                DBG_ERROR("pCell == NULL");
+                                OSL_FAIL("pCell == NULL");
                             }
 
                             pEngine->SetUpdateMode( TRUE );     // after SetText, before CalcTextWidth/GetTextHeight
@@ -3485,7 +3483,7 @@ void ScOutputData::DrawRotated(BOOL bPixelToLogic)
                                 double nAbsCos = fabs( nCos );
                                 double nAbsSin = fabs( nSin );
 
-                                // #47740# adjust witdh of papersize for height of text
+                                // adjust witdh of papersize for height of text
                                 int nSteps = 5;
                                 while (nSteps > 0)
                                 {

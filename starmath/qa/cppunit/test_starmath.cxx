@@ -29,18 +29,16 @@
 #include "precompiled_starmath.hxx"
 
 #ifdef WNT
-# include <tools/prewin.h>
-# include <windows.h>
-# include <tools/postwin.h>
+#include <prewin.h>
+#include <windows.h>
+#include <postwin.h>
 #endif
 
-#include "preextstl.h"
 #include <cppunit/TestSuite.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestCase.h>
 #include <cppunit/plugin/TestPlugIn.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include "postextstl.h"
 
 #include <sal/config.h>
 

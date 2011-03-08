@@ -44,7 +44,7 @@ interface XNodeList : com::sun::star::uno::XInterface
     */
     long getLength();
     /**
-    Returns the indexth item in the collection.
+    Returns a node specified by index in the collection.
     */
     XNode item([in] long index);
 };

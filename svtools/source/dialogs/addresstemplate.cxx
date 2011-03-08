@@ -264,13 +264,13 @@ public:
     // -------------------------------------------------------------------
     void AssigmentTransientData::setDatasourceName(const ::rtl::OUString&)
     {
-        DBG_ERROR( "AssigmentTransientData::setDatasourceName: cannot be implemented for transient data!" );
+        OSL_FAIL( "AssigmentTransientData::setDatasourceName: cannot be implemented for transient data!" );
     }
 
     // -------------------------------------------------------------------
     void AssigmentTransientData::setCommand(const ::rtl::OUString&)
     {
-        DBG_ERROR( "AssigmentTransientData::setCommand: cannot be implemented for transient data!" );
+        OSL_FAIL( "AssigmentTransientData::setCommand: cannot be implemented for transient data!" );
     }
 
     // ===================================================================
@@ -818,7 +818,7 @@ void AssignmentPersistentData::Commit()
         }
         catch(Exception&)
         {
-            DBG_ERROR("AddressBookSourceDialog::initializeDatasources: caught an exception while asking for the data source names!");
+            OSL_FAIL("AddressBookSourceDialog::initializeDatasources: caught an exception while asking for the data source names!");
         }
         const ::rtl::OUString* pDatasourceNames = aDatasourceNames.getConstArray();
         const ::rtl::OUString* pEnd = pDatasourceNames + aDatasourceNames.getLength();
@@ -904,7 +904,7 @@ void AssignmentPersistentData::Commit()
         catch(SQLException& e) { aException <<= e; }
         catch(Exception&)
         {
-            DBG_ERROR("AddressBookSourceDialog::resetTables: could not retrieve the table!");
+            OSL_FAIL("AddressBookSourceDialog::resetTables: could not retrieve the table!");
         }
 
         if (aException.hasValue())
@@ -964,7 +964,7 @@ void AssignmentPersistentData::Commit()
         }
         catch(Exception&)
         {
-            DBG_ERROR("AddressBookSourceDialog::resetFields: could not retrieve the table columns!");
+            OSL_FAIL("AddressBookSourceDialog::resetFields: could not retrieve the table columns!");
         }
 
 
@@ -1263,7 +1263,7 @@ void AssignmentPersistentData::Commit()
         }
         catch(Exception&)
         {
-            DBG_ERROR("AddressBookSourceDialog::OnAdministrateDatasources: an error occurred while executing the administration dialog!");
+            OSL_FAIL("AddressBookSourceDialog::OnAdministrateDatasources: an error occurred while executing the administration dialog!");
         }
 
         // re-fill the data source list

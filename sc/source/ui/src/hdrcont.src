@@ -43,7 +43,6 @@
         Identifier = SID_CUT ; \
         HelpId = SID_CUT ; \
         Text [ en-US ] = "Cu~t" ; \
-        /* ### ACHTUNG: Neuer Text in Resource? Die Selektion in die Zwischenablage kopieren und löschen : Die Selektion in die Zwischenablage kopieren und l÷schen */\
     };\
     MenuItem\
     {\
@@ -55,9 +54,7 @@
     {\
         Identifier = SID_PASTE ; \
         HelpId = SID_PASTE ; \
-        /* ### ACHTUNG: Neuer Text in Resource? Einfügen : Einf³gen */\
         Text [ en-US ] = "~Paste" ; \
-        /* ### ACHTUNG: Neuer Text in Resource? Den Inhalt der Zwischenablage einfügen : Den Inhalt der Zwischenablage einf³gen */\
     };
 
  //-------------------------------------------------------------------------------
@@ -74,16 +71,13 @@ Menu RID_POPUP_ROWHEADER
         {
             Identifier = FID_ROW_HEIGHT ;
             HelpId = FID_ROW_HEIGHT ;
-            /* ### ACHTUNG: Neuer Text in Resource? Zeilenhöhe... : Zeilenh÷he... */
             Text [ en-US ] = "Row Hei~ght..." ;
         };
         MenuItem
         {
             Identifier = FID_ROW_OPT_HEIGHT ;
             HelpId = FID_ROW_OPT_HEIGHT ;
-            /* ### ACHTUNG: Neuer Text in Resource? Optimale Zeilenhöhe... : Optimale Zeilenh÷he... */
             Text [ en-US ] = "Optimal ~Row Height..." ;
-            /* ### ACHTUNG: Neuer Text in Resource? Optimale Zeilenhöhe einstellen : Optimale Zeilenh÷he einstellen */
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -92,25 +86,19 @@ Menu RID_POPUP_ROWHEADER
         {
             Identifier = FID_INS_ROW ;
             HelpId = FID_INS_ROW ;
-            /* ### ACHTUNG: Neuer Text in Resource? Zeilen einfügen : Zeilen einf³gen */
             Text [ en-US ] = "~Insert Rows" ;
-            /* ### ACHTUNG: Neuer Text in Resource? Ganze Zeilen einfügen : Ganze Zeilen einf³gen */
         };
         MenuItem
         {
             Identifier = SID_DEL_ROWS ;
             HelpId = SID_DEL_ROWS ;
-            /* ### ACHTUNG: Neuer Text in Resource? Zeilen löschen : Zeilen l÷schen */
             Text [ en-US ] = "~Delete Rows" ;
-            /* ### ACHTUNG: Neuer Text in Resource? Ganze Zeilen löschen : Ganze Zeilen l÷schen */
         };
         MenuItem
         {
             Identifier = SID_DELETE ;
             HelpId = SID_DELETE ;
-            /* ### ACHTUNG: Neuer Text in Resource? Inhalte l~öschen... : Inhalte l~÷schen... */
             Text [ en-US ] = "De~lete Contents..." ;
-            /* ### ACHTUNG: Neuer Text in Resource? Ausgewählte Inhalte löschen (Formeln, Formate etc.) : Ausgewõhlte Inhalte l÷schen (Formeln, Formate etc.) */
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -155,7 +143,6 @@ Menu RID_POPUP_COLHEADER
             Identifier = FID_COL_WIDTH ;
             HelpId = FID_COL_WIDTH ;
             Text [ en-US ] = "Col~umn Width..." ;
-            /* ### ACHTUNG: Neuer Text in Resource? Spaltenbreite ändern : Spaltenbreite õndern */
         };
         MenuItem
         {
@@ -170,25 +157,19 @@ Menu RID_POPUP_COLHEADER
         {
             Identifier = FID_INS_COLUMN ;
             HelpId = FID_INS_COLUMN ;
-            /* ### ACHTUNG: Neuer Text in Resource? Spalten einfügen : Spalten einf³gen */
             Text [ en-US ] = "~Insert Columns" ;
-            /* ### ACHTUNG: Neuer Text in Resource? Ganze Spalten einfügen : Ganze Spalten einf³gen */
         };
         MenuItem
         {
             Identifier = SID_DEL_COLS ;
             HelpId = SID_DEL_COLS ;
-            /* ### ACHTUNG: Neuer Text in Resource? Spalten löschen : Spalten l÷schen */
             Text [ en-US ] = "~Delete Columns" ;
-            /* ### ACHTUNG: Neuer Text in Resource? Ganze Spalten löschen : Ganze Spalten l÷schen */
         };
         MenuItem
         {
             Identifier = SID_DELETE ;
             HelpId = SID_DELETE ;
-            /* ### ACHTUNG: Neuer Text in Resource? Inhalte l~öschen... : Inhalte l~÷schen... */
             Text [ en-US ] = "D~elete Contents..." ;
-            /* ### ACHTUNG: Neuer Text in Resource? Ausgewählte Inhalte löschen (Formeln, Formate etc.) : Ausgewõhlte Inhalte l÷schen (Formeln, Formate etc.) */
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };

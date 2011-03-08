@@ -1233,7 +1233,7 @@ void ORowSet::impl_setDataColumnsWriteable_throw()
     impl_restoreDataColumnsWriteable_throw();
     TDataColumns::iterator aIter = m_aDataColumns.begin();
     m_aReadOnlyDataColumns.resize(m_aDataColumns.size(),false);
-    ::std::bit_vector::iterator aReadIter = m_aReadOnlyDataColumns.begin();
+    ::std::vector<bool, std::allocator<bool> >::iterator aReadIter = m_aReadOnlyDataColumns.begin();
     for(;aIter != m_aDataColumns.end();++aIter,++aReadIter)
     {
         sal_Bool bReadOnly = sal_False;
@@ -1247,7 +1247,7 @@ void ORowSet::impl_setDataColumnsWriteable_throw()
 void ORowSet::impl_restoreDataColumnsWriteable_throw()
 {
     TDataColumns::iterator aIter = m_aDataColumns.begin();
-    ::std::bit_vector::iterator aReadIter = m_aReadOnlyDataColumns.begin();
+    ::std::vector<bool, std::allocator<bool> >::iterator aReadIter = m_aReadOnlyDataColumns.begin();
     for(;aReadIter != m_aReadOnlyDataColumns.end();++aIter,++aReadIter)
     {
         (*aIter)->setPropertyValue(PROPERTY_ISREADONLY,makeAny((sal_Bool)*aReadIter ));
@@ -1483,7 +1483,7 @@ void SAL_CALL ORowSet::executeWithCompletion( const Reference< XInteractionHandl
     }
     catch(Exception&)
     {
-        DBG_ERROR("ORowSet::executeWithCompletion: caught an unexpected exception type while filling in the parameters!");
+        OSL_FAIL("ORowSet::executeWithCompletion: caught an unexpected exception type while filling in the parameters!");
     }
 
     // we're done with the parameters, now for the real execution
@@ -1579,7 +1579,7 @@ void ORowSet::setStatementResultSetType( const Reference< XPropertySet >& _rxSta
     sal_Int32 nResultSetConcurrency( _nDesiredResultSetConcurrency );
 
     // there *might* be a data source setting which tells use to be more defensive with those settings
-    // #i15113# / 2005-02-10 / frank.schoenheit@sun.com
+    // #i15113#
     sal_Bool bRespectDriverRST = sal_False;
     Any aSetting;
     if ( getDataSourceSetting( ::dbaccess::getDataSource( m_xActiveConnection ), "RespectDriverResultSetType", aSetting ) )
@@ -2277,7 +2277,6 @@ sal_Bool ORowSet::impl_initComposer_throw( ::rtl::OUString& _out_rCommandToExecu
     {   // append a "0=1" filter
         // don't simply overwrite an existent filter, this would lead to problems if this existent
         // filter contains paramters (since a keyset may add parameters itself)
-        // 2003-12-12 - #23418# - fs@openoffice.org
         m_xComposer->setElementaryQuery( m_xComposer->getQuery( ) );
         m_xComposer->setFilter( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "0 = 1" ) ) );
     }

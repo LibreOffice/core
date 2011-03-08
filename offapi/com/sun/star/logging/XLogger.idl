@@ -46,7 +46,7 @@ interface XLogHandler;
     <a href="http://java.sun.com/javase/6/docs/api/java/util/logging/package-summary.html">Java
     Logging API</a>. However, there are some differences, the major ones being:
     <ul><li>There's no support (yet) for filtering log events.</li>
-        <li>There ain't no convenience menthods for logging.</li>
+        <li>There ain't no convenience methods for logging.</li>
         <li>There's no localization support.</li>
         <li>Logger instances do not form a hierarchy.</li>
     </ul></p>
@@ -87,7 +87,7 @@ interface XLogger
 
         @param LogHandler
             the handler to remove from the list of handlers. The call is ignored if this
-            parameter is <NULL/>, or if the handler has not previously beed added.
+            parameter is <NULL/>, or if the handler has not previously been added.
     */
     void    removeLogHandler( [in] XLogHandler LogHandler );
 

@@ -1193,25 +1193,15 @@ BOOL Export::WriteData( ResData *pResData, BOOL bCreateNew )
     if ( bUnmerge )
         return TRUE;
 
-/*    ByteStringHashMap::iterator pos3 = pResData->sText.begin();
-    ByteStringHashMap::iterator end3 = pResData->sText.end();
-    for(;pos3!=end3;++pos3){
-
-        printf("[%s]=%s\n", pos3->first.GetBuffer(), pos3->second.GetBuffer() );
-    }*/
        // mandatory to export: en-US
 
-     if (( //pResData->sText[ ByteString("de") ].Len() &&
-        ( pResData->sText[ SOURCE_LANGUAGE ].Len()))
+     if (( pResData->sText[ SOURCE_LANGUAGE ].Len())
         ||
-        ( //pResData->sHelpText[ ByteString("de") ].Len() &&
-        (  pResData->sHelpText[ SOURCE_LANGUAGE ].Len()))
+        (  pResData->sHelpText[ SOURCE_LANGUAGE ].Len())
         ||
-        ( //pResData->sQuickHelpText[ ByteString("de") ].Len() &&
-        (  pResData->sQuickHelpText[ SOURCE_LANGUAGE ].Len()))
+        (  pResData->sQuickHelpText[ SOURCE_LANGUAGE ].Len())
          ||
-        ( //pResData->sTitle[ ByteString("de") ].Len() &&
-        (  pResData->sTitle[ SOURCE_LANGUAGE ].Len())))
+        (  pResData->sTitle[ SOURCE_LANGUAGE ].Len()))
 
        {
         FillInFallbacks( pResData );
@@ -1238,52 +1228,32 @@ BOOL Export::WriteData( ResData *pResData, BOOL bCreateNew )
                         sXText = pResData->sText[ sCur ];
                     else {
                         sXText = pResData->sText[ SOURCE_LANGUAGE ];
-                        /*if ( !sXText.Len())
-                            sXText = pResData->sText[ ByteString("en") ];
-                        if ( !sXText.Len())
-                            sXText = pResData->sText[ ByteString("de") ];*/
                     }
 
                     if ( pResData->sHelpText[ sCur ].Len())
                         sXHText = pResData->sHelpText[ sCur ];
                     else {
                         sXHText = pResData->sHelpText[ SOURCE_LANGUAGE ];
-                        /*if ( !sXHText.Len())
-                            sXHText = pResData->sHelpText[ ByteString("en") ];
-                        if ( !sXText.Len())
-                            sXHText = pResData->sHelpText[ ByteString("de") ];*/
                     }
 
                     if ( pResData->sQuickHelpText[ sCur ].Len())
                         sXQHText = pResData->sQuickHelpText[ sCur ];
                     else {
                         sXQHText = pResData->sQuickHelpText[ SOURCE_LANGUAGE ];
-                        /*if ( !sXQHText.Len())
-                            sXQHText = pResData->sQuickHelpText[ ByteString("en") ];
-                        if ( !sXQHText.Len())
-                            sXQHText = pResData->sQuickHelpText[ ByteString("de") ];*/
                     }
 
                     if ( pResData->sTitle[ sCur ].Len())
                         sXTitle = pResData->sTitle[ sCur ];
                     else {
                         sXTitle = pResData->sTitle[ SOURCE_LANGUAGE ];
-                        /*if ( !sXTitle.Len())
-                            sXTitle = pResData->sTitle[ ByteString("en") ];
-                        if ( !sXTitle.Len())
-                            sXTitle = pResData->sTitle[ ByteString("de") ];*/
                     }
 
                     if ( !sXText.Len())
                         sXText = "-";
 
                     if ( !sXHText.Len()) {
-                        /*if ( pResData->sHelpText[ ByteString("de") ].Len())
-                            sXHText = pResData->sHelpText[ ByteString("de") ];*/
                         if ( pResData->sHelpText[ SOURCE_LANGUAGE ].Len())
                             sXHText = pResData->sHelpText[ SOURCE_LANGUAGE ];
-                        /*else if ( pResData->sHelpText[ ByteString("en") ].Len())
-                            sXHText = pResData->sHelpText[ ByteString("en") ];*/
                     }
                 }
                 else
@@ -1309,7 +1279,6 @@ BOOL Export::WriteData( ResData *pResData, BOOL bCreateNew )
                     sOutput += sXTitle; sOutput += "\t";
                     sOutput += sTimeStamp;
 
-                 // if( !sCur.EqualsIgnoreCaseAscii("de") ||( sCur.EqualsIgnoreCaseAscii("de") && !Export::isMergingGermanAllowed( sProject ) ) )
                     aOutput.WriteLine( sOutput );
                 }
 
@@ -1404,11 +1373,7 @@ BOOL Export::WriteExportList( ResData *pResData, ExportList *pExportList,
         ByteString sLID( ByteString::CreateFromInt64( i + 1 ));
         for( unsigned int n = 0; n < aLanguages.size(); n++ ){
             sCur = aLanguages[ n ];
-            if ( //1 )
-                  //(*pEntry)[ ByteString("de") ].Len() &&
-                     (*pEntry)[ SOURCE_LANGUAGE ].Len() )
-                    //||
-                     //     (*pEntry)[ ByteString("en") ].Len()))
+            if ( (*pEntry)[ SOURCE_LANGUAGE ].Len() )
                 {
                     if ( bEnableExport )
                     {
@@ -1422,15 +1387,9 @@ BOOL Export::WriteExportList( ResData *pResData, ExportList *pExportList,
                             sText = GetPairedListString( sText );
                         }
                         else{
-                            //if ((*pEntry)[ sCur ].Len()){
-                            //  if( sCur.EqualsIgnoreCaseAscii("de") ){
-                            //      sText = StripList( (*pEntry)[ sCur ] );
-                            //  }
-                            //  else
                                     sText = StripList( (*pEntry)[ sCur ] );
                                     if( sText == "\\\"" )
                                         sText = "\"";
-                            //}
                         }
 
                         ByteString sOutput( sProject ); sOutput += "\t";
@@ -1446,7 +1405,6 @@ BOOL Export::WriteExportList( ResData *pResData, ExportList *pExportList,
                         sOutput += sText; sOutput += "\t\t\t\t";
                         sOutput += sTimeStamp;
 
-                        //if( !sCur.EqualsIgnoreCaseAscii("de") ||( sCur.EqualsIgnoreCaseAscii("de") && !Export::isMergingGermanAllowed( sProject ) ) )
                         aOutput.WriteLine( sOutput );
 
                     }
@@ -1550,7 +1508,6 @@ void Export::InsertListEntry( const ByteString &rText, const ByteString &rLine )
         (*pCurEntry)[ nListLang ] = rText;
 
     // Remember en-US fallback string, so each list has the same amount of elements
-    //if ( nListLang.EqualsIgnoreCaseAscii("en-US")  ) {
     if ( Export::isSourceLanguage( nListLang ) ) {
         if( nList == LIST_PAIRED ){
             const ByteString sPlist("pairedlist");
@@ -1571,7 +1528,6 @@ void Export::InsertListEntry( const ByteString &rText, const ByteString &rLine )
         // new fallback
     }
 
-    //if ( nListLang.EqualsIgnoreCaseAscii("en-US")  ) {
     if ( Export::isSourceLanguage( nListLang ) ) {
         if( nList == LIST_PAIRED ){
             (*pCurEntry)[ SOURCE_LANGUAGE ] = rLine;

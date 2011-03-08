@@ -191,7 +191,7 @@ bool SvxPageItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
                 case SVX_PAGE_ALL   : eRet = style::PageStyleLayout_ALL;       break;
                 case SVX_PAGE_MIRROR: eRet = style::PageStyleLayout_MIRRORED; break;
                 default:
-                    DBG_ERROR("was fuer ein Layout ist das?");
+                    OSL_FAIL("was fuer ein Layout ist das?");
                     return sal_False;
             }
             rVal <<= eRet;

@@ -72,10 +72,10 @@ SV_IMPL_REF( SwServerObject )
 
 void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
 {
-    //JP 4.7.2001: call fist all not SwNoTxtFrames, then the SwNoTxtFrames.
+    //call fist all not SwNoTxtFrames, then the SwNoTxtFrames.
     //              The reason is, that in the SwNoTxtFrames the Graphic
     //              after a Paint will be swapped out! So all other "behind"
-    //              them havent't a loaded Graphic. - #86501#
+    //              them havent't a loaded Graphic.
     rGrfNd.LockModify();
 
     SwClientIter aIter( rGrfNd );
@@ -193,8 +193,7 @@ void SwBaseLink::DataChanged( const String& rMimeType,
             //      zugreifen zu muessen (sonst erfolgt ein SwapIn!).
             if( bGraphicArrived )
             {
-                // Bug #34735#: immer mit der korrekten Grafik-Size
-                //              arbeiten
+                // immer mit der korrekten Grafik-Size arbeiten
                 if( aGrfSz.Height() && aGrfSz.Width() &&
                     aSz.Height() && aSz.Width() &&
                     aGrfSz != aSz )

@@ -105,6 +105,8 @@ enum EActiveState
     E_FOCUS             // I have the focus now. I must a member of an active path!
 };
 
+class WindowCommandDispatch;
+
 //_________________________________________________________________________________________________________________
 //  exported definitions
 //_________________________________________________________________________________________________________________
@@ -437,6 +439,8 @@ class Frame :   // interfaces
         css::uno::Reference< ::com::sun::star::frame::XLayoutManager >    m_xLayoutManager                    ;   /// is used to layout the child windows of the frame.
         css::uno::Reference< css::frame::XDispatchInformationProvider >         m_xDispatchInfoHelper               ;
         css::uno::Reference< css::frame::XTitle >                               m_xTitleHelper                      ;
+
+        WindowCommandDispatch*                                                  m_pWindowCommandDispatch            ;
 
     protected:
 

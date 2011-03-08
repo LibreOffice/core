@@ -49,9 +49,9 @@ module com { module sun { module star { module frame {
     <p>
     With this factory it's possible to
     <ul>
-        <li>have access on configuration of set of registered frame laoder objects</li>
-        <li>create a frame laoder by his internal name</li>
-        <li>query for a frame laoder by using special query or property description.</li>
+        <li>have access on configuration of set of registered frame loader objects</li>
+        <li>create a frame loader by his internal name</li>
+        <li>query for a frame loader by using special query or property description.</li>
     </ul>
     </p>
  */
@@ -62,9 +62,9 @@ published service FrameLoaderFactory
 
         <p>
         Returned objects must support the service specification of a <type>FrameLoader</type>
-        or <type>SynchronousFrameLoader</type>. (Note: last one will be prefered if both ones
+        or <type>SynchronousFrameLoader</type>. (Note: last one will be preferred if both ones
         are available)
-        They can be created by using of his internal name, which must be unambigous everytime, only.
+        They can be created by using of his internal name, which must be unambiguous everytime, only.
         To get this name use further specified interfaces of this factory for access on
         the flat configuration.
         </p>

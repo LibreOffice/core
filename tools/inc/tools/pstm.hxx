@@ -28,7 +28,7 @@
 #ifndef _PSTM_HXX
 #define _PSTM_HXX
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include "tools/toolsdllapi.h"
 
 #include <tools/table.hxx>
@@ -49,7 +49,7 @@ typedef void * (*SvCreateInstancePersist)( SvPersistBase ** );
 
 class TOOLS_DLLPUBLIC SvClassManager
 {
-    typedef std::hash_map< USHORT, SvCreateInstancePersist > Map;
+    typedef boost::unordered_map< USHORT, SvCreateInstancePersist > Map;
     Map aAssocTable;
 public:
     void        Register( USHORT nClassId, SvCreateInstancePersist pFunc );
@@ -57,16 +57,7 @@ public:
 };
 
 /************************** S v R t t i B a s e **************************/
-/*
-#if defined (DOS) && defined (STC)
-#ifdef WIN
-#error Fuer Win muss der Kram virtual sein (MM/MH)
-#endif
-class SvRttiBase : public SvRefBase
-#else
-class SvRttiBase : virtual public SvRefBase
-#endif
-*/
+
 class TOOLS_DLLPUBLIC SvRttiBase : public SvRefBase
 {
 public:

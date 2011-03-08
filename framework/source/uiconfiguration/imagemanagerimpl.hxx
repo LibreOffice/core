@@ -35,7 +35,7 @@
 */
 #include <vector>
 #include <list>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 //_________________________________________________________________________________________________________________
 //  my own includes
@@ -162,7 +162,7 @@ namespace framework
 
             void clear();
 
-            typedef std::hash_map< rtl::OUString,
+            typedef boost::unordered_map< rtl::OUString,
                                    sal_Bool,
                                    OUStringHashCode,
                                    ::std::equal_to< ::rtl::OUString > > ImageNameMap;

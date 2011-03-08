@@ -36,13 +36,6 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
-#building with stlport, but cppunit was not built with stlport
-.IF "$(USE_SYSTEM_STL)"!="YES"
-.IF "$(SYSTEM_CPPUNIT)"=="YES"
-CFLAGSCXX+=-DADAPT_EXT_STL
-.ENDIF
-.ENDIF
-
 CFLAGSCXX += $(CPPUNIT_CFLAGS)
 DLLPRE = # no leading "lib" on .so files
 
@@ -52,7 +45,7 @@ SHL1OBJS= \
     $(SLO)$/rtl_digest.obj
 
 SHL1TARGET= rtl_digest
-SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
+SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB)
 
 SHL1IMPLIB= i$(SHL1TARGET)
 DEF1NAME=    $(SHL1TARGET)
@@ -65,5 +58,4 @@ SLOFILES= \
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-.INCLUDE : _cppunit.mk
-
+.INCLUDE : $(PRJ)$/qa$/cppunit_local.mk

@@ -57,7 +57,6 @@
 #include <svx/dialogs.hrc>
 #include <sot/clsids.hxx>
 
-#include "misc.hxx"
 #include "strings.hrc"
 #include "app.hrc"
 #include "unokywds.hxx"

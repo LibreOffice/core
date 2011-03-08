@@ -20,8 +20,11 @@
 #include <stdio.h>
 #endif
 
-using namespace rtl;
 using namespace com::sun::star;
+
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OUStringToOString;
 
 #define MAKE_PROPVAL(NameId, Value) \
     beans::PropertyValue(aPropNameSupplier.GetName(NameId), 0, uno::makeAny(Value), beans::PropertyState_DIRECT_VALUE )
@@ -653,7 +656,6 @@ void ListsManager::attribute( Id nName, Value& rVal )
                 pCurrentLvl->SetBulletChar( rVal.getString() );
         }
         break;
-//        case NS_rtf::LN_ISTD: break;
         case NS_rtf::LN_ISTARTAT:
         case NS_rtf::LN_NFC:
         case NS_rtf::LN_JC:

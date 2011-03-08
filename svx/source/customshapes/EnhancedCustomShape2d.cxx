@@ -462,7 +462,6 @@ sal_Bool EnhancedCustomShape2d::ConvertSequenceToEnhancedCustomShape2dHandle(
             const rtl::OUString sMirroredY          ( RTL_CONSTASCII_USTRINGPARAM( "MirroredY" ) );
             const rtl::OUString sSwitched           ( RTL_CONSTASCII_USTRINGPARAM( "Switched" ) );
             const rtl::OUString sPolar              ( RTL_CONSTASCII_USTRINGPARAM( "Polar" ) );
-//          const rtl::OUString sMap                ( RTL_CONSTASCII_USTRINGPARAM( "Map" ) );
             const rtl::OUString sRefX               ( RTL_CONSTASCII_USTRINGPARAM( "RefX" ) );
             const rtl::OUString sRefY               ( RTL_CONSTASCII_USTRINGPARAM( "RefY" ) );
             const rtl::OUString sRefAngle           ( RTL_CONSTASCII_USTRINGPARAM( "RefAngle" ) );
@@ -2140,8 +2139,6 @@ SdrObject* EnhancedCustomShape2d::CreateObject( sal_Bool bLineGeometryNeededOnly
     if ( eSpType == mso_sptRectangle )
     {
         pRet = new SdrRectObj( aLogicRect );
-// SJ: not setting model, so we save a lot of broadcasting and the model is not modified any longer
-//      pRet->SetModel( pCustomShapeObj->GetModel() );
         pRet->SetMergedItemSet( *this );
     }
     if ( !pRet )
@@ -2161,14 +2158,6 @@ void EnhancedCustomShape2d::ApplyGluePoints( SdrObject* pObj )
 
             aGluePoint.SetPos( GetPoint( seqGluePoints[ i ], sal_True, sal_True ) );
             aGluePoint.SetPercent( sal_False );
-
-//          const Point& rPoint = GetPoint( seqGluePoints[ i ], sal_True, sal_True );
-//          double fXRel = rPoint.X();
-//          double fYRel = rPoint.Y();
-//          fXRel = aLogicRect.GetWidth() == 0 ? 0.0 : fXRel / aLogicRect.GetWidth() * 10000;
-//          fYRel = aLogicRect.GetHeight() == 0 ? 0.0 : fYRel / aLogicRect.GetHeight() * 10000;
-//          aGluePoint.SetPos( Point( (sal_Int32)fXRel, (sal_Int32)fYRel ) );
-//          aGluePoint.SetPercent( sal_True );
             aGluePoint.SetAlign( SDRVERTALIGN_TOP | SDRHORZALIGN_LEFT );
             aGluePoint.SetEscDir( SDRESC_SMART );
             SdrGluePointList* pList = pObj->ForceGluePointList();

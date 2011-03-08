@@ -319,7 +319,7 @@ void Timer::Start()
     }
     else if( !mpTimerData->mpSVTimer ) // TODO: remove when guilty found
     {
-        DBG_ERROR( "Timer::Start() on a destroyed Timer!" );
+        OSL_FAIL( "Timer::Start() on a destroyed Timer!" );
     }
     else
     {

@@ -36,10 +36,11 @@
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::i18n;
-using namespace ::rtl;
+using ::rtl::OUString;
 
 #define ERROR RuntimeException()
+
+namespace com { namespace sun { namespace star { namespace i18n {
 
 // not used
 //static UErrorCode status; // status is shared in all calls to Calendar, it has to be reset for each call.
@@ -305,5 +306,7 @@ Calendar_jewish::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNa
     else
         return Calendar_gregorian::getDisplayString(nCalendarDisplayCode, nNativeNumberMode );
 }
+
+}}}}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

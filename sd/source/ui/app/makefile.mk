@@ -54,10 +54,6 @@ SRC1FILES =	\
         popup.src			\
         sdstring.src
 
-#OBJFILES = \
-#		$(OBJ)$/sdlib.obj	\
-#		$(OBJ)$/sdresid.obj	\
-
 SLOFILES =	\
         $(EXCEPTIONSFILES)		\
         $(SLO)$/sdresid.obj
@@ -102,7 +98,6 @@ LOCALIZE_ME =  tbxids_tmpl.src menuids2_tmpl.src menu_tmpl.src menuids_tmpl.src 
 .INCLUDE :  target.mk
 
 $(SRS)$/app.srs: $(SOLARINCDIR)$/svx$/globlmn.hrc
-
 
 $(SRS)$/$(SRS1NAME).srs  : $(LOCALIZE_ME_DEST)
 

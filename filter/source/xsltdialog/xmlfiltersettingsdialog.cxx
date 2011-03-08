@@ -54,7 +54,6 @@
 #include "xmlfilterjar.hxx"
 #include "xmlfilterhelpids.hrc"
 
-using namespace rtl;
 using namespace osl;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
@@ -63,6 +62,9 @@ using namespace com::sun::star::frame;
 using namespace com::sun::star::container;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::util;
+
+using ::rtl::OUString;
+using ::rtl::Uri;
 
 ResMgr* XMLFilterSettingsDialog::mpResMgr = NULL;
 
@@ -114,7 +116,7 @@ XMLFilterSettingsDialog::XMLFilterSettingsDialog( Window* pParent, ResMgr& rResM
     }
     catch(Exception&)
     {
-        DBG_ERROR( "XMLFilterSettingsDialog::XMLFilterSettingsDialog exception catched!" );
+        OSL_FAIL( "XMLFilterSettingsDialog::XMLFilterSettingsDialog exception catched!" );
     }
 }
 
@@ -432,7 +434,7 @@ OUString XMLFilterSettingsDialog::createUniqueInterfaceName( const OUString& rIn
     }
     catch( Exception& )
     {
-        DBG_ERROR( "XMLFilterSettingsDialog::createUniqueInterfaceName exception catched!" );
+        OSL_FAIL( "XMLFilterSettingsDialog::createUniqueInterfaceName exception catched!" );
     }
 
     OUString aInterfaceName( rInterfaceName );
@@ -477,7 +479,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
         }
         catch( Exception& )
         {
-            DBG_ERROR( "XMLFilterSettingsDialog::insertOrEdit exception catched!" );
+            OSL_FAIL( "XMLFilterSettingsDialog::insertOrEdit exception catched!" );
             bOk = false;
         }
     }
@@ -599,7 +601,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
         }
         catch( Exception& )
         {
-            DBG_ERROR( "XMLFilterSettingsDialog::insertOrEdit exception catched!" );
+            OSL_FAIL( "XMLFilterSettingsDialog::insertOrEdit exception catched!" );
             bOk = false;
         }
     }
@@ -662,7 +664,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
             }
             catch( Exception& )
             {
-                DBG_ERROR( "XMLFilterSettingsDialog::insertOrEdit exception catched!" );
+                OSL_FAIL( "XMLFilterSettingsDialog::insertOrEdit exception catched!" );
                 bOk = false;
             }
         }
@@ -677,7 +679,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
             }
             catch( Exception& )
             {
-                DBG_ERROR( "XMLFilterSettingsDialog::insertOrEdit exception catched!" );
+                OSL_FAIL( "XMLFilterSettingsDialog::insertOrEdit exception catched!" );
                 bOk = false;
             }
         }
@@ -691,7 +693,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
             }
             catch( Exception& )
             {
-                DBG_ERROR( "XMLFilterSettingsDialog::insertOrEdit exception catched!" );
+                OSL_FAIL( "XMLFilterSettingsDialog::insertOrEdit exception catched!" );
                 bOk = false;
             }
         }
@@ -707,7 +709,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
                 }
                 catch( Exception& )
                 {
-                    DBG_ERROR( "XMLFilterSettingsDialog::insertOrEdit exception catched!" );
+                    OSL_FAIL( "XMLFilterSettingsDialog::insertOrEdit exception catched!" );
                     bOk = false;
                 }
 
@@ -720,7 +722,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
                     }
                     catch( Exception& )
                     {
-                        DBG_ERROR( "XMLFilterSettingsDialog::insertOrEdit exception catched!" );
+                        OSL_FAIL( "XMLFilterSettingsDialog::insertOrEdit exception catched!" );
                     }
                 }
 
@@ -897,7 +899,7 @@ void XMLFilterSettingsDialog::onDelete()
             }
             catch( Exception& )
             {
-                DBG_ERROR( "XMLFilterSettingsDialog::onDelete exception catched!" );
+                OSL_FAIL( "XMLFilterSettingsDialog::onDelete exception catched!" );
             }
         }
     }
@@ -1238,7 +1240,7 @@ void XMLFilterSettingsDialog::initFilterList()
                     }
                     catch( ::com::sun::star::container::NoSuchElementException& )
                     {
-                        DBG_ERROR( "Type not found, user error?" ); // TODO: error?
+                        OSL_FAIL( "Type not found, user error?" ); // TODO: error?
                     }
                 }
 
@@ -1251,7 +1253,7 @@ void XMLFilterSettingsDialog::initFilterList()
             }
             catch( Exception& )
             {
-                DBG_ERROR( "XMLFilterSettingsDialog::initFilterList exception catched!" );
+                OSL_FAIL( "XMLFilterSettingsDialog::initFilterList exception catched!" );
             }
 
         }
@@ -1765,7 +1767,7 @@ bool copyStreams( Reference< XInputStream > xIS, Reference< XOutputStream > xOS 
     }
     catch(Exception&)
     {
-        DBG_ERROR( "copyStreams() exception catched!" );
+        OSL_FAIL( "copyStreams() exception catched!" );
     }
 
     return false;

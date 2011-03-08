@@ -60,7 +60,7 @@ namespace DOM
             OUString prefix(reinterpret_cast<const sal_Char*>(pPrefix),
                 strlen(reinterpret_cast<const char*>(pPrefix)),
                 RTL_TEXTENCODING_UTF8);
-            OUString name = (prefix.equalsAscii(""))
+            OUString name = (prefix.getLength() == 0)
                 ? OUString(RTL_CONSTASCII_USTRINGPARAM("xmlns"))
                 : OUString(RTL_CONSTASCII_USTRINGPARAM("xmlns:")) + prefix;
             const xmlChar *pHref = pNs->href;

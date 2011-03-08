@@ -62,7 +62,7 @@
 #include <boost/bind.hpp>
 
 #include <vector>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <algorithm>
 
 using namespace ::com::sun::star;

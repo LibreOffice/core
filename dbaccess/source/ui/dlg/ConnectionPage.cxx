@@ -56,7 +56,6 @@
 #include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
-// #106016# ------------------------------------
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
@@ -78,9 +77,8 @@
 
 #ifdef _ADO_DATALINK_BROWSE_
 #if defined( WNT )
-    #include <tools/prewin.h>
-    #include <windows.h>
-    #include <tools/postwin.h>
+    #include <prewin.h>
+    #include <postwin.h>
 #endif
 #include <vcl/sysdata.hxx>
 #include "adodatalinks.hxx"

@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 // include ---------------------------------------------------------------
 
 #include <vcl/msgbox.hxx>
@@ -294,7 +291,6 @@ void lcl_SetCheckButton( SvLBoxEntry* pEntry, BOOL bCheck )
             pItem->SetStateChecked();
         else
             pItem->SetStateUnchecked();
-        //InvalidateEntry( pEntry );
     }
 }
 
@@ -451,7 +447,6 @@ void OptionsUserData::SetChecked( BOOL bVal )
 
 void OptionsUserData::SetNumericValue( BYTE nNumVal )
 {
-//  DBG_ASSERT( nNumVal < 256, "value out of range" );
     if (HasNumericValue()  &&  (GetNumericValue() != nNumVal))
     {
         nVal &= 0xffffff00;
@@ -492,8 +487,6 @@ void BrwString_Impl::Paint( const Point& rPos, SvLBox& rDev, USHORT,
         Font aFont( aOldFont );
         aFont.SetWeight( WEIGHT_BOLD );
 
-//      BOOL bFett = TRUE;
-//      USHORT nPos = 0;
         //??? das untere byte aus dem user data in string wandeln
         OptionsUserData aData( (ULONG) pEntry->GetUserData() );
         if(aData.HasNumericValue())
@@ -503,9 +496,6 @@ void BrwString_Impl::Paint( const Point& rPos, SvLBox& rDev, USHORT,
             rDev.SetFont( aFont );
             rDev.DrawText( aNewPos, sTxt );
         }
-
-//          if( STRING_NOTFOUND != nPos )
-//              aNewPos.X() += rDev.GetTextWidth( sTxt );
 
         rDev.SetFont( aOldFont );
     }
@@ -1328,7 +1318,6 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
     for (ULONG i = 0;  i < nEntries;  ++i)
     {
         INT32 nDics = aDics.getLength();
-//        const uno::Reference< XDictionary > *pDic = aDics.getConstArray();
 
         aActiveDics.realloc( nDics );
         OUString *pActiveDic = aActiveDics.getArray();
@@ -1356,7 +1345,7 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
             }
         }
     }
-    //
+
     aActiveDics.realloc( nActiveDics );
     Any aTmp;
     aTmp <<= aActiveDics;
@@ -1430,11 +1419,9 @@ ULONG SvxLinguTabPage::GetDicUserData( const uno::Reference< XDictionary > &rxDi
     {
         uno::Reference< frame::XStorable > xStor( rxDic, UNO_QUERY );
 
-//        ULONG nUserData = 0;
         BOOL bChecked = rxDic->isActive();
         BOOL bEditable = !xStor.is() || !xStor->isReadonly();
         BOOL bDeletable = bEditable;
-//        BOOL bNegativ = rxDic->getDictionaryType() == DictionaryType_NEGATIVE;
 
         nRes = DicUserData( nIdx,
                 bChecked, bEditable, bDeletable ).GetUserData();
@@ -1548,9 +1535,6 @@ void SvxLinguTabPage::Reset( const SfxItemSet& rSet )
 
     pEntry = CreateEntry( sGrammarAuto,       CBCOL_FIRST );
     aLngCfg.GetProperty( C2U(UPN_IS_GRAMMAR_AUTO) ) >>= bVal;
-//    const SfxPoolItem* pItem = GetItem( rSet, SID_AUTOSPELL_CHECK );
-//    if (pItem)
-//        bVal = ((SfxBoolItem *) pItem)->GetValue();
     nUserData = OptionsUserData( EID_GRAMMAR_AUTO, FALSE, 0, TRUE, bVal).GetUserData();
     pEntry->SetUserData( (void *)nUserData );
     pModel->Insert( pEntry );
@@ -1861,7 +1845,7 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
                     case EID_NUM_POST_BREAK : nRID = STR_NUM_POST_BREAK_DLG; break;
                     case EID_NUM_MIN_WORDLEN: nRID = STR_NUM_MIN_WORDLEN_DLG; break;
                     default:
-                        DBG_ERROR( "unexpected case" );
+                        OSL_FAIL( "unexpected case" );
                 }
 
                 OptionsBreakSet aDlg( this, nRID );
@@ -1881,7 +1865,7 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
     }
     else
     {
-        DBG_ERROR( "pBtn unexpected value" );
+        OSL_FAIL( "pBtn unexpected value" );
     }
 
     return 0;
@@ -1917,7 +1901,7 @@ IMPL_LINK( SvxLinguTabPage, SelectHdl_Impl, SvxCheckListBox *, pBox )
     }
     else
     {
-        DBG_ERROR( "pBox unexpected value" );
+        OSL_FAIL( "pBox unexpected value" );
     }
 
     return 0;
@@ -1958,7 +1942,7 @@ void SvxLinguTabPage::HideGroups( sal_uInt16 nGrp )
                        aLinguModulesFT.GetPosPixel().Y();
         DBG_ASSERT( nDeltaY >= 0, "move/resize value is negative" );
         Point   aPos;
-        //
+
         aPos = aLinguDicsFT.GetPosPixel();
         aPos.Y() -= nDeltaY;
         aLinguDicsFT.SetPosPixel( aPos );
@@ -1974,7 +1958,7 @@ void SvxLinguTabPage::HideGroups( sal_uInt16 nGrp )
         aPos = aLinguDicsDelPB.GetPosPixel();
         aPos.Y() -= nDeltaY;
         aLinguDicsDelPB.SetPosPixel( aPos );
-        //
+
         aPos = aLinguOptionsFT.GetPosPixel();
         aPos.Y() -= nDeltaY;
         aLinguOptionsFT.SetPosPixel( aPos );
@@ -1984,7 +1968,7 @@ void SvxLinguTabPage::HideGroups( sal_uInt16 nGrp )
         aPos = aLinguOptionsEditPB.GetPosPixel();
         aPos.Y() -= nDeltaY;
         aLinguOptionsEditPB.SetPosPixel( aPos );
-        //
+
         Size aSize( aLinguOptionsCLB.GetSizePixel() );
         aSize.Height() += nDeltaY;
         aLinguOptionsCLB.SetSizePixel( aSize );
@@ -2138,7 +2122,7 @@ IMPL_LINK( SvxEditModulesDlg, SelectHdl_Impl, SvxCheckListBox *, pBox )
     }
     else
     {
-        DBG_ERROR( "pBox unexpected value" );
+        OSL_FAIL( "pBox unexpected value" );
     }
 
     return 0;
@@ -2146,8 +2130,6 @@ IMPL_LINK( SvxEditModulesDlg, SelectHdl_Impl, SvxCheckListBox *, pBox )
 
 IMPL_LINK( SvxEditModulesDlg, BoxCheckButtonHdl_Impl, SvTreeListBox *, pBox )
 {
-//    if (pBox == (SvTreeListBox *) &aModulesCLB)
-//    {
         pBox = &aModulesCLB;
         SvLBoxEntry *pCurEntry = pBox->GetCurEntry();
         if (pCurEntry)
@@ -2173,7 +2155,6 @@ IMPL_LINK( SvxEditModulesDlg, BoxCheckButtonHdl_Impl, SvTreeListBox *, pBox )
                 }
             }
         }
-//    }
     return 0;
 }
 
@@ -2197,7 +2178,6 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
     Locale aCurLocale;
     SvxLanguageToLocale(aCurLocale, eCurLanguage);
     SvLBoxTreeList *pModel = aModulesCLB.GetModel();
-//  uno::Reference<XLinguServiceManager>&   xMgr = rLinguData.GetManager();
 
     if (pBox)
     {
@@ -2263,8 +2243,6 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
     aModulesCLB.Clear();
     if(LANGUAGE_DONTKNOW != eCurLanguage)
     {
-//      sal_Int32 nEntryPos = 1;
-
         ULONG n;
         ServiceInfo_Impl* pInfo;
 
@@ -2276,7 +2254,7 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
                                          String(), TRUE, FALSE, TYPE_SPELL, 0 );
         pEntry->SetUserData( (void *)pUserData );
         pModel->Insert( pEntry );
-        //
+
         Sequence< OUString > aNames( rLinguData.GetSortedImplNames( eCurLanguage, TYPE_SPELL ) );
         const OUString *pName = aNames.getConstArray();
         ULONG nNames = (ULONG) aNames.getLength();
@@ -2320,7 +2298,7 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
         pUserData = new ModuleUserData_Impl( String(), TRUE, FALSE, TYPE_GRAMMAR, 0 );
         pEntry->SetUserData( (void *)pUserData );
         pModel->Insert( pEntry );
-        //
+
         aNames = rLinguData.GetSortedImplNames( eCurLanguage, TYPE_GRAMMAR );
         pName = aNames.getConstArray();
         nNames = (ULONG) aNames.getLength();
@@ -2364,7 +2342,7 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
         pUserData = new ModuleUserData_Impl( String(), TRUE, FALSE, TYPE_HYPH, 0 );
         pEntry->SetUserData( (void *)pUserData );
         pModel->Insert( pEntry );
-        //
+
         aNames = rLinguData.GetSortedImplNames( eCurLanguage, TYPE_HYPH );
         pName = aNames.getConstArray();
         nNames = (ULONG) aNames.getLength();
@@ -2408,7 +2386,7 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
         pUserData = new ModuleUserData_Impl( String(), TRUE, FALSE, TYPE_THES, 0 );
         pEntry->SetUserData( (void *)pUserData );
         pModel->Insert( pEntry );
-        //
+
         aNames = rLinguData.GetSortedImplNames( eCurLanguage, TYPE_THES );
         pName = aNames.getConstArray();
         nNames = (ULONG) aNames.getLength();
@@ -2489,7 +2467,7 @@ IMPL_LINK( SvxEditModulesDlg, ClickHdl_Impl, PushButton *, pBtn )
     }
     else
     {
-        DBG_ERROR( "pBtn unexpected value" );
+        OSL_FAIL( "pBtn unexpected value" );
     }
 
     return 0;

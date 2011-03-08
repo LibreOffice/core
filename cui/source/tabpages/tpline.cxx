@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 #ifndef _SVX_SIZEITEM_HXX //autogen
 #include <editeng/sizeitem.hxx>
 #endif

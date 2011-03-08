@@ -90,7 +90,7 @@ struct ScSetStringParam;
 struct ScColWidthParam;
 struct ScColWidthParam;
 
-typedef std::hash_map< ::rtl::OUString, rtl::OUString, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > NameToNameMap;
+typedef boost::unordered_map< ::rtl::OUString, rtl::OUString, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > NameToNameMap;
 
 class ScTable
 {
@@ -727,9 +727,8 @@ public:
         ::com::sun::star::sheet::TablePageBreakData> GetRowBreakData() const;
 
     bool        RowHidden(SCROW nRow, SCROW* pFirstRow = NULL, SCROW* pLastRow = NULL) const;
-    bool        RowHidden(SCROW nRow, SCROW& rLastRow) const;
+    bool        RowHiddenLeaf(SCROW nRow, SCROW* pFirstRow = NULL, SCROW* pLastRow = NULL) const;
     bool        HasHiddenRows(SCROW nStartRow, SCROW nEndRow) const;
-    bool        ColHidden(SCCOL nCol, SCCOL& rLastCol) const;
     bool        ColHidden(SCCOL nCol, SCCOL* pFirstCol = NULL, SCCOL* pLastCol = NULL) const;
     bool        SetRowHidden(SCROW nStartRow, SCROW nEndRow, bool bHidden);
     bool        SetColHidden(SCCOL nStartCol, SCCOL nEndCol, bool bHidden);
@@ -785,8 +784,8 @@ public:
 
     void        FindConditionalFormat( ULONG nKey, ScRangeList& rRanges );
 
-    void        IncRecalcLevel() { ++nRecalcLvl; }
-    void        DecRecalcLevel( bool bUpdateNoteCaptionPos = true ) { if (!--nRecalcLvl) SetDrawPageSize(true, bUpdateNoteCaptionPos); }
+    void        IncRecalcLevel();
+    void        DecRecalcLevel( bool bUpdateNoteCaptionPos = true );
 
     BOOL        IsSortCollatorGlobal() const;
     void        InitSortCollator( const ScSortParam& rPar );

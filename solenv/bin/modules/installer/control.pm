@@ -675,25 +675,6 @@ sub set_addchildprojects
     push( @installer::globals::globallogfileinfo, $infoline);
 }
 
-####################################################################
-# Setting global variable "$installer::globals::addjavainstaller"
-####################################################################
-
-sub set_addjavainstaller
-{
-    my ($allvariables) = @_;
-
-    if ( $allvariables->{'JAVAINSTALLER'} ) { $installer::globals::addjavainstaller = 1; }
-
-    if ( $installer::globals::patch ) { $installer::globals::addjavainstaller = 0; }
-    if ( $installer::globals::languagepack ) { $installer::globals::addjavainstaller = 0; }
-    if ( $installer::globals::helppack ) { $installer::globals::addjavainstaller = 0; }
-    if ( $allvariableshashref->{'XPDINSTALLER'} ) { $installer::globals::addjavainstaller = 0; }
-
-    my $infoline = "Value of \$installer::globals::addjavainstaller: $installer::globals::addjavainstaller\n";
-    push( @installer::globals::globallogfileinfo, $infoline);
-}
-
 #######################################################################
 # Setting global variable "$installer::globals::addsystemintegration"
 #######################################################################

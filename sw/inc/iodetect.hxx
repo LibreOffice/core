@@ -33,7 +33,6 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <osl/endian.h>
-//#include <errhdl.hxx>     // for ASSERT
 #include <tools/string.hxx>
 #include <swdllapi.h>
 

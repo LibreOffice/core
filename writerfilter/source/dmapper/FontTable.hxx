@@ -57,7 +57,7 @@ struct FontEntry
     FontEntry() :
         bTrueType(false),
         nPitchRequest( 0 ),
-        nTextEncoding( 0 ),
+        nTextEncoding( RTL_TEXTENCODING_DONTKNOW ),
         nFontFamilyId( 0 ),
         nBaseWeight( 0 ),
         nAltFontIndex( 0 )
@@ -75,13 +75,10 @@ public:
     // Properties
     virtual void attribute(Id Name, Value & val);
     virtual void sprm(Sprm & sprm);
+    void resolveSprm(Sprm & r_sprm);
 
     // Table
     virtual void entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref);
-
-    // BinaryObj
-//    virtual void data(const sal_Int8* buf, size_t len,
-//                      writerfilter::Reference<Properties>::Pointer_t ref);
 
     // Stream
     virtual void startSectionGroup();

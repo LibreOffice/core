@@ -54,7 +54,6 @@ public:
     virtual void        ParagraphDeleted( USHORT nDeletedParagraph );
     virtual void        ParagraphConnected( USHORT nLeftParagraph, USHORT nRightParagraph );
 
-    // #101498#
     virtual void DrawingText(
         const Point& rStartPos, const XubString& rText, USHORT nTextStart, USHORT nTextLen, const sal_Int32* pDXArray, const SvxFont& rFont,
         USHORT nPara, USHORT nIndex, BYTE nRightToLeft,

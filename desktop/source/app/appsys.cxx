@@ -35,9 +35,8 @@
 
 #include <rtl/ustring.hxx>
 #include <tools/solar.h>
-#include <tools/prewin.h>
-#include <winreg.h>
-#include <tools/postwin.h>
+#include <prewin.h>
+#include <postwin.h>
 #include <tools/urlobj.hxx>
 
 
@@ -55,7 +54,7 @@ void FATToVFat_Impl( String& aName )
         HANDLE h = FindFirstFile( U2S(aName).getStr(), &aData );
         if ( h )
         {
-            // FAT-Kurzname in VFAT-Langname wandeln
+            // Change FAT short filename into VFAT long filename
             aObj.removeSegment();
             aObj.insertName( String::CreateFromAscii( aData.cFileName ) );
             aName = aObj.PathToFileName();

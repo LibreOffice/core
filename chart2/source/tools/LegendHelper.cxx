@@ -113,7 +113,7 @@ uno::Reference< chart2::XLegend > LegendHelper::getLegend(
             }
             else if(bCreate)
             {
-                DBG_ERROR("need diagram for creation of legend");
+                OSL_FAIL("need diagram for creation of legend");
             }
         }
         catch( uno::Exception & ex )

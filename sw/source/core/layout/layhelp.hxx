@@ -30,11 +30,11 @@
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_ULONGS
-#define _SVSTDARR_BYTES
 #define _SVSTDARR_XUB_STRLEN
 #include <svl/svstdarr.hxx>
 #endif
 #include <swrect.hxx>
+#include <vector>
 
 class SwDoc;
 class SwFrm;
@@ -167,8 +167,13 @@ public:
 
 class SwLayCacheIoImpl
 {
-    SvBytes         aRecTypes;
-    SvULongs        aRecSizes;
+private:
+    struct RecTypeSize {
+        BYTE  type;
+        ULONG size;
+        RecTypeSize(BYTE typ, ULONG siz) : type(typ), size(siz) {}
+    };
+    std::vector<RecTypeSize> aRecords;
 
     SvStream        *pStream;
 

@@ -35,8 +35,8 @@
 #include "editeng/editengdllapi.h"
 
 // class SvxCharHiddenItem -------------------------------------------------
-/*
-    [Description]
+/*  [Description]
+
     This item marks text as hidden
 */
 

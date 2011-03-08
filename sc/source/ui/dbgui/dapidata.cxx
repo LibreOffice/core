@@ -107,7 +107,7 @@ ScDataPilotDatabaseDlg::ScDataPilotDatabaseDlg( Window* pParent ) :
     }
     catch(uno::Exception&)
     {
-        DBG_ERROR("exception in database");
+        OSL_FAIL("exception in database");
     }
 
     aLbDatabase.SelectEntryPos( 0 );
@@ -220,7 +220,7 @@ void ScDataPilotDatabaseDlg::FillObjects()
     }
     catch(uno::Exception&)
     {
-        //  #71604# this may happen if an invalid database is selected -> no DBG_ERROR
+        //  this may happen if an invalid database is selected -> no DBG_ERROR
         DBG_WARNING("exception in database");
     }
 }

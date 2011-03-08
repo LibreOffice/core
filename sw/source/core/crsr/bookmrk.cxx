@@ -33,7 +33,6 @@
 #include <bookmrk.hxx>
 #include <IDocumentMarkAccess.hxx>
 #include <doc.hxx>
-#include <errhdl.hxx>
 #include <ndtxt.hxx>
 #include <pam.hxx>
 #include <swserv.hxx>
@@ -333,10 +332,9 @@ namespace sw { namespace mark
     }
     void CheckboxFieldmark::SetChecked(bool checked)
     {
-        bool bOld( IsChecked() );
-        (*GetParameters())[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMCHECKBOX_RESULT))] = makeAny(checked);
-        if ( bOld != checked )
+        if ( IsChecked() != checked )
         {
+            (*GetParameters())[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMCHECKBOX_RESULT))] = makeAny(checked);
             // mark document as modified
             SwDoc *const pDoc( GetMarkPos().GetDoc() );
             if ( pDoc )

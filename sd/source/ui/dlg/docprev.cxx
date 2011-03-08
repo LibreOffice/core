@@ -238,7 +238,7 @@ void SdDocPreviewWin::updateViewSettings()
 
             aVDev.SetMapMode( aMap );
 
-            // #109058# Disable output, as we only want to record a metafile
+            // Disable output, as we only want to record a metafile
             aVDev.EnableOutput( FALSE );
 
             pMtf->Record( &aVDev );

@@ -128,7 +128,7 @@ sal_Bool SAL_CALL component_writeInfo(  void*   /*pServiceManager*/,
     OUString aDelimiter( RTL_CONSTASCII_USTRINGPARAM("/") );
     OUString aUnoServices( RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") );
 
-    // Eigentliche Implementierung und ihre Services registrieren
+    // Actual implementation and register its services
     sal_Int32 i;
     Reference< registry::XRegistryKey >  xNewKey;
 

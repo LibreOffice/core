@@ -860,7 +860,7 @@ SdrModel* SdrExchangeView::GetMarkedObjModel() const
 
 BOOL SdrExchangeView::Cut( ULONG /*nFormat */)
 {
-    DBG_ERROR( "SdrExchangeView::Cut: Not supported anymore" );
+    OSL_FAIL( "SdrExchangeView::Cut: Not supported anymore" );
     return FALSE;
 }
 
@@ -868,14 +868,14 @@ BOOL SdrExchangeView::Cut( ULONG /*nFormat */)
 
 void SdrExchangeView::CutMarked( ULONG /*nFormat */)
 {
-    DBG_ERROR( "SdrExchangeView::CutMarked: Not supported anymore" );
+    OSL_FAIL( "SdrExchangeView::CutMarked: Not supported anymore" );
 }
 
 // -----------------------------------------------------------------------------
 
 BOOL SdrExchangeView::Yank(ULONG /*nFormat*/)
 {
-    DBG_ERROR( "SdrExchangeView::Yank: Not supported anymore" );
+    OSL_FAIL( "SdrExchangeView::Yank: Not supported anymore" );
     return FALSE;
 }
 
@@ -883,14 +883,14 @@ BOOL SdrExchangeView::Yank(ULONG /*nFormat*/)
 
 void SdrExchangeView::YankMarked(ULONG /*nFormat*/)
 {
-    DBG_ERROR( "YankMarked: Not supported anymore" );
+    OSL_FAIL( "YankMarked: Not supported anymore" );
 }
 
 // -----------------------------------------------------------------------------
 
 BOOL SdrExchangeView::Paste(Window* /*pWin*/, ULONG /*nFormat*/)
 {
-    DBG_ERROR( "SdrExchangeView::Paste: Not supported anymore" );
+    OSL_FAIL( "SdrExchangeView::Paste: Not supported anymore" );
     return FALSE;
 }
 

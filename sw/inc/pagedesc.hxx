@@ -32,7 +32,7 @@
 #include <tools/color.hxx>
 #include <tools/string.hxx>
 #include "swdllapi.h"
-#include <swtypes.hxx>  //fuer SwTwips
+#include <swtypes.hxx>  // For SwTwips.
 #include <frmfmt.hxx>
 #include <editeng/numitem.hxx>
 
@@ -40,7 +40,7 @@ class SfxPoolItem;
 class SwTxtFmtColl;
 class SwNode;
 
-//Separator line adjustment
+// Separator line adjustment.
 enum SwFtnAdj
 {
     FTNADJ_LEFT,
@@ -48,16 +48,16 @@ enum SwFtnAdj
     FTNADJ_RIGHT
 };
 
-//footnote information
+// Footnote information.
 class SW_DLLPUBLIC SwPageFtnInfo
 {
-    SwTwips     nMaxHeight;     //maximum height of the footnote area.
-    ULONG       nLineWidth;     //width of separator line
-    Color       aLineColor;     //color of the separator line
-    Fraction    aWidth;         //percentage width of the separator line.
-    SwFtnAdj    eAdj;           //line adjustment.
-    SwTwips     nTopDist;       //distance between body and separator.
-    SwTwips     nBottomDist;    //distance between separator and first footnote
+    SwTwips     nMaxHeight;     // Maximum height of the footnote area.
+    ULONG       nLineWidth;     // Width of separator line.
+    Color       aLineColor;     // Color of the separator line.
+    Fraction    aWidth;         // Percentage width of the separator line.
+    SwFtnAdj    eAdj;           // Line adjustment.
+    SwTwips     nTopDist;       // Distance between body and separator.
+    SwTwips     nBottomDist;    // Distance between separator and first footnote.
 
 public:
     SwTwips     GetHeight() const       { return nMaxHeight; }
@@ -84,51 +84,51 @@ public:
 };
 
 /*
- * Verwendung des UseOnPage (eUse) und der FrmFmt'e
+ *  Use of UseOnPage (eUse) and of FrmFmts
  *
- *  RIGHT   - aMaster nur fuer rechte Seiten, linke  Seiten immer leer.
- *  LEFT    - aLeft fuer linke  Seiten, rechte Seiten immer leer.
- *            aLeft ist eine Kopie des Master.
- *  ALL     - aMaster fuer rechte Seiten, aLeft fuer Linke Seiten.
- *            aLeft ist eine Kopie des Master.
- *  MIRROR  - aMaster fuer rechte Seiten, aLeft fuer linke Seiten.
- *            aLeft ist eine Kopie des Master, Raender sind gespiegelt.
+ *  RIGHT   - aMaster only for right hand (odd) pages, left hand (even) pages
+ *            always empty.
+ *  LEFT    - aLeft for left-hand pages, right-hand pages always empty.
+ *            aLeft is a copy of master.
+ *  ALL     - aMaster for right hand pages, aLeft for left hand pages.
+ *          - aLeft is a copy of master.
+ * MIRROR   - aMaster for right hand pages, aLeft for left hand pagers.
+ *            aLeft is a copy of master, margins are mirrored.
  *
- * UI dreht auschliesslich am Master! aLeft wird beim Chg am Dokument
- * enstprechend dem eUse eingestellt.
+ * UI works exclusively on master! aLeft is adjusted on Chg at document
+ * according to eUse.
  *
- * Damit es die Filter etwas einfacher haben werden weitere Werte im
- * eUse untergebracht:
+ * In order to simplify the work of the filters some more values are placed
+ * into eUse:
  *
- * HEADERSHARE - Headerinhalt auf beiden Seiten gleich
- * FOOTERSHARE - Footerinhalt auf beiden Seiten gleich
+ * HEADERSHARE - Content of header is equal on left and right hand pages.
+ * FOOTERSHARE - Content of footer is equal on left and right hand pages.
  *
- * Die Werte werden bei den entsprechenden Get-/Set-Methden ausmaskiert.
- * Zugriff auf das volle eUse inclusive der Header-Footer information
- * per ReadUseOn(), WriteUseOn() (fuer Filter und CopyCTor)!
+ * The values are masked out in the respective getter and setter methods.
+ * Access to complete eUse including the information on header and footer
+ * via ReadUseOn(), WriteUseOn() (fuer Filter und CopyCTor)!
  *
- * Die FrmFormate fuer Header/Footer werden anhand der Attribute fuer
- * Header/Footer vom UI am Master eingestellt (Hoehe, Raender, Hintergrund...);
- * Header/Footer fuer die Linke Seite werden entsprechen kopiert bzw.
- * gespielt (Chg am Dokument).
- * Das jew. Attribut fuer den Inhalt wird automatisch beim Chg am
- * Dokument versorgt (entsprechen den SHARE-informationen werden Inhalte
- * erzeugt bzw. entfernt).
- *
+ * The Frmformats for header/footer are adjusted by the UI according to
+ * the attributes for header and footer at master (height, margin, back-
+ * ground ...)
+ * Header/footer for left hand pages are copied or mirrored (Chg at
+ * document).
+ * The respective attribute for content is cared for automatically on Chg at
+ * document (contents are created or removed according to SHARE-information).
  */
 
 typedef USHORT UseOnPage;
 namespace nsUseOnPage
 {
-    const UseOnPage PD_NONE           = 0x0000; //for internal use only.
+    const UseOnPage PD_NONE           = 0x0000; // For internal use only.
     const UseOnPage PD_LEFT           = 0x0001;
     const UseOnPage PD_RIGHT          = 0x0002;
     const UseOnPage PD_ALL            = 0x0003;
     const UseOnPage PD_MIRROR         = 0x0007;
     const UseOnPage PD_HEADERSHARE    = 0x0040;
     const UseOnPage PD_FOOTERSHARE    = 0x0080;
-    const UseOnPage PD_NOHEADERSHARE  = 0x00BF; //for internal use only
-    const UseOnPage PD_NOFOOTERSHARE  = 0x007F; //for internal use only
+    const UseOnPage PD_NOHEADERSHARE  = 0x00BF; // For internal use only.
+    const UseOnPage PD_NOFOOTERSHARE  = 0x007F; // For internal use only.
 }
 
 class SW_DLLPUBLIC SwPageDesc : public SwModify
@@ -140,18 +140,18 @@ class SW_DLLPUBLIC SwPageDesc : public SwModify
     SvxNumberType   aNumType;
     SwFrmFmt    aMaster;
     SwFrmFmt    aLeft;
-    SwDepend    aDepend;    // wg. Registerhaltigkeit
+    SwDepend    aDepend;    // Because of grid alignment (Registerhaltigkeit).
     SwPageDesc *pFollow;
-    USHORT      nRegHeight; // Zeilenabstand und Fontascent der Vorlage
-    USHORT      nRegAscent; // fuer die Registerhaltigkeit
+    USHORT      nRegHeight; // Sentence spacing and fontascent of style.
+    USHORT      nRegAscent; // For grid alignment (Registerhaltigkeit).
     UseOnPage   eUse;
     BOOL        bLandscape;
 
-    //Fussnoteninformationen
+    // Footnote information.
     SwPageFtnInfo aFtnInfo;
 
-    //Wird zum Spiegeln vom Chg (Doc) gerufen.
-    //Kein Abgleich an anderer Stelle.
+    // Called for mirroring of Chg (doc).
+    // No adjustment at any other place.
     SW_DLLPRIVATE void Mirror();
 
     SW_DLLPRIVATE void ResetAllAttr( sal_Bool bLeft );
@@ -193,8 +193,8 @@ public:
     inline void ResetAllMasterAttr();
     inline void ResetAllLeftAttr();
 
-    //Mit den folgenden Methoden besorgt sich das Layout ein Format
-    //um eine Seite erzeugen zu koennen
+    // Layout uses the following methods to obtain a format in order
+    // to be able to create a page.
     inline SwFrmFmt *GetRightFmt();
     inline const SwFrmFmt *GetRightFmt() const;
     inline SwFrmFmt *GetLeftFmt();
@@ -214,7 +214,7 @@ public:
     virtual void Modify( SfxPoolItem *pOldValue, SfxPoolItem *pNewValue );
     void RegisterChange();
 
-    // erfragen und setzen der PoolFormat-Id
+    // Query and set PoolFormat-Id.
     USHORT GetPoolFmtId() const         { return aMaster.GetPoolFmtId(); }
     void SetPoolFmtId( USHORT nId )     { aMaster.SetPoolFmtId( nId ); }
     USHORT GetPoolHelpId() const        { return aMaster.GetPoolHelpId(); }
@@ -222,7 +222,7 @@ public:
     BYTE GetPoolHlpFileId() const       { return aMaster.GetPoolHlpFileId(); }
     void SetPoolHlpFileId( BYTE nId )   { aMaster.SetPoolHlpFileId( nId ); }
 
-        // erfrage vom Client Informationen
+    // Query information from Client.
     virtual BOOL GetInfo( SfxPoolItem& ) const;
 
     const SwFrmFmt* GetPageFmtOfNode( const SwNode& rNd,

@@ -33,15 +33,15 @@
 #include <svtools/brwhead.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/image.hxx>
-#include <tools/list.hxx>
 #include <svtools/transfer.hxx>
+#include <vector>
 
 //===================================================================
 
 #define MIN_COLUMNWIDTH  2
 #define DRAG_CRITICAL    4
 
-DECLARE_LIST( RectangleList, Rectangle* )
+typedef ::std::vector< Rectangle* > RectangleList;
 
 //===================================================================
 
@@ -234,18 +234,6 @@ void InitSettings_Impl( Window *pWin,
          BOOL bFont = TRUE, BOOL bForeground = TRUE, BOOL bBackground = TRUE );
 
 //===================================================================
-
-#ifdef DBG_MI
-
-void DoLog_Impl( const BrowseBox *pThis, const char *pWhat, const char *pWho );
-#define LOG(pThis,what,who) DoLog_Impl(pThis,what,who)
-
-#else
-
-#define LOG(pThis,what,who)
-
-#endif
-
 
 #endif
 

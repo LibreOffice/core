@@ -50,7 +50,7 @@ class Window;
 void EDITENG_DLLPUBLIC SvxPrepareAutoCorrect( String &rOldText, String &rNewText );
 
 /*--------------------------------------------------------------------
-     Beschreibung: Der SpellWrapper
+     Description: The SpellWrapper
  --------------------------------------------------------------------*/
 
 class EDITENG_DLLPUBLIC SvxSpellWrapper {
@@ -66,21 +66,21 @@ private:
         ::com::sun::star::linguistic2::XSpellChecker1 > xSpell;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XHyphenator >    xHyph;
-    sal_uInt16  nOldLang;       // Sprache merken, nur bei Aenderung SetLanguage rufen
-    sal_Bool    bOtherCntnt : 1; // gesetzt => Sonderbereiche zunaechst pruefen
-    sal_Bool    bDialog     : 1; // Ist pWin der Svx...Dialog?
-    sal_Bool    bHyphen     : 1; // Trennen statt Spellen
-    sal_Bool    bAuto       : 1; // Autokorrektur vorhanden?
-    sal_Bool    bReverse    : 1; // Rueckwaerts Spellen
-    sal_Bool    bStartDone  : 1; // Vorderen Teil bereits korrigiert
-    sal_Bool    bEndDone    : 1; // Hinteren Teil bereits korrigiert
-    sal_Bool    bStartChk   : 1; // Vorderen Teil pruefen
-    sal_Bool    bRevAllowed : 1; // Niemals rueckwaerts spellen
-    sal_Bool    bAllRight   : 1; // falsche Woerter in geignetes Woerterbuch
-                             // aufnehmen und nicht den Dialog starten.
+    sal_uInt16  nOldLang;        // Set Language, only call SetLanguage on changes
+    sal_Bool    bOtherCntnt : 1; // set => Check special sections initially
+    sal_Bool    bDialog     : 1; // Is pWin the Svx...Dialog?
+    sal_Bool    bHyphen     : 1; // Split instead of spell checking
+    sal_Bool    bAuto       : 1; // AutoCorrect available?
+    sal_Bool    bReverse    : 1; // Reverse spell check
+    sal_Bool    bStartDone  : 1; // Beginning already corrected
+    sal_Bool    bEndDone    : 1; // End part already corrected
+    sal_Bool    bStartChk   : 1; // Examine the beginning
+    sal_Bool    bRevAllowed : 1; // Reverse spell check prohibited
+    sal_Bool    bAllRight   : 1; // Record wrong words in the dedicated
+                                 // dictionary and do not start the dialog.
 
-    EDITENG_DLLPRIVATE sal_Bool     SpellNext();        // naechsten Bereich anwaehlen
-    sal_Bool    FindSpellError();   // Suche nach Fehlern ( ueber Bereiche hinweg )
+    EDITENG_DLLPRIVATE sal_Bool     SpellNext();        // select next area
+    sal_Bool    FindSpellError();   // Check for errors (over areas)
 
 public:
     SvxSpellWrapper( Window* pWn,
@@ -106,12 +106,12 @@ public:
 
     static void         ShowLanguageErrors();
 
-    void            SpellDocument();        // Rechtschreibpruefung durchfuehren
+    void            SpellDocument();        // Perform Spell Checking
     inline sal_Bool IsStartDone(){ return bStartDone; }
     inline sal_Bool IsEndDone(){ return bEndDone; }
     inline sal_Bool IsReverse(){ return bReverse; }
     inline sal_Bool IsDialog(){ return bDialog; } // SvxSpellCheckDialog OnScreen
-    inline sal_Bool IsHyphen(){ return bHyphen; } // Trennen statt Spellen
+    inline sal_Bool IsHyphen(){ return bHyphen; } // Split instead of Spell check
     inline void     SetHyphen( const sal_Bool bNew = sal_True ){ bHyphen = bNew; }
     inline ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XSpellChecker1 >
@@ -121,10 +121,10 @@ public:
                     GetXHyphenator()    { return xHyph; }
     inline sal_Bool             IsAllRight()        { return bAllRight; }
     inline Window*  GetWin() { return pWin; }
-    // kann evtl entfallen in ONE_LINGU:
+    // can possibly be omitted in ONE_LINGU:
     inline void     SetOldLang( const sal_uInt16 nNew ){ nOldLang = nNew; }
-    // kann evtl entfallen in ONE_LINGU:
-    inline void     ChangeLanguage( const sal_uInt16 nNew ) // rufe ggf. SetLanguage
+    // can possibly be omitted in ONE_LINGU:
+    inline void     ChangeLanguage( const sal_uInt16 nNew ) // call SetLanguage if needed.
         { if ( nNew != nOldLang ) { SetLanguage( nNew ); nOldLang = nNew; } }
     inline void     EnableAutoCorrect() { bAuto = sal_True; }
 
@@ -135,26 +135,26 @@ protected:
     void             SetLast(const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::uno::XInterface >  &xNewLast)
                             { xLast = xNewLast; }
-    virtual sal_Bool SpellMore();               // weitere Dokumente pruefen?
-    virtual sal_Bool HasOtherCnt();             // gibt es ueberhaupt Sonderbereiche
-    virtual void     SpellStart( SvxSpellArea eSpell ); // Bereich vorbereiten
-    virtual sal_Bool SpellContinue();           // Bereich pruefen
-                                            // Ergebnis mit GetLast verfuegbar
-    virtual void ReplaceAll( const String &rNewText, sal_Int16 nLanguage ); // Wort aus Replace-Liste ersetzen
-    virtual void StartThesaurus( const String &rWord, sal_uInt16 nLang );   // Thesaurus starten
+    virtual sal_Bool SpellMore();               // examine further documents?
+    virtual sal_Bool HasOtherCnt();             // Are there any special areas?
+    virtual void     SpellStart( SvxSpellArea eSpell ); // Preparing the area
+    virtual sal_Bool SpellContinue();     // Check Areas
+                                          // Result avaliable through GetLast
+    virtual void ReplaceAll( const String &rNewText, sal_Int16 nLanguage ); //Replace word from the replace list
+    virtual void StartThesaurus( const String &rWord, sal_uInt16 nLang );
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XDictionary >
                  GetAllRightDic() const;
-    virtual void SpellEnd();                        // Bereich abschliessen
-    virtual void ScrollArea();                      // ScrollArea einstellen
-    // Wort ersetzen
+    virtual void SpellEnd();                        // Finish area
+    virtual void ScrollArea();                      // Set ScrollArea
+    // Replace word
     virtual void ChangeWord( const String& rNewWord, const sal_uInt16 nLang );
     virtual String GetThesWord();
     // Wort via Thesaurus ersetzen
     virtual void ChangeThesWord( const String& rNewWord );
-    virtual void SetLanguage( const sal_uInt16 nLang ); // Sprache aendern
+    virtual void SetLanguage( const sal_uInt16 nLang ); // Change Language
     virtual void AutoCorrect( const String& rAktStr, const String& rNewStr );
-    virtual void InsertHyphen( const sal_uInt16 nPos ); // Hyphen einfuegen
+    virtual void InsertHyphen( const sal_uInt16 nPos ); // Insert hyphen
 
 };
 

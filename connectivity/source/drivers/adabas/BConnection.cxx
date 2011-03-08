@@ -112,7 +112,7 @@ SQLRETURN OAdabasConnection::Construct( const ::rtl::OUString& url,const Sequenc
     m_sUser = aUID;
 
     if ( sHostName.getLength() )
-        aDSN = sHostName + ':' + aDSN;
+        aDSN = sHostName + rtl::OUString(static_cast<sal_Unicode>(':')) + aDSN;
     SQLRETURN nSQLRETURN = openConnectionWithAuth(aDSN,nTimeout, aUID,aPWD);
 
     return nSQLRETURN;
@@ -141,7 +141,7 @@ SQLRETURN OAdabasConnection::openConnectionWithAuth(const ::rtl::OUString& aConn
 
 
 
-    N3SQLSetConnectAttr(m_aConnectionHandle,SQL_ATTR_LOGIN_TIMEOUT,(SQLPOINTER)nTimeOut,SQL_IS_INTEGER);
+    N3SQLSetConnectAttr(m_aConnectionHandle,SQL_ATTR_LOGIN_TIMEOUT,(SQLPOINTER)(sal_IntPtr)nTimeOut,SQL_IS_INTEGER);
     // Verbindung aufbauen
 
     nSQLRETURN = N3SQLConnect(m_aConnectionHandle,

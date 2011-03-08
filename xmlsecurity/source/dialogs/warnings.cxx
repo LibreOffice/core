@@ -34,7 +34,7 @@
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
 #include <comphelper/sequence.hxx>
 
-// MM : added for password exception
+// added for password exception
 #include <vcl/msgbox.hxx>
 #include <com/sun/star/security/NoPasswordException.hpp>
 using namespace ::com::sun::star::security;

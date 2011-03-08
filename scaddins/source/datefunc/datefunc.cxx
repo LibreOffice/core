@@ -359,8 +359,7 @@ void ScaDateAddIn::InitData()
         delete pResMgr;
 
     OString aModName( "date" );
-    pResMgr = ResMgr::CreateResMgr( (const sal_Char*) aModName,
-                                        aFuncLoc );
+    pResMgr = ResMgr::CreateResMgr( aModName.getStr(), aFuncLoc );
 
     if( pFuncDataList )
         delete pFuncDataList;

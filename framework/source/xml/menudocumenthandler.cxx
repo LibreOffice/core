@@ -140,28 +140,28 @@ static void ExtractMenuParameters( const Sequence< PropertyValue > rProp,
 {
     for ( sal_Int32 i = 0; i < rProp.getLength(); i++ )
     {
-        if ( rProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_COMMANDURL ))
+        if ( rProp[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_COMMANDURL)) )
         {
             rProp[i].Value >>= rCommandURL;
             rCommandURL = rCommandURL.intern();
         }
-        else if ( rProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_HELPURL ))
+        else if ( rProp[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_HELPURL)) )
         {
             rProp[i].Value >>= rHelpURL;
         }
-        else if ( rProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_CONTAINER ))
+        else if ( rProp[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_CONTAINER)) )
         {
             rProp[i].Value >>= rSubMenu;
         }
-        else if ( rProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_LABEL ))
+        else if ( rProp[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_LABEL)) )
         {
             rProp[i].Value >>= rLabel;
         }
-        else if ( rProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_TYPE ))
+        else if ( rProp[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_TYPE)) )
         {
             rProp[i].Value >>= rType;
         }
-        else if ( rProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_STYLE ))
+        else if ( rProp[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_STYLE)) )
         {
             rProp[i].Value >>= rStyle;
         }
@@ -893,8 +893,8 @@ throw ( SAXException, RuntimeException )
             ExtractMenuParameters( aProps, aCommandURL, aLabel, aHelpURL, xSubMenu, nType, nItemBits );
             if ( xSubMenu.is() )
             {
-                if ( aCommandURL.equalsAscii( ADDDIRECT_CMD ) ||
-                    aCommandURL.equalsAscii( AUTOPILOTMENU_CMD ))
+                if ( aCommandURL.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ADDDIRECT_CMD)) ||
+                    aCommandURL.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(AUTOPILOTMENU_CMD)) )
                 {
                     WriteMenuItem( aCommandURL, aLabel, aHelpURL, nItemBits );
                     bSeparator = sal_False;
@@ -908,7 +908,7 @@ throw ( SAXException, RuntimeException )
                                             m_aAttributeType,
                                             aCommandURL );
 
-                    if ( !( aCommandURL.copy( CMD_PROTOCOL_SIZE ).equalsAscii( CMD_PROTOCOL )))
+                    if ( !( aCommandURL.copy( CMD_PROTOCOL_SIZE ).equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(CMD_PROTOCOL))) )
                         pListMenu->AddAttribute( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_NS_LABEL )),
                                                  m_aAttributeType,
                                                  aLabel );
@@ -967,13 +967,13 @@ void OWriteMenuDocumentHandler::WriteMenuItem( const ::rtl::OUString& aCommandUR
                              aHelpURL );
     }
 
-    if (( aLabel.getLength() > 0 ) && !( aCommandURL.copy( CMD_PROTOCOL_SIZE ).equalsAscii( CMD_PROTOCOL )))
+    if (( aLabel.getLength() > 0 ) && !( aCommandURL.copy( CMD_PROTOCOL_SIZE ).equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(CMD_PROTOCOL)) ))
     {
         pList->AddAttribute( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_NS_LABEL )),
                                 m_aAttributeType,
                                 aLabel );
     }
-    if (( nStyle > 0 ) && !( aCommandURL.copy( CMD_PROTOCOL_SIZE ).equalsAscii( CMD_PROTOCOL )))
+    if (( nStyle > 0 ) && !( aCommandURL.copy( CMD_PROTOCOL_SIZE ).equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(CMD_PROTOCOL)) ))
     {
         rtl::OUString aValue;
         MenuStyleItem* pStyle = MenuItemStyles;

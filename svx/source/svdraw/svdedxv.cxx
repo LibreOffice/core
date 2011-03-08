@@ -73,9 +73,8 @@
 #include <editeng/outliner.hxx>
 #include <editeng/adjitem.hxx>
 
-// #98988#
 #include <svtools/colorcfg.hxx>
-#include <vcl/svapp.hxx> //add CHINA001
+#include <vcl/svapp.hxx>
 #include <sdrpaintwindow.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -587,7 +586,7 @@ sal_Bool SdrObjEditView::SdrBeginTextEdit(
 
     if(pTextEditOutliner)
     {
-        DBG_ERROR("SdrObjEditView::SdrBeginTextEdit() da stand noch ein alter Outliner rum");
+        OSL_FAIL("SdrObjEditView::SdrBeginTextEdit() da stand noch ein alter Outliner rum");
         delete pTextEditOutliner;
         pTextEditOutliner = 0L;
     }

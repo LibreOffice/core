@@ -303,7 +303,6 @@ void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
                 SwSelBoxes& rBoxes, SwCellFrms* pCells,
                 const SwTblSearchType eSearchType )
 {
-    // #112697# Robust:
     const SwTabFrm* pStartTab = pStart->FindTabFrm();
     if ( !pStartTab )
     {
@@ -314,9 +313,8 @@ void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
     int bChkProtected = nsSwTblSearchType::TBLSEARCH_PROTECT & eSearchType;
 
     BOOL bTblIsValid;
-    // --> FME 2006-01-25 #i55421# Reduced value 10
-    int nLoopMax = 10;      //JP 28.06.99: max 100 loops - Bug 67292
-    // <--
+    // #i55421# Reduced value 10
+    int nLoopMax = 10;
     USHORT i;
 
     do {
@@ -464,7 +462,7 @@ void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
                 break;
         }
 
-        // --> FME 2005-10-13 #125337# Make code robust, check if pStart has
+        // --> Make code robust, check if pStart has
         // been deleted due to the formatting of the table:
         if ( aDelCheck.HasBeenDeleted() )
         {
@@ -496,10 +494,10 @@ BOOL ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
     if( !pCNd )
         pCNd = aIdx.GetNodes().GoNextSection( &aIdx, FALSE, FALSE );
 
-    // #109394# if table is invisible, return
+    // if table is invisible, return
     // (layout needed for forming table selection further down, so we can't
     //  continue with invisible tables)
-    // OD 07.11.2003 #i22135# - Also the content of the table could be
+    // #i22135# - Also the content of the table could be
     //                          invisible - e.g. in a hidden section
     // Robust: check, if content was found (e.g. empty table cells)
     if ( !pCNd || pCNd->GetFrm() == NULL )
@@ -513,7 +511,7 @@ BOOL ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
     if( !pCNd )
         pCNd = aIdx.GetNodes().GoNextSection( &aIdx, FALSE, FALSE );
 
-    // OD 07.11.2003 #i22135# - Robust: check, if content was found and if it's visible
+    // #i22135# - Robust: check, if content was found and if it's visible
     if ( !pCNd || pCNd->GetFrm() == NULL )
     {
         return FALSE;
@@ -1204,7 +1202,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                     if ( pCell->GetNext() )
                     {
                         pCell = (const SwLayoutFrm*)pCell->GetNext();
-                        // --> FME 2005-11-03 #125288# Check if table cell is not empty
+                        // --> Check if table cell is not empty
                         if ( pCell->Lower() && pCell->Lower()->IsRowFrm() )
                             pCell = pCell->FirstCell();
                     }
@@ -1765,7 +1763,7 @@ void lcl_FindStartEndCol( const SwLayoutFrm *&rpStart,
 
     const SwCntntFrm* pLastCntnt = pTab->FindLastCntnt();
     rpEnd = pLastCntnt ? pLastCntnt->GetUpper() : 0;
-    // --> FME 2006-07-17 #134385# Made code robust. If pTab does not have a lower,
+    // --> Made code robust. If pTab does not have a lower,
     // we would crash here.
     if ( !pLastCntnt ) return;
     // <--
@@ -1841,7 +1839,6 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrm *pStart,
     while ( pEnd && !pEnd->IsCellFrm() )
         pEnd = pEnd->GetUpper();
 
-    // #112697# Robust:
     if ( !pStart || !pEnd )
     {
         OSL_ENSURE( false, "MakeSelUnions with pStart or pEnd not in CellFrm" );
@@ -1892,11 +1889,9 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrm *pStart,
     else if( nsSwTblSearchType::TBLSEARCH_COL == ((~nsSwTblSearchType::TBLSEARCH_PROTECT ) & eSearchType ) )
         ::lcl_FindStartEndCol( pStart, pEnd, nsSwTblSearchType::TBLSEARCH_PROTECT & eSearchType );
 
-    // --> FME 2006-07-17 #134385# Made code robust.
-    if ( !pEnd ) return;
-    // <--
+    if ( !pEnd ) return; // Made code robust.
 
-    //neu besorgen, da sie jetzt verschoben sind. MA: 28. Dec. 93 Bug 5190
+    //neu besorgen, da sie jetzt verschoben sind.
     pTable = pStart->FindTabFrm();
     pEndTable = pEnd->FindTabFrm();
 

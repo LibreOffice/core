@@ -48,11 +48,12 @@
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 
 using namespace padmin;
-using namespace rtl;
 using namespace cppu;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace comphelper;
+
+using ::rtl::OUString;
 
 // -----------------------------------------------------------------------
 

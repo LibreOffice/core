@@ -195,7 +195,7 @@ FunctionReference SelectionFunction::Create(
 
 BOOL SelectionFunction::MouseButtonDown (const MouseEvent& rEvent)
 {
-    // #95491# remember button state for creation of own MouseEvents
+    // remember button state for creation of own MouseEvents
     SetMouseButtonCode (rEvent.GetButtons());
     mbProcessingMouseButtonDown = true;
 
@@ -260,7 +260,7 @@ BOOL SelectionFunction::MouseButtonUp (const MouseEvent& rEvent)
 {
     mrController.GetScrollBarManager().StopAutoScroll ();
 
-    // #95491# remember button state for creation of own MouseEvents
+    // remember button state for creation of own MouseEvents
     SetMouseButtonCode (rEvent.GetButtons());
 
     if (aDragTimer.IsActive())
@@ -691,7 +691,7 @@ void SelectionFunction::GotoNextPage (int nOffset)
 
 void SelectionFunction::ProcessMouseEvent (sal_uInt32 nEventType, const MouseEvent& rEvent)
 {
-    // #95491# remember button state for creation of own MouseEvents
+    // remember button state for creation of own MouseEvents
     SetMouseButtonCode (rEvent.GetButtons());
 
     // 1. Compute some frequently used values relating to the event.

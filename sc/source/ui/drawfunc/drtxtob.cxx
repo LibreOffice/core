@@ -145,7 +145,7 @@ ScDrawTextObjectBar::~ScDrawTextObjectBar()
     {
         pClipEvtLstnr->AddRemoveListener( pViewData->GetActiveWin(), FALSE );
 
-        //  #122057# The listener may just now be waiting for the SolarMutex and call the link
+        //  The listener may just now be waiting for the SolarMutex and call the link
         //  afterwards, in spite of RemoveListener. So the link has to be reset, too.
         pClipEvtLstnr->ClearCallbackLink();
 

@@ -48,7 +48,7 @@ IniParser::IniParser(OUString const & rIniName) throw(com::sun::star::io::IOExce
         if (iniUrl.getLength())
             fileError = osl_openFile(iniUrl.pData, &handle, osl_File_OpenFlag_Read);
     }
-    catch(::com::sun::star::io::IOException e)
+    catch(::com::sun::star::io::IOException&)
     {
 #if OSL_DEBUG_LEVEL > 0
         OString file_tmp = OUStringToOString(iniUrl, RTL_TEXTENCODING_ASCII_US);

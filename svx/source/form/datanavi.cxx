@@ -810,10 +810,8 @@ namespace svxform
         {
             // create a resource manager, for the svx resource file
             // and the UI locale
-            ByteString aResourceFile( "svx" );
             ResMgr* pResMgr = ResMgr::CreateResMgr(
-                aResourceFile.GetBuffer(),
-                Application::GetSettings().GetUILocale() );
+                "svx", Application::GetSettings().GetUILocale() );
 
             // load the resources for the AddSubmission modal dialog.
             // This will create our own resource context.
@@ -1366,7 +1364,7 @@ namespace svxform
                 break;
             }
             default:
-                DBG_ERROR( "XFormsPage::SetModel: unknown group!" );
+                OSL_FAIL( "XFormsPage::SetModel: unknown group!" );
                 break;
         }
 
@@ -2793,7 +2791,7 @@ namespace svxform
                             m_eItemType = DITText;
                             break;
                         default:
-                            DBG_ERROR( "AddDataItemDialog::InitFronNode: cannot handle this node type!" );
+                            OSL_FAIL( "AddDataItemDialog::InitFronNode: cannot handle this node type!" );
                             break;
                     }
 

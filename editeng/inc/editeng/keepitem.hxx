@@ -40,9 +40,9 @@ namespace rtl
 
 // class SvxFmtKeepItem ------------------------------------------------
 
-/*
-[Beschreibung]
-Dieses Item beschreibt eine logische Variable "Absaetze zusammenhalten?".
+/*  [Description]
+
+    This item describes a logical variable "keep paragraphs together?".
 */
 
 class EDITENG_DLLPUBLIC SvxFmtKeepItem : public SfxBoolItem
@@ -54,7 +54,7 @@ public:
                            const USHORT _nWhich  );
     inline SvxFmtKeepItem& operator=( const SvxFmtKeepItem& rSplit );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual Methods" from SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*    Create( SvStream&, USHORT ) const;
     virtual SvStream&       Store( SvStream& , USHORT nItemVersion ) const;

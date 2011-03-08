@@ -31,7 +31,7 @@
 
 #include <memory>
 #include <vector>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -89,7 +89,7 @@ public:
 
 };
 
-typedef std::hash_map
+typedef boost::unordered_map
 <
     rtl::OUString,
     PropertyValue,

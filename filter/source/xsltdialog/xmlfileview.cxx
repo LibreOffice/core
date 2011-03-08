@@ -54,7 +54,6 @@
 #include "xmlfileview.hrc"
 #include "xmlfilterhelpids.hrc"
 
-using namespace rtl;
 using namespace osl;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
@@ -62,6 +61,8 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::io;
 using namespace com::sun::star::xml;
 using namespace com::sun::star::xml::sax;
+
+using ::rtl::OUString;
 
 
 #define MAX_SYNTAX_HIGHLIGHT 20
@@ -767,7 +768,7 @@ void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
                     {
                         //was war das denn?
 #ifdef DEBUG
-                        DBG_ERROR("Token nicht erkannt!")
+                        OSL_FAIL("Token nicht erkannt!")
                         DBG_ERROR(ByteString(sToken, gsl_getSystemTextEncoding()).GetBuffer())
 #endif
                     }

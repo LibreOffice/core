@@ -297,9 +297,6 @@ int XSecController::findSignatureInfor( sal_Int32 nSecurityId) const
  *  index - the index of the signature, or -1 when no such signature
  *          existing
  *
- *   HISTORY
- *  08.05.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -339,9 +336,6 @@ void XSecController::createXSecComponent( )
  *
  *   RESULT
  *  empty
- *
- *   HISTORY
- *  05.01.2004 -    implemented
  *
  *   AUTHOR
  *  Michael Mi
@@ -449,9 +443,6 @@ bool XSecController::chainOn( bool bRetrievingLastEvent )
  *  events except that startElement event, then adds a new
  *  ElementCollector, then receives that startElement event.
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -549,9 +540,6 @@ void XSecController::chainOff()
  *   RESULT
  *  empty
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -617,9 +605,6 @@ void XSecController::checkChainingStatus()
  *   RESULT
  *  empty
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -655,9 +640,6 @@ void XSecController::initializeSAXChain()
  *
  *   RESULT
  *  empty
- *
- *   HISTORY
- *  05.01.2004 -    implemented
  *
  *   AUTHOR
  *  Michael Mi
@@ -697,9 +679,6 @@ cssu::Reference< com::sun::star::io::XInputStream >
  *
  *   RESULT
  *  xInputStream - the XInputStream interface
- *
- *   HISTORY
- *  15.04.2004 -    implemented
  *
  *   AUTHOR
  *  Michael Mi
@@ -749,9 +728,6 @@ void XSecController::startMission(
  *   RESULT
  *  empty
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -795,9 +771,6 @@ void XSecController::setSAXChainConnector(
  *   RESULT
  *  empty
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -836,9 +809,6 @@ void XSecController::setSAXChainConnector(
  *   RESULT
  *  empty
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -869,9 +839,6 @@ void XSecController::clearSAXChainConnector()
  *
  *   RESULT
  *  empty
- *
- *   HISTORY
- *  05.01.2004 -    implemented
  *
  *   AUTHOR
  *  Michael Mi
@@ -914,9 +881,6 @@ void XSecController::endMission()
  *
  *   RESULT
  *  empty
- *
- *   HISTORY
- *  05.01.2004 -    implemented
  *
  *   AUTHOR
  *  Michael Mi
@@ -976,9 +940,6 @@ const char* XSecController::getErrorMessage()
  *   RESULT
  *  empty
  *
- *   HISTORY
- *  22.04.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -1007,9 +968,6 @@ void XSecController::exportSignature(
  *
  *   RESULT
  *  empty
- *
- *   HISTORY
- *  26.05.2004 -    implemented
  *
  *   AUTHOR
  *  Michael Mi

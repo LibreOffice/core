@@ -57,10 +57,10 @@ public:
     SwVbaRange( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::text::XTextDocument >& rTextDocument, const css::uno::Reference< css::text::XTextRange >& rStart, const css::uno::Reference< css::text::XTextRange >& rEnd, sal_Bool _bMaySpanEndOfDocument = sal_False ) throw (css::uno::RuntimeException);
     SwVbaRange( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::text::XTextDocument >& rTextDocument, const css::uno::Reference< css::text::XTextRange >& rStart, const css::uno::Reference< css::text::XTextRange >& rEnd, const css::uno::Reference< css::text::XText >& rText, sal_Bool _bMaySpanEndOfDocument = sal_False ) throw (css::uno::RuntimeException);
     virtual ~SwVbaRange();
-   css::uno::Reference< css::text::XTextDocument > getDocument() { return mxTextDocument; }
+   css::uno::Reference< css::text::XTextDocument > getDocument() const { return mxTextDocument; }
 
     virtual css::uno::Reference< css::text::XTextRange > SAL_CALL getXTextRange() throw (css::uno::RuntimeException);
-    css::uno::Reference< css::text::XText > getXText() { return mxText; }
+    css::uno::Reference< css::text::XText > getXText() const { return mxText; }
     void setXTextCursor( const css::uno::Reference< css::text::XTextCursor >& xTextCursor ) { mxTextCursor = xTextCursor; }
     void Move( const css::uno::Any& _unit, const css::uno::Any& _count, const css::uno::Any& _extend, ooo::vba::word::E_DIRECTION eDirection ) throw (css::uno::RuntimeException);
 

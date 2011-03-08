@@ -569,10 +569,9 @@ void ErrorBarResources::Reset(const SfxItemSet& rInAttrs)
 
     aState = rInAttrs.GetItemState( SCHATTR_STAT_CONSTMINUS, TRUE, &pPoolItem );
     m_bMinusUnique = ( aState != SFX_ITEM_DONTCARE );
-    double fMinusValue = 0.0;
     if( aState == SFX_ITEM_SET )
     {
-        fMinusValue = ((const SvxDoubleItem*) pPoolItem)->GetValue();
+        double fMinusValue = ((const SvxDoubleItem*) pPoolItem)->GetValue();
         sal_Int32 nMinusValue = static_cast< sal_Int32 >( fMinusValue * pow(10.0,m_aMfNegative.GetDecimalDigits()) );
         m_aMfNegative.SetValue( nMinusValue );
 

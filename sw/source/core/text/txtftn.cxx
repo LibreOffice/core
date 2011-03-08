@@ -49,7 +49,6 @@
 // OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
 
-#include "txtcfg.hxx"
 #include "swfont.hxx"   // new SwFont
 #include "porftn.hxx"
 #include "porfly.hxx"
@@ -1650,7 +1649,6 @@ void SwParaPortion::SetErgoSumNum( const XubString& rErgo )
     SwLineLayout *pLay = this;
     while( pLay->GetNext() )
     {
-        DBG_LOOP;
         pLay = pLay->GetNext();
     }
     SwLinePortion     *pPor = pLay;
@@ -1676,7 +1674,6 @@ sal_Bool SwParaPortion::UpdateQuoVadis( const XubString &rQuo )
     SwLineLayout *pLay = this;
     while( pLay->GetNext() )
     {
-        DBG_LOOP;
         pLay = pLay->GetNext();
     }
     SwLinePortion     *pPor = pLay;

@@ -223,7 +223,7 @@ ShapeContextHandler::getShape() throw (uno::RuntimeException)
 
     if (mxFilterBase.is() && xShapes.is())
     {
-        if (mpDrawing.get() != NULL)
+        if ( getContextHandler() == getDrawingShapeContext() )
         {
             mpDrawing->finalizeFragmentImport();
             if( const ::oox::vml::ShapeBase* pShape = mpDrawing->getShapes().getFirstShape() )

@@ -35,9 +35,9 @@
 
 // class SvxPageModelItem ------------------------------------------------
 
-/*
-[Beschreibung]
-Dieses Item enthaelt einen Namen einer Seitenvorlage.
+/*  [Description]
+
+    This item contains a name of a page template.
 */
 
 class EDITENG_DLLPUBLIC SvxPageModelItem : public SfxStringItem

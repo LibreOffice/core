@@ -172,7 +172,7 @@ class ConfigurationAccess_UICommand : // Order is neccessary for right initializ
                                                 std::vector< ::rtl::OUString >& aImageMirrorVector);
 
     private:
-        typedef ::std::hash_map< ::rtl::OUString,
+        typedef ::boost::unordered_map< ::rtl::OUString,
                                  CmdToInfoMap,
                                  OUStringHashCode,
                                  ::std::equal_to< ::rtl::OUString > > CommandToInfoCache;

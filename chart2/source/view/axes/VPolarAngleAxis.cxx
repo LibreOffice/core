@@ -179,7 +179,6 @@ void SAL_CALL VPolarAngleAxis::createLabels()
         return;
 
     double fLogicRadius = m_pPosHelper->getOuterLogicRadius();
-    double fLogicZ      = -0.5;//as defined
 
     if( m_aAxisProperties.m_bDisplayLabels )
     {
@@ -197,6 +196,7 @@ void SAL_CALL VPolarAngleAxis::createLabels()
 
         AxisLabelProperties aAxisLabelProperties( m_aAxisLabelProperties );
         aAxisLabelProperties.bOverlapAllowed = true;
+        double fLogicZ      = -0.5;//as defined
         while( !createTextShapes_ForAngleAxis( m_xTextTarget, aTickIter
                         , aAxisLabelProperties
                         , fLogicRadius, fLogicZ

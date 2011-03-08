@@ -380,7 +380,6 @@ private:
 
     void                ProcessDouble( const XclExpScToken& rTokData );
     void                ProcessString( const XclExpScToken& rTokData );
-    void                ProcessError( const XclExpScToken& rTokData );
     void                ProcessMissing( const XclExpScToken& rTokData );
     void                ProcessBad( const XclExpScToken& rTokData );
     void                ProcessParentheses( const XclExpScToken& rTokData );
@@ -472,7 +471,6 @@ private:
     void                AppendExt( sal_uInt8 nData );
     void                AppendExt( sal_uInt8 nData, size_t nCount );
     void                AppendExt( sal_uInt16 nData );
-    void                AppendExt( sal_uInt32 nData );
     void                AppendExt( double fData );
     void                AppendExt( const String& rString );
 
@@ -1216,11 +1214,6 @@ void XclExpFmlaCompImpl::ProcessString( const XclExpScToken& rTokData )
     Append( rTokData.mpScToken->GetString() );
 }
 
-void XclExpFmlaCompImpl::ProcessError( const XclExpScToken& rTokData )
-{
-    (void)rTokData; // compiler warning
-}
-
 void XclExpFmlaCompImpl::ProcessMissing( const XclExpScToken& rTokData )
 {
     AppendMissingToken( rTokData.mnSpaces );
@@ -1666,7 +1659,7 @@ void XclExpFmlaCompImpl::AppendTrailingParam( XclExpFuncData& rFuncData )
         case ocIf:
             if( nParamCount == 1 )
             {
-                // #112262# Excel needs at least two parameters in IF function
+                // Excel needs at least two parameters in IF function
                 PrepareParam( rFuncData );
                 AppendBoolToken( true );
                 FinishParam( rFuncData );
@@ -2503,11 +2496,6 @@ void XclExpFmlaCompImpl::AppendExt( sal_uInt8 nData, size_t nCount )
 }
 
 void XclExpFmlaCompImpl::AppendExt( sal_uInt16 nData )
-{
-    lclAppend( mxData->maExtDataVec, nData );
-}
-
-void XclExpFmlaCompImpl::AppendExt( sal_uInt32 nData )
 {
     lclAppend( mxData->maExtDataVec, nData );
 }

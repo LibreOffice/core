@@ -34,29 +34,12 @@ TARGET=so_stlport
 
 .INCLUDE :	settings.mk
 
-.IF "$(USE_SYSTEM_STL)"=="YES"
+.IF "$(WITH_STLPORT)"!="YES"
 
-.IF "$(OS)"=="SOLARIS" && "$(COM)"!="GCC"
-# System STL when building with SunStudio is just a version of STLport
-# which comes with the compiler
 all:
     @echo "Nothing to do"
-.ELSE #"$(OS)"=="SOLARIS" && "$(COM)"!="GCC"
-#
-# If you choose to build without stlport, some headers will be used to bring the
-# sgi extensions into the std namespace:
-$(INCCOM)$/stlport$/functional \
-$(INCCOM)$/stlport$/hash_map \
-$(INCCOM)$/stlport$/hash_set \
-$(INCCOM)$/stlport$/numeric \
-$(INCCOM)$/stlport$/slist \
-$(INCCOM)$/stlport$/rope \
-$(INCCOM)$/stlport$/vector: systemstl$/$$(@:f)
-    $(MKDIRHIER) $(@:d)
-    $(COPY) $< $@
-.ENDIF #"$(OS)"=="SOLARIS" && "$(COM)"!="GCC"
 
-.ELSE # "$(USE_SYSTEM_STL)"
+.ELSE # "$(WITH_STLPORT)"!="YES"
 
 # --- Files --------------------------------------------------------
 .EXPORT : CC CXX
@@ -205,16 +188,6 @@ OUT2LIB= \
 
 # --- Targets ------------------------------------------------------
 
-.IF "$(STLPORT4)"!="NO_STLPORT4"
-all :
-       @echo "         An already available installation of STLport has been chosen in the configure process."
-       @echo "         Therefore the version provided here does not need to be built in addition."
-.ELIF "$(OS)"=="MACOSX"
-all:
-    @echo '--with-stlport=yes is not supported on Mac OS X'
-    false
-.ENDIF
-
 .INCLUDE : 	set_ext.mk
 .INCLUDE :	target.mk
 .INCLUDE :	tg_ext.mk
@@ -246,4 +219,4 @@ $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)$/win32_sdk_patch
 .ENDIF "$(COM)"=="GCC"
 .ENDIF          # "$(GUI)"=="WNT"
 
-.ENDIF # "$(USE_SYSTEM_STL)"
+.ENDIF # "$(WITH_STLPORT)"!="YES"

@@ -64,8 +64,9 @@
 #endif
 
 
-using namespace rtl;
 using namespace vcl_sal;
+
+using ::rtl::OUString;
 
 String DtIntegrator::aHomeDir;
 

@@ -41,10 +41,10 @@ namespace rtl
 
 // class SvxFmtBreakItem -------------------------------------------------
 
-/*
-    [Beschreibung]
-    Dieses Item beschreibt ein Umbruch-Attribut
-    Automatisch?, Seiten- oder Spaltenumbruch, davor oder danach?
+/*  [Description]
+
+    This item Describes a wrap-attribute
+    Automatic?, Page or column break, before or after?
 */
 #define FMTBREAK_NOAUTO ((USHORT)0x0001)
 
@@ -58,7 +58,7 @@ public:
     inline SvxFmtBreakItem( const SvxFmtBreakItem& rBreak );
     inline SvxFmtBreakItem& operator=( const SvxFmtBreakItem& rCpy );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual Methods" from SfxPoolItem
     virtual int              operator==( const SfxPoolItem& ) const;
     virtual bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
     virtual bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
@@ -75,7 +75,7 @@ public:
     virtual SfxPoolItem*     Create( SvStream&, USHORT ) const;
     virtual USHORT           GetValueCount() const;
 
-    // MS VC4.0 kommt durcheinander
+    // MS VC4.0 messes things up
     void             SetValue( USHORT nNewVal )
                                 {SfxEnumItem::SetValue(nNewVal); }
     SvxBreak             GetBreak() const { return SvxBreak( GetValue() ); }

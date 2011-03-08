@@ -312,7 +312,7 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
 
 
         default:
-        DBG_ERROR( "ScTabViewShell::CreateRefDialog: unbekannte ID" );
+        OSL_FAIL( "ScTabViewShell::CreateRefDialog: unbekannte ID" );
         break;
     }
 

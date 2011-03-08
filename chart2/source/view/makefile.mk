@@ -95,9 +95,6 @@ SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
 #Specifies the library name to parse for symbols. For Win32 only.
 DEFLIB1NAME=	$(TARGET)
 
-#A file of symbols to export.
-#DEF1EXPORTFILE=	$(PRJ)$/source$/inc$/exports.dxp
-
 #--------definition file
 
 #name of the definition file:

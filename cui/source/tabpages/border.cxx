@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 // include ---------------------------------------------------------------
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
@@ -450,7 +447,6 @@ void SvxBorderTabPage::Reset( const SfxItemSet& rSet )
     const SvxBoxInfoItem*   pBoxInfoItem;
     USHORT                  nWhichBox       = GetWhich(SID_ATTR_BORDER_OUTER);
     SfxMapUnit              eCoreUnit;
-    const Color             aColBlack       = RGBCOL(COL_BLACK);
 
     pBoxItem  = (const SvxBoxItem*)GetItem( rSet, SID_ATTR_BORDER_OUTER );
 

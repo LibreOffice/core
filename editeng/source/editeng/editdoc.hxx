@@ -204,7 +204,7 @@ private:
 public:
                     ContentAttribs( SfxItemPool& rItemPool );
                     ContentAttribs( const ContentAttribs& );
-                    ~ContentAttribs();  // erst bei umfangreicheren Tabs
+                    ~ContentAttribs();  // only for larger Tabs
 
     SvxTabStop      FindTabStop( long nCurPos, USHORT nDefTab );
     SfxItemSet&     GetItems()                          { return aAttribSet; }
@@ -222,7 +222,7 @@ class CharAttribList
 {
 private:
     CharAttribArray aAttribs;
-    SvxFont         aDefFont;               // schneller, als jedesmal vom Pool!
+    SvxFont         aDefFont;          // faster than ever from the pool!
     BOOL            bHasEmptyAttribs;
 
                     CharAttribList( const CharAttribList& ) {;}
@@ -465,16 +465,16 @@ private:
     CharPosArray    aPositions;
     long            nTxtWidth;
     USHORT          nStartPosX;
-    USHORT          nStart;     // koennte durch nStartPortion ersetzt werden
-    USHORT          nEnd;       // koennte durch nEndPortion ersetzt werden
+    USHORT          nStart;     // could be replaced by nStartPortion
+    USHORT          nEnd;       // could be replaced by nEndPortion
     USHORT          nStartPortion;
     USHORT          nEndPortion;
-    USHORT          nHeight;    // Gesamthoehe der Zeile
-    USHORT          nTxtHeight; // Reine Texthoehe
-    USHORT          nCrsrHeight;    // Bei Konturfluss hohe Zeilen => Cursor zu groá.
+    USHORT          nHeight;    //  Total height of the line
+    USHORT          nTxtHeight; // Pure Text height
+    USHORT          nCrsrHeight;    // For contour flow high lines => cursor is large.
     USHORT          nMaxAscent;
     BOOL            bHangingPunctuation;
-    BOOL            bInvalid;   // fuer geschickte Formatierung
+    BOOL            bInvalid;   // for skillful formatting
 
 public:
                     EditLine();
@@ -567,7 +567,7 @@ public:
 // -------------------------------------------------------------------------
 class ParaPortion
 {
-    friend class ImpEditEngine; // zum Einstellen der Hoehe
+    friend class ImpEditEngine; // to adjust the height
 private:
     EditLineList        aLineList;
     TextPortionList     aTextPortionList;
@@ -578,13 +578,13 @@ private:
     WritingDirectionInfos   aWritingDirectionInfos;
 
     USHORT              nInvalidPosStart;
-    USHORT              nFirstLineOffset;   // Fuer Writer-LineSpacing-Interpretation
+    USHORT              nFirstLineOffset;   // For Writer-LineSpacing-Interpretation
     USHORT              nBulletX;
     short               nInvalidDiff;
 
     BOOL                bInvalid            : 1;
-    BOOL                bSimple             : 1;    // nur lineares Tippen
-    BOOL                bVisible            : 1;    // MT 05/00: Gehoert an den Node!!!
+    BOOL                bSimple             : 1;    // only linear Tap
+    BOOL                bVisible            : 1;    // Belongs to the node!
     BOOL                bForceRepaint       : 1;
 
                         ParaPortion( const ParaPortion& );
@@ -650,7 +650,7 @@ public:
 
     USHORT                  GetPos( const ParaPortionPtr &rPtr ) const;
 
-    // temporaer:
+    // temporary:
     void            DbgCheck( EditDoc& rDoc );
 };
 
@@ -664,7 +664,8 @@ private:
     EditPaM         aEndPaM;
 
 public:
-                    EditSelection();    // kein CCTOR und DTOR, geht autom. richtig!
+                    EditSelection();    // No constructor and destructor
+                                        // are automtically excecuted correctly!
                     EditSelection( const EditPaM& rStartAndAnd );
                     EditSelection( const EditPaM& rStart, const EditPaM& rEnd );
 
@@ -717,7 +718,7 @@ private:
     SfxItemPool*    pItemPool;
     Link            aModifyHdl;
 
-    SvxFont         aDefFont;           //schneller, als jedesmal vom Pool!
+    SvxFont         aDefFont;           //faster than ever from the pool!!
     USHORT          nDefTab;
     BOOL            bIsVertical;
     BOOL            bIsFixedCellHeight;

@@ -912,14 +912,6 @@ void SvImpLBox::Paint( const Rectangle& rRect )
         pStartEntry = pView->First();
     }
 
-#ifdef XX_OV
-    ULONG nXAbsPos = (USHORT)pTree->GetAbsPos( pStartEntry );
-    ULONG nXVisPos = pView->GetVisiblePos( pStartEntry );
-    SvLBoxString* pXStr = (SvLBoxString*)pStartEntry->GetFirstItem( SV_ITEM_ID_LBOXSTRING);
-#endif
-
-
-
     if( nNodeBmpTabDistance == NODE_BMP_TABDIST_NOTVALID )
         SetNodeBmpTabDistance();
 
@@ -2265,7 +2257,6 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
             // if there is no next entry, take the current one
             // this ensures that in case of _one_ entry in the list, this entry is selected when pressing
             // the cursor key
-            // 06.09.20001 - 83416 - fs@openoffice.org
             if ( !pNewCursor && pCursor )
                 pNewCursor = pCursor;
 
@@ -2512,19 +2503,6 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
             else
                 bKeyUsed = FALSE;
             break;
-
-
-#ifdef OV_DEBUG
-        case KEY_F9:
-            MakeVisible( pCursor );
-            break;
-        case KEY_F10:
-            pView->RemoveSelection();
-            break;
-        case KEY_DELETE:
-            pView->RemoveEntry( pCursor );
-            break;
-#endif
 
         case KEY_ADD:
             if( pCursor )

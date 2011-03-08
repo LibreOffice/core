@@ -216,7 +216,6 @@ BibToolBar::BibToolBar(Window* pParent, Link aLink, WinBits nStyle):
     ApplyImageList();
     SetStyle(GetStyle()|nStyle);
     SetOutStyle(TOOLBOX_STYLE_FLAT);
-    Size aSize=GetSizePixel();
     Size a2Size(GetOutputSizePixel());
     a2Size.Width()=100;
     aLBSource.SetSizePixel(a2Size);

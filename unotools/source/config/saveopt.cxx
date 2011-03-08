@@ -44,8 +44,10 @@
 #include "itemholder1.hxx"
 
 using namespace utl;
-using namespace rtl;
 using namespace com::sun::star::uno;
+
+using ::rtl::OUString;
+
 namespace css = ::com::sun::star;
 
 class SvtSaveOptions_Impl;
@@ -440,7 +442,7 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
                         if ( pValues[nProp] >>= nTemp )
                             nAutoSaveTime = nTemp;
                         else {
-                            DBG_ERROR( "Wrong Type!" );
+                            OSL_FAIL( "Wrong Type!" );
                         };
                         bROAutoSaveTime = pROStates[nProp];
                         break;
@@ -531,7 +533,7 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
                         }
                         else
                         {
-                            DBG_ERROR( "Wrong Type!" );
+                            OSL_FAIL( "Wrong Type!" );
                         }
                     }
                 }
@@ -557,7 +559,7 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TimeIntervall"))) >>= nAutoSaveTime;
     }
     catch(const css::uno::Exception&)
-        { DBG_ERROR("Could not find needed informations for AutoSave feature."); }
+        { OSL_FAIL("Could not find needed informations for AutoSave feature."); }
 }
 
 SvtSaveOptions_Impl::~SvtSaveOptions_Impl()

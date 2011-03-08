@@ -94,7 +94,7 @@ using namespace cppu;
 #include<runtime.hxx>
 
 #include<math.h>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <com/sun/star/reflection/XTypeDescriptionEnumerationAccess.hpp>
 #include <com/sun/star/reflection/XConstantsTypeDescription.hpp>
 
@@ -1743,7 +1743,7 @@ bool checkUnoObjectType( SbUnoObject* pUnoObj,
             Reference<XIdlClass> xClass = TypeToIdlClass( rType );
             if( !xClass.is() )
             {
-                DBG_ERROR("failed to get XIdlClass for type");
+                OSL_FAIL("failed to get XIdlClass for type");
                 break;
             }
             ::rtl::OUString sClassName = xClass->getName();
@@ -1839,7 +1839,7 @@ String Impl_GetSupportedInterfaces( SbUnoObject* pUnoObj )
         else if( xClassProvider.is() )
         {
 
-            DBG_ERROR( "XClassProvider not supported in UNO3" );
+            OSL_FAIL( "XClassProvider not supported in UNO3" );
         }
     }
     return aRet;
@@ -3218,7 +3218,7 @@ void RTL_Impl_EqualUnoObjects( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
         refVar->PutBool( TRUE );
 }
 
-typedef std::hash_map< ::rtl::OUString, std::vector< ::rtl::OUString >, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > ModuleHash;
+typedef boost::unordered_map< ::rtl::OUString, std::vector< ::rtl::OUString >, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > ModuleHash;
 
 
 // helper wrapper function to interact with TypeProvider and
@@ -3245,7 +3245,7 @@ getTypeDescriptorEnumeration( const ::rtl::OUString& sSearchRoot,
     return xEnum;
 }
 
-typedef std::hash_map< ::rtl::OUString, Any, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > VBAConstantsHash;
+typedef boost::unordered_map< ::rtl::OUString, Any, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > VBAConstantsHash;
 
 VBAConstantHelper&
 VBAConstantHelper::instance()

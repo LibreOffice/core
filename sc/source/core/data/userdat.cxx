@@ -60,7 +60,7 @@ IMPL_LINK_INLINE_START( ScDrawObjFactory, MakeUserData, SdrObjFactory *, pObjFac
             pObjFactory->pNewData = new ScMacroInfo;
         else
         {
-            DBG_ERROR("MakeUserData: falsche ID");
+            OSL_FAIL("MakeUserData: falsche ID");
         }
     }
     return 0;

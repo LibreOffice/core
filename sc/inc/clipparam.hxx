@@ -78,7 +78,7 @@ struct ScClipParam
 struct ScClipRangeNameData
 {
     ScRangeData::IndexMap       maRangeMap;
-    ::std::vector<ScRangeData*> mpRangeNames;
+    ::std::vector<ScRangeData*> mpRangeNames; // Don't insert NULL pointers.
     bool                        mbReplace;
 
     ScClipRangeNameData();

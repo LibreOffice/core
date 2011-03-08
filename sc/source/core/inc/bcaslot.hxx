@@ -30,7 +30,7 @@
 #define SC_BCASLOT_HXX
 
 #include <set>
-#include <hash_set>
+#include <boost/unordered_set.hpp>
 #include <functional>
 #include <svl/broadcast.hxx>
 #include <svl/svarray.hxx>
@@ -97,7 +97,7 @@ struct ScBroadcastAreaEqual
     }
 };
 
-typedef ::std::hash_set< ScBroadcastArea*, ScBroadcastAreaHash, ScBroadcastAreaEqual > ScBroadcastAreas;
+typedef ::boost::unordered_set< ScBroadcastArea*, ScBroadcastAreaHash, ScBroadcastAreaEqual > ScBroadcastAreas;
 
 //=============================================================================
 
@@ -117,7 +117,7 @@ struct ScBroadcastAreaBulkEqual
     }
 };
 
-typedef ::std::hash_set< const ScBroadcastArea*, ScBroadcastAreaBulkHash,
+typedef ::boost::unordered_set< const ScBroadcastArea*, ScBroadcastAreaBulkHash,
         ScBroadcastAreaBulkEqual > ScBroadcastAreasBulk;
 
 //=============================================================================

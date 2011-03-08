@@ -226,7 +226,7 @@ namespace comphelper
             case CPPUTYPE_REFXGRAPHIC:      pType = &::getCppuType( (Reference< graphic::XGraphic >*)0); break;
             case CPPUTYPE_TABLEBORDERDISTANCES:     pType = &::getCppuType( (table::TableBorderDistances*)0 ); break;
             default:
-                OSL_ASSERT( "Unknown CPPU type" );
+                OSL_FAIL( "Unknown CPPU type" );
         }
     }
 }

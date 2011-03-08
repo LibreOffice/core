@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <ctype.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -70,10 +69,8 @@
 #endif
 
 
-
 const sal_Int32 MAX_LEN = 1024;
 
-/*  */
 
 void CSS1Parser::InitRead( const String& rIn )
 {
@@ -112,8 +109,6 @@ sal_Unicode CSS1Parser::GetNextChar()
 
     return c;
 }
-
-/*  */
 
 // Diese Funktion realisiert den in
 //
@@ -690,9 +685,6 @@ CSS1Token CSS1Parser::GetNextToken()
 }
 
 
-/*  */
-
-
 // Dies folegenden Funktionen realisieren den in
 //
 //      http://www.w3.orh/pub/WWW/TR/WD-css1.html
@@ -1152,7 +1144,6 @@ CSS1Expression *CSS1Parser::ParseDeclaration( String& rProperty )
     return pRoot;
 }
 
-/*  */
 
 CSS1Parser::CSS1Parser()
     : nValue(0)
@@ -1165,7 +1156,6 @@ CSS1Parser::~CSS1Parser()
 {
 }
 
-/*  */
 
 BOOL CSS1Parser::ParseStyleSheet( const String& rIn )
 {
@@ -1254,8 +1244,6 @@ BOOL CSS1Parser::DeclarationParsed( const String& /*rProperty*/,
     return TRUE;
 }
 
-
-/*  */
 
 CSS1Selector::~CSS1Selector()
 {

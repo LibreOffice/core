@@ -31,9 +31,8 @@
 #include <stdlib.h>
 #include <time.h>
 #ifdef WNT
-#include <tools/prewin.h>
-#include <windows.h>
-#include <tools/postwin.h>
+#include <prewin.h>
+#include <postwin.h>
 #else
 #include <unistd.h>
 #endif

@@ -121,9 +121,6 @@ public:
 
     ControlItem( const char *Name, SmartId aUIdP );
     ControlItem( const String &Name, SmartId aUIdP );
-//  ControlItem( const String &Name, const String &URL, const URLType aType );
-//    ControlItem( const String &Name, const String &URL, const ULONG nUId );
-//    ControlItem( const char *Name, const String &URL, const ULONG nUId );
     ControlItem( ControlData *pDataP );
     virtual ~ControlItem() {
 DBG_DTOR(ControlItem,0);
@@ -131,7 +128,6 @@ DBG_DTOR(ControlItem,0);
     }
     virtual BOOL operator < (const ControlItem &rPar)=0;
     virtual BOOL operator == (const ControlItem &rPar)=0;
-//  void Write( SvStream &aStream );
 };
 
 SV_DECL_PTRARR_SORT_DEL(CNames, ControlItem*, 50, 10)
@@ -149,7 +145,6 @@ protected:
 public:
     ControlSon() : pSons( NULL ) {};
     ~ControlSon();
-//  void Write( SvStream &aStream );
 
     USHORT Son_Count() { return pSons->Count(); }
     void Sons( CNames *pNewSons ) { pSons = pNewSons; }
@@ -162,10 +157,6 @@ public:
     ControlItemSon(const char *Name, SmartId aUIdP )
         : ControlItem( Name, aUIdP ) {}
     ControlItemSon(const String &Name, SmartId aUIdP );
-//  ControlItemSon(const String &Name, const String &URL, const URLType aType );
-//    ControlItemSon(const String &Name, const String &URL, const ULONG nUId );
-//    ControlItemSon(const char *Name, const String &URL, const ULONG nUId );
-//  void Write( SvStream &aStream );
 };
 
 class ControlDef : public ControlItemSon
@@ -174,7 +165,6 @@ public:
     ControlDef(const char *Name, SmartId aUIdP )
         : ControlItemSon( Name, aUIdP ) {DBG_CTOR(ControlDef,0);}
     ControlDef(const String &Name, SmartId aUIdP );
-//  ControlDef(const String &Name, const String &URL, const URLType aType );
     ControlDef(const String &aOldName, const String &aNewName, ControlDef *pOriginal, BOOL bWithSons = FALSE );
     ~ControlDef() {DBG_DTOR(ControlDef,0);}
     virtual BOOL operator < (const ControlItem &rPar);
@@ -245,9 +235,6 @@ typedef std::map< String, String > Environment;
 class ImplTestToolObj
 {
 public:
-//  ImplTestToolObj()
-//  ~ImplTestToolObj()
-
     String ProgParam;           // Parameter der zu Testenden APP; Gesetzt über Start
 
     DirEntry aFileBase;         // Grundpfad für die *.sid und *.win Dateien (Aus Configdatei)

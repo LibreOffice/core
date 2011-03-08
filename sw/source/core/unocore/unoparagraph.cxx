@@ -606,7 +606,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
         catch (beans::UnknownPropertyException &)
         {
             // should not occur because property was searched for before
-            DBG_ERROR( "unexpected exception catched" );
+            OSL_FAIL( "unexpected exception catched" );
             pFailed[ nFailed++ ].Result =
                 beans::TolerantPropertySetResultType::UNKNOWN_PROPERTY;
         }
@@ -759,7 +759,7 @@ throw (uno::RuntimeException)
         catch (beans::UnknownPropertyException &)
         {
             // should not occur because property was searched for before
-            DBG_ERROR( "unexpected exception caught" );
+            OSL_FAIL( "unexpected exception caught" );
             rResult.Result = beans::TolerantPropertySetResultType::UNKNOWN_PROPERTY;
         }
         catch (lang::IllegalArgumentException &)

@@ -409,7 +409,7 @@ CommandTypeEnum WpADOCommand::get_CommandType( ) const
     return eNum;
 }
 
-// gibt den Namen des Feldes zur"ueck
+// returns the name of the field
 ::rtl::OUString WpADOCommand::GetName() const
 {
     OSL_ENSURE(pInterface,"Interface is null!");
@@ -514,7 +514,7 @@ sal_Int32 WpADOField::GetDefinedSize() const
     return nDefinedSize;
 }
 
-// gibt den Namen des Feldes zur"ueck
+// returns the name of the field
 ::rtl::OUString WpADOField::GetName() const
 {
     OSL_ENSURE(pInterface,"Interface is null!");

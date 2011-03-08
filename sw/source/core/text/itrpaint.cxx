@@ -33,7 +33,6 @@
 #include "hintids.hxx"
 #include "flyfrm.hxx"     // SwFlyInCntFrm
 #include "viewopt.hxx"  // SwViewOptions
-#include "errhdl.hxx"
 #include "txtatr.hxx"  // SwINetFmt
 #include <tools/multisel.hxx>
 #include <editeng/escpitem.hxx>
@@ -58,7 +57,6 @@
 
 #include "flyfrms.hxx"
 #include "viewsh.hxx"
-#include "txtcfg.hxx"
 #include "itrpaint.hxx"
 #include "txtfrm.hxx"   // pFrm
 #include "txtfly.hxx"
@@ -133,7 +131,6 @@ SwLinePortion *SwTxtPainter::CalcPaintOfst( const SwRect &rPaint )
         while( pPor && GetInfo().X() + pPor->Width() + (pPor->Height()/2)
                        < nPaintOfst )
         {
-            DBG_LOOP;
             if( pPor->InSpaceGrp() && GetInfo().GetSpaceAdd() )
             {
                 long nTmp = GetInfo().X() +pPor->Width() +
@@ -264,12 +261,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     }
 
     if( !pPor && !bEndPor )
-    {
-#ifdef DBGTXT
-        aDbstream << "PAINTER: done nothing" << endl;
-#endif
         return;
-    }
 
     // Baseline-Ausgabe auch bei nicht-TxtPortions (vgl. TabPor mit Fill)
     // if no special vertical alignment is used,
@@ -316,7 +308,6 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
 
     while( pPor )
     {
-        DBG_LOOP;
         sal_Bool bSeeked = sal_True;
         GetInfo().SetLen( pPor->GetLen() );
 

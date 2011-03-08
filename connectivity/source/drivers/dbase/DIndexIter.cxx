@@ -69,7 +69,7 @@ ULONG OIndexIterator::Find(BOOL bFirst)
 
     if (!m_pOperator)
     {
-        // Vorbereitung , auf kleinstes Element positionieren
+        // Preparation, position on the smallest element
         if (bFirst)
         {
             ONDXPage* pPage = m_aRoot;
@@ -97,18 +97,17 @@ ULONG OIndexIterator::Find(BOOL bFirst)
 //------------------------------------------------------------------
 ONDXKey* OIndexIterator::GetFirstKey(ONDXPage* pPage, const OOperand& rKey)
 {
-    // sucht den vorgegeben key
-    // Besonderheit: gelangt der Algorithmus ans Ende
-    // wird immer die aktuelle Seite und die Knotenposition vermerkt
-    // auf die die Bedingung <= zutrifft
-    // dieses findet beim Insert besondere Beachtung
+    // searches a given key
+    // Speciality: At the end of the algorithm
+    // the actual page and the position of the node which fulfil the
+    // '<='-condition are saved. this is considered for inserts.
     //  ONDXIndex* m_pIndex = GetNDXIndex();
     OOp_COMPARE aTempOp(SQLFilterOperator::GREATER);
     USHORT i = 0;
 
     if (pPage->IsLeaf())
     {
-        // im blatt wird die eigentliche Operation ausgefuehrt, sonst die temp. (>)
+        // in the leaf the actual operation is run, otherwise temp. (>)
         while (i < pPage->Count() && !m_pOperator->operate(&((*pPage)[i]).GetKey(),&rKey))
                i++;
     }
@@ -120,7 +119,7 @@ ONDXKey* OIndexIterator::GetFirstKey(ONDXPage* pPage, const OOperand& rKey)
     ONDXKey* pFoundKey = NULL;
     if (!pPage->IsLeaf())
     {
-        // weiter absteigen
+        // descend further
         ONDXPagePtr aPage = (i==0) ? pPage->GetChild(m_pIndex)
                                      : ((*pPage)[i-1]).GetChild(m_pIndex, pPage);
         pFoundKey = aPage.Is() ? GetFirstKey(aPage, rKey) : NULL;
@@ -149,7 +148,7 @@ ULONG OIndexIterator::GetCompare(BOOL bFirst)
 
     if (bFirst)
     {
-        // Vorbereitung , auf kleinstes Element positionieren
+        // Preparation, position on the smallest element
         ONDXPage* pPage = m_aRoot;
         switch (ePredicateType)
         {
@@ -278,7 +277,7 @@ ONDXKey* OIndexIterator::GetNextKey()
     if (m_aCurLeaf.Is() && ((++m_nCurNode) >= m_aCurLeaf->Count()))
     {
         ONDXPage* pPage = m_aCurLeaf;
-        // naechste Seite suchen
+        // search next page
         while (pPage)
         {
             ONDXPage* pParentPage = pPage->GetParent();
@@ -286,7 +285,7 @@ ONDXKey* OIndexIterator::GetNextKey()
             {
                 USHORT nPos = pParentPage->Search(pPage);
                 if (nPos != pParentPage->Count() - 1)
-                {   // Seite gefunden
+                {   // page found
                     pPage = (*pParentPage)[nPos+1].GetChild(m_pIndex,pParentPage);
                     break;
                 }
@@ -294,7 +293,7 @@ ONDXKey* OIndexIterator::GetNextKey()
             pPage = pParentPage;
         }
 
-        // jetzt wieder zum Blatt
+        // now go on with leaf
         while (pPage && !pPage->IsLeaf())
             pPage = pPage->GetChild(m_pIndex);
 

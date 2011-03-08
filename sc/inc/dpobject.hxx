@@ -122,13 +122,9 @@ private:
     long                        mnCacheId;
 
 public:
-    inline void SetRefresh() { bRefresh = TRUE; }
-    long          GetCacheId() const;
-    void          SetCacheId( long nCacheId );
-    ULONG RefreshCache();
-                ScDPObject( ScDocument* pD );
-                ScDPObject(const ScDPObject& r);
-                ~ScDPObject();
+    ScDPObject(ScDocument* pD);
+    ScDPObject(const ScDPObject& r);
+    ~ScDPObject();
 
     /**
      * When a DP object is "alive", it has table output on a sheet.  This flag
@@ -139,7 +135,7 @@ public:
     void                SetAllowMove(BOOL bSet);
 
     void                InvalidateData();
-    void                InvalidateSource();
+    void                ClearSource();
 
 
     void                Output( const ScAddress& rPos );
@@ -266,13 +262,10 @@ public:
 class ScDPCollection
 {
 private:
+    typedef ::boost::ptr_vector<ScDPObject> TablesType;
+
     ScDocument* pDoc;
-
-    typedef ::boost::ptr_list<ScDPTableDataCache>   DataCachesType;
-    typedef ::boost::ptr_vector<ScDPObject>         TablesType;
-
-    TablesType      maTables;
-    DataCachesType  maDPDataCaches;
+    TablesType maTables;
 
 public:
     ScDPCollection(ScDocument* pDocument);
@@ -307,16 +300,6 @@ public:
     SC_DLLPUBLIC bool InsertNewTable(ScDPObject* pDPObj);
 
     bool HasDPTable(SCCOL nCol, SCROW nRow, SCTAB nTab) const;
-
-    ScDPTableDataCache* GetDPObjectCache( long nID );
-    ScDPTableDataCache* GetUsedDPObjectCache ( const ScRange& rRange );
-    long AddDPObjectCache( ScDPTableDataCache* pData );
-    void RemoveDPObjectCache( long nID );
-
-    /**
-     * Get an available, unique ID value for datapilot data cache.
-     */
-    long GetNewDPObjectCacheId ();
 };
 
 

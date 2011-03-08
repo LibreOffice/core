@@ -253,7 +253,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
 
                 // Ensure bold/italic etc. icon state updates
                 Invalidate();
-                // #96551# trigger preview refresh
+                // trigger preview refresh
                 mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, TRUE, FALSE );
             }
             rReq.Done();
@@ -268,7 +268,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
 
                 // Ensure bold/italic etc. icon state updates
                 Invalidate();
-                // #96551# trigger preview refresh
+                // trigger preview refresh
                 mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, TRUE, FALSE );
             }
             rReq.Done();
@@ -281,7 +281,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
             {
                 pOLV->AdjustHeight( -1 );
 
-                // #96551# trigger preview refresh
+                // trigger preview refresh
                 mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, TRUE, FALSE );
             }
             rReq.Done();
@@ -294,7 +294,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
             {
                 pOLV->AdjustHeight( 1 );
 
-                // #96551# trigger preview refresh
+                // trigger preview refresh
                 mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, TRUE, FALSE );
             }
             rReq.Done();

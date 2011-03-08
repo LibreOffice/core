@@ -437,6 +437,8 @@ void GDIMetaFile::Play( GDIMetaFile& rMtf, ULONG nPos )
         MetaAction* pAction = GetCurAction();
         const ULONG nObjCount = Count();
 
+        rMtf.UseCanvas( rMtf.GetUseCanvas() || bUseCanvas );
+
         if( nPos > nObjCount )
             nPos = nObjCount;
 
@@ -512,7 +514,10 @@ bool GDIMetaFile::ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, S
     if (!win)
         win = Application::GetFirstTopLevelWindow();
 
-    if (win) {
+    if (!win)
+        return false;
+
+    try {
         const uno::Reference<rendering::XCanvas>& xCanvas = win->GetCanvas ();
         Size aSize (rDestSize.Width () + 1, rDestSize.Height () + 1);
         const uno::Reference<rendering::XBitmap>& xBitmap = xCanvas->getDevice ()->createCompatibleAlphaBitmap (vcl::unotools::integerSize2DFromSize( aSize));
@@ -566,6 +571,10 @@ bool GDIMetaFile::ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, S
                 }
             }
         }
+    } catch( uno::RuntimeException& ) {
+        throw; // runtime errors are fatal
+    } catch( uno::Exception& ) {
+        // ignore errors, no way of reporting them here
     }
 
     return false;
@@ -1618,7 +1627,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 case( META_TEXTRECT_ACTION ):
                 case( META_MOVECLIPREGION_ACTION ):
                 {
-                    DBG_ERROR( "GDIMetaFile::Rotate(): unsupported action" );
+                    OSL_FAIL( "GDIMetaFile::Rotate(): unsupported action" );
                 }
                 break;
 
@@ -2322,7 +2331,7 @@ void GDIMetaFile::ImplExchangeColors( ColorExchangeFnc pFncCol, const void* pCol
             case( META_BMPEX_ACTION ):
             case( META_MASK_ACTION ):
             {
-                DBG_ERROR( "Don't use bitmap actions of this type in metafiles!" );
+                OSL_FAIL( "Don't use bitmap actions of this type in metafiles!" );
             }
             break;
 

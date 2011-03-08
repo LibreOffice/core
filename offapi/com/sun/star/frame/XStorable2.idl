@@ -60,8 +60,8 @@ published interface XStorable2: XStorable
         </p>
 
         <p>
-            This is an extention of the <method>XStorable::store()</method>.
-            This method allows to specify some additional parametes for
+            This is an extension of the <method>XStorable::store()</method>.
+            This method allows to specify some additional parameters for
             storing process.
         </p>
 

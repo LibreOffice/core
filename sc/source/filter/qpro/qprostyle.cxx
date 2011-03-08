@@ -145,12 +145,12 @@ void ScQProStyle::SetFormat( ScDocument *pDoc, sal_uInt8 nCol, sal_uInt16 nRow, 
 
     // Font Attributes
     sal_uInt16 nTmpFnt = maFontRecord[ maFont[ nStyle ] ];
-    BOOL bIsBold, bIsItalic, bIsUnderLine, bIsStrikeThrough;
+    BOOL bIsBold, bIsItalic, bIsUnderLine;
 
     bIsBold = ( nTmpFnt & 0x0001 ) != 0;
     bIsItalic = ( nTmpFnt & 0x0002 ) != 0;
     bIsUnderLine = ( nTmpFnt & 0x0004 ) != 0;
-    bIsStrikeThrough = (nTmpFnt & 0x0020 ) != 0;
+    //(nTmpFnt & 0x0020 ) for StrikeThrough
 
     if( bIsBold )
         rItemSet.Put( SvxWeightItem( WEIGHT_BOLD,ATTR_FONT_WEIGHT) );

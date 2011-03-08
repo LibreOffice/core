@@ -37,8 +37,6 @@
 #include "viewsh.hxx"       // IsDbg()
 #include "viewopt.hxx"      // IsDbg()
 #include "txtatr.hxx"
-#include "errhdl.hxx"
-#include "txtcfg.hxx"
 #include "txtfrm.hxx"       // IsDbg()
 #include "flyfrms.hxx"
 #include "inftxt.hxx"
@@ -58,6 +56,8 @@
 #include "pordrop.hxx"
 #include "pormulti.hxx"
 #include "ndhints.hxx"
+
+#define CONSTCHAR( name, string ) static const sal_Char name[] = string
 
 SvStream &operator<<( SvStream &rOs, const SwpHints & ) //$ ostream
 {
@@ -163,10 +163,10 @@ const char *GetLangName( const MSHORT  )
 }
 
 #else
-# include <limits.h>
-# include <stdlib.h>
-# include "swtypes.hxx"      // ZTCCONST
-# include "swfont.hxx"     // SwDropPortion
+#include <limits.h>
+#include <stdlib.h>
+#include "swtypes.hxx"      // ZTCCONST
+#include "swfont.hxx"     // SwDropPortion
 
 CONSTCHAR( pClose, "} " );
 
@@ -277,7 +277,6 @@ void SwLineLayout::DebugPortions( SvStream &rOs, const XubString &/*rTxt*/, //$ 
 
     while( pPortion2 )
     {
-        DBG_LOOP;
         SwTxtPortion *pTxtPor = pPortion2->InTxtGrp() ?
                                 (SwTxtPortion *)pPortion2 : NULL ;
         (void)pTxtPor;
@@ -386,7 +385,6 @@ SvStream &SwLineLayout::operator<<( SvStream &rOs ) const //$ ostream
     SwLinePortion *pPos = GetPortion();
     while( pPos )
     {
-        DBG_LOOP;
         rOs << "\t";
         pPos->operator<<( rOs );
         pPos = pPos->GetPortion();

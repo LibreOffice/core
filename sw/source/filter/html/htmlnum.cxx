@@ -82,8 +82,7 @@ void SwHTMLNumRuleInfo::Set( const SwTxtNode& rTxtNd )
         pNumRule = const_cast<SwNumRule*>(pTxtNdNumRule);
         nDeep = static_cast< sal_uInt16 >(pNumRule ? rTxtNd.GetActualListLevel() + 1 : 0);
         bNumbered = rTxtNd.IsCountedInList();
-        // --> OD 2005-11-16 #i57919#
-        // correction of refactoring done by cws swnumtree:
+        // #i57919# - correction of refactoring done by cws swnumtree:
         // <bRestart> has to be set to <true>, if numbering is restarted at this
         // text node and the start value equals <USHRT_MAX>.
         // Start value <USHRT_MAX> indicates, that at this text node the numbering
@@ -147,8 +146,7 @@ void SwHTMLParser::NewNumBulList( int nToken )
             // so macht. Dadurch wurd immer auch eine 9pt-Schrift
             // eingestellt, was in Netscape nicht der Fall ist. Bisher hat
             // das noch niemanden gestoert.
-            // --> OD 2008-06-03 #i63395#
-            // Only apply user defined default bullet font
+            // #i63395# - Only apply user defined default bullet font
             if ( numfunc::IsDefBulletFontUserDefined() )
             {
                 aNumFmt.SetBulletFont( &numfunc::GetDefBulletFont() );
@@ -350,8 +348,7 @@ void SwHTMLParser::NewNumBulList( int nToken )
             if( !aPropInfo.bRightMargin )
                 aItemSet.ClearItem( RES_LR_SPACE );
 
-            // --> OD 2008-06-26 #i89812#
-            // Perform change to list style before calling <DoPositioning(..)>,
+            // #i89812# - Perform change to list style before calling <DoPositioning(..)>,
             // because <DoPositioning(..)> may open a new context and thus may
             // clear the <SwHTMLNumRuleInfo> instance hold by local variable <rInfo>.
             if( bChangeNumFmt )
@@ -432,8 +429,7 @@ void SwHTMLParser::EndNumBulList( int nToken )
                                         ? pRefNumFmt->GetNumberingType() : style::NumberingType::CHAR_SPECIAL);
                     if( SVX_NUM_CHAR_SPECIAL == aNumFmt.GetNumberingType() )
                     {
-                        // --> OD 2008-06-03 #i63395#
-                        // Only apply user defined default bullet font
+                        // #i63395# - Only apply user defined default bullet font
                         if ( numfunc::IsDefBulletFontUserDefined() )
                         {
                             aNumFmt.SetBulletFont( &numfunc::GetDefBulletFont() );
@@ -542,8 +538,7 @@ void SwHTMLParser::NewNumBulListItem( int nToken )
         SwNumRule aNumRule( aNumRuleName,
                             SvxNumberFormat::LABEL_WIDTH_AND_POSITION );
         SwNumFmt aNumFmt( aNumRule.Get( 0 ) );
-        // --> OD 2008-06-03 #i63395#
-        // Only apply user defined default bullet font
+        // #i63395# - Only apply user defined default bullet font
         if ( numfunc::IsDefBulletFontUserDefined() )
         {
             aNumFmt.SetBulletFont( &numfunc::GetDefBulletFont() );
@@ -576,7 +571,7 @@ void SwHTMLParser::NewNumBulListItem( int nToken )
         pTxtNode->SetCountedInList( bCountedInList );
     }
     // <--
-    // --> OD 2005-11-15 #i57919#
+    // #i57919#
     // correction of refactoring done by cws swnumtree
     // - <nStart> contains the start value, if the numbering has to be restarted
     //   at this text node. Value <USHRT_MAX> indicates, that numbering isn't
@@ -880,7 +875,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
             sal_uInt16 nStartVal = rNumFmt.GetStart();
             if( bStartValue && 1 == nStartVal && i == rInfo.GetDepth()-1 )
             {
-                // --> OD 2005-11-02 #i51089 - TUNING#
+                // #i51089 - TUNING#
                 if ( rWrt.pCurPam->GetNode()->GetTxtNode()->GetNum() )
                 {
                     nStartVal = static_cast< sal_uInt16 >( rWrt.pCurPam->GetNode()

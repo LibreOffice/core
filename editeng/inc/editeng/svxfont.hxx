@@ -45,9 +45,9 @@ class Printer;
 class EDITENG_DLLPUBLIC SvxFont : public Font
 {
     LanguageType eLang;         // Language
-    SvxCaseMap   eCaseMap;      // Textauszeichnung
-    short nEsc;                 // Grad der Hoch-/Tiefstellung
-    BYTE  nPropr;               // Grad der Verkleinerung der Fonthoehe
+    SvxCaseMap   eCaseMap;      // Text Markup
+    short nEsc;                 // Degree of Superscript/Subscript
+    BYTE  nPropr;               // Degree of reduction of the font height
     short nKern;                // Kerning in Pt
 
 public:
@@ -55,7 +55,7 @@ public:
     SvxFont( const Font &rFont );
     SvxFont( const SvxFont &rFont );
 
-    // Methoden fuer die Hoch-/Tiefstellung
+    // Methods for Superscript/Subscript
     inline short GetEscapement() const { return nEsc; }
     inline void SetEscapement( const short nNewEsc ) { nEsc = nNewEsc; }
 
@@ -75,19 +75,18 @@ public:
     inline void SetLanguage( const LanguageType eNewLan )
         { eLang = eNewLan;  Font::SetLanguage(eNewLan); }
 
-    // Is-Methoden:
+    // Is-Methods:
     inline BOOL IsCaseMap() const { return SVX_CASEMAP_NOT_MAPPED != eCaseMap; }
     inline BOOL IsCapital() const { return SVX_CASEMAP_KAPITAELCHEN == eCaseMap; }
     inline BOOL IsKern() const { return 0 != nKern; }
     inline BOOL IsEsc() const { return 0 != nEsc; }
 
-    // Versalien, Gemeine etc. beruecksichtigen
+    // Consider Upper case, Lower case letters etc.
     String CalcCaseMap( const String &rTxt ) const;
 
-// Der folgende Bereich wird nicht von jedem benoetigt, er kann deshalb
-// ausgeklammert werden.
+// The following section is not needed by anyone, so it can be excluded.
 #ifndef REDUCEDSVXFONT
-    // Kapitaelchenbearbeitung
+    // Handle upper case letters
     void DoOnCapitals( SvxDoCapitals &rDo,
                        const USHORT nPartLen = USHRT_MAX ) const;
 

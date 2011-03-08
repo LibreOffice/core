@@ -57,7 +57,7 @@ TYPEINIT1(ModifyPageUndoAction, SdUndoAction);
 \************************************************************************/
 
 ModifyPageUndoAction::ModifyPageUndoAction(
-    SfxUndoManager* pTheManager, // #67720#
+    SfxUndoManager* pTheManager,
     SdDrawDocument* pTheDoc,
     SdPage* pThePage,
     String aTheNewName,
@@ -101,7 +101,7 @@ ModifyPageUndoAction::ModifyPageUndoAction(
 #include <svx/svdview.hxx>
 void ModifyPageUndoAction::Undo()
 {
-    // #94637# invalidate Selection, there could be objects deleted in tis UNDO
+    // invalidate Selection, there could be objects deleted in tis UNDO
     // which are no longer allowed to be selected then.
       SdrViewIter aIter(mpPage);
     SdrView* pView = aIter.FirstView();
@@ -150,7 +150,7 @@ void ModifyPageUndoAction::Undo()
 
 void ModifyPageUndoAction::Redo()
 {
-    // #94637# invalidate Selection, there could be objects deleted in tis UNDO
+    // invalidate Selection, there could be objects deleted in tis UNDO
     // which are no longer allowed to be selected then.
       SdrViewIter aIter(mpPage);
     SdrView* pView = aIter.FirstView();

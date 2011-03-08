@@ -54,7 +54,7 @@ interface XObjectInspectorModel
         <p>Every element of the sequence must contain information to create a
         <type>XPropertyHandler</type> instance. Two ways are currently supported:
         <ul>
-            <li>A sevice name:</br>
+            <li>A service name:</br>
                 If a sequence element contains a string, this string is interpreted
                 as service name, and an <type scope="com::sun::star::lang">XMultiComponentFactory</type>
                 is asked to create an instance of this service.</li>
@@ -67,7 +67,7 @@ interface XObjectInspectorModel
         <p>This attribute is usually only evaluated by the <type>ObjectInspector</type> instance
         which the model is currently bound to.</p>
 
-        <p>The order of factories is important: If two property handlers declare themself responsible
+        <p>The order of factories is important: If two property handlers declare themselves responsible
         for the same property, the one whose factory is listed <strong>last</strong> wins. Also,
         if a handler <code>B</code> wants to supersede a property of another handler <code>A</code>,
         <code>A</code>'s factory must precede the factory of <code>B</code>.</p>
@@ -174,7 +174,7 @@ interface XObjectInspectorModel
         change any of them.</p>
 
         <p>In a read-only object inspector, the property controls are readonly or
-        disabled themself, and the primary and secondary buttons of a property line
+        disabled themselves, and the primary and secondary buttons of a property line
         are both disabled.</p>
 
         @see XPropertyControl

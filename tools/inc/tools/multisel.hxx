@@ -30,7 +30,6 @@
 
 #include "tools/toolsdllapi.h"
 #include <tools/gen.hxx>
-#include <tools/list.hxx>
 #include <tools/string.hxx>
 
 #include <vector>
@@ -38,13 +37,9 @@
 
 //------------------------------------------------------------------
 
-#ifdef _SV_MULTISEL_CXX
-DECLARE_LIST( ImpSelList, Range* )
-#else
-#define ImpSelList List
-#endif
+typedef ::std::vector< Range* > ImpSelList;
 
-#define SFX_ENDOFSELECTION      CONTAINER_ENTRY_NOTFOUND
+#define SFX_ENDOFSELECTION      ULONG_MAX
 
 //------------------------------------------------------------------
 
@@ -66,8 +61,8 @@ private:
 
 #ifdef _SV_MULTISEL_CXX
     TOOLS_DLLPRIVATE void           ImplClear();
-    TOOLS_DLLPRIVATE ULONG          ImplFindSubSelection( long nIndex ) const;
-    TOOLS_DLLPRIVATE BOOL           ImplMergeSubSelections( ULONG nPos1, ULONG nPos2 );
+    TOOLS_DLLPRIVATE size_t         ImplFindSubSelection( long nIndex ) const;
+    TOOLS_DLLPRIVATE BOOL           ImplMergeSubSelections( size_t nPos1, size_t nPos2 );
     TOOLS_DLLPRIVATE long           ImplFwdUnselected();
     TOOLS_DLLPRIVATE long           ImplBwdUnselected();
 #endif
@@ -109,8 +104,10 @@ public:
     long            NextSelected();
     long            PrevSelected();
 
-    ULONG           GetRangeCount() const { return aSels.Count(); }
-    const Range&    GetRange( ULONG nRange ) const { return *(const Range*)aSels.GetObject(nRange); }
+    size_t          GetRangeCount() const { return aSels.size(); }
+    const Range&    GetRange( size_t nRange ) const {
+                        return *(const Range*)aSels[nRange];
+                    }
 };
 
 class TOOLS_DLLPUBLIC StringRangeEnumerator

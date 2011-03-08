@@ -59,7 +59,6 @@ sub cleandie
     print STDERR "$errstring\n";
     if ( not $debug ) {
         foreach my $i (@cleanuplist) {
-#           unlink "$workfile$i" if -f "$workfile$i" or print STDERR "ERROR - couldn't remove $workfile$i\n";
             if ( -f "$workfile$i" ) {
                 unlink "$workfile$i" or print STDERR "ERROR - couldn't remove $workfile$i\n";
             }
@@ -161,7 +160,6 @@ $flbs =~ s/[aeiou]//g;
 # call srand ony once per script!
 srand();
 $workfile = "$tmpdir/${flbs}_".$$.rand();
-#$workfile =~ s/setup/set_up/;
 
 # now get $workfile ready for shell usage...
 $shell_workfile = $workfile;
@@ -172,7 +170,6 @@ print "workfile: $workfile\n" if $verbose;
 unlink "$workfile.obj";
 
 # can't do this for modules with mixed case!
-#$prjname =~ lc $prjname;
 
 if ( -f "$workfile.hid" )
 {
@@ -193,9 +190,6 @@ if ( defined $ENV{"NO_HID_FILES"} ) {
         }
     }
 }
-
-#echo "perl5 -p -e "s/=[ \t]*\".*\"/=\"\"/go; s/\".*\"[ \t]*;/\"\" ;/go ; s/(\".*)\/\/(.*\")/$1\/\\\/$2/go ;" < %filename% > %srs%\%workfile%.c0"
-#call  perl5 -p -e "s/=[ \t]*\".*\"/=\"\"/go; s/\".*\"[ \t]*;/\"\" ;/go ; s/(\".*)\/\/(.*\")/$1\/\\\/$2/go ;" < %filename% > %srs%\%workfile%.c0
 
 my $verboseSwitch = $verbose ? "-verbose" : "";
 print         "$ENV{SOLARBINDIR}/hidc $verboseSwitch $filename ${shell_workfile}.c1 $prjname\n" if $verbose;
@@ -279,7 +273,6 @@ while (<C3>)
     @arr = split /:/, $fields[0];
     if( $arr[1] =~ /^leer$|^bitmap$|^font$|^color$|^image$|^imagelist$|^date$|^brush$|^fixedtext$|^keycode$|^time$|^mapmode$/i )
     {
-        #print "skipping $arr[1]\n";
         next;
     }
 
@@ -291,11 +284,6 @@ while (<C3>)
         $GID = $fields[3];
         $LClass  = lc($fields[4]);
         $LID = $fields[5] || 0;
-
-        #print $LID
-        #print $LClass
-        #print $GID
-        #print $GClass
 
         $nHID=0;
 
@@ -310,7 +298,6 @@ while (<C3>)
         else {
             $nHID=0;
             $outline = "No GClass ".$helpIDString." ".$nHID." ".$GClass;
-            #print "$outline\n";
             next;
         }
         if( $LID != 0 ) {
@@ -343,7 +330,6 @@ while (<C3>)
             else {
                 $nHID=0;
                 $outline = "No LClass ".$helpIDString." ".$nHID;
-                #print "$outline\n";
                 next;
             }
 

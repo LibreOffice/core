@@ -440,7 +440,7 @@ public:
     BOOL            HasRelNameReference() const;
     BOOL            HasColRowName() const;
 
-    void            UpdateReference(UpdateRefMode eUpdateRefMode,
+    bool            UpdateReference(UpdateRefMode eUpdateRefMode,
                                     const ScRange& r,
                                     SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
                                     ScDocument* pUndoDoc = NULL,

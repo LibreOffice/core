@@ -122,7 +122,7 @@ ScVbaCommandBar::setVisible( ::sal_Bool _visible ) throw (uno::RuntimeException)
             xLayoutManager->destroyElement( m_sResourceUrl );
         }
     }
-    catch( uno::Exception e )
+    catch( uno::Exception& )
     {
         OSL_TRACE( "SetVisible get an exception\n" );
     }

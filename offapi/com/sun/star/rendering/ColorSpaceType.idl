@@ -50,7 +50,7 @@ constants ColorSpaceType
     /** CMYK color space.<p>
 
         See <a
-        href="http://en.wikipedia.org/wiki/CMYK">wikipedia</a>
+        href="http://en.wikipedia.org/wiki/CMYK">Wikipedia</a>
         for a thorough explanation.
      */
     const byte CMYK=3;
@@ -58,7 +58,7 @@ constants ColorSpaceType
     /** CMYKOG color space.<p>
 
         See <a
-        href="http://en.wikipedia.org/wiki/Hexachrome">wikipedia</a>
+        href="http://en.wikipedia.org/wiki/Hexachrome">Wikipedia</a>
         for a thorough explanation.
      */
     const byte CMYKOG=4;
@@ -66,7 +66,7 @@ constants ColorSpaceType
     /** Standard CieXYZ color space.<p>
 
         See <a
-        href="http://en.wikipedia.org/wiki/CIE_1931_color_space">wikipedia</a>
+        href="http://en.wikipedia.org/wiki/CIE_1931_color_space">Wikipedia</a>
         for a thorough explanation.
      */
     const byte CIEXYZ=5;
@@ -74,8 +74,8 @@ constants ColorSpaceType
     /** Standard CieLab color space.<p>
 
         See <a
-        href="http://en.wikipedia.org/wiki/Lab_color_space">wikipedia</a>
-        for a thorough explanation. Preferrable over CIEXYZ if
+        href="http://en.wikipedia.org/wiki/Lab_color_space">Wikipedia</a>
+        for a thorough explanation. Preferable over CIEXYZ if
         perceptual uniformity is an issue.
      */
     const byte CIELAB=6;
@@ -83,7 +83,7 @@ constants ColorSpaceType
     /** Standard sRGB color space.<p>
 
         See <a
-        href="http://en.wikipedia.org/wiki/Srgb">wikipedia</a>
+        href="http://en.wikipedia.org/wiki/Srgb">Wikipedia</a>
         for a thorough explanation.
      */
     const byte SRGB=7;
@@ -91,7 +91,7 @@ constants ColorSpaceType
     /** HSV color space.<p>
 
         Hue saturation value. See <a
-        href="http://en.wikipedia.org/wiki/HSV_color_space">wikipedia</a>
+        href="http://en.wikipedia.org/wiki/HSV_color_space">Wikipedia</a>
         for a thorough explanation.
      */
     const byte HSV=8;
@@ -99,14 +99,14 @@ constants ColorSpaceType
     /** HSL color space.<p>
 
         Hue saturation lightness. See <a
-        href="http://en.wikipedia.org/wiki/HSL_color_space">wikipedia</a>
+        href="http://en.wikipedia.org/wiki/HSL_color_space">Wikipedia</a>
         for a thorough explanation
      */
     const byte HSL=9;
 
     /** YCbCr color space.<p>
 
-        See <a href="http://en.wikipedia.org/wiki/YCbCr">wikipedia</a>
+        See <a href="http://en.wikipedia.org/wiki/YCbCr">Wikipedia</a>
         for a thorough explanation. This color space is common for
         digital video.
      */

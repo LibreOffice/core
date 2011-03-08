@@ -121,7 +121,7 @@ basegfx::B2ITuple TableLayouter::getCellSize( const CellPos& rPos  ) const
     }
     catch( Exception& )
     {
-        DBG_ERROR( "TableLayouter::getCellSize(), exception caught!" );
+        OSL_FAIL( "TableLayouter::getCellSize(), exception caught!" );
     }
 
     return basegfx::B2ITuple( width, height );
@@ -150,7 +150,7 @@ bool TableLayouter::getCellArea( const CellPos& rPos, basegfx::B2IRectangle& rAr
     }
     catch( Exception& )
     {
-        DBG_ERROR( "TableLayouter::getCellSize(), exception caught!" );
+        OSL_FAIL( "TableLayouter::getCellSize(), exception caught!" );
     }
     return false;
 }
@@ -174,7 +174,7 @@ void TableLayouter::setRowHeight( sal_Int32 nRow, sal_Int32 nHeight )
     }
     else
     {
-        DBG_ERROR( "TableLayouter::setRowHeight(), row out of range!" );
+        OSL_FAIL( "TableLayouter::setRowHeight(), row out of range!" );
     }
 }
 
@@ -194,7 +194,7 @@ void TableLayouter::setColumnWidth( sal_Int32 nColumn, sal_Int32 nWidth )
     if( isValidColumn(nColumn) )
         maColumns[nColumn].mnSize = nWidth;
     else
-        DBG_ERROR( "TableLayouter::setColumnWidth(), column out of range!" );
+        OSL_FAIL( "TableLayouter::setColumnWidth(), column out of range!" );
 }
 
 // -----------------------------------------------------------------------------
@@ -441,7 +441,7 @@ bool findMergeOrigin( const TableModelRef& xTable, sal_Int32 nMergedX, sal_Int32
     }
     catch( Exception& )
     {
-        DBG_ERROR("sdr::table::TableLayouter::findMergeOrigin(), exception caught!");
+        OSL_FAIL("sdr::table::TableLayouter::findMergeOrigin(), exception caught!");
     }
     return false;
 }
@@ -456,7 +456,7 @@ sal_Int32 TableLayouter::getMinimumColumnWidth( sal_Int32 nColumn )
     }
     else
     {
-        DBG_ERROR( "TableLayouter::getMinimumColumnWidth(), column out of range!" );
+        OSL_FAIL( "TableLayouter::getMinimumColumnWidth(), column out of range!" );
         return 0;
     }
 }
@@ -912,7 +912,7 @@ CellRef TableLayouter::getCell( const CellPos& rPos ) const
     }
     catch( Exception& )
     {
-        DBG_ERROR( "sdr::table::TableLayouter::getCell(), exception caught!" );
+        OSL_FAIL( "sdr::table::TableLayouter::getCell(), exception caught!" );
     }
     return xCell;
 }
@@ -1106,7 +1106,7 @@ void TableLayouter::SetLayoutToModel()
     }
     catch( Exception& )
     {
-        DBG_ERROR("sdr::table::TableLayouter::SetLayoutToModel(), exception caught!");
+        OSL_FAIL("sdr::table::TableLayouter::SetLayoutToModel(), exception caught!");
     }
 }
 */
@@ -1145,7 +1145,7 @@ void TableLayouter::DistributeColumns( ::Rectangle& rArea, sal_Int32 nFirstCol, 
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR("sdr::table::TableLayouter::DistributeColumns(), exception caught!");
+        OSL_FAIL("sdr::table::TableLayouter::DistributeColumns(), exception caught!");
     }
 }
 
@@ -1197,7 +1197,7 @@ void TableLayouter::DistributeRows( ::Rectangle& rArea, sal_Int32 nFirstRow, sal
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR("sdr::table::TableLayouter::DistributeRows(), exception caught!");
+        OSL_FAIL("sdr::table::TableLayouter::DistributeRows(), exception caught!");
     }
 }
 
@@ -1286,7 +1286,7 @@ sal_Int32 TableLayouter::detectInsertedOrRemovedRows()
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR("svx::TableLayouter::detectInsertedOrRemovedRows(), exception caught!");
+        OSL_FAIL("svx::TableLayouter::detectInsertedOrRemovedRows(), exception caught!");
     }
 
     return nHeightChange;

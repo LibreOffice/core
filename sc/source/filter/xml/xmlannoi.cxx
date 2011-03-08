@@ -159,18 +159,6 @@ SvXMLImportContext *ScXMLAnnotationContext::CreateChildContext( USHORT nPrefix,
             pContext = new ScXMLContentContext(GetScImport(), nPrefix,
                                             rLName, xAttrList, maCreateDateStringBuffer);
     }
-/*  else if ((nPrefix == XML_NAMESPACE_TEXT) && IsXMLToken(rLName, XML_P) )
-    {
-        if (!bHasTextP)
-        {
-            bHasTextP = sal_True;
-            maTextBuffer.setLength(0);
-        }
-        if(nParagraphCount)
-            maTextBuffer.append(static_cast<sal_Unicode>('\n'));
-        ++nParagraphCount;
-        pContext = new ScXMLContentContext( GetScImport(), nPrefix, rLName, xAttrList, maTextBuffer);
-    }*/
 
     if( !pContext && pShapeContext )
         pContext = pShapeContext->CreateChildContext(nPrefix, rLName, xAttrList);

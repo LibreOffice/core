@@ -96,7 +96,7 @@ BOOL ScModule::HasThesaurusLanguage( USHORT nLang )
     }
     catch( uno::Exception& )
     {
-        DBG_ERROR("Error in Thesaurus");
+        OSL_FAIL("Error in Thesaurus");
     }
 
     return bHasLang;

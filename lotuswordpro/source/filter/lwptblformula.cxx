@@ -116,8 +116,8 @@ sal_Bool LwpFormulaInfo::ReadConst()
 */
 sal_Bool LwpFormulaInfo::ReadText()
 {
-    USHORT nDiskSize,nStrLen;
-    nDiskSize = m_pObjStrm->QuickReadInt16();
+    sal_uInt16 nStrLen;
+    m_pObjStrm->QuickReadInt16(); //Disk Size
     nStrLen = m_pObjStrm->QuickReadInt16();
 
     auto_ptr<char> pBuf(new char[nStrLen+1]);

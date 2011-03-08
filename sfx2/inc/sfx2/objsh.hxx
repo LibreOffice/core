@@ -43,11 +43,8 @@
 #include <com/sun/star/security/DocumentSignatureInformation.hpp>
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
-
 #include <com/sun/star/beans/XPropertySet.hpp>
-
 #include <boost/shared_ptr.hpp>
-
 
 //________________________________________________________________________________________________________________
 //  include something else
@@ -290,9 +287,7 @@ public:
     void                        SetNoName();
     sal_Bool                    IsInModalMode() const;
     sal_Bool                    IsInPrepareClose() const;
-    //<!--Added by PengYunQuan for Validity Cell Range Picker
     virtual sal_Bool            AcceptStateUpdate() const;
-    //-->Added by PengYunQuan for Validity Cell Range Picker
     sal_Bool                    HasModalViews() const;
     sal_Bool                    IsHelpDocument() const;
 
@@ -502,8 +497,6 @@ public:
     virtual void                MemoryError();
     SfxProgress*                GetProgress() const;
     void                        SetWaitCursor( BOOL bSet ) const;
-
-//(mba)    virtual SotObjectRef        CreateAggObj( const SotFactory* pFact );
 
     // Naming Interface
     void                        SetTitle( const String& rTitle );
@@ -792,7 +785,6 @@ public:
 
     SAL_DLLPRIVATE void ImplSign( sal_Bool bScriptingContent = FALSE );
     SAL_DLLPRIVATE sal_Bool QuerySaveSizeExceededModules_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler );
-//#endif
 };
 
 #define SFX_GLOBAL_CLASSID \

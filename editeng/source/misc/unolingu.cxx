@@ -32,7 +32,7 @@
 #include <map>
 #include <set>
 #include <vector>
-#include <slist>
+#include <list>
 #include <memory>
 #include <editeng/unolingu.hxx>
 #include <tools/debug.hxx>
@@ -80,9 +80,6 @@ using namespace ::com::sun::star::linguistic2;
 
 #define CSS com::sun::star
 
-///////////////////////////////////////////////////////////////////////////
-
-
 static uno::Reference< XLinguServiceManager > GetLngSvcMgr_Impl()
 {
     uno::Reference< XLinguServiceManager > xRes;
@@ -95,8 +92,6 @@ static uno::Reference< XLinguServiceManager > GetLngSvcMgr_Impl()
     }
     return xRes;
 }
-
-///////////////////////////////////////////////////////////////////////////
 
 BOOL lcl_FindEntry( const OUString &rEntry, const Sequence< OUString > &rCfgSvcs )
 {
@@ -166,7 +161,7 @@ Sequence< OUString > lcl_GetLastFoundSvcs(
                 aRes = aSvcImplNames;
             else
             {
-                DBG_ERROR( "type mismatch" );
+                OSL_FAIL( "type mismatch" );
             }
         }
     }
@@ -223,9 +218,6 @@ Sequence< OUString > lcl_MergeSeq(
     return aRes;
 }
 
-///////////////////////////////////////////////////////////////////////////
-
-// static member initialization
 INT16 SvxLinguConfigUpdate::nNeedUpdating = -1;
 INT32 SvxLinguConfigUpdate::nCurrentDataFilesChangedCheckValue = -1;
 
@@ -401,7 +393,7 @@ void SvxLinguConfigUpdate::UpdateAll( sal_Bool bForceCheck )
                     if (!bRes)
                     {
 #if OSL_DEBUG_LEVEL > 1
-                        DBG_ERROR( "failed to set new configuration values" );
+                        OSL_FAIL( "failed to set new configuration values" );
 #endif
                     }
                 }
@@ -466,8 +458,6 @@ BOOL SvxLinguConfigUpdate::IsNeedUpdateAll( sal_Bool bForceCheck )
 
     return nNeedUpdating == 1;
 }
-
-///////////////////////////////////////////////////////////////////////////
 
 
 //! Dummy implementation in order to avoid loading of lingu DLL
@@ -612,9 +602,6 @@ uno::Sequence< uno::Reference< linguistic2::XMeaning > > SAL_CALL
 }
 
 
-///////////////////////////////////////////////////////////////////////////
-
-
 //! Dummy implementation in order to avoid loading of lingu DLL.
 //! The dummy accesses the real implementation (and thus loading the DLL)
 //! when it needs to be done only.
@@ -715,9 +702,6 @@ uno::Reference< linguistic2::XSpellAlternatives > SAL_CALL
         xRes = xSpell->spell( rWord, nLanguage, rProperties );
     return xRes;
 }
-
-
-///////////////////////////////////////////////////////////////////////////
 
 
 //! Dummy implementation in order to avoid loading of lingu DLL.
@@ -858,10 +842,8 @@ uno::Reference< linguistic2::XPossibleHyphens > SAL_CALL
 }
 
 
-///////////////////////////////////////////////////////////////////////////
-
-
 typedef cppu::WeakImplHelper1 < XEventListener > LinguMgrAppExitLstnrBaseClass;
+
 
 class LinguMgrAppExitLstnr : public LinguMgrAppExitLstnrBaseClass
 {
@@ -916,8 +898,6 @@ void LinguMgrAppExitLstnr::disposing(const EventObject& rSource)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////
-
 class LinguMgrExitLstnr : public LinguMgrAppExitLstnr
 {
 public:
@@ -938,16 +918,10 @@ void LinguMgrExitLstnr::AtExit()
 
     LinguMgr::bExiting      = sal_True;
 
-    //TL:TODO: MBA fragen wie ich ohne Absturz hier meinen Speicher
-    //  wieder freibekomme...
-    //delete LinguMgr::pExitLstnr;
     LinguMgr::pExitLstnr    = 0;
 }
 
-///////////////////////////////////////////////////////////////////////////
 
-
-// static member initialization
 LinguMgrExitLstnr *             LinguMgr::pExitLstnr    = 0;
 sal_Bool                        LinguMgr::bExiting      = sal_False;
 uno::Reference< XLinguServiceManager >  LinguMgr::xLngSvcMgr    = 0;
@@ -1028,16 +1002,6 @@ uno::Reference< XSpellChecker1 > LinguMgr::GetSpell()
 
     //! use dummy implementation in order to avoid loading of lingu DLL
     xSpell = new SpellDummy_Impl;
-
-/*    if (!xLngSvcMgr.is())
-        xLngSvcMgr = GetLngSvcMgr_Impl();
-
-    if (xLngSvcMgr.is())
-    {
-        xSpell = uno::Reference< XSpellChecker1 > (
-                        xLngSvcMgr->getSpellChecker(), UNO_QUERY );
-    }
-*/
     return xSpell;
 }
 
@@ -1051,16 +1015,6 @@ uno::Reference< XHyphenator > LinguMgr::GetHyph()
 
     //! use dummy implementation in order to avoid loading of lingu DLL
     xHyph = new HyphDummy_Impl;
-
-/*
-    if (!xLngSvcMgr.is())
-        xLngSvcMgr = GetLngSvcMgr_Impl();
-
-    if (xLngSvcMgr.is())
-    {
-        xHyph = xLngSvcMgr->getHyphenator();
-    }
-*/
     return xHyph;
 }
 
@@ -1077,15 +1031,6 @@ uno::Reference< XThesaurus > LinguMgr::GetThes()
     //! The dummy accesses the real implementation (and thus loading the DLL)
     //! when "real" work needs to be done only.
     xThes = new ThesDummy_Impl;
-/*
-    if (!xLngSvcMgr.is())
-        xLngSvcMgr = GetLngSvcMgr_Impl();
-
-    if (xLngSvcMgr.is())
-    {
-        xThes = xLngSvcMgr->getThesaurus();
-    }
-*/
     return xThes;
 }
 
@@ -1217,8 +1162,6 @@ uno::Reference< XDictionary > LinguMgr::GetStandard()
     return xDic;
 }
 
-///////////////////////////////////////////////////////////////////////////
-
 uno::Reference< XSpellChecker1 >  SvxGetSpellChecker()
 {
     return LinguMgr::GetSpellChecker();
@@ -1244,7 +1187,7 @@ uno::Reference< XPropertySet >  SvxGetLinguPropertySet()
     return LinguMgr::GetLinguPropertySet();
 }
 
-//TL:TODO: remove argument or provide SvxGetIgnoreAllList with the same one
+//TODO: remove argument or provide SvxGetIgnoreAllList with the same one
 uno::Reference< XDictionary >  SvxGetOrCreatePosDic(
         uno::Reference< XDictionaryList >  /* xDicList */ )
 {
@@ -1260,9 +1203,6 @@ uno::Reference< XDictionary >  SvxGetChangeAllList()
 {
     return LinguMgr::GetChangeAllList();
 }
-
-///////////////////////////////////////////////////////////////////////////
-
 
 #include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
 
@@ -1307,8 +1247,6 @@ SvxAlternativeSpelling SvxGetAltSpelling(
 }
 
 
-///////////////////////////////////////////////////////////////////////////
-
 SvxDicListChgClamp::SvxDicListChgClamp( uno::Reference< XDictionaryList >  &rxDicList ) :
     xDicList    ( rxDicList )
 {
@@ -1325,8 +1263,6 @@ SvxDicListChgClamp::~SvxDicListChgClamp()
         xDicList->endCollectEvents();
     }
 }
-
-///////////////////////////////////////////////////////////////////////////
 
 short SvxDicError( Window *pParent, sal_Int16 nError )
 {
@@ -1349,7 +1285,6 @@ short SvxDicError( Window *pParent, sal_Int16 nError )
 
 LanguageType SvxLocaleToLanguage( const Locale& rLocale )
 {
-    //  empty Locale -> LANGUAGE_NONE
     if ( rLocale.Language.getLength() == 0 )
         return LANGUAGE_NONE;
 
@@ -1358,7 +1293,7 @@ LanguageType SvxLocaleToLanguage( const Locale& rLocale )
 
 Locale& SvxLanguageToLocale( Locale& rLocale, LanguageType eLang )
 {
-    if ( eLang != LANGUAGE_NONE /* &&  eLang != LANGUAGE_SYSTEM */)
+    if ( eLang != LANGUAGE_NONE )
         MsLangId::convertLanguageToLocale( eLang, rLocale );
     else
         rLocale = Locale();
@@ -1369,7 +1304,7 @@ Locale& SvxLanguageToLocale( Locale& rLocale, LanguageType eLang )
 Locale SvxCreateLocale( LanguageType eLang )
 {
     Locale aLocale;
-    if ( eLang != LANGUAGE_NONE /* &&  eLang != LANGUAGE_SYSTEM */)
+    if ( eLang != LANGUAGE_NONE )
         MsLangId::convertLanguageToLocale( eLang, aLocale );
 
     return aLocale;

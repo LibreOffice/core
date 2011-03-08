@@ -195,12 +195,10 @@ ResMgr* Desktop::GetDesktopResManager()
 {
     if ( !Desktop::pResMgr )
     {
-        String aMgrName = String::CreateFromAscii( "dkt" );
-
         // Create desktop resource manager and bootstrap process
         // was successful. Use default way to get language specific message.
         if ( Application::IsInExecute() )
-            Desktop::pResMgr = ResMgr::CreateResMgr( U2S( aMgrName ));
+            Desktop::pResMgr = ResMgr::CreateResMgr("dkt");
 
         if ( !Desktop::pResMgr )
         {
@@ -215,7 +213,7 @@ ResMgr* Desktop::GetDesktopResManager()
 
             ::com::sun::star::lang::Locale aLocale( aLanguage, aCountry, aVariant );
 
-            Desktop::pResMgr = ResMgr::SearchCreateResMgr( U2S( aMgrName ), aLocale);
+            Desktop::pResMgr = ResMgr::SearchCreateResMgr( "dkt", aLocale);
             AllSettings as = GetSettings();
             as.SetUILocale(aLocale);
             SetSettings(as);
@@ -572,64 +570,67 @@ throw()
     }
     else if( TypeToCopy == +1 ) // Folder
     {
-        osl::Directory aDir( srcUnqPath );
-        aDir.open();
-
         err = osl::Directory::create( dstUnqPath );
         osl::FileBase::RC next = err;
-        if( err == osl::FileBase::E_None ||
-            err == osl::FileBase::E_EXIST )
+        if( err == osl::FileBase::E_None || err == osl::FileBase::E_EXIST )
         {
             err = osl::FileBase::E_None;
-            sal_Int32 n_Mask = FileStatusMask_FileURL | FileStatusMask_FileName | FileStatusMask_Type;
 
-            osl::DirectoryItem aDirItem;
-
-            while( err == osl::FileBase::E_None && ( next = aDir.getNextItem( aDirItem ) ) == osl::FileBase::E_None )
+            osl::Directory aDir( srcUnqPath );
+            if (aDir.open() == osl::FileBase::E_None)
             {
-                sal_Bool IsDoc = false;
-                sal_Bool bFilter = false;
-                osl::FileStatus aFileStatus( n_Mask );
-                aDirItem.getFileStatus( aFileStatus );
-                if( aFileStatus.isValid( FileStatusMask_Type ) )
-                    IsDoc = aFileStatus.getFileType() == osl::FileStatus::Regular;
+                sal_Int32 n_Mask = FileStatusMask_FileURL |
+                                   FileStatusMask_FileName |
+                                   FileStatusMask_Type;
 
-                // Getting the information for the next recursive copy
-                sal_Int32 newTypeToCopy = IsDoc ? -1 : +1;
-
-                rtl::OUString newSrcUnqPath;
-                if( aFileStatus.isValid( FileStatusMask_FileURL ) )
-                    newSrcUnqPath = aFileStatus.getFileURL();
-
-                rtl::OUString newDstUnqPath = dstUnqPath;
-                rtl::OUString tit;
-                if( aFileStatus.isValid( FileStatusMask_FileName ) )
+                osl::DirectoryItem aDirItem;
+                while( err == osl::FileBase::E_None && ( next = aDir.getNextItem( aDirItem ) ) == osl::FileBase::E_None )
                 {
-                    ::rtl::OUString aFileName = aFileStatus.getFileName();
-                    tit = rtl::Uri::encode( aFileName,
-                                            rtl_UriCharClassPchar,
-                                            rtl_UriEncodeIgnoreEscapes,
-                                            RTL_TEXTENCODING_UTF8 );
+                    sal_Bool IsDoc = false;
+                    sal_Bool bFilter = false;
+                    osl::FileStatus aFileStatus( n_Mask );
+                    aDirItem.getFileStatus( aFileStatus );
+                    if( aFileStatus.isValid( FileStatusMask_Type ) )
+                        IsDoc = aFileStatus.getFileType() == osl::FileStatus::Regular;
 
-                    // Special treatment for "lastsychronized" file. Must not be
-                    // copied from the bundled folder!
-                    if ( IsDoc && aFileName.equalsAscii( pLastSyncFileName ))
-                        bFilter = true;
+                    // Getting the information for the next recursive copy
+                    sal_Int32 newTypeToCopy = IsDoc ? -1 : +1;
+
+                    rtl::OUString newSrcUnqPath;
+                    if( aFileStatus.isValid( FileStatusMask_FileURL ) )
+                        newSrcUnqPath = aFileStatus.getFileURL();
+
+                    rtl::OUString newDstUnqPath = dstUnqPath;
+                    rtl::OUString tit;
+                    if( aFileStatus.isValid( FileStatusMask_FileName ) )
+                    {
+                        ::rtl::OUString aFileName = aFileStatus.getFileName();
+                        tit = rtl::Uri::encode( aFileName,
+                                                rtl_UriCharClassPchar,
+                                                rtl_UriEncodeIgnoreEscapes,
+                                                RTL_TEXTENCODING_UTF8 );
+
+                        // Special treatment for "lastsychronized" file. Must not be
+                        // copied from the bundled folder!
+                        if ( IsDoc && aFileName.equalsAscii( pLastSyncFileName ))
+                            bFilter = true;
+                    }
+
+                    if( newDstUnqPath.lastIndexOf( sal_Unicode('/') ) != newDstUnqPath.getLength()-1 )
+                        newDstUnqPath += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+
+                    newDstUnqPath += tit;
+
+                    if (( newSrcUnqPath != dstUnqPath ) && !bFilter )
+                        err = copy_bundled_recursive( newSrcUnqPath,newDstUnqPath, newTypeToCopy );
                 }
 
-                if( newDstUnqPath.lastIndexOf( sal_Unicode('/') ) != newDstUnqPath.getLength()-1 )
-                    newDstUnqPath += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+                if( err == osl::FileBase::E_None && next != osl::FileBase::E_NOENT )
+                    err = next;
 
-                newDstUnqPath += tit;
-
-                if (( newSrcUnqPath != dstUnqPath ) && !bFilter )
-                    err = copy_bundled_recursive( newSrcUnqPath,newDstUnqPath, newTypeToCopy );
+                aDir.close();
             }
-
-            if( err == osl::FileBase::E_None && next != osl::FileBase::E_NOENT )
-                err = next;
         }
-        aDir.close();
     }
 
     return err;
@@ -1603,13 +1604,11 @@ int Desktop::Main()
         // create title string
         sal_Bool bCheckOk = sal_False;
         ::com::sun::star::lang::Locale aLocale;
-        String aMgrName = String::CreateFromAscii( "iso" );
-        ResMgr* pLabelResMgr = ResMgr::SearchCreateResMgr( U2S( aMgrName ), aLocale );
+        ResMgr* pLabelResMgr = ResMgr::SearchCreateResMgr( "iso", aLocale );
         if ( !pLabelResMgr )
         {
             // no "iso" resource -> search for "ooo" resource
-            aMgrName = String::CreateFromAscii( "ooo" );
-            pLabelResMgr = ResMgr::SearchCreateResMgr( U2S( aMgrName ), aLocale);
+            pLabelResMgr = ResMgr::SearchCreateResMgr( "ooo", aLocale);
         }
         String aTitle = pLabelResMgr ? String( ResId( RID_APPTITLE, *pLabelResMgr ) ) : String();
         delete pLabelResMgr;

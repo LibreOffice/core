@@ -270,6 +270,7 @@ TabPage OFA_TP_VIEW
             < "Tango" ; > ;
             < "Oxygen" ; > ;
             < "Classic" ; > ;
+            < "Human" ; > ;
         };
     };
     CheckBox CB_SYSTEM_FONT

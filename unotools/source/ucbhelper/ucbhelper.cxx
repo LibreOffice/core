@@ -65,6 +65,7 @@
 #include <ucbhelper/contentbroker.hxx>
 
 #include "unotools/localfilehelper.hxx"
+#include <vector>
 
 using namespace ucbhelper;
 using namespace com::sun::star;
@@ -75,11 +76,12 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::task;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::ucb;
-using namespace rtl;
 using namespace comphelper;
 using namespace osl;
 
-DECLARE_LIST( StringList_Impl, OUString* )
+using ::rtl::OUString;
+
+typedef ::std::vector< OUString* > StringList_Impl;
 
 #define CONVERT_DATETIME( aUnoDT, aToolsDT ) \
     aToolsDT = DateTime( Date( aUnoDT.Day, aUnoDT.Month, aUnoDT.Year ), \
@@ -350,7 +352,7 @@ Sequence < OUString > UCBContentHelper::GetFolderContents( const String& rFolder
                 {
                     OUString aId = xContentAccess->queryContentIdentifierString();
                     OUString* pFile = new OUString( aId );
-                    pFiles->Insert( pFile, LIST_APPEND );
+                    pFiles->push_back( pFile );
                 }
             }
             catch( ::com::sun::star::ucb::CommandAbortedException& )
@@ -367,12 +369,12 @@ Sequence < OUString > UCBContentHelper::GetFolderContents( const String& rFolder
 
     if ( pFiles )
     {
-        ULONG nCount = pFiles->Count();
+        size_t nCount = pFiles->size();
         Sequence < OUString > aRet( nCount );
         OUString* pRet = aRet.getArray();
-        for ( ULONG i = 0; i < nCount; ++i )
+        for ( size_t i = 0; i < nCount; ++i )
         {
-            OUString* pFile = pFiles->GetObject(i);
+            OUString* pFile = (*pFiles)[ i ];
             pRet[i] = *( pFile );
             delete pFile;
         }
@@ -431,7 +433,7 @@ Sequence < OUString > UCBContentHelper::GetResultSet( const String& rURL )
                     aRow += '\t';
                     aRow += String( xContentAccess->queryContentIdentifierString() );
                     OUString* pRow = new OUString( aRow );
-                    pList->Insert( pRow, LIST_APPEND );
+                    pList->push_back( pRow );
                 }
             }
             catch( ::com::sun::star::ucb::CommandAbortedException& )
@@ -448,12 +450,12 @@ Sequence < OUString > UCBContentHelper::GetResultSet( const String& rURL )
 
     if ( pList )
     {
-        ULONG nCount = pList->Count();
+        size_t nCount = pList->size();
         Sequence < OUString > aRet( nCount );
         OUString* pRet = aRet.getArray();
-        for ( ULONG i = 0; i < nCount; ++i )
+        for ( size_t i = 0; i < nCount; ++i )
         {
-            OUString* pEntry = pList->GetObject(i);
+            OUString* pEntry = (*pList)[ i ];
             pRet[i] = *( pEntry );
             delete pEntry;
         }

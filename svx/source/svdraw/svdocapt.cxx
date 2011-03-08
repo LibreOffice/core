@@ -818,7 +818,7 @@ void SdrCaptionObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, cons
             }
             default:
             {
-                DBG_ERROR("TRSetBaseGeometry: Missing unit translation to PoolMetric!");
+                OSL_FAIL("TRSetBaseGeometry: Missing unit translation to PoolMetric!");
             }
         }
     }

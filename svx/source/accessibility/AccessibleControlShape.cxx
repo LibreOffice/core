@@ -208,9 +208,6 @@ void AccessibleControlShape::Init()
         // be aggregated, as by definition the proxy's ref count is exactly 1 when returned from the factory.
         // Sounds better. Though this yields the problem of slightly degraded performance, it's the only solution
         // I'm aware of at the moment .....
-        //
-        // 98750 - 30.04.2002 - fs@openoffice.org
-        //
 
         // get the control which belongs to our model (relative to our view)
         const Window* pViewWindow = maShapeTreeInfo.GetWindow();

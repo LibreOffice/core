@@ -451,7 +451,7 @@ namespace dbaui
             void* _pTreeListUserData    // in rela a DBTreeListUserData*, but we do not know this class here ....
         );
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
         // checks whether the given tree entry denotes a data source
         bool impl_isDataSourceEntry( SvLBoxEntry* _pEntry ) const;
 #endif

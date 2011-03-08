@@ -65,7 +65,7 @@ MasterLayoutDialog::MasterLayoutDialog( Window* pParent, SdDrawDocument* pDoc, S
     if( mpCurrentPage == 0 )
     {
         mpCurrentPage = pDoc->GetMasterSdPage( 0, PK_STANDARD );
-        DBG_ERROR( "MasterLayoutDialog::MasterLayoutDialog() - no current page?" );
+        OSL_FAIL( "MasterLayoutDialog::MasterLayoutDialog() - no current page?" );
     }
 
     switch( mpCurrentPage->GetPageKind() )

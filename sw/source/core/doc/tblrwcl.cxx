@@ -3482,7 +3482,7 @@ void _CheckBoxWidth( const SwTableLine& rLine, SwTwips nSize )
 
     if( Abs( nAktSize - nSize ) > ( COLFUZZY * rBoxes.Count() ) )
     {
-        DBG_ERROR( "Boxen der Line zu klein/gross" );
+        OSL_FAIL( "Boxen der Line zu klein/gross" );
     }
 }
 
@@ -4358,8 +4358,7 @@ BOOL SwTable::SetRowHeight( SwTableBox& rAktBox, USHORT eType,
 
                         pFndBox = ::lcl_SaveInsDelData( aParam, ppUndo, aTmpLst );
 
-                        // #110525# delete complete table when last row is
-                        // deleted
+                        // delete complete table when last row is deleted
                         if( !bBigger &&
                             aParam.aBoxes.Count() == aSortCntBoxes.Count() )
                         {

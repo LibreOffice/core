@@ -43,8 +43,9 @@ using namespace com::sun::star::io;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::xml::sax;
 using namespace com::sun::star;
-using namespace rtl;
 using namespace std;
+
+using ::rtl::OUString;
 
 TypeDetectionImporter::TypeDetectionImporter( Reference< XMultiServiceFactory >& xMSF )
 :   mxMSF(xMSF),
@@ -90,7 +91,7 @@ void TypeDetectionImporter::doImport( Reference< XMultiServiceFactory >& xMSF, R
     }
     catch( Exception& /* e */ )
     {
-        DBG_ERROR( "TypeDetectionImporter::doImport exception catched!" );
+        OSL_FAIL( "TypeDetectionImporter::doImport exception catched!" );
     }
 }
 

@@ -43,7 +43,8 @@
 #include "AquaFilePickerDelegate.hxx"
 
 using namespace com::sun::star;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 class ControlHelper {
 

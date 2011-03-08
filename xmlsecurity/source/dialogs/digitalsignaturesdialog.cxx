@@ -391,8 +391,8 @@ IMPL_LINK( DigitalSignaturesDialog, OKButtonHdl, void*, EMPTYARG )
     uno::Reference< com::sun::star::xml::sax::XDocumentHandler> xDocumentHandler =
         maSignatureHelper.CreateDocumentHandlerWithHeader( xOutputStream );
 
-    int nInfos = maCurrentSignatureInformations.size();
-    for( int n = 0 ; n < nInfos ; ++n )
+    size_t nInfos = maCurrentSignatureInformations.size();
+    for( size_t n = 0 ; n < nInfos ; ++n )
         maSignatureHelper.ExportSignature(
         xDocumentHandler, maCurrentSignatureInformations[ n ] );
 
@@ -444,7 +444,7 @@ IMPL_LINK( DigitalSignaturesDialog, AddButtonHdl, Button*, EMPTYARG )
             rtl::OUString aCertSerial = xSerialNumberAdapter->toString( xCert->getSerialNumber() );
             if ( !aCertSerial.getLength() )
             {
-                DBG_ERROR( "Error in Certificate, problem with serial number!" );
+                OSL_FAIL( "Error in Certificate, problem with serial number!" );
                 return -1;
             }
 
@@ -485,8 +485,8 @@ IMPL_LINK( DigitalSignaturesDialog, AddButtonHdl, Button*, EMPTYARG )
                 maSignatureHelper.CreateDocumentHandlerWithHeader( xOutputStream );
 
             // Export old signatures...
-             int nInfos = maCurrentSignatureInformations.size();
-            for ( int n = 0; n < nInfos; n++ )
+            size_t nInfos = maCurrentSignatureInformations.size();
+            for ( size_t n = 0; n < nInfos; n++ )
                 maSignatureHelper.ExportSignature( xDocumentHandler, maCurrentSignatureInformations[n]);
 
             // Create a new one...
@@ -519,7 +519,7 @@ IMPL_LINK( DigitalSignaturesDialog, AddButtonHdl, Button*, EMPTYARG )
     }
     catch ( uno::Exception& )
     {
-        DBG_ERROR( "Exception while adding a signature!" );
+        OSL_FAIL( "Exception while adding a signature!" );
         // Don't keep invalid entries...
         ImplGetSignatureInformations(true);
         ImplFillSignaturesBox();
@@ -547,8 +547,8 @@ IMPL_LINK( DigitalSignaturesDialog, RemoveButtonHdl, Button*, EMPTYARG )
             Reference< css::xml::sax::XDocumentHandler> xDocumentHandler =
                 maSignatureHelper.CreateDocumentHandlerWithHeader( xOutputStream );
 
-            int nInfos = maCurrentSignatureInformations.size();
-            for( int n = 0 ; n < nInfos ; ++n )
+            size_t nInfos = maCurrentSignatureInformations.size();
+            for( size_t n = 0 ; n < nInfos ; ++n )
                 maSignatureHelper.ExportSignature( xDocumentHandler, maCurrentSignatureInformations[ n ] );
 
             maSignatureHelper.CloseDocumentHandler( xDocumentHandler);
@@ -561,7 +561,7 @@ IMPL_LINK( DigitalSignaturesDialog, RemoveButtonHdl, Button*, EMPTYARG )
         }
         catch ( uno::Exception& )
         {
-            DBG_ERROR( "Exception while removing a signature!" );
+            OSL_FAIL( "Exception while removing a signature!" );
             // Don't keep invalid entries...
             ImplGetSignatureInformations(true);
             ImplFillSignaturesBox();
@@ -587,13 +587,13 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
     uno::Reference< ::com::sun::star::security::XCertificate > xCert;
 
     String aNullStr;
-    int nInfos = maCurrentSignatureInformations.size();
-    int nValidSigs = 0, nValidCerts = 0;
+    size_t nInfos = maCurrentSignatureInformations.size();
+    size_t nValidSigs = 0, nValidCerts = 0;
     bool bAllNewSignatures = true;
 
     if( nInfos )
     {
-        for( int n = 0; n < nInfos; ++n )
+        for( size_t n = 0; n < nInfos; ++n )
         {
             DocumentSignatureAlgorithm mode = DocumentSignatureHelper::getDocumentAlgorithm(
                 m_sODFVersion, maCurrentSignatureInformations[n]);

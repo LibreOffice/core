@@ -58,8 +58,11 @@ Reference<XAccessible> VclAccessibleEvent::GetAccessible() const
 
 void VclEventListeners::Call( VclSimpleEvent* pEvent ) const
 {
+    if ( m_aListeners.empty() )
+        return;
+
     // Copy the list, because this can be destroyed when calling a Link...
-    std::list<Link> aCopy( *this );
+    std::list<Link> aCopy( m_aListeners );
     std::list<Link>::iterator aIter( aCopy.begin() );
     if( pEvent->IsA( VclWindowEvent::StaticType() ) )
     {
@@ -83,9 +86,12 @@ void VclEventListeners::Call( VclSimpleEvent* pEvent ) const
 
 BOOL VclEventListeners::Process( VclSimpleEvent* pEvent ) const
 {
+    if ( m_aListeners.empty() )
+        return FALSE;
+
     BOOL bProcessed = FALSE;
     // Copy the list, because this can be destroyed when calling a Link...
-    std::list<Link> aCopy( *this );
+    std::list<Link> aCopy( m_aListeners );
     std::list<Link>::iterator aIter( aCopy.begin() );
     while ( aIter != aCopy.end() )
     {
@@ -97,6 +103,16 @@ BOOL VclEventListeners::Process( VclSimpleEvent* pEvent ) const
         aIter++;
     }
     return bProcessed;
+}
+
+void VclEventListeners::addListener( const Link& rListener )
+{
+    m_aListeners.push_back( rListener );
+}
+
+void VclEventListeners::removeListener( const Link& rListener )
+{
+    m_aListeners.remove( rListener );
 }
 
 VclEventListeners2::VclEventListeners2()

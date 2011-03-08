@@ -233,7 +233,7 @@ void print_node( const LocaleNode* p, int depth=0 )
 void LocaleNode :: generateCode (const OFileWriter &of) const
 {
     ::rtl::OUString aDTD = getAttr().getValueByName("versionDTD");
-    if (!aDTD.equalsAscii( LOCALE_VERSION_DTD))
+    if (!aDTD.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(LOCALE_VERSION_DTD)))
     {
         ++nError;
         fprintf( stderr, "Error: Locale versionDTD is not %s, see comment in locale.dtd\n", LOCALE_VERSION_DTD);

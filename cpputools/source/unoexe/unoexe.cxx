@@ -74,7 +74,6 @@
 #endif
 
 using namespace std;
-using namespace rtl;
 using namespace osl;
 using namespace cppu;
 using namespace com::sun::star::uno;
@@ -84,6 +83,11 @@ using namespace com::sun::star::registry;
 using namespace com::sun::star::connection;
 using namespace com::sun::star::bridge;
 using namespace com::sun::star::container;
+
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OUStringToOString;
+using ::rtl::OUStringBuffer;
 
 namespace unoexe
 {

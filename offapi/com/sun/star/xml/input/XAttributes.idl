@@ -54,12 +54,12 @@ interface XAttributes : com::sun::star::uno::XInterface
     */
     long getIndexByQName( [in] string qName );
 
-    /** Gets attribute index passing a namespace uid and a localname.
+    /** Gets attribute index passing a namespace uid and a local name.
 
         @param uid
                namespace uid
         @param localName
-               localname
+               local name
         @return
                 attribute index or -1, if not found
     */
@@ -83,12 +83,12 @@ interface XAttributes : com::sun::star::uno::XInterface
     */
     long getUidByIndex( [in] long nIndex );
 
-    /** Gets the localname of an attribute.
+    /** Gets the local name of an attribute.
 
         @param nIndex
                index
         @return
-                localname of attribute or empty string, if invalid index
+                local name of attribute or empty string, if invalid index
     */
     string getLocalNameByIndex( [in] long nIndex );
 
@@ -101,14 +101,14 @@ interface XAttributes : com::sun::star::uno::XInterface
     */
     string getValueByIndex( [in] long nIndex );
 
-    /** For convenience: Gets the value of an attribute passing uid, localname.
+    /** For convenience: Gets the value of an attribute passing uid, local name.
 
         @param uid
                namespace uid
         @param localName
-               localname
+               local name
         @return
-                value string or empty string, if invalid uid/localname
+                value string or empty string, if invalid uid/local name
     */
     string getValueByUidName( [in] long uid, [in] string localName );
 

@@ -42,7 +42,7 @@ namespace ole {
 // ============================================================================
 
 /** Implements stream access for binary OLE storages. */
-class OleStorage : public StorageBase
+class OOX_DLLPUBLIC OleStorage : public StorageBase
 {
 public:
     explicit            OleStorage(

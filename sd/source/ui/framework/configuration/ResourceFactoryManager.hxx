@@ -35,7 +35,7 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <osl/mutex.hxx>
 #include <comphelper/stl_types.hxx>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 namespace css = ::com::sun::star;
 
@@ -94,7 +94,7 @@ public:
 
 private:
     ::osl::Mutex maMutex;
-    typedef ::std::hash_map<
+    typedef ::boost::unordered_map<
         ::rtl::OUString,
         css::uno::Reference<css::drawing::framework::XResourceFactory>,
         ::comphelper::UStringHash,

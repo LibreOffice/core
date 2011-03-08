@@ -78,8 +78,7 @@ using namespace ::sfx2;
 
 void GetPreferedExtension( String &rExt, const Graphic &rGrf )
 {
-    // dann ggfs. ueber die native-Info der Grafik den "besten"
-    // Filter vorschlagen
+    // then propose the "best" filter using the native-info, if applicable
     const sal_Char* pExt = "png";
     switch( const_cast<Graphic&>(rGrf).GetLink().GetType() )
     {
@@ -96,17 +95,9 @@ void GetPreferedExtension( String &rExt, const Graphic &rGrf )
 
 SwReadOnlyPopup::~SwReadOnlyPopup()
 {
-    String *pDel = (String*)aThemeList.First();
-    while ( pDel )
-    {
-        delete pDel;
-        pDel = (String*)aThemeList.Next();
-    }
     delete pImageMap;
     delete pTargetURL;
 }
-
-
 
 void SwReadOnlyPopup::Check( USHORT nMID, USHORT nSID, SfxDispatcher &rDis )
 {
@@ -180,22 +171,22 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
         }
     }
 
-    BOOL bEnableGraphicToGallery;
-    if ( TRUE == (bEnableGraphicToGallery = bLink) )
+    bool bEnableGraphicToGallery = bLink;
+    if ( bEnableGraphicToGallery )
     {
-        GalleryExplorer::FillThemeList( aThemeList );
-        if ( aThemeList.Count() )
+        if (GalleryExplorer::FillThemeList( aThemeList ))
         {
             PopupMenu *pMenu = GetPopupMenu(MN_READONLY_GRAPHICTOGALLERY);
             pMenu->CheckItem( MN_READONLY_TOGALLERYLINK,  bGrfToGalleryAsLnk );
             pMenu->CheckItem( MN_READONLY_TOGALLERYCOPY, !bGrfToGalleryAsLnk );
-            for ( USHORT i=0; i < aThemeList.Count(); ++i )
-                pMenu->InsertItem( MN_READONLY_GRAPHICTOGALLERY+i + 3,
-                                   *(String*)aThemeList.GetObject( i ) );
+
+            for ( USHORT i=0; i < aThemeList.size(); ++i )
+                pMenu->InsertItem( MN_READONLY_GRAPHICTOGALLERY+i + 3, aThemeList[ i ] );
         }
         else
-            bEnableGraphicToGallery = FALSE;
+            bEnableGraphicToGallery = false;
     }
+
     EnableItem( MN_READONLY_GRAPHICTOGALLERY, bEnableGraphicToGallery );
 
     SfxViewFrame * pVFrame = rV.GetViewFrame();
@@ -210,17 +201,18 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
         bEnableBack = TRUE;
         if ( pItem->GetGraphicLink() )
         {
-            if ( !aThemeList.Count() )
+            if ( aThemeList.empty() )
                 GalleryExplorer::FillThemeList( aThemeList );
-            if ( aThemeList.Count() )
+
+            if ( !aThemeList.empty() )
             {
                 PopupMenu *pMenu = GetPopupMenu(MN_READONLY_BACKGROUNDTOGALLERY);
                 pMenu->CheckItem( MN_READONLY_TOGALLERYLINK,  bGrfToGalleryAsLnk );
                 pMenu->CheckItem( MN_READONLY_TOGALLERYCOPY, !bGrfToGalleryAsLnk );
                 bEnableBackGallery = TRUE;
-                for ( USHORT i=0; i < aThemeList.Count(); ++i )
-                    pMenu->InsertItem( MN_READONLY_BACKGROUNDTOGALLERY+i + 3,
-                                       *(String*)aThemeList.GetObject( i ) );
+
+                for ( USHORT i=0; i < aThemeList.size(); ++i )
+                    pMenu->InsertItem( MN_READONLY_GRAPHICTOGALLERY+i + 3, aThemeList[ i ] );
             }
         }
     }
@@ -310,10 +302,8 @@ void SwReadOnlyPopup::Execute( Window* pWin, USHORT nId )
             sTmp = SaveGraphic( nSaveId );
 
         if ( sTmp.Len() )
-        {
-            String sThemeName( *(String*)aThemeList.GetObject( nId ));
-            GalleryExplorer::InsertURL( sThemeName, sTmp );
-        }
+            GalleryExplorer::InsertURL( aThemeList[nId], sTmp );
+
         return;
     }
 
@@ -399,7 +389,7 @@ void SwReadOnlyPopup::Execute( Window* pWin, USHORT nId )
 String SwReadOnlyPopup::SaveGraphic( USHORT nId )
 {
 
-    //Namen der Grafik herausfischen.
+    // fish out the graphic's name
     String aName;
     if ( MN_READONLY_SAVEBACKGROUND == nId )
     {
@@ -430,7 +420,7 @@ String ExportGraphic( const Graphic &rGraphic, const String &rGrfName )
     INetURLObject aPath;
     aPath.SetSmartURL( sGrfPath );
 
-    //Namen der Grafik herausfischen.
+    // fish out the graphic's name
     String aName = rGrfName;
 
     aDlgHelper.SetTitle( SW_RESSTR(STR_EXPORT_GRAFIK_TITLE));
@@ -459,7 +449,7 @@ String ExportGraphic( const Graphic &rGraphic, const String &rGrfName )
     }
     if ( USHRT_MAX == nDfltFilter )
     {
-        //"falsche" Extension?
+        // "wrong" extension?
         GetPreferedExtension( aExt, rGraphic );
         for ( USHORT i = 0; i < nCount; ++i )
             if ( aExt == rGF.GetExportFormatShortName( i ).ToLowerAscii() )
@@ -476,14 +466,14 @@ String ExportGraphic( const Graphic &rGraphic, const String &rGrfName )
         if( aDlgHelper.Execute() == ERRCODE_NONE )
         {
             String sPath( xFP->getFiles().getConstArray()[0] );
-            //verwendeten Pfad merken - bitte nicht wieder wegoptimieren!
+            // remember used path - please don't optimize away!
             aPath.SetSmartURL( sPath);
             sGrfPath = aPath.GetPath();
 
             if( rGrfName.Len() &&
                  nDfltFilter == rGF.GetExportFormatNumber( xFltMgr->getCurrentFilter()))
             {
-                //Versuchen die Originalgrafik zu speichern.
+                // try to save the original graphic
                 SfxMedium aIn( rGrfName, STREAM_READ | STREAM_NOCREATE,
                                 TRUE );
                 if( aIn.GetInStream() && !aIn.GetInStream()->GetError() )

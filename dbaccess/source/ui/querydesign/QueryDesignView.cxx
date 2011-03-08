@@ -36,6 +36,7 @@
 #include <vcl/split.hxx>
 #include <svl/undo.hxx>
 #include <tools/diagnose_ex.h>
+#include <osl/diagnose.h>
 #include "adtabdlg.hxx"
 #include <vcl/svapp.hxx>
 #include <vcl/combobox.hxx>
@@ -332,7 +333,7 @@ namespace
             }
             catch(SQLException&)
             {
-                OSL_ASSERT(!"Failure while building Join criteria!");
+                OSL_FAIL(!"Failure while building Join criteria!");
             }
         }
 
@@ -558,7 +559,7 @@ namespace
         else if (SQL_ISRULE(pNode,comparison_predicate))
         {
             // only the comparison of columns is allowed
-            DBG_ASSERT(pNode->count() == 3,"OQueryDesignView::InsertJoinConnection: Fehler im Parse Tree");
+            OSL_ENSURE(pNode->count() == 3,"OQueryDesignView::InsertJoinConnection: Fehler im Parse Tree");
             if (!(SQL_ISRULE(pNode->getChild(0),column_ref) &&
                   SQL_ISRULE(pNode->getChild(2),column_ref) &&
                    pNode->getChild(1)->getNodeType() == SQL_NODE_EQUAL))
@@ -677,7 +678,7 @@ namespace
 
                     if  ( pEntryField->isAggreateFunction() )
                     {
-                        DBG_ASSERT(pEntryField->GetFunction().getLength(),"Functionname darf hier nicht leer sein! ;-(");
+                        OSL_ENSURE(pEntryField->GetFunction().getLength(),"Functionname darf hier nicht leer sein! ;-(");
                         ::rtl::OUStringBuffer aTmpStr2( pEntryField->GetFunction());
                         aTmpStr2.appendAscii("(");
                         aTmpStr2.append(aTmpStr.makeStringAndClear());
@@ -702,7 +703,7 @@ namespace
         }
         catch(SQLException&)
         {
-            OSL_ASSERT(!"Failure while building select list!");
+            OSL_FAIL(!"Failure while building select list!");
         }
         return aFieldListStr.makeStringAndClear();
     }
@@ -877,7 +878,7 @@ namespace
         }
         catch(SQLException&)
         {
-            OSL_ASSERT(!"Failure while building where clause!");
+            OSL_FAIL(!"Failure while building where clause!");
         }
         return sal_True;
     }
@@ -930,7 +931,7 @@ namespace
                     }
                     else if ( pEntryField->isNumericOrAggreateFunction() )
                     {
-                        DBG_ASSERT(pEntryField->GetFunction().getLength(),"Functionname darf hier nicht leer sein! ;-(");
+                        OSL_ENSURE(pEntryField->GetFunction().getLength(),"Functionname darf hier nicht leer sein! ;-(");
                         aWorkStr += pEntryField->GetFunction();
                         aWorkStr +=  ::rtl::OUString('(');
                         aWorkStr += quoteTableAlias(bMulti,pEntryField->GetAlias(),aQuote);
@@ -978,7 +979,7 @@ namespace
         }
         catch(SQLException&)
         {
-            OSL_ASSERT(!"Failure while building group by!");
+            OSL_FAIL(!"Failure while building group by!");
         }
 
         return eErrorCode;
@@ -1168,7 +1169,7 @@ namespace
                 OTableFieldDescRef  pEntryField = *aIter;
                 if ( pEntryField->IsGroupBy() )
                 {
-                    DBG_ASSERT(pEntryField->GetField().getLength(),"Kein FieldName vorhanden!;-(");
+                    OSL_ENSURE(pEntryField->GetField().getLength(),"Kein FieldName vorhanden!;-(");
                     ::rtl::OUString sGroupByPart = quoteTableAlias(bMulti,pEntryField->GetAlias(),aQuote);
 
                     // only quote the field name when it isn't calculated
@@ -1213,7 +1214,7 @@ namespace
         }
         catch(SQLException&)
         {
-            OSL_ASSERT(!"Failure while building group by!");
+            OSL_FAIL(!"Failure while building group by!");
         }
         return aGroupByStr;
     }
@@ -1613,7 +1614,7 @@ namespace
         SqlParseError eErrorCode = eOk;
         OQueryController& rController = static_cast<OQueryController&>(_pView->getController());
 
-        DBG_ASSERT(SQL_ISRULE( pCondition, comparison_predicate),"ComparisonPredicate: pCondition ist kein ComparisonPredicate");
+        OSL_ENSURE(SQL_ISRULE( pCondition, comparison_predicate),"ComparisonPredicate: pCondition ist kein ComparisonPredicate");
         if ( SQL_ISRULE(pCondition->getChild(0), column_ref )
             || SQL_ISRULE(pCondition->getChild(pCondition->count()-1), column_ref) )
         {
@@ -1797,7 +1798,7 @@ namespace
         rParseIter.getColumnRange( pColumnRef, aColumnName, aTableRange );
 
         sal_Bool bFound(sal_False);
-        DBG_ASSERT(aColumnName.getLength(),"Columnname darf nicht leer sein");
+        OSL_ENSURE(aColumnName.getLength(),"Columnname darf nicht leer sein");
         if (!aTableRange.getLength())
         {
             // SELECT column, ...
@@ -1850,7 +1851,7 @@ namespace
     sal_Bool InsertJoin(const OQueryDesignView* _pView,
                         const ::connectivity::OSQLParseNode *pNode)
     {
-        DBG_ASSERT( SQL_ISRULE( pNode, qualified_join ) || SQL_ISRULE( pNode, joined_table ) || SQL_ISRULE( pNode, cross_union ),
+        OSL_ENSURE( SQL_ISRULE( pNode, qualified_join ) || SQL_ISRULE( pNode, joined_table ) || SQL_ISRULE( pNode, cross_union ),
             "OQueryDesignView::InsertJoin: Fehler im Parse Tree");
 
         if (SQL_ISRULE(pNode,joined_table))
@@ -1984,7 +1985,7 @@ namespace
             Reference< XConnection> xConnection = rController.getConnection();
             if ( !xConnection.is() )
             {
-                DBG_ERROR( "InitFromParseNodeImpl: no connection? no connection!" );
+                OSL_FAIL( "InitFromParseNodeImpl: no connection? no connection!" );
                 break;
             }
 
@@ -2091,7 +2092,7 @@ namespace
             }
             catch(SQLException&)
             {
-                OSL_ASSERT(!"getMaxTablesInSelect!");
+                OSL_FAIL("getMaxTablesInSelect!");
             }
         }
         while ( false );
@@ -2296,7 +2297,7 @@ namespace
                     break;
                 }
 
-                DBG_ERROR( "InstallFields: don't know how to interpret this parse node!" );
+                OSL_FAIL( "InstallFields: don't know how to interpret this parse node!" );
 
                 } while ( false );
             }
@@ -2755,7 +2756,7 @@ sal_Int32 OQueryDesignView::getColWidth(sal_uInt16 _nColPos) const
 //------------------------------------------------------------------------------
 void OQueryDesignView::fillValidFields(const ::rtl::OUString& sAliasName, ComboBox* pFieldList)
 {
-    DBG_ASSERT(pFieldList != NULL, "OQueryDesignView::FillValidFields : What the hell do you think I can do with a NULL-ptr ? This will crash !");
+    OSL_ENSURE(pFieldList != NULL, "OQueryDesignView::FillValidFields : What the hell do you think I can do with a NULL-ptr ? This will crash !");
     pFieldList->Clear();
 
     sal_Bool bAllTables = sAliasName.getLength() == 0;
@@ -2874,7 +2875,7 @@ sal_Bool OQueryDesignView::checkStatement()
     const ::std::vector<OTableConnection*>* pConnList = m_pTableView->getTableConnections();
     Reference< XConnection> xConnection = rController.getConnection();
     ::rtl::OUString aTableListStr(GenerateFromClause(xConnection,pTabList,pConnList));
-    DBG_ASSERT(aTableListStr.getLength(), "OQueryDesignView::getStatement() : unerwartet : habe Felder, aber keine Tabellen !");
+    OSL_ENSURE(aTableListStr.getLength(), "OQueryDesignView::getStatement() : unerwartet : habe Felder, aber keine Tabellen !");
     // wenn es Felder gibt, koennen die nur durch Einfuegen aus einer schon existenten Tabelle entstanden sein; wenn andererseits
     // eine Tabelle geloescht wird, verschwinden auch die zugehoerigen Felder -> ergo KANN es das nicht geben, dass Felder
     // existieren, aber keine Tabellen (und aFieldListStr hat schon eine Laenge, das stelle ich oben sicher)

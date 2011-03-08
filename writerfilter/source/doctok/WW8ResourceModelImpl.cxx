@@ -169,8 +169,6 @@ void WW8PropertiesReference::resolve(Properties & rHandler)
 {
     if (mpPropSet != NULL)
     {
-        //mpPropSet->dump(clog);
-
         if (mpPropSet->isPap())
         {
             WW8IntValue aValue(mpPropSet->get_istd());

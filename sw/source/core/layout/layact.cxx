@@ -29,8 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-
 #include <time.h>
 #include "rootfrm.hxx"
 #include "pagefrm.hxx"
@@ -66,9 +64,6 @@
 #include <editeng/brshitem.hxx>
 #include <SwSmartTagMgr.hxx>
 
-#define _SVSTDARR_BOOLS
-#include <svl/svstdarr.hxx>
-
 #define _LAYACT_CXX
 #include "layact.hxx"
 #include <swwait.hxx>
@@ -94,6 +89,7 @@
 #include <sortedobjs.hxx>
 #include <objectformatter.hxx>
 #include <PostItMgr.hxx>
+#include <vector>
 
 // <--
 //#pragma optimize("ity",on)
@@ -1431,8 +1427,6 @@ BOOL SwLayAction::FormatLayout( SwLayoutFrm *pLay, BOOL bAddRect )
             if ( pLay->IsPageFrm() )
             {
                 SwPageFrm* pPageFrm = static_cast<SwPageFrm*>(pLay);
-                const int nBorderWidth =
-                        pImp->GetShell()->GetOut()->PixelToLogic( Size( pPageFrm->BorderPxWidth(), 0 ) ).Width();
                 const int nShadowWidth =
                         pImp->GetShell()->GetOut()->PixelToLogic( Size( pPageFrm->ShadowPxWidth(), 0 ) ).Width();
 
@@ -1443,22 +1437,20 @@ BOOL SwLayAction::FormatLayout( SwLayoutFrm *pLay, BOOL bAddRect )
                 {
                     case sw::sidebarwindows::SIDEBAR_LEFT:
                     {
-                        aPaint.Left( aPaint.Left() - nBorderWidth - nSidebarWidth);
-                        aPaint.Right( aPaint.Right() + nBorderWidth + nShadowWidth);
+                        aPaint.Left( aPaint.Left()  - nSidebarWidth);
+                        aPaint.Right( aPaint.Right() + nShadowWidth);
                     }
                     break;
                     case sw::sidebarwindows::SIDEBAR_RIGHT:
                     {
-                        aPaint.Left( aPaint.Left() - nBorderWidth );
-                        aPaint.Right( aPaint.Right() + nBorderWidth + nShadowWidth + nSidebarWidth);
+                        aPaint.Right( aPaint.Right() + nShadowWidth + nSidebarWidth);
                     }
                     break;
                     case sw::sidebarwindows::SIDEBAR_NONE:
                         // nothing to do
                     break;
                 }
-                aPaint.Top( aPaint.Top() - nBorderWidth );
-                aPaint.Bottom( aPaint.Bottom() + nBorderWidth + nShadowWidth);
+                aPaint.Bottom( aPaint.Bottom() + nShadowWidth );
             }
 
             if ( pLay->IsPageFrm() &&
@@ -2306,7 +2298,6 @@ BOOL SwLayIdle::DoIdleJob( IdleJobType eJob, BOOL bVisAreaOnly )
 
 
 #if OSL_DEBUG_LEVEL > 1
-#if OSL_DEBUG_LEVEL > 1
 
 /*************************************************************************
 |*
@@ -2336,9 +2327,6 @@ void SwLayIdle::ShowIdle( ColorData eColorData )
 #else
 #define SHOW_IDLE( ColorData )
 #endif
-#else
-#define SHOW_IDLE( ColorData )
-#endif
 
 /*************************************************************************
 |*
@@ -2349,9 +2337,7 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
     pRoot( pRt ),
     pImp( pI )
 #if OSL_DEBUG_LEVEL > 1
-#if OSL_DEBUG_LEVEL > 1
     , bIndicator( FALSE )
-#endif
 #endif
 {
     pImp->pIdleAct = this;
@@ -2371,7 +2357,7 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
         //Veraenderungen der Seitenzahl nicht zu unerwuenschten Effekten kommt.
         //Wir merken uns bei welchen Shells der Cursor sichtbar ist, damit
         //wir ihn bei Dokumentaenderung ggf. wieder sichbar machen koennen.
-        SvBools aBools;
+        std::vector<bool> aBools;
         ViewShell *pSh = pImp->GetShell();
         do
         {   ++pSh->nStartAction;
@@ -2383,7 +2369,7 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
 #endif
                 bVis = ((SwCrsrShell*)pSh)->GetCharRect().IsOver(pSh->VisArea());
             }
-            aBools.Insert( bVis, aBools.Count() );
+            aBools.push_back(bVis);
             pSh = (ViewShell*)pSh->GetNext();
         } while ( pSh != pImp->GetShell() );
 
@@ -2533,25 +2519,13 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
         pImp->FireAccessibleEvents();
 
 #if OSL_DEBUG_LEVEL > 1
-#if OSL_DEBUG_LEVEL > 1
     if ( bIndicator && pImp->GetShell()->GetWin() )
     {
         // #i75172# Do not invalidate indicator, this may cause a endless loop. Instead, just repaint it
         // This should be replaced by an overlay object in the future, anyways. Since it's only for debug
         // purposes, it is not urgent.
-        static bool bCheckWithoutInvalidating(true);
-        if(bCheckWithoutInvalidating)
-        {
             bIndicator = false; SHOW_IDLE( COL_LIGHTGREEN );
-        }
-        else
-        {
-            Rectangle aRect( 0, 0, 5, 5 );
-            aRect = pImp->GetShell()->GetWin()->PixelToLogic( aRect );
-            pImp->GetShell()->GetWin()->Invalidate( aRect );
-        }
     }
-#endif
 #endif
 }
 

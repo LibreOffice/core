@@ -176,7 +176,7 @@ SfxPreviewWin::SfxPreviewWin(
     // adjust contrast mode initially
     SetDrawMode( OUTPUT_DRAWMODE_COLOR );
 
-    // #107818# This preview window is for document previews.  Therefore
+    // This preview window is for document previews.  Therefore
     // right-to-left mode should be off
     EnableRTL( FALSE );
 }
@@ -668,8 +668,6 @@ SfxNewFileDialog_Impl::SfxNewFileDialog_Impl(
     aPrevTimer.SetTimeout( 500 );
     aPrevTimer.SetTimeoutHdl( LINK( this, SfxNewFileDialog_Impl, Update));
 
-//   else
-//        aRegionLb.InsertEntry(String(SfxResId(STR_STANDARD)));
     aRegionLb.SelectEntryPos(0);
     RegionSelect(&aRegionLb);
 }

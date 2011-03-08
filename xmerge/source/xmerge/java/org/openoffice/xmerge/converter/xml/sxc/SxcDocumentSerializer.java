@@ -651,10 +651,6 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
             }
         }
 
-
-        // for (int j = 0; j < colsRepeated; j++) {
-
-
         if (tableValueTypeNode != null) {
 
             // Make sure we initialize to 0 the width of the current cell
@@ -858,7 +854,6 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
             }
 
             String s = buffer.toString();
-            // displayWidth = calculateContentWidth(s);
             addCell(s);
 
         }
@@ -959,8 +954,6 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
                 if (child.getNodeType() == Node.TEXT_NODE) {
 
                     String s = child.getNodeValue();
-
-                    // displayWidth = calculateContentWidth(s);
 
                     int k = s.lastIndexOf(".");
                     if (k > 0) {

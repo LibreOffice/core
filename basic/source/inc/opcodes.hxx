@@ -31,10 +31,6 @@
 
 #include "sbintern.hxx"
 
-#ifdef MTW
-#undef _NUMBER
-#endif
-
 // Ein Opcode ist entweder 1, 3 oder 5 Bytes lang, je nach numerischen
 // Wert des Opcodes (s.u.).
 

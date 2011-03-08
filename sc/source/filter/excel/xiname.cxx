@@ -137,7 +137,7 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
     if( nXclTab != EXC_NAME_GLOBAL )
     {
         sal_uInt16 nUsedTab = (GetBiff() == EXC_BIFF8) ? nXclTab : nExtSheet;
-        // #163146# do not rename sheet-local names by default, this breaks VBA scripts
+        // do not rename sheet-local names by default, this breaks VBA scripts
 //        maScName.Append( '_' ).Append( String::CreateFromInt32( nUsedTab ) );
         // TODO: may not work for BIFF5, handle skipped sheets (all BIFF)
         mnScTab = static_cast< SCTAB >( nUsedTab - 1 );
@@ -146,8 +146,7 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
     // find an unused name
     String aOrigName( maScName );
     sal_Int32 nCounter = 0;
-    USHORT nDummy;
-    while( rRangeNames.SearchName( maScName, nDummy ) )
+    while( rRangeNames.findByName(maScName) )
         maScName.Assign( aOrigName ).Append( ' ' ).Append( String::CreateFromInt32( ++nCounter ) );
 
     // 3) *** convert the name definition formula *** -------------------------
@@ -216,14 +215,14 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
 
     // 4) *** create a defined name in the Calc document *** ------------------
 
-    // #163146# do not ignore hidden names (may be regular names created by VBA scripts)
+    // do not ignore hidden names (may be regular names created by VBA scripts)
     if( pTokArr /*&& (bBuiltIn || !::get_flag( nFlags, EXC_NAME_HIDDEN ))*/ && !mbFunction && !mbVBName )
     {
         // create the Calc name data
         ScRangeData* pData = new ScRangeData( GetDocPtr(), maScName, *pTokArr, ScAddress(), nNameType );
         pData->GuessPosition();             // calculate base position for relative refs
         pData->SetIndex( nXclNameIdx );     // used as unique identifier in formulas
-        rRangeNames.Insert( pData );        // takes ownership of pData
+        rRangeNames.insert( pData );        // takes ownership of pData
         if( nXclTab != EXC_NAME_GLOBAL )
         {
             if (GetBiff() == EXC_BIFF8)

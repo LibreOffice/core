@@ -318,11 +318,10 @@ private:
 private:
     typedef ::std::auto_ptr< SvNumberFormatter >    SvNumberFormatterPtr;
     typedef ::std::vector< XclExpNumFmt >           XclExpNumFmtVec;
-    typedef NfKeywordTable*                         NfKeywordTablePtr;
 
     SvNumberFormatterPtr mxFormatter;   /// Special number formatter for conversion.
     XclExpNumFmtVec     maFormatMap;    /// Maps core formats to Excel indexes.
-    NfKeywordTablePtr   mpKeywordTable; /// Replacement table.
+    NfKeywordTable*     mpKeywordTable; /// Replacement table.
     ULONG               mnStdFmt;       /// Key for standard number format.
     sal_uInt16          mnXclOffset;    /// Offset to first user defined format.
 };

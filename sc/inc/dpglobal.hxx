@@ -32,6 +32,7 @@
 
 #include <algorithm>
 #include <list>
+#include <vector>
 #include <tools/gen.hxx>
 #include <tools/debug.hxx>
 #include <global.hxx>
@@ -125,7 +126,7 @@ private:
     double  fValue;
     BYTE    mbFlag;
 
-    friend class ScDPTableDataCache;
+    friend class ScDPCache;
 public:
     ScDPItemData() : nNumFormat( 0 ), fValue(0.0), mbFlag( 0 ){}
     ScDPItemData( ULONG nNF, const String & rS, double fV, BYTE bF ):nNumFormat(nNF), aString(rS), fValue(fV), mbFlag( bF ){}
@@ -142,7 +143,7 @@ public:
     // case insensitive equality
     static sal_Int32    Compare( const ScDPItemData& rA, const ScDPItemData& rB );
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     void    dump() const;
 #endif
 
@@ -180,7 +181,7 @@ protected:
         size_t operator() (const ScDPItemData &rData) const { return rData.Hash(); }
     };
 
-    typedef ::std::hash_multimap< ScDPItemData, sal_Int32, DataHashFunc > DataHash;
+    typedef ::boost::unordered_multimap< ScDPItemData, sal_Int32, DataHashFunc > DataHash;
 
     ::std::vector< ScDPItemData > maItems;
     DataHash  maItemIds;

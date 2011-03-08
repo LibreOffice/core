@@ -178,7 +178,7 @@ sal_Bool VCLXPrinterPropertySet::convertFastPropertyValue( ::com::sun::star::uno
         break;
         default:
         {
-            DBG_ERROR( "VCLXPrinterPropertySet_Impl::convertFastPropertyValue - invalid Handle" );
+            OSL_FAIL( "VCLXPrinterPropertySet_Impl::convertFastPropertyValue - invalid Handle" );
         }
     }
     return bDifferent;
@@ -202,7 +202,7 @@ void VCLXPrinterPropertySet::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle
         break;
         default:
         {
-            DBG_ERROR( "VCLXPrinterPropertySet_Impl::convertFastPropertyValue - invalid Handle" );
+            OSL_FAIL( "VCLXPrinterPropertySet_Impl::convertFastPropertyValue - invalid Handle" );
         }
     }
 }
@@ -221,7 +221,7 @@ void VCLXPrinterPropertySet::getFastPropertyValue( ::com::sun::star::uno::Any& r
         break;
         default:
         {
-            DBG_ERROR( "VCLXPrinterPropertySet_Impl::convertFastPropertyValue - invalid Handle" );
+            OSL_FAIL( "VCLXPrinterPropertySet_Impl::convertFastPropertyValue - invalid Handle" );
         }
     }
 }

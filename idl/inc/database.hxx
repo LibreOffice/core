@@ -34,13 +34,10 @@
 #include <lex.hxx>
 #include <tools/pstm.hxx>
 
-/*************************************************************************
-*************************************************************************/
-
 class SvCommand;
 
 #ifdef IDL_COMPILER
-/******************** class SvIdlError ***********************************/
+
 class SvIdlError
 {
     ByteString  aText;
@@ -64,7 +61,6 @@ public:
 };
 #endif
 
-/******************** class SvIdlDataBase ********************************/
 class SvIdlDataBase
 {
     BOOL                        bExport;
@@ -82,7 +78,7 @@ class SvIdlDataBase
     SvMetaClassMemberList       aClassList;
     SvMetaModuleMemberList      aModuleList;
     SvMetaAttributeMemberList   aAttrList;
-    SvMetaTypeMemberList        aTmpTypeList; // nicht Persistent
+    SvMetaTypeMemberList        aTmpTypeList; // not persistent
 
 protected:
 #ifdef IDL_COMPILER
@@ -111,7 +107,7 @@ public:
     SvMetaModuleMemberList &  GetModuleList() { return aModuleList; }
     SvMetaModule *            GetModule( const ByteString & rName );
 
-    // Liste der benutzten Typen beim Schreiben
+    // list of used types while writing
     SvMetaTypeMemberList    aUsedTypes;
     ByteString                  aIFaceName;
     SvNumberIdentifier      aStructSlotId;

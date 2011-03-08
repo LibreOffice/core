@@ -31,8 +31,6 @@
 
 String RID_SVXSTR_HMERR_CHECKINSTALL
 {
-    /* ### ACHTUNG: Neuer Text in Resource?  ist für die Prüfung nicht verfügbar. \nÜberprüfen Sie bitte Ihre Installation und installieren Sie \ngegebenenfalls die gewünschte Sprache :  ist f³r die Pr³fung nicht verf³gbar. \nberpr³fen Sie bitte Ihre Installation und installieren Sie \ngegebenenfalls die gew³nschte Sprache */
-    /* ### ACHTUNG: Neuer Text in Resource?  ist für die Prüfung nicht verfügbar. \nÜberprüfen Sie bitte Ihre Installation und installieren Sie \ngegebenenfalls die gewünschte Sprache :  ist f³r die Pr³fung nicht verf³gbar. \nberpr³fen Sie bitte Ihre Installation und installieren Sie \ngegebenenfalls die gew³nschte Sprache */
     Text [ en-US ] = "is not available for spellchecking\nPlease check your installation and install the desired language\n" ;
 };
 

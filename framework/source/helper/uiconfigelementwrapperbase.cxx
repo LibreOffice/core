@@ -70,8 +70,7 @@ const rtl::OUString UIELEMENT_PROPNAME_RESOURCEURL( RTL_CONSTASCII_USTRINGPARAM(
 const rtl::OUString UIELEMENT_PROPNAME_TYPE( RTL_CONSTASCII_USTRINGPARAM( "Type" ));
 const rtl::OUString UIELEMENT_PROPNAME_XMENUBAR( RTL_CONSTASCII_USTRINGPARAM( "XMenuBar" ));
 const rtl::OUString UIELEMENT_PROPNAME_NOCLOSE( RTL_CONSTASCII_USTRINGPARAM( "NoClose" ));
-
-using namespace rtl;
+using ::rtl::OUString;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::frame;

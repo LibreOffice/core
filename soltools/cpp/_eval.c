@@ -234,7 +234,8 @@ long
 {
     Token *tp;
     Nlist *np;
-    int ntok, rnd;
+    size_t  ntok;
+    int rnd;
 
     trp->tp++;
     if (kw == KIFDEF || kw == KIFNDEF)

@@ -44,7 +44,7 @@
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase1.hxx>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <stdtypes.h>
 
 //_________________________________________________________________________________________________________________
@@ -126,7 +126,7 @@ class OReadEventsDocumentHandler :  private ThreadHelpBase, // Struct for right 
     private:
         ::rtl::OUString getErrorLineString();
 
-        class EventsHashMap : public ::std::hash_map<   ::rtl::OUString                 ,
+        class EventsHashMap : public ::boost::unordered_map<    ::rtl::OUString                 ,
                                                         Events_XML_Entry                ,
                                                         OUStringHashCode                ,
                                                         ::std::equal_to< ::rtl::OUString >  >

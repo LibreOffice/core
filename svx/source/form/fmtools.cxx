@@ -220,7 +220,7 @@ sal_Int32 getElementPos(const Reference< ::com::sun::star::container::XIndexAcce
             }
             catch(Exception&)
             {
-                DBG_ERROR( "getElementPos: caught an exception!" );
+                OSL_FAIL( "getElementPos: caught an exception!" );
             }
 
         }
@@ -446,7 +446,7 @@ sal_Int16 getControlTypeByObject(const Reference< ::com::sun::star::lang::XServi
         return OBJ_FM_IMAGECONTROL;
     if (sPersistentServiceName.equals(FM_COMPONENT_FORMATTEDFIELD))
     {
-        DBG_ERROR("::getControlTypeByObject : suspicious persistent service name (formatted field) !");
+        OSL_FAIL("::getControlTypeByObject : suspicious persistent service name (formatted field) !");
             // objects with that service name should exist as they aren't compatible with older versions
         return OBJ_FM_FORMATTEDFIELD;
     }
@@ -457,7 +457,7 @@ sal_Int16 getControlTypeByObject(const Reference< ::com::sun::star::lang::XServi
     if (sPersistentServiceName.equals(FM_SUN_COMPONENT_NAVIGATIONBAR))
         return OBJ_FM_NAVIGATIONBAR;
 
-    DBG_ERROR("::getControlTypeByObject : unknown object type !");
+    OSL_FAIL("::getControlTypeByObject : unknown object type !");
     return OBJ_FM_CONTROL;
 }
 
@@ -475,7 +475,7 @@ void setConnection(const Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet,
         }
         catch(Exception&)
         {
-            DBG_ERROR("::setConnection : could not set the connection !");
+            OSL_FAIL("::setConnection : could not set the connection !");
         }
 
     }

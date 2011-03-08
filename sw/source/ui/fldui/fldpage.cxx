@@ -203,7 +203,6 @@ BOOL SwFldPage::InsertFld(USHORT nTypeId, USHORT nSubType, const String& rPar1,
 
         String sPar1(rPar1);
         String sPar2(rPar2);
-        BOOL bDBChanged = FALSE;
         switch( nTypeId )
         {
         case TYP_DATEFLD:
@@ -226,7 +225,6 @@ BOOL SwFldPage::InsertFld(USHORT nTypeId, USHORT nSubType, const String& rPar1,
                 sPar1 = rPar1.Copy(nPos);
 
                 ((SwDBNameInfField*)pTmpFld)->SetDBData(aData);
-                bDBChanged = TRUE;
             }
             break;
 
@@ -254,7 +252,6 @@ BOOL SwFldPage::InsertFld(USHORT nTypeId, USHORT nSubType, const String& rPar1,
                         break;
                     }
                 }
-                bDBChanged = TRUE;
             }
             break;
 

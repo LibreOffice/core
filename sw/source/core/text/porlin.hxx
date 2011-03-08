@@ -245,14 +245,7 @@ inline void SwLinePortion::Truncate()
 
 
 //$ ostream
-#ifdef DBGTXT
-#define CLASSIO( class ) \
-    inline SvStream &operator<<( SvStream &rOs, const class &rClass ) {\
-            return rClass.operator<<( rOs );\
-    }
-#else
 #define CLASSIO( class )
-#endif
 
 CLASSIO( SwLinePortion )
 

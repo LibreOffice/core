@@ -238,10 +238,10 @@ void OP_NamedRange( SvStream& r, UINT16 /*n*/ )
     if( isdigit( *cPuffer ) )
     {   // erstes Zeichen im Namen eine Zahl -> 'A' vor Namen setzen
         *pAnsi = 'A';
-        strcpy( pAnsi + 1, cPuffer );       // #100211# - checked
+        strcpy( pAnsi + 1, cPuffer );
     }
     else
-        strcpy( pAnsi, cPuffer );           // #100211# - checked
+        strcpy( pAnsi, cPuffer );
 
     String              aTmp( pAnsi, pLotusRoot->eCharsetQ );
 
@@ -273,10 +273,10 @@ void OP_SymphNamedRange( SvStream& r, UINT16 /*n*/ )
     if( isdigit( *cPuffer ) )
     {   // erstes Zeichen im Namen eine Zahl -> 'A' vor Namen setzen
         *pAnsi = 'A';
-        strcpy( pAnsi + 1, cPuffer );       // #100211# - checked
+        strcpy( pAnsi + 1, cPuffer );
     }
     else
-        strcpy( pAnsi, cPuffer );           // #100211# - checked
+        strcpy( pAnsi, cPuffer );
 
     String      aTmp( pAnsi, pLotusRoot->eCharsetQ );
     ScfTools::ConvertToScDefinedName( aTmp );
@@ -646,7 +646,7 @@ void OP_ApplyPatternArea123( SvStream& rStream )
                     {
                         std::map<UINT16, ScPatternAttr>::iterator loc = aLotusPatternPool.find( nData );
 
-                        // #126338# apparently, files with invalid index occur in the wild -> don't crash then
+                        // apparently, files with invalid index occur in the wild -> don't crash then
                         DBG_ASSERT( loc != aLotusPatternPool.end(), "invalid format index" );
                         if ( loc != aLotusPatternPool.end() )
                             pDoc->ApplyPatternAreaTab( nCol, nRow, nCol +  nColCount - 1, nRow + nRowCount - 1, static_cast< SCTAB >( nTab + i ), loc->second );

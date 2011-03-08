@@ -35,8 +35,8 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 
-#include <hash_map>
-#include <hash_set>
+#include <boost/unordered_map.hpp>
+#include <boost/unordered_set.hpp>
 #include <vector>
 
 namespace com {
@@ -86,7 +86,7 @@ class UNOTOOLS_DLLPUBLIC DefaultFontConfiguration
         mutable com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > xAccess;
     };
 
-    std::hash_map< com::sun::star::lang::Locale,
+    boost::unordered_map< com::sun::star::lang::Locale,
                    LocaleAccess,
                    utl::LocaleHash >
             m_aConfig;
@@ -192,8 +192,8 @@ private:
 
         LocaleSubst() : bConfigRead( false ) {}
     };
-    std::hash_map< com::sun::star::lang::Locale, LocaleSubst, utl::LocaleHash > m_aSubst;
-    typedef std::hash_set< rtl::OUString, rtl::OUStringHash > UniqueSubstHash;
+    boost::unordered_map< com::sun::star::lang::Locale, LocaleSubst, utl::LocaleHash > m_aSubst;
+    typedef boost::unordered_set< rtl::OUString, rtl::OUStringHash > UniqueSubstHash;
     mutable UniqueSubstHash maSubstHash;
 
 

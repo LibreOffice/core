@@ -181,10 +181,6 @@ void SfxVirtualMenu::Construct_Impl()
     pSVMenu->SetDeactivateHdl( LINK(this, SfxVirtualMenu, Deactivate) );
     pSVMenu->SetSelectHdl( LINK(this, SfxVirtualMenu, Select) );
 
-    // #107258# accelerator keys are needed for accessibility
-    //if ( bOLE )
-    //    InvalidateKeyCodes();
-
     if ( !pResMgr && pParent )
         pResMgr = pParent->pResMgr;
 }
@@ -428,22 +424,6 @@ void SfxVirtualMenu::CreateFromSVMenu()
             }
             else
             {
-/*
-                if ( nSlotId >= SID_SFX_START && !SfxMenuManager::IsPopupFunction(nSlotId) )
-                {
-                    // Echte Popups sollen keine SlotIds haben; leider sind
-                    // da noch Altlasten mit herumzuschleppen ...
-                    String aTitle = pSVMenu->GetItemText( nSlotId );
-                    pSVMenu->SetPopupMenu( nSlotId, NULL );
-                    USHORT nPos = pSVMenu->GetItemPos( nSlotId );
-                    pSVMenu->RemoveItem( nPos );
-                    nSlotId = 1;
-                    while ( pSVMenu->GetItemPos(nSlotId) != MENU_ITEM_NOTFOUND )
-                        nSlotId++;
-                    pSVMenu->InsertItem( nSlotId, aTitle, 0, nPos );
-                    pSVMenu->SetPopupMenu( nSlotId, pPopup );
-                }
-*/
                 pSVMenu->SetHelpId( nSlotId, 0L );
                 pMnuCtrl = pItems+nPos;
 
@@ -575,7 +555,6 @@ IMPL_LINK( SfxVirtualMenu, Highlight, Menu *, pMenu )
     if ( pMenu == pSVMenu )
     {
         // AutoDeactivate ist jetzt nicht mehr n"otig
-        //USHORT nSlotId = pMenu->GetCurItemId();
         if ( pAutoDeactivate )
             pAutoDeactivate->Stop();
     }
@@ -918,8 +897,6 @@ IMPL_LINK( SfxVirtualMenu, Activate, Menu *, pMenu )
 
     // MI: wozu war der noch gut?
     // MBA: scheint ein alter QAP-Hack gewesen zu sein ( in rev.1.41 eingecheckt ! )
-//  if ( Application::IsInModalMode() )
-//      return TRUE; // abw"urgen
 
     if ( pMenu )
     {
@@ -1033,13 +1010,6 @@ IMPL_LINK( SfxVirtualMenu, Activate, Menu *, pMenu )
 
         pBindings->Update( SID_IMAGE_ORIENTATION );
 
-        // HelpText on-demand
-        if ( !bHelpInitialized )
-        {
-            // TODO/CLEANUP: do we need help texts in context menus?
-            // old way with SlotInfo doesn't work anymore
-        }
-
         // bis zum Deactivate die Statusupdates unterdr"ucken
         pBindings->ENTERREGISTRATIONS(); ++nLocks; bIsActive = TRUE;
 
@@ -1088,22 +1058,7 @@ IMPL_LINK( SfxVirtualMenu, Select, Menu *, pMenu )
 {
     USHORT nSlotId = (USHORT) pMenu->GetCurItemId();
     DBG_OUTF( ("SfxVirtualMenu %lx selected %u from %lx", this, nSlotId, pMenu) );
-/*
-    if ( pSVMenu->GetItemCommand( nSlotId ).Len() )
-    {
-        SfxMenuCtrlArr_Impl& rCtrlArr = GetAppCtrl_Impl();
-        for ( USHORT nPos=0; nPos<rCtrlArr.Count(); nPos++ )
-        {
-            SfxMenuControl* pCtrl = rCtrlArr[nPos];
-            if ( pCtrl->GetId() == nSlotId )
-            {
-                SfxUnoMenuControl *pUnoCtrl = (SfxUnoMenuControl*) pCtrl;
-                pUnoCtrl->Select();
-                return TRUE;
-            }
-        }
-    }
-*/
+
     if ( nSlotId >= START_ITEMID_WINDOWLIST && nSlotId <= END_ITEMID_WINDOWLIST )
     {
         // window list menu item selected
@@ -1294,9 +1249,6 @@ void SfxVirtualMenu::InitializeHelp()
     for ( USHORT nPos = 0; nPos<pSVMenu->GetItemCount(); ++nPos )
     {
         USHORT nSlotId = pSVMenu->GetItemId(nPos);
-        // TODO/CLEANUP: this code does nothing!
-//        if ( !bHelpInitialized )
-//            pSVMenu->SetHelpText( nId, rSlotPool.GetSlotHelpText_Impl( nId ) );
         SfxMenuControl &rCtrl = pItems[nPos];
         if ( nSlotId && !rCtrl.GetId() )
         {

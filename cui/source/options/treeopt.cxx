@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/loader/CannotActivateFactoryException.hpp>
@@ -361,9 +359,7 @@ SfxTabPage* CreateGeneralTabPage( sal_uInt16 nId, Window* pParent, const SfxItem
         case RID_SVXPAGE_ACCESSIBILITYCONFIG:       fnCreate = &SvxAccessibilityOptionsTabPage::Create; break;
         case RID_SVXPAGE_SSO:                       fnCreate = GetSSOCreator(); break;
         case RID_SVXPAGE_OPTIONS_CTL:               fnCreate = &SvxCTLOptionsPage::Create ; break;
-        //added by jmeng begin
         case RID_SVXPAGE_INET_MOZPLUGIN:            fnCreate = &MozPluginTabPage::Create; break;
-        //added by jmeng end
         case RID_SVXPAGE_OPTIONS_JAVA:              fnCreate = &SvxJavaOptionsPage::Create ; break;
         case RID_SVXPAGE_ONLINEUPDATE:              fnCreate = &SvxOnlineUpdateTabPage::Create; break;
         case RID_OPTPAGE_CHART_DEFCOLORS:           fnCreate = &SvxDefaultColorOptPage::Create; break;
@@ -839,13 +835,11 @@ void OfaTreeOptionsDialog::InitTreeAndHandler()
 {
     aTreeLB.SetNodeDefaultImages();
 
-    String sResName = String::CreateFromAscii( "iso" );
-    ResMgr* pIsoRes = ResMgr::CreateResMgr( ::rtl::OUStringToOString( sResName, RTL_TEXTENCODING_UTF8 ) );
+    ResMgr* pIsoRes = ResMgr::CreateResMgr( "iso" );
     if ( !pIsoRes )
     {
         // Fallback: Use ooo resource file
-        String sOOoName = String::CreateFromAscii( "ooo" );
-        pIsoRes = ResMgr::CreateResMgr( ::rtl::OUStringToOString( sOOoName, RTL_TEXTENCODING_UTF8 ) );
+        pIsoRes = ResMgr::CreateResMgr("ooo");
     }
 
     //! ResMgr* pIsoRes = SFX_APP()->GetLabelResManager();
@@ -1696,7 +1690,7 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
 
         default:
         {
-            DBG_ERROR( "Unhandled option in ApplyItemSet" );
+            OSL_FAIL( "Unhandled option in ApplyItemSet" );
         }
         break;
     }

@@ -323,7 +323,8 @@ bool ScfPropSetHelper::ReadValue( Type& rValue )
 template< typename Type >
 void ScfPropSetHelper::WriteValue( const Type& rValue )
 {
-    if( UnoAny* pAny = GetNextAny() )
+    UnoAny* pAny = GetNextAny();
+    if( pAny )
         *pAny <<= rValue;
 }
 

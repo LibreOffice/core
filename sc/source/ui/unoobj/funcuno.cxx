@@ -451,7 +451,7 @@ public:
                     eElemClass == uno::TypeClass_FLOAT ||
                     eElemClass == uno::TypeClass_DOUBLE )
         {
-            //  #87871# accept integer types because Basic passes a floating point
+            //  accept integer types because Basic passes a floating point
             //  variable as byte, short or long if it's an integer number.
             double fVal(0.0);
             rElement >>= fVal;
@@ -601,7 +601,7 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const rtl::OUString& aName,
              eClass == uno::TypeClass_FLOAT ||
              eClass == uno::TypeClass_DOUBLE )
         {
-            //  #87871# accept integer types because Basic passes a floating point
+            //  accept integer types because Basic passes a floating point
             //  variable as byte, short or long if it's an integer number.
             double fVal = 0;
             rArg >>= fVal;

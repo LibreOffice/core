@@ -42,8 +42,8 @@
 #include "itemholder1.hxx"
 
 using namespace utl;
-using namespace rtl;
 using namespace com::sun::star::uno;
+using ::rtl::OUString;
 
 static SvtUndoOptions_Impl* pOptions = NULL;
 static sal_Int32           nRefCount = 0;
@@ -132,13 +132,13 @@ void SvtUndoOptions_Impl::Load()
                             nUndoCount = nTemp;
                         else
                         {
-                            DBG_ERROR( "Wrong Type!" );
+                            OSL_FAIL( "Wrong Type!" );
                         }
                         break;
                     }
 
                     default:
-                        DBG_ERROR( "Wrong Type!" );
+                        OSL_FAIL( "Wrong Type!" );
                         break;
                 }
             }

@@ -32,7 +32,7 @@
 #include <rtl/string.hxx>
 #include <rtl/random.h>
 #include <osl/time.h>
-#include <hash_set>
+#include <boost/unordered_set.hpp>
 #include <stdexcept>
 
 
@@ -62,7 +62,6 @@ public:
             id%=QName::tokenizer().getQNames();
             const sal_Char *ln=QName::serializer().getLocalName((QName_t)id);
             const sal_Char *ns=QName::serializer().getNamespaceUri((QName_t)id);
-//          printf("%i \"%s\" \"%s\"\n", i, ns, ln);
             testAdd(ns, ln);
         }
         rtl_random_destroyPool(rndPool);

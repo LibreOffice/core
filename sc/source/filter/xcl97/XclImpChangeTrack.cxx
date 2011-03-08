@@ -146,7 +146,7 @@ sal_Bool XclImpChangeTrack::CheckRecord( sal_uInt16 nOpCode )
 {
     if( (nOpCode != EXC_CHTR_OP_UNKNOWN) && (aRecHeader.nOpCode != nOpCode) )
     {
-        DBG_ERROR( "XclImpChangeTrack::CheckRecord - unknown action" );
+        OSL_FAIL( "XclImpChangeTrack::CheckRecord - unknown action" );
         return sal_False;
     }
     return aRecHeader.nIndex != 0;
@@ -266,7 +266,7 @@ void XclImpChangeTrack::ReadCell(
         }
         break;
         default:
-            DBG_ERROR( "XclImpChangeTrack::ReadCell - unknown data type" );
+            OSL_FAIL( "XclImpChangeTrack::ReadCell - unknown data type" );
     }
 }
 
@@ -280,7 +280,7 @@ void XclImpChangeTrack::ReadChTrInsert()
             (aRecHeader.nOpCode != EXC_CHTR_OP_DELROW) &&
             (aRecHeader.nOpCode != EXC_CHTR_OP_DELCOL) )
         {
-            DBG_ERROR( "XclImpChangeTrack::ReadChTrInsert - unknown action" );
+            OSL_FAIL( "XclImpChangeTrack::ReadChTrInsert - unknown action" );
             return;
         }
 
@@ -351,7 +351,7 @@ void XclImpChangeTrack::ReadChTrCellContent()
             case 0x0000:                            break;
             case 0x1100:    pStrm->Ignore( 16 );    break;
             case 0x1300:    pStrm->Ignore( 8 );     break;
-            default:        DBG_ERROR( "XclImpChangeTrack::ReadChTrCellContent - unknown format info" );
+            default:        OSL_FAIL( "XclImpChangeTrack::ReadChTrCellContent - unknown format info" );
         }
 
         ScBaseCell* pOldCell;
@@ -362,7 +362,7 @@ void XclImpChangeTrack::ReadChTrCellContent()
         ReadCell( pNewCell, nNewFormat, nNewValueType, aPosition );
         if( !pStrm->IsValid() || (pStrm->GetRecLeft() > 0) )
         {
-            DBG_ERROR( "XclImpChangeTrack::ReadChTrCellContent - bytes left, action ignored" );
+            OSL_FAIL( "XclImpChangeTrack::ReadChTrCellContent - bytes left, action ignored" );
             if( pOldCell )
                 pOldCell->Delete();
             if( pNewCell )

@@ -65,7 +65,7 @@ public:
     void                    SetModified() {ConfigItem::SetModified();}
 };
 /*--------------------------------------------------------------------
-    Beschreibung:   Konfiguration fuer Auto Correction
+    Description:   Configuration for Auto Correction
  --------------------------------------------------------------------*/
 class EDITENG_DLLPUBLIC SvxAutoCorrCfg
 {
@@ -77,10 +77,10 @@ class EDITENG_DLLPUBLIC SvxAutoCorrCfg
     SvxBaseAutoCorrCfg      aBaseConfig;
     SvxSwAutoCorrCfg        aSwConfig;
 
-    // Flags f"ur Autotext:
+    // Flags for Autotext:
     sal_Bool    bFileRel;
     sal_Bool    bNetRel;
-    // Tiphilfe f"ur Autotext w"ahrend der Eingabe
+    // Help tip for Autotext as you type
     sal_Bool    bAutoTextTip;
     sal_Bool    bAutoTextPreview;
     sal_Bool    bAutoFmtByInput;
@@ -100,7 +100,7 @@ public:
 
           SvxAutoCorrect* GetAutoCorrect()          { return pAutoCorrect; }
     const SvxAutoCorrect* GetAutoCorrect() const    { return pAutoCorrect; }
-    // der Pointer geht in den Besitz des ConfigItems!
+    // the pointer is transfered to the possession of the ConfigItems!
     void SetAutoCorrect( SvxAutoCorrect* );
 
     sal_Bool IsAutoFmtByInput() const       { return bAutoFmtByInput; }

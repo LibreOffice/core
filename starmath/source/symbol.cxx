@@ -276,7 +276,7 @@ void SmSymbolManager::Load()
 
     if (0 == nSymbolCount)
     {
-        DBG_ERROR( "no symbol set found" );
+        OSL_FAIL( "no symbol set found" );
         m_bModified = false;
     }
 

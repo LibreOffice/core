@@ -58,8 +58,8 @@
 // forward declarations
 //----------------------------------------------------------
 
-using namespace rtl;
-
+using ::rtl::OUString;
+using ::rtl::OString;
 struct FilterEntry;
 struct ElementEntry_Impl;
 

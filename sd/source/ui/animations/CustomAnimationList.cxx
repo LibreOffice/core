@@ -728,7 +728,7 @@ void CustomAnimationList::append( CustomAnimationEffectPtr pEffect )
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR("sd::CustomAnimationList::append(), exception catched!" );
+        OSL_FAIL("sd::CustomAnimationList::append(), exception catched!" );
     }
 }
 
@@ -784,7 +784,7 @@ void CustomAnimationList::onSelectionChanged( Any aSelection )
     }
     catch( Exception& )
     {
-        DBG_ERROR( "sd::CustomAnimationList::onSelectionChanged(), Exception catched!" );
+        OSL_FAIL( "sd::CustomAnimationList::onSelectionChanged(), Exception catched!" );
     }
 }
 

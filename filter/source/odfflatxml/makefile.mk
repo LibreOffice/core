@@ -34,7 +34,7 @@ LIBTARGET=NO
 
 .INCLUDE: settings.mk
 
-SLOFILES=$(SLO)$/FlatXml.obj
+SLOFILES=$(SLO)$/OdfFlatXml.obj
 LIBNAME=odfflatxml
 SHL1TARGETDEPN=makefile.mk
 SHL1OBJS=$(SLOFILES)

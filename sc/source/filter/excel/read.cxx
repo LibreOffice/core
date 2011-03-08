@@ -92,7 +92,6 @@ FltError ImportExcel::Read( void )
     FltError            eLastErr = eERR_OK;
     UINT16              nOpcode;
     UINT16              nBofLevel = 0;
-    BOOL                bBiff4Workbook = FALSE;
 
     DBG_ASSERT( &aIn != NULL, "-ImportExcel::Read(): Kein Stream - wie dass?!" );
 
@@ -125,7 +124,7 @@ FltError ImportExcel::Read( void )
 
         if( !aIn.IsValid() )
         {
-            // #124240# finalize table if EOF is missing
+            // finalize table if EOF is missing
             switch( eAkt )
             {
                 case Z_Biff2:
@@ -188,10 +187,7 @@ FltError ImportExcel::Read( void )
                                     NeueTabelle();
                                 }
                                 else if( pExcRoot->eDateiTyp == Biff4W )
-                                {
                                     eAkt = Z_Biff4W;
-                                    bBiff4Workbook = TRUE;
-                                }
                             break;
                             case EXC_BIFF5:
                                 Bof5();
@@ -749,9 +745,9 @@ FltError ImportExcel::Read( void )
                 break;
             // ----------------------------------------------------------------
             case Z_Ende:        // ----------------------------------- Z_Ende -
-                DBG_ERROR( "*ImportExcel::Read(): Not possible state!" );
+                OSL_FAIL( "*ImportExcel::Read(): Not possible state!" );
                 break;
-            default: DBG_ERROR( "-ImportExcel::Read(): Zustand vergessen!" );
+            default: OSL_FAIL( "-ImportExcel::Read(): Zustand vergessen!" );
         }
     }
 
@@ -858,7 +854,7 @@ FltError ImportExcel8::Read( void )
 
         if( !aIn.IsValid() )
         {
-            // #124240# #i63591# finalize table if EOF is missing
+            // #i63591# finalize table if EOF is missing
             switch( eAkt )
             {
                 case EXC_STATE_SHEET_PRE:
@@ -1032,7 +1028,7 @@ FltError ImportExcel8::Read( void )
             {
                 if( nRecId == EXC_ID5_BOF )
                 {
-                    // #94191# import only 256 sheets
+                    // import only 256 sheets
                     if( GetCurrScTab() > GetScMaxPos().Tab() )
                     {
                         XclTools::SkipSubStream( maStrm );

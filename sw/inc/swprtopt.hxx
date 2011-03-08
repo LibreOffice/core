@@ -80,12 +80,6 @@ public:
     const String& MakeNextJobName();        // steht in vprint.cxx
     const String& GetJobName() const    { return sJobName; }
 
-#if defined(TCPP)
-    // seit neuestem (SV 223) kann der keinen mehr generieren
-    inline  SwPrtOptions(const SwPrtOptions& rNew) {*this = rNew;}
-#endif
-
-
     SwPrtOptions& operator=(const SwPrintData& rData)
         {
             SwPrintData::operator=(rData);

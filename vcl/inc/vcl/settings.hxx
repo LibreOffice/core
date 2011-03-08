@@ -525,7 +525,8 @@ private:
 #define STYLE_SYMBOLS_TANGO         ((ULONG)5)
 #define STYLE_SYMBOLS_OXYGEN        ((ULONG)6)
 #define STYLE_SYMBOLS_CLASSIC       ((ULONG)7)
-#define STYLE_SYMBOLS_THEMES_MAX    ((ULONG)8)
+#define STYLE_SYMBOLS_HUMAN     ((ULONG)8)
+#define STYLE_SYMBOLS_THEMES_MAX    ((ULONG)9)
 
 #define STYLE_MENUIMAGES_OFF  ((USHORT)0)
 #define STYLE_MENUIMAGES_ON   ((USHORT)1)
@@ -1178,8 +1179,6 @@ private:
     LanguageType                            meUILanguage;
     LocaleDataWrapper*                      mpLocaleDataWrapper;
     LocaleDataWrapper*                      mpUILocaleDataWrapper;
-    CollatorWrapper*                        mpCollatorWrapper;
-    CollatorWrapper*                        mpUICollatorWrapper;
     vcl::I18nHelper*                        mpI18nHelper;
     vcl::I18nHelper*                        mpUII18nHelper;
     LocaleConfigurationListener*            mpLocaleCfgListener;

@@ -59,6 +59,7 @@
 #define BOOL win32BOOL
 #define INT32 win32INT32
 #define UINT32 win32UINT32
+#define ULONG win32ULONG
 #define GradientStyle_RECT win32GradientStyle_RECT
 #define Polygon win32Polygon
 #define PolyPolygon win32PolyPolygon
@@ -66,7 +67,7 @@
 #undef WB_RIGHT
 
 #define WIN32_LEAN_AND_MEAN
-#include <tools/prewin.h>
+#include <windows.h> // TODO(Q1): extract minimal set of required headers for gdiplus
 
 #if DIRECTX_VERSION < 0x0900
 
@@ -106,8 +107,6 @@ using ::std::min;
 #endif
 
 #include <gdiplus.h>
-
-#include <tools/postwin.h>
 
 #ifdef min
 #   undef min
@@ -217,6 +216,12 @@ namespace dxcanvas
 #if defined _MSC_VER
 #pragma warning(pop)
 #endif
+
+#undef DELETE
+#undef BOOL
+#undef INT32
+#undef UINT32
+#undef PolyPolygon
 
 #endif /* _DXCANVAS_WINSTUFF_HXX */
 

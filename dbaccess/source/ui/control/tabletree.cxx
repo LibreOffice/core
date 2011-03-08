@@ -50,10 +50,12 @@
 #include "commontypes.hxx"
 #include "listviewitems.hxx"
 #include <tools/diagnose_ex.h>
+#include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <connectivity/dbmetadata.hxx>
 
 #include <algorithm>
+#include <o3tl/compat_functional.hxx>
 
 //.........................................................................
 namespace dbaui
@@ -191,7 +193,7 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
     }
     catch(RuntimeException&)
     {
-        DBG_ERROR("OTableTreeListBox::UpdateTableList : caught an RuntimeException!");
+        OSL_FAIL("OTableTreeListBox::UpdateTableList : caught an RuntimeException!");
     }
     catch ( const SQLException& )
     {
@@ -286,9 +288,9 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
         {
             String sRootEntryText;
             TNames::const_iterator aViews = ::std::find_if(_rTables.begin(),_rTables.end(),
-            ::std::compose1(::std::bind2nd(::std::equal_to<sal_Bool>(),sal_False),::std::select2nd<TNames::value_type>()));
+            ::o3tl::compose1(::std::bind2nd(::std::equal_to<sal_Bool>(),sal_False),::o3tl::select2nd<TNames::value_type>()));
             TNames::const_iterator aTables = ::std::find_if(_rTables.begin(),_rTables.end(),
-            ::std::compose1(::std::bind2nd(::std::equal_to<sal_Bool>(),sal_True),::std::select2nd<TNames::value_type>()));
+            ::o3tl::compose1(::std::bind2nd(::std::equal_to<sal_Bool>(),sal_True),::o3tl::select2nd<TNames::value_type>()));
 
             if ( aViews == _rTables.end() )
                 sRootEntryText  = String(ModuleRes(STR_ALL_TABLES));
@@ -387,17 +389,16 @@ void OTableTreeListBox::checkedButton_noBroadcast(SvLBoxEntry* _pEntry)
     // So we track explicit (un)checking
 
     SvButtonState eState = GetCheckButtonState(_pEntry);
-    DBG_ASSERT(SV_BUTTON_TRISTATE != eState, "OTableTreeListBox::CheckButtonHdl: user action which lead to TRISTATE?");
+    OSL_ENSURE(SV_BUTTON_TRISTATE != eState, "OTableTreeListBox::CheckButtonHdl: user action which lead to TRISTATE?");
     implEmphasize(_pEntry, SV_BUTTON_CHECKED == eState);
 }
 
 //------------------------------------------------------------------------
 void OTableTreeListBox::implEmphasize(SvLBoxEntry* _pEntry, sal_Bool _bChecked, sal_Bool _bUpdateDescendants, sal_Bool _bUpdateAncestors)
 {
-    DBG_ASSERT(_pEntry, "OTableTreeListBox::implEmphasize: invalid entry (NULL)!");
+    OSL_ENSURE(_pEntry, "OTableTreeListBox::implEmphasize: invalid entry (NULL)!");
 
     // special emphasizing handling for the "all objects" entry
-    // 89709 - 16.07.2001 - frank.schoenheit@sun.com
     sal_Bool bAllObjectsEntryAffected = haveVirtualRoot() && (getAllObjectsEntry() == _pEntry);
     if  (   GetModel()->HasChilds(_pEntry)              // the entry has children
         ||  bAllObjectsEntryAffected                    // or it is the "all objects" entry
@@ -438,9 +439,9 @@ void OTableTreeListBox::InitEntry(SvLBoxEntry* _pEntry, const XubString& _rStrin
 
     // replace the text item with our own one
     SvLBoxItem* pTextItem = _pEntry->GetFirstItem(SV_ITEM_ID_LBOXSTRING);
-    DBG_ASSERT(pTextItem, "OTableTreeListBox::InitEntry: no text item!?");
+    OSL_ENSURE(pTextItem, "OTableTreeListBox::InitEntry: no text item!?");
     sal_uInt16 nTextPos = _pEntry->GetPos(pTextItem);
-    DBG_ASSERT(((sal_uInt16)-1) != nTextPos, "OTableTreeListBox::InitEntry: no text item pos!");
+    OSL_ENSURE(((sal_uInt16)-1) != nTextPos, "OTableTreeListBox::InitEntry: no text item pos!");
 
     _pEntry->ReplaceItem(new OBoldListboxString(_pEntry, 0, _rString), nTextPos);
 }

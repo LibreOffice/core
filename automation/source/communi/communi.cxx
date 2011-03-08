@@ -56,7 +56,7 @@ _SV_IMPL_SORTAR_ALG( nm,AE )\
         if( nL ) {\
             DBG_ASSERT( nP < nA && nP + nL <= nA, "ERR_VAR_DEL" );\
             for( USHORT n=nP; n < nP + nL; n++ ) \
-                DBG_ERROR("Das Element der Liste wurde nicht gelöscht"); \
+                OSL_FAIL("Das Element der Liste wurde nicht gelöscht"); \
             SvPtrarr::Remove( nP, nL ); \
         } \
     } \

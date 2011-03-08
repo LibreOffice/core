@@ -123,7 +123,7 @@ namespace abp
         }
         catch(const Exception&)
         {
-            DBG_ERROR("OAdminDialogInvokation::invokeAdministration: caught an exception while executing the dialog!");
+            OSL_FAIL("OAdminDialogInvokation::invokeAdministration: caught an exception while executing the dialog!");
         }
         return sal_False;
     }

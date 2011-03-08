@@ -1324,7 +1324,6 @@ Reference< XHierarchicalNameAccess> ConfigItem::GetTree()
         xRet = pImpl->pManager->AcquireTree(*this);
     else
         xRet = m_xHierarchyAccess;
-    OSL_ENSURE(xRet.is(), "AcquireTree failed");
     return xRet;
 }
 

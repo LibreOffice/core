@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
 #include "sdbcdriverenum.hxx"
 #include <comphelper/stl_types.hxx>
 #include <comphelper/processfactory.hxx>

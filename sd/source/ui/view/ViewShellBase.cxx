@@ -1011,8 +1011,8 @@ void ViewShellBase::UpdateBorder ( bool bForce /* = false */ )
     // made only for the main view shell.  This not only avoids unnecessary
     // calls for the views in side panes but prevents calling an already
     // dying SfxViewShell base class.
-    // For issue #140703# we have to check the existence of the window,
-    // too.  The SfxViewFrame accesses the window without checking it.
+    // We have to check the existence of the window, too.
+    // The SfxViewFrame accesses the window without checking it.
     ViewShell* pMainViewShell = GetMainViewShell().get();
     if (pMainViewShell != NULL && GetWindow()!=NULL)
     {

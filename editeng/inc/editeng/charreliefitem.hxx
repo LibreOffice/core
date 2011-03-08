@@ -40,7 +40,6 @@
 
     This item defines a character relief and has currently the values
     emboss, relief.
-
 */
 
 class EDITENG_DLLPUBLIC SvxCharReliefItem : public SfxEnumItem

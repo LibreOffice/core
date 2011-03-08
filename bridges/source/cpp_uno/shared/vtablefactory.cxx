@@ -50,7 +50,7 @@
 #include "sal/types.h"
 #include "typelib/typedescription.hxx"
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <new>
 #include <vector>
 
@@ -83,7 +83,7 @@ namespace {
 extern "C" void * SAL_CALL allocExec(rtl_arena_type *, sal_Size * size) {
     sal_Size pagesize;
 #if defined SAL_UNX
-#if defined FREEBSD || defined NETBSD || defined OPENBSD
+#if defined FREEBSD || defined NETBSD || defined OPENBSD || defined DRAGONFLY
     pagesize = getpagesize();
 #else
     pagesize = sysconf(_SC_PAGESIZE);
@@ -176,7 +176,7 @@ private:
     sal_Int32 calculate(
         typelib_InterfaceTypeDescription * type, sal_Int32 offset);
 
-    typedef std::hash_map< rtl::OUString, sal_Int32, rtl::OUStringHash > Map;
+    typedef boost::unordered_map< rtl::OUString, sal_Int32, rtl::OUStringHash > Map;
 
     Map m_map;
 };

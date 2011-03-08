@@ -155,7 +155,7 @@ void SdOptionsGeneric::Commit( SdOptionsItem& rCfgItem ) const
             rCfgItem.PutProperties( aNames, aValues );
         else
         {
-            DBG_ERROR( "PutProperties failed" );
+            OSL_FAIL( "PutProperties failed" );
         }
     }
 }

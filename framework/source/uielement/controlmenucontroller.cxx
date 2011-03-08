@@ -230,9 +230,7 @@ ControlMenuController::~ControlMenuController()
 // private function
 void ControlMenuController::updateImagesPopupMenu( PopupMenu* pPopupMenu )
 {
-    rtl::OUString aResName( RTL_CONSTASCII_USTRINGPARAM( "svx" ));
-
-    ResMgr* pResMgr = ResMgr::CreateResMgr( rtl::OUStringToOString( aResName, RTL_TEXTENCODING_ASCII_US ));
+    ResMgr* pResMgr = ResMgr::CreateResMgr("svx");
     ResId aResId( RID_SVXIMGLIST_FMEXPL, *pResMgr );
     aResId.SetRT( RSC_IMAGELIST );
 
@@ -383,10 +381,7 @@ void ControlMenuController::impl_setPopupMenu()
 {
     if ( m_pResPopupMenu == 0 )
     {
-        rtl::OStringBuffer aBuf( 32 );
-        aBuf.append( "svx" );
-
-        ResMgr* pResMgr = ResMgr::CreateResMgr( aBuf.getStr() );
+        ResMgr* pResMgr = ResMgr::CreateResMgr("svx");
         if ( pResMgr )
         {
             ResId aResId( RID_FMSHELL_CONVERSIONMENU, *pResMgr );

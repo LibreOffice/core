@@ -93,10 +93,11 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::frame;
-using namespace rtl;
 
 using ::com::sun::star::util::URL;
 using comphelper::HelperBaseNoState;
+
+using ::rtl::OUString;
 
 SV_IMPL_PTRARR( SelectionChangeListenerArr, XSelectionChangeListenerPtr );
 

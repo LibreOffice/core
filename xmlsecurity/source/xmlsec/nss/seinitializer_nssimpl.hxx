@@ -54,9 +54,6 @@ class SEInitializer_NssImpl : public cppu::WeakImplHelper2
  *  instance. After this instance is used up, use this class to free this
  *  instance.
  *
- *   HISTORY
- *  05.01.2004 -    Interface supported: XSEInitializer, XSEInitializer
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com

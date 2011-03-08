@@ -153,7 +153,7 @@ static void lcl_setObjectVisualArea( const uno::Reference< embed::XEmbeddedObjec
         }
         catch( uno::Exception& )
         {
-            OSL_ASSERT( "Couldn't set visual area of the object!\n" );
+            OSL_FAIL( "Couldn't set visual area of the object!\n" );
         }
     }
 }
@@ -176,8 +176,8 @@ SwXMLTextImportHelper::SwXMLTextImportHelper(
 
 SwXMLTextImportHelper::~SwXMLTextImportHelper()
 {
-    // #90463# the redline helper destructor sets properties on the document
-    //         and may through an exception while doing so... catch this
+    // the redline helper destructor sets properties on the document
+    // and may through an exception while doing so... catch this
     try
     {
         delete pRedlineHelper;

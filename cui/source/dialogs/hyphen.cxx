@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 #include "hyphen.hxx"
 #include "hyphen.hrc"
 #include "cuires.hrc"
@@ -40,7 +37,6 @@
 #include <svtools/langtab.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dlgutil.hxx>
-#include <tools/list.hxx>
 #include <tools/shl.hxx>
 #include <vcl/msgbox.hxx>
 

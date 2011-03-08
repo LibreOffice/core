@@ -799,15 +799,11 @@ SvStream* SwGrfNode::_GetStreamForEmbedGrf(
         // re-generating its name.
         // A save action can have changed the filename of the embedded graphic,
         // because a changed unique ID of the graphic is calculated.
-        // --> OD 2006-01-30 #b6364738#
-        // recursive calls of <GetUniqueID()> have to be avoided.
+        // --> recursive calls of <GetUniqueID()> have to be avoided.
         // Thus, use local static boolean to assure this.
-        static bool bInRegenerateStrmName( false );
-        if ( !bInRegenerateStrmName &&
-             ( !_refPics->hasByName( _aStrmName ) ||
-               !_refPics->isStreamElement( _aStrmName ) ) )
+        if ( !_refPics->hasByName( _aStrmName ) ||
+               !_refPics->isStreamElement( _aStrmName ) )
         {
-            bInRegenerateStrmName = true;
             xub_StrLen nExtPos = _aStrmName.Search( '.' );
             String aExtStr = _aStrmName.Copy( nExtPos );
             Graphic aGraphic( GetGrfObj().GetGraphic() );
@@ -816,7 +812,6 @@ SvStream* SwGrfNode::_GetStreamForEmbedGrf(
                 _aStrmName = String( GetGrfObj().GetUniqueID(), RTL_TEXTENCODING_ASCII_US );
                 _aStrmName += aExtStr;
             }
-            bInRegenerateStrmName = false;
         }
         // <--
 
@@ -945,7 +940,7 @@ IMPL_LINK( SwGrfNode, SwapGraphic, GraphicObject*, pGrfObj )
 {
     SvStream* pRet;
 
-    // #101174#: Keep graphic while in swap in. That's at least important
+    // Keep graphic while in swap in. That's at least important
     // when breaking links, because in this situation a reschedule call and
     // a DataChanged call lead to a paint of the graphic.
     if( pGrfObj->IsInSwapOut() && (IsSelected() || bInSwapIn) )

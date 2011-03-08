@@ -130,15 +130,12 @@ public:
     bool isValue();
 
     void markChildAsModified(rtl::Reference< ChildAccess > const & child);
-
     void releaseChild(rtl::OUString const & name);
 
     virtual Path getAbsolutePath() = 0;
-
     virtual Path getRelativePath() = 0;
 
     virtual rtl::OUString getRelativePathRepresentation() = 0;
-
     virtual rtl::Reference< Node > getNode() = 0;
 
     virtual bool isFinalized() = 0;
@@ -155,9 +152,7 @@ protected:
     virtual ~Access();
 
     virtual rtl::OUString getNameInternal() = 0;
-
     virtual rtl::Reference< RootAccess > getRootAccess() = 0;
-
     virtual rtl::Reference< Access > getParentAccess() = 0;
 
     virtual void addTypes(std::vector< com::sun::star::uno::Type > * types)
@@ -167,7 +162,6 @@ protected:
         std::vector< rtl::OUString > * services) = 0;
 
     virtual void initDisposeBroadcaster(Broadcaster * broadcaster);
-
     virtual void clearListeners() throw ();
 
     virtual com::sun::star::uno::Any SAL_CALL queryInterface(
@@ -179,9 +173,7 @@ protected:
     void checkLocalizedPropertyAccess();
 
     rtl::Reference< Node > getParentNode();
-
     rtl::Reference< ChildAccess > getChild(rtl::OUString const & name);
-
     std::vector< rtl::Reference< ChildAccess > > getAllChildren();
 
     void checkValue(

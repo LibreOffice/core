@@ -35,7 +35,7 @@
 
 #include <comphelper/stl_types.hxx>
 #include <vector>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 namespace css = ::com::sun::star;
 
@@ -127,7 +127,7 @@ private:
         css::uno::Any maUserData;
     };
     typedef ::std::vector<ListenerDescriptor> ListenerList;
-    typedef ::std::hash_map
+    typedef ::boost::unordered_map
         <rtl::OUString,
          ListenerList,
          ::comphelper::UStringHash,

@@ -1269,7 +1269,7 @@ sub set_custom_action
 
     # All files are located in $filesref and in @installer::globals::binarytableonlyfiles.
     # Both must be added together
-    my $localfilesref = installer::converter::combine_arrays_from_references(\@installer::globals::binarytableonlyfiles, $filesref);
+    my $localfilesref = [@installer::globals::binarytableonlyfiles, @{$filesref}];
 
     for ( my $i = 0; $i <= $#{$localfilesref}; $i++ )
     {
@@ -1347,7 +1347,7 @@ sub add_custom_action_to_install_table
 
     # All files are located in $filesref and in @installer::globals::binarytableonlyfiles.
     # Both must be added together
-    my $localfilesref = installer::converter::combine_arrays_from_references(\@installer::globals::binarytableonlyfiles, $filesref);
+    my $localfilesref = [@installer::globals::binarytableonlyfiles, @{$filesref}];
 
     for ( my $i = 0; $i <= $#{$localfilesref}; $i++ )
     {

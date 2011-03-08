@@ -30,6 +30,8 @@
 #include "precompiled_vcl.hxx"
 #include <string.h>
 
+#include <boost/ptr_container/ptr_vector.hpp>
+
 #include <svsys.h>
 #include <vcl/salinst.hxx>
 #include <vcl/salframe.hxx>
@@ -69,7 +71,7 @@
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::awt;
-using namespace rtl;
+using ::rtl::OUString;
 
 // =======================================================================
 

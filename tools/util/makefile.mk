@@ -90,8 +90,6 @@ LIB1FILES+=  $(SLB)$/dll.lib
 
 .IF "$(BIG_TOOLS)"!=""
 .IF "$(GUI)"=="WNT"
-#SOLARLIBDIR=$(SOLARVER)\$((INPATH)\lib
-#SOLARLIBDIR=..\$(INPATH)\lib
 # bei lokalen osl rtl oder vos das SOLARLIBDIR bitte patchen !
 LIB1FILES+= $(SOLARLIBDIR)\xosl.lib \
             $(SOLARLIBDIR)\xrtl.lib

@@ -125,7 +125,7 @@ typedef ::cppu::WeakImplHelper1< container::XNameContainer > OleNameOverrideCont
 class OleNameOverrideContainer : public OleNameOverrideContainer_BASE
 {
 private:
-    typedef std::hash_map< rtl::OUString, uno::Reference< container::XIndexContainer >, ::rtl::OUStringHash,
+    typedef boost::unordered_map< rtl::OUString, uno::Reference< container::XIndexContainer >, ::rtl::OUStringHash,
        ::std::equal_to< ::rtl::OUString > > NamedIndexToOleName;
     NamedIndexToOleName  IdToOleNameHash;
     ::osl::Mutex m_aMutex;
@@ -287,13 +287,13 @@ void ImportExcel8::Scenman( void )
     aIn.Ignore( 4 );
     aIn >> nLastDispl;
 
-    aScenList.SetLast( nLastDispl );
+    aScenList.nLastScenario = nLastDispl;
 }
 
 
 void ImportExcel8::Scenario( void )
 {
-    aScenList.Append( new ExcScenario( aIn, *pExcRoot ) );
+    aScenList.aEntries.push_back( new ExcScenario( aIn, *pExcRoot ) );
 }
 
 
@@ -338,7 +338,6 @@ void ImportExcel8::ReadBasic( void )
 
             if ( !bAsComment )
             {
-#if 1
                 // see if we have the XCB stream
                 SvStorageStreamRef xXCB = xRootStrg->OpenSotStream( String( RTL_CONSTASCII_USTRINGPARAM( "XCB" ) ), STREAM_STD_READ | STREAM_NOCREATE  );
                 if ( xXCB.Is()|| SVSTREAM_OK == xXCB->GetError() )
@@ -346,14 +345,12 @@ void ImportExcel8::ReadBasic( void )
                     CTBWrapper wrapper;
                     if ( wrapper.Read( xXCB ) )
                     {
-#if DEBUG
+#if OSL_DEBUG_LEVEL > 1
                         wrapper.Print( stderr );
 #endif
                         wrapper.ImportCustomToolBar( *pShell );
                     }
                 }
-#endif
-
             }
         }
         try
@@ -423,7 +420,7 @@ void ImportExcel8::PostDocLoad( void )
     ImportExcel::PostDocLoad();
 
     // Scenarien bemachen! ACHTUNG: Hier wird Tabellen-Anzahl im Dokument erhoeht!!
-    if( !pD->IsClipboard() && aScenList.Count() )
+    if( !pD->IsClipboard() && aScenList.aEntries.size() )
     {
         pD->UpdateChartListenerCollection();    // references in charts must be updated
 

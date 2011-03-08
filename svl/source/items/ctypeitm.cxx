@@ -247,7 +247,7 @@ bool CntContentTypeItem::PutValue( const com::sun::star::uno::Any& rVal,BYTE )
         return true;
     }
 
-    DBG_ERROR( "CntContentTypeItem::PutValue - Wrong type!" );
+    OSL_FAIL( "CntContentTypeItem::PutValue - Wrong type!" );
     return false;
 }
 

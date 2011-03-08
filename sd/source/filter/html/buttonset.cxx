@@ -77,7 +77,7 @@ ButtonsImpl::ButtonsImpl( const OUString& rURL )
     }
     catch( Exception& )
     {
-        DBG_ERROR("sd::ButtonsImpl::ButtonsImpl(), exception caught!" );
+        OSL_FAIL("sd::ButtonsImpl::ButtonsImpl(), exception caught!" );
     }
 }
 
@@ -92,7 +92,7 @@ Reference< XInputStream > ButtonsImpl::getInputStream( const OUString& rName )
     }
     catch( Exception& )
     {
-        DBG_ERROR( "sd::ButtonsImpl::getInputStream(), exception caught!" );
+        OSL_FAIL( "sd::ButtonsImpl::getInputStream(), exception caught!" );
     }
     return xInputStream;
 }
@@ -115,7 +115,7 @@ bool ButtonsImpl::getGraphic( const Reference< XGraphicProvider >& xGraphicProvi
     }
     catch( Exception& )
     {
-        DBG_ERROR( "sd::ButtonsImpl::getGraphic(), exception caught!" );
+        OSL_FAIL( "sd::ButtonsImpl::getGraphic(), exception caught!" );
     }
     return false;
 }
@@ -136,7 +136,7 @@ bool ButtonsImpl::copyGraphic( const OUString& rName, const OUString& rPath )
     }
     catch( Exception& )
     {
-        DBG_ERROR( "sd::ButtonsImpl::copyGraphic(), exception caught!" );
+        OSL_FAIL( "sd::ButtonsImpl::copyGraphic(), exception caught!" );
     }
 
     return false;
@@ -276,7 +276,7 @@ Reference< XGraphicProvider > ButtonSetImpl::getGraphicProvider()
         }
         catch( Exception& )
         {
-            DBG_ERROR("sd::ButtonSetImpl::getGraphicProvider(), could not get graphic provider!");
+            OSL_FAIL("sd::ButtonSetImpl::getGraphicProvider(), could not get graphic provider!");
         }
     }
     return mxGraphicProvider;

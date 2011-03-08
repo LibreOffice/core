@@ -55,15 +55,15 @@
 #include "misc.hxx"
 #include "defs.hxx"
 
-//using namespace utl;
 using namespace osl;
-using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::container;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
+
+using ::rtl::OUString;
 
 #define SN_CONV_DICTIONARY_LIST  "com.sun.star.linguistic2.ConversionDictionaryList"
 
@@ -178,7 +178,7 @@ void ConvDicNameContainer::FlushDics() const
             }
             catch(Exception &)
             {
-                DBG_ERROR( "flushing of conversion dictionary failed" );
+                OSL_FAIL( "flushing of conversion dictionary failed" );
             }
         }
     }
@@ -543,8 +543,6 @@ uno::Sequence< OUString > SAL_CALL ConvDicList::queryConversions(
     throw (IllegalArgumentException, NoSupportException, RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
-
-    /*INT16 nLang = LocaleToLanguage( rLocale );*/
 
     INT32 nCount = 0;
     uno::Sequence< OUString > aRes( 20 );

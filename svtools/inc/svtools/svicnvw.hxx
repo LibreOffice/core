@@ -55,8 +55,7 @@ enum SvIconViewTextMode
     ShowTextFull = 1,
     ShowTextShort,
     ShowTextSmart,          // not implemented
-    ShowTextDontKnow        // nur fuer Eintraege (->Einstellung der View
-                            // wird genommen)
+    ShowTextDontKnow        // only for entries (uses config? from the view)
 };
 
 class SvIcnVwDataEntry : public SvViewDataEntry
@@ -65,10 +64,10 @@ friend class SvImpIconView;
     USHORT      nIcnVwFlags;
     SvIconViewTextMode eTextMode;
 public:
-    Rectangle   aRect;              // Bounding-Rect des Entries
-    Rectangle   aGridRect;          // gesetzt im Grid-Modus
-    Size        aTextSize;          // nur gesetzt im Grid-Modus
-    USHORT      nX,nY;              // fuer Tastatursteuerung
+    Rectangle   aRect;              // Bounding-Rect of the Entry
+    Rectangle   aGridRect;          // set in grid mode
+    Size        aTextSize;          // set in grid mode only
+    USHORT      nX,nY;              // for keyboard control
                 SvIcnVwDataEntry();
     virtual     ~SvIcnVwDataEntry();
 
@@ -175,17 +174,17 @@ public:
     using Window::GetDropTarget;
     virtual SvLBoxEntry* GetDropTarget( const Point& );
     virtual Region  GetDragRegion() const;
-    // NotifyMoving/Copying ueberladen, da wir bei GetDropTarget
-    // einen "magic pointer" zurueckgeben, falls in einen leeren
-    // Bereich auf der IconView gedroppt wird.
+    // NotifyMoving/Copying is overloaded, since GetDropTarget
+    // returns a "magic pointer" if the drop happens in/on an empty
+    // area(?) of the IconView
     virtual BOOL    NotifyMoving( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
                         SvLBoxEntry*& rpNewParent, ULONG& rNewChildPos);
     virtual BOOL    NotifyCopying( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
                         SvLBoxEntry*& rpNewParent, ULONG& rNewChildPos);
 
-    // gibt TopLeft des BoundingRects zurueck
-    // Konvertierung in Fensterposition: MapMode.Origin addieren
-    Point           GetEntryPosition( SvLBoxEntry* ) const;
+    // returns TopLeft of the BoundingRect. Add MapMode.Origin to get the
+    // position relative to the window
+     Point          GetEntryPosition( SvLBoxEntry* ) const;
     void            SetEntryPosition( SvLBoxEntry*, const Point& rDocPos);
     void            SetEntryPosition( SvLBoxEntry*, const Point& rDocPos,
                                       BOOL bAdjustAtGrid );
@@ -195,9 +194,9 @@ public:
 
     using SvLBox::GetEntry;
     SvLBoxEntry*    GetEntry( const Point& rPixPos, BOOL  ) const;
-    // Gibt den naechsten ueber pCurEntry liegenden Eintrag (ZOrder)
+    // returns the entry just above pCurEntry (z-wise)
     SvLBoxEntry*    GetNextEntry( const Point& rPixPos, SvLBoxEntry* pCurEntry, BOOL  ) const;
-    // Gibt den naechsten unter pCurEntry liegenden Eintrag (ZOrder)
+    // returns the entry just below pCurEntry (z-wise)
     SvLBoxEntry*    GetPrevEntry( const Point& rPixPos, SvLBoxEntry* pCurEntry, BOOL  ) const;
 
     SvLBoxEntry*    GetEntryFromLogicPos( const Point& rDocPos ) const;
@@ -219,12 +218,12 @@ public:
     virtual SvLBoxEntry*
                     GetCurEntry() const;
 
-    // logische Koordinaten
+    // locigal coordinates
     void            SelectRect(
                         const Rectangle& rRect,
                         BOOL bAdd = FALSE,
-                        // die Schnittmenge mit rRect wird invertiert
-                        // wird bei bAdd == FALSE ignoriert
+                        // inverts the intersection with rRect
+                        // (ignored if bAdd == FALSE)
                         SvPtrarr* pOtherRects = 0,
                         short nBorderOffs = -5 );
     ULONG           GetSelectionCount() const;
@@ -245,13 +244,13 @@ public:
     virtual void    ModelNotification( USHORT nActionId, SvListEntry* pEntry1,
                         SvListEntry* pEntry2, ULONG nPos );
 
-    // 0,0: Grid-Modus ausschalten
+    // pass (0, 0) to switch off grid mode
     void            SetGrid( long nDX, long nDY );
 
-    // nDeltaY < 0 : View bewegt sich auf dem Doc nach oben
-    // nDeltaY > 0 : View bewegt sich auf dem Doc nach unten
-    // nDeltaX < 0 : View bewegt sich auf dem Doc nach links
-    // nDeltaX > 0 : View bewegt sich auf dem Doc nach rechts
+    // nDeltaY < 0 : View moves up relative to Doc
+    // nDeltaY > 0 : View moves down relative to Doc
+    // nDeltaX < 0 : View moves left relative to Doc
+    // nDeltaX > 0 : View moves right relative to Doc
     using Window::Scroll;
     virtual void    Scroll( long nDeltaX, long nDeltaY, USHORT nFlags = 0 );
 
@@ -266,7 +265,7 @@ public:
     void            HideDDIcon();
     void            HideShowDDIcon( SvLBoxEntry* pRefEntry, const Point& rPos );
 
-    // fuers Scrollen beim D&D
+    // to scroll during Drag&Drop
     void            CalcScrollOffsets(
                         const Point& rRefPosPixel,
                         long& rScrollX,

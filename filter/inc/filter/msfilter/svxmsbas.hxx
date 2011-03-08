@@ -34,7 +34,7 @@
 
 #include <sot/storage.hxx>
 #include <map>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 class SfxObjectShell;
 
@@ -53,7 +53,7 @@ class SfxObjectShell;
  * probably what the user expects to see when viewing the code
  */
 
-typedef std::hash_map< sal_Int32, String >  ObjIdToName;
+typedef boost::unordered_map< sal_Int32, String >  ObjIdToName;
 
 typedef std::map< String, ObjIdToName >  ControlAttributeInfo;
 

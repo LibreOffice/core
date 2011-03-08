@@ -2093,17 +2093,13 @@ sub optimize_list
 {
     my ( $longlist ) = @_;
     my %tmpHash;
-    my $shortlist = "";
 
-    $longlist =~ s/^\s*|\s*$//g;
+    $longlist =~ s/^\s+//;
+    $longlist =~ s/\s+$//;
     $longlist =~ s/\s*,\s*/,/g;
 
-    foreach ( split /,/, $longlist ) { $tmpHash{$_} = 1; }
-
-    foreach (sort keys %tmpHash ) { $shortlist .= "$_,"; }
-    chop( $shortlist );
-
-    return $shortlist;
+    @tmpHash{split /,/, $longlist} = ();
+    return join(",", sort keys %tmpHash);
 }
 
 #######################################################################
@@ -2126,7 +2122,6 @@ sub collect_directories_from_filesarray
     my %alldirectoryhash = ();
 
     my $predefinedprogdir_added = 0;
-    my $alreadyincluded = 0;
 
     # Preparing this already as hash, although the only needed value at the moment is the HostName
     # But also adding: "specificlanguage" and "Dir" (for instance gid_Dir_Program)
@@ -2138,62 +2133,26 @@ sub collect_directories_from_filesarray
         installer::pathanalyzer::get_path_from_fullqualifiedname(\$destinationpath);
         $destinationpath =~ s/\Q$installer::globals::separator\E\s*$//;     # removing ending slashes or backslashes
 
-        $alreadyincluded = 0;
-        if  ( exists($alldirectoryhash{$destinationpath}) ) { $alreadyincluded = 1; }
-
-        if (!($alreadyincluded))
+        do
         {
-            my %directoryhash = ();
-            $directoryhash{'HostName'} = $destinationpath;
-            $directoryhash{'specificlanguage'} = $onefile->{'specificlanguage'};
-            $directoryhash{'Dir'} = $onefile->{'Dir'};
-            $directoryhash{'modules'} = $onefile->{'modules'}; # NEW, saving modules
-
-            if ( $onefile->{'Dir'} eq "PREDEFINED_PROGDIR" ) { $predefinedprogdir_added = 1; }
-
-            $alldirectoryhash{$destinationpath} = \%directoryhash;
-
-            # Problem: The $destinationpath can be share/registry/schema/org/openoffice
-            # but not all directories contain files and will be added to this list.
-            # Therefore the path has to be analyzed.
-
-            while ( $destinationpath =~ /(^.*\S)\Q$installer::globals::separator\E(\S.*?)\s*$/ )    # as long as the path contains slashes
+            if (!exists($alldirectoryhash{$destinationpath}))
             {
-                $destinationpath = $1;
+                my %directoryhash = ();
+                $directoryhash{'HostName'} = $destinationpath;
+                $directoryhash{'specificlanguage'} = $onefile->{'specificlanguage'};
+                $directoryhash{'Dir'} = $onefile->{'Dir'};
+                $directoryhash{'modules'} = $onefile->{'modules'}; # NEW, saving modules
 
-                $alreadyincluded = 0;
-                if  ( exists($alldirectoryhash{$destinationpath}) ) { $alreadyincluded = 1; }
+                $predefinedprogdir_added ||= $onefile->{'Dir'} eq "PREDEFINED_PROGDIR";
 
-                if (!($alreadyincluded))
-                {
-                    my %directoryhash = ();
-
-                    $directoryhash{'HostName'} = $destinationpath;
-                    $directoryhash{'specificlanguage'} = $onefile->{'specificlanguage'};
-                    $directoryhash{'Dir'} = $onefile->{'Dir'};
-                    $directoryhash{'modules'} = $onefile->{'modules'}; # NEW, saving modules
-
-                    $alldirectoryhash{$destinationpath} = \%directoryhash;
-                }
-                else
-                {
-                    # Adding the modules to the module list!
-                    $alldirectoryhash{$destinationpath}->{'modules'} = $alldirectoryhash{$destinationpath}->{'modules'} . "," . $onefile->{'modules'};
-                }
+                $alldirectoryhash{$destinationpath} = \%directoryhash;
             }
-        }
-        else
-        {
-            # Adding the modules to the module list!
-            $alldirectoryhash{$destinationpath}->{'modules'} = $alldirectoryhash{$destinationpath}->{'modules'} . "," . $onefile->{'modules'};
-
-            # Also adding the module to all parents
-            while ( $destinationpath =~ /(^.*\S)\Q$installer::globals::separator\E(\S.*?)\s*$/ )    # as long as the path contains slashes
+            else
             {
-                $destinationpath = $1;
-                $alldirectoryhash{$destinationpath}->{'modules'} = $alldirectoryhash{$destinationpath}->{'modules'} . "," . $onefile->{'modules'};
+                # Adding the modules to the module list!
+                $alldirectoryhash{$destinationpath}->{'modules'} .= "," . $onefile->{'modules'};
             }
-        }
+        } while ($destinationpath =~ s/(^.*\S)\Q$installer::globals::separator\E(\S.*?)\s*$/$1/);  # as long as the path contains slashes
     }
 
     # if there is no file in the root directory PREDEFINED_PROGDIR, it has to be included into the directory array now

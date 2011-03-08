@@ -186,7 +186,7 @@ void ScShareDocumentDlg::UpdateView()
         }
         catch ( uno::Exception& )
         {
-            DBG_ERROR( "ScShareDocumentDlg::UpdateView(): caught exception\n" );
+            OSL_FAIL( "ScShareDocumentDlg::UpdateView(): caught exception\n" );
             maLbUsers.Clear();
             maLbUsers.InsertEntry( maStrNoUserData, NULL );
         }

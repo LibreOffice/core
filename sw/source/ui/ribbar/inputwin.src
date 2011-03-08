@@ -47,22 +47,18 @@ ToolBox RID_TBX_FORMULA
             HelpID = FN_FORMULA_CALC ;
             DropDown = TRUE ;
             Text [ en-US ] = "Formula" ;
-            /* ### ACHTUNG: Neuer Text in Resource? Formel auswählen : Formel auswõhlen */
         };
         ToolBoxItem
         {
             Identifier = FN_FORMULA_CANCEL ;
             HelpID = FN_FORMULA_CANCEL ;
             Text [ en-US ] = "Cancel" ;
-            /* ### ACHTUNG: Neuer Text in Resource? Formel nicht übenehmen : Formel nicht ³benehmen */
         };
         ToolBoxItem
         {
             Identifier = FN_FORMULA_APPLY ;
             HelpID = FN_FORMULA_APPLY ;
-            /* ### ACHTUNG: Neuer Text in Resource? Übernehmen : šbernehmen */
             Text [ en-US ] = "Apply" ;
-            /* ### ACHTUNG: Neuer Text in Resource? Formel einfügen : Formel einf³gen */
         };
     };
     Edit ED_POS
@@ -152,7 +148,6 @@ Menu MN_CALC_POPUP
                     {
                         Identifier = MN_CALC_GEQ ;
                         HelpID = HID_MN_CALC_GEQ ;
-                        /* ### ACHTUNG: Neuer Text in Resource? Gr~ößer Gleich : Gr~÷˜er Gleich */
                         Text [ en-US ] = "Greater Than or Equal" ;
                     };
                     MenuItem
@@ -165,7 +160,6 @@ Menu MN_CALC_POPUP
                     {
                         Identifier = MN_CALC_GRE ;
                         HelpID = HID_MN_CALC_GRE ;
-                        /* ### ACHTUNG: Neuer Text in Resource? G~rößer : G~r÷˜er */
                         Text [ en-US ] = "Greater" ;
                     };
                     MenuItem
@@ -289,22 +283,18 @@ String STR_TBL_FORMULA
         Identifier = FN_FORMULA_CALC ; \
         HelpID = FN_FORMULA_CALC ; \
         Text [ en-US ] = "Formula" ; \
-        /* ### ACHTUNG: Neuer Text in Resource? Formel auswählen : Formel auswõhlen */\
     };\
     ToolBoxItem\
     {\
         Identifier = FN_FORMULA_CANCEL ; \
         HelpID = FN_FORMULA_CANCEL ; \
         Text [ en-US ] = "Cancel" ; \
-        /* ### ACHTUNG: Neuer Text in Resource? Formel nicht übenehmen : Formel nicht ³benehmen */\
     };\
     ToolBoxItem\
     {\
         Identifier = FN_FORMULA_APPLY ; \
         HelpID = FN_FORMULA_APPLY ; \
-        /* ### ACHTUNG: Neuer Text in Resource? Übernehmen : šbernehmen */\
         Text [ en-US ] = "Apply" ; \
-        /* ### ACHTUNG: Neuer Text in Resource? Formel einfügen : Formel einf³gen */\
     };
 
 

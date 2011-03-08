@@ -30,6 +30,7 @@
 #include "precompiled_svl.hxx"
 
 #include <tools/debug.hxx>
+#include <osl/diagnose.h>
 
 #include <svl/hint.hxx>
 #include <svl/smplhint.hxx>
@@ -147,7 +148,7 @@ BOOL SfxBroadcaster::AddListener( SfxListener& rListener )
         aListeners.Insert( pListener, aListeners.Count() );
     else
     {
-        DBG_ERROR( "array overflow" );
+        OSL_FAIL( "array overflow" );
         return FALSE;
     }
 

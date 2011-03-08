@@ -31,7 +31,6 @@
 
 
 #include <pam.hxx>          // GetSpaces
-#include <txtcfg.hxx>
 #include <frminf.hxx>       // SwTxtFrminfo
 #include <itrtxt.hxx>       // SwTxtMargin
 

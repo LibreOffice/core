@@ -303,7 +303,6 @@
 #include "tools/diagnose_ex.h"
 #include "tools/gen.hxx"
 #include "tools/link.hxx"
-#include "tools/list.hxx"
 #include "tools/poly.hxx"
 #include "tools/simplerm.hxx"
 #include "tools/solar.h"

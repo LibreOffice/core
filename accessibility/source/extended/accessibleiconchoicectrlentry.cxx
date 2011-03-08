@@ -122,21 +122,6 @@ throw(RuntimeException)
             dispose();
         }
     }
-    #ifdef ACCESSIBLE_EVENT_NOTIFICATION_ENABLED
-    // (the following method is unused currently. If you need it, simply remove the #ifdef thing here and
-    // in the hxx)
-    // -----------------------------------------------------------------------------
-    void AccessibleIconChoiceCtrlEntry::NotifyAccessibleEvent( sal_Int16 _nEventId,
-                                                   const ::com::sun::star::uno::Any& _aOldValue,
-                                                   const ::com::sun::star::uno::Any& _aNewValue )
-    {
-        Reference< uno::XInterface > xSource( *this );
-        AccessibleEventObject aEventObj( xSource, _nEventId, _aNewValue, _aOldValue );
-
-        if (m_nClientId)
-            comphelper::AccessibleEventNotifier::addEvent( m_nClientId, aEventObj );
-    }
-    #endif
     // -----------------------------------------------------------------------------
     Rectangle AccessibleIconChoiceCtrlEntry::GetBoundingBox_Impl() const
     {

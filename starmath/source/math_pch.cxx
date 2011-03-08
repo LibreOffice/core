@@ -41,7 +41,6 @@
 //--------- ab hier die "generierten"
 #include <tools/string.hxx>
 #include <tools/solar.h>
-#include <tools/list.hxx>
 #include <tools/contnr.hxx>
 #include <tools/rtti.hxx>
 #include <tools/ref.hxx>
@@ -427,7 +426,6 @@
 #include <vcl/gdimtf.hxx>
 #include <sot/exchange.hxx>
 #include <vcl/wrkwin.hxx>
-#include <tools/sstring.hxx>
 #include <action.hxx>
 #include <sfx2/filedlg.hxx>
 #include <sfx2/iodlg.hxx>

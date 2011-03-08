@@ -65,7 +65,7 @@ service ModuleUICommandDescription
             <li><b>Name</b><br>a string which specifies the short name of the user interface command without
             any additional information. It can be used for the bubble help.</li>
             <li><b>Popup</b><br>a boolean which specifies if the user interface command is a unique
-            identifer for a popup menu. A popup menu has a label, but is not bound to a command.</li>
+            identifier for a pop-up menu. A pop-up menu has a label, but is not bound to a command.</li>
         </ul>
         The key to a user interface command description is the user interface command itself which has
         the following syntax ".uno:$Command". For example ".uno:Open" shows the file open dialog.

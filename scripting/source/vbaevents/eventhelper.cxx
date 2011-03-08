@@ -95,7 +95,7 @@
 
 #include <set>
 #include <list>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #define ASYNC 0
 
 // primitive support for asynchronous handling of
@@ -250,7 +250,7 @@ struct TranslateInfo
 };
 
 
-typedef std::hash_map< rtl::OUString,
+typedef boost::unordered_map< rtl::OUString,
 std::list< TranslateInfo >,
 ::rtl::OUStringHash,
 ::std::equal_to< ::rtl::OUString > > EventInfoHash;
@@ -546,7 +546,7 @@ public:
     { return ( ( m_hEvents.size() > 0 ? sal_True : sal_False ) ); }
 private:
 
-typedef std::hash_map< rtl::OUString, Any, ::rtl::OUStringHash,
+typedef boost::unordered_map< rtl::OUString, Any, ::rtl::OUStringHash,
 ::std::equal_to< ::rtl::OUString > > EventSupplierHash;
 
     EventSupplierHash m_hEvents;

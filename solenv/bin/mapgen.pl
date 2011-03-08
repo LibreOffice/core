@@ -137,7 +137,8 @@ sub filter_symbols {
         $env_section = '1' and next if ((/^# FREEBSD #$/) && ($ENV{OS} eq 'FREEBSD'));
         $env_section = '1' and next if ((/^# NETBSD #$/) && ($ENV{OS} eq 'NETBSD'));
         $env_section = '1' and next if ((/^# OPENBSD #$/) && ($ENV{OS} eq 'OPENBSD'));
-        last if ($env_section && ((/^# SOLARIS #$/) || (/^# FREEBSD #$/) || (/^# LINUX #$/) || (/^# NETBSD #$/) || (/^# OPENBSD #$/)));
+        $env_section = '1' and next if ((/^# DRAGONFLY #$/) && ($ENV{OS} eq 'DRAGONFLY'));
+        last if ($env_section && ((/^# SOLARIS #$/) || (/^# FREEBSD #$/) || (/^# LINUX #$/) || (/^# NETBSD #$/) || (/^# OPENBSD #$/) (/^# DRAGONFLY #$/)));
         next if (!$_ || /^#/);
         push(@filters, $_);
     };

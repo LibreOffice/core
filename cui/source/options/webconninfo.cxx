@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 // include ---------------------------------------------------------------
 #include <dialmgr.hxx>
 #include <cuires.hrc>
@@ -209,7 +206,7 @@ void WebConnectionInfoDialog::FillPasswordList()
                     aUIEntry += ::rtl::OUString::valueOf( (sal_Unicode)'\t' );
                     aUIEntry += aURLEntries[nURLInd].UserList[nUserInd].UserName;
                     SvLBoxEntry* pEntry = m_aPasswordsLB.InsertEntry( aUIEntry );
-                    pEntry->SetUserData( (void*)(nCount++) );
+                    pEntry->SetUserData( (void*)(sal_IntPtr)(nCount++) );
                 }
             }
 
@@ -228,7 +225,7 @@ void WebConnectionInfoDialog::FillPasswordList()
                 aUIEntry += ::rtl::OUString::valueOf( (sal_Unicode)'\t' );
                 aUIEntry += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "*" ) );
                 SvLBoxEntry* pEntry = m_aPasswordsLB.InsertEntry( aUIEntry );
-                pEntry->SetUserData( (void*)(nCount++) );
+                pEntry->SetUserData( (void*)(sal_IntPtr)(nCount++) );
             }
         }
     }

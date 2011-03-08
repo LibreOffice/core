@@ -669,7 +669,7 @@
 #include "rtl/logfile.hxx"
 #include "rtl/math.hxx"
 #include "rtl/memory.h"
-#include "rlt/ref.hxx"
+#include "rtl/ref.hxx"
 #include "rtl/tencinfo.h"
 #include "rtl/textenc.h"
 #include "rtl/ustrbuf.hxx"
@@ -686,7 +686,7 @@
 #include "sot/formats.hxx"
 #include <map>
 #include <set>
-#include <slist>
+#include <list>
 #include <vector>
 #include "svtools/FilterConfigItem.hxx"
 #include "svtools/accessibilityoptions.hxx"
@@ -694,7 +694,6 @@
 #include "svtools/apearcfg.hxx"
 #include "svl/brdcst.hxx"
 #include "unotools/cacheoptions.hxx"
-#include "svl/cancel.hxx"
 #include "svl/cjkoptions.hxx"
 #include "unotools/cmdoptions.hxx"
 #include "svl/cntwall.hxx"
@@ -797,7 +796,6 @@
 #include "tools/inetdef.hxx"
 #include "tools/line.hxx"
 #include "tools/link.hxx"
-#include "tools/list.hxx"
 #include "tools/multisel.hxx"
 #include "tools/poly.hxx"
 #include "tools/rc.h"

@@ -79,7 +79,7 @@ namespace {
 /** Returns the scaling factor to calculate coordinates from twips. */
 double lclGetTwipsScale( MapUnit eMapUnit )
 {
-    /*  #111027# We cannot use OutputDevice::LogicToLogic() or the XclTools
+    /*  We cannot use OutputDevice::LogicToLogic() or the XclTools
         conversion functions to calculate drawing layer coordinates due to
         Calc's strange definition of a point (1 inch == 72.27 points, instead
         of 72 points). */
@@ -189,7 +189,7 @@ Rectangle XclObjAnchor::GetRect( const XclRoot& rRoot, SCTAB nScTab, MapUnit eMa
         lclGetXFromCol( rDoc, nScTab, maLast.mnCol,  mnRX + 1, fScale ),
         lclGetYFromRow( rDoc, nScTab, maLast.mnRow,  mnBY, fScale ) );
 
-    // #106948# adjust coordinates in mirrored sheets
+    // adjust coordinates in mirrored sheets
     if( rDoc.IsLayoutRTL( nScTab ) )
         lclMirrorRectangle( aRect );
     return aRect;
@@ -201,7 +201,7 @@ void XclObjAnchor::SetRect( const XclRoot& rRoot, SCTAB nScTab, const Rectangle&
     sal_uInt16 nXclMaxCol = rRoot.GetXclMaxPos().Col();
     sal_uInt16 nXclMaxRow = static_cast<sal_uInt16>( rRoot.GetXclMaxPos().Row());
 
-    // #106948# adjust coordinates in mirrored sheets
+    // adjust coordinates in mirrored sheets
     Rectangle aRect( rRect );
     if( rDoc.IsLayoutRTL( nScTab ) )
         lclMirrorRectangle( aRect );

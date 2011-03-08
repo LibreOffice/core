@@ -47,7 +47,6 @@
 #include <view.hxx>
 #include <docsh.hxx>
 #include <uitool.hxx>
-#include <errhdl.hxx>
 #include <wrtsh.hxx>
 #include <swmodule.hxx>
 #include <fmtcol.hxx>

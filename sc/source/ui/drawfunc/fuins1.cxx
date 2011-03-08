@@ -53,54 +53,6 @@
 #include "progress.hxx"
 #include "sc.hrc"
 
-
-
-////========================================================================
-////    class ImportProgress
-////
-////  Bemerkung:
-////    Diese Klasse stellt lediglich den Handler fuer den ImportProgress des
-////    Grafikfilters bereit.
-////========================================================================
-//
-//class ImportProgress
-//{
-//public:
-//      ImportProgress( GraphicFilter& rFilter );
-//      ~ImportProgress();
-//
-//  DECL_LINK( Update, GraphicFilter* );
-//
-//private:
-//  ScProgress aProgress;
-//};
-//
-////------------------------------------------------------------------------
-//
-//ImportProgress::ImportProgress( GraphicFilter& rFilter )
-//  : aProgress( NULL, // SfxViewFrame*, NULL == alle Docs locken
-//               String( ScResId(STR_INSERTGRAPHIC) ),
-//               100 )
-//{
-//  rFilter.SetUpdatePercentHdl( LINK( this, ImportProgress, Update) );
-//}
-//
-////------------------------------------------------------------------------
-//
-//ImportProgress::~ImportProgress()
-//{
-//  aProgress.SetState( 100 );
-//}
-//
-////------------------------------------------------------------------------
-//
-//IMPL_LINK( ImportProgress, Update, GraphicFilter*, pGraphicFilter )
-//{
-//  aProgress.SetState( pGraphicFilter->GetPercent() );
-//  return 0;
-//}
-
-
 //------------------------------------------------------------------------
 
 void SC_DLLPUBLIC ScLimitSizeOnDrawPage( Size& rSize, Point& rPos, const Size& rPage )
@@ -154,7 +106,7 @@ void lcl_InsertGraphic( const Graphic& rGraphic,
                         const String& rFileName, const String& rFilterName, BOOL bAsLink, BOOL bApi,
                         ScTabViewShell* pViewSh, Window* pWindow, SdrView* pView )
 {
-    //  #74778# set the size so the graphic has its original pixel size
+    //  set the size so the graphic has its original pixel size
     //  at 100% view scale (as in SetMarkedOriginalSize),
     //  instead of respecting the current view scale
 
@@ -187,9 +139,9 @@ void lcl_InsertGraphic( const Graphic& rGraphic,
 
     SdrGrafObj* pObj = new SdrGrafObj( rGraphic, aRect );
 
-    // #118522# calling SetGraphicLink here doesn't work
+    // calling SetGraphicLink here doesn't work
 
-    //  #49961# Path is no longer used as name for the graphics object
+    //  Path is no longer used as name for the graphics object
 
     ScDrawLayer* pLayer = (ScDrawLayer*) pView->GetModel();
     String aName = pLayer->GetNewGraphicName();                 // "Grafik x"
@@ -199,7 +151,7 @@ void lcl_InsertGraphic( const Graphic& rGraphic,
     ULONG nInsOptions = bApi ? SDRINSERT_DONTMARK : 0;
     pView->InsertObjectAtView( pObj, *pPV, nInsOptions );
 
-    // #118522# SetGraphicLink has to be used after inserting the object,
+    // SetGraphicLink has to be used after inserting the object,
     // otherwise an empty graphic is swapped in and the contact stuff crashes.
     // See #i37444#.
     if ( bAsLink )

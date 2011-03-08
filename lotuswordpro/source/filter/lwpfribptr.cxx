@@ -179,14 +179,13 @@ void LwpFribPtr::XFConvert()
     {
         sal_uInt8 nFribType = pFrib->GetType();
         sal_Bool bRevisionFlag = pFrib->GetRevisionFlag();
-        sal_uInt8 nRevisionType;
         OUString sChangeID;
         if (bRevisionFlag)
         {
             if ( nFribType!= FRIB_TAG_TABLE && nFribType != FRIB_TAG_FIELD
                     && nFribType != FRIB_TAG_FRAME)
             {
-                nRevisionType = pFrib->GetRevisionType();
+                //sal_uInt8 nRevisionType = pFrib->GetRevisionType();
                 LwpGlobalMgr* pGlobal = LwpGlobalMgr::GetInstance();
                 LwpChangeMgr* pChangeMgr = pGlobal->GetLwpChangeMgr();
                 sChangeID = pChangeMgr->GetChangeID(pFrib);

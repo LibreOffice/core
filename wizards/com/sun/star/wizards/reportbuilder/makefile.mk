@@ -33,11 +33,8 @@ PACKAGE = com$/sun$/star$/wizards$/reportbuilder
 # --- Settings -----------------------------------------------------
 
 .INCLUDE : settings.mk
-#.INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 JARFILES= unoil.jar jurt.jar ridl.jar juh.jar java_uno.jar commonwizards.jar report.jar
-
-# CUSTOMMANIFESTFILE= Manifest.mf
 
 JARCLASSDIRS	= com$/sun$/star$/wizards$/reportbuilder
 JARTARGET	= $(TARGET).jar

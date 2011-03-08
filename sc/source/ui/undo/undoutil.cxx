@@ -99,6 +99,7 @@ ScDBData* ScUndoUtil::GetOldDBData( ScDBData* pUndoData, ScDocument* pDoc, SCTAB
                 bWasTemp = TRUE;
         }
         DBG_ASSERT(bWasTemp, "Undo: didn't find database range");
+        (void)bWasTemp;
 
         USHORT nIndex;
         ScDBCollection* pColl = pDoc->GetDBCollection();

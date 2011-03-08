@@ -73,11 +73,11 @@ public:
     BOOL Execute();
     void Abort();
 
-    ByteString GetHeader() { return aHeader; }
+    ByteString GetHeader() const { return aHeader; }
     SvMemoryStream* GetBody();
 
-    ByteString GetContentType() { return aContentType; }
-    USHORT GetResultId() { return nResultId; }
+    ByteString GetContentType() const { return aContentType; }
+    USHORT GetResultId() const { return nResultId; }
 
     USHORT GetStatus();
 

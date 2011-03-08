@@ -38,12 +38,6 @@
 #include <svx/dialmgr.hxx>
 #include "dlgutil.hxx"
 
-/*************************************************************************
-|*
-|* Ctor SvxXMeasurePreview
-|*
-*************************************************************************/
-
 SvxXMeasurePreview::SvxXMeasurePreview
 (
     Window* pParent,
@@ -59,14 +53,13 @@ SvxXMeasurePreview::SvxXMeasurePreview
 
     Size aSize = GetOutputSize();
 
-    // Massstab: 1:2
+    // Scale: 1:2
     MapMode aMapMode = GetMapMode();
     aMapMode.SetScaleX( Fraction( 1, 2 ) );
     aMapMode.SetScaleY( Fraction( 1, 2 ) );
     SetMapMode( aMapMode );
 
     aSize = GetOutputSize();
-    Rectangle aRect = Rectangle( Point(), aSize );
     Point aPt1 = Point( aSize.Width() / 5, (long) ( aSize.Height() / 2 ) );
     Point aPt2 = Point( aSize.Width() * 4 / 5, (long) ( aSize.Height() / 2 ) );
 
@@ -74,7 +67,6 @@ SvxXMeasurePreview::SvxXMeasurePreview
     pModel = new SdrModel();
     pMeasureObj->SetModel( pModel );
 
-    //pMeasureObj->SetItemSetAndBroadcast(rInAttrs);
     pMeasureObj->SetMergedItemSetAndBroadcast(rInAttrs);
 
     SetDrawMode( GetSettings().GetStyleSettings().GetHighContrastMode() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
@@ -82,15 +74,8 @@ SvxXMeasurePreview::SvxXMeasurePreview
     Invalidate();
 }
 
-/*************************************************************************
-|*
-|* Dtor SvxXMeasurePreview
-|*
-*************************************************************************/
-
 SvxXMeasurePreview::~SvxXMeasurePreview()
 {
-    // #111111#
     // No one is deleting the MeasureObj? This is not only an error but also
     // a memory leak (!). Main problem is that this object is still listening to
     // a StyleSheet of the model which was set. Thus, if You want to keep the obnject,
@@ -101,36 +86,17 @@ SvxXMeasurePreview::~SvxXMeasurePreview()
     delete pModel;
 }
 
-/*************************************************************************
-|*
-|* SvxXMeasurePreview: Paint()
-|*
-*************************************************************************/
-
 void SvxXMeasurePreview::Paint( const Rectangle&  )
 {
-    pMeasureObj->SingleObjectPainter(*this); // #110094#-17
+    pMeasureObj->SingleObjectPainter(*this);
 }
-
-/*************************************************************************
-|*
-|* SvxXMeasurePreview: SetAttributes()
-|*
-*************************************************************************/
 
 void SvxXMeasurePreview::SetAttributes( const SfxItemSet& rInAttrs )
 {
-    //pMeasureObj->SetItemSetAndBroadcast(rInAttrs);
     pMeasureObj->SetMergedItemSetAndBroadcast(rInAttrs);
 
     Invalidate();
 }
-
-/*************************************************************************
-|*
-|* SvxXMeasurePreview: SetAttributes()
-|*
-*************************************************************************/
 
 void SvxXMeasurePreview::MouseButtonDown( const MouseEvent& rMEvt )
 {

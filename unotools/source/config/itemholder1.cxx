@@ -313,7 +313,7 @@ void ItemHolder1::impl_newItem(TItemInfo& rItem)
             break;
 
         default:
-            OSL_ASSERT( "unknown item type" );
+            OSL_FAIL( "unknown item type" );
             break;
     }
 }

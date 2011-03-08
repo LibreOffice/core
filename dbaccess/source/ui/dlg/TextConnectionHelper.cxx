@@ -55,7 +55,6 @@
 #include <comphelper/types.hxx>
 
 #include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
-// #106016# ------------------------------------
 #include <com/sun/star/task/XInteractionHandler.hpp>
 
 #include <svl/filenotation.hxx>
@@ -336,7 +335,7 @@ DBG_NAME(OTextConnectionHelper)
         String aErrorText;
         Control* pErrorWin = NULL;
         //  if (!m_aFieldSeparator.GetText().Len())
-            // bug (#42168) if this line is compiled under OS2 (in a product environent)
+            // if this line is compiled under OS2 (in a product environent)
             // -> use a temporary variable
         String aDelText(m_aFieldSeparator.GetText());
         if(!aDelText.Len())

@@ -514,10 +514,6 @@ bool SvxLanguageBox::IsLanguageSelected( const LanguageType/*type*/) const
     return true;
 }
 
-/*IMPL_IMPL (SvxLanguageBox, ListBox);
-IMPL_CONSTRUCTORS ( SvxLanguageBox, ListBox, "svxlanguagebox" );
-IMPL_GET_IMPL( SvxLanguageBox );
-IMPL_GET_WINDOW (SvxLanguageBox);*/
 };
 
 #endif

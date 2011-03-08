@@ -172,9 +172,7 @@ ScDPObject::ScDPObject( ScDocument* pD ) :
     mnAutoFormatIndex( 65535 ),
     bAllowMove( FALSE ),
     nHeaderRows( 0 ),
-    mbHeaderLayout(false),
-    bRefresh( FALSE ),
-    mnCacheId( -1)
+    mbHeaderLayout(false)
 {
 }
 
@@ -194,9 +192,7 @@ ScDPObject::ScDPObject(const ScDPObject& r) :
     mnAutoFormatIndex( r.mnAutoFormatIndex ),
     bAllowMove( FALSE ),
     nHeaderRows( r.nHeaderRows ),
-    mbHeaderLayout( r.mbHeaderLayout ),
-    bRefresh( r.bRefresh ),
-    mnCacheId ( r.mnCacheId )
+    mbHeaderLayout( r.mbHeaderLayout )
 {
     if (r.pSaveData)
         pSaveData = new ScDPSaveData(*r.pSaveData);
@@ -216,8 +212,7 @@ ScDPObject::~ScDPObject()
     delete pSheetDesc;
     delete pImpDesc;
     delete pServDesc;
-    mnCacheId = -1;
-    InvalidateSource();
+    ClearSource();
 }
 
 void ScDPObject::SetAlive(BOOL bSet)
@@ -236,10 +231,6 @@ void ScDPObject::SetSaveData(const ScDPSaveData& rData)
     {
         delete pSaveData;
         pSaveData = new ScDPSaveData( rData );
-        if ( rData.GetCacheId() >= 0 )
-            mnCacheId = rData.GetCacheId();
-        else if ( mnCacheId >= 0 )
-            pSaveData->SetCacheId( mnCacheId );
     }
 
     InvalidateData();       // re-init source from SaveData
@@ -271,7 +262,7 @@ void ScDPObject::SetSheetDesc(const ScSheetSourceDesc& rDesc)
     DELETEZ( pImpDesc );
     DELETEZ( pServDesc );
 
-    delete pImpDesc;
+    delete pSheetDesc;
     pSheetDesc = new ScSheetSourceDesc(rDesc);
 
     //  make valid QueryParam
@@ -281,11 +272,11 @@ void ScDPObject::SetSheetDesc(const ScSheetSourceDesc& rDesc)
     aParam.nCol1 = rSrcRange.aStart.Col();
     aParam.nRow1 = rSrcRange.aStart.Row();
     aParam.nCol2 = rSrcRange.aEnd.Col();
-    aParam.nRow2 = rSrcRange.aEnd.Row();;
+    aParam.nRow2 = rSrcRange.aEnd.Row();
     aParam.bHasHeader = true;
     pSheetDesc->SetQueryParam(aParam);
 
-    InvalidateSource();     // new source must be created
+    ClearSource();      // new source must be created
 }
 
 void ScDPObject::SetImportDesc(const ScImportSourceDesc& rDesc)
@@ -299,7 +290,7 @@ void ScDPObject::SetImportDesc(const ScImportSourceDesc& rDesc)
     delete pImpDesc;
     pImpDesc = new ScImportSourceDesc(rDesc);
 
-    InvalidateSource();     // new source must be created
+    ClearSource();      // new source must be created
 }
 
 void ScDPObject::SetServiceData(const ScDPServiceDesc& rDesc)
@@ -313,7 +304,7 @@ void ScDPObject::SetServiceData(const ScDPServiceDesc& rDesc)
     delete pServDesc;
     pServDesc = new ScDPServiceDesc(rDesc);
 
-    InvalidateSource();     // new source must be created
+    ClearSource();      // new source must be created
 }
 
 void ScDPObject::WriteSourceDataTo( ScDPObject& rDest ) const
@@ -416,17 +407,17 @@ ScDPTableData* ScDPObject::GetTableData()
         if ( pImpDesc )
         {
             // database data
-            pData.reset(new ScDatabaseDPData(pDoc, *pImpDesc, GetCacheId()));
+            pData.reset(new ScDatabaseDPData(pDoc, *pImpDesc));
         }
         else
         {
             // cell data
             if (!pSheetDesc)
             {
-                DBG_ERROR("no source descriptor");
+                OSL_FAIL("no source descriptor");
                 pSheetDesc = new ScSheetSourceDesc(pDoc);     // dummy defaults
             }
-            pData.reset(new ScSheetDPData(pDoc, *pSheetDesc, GetCacheId()));
+            pData.reset(new ScSheetDPData(pDoc, *pSheetDesc));
         }
 
         // grouping (for cell or database data)
@@ -436,9 +427,6 @@ ScDPTableData* ScDPObject::GetTableData()
             pSaveData->GetExistingDimensionData()->WriteToData(*pGroupData);
             pData = pGroupData;
         }
-
-        if ( pData )
-           SetCacheId( pData->GetCacheId());        // resets mpTableData
 
         mpTableData = pData;                        // after SetCacheId
     }
@@ -450,7 +438,7 @@ void ScDPObject::CreateObjects()
 {
     // if groups are involved, create a new source with the ScDPGroupTableData
     if ( bSettingsChanged && pSaveData && pSaveData->GetExistingDimensionData() )
-        InvalidateSource();
+        ClearSource();
 
     if (!xSource.is())
     {
@@ -469,17 +457,11 @@ void ScDPObject::CreateObjects()
         {
             DBG_ASSERT( !pServDesc, "DPSource could not be created" );
             ScDPTableData* pData = GetTableData();
-
             ScDPSource* pSource = new ScDPSource( pData );
             xSource = pSource;
-
-            if ( pSaveData && bRefresh )
-            {
-                pSaveData->Refresh( xSource );
-                bRefresh = FALSE;
-            }
         }
-        if (pSaveData  )
+
+        if (pSaveData)
             pSaveData->WriteToSource( xSource );
     }
     else if (bSettingsChanged)
@@ -495,7 +477,7 @@ void ScDPObject::CreateObjects()
             }
             catch(uno::Exception&)
             {
-                DBG_ERROR("exception in refresh");
+                OSL_FAIL("exception in refresh");
             }
         }
 
@@ -510,7 +492,7 @@ void ScDPObject::InvalidateData()
     bSettingsChanged = TRUE;
 }
 
-void ScDPObject::InvalidateSource()
+void ScDPObject::ClearSource()
 {
     Reference< XComponent > xObjectComp( xSource, UNO_QUERY );
     if ( xObjectComp.is() )
@@ -746,7 +728,7 @@ BOOL ScDPObject::RefsEqual( const ScDPObject& r ) const
     }
     else if ( pSheetDesc || r.pSheetDesc )
     {
-        DBG_ERROR("RefsEqual: SheetDesc set at only one object");
+        OSL_FAIL("RefsEqual: SheetDesc set at only one object");
         return FALSE;
     }
 
@@ -1671,7 +1653,7 @@ USHORT lcl_FirstSubTotal( const uno::Reference<beans::XPropertySet>& xDimProp ) 
         }
     }
 
-    DBG_ERROR("FirstSubTotal: NULL");
+    OSL_FAIL("FirstSubTotal: NULL");
     return 0;
 }
 
@@ -2414,8 +2396,7 @@ ScDPCollection::ScDPCollection(ScDocument* pDocument) :
 }
 
 ScDPCollection::ScDPCollection(const ScDPCollection& r) :
-    pDoc(r.pDoc),
-    maDPDataCaches(r.maDPDataCaches)
+    pDoc(r.pDoc)
 {
 }
 
@@ -2568,78 +2549,6 @@ String ScDPCollection::CreateNewName( USHORT nMin ) const
     return String();                    // should not happen
 }
 
-long ScDPObject::GetCacheId() const
-{
-    if ( GetSaveData() )
-        return GetSaveData()->GetCacheId();
-    else
-        return mnCacheId;
-}
-ULONG ScDPObject::RefreshCache()
-{
-    if ( pServDesc )
-    {
-        // cache table isn't used for external service - do nothing, no error
-        return 0;
-    }
-
-    CreateObjects();
-    ULONG nErrId = 0;
-    if ( pSheetDesc)
-        nErrId =  pSheetDesc->CheckSourceRange();
-    if ( nErrId == 0 )
-    {
-        // First remove the old cache if exists.
-        ScDPCollection* pDPCollection = pDoc->GetDPCollection();
-        long nOldId = GetCacheId();
-        long nNewId = pDPCollection->GetNewDPObjectCacheId();
-        if ( nOldId >= 0 )
-            pDPCollection->RemoveDPObjectCache( nOldId );
-
-        // Create a new cache.
-        ScDPTableDataCache* pCache = NULL;
-        if ( pSheetDesc )
-            pCache = pSheetDesc->CreateCache(nNewId);
-        else if ( pImpDesc )
-            pCache = pImpDesc->CreateCache(pDoc, nNewId);
-
-        if ( pCache == NULL )
-        {
-            //cache failed
-            DBG_ASSERT( pCache , "pCache == NULL" );
-            return STR_ERR_DATAPILOTSOURCE;
-        }
-
-        nNewId = pCache->GetId();
-
-        bRefresh = TRUE;
-        size_t nCount = pDPCollection->GetCount();
-        for (size_t i=0; i<nCount; ++i)
-        { //set new cache id
-            if ( (*pDPCollection)[i]->GetCacheId() == nOldId )
-            {
-                (*pDPCollection)[i]->SetCacheId( nNewId );
-                (*pDPCollection)[i]->SetRefresh();
-
-            }
-        }
-        DBG_ASSERT( GetCacheId() >= 0, " GetCacheId() >= 0 " );
-    }
-    return nErrId;
-}
-
-void ScDPObject::SetCacheId( long nCacheId )
-{
-    if ( GetCacheId() != nCacheId )
-    {
-        InvalidateSource();
-        if ( GetSaveData() )
-            GetSaveData()->SetCacheId( nCacheId );
-
-        mnCacheId = nCacheId;
-    }
-}
-
 void ScDPCollection::FreeTable(ScDPObject* pDPObj)
 {
     const ScRange& rOutRange = pDPObj->GetOutRange();
@@ -2678,83 +2587,6 @@ bool ScDPCollection::HasDPTable(SCCOL nCol, SCROW nRow, SCTAB nTab) const
         return false;
 
     return pMergeAttr->HasDPTable();
-}
-
-ScDPTableDataCache* ScDPCollection::GetDPObjectCache( long nID )
-{
-    DataCachesType::iterator itr = maDPDataCaches.begin(), itrEnd = maDPDataCaches.end();
-    for (; itr != itrEnd; ++itr)
-    {
-        if ( nID == itr->GetId() )
-            return &(*itr);
-    }
-    return NULL;
-}
-
-ScDPTableDataCache* ScDPCollection::GetUsedDPObjectCache ( const ScRange& rRange )
-{
-    ScDPTableDataCache* pCache = NULL;
-    for (size_t i=maTables.size(); i > 0 ; --i)
-    {
-        if ( const ScSheetSourceDesc* pUsedSheetDesc = maTables[i-1].GetSheetDesc() )
-            if ( rRange == pUsedSheetDesc->GetSourceRange() )
-            {
-                long nID = maTables[i-1].GetCacheId();
-                if ( nID >= 0 )
-                    pCache= GetDPObjectCache( nID );
-                if ( pCache )
-                    return pCache;
-            }
-    }
-    return pCache;
-}
-
-long ScDPCollection::AddDPObjectCache( ScDPTableDataCache* pData )
-{
-    if ( pData->GetId() < 0 )
-    { //create a id for it
-        pData->SetId( GetNewDPObjectCacheId() );
-    }
-    maDPDataCaches.push_back( pData );
-    return pData->GetId();
-}
-
-void ScDPCollection::RemoveDPObjectCache( long nID )
-{
-    DataCachesType::iterator itr = maDPDataCaches.begin(), itrEnd = maDPDataCaches.end();
-    for (; itr != itrEnd; ++itr)
-    {
-        if ( nID == itr->GetId() )
-        {
-            maDPDataCaches.erase(itr);
-            break;
-        }
-    }
-}
-
-long ScDPCollection::GetNewDPObjectCacheId()
-{
-    long nID = 0;
-
-    bool bFound = false;
-    DataCachesType::const_iterator itr, itrEnd = maDPDataCaches.end();
-    do
-    {
-        for ( itr = maDPDataCaches.begin(); itr != itrEnd; ++itr )
-        {
-            if ( nID == itr->GetId() )
-            {
-                nID++;
-                bFound = true;
-                break;
-            }
-        }
-        if ( itr == itrEnd )
-            bFound = false;
-    }
-    while ( bFound );
-
-    return nID;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

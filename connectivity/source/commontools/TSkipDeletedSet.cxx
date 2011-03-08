@@ -139,7 +139,7 @@ sal_Bool OSkipDeletedSet::skipDeleted(IResultSetHelper::Movement _eCursorPositio
             bDone = sal_False;
     }
 
-    while (bDataFound && !bDone)            // solange iterieren bis man auf einem gueltigen Satz ist
+    while (bDataFound && !bDone)            // Iterate until we are at the valid set
     {
         bDataFound = m_pHelper->move(eDelPosition, 1, _bRetrieveData);
         if (_eCursorPosition != IResultSetHelper::RELATIVE)

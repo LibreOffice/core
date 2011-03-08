@@ -49,10 +49,6 @@ TARFILE_MD5=2ae988b339daec234019a7066f96733e
 
 TARFILE_ROOTDIR=commons-lang-2.3-src
 
-#PATCH_FILES=$(PRJ)$/patches$/logging.patch
-
-#CONVERTFILES=build.xml
-                
 OUT2CLASS=dist$/commons-lang-2.3.jar
 
 ANT_OPTS+="-Dfile.encoding=ISO-8859-1"

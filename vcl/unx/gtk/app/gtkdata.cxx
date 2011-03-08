@@ -64,8 +64,9 @@
 
 #include <vcl/svapp.hxx>
 
-using namespace rtl;
 using namespace vcl_sal;
+
+using ::rtl::OUString;
 
 /***************************************************************************
  * class GtkDisplay                                                        *
@@ -203,7 +204,7 @@ void GtkSalDisplay::screenSizeChanged( GdkScreen* pScreen )
         }
         else
         {
-            DBG_ERROR( "unknown screen changed size" );
+            OSL_FAIL( "unknown screen changed size" );
         }
     }
 }
@@ -232,7 +233,7 @@ void GtkSalDisplay::monitorsChanged( GdkScreen* pScreen )
             }
             else
             {
-                DBG_ERROR( "monitors for non-default screen changed, extend-me" );
+                OSL_FAIL( "monitors for non-default screen changed, extend-me" );
             }
         }
     }
@@ -391,7 +392,7 @@ GdkCursor *GtkSalDisplay::getCursor( PointerStyle ePointerStyle )
             MAP_BUILTIN( POINTER_HSIZEBAR, GDK_SB_H_DOUBLE_ARROW );
             MAP_BUILTIN( POINTER_VSIZEBAR, GDK_SB_V_DOUBLE_ARROW );
 
-            MAP_BUILTIN( POINTER_REFHAND, GDK_HAND1 );
+            MAP_BUILTIN( POINTER_REFHAND, GDK_HAND2 );
             MAP_BUILTIN( POINTER_HAND, GDK_HAND2 );
             MAP_BUILTIN( POINTER_PEN, GDK_PENCIL );
 

@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 #include <unotools/pathoptions.hxx>
 #include <unotools/useroptions.hxx>
 #include <svl/adrparse.hxx>

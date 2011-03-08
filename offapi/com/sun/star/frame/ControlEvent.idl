@@ -62,7 +62,7 @@ struct ControlEvent
 
     /** specifies a sequence of named values which are used as
         additional values for the event. The number and types of
-        named values depent on the event.
+        named values depend on the event.
      */
     sequence< com::sun::star::beans::NamedValue > aInformation;
 };

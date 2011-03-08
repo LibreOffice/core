@@ -41,7 +41,6 @@ using ::com::sun::star::accessibility::XAccessible;
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::lang;
 using namespace utl;
-//using namespace rtl;
 //........................................................................
 namespace svt { namespace table
 {

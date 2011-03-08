@@ -104,7 +104,7 @@ void SfxTemplateControllerItem::StateChanged( USHORT nSID, SfxItemState eState,
                     nFamily = 4; break;
                 case SID_STYLE_FAMILY5:
                     nFamily = 5; break;
-                default: DBG_ERROR("unbekannte StyleFamily"); break;
+                default: OSL_FAIL("unbekannte StyleFamily"); break;
             }
             rTemplateDlg.EnableFamilyItem( nFamily, !bDisable );
             break;
@@ -140,9 +140,6 @@ void SfxTemplateControllerItem::StateChanged( USHORT nSID, SfxItemState eState,
         {
             rTemplateDlg.EnableExample_Impl(
                 GetId(), eState != SFX_ITEM_DISABLED );
-            // Das Select Disabled dann, falls enabled und Style Readonly
-/*          String aStr = rTemplateDlg.GetSelectedEntry();
-            if( aStr.Len() ) rTemplateDlg.SelectStyle( aStr ); */
             break;
         }
         case SID_STYLE_NEW:

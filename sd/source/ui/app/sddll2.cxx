@@ -44,7 +44,6 @@
 #include <svx/fontwork.hxx>
 #include <svx/colrctrl.hxx>
 #include <svx/verttexttbxctrl.hxx>
-#include <svx/hyprlink.hxx>
 #include <svx/hyperdlg.hxx>
 #include <svx/fillctrl.hxx>
 #include <svx/linectrl.hxx>
@@ -135,7 +134,6 @@ void SdDLL::RegisterControllers()
     SvxBmpMaskChildWindow::RegisterChildWindow(0, pMod);
     GalleryChildWindow::RegisterChildWindow(0, pMod);
     SvxIMapDlgChildWindow::RegisterChildWindow(0, pMod);
-    SvxHyperlinkDlgWrapper::RegisterChildWindow(0, pMod, SFX_CHILDWIN_FORCEDOCK);
     SvxHlinkDlgWrapper::RegisterChildWindow(0, pMod);
     ::sd::SpellDialogChildWindow::RegisterChildWindow(0, pMod);
     ::avmedia::MediaPlayer::RegisterChildWindow(0, pMod);

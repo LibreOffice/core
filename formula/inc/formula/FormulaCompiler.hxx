@@ -35,7 +35,7 @@
 #include <rtl/ustrbuf.hxx>
 
 #include <boost/shared_ptr.hpp>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #include <com/sun/star/uno/Sequence.hxx>
 
@@ -77,8 +77,8 @@ struct FORMULA_DLLPUBLIC StringHashCode
     }
 };
 
-typedef ::std::hash_map< String, OpCode, StringHashCode, ::std::equal_to< String > > OpCodeHashMap;
-typedef ::std::hash_map< String, String, StringHashCode, ::std::equal_to< String > > ExternalHashMap;
+typedef ::boost::unordered_map< String, OpCode, StringHashCode, ::std::equal_to< String > > OpCodeHashMap;
+typedef ::boost::unordered_map< String, String, StringHashCode, ::std::equal_to< String > > ExternalHashMap;
 
 class FORMULA_DLLPUBLIC FormulaCompiler
 {

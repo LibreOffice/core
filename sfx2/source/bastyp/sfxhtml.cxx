@@ -256,12 +256,6 @@ void SfxHTMLParser::StartFileDownload( const String& rURL, int nToken,
     {
         // Register the medium, so that it can be stopped.
         pSh->RegisterTransfer( *pDLMedium );
-
-        // Transfer Target-Frame, so that also the javascript:-URLs
-        // can be "loaded".
-        //const SfxMedium *pShMedium = pSh->GetMedium();
-        //if( pShMedium )
-        //      pDLMedium->SetLoadTargetFrame( pShMedium->GetLoadTargetFrame() );
     }
 
     // Push Download (Note: Can also be synchronous).
@@ -300,7 +294,7 @@ BOOL SfxHTMLParser::FinishFileDownload( String& rStr )
         DBG_ASSERT( pStream, "Kein In-Stream vom Medium erhalten" );
 
         SvMemoryStream aStream;
-        if( pStream )   // HACK due to bug #65563#
+        if( pStream )
             aStream << *pStream;
 
         aStream.Seek( STREAM_SEEK_TO_END );

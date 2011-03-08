@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <hintids.hxx>
 #include <editeng/keepitem.hxx>
 #include <editeng/hyznitem.hxx>
@@ -48,7 +47,6 @@
 #include <pam.hxx>
 #include <flyfrms.hxx>
 #include <fmtanchr.hxx>
-#include <txtcfg.hxx>
 #include <itrform2.hxx>     // SwTxtFormatter
 #include <widorp.hxx>       // Widows and Orphans
 #include <txtcache.hxx>
@@ -62,6 +60,9 @@
 #include <frmfmt.hxx>       // SwFrmFmt
 // OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
+
+// Toleranzwert in der Formatierung und Textausgabe.
+#define SLOPPY_TWIPS    5
 
 class FormatLevel
 {
@@ -85,23 +86,6 @@ void ValidateTxt( SwFrm *pFrm )     // Freund vom Frame
          (   pFrm->IsVertical() &&
              pFrm->Frm().Height() == pFrm->GetUpper()->Prt().Height() ) )
         pFrm->bValidSize = sal_True;
-/*
-    pFrm->bValidPrtArea = sal_True;
-    //Die Position validieren um nicht unnoetige (Test-)Moves zu provozieren.
-    //Dabei darf allerdings nicht eine tatsaechlich falsche Coordinate
-    //validiert werden.
-    if ( !pFrm->bValidPos )
-    {
-        //Leider muessen wir dazu die korrekte Position berechnen.
-        Point aOld( pFrm->Frm().Pos() );
-        pFrm->MakePos();
-        if ( aOld != pFrm->Pos() )
-        {
-            pFrm->Frm().Pos( aOld );
-            pFrm->bValidPos = sal_False;
-        }
-    }
-*/
 }
 
 void SwTxtFrm::ValidateFrm()
@@ -601,7 +585,6 @@ void SwTxtFrm::_AdjustFollow( SwTxtFormatter &rLine,
         while( GetFollow() && GetFollow()->GetFollow() &&
                nNewOfst >= GetFollow()->GetFollow()->GetOfst() )
         {
-            DBG_LOOP;
             JoinFrm();
         }
     }
@@ -790,12 +773,6 @@ SwCntntFrm *SwTxtFrm::SplitFrm( const xub_StrLen nTxtPos )
 
 void SwTxtFrm::_SetOfst( const xub_StrLen nNewOfst )
 {
-#ifdef DBGTXT
-    // Es gibt tatsaechlich einen Sonderfall, in dem ein SetOfst(0)
-    // zulaessig ist: bug 3496
-    OSL_ENSURE( nNewOfst, "!SwTxtFrm::SetOfst: missing JoinFrm()." );
-#endif
-
     // Die Invalidierung unseres Follows ist nicht noetig.
     // Wir sind ein Follow, werden gleich formatiert und
     // rufen von dort aus das SetOfst() !
@@ -895,7 +872,6 @@ sal_Bool SwTxtFrm::CalcPreps()
                 else
                     rRepaint.Chg( Frm().Pos() + Prt().Pos(), Prt().SSize() );
 
-                // 6792: Rrand < LRand und Repaint
                 if( 0 >= rRepaint.Width() )
                     rRepaint.Width(1);
             }
@@ -1147,52 +1123,8 @@ void SwTxtFrm::FormatAdjust( SwTxtFormatter &rLine,
 
     AdjustFrm( nChg, bHasToFit );
 
-/*
-    // FME 16.07.2003 #i16930# - removed this code because it did not
-    // work correctly. In SwCntntFrm::MakeAll, the frame did not move to the
-    // next page, instead the print area was recalculated and
-    // Prepare( PREP_POS_CHGD, (const void*)&bFormatted, FALSE ) invalidated
-    // the other flags => loop
-
-    // OD 04.04.2003 #108446# - handle special case:
-    // If text frame contains no content and just has split, because of a
-    // line stop, it has to move forward. To force this forward move without
-    // unnecessary formatting of its footnotes and its follow, especially in
-    // columned sections, adjust frame height to zero (0) and do not perform
-    // the intrinsic format of the follow.
-    // The formating method <SwCntntFrm::MakeAll()> will initiate the move forward.
-    sal_Bool bForcedNoIntrinsicFollowCalc = sal_False;
-    if ( nEnd == 0 &&
-         rLine.IsStop() && HasFollow() && nNew == 1
-       )
-    {
-        AdjustFrm( -Frm().SSize().Height(), bHasToFit );
-        Prt().Pos().Y() = 0;
-        Prt().Height( Frm().Height() );
-        if ( FollowFormatAllowed() )
-        {
-            bForcedNoIntrinsicFollowCalc = sal_True;
-            ForbidFollowFormat();
-        }
-    }
-    else
-    {
-        AdjustFrm( nChg, bHasToFit );
-    }
- */
-
     if( HasFollow() || IsInFtn() )
         _AdjustFollow( rLine, nEnd, nStrLen, nNew );
-
-    // FME 16.07.2003 #i16930# - removed this code because it did not work
-    // correctly
-    // OD 04.04.2003 #108446# - allow intrinsic format of follow, if above
-    // special case has forbit it.
-/*    if ( bForcedNoIntrinsicFollowCalc )
-    {
-        AllowFollowFormat();
-    }
- */
 
     pPara->SetPrepMustFit( sal_False );
 
@@ -1212,10 +1144,6 @@ sal_Bool SwTxtFrm::FormatLine( SwTxtFormatter &rLine, const sal_Bool bPrev )
     OSL_ENSURE( ! IsVertical() || IsSwapped(),
             "SwTxtFrm::FormatLine( rLine, bPrev) with unswapped frame" );
     SwParaPortion *pPara = rLine.GetInfo().GetParaPortion();
-    // Nach rLine.FormatLine() haelt nStart den neuen Wert,
-    // waehrend in pOldStart der alte Offset gepflegt wird.
-    // Ueber diesen Weg soll das nDelta ersetzt werden.
-    // *pOldStart += rLine.GetCurr()->GetLen();
     const SwLineLayout *pOldCur = rLine.GetCurr();
     const xub_StrLen nOldLen    = pOldCur->GetLen();
     const KSHORT nOldAscent = pOldCur->GetAscent();
@@ -1241,7 +1169,6 @@ sal_Bool SwTxtFrm::FormatLine( SwTxtFormatter &rLine, const sal_Bool bPrev )
                   bOldHyph == pNew->IsEndHyph();
     if ( bUnChg && !bPrev )
     {
-        // 6672: Toleranz von SLOPPY_TWIPS (5 Twips); vgl. 6922
         const long nWidthDiff = nOldWidth > pNew->Width()
                                 ? nOldWidth - pNew->Width()
                                 : pNew->Width() - nOldWidth;
@@ -1445,7 +1372,6 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
     if( pPara->IsMargin() )
         rRepaint.Width( rRepaint.Width() + pPara->GetHangingMargin() );
     rRepaint.Top( rLine.Y() );
-    // 6792: Rrand < LRand und Repaint
     if( 0 >= rRepaint.Width() )
         rRepaint.Width(1);
     WidowsAndOrphans aFrmBreak( this, rInf.IsTest() ? 1 : 0 );
@@ -1538,7 +1464,6 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
      */
     do
     {
-        DBG_LOOP;
         if( bFirst )
             bFirst = sal_False;
         else
@@ -1699,9 +1624,6 @@ void SwTxtFrm::FormatOnceMore( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
     sal_uInt8 nGo    = 0;
     while( bGoOn )
     {
-#ifdef DBGTXT
-        aDbstream << "OnceMore!" << endl;
-#endif
         ++nGo;
         rInf.Init();
         rLine.Top();
@@ -1756,11 +1678,6 @@ void SwTxtFrm::_Format( SwParaPortion *pPara )
 {
     const xub_StrLen nStrLen = GetTxt().Len();
 
-    // AMA: Wozu soll das gut sein? Scheint mir zuoft zu einem kompletten
-    // Formatieren und Repainten zu fuehren???
-//  if ( !(*pPara->GetDelta()) )
-//      *(pPara->GetDelta()) = nStrLen;
-//  else
     if ( !nStrLen )
     {
         // Leere Zeilen werden nicht lange gequaelt:
@@ -1829,7 +1746,6 @@ void SwTxtFrm::_Format( SwParaPortion *pPara )
 
 void SwTxtFrm::Format( const SwBorderAttrs * )
 {
-    DBG_LOOP;
 #if OSL_DEBUG_LEVEL > 1
     const XubString aXXX = GetTxtNode()->GetTxt();
     const SwTwips nDbgY = Frm().Top();
@@ -1841,33 +1757,12 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
     const SwFrm *pDbgFtnCont = (const SwFrm*)(FindPageFrm()->FindFtnCont());
     (void)pDbgFtnCont;
 
-#if OSL_DEBUG_LEVEL > 1
     // nStopAt laesst sich vom CV bearbeiten.
     static MSHORT nStopAt = 0;
     if( nStopAt == GetFrmId() )
     {
         int i = GetFrmId();
         (void)i;
-    }
-#endif
-#endif
-
-#ifdef DEBUG_FTN
-    //Fussnote darf nicht auf einer Seite vor ihrer Referenz stehen.
-    if( IsInFtn() )
-    {
-        const SwFtnFrm *pFtn = (SwFtnFrm*)GetUpper();
-        const SwPageFrm *pFtnPage = pFtn->GetRef()->FindPageFrm();
-        const MSHORT nFtnPageNr = pFtnPage->GetPhyPageNum();
-        if( !IsLocked() )
-        {
-            if( nFtnPageNr > nDbgPageNr )
-            {
-                SwTxtFrmLocker aLock(this);
-                OSL_ENSURE( nFtnPageNr <= nDbgPageNr, "!Ftn steht vor der Referenz." );
-                MSHORT i = 0;
-            }
-        }
     }
 #endif
 
@@ -2080,12 +1975,10 @@ sal_Bool SwTxtFrm::FormatQuick( bool bForceQuickFormat )
     OSL_ENSURE( ! IsVertical() || ! IsSwapped(),
             "SwTxtFrm::FormatQuick with swapped frame" );
 
-    DBG_LOOP;
 #if OSL_DEBUG_LEVEL > 1
     const XubString aXXX = GetTxtNode()->GetTxt();
     const SwTwips nDbgY = Frm().Top();
     (void)nDbgY;
-#if OSL_DEBUG_LEVEL > 1
     // nStopAt laesst sich vom CV bearbeiten.
     static MSHORT nStopAt = 0;
     if( nStopAt == GetFrmId() )
@@ -2093,7 +1986,6 @@ sal_Bool SwTxtFrm::FormatQuick( bool bForceQuickFormat )
         int i = GetFrmId();
         (void)i;
     }
-#endif
 #endif
 
     if( IsEmpty() && FormatEmpty() )
@@ -2128,13 +2020,6 @@ sal_Bool SwTxtFrm::FormatQuick( bool bForceQuickFormat )
                       ? GetFollow()->GetOfst() : aInf.GetTxt().Len();
     do
     {
-        //DBG_LOOP; shadows declaration above.
-        //resolved into:
-#if OSL_DEBUG_LEVEL > 1
-#if OSL_DEBUG_LEVEL > 1
-        DbgLoop aDbgLoop2( (const void*) this );
-#endif
-#endif
         nStart = aLine.FormatLine( nStart );
         if( aInf.IsNewLine() || (!aInf.IsStop() && nStart < nEnd) )
             aLine.Insert( new SwLineLayout() );
@@ -2149,7 +2034,6 @@ sal_Bool SwTxtFrm::FormatQuick( bool bForceQuickFormat )
     if( !bForceQuickFormat && nNewHeight != nOldHeight && !IsUndersized() )
     {
         // Achtung: Durch FormatLevel==12 kann diese Situation auftreten, don't panic!
-        // OSL_ENSURE( nNewHeight == nOldHeight, "!FormatQuick: rosebud" );
         const xub_StrLen nStrt = GetOfst();
         _InvalidateRange( SwCharRange( nStrt, nEnd - nStrt) );
         return sal_False;

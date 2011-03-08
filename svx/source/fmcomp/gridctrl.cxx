@@ -2169,7 +2169,7 @@ sal_Bool DbGridControl::SetCurrent(long nNewRow)
         }
         else
         {
-            DBG_ERROR("DbGridControl::SetCurrent : SeekRow failed !");
+            OSL_FAIL("DbGridControl::SetCurrent : SeekRow failed !");
             EndCursorAction();
             return sal_False;
         }
@@ -2504,7 +2504,7 @@ sal_Bool DbGridControl::SeekCursor(long nRow, sal_Bool bAbsolute)
         }
         catch(Exception&)
         {
-            DBG_ERROR("DbGridControl::SeekCursor : failed ...");
+            OSL_FAIL("DbGridControl::SeekCursor : failed ...");
         }
 
         try
@@ -2524,7 +2524,7 @@ sal_Bool DbGridControl::SeekCursor(long nRow, sal_Bool bAbsolute)
         }
         catch(Exception&)
         {
-            DBG_ERROR("DbGridControl::SeekCursor : failed ...");
+            OSL_FAIL("DbGridControl::SeekCursor : failed ...");
             m_nSeekPos = -1;                        // kein Datensatz mehr vorhanden
         }
     }
@@ -3615,7 +3615,7 @@ sal_uInt16 DbGridControl::GetColumnIdFromModelPos( sal_uInt16 nPos ) const
 {
     if (nPos >= m_aColumns.size())
     {
-        DBG_ERROR("DbGridControl::GetColumnIdFromModelPos : invalid argument !");
+        OSL_FAIL("DbGridControl::GetColumnIdFromModelPos : invalid argument !");
         return (sal_uInt16)-1;
     }
 
@@ -3832,14 +3832,14 @@ void DbGridControl::FieldListenerDisposing(sal_uInt16 _nId)
     ColumnFieldValueListeners* pListeners = (ColumnFieldValueListeners*)m_pFieldListeners;
     if (!pListeners)
     {
-        DBG_ERROR("DbGridControl::FieldListenerDisposing : invalid call (have no listener array) !");
+        OSL_FAIL("DbGridControl::FieldListenerDisposing : invalid call (have no listener array) !");
         return;
     }
 
     ColumnFieldValueListenersIterator aPos = pListeners->find(_nId);
     if (aPos == pListeners->end())
     {
-        DBG_ERROR("DbGridControl::FieldListenerDisposing : invalid call (did not find the listener) !");
+        OSL_FAIL("DbGridControl::FieldListenerDisposing : invalid call (did not find the listener) !");
         return;
     }
 

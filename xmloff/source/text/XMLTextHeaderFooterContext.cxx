@@ -43,12 +43,8 @@ using ::rtl::OUStringBuffer;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
-//using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::beans;
-//using namespace ::com::sun::star::container;
-//using namespace ::com::sun::star::lang;
-//using namespace ::com::sun::star::text;
 
 
 TYPEINIT1( XMLTextHeaderFooterContext, SvXMLImportContext );

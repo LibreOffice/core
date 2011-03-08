@@ -50,7 +50,6 @@
 #include <shellio.hxx>
 #include <docsh.hxx>
 #include <doc.hxx>
-#include <errhdl.hxx>
 
 #include <dialog.hrc>
 #include <ascfldlg.hrc>
@@ -267,7 +266,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
         SetSizePixel( aSize );
     }
 
-    // initialisiere Zeichensatz
+    // initialise character set
     aCharSetLB.FillFromTextEncodingTable( pStream != NULL );
     aCharSetLB.SelectTextEncoding( aOpt.GetCharSet()  );
 
@@ -305,7 +304,7 @@ void SwAsciiFilterDlg::FillOptions( SwAsciiOptions& rOptions )
     rOptions.SetLanguage( USHORT( nLng ) );
     rOptions.SetParaFlags( GetCRLF() );
 
-    // JP: Task #71802# save the user settings
+    // save the user settings
     String sData;
     rOptions.WriteUserData( sData );
     if( sData.Len() )

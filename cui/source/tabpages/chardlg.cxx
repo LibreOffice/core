@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 // include ---------------------------------------------------------------
 #include <editeng/unolingu.hxx>
 #include <vcl/svapp.hxx>
@@ -621,6 +618,30 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet ) :
         m_pColorLB  = new ColorListBox( this, CUI_RES( LB_COLOR2 ) );
     }
 
+    //In MacOSX the standard dialogs name font-name, font-style as
+    //Family, Typeface
+    //In GNOME the standard dialogs name font-name, font-style as
+    //Family, Style
+    //In Windows the standard dialogs name font-name, font-style as
+    //Font, Style
+#ifdef WNT
+    String sFontFamilyString(CUI_RES(STR_CHARNAME_FONT));
+#else
+    String sFontFamilyString(CUI_RES(STR_CHARNAME_FAMILY));
+#endif
+    m_pWestFontNameFT->SetText(sFontFamilyString);
+    m_pEastFontNameFT->SetText(sFontFamilyString);
+    m_pCTLFontNameFT->SetText(sFontFamilyString);
+
+#ifdef MACOSX
+    String sFontStyleString(CUI_RES(STR_CHARNAME_TYPEFACE));
+#else
+    String sFontStyleString(CUI_RES(STR_CHARNAME_STYLE));
+#endif
+    m_pWestFontStyleFT->SetText(sFontStyleString);
+    m_pEastFontStyleFT->SetText(sFontStyleString);
+    m_pCTLFontStyleFT->SetText(sFontStyleString);
+
     m_pWestLine             ->Show( bCJK );
     m_pColorFL              ->Show( bCJK );
 
@@ -980,7 +1001,6 @@ void SvxCharNamePage::FillSizeBox_Impl( const FontNameBox* pNameBox )
 
 void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp )
 {
-    FixedText* pNameLabel = NULL;
     FontNameBox* pNameBox = NULL;
     FixedText* pStyleLabel = NULL;
     FontStyleBox* pStyleBox = NULL;
@@ -993,7 +1013,6 @@ void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp
     switch ( eLangGrp )
     {
         case Western :
-            pNameLabel = m_pWestFontNameFT;
             pNameBox = m_pWestFontNameLB;
             pStyleLabel = m_pWestFontStyleFT;
             pStyleBox = m_pWestFontStyleLB;
@@ -1005,7 +1024,6 @@ void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp
             break;
 
         case Asian :
-            pNameLabel = m_pEastFontNameFT;
             pNameBox = m_pEastFontNameLB;
             pStyleLabel = m_pEastFontStyleFT;
             pStyleBox = m_pEastFontStyleLB;
@@ -1017,7 +1035,6 @@ void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp
             break;
 
         case Ctl :
-            pNameLabel = m_pCTLFontNameFT;
             pNameBox = m_pCTLFontNameLB;
             pStyleLabel = m_pCTLFontStyleFT;
             pStyleBox = m_pCTLFontStyleLB;
@@ -2447,7 +2464,6 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
     m_aUnderlineLB.GetSelectHdl().Call(NULL);
         // don't call SelectHdl_Impl directly!
         // in DisableControls, we may have re-reouted the select handler
-        // 30.05.2001 - 86262 - frank.schoenheit@germany.sun.com
 
     // the select handler for the emphasis listbox
 //  SelectHdl_Impl( &m_aEmphasisLB );

@@ -207,7 +207,7 @@ void SfxModule::RegisterChildWindow(SfxChildWinFactory *pFact)
         if (pFact->nId ==  (*pImpl->pFactArr)[nFactory]->nId)
         {
             pImpl->pFactArr->Remove( nFactory );
-            DBG_ERROR("ChildWindow registered multiple times!");
+            OSL_FAIL("ChildWindow registered multiple times!");
             return;
         }
     }
@@ -236,7 +236,7 @@ void SfxModule::RegisterChildWindowContext( USHORT nId,
         }
     }
 
-    DBG_ERROR( "No ChildWindow for this Context!" );
+    OSL_FAIL( "No ChildWindow for this Context!" );
 }
 
 //-------------------------------------------------------------------------

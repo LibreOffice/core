@@ -555,7 +555,6 @@ IMPL_LINK( SwFldDokPage, FormatHdl, ListBox *, EMPTYARG )
 
 BOOL SwFldDokPage::FillItemSet(SfxItemSet& )
 {
-    BOOL bPage = FALSE;
     USHORT nTypeId = (USHORT)(ULONG)aTypeLB.GetEntryData(GetTypeSel());
 
     if (nTypeId == USHRT_MAX)
@@ -564,7 +563,6 @@ BOOL SwFldDokPage::FillItemSet(SfxItemSet& )
         if(nPos == LISTBOX_ENTRY_NOTFOUND)
             nPos = 0;
         nTypeId = (USHORT)(ULONG)aSelectionLB.GetEntryData(nPos);
-        bPage = TRUE;
     }
 
     String aVal(aValueED.GetText());

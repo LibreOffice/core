@@ -40,8 +40,9 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include "miscuno.hxx"
 
-using namespace rtl;
 using namespace com::sun::star::uno;
+
+using ::rtl::OUString;
 
 
 
@@ -110,7 +111,7 @@ ScCsvRuler::ScCsvRuler( ScCsvControl& rParent ) :
     ScCsvControl( rParent ),
     mnPosCursorLast( 1 )
 {
-    EnableRTL( false ); // #107812# RTL
+    EnableRTL( false ); // RTL
     InitColors();
     InitSizeData();
     maBackgrDev.SetFont( GetFont() );

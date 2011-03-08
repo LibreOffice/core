@@ -409,7 +409,7 @@ void DrawView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
             mpDrawViewShell->ResetActualLayer();
         }
 
-        // #94278# switch to that page when it's not a master page
+        // switch to that page when it's not a master page
         if(HINT_SWITCHTOPAGE == eHintKind)
         {
             const SdrPage* pPage = ((const SdrHint&)rHint).GetPage();

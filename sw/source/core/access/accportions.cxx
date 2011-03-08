@@ -172,7 +172,7 @@ void SwAccessiblePortionData::Special(
             sDisplay = aTmpBuffer.makeStringAndClear();
             break;
         }
-        // --> OD 2010-06-04 #i111768# - apply patch from kstribley:
+        // #i111768# - apply patch from kstribley:
         // Include the control characters.
         case POR_CONTROLCHAR:
         {
@@ -315,7 +315,7 @@ void SwAccessiblePortionData::GetLineBoundary(
                   FindBreak( aLineBreaks, nPos ) );
 }
 
-// --> OD 2008-05-30 #i89175#
+// #i89175#
 sal_Int32 SwAccessiblePortionData::GetLineCount() const
 {
     size_t nBreaks = aLineBreaks.size();
@@ -550,11 +550,9 @@ sal_Int32 SwAccessiblePortionData::GetAccessiblePosition( USHORT nPos ) const
     DBG_ASSERT( nPos <= pTxtNode->GetTxt().Len(), "illegal position" );
 
     // find the portion number
-    // --> OD 2006-10-19 #i70538#
-    // consider "empty" model portions - e.g. number portion
+    // #i70538# - consider "empty" model portions - e.g. number portion
     size_t nPortionNo = FindLastBreak( aModelPositions,
                                        static_cast<sal_Int32>(nPos) );
-    // <--
 
     sal_Int32 nRet = aAccessiblePositions[nPortionNo];
 

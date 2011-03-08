@@ -129,12 +129,6 @@ TTSettings* GetTTSettings()
 
 #define IS_WINP_CLOSING(pWin) (pWin->GetSmartHelpId().Matches( 4321 ) && pWin->GetSmartUniqueId().Matches( 1234 ))
 
-/*
-UniString GEN_RES_STR0( ULONG nResId ) { return ResString( nResId ); }
-UniString GEN_RES_STR1( ULONG nResId, const UniString &Text1 ) { return GEN_RES_STR0( nResId ).Append( ArgString( 1, Text1 ) ); }
-UniString GEN_RES_STR2( ULONG nResId, const UniString &Text1, const UniString &Text2 ) { return GEN_RES_STR1( nResId, Text1 ).Append( ArgString( 2, Text2 ) ); }
-UniString GEN_RES_STR3( ULONG nResId, const UniString &Text1, const UniString &Text2, const UniString &Text3 ) { return GEN_RES_STR2( nResId, Text1, Text2 ).Append( ArgString( 3, Text3 ) );}
-*/
 StatementList::StatementList()
 : nRetryCount(MAX_RETRIES)
 , bStatementInQue(FALSE)
@@ -301,8 +295,6 @@ Window* StatementList::SearchAllWin( Window *pBase, Search &aSearch, BOOL MaybeB
                 while ( pPParent->GET_REAL_PARENT() )
                     pPParent = pPParent->GET_REAL_PARENT();
 
-//              if ( !IsFirstDocFrame( pPParent ) )
-//              {
                     // get overlap window. Will be dialog else document itself
                     pBase = pBase->GetWindow( WINDOW_OVERLAP );
 
@@ -321,15 +313,10 @@ Window* StatementList::SearchAllWin( Window *pBase, Search &aSearch, BOOL MaybeB
 
                     if ( pControl )
                         return pControl;
-//              }
             }
         }
 
         pBase = Application::GetFirstTopLevelWindow();
-
-        // Skip FirstDocFrame
-//      if ( bSearchFocusFirst && IsFirstDocFrame( pBase ) )
-//          pBase = Application::GetNextTopLevelWindow( pBase );
 
         while ( pBase )
         {
@@ -338,9 +325,6 @@ Window* StatementList::SearchAllWin( Window *pBase, Search &aSearch, BOOL MaybeB
                 return pControl;
 
             pBase = Application::GetNextTopLevelWindow( pBase );
-            // Skip FirstDocFrame
-//          if ( bSearchFocusFirst && IsFirstDocFrame( pBase ) )
-//              pBase = Application::GetNextTopLevelWindow( pBase );
         }
         return NULL;
     }
@@ -350,9 +334,6 @@ Window* StatementList::SearchAllWin( Window *pBase, Search &aSearch, BOOL MaybeB
     pResult = SearchClientWin( pBase, aSearch, MaybeBase );
     if ( pResult )
         return pResult;
-
-//    if ( pBase->GetType() != WINDOW_BORDERWINDOW )
-//      return NULL;
 
     if ( !aSearch.HasSearchFlag( SEARCH_NOOVERLAP ) )
     {
@@ -553,8 +534,6 @@ Menu* StatementList::GetMatchingMenu( Window* pWin, Menu* pBaseMenu )
             return pBaseMenu;
 
         USHORT i;
-//        while ( pBaseMenu )
-//        {
             i = 0;
             while ( i < pBaseMenu->GetItemCount() )
             {
@@ -572,7 +551,6 @@ Menu* StatementList::GetMatchingMenu( Window* pWin, Menu* pBaseMenu )
                 else
                     i++;
             }
-//        }
     }
     else
     {
@@ -618,7 +596,6 @@ Menu* StatementList::GetMatchingMenu( Window* pWin, Menu* pBaseMenu )
 
 BOOL SearchActive::IsWinOK( Window *pWin )
 {
-//  return pWin->IsVisible() && ( (nRT == WINDOW_ANYTYPE && IsDialog(pWin) ) || pWin->GetType() == nRT )  && (nRT == WINDOW_FILEDIALOG || nRT == WINDOW_PATHDIALOG || nRT == WINDOW_PRINTDIALOG || nRT == WINDOW_PRINTERSETUPDIALOG || nRT == WINDOW_COLORDIALOG || ((SystemWindow*)pWin)->IsActive());
     // only matches ResID due to problems with UNIX Window Managers
     return pWin->IsVisible() && ( (nRT == WINDOW_ANYTYPE && IsDialog(pWin) ) || pWin->GetType() == nRT );
 }
@@ -1147,10 +1124,6 @@ void ImplMouseMove( Window* pWin, MouseEvent &aMEvnt, BOOL bForceDirect )
     }
     else
     {
-    //  DragManager* pDragManager = DragManager::GetDragManager();
-    //  if ( pDragManager )
-    //      pDragManager->MouseMove( aMEvnt, pWin );
-    //  else
             if ( pWin->IsTracking() )
         {
             TrackingEvent   aTEvt( aMEvnt );
@@ -1191,10 +1164,6 @@ void ImplMouseButtonUp( Window* pWin, MouseEvent &aMEvnt, BOOL bForceDirect )
     }
     else
     {
-    //      DragManager* pDragManager = DragManager::GetDragManager();
-    //  if ( pDragManager )
-    //      pDragManager->ButtonUp( aMEvnt, pWin );
-    //  else
             if ( pWin->IsTracking() )
         {
             // siehe #64693 die Position ist für Toolboxen relevant

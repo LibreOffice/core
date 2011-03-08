@@ -1239,7 +1239,6 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             USHORT nSubCount = pType->nAttribs;
             if ( !nSubCount )
             {
-                //rPool.FillVariable( *pItem, *pVar, eUserMetric );
                 pValue[nActProp].Name = String( String::CreateFromAscii( pSlot->pUnoName ) ) ;
                 if ( !pItem->QueryValue( pValue[nActProp].Value ) )
                 {
@@ -1253,7 +1252,6 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 // complex type, add a property value for every member of the struct
                 for ( USHORT n=1; n<=nSubCount; ++n )
                 {
-                    //rPool.FillVariable( *pItem, *pVar, eUserMetric );
                     BYTE nSubId = (BYTE) (sal_Int8) pType->aAttrib[n-1].nAID;
                     if ( bConvertTwips )
                         nSubId |= CONVERT_TWIPS;
@@ -1290,7 +1288,6 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 USHORT nSubCount = rArg.pType->nAttribs;
                 if ( !nSubCount )
                 {
-                    //rPool.FillVariable( *pItem, *pVar, eUserMetric );
                     pValue[nActProp].Name = String( String::CreateFromAscii( rArg.pName ) ) ;
                     if ( !pItem->QueryValue( pValue[nActProp++].Value ) )
                     {
@@ -1304,7 +1301,6 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                     // complex type, add a property value for every member of the struct
                     for ( USHORT n = 1; n <= nSubCount; ++n )
                     {
-                        //rPool.FillVariable( rItem, *pVar, eUserMetric );
                         BYTE nSubId = (BYTE) (sal_Int8) rArg.pType->aAttrib[n-1].nAID;
                         if ( bConvertTwips )
                             nSubId |= CONVERT_TWIPS;
@@ -1864,9 +1860,6 @@ ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL, com::sun::star::
                 SfxObjectShellRef rSh = pSh;
 
                 // execute function using its Sbx parent,
-                //SbxVariable* pRet = pMethod->GetParent()->Execute( aCall );
-                //rRetval = sbxToUnoValue( pRet );
-
                 SbxVariable* pRet = pMethod->GetParent()->Execute( aCall );
                 if ( pRet )
                 {

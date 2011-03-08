@@ -50,11 +50,15 @@
 //-----------------------------------------------------------------------------
 
 using namespace utl;
-using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
+
+using ::rtl::OUString;
+#if OSL_DEBUG_LEVEL > 0
+using ::rtl::OString;
+#endif
 
 #define UNISTRING(s) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s))
 
@@ -116,7 +120,12 @@ ConfigManager::ConfigManager(Reference< XMultiServiceFactory > xConfigProv) :
 ConfigManager::~ConfigManager()
 {
     //check list content -> should be empty!
+#if OSL_DEBUG_LEVEL > 1
+    // I think this is a pointless assertion, the code seems to cope
+    // fine with it being empty, no need to crash in a dbglevel=1
+    // build.
     OSL_ENSURE(pMgrImpl->aItemList.empty(), "some ConfigItems are still alive");
+#endif
     if(!pMgrImpl->aItemList.empty())
     {
         ConfigItemList::iterator aListIter;
@@ -145,7 +154,7 @@ Reference< XMultiServiceFactory > ConfigManager::GetConfigurationProvider()
                         UNISTRING("com.sun.star.configuration.ConfigurationProvider")),
                      UNO_QUERY);
             }
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     catch(Exception& rEx)
     {
         static sal_Bool bMessage = sal_True;
@@ -207,7 +216,7 @@ Reference< XHierarchicalNameAccess > ConfigManager::AddConfigItem(utl::ConfigIte
 void    ConfigManager::RegisterConfigItem(utl::ConfigItem& rCfgItem)
 {
     ConfigItemList::iterator aListIter = pMgrImpl->aItemList.begin();
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     for(aListIter = pMgrImpl->aItemList.begin(); aListIter != pMgrImpl->aItemList.end(); ++aListIter)
     {
         ConfigItemListEntry_Impl& rEntry = *aListIter;
@@ -220,7 +229,7 @@ void    ConfigManager::RegisterConfigItem(utl::ConfigItem& rCfgItem)
 
 Reference< XHierarchicalNameAccess> ConfigManager::AcquireTree(utl::ConfigItem& rCfgItem)
 {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     sal_Bool bFound = sal_False;
     ConfigItemList::iterator aListIter = pMgrImpl->aItemList.begin();
     for(aListIter = pMgrImpl->aItemList.begin(); aListIter != pMgrImpl->aItemList.end(); ++aListIter)
@@ -281,7 +290,7 @@ Reference< XHierarchicalNameAccess> ConfigManager::AcquireTree(utl::ConfigItem& 
 
                 throw;
             }
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
             if(0 == (CONFIG_MODE_IGNORE_ERRORS & rCfgItem.GetMode()))
             {
                 OString sMsg("CreateInstance exception: ");
@@ -620,7 +629,7 @@ Reference< XHierarchicalNameAccess> ConfigManager::GetHierarchyAccess(const OUSt
                     OUString::createFromAscii(pAccessSrvc),
                     aArgs);
         }
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         catch(Exception& rEx)
         {
             OString sMsg("CreateInstance exception: ");
@@ -651,7 +660,7 @@ Any ConfigManager::GetLocalProperty(const OUString& rProperty)
         if(xAccess.is())
             aRet = xAccess->getByName(sProperty);
     }
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     catch(Exception& rEx)
     {
         OString sMsg("GetLocalProperty: ");
@@ -681,7 +690,7 @@ void ConfigManager::PutLocalProperty(const OUString& rProperty, const Any& rValu
         {
             xNodeReplace->replaceByName(sProperty, rValue);
         }
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         catch(Exception& rEx)
         {
             OString sMsg("PutLocalProperty: ");

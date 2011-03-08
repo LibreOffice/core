@@ -50,8 +50,6 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 
 
-//  using namespace connectivity;
-
 ODatabaseMetaData::ODatabaseMetaData(OConnection* _pCon)
     : ::connectivity::ODatabaseMetaDataBase(_pCon,_pCon->getConnectionInfo())
     ,m_pADOConnection(_pCon->getConnection())
@@ -98,7 +96,6 @@ sal_Bool ODatabaseMetaData::getBoolProperty(const ::rtl::OUString& _aProperty)  
 Reference< XResultSet > ODatabaseMetaData::impl_getTypeInfo_throw(  )
 {
     ADORecordset *pRecordset = m_pADOConnection->getTypeInfo();
-    //  ADOS::ThrowException(*m_pADOConnection,*this);
 
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(pRecordset);
     pResult->setTypeInfoMap(ADOS::isJetEngine(m_pConnection->getEngineType()));

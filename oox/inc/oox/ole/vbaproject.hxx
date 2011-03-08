@@ -70,7 +70,7 @@ private:
 
 // ============================================================================
 
-class VbaProject : public VbaFilterConfig
+class OOX_DLLPUBLIC VbaProject : public VbaFilterConfig
 {
 public:
     explicit            VbaProject(

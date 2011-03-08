@@ -459,7 +459,6 @@ static void suppress_decorations_motif()
     struct {
         unsigned long flags, functions, decorations;
         long input_mode;
-        unsigned long status;
     } mwmhints;
 
     Atom a = XInternAtom( display, "_MOTIF_WM_HINTS", False );

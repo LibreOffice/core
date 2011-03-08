@@ -34,7 +34,7 @@
 #include <utility>
 #include <vector>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #include "com/sun/star/container/XNameAccess.hpp"
 #include "com/sun/star/io/XInputStream.hpp"

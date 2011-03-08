@@ -322,7 +322,6 @@ bool SwpHintsArray::Check() const
                    "HintsCheck: Character attribute in end array" );
 
         // 8) style portion check
-#if OSL_DEBUG_LEVEL > 1
         const SwTxtAttr* pHtThis = m_HintStarts[i];
         const SwTxtAttr* pHtLast = i > 0 ? m_HintStarts[i-1] : 0;
         CHECK_ERR( 0 == i ||
@@ -372,7 +371,6 @@ bool SwpHintsArray::Check() const
                 }
             }
         }
-#endif
     }
     return true;
 }

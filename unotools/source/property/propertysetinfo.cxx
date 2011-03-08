@@ -81,12 +81,12 @@ void PropertyMapImpl::add( PropertyMapEntry* pMap ) throw()
         PropertyMap::iterator aIter = maPropertyMap.find( aName );
         if( aIter != maPropertyMap.end() )
         {
-            DBG_ERROR( "Warning: PropertyMapEntry added twice, possible error!" );
+            OSL_FAIL( "Warning: PropertyMapEntry added twice, possible error!" );
         }
 #endif
         if( NULL == pMap->mpType )
         {
-            DBG_ERROR( "No type in PropertyMapEntry!" );
+            OSL_FAIL( "No type in PropertyMapEntry!" );
             pMap->mpType = &::getCppuType((const sal_Int32*)0);
         }
 

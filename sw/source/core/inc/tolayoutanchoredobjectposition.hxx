@@ -39,7 +39,7 @@ namespace objectpositioning
             // calculated data for object position type TO_LAYOUT
             Point       maRelPos;
 
-            // --> OD 2004-06-17 #i26791#
+            // #i26791#
             // determine offset to frame anchor position according to the
             // positioning alignments
             Point maOffsetToFrmAnchorPos;
@@ -49,16 +49,10 @@ namespace objectpositioning
             virtual ~SwToLayoutAnchoredObjectPosition();
 
             /** calculate position for object
-
-                OD 30.07.2003 #110978#
-
-                @author OD
             */
             virtual void CalcPosition();
 
             /** calculated relative position for object
-
-                @author OD
             */
             Point GetRelPos() const;
     };

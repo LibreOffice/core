@@ -37,15 +37,11 @@ END {
         print "UDK_3_0_0 {"
         print "global:"
         print "_ZTI*; _ZTS*; # weak RTTI symbols for C++ exceptions"
-        if (ENVIRON["USE_SYSTEM_STL"] != "YES")
-            print "_ZN4_STL7num_put*; # for STLport"
         print "};"
     }
 }
 state == 2 {
     print "_ZTI*; _ZTS*; # weak RTTI symbols for C++ exceptions"
-    if (ENVIRON["USE_SYSTEM_STL"] != "YES")
-        print "_ZN4_STL7num_put*; # for STLport"
     state = 3
 }
 # #i66636# - ???

@@ -403,8 +403,6 @@ void DBTreeListBox::KeyInput( const KeyEvent& rKEvt )
         // is used by the document will raise a similar bug once somebody discovers it.
         // If this is the case, we should discuss a real solution with the framework (SFX) and the
         // applications.
-        //
-        // 2002-12-02 - 105831 - fs@openoffice.org
     }
 
     if ( !bHandled )
@@ -667,7 +665,7 @@ PopupMenu* DBTreeListBox::CreateContextMenu( void )
                     break;
 
                 default:
-                    DBG_ERROR( "DBTreeListBox::CreateContextMenu: unexpected return value of the interceptor call!" );
+                    OSL_FAIL( "DBTreeListBox::CreateContextMenu: unexpected return value of the interceptor call!" );
 
                 case ContextMenuInterceptorAction_IGNORED:
                     break;

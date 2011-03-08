@@ -42,10 +42,6 @@ import java.util.*;
 import java.io.*;
 import java.lang.*;
 
-/**
- *
- * @author  fs@openoffice.org
- */
 public class RadioButtons extends complexlib.ComplexTestCase
 {
     private DocumentHelper          m_document;         /// our current test document

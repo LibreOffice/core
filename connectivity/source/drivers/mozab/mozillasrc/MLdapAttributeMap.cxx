@@ -39,7 +39,7 @@
 
 #include <tools/diagnose_ex.h>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 //........................................................................
 namespace connectivity { namespace mozab {
@@ -72,7 +72,7 @@ namespace connectivity { namespace mozab {
             }
         };
 
-        typedef ::std::hash_map< ::rtl::OString, CardPropertyData, ::rtl::OStringHash > MapPropertiesToAttributes;
+        typedef ::boost::unordered_map< ::rtl::OString, CardPropertyData, ::rtl::OStringHash > MapPropertiesToAttributes;
 
         #define DEF_CARD_ACCESS( PropertyName ) \
             &nsIAbCard::Get##PropertyName, &nsIAbCard::Set##PropertyName

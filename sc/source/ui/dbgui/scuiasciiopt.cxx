@@ -56,8 +56,9 @@ const SCSIZE ASCIIDLG_MAXROWS                = MAXROWCOUNT;
 #endif
 
 
-using namespace rtl;
 using namespace com::sun::star::uno;
+
+using ::rtl::OUString;
 
 // Defines - CSV Import Preserve Options
 #define FIXED_WIDTH         "FixedWidth"
@@ -485,7 +486,7 @@ bool ScImportAsciiDlg::GetLine( ULONG nLine, String &rText )
         mnStreamPos = mpDatStream->Tell();
     }
 
-    //  #107455# If the file content isn't unicode, ReadUniStringLine
+    //  If the file content isn't unicode, ReadUniStringLine
     //  may try to seek beyond the file's end and cause a CANTSEEK error
     //  (depending on the stream type). The error code has to be cleared,
     //  or further read operations (including non-unicode) will fail.

@@ -448,7 +448,7 @@ protected:
        than or equal to the referenced child are valid. All children
        greater than the referenced child are invalid.
      */
-    mutable tSwNumberTreeChildren::iterator mItLastValid;
+    mutable tSwNumberTreeChildren::const_iterator mItLastValid;
 
 #if OSL_DEBUG_LEVEL > 1
     /**
@@ -515,7 +515,7 @@ protected:
                               - false   only set if aItLastValid is preceeding
                                         the current last valid node
      */
-    void SetLastValid(tSwNumberTreeChildren::iterator aItLastValid,
+    void SetLastValid(tSwNumberTreeChildren::const_iterator aItLastValid,
                       bool bValidating = false) const;
 
     /**
@@ -672,7 +672,7 @@ protected:
      */
     void ClearObsoletePhantoms();
 
-    tSwNumberTreeChildren::iterator GetIterator(const SwNumberTreeNode * pChild) const;
+    tSwNumberTreeChildren::const_iterator GetIterator(const SwNumberTreeNode * pChild) const;
 
     /**
        Moves all children to a given destination node.

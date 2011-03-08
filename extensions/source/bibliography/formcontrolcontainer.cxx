@@ -120,7 +120,7 @@ namespace bib
         catch( const Exception& e)
         {
             (void) e;   // make compiler happy
-            DBG_ERROR( "FormControlContainer::implSetDesignMode: caught an exception!" );
+            OSL_FAIL( "FormControlContainer::implSetDesignMode: caught an exception!" );
         }
     }
 

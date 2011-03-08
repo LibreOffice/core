@@ -89,10 +89,10 @@ public:
                             ~ScProgress();
 
 #ifdef SC_PROGRESS_CXX
-                            // nur fuer DummyInterpret, sonst nie benutzen!!!
+                            // for DummyInterpret only, never use otherwise!!!
                             ScProgress();
 #endif
-                            // kann NULL sein!
+                            // might be NULL!
             SfxProgress*    GetSfxProgress() const { return pProgress; }
 
             BOOL            SetStateText( ULONG nVal, const String &rVal, ULONG nNewRange = 0 )
@@ -133,14 +133,14 @@ public:
                                     return TRUE;
                                 }
             BOOL            SetStateOnPercent( ULONG nVal )
-                                {   // nur wenn Prozent mehr als vorher
+                                {   // only if percentage increased
                                     if ( nGlobalRange && (nVal * 100 /
                                             nGlobalRange) > nGlobalPercent )
                                         return SetState( nVal );
                                     return TRUE;
                                 }
             BOOL            SetStateCountDownOnPercent( ULONG nVal )
-                                {   // nur wenn Prozent mehr als vorher
+                                {   // only if percentage increased
                                     if ( nGlobalRange &&
                                             ((nGlobalRange - nVal) * 100 /
                                             nGlobalRange) > nGlobalPercent )

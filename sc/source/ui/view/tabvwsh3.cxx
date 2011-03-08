@@ -269,7 +269,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
                 if ( nSlot == SID_JUMPTOMARK )
                 {
-                    //  #106586# URL has to be decoded for escaped characters (%20)
+                    //  URL has to be decoded for escaped characters (%20)
                     aAddress = INetURLObject::decode( aAddress, INET_HEX_ESCAPE,
                                                INetURLObject::DECODE_WITH_CHARSET,
                                             RTL_TEXTENCODING_UTF8 );
@@ -529,7 +529,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
         //  View aufgerufen, um auf der sichtbaren View zu markieren/umzuschalten:
 
         case SID_TABLE_ACTIVATE:
-            DBG_ERROR("old slot SID_TABLE_ACTIVATE");
+            OSL_FAIL("old slot SID_TABLE_ACTIVATE");
             break;
 
         case SID_REPAINT:
@@ -694,10 +694,14 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                         pDlg = pFact->CreateSvxZoomDialog(GetDialogParent(), aSet );
                         DBG_ASSERT(pDlg, "Dialogdiet fail!");
                     }
-                    pDlg->SetLimits( MINZOOM, MAXZOOM );
+                    if (pDlg)
+                    {
+                       pDlg->SetLimits( MINZOOM, MAXZOOM );
 
-                    bCancel = ( RET_CANCEL == pDlg->Execute() );
-
+                       bCancel = ( RET_CANCEL == pDlg->Execute() );
+                    }
+                    // bCancel is True only if we were in the previous if block,
+                    // so no need to check again pDlg
                     if ( !bCancel )
                     {
                         const SvxZoomItem&  rZoomItem = (const SvxZoomItem&)
@@ -1146,7 +1150,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             break;
 
         default:
-            DBG_ERROR("Unbekannter Slot bei ScTabViewShell::Execute");
+            OSL_FAIL("Unbekannter Slot bei ScTabViewShell::Execute");
             break;
     }
 }

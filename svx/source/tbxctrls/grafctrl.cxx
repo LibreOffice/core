@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include <string> // HACK: prevent conflict between STLPORT and Workshop headers
+#include <string>
 
 #include <vcl/toolbox.hxx>
 #include <vcl/field.hxx>

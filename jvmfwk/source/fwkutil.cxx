@@ -58,8 +58,11 @@
 #include "framework.hxx"
 #include "fwkutil.hxx"
 
-using namespace rtl;
 using namespace osl;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
+using ::rtl::OString;
 
 namespace jfw
 {

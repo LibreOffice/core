@@ -72,9 +72,10 @@ Color SwViewOption::aFieldShadingsColor(COL_LIGHTGRAY);
 Color SwViewOption::aSectionBoundColor(COL_LIGHTGRAY);
 Color SwViewOption::aPageBreakColor(COL_BLUE);
 Color SwViewOption::aScriptIndicatorColor(COL_GREEN);
+Color SwViewOption::aShadowColor(COL_GRAY);
 
 sal_Int32 SwViewOption::nAppearanceFlags = VIEWOPT_DOC_BOUNDARIES|VIEWOPT_OBJECT_BOUNDARIES;
-USHORT SwViewOption::nPixelTwips = 0;   //ein Pixel auf dem Bildschirm
+USHORT SwViewOption::nPixelTwips = 0;   // one pixel on the screen
 
 
 #define LINEBREAK_SIZE 12, 8
@@ -103,7 +104,7 @@ BOOL SwViewOption::IsEqualFlags( const SwViewOption &rOpt ) const
             && bShowPlaceHolderFields == rOpt.bShowPlaceHolderFields
             && bIdle == rOpt.bIdle
 #if OSL_DEBUG_LEVEL > 1
-            // korrespondieren zu den Angaben in ui/config/cfgvw.src
+            // correspond to the statements in ui/config/cfgvw.src
             && bTest1 == rOpt.IsTest1()
             && bTest2 == rOpt.IsTest2()
             && bTest3 == rOpt.IsTest3()
@@ -156,7 +157,7 @@ void SwViewOption::PaintPostIts( OutputDevice *pOut, const SwRect &rRect, sal_Bo
     {
             Color aOldLineColor( pOut->GetLineColor() );
         pOut->SetLineColor( Color(COL_GRAY ) );
-        // Wir ziehen ueberall zwei Pixel ab, damit es schick aussieht
+        // to make it look nice, we subtract two pixels everywhere
         USHORT nPix = GetPixelTwips() * 2;
         if( rRect.Width() <= 2 * nPix || rRect.Height() <= 2 * nPix )
             nPix = 0;
@@ -188,8 +189,8 @@ SwViewOption::SwViewOption() :
     eZoom( SVX_ZOOM_PERCENT ),
     nTblDest(TBL_DEST_CELL)
 {
-    // Initialisierung ist jetzt etwas einfacher
-    // alle Bits auf 0
+    // Initialisation is a little simpler now
+    // all Bits to 0
     nCoreOptions =  VIEWOPT_1_HARDBLANK | VIEWOPT_1_SOFTHYPH |
                     VIEWOPT_1_REF |
                     VIEWOPT_1_GRAPHIC |
@@ -210,7 +211,7 @@ SwViewOption::SwViewOption() :
     bIdle = true;
 
 #if OSL_DEBUG_LEVEL > 1
-    // korrespondieren zu den Angaben in ui/config/cfgvw.src
+    // correspond to the statements in ui/config/cfgvw.src
     bTest1 = bTest2 = bTest3 = bTest4 =
              bTest5 = bTest6 = bTest7 = bTest8 = bTest10 = FALSE;
 #endif
@@ -418,6 +419,11 @@ Color&   SwViewOption::GetSmarttagColor()
     return aSmarttagColor;
 }
 
+Color&   SwViewOption::GetShadowColor()
+{
+    return aShadowColor;
+}
+
 Color&   SwViewOption::GetFontColor()
 {
     return aFontColor;
@@ -475,6 +481,11 @@ void SwViewOption::ApplyColorConfigValues(const svtools::ColorConfig& rConfig )
     if(aValue.bIsVisible)
         nAppearanceFlags |= VIEWOPT_VISITED_LINKS;
 
+    aValue = rConfig.GetColorValue(svtools::SHADOWCOLOR);
+    aShadowColor.SetColor(aValue.nColor);
+    if(aValue.bIsVisible)
+        nAppearanceFlags |= VIEWOPT_SHADOW;
+
     aDirectCursorColor.SetColor(rConfig.GetColorValue(svtools::WRITERDIRECTCURSOR).nColor);
 
     aTextGridColor.SetColor(rConfig.GetColorValue(svtools::WRITERTEXTGRID).nColor);
@@ -526,6 +537,7 @@ void SwViewOption::SetAppearanceFlag(sal_Int32 nFlag, BOOL bSet, BOOL bSaveInCon
             { VIEWOPT_VISITED_LINKS      ,   svtools::LINKSVISITED },
             { VIEWOPT_FIELD_SHADINGS     ,   svtools::WRITERFIELDSHADINGS },
             { VIEWOPT_SECTION_BOUNDARIES ,   svtools::WRITERSECTIONBOUNDARIES },
+            { VIEWOPT_SHADOW             ,   svtools::SHADOWCOLOR },
             { 0                          ,   svtools::ColorConfigEntryCount }
         };
         sal_uInt16 nPos = 0;

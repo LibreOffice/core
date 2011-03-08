@@ -201,7 +201,7 @@ SlideSorterController::~SlideSorterController (void)
     catch( uno::Exception& e )
     {
         (void)e;
-        DBG_ERROR( "sd::SlideSorterController::~SlideSorterController(), exception caught!" );
+        OSL_FAIL( "sd::SlideSorterController::~SlideSorterController(), exception caught!" );
     }
 
     // dispose should have been called by now so that nothing is to be done

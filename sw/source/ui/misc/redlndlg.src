@@ -52,7 +52,6 @@
 ModelessDialog DLG_REDLINE_ACCEPT
 {
     HelpID = HID_REDLINE_ACCEPT ;
-    /* ### ACHTUNG: Neuer Text in Resource? Änderungen akzeptieren oder verwerfen : Redlining */
     Text [ en-US ] = "Accept or Reject Changes" ;
     REDLNDLG
 };

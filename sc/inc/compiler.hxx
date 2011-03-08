@@ -49,7 +49,7 @@
 #include <boost/intrusive_ptr.hpp>
 
 #ifndef INCLUDED_HASH_MAP
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #define INCLUDED_HASH_MAP
 #endif
 
@@ -433,7 +433,7 @@ public:
     ScRangeData* UpdateReference( UpdateRefMode eUpdateRefMode,
                                   const ScAddress& rOldPos, const ScRange&,
                                   SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
-                                  BOOL& rChanged, BOOL& rRefSizeChanged );
+                                  bool& rChanged, bool& rRefSizeChanged );
 
     /// Only once for converted shared formulas,
     /// token array has to be compiled afterwards.

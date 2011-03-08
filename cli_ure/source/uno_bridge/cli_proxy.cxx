@@ -53,7 +53,11 @@ namespace css = com::sun::star;
 namespace ucss = unoidl::com::sun::star;
 
 using namespace cli_uno;
-using namespace rtl;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
+using ::rtl::OString;
+using ::rtl::OUStringBuffer;
 extern "C"
 {
 //------------------------------------------------------------------------------

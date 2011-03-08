@@ -83,7 +83,7 @@ interface XRoot : com::sun::star::uno::XInterface
          @param uid
                 namespace uid of element
          @param localName
-                localname of element
+                local name of element
          @param xAattributes
                 attributes of element
      */

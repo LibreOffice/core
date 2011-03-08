@@ -54,7 +54,6 @@ ToolBox RID_TOOLBOX
             Identifier = SID_INSERT_PUSHBUTTON ;
             RadioCheck = TRUE ;
             Text [ en-US ] = "Button" ;
-            /* ### ACHTUNG: Neuer Text in Resource? CommandButton einfügen : CommandButton einf³gen */
         };
         ToolBoxItem
         {
@@ -62,7 +61,6 @@ ToolBox RID_TOOLBOX
             Identifier = SID_INSERT_CHECKBOX ;
             RadioCheck = TRUE ;
             Text [ en-US ] = "Check Box" ;
-            /* ### ACHTUNG: Neuer Text in Resource? CheckBox einfügen : CheckBox einf³gen */
         };
         ToolBoxItem
         {
@@ -70,7 +68,6 @@ ToolBox RID_TOOLBOX
             Identifier = SID_INSERT_FIXEDTEXT ;
             RadioCheck = TRUE ;
             Text [ en-US ] = "Label field" ;
-            /* ### ACHTUNG: Neuer Text in Resource? Label einfügen : Label einf³gen */
         };
         ToolBoxItem
         {
@@ -78,7 +75,6 @@ ToolBox RID_TOOLBOX
             Identifier = SID_INSERT_LISTBOX ;
             RadioCheck = TRUE ;
             Text [ en-US ] = "List Box" ;
-            /* ### ACHTUNG: Neuer Text in Resource? ListBox einfügen : ListBox einf³gen */
         };
         ToolBoxItem
         {
@@ -86,7 +82,6 @@ ToolBox RID_TOOLBOX
             Identifier = SID_INSERT_HSCROLLBAR ;
             RadioCheck = TRUE ;
             Text [ en-US ] = "Horizontal Scroll Bar" ;
-            /* ### ACHTUNG: Neuer Text in Resource? Horizontale ScrollBar einfügen : Horizontale ScrollBar einf³gen */
         };
         ToolBoxItem
         {
@@ -94,7 +89,6 @@ ToolBox RID_TOOLBOX
             Identifier = SID_INSERT_GROUPBOX ;
             RadioCheck = TRUE ;
             Text [ en-US ] = "Group Box" ;
-            /* ### ACHTUNG: Neuer Text in Resource? GroupBox einfügen : GroupBox einf³gen */
         };
         ToolBoxItem
         {
@@ -159,7 +153,6 @@ ToolBox RID_TOOLBOX
             Identifier = SID_INSERT_RADIOBUTTON ;
             RadioCheck = TRUE ;
             Text [ en-US ] = "Option Button" ;
-            /* ### ACHTUNG: Neuer Text in Resource? RadioButton einfügen : RadioButton einf³gen */
         };
         ToolBoxItem
         {
@@ -167,7 +160,6 @@ ToolBox RID_TOOLBOX
             Identifier = SID_INSERT_EDIT ;
             RadioCheck = TRUE ;
             Text [ en-US ] = "Text Box" ;
-            /* ### ACHTUNG: Neuer Text in Resource? Edit einfügen : Edit einf³gen */
         };
         ToolBoxItem
         {
@@ -175,7 +167,6 @@ ToolBox RID_TOOLBOX
             Identifier = SID_INSERT_COMBOBOX ;
             RadioCheck = TRUE ;
             Text [ en-US ] = "Combo Box" ;
-            /* ### ACHTUNG: Neuer Text in Resource? ComboBox einfügen : ComboBox einf³gen */
         };
         ToolBoxItem
         {
@@ -183,7 +174,6 @@ ToolBox RID_TOOLBOX
             Identifier = SID_INSERT_VSCROLLBAR ;
             RadioCheck = TRUE ;
             Text [ en-US ] = "Vertical Scroll Bar" ;
-            /* ### ACHTUNG: Neuer Text in Resource? Vertikale ScrollBar einfügen : Vertikale ScrollBar einf³gen */
         };
         ToolBoxItem
         {

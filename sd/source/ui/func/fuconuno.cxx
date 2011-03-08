@@ -200,7 +200,6 @@ void FuConstructUnoControl::Deactivate()
     mpWindow->SetPointer( aOldPointer );
 }
 
-// #97016#
 SdrObject* FuConstructUnoControl::CreateDefaultObject(const sal_uInt16, const Rectangle& rRectangle)
 {
     // case SID_FM_CREATE_CONTROL:

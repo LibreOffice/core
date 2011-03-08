@@ -37,24 +37,21 @@ namespace dmapper {
 
 using namespace ::com::sun::star;
 
-/*-- 24.04.2007 09:06:35---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 MeasureHandler::MeasureHandler() :
     m_nMeasureValue( 0 ),
     m_nUnit( -1 ),
     m_nRowHeightSizeType( text::SizeType::MIN )
 {
 }
-/*-- 24.04.2007 09:06:35---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 MeasureHandler::~MeasureHandler()
 {
 }
-/*-- 24.04.2007 09:06:35---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void MeasureHandler::attribute(Id rName, Value & rVal)
 {
     sal_Int32 nIntValue = rVal.getInt();
@@ -90,16 +87,14 @@ void MeasureHandler::attribute(Id rName, Value & rVal)
             OSL_ENSURE( false, "unknown attribute");
     }
 }
-/*-- 24.04.2007 09:06:35---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void MeasureHandler::sprm(Sprm & rSprm)
 {
     (void)rSprm;
 }
-/*-- 24.04.2007 09:09:01---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 sal_Int32 MeasureHandler::getMeasureValue() const
 {
     sal_Int32 nRet = 0;
@@ -114,9 +109,8 @@ sal_Int32 MeasureHandler::getMeasureValue() const
     }
     return nRet;
 }
-/*-- 18.06.2007 10:24:26---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 bool MeasureHandler::isAutoWidth() const
 {
     return sal::static_int_cast<Id>(m_nUnit) == NS_ooxml::LN_Value_ST_TblWidth_auto;

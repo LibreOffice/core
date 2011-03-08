@@ -1503,10 +1503,6 @@ static sal_Bool putLine(osl_TFile* pFile, const sal_Char *pszLine)
 {
     unsigned int Len = strlen(pszLine);
 
-#ifdef DEBUG_OSL_PROFILE
-    int strLen=0;
-#endif
-
     if ( pFile == 0 || pFile->m_Handle < 0 )
     {
         return (sal_False);
@@ -1539,18 +1535,12 @@ static sal_Bool putLine(osl_TFile* pFile, const sal_Char *pszLine)
 
 
     memcpy(pFile->m_pWriteBuf + ( pFile->m_nWriteBufLen - pFile->m_nWriteBufFree ),pszLine,Len+1);
-#ifdef DEBUG_OSL_PROFILE
-    strLen = strlen(pFile->m_pWriteBuf);
-#endif
+
     pFile->m_pWriteBuf[pFile->m_nWriteBufLen - pFile->m_nWriteBufFree + Len]='\r';
     pFile->m_pWriteBuf[pFile->m_nWriteBufLen - pFile->m_nWriteBufFree + Len + 1]='\n';
     pFile->m_pWriteBuf[pFile->m_nWriteBufLen - pFile->m_nWriteBufFree + Len + 2]='\0';
 
     pFile->m_nWriteBufFree-=Len+2;
-
-#ifdef DEBUG_OSL_PROFILE
-/*    OSL_TRACE("File Buffer in _putLine '%s' '%i'(%i)\n",pFile->m_pWriteBuf,strlen(pFile->m_pWriteBuf),pFile->m_nWriteBufLen - pFile->m_nWriteBufFree);*/
-#endif
 
     return (sal_True);
 }

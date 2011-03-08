@@ -37,6 +37,7 @@
 #include "tools/toolsdllapi.h"
 
 #include <cstdarg>
+#include <vector>
 
 #define FEAT_FSYS_DOUBLESPEED
 
@@ -45,12 +46,13 @@
 // --------------
 
 class DirEntry;
-class DirEntryList;
-class FSysSortList;
-class FileStatList;
+class FileStat;
 struct FileCopier_Impl;
 class SvFileStream;
 class BigInt;
+
+typedef ::std::vector< DirEntry* > DirEntryList;
+typedef ::std::vector< FileStat* > FileStatList;
 
 #define FSYS_BUFSIZE                1024
 #define FSYS_SHORTNAME_DELIMITER    '@'
@@ -94,6 +96,7 @@ typedef int FSysSort;
 #define FSYS_SORT_KIND              ((FSysSort) 256)
 #define FSYS_SORT_CREATOR           ((FSysSort) 512)
 #define FSYS_SORT_END               ((FSysSort)1024)
+typedef ::std::vector< FSysSort > FSysSortList;
 
 // DirEntryFlag
 enum DirEntryFlag
@@ -279,10 +282,8 @@ private:
                                          FSysPathStyle eStyle );
     TOOLS_DLLPRIVATE FSysError          ImpParseUnixName( const ByteString& rPfad,
                                           FSysPathStyle eStyle );
-    TOOLS_DLLPRIVATE USHORT             ImpTryUrl( DirEntryStack& rStack, const String& rPfad, FSysPathStyle eStyle );
     TOOLS_DLLPRIVATE const DirEntry*    ImpGetTopPtr() const;
     TOOLS_DLLPRIVATE DirEntry*          ImpGetTopPtr();
-    TOOLS_DLLPRIVATE DirEntry*          ImpGetPreTopPtr();
     TOOLS_DLLPRIVATE BOOL               ImpToRel( String aStart );
 
 protected:
@@ -472,8 +473,8 @@ private:
 protected:
     BOOL            ImpInsertPointReached( const DirEntry& rIsSmaller,
                                            const FileStat& rNewStat,
-                                           ULONG nCurPos,
-                                           ULONG nSortIndex ) const;
+                                           size_t nCurPos,
+                                           size_t nSortIndex ) const;
     void            ImpSortedInsert( const DirEntry *pNewEntry,
                                      const FileStat *pNewStat );
 #endif
@@ -493,11 +494,11 @@ public:
 
     void            Reset();
     USHORT          Scan( USHORT nCount = 5 );
-    USHORT          Count( BOOL bUpdated = TRUE ) const;
+    size_t          Count( BOOL bUpdated = TRUE ) const;
     BOOL            Update();
 
     Dir&            operator +=( const Dir& rDir );
-    DirEntry&       operator []( USHORT nIndex ) const;
+    DirEntry&       operator []( size_t nIndex ) const;
 };
 
 // we don't need this stuff for bootstraping

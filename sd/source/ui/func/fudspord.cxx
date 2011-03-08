@@ -94,7 +94,7 @@ FunctionReference FuDisplayOrder::Create( ViewShell* pViewSh, ::sd::Window* pWin
 
 BOOL FuDisplayOrder::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    // #95491# remember button state for creation of own MouseEvents
+    // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
     return TRUE;
@@ -143,7 +143,7 @@ BOOL FuDisplayOrder::MouseMove(const MouseEvent& rMEvt)
 
 BOOL FuDisplayOrder::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    // #95491# remember button state for creation of own MouseEvents
+    // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
     SdrPageView* pPV = NULL;

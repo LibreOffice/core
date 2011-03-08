@@ -52,7 +52,7 @@ module com {  module sun {  module star {  module sheet {
     interface to allow drill-down of result data.  The method this interface provides
     is used internally when calling <method>XDataPilotTable2::getDrillDownData</method>
     or <method>XDataPilotTable2::insertDrillDownSheet</method>.  If the data source
-    service does not implement this interface, then the aformentioned two methods
+    service does not implement this interface, then the aforementioned two methods
     will have no effect.
 
     @see com::sun::star::sheet::DataPilotSource
@@ -66,7 +66,7 @@ interface XDrillDownDataSupplier: com::sun::star::uno::XInterface
 
         @param aFilters filtering criteria
 
-        @returns a filtered subset of the origintal source data as 2-dimensional
+        @returns a filtered subset of the original source data as 2-dimensional
         sequences of <type scope="com::sun::star::uno">Any</any>.  The first row
         must be the header row.  Each <type scope="com::sun::star::uno">Any</type>
         instance must contain either <type>double</type> value for a numeric cell, or

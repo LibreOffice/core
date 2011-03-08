@@ -51,7 +51,7 @@ public:
     virtual void Activate();           // Function aktivieren
     virtual void Deactivate();         // Function deaktivieren
 
-    // #98185# Create default drawing objects via keyboard
+    // Create default drawing objects via keyboard
     virtual SdrObject* CreateDefaultObject( const sal_uInt16 nID, const Rectangle& rRectangle );
 
     // #i33136#

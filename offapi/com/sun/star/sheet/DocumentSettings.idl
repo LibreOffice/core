@@ -114,7 +114,7 @@ published service DocumentSettings
      */
     [optional, property] long RasterResolutionY;
 
-    /** specifies the number of subdivisions between two horiontal
+    /** specifies the number of subdivisions between two horizontal
         grid elements.
      */
     [optional, property] long RasterSubdivisionX;

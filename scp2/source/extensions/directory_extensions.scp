@@ -96,6 +96,17 @@ End
 
 /* ** Lightproof ** */
 
+#ifdef WITH_EXTENSION_LIGHTPROOF
+
+Directory gid_Brand_Dir_Share_Extensions_LightProof
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName (en-US) = "lightproof-en-US-0.1";
+    DosName (hu) = "lightproof-hu-1.2";
+    DosName = "lightproof";
+End
+
+#endif
+
 /* ** Numbertext ** */
 
 #ifdef WITH_EXTENSION_NUMBERTEXT
@@ -245,31 +256,48 @@ End
 
 Directory gid_Brand_Dir_Share_Extensions_Sun_Template_Pack
     ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName (en-US)= "Sun_ODF_Template_Pack_en-US";
+    DosName (en-US) = "Sun_ODF_Template_Pack_en-US";
     DosName (de) = "Sun_ODF_Template_Pack_de";
-    DosName (it) = "Sun_ODF_Template_Pack_it";
-    DosName (fr) = "Sun_ODF_Template_Pack_fr";
     DosName (es) = "Sun_ODF_Template_Pack_es";
+    DosName (fr) = "Sun_ODF_Template_Pack_fr";
     DosName (hu) = "Sun_ODF_Template_Pack_hu";
+    DosName (it) = "Sun_ODF_Template_Pack_it";
+    DosName = "Sun_ODF_Template_Pack";
 End
 
 #endif
 
-/* script providers */
+/* ** Script provider for BeanShell ** */
+
+#ifndef WITHOUT_EXTENSION_SCRIPTING_BEANSHELL
 
 Directory gid_Brand_Dir_Share_Extensions_Script_Provider_For_Beanshell
     ParentID = gid_Brand_Dir_Share_Extensions;
     DosName = "script-provider-for-beanshell";
 End
 
+#endif
+
+/* ** Script provider for JavaScript ** */
+
+#ifndef WITHOUT_EXTENSION_SCRIPTING_JAVASCRIPT
+
 Directory gid_Brand_Dir_Share_Extensions_Script_Provider_For_Javascript
     ParentID = gid_Brand_Dir_Share_Extensions;
     DosName = "script-provider-for-javascript";
 End
 
+#endif
+
+/* ** Script provider for Python ** */
+
+#ifndef WITHOUT_EXTENSION_SCRIPTING_PYTHON
+
 Directory gid_Brand_Dir_Share_Extensions_Script_Provider_For_Python
     ParentID = gid_Brand_Dir_Share_Extensions;
     DosName = "script-provider-for-python";
 End
+
+#endif
 
 #endif

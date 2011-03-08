@@ -226,12 +226,12 @@ void OGroup::RemoveComponent( const Reference<XPropertySet>& rxElement )
         }
         else
         {
-            DBG_ERROR( "OGroup::RemoveComponent: Component nicht in Gruppe" );
+            OSL_FAIL( "OGroup::RemoveComponent: Component nicht in Gruppe" );
         }
     }
     else
     {
-        DBG_ERROR( "OGroup::RemoveComponent: Component nicht in Gruppe" );
+        OSL_FAIL( "OGroup::RemoveComponent: Component nicht in Gruppe" );
     }
 }
 

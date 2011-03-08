@@ -42,25 +42,17 @@
 
 #else
 
-#include <tools/prewin.h>
+#include <prewin.h>
 #include <ddeml.h>
-#include <tools/postwin.h>
+#include <postwin.h>
 #include "ddewrap.hxx"
 
-/*
-extern "C"
-{
-#define BOOL WIN_BOOL
-#define BYTE WIN_BYTE
-#undef BOOL
-#undef BYTE
-};
-*/
-
 #endif
+
 #include <tools/string.hxx>
 #include <tools/list.hxx>
 #include <tools/shl.hxx>
+#include <vector>
 
 class DdeService;
 class DdeTopic;
@@ -78,7 +70,7 @@ struct Conversation
     DdeTopic*   pTopic;
 };
 
-DECLARE_LIST( ConvList, Conversation* );
+typedef ::std::vector< Conversation* > ConvList;
 
 // ---------------
 // - DdeInternal -
@@ -95,7 +87,7 @@ public:
     static HDDEDATA CALLBACK InfCallback
            ( WORD, WORD, HCONV, HSZ, HSZ, HDDEDATA, DWORD, DWORD );
 #else
-#if defined ( MTW ) || ( defined ( GCC ) && defined ( OS2 )) || defined( ICC )
+#if (defined ( GCC ) && defined ( OS2 )) || defined( ICC )
     static HDDEDATA CALLBACK CliCallback
            ( WORD, WORD, HCONV, HSZ, HSZ, HDDEDATA, DWORD, DWORD );
     static HDDEDATA CALLBACK SvrCallback

@@ -42,9 +42,8 @@ namespace rtl
 
 // class SvxLineSpacingItem ----------------------------------------------
 
-/*
-[Beschreibung]
-Dieses Item beschreibt den Abstand zwischen den Zeilen.
+/*  [Description]
+    This item describes the distance between the lines.
 */
 
 #define LINE_SPACE_DEFAULT_HEIGHT 200
@@ -61,15 +60,14 @@ class EDITENG_DLLPUBLIC SvxLineSpacingItem : public SfxEnumItemInterface
 public:
     TYPEINFO();
 
-    // Der Writer verlaesst sich auf eine Default-Hoehe von 200!
-    // Eigentlich wuerde ich alle Werte mit 0 initialisieren, aber wer kann
-    // die Folgen beim Writer absehen ?
-    // => lieber einen krummen Wert als Default, aber der Programmierer
-    // sieht, dass dort etwas besonderes passiert.
+    // The writer relies on a default height of 200! Actually, I would
+    // initialize all values to 0, but who can ignore the consequences in
+    // writer? => Rather have a crooked vales as the default, but the
+    // programmer sees that there's something special happening.
 
     SvxLineSpacingItem( USHORT nHeight /*= LINE_SPACE_DEFAULT_HEIGHT*/, const USHORT nId  );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual Methods" from SfxPoolItem
     virtual int              operator==( const SfxPoolItem& ) const;
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
@@ -83,8 +81,7 @@ public:
     virtual SfxPoolItem*     Create(SvStream &, USHORT) const;
     virtual SvStream&        Store(SvStream &, USHORT nItemVersion ) const;
 
-    // Methoden zum Abfragen und Aendern
-    // Interlinespace wird zur Hoehe addiert.
+    // Methods to query and edit. InterlineSpace is added to the height.
     inline short GetInterLineSpace() const { return nInterLineSpace; }
     inline void SetInterLineSpace( const short nSpace )
     {
@@ -92,7 +89,7 @@ public:
         eInterLineSpace = SVX_INTER_LINE_SPACE_FIX;
     }
 
-    // Bestimmt absolute oder minimale Zeilenhoehe.
+    // Determines the absolute or minimum row height.
     inline USHORT GetLineHeight() const { return nLineHeight; }
     inline void SetLineHeight( const USHORT nHeight )
     {
@@ -100,7 +97,7 @@ public:
         eLineSpace = SVX_LINE_SPACE_MIN;
     }
 
-    // Vergroessert oder verkleinert die Zeilenhoehe.
+    // To increase or decrease the row height.
     BYTE GetPropLineSpace() const { return nPropLineSpace; }
     inline void SetPropLineSpace( const BYTE nProp )
     {

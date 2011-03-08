@@ -31,7 +31,6 @@
 
 
 
-#include "errhdl.hxx"
 
 #include "txtcache.hxx"
 #include "txtfrm.hxx"

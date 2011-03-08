@@ -778,7 +778,7 @@ void ScUndoThesaurus::DoChange( BOOL bUndo, const String& rStr,
             }
             else
             {
-                DBG_ERROR("Nicht CELLTYPE_EDIT bei Un/RedoThesaurus");
+                OSL_FAIL("Nicht CELLTYPE_EDIT bei Un/RedoThesaurus");
             }
         }
     }
@@ -1036,7 +1036,7 @@ void ScUndoDetective::Undo()
                 pList->DeleteAndDestroy( nPos, 1 );
             else
             {
-                DBG_ERROR("Detektiv-Eintrag in der Liste nicht gefunden");
+                OSL_FAIL("Detektiv-Eintrag in der Liste nicht gefunden");
             }
         }
     }

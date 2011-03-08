@@ -37,7 +37,7 @@
 
 namespace svtools {class EditableColorConfig;class EditableExtendedColorConfig;}
 class ColorConfigCtrl_Impl;
-class AbstractSvxNameDialog; //CHINA001 class SvxNameDialog;
+class AbstractSvxNameDialog;
 class SvxColorOptionsTabPage : public SfxTabPage
 {
     using SfxTabPage::DeactivatePage;

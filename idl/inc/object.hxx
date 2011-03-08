@@ -33,6 +33,7 @@
 #include <types.hxx>
 #include <slot.hxx>
 #include <vector>
+#include <tools/list.hxx>
 
 struct SvSlotElement
 {
@@ -48,15 +49,6 @@ DECLARE_LIST( SvSlotElementList, SvSlotElement* )
 class SvMetaClass;
 typedef ::std::vector< SvMetaClass* > SvMetaClassList;
 
-class SvULongs : public List
-{
-public:
-    void    Insert( ULONG& rId, ULONG nPos ) { ULONG nId(rId ); List::Insert( (void*) nId, nPos ); }
-    void    Remove( ULONG& rId ){ ULONG nId(rId ); List::Remove( (void*) nId ); }
-    ULONG   GetObject( ULONG nPos ){ return (ULONG) List::GetObject( nPos ); }
-};
-
-/******************** class SvClassElement *******************************/
 SV_DECL_REF(SvMetaClass)
 class SvClassElement : public SvPersistBase
 {
@@ -86,7 +78,6 @@ public:
 SV_DECL_IMPL_REF(SvClassElement)
 SV_DECL_IMPL_PERSIST_LIST(SvClassElement,SvClassElement *)
 
-/******************** class SvMetaClass *********************************/
 class SvMetaModule;
 SV_DECL_PERSIST_LIST(SvMetaClass,SvMetaClass *)
 class SvMetaClass : public SvMetaType
@@ -112,7 +103,7 @@ class SvMetaClass : public SvMetaType
                                     SvIdlDataBase & rBase,
                                     SvStream & rOutStm );
 
-    void                InsertSlots( SvSlotElementList& rList, SvULongs& rSuperList,
+    void                InsertSlots( SvSlotElementList& rList, std::vector<ULONG>& rSuperList,
                                     SvMetaClassList & rClassList,
                                     const ByteString & rPrefix, SvIdlDataBase& rBase );
 

@@ -44,8 +44,8 @@ namespace rtl
 // class SvxAdjustItem ---------------------------------------------------
 
 /*
-[Beschreibung]
-Dieses Item beschreibt die Zeilenausrichtung.
+[Description]
+This item describes the row orientation.
 */
 #define ADJUST_LASTBLOCK_VERSION        ((USHORT)0x0001)
 
@@ -56,7 +56,7 @@ class EDITENG_DLLPUBLIC SvxAdjustItem : public SfxEnumItemInterface
     BOOL    bCenter    : 1;
     BOOL    bBlock     : 1;
 
-    // nur aktiv, wenn bBlock
+    // only activ when bBlock
     BOOL    bOneBlock : 1;
     BOOL    bLastCenter : 1;
     BOOL    bLastBlock : 1;
@@ -68,7 +68,7 @@ public:
     SvxAdjustItem( const SvxAdjust eAdjst /*= SVX_ADJUST_LEFT*/,
                    const USHORT nId );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual Methods" from SfxPoolItem
     virtual int              operator==( const SfxPoolItem& ) const;
 
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;

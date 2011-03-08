@@ -38,8 +38,6 @@
 
 #include <tools/debug.hxx>
 
-DECLARE_LIST( BrowserColumns, BrowserColumn* )
-
 //===================================================================
 void ButtonFrame::Draw( OutputDevice& rDev )
 {
@@ -234,6 +232,10 @@ BrowserDataWin::~BrowserDataWin()
 {
     if( pDtorNotify )
         *pDtorNotify = TRUE;
+
+    for ( size_t i = 0, n = aInvalidRegion.size(); i < n; ++i )
+        delete aInvalidRegion[ i ];
+    aInvalidRegion.clear();
 }
 
 //-------------------------------------------------------------------
@@ -317,7 +319,7 @@ void BrowserDataWin::Paint( const Rectangle& rRect )
     {
         if ( bInPaint )
         {
-            aInvalidRegion.Insert( new Rectangle( rRect ) );
+            aInvalidRegion.push_back( new Rectangle( rRect ) );
             return;
         }
         bInPaint = TRUE;
@@ -326,7 +328,7 @@ void BrowserDataWin::Paint( const Rectangle& rRect )
         DoOutstandingInvalidations();
     }
     else
-        aInvalidRegion.Insert( new Rectangle( rRect ) );
+        aInvalidRegion.push_back( new Rectangle( rRect ) );
 }
 
 //-------------------------------------------------------------------
@@ -344,28 +346,28 @@ BrowseEvent BrowserDataWin::CreateBrowseEvent( const Point& rPosPixel )
     // find column under mouse
     long nMouseX = rPosPixel.X();
     long nColX = 0;
-    USHORT nCol;
+    size_t nCol;
     for ( nCol = 0;
-          nCol < pBox->pCols->Count() && nColX < GetSizePixel().Width();
+          nCol < pBox->pCols->size() && nColX < GetSizePixel().Width();
           ++nCol )
-        if ( pBox->pCols->GetObject(nCol)->IsFrozen() || nCol >= pBox->nFirstCol )
+        if ( (*pBox->pCols)[ nCol ]->IsFrozen() || nCol >= pBox->nFirstCol )
         {
-            nColX += pBox->pCols->GetObject(nCol)->Width();
+            nColX += (*pBox->pCols)[ nCol ]->Width();
             if ( nMouseX < nColX )
                 break;
         }
     USHORT nColId = BROWSER_INVALIDID;
-    if ( nCol < pBox->pCols->Count() )
-        nColId = pBox->pCols->GetObject(nCol)->GetId();
+    if ( nCol < pBox->pCols->size() )
+        nColId = (*pBox->pCols)[ nCol ]->GetId();
 
     // compute the field rectangle and field relative MouseEvent
     Rectangle aFieldRect;
-    if ( nCol < pBox->pCols->Count() )
+    if ( nCol < pBox->pCols->size() )
     {
-        nColX -= pBox->pCols->GetObject(nCol)->Width();
+        nColX -= (*pBox->pCols)[ nCol ]->Width();
         aFieldRect = Rectangle(
             Point( nColX, nRelRow * pBox->GetDataRowHeight() ),
-            Size( pBox->pCols->GetObject(nCol)->Width(),
+            Size( (*pBox->pCols)[ nCol ]->Width(),
                   pBox->GetDataRowHeight() ) );
     }
 
@@ -687,8 +689,7 @@ BrowserExecuteDropEvent::BrowserExecuteDropEvent( BrowserDataWin *pWindow, const
 
 void BrowserDataWin::SetUpdateMode( BOOL bMode )
 {
-    DBG_ASSERT( !bUpdateMode || aInvalidRegion.Count() == 0,
-                "invalid region not empty" );
+    DBG_ASSERT( !bUpdateMode || aInvalidRegion.empty(), "invalid region not empty" );
     if ( bMode == bUpdateMode )
         return;
 
@@ -700,14 +701,11 @@ void BrowserDataWin::SetUpdateMode( BOOL bMode )
 //-------------------------------------------------------------------
 void BrowserDataWin::DoOutstandingInvalidations()
 {
-    for ( Rectangle* pRect = aInvalidRegion.First();
-          pRect;
-          pRect = aInvalidRegion.Next() )
-    {
-        Control::Invalidate( *pRect );
-        delete pRect;
+    for ( size_t i = 0, n = aInvalidRegion.size(); i < n; ++i ) {
+        Control::Invalidate( *aInvalidRegion[ i ] );
+        delete aInvalidRegion[ i ];
     }
-    aInvalidRegion.Clear();
+    aInvalidRegion.clear();
 }
 
 //-------------------------------------------------------------------
@@ -716,12 +714,10 @@ void BrowserDataWin::Invalidate( USHORT nFlags )
 {
     if ( !GetUpdateMode() )
     {
-        for ( Rectangle* pRect = aInvalidRegion.First();
-              pRect;
-              pRect = aInvalidRegion.Next() )
-            delete pRect;
-        aInvalidRegion.Clear();
-        aInvalidRegion.Insert( new Rectangle( Point( 0, 0 ), GetOutputSizePixel() ) );
+        for ( size_t i = 0, n = aInvalidRegion.size(); i < n; ++i )
+            delete aInvalidRegion[ i ];
+        aInvalidRegion.clear();
+        aInvalidRegion.push_back( new Rectangle( Point( 0, 0 ), GetOutputSizePixel() ) );
     }
     else
         Window::Invalidate( nFlags );
@@ -732,7 +728,7 @@ void BrowserDataWin::Invalidate( USHORT nFlags )
 void BrowserDataWin::Invalidate( const Rectangle& rRect, USHORT nFlags )
 {
     if ( !GetUpdateMode() )
-        aInvalidRegion.Insert( new Rectangle( rRect ) );
+        aInvalidRegion.push_back( new Rectangle( rRect ) );
     else
         Window::Invalidate( rRect, nFlags );
 }

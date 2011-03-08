@@ -206,8 +206,6 @@ void SdTransformOOo2xDocument::transformTextShape( SdrTextObj& rTextShape )
 
             sal_uInt32 nCount = mrOutliner.GetParagraphCount();
 
-            //Paragraph* pPara = NULL;
-
             bool bChange = false;
 
             for(sal_uInt16 nPara = 0; nPara < nCount; nPara++)

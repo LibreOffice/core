@@ -37,10 +37,6 @@ ENABLE_EXCEPTIONS=	TRUE
 .INCLUDE: settings.mk
 .INCLUDE: $(PRJ)$/chartview.pmk
 
-#.IF "$(GUI)" == "WNT"
-#CFLAGS+=-GR
-#.ENDIF
-
 # --- export library -------------------------------------------------
 
 #object files to build and link together to lib $(SLB)$/$(TARGET).lib

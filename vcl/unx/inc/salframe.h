@@ -91,7 +91,6 @@ class VCL_DLLPUBLIC X11SalFrame : public SalFrame
     USHORT          nKeyCode_;          // last key code
     USHORT          nKeyState_;         // last key state
     int             nCompose_;          // compose state
-    bool            mbKeyMenu;
     bool            mbSendExtKeyModChange;
     USHORT          mnExtKeyMod;
 

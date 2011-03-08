@@ -38,7 +38,7 @@
 #include <com/sun/star/beans/TolerantPropertySetResultType.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <list>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #include <xmloff/xmlexppr.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -234,7 +234,7 @@ public:
 
 // ----------------------------------------------------------------------------
 
-typedef std::hash_map
+typedef boost::unordered_map
 <
     PropertySetInfoKey,
     FilterPropertiesInfo_Impl *,

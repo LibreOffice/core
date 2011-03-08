@@ -48,7 +48,6 @@ ModalDialog DLG_BIB_BASE
     {
         Pos = MAP_APPFONT ( 293 , 83 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
         Text [ en-US ] = "~Delete" ;
         TabStop = TRUE ;
         Disable = TRUE ;

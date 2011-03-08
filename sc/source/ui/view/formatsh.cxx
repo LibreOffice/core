@@ -712,7 +712,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                 SfxAbstractTabDialog* pDlg    = NULL;
                 USHORT          nRsc    = 0;
 
-                //  #37034#/#37245# alte Items aus der Vorlage merken
+                // alte Items aus der Vorlage merken
                 SfxItemSet aOldSet = pStyleSheet->GetItemSet();
                 String aOldName = pStyleSheet->GetName();
 
@@ -776,7 +776,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                 Window* pParent = Application::GetDefDialogParent();
                 if ( !pParent || !pParent->IsDialog() )
                 {
-                    //  #107256# GetDefDialogParent currently doesn't return the window
+                    //  GetDefDialogParent currently doesn't return the window
                     //  that was set with SetDefDialogParent (but dynamically finds the
                     //  topmost parent of the focus window), so IsDialog above is FALSE
                     //  even if called from the style catalog.
@@ -806,7 +806,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                     {
                         nRetMask = pStyleSheet->GetMask();
 
-                        //  #37034#/#37245# Attribut-Vergleiche (frueher in ModifyStyleSheet)
+                        //  Attribut-Vergleiche (frueher in ModifyStyleSheet)
                         //  jetzt hier mit den alten Werten (Style ist schon veraendert)
 
                         if ( SFX_STYLE_FAMILY_PARA == eFam )
@@ -904,7 +904,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
     }
     else
     {
-        DBG_ERROR( "Unknown slot (ScViewShell::ExecuteStyle)" );
+        OSL_FAIL( "Unknown slot (ScViewShell::ExecuteStyle)" );
     }
 }
 
@@ -1045,7 +1045,7 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
             break;
 
         default:
-            DBG_ERROR("falscher Slot bei ExecuteEdit");
+            OSL_FAIL("falscher Slot bei ExecuteEdit");
             break;
     }
 }
@@ -1127,7 +1127,7 @@ void ScFormatShell::ExecuteAlignment( SfxRequest& rReq )
                             pTabViewShell->ApplyAttr( SvxVerJustifyItem( (SvxCellVerJustify)((const SvxVerJustifyItem*)pItem)->GetValue(), ATTR_VER_JUSTIFY ) );
                         break;
                         default:
-                            DBG_ERROR( "ExecuteAlignment: invalid slot" );
+                            OSL_FAIL( "ExecuteAlignment: invalid slot" );
                             return;
                     }
                 }
@@ -1585,7 +1585,7 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                     if ( pNewAttrs->GetItemState( ATTR_BORDER, TRUE, &pItem )
                          == SFX_ITEM_SET )
                     {
-                        //  #100959# The SvxFrameToolBoxControl toolbox controller uses a default
+                        //  The SvxFrameToolBoxControl toolbox controller uses a default
                         //  SvxBorderLine (all widths 0) to mark the lines that should be set.
                         //  Macro recording uses a SvxBoxItem with the real values (OutWidth > 0)
                         //  or NULL pointers for no lines.
@@ -1785,7 +1785,6 @@ void ScFormatShell::GetTextAttrState( SfxItemSet& rSet )
 
     const SvxHorJustifyItem* pHorJustify = NULL;
     const SvxVerJustifyItem* pVerJustify = NULL;
-    SvxCellHorJustify        eHorJustify = SVX_HOR_JUSTIFY_STANDARD;
     SvxCellVerJustify        eVerJustify = SVX_VER_JUSTIFY_STANDARD;
     USHORT                   nWhich      = 0;
     BOOL                     bJustifyStd = FALSE;
@@ -1797,8 +1796,6 @@ void ScFormatShell::GetTextAttrState( SfxItemSet& rSet )
     {
         case SFX_ITEM_SET:
             {
-                eHorJustify = SvxCellHorJustify( pHorJustify->GetValue() );
-
                 switch ( SvxCellHorJustify( pHorJustify->GetValue() ) )
                 {
                     case SVX_HOR_JUSTIFY_STANDARD:

@@ -40,20 +40,19 @@ namespace rtl
 
 // class SvxLRSpaceItem --------------------------------------------------
 
-/*
-[Beschreibung]
-Linker/Rechter Rand sowie Erstzeileneinzug
+/*  [Description]
 
-SvxLRSpaceItem bietet zwei Schnittstellen zur Befragung des linken
-Randes und des Erstzeileneinzuges an. Die Get-Methoden liefern
-die Member zurueck, wie sie das Layout bisher auch erwartete:
-Der linke Rand verschiebt sich beim negativem Erstzeileneinzug
-nach links. Die SetTxt/GetTxt-Methoden setzen voraus, dass der
-linke Rand der 0-Punkt des Erstzeileneinzugs darstellt:
+    Left/Right margin and first line indent
 
-     UI         UI       LAYOUT   UI/TEXT      UI/TEXT    (Wo?)
-SetTxtLeft SetTxtFirst GetLeft  GetTxtLeft  GetTxtFirst  (Was?)
-    500       -500        0        500         -500      (Wieviel?)
+    SvxLRSpaceItem offers two interfaces for views from the left margin and
+    first line indent. The get methods return the member, with the layout also
+    as expected: the left edge shifts to the negative first line indent to the
+    left. The SetTxt/Gettxt methods assume that the left side represents the
+    0 coordinate for the first line indent:
+
+    UI         UI       LAYOUT   UI/TEXT      UI/TEXT    (Where?)
+    SetTxtLeft SetTxtFirst GetLeft  GetTxtLeft  GetTxtFirst  (What?)
+    500       -500        0        500         -500      (How much?)
     500         0        500       500           0
     500       +500       500       500         +500
     700       -500       200       700         -500
@@ -66,15 +65,15 @@ SetTxtLeft SetTxtFirst GetLeft  GetTxtLeft  GetTxtFirst  (Was?)
 
 class EDITENG_DLLPUBLIC SvxLRSpaceItem : public SfxPoolItem
 {
-    short   nFirstLineOfst;     // Erstzeileneinzug _immer_ relativ zu nTxtLeft
-    long    nTxtLeft;           // wir spendieren einen USHORT
-    long    nLeftMargin;        // nLeft oder der neg. Erstzeileneinzug
-    long    nRightMargin;       // der unproblematische rechte Rand
+    short   nFirstLineOfst;     // First-line indent _always_ relative to nTxtLeft
+    long    nTxtLeft;           // We spend a USHORT
+    long    nLeftMargin;        // nLeft or the negative first-line indent
+    long    nRightMargin;       // The unproblematic right edge
 
     USHORT  nPropFirstLineOfst, nPropLeftMargin, nPropRightMargin;
-    BOOL    bAutoFirst  : 1;    // Automatische Berechnung der Erstzeileneinzugs
+    BOOL    bAutoFirst  : 1;    // Automatic calculation of the first line indent
 
-    void   AdjustLeft();        // nLeftMargin und nTxtLeft werden angepasst.
+    void   AdjustLeft();        // nLeftMargin and nTxtLeft are being adjusted.
 
 public:
     TYPEINFO();
@@ -85,7 +84,7 @@ public:
                     const USHORT nId  );
     inline SvxLRSpaceItem& operator=( const SvxLRSpaceItem &rCpy );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual Methods" from SfxPoolItem
     virtual int              operator==( const SfxPoolItem& ) const;
 
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
@@ -103,11 +102,11 @@ public:
     virtual bool             ScaleMetrics( long nMult, long nDiv );
     virtual bool             HasMetrics() const;
 
-    // Die "Layout-Schnittstelle":
+    // The Layout Interface:
     inline void   SetLeft ( const long nL, const USHORT nProp = 100 );
     inline void   SetRight( const long nR, const USHORT nProp = 100 );
 
-    // abfragen / direktes setzen der absoluten Werte
+    // Query/direct setting of the absolute values
     inline long GetLeft()  const { return nLeftMargin; }
     inline long GetRight() const { return nRightMargin;}
     inline void SetLeftValue( const long nL ) { nTxtLeft = nLeftMargin = nL; }
@@ -115,7 +114,7 @@ public:
     inline BOOL IsAutoFirst()  const { return bAutoFirst; }
     inline void SetAutoFirst( const BOOL bNew ) { bAutoFirst = bNew; }
 
-    // abfragen / setzen der Prozent-Werte
+    // Query/Setting the percentage values
     inline void SetPropLeft( const USHORT nProp = 100 )
                     { nPropLeftMargin = nProp; }
     inline void SetPropRight( const USHORT nProp = 100 )
@@ -123,7 +122,7 @@ public:
     inline USHORT GetPropLeft()  const { return nPropLeftMargin; }
     inline USHORT GetPropRight() const { return nPropRightMargin;}
 
-    // Die "UI/Text-Schnittstelle":
+    // The UI/text interface:
     inline void SetTxtLeft( const long nL, const USHORT nProp = 100 );
     inline long GetTxtLeft() const { return nTxtLeft; }
 

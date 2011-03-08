@@ -50,7 +50,6 @@
 
 
 using namespace ::std;
-//using namespace ::com::sun::star::text;
 using namespace ::xmloff::token;
 
 using ::rtl::OUString;

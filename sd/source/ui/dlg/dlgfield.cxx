@@ -155,7 +155,7 @@ SvxFieldData* SdModifyFieldDlg::GetField()
                 if( pDocSh->HasName() )
                     aName = pDocSh->GetMedium()->GetName();
 
-                // #91225# Get current filename, not the one stored in the old field
+                // Get current filename, not the one stored in the old field
                 pNewField = new SvxExtFileField( aName );
                 ( (SvxExtFileField*) pNewField )->SetType( eType );
                 ( (SvxExtFileField*) pNewField )->SetFormat( eFormat );
@@ -173,7 +173,7 @@ SvxFieldData* SdModifyFieldDlg::GetField()
 
             eFormat = (SvxAuthorFormat) ( aLbFormat.GetSelectEntryPos() );
 
-            // #91225# Get current state of address, not the old one
+            // Get current state of address, not the old one
             SvtUserOptions aUserOptions;
             pNewField = new SvxAuthorField( aUserOptions.GetFirstName(), aUserOptions.GetLastName(), aUserOptions.GetID() );
             ( (SvxAuthorField*) pNewField )->SetType( eType );

@@ -39,8 +39,8 @@
 #include <osl/mutex.hxx>
 #include <osl/thread.hxx>
 #ifdef __MINGW32__
-#include <tools/prewin.h>
-#include <tools/postwin.h>
+#include <prewin.h>
+#include <postwin.h>
 #endif
 using namespace std;
 using namespace osl;
@@ -1341,8 +1341,6 @@ void XMLUtil::QuotHTML( String &rString )
                              case '>':  sReturn.append( GT );i++;break;
                              case '\\': sReturn.append( QUOT );i++;break;
                              case '\"': sReturn.append( APOS );i++;break;
-                             //case '\'': sReturn += "\'";i++;break;
-                             //case '&' : sRetrun += "&";i++;break;
                              default:   sReturn.append( SLASH );break;
 
                            }
@@ -1361,10 +1359,6 @@ void XMLUtil::QuotHTML( String &rString )
                     sReturn.append( QQUOT );
                     break;
 
-/*              case '\'':
-                    sReturn += "&apos;";
-                    break;
-*/
                 case '&':
                     if (
                           ( ( i + 4 ) < rString.Len()) &&

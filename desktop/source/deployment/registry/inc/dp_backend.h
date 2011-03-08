@@ -43,7 +43,7 @@
 #include "com/sun/star/deployment/XPackageManager.hpp"
 #include "com/sun/star/deployment/InvalidRemovedParameterException.hpp"
 #include <memory>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <list>
 #include "dp_registry.hrc"
 
@@ -283,7 +283,7 @@ class PackageRegistryBackend
     // XPackageManager::getDeployedPackages is called often. This results in a lot
     //of bindPackage calls which are costly. Therefore we keep hard references in
     //the map now.
-    typedef ::std::hash_map<
+    typedef ::boost::unordered_map<
         ::rtl::OUString, css::uno::Reference<css::deployment::XPackage>,
         ::rtl::OUStringHash > t_string2ref;
     t_string2ref m_bound;

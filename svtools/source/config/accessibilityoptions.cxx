@@ -52,8 +52,8 @@
 #include <itemholder2.hxx>
 
 using namespace utl;
-using namespace rtl;
 using namespace com::sun::star::uno;
+
 namespace css = com::sun::star;
 
 #define HELP_TIP_TIMEOUT 0xffff     // max. timeout setting to pretend a non-timeout
@@ -550,12 +550,12 @@ void SvtAccessibilityOptions::Commit()
 
 sal_Bool SvtAccessibilityOptions::GetIsForDrawings() const
 {
-    DBG_ERROR( "SvtAccessibilityOptions::GetIsForDrawings: is obsolete!" );
+    OSL_FAIL( "SvtAccessibilityOptions::GetIsForDrawings: is obsolete!" );
     return sal_False;
 }
 sal_Bool SvtAccessibilityOptions::GetIsForBorders() const
 {
-    DBG_ERROR( "SvtAccessibilityOptions::GetIsForBorders: is obsolete!" );
+    OSL_FAIL( "SvtAccessibilityOptions::GetIsForBorders: is obsolete!" );
     return sal_False;
 }
 sal_Bool SvtAccessibilityOptions::GetAutoDetectSystemHC() const

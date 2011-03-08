@@ -76,7 +76,7 @@ RedlinData::~RedlinData()
 }
 
 //============================================================================
-//  class SvxRedlinEntry (Eintraege fuer Liste)
+//  class SvxRedlinEntry (Entries for list)
 //----------------------------------------------------------------------------
 
 SvxRedlinEntry::SvxRedlinEntry()
@@ -93,25 +93,9 @@ SvxRedlinEntry::~SvxRedlinEntry()
     }
 }
 
-/*************************************************************************
-#* Funktionen der in den SvxRedlinTable eingefuegten Items
-#************************************************************************/
+// Functions in the inserts Items of SvxRedlinTable
 
 DBG_NAME(SvLBoxColorString);
-
-/*************************************************************************
-#*  Member:     SvLBoxColorString                           Datum:23.10.97
-#*------------------------------------------------------------------------
-#*
-#*  Klasse:     SvLBoxColorString
-#*
-#*  Funktion:   Konstruktor der Klasse SvLBoxColorString
-#*
-#*  Input:      Box- Entry,Flags, Text fuer Anzeige, Schrift
-#*
-#*  Output:     ---
-#*
-#************************************************************************/
 
 SvLBoxColorString::SvLBoxColorString( SvLBoxEntry*pEntry,USHORT nFlags,const XubString& rStr,
                                     const Color& rCol)
@@ -123,59 +107,16 @@ SvLBoxColorString::SvLBoxColorString( SvLBoxEntry*pEntry,USHORT nFlags,const Xub
     SetText( pEntry, rStr );
 }
 
-/*************************************************************************
-#*  Member:     SvLBoxColorString                           Datum:23.10.97
-#*------------------------------------------------------------------------
-#*
-#*  Klasse:     SvLBoxColorString
-#*
-#*  Funktion:   Default Konstruktor der Klasse SvLBoxColorString
-#*
-#*  Input:      ---
-#*
-#*  Output:     ---
-#*
-#************************************************************************/
-
 SvLBoxColorString::SvLBoxColorString()
 : SvLBoxString()
 {
     DBG_CTOR(SvLBoxColorString,0);
 }
 
-/*************************************************************************
-#*  Member:     ~SvLBoxColorString                          Datum:23.10.97
-#*------------------------------------------------------------------------
-#*
-#*  Klasse:     SvLBoxColorString
-#*
-#*  Funktion:   Destruktor der Klasse SvLBoxColorString
-#*
-#*  Input:      ---
-#*
-#*  Output:     ---
-#*
-#************************************************************************/
-
 SvLBoxColorString::~SvLBoxColorString()
 {
     DBG_DTOR(SvLBoxColorString,0);
 }
-
-
-/*************************************************************************
-#*  Member:     SvLBoxColorString                           Datum:23.10.97
-#*------------------------------------------------------------------------
-#*
-#*  Klasse:     SvLBoxColorString
-#*
-#*  Funktion:   Erzeugt einen neuen SvLBoxColorString
-#*
-#*  Input:      ---
-#*
-#*  Output:     SvLBoxColorString
-#*
-#************************************************************************/
 
 SvLBoxItem* SvLBoxColorString::Create() const
 {
@@ -183,27 +124,14 @@ SvLBoxItem* SvLBoxColorString::Create() const
     return new SvLBoxColorString;
 }
 
-
-
-/*************************************************************************
-#*  Member:     SvLBoxColorString                           Datum:23.10.97
-#*------------------------------------------------------------------------
-#*
-#*  Klasse:     SvLBoxColorString
-#*
-#*  Funktion:   Zeichenroutine des SvLBoxColorString. Gezeichnet wird
-#*              der entsprechende Text mit der eingestellten Farbe
-#*              im Ausgabe- Device.
-#*
-#*  Input:      Position, Ausgabe- Device, Flag fuer Selection,
-#*              Zeiger auf den Eintrag
-#*
-#*  Output:     ---
-#*
-#************************************************************************/
-
 void SvLBoxColorString::Paint( const Point& rPos, SvLBox& rDev,
                              USHORT nFlags, SvLBoxEntry* pEntry )
+/* [Description]
+
+   Paint function of the SvLBoxColorString class. The relevant text with the
+   selected color is drawn in the output device.
+*/
+
 {
     Color aColor=rDev.GetTextColor();
     Color a2Color=aColor;
@@ -597,7 +525,6 @@ void SvxRedlinTable::InitEntry( SvLBoxEntry* pEntry, const XubString& rStr,
     for( USHORT nToken = 0; nToken < nCount; nToken++ )
     {
         if( pCurToken && nCurTokenLen )
-            // aToken.Assign( pCurToken, nCurTokenLen );
             aToken = XubString( pCurToken, nCurTokenLen );
         else
             aToken.Erase();
@@ -628,7 +555,7 @@ SvxTPView::SvxTPView( Window * pParent)
     PbAcceptAll ( this, SVX_RES(PB_ACCEPTALL  ) ),
     PbRejectAll ( this, SVX_RES(PB_REJECTALL  ) ),
     PbUndo      ( this, SVX_RES(PB_UNDO  ) ),
-    aTitle1     ( SVX_RES( STR_TITLE1 ) ),      // lokale Resource
+    aTitle1     ( SVX_RES( STR_TITLE1 ) ),      // local resource
     aTitle2     ( SVX_RES( STR_TITLE2 ) ),
     aTitle3     ( SVX_RES( STR_TITLE3 ) ),
     aTitle4     ( SVX_RES( STR_TITLE4 ) ),

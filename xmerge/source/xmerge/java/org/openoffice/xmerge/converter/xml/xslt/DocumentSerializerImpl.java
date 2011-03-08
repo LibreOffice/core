@@ -197,14 +197,12 @@ public final class DocumentSerializerImpl
 
     public Source resolve(String href,String base)
     throws TransformerException{
-        //System.out.println("\nhref "+href+"\nbase "+base);
         if (href !=null){
         if(href.equals("javax.xml.transform.dom.DOMSource")|| href.equals(""))
             return null;
         try{
             ConverterInfo ci = pluginFactory.getConverterInfo();
             String newhRef ="jar:"+ci.getJarName()+"!/"+href;
-            //System.out.println("\n Looking For "+ newhRef);
             StreamSource sheetFile= new StreamSource(newhRef);
             return sheetFile;
         }
@@ -235,9 +233,7 @@ public final class DocumentSerializerImpl
     private ByteArrayOutputStream transform(org.w3c.dom.Document domDoc)
        throws TransformerException,TransformerConfigurationException
           , FileNotFoundException,IOException{
-       //System.out.println("\nTransforming...");
        ConverterInfo ci = pluginFactory.getConverterInfo();
-       //DOMResult xmlDomResult = new DOMResult();
        ByteArrayOutputStream baos= new ByteArrayOutputStream();
        try{
 
@@ -256,7 +252,6 @@ public final class DocumentSerializerImpl
 
           }
           else{
-              //System.out.println(ci.getJarName()+"!/"+ci.getXsltSerial());
               xslDoc = dBuilder.parse(
                   "jar:"+ci.getJarName()+"!/"+ci.getXsltSerial());
           }
@@ -270,21 +265,6 @@ public final class DocumentSerializerImpl
           Transformer transformer = tFactory.newTransformer(xslDomSource);
 
           transformer.transform(xmlDomSource, new StreamResult(baos));
-
-            /*
-          transformer.transform(xmlDomSource, xmlDomResult); //Removed this impl because the DocType was not being written out
-
-         // Serialize for output to standard out
-          Serializer serializer = SerializerFactory.getSerializer
-                                   (OutputProperties.getDefaultMethodProperties("xml"));
-                 //serializer.setOutputStream(System.out);
-          serializer.setOutputStream(baos);
-          serializer.asDOMSerializer().serialize(xmlDomResult.getNode());
-          //serializer.asDOMSerializer().serialize(xmlDomSource.getNode());
-
-
-          //System.out.println("\n** Transform Complete ***");
-          */
        }
        catch(Exception e){
               System.out.println("An error occurred in the transformation : "+e);

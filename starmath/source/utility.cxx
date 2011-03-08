@@ -139,7 +139,6 @@ void SmPickList::Clear()
 
 
 /**************************************************************************/
-/**************************************************************************/
 
 void * SmFontPickList::CreateItem(const String& /*rString*/)
 {
@@ -227,8 +226,6 @@ void SmFontPickList::WriteTo(SmFontDialog& rDialog) const
 /**************************************************************************/
 
 
-/**************************************************************************/
-
 IMPL_LINK( SmFontPickListBox, SelectHdl, ListBox *, /*pListBox*/ )
 {
     USHORT  nPos;
@@ -292,8 +289,6 @@ void SmFontPickListBox::Update(const Font &rFont, const Font &rNewFont)
 {
     SmFontPickList::Update(rFont, rNewFont);
 
-    // ********************** hier fehlt noch was
-
     return;
 }
 
@@ -301,8 +296,6 @@ void SmFontPickListBox::Update(const Font &rFont, const Font &rNewFont)
 void SmFontPickListBox::Remove(const Font &rFont)
 {
     SmFontPickList::Remove(rFont);
-
-    // ********************** hier fehlt noch was
 
     return;
 }

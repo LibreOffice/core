@@ -252,7 +252,7 @@ String TTProfiler::Dec( ULONG nNr )
     return aRet;
 }
 
-String TTProfiler::Pad( const String aS, xub_StrLen nLen )
+String TTProfiler::Pad( const String &aS, xub_StrLen nLen )
 {
     if ( nLen > aS.Len() )
         return UniString().Fill( nLen - aS.Len() ).Append( aS );

@@ -87,7 +87,7 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
                                     Find( aPageStyle, SFX_STYLE_FAMILY_PAGE );
     if ( !pStyle )
     {
-        DBG_ERROR("UpdatePageBreaks: Style nicht gefunden");
+        OSL_FAIL("UpdatePageBreaks: Style nicht gefunden");
         return;
     }
     SfxItemSet* pStyleSet = &pStyle->GetItemSet();
@@ -540,19 +540,33 @@ bool ScTable::RowHidden(SCROW nRow, SCROW* pFirstRow, SCROW* pLastRow) const
     return aData.mbValue;
 }
 
-
-bool ScTable::RowHidden(SCROW nRow, SCROW& rLastRow) const
+bool ScTable::RowHiddenLeaf(SCROW nRow, SCROW* pFirstRow, SCROW* pLastRow) const
 {
-    rLastRow = nRow;
     if (!ValidRow(nRow))
+    {
+        if (pFirstRow)
+            *pFirstRow = nRow;
+        if (pLastRow)
+            *pLastRow = nRow;
         return true;
+    }
 
     ScFlatBoolRowSegments::RangeData aData;
-    if (!mpHiddenRows->getRangeData(nRow, aData))
+    if (!mpHiddenRows->getRangeDataLeaf(nRow, aData))
+    {
         // search failed.
+        if (pFirstRow)
+            *pFirstRow = nRow;
+        if (pLastRow)
+            *pLastRow = nRow;
         return true;
+    }
 
-    rLastRow = aData.mnRow2;
+    if (pFirstRow)
+        *pFirstRow = aData.mnRow1;
+    if (pLastRow)
+        *pLastRow = aData.mnRow2;
+
     return aData.mbValue;
 }
 
@@ -562,27 +576,13 @@ bool ScTable::HasHiddenRows(SCROW nStartRow, SCROW nEndRow) const
     while (nRow <= nEndRow)
     {
         SCROW nLastRow = -1;
-        bool bHidden = RowHidden(nRow, nLastRow);
+        bool bHidden = RowHidden(nRow, NULL, &nLastRow);
         if (bHidden)
             return true;
 
         nRow = nLastRow + 1;
     }
     return false;
-}
-
-bool ScTable::ColHidden(SCCOL nCol, SCCOL& rLastCol) const
-{
-    rLastCol = nCol;
-    if (!ValidCol(nCol))
-        return true;
-
-    ScFlatBoolColSegments::RangeData aData;
-    if (!mpHiddenCols->getRangeData(nCol, aData))
-        return true;
-
-    rLastCol = aData.mnCol2;
-    return aData.mbValue;
 }
 
 bool ScTable::ColHidden(SCCOL nCol, SCCOL* pFirstCol, SCCOL* pLastCol) const
@@ -610,6 +610,12 @@ bool ScTable::SetRowHidden(SCROW nStartRow, SCROW nEndRow, bool bHidden)
     else
         bChanged = mpHiddenRows->setFalse(nStartRow, nEndRow);
 
+    if (bChanged)
+    {
+        if (IsStreamValid())
+            SetStreamValid(false);
+    }
+
     return bChanged;
 }
 
@@ -620,6 +626,12 @@ bool ScTable::SetColHidden(SCCOL nStartCol, SCCOL nEndCol, bool bHidden)
         bChanged = mpHiddenCols->setTrue(nStartCol, nEndCol);
     else
         bChanged = mpHiddenCols->setFalse(nStartCol, nEndCol);
+
+    if (bChanged)
+    {
+        if (IsStreamValid())
+            SetStreamValid(false);
+    }
 
     return bChanged;
 }
@@ -645,7 +657,7 @@ void ScTable::CopyRowHidden(ScTable& rTable, SCROW nStartRow, SCROW nEndRow)
     while (nRow <= nEndRow)
     {
         SCROW nLastRow = -1;
-        bool bHidden = rTable.RowHidden(nRow, nLastRow);
+        bool bHidden = rTable.RowHidden(nRow, NULL, &nLastRow);
         if (nLastRow > nEndRow)
             nLastRow = nEndRow;
         SetRowHidden(nRow, nLastRow, bHidden);

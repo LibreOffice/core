@@ -187,7 +187,7 @@ void UnoWrapper::SetWindowInterface( Window* pWindow, ::com::sun::star::uno::Ref
         {
             int i = 0;
             i++;
-            //          DBG_ERROR( "UnoWrapper::SetWindowInterface: there already *is* a WindowInterface for this window!" );
+            //          OSL_FAIL( "UnoWrapper::SetWindowInterface: there already *is* a WindowInterface for this window!" );
         }
         pVCLXWindow->SetWindow( pWindow );
         pWindow->SetWindowPeer( xIFace, pVCLXWindow );

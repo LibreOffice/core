@@ -484,7 +484,6 @@ interface OutlineView
         StateMethod = GetCtrlState ;
     ]
 
-    // #96090#
     SID_GETUNDOSTRINGS // ole : no, status : ?
     [
         ExecMethod = FuSupport ;

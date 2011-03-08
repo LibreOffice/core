@@ -62,7 +62,6 @@ sal_Bool SAL_CALL nss_component_writeInfo( void* /*pServiceManager*/ , void* pRe
     Reference< XRegistryKey > xKey( reinterpret_cast< XRegistryKey* >( pRegistryKey ) ) ;
 
     if( xKey.is() ) {
-        //  try {
         // XMLSignature_NssImpl
         sKeyName = OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) ) ;
         sKeyName += XMLSignature_NssImpl::impl_getImplementationName() ;
@@ -124,10 +123,6 @@ sal_Bool SAL_CALL nss_component_writeInfo( void* /*pServiceManager*/ , void* pRe
         }
 
         return sal_True;
-        //} catch( InvalidRegistryException & ) {
-        //  //we should not ignore exceptions
-        //  return sal_False ;
-        //}
     }
     return result;
 }

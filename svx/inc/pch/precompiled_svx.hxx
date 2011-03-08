@@ -56,7 +56,6 @@
 #include "boost/scoped_ptr.hpp"
 #include "boost/shared_ptr.hpp"
 #include "boost/spirit/include/classic_core.hpp"
-#include "bootstrp/sstring.hxx"
 #include "com/sun/star/accessibility/AccessibleEventId.hpp"
 #include "com/sun/star/accessibility/AccessibleEventObject.hpp"
 #include "com/sun/star/accessibility/AccessibleRelationType.hpp"
@@ -750,7 +749,7 @@
 #include "sot/formats.hxx"
 #include <map>
 #include <set>
-#include <slist>
+#include <list>
 #include <vector>
 #include "svtools/FilterConfigItem.hxx"
 #include "svtools/accessibilityoptions.hxx"
@@ -867,7 +866,6 @@
 #include "tools/inetdef.hxx"
 #include "tools/line.hxx"
 #include "tools/link.hxx"
-#include "tools/list.hxx"
 #include "tools/multisel.hxx"
 #include "tools/poly.hxx"
 #include "tools/rc.h"

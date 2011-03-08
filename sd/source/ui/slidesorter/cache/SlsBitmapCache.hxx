@@ -35,7 +35,7 @@ class SdrPage;
 #include <osl/mutex.hxx>
 #include <memory>
 #include <boost/shared_ptr.hpp>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 namespace sd { namespace slidesorter { namespace cache {
 

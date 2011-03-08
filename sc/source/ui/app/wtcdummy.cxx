@@ -40,12 +40,12 @@ class SdbColumns
 
 SdbColumns::SdbColumns()
 {
-    DBG_ERROR("WATCOM Hack failed !");
+    OSL_FAIL("WATCOM Hack failed !");
 }
 
 SdbColumns::~SdbColumns()
 {
-    DBG_ERROR("WATCOM Hack failed !");
+    OSL_FAIL("WATCOM Hack failed !");
 }
 
 class SdbRow
@@ -57,12 +57,12 @@ class SdbRow
 
 SdbRow::SdbRow()
 {
-    DBG_ERROR("WATCOM Hack failed !");
+    OSL_FAIL("WATCOM Hack failed !");
 }
 
 SdbRow::~SdbRow()
 {
-    DBG_ERROR("WATCOM Hack failed !");
+    OSL_FAIL("WATCOM Hack failed !");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

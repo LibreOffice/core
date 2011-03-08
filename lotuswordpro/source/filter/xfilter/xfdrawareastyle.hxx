@@ -58,10 +58,6 @@
  * Area style of Drawing object.
  * Only support fill color and fill pattern now.
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2004-02-21 create this file.
- ************************************************************************/
 #ifndef     _XFDRAWAREASTYLE_HXX
 #define     _XFDRAWAREASTYLE_HXX
 

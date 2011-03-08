@@ -145,7 +145,7 @@ public:
     const ImpSvNumberformatInfo& Info() const { return aI; }
 
     // Get count of substrings (symbols)
-    USHORT GetnAnz() const { return nAnzStrings;}
+    USHORT GetCount() const { return nAnzStrings;}
 
     Color* GetColor() const { return pColor; }
     void SetColor( Color* pCol, String& rName )
@@ -175,6 +175,18 @@ private:
 
 class SVL_DLLPUBLIC SvNumberformat
 {
+    struct LocaleType
+    {
+        sal_uInt8 mnNumeralShape;
+        sal_uInt8 mnCalendarType;
+        LanguageType meLanguage;
+
+        ::rtl::OUString generateCode() const;
+
+        LocaleType();
+        LocaleType(sal_uInt32 nRawCode);
+    };
+
 public:
     // Ctor for Load
     SvNumberformat( ImpSvNumberformatScan& rSc, LanguageType eLge );
@@ -215,7 +227,7 @@ public:
     BOOL IsAdditionalStandardDefined() const
         { return nNewStandardDefined == SV_NUMBERFORMATTER_VERSION_ADDITIONAL_I18N_FORMATS; }
 
-    LanguageType GetLanguage() const            { return eLnge;}
+    LanguageType GetLanguage() const            { return maLocale.meLanguage;}
 
     const String& GetFormatstring() const   { return sFormatstring; }
 
@@ -251,7 +263,7 @@ public:
     // True if 4th subformat present
     BOOL HasTextFormat() const
         {
-            return (NumFor[3].GetnAnz() > 0) ||
+            return (NumFor[3].GetCount() > 0) ||
                 (NumFor[3].Info().eScannedType == NUMBERFORMAT_TEXT);
         }
 
@@ -299,7 +311,7 @@ public:
                 // strings of the format were matched and not just the starting
                 // sequence, so we don't have to check if GetnAnz() includes
                 // [modifiers] or anything else if both counts are equal.
-                USHORT nCnt = NumFor[nNumFor].GetnAnz();
+                USHORT nCnt = NumFor[nNumFor].GetCount();
                 if ( nAllCount == nCnt )
                     return TRUE;
                 if ( nAllCount < nCnt ) // check ignoring [modifiers] and so on
@@ -321,6 +333,10 @@ public:
 
     // Whether the negative format is without a sign or not
     BOOL IsNegativeWithoutSign() const;
+
+    BOOL IsNegativeInBracket() const;
+
+    BOOL HasPositiveBracketPlaceholder() const;
 
     // Whether a new SYMBOLTYPE_CURRENCY is contained in the format
     BOOL HasNewCurrency() const;
@@ -456,7 +472,7 @@ private:
     double fLimit1;                 // Value for first condition
     double fLimit2;                 // Value for second condition
     ImpSvNumberformatScan& rScan;   // Format code scanner
-    LanguageType eLnge;             // Language/country of the format
+    LocaleType maLocale;            // Language/country of the format, numeral shape and calendar type from Excel.
     SvNumberformatLimitOps eOp1;    // Operator for first condition
     SvNumberformatLimitOps eOp2;    // Operator for second condition
     USHORT nNewStandardDefined;     // new builtin formats as of version 6
@@ -489,8 +505,29 @@ private:
                    xub_StrLen& nPos,
                    String& sSymbol );
 
-    // get xxx of "[$-xxx]" as LanguageType, starting at and advancing position nPos
-    SVL_DLLPRIVATE static LanguageType ImpGetLanguageType( const String& rString, xub_StrLen& nPos );
+    /**
+     * Parse the content of '[$-xxx] or '[$-xxxxxxxx]' and extract the locale
+     * type from it.  Given the string, start parsing at position specified by
+     * nPos, and store the end position with nPos when the parsing is
+     * complete.  The nPos should point to the '$' before the parsing, and to
+     * the closing bracket after the parsing.  When the content is [$-xxx],
+     * the xxx part represents the language type (aka LCID) in hex numerals.
+     * When the content is [$-xxxxxxxx] the last 4 digits represent the LCID
+     * (again in hex), the next 2 digits represent the calendar type, and the
+     * 2 highest digits (if exists) is the numeral shape.
+     *
+     * @reference
+     * http://office.microsoft.com/en-us/excel-help/creating-international-number-formats-HA001034635.aspx
+     *
+     * @param rString input string
+     * @param nPos position (see above).
+     *
+     * @return struct containing numeral shape, calendar type, and LCID that
+     *         specifies language type. See i18npool/lang.h for a complete
+     *         list of language types. These numbers also correspond with the
+     *         numbers used by Microsoft Office.
+     */
+    SVL_DLLPRIVATE static LocaleType ImpGetLocaleType( const String& rString, xub_StrLen& nPos );
 
     // standard number output
     SVL_DLLPRIVATE void ImpGetOutputStandard( double& fNumber, String& OutString );

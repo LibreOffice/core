@@ -169,8 +169,6 @@ Reference< XDispatch > SAL_CALL HelpInterceptor_Impl::queryDispatch(
     if ( m_xSlaveDispatcher.is() )
         xResult = m_xSlaveDispatcher->queryDispatch( aURL, aTargetFrameName, nSearchFlags );
 
-    // INetURLObject aObj( aURL.Complete );
-    // sal_Bool bHelpURL = ( aObj.GetProtocol() == INET_PROT_VND_SUN_STAR_HELP );
     BOOL bHelpURL = aURL.Complete.toAsciiLowerCase().match(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.help")),0);
 
     if ( bHelpURL )

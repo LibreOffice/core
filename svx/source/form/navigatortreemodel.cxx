@@ -177,7 +177,7 @@ namespace svxform
             }
             else if (pEntryData->ISA(FmFormData))
             {
-                DBG_ERROR("replacing forms not implemented yet !");
+                OSL_FAIL("replacing forms not implemented yet !");
             }
         }
 
@@ -352,7 +352,7 @@ namespace svxform
             }
             else
             {
-                DBG_ERROR("NavigatorTreeModel::Insert : the parent container needs an elementtype I don't know !");
+                OSL_FAIL("NavigatorTreeModel::Insert : the parent container needs an elementtype I don't know !");
             }
 
             if( bUndo )

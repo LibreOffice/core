@@ -39,32 +39,23 @@ namespace dmapper {
 
 using namespace ::com::sun::star;
 using namespace ::writerfilter;
-//using namespace ::std;
 
-/*-- 24.04.2007 09:06:35---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 CellColorHandler::CellColorHandler() :
     m_nShadowType( 0 ),
     m_nColor( 0xffffffff ),
     m_nFillColor( 0xffffffff ),
-    m_bParagraph( false )
+    m_OutputFormat( Form )
 {
 }
-/*-- 24.04.2007 09:06:35---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 CellColorHandler::~CellColorHandler()
 {
 }
-/*-- 24.04.2007 09:06:35---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void CellColorHandler::attribute(Id rName, Value & rVal)
 {
     sal_Int32 nIntValue = rVal.getInt();
-    (void)nIntValue;
-    (void)rName;
     switch( rName )
     {
         case NS_rtf::LN_cellTopColor:
@@ -91,16 +82,6 @@ void CellColorHandler::attribute(Id rName, Value & rVal)
             //color of the shading
             m_nColor = nIntValue;
         break;
-//        case NS_rtf::LN_rgbrc:
-//        {
-//            writerfilter::Reference<Properties>::Pointer_t pProperties = rVal.getProperties();
-//            if( pProperties.get())
-//            {
-//                pProperties->resolve(*this);
-//                //
-//            }
-//        }
-//        break;
         case NS_ooxml::LN_CT_Shd_themeFill:
         case NS_ooxml::LN_CT_Shd_themeFillTint:
         case NS_ooxml::LN_CT_Shd_themeFillShade:
@@ -110,16 +91,12 @@ void CellColorHandler::attribute(Id rName, Value & rVal)
             OSL_ENSURE( false, "unknown attribute");
     }
 }
-/*-- 24.04.2007 09:06:35---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void CellColorHandler::sprm(Sprm & rSprm)
 {
     (void)rSprm;
 }
-/*-- 24.04.2007 09:09:01---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 TablePropertyMapPtr  CellColorHandler::getProperties()
 {
     TablePropertyMapPtr pPropertyMap(new TablePropertyMap);
@@ -221,8 +198,9 @@ TablePropertyMapPtr  CellColorHandler::getProperties()
         nApplyColor = ( (nRed/1000) << 0x10 ) + ((nGreen/1000) << 8) + nBlue/1000;
     }
 
-    pPropertyMap->Insert( m_bParagraph ? PROP_PARA_BACK_COLOR : PROP_BACK_COLOR, false,
-                            uno::makeAny( nApplyColor ));
+    pPropertyMap->Insert( m_OutputFormat == Form ? PROP_BACK_COLOR
+                        : m_OutputFormat == Paragraph ? PROP_PARA_BACK_COLOR
+                        : PROP_CHAR_BACK_COLOR, false, uno::makeAny( nApplyColor ));
     return pPropertyMap;
 }
 } //namespace dmapper

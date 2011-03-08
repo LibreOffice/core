@@ -243,8 +243,9 @@ public:
     void exportText( const ::rtl::OUString& rText, bool bConvertTabsLFs = false );
     void exportErrorBarRanges();
 
+private:
     SchXMLExportHelper_Impl(SchXMLExportHelper_Impl &); // not defined
-    void operator =(SchXMLExportHelper_Impl &); // not defined
+    SchXMLExportHelper_Impl operator =(SchXMLExportHelper_Impl &); // not defined
 
 public:
     SvXMLExport& mrExport;
@@ -567,7 +568,7 @@ bool lcl_hasChartType( const Reference< chart2::XDiagram > & xDiagram, const OUS
     }
     catch( uno::Exception & )
     {
-        DBG_ERROR( "Exception while searching for chart type in diagram" );
+        OSL_FAIL( "Exception while searching for chart type in diagram" );
     }
     return false;
 }
@@ -914,10 +915,6 @@ void lcl_exportNumberFormat( const OUString& rPropertyName, const Reference< bea
         return aResult;
 
     const OUString aRolePrefix( RTL_CONSTASCII_USTRINGPARAM( "error-bars-" ));
-//     const OUString aXRolePrefix( aRolePrefix + OUString( RTL_CONSTASCII_USTRINGPARAM( "x-" )));
-//     const OUString aYRolePrefix( aRolePrefix + OUString( RTL_CONSTASCII_USTRINGPARAM( "y-" )));
-//     const OUString aPositivePostfix( RTL_CONSTASCII_USTRINGPARAM( "positive" ));
-//     const OUString aNegativePostfix( RTL_CONSTASCII_USTRINGPARAM( "negative" ));
 
     Sequence< Reference< chart2::data::XLabeledDataSequence > > aSequences(
         xErrorBarDataSource->getDataSequences());
@@ -1151,7 +1148,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
     Reference< chart2::XChartDocument > xNewDoc( rChartDoc, uno::UNO_QUERY );
     if( !rChartDoc.is() || !xNewDoc.is() )
     {
-        DBG_ERROR( "No XChartDocument was given for export." );
+        OSL_FAIL( "No XChartDocument was given for export." );
         return;
     }
 
@@ -1215,7 +1212,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
         {
             DBG_WARNING( "Required property not found in ChartDocument" );
         }
-    } // if( xDocPropSet.is())
+    }
 
     if ( bIncludeTable && (aNullDate.Day != 30 || aNullDate.Month != 12 || aNullDate.Year != 1899 ) )
     {
@@ -1431,12 +1428,10 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
                 switch( aLegendPos )
                 {
                     case chart::ChartLegendPosition_LEFT:
-//                      msString = GetXMLToken(XML_LEFT);
                         // #i35421# change left->start (not clear why this was done)
                         msString = GetXMLToken(XML_START);
                         break;
                     case chart::ChartLegendPosition_RIGHT:
-//                      msString = GetXMLToken(XML_RIGHT);
                         // #i35421# change right->end (not clear why this was done)
                         msString = GetXMLToken(XML_END);
                         break;
@@ -1561,8 +1556,6 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
 
                     rShapeExport->collectShapeAutoStyles( xShape );
                 }
-                // this would be the easier way if it worked:
-                // mrExport.GetShapeExport()->collectShapesAutoStyles( mxAdditionalShapes );
             }
         }
     }
@@ -1893,7 +1886,7 @@ void SchXMLExportHelper_Impl::exportPlotArea(
             }
             catch( beans::UnknownPropertyException & )
             {
-                DBG_ERROR( "Property HasSecondaryYAxis not found in Diagram" );
+                OSL_FAIL( "Property HasSecondaryYAxis not found in Diagram" );
             }
 
             // 3d attributes
@@ -3195,7 +3188,6 @@ void SchXMLExportHelper_Impl::exportCandleStickSeries(
     sal_Bool bJapaneseCandleSticks,
     sal_Bool bExportContent )
 {
-//  std::vector< XMLPropertyState > aPropertyStates;
 
     for( sal_Int32 nSeriesIdx=0; nSeriesIdx<aSeriesSeq.getLength(); ++nSeriesIdx )
     {
@@ -3285,12 +3277,6 @@ void SchXMLExportHelper_Impl::exportCandleStickSeries(
                         mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_ATTACHED_AXIS, XML_SECONDARY_Y );
                     else
                         mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_ATTACHED_AXIS, XML_PRIMARY_Y );
-                    // write style name
-//                     AddAutoStyleAttribute( aPropertyStates );
-                    // chart type
-//                     mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_CLASS,
-//                                            mrExport.GetNamespaceMap().GetQNameByKey(
-//                                                XML_NAMESPACE_CHART, GetXMLToken( XML_STOCK )));
                     SvXMLElementExport aCloseSeries( mrExport, XML_NAMESPACE_CHART, XML_SERIES, sal_True, sal_True );
                     // export empty data points
                     exportDataPoints( 0, nSeriesLength, xDiagram, bExportContent );
@@ -3299,10 +3285,8 @@ void SchXMLExportHelper_Impl::exportCandleStickSeries(
             else    // autostyles
             {
                 // for close series
-//                 CollectAutoStyle( aPropertyStates );
             }
             // remove property states for autostyles
-//             aPropertyStates.clear();
         }
     }
 }
@@ -3700,7 +3684,7 @@ void SchXMLExport::_ExportAutoStyles()
         }
         else
         {
-            DBG_ERROR( "Couldn't export chart due to wrong XModel (must be XChartDocument)" );
+            OSL_FAIL( "Couldn't export chart due to wrong XModel (must be XChartDocument)" );
         }
     }
 }
@@ -3758,7 +3742,7 @@ void SchXMLExport::_ExportContent()
                         }
                         catch( beans::UnknownPropertyException & )
                         {
-                            DBG_ERROR( "Property ChartRangeAddress not supported by ChartDocument" );
+                            OSL_FAIL( "Property ChartRangeAddress not supported by ChartDocument" );
                         }
                     }
                 }
@@ -3768,7 +3752,7 @@ void SchXMLExport::_ExportContent()
     }
     else
     {
-        DBG_ERROR( "Couldn't export chart due to wrong XModel" );
+        OSL_FAIL( "Couldn't export chart due to wrong XModel" );
     }
 }
 
@@ -3864,7 +3848,6 @@ Reference< uno::XInterface > SAL_CALL SchXMLExport_createInstance(const Referenc
 {
     // #110680#
     // #103997# removed some flags from EXPORT_ALL
-    // return (cppu::OWeakObject*)new SchXMLExport( EXPORT_ALL ^ ( EXPORT_SETTINGS | EXPORT_MASTERSTYLES | EXPORT_SCRIPTS ));
     return (cppu::OWeakObject*)new SchXMLExport( rSMgr, EXPORT_ALL ^ ( EXPORT_SETTINGS | EXPORT_MASTERSTYLES | EXPORT_SCRIPTS ));
 }
 
@@ -3907,7 +3890,6 @@ OUString SAL_CALL SchXMLExport_Styles_getImplementationName() throw()
 Reference< uno::XInterface > SAL_CALL SchXMLExport_Styles_createInstance(const Reference< lang::XMultiServiceFactory >& rSMgr) throw( uno::Exception )
 {
     // #110680#
-    // return (cppu::OWeakObject*)new SchXMLExport( EXPORT_STYLES );
     return (cppu::OWeakObject*)new SchXMLExport( rSMgr, EXPORT_STYLES );
 }
 
@@ -3946,7 +3928,6 @@ OUString SAL_CALL SchXMLExport_Content_getImplementationName() throw()
 Reference< uno::XInterface > SAL_CALL SchXMLExport_Content_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
 {
     // #110680#
-    // return (cppu::OWeakObject*)new SchXMLExport( EXPORT_AUTOSTYLES | EXPORT_CONTENT | EXPORT_FONTDECLS );
     return (cppu::OWeakObject*)new SchXMLExport( rSMgr, EXPORT_AUTOSTYLES | EXPORT_CONTENT | EXPORT_FONTDECLS );
 }
 
@@ -3969,23 +3950,6 @@ Reference< uno::XInterface > SAL_CALL SchXMLExport_Oasis_Content_createInstance(
 }
 
 // ------------------------------------------------------------
-
-// Sequence< OUString > SAL_CALL SchXMLExport_Meta_getSupportedServiceNames() throw()
-// {
-//  const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Chart.XMLMetaExporter" ));
-//  const Sequence< OUString > aSeq( &aServiceName, 1 );
-//  return aSeq;
-// }
-
-// OUString SAL_CALL SchXMLExport_Meta_getImplementationName() throw()
-// {
-//  return OUString( RTL_CONSTASCII_USTRINGPARAM( "SchXMLExport.Meta" ));
-// }
-
-// Reference< uno::XInterface > SAL_CALL SchXMLExport_Meta_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
-// {
-//  return (cppu::OWeakObject*)new SchXMLExport( EXPORT_META );
-// }
 
 // Oasis format
 Sequence< OUString > SAL_CALL SchXMLExport_Oasis_Meta_getSupportedServiceNames() throw()
@@ -4017,8 +3981,6 @@ OUString SAL_CALL SchXMLExport::getImplementationName() throw( uno::RuntimeExcep
             return SchXMLExport_Styles_getImplementationName();
         case ( EXPORT_AUTOSTYLES | EXPORT_CONTENT | EXPORT_FONTDECLS ):
             return SchXMLExport_Content_getImplementationName();
-//         case EXPORT_META:
-//             return SchXMLExport_Meta_getImplementationName();
 
         // Oasis format
         case ( EXPORT_ALL | EXPORT_OASIS ):

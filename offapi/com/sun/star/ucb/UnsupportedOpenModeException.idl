@@ -41,7 +41,7 @@ module com { module sun { module star { module ucb {
     is not supported.
 
     <p>For example, each <type>OpenCommandArgument</type> supplied as argument
-    of the command 'open' contains such an open mode.
+    of the command "open" contains such an open mode.
 
     @version    1.0
     @author     Kai Sommerfeld

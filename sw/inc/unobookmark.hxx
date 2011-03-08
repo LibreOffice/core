@@ -237,9 +237,8 @@ class SwXFieldmark
 {
 
 private:
-
+    ::sw::mark::ICheckboxFieldmark* getCheckboxFieldmark();
     bool isReplacementObject;
-
 public:
 
     static ::com::sun::star::uno::Reference<
@@ -260,9 +259,28 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > SAL_CALL getParameters(  )
         throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setPropertyValue(
+            const ::rtl::OUString& rPropertyName,
+            const ::com::sun::star::uno::Any& rValue)
+        throw (::com::sun::star::beans::UnknownPropertyException,
+                ::com::sun::star::beans::PropertyVetoException,
+                ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::lang::WrappedTargetException,
+                ::com::sun::star::uno::RuntimeException);
 
+    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue(
+            const ::rtl::OUString& rPropertyName)
+        throw (::com::sun::star::beans::UnknownPropertyException,
+                ::com::sun::star::lang::WrappedTargetException,
+                ::com::sun::star::uno::RuntimeException);
 };
 
+class SwXODFCheckboxField : public SwXFieldmark
+{
+public:
+    SwXODFCheckboxField( ::sw::mark::IMark* pBkm = 0, SwDoc* pDoc = 0) : SwXFieldmark(true,
+            pBkm, pDoc) {}
+};
 #endif // SW_UNOBOOKMARK_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

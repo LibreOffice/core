@@ -1233,7 +1233,7 @@ namespace dbmm
             // Unfortunately, the storage implementation does not complain if you use invalid characters/names, but instead
             // it silently accepts them, and produces garbage in the file (#i95408).
             // So, until especially the former is fixed, we need to strip all invalid characters from the name.
-            // #i95865# / 2008-11-06 / frank.schoenheit@sun.com
+            // #i95865#
 
             // The general idea is to replace invalid characters with '_'. However, since "valid" essentially means
             // ASCII only, this implies that for a lot of languages, we would simply replace everything with '_',

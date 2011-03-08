@@ -45,7 +45,7 @@ ScVbaLineFormat::ScVbaLineFormat( const uno::Reference< ov::XHelperInterface >& 
 }
 
 sal_Int32
-ScVbaLineFormat::calculateArrowheadSize()
+ScVbaLineFormat::calculateArrowheadSize() const
 {
     return 0;
 }

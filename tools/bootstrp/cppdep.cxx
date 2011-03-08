@@ -38,8 +38,6 @@
 #include <tools/stream.hxx>
 #include "cppdep.hxx"
 
-//#define TEST
-
 CppDep::CppDep( ByteString aFileName )
 {
     aSourceFile = aFileName;
@@ -57,17 +55,28 @@ CppDep::CppDep()
 
 CppDep::~CppDep()
 {
+    for ( size_t i = 0, n = pSources->size(); i < n; ++i ) {
+        delete (*pSources)[ i ];
+    }
     delete pSources;
+
+    for ( size_t i = 0, n = pSearchPath->size(); i < n; ++i ) {
+        delete (*pSearchPath)[ i ];
+    }
     delete pSearchPath;
+
+    for ( size_t i = 0, n = pFileList->size(); i < n; ++i ) {
+        delete (*pFileList)[ i ];
+    }
     delete pFileList;
 }
 
 void CppDep::Execute()
 {
-    ULONG nCount = pSources->Count();
-    for ( ULONG n=0; n<nCount;n++)
+    size_t nCount = pSources->size();
+    for ( size_t n = 0; n < nCount; n++ )
     {
-        ByteString *pStr = pSources->GetObject(n);
+        ByteString *pStr = (*pSources)[ n ];
         Search( *pStr );
     }
 }
@@ -75,14 +84,14 @@ void CppDep::Execute()
 BOOL CppDep::AddSearchPath( const char* aPath )
 {
     ByteString *pStr = new ByteString( aPath );
-    pSearchPath->Insert( pStr, LIST_APPEND );
+    pSearchPath->push_back( pStr );
     return FALSE;
 }
 
 BOOL CppDep::AddSource( const char* aSource )
 {
     ByteString *pStr = new ByteString( aSource );
-    pSources->Insert( pStr, LIST_APPEND );
+    pSources->push_back( pStr );
     return FALSE;
 }
 
@@ -117,10 +126,10 @@ BOOL CppDep::Search( ByteString aFileName )
             if ( (aNewFile = Exists( aResult )) != "" )
             {
                 BOOL bFound = FALSE;
-                ULONG nCount = pFileList->Count();
-                for ( ULONG i=0; i<nCount; i++ )
+                size_t nCount = pFileList->size();
+                for ( size_t i = 0; i < nCount; i++ )
                 {
-                    ByteString *pStr = pFileList->GetObject(i);
+                    ByteString *pStr = (*pFileList)[ i ];
                     if ( *pStr == aNewFile )
                         bFound = TRUE;
                 }
@@ -129,7 +138,7 @@ BOOL CppDep::Search( ByteString aFileName )
 #endif
                 if ( !bFound )
                 {
-                    pFileList->Insert( new ByteString( aNewFile ), LIST_APPEND );
+                    pFileList->push_back( new ByteString( aNewFile ) );
 #ifdef DEBUG_VERBOSE
                     fprintf( stderr, " CppDep %s\\\n", aNewFile.GetBuffer() );
 #endif
@@ -152,11 +161,11 @@ ByteString CppDep::Exists( ByteString aFileName )
     fprintf( stderr, "Searching %s \n", aFileName.GetBuffer() );
 #endif
 
-    ULONG nCount = pSearchPath->Count();
-    for ( ULONG n=0; n<nCount; n++)
+    size_t nCount = pSearchPath->size();
+    for ( size_t n = 0; n < nCount; n++ )
     {
         struct stat aBuf;
-        ByteString *pPathName = pSearchPath->GetObject(n);
+        ByteString *pPathName = (*pSearchPath)[ n ];
 
         strcpy( pFullName, pPathName->GetBuffer());
         strcat( pFullName, DIR_SEP );

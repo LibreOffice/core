@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 // include ---------------------------------------------------------------
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
@@ -523,9 +520,6 @@ BOOL SvxMeasurePage::FillItemSet( SfxItemSet& rAttrs)
             bModified = TRUE;
         }
     }
-
-//enum SdrMeasureTextHPos {SDRMEASURE_TEXTHAUTO,SDRMEASURE_TEXTLEFTOUTSIDE,SDRMEASURE_TEXTINSIDE,SDRMEASURE_TEXTRIGHTOUTSIDE};
-//enum SdrMeasureTextVPos {SDRMEASURE_TEXTVAUTO,SDRMEASURE_ABOVE,SDRMEASURETEXT_VERTICALCENTERED,SDRMEASURE_BELOW};
 
     if( bPositionModified )
     {

@@ -1654,11 +1654,20 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     SfxItemSet aFrameItemSet(m_pImpl->m_pDoc->GetAttrPool(),
                     RES_FRMATR_BEGIN, RES_FRMATR_END-1,
                     0 );
-
+    // If there is no content in the frame the shape is in
+    // it gets deleted in the DelFullPara call below,
+    // In this case insert a tmp text node ( we delete it later )
+    if ( aStartPam.Start()->nNode == pEndPam->Start()->nNode
+    && aStartPam.End()->nNode == pEndPam->End()->nNode )
+    {
+        SwPosition aEnd(*aStartPam.End());
+        bParaAfterInserted = GetDoc()->AppendTxtNode( aEnd );
+        pEndPam->DeleteMark();
+        *pEndPam->GetPoint() = aEnd;
+    }
     aStartPam.SetMark();
     *aStartPam.End() = *pEndPam->End();
     pEndPam.reset(0);
-
     SwXTextFrame *const pNewFrame = new SwXTextFrame(m_pImpl->m_pDoc);
     const uno::Reference< text::XTextFrame > xNewFrame = pNewFrame;
     pNewFrame->SetSelection( aStartPam );
@@ -1784,10 +1793,7 @@ void SwXText::copyText(
     const uno::Reference< text::XTextCopy >& xSource )
         throw ( uno::RuntimeException )
 {
-    uno::Reference< lang::XUnoTunnel > xTTunnel( xSource, uno::UNO_QUERY_THROW );
-    SwXText* pText = 0;
-    pText = reinterpret_cast< SwXText* >(
-                   sal::static_int_cast< sal_IntPtr >( xTTunnel->getSomething( SwXText::getUnoTunnelId()) ));
+    SolarMutexGuard aGuard;
 
     uno::Reference< text::XText > xText( xSource, uno::UNO_QUERY_THROW );
     uno::Reference< text::XTextCursor > xCursor = xText->createTextCursor( );

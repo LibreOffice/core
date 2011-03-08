@@ -34,7 +34,6 @@
 
 #include "frame.hxx"       // CalcFlyAdjust()
 #include "paratr.hxx"
-#include "txtcfg.hxx"
 #include "itrtxt.hxx"
 #include "porglue.hxx"
 #include "porlay.hxx"
@@ -730,21 +729,7 @@ void SwTxtAdjuster::CalcAdjLine( SwLineLayout *pCurrent )
         }
         case SVX_ADJUST_BLOCK:
         {
-            // disabled for #i13507#
-            // 8311: In Zeilen mit LineBreaks gibt es keinen Blocksatz!
-/*          if( pCurrent->GetLen() &&
-                CH_BREAK == GetInfo().GetChar( nStart + pCurrent->GetLen() - 1 ) &&
-                !IsLastBlock() )
-            {
-                if( IsLastCenter() )
-                {
-                    CalcFlyAdjust( pCurrent );
-                    pPara->GetRepaint()->SetOfst( 0 );
-                    break;
-                }
-                return;
-            }
-*/          FormatBlock();
+            FormatBlock();
             break;
         }
         default : return;
@@ -882,9 +867,6 @@ void SwTxtAdjuster::CalcDropAdjust()
                         pLeft->MoveAllGlue( pRight );
                     else
                         pLeft->MoveGlue( pRight, nGlue );
-#ifdef DBGTXT
-                    aDbstream << "Drop adjusted: " << nGlue << endl;
-#endif
                 }
             }
         }

@@ -488,7 +488,7 @@ start:
             {
                 SbxBase::SetError( SbxERR_OVERFLOW ); val = SbxMININT;
             }
-            *p->pInteger = (INT16) r; break;
+            *p->pInteger = (INT16) val; break;
         }
         case SbxBYREF | SbxERROR:
         case SbxBYREF | SbxUSHORT:

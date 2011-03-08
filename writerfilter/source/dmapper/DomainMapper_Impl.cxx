@@ -37,6 +37,7 @@
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/style/LineNumberPosition.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
@@ -64,6 +65,7 @@
 #include <com/sun/star/text/XTextCopy.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
+#include <com/sun/star/text/XFormField.hpp>
 #include <com/sun/star/style/DropCapFormat.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
@@ -82,16 +84,74 @@
 
 #if DEBUG
 #include <stdio.h>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/style/TabStop.hpp>
 #endif
 
 #include <map>
 
+#include <comphelper/configurationhelper.hxx>
+#include <comphelper/stlunosequence.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::rtl;
 namespace writerfilter {
 namespace dmapper{
+
+sal_Bool lcl_IsUsingEnhancedFields( const uno::Reference< lang::XMultiServiceFactory >& rFac )
+{
+    bool bResult(sal_False);
+    try
+    {
+        rtl::OUString writerConfig = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.Office.Common"));
+
+        uno::Reference< uno::XInterface > xCfgAccess = ::comphelper::ConfigurationHelper::openConfig( rFac, writerConfig, ::comphelper::ConfigurationHelper::E_READONLY );
+        ::comphelper::ConfigurationHelper::readRelativeKey( xCfgAccess, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Filter/Microsoft/Import" ) ), rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ImportWWFieldsAsEnhancedFields" ) ) ) >>= bResult;
+
+    }
+    catch( uno::Exception& e)
+    {
+    }
+    return bResult;
+}
+
+// Populate Dropdown Field properties from FFData structure
+void lcl_handleDropdownField( const uno::Reference< beans::XPropertySet >& rxFieldProps, FFDataHandler::Pointer_t pFFDataHandler )
+{
+    if ( rxFieldProps.is() )
+    {
+        if ( pFFDataHandler->getName().getLength() )
+            rxFieldProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Name") ), uno::makeAny( pFFDataHandler->getName() ) );
+
+        const FFDataHandler::DropDownEntries_t& rEntries = pFFDataHandler->getDropDownEntries();
+        uno::Sequence< rtl::OUString > sItems( rEntries.size() );
+        ::std::copy( rEntries.begin(), rEntries.end(), ::comphelper::stl_begin(sItems));
+        if ( sItems.getLength() )
+            rxFieldProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Items") ), uno::makeAny( sItems ) );
+
+        sal_Int32 nResult = pFFDataHandler->getDropDownResult().toInt32();
+        if ( nResult )
+            rxFieldProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("SelectedItem") ), uno::makeAny( sItems[ nResult ] ) );
+        if ( pFFDataHandler->getHelpText().getLength() )
+             rxFieldProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Help") ), uno::makeAny( pFFDataHandler->getHelpText() ) );
+    }
+}
+
+void lcl_handleTextField( const uno::Reference< beans::XPropertySet >& rxFieldProps, FFDataHandler::Pointer_t pFFDataHandler, PropertyNameSupplier& rPropNameSupplier )
+{
+    if ( rxFieldProps.is() && pFFDataHandler )
+    {
+        rxFieldProps->setPropertyValue
+            (rPropNameSupplier.GetName(PROP_HINT),
+            uno::makeAny(pFFDataHandler->getStatusText()));
+        rxFieldProps->setPropertyValue
+            (rPropNameSupplier.GetName(PROP_HELP),
+            uno::makeAny(pFFDataHandler->getHelpText()));
+        rxFieldProps->setPropertyValue
+            (rPropNameSupplier.GetName(PROP_CONTENT),
+            uno::makeAny(pFFDataHandler->getTextDefault()));
+    }
+}
+
 struct FieldConversion
 {
     ::rtl::OUString     sWordCommand;
@@ -103,9 +163,8 @@ struct FieldConversion
 typedef ::std::map< ::rtl::OUString, FieldConversion>
             FieldConversionMap_t;
 
-/*-- 18.07.2006 08:56:55---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 sal_Int32 FIB::GetData( Id nName )
 {
     if( nName >= NS_rtf::LN_WIDENT && nName <= NS_rtf::LN_LCBSTTBFUSSR)
@@ -113,18 +172,16 @@ sal_Int32 FIB::GetData( Id nName )
     OSL_ENSURE( false, "invalid index in FIB");
     return -1;
 }
-/*-- 18.07.2006 08:56:55---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void FIB::SetData( Id nName, sal_Int32 nValue )
 {
     OSL_ENSURE( nName >= NS_rtf::LN_WIDENT && nName <= NS_rtf::LN_LCBSTTBFUSSR, "invalid index in FIB");
     if( nName >= NS_rtf::LN_WIDENT && nName <= NS_rtf::LN_LCBSTTBFUSSR)
         aFIBData[nName - NS_rtf::LN_WIDENT] = nValue;
 }
-/*-- 01.09.2006 10:22:03---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 DomainMapper_Impl::DomainMapper_Impl(
             DomainMapper& rDMapper,
             uno::Reference < uno::XComponentContext >  xContext,
@@ -166,19 +223,19 @@ DomainMapper_Impl::DomainMapper_Impl(
     getTableManager( ).setHandler(pTableHandler);
 
     getTableManager( ).startLevel();
-}
-/*-- 01.09.2006 10:22:28---------------------------------------------------
+    m_bUsingEnhancedFields = lcl_IsUsingEnhancedFields( uno::Reference< lang::XMultiServiceFactory >( m_xComponentContext->getServiceManager(), uno::UNO_QUERY ) );
 
-  -----------------------------------------------------------------------*/
+}
+
+
 DomainMapper_Impl::~DomainMapper_Impl()
 {
     RemoveLastParagraph( );
     getTableManager( ).endLevel();
     popTableManager( );
 }
-/*-------------------------------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 uno::Reference< container::XNameContainer >    DomainMapper_Impl::GetPageStyles()
 {
     if(!m_xPageStyles.is())
@@ -188,9 +245,8 @@ uno::Reference< container::XNameContainer >    DomainMapper_Impl::GetPageStyles(
     }
     return m_xPageStyles;
 }
-/*-------------------------------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 uno::Reference< text::XText > DomainMapper_Impl::GetBodyText()
 {
     if(!m_xBodyText.is() && m_xTextDocument.is())
@@ -199,9 +255,8 @@ uno::Reference< text::XText > DomainMapper_Impl::GetBodyText()
     }
     return m_xBodyText;
 }
-/*-- 21.12.2006 12:09:30---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 uno::Reference< beans::XPropertySet > DomainMapper_Impl::GetDocumentSettings()
 {
     if( !m_xDocumentSettings.is() )
@@ -211,9 +266,8 @@ uno::Reference< beans::XPropertySet > DomainMapper_Impl::GetDocumentSettings()
     }
     return m_xDocumentSettings;
 }
-/*-- 21.12.2006 12:16:23---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void DomainMapper_Impl::SetDocumentSettingsProperty( const ::rtl::OUString& rPropName, const uno::Any& rValue )
 {
     uno::Reference< beans::XPropertySet > xSettings = GetDocumentSettings();
@@ -250,9 +304,8 @@ void DomainMapper_Impl::SetIsLastParagraphInSection( bool bIsLast )
     m_bIsLastParaInSection = bIsLast;
 }
 
-/*-------------------------------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void    DomainMapper_Impl::PushProperties(ContextType eId)
 {
     SectionPropertyMap* pSectionContext = 0;
@@ -275,9 +328,8 @@ void    DomainMapper_Impl::PushProperties(ContextType eId)
 
     m_pTopContext = m_aPropertyStacks[eId].top();
 }
-/*-- 13.06.2007 16:18:18---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void DomainMapper_Impl::PushStyleProperties( PropertyMapPtr pStyleProperties )
 {
     m_aPropertyStacks[CONTEXT_STYLESHEET].push( pStyleProperties );
@@ -285,18 +337,16 @@ void DomainMapper_Impl::PushStyleProperties( PropertyMapPtr pStyleProperties )
 
     m_pTopContext = m_aPropertyStacks[CONTEXT_STYLESHEET].top();
 }
-/*-- 28.01.2008 14:47:46---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void DomainMapper_Impl::PushListProperties(PropertyMapPtr pListProperties)
 {
     m_aPropertyStacks[CONTEXT_LIST].push( pListProperties );
     m_aContextStack.push(CONTEXT_LIST);
     m_pTopContext = m_aPropertyStacks[CONTEXT_LIST].top();
 }
-/*-------------------------------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void    DomainMapper_Impl::PopProperties(ContextType eId)
 {
     OSL_ENSURE(!m_aPropertyStacks[eId].empty(), "section stack already empty");
@@ -317,9 +367,8 @@ void    DomainMapper_Impl::PopProperties(ContextType eId)
         m_pTopContext.reset();
     }
 }
-/*-------------------------------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 PropertyMapPtr DomainMapper_Impl::GetTopContextOfType(ContextType eId)
 {
     PropertyMapPtr pRet;
@@ -330,18 +379,16 @@ PropertyMapPtr DomainMapper_Impl::GetTopContextOfType(ContextType eId)
     return pRet;
 }
 
-/*-- 24.05.2007 15:54:51---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 uno::Reference< text::XTextAppend >  DomainMapper_Impl::GetTopTextAppend()
 {
     OSL_ENSURE(!m_aTextAppendStack.empty(), "text append stack is empty" );
     return m_aTextAppendStack.top().xTextAppend;
 }
 
-/*-- 17.07.2006 08:47:04---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void DomainMapper_Impl::InitTabStopFromStyle( const uno::Sequence< style::TabStop >& rInitTabStops )
 {
     OSL_ENSURE(!m_aCurrentTabStops.size(), "tab stops already initialized");
@@ -351,9 +398,8 @@ void DomainMapper_Impl::InitTabStopFromStyle( const uno::Sequence< style::TabSto
     }
 }
 
-/*-- 29.06.2006 13:35:33---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void DomainMapper_Impl::ModifyCurrentTabStop( Id nId, sal_Int32 nValue)
 {
     OSL_ENSURE(nId == NS_rtf::LN_dxaAdd || m_nCurrentTabStopIndex < m_aCurrentTabStops.size(),
@@ -435,9 +481,8 @@ void DomainMapper_Impl::IncorporateTabStop( const DeletableTabStop &  rTabStop )
     if( !bFound )
         m_aCurrentTabStops.push_back( rTabStop );
 }
-/*-- 29.06.2006 13:35:33---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 uno::Sequence< style::TabStop > DomainMapper_Impl::GetCurrentTabStopAndClear()
 {
     uno::Sequence< style::TabStop > aRet( sal_Int32( m_aCurrentTabStops.size() ) );
@@ -490,9 +535,8 @@ uno::Any DomainMapper_Impl::GetPropertyFromStyleSheet(PropertyIds eId)
     }
     return uno::Any();
 }
-/*-------------------------------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 ListsManager::Pointer DomainMapper_Impl::GetListTable()
 {
     if(!m_pListTable)
@@ -566,9 +610,8 @@ bool lcl_removeShape( const uno::Reference<  text::XTextDocument >& rDoc, const 
     return bRet;
 }
 
-/*-------------------------------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void lcl_MoveBorderPropertiesToFrame(uno::Sequence<beans::PropertyValue>& rFrameProperties,
     uno::Reference<text::XTextRange> xStartTextRange,
     uno::Reference<text::XTextRange> xEndTextRange )
@@ -616,9 +659,8 @@ void lcl_MoveBorderPropertiesToFrame(uno::Sequence<beans::PropertyValue>& rFrame
         (void)rEx;
    }
 }
-/*-- 04.01.2008 10:59:19---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void lcl_AddRangeAndStyle(
     ParagraphPropertiesPtr& pToBeSavedProperties,
     uno::Reference< text::XTextAppend > xTextAppend,
@@ -641,9 +683,8 @@ void lcl_AddRangeAndStyle(
         }
     }
 }
-/*-------------------------------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 //define some default frame width - 0cm ATM: this allow the frame to be wrapped around the text
 #define DEFAULT_FRAME_MIN_WIDTH 0
 
@@ -922,9 +963,8 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
     dmapper_logger->endElement();
 #endif
 }
-/*-------------------------------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 util::DateTime lcl_DateStringToDateTime( const ::rtl::OUString& rDateTime )
 {
     util::DateTime aDateTime;
@@ -972,9 +1012,8 @@ void DomainMapper_Impl::appendTextPortion( const ::rtl::OUString& rString, Prope
         }
     }
 }
-/*-- 02.11.2006 12:08:33---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void DomainMapper_Impl::appendTextContent(
     const uno::Reference< text::XTextContent > xContent,
     const uno::Sequence< beans::PropertyValue > xPropertyValues
@@ -997,9 +1036,8 @@ void DomainMapper_Impl::appendTextContent(
     }
 }
 
-/*-- 24.04.2008 08:38:07---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void DomainMapper_Impl::appendOLE( const ::rtl::OUString& rStreamName, OLEHandlerPtr pOLEHandler )
 {
     static const rtl::OUString sEmbeddedService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextEmbeddedObject"));
@@ -1044,9 +1082,8 @@ void DomainMapper_Impl::appendOLE( const ::rtl::OUString& rStreamName, OLEHandle
     }
 
 }
-/*-- 14.12.2006 12:26:00---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 uno::Reference< beans::XPropertySet > DomainMapper_Impl::appendTextSectionAfter(
                                     uno::Reference< text::XTextRange >& xBefore )
 {
@@ -1076,9 +1113,8 @@ uno::Reference< beans::XPropertySet > DomainMapper_Impl::appendTextSectionAfter(
 
     return xRet;
 }
-/*-- 02.11.2006 12:08:33---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void DomainMapper_Impl::PushPageHeader(SectionPropertyMap::PageType eType)
 {
     //get the section context
@@ -1114,9 +1150,8 @@ void DomainMapper_Impl::PushPageHeader(SectionPropertyMap::PageType eType)
         }
     }
 }
-/*-- 24.07.2006 09:41:20---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void DomainMapper_Impl::PushPageFooter(SectionPropertyMap::PageType eType)
 {
     //get the section context
@@ -1151,9 +1186,8 @@ void DomainMapper_Impl::PushPageFooter(SectionPropertyMap::PageType eType)
         }
     }
 }
-/*-- 24.07.2006 09:41:20---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void DomainMapper_Impl::PopPageHeaderFooter()
 {
     //header and footer always have an empty paragraph at the end
@@ -1161,9 +1195,8 @@ void DomainMapper_Impl::PopPageHeaderFooter()
     RemoveLastParagraph( );
     m_aTextAppendStack.pop();
 }
-/*-- 24.05.2007 14:22:28---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
 {
     try
@@ -1283,9 +1316,8 @@ void DomainMapper_Impl::EndParaChange( )
     m_bIsParaChange = false;
 }
 
-/*-- 22.12.2008 13:45:15---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void DomainMapper_Impl::PushAnnotation()
 {
     try
@@ -1303,16 +1335,14 @@ void DomainMapper_Impl::PushAnnotation()
         OSL_ENSURE( false, "exception in PushFootOrEndnote" );
     }
 }
-/*-- 24.05.2007 14:22:29---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void DomainMapper_Impl::PopFootOrEndnote()
 {
     m_aTextAppendStack.pop();
 }
-/*-- 22.12.2008 13:45:15---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void DomainMapper_Impl::PopAnnotation()
 {
     m_aTextAppendStack.pop();
@@ -1338,9 +1368,10 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
         PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
 
         uno::Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY_THROW );
-        xProps->setPropertyValue(
-                rPropNameSupplier.GetName( PROP_ANCHOR_TYPE ),
-                uno::makeAny( text::TextContentAnchorType_AT_PARAGRAPH ) );
+        uno::Reference< lang::XServiceInfo > xSInfo( xShape, uno::UNO_QUERY_THROW );
+        bool bIsGraphic = xSInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.GraphicObjectShape" ) ) );
+
+        xProps->setPropertyValue( rPropNameSupplier.GetName( PROP_ANCHOR_TYPE ), bIsGraphic  ?  uno::makeAny( text::TextContentAnchorType_AS_CHARACTER ) : uno::makeAny( text::TextContentAnchorType_AT_PARAGRAPH ) );
         xProps->setPropertyValue(
                 rPropNameSupplier.GetName( PROP_OPAQUE ),
                 uno::makeAny( true ) );
@@ -1355,9 +1386,8 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
     }
 }
 
-/*-- 20.03.2008 09:01:59---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void DomainMapper_Impl::PopShapeContext()
 {
     if ( m_bShapeContextAdded )
@@ -1367,9 +1397,8 @@ void DomainMapper_Impl::PopShapeContext()
     }
     m_bIsInShape = false;
 }
-/*-- 12.09.2006 08:07:55---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 ::rtl::OUString lcl_FindQuotedText( const ::rtl::OUString& rCommand,
                 const sal_Char* cStartQuote, const sal_Unicode uEndQuote )
 {
@@ -1388,9 +1417,8 @@ void DomainMapper_Impl::PopShapeContext()
     return sRet;
 
 }
-/*-- 08.09.2006 14:05:17---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 sal_Int16 lcl_ParseNumberingType( const ::rtl::OUString& rCommand )
 {
     sal_Int16 nRet = style::NumberingType::PAGE_DESCRIPTOR;
@@ -1486,9 +1514,8 @@ style::NumberingType::
     }
     return nRet;
 }
-/*-- 08.09.2006 13:52:09---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 OUString lcl_ParseFormat( const ::rtl::OUString& rCommand )
 {
     //  The command looks like: " DATE \@ "dd MMMM yyyy"
@@ -1528,9 +1555,8 @@ extract a parameter (with or without quotes) between the command and the followi
     return sRet;
 }
 
-/*-- 15.09.2006 10:57:57---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 ::rtl::OUString lcl_ExctractAskVariableAndHint( const ::rtl::OUString& rCommand, ::rtl::OUString& rHint )
 {
     // the first word after "ASK " is the variable
@@ -1552,9 +1578,8 @@ extract a parameter (with or without quotes) between the command and the followi
         rHint = sRet;
     return sRet;
 }
-/*-- 24.01.2007 16:04:33---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 bool lcl_FindInCommand(
     const ::rtl::OUString& rCommand,
     sal_Unicode cSwitch,
@@ -1577,9 +1602,8 @@ bool lcl_FindInCommand(
     return bRet;
 }
 
-/*-- 14.09.2006 12:46:52---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void DomainMapper_Impl::GetCurrentLocale(lang::Locale& rLocale)
 {
     PropertyMapPtr pTopContext = GetTopContext();
@@ -1631,9 +1655,8 @@ void DomainMapper_Impl::SetNumberFormat( const ::rtl::OUString& rCommand,
     }
 }
 
-/*-- 15.09.2006 15:10:20---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 uno::Reference< beans::XPropertySet > DomainMapper_Impl::FindOrCreateFieldMaster(
         const sal_Char* pFieldMasterService, const ::rtl::OUString& rFieldMasterName )
             throw(::com::sun::star::uno::Exception)
@@ -1705,23 +1728,20 @@ bool DomainMapper_Impl::IsOpenField() const
 {
     return !m_aFieldStack.empty();
 }
-/*-- 29.01.2007 11:49:13---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 FieldContext::FieldContext(uno::Reference< text::XTextRange > xStart) :
     m_bFieldCommandCompleted( false )
     ,m_xStartRange( xStart )
 {
 }
-/*-- 29.01.2007 11:48:44---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 FieldContext::~FieldContext()
 {
 }
-/*-- 29.01.2007 11:48:45---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void FieldContext::AppendCommand(const ::rtl::OUString& rPart)
 {
     m_sCommand += rPart;
@@ -1801,15 +1821,17 @@ void DomainMapper_Impl::AppendFieldCommand(::rtl::OUString& rPartOfCommand)
         pContext->AppendCommand( rPartOfCommand );
     }
 }
-/*-- 13.12.2007 11:45:43---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 typedef std::multimap < sal_Int32, ::rtl::OUString > TOCStyleMap;
 
 const FieldConversionMap_t & lcl_GetFieldConversion()
 {
 static FieldConversionMap_t aFieldConversionMap;
+static FieldConversionMap_t aEnhancedFieldConversionMap;
+
 static bool bFilled = false;
+
 if(!bFilled)
 {
     static const FieldConversion aFields[] =
@@ -1832,7 +1854,7 @@ if(!bFilled)
 //            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FILESIZE")),      "",                         "", FIELD_FILESIZE     },
 //            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FORMULA")),     "",                           "", FIELD_FORMULA },
             {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FORMCHECKBOX")),     "",                           "", FIELD_FORMCHECKBOX},
-//            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FORMDROPDOWN")),     "",                           "", FIELD_FORMDROWDOWN},
+            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FORMDROPDOWN")),     "DropDown",                           "", FIELD_FORMDROPDOWN},
             {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FORMTEXT")),     "Input", "", FIELD_FORMTEXT},
 //            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GOTOBUTTON")),    "",                         "", FIELD_GOTOBUTTON   },
             {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HYPERLINK")),     "",                         "", FIELD_HYPERLINK    },
@@ -1874,7 +1896,7 @@ if(!bFilled)
 //            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")), "", "", FIELD_},
 
         };
-        size_t nConversions = sizeof(aFields)/sizeof(FieldConversion);
+        size_t nConversions = SAL_N_ELEMENTS(aFields);
         for( size_t nConversion = 0; nConversion < nConversions; ++nConversion)
         {
             aFieldConversionMap.insert( FieldConversionMap_t::value_type(
@@ -1886,6 +1908,32 @@ if(!bFilled)
     }
 
     return aFieldConversionMap;
+}
+
+const FieldConversionMap_t & lcl_GetEnhancedFieldConversion()
+{
+    static FieldConversionMap_t aEnhancedFieldConversionMap;
+
+    static bool bFilled = false;
+
+    if(!bFilled)
+    {
+        static const FieldConversion aEnhancedFields[] =
+        {
+            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FORMCHECKBOX")),     "FormFieldmark",                           "", FIELD_FORMCHECKBOX},
+            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FORMDROPDOWN")),     "FormFieldmark",                           "", FIELD_FORMDROPDOWN},
+            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FORMTEXT")),     "Fieldmark", "", FIELD_FORMTEXT},
+        };
+
+        size_t nConversions = SAL_N_ELEMENTS(aEnhancedFields);
+        for( size_t nConversion = 0; nConversion < nConversions; ++nConversion)
+        {
+            aEnhancedFieldConversionMap.insert( FieldConversionMap_t::value_type(
+                aEnhancedFields[nConversion].sWordCommand,
+                aEnhancedFields[nConversion] ));
+        }
+    }
+    return aEnhancedFieldConversionMap;
 }
 
 void DomainMapper_Impl::handleFieldAsk
@@ -2297,6 +2345,7 @@ void DomainMapper_Impl::CloseFieldCommand()
     {
         m_bSetUserFieldContent = false;
         FieldConversionMap_t aFieldConversionMap = lcl_GetFieldConversion();
+        bool bCreateEnhancedField = false;
 
         try
         {
@@ -2318,17 +2367,45 @@ void DomainMapper_Impl::CloseFieldCommand()
                 case FIELD_DOCPROPERTY:
                 case FIELD_TOC:
                 case FIELD_TC:
-                case FIELD_FORMCHECKBOX:
-                    bCreateField = false;
+                        bCreateField = false;
+                        break;
+                case FIELD_FORMCHECKBOX :
+                case FIELD_FORMTEXT :
+                case FIELD_FORMDROPDOWN :
+                {
+                    // If we use 'enhanced' fields then FIELD_FORMCHECKBOX,
+                    // FIELD_FORMTEXT & FIELD_FORMDROPDOWN are treated specially
+                    if ( m_bUsingEnhancedFields  )
+                    {
+                        bCreateField = false;
+                        bCreateEnhancedField = true;
+                    }
+                    // for non enhanced fields checkboxes are displayed
+                    // as an awt control not a field
+                    else if ( aIt->second.eFieldId == FIELD_FORMCHECKBOX )
+                        bCreateField = false;
                     break;
+                }
                 default:
                     break;
                 }
-                if( bCreateField)
+
+                if( bCreateField || bCreateEnhancedField )
                 {
                     //add the service prefix
-                    OUString sServiceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextField."));
-                    sServiceName += ::rtl::OUString::createFromAscii(aIt->second.cFieldServiceName );
+                    OUString sServiceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text."));
+                    if ( bCreateEnhancedField )
+                    {
+                        FieldConversionMap_t aEnhancedFieldConversionMap = lcl_GetEnhancedFieldConversion();
+                        FieldConversionMap_t::iterator aEnhancedIt = aEnhancedFieldConversionMap.find(sCommand);
+                        if ( aEnhancedIt != aEnhancedFieldConversionMap.end())
+                            sServiceName += ::rtl::OUString::createFromAscii(aEnhancedIt->second.cFieldServiceName );
+                    }
+                    else
+                    {
+                        sServiceName += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("TextField."));
+                        sServiceName += ::rtl::OUString::createFromAscii(aIt->second.cFieldServiceName );
+                    }
 
 #ifdef DEBUG_DOMAINMAPPER
                     dmapper_logger->startElement("fieldService");
@@ -2418,33 +2495,38 @@ void DomainMapper_Impl::CloseFieldCommand()
                     case FIELD_FILESIZE     : break;
                     case FIELD_FORMULA : break;
                     case FIELD_FORMCHECKBOX :
+                    case FIELD_FORMDROPDOWN :
+                    case FIELD_FORMTEXT :
                         {
-                            FFDataHandler::Pointer_t
+                            uno::Reference< text::XTextField > xTextField( xFieldInterface, uno::UNO_QUERY );
+                            if ( !xTextField.is() )
+                            {
+                                FFDataHandler::Pointer_t
                                 pFFDataHandler(pContext->getFFDataHandler());
-                            FormControlHelper::Pointer_t
-                                pFormControlHelper(new FormControlHelper
-                                                   (FIELD_FORMCHECKBOX,
-                                                    m_xTextDocument, pFFDataHandler));
-                            pContext->setFormControlHelper(pFormControlHelper);
+                                FormControlHelper::Pointer_t
+                                    pFormControlHelper(new FormControlHelper
+                                                       (m_bUsingEnhancedFields ? aIt->second.eFieldId : FIELD_FORMCHECKBOX,
+
+                                                        m_xTextDocument, pFFDataHandler));
+                                pContext->setFormControlHelper(pFormControlHelper);
+                                uno::Reference< text::XFormField > xFormField( xFieldInterface, uno::UNO_QUERY );
+                                uno::Reference< container::XNamed > xNamed( xFormField, uno::UNO_QUERY );
+                                if ( xNamed.is() )
+                                {
+                                    if ( pFFDataHandler && pFFDataHandler->getName().getLength() )
+                                        xNamed->setName(  pFFDataHandler->getName() );
+                                    pContext->SetFormField( xFormField );
+                                }
+                            }
+                            else
+                            {
+                                if ( aIt->second.eFieldId == FIELD_FORMDROPDOWN )
+                                    lcl_handleDropdownField( xFieldProperties, pContext->getFFDataHandler() );
+                                else
+                                    lcl_handleTextField( xFieldProperties, pContext->getFFDataHandler(), rPropNameSupplier );
+                            }
                         }
                         break;
-                    case FIELD_FORMDROPDOWN : break;
-                    case FIELD_FORMTEXT :
-                    {
-                        FFDataHandler::Pointer_t pFFDataHandler
-                            (pContext->getFFDataHandler());
-
-                        xFieldProperties->setPropertyValue
-                            (rPropNameSupplier.GetName(PROP_HINT),
-                            uno::makeAny(pFFDataHandler->getStatusText()));
-                        xFieldProperties->setPropertyValue
-                            (rPropNameSupplier.GetName(PROP_HELP),
-                            uno::makeAny(pFFDataHandler->getHelpText()));
-                        xFieldProperties->setPropertyValue
-                            (rPropNameSupplier.GetName(PROP_CONTENT),
-                            uno::makeAny(pFFDataHandler->getTextDefault()));
-                    }
-                    break;
                     case FIELD_GOTOBUTTON   : break;
                     case FIELD_HYPERLINK:
                     {
@@ -2456,7 +2538,7 @@ void DomainMapper_Impl::CloseFieldCommand()
 
                         while (aPartIt != aItEnd)
                         {
-                            if (aPartIt->equalsAscii("\\l"))
+                            if (aPartIt->equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("\\l")))
                             {
                                 aPartIt++;
 
@@ -2466,12 +2548,12 @@ void DomainMapper_Impl::CloseFieldCommand()
                                 sURL = OUString('#');
                                 sURL += *aPartIt;
                             }
-                            else if (aPartIt->equalsAscii("\\m") ||
-                                     aPartIt->equalsAscii("\\n"))
+                            else if (aPartIt->equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("\\m")) ||
+                                     aPartIt->equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("\\n")))
                             {
                             }
-                            else if (aPartIt->equalsAscii("\\o") ||
-                                     aPartIt->equalsAscii("\\t"))
+                            else if (aPartIt->equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("\\o")) ||
+                                     aPartIt->equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("\\t")))
                             {
                                 aPartIt++;
 
@@ -2699,9 +2781,8 @@ bool DomainMapper_Impl::IsFieldResultAsString()
     }
     return bRet;
 }
-/*-- 01.09.2006 11:48:09---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void DomainMapper_Impl::SetFieldResult( ::rtl::OUString& rResult )
 {
 #ifdef DEBUG_DOMAINMAPPER
@@ -2816,10 +2897,21 @@ void DomainMapper_Impl::PopFieldContext()
                     else
                     {
                         FormControlHelper::Pointer_t pFormControlHelper(pContext->getFormControlHelper());
-                        if (pFormControlHelper.get() != NULL)
+                        if (pFormControlHelper.get() != NULL && pFormControlHelper->hasFFDataHandler() )
                         {
-                            uno::Reference<text::XTextRange> xTxtRange(xCrsr, uno::UNO_QUERY);
-                            pFormControlHelper->insertControl(xTxtRange);
+                            uno::Reference< text::XFormField > xFormField( pContext->GetFormField() );
+                            xToInsert.set(xFormField, uno::UNO_QUERY);
+                            if ( xFormField.is() && xToInsert.is() )
+                            {
+                                xCrsr->gotoEnd( true );
+                                xToInsert->attach( uno::Reference< text::XTextRange >( xCrsr, uno::UNO_QUERY_THROW ));
+                                pFormControlHelper->processField( xFormField );
+                            }
+                            else
+                            {
+                                uno::Reference<text::XTextRange> xTxtRange(xCrsr, uno::UNO_QUERY);
+                                pFormControlHelper->insertControl(xTxtRange);
+                            }
                         }
                         else if(pContext->GetHyperlinkURL().getLength())
                         {
@@ -2849,9 +2941,8 @@ void DomainMapper_Impl::PopFieldContext()
     //remove the field context
     m_aFieldStack.pop();
 }
-/*-- 11.06.2007 16:19:00---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void DomainMapper_Impl::AddBookmark( const ::rtl::OUString& rBookmarkName, const ::rtl::OUString& rId )
 {
     uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
@@ -2894,9 +2985,8 @@ void DomainMapper_Impl::AddBookmark( const ::rtl::OUString& rBookmarkName, const
         //TODO: What happens to bookmarks where start and end are at different XText objects?
     }
 }
-/*-- 01.11.2006 14:57:44---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 GraphicImportPtr DomainMapper_Impl::GetGraphicImport(GraphicImportType eGraphicImportType)
 {
     if(!m_pGraphicImport)
@@ -2910,9 +3000,8 @@ void DomainMapper_Impl::ResetGraphicImport()
 {
     m_pGraphicImport.reset();
 }
-/*-- 01.11.2006 09:25:40---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void  DomainMapper_Impl::ImportGraphic(writerfilter::Reference< Properties >::Pointer_t ref, GraphicImportType eGraphicImportType)
 {
     GetGraphicImport(eGraphicImportType);
@@ -2935,9 +3024,8 @@ void  DomainMapper_Impl::ImportGraphic(writerfilter::Reference< Properties >::Po
     m_pGraphicImport.reset();
 }
 
-/*-- 28.12.2006 14:00:47---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void DomainMapper_Impl::SetLineNumbering( sal_Int32 nLnnMod, sal_Int32 nLnc, sal_Int32 ndxaLnn )
 {
     if( !m_bLineNumberingSet )
@@ -2979,9 +3067,8 @@ void DomainMapper_Impl::SetLineNumbering( sal_Int32 nLnnMod, sal_Int32 nLnc, sal
     }
     m_bLineNumberingSet = true;
 }
-/*-- 31.08.2007 13:50:49---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void DomainMapper_Impl::SetPageMarginTwip( PageMarElement eElement, sal_Int32 nValue )
 {
     nValue = ConversionHelper::convertTwipToMM100(nValue);
@@ -2997,9 +3084,8 @@ void DomainMapper_Impl::SetPageMarginTwip( PageMarElement eElement, sal_Int32 nV
     }
 }
 
-/*-- 31.08.2007 13:47:50---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 _PageMar::_PageMar()
 {
     header = footer = top = bottom = ConversionHelper::convertTwipToMM100( sal_Int32(1440));
@@ -3007,9 +3093,8 @@ _PageMar::_PageMar()
     gutter = 0;
 }
 
-/*-- 07.03.2008 12:07:27---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void DomainMapper_Impl::RegisterFrameConversion(
         uno::Reference< text::XTextRange >      xFrameStartRange,
         uno::Reference< text::XTextRange >      xFrameEndRange,
@@ -3023,9 +3108,8 @@ void DomainMapper_Impl::RegisterFrameConversion(
     m_xFrameStartRange = xFrameStartRange;
     m_xFrameEndRange   = xFrameEndRange;
 }
-/*-- 07.03.2008 12:07:33---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 bool DomainMapper_Impl::ExecuteFrameConversion()
 {
     bool bRet = false;
@@ -3113,9 +3197,8 @@ void DomainMapper_Impl::SetCurrentRedlineToken( sal_Int32 nToken )
         pCurrent->m_nToken = nToken;
 }
 
-/*-- 19.03.2008 11:35:38---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void DomainMapper_Impl::RemoveCurrentRedline( )
 {
     if ( m_aRedlines.size( ) > 0 )
@@ -3133,9 +3216,8 @@ void DomainMapper_Impl::ResetParaRedline( )
     }
 }
 
-/*-- 22.09.2009 10:26:19---------------------------------------------------
 
------------------------------------------------------------------------*/
+
 void DomainMapper_Impl::ApplySettingsTable()
 {
     if( m_pSettingsTable )

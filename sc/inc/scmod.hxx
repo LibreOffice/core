@@ -34,7 +34,7 @@
 #include <vcl/timer.hxx>
 #include <svl/lstner.hxx>
 #include "global.hxx"       // ScInputMode
-#include "markdata.hxx"     //ScMarkData
+#include "markdata.hxx"     // ScMarkData
 #include "shellids.hxx"
 #include <unotools/options.hxx>
 #include <tools/shl.hxx>
@@ -122,7 +122,7 @@ class ScModule: public SfxModule, public SfxListener, utl::ConfigurationListener
     ScClipData          aClipData;
     ScSelectionTransferObj* pSelTransfer;
     ScMessagePool*      pMessagePool;
-    //  globalen InputHandler gibt's nicht mehr, jede View hat einen
+    // there is no global InputHandler anymore, each View has it's own
     ScInputHandler*     pRefInputHandler;
     ScViewCfg*          pViewCfg;
     ScDocCfg*           pDocCfg;
@@ -157,9 +157,9 @@ public:
     virtual void        ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 );
     void                DeleteCfg();
 
-                        // von der Applikation verschoben:
+                        // moved by the application
 
-    DECL_LINK( IdleHandler,     Timer* );   // Timer statt idle
+    DECL_LINK( IdleHandler,     Timer* );   // Timer instead of idle
     DECL_LINK( SpellTimerHdl,   Timer* );
     DECL_LINK( CalcFieldValueHdl, EditFieldInfo* );
 
@@ -226,9 +226,9 @@ SC_DLLPUBLIC    void                    SetAppOptions   ( const ScAppOptions& rO
 
     void                ModifyOptions( const SfxItemSet& rOptSet );
 
-    //  InputHandler:
-    BOOL                IsEditMode();   // nicht bei SC_INPUT_TYPE
-    BOOL                IsInputMode();  // auch bei SC_INPUT_TYPE
+    // InputHandler:
+    BOOL                IsEditMode();   // not for SC_INPUT_TYPE
+    BOOL                IsInputMode();  // also for SC_INPUT_TYPE
     void                SetInputMode( ScInputMode eMode );
     BOOL                InputKeyEvent( const KeyEvent& rKEvt, BOOL bStartEdit = FALSE );
     SC_DLLPUBLIC void                InputEnterHandler( BYTE nBlockMode = 0 );
@@ -242,7 +242,7 @@ SC_DLLPUBLIC    void                    SetAppOptions   ( const ScAppOptions& rO
 
     void                ViewShellGone(ScTabViewShell* pViewSh);
     void                ViewShellChanged();
-    // Kommunikation mit Funktionsautopilot
+    // communication with function-autopilot
     void                InputGetSelection( xub_StrLen& rStart, xub_StrLen& rEnd );
     void                InputSetSelection( xub_StrLen nStart, xub_StrLen nEnd );
     void                InputReplaceSelection( const String& rStr );
@@ -254,7 +254,7 @@ SC_DLLPUBLIC    void                    SetAppOptions   ( const ScAppOptions& rO
     void                ClearFormEditData();
     ScFormEditData*     GetFormEditData()       { return pFormEditData; }
 
-    //  Referenzeingabe:
+    // input of reference:
     SC_DLLPUBLIC void               SetRefDialog( USHORT nId, BOOL bVis, SfxViewFrame* pViewFrm = NULL );
     BOOL                IsModalMode(SfxObjectShell* pDocSh = NULL);
     BOOL                IsFormulaMode();
@@ -266,7 +266,7 @@ SC_DLLPUBLIC    void                    SetAppOptions   ( const ScAppOptions& rO
     void                EndReference();
     USHORT              GetCurRefDlgId() const                  { return nCurRefDlgId; }
 
-    //virtuelle Methoden fuer den Optionendialog
+    // virtual methods for the options dialog
     virtual SfxItemSet*  CreateItemSet( USHORT nId );
     virtual void         ApplyItemSet( USHORT nId, const SfxItemSet& rSet );
     virtual SfxTabPage*  CreateTabPage( USHORT nId, Window* pParent, const SfxItemSet& rSet );

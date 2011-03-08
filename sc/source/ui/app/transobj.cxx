@@ -197,12 +197,12 @@ ScTransferObj::~ScTransferObj()
     ScModule* pScMod = SC_MOD();
     if ( pScMod->GetClipData().pCellClipboard == this )
     {
-        DBG_ERROR("ScTransferObj wasn't released");
+        OSL_FAIL("ScTransferObj wasn't released");
         pScMod->SetClipObject( NULL, NULL );
     }
     if ( pScMod->GetDragData().pCellTransfer == this )
     {
-        DBG_ERROR("ScTransferObj wasn't released");
+        OSL_FAIL("ScTransferObj wasn't released");
         pScMod->ResetDragObject();
     }
 
@@ -228,7 +228,7 @@ ScTransferObj* ScTransferObj::GetOwnClipboard( Window* pUIWin )
         TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pUIWin ) );
         if ( !aDataHelper.HasFormat( SOT_FORMATSTR_ID_DIF ) )
         {
-//          DBG_ERROR("ScTransferObj wasn't released");
+//          OSL_FAIL("ScTransferObj wasn't released");
             pObj = NULL;
         }
     }
@@ -335,7 +335,7 @@ sal_Bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor )
             }
             else
             {
-                DBG_ERROR("unknown DataType");
+                OSL_FAIL("unknown DataType");
             }
         }
         else if ( nFormat == SOT_FORMAT_BITMAP )
@@ -419,7 +419,7 @@ sal_Bool ScTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObj
                 }
                 else
                 {
-                    //  #107722# can't use Write for EditEngine format because that would
+                    //  can't use Write for EditEngine format because that would
                     //  write old format without support for unicode characters.
                     //  Get the data from the EditEngine's transferable instead.
 
@@ -474,7 +474,7 @@ sal_Bool ScTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObj
             break;
 
         default:
-            DBG_ERROR("unknown object id");
+            OSL_FAIL("unknown object id");
     }
     return bRet;
 }
@@ -498,7 +498,7 @@ void ScTransferObj::DragFinished( sal_Int8 nDropAction )
         {
             ScMarkData aMarkData = GetSourceMarkData();
             //  external drag&drop doesn't copy objects, so they also aren't deleted:
-            //  #105703# bApi=TRUE, don't show error messages from drag&drop
+            //  bApi=TRUE, don't show error messages from drag&drop
             pSourceSh->GetDocFunc().DeleteContents( aMarkData, IDF_ALL & ~IDF_OBJECTS, TRUE, TRUE );
         }
     }
@@ -607,11 +607,11 @@ void ScTransferObj::InitDocShell()
         //  widths / heights
         //  (must be copied before CopyFromClip, for drawing objects)
 
-        SCCOL nCol, nLastCol;
+        SCCOL nCol;
         SCTAB nSrcTab = aBlock.aStart.Tab();
         pDestDoc->SetLayoutRTL(0, pDoc->IsLayoutRTL(nSrcTab));
         for (nCol=nStartX; nCol<=nEndX; nCol++)
-            if ( pDoc->ColHidden(nCol, nSrcTab, nLastCol) )
+            if ( pDoc->ColHidden(nCol, nSrcTab) )
                 pDestDoc->ShowCol( nCol, 0, FALSE );
             else
                 pDestDoc->SetColWidth( nCol, 0, pDoc->GetColWidth( nCol, nSrcTab ) );
@@ -622,8 +622,7 @@ void ScTransferObj::InitDocShell()
         for (SCROW nRow = nStartY; nRow <= nEndY; ++nRow)
         {
             BYTE nSourceFlags = pDoc->GetRowFlags(nRow, nSrcTab);
-            SCROW nLastRow = -1;
-            if ( pDoc->RowHidden(nRow, nSrcTab, nLastRow) )
+            if ( pDoc->RowHidden(nRow, nSrcTab) )
                 pDestDoc->ShowRow( nRow, 0, FALSE );
             else
             {
@@ -769,7 +768,7 @@ void ScTransferObj::StripRefs( ScDocument* pDoc,
 
     if (!pDoc->HasTable(nSrcTab) || !pDestDoc->HasTable(nDestTab))
     {
-        DBG_ERROR("Sheet not found in ScTransferObj::StripRefs");
+        OSL_FAIL("Sheet not found in ScTransferObj::StripRefs");
         return;
     }
 

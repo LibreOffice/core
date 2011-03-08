@@ -492,7 +492,7 @@ void SvUnoImageMapObject::_setPropertyValues( const PropertyMapEntry** ppEntries
             bOk = *pValues >>= maPolygon;
             break;
         default:
-            DBG_ERROR( "SvUnoImageMapObject::_setPropertyValues: unexpected property handle" );
+            OSL_FAIL( "SvUnoImageMapObject::_setPropertyValues: unexpected property handle" );
             break;
         }
 
@@ -542,7 +542,7 @@ void SvUnoImageMapObject::_getPropertyValues( const PropertyMapEntry** ppEntries
             *pValues <<= maPolygon;
             break;
         default:
-            DBG_ERROR( "SvUnoImageMapObject::_getPropertyValues: unexpected property handle" );
+            OSL_FAIL( "SvUnoImageMapObject::_getPropertyValues: unexpected property handle" );
             break;
         }
 

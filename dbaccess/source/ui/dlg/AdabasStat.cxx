@@ -29,9 +29,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#include <tools/debug.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <tools/diagnose_ex.h>
+#include <osl/diagnose.h>
 #include "AdabasStat.hxx"
 #include <comphelper/types.hxx>
 #include <com/sun/star/sdbc/XStatement.hpp>
@@ -84,7 +84,7 @@ OAdabasStatistics::OAdabasStatistics( Window* pParent,
 
     FreeResource();
 
-    DBG_ASSERT(m_xConnection.is(),"No connection");
+    OSL_ENSURE(m_xConnection.is(),"No connection");
     if(m_xConnection.is())
     {
         Reference<XStatement> xStmt;

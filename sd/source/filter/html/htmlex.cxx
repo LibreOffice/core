@@ -636,7 +636,7 @@ void HtmlExport::InitExportParameters( const Sequence< PropertyValue >& rParams 
         }
         else
         {
-            DBG_ERROR("Unknown property for html export detected!");
+            OSL_FAIL("Unknown property for html export detected!");
         }
 
         pParams++;
@@ -1880,7 +1880,7 @@ bool HtmlExport::CreateContentPage()
 
     aStr.AppendAscii( "<h2>" );
 
-    // #92564# Solaris compiler bug workaround
+    // Solaris compiler bug workaround
     if( mbFrames )
         aStr += CreateLink( maFramePage,
                             RESTOHTML(STR_HTMLEXP_CLICKSTART) );

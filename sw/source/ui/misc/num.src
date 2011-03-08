@@ -326,7 +326,6 @@ TabDialog DLG_SVXTEST_NUM_BULLET
             PageItem
             {
                 Identifier = RID_SVXPAGE_NUM_OPTIONS ;
-                /* ### ACHTUNG: Neuer Text in Resource? Optionen : ~Optionen */
                 Text [ en-US ] = "Options" ;
             };
         };

@@ -43,7 +43,7 @@
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <com/sun/star/awt/XWindow2.hpp>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <filter/msfilter/msvbahelper.hxx>
 #include <tools/datetime.hxx>
 
@@ -89,7 +89,7 @@ public:
         Time aTimeNow;
          Date aRefDate( 1,1,1900 );
         long nDiffDays = (long)(aDateNow - aRefDate);
-        nDiffDays += 2; // Anpassung VisualBasic: 1.Jan.1900 == 2
+        nDiffDays += 2; // Change VisualBasic: 1.Jan.1900 == 2
 
         long nDiffSeconds = aTimeNow.GetHour() * 3600 + aTimeNow.GetMin() * 60 + aTimeNow.GetSec();
         return (double)nDiffDays + ((double)nDiffSeconds)/(double)(24*3600);
@@ -156,7 +156,7 @@ struct VbaTimerInfoHash
 };
 
 // ====VbaTimerHashMap==================================
-typedef ::std::hash_map< VbaTimerInfo, VbaTimer*, VbaTimerInfoHash, ::std::equal_to< VbaTimerInfo > > VbaTimerHashMap;
+typedef ::boost::unordered_map< VbaTimerInfo, VbaTimer*, VbaTimerInfoHash, ::std::equal_to< VbaTimerInfo > > VbaTimerHashMap;
 
 // ====VbaApplicationBase_Impl==================================
 struct VbaApplicationBase_Impl
@@ -359,15 +359,10 @@ uno::Any SAL_CALL VbaApplicationBase::Run( const ::rtl::OUString& MacroName, con
         const uno::Any** pArg = aArgsPtrArray;
         const uno::Any** pArgEnd = ( aArgsPtrArray + nArg );
 
-        sal_Int32 nLastArgWithValue = 0;
         sal_Int32 nArgProcessed = 0;
 
         for ( ; pArg != pArgEnd; ++pArg, ++nArgProcessed )
-        {
             aArgs[ nArgProcessed ] =  **pArg;
-            if( (*pArg)->hasValue() )
-                nLastArgWithValue = nArgProcessed;
-        }
 
         // resize array to position of last param with value
         aArgs.realloc( nArgProcessed + 1 );

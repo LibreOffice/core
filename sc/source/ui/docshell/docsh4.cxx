@@ -37,9 +37,7 @@
 using namespace ::com::sun::star;
 
 // INCLUDE ---------------------------------------------------------------
-#if STLPORT_VERSION>=321
 #include <math.h>       // prevent conflict between exception and std::exception
-#endif
 
 #include "scitems.hxx"
 #include <sfx2/fcontnr.hxx>
@@ -299,7 +297,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
             }
             else
             {
-                DBG_ERROR( "arguments expected" );
+                OSL_FAIL( "arguments expected" );
             }
         }
         break;
@@ -435,13 +433,13 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 }
                 else
                 {
-                    DBG_ERROR("UpdateChartArea: keine ViewShell oder falsche Daten");
+                    OSL_FAIL("UpdateChartArea: keine ViewShell oder falsche Daten");
                 }
                 rReq.Done();
             }
             else
             {
-                DBG_ERROR("SID_CHART_SOURCE ohne Argumente");
+                OSL_FAIL("SID_CHART_SOURCE ohne Argumente");
             }
             break;
 
@@ -556,7 +554,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                     pDBData->GetArea(aRange);
                                     pViewSh->MarkRange(aRange);
 
-                                    if ( bContinue )    // #41905# Fehler beim Import -> Abbruch
+                                    if ( bContinue )    // Fehler beim Import -> Abbruch
                                     {
                                         //  interne Operationen, wenn welche gespeichert
 
@@ -593,7 +591,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
 
 
         case SID_AUTO_STYLE:
-            DBG_ERROR("use ScAutoStyleHint instead of SID_AUTO_STYLE");
+            OSL_FAIL("use ScAutoStyleHint instead of SID_AUTO_STYLE");
             break;
 
         case SID_GET_COLORTABLE:
@@ -1112,7 +1110,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                             }
                             catch ( uno::Exception& )
                             {
-                                DBG_ERROR( "SID_SHARE_DOC: caught exception\n" );
+                                OSL_FAIL( "SID_SHARE_DOC: caught exception\n" );
                                 SC_MOD()->SetInSharedDocSaving( false );
 
                                 try
@@ -1254,7 +1252,7 @@ void ScDocShell::DoRecalc( BOOL bApi )
 
         aDocument.BroadcastUno( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
 
-        //  #47939# Wenn es Charts gibt, dann alles painten, damit nicht
+        //  Wenn es Charts gibt, dann alles painten, damit nicht
         //  PostDataChanged und die Charts nacheinander kommen und Teile
         //  doppelt gepainted werden.
 
@@ -1493,7 +1491,7 @@ BOOL ScDocShell::AdjustPrintZoom( const ScRange& rRange )
         aOldPrFunc.GetScaleData( aPhysPage, nHdr, nFtr );
         nBlkTwipsY += nHdr + nFtr;
 
-        if ( nBlkTwipsX == 0 )      // #100639# hidden columns/rows may lead to 0
+        if ( nBlkTwipsX == 0 )      // hidden columns/rows may lead to 0
             nBlkTwipsX = 1;
         if ( nBlkTwipsY == 0 )
             nBlkTwipsY = 1;
@@ -2202,8 +2200,8 @@ void ScDocShell::GetState( SfxItemSet &rSet )
                 break;
 
             //  Wenn eine Formel editiert wird, muss FID_RECALC auf jeden Fall enabled sein.
-            //  Recalc fuer das Doc war mal wegen #29898# disabled, wenn AutoCalc an war,
-            //  ist jetzt wegen #41540# aber auch immer enabled.
+            //  Recalc fuer das Doc war mal wegen eines Bugs disabled, wenn AutoCalc an war,
+            //  ist jetzt wegen eines anderen Bugs aber auch immer enabled.
 
             case SID_TABLES_COUNT:
                 rSet.Put( SfxInt16Item( nWhich, aDocument.GetTableCount() ) );
@@ -2465,10 +2463,9 @@ long ScDocShell::DdeSetData( const String& rItem,
     ScRangeName* pRange = aDocument.GetRangeName();
     if( pRange )
     {
-        USHORT nPos;
-        if( pRange->SearchName( aPos, nPos ) )
+        const ScRangeData* pData = pRange->findByName(aPos);
+        if (pData)
         {
-            ScRangeData* pData = (*pRange)[ nPos ];
             if( pData->HasType( RT_REFAREA )
                 || pData->HasType( RT_ABSAREA )
                 || pData->HasType( RT_ABSPOS ) )
@@ -2674,7 +2671,7 @@ uno::Reference< frame::XModel > ScDocShell::LoadSharedDocument()
     }
     catch ( uno::Exception& )
     {
-        DBG_ERROR( "ScDocShell::LoadSharedDocument(): caught exception\n" );
+        OSL_FAIL( "ScDocShell::LoadSharedDocument(): caught exception\n" );
         SC_MOD()->SetInSharedDocLoading( false );
         try
         {

@@ -38,17 +38,19 @@
 #include <cppuhelper/weak.hxx>
 #include <osl/mutex.hxx>
 
-#include <tools/list.hxx>
 #include <tools/link.hxx>
 
 #include <toolkit/helper/listenermultiplexer.hxx>
+#include <vector>
 
 class Menu;
 class MenuBar;
 class VclSimpleEvent;
 class PopupMenu;
 
-DECLARE_LIST( PopupMenuRefList, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu >* )
+typedef ::std::vector<
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu >*
+> PopupMenuRefList;
 
 //  ----------------------------------------------------
 //  class VCLXMenu

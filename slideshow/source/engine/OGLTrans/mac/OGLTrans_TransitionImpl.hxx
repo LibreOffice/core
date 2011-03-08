@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,8 +31,8 @@
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/vector/b3dvector.hxx>
 
-#include <tools/prewin.h>
-#include <tools/postwin.h>
+#include <prewin.h>
+#include <postwin.h>
 
 #include <OpenGL/gl.h>
 #include <vector>
@@ -496,3 +497,4 @@ private:
 
 #endif // INCLUDED_SLIDESHOW_TRANSITION_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

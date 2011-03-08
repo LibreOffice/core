@@ -30,11 +30,10 @@
 #include "precompiled_sfx2.hxx"
 
 #ifdef SOLARIS
-// HACK: prevent conflict between STLPORT and Workshop headers on Solaris 8
 #include <ctime>
 #endif
 
-#include <string> // HACK: prevent conflict between STLPORT and Workshop headers
+#include <string>
 
 #include <vcl/wrkwin.hxx>
 #include <unotools/viewoptions.hxx>
@@ -103,7 +102,6 @@ friend class SfxSplitWindow;
                             aTimer.SetTimeoutHdl(
                                 LINK(pOwner, SfxSplitWindow, TimerHdl ) );
                             aTimer.SetTimeout( 200 );
-//                            EnableDrop( TRUE );
                             SetAlign( pOwner->GetAlign() );
                             Actualize();
                             ShowAutoHideButton( pOwner->IsAutoHideButtonVisible() );
@@ -252,7 +250,6 @@ SfxSplitWindow::SfxSplitWindow( Window* pParent, SfxChildAlignment eAl,
             pEmptyWin->nState = (USHORT) aWinData.GetToken( 1, ',' ).ToInt32();
             if ( pEmptyWin->nState & 2 )
                 pEmptyWin->bFadeIn = TRUE;
-            //bPinned = !( pEmptyWin->nState & 1 );
             bPinned = TRUE; // always assume pinned - floating mode not used anymore
 
             USHORT i=2;
@@ -579,12 +576,6 @@ void SfxSplitWindow::MoveWindow( SfxDockingWindow* pDockWin, const Size& rSize,
         // alles eine Zeile nach vorne!
         nLine--;
     }
-/*
-    else if ( nLine == nL && nPos > nP )
-    {
-        nPos--;
-    }
-*/
     RemoveWindow( pDockWin );
     InsertWindow( pDockWin, rSize, nLine, nPos, bNewLine );
 }
@@ -1239,13 +1230,7 @@ void SfxSplitWindow::Show_Impl()
             pDock->pWin->FadeIn( pEmptyWin->bFadeIn );
     }
 }
-/*
-void SfxSplitWindow::Pin_Impl( BOOL bPin )
-{
-    if ( bPinned != bPin )
-        AutoHide();
-}
-*/
+
 BOOL SfxSplitWindow::ActivateNextChild_Impl( BOOL bForward )
 {
     // Wenn kein pActive, auf erstes bzw. letztes Fenster gehen ( bei !bForward wird erst in der loop dekrementiert )

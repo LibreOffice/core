@@ -112,7 +112,7 @@ USHORT TETextPortionList::FindPortion( USHORT nCharPos, USHORT& nPortionStart, B
             }
         }
     }
-    DBG_ERROR( "FindPortion: Nicht gefunden!" );
+    OSL_FAIL( "FindPortion: Nicht gefunden!" );
     return ( Count() - 1 );
 }
 

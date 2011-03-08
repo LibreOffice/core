@@ -756,7 +756,7 @@ sal_Bool XMLTextFieldExport::IsStringField(
     case FIELD_ID_DRAW_FOOTER:
     case FIELD_ID_DRAW_DATE_TIME:
     default:
-        DBG_ERROR("unkown field type/field has no content");
+        OSL_FAIL("unkown field type/field has no content");
         return sal_True; // invalid info; string in case of doubt
     }
 }
@@ -975,7 +975,7 @@ void XMLTextFieldExport::ExportFieldAutoStyle(
 
     case FIELD_ID_UNKNOWN:
     default:
-        DBG_ERROR("unkown field type!");
+        OSL_FAIL("unkown field type!");
         // ignore -> no format for unkowns
         break;
     }
@@ -1852,7 +1852,7 @@ void XMLTextFieldExport::ExportFieldHelper(
 
     case FIELD_ID_UNKNOWN:
     default:
-        DBG_ERROR("unkown field type encountered!");
+        OSL_FAIL("unkown field type encountered!");
         // always export content
         GetExport().Characters(sPresentation);
     }
@@ -2957,7 +2957,7 @@ enum XMLTokenEnum XMLTextFieldExport::MapPlaceholderType(sal_uInt16 nType)
 
         default:
             // unkown placeholder: XML_TEXT
-            DBG_ERROR("unkown placeholder type");
+            OSL_FAIL("unkown placeholder type");
     }
 
     return eType;
@@ -2996,7 +2996,7 @@ enum XMLTokenEnum XMLTextFieldExport::MapPageNumberName(
             nOffset -= 1;
             break;
         default:
-            DBG_ERROR("unknown page number type");
+            OSL_FAIL("unknown page number type");
             eName = XML_TOKEN_INVALID;
             break;
     }
@@ -3030,7 +3030,7 @@ enum XMLTokenEnum XMLTextFieldExport::MapTemplateDisplayFormat(sal_Int16 nFormat
             eName = XML_TITLE;
             break;
         default:
-            DBG_ERROR("unknown template display format");
+            OSL_FAIL("unknown template display format");
             eName = XML_TOKEN_INVALID;
             break;
     }
@@ -3067,7 +3067,7 @@ enum XMLTokenEnum XMLTextFieldExport::MapCountFieldName(FieldIdEnum nToken)
             eElement = XML_OBJECT_COUNT;
             break;
         default:
-            DBG_ERROR("no count field token");
+            OSL_FAIL("no count field token");
             eElement = XML_TOKEN_INVALID;
             break;
     }
@@ -3098,7 +3098,7 @@ enum XMLTokenEnum XMLTextFieldExport::MapChapterDisplayFormat(sal_Int16 nFormat)
             eName = XML_PLAIN_NUMBER;
             break;
         default:
-            DBG_ERROR("unkown chapter display format");
+            OSL_FAIL("unkown chapter display format");
             eName = XML_TOKEN_INVALID;
             break;
     }
@@ -3127,7 +3127,7 @@ enum XMLTokenEnum XMLTextFieldExport::MapFilenameDisplayFormat(sal_Int16 nFormat
             eName = XML_NAME_AND_EXTENSION;
             break;
         default:
-            DBG_ERROR("unknown filename display format");
+            OSL_FAIL("unknown filename display format");
     }
 
     return eName;
@@ -3178,7 +3178,7 @@ enum XMLTokenEnum XMLTextFieldExport::MapReferenceType(sal_Int16 nType)
             eElement = XML_NUMBER_ALL_SUPERIOR;
             break;
         default:
-            DBG_ERROR("unknown reference type");
+            OSL_FAIL("unknown reference type");
             eElement = XML_TEMPLATE;
             break;
     }
@@ -3207,7 +3207,7 @@ enum XMLTokenEnum XMLTextFieldExport::MapReferenceSource(sal_Int16 nType)
             eElement = XML_NOTE_REF;
             break;
         default:
-            DBG_ERROR("unkown reference source");
+            OSL_FAIL("unkown reference source");
             break;
     }
 
@@ -3470,7 +3470,7 @@ enum XMLTokenEnum XMLTextFieldExport::MapBibliographyFieldName(OUString sName)
     }
     else
     {
-        DBG_ERROR("Unknown bibliography info data");
+        OSL_FAIL("Unknown bibliography info data");
         eName = XML_TOKEN_INVALID;
     }
 

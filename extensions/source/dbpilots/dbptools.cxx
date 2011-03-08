@@ -61,7 +61,7 @@ namespace dbp
         }
         catch(Exception&)
         {
-            DBG_ERROR("::dbp::disambiguateName: something went (strangely) wrong!");
+            OSL_FAIL("::dbp::disambiguateName: something went (strangely) wrong!");
         }
     }
 

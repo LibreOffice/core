@@ -695,7 +695,7 @@ void GalleryTheme::Actualize( const Link& rActualizeLink, GalleryProgress* pProg
         }
         else
         {
-            DBG_ERROR( "File(s) could not be opened" );
+            OSL_FAIL( "File(s) could not be opened" );
         }
 
         delete pIStm;

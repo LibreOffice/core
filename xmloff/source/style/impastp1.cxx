@@ -31,7 +31,7 @@
 #include <tools/debug.hxx>
 #include "impastpl.hxx"
 
-using namespace rtl;
+using ::rtl::OUString;
 
 //#############################################################################
 //

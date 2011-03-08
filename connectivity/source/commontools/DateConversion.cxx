@@ -252,27 +252,25 @@ void DBTypeConversion::setValue(const Reference<XColumnUpdate>& xVariant,
                                 sal_Int16 nFieldType,
                                 sal_Int16 nKeyType) throw(::com::sun::star::lang::IllegalArgumentException)
 {
-    double fValue = 0;
     if (rString.getLength())
     {
-            // Muss der String formatiert werden?
+        // Does the String need to be formatted?
         sal_Int16 nTypeClass = nKeyType & ~NumberFormat::DEFINED;
         sal_Bool bTextFormat = nTypeClass == NumberFormat::TEXT;
         sal_Int32 nKeyToUse  = bTextFormat ? 0 : nKey;
         sal_Int16 nRealUsedTypeClass = nTypeClass;
-            // bei einem Text-Format muessen wir dem Formatter etwas mehr Freiheiten einraeumen, sonst
-            // wirft convertStringToNumber eine NotNumericException
+        // for a Text-Format the formatter needs some more freedom, otherwise
+        // convertStringToNumber will throw a NotNumericException
         try
         {
-            fValue = xFormatter->convertStringToNumber(nKeyToUse, rString);
+            double fValue = xFormatter->convertStringToNumber(nKeyToUse, rString);
             sal_Int32 nRealUsedKey = xFormatter->detectNumberFormat(0, rString);
             if (nRealUsedKey != nKeyToUse)
                 nRealUsedTypeClass = getNumberFormatType(xFormatter, nRealUsedKey) & ~NumberFormat::DEFINED;
 
-            // und noch eine Sonderbehandlung, diesmal fuer Prozent-Formate
+            // and again a special treatment, this time for percent formats
             if ((NumberFormat::NUMBER == nRealUsedTypeClass) && (NumberFormat::PERCENT == nTypeClass))
-            {   // die Formatierung soll eigentlich als Prozent erfolgen, aber der String stellt nur eine
-                // einfache Nummer dar -> anpassen
+            {   // formatting should be "percent", but the String provides just a simple number -> adjust
                 ::rtl::OUString sExpanded(rString);
                 static ::rtl::OUString s_sPercentSymbol( RTL_CONSTASCII_USTRINGPARAM( "%" ));
                     // need a method to add a sal_Unicode to a string, 'til then we use a static string

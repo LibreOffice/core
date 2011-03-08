@@ -195,7 +195,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
 
                 if( (nSlotId == SID_ATTR_CHAR_FONT) || (nSlotId == SID_ATTR_CHAR_FONTHEIGHT) )
                 {
-                    // #42732# input language should be preferred over
+                    // input language should be preferred over
                     // current cursor position to detect script type
                     OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
 
@@ -265,13 +265,12 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                     List* pList = pOLV->CreateSelectionList();
                     Paragraph* pPara = (Paragraph*) pList->First();
 
-                    // #96539# find out if we are a OutlineView
+                    // find out if we are a OutlineView
                     BOOL bIsOutlineView(OUTLINERMODE_OUTLINEVIEW == pOLV->GetOutliner()->GetMode());
 
-                    // #96539# This is ONLY for OutlineViews
+                    // This is ONLY for OutlineViews
                     if(bIsOutlineView)
                     {
-                        // #96250# and #78665#
                         // allow move up if position is 2 or greater OR it
                         // is a title object (and thus depth==1)
                         if(pOutl->GetAbsPos(pPara) > 1 || ( pOutl->HasParaFlag(pPara,PARAFLAG_ISPAGE) && pOutl->GetAbsPos(pPara) > 0 ) )
@@ -282,7 +281,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                     }
                     else
                     {
-                        // #96539# old behaviour for OUTLINERMODE_OUTLINEOBJECT
+                        // old behaviour for OUTLINERMODE_OUTLINEOBJECT
                         if(pOutl->GetAbsPos(pPara) > 0)
                         {
                             // Nicht ganz oben
@@ -317,7 +316,6 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                         bDisableDown = FALSE;
                     }
 
-                    // #96250# and #78665#
                     // disable when first para and 2nd is not a title
                     pPara = static_cast< Paragraph* >( pList->First() );
                     if(!bDisableDown && bIsOutlineView
@@ -514,7 +512,6 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                     rSet.Put( SfxBoolItem( SID_ATTR_PARA_RIGHT_TO_LEFT, TRUE ) );
                 break;
 
-                // #107865#
                 // The case for the superordinate object is missing.
                 case FRMDIR_ENVIRONMENT:
                 {

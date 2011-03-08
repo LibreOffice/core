@@ -31,7 +31,7 @@ PRJNAME=sc
 TARGET=vbaobj
 ENABLE_EXCEPTIONS=TRUE
 VISIBILITY_HIDDEN=TRUE
-CDEFS+=-DVBA_OOBUILD_HACK
+
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
@@ -41,6 +41,9 @@ DLLPRE =
 dummy:
         @echo "not building vba..."
 .ENDIF
+
+CDEFS+=-DVBA_OOBUILD_HACK
+
 .IF "$(L10N_framework)"==""
 INCPRE=$(INCCOM)$/$(TARGET)
 
@@ -59,7 +62,6 @@ SLOFILES= \
         $(SLO)$/vbachart.obj \
         $(SLO)$/vbachartobject.obj \
         $(SLO)$/vbachartobjects.obj \
-        $(SLO)$/vbacharts.obj \
         $(SLO)$/vbacharttitle.obj \
         $(SLO)$/vbacomment.obj \
         $(SLO)$/vbacomments.obj \
@@ -101,7 +103,6 @@ SLOFILES= \
         $(SLO)$/vbapivottables.obj \
         $(SLO)$/vbaquerytable.obj \
         $(SLO)$/vbarange.obj \
-        $(SLO)$/vbaseriescollection.obj \
         $(SLO)$/vbasheetobject.obj \
         $(SLO)$/vbasheetobjects.obj \
         $(SLO)$/vbastyle.obj \

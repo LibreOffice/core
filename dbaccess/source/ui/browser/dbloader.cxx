@@ -229,7 +229,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
 
     // if a data source browser is loaded without its tree pane, then we assume it to be a
     // table data view, effectively. In this case, we need to adjust the module identifier.
-    // 2008-02-05 / i85879 / frank.schoenheit@sun.com
+    // #i85879#
     ::comphelper::NamedValueCollection aLoadArgs( rArgs );
 
     if  ( sComponentURL == URL_COMPONENT_DATASOURCEBROWSER )

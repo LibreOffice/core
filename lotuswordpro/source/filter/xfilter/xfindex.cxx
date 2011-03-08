@@ -57,10 +57,6 @@
  * @file
  * Represente index source,index body and index index entry.
  ************************************************************************/
-/*************************************************************************
- * Change History
-   2005-02-02   create and implemente.
- ************************************************************************/
 #include    "xfindex.hxx"
 #include    "xfparagraph.hxx"
 

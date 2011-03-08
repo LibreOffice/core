@@ -78,8 +78,8 @@
 #include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
 #include <com/sun/star/container/XHierarchicalName.hpp>
 /** === end UNO includes === **/
-#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <osl/diagnose.h>
 #include <tools/string.hxx>
 
 #include <svl/urihelper.hxx>
@@ -473,7 +473,7 @@ sal_Bool OApplicationController::Construct(Window* _pParent)
     }
     catch(Exception&)
     {
-        DBG_ERROR("OApplicationController::Construct : the construction of UnoDataBrowserView failed !");
+        OSL_FAIL("OApplicationController::Construct : the construction of UnoDataBrowserView failed !");
     }
 
     if ( !bSuccess )
@@ -483,7 +483,7 @@ sal_Bool OApplicationController::Construct(Window* _pParent)
         return sal_False;
     }
 
-    DBG_ASSERT( getView(), "OApplicationController::Construct: have no view!" );
+    OSL_ENSURE( getView(), "OApplicationController::Construct: have no view!" );
     if ( getView() )
         getView()->enableSeparator( );
 
@@ -508,7 +508,7 @@ void SAL_CALL OApplicationController::disposing(const EventObject& _rSource) thr
     Reference<XConnection> xCon(_rSource.Source, UNO_QUERY);
     if ( xCon.is() )
     {
-        DBG_ASSERT( m_xDataSourceConnection == xCon,
+        OSL_ENSURE( m_xDataSourceConnection == xCon,
             "OApplicationController::disposing: which connection does this come from?" );
 
         if ( getContainer() && getContainer()->getElementType() == E_TABLE )
@@ -2514,7 +2514,7 @@ sal_Int8 OApplicationController::executeDrop( const ExecuteDropEvent& _rEvt )
     OApplicationView* pView = getContainer();
     if ( !pView || pView->getElementType() == E_NONE )
     {
-        DBG_ERROR("OApplicationController::executeDrop: what the hell did queryDrop do?");
+        OSL_FAIL("OApplicationController::executeDrop: what the hell did queryDrop do?");
             // queryDrop shoud not have allowed us to reach this situation ....
         return DND_ACTION_NONE;
     }
@@ -2715,11 +2715,11 @@ sal_Bool SAL_CALL OApplicationController::attachModel(const Reference< XModel > 
     Reference< XOfficeDatabaseDocument > xOfficeDoc( _rxModel, UNO_QUERY );
     if ( !xOfficeDoc.is() && _rxModel.is() )
     {
-        DBG_ERROR( "OApplicationController::attachModel: invalid model!" );
+        OSL_FAIL( "OApplicationController::attachModel: invalid model!" );
         return sal_False;
     }
 
-    DBG_ASSERT( !( m_xModel.is() && ( m_xModel != _rxModel ) ),
+    OSL_ENSURE( !( m_xModel.is() && ( m_xModel != _rxModel ) ),
         "OApplicationController::attachModel: missing implementation: setting a new model while we have another one!" );
         // at least: remove as property change listener from the old model/data source
 

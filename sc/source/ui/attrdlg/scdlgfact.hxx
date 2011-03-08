@@ -145,8 +145,11 @@ class AbstractScDataPilotDatabaseDlg_Impl  :public AbstractScDataPilotDatabaseDl
 class AbstractScDataPilotSourceTypeDlg_Impl  :public AbstractScDataPilotSourceTypeDlg  //add for ScDataPilotSourceTypeDlg
 {
     DECL_ABSTDLG_BASE(AbstractScDataPilotSourceTypeDlg_Impl, ScDataPilotSourceTypeDlg)
-    virtual BOOL    IsDatabase() const;
-    virtual BOOL    IsExternal() const;
+    virtual bool IsDatabase() const;
+    virtual bool IsExternal() const;
+    virtual bool IsNamedRange() const;
+    virtual rtl::OUString GetSelectedNamedRange() const;
+    virtual void AppendNamedRange(const ::rtl::OUString& rName);
 };
 
 class AbstractScDataPilotServiceDlg_Impl : public AbstractScDataPilotServiceDlg  //add for ScDataPilotServiceDlg

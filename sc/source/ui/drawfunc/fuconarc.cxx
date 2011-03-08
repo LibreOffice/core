@@ -34,7 +34,7 @@
 #include "tabvwsh.hxx"
 #include "drawview.hxx"
 
-// #98185# Create default drawing objects via keyboard
+// Create default drawing objects via keyboard
 #include <svx/svdocirc.hxx>
 #include <svx/sxciaitm.hxx>
 
@@ -68,7 +68,7 @@ FuConstArc::~FuConstArc()
 
 BOOL FuConstArc::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    // #95491# remember button state for creation of own MouseEvents
+    // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
     BOOL bReturn = FuConstruct::MouseButtonDown( rMEvt );
@@ -102,25 +102,16 @@ BOOL FuConstArc::MouseMove( const MouseEvent& rMEvt )
 
 BOOL FuConstArc::MouseButtonUp( const MouseEvent& rMEvt )
 {
-    // #95491# remember button state for creation of own MouseEvents
+    // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
     BOOL bReturn = FALSE;
 
     if ( pView->IsCreateObj() && rMEvt.IsLeft() )
     {
-        // Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
         pView->EndCreateObj( SDRCREATE_NEXTPOINT );
         bReturn = TRUE;
     }
-/*
-    else if ( pView->IsCreateObj() && rMEvt.IsRight() )
-    {
-        // Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
-        pView->EndCreateObj( SDRCREATE_FORCEEND );
-        bReturn = TRUE;
-    }
-*/
     return (FuConstruct::MouseButtonUp(rMEvt) || bReturn);
 }
 
@@ -192,7 +183,7 @@ void FuConstArc::Deactivate()
     pViewShell->SetActivePointer( aOldPointer );
 }
 
-// #98185# Create default drawing objects via keyboard
+// Create default drawing objects via keyboard
 SdrObject* FuConstArc::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
 {
     // case SID_DRAW_ARC:
@@ -225,7 +216,7 @@ SdrObject* FuConstArc::CreateDefaultObject(const sal_uInt16 nID, const Rectangle
         }
         else
         {
-            DBG_ERROR("Object is NO circle object");
+            OSL_FAIL("Object is NO circle object");
         }
     }
 

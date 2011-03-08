@@ -63,6 +63,7 @@
 #include <unotools/syslocale.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <osl/diagnose.h>
 #include <unotools/configmgr.hxx>
 #include <unotools/sharedunocomponent.hxx>
 
@@ -578,7 +579,7 @@ void SAL_CALL OSingleSelectQueryComposer::appendGroupByColumn( const Reference< 
 ::rtl::OUString OSingleSelectQueryComposer::composeStatementFromParts( const ::std::vector< ::rtl::OUString >& _rParts )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OSingleSelectQueryComposer::composeStatementFromParts" );
-    DBG_ASSERT( _rParts.size() == (size_t)SQLPartCount, "OSingleSelectQueryComposer::composeStatementFromParts: invalid parts array!" );
+    OSL_ENSURE( _rParts.size() == (size_t)SQLPartCount, "OSingleSelectQueryComposer::composeStatementFromParts: invalid parts array!" );
 
     ::rtl::OUStringBuffer aSql( m_aPureSelectSQL );
     for ( SQLPart eLoopParts = Where; eLoopParts != SQLPartCount; incSQLPart( eLoopParts ) )
@@ -625,7 +626,7 @@ void SAL_CALL OSingleSelectQueryComposer::setElementaryQuery( const ::rtl::OUStr
     catch( const Exception& e )
     {
         (void)e;
-        DBG_ERROR( "OSingleSelectQueryComposer::setElementaryQuery: there should be no error anymore for the additive statement!" );
+        OSL_FAIL( "OSingleSelectQueryComposer::setElementaryQuery: there should be no error anymore for the additive statement!" );
         // every part of the additive statement should have passed other tests already, and should not
         // be able to cause any errors ... me thinks
     }
@@ -703,7 +704,7 @@ void OSingleSelectQueryComposer::setSingleAdditiveClause( SQLPart _ePart, const 
     catch( const Exception& e )
     {
         (void)e;
-        DBG_ERROR( "OSingleSelectQueryComposer::setSingleAdditiveClause: there should be no error anymore for the additive statement!" );
+        OSL_FAIL( "OSingleSelectQueryComposer::setSingleAdditiveClause: there should be no error anymore for the additive statement!" );
         // every part of the additive statement should have passed other tests already, and should not
         // be able to cause any errors ... me thinks
     }
@@ -789,7 +790,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
         aSQL.append( STR_WHERE );
 
         // preserve the original WHERE clause
-        // #i102234# / 2009-06-02 / frank.schoenheit@sun.com
+        // #i102234#
         ::rtl::OUString sOriginalWhereClause = getSQLPart( Where, m_aSqlIterator, sal_False );
         if ( sOriginalWhereClause.getLength() )
         {
@@ -810,7 +811,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
         // normalize the statement so that it doesn't contain any application-level features anymore
         ::rtl::OUString sError;
         const ::std::auto_ptr< OSQLParseNode > pStatementTree( m_aSqlParser.parseTree( sError, sSQL, false ) );
-        DBG_ASSERT( pStatementTree.get(), "OSingleSelectQueryComposer::getColumns: could not parse the column retrieval statement!" );
+        OSL_ENSURE( pStatementTree.get(), "OSingleSelectQueryComposer::getColumns: could not parse the column retrieval statement!" );
         if ( pStatementTree.get() )
             if ( !pStatementTree->parseNodeToExecutableStatement( sSQL, m_xConnection, m_aSqlParser, NULL ) )
                 break;
@@ -1015,7 +1016,7 @@ sal_Bool OSingleSelectQueryComposer::setANDCriteria( OSQLParseNode * pCondition,
     if (SQL_ISRULE(pCondition,boolean_primary))
     {
         // this should not occur
-        DBG_ERROR("boolean_primary in And-Criteria");
+        OSL_FAIL("boolean_primary in And-Criteria");
         return sal_False;
     }
     // Das erste Element ist (wieder) eine AND-Verknuepfung
@@ -1130,7 +1131,7 @@ sal_Bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode * pCon
                                             ::std::vector < PropertyValue >& rFilter, const Reference< ::com::sun::star::util::XNumberFormatter > & xFormatter) const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OSingleSelectQueryComposer::setComparsionPredicate" );
-    DBG_ASSERT(SQL_ISRULE(pCondition, comparison_predicate),"setComparsionPredicate: pCondition ist kein ComparsionPredicate");
+    OSL_ENSURE(SQL_ISRULE(pCondition, comparison_predicate),"setComparsionPredicate: pCondition ist kein ComparsionPredicate");
     if (SQL_ISRULE(pCondition->getChild(0), column_ref) ||
         SQL_ISRULE(pCondition->getChild(pCondition->count()-1), column_ref))
     {

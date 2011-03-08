@@ -29,8 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-#if OSL_DEBUG_LEVEL > 0
-#   include <cstdio>
+#if OSL_DEBUG_LEVEL > 1
+#include <cstdio>
 #endif
 
 #include <com/sun/star/embed/XEmbedPersist.hpp>
@@ -78,7 +78,7 @@
 #include "docsh.hxx"
 #include <cstdio>
 
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
 #endif
 
@@ -108,9 +108,6 @@ bool WW8Export::TestOleNeedsGraphic(const SwAttrSet& rSet,
     SvStorageRef xOleStg, SvStorageRef xObjStg, String &rStorageName,
     SwOLENode *pOLENd)
 {
-#ifdef NO_OLE_SIZE_OPTIMIZE
-    return true;
-#else
     bool bGraphicNeeded = false;
     SfxItemIter aIter( rSet );
     const SfxPoolItem* pItem = aIter.GetCurItem();
@@ -210,7 +207,6 @@ bool WW8Export::TestOleNeedsGraphic(const SwAttrSet& rSet,
     else
         bGraphicNeeded = true;
     return bGraphicNeeded;
-#endif
 }
 
 void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
@@ -410,7 +406,7 @@ void WW8Export::OutGrf(const sw::Frame &rFrame)
     pChpPlc->AppendFkpEntry( Strm().Tell(), pO->Count(), pO->GetData() );
     pO->Remove( 0, pO->Count() );                   // leeren
 
-    // --> OD 2007-06-06 #i29408#
+    // #i29408#
     // linked, as-character anchored graphics have to be exported as fields.
     const SwGrfNode* pGrfNd = rFrame.IsInline() && rFrame.GetContent()
                               ? rFrame.GetContent()->GetGrfNode() : 0;
@@ -496,7 +492,7 @@ void WW8Export::OutGrf(const sw::Frame &rFrame)
     Set_UInt8( pArr, nAttrMagicIdx++ );
     pChpPlc->AppendFkpEntry( Strm().Tell(), static_cast< short >(pArr - aArr), aArr );
 
-    // --> OD 2007-04-23 #i75464#
+    // #i75464#
     // Check, if graphic isn't exported as-character anchored.
     // Otherwise, an additional paragraph is exported for a graphic, which is
     // forced to be treated as inline, because it's anchored inside another frame.
@@ -518,7 +514,7 @@ void WW8Export::OutGrf(const sw::Frame &rFrame)
         pPapPlc->AppendFkpEntry( Strm().Tell(), pO->Count(), pO->GetData() );
         pO->Remove( 0, pO->Count() );                   // leeren
     }
-    // --> OD 2007-06-06 #i29408#
+    // #i29408#
     // linked, as-character anchored graphics have to be exported as fields.
     else if ( pGrfNd && pGrfNd->IsLinkedFile() )
     {
@@ -636,7 +632,6 @@ void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const sw::Frame &rFly,
     Set_UInt16( pArr, mm );                         // set mm
 
     /*
-    #92494#
     Just in case our original size is too big to fit inside a ushort we can
     substitute the final size and loose on retaining the scaling factor but
     still keep the correct display size anyway.

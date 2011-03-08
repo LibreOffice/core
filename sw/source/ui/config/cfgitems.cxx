@@ -65,7 +65,7 @@ SwDocDisplayItem::SwDocDisplayItem( USHORT _nWhich ) :
 };
 
 /*-------------------------------------------------------------------
-    Item fuer Einstellungsdialog, Seite Dokumentansicht
+    Item for the Settings dialog, page document view
 --------------------------------------------------------------------*/
 SwDocDisplayItem::SwDocDisplayItem( const SwDocDisplayItem& rDocDisplayItem ):
             SfxPoolItem(rDocDisplayItem)
@@ -250,7 +250,7 @@ void SwElemItem::FillViewOptions( SwViewOption& rVOpt) const
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: CopyCTOR
+    Description: CopyCTOR
  --------------------------------------------------------------------*/
 SwAddPrinterItem::SwAddPrinterItem( const SwAddPrinterItem& rAddPrinterItem ):
             SfxPoolItem(rAddPrinterItem),
@@ -259,7 +259,7 @@ SwAddPrinterItem::SwAddPrinterItem( const SwAddPrinterItem& rAddPrinterItem ):
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: CTOR fuer leeres Item
+    Description: CTOR for empty Item
  --------------------------------------------------------------------*/
 SwAddPrinterItem::SwAddPrinterItem( USHORT _nWhich):
                 SfxPoolItem(_nWhich)
@@ -267,7 +267,7 @@ SwAddPrinterItem::SwAddPrinterItem( USHORT _nWhich):
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: CTOR aus SwPrintOptions
+    Description: CTOR from SwPrintOptions
  --------------------------------------------------------------------*/
 SwAddPrinterItem::SwAddPrinterItem( USHORT _nWhich, const SwPrintData& rPrtData ) :
     SfxPoolItem(_nWhich)
@@ -290,7 +290,7 @@ int SwAddPrinterItem::operator==( const SfxPoolItem& rAttr ) const
 }
 
 /*--------------------------------------------------
- Item fuer Einstellungsdialog, ShadowCursorSeite
+ Item for Settings dialog, ShadowCursorPage
 --------------------------------------------------*/
 SwShadowCursorItem::SwShadowCursorItem( USHORT _nWhich )
     : SfxPoolItem( _nWhich ),

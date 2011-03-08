@@ -33,7 +33,6 @@ PACKAGE = com$/sun$/star$/wizards$/agenda
 # --- Settings -----------------------------------------------------
 
 .INCLUDE : settings.mk
-#.INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 JARFILES= unoil.jar \
     jurt.jar \

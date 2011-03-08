@@ -124,7 +124,7 @@ SfxMacroStatement::SfxMacroStatement
     bDone( bRequestDone ),
     pDummy( 0 )
 {
-    // Workaround Recording non exported Slots (#25386#)
+    // Workaround Recording non exported Slots
     if ( !rSlot.pName )
         return;
 
@@ -311,7 +311,6 @@ void SfxMacroStatement::GenerateNameAndArgs_Impl
                             n = n + aReplacement.Len();
                             aRecordable.SetChar((unsigned short) (n-2), 0x0029);// ')' = 29h
                             aRecordable.Replace( n-1, 2, DEFINE_CONST_UNICODE("+\"") );
-                            // ++n;
                         }
                         else
                         {

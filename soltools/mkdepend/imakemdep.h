@@ -43,14 +43,6 @@ in this Software without prior written authorization from the X Consortium.
  *     These will be passed to the compile along with the contents of the
  *     make variable BOOTSTRAPCFLAGS.
  */
-#ifdef hpux
-#ifdef hp9000s800
-#define imake_ccflags "-DSYSV"
-#else
-#define imake_ccflags "-Wc,-Nd4000,-Ns3000 -DSYSV"
-#endif
-#endif
-
 #if defined(macII) || defined(_AUX_SOURCE)
 #define imake_ccflags "-DmacII -DSYSV"
 #endif
@@ -208,9 +200,6 @@ in this Software without prior written authorization from the X Consortium.
  *     If use cc -E but want a different compiler, define DEFAULT_CC.
  *     If the cpp you need is not in /lib/cpp, define DEFAULT_CPP.
  */
-#ifdef hpux
-#define USE_CC_E
-#endif
 #ifdef WIN32
 #define USE_CC_E
 #define DEFAULT_CC "cl"
@@ -236,7 +225,7 @@ in this Software without prior written authorization from the X Consortium.
 #ifdef _CRAY
 #define DEFAULT_CPP "/lib/pcpp"
 #endif
-#if defined(__386BSD__) || defined(__NetBSD__) || defined(__FreeBSD__) || defined(__OpenBSD__)
+#if defined(__NetBSD__) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__DragonFly__)
 #define DEFAULT_CPP "/usr/libexec/cpp"
 #endif
 #ifdef  MACH
@@ -274,7 +263,9 @@ char *cpp_argv[ARGUMENTS] = {
 #ifdef unix
     "-Uunix",   /* remove unix symbol so that filename unix.c okay */
 #endif
-#if defined(__386BSD__) || defined(__NetBSD__) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined(MACH)
+#if defined(__NetBSD__) || defined(__FreeBSD__) || defined(__OpenBSD__) || \
+    defined(MACH) || defined(DRAGONFLY)
+/* FIXME: strange list of obsolete systems */
 # ifdef __i386__
     "-D__i386__",
 # endif
@@ -514,6 +505,8 @@ char *cpp_argv[ARGUMENTS] = {
  *     them to the the following table.  The definition of struct symtab is
  *     in util/makedepend/def.h.
  */
+
+/* FIXME: strange list of obsolete systems */
 struct pair predefs[] = {
 #ifdef apollo
     {"apollo", "1", NULL},
@@ -544,18 +537,6 @@ struct pair predefs[] = {
 #endif
 #ifdef __sparc__
     {"__sparc__", "1", NULL},
-#endif
-#ifdef hpux
-    {"hpux", "1", NULL},
-#endif
-#ifdef __hpux
-    {"__hpux", "1", NULL},
-#endif
-#ifdef __hp9000s800
-    {"__hp9000s800", "1", NULL},
-#endif
-#ifdef __hp9000s700
-    {"__hp9000s700", "1", NULL},
 #endif
 #ifdef vax
     {"vax", "1", NULL},
@@ -719,6 +700,9 @@ struct pair predefs[] = {
 #endif
 #ifdef __OpenBSD__
     {"__OpenBSD__", "1", NULL},
+#endif
+#ifdef __DragonFly__
+    {"__DragonFly__", "1", NULL},
 #endif
 #ifdef __EMX__
     {"__EMX__", "1", NULL},

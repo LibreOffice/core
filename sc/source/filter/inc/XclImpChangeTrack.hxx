@@ -93,7 +93,6 @@ private:
     void                        ReadDateTime( DateTime& rDateTime );
 
     inline void                 ReadString( String& rString );
-    inline void                 IgnoreString();
 
     sal_Bool                    CheckRecord( sal_uInt16 nOpCode );
 
@@ -165,11 +164,6 @@ inline void XclImpChangeTrack::Read2DRange( ScRange& rRange )
 inline void XclImpChangeTrack::ReadString( String& rString )
 {
     rString = pStrm->ReadUniString();
-}
-
-inline void XclImpChangeTrack::IgnoreString()
-{
-    pStrm->IgnoreUniString();
 }
 
 //___________________________________________________________________

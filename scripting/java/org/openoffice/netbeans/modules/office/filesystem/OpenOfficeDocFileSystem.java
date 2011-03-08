@@ -49,8 +49,6 @@ import org.openide.util.NbBundle;
 
 /**
  * OpenOffice.org Document filesystem.
- *
- * @author misha <misha@openoffice.org>
  */
 public class OpenOfficeDocFileSystem
     extends AbstractFileSystem

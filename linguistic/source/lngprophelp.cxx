@@ -43,16 +43,15 @@
 
 #include <lngprophelp.hxx>
 
-
-//using namespace utl;
 using namespace osl;
-using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
+
+using ::rtl::OUString;
 
 namespace linguistic
 {
@@ -530,7 +529,7 @@ void PropertyHelper_Spell::SetTmpPropVals( const PropertyValues &rPropVals )
     nResMaxNumberOfSuggestions  = GetDefaultNumberOfSuggestions();
     bResIsSpellWithDigits       = bIsSpellWithDigits;
     bResIsSpellCapitalization   = bIsSpellCapitalization;
-    //
+
     INT32 nLen = rPropVals.getLength();
     if (nLen)
     {
@@ -692,7 +691,7 @@ void PropertyHelper_Hyphen::SetTmpPropVals( const PropertyValues &rPropVals )
     nResHyphMinLeading      = nHyphMinLeading;
     nResHyphMinTrailing     = nHyphMinTrailing;
     nResHyphMinWordLength   = nHyphMinWordLength;
-    //
+
     INT32 nLen = rPropVals.getLength();
     if (nLen)
     {

@@ -34,7 +34,7 @@
 #include <editeng/editengdllapi.h>
 
 /*
- * dummy-Item fuer ToolBox-Controller:
+ * Dummy item for ToolBox controller:
  *
  */
 

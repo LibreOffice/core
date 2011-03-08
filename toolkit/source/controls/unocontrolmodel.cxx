@@ -147,7 +147,7 @@ static void lcl_ImplMergeFontProperty( FontDescriptor& rFD, sal_uInt16 nPropId, 
                                                             break;
         case BASEPROPERTY_FONTDESCRIPTORPART_TYPE:          rValue >>= rFD.Type;
                                                             break;
-        default:                                            DBG_ERROR( "FontProperty?!" );
+        default:                                            OSL_FAIL( "FontProperty?!" );
     }
 }
 
@@ -195,7 +195,7 @@ UnoControlModel::~UnoControlModel()
 
 UnoControlModel* UnoControlModel::Clone() const
 {
-    DBG_ERROR( "UnoControlModel::Clone() ?!" );
+    OSL_FAIL( "UnoControlModel::Clone() ?!" );
     return NULL;
 }
 
@@ -249,7 +249,7 @@ sal_Bool UnoControlModel::ImplHasProperty( sal_uInt16 nPropId ) const
             case BASEPROPERTY_FONTDESCRIPTORPART_KERNING:       aDefault <<= aFD.Kerning;           break;
             case BASEPROPERTY_FONTDESCRIPTORPART_WORDLINEMODE:  aDefault <<= aFD.WordLineMode;      break;
             case BASEPROPERTY_FONTDESCRIPTORPART_TYPE:          aDefault <<= aFD.Type;              break;
-            default: DBG_ERROR( "FontProperty?!" );
+            default: OSL_FAIL( "FontProperty?!" );
         }
     }
     else
@@ -445,7 +445,7 @@ sal_Bool UnoControlModel::ImplHasProperty( sal_uInt16 nPropId ) const
             }
             break;
 
-            default:    DBG_ERROR( "ImplGetDefaultValue - unknown Property" );
+            default:    OSL_FAIL( "ImplGetDefaultValue - unknown Property" );
         }
     }
 
@@ -607,7 +607,7 @@ void UnoControlModel::setPropertyToDefault( const ::rtl::OUString& PropertyName 
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    DBG_ERROR( "ServiceName von UnoControlModel ?!" );
+    OSL_FAIL( "ServiceName von UnoControlModel ?!" );
     return ::rtl::OUString();
 }
 
@@ -819,7 +819,7 @@ void UnoControlModel::write( const ::com::sun::star::uno::Reference< ::com::sun:
             }
             else
             {
-                DBG_ERROR( "Property?!" );
+                OSL_FAIL( "Property?!" );
             }
 
             sal_Int32 nPropDataLen = xMark->offsetToMark( nPropDataBeginMark );
@@ -1027,7 +1027,7 @@ void UnoControlModel::read( const ::com::sun::star::uno::Reference< ::com::sun::
                 }
                 else
                 {
-                    DBG_ERROR( "read: unknown Property!" );
+                    OSL_FAIL( "read: unknown Property!" );
                 }
             }
         }
@@ -1090,7 +1090,7 @@ void UnoControlModel::read( const ::com::sun::star::uno::Reference< ::com::sun::
 // ::com::sun::star::lang::XServiceInfo
 ::rtl::OUString UnoControlModel::getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    DBG_ERROR( "This method should be overloaded!" );
+    OSL_FAIL( "This method should be overloaded!" );
     return ::rtl::OUString();
 
 }
@@ -1116,7 +1116,7 @@ sal_Bool UnoControlModel::supportsService( const ::rtl::OUString& rServiceName )
 // ::cppu::OPropertySetHelper
 ::cppu::IPropertyArrayHelper& UnoControlModel::getInfoHelper()
 {
-    DBG_ERROR( "UnoControlModel::getInfoHelper() not possible!" );
+    OSL_FAIL( "UnoControlModel::getInfoHelper() not possible!" );
     return *(::cppu::IPropertyArrayHelper*) NULL;
 }
 
@@ -1170,7 +1170,7 @@ sal_Bool UnoControlModel::convertFastPropertyValue( Any & rConvertedValue, Any &
                         if ( bConverted )
                             rConvertedValue <<= nAsDouble;
                         else
-                        {   // try as integer - 96136 - 2002-10-08 - fs@openoffice.org
+                        {   // try as integer
                             sal_Int32 nAsInteger = 0;
                             bConverted = ( rValue >>= nAsInteger );
                             if ( bConverted )
@@ -1317,12 +1317,12 @@ void UnoControlModel::getFastPropertyValue( ::com::sun::star::uno::Any& rValue, 
                                                                 break;
             case BASEPROPERTY_FONTDESCRIPTORPART_TYPE:          rValue <<= aFD.Type;
                                                                 break;
-            default: DBG_ERROR( "FontProperty?!" );
+            default: OSL_FAIL( "FontProperty?!" );
         }
     }
     else
     {
-        DBG_ERROR( "getFastPropertyValue - invalid Property!" );
+        OSL_FAIL( "getFastPropertyValue - invalid Property!" );
     }
 }
 
@@ -1379,7 +1379,7 @@ void UnoControlModel::setFastPropertyValue( sal_Int32 nPropId, const ::com::sun:
 // ::com::sun::star::beans::XMultiPropertySet
 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > UnoControlModel::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    DBG_ERROR( "UnoControlModel::getPropertySetInfo() not possible!" );
+    OSL_FAIL( "UnoControlModel::getPropertySetInfo() not possible!" );
     return ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >();
 }
 
@@ -1395,7 +1395,6 @@ void UnoControlModel::setPropertyValues( const ::com::sun::star::uno::Sequence< 
     sal_Int32* pHandles = aHandles.getArray();
 
     // may need to change the order in the sequence, for this we need a non-const value sequence
-    // 15.05.2002 - 99314 - fs@openoffice.org
     uno::Sequence< uno::Any > aValues( Values );
     uno::Any* pValues = aValues.getArray();
 
@@ -1429,7 +1428,7 @@ void UnoControlModel::setPropertyValues( const ::com::sun::star::uno::Sequence< 
                 // clear our guard before calling into setFastPropertyValues - this method
                 // will implicitly call property listeners, and this should not happen with
                 // our mutex locked
-                // #i23451# - 2004-03-18 - fs@openoffice.org
+                // #i23451#
              setFastPropertyValues( nProps, pHandles, pValues, nValidHandles );
         }
         else

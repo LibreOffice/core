@@ -50,9 +50,6 @@
 #include <math.h>
 #include <float.h>
 
-// define this to draw rectangles for debugging
-//#define SM_RECT_DEBUG
-
 #define APPEND(str,ascii) str.AppendAscii(RTL_CONSTASCII_STRINGPARAM(ascii))
 
 ////////////////////////////////////////
@@ -96,7 +93,7 @@ SmTmpDevice::SmTmpDevice(OutputDevice &rTheDev, bool bUseMap100th_mm) :
                   PUSH_LINECOLOR | PUSH_FILLCOLOR | PUSH_TEXTCOLOR );
     if (bUseMap100th_mm  &&  MAP_100TH_MM != rOutDev.GetMapMode().GetMapUnit())
     {
-        DBG_ERROR( "incorrect MapMode?" );
+        OSL_FAIL( "incorrect MapMode?" );
         rOutDev.SetMapMode( MAP_100TH_MM );     //Immer fuer 100% fomatieren
     }
 }
@@ -515,7 +512,7 @@ const SmNode * SmNode::FindRectClosestTo(const Point &rPoint) const
 
 void SmNode::GetAccessibleText( String &/*rText*/ ) const
 {
-    DBG_ERROR( "SmNode: GetAccessibleText not overloaded" );
+    OSL_FAIL( "SmNode: GetAccessibleText not overloaded" );
 }
 
 const SmNode * SmNode::FindNodeWithAccessibleIndex(xub_StrLen nAccIdx) const

@@ -101,7 +101,7 @@ handleNoSuchFilterRequest_(
     uno::Reference< document::XInteractionFilterSelect > xFilterTransport;
     getContinuations(rContinuations, &xAbort, &xFilterTransport);
 
-    // check neccessary ressources - if they don't exist - abort or
+    // check neccessary resources - if they don't exist - abort or
     // break this operation
     if (!xAbort.is())
         return;
@@ -135,14 +135,14 @@ handleNoSuchFilterRequest_(
     // Note: We look for all filters here which match the following criteria:
     //          - they are import filters as minimum (of course they can
     //            support export too)
-    //          - we don't show any filter which are flaged as "don't show it
+    //          - we don't show any filter which are flagged as "don't show it
     //            at the UI" or "they are not installed"
     //          - we ignore filters, which have not set any valid
     //            DocumentService (e.g. our pure graphic filters)
     //          - we show it sorted by her UIName's
     //          - We don't use the order flag or prefer default filters.
     //            (Because this list shows all filters and the user should
-    //            find his filter vry easy by his UIName ...)
+    //            find his filter very easy by his UIName ...)
     //          - We use "_query_all" here ... but we filter graphic filters
     //            out by using DocumentService property later!
     uno::Reference< container::XEnumeration > xFilters
@@ -199,7 +199,7 @@ handleNoSuchFilterRequest_(
         return;
     }
 
-    // otherwhise set it for return
+    // otherwise set it for return
     xFilterTransport->setFilter( sSelectedFilter );
     xFilterTransport->select();
 }

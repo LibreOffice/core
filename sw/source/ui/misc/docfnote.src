@@ -499,7 +499,6 @@ TabPage TP_ENDNOTEOPTION
     {
         Pos = MAP_APPFONT ( 80 , 91 ) ;
         Size = MAP_APPFONT ( 174 , 8 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Hinweistext mehrseitige Fuﬂnoten : Hinweistext mehrseitige Fuònoten */
         Text [ en-US ] = "Continuation notice" ;
     };
     FixedText FT_CONT

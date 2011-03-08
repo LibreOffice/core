@@ -34,7 +34,7 @@
 
 #undef WB_LEFT
 #undef WB_RIGHT
-#include <tools/prewin.h>
+#include <prewin.h>
 }   // close extern "C" {
 
 #ifndef __MINGW32__
@@ -43,7 +43,7 @@
 #include <oleauto.h>
 
 extern "C" {    // reopen extern "C" {
-#include <tools/postwin.h>
+#include <postwin.h>
 
 #endif
 #endif

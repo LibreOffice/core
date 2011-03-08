@@ -186,7 +186,7 @@ BOOL ScGridWindow::DrawKeyInput(const KeyEvent& rKEvt)
                         bUsed = FALSE;                  // nichts geloescht
                 }
             if (!bLeaveDraw)
-                UpdateStatusPosSize();      // #108137# for moving/resizing etc. by keyboard
+                UpdateStatusPosSize();      // for moving/resizing etc. by keyboard
             return bUsed;
         }
     }
@@ -342,7 +342,7 @@ void ScGridWindow::UpdateStatusPosSize()
     SfxItemSet aSet(pViewData->GetViewShell()->GetPool(), SID_ATTR_POSITION, SID_ATTR_SIZE);
 
     //  Fill items for position and size:
-    //  #108137# show action rectangle during action,
+    //  show action rectangle during action,
     //  position and size of selected object(s) if something is selected,
     //  mouse position otherwise
 

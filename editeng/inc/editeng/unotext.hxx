@@ -56,6 +56,7 @@
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakagg.hxx>
+#include <osl/diagnose.hxx>
 #include <osl/mutex.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <tools/link.hxx>
@@ -173,8 +174,8 @@ EDITENG_DLLPUBLIC void GetSelection( struct ESelection& rSel, SvxTextForwarder* 
 EDITENG_DLLPUBLIC void CheckSelection( struct ESelection& rSel, SvxTextForwarder* pForwarder ) throw();
 
 // ====================================================================
-// Diese Klasse implementiert eine SvxEditSource und einen SvxTextForwarder
-// und macht ansonsten rein garnichts
+// This class implements a SvxEditSource and SvxTextForwarder and does
+// nothing otherwise
 // ====================================================================
 
 class SvxDummyTextSource : public SvxEditSource, public SvxTextForwarder
@@ -256,7 +257,8 @@ class EDITENG_DLLPUBLIC SvxUnoTextRangeBase : public ::com::sun::star::text::XTe
                             public ::com::sun::star::beans::XPropertyState,
                             public ::com::sun::star::lang::XServiceInfo,
                             public ::com::sun::star::text::XTextRangeCompare,
-                            public ::com::sun::star::lang::XUnoTunnel
+                            public ::com::sun::star::lang::XUnoTunnel,
+                            private osl::DebugBase<SvxUnoTextRangeBase>
 
 {
     friend class SvxUnoTextRangeEnumeration;

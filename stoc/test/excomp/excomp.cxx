@@ -51,7 +51,9 @@ using namespace com::sun::star::registry;
 using namespace com::sun::star::lang;
 using namespace example;
 using namespace cppu;
-using namespace rtl;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
 
 #if OSL_DEBUG_LEVEL > 0
 #define TEST_ENSHURE(c, m)   OSL_ENSURE(c, m)

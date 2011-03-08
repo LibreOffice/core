@@ -51,13 +51,17 @@
 #include <rtl/ustring.hxx>
 #include <rtl/strbuf.hxx>
 
-using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 using namespace com::sun::star::script;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::reflection;
+
+using ::rtl::OUString;
+using ::rtl::OStringBuffer;
+using ::rtl::OUStringToOString;
+using ::rtl::OStringToOUString;
 
 //------------------------------------------------------------------------
 //------------------------------------------------------------------------

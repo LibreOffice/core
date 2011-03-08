@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 #include <hintids.hxx>
-#include <tools/list.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/cmdevt.hxx>
 #include <unotools/charclass.hxx>
@@ -262,16 +261,14 @@ SwGrfNode * SwEditShell::_GetGrfNode() const
  *                   oder auf die gleiche Graphic zeigt)
  ******************************************************************************/
 
-// --> OD 2005-02-09 #119353# - robust
 const Graphic* SwEditShell::GetGraphic( BOOL bWait ) const
 {
     SwGrfNode* pGrfNode = _GetGrfNode();
-    // --> OD 2005-02-09 #119353# - robust
     const Graphic* pGrf( 0L );
     if ( pGrfNode )
     {
         pGrf = &(pGrfNode->GetGrf());
-        // --> OD 2007-03-01 #i73788#
+        // --> #i73788#
         // no load of linked graphic, if its not needed now (bWait = FALSE).
         if ( bWait )
         {
@@ -312,13 +309,10 @@ BOOL SwEditShell::IsGrfSwapOut( BOOL bOnlyLinked ) const
                      : pGrfNode->GetGrfObj().IsSwappedOut());
 }
 
-// --> OD 2005-02-09 #119353# - robust
 const GraphicObject* SwEditShell::GetGraphicObj() const
 {
     SwGrfNode* pGrfNode = _GetGrfNode();
-    // --> OD 2005-02-09 #119353# - robust
     return pGrfNode ? &(pGrfNode->GetGrfObj()) : 0L;
-    // <--
 }
 
 USHORT SwEditShell::GetGraphicType() const

@@ -885,7 +885,6 @@ void OSQLParseTreeIterator::traverseCreateColumns(const OSQLParseNode* pSelectNo
             ::rtl::OUString aTypeName;
             ::rtl::OUString aTableRange;
             sal_Int32 nType = DataType::VARCHAR;
-            sal_Int32 nLen  = 0;
             aColumnName = pColumnRef->getChild(0)->getTokenValue();
 
             OSQLParseNode *pDatatype = pColumnRef->getChild(1);
@@ -899,7 +898,8 @@ void OSQLParseTreeIterator::traverseCreateColumns(const OSQLParseNode* pSelectNo
                 const OSQLParseNode *pParams = pDatatype->getChild(pDatatype->count()-1);
                 if ( pParams->count() )
                 {
-                    nLen = pParams->getChild(1)->getTokenValue().toInt32();
+                    sal_Int32 nLen = pParams->getChild(1)->getTokenValue().toInt32();
+                    (void)nLen;
                 }
             }
             else if(pDatatype && pDatatype->getNodeType() == SQL_NODE_KEYWORD)
@@ -1245,7 +1245,7 @@ bool OSQLParseTreeIterator::traverseSelectionCriteria(const OSQLParseNode* pSele
         pWhereClause = pSelectNode->getChild(3);
     } else if (SQL_ISRULE(pSelectNode,delete_statement_positioned)) {
         // nyi
-        OSL_ASSERT("OSQLParseTreeIterator::getSelectionCriteria: positioned nyi");
+        OSL_FAIL("OSQLParseTreeIterator::getSelectionCriteria: positioned nyi");
     } else {
         // Anderes Statement. Keine Selektionskriterien.
         return false;
@@ -1487,7 +1487,7 @@ void OSQLParseTreeIterator::traverseParameter(const OSQLParseNode* _pParseNode
     }
     else
     {
-        OSL_ASSERT("OSQLParseTreeIterator: error in parse tree!");
+        OSL_FAIL("OSQLParseTreeIterator: error in parse tree!");
     }
 
     // found a parameter

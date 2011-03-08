@@ -25,7 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #include <rtl/alloc.h>
 
@@ -84,7 +84,7 @@ namespace remotebridges_factory
             }
     };
 
-    typedef ::std::hash_map
+    typedef ::boost::unordered_map
     <
     OUString,
     WeakReference< XBridge >,
@@ -93,7 +93,7 @@ namespace remotebridges_factory
     > BridgeHashMap;
 
 
-    typedef ::std::hash_map
+    typedef ::boost::unordered_map
     <
     OUString,
     OUString,

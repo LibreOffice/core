@@ -190,10 +190,10 @@ void ScUndoWidthOrHeight::Redo()
         SCTAB nTab = pViewShell->GetViewData()->GetTabNo();
         if ( nTab < nStartTab || nTab > nEndTab )
             pViewShell->SetTabNo( nStartTab );
-    }
 
-    // SetWidthOrHeight aendert aktuelle Tabelle !
-    pViewShell->SetWidthOrHeight( bWidth, nRangeCnt, pRanges, eMode, nNewSize, FALSE, TRUE, &aMarkData );
+        // SetWidthOrHeight aendert aktuelle Tabelle !
+        pViewShell->SetWidthOrHeight( bWidth, nRangeCnt, pRanges, eMode, nNewSize, FALSE, TRUE, &aMarkData );
+    }
 
     // paint grid if selection was changed directly at the MarkData
     if (bPaintAll)

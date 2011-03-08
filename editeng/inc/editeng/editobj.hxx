@@ -64,7 +64,7 @@ public:
 
     USHORT              Which() const { return nWhich; }
 
-    virtual USHORT      GetUserType() const;    // Fuer OutlinerMode, der kann das aber nicht kompatibel speichern
+    virtual USHORT      GetUserType() const;  // For OutlinerMode, it can however not save in compatible format
     virtual void        SetUserType( USHORT n );
 
     virtual ULONG       GetObjectSettings() const;
@@ -75,7 +75,7 @@ public:
 
     virtual USHORT      GetScriptType() const;
 
-    virtual USHORT      GetVersion() const; // Solange der Outliner keine Recordlaenge speichert
+    virtual USHORT      GetVersion() const; // As long as the outliner does not store any record length.
 
     virtual EditTextObject* Clone() const = 0;
 

@@ -35,7 +35,7 @@
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/event.hxx>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 namespace {
 
@@ -65,7 +65,7 @@ namespace sd { namespace toolpanel {
 
 
 class FocusManager::LinkMap
-    : public ::std::hash_multimap< ::Window*, EventDescriptor, WindowHash>
+    : public ::boost::unordered_multimap< ::Window*, EventDescriptor, WindowHash>
 {
 };
 

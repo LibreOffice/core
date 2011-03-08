@@ -40,14 +40,11 @@ class StarBASIC;
 #define GLOBALOVERFLOW
 #endif
 
-// INCLUDE ---------------------------------------------------------------
-
 #include <stdio.h>
 #include <ctype.h>
 #include <stdlib.h>
 #include <osl/endian.h>
 #include <i18npool/mslangid.hxx>
-#include <tools/list.hxx>
 #include <tools/string.hxx>
 #include <rtl/math.hxx>
 #include <svtools/htmlout.hxx>
@@ -178,10 +175,9 @@ ScImportExport::ScImportExport( ScDocument* p, const String& rPos )
     ScRangeName* pRange = pDoc->GetRangeName();
     if( pRange )
     {
-        USHORT nPos;
-        if( pRange->SearchName( aPos, nPos ) )
+        const ScRangeData* pData = pRange->findByName(aPos);
+        if (pData)
         {
-            ScRangeData* pData = (*pRange)[ nPos ];
             if( pData->HasType( RT_REFAREA )
                 || pData->HasType( RT_ABSAREA )
                 || pData->HasType( RT_ABSPOS ) )
@@ -1001,7 +997,7 @@ static bool lcl_PutString(
                     else if ( i == 8 && rTransliteration.isEqual( aSeptCorrect,
                                 xMonths[i].AbbrevName ) &&
                             rTransliteration.isEqual( aMStr, aSepShortened ) )
-                    {   // #102136# correct English abbreviation is SEPT,
+                    {   // correct English abbreviation is SEPT,
                         // but data mostly contains SEP only
                         nMonth = sal::static_int_cast<sal_Int16>( i+1 );
                     }
@@ -1021,7 +1017,7 @@ static bool lcl_PutString(
                         }
                         else if ( i == 8 && pSecondTransliteration->isEqual(
                                     aMStr, aSepShortened ) )
-                        {   // #102136# correct English abbreviation is SEPT,
+                        {   // correct English abbreviation is SEPT,
                             // but data mostly contains SEP only
                             nMonth = sal::static_int_cast<sal_Int16>( i+1 );
                             bSecondCal = TRUE;
@@ -1970,7 +1966,7 @@ BOOL ScImportExport::Dif2Doc( SvStream& rStrm )
     SCCOL nEndCol;
     SCROW nEndRow;
     pImportDoc->GetCellArea( nTab, nEndCol, nEndRow );
-    // #131247# if there are no cells in the imported content, nEndCol/nEndRow may be before the start
+    // if there are no cells in the imported content, nEndCol/nEndRow may be before the start
     if ( nEndCol < aRange.aStart.Col() )
         nEndCol = aRange.aStart.Col();
     if ( nEndRow < aRange.aStart.Row() )
@@ -2055,7 +2051,7 @@ class ScFormatFilterMissing : public ScFormatFilterPlugin {
   public:
     ScFormatFilterMissing()
     {
-      OSL_ASSERT ("Missing file filters");
+      OSL_FAIL("Missing file filters");
     }
     virtual FltError ScImportLotus123( SfxMedium&, ScDocument*, CharSet ) RETURN_ERROR
     virtual FltError ScImportQuattroPro( SfxMedium &, ScDocument * ) RETURN_ERROR

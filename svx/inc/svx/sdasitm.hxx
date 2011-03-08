@@ -36,7 +36,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <rtl/ustring.hxx>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <map>
 #include "svx/svxdllapi.h"
 
@@ -60,20 +60,20 @@ public:
     typedef std::pair < const ::rtl::OUString, const ::rtl::OUString > PropertyPair;
 
 private:
-    struct SVX_DLLPRIVATE PropertyEq
+    struct SVX_DLLPUBLIC PropertyEq
     {
         bool operator()( const rtl::OUString&, const rtl::OUString& ) const;
     };
-    struct SVX_DLLPRIVATE PropertyPairEq
+    struct SVX_DLLPUBLIC PropertyPairEq
     {
         bool operator()( const SdrCustomShapeGeometryItem::PropertyPair&, const SdrCustomShapeGeometryItem::PropertyPair& ) const;
     };
-    struct SVX_DLLPRIVATE PropertyPairHash
+    struct SVX_DLLPUBLIC PropertyPairHash
     {
-        size_t operator()( const SdrCustomShapeGeometryItem::PropertyPair &r1 ) const;
+        size_t operator()( const SdrCustomShapeGeometryItem::PropertyPair& ) const;
     };
-    typedef std::hash_map < PropertyPair, sal_Int32, PropertyPairHash, PropertyPairEq > PropertyPairHashMap;
-    typedef std::hash_map< rtl::OUString, sal_Int32, rtl::OUStringHash, PropertyEq > PropertyHashMap;
+    typedef boost::unordered_map < PropertyPair, sal_Int32, PropertyPairHash, PropertyPairEq > PropertyPairHashMap;
+    typedef boost::unordered_map< rtl::OUString, sal_Int32, rtl::OUStringHash, PropertyEq > PropertyHashMap;
 
     PropertyHashMap     aPropHashMap;
     PropertyPairHashMap aPropPairHashMap;
@@ -105,9 +105,6 @@ private:
 
             const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& GetGeometry() const;
 
-#ifdef SDR_ISPOOLABLE
-            virtual int IsPoolable() const;
-#endif
             com::sun::star::uno::Any* GetPropertyValueByName( const rtl::OUString& rPropName );
             com::sun::star::uno::Any* GetPropertyValueByName( const rtl::OUString& rPropName, const rtl::OUString& rPropName2 );
 

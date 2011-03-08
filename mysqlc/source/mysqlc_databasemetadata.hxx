@@ -32,9 +32,7 @@
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <cppuhelper/implbase1.hxx>
 
-#include <preextstl.h>
 #include <cppconn/metadata.h>
-#include <postextstl.h>
 
 namespace connectivity
 {
@@ -62,8 +60,8 @@ namespace connectivity
             bool            identifier_quote_string_set;
 
         private:
-            OUString impl_getStringMetaData( const sal_Char* _methodName, const ext_std::string& (sql::DatabaseMetaData::*_Method)() );
-            OUString impl_getStringMetaData( const sal_Char* _methodName, ext_std::string (sql::DatabaseMetaData::*_Method)() );
+            OUString impl_getStringMetaData( const sal_Char* _methodName, const std::string& (sql::DatabaseMetaData::*_Method)() );
+            OUString impl_getStringMetaData( const sal_Char* _methodName, std::string (sql::DatabaseMetaData::*_Method)() );
             OUString impl_getStringMetaData( const sal_Char* _methodName, const sql::SQLString& (sql::DatabaseMetaData::*_Method)() );
             OUString impl_getStringMetaData( const sal_Char* _methodName, sql::SQLString (sql::DatabaseMetaData::*_Method)() );
             sal_Int32 impl_getInt32MetaData( const sal_Char* _methodName, unsigned int (sql::DatabaseMetaData::*_Method)() );

@@ -86,7 +86,7 @@ public:
     bool            MakePivotTable( const ScDPSaveData& rData, const ScRange& rDest, BOOL bNewTable,
                                     const ScDPObject& rSource, BOOL bApi = FALSE );
     void            DeletePivotTable();
-    ULONG   RecalcPivotTable();
+    void            RecalcPivotTable();
     BOOL            HasSelectionForDateGroup( ScDPNumGroupInfo& rOldInfo, sal_Int32& rParts );
     BOOL            HasSelectionForNumGroup( ScDPNumGroupInfo& rOldInfo );
     void            GroupDataPilot();

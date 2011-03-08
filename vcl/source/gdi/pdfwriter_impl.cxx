@@ -70,7 +70,14 @@
 #include <vcl/lineinfo.hxx>
 
 using namespace vcl;
-using namespace rtl;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
+using ::rtl::OString;
+using ::rtl::OStringHash;
+using ::rtl::OUStringHash;
+using ::rtl::OStringBuffer;
+using ::rtl::OUStringBuffer;
 
 #if (OSL_DEBUG_LEVEL < 2)
 #define COMPRESS_PAGES
@@ -696,7 +703,7 @@ void PDFWriterImpl::createWidgetFieldName( sal_Int32 i_nWidgetIndex, const PDFWr
             // find or create a hierarchical field
             // first find the fully qualified name up to this field
             aDomain = aFullName.copy( 0, nTokenIndex-1 );
-            std::hash_map< rtl::OString, sal_Int32, rtl::OStringHash >::const_iterator it = m_aFieldNameMap.find( aDomain );
+            boost::unordered_map< rtl::OString, sal_Int32, rtl::OStringHash >::const_iterator it = m_aFieldNameMap.find( aDomain );
             if( it == m_aFieldNameMap.end() )
             {
                  // create new hierarchy field
@@ -757,7 +764,7 @@ void PDFWriterImpl::createWidgetFieldName( sal_Int32 i_nWidgetIndex, const PDFWr
     // insert widget into its hierarchy field
     if( aDomain.getLength() )
     {
-        std::hash_map< rtl::OString, sal_Int32, rtl::OStringHash >::const_iterator it = m_aFieldNameMap.find( aDomain );
+        boost::unordered_map< rtl::OString, sal_Int32, rtl::OStringHash >::const_iterator it = m_aFieldNameMap.find( aDomain );
         if( it != m_aFieldNameMap.end() )
         {
             OSL_ENSURE( it->second >= 0 && it->second < sal_Int32( m_aWidgets.size() ), "invalid field index" );
@@ -784,11 +791,11 @@ void PDFWriterImpl::createWidgetFieldName( sal_Int32 i_nWidgetIndex, const PDFWr
 
     if( ! m_aContext.AllowDuplicateFieldNames )
     {
-        std::hash_map<OString, sal_Int32, OStringHash>::iterator it = m_aFieldNameMap.find( aFullName );
+        boost::unordered_map<OString, sal_Int32, OStringHash>::iterator it = m_aFieldNameMap.find( aFullName );
 
         if( it != m_aFieldNameMap.end() ) // not unique
         {
-            std::hash_map< OString, sal_Int32, OStringHash >::const_iterator check_it;
+            boost::unordered_map< OString, sal_Int32, OStringHash >::const_iterator check_it;
             OString aTry;
             sal_Int32 nTry = 2;
             do
@@ -2420,7 +2427,7 @@ void PDFWriterImpl::endPage()
         // sanity check
         if( m_aOutputStreams.begin() != m_aOutputStreams.end() )
         {
-            DBG_ERROR( "redirection across pages !!!" );
+            OSL_FAIL( "redirection across pages !!!" );
             m_aOutputStreams.clear(); // leak !
             m_aMapMode.SetOrigin( Point() );
         }
@@ -2671,7 +2678,7 @@ OString PDFWriterImpl::emitStructureAttributes( PDFStructureElement& i_rEle )
             }
             else
             {
-                DBG_ERROR( "unresolved link id for Link structure" );
+                OSL_FAIL( "unresolved link id for Link structure" );
 #if OSL_DEBUG_LEVEL > 1
                 fprintf( stderr, "unresolved link id %" SAL_PRIdINT32 " for Link structure\n", nLink );
                 {
@@ -2772,7 +2779,7 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
                     emitStructure( rChild );
                 else
                 {
-                    DBG_ERROR( "PDFWriterImpl::emitStructure: invalid child structure element" );
+                    OSL_FAIL( "PDFWriterImpl::emitStructure: invalid child structure element" );
 #if OSL_DEBUG_LEVEL > 1
                     fprintf( stderr, "PDFWriterImpl::emitStructure: invalid child structure elemnt with id %" SAL_PRIdINT32 "\n", *it );
 #endif
@@ -2781,7 +2788,7 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
         }
         else
         {
-            DBG_ERROR( "PDFWriterImpl::emitStructure: invalid child structure id" );
+            OSL_FAIL( "PDFWriterImpl::emitStructure: invalid child structure id" );
 #if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "PDFWriterImpl::emitStructure: invalid child structure id %" SAL_PRIdINT32 "\n", *it );
 #endif
@@ -2804,7 +2811,7 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
         if( ! m_aRoleMap.empty() )
         {
             aLine.append( "/RoleMap<<" );
-            for( std::hash_map<OString,OString,OStringHash>::const_iterator
+            for( boost::unordered_map<OString,OString,OStringHash>::const_iterator
                  it = m_aRoleMap.begin(); it != m_aRoleMap.end(); ++it )
             {
                 aLine.append( '/' );
@@ -3113,7 +3120,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const ImplFontDa
     }
     else
     {
-        DBG_ERROR( "system font neither embeddable nor subsettable" );
+        OSL_FAIL( "system font neither embeddable nor subsettable" );
     }
 
     // write font descriptor
@@ -3949,7 +3956,7 @@ sal_Int32 PDFWriterImpl::emitFontDescriptor( const ImplFontData* pFont, FontSubs
             case FontSubsetInfo::ANY_TYPE1:
                 break;
             default:
-                DBG_ERROR( "unknown fonttype in PDF font descriptor" );
+                OSL_FAIL( "unknown fonttype in PDF font descriptor" );
                 return 0;
         }
         aLine.append( ' ' );
@@ -4024,7 +4031,7 @@ bool PDFWriterImpl::emitFonts()
                     nGlyphs++;
                 else
                 {
-                    DBG_ERROR( "too many glyphs for subset" );
+                    OSL_FAIL( "too many glyphs for subset" );
                 }
             }
             FontSubsetInfo aSubsetInfo;
@@ -4085,7 +4092,7 @@ bool PDFWriterImpl::emitFonts()
                 else if( (aSubsetInfo.m_nFontType & FontSubsetInfo::CFF_FONT) != 0 )
                 {
                     // TODO: implement
-                    DBG_ERROR( "PDFWriterImpl does not support CFF-font subsets yet!" );
+                    OSL_FAIL( "PDFWriterImpl does not support CFF-font subsets yet!" );
                 }
                 else if( (aSubsetInfo.m_nFontType & FontSubsetInfo::TYPE1_PFB) != 0 ) // TODO: also support PFA?
                 {
@@ -6580,7 +6587,7 @@ void PDFWriterImpl::sortWidgets()
 {
     // sort widget annotations on each page as per their
     // TabOrder attribute
-    std::hash_map< sal_Int32, AnnotSortContainer > sorted;
+    boost::unordered_map< sal_Int32, AnnotSortContainer > sorted;
     int nWidgets = m_aWidgets.size();
     for( int nW = 0; nW < nWidgets; nW++ )
     {
@@ -6600,7 +6607,7 @@ void PDFWriterImpl::sortWidgets()
             }
         }
     }
-    for( std::hash_map< sal_Int32, AnnotSortContainer >::iterator it = sorted.begin(); it != sorted.end(); ++it )
+    for( boost::unordered_map< sal_Int32, AnnotSortContainer >::iterator it = sorted.begin(); it != sorted.end(); ++it )
     {
         // append entries for non widget annotations
         PDFPage& rPage = m_aPages[ it->first ];
@@ -11003,11 +11010,11 @@ sal_Int32 PDFWriterImpl::beginStructureElement( PDFWriter::StructElement eType, 
                 DBG_ASSERT( 0, "Structure element inserted to StructTreeRoot that is not a document" );
             }
             else {
-                DBG_ERROR( "document structure in disorder !" );
+                OSL_FAIL( "document structure in disorder !" );
             }
         }
         else {
-            DBG_ERROR( "PDF document structure MUST be contained in a Document element" );
+            OSL_FAIL( "PDF document structure MUST be contained in a Document element" );
         }
     }
 
@@ -11125,7 +11132,7 @@ void PDFWriterImpl::addInternalStructureContainer( PDFStructureElement& rEle )
                     addInternalStructureContainer( rChild );//examine the child
                 else
                 {
-                    DBG_ERROR( "PDFWriterImpl::addInternalStructureContainer: invalid child structure element" );
+                    OSL_FAIL( "PDFWriterImpl::addInternalStructureContainer: invalid child structure element" );
 #if OSL_DEBUG_LEVEL > 1
                     fprintf( stderr, "PDFWriterImpl::addInternalStructureContainer: invalid child structure elemnt with id %" SAL_PRIdINT32 "\n", *it );
 #endif
@@ -11134,7 +11141,7 @@ void PDFWriterImpl::addInternalStructureContainer( PDFStructureElement& rEle )
         }
         else
         {
-            DBG_ERROR( "PDFWriterImpl::emitStructure: invalid child structure id" );
+            OSL_FAIL( "PDFWriterImpl::emitStructure: invalid child structure id" );
 #if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "PDFWriterImpl::addInternalStructureContainer: invalid child structure id %" SAL_PRIdINT32 "\n", *it );
 #endif
@@ -11637,7 +11644,7 @@ void PDFWriterImpl::ensureUniqueRadioOnValues()
     {
         PDFWidget& rGroupWidget = m_aWidgets[ group->second ];
         // check whether all kids have a unique OnValue
-        std::hash_map< OUString, sal_Int32, OUStringHash > aOnValues;
+        boost::unordered_map< OUString, sal_Int32, OUStringHash > aOnValues;
         int nChildren = rGroupWidget.m_aKidsIndex.size();
         bool bIsUnique = true;
         for( int nKid = 0; nKid < nChildren && bIsUnique; nKid++ )

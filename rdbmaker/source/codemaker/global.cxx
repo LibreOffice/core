@@ -133,7 +133,7 @@ void FileStream::open(const OString& name, FileAccessMode mode)
     if ( name.getLength() > 0 )
     {
         m_name = name;
-        m_pFile = fopen(m_name, checkAccessMode(mode));
+        m_pFile = fopen(m_name.getStr(), checkAccessMode(mode));
     }
 }
 

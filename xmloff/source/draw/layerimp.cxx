@@ -153,7 +153,7 @@ void SdXMLLayerContext::EndElement()
     }
     catch( Exception& )
     {
-        DBG_ERROR("SdXMLLayerContext::EndElement(), exception caught!");
+        OSL_FAIL("SdXMLLayerContext::EndElement(), exception caught!");
     }
 }
 

@@ -29,13 +29,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include <string> // HACK: prevent conflict between STLPORT and Workshop headern
+#include <string>
 #include <svtools/stdmenu.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/dispatch.hxx>
 
-#include <svx/fntctl.hxx>       //
+#include <svx/fntctl.hxx>
 #include <svx/svxids.hrc>
 #include "editeng/flstitem.hxx"
 #include "editeng/fontitem.hxx"

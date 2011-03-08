@@ -43,6 +43,7 @@ dummy:
 
 INCPRE=$(INCCOM)$/$(TARGET)
 CDEFS+=-DVBA_OOBUILD_HACK
+
 # ------------------------------------------------------------------
 
 SLOFILES= \
@@ -63,7 +64,4 @@ APP1STDLIBS=\
         $(TOOLSLIB) \
         $(UNOTOOLSLIB) \
 
-#APP1OBJS= $(OBJ)$/testclient.obj
 .INCLUDE :	target.mk
-
-

@@ -97,13 +97,14 @@
 #include <set>
 #include <typeinfo>
 
-using namespace rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::datatransfer::clipboard;
 using namespace ::com::sun::star::datatransfer::dnd;
 using namespace ::com::sun::star;
 using namespace com::sun;
+
+using ::rtl::OUString;
 
 using ::com::sun::star::awt::XTopWindow;
 
@@ -1549,7 +1550,6 @@ void Window::ImplResetReallyVisible()
     // the SHOW/HIDE events serve as indicators to send child creation/destroy events to the access bridge.
     // For this, the data member of the event must not be NULL.
     // Previously, we did this in Window::Show, but there some events got lost in certain situations.
-    // #104887# - 2004-08-10 - fs@openoffice.org
     if( bBecameReallyInvisible && ImplIsAccessibleCandidate() )
         ImplCallEventListeners( VCLEVENT_WINDOW_HIDE, this );
         // TODO. It's kind of a hack that we're re-using the VCLEVENT_WINDOW_HIDE. Normally, we should
@@ -1592,7 +1592,6 @@ void Window::ImplSetReallyVisible()
     // For this, the data member of the event must not be NULL.
     // Previously, we did this in Window::Show, but there some events got lost in certain situations. Now
     // we're doing it when the visibility really changes
-    // #104887# - 2004-08-10 - fs@openoffice.org
     if( bBecameReallyVisible && ImplIsAccessibleCandidate() )
         ImplCallEventListeners( VCLEVENT_WINDOW_SHOW, this );
         // TODO. It's kind of a hack that we're re-using the VCLEVENT_WINDOW_SHOW. Normally, we should
@@ -5245,8 +5244,7 @@ void Window::CallEventListeners( ULONG nEvent, void* pData )
     if ( aDelData.IsDelete() )
         return;
 
-    if ( !mpWindowImpl->maEventListeners.empty() )
-        mpWindowImpl->maEventListeners.Call( &aEvent );
+    mpWindowImpl->maEventListeners.Call( &aEvent );
 
     if ( aDelData.IsDelete() )
         return;
@@ -5258,8 +5256,7 @@ void Window::CallEventListeners( ULONG nEvent, void* pData )
     {
         pWindow->ImplAddDel( &aDelData );
 
-        if ( !pWindow->mpWindowImpl->maChildEventListeners.empty() )
-            pWindow->mpWindowImpl->maChildEventListeners.Call( &aEvent );
+        pWindow->mpWindowImpl->maChildEventListeners.Call( &aEvent );
 
         if ( aDelData.IsDelete() )
             return;
@@ -5279,28 +5276,28 @@ void Window::FireVclEvent( VclSimpleEvent* pEvent )
 
 void Window::AddEventListener( const Link& rEventListener )
 {
-    mpWindowImpl->maEventListeners.push_back( rEventListener );
+    mpWindowImpl->maEventListeners.addListener( rEventListener );
 }
 
 // -----------------------------------------------------------------------
 
 void Window::RemoveEventListener( const Link& rEventListener )
 {
-    mpWindowImpl->maEventListeners.remove( rEventListener );
+    mpWindowImpl->maEventListeners.removeListener( rEventListener );
 }
 
 // -----------------------------------------------------------------------
 
 void Window::AddChildEventListener( const Link& rEventListener )
 {
-    mpWindowImpl->maChildEventListeners.push_back( rEventListener );
+    mpWindowImpl->maChildEventListeners.addListener( rEventListener );
 }
 
 // -----------------------------------------------------------------------
 
 void Window::RemoveChildEventListener( const Link& rEventListener )
 {
-    mpWindowImpl->maChildEventListeners.remove( rEventListener );
+    mpWindowImpl->maChildEventListeners.removeListener( rEventListener );
 }
 
 // -----------------------------------------------------------------------

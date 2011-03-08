@@ -36,7 +36,8 @@
 #include <rtfkeywd.hxx>
 #include <rtfout.hxx>
 
-using namespace rtl;
+using ::rtl::OUString;
+using ::rtl::OString;
 
 #if defined(UNX)
 const sal_Char RTFOutFuncs::sNewLine = '\012';

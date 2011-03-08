@@ -68,9 +68,6 @@ foreach my $infofilename ( @{$infofilelist} )
         installer::logger::print_message( "... WARNING: Signing only for Windows platforms active ...\n" );
     }
 
-    # installer::logger::include_header_into_logfile("Reading include pathes");
-    # installer::worker::collect_all_files_from_includepathes($followmeinfohash->{'includepatharray'});
-
     if (( $installer::globals::iswindowsbuild ) && ( $installer::globals::dosign ))
     {
         $followmeinfohash->{'finalinstalldir'} = installer::windows::sign::sign_install_set($followmeinfohash, $do_copy, $temppath);

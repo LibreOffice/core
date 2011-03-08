@@ -39,7 +39,6 @@ class SwErgoSumPortion;
 class SwExpandPortion;
 class SwMultiPortion;
 class SwFtnPortion;
-class SvLongs;
 
 /*************************************************************************
  *                      class SwTxtFormatter
@@ -100,9 +99,6 @@ class SwTxtFormatter : public SwTxtPainter
 
     // determines, if a optimized repaint rectange is allowed
     sal_Bool AllowRepaintOpt() const;
-
-    // calculates and sets the optimized repaint offset
-    long CalcOptRepaint( xub_StrLen nOldLineEnd, const SvLongs* pFlyStart );
 
     // wird von FormatLine gerufen.
     void FormatReset( SwTxtFormatInfo &rInf );

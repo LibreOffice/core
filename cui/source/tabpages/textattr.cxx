@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 // include ---------------------------------------------------------------
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
@@ -421,7 +418,7 @@ BOOL SvxTextAttrPage::FillItemSet( SfxItemSet& rAttrs)
         switch( eState )
         {
             default: ; //prevent warning
-                DBG_ERROR( "svx::SvxTextAttrPage::FillItemSet(), unhandled state!" );
+                OSL_FAIL( "svx::SvxTextAttrPage::FillItemSet(), unhandled state!" );
             case STATE_NOCHECK: eFTS = SDRTEXTFIT_NONE; break;
             case STATE_CHECK: eFTS = SDRTEXTFIT_AUTOFIT; break;
         }
@@ -755,7 +752,6 @@ bool SvxTextAttrPage::IsTextDirectionLeftToRight (void) const
     return bLeftToRightDirection;
 }
 
-//add CHINA001 begin
 void SvxTextAttrPage::PageCreated(SfxAllItemSet aSet)
 {
     SFX_ITEMSET_ARG (&aSet,pViewItem,OfaPtrItem,SID_SVXTEXTATTRPAGE_VIEW,sal_False);
@@ -765,7 +761,5 @@ void SvxTextAttrPage::PageCreated(SfxAllItemSet aSet)
 
     Construct();
 }
-
-//end of CHINA001
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -39,8 +39,7 @@
 
 #include <comphelper/uieventslogger.hxx>
 
-using namespace rtl;
-
+using ::rtl::OUString;
 namespace tools
 {
     typedef void ( *pfunc_CreateRemoteControl)();
@@ -68,7 +67,7 @@ String GetCommandLineParam( sal_uInt32 nParam )
         return String( aParam );
     else
     {
-        DBG_ERROR( "Unable to get CommandLineParam" );
+        OSL_FAIL( "Unable to get CommandLineParam" );
         return String();
     }
 }

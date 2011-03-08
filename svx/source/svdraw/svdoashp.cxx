@@ -3292,7 +3292,7 @@ void SdrObjCustomShape::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, 
             }
             default:
             {
-                DBG_ERROR("TRSetBaseGeometry: Missing unit translation to PoolMetric!");
+                OSL_FAIL("TRSetBaseGeometry: Missing unit translation to PoolMetric!");
             }
         }
     }
@@ -3438,7 +3438,7 @@ sal_Bool SdrObjCustomShape::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, ba
             }
             default:
             {
-                DBG_ERROR("TRGetBaseGeometry: Missing unit translation to 100th mm!");
+                OSL_FAIL("TRGetBaseGeometry: Missing unit translation to 100th mm!");
             }
         }
     }

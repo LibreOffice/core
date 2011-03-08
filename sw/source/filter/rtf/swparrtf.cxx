@@ -140,7 +140,7 @@ ULONG RtfReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPam, const S
         return ERR_SWG_READ_ERROR;
     }
 
-    //JP 18.01.96: Alle Ueberschriften sind normalerweise ohne
+    // Alle Ueberschriften sind normalerweise ohne
     //              Kapitelnummer. Darum hier explizit abschalten
     //              weil das Default jetzt wieder auf AN ist.
     if( !bInsertMode )
@@ -193,7 +193,6 @@ SwRTFParser::SwRTFParser(SwDoc* pD,
     maCharStyleMapper(*pD),
     maSegments(*this),
     maInsertedTables(*pD),
-    aMergeBoxes(0, 5),
     aTblFmts(0, 10),
     mpBookmarkStart(0),
     mpRedlineStack(0),
@@ -214,9 +213,8 @@ SwRTFParser::SwRTFParser(SwDoc* pD,
     nInsTblRow(USHRT_MAX),
     nNewNumSectDef(USHRT_MAX),
     nRowsToRepeat(0),
-    // --> OD 2008-12-22 #i83368#
-    mbReadCellWhileReadSwFly( false ),
-    // <--
+    mbReadCellWhileReadSwFly( false ), // #i83368#
+
     bTrowdRead(0),
     nReadFlyDepth(0),
     nZOrder(0)
@@ -297,8 +295,8 @@ void SwRTFParser::Continue( int nToken )
             pDoc->set(IDocumentSettingAccess::USE_FORMER_OBJECT_POS, false);
             pDoc->set(IDocumentSettingAccess::USE_FORMER_TEXT_WRAPPING, false);
             pDoc->set(IDocumentSettingAccess::CONSIDER_WRAP_ON_OBJECT_POSITION, true);
-            pDoc->set(IDocumentSettingAccess::DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT, false); // --> FME 2005-08-11 #i53199#
-            // --> FME 2006-02-10 #131283#
+            pDoc->set(IDocumentSettingAccess::DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT, false); // #i53199#
+
             pDoc->set(IDocumentSettingAccess::TABLE_ROW_KEEP, true);
             pDoc->set(IDocumentSettingAccess::IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION, true);
         pDoc->set(IDocumentSettingAccess::INVERT_BORDER_SPACING, true);
@@ -323,7 +321,7 @@ void SwRTFParser::Continue( int nToken )
 
             pPam->Move( fnMoveBackward );
 
-            // #106634# split any redline over the insertion point
+            // split any redline over the insertion point
             aInsertionRangePam.SetMark();
             *aInsertionRangePam.GetPoint() = *pPam->GetPoint();
             aInsertionRangePam.Move( fnMoveBackward );
@@ -414,8 +412,7 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( FALSE ).nNode.GetIndex() )
         // den letzen Bereich wieder zumachen
         if( pRegionEndIdx )
         {
-            // JP 06.01.00: Task 71411 - the last section in WW are not a
-            //              balanced Section.
+            // the last section in WW are not a balanced Section.
             if( !GetVersionNo() )
             {
                 SwSectionNode* pSectNd = pRegionEndIdx->GetNode().
@@ -435,7 +432,7 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( FALSE ).nNode.GetIndex() )
         maSegments.InsertSegments(IsNewDoc());
         UpdatePageDescs(*pDoc, nPageDescOffset);
         //$flr folloing garbe collecting code has been moved from the previous procedure
-        //     UpdatePageDescs to here in order to fix bug #117882#
+        //     UpdatePageDescs to here in order to fix a bug
         rtfSections::myrDummyIter aDEnd = maSegments.maDummyPageNos.rend();
         for (rtfSections::myrDummyIter aI = maSegments.maDummyPageNos.rbegin(); aI != aDEnd; ++aI)
             pDoc->DelPageDesc(*aI);
@@ -454,8 +451,7 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( FALSE ).nNode.GetIndex() )
                 SwNode* pTmp = pDoc->GetNodes()[ nNodeIdx -1 ];
                 if( pTmp->IsCntntNode() && !pTmp->FindTableNode() )
                 {
-                    // --> FME 2006-02-15 #131200# Do not delete the paragraph
-                    // if it has anchored objects:
+                    // Do not delete the paragraph if it has anchored objects:
                     bool bAnchoredObjs = false;
                     const SwSpzFrmFmts* pFrmFmts = pDoc->GetSpzFrmFmts();
                     if ( pFrmFmts && pFrmFmts->Count() )
@@ -1178,7 +1174,7 @@ void SwRTFParser::ReadShpTxt(String& s)
 }
 
 /*
- * #127429#. Very basic support for the "Buchhalternase".
+ * Very basic support for the "Buchhalternase".
  */
 void SwRTFParser::ReadDrawingObject()
 {
@@ -1249,44 +1245,8 @@ void SwRTFParser::ReadDrawingObject()
         aAnchor.SetAnchor( pPam->GetPoint() );
         aFlySet.Put( aAnchor );
 
-        /*
-        text::RelOrientation::FRAME,          // Absatz inkl. Raender
-        text::RelOrientation::PRINT_AREA,     // Absatz ohne Raender
-        text::RelOrientation::CHAR,       // an einem Zeichen
-        text::RelOrientation::PAGE_LEFT,  // im linken Seitenrand
-        text::RelOrientation::PAGE_RIGHT,   // im rechten Seitenrand
-        text::RelOrientation::FRAME_LEFT,   // im linken Absatzrand
-        text::RelOrientation::FRAME_RIGHT,  // im rechten Absatzrand
-        text::RelOrientation::PAGE_FRAME, // Seite inkl. Raender, bei seitengeb. identisch mit text::RelOrientation::FRAME
-        text::RelOrientation::PAGE_PRINT_AREA,    // Seite ohne Raender, bei seitengeb. identisch mit text::RelOrientation::PRTAREA
-        // OD 11.11.2003 #i22341#
-        text::RelOrientation::TEXT_LINE,  // vertical relative to top of text line, only for to-character
-                        // anchored objects.
-
-
-            text::HoriOrientation::NONE,      //Der Wert in nYPos gibt die RelPos direkt an.
-        text::HoriOrientation::RIGHT,     //Der Rest ist fuer automatische Ausrichtung.
-        text::HoriOrientation::CENTER,
-        text::HoriOrientation::LEFT,
-        text::HoriOrientation::INSIDE,
-        text::HoriOrientation::OUTSIDE,
-        text::HoriOrientation::FULL,          //Spezialwert fuer Tabellen
-        text::HoriOrientation::LEFT_AND_WIDTH  //Auch fuer Tabellen
-        */
         SwFmtHoriOrient aHori( 0, text::HoriOrientation::NONE, text::RelOrientation::PAGE_FRAME );
         aFlySet.Put( aHori );
-        /*
-        text::VertOrientation::NONE,  //Der Wert in nYPos gibt die RelPos direkt an.
-        text::VertOrientation::TOP,   //Der Rest ist fuer automatische Ausrichtung.
-        text::VertOrientation::CENTER,
-        text::VertOrientation::BOTTOM,
-        text::VertOrientation::CHAR_TOP,      //Ausrichtung _nur_ fuer Zeichengebundene Rahmen
-        text::VertOrientation::CHAR_CENTER,   //wie der Name jew. sagt wird der RefPoint des Rahmens
-        text::VertOrientation::CHAR_BOTTOM,   //entsprechend auf die Oberkante, Mitte oder Unterkante
-        text::VertOrientation::LINE_TOP,      //der Zeile gesetzt. Der Rahmen richtet sich  dann
-        text::VertOrientation::LINE_CENTER,   //entsprechend aus.
-        text::VertOrientation::LINE_BOTTOM
-        */
         SwFmtVertOrient aVert( 0, text::VertOrientation::NONE, text::RelOrientation::PAGE_FRAME );
         aFlySet.Put( aVert );
 
@@ -1497,7 +1457,6 @@ void SwRTFParser::ReadShapeObject()
               rOutliner.Read(aStream, String::CreateFromAscii(""), EE_FORMAT_RTF);
               OutlinerParaObject* pParaObject=rOutliner.CreateParaObject();
               pStroke->NbcSetOutlinerParaObject(pParaObject);
-              //delete pParaObject;
               rOutliner.Clear();
             }
             if (txflTextFlow==2) {
@@ -1729,7 +1688,7 @@ void SwRTFParser::NextToken( int nToken )
         break;
 
     case RTF_PAGE:
-        if (pTableNode==NULL) { //#117410#: A \page command within a table is ignored by Word.
+        if (pTableNode==NULL) { //A \page command within a table is ignored by Word.
             if (lcl_UsedPara(*pPam))
                 InsertPara();
             CheckInsNewTblLine();
@@ -1742,9 +1701,7 @@ void SwRTFParser::NextToken( int nToken )
         ReadSectControls( nToken );
         break;
     case RTF_CELL:
-        // --> OD 2008-12-22 #i83368#
-        mbReadCellWhileReadSwFly = bReadSwFly;
-        // <--
+        mbReadCellWhileReadSwFly = bReadSwFly; // #i83368#
         if (CantUseTables())
             InsertPara();
         else
@@ -2854,7 +2811,7 @@ void SwRTFParser::ReadSectControls( int nToken )
         {
             case RTF_SECT:
                 bNewSection = true;
-                bForceNewTable = true; // #117882#
+                bForceNewTable = true;
                 break;
             case RTF_SECTD: {
                 //Reset to page defaults
@@ -2987,8 +2944,8 @@ void SwRTFParser::ReadSectControls( int nToken )
                     _pKeepHeader = &aNewSection.mpPageHdFt->GetMaster().GetHeader();
                 }
                 bKeepFooter = false;
-                if (!bNewSectionHeader) { //see #117914# topic 2). If a header is redefined in a section
-                    bNewSectionHeader=true;                    //  a new header must be created.
+                if (!bNewSectionHeader) { // If a header is redefined in a section
+                    bNewSectionHeader=true;           //  a new header must be created.
                     aNewSection.mpPageHdFt=NULL;
                 }
                 if (!aNewSection.mpPageHdFt)
@@ -3125,8 +3082,8 @@ void SwRTFParser::ReadSectControls( int nToken )
 
     if (bNewSection || maSegments.empty())
     {
-        AttrGroupEnd(); //#106493#
-        if(!bContainsPara && !bContainsTablePara) //#117881#: bContainsTablePara is set in rtftbl.cxx
+        AttrGroupEnd();
+        if(!bContainsPara && !bContainsTablePara) // bContainsTablePara is set in rtftbl.cxx
             pDoc->AppendTxtNode(*pPam->GetPoint());
         bContainsPara = false;
         bContainsTablePara = false;
@@ -3164,7 +3121,7 @@ void SwRTFParser::LeaveEnvironment()
 
 void SwRTFParser::SkipPageDescTbl()
 {
-    // M.M. #117907# I have to use this glorified SkipGroup because the
+    // I have to use this glorified SkipGroup because the
     // SvParser SkipGroup uses nNextCh which is not set correctly <groan>
     int nNumOpenBrakets = 1;
 
@@ -3837,7 +3794,7 @@ SwTxtFmtColl* SwRTFParser::MakeColl(const String& rName, USHORT nPos,
     BYTE nOutlineLevel, bool& rbCollExist)
 {
     if( BYTE(-1) == nOutlineLevel )
-        nOutlineLevel = MAXLEVEL;//#outline level,zhaojianwei
+        nOutlineLevel = MAXLEVEL;
 
     rbCollExist = false;
     SwTxtFmtColl* pColl;
@@ -3848,10 +3805,10 @@ SwTxtFmtColl* SwRTFParser::MakeColl(const String& rName, USHORT nPos,
         if( !nPos )
         {
             pColl = pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD, false );
-            if(nOutlineLevel < MAXLEVEL )                           //->add by zhaojianwei
+            if(nOutlineLevel < MAXLEVEL )
                 pColl->AssignToListLevelOfOutlineStyle( nOutlineLevel );
             else
-                pColl->DeleteAssignmentToListLevelOfOutlineStyle(); //<-end,zhaojianwei
+                pColl->DeleteAssignmentToListLevelOfOutlineStyle();
             return pColl;
         }
 
@@ -3867,18 +3824,16 @@ SwTxtFmtColl* SwRTFParser::MakeColl(const String& rName, USHORT nPos,
     rbCollExist = aResult.second;
     if (IsNewDoc() && rbCollExist)
     {
-        // --> OD 2007-01-25 #i73790# - method renamed
-        pColl->ResetAllFmtAttr();
-        // <--
+        pColl->ResetAllFmtAttr(); // #i73790# - method renamed
         rbCollExist = false;
     }
 
     if (!rbCollExist)
     {
-        if(nOutlineLevel < MAXLEVEL)                        //->add by zhaojianwei
+        if(nOutlineLevel < MAXLEVEL)
             pColl->AssignToListLevelOfOutlineStyle( nOutlineLevel );
         else
-            pColl->DeleteAssignmentToListLevelOfOutlineStyle(); //<-end,zhaojianwei
+            pColl->DeleteAssignmentToListLevelOfOutlineStyle();
     }
 
     return pColl;
@@ -3905,9 +3860,7 @@ SwCharFmt* SwRTFParser::MakeCharFmt(const String& rName, USHORT nPos,
     rbCollExist = aResult.second;
     if (IsNewDoc() && rbCollExist)
     {
-        // --> OD 2007-01-25 #i73790# - method renamed
-        pFmt->ResetAllFmtAttr();
-        // <--
+        pFmt->ResetAllFmtAttr(); // #i73790# - method renamed
         rbCollExist = false;
     }
     return pFmt;
@@ -4067,7 +4020,7 @@ void SwRTFParser::DelLastNode()
     {
         ULONG nNodeIdx = pPam->GetPoint()->nNode.GetIndex();
         SwCntntNode* pCNd = pDoc->GetNodes()[ nNodeIdx ]->GetCntntNode();
-        // paragraphs with page break information are not empty! see #117914# topic 1)
+        // paragraphs with page break information are not empty!)
         if(const SfxPoolItem* pItem=&(pCNd->GetAttr( RES_PAGEDESC, FALSE)))
         {
             SwFmtPageDesc* pPageDescItem = ((SwFmtPageDesc*)pItem);
@@ -4120,7 +4073,7 @@ void SwRTFParser::UnknownAttrToken( int nToken, SfxItemSet* pSet )
                 NewTblLine();           // evt. Line copieren
             else
             {
-                static int _do=0; //$flr See #117881# for explanation.
+                static int _do=0; //$flr
                 // Crsr nicht mehr in der Tabelle ?
                 if( !pPam->GetNode()->FindTableNode() && _do )
                 {
@@ -4192,7 +4145,7 @@ void SwRTFParser::UnknownAttrToken( int nToken, SfxItemSet* pSet )
             {
                 // wir sind in der Style-Definitions - Phase. Der Name
                 // wird dann spaeter umgesetzt
-                                //#117891# pSet->Put( SwNumRuleItem( String::CreateFromInt32( nTokenValue )));
+                                // pSet->Put( SwNumRuleItem( String::CreateFromInt32( nTokenValue )));
             }
 
         }

@@ -30,7 +30,6 @@
 #include "precompiled_editeng.hxx"
 
 // include ---------------------------------------------------------------
-#include <tools/list.hxx>
 #include <vcl/outdev.hxx>
 #include <editeng/editrids.hrc>
 #include <unotools/intlwrapper.hxx>
@@ -97,7 +96,7 @@ XubString GetMetricText( long nVal, SfxMapUnit eSrcUnit, SfxMapUnit eDestUnit, c
                         nVal, (MapUnit)eSrcUnit, (MapUnit)eDestUnit ));
 
         default:
-            DBG_ERROR( "not supported mapunit" );
+            OSL_FAIL( "not supported mapunit" );
             return sRet;
     }
 
@@ -124,7 +123,6 @@ XubString GetMetricText( long nVal, SfxMapUnit eSrcUnit, SfxMapUnit eDestUnit, c
         nRet %= nDiff;
         if( 4 == nDigits )
         {
-//            DBG_ASSERT(pIntl, "no IntlWrapper* set")
             if(pIntl)
                 sRet += pIntl->getLocaleData()->getNumDecimalSep();
             else
@@ -229,7 +227,7 @@ sal_uInt16 GetMetricId( SfxMapUnit eUnit )
             break;
 
         default:
-            DBG_ERROR( "not supported mapunit" );
+            OSL_FAIL( "not supported mapunit" );
     }
     return nId;
 }

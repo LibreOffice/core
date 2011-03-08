@@ -32,6 +32,7 @@
 
 // Programmuebergreifende Includes.
 #include <rscdef.hxx>
+#include <tools/list.hxx>
 
 /****************** C o d e **********************************************/
 /****************** R s c I d ********************************************/
@@ -1030,10 +1031,11 @@ BOOL RscFileTab::ChangeDef( const ByteString & rDefName,
 {
     RscDefine * pDef = FindDef( rDefName );
     RscFile   * pFile;
-    ULONG       lPos = 0;
 
-    if( pDef ){
+    if( pDef )
+    {
         pFile = GetFile( pDef->GetFileKey() );
+        ULONG lPos = 0;
         if( pFile )
             lPos = pFile->aDefLst.GetPos( pDef );
         //Macros in den Expressions sind definiert ?

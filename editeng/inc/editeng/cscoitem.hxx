@@ -36,9 +36,9 @@
 
 // class SvxCharSetColorItem ---------------------------------------------
 
-/*  [Beschreibung]
+/*  [Description]
 
-    PB: wird nur intern im Reader des Writers benoetigt
+    Is only needed internally in the reader of Writer.
 */
 
 class EDITENG_DLLPUBLIC SvxCharSetColorItem : public SvxColorItem
@@ -51,7 +51,7 @@ public:
     SvxCharSetColorItem( const Color& aColor, const rtl_TextEncoding eFrom,
                      const USHORT nId  );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual Methods" from SfxPoolItem
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,

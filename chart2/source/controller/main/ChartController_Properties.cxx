@@ -103,7 +103,7 @@ namespace
     ObjectType eObjectType = ObjectIdentifier::getObjectType( aObjectCID );
     if( OBJECTTYPE_UNKNOWN==eObjectType )
     {
-        DBG_ERROR("unknown ObjectType");
+        OSL_FAIL("unknown ObjectType");
         return NULL;
     }
 

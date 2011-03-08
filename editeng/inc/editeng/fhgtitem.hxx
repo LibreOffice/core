@@ -41,11 +41,11 @@ namespace rtl
 
 // class SvxFontHeightItem -----------------------------------------------
 
-// Achtung: Twips-Werte
+// Warning: twips values
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Dieses Item beschreibt die Font-Hoehe.
+    This item describes the font height
 */
 
 #define FONTHEIGHT_16_VERSION   ((USHORT)0x0001)
@@ -62,7 +62,7 @@ public:
     SvxFontHeightItem( const ULONG nSz /*= 240*/, const USHORT nPropHeight /*= 100*/,
                        const USHORT nId  );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual Methods" from SfxPoolItem
     virtual int              operator==( const SfxPoolItem& ) const;
     virtual bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
     virtual bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );

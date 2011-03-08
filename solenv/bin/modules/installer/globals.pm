@@ -313,7 +313,6 @@ BEGIN
     $javasettozero = 0;
     $addlicensefile = 1;
     $addsystemintegration = 0;
-    $addjavainstaller = 0;
     $added_directories = 0;
     $makedownload = 1;
     $makejds = 1;
@@ -416,7 +415,7 @@ BEGIN
     $one_cab_file = 0;
     $fix_number_of_cab_files = 1;
     $cab_file_per_component = 0;
-    $cabfilecompressionlevel = 7;
+    $cabfilecompressionlevel = 21; # Using LZX compression, possible values are: 15 | 16 | ... | 21 (best compression)
     $number_of_cabfiles = 1;    # only for $fix_number_of_cab_files = 1
     $include_cab_in_msi = 0;
     $use_packages_for_cabs = 0;

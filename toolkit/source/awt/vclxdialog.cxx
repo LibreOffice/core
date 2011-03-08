@@ -26,6 +26,7 @@
  *
  ************************************************************************/
 
+#include <boost/ptr_container/ptr_vector.hpp>
 #include "vclxdialog.hxx"
 
 #include <com/sun/star/awt/PosSize.hpp>
@@ -39,9 +40,8 @@
 #include <toolkit/helper/property.hxx>
 
 #ifdef WNT
-#include <tools/prewin.h>
-#include <windows.h>
-#include <tools/postwin.h>
+#include <prewin.h>
+#include <postwin.h>
 #elif defined ( QUARTZ )
 #include "premac.h"
 #include <Cocoa/Cocoa.h>

@@ -38,8 +38,10 @@ extern NPNetscapeFuncs aNPNFuncs;
 
 #include <tools/debug.hxx>
 
-using namespace rtl;
 using namespace plugstringhelper;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
 
 #if OSL_DEBUG_LEVEL > 1
 void TRACE( char const * s );
@@ -682,7 +684,7 @@ NPError MacPluginComm::NPP_SetValue( NPP instance, NPNVariable variable, void *s
 //--------------------------------------------------------------------------------------------------
 void * MacPluginComm::NPP_GetJavaClass()
 {
-    DBG_ERROR( "no java class available!" );
+    OSL_FAIL( "no java class available!" );
     return 0;
 }
 

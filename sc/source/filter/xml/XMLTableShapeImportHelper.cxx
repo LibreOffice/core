@@ -188,7 +188,7 @@ void XMLTableShapeImportHelper::finishShape(
             bNote = true;
         }
     }
-    else //#99532# this are grouped shapes which should also get the layerid
+    else //this are grouped shapes which should also get the layerid
     {
         sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
         sal_Int16 nLayerID(-1);

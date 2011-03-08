@@ -50,7 +50,6 @@
 #include <docary.hxx>
 #include <pam.hxx>
 #include <shellio.hxx>
-#include <errhdl.hxx>
 #include <docsh.hxx>
 #include <wdocsh.hxx>
 #include <fltini.hxx>
@@ -142,12 +141,6 @@ void _InitFilter()
     _SetFltPtr( READER_WRITER_HTML, (ReadHTML = new HTMLReader) );
     _SetFltPtr( READER_WRITER_WW1, new WW1Reader );
     _SetFltPtr( READER_WRITER_XML, (ReadXML = new XMLReader)  );
-
-#ifdef NEW_WW97_EXPORT
-    aReaderWriter[ READER_WRITER_WW1 ].fnGetWriter =  &::GetWW8Writer;
-    aReaderWriter[ READER_WRITER_WW5 ].fnGetWriter = &::GetWW8Writer;
-#endif
-
     _SetFltPtr( READER_WRITER_TEXT_DLG, ReadAscii );
     _SetFltPtr( READER_WRITER_TEXT, ReadAscii );
 }
@@ -199,35 +192,6 @@ SwRead GetReader( const String& rFltName )
 }
 
 } // namespace SwReaderWriter
-
-/*  */
-
-ULONG StgReader::OpenMainStream( SvStorageStreamRef& rRef, USHORT& rBuffSize )
-{
-    ULONG nRet = ERR_SWG_READ_ERROR;
-    OSL_ENSURE( pStg, "wo ist mein Storage?" );
-    const SfxFilter* pFltr = SwIoSystem::GetFilterOfFormat( aFltName );
-    if( pFltr )
-    {
-        rRef = pStg->OpenSotStream( SwIoSystem::GetSubStorageName( *pFltr ),
-                                    STREAM_READ | STREAM_SHARE_DENYALL );
-
-        if( rRef.Is() )
-        {
-            if( SVSTREAM_OK == rRef->GetError() )
-            {
-                USHORT nOld = rRef->GetBufferSize();
-                rRef->SetBufferSize( rBuffSize );
-                rBuffSize = nOld;
-                nRet = 0;
-            }
-            else
-                nRet = rRef->GetError();
-        }
-    }
-    return nRet;
-}
-
 
 void Writer::SetPasswd( const String& ) {}
 
@@ -446,7 +410,7 @@ void SwRelNumRuleSpaces::SetOultineRelSpaces( const SwNodeIndex& rStt,
 void SwRelNumRuleSpaces::SetNumLSpace( SwTxtNode& rNd, const SwNumRule& rRule )
 {
     BOOL bOutlineRule = OUTLINE_RULE == rRule.GetRuleType();
-    // #128056# correction of refactoring done by cws swnumtree:
+    // correction of refactoring done by cws swnumtree:
     // - assure a correct level for retrieving numbering format.
     BYTE nLvl = 0;
     if ( rNd.GetActualListLevel() >= 0 && rNd.GetActualListLevel() < MAXLEVEL )
@@ -469,11 +433,9 @@ void SwRelNumRuleSpaces::SetNumLSpace( SwTxtNode& rNd, const SwNumRule& rRule )
         if( 0 < rLR.GetTxtFirstLineOfst() )
             nParaLeft += rLR.GetTxtFirstLineOfst();
         else if( nParaLeft >= nLeft )
-            // #82963#/#82962#: set correct paragraph indent
+            // set correct paragraph indent
             nParaLeft -= nLeft;
         else
-            //#83154#, Don't think any of the older #80856# bugfix code is
-            //relevent anymore.
             nParaLeft = rLR.GetTxtLeft()+rLR.GetTxtFirstLineOfst();
         aLR.SetTxtLeft( nParaLeft );
     }

@@ -61,9 +61,8 @@ namespace dmapper
 
 typedef ::std::map< ::rtl::OUString, ::rtl::OUString> StringPairMap_t;
 
-/*-- 21.06.2006 07:34:44---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 StyleSheetEntry::StyleSheetEntry() :
         sStyleIdentifierI()
         ,sStyleIdentifierD()
@@ -137,7 +136,7 @@ void TableStyleSheetEntry::AddTblStylePr( TblStyleType nType, PropertyMapPtr pPr
     dmapper_logger->endElement();
 #endif
 
-    static TblStyleType pTypesToFix[] =
+    static const TblStyleType pTypesToFix[] =
     {
         TBL_STYLE_FIRSTROW,
         TBL_STYLE_LASTROW,
@@ -145,7 +144,7 @@ void TableStyleSheetEntry::AddTblStylePr( TblStyleType nType, PropertyMapPtr pPr
         TBL_STYLE_LASTCOL
     };
 
-    static PropertyIds pPropsToCheck[] =
+    static const PropertyIds pPropsToCheck[] =
     {
         PROP_BOTTOM_BORDER,
         PROP_TOP_BORDER,
@@ -238,7 +237,7 @@ void TableStyleSheetEntry::dumpXml( const TagLogger::Pointer_t pLogger )
 
 void lcl_mergeProps( PropertyMapPtr pToFill,  PropertyMapPtr pToAdd, TblStyleType nStyleId )
 {
-    static PropertyIds pPropsToCheck[] =
+    static const PropertyIds pPropsToCheck[] =
     {
         PROP_BOTTOM_BORDER,
         PROP_TOP_BORDER,
@@ -281,7 +280,7 @@ void lcl_mergeProps( PropertyMapPtr pToFill,  PropertyMapPtr pToAdd, TblStyleTyp
 PropertyMapPtr TableStyleSheetEntry::GetLocalPropertiesFromMask( sal_Int32 nMask )
 {
     // Order from right to left
-    static TblStyleType aBitsOrder[] =
+    static const TblStyleType aBitsOrder[] =
     {
         TBL_STYLE_SWCELL,
         TBL_STYLE_SECELL,
@@ -318,9 +317,8 @@ PropertyMapPtr TableStyleSheetEntry::GetLocalPropertiesFromMask( sal_Int32 nMask
     return pProps;
 }
 
-/*-- 06.02.2008 11:30:46---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 struct ListCharStylePropertyMap_t
 {
     ::rtl::OUString         sCharStyleName;
@@ -332,9 +330,8 @@ struct ListCharStylePropertyMap_t
         {}
 };
 typedef std::vector< ListCharStylePropertyMap_t > ListCharStylePropertyVector_t;
-/*-- 19.06.2006 12:04:32---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 struct StyleSheetTable_Impl
 {
     DomainMapper&                           m_rDMapper;
@@ -351,9 +348,8 @@ struct StyleSheetTable_Impl
 
     ::rtl::OUString HasListCharStyle( const PropertyValueVector_t& rCharProperties );
 };
-/*-- 15.11.2007 08:30:02---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 StyleSheetTable_Impl::StyleSheetTable_Impl(DomainMapper& rDMapper, uno::Reference< text::XTextDocument> xTextDocument ) :
             m_rDMapper( rDMapper ),
             m_xTextDocument( xTextDocument ),
@@ -367,9 +363,8 @@ StyleSheetTable_Impl::StyleSheetTable_Impl(DomainMapper& rDMapper, uno::Referenc
     m_pDefaultCharProps->Insert( PROP_CHAR_HEIGHT_ASIAN, true, aVal );
     m_pDefaultCharProps->Insert( PROP_CHAR_HEIGHT_COMPLEX, true, aVal );
 }
-/*-- 06.02.2008 11:45:21---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 ::rtl::OUString StyleSheetTable_Impl::HasListCharStyle( const PropertyValueVector_t& rPropValues )
 {
     ::rtl::OUString sRet;
@@ -413,23 +408,20 @@ StyleSheetTable_Impl::StyleSheetTable_Impl(DomainMapper& rDMapper, uno::Referenc
     }
     return sRet;
 }
-/*-- 19.06.2006 12:04:32---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 StyleSheetTable::StyleSheetTable(DomainMapper& rDMapper, uno::Reference< text::XTextDocument> xTextDocument) :
     m_pImpl( new StyleSheetTable_Impl(rDMapper, xTextDocument) )
 {
 }
-/*-- 19.06.2006 12:04:33---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 StyleSheetTable::~StyleSheetTable()
 {
     delete m_pImpl;
 }
-/*-- 19.06.2006 12:04:33---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void StyleSheetTable::attribute(Id Name, Value & val)
 {
 #ifdef DEBUG_DOMAINMAPPER
@@ -444,7 +436,7 @@ void StyleSheetTable::attribute(Id Name, Value & val)
     int nIntValue = val.getInt();
     (void)nIntValue;
     ::rtl::OUString sValue = val.getString();
-//    printf ( "StyleSheetTable::attribute(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)Name, (unsigned int)nIntValue, ::rtl::OUStringToOString(sValue, RTL_TEXTENCODING_DONTKNOW).getStr());
+
     switch(Name)
     {
         case NS_rtf::LN_ISTD:
@@ -535,9 +527,8 @@ void StyleSheetTable::attribute(Id Name, Value & val)
     dmapper_logger->endElement();
 #endif
 }
-/*-- 19.06.2006 12:04:33---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void StyleSheetTable::sprm(Sprm & rSprm)
 {
 #ifdef DEBUG_DOMAINMAPPER
@@ -550,7 +541,6 @@ void StyleSheetTable::sprm(Sprm & rSprm)
     sal_Int32 nIntValue = pValue.get() ? pValue->getInt() : 0;
     (void)nIntValue;
     rtl::OUString sStringValue = pValue.get() ? pValue->getString() : rtl::OUString();
-    //printf ( "StyleSheetTable::sprm(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)nSprmId, (unsigned int)nIntValue, ::rtl::OUStringToOString(sStringValue, RTL_TEXTENCODING_DONTKNOW).getStr());
 
     switch(nSprmId)
     {
@@ -688,9 +678,8 @@ void StyleSheetTable::sprm(Sprm & rSprm)
     dmapper_logger->endElement();
 #endif
 }
-/*-- 19.06.2006 12:04:33---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void StyleSheetTable::entry(int /*pos*/, writerfilter::Reference<Properties>::Pointer_t ref)
 {
 #ifdef DEBUG_DOMAINMAPPER
@@ -698,7 +687,6 @@ void StyleSheetTable::entry(int /*pos*/, writerfilter::Reference<Properties>::Po
 #endif
 
     //create a new style entry
-    // printf("StyleSheetTable::entry(...)\n");
     OSL_ENSURE( !m_pImpl->m_pCurrentEntry, "current entry has to be NULL here");
     StyleSheetEntryPtr pNewEntry( new StyleSheetEntry );
     m_pImpl->m_pCurrentEntry = pNewEntry;
@@ -780,9 +768,8 @@ uno::Sequence< ::rtl::OUString > PropValVector::getNames()
     }
     return aRet;
 }
-/*-- 21.06.2006 13:35:48---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
 {
 #ifdef DEBUG_DOMAINMAPPER
@@ -1037,9 +1024,8 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
     dmapper_logger->endElement();
 #endif
 }
-/*-- 22.06.2006 15:56:56---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 const StyleSheetEntryPtr StyleSheetTable::FindStyleSheetByISTD(const ::rtl::OUString& sIndex)
 {
     StyleSheetEntryPtr pRet;
@@ -1053,9 +1039,8 @@ const StyleSheetEntryPtr StyleSheetTable::FindStyleSheetByISTD(const ::rtl::OUSt
     }
     return pRet;
 }
-/*-- 28.12.2007 14:45:45---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 const StyleSheetEntryPtr StyleSheetTable::FindStyleSheetByStyleName(const ::rtl::OUString& sIndex)
 {
     StyleSheetEntryPtr pRet;
@@ -1069,9 +1054,8 @@ const StyleSheetEntryPtr StyleSheetTable::FindStyleSheetByStyleName(const ::rtl:
     }
     return pRet;
 }
-/*-- 28.12.2007 14:45:45---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 const StyleSheetEntryPtr StyleSheetTable::FindStyleSheetByConvertedStyleName(const ::rtl::OUString& sIndex)
 {
     StyleSheetEntryPtr pRet;
@@ -1086,9 +1070,8 @@ const StyleSheetEntryPtr StyleSheetTable::FindStyleSheetByConvertedStyleName(con
     return pRet;
 }
 
-/*-- 17.07.2006 11:47:00---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 const StyleSheetEntryPtr StyleSheetTable::FindParentStyleSheet(::rtl::OUString sBaseStyle)
 {
     if( !sBaseStyle.getLength() )
@@ -1101,10 +1084,9 @@ const StyleSheetEntryPtr StyleSheetTable::FindParentStyleSheet(::rtl::OUString s
 
     return FindStyleSheetByISTD( sBaseStyle );
 }
-/*-- 21.12.2006 15:58:23---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
-static const sal_Char *aStyleNamePairs[] =
+
+static const sal_Char* const aStyleNamePairs[] =
 {
     "Normal",                     "Standard",
     "heading 1",                  "Heading 1",
@@ -1304,9 +1286,8 @@ void StyleSheetTable::resolveAttributeProperties(Value & val)
     if( pProperties.get())
         pProperties->resolve(*this);
 }
-/*-- 18.07.2007 15:59:34---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void StyleSheetTable::applyDefaults(bool bParaProperties)
 {
     try{
@@ -1352,9 +1333,8 @@ void StyleSheetTable::applyDefaults(bool bParaProperties)
     {
     }
 }
-/*-- 05.02.2008 10:27:36---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 ::rtl::OUString StyleSheetTable::getOrCreateCharStyle( PropertyValueVector_t& rCharProperties )
 {
     //find out if any of the styles already has the required properties then return it's name
@@ -1392,8 +1372,6 @@ void StyleSheetTable::applyDefaults(bool bParaProperties)
     {
         uno::Reference< style::XStyle > xStyle( xDocFactory->createInstance(
             rPropNameSupplier.GetName( PROP_SERVICE_CHAR_STYLE )), uno::UNO_QUERY_THROW);
-        //uno::Reference< container::XNamed >xNamed( xStyle, uno::UNO_QUERY_THROW );
-        //xNamed->setName( sListLabel );
         uno::Reference< beans::XPropertySet > xStyleProps(xStyle, uno::UNO_QUERY_THROW );
         PropertyValueVector_t::const_iterator aCharPropIter = rCharProperties.begin();
         while( aCharPropIter != rCharProperties.end())

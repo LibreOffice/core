@@ -30,8 +30,8 @@
 #include "precompiled_ucb.hxx"
 #include <osl/module.h>
 #include <rtl/ustring.hxx>
-#include <tools/prewin.h>
-#include <tools/postwin.h>
+#include <prewin.h>
+#include <postwin.h>
 #include "odma_lib.hxx"
 
 

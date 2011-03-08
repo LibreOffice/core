@@ -115,8 +115,6 @@ uno::Reference<container::XNameContainer> XMLMyList::GetNameContainer()
     uno::Reference<container::XNameContainer> xNameContainer;
 
     // #110680#
-    // uno::Reference<lang::XMultiServiceFactory> xServiceFactory = comphelper::getProcessServiceFactory();
-    // DBG_ASSERT( xServiceFactory.is(), "got no service manager" );
 
     if( mxServiceFactory.is() )
     {
@@ -139,8 +137,6 @@ uno::Reference<container::XIndexContainer> XMLMyList::GetIndexContainer()
 {
     uno::Reference<container::XIndexContainer> xIndexContainer;
     // #110680#
-    // uno::Reference<lang::XMultiServiceFactory> xServiceFactory = comphelper::getProcessServiceFactory();
-    // DBG_ASSERT( xServiceFactory.is(), "got no service manager" );
 
     if( mxServiceFactory.is() )
     {
@@ -455,10 +451,18 @@ void XMLDocumentSettingsContext::EndElement()
     }
 
     sal_Bool bLoadDocPrinter( sal_True );
-    ::comphelper::ConfigurationHelper::readDirectKey(
-        ::comphelper::getProcessServiceFactory(),
-        C2U("org.openoffice.Office.Common/"), C2U("Save/Document"), C2U("LoadPrinter"),
-        ::comphelper::ConfigurationHelper::E_READONLY ) >>= bLoadDocPrinter;
+
+    try
+    {
+        ::comphelper::ConfigurationHelper::readDirectKey(
+            ::comphelper::getProcessServiceFactory(),
+            C2U("org.openoffice.Office.Common/"), C2U("Save/Document"), C2U("LoadPrinter"),
+            ::comphelper::ConfigurationHelper::E_READONLY ) >>= bLoadDocPrinter;
+    }
+    catch( const uno::Exception& )
+    {
+    }
+
     uno::Sequence<beans::PropertyValue> aSeqConfigProps;
     if ( m_pData->aConfigProps >>= aSeqConfigProps )
     {
@@ -603,7 +607,7 @@ void XMLConfigItemContext::Characters( const ::rtl::OUString& rChars )
         if( sTrimmedChars.getLength() )
         {
             rtl::OUString sChars;
-            if( msValue )
+            if( msValue.getLength() )
             {
                 sChars = msValue;
                 sChars += sTrimmedChars;
@@ -688,7 +692,7 @@ void XMLConfigItemContext::EndElement()
             mrAny <<= maDecoded;
         }
         else {
-            DBG_ERROR("wrong type");
+            OSL_FAIL("wrong type");
         }
 
         ManipulateConfigItem();
@@ -696,7 +700,7 @@ void XMLConfigItemContext::EndElement()
         mpBaseContext->AddPropertyValue();
     }
     else {
-        DBG_ERROR("no BaseContext");
+        OSL_FAIL("no BaseContext");
     }
 }
 
@@ -785,7 +789,7 @@ void XMLConfigItemMapNamedContext::EndElement()
         mpBaseContext->AddPropertyValue();
     }
     else {
-        DBG_ERROR("no BaseContext");
+        OSL_FAIL("no BaseContext");
     }
 }
 
@@ -894,7 +898,7 @@ void XMLConfigItemMapIndexedContext::EndElement()
                             }
                             catch( uno::Exception& )
                             {
-                                DBG_ERROR( "Exception while importing forbidden characters" );
+                                OSL_FAIL( "Exception while importing forbidden characters" );
                             }
                         }
                     }
@@ -902,7 +906,7 @@ void XMLConfigItemMapIndexedContext::EndElement()
             }
             else
             {
-                DBG_ERROR( "could not get the XForbiddenCharacters from document!" );
+                OSL_FAIL( "could not get the XForbiddenCharacters from document!" );
                 mrAny <<= maProps.GetIndexContainer();
             }
         }
@@ -1007,7 +1011,7 @@ void XMLConfigItemMapIndexedContext::EndElement()
         mpBaseContext->AddPropertyValue();
     }
     else {
-        DBG_ERROR("no BaseContext");
+        OSL_FAIL("no BaseContext");
     }
 }
 

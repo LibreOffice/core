@@ -481,7 +481,7 @@ IMPL_LINK( CommandToolBox, ToolBoxDropdownClickHdl, ToolBox*, EMPTYARG )
         if ( nId >= RID_DROPMODE_URL && nId <= RID_DROPMODE_COPY )
             rDlg.SetDropMode( nId - RID_DROPMODE_URL );
 
-        //  #49956# den gehighlighteten Button aufheben
+        //  den gehighlighteten Button aufheben
         Point aPoint;
         MouseEvent aLeave( aPoint, 0, MOUSE_LEAVEWINDOW | MOUSE_SYNTHETIC );
         MouseMove( aLeave );
@@ -825,7 +825,7 @@ void ScNavigatorDlg::DoResize()
     Size aNewSize = GetOutputSizePixel();
     long nTotalHeight = aNewSize.Height();
 
-    //  #41403# bei angedocktem Navigator wird das Fenster evtl. erst klein erzeugt,
+    //  bei angedocktem Navigator wird das Fenster evtl. erst klein erzeugt,
     //  dann kommt ein Resize auf die wirkliche Groesse -> dann Inhalte einschalten
 
     BOOL bSmall = ( nTotalHeight <= aInitSize.Height() + SCNAV_MINTOL );
@@ -1078,7 +1078,7 @@ ScTabViewShell* ScNavigatorDlg::GetTabViewShell() const
 
 ScNavigatorSettings* ScNavigatorDlg::GetNavigatorSettings()
 {
-    //  #95791# Don't store the settings pointer here, because the settings belong to
+    //  Don't store the settings pointer here, because the settings belong to
     //  the view, and the view may be closed while the navigator is open (reload).
     //  If the pointer is cached here again later for performance reasons, it has to
     //  be forgotten when the view is closed.

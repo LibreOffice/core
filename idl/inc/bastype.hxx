@@ -40,7 +40,6 @@ class SvStringHashEntry;
 class SvIdlDataBase;
 class SvTokenStream;
 
-/******************** class SvUINT32 **********************************/
 class SvUINT32
 {
     UINT32  nVal;
@@ -61,7 +60,6 @@ public:
 };
 
 
-/******************** class SvINT16 **********************************/
 class SvINT16
 {
     short   nVal;
@@ -79,7 +77,6 @@ public:
 };
 
 
-/******************** class SvUINT16 **********************************/
 class SvUINT16
 {
     USHORT  nVal;
@@ -97,7 +94,6 @@ public:
 };
 
 
-/******************** class SvINT32 **********************************/
 class SvINT32
 {
     INT32   nVal;
@@ -115,7 +111,6 @@ public:
 };
 
 
-/******************** class Svint **********************************/
 class Svint
 {
     int     nVal;
@@ -136,7 +131,6 @@ public:
 };
 
 
-/******************** class SvBOOL **********************************/
 class SvBOOL
 {
     BOOL  nVal:1,
@@ -165,7 +159,6 @@ public:
 };
 
 
-/******************** class SvIdentifier **********************************/
 class SvIdentifier : public ByteString
 {
 public:
@@ -184,11 +177,10 @@ public:
 };
 
 
-/******************** class SvIdentifier **********************************/
 class SvNumberIdentifier : public SvIdentifier
 {
     UINT32  nValue;
-    // darf nicht benutzt werden
+    // must not be used
     BOOL    ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm );
 public:
                 SvNumberIdentifier() : nValue( 0 ) {};
@@ -209,7 +201,6 @@ public:
 };
 
 
-/******************** class SvString **********************************/
 class SvString : public ByteString
 {
 public:
@@ -228,7 +219,6 @@ public:
 };
 
 
-/******************** class SvHelpText **********************************/
 class SvHelpText : public SvString
 {
 public:
@@ -241,12 +231,10 @@ public:
 };
 
 
-/******************** class SvHelpContext *******************************/
 class SvHelpContext : public SvNumberIdentifier
 {
 };
 
-/******************** class SvUUId *************************************/
 class SvUUId : public SvGlobalName
 {
 public:
@@ -258,7 +246,6 @@ public:
 };
 
 
-/******************** class SvVersion **********************************/
 class SvVersion
 {
     USHORT  nMajorVersion;

@@ -135,7 +135,6 @@ PPTExBulletProvider::~PPTExBulletProvider()
 sal_uInt16 PPTExBulletProvider::GetId( const ByteString& rUniqueId, Size& rGraphicSize )
 {
     sal_uInt16 nRetValue = 0xffff;
-    sal_uInt32 nId = 0;
 
     if ( rUniqueId.Len() )
     {
@@ -169,8 +168,7 @@ sal_uInt16 PPTExBulletProvider::GetId( const ByteString& rUniqueId, Size& rGraph
                 aGraphicObject = GraphicObject( aMappedGraphic );
             }
         }
-
-        nId = pGraphicProv->GetBlibID( aBuExPictureStream, aGraphicObject.GetUniqueID(), aRect, NULL, NULL );
+        sal_uInt32 nId = pGraphicProv->GetBlibID( aBuExPictureStream, aGraphicObject.GetUniqueID(), aRect, NULL, NULL );
 
         if ( nId && ( nId < 0x10000 ) )
             nRetValue = (sal_uInt16)nId - 1;
@@ -1208,7 +1206,7 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
                                 aFile = aUrl.PathToFileName();
                             else if ( INET_PROT_SMB == aUrl.GetProtocol() )
                             {
-                                // #n382718# (and #n261623#) Convert smb notation to '\\'
+                                // Convert smb notation to '\\'
                                 aFile = aUrl.GetMainURL( INetURLObject::NO_DECODE );
                                 aFile = String( aFile.GetBuffer() + 4 ); // skip the 'smb:' part
                                 aFile.SearchAndReplaceAll( '/', '\\' );
@@ -2876,7 +2874,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                                 mpPptEscherEx->AddAtom( 4, EPP_TextHeaderAtom );
                                 *mpStrm << (sal_uInt32)EPP_TEXTTYPE_Title;
                                 mpPptEscherEx->AddAtom( mnTextSize << 1, EPP_TextCharsAtom );
-                                const sal_Unicode* pString = aUString;
+                                const sal_Unicode* pString = aUString.getStr();
                                 for ( sal_uInt32 i = 0; i < mnTextSize; i++ )
                                 {
                                     nChar = pString[ i ];       // 0xa -> 0xb weicher Zeilenumbruch
@@ -3248,7 +3246,6 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             {
                 continue;
             }
-            sal_Int32 nPlacementID = -1;
 
             sal_Bool bClientData = ( bEffect || ( eCa != ::com::sun::star::presentation::ClickAction_NONE ) ||
                                         nPlaceHolderAtom || nOlePictureId );
@@ -3256,6 +3253,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             {
                 if ( nPlaceHolderAtom )
                 {
+                    sal_Int32 nPlacementID = -1;
                     if ( ( mnTextStyle == EPP_TEXTSTYLE_TITLE ) || ( mnTextStyle == EPP_TEXTSTYLE_BODY ) )
                         nPlacementID = nIndices++;
                     else

@@ -927,7 +927,7 @@ void X11SalGraphics::drawBitmap( const SalTwoRect*,
                                  const SalBitmap&,
                                  SalColor )
 {
-    DBG_ERROR( "::DrawBitmap with transparent color not supported" );
+    OSL_FAIL( "::DrawBitmap with transparent color not supported" );
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

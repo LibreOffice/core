@@ -647,7 +647,7 @@ public:
     /** Reads the CHATTACHEDLABEL record (data series/point labels). */
     void                ReadChAttachedLabel( XclImpStream& rStrm );
     /** Creates a CHTEXT group for the label. Clones xParentText and sets additional label settings */
-    XclImpChTextRef     CreateDataLabel( XclImpChTextRef xParent ) const;
+    XclImpChTextRef     CreateDataLabel( const XclImpChText* pParent ) const;
 
 private:
     sal_uInt16          mnFlags;            /// Additional flags.
@@ -696,7 +696,7 @@ public:
     /** Returns true, if the series line is smoothed. */
     inline bool         HasSpline() const { return mxSeriesFmt && mxSeriesFmt->HasSpline(); }
     /** Returns the data label text object. */
-    inline XclImpChTextRef GetDataLabel() const { return mxLabel; }
+    inline const XclImpChText* GetDataLabel() const { return mxLabel.get(); }
 
     /** Converts and writes the contained data to the passed property set. */
     void                Convert( ScfPropertySet& rPropSet, const XclChExtTypeInfo& rTypeInfo ) const;
@@ -870,10 +870,10 @@ private:
     XPropertySetRef     CreateErrorBar( sal_uInt8 nPosBarId, sal_uInt8 nNegBarId ) const;
 
 private:
-    typedef ScfRefMap< sal_uInt16, XclImpChDataFormat > XclImpChDataFormatMap;
-    typedef ScfRefMap< sal_uInt16, XclImpChText >       XclImpChTextMap;
-    typedef ::std::list< XclImpChSerTrendLineRef >      XclImpChSerTrendLineList;
-    typedef ScfRefMap< sal_uInt8, XclImpChSerErrorBar > XclImpChSerErrorBarMap;
+    typedef ::std::map<sal_uInt16, XclImpChDataFormatRef> XclImpChDataFormatMap;
+    typedef ::std::map<sal_uInt16, XclImpChTextRef>       XclImpChTextMap;
+    typedef ::std::list< XclImpChSerTrendLineRef >        XclImpChSerTrendLineList;
+    typedef ::boost::ptr_map<sal_uInt8, XclImpChSerErrorBar> XclImpChSerErrorBarMap;
 
     XclChSeries         maData;             /// Contents of the CHSERIES record.
     XclImpChSourceLinkRef mxValueLink;      /// Link data for series values.
@@ -1107,8 +1107,8 @@ private:
 
 private:
     typedef ::std::vector< XclImpChSeriesRef >               XclImpChSeriesVec;
-    typedef ScfRefMap< sal_uInt16, XclImpChDropBar >         XclImpChDropBarMap;
-    typedef boost::ptr_map< sal_uInt16, XclImpChLineFormat > XclImpChLineFormatMap;
+    typedef boost::ptr_map<sal_uInt16, XclImpChDropBar>      XclImpChDropBarMap;
+    typedef boost::ptr_map<sal_uInt16, XclImpChLineFormat>   XclImpChLineFormatMap;
     typedef ::std::set< sal_uInt16 >                         UInt16Set;
 
     XclChTypeGroup      maData;             /// Contents of the CHTYPEGROUP record.
@@ -1301,7 +1301,7 @@ public:
     /** Returns the outer plot area position, if existing. */
     inline XclImpChFramePosRef GetPlotAreaFramePos() const { return mxFramePos; }
     /** Returns the specified chart type group. */
-    inline XclImpChTypeGroupRef GetTypeGroup( sal_uInt16 nGroupIdx ) const { return maTypeGroups.get( nGroupIdx ); }
+    XclImpChTypeGroupRef GetTypeGroup( sal_uInt16 nGroupIdx ) const;
     /** Returns the first chart type group. */
     XclImpChTypeGroupRef GetFirstTypeGroup() const;
     /** Looks for a legend in all chart type groups and returns it. */
@@ -1338,7 +1338,7 @@ private:
     void                ConvertBackground( XDiagramRef xDiagram ) const;
 
 private:
-    typedef ScfRefMap< sal_uInt16, XclImpChTypeGroup > XclImpChTypeGroupMap;
+    typedef ::std::map<sal_uInt16, XclImpChTypeGroupRef> XclImpChTypeGroupMap;
 
     XclChAxesSet        maData;             /// Contents of the CHAXESSET record.
     XclImpChFramePosRef mxFramePos;         /// Outer plot area position (CHFRAMEPOS record).
@@ -1387,7 +1387,7 @@ public:
     /** Returns the specified chart type group. */
     XclImpChTypeGroupRef GetTypeGroup( sal_uInt16 nGroupIdx ) const;
     /** Returns the specified default text. */
-    XclImpChTextRef     GetDefaultText( XclChTextType eTextType ) const;
+    const XclImpChText*  GetDefaultText( XclChTextType eTextType ) const;
     /** Returns true, if the plot area has benn moved and/or resized manually. */
     bool                IsManualPlotArea() const;
     /** Returns the number of units on the progress bar needed for the chart. */
@@ -1422,9 +1422,9 @@ private:
     XDiagramRef         CreateDiagram() const;
 
 private:
-    typedef ::std::vector< XclImpChSeriesRef >                  XclImpChSeriesVec;
-    typedef ScfRefMap< XclChDataPointPos, XclImpChDataFormat >  XclImpChDataFormatMap;
-    typedef ScfRefMap< sal_uInt16, XclImpChText >               XclImpChTextMap;
+    typedef ::std::vector< XclImpChSeriesRef >                   XclImpChSeriesVec;
+    typedef ::std::map<XclChDataPointPos, XclImpChDataFormatRef> XclImpChDataFormatMap;
+    typedef ::boost::ptr_map<sal_uInt16, XclImpChText>           XclImpChTextMap;
 
     XclChRectangle      maRect;             /// Position of the chart on the sheet (CHCHART record).
     XclImpChSeriesVec   maSeries;           /// List of series data (CHSERIES groups).

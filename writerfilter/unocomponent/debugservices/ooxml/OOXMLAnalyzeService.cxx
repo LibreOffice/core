@@ -41,7 +41,7 @@
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <osl/process.h>
 #include <rtl/string.hxx>
-#include <hash_set>
+#include <boost/unordered_set.hpp>
 #include <assert.h>
 #include <cppuhelper/implbase2.hxx>
 #include <com/sun/star/embed/XTransactedObject.hpp>

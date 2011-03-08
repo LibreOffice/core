@@ -37,11 +37,6 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
-# --- Define time bomb date. Not active for OOo --------------------
-# --- Change something in evaluation.cxx!!! (e.g. line 313)
-# --- You must use the yyyymmdd format!!! --------------------------
-#CDEFS+=-DTIMEBOMB=20050930
-
 # --- Files --------------------------------------------------------
 
 SLOFILES =	$(SLO)$/evaluation.obj \

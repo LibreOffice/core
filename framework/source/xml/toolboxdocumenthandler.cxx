@@ -319,8 +319,6 @@ throw(  SAXException, RuntimeException )
                 ::rtl::OUString        aTooltip;
                 ::rtl::OUString        aBitmapName;
                 sal_uInt16      nItemBits( 0 );
-                sal_uInt16      nWidth( 0 );
-                sal_uInt16      nUserDef( 0 );
                 sal_Bool        bVisible( sal_True );
 
                 for ( sal_Int16 n = 0; n < xAttribs->getLength(); n++ )
@@ -367,18 +365,6 @@ throw(  SAXException, RuntimeException )
                                     aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Attribute toolbar:visible must have value 'true' or 'false'!" ));
                                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                                 }
-                            }
-                            break;
-
-                            case TB_ATTRIBUTE_WIDTH:
-                            {
-                                nWidth = (USHORT)(xAttribs->getValueByIndex( n ).toInt32());
-                            }
-                            break;
-
-                            case TB_ATTRIBUTE_USER:
-                            {
-                                nUserDef = (USHORT)(xAttribs->getValueByIndex( n ).toInt32());
                             }
                             break;
 
@@ -429,9 +415,10 @@ throw(  SAXException, RuntimeException )
                                 while ( nIndex >= 0 );
                             }
                             break;
-
-                                          default:
-                                              break;
+                            case TB_ATTRIBUTE_USER:
+                            case TB_ATTRIBUTE_WIDTH:
+                            default:
+                            break;
                         }
                     }
                 } // for

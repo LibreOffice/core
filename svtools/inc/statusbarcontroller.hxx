@@ -43,10 +43,7 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #include <comphelper/broadcasthelper.hxx>
 
-#ifndef INCLUDED_HASH_MAP
-#include <hash_map>
-#define INCLUDED_HASH_MAP
-#endif
+#include <boost/unordered_map.hpp>
 
 #include <tools/gen.hxx>
 
@@ -125,7 +122,7 @@ class SVT_DLLPUBLIC StatusbarController : public ::com::sun::star::frame::XStatu
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > xDispatch;
         };
 
-        typedef ::std::hash_map< ::rtl::OUString,
+        typedef ::boost::unordered_map< ::rtl::OUString,
                                  com::sun::star::uno::Reference< com::sun::star::frame::XDispatch >,
                                  ::rtl::OUStringHash,
                                  ::std::equal_to< ::rtl::OUString > > URLToDispatchMap;

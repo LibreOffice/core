@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
+#include <boost/bind.hpp>
 
 #include <tools/debug.hxx>
 #include <rtl/uuid.h>
@@ -82,20 +82,66 @@ SC_SIMPLE_SERVICE_INFO( ScTableValidationObj, "ScTableValidationObj", "com.sun.s
 
 //------------------------------------------------------------------------
 
+sal_Int32 lcl_ConditionModeToOperatorNew( ScConditionMode eMode )
+{
+    sal_Int32 eOper = sheet::ConditionOperator2::NONE;
+    switch (eMode)
+    {
+        case SC_COND_EQUAL:         eOper = sheet::ConditionOperator2::EQUAL;           break;
+        case SC_COND_LESS:          eOper = sheet::ConditionOperator2::LESS;            break;
+        case SC_COND_GREATER:       eOper = sheet::ConditionOperator2::GREATER;         break;
+        case SC_COND_EQLESS:        eOper = sheet::ConditionOperator2::LESS_EQUAL;      break;
+        case SC_COND_EQGREATER:     eOper = sheet::ConditionOperator2::GREATER_EQUAL;   break;
+        case SC_COND_NOTEQUAL:      eOper = sheet::ConditionOperator2::NOT_EQUAL;       break;
+        case SC_COND_BETWEEN:       eOper = sheet::ConditionOperator2::BETWEEN;         break;
+        case SC_COND_NOTBETWEEN:    eOper = sheet::ConditionOperator2::NOT_BETWEEN;     break;
+        case SC_COND_DIRECT:        eOper = sheet::ConditionOperator2::FORMULA;         break;
+        case SC_COND_DUPLICATE:     eOper = sheet::ConditionOperator2::DUPLICATE;       break;
+        default:
+        {
+            // added to avoid warnings
+        }
+    }
+    return eOper;
+}
+
+ScConditionMode lcl_ConditionOperatorToModeNew( sal_Int32 eOper )
+{
+    ScConditionMode eMode = SC_COND_NONE;
+    switch (eOper)
+    {
+        case sheet::ConditionOperator2::EQUAL:          eMode = SC_COND_EQUAL;      break;
+        case sheet::ConditionOperator2::LESS:           eMode = SC_COND_LESS;       break;
+        case sheet::ConditionOperator2::GREATER:        eMode = SC_COND_GREATER;    break;
+        case sheet::ConditionOperator2::LESS_EQUAL:     eMode = SC_COND_EQLESS;     break;
+        case sheet::ConditionOperator2::GREATER_EQUAL:  eMode = SC_COND_EQGREATER;  break;
+        case sheet::ConditionOperator2::NOT_EQUAL:      eMode = SC_COND_NOTEQUAL;   break;
+        case sheet::ConditionOperator2::BETWEEN:        eMode = SC_COND_BETWEEN;    break;
+        case sheet::ConditionOperator2::NOT_BETWEEN:    eMode = SC_COND_NOTBETWEEN; break;
+        case sheet::ConditionOperator2::FORMULA:        eMode = SC_COND_DIRECT;     break;
+        case sheet::ConditionOperator2::DUPLICATE:      eMode = SC_COND_DUPLICATE;  break;
+        default:
+        {
+            // added to avoid warnings
+        }
+    }
+    return eMode;
+}
+
 sheet::ConditionOperator lcl_ConditionModeToOperator( ScConditionMode eMode )
 {
     sheet::ConditionOperator eOper = sheet::ConditionOperator_NONE;
     switch (eMode)
     {
-        case SC_COND_EQUAL:      eOper = sheet::ConditionOperator_EQUAL;         break;
-        case SC_COND_LESS:       eOper = sheet::ConditionOperator_LESS;          break;
-        case SC_COND_GREATER:    eOper = sheet::ConditionOperator_GREATER;       break;
-        case SC_COND_EQLESS:     eOper = sheet::ConditionOperator_LESS_EQUAL;    break;
-        case SC_COND_EQGREATER:  eOper = sheet::ConditionOperator_GREATER_EQUAL; break;
-        case SC_COND_NOTEQUAL:   eOper = sheet::ConditionOperator_NOT_EQUAL;     break;
-        case SC_COND_BETWEEN:    eOper = sheet::ConditionOperator_BETWEEN;       break;
-        case SC_COND_NOTBETWEEN: eOper = sheet::ConditionOperator_NOT_BETWEEN;   break;
-        case SC_COND_DIRECT:     eOper = sheet::ConditionOperator_FORMULA;       break;
+        case SC_COND_EQUAL:         eOper = sheet::ConditionOperator_EQUAL;         break;
+        case SC_COND_LESS:          eOper = sheet::ConditionOperator_LESS;          break;
+        case SC_COND_GREATER:       eOper = sheet::ConditionOperator_GREATER;       break;
+        case SC_COND_EQLESS:        eOper = sheet::ConditionOperator_LESS_EQUAL;    break;
+        case SC_COND_EQGREATER:     eOper = sheet::ConditionOperator_GREATER_EQUAL; break;
+        case SC_COND_NOTEQUAL:      eOper = sheet::ConditionOperator_NOT_EQUAL;     break;
+        case SC_COND_BETWEEN:       eOper = sheet::ConditionOperator_BETWEEN;       break;
+        case SC_COND_NOTBETWEEN:    eOper = sheet::ConditionOperator_NOT_BETWEEN;   break;
+        case SC_COND_DIRECT:        eOper = sheet::ConditionOperator_FORMULA;       break;
         default:
         {
             // added to avoid warnings
@@ -109,15 +155,15 @@ ScConditionMode lcl_ConditionOperatorToMode( sheet::ConditionOperator eOper )
     ScConditionMode eMode = SC_COND_NONE;
     switch (eOper)
     {
-        case sheet::ConditionOperator_EQUAL:         eMode = SC_COND_EQUAL;      break;
-        case sheet::ConditionOperator_LESS:          eMode = SC_COND_LESS;       break;
-        case sheet::ConditionOperator_GREATER:       eMode = SC_COND_GREATER;    break;
-        case sheet::ConditionOperator_LESS_EQUAL:    eMode = SC_COND_EQLESS;     break;
-        case sheet::ConditionOperator_GREATER_EQUAL: eMode = SC_COND_EQGREATER;  break;
-        case sheet::ConditionOperator_NOT_EQUAL:     eMode = SC_COND_NOTEQUAL;   break;
-        case sheet::ConditionOperator_BETWEEN:       eMode = SC_COND_BETWEEN;    break;
-        case sheet::ConditionOperator_NOT_BETWEEN:   eMode = SC_COND_NOTBETWEEN; break;
-        case sheet::ConditionOperator_FORMULA:       eMode = SC_COND_DIRECT;     break;
+        case sheet::ConditionOperator_EQUAL:            eMode = SC_COND_EQUAL;      break;
+        case sheet::ConditionOperator_LESS:             eMode = SC_COND_LESS;       break;
+        case sheet::ConditionOperator_GREATER:          eMode = SC_COND_GREATER;    break;
+        case sheet::ConditionOperator_LESS_EQUAL:       eMode = SC_COND_EQLESS;     break;
+        case sheet::ConditionOperator_GREATER_EQUAL:    eMode = SC_COND_EQGREATER;  break;
+        case sheet::ConditionOperator_NOT_EQUAL:        eMode = SC_COND_NOTEQUAL;   break;
+        case sheet::ConditionOperator_BETWEEN:          eMode = SC_COND_BETWEEN;    break;
+        case sheet::ConditionOperator_NOT_BETWEEN:      eMode = SC_COND_NOTBETWEEN; break;
+        case sheet::ConditionOperator_FORMULA:          eMode = SC_COND_DIRECT;     break;
         default:
         {
             // added to avoid warnings
@@ -191,15 +237,12 @@ void ScTableConditionalFormat::FillFormat( ScConditionalFormat& rFormat,
     //  ScConditionalFormat = Core-Struktur, muss leer sein
 
     DBG_ASSERT( rFormat.IsEmpty(), "FillFormat: Format nicht leer" );
-    USHORT nCount = (USHORT)aEntries.Count();
-    for (USHORT i=0; i<nCount; i++)
-    {
-        ScTableConditionalEntry* pEntry = (ScTableConditionalEntry*)aEntries.GetObject(i);
-        if ( !pEntry )
-            continue;
 
+    std::vector<ScTableConditionalEntry*>::const_iterator iter;
+    for (iter = aEntries.begin(); iter != aEntries.end(); ++iter)
+    {
         ScCondFormatEntryItem aData;
-        pEntry->GetData(aData);
+        (*iter)->GetData(aData);
 
         FormulaGrammar::Grammar eGrammar1 = lclResolveGrammar( eGrammar, aData.meGrammar1 );
         FormulaGrammar::Grammar eGrammar2 = lclResolveGrammar( eGrammar, aData.meGrammar2 );
@@ -229,17 +272,14 @@ void ScTableConditionalFormat::FillFormat( ScConditionalFormat& rFormat,
 
 ScTableConditionalFormat::~ScTableConditionalFormat()
 {
-    ScTableConditionalEntry* pEntry;
-    aEntries.First();
-    while ( ( pEntry = (ScTableConditionalEntry*)aEntries.Remove() ) != NULL )
-        pEntry->release();
+    std::for_each(aEntries.begin(),aEntries.end(),boost::bind(&ScTableConditionalEntry::release,_1));
 }
 
 void ScTableConditionalFormat::AddEntry_Impl(const ScCondFormatEntryItem& aEntry)
 {
     ScTableConditionalEntry* pNew = new ScTableConditionalEntry(this, aEntry);
     pNew->acquire();
-    aEntries.Insert( pNew, LIST_APPEND );
+    aEntries.push_back(pNew);
 }
 
 void ScTableConditionalFormat::DataChanged()
@@ -251,7 +291,7 @@ void ScTableConditionalFormat::DataChanged()
 
 ScTableConditionalEntry* ScTableConditionalFormat::GetObjectByIndex_Impl(USHORT nIndex) const
 {
-    return (ScTableConditionalEntry*)aEntries.GetObject(nIndex);
+    return aEntries[nIndex];
 }
 
 void SAL_CALL ScTableConditionalFormat::addNew(
@@ -270,9 +310,8 @@ void SAL_CALL ScTableConditionalFormat::addNew(
 
         if ( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_UNONAME_OPERATOR ) ) )
         {
-            sheet::ConditionOperator eOper = (sheet::ConditionOperator)
-                            ScUnoHelpFunctions::GetEnumFromAny( rProp.Value );
-            aEntry.meMode = lcl_ConditionOperatorToMode( eOper );
+            sal_Int32 eOper = ScUnoHelpFunctions::GetEnumFromAny( rProp.Value );
+            aEntry.meMode = lcl_ConditionOperatorToModeNew( eOper );
         }
         else if ( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_UNONAME_FORMULA1 ) ) )
         {
@@ -343,7 +382,7 @@ void SAL_CALL ScTableConditionalFormat::addNew(
         }
         else
         {
-            DBG_ERROR("falsche Property");
+            OSL_FAIL("falsche Property");
             //! Exception...
         }
     }
@@ -356,11 +395,13 @@ void SAL_CALL ScTableConditionalFormat::removeByIndex( sal_Int32 nIndex )
                                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    ScTableConditionalEntry* pEntry = (ScTableConditionalEntry*)aEntries.GetObject(nIndex);
-    if (pEntry)
+
+    if (nIndex < static_cast<sal_Int32>(aEntries.size()))
     {
-        aEntries.Remove(pEntry);
-        pEntry->release();
+        std::vector<ScTableConditionalEntry*>::iterator iter = aEntries.begin()+nIndex;
+
+        (*iter)->release();
+        aEntries.erase(iter);
         DataChanged();
     }
 }
@@ -368,10 +409,10 @@ void SAL_CALL ScTableConditionalFormat::removeByIndex( sal_Int32 nIndex )
 void SAL_CALL ScTableConditionalFormat::clear() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    ScTableConditionalEntry* pEntry;
-    aEntries.First();
-    while ( ( pEntry = (ScTableConditionalEntry*)aEntries.Remove() ) != NULL )
-        pEntry->release();
+    std::for_each(aEntries.begin(),aEntries.end(),
+                  boost::bind(&ScTableConditionalEntry::release,_1));
+
+    aEntries.clear();
 
     DataChanged();
 }
@@ -390,7 +431,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScTableConditionalFormat::creat
 sal_Int32 SAL_CALL ScTableConditionalFormat::getCount() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    return aEntries.Count();
+    return aEntries.size();
 }
 
 uno::Any SAL_CALL ScTableConditionalFormat::getByIndex( sal_Int32 nIndex )
@@ -403,7 +444,6 @@ uno::Any SAL_CALL ScTableConditionalFormat::getByIndex( sal_Int32 nIndex )
         return uno::makeAny(xEntry);
     else
         throw lang::IndexOutOfBoundsException();
-//    return uno::Any();
 }
 
 uno::Type SAL_CALL ScTableConditionalFormat::getElementType() throw(uno::RuntimeException)
@@ -435,7 +475,7 @@ uno::Any SAL_CALL ScTableConditionalFormat::getByName( const rtl::OUString& aNam
     SolarMutexGuard aGuard;
 
     uno::Reference<sheet::XSheetConditionalEntry> xEntry;
-    long nCount = aEntries.Count();
+    long nCount = aEntries.size();
     for (long i=0; i<nCount; i++)
         if ( aName == lcl_GetEntryNameFromIndex(i) )
         {
@@ -447,7 +487,6 @@ uno::Any SAL_CALL ScTableConditionalFormat::getByName( const rtl::OUString& aNam
         return uno::makeAny(xEntry);
     else
         throw container::NoSuchElementException();
-//    return uno::Any();
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL ScTableConditionalFormat::getElementNames()
@@ -455,7 +494,7 @@ uno::Sequence<rtl::OUString> SAL_CALL ScTableConditionalFormat::getElementNames(
 {
     SolarMutexGuard aGuard;
 
-    long nCount = aEntries.Count();
+    long nCount = aEntries.size();
     uno::Sequence<rtl::OUString> aNames(nCount);
     rtl::OUString* pArray = aNames.getArray();
     for (long i=0; i<nCount; i++)
@@ -469,7 +508,7 @@ sal_Bool SAL_CALL ScTableConditionalFormat::hasByName( const rtl::OUString& aNam
 {
     SolarMutexGuard aGuard;
 
-    long nCount = aEntries.Count();
+    long nCount = aEntries.size();
     for (long i=0; i<nCount; i++)
         if ( aName == lcl_GetEntryNameFromIndex(i) )
             return TRUE;
@@ -557,6 +596,22 @@ void SAL_CALL ScTableConditionalEntry::setOperator( sheet::ConditionOperator nOp
         pParent->DataChanged();
 }
 
+sal_Int32 SAL_CALL ScTableConditionalEntry::getConditionOperator()
+                                                throw(uno::RuntimeException)
+{
+    SolarMutexGuard aGuard;
+    return lcl_ConditionModeToOperatorNew( aData.meMode );
+}
+
+void SAL_CALL ScTableConditionalEntry::setConditionOperator( sal_Int32 nOperator )
+                                                throw(uno::RuntimeException)
+{
+    SolarMutexGuard aGuard;
+    aData.meMode = lcl_ConditionOperatorToModeNew( nOperator );
+    if (pParent)
+        pParent->DataChanged();
+}
+
 rtl::OUString SAL_CALL ScTableConditionalEntry::getFormula1() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -638,7 +693,7 @@ ScTableValidationObj::ScTableValidationObj(ScDocument* pDoc, ULONG nKey,
         if (pData)
         {
             nMode = sal::static_int_cast<USHORT>( pData->GetOperation() );
-            aSrcPos = pData->GetValidSrcPos();  // #b4974740# valid pos for expressions
+            aSrcPos = pData->GetValidSrcPos();  // valid pos for expressions
             aExpr1 = pData->GetExpression( aSrcPos, 0, 0, eGrammar );
             aExpr2 = pData->GetExpression( aSrcPos, 1, 0, eGrammar );
             meGrammar1 = meGrammar2 = eGrammar;
@@ -752,6 +807,21 @@ void SAL_CALL ScTableValidationObj::setOperator( sheet::ConditionOperator nOpera
 {
     SolarMutexGuard aGuard;
     nMode = sal::static_int_cast<USHORT>( lcl_ConditionOperatorToMode( nOperator ) );
+    DataChanged();
+}
+
+sal_Int32 SAL_CALL ScTableValidationObj::getConditionOperator()
+                                                throw(uno::RuntimeException)
+{
+    SolarMutexGuard aGuard;
+    return lcl_ConditionModeToOperatorNew( (ScConditionMode)nMode );
+}
+
+void SAL_CALL ScTableValidationObj::setConditionOperator( sal_Int32 nOperator )
+                                                throw(uno::RuntimeException)
+{
+    SolarMutexGuard aGuard;
+    nMode = sal::static_int_cast<USHORT>( lcl_ConditionOperatorToModeNew( nOperator ) );
     DataChanged();
 }
 

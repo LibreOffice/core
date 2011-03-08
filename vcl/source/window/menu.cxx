@@ -31,7 +31,6 @@
 
 #include "svsys.h"
 #include "vcl/salinst.hxx"
-#include "tools/list.hxx"
 #include "tools/debug.hxx"
 #include "tools/diagnose_ex.h"
 #include "vcl/svdata.hxx"
@@ -1183,7 +1182,7 @@ void Menu::ImplCallEventListeners( ULONG nEvent, USHORT nPos )
         ImplGetSVData()->mpApp->ImplCallEventListeners( &aEvent );
     }
 
-    if ( !aDelData.isDeleted() && !maEventListeners.empty() )
+    if ( !aDelData.isDeleted() )
         maEventListeners.Call( &aEvent );
 
     if( !aDelData.isDeleted() )
@@ -1191,8 +1190,7 @@ void Menu::ImplCallEventListeners( ULONG nEvent, USHORT nPos )
         Menu* pMenu = this;
         while ( pMenu )
         {
-            if ( !maChildEventListeners.empty() )
-                maChildEventListeners.Call( &aEvent );
+            maChildEventListeners.Call( &aEvent );
 
             if( aDelData.isDeleted() )
                 break;
@@ -1204,12 +1202,12 @@ void Menu::ImplCallEventListeners( ULONG nEvent, USHORT nPos )
 
 void Menu::AddEventListener( const Link& rEventListener )
 {
-    maEventListeners.push_back( rEventListener );
+    maEventListeners.addListener( rEventListener );
 }
 
 void Menu::RemoveEventListener( const Link& rEventListener )
 {
-    maEventListeners.remove( rEventListener );
+    maEventListeners.removeListener( rEventListener );
 }
 
 // -----------------------------------------------------------------------

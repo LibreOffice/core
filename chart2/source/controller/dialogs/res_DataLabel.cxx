@@ -236,7 +236,7 @@ IMPL_LINK( DataLabelResources, NumberFormatDialogHdl, PushButton *, pButton )
 {
     if( !m_pPool || !m_pNumberFormatter )
     {
-        DBG_ERROR("Missing item pool or number formatter");
+        OSL_FAIL("Missing item pool or number formatter");
         return 1;
     }
 

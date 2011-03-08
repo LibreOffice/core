@@ -47,7 +47,6 @@
 #include <viewimp.hxx>  // SwViewImp
 #include <viewopt.hxx>  // SwViewOption
 #include <frmtool.hxx>  // DrawGraphic
-#include <txtcfg.hxx>
 #include <txtfrm.hxx>       // SwTxtFrm
 #include <itrpaint.hxx>     // SwTxtPainter
 #include <txtpaint.hxx>     // SwSaveClip
@@ -611,7 +610,6 @@ void SwTxtFrm::Paint( const SwRect &rRect, const SwPrtOptions * /*pPrintData*/ )
     SwTaggedPDFHelper aTaggedPDFHelperParagraph( 0, &aFrmInfo, 0, *pSh->GetOut() );
     // <--
 
-    DBG_LOOP_RESET;
     if( !IsEmpty() || !PaintEmpty( rRect, sal_True ) )
     {
 #if OSL_DEBUG_LEVEL > 1
@@ -619,10 +617,6 @@ void SwTxtFrm::Paint( const SwRect &rRect, const SwPrtOptions * /*pPrintData*/ )
         (void)nDbgY;
 #endif
 
-#ifdef DBGTXT
-        if( IsDbg( this ) )
-            DBTXTFRM << "Paint()" << endl;
-#endif
         if( IsLocked() || IsHiddenNow() || ! Prt().HasArea() )
             return;
 
@@ -722,13 +716,6 @@ void SwTxtFrm::Paint( const SwRect &rRect, const SwPrtOptions * /*pPrintData*/ )
         {
             do
             {
-                //DBG_LOOP; shadows declaration above.
-                //resolved into:
-#if  OSL_DEBUG_LEVEL > 1
-#if OSL_DEBUG_LEVEL > 1
-                DbgLoop aDbgLoop2( (const void*) this );
-#endif
-#endif
                 aLine.DrawTextLine( rRect, aClip, IsUndersized() );
 
             } while( aLine.Next() && aLine.Y() <= nBottom );

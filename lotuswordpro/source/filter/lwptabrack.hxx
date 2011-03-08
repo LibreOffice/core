@@ -57,11 +57,6 @@
  * @file
  * Tabrack for LwpTabPiece object.
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2005-01-12 create this file.
- ************************************************************************/
-
 #ifndef     _LWPTABRACK_HXX
 #define     _LWPTABRACK_HXX
 
@@ -100,7 +95,6 @@ public:
     };
 public:
     void    Read(LwpObjectStream *pStrm);
-    // 2005/01/28
     inline sal_uInt32 GetPosition();
     inline TabType GetTabType();
     inline LeaderType GetLeaderType();
@@ -115,7 +109,6 @@ protected:
     sal_uInt16      m_nAlignChar;       //be careful
 };
 
-// 2005/01/28
 inline sal_uInt32 LwpTab::GetPosition()
 {
     return m_nX;
@@ -147,7 +140,6 @@ public:
     virtual ~LwpTabRack(){}
 public:
     void Read();
-    // 2005/01/28
     sal_uInt16 GetNumTabs();
     LwpTab* Lookup(sal_uInt16 nIndex);
     LwpTabRack* GetNext();

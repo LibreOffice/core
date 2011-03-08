@@ -90,6 +90,7 @@
 #include <svtools/localresaccess.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
+#include <osl/diagnose.h>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
@@ -232,7 +233,7 @@ namespace dbaui
                         break;}
 
                 default:
-                    OSL_ASSERT("OSQLParser::ShowParseTree: unzulaessiger NodeType");
+                    OSL_FAIL("OSQLParser::ShowParseTree: unzulaessiger NodeType");
                     rString += _pNode->getTokenValue();
                 }
                 _pBox->InsertEntry(rString,_pParent);
@@ -1832,7 +1833,7 @@ bool OQueryController::allowViews() const
 // -----------------------------------------------------------------------------
 bool OQueryController::allowQueries() const
 {
-    DBG_ASSERT( getSdbMetaData().isConnected(), "OQueryController::allowQueries: illegal call!" );
+    OSL_ENSURE( getSdbMetaData().isConnected(), "OQueryController::allowQueries: illegal call!" );
     if ( !getSdbMetaData().supportsSubqueriesInFrom() )
         return false;
 

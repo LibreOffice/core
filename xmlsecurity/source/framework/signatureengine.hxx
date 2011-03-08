@@ -63,9 +63,6 @@ class SignatureEngine : public cppu::ImplInheritanceHelper2
  *   FUNCTION
  *  Maintains common members and methods related with signature operation.
  *
- *   HISTORY
- *  05.01.2004 -    Interface supported: XReferenceCollector
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com

@@ -40,7 +40,7 @@
 #include "dpsave.hxx"
 #include "queryparam.hxx"
 
-#include <hash_set>
+#include <boost/unordered_set.hpp>
 
 class ScXMLImport;
 class ScDPSaveNumGroupDimension;
@@ -80,7 +80,7 @@ public:
 
 class ScXMLDataPilotTableContext : public SvXMLImportContext
 {
-    typedef ::std::hash_set< ::rtl::OUString, ::rtl::OUStringHash > StringSet;
+    typedef ::boost::unordered_set< ::rtl::OUString, ::rtl::OUStringHash > StringSet;
     StringSet       maHiddenMemberFields;
 
     struct GrandTotalItem

@@ -222,7 +222,6 @@ public:
     virtual short   Execute();
     virtual void    Resize();
     virtual BOOL    Close();
-//    virtual long    Notify( NotifyEvent& rNEvt );
 
     virtual void    showProgress( bool bStart );
     virtual void    updateProgress( const ::rtl::OUString &rText,

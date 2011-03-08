@@ -29,8 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
 
-//#define TF_NEWDESKTOP
-
 #define _SDINTERN_HXX
 
 #include <stdio.h>

@@ -99,10 +99,10 @@ void lcl_doDynamicFontResize( uno::Any* pAOldAndNewFontHeightAny
                           , const awt::Size& rOldReferenceSize
                           , const awt::Size& rNewReferenceSize  )
 {
-    double fOldFontHeight = 0, fNewFontHeight;
+    double fOldFontHeight = 0;
     if( pAOldAndNewFontHeightAny && ( *pAOldAndNewFontHeightAny >>= fOldFontHeight ) )
     {
-        fNewFontHeight = RelativeSizeHelper::calculate( fOldFontHeight, rOldReferenceSize, rNewReferenceSize );
+        double fNewFontHeight = RelativeSizeHelper::calculate( fOldFontHeight, rOldReferenceSize, rNewReferenceSize );
         *pAOldAndNewFontHeightAny = uno::makeAny(fNewFontHeight);
     }
 }

@@ -25,16 +25,6 @@ do while( lines())
 
 	/* remove GLOBAL symbols */
 	if POS('_GLOBAL_', l) > 0 then l = ';'l
-/*
-	if POS('!', l) > 0 then l = ';'l
-	if POS('_ZN4_STL', l) > 0 then l = ';'l
-	if POS('_ZNK4_STL', l) > 0 then l = ';'l
-	if POS('ImplClass', l) > 0 then l = ';'l
-	if POS('ImplHelper', l) > 0 then l = ';'l
-	if POS('UsageHelper', l) > 0 then l = ';'l
-	if POS('com3sun4star3', l) > 0 then l = ';'l
-*/
-	/* if LENGTH(l) > 254 then l = ';(>254)'left(l,100) */
 
 	if POS(';', l) > 0 then l = LEFT(l,POS(';', l)-1)
 

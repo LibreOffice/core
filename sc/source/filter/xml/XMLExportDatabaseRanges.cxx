@@ -407,7 +407,6 @@ void ScXMLExportDatabaseRanges::WriteSortDescriptor(const uno::Sequence <beans::
     uno::Sequence <table::TableSortField> aSortFields;
     sal_Bool bBindFormatsToContent (sal_True);
     sal_Bool bCopyOutputData (sal_False);
-//    sal_Bool bIsCaseSensitive (sal_False);
     sal_Bool bIsUserListEnabled (sal_False);
     table::CellAddress aOutputPosition;
     sal_Int32 nUserListIndex = 0;
@@ -419,9 +418,6 @@ void ScXMLExportDatabaseRanges::WriteSortDescriptor(const uno::Sequence <beans::
              bBindFormatsToContent = ::cppu::any2bool(aSortProperties[i].Value);
         else if (aSortProperties[i].Name.compareToAscii(SC_UNONAME_COPYOUT) == 0)
             bCopyOutputData = ::cppu::any2bool(aSortProperties[i].Value);
-//      no longer supported
-/*      else if (aSortProperties[i].Name.compareToAscii(SC_UNONAME_ISCASE) == 0)
-            bIsCaseSensitive = ::cppu::any2bool(aSortProperties[i].Value);*/
         else if (aSortProperties[i].Name.compareToAscii(SC_UNONAME_ISULIST) == 0)
             bIsUserListEnabled = ::cppu::any2bool(aSortProperties[i].Value);
         else if (aSortProperties[i].Name.compareToAscii(SC_UNONAME_OUTPOS) == 0)
@@ -430,11 +426,6 @@ void ScXMLExportDatabaseRanges::WriteSortDescriptor(const uno::Sequence <beans::
             aSortProperties[i].Value >>= nUserListIndex;
         else if (aSortProperties[i].Name.compareToAscii(SC_UNONAME_SORTFLD) == 0)
             aSortProperties[i].Value >>= aSortFields;
-//      no longer supported
-/*      else if (aSortProperties[i].Name.compareToAscii(SC_UNONAME_COLLLOC) == 0)
-            aSortProperties[i].Value >>= aCollatorLocale;
-        else if (aSortProperties[i].Name.compareToAscii(SC_UNONAME_COLLALG) == 0)
-            aSortProperties[i].Value >>= sCollatorAlgorithm;*/
     }
     sal_Int32 nSortFields = aSortFields.getLength();
     if (nSortFields > 0)
@@ -447,9 +438,6 @@ void ScXMLExportDatabaseRanges::WriteSortDescriptor(const uno::Sequence <beans::
             ScRangeStringConverter::GetStringFromAddress( sOUCellAddress, aOutputPosition, pDoc, ::formula::FormulaGrammar::CONV_OOO );
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_TARGET_RANGE_ADDRESS, sOUCellAddress);
         }
-//      no longer supported
-//      if (bIsCaseSensitive)
-//          rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CASE_SENSITIVE, XML_TRUE);
 
         if (aSortFields[0].IsCaseSensitive)
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CASE_SENSITIVE, XML_TRUE);
@@ -460,13 +448,6 @@ void ScXMLExportDatabaseRanges::WriteSortDescriptor(const uno::Sequence <beans::
             DBG_ASSERT(bCaseSensitive == aSortFields[i].IsCaseSensitive, "seems that it is now possible to have every field case sensitive");
         }
 #endif
-//      no longer supported
-/*      if (aCollatorLocale.Language.getLength())
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_LANGUAGE, aCollatorLocale.Language);
-        if (aCollatorLocale.Country.getLength())
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_COUNTRY, aCollatorLocale.Country);
-        if (sCollatorAlgorithm.getLength())
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ALGORITHM, sCollatorAlgorithm);*/
         if (aSortFields[0].CollatorLocale.Language.getLength())
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_LANGUAGE, aSortFields[0].CollatorLocale.Language);
         if (aSortFields[0].CollatorLocale.Country.getLength())
@@ -527,9 +508,6 @@ void ScXMLExportDatabaseRanges::WriteSubTotalDescriptor(const com::sun::star::un
         if (nSubTotalFields > 0)
         {
             uno::Reference <beans::XPropertySet> xPropertySet (xSubTotalDescriptor, uno::UNO_QUERY);
-//          sal_Bool bEnableUserSortList = sal_False;
-//          sal_Bool bSortAscending = sal_True;
-//          sal_Int32 nUserSortListIndex = 0;
             if (xPropertySet.is())
             {
                 if (!::cppu::any2bool(xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_BINDFMT)))))
@@ -538,9 +516,6 @@ void ScXMLExportDatabaseRanges::WriteSubTotalDescriptor(const com::sun::star::un
                     rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_PAGE_BREAKS_ON_GROUP_CHANGE, XML_TRUE);
                 if (::cppu::any2bool(xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ISCASE)))))
                     rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CASE_SENSITIVE, XML_TRUE);
-//              bSortAscending = ::cppu::any2bool(xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_SORTASCENDING))));
-//              if (::cppu::any2bool(xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ENABLEUSERSORTLIST)))))
-//                  xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_USERSORTLISTINDEX))) >>= nUserSortListIndex;
             }
             SvXMLElementExport aElemSTRs(rExport, XML_NAMESPACE_TABLE, XML_SUBTOTAL_RULES, sal_True, sal_True);
             rExport.CheckAttrList();
@@ -650,11 +625,6 @@ void ScXMLExportDatabaseRanges::WriteDatabaseRanges(const com::sun::star::uno::R
                                 {
                                     if (!::cppu::any2bool(xFilterProperties->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CONTHDR)))))
                                         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CONTAINS_HEADER, XML_FALSE);
-
-                                    // #98317#; there is no orientation on the filter
-/*                                  table::TableOrientation eFilterOrient(table::TableOrientation_ROWS);
-                                    if (::cppu::any2bool(xFilterProperties->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ORIENT)))))
-                                        eFilterOrient = table::TableOrientation_ROWS;*/
 
                                     sal_Bool bSortColumns(sal_True);
                                     sal_Bool bFound(sal_False);

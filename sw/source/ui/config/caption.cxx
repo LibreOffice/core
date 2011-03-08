@@ -84,8 +84,8 @@ InsCaptionOpt& InsCaptionOpt::operator=( const InsCaptionOpt& rOpt )
 BOOL InsCaptionOpt::operator==( const InsCaptionOpt& rOpt ) const
 {
     return (eObjType == rOpt.eObjType &&
-            aOleId == rOpt.aOleId); // Damit gleiche Ole-IDs nicht mehrfach eingefuegt
-                                    // werden koennen, auf nichts weiteres vergleichen
+            aOleId == rOpt.aOleId); // So that identical Ole-IDs can't be added multiple
+                                    // times, don't compare against anything else.
 
 
 }

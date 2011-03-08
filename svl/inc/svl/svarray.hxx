@@ -91,7 +91,7 @@
 *           ein Stack mit einem PtrArray als Grundlage.
 *
 * JP 09.10.96:  vordefinierte Arrays:
-*   VarArr:     SvBools, SvULongs, SvUShorts, SvLongs, SvShorts
+*   VarArr:     SvULongs, SvUShorts, SvLongs
 *   PtrArr:     SvStrings, SvStringsDtor
 *   SortArr:    SvStringsSort, SvStringsSortDtor,
 *               SvStringsISort, SvStringsISortDtor
@@ -843,27 +843,10 @@ void nm::Remove( const AE &aE, USHORT nL )\
         nm##_SAR::Remove( nP, nL);\
 }\
 
-#if defined(TCPP)
-
-#define _SORTARR_BLC_CASTS(nm, AE )\
-    BOOL Insert(  AE &aE ) {\
-        return Insert( (const AE&)aE );\
-    }\
-    USHORT GetPos( AE& aE ) const { \
-        return SvPtrarr::GetPos((const VoidPtr&)aE);\
-    }\
-    void Remove( AE& aE, USHORT nL = 1 ) { \
-        Remove( (const AE&) aE, nL  );\
-    }
-
-#else
-
 #define _SORTARR_BLC_CASTS(nm, AE )\
     USHORT GetPos( const AE& aE ) const { \
         return SvPtrarr::GetPos((const VoidPtr&)aE);\
     }
-
-#endif
 
 #define _SV_DECL_PTRARR_SORT_ALG(nm, AE, IS, GS, vis)\
 SV_DECL_PTRARR_VISIBILITY(nm##_SAR, AE, IS, GS, vis)\
@@ -1024,7 +1007,7 @@ public:\
 #define C40_PTR_REPLACE( c, p) Replace( (c const *) p )
 #define C40_GETPOS( c, r) GetPos( (c const *)r )
 #else
-#if defined WTC || defined ICC || defined HPUX || (defined GCC && __GNUC__ >= 3) || (defined(WNT) && _MSC_VER >= 1400)
+#if defined ICC || (defined GCC && __GNUC__ >= 3) || (defined(WNT) && _MSC_VER >= 1400)
 #define C40_INSERT( c, p, n ) Insert( (c const *&) p, n )
 #define C40_PUSH( c, p) Push( (c const *&) p )
 #define C40_PTR_INSERT( c, p ) Insert( (c const *&) p )

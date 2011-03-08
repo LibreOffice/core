@@ -36,6 +36,7 @@
 #include <svtools/transfer.hxx>
 #include <svtools/AccessibleBrowseBoxObjType.hxx>
 #include <svtools/accessibletableprovider.hxx>
+#include <vector>
 
 #ifndef INCLUDED_LIMITS_H
 #include <limits.h>
@@ -48,10 +49,11 @@
 #endif
 
 class BrowserColumn;
-class BrowserColumns;
 class BrowserDataWin;
 class MultiSelection;
 class BrowserHeader;
+
+typedef ::std::vector< BrowserColumn* > BrowserColumns;
 
 namespace svt {
     class BrowseBoxImpl;
@@ -226,7 +228,6 @@ public:
 // whole class, which is planned for a long time :)
 //
 // sorry for the ranting. could not resist
-// 98483 - 11.04.2002 - fs@openoffice.org
 
 class SVT_DLLPUBLIC BrowseBox
         :public Control
@@ -240,10 +241,6 @@ class SVT_DLLPUBLIC BrowseBox
 
     friend class BrowserDataWin;
     friend class ::svt::BrowseBoxImpl;
-
-#ifdef DBG_MI
-    friend void DoLog_Impl( const BrowseBox *pThis, const char *pWhat, const char *pWho );
-#endif
 
 #ifdef DBG_UTIL
     friend const char* BrowseBoxCheckInvariants( const void * pVoid );

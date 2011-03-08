@@ -137,13 +137,13 @@ namespace svt { namespace table
         }
         virtual PColumnModel        getColumnModel( ColPos column )
         {
-            DBG_ERROR( "EmptyTableModel::getColumnModel: invalid call!" );
+            OSL_FAIL( "EmptyTableModel::getColumnModel: invalid call!" );
             (void)column;
             return PColumnModel();
         }
         virtual PColumnModel        getColumnModelByID( ColumnID id )
         {
-            DBG_ERROR( "EmptyTableModel::getColumnModel: invalid call!" );
+            OSL_FAIL( "EmptyTableModel::getColumnModel: invalid call!" );
             (void)id;
             return PColumnModel();
         }
@@ -1517,7 +1517,7 @@ namespace svt { namespace table
     }
         break;
         default:
-            DBG_ERROR( "TableControl_Impl::dispatchAction: unsupported action!" );
+            OSL_FAIL( "TableControl_Impl::dispatchAction: unsupported action!" );
         }
         return bSuccess;
     }

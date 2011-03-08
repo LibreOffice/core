@@ -39,7 +39,8 @@
 #include <unomid.h>
 
 using namespace com::sun::star;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 struct SwNumberingTypeListBox_Impl
 {

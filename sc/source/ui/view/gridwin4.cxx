@@ -29,13 +29,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
 // INCLUDE ---------------------------------------------------------------
-
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
-
 
 #include <svtools/colorcfg.hxx>
 #include <editeng/colritem.hxx>
@@ -86,7 +82,7 @@ void lcl_LimitRect( Rectangle& rRect, const Rectangle& rVisible )
     if ( rRect.Top()    < rVisible.Top()-1 )    rRect.Top()    = rVisible.Top()-1;
     if ( rRect.Bottom() > rVisible.Bottom()+1 ) rRect.Bottom() = rVisible.Bottom()+1;
 
-    // #51122# auch wenn das inner-Rectangle nicht sichtbar ist, muss evtl.
+    // auch wenn das inner-Rectangle nicht sichtbar ist, muss evtl.
     // die Titelzeile gezeichnet werden, darum kein Rueckgabewert mehr.
     // Wenn's weit daneben liegt, wird lcl_DrawOneFrame erst gar nicht gerufen.
 }
@@ -328,16 +324,6 @@ void ScGridWindow::PrePaint()
 
 void ScGridWindow::Paint( const Rectangle& rRect )
 {
-    //TODO/LATER: how to get environment? Do we need that?!
-    /*
-    ScDocShell* pDocSh = pViewData->GetDocShell();
-    SvInPlaceEnvironment* pEnv = pDocSh->GetIPEnv();
-    if (pEnv && pEnv->GetRectsChangedLockCount())
-    {
-        Invalidate(rRect);
-        return;
-    }*/
-
     ScDocument* pDoc = pViewData->GetDocument();
     if ( pDoc->IsInInterpreter() )
     {
@@ -714,7 +700,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     aOutputData.DrawBackground();
     if ( bPageMode )
     {
-        // #87655# DrawPagePreview draws complete lines/page numbers, must always be clipped
+        // DrawPagePreview draws complete lines/page numbers, must always be clipped
         if ( aOutputData.SetChangedClip() )
         {
             DrawPagePreview(nX1,nY1,nX2,nY2, pContentDev);
@@ -1193,7 +1179,7 @@ void ScGridWindow::DrawButtons( SCCOL nX1, SCROW /*nY1*/, SCCOL nX2, SCROW /*nY2
                         else
                         {
                             // can also be part of DataPilot table
-                            // DBG_ERROR("Auto-Filter-Button ohne DBData");
+                            // OSL_FAIL("Auto-Filter-Button ohne DBData");
                         }
                     }
 
@@ -1339,7 +1325,7 @@ BOOL ScGridWindow::IsAutoFilterActive( SCCOL nCol, SCROW nRow, SCTAB nTab )
         pDBData->GetQueryParam( aQueryParam );
     else
     {
-        DBG_ERROR("Auto-Filter-Button ohne DBData");
+        OSL_FAIL("Auto-Filter-Button ohne DBData");
     }
 
     BOOL    bSimpleQuery = TRUE;
@@ -1716,133 +1702,6 @@ void ScGridWindow::GetSelectionRects( ::std::vector< Rectangle >& rPixelRects )
 
 // -------------------------------------------------------------------------
 
-
-
-// -------------------------------------------------------------------------
-
-void ScGridWindow::DrawCursor()
-{
-// #114409#
-//  SCTAB nTab = pViewData->GetTabNo();
-//  SCCOL nX = pViewData->GetCurX();
-//  SCROW nY = pViewData->GetCurY();
-//
-//  //  in verdeckten Zellen nicht zeichnen
-//
-//  ScDocument* pDoc = pViewData->GetDocument();
-//  const ScPatternAttr* pPattern = pDoc->GetPattern(nX,nY,nTab);
-//  const ScMergeFlagAttr& rMerge = (const ScMergeFlagAttr&) pPattern->GetItem(ATTR_MERGE_FLAG);
-//  if (rMerge.IsOverlapped())
-//      return;
-//
-//  //  links/oben ausserhalb des Bildschirms ?
-//
-//  BOOL bVis = ( nX>=pViewData->GetPosX(eHWhich) && nY>=pViewData->GetPosY(eVWhich) );
-//  if (!bVis)
-//  {
-//      SCCOL nEndX = nX;
-//      SCROW nEndY = nY;
-//      ScDocument* pDoc = pViewData->GetDocument();
-//      const ScMergeAttr& rMerge = (const ScMergeAttr&) pPattern->GetItem(ATTR_MERGE);
-//      if (rMerge.GetColMerge() > 1)
-//          nEndX += rMerge.GetColMerge()-1;
-//      if (rMerge.GetRowMerge() > 1)
-//          nEndY += rMerge.GetRowMerge()-1;
-//      bVis = ( nEndX>=pViewData->GetPosX(eHWhich) && nEndY>=pViewData->GetPosY(eVWhich) );
-//  }
-//
-//  if ( bVis )
-//  {
-//      //  hier kein Update, da aus Paint gerufen und laut Zaehler Cursor schon da
-//      //  wenn Update noetig, dann bei Hide/Showcursor vor dem Hoch-/Runterzaehlen
-//
-//      MapMode aOld = GetMapMode(); SetMapMode(MAP_PIXEL);
-//
-//      Point aScrPos = pViewData->GetScrPos( nX, nY, eWhich, TRUE );
-//      BOOL bLayoutRTL = pDoc->IsLayoutRTL( nTab );
-//
-//      //  completely right of/below the screen?
-//      //  (test with logical start position in aScrPos)
-//      BOOL bMaybeVisible;
-//      if ( bLayoutRTL )
-//          bMaybeVisible = ( aScrPos.X() >= -2 && aScrPos.Y() >= -2 );
-//      else
-//      {
-//          Size aOutSize = GetOutputSizePixel();
-//          bMaybeVisible = ( aScrPos.X() <= aOutSize.Width() + 2 && aScrPos.Y() <= aOutSize.Height() + 2 );
-//      }
-//      if ( bMaybeVisible )
-//      {
-//          long nSizeXPix;
-//          long nSizeYPix;
-//          pViewData->GetMergeSizePixel( nX, nY, nSizeXPix, nSizeYPix );
-//
-//          if ( bLayoutRTL )
-//              aScrPos.X() -= nSizeXPix - 2;       // move instead of mirroring
-//
-//          BOOL bFix = ( pViewData->GetHSplitMode() == SC_SPLIT_FIX ||
-//                          pViewData->GetVSplitMode() == SC_SPLIT_FIX );
-//          if ( pViewData->GetActivePart()==eWhich || bFix )
-//          {
-//              //  old UNX version with two Invert calls causes flicker.
-//              //  if optimization is needed, a new flag should be added
-//              //  to InvertTracking
-//
-//              aScrPos.X() -= 2;
-//              aScrPos.Y() -= 2;
-//              Rectangle aRect( aScrPos, Size( nSizeXPix + 3, nSizeYPix + 3 ) );
-//
-//              Invert(Rectangle( aRect.Left(), aRect.Top(), aRect.Left()+2, aRect.Bottom() ));
-//              Invert(Rectangle( aRect.Right()-2, aRect.Top(), aRect.Right(), aRect.Bottom() ));
-//              Invert(Rectangle( aRect.Left()+3, aRect.Top(), aRect.Right()-3, aRect.Top()+2 ));
-//              Invert(Rectangle( aRect.Left()+3, aRect.Bottom()-2, aRect.Right()-3, aRect.Bottom() ));
-//          }
-//          else
-//          {
-//              Rectangle aRect( aScrPos, Size( nSizeXPix - 1, nSizeYPix - 1 ) );
-//              Invert( aRect );
-//          }
-//      }
-//
-//      SetMapMode(aOld);
-//  }
-}
-
-    //  AutoFill-Anfasser:
-
-void ScGridWindow::DrawAutoFillMark()
-{
-// #114409#
-//  if ( bAutoMarkVisible && aAutoMarkPos.Tab() == pViewData->GetTabNo() )
-//  {
-//      SCCOL nX = aAutoMarkPos.Col();
-//      SCROW nY = aAutoMarkPos.Row();
-//      SCTAB nTab = pViewData->GetTabNo();
-//      ScDocument* pDoc = pViewData->GetDocument();
-//      BOOL bLayoutRTL = pDoc->IsLayoutRTL( nTab );
-//
-//      Point aFillPos = pViewData->GetScrPos( nX, nY, eWhich, TRUE );
-//      long nSizeXPix;
-//      long nSizeYPix;
-//      pViewData->GetMergeSizePixel( nX, nY, nSizeXPix, nSizeYPix );
-//      if ( bLayoutRTL )
-//          aFillPos.X() -= nSizeXPix + 3;
-//      else
-//          aFillPos.X() += nSizeXPix - 2;
-//
-//      aFillPos.Y() += nSizeYPix;
-//      aFillPos.Y() -= 2;
-//      Rectangle aFillRect( aFillPos, Size(6,6) );
-//      //  Anfasser von Zeichenobjekten sind 7*7
-//
-//      MapMode aOld = GetMapMode(); SetMapMode(MAP_PIXEL);
-//      Invert( aFillRect );
-//      SetMapMode(aOld);
-//  }
-}
-
-// -------------------------------------------------------------------------
-
 void ScGridWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Window::DataChanged(rDCEvt);
@@ -1886,8 +1745,5 @@ void ScGridWindow::DataChanged( const DataChangedEvent& rDCEvt )
         Invalidate();
     }
 }
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

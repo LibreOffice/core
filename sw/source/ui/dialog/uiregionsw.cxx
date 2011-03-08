@@ -55,13 +55,13 @@
 #include <IMark.hxx>
 #include <section.hxx>
 #include <docary.hxx>
-#include <doc.hxx>                      // fuers SwSectionFmt-Array
+#include <doc.hxx>                      // for the SwSectionFmt-Array
 #include <basesh.hxx>
 #include <wdocsh.hxx>
 #include <view.hxx>
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
-#include <swundo.hxx>                   // fuer Undo-Ids
+#include <swundo.hxx>                   // for Undo-Ids
 #include <column.hxx>
 #include <fmtfsize.hxx>
 #include <swunodef.hxx>
@@ -160,7 +160,7 @@ public:
 };
 
 /*----------------------------------------------------------------------------
- Beschreibung: User Data Klasse fuer Bereichsinformationen
+ Description: user data class for region information
 ----------------------------------------------------------------------------*/
 
 class SectRepr
@@ -175,9 +175,9 @@ private:
     SvxFrameDirectionItem   m_FrmDirItem;
     SvxLRSpaceItem          m_LRSpaceItem;
     USHORT                  m_nArrPos;
-    // zeigt an, ob evtl. Textinhalt im Bereich ist
+    // shows, if maybe textcontent is in the region
     bool                    m_bContent  : 1;
-    // fuer Multiselektion erst markieren, dann mit der TreeListBox arbeiten!
+    // for multiselection, mark at first, then work with TreeListBox!
     bool                    m_bSelected : 1;
     uno::Sequence<sal_Int8> m_TempPasswd;
 
@@ -253,7 +253,7 @@ void SectRepr::SetFile( const String& rFile )
     if( rFile.Len() || sSub.Len() )
     {
         sNewFile += sfx2::cTokenSeperator;
-        if( rFile.Len() ) // Filter nur mit FileName
+        if( rFile.Len() ) // Filter only with FileName
             sNewFile += sOldFileName.GetToken( 1, sfx2::cTokenSeperator );
 
         sNewFile += sfx2::cTokenSeperator;
@@ -348,7 +348,7 @@ String SectRepr::GetSubRegion() const
 }
 
 /*----------------------------------------------------------------------------
- Beschreibung: Dialog Bearbeiten Bereiche
+ Description: dialog edit regions
 ----------------------------------------------------------------------------*/
 SwEditRegionDlg::SwEditRegionDlg( Window* pParent, SwWrtShell& rWrtSh )
     : SfxModalDialog( pParent, SW_RES(MD_EDIT_REGION) ),
@@ -376,7 +376,7 @@ SwEditRegionDlg::SwEditRegionDlg( Window* pParent, SwWrtShell& rWrtSh )
     aConditionFT        ( this, SW_RES( FT_CONDITION ) ),
     aConditionED        ( this, SW_RES( ED_CONDITION ) ),
 
-    // #114856# edit in readonly sections
+    // edit in readonly sections
     aPropertiesFL       ( this, SW_RES( FL_PROPERTIES ) ),
     aEditInReadonlyCB   ( this, SW_RES( CB_EDIT_IN_READONLY ) ),
 
@@ -406,7 +406,7 @@ SwEditRegionDlg::SwEditRegionDlg( Window* pParent, SwWrtShell& rWrtSh )
     aPasswdCB.SetClickHdl   ( LINK( this, SwEditRegionDlg, ChangePasswdHdl));
     aPasswdPB.SetClickHdl   ( LINK( this, SwEditRegionDlg, ChangePasswdHdl));
     aHideCB.SetClickHdl     ( LINK( this, SwEditRegionDlg, ChangeHideHdl));
-    //  #114856# edit in readonly sections
+    // edit in readonly sections
     aEditInReadonlyCB.SetClickHdl ( LINK( this, SwEditRegionDlg, ChangeEditInReadonlyHdl));
 
     aOptionsPB.Show();
@@ -441,7 +441,7 @@ SwEditRegionDlg::SwEditRegionDlg( Window* pParent, SwWrtShell& rWrtSh )
     pCurrSect = rSh.GetCurrSection();
     RecurseList( 0, 0 );
     // if the cursor is not in a region
-    //the first one will always be selected
+    // the first one will always be selected
     if( !aTree.FirstSelected() && aTree.First() )
         aTree.Select( aTree.First() );
     aTree.Show();
@@ -494,7 +494,7 @@ BOOL SwEditRegionDlg::CheckPasswd(CheckBox* pBox)
 }
 
 /*---------------------------------------------------------------------
-    Beschreibung: Durchsuchen nach Child-Sections, rekursiv
+    Description: recursively look for child-sections
 ---------------------------------------------------------------------*/
 void SwEditRegionDlg::RecurseList( const SwSectionFmt* pFmt, SvLBoxEntry* pEntry )
 {
@@ -607,16 +607,16 @@ void    SwEditRegionDlg::SelectSection(const String& rSectionName)
 }
 
 /*---------------------------------------------------------------------
-    Beschreibung:   Selektierte Eintrag in der TreeListBox wird im
-                    Edit-Fenster angezeigt
-                    Bei Multiselektion werden einige Controls disabled
+    Description:    selected entry in TreeListBox is showed in
+                    Edit window
+                    in case of multiselection some controls are disabled
 ---------------------------------------------------------------------*/
 IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
 {
     bDontCheckPasswd = sal_True;
     SvLBoxEntry* pEntry=pBox->FirstSelected();
     aHideCB     .Enable(TRUE);
-    // #114856# edit in readonly sections
+    // edit in readonly sections
     aEditInReadonlyCB.Enable(TRUE);
 
     aProtectCB  .Enable(TRUE);
@@ -626,7 +626,7 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
     {
         aHideCB.EnableTriState( TRUE );
         aProtectCB.EnableTriState( TRUE );
-        // #114856# edit in readonly sections
+        // edit in readonly sections
         aEditInReadonlyCB.EnableTriState ( TRUE );
 
         aFileCB.EnableTriState( TRUE );
@@ -634,7 +634,7 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
         bool bHiddenValid       = true;
         bool bProtectValid      = true;
         bool bConditionValid    = true;
-        // #114856# edit in readonly sections
+        // edit in readonly sections
         bool bEditInReadonlyValid = true;
         bool bEditInReadonly    = true;
 
@@ -655,7 +655,7 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
                 sCondition      = rData.GetCondition();
                 bHidden         = rData.IsHidden();
                 bProtect        = rData.IsProtectFlag();
-                // #114856# edit in readonly sections
+                // edit in readonly sections
                 bEditInReadonly = rData.IsEditInReadonlyFlag();
 
                 bFile           = (rData.GetType() != CONTENT_SECTION);
@@ -668,7 +668,7 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
                     bConditionValid = FALSE;
                 bHiddenValid      = (bHidden == rData.IsHidden());
                 bProtectValid     = (bProtect == rData.IsProtectFlag());
-                // #114856# edit in readonly sections
+                // edit in readonly sections
                 bEditInReadonlyValid =
                     (bEditInReadonly == rData.IsEditInReadonlyFlag());
 
@@ -684,7 +684,7 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
                     bHidden ? STATE_CHECK : STATE_NOCHECK);
         aProtectCB.SetState( !bProtectValid ? STATE_DONTKNOW :
                     bProtect ? STATE_CHECK : STATE_NOCHECK);
-        // #114856# edit in readonly sections
+        // edit in readonly sections
         aEditInReadonlyCB.SetState( !bEditInReadonlyValid ? STATE_DONTKNOW :
                     bEditInReadonly ? STATE_CHECK : STATE_NOCHECK);
 
@@ -765,7 +765,7 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
                 ? STATE_CHECK : STATE_NOCHECK);
         aProtectCB.Enable();
 
-        // #114856# edit in readonly sections
+        // edit in readonly sections
         aEditInReadonlyCB.SetState((rData.IsEditInReadonlyFlag())
                 ? STATE_CHECK : STATE_NOCHECK);
         aEditInReadonlyCB.Enable();
@@ -784,7 +784,7 @@ IMPL_LINK( SwEditRegionDlg, DeselectHdl, SvTreeListBox *, pBox )
     {
         aHideCB     .Enable(FALSE);
         aProtectCB  .Enable(FALSE);
-        // #114856# edit in readonly sections
+        // edit in readonly sections
         aEditInReadonlyCB.Enable(FALSE);
 
         aPasswdCB   .Enable(FALSE);
@@ -808,18 +808,17 @@ IMPL_LINK( SwEditRegionDlg, DeselectHdl, SvTreeListBox *, pBox )
 }
 
 /*---------------------------------------------------------------------
-    Beschreibung:   Im OkHdl werden die veraenderten Einstellungen
-                    uebernommen und aufgehobene Bereiche geloescht
+    Description:    in OkHdl the modified settings are being applied
+                    and reversed regions are deleted
 ---------------------------------------------------------------------*/
 IMPL_LINK( SwEditRegionDlg, OkHdl, CheckBox *, EMPTYARG )
 {
-    // JP 13.03.96:
-    // temp. Array weil sich waehrend des aendern eines Bereiches die
-    // Position innerhalb des "Core-Arrays" verschieben kann:
-    //  - bei gelinkten Bereichen, wenn sie weitere SubBereiche haben oder
-    //    neu erhalten.
-    // JP 30.05.97: StartUndo darf natuerlich auch erst nach dem Kopieren
-    //              der Formate erfolgen (ClearRedo!)
+    // temp. Array because during changing of a region the position
+    // inside of the "Core-Arrays" can be shifted:
+    //  - at linked regions, when they have more SubRegions or get
+    //    new ones.
+    // StartUndo must certainly also happen not before the formats
+    // are copied (ClearRedo!)
 
     const SwSectionFmts& rDocFmts = rSh.GetDoc()->GetSections();
     SwSectionFmts aOrigArray( 0, 5 );
@@ -880,8 +879,8 @@ IMPL_LINK( SwEditRegionDlg, OkHdl, CheckBox *, EMPTYARG )
 
     aOrigArray.Remove( 0, aOrigArray.Count() );
 
-    //JP 21.05.97: EndDialog muss vor Ende der EndAction gerufen werden,
-    //              sonst kann es ScrollFehler geben.
+    // EndDialog must be called ahead of EndAction's end,
+    // otherwise ScrollError can occur.
     EndDialog(RET_OK);
 
     rSh.EndUndo();
@@ -891,7 +890,7 @@ IMPL_LINK( SwEditRegionDlg, OkHdl, CheckBox *, EMPTYARG )
 }
 
 /*---------------------------------------------------------------------
- Beschreibung: Toggle protect
+ Description: Toggle protect
 ---------------------------------------------------------------------*/
 IMPL_LINK( SwEditRegionDlg, ChangeProtectHdl, TriStateBox *, pBox )
 {
@@ -917,7 +916,7 @@ IMPL_LINK( SwEditRegionDlg, ChangeProtectHdl, TriStateBox *, pBox )
 }
 
 /*---------------------------------------------------------------------
- Beschreibung: Toggle hide
+ Description: Toggle hide
 ---------------------------------------------------------------------*/
 IMPL_LINK( SwEditRegionDlg, ChangeHideHdl, TriStateBox *, pBox )
 {
@@ -946,7 +945,7 @@ IMPL_LINK( SwEditRegionDlg, ChangeHideHdl, TriStateBox *, pBox )
 }
 
 /*---------------------------------------------------------------------
- Beschreibung: Toggle edit in readonly
+ Description: Toggle edit in readonly
 ---------------------------------------------------------------------*/
 IMPL_LINK( SwEditRegionDlg, ChangeEditInReadonlyHdl, TriStateBox *, pBox )
 {
@@ -967,7 +966,7 @@ IMPL_LINK( SwEditRegionDlg, ChangeEditInReadonlyHdl, TriStateBox *, pBox )
 }
 
 /*---------------------------------------------------------------------
- Beschreibung: selektierten Bereich aufheben
+ Description: clear selected region
 ---------------------------------------------------------------------*/
 IMPL_LINK( SwEditRegionDlg, ChangeDismissHdl, CheckBox *, EMPTYARG )
 {
@@ -976,7 +975,7 @@ IMPL_LINK( SwEditRegionDlg, ChangeDismissHdl, CheckBox *, EMPTYARG )
     SvLBoxEntry* pEntry = aTree.FirstSelected();
     SvLBoxEntry* pChild;
     SvLBoxEntry* pParent;
-    //zuerst alle selektierten markieren
+    // at first mark all selected
     while(pEntry)
     {
         const SectReprPtr pSectRepr = (SectRepr*)pEntry->GetUserData();
@@ -984,7 +983,7 @@ IMPL_LINK( SwEditRegionDlg, ChangeDismissHdl, CheckBox *, EMPTYARG )
         pEntry = aTree.NextSelected(pEntry);
     }
     pEntry = aTree.FirstSelected();
-    // dann loeschen
+    // then delete
     while(pEntry)
     {
         const SectReprPtr pSectRepr = (SectRepr*)pEntry->GetUserData();
@@ -995,7 +994,7 @@ IMPL_LINK( SwEditRegionDlg, ChangeDismissHdl, CheckBox *, EMPTYARG )
             aSectReprArr.Insert( pSectRepr );
             while( (pChild = aTree.FirstChild(pEntry) )!= 0 )
             {
-                //durch das Umhaengen muss wieder am Anfang aufgesetzt werden
+                // because of the repositioning we have to start at the beginning again
                 bRestart = TRUE;
                 pParent=aTree.GetParent(pEntry);
                 aTree.GetModel()->Move(pChild, pParent, aTree.GetModel()->GetRelPos(pEntry));
@@ -1019,7 +1018,7 @@ IMPL_LINK( SwEditRegionDlg, ChangeDismissHdl, CheckBox *, EMPTYARG )
         aProtectCB.     Enable(FALSE);
         aPasswdCB.      Enable(FALSE);
         aHideCB.        Enable(FALSE);
-        // #114856# edit in readonly sections
+        // edit in readonly sections
         aEditInReadonlyCB.Enable(FALSE);
         aEditInReadonlyCB.SetState(STATE_NOCHECK);
         aProtectCB.     SetState(STATE_NOCHECK);
@@ -1034,7 +1033,7 @@ IMPL_LINK( SwEditRegionDlg, ChangeDismissHdl, CheckBox *, EMPTYARG )
 }
 
 /*---------------------------------------------------------------------
- Beschreibung: CheckBox mit Datei verknuepfen?
+ Description: link CheckBox to file?
 ---------------------------------------------------------------------*/
 IMPL_LINK( SwEditRegionDlg, UseFileHdl, CheckBox *, pBox )
 {
@@ -1103,7 +1102,7 @@ IMPL_LINK( SwEditRegionDlg, UseFileHdl, CheckBox *, pBox )
 }
 
 /*---------------------------------------------------------------------
-    Beschreibung: Dialog Datei einfuegen rufen
+    Description: call dialog paste file
 ---------------------------------------------------------------------*/
 IMPL_LINK( SwEditRegionDlg, FileSearchHdl, PushButton *, EMPTYARG )
 {
@@ -1221,8 +1220,8 @@ IMPL_LINK( SwEditRegionDlg, OptionsHdl, PushButton *, EMPTYARG )
 }
 
 /*---------------------------------------------------------------------
-    Beschreibung:   Uebernahme des Dateinamen oder
-                    des verknuepften Bereichs
+    Description:    Applying of the filename or the
+                    linked region
 ---------------------------------------------------------------------*/
 IMPL_LINK( SwEditRegionDlg, FileNameHdl, Edit *, pEdit )
 {
@@ -1376,9 +1375,9 @@ IMPL_LINK( SwEditRegionDlg, ChangePasswdHdl, Button *, pBox )
 }
 
 /*---------------------------------------------------------------------
-    Beschreibung:   Aktueller Bereichsname wird sofort beim editieren
-                    in die TreeListBox eingetragen, mit leerem String
-                    kein Ok()
+    Description:    the current region name is being added to the
+                    TreeListBox immediately during editing, with empty
+                    string no Ok()
 ---------------------------------------------------------------------*/
 IMPL_LINK( SwEditRegionDlg, NameEditHdl, Edit *, EMPTYARG )
 {
@@ -1483,7 +1482,7 @@ Image SwEditRegionDlg::BuildBitmap(BOOL bProtect,BOOL bHidden)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Hilfsfunktion - Bereichsnamen aus dem Medium lesen
+    Description:    helper function - read region names from medium
  --------------------------------------------------------------------*/
 static void lcl_ReadSections( SfxMedium& rMedium, ComboBox& rBox )
 {
@@ -1592,7 +1591,7 @@ short   SwInsertSectionTabDialog::Ok()
                     m_pSectionData->IsHidden()));
         aRequest.AppendItem(SfxBoolItem( FN_PARAM_REGION_PROTECT,
                     m_pSectionData->IsProtectFlag()));
-        // #114856# edit in readonly sections
+        // edit in readonly sections
         aRequest.AppendItem(SfxBoolItem( FN_PARAM_REGION_EDIT_IN_READONLY,
                     m_pSectionData->IsEditInReadonlyFlag()));
 
@@ -1629,7 +1628,7 @@ SwInsertSectionTabPage::SwInsertSectionTabPage(
     aHideCB             ( this, SW_RES( CB_HIDE ) ),
     aConditionFT             ( this, SW_RES( FT_CONDITION ) ),
     aConditionED        ( this, SW_RES( ED_CONDITION ) ),
-    // #114856# edit in readonly sections
+    // edit in readonly sections
     aPropertiesFL       ( this, SW_RES( FL_PROPERTIES ) ),
     aEditInReadonlyCB   ( this, SW_RES( CB_EDIT_IN_READONLY ) ),
 
@@ -1643,7 +1642,7 @@ SwInsertSectionTabPage::SwInsertSectionTabPage(
     aPasswdCB.SetClickHdl   ( LINK( this, SwInsertSectionTabPage, ChangePasswdHdl));
     aPasswdPB.SetClickHdl   ( LINK( this, SwInsertSectionTabPage, ChangePasswdHdl));
     aHideCB.SetClickHdl     ( LINK( this, SwInsertSectionTabPage, ChangeHideHdl));
-    // #114856# edit in readonly sections
+    // edit in readonly sections
     aEditInReadonlyCB.SetClickHdl       ( LINK( this, SwInsertSectionTabPage, ChangeEditInReadonlyHdl));
     aFileCB.SetClickHdl     ( LINK( this, SwInsertSectionTabPage, UseFileHdl ));
     aFilePB.SetClickHdl     ( LINK( this, SwInsertSectionTabPage, FileSearchHdl ));
@@ -1701,7 +1700,7 @@ BOOL SwInsertSectionTabPage::FillItemSet( SfxItemSet& )
     BOOL bProtected = aProtectCB.IsChecked();
     aSection.SetProtectFlag(bProtected);
     aSection.SetHidden(aHideCB.IsChecked());
-    // #114856# edit in readonly sections
+    // edit in readonly sections
     aSection.SetEditInReadonlyFlag(aEditInReadonlyCB.IsChecked());
 
     if(bProtected)
@@ -1919,8 +1918,8 @@ IMPL_LINK( SwInsertSectionTabPage, DlgClosedHdl, sfx2::FileDialogHelper *, _pFil
 
 // --------------------------------------------------------------
 
-// Numerierungsformat Umsetzung:
-// ListBox  - Format            - Enum-Wert
+// numbering format conversion:
+// ListBox  - format            - enum-value
 // 0        - A, B, C, ...      - 0
 // 1        - a, b, c, ...      - 1
 // 2        - I, II, III, ...   - 2

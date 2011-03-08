@@ -130,19 +130,19 @@ SfxPoolItem* SfxEventNamesItem::Clone( SfxItemPool *) const
 
 SfxPoolItem* SfxEventNamesItem::Create(SvStream &, USHORT) const
 {
-    DBG_ERROR("not streamable!");
+    OSL_FAIL("not streamable!");
     return new SfxEventNamesItem(Which());
 }
 
 SvStream& SfxEventNamesItem::Store(SvStream &rStream, USHORT ) const
 {
-    DBG_ERROR("not streamable!");
+    OSL_FAIL("not streamable!");
     return rStream;
 }
 
 USHORT SfxEventNamesItem::GetVersion( USHORT ) const
 {
-    DBG_ERROR("not streamable!");
+    OSL_FAIL("not streamable!");
     return 0;
 }
 

@@ -73,24 +73,16 @@ DEF1NAME=$(SHL1TARGET)
 
 SHL1LIBS=$(LIB1TARGET)
 
-.IF "$(OS)"=="MACOSX"
-SHL1STDLIBS= \
-    $(LIBSTLPORT)		\
-    $(TKLIB)
-.ELSE
-SHL1STDLIBS= \
-    $(TKLIB)
-.ENDIF
-
 SHL1STDLIBS+= \
+    $(TKLIB)            \
     $(VCLLIB)			\
     $(SVLLIB)			\
-        $(UNOTOOLSLIB)                     \
+    $(UNOTOOLSLIB)      \
     $(TOOLSLIB)			\
     $(UCBHELPERLIB)		\
     $(CPPUHELPERLIB)	\
     $(CPPULIB)			\
-    $(SALLIB) \
+    $(SALLIB)           \
     $(SALHELPERLIB)
 
 .IF "$(GUIBASE)"=="unx"

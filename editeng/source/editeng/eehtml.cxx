@@ -93,7 +93,7 @@ SvParserState EditHTMLParser::CallParser( ImpEditEngine* pImpEE, const EditPaM& 
     SvParserState _eState = SVPAR_NOTSTARTED;
     if ( pImpEditEngine )
     {
-        // Umbrechmimik vom RTF-Import einbauen?
+        // Build in wrap mimic in RTF import?
         aCurSel = EditSelection( rPaM, rPaM );
 
         if ( pImpEditEngine->aImportHdl.IsSet() )
@@ -210,7 +210,7 @@ void EditHTMLParser::NextToken( int nToken )
             }
             else
             {
-                // Nur bis HTML mit 319 geschrieben ?!
+                // Only written until HTML with 319?
                 if ( IsReadPRE() )
                 {
                     USHORT nTabPos = aText.Search( '\t', 0 );
@@ -228,7 +228,7 @@ void EditHTMLParser::NextToken( int nToken )
     break;
 
     case HTML_CENTER_ON:
-    case HTML_CENTER_OFF:   // if ( bInPara )
+    case HTML_CENTER_OFF:
                             {
                                 USHORT nNode = pImpEditEngine->GetEditDoc().GetPos( aCurSel.Max().GetNode() );
                                 SfxItemSet aItems( aCurSel.Max().GetNode()->GetContentAttribs().GetItems() );
@@ -301,14 +301,14 @@ void EditHTMLParser::NextToken( int nToken )
 
     case HTML_TABLE_ON:     nInTable++;
                             break;
-    case HTML_TABLE_OFF:    DBG_ASSERT( nInTable, "Nicht in Table, aber TABLE_OFF?" );
+    case HTML_TABLE_OFF:    DBG_ASSERT( nInTable, "Not in Table, but TABLE_OFF?" );
                             nInTable--;
                             break;
 
     case HTML_TABLEHEADER_ON:
     case HTML_TABLEDATA_ON:
         nInCell++;
-    // fallthru
+    // fall through
     case HTML_BLOCKQUOTE_ON:
     case HTML_BLOCKQUOTE_OFF:
     case HTML_BLOCKQUOTE30_ON:
@@ -333,7 +333,7 @@ void EditHTMLParser::NextToken( int nToken )
         if ( nInCell )
             nInCell--;
     }
-    // fallthru
+    // fall through
     case HTML_LISTHEADER_OFF:
     case HTML_LI_OFF:
     case HTML_DD_OFF:
@@ -343,7 +343,7 @@ void EditHTMLParser::NextToken( int nToken )
                                 break;
 
     case HTML_TABLEROW_ON:
-    case HTML_TABLEROW_OFF: // Nur nach einem CELL ein RETURN, fuer Calc
+    case HTML_TABLEROW_OFF: // A RETURN only after a CELL, for Calc
 
     case HTML_COL_ON:
     case HTML_COLGROUP_ON:
@@ -353,9 +353,6 @@ void EditHTMLParser::NextToken( int nToken )
                             break;
     case HTML_FONT_OFF:     // ...
                             break;
-
-
-    // #58335# kein SkipGroup on/off auf inline markup etc.
 
     case HTML_TITLE_ON:
         bInTitle = TRUE;
@@ -391,7 +388,7 @@ void EditHTMLParser::NextToken( int nToken )
     // HTML 2.0
     case HTML_ADDRESS_ON:
     case HTML_ADDRESS_OFF:
-//  case HTML_BLOCKQUOTE_ON:        //! extra Behandlung
+//  case HTML_BLOCKQUOTE_ON:        //! special handling
 //  case HTML_BLOCKQUOTE_OFF:
     case HTML_CITIATION_ON:
     case HTML_CITIATION_OFF:
@@ -418,7 +415,7 @@ void EditHTMLParser::NextToken( int nToken )
     case HTML_ACRONYM_OFF:
     case HTML_AUTHOR_ON:
     case HTML_AUTHOR_OFF:
-//  case HTML_BLOCKQUOTE30_ON:      //! extra Behandlung
+//  case HTML_BLOCKQUOTE30_ON:      //! special handling
 //  case HTML_BLOCKQUOTE30_OFF:
     case HTML_DELETEDTEXT_ON:
     case HTML_DELETEDTEXT_OFF:
@@ -461,20 +458,20 @@ void EditHTMLParser::NextToken( int nToken )
     // misc
     case HTML_DIRLIST_ON:
     case HTML_DIRLIST_OFF:
-    case HTML_FOOTNOTE_ON:          //! landen so im Text
+    case HTML_FOOTNOTE_ON:          //! land so im Text
     case HTML_FOOTNOTE_OFF:
     case HTML_MENULIST_ON:
     case HTML_MENULIST_OFF:
-//  case HTML_PLAINTEXT_ON:         //! extra Behandlung
+//  case HTML_PLAINTEXT_ON:         //! special handling
 //  case HTML_PLAINTEXT_OFF:
-//  case HTML_PREFORMTXT_ON:        //! extra Behandlung
+//  case HTML_PREFORMTXT_ON:        //! special handling
 //  case HTML_PREFORMTXT_OFF:
     case HTML_SPAN_ON:
     case HTML_SPAN_OFF:
     // obsolete
-//  case HTML_XMP_ON:               //! extra Behandlung
+//  case HTML_XMP_ON:               //! special handling
 //  case HTML_XMP_OFF:
-//  case HTML_LISTING_ON:           //! extra Behandlung
+//  case HTML_LISTING_ON:           //! special handling
 //  case HTML_LISTING_OFF:
     // Netscape
     case HTML_BLINK_ON:
@@ -488,7 +485,7 @@ void EditHTMLParser::NextToken( int nToken )
     // Internet Explorer
     case HTML_MARQUEE_ON:
     case HTML_MARQUEE_OFF:
-//  case HTML_PLAINTEXT2_ON:        //! extra Behandlung
+//  case HTML_PLAINTEXT2_ON:        //! special handling
 //  case HTML_PLAINTEXT2_OFF:
     break;
 
@@ -502,7 +499,7 @@ void EditHTMLParser::NextToken( int nToken )
             }
             else if ( !(nToken & 1) )
             {
-                DBG_ASSERT( !( nToken & 1 ), "Kein Start-Token ?!" );
+                DBG_ASSERT( !( nToken & 1 ), "No Start-Token ?!" );
                 SkipGroup( nToken + 1 );
             }
         }
@@ -534,9 +531,9 @@ void EditHTMLParser::ImpInsertParaBreak()
 
 void EditHTMLParser::ImpSetAttribs( const SfxItemSet& rItems, EditSelection* pSel )
 {
-    // pSel, wenn Zeichenattribute, sonst Absatzattribute fuer den
-    // aktuellen Absatz.
-    DBG_ASSERT( pSel || ( aCurSel.Min().GetNode() == aCurSel.Max().GetNode() ), "ImpInsertAttribs: Selektion?" );
+    // pSel, when character attributes, otherwise paragraph attributes for
+    // the current paragraph.
+    DBG_ASSERT( pSel || ( aCurSel.Min().GetNode() == aCurSel.Max().GetNode() ), "ImpInsertAttribs: Selection?" );
 
     EditPaM aStartPaM( pSel ? pSel->Min() : aCurSel.Min() );
     EditPaM aEndPaM( pSel ? pSel->Max() : aCurSel.Max() );
@@ -558,160 +555,123 @@ void EditHTMLParser::ImpSetAttribs( const SfxItemSet& rItems, EditSelection* pSe
     ContentNode* pSN = aStartPaM.GetNode();
     USHORT nStartNode = pImpEditEngine->GetEditDoc().GetPos( pSN );
 
-    // Wenn ein Attribut von 0 bis aktuelle Absatzlaenge geht,
-    // soll es ein Absatz-Attribut sein!
+    // If an attribute goes from 0 to current Paragraph length,
+    // then it should be a paragraph attribute!
 
-    // Achtung: Selektion kann ueber mehrere Absaetze gehen.
-    // Alle vollstaendigen Absaetze sind Absatzattribute...
+    // Note: Selection can reach over several Paragraphs.
+    // All complete paragraphs are paragraph attributes ...
 
-    // HTML eigentlich nicht:
+    // not really HTML:
 #ifdef DBG_UTIL
     ContentNode* pEN = aEndPaM.GetNode();
     USHORT nEndNode = pImpEditEngine->GetEditDoc().GetPos( pEN );
-    DBG_ASSERT( nStartNode == nEndNode, "ImpSetAttribs: Mehrere Absaetze?" );
+    DBG_ASSERT( nStartNode == nEndNode, "ImpSetAttribs: Several paragraphs?" );
 #endif
-
-/*
-    for ( USHORT z = nStartNode+1; z < nEndNode; z++ )
+    if ( ( aStartPaM.GetIndex() == 0 ) && ( aEndPaM.GetIndex() == aEndPaM.GetNode()->Len() ) )
     {
-        DBG_ASSERT( pImpEditEngine->GetEditDoc().SaveGetObject( z ), "Node existiert noch nicht(RTF)" );
-        pImpEditEngine->SetParaAttribs( z, rSet.GetAttrSet() );
-    }
-
-    if ( aStartPaM.GetNode() != aEndPaM.GetNode() )
-    {
-        // Den Rest des StartNodes...
-        if ( aStartPaM.GetIndex() == 0 )
-            pImpEditEngine->SetParaAttribs( nStartNode, rSet.GetAttrSet() );
-        else
-            pImpEditEngine->SetAttribs( EditSelection( aStartPaM, EditPaM( aStartPaM.GetNode(), aStartPaM.GetNode()->Len() ) ), rSet.GetAttrSet() );
-
-        // Den Anfang des EndNodes....
-        if ( aEndPaM.GetIndex() == aEndPaM.GetNode()->Len() )
-            pImpEditEngine->SetParaAttribs( nEndNode, rSet.GetAttrSet() );
-        else
-            pImpEditEngine->SetAttribs( EditSelection( EditPaM( aEndPaM.GetNode(), 0 ), aEndPaM ), rSet.GetAttrSet() );
+        // Has to be merged:
+        SfxItemSet aItems( pImpEditEngine->GetParaAttribs( nStartNode ) );
+        aItems.Put( rItems );
+        pImpEditEngine->SetParaAttribs( nStartNode, aItems );
     }
     else
-*/
-    {
-        if ( ( aStartPaM.GetIndex() == 0 ) && ( aEndPaM.GetIndex() == aEndPaM.GetNode()->Len() ) )
-        {
-            // Muesse gemergt werden:
-            SfxItemSet aItems( pImpEditEngine->GetParaAttribs( nStartNode ) );
-            aItems.Put( rItems );
-            pImpEditEngine->SetParaAttribs( nStartNode, aItems );
-        }
-        else
-            pImpEditEngine->SetAttribs( EditSelection( aStartPaM, aEndPaM ), rItems );
-    }
+        pImpEditEngine->SetAttribs( EditSelection( aStartPaM, aEndPaM ), rItems );
 }
 
 void EditHTMLParser::ImpSetStyleSheet( USHORT nHLevel )
 {
     /*
-        nHLevel:    0:          Ausschalten
+        nHLevel:    0:          Turn off
                     1-6:        Heading
                     STYLE_PRE:  Preformatted
     */
+    // Create hard attributes ...
+    // Enough for Calc, would have to be clarified with StyleSheets
+    // that they should also be in the app so that when they are feed
+    // in a different engine still are here ...
 
-//      if ( pImpEditEngine->GetStatus().DoImportRTFStyleSheets() )
-//      {
-//          SvxRTFStyleType* pS = GetStyleTbl().Get( rSet.StyleNo() );
-//          DBG_ASSERT( pS, "Vorlage in RTF nicht definiert!" );
-//          if ( pS )
-//              pImpEditEngine->SetStyleSheet( EditSelection( aStartPaM, aEndPaM ), pS->sName, SFX_STYLE_FAMILY_ALL );
-//      }
-//      else
+    USHORT nNode = pImpEditEngine->GetEditDoc().GetPos( aCurSel.Max().GetNode() );
+
+    SfxItemSet aItems( aCurSel.Max().GetNode()->GetContentAttribs().GetItems() );
+
+    aItems.ClearItem( EE_PARA_ULSPACE );
+
+    aItems.ClearItem( EE_CHAR_FONTHEIGHT );
+    aItems.ClearItem( EE_CHAR_FONTINFO );
+    aItems.ClearItem( EE_CHAR_WEIGHT );
+
+    aItems.ClearItem( EE_CHAR_FONTHEIGHT_CJK );
+    aItems.ClearItem( EE_CHAR_FONTINFO_CJK );
+    aItems.ClearItem( EE_CHAR_WEIGHT_CJK );
+
+    aItems.ClearItem( EE_CHAR_FONTHEIGHT_CTL );
+    aItems.ClearItem( EE_CHAR_FONTINFO_CTL );
+    aItems.ClearItem( EE_CHAR_WEIGHT_CTL );
+
+    // Bold in the first 3 Headings
+    if ( ( nHLevel >= 1 ) && ( nHLevel <= 3 ) )
+    {
+        SvxWeightItem aWeightItem( WEIGHT_BOLD, EE_CHAR_WEIGHT );
+        aItems.Put( aWeightItem );
+
+        SvxWeightItem aWeightItemCJK( WEIGHT_BOLD, EE_CHAR_WEIGHT_CJK );
+        aItems.Put( aWeightItem );
+
+        SvxWeightItem aWeightItemCTL( WEIGHT_BOLD, EE_CHAR_WEIGHT_CTL );
+        aItems.Put( aWeightItem );
+    }
+
+    // Font hight and margins, when LogicToLogic is possible:
+    MapUnit eUnit = pImpEditEngine->GetRefMapMode().GetMapUnit();
+    if ( ( eUnit != MAP_PIXEL ) && ( eUnit != MAP_SYSFONT ) &&
+         ( eUnit != MAP_APPFONT ) && ( eUnit != MAP_RELATIVE ) )
+    {
+        long nPoints = 10;
+        if ( nHLevel == 1 )
+            nPoints = 22;
+        else if ( nHLevel == 2 )
+            nPoints = 16;
+        else if ( nHLevel == 3 )
+            nPoints = 12;
+        else if ( nHLevel == 4 )
+            nPoints = 11;
+
+        nPoints = OutputDevice::LogicToLogic( nPoints, MAP_POINT, eUnit );
+
+        SvxFontHeightItem aHeightItem( nPoints, 100, EE_CHAR_FONTHEIGHT );
+        aItems.Put( aHeightItem );
+
+        SvxFontHeightItem aHeightItemCJK( nPoints, 100, EE_CHAR_FONTHEIGHT_CJK );
+        aItems.Put( aHeightItemCJK );
+
+        SvxFontHeightItem aHeightItemCTL( nPoints, 100, EE_CHAR_FONTHEIGHT_CTL );
+        aItems.Put( aHeightItemCTL );
+
+        // Paragraph margins, when Heading:
+        if ( !nHLevel || ((nHLevel >= 1) && (nHLevel <= 6)) )
         {
-            // Harte Attribute erzeugen...
-            // Reicht fuer Calc, bei StyleSheets muesste noch geklaert werden,
-            // dass diese auch in der App liegen sollten, damit sie beim
-            // fuettern in eine andere Engine auch noch da sind...
-
-            USHORT nNode = pImpEditEngine->GetEditDoc().GetPos( aCurSel.Max().GetNode() );
-//          SfxItemSet aItems( pImpEditEngine->GetEmptyItemSet() );
-            SfxItemSet aItems( aCurSel.Max().GetNode()->GetContentAttribs().GetItems() );
-
-            aItems.ClearItem( EE_PARA_ULSPACE );
-
-            aItems.ClearItem( EE_CHAR_FONTHEIGHT );
-            aItems.ClearItem( EE_CHAR_FONTINFO );
-            aItems.ClearItem( EE_CHAR_WEIGHT );
-
-            aItems.ClearItem( EE_CHAR_FONTHEIGHT_CJK );
-            aItems.ClearItem( EE_CHAR_FONTINFO_CJK );
-            aItems.ClearItem( EE_CHAR_WEIGHT_CJK );
-
-            aItems.ClearItem( EE_CHAR_FONTHEIGHT_CTL );
-            aItems.ClearItem( EE_CHAR_FONTINFO_CTL );
-            aItems.ClearItem( EE_CHAR_WEIGHT_CTL );
-
-            // Fett in den ersten 3 Headings
-            if ( ( nHLevel >= 1 ) && ( nHLevel <= 3 ) )
-            {
-                SvxWeightItem aWeightItem( WEIGHT_BOLD, EE_CHAR_WEIGHT );
-                aItems.Put( aWeightItem );
-
-                SvxWeightItem aWeightItemCJK( WEIGHT_BOLD, EE_CHAR_WEIGHT_CJK );
-                aItems.Put( aWeightItem );
-
-                SvxWeightItem aWeightItemCTL( WEIGHT_BOLD, EE_CHAR_WEIGHT_CTL );
-                aItems.Put( aWeightItem );
-            }
-
-            // Fonthoehe und Abstaende, wenn LogicToLogic moeglich:
-            MapUnit eUnit = pImpEditEngine->GetRefMapMode().GetMapUnit();
-            if ( ( eUnit != MAP_PIXEL ) && ( eUnit != MAP_SYSFONT ) &&
-                 ( eUnit != MAP_APPFONT ) && ( eUnit != MAP_RELATIVE ) )
-            {
-                long nPoints = 10;
-                if ( nHLevel == 1 )
-                    nPoints = 22;
-                else if ( nHLevel == 2 )
-                    nPoints = 16;
-                else if ( nHLevel == 3 )
-                    nPoints = 12;
-                else if ( nHLevel == 4 )
-                    nPoints = 11;
-
-                nPoints = OutputDevice::LogicToLogic( nPoints, MAP_POINT, eUnit );
-
-                SvxFontHeightItem aHeightItem( nPoints, 100, EE_CHAR_FONTHEIGHT );
-                aItems.Put( aHeightItem );
-
-                SvxFontHeightItem aHeightItemCJK( nPoints, 100, EE_CHAR_FONTHEIGHT_CJK );
-                aItems.Put( aHeightItemCJK );
-
-                SvxFontHeightItem aHeightItemCTL( nPoints, 100, EE_CHAR_FONTHEIGHT_CTL );
-                aItems.Put( aHeightItemCTL );
-
-                // Absatzabstaende, wenn Heading:
-                if ( !nHLevel || ((nHLevel >= 1) && (nHLevel <= 6)) )
-                {
-                    SvxULSpaceItem aULSpaceItem( EE_PARA_ULSPACE );
-                    aULSpaceItem.SetUpper( (USHORT)OutputDevice::LogicToLogic( 42, MAP_10TH_MM, eUnit ) );
-                    aULSpaceItem.SetLower( (USHORT)OutputDevice::LogicToLogic( 35, MAP_10TH_MM, eUnit ) );
-                    aItems.Put( aULSpaceItem );
-                }
-            }
-
-            // Bei Pre einen proportionalen Font waehlen
-            if ( nHLevel == STYLE_PRE )
-            {
-                Font aFont = OutputDevice::GetDefaultFont( DEFAULTFONT_FIXED, LANGUAGE_SYSTEM, 0 );
-                SvxFontItem aFontItem( aFont.GetFamily(), aFont.GetName(), XubString(), aFont.GetPitch(), aFont.GetCharSet(), EE_CHAR_FONTINFO );
-                aItems.Put( aFontItem );
-
-                SvxFontItem aFontItemCJK( aFont.GetFamily(), aFont.GetName(), XubString(), aFont.GetPitch(), aFont.GetCharSet(), EE_CHAR_FONTINFO_CJK );
-                aItems.Put( aFontItemCJK );
-
-                SvxFontItem aFontItemCTL( aFont.GetFamily(), aFont.GetName(), XubString(), aFont.GetPitch(), aFont.GetCharSet(), EE_CHAR_FONTINFO_CTL );
-                aItems.Put( aFontItemCTL );
-            }
-
-            pImpEditEngine->SetParaAttribs( nNode, aItems );
+            SvxULSpaceItem aULSpaceItem( EE_PARA_ULSPACE );
+            aULSpaceItem.SetUpper( (USHORT)OutputDevice::LogicToLogic( 42, MAP_10TH_MM, eUnit ) );
+            aULSpaceItem.SetLower( (USHORT)OutputDevice::LogicToLogic( 35, MAP_10TH_MM, eUnit ) );
+            aItems.Put( aULSpaceItem );
         }
+    }
+
+    // Choose a proportional Font for Pre
+    if ( nHLevel == STYLE_PRE )
+    {
+        Font aFont = OutputDevice::GetDefaultFont( DEFAULTFONT_FIXED, LANGUAGE_SYSTEM, 0 );
+        SvxFontItem aFontItem( aFont.GetFamily(), aFont.GetName(), XubString(), aFont.GetPitch(), aFont.GetCharSet(), EE_CHAR_FONTINFO );
+        aItems.Put( aFontItem );
+
+        SvxFontItem aFontItemCJK( aFont.GetFamily(), aFont.GetName(), XubString(), aFont.GetPitch(), aFont.GetCharSet(), EE_CHAR_FONTINFO_CJK );
+        aItems.Put( aFontItemCJK );
+
+        SvxFontItem aFontItemCTL( aFont.GetFamily(), aFont.GetName(), XubString(), aFont.GetPitch(), aFont.GetCharSet(), EE_CHAR_FONTINFO_CTL );
+        aItems.Put( aFontItemCTL );
+    }
+
+    pImpEditEngine->SetParaAttribs( nNode, aItems );
 }
 
 void EditHTMLParser::ImpInsertText( const String& rText )
@@ -730,7 +690,7 @@ void EditHTMLParser::ImpInsertText( const String& rText )
 
 void EditHTMLParser::SkipGroup( int nEndToken )
 {
-    // #69109# groups in cells are closed upon leaving the cell, because those
+    // groups in cells are closed upon leaving the cell, because those
     // ******* web authors don't know their job
     // for example: <td><form></td>   lacks a closing </form>
     BYTE nCellLevel = nInCell;
@@ -792,18 +752,14 @@ void EditHTMLParser::EndPara( BOOL )
         BOOL bHasText = HasTextInCurrentPara();
         if ( bHasText )
             ImpInsertParaBreak();
-        // Nur, wenn ohne Absatzabstaende gearbeitet wird...
-//      if ( !nInTable && bReal && (nNumberingLevel<=1) && (nBulletLevel<=1) )
-//          ImpInsertParaBreak();
     }
     bInPara = FALSE;
 }
 
 BOOL EditHTMLParser::ThrowAwayBlank()
 {
-    // Ein Blank muss weggeschmissen werden, wenn der neue Text mit einem
-    // Blank beginnt und der aktuelle Absatz leer ist oder mit einem
-    // Blank endet...
+    // A blank must be thrown away if the new text begins with a Blank and
+    // if the current paragraph is empty or ends with a Blank...
     ContentNode* pNode = aCurSel.Max().GetNode();
     if ( pNode->Len() && ( pNode->GetChar( pNode->Len()-1 ) != ' ' ) )
         return FALSE;
@@ -817,7 +773,7 @@ BOOL EditHTMLParser::HasTextInCurrentPara()
 
 void EditHTMLParser::AnchorStart()
 {
-    // Anker im Anker ignoriern
+    // ignore anchor in anchor
     if ( !pCurAnchor )
     {
         const HTMLOptions* _pOptions = GetOptions();
@@ -856,7 +812,7 @@ void EditHTMLParser::AnchorEnd()
 {
     if ( pCurAnchor )
     {
-        // Als URL-Feld einfuegen...
+        // Insert as URL-Field...
         SvxFieldItem aFld( SvxURLField( pCurAnchor->aHRef, pCurAnchor->aText, SVXURLFORMAT_REPR ), EE_FEATURE_FIELD  );
         aCurSel = pImpEditEngine->InsertField( aCurSel, aFld );
         bFieldsInserted = TRUE;
@@ -881,7 +837,7 @@ void EditHTMLParser::HeadingStart( int nToken )
 
     USHORT nId = sal::static_int_cast< USHORT >(
         1 + ( ( nToken - HTML_HEAD1_ON ) / 2 ) );
-    DBG_ASSERT( (nId >= 1) && (nId <= 9), "HeadingStart: ID kann nicht stimmen!" );
+    DBG_ASSERT( (nId >= 1) && (nId <= 9), "HeadingStart: ID can not be correct!" );
     ImpSetStyleSheet( nId );
 }
 

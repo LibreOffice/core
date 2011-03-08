@@ -107,7 +107,7 @@ readRightTranslation( OUString const& aXMLName )
         = getLocaleSubdirList( Application::GetSettings().GetUILocale() );
 #if TEST_LAYOUT // read from cwd first
     OUString aCurrentWorkingUrl;
-    tools::getProcessWorkingDir( &aCurrentWorkingUrl );
+    tools::getProcessWorkingDir( aCurrentWorkingUrl );
     String aCurrentWorkingDir;
     LocalFileHelper::ConvertURLToPhysicalName( aCurrentWorkingUrl, aCurrentWorkingDir );
     aXMLFile = getFirstExisting( aCurrentWorkingDir, aSubdirs, aXMLName );

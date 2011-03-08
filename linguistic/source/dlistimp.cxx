@@ -60,14 +60,14 @@
 #include "dicimp.hxx"
 #include "lngopt.hxx"
 
-//using namespace utl;
 using namespace osl;
-using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
+
+using ::rtl::OUString;
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -184,7 +184,6 @@ void SAL_CALL DicEvtListenerHelper::processDictionaryEvent(
                 || xDicEntry.is(),
                 "lng : missing dictionary entry" );
 
-    /*BOOL bActiveDicsModified = FALSE;*/
     //
     // evaluate DictionaryEvents and update data for next DictionaryListEvent
     //
@@ -347,7 +346,7 @@ void DicList::SearchForDictionaries(
 
         if(!::IsVers2OrNewer( aURL, nLang, bNeg ))
         {
-            // Wenn kein
+            // When not
             xub_StrLen nPos  = aURL.Search('.');
             String aExt(aURL.Copy(nPos + 1));
             aExt.ToLowerAscii();
@@ -360,9 +359,8 @@ void DicList::SearchForDictionaries(
                 continue;          // andere Files
         }
 
-        // Aufnehmen in die Liste der Dictionaries
-        // Wenn existent nicht aufnehmen
-        //
+        // Record in the list of Dictoinaries
+        // When it already exists don't record
         INT16 nSystemLanguage = MsLangId::getSystemLanguage();
         String aTmp1 = ToLower( aURL, nSystemLanguage );
         xub_StrLen nPos = aTmp1.SearchBackward( '/' );
@@ -792,7 +790,7 @@ uno::Sequence< rtl::OUString > DicList::getSupportedServiceNames_Static() throw(
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 
-    uno::Sequence< rtl::OUString > aSNS( 1 );   // auch mehr als 1 Service moeglich
+    uno::Sequence< rtl::OUString > aSNS( 1 );   // more than 1 service possible
     aSNS.getArray()[0] = A2OU( SN_DICTIONARY_LIST );
     return aSNS;
 }

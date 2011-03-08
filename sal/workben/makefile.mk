@@ -102,7 +102,8 @@ APP4DEPN=$(SLB)$/sal.lib
 #
 # tgetpwnam
 #
-.IF "$(OS)"=="SCO" || "$(OS)"=="NETBSD" || "$(OS)"=="FREEBSD" || "$(OS)"=="OPENBSD"
+.IF "$(OS)"=="NETBSD" || "$(OS)"=="FREEBSD" || "$(OS)"=="OPENBSD" || \
+    "$(OS)"=="DRAGONFLY"
 OBJFILES+=\
     $(OBJ)$/tgetpwnam.obj
 
@@ -110,7 +111,7 @@ APP5TARGET=tgetpwnam
 APP5OBJS=$(OBJ)$/tgetpwnam.obj
 APP5STDLIBS=$(SALLIB)
 APP5DEPN=$(SLB)$/sal.lib
-.ENDIF # (sco | netbsd | freebsd)
+.ENDIF # (netbsd | freebsd)
 
 #
 # measure_oustrings

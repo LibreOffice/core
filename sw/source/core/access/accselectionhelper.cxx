@@ -317,7 +317,7 @@ Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
     return xChild;
 }
 
-// --> OD 2004-11-16 #111714# - index has to be treated as global child index.
+// index has to be treated as global child index.
 void SwAccessibleSelectionHelper::deselectAccessibleChild(
     sal_Int32 nChildIndex )
     throw ( lang::IndexOutOfBoundsException,

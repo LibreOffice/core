@@ -181,7 +181,7 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
         break;
     }
 
-    // #112490# the tabpages Alignment, Tabs and Asian Typography are very
+    // the tabpages Alignment, Tabs and Asian Typography are very
     // usefull, except for the background style
     if( DlgId.GetId() != TAB_PRES_LAYOUT_TEMPLATE_BACKGROUND )
     {

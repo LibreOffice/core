@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 #include <sfx2/dispatch.hxx>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>

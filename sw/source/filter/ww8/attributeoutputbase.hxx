@@ -170,6 +170,9 @@ public:
     /// Called after we end outputting the attributes.
     virtual void EndRunProperties( const SwRedlineData* pRedlineData ) = 0;
 
+    /// docx requires footnoteRef/endnoteRef tag at the beginning of each of them
+    virtual void FootnoteEndnoteRefTag() {};
+
     /// Output text (inside a run).
     virtual void RunText( const String& rText, rtl_TextEncoding eCharSet ) = 0;
 
@@ -564,6 +567,9 @@ public:
 
     /// Return the right export class.
     virtual MSWordExportBase& GetExport() = 0;
+
+    /// @overload
+    const MSWordExportBase& GetExport() const { return const_cast< AttributeOutputBase* >( this )->GetExport(); }
 
     /// Call the right virtual function according to the type of the item.
     void OutputItem( const SfxPoolItem& rHt );

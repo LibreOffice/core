@@ -37,38 +37,18 @@
 #include <com/sun/star/linguistic2/DictionaryListEventFlags.hpp>
 #include <tools/debug.hxx>
 #include <osl/mutex.hxx>
-
-//#define IPR_DEF_CACHE_SIZE        503
-#define IPR_DEF_CACHE_MAX       375
-#define IPR_DEF_CACHE_MAXINPUT  200
-
-#ifdef DBG_STATISTIC
-#include <tools/stream.hxx>
-
-//#define IPR_CACHE_SIZE        nTblSize
-#define IPR_CACHE_MAX       nMax
-#define IPR_CACHE_MAXINPUT  nMaxInput
-
-#else
-
-//#define IPR_CACHE_SIZE        IPR_DEF_CACHE_SIZE
-#define IPR_CACHE_MAX       IPR_DEF_CACHE_MAX
-#define IPR_CACHE_MAXINPUT  IPR_DEF_CACHE_MAXINPUT
-
-#endif
 #include <unotools/processfactory.hxx>
-
 #include <lngprops.hxx>
 
 using namespace utl;
 using namespace osl;
-using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 
+using ::rtl::OUString;
 
 namespace linguistic
 {

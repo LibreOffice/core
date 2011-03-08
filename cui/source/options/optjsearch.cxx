@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 #include <tools/shl.hxx>
 #include <unotools/searchopt.hxx>
 #include <com/sun/star/i18n/TransliterationModules.hpp>

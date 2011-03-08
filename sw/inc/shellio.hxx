@@ -47,7 +47,6 @@
 #include <swdllapi.h>
 #include <swtypes.hxx>
 #include <docfac.hxx>   // SwDocFac
-#include <errhdl.hxx>
 #include <iodetect.hxx>
 
 // einige Forward - Deklarationen
@@ -303,10 +302,6 @@ public:
 class SW_DLLPUBLIC StgReader : public Reader
 {
     String aFltName;
-
-protected:
-    ULONG OpenMainStream( SotStorageStreamRef& rRef, USHORT& rBuffSize );
-
 public:
     virtual int GetReaderType();
     const String& GetFltName() { return aFltName; }

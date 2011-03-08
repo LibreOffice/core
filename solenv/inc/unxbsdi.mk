@@ -37,7 +37,7 @@ JAVAFLAGSDEBUG=-g
 #LINKOUTPUT_FILTER=" |& $(SOLARENV)/bin/msg_filter"
 
 # _PTHREADS is needed for the stl
-CDEFS+=-DX86 -D_PTHREADS -D_REENTRANT -DNEW_SOLAR -D_USE_NAMESPACE=1 -DSTLPORT_VERSION=$(STLPORT_VER)
+CDEFS+=-DX86 -D_PTHREADS -D_REENTRANT -DNEW_SOLAR -D_USE_NAMESPACE=1
 
 # this is a platform with JAVA support
 .IF "$(SOLAR_JAVA)"!=""
@@ -145,14 +145,6 @@ STDLIBCUIMT=-lpthread -lm
 # libraries for linking shared libraries
 STDSHLGUIMT=-lX11 -lXext -lpthread -lm
 STDSHLCUIMT=-lpthread -lm
-
-.IF "$(STLPORT_VER)" >= "500"
-LIBSTLPORT=$(DYNAMIC) -lstlport
-LIBSTLPORTST=$(STATIC) -lstlport $(DYNAMIC)
-.ELSE
-LIBSTLPORT=$(DYNAMIC) -lstlport_gcc
-LIBSTLPORTST=$(STATIC) -lstlport_gcc $(DYNAMIC)
-.ENDIF
 
 
 # name of library manager

@@ -682,7 +682,7 @@ public:
     sal_Bool IsMinHeight() const { return bMinHeight; }
 };
 
-void SwHTMLParser::SetPendingControlSize( int nToken )
+void SwHTMLParser::SetPendingControlSize()
 {
     OSL_ENSURE( pPendStack, "Wo ist der Pending Stack?" );
     SwHTMLFormPendingStackData_Impl *pData =
@@ -694,18 +694,15 @@ void SwHTMLParser::SetPendingControlSize( int nToken )
     OSL_ENSURE( !pPendStack, "Wo kommt der Pending-Stack her?" );
 
     SetControlSize( pData->GetShape(), pData->GetTextSize(),
-                    pData->IsMinWidth(), pData->IsMinHeight(),
-                    nToken );
+                    pData->IsMinWidth(), pData->IsMinHeight() );
     delete pData;
 }
 
 void SwHTMLParser::SetControlSize( const uno::Reference< drawing::XShape >& rShape,
                                    const Size& rTextSz,
                                    sal_Bool bMinWidth,
-                                   sal_Bool bMinHeight,
-                                   int nToken )
+                                   sal_Bool bMinHeight )
 {
-    nToken = 0;
     if( !rTextSz.Width() && !rTextSz.Height() && !bMinWidth  && !bMinHeight )
         return;
 
@@ -1055,11 +1052,9 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
             xPropSetInfo->hasPropertyByName( sPropName ) )
         {
             const Color &rColor = ((const SvxBrushItem *)pItem)->GetColor();
-            /// OD 02.09.2002 #99657#
             /// copy color, if color is not "no fill"/"auto fill"
             if( rColor.GetColor() != COL_TRANSPARENT )
             {
-                /// OD 02.09.2002 #99657#
                 /// copy complete color with transparency
                 aTmp <<= static_cast<sal_Int32>(rColor.GetColor());
                 rFCompPropSet->setPropertyValue( sPropName, aTmp );
@@ -1493,7 +1488,7 @@ void SwHTMLParser::InsertInput()
 {
     if( pPendStack )
     {
-        SetPendingControlSize( HTML_INPUT );
+        SetPendingControlSize();
         return;
     }
 
@@ -1652,7 +1647,6 @@ void SwHTMLParser::InsertInput()
         // ALIGN fuer alle Controls auszuwerten ist keine so gute Idee,
         // solange Absatz-gebundene Controls die Hoehe von Tabellen-Zellen
         // nicht beeinflussen
-        // (#64110#, http://www.telekom.de/katalog-online/onlineshop.html)
         eVertOri = text::VertOrientation::TOP;
         eHoriOri = text::HoriOrientation::NONE;
     }
@@ -1764,7 +1758,7 @@ void SwHTMLParser::InsertInput()
             aTmp <<= OUString();
             xPropSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("Label")),
                                         aTmp );
-            // #53559#: Beim RadioButton darf die DefaultChecked-Property
+            // Beim RadioButton darf die DefaultChecked-Property
             // erst gesetzt werden, wenn das Control angelegt und ein
             // activateTabOrder gerufen wurde, weil es sonst noch zu der
             // vorhergehenden Gruppe gehoert.
@@ -1953,7 +1947,7 @@ void SwHTMLParser::InsertInput()
     if( aTextSz.Width() || aTextSz.Height() || bMinWidth || bMinHeight )
     {
         OSL_ENSURE( !(bSetGrfWidth || bSetGrfHeight), "Grafikgroesse anpassen???" );
-        SetControlSize( xShape, aTextSz, bMinWidth, bMinHeight, HTML_INPUT );
+        SetControlSize( xShape, aTextSz, bMinWidth, bMinHeight );
     }
 
     if( HTML_IT_RADIO == eType )
@@ -1985,7 +1979,7 @@ void SwHTMLParser::NewTextArea()
 {
     if( pPendStack )
     {
-        SetPendingControlSize( HTML_TEXTAREA_ON );
+        SetPendingControlSize();
         return;
     }
 
@@ -2202,8 +2196,7 @@ void SwHTMLParser::NewTextArea()
                                       aMacroTbl, aUnoMacroTbl,
                                       aUnoMacroParamTbl );
     if( aTextSz.Width() || aTextSz.Height() )
-        SetControlSize( xShape, aTextSz, sal_False, sal_False,
-                        HTML_TEXTAREA_ON );
+        SetControlSize( xShape, aTextSz, sal_False, sal_False );
 
     // einen neuen Kontext anlegen
     _HTMLAttrContext *pCntxt = new _HTMLAttrContext( HTML_TEXTAREA_ON );
@@ -2280,7 +2273,7 @@ void SwHTMLParser::NewSelect()
 {
     if( pPendStack )
     {
-        SetPendingControlSize( HTML_SELECT_ON );
+        SetPendingControlSize();
         return;
     }
 
@@ -2489,8 +2482,7 @@ void SwHTMLParser::NewSelect()
     if( bFixSelectWidth )
         pFormImpl->SetShape( xShape );
     if( aTextSz.Height() || bMinWidth || bMinHeight )
-        SetControlSize( xShape, aTextSz, bMinWidth, bMinHeight,
-                        HTML_SELECT_ON );
+        SetControlSize( xShape, aTextSz, bMinWidth, bMinHeight );
 
     // einen neuen Kontext anlegen
     _HTMLAttrContext *pCntxt = new _HTMLAttrContext( HTML_SELECT_ON );
@@ -2506,7 +2498,7 @@ void SwHTMLParser::EndSelect()
 {
     if( pPendStack )
     {
-        SetPendingControlSize( HTML_SELECT_OFF );
+        SetPendingControlSize();
         return;
     }
 
@@ -2583,8 +2575,7 @@ void SwHTMLParser::EndSelect()
     {
         OSL_ENSURE( pFormImpl->GetShape().is(), "Kein Shape gemerkt" );
         Size aTextSz( -1, 0 );
-        SetControlSize( pFormImpl->GetShape(), aTextSz, sal_False, sal_False,
-                        HTML_SELECT_OFF );
+        SetControlSize( pFormImpl->GetShape(), aTextSz, sal_False, sal_False );
     }
 
     pFormImpl->ReleaseFCompPropSet();

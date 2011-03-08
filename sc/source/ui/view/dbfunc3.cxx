@@ -79,8 +79,8 @@
 #include "cell.hxx"
 #include "userlist.hxx"
 
-#include <hash_set>
-#include <hash_map>
+#include <boost/unordered_set.hpp>
+#include <boost/unordered_map.hpp>
 #include <memory>
 #include <list>
 #include <vector>
@@ -99,8 +99,6 @@ using ::rtl::OUStringBuffer;
 using ::std::auto_ptr;
 using ::std::list;
 using ::std::vector;
-using ::std::hash_map;
-using ::std::hash_set;
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -415,7 +413,7 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, BOOL bRecord,
                                                 rParam.nCol2, rParam.nRow2 );
     if (!pDBData)
     {
-        DBG_ERROR( "SubTotals: keine DBData" );
+        OSL_FAIL( "SubTotals: keine DBData" );
         return;
     }
 
@@ -489,7 +487,7 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, BOOL bRecord,
 
             //  DB- und andere Bereiche
             ScRangeName* pDocRange = pDoc->GetRangeName();
-            if (pDocRange->GetCount())
+            if (!pDocRange->empty())
                 pUndoRange = new ScRangeName( *pDocRange );
             ScDBCollection* pDocDB = pDoc->GetDBCollection();
             if (pDocDB->GetCount())
@@ -585,7 +583,7 @@ String lcl_MakePivotTabName( const String& rPrefix, SCTAB nNumber )
 bool ScDBFunc::MakePivotTable( const ScDPSaveData& rData, const ScRange& rDest, BOOL bNewTable,
                                 const ScDPObject& rSource, BOOL bApi )
 {
-    //  #70096# error message if no fields are set
+    //  error message if no fields are set
     //  this must be removed when drag&drop of fields from a toolbox is available
 
     if ( rData.IsEmpty() && !bApi )
@@ -654,9 +652,6 @@ bool ScDBFunc::MakePivotTable( const ScDPSaveData& rData, const ScRange& rDest, 
 
     bool bAllowMove = (pDPObj != NULL);   // allow re-positioning when editing existing table
 
-    if (aObj.RefreshCache())
-        return false;
-
     ScDBDocFunc aFunc( *pDocSh );
     bool bSuccess = aFunc.DataPilotUpdate( pDPObj, &aObj, TRUE, FALSE, bAllowMove );
 
@@ -687,44 +682,8 @@ void ScDBFunc::DeletePivotTable()
     else
         ErrorMessage(STR_PIVOT_NOTFOUND);
 }
-ULONG RefreshDPObject( ScDPObject *pDPObj, ScDocument *pDoc, ScDocShell *pDocSh, BOOL bRecord, BOOL bApi )
-{
-    if( !pDPObj )
-        return STR_PIVOT_NOTFOUND;
 
-    if ( pDocSh && !pDoc )
-        pDoc = pDocSh->GetDocument();
-
-    if( !pDoc  )
-        return static_cast<ULONG>(-1);
-
-    if( !pDocSh && ( pDocSh = PTR_CAST( ScDocShell, pDoc->GetDocumentShell() ) ) == NULL )
-        return static_cast<ULONG>(-1);
-
-    if( ULONG nErrId = pDPObj->RefreshCache() )
-        return nErrId;
-    else if ( nErrId == 0 )
-    {
-        //Refresh all dpobjects
-        ScDPCollection* pDPCollection = pDoc->GetDPCollection();
-        size_t nCount = pDPCollection->GetCount();
-        for (size_t i=0; i<nCount; ++i)
-        {
-            if ( (*pDPCollection)[i]->GetCacheId() == pDPObj->GetCacheId()  )
-            {
-                ScDBDocFunc aFunc( * pDocSh );
-                if ( !aFunc.DataPilotUpdate( (*pDPCollection)[i], (*pDPCollection)[i], bRecord, bApi ) )
-                    break;
-            }
-        }
-
-        return nErrId;
-    }
-
-    return 0U;
-}
-
-ULONG  ScDBFunc::RecalcPivotTable()
+void ScDBFunc::RecalcPivotTable()
 {
     ScDocShell* pDocSh  = GetViewData()->GetDocShell();
     ScDocument* pDoc    = GetViewData()->GetDocument();
@@ -736,19 +695,12 @@ ULONG  ScDBFunc::RecalcPivotTable()
                                                   GetViewData()->GetTabNo() );
     if ( pDPObj )
     {
-        ULONG nErrId = RefreshDPObject( pDPObj, pDoc, pDocSh, TRUE, FALSE );
-        if ( nErrId == 0 )
-        {
-            // There is no undo for the refresh of the cache table, but the undo history for cell changes
-            // remains valid and should be preserved, so the history isn't cleared here.
-        }
-        else if (nErrId <= USHRT_MAX)
-            ErrorMessage(static_cast<USHORT>(nErrId));
-      return nErrId;
+        ScDBDocFunc aFunc( *pDocSh );
+        aFunc.DataPilotUpdate( pDPObj, pDPObj, TRUE, FALSE );
+        CursorPosChanged();     // shells may be switched
     }
     else
         ErrorMessage(STR_PIVOT_NOTFOUND);
-    return STR_PIVOT_NOTFOUND;
 }
 
 void ScDBFunc::GetSelectedMemberList( ScStrCollection& rEntries, long& rDimension )
@@ -1052,7 +1004,7 @@ void ScDBFunc::DateGroupDataPilot( const ScDPNumGroupInfo& rInfo, sal_Int32 nPar
                 if ( pExistingGroup && pExistingGroup->GetGroupDimName() == aGroupDimName )
                 {
                     // still get the same group dimension?
-                    DBG_ERROR("couldn't remove group dimension");
+                    OSL_FAIL("couldn't remove group dimension");
                     pExistingGroup = NULL;      // avoid endless loop
                 }
             }
@@ -1534,7 +1486,7 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const String& rString )
         {
             if (rString.Len())
             {
-                if (rString.EqualsIgnoreCaseAscii(pDim->GetName()))
+                if (pDim->GetName().equalsIgnoreAsciiCase(rString))
                 {
                     pDim->RemoveLayoutName();
                     bChange = true;
@@ -1680,7 +1632,7 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const String& rString )
                             // already used.
                             if (rString.Len())
                             {
-                                if (rString.EqualsIgnoreCaseAscii(pMem->GetName()))
+                                if (::rtl::OUString(rString).equalsIgnoreAsciiCase(pMem->GetName()))
                                 {
                                     pMem->RemoveLayoutName();
                                     bChange = true;
@@ -1779,7 +1731,7 @@ bool ScDBFunc::DataPilotSort( const ScAddress& rPos, bool bAscending, sal_uInt16
         typedef ScDPSaveDimension::MemberList MemList;
         const MemList& rDimMembers = pSaveDim->GetMembers();
         list<OUString> aMembers;
-        hash_set<OUString, ::rtl::OUStringHash> aMemberSet;
+        boost::unordered_set<OUString, ::rtl::OUStringHash> aMemberSet;
         size_t nMemberCount = 0;
         for (MemList::const_iterator itr = rDimMembers.begin(), itrEnd = rDimMembers.end();
               itr != itrEnd; ++itr)
@@ -1796,7 +1748,7 @@ bool ScDBFunc::DataPilotSort( const ScAddress& rPos, bool bAscending, sal_uInt16
 
         // Collect and rank those custom sort strings that also exist in the member name list.
 
-        typedef hash_map<OUString, sal_uInt16, OUStringHash> UserSortMap;
+        typedef boost::unordered_map<OUString, sal_uInt16, OUStringHash> UserSortMap;
         UserSortMap aSubStrs;
         sal_uInt16 nSubCount = 0;
         if (pUserListId)
@@ -1900,7 +1852,7 @@ BOOL ScDBFunc::DataPilotMove( const ScRange& rSource, const ScAddress& rDest )
         bool bValid = ( aDestData.Dimension >= 0 );        // dropping onto a field
 
         // look through the source range
-        std::hash_set< rtl::OUString, rtl::OUStringHash, std::equal_to<rtl::OUString> > aMembersSet;   // for lookup
+        boost::unordered_set< rtl::OUString, rtl::OUStringHash, std::equal_to<rtl::OUString> > aMembersSet;   // for lookup
         std::vector< rtl::OUString > aMembersVector;  // members in original order, for inserting
         aMembersVector.reserve( std::max( static_cast<SCSIZE>( rSource.aEnd.Col() - rSource.aStart.Col() + 1 ),
                                           static_cast<SCSIZE>( rSource.aEnd.Row() - rSource.aStart.Row() + 1 ) ) );
@@ -2277,7 +2229,7 @@ void ScDBFunc::RepeatDB( BOOL bRecord )
 
             //  DB- und andere Bereiche
             ScRangeName* pDocRange = pDoc->GetRangeName();
-            if (pDocRange->GetCount())
+            if (!pDocRange->empty())
                 pUndoRange = new ScRangeName( *pDocRange );
             ScDBCollection* pDocDB = pDoc->GetDBCollection();
             if (pDocDB->GetCount())

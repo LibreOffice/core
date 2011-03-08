@@ -1434,7 +1434,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     // ensure that the metadatable has an XML ID
     i_xObject->ensureMetadataReference();
     const beans::StringPair mdref( i_xObject->getMetadataReference() );
-    if (mdref.First.equalsAscii("") || mdref.Second.equalsAscii("")) {
+    if ((mdref.First.getLength() == 0) || (mdref.Second.getLength() == 0)) {
         throw uno::RuntimeException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                 "librdf_Repository::setStatementRDFa: "
                 "ensureMetadataReference did not")), *this);
@@ -1497,7 +1497,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     }
 
     const beans::StringPair mdref( i_xElement->getMetadataReference() );
-    if (mdref.First.equalsAscii("") || mdref.Second.equalsAscii("")) {
+    if ((mdref.First.getLength() == 0) || (mdref.Second.getLength() == 0)) {
         return; // nothing to do...
     }
     uno::Reference<rdf::XURI> xXmlId;
@@ -1528,7 +1528,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
             "librdf_Repository::getStatementRDFa: Element is null")), *this, 0);
     }
     const beans::StringPair mdref( i_xElement->getMetadataReference() );
-    if (mdref.First.equalsAscii("") || mdref.Second.equalsAscii("")) {
+    if ((mdref.First.getLength() == 0) || (mdref.Second.getLength() == 0)) {
         return beans::Pair< uno::Sequence<rdf::Statement>, sal_Bool >();
     }
     ::rtl::OUString const sXmlId(mdref.First +

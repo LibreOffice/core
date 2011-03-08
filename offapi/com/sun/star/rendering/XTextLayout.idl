@@ -110,8 +110,8 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
          text.<p>
 
         Ink, or tight bounding boxes in this case means that for
-        e.g. an 'a', the bounding box for the
-        <type>XPolyPolygon2D</type> describing the glyph 'a' is
+        e.g. an "a", the bounding box for the
+        <type>XPolyPolygon2D</type> describing the glyph "a" is
         returned, not the logical dimensions of the character in the
         font.<p>
 
@@ -128,7 +128,7 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
         given text string.<p>
 
         Logical bounding boxes means the space that the font allocates
-        for the given character, which, e.g. for a '.', might be
+        for the given character, which, e.g. for a ".", might be
         significantly broader than the bounds returned via
         <member>XTextLayout::queryInkMeasures()</member>.
 
@@ -170,7 +170,7 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
         logical character in the input string (<em>not</em> for every
         glyph. There might be multiple glyphs per input character, or
         multiple input characters per glyph). This is useful to
-        explicitely manipulate the exact output positions of
+        explicitly manipulate the exact output positions of
         characters, e.g. relative to a reference output device.<p>
 
         @param aAdvancements
@@ -291,7 +291,7 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
         @param bExcludeLigatures
         Set this to <TRUE/>, to skip the positions inside ligatures as
         valid caret placements. That means, on cannot e.g. set the
-        caret between the 'f' and the 'i' in a 'fi' ligature.
+        caret between the "f" and the "i" in a "fi" ligature.
 
         @returns the generated Caret structure.
 

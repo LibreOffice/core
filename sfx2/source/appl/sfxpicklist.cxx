@@ -126,8 +126,6 @@ void SfxPickList::CreatePicklistMenuTitle( Menu* pMenu, USHORT nItemId, const St
         // path and abbreviate it with a special function:
         String aFileSystemPath( aURL.getFSysPath( INetURLObject::FSYS_DETECT ) );
 
-//      ::utl::LocalFileHelper::ConvertURLToPhysicalName( aURLString, aPhysicalName );
-
         ::rtl::OUString aSystemPath( aFileSystemPath );
         ::rtl::OUString aCompactedSystemPath;
 

@@ -63,7 +63,6 @@
 #include <fmtclbl.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <fmtcntnt.hxx>
-/* #109700# */
 #include <editeng/lrspitem.hxx>
 
 
@@ -85,15 +84,13 @@ struct SwTextSectionProperties_Impl
     ::std::auto_ptr<SvXMLAttrContainerItem> m_pXMLAttr;
     ::std::auto_ptr<SwFmtNoBalancedColumns> m_pNoBalanceItem;
     ::std::auto_ptr<SvxFrameDirectionItem>  m_pFrameDirItem;
-    ::std::auto_ptr<SvxLRSpaceItem>         m_pLRSpaceItem; // #109700#
+    ::std::auto_ptr<SvxLRSpaceItem>         m_pLRSpaceItem;
 
     bool m_bDDE;
     bool m_bHidden;
     bool m_bCondHidden;
     bool m_bProtect;
-    // --> FME 2004-06-22 #114856# edit in readonly sections
     bool m_bEditInReadonly;
-    // <--
     bool m_bUpdateType;
 
     SwTextSectionProperties_Impl()
@@ -101,9 +98,7 @@ struct SwTextSectionProperties_Impl
         , m_bHidden(false)
         , m_bCondHidden(false)
         , m_bProtect(false)
-        // --> FME 2004-06-22 #114856# edit in readonly sections
         , m_bEditInReadonly(false)
-        // <--
         , m_bUpdateType(true)
     {
     }
@@ -347,15 +342,13 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
 
     aSect.SetHidden(m_pImpl->m_pProps->m_bHidden);
     aSect.SetProtectFlag(m_pImpl->m_pProps->m_bProtect);
-    // --> FME 2004-06-22 #114856# edit in readonly sections
     aSect.SetEditInReadonlyFlag(m_pImpl->m_pProps->m_bEditInReadonly);
-    // <--
 
     SfxItemSet aSet(pDoc->GetAttrPool(),
                 RES_COL, RES_COL,
                 RES_BACKGROUND, RES_BACKGROUND,
                 RES_FTN_AT_TXTEND, RES_FRAMEDIR,
-                RES_LR_SPACE, RES_LR_SPACE, // #109700#
+                RES_LR_SPACE, RES_LR_SPACE,
                 RES_UNKNOWNATR_CONTAINER,RES_UNKNOWNATR_CONTAINER,
                 0);
     if (m_pImpl->m_pProps->m_pBrushItem.get())
@@ -386,7 +379,6 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     {
         aSet.Put(*m_pImpl->m_pProps->m_pFrameDirItem);
     }
-    /* #109700# */
     if (m_pImpl->m_pProps->m_pLRSpaceItem.get())
     {
         aSet.Put(*m_pImpl->m_pProps->m_pLRSpaceItem);
@@ -402,7 +394,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     pRet->GetFmt()->Add(m_pImpl.get());
     pRet->GetFmt()->SetXObject(static_cast< ::cppu::OWeakObject*>(this));
 
-    // #97450# XML import must hide sections depending on their old
+    // XML import must hide sections depending on their old
     //         condition status
     if (m_pImpl->m_pProps->m_sCondition.getLength() != 0)
     {
@@ -795,7 +787,6 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                 }
             }
             break;
-            // --> FME 2004-06-22 #114856# edit in readonly sections
             case WID_SECT_EDIT_IN_READONLY:
             {
                 sal_Bool bVal(sal_False);
@@ -812,7 +803,6 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                     pSectionData->SetEditInReadonlyFlag(bVal);
                 }
             }
-            // <--
             break;
             case WID_SECT_PASSWORD:
             {
@@ -906,7 +896,6 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                     }
                     else if (RES_LR_SPACE == pEntry->nWID)
                     {
-                        // #109700#
                         if (!m_pProps->m_pLRSpaceItem.get())
                         {
                             m_pProps->m_pLRSpaceItem.reset(
@@ -1031,7 +1020,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
             case WID_SECT_DDE_AUTOUPDATE:
             {
                 // GetUpdateType() returns .._ALWAYS or .._ONCALL
-                if (pSect && pSect->IsLinkType() && pSect->IsConnected())  // lijian i73247
+                if (pSect && pSect->IsLinkType() && pSect->IsConnected())  // #i73247#
                 {
                     const sal_Bool bTemp =
                         (pSect->GetUpdateType() == sfx2::LINKUPDATE_ALWAYS);
@@ -1098,7 +1087,6 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 pRet[nProperty] <<= bTemp;
             }
             break;
-            // --> FME 2004-06-22 #114856# edit in readonly sections
             case WID_SECT_EDIT_IN_READONLY:
             {
                 const sal_Bool bTemp = (m_bIsDescriptor)
@@ -1106,7 +1094,6 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 pRet[nProperty] <<= bTemp;
             }
             break;
-            // <--
             case  FN_PARAM_LINK_DISPLAY_NAME:
             {
                 if (pFmt)
@@ -1155,7 +1142,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
             case FN_UNO_REDLINE_NODE_END:
             {
                 if (!pFmt)
-                    break;      // lijian i73247
+                    break;      // #i73247#
                 SwNode* pSectNode = pFmt->GetSectionNode();
                 if (FN_UNO_REDLINE_NODE_END == pEntry->nWID)
                 {
@@ -1261,7 +1248,6 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                         }
                         pQueryItem = m_pProps->m_pFrameDirItem.get();
                     }
-                    /* -> #109700# */
                     else if (RES_LR_SPACE == pEntry->nWID)
                     {
                         if (!m_pProps->m_pLRSpaceItem.get())
@@ -1271,7 +1257,6 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                         }
                         pQueryItem = m_pProps->m_pLRSpaceItem.get();
                     }
-                    /* <- #109700# */
                     if (pQueryItem)
                     {
                         pQueryItem->QueryValue(pRet[nProperty],
@@ -1444,9 +1429,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
             case WID_SECT_REGION :
             case WID_SECT_VISIBLE:
             case WID_SECT_PROTECTED:
-            // --> FME 2004-06-22 #114856# edit in readonly sections
             case WID_SECT_EDIT_IN_READONLY:
-            // <--
             case  FN_PARAM_LINK_DISPLAY_NAME:
             case  FN_UNO_ANCHOR_TYPES:
             case  FN_UNO_TEXT_WRAP:
@@ -1590,7 +1573,6 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
             }
         }
         break;
-        // --> FME 2004-06-22 #114856# edit in readonly sections
         case WID_SECT_EDIT_IN_READONLY:
         {
             if (m_pImpl->m_bIsDescriptor)
@@ -1678,9 +1660,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         }
         break;
         case WID_SECT_PROTECTED:
-        // --> FME 2004-06-22 #114856# edit in readonly sections
         case WID_SECT_EDIT_IN_READONLY:
-        // <--
         {
             sal_Bool bTemp = sal_False;
             aRet.setValue( &bTemp, ::getCppuBooleanType());

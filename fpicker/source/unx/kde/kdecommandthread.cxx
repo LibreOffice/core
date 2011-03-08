@@ -34,7 +34,9 @@
 
 #include <kapplication.h>
 
+#if OSL_DEBUG_LEVEL > 1
 #include <iostream>
+#endif
 
 //////////////////////////////////////////////////////////////////////////
 // CommandEvent
@@ -105,7 +107,7 @@ void KDECommandThread::handleCommand( const QString &rString, bool &bQuit )
 {
     QMutexLocker qMutexLocker( &m_aMutex );
 
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
     ::std::cerr << "kdefilepicker received: " << rString.latin1() << ::std::endl;
 #endif
 

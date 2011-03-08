@@ -66,23 +66,23 @@
 
 module com {  module sun {  module star {  module presentation {
 
-/** Slideshow interface to perform slideshow presentations.<p>
+/** Slide show interface to perform slide show presentations.<p>
 
     This interface provides the necessary methods to run and control a
-    slideshow from a given set of XDrawPage slides. The slideshow can
+    slide show from a given set of XDrawPage slides. The slide show can
     be displayed simultaneously on multiple targets.<p>
 
-    Note: To controll a running slideshow inside a presentation, please
+    Note: To control a running slide show inside a presentation, please
     use <type>XPresentation2</type> and <type>XSlideShowController</type>.
 
     @since OOo 3.0
  */
 interface XSlideShow : ::com::sun::star::uno::XInterface
 {
-    /** Trigger the next effect of the slideshow.<p>
+    /** Trigger the next effect of the slide show.<p>
 
         This method triggers the next effect on the currently
-        displayed slide. If there is currently no slideshow running,
+        displayed slide. If there is currently no slide show running,
         this method does nothing. If there are no more effects on the
         current slide, a possible slide transition effect is issued
         and the next slide is displayed.<p>
@@ -95,7 +95,7 @@ interface XSlideShow : ::com::sun::star::uno::XInterface
      */
     boolean nextEffect();
 
-    /** Undo the last effect in the main sequence of the slideshow.<p>
+    /** Undo the last effect in the main sequence of the slide show.<p>
 
         The current slide is displayed as if the last user-triggered effect
         has never been triggered.  If there is no previous effect on the
@@ -103,7 +103,7 @@ interface XSlideShow : ::com::sun::star::uno::XInterface
         XSlideShowListener objects, which can then trigger a change to the
         previous slide.  Note that this command is executed asynchronously.
         Multiple calls to update() may be necessary to complete its execution.
-        If there is currently no slideshow running, this method does
+        If there is currently no slide show running, this method does
         nothing.<p>
 
         @return <TRUE/>, if the previous effect was successfully
@@ -166,7 +166,7 @@ interface XSlideShow : ::com::sun::star::uno::XInterface
             <li>name: Prefetch, value: ::com::sun::star::drawing::XDrawPage. When given,
                 this slide is prepared in the background to be displayed next. The next
                 call to displaySlide() with the given slide may be faster if there was
-                enough time for prefatching. If the next call to displaySlide() uses
+                enough time for prefetching. If the next call to displaySlide() uses
                 a different slide, this will still work but will not have any performance
                 improvements
                 </li>
@@ -175,7 +175,7 @@ interface XSlideShow : ::com::sun::star::uno::XInterface
                 are triggered.  This is typically used when going back one
                 effect leads to the previous slide.  On that slide all
                 effects have to be shown in order to continue the backward
-                travelling.
+                traveling.
                 When <FALSE/>, the default, then no main sequence effect is
                 triggered.
                 </li>
@@ -213,7 +213,7 @@ interface XSlideShow : ::com::sun::star::uno::XInterface
     /** Query the currently displayed slide.<p>
 
         @return the instance of the current slide. If there's no
-        slideshow running at the moment, this method returns an
+        slide show running at the moment, this method returns an
         empty reference.
      */
     ::com::sun::star::drawing::XDrawPage getCurrentSlide();
@@ -226,7 +226,7 @@ interface XSlideShow : ::com::sun::star::uno::XInterface
 
     void registerUserPaintPolygons([in] ::com::sun::star::lang::XMultiServiceFactory xDocFactory);
 
-    /** Change a property of the slideshow.<p>
+    /** Change a property of the slide show.<p>
 
         @param aShowProperty
         Property values, which influence the way the slides are
@@ -305,7 +305,7 @@ interface XSlideShow : ::com::sun::star::uno::XInterface
     /** Add a slide show listener.<p>
 
         This method adds a listener to the slide show, which will get
-        notified when a registerend shape is clicked upon, or a new
+        notified when a registered shape is clicked upon, or a new
         slide is about to be displayed. Note that the listeners will
         <em>not</em> be notified, when the slide change is directly
         requested by one of the nextSlide(), previousSlide() or

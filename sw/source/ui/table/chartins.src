@@ -98,8 +98,6 @@ ModelessDialog DLG_INSERT_CHART
     {
         Pos = MAP_APPFONT ( 130 , 151 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-         // ### ACHTUNG: Neuer Text in Resource? << ~Zurück : << Zurück
-        /* ### ACHTUNG: Neuer Text in Resource? << ~Zurück : << ~Zur³ck */
         TabStop = TRUE ;
         Disable = TRUE ;
         Text [ en-US ] = "<< ~Back" ;

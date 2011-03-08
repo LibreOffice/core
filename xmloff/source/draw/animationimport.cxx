@@ -397,7 +397,7 @@ Any AnimationsImportHelperImpl::convertTarget( const OUString& rValue )
     }
     catch( RuntimeException& )
     {
-        DBG_ERROR( "xmloff::AnimationsImportImpl::convertTarget(), RuntimeException catched!" );
+        OSL_FAIL( "xmloff::AnimationsImportImpl::convertTarget(), RuntimeException catched!" );
     }
 
     Any aAny;
@@ -481,38 +481,6 @@ Any AnimationsImportHelperImpl::convertValue( XMLTokenEnum eAttributeName, const
             pHandler->importXML( rValue, aAny, mrImport.GetMM100UnitConverter() );
 
         return aAny;
-
-/*
-        if( rValue.getLength() == 0 )
-        {
-            Any aAny;
-            return aAny;
-        }
-        else if( rValue.indexOf( '#' ) == 0 )
-        {
-            // color
-            Color aColor;
-            SvXMLUnitConverter::convertColor( aColor, rValue );
-
-            return makeAny( static_cast< sal_Int32 >( aColor.GetRGBColor() ) );
-        }
-        else if( rValue.indexOf( '$' ) != -1 )
-        {
-            // formula
-            return makeAny( rValue );
-        }
-        else
-        {
-            if( isDouble( rValue ) )
-            {
-                return makeAny( rValue.toDouble() );
-            }
-            else
-            {
-                return makeAny( rValue );
-            }
-        }
-*/
     }
 }
 
@@ -599,7 +567,7 @@ Any AnimationsImportHelperImpl::convertTiming( const OUString& rValue )
                 }
                 else
                 {
-                    DBG_ERROR("AnimationsImportHelperImpl::convertTiming(), unknown event trigger!");
+                    OSL_FAIL("AnimationsImportHelperImpl::convertTiming(), unknown event trigger!");
                 }
 
                 aAny <<= aEvent;
@@ -773,7 +741,7 @@ AnimationNodeContext::AnimationNodeContext(
     }
     catch( RuntimeException& )
     {
-        DBG_ERROR( "xmloff::AnimationsImportImpl::AnimationsImportImpl(), RuntimeException catched!" );
+        OSL_FAIL( "xmloff::AnimationsImportImpl::AnimationsImportImpl(), RuntimeException catched!" );
     }
 }
 
@@ -1291,7 +1259,7 @@ void AnimationNodeContext::init_node(  const ::com::sun::star::uno::Reference< :
     }
     catch( RuntimeException& )
     {
-        DBG_ERROR( "xmloff::AnimationNodeContext::StartElement(), RuntimeException catched!" );
+        OSL_FAIL( "xmloff::AnimationNodeContext::StartElement(), RuntimeException catched!" );
     }
 }
 
@@ -1478,7 +1446,7 @@ void AnimationNodeContext::postProcessRootNode( SvXMLImport& /*rImport*/, const 
     }
     catch( Exception& )
     {
-        DBG_ERROR("xmloff::AnimationsImport::postProcessRootNode(), exception caught!");
+        OSL_FAIL("xmloff::AnimationsImport::postProcessRootNode(), exception caught!");
     }
 }
 

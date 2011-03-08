@@ -428,7 +428,7 @@ void EmbeddedObjectRef::GetReplacement( BOOL bUpdate )
     }
     else
     {
-        DBG_ERROR("No update, but replacement exists already!");
+        OSL_FAIL("No update, but replacement exists already!");
         return;
     }
 

@@ -146,9 +146,6 @@ PATH!:=$(moz_build)/msys/bin:$(moz_build)/moztools/bin:$(PATH)
 OS_TARGET=WIN95
 .EXPORT : OS_TARGET
 
-# make use of stlport headerfiles
-EXT_USE_STLPORT=TRUE
-
 #To build nss one has to call "make nss_build_all" in 
 #mozilla/security/nss
 NSS_BUILD_DIR= $(subst,\,/ $(PWD)/$(MISC)/build/$(TARFILE_ROOTDIR)/mozilla/security/nss)

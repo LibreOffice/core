@@ -63,12 +63,13 @@
 using namespace std;
 using namespace utl;
 using namespace osl;
-using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
+
+using ::rtl::OUString;
 
 #define XML_NAMESPACE_TCD_STRING        "http://openoffice.org/2003/text-conversion-dictionary"
 #define CONV_TYPE_HANGUL_HANJA          "Hangul / Hanja"

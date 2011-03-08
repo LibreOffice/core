@@ -42,7 +42,6 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
 
-// #107844#
 #include <svx/svdundo.hxx>
 
 #include <vector>
@@ -196,7 +195,6 @@ private:
     CharClass*          mpCharClass;
     ::com::sun::star::lang::Locale* mpLocale;
 
-    // #109538#
     ::std::auto_ptr<ImpDrawPageListWatcher> mpDrawPageListWatcher;
     ::std::auto_ptr<ImpMasterPageListWatcher> mpMasterPageListWatcher;
 
@@ -662,7 +660,6 @@ private:
         BOOL bIsPageBack,
         BOOL bIsPageObj);
 
-    // #109538#
     virtual void PageListChanged();
     virtual void MasterPageListChanged();
 };

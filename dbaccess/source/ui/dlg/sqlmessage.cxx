@@ -35,6 +35,7 @@
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <vcl/fixed.hxx>
+#include <osl/diagnose.h>
 #include <svtools/svtreebx.hxx>
 #include <svtools/svmedit.hxx>
 #include <connectivity/dbexception.hxx>
@@ -259,7 +260,7 @@ namespace
             iter.next( aCurrentElement );
 
             const SQLException* pCurrentError = (const SQLException*)aCurrentElement;
-            DBG_ASSERT( pCurrentError, "lcl_buildExceptionChain: iterator failure!" );
+            OSL_ENSURE( pCurrentError, "lcl_buildExceptionChain: iterator failure!" );
                 // hasMoreElements should not have returned <TRUE/> in this case
 
             ExceptionDisplayInfo aDisplayInfo( aCurrentElement.getType() );
@@ -374,7 +375,7 @@ OExceptionChainDialog::OExceptionChainDialog( Window* pParent, const ExceptionDi
     }
 
     // if the error has the code 22018, then add an additional explanation
-    // #i24021# / 2004-10-14 / frank.schoenheit@sun.com
+    // #i24021#
     if ( bHave22018 )
     {
         ProviderFactory aProviderFactory;
@@ -399,7 +400,7 @@ OExceptionChainDialog::~OExceptionChainDialog()
 IMPL_LINK(OExceptionChainDialog, OnExceptionSelected, void*, EMPTYARG)
 {
     SvLBoxEntry* pSelected = m_aExceptionList.FirstSelected();
-    DBG_ASSERT(!pSelected || !m_aExceptionList.NextSelected(pSelected), "OExceptionChainDialog::OnExceptionSelected : multi selection ?");
+    OSL_ENSURE(!pSelected || !m_aExceptionList.NextSelected(pSelected), "OExceptionChainDialog::OnExceptionSelected : multi selection ?");
 
     String sText;
 
@@ -593,7 +594,7 @@ void OSQLMessageBox::impl_initImage( MessageType _eImage )
     switch (_eImage)
     {
         default:
-            DBG_ERROR( "OSQLMessageBox::impl_initImage: unsupported image type!" );
+            OSL_FAIL( "OSQLMessageBox::impl_initImage: unsupported image type!" );
 
         case Info:
             m_aInfoImage.SetImage(InfoBox::GetStandardImage());

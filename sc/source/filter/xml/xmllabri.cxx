@@ -132,7 +132,7 @@ SvXMLImportContext* ScXMLLabelRangeContext::CreateChildContext(
 
 void ScXMLLabelRangeContext::EndElement()
 {
-    //  #b5071088# Label ranges must be stored as strings until all sheets are loaded
+    //  Label ranges must be stored as strings until all sheets are loaded
     //  (like named expressions).
 
     ScMyLabelRange* pLabelRange = new ScMyLabelRange;

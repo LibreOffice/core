@@ -31,7 +31,6 @@
 #include <vcl/timer.hxx>
 #include <tools/color.hxx>
 
-// OD 25.06.2003 #108784#
 #include <svx/svdtypes.hxx>
 
 #include <tools/string.hxx>
@@ -67,7 +66,7 @@ class SwViewImp
     friend class SwLayAction;   //Lay- und IdleAction tragen sich ein und aus.
     friend class SwLayIdle;
 
-    // OD 12.12.2002 #103492# - for paint of page preview
+    // for paint of page preview
     friend class SwPagePreviewLayout;
 
     ViewShell *pSh;             //Falls jemand einen Imp durchreicht und doch
@@ -92,8 +91,6 @@ class SwViewImp
 
     BOOL bFirstPageInvalid  :1; //Pointer auf erste Seite ungueltig?
 
-    //BOOL bResetXorVisibility:1; //StartAction/EndAction
-    //HMHBOOL bShowHdlPaint     :1; //LockPaint/UnlockPaint
     BOOL bResetHdlHiddenPaint:1;//  -- "" --
 
     BOOL bSmoothUpdate      :1; //Meber fuer SmoothScroll
@@ -103,7 +100,6 @@ class SwViewImp
     USHORT nRestoreActions  ; //Die Anzahl der zu restaurierenden Actions (UNO)
     SwRect aSmoothRect;
 
-    // OD 12.12.2002 #103492#
     SwPagePreviewLayout* mpPgPrevwLayout;
 
     /**
@@ -140,11 +136,9 @@ private:
 
     /** invalidate CONTENT_FLOWS_FROM/_TO relation for paragraphs
 
-        OD 2005-12-01 #i27138#
+        #i27138#
         implementation for wrapper method
         <ViewShell::InvalidateAccessibleParaFlowRelation(..)>
-
-        @author OD
 
         @param _pFromTxtFrm
         input parameter - paragraph frame, for which the relation CONTENT_FLOWS_FROM
@@ -161,21 +155,17 @@ private:
 
     /** invalidate text selection for paragraphs
 
-        OD 2005-12-12 #i27301#
+        #i27301#
         implementation for wrapper method
         <ViewShell::InvalidateAccessibleParaTextSelection(..)>
-
-        @author OD
     */
     void _InvalidateAccessibleParaTextSelection();
 
     /** invalidate attributes for paragraphs and paragraph's characters
 
-        OD 2009-01-06 #i88069#
+        #i88069#
         implementation for wrapper method
         <ViewShell::InvalidateAccessibleParaAttrs(..)>
-
-        @author OD
     */
     void _InvalidateAccessibleParaAttrs( const SwTxtFrm& rTxtFrm );
 
@@ -206,15 +196,16 @@ public:
     const SdrPageView*GetPageView() const { return pSdrPageView; }
     void MakeDrawView();
 
-    // OD 29.08.2002 #102450#
     // add 3rd parameter <const Color* pPageBackgrdColor> for setting this
     // color as the background color at the outliner of the draw view
     // for painting layers <hell> and <heaven>
-    // OD 09.12.2002 #103045# - add 4th parameter for the horizontal text
+
+    // add 4th parameter for the horizontal text
     // direction of the page in order to set the default horizontal text
     // direction at the outliner of the draw view for painting layers <hell>
     // and <heaven>.
-    // OD 25.06.2003 #108784# - correct type of 1st parameter
+
+    // correct type of 1st parameter
     void   PaintLayer( const SdrLayerID _nLayerID,
                        const SwPrtOptions *pPrintData,
                        const SwRect& _rRect,
@@ -223,8 +214,6 @@ public:
 
     //wird als Link an die DrawEngine uebergeben, entscheidet was wie
     //gepaintet wird oder nicht.
-    //#110094#-3
-    //DECL_LINK( PaintDispatcher, SdrPaintProcRec * );
 
     // Interface Drawing
     BOOL IsDragPossible( const Point &rPoint );
@@ -249,10 +238,8 @@ public:
     void    SetRestoreActions(USHORT nSet){nRestoreActions = nSet;}
     USHORT  GetRestoreActions() const{return nRestoreActions;}
 
-    // OD 12.12.2002 #103492#
     void InitPagePreviewLayout();
 
-    // OD 12.12.2002 #103492#
     inline SwPagePreviewLayout* PagePreviewLayout()
     {
         return mpPgPrevwLayout;
@@ -298,8 +285,7 @@ public:
                                           const SwFlyFrm *pFollow );
 
     // update data for accessible preview
-    // OD 15.01.2003 #103492# - change method signature due to new page preview
-    // functionality
+    // change method signature due to new page preview functionality
     void UpdateAccessiblePreview( const std::vector<PrevwPage*>& _rPrevwPages,
                                   const Fraction&  _rScale,
                                   const SwPageFrm* _pSelectedPageFrm,

@@ -33,8 +33,8 @@
 #include <rtl/ustring.hxx>
 #include <osl/module.h>
 
-using namespace rtl;
-
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
 #include <xrender_peer.hxx>
 
 #include <salunx.h>

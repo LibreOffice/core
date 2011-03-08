@@ -38,10 +38,6 @@ USE_DEFFILE=TRUE
 
 .INCLUDE : settings.mk
 
-.IF "$(USE_SYSTEM_STL)" != "YES"
-CFLAGS+=-D_STLP_USE_STATIC_LIB
-.ENDIF
-
 #Disable precompiled header
 CDEFS+=-Dnot_used_define_to_disable_pch
 
@@ -59,17 +55,12 @@ STDSHL += \
     $(MSILIB)\
         $(SHELL32LIB)								
 
-.IF "$(USE_SYSTEM_STL)" != "YES"
-STDSHL += $(LIBSTLPORTST)
-.ENDIF
-
 .IF "$(COM)"=="GCC"
 STDSHL+=	\
     $(KERNEL32LIB)\
     -lmsvcrt
 .ENDIF
 
-#SHL1LIBS = $(SLB)$/$(TARGET).lib 
 
 SHL1OBJS = $(SLOFILES)               \
     $(SLO)$/respintest.obj           \

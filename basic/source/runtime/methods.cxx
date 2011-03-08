@@ -52,9 +52,8 @@
 #include "runtime.hxx"
 #include "sbunoobj.hxx"
 #ifdef WNT
-#include <tools/prewin.h>
-#include "winbase.h"
-#include <tools/postwin.h>
+#include <prewin.h>
+#include <postwin.h>
 #include <tools/fsys.hxx>
 #else
 #include <osl/file.hxx>
@@ -3447,7 +3446,7 @@ RTLFUNC(Rnd)
     else
     {
         double nRand = (double)rand();
-        nRand = ( nRand / (double)RAND_MAX );
+        nRand = ( nRand / ((double)RAND_MAX + 1.0));
         rPar.Get(0)->PutDouble( nRand );
     }
 }

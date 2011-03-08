@@ -31,7 +31,6 @@
 #include <scanner.hxx>
 #include <sanedlg.hxx>
 #include <osl/thread.hxx>
-#include <tools/list.hxx>
 #include <boost/shared_ptr.hpp>
 
 #if OSL_DEBUG_LEVEL > 1

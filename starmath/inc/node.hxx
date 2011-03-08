@@ -35,24 +35,6 @@
 #include <stdio.h>
 
 #define j_assert(cond, msg) DBG_ASSERT(cond, msg)
-#if 0
-// easier to read assert macro
-    do{                                                             \
-                                    if(!(cond))                                                 \
-                                    {                                                           \
-                                        std::cerr<<"Failed assertion: "<<msg<<", at line ";     \
-                                        char* f = (char*)__FILE__;                              \
-                                        f += strlen(f);                                         \
-                                        do f--; while(*f != '/');                               \
-                                        do f--; while(*f != '/');                               \
-                                        do f--; while(*f != '/');                               \
-                                        fprintf(stderr, "%d in %s\n", __LINE__, f + 1);         \
-                                    }                                                           \
-                                } while(false)
-#endif
-
-// Comment out below to disable dumpasdot
-//#define DEBUG_ENABLE_DUMPASDOT
 
 #include "parse.hxx"
 #include "types.hxx"
@@ -183,10 +165,6 @@ public:
     void MoveTo(const Point &rPosition) { Move(rPosition - GetTopLeft()); }
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
     virtual void CreateTextFromNode(String &rText);
-
-#ifdef SM_RECT_DEBUG
-    using   SmRect::Draw;
-#endif
 
     virtual void    GetAccessibleText( String &rText ) const;
     sal_Int32       GetAccessibleIndex() const { return nAccIndex; }
@@ -431,10 +409,6 @@ public:
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
 
-#ifdef SM_RECT_DEBUG
-    using   SmRect::Draw;
-#endif
-
     void CreateTextFromNode(String &rText);
     void Accept(SmVisitor* pVisitor);
 };
@@ -463,10 +437,6 @@ public:
     virtual void AdaptToY(const OutputDevice &rDev, ULONG nHeight);
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
-
-#ifdef SM_RECT_DEBUG
-    using   SmRect::Draw;
-#endif
 
     void Accept(SmVisitor* pVisitor);
 };
@@ -527,11 +497,6 @@ public:
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
     virtual void CreateTextFromNode(String &rText);
 
-#ifdef SM_RECT_DEBUG
-    using   SmRect::Draw;
-#endif
-
-
     virtual void  GetAccessibleText( String &rText ) const;
     void Accept(SmVisitor* pVisitor);
 };
@@ -558,10 +523,6 @@ public:
 
     virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell);
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
-
-#ifdef SM_RECT_DEBUG
-    using   SmRect::Draw;
-#endif
 
     void Accept(SmVisitor* pVisitor);
 };
@@ -640,10 +601,6 @@ public:
     ULONG GetBodyWidth() const {return nBodyWidth;};
     virtual void AdaptToX(const OutputDevice &rDev, ULONG nWidth);
     virtual void AdaptToY(const OutputDevice &rDev, ULONG nHeight);
-
-#ifdef SM_RECT_DEBUG
-    using   SmRect::Draw;
-#endif
 
     void Accept(SmVisitor* pVisitor);
 };

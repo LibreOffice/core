@@ -104,7 +104,6 @@ String SCSTR_QHELP_BTNCALC
 
 String SCSTR_QHELP_BTNOK
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Übernehmen : šbernehmen */
     Text [ en-US ] = "Accept" ;
 };
 
@@ -134,7 +133,6 @@ FloatingWindow RID_TBXCTL_INSERT
     Hide = TRUE ;
     SVLook = TRUE ;
     HelpID = RID_TBXCTL_INSERT ;
-    /* ### ACHTUNG: Neuer Text in Resource? Einfügen : Einf³gen */
     Text [ en-US ] = "Insert" ;
 
     ToolBox RID_TOOLBOX_INSERT
@@ -165,7 +163,6 @@ FloatingWindow RID_TBXCTL_INSCELLS
     Hide = TRUE ;
     SVLook = TRUE ;
     HelpID = RID_TBXCTL_INSCELLS ;
-    /* ### ACHTUNG: Neuer Text in Resource? Zellen einfügen : Zellen einf³gen */
     Text [ en-US ] = "Insert Cells" ;
 
     ToolBox RID_TOOLBOX_INSCELLS
@@ -206,7 +203,6 @@ FloatingWindow RID_TBXCTL_INSOBJ
     Hide = TRUE ;
     SVLook = TRUE;
     HelpID = RID_TBXCTL_INSOBJ ;
-    /* ### ACHTUNG: Neuer Text in Resource? Objekt einfügen : Objekt einf³gen */
     Text [ en-US ] = "Insert Object" ;
     ToolBox RID_TOOLBOX_INSOBJ
     {

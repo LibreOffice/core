@@ -35,13 +35,12 @@
 #endif
 
 #include <tools/string.hxx>
-#include <tools/list.hxx>
 #include <tools/stream.hxx>
 #include <tools/fsys.hxx>
 #include <osl/file.hxx>
 #include <osl/file.h>
 
-#include <hash_map> /* std::hashmap*/
+#include <boost/unordered_map.hpp>
 #include <iterator> /* std::iterator*/
 #include <set>      /* std::set*/
 #include <vector>   /* std::vector*/
@@ -85,16 +84,16 @@ class PFormEntrys;
 class MergeData;
 typedef std::set<ByteString , lessByteString > ByteStringSet;
 
-typedef std::hash_map<ByteString , ByteString , hashByteString,equalByteString>
+typedef boost::unordered_map<ByteString , ByteString , hashByteString,equalByteString>
                                 ByteStringHashMap;
 
-typedef std::hash_map<ByteString , bool , hashByteString,equalByteString>
+typedef boost::unordered_map<ByteString , bool , hashByteString,equalByteString>
                                 ByteStringBoolHashMap;
 
-typedef std::hash_map<ByteString , PFormEntrys* , hashByteString,equalByteString>
+typedef boost::unordered_map<ByteString , PFormEntrys* , hashByteString,equalByteString>
                                 PFormEntrysHashMap;
 
-typedef std::hash_map<ByteString , MergeData* , hashByteString,equalByteString>
+typedef boost::unordered_map<ByteString , MergeData* , hashByteString,equalByteString>
                                 MergeDataHashMap;
 
 #define SOURCE_LANGUAGE ByteString("en-US")

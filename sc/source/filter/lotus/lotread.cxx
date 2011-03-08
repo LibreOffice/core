@@ -197,7 +197,7 @@ FltError ImportLotus::Read()
             // -----------------------------------------------------------
 #ifdef DBG_UTIL
             default:
-            DBG_ERROR( "*ImportLotus::Read(): State unbekannt!" );
+            OSL_FAIL( "*ImportLotus::Read(): State unbekannt!" );
             eAkt = S_END;
 #endif
         }

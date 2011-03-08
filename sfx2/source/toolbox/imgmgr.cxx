@@ -30,7 +30,7 @@
 #include "precompiled_sfx2.hxx"
 
 #include <stdio.h>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #include "imgmgr.hxx"
 #include <sfx2/sfx.hrc>
@@ -78,7 +78,7 @@ public:
     ~SfxImageManager_Impl();
 };
 
-typedef std::hash_map< sal_Int64, sal_Int64 > SfxImageManagerMap;
+typedef boost::unordered_map< sal_Int64, sal_Int64 > SfxImageManagerMap;
 
 // global image lists
 static SfxImageManager_Impl* pGlobalImageManager = 0;

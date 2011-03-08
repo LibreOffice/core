@@ -214,13 +214,8 @@ APP3STDLIBS= \
             $(VCLLIB)
 
 .IF "$(GUI)"=="UNX"
-.IF "$(OS)"=="MACOSX"
-APP3STDLIBS+= \
-             $(SALLIB) $(LIBSTLPORT)
-.ELSE
 APP3STDLIBS+= \
              $(SALLIB)
-.ENDIF
 .ENDIF
 # $(AUTOMATIONLIB) is build in SHL1TARGET
 .IF "$(GUI)"=="UNX" || ("$(COM)"=="GCC" && "$(GUI)"=="WNT")

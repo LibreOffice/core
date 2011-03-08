@@ -211,280 +211,287 @@ TabPage RID_SVXPAGE_COLORCONFIG
             };
             LB_WN( SMARTTAGS, 10 )
 
+            Checkbox CB_SHADOWCOLOR
+            {
+                CB_POS_SIZE( 11 );
+                Text [ en-US ] = "Shadows";
+            };
+            LB_WN( SHADOWCOLOR, 11 )
+
             FixedText FT_WRITER
             {
-                FT_SEP_POS_SIZE( 11 );
+                FT_SEP_POS_SIZE( 12 );
                 Text [ en-US ] = "Text Document";
             };
 
             FixedText FT_WRITERTEXTGRID
             {
-                FT_POS_SIZE( 12 );
+                FT_POS_SIZE( 13 );
                 Text [ en-US ] = "Grid";
             };
-            LB_WN( WRITERTEXTGRID, 12 )
+            LB_WN( WRITERTEXTGRID, 13 )
 
             CheckBox CB_WRITERFIELDSHADINGS
             {
-                CB_POS_SIZE( 13 );
+                CB_POS_SIZE( 14 );
                 Text [ en-US ] = "Field shadings";
             };
-            LB_WN( WRITERFIELDSHADINGS, 13 )
+            LB_WN( WRITERFIELDSHADINGS, 14 )
 
             CheckBox CB_WRITERIDXSHADINGS
             {
-                CB_POS_SIZE( 14 );
+                CB_POS_SIZE( 15 );
                 Text [ en-US ] = "Index and table shadings";
             };
-            LB_WN( WRITERIDXSHADINGS, 14 )
+            LB_WN( WRITERIDXSHADINGS, 15 )
 
 
             FixedText FT_WRITERSCRIPTINDICATOR
             {
-                FT_POS_SIZE( 15 );
+                FT_POS_SIZE( 16 );
                 Text [ en-US ] = "Script indicator";
             };
-            LB_WN( WRITERSCRIPTINDICATOR, 15 )
+            LB_WN( WRITERSCRIPTINDICATOR, 16 )
 
             CheckBox CB_WRITERSECTIONBOUNDARIES
             {
-                CB_POS_SIZE( 16 );
+                CB_POS_SIZE( 17 );
                 Text [ en-US ] = "Section boundaries";
             };
-            LB_WN( WRITERSECTIONBOUNDARIES, 16 )
+            LB_WN( WRITERSECTIONBOUNDARIES, 17 )
 
             FixedText FT_WRITERPAGEBREAKS
             {
-                FT_POS_SIZE( 17 );
+                FT_POS_SIZE( 18 );
                 Text [ en-US ] = "Page and column breaks";
             };
-            LB_WN( WRITERPAGEBREAKS, 17 )
+            LB_WN( WRITERPAGEBREAKS, 18 )
 
             FixedText FT_WRITERDIRECTCURSOR
             {
-                FT_POS_SIZE( 18 );
+                FT_POS_SIZE( 19 );
                 Text [ en-US ] = "Direct cursor";
             };
-            LB_WN( WRITERDIRECTCURSOR, 18 )
+            LB_WN( WRITERDIRECTCURSOR, 19 )
 
             FixedText FT_HTML
             {
-                FT_SEP_POS_SIZE( 19 );
+                FT_SEP_POS_SIZE( 20 );
                 Text [ en-US ] = "HTML Document";
             };
 
             FixedText FT_HTMLSGML
             {
-                FT_POS_SIZE( 20 );
+                FT_POS_SIZE( 21 );
                 Text [ en-US ] = "SGML syntax highlighting";
             };
-            LB_WN( HTMLSGML, 20 )
+            LB_WN( HTMLSGML, 21 )
 
             FixedText FT_HTMLCOMMENT
             {
-                FT_POS_SIZE( 21 );
+                FT_POS_SIZE( 22 );
                 Text [ en-US ] = "Comment highlighting";
             };
-            LB_WN( HTMLCOMMENT, 21 )
+            LB_WN( HTMLCOMMENT, 22 )
 
             FixedText FT_HTMLKEYWORD
             {
-                FT_POS_SIZE( 22 );
+                FT_POS_SIZE( 23 );
                 Text [ en-US ] = "Keyword highlighting";
             };
-            LB_WN( HTMLKEYWORD, 22 )
+            LB_WN( HTMLKEYWORD, 23 )
 
             FixedText FT_HTMLUNKNOWN
             {
-                FT_POS_SIZE( 23 );
+                FT_POS_SIZE( 24 );
                 Text [ en-US ] = "Text";
             };
-            LB_WN( HTMLUNKNOWN, 23 )
+            LB_WN( HTMLUNKNOWN, 24 )
 
             FixedText FT_CALC
             {
-                FT_SEP_POS_SIZE( 24 );
+                FT_SEP_POS_SIZE( 25 );
                 Text [ en-US ] = "Spreadsheet";
             };
 
             FixedText FT_CALCGRID
             {
-                FT_POS_SIZE( 25 );
+                FT_POS_SIZE( 26 );
                 Text [ en-US ] = "Grid lines";
             };
-            LB_WN( CALCGRID, 25 )
+            LB_WN( CALCGRID, 26 )
 
             FixedText FT_CALCPAGEBREAK
             {
-                FT_POS_SIZE( 26 );
+                FT_POS_SIZE( 27 );
                 Text [ en-US ] = "Page breaks";
             };
-            LB_WN( CALCPAGEBREAK, 26 )
+            LB_WN( CALCPAGEBREAK, 27 )
 
             FixedText FT_CALCPAGEBREAKMANUAL
             {
-                FT_POS_SIZE( 27 );
+                FT_POS_SIZE( 28 );
                 Text [ en-US ] = "Manual page breaks";
             };
-            LB_WN( CALCPAGEBREAKMANUAL, 27 )
+            LB_WN( CALCPAGEBREAKMANUAL, 28 )
 
             FixedText FT_CALCPAGEBREAKAUTO
             {
-                FT_POS_SIZE( 28 );
+                FT_POS_SIZE( 29 );
                 Text [ en-US ] = "Automatic page breaks";
             };
-            LB_WN( CALCPAGEBREAKAUTO, 28)
+            LB_WN( CALCPAGEBREAKAUTO, 29)
 
             FixedText FT_CALCDETECTIVE
             {
-                FT_POS_SIZE( 29 );
+                FT_POS_SIZE( 30 );
                 Text [ en-US ] = "Detective";
             };
-            LB_WN( CALCDETECTIVE, 29 )
+            LB_WN( CALCDETECTIVE, 30 )
 
             FixedText FT_CALCDETECTIVEERROR
             {
-                FT_POS_SIZE( 30 );
+                FT_POS_SIZE( 31 );
                 Text [ en-US ] = "Detective error";
             };
-            LB_WN( CALCDETECTIVEERROR, 30 )
+            LB_WN( CALCDETECTIVEERROR, 31 )
 
             FixedText FT_CALCREFERENCE
             {
-                FT_POS_SIZE( 31 );
+                FT_POS_SIZE( 32 );
                 Text [ en-US ] = "References";
             };
-            LB_WN( CALCREFERENCE, 31 )
+            LB_WN( CALCREFERENCE, 32 )
 
             FixedText FT_CALCNOTESBACKGROUND
             {
-                FT_POS_SIZE( 32 );
+                FT_POS_SIZE( 33 );
                 Text [ en-US ] = "Notes background";
             };
-            LB_WN( CALCNOTESBACKGROUND, 32 )
+            LB_WN( CALCNOTESBACKGROUND, 33 )
 
             FixedText FT_DRAW
             {
-                FT_SEP_POS_SIZE( 33 );
+                FT_SEP_POS_SIZE( 34 );
                 Text [ en-US ] = "Drawing / Presentation";
             };
 
             FixedText FT_DRAWGRID
             {
-                FT_POS_SIZE( 34 );
+                FT_POS_SIZE( 35 );
                 Text [ en-US ] = "Grid";
             };
-            LB_WN( DRAWGRID, 34 )
+            LB_WN( DRAWGRID, 35 )
 
             FixedText FT_BASIC
             {
-                FT_SEP_POS_SIZE( 35 );
+                FT_SEP_POS_SIZE( 36 );
                 Text [ en-US ] = "Basic Syntax Highlighting";
             };
 
             FixedText FT_BASICIDENTIFIER
             {
-                FT_POS_SIZE( 36 );
+                FT_POS_SIZE( 37 );
                 Text [ en-US ] = "Identifier";
             };
-            LB_WN( BASICIDENTIFIER, 36 )
+            LB_WN( BASICIDENTIFIER, 37 )
 
             FixedText FT_BASICCOMMENT
             {
-                FT_POS_SIZE( 37 );
+                FT_POS_SIZE( 38 );
                 Text [ en-US ] = "Comment";
             };
-            LB_WN( BASICCOMMENT, 37 )
+            LB_WN( BASICCOMMENT, 38 )
 
             FixedText FT_BASICNUMBER
             {
-                FT_POS_SIZE( 38 );
+                FT_POS_SIZE( 39 );
                 Text [ en-US ] = "Number";
             };
-            LB_WN( BASICNUMBER, 38)
+            LB_WN( BASICNUMBER, 39)
 
             FixedText FT_BASICSTRING
             {
-                FT_POS_SIZE( 39 );
+                FT_POS_SIZE( 40 );
                 Text [ en-US ] = "String";
             };
-            LB_WN( BASICSTRING, 39 )
+            LB_WN( BASICSTRING, 40 )
 
             FixedText FT_BASICOPERATOR
             {
-                FT_POS_SIZE( 40 );
+                FT_POS_SIZE( 41 );
                 Text [ en-US ] = "Operator";
             };
-            LB_WN( BASICOPERATOR, 40 )
+            LB_WN( BASICOPERATOR, 41 )
 
             FixedText FT_BASICKEYWORD
             {
-                FT_POS_SIZE( 41 );
+                FT_POS_SIZE( 42 );
                 Text [ en-US ] = "Reserved expression";
             };
-            LB_WN( BASICKEYWORD, 41 )
+            LB_WN( BASICKEYWORD, 42 )
 
             FixedText FT_BASICERROR
             {
-                FT_POS_SIZE( 42 );
+                FT_POS_SIZE( 43 );
                 Text [ en-US ] = "Error";
             };
-            LB_WN( BASICERROR, 42 )
+            LB_WN( BASICERROR, 43 )
 
             FixedText FT_SQL_COMMAND
             {
-                FT_SEP_POS_SIZE( 43 );
+                FT_SEP_POS_SIZE( 44 );
                 Text [ en-US ] = "SQL Syntax Highlighting";
             };
 
             FixedText FT_SQLIDENTIFIER
             {
-                FT_POS_SIZE( 44 );
+                FT_POS_SIZE( 45 );
                 Text [ en-US ] = "Identifier";
             };
-            LB_WN( SQLIDENTIFIER, 44 )
+            LB_WN( SQLIDENTIFIER, 45 )
 
             FixedText FT_SQLNUMBER
             {
-                FT_POS_SIZE( 45 );
+                FT_POS_SIZE( 46 );
                 Text [ en-US ] = "Number";
             };
-            LB_WN( SQLNUMBER, 45 )
+            LB_WN( SQLNUMBER, 46 )
 
             FixedText FT_SQLSTRING
             {
-                FT_POS_SIZE( 46 );
+                FT_POS_SIZE( 47 );
                 Text [ en-US ] = "String";
             };
-            LB_WN( SQLSTRING, 46 )
+            LB_WN( SQLSTRING, 47 )
 
             FixedText FT_SQLOPERATOR
             {
-                FT_POS_SIZE( 47 );
+                FT_POS_SIZE( 48 );
                 Text [ en-US ] = "Operator";
             };
-            LB_WN( SQLOPERATOR, 47 )
+            LB_WN( SQLOPERATOR, 48 )
 
             FixedText FT_SQLKEYWORD
             {
-                FT_POS_SIZE( 48 );
+                FT_POS_SIZE( 49 );
                 Text [ en-US ] = "Keyword";
             };
-            LB_WN( SQLKEYWORD, 48 )
+            LB_WN( SQLKEYWORD, 49 )
 
             FixedText FT_SQLPARAMETER
             {
-                FT_POS_SIZE( 49 );
+                FT_POS_SIZE( 50 );
                 Text [ en-US ] = "Parameter";
             };
-            LB_WN( SQLPARAMETER, 49 )
+            LB_WN( SQLPARAMETER, 50 )
 
             FixedText FT_SQLCOMMENT
             {
-                FT_POS_SIZE( 50 );
+                FT_POS_SIZE( 51 );
                 Text [ en-US ] = "Comment";
             };
-            LB_WN( SQLCOMMENT, 50 )
+            LB_WN( SQLCOMMENT, 51 )
 
             String ST_EXTENSION
             {

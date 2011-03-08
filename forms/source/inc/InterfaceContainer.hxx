@@ -29,7 +29,7 @@
 #ifndef _FRM_INTERFACE_CONTAINER_HXX_
 #define _FRM_INTERFACE_CONTAINER_HXX_
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <comphelper/stl_types.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/uno3.hxx>
@@ -83,7 +83,7 @@ namespace frm
     };
 
 typedef ::std::vector<InterfaceRef> OInterfaceArray;
-typedef ::std::hash_multimap< ::rtl::OUString, InterfaceRef, ::comphelper::UStringHash, ::comphelper::UStringEqual> OInterfaceMap;
+typedef ::boost::unordered_multimap< ::rtl::OUString, InterfaceRef, ::comphelper::UStringHash, ::comphelper::UStringEqual> OInterfaceMap;
 
 //==================================================================
 // OInterfaceContainer

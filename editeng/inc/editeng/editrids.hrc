@@ -318,7 +318,7 @@
 #define RID_SVXITEMS_SHADOW_BOTTOMLEFT      (RID_EDIT_START + 232)
 #define RID_SVXITEMS_SHADOW_BOTTOMRIGHT     (RID_EDIT_START + 233)
 
-// Umrandungslinien
+// Border lines
 #define RID_SINGLE_LINE0                    (RID_EDIT_START + 234)
 #define RID_SINGLE_LINE1                    (RID_EDIT_START + 235)
 #define RID_SINGLE_LINE2                    (RID_EDIT_START + 236)
@@ -336,7 +336,7 @@
 #define RID_DOUBLE_LINE9                    (RID_EDIT_START + 248)
 #define RID_DOUBLE_LINE10                   (RID_EDIT_START + 249)
 
-// Metric-Texte
+// Metric-Text
 #define RID_SVXITEMS_METRIC_MM              (RID_EDIT_START + 250)
 #define RID_SVXITEMS_METRIC_CM              (RID_EDIT_START + 251)
 #define RID_SVXITEMS_METRIC_INCH            (RID_EDIT_START + 252)

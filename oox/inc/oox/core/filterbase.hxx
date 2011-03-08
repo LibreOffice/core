@@ -105,7 +105,7 @@ public:
     /** Returns true, if filter is an export filter. */
     bool                isExportFilter() const;
 
-    OoxmlVersion getVersion( );
+    OoxmlVersion getVersion() const;
 
     /** Derived classes implement import of the entire document. */
     virtual bool        importDocument() = 0;

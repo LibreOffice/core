@@ -49,24 +49,21 @@ namespace writerfilter {
 namespace dmapper {
 
 using namespace ::com::sun::star;
-/*-- 23.04.2008 10:46:14---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 OLEHandler::OLEHandler() :
     m_nDxaOrig(0),
     m_nDyaOrig(0),
     m_nWrapMode(1)
 {
 }
-/*-- 23.04.2008 10:46:14---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 OLEHandler::~OLEHandler()
 {
 }
-/*-- 23.04.2008 10:46:14---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void OLEHandler::attribute(Id rName, Value & rVal)
 {
     rtl::OUString sStringValue = rVal.getString();
@@ -136,9 +133,8 @@ void OLEHandler::attribute(Id rName, Value & rVal)
             OSL_ENSURE( false, "unknown attribute");
     }
 }
-/*-- 23.04.2008 10:46:14---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void OLEHandler::sprm(Sprm & rSprm)
 {
     sal_uInt32 nSprmId = rSprm.getId();
@@ -188,9 +184,8 @@ void OLEHandler::sprm(Sprm & rSprm)
         }
     }
 }
-/*-- 23.04.2008 11:15:19---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 ::rtl::OUString OLEHandler::copyOLEOStream( uno::Reference< text::XTextDocument > xTextDocument )
 {
     ::rtl::OUString sRet;

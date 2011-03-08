@@ -49,7 +49,7 @@
 //  other includes
 //_________________________________________________________________________________________________________________
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 namespace framework
 {

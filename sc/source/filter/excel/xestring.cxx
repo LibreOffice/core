@@ -135,25 +135,9 @@ void XclExpString::Assign( const String& rString, XclStrFlags nFlags, sal_uInt16
     Build( rString.GetBuffer(), rString.Len(), nFlags, nMaxLen );
 }
 
-void XclExpString::Assign(
-        const String& rString, const XclFormatRunVec& rFormats,
-        XclStrFlags nFlags, sal_uInt16 nMaxLen )
-{
-    Assign( rString, nFlags, nMaxLen );
-    SetFormats( rFormats );
-}
-
 void XclExpString::Assign( const OUString& rString, XclStrFlags nFlags, sal_uInt16 nMaxLen )
 {
     Build( rString.getStr(), rString.getLength(), nFlags, nMaxLen );
-}
-
-void XclExpString::Assign(
-        const OUString& rString, const XclFormatRunVec& rFormats,
-        XclStrFlags nFlags, sal_uInt16 nMaxLen )
-{
-    Assign( rString, nFlags, nMaxLen );
-    SetFormats( rFormats );
 }
 
 void XclExpString::Assign( sal_Unicode cChar, XclStrFlags nFlags, sal_uInt16 nMaxLen )

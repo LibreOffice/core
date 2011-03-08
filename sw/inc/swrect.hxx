@@ -27,7 +27,6 @@
  ************************************************************************/
 #ifndef _SWRECT_HXX
 #define _SWRECT_HXX
-#include "errhdl.hxx"
 #include <osl/diagnose.h>
 #include <tools/gen.hxx>
 class SvStream;

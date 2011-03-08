@@ -104,7 +104,7 @@ void SdXMLayerExporter::exportLayer( SvXMLExport& rExport )
         }
         catch( Exception& )
         {
-            DBG_ERROR("SdXMLayerExporter::exportLayer(), exception caught during export of one layer!");
+            OSL_FAIL("SdXMLayerExporter::exportLayer(), exception caught during export of one layer!");
         }
     }
 }

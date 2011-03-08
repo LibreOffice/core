@@ -32,11 +32,9 @@
 #include <rtl/memory.h>
 
 using namespace cppu;
-using namespace rtl;
 using namespace com::sun::star::io;
 using namespace com::sun::star::uno;
 using namespace webdav_ucp;
-
 
 // -------------------------------------------------------------------
 // Constructor

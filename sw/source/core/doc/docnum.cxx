@@ -620,7 +620,7 @@ USHORT lcl_FindOutlineNum( const SwNodes& rNds, String& rName )
     // Gliederung:
     const SwOutlineNodes& rOutlNds = rNds.GetOutLineNds();
     // OS: ohne OutlineNodes lohnt die Suche nicht
-    // und man spart sich einen Absturz #42958#
+    // und man spart sich einen Absturz
     if(!rOutlNds.Count())
         return USHRT_MAX;
     SwTxtNode* pNd;
@@ -654,7 +654,6 @@ USHORT lcl_FindOutlineNum( const SwNodes& rNds, String& rName )
             }
             else
             {
-                // --> OD 2006-01-12 #126588#
                 // A text node, which has an outline paragraph style applied and
                 // has as hard attribute 'no numbering' set, has an outline level,
                 // but no numbering tree node. Thus, consider this situation in
@@ -728,8 +727,7 @@ BOOL SwDoc::GotoOutline( SwPosition& rPos, const String& rName ) const
             return TRUE;
         }
 
-        // --> OD 2006-09-22 #i68289#
-        // additional search on hyperlink URL without its outline numbering part
+        // #i68289# additional search on hyperlink URL without its outline numbering part
         if ( !sName.Equals( rName ) )
         {
             nFndPos = ::lcl_FindOutlineName( GetNodes(), sName, FALSE );
@@ -741,7 +739,6 @@ BOOL SwDoc::GotoOutline( SwPosition& rPos, const String& rName ) const
                 return TRUE;
             }
         }
-        // <--
     }
     return FALSE;
 }
@@ -898,8 +895,8 @@ void SwDoc::SetNumRule( const SwPaM& rPam,
                     pTxtNd->AddToList();
                 }
             }
-            // --> OD 2005-10-26 #b6340308# - only clear numbering attribute at
-            // text node, if at paragraph style the new numbering rule is found.
+            // Only clear numbering attribute at text node, if at paragraph
+            // style the new numbering rule is found.
             else if ( !pRule )
             {
                 SwTxtFmtColl* pColl = pTxtNd->GetTxtColl();
@@ -913,9 +910,7 @@ void SwDoc::SetNumRule( const SwPaM& rPam,
                     }
                 }
             }
-            // <--
         }
-        // <--
     }
 
     if ( bSetItem )
@@ -1566,7 +1561,7 @@ const SwNumRule *  SwDoc::SearchNumRule(const SwPosition & rPos,
                 const SwNumRule * pNumRule = pTxtNd->GetNumRule();
                 if (pNumRule)
                 {
-                    if ( ( pNumRule->IsOutlineRule() == ( bOutline ? TRUE : FALSE ) ) && // #115901#
+                    if ( ( pNumRule->IsOutlineRule() == ( bOutline ? TRUE : FALSE ) ) &&
                          ( ( bNum && pNumRule->Get(0).IsEnumeration()) ||
                            ( !bNum && pNumRule->Get(0).IsItemize() ) ) ) // #i22362#, #i29560#
                     {
@@ -1622,7 +1617,7 @@ BOOL SwDoc::NumUpDown( const SwPaM& rPam, BOOL bDown )
         ULONG nTmp = nStt; nStt = nEnd; nEnd = nTmp;
     }
 
-    // -> #115901# outline nodes are promoted or demoted differently
+    // -> outline nodes are promoted or demoted differently
     bool bOnlyOutline = true;
     bool bOnlyNonOutline = true;
     for (ULONG n = nStt; n <= nEnd; n++)
@@ -1650,7 +1645,7 @@ BOOL SwDoc::NumUpDown( const SwPaM& rPam, BOOL bDown )
         bRet = OutlineUpDown(rPam, nDiff);
     else if (bOnlyNonOutline)
     {
-        /* --> #i24560#
+        /* #i24560#
 
         Only promote or demote if all selected paragraphs are
         promotable resp. demotable.
@@ -1660,8 +1655,8 @@ BOOL SwDoc::NumUpDown( const SwPaM& rPam, BOOL bDown )
         {
             SwTxtNode* pTNd = GetNodes()[ nTmp ]->GetTxtNode();
 
-            // --> OD 2006-10-19 #134160# - make code robust:
-            // consider case that the node doesn't denote a text node.
+            // Make code robust: consider case that the node doesn't denote a
+            // text node.
             if ( pTNd )
             {
                 SwNumRule * pRule = pTNd->GetNumRule();
@@ -1674,7 +1669,6 @@ BOOL SwDoc::NumUpDown( const SwPaM& rPam, BOOL bDown )
                         bRet = FALSE;
                 }
             }
-            // <--
         }
 
         if( bRet )
@@ -1923,7 +1917,7 @@ BOOL SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, BOOL bIsOutlMv )
 
             BOOL bDelLastPara = !aInsPos.nNode.GetNode().IsCntntNode();
 
-            /* #101076# When copying to a non-content node Copy will
+            /* When copying to a non-content node Copy will
                insert a paragraph before that node and insert before
                that inserted node. Copy creates an SwUndoInserts that
                does not cover the extra paragraph. Thus we insert the
@@ -1994,7 +1988,7 @@ BOOL SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, BOOL bIsOutlMv )
 
             SwRedline* pNewRedline = new SwRedline( nsRedlineType_t::REDLINE_DELETE, aPam );
 
-            // #101654# prevent assertion from aPam's target being deleted
+            // prevent assertion from aPam's target being deleted
             // (Alternatively, one could just let aPam go out of scope, but
             //  that requires touching a lot of code.)
             aPam.GetBound(TRUE).nContent.Assign( NULL, 0 );
@@ -2491,7 +2485,7 @@ SwList* SwDoc::getListByName( const String sListId ) const
 {
     SwList* pList = 0;
 
-    std::hash_map< String, SwList*, StringHash >::const_iterator
+    boost::unordered_map< String, SwList*, StringHash >::const_iterator
                                             aListIter = maLists.find( sListId );
     if ( aListIter != maLists.end() )
     {
@@ -2541,7 +2535,7 @@ SwList* SwDoc::getListForListStyle( const String sListStyleName ) const
 {
     SwList* pList = 0;
 
-    std::hash_map< String, SwList*, StringHash >::const_iterator
+    boost::unordered_map< String, SwList*, StringHash >::const_iterator
                             aListIter = maListStyleLists.find( sListStyleName );
     if ( aListIter != maListStyleLists.end() )
     {
@@ -2602,19 +2596,16 @@ namespace listfunc
     }
     const String CreateUniqueListId( const SwDoc& rDoc )
     {
-        // --> OD 2008-08-06 #i92478#
+        // #i92478#
         String aNewListId = String::CreateFromAscii( "list" );
-        // <--
         sal_Int64 n = Time().GetTime();
         n += Date().GetDate();
         n += rand();
-        // --> OD 2008-08-06 #i92478#
+        // #i92478#
         aNewListId += String::CreateFromInt64( n );
-        // <--
 
         return MakeListIdUnique( rDoc, aNewListId );
     }
 }
-// <--
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

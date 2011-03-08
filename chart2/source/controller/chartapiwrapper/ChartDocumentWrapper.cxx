@@ -78,6 +78,7 @@
 #include <vector>
 #include <algorithm>
 #include <functional>
+#include <o3tl/compat_functional.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart;
@@ -1482,7 +1483,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL ChartDocumentWrapper::getAvailableServ
 
     ::std::transform( rMap.begin(), rMap.end(),
                       aResult.getArray(),
-                      ::std::select1st< tServiceNameMap::value_type >() );
+                      ::o3tl::select1st< tServiceNameMap::value_type >() );
 
     return aResult;
 

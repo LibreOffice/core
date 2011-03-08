@@ -64,7 +64,7 @@
 #include <tools/zcodec.hxx>
 
 #include <boost/bind.hpp>
-#include <hash_set>
+#include <boost/unordered_set.hpp>
 #include <map>
 #include <string.h>
 
@@ -147,6 +147,7 @@ struct AnnotatingVisitor
                       StateMap&                                         rStateMap,
                       const State&                                       rInitialState,
                       const uno::Reference<xml::sax::XDocumentHandler>& xDocumentHandler) :
+        mbSeenText(false),
         mnCurrStateId(0),
         maCurrState(),
         maParentStates(),
@@ -265,6 +266,13 @@ struct AnnotatingVisitor
                 maCurrState = maParentStates.back();
                 maCurrState.maTransform.identity();
                 maCurrState.maViewBox.reset();
+
+                // set default font size here to ensure writing styles for text
+                if( !mbSeenText && XML_TEXT == nTagId )
+                {
+                    maCurrState.mnFontSize = 12.0;
+                    mbSeenText = true;
+                }
 
                 // scan for style info
                 const sal_Int32 nNumAttrs( xAttributes->getLength() );
@@ -410,13 +418,13 @@ struct AnnotatingVisitor
         const sal_uInt8 nGreen( toByteColor(rColor.g) );
         const sal_uInt8 nBlue ( toByteColor(rColor.b)  );
         aBuf.append( sal_Unicode('#') );
-        if( nRed < 10 )
+        if( nRed < 0x10 )
             aBuf.append( sal_Unicode('0') );
         aBuf.append( sal_Int32(nRed), 16 );
-        if( nGreen < 10 )
+        if( nGreen < 0x10 )
             aBuf.append( sal_Unicode('0') );
         aBuf.append( sal_Int32(nGreen), 16 );
-        if( nBlue < 10 )
+        if( nBlue < 0x10 )
             aBuf.append( sal_Unicode('0') );
         aBuf.append( sal_Int32(nBlue), 16 );
 
@@ -873,7 +881,7 @@ struct AnnotatingVisitor
             {
                 // TODO(F1): preserveAspectRatio
                 parseViewBox(
-                    aValueUtf8,
+                    aValueUtf8.getStr(),
                     maCurrState.maViewBox);
                 break;
             }
@@ -990,6 +998,14 @@ struct AnnotatingVisitor
                             rParent.maStrokeGradient );
                 break;
             }
+            case XML_COLOR:
+            {
+                if( aValueUtf8 == "inherit" )
+                    maCurrState.maCurrentColor = maParentStates.back().maCurrentColor;
+                else
+                    parseColor(aValueUtf8.getStr(), maCurrState.maCurrentColor);
+                break;
+            }
             case XML_TRANSFORM:
             {
                 basegfx::B2DHomMatrix aTransform;
@@ -1019,7 +1035,7 @@ struct AnnotatingVisitor
                 if( maGradientVector.empty() ||
                     maGradientVector.back().maStops.empty() )
                     break;
-                parseColor( aValueUtf8,
+                parseColor( aValueUtf8.getStr(),
                             maGradientStopVector[
                                 maGradientVector.back().maStops.back()].maStopColor );
                 break;
@@ -1027,7 +1043,7 @@ struct AnnotatingVisitor
                 if( maGradientVector.empty() ||
                     maGradientVector.back().maStops.empty() )
                     break;
-                parseOpacity( aValueUtf8,
+                parseOpacity( aValueUtf8.getStr(),
                               maGradientStopVector[
                                   maGradientVector.back().maStops.back()].maStopColor );
                 break;
@@ -1153,6 +1169,7 @@ struct AnnotatingVisitor
         }
     }
 
+    bool                                       mbSeenText;
     sal_Int32                                  mnCurrStateId;
     State                                      maCurrState;
     std::vector<State>                         maParentStates;
@@ -1458,7 +1475,7 @@ struct ShapeWritingVisitor
                 // collect text from all TEXT_NODE children into sText
                 rtl::OUStringBuffer sText;
                 visitChildren(boost::bind(
-                                  (rtl::OUStringBuffer& (rtl::OUStringBuffer::*)(const sal_Unicode* str))&rtl::OUStringBuffer::append,
+                                  (rtl::OUStringBuffer& (rtl::OUStringBuffer::*)(const rtl::OUString& str))&rtl::OUStringBuffer::append,
                                   boost::ref(sText),
                                   boost::bind(&xml::dom::XNode::getNodeValue,
                                               _1)),
@@ -2368,7 +2385,7 @@ struct ShapeRenderingVisitor
                 // collect text from all TEXT_NODE children into sText
                 rtl::OUStringBuffer sText;
                 visitChildren(boost::bind(
-                                  (rtl::OUStringBuffer& (rtl::OUStringBuffer::*)(const sal_Unicode* str))&rtl::OUStringBuffer::append,
+                                  (rtl::OUStringBuffer& (rtl::OUStringBuffer::*)(const rtl::OUString& str))&rtl::OUStringBuffer::append,
                                   boost::ref(sText),
                                   boost::bind(&xml::dom::XNode::getNodeValue,
                                               _1)),

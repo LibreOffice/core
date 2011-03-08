@@ -71,7 +71,7 @@ public:
              bPrintLeftPages, bPrintRightPages, bPrintReverse, bPrintProspect,
              bPrintProspectRTL,
              bPrintSingleJobs, bPaperFromSetup,
-             // #b6354161# Print empty pages
+             // Print empty pages
              bPrintEmptyPages,
 
              // #i56195# no field update while printing mail merge documents

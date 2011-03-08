@@ -41,7 +41,7 @@ module com { module sun { module star { module ucb {
 
     Macros which will be expanded using the singleton
     /singletons/com.sun.star.util.theMacroExpander
-    of the process' initial component context.
+    of the process's initial component context.
 
     @see Content
 */

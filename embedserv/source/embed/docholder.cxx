@@ -496,17 +496,7 @@ void DocumentHolder::InPlaceDeactivate(void)
         m_xLayoutManager->setVisible(false);
 
     if (NULL!=m_pIOleIPSite)
-    {
-        // The following workaround should let the object be stored in case of inplace editing
-//        CComPtr< IOleClientSite > pClientSite;
-//
-//        m_pIOleIPSite->QueryInterface(
-//              IID_IOleClientSite, (void**)&pClientSite );
-//        if ( pClientSite )
-//            pClientSite->SaveObject();
-
         m_pIOleIPSite->OnInPlaceDeactivate();
-    }
 
     if(m_pIOleIPFrame) m_pIOleIPFrame->Release(); m_pIOleIPFrame = 0;
     if(m_pIOleIPUIWindow) m_pIOleIPUIWindow->Release(); m_pIOleIPUIWindow = 0;
@@ -1162,62 +1152,6 @@ IDispatch* DocumentHolder::GetIDispatch()
     return m_pIDispatch;
 }
 
-#if 0
-HRESULT DocumentHolder::SetVisArea( const RECTL *pRect )
-{
-    if ( pRect && m_xDocument.is() )
-    {
-        uno::Sequence< beans::PropertyValue > aArgs = m_xDocument->getArgs();
-        for ( sal_Int32 nInd = 0; nInd < aArgs.getLength(); nInd++ )
-            if ( aArgs[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "WinExtent" ) ) )
-            {
-                // should allways be there
-                uno::Sequence< sal_Int32 > aRect(4);
-
-                aRect[0] = pRect->left;
-                aRect[1] = pRect->top;
-                aRect[2] = pRect->right;
-                aRect[3] = pRect->bottom;
-
-                aArgs[nInd].Value <<= aRect;
-
-                m_xDocument->attachResource( m_xDocument->getURL(), aArgs );
-                return S_OK;
-            }
-
-        OSL_ENSURE( sal_False, "WinExtent seems not to be implemented!\n" );
-    }
-
-    return E_FAIL;
-}
-
-HRESULT DocumentHolder::GetVisArea( RECTL *pRect )
-{
-    if ( pRect && m_xDocument.is() )
-    {
-        uno::Sequence< beans::PropertyValue > aArgs = m_xDocument->getArgs();
-        for ( sal_Int32 nInd = 0; nInd < aArgs.getLength(); nInd++ )
-            if ( aArgs[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "WinExtent" ) ) )
-            {
-                uno::Sequence< sal_Int32 > aRect;
-                if ( ( aArgs[nInd].Value >>= aRect ) && aRect.getLength() == 4 )
-                {
-                    pRect->left   = aRect[0];
-                    pRect->top    = aRect[1];
-                    pRect->right  = aRect[2];
-                    pRect->bottom = aRect[3];
-
-                    return S_OK;
-                }
-
-                break;
-            }
-    }
-
-    return E_FAIL;
-}
-#endif
-
 HRESULT DocumentHolder::GetDocumentBorder( RECT *pRect )
 {
     if ( pRect && m_xDocument.is() )
@@ -1588,52 +1522,6 @@ void SAL_CALL DocumentHolder::modified( const lang::EventObject& /*aEvent*/ )
             aDocLock.GetEmbedDocument()->notify();
     }
 }
-
-
-
-//     if(m_pOLEInterface->GetGUID() == OID_WriterTextServer) {
-//         // edit group
-//         CopyToOLEMenu(m_nMenuHandle,1,hMenu,(WORD)mgw.width[0]);
-//         CopyToOLEMenu(m_nMenuHandle,2,hMenu,1+(WORD)mgw.width[0]);
-//         CopyToOLEMenu(m_nMenuHandle,3,hMenu,2+(WORD)mgw.width[0]);
-//         CopyToOLEMenu(m_nMenuHandle,4,hMenu,3+(WORD)mgw.width[0]);
-//         mgw.width[1]=4;
-
-//         // object group
-//         CopyToOLEMenu(
-//             m_nMenuHandle,5,
-//             hMenu,4+(WORD)mgw.width[0]+(WORD)mgw.width[2]);
-//         mgw.width[3]=1;
-
-//         // help group
-//         CopyToOLEMenu(
-//             m_nMenuHandle,7,
-//             hMenu,5+(WORD)mgw.width[0]+(WORD)mgw.width[2]+(WORD)mgw.width[4]);
-//         mgw.width[5]=1;
-//     }
-//     else if(m_pOLEInterface->GetGUID() == OID_CalcServer) {
-//         // edit group
-//         CopyToOLEMenu(m_nMenuHandle,1,hMenu,(WORD)mgw.width[0]);
-//         CopyToOLEMenu(m_nMenuHandle,2,hMenu,1+(WORD)mgw.width[0]);
-//         CopyToOLEMenu(m_nMenuHandle,3,hMenu,2+(WORD)mgw.width[0]);
-//         CopyToOLEMenu(m_nMenuHandle,4,hMenu,3+(WORD)mgw.width[0]);
-//         mgw.width[1]=4;
-
-//         // object group
-//         CopyToOLEMenu(
-//             m_nMenuHandle,5,
-//             hMenu,4+(WORD)mgw.width[0]+(WORD)mgw.width[2]);
-//         CopyToOLEMenu(
-//             m_nMenuHandle,6,
-//             hMenu,5+(WORD)mgw.width[0]+(WORD)mgw.width[2]);
-//         mgw.width[3]=2;
-
-//         // help group
-//         CopyToOLEMenu(
-//             m_nMenuHandle,8,
-//             hMenu,6+(WORD)mgw.width[0]+(WORD)mgw.width[2]+(WORD)mgw.width[4]);
-//         mgw.width[5]=1;
-//     }
 
 // Fix strange warnings about some
 // ATL::CAxHostWindow::QueryInterface|AddRef|Releae functions.

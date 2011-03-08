@@ -44,7 +44,6 @@
 #define LSize MacOSLSize
 #define ModalDialog MacOSModalDialog
 #define SetCursor MacOSSetCursor
-//#define ShowWindow MacOSShowWindow
 #define StringPtr MacOSStringPtr
 #define DirInfo MacOSDirInfo
 #define ULONG MacOSULONG

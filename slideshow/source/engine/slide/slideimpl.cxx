@@ -75,6 +75,8 @@
 #include "event.hxx"
 #include "tools.hxx"
 
+#include <o3tl/compat_functional.hxx>
+
 #include <boost/bind.hpp>
 #include <iterator>
 #include <algorithm>
@@ -619,7 +621,7 @@ SlideBitmapSharedPtr SlideImpl::getCurrentSlideBitmap( const UnoViewSharedPtr& r
                                  rView,
                                  // select view:
                                  boost::bind(
-                                     std::select1st<VectorOfVectorOfSlideBitmaps::value_type>(),
+                                     o3tl::select1st<VectorOfVectorOfSlideBitmaps::value_type>(),
                                      _1 )))) == aEnd )
     {
         // corresponding view not found - maybe view was not
@@ -693,7 +695,7 @@ void SlideImpl::viewRemoved( const UnoViewSharedPtr& rView )
                             rView,
                             // select view:
                             boost::bind(
-                                std::select1st<VectorOfVectorOfSlideBitmaps::value_type>(),
+                                o3tl::select1st<VectorOfVectorOfSlideBitmaps::value_type>(),
                                 _1 ))),
         aEnd );
 }

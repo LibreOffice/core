@@ -142,14 +142,6 @@ $(MISC)$/$(TARGET)-common : makefile.mk
     @-echo $(URELIBPATH)$/$(DLLPRE)reg$(UDKDLLPOST)         >> $@
     @-echo $(URELIBPATH)$/$(DLLPRE)store$(UDKDLLPOST)       >> $@
     @-echo $(URELIBPATH)$/reflection$(UNODLLPOST)           >> $@
-.IF "$(USE_SYSTEM_STL)"!="YES"
-.IF "$(COMNAME)" == "gcc2" || "$(COMNAME)" == "gcc3"
-    @-echo $(URELIBPATH)$/$(DLLPRE)stlport_gcc$(DLLPOST)    >> $@
-.ENDIF # gcc
-.IF "$(COMNAME)" == "sunpro5"
-    @-echo $(URELIBPATH)$/$(DLLPRE)stlport_sunpro$(DLLPOST) >> $@
-.ENDIF # sunpro5
-.ENDIF # SYSTEM_STL
     @-echo $(URELIBPATH)$/$(DLLPRE)uno_cppuhelper$(COMID)$(UDKDLLPOST) >> $@
     @-echo $(URELIBPATH)$/$(DLLPRE)uno_cppu$(UDKDLLPOST)               >> $@
     @-echo $(URELIBPATH)$/$(DLLPRE)uno_sal$(UDKDLLPOST)                >> $@

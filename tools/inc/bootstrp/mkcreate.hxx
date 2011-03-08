@@ -32,7 +32,6 @@
 #include <tools/string.hxx>
 #include "bootstrp/sstring.hxx"
 
-#include <tools/list.hxx>
 #include "bootstrp/prj.hxx"
 
 class SvStream;
@@ -285,7 +284,7 @@ public:
 
     /* insert a new directory
      */
-    ULONG InsertSorted(
+    size_t InsertSorted(
         SourceDirectory *pDirectory     // directory
     )
     {

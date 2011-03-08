@@ -84,7 +84,7 @@ XMLFilterTabPageXSLT::XMLFilterTabPageXSLT( Window* pParent, ResMgr& rResMgr, co
     }
     catch(Exception&)
     {
-        DBG_ERROR( "XMLFilterTabPageXSLT::XMLFilterTabPageXSLT exception catched!" );
+        OSL_FAIL( "XMLFilterTabPageXSLT::XMLFilterTabPageXSLT exception catched!" );
     }
 
     maPBDTDSchemaBrowse.SetClickHdl( LINK ( this, XMLFilterTabPageXSLT, ClickBrowseHdl_Impl ) );

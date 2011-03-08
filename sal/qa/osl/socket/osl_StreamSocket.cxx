@@ -61,7 +61,9 @@
 #include <osl/conditn.hxx>
 
 using namespace osl;
-using namespace rtl;
+
+using ::rtl::OUString;
+using ::rtl::OString;
 
 #define IP_PORT_MYPORT9  8897
 #define IP_PORT_MYPORT10 18900
@@ -455,31 +457,6 @@ protected:
                     }
                     else
                     {
-
-// LLA: removed, due to the fact, this is to error prone
-// LLA:             char * pSrcRoot = getenv("SOURCE_ROOT");
-// LLA:             // LLA: This is absolute wrong!
-// LLA:             // strcat( pSrcRoot, "/sal/inc/osl/file.hxx");
-// LLA:             rtl::OString sSrcRoot(pSrcRoot);
-// LLA:             sSrcRoot += "/sal/inc/osl/file.hxx";
-// LLA:
-// LLA:             ::rtl::OUString sFilePath = ::rtl::OUString::createFromAscii( sSrcRoot.getStr() );
-// LLA: #ifdef WNT
-// LLA:             while (sFilePath.lastIndexOf('/') != -1)
-// LLA:                 sFilePath = sFilePath.replace('/',(sal_Unicode)'\\');
-// LLA: #endif
-// LLA:             FILE *stream;
-// LLA:             sal_uInt64     nCount_read;
-// LLA:             sal_Char       buffer_read[FILE_READ];
-// LLA:
-// LLA:             if( (stream = fopen( oustring2char( sFilePath ), "r+t" )) != NULL )
-// LLA:             {
-// LLA:                 /* Attempt to read in 25 characters */
-// LLA:                 nCount_read = fread( buffer_read, sizeof( char ), FILE_READ, stream );
-// LLA:                 fclose( stream );
-// LLA:             }
-// LLA:             else
-// LLA:                 t_print("# File $SRC_ROOT/sal/inc/osl/file.hxx could not be opened\n" );
 
                         t_print("write()\n");
 
@@ -925,58 +902,6 @@ namespace osl_StreamSocket
     }; // class isExceptionPending
 
 // -----------------------------------------------------------------------------
-/** Server Socket Thread, write a file which is large
- */
-// LLA: class WriteSocketThread : public Thread
-// LLA: {
-// LLA:     ValueCheckProvider m_aValues;
-// LLA:
-// LLA: protected:
-// LLA:     oslThreadIdentifier m_id;
-// LLA:
-// LLA:     void SAL_CALL run( )
-// LLA:     {
-// LLA:         ::osl::AcceptorSocket asAcceptorSocket( osl_Socket_FamilyInet, osl_Socket_ProtocolIp, osl_Socket_TypeStream );
-// LLA:         ::osl::SocketAddr saLocalSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("10.16.66.252")), 8888 );
-// LLA:         ::osl::StreamSocket ssStreamConnection;
-// LLA:
-// LLA:         //if has not set this option, socket addr can not be binded in some time(maybe 2 minutes) by another socket
-// LLA:         asAcceptorSocket.setOption( osl_Socket_OptionReuseAddr, 1 );    //sal_True);
-// LLA:
-// LLA:         /// if the thread should terminate, schedule return false
-// LLA:         while ( schedule( ) == sal_True )
-// LLA:         {
-// LLA:             sal_Bool bOK1 = asAcceptorSocket.bind( saLocalSocketAddr );
-// LLA:             if  ( sal_True != bOK1 )
-// LLA:             {
-// LLA:                 t_print("# WriteSocketThread: AcceptorSocket bind address failed. \n" ) ;
-// LLA:                 break;
-// LLA:             }
-// LLA:             sal_Bool bOK2 = asAcceptorSocket.listen( 1 );
-// LLA:             if  ( sal_True != bOK2 )
-// LLA:             {
-// LLA:                 t_print("# WriteSocketThread: AcceptorSocket listen address failed. \n" ) ;
-// LLA:                 break;
-// LLA:             }
-// LLA:             // blocking mode, if read/recv failed, block until success
-// LLA:             asAcceptorSocket.enableNonBlockingMode( sal_False);
-// LLA:
-// LLA:             oslSocketResult eResult = asAcceptorSocket.acceptConnection( ssStreamConnection );
-// LLA:             if (eResult != osl_Socket_Ok )
-// LLA:             {
-// LLA:                 t_print("WriteSocketThread: acceptConnection failed! \n");
-// LLA:                 break;
-// LLA:             }
-// LLA:
-// LLA:
-// LLA:             sal_Int32 nReadNumber1 = ssStreamConnection.write( m_aValues.getBuffer(), m_aValues.getBufferSize() );
-// LLA:             break;
-// LLA:         }
-// LLA:         ssStreamConnection.close();
-// LLA:         asAcceptorSocket.close();
-// LLA:     }
-// LLA: }
-
 /** Client Socket Thread, served as a temp little client to communicate with server.
  */
 

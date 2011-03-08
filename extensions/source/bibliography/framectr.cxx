@@ -61,15 +61,16 @@
 #include <vcl/edit.hxx>
 #include <osl/mutex.hxx>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 using namespace osl;
 using namespace cppu;
-using namespace rtl;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::uno;
 using namespace com::sun::star;
+
+using ::rtl::OUString;
 
 #define C2U(cChar) OUString::createFromAscii(cChar)
 
@@ -110,7 +111,7 @@ static DispatchInfo SupportedCommandsArray[] =
     { 0                         ,   0                               , sal_False }
 };
 
-typedef ::std::hash_map< ::rtl::OUString, CacheDispatchInfo, rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > CmdToInfoCache;
+typedef ::boost::unordered_map< ::rtl::OUString, CacheDispatchInfo, rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > CmdToInfoCache;
 
 SV_IMPL_PTRARR( BibStatusDispatchArr, BibStatusDispatchPtr );
 
@@ -383,7 +384,6 @@ sal_Bool BibFrameController_Impl::SaveModified(const Reference< form::runtime::X
 {
     if (!xController.is())
         return sal_False;
-    sal_Bool bInserted = sal_False;
 
     Reference< XResultSetUpdate> _xCursor = Reference< XResultSetUpdate>(xController->getModel(), UNO_QUERY);
 
@@ -410,10 +410,8 @@ sal_Bool BibFrameController_Impl::SaveModified(const Reference< form::runtime::X
         }
         catch(Exception&)
         {
-            DBG_ERROR("SaveModified: Exception occurred!");
+            OSL_FAIL("SaveModified: Exception occurred!");
         }
-
-        bInserted = bIsNew && bResult;
     }
     return bResult;
 }
@@ -466,7 +464,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
                 }
                 catch(const Exception&)
                 {
-                    DBG_ERROR("Exception catched while changing the data source");
+                    OSL_FAIL("Exception catched while changing the data source");
                 }
             }
         }
@@ -556,7 +554,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
             }
             catch( const uno::Exception& )
             {
-                DBG_ERROR( "BibFrameController_Impl::dispatch: caught an exception!" );
+                OSL_FAIL( "BibFrameController_Impl::dispatch: caught an exception!" );
             }
 
             sal_uInt16 nCount = aStatusListeners.Count();
@@ -600,7 +598,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
                 }
                 catch(Exception&)
                 {
-                    DBG_ERROR("Exception in last() or moveToInsertRow()");
+                    OSL_FAIL("Exception in last() or moveToInsertRow()");
                 }
             }
         }
@@ -660,7 +658,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
                         }
                         catch(Exception&)
                         {
-                            DBG_ERROR("DeleteRecord : exception caught !");
+                            OSL_FAIL("DeleteRecord : exception caught !");
                         }
                     }
                 }

@@ -31,7 +31,6 @@
 
 #include <com/sun/star/frame/XTitle.hpp>
 
-#include <tools/list.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/printer.hxx>
@@ -57,9 +56,9 @@
 #include <swerror.h>
 #include <misc.hrc>
 
-
 #define SwWebGlosDocShell
 #define SwGlosDocShell
+
 #include <sfx2/msg.hxx>
 #include <swslots.hxx>
 

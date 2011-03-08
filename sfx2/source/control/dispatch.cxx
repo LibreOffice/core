@@ -423,9 +423,6 @@ SfxDispatcher::~SfxDispatcher()
     SfxApplication *pSfxApp = SFX_APP();
     SfxBindings* pBindings = GetBindings();
 
-//      if (pImp->nEventId)
-//              pSfxApp->RemoveEventHdl(pImp->nEventId);
-
     // When not flushed, revive the bindings
     if ( pBindings && !pSfxApp->IsDowning() && !bFlushed )
         pBindings->DLEAVEREGISTRATIONS();
@@ -778,7 +775,6 @@ void SfxDispatcher::DoActivate_Impl( sal_Bool bMDI, SfxViewFrame* /* pOld */ )
 
     if ( bMDI && pImp->pFrame )
     {
-        //SfxWorkWindow *pWorkWin = pImp->pFrame->GetFrame().GetWorkWindow_Impl();
         SfxBindings *pBind = GetBindings();
         while ( pBind )
         {
@@ -883,7 +879,6 @@ void SfxDispatcher::DoDeactivate_Impl( sal_Bool bMDI, SfxViewFrame* pNew )
 
     if ( bHidePopups )
     {
-        //SfxWorkWindow *pWorkWin = pImp->pFrame->GetFrame().GetWorkWindow_Impl();
         SfxBindings *pBind = GetBindings();
         while ( pBind )
         {
@@ -948,41 +943,11 @@ int SfxDispatcher::GetShellAndSlot_Impl
         if ( bRealSlot && ((0 == *ppSlot) || (0 == (*ppSlot)->GetExecFnc()) ))
             return sal_False;
 
-#ifdef DBG_UTILx
-        ByteString aMsg( nSlot );
-        aMsg += " found in ";
-        aMsg += (*ppShell)->GetInterface()->GetClassName();
-        DbgTrace( aMsg.GetBuffer() );
-#endif
-
         return sal_True;
     }
 
-#ifdef DBG_UTILx
-    ByteString aMsg( nSlot );
-    aMsg += " not found";
-    DbgTrace( aMsg.GetBuffer() );
-#endif
-
     return sal_False;
 }
-
-/*
-struct Executer : public SfxHint
-{
-    SfxRequest *pRequest;
-    const SfxSlot* pSlot;
-    sal_uInt16 nLevel;
-
-    Executer( SfxRequest* pReq, const SfxSlot* p, sal_uInt16 n )
-        :  pRequest( pReq )
-        , pSlot(p)
-        , nLevel(n)
-        {}
-    ~Executer()
-    {delete pRequest;}
-};
-*/
 
 //--------------------------------------------------------------------
 void SfxDispatcher::_Execute
@@ -1027,7 +992,6 @@ void SfxDispatcher::_Execute
                     if ( eCallMode & SFX_CALLMODE_RECORD )
                         rReq.AllowRecording( TRUE );
                     pDispat->pImp->xPoster->Post(new SfxRequest(rReq));
-//                    pDispat->pImp->xPoster->Post(new Executer(new SfxRequest(rReq), &rSlot, n ));
                     return;
                 }
             }
@@ -1125,16 +1089,6 @@ sal_uInt16 SfxDispatcher::ExecuteFunction( sal_uInt16 nSlot, const SfxItemSet& r
     if ( !nMode )
         nMode = pImp->nStandardMode;
 
-/*
-    // at the moment not implemented
-    // through Bindings/Interceptor? (then the return value is not exact)
-    sal_Bool bViaBindings = SFX_USE_BINDINGS == ( nMode & SFX_USE_BINDINGS );
-    nMode &= ~sal_uInt16(SFX_USE_BINDINGS);
-    if ( bViaBindings && GetBindings() )
-        return GetBindings()->Execute( nSlot, rArgs, nMode )
-                ? EXECUTE_POSSIBLE
-                : EXECUTE_NO;
-*/
     // otherwise through the Dispatcher
     if ( IsLocked(nSlot) )
         return 0;
@@ -1542,7 +1496,6 @@ IMPL_LINK( SfxDispatcher, PostMsgHandler, SfxRequest*, pReq )
     SFX_STACK(SfxDispatcher::PostMsgHandler);
 
     // Has also the Pool not yet died?
-//    SfxRequest* pReq = pExec->pRequest;
     if ( !pReq->IsCancelled() )
     {
         if ( !IsLocked(pReq->GetSlot()) )
@@ -1550,8 +1503,6 @@ IMPL_LINK( SfxDispatcher, PostMsgHandler, SfxRequest*, pReq )
             Flush();
             SfxSlotServer aSvr;
             if ( _FindServer(pReq->GetSlot(), aSvr, HACK(x) sal_True ) )
-//            SfxShell *pShell = GetShell(pExec->nLevel);
-//            if ( pShell && pShell->GetInterface()->GetSlot( pExec->pSlot->GetSlotId() ) )
             {
                 const SfxSlot *pSlot = aSvr.GetSlot();
                 SfxShell *pSh = GetShell(aSvr.GetShellLevel());
@@ -1563,23 +1514,17 @@ IMPL_LINK( SfxDispatcher, PostMsgHandler, SfxRequest*, pReq )
                 // be destroyed in the Call_Impl, thus do not use it anymore!
                 pReq->SetSynchronCall( sal_False );
                 Call_Impl( *pSh, *pSlot, *pReq, pReq->AllowsRecording() ); //! why bRecord?
-//                Call_Impl( *pShell, *pExec->pSlot, *pReq, sal_True ); //! why bRecord?
                 DBG( pSfxApp->LeaveAsynchronCall_Impl() );
             }
-
-//            delete pExec;
         }
         else
         {
-//            pImp->xPoster->Post(pExec);
             if ( pImp->bLocked )
                 pImp->aReqArr.Insert( new SfxRequest(*pReq), pImp->aReqArr.Count() );
             else
                 pImp->xPoster->Post(new SfxRequest(*pReq));
         }
     }
-//    else
-//        delete pExec;
 
     delete pReq;
     return 0;
@@ -1951,20 +1896,11 @@ void SfxDispatcher::FlushImpl()
     if ( pImp->pParent )
         pImp->pParent->Flush();
 
-//      if ( pImp->bQuiet )
-//              return;
-
     pImp->bFlushing = !pImp->bFlushing;
     if ( !pImp->bFlushing )
     {
         pImp->bFlushing = sal_True;
         DBG_PROFSTOP(SfxDispatcherFlush);
-//!
-#ifdef DBG_UTIL_MESSEHACK_AUSKOMMENT
-        DBG_ERROR( "reentering SfxDispatcher::Flush()" );
-        aMsg += " reentering, aborted";
-        DbgTrace( aMsg.GetBuffer() );
-#endif
         return;
     }
 
@@ -2134,7 +2070,7 @@ void SfxDispatcher::SetSlotFilter
 
 //--------------------------------------------------------------------
 EXTERN_C
-#if defined( PM2 ) && (!defined( CSET ) && !defined ( MTW ) && !defined( WTC ))
+#if defined( PM2 )
 int _stdcall
 #else
 #ifdef WNT
@@ -2226,11 +2162,6 @@ sal_Bool SfxDispatcher::_TryIntercept_Impl
         {
             rServer.SetSlot(pSlot);
             rServer.SetShellLevel(0);
-#ifdef DBG_UTILx
-            String aMsg( nSlot );
-            aMsg += " intercepted";
-            DbgTrace( aMsg.GetBuffer() );
-#endif
             return sal_True;
         }
     }
@@ -2351,14 +2282,9 @@ sal_Bool SfxDispatcher::_FindServer
     }
 
     sal_Bool bReadOnly = ( 2 != nSlotEnableMode && pImp->bReadOnly );
-//                              ( pImp->pFrame && pImp->pFrame->GetObjectShell() );
-//                                pImp->pFrame->GetObjectShell()->IsLoading() );
 
     // search through all the shells of the chained dispatchers
     // from top to bottom
-#ifdef DBG_UTILx
-    String aStack( "Stack:" );
-#endif
     sal_uInt16 nFirstShell = pImp->bModal && !bModal ? pImp->aStack.Count() : 0;
     for ( sal_uInt16 i = nFirstShell; i < nTotCount; ++i )
     {
@@ -2399,20 +2325,6 @@ sal_Bool SfxDispatcher::_FindServer
                 pSlot = 0;
         }
 
-#ifdef DBG_UTILx
-        if ( pSlot )
-        {
-            String aMsg( nSlot );
-            aMsg += " found in ";
-            aMsg += pObjShell->GetInterface()->GetClassName();
-            DbgTrace( aMsg.GetBuffer() );
-        }
-        else
-        {
-            aStack += " ";
-            aStack += pObjShell->GetInterface()->GetClassName();
-        }
-#endif
         if ( pSlot && !IsAllowed( nSlot ) )
         {
             pSlot = NULL;
@@ -2426,12 +2338,6 @@ sal_Bool SfxDispatcher::_FindServer
         }
     }
 
-#ifdef DBG_UTILx
-    String aMsg( nSlot );
-    aMsg += " not found in ";
-    aMsg += aStack;
-    DbgTrace( aMsg.GetBuffer() );
-#endif
     return sal_False;
 }
 
@@ -2476,8 +2382,6 @@ sal_Bool SfxDispatcher::HasSlot_Impl( sal_uInt16 nSlot )
         return sal_False;
 
     sal_Bool bReadOnly = ( 2 != nSlotEnableMode && pImp->bReadOnly );
-//                              ( pImp->pFrame && pImp->pFrame->GetObjectShell());
-//                                pImp->pFrame->GetObjectShell()->IsLoading() );
 
     for ( sal_uInt16 i=0 ; i < nTotCount; ++i )
     {
@@ -2645,10 +2549,6 @@ const SfxPoolItem* SfxDispatcher::_Execute( const SfxSlotServer &rSvr )
                         pDispat->pImp->xPoster->Post(
                             new SfxRequest( pSlot->GetSlotId(),
                                 SFX_CALLMODE_RECORD, pShell->GetPool() ) );
-//                        pDispat->pImp->xPoster->Post(new Executer(
-//                                new SfxRequest( pSlot->GetSlotId(),
-//                                    SFX_CALLMODE_RECORD, pShell->GetPool() ),
-//                                pSlot, n ));
                         return 0;
                     }
             }
@@ -2705,20 +2605,7 @@ void SfxDispatcher::ExecutePopup( sal_uInt16 nConfigId, Window *pWin, const Poin
     SfxDispatcher &rDisp = *SFX_APP()->GetDispatcher_Impl();
     sal_uInt16 nShLevel = 0;
     SfxShell *pSh;
-/*
-    const SvVerbList *pVerbList = 0;
-    sal_uInt16 nMaxShellLevel = rDisp.pImp->aStack.Count();
-    for ( pSh = rDisp.GetShell(nShLevel);
-          pSh && nShLevel < nMaxShellLevel ;
-          ++nShLevel, pSh = rDisp.GetShell(nShLevel) )
-    {
-        if ( pSh->GetVerbs() )
-        {
-            pVerbList = pSh->GetVerbs();
-            break;
-        }
-    }
-*/
+
     nShLevel=0;
     if ( rDisp.pImp->bQuiet )
     {
@@ -2732,14 +2619,6 @@ void SfxDispatcher::ExecutePopup( sal_uInt16 nConfigId, Window *pWin, const Poin
         const ResId& rResId = pSh->GetInterface()->GetPopupMenuResId();
         if ( ( nConfigId == 0 && rResId.GetId() ) || ( nConfigId != 0 && rResId.GetId() == nConfigId ) )
         {
-            //SfxPopupMenuManager aPop( rResId.GetId(), *rDisp.GetBindings() );
-            //aPop.SetResMgr(rResId.GetResMgr());
-            //aPop.AddClipboardFunctions();
-            //aPop.Initialize();
-            //if ( pVerbList && pVerbList->Count() )
-            //    aPop.InsertVerbs(pVerbList);
-            //aPop.RemoveDisabledEntries();
-            //aPop.Execute( pPos ? *pPos : pWindow->GetPointerPosPixel(), pWindow );
             SfxPopupMenuManager::ExecutePopup( rResId, rDisp.GetFrame(), pPos ? *pPos : pWindow->GetPointerPosPixel(), pWindow );
             return;
         }
@@ -2750,13 +2629,6 @@ void SfxDispatcher::ExecutePopup( sal_uInt16 nConfigId, Window *pWin, const Poin
 void SfxDispatcher::ExecutePopup( const ResId &rId, Window *pWin, const Point *pPos )
 {
     Window *pWindow = pWin ? pWin : pImp->pFrame->GetFrame().GetWorkWindow_Impl()->GetWindow();
-/*
-    SfxPopupMenuManager aPop( rId, *GetBindings() );
-    aPop.AddClipboardFunctions();
-    aPop.Initialize();
-    aPop.RemoveDisabledEntries();
-    aPop.Execute( pPos ? *pPos : pWindow->GetPointerPosPixel(), pWindow );
-*/
     SfxPopupMenuManager::ExecutePopup( rId, GetFrame(), pPos ? *pPos : pWindow->GetPointerPosPixel(), pWindow );
 }
 
@@ -2846,8 +2718,6 @@ void SfxDispatcher::LockUI_Impl( sal_Bool bLock )
 //-------------------------------------------------------------------------
 void SfxDispatcher::HideUI( sal_Bool bHide )
 {
-//  if ( !bHide && pImp->bReadOnly )
-//      bHide = sal_True;
     sal_Bool bWasHidden = pImp->bNoUI;
     pImp->bNoUI = bHide;
     if ( pImp->pFrame )
@@ -2878,7 +2748,6 @@ void SfxDispatcher::HideUI( sal_Bool bHide )
 void SfxDispatcher::SetReadOnly_Impl( sal_Bool bOn )
 {
     pImp->bReadOnly = bOn;
-//  pImp->bNoUI = bOn;
 }
 
 sal_Bool SfxDispatcher::GetReadOnly_Impl() const

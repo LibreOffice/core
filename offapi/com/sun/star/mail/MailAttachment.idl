@@ -48,7 +48,7 @@ struct MailAttachment
         It is expected that the transferable delivers the data as
         sequence of bytes. Although a transferable may support
         multiple data flavors only the first data flavor supplied
-        will be used to retrive the data and it is expected that
+        will be used to retrieve the data and it is expected that
         the type of the data is a sequence of bytes.
 
         @see ::com::sun::star::datatransfer::XTransferable

@@ -38,7 +38,7 @@ module com { module sun { module star { module ucb {
 /** A <type>ContentProvider</type> that wraps remote content providers that
     (potentially) have been distributed to a UCB.
 
-    <p>Before trying to pass a request to a 'real,' underlying content provider
+    <p>Before trying to pass a request to a "real", underlying content provider
     (which will most likely be a remote content provider distributed to this
     UCB), this proxy first activates any remote content providers that have
     been distributed here, but are still inactive (see
@@ -46,7 +46,7 @@ module com { module sun { module star { module ucb {
     <type>XRemoteContentProviderActivator</type> for more information).
 
     <p>The way this works might change, therefore this interface is marked as
-    deprectated.
+    deprecated.
 
     @deprecated
  */

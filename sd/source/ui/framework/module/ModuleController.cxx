@@ -34,7 +34,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/stl_types.hxx>
 #include <boost/bind.hpp>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #include <tools/diagnose_ex.h>
 
@@ -56,7 +56,7 @@ static const sal_uInt32 snStartupPropertyCount (1);
 
 
 class ModuleController::ResourceToFactoryMap
-    : public ::std::hash_map<
+    : public ::boost::unordered_map<
     rtl::OUString,
     rtl::OUString,
     ::comphelper::UStringHash,
@@ -68,7 +68,7 @@ public:
 
 
 class ModuleController::LoadedFactoryContainer
-    : public ::std::hash_map<
+    : public ::boost::unordered_map<
     rtl::OUString,
     WeakReference<XInterface>,
     ::comphelper::UStringHash,

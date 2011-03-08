@@ -49,8 +49,8 @@
 #include <unotools/ucbhelper.hxx>
 
 #ifndef ODMA_LIB_HXX
-#include <tools/prewin.h>
-#include <tools/postwin.h>
+#include <prewin.h>
+#include <postwin.h>
 #include <odma_lib.hxx>
 #endif
 

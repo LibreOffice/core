@@ -271,8 +271,6 @@ public:
 
     ScDocument*     GetDocument() const;
 
-    void            SetViewShell( ScTabViewShell* pViewSh );
-
     BOOL            IsActive() const            { return bActive; }
     void            Activate(BOOL bActivate)    { bActive = bActivate; }
 

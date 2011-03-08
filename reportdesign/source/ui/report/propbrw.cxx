@@ -126,7 +126,7 @@ PropBrw::PropBrw(const Reference< XMultiServiceFactory >&   _xORB,Window* pParen
     }
     catch (Exception&)
     {
-        DBG_ERROR("PropBrw::PropBrw: could not create/initialize my frame!");
+        OSL_FAIL("PropBrw::PropBrw: could not create/initialize my frame!");
         m_xMeAsFrame.clear();
     }
 
@@ -179,7 +179,7 @@ PropBrw::PropBrw(const Reference< XMultiServiceFactory >&   _xORB,Window* pParen
         }
         catch (Exception&)
         {
-            DBG_ERROR("PropBrw::PropBrw: could not create/initialize the browser controller!");
+            OSL_FAIL("PropBrw::PropBrw: could not create/initialize the browser controller!");
             try
             {
                 ::comphelper::disposeComponent(m_xBrowserController);
@@ -363,13 +363,13 @@ void PropBrw::implSetNewObject( const uno::Sequence< Reference<uno::XInterface> 
     }
     else if ( _aObjects.getLength() == 1 )    // single selection
     {
-        sal_uInt16 nResId = 0;
         aName = String(ModuleRes(RID_STR_BRWTITLE_PROPERTIES));
 
         uno::Reference< container::XNameContainer > xNameCont(_aObjects[0],uno::UNO_QUERY);
         Reference< lang::XServiceInfo > xServiceInfo( xNameCont->getByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReportComponent"))), UNO_QUERY );
         if ( xServiceInfo.is() )
         {
+            sal_uInt16 nResId = 0;
             if ( xServiceInfo->supportsService( SERVICE_FIXEDTEXT ) )
             {
                 nResId = RID_STR_PROPTITLE_FIXEDTEXT;
@@ -562,7 +562,7 @@ void PropBrw::Update( OSectionView* pNewView )
     }
     catch ( Exception& )
     {
-        DBG_ERROR( "PropBrw::Update: Exception occurred!" );
+        OSL_FAIL( "PropBrw::Update: Exception occurred!" );
     }
 }
 //----------------------------------------------------------------------------
@@ -584,7 +584,7 @@ void PropBrw::Update( const uno::Reference< uno::XInterface>& _xReportComponent)
         }
         catch ( Exception& )
         {
-            DBG_ERROR( "PropBrw::Update: Exception occurred!" );
+            OSL_FAIL( "PropBrw::Update: Exception occurred!" );
         }
     }
 }

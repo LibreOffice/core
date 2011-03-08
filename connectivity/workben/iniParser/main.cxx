@@ -32,10 +32,14 @@
 #include <stdio.h>
 #include <com/sun/star/io/IOException.hpp>
 #include <osl/process.h>
-using namespace rtl;
 
 #include <map>
 #include <list>
+
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OStringToOUString;
+using ::rtl::OUStringToOString;
 
 struct ini_NameValue
 {

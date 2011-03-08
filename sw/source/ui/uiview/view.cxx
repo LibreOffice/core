@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-#include <string> // HACK: prevent conflict between STLPORT and Workshop headers
+#include <string>
 #include <stdlib.h>
 #include <hintids.hxx>
 #include <rtl/logfile.hxx>
@@ -917,42 +917,9 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     pVRuler->SetZoom( aZoomFract );
     pHRuler->SetDoubleClickHdl(LINK( this, SwView, ExecRulerClick ));
     FieldUnit eMetric = pUsrPref->GetHScrollMetric();
-
-    BOOL bApplyCharUnit = pUsrPref->IsApplyCharUnit();
-    SvtCJKOptions aCJKOptions;
-    if ( aCJKOptions.IsAsianTypographyEnabled() )
-    {
-        if ( bApplyCharUnit )
-            eMetric = FUNIT_CHAR;
-        else
-        {
-            if ( eMetric == FUNIT_CHAR )
-                eMetric = FUNIT_CM;
-        }
-    }
-    else
-    {
-        if ( eMetric == FUNIT_CHAR )
-            eMetric = FUNIT_INCH;
-    }
     pHRuler->SetUnit( eMetric );
 
     eMetric = pUsrPref->GetVScrollMetric();
-    if ( aCJKOptions.IsAsianTypographyEnabled() )
-    {
-        if ( bApplyCharUnit )
-            eMetric = FUNIT_LINE;
-        else
-        {
-            if ( eMetric == FUNIT_LINE )
-                eMetric = FUNIT_CM;
-        }
-    }
-    else
-    {
-        if ( eMetric == FUNIT_LINE )
-            eMetric = FUNIT_INCH;
-    }
     pVRuler->SetUnit( eMetric );
 
         pHRuler->SetCharWidth( 371 );  // default character width

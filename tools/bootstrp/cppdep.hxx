@@ -26,12 +26,12 @@
  *
  ************************************************************************/
 
-#include <tools/list.hxx>
 #include <tools/string.hxx>
+#include <vector>
 #define PATH_SEP ":"
 #define DIR_SEP "/"
 
-DECLARE_LIST( ByteStringList, ByteString * )
+typedef ::std::vector< ByteString* > ByteStringList;
 
 class CppDep
 {

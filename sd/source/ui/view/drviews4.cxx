@@ -107,7 +107,7 @@ void DrawViewShell::DeleteActualPage()
     }
     catch( Exception& )
     {
-        DBG_ERROR("SelectionManager::DeleteSelectedMasterPages(), exception caught!");
+        OSL_FAIL("SelectionManager::DeleteSelectedMasterPages(), exception caught!");
     }
 }
 
@@ -475,7 +475,6 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
     // menu from an inplace client is closed. Now we have the chance to
     // deactivate the inplace client without any problem regarding parent
     // windows and code on the stack.
-    // For more information, see #126086# and #128122#
     SfxInPlaceClient* pIPClient = GetViewShell()->GetIPClient();
     BOOL bIsOleActive = ( pIPClient && pIPClient->IsObjectInPlaceActive() );
     if ( bIsOleActive && ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU ))

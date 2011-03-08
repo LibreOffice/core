@@ -36,8 +36,8 @@
 #include <libxslt/transform.h>
 #include <libxslt/xsltutils.h>
 #ifdef __MINGW32__
-#include <tools/prewin.h>
-#include <tools/postwin.h>
+#include <prewin.h>
+#include <postwin.h>
 #endif
 #include <osl/thread.hxx>
 

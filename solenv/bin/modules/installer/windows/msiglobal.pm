@@ -64,7 +64,10 @@ sub write_ddf_file_header
     push(@{$ddffileref} ,$oneline);
     $oneline = ".Set Compress=ON\n";
     push(@{$ddffileref} ,$oneline);
-    $oneline = ".Set CompressionLevel=$installer::globals::cabfilecompressionlevel\n";
+# The window size for LZX compression
+# CompressionMemory=15 | 16 | ... | 21
+# Reference: http://msdn.microsoft.com/en-us/library/bb417343.aspx
+    $oneline = ".Set CompressionMemory=$installer::globals::cabfilecompressionlevel\n";
     push(@{$ddffileref} ,$oneline);
     $oneline = ".Set Cabinet=ON\n";
     push(@{$ddffileref} ,$oneline);

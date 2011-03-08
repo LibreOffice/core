@@ -76,9 +76,6 @@ public:
     virtual BOOL MakeTopic( const String& );
 
     virtual String  Topics();
-//  virtual String  Formats();
-//  virtual String  SysItems();
-//  virtual String  Status();
 
     virtual BOOL SysTopicExecute( const String* pStr );
 };
@@ -109,11 +106,6 @@ public:
     virtual BOOL Execute( const String* );
     virtual BOOL StartAdviseLoop();
     virtual BOOL MakeItem( const String& rItem );
-
-// wird benoetigt?
-//  virtual void Connect( long n );
-//  virtual void Disconnect( long n );
-//  virtual void StopAdviseLoop();
 
 };
 
@@ -522,7 +514,6 @@ void SfxApplication::AddDdeTopic( SfxObjectShell* pSh )
     for( USHORT n = pAppData_Impl->pDocTopics->Count(); n; )
         if( (*pAppData_Impl->pDocTopics)[ --n ]->pSh == pSh )
         {
-            // JP 18.03.96 - Bug 26470
             //  falls das Document unbenannt wurde, ist trotzdem ein
             //  neues Topics anzulegen!
             if( !bFnd )

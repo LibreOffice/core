@@ -129,7 +129,7 @@ void ShrfmlaBuffer::Store( const ScRange& rRange, const ScTokenArray& rToken )
     pData->SetMaxCol(rMaxPos.Col());
     pData->SetMaxRow(rMaxPos.Row());
     pData->SetIndex( static_cast< USHORT >( mnCurrIdx ) );
-    pExcRoot->pIR->GetNamedRanges().Insert( pData );
+    pExcRoot->pIR->GetNamedRanges().insert( pData );
     index_hash[rRange.aStart] = static_cast< USHORT >( mnCurrIdx );
     index_list.push_front (rRange);
     ++mnCurrIdx;

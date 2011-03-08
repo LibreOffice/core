@@ -58,7 +58,7 @@ public:
 };
 
 /*
-[Beschreibung]
+[Description]
 In diesem Item wird ein Feld (SvxFieldData) gespeichert.
 Das Feld gehoert dem Item.
 Das Feld selbst wird durch eine Ableitung von SvxFieldData bestimmt. (RTTI)
@@ -88,13 +88,13 @@ public:
 };
 
 // =================================================================
-// Es folgen die Ableitungen von SvxFieldData...
+// The following are the derivatives of SvxFieldData ...
 // =================================================================
 
 #define SVX_DATEFIELD       2
 #define SVX_URLFIELD        3
 
-#define SVX_PAGEFIELD       100     // Ex-Calc-Felder
+#define SVX_PAGEFIELD       100     // Ex-Calc Fields
 #define SVX_PAGESFIELD      101
 #define SVX_TIMEFIELD       102
 #define SVX_FILEFIELD       103
@@ -106,19 +106,19 @@ public:
 #define SVX_FOOTERFIELD     109
 #define SVX_DATEFIMEFIELD   110
 
-#define SVX_USERFIELD       200 // Ab hier eigene Felder, nicht im SVX
+#define SVX_USERFIELD       200 // From here on own fields, not in the SVX
 
 enum SvxDateType { SVXDATETYPE_FIX, SVXDATETYPE_VAR };
-enum SvxDateFormat {    SVXDATEFORMAT_APPDEFAULT,   // Wie in App eingestellt
-                        SVXDATEFORMAT_SYSTEM,       // Wie im System eingestellt
+enum SvxDateFormat {    SVXDATEFORMAT_APPDEFAULT,   // Set as in App
+                        SVXDATEFORMAT_SYSTEM,       // Set as in System
                         SVXDATEFORMAT_STDSMALL,
                         SVXDATEFORMAT_STDBIG,
                         SVXDATEFORMAT_A,    // 13.02.96
                         SVXDATEFORMAT_B,    // 13.02.1996
                         SVXDATEFORMAT_C,    // 13.Feb 1996
-                        SVXDATEFORMAT_D,    // 13.Februar 1996
-                        SVXDATEFORMAT_E,    // Die, 13.Februar 1996
-                        SVXDATEFORMAT_F     // Dienstag, 13.Februar 1996
+                        SVXDATEFORMAT_D,    // 13.February 1996
+                        SVXDATEFORMAT_E,    // Tue, 13.February 1996
+                        SVXDATEFORMAT_F     // Tuesday, 13.February 1996
                     };
 
 class EDITENG_DLLPUBLIC SvxDateField : public SvxFieldData
@@ -159,18 +159,18 @@ public:
 };
 
 
-enum SvxURLFormat   {   SVXURLFORMAT_APPDEFAULT,    // Wie in App eingestellt
-                        SVXURLFORMAT_URL,           // URL darstellen
-                        SVXURLFORMAT_REPR           // Repraesentation darstellen
+enum SvxURLFormat   {   SVXURLFORMAT_APPDEFAULT,    // Set as in App
+                        SVXURLFORMAT_URL,           // Represent URL
+                        SVXURLFORMAT_REPR           // Constitute repraesentation
                     };
 
 class EDITENG_DLLPUBLIC SvxURLField : public SvxFieldData
 {
 private:
     SvxURLFormat            eFormat;
-    XubString               aURL;               // URL-Adresse
-    XubString               aRepresentation;    // Was wird dargestellt
-    XubString               aTargetFrame;       // In welchem Frame
+    XubString               aURL;               // URL-Address
+    XubString               aRepresentation;    // What is shown
+    XubString               aTargetFrame;       // In what Frame
 
 public:
                             SV_DECL_PERSIST1( SvxURLField, SvxFieldData, SVX_URLFIELD )
@@ -247,8 +247,8 @@ public:
 
 
 enum SvxTimeType { SVXTIMETYPE_FIX, SVXTIMETYPE_VAR };
-enum SvxTimeFormat {    SVXTIMEFORMAT_APPDEFAULT,   // Wie in App eingestellt
-                        SVXTIMEFORMAT_SYSTEM,       // Wie im System eingestellt
+enum SvxTimeFormat {    SVXTIMEFORMAT_APPDEFAULT,   // Set as in App
+                        SVXTIMEFORMAT_SYSTEM,       // Set as in System
                         SVXTIMEFORMAT_STANDARD,
                         SVXTIMEFORMAT_24_HM,    // 13:49
                         SVXTIMEFORMAT_24_HMS,   // 13:49:38
@@ -300,10 +300,10 @@ public:
 
 
 enum SvxFileType { SVXFILETYPE_FIX, SVXFILETYPE_VAR };
-enum SvxFileFormat {    SVXFILEFORMAT_NAME_EXT, // Dateiname mit Extension
-                        SVXFILEFORMAT_FULLPATH, // vollst„ndiger Pfad
-                        SVXFILEFORMAT_PATH,     // nur Pfad
-                        SVXFILEFORMAT_NAME      // nur Dateiname
+enum SvxFileFormat {    SVXFILEFORMAT_NAME_EXT, // File name with Extension
+                        SVXFILEFORMAT_FULLPATH, // full path
+                        SVXFILEFORMAT_PATH,     // only path
+                        SVXFILEFORMAT_NAME      // only file name
                    };
 
 
@@ -339,10 +339,10 @@ public:
 
 
 enum SvxAuthorType { SVXAUTHORTYPE_FIX, SVXAUTHORTYPE_VAR };
-enum SvxAuthorFormat {  SVXAUTHORFORMAT_FULLNAME,   // vollst„ndiger Name
-                        SVXAUTHORFORMAT_NAME,       // nur Nachname
-                        SVXAUTHORFORMAT_FIRSTNAME,  // nur Vorname
-                        SVXAUTHORFORMAT_SHORTNAME   // Initialen
+enum SvxAuthorFormat {  SVXAUTHORFORMAT_FULLNAME,   // full name
+                        SVXAUTHORFORMAT_NAME,       // Only Last name
+                        SVXAUTHORFORMAT_FIRSTNAME,  // Only first name
+                        SVXAUTHORFORMAT_SHORTNAME   // Initials
                     };
 
 class EDITENG_DLLPUBLIC SvxAuthorField : public SvxFieldData

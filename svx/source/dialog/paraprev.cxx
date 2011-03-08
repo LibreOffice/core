@@ -54,7 +54,7 @@ SvxParaPrevWindow::SvxParaPrevWindow( Window* pParent, const ResId& rId ) :
     nLineVal        ( 0 )
 
 {
-    // defaultmaessing in Twips rechnen
+    // Count in Twips by default
     SetMapMode( MapMode( MAP_TWIP ) );
     aWinSize = GetOutputSizePixel();
     aWinSize = PixelToLogic( aWinSize );
@@ -220,7 +220,7 @@ void SvxParaPrevWindow::DrawParagraph( BOOL bAll )
         }
 
         aPnt.Y() += nH;
-        // wieder zuruecksetzen, fuer jede Linie neu berechnen
+        // Reset, recalculate for each line
         aPnt.X() = DEF_MARGIN / 2;
         aSiz = aLineSiz;
     }

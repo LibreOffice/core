@@ -56,7 +56,6 @@
 #include <vcl/sysdata.hxx>
 
 using namespace vcl;
-using namespace rtl;
 
 namespace vcl {
 

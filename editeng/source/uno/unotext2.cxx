@@ -516,7 +516,8 @@ SvxUnoTextCursor::~SvxUnoTextCursor() throw()
 {
 }
 
-// automatisch auskommentiert - [getIdlClass(es) or queryInterface] - Bitte XTypeProvider benutzen!
+// Comment out automatically - [getIdlClass(es) or queryInterface]
+// Please use the XTypeProvider!
 //sal_Bool SvxUnoTextCursor::queryInterface( uno::Uik aUIK, Reference< uno::XInterface > & xRef)
 uno::Any SAL_CALL SvxUnoTextCursor::queryAggregation( const uno::Type & rType )
     throw(uno::RuntimeException)

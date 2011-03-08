@@ -39,11 +39,6 @@
 #include <database.hxx>
 #include <tools/fsys.hxx>
 
-/*************************************************************************
-|*
-|*    Syntaxbeschreibung
-|*
-*************************************************************************/
 char const * SyntaxStrings[] = {
 "basic-type:",
 "\tvoid|        char|       int|        float|      double|",
@@ -91,7 +86,6 @@ char const * SyntaxStrings[] = {
 "\t\tAccelConfig, MenuConfig, StatusBarConfig, ToolbarConfig",
 "\t\tAutomation*",
 "\t\tAutoUpdate",
-// "\t\tCachable*, Volatile",
 "\t\tContainer",
 "\t\tDefault        = Identifier",
 "\t\tExecMethod     = Identifier",
@@ -134,11 +128,6 @@ char CommandLineSyntax[] =
 "-help, ?                   @<file> response file\n"
 " <filenames>\n";
 
-/*************************************************************************
-|*
-|*    Init()
-|*
-*************************************************************************/
 void Init()
 {
     if( !IDLAPP->pHashTable )
@@ -147,25 +136,11 @@ void Init()
         IDLAPP->pGlobalNames    = new SvGlobalHashNames();
 }
 
-/*************************************************************************
-|*
-|*    DeInit()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
 void DeInit()
 {
     delete IDLAPP;
 }
 
-/*************************************************************************
-|*
-|*    DeInit()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
 BOOL ReadIdl( SvIdlWorkingBase * pDataBase, const SvCommand & rCommand )
 {
     for( size_t n = 0; n < rCommand.aInFileList.size(); ++n )
@@ -204,21 +179,14 @@ BOOL ReadIdl( SvIdlWorkingBase * pDataBase, const SvCommand & rCommand )
     return TRUE;
 }
 
-/*************************************************************************
-|*
-|*    SvCommand::SvCommand()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
 static BOOL ResponseFile( StringList * pList, int argc, char ** argv )
 {
-    // Programmname
+    // program name
     pList->push_back( new String( String::CreateFromAscii(*argv) ) );
     for( int i = 1; i < argc; i++ )
     {
         if( '@' == **(argv +i) )
-        { // wenn @, dann Response-Datei
+        { // when @, then response file
             SvFileStream aStm( String::CreateFromAscii((*(argv +i)) +1), STREAM_STD_READ | STREAM_NOCREATE );
             if( aStm.GetError() != SVSTREAM_OK )
                 return FALSE;
@@ -246,11 +214,6 @@ static BOOL ResponseFile( StringList * pList, int argc, char ** argv )
     return TRUE;
 }
 
-/*************************************************************************
-|*    SvCommand::SvCommand()
-|*
-|*    Beschreibung
-*************************************************************************/
 SvCommand::SvCommand( int argc, char ** argv )
     : nVerbosity(1), nFlags( 0 )
 {
@@ -271,67 +234,58 @@ SvCommand::SvCommand( int argc, char ** argv )
                 aFirstChar = aParam.GetChar(0);
                 String aName( aParam.Copy( 1 ) );
                 if( 's' == aFirstChar )
-                { // Name der Slot-Ausgabe
+                { // name of slot output
                     aSlotMapFile = aName;
                 }
                 else if( 'l' == aFirstChar )
-                { // Name der Listing
+                { // name of listing
                     aListFile = aName;
                 }
                 else if( 'i' == aFirstChar )
-                { // Name der Item-Datei
-//                    aSfxItemFile = aName;
+                {
                 }
                 else if( 'o' == aFirstChar )
-                { // Name der ODL-Datei
-//                    aODLFile = aName;
+                {
                 }
                 else if( 'd' == aFirstChar )
-                { // Name der Datenbasis-Datei
+                { // name of data set file
                     aDataBaseFile = aName;
                 }
                 else if( 'D' == aFirstChar )
-                { // Name der Docu-Datei f"ur das API
-//                    aDocuFile = aName;
+                {
                 }
                 else if( 'C' == aFirstChar )
-                { // Name der cxx-Datei
-//                    aCxxFile = aName;
+                {
                 }
                 else if( 'H' == aFirstChar )
-                { // Name der hxx-Datei
-//                    aHxxFile = aName;
+                {
                 }
                 else if( 'c' == aFirstChar )
-                { // Name der C-Header-Datei
-//                    aCSourceFile = aName;
+                {
                 }
                 else if( 'h' == aFirstChar )
-                { // Name der C-Header-Datei
-//                    aCHeaderFile = aName;
+                {
                 }
                 else if( 't' == aFirstChar )
-                { // Name der Info-Datei
-//                    aCallingFile = aName;
+                {
                 }
                 else if( 'm' == aFirstChar )
-                { // Name der Info-Datei
+                { // name of info file
                     aTargetFile = aName;
                 }
                 else if( 'r' == aFirstChar )
-                { // Name der Resource-Datei
-//                    aSrcFile = aName;
+                {
                 }
                 else if( 'z' == aFirstChar )
-                { // Name der HelpId-Datei
+                { // name of HelpId file
                     aHelpIdFile = aName;
                 }
                 else if( 'y' == aFirstChar )
-                { // Name der CSV-Datei
+                { // name of CSV file
                     aCSVFile = aName;
                 }
                 else if( 'x' == aFirstChar )
-                { // Name der IDL-Datei fuer die CSV-Datei
+                { // name of IDL file for the CSV file
                     aExportFile = aName;
                 }
                 else
@@ -344,7 +298,7 @@ SvCommand::SvCommand( int argc, char ** argv )
                 }
             }
             else if( aParam.EqualsIgnoreCaseAscii( "help" ) || aParam.EqualsIgnoreCaseAscii( "?" ) )
-            { // Hilfe
+            { // help
                 printf( "%s", CommandLineSyntax );
             }
             else if( aParam.EqualsIgnoreCaseAscii( "quiet" ) )
@@ -356,20 +310,20 @@ SvCommand::SvCommand( int argc, char ** argv )
                 nVerbosity = 2;
             }
             else if( aParam.EqualsIgnoreCaseAscii( "syntax" ) )
-            { // Hilfe
+            { // help
                 int j = 0;
                 while(SyntaxStrings[j])
                     printf("%s\n",SyntaxStrings[j++]);
             }
             else if( aParam.EqualsIgnoreCaseAscii( "i", 0, 1 ) )
-            { // Include-Pfade definieren
+            { // define include paths
                 String aName( aParam.Copy( 1 ) );
                 if( aPath.Len() )
                     aPath += DirEntry::GetSearchDelimiter();
                 aPath += aName;
             }
             else if( aParam.EqualsIgnoreCaseAscii( "rsc", 0, 3 ) )
-            { // erste Zeile im *.srs File
+            { // first line in *.srs file
                 if( aList[ i + 1 ] )
                 {
                     aSrsLine = ByteString( *aList[ i +1 ], RTL_TEXTENCODING_UTF8 );
@@ -401,7 +355,7 @@ SvCommand::SvCommand( int argc, char ** argv )
     aList.clear();
 
     ByteString aInc( getenv( "INCLUDE" ) );
-    // Include Environmentvariable anhaengen
+    // append include environment variable
     if( aInc.Len() )
     {
         if( aPath.Len() )
@@ -410,16 +364,9 @@ SvCommand::SvCommand( int argc, char ** argv )
     }
 }
 
-/*************************************************************************
-|*
-|*    SvCommand::~SvCommand()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
 SvCommand::~SvCommand()
 {
-    // ByteString Liste freigeben
+    // release ByteString list
     for ( size_t i = 0, n = aInFileList.size(); i < n; ++i )
         delete aInFileList[ i ];
     aInFileList.clear();

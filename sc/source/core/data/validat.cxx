@@ -315,7 +315,7 @@ BOOL ScValidationData::DoMacro( const ScAddress& rPos, const String& rInput,
         aMacroStr += pMethod->GetName();
         String aBasicStr;
 
-        //  #95867# the distinction between document- and app-basic has to be done
+        //  the distinction between document- and app-basic has to be done
         //  by checking the parent (as in ScInterpreter::ScMacro), not by looping
         //  over all open documents, because this may be called from within loading,
         //  when SfxObjectShell::GetFirst/GetNext won't find the document.
@@ -537,7 +537,7 @@ BOOL ScValidationData::IsDataValid( ScBaseCell* pCell, const ScAddress& rPos ) c
             break;
 
         default:
-            DBG_ERROR("hammanochnich");
+            OSL_FAIL("hammanochnich");
             break;
     }
 
@@ -702,7 +702,7 @@ bool ScValidationData::GetSelectionFromFormula( TypedScStrCollection* pStrings,
         }
         else if (t->GetOpCode() == ocName)
         {
-            ScRangeData* pName = pDocument->GetRangeName()->FindIndex( t->GetIndex() );
+            ScRangeData* pName = pDocument->GetRangeName()->findByIndex( t->GetIndex() );
             if (pName && pName->IsReference(aRange))
             {
                 bRef = TRUE;
@@ -935,7 +935,7 @@ ScValidationData* ScValidationDataList::GetData( sal_uInt32 nKey )
         if ((*this)[i]->GetKey() == nKey)
             return (*this)[i];
 
-    DBG_ERROR("ScValidationDataList: Eintrag nicht gefunden");
+    OSL_FAIL("ScValidationDataList: Eintrag nicht gefunden");
     return NULL;
 }
 
@@ -959,15 +959,6 @@ void ScValidationDataList::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos )
     USHORT nCount = Count();
     for (USHORT i=0; i<nCount; i++)
         (*this)[i]->UpdateMoveTab( nOldPos, nNewPos );
-}
-
-bool ScValidationDataList::MarkUsedExternalReferences() const
-{
-    bool bAllMarked = false;
-    USHORT nCount = Count();
-    for (USHORT i=0; !bAllMarked && i<nCount; i++)
-        bAllMarked = (*this)[i]->MarkUsedExternalReferences();
-    return bAllMarked;
 }
 
 BOOL ScValidationDataList::operator==( const ScValidationDataList& r ) const

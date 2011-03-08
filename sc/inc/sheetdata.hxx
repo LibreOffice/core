@@ -32,7 +32,7 @@
 #include <xmloff/maptype.hxx>
 #include <editeng/editdata.hxx>
 #include <vector>
-#include <hash_set>
+#include <boost/unordered_set.hpp>
 
 #include "address.hxx"
 
@@ -114,7 +114,7 @@ struct ScLoadedNamespaceEntry
 
 class ScSheetSaveData
 {
-    std::hash_set<rtl::OUString, rtl::OUStringHash>  maInitialPrefixes;
+    boost::unordered_set<rtl::OUString, rtl::OUStringHash>  maInitialPrefixes;
     std::vector<ScLoadedNamespaceEntry>              maLoadedNamespaces;
 
     std::vector<ScCellStyleEntry> maCellStyles;

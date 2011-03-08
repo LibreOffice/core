@@ -50,7 +50,6 @@
 #include <rtl/locale.h>
 #include <tools/contnr.hxx>
 #include <i18npool/lang.h>
-#include <tools/list.hxx>
 #include <global.hxx>
 #include <tools/stream.hxx>
 #include <tools/errinf.hxx>
@@ -133,7 +132,6 @@
 #include <svl/intitem.hxx>
 #include <svl/cintitem.hxx>
 #include <svl/brdcst.hxx>
-#include <sot/sotref.hxx>
 #include <tools/globname.hxx>
 #include <sot/factory.hxx>
 #include <sot/object.hxx>

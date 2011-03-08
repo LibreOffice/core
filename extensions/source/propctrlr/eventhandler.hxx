@@ -79,7 +79,7 @@ namespace pcr
             sal_Int32 _nUniqueBrowseId );
     };
 
-    typedef ::std::hash_map< ::rtl::OUString, EventDescription, ::rtl::OUStringHash >   EventMap;
+    typedef ::boost::unordered_map< ::rtl::OUString, EventDescription, ::rtl::OUStringHash >   EventMap;
 
     //====================================================================
     //= EventHandler

@@ -49,7 +49,8 @@ using namespace com::sun::star::xml::sax;
 using namespace com::sun::star::io;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::util;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 class SVInputStream : public cppu::WeakImplHelper1< XInputStream >
 {
@@ -177,7 +178,7 @@ ElementNode::ElementNode( const String& aName, Reference < XAttributeList > xAtt
             xAttributeList = Reference < XAttributeList > ( xAttributeCloner->createClone() , UNO_QUERY );
         else
         {
-            DBG_ERROR("Unable to clone AttributeList");
+            OSL_FAIL("Unable to clone AttributeList");
         }
     }
 };

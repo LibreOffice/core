@@ -558,7 +558,7 @@ bool SfxDocumentInfoItem::QueryValue( Any& rVal, BYTE nMemberId ) const
             aValue = getTitle();
             break;
         default:
-            DBG_ERROR("Wrong MemberId!");
+            OSL_FAIL("Wrong MemberId!");
             return sal_False;
      }
 
@@ -632,7 +632,7 @@ bool SfxDocumentInfoItem::PutValue( const Any& rVal, BYTE nMemberId )
                 setTitle(aValue);
             break;
         default:
-            DBG_ERROR("Wrong MemberId!");
+            OSL_FAIL("Wrong MemberId!");
             return false;
     }
 
@@ -1245,7 +1245,7 @@ void SfxInternetPage::ChangeState( STATE eNewState )
                 EnableReload( TRUE );
             break;
         default:
-            DBG_ERROR( "*SfxInternetPage::SetState(): unhandled state!" );
+            OSL_FAIL( "*SfxInternetPage::SetState(): unhandled state!" );
     }
 
     eState = eNewState;
@@ -1445,7 +1445,6 @@ void SfxInternetPage::Reset( const SfxItemSet& rSet )
 
     ChangeState( eNewState );
 
-    // #102907# ------------------------
     SFX_ITEMSET_ARG( &rSet, pROItem, SfxBoolItem, SID_DOC_READONLY, FALSE );
     if ( pROItem && pROItem->GetValue() )
     {
@@ -2063,7 +2062,7 @@ void CustomPropertiesWindow::AddLine( const ::rtl::OUString& sName, Any& rAny )
         pCurrent++;
         pNewCurrent++;
     }
-    //
+
     pNewLine->m_aDatePos = pNewLine->m_aDateField.GetPosPixel();
     pNewLine->m_aTimePos = pNewLine->m_aTimeField.GetPosPixel();
     pNewLine->m_aDateTimeSize = pNewLine->m_aDateField.GetSizePixel();

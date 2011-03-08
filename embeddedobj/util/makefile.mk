@@ -29,8 +29,6 @@ PRJ=..
 
 PRJNAME=embeddedobj
 TARGET=embobj
-#LIBTARGET=NO
-#USE_DEFFILE=TRUE
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------------

@@ -56,7 +56,7 @@
 #include <rtl/ustring.hxx>
 #include <svl/itemprop.hxx>
 
-#include <hash_set>
+#include <boost/unordered_set.hpp>
 #include <list>
 #include <vector>
 #include <memory>
@@ -444,14 +444,14 @@ private:
         virtual void notify(sal_uInt16 nFileId, ScExternalRefManager::LinkUpdateType eType);
         void addFileId(sal_uInt16 nFileId);
         void removeFileId(sal_uInt16 nFileId);
-        const ::std::hash_set<sal_uInt16>& getAllFileIds();
+        const ::boost::unordered_set<sal_uInt16>& getAllFileIds();
 
     private:
         ExternalRefListener();
         ExternalRefListener(const ExternalRefListener& r);
 
         ScChart2DataSequence&       mrParent;
-        ::std::hash_set<sal_uInt16> maFileIds;
+        ::boost::unordered_set<sal_uInt16> maFileIds;
         ScDocument*                 mpDoc;
     };
 

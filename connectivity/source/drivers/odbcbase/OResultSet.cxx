@@ -48,6 +48,8 @@
 #include "diagnose_ex.h"
 #include <rtl/logfile.hxx>
 
+#include <o3tl/compat_functional.hxx>
+
 using namespace ::comphelper;
 using namespace connectivity;
 using namespace connectivity::odbc;
@@ -1150,7 +1152,7 @@ Any SAL_CALL OResultSet::getBookmark(  ) throw( SQLException,  RuntimeException)
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
     TBookmarkPosMap::iterator aFind = ::std::find_if(m_aPosToBookmarks.begin(),m_aPosToBookmarks.end(),
-        ::std::compose1(::std::bind2nd(::std::equal_to<sal_Int32>(),m_nRowPos),::std::select2nd<TBookmarkPosMap::value_type>()));
+        ::o3tl::compose1(::std::bind2nd(::std::equal_to<sal_Int32>(),m_nRowPos),::o3tl::select2nd<TBookmarkPosMap::value_type>()));
 
     if ( aFind == m_aPosToBookmarks.end() )
     {
@@ -1366,12 +1368,12 @@ sal_Bool  OResultSet::isBookmarkable() const
 //------------------------------------------------------------------------------
 void OResultSet::setFetchDirection(sal_Int32 _par0)
 {
-    N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_CURSOR_TYPE,(SQLPOINTER)_par0,SQL_IS_UINTEGER);
+    N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_CURSOR_TYPE,(SQLPOINTER)(sal_IntPtr)_par0,SQL_IS_UINTEGER);
 }
 //------------------------------------------------------------------------------
 void OResultSet::setFetchSize(sal_Int32 _par0)
 {
-    N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_ROW_ARRAY_SIZE,(SQLPOINTER)_par0,SQL_IS_UINTEGER);
+    N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_ROW_ARRAY_SIZE,(SQLPOINTER)(sal_IntPtr)_par0,SQL_IS_UINTEGER);
     delete m_pRowStatusArray;
     m_pRowStatusArray = new SQLUSMALLINT[_par0];
     N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_ROW_STATUS_PTR,m_pRowStatusArray,SQL_IS_POINTER);

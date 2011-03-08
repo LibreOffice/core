@@ -5867,6 +5867,11 @@
 							<desc>Classic - the OpenOffice.org 2.0 default theme</desc>
 						</info>
 					</enumeration>
+					<enumeration oor:value="human">
+						<info>
+							<desc>Human - the Gnome default theme for Ubuntu</desc>
+						</info>
+					</enumeration>
 				</constraints>
 				<value>auto</value>
 			</prop>

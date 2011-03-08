@@ -53,7 +53,7 @@ module com {  module sun {  module star {  module sheet {
 /** represents a description of how a cell range is to be filtered.
 
     <p>The descriptor contains properties and a collection of filter
-    conditions (filter fields) which control the behaviour of a filter
+    conditions (filter fields) which control the behavior of a filter
     operation.</p>
  */
 published service SheetFilterDescriptor

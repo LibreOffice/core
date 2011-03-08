@@ -91,8 +91,6 @@ public:
     /** Returns the base field if this is a grouping field. */
     const XclImpPCField* GetGroupBaseField() const;
 
-    /** Returns the number of items of this field. */
-    sal_uInt16          GetItemCount() const;
     /** Returns the item at the specified position or 0 on error. */
     const XclImpPCItem* GetItem( sal_uInt16 nItemIdx ) const;
     /** Returns the item representing a limit value in numeric/date/time grouping fields.
@@ -262,8 +260,6 @@ public:
     const XclImpPTItem* GetItem( sal_uInt16 nItemIdx ) const;
     /** Returns the internal name of the specified item. */
     const String*       GetItemName( sal_uInt16 nItemIdx ) const;
-    /** Returns the displayed name of the specified item. */
-    const String*       GetVisItemName( sal_uInt16 nItemIdx ) const;
 
     /** Returns the flags of the axes this field is part of. */
     inline sal_uInt16   GetAxes() const { return maFieldInfo.mnAxes; }

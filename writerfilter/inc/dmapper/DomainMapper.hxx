@@ -135,7 +135,6 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > GetCurrentTextRange();
 
     ::rtl::OUString getOrCreateCharStyle( PropertyValueVector_t& rCharProperties );
-    boost::shared_ptr< ListsManager > GetListTable( );
     boost::shared_ptr< StyleSheetTable > GetStyleSheetTable( );
 
 private:

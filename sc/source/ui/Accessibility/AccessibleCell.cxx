@@ -101,7 +101,7 @@ void ScAccessibleCell::Init()
 void SAL_CALL ScAccessibleCell::disposing()
 {
     SolarMutexGuard aGuard;
-    // #100593# dispose in AccessibleStaticTextBase
+    // dispose in AccessibleStaticTextBase
     Dispose();
 
     if (mpViewShell)

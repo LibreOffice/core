@@ -47,7 +47,7 @@
 // =======================================================================
 
 // Standard Fontgroessen fuer scalierbare Fonts
-static long aStdSizeAry[] =
+static const long aStdSizeAry[] =
 {
      60,
      70,
@@ -871,7 +871,7 @@ struct ImplFSNameItem
 
 //------------------------------------------------------------------------
 
-static ImplFSNameItem aImplSimplifiedChinese[] =
+static const ImplFSNameItem aImplSimplifiedChinese[] =
 {
     {  50, "\xe5\x85\xab\xe5\x8f\xb7" },
     {  55, "\xe4\xb8\x83\xe5\x8f\xb7" },

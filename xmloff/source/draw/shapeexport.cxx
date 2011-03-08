@@ -164,11 +164,7 @@ uno::Reference< drawing::XShape > XMLShapeExport::checkForCustomShapeReplacement
                     aEngine = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.EnhancedCustomShapeEngine" ) );
 
                 uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
-        /*
-                uno::Reference< drawing::XShape > aXShape = GetXShapeForSdrObject( (SdrObjCustomShape*)pCustomShape );
-                if ( !aXShape.is() )
-                    aXShape = new SvxCustomShape( (SdrObjCustomShape*)pCustomShape );
-        */
+
                 if ( aEngine.getLength() && xFactory.is() )
                 {
                     uno::Sequence< uno::Any > aArgument( 1 );
@@ -199,7 +195,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
 {
     if( maCurrentShapesIter == maShapesInfos.end() )
     {
-        DBG_ERROR( "XMLShapeExport::collectShapeAutoStyles(): no call to seekShapes()!" );
+        OSL_FAIL( "XMLShapeExport::collectShapeAutoStyles(): no call to seekShapes()!" );
         return;
     }
     sal_Int32 nZIndex = 0;
@@ -211,7 +207,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
 
     if( (sal_Int32)aShapeInfoVector.size() <= nZIndex )
     {
-        DBG_ERROR( "XMLShapeExport::collectShapeAutoStyles(): no shape info allocated for a given shape" );
+        OSL_FAIL( "XMLShapeExport::collectShapeAutoStyles(): no shape info allocated for a given shape" );
         return;
     }
 
@@ -227,7 +223,6 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
     ImpCalcShapeType(xShape, aShapeInfo.meShapeType);
 
     const bool bObjSupportsText =
-//      aShapeInfo.meShapeType != XmlShapeTypeDrawControlShape &&
         aShapeInfo.meShapeType != XmlShapeTypeDrawChartShape &&
         aShapeInfo.meShapeType != XmlShapeTypePresChartShape &&
         aShapeInfo.meShapeType != XmlShapeTypeDrawOLE2Shape &&
@@ -402,7 +397,6 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
                     // * defaults for style properties are not written, but we need to write the "left",
                     //   because we need to distiguish this "left" from the case where not align attribute
                     //   is present which means "void"
-                    // 102407 - 2002-11-01 - fs@openoffice.org
                     static const ::rtl::OUString s_sParaAdjustPropertyName( RTL_CONSTASCII_USTRINGPARAM( "ParaAdjust" ) );
                     if  (   xPropSetInfo->hasPropertyByName( s_sParaAdjustPropertyName )
                         &&  ( beans::PropertyState_DEFAULT_VALUE == xPropState->getPropertyState( s_sParaAdjustPropertyName ) )
@@ -479,7 +473,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
             }
             catch( uno::Exception& )
             {
-                DBG_ERROR( "XMLShapeExport::collectShapeAutoStyles(): exception caught while collection auto styles for a table!" );
+                OSL_FAIL( "XMLShapeExport::collectShapeAutoStyles(): exception caught while collection auto styles for a table!" );
             }
             break;
         }
@@ -535,7 +529,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
 {
     if( maCurrentShapesIter == maShapesInfos.end() )
     {
-        DBG_ERROR( "XMLShapeExport::exportShape(): no auto styles where collected before export" );
+        OSL_FAIL( "XMLShapeExport::exportShape(): no auto styles where collected before export" );
         return;
     }
     sal_Int32 nZIndex = 0;
@@ -568,7 +562,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
     }
     catch( uno::Exception& )
     {
-        DBG_ERROR("XMLShapeExport::exportShape(): exception during hyperlink export");
+        OSL_FAIL("XMLShapeExport::exportShape(): exception during hyperlink export");
     }
 
 
@@ -579,7 +573,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
 
     if( (sal_Int32)aShapeInfoVector.size() <= nZIndex )
     {
-        DBG_ERROR( "XMLShapeExport::exportShape(): no shape info collected for a given shape" );
+        OSL_FAIL( "XMLShapeExport::exportShape(): no shape info collected for a given shape" );
         return;
     }
 
@@ -691,7 +685,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
             }
             catch( uno::Exception e )
             {
-                DBG_ERROR( "could not export layer name for shape!" );
+                OSL_FAIL( "could not export layer name for shape!" );
             }
         }
     }
@@ -725,7 +719,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
         }
         catch( uno::Exception& )
         {
-            DBG_ERROR( "XMLShapeExport::exportShape(), exception caught!" );
+            OSL_FAIL( "XMLShapeExport::exportShape(), exception caught!" );
         }
     }
 
@@ -905,7 +899,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
         default:
         {
             // this should never happen and is an error
-            DBG_ERROR("XMLEXP: WriteShape: unknown or unexpected type of shape in export!");
+            OSL_FAIL("XMLEXP: WriteShape: unknown or unexpected type of shape in export!");
             break;
         }
     }
@@ -1002,7 +996,6 @@ void XMLShapeExport::exportAutoStyles()
     // export all autostyle infos
 
     // ...for graphic
-//  if(IsFamilyGraphicUsed())
     {
         GetExport().GetAutoStylePool()->exportXML(
             XML_STYLE_FAMILY_SD_GRAPHICS_ID
@@ -1013,7 +1006,6 @@ void XMLShapeExport::exportAutoStyles()
     }
 
     // ...for presentation
-//  if(IsFamilyPresentationUsed())
     {
         GetExport().GetAutoStylePool()->exportXML(
             XML_STYLE_FAMILY_SD_PRESENTATION_ID
@@ -1166,7 +1158,7 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
                     }
                     catch( uno::Exception& )
                     {
-                        DBG_ERROR( "XMLShapeExport::ImpCalcShapeType(), expected ole shape to have the CLSID property?" );
+                        OSL_FAIL( "XMLShapeExport::ImpCalcShapeType(), expected ole shape to have the CLSID property?" );
                     }
                 }
                 else if(aType.EqualsAscii("Chart", 26, 5)) { eShapeType = XmlShapeTypePresChartShape;  }

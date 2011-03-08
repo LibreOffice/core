@@ -66,7 +66,6 @@ namespace css = ::com::sun::star;
 #define A2OU(x) ::rtl::OUString::createFromAscii( x )
 
 #define SERVICENAME     "com.sun.star.linguistic2.LanguageGuessing"
-
 #define IMPLNAME        "com.sun.star.lingu2.LanguageGuessing"
 
 static Sequence< OUString > getSupportedServiceNames_LangGuess_Impl()
@@ -191,40 +190,6 @@ void LangGuess_Impl::EnsureInitialized()
 
 //*************************************************************************
 
-/* TL: currently not part of the API
-Sequence< com::sun::star::lang::Locale > SAL_CALL LangGuess_Impl::guessLanguages(
-        const rtl::OUString   &rText,
-        sal_Int32       nStartPos,
-        sal_Int32       nLen )
-    throw (RuntimeException)
-{
-    Sequence< com::sun::star::lang::Locale > aRes;
-
-    OString o = OUStringToOString( rText, RTL_TEXTENCODING_UTF8 );
-    vector<Guess> gs = m_aGuesser.GuessLanguage(o.pData->buffer);
-
-    aRes.realloc(gs.size());
-
-    com::sun::star::lang::Locale *pRes = aRes.getArray();
-
-#ifdef DEBUG
-    std::cout << " We have " << gs.size() << " candidates" << std::endl;
-#endif
-
-    for(int i = 0; i < gs.size() ; i++ ){
-        com::sun::star::lang::Locale current_aRes;
-
-        current_aRes.Language   = A2OU( gs[i].getLanguage().c_str() );
-        current_aRes.Country    = A2OU( gs[i].getCountry().c_str() );
-
-        pRes[i] = current_aRes;
-    }
-
-    return aRes;
-}
-*/
-//*************************************************************************
-
 Locale SAL_CALL LangGuess_Impl::guessPrimaryLanguage(
         const ::rtl::OUString& rText,
         ::sal_Int32 nStartPos,
@@ -261,8 +226,6 @@ void LangGuess_Impl::SetFingerPrintsDB(
     OString conf_file_name( DEFAULT_CONF_FILE_NAME );
     OString conf_file_path(path);
     conf_file_path += conf_file_name;
-
-    //cout << "Conf file : " << conf_file_path.getStr() << " directory : " << path.getStr() << endl;
 
     m_aGuesser.SetDBPath((const char*)conf_file_path.getStr(), (const char*)path.getStr());
 }

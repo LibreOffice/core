@@ -34,19 +34,17 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <utime.h>
-#if defined HPUX || defined LINUX
+#if defined LINUX
 #include <mntent.h>
 #define mnttab mntent
-#elif defined SCO
-#include <mnttab.h>
 #elif defined AIX
 #include <sys/mntctl.h>
 #include <sys/vmount.h>
 extern "C" int mntctl( int cmd, size_t size, char* buf );
 #elif defined(NETBSD)
 #include <sys/mount.h>
-#elif defined(FREEBSD) || defined(MACOSX) || defined(OPENBSD)
-#elif defined DECUNIX
+#elif defined(FREEBSD) || defined(MACOSX) || defined(OPENBSD) || \
+      defined(DRAGONFLY)
 struct mnttab
 {
   char *mnt_dir;
@@ -61,24 +59,15 @@ struct mnttab
 #endif
 
 #include <tools/debug.hxx>
-#include <tools/list.hxx>
 #include <tools/fsys.hxx>
 #include "comdep.hxx"
 #include <rtl/instance.hxx>
 
-DECLARE_LIST( DirEntryList, DirEntry* )
-DECLARE_LIST( FSysSortList, FSysSort* )
-DECLARE_LIST( FileStatList, FileStat* )
-
-#if defined SOLARIS || defined SINIX
+#if defined SOLARIS
 #define MOUNTSPECIAL mnt_special
 #define MOUNTPOINT   mnt_mountp
 #define MOUNTOPTS    mnt_mntopts
 #define MOUNTFS      mnt_fstype
-#elif defined SCO
-#define MNTTAB       "/etc/mnttab"
-#define MOUNTSPECIAL mt_dev
-#define MOUNTPOINT   mt_filsys
 #else
 #define MOUNTSPECIAL mnt_fsname
 #define MOUNTPOINT   mnt_dir
@@ -96,7 +85,7 @@ struct mymnttab
 
 
 #if defined(NETBSD) || defined(FREEBSD) || defined(MACOSX) || \
-    defined(OPENBSD)
+    defined(OPENBSD) || defined(DRAGONFLY)
 BOOL GetMountEntry(dev_t /* dev */, struct mymnttab * /* mytab */ )
 {
     DBG_WARNING( "Sorry, not implemented: GetMountEntry" );
@@ -141,19 +130,13 @@ BOOL GetMountEntry(dev_t dev, struct mymnttab *mytab)
 
 static BOOL GetMountEntry(dev_t dev, struct mymnttab *mytab)
 {
-#if defined SOLARIS || defined SINIX
+#if defined SOLARIS
     FILE *fp = fopen (MNTTAB, "r");
     if (! fp)
         return FALSE;
     struct mnttab mnt[1];
     while (getmntent (fp, mnt) != -1)
-#elif defined SCO
-    FILE *fp = fopen (MNTTAB, "r");
-    if (! fp)
-        return FALSE;
-    struct mnttab mnt[1];
-    while (fread (&mnt, sizeof mnt, 1, fp) > 0)
-#elif defined DECUNIX || defined AIX
+#elif defined AIX
     FILE *fp = NULL;
     if (! fp)
         return FALSE;
@@ -193,11 +176,8 @@ static BOOL GetMountEntry(dev_t dev, struct mymnttab *mytab)
         mytab->mountspecial = mnt->MOUNTSPECIAL;
         mytab->mountpoint   = mnt->MOUNTPOINT;
         mytab->mountdevice  = dev;
-#ifndef SCO
         mytab->mymnttab_filesystem = mnt->MOUNTFS;
-#else
-        mytab->mymnttab_filesystem = "ext2";        //default ist case sensitiv unter unix
-#endif
+
         return TRUE;
     }
 #   ifdef LINUX
@@ -222,7 +202,7 @@ BOOL DirEntry::IsCaseSensitive( FSysPathStyle eFormatter ) const
 
     if (eFormatter==FSYS_STYLE_HOST)
     {
-#ifdef NETBSD
+#if defined(NETBSD) || defined(DRAGONFLY)
         return TRUE;
 #else
         struct stat buf;

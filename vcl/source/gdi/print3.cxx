@@ -50,8 +50,8 @@
 #include "com/sun/star/awt/Size.hpp"
 #include "comphelper/processfactory.hxx"
 
-#include <hash_map>
-#include <hash_set>
+#include <boost/unordered_map.hpp>
+#include <boost/unordered_set.hpp>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -144,8 +144,8 @@ public:
         ControlDependency() : mnDependsOnEntry( -1 ) {}
     };
 
-    typedef std::hash_map< rtl::OUString, size_t, rtl::OUStringHash > PropertyToIndexMap;
-    typedef std::hash_map< rtl::OUString, ControlDependency, rtl::OUStringHash > ControlDependencyMap;
+    typedef boost::unordered_map< rtl::OUString, size_t, rtl::OUStringHash > PropertyToIndexMap;
+    typedef boost::unordered_map< rtl::OUString, ControlDependency, rtl::OUStringHash > ControlDependencyMap;
 
     boost::shared_ptr<Printer>                                  mpPrinter;
     Sequence< PropertyValue >                                   maUIOptions;
@@ -1221,7 +1221,7 @@ bool PrinterController::getReversePrint() const
 
 Sequence< PropertyValue > PrinterController::getJobProperties( const Sequence< PropertyValue >& i_rMergeList ) const
 {
-    std::hash_set< rtl::OUString, rtl::OUStringHash > aMergeSet;
+    boost::unordered_set< rtl::OUString, rtl::OUStringHash > aMergeSet;
     size_t nResultLen = size_t(i_rMergeList.getLength()) + mpImplData->maUIProperties.size() + 3;
     for( int i = 0; i < i_rMergeList.getLength(); i++ )
         aMergeSet.insert( i_rMergeList[i].Name );
@@ -1270,14 +1270,14 @@ const Sequence< beans::PropertyValue >& PrinterController::getUIOptions() const
 
 beans::PropertyValue* PrinterController::getValue( const rtl::OUString& i_rProperty )
 {
-    std::hash_map< rtl::OUString, size_t, rtl::OUStringHash >::const_iterator it =
+    boost::unordered_map< rtl::OUString, size_t, rtl::OUStringHash >::const_iterator it =
         mpImplData->maPropertyToIndex.find( i_rProperty );
     return it != mpImplData->maPropertyToIndex.end() ? &mpImplData->maUIProperties[it->second] : NULL;
 }
 
 const beans::PropertyValue* PrinterController::getValue( const rtl::OUString& i_rProperty ) const
 {
-    std::hash_map< rtl::OUString, size_t, rtl::OUStringHash >::const_iterator it =
+    boost::unordered_map< rtl::OUString, size_t, rtl::OUStringHash >::const_iterator it =
         mpImplData->maPropertyToIndex.find( i_rProperty );
     return it != mpImplData->maPropertyToIndex.end() ? &mpImplData->maUIProperties[it->second] : NULL;
 }
@@ -1307,7 +1307,7 @@ void PrinterController::setValue( const rtl::OUString& i_rName, const Any& i_rVa
 
 void PrinterController::setValue( const beans::PropertyValue& i_rValue )
 {
-    std::hash_map< rtl::OUString, size_t, rtl::OUStringHash >::const_iterator it =
+    boost::unordered_map< rtl::OUString, size_t, rtl::OUStringHash >::const_iterator it =
         mpImplData->maPropertyToIndex.find( i_rValue.Name );
     if( it != mpImplData->maPropertyToIndex.end() )
         mpImplData->maUIProperties[ it->second ] = i_rValue;
@@ -1379,7 +1379,7 @@ void PrinterController::setUIOptions( const Sequence< beans::PropertyValue >& i_
 
 void PrinterController::enableUIOption( const rtl::OUString& i_rProperty, bool i_bEnable )
 {
-    std::hash_map< rtl::OUString, size_t, rtl::OUStringHash >::const_iterator it =
+    boost::unordered_map< rtl::OUString, size_t, rtl::OUStringHash >::const_iterator it =
         mpImplData->maPropertyToIndex.find( i_rProperty );
     if( it != mpImplData->maPropertyToIndex.end() )
     {
@@ -1397,7 +1397,7 @@ void PrinterController::enableUIOption( const rtl::OUString& i_rProperty, bool i
 bool PrinterController::isUIOptionEnabled( const rtl::OUString& i_rProperty ) const
 {
     bool bEnabled = false;
-    std::hash_map< rtl::OUString, size_t, rtl::OUStringHash >::const_iterator prop_it =
+    boost::unordered_map< rtl::OUString, size_t, rtl::OUStringHash >::const_iterator prop_it =
         mpImplData->maPropertyToIndex.find( i_rProperty );
     if( prop_it != mpImplData->maPropertyToIndex.end() )
     {
@@ -1604,7 +1604,7 @@ sal_Bool PrinterController::getBoolProperty( const rtl::OUString& i_rProperty, s
 Any PrinterOptionsHelper::getValue( const rtl::OUString& i_rPropertyName ) const
 {
     Any aRet;
-    std::hash_map< rtl::OUString, Any, rtl::OUStringHash >::const_iterator it =
+    boost::unordered_map< rtl::OUString, Any, rtl::OUStringHash >::const_iterator it =
         m_aPropertyMap.find( i_rPropertyName );
     if( it != m_aPropertyMap.end() )
         aRet = it->second;
@@ -1619,7 +1619,7 @@ void PrinterOptionsHelper::setValue( const rtl::OUString& i_rPropertyName, const
 bool PrinterOptionsHelper::hasProperty( const rtl::OUString& i_rPropertyName ) const
 {
     Any aRet;
-    std::hash_map< rtl::OUString, Any, rtl::OUStringHash >::const_iterator it =
+    boost::unordered_map< rtl::OUString, Any, rtl::OUStringHash >::const_iterator it =
         m_aPropertyMap.find( i_rPropertyName );
     return it != m_aPropertyMap.end();
 }
@@ -1659,7 +1659,7 @@ bool PrinterOptionsHelper::processProperties( const Sequence< PropertyValue >& i
     for( sal_Int32 i = 0; i < nElements; i++ )
     {
         bool bElementChanged = false;
-        std::hash_map< rtl::OUString, Any, rtl::OUStringHash >::iterator it =
+        boost::unordered_map< rtl::OUString, Any, rtl::OUStringHash >::iterator it =
             m_aPropertyMap.find( pVals[ i ].Name );
         if( it != m_aPropertyMap.end() )
         {

@@ -36,7 +36,6 @@
 #include <malloc.h>
 #endif
 #include <tools/debug.hxx>
-#include <tools/list.hxx>
 #include <tools/bigint.hxx>
 #include <tools/fsys.hxx>
 #include "comdep.hxx"
@@ -46,10 +45,6 @@
 #endif
 
 int Sys2SolarError_Impl( int nSysErr );
-
-DECLARE_LIST( DirEntryList, DirEntry* );
-DECLARE_LIST( FSysSortList, FSysSort* );
-DECLARE_LIST( FileStatList, FileStat* );
 
 static char sCaseMap[256];
 static BOOL bCaseMap = FALSE;

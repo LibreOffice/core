@@ -233,7 +233,7 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SvSto
         catch( uno::Exception& )
         {
             // TODO/LATER: Error handling
-            DBG_ERROR( "The object could not be exported!" );
+            OSL_FAIL( "The object could not be exported!" );
         }
     }
     else if( aOwnGlobalName != SvGlobalName() )
@@ -279,12 +279,7 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SvSto
                         aSize.Height = 5000;
                     }
 
-                    //Rectangle aVisArea = xSfxIPObj->GetVisArea( ASPECT_CONTENT );
                     sal_Int32 pRect[4];
-                    //pRect[0] = aVisArea.Left();
-                    //pRect[1] = aVisArea.Right();
-                    //pRect[2] = aVisArea.Top();
-                    //pRect[3] = aVisArea.Bottom();
                     pRect[0] = 0;
                     pRect[1] = aSize.Width;
                     pRect[2] = 0;
@@ -328,14 +323,14 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SvSto
                     catch( uno::Exception& )
                     {
                         // TODO/LATER: Error handling
-                        DBG_ERROR( "The object could not be exported!" );
+                        OSL_FAIL( "The object could not be exported!" );
                     }
                 }
             }
         }
         else
         {
-            DBG_ERROR("Own binary format inside own container document!");
+            OSL_FAIL("Own binary format inside own container document!");
         }
     }
     else

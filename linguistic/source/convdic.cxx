@@ -73,12 +73,13 @@
 using namespace std;
 using namespace utl;
 using namespace osl;
-using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
+
+using ::rtl::OUString;
 
 #define SN_CONV_DICTIONARY      "com.sun.star.linguistic2.ConversionDictionary"
 #define SN_HCD_CONV_DICTIONARY  "com.sun.star.linguistic2.HangulHanjaConversionDictionary"

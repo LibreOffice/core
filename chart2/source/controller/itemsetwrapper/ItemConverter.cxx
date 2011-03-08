@@ -140,7 +140,7 @@ void ItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
                             delete pItem;
                         }
                     }
-                    catch( beans::UnknownPropertyException ex )
+                    catch( beans::UnknownPropertyException &ex )
                     {
                         delete pItem;
                         OSL_ENSURE( false,
@@ -150,7 +150,7 @@ void ItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
                                                              " - unknown Property: " )) + aProperty.first,
                                         RTL_TEXTENCODING_ASCII_US ).getStr());
                     }
-                    catch( uno::Exception ex )
+                    catch( uno::Exception &ex )
                     {
                         ASSERT_EXCEPTION( ex );
                     }
@@ -162,7 +162,7 @@ void ItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
                 {
                     FillSpecialItem( nWhich, rOutItemSet );
                 }
-                catch( uno::Exception ex )
+                catch( uno::Exception &ex )
                 {
                     ASSERT_EXCEPTION( ex );
                 }
@@ -212,7 +212,7 @@ bool ItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
                         bItemsChanged = true;
                     }
                 }
-                catch( beans::UnknownPropertyException ex )
+                catch( beans::UnknownPropertyException &ex )
                 {
                     OSL_ENSURE( false,
                                 ::rtl::OUStringToOString(
@@ -221,7 +221,7 @@ bool ItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
                                                          " - unknown Property: " )) + aProperty.first,
                                     RTL_TEXTENCODING_ASCII_US).getStr());
                 }
-                catch( uno::Exception ex )
+                catch( uno::Exception &ex )
                 {
                     OSL_ENSURE( false, ::rtl::OUStringToOString(
                                     ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());

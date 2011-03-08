@@ -30,6 +30,7 @@
 
 #include <vcl/timer.hxx>
 #include <vcl/field.hxx>
+#include <vcl/floatwin.hxx>
 #include <svtools/htmlcfg.hxx>
 #include <sfx2/viewfac.hxx>
 #include <sfx2/viewsh.hxx>
@@ -247,6 +248,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     SwPostItMgr         *mpPostItMgr;
 
     int                 nSelectionType;
+    FloatingWindow      *mpFieldPopup;
 
     static const int MASTERENUMCOMMANDS = 6;
 
@@ -307,6 +309,8 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     SW_DLLPRIVATE DECL_LINK( UpdatePercentHdl, GraphicFilter* );
 
     SW_DLLPRIVATE DECL_LINK( HtmlOptionsHdl, void * );
+
+    SW_DLLPRIVATE DECL_LINK( FieldPopupModeEndHdl, FloatingWindow * );
 
     inline long     GetXScroll() const;
     inline long     GetYScroll() const;
@@ -471,7 +475,7 @@ public:
 
     DECL_LINK( SpellError, LanguageType * );
     BOOL            ExecSpellPopup( const Point& rPt );
-    BOOL            ExecFieldPopup( const Point& rPt, sw::mark::IFieldmark *fieldBM );
+    void            ExecFieldPopup( const Point& rPt, sw::mark::IFieldmark *fieldBM );
     // SMARTTAGS
     BOOL            ExecSmartTagPopup( const Point& rPt );
 

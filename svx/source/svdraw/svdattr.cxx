@@ -698,14 +698,6 @@ SfxPoolItem* SdrFractionItem::Clone(SfxItemPool * /*pPool*/) const
     return new SdrFractionItem(Which(),GetValue());
 }
 
-#ifdef SDR_ISPOOLABLE
-int SdrFractionItem::IsPoolable() const
-{
-    USHORT nId=Which();
-    return nId<SDRATTR_NOTPERSIST_FIRST || nId>SDRATTR_NOTPERSIST_LAST;
-}
-#endif
-
 ////////////////////////////////////////////////////////////////////////////////
 // ScaleItem
 ////////////////////////////////////////////////////////////////////////////////
@@ -788,14 +780,6 @@ SfxItemPresentation SdrOnOffItem::GetPresentation(SfxItemPresentation ePres,
     return ePres;
 }
 
-#ifdef SDR_ISPOOLABLE
-int SdrOnOffItem::IsPoolable() const
-{
-    USHORT nId=Which();
-    return nId<SDRATTR_NOTPERSIST_FIRST || nId>SDRATTR_NOTPERSIST_LAST;
-}
-#endif
-
 TYPEINIT1_AUTOFACTORY(SdrYesNoItem,SfxBoolItem);
 
 SfxPoolItem* SdrYesNoItem::Clone(SfxItemPool* /*pPool*/) const
@@ -827,14 +811,6 @@ SfxItemPresentation SdrYesNoItem::GetPresentation(SfxItemPresentation ePres,
     }
     return ePres;
 }
-
-#ifdef SDR_ISPOOLABLE
-int SdrYesNoItem::IsPoolable() const
-{
-    USHORT nId=Which();
-    return nId<SDRATTR_NOTPERSIST_FIRST || nId>SDRATTR_NOTPERSIST_LAST;
-}
-#endif
 
 //------------------------------------------------------------
 // class SdrPercentItem
@@ -870,14 +846,6 @@ SfxItemPresentation SdrPercentItem::GetPresentation(
 
     return ePres;
 }
-
-#ifdef SDR_ISPOOLABLE
-int SdrPercentItem::IsPoolable() const
-{
-    USHORT nId=Which();
-    return nId<SDRATTR_NOTPERSIST_FIRST || nId>SDRATTR_NOTPERSIST_LAST;
-}
-#endif
 
 //------------------------------------------------------------
 // class SdrAngleItem
@@ -968,14 +936,6 @@ SfxItemPresentation SdrAngleItem::GetPresentation(
     return ePres;
 }
 
-#ifdef SDR_ISPOOLABLE
-int SdrAngleItem::IsPoolable() const
-{
-    USHORT nId=Which();
-    return nId<SDRATTR_NOTPERSIST_FIRST || nId>SDRATTR_NOTPERSIST_LAST;
-}
-#endif
-
 //------------------------------------------------------------
 // class SdrMetricItem
 //------------------------------------------------------------
@@ -1027,14 +987,6 @@ SfxItemPresentation SdrMetricItem::GetPresentation(SfxItemPresentation ePres,
     }
     return ePres;
 }
-
-#ifdef SDR_ISPOOLABLE
-int SdrMetricItem::IsPoolable() const
-{
-    USHORT nId=Which();
-    return nId<SDRATTR_NOTPERSIST_FIRST || nId>SDRATTR_NOTPERSIST_LAST;
-}
-#endif
 
 ////////////////////////////////////////////////////////////////////////////////
 // Items des Legendenobjekts
@@ -1505,13 +1457,6 @@ bool SdrTextFixedCellHeightItem::PutValue( const uno::Any& rVal, BYTE /*nMemberI
     SetValue( bValue );
     return true;
 }
-#ifdef SDR_ISPOOLABLE
-int SdrTextFixedCellHeightItem::IsPoolable() const
-{
-    USHORT nId=Which();
-    return nId < SDRATTR_NOTPERSIST_FIRST || nId > SDRATTR_NOTPERSIST_LAST;
-}
-#endif
 
 TYPEINIT1_AUTOFACTORY( SdrCustomShapeAdjustmentItem, SfxPoolItem );
 
@@ -1537,9 +1482,6 @@ SdrCustomShapeAdjustmentItem::SdrCustomShapeAdjustmentItem( SvStream& rIn, sal_u
 
 SdrCustomShapeAdjustmentItem::~SdrCustomShapeAdjustmentItem()
 {
-    void* pPtr;
-    for ( pPtr = aAdjustmentValueList.First(); pPtr; pPtr = aAdjustmentValueList.Next() )
-        delete (SdrCustomShapeAdjustmentValue*)pPtr;
 }
 
 int SdrCustomShapeAdjustmentItem::operator==( const SfxPoolItem& rCmp ) const
@@ -1547,18 +1489,13 @@ int SdrCustomShapeAdjustmentItem::operator==( const SfxPoolItem& rCmp ) const
     int bRet = SfxPoolItem::operator==( rCmp );
     if ( bRet )
     {
-        bRet = ((SdrCustomShapeAdjustmentItem&)rCmp).GetCount() == GetCount();
-        if ( bRet )
+        bRet = GetCount() == ((SdrCustomShapeAdjustmentItem&)rCmp).GetCount();
+
+        if (bRet)
         {
-            sal_uInt32 i;
-            for ( i = 0; i < GetCount(); i++ )
-            {
-                if ( ((SdrCustomShapeAdjustmentItem&)rCmp).GetValue( i ).nValue != GetValue( i ).nValue )
-                {
-                    bRet = 0;
-                    break;
-                }
-            }
+            for (sal_uInt32 i = 0; i < GetCount(); ++i)
+                if (aAdjustmentValueList[i].nValue != ((SdrCustomShapeAdjustmentItem&)rCmp).aAdjustmentValueList[i].nValue)
+                    return false;
         }
     }
     return bRet;
@@ -1605,43 +1542,29 @@ SvStream& SdrCustomShapeAdjustmentItem::Store( SvStream& rOut, sal_uInt16 nItemV
 
 SfxPoolItem* SdrCustomShapeAdjustmentItem::Clone( SfxItemPool * /*pPool*/) const
 {
-    sal_uInt32 i;
     SdrCustomShapeAdjustmentItem* pItem = new SdrCustomShapeAdjustmentItem;
-    for ( i = 0; i < GetCount(); i++ )
-    {
-        const SdrCustomShapeAdjustmentValue& rVal = GetValue( i );
-        pItem->SetValue( i, rVal );
-    }
+
+    if (pItem)
+        pItem->aAdjustmentValueList = aAdjustmentValueList;
+
     return pItem;
 }
-
-#ifdef SDR_ISPOOLABLE
-int SdrCustomShapeAdjustmentItem::IsPoolable() const
-{
-    USHORT nId=Which();
-    return nId < SDRATTR_NOTPERSIST_FIRST || nId > SDRATTR_NOTPERSIST_LAST;
-}
-#endif
 
 const SdrCustomShapeAdjustmentValue& SdrCustomShapeAdjustmentItem::GetValue( sal_uInt32 nIndex ) const
 {
 #ifdef DBG_UTIL
-    if ( aAdjustmentValueList.Count() <= nIndex )
-        DBG_ERROR( "SdrCustomShapeAdjustemntItem::GetValue - nIndex out of range (SJ)" );
+    if ( aAdjustmentValueList.size() <= nIndex )
+        OSL_FAIL( "SdrCustomShapeAdjustemntItem::GetValue - nIndex out of range (SJ)" );
 #endif
-    return *(SdrCustomShapeAdjustmentValue*)aAdjustmentValueList.GetObject( nIndex );
+    return aAdjustmentValueList[nIndex];
 }
 
 void SdrCustomShapeAdjustmentItem::SetValue( sal_uInt32 nIndex, const SdrCustomShapeAdjustmentValue& rVal )
 {
-    sal_uInt32 i;
-    for ( i = GetCount(); i <= nIndex; i++ )
-    {
-        SdrCustomShapeAdjustmentValue* pItem = new SdrCustomShapeAdjustmentValue;
-        aAdjustmentValueList.Insert( pItem, LIST_APPEND );
-    }
-    SdrCustomShapeAdjustmentValue& rValue = *(SdrCustomShapeAdjustmentValue*)aAdjustmentValueList.GetObject( nIndex );
-    rValue.nValue = rVal.nValue;
+    for (sal_uInt32 i = aAdjustmentValueList.size(); i <= nIndex; i++ )
+        aAdjustmentValueList.push_back(SdrCustomShapeAdjustmentValue());
+
+    aAdjustmentValueList[nIndex] = rVal;
 }
 
 sal_uInt16 SdrCustomShapeAdjustmentItem::GetVersion( sal_uInt16 /*nFileFormatVersion*/) const
@@ -1669,19 +1592,17 @@ bool SdrCustomShapeAdjustmentItem::PutValue( const uno::Any& rVal, BYTE /*nMembe
     if( !( rVal >>= aSequence ) )
         return false;
 
-    void* pPtr;
-    for ( pPtr = aAdjustmentValueList.First(); pPtr; pPtr = aAdjustmentValueList.Next() )
-        delete (SdrCustomShapeAdjustmentValue*)pPtr;
+    aAdjustmentValueList.clear();
 
     sal_uInt32 i, nCount = aSequence.getLength();
     if ( nCount )
     {
+        SdrCustomShapeAdjustmentValue val;
         const sal_Int32* pPtr2 = aSequence.getConstArray();
         for ( i = 0; i < nCount; i++ )
         {
-            SdrCustomShapeAdjustmentValue* pItem = new SdrCustomShapeAdjustmentValue;
-            pItem->nValue = *pPtr2++;
-            aAdjustmentValueList.Insert( pItem, LIST_APPEND );
+            val.nValue = *pPtr2++;
+            aAdjustmentValueList.push_back(val);
         }
     }
     return true;
@@ -1732,7 +1653,7 @@ bool SdrEdgeKindItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
         case SDREDGE_BEZIER :       eCT = drawing::ConnectorType_CURVE; break;
         case SDREDGE_ARC :          eCT = drawing::ConnectorType_CURVE; break;
         default:
-            DBG_ERROR( "SdrEdgeKindItem::QueryValue : unknown enum" );
+            OSL_FAIL( "SdrEdgeKindItem::QueryValue : unknown enum" );
     }
 
     rVal <<= eCT;
@@ -1760,7 +1681,7 @@ bool SdrEdgeKindItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
         case drawing::ConnectorType_LINE :       eEK = SDREDGE_ONELINE;     break;
         case drawing::ConnectorType_LINES :      eEK = SDREDGE_THREELINES;   break;
         default:
-            DBG_ERROR( "SdrEdgeKindItem::PuValue : unknown enum" );
+            OSL_FAIL( "SdrEdgeKindItem::PuValue : unknown enum" );
     }
     SetValue( sal::static_int_cast< USHORT >( eEK ) );
 
@@ -2170,15 +2091,6 @@ SfxItemPresentation SdrSignedPercentItem::GetPresentation(
 
     return ePres;
 }
-
-#ifdef SDR_ISPOOLABLE
-
-int SdrSignedPercentItem::IsPoolable() const
-{
-    USHORT nId=Which();
-    return nId < SDRATTR_NOTPERSIST_FIRST || nId > SDRATTR_NOTPERSIST_LAST;
-}
-#endif
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // SdrGrafRedItem

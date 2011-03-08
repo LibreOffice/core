@@ -1207,7 +1207,7 @@ void XMLTextFrameContext_Impl::Characters( const OUString& rChars )
             if( bOwnBase64Stream && xBase64Stream.is() )
             {
                 OUString sChars;
-                if( sBase64CharsLeft )
+                if( sBase64CharsLeft.getLength() )
                 {
                     sChars = sBase64CharsLeft;
                     sChars += sTrimmedChars;

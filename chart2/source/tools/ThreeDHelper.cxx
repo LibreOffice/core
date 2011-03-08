@@ -555,7 +555,7 @@ void ThreeDHelper::convertElevationRotationDegToXYZAngleRad(
         z = atan(tan(R) * sin(E));
         if(cos(z)==0.0)
         {
-            DBG_ERROR("calculation error in ThreeDHelper::convertElevationRotationDegToXYZAngleRad");
+            OSL_FAIL("calculation error in ThreeDHelper::convertElevationRotationDegToXYZAngleRad");
             return;
         }
         double cy = cos(R)/cos(z);
@@ -566,7 +566,7 @@ void ThreeDHelper::convertElevationRotationDegToXYZAngleRad(
         double fDenominator = cos(z)*(1.0-pow(sin(y),2));
         if(fDenominator==0.0)
         {
-            DBG_ERROR("calculation error in ThreeDHelper::convertElevationRotationDegToXYZAngleRad");
+            OSL_FAIL("calculation error in ThreeDHelper::convertElevationRotationDegToXYZAngleRad");
             return;
         }
         double sx = cos(R)*sin(E)/fDenominator;

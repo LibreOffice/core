@@ -55,7 +55,6 @@ using ::rtl::OUString;
 sal_Char XMLN_VERSIONSLIST[] = "VersionList.xml";
 
 // ------------------------------------------------------------------------
-
 // #110897#
 XMLVersionListExport::XMLVersionListExport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
@@ -116,8 +115,6 @@ sal_uInt32 XMLVersionListExport::exportDoc( enum ::xmloff::token::XMLTokenEnum )
 }
 
 // ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
-
 // #110897#
 XMLVersionListImport::XMLVersionListImport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
@@ -156,8 +153,6 @@ SvXMLImportContext *XMLVersionListImport::CreateContext(
 
 
 // ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
-
 XMLVersionListContext::XMLVersionListContext( XMLVersionListImport& rImport,
                                         sal_uInt16 nPrefix,
                                         const OUString& rLocalName,
@@ -192,8 +187,6 @@ SvXMLImportContext *XMLVersionListContext::CreateChildContext( sal_uInt16 nPrefi
 }
 
 // ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
-
 XMLVersionContext::XMLVersionContext( XMLVersionListImport& rImport,
                                         sal_uInt16 nPref,
                                         const OUString& rLocalName,
@@ -253,7 +246,6 @@ XMLVersionContext::~XMLVersionContext( void )
 {}
 
 // ------------------------------------------------------------------------
-// static
 sal_Bool XMLVersionContext::ParseISODateTimeString(
                                 const rtl::OUString& rString,
                                 util::DateTime& rDateTime )
@@ -355,8 +347,6 @@ sal_Bool XMLVersionContext::ParseISODateTimeString(
 
 
 // ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
-
 void SAL_CALL XMLVersionListPersistence::store( const uno::Reference< embed::XStorage >& xRoot, const uno::Sequence< util::RevisionTag >& rVersions )
     throw (::com::sun::star::io::IOException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
 {
@@ -376,14 +366,6 @@ void SAL_CALL XMLVersionListPersistence::store( const uno::Reference< embed::XSt
         // and delete it
         OUString sVerName( RTL_CONSTASCII_USTRINGPARAM( XMLN_VERSIONSLIST ) );
 
-        // is this really needed, we set the size to zero before doing
-        // anything with this stream?
-/*      if ( xRoot->IsContained( sVerName ) )
-        {
-            xRoot->Remove( sVerName );
-            xRoot->Commit();
-        }
-*/
         try {
             // open (create) the sub storage with the version info
             uno::Reference< io::XStream > xVerStream = xRoot->openStreamElement(
@@ -391,11 +373,6 @@ void SAL_CALL XMLVersionListPersistence::store( const uno::Reference< embed::XSt
                                             embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
             if ( !xVerStream.is() )
                 throw uno::RuntimeException();
-
-//REMOVE                // SetSize should not be neccessary because OpenStream( WRITE|TRUNC ) should already
-//REMOVE                // have set the size to zero
-//REMOVE        //      xVerStream->SetSize ( 0L );
-//REMOVE                xVerStream->SetBufferSize( 16*1024 );
 
             Reference< io::XOutputStream > xOut = xVerStream->getOutputStream();
             if ( !xOut.is() )
@@ -411,9 +388,7 @@ void SAL_CALL XMLVersionListPersistence::store( const uno::Reference< embed::XSt
 
             aExp.exportDoc( ::xmloff::token::XML_VERSION );
 
-//REMOVE                xVerStream->Commit();
             xVerStream = uno::Reference< io::XStream >(); // use refcounting for now to dispose
-    //      xRoot->Commit();
         }
         catch( uno::Exception& )
         {
@@ -456,9 +431,6 @@ uno::Sequence< util::RevisionTag > SAL_CALL XMLVersionListPersistence::load( con
                                                             embed::ElementModes::READ );
             if ( !xDocStream.is() )
                 throw uno::RuntimeException();
-
-//REMOVE                xDocStream->Seek( 0L );
-//REMOVE                xDocStream->SetBufferSize( 16*1024 );
 
             aParserInput.aInputStream = xDocStream->getInputStream();
             OSL_ENSURE( aParserInput.aInputStream.is(),

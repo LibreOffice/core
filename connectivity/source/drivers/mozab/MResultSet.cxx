@@ -411,7 +411,7 @@ const ORowSetValue& OResultSet::getValue(sal_Int32 cardNumber, sal_Int32 columnI
 {
     if ( fetchRow( cardNumber ) == sal_False )
     {
-        OSL_ASSERT("fetchRow() returned False" );
+        OSL_FAIL("fetchRow() returned False" );
         m_bWasNull = sal_True;
         return *ODatabaseMetaDataResultSet::getEmptyValue();
     }
@@ -836,7 +836,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
             queryExpression.setExpressionCondition( MQueryExpression::AND );
         }
         else {
-            OSL_ASSERT("analyseSQL: Error in Parse Tree");
+            OSL_FAIL("analyseSQL: Error in Parse Tree");
         }
     }
     else if (SQL_ISRULE(parseTree,comparison_predicate))
@@ -900,6 +900,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
         pColumn     = parseTree->getChild(0);                        // Match Item
         pAtom       = pPart2->getChild(parseTree->count()-2);     // Match String
         pOptEscape  = pPart2->getChild(parseTree->count()-1);     // Opt Escape Rule
+        (void)pOptEscape;
         const bool bNot = SQL_ISTOKEN(pPart2->getChild(0), NOT);
 
         if (!(pAtom->getNodeType() == SQL_NODE_STRING ||
@@ -1224,7 +1225,6 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
             else
             {
                 sal_Bool bDistinct = sal_False;
-                sal_Bool bWasSorted = sal_False;
                 OSQLParseNode *pDistinct = m_pParseTree->getChild(1);
                 if (pDistinct && pDistinct->getTokenID() == SQL_TOKEN_DISTINCT)
                 {
@@ -1233,8 +1233,6 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
                         m_aOrderbyColumnNumber.push_back(m_aColMapping[1]);
                         m_aOrderbyAscending.push_back(SQL_DESC);
                     }
-                    else
-                        bWasSorted = sal_True;
                     bDistinct = sal_True;
                 }
 
@@ -1269,7 +1267,7 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
                     // FALSE)
                         default:
                             eKeyType[i] = SQL_ORDERBYKEY_NONE;
-                            OSL_ASSERT("MResultSet::executeQuery: Order By Data Type not implemented");
+                            OSL_FAIL("MResultSet::executeQuery: Order By Data Type not implemented");
                             break;
                     }
                 }

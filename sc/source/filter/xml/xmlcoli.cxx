@@ -29,10 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
 // INCLUDE ---------------------------------------------------------------
-
 #include "xmlcoli.hxx"
 #include "xmlimprt.hxx"
 #include "global.hxx"
@@ -114,26 +111,6 @@ SvXMLImportContext *ScXMLTableColContext::CreateChildContext( USHORT nPrefix,
                                         ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )
 {
     SvXMLImportContext *pContext = 0;
-/*
-    const SvXMLTokenMap& rTokenMap = GetScImport().GetTableRowElemTokenMap();
-    sal_Bool bHeader = sal_False;
-    switch( rTokenMap.Get( nPrefix, rLName ) )
-    {
-    case XML_TOK_TABLE_ROW_CELL:
-//      if( IsInsertCellPossible() )
-            pContext = new ScXMLTableRowCellContext( GetScImport(), nPrefix,
-                                                      rLName, xAttrList//,
-                                                      //this
-                                                      );
-        break;
-    case XML_TOK_TABLE_ROW_COVERED_CELL:
-//      if( IsInsertCellPossible() )
-            pContext = new ScXMLTableRowCellContext( GetScImport(), nPrefix,
-                                                      rLName, xAttrList//,
-                                                      //this
-                                                      );
-        break;
-    }*/
 
     if( !pContext )
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );

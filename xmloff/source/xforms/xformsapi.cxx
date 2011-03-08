@@ -344,7 +344,7 @@ rtl::OUString lcl_getBasicTypeName(
     }
     catch( const Exception& )
     {
-        DBG_ERROR( "exception during type creation" );
+        OSL_FAIL( "exception during type creation" );
     }
     return sTypeName;
 }

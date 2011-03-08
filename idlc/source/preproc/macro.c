@@ -31,13 +31,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-#ifdef __hpux
-#   define _HPUX_SOURCE
-#endif
-#ifdef SCO
-#   define _IBCS2
-#endif
 #include <limits.h>
 
 #include "cpp.h"

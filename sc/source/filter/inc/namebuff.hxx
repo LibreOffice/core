@@ -36,7 +36,7 @@
 #include "xiroot.hxx"
 
 #include "rangenam.hxx"
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <list>
 
 class ScDocument;
@@ -108,7 +108,7 @@ class NameBuffer : private List, public ExcRoot
 private:
     UINT16                  nBase;      // Index-Basis
 public:
-//    inline                  NameBuffer( void );   //#94039# prevent empty rootdata
+//    inline                  NameBuffer( void );   //prevent empty rootdata
     inline                  NameBuffer( RootData* );
     inline                  NameBuffer( RootData*, UINT16 nNewBase );
 
@@ -119,7 +119,7 @@ public:
     void                    operator <<( const String& rNewString );
 };
 
-//#94039# prevent empty rootdata
+//prevent empty rootdata
 //inline NameBuffer::NameBuffer( void )
 //{
 //    nBase = 0;
@@ -176,7 +176,7 @@ class ShrfmlaBuffer : public ExcRoot
     {
         size_t operator() (const ScAddress &addr) const;
     };
-    typedef std::hash_map <ScAddress, USHORT, ScAddressHashFunc> ShrfmlaHash;
+    typedef boost::unordered_map <ScAddress, USHORT, ScAddressHashFunc> ShrfmlaHash;
     typedef std::list <ScRange>                                  ShrfmlaList;
 
     ShrfmlaHash  index_hash;

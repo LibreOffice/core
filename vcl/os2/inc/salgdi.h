@@ -35,7 +35,7 @@
 #include <vcl/outfont.hxx>
 #include <vcl/impfont.hxx>
 
-#include <hash_set>
+#include <boost/unordered_set.hpp>
 
 class ImplOs2FontEntry;
 
@@ -101,7 +101,7 @@ private:
 #ifdef GNG_VERT_HACK
     void                    ReadGsubTable( HDC ) const;
 
-    typedef std::hash_set<int> IntHashSet;
+    typedef boost::unordered_set<int> IntHashSet;
     mutable IntHashSet      maGsubTable;
     mutable bool            mbGsubRead;
 public:

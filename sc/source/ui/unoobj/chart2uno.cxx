@@ -83,7 +83,6 @@ using ::std::vector;
 using ::std::list;
 using ::std::distance;
 using ::std::unary_function;
-using ::std::hash_set;
 using ::boost::shared_ptr;
 
 namespace
@@ -2426,7 +2425,7 @@ void ScChart2DataSequence::BuildDataCache()
 
     if (!m_pTokens.get())
     {
-        DBG_ERROR("m_pTokens == NULL!  Something is wrong.");
+        OSL_FAIL("m_pTokens == NULL!  Something is wrong.");
         return;
     }
 
@@ -2457,8 +2456,8 @@ void ScChart2DataSequence::BuildDataCache()
                 {
                     for (SCROW nRow = aRange.aStart.Row(); nRow <= aRange.aEnd.Row(); ++nRow)
                     {
-                        bool bColHidden = m_pDocument->ColHidden(nCol, nTab, nLastCol);
-                        bool bRowHidden = m_pDocument->RowHidden(nRow, nTab, nLastRow);
+                        bool bColHidden = m_pDocument->ColHidden(nCol, nTab, NULL, &nLastCol);
+                        bool bRowHidden = m_pDocument->RowHidden(nRow, nTab, NULL, &nLastRow);
 
                         if (bColHidden || bRowHidden)
                         {
@@ -2577,7 +2576,7 @@ sal_Int32 ScChart2DataSequence::FillCacheFromExternalRef(const ScTokenRef& pToke
 
         if (p->GetType() != svMatrix)
         {
-            DBG_ERROR("Cached array is not a matrix token.");
+            OSL_FAIL("Cached array is not a matrix token.");
             continue;
         }
 
@@ -2666,8 +2665,8 @@ void ScChart2DataSequence::StopListeningToAllExternalRefs()
     if (!m_pExtRefListener.get())
         return;
 
-    const hash_set<sal_uInt16>& rFileIds = m_pExtRefListener->getAllFileIds();
-    hash_set<sal_uInt16>::const_iterator itr = rFileIds.begin(), itrEnd = rFileIds.end();
+    const boost::unordered_set<sal_uInt16>& rFileIds = m_pExtRefListener->getAllFileIds();
+    boost::unordered_set<sal_uInt16>::const_iterator itr = rFileIds.begin(), itrEnd = rFileIds.end();
     ScExternalRefManager* pRefMgr = m_pDocument->GetExternalRefManager();
     for (; itr != itrEnd; ++itr)
         pRefMgr->removeLinkListener(*itr, m_pExtRefListener.get());
@@ -2679,7 +2678,7 @@ void ScChart2DataSequence::CopyData(const ScChart2DataSequence& r)
 {
     if (!m_pDocument)
     {
-        DBG_ERROR("document instance is NULL!?");
+        OSL_FAIL("document instance is NULL!?");
         return;
     }
 
@@ -2699,8 +2698,8 @@ void ScChart2DataSequence::CopyData(const ScChart2DataSequence& r)
 
         ScExternalRefManager* pRefMgr = m_pDocument->GetExternalRefManager();
         m_pExtRefListener.reset(new ExternalRefListener(*this, m_pDocument));
-        const hash_set<sal_uInt16>& rFileIds = r.m_pExtRefListener->getAllFileIds();
-        hash_set<sal_uInt16>::const_iterator itr = rFileIds.begin(), itrEnd = rFileIds.end();
+        const boost::unordered_set<sal_uInt16>& rFileIds = r.m_pExtRefListener->getAllFileIds();
+        boost::unordered_set<sal_uInt16>::const_iterator itr = rFileIds.begin(), itrEnd = rFileIds.end();
         for (; itr != itrEnd; ++itr)
         {
             pRefMgr->addLinkListener(*itr, m_pExtRefListener.get());
@@ -2803,7 +2802,7 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
 
             if (!m_pRangeIndices.get() || m_pRangeIndices->empty())
             {
-                DBG_ERROR(" faulty range indices");
+                OSL_FAIL(" faulty range indices");
                 break;
             }
 
@@ -2812,7 +2811,7 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
             size_t nCount = rRanges.size();
             if (nCount != m_pRangeIndices->size())
             {
-                DBG_ERROR("range count and range index count differ.");
+                OSL_FAIL("range count and range index count differ.");
                 break;
             }
 
@@ -2884,7 +2883,7 @@ void ScChart2DataSequence::ExternalRefListener::removeFileId(sal_uInt16 nFileId)
     maFileIds.erase(nFileId);
 }
 
-const hash_set<sal_uInt16>& ScChart2DataSequence::ExternalRefListener::getAllFileIds()
+const boost::unordered_set<sal_uInt16>& ScChart2DataSequence::ExternalRefListener::getAllFileIds()
 {
     return maFileIds;
 }
@@ -3388,7 +3387,6 @@ void SAL_CALL ScChart2DataSequence::addPropertyChangeListener(
                     lang::WrappedTargetException, uno::RuntimeException)
 {
     // FIXME: real implementation
-//     throw uno::RuntimeException();
     OSL_ENSURE( false, "Not yet implemented" );
 }
 
@@ -3400,7 +3398,6 @@ void SAL_CALL ScChart2DataSequence::removePropertyChangeListener(
                     lang::WrappedTargetException, uno::RuntimeException)
 {
     // FIXME: real implementation
-//     throw uno::RuntimeException();
     OSL_ENSURE( false, "Not yet implemented" );
 }
 
@@ -3412,7 +3409,6 @@ void SAL_CALL ScChart2DataSequence::addVetoableChangeListener(
                     lang::WrappedTargetException, uno::RuntimeException)
 {
     // FIXME: real implementation
-//     throw uno::RuntimeException();
     OSL_ENSURE( false, "Not yet implemented" );
 }
 
@@ -3424,7 +3420,6 @@ void SAL_CALL ScChart2DataSequence::removeVetoableChangeListener(
                     lang::WrappedTargetException, uno::RuntimeException)
 {
     // FIXME: real implementation
-//     throw uno::RuntimeException();
     OSL_ENSURE( false, "Not yet implemented" );
 }
 
@@ -3666,7 +3661,6 @@ void SAL_CALL ScChart2EmptyDataSequence::addPropertyChangeListener(
                     lang::WrappedTargetException, uno::RuntimeException)
 {
     // FIXME: real implementation
-//     throw uno::RuntimeException();
     OSL_ENSURE( false, "Not yet implemented" );
 }
 
@@ -3678,7 +3672,6 @@ void SAL_CALL ScChart2EmptyDataSequence::removePropertyChangeListener(
                     lang::WrappedTargetException, uno::RuntimeException)
 {
     // FIXME: real implementation
-//     throw uno::RuntimeException();
     OSL_ENSURE( false, "Not yet implemented" );
 }
 
@@ -3690,7 +3683,6 @@ void SAL_CALL ScChart2EmptyDataSequence::addVetoableChangeListener(
                     lang::WrappedTargetException, uno::RuntimeException)
 {
     // FIXME: real implementation
-//     throw uno::RuntimeException();
     OSL_ENSURE( false, "Not yet implemented" );
 }
 
@@ -3702,7 +3694,6 @@ void SAL_CALL ScChart2EmptyDataSequence::removeVetoableChangeListener(
                     lang::WrappedTargetException, uno::RuntimeException)
 {
     // FIXME: real implementation
-//     throw uno::RuntimeException();
     OSL_ENSURE( false, "Not yet implemented" );
 }
 

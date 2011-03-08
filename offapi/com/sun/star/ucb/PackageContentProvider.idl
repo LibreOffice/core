@@ -77,7 +77,7 @@ published service PackageContentProvider
         abs-path       = "/" path-segments
         </li>
         <li>
-        path-segements = segment *( "/" segment )
+        path-segments = segment *( "/" segment )
         </li>
         <li>
         segment        = pchar

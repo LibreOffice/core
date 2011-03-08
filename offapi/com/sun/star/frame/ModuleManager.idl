@@ -66,7 +66,7 @@ service ModuleManager
         (which is used inside configuration as set node name too)
         and is further represented by a sequence of elements of type
         <type scope="com::sun::star::beans">PropertyValue</type>.
-        A list of properties can be getted from the configuration template
+        A list of properties can be gotten from the configuration template
         org.openoffice.Setup/Factory.
         </p>
      */

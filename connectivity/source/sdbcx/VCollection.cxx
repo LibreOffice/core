@@ -107,7 +107,6 @@ namespace
                 // during the swap. If we would not do this, the UStringMixLess instance which is used would be
                 // default constructed (instead of being constructed from the same instance in m_aNameMap), and
                 // it's case-sensitive flag would have an unpredictable value.
-                // 2002-01-09 - #106589# - fs@openoffice.org
         }
         // -----------------------------------------------------------------------------
         virtual void clear()

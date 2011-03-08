@@ -54,9 +54,6 @@ class EncryptionEngine : public cppu::ImplInheritanceHelper1
  *   FUNCTION
  *  Maintains common members and methods related with encryption.
  *
- *   HISTORY
- *  05.01.2004 -    Interface supported: XBlockerMonitor
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com

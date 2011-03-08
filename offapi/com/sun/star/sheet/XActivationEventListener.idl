@@ -58,7 +58,7 @@ published interface XActivationEventListener: com::sun::star::lang::XEventListen
             the event that gives further information on which Spreadsheet is active now.
 
         @see ActivationEvent
-        @see XSpreadsheetViewEventProvieder
+        @see XSpreadsheetViewEventProvider
 
         @since OOo 2.0.0
 

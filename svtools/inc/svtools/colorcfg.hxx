@@ -51,6 +51,7 @@ enum ColorConfigEntry
     ANCHOR              ,
     SPELL         ,
     SMARTTAGS     ,
+    SHADOWCOLOR         ,
     WRITERTEXTGRID      ,
     WRITERFIELDSHADINGS ,
     WRITERIDXSHADINGS         ,

@@ -52,7 +52,6 @@
 #include "ViewShellBase.hxx"
 #include "ToolBarManager.hxx"
 
-// #97016#
 #include <svx/sxciaitm.hxx>
 
 namespace sd {
@@ -316,7 +315,7 @@ SdrObject* FuConstructArc::CreateDefaultObject(const sal_uInt16 nID, const Recta
         }
         else
         {
-            DBG_ERROR("Object is NO circle object");
+            OSL_FAIL("Object is NO circle object");
         }
     }
 

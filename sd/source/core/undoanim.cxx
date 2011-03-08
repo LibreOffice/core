@@ -71,7 +71,7 @@ UndoAnimation::UndoAnimation( SdDrawDocument* pDoc, SdPage* pThePage )
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR("sd::UndoAnimation::UndoAnimation(), exception caught!");
+        OSL_FAIL("sd::UndoAnimation::UndoAnimation(), exception caught!");
     }
 }
 
@@ -100,7 +100,7 @@ void UndoAnimation::Undo()
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR("sd::UndoAnimation::Undo(), exception caught!");
+        OSL_FAIL("sd::UndoAnimation::Undo(), exception caught!");
     }
 }
 
@@ -116,7 +116,7 @@ void UndoAnimation::Redo()
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR("sd::UndoAnimation::Redo(), exception caught!");
+        OSL_FAIL("sd::UndoAnimation::Redo(), exception caught!");
     }
 }
 

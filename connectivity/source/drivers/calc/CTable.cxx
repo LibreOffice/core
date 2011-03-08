@@ -509,7 +509,7 @@ void OCalcTable::fillColumns()
                 aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TIMESTAMP"));
                 break;
             default:
-                OSL_ASSERT("missing type name");
+                OSL_FAIL("missing type name");
                 aTypeName = ::rtl::OUString();
         }
 

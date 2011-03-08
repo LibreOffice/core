@@ -143,9 +143,8 @@ enum SdDocumentSettingsPropertyHandles
     HANDLE_GRADIENTTABLEURL, HANDLE_BITMAPTABLEURL, HANDLE_FORBIDDENCHARS, HANDLE_APPLYUSERDATA, HANDLE_PAGENUMFMT,
     HANDLE_PRINTERNAME, HANDLE_PRINTERJOB, HANDLE_PARAGRAPHSUMMATION, HANDLE_CHARCOMPRESS, HANDLE_ASIANPUNCT, HANDLE_UPDATEFROMTEMPLATE,
     HANDLE_PRINTER_INDEPENDENT_LAYOUT
-    // --> PB 2004-08-23 #i33095#
+    // #i33095#
     ,HANDLE_LOAD_READONLY, HANDLE_SAVE_VERSION
-    // <--
     ,HANDLE_SLIDESPERHANDOUT, HANDLE_HANDOUTHORIZONTAL
 };
 
@@ -206,7 +205,7 @@ enum SdDocumentSettingsPropertyHandles
             { MAP_LEN("IsKernAsianPunctuation"),HANDLE_ASIANPUNCT,          &::getBooleanCppuType(),                0,  0 },
             { MAP_LEN("UpdateFromTemplate"),    HANDLE_UPDATEFROMTEMPLATE,  &::getBooleanCppuType(),                0,  0 },
             { MAP_LEN("PrinterIndependentLayout"),HANDLE_PRINTER_INDEPENDENT_LAYOUT,&::getCppuType((const sal_Int16*)0), 0,  0 },
-            // --> PB 2004-08-23 #i33095#
+            // --> #i33095#
             { MAP_LEN("LoadReadonly"),          HANDLE_LOAD_READONLY,       &::getBooleanCppuType(),                0,  0 },
             { MAP_LEN("SaveVersionOnClose"),    HANDLE_SAVE_VERSION,        &::getBooleanCppuType(),                0,  0 },
             // <--
@@ -831,7 +830,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
             }
             break;
 
-            // --> PB 2004-08-23 #i33095#
+            // --> #i33095#
             case HANDLE_LOAD_READONLY:
             {
                 sal_Bool bNewValue = sal_False;
@@ -1102,7 +1101,7 @@ void DocumentSettings::_getPropertyValues( const PropertyMapEntry** ppEntries, A
             }
             break;
 
-            // --> PB 2004-08-23 #i33095#
+            // --> #i33095#
             case HANDLE_LOAD_READONLY:
             {
                 *pValue <<= pDocSh->IsLoadReadonly();

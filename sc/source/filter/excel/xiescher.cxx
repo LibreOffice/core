@@ -399,7 +399,7 @@ void XclImpDrawObjBase::SetDffData( const DffObjData& rDffObjData, const String&
 
 String XclImpDrawObjBase::GetObjName() const
 {
-    /*  #118053# #i51348# Always return a non-empty name. Create English
+    /*  #i51348# Always return a non-empty name. Create English
         default names depending on the object type. This is not implemented as
         virtual functions in derived classes, as class type and object type may
         not match. */
@@ -1607,7 +1607,7 @@ void XclImpChartObj::DoReadObj8SubRec( XclImpStream& rStrm, sal_uInt16 nSubRecId
         // enable CONTINUE handling for the entire chart substream
         rStrm.ResetRecord( true );
         ReadChartSubStream( rStrm );
-        /*  #90118# disable CONTINUE handling again to be able to read
+        /*  disable CONTINUE handling again to be able to read
             following CONTINUE records as MSODRAWING records. */
         rStrm.ResetRecord( false );
     }
@@ -1843,7 +1843,7 @@ void XclImpControlHelper::ProcessControl( const XclImpDrawObjBase& rDrawObj ) co
 
     ScfPropertySet aPropSet( xCtrlModel );
 
-    // #118053# #i51348# set object name at control model
+    // #i51348# set object name at control model
     aPropSet.SetStringProperty( CREATE_OUSTRING( "Name" ), rDrawObj.GetObjName() );
 
     // control visible and printable?
@@ -2908,7 +2908,7 @@ void XclImpPictureObj::DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObje
                 OUString aNewName;
                 rEmbObjCont.InsertEmbeddedObject( xEmbObj, aNewName );
                 if( aOldName != aNewName )
-                    // #95381# SetPersistName, not SetName
+                    // SetPersistName, not SetName
                     pOleSdrObj->SetPersistName( aNewName );
             }
         }
@@ -3399,7 +3399,7 @@ SdrObject* XclImpDffConverter::ProcessObj( SvStream& rDffStrm, DffObjData& rDffO
     XclImpDrawObjRef xDrawObj = rConvData.mrDrawing.FindDrawObj( rDffObjData.rSpHd );
     const Rectangle& rAnchorRect = rDffObjData.aChildAnchor;
 
-    // #102378# Do not process the global page group shape (flag SP_FPATRIARCH)
+    // Do not process the global page group shape (flag SP_FPATRIARCH)
     bool bGlobalPageGroup = ::get_flag< sal_uInt32 >( rDffObjData.nSpFlags, SP_FPATRIARCH );
     if( !xDrawObj || !xDrawObj->IsProcessSdrObj() || bGlobalPageGroup )
         return 0;   // simply return, xSdrObj will be destroyed
@@ -3412,7 +3412,7 @@ SdrObject* XclImpDffConverter::ProcessObj( SvStream& rDffStrm, DffObjData& rDffO
     if( ppTopLevelObj && bIsTopLevel )
         *ppTopLevelObj = xDrawObj.get();
 
-    // #119010# connectors don't have to be area objects
+    // connectors don't have to be area objects
     if( dynamic_cast< SdrEdgeObj* >( xSdrObj.get() ) )
         xDrawObj->SetAreaObj( false );
 
@@ -3432,7 +3432,7 @@ SdrObject* XclImpDffConverter::ProcessObj( SvStream& rDffStrm, DffObjData& rDffO
     xDrawObj->SetDffData( rDffObjData, aObjName, aHyperlink, bVisible, bAutoMargin );
 
     /*  Connect textbox data (string, alignment, text orientation) to object.
-        #98132# don't ask for a text-ID, DFF export doesn't set one. */
+        don't ask for a text-ID, DFF export doesn't set one. */
     if( XclImpTextObj* pTextObj = dynamic_cast< XclImpTextObj* >( xDrawObj.get() ) )
         if( const XclImpObjTextData* pTextData = rConvData.mrDrawing.FindTextData( rDffObjData.rSpHd ) )
             pTextObj->SetTextData( *pTextData );

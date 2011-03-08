@@ -686,7 +686,7 @@ String ScHeaderEditEngine::CalcFieldValue( const SvxFieldItem& rField,
     }
     else
     {
-        DBG_ERROR("FieldData ist 0");
+        OSL_FAIL("FieldData ist 0");
         aRet = '?';
     }
 

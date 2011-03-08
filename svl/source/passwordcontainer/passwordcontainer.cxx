@@ -392,7 +392,7 @@ void StorageItem::update( const ::rtl::OUString& aURL, const NamePassRecord& aRe
 {
     if ( !aRecord.HasPasswords( PERSISTENT_RECORD ) )
     {
-        OSL_ASSERT( "Unexpected storing of a record!" );
+        OSL_FAIL( "Unexpected storing of a record!" );
         return;
     }
 
@@ -723,7 +723,7 @@ void PasswordContainer::PrivateAdd( const ::rtl::OUString& Url, const ::rtl::OUS
         aRecord.SetMemPasswords( aStorePass );
     else
     {
-        OSL_ASSERT( "Unexpected persistence status!" );
+        OSL_FAIL( "Unexpected persistence status!" );
         return;
     }
 

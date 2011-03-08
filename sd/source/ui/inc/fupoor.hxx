@@ -66,7 +66,6 @@ public:
 
     virtual void DoExecute( SfxRequest& rReq );
 
-    // #95491# see member
     void SetMouseButtonCode(sal_uInt16 nNew) { if(nNew != mnCode) mnCode = nNew; }
     sal_uInt16 GetMouseButtonCode() const { return mnCode; }
 
@@ -82,7 +81,7 @@ public:
     virtual BOOL MouseMove(const MouseEvent& );
     virtual BOOL MouseButtonUp(const MouseEvent& rMEvt);
 
-    // #95491# moved from inline to *.cxx
+    // moved from inline to *.cxx
     virtual BOOL MouseButtonDown(const MouseEvent& rMEvt);
 
     virtual BOOL Command(const CommandEvent& rCEvt);
@@ -98,7 +97,6 @@ public:
 
     void SetWindow(::sd::Window* pWin) { mpWindow = pWin; }
 
-    // #97016# II
     virtual void SelectionHasChanged();
 
     USHORT  GetSlotID() const { return( nSlotId ); }
@@ -109,7 +107,6 @@ public:
 
     void StartDelayToScrollTimer ();
 
-    // #97016#
     virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle);
 
     /** is called when the currenct function should be aborted. <p>
@@ -195,7 +192,7 @@ protected:
     BOOL            bDelayActive;
     BOOL            bFirstMouseMove;
 
-    // #95491# member to hold state of the mouse buttons for creation
+    // member to hold state of the mouse buttons for creation
     // of own MouseEvents (like in ScrollHdl)
 
 private:

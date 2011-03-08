@@ -1,2 +1,2 @@
-c5t cppunit : stlport NULL
+c5t cppunit : NULL
 c5t cppunit nmake - all cppunit NULL

@@ -226,12 +226,9 @@ void PCXReader::ImplReadHeader()
 void PCXReader::ImplReadBody()
 {
     BYTE    *pPlane[ 4 ], * pDest, * pSource1, * pSource2, * pSource3, *pSource4;
-    ULONG   i, nx, ny, np, nCount, nUsedLineSize, nLineSize, nPercent;
+    ULONG   i, nx, ny, np, nCount, nPercent;
     ULONG   nLastPercent = 0;
     BYTE    nDat = 0, nCol = 0;
-
-    nUsedLineSize = (ULONG)( ( ( nWidth * (ULONG)nDestBitsPerPixel ) + 7 ) >> 3 );
-    nLineSize = ( nUsedLineSize + 3 ) & 0xfffc;
 
     for( np = 0; np < nPlanes; np++ )
         pPlane[ np ] = new BYTE[ nBytesPerPlaneLin ];

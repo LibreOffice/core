@@ -49,11 +49,6 @@
 #include "wrtww8.hxx"
 #include "ww8par.hxx"
 
-//#define DUMPSYMBOLS
-#ifdef DUMPSYMBOLS
-#include <fstream>
-#endif
-
 using namespace ::com::sun::star;
 using namespace sw::types;
 using namespace sw::util;
@@ -92,8 +87,8 @@ USHORT MSWordExportBase::GetId( const SwNumRule& rNumRule )
     {
         pUsedNumTbl = new SwNumRuleTbl;
         pUsedNumTbl->Insert( &pDoc->GetNumRuleTbl(), 0 );
-        // --> OD 2005-10-17 #126238# - Check, if the outline rule is
-        // already inserted into <pUsedNumTbl>. If yes, do not insert it again.
+        // Check, if the outline rule is already inserted into <pUsedNumTbl>.
+        // If yes, do not insert it again.
         bool bOutlineRuleAdded( false );
         for ( USHORT n = pUsedNumTbl->Count(); n; )
         {
@@ -120,8 +115,7 @@ USHORT MSWordExportBase::GetId( const SwNumRule& rNumRule )
     USHORT nRet = pUsedNumTbl->GetPos(p);
 
     //Is this list now duplicated into a new list which we should use
-    // --> OD 2007-05-30 #i77812#
-    // perform 'deep' search in duplication map
+    // #i77812# - perform 'deep' search in duplication map
     ::std::map<USHORT,USHORT>::const_iterator aResult = aRuleDuplicates.end();
     do {
         aResult = aRuleDuplicates.find(nRet);
@@ -328,7 +322,7 @@ void MSWordExportBase::AbstractNumberingDefinitions()
             const SwNumFmt& rFmt = rRule.Get( nLvl );
 
             BYTE nFollow = 0;
-            // --> OD 2008-06-03 #i86652#
+            // #i86652#
             if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
                 nFollow = 2;     // ixchFollow: 0 - tab, 1 - blank, 2 - nothing
@@ -390,17 +384,15 @@ void MSWordExportBase::AbstractNumberingDefinitions()
                 if ( sw::util::IsStarSymbol( sFontName ) )
                     SubstituteBullet( sNumStr, eChrSet, sFontName );
 
-                // --> OD 2008-06-03 #i86652#
+                // #i86652#
                 if ( rFmt.GetPositionAndSpaceMode() ==
                                         SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                 {
-                    // --> OD 2007-07-23 #148661#
                     // <nFollow = 2>, if minimum label width equals 0 and
                     // minimum distance between label and text equals 0
                     nFollow = ( rFmt.GetFirstLineOffset() == 0 &&
                                 rFmt.GetCharTextDistance() == 0 )
                               ? 2 : 0;     // ixchFollow: 0 - tab, 1 - blank, 2 - nothing
-                    // <--
                 }
                 // <--
             }
@@ -409,8 +401,8 @@ void MSWordExportBase::AbstractNumberingDefinitions()
                 if (SVX_NUM_NUMBER_NONE != rFmt.GetNumberingType())
                 {
                     BYTE* pLvlPos = aNumLvlPos;
-                    // --> OD 2005-10-17 #126238# - the numbering string
-                    // has to be restrict to the level currently working on.
+                    // the numbering string has to be restrict
+                    // to the level currently working on.
                     sNumStr = rRule.MakeNumString(aNumVector, false, true, nLvl);
                     // <--
 
@@ -426,17 +418,15 @@ void MSWordExportBase::AbstractNumberingDefinitions()
                             sNumStr.SetChar( nFnd, (char)i );
                         }
                     }
-                    // --> OD 2008-06-03 #i86652#
+                    // #i86652#
                     if ( rFmt.GetPositionAndSpaceMode() ==
                                             SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                     {
-                        // --> OD 2007-07-23 #148661#
                         // <nFollow = 2>, if minimum label width equals 0 and
                         // minimum distance between label and text equals 0
                         nFollow = ( rFmt.GetFirstLineOffset() == 0 &&
                                     rFmt.GetCharTextDistance() == 0 )
                                   ? 2 : 0;     // ixchFollow: 0 - tab, 1 - blank, 2 - nothing
-                        // <--
                     }
                     // <--
                 }
@@ -478,7 +468,7 @@ void MSWordExportBase::AbstractNumberingDefinitions()
             sal_Int16 nFirstLineIndex = 0;
             sal_Int16 nListTabPos = 0;
 
-            // --> OD 2008-06-03 #i86652#
+            // #i86652#
             if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
                 nIndentAt = nListTabPos = rFmt.GetAbsLSpace();
@@ -634,7 +624,7 @@ void WW8Export::BuildAnlvBulletBase(WW8_ANLV& rAnlv, BYTE*& rpCh,
             break;
     }
 
-    // --> OD 2008-06-03 #i86652#
+    // #i86652#
     if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
     {
         if (GetWordFirstLineOffset(rFmt) < 0)
@@ -645,11 +635,9 @@ void WW8Export::BuildAnlvBulletBase(WW8_ANLV& rAnlv, BYTE*& rpCh,
 
     if (1 < rCharLen)
     {
-        // --> #b6440955#
         const Font& rFont = rFmt.GetBulletFont()
                             ? *rFmt.GetBulletFont()
                             : numfunc::GetDefBulletFont();
-        // <--
         String sNumStr = rFmt.GetBulletChar();
         rtl_TextEncoding eChrSet = rFont.GetCharSet();
         String sFontName = rFont.GetName();
@@ -693,7 +681,7 @@ void WW8Export::BuildAnlvBulletBase(WW8_ANLV& rAnlv, BYTE*& rpCh,
         ShortToSVBT16(nFontId, rAnlv.ftc);
         ByteToSVBT8( 1, rAnlv.cbTextBefore );
     }
-    // --> OD 2008-06-03 #i86652#
+    // #i86652#
     if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
     {
         ShortToSVBT16( -GetWordFirstLineOffset(rFmt), rAnlv.dxaIndent );
@@ -711,7 +699,6 @@ void MSWordExportBase::SubstituteBullet( String& rNumStr,
     rtl_TextEncoding& rChrSet, String& rFontName ) const
 {
     StarSymbolToMSMultiFont *pConvert = 0;
-    FontFamily eFamily = FAMILY_DECORATIVE;
 
     if (!bSubstituteBullets)
         return;
@@ -719,15 +706,6 @@ void MSWordExportBase::SubstituteBullet( String& rNumStr,
     if (!pConvert)
     {
         pConvert = CreateStarSymbolToMSMultiFont();
-#ifdef DUMPSYMBOLS
-        ::std::ofstream output("fontdebug");
-        for (sal_Unicode i=0xE000;i<0xF8FF;i++)
-        {
-            String sFont = pConvert->ConvertChar(i);
-            if (sFont.Len())
-                 output << ::std::hex << i << std::endl;
-        }
-#endif
     }
     sal_Unicode cChar = rNumStr.GetChar(0);
     String sFont = pConvert->ConvertChar(cChar);
@@ -748,7 +726,6 @@ void MSWordExportBase::SubstituteBullet( String& rNumStr,
         let words own font substitution kick in
         */
         rChrSet = RTL_TEXTENCODING_UNICODE;
-        eFamily = FAMILY_SWISS;
         rFontName = ::GetFontToken(rFontName, 0);
      }
      else
@@ -840,7 +817,7 @@ void WW8Export::BuildAnlvBase(WW8_ANLV& rAnlv, BYTE*& rpCh,
     }
 
     ShortToSVBT16( rFmt.GetStart(), rAnlv.iStartAt );
-    // --> OD 2008-06-03 #i86652#
+    // #i86652#
     if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
     {
         ShortToSVBT16( -GetWordFirstLineOffset(rFmt), rAnlv.dxaIndent );
@@ -902,7 +879,7 @@ bool WW8Export::Out_SwNum(const SwTxtNode* pNd)
     bool bRet = true;
 
     SwNumFmt aFmt(pRul->Get(nSwLevel));
-    // --> OD 2008-06-03 #i86652#
+    // #i86652#
     if ( aFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
     {
         const SvxLRSpaceItem& rLR = ItemGet<SvxLRSpaceItem>(*pNd, RES_LR_SPACE);

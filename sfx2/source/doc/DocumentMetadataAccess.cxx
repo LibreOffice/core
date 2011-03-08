@@ -112,20 +112,20 @@ static const char s_odfmime [] = "application/vnd.oasis.opendocument.";
 
 static bool isContentFile(::rtl::OUString const & i_rPath)
 {
-    return i_rPath.equalsAscii(s_content);
+    return i_rPath.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(s_content));
 }
 
 static bool isStylesFile (::rtl::OUString const & i_rPath)
 {
-    return i_rPath.equalsAscii(s_styles);
+    return i_rPath.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(s_styles));
 }
 
 static bool isReservedFile(::rtl::OUString const & i_rPath)
 {
     return isContentFile(i_rPath)
         || isStylesFile(i_rPath)
-        || i_rPath.equalsAscii(s_meta)
-        || i_rPath.equalsAscii(s_settings);
+        || i_rPath.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(s_meta))
+        || i_rPath.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(s_settings));
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -488,11 +488,7 @@ handleError( ucb::InteractiveAugmentedIOException const & i_rException,
         new ::comphelper::OInteractionApprove );
     ::rtl::Reference< ::comphelper::OInteractionAbort > pAbort(
         new ::comphelper::OInteractionAbort );
-    /* this does not seem to work
-    if (i_rException.Code != ucb::IOErrorCode_WRONG_FORMAT) {
-        pRequest->addContinuation( pRetry.get() );
-    }
-    */
+
     pRequest->addContinuation( pApprove.get() );
     pRequest->addContinuation( pAbort.get() );
     // actually call the handler
@@ -545,7 +541,7 @@ readStream(struct DocumentMetadataAccess_Impl & i_rImpl,
     ::rtl::OUString rest;
     try {
         if (!splitPath(i_rPath, dir, rest)) throw uno::RuntimeException();
-        if (dir.equalsAscii("")) {
+        if (dir.getLength() == 0) {
             if (i_xStorage->isStreamElement(i_rPath)) {
                 const uno::Reference<io::XStream> xStream(
                     i_xStorage->openStreamElement(i_rPath,
@@ -665,7 +661,7 @@ writeStream(struct DocumentMetadataAccess_Impl & i_rImpl,
     ::rtl::OUString rest;
     if (!splitPath(i_rPath, dir, rest)) throw uno::RuntimeException();
     try {
-        if (dir.equalsAscii("")) {
+        if (dir.getLength() == 0) {
             exportStream(i_rImpl, i_xStorage, i_xGraphName, i_rPath,
                 i_rBaseURI);
         } else {
@@ -838,7 +834,6 @@ DocumentMetadataAccess::DocumentMetadataAccess(
 DocumentMetadataAccess::~DocumentMetadataAccess()
 {
 }
-
 
 // ::com::sun::star::rdf::XRepositorySupplier:
 uno::Reference< rdf::XRepository > SAL_CALL
@@ -1307,7 +1302,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     if (md.addInputStream()) {
         md[ ::comphelper::MediaDescriptor::PROP_INPUTSTREAM() ] >>= xIn;
     }
-    if (!xIn.is() && URL.equalsAscii("")) {
+    if (!xIn.is() && (URL.getLength() == 0)) {
         throw lang::IllegalArgumentException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "DocumentMetadataAccess::loadMetadataFromMedium: "
             "inalid medium: no URL, no input stream")), *this, 0);
@@ -1363,7 +1358,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     ::comphelper::MediaDescriptor md(i_rMedium);
     ::rtl::OUString URL;
     md[ ::comphelper::MediaDescriptor::PROP_URL() ] >>= URL;
-    if (URL.equalsAscii("")) {
+    if (URL.getLength() == 0) {
         throw lang::IllegalArgumentException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "DocumentMetadataAccess::storeMetadataToMedium: "
             "invalid medium: no URL")), *this, 0);

@@ -244,7 +244,7 @@ bool XLineJointItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE /*nMembe
         eJoint = ::com::sun::star::drawing::LineJoint_ROUND;
         break;
     default:
-        DBG_ERROR( "Unknown LineJoint enum value!" );
+        OSL_FAIL( "Unknown LineJoint enum value!" );
     }
 
     rVal <<= eJoint;

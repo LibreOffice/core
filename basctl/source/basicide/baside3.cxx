@@ -29,16 +29,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basctl.hxx"
 
-//svdraw.hxx
-//#define _SVDRAW_HXX ***
 #define _SDR_NOITEMS
 #define _SDR_NOTOUCH
 #define _SDR_NOTRANSFORM
 #define _SDR_NOOBJECTS
-//#define _SDR_NOVIEWS ***
 #define _SDR_NOVIEWMARKER
 #define _SDR_NODRAGMETHODS
-//#define _SDR_NOUNDO ***
 #define _SDR_NOXOUTDEV
 
 #include <ide_pch.hxx>

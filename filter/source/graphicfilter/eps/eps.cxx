@@ -44,6 +44,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/gradient.hxx>
+#include <unotools/configmgr.hxx>
 #include <svl/solar.hrc>
 #include <svtools/fltcall.hxx>
 #include <svtools/FilterConfigItem.hxx>
@@ -53,6 +54,8 @@
 #include "dlgeps.hxx"
 
 #include <math.h>
+
+using namespace ::com::sun::star::uno;
 
 #define POSTSCRIPT_BOUNDINGSEARCH   0x1000  // we only try to get the BoundingBox
                                             // in the first 4096 bytes
@@ -368,10 +371,21 @@ BOOL PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Filter
     ChrSet*         pCS;
     StackMember*    pGS;
 
-    if ( rGraphic.GetType() == GRAPHIC_GDIMETAFILE )
+    if (rGraphic.GetType() == GRAPHIC_GDIMETAFILE)
         pMTF = &rGraphic.GetGDIMetaFile();
-    else
+    else if (rGraphic.GetGDIMetaFile().GetActionCount())
         pMTF = pAMTF = new GDIMetaFile( rGraphic.GetGDIMetaFile() );
+    else
+    {
+        Bitmap aBmp( rGraphic.GetBitmap() );
+        pAMTF = new GDIMetaFile();
+        VirtualDevice aTmpVDev;
+        pAMTF->Record( &aTmpVDev );
+        aTmpVDev.DrawBitmap( Point(), aBmp );
+        pAMTF->Stop();
+        pAMTF->SetPrefSize( aBmp.GetSizePixel() );
+        pMTF = pAMTF;
+    }
     aVDev.SetMapMode( pMTF->GetPrefMapMode() );
     nBoundingX1 = nBoundingY1 = 0;
     nBoundingX2 = pMTF->GetPrefSize().Width();
@@ -459,7 +473,18 @@ void PSWriter::ImplWriteProlog( const Graphic* pPreview )
     ImplWriteLong( aSizePoint.Width() );
     ImplWriteLong( aSizePoint.Height() ,PS_RET );
     ImplWriteLine( "%%Pages: 0" );
-    ImplWriteLine( "%%Creator: Sun Microsystems, Inc." );
+    ::rtl::OUStringBuffer aCreator;
+    aCreator.appendAscii( RTL_CONSTASCII_STRINGPARAM( "%%Creator: " ) );
+    ::utl::ConfigManager& rMgr = ::utl::ConfigManager::GetConfigManager();
+    Any aProductName = rMgr.GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
+    ::rtl::OUString sProductName;
+    aProductName >>= sProductName;
+    aCreator.append( sProductName );
+    aProductName = rMgr.GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTVERSION );
+    aProductName >>= sProductName;
+    aCreator.appendAscii( RTL_CONSTASCII_STRINGPARAM( " " ) );
+    aCreator.append( sProductName );
+    ImplWriteLine( ::rtl::OUStringToOString( aCreator.makeStringAndClear(), RTL_TEXTENCODING_UTF8 ).getStr() );
     ImplWriteLine( "%%Title: none" );
     ImplWriteLine( "%%CreationDate: none" );
 
@@ -762,7 +787,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 
             case META_TEXTRECT_ACTION:
             {
-                DBG_ERROR( "Unsupported action: TextRect...Action!" );
+                OSL_FAIL( "Unsupported action: TextRect...Action!" );
             }
             break;
 
@@ -867,7 +892,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
             case META_MASKSCALE_ACTION:
             case META_MASKSCALEPART_ACTION:
             {
-                DBG_ERROR( "Unsupported action: MetaMask...Action!" );
+                OSL_FAIL( "Unsupported action: MetaMask...Action!" );
             }
             break;
 

@@ -66,6 +66,8 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
 
+using ::rtl::OUString;
+
 
 // Constants for type offsets per Country/Language (CL)
 #define ZF_STANDARD              0
@@ -524,7 +526,7 @@ BOOL SvNumberFormatter::PutEntry(String& rString,
             sal_uInt32 nPos = CLOffset + pStdFormat->GetLastInsertKey();
             if (nPos - CLOffset >= SV_COUNTRY_LANGUAGE_OFFSET)
             {
-                DBG_ERROR("SvNumberFormatter:: Zu viele Formate pro CL");
+                OSL_FAIL("SvNumberFormatter:: Zu viele Formate pro CL");
                 delete p_Entry;
             }
             else if (!aFTable.Insert(nPos+1,p_Entry))
@@ -540,6 +542,17 @@ BOOL SvNumberFormatter::PutEntry(String& rString,
     else
         delete p_Entry;
     return bCheck;
+}
+
+bool SvNumberFormatter::PutEntry(
+    OUString& rString, xub_StrLen& nCheckPos, short& nType, sal_uInt32& nKey,
+    LanguageType eLnge)
+{
+    // Wrapper to allow rtl::OUString to be used.
+    String aStr(rString);
+    bool bRet = PutEntry(aStr, nCheckPos, nType, nKey, eLnge);
+    rString = aStr;
+    return bRet;
 }
 
 BOOL SvNumberFormatter::PutandConvertEntry(String& rString,
@@ -953,7 +966,7 @@ String SvNumberFormatter::GetKeyword( LanguageType eLnge, USHORT nIndex )
     if ( pTable && nIndex < NF_KEYWORD_ENTRIES_COUNT )
         return pTable[nIndex];
 
-    DBG_ERROR("GetKeyword: invalid index");
+    OSL_FAIL("GetKeyword: invalid index");
     return String();
 }
 
@@ -1037,7 +1050,7 @@ SvNumberFormatTable& SvNumberFormatter::GetFirstEntryTable(
         SvNumberformat* pFormat = (SvNumberformat*) aFTable.Get(FIndex);
         if (!pFormat)
         {
-//          DBG_ERROR("SvNumberFormatter:: Unbekanntes altes Zahlformat (1)");
+//          OSL_FAIL("SvNumberFormatter:: Unbekanntes altes Zahlformat (1)");
             rLnge = IniLnge;
             eType = NUMBERFORMAT_ALL;
             eTypetmp = eType;
@@ -1194,7 +1207,7 @@ BOOL SvNumberFormatter::IsNumberFormat(const String& sString,
     const SvNumberformat* pFormat = (SvNumberformat*) aFTable.Get(F_Index);
     if (!pFormat)
     {
-//      DBG_ERROR("SvNumberFormatter:: Unbekanntes altes Zahlformat (2)");
+//      OSL_FAIL("SvNumberFormatter:: Unbekanntes altes Zahlformat (2)");
         ChangeIntl(IniLnge);
         FType = NUMBERFORMAT_NUMBER;
     }
@@ -2291,6 +2304,15 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, BOOL bLoadingSO
         CLOffset + SetIndexTable( NF_NUMBER_SYSTEM, ZF_STANDARD+5 ),
         SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
 
+    // #,##0_);(#,##0)  -42 => (42)
+    nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_NUMBER_NEG_BRACKET );
+    ImpInsertFormat( aFormatSeq[nIdx],
+        CLOffset + SetIndexTable( NF_NUMBER_NEG_BRACKET, ZF_STANDARD+6 ));
+
+    // #,##0.00_);(#,##0.00)  -42.00 => (42.00)
+    nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_NUMBER_NEG_BRACKET_DEC2 );
+    ImpInsertFormat( aFormatSeq[nIdx],
+        CLOffset + SetIndexTable( NF_NUMBER_NEG_BRACKET_DEC2, ZF_STANDARD+7 ));
 
     // Percent number
     aFormatSeq = aNumberFormatCode.getAllFormatCode( i18n::KNumberFormatUsage::PERCENT_NUMBER );
@@ -2731,6 +2753,10 @@ void SvNumberFormatter::GenerateFormat(String& sString,
     utl::DigitGroupingIterator aGrouping( xLocaleData->getDigitGrouping());
     const xub_StrLen nDigitsInFirstGroup = static_cast<xub_StrLen>(aGrouping.get());
     const String& rThSep = GetNumThousandSep();
+
+    SvNumberformat* pFormat = (SvNumberformat*) aFTable.Get(nIndex);
+    BOOL insertBrackets = pFormat->IsNegativeInBracket();
+
     if (nAnzLeading == 0)
     {
         if (!bThousand)
@@ -2823,15 +2849,35 @@ void SvNumberFormatter::GenerateFormat(String& sString,
             sString += ';';
         sString += sNegStr;
     }
-    if (IsRed && eType != NUMBERFORMAT_CURRENCY)
+    if ( (IsRed || insertBrackets ) && eType != NUMBERFORMAT_CURRENCY)
     {
         String sTmpStr = sString;
+
+        if ( pFormat->HasPositiveBracketPlaceholder() )
+        {
+             sTmpStr += '_';
+             sTmpStr += ')';
+        }
         sTmpStr += ';';
-        sTmpStr += '[';
-        sTmpStr += pFormatScanner->GetRedString();
-        sTmpStr += ']';
-        sTmpStr += '-';
-        sTmpStr +=sString;
+
+        if (IsRed)
+        {
+            sTmpStr += '[';
+            sTmpStr += pFormatScanner->GetRedString();
+            sTmpStr += ']';
+        }
+
+        if (insertBrackets)
+        {
+            sTmpStr += '(';
+            sTmpStr += sString;
+            sTmpStr += ')';
+        }
+        else
+        {
+            sTmpStr += '-';
+            sTmpStr +=sString;
+        }
         sString = sTmpStr;
     }
 }
@@ -2951,7 +2997,7 @@ SvNumberFormatterIndexTable* SvNumberFormatter::MergeFormatter(SvNumberFormatter
                 nNewKey = nPos+1;
                 if (nPos - nCLOffset >= SV_COUNTRY_LANGUAGE_OFFSET)
                 {
-                    DBG_ERROR(
+                    OSL_FAIL(
                         "SvNumberFormatter:: Zu viele Formate pro CL");
                     delete pNewEntry;
                 }
@@ -3461,15 +3507,18 @@ const NfCurrencyEntry* SvNumberFormatter::GetCurrencyEntry( BOOL & bFoundBank,
 void SvNumberFormatter::GetCompatibilityCurrency( String& rSymbol, String& rAbbrev ) const
 {
     ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Currency2 >
-        xCurrencies = xLocaleData->getAllCurrencies();
+        xCurrencies( xLocaleData->getAllCurrencies() );
+
+    const ::com::sun::star::i18n::Currency2 *pCurrencies = xCurrencies.getConstArray();
     sal_Int32 nCurrencies = xCurrencies.getLength();
+
     sal_Int32 j;
     for ( j=0; j < nCurrencies; ++j )
     {
-        if ( xCurrencies[j].UsedInCompatibleFormatCodes )
+        if ( pCurrencies[j].UsedInCompatibleFormatCodes )
         {
-            rSymbol = xCurrencies[j].Symbol;
-            rAbbrev = xCurrencies[j].BankSymbol;
+            rSymbol = pCurrencies[j].Symbol;
+            rAbbrev = pCurrencies[j].BankSymbol;
             break;
         }
     }
@@ -4001,7 +4050,7 @@ void NfCurrencyEntry::CompletePositiveFormatString( String& rStr,
         }
         break;
         default:
-            DBG_ERROR("NfCurrencyEntry::CompletePositiveFormatString: unknown option");
+            OSL_FAIL("NfCurrencyEntry::CompletePositiveFormatString: unknown option");
         break;
     }
 }
@@ -4123,7 +4172,7 @@ void NfCurrencyEntry::CompleteNegativeFormatString( String& rStr,
         }
         break;
         default:
-            DBG_ERROR("NfCurrencyEntry::CompleteNegativeFormatString: unknown option");
+            OSL_FAIL("NfCurrencyEntry::CompleteNegativeFormatString: unknown option");
         break;
     }
 }
@@ -4154,7 +4203,7 @@ USHORT NfCurrencyEntry::GetEffectivePositiveFormat( USHORT
             case 3:                                         // 1 $
             break;
             default:
-                DBG_ERROR("NfCurrencyEntry::GetEffectivePositiveFormat: unknown option");
+                OSL_FAIL("NfCurrencyEntry::GetEffectivePositiveFormat: unknown option");
             break;
         }
         return nIntlFormat;
@@ -4195,7 +4244,7 @@ USHORT lcl_MergeNegativeParenthesisFormat( USHORT nIntlFormat, USHORT nCurrForma
             nSign = 2;
         break;
         default:
-            DBG_ERROR("lcl_MergeNegativeParenthesisFormat: unknown option");
+            OSL_FAIL("lcl_MergeNegativeParenthesisFormat: unknown option");
         break;
     }
 
@@ -4308,7 +4357,7 @@ USHORT NfCurrencyEntry::GetEffectiveNegativeFormat( USHORT nIntlFormat,
                 nIntlFormat = 8;                            // -1 $
             break;
             default:
-                DBG_ERROR("NfCurrencyEntry::GetEffectiveNegativeFormat: unknown option");
+                OSL_FAIL("NfCurrencyEntry::GetEffectiveNegativeFormat: unknown option");
             break;
         }
 #endif
@@ -4370,7 +4419,7 @@ USHORT NfCurrencyEntry::GetEffectiveNegativeFormat( USHORT nIntlFormat,
                     nIntlFormat, nCurrFormat );
             break;
             default:
-                DBG_ERROR("NfCurrencyEntry::GetEffectiveNegativeFormat: unknown option");
+                OSL_FAIL("NfCurrencyEntry::GetEffectiveNegativeFormat: unknown option");
             break;
         }
     }

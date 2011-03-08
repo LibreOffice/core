@@ -2899,7 +2899,6 @@ int MathType::HandleChar(xub_StrLen &rTextStart,int &rSetSize,int nLevel,
         *pS >> nChar;
 
     /*
-    ##912##
     bad character, old mathtype < 3 has these
     */
     if (nChar < 0x20)

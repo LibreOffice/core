@@ -51,12 +51,13 @@
 #define DEFAULTFONT_CONFIGNODE "VCL/DefaultFonts"
 #define SUBSTFONT_CONFIGNODE "VCL/FontSubstitutions"
 
-using namespace rtl;
 using namespace utl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
+
+using ::rtl::OUString;
 
 static DefaultFontConfiguration* mpDefaultFontConfiguration = 0;
 
@@ -94,7 +95,7 @@ static const char* getKeyType( int nKeyType )
     case DEFAULTFONT_UI_FIXED: return "UI_FIXED";
     case DEFAULTFONT_UI_SANS: return "UI_SANS";
     default:
-        DBG_ERROR( "unmatched type" );
+        OSL_FAIL( "unmatched type" );
         return "";
     }
 }
@@ -193,7 +194,7 @@ OUString DefaultFontConfiguration::tryLocale( const Locale& rLocale, const OUStr
 {
     OUString aRet;
 
-    std::hash_map< Locale, LocaleAccess, LocaleHash >::const_iterator it =
+    boost::unordered_map< Locale, LocaleAccess, LocaleHash >::const_iterator it =
         m_aConfig.find( rLocale );
     if( it != m_aConfig.end() )
     {
@@ -1093,7 +1094,7 @@ unsigned long FontSubstConfiguration::getSubstType( const com::sun::star::uno::R
 
 void FontSubstConfiguration::readLocaleSubst( const com::sun::star::lang::Locale& rLocale ) const
 {
-    std::hash_map< Locale, LocaleSubst, LocaleHash >::const_iterator it =
+    boost::unordered_map< Locale, LocaleSubst, LocaleHash >::const_iterator it =
         m_aSubst.find( rLocale );
     if( it != m_aSubst.end() )
     {
@@ -1193,7 +1194,7 @@ const FontNameAttr* FontSubstConfiguration::getSubstInfo( const String& rFontNam
 
     while( aLocale.Language.getLength() )
     {
-        std::hash_map< Locale, LocaleSubst, LocaleHash >::const_iterator lang = m_aSubst.find( aLocale );
+        boost::unordered_map< Locale, LocaleSubst, LocaleHash >::const_iterator lang = m_aSubst.find( aLocale );
         if( lang != m_aSubst.end() )
         {
             if( ! lang->second.bConfigRead )

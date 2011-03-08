@@ -57,18 +57,17 @@ using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Sequence;
 using ::rtl::OUString;
 using ::std::vector;
-using ::std::hash_map;
-using ::std::hash_set;
 
 // -----------------------------------------------------------------------
 
-ScSheetDPData::ScSheetDPData( ScDocument* pD, const ScSheetSourceDesc& rDesc , long nCacheId) :
-    ScDPTableData(pD, rDesc.GetCacheId(nCacheId) ),
+ScSheetDPData::ScSheetDPData(ScDocument* pD, const ScSheetSourceDesc& rDesc) :
+    ScDPTableData(pD),
     aQuery ( rDesc.GetQueryParam() ),
     pSpecial(NULL),
     bIgnoreEmptyRows( FALSE ),
     bRepeatIfEmpty(FALSE),
-    aCacheTable( pD, rDesc.GetCacheId(nCacheId))
+    mrDesc(rDesc),
+    aCacheTable(rDesc.CreateCache())
 {
     SCSIZE nEntryCount( aQuery.GetEntryCount());
     pSpecial = new bool[nEntryCount];
@@ -122,7 +121,7 @@ String ScSheetDPData::getDimensionName(long nColumn)
     }
     else if (nColumn >= aCacheTable.getColSize())
     {
-        DBG_ERROR("getDimensionName: invalid dimension");
+        OSL_FAIL("getDimensionName: invalid dimension");
         return String();
     }
     else
@@ -141,12 +140,12 @@ BOOL ScSheetDPData::IsDateDimension(long nDim)
     }
     else if (nDim >= nColCount)
     {
-        DBG_ERROR("IsDateDimension: invalid dimension");
+        OSL_FAIL("IsDateDimension: invalid dimension");
         return FALSE;
     }
     else
     {
-        return aCacheTable.getCache()->IsDateDimension( nDim);
+        return GetCacheTable().getCache()->IsDateDimension( nDim);
     }
 }
 
@@ -159,7 +158,7 @@ ULONG ScSheetDPData::GetNumberFormat(long nDim)
     }
     else if (nDim >= GetCacheTable().getColSize())
     {
-        DBG_ERROR("GetNumberFormat: invalid dimension");
+        OSL_FAIL("GetNumberFormat: invalid dimension");
         return 0;
     }
     else
@@ -202,18 +201,20 @@ void ScSheetDPData::CreateCacheTable()
         // already cached.
         return;
 
-    aCacheTable.fillTable( aQuery, pSpecial,
-                                bIgnoreEmptyRows, bRepeatIfEmpty );
+    if (!aCacheTable.hasCache())
+        aCacheTable.setCache(mrDesc.CreateCache());
+
+    aCacheTable.fillTable(aQuery, pSpecial, bIgnoreEmptyRows, bRepeatIfEmpty);
 }
 
-void ScSheetDPData::FilterCacheTable(const vector<ScDPCacheTable::Criterion>& rCriteria, const hash_set<sal_Int32>& rCatDims)
+void ScSheetDPData::FilterCacheTable(const vector<ScDPCacheTable::Criterion>& rCriteria, const boost::unordered_set<sal_Int32>& rCatDims)
 {
     CreateCacheTable();
     aCacheTable.filterByPageDimension(
-        rCriteria, (IsRepeatIfEmpty() ? rCatDims : hash_set<sal_Int32>()));
+        rCriteria, (IsRepeatIfEmpty() ? rCatDims : boost::unordered_set<sal_Int32>()));
 }
 
-void ScSheetDPData::GetDrillDownData(const vector<ScDPCacheTable::Criterion>& rCriteria, const hash_set<sal_Int32>& rCatDims, Sequence< Sequence<Any> >& rData)
+void ScSheetDPData::GetDrillDownData(const vector<ScDPCacheTable::Criterion>& rCriteria, const boost::unordered_set<sal_Int32>& rCatDims, Sequence< Sequence<Any> >& rData)
 {
     CreateCacheTable();
     sal_Int32 nRowSize = aCacheTable.getRowSize();
@@ -221,7 +222,7 @@ void ScSheetDPData::GetDrillDownData(const vector<ScDPCacheTable::Criterion>& rC
         return;
 
     aCacheTable.filterTable(
-        rCriteria, rData, IsRepeatIfEmpty() ? rCatDims : hash_set<sal_Int32>());
+        rCriteria, rData, IsRepeatIfEmpty() ? rCatDims : boost::unordered_set<sal_Int32>());
 }
 
 void ScSheetDPData::CalcResults(CalcInfo& rInfo, bool bAutoShow)
@@ -257,13 +258,12 @@ const ScRange& ScSheetSourceDesc::GetSourceRange() const
                 break;
 
             OUString aUpper = ScGlobal::pCharClass->upper(maRangeName);
-            USHORT n;
-            if (!pRangeName->SearchNameUpper(aUpper, n))
+            const ScRangeData* pData = pRangeName->findByUpperName(aUpper);
+            if (!pData)
                 break;
 
             // range name found.  Fow now, we only use the first token and
             // ignore the rest.
-            ScRangeData* pData = (*pRangeName)[n];
             ScRange aRange;
             if (!pData->IsReference(aRange))
                 break;
@@ -307,60 +307,26 @@ bool ScSheetSourceDesc::operator== (const ScSheetSourceDesc& rOther) const
         maQueryParam  == rOther.maQueryParam;
 }
 
-ScDPTableDataCache* ScSheetSourceDesc::CreateCache(long nID) const
+ScDPCache* ScSheetSourceDesc::CreateCache() const
 {
     if (!mpDoc)
         return NULL;
-
-    ScDPTableDataCache* pCache = GetExistDPObjectCache();
-    if ( pCache && ( nID < 0 || nID == pCache->GetId() ) )
-        return pCache;
 
     ULONG nErrId = CheckSourceRange();
     if (nErrId)
     {
-        DBG_ERROR( "Error Create Cache\n" );
+        OSL_FAIL( "Error Create Cache\n" );
         return NULL;
     }
 
-    pCache = new ScDPTableDataCache(mpDoc);
-
+    ScDPCache* pCache = new ScDPCache(mpDoc);
     pCache->InitFromDoc(mpDoc, GetSourceRange());
-    pCache->SetId( nID );
-    mpDoc->GetDPCollection()->AddDPObjectCache(pCache);
-
-    DBG_TRACE1("Create a cache id = %d \n", pCache->GetId());
-
     return pCache;
 }
 
-ScDPTableDataCache* ScSheetSourceDesc::GetExistDPObjectCache() const
+long ScSheetSourceDesc::GetCacheId() const
 {
-    return mpDoc->GetDPCollection()->GetUsedDPObjectCache( GetSourceRange() );
-}
-
-ScDPTableDataCache* ScSheetSourceDesc::GetCache(long nID) const
-{
-    if (!mpDoc)
-        return NULL;
-
-    ScDPTableDataCache* pCache = mpDoc->GetDPCollection()->GetDPObjectCache(nID);
-    if (NULL == pCache)
-        pCache = GetExistDPObjectCache();
-
-    if (NULL == pCache)
-        pCache = CreateCache();
-
-    return pCache;
-}
-
-long ScSheetSourceDesc::GetCacheId(long nID) const
-{
-    ScDPTableDataCache* pCache = GetCache(nID);
-    if ( NULL == pCache )
-        return -1;
-    else
-        return pCache->GetId();
+    return -1;
 }
 
 ULONG ScSheetSourceDesc::CheckSourceRange() const

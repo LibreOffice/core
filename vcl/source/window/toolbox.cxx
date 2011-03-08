@@ -31,7 +31,6 @@
 
 #include <svsys.h>
 #include <rtl/logfile.hxx>
-#include <tools/list.hxx>
 #include <tools/debug.hxx>
 
 #include <tools/rc.h>
@@ -141,7 +140,7 @@ struct ImplToolSizeArray
 
 // -----------------------------------------------------------------------
 
-DECLARE_LIST( ImplTBList, ToolBox* )
+typedef ::std::vector< ToolBox* > ImplTBList;
 
 class ImplTBDragMgr
 {
@@ -165,12 +164,19 @@ public:
                     ImplTBDragMgr();
                     ~ImplTBDragMgr();
 
-    void            Insert( ToolBox* pBox )
-                        { mpBoxList->Insert( pBox ); }
-    void            Remove( ToolBox* pBox )
-                        { mpBoxList->Remove( pBox ); }
-    ULONG           Count() const
-                        { return mpBoxList->Count(); }
+    void            push_back( ToolBox* pBox )
+                        { mpBoxList->push_back( pBox ); }
+    void            erase( ToolBox* pBox )
+                    {
+                        for ( ImplTBList::iterator it = mpBoxList->begin(); it < mpBoxList->end(); ++it ) {
+                            if ( *it == pBox ) {
+                                mpBoxList->erase( it );
+                                break;
+                            }
+                        }
+                    }
+    size_t          size() const
+                    { return mpBoxList->size(); }
 
     ToolBox*        FindToolBox( const Rectangle& rRect );
 
@@ -1119,7 +1125,7 @@ void ToolBox::ImplLineSizing( ToolBox* pThis, const Point& rPos, Rectangle& rRec
         mbHorz = TRUE;
     }
     else {
-        DBG_ERROR( "ImplLineSizing: Trailing else" );
+        OSL_FAIL( "ImplLineSizing: Trailing else" );
         nCurSize = 0;
         mbHorz = FALSE;
     }
@@ -1250,7 +1256,7 @@ USHORT ToolBox::ImplFindItemPos( ToolBox* pBox, const Point& rPos )
 
 ImplTBDragMgr::ImplTBDragMgr()
 {
-    mpBoxList       = new ImplTBList( 4, 4 );
+    mpBoxList       = new ImplTBList();
     mnLineMode      = 0;
     mnStartLines    = 0;
     mbCustomizeMode = FALSE;
@@ -1274,9 +1280,9 @@ ImplTBDragMgr::~ImplTBDragMgr()
 
 ToolBox* ImplTBDragMgr::FindToolBox( const Rectangle& rRect )
 {
-    ToolBox* pBox = mpBoxList->First();
-    while ( pBox )
+    for ( size_t i = 0, n = mpBoxList->size(); i < n; ++i )
     {
+        ToolBox* pBox = (*mpBoxList)[ i ];
         /*
          *  FIXME: since we can have multiple frames now we cannot
          *  find the drag target by its position alone.
@@ -1284,8 +1290,9 @@ ToolBox* ImplTBDragMgr::FindToolBox( const Rectangle& rRect )
          *  this works in one frame only anyway. If the dialogue
          *  changes to a system window, we need a new implementation here
          */
-        if ( pBox->IsReallyVisible() && pBox->ImplGetWindowImpl()->mpFrame == mpDragBox->ImplGetWindowImpl()->mpFrame )
-        {
+        if (  pBox->IsReallyVisible()
+           && pBox->ImplGetWindowImpl()->mpFrame == mpDragBox->ImplGetWindowImpl()->mpFrame
+        ) {
             if ( !pBox->ImplIsFloatingMode() )
             {
                 Point aPos = pBox->GetPosPixel();
@@ -1295,11 +1302,9 @@ ToolBox* ImplTBDragMgr::FindToolBox( const Rectangle& rRect )
                     return pBox;
             }
         }
-
-        pBox = mpBoxList->Next();
     }
 
-    return pBox;
+    return NULL;
 }
 
 // -----------------------------------------------------------------------
@@ -1498,11 +1503,8 @@ void ImplTBDragMgr::StartCustomizeMode()
 {
     mbCustomizeMode = TRUE;
 
-    ToolBox* pBox = mpBoxList->First();
-    while ( pBox )
-    {
-        pBox->ImplStartCustomizeMode();
-        pBox = mpBoxList->Next();
+    for ( size_t i = 0, n = mpBoxList->size(); i < n; ++i ) {
+        (*mpBoxList)[ i ]->ImplStartCustomizeMode();
     }
 }
 
@@ -1512,11 +1514,8 @@ void ImplTBDragMgr::EndCustomizeMode()
 {
     mbCustomizeMode = FALSE;
 
-    ToolBox* pBox = mpBoxList->First();
-    while ( pBox )
-    {
-        pBox->ImplEndCustomizeMode();
-        pBox = mpBoxList->Next();
+    for ( size_t i = 0, n = mpBoxList->size(); i < n; ++i ) {
+        (*mpBoxList)[ i ]->ImplEndCustomizeMode();
     }
 }
 
@@ -1836,9 +1835,9 @@ ToolBox::~ToolBox()
     {
         // Wenn im TBDrag-Manager, dann wieder rausnehmen
         if ( mbCustomize )
-            pSVData->maCtrlData.mpTBDragMgr->Remove( this );
+            pSVData->maCtrlData.mpTBDragMgr->erase( this );
 
-        if ( !pSVData->maCtrlData.mpTBDragMgr->Count() )
+        if ( !pSVData->maCtrlData.mpTBDragMgr->size() )
         {
             delete pSVData->maCtrlData.mpTBDragMgr;
             pSVData->maCtrlData.mpTBDragMgr = NULL;
@@ -3403,6 +3402,54 @@ void ToolBox::ImplDrawNext( BOOL bIn )
 
 // -----------------------------------------------------------------------
 
+void ToolBox::ImplDrawSeparator( USHORT nPos, Rectangle rRect )
+{
+    BOOL bNativeOk = FALSE;
+    ImplToolItem* pItem = &mpData->m_aItems[nPos];
+
+    if( IsNativeControlSupported( CTRL_TOOLBAR, PART_SEPARATOR ) )
+    {
+        ImplControlValue    aControlValue;
+        ControlState        nState = 0;
+        bNativeOk = DrawNativeControl( CTRL_TOOLBAR, PART_SEPARATOR,
+                                       rRect, nState, aControlValue, rtl::OUString() );
+    }
+
+    /* Draw the widget only if it can't be drawn natively. */
+    if( !bNativeOk )
+    {
+        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+        ImplToolItem* pTempItem = &mpData->m_aItems[nPos-1];
+
+        // no separator before or after windows or at breaks
+        if ( pTempItem && !pTempItem->mbShowWindow && nPos < mpData->m_aItems.size()-1 )
+        {
+            pTempItem = &mpData->m_aItems[nPos+1];
+            if ( !pTempItem->mbShowWindow && !pTempItem->mbBreak )
+            {
+                long nCenterPos, nSlim;
+                SetLineColor( rStyleSettings.GetSeparatorColor() );
+                if ( IsHorizontal() )
+                {
+                    nSlim = (pItem->maRect.Bottom() - pItem->maRect.Top ()) / 4;
+                    nCenterPos = pItem->maRect.Center().X();
+                    DrawLine( Point( nCenterPos, pItem->maRect.Top() + nSlim ),
+                              Point( nCenterPos, pItem->maRect.Bottom() - nSlim ) );
+                }
+                else
+                {
+                    nSlim = (pItem->maRect.Right() - pItem->maRect.Left ()) / 4;
+                    nCenterPos = pItem->maRect.Center().Y();
+                    DrawLine( Point( pItem->maRect.Left() + nSlim, nCenterPos ),
+                              Point( pItem->maRect.Right() - nSlim, nCenterPos ) );
+                }
+            }
+        }
+    }
+}
+
+// -----------------------------------------------------------------------
+
 static void ImplDrawButton( ToolBox* pThis, const Rectangle &rRect, USHORT highlight, BOOL bChecked, BOOL bEnabled, BOOL bIsWindow )
 {
     // draws toolbar button background either native or using a coloured selection
@@ -3462,6 +3509,33 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint, BOOL bLay
     if( rStyleSettings.GetFaceColor() == Color( COL_WHITE ) )
         bHighContrastWhite = TRUE;
 
+    // Compute buttons area.
+    Size    aBtnSize    = pItem->maRect.GetSize();
+    if( ImplGetSVData()->maNWFData.mbToolboxDropDownSeparate )
+    {
+        // separate button not for dropdown only where the whole button is painted
+        if ( pItem->mnBits & TIB_DROPDOWN &&
+            ((pItem->mnBits & TIB_DROPDOWNONLY) != TIB_DROPDOWNONLY) )
+        {
+            Rectangle aArrowRect = pItem->GetDropDownRect( mbHorz );
+            if( aArrowRect.Top() == pItem->maRect.Top() ) // dropdown arrow on right side
+                aBtnSize.Width() -= aArrowRect.GetWidth();
+            else // dropdown arrow on bottom side
+                aBtnSize.Height() -= aArrowRect.GetHeight();
+        }
+    }
+
+    /* Compute the button/separator rectangle here, we'll need it for
+     * both the buttons and the separators. */
+    Rectangle aButtonRect( pItem->maRect.TopLeft(), aBtnSize );
+    long    nOffX       = SMALLBUTTON_OFF_NORMAL_X;
+    long    nOffY       = SMALLBUTTON_OFF_NORMAL_Y;
+    long    nImageOffX  = 0;
+    long    nImageOffY  = 0;
+    long    nTextOffX   = 0;
+    long    nTextOffY   = 0;
+    USHORT  nStyle      = 0;
+
     // draw separators in flat style only
     if ( !bLayout &&
          (mnOutStyle & TOOLBOX_STYLE_FLAT) &&
@@ -3469,31 +3543,7 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint, BOOL bLay
          nPos > 0
          )
     {
-        // no separator before or after windows or at breaks
-        ImplToolItem* pTempItem = &mpData->m_aItems[nPos-1];
-        if ( pTempItem && !pTempItem->mbShowWindow && nPos < mpData->m_aItems.size()-1 )
-        {
-            pTempItem = &mpData->m_aItems[nPos+1];
-            if ( !pTempItem->mbShowWindow && !pTempItem->mbBreak )
-            {
-                long nCenterPos, nSlim;
-                SetLineColor( rStyleSettings.GetSeparatorColor() );
-                if ( IsHorizontal() )
-                {
-                    nSlim = (pItem->maRect.Bottom() - pItem->maRect.Top ()) / 4;
-                    nCenterPos = pItem->maRect.Center().X();
-                    DrawLine( Point( nCenterPos, pItem->maRect.Top() + nSlim ),
-                              Point( nCenterPos, pItem->maRect.Bottom() - nSlim ) );
-                }
-                else
-                {
-                    nSlim = (pItem->maRect.Right() - pItem->maRect.Left ()) / 4;
-                    nCenterPos = pItem->maRect.Center().Y();
-                    DrawLine( Point( pItem->maRect.Left() + nSlim, nCenterPos ),
-                              Point( pItem->maRect.Right() - nSlim, nCenterPos ) );
-                }
-            }
-        }
+        ImplDrawSeparator( nPos, aButtonRect );
     }
 
     // do nothing if item is no button or will be displayed as window
@@ -3556,30 +3606,6 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint, BOOL bLay
             pMgr->UpdateDragRect();
         return;
     }
-
-    // draw button
-    Size    aBtnSize    = pItem->maRect.GetSize();
-    if( ImplGetSVData()->maNWFData.mbToolboxDropDownSeparate )
-    {
-        // separate button not for dropdown only where the whole button is painted
-        if ( pItem->mnBits & TIB_DROPDOWN &&
-            ((pItem->mnBits & TIB_DROPDOWNONLY) != TIB_DROPDOWNONLY) )
-        {
-            Rectangle aArrowRect = pItem->GetDropDownRect( mbHorz );
-            if( aArrowRect.Top() == pItem->maRect.Top() ) // dropdown arrow on right side
-                aBtnSize.Width() -= aArrowRect.GetWidth();
-            else // dropdown arrow on bottom side
-                aBtnSize.Height() -= aArrowRect.GetHeight();
-        }
-    }
-    Rectangle aButtonRect( pItem->maRect.TopLeft(), aBtnSize );
-    long    nOffX       = SMALLBUTTON_OFF_NORMAL_X;
-    long    nOffY       = SMALLBUTTON_OFF_NORMAL_Y;
-    long    nImageOffX=0;
-    long    nImageOffY=0;
-    long    nTextOffX=0;
-    long    nTextOffY=0;
-    USHORT  nStyle      = 0;
 
     if ( pItem->meState == STATE_CHECK )
     {
@@ -5500,9 +5526,9 @@ void ToolBox::EnableCustomize( BOOL bEnable )
 
         ImplTBDragMgr* pMgr = ImplGetTBDragMgr();
         if ( bEnable )
-            pMgr->Insert( this );
+            pMgr->push_back( this );
         else
-            pMgr->Remove( this );
+            pMgr->erase( this );
     }
 }
 

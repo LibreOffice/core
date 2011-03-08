@@ -34,17 +34,16 @@
 #include <hintids.hxx>
 #include <format.hxx>
 
-//Der ColumnDescriptor --------------------------
-
+// ColumnDescriptor
 class SwColumn
 {
-    USHORT nWish;   //Wunschbreite incl. Raender.
-                    //Verhaelt sich proportional zum Verhaeltniss:
-                    //Wunschbreite der Umgebung / aktuelle Breite der Spalte
-    USHORT nUpper;  //Oberer Rand
-    USHORT nLower;  //Unterer Rand
-    USHORT nLeft;   //Linker Rand
-    USHORT nRight;  //Rechter Rand
+    USHORT nWish;   // Desired width, borders included.
+                    // It is inversely proportional to the ratio of
+                    // desired width environment / current width column.
+    USHORT nUpper;  // Top border.
+    USHORT nLower;  // Bottom border.
+    USHORT nLeft;   // Left border.
+    USHORT nRight;  // Right border.
 
 public:
     SwColumn();
@@ -78,24 +77,22 @@ enum SwColLineAdj
 
 class SW_DLLPUBLIC SwFmtCol : public SfxPoolItem
 {
-    ULONG   nLineWidth;     //width of the separator line
-    Color   aLineColor;     //color of the separator line
+    ULONG   nLineWidth;     // Width of the separator line.
+    Color   aLineColor;     // Color of the separator line.
 
-    BYTE     nLineHeight;   //Prozentuale Hoehe der Linien
-                            //(Relativ zu der Hoehe der Spalten incl. UL).
-    SwColLineAdj eAdj;      //Linie wird oben, mittig oder unten ausgerichtet.
+    BYTE     nLineHeight;   // Percentile height of lines.
+                            // (Based on height of columns including UL).
 
-    SwColumns   aColumns;   //Informationen fuer die einzelnen Spalten.
-    USHORT      nWidth;     //Gesamtwunschbreite aller Spalten.
+    SwColLineAdj eAdj;      // Line will be adjusted top, centered or bottom.
 
-    BOOL bOrtho;            //Nur wenn dieses Flag gesetzt ist wird beim setzen
-                            //der GutterWidth eine 'optische Verteilung'
-                            //vorgenommen.
-                            //Es muss zurueckgesetzt werden wenn an den
-                            //Spaltenbreiten bzw. den Raendern gedreht wird.
-                            //Wenn es wieder gesetzt wird wird automatisch neu
-                            //gemischt (optisch verteilt).
-                            //Das Flag ist initial gesetzt.
+    SwColumns   aColumns;   // Information concerning the columns.
+    USHORT      nWidth;     // Total desired width of all columns.
+
+    BOOL bOrtho;            // Only if this flag is set, the setting of GutterWidth will
+                            // be accompanied by a "visual rearrangement".
+                            // The flag must be reset if widths of columns or borders are changed.
+                            // When it is set (again) the visual arrangement is recalculated.
+                            // The flag is initially set.
 
     SW_DLLPRIVATE void Calc( USHORT nGutterWidth, USHORT nAct );
 
@@ -131,8 +128,8 @@ public:
     USHORT           GetWishWidth() const { return nWidth; }
     BYTE             GetLineHeight()const { return nLineHeight; }
 
-    //Return USHRT_MAX wenn uneindeutig.
-    //Return die kleinste Breite wenn bMin True ist.
+    // Return USHRT_MAX if ambiguous.
+    // Return smallest width if bMin is true.
     USHORT GetGutterWidth( BOOL bMin = FALSE ) const;
 
     void SetLineWidth(ULONG nLWidth)        { nLineWidth = nLWidth;}
@@ -141,30 +138,30 @@ public:
     void SetLineAdj( SwColLineAdj eNew ){ eAdj = eNew; }
     void SetWishWidth( USHORT nNew )    { nWidth = nNew; }
 
-    //Mit dieser Funktion koennen die Spalten (immer wieder) initialisert
-    //werden. Das Ortho Flag wird automatisch gesetzt.
+    // This function allows to (repeatedly) initialize the columns.
+    // The Ortho flag is set automatically.
     void Init( USHORT nNumCols, USHORT nGutterWidth, USHORT nAct );
 
-    //Stellt die Raender fuer die Spalten in aColumns ein.
-    //Wenn das Flag bOrtho gesetzt ist, werden die Spalten neu optisch
-    //verteilt. Ist das Flag nicht gesetzt werden die Spaltenbreiten nicht
-    //veraendert und die Raender werden einfach eingestellt.
+    // Adjusts borders for columns in aColumns.
+    // If flag bOrtho is set, columns are visually re-arranged.
+    // If the flag is not set, columns widths are not changed and
+    // borders are adjusted.
     void SetGutterWidth( USHORT nNew, USHORT nAct );
 
-    //Verteilt ebenfalls automatisch neu wenn das Flag gesetzt wird;
-    //nur dann wird auch der zweite Param. benoetigt und beachtet.
+    // This too re-arranges columns automatically if flag is set.
+    // Only in this case the second parameter is needed and evaluated.
     void SetOrtho( BOOL bNew, USHORT nGutterWidth, USHORT nAct );
 
-    //Fuer den Reader
+    //For the reader
     void _SetOrtho( BOOL bNew ) { bOrtho = bNew; }
 
-    //Berechnet die aktuelle Breite der Spalte nCol.
-    //Das Verhaeltniss von Wunschbreite der Spalte zum Returnwert ist
-    //proportional zum Verhaeltniss des Gesamtwunschwertes zu nAct.
+    // Calculates current width of column nCol.
+    // The ratio of desired width of this column to return value is
+    // proportional to ratio of total desired value to nAct.
     USHORT CalcColWidth( USHORT nCol, USHORT nAct ) const;
 
-    //Wie oben, aber es wir die Breite der PrtArea - also das was fuer
-    //den Anwender die Spalte ist - geliefert.
+    // As above except that it returns the width of PrtArea -
+    // that corresponds to what constitutes the column for the user.
     USHORT CalcPrtColWidth( USHORT nCol, USHORT nAct ) const;
 };
 

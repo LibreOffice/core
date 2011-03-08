@@ -491,7 +491,7 @@ static BOOL lcl_MayBeDBase( SvStream& rStream )
                                 }
                                 else if ( aOldName.EqualsAscii(pFilterEx97Temp) )
                                 {
-                                    // #101923# auto detection has found template -> return Excel5 template
+                                    // auto detection has found template -> return Excel5 template
                                     pFilter = aMatcher.GetFilter4FilterName( String::CreateFromAscii(pFilterEx5Temp) );
                                 }
                                 else
@@ -692,7 +692,7 @@ static BOOL lcl_MayBeDBase( SvStream& rStream )
                                 }
                                 else
                                 { //                                         Tabellenfehler
-                                    DBG_ERROR( "-ScApplication::DetectFilter(): Fehler in Mustertabelle");
+                                    OSL_FAIL( "-ScApplication::DetectFilter(): Fehler in Mustertabelle");
                                 }
 
                                 pSearch++;

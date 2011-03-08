@@ -33,10 +33,6 @@
 #include <deque>
 #include <vector>
 
-#ifndef _SVSTDARR_HXX
-#define _SVSTDARR_BOOLS
-#include <svl/svstdarr.hxx>
-#endif
 #include <editeng/svxrtf.hxx>
 #include <editeng/numitem.hxx>
 #include <editeng/boxitem.hxx>
@@ -242,7 +238,7 @@ private:
     {
         bool bHasHeader, bHasFooter;
         short nSwHLo, nHdUL, nSwFUp, nFtUL, nSwUp,  nSwLo;
-        wwULSpaceData() : bHasHeader(false), bHasFooter(false) {}
+        wwULSpaceData() : bHasHeader(false), bHasFooter(false), nSwHLo(0), nHdUL(0), nSwFUp(0), nFtUL(0), nSwUp(0),  nSwLo(0) {}
     };
 
     void SetSegmentToPageDesc(const rtfSection &rSection, bool bTitlePage,
@@ -294,7 +290,7 @@ class SwRTFParser : public SvxRTFParser
     SwRTFStyleTbl aTxtCollTbl;
     SwRTFCharStyleTbl aCharFmtTbl;
     SwFlySaveArr aFlyArr;               // Flys als Letzes im Doc setzen
-    SvBools aMergeBoxes;                // Flags fuer gemergte Zellen
+    std::vector<bool> aMergeBoxes;      // Flags fuer gemergte Zellen
     SwListArr aListArr;
     SvPtrarr aTblFmts;
     SvPtrarr aRubyCharFmts;
@@ -324,9 +320,7 @@ class SwRTFParser : public SvxRTFParser
 
     bool bSwPageDesc;
     bool bReadSwFly;        // lese Swg-Fly (wichtig fuer Bitmaps!)
-    // --> OD 2008-12-22 #i83368#
-    bool mbReadCellWhileReadSwFly;
-    // <--
+    bool mbReadCellWhileReadSwFly; // #i83368#
     bool mbReadNoTbl;       // verhinder Tabelle in Tabelle/FootNote
     bool mbIsFootnote;
     bool bFootnoteAutoNum;  // automatische Numerierung ?

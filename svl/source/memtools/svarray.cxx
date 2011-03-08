@@ -31,14 +31,11 @@
 
 #define _SVARRAY_CXX
 
-#define _SVSTDARR_BOOLS
-#define _SVSTDARR_BYTES
 #define _SVSTDARR_ULONGS
 #define _SVSTDARR_ULONGSSORT
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_LONGS
 #define _SVSTDARR_LONGSSORT
-#define _SVSTDARR_SHORTS
 #define _SVSTDARR_STRINGS
 #define _SVSTDARR_STRINGSDTOR
 #define _SVSTDARR_STRINGSSORT
@@ -77,12 +74,9 @@ USHORT SvPtrarrPlain::GetPos( const VoidPtr aElement ) const
 }
 
 
-SV_IMPL_VARARR( SvBools, BOOL )
-SV_IMPL_VARARR( SvBytes, BYTE )
 SV_IMPL_VARARR( SvULongs, ULONG )
 SV_IMPL_VARARR( SvUShorts, USHORT )
 SV_IMPL_VARARR( SvLongs, long)
-SV_IMPL_VARARR( SvShorts, short )
 
 SV_IMPL_VARARR_SORT( SvULongsSort, ULONG )
 SV_IMPL_VARARR_SORT( SvLongsSort, long )

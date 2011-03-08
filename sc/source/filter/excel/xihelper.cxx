@@ -108,11 +108,6 @@ ScAddress XclImpAddressConverter::CreateValidAddress(
 
 // cell range -----------------------------------------------------------------
 
-bool XclImpAddressConverter::CheckRange( const XclRange& rXclRange, bool bWarn )
-{
-    return CheckAddress( rXclRange.maFirst, bWarn ) && CheckAddress( rXclRange.maLast, bWarn );
-}
-
 bool XclImpAddressConverter::ConvertRange( ScRange& rScRange,
         const XclRange& rXclRange, SCTAB nScTab1, SCTAB nScTab2, bool bWarn )
 {
@@ -601,7 +596,7 @@ namespace {
 
 void lclAppendUrlChar( String& rUrl, sal_Unicode cChar )
 {
-    // #126855# encode special characters
+    // encode special characters
     switch( cChar )
     {
         case '#':   rUrl.AppendAscii( "%23" );  break;

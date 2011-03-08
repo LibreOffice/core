@@ -42,8 +42,8 @@
 #include <rtl_String_Utils.hxx>
 
 
-
-    using namespace rtl;
+using ::rtl::OUString;
+using ::rtl::OString;
 
 //------------------------------------------------------------------------
 // test classes

@@ -809,7 +809,7 @@ lcl_ExportHints(
                 case RES_TXTATR_CHARFMT:
                 break; // these are handled as properties of a "Text" portion
                 default:
-                    DBG_ERROR("unknown attribute");
+                    OSL_FAIL("unknown attribute");
                 break;
             }
         }
@@ -1080,7 +1080,7 @@ lcl_CreatePortions(
         SwTxtNode * const pTxtNode = pUnoCrsr->GetNode()->GetTxtNode();
         if (!pTxtNode)
         {
-            DBG_ERROR("lcl_CreatePortions: no TextNode - what now ?");
+            OSL_FAIL("lcl_CreatePortions: no TextNode - what now ?");
             return;
         }
 

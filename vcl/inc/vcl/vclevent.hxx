@@ -260,7 +260,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > mxAccessible;
 };
 
-class VCL_DLLPUBLIC VclEventListeners : public std::list<Link>
+class VCL_DLLPUBLIC VclEventListeners
 {
 public:
     void Call( VclSimpleEvent* pEvent ) const;
@@ -269,6 +269,10 @@ public:
     // and returns TRUE in that case
     // a handler must return TRUE to signal that it has processed the event
     BOOL Process( VclSimpleEvent* pEvent ) const;
+    void addListener( const Link& rListener );
+    void removeListener( const Link& rListener );
+private:
+    std::list<Link> m_aListeners;
 };
 
 class VCL_DLLPUBLIC VclEventListeners2 : public vcl::DeletionNotifier

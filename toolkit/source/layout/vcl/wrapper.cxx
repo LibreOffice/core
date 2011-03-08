@@ -157,7 +157,7 @@ PeerHandle Context::GetPeerHandle( const char *id, sal_uInt32 nId ) const
     if ( nId != 0 )
     {
         rtl::OString aStr = rtl::OString::valueOf( (sal_Int32) nId );
-        xHandle = GetPeerHandle( aStr, 0 );
+        xHandle = GetPeerHandle( aStr.getStr(), 0 );
     }
     return xHandle;
 }

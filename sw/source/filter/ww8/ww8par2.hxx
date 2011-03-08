@@ -108,7 +108,6 @@ struct WW8SwFlyPara
     bool bAutoWidth;
     bool bToggelPos;
 
-    // --> OD 2007-07-03 #148498#
     // add parameter <nWWPgTop> - WW8's page top margin
     WW8SwFlyPara( SwPaM& rPaM,
                   SwWW8ImplReader& rIo,

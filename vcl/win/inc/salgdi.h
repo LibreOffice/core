@@ -34,9 +34,10 @@
 #include <vcl/salgdi.hxx>
 #include <vcl/outfont.hxx>
 #include <vcl/impfont.hxx>
+#include <vcl/fontcapabilities.hxx>
 
 #include "boost/scoped_ptr.hpp"
-#include <hash_set>
+#include <boost/unordered_set.hpp>
 
 class ImplFontSelectData;
 class ImplWinFontEntry;
@@ -84,6 +85,7 @@ public:
 #endif
 
     ImplFontCharMap*        GetImplFontCharMap() const;
+    bool GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const;
     const Ucs2SIntMap* GetEncodingVector() const { return mpEncodingVector; }
     void SetEncodingVector( const Ucs2SIntMap* pNewVec ) const
     {
@@ -102,8 +104,10 @@ private:
     mutable bool                    mbHasGraphiteSupport;
 #endif
     mutable bool                    mbHasArabicSupport;
+    mutable bool                    mbFontCapabilitiesRead;
     mutable ImplFontCharMap*        mpUnicodeMap;
     mutable const Ucs2SIntMap*      mpEncodingVector;
+    mutable vcl::FontCapabilities   maFontCapabilities;
 
     // TODO: get rid of the members below needed to work with the Win9x non-unicode API
     BYTE*                   mpFontCharSets;     // all Charsets for the current font (used on W98 for kerning)
@@ -114,12 +118,13 @@ private:
     bool                    mbAliasSymbolsLow;
 private:
     void                    ReadCmapTable( HDC ) const;
+    void                    GetFontCapabilities( HDC hDC ) const;
     void                    ReadOs2Table( HDC ) const;
 
 #ifdef GNG_VERT_HACK
     void                    ReadGsubTable( HDC ) const;
 
-    typedef std::hash_set<sal_UCS4> UcsHashSet;
+    typedef boost::unordered_set<sal_UCS4> UcsHashSet;
     mutable UcsHashSet      maGsubTable;
     mutable bool            mbGsubRead;
 public:
@@ -289,6 +294,8 @@ public:
     virtual ULONG           GetKernPairs( ULONG nPairs, ImplKernPairData* pKernPairs );
     // get the repertoire of the current font
     virtual ImplFontCharMap* GetImplFontCharMap() const;
+    // get the layout capabilities of the current font
+    virtual bool GetImplFontCapabilities(vcl::FontCapabilities &rGetFontCapabilities) const;
     // graphics must fill supplied font list
     virtual void            GetDevFontList( ImplDevFontList* );
     // graphics should call ImplAddDevFontSubstitute on supplied

@@ -57,11 +57,6 @@
  * @file
  * Container for content.It will destroy all children when destroy.
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2005-01-27 create this file.
- * 2005-04-20 change add to virtual.
- ************************************************************************/
 #ifndef     _XFCONTENTCONTAINER_HXX
 #define     _XFCONTENTCONTAINER_HXX
 

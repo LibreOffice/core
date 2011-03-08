@@ -31,6 +31,7 @@
 
 #include "curledit.hxx"
 #include <vcl/svapp.hxx>
+#include <osl/diagnose.h>
 
 //.........................................................................
 namespace dbaui
@@ -63,7 +64,7 @@ OConnectionURLEdit::~OConnectionURLEdit()
 //-------------------------------------------------------------------------
 void OConnectionURLEdit::SetTextNoPrefix(const String& _rText)
 {
-    DBG_ASSERT(GetSubEdit(), "OConnectionURLEdit::SetTextNoPrefix: have no current type, not changing the text!");
+    OSL_ENSURE(GetSubEdit(), "OConnectionURLEdit::SetTextNoPrefix: have no current type, not changing the text!");
     if (GetSubEdit())
         GetSubEdit()->SetText(_rText);
 }

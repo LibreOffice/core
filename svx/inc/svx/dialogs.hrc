@@ -933,7 +933,6 @@
 // a dialog and a string, both with the same id)
 // I suggest sticking to per-type ids instead of per-semantic ids, this is
 // better maintainable (IMO), and does not waste that much ids
-// fs@openoffice.org
 
 // ----------------------------------------------------------------------------
 // "Window" resource ids

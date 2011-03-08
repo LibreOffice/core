@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 // include ---------------------------------------------------------------
 
 #include <tools/shl.hxx>
@@ -558,7 +555,6 @@ void SvxSlantTabPage::Construct()
 BOOL SvxSlantTabPage::FillItemSet(SfxItemSet& rAttrs)
 {
     BOOL  bModified = FALSE;
-    INT32 nValue = 0L;
     String aStr = aMtrRadius.GetText();
 
     if( aStr != aMtrRadius.GetSavedValue() )
@@ -575,7 +571,7 @@ BOOL SvxSlantTabPage::FillItemSet(SfxItemSet& rAttrs)
 
     if( aStr != aMtrAngle.GetSavedValue() )
     {
-        nValue = static_cast<INT32>(aMtrAngle.GetValue());
+        INT32 nValue = static_cast<INT32>(aMtrAngle.GetValue());
         rAttrs.Put( SfxInt32Item( SID_ATTR_TRANSFORM_SHEAR, nValue ) );
         bModified = TRUE;
     }

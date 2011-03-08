@@ -283,7 +283,6 @@ BOOL SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
 
 BOOL SwEditShell::GetSelectedText( String &rBuf, int nHndlParaBrk )
 {
-    BOOL bRet = FALSE;
     GetCrsr();  // ggfs. alle Cursor erzeugen lassen
     if( IsSelOnePara() )
     {
@@ -305,7 +304,6 @@ BOOL SwEditShell::GetSelectedText( String &rBuf, int nHndlParaBrk )
                             RTL_CONSTASCII_STRINGPARAM( "\015\012" ));
 #endif
         }
-        bRet = TRUE;
     }
     else if( IsSelection() )
     {

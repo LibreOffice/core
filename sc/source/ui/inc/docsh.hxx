@@ -43,8 +43,10 @@
 #include "refreshtimer.hxx"
 #include "optutil.hxx"
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <cppuhelper/implbase1.hxx>
+
+#include <sot/sotref.hxx>
 
 class ScEditEngineDefaulter;
 class FontList;
@@ -77,7 +79,7 @@ struct ScColWidthParam;
 namespace sfx2 { class FileDialogHelper; }
 struct DocShell_Impl;
 
-typedef ::std::hash_map< ULONG, ULONG > ScChangeActionMergeMap;
+typedef ::boost::unordered_map< ULONG, ULONG > ScChangeActionMergeMap;
 
 //==================================================================
 

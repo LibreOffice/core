@@ -28,6 +28,9 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_toolkit.hxx"
+
+#include <boost/ptr_container/ptr_vector.hpp>
+
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #include <tools/svwin.h>
@@ -53,9 +56,8 @@
 #include <rtl/process.h>
 
 #ifdef WNT
-#include <tools/prewin.h>
-#include <windows.h>
-#include <tools/postwin.h>
+#include <prewin.h>
+#include <postwin.h>
 #elif (defined QUARTZ)
 #include "premac.h"
 #include <Cocoa/Cocoa.h>
@@ -75,7 +77,6 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/helper/unowrapper.hxx>
 #include <toolkit/helper/servicenames.hxx>
-
 
 #include <toolkit/helper/macros.hxx>
 #include <toolkit/helper/convert.hxx>

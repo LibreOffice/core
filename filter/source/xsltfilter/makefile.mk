@@ -26,16 +26,23 @@
 #*************************************************************************
 PRJ	= ..$/..
 PRJNAME = filter
-#PACKAGE = com$/sun$/star$/documentconversion$/XSLTFilter
 TARGET  =XSLTFilter
 ENABLE_EXCEPTIONS=TRUE
 LIBTARGET=NO
 
 # --- Settings -----------------------------------------------------
 CLASSDIR!:=$(CLASSDIR)$/$(TARGET)
+
 .INCLUDE: settings.mk
 
-SLOFILES=$(SLO)$/XSLTFilter.obj $(SLO)$/fla.obj
+.IF "$(SYSTEM_LIBXSLT)" == "YES"
+CFLAGS+= $(LIBXSLT_CFLAGS)
+.ELSE
+LIBXSLTINCDIR=external$/libxslt
+CFLAGS+= -I$(SOLARINCDIR)$/$(LIBXSLTINCDIR)
+.ENDIF
+
+SLOFILES=$(SLO)$/XSLTFilter.obj $(SLO)$/LibXSLTTransformer.obj $(SLO)$/fla.obj
 LIBNAME=xsltfilter
 SHL1TARGETDEPN=makefile.mk
 SHL1OBJS=$(SLOFILES)
@@ -50,12 +57,12 @@ SHL1STDLIBS= \
     $(CPPUHELPERLIB)    \
     $(CPPULIB)          \
     $(XMLOFFLIB) \
-    $(SALLIB)
+    $(SALLIB) \
+    $(LIBXML2LIB) \
+    $(XSLTLIB)
 
 .IF "$(SOLAR_JAVA)"!=""
 
-#USE_UDK_EXTENDED_MANIFESTFILE=TRUE
-#USE_EXTENDED_MANIFESTFILE=TRUE
 JARFILES 		= ridl.jar unoil.jar jurt.jar juh.jar
 
 JAVAFILES		= $(subst,$(CLASSDIR)$/, $(subst,.class,.java $(JAVACLASSFILES)))

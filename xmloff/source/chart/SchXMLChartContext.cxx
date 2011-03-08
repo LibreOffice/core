@@ -111,13 +111,13 @@ uno::Reference< chart2::XChartTypeTemplate > lcl_getTemplate( const uno::Referen
             }
             catch( uno::Exception & )
             {
-                DBG_ERROR( "Exception during determination of chart type template" );
+                OSL_FAIL( "Exception during determination of chart type template" );
             }
         }
     }
     catch( uno::Exception & )
     {
-        DBG_ERROR( "Exception during import lcl_getTemplate" );
+        OSL_FAIL( "Exception during import lcl_getTemplate" );
     }
     return xResult;
 }
@@ -280,11 +280,9 @@ uno::Sequence< sal_Int32 > lcl_getNumberSequenceFromString( const ::rtl::OUStrin
 
 static SvXMLEnumMapEntry aXMLLegendAlignmentMap[] =
 {
-//  { XML_LEFT,         chart::ChartLegendPosition_LEFT     },
     // #i35421#
     { XML_START,        chart::ChartLegendPosition_LEFT     },
     { XML_TOP,          chart::ChartLegendPosition_TOP      },
-//  { XML_RIGHT,        chart::ChartLegendPosition_RIGHT    },
     // #i35421#
     { XML_END,          chart::ChartLegendPosition_RIGHT    },
     { XML_BOTTOM,       chart::ChartLegendPosition_BOTTOM   },
@@ -401,7 +399,7 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
 
     if( aOldChartTypeName.getLength()<= 0 )
     {
-        DBG_ERROR( "need a charttype to create a diagram" );
+        OSL_FAIL( "need a charttype to create a diagram" );
         //set a fallback value:
         ::rtl::OUString aChartClass_Bar( GetXMLToken(XML_BAR ) );
         aOldChartTypeName = SchXMLTools::GetChartTypeByClassName( aChartClass_Bar, true /* bUseOldNames */ );
@@ -429,7 +427,7 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
             }
             catch( uno::Exception & )
             {
-                DBG_ERROR( "Exception during import SchXMLChartContext::StartElement" );
+                OSL_FAIL( "Exception during import SchXMLChartContext::StartElement" );
             }
         }
     }
@@ -547,23 +545,6 @@ void lcl_swapPointAndSeriesStylesForDonutCharts( ::std::list< DataRowPointStyle 
         }
         nOldSeriesCount = nMaxOldSeriesIndex+1;
     }
-    /*
-    sal_Int32 nOldSeriesCount = 0;
-    {
-        sal_Int32 nMaxOldSeriesIndex = 0;
-        sal_Int32 nOldSeriesIndex = 0;
-        for( aIt = rStyleList.begin(); aIt != aEnd; ++aIt )
-        {
-            DataRowPointStyle aStyle(*aIt);
-            if(aStyle.meType == DataRowPointStyle::DATA_SERIES )
-            {
-                nMaxOldSeriesIndex = nOldSeriesIndex;
-                nOldSeriesIndex++;
-            }
-        }
-        nOldSeriesCount = nMaxOldSeriesIndex+1;
-    }
-    */
 
 
     //initialize new series styles
@@ -785,7 +766,7 @@ void SchXMLChartContext::EndElement()
                 }
                 catch( beans::UnknownPropertyException )
                 {
-                    DBG_ERROR( "Property String for Title not available" );
+                    OSL_FAIL( "Property String for Title not available" );
                 }
             }
         }
@@ -802,7 +783,7 @@ void SchXMLChartContext::EndElement()
                 }
                 catch( beans::UnknownPropertyException )
                 {
-                    DBG_ERROR( "Property String for Title not available" );
+                    OSL_FAIL( "Property String for Title not available" );
                 }
             }
         }
@@ -905,7 +886,7 @@ void SchXMLChartContext::EndElement()
             catch( uno::Exception & )
             {
                 //try to fallback to internal data
-                DBG_ERROR( "Exception during import SchXMLChartContext::lcl_ApplyDataFromRectangularRangeToDiagram try to fallback to internal data" );
+                OSL_FAIL( "Exception during import SchXMLChartContext::lcl_ApplyDataFromRectangularRangeToDiagram try to fallback to internal data" );
                 if(!bHasOwnData)
                 {
                     bHasOwnData = true;
@@ -920,7 +901,7 @@ void SchXMLChartContext::EndElement()
                         }
                         catch( uno::Exception & )
                         {
-                            DBG_ERROR( "Exception during import SchXMLChartContext::lcl_ApplyDataFromRectangularRangeToDiagram fallback to internal data failed also" );
+                            OSL_FAIL( "Exception during import SchXMLChartContext::lcl_ApplyDataFromRectangularRangeToDiagram fallback to internal data failed also" );
                         }
                     }
                 }
@@ -929,7 +910,7 @@ void SchXMLChartContext::EndElement()
     }
     else
     {
-        DBG_ERROR( " Must not get here" );
+        OSL_FAIL( " Must not get here" );
     }
 
     // now all series and data point properties are available and can be set
@@ -1072,7 +1053,7 @@ void SchXMLChartContext::MergeSeriesForStockChart()
     }
     catch( uno::Exception & )
     {
-        DBG_ERROR( "Exception while merging series for stock chart" );
+        OSL_FAIL( "Exception while merging series for stock chart" );
     }
 }
 
@@ -1345,7 +1326,7 @@ void SchXMLLegendContext::StartElement( const uno::Reference< xml::sax::XAttribu
         }
         catch( beans::UnknownPropertyException )
         {
-            DBG_ERROR( "Property HasLegend not found" );
+            OSL_FAIL( "Property HasLegend not found" );
         }
     }
 
@@ -1386,7 +1367,7 @@ void SchXMLLegendContext::StartElement( const uno::Reference< xml::sax::XAttribu
                         }
                         catch( beans::UnknownPropertyException )
                         {
-                            DBG_ERROR( "Property Alignment (legend) not found" );
+                            OSL_FAIL( "Property Alignment (legend) not found" );
                         }
                     }
                 }

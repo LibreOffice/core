@@ -606,14 +606,14 @@ void ScGlobal::InitTextHeight(SfxItemPool* pPool)
 {
     if (!pPool)
     {
-        DBG_ERROR("kein Pool bei ScGlobal::InitTextHeight");
+        OSL_FAIL("kein Pool bei ScGlobal::InitTextHeight");
         return;
     }
 
     const ScPatternAttr* pPattern = (const ScPatternAttr*)&pPool->GetDefaultItem(ATTR_PATTERN);
     if (!pPattern)
     {
-        DBG_ERROR("kein Default-Pattern bei ScGlobal::InitTextHeight");
+        OSL_FAIL("kein Default-Pattern bei ScGlobal::InitTextHeight");
         return;
     }
 
@@ -940,7 +940,7 @@ void ScGlobal::OpenURL( const String& rURL, const String& rTarget )
     SfxBoolItem aNewView( SID_OPEN_NEW_VIEW, FALSE );
     SfxBoolItem aBrowsing( SID_BROWSE, TRUE );
 
-    //  kein SID_SILENT mehr wegen Bug #42525# (war angeblich sowieso falsch)
+    //  kein SID_SILENT mehr
 
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
     if (pViewFrm)

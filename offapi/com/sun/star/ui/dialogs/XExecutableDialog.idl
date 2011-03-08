@@ -51,7 +51,7 @@ published interface XExecutableDialog: com::sun::star::uno::XInterface
     /** Sets the title of the dialog.
 
         @param aTitle
-        Set an abitrary title for the dialog,
+        Set an arbitrary title for the dialog,
         may be an empty string if the dialog should not
         have a title.
     */

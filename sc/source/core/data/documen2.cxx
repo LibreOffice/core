@@ -49,7 +49,6 @@
 #include <comphelper/processfactory.hxx>
 #include <svl/PasswordHelper.hxx>
 #include <tools/tenccvt.hxx>
-#include <tools/list.hxx>
 #include <rtl/crc.h>
 #include <basic/basmgr.hxx>
 
@@ -251,7 +250,7 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
     for (SCTAB i=1; i<=MAXTAB; i++)
         pTab[i] = NULL;
 
-    pRangeName = new ScRangeName( 4, 4, FALSE, this );
+    pRangeName = new ScRangeName(this);
     pDBCollection = new ScDBCollection( 4, 4, FALSE, this );
     pSelectionAttr = NULL;
     pChartCollection = new ScChartCollection;
@@ -576,7 +575,7 @@ void ScDocument::ResetClip( ScDocument* pSourceDoc, const ScMarkData* pMarks )
     }
     else
     {
-        DBG_ERROR("ResetClip");
+        OSL_FAIL("ResetClip");
     }
 }
 
@@ -594,7 +593,7 @@ void ScDocument::ResetClip( ScDocument* pSourceDoc, SCTAB nTab )
     }
     else
     {
-        DBG_ERROR("ResetClip");
+        OSL_FAIL("ResetClip");
     }
 }
 
@@ -779,7 +778,7 @@ BOOL ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos )
                 for (i = 0; i <= MAXTAB; i++)
                     if (pTab[i])
                         pTab[i]->StartAllListeners();
-                // #81844# sheet names of references may not be valid until sheet is moved
+                // sheet names of references may not be valid until sheet is moved
                 pChartListenerCollection->UpdateScheduledSeriesRanges();
                 SetDirty();
                 SetAutoCalc( bOldAutoCalc );
@@ -868,7 +867,7 @@ BOOL ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
                     pCondFormList->UpdateReference( URM_INSDEL, aRange, 0,0,1 );
                 if ( pValidationList )
                     pValidationList->UpdateReference( URM_INSDEL, aRange, 0,0,1 );
-                // #81844# sheet names of references may not be valid until sheet is copied
+                // sheet names of references may not be valid until sheet is copied
                 pChartListenerCollection->UpdateScheduledSeriesRanges();
             }
             else
@@ -891,7 +890,7 @@ BOOL ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
         pTab[nOldPos]->UpdateInsertTab(nNewPos);
 
         pTab[nOldPos]->UpdateCompile();
-        pTab[nNewPos]->UpdateCompile( TRUE );   // #67996# maybe already compiled in Clone, but used names need recompilation
+        pTab[nNewPos]->UpdateCompile( TRUE );   //  maybe already compiled in Clone, but used names need recompilation
         SetNoListening( FALSE );
         pTab[nOldPos]->StartAllListeners();
         pTab[nNewPos]->StartAllListeners();
@@ -964,9 +963,12 @@ ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
         if ( !bResultsOnly )
         {
             BOOL bNamesLost = FALSE;
-            USHORT nSrcRangeNames = pSrcDoc->pRangeName->GetCount();
-            // array containing range names which might need update of indices
-            ScRangeData** pSrcRangeNames = nSrcRangeNames ? new ScRangeData* [nSrcRangeNames] : NULL;
+            // array containing range names which might need update of indices.
+            // The instances inserted into this vector are managed by the
+            // range name container of this document, so no need to delete
+            // them afterward.
+            ::std::vector<ScRangeData*> aSrcRangeNames;
+
             // the index mapping thereof
             ScRangeData::IndexMap aSrcRangeMap;
             BOOL bRangeNameReplace = FALSE;
@@ -975,24 +977,23 @@ ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
             std::set<USHORT> aUsedNames;
             pSrcDoc->pTab[nSrcPos]->FindRangeNamesInUse( 0, 0, MAXCOL, MAXROW, aUsedNames );
 
-            for (USHORT i = 0; i < nSrcRangeNames; i++)     //! DB-Bereiche Pivot-Bereiche auch !!!
+            ScRangeName::const_iterator itr = pSrcDoc->pRangeName->begin(), itrEnd = pSrcDoc->pRangeName->end();
+            for (; itr != itrEnd; ++itr)        //! DB-Bereiche Pivot-Bereiche auch !!!
             {
-                ScRangeData* pSrcData = (*pSrcDoc->pRangeName)[i];
-                USHORT nOldIndex = pSrcData->GetIndex();
+                USHORT nOldIndex = itr->GetIndex();
                 bool bInUse = ( aUsedNames.find(nOldIndex) != aUsedNames.end() );
                 if (bInUse)
                 {
-                    USHORT nExisting = 0;
-                    if ( pRangeName->SearchName( pSrcData->GetName(), nExisting ) )
+                    const ScRangeData* pExistingData = pRangeName->findByName(itr->GetName());
+                    if (pExistingData)
                     {
                         // the name exists already in the destination document
                         // -> use the existing name, but show a warning
                         // (when refreshing links, the existing name is used and the warning not shown)
 
-                        ScRangeData* pExistingData = (*pRangeName)[nExisting];
                         USHORT nExistingIndex = pExistingData->GetIndex();
 
-                        pSrcRangeNames[i] = NULL;       // don't modify the named range
+                        // don't modify the named range
                         aSrcRangeMap.insert(
                             ScRangeData::IndexMap::value_type(nOldIndex, nExistingIndex));
                         bRangeNameReplace = TRUE;
@@ -1000,19 +1001,19 @@ ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
                     }
                     else
                     {
-                        ScRangeData* pData = new ScRangeData( *pSrcData );
+                        ScRangeData* pData = new ScRangeData( *itr );
                         pData->SetDocument(this);
-                        if ( pRangeName->FindIndex( pData->GetIndex() ) )
+                        if ( pRangeName->findByIndex( pData->GetIndex() ) )
                             pData->SetIndex(0);     // need new index, done in Insert
-                        if (!pRangeName->Insert(pData))
+                        if (!pRangeName->insert(pData))
                         {
-                            DBG_ERROR("can't insert name");     // shouldn't happen
+                            OSL_FAIL("can't insert name");     // shouldn't happen
                             delete pData;
                         }
                         else
                         {
                             pData->TransferTabRef( nSrcPos, nDestPos );
-                            pSrcRangeNames[i] = pData;
+                            aSrcRangeNames.push_back(pData);
                             USHORT nNewIndex = pData->GetIndex();
                             aSrcRangeMap.insert(
                                 ScRangeData::IndexMap::value_type(nOldIndex, nNewIndex));
@@ -1021,25 +1022,17 @@ ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
                         }
                     }
                 }
-                else
-                {
-                    pSrcRangeNames[i] = NULL;
-                }
             }
             if ( bRangeNameReplace )
             {
                 // first update all inserted named formulas if they contain other
                 // range names and used indices changed
-                for (USHORT i = 0; i < nSrcRangeNames; i++)     //! DB-Bereiche Pivot-Bereiche auch
-                {
-                    if ( pSrcRangeNames[i] )
-                        pSrcRangeNames[i]->ReplaceRangeNamesInUse( aSrcRangeMap );
-                }
+                for (size_t i = 0, n = aSrcRangeNames.size(); i < n; ++i)       //! DB-Bereiche Pivot-Bereiche auch
+                    aSrcRangeNames[i]->ReplaceRangeNamesInUse( aSrcRangeMap );
+
                 // then update the formulas, they might need the just updated range names
                 pTab[nDestPos]->ReplaceRangeNamesInUse( 0, 0, MAXCOL, MAXROW, aSrcRangeMap );
             }
-            if ( pSrcRangeNames )
-                delete [] pSrcRangeNames;
 
             SCsTAB nDz = ((SCsTAB)nDestPos) - (SCsTAB)nSrcPos;
             pTab[nDestPos]->UpdateReference(URM_COPY, 0, 0, nDestPos,
@@ -1129,32 +1122,46 @@ void ScDocument::SetError( SCCOL nCol, SCROW nRow, SCTAB nTab, const USHORT nErr
             pTab[nTab]->SetError( nCol, nRow, nError );
 }
 
-void ScDocument::EraseNonUsedSharedNames(USHORT nLevel)
+namespace {
+
+bool eraseUnusedSharedName(ScRangeName* pRangeName, ScTable* pTab[], USHORT nLevel)
 {
-    for (USHORT i = 0; i < pRangeName->GetCount(); i++)
+    ScRangeName::iterator itr = pRangeName->begin(), itrEnd = pRangeName->end();
+    for (; itr != itrEnd; ++itr)
     {
-        ScRangeData* pRangeData = (*pRangeName)[i];
-        if (pRangeData && pRangeData->HasType(RT_SHARED))
+        if (!itr->HasType(RT_SHARED))
+            continue;
+
+        String aName;
+        itr->GetName(aName);
+        aName.Erase(0, 6);                      // !!! vgl. Table4, FillFormula !!
+        USHORT nInd = static_cast<USHORT>(aName.ToInt32());
+        if (nInd > nLevel)
+            continue;
+
+        USHORT nIndex = itr->GetIndex();
+
+        bool bInUse = false;
+        for (SCTAB j = 0; !bInUse && (j <= MAXTAB); ++j)
         {
-            String aName;
-            pRangeData->GetName(aName);
-            aName.Erase(0, 6);                      // !!! vgl. Table4, FillFormula !!
-            USHORT nInd = (USHORT) aName.ToInt32();
-            if (nInd <= nLevel)
-            {
-                USHORT nIndex = pRangeData->GetIndex();
-                BOOL bInUse = FALSE;
-                for (SCTAB j = 0; !bInUse && (j <= MAXTAB); j++)
-                {
-                    if (pTab[j])
-                        bInUse = pTab[j]->IsRangeNameInUse(0, 0, MAXCOL-1, MAXROW-1,
-                                                           nIndex);
-                }
-                if (!bInUse)
-                    pRangeName->AtFree(i);
-            }
+            if (pTab[j])
+                bInUse = pTab[j]->IsRangeNameInUse(0, 0, MAXCOL-1, MAXROW-1, nIndex);
+        }
+        if (!bInUse)
+        {
+            pRangeName->erase(itr);
+            return true;
         }
     }
+    return false;
+}
+
+}
+
+void ScDocument::EraseNonUsedSharedNames(USHORT nLevel)
+{
+    while (eraseUnusedSharedName(pRangeName, pTab, nLevel))
+        ;
 }
 
 //  ----------------------------------------------------------------------------

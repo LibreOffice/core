@@ -44,7 +44,7 @@ using rtl::OUString;
 using namespace com::sun::star::uno;
 
 /*--------------------------------------------------------------------
-     Beschreibung: Ctor
+     Description: Ctor
  --------------------------------------------------------------------*/
 
 Sequence<OUString> SwPrintOptions::GetPropertyNames()

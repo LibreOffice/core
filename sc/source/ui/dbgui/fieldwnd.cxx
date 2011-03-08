@@ -273,7 +273,7 @@ const vector<ScDPFieldControlBase::FieldName>& ScDPFieldControlBase::GetFieldNam
 
 void ScDPFieldControlBase::Paint( const Rectangle& /* rRect */ )
 {
-    // #124828# hiding the caption is now done from StateChanged
+    // hiding the caption is now done from StateChanged
     Redraw();
 }
 
@@ -637,8 +637,10 @@ void ScDPFieldControlBase::SetSelection(size_t nIndex)
     if (rFields.empty())
         return;
 
-    if( mnFieldSelected >= rFields.size() )
-        mnFieldSelected = rFields.size() - 1;
+    if (nIndex >= rFields.size())
+        // Prevent it from going out-of-bound.
+        nIndex = rFields.size() - 1;
+
     if( mnFieldSelected != nIndex )
     {
         size_t nOldSelected = mnFieldSelected;
@@ -648,6 +650,8 @@ void ScDPFieldControlBase::SetSelection(size_t nIndex)
         if (HasFocus())
             FieldFocusChanged(nOldSelected, mnFieldSelected);
     }
+
+    ScrollToShowSelection();
 }
 
 void ScDPFieldControlBase::SetSelectionHome()

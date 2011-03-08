@@ -41,7 +41,7 @@ module com { module sun { module star { module ucb {
 published struct NumberedSortingInfo
 {
     //-------------------------------------------------------------------------
-    /** sort the resultset by this column. Index starts with <code>1</code>.
+    /** sort the result set by this column. Index starts with <code>1</code>.
     */
     long ColumnIndex;
 

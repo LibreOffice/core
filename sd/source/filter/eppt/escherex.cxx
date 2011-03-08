@@ -182,11 +182,6 @@ void PptEscherEx::OpenContainer( UINT16 n_EscherContainer, int nRecInstance )
         }
         break;
 
-        case ESCHER_SpContainer :
-        {
-        }
-        break;
-
         default:
         break;
     }

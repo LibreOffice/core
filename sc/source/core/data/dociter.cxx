@@ -947,7 +947,7 @@ ScCellIterator::ScCellIterator( ScDocument* pDocument,
 
     if (!pDoc->pTab[nTab])
     {
-        DBG_ERROR("Tabelle nicht gefunden");
+        OSL_FAIL("Tabelle nicht gefunden");
         nStartCol = nCol = MAXCOL+1;
         nStartRow = nRow = MAXROW+1;
         nStartTab = nTab = MAXTAB+1;    // -> Abbruch bei GetFirst
@@ -989,7 +989,7 @@ ScCellIterator::ScCellIterator
 
     if (!pDoc->pTab[nTab])
     {
-        DBG_ERROR("Tabelle nicht gefunden");
+        OSL_FAIL("Tabelle nicht gefunden");
         nStartCol = nCol = MAXCOL+1;
         nStartRow = nRow = MAXROW+1;
         nStartTab = nTab = MAXTAB+1;    // -> Abbruch bei GetFirst
@@ -1855,7 +1855,7 @@ const ScPatternAttr* ScHorizontalAttrIterator::GetNext( SCCOL& rCol1, SCCOL& rCo
                 }
                 else
                 {
-                    DBG_ERROR("AttrArray reicht nicht bis MAXROW");
+                    OSL_FAIL("AttrArray reicht nicht bis MAXROW");
                     pNextEnd[nPos] = MAXROW;
                     ppPatterns[nPos] = NULL;
                 }

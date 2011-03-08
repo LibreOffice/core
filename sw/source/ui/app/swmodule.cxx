@@ -44,7 +44,7 @@
 #include <svx/insctrl.hxx>
 #include <svx/selctrl.hxx>
 #include <svx/linectrl.hxx>
-#include <svx/tbxctl.hxx>            //z-Zt falscher includeschutz!
+#include <svx/tbxctl.hxx>            // at the moment wrong include-protection!
 #include <svx/fillctrl.hxx>
 #include <svx/tbcontrl.hxx>
 #include <svx/verttexttbxctrl.hxx>
@@ -58,7 +58,6 @@
 #include <svx/tbxcolor.hxx>
 #include <svx/clipboardctl.hxx>
 #include <svx/lboxctrl.hxx>
-#include <svx/hyprlink.hxx>
 #include <svx/tbxcustomshapes.hxx>
 #include <svx/imapdlg.hxx>
 #include <svx/srchdlg.hxx>
@@ -194,15 +193,15 @@ SwModule::SwModule( SfxObjectFactory* pWebFact,
 
     pModuleConfig = new SwModuleOptions;
 
-    //Die brauchen wie sowieso
+    // We need them anyways
     pToolbarConfig = new SwToolbarConfigItem( sal_False );
     pWebToolbarConfig = new SwToolbarConfigItem( sal_True );
 
     pStdFontConfig = new SwStdFontConfig;
 
-    pAuthorNames = new SvStringsDtor(5, 1);    // Alle Redlining-Autoren
+    pAuthorNames = new SvStringsDtor(5, 1);    // All Redlining-Authors
 
-    //JP 18.10.96: SvxAutocorrect gegen die SwAutocorrect austauschen
+    // replace SvxAutocorrect with SwAutocorrect
     SvxAutoCorrCfg*    pACfg = SvxAutoCorrCfg::Get();
     if( pACfg )
     {
@@ -269,8 +268,8 @@ void SwModule::CreateLngSvcEvtListener()
 
 void SwDLL::RegisterFactories()
 {
-    //Diese Id's duerfen nicht geaendert werden. Mittels der Id's wird vom
-    //Sfx die View (Dokumentansicht wiederherstellen) erzeugt.
+    // These Id's must not be changed. Through these Id's the View (resume Documentview)
+    // is created by Sfx.
     if ( SvtModuleOptions().IsWriter() )
         SwView::RegisterFactory         ( 2 );
 
@@ -390,7 +389,6 @@ void SwDLL::RegisterControls()
     SvxIMapDlgChildWindow::RegisterChildWindow( sal_False, pMod );
     SvxSearchDialogWrapper::RegisterChildWindow( sal_False, pMod );
     SvxHlinkDlgWrapper::RegisterChildWindow( sal_False, pMod );
-    SvxHyperlinkDlgWrapper::RegisterChildWindow( sal_False, pMod, SFX_CHILDWIN_FORCEDOCK );
     SvxFontWorkChildWindow::RegisterChildWindow( sal_False, pMod );
     SwFldDlgWrapper::RegisterChildWindow( sal_False, pMod );
     SwFldDataOnlyDlgWrapper::RegisterChildWindow( sal_False, pMod );
@@ -435,7 +433,7 @@ void SwDLL::RegisterControls()
 
 /*************************************************************************
 |*
-|* Modul laden (nur Attrappe fuer das Linken der DLL)
+|* Load Module (only dummy for linking of the DLL)
 |*
 \************************************************************************/
 

@@ -570,7 +570,7 @@ const ScStyleSheet* ScColumn::GetSelectionStyle( const ScMarkData& rMark, bool& 
     rFound = false;
     if (!rMark.IsMultiMarked())
     {
-        DBG_ERROR("ScColumn::GetSelectionStyle ohne Selektion");
+        OSL_FAIL("ScColumn::GetSelectionStyle ohne Selektion");
         return NULL;
     }
 
@@ -969,9 +969,6 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
         }
     }
 
-    //  hier kein UpdateReference wegen #30529# - mitsortiert werden nur noch relative Referenzen
-//  long dy = (long)nRow2 - (long)nRow1;
-
     /*  Create clone of pCell1 at position of pCell2 (pCell1 exists always, see
         variable swapping above). Do not clone the note, but move pointer of
         old note to new cell. */
@@ -1143,14 +1140,14 @@ void ScColumn::InsertRow( SCROW nStartRow, SCSIZE nSize )
         for ( ; i < nCount; i++)
         {
             SCROW nOldRow = pItems[i].nRow;
-            // #43940# Aenderung Quelle broadcasten
+            // Aenderung Quelle broadcasten
             if ( nLastBroadcast != nOldRow )
             {   // direkt aufeinanderfolgende nicht doppelt broadcasten
                 rAddress.SetRow( nOldRow );
                 pDocument->AreaBroadcast( aHint );
             }
             SCROW nNewRow = (pItems[i].nRow += nSize);
-            // #43940# Aenderung Ziel broadcasten
+            // Aenderung Ziel broadcasten
             rAddress.SetRow( nNewRow );
             pDocument->AreaBroadcast( aHint );
             nLastBroadcast = nNewRow;
@@ -1282,7 +1279,7 @@ void ScColumn::CopyToColumn(SCROW nRow1, SCROW nRow2, sal_uInt16 nFlags, bool bM
         }
         else
         {
-            DBG_ERROR("CopyToColumn: bMarked, aber keine Markierung");
+            OSL_FAIL("CopyToColumn: bMarked, aber keine Markierung");
         }
         return;
     }
@@ -1514,7 +1511,7 @@ void ScColumn::SwapCol(ScColumn& rCol)
     rCol.pAttrArray = pAttrArray;
     pAttrArray = pTempAttr;
 
-    // #38415# AttrArray muss richtige Spaltennummer haben
+    // AttrArray muss richtige Spaltennummer haben
     pAttrArray->SetCol(nCol);
     rCol.pAttrArray->SetCol(rCol.nCol);
 
@@ -1595,7 +1592,7 @@ void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
             ScAddress& rAddress = aHint.GetAddress();
             ScNoteCell* pNoteCell = new ScNoteCell;     // Dummy like in DeleteRange
 
-            // #121990# must iterate backwards, because indexes of following cells become invalid
+            // must iterate backwards, because indexes of following cells become invalid
             for (EntryPosPairs::reverse_iterator it( aEntries.rbegin());
                     it != aEntries.rend(); ++it)
             {
@@ -1620,10 +1617,11 @@ void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
 }
 
 
-void ScColumn::UpdateReference( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
+bool ScColumn::UpdateReference( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
              SCCOL nCol2, SCROW nRow2, SCTAB nTab2, SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
              ScDocument* pUndoDoc )
 {
+    bool bUpdated = false;
     if (pItems)
     {
         ScRange aRange( ScAddress( nCol1, nRow1, nTab1 ),
@@ -1635,12 +1633,13 @@ void ScColumn::UpdateReference( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW
             {
                 ScFormulaCell* pCell = (ScFormulaCell*) pItems[nIndex].pCell;
                 if( pCell->GetCellType() == CELLTYPE_FORMULA)
-                    pCell->UpdateReference( eUpdateRefMode, aRange, nDx, nDy, nDz, pUndoDoc );
+                    bUpdated |= pCell->UpdateReference(
+                        eUpdateRefMode, aRange, nDx, nDy, nDz, pUndoDoc );
             }
         }
         else
         {
-            // #90279# For performance reasons two loop bodies instead of
+            // For performance reasons two loop bodies instead of
             // testing for update mode in each iteration.
             // Anyways, this is still a bottleneck on large arrays with few
             // formulas cells.
@@ -1656,7 +1655,8 @@ void ScColumn::UpdateReference( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW
                     ScBaseCell* pCell = pItems[i].pCell;
                     if( pCell->GetCellType() == CELLTYPE_FORMULA)
                     {
-                        ((ScFormulaCell*)pCell)->UpdateReference( eUpdateRefMode, aRange, nDx, nDy, nDz, pUndoDoc );
+                        bUpdated |= ((ScFormulaCell*)pCell)->UpdateReference(
+                            eUpdateRefMode, aRange, nDx, nDy, nDz, pUndoDoc );
                         if ( nRow != pItems[i].nRow )
                             Search( nRow, i );  // Listener removed/inserted?
                     }
@@ -1674,7 +1674,8 @@ void ScColumn::UpdateReference( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW
                         // When deleting rows on several sheets, the formula's position may be updated with the first call,
                         // so the undo position must be passed from here.
                         ScAddress aUndoPos( nCol, nRow, nTab );
-                        ((ScFormulaCell*)pCell)->UpdateReference( eUpdateRefMode, aRange, nDx, nDy, nDz, pUndoDoc, &aUndoPos );
+                        bUpdated |= ((ScFormulaCell*)pCell)->UpdateReference(
+                            eUpdateRefMode, aRange, nDx, nDy, nDz, pUndoDoc, &aUndoPos );
                         if ( nRow != pItems[i].nRow )
                             Search( nRow, i );  // Listener removed/inserted?
                     }
@@ -1682,6 +1683,7 @@ void ScColumn::UpdateReference( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW
             }
         }
     }
+    return bUpdated;
 }
 
 

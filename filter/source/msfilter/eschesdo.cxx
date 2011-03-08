@@ -68,15 +68,12 @@ using namespace ::com::sun::star::style;
 
 #define EES_MAP_FRACTION 1440   // 1440 dpi
 
-// ===================================================================
-
 ImplEESdrWriter::ImplEESdrWriter( EscherEx& rEx )
         :
         mpEscherEx              ( &rEx ),
         maMapModeSrc            ( MAP_100TH_MM ),
         // PowerPoint: 576 dpi, WinWord: 1440 dpi, Excel: 1440 dpi
         maMapModeDest( MAP_INCH, Point(), Fraction( 1, EES_MAP_FRACTION ), Fraction( 1, EES_MAP_FRACTION ) ),
-//      mXStatusIndicator       ( rXStatInd ),
         mpPicStrm               ( NULL ),
         mpHostAppData           ( NULL ),
         mnPagesWritten          ( 0 ),
@@ -88,15 +85,10 @@ ImplEESdrWriter::ImplEESdrWriter( EscherEx& rEx )
 }
 
 
-// -------------------------------------------------------------------
-
 Point ImplEESdrWriter::ImplMapPoint( const Point& rPoint )
 {
     return OutputDevice::LogicToLogic( rPoint, maMapModeSrc, maMapModeDest );
 }
-
-
-// -------------------------------------------------------------------
 
 Size ImplEESdrWriter::ImplMapSize( const Size& rSize )
 {
@@ -108,8 +100,6 @@ Size ImplEESdrWriter::ImplMapSize( const Size& rSize )
         aRetSize.Height()++;
     return aRetSize;
 }
-
-// -------------------------------------------------------------------
 
 void ImplEESdrWriter::ImplFlipBoundingBox( ImplEESdrObject& rObj, EscherPropertyContainer& rPropOpt )
 {
@@ -222,14 +212,6 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             ::cppu::any2bool( rObj.GetUsrAny() ) ) ||
             rObj.GetType().EqualsAscii( "drawing.Measure" ) || rObj.GetType().EqualsAscii( "drawing.Caption" ) )
         {
-/*
-            if( rObj.ImplGetPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BoundRect")) ) )
-            {
-                ::com::sun::star::awt::Rectangle aRect( *(::com::sun::star::awt::Rectangle*)rObj.GetUsrAny().getValue() );
-                rObj.SetRect( ImplMapPoint( Point( aRect.X, aRect.Y ) ),
-                                ImplMapSize( Size( aRect.Width, aRect.Height ) ) );
-            }
-*/
             rObj.SetType( String( RTL_CONSTASCII_STRINGPARAM(
                                 "drawing.dontknow" ),
                                 RTL_TEXTENCODING_MS_1252 ));
@@ -446,86 +428,6 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
         }
         else if ( rObj.GetType().EqualsAscii( "drawing.Measure" ))
         {
-/*
-            if ( ImplGetPropertyValue( L"MeasureKind" ) )
-            {
-                mpEscherEx->EnterGroup( &maRect );
-                mpEscherEx->OpenContainer( ESCHER_SpContainer );
-                ImplWriteAny( ANY_FLAGS_LINE, FALSE );
-                UINT32 nFlags = 0xa00;                                          // Flags: Connector | HasSpt
-                if ( maRect.Top() > maRect.Bottom() )
-                    nFlags |= 0x80;                                             // Flags: VertMirror
-                if ( maRect.Left() > maRect.Right() )
-                    nFlags |= 0x40;                                             // Flags: HorzMirror
-
-                ADD_SHAPE( ESCHER_ShpInst_Line, nFlags );
-                aPropOpt.AddOpt( ESCHER_Prop_shapePath, ESCHER_ShapeComplex );
-                aPropOpt.CreateLineProperties( rObj.mXPropSet, sal_False );
-                mpEscherEx->EndCount( ESCHER_OPT, 3 );
-                maRect.Justify();
-                mpEscherEx->AddClientAnchor( maRect );
-                mpEscherEx->CloseContainer();           // ESCHER_SpContainer
-
-                if ( ImplGetPropertyValue( L"MeasureTextHorizontalPosition" ) )
-                {
-                }
-                if ( ImplGetPropertyValue( L"MeasureTextVerticalPosition" ) )
-                {
-                }
-                if ( ImplGetPropertyValue( L"MeasureLineDistance" ) )
-                {
-                }
-                if ( ImplGetPropertyValue( L"MeasureHelpLineOverhang" ) )
-                {
-                }
-                if ( ImplGetPropertyValue( L"MeasureHelpLineDistance" ) )
-                {
-                }
-                if ( ImplGetPropertyValue( L"MeasureHelpLine1Length" ) )
-                {
-                }
-                if ( ImplGetPropertyValue( L"MeasureHelpLine2Length" ) )
-                {
-                }
-                if ( ImplGetPropertyValue( L"MeasureBelowReferenceEdge" ) )
-                {
-                }
-                if ( ImplGetPropertyValue( L"MeasureTextRotate90" ) )
-                {
-                }
-                if ( ImplGetPropertyValue( L"MeasureTextUpsideDown" ) )
-                {
-                }
-                if ( ImplGetPropertyValue( L"MeasureOverhang" ) )
-                {
-                }
-                if ( ImplGetPropertyValue( L"MeasureUnit" ) )
-                {
-                }
-                if ( ImplGetPropertyValue( L"MeasureScale" ) )
-                {
-                }
-                if ( ImplGetPropertyValue( L"MeasureShowUnit" ) )
-                {
-                }
-                if ( ImplGetPropertyValue( L"MeasureFormatString" ) )
-                {
-                }
-                if ( ImplGetPropertyValue( L"MeasureTextAutoAngle" ) )
-                {
-                }
-                if ( ImplGetPropertyValue( L"MeasureTextAutoAngleView" ) )
-                {
-                }
-                if ( ImplGetPropertyValue( L"MeasureTextIsFixedAngle" ) )
-                {
-                }
-                if ( ImplGetPropertyValue( L"MeasureTextFixedAngle" ) )
-                {
-                }
-                mpEscherEx->LeaveGroup();
-            }
-*/
             break;
         }
         else if ( rObj.GetType().EqualsAscii( "drawing.Line" ))
@@ -693,7 +595,6 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                         aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest,    0x00110010 );
                         aPropOpt.AddOpt( ESCHER_Prop_lineColor,     0x08000040 );
                         aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash,0x00080008 );
-//                      aPropOpt.AddOpt( ESCHER_Prop_fshadowObscured,0x00020000 );
                         aPropOpt.AddOpt( ESCHER_Prop_fPrint,            0x00080000 );
                     }
                     aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
@@ -871,8 +772,6 @@ void ImplEESdrWriter::ImplWriteAdditionalText( ImplEESdrObject& rObj,
 }
 
 
-// -------------------------------------------------------------------
-
 UINT32 ImplEESdrWriter::ImplEnterAdditionalTextGroup( const Reference< XShape >& rShape,
             const Rectangle* pBoundRect )
 {
@@ -883,8 +782,6 @@ UINT32 ImplEESdrWriter::ImplEnterAdditionalTextGroup( const Reference< XShape >&
 }
 
 
-// -------------------------------------------------------------------
-
 BOOL ImplEESdrWriter::ImplInitPageValues()
 {
     mnIndices = 0;
@@ -894,9 +791,6 @@ BOOL ImplEESdrWriter::ImplInitPageValues()
 
     return TRUE;
 }
-
-
-// -------------------------------------------------------------------
 
 void ImplEESdrWriter::ImplWritePage(
             EscherSolverContainer& rSolverContainer,
@@ -928,8 +822,6 @@ void ImplEESdrWriter::ImplWritePage(
     mnPagesWritten++;
 }
 
-// ===================================================================
-
 ImplEscherExSdr::ImplEscherExSdr( EscherEx& rEx )
         :
         ImplEESdrWriter( rEx ),
@@ -939,16 +831,12 @@ ImplEscherExSdr::ImplEscherExSdr( EscherEx& rEx )
 }
 
 
-// -------------------------------------------------------------------
-
 ImplEscherExSdr::~ImplEscherExSdr()
 {
     DBG_ASSERT( !mpSolverContainer, "ImplEscherExSdr::~ImplEscherExSdr: unwritten SolverContainer" );
     delete mpSolverContainer;
 }
 
-
-// -------------------------------------------------------------------
 
 bool ImplEscherExSdr::ImplInitPage( const SdrPage& rPage )
 {
@@ -961,8 +849,6 @@ bool ImplEscherExSdr::ImplInitPage( const SdrPage& rPage )
             ImplFlushSolverContainer();
 
             mpSdrPage = NULL;
-            // why not declare a const parameter if the object will not be modified?
-//          mXDrawPage = pSvxDrawPage = new SvxDrawPage( (SdrPage*) &rPage );
             mXDrawPage = pSvxDrawPage = new SvxFmDrawPage( (SdrPage*) &rPage );
             mXShapes = Reference< XShapes >::query( mXDrawPage );
             if ( !mXShapes.is() )
@@ -981,8 +867,6 @@ bool ImplEscherExSdr::ImplInitPage( const SdrPage& rPage )
 
     return false;
 }
-
-// -------------------------------------------------------------------
 
 bool ImplEscherExSdr::ImplInitUnoShapes( const Reference< XShapes >& rxShapes )
 {
@@ -1003,8 +887,6 @@ bool ImplEscherExSdr::ImplInitUnoShapes( const Reference< XShapes >& rxShapes )
     return true;
 }
 
-// -------------------------------------------------------------------
-
 void ImplEscherExSdr::ImplExitPage()
 {
     // close all groups before the solver container is written
@@ -1015,8 +897,6 @@ void ImplEscherExSdr::ImplExitPage()
     mpSdrPage = NULL;   // reset page for next init
 }
 
-
-// -------------------------------------------------------------------
 
 void ImplEscherExSdr::ImplFlushSolverContainer()
 {
@@ -1029,8 +909,6 @@ void ImplEscherExSdr::ImplFlushSolverContainer()
 }
 
 
-// -------------------------------------------------------------------
-
 void ImplEscherExSdr::ImplWriteCurrentPage()
 {
     DBG_ASSERT( mpSolverContainer, "ImplEscherExSdr::ImplWriteCurrentPage: no SolverContainer" );
@@ -1039,8 +917,6 @@ void ImplEscherExSdr::ImplWriteCurrentPage()
 }
 
 
-// -------------------------------------------------------------------
-
 UINT32 ImplEscherExSdr::ImplWriteTheShape( ImplEESdrObject& rObj )
 {
     DBG_ASSERT( mpSolverContainer, "ImplEscherExSdr::ImplWriteShape: no SolverContainer" );
@@ -1048,23 +924,17 @@ UINT32 ImplEscherExSdr::ImplWriteTheShape( ImplEESdrObject& rObj )
 }
 
 
-// ===================================================================
-
 void EscherEx::AddSdrPage( const SdrPage& rPage )
 {
     if ( mpImplEscherExSdr->ImplInitPage( rPage ) )
         mpImplEscherExSdr->ImplWriteCurrentPage();
 }
 
-// -------------------------------------------------------------------
-
 void EscherEx::AddUnoShapes( const Reference< XShapes >& rxShapes )
 {
     if ( mpImplEscherExSdr->ImplInitUnoShapes( rxShapes ) )
         mpImplEscherExSdr->ImplWriteCurrentPage();
 }
-
-// -------------------------------------------------------------------
 
 UINT32 EscherEx::AddSdrObject( const SdrObject& rObj )
 {
@@ -1075,47 +945,35 @@ UINT32 EscherEx::AddSdrObject( const SdrObject& rObj )
 }
 
 
-// -------------------------------------------------------------------
-
 void EscherEx::EndSdrObjectPage()
 {
     mpImplEscherExSdr->ImplExitPage();
 }
-
-// -------------------------------------------------------------------
 
 EscherExHostAppData* EscherEx::StartShape( const Reference< XShape >& /* rShape */, const Rectangle* /*pChildAnchor*/ )
 {
     return NULL;
 }
 
-// -------------------------------------------------------------------
-
 void EscherEx::EndShape( UINT16 /* nShapeType */, UINT32 /* nShapeID */ )
 {
 }
-
-// -------------------------------------------------------------------
 
 UINT32 EscherEx::QueryTextID( const Reference< XShape >&, UINT32 )
 {
     return 0;
 }
 
-// -------------------------------------------------------------------
 // add an dummy rectangle shape into the escher stream
 UINT32 EscherEx::AddDummyShape()
 {
     OpenContainer( ESCHER_SpContainer );
     UINT32 nShapeID = GenerateShapeId();
     AddShape( ESCHER_ShpInst_Rectangle, 0xa00, nShapeID );
-//??    aSolverContainer.AddShape( mXShape, nShapeID );
     CloseContainer();
 
     return nShapeID;
 }
-
-// -------------------------------------------------------------------
 
 // static
 const SdrObject* EscherEx::GetSdrObject( const Reference< XShape >& rShape )
@@ -1131,8 +989,6 @@ const SdrObject* EscherEx::GetSdrObject( const Reference< XShape >& rShape )
     return pRet;
 }
 
-
-// -------------------------------------------------------------------
 
 ImplEESdrObject::ImplEESdrObject( ImplEscherExSdr& rEx,
                                     const SdrObject& rObj ) :
@@ -1199,7 +1055,6 @@ void ImplEESdrObject::Init( ImplEESdrWriter& rEx )
     }
 }
 
-//BOOL ImplEESdrObject::ImplGetPropertyValue( const OUString& rString )
 BOOL ImplEESdrObject::ImplGetPropertyValue( const sal_Unicode* rString )
 {
     BOOL bRetValue = FALSE;

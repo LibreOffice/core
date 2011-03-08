@@ -33,10 +33,6 @@
 #include <stdio.h>
 #include <fcntl.h>
 #include <string.h>
-#if defined (WNT) && defined (tcpp)
-#define _spawnvp spawnvp
-#define _P_WAIT P_WAIT
-#endif
 
 #ifdef UNX
 #include <unistd.h>
@@ -48,7 +44,7 @@
 #if defined ( OS2 ) && !defined ( GCC )
 #include <direct.h>
 #endif
-#if !defined ( CSET ) && !defined ( OS2 )
+#if !defined ( OS2 )
 #include <dos.h>
 #endif
 
@@ -175,14 +171,8 @@ static BOOL CallPrePro( const ByteString& rPrePro,
         }
     }
 
-#if ((defined OS2 || defined WNT) && (defined TCPP || defined tcpp)) || defined UNX || defined OS2
+#if defined UNX || defined OS2
     nExit = spawnvp( P_WAIT, rPrePro.GetBuffer(), (char* const*)pCmdL->GetBlock() );
-#elif defined CSET
-    nExit = spawnvp( P_WAIT, (char*)rPrePro.GetBuffer(), (const char**)pCmdL->GetBlock() );
-#elif defined WTC
-    nExit = spawnvp( P_WAIT, (char*)rPrePro.GetBuffer(), (const char* const*)pCmdL->GetBlock() );
-#elif defined MTW
-    nExit = spawnvp( P_WAIT, (char*)rPrePro.GetBuffer(), (char**)pCmdL->GetBlock() );
 #else
     nExit = spawnvp( P_WAIT, (char*)rPrePro.GetBuffer(), (const char**)pCmdL->GetBlock() );
 #endif
@@ -291,14 +281,8 @@ static BOOL CallRsc2( ByteString aRsc2Name,
         printf( "\n" );
     }
 
-#if ((defined OS2 || defined WNT) && (defined TCPP || defined tcpp)) || defined UNX || defined OS2
+#if defined UNX || defined OS2
     nExit = spawnvp( P_WAIT, aRsc2Name.GetBuffer(), (char* const*)aNewCmdL.GetBlock() );
-#elif defined CSET
-    nExit = spawnvp( P_WAIT, (char*)aRsc2Name.GetBuffer(), (char **)(const char**)aNewCmdL.GetBlock() );
-#elif defined WTC
-    nExit = spawnvp( P_WAIT, (char*)aRsc2Name.GetBuffer(), (const char* const*)aNewCmdL.GetBlock() );
-#elif defined MTW
-    nExit = spawnvp( P_WAIT, (char*)aRsc2Name.GetBuffer(), (char**)aNewCmdL.GetBlock() );
 #else
     nExit = spawnvp( P_WAIT, (char*)aRsc2Name.GetBuffer(), (const char**)aNewCmdL.GetBlock() );
 #endif
@@ -322,7 +306,6 @@ static BOOL CallRsc2( ByteString aRsc2Name,
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
     BOOL            bPrePro  = TRUE;
-    BOOL            bResFile = TRUE;
     BOOL            bHelp    = FALSE;
     BOOL            bError   = FALSE;
     BOOL            bResponse = FALSE;
@@ -367,11 +350,6 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
               || !rsc_stricmp( (*ppStr) + 1, "l" ) )
             { // kein Preprozessor
                 bPrePro = FALSE;
-            }
-            else if( !rsc_stricmp( (*ppStr) + 1, "r" )
-              || !rsc_stricmp( (*ppStr) + 1, "s" ) )
-            { // erzeugt kein .res-file
-                bResFile = FALSE;
             }
             else if( !rsc_stricmp( (*ppStr) + 1, "h" ) )
             { // Hilfe anzeigen
@@ -421,10 +399,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     };
 
     if( bHelp )
-    {
         bPrePro = FALSE;
-        bResFile = FALSE;
-    };
     if( bPrePro && !aInputList.empty() )
     {
         ByteString aTmpName;

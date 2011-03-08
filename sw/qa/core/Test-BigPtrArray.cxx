@@ -30,27 +30,22 @@
 #include "precompiled_sw.hxx"
 
 #ifdef WNT
-# include <tools/prewin.h>
-# include <windows.h>
-# include <tools/postwin.h>
+#include <prewin.h>
+#include <postwin.h>
 #endif
 
 #define TIMELOG
 
-#include "preextstl.h"
 #include <cppunit/TestSuite.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestCase.h>
 #include <cppunit/plugin/TestPlugIn.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include "postextstl.h"
 
 #include <bparr.hxx>
 #include <string.h>
 #include <stdlib.h>
 #include <rtl/logfile.hxx>
-
-#undef ENABLE_DEBUG_OUTPUT
 
 using namespace std;
 
@@ -68,9 +63,6 @@ namespace /* private */
 
         ~BigPtrEntryMock()
         {
-        #ifdef ENABLE_DEBUG_OUTPUT
-            printf("Destructor called (%i)\n", count_);
-        #endif
         }
 
         ULONG getCount() const
@@ -101,14 +93,7 @@ namespace /* private */
 
     void dumpBigPtrArray(const BigPtrArray& bparr)
     {
-    #ifdef ENABLE_DEBUG_OUTPUT
-        for (int i = 0; i < bparr.Count(); i++)
-            printf("bparr[%i,%i]: %i\n", i, static_cast<BigPtrEntryMock*>(bparr[i])->Position(), static_cast<BigPtrEntryMock*>(bparr[i])->getCount());
-
-        printf("\n");
-    #else
         (void)bparr;
-    #endif
     }
 
     void fillBigPtrArray(BigPtrArray& bparr, ULONG numEntries)
@@ -119,11 +104,7 @@ namespace /* private */
 
     void printMethodName(const char* name)
     {
-    #ifdef ENABLE_DEBUG_OUTPUT
-        printf(name);
-    #else
         (void)name;
-    #endif
     }
 
     bool checkElementPositions(const BigPtrArray& bparr)

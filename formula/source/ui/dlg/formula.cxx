@@ -581,7 +581,7 @@ xub_StrLen FormulaDlg_Impl::GetFunctionPos(xub_StrLen nPos)
         }
         catch(const uno::Exception& )
         {
-            DBG_ERROR("Exception caught!");
+            OSL_FAIL("Exception caught!");
         }
     }
 
@@ -971,7 +971,7 @@ String FormulaDlg_Impl::RepairFormula(const String& aFormula)
     }
     catch(const uno::Exception& )
     {
-        DBG_ERROR("Exception caught!");
+        OSL_FAIL("Exception caught!");
     }
     return aResult;
 }

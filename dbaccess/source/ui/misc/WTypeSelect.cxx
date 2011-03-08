@@ -31,8 +31,8 @@
 #include "WTypeSelect.hxx"
 #include "WizardPages.hrc"
 #include "dbustrings.hrc"
-#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <osl/diagnose.h>
 #include "FieldDescriptions.hxx"
 #include "WCopyTable.hxx"
 #include "dbaccess_helpid.hrc"
@@ -97,7 +97,7 @@ void OWizTypeSelectControl::DeactivateAggregate( EControlType eType )
 // -----------------------------------------------------------------------
 void OWizTypeSelectControl::CellModified(long nRow, sal_uInt16 nColId )
 {
-    DBG_ASSERT(nRow == -1,"nRow muss -1 sein!");
+    OSL_ENSURE(nRow == -1,"nRow muss -1 sein!");
     (void)nRow;
 
     MultiListBox &aListBox = ((OWizTypeSelect*)GetParent())->m_lbColumnNames;

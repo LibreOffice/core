@@ -70,7 +70,7 @@ HPOINTER ImplLoadSalCursor( int nId )
     HPOINTER hPointer = WinLoadPointer( HWND_DESKTOP, aSalShlData.mhMod, nId );
 
     DBG_ASSERT( hPointer, "pointer not found in sal resource" );
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 1
     if (!hPointer)
         debug_printf( "ImplLoadSalCursor: pointer %d not found in sal resource\n", nId);
 #endif

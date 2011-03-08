@@ -50,7 +50,6 @@ class OUStrings_Impl;
 class OUStringsSort_Impl;
 class XMLTextNumRuleInfo;
 class XMLTextListAutoStylePool;
-class SvLongs;
 class XMLSectionExport;
 class XMLIndexMarkExport;
 class XMLRedlineExport;

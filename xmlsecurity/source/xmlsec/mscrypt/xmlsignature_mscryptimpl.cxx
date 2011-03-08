@@ -33,15 +33,11 @@
 
 #include "com/sun/star/xml/crypto/SecurityOperationStatus.hdl"
 #include "xmlsignature_mscryptimpl.hxx"
-
 #include "xmldocumentwrapper_xmlsecimpl.hxx"
-
 #include "xmlelementwrapper_xmlsecimpl.hxx"
-
 #include "securityenvironment_mscryptimpl.hxx"
 #include "xmlstreamio.hxx"
 #include "errorcallback.hxx"
-
 #include "xmlsec/xmlsec.h"
 #include "xmlsec/xmldsig.h"
 #include "xmlsec/crypto.h"
@@ -175,7 +171,6 @@ SAL_CALL XMLSignature_MSCryptImpl :: validate(
     xmlSecKeysMngrPtr pMngr = NULL ;
     xmlSecDSigCtxPtr pDsigCtx = NULL ;
     xmlNodePtr pNode = NULL ;
-    //sal_Bool valid ;
 
     if( !aTemplate.is() )
         throw RuntimeException() ;
@@ -220,15 +215,6 @@ SAL_CALL XMLSignature_MSCryptImpl :: validate(
             throw RuntimeException() ;
     }
 
-    //added for test: save the result
-    /*
-    {
-        FILE *dstFile = fopen( "c:\\1.txt", "w" ) ;
-        xmlDocDump( dstFile, pNode->doc) ;
-        fclose( dstFile ) ;
-    }
-    */
-
      setErrorRecorder( );
 
     pMngr = pSecEnv->createKeysManager() ; //i39448
@@ -241,7 +227,6 @@ SAL_CALL XMLSignature_MSCryptImpl :: validate(
     if( pDsigCtx == NULL )
     {
         pSecEnv->destroyKeysManager( pMngr ) ; //i39448
-        //throw XMLSignatureException() ;
         clearErrorRecorder();
         return aTemplate;
     }
@@ -321,9 +306,6 @@ Reference< XInterface > SAL_CALL XMLSignature_MSCryptImpl :: impl_createInstance
 }
 
 Reference< XSingleServiceFactory > XMLSignature_MSCryptImpl :: impl_createFactory( const Reference< XMultiServiceFactory >& aServiceManager ) {
-    //Reference< XSingleServiceFactory > xFactory ;
-    //xFactory = ::cppu::createSingleFactory( aServiceManager , impl_getImplementationName , impl_createInstance , impl_getSupportedServiceNames ) ;
-    //return xFactory ;
     return ::cppu::createSingleFactory( aServiceManager , impl_getImplementationName() , impl_createInstance , impl_getSupportedServiceNames() ) ;
 }
 

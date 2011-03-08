@@ -361,7 +361,7 @@ void SdXMLGenericPageContext::EndElement()
         catch( uno::Exception& e )
         {
             (void)e;
-            DBG_ERROR("xmloff::SdXMLGenericPageContext::EndElement(), unexpected exception cought!");
+            OSL_FAIL("xmloff::SdXMLGenericPageContext::EndElement(), unexpected exception cought!");
         }
     }
 
@@ -428,7 +428,7 @@ void SdXMLGenericPageContext::SetStyle( rtl::OUString& rStyleName )
         }
         catch( uno::Exception )
         {
-            DBG_ERROR( "SdXMLGenericPageContext::SetStyle(): uno::Exception catched!" );
+            OSL_FAIL( "SdXMLGenericPageContext::SetStyle(): uno::Exception catched!" );
         }
     }
 }
@@ -632,7 +632,7 @@ void SdXMLGenericPageContext::SetNavigationOrder()
         {
             if( !aShapes[nIndex].is() )
             {
-                DBG_ERROR("xmloff::SdXMLGenericPageContext::SetNavigationOrder(), draw:nav-order attribute incomplete!");
+                OSL_FAIL("xmloff::SdXMLGenericPageContext::SetNavigationOrder(), draw:nav-order attribute incomplete!");
                 // todo: warning?
                 return;
             }
@@ -643,7 +643,7 @@ void SdXMLGenericPageContext::SetNavigationOrder()
     }
     catch( uno::Exception& )
     {
-        DBG_ERROR("xmloff::SdXMLGenericPageContext::SetNavigationOrder(), unexpected exception cought while importing shape navigation order!");
+        OSL_FAIL("xmloff::SdXMLGenericPageContext::SetNavigationOrder(), unexpected exception cought while importing shape navigation order!");
     }
 }
 

@@ -140,7 +140,7 @@ void ScMyOLEFixer::FixupOLEs()
         {
             // #i78086# also call CreateChartListener for invalid position (anchored to sheet)
             if (!IsOLE(aItr->xShape))
-                DBG_ERROR("Only OLEs should be in here now");
+                OSL_FAIL("Only OLEs should be in here now");
 
             if (IsOLE(aItr->xShape))
             {

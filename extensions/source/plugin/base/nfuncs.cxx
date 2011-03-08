@@ -35,10 +35,7 @@
 #undef _LINUX_SOURCE_COMPAT
 #endif
 
-#if STLPORT_VERSION>=321
 #include <cstdarg>
-#endif
-
 #include <list>
 
 #include <plugin/impl.hxx>
@@ -87,8 +84,11 @@ void TRACES( char const* s, char const* s2 )
 #define TRACES(x,s)
 #endif
 
-using namespace rtl;
 using namespace com::sun::star::lang;
+
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OStringToOUString;
 
 NPNetscapeFuncs aNPNFuncs =
 {

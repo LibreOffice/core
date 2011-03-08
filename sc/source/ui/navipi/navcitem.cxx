@@ -64,7 +64,6 @@ void ScNavigatorControllerItem::StateChanged( USHORT /* nSID */, SfxItemState /*
         case SID_CURRENTCELL:
             if ( pItem )
             {
-//              const SfxPointItem* pCellPosItem = PTR_CAST(SfxPointItem, pItem);
                 const SfxStringItem* pCellPosItem = PTR_CAST(SfxStringItem, pItem);
 
                 DBG_ASSERT( pCellPosItem, "SfxStringItem expected!" );
@@ -77,9 +76,6 @@ void ScNavigatorControllerItem::StateChanged( USHORT /* nSID */, SfxItemState /*
 
                     SCCOL nCol = aScAddress.Col()+1;
                     SCROW nRow = aScAddress.Row()+1;
-
-//                  SCCOL nCol = (USHORT)pCellPosItem->GetValue().X()+1;
-//                  SCROW nRow = (USHORT)pCellPosItem->GetValue().Y()+1;
 
                     rNavigatorDlg.UpdateColumn( &nCol );
                     rNavigatorDlg.UpdateRow   ( &nRow );

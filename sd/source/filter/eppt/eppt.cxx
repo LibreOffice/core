@@ -237,10 +237,11 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
             aAny >>= aAs;
             nSpeed = (sal_uInt8)aAs;
         }
-        sal_Int16 nTT = 0, nTST = 0;
+        sal_Int16 nTT = 0;
         if ( GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "TransitionType" ) ) )
             && ( aAny >>= nTT ) )
         {
+            sal_Int16 nTST = 0;
             if ( GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "TransitionSubtype" ) ) )
                 && ( aAny >>= nTST ) )
                 nTransitionType = GetTransition( nTT, nTST, eFe, nDirection );
@@ -354,38 +355,6 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
 
 void PPTWriter::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPropertySet > aXBackgroundPropSet )
 {
-    sal_uInt32 nFillColor = 0xffffff;
-    sal_uInt32 nFillBackColor = 0x000000;
-
-    ::com::sun::star::drawing::FillStyle aFS = ::com::sun::star::drawing::FillStyle_NONE;
-    if ( ImplGetPropertyValue( aXBackgroundPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FillStyle" ) ) ) )
-        mAny >>= aFS;
-    switch ( aFS )
-    {
-        case ::com::sun::star::drawing::FillStyle_GRADIENT :
-        {
-            if ( ImplGetPropertyValue( aXBackgroundPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FillGradient" ) ) ) )
-            {
-                nFillColor = EscherPropertyContainer::GetGradientColor( (::com::sun::star::awt::Gradient*)mAny.getValue(), 0 );
-                nFillBackColor = EscherPropertyContainer::GetGradientColor( (::com::sun::star::awt::Gradient*)mAny.getValue(), 1 );
-            }
-        }
-        break;
-
-        case ::com::sun::star::drawing::FillStyle_SOLID :
-        {
-            if ( ImplGetPropertyValue( aXBackgroundPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FillColor" ) ) ) )
-            {
-                nFillColor = mpPptEscherEx->GetColor( *((sal_uInt32*)mAny.getValue()) );
-                nFillBackColor = nFillColor ^ 0xffffff;
-            }
-        }
-        break;
-
-        default:
-            break;
-    }
-
     mpPptEscherEx->PtReplaceOrInsert( EPP_Persist_MainMaster | nPageNum, mpStrm->Tell() );
     mpPptEscherEx->OpenContainer( EPP_MainMaster );
     mpPptEscherEx->AddAtom( 24, EPP_SlideAtom, 2 );
@@ -1349,7 +1318,7 @@ void PPTWriter::ImplWriteOLE( )
                         SvMemoryStream aStream;
                         SvStorageRef xCleanStorage( new SvStorage( FALSE, aStream ) );
                         xTempStorage->CopyTo( xCleanStorage );
-                        // SJ: #99809# create a dummy content stream, the dummy content is necessary for ppt, but not for
+                        // create a dummy content stream, the dummy content is necessary for ppt, but not for
                         // doc files, so we can't share code.
                         SotStorageStreamRef xStm = xCleanStorage->OpenSotStream( aPersistStream, STREAM_STD_READWRITE );
                         *xStm   << (sal_uInt32)0        // no ClipboardId
@@ -1386,12 +1355,6 @@ void PPTWriter::ImplWriteOLE( )
             pStrm->Seek( STREAM_SEEK_TO_END );
             sal_uInt32 npStrmSize = pStrm->Tell();
             *mpStrm << npStrmSize;                  // uncompressed size
-
-#ifdef DBG_EXTRACTOLEOBJECTS
-            SvFileStream aOut( String::CreateFromAscii( "D:\\OUT.OLE" ), STREAM_TRUNC | STREAM_WRITE );
-            pStrm->Seek( 0 );
-            aOut.Write( pStrm->GetData(), npStrmSize );
-#endif
 
             pStrm->Seek( 0 );
             ZCodec aZCodec( 0x8000, 0x8000 );

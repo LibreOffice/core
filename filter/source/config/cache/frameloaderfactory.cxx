@@ -50,9 +50,8 @@ namespace css = ::com::sun::star;
 //_______________________________________________
 // definitions
 
-/*-----------------------------------------------
-    09.07.2003 07:43
------------------------------------------------*/
+
+
 FrameLoaderFactory::FrameLoaderFactory(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
 {
     BaseContainer::init(xSMGR                                              ,
@@ -61,16 +60,14 @@ FrameLoaderFactory::FrameLoaderFactory(const css::uno::Reference< css::lang::XMu
                         FilterCache::E_FRAMELOADER                         );
 }
 
-/*-----------------------------------------------
-    09.07.2003 07:43
------------------------------------------------*/
+
+
 FrameLoaderFactory::~FrameLoaderFactory()
 {
 }
 
-/*-----------------------------------------------
-    16.07.2003 13:37
------------------------------------------------*/
+
+
 css::uno::Reference< css::uno::XInterface > SAL_CALL FrameLoaderFactory::createInstance(const ::rtl::OUString& sLoader)
     throw(css::uno::Exception       ,
           css::uno::RuntimeException)
@@ -78,9 +75,8 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FrameLoaderFactory::createI
     return createInstanceWithArguments(sLoader, css::uno::Sequence< css::uno::Any >());
 }
 
-/*-----------------------------------------------
-    17.07.2003 09:00
------------------------------------------------*/
+
+
 css::uno::Reference< css::uno::XInterface > SAL_CALL FrameLoaderFactory::createInstanceWithArguments(const ::rtl::OUString&                     sLoader  ,
                                                                                                      const css::uno::Sequence< css::uno::Any >& lArguments)
     throw(css::uno::Exception       ,
@@ -158,9 +154,8 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FrameLoaderFactory::createI
     // <- SAFE
 }
 
-/*-----------------------------------------------
-    09.07.2003 07:46
------------------------------------------------*/
+
+
 css::uno::Sequence< ::rtl::OUString > SAL_CALL FrameLoaderFactory::getAvailableServiceNames()
     throw(css::uno::RuntimeException)
 {
@@ -168,17 +163,15 @@ css::uno::Sequence< ::rtl::OUString > SAL_CALL FrameLoaderFactory::getAvailableS
     return getElementNames();
 }
 
-/*-----------------------------------------------
-    09.07.2003 07:43
------------------------------------------------*/
+
+
 ::rtl::OUString FrameLoaderFactory::impl_getImplementationName()
 {
     return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.filter.config.FrameLoaderFactory" ));
 }
 
-/*-----------------------------------------------
-    09.07.2003 07:43
------------------------------------------------*/
+
+
 css::uno::Sequence< ::rtl::OUString > FrameLoaderFactory::impl_getSupportedServiceNames()
 {
     css::uno::Sequence< ::rtl::OUString > lServiceNames(1);
@@ -186,9 +179,8 @@ css::uno::Sequence< ::rtl::OUString > FrameLoaderFactory::impl_getSupportedServi
     return lServiceNames;
 }
 
-/*-----------------------------------------------
-    09.07.2003 07:43
------------------------------------------------*/
+
+
 css::uno::Reference< css::uno::XInterface > SAL_CALL FrameLoaderFactory::impl_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
 {
     FrameLoaderFactory* pNew = new FrameLoaderFactory(xSMGR);

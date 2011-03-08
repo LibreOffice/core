@@ -133,7 +133,6 @@ ModalDialog DLG_JAVAEDIT
     };
     String STR_JAVA_INSERT
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Script einfügen : Script einf³gen */
         Text [ en-US ] = "Insert Script" ;
     };
     Text [ en-US ] = "Edit Script" ;

@@ -148,6 +148,7 @@ public:
     void destroy (pointer p)
     {
         p->~T();
+        (void)p; //MSVC2005 annoyingly warns this is unused
     }
 };
 

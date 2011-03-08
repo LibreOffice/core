@@ -35,17 +35,18 @@
 class SwFrmFmt;
 class SwNodeIndex;
 
-// Struktur zum Erfragen der akt. freifliegenden Rahmen am Dokument.
+
+// For querying current flys in document.
 class SW_DLLPUBLIC SwPosFlyFrm
 {
-    const SwFrmFmt* pFrmFmt;    // das FlyFrmFmt
-    SwNodeIndex* pNdIdx;        // es reicht ein Index auf den Node
+    const SwFrmFmt* pFrmFmt;    // FlyFrmFmt
+    SwNodeIndex* pNdIdx;        // Index for node is sufficient.
     UINT32 nOrdNum;
 public:
     SwPosFlyFrm( const SwNodeIndex& , const SwFrmFmt*, USHORT nArrPos );
-    virtual ~SwPosFlyFrm(); // virtual fuer die Writer (DLL !!)
+    virtual ~SwPosFlyFrm(); // Virtual for Writer (DLL !!)
 
-    // operatoren fuer das Sort-Array
+    // Operators for sort array.
     BOOL operator==( const SwPosFlyFrm& );
     BOOL operator<( const SwPosFlyFrm& );
 

@@ -37,6 +37,7 @@
 
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <osl/diagnose.h>
 #include <comphelper/sequence.hxx>
 #include <comphelper/enumhelper.hxx>
 #include <comphelper/extract.hxx>
@@ -46,6 +47,7 @@
 #include <com/sun/star/sdb/ErrorCondition.hpp>
 #include <comphelper/types.hxx>
 #include <ucbhelper/contentidentifier.hxx>
+#include <o3tl/compat_functional.hxx>
 
 
 using namespace ::com::sun::star::uno;
@@ -78,9 +80,9 @@ ODefinitionContainer_Impl::const_iterator ODefinitionContainer_Impl::find( TCont
     return ::std::find_if(
         m_aDefinitions.begin(),
         m_aDefinitions.end(),
-        ::std::compose1(
+        ::o3tl::compose1(
             ::std::bind2nd( ::std::equal_to< TContentPtr >(), _pDefinition ),
-            ::std::select2nd< NamedDefinitions::value_type >()
+            ::o3tl::select2nd< NamedDefinitions::value_type >()
         )
     );
 }
@@ -90,9 +92,9 @@ ODefinitionContainer_Impl::iterator ODefinitionContainer_Impl::find( TContentPtr
     return ::std::find_if(
         m_aDefinitions.begin(),
         m_aDefinitions.end(),
-        ::std::compose1(
+        ::o3tl::compose1(
             ::std::bind2nd( ::std::equal_to< TContentPtr >(), _pDefinition ),
-            ::std::select2nd< NamedDefinitions::value_type >()
+            ::o3tl::select2nd< NamedDefinitions::value_type >()
         )
     );
 }
@@ -534,7 +536,7 @@ void ODefinitionContainer::implAppend(const ::rtl::OUString& _rName, const Refer
             // Somebody could create an object with name "foo", and insert it as "bar"
             // into a container. In this case, we need to ensure that the object name
             // is also "bar"
-            // #i44786# / 2005-03-11 / frank.schoenheit@sun.com
+            // #i44786#
             lcl_ensureName( _rxNewObject, _rName );
 
             ::rtl::Reference< OContentHelper > pContent = OContentHelper::getImplementation( _rxNewObject );
@@ -556,13 +558,13 @@ void ODefinitionContainer::implAppend(const ::rtl::OUString& _rName, const Refer
     }
     catch(Exception&)
     {
-        DBG_ERROR("ODefinitionContainer::implAppend: caught something !");
+        OSL_FAIL("ODefinitionContainer::implAppend: caught something !");
     }
 }
 
 void ODefinitionContainer::implReplace(const ::rtl::OUString& _rName, const Reference< XContent >& _rxNewObject)
 {
-    DBG_ASSERT(checkExistence(_rName), "ODefinitionContainer::implReplace : invalid name !");
+    OSL_ENSURE(checkExistence(_rName), "ODefinitionContainer::implReplace : invalid name !");
 
     Documents::iterator aFind = m_aDocumentMap.find(_rName);
     removeObjectListener(aFind->second);

@@ -343,6 +343,12 @@ en-US = "Catalan"
 [STR_DESC_MODULE_LANGPACK_CA]
 en-US = "Installs Catalan support in %PRODUCTNAME %PRODUCTVERSION"
 
+[STR_NAME_MODULE_LANGPACK_CA_XV]
+en-US = "Catalan (Valencian)"
+
+[STR_DESC_MODULE_LANGPACK_CA_XV]
+en-US = "Installs Catalan (Valencian) support in %PRODUCTNAME %PRODUCTVERSION"
+
 [STR_NAME_MODULE_LANGPACK_DA]
 en-US = "Danish"
 
@@ -516,6 +522,12 @@ en-US = "Assamese"
 
 [STR_DESC_MODULE_LANGPACK_AS_IN]
 en-US = "Installs Assamese support in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_AST]
+en-US = "Asturian"
+
+[STR_DESC_MODULE_LANGPACK_AST]
+en-US = "Installs Asturian support in %PRODUCTNAME %PRODUCTVERSION"
 
 [STR_NAME_MODULE_LANGPACK_RW]
 en-US = "Kinyarwanda"
@@ -760,7 +772,7 @@ en-US = "Installs Konkani support in %PRODUCTNAME %PRODUCTVERSION"
 [STR_NAME_MODULE_LANGPACK_KS]
 en-US = "Kashmiri"
 
-[STR_DESC_MODULE_LANGPACK_KS
+[STR_DESC_MODULE_LANGPACK_KS]
 en-US = "Installs Kashmiri support in %PRODUCTNAME %PRODUCTVERSION"
 
 [STR_NAME_MODULE_LANGPACK_KY]

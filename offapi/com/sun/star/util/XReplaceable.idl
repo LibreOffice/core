@@ -51,7 +51,7 @@ module com {  module sun {  module star {  module util {
 
     @example
     <listing>
-    'replace all bold words "search for" by "look for"
+    replace all bold words "search for" by "look for"
     xReplaceDescr = xDocument.createReplaceDescriptor()
     xReplaceDescr.SearchString = "search for"
     xReplaceDescr.ReplaceString = "look for"

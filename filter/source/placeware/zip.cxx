@@ -38,8 +38,7 @@
 #include "zip.hxx"
 #include "zipfile.hxx"
 
-using namespace rtl;
-
+using ::rtl::OString;
 /** this struct describes one entry in a zip file */
 struct ZipEntry
 {

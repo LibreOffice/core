@@ -60,15 +60,12 @@
 #include <svx/svdoashp.hxx>
 #include <svx/sdtagitm.hxx>
 
-// #88751#
 #include <svx/svdocapt.hxx>
 
-// #97016#
 #include <svx/svdomeas.hxx>
 #include "ViewShell.hxx"
 #include "ViewShellBase.hxx"
 #include "ToolBarManager.hxx"
-// #109583#
 #include <editeng/writingmodeitem.hxx>
 #include <svx/gallery.hxx>
 #include <svl/itempool.hxx>
@@ -315,7 +312,6 @@ void FuConstructCustomShape::SetAttributes( SdrObject* pObj )
     }
 }
 
-// #97016#
 SdrObject* FuConstructCustomShape::CreateDefaultObject(const sal_uInt16, const Rectangle& rRectangle)
 {
     SdrObject* pObj = SdrObjFactory::MakeNewObject(

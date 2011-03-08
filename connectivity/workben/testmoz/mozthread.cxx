@@ -78,20 +78,21 @@
 
 using namespace comphelper;
 using namespace cppu;
-using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::beans;
 
-//using namespace com::sun::star;
 using namespace connectivity;
 using namespace com::sun::star::sdb;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
 using namespace ::com::sun::star::container;
 using namespace com::sun::star::registry;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
 
 extern Reference< XMultiServiceFactory > InitializeFac( void );
 Reference< XMultiServiceFactory > mMgr;

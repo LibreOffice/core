@@ -56,13 +56,10 @@ namespace scripting_impl
 {
 
 static OUString s_implName(RTL_CONSTASCII_USTRINGPARAM(
-        "drafts.com.sun.star.script.framework.storage.ScriptStorageManager" );
+        "drafts.com.sun.star.script.framework.storage.ScriptStorageManager" ));
 static OUString s_serviceName(RTL_CONSTASCII_USTRINGPARAM(
         "drafts.com.sun.star.script.framework.storage.ScriptStorageManager" ));
 static Sequence< OUString > s_serviceNames = Sequence< OUString >( &s_serviceName, 1 );
-
-//extern ::rtl_StandardModuleCount s_moduleCount = MODULE_COUNT_INIT;
-//extern ::rtl_StandardModuleCount s_moduleCount;
 
 
 //*************************************************************************
@@ -72,7 +69,6 @@ ScriptStorageManager::ScriptStorageManager( const Reference<
         : m_xContext( xContext ), m_count( 0 ), m_securityMgr( xContext )
 {
     OSL_TRACE( "< ScriptStorageManager ctor called >\n" );
-    //s_moduleCount.modCnt.acquire( &s_moduleCount.modCnt );
 
     validateXRef( m_xContext,
                   "ScriptStorageManager::ScriptStorageManager : cannot get component context" );
@@ -175,7 +171,7 @@ SAL_THROW ( ( RuntimeException ) )
 
         validateXRef( xInterface, "ScriptStorageManager:: setupAnyStorage: Can't create ScriptStorage for share" );
 
-        // and place it in the hash_map. Increment the counter
+        // and place it in the boost::unordered_map. Increment the counter
         m_ScriptStorageMap[ m_count++ ] = xInterface;
         sal_Int32 sid =  m_count - 1;
 
@@ -202,7 +198,6 @@ ScriptStorageManager::~ScriptStorageManager()
 SAL_THROW ( () )
 {
     OSL_TRACE( "< ScriptStorageManager dtor called >\n" );
-//    s_moduleCount.modCnt.release( &s_moduleCount.modCnt );
 }
 
 //*************************************************************************
@@ -266,31 +261,6 @@ throw ( RuntimeException )
                RTL_TEXTENCODING_ASCII_US ).pData->buffer );
     }
 
-// np - removed previous scripting framework security handling
-// now handled by modification to existing calls in sfx for basic
-//
-/*    if( displayDialog )
-    {
-        try
-        {
-           OSL_TRACE("Adding to security mgr for %s",
-               ::rtl::OUStringToOString( stringURI,
-                   RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-            m_securityMgr.addScriptStorage( stringURI, returnedID );
-        }
-        catch ( RuntimeException & rte )
-        {
-            throw RuntimeException(
-                OUSTR( "ScriptStorageManager::createScriptStorageWithURI: " ).concat(
-                    rte.Message ), Reference< XInterface >() );
-        }
-    }
-    else
-    {
-       OSL_TRACE("No need to security mgr for %s",
-           ::rtl::OUStringToOString( stringURI,
-               RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-    }*/
     return returnedID;
 }
 

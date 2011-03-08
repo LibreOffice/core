@@ -57,7 +57,7 @@
 
 //=============================================================================
 
-/** This componend integrates a preview view to a slide show of a presentation
+/** This component integrates a preview view to a slide show of a presentation
     document into the desktop.
 
     @since OOo 1.1.2

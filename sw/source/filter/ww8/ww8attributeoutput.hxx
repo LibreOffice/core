@@ -102,31 +102,18 @@ public:
     virtual void ParagraphStyle( USHORT nStyle );
 
     virtual void TableInfoCell( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfo );
-
     virtual void TableInfoRow( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfo );
-
     virtual void TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfo );
-
     virtual void TableDefaultBorders( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfo );
-
     virtual void TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfo );
-
     virtual void TableHeight( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfo );
-
     virtual void TableCanSplit( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfo );
-
     virtual void TableBidi( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfo );
-
     virtual void TableVerticalCell( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfo );
-
     virtual void TableNodeInfo( ww8::WW8TableNodeInfo::Pointer_t pNodeInfo );
-
     virtual void TableNodeInfoInner( ww8::WW8TableNodeInfoInner::Pointer_t pNodeInfoInner );
-
     virtual void TableOrientation( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
-
     virtual void TableSpacing( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
-
     virtual void TableRowEnd( sal_uInt32 nDepth = 1 );
 
     /// Start of the styles table.
@@ -440,7 +427,8 @@ public:
     virtual ~WW8AttributeOutput() {}
 
     /// Return the right export class.
-    virtual MSWordExportBase& GetExport() { return m_rWW8Export; }
+    virtual WW8Export& GetExport() { return m_rWW8Export; }
+    const WW8Export& GetExport() const { return m_rWW8Export; }
 
 protected:
     /// Output the bold etc. attributes

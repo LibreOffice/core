@@ -118,11 +118,9 @@ namespace
         nNdOff -= nDelCount;
         xub_StrLen nCntntPos = rOrigPos.nContent.GetIndex();
 
-        // --> OD, AMA 2008-07-07 #b6713815#
         // Always adjust <nNode> at to be changed <SwPosition> instance <rChgPos>
         rChgPos.nNode = nNdOff + rCpyStt.nNode.GetIndex();
         if( !nNdOff )
-        // <--
         {
             // dann nur den Content anpassen
             if( nCntntPos > rOrigStt.nContent.GetIndex() )
@@ -273,7 +271,7 @@ SwCntntNode* SwTxtNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     }
 
         // ??? reicht das ??? was ist mit PostIts/Feldern/FeldTypen ???
-    // --> OD 2008-11-18 #i96213# - force copy of all attributes
+    // #i96213# - force copy of all attributes
     pCpyTxtNd->CopyText( pTxtNd, SwIndex( pCpyTxtNd ),
         pCpyTxtNd->GetTxt().Len(), true );
     // <--
@@ -818,7 +816,7 @@ bool lcl_MarksWholeNode(const SwPaM & rPam)
     return bResult;
 }
 
-// --> OD 2009-08-25 #i86492#
+// #i86492#
 bool lcl_ContainsOnlyParagraphsInList( const SwPaM& rPam )
 {
     bool bRet = false;
@@ -891,6 +889,17 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
     // die Position nicht "verschoben"
     aCpyPam.SetMark();
     BOOL bCanMoveBack = aCpyPam.Move( fnMoveBackward, fnGoCntnt );
+    // If the position was shifted from more than one node, an end node has been skipped
+    bool bAfterTable = false;
+    if ( ( rPos.nNode.GetIndex() - aCpyPam.GetPoint()->nNode.GetIndex() ) > 1 )
+    {
+        // First go back to the original place
+        aCpyPam.GetPoint()->nNode = rPos.nNode;
+        aCpyPam.GetPoint()->nContent = rPos.nContent;
+
+        bCanMoveBack = false;
+        bAfterTable = true;
+    }
     if( !bCanMoveBack )
         aCpyPam.GetPoint()->nNode--;
 
@@ -912,7 +921,7 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
         pDoc->SetOutlineNumRule(*GetOutlineNumRule());
     }
 
-    // --> OD 2009-08-25 #i86492#
+    // #i86492#
     // Correct the search for a previous list:
     // First search for non-outline numbering list. Then search for non-outline
     // bullet list.
@@ -926,7 +935,7 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
             pDoc->SearchNumRule( rPos, false, false, false, 0, aListIdToPropagate, true );
     }
     // <--
-    // --> OD 2009-08-25 #i86492#
+    // #i86492#
     // Do not propagate previous found list, if
     // - destination is an empty paragraph which is not in a list and
     // - source contains at least one paragraph which is not in a list
@@ -1000,9 +1009,8 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                     }
                 }
 
-                /* #107213#: Safe numrule item at destination. */
-                // --> OD 2009-08-25 #i86492#
-                // Safe also <ListId> item of destination.
+                // Safe numrule item at destination.
+                // #i86492# - Safe also <ListId> item of destination.
                 int aNumRuleState = SFX_ITEM_UNKNOWN;
                 SwNumRuleItem aNumRuleItem;
                 int aListIdState = SFX_ITEM_UNKNOWN;
@@ -1025,7 +1033,6 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                     }
                 }
                 // <--
-                /* #107213# */
 
                 if( !bCopyOk )
                 {
@@ -1045,10 +1052,9 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                     {
                         pSttTxtNd->CopyCollFmt( *pDestTxtNd );
 
-                        /* #107213# If only a part of one paragraph is copied
+                        /* If only a part of one paragraph is copied
                            restore the numrule at the destination. */
-                        // --> OD 2009-08-25 #i86492#
-                        // restore also <ListId> item
+                        // #i86492# - restore also <ListId> item
                         if ( !lcl_MarksWholeNode(rPam) )
                         {
                             if (SFX_ITEM_SET == aNumRuleState)
@@ -1140,7 +1146,7 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                 aDestIdx.Assign( pDestTxtNd, 0  );
                 aInsPos--;
 
-                // #112756# #98130# if we have to insert an extra text node
+                // if we have to insert an extra text node
                 // at the destination, this node will be our new destination
                 // (text) node, and thus we set bStartisTxtNode to true. This
                 // will ensure that this node will be deleted during Undo
@@ -1149,9 +1155,8 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                 bStartIsTxtNode = TRUE;
             }
 
-            /* #107213# Save numrule at destination */
-            // --> OD 2009-08-25 #i86492#
-            // Safe also <ListId> item of destination.
+            // Save numrule at destination
+            // #i86492# - Safe also <ListId> item of destination.
             int aNumRuleState = SFX_ITEM_UNKNOWN;
             SwNumRuleItem aNumRuleItem;
             int aListIdState = SFX_ITEM_UNKNOWN;
@@ -1174,7 +1179,6 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                 }
             }
             // <--
-            /* #107213# */
 
             const bool bEmptyDestNd = 0 == pDestTxtNd->GetTxt().Len();
             pEndTxtNd->CopyText( pDestTxtNd, aDestIdx, SwIndex( pEndTxtNd ),
@@ -1187,10 +1191,9 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
 
                 if ( bOneNode )
                 {
-                    /* #107213# If only a part of one paragraph is copied
+                    /* If only a part of one paragraph is copied
                        restore the numrule at the destination. */
-                    // --> OD 2009-08-25 #i86492#
-                    // restore also <ListId> item
+                    // #i86492# - restore also <ListId> item
                     if ( !lcl_MarksWholeNode(rPam) )
                     {
                         if (SFX_ITEM_SET == aNumRuleState)
@@ -1261,7 +1264,20 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
     else
         *aCpyPam.GetMark() = rPos;
 
-    aCpyPam.Move( fnMoveForward, bCanMoveBack ? fnGoCntnt : fnGoNode );
+    if ( !bAfterTable )
+        aCpyPam.Move( fnMoveForward, bCanMoveBack ? fnGoCntnt : fnGoNode );
+    else
+    {
+        // Reset the offset to 0 as it was before the insertion
+        aCpyPam.GetPoint( )->nContent -= aCpyPam.GetPoint( )->nContent;
+
+        aCpyPam.GetPoint( )->nNode++;
+        // If the next node is a start node, then step back: the start node
+        // has been copied and needs to be in the selection for the undo
+        if ( aCpyPam.GetPoint()->nNode.GetNode().IsStartNode() )
+            aCpyPam.GetPoint( )->nNode--;
+
+    }
     aCpyPam.Exchange();
 
     // dann kopiere noch alle Bookmarks
@@ -1459,7 +1475,7 @@ void SwDoc::CopyFlyInFlyImpl( const SwNodeRange& rRg,
     {
         const _ZSortFly& rZSortFly = aArr[ n ];
 
-        // --> OD 2006-01-04 #i59964#
+        // #i59964#
         // correct determination of new anchor position
         SwFmtAnchor aAnchor( *rZSortFly.GetAnchor() );
         SwPosition* pNewPos = (SwPosition*)aAnchor.GetCntntAnchor();

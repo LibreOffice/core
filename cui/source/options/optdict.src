@@ -39,8 +39,6 @@ ModalDialog RID_SFXDLG_NEWDICT
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 213 , 66 ) ;
     Moveable = TRUE ;
-    /* ### ACHTUNG: Neuer Text in Resource? Benutzerwörterbuch anlegen : Benutzerw÷rterbuch anlegen */
-    /* ### ACHTUNG: Neuer Text in Resource? Benutzerwörterbuch anlegen : Benutzerw÷rterbuch anlegen */
     Text [ en-US ] = "New Dictionary" ;
     FixedText FT_DICTNAME
     {
@@ -80,8 +78,6 @@ ModalDialog RID_SFXDLG_NEWDICT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 145 , 8 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Wörterbuch : W÷rterbuch */
-        /* ### ACHTUNG: Neuer Text in Resource? Wörterbuch : W÷rterbuch */
         Text [ en-US ] = "Dictionary" ;
     };
     OKButton BTN_NEWDICT_OK
@@ -111,8 +107,6 @@ ModalDialog RID_SFXDLG_EDITDICT
     SVLook = TRUE ;
     Size = MAP_APPFONT( 270, 161 );
 
-    /* ### ACHTUNG: Neuer Text in Resource? Benutzerwörterbuch bearbeiten : Benutzerw÷rterbuch bearbeiten */
-    /* ### ACHTUNG: Neuer Text in Resource? Benutzerwörterbuch bearbeiten : Benutzerw÷rterbuch bearbeiten */
     Text [ en-US ] = "Edit Custom Dictionary" ;
 
     Moveable = TRUE ;
@@ -218,8 +212,6 @@ ModalDialog RID_SFXDLG_EDITDICT
         Pos = MAP_APPFONT ( 209 , 143 ) ;
         Size = MAP_APPFONT ( 55 , 14 ) ;
 
-        /* ### ACHTUNG: Neuer Text in Resource? ~Schließen : ~Schlie˜en */
-        /* ### ACHTUNG: Neuer Text in Resource? ~Schließen : ~Schlie˜en */
         Text [ en-US ] = "~Close" ;
     };
 };
@@ -234,10 +226,6 @@ QueryBox RID_SFXQB_SET_LANGUAGE
 {
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_NO ;
-    /* ### ACHTUNG: Neuer Text in Resource? Möchten Sie die Sprache des Wörterbuches '%1' ändern? : Möchten Sie die Sprache des Wörterbuches ''%1'' ändern? */
-    /* ### ACHTUNG: Neuer Text in Resource? Möchten Sie die Sprache des Wörterbuches '%1' ändern? : Möchten Sie die Sprache des Wörterbuches ''%1'' ändern? */
-    /* ### ACHTUNG: Neuer Text in Resource? Möchten Sie die Sprache des Wörterbuches '%1' ändern? : M÷chten Sie die Sprache des W÷rterbuches '%1' õndern? */
-    /* ### ACHTUNG: Neuer Text in Resource? Möchten Sie die Sprache des Wörterbuches '%1' ändern? : M÷chten Sie die Sprache des W÷rterbuches '%1' õndern? */
     Message [ en-US ] = "Do you want to change the '%1' dictionary language?" ;
 };
  // ********************************************************************** EOF

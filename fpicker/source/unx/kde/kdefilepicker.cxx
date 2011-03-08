@@ -650,7 +650,7 @@ void KDEFileDialog::selectionChangedCommand()
 
 void KDEFileDialog::sendCommand( const QString &rCommand )
 {
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
     ::std::cerr << "kdefilepicker sent: " << rCommand.latin1() << ::std::endl;
 #endif
 

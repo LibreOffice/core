@@ -51,7 +51,6 @@
 #include <svl/svstdarr.hxx>
 #include <swunohelper.hxx>
 #include <swunodef.hxx>
-#include <errhdl.hxx>
 
 namespace SWUnoHelper {
 

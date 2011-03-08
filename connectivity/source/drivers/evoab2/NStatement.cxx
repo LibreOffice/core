@@ -208,8 +208,8 @@ OCommonStatement::createTest( const ::rtl::OUString &aColumnName,
     ::rtl::OString sMatch = rtl::OUStringToOString( aMatch, RTL_TEXTENCODING_UTF8 );
     ::rtl::OString sColumnName = rtl::OUStringToOString( aColumnName, RTL_TEXTENCODING_UTF8 );
 
-    return e_book_query_field_test( e_contact_field_id( sColumnName ),
-                                    eTest, sMatch );
+    return e_book_query_field_test( e_contact_field_id( sColumnName.getStr() ),
+                                    eTest, sMatch.getStr() );
 }
 
 // -------------------------------------------------------------------------

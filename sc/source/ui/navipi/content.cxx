@@ -198,7 +198,7 @@ void ScContentTree::InsertContent( USHORT nType, const String& rValue )
 {
     if (nType >= SC_CONTENT_COUNT)
     {
-        DBG_ERROR("ScContentTree::InsertContent mit falschem Typ");
+        OSL_FAIL("ScContentTree::InsertContent mit falschem Typ");
         return;
     }
 
@@ -207,7 +207,7 @@ void ScContentTree::InsertContent( USHORT nType, const String& rValue )
         InsertEntry( rValue, pParent );
     else
     {
-        DBG_ERROR("InsertContent ohne Parent");
+        OSL_FAIL("InsertContent ohne Parent");
     }
 }
 
@@ -311,7 +311,7 @@ IMPL_LINK( ScContentTree, ContentDoubleClickHdl, ScContentTree *, EMPTYARG )
 
             case SC_CONTENT_DBAREA:
             {
-                //  #47905# Wenn gleiche Bereichs- und DB-Namen existieren, wird
+                //  Wenn gleiche Bereichs- und DB-Namen existieren, wird
                 //  bei SID_CURRENTCELL der Bereichsname genommen.
                 //  DB-Bereiche darum direkt ueber die Adresse anspringen.
 
@@ -407,16 +407,6 @@ void ScContentTree::KeyInput( const KeyEvent& rKEvt )
         SvTreeListBox::KeyInput(rKEvt);
 }
 
-//BOOL ScContentTree::Drop( const DropEvent& rEvt )
-//{
-//  return pParentWindow->Drop(rEvt);           // Drop auf Navigator
-//}
-
-//BOOL ScContentTree::QueryDrop( DropEvent& rEvt )
-//{
-//  return pParentWindow->QueryDrop(rEvt);      // Drop auf Navigator
-//}
-
 sal_Int8 ScContentTree::AcceptDrop( const AcceptDropEvent& /* rEvt */ )
 {
     return DND_ACTION_NONE;
@@ -447,8 +437,6 @@ void ScContentTree::Command( const CommandEvent& rCEvt )
             //  (beim Umschalten auf einen anderen Dokument-Typ), das wuerde aber
             //  den StarView MouseMove-Handler, der Command() aufruft, umbringen.
             //  Deshalb Drag&Drop asynchron:
-
-//          DoDrag();
 
             Application::PostUserEvent( STATIC_LINK( this, ScContentTree, ExecDragHdl ) );
 
@@ -678,38 +666,29 @@ void ScContentTree::GetAreaNames()
         return;
 
     ScRangeName* pRangeNames = pDoc->GetRangeName();
-    USHORT nCount = pRangeNames->GetCount();
-    if ( nCount > 0 )
+    if (!pRangeNames->empty())
     {
-        USHORT nValidCount = 0;
         ScRange aDummy;
-        USHORT i;
-        for ( i=0; i<nCount; i++ )
+        ScRangeName::const_iterator itrBeg = pRangeNames->begin(), itrEnd = pRangeNames->end();
+        std::vector<const ScRangeData*> aSortArray;
+        for (ScRangeName::const_iterator itr = itrBeg; itr != itrEnd; ++itr)
         {
-            ScRangeData* pData = (*pRangeNames)[i];
-            if (pData->IsValidReference(aDummy))
-                nValidCount++;
+            if (itr->IsValidReference(aDummy))
+                aSortArray.push_back(&(*itr));
         }
-        if ( nValidCount )
+
+        if (!aSortArray.empty())
         {
-            ScRangeData** ppSortArray = new ScRangeData* [ nValidCount ];
-            USHORT j;
-            for ( i=0, j=0; i<nCount; i++ )
-            {
-                ScRangeData* pData = (*pRangeNames)[i];
-                if (pData->IsValidReference(aDummy))
-                    ppSortArray[j++] = pData;
-            }
 #ifndef ICC
-            qsort( (void*)ppSortArray, nValidCount, sizeof(ScRangeData*),
+            size_t n = aSortArray.size();
+            qsort( (void*)&aSortArray[0], n, sizeof(ScRangeData*),
                 &ScRangeData_QsortNameCompare );
 #else
-            qsort( (void*)ppSortArray, nValidCount, sizeof(ScRangeData*),
+            qsort( (void*)&aSortArray[0], n, sizeof(ScRangeData*),
                 ICCQsortNameCompare );
 #endif
-            for ( j=0; j<nValidCount; j++ )
-                InsertContent( SC_CONTENT_RANGENAME, ppSortArray[j]->GetName() );
-            delete [] ppSortArray;
+            for (size_t i = 0; i < n; ++i)
+                InsertContent(SC_CONTENT_RANGENAME, aSortArray[i]->GetName());
         }
     }
 }
@@ -753,7 +732,7 @@ bool ScContentTree::IsPartOfType( USHORT nContentType, USHORT nObjIdentifier )
             bRet = ( nObjIdentifier != OBJ_GRAF && nObjIdentifier != OBJ_OLE2 );    // everything else
             break;
         default:
-            DBG_ERROR("unknown content type");
+            OSL_FAIL("unknown content type");
     }
     return bRet;
 }
@@ -859,7 +838,7 @@ const ScAreaLink* ScContentTree::GetLink( ULONG nIndex )
         }
     }
 
-    DBG_ERROR("Link nicht gefunden");
+    OSL_FAIL("Link nicht gefunden");
     return NULL;
 }
 
@@ -915,7 +894,7 @@ ScAddress ScContentTree::GetNotePos( ULONG nIndex )
         }
     }
 
-    DBG_ERROR("Notiz nicht gefunden");
+    OSL_FAIL("Notiz nicht gefunden");
     return ScAddress();
 }
 
@@ -1025,9 +1004,11 @@ BOOL lcl_GetRange( ScDocument* pDoc, USHORT nType, const String& rName, ScRange&
     {
         ScRangeName* pList = pDoc->GetRangeName();
         if (pList)
-            if (pList->SearchName( rName, nPos ))
-                if ( (*pList)[nPos]->IsValidReference( rRange ) )
-                    bFound = TRUE;
+        {
+            const ScRangeData* p = pList->findByName(rName);
+            if (p && p->IsValidReference(rRange))
+                bFound = true;
+        }
     }
     else if ( nType == SC_CONTENT_DBAREA )
     {
@@ -1298,7 +1279,6 @@ BOOL ScContentTree::LoadFile( const String& rUrl )
         Refresh();                      // Inhalte aus geladenem Dokument holen
 
         pHiddenDocument = NULL;
-//      AdjustTitle();
 
         pParentWindow->GetDocNames( &aHiddenTitle );            // Liste fuellen
     }
@@ -1416,8 +1396,6 @@ void ScContentTree::SelectDoc(const String& rName)      // rName wie im Menue/Li
     if ( rName.Copy( nNotActiveStart ) == pParentWindow->aStrNotActive )
         aRealName = rName.Copy( 0, nNotActiveStart );
 
-    //
-
     BOOL bLoaded = FALSE;
 
         // ist es ein normal geladenes Doc ?
@@ -1443,7 +1421,7 @@ void ScContentTree::SelectDoc(const String& rName)      // rName wie im Menue/Li
     }
     else
     {
-        DBG_ERROR("SelectDoc: nicht gefunden");
+        OSL_FAIL("SelectDoc: nicht gefunden");
     }
 }
 

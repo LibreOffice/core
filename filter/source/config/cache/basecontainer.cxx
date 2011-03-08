@@ -54,9 +54,8 @@ namespace filter{
 
 ::salhelper::SingletonRef< FilterCache >* BaseContainer::m_pPerformanceOptimizer = 0;
 
-/*-----------------------------------------------
-    03.03.2004 11:37
------------------------------------------------*/
+
+
 BaseContainer::BaseContainer()
     : BaseLock     (       )
     , m_rCache     (       )
@@ -74,16 +73,14 @@ BaseContainer::BaseContainer()
     // <- GLOBAL SAFE (!) -----------------------
 }
 
-/*-----------------------------------------------
-    02.07.2003 10:16
------------------------------------------------*/
+
+
 BaseContainer::~BaseContainer()
 {
 }
 
-/*-----------------------------------------------
-    03.07.2003 11:16
------------------------------------------------*/
+
+
 void BaseContainer::init(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR              ,
                          const ::rtl::OUString&                                        sImplementationName,
                          const css::uno::Sequence< ::rtl::OUString >&                  lServiceNames      ,
@@ -102,9 +99,8 @@ void BaseContainer::init(const css::uno::Reference< css::lang::XMultiServiceFact
     // <- SAFE
 }
 
-/*-----------------------------------------------
-    28.10.2003 09:04
------------------------------------------------*/
+
+
 void BaseContainer::impl_loadOnDemand()
 {
 #ifdef LOAD_IMPLICIT
@@ -144,9 +140,8 @@ void BaseContainer::impl_loadOnDemand()
 #endif
 }
 
-/*-----------------------------------------------
-    03.03.2004 12:18
------------------------------------------------*/
+
+
 void BaseContainer::impl_initFlushMode()
     throw (css::uno::RuntimeException)
 {
@@ -161,9 +156,8 @@ void BaseContainer::impl_initFlushMode()
     // <- SAFE
 }
 
-/*-----------------------------------------------
-    03.03.2004 12:11
------------------------------------------------*/
+
+
 FilterCache* BaseContainer::impl_getWorkingCache() const
 {
     // SAFE ->
@@ -175,9 +169,8 @@ FilterCache* BaseContainer::impl_getWorkingCache() const
     // <- SAFE
 }
 
-/*-----------------------------------------------
-    03.07.2003 11:12
------------------------------------------------*/
+
+
 ::rtl::OUString SAL_CALL BaseContainer::getImplementationName()
     throw (css::uno::RuntimeException)
 {
@@ -187,9 +180,8 @@ FilterCache* BaseContainer::impl_getWorkingCache() const
     // <- SAFE
 }
 
-/*-----------------------------------------------
-    03.07.2003 11:14
------------------------------------------------*/
+
+
 sal_Bool SAL_CALL BaseContainer::supportsService(const ::rtl::OUString& sServiceName)
     throw (css::uno::RuntimeException)
 {
@@ -207,9 +199,8 @@ sal_Bool SAL_CALL BaseContainer::supportsService(const ::rtl::OUString& sService
     // <- SAFE
 }
 
-/*-----------------------------------------------
-    03.07.2003 11:12
------------------------------------------------*/
+
+
 css::uno::Sequence< ::rtl::OUString > SAL_CALL BaseContainer::getSupportedServiceNames()
     throw (css::uno::RuntimeException)
 {
@@ -219,9 +210,8 @@ css::uno::Sequence< ::rtl::OUString > SAL_CALL BaseContainer::getSupportedServic
     // <- SAFE
 }
 
-/*-----------------------------------------------
-    20.10.2003 11:39
------------------------------------------------*/
+
+
 void SAL_CALL BaseContainer::insertByName(const ::rtl::OUString& sItem ,
                                           const css::uno::Any&   aValue)
     throw (css::lang::IllegalArgumentException  ,
@@ -262,9 +252,8 @@ void SAL_CALL BaseContainer::insertByName(const ::rtl::OUString& sItem ,
     // <- SAFE ----------------------------------
 }
 
-/*-----------------------------------------------
-    03.03.2004 11:40
------------------------------------------------*/
+
+
 void SAL_CALL BaseContainer::removeByName(const ::rtl::OUString& sItem)
     throw (css::container::NoSuchElementException,
            css::lang::WrappedTargetException     ,
@@ -285,9 +274,8 @@ void SAL_CALL BaseContainer::removeByName(const ::rtl::OUString& sItem)
     // <- SAFE ----------------------------------
 }
 
-/*-----------------------------------------------
-    03.03.2004 11:41
------------------------------------------------*/
+
+
 void SAL_CALL BaseContainer::replaceByName(const ::rtl::OUString& sItem ,
                                            const css::uno::Any&   aValue)
     throw (css::lang::IllegalArgumentException   ,
@@ -328,9 +316,8 @@ void SAL_CALL BaseContainer::replaceByName(const ::rtl::OUString& sItem ,
     // <- SAFE ----------------------------------
 }
 
-/*-----------------------------------------------
-    03.03.2004 11:44
------------------------------------------------*/
+
+
 css::uno::Any SAL_CALL BaseContainer::getByName(const ::rtl::OUString& sItem)
     throw (css::container::NoSuchElementException,
            css::lang::WrappedTargetException     ,
@@ -371,9 +358,8 @@ css::uno::Any SAL_CALL BaseContainer::getByName(const ::rtl::OUString& sItem)
     return aValue;
 }
 
-/*-----------------------------------------------
-    03.03.2004 11:46
------------------------------------------------*/
+
+
 css::uno::Sequence< ::rtl::OUString > SAL_CALL BaseContainer::getElementNames()
     throw (css::uno::RuntimeException)
 {
@@ -401,9 +387,8 @@ css::uno::Sequence< ::rtl::OUString > SAL_CALL BaseContainer::getElementNames()
     return lNames;
 }
 
-/*-----------------------------------------------
-    03.03.2004 11:47
------------------------------------------------*/
+
+
 sal_Bool SAL_CALL BaseContainer::hasByName(const ::rtl::OUString& sItem)
     throw (css::uno::RuntimeException)
 {
@@ -430,9 +415,8 @@ sal_Bool SAL_CALL BaseContainer::hasByName(const ::rtl::OUString& sItem)
     return bHasOne;
 }
 
-/*-----------------------------------------------
-    02.07.2003 10:18
------------------------------------------------*/
+
+
 css::uno::Type SAL_CALL BaseContainer::getElementType()
     throw (css::uno::RuntimeException)
 {
@@ -441,9 +425,8 @@ css::uno::Type SAL_CALL BaseContainer::getElementType()
     return ::getCppuType(static_cast< css::uno::Sequence< css::beans::PropertyValue >* >(NULL));
 }
 
-/*-----------------------------------------------
-    03.03.2004 11:48
------------------------------------------------*/
+
+
 sal_Bool SAL_CALL BaseContainer::hasElements()
     throw (css::uno::RuntimeException)
 {
@@ -470,9 +453,8 @@ sal_Bool SAL_CALL BaseContainer::hasElements()
     return bHasSome;
 }
 
-/*-----------------------------------------------
-    15.07.2003 09:21
------------------------------------------------*/
+
+
 css::uno::Reference< css::container::XEnumeration > SAL_CALL BaseContainer::createSubSetEnumerationByQuery(const ::rtl::OUString& /* sQuery */ )
     throw (css::uno::RuntimeException)
 {
@@ -482,9 +464,8 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL BaseContainer::crea
     return css::uno::Reference< css::container::XEnumeration >(static_cast< css::container::XEnumeration* >(pEnum), css::uno::UNO_QUERY);
 }
 
-/*-----------------------------------------------
-    15.07.2003 10:15
------------------------------------------------*/
+
+
 css::uno::Reference< css::container::XEnumeration > SAL_CALL BaseContainer::createSubSetEnumerationByProperties(const css::uno::Sequence< css::beans::NamedValue >& lProperties)
     throw (css::uno::RuntimeException)
 {
@@ -532,9 +513,8 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL BaseContainer::crea
     return css::uno::Reference< css::container::XEnumeration >(static_cast< css::container::XEnumeration* >(pEnum), css::uno::UNO_QUERY);
 }
 
-/*-----------------------------------------------
-    07.03.2004 10:48
------------------------------------------------*/
+
+
 void SAL_CALL BaseContainer::flush()
     throw (css::uno::RuntimeException)
 {
@@ -611,9 +591,8 @@ void SAL_CALL BaseContainer::flush()
     }
 }
 
-/*-----------------------------------------------
-    02.07.2003 12:16
------------------------------------------------*/
+
+
 void SAL_CALL BaseContainer::addFlushListener(const css::uno::Reference< css::util::XFlushListener >& xListener)
     throw (css::uno::RuntimeException)
 {
@@ -623,9 +602,8 @@ void SAL_CALL BaseContainer::addFlushListener(const css::uno::Reference< css::ut
                              xListener                                                                           );
 }
 
-/*-----------------------------------------------
-    02.07.2003 12:18
------------------------------------------------*/
+
+
 void SAL_CALL BaseContainer::removeFlushListener(const css::uno::Reference< css::util::XFlushListener >& xListener)
     throw (css::uno::RuntimeException)
 {

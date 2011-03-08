@@ -58,27 +58,16 @@
 //_______________________________________________
 // other includes
 #include <vcl/svapp.hxx>
-
 #include <com/sun/star/container/XNamed.hpp>
-
 #include <com/sun/star/container/XNameContainer.hpp>
-
 #include <com/sun/star/awt/KeyEvent.hpp>
-
 #include <com/sun/star/awt/KeyModifier.hpp>
-
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-
 #include <com/sun/star/util/XChangesNotifier.hpp>
-
 #include <comphelper/configurationhelper.hxx>
-
 #include <unotools/configpathes.hxx>
-
 #include <rtl/logfile.hxx>
-
 #include <svtools/acceleratorexecute.hxx>
-
 #include <stdio.h>
 
 //_______________________________________________

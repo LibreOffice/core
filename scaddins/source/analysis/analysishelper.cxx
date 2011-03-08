@@ -1708,7 +1708,7 @@ sal_Bool Complex::ParseString( const STRING& rStr, Complex& rCompl )
 {
     rCompl.c = '\0';    // do not force a symbol, if only real part present
 
-    const sal_Unicode*      pStr = ( const sal_Unicode * ) rStr;
+    const sal_Unicode* pStr = rStr.getStr();
 
     if( IsImagUnit( *pStr ) && rStr.getLength() == 1)
     {
@@ -2123,7 +2123,7 @@ sal_Int16 ConvertData::GetMatchingLevel( const STRING& rRef ) const
                 n = INV_MATCHLEV;   // milli-bits doesn't make sense
 #endif
 
-//! <HACK> #100616# "cm3" is not 10^-2 m^3 but 10^-6 m^3 !!! ------------------
+//! <HACK> "cm3" is not 10^-2 m^3 but 10^-6 m^3 !!! ------------------
             if( n != INV_MATCHLEV )
             {
                 sal_Unicode cLast = p[ aStr.getLength() - 1 ];

@@ -41,6 +41,7 @@ SalKDEDisplay::SalKDEDisplay( Display* pDisp )
 {
     assert( selfptr == NULL );
     selfptr = this;
+    xim_protocol = XInternAtom( pDisp_, "_XIM_PROTOCOL", False );
 }
 
 SalKDEDisplay::~SalKDEDisplay()
@@ -65,7 +66,32 @@ void SalKDEDisplay::Yield()
 
     XEvent event;
     XNextEvent( pDisp_, &event );
+    if( checkDirectInputEvent( &event ))
+        return;
     qApp->x11ProcessEvent( &event );
 }
+
+// HACK: When using Qt event loop, input methods (japanese, etc.) will get broken because
+// of XFilterEvent() getting called twice, once by Qt, once by LO (bnc#665112).
+// This function is therefore called before any XEvent is passed to Qt event handling
+// and if it is a keyboard event and no Qt widget is the active window (i.e. we are
+// processing events for some LO window), then feed the event only to LO directly and skip Qt
+// completely. Skipped events are KeyPress, KeyRelease and also _XIM_PROTOCOL client message
+// (seems to be necessary too, hopefully there are not other internal XIM messages that
+// would need this handling).
+bool SalKDEDisplay::checkDirectInputEvent( XEvent* ev )
+{
+    if( ev->xany.type == XLIB_KeyPress || ev->xany.type == KeyRelease
+        || ( ev->xany.type == ClientMessage && ev->xclient.message_type == xim_protocol ))
+    {
+        if( qApp->activeWindow() == NULL )
+        {
+            Dispatch(ev);
+            return true;
+        }
+    }
+    return false;
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

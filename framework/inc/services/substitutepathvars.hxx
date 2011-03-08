@@ -34,7 +34,7 @@
 */
 #include <vector>
 #include <list>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 //_________________________________________________________________________________________________________________
 //  my own includes
@@ -110,7 +110,7 @@ struct SubstitutePathNotify
     const com::sun::star::uno::Sequence<rtl::OUString> aPropertyNames;
 };
 
-class SubstituteVariables : public ::std::hash_map< ::rtl::OUString,
+class SubstituteVariables : public ::boost::unordered_map<  ::rtl::OUString,
                                                     SubstituteRule,
                                                     OUStringHashCode,
                                                     ::std::equal_to< ::rtl::OUString > >
@@ -277,7 +277,7 @@ class SubstitutePathVariables :     private ThreadHelpBase                      
             throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
 
     private:
-        class VarNameToIndexMap : public std::hash_map< ::rtl::OUString,
+        class VarNameToIndexMap : public boost::unordered_map< ::rtl::OUString,
                                                         PreDefVariable,
                                                         OUStringHashCode,
                                                         ::std::equal_to< ::rtl::OUString > >

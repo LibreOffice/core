@@ -57,7 +57,7 @@ void ImportExcel::Formula25()
     XclAddress aXclPos;
     UINT16  nXF = 0, nFormLen;
     double  fCurVal;
-    BYTE    nAttr0, nFlag0;
+    BYTE    nFlag0;
     BOOL    bShrFmla;
 
     aIn >> aXclPos;
@@ -73,7 +73,6 @@ void ImportExcel::Formula25()
         aIn >> nDummy;
         nFormLen = nDummy;
         bShrFmla = FALSE;
-        nAttr0 = 0x01;  // Always calculate
     }
     else
     {//                     BIFF5
@@ -235,7 +234,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
     {
         aIn >> nOp;
 
-        // #98524# always reset flags
+        // always reset flags
         aSRD.InitFlags();
         aCRD.InitFlags();
 
@@ -331,7 +330,6 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
             case 0x10: // Union                                 [314 265]
                 // ocSep behelfsweise statt 'ocUnion'
                 aStack >> nMerk0;
-//#100928#      aPool << ocOpen << aStack << ocSep << nMerk0 << ocClose;
                 aPool << aStack << ocSep << nMerk0;
                     // doesn't fit exactly, but is more Excel-like
                 aPool >> aStack;
@@ -517,7 +515,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
                     case EXC_BIFF4: aIn.Ignore( 8 );    break;
                     case EXC_BIFF5: aIn.Ignore( 12 );   break;
                     default:
-                        DBG_ERROR(
+                        OSL_FAIL(
                         "-ExcelToSc::Convert(): Ein wenig vergesslich, was?" );
                 }
                 const XclImpName* pName = GetNameManager().GetName( nUINT16 );
@@ -926,7 +924,7 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
         aIn >> nOp;
         nIgnore = 0;
 
-        // #98524# always reset flags
+        // always reset flags
         aSRD.InitFlags();
         aCRD.InitFlags();
 
@@ -1044,7 +1042,7 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
                     case EXC_BIFF3:
                     case EXC_BIFF4: nIgnore = 10;   break;
                     case EXC_BIFF5: nIgnore = 14;   break;
-                    default:        DBG_ERROR( "-ExcelToSc::Convert(): Ein wenig vergesslich, was?" );
+                    default:        OSL_FAIL( "-ExcelToSc::Convert(): Ein wenig vergesslich, was?" );
                 }
                 break;
             case 0x44:
@@ -1391,7 +1389,7 @@ BOOL ExcelToSc::GetAbsRefs( ScRangeList& rRangeList, XclImpStream& rStrm, sal_Si
                 nTab1 = static_cast< SCTAB >( nTabFirst );
                 nTab2 = static_cast< SCTAB >( nTabLast );
 
-                // #122885# skip references to deleted sheets
+                // skip references to deleted sheets
                 if( (nRefIdx >= 0) || !ValidTab( nTab1 ) || (nTab1 != nTab2) )
                     break;
 
@@ -1596,7 +1594,7 @@ void ExcelToSc::DoMulArgs( DefTokenId eId, sal_uInt8 nAnz, sal_uInt8 nMinParamCo
         // a function table, and pre-call argument normalisation 1st.
         INT16 nLastRemovable = nLast - nMinParamCount;
 
-        // #84453# skip missing parameters at end of parameter list
+        // skip missing parameters at end of parameter list
         while( nSkipEnd < nLastRemovable &&
                aPool.IsSingleOp( eParam[ nSkipEnd + 1 ], ocMissing ) )
             nSkipEnd++;
@@ -1655,7 +1653,7 @@ void ExcelToSc::ExcRelToScRel( UINT16 nRow, UINT8 nCol, ScSingleRefData &rSRD, c
         }
 
         // T A B
-        // #67965# abs needed if rel in shared formula for ScCompiler UpdateNameReference
+        // abs needed if rel in shared formula for ScCompiler UpdateNameReference
         if ( rSRD.IsTabRel() && !rSRD.IsFlag3D() )
             rSRD.nTab = GetCurrScTab();
     }
@@ -1703,7 +1701,7 @@ const ScTokenArray* ExcelToSc::GetBoolErr( XclBoolError eType )
         case xlErrFalse:    eOc = ocFalse;      nError = 0;                     break;
         case xlErrUnknown:  eOc = ocStop;       nError = errUnknownState;       break;
         default:
-            DBG_ERROR( "ExcelToSc::GetBoolErr - wrong enum!" );
+            OSL_FAIL( "ExcelToSc::GetBoolErr - wrong enum!" );
             eOc = ocNoName;
             nError = errUnknownState;
     }

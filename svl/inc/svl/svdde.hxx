@@ -34,6 +34,7 @@
 #include <tools/string.hxx>
 #include <tools/list.hxx>
 #include <tools/link.hxx>
+#include <vector>
 
 class DdeString;
 class DdeData;
@@ -48,10 +49,10 @@ class DdeExecute;
 class DdeItem;
 class DdeTopic;
 class DdeService;
-class ConvList;
 struct DdeDataImp;
 struct DdeImp;
 class DdeItemImp;
+struct Conversation;
 
 #ifndef _SVDDE_NOLISTS
 DECLARE_LIST( DdeConnections, DdeConnection* )
@@ -66,13 +67,8 @@ typedef List DdeItems;
 #endif
 
 DECLARE_LIST( DdeTransactions, DdeTransaction* )
-DECLARE_LIST( DdeFormats, long )
-
-
-#ifndef STRING_LIST
-#define STRING_LIST
-DECLARE_LIST( StringList, String * )
-#endif
+typedef ::std::vector< long > DdeFormats;
+typedef ::std::vector< Conversation* > ConvList;
 
 // -----------
 // - DdeData -
@@ -106,40 +102,6 @@ public:
 
     static ULONG GetExternalFormat( ULONG nFmt );
     static ULONG GetInternalFormat( ULONG nFmt );
-};
-// ------------------
-// - DdeServiceList -
-// ------------------
-
-class DdeServiceList
-{
-    StringList      aServices;
-
-public:
-                    DdeServiceList( const String* = NULL );
-                    ~DdeServiceList();
-
-    StringList&     GetServices() { return aServices; }
-
-private:
-                            DdeServiceList( const DdeServiceList& );
-    const DdeServiceList&   operator= ( const DdeServiceList& );
-};
-
-// ----------------
-// - DdeTopicList -
-// ----------------
-
-class DdeTopicList
-{
-    StringList      aTopics;
-
-                    DECL_LINK( Data, DdeData* );
-public:
-                    DdeTopicList( const String& );
-                    ~DdeTopicList();
-
-    StringList&     GetTopics() { return aTopics; }
 };
 
 // ------------------

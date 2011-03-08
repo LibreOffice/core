@@ -134,7 +134,7 @@ namespace pcr
 
 
             default:
-                DBG_ERROR( "EditPropertyHandler::getPropertyValue: cannot handle this property!" );
+                OSL_FAIL( "EditPropertyHandler::getPropertyValue: cannot handle this property!" );
                 break;
             }
         }

@@ -1,6 +1,6 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include <string>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <unicode/regex.h>
 
 using namespace std;
@@ -16,8 +16,8 @@ struct eqstr
     }
 };
 
-typedef std::hash_map< string , string > stringmap;
-typedef std::hash_map< string, stringmap* > INImap;
+typedef boost::unordered_map< string , string > stringmap;
+typedef boost::unordered_map< string, stringmap* > INImap;
 
 class INIreader
 {
@@ -39,7 +39,7 @@ class INIreader
             delete section_match;
             delete parameter_match;
         }
-        // open "filename", fill hash_map with sections / paramaters
+        // open "filename", fill boost::unordered_map with sections / paramaters
         bool read( INImap& myMap , string& filename );
 
     private:

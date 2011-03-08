@@ -146,7 +146,7 @@ void SdrEditView::MovMarkedToTop()
                 SdrObject* pCmpObj=pOL->GetObj(nCmpPos);
                 if (pCmpObj==NULL)
                 {
-                    DBG_ERROR("MovMarkedToTop(): Vergleichsobjekt nicht gefunden");
+                    OSL_FAIL("MovMarkedToTop(): Vergleichsobjekt nicht gefunden");
                     bEnd=TRUE;
                 }
                 else if (pCmpObj==pMaxObj)
@@ -235,7 +235,7 @@ void SdrEditView::MovMarkedToBtm()
                 SdrObject* pCmpObj=pOL->GetObj(nCmpPos);
                 if (pCmpObj==NULL)
                 {
-                    DBG_ERROR("MovMarkedToBtm(): Vergleichsobjekt nicht gefunden");
+                    OSL_FAIL("MovMarkedToBtm(): Vergleichsobjekt nicht gefunden");
                     bEnd=TRUE;
                 }
                 else if (pCmpObj==pMaxObj)
@@ -1983,7 +1983,6 @@ SdrObject* SdrEditView::ImpConvertOneObj(SdrObject* pObj, BOOL bPath, BOOL bLine
 void SdrEditView::ImpConvertTo(BOOL bPath, BOOL bLineToArea)
 {
     BOOL bMrkChg=FALSE;
-    BOOL bModChg=FALSE;
     if (AreObjectsMarked()) {
         ULONG nMarkAnz=GetMarkedObjectCount();
         USHORT nDscrID=0;
@@ -2018,12 +2017,11 @@ void SdrEditView::ImpConvertTo(BOOL bPath, BOOL bLineToArea)
                 SdrObjListIter aIter(*pGrp,IM_DEEPNOGROUPS);
                 while (aIter.IsMore()) {
                     pObj=aIter.Next();
-                    if (ImpConvertOneObj(pObj,bPath,bLineToArea)) bModChg=TRUE;
+                    ImpConvertOneObj(pObj,bPath,bLineToArea);
                 }
             } else {
                 SdrObject* pNewObj=ImpConvertOneObj(pObj,bPath,bLineToArea);
                 if (pNewObj!=NULL) {
-                    bModChg=TRUE;
                     bMrkChg=TRUE;
                     GetMarkedObjectListWriteAccess().ReplaceMark(SdrMark(pNewObj,pPV),nm);
                 }

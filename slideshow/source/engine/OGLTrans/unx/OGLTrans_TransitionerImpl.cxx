@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -60,9 +61,8 @@
 
 
 #if defined( WNT )
-    #include <tools/prewin.h>
-    #include <windows.h>
-    #include <tools/postwin.h>
+    #include <prewin.h>
+    #include <postwin.h>
     #define GL_TEXTURE_MAX_ANISOTROPY_EXT 0x84FE
     #define GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT 0x84FF
 #elif defined( OS2 )
@@ -1482,3 +1482,5 @@ namespace sdecl = comphelper::service_decl;
 
 // The C shared lib entry points
 COMPHELPER_SERVICEDECL_EXPORTS1(OGLTransitionFactoryDecl)
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

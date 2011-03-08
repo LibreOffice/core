@@ -147,7 +147,7 @@ void SdrEditView::SetMarkedObjRect(const Rectangle& rRect, BOOL bCopy)
             }
             pO->SetSnapRect(aR1);
         } else {
-            DBG_ERROR("SetMarkedObjRect(): pObj->GetSnapRect() liefert leeres Rect");
+            OSL_FAIL("SetMarkedObjRect(): pObj->GetSnapRect() liefert leeres Rect");
         }
     }
     if( bUndo )

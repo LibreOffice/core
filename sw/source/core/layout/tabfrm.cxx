@@ -2065,7 +2065,6 @@ void SwTabFrm::MakeAll()
                 delete pAccess;
                 bCalcLowers |= pLayout->Resize(
                         pLayout->GetBrowseWidthByTabFrm( *this ), FALSE );
-//                  GetFmt()->GetDoc()->GetDocShell()->IsReadOnly() ? FALSE : TRUE );
                 pAccess= new SwBorderAttrAccess( SwFrm::GetCache(), this );
                 pAttrs = pAccess->Get();
             }
@@ -2137,15 +2136,6 @@ void SwTabFrm::MakeAll()
                         // Thus, find next content, table or section
                         // and, if a section is found, get its first
                         // content.
-//                        SwFrm *pNxt = FindNextCnt();
-//                        if( pNxt && pNxt->IsInTab() )
-//                            pNxt = pNxt->FindTabFrm();
-//                        if ( pNxt )
-//                        {
-//                            pNxt->Calc();
-//                            if ( !GetNext() )
-//                                bValidPos = FALSE;
-//                        }
                         if ( 0 != lcl_FormatNextCntntForKeep( this ) && !GetNext() )
                         {
                             bValidPos = FALSE;
@@ -2756,19 +2746,6 @@ BOOL SwTabFrm::CalcFlyOffsets( SwTwips& rUpper,
                 //   E.g., it could happen, that the fly frame is still registered
                 //   at the page frame, the table is on, but it's anchor character
                 //   text frame has already changed its page.
-                //if ( WEIT_WECH != (pFly->Frm().*fnRect->fnGetTop)() &&
-                //     pFly->IsFlyAtCntFrm() && aFlyRect.IsOver( aRect ) &&
-                //     // OD 25.02.2003 #i9040# - use '<=' instead of '<'
-                //     (*fnRect->fnYDiff)(
-                //            (pFly->GetAnchorFrm()->Frm().*fnRect->fnGetBottom)(),
-                //            (Frm().*fnRect->fnGetTop)() ) <= 0 &&
-                //     !IsAnLower( pFly ) && !pFly->IsAnLower( this ) &&
-                //     ( !pMyFly || pMyFly->IsAnLower( pFly ) ) &&
-                //     pPage->GetPhyPageNum() >=
-                //     pFly->GetAnchorFrm()->FindPageFrm()->GetPhyPageNum() &&
-                //     // anchor should be in same page body/header/footer
-                //     ( pFly->GetAnchorFrm()->FindFooterOrHeader() ==
-                //       FindFooterOrHeader() ) )
                 const SwTxtFrm* pAnchorCharFrm = pFly->FindAnchorCharFrm();
                 bool bConsiderFly =
                     // --> OD 2005-04-06 #i46807# - do not consider invalid
@@ -3041,11 +3018,6 @@ void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
                         // OD 10.03.2003 #i9040# - consider right line attribute.
                         nRightSpacing = Max( nRightSpacing, ( nRightOffset + nRightLine ) );
                     }
-                    // OD 10.03.2003 #i9040# - do not hold wished table width.
-                    /*
-                    if ( !pAttrs->GetLRSpace().GetRight() )
-                        nRight = Max( nRight, nMax - (nWish + nLeft + nRight));
-                    */
                 }
                 break;
             case text::HoriOrientation::LEFT_AND_WIDTH:
@@ -3249,8 +3221,6 @@ void SwTabFrm::Modify( SfxPoolItem * pOld, SfxPoolItem * pNew )
     {
         SwPageFrm *pPage = FindPageFrm();
         InvalidatePage( pPage );
-//      if ( nInvFlags & 0x01 )
-//          SetCompletePaint();
         if ( nInvFlags & 0x02 )
             _InvalidatePrt();
         if ( nInvFlags & 0x40 )

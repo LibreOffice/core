@@ -78,7 +78,7 @@ FuConstCustomShape::~FuConstCustomShape()
 
 BOOL FuConstCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    // #95491# remember button state for creation of own MouseEvents
+    // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
     BOOL bReturn = FuConstruct::MouseButtonDown(rMEvt);
@@ -123,7 +123,7 @@ BOOL FuConstCustomShape::MouseMove(const MouseEvent& rMEvt)
 
 BOOL FuConstCustomShape::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    // #95491# remember button state for creation of own MouseEvents
+    // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
     BOOL bReturn = FALSE;
@@ -190,7 +190,7 @@ void FuConstCustomShape::Deactivate()
     pViewShell->SetActivePointer( aOldPointer );
 }
 
-// #98185# Create default drawing objects via keyboard
+// Create default drawing objects via keyboard
 SdrObject* FuConstCustomShape::CreateDefaultObject(const sal_uInt16 /* nID */, const Rectangle& rRectangle)
 {
     SdrObject* pObj = SdrObjFactory::MakeNewObject(

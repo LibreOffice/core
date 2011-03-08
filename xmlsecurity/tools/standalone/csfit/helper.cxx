@@ -94,11 +94,11 @@ Reference< XMultiComponentFactory > serviceManager( Reference< XComponentContext
     Reference< XMultiComponentFactory > xUsedServiceManager = NULL ;
     Reference< XComponentContext > xUsedComponentContext = NULL ;
 
-    OSL_ENSURE( !sUnoUrl.equalsAscii( "" ) ,
+    OSL_ENSURE( sUnoUrl.getLength() ,
         "serviceManager - "
         "No uno URI specified" ) ;
 
-    OSL_ENSURE( !sRdbUrl.equalsAscii( "" ) ,
+    OSL_ENSURE( sRdbUrl.getLength() ,
         "serviceManager - "
         "No rdb URI specified" ) ;
 

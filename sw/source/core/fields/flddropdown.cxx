@@ -222,7 +222,7 @@ bool SwDropDownField::QueryValue(::uno::Any &rVal, USHORT nWhich) const
         break;
 
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }
@@ -277,7 +277,7 @@ bool SwDropDownField::PutValue(const uno::Any &rVal,
         break;
 
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }

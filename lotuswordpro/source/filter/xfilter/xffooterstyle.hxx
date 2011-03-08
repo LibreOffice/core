@@ -57,11 +57,6 @@
  * @file
  * Footer style,exist in page-master object.
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2005-01-19 create this file.
- * 2005-04-05 change to inherit from xfheaderstyle.
- ************************************************************************/
 #ifndef     _XFFOOTERSTYLE_HXX
 #define     _XFFOOTERSTYLE_HXX
 

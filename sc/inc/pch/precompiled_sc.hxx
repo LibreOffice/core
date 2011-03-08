@@ -195,7 +195,6 @@
 #include <tools/errinf.hxx>
 #include <tools/gen.hxx>
 #include <tools/globname.hxx>
-#include <tools/list.hxx>
 #include <tools/rc.hxx>
 #include <tools/rtti.hxx>
 #include <tools/solar.h>

@@ -32,8 +32,8 @@
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 
-#include <hash_map>
-#include <hash_set>
+#include <boost/unordered_map.hpp>
+#include <boost/unordered_set.hpp>
 #include <list>
 #include <uno/mapping.hxx>
 #include <uno/dispatcher.h>
@@ -82,8 +82,12 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
 using namespace cppu;
 using namespace osl;
-using namespace rtl;
 using namespace std;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
+using ::rtl::OUStringBuffer;
+using ::rtl::OString;
 
 rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
 
@@ -283,7 +287,7 @@ struct equaltoRef_Impl
         { return rName1 == rName2; }
 };
 
-typedef hash_set
+typedef boost::unordered_set
 <
     Reference<XInterface >,
     hashRef_Impl,
@@ -450,14 +454,14 @@ struct hashOWString_Impl
         { return rName.hashCode(); }
 };
 
-typedef hash_set
+typedef boost::unordered_set
 <
     OUString,
     hashOWString_Impl,
     equalOWString_Impl
 > HashSet_OWString;
 
-typedef hash_multimap
+typedef boost::unordered_multimap
 <
     OUString,
     Reference<XInterface >,
@@ -465,7 +469,7 @@ typedef hash_multimap
     equalOWString_Impl
 > HashMultimap_OWString_Interface;
 
-typedef hash_map
+typedef boost::unordered_map
 <
     OUString,
     Reference<XInterface >,

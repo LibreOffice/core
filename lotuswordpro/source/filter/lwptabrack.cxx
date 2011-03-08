@@ -57,10 +57,6 @@
  * @file
  * Tabrack for LwpTabPiece object.
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2005-01-12 create this file.
- ************************************************************************/
 #include    "lwptabrack.hxx"
 #include    "lwpobjstrm.hxx"
 #include    "lwpslvlist.hxx"

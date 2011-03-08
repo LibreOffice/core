@@ -30,7 +30,7 @@
 
 #include "envelp.hrc"
 
-// Lokale Resourcen *********************************************************
+// local resources *********************************************************
 
 #define FL_ADDRESSEE           11
 #define TXT_ADDR_POS        12
@@ -64,11 +64,11 @@
 #define MID_CHAR        1
 #define MID_PARA        2
 
-// Globale Resourcen ********************************************************
+// global resources ********************************************************
 
 #define MNU_EDIT  (RC_ENVFMT_BEGIN     )
 
-// Ueberlaufpruefung ********************************************************
+// overflow check ********************************************************
 
 #define ENVFMT_ACT_END  MNU_EDIT
 

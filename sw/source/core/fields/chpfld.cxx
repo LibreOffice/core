@@ -163,12 +163,10 @@ void SwChapterField::ChangeExpansion(const SwTxtNode &rTxtNd, sal_Bool bSrchNum)
 
         if ( pTxtNd->IsOutline() )
         {
-            // --> OD 2005-11-17 #128041#
             // correction of refactoring done by cws swnumtree:
             // retrieve numbering string without prefix and suffix strings
             // as stated in the above german comment.
             sNumber = pTxtNd->GetNumString( false );
-            // <--
 
             SwNumRule* pRule( pTxtNd->GetNumRule() );
             if ( pTxtNd->IsCountedInList() && pRule )
@@ -231,7 +229,7 @@ bool SwChapterField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
         break;
 
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }
@@ -273,7 +271,7 @@ bool SwChapterField::PutValue( const uno::Any& rAny, USHORT nWhichId )
         break;
 
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
         bRet = false;
     }
     return bRet;

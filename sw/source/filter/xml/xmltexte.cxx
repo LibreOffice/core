@@ -509,7 +509,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
                 catch( uno::Exception )
                 {
                     // TODO/LATER: error handling
-                    DBG_ERROR( "Link detection or retrieving of the URL of OOo link is failed!\n" );
+                    OSL_FAIL( "Link detection or retrieving of the URL of OOo link is failed!\n" );
                 }
             }
 
@@ -752,9 +752,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
 
     // Lastly the stuff common to each of Applet/Plugin/Floating Frame
     exportEvents( rPropSet );
-    // --> OD 2009-07-22 #i73249#
-    exportTitleAndDescription( rPropSet, rPropSetInfo );
-    // <--
+    exportTitleAndDescription( rPropSet, rPropSetInfo );  // #i73249#
     exportContour( rPropSet, rPropSetInfo );
 }
 

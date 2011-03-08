@@ -35,8 +35,8 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <vector>
-#include <hash_map>
-#include <hash_set>
+#include <boost/unordered_map.hpp>
+#include <boost/unordered_set.hpp>
 #include <list>
 #include <osl/file.hxx>
 
@@ -143,7 +143,7 @@ namespace fileaccess {
             }
         };
 
-        typedef std::hash_set< MyProperty,hMyProperty,eMyProperty > PropertySet;
+        typedef boost::unordered_set< MyProperty,hMyProperty,eMyProperty > PropertySet;
         typedef std::list< Notifier* >                              NotifierList;
 
 
@@ -164,7 +164,7 @@ namespace fileaccess {
             com::sun::star::uno::Reference< com::sun::star::beans::XPropertyAccess >        xA;
         };
 
-        typedef std::hash_map< UniquePath,UnqPathData,hUniquePath,eUniquePath > ContentMap;
+        typedef boost::unordered_map< UniquePath,UnqPathData,hUniquePath,eUniquePath > ContentMap;
 
     public:
 

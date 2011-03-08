@@ -43,7 +43,6 @@ using namespace ::rtl;
 
 static OUString sBlockList ( RTL_CONSTASCII_USTRINGPARAM ( "_block-list" ) );
 
-// #110680#
 SvXMLAutoCorrectImport::SvXMLAutoCorrectImport(
     const uno::Reference< lang::XMultiServiceFactory > xServiceFactory,
     SvxAutocorrWordList *pNewAutocorr_List,
@@ -141,8 +140,6 @@ SvXMLWordContext::SvXMLWordContext(
     if (!sWrong.Len() || !sRight.Len() )
         return;
 
-//  const International& rInter = Application::GetAppInternational();
-//  BOOL bOnlyTxt = COMPARE_EQUAL != rInter.Compare( sRight, sWrong, INTN_COMPARE_IGNORECASE );
     BOOL bOnlyTxt = sRight != sWrong;
     if( !bOnlyTxt )
     {
@@ -164,7 +161,6 @@ SvXMLWordContext::~SvXMLWordContext ( void )
 {
 }
 
-// #110680#
 SvXMLExceptionListImport::SvXMLExceptionListImport(
     const uno::Reference< lang::XMultiServiceFactory > xServiceFactory,
     SvStringsISortDtor & rNewList )

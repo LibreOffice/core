@@ -231,21 +231,6 @@ void SwCrsrShell::EndAction( const BOOL bIdleEnd )
     if( bIdleEnd && Imp()->GetRegion() )
     {
         pCurCrsr->Hide();
-
-#ifdef SHOW_IDLE_REGION
-if( GetWin() )
-{
-    GetWin()->Push();
-    GetWin()->ChangePen( Pen( Color( COL_YELLOW )));
-    for( USHORT n = 0; n < aPntReg.Count(); ++n )
-    {
-        SwRect aIRect( aPntReg[n] );
-        GetWin()->DrawRect( aIRect.SVRect() );
-    }
-    GetWin()->Pop();
-}
-#endif
-
     }
 
     // vor der letzten Action alle invaliden Numerierungen updaten
@@ -271,7 +256,7 @@ if( GetWin() )
         // mit der Basic-Klammerung entkoppelt; die Shells werden umgeschaltet
         if( !BasicActionPend() )
         {
-            //JP 12.01.98: Bug #46496# - es muss innerhalb einer BasicAction
+            // es muss innerhalb einer BasicAction
             //              der Cursor geupdatet werden; um z.B. den
             //              TabellenCursor zu erzeugen. Im UpdateCrsr wird
             //              das jetzt beruecksichtigt!
@@ -381,7 +366,7 @@ BOOL SwCrsrShell::LeftRight( BOOL bLeft, USHORT nCnt, USHORT nMode,
     else
     {
         const BOOL bSkipHidden = !GetViewOptions()->IsShowHiddenChar();
-        // --> OD 2009-12-30 #i107447#
+        // #i107447#
         // To avoid loop the reset of <bInFrontOfLabel> flag is no longer
         // reflected in the return value <bRet>.
         const bool bResetOfInFrontOfLabel = SetInFrontOfLabel( FALSE );
@@ -392,7 +377,6 @@ BOOL SwCrsrShell::LeftRight( BOOL bLeft, USHORT nCnt, USHORT nMode,
             // undo reset of <bInFrontOfLabel> flag
             SetInFrontOfLabel( TRUE );
         }
-        // <--
     }
 
     if( bRet )
@@ -459,10 +443,8 @@ BOOL SwCrsrShell::UpDown( BOOL bUp, USHORT nCnt )
     SwShellCrsr* pTmpCrsr = getShellCrsr( true );
 
     BOOL bRet = pTmpCrsr->UpDown( bUp, nCnt );
-    // --> FME 2005-01-10 #i40019# UpDown should always reset the
-    // bInFrontOfLabel flag:
+    // #i40019# UpDown should always reset the bInFrontOfLabel flag:
     bRet = SetInFrontOfLabel(FALSE) || bRet;
-    // <--
 
     if( pBlockCrsr )
         pBlockCrsr->clearPoints();
@@ -731,12 +713,11 @@ int SwCrsrShell::SetCrsr( const Point &rLPt, BOOL bOnlyText, bool bBlock )
     *pCrsr->GetPoint() = aPos;
     rAktCrsrPt = aPt;
 
-    // --> FME 2005-01-31 #i41424# Only update the marked number levels if necessary
+    // #i41424# Only update the marked number levels if necessary
     // Force update of marked number levels if necessary.
     if ( bNewInFrontOfLabel || bOldInFrontOfLabel )
         pCurCrsr->_SetInFrontOfLabel( !bNewInFrontOfLabel );
     SetInFrontOfLabel( bNewInFrontOfLabel );
-    // <--
 
     if( !pCrsr->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_CHANGEPOS ) )
     {
@@ -1287,8 +1268,8 @@ static void lcl_CheckHiddenPara( SwPosition& rPos )
         rPos = SwPosition( aTmp, SwIndex( pTxtNd, 0 ) );
 }
 
-// --> OD 2005-12-14 #i27301# - helper class, which notifies the accessibility
-// about invalid text selections in its destructor
+// #i27301# - helper class, which notifies the accessibility about invalid text
+// selections in its destructor
 class SwNotifyAccAboutInvalidTextSelections
 {
     private:
@@ -1311,7 +1292,7 @@ void SwCrsrShell::UpdateCrsr( USHORT eFlags, BOOL bIdleEnd )
 
     ClearUpCrsrs();
 
-    //JP 12.01.98: Bug #46496# - es muss innerhalb einer BasicAction der
+    // es muss innerhalb einer BasicAction der
     //              Cursor geupdatet werden; um z.B. den TabellenCursor zu
     //              erzeugen. Im EndAction wird jetzt das UpdateCrsr gerufen!
     if( ActionPend() && BasicActionPend() )
@@ -1321,9 +1302,8 @@ void SwCrsrShell::UpdateCrsr( USHORT eFlags, BOOL bIdleEnd )
         return;             // wenn nicht, dann kein Update !!
     }
 
-    // --> OD 2005-12-14 #i27301#
+    // #i27301#
     SwNotifyAccAboutInvalidTextSelections aInvalidateTextSelections( *this );
-    // <--
 
     if ( bIgnoreReadonly )
     {
@@ -1368,8 +1348,8 @@ void SwCrsrShell::UpdateCrsr( USHORT eFlags, BOOL bIdleEnd )
 
         OSL_ENSURE( pTblFrm, "Tabelle Crsr nicht im Content ??" );
 
-        // --> FME 2005-12-02 #126107# Make code robust. The table
-        // cursor may point to a table in a currently inactive header.
+        // --> Make code robust. The table cursor may point
+        // to a table in a currently inactive header.
         SwTabFrm *pTab = pTblFrm ? pTblFrm->FindTabFrm() : 0;
         // <--
 
@@ -1389,12 +1369,11 @@ void SwCrsrShell::UpdateCrsr( USHORT eFlags, BOOL bIdleEnd )
                     SwTabFrm* pMarkTab = pMarkTblFrm->FindTabFrm();
                     OSL_ENSURE( pMarkTab, "Tabelle Crsr nicht im Content ??" );
 
-                    // --> FME 2005-11-28 #120360# Make code robust:
+                    // Make code robust:
                     if ( pMarkTab )
                     {
                         bInRepeatedHeadline = pMarkTab->IsFollow() && pMarkTab->IsInHeadline( *pMarkTblFrm );
                     }
-                    // <--
                 }
             }
 
@@ -1549,7 +1528,7 @@ void SwCrsrShell::UpdateCrsr( USHORT eFlags, BOOL bIdleEnd )
 
     UpdateCrsrPos();
 
-    // #100722# The cursor must always point into content; there's some code
+    // The cursor must always point into content; there's some code
     // that relies on this. (E.g. in SwEditShell::GetScriptType, which always
     // loops _behind_ the last node in the selection, which always works if you
     // are in content.) To achieve this, we'll force cursor(s) to point into
@@ -1607,7 +1586,7 @@ void SwCrsrShell::UpdateCrsr( USHORT eFlags, BOOL bIdleEnd )
                 }  while( !pFrm );
             }
             else if ( Imp()->IsIdleAction() )
-                //Wir stellen sicher, dass anstaendig Formatiert wurde #42224#
+                //Wir stellen sicher, dass anstaendig Formatiert wurde
                 pFrm->PrepareCrsr();
 
             // im geschuetzten Fly? aber bei Rahmenselektion ignorieren
@@ -2330,9 +2309,8 @@ BOOL SwCrsrShell::IsOverReadOnlyPos( const Point& rPt ) const
     Point aPt( rPt );
     SwPaM aPam( *pCurCrsr->GetPoint() );
     GetLayout()->GetCrsrOfst( aPam.GetPoint(), aPt );
-    // --> FME 2004-06-29 #114856# Formular view
+    // Formular view
     return aPam.HasReadonlySel( GetViewOptions()->IsFormView() );
-    // <--
 }
 
 
@@ -2557,7 +2535,6 @@ SwCrsrShell::SwCrsrShell( SwCrsrShell& rShell, Window *pInitWin )
     bCallChgLnk = bHasFocus = bSVCrsrVis = bAutoUpdateCells = TRUE;
     bSetCrsrInReadOnly = TRUE;
     pVisCrsr = new SwVisCrsr( this );
-    // OD 11.02.2003 #100556#
     mbMacroExecAllowed = rShell.IsMacroExecAllowed();
 }
 
@@ -2598,7 +2575,6 @@ SwCrsrShell::SwCrsrShell( SwDoc& rDoc, Window *pInitWin,
     bSetCrsrInReadOnly = TRUE;
 
     pVisCrsr = new SwVisCrsr( this );
-    // OD 11.02.2003 #100556#
     mbMacroExecAllowed = true;
 }
 
@@ -2900,9 +2876,8 @@ void SwCrsrShell::NewCoreSelection()
 BOOL SwCrsrShell::IsCrsrReadonly() const
 {
     if ( GetViewOptions()->IsReadonly() ||
-         // --> FME 2004-06-29 #114856# Formular view
+         // Formular view
          GetViewOptions()->IsFormView() )
-         // <--
     {
         SwFrm *pFrm = GetCurrFrm( FALSE );
         const SwFlyFrm* pFly;
@@ -2916,14 +2891,13 @@ BOOL SwCrsrShell::IsCrsrReadonly() const
         {
             return FALSE;
         }
-        // --> FME 2004-06-22 #114856# edit in readonly sections
+        // edit in readonly sections
         else if ( pFrm && pFrm->IsInSct() &&
                   0 != ( pSection = pFrm->FindSctFrm()->GetSection() ) &&
                   pSection->IsEditInReadonlyFlag() )
         {
             return FALSE;
         }
-        // <--
 
         return TRUE;
     }
@@ -3243,7 +3217,6 @@ void SwCrsrShell::ClearUpCrsrs()
         TblCrsrToCursor();
 }
 
-// #111827#
 String SwCrsrShell::GetCrsrDescr() const
 {
     String aResult;
@@ -3425,7 +3398,7 @@ void SwCrsrShell::GetSmartTagTerm( const Point& rPt, SwRect& rSelectRect,
             //no determine the rectangle in the current line
             xub_StrLen nWordStart = (nBegin + nLeft) < nLineStart ? nLineStart : nBegin + nLeft;
             //take one less than the line end - otherwise the next line would be calculated
-            xub_StrLen nWordEnd = (nBegin + nLen - nLeft - nRight) > nLineEnd ? nLineEnd - 1: (nBegin + nLen - nLeft - nRight);
+            xub_StrLen nWordEnd = (nBegin + nLen - nLeft - nRight) > nLineEnd ? nLineEnd : (nBegin + nLen - nLeft - nRight);
             Push();
             pCrsr->DeleteMark();
             SwIndex& rContent = GetCrsr()->GetPoint()->nContent;
@@ -3437,7 +3410,7 @@ void SwCrsrShell::GetSmartTagTerm( const Point& rPt, SwRect& rSelectRect,
             SwCntntFrm *pCntntFrame = pCntntNode->GetFrm( &rPt, pCrsr->GetPoint(), FALSE);
 
             pCntntFrame->GetCharRect( aStartRect, *pCrsr->GetPoint(), &aState );
-            rContent = nWordEnd;
+            rContent = nWordEnd - 1;
             SwRect aEndRect;
             pCntntFrame->GetCharRect( aEndRect, *pCrsr->GetPoint(),&aState );
             rSelectRect = aStartRect.Union( aEndRect );

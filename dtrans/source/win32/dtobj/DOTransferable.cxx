@@ -58,7 +58,6 @@
 // namespace directives
 //------------------------------------------------------------------------
 
-using namespace rtl;
 using namespace std;
 using namespace osl;
 using namespace cppu;
@@ -67,6 +66,8 @@ using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::io;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
+
+using ::rtl::OUString;
 
 //------------------------------------------------------------------------
 //

@@ -30,9 +30,7 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
 
-#include <preextstl.h>
 #include <cppconn/exception.h>
-#include <postextstl.h>
 
 namespace mysqlc_sdbc_driver
 {
@@ -57,9 +55,9 @@ namespace mysqlc_sdbc_driver
     int mysqlToOOOType(int mysqlType) throw ();
 
 
-    ::rtl::OUString convert(const ::ext_std::string& _string, const rtl_TextEncoding encoding);
+    ::rtl::OUString convert(const ::std::string& _string, const rtl_TextEncoding encoding);
 
-    ::ext_std::string convert(const ::rtl::OUString& _string, const rtl_TextEncoding encoding);
+    ::std::string convert(const ::rtl::OUString& _string, const rtl_TextEncoding encoding);
 }
 
 #endif

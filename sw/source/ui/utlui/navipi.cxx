@@ -29,12 +29,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-
 #define NAVIPI_CXX
 
-#include <string> // HACK: prevent conflict between STLPORT and Workshop headers
-#include <tools/list.hxx>
+#include <string>
 #include <svl/urlbmk.hxx>
 #include <svl/stritem.hxx>
 #include <svtools/filter.hxx>
@@ -47,7 +44,6 @@
 #include <sfx2/dockwin.hxx>
 #include <vcl/toolbox.hxx>
 #include <swtypes.hxx>  // fuer Pathfinder
-#include <errhdl.hxx>
 #include <swmodule.hxx>
 #include <view.hxx>
 #include <navicfg.hxx>
@@ -68,7 +64,6 @@
 #include <utlui.hrc>
 
 #include <unomid.h>
-
 
 #define PAGE_CHANGE_TIMEOUT 1000 //Timeout fuer Seitenwechsel
 

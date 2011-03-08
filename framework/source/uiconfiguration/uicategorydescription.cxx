@@ -137,7 +137,7 @@ class ConfigurationAccess_UICategory : // Order is neccessary for right initiali
         sal_Bool                  fillCache();
 
     private:
-        typedef ::std::hash_map< ::rtl::OUString,
+        typedef ::boost::unordered_map< ::rtl::OUString,
                                  ::rtl::OUString,
                                  OUStringHashCode,
                                  ::std::equal_to< ::rtl::OUString > > IdToInfoCache;

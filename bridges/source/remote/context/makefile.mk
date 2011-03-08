@@ -57,8 +57,6 @@ SHL1RPATH=URELIB
 SHL1VERSIONMAP=	$(TARGET).map
 
 DEF1NAME=		$(SHL1TARGET)
-#DEF1EXPORTFILE=	exports.dxp
-
 
 # --- Targets ------------------------------------------------------
 

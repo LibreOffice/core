@@ -92,7 +92,7 @@
 #include <osl/mutex.hxx>
 
 #include <ctype.h>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 // compatiblity: DatabaseCursorType is dead, but for compatiblity reasons we still have to write it ...
 namespace com {
@@ -1157,7 +1157,7 @@ bool ODatabaseForm::hasValidParent() const
         Reference<XResultSet>  xResultSet(m_xParent, UNO_QUERY);
         if (!xResultSet.is())
         {
-            DBG_ERROR("ODatabaseForm::hasValidParent() : no parent resultset !");
+            OSL_FAIL("ODatabaseForm::hasValidParent() : no parent resultset !");
             return false;
         }
         try
@@ -2106,8 +2106,7 @@ void ODatabaseForm::reset_impl(bool _bAproveByListeners)
     aResetGuard.reset();
     // ensure that the row isn't modified
     // (do this _before_ the listeners are notified ! their reaction (maybe asynchronous) may depend
-    // on the modified state of the row
-    // 21.02.00 - 73265 - FS)
+    // on the modified state of the row)
     if (bInsertRow)
         m_xAggregateSet->setPropertyValue(PROPERTY_ISMODIFIED, ::cppu::bool2any(sal_Bool(sal_False)));
 
@@ -2340,7 +2339,7 @@ void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const ::com:
         lcl_dispatch(xFrame,xTransformer,aURLStr,aReferer,aTargetName,aData,osl_getThreadTextEncoding());
     }
     else {
-        DBG_ERROR("ODatabaseForm::submit_Impl : wrong encoding !");
+        OSL_FAIL("ODatabaseForm::submit_Impl : wrong encoding !");
     }
 
 }
@@ -3023,7 +3022,7 @@ void ODatabaseForm::reload_impl(sal_Bool bMoveToFirst, const Reference< XInterac
     }
     catch( const SQLException& e )
     {
-        DBG_ERROR("ODatabaseForm::reload_impl : shouldn't executeRowSet catch this exception?");
+        OSL_FAIL("ODatabaseForm::reload_impl : shouldn't executeRowSet catch this exception?");
         (void)e;
     }
 
@@ -3596,15 +3595,13 @@ void SAL_CALL ODatabaseForm::moveToInsertRow() throw( SQLException, RuntimeExcep
         // * in reset_impl
         //   - set the control defaults into the columns if not void
         //   - do _not_ set the columns to NULL if no control default is set
-        // This fixes both #88888# and #97955#
         //
         // Still, there is #72756#. During fixing this bug, DG introduced not calling the aggregate here. So
         // in theory, we re-introduced #72756#. But the bug described therein does not happen anymore, as the
         // preliminaries for it changed (no display of guessed values for new records with autoinc fields)
         //
-        // BTW: the public Issuezilla bug for #97955# is #i2815#
+        // BTW: the public Issuezilla bug is #i2815#
         //
-        // 16.04.2002 - 97955 - fs@openoffice.org
         xUpdate->moveToInsertRow();
 
         // then set the default values and the parameters given from the parent
@@ -3866,7 +3863,6 @@ Sequence< ::rtl::OUString > SAL_CALL ODatabaseForm::getSupportedServiceNames() t
     // the compatible names
     // This is maily to be consistent with the implementation before fixing #97083#, though the
     // better solution _may_ be to return the compatible names at runtime, too
-    // 04.03.2002 - fs@openoffice.org
 }
 
 //------------------------------------------------------------------------------
@@ -3939,7 +3935,7 @@ void SAL_CALL ODatabaseForm::write(const Reference<XObjectOutputStream>& _rxOutS
                 eTranslated = bEscapeProcessing ? DataSelectionType_SQL : DataSelectionType_SQLPASSTHROUGH;
             }
             break;
-            default : DBG_ERROR("ODatabaseForm::write : wrong CommandType !");
+            default : OSL_FAIL("ODatabaseForm::write : wrong CommandType !");
         }
     }
     _rxOutStream->writeShort((sal_Int16)eTranslated);           // former DataSelectionType
@@ -4045,7 +4041,7 @@ void SAL_CALL ODatabaseForm::read(const Reference<XObjectInputStream>& _rxInStre
             m_xAggregateSet->setPropertyValue(PROPERTY_ESCAPE_PROCESSING, makeAny((sal_Bool)bEscapeProcessing));
         }
         break;
-        default : DBG_ERROR("ODatabaseForm::read : wrong CommandType !");
+        default : OSL_FAIL("ODatabaseForm::read : wrong CommandType !");
     }
     if (m_xAggregateSet.is())
         m_xAggregateSet->setPropertyValue(PROPERTY_COMMANDTYPE, makeAny(nCommandType));

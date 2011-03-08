@@ -47,8 +47,6 @@ DLLPRE =
 
 # ------------------------------------------------------------------
 
-#.INCLUDE :  ..$/cppumaker.mk
-
 SLOFILES= \
         $(SLO)$/service.obj \
         $(SLO)$/eventhelper.obj

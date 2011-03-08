@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 #include <optasian.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/unolingu.hxx>
@@ -228,7 +225,7 @@ BOOL SvxAsianLayoutPage::FillItemSet( SfxItemSet& )
         }
         catch(Exception&)
         {
-            DBG_ERROR("exception in XForbiddenCharacters");
+            OSL_FAIL("exception in XForbiddenCharacters");
         }
     }
     eLastUsedLanguageTypeForForbiddenCharacters = aLanguageLB.GetSelectLanguage();
@@ -362,7 +359,7 @@ IMPL_LINK(SvxAsianLayoutPage, LanguageHdl, SvxLanguageBox*, EMPTYARG )
             }
             catch(Exception&)
             {
-                DBG_ERROR("exception in XForbiddenCharacters");
+                OSL_FAIL("exception in XForbiddenCharacters");
             }
         }
     }
@@ -425,7 +422,7 @@ IMPL_LINK(SvxAsianLayoutPage, ModifyHdl, Edit*, pEdit)
         }
         catch(Exception&)
         {
-            DBG_ERROR("exception in XForbiddenCharacters");
+            OSL_FAIL("exception in XForbiddenCharacters");
         }
     }
     pImpl->aConfig.SetStartEndChars( aLocale, bEnable ? &sStart : 0, bEnable ? &sEnd : 0);

@@ -93,7 +93,7 @@ interface XMailService: ::com::sun::star::uno::XInterface {
         connection types are (the values should be handled
         case insensitive):
         "Insecure" - insecure connections
-        "Ssl" - Secure Socket Layer 2.0/3.0 based connection
+        "SSL" - Secure Socket Layer 2.0/3.0 based connection
 
         @returns
         a sequence of supported connection types.
@@ -121,7 +121,7 @@ interface XMailService: ::com::sun::star::uno::XInterface {
     void removeConnectionListener([in] XConnectionListener xListener);
 
     /**
-        Return the context of the current connnection. The context
+        Return the context of the current connection. The context
         contains information like the server name, port, connection type
         etc.
 
@@ -147,8 +147,8 @@ interface XMailService: ::com::sun::star::uno::XInterface {
         @param xConnectionContext
         [in] an interface used to query for connection related information.
         The context must contain the following values:
-        "ServerName" of type 'string', "Port" of type 'long', "ConnectionType"
-        of type 'string'. A list of supported connection types can be queried
+        "ServerName" of type "string", "Port" of type "long", "ConnectionType"
+        of type "string". A list of supported connection types can be queried
         using <code>getSupportedConnectionTypes</code>.
 
         @param xAuthenticator

@@ -29,7 +29,6 @@
 #define _SFX_APPDATA_HXX
 
 #include <tools/link.hxx>
-#include <tools/list.hxx>
 #include <svl/lstner.hxx>
 #include <vcl/timer.hxx>
 #include <tools/string.hxx>

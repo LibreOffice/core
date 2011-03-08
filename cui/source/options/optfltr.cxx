@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 // include ---------------------------------------------------------------
 #include <unotools/moduleoptions.hxx>
 #include <unotools/fltrcfg.hxx>
@@ -188,7 +185,6 @@ SfxTabPage* OfaMSFilterTabPage2::Create( Window* pParent,
 
 BOOL OfaMSFilterTabPage2::FillItemSet( SfxItemSet& )
 {
-    BOOL bModified = FALSE;
     SvtFilterOptions* pOpt = SvtFilterOptions::Get();
 
     static struct ChkCBoxEntries{
@@ -231,10 +227,7 @@ BOOL OfaMSFilterTabPage2::FillItemSet( SfxItemSet& )
                         pCheckButtonData->ConvertToButtonState( nButtonFlags );
 
                 if( bCheck != (pOpt->*pArr->FnIs)() )
-                {
-                    bModified = TRUE;
                     (pOpt->*pArr->FnSet)( bCheck );
-                }
             }
         }
     }

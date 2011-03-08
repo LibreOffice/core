@@ -140,7 +140,7 @@ MacroSecurityLevelTP::MacroSecurityLevelTP( Window* _pParent, MacroSecurity* _pD
         pCheck->Check();
     else
     {
-        DBG_ERROR("illegal macro security level");
+        OSL_FAIL("illegal macro security level");
     }
     maSecReadonlyFI.Show(bReadonly);
     if(bReadonly)
@@ -329,7 +329,7 @@ void MacroSecurityTrustedSourcesTP::FillCertLB( void )
             SvLBoxEntry*    pLBEntry = maTrustCertLB.InsertEntry( XmlSec::GetContentPart( xCert->getSubjectName() ) );
             maTrustCertLB.SetEntryText( XmlSec::GetContentPart( xCert->getIssuerName() ), pLBEntry, 1 );
             maTrustCertLB.SetEntryText( XmlSec::GetDateTimeString( xCert->getNotValidAfter() ), pLBEntry, 2 );
-            pLBEntry->SetUserData( ( void* ) sal_Int32( nEntry ) );     // missuse user data as index
+            pLBEntry->SetUserData( ( void* ) (sal_IntPtr)nEntry );      // missuse user data as index
         }
     }
 }

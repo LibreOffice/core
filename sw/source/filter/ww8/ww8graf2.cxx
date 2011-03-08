@@ -81,7 +81,7 @@ void wwZOrderer::OutsideEscher()
     maIndexes.pop();
 }
 
-// --> OD 2004-12-13 #117915# - consider new parameter <_bInHeaderFooter>
+// consider new parameter <_bInHeaderFooter>
 void wwZOrderer::InsertEscherObject( SdrObject* pObject,
                                      ULONG nSpId,
                                      const bool _bInHeaderFooter )
@@ -121,12 +121,12 @@ USHORT wwZOrderer::GetEscherObjectIdx(ULONG nSpId)
     return nFound;
 }
 
-// --> OD 2004-12-13 #117915# - consider new parameter <_bInHeaderFooter>
+// consider new parameter <_bInHeaderFooter>
 ULONG wwZOrderer::GetEscherObjectPos( ULONG nSpId,
                                       const bool _bInHeaderFooter )
 {
     /*
-    #97824# EscherObjects have their own ordering which needs to be matched to
+    EscherObjects have their own ordering which needs to be matched to
     the actual ordering that should be used when inserting them into the
     document.
     */
@@ -138,8 +138,8 @@ ULONG wwZOrderer::GetEscherObjectPos( ULONG nSpId,
     ULONG nRet=0;
     myeiter aIter = maEscherLayer.begin();
     myeiter aEnd = maEscherLayer.end();
-    // --> OD 2004-12-13 #117915# - skip objects in page header|footer, if
-    // current object isn't in page header|footer
+    // skip objects in page header|footer,
+    // if current object isn't in page header|footer
     if ( !_bInHeaderFooter )
     {
         while ( aIter != aEnd )
@@ -155,7 +155,7 @@ ULONG wwZOrderer::GetEscherObjectPos( ULONG nSpId,
     // <--
     while (aIter != aEnd)
     {
-        // --> OD 2004-12-13 #117915# - insert object in page header|footer
+        // insert object in page header|footer
         // before objects in page body
         if ( _bInHeaderFooter && !aIter->mbInHeaderFooter )
         {
@@ -517,11 +517,9 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
 
             WW8FlySet aFlySet( *this, pPaM, aPic, aPD.nWidth, aPD.nHeight );
 
-            //JP 17.1.2002: the correct anchor is set in Read_F_IncludePicture
-            //              and the current PaM point's behind the position if
-            //              it is anchored in content; because this anchor add
-            //              a character into the textnode.
-            //              IussueZilla task 2806
+            // the correct anchor is set in Read_F_IncludePicture and the current PaM point's
+            // behind the position if it is anchored in content; because this anchor add
+            // a character into the textnode. IussueZilla task 2806
             if (FLY_AS_CHAR ==
                 pFlyFmtOfJustInsertedGraphic->GetAnchor().GetAnchorId() )
             {

@@ -36,7 +36,7 @@
 
 
 /** is used for receiving "rowsChanged" events
-    posted by, for example, a rowset.
+    posted by, for example, a row set.
  */
 interface XRowsChangeListener: com::sun::star::lang::XEventListener
 {

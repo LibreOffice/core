@@ -40,12 +40,13 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/compbase1.hxx>
 
-using namespace rtl;
 using namespace cppu;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::datatransfer::clipboard;
 using namespace com::sun::star::awt;
 using namespace x11;
+
+using ::rtl::OUString;
 
 Sequence< OUString > SAL_CALL x11::X11Clipboard_getSupportedServiceNames()
 {
@@ -72,7 +73,7 @@ Sequence< OUString > SAL_CALL x11::Xdnd_dropTarget_getSupportedServiceNames()
 
 Reference< XInterface > X11SalInstance::CreateClipboard( const Sequence< Any >& arguments )
 {
-    static std::hash_map< OUString, ::std::hash_map< Atom, Reference< XClipboard > >, ::rtl::OUStringHash > m_aInstances;
+    static boost::unordered_map< OUString, ::boost::unordered_map< Atom, Reference< XClipboard > >, ::rtl::OUStringHash > m_aInstances;
 
     OUString aDisplayName;
     Atom nSelection;
@@ -108,8 +109,8 @@ Reference< XInterface > X11SalInstance::CreateClipboard( const Sequence< Any >& 
         nSelection = rManager.getAtom( OUString(RTL_CONSTASCII_USTRINGPARAM("CLIPBOARD")) );
     }
 
-    ::std::hash_map< Atom, Reference< XClipboard > >& rMap( m_aInstances[ aDisplayName ] );
-    ::std::hash_map< Atom, Reference< XClipboard > >::iterator it = rMap.find( nSelection );
+    ::boost::unordered_map< Atom, Reference< XClipboard > >& rMap( m_aInstances[ aDisplayName ] );
+    ::boost::unordered_map< Atom, Reference< XClipboard > >::iterator it = rMap.find( nSelection );
     if( it != rMap.end() )
         return it->second;
 

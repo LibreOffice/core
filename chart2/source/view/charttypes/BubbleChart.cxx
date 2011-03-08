@@ -382,7 +382,7 @@ void BubbleChart::createShapes()
                                 eAlignment = LABEL_ALIGN_CENTER;
                                 break;
                             default:
-                                DBG_ERROR("this label alignment is not implemented yet");
+                                OSL_FAIL("this label alignment is not implemented yet");
                                 aScenePosition3D.PositionY -= (aSymbolSize.DirectionY/2+1);
                                 eAlignment = LABEL_ALIGN_TOP;
                                 break;

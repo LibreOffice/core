@@ -334,7 +334,7 @@ void ScQueryParam::MoveToDest()
     }
     else
     {
-        DBG_ERROR("MoveToDest, bInplace == TRUE");
+        OSL_FAIL("MoveToDest, bInplace == TRUE");
     }
 }
 

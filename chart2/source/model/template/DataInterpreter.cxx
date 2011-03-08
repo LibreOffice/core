@@ -85,7 +85,7 @@ InterpretedData SAL_CALL DataInterpreter::interpretDataSource(
     if( ! xSource.is())
         return InterpretedData();
 
-#if OSL_DEBUG_LEVEL > 2
+#if OSL_DEBUG_LEVEL > 1
     lcl_ShowDataSource( xSource );
 #endif
 

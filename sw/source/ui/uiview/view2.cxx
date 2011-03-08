@@ -221,7 +221,7 @@ int SwView::InsertGraphic( const String &rPath, const String &rFilter,
     {
         if( !pFlt )
             pFlt = GraphicFilter::GetGraphicFilter();
-        nRes = GraphicFilter::LoadGraphic( rPath, rFilter, aGrf, pFlt /*, nFilter*/ );
+        nRes = GraphicFilter::LoadGraphic( rPath, rFilter, aGrf, pFlt );
     }
 
     if( GRFILTER_OK == nRes )
@@ -363,7 +363,7 @@ BOOL SwView::InsertGraphicDlg( SfxRequest& rReq )
                 }
                 catch(Exception& )
                 {
-                    OSL_ENSURE(false, "control acces failed");
+                    OSL_ENSURE(false, "control access failed");
                 }
             }
             rReq.AppendItem( SfxBoolItem( FN_PARAM_1, bAsLink ) );
@@ -413,7 +413,6 @@ BOOL SwView::InsertGraphicDlg( SfxRequest& rReq )
         rSh.LockPaint();
         rSh.StartAction();
 
-        /// #111827#
         SwRewriter aRewriter;
         aRewriter.AddRule(UNDO_ARG1, String(SW_RES(STR_GRAPHIC_DEFNAME)));
 
@@ -493,9 +492,7 @@ void SwView::Execute(SfxRequest &rReq)
     switch( nSlot )
     {
         case SID_CREATE_SW_DRAWVIEW:
-            // --> OD 2005-08-08 #i52858# - method name changed
             pWrtShell->getIDocumentDrawModelAccess()->GetOrCreateDrawModel();
-            // <--
             break;
 
         case FN_LINE_NUMBERING_DLG:
@@ -859,8 +856,8 @@ void SwView::Execute(SfxRequest &rReq)
                         pWrtShell->ApplyAutoMark();
                         bAutoMarkApplied = TRUE;
                     }
-                    // JP 15.07.96: das pBase wird nur fuer die Schnittstelle
-                    //              benoetigt. Muss mal umgetstellt werden!!!
+                    // das pBase wird nur fuer die Schnittstelle
+                    // benoetigt. Muss mal umgetstellt werden!!!
                     pWrtShell->UpdateTableOf( *pBase );
 
                     if( pWrtShell->GotoNextTOXBase() )
@@ -1374,7 +1371,6 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                 //-->#outline level,added by zhaojianwei
                 const SwNumRule* pNumRule = rShell.GetCurNumRule();
                 const bool bOutlineNum = pNumRule ? pNumRule->IsOutlineRule() : 0;
-                       //((SwTxtFmtColl*)rShell.GetCrsr()->GetNode()->GetTxtNode()->GetFmtColl())->IsAssignedToListLevelOfOutlineStyle();
 
                 if (pNumRule && !bOutlineNum )  // Cursor in Numerierung
                 {
@@ -1387,8 +1383,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                                     RES_PARATR_NUMRULE, RES_PARATR_NUMRULE);
                             rShell.GetCurAttr(aSet);
                             if(SFX_ITEM_AVAILABLE <=
-                               aSet.GetItemState(RES_PARATR_NUMRULE, TRUE
-                                                 /*, &pItem */ ))
+                               aSet.GetItemState(RES_PARATR_NUMRULE, TRUE ))
                             {
                                 const String& rNumStyle =
                                     ((const SfxStringItem &)
@@ -1770,7 +1765,6 @@ BOOL SwView::JumpToSwMark( const String& rMark )
         BOOL bSaveCT = IsCrsrAtTop();
         SetCrsrAtTop( TRUE );
 
-        //JP 27.04.98: Bug 49786
         // Damit in FrameSet auch gescrollt werden kann, muss die
         // entsprechende Shell auch das Focus-Flag gesetzt haben!
         BOOL bHasShFocus = pWrtShell->HasShFcs();
@@ -1880,7 +1874,7 @@ BOOL SwView::JumpToSwMark( const String& rMark )
     return bRet;
 }
 
-// #i67305, #1367991: Undo after insert from file:
+// #i67305# Undo after insert from file:
 // Undo "Insert form file" crashes with documents imported from binary filter (.sdw) => disabled
 // Undo "Insert form file" crashes with (.odt) documents crashes if these documents contains
 // page styles with active header/footer => disabled for those documents
@@ -2055,8 +2049,8 @@ long SwView::InsertMedium( USHORT nSlotId, SfxMedium* pMedium, INT16 nVersion )
                 }
 
                 if( pDoc )
-                { // Disable Undo for .sdw (136991) or
-                  // if the number of page styles with header/footer has changed (#i67305)
+                { // Disable Undo for .sdw or
+                  // if the number of page styles with header/footer has changed
                     if( !pRead || nUndoCheck != lcl_PageDescWithHeader( *pDoc ) )
                         pDoc->DelAllUndoObj();
                 }
@@ -2328,8 +2322,6 @@ void SwView::GenerateFormLetter(BOOL bUseCurrentDocument)
             // after the destruction of the dialogue its parent comes to top,
             // but we want that the new document is on top
             pTopWin->ToTop();
-
-//        return;
     }
 }
 

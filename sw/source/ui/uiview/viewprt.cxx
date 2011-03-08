@@ -31,9 +31,7 @@
 
 #include <com/sun/star/text/NotePrintMode.hpp>
 
-#if STLPORT_VERSION>=321
 #include <cstdarg>
-#endif
 
 #include <cmdid.h>
 
@@ -266,8 +264,7 @@ void SwView::ExecutePrint(SfxRequest& rReq)
             }
             else if( rReq.GetSlot() == SID_PRINTDOCDIRECT && ! bSilent )
             {
-                if( /*!bIsAPI && */
-                   ( pSh->IsSelection() || pSh->IsFrmSelected() || pSh->IsObjSelected() ) )
+                if( ( pSh->IsSelection() || pSh->IsFrmSelected() || pSh->IsObjSelected() ) )
                 {
                     short nBtn = SvxPrtQryBox(&GetEditWin()).Execute();
                     if( RET_CANCEL == nBtn )

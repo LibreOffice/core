@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_idl.hxx"
 
-/****************** I N C L U D E S **************************************/
 #include <ctype.h>
 #include <string.h>
 
@@ -37,7 +36,6 @@
 
 #include <char.hxx>
 
-/****************** D A T E N ********************************************/
 static unsigned char EqualTab[ 256 ] = {
   0,   1,   2,   3,   4,   5,   6,   7,   8,   9,
  10,  11,  12,  13,  14,  15,  16,  17,  18,  19,

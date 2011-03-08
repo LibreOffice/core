@@ -50,6 +50,7 @@
 class SdStyleSheet;
 class SdDrawDocument;
 class SdPage;
+class SfxStyleSheetBase;
 
 typedef std::map< const SdPage*, SdStyleFamilyRef > SdStyleFamilyMap;
 
@@ -71,7 +72,7 @@ public:
     SfxStyleSheetBase*  GetTitleSheet(const String& rLayoutName);
 
                         // Caller muss Liste loeschen
-    List*               CreateOutlineSheetList(const String& rLayoutName);
+    void                CreateOutlineSheetList(const String& rLayoutName, std::vector<SfxStyleSheetBase*> &rOutlineStyles);
 
     /** creates all layout style sheets for the givin layout name if they
         don't exist yet.
@@ -82,7 +83,7 @@ public:
                             when styles are missing.
     */
     SD_DLLPUBLIC void                CreateLayoutStyleSheets(const String& rLayoutName, sal_Bool bCheck = sal_False );
-    List*               CreateLayoutSheetNames(const String& rLayoutName) const;
+    void                CreateLayoutSheetNames(const String& rLayoutName, std::vector<String> &aNameList) const;
     void                CreateLayoutSheetList(const String& rLayoutName, SdStyleSheetVector& rLayoutSheets);
     void                CopyLayoutSheets(const String& rLayoutName, SdStyleSheetPool& rSourcePool, SdStyleSheetVector& rCreatedSheets );
     void                CopyGraphicSheets(SdStyleSheetPool& rSourcePool);

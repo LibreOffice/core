@@ -124,6 +124,7 @@
 #include <svx/databaseregistrationui.hxx>
 #include <toolkit/unohlp.hxx>
 #include <tools/diagnose_ex.h>
+#include <osl/diagnose.h>
 #include <tools/multisel.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/confignode.hxx>
@@ -373,7 +374,7 @@ sal_Bool SbaTableQueryBrowser::Construct(Window* pParent)
     }
     catch(Exception&)
     {
-        DBG_ERROR("SbaTableQueryBrowser::Construct: could not create (or start listening at) the database context!");
+        OSL_FAIL("SbaTableQueryBrowser::Construct: could not create (or start listening at) the database context!");
     }
     // some help ids
     if (getBrowserView() && getBrowserView()->getVclControl())
@@ -467,7 +468,7 @@ sal_Bool SbaTableQueryBrowser::InitializeForm(const Reference< ::com::sun::star:
     }
     catch(Exception&)
     {
-        DBG_ERROR("SbaTableQueryBrowser::InitializeForm : something went wrong !");
+        OSL_FAIL("SbaTableQueryBrowser::InitializeForm : something went wrong !");
         return sal_False;
     }
 
@@ -903,7 +904,7 @@ void SAL_CALL SbaTableQueryBrowser::statusChanged( const FeatureStateEvent& _rEv
     {
         if ( _rEvent.FeatureURL.Complete == aLoop->second.aURL.Complete)
         {
-            DBG_ASSERT( xSource.get() == aLoop->second.xDispatcher.get(), "SbaTableQueryBrowser::statusChanged: inconsistent!" );
+            OSL_ENSURE( xSource.get() == aLoop->second.xDispatcher.get(), "SbaTableQueryBrowser::statusChanged: inconsistent!" );
             // update the enabled state
             aLoop->second.bEnabled = _rEvent.IsEnabled;
 
@@ -941,7 +942,7 @@ void SAL_CALL SbaTableQueryBrowser::statusChanged( const FeatureStateEvent& _rEv
         }
     }
 
-    DBG_ASSERT(aLoop != m_aExternalFeatures.end(), "SbaTableQueryBrowser::statusChanged: don't know who sent this!");
+    OSL_ENSURE(aLoop != m_aExternalFeatures.end(), "SbaTableQueryBrowser::statusChanged: don't know who sent this!");
 }
 
 // -------------------------------------------------------------------------
@@ -1034,11 +1035,11 @@ namespace
 // -------------------------------------------------------------------------
 String SbaTableQueryBrowser::getDataSourceAcessor( SvLBoxEntry* _pDataSourceEntry ) const
 {
-    DBG_ASSERT( _pDataSourceEntry, "SbaTableQueryBrowser::getDataSourceAcessor: invalid entry!" );
+    OSL_ENSURE( _pDataSourceEntry, "SbaTableQueryBrowser::getDataSourceAcessor: invalid entry!" );
 
     DBTreeListUserData* pData = static_cast< DBTreeListUserData* >( _pDataSourceEntry->GetUserData() );
-    DBG_ASSERT( pData, "SbaTableQueryBrowser::getDataSourceAcessor: invalid entry data!" );
-    DBG_ASSERT( pData->eType == etDatasource, "SbaTableQueryBrowser::getDataSourceAcessor: entry does not denote a data source!" );
+    OSL_ENSURE( pData, "SbaTableQueryBrowser::getDataSourceAcessor: invalid entry data!" );
+    OSL_ENSURE( pData->eType == etDatasource, "SbaTableQueryBrowser::getDataSourceAcessor: entry does not denote a data source!" );
     return pData->sAccessor.Len() ? pData->sAccessor : GetEntryText( _pDataSourceEntry );
 }
 
@@ -1059,7 +1060,7 @@ SvLBoxEntry* SbaTableQueryBrowser::getObjectEntry(const ::rtl::OUString& _rDataS
         String sDisplayName, sDataSourceId;
         bool bIsDataSourceURL = getDataSourceDisplayName_isURL( _rDataSource, sDisplayName, sDataSourceId );
             // the display name may differ from the URL for readability reasons
-            // #i33699# - 2004-09-24 - fs@openoffice.org
+            // #i33699#
 
         FilterByEntryDataId aFilter( sDataSourceId );
         SvLBoxEntry* pDataSource = m_pTreeView->getListBox().GetEntryPosByName( sDisplayName, NULL, &aFilter );
@@ -1071,7 +1072,7 @@ SvLBoxEntry* SbaTableQueryBrowser::getObjectEntry(const ::rtl::OUString& _rDataS
                 // add new entries to the list box model
                 implAddDatasource( _rDataSource, _rxConnection );
                 pDataSource = m_pTreeView->getListBox().GetEntryPosByName( sDisplayName, NULL, &aFilter );
-                DBG_ASSERT( pDataSource, "SbaTableQueryBrowser::getObjectEntry: hmm - did not find it again!" );
+                OSL_ENSURE( pDataSource, "SbaTableQueryBrowser::getObjectEntry: hmm - did not find it again!" );
             }
         }
         if (_ppDataSourceEntry)
@@ -1143,7 +1144,7 @@ SvLBoxEntry* SbaTableQueryBrowser::getObjectEntry(const ::rtl::OUString& _rDataS
                             }
                             catch(Exception&)
                             {
-                                DBG_ERROR("SbaTableQueryBrowser::populateTree: could not fill the tree");
+                                OSL_FAIL("SbaTableQueryBrowser::populateTree: could not fill the tree");
                             }
                         }
                     }
@@ -1174,7 +1175,7 @@ SvLBoxEntry* SbaTableQueryBrowser::getObjectEntry(const ::svx::ODataAccessDescri
 void SbaTableQueryBrowser::connectExternalDispatches()
 {
     Reference< XDispatchProvider >  xProvider( getFrame(), UNO_QUERY );
-    DBG_ASSERT(xProvider.is(), "SbaTableQueryBrowser::connectExternalDispatches: no DispatchProvider !");
+    OSL_ENSURE(xProvider.is(), "SbaTableQueryBrowser::connectExternalDispatches: no DispatchProvider !");
     if (xProvider.is())
     {
         if ( m_aExternalFeatures.empty() )
@@ -1337,7 +1338,7 @@ void SbaTableQueryBrowser::implRemoveStatusListeners()
             }
             catch (Exception&)
             {
-                DBG_ERROR("SbaTableQueryBrowser::implRemoveStatusListeners: could not remove a status listener!");
+                OSL_FAIL("SbaTableQueryBrowser::implRemoveStatusListeners: could not remove a status listener!");
             }
         }
     }
@@ -1682,7 +1683,6 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId) const
                     aReturn.bEnabled = aReturn.bEnabled && getBrowserView()->getVclControl()->GetSelectRowCount();
 
                 // disabled for native queries which are not saved within the database
-                // 67706 - 23.08.99 - FS
                 Reference< XPropertySet >  xDataSource(getRowSet(), UNO_QUERY);
                 try
                 {
@@ -1719,7 +1719,7 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId) const
                         case CommandType::COMMAND:
                             sTitle = String(ModuleRes(STR_QRY_TITLE)); break;
                         default:
-                            DBG_ASSERT(sal_False, "SbaTableQueryBrowser::GetState: unknown command type!");
+                            OSL_ENSURE(sal_False, "SbaTableQueryBrowser::GetState: unknown command type!");
                     }
                     ::rtl::OUString aName;
                     xProp->getPropertyValue(PROPERTY_COMMAND) >>= aName;
@@ -1872,7 +1872,7 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId, const Sequence< PropertyValue
                     if ( !pGrid->IsAllSelected() )
                     {   // transfer the selected rows only if not all rows are selected
                         // (all rows means the whole table)
-                        // i3832 - 03.04.2002 - fs@openoffice.org
+                        // #i3832#
                         if (pSelection != NULL)
                         {
                             aSelection.realloc(pSelection->GetSelectCount());
@@ -1899,7 +1899,7 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId, const Sequence< PropertyValue
                     }
                     catch(Exception&)
                     {
-                        DBG_ERROR("SbaTableQueryBrowser::Execute(ID_BROWSER_?): could not clone the cursor!");
+                        OSL_FAIL("SbaTableQueryBrowser::Execute(ID_BROWSER_?): could not clone the cursor!");
                     }
 
                     Reference<XPropertySet> xProp(getRowSet(),UNO_QUERY);
@@ -1986,7 +1986,7 @@ void SbaTableQueryBrowser::implAddDatasource(const String& _rDbName, Image& _rDb
 
     // add the entry for the data source
     // special handling for data sources denoted by URLs - we do not want to display this ugly URL, do we?
-    // #i33699# - 2004-09-24 - fs@openoffice.org
+    // #i33699#
     String sDSDisplayName, sDataSourceId;
     getDataSourceDisplayName_isURL( _rDbName, sDSDisplayName, sDataSourceId );
 
@@ -2065,7 +2065,7 @@ void SbaTableQueryBrowser::populateTree(const Reference<XNameAccess>& _xNameAcce
     }
     catch(Exception&)
     {
-        DBG_ERROR("SbaTableQueryBrowser::populateTree: could not fill the tree");
+        OSL_FAIL("SbaTableQueryBrowser::populateTree: could not fill the tree");
     }
 }
 
@@ -2190,7 +2190,7 @@ IMPL_LINK(SbaTableQueryBrowser, OnExpandEntry, SvLBoxEntry*, _pParent)
 //------------------------------------------------------------------------------
 sal_Bool SbaTableQueryBrowser::ensureEntryObject( SvLBoxEntry* _pEntry )
 {
-    DBG_ASSERT(_pEntry, "SbaTableQueryBrowser::ensureEntryObject: invalid argument!");
+    OSL_ENSURE(_pEntry, "SbaTableQueryBrowser::ensureEntryObject: invalid argument!");
     if (!_pEntry)
         return sal_False;
 
@@ -2252,7 +2252,7 @@ sal_Bool SbaTableQueryBrowser::ensureEntryObject( SvLBoxEntry* _pEntry )
                             bSuccess = pEntryData->xContainer.is();
                         }
                         else {
-                            DBG_ERROR("SbaTableQueryBrowser::ensureEntryObject: no XQueryDefinitionsSupplier interface!");
+                            OSL_FAIL("SbaTableQueryBrowser::ensureEntryObject: no XQueryDefinitionsSupplier interface!");
                         }
                     }
                     catch( const Exception& )
@@ -2264,7 +2264,7 @@ sal_Bool SbaTableQueryBrowser::ensureEntryObject( SvLBoxEntry* _pEntry )
             break;
 
         default:
-            DBG_ERROR("SbaTableQueryBrowser::ensureEntryObject: ooops ... missing some implementation here!");
+            OSL_FAIL("SbaTableQueryBrowser::ensureEntryObject: ooops ... missing some implementation here!");
             // TODO ...
             break;
     }
@@ -2825,7 +2825,7 @@ void SAL_CALL SbaTableQueryBrowser::elementReplaced( const ContainerEvent& _rEve
     }
     else if (xNames.get() == m_xDatabaseContext.get())
     {   // a datasource has been replaced in the context
-        DBG_ERROR("SbaTableQueryBrowser::elementReplaced: no support for replaced data sources!");
+        OSL_FAIL("SbaTableQueryBrowser::elementReplaced: no support for replaced data sources!");
             // very suspicious: the database context should not allow to replace data source, only to register
             // and revoke them
     }
@@ -2864,8 +2864,8 @@ void SbaTableQueryBrowser::impl_releaseConnection( SharedConnection& _rxConnecti
 // -------------------------------------------------------------------------
 void SbaTableQueryBrowser::disposeConnection( SvLBoxEntry* _pDSEntry )
 {
-    DBG_ASSERT( _pDSEntry, "SbaTableQueryBrowser::disposeConnection: invalid entry (NULL)!" );
-    DBG_ASSERT( impl_isDataSourceEntry( _pDSEntry ), "SbaTableQueryBrowser::disposeConnection: invalid entry (not top-level)!" );
+    OSL_ENSURE( _pDSEntry, "SbaTableQueryBrowser::disposeConnection: invalid entry (NULL)!" );
+    OSL_ENSURE( impl_isDataSourceEntry( _pDSEntry ), "SbaTableQueryBrowser::disposeConnection: invalid entry (not top-level)!" );
 
     if ( _pDSEntry )
     {
@@ -2878,8 +2878,8 @@ void SbaTableQueryBrowser::disposeConnection( SvLBoxEntry* _pDSEntry )
 // -------------------------------------------------------------------------
 void SbaTableQueryBrowser::closeConnection(SvLBoxEntry* _pDSEntry,sal_Bool _bDisposeConnection)
 {
-    DBG_ASSERT(_pDSEntry, "SbaTableQueryBrowser::closeConnection: invalid entry (NULL)!");
-    DBG_ASSERT( impl_isDataSourceEntry( _pDSEntry ), "SbaTableQueryBrowser::closeConnection: invalid entry (not top-level)!");
+    OSL_ENSURE(_pDSEntry, "SbaTableQueryBrowser::closeConnection: invalid entry (NULL)!");
+    OSL_ENSURE( impl_isDataSourceEntry( _pDSEntry ), "SbaTableQueryBrowser::closeConnection: invalid entry (not top-level)!");
 
     // if one of the entries of the given DS is displayed currently, unload the form
     if (m_pCurrentlyDisplayed && (m_pTreeView->getListBox().GetRootLevelParent(m_pCurrentlyDisplayed) == _pDSEntry))
@@ -3244,7 +3244,7 @@ sal_Bool SbaTableQueryBrowser::getExistentConnectionFor( SvLBoxEntry* _pAnyEntry
     return _rConnection.is();
 }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
 // -----------------------------------------------------------------------------
 bool SbaTableQueryBrowser::impl_isDataSourceEntry( SvLBoxEntry* _pEntry ) const
 {
@@ -3255,7 +3255,7 @@ bool SbaTableQueryBrowser::impl_isDataSourceEntry( SvLBoxEntry* _pEntry ) const
 // -----------------------------------------------------------------------------
 sal_Bool SbaTableQueryBrowser::ensureConnection( SvLBoxEntry* _pDSEntry, void* pDSData, SharedConnection& _rConnection )
 {
-    DBG_ASSERT( impl_isDataSourceEntry( _pDSEntry ), "SbaTableQueryBrowser::ensureConnection: this entry does not denote a data source!" );
+    OSL_ENSURE( impl_isDataSourceEntry( _pDSEntry ), "SbaTableQueryBrowser::ensureConnection: this entry does not denote a data source!" );
     if(_pDSEntry)
     {
         DBTreeListUserData* pTreeListData = static_cast<DBTreeListUserData*>(pDSData);
@@ -3294,7 +3294,7 @@ IMPL_LINK( SbaTableQueryBrowser, OnTreeEntryCompare, const SvSortData*, _pSortDa
 {
     SvLBoxEntry* pLHS = static_cast<SvLBoxEntry*>(_pSortData->pLeft);
     SvLBoxEntry* pRHS = static_cast<SvLBoxEntry*>(_pSortData->pRight);
-    DBG_ASSERT(pLHS && pRHS, "SbaTableQueryBrowser::OnTreeEntryCompare: invalid tree entries!");
+    OSL_ENSURE(pLHS && pRHS, "SbaTableQueryBrowser::OnTreeEntryCompare: invalid tree entries!");
     // we want the table entry and the end so we have to do a check
 
     if (isContainer(pRHS))
@@ -3330,7 +3330,7 @@ IMPL_LINK( SbaTableQueryBrowser, OnTreeEntryCompare, const SvSortData*, _pSortDa
 
     SvLBoxString* pLeftTextItem = static_cast<SvLBoxString*>(pLHS->GetFirstItem(SV_ITEM_ID_LBOXSTRING));
     SvLBoxString* pRightTextItem = static_cast<SvLBoxString*>(pRHS->GetFirstItem(SV_ITEM_ID_LBOXSTRING));
-    DBG_ASSERT(pLeftTextItem && pRightTextItem, "SbaTableQueryBrowser::OnTreeEntryCompare: invalid text items!");
+    OSL_ENSURE(pLeftTextItem && pRightTextItem, "SbaTableQueryBrowser::OnTreeEntryCompare: invalid text items!");
 
     String sLeftText = pLeftTextItem->GetText();
     String sRightText = pRightTextItem->GetText();

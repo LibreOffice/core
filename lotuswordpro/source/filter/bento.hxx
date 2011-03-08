@@ -214,7 +214,7 @@ private: // Data
 class CBenNamedObjectListElmt : public CUtListElmt
 {
 public: // Methods
-    // added by  to remove warning 2004-06-24
+    // added to remove warning
     CBenNamedObjectListElmt(pCBenNamedObjectListElmt pPrev) : CUtListElmt(pPrev)
       { cpNamedObject = NULL; }
     void SetNamedObject(pCBenNamedObject pObj)
@@ -293,13 +293,12 @@ public: // Internal methods
     pCUtList GetObjects() { return &cObjects; }
     pCUtList GetNamedObjects() { return &cNamedObjects; }
 
-    // Added by  2004-06-10
     LtcUtBenValueStream * FindNextValueStreamWithPropertyName(const char * sPropertyName, LtcUtBenValueStream * pCurrentValueStream);
     LtcUtBenValueStream * FindValueStreamWithPropertyName(const char * sPropertyName);
     LtcUtBenValueStream * FindObjectValueStreamWithObjectIDAndProperty(BenObjectID ObjectID, const char * sPropertyName);
     BenError CreateGraphicStreams(std::vector<SvStream *> * pStreamVector)  ;
     BenError CreateGraphicStream(SvStream * &pStream,  const char *pObjectName);
-    //Add by  10/24/2005
+
     SotStorageStreamRef ConvertAswStorageToOLE2Stream(const char * sObjectName);
     LtcUtBenValueStream * FindOLEStorageStreamWithObjectName(const char * sObjectName, AswEntry& rDirStruct);
     void ReadAswEntry(SvStream * pStream, AswEntry& rEntry);
@@ -368,7 +367,7 @@ public:
     pCBenProperty BEN_EXPORT GetProperty() { return cpProperty; }
 
 public: // Internal methods
-    // added by  to remove WARNING 2004-06-24
+    // added to remove WARNING
     CBenValue(BenObjectID TypeID):CBenIDListElmt(TypeID)
     {
         cpProperty = NULL;
@@ -414,7 +413,7 @@ public:
     pLtcBenContainer GetContainer() { return GetBenObject()->GetContainer(); }
 
 public: // Internal methods
-    // changed by  to remove WARNING here 2004-06-24
+    // changed to remove WARNING here
     CBenProperty(pCBenObject pObject, BenObjectID PropertyID,
       BenObjectID TypeID, pCBenIDListElmt pPrevProperty) :
       CBenIDListElmt(PropertyID, pPrevProperty), cValue(TypeID)

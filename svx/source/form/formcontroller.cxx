@@ -94,7 +94,8 @@
 #include <rtl/logfile.hxx>
 
 #include <algorithm>
-#include <functional>
+
+#include <o3tl/compat_functional.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::comphelper;
@@ -522,7 +523,7 @@ struct UpdateAllListeners : public ::std::unary_function< Reference< XDispatch >
     bool operator()( const Reference< XDispatch >& _rxDispatcher ) const
     {
         static_cast< ::svx::OSingleFeatureDispatcher* >( _rxDispatcher.get() )->updateAllListeners();
-        // the return is a dummy only so we can use this struct in a std::compose1 call
+        // the return is a dummy only so we can use this struct in a o3tl::compose1 call
         return true;
     }
 };
@@ -2651,9 +2652,9 @@ void FormController::updateAllDispatchers() const
     ::std::for_each(
         m_aFeatureDispatchers.begin(),
         m_aFeatureDispatchers.end(),
-        ::std::compose1(
+        ::o3tl::compose1(
             UpdateAllListeners(),
-            ::std::select2nd< DispatcherContainer::value_type >()
+            ::o3tl::select2nd< DispatcherContainer::value_type >()
         )
     );
 }
@@ -3272,7 +3273,6 @@ void FormController::startFiltering()
     Reference< XConnection >  xConnection( aStaticTools.getRowSetConnection( Reference< XRowSet >( m_xModelAsIndex, UNO_QUERY ) ) );
     if ( !xConnection.is() )
         // nothing to do - can't filter a form which is not connected
-        // 98023 - 19.03.2002 - fs@openoffice.org
         return;
 
     // stop listening for controls
@@ -3970,7 +3970,7 @@ sal_Bool SAL_CALL FormController::approveParameter(const DatabaseParameterEvent&
             Sequence< PropertyValue > aFinalValues = pParamValues->getValues();
             if (aFinalValues.getLength() != aRequest.Parameters->getCount())
             {
-                DBG_ERROR("FormController::approveParameter: the InteractionHandler returned nonsense!");
+                OSL_FAIL("FormController::approveParameter: the InteractionHandler returned nonsense!");
                 return sal_False;
             }
             const PropertyValue* pFinalValues = aFinalValues.getConstArray();
@@ -3988,7 +3988,7 @@ sal_Bool SAL_CALL FormController::approveParameter(const DatabaseParameterEvent&
                     try { xParam->setPropertyValue(FM_PROP_VALUE, pFinalValues->Value); }
                     catch(Exception&)
                     {
-                        DBG_ERROR("FormController::approveParameter: setting one of the properties failed!");
+                        OSL_FAIL("FormController::approveParameter: setting one of the properties failed!");
                     }
                 }
             }
@@ -4107,7 +4107,7 @@ void SAL_CALL FormController::invalidateAllFeatures(  ) throw (RuntimeException)
         m_aFeatureDispatchers.begin(),
         m_aFeatureDispatchers.end(),
         aInterceptedFeatures.getArray(),
-        ::std::select1st< DispatcherContainer::value_type >()
+        ::o3tl::select1st< DispatcherContainer::value_type >()
     );
 
     aGuard.clear();
@@ -4162,7 +4162,7 @@ void SAL_CALL FormController::dispatch( const URL& _rURL, const Sequence< Proper
 {
     if ( _rArgs.getLength() != 1 )
     {
-        DBG_ERROR( "FormController::dispatch: no arguments -> no dispatch!" );
+        OSL_FAIL( "FormController::dispatch: no arguments -> no dispatch!" );
         return;
     }
 
@@ -4177,12 +4177,12 @@ void SAL_CALL FormController::dispatch( const URL& _rURL, const Sequence< Proper
 
     if  ( _rURL.Complete == FMURL_CONFIRM_DELETION )
     {
-        DBG_ERROR( "FormController::dispatch: How do you expect me to return something via this call?" );
+        OSL_FAIL( "FormController::dispatch: How do you expect me to return something via this call?" );
             // confirmDelete has a return value - dispatch hasn't
         return;
     }
 
-    DBG_ERROR( "FormController::dispatch: unknown URL!" );
+    OSL_FAIL( "FormController::dispatch: unknown URL!" );
 }
 
 //------------------------------------------------------------------------------
@@ -4235,7 +4235,7 @@ Reference< XDispatchProviderInterceptor >  FormController::createInterceptor(con
         )
     {
         if ((*aIter)->getIntercepted() == _xInterception)
-            DBG_ERROR("FormController::createInterceptor : we already do intercept this objects dispatches !");
+            OSL_FAIL("FormController::createInterceptor : we already do intercept this objects dispatches !");
     }
 #endif
 

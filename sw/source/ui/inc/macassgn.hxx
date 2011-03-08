@@ -35,7 +35,7 @@ class SvxMacroItem;
 
 enum DlgEventType
 {
-    MACASSGN_TEXTBAUST,
+    MACASSGN_AUTOTEXT,
     MACASSGN_GRAPHIC,
     MACASSGN_OLE,
     MACASSGN_FRMURL,

@@ -31,9 +31,7 @@
 
 
 
-#if STLPORT_VERSION>=321
 #include <cstdarg>
-#endif
 
 #include <svtools/svmedit.hxx>
 #include <svl/eitem.hxx>
@@ -98,11 +96,6 @@ struct DBTextStruct_Impl
     Reference<XResultSet>   xCursor;
     Reference<XConnection>  xConnection;
 };
-
-inline void AddSelList( List& rLst, long nRow )
-{
-    rLst.Insert( (void*)nRow , LIST_APPEND );
-}
 
 void SwTextShell::ExecDB(SfxRequest &rReq)
 {

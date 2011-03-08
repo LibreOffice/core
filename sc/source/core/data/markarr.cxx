@@ -77,14 +77,13 @@ void ScMarkArray::Reset( BOOL bMarked )
 
 BOOL ScMarkArray::Search( SCROW nRow, SCSIZE& nIndex ) const
 {
-    long    nLo         = 0;
     long    nHi         = static_cast<long>(nCount) - 1;
-    long    nStartRow   = 0;
-    long    nEndRow     = 0;
     long    i           = 0;
     BOOL    bFound      = (nCount == 1);
     if (pData)
     {
+        long    nLo         = 0;
+        long    nStartRow   = 0;
         while ( !bFound && nLo <= nHi )
         {
             i = (nLo + nHi) / 2;
@@ -92,7 +91,7 @@ BOOL ScMarkArray::Search( SCROW nRow, SCSIZE& nIndex ) const
                 nStartRow = (long) pData[i - 1].nRow;
             else
                 nStartRow = -1;
-            nEndRow = (long) pData[i].nRow;
+            long nEndRow = (long) pData[i].nRow;
             if (nEndRow < (long) nRow)
                 nLo = ++i;
             else

@@ -4934,25 +4934,7 @@ void ScInterpreter::ScSumIf()
             case svExternalSingleRef:
             case svExternalDoubleRef:
             {
-                if (GetStackType() == svMatrix)
-                    pQueryMatrix = PopMatrix();
-                else if (GetStackType() == svExternalDoubleRef)
-                    PopExternalDoubleRef(pQueryMatrix);
-                else
-                {
-                    OSL_ENSURE(GetStackType() == svExternalSingleRef, "external single ref is expected, but that's not what we found.");
-                    ScExternalRefCache::TokenRef pToken;
-                    PopExternalSingleRef(pToken);
-                    if (pToken)
-                    {
-                        pQueryMatrix = new ScMatrix(1, 1);
-                        if (pToken->GetType() == svDouble)
-                            pQueryMatrix->PutDouble(pToken->GetDouble(), 0, 0);
-                        else
-                            pQueryMatrix->PutString(pToken->GetString(), 0, 0);
-                    }
-                }
-
+                pQueryMatrix = GetMatrix();
                 if (!pQueryMatrix)
                 {
                     PushIllegalParameter();
@@ -5217,8 +5199,10 @@ void ScInterpreter::ScLookup()
             }
             break;
             case svMatrix:
+            case svExternalSingleRef:
+            case svExternalDoubleRef:
             {
-                pResMat = PopMatrix();
+                pResMat = GetMatrix();
                 if (!pResMat)
                 {
                     PushIllegalParameter();
@@ -5275,8 +5259,10 @@ void ScInterpreter::ScLookup()
         }
         break;
         case svMatrix:
+        case svExternalSingleRef:
+        case svExternalDoubleRef:
         {
-            pDataMat = PopMatrix();
+            pDataMat = GetMatrix();
             if (!pDataMat)
             {
                 PushIllegalParameter();
@@ -5763,12 +5749,9 @@ void ScInterpreter::CalculateLookup(BOOL HLookup)
                 return;
             }
         }
-        else if (eType == svMatrix || eType == svExternalDoubleRef)
+        else if (eType == svMatrix || eType == svExternalDoubleRef || eType == svExternalSingleRef)
         {
-            if (eType == svMatrix)
-                pMat = PopMatrix();
-            else
-                PopExternalDoubleRef(pMat);
+            pMat = GetMatrix();
 
             if (pMat)
                 pMat->GetDimensions(nC, nR);
@@ -6588,22 +6571,18 @@ void ScInterpreter::ScIndirect()
                 if (!pNames)
                     break;
 
-                USHORT nPos = 0;
-                if (!pNames->SearchName( sRefStr, nPos))
-                    break;
-
-                ScRangeData* rData = (*pNames)[nPos];
-                if (!rData)
+                ScRangeData* pData = pNames->findByName(sRefStr);
+                if (!pData)
                     break;
 
                 // We need this in order to obtain a good range.
-                rData->ValidateTabRefs();
+                pData->ValidateTabRefs();
 
                 ScRange aRange;
 
                 // This is the usual way to treat named ranges containing
                 // relative references.
-                if (!rData->IsReference( aRange, aPos))
+                if (!pData->IsReference( aRange, aPos))
                     break;
 
                 if (aRange.aStart == aRange.aEnd)
@@ -6879,6 +6858,8 @@ void ScInterpreter::ScIndex()
         switch (GetStackType())
         {
             case svMatrix:
+            case svExternalSingleRef:
+            case svExternalDoubleRef:
                 {
                     if (nArea != 1)
                         SetError(errIllegalArgument);

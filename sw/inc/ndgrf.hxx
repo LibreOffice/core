@@ -39,20 +39,18 @@ class SwGrfFmtColl;
 class SwDoc;
 class GraphicAttr;
 class SvStorage;
-// --------------------
+
 // SwGrfNode
-// --------------------
 class SW_DLLPUBLIC SwGrfNode: public SwNoTxtNode
 {
     friend class SwNodes;
 
     GraphicObject aGrfObj;
-    ::sfx2::SvBaseLinkRef refLink;       // falls Grafik nur als Link, dann Pointer gesetzt
+    ::sfx2::SvBaseLinkRef refLink;       // If graphics only as link then pointer is set.
     Size nGrfSize;
     String aNewStrmName;        // SW3/XML: new stream name (either SW3 stream
                                 // name or package url)
-    String aLowResGrf;          // HTML: LowRes Grafik (Ersatzdarstellung bis
-                                //      die normale (HighRes) geladen ist.
+    String aLowResGrf;          // HTML: LowRes graphics (substitute until regular HighRes graphics is loaded).
     BOOL bTransparentFlagValid  :1;
     BOOL bInSwapIn              :1;
 
@@ -60,9 +58,8 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTxtNode
     BOOL bChgTwipSize           :1;
     BOOL bChgTwipSizeFromPixel  :1;
     BOOL bLoadLowResGrf         :1;
-    BOOL bFrameInPaint          :1; //Um Start-/EndActions im Paint (ueber
-                                    //SwapIn zu verhindern.
-    BOOL bScaleImageMap         :1; //Image-Map in SetTwipSize skalieren
+    BOOL bFrameInPaint          :1; // To avoid Start-/EndActions in Paint via SwapIn.
+    BOOL bScaleImageMap         :1; // Scale image map in SetTwipSize.
 
     boost::shared_ptr< SwAsyncRetrieveInputStreamThreadConsumer > mpThreadConsumer;
     bool mbLinkedInputStreamReady;
@@ -74,7 +71,7 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTxtNode
                const Graphic* pGraphic,
                SwGrfFmtColl* pGrfColl,
                SwAttrSet* pAutoAttr = 0 );
-    // Ctor fuer Einlesen (SW/G) ohne Grafik
+    // Ctor for reading (SW/G) without graphics.
     SwGrfNode( const SwNodeIndex& rWhere,
                const String& rGrfName, const String& rFltName,
                SwGrfFmtColl* pGrfColl,
@@ -169,29 +166,30 @@ public:
     virtual SwCntntNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const;
 #ifndef _FESHVIEW_ONLY_INLINE_NEEDED
 
-    // erneutes Einlesen, falls Graphic nicht Ok ist. Die
-    // aktuelle wird durch die neue ersetzt.
+    // Re-read in case graphic was not OK. The current one
+    // gets replaced by the new one.
     BOOL ReRead( const String& rGrfName, const String& rFltName,
                  const Graphic* pGraphic = 0,
                  const GraphicObject* pGrfObj = 0,
                  BOOL bModify = TRUE );
-    // Laden der Grafik unmittelbar vor der Anzeige
+    // Loading of graphic immediately before displaying.
     short SwapIn( BOOL bWaitForData = FALSE );
-        // Entfernen der Grafik, um Speicher freizugeben
+    // Remove graphic in order to free memory.
     short SwapOut();
-        // Zugriff auf den Storage-Streamnamen
+    // Access to storage stream-name.
     void SetStreamName( const String& r ) { aGrfObj.SetUserData( r ); }
     void SetNewStreamName( const String& r ) { aNewStrmName = r; }
-    // is this node selected by any shell?
+    // Is this node selected by any shell?
     BOOL IsSelected() const;
 #endif
 
-        // Der Grafik sagen, dass sich der Node im Undobereich befindet
+    // Communicate to graphic that node is in Undo-range.
     virtual BOOL SavePersistentData();
     virtual BOOL RestorePersistentData();
 
 #ifndef _FESHVIEW_ONLY_INLINE_NEEDED
-        // Abfrage der Link-Daten
+
+    // Query link-data.
     BOOL IsGrfLink() const                  { return refLink.Is(); }
     inline BOOL IsLinkedFile() const;
     inline BOOL IsLinkedDDE() const;
@@ -199,11 +197,11 @@ public:
     BOOL GetFileFilterNms( String* pFileNm, String* pFilterNm ) const;
     void ReleaseLink();
 
-    // Skalieren einer Image-Map: Die Image-Map wird um den Faktor
-    // zwischen Grafik-Groesse und Rahmen-Groesse vergroessert/verkleinert
+    // Scale an image-map: the image-map becomes zoomed in / out by
+    // factor between graphic-size and border-size.
     void ScaleImageMap();
 
-    // returns the with our graphic attributes filled Graphic-Attr-Structure
+    // Returns the with our graphic attributes filled Graphic-Attr-Structure.
     GraphicAttr& GetGraphicAttr( GraphicAttr&, const SwFrm* pFrm ) const;
 
 #endif
@@ -217,8 +215,8 @@ public:
     bool IsAsyncRetrieveInputStreamPossible() const;
 };
 
-// ----------------------------------------------------------------------
-// Inline methods from Node.hxx - erst hier ist der TxtNode bekannt !!
+
+// Inline methods from Node.hxx - it is only now that we know TxtNode!!
 inline       SwGrfNode   *SwNode::GetGrfNode()
 {
      return ND_GRFNODE == nNodeType ? (SwGrfNode*)this : 0;

@@ -82,7 +82,7 @@ class SwContourCache
 public:
     SwContourCache();
     ~SwContourCache();
-    const SdrObject* GetObject( MSHORT nPos ){ return pSdrObj[ nPos ]; }
+    const SdrObject* GetObject( MSHORT nPos ) const{ return pSdrObj[ nPos ]; }
     MSHORT GetCount() const { return nObjCnt; }
     void ClrObject( MSHORT nPos );
     static const SwRect CalcBoundRect( const SwAnchoredObject* pAnchoredObj,
@@ -143,15 +143,8 @@ class SwTxtFly
     const SwCntntFrm* _GetMaster();
 
 public:
-    inline SwTxtFly()
-    {
-        mbIgnoreCurrentFrame = sal_False;
-        mbIgnoreCurrentFrame = sal_False;
-        mbIgnoreObjsInHeaderFooter = sal_False;
-        mpCurrAnchoredObj = 0;
-        mpAnchoredObjList = 0;
-        pMaster = 0;
-    }
+    inline SwTxtFly() : pPage(0), mpCurrAnchoredObj(0), pCurrFrm(0), pMaster(0), mpAnchoredObjList(0), nMinBottom(0), nNextTop(0),
+    nIndex(0) {}
     inline SwTxtFly( const SwTxtFrm *pFrm )
         { CtorInitTxtFly( pFrm ); }
 

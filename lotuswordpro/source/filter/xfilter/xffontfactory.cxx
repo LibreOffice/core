@@ -57,10 +57,6 @@
  * @file
  * Implement for font factory which will manage all font.
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2004-12-23 create this file.
- ************************************************************************/
 #include    "xffontfactory.hxx"
 
 XFFontFactory::XFFontFactory()

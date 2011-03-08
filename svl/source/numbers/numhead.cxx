@@ -69,7 +69,7 @@ ULONG SvNumReadHeader::BytesLeft() const
     if (nReadEnd <= nDataEnd)
         return nDataEnd-nReadEnd;
 
-    DBG_ERROR("Fehler bei SvNumReadHeader::BytesLeft");
+    OSL_FAIL("Fehler bei SvNumReadHeader::BytesLeft");
     return 0;
 }
 
@@ -119,7 +119,7 @@ ImpSvNumMultipleReadHeader::ImpSvNumMultipleReadHeader(SvStream& rNewStream) :
     rStream >> nID;
     if (nID != SV_NUMID_SIZES)
     {
-        DBG_ERROR("SV_NUMID_SIZES nicht gefunden");
+        OSL_FAIL("SV_NUMID_SIZES nicht gefunden");
     }
     sal_uInt32 nSizeTableLen;
     rStream >> nSizeTableLen;
@@ -154,7 +154,7 @@ void ImpSvNumMultipleReadHeader::Skip( SvStream& rStream )
     rStream >> nID;
     if ( nID != SV_NUMID_SIZES )
     {
-        DBG_ERROR("SV_NUMID_SIZES nicht gefunden");
+        OSL_FAIL("SV_NUMID_SIZES nicht gefunden");
     }
     sal_uInt32 nSizeTableLen;
     rStream >> nSizeTableLen;
@@ -190,7 +190,7 @@ ULONG ImpSvNumMultipleReadHeader::BytesLeft() const
     if (nReadEnd <= nEntryEnd)
         return nEntryEnd-nReadEnd;
 
-    DBG_ERROR("Fehler bei ImpSvNumMultipleReadHeader::BytesLeft");
+    OSL_FAIL("Fehler bei ImpSvNumMultipleReadHeader::BytesLeft");
     return 0;
 }
 

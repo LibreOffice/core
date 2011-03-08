@@ -42,10 +42,11 @@
 #include <com/sun/star/scanner/XScannerManager.hpp>
 #include <com/sun/star/scanner/ScannerException.hpp>
 
-using namespace rtl;
 using namespace cppu;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::scanner;
+
+using ::rtl::OUString;
 
 // -----------
 // - Defines -

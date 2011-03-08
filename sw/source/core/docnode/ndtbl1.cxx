@@ -29,11 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-#ifdef WTC
-#define private public
-#endif
-
 #include "hintids.hxx"
 #include <editeng/lrspitem.hxx>
 #include <editeng/boxitem.hxx>
@@ -700,9 +695,8 @@ void SwDoc::SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet )
                 //Grundsaetzlich nichts setzen in HeadlineRepeats.
                 if ( pTab->IsFollow() &&
                      ( pTab->IsInHeadline( *pCell ) ||
-                       // --> FME 2006-02-07 #126092# Same holds for follow flow rows.
+                       // Same holds for follow flow rows.
                        pCell->IsInFollowFlowRow() ) )
-                       // <--
                     continue;
 
                 SvxBoxItem aBox( pCell->GetFmt()->GetBox() );
@@ -1209,6 +1203,18 @@ BOOL SwDoc::GetBoxAttr( const SwCursor& rCursor, SfxPoolItem& rToFill ) const
                     else if( rToFill != rDir )
                         bRet = FALSE;
                 }
+                case RES_VERT_ORIENT:
+                {
+                    const SwFmtVertOrient& rOrient =
+                                    aBoxes[i]->GetFrmFmt()->GetVertOrient();
+                    if( !bOneFound )
+                    {
+                        (SwFmtVertOrient&)rToFill = rOrient;
+                        bOneFound = TRUE;
+                    }
+                    else if( rToFill != rOrient )
+                        bRet = FALSE;
+                }
             }
 
             if ( FALSE == bRet )
@@ -1267,11 +1273,10 @@ USHORT lcl_CalcCellFit( const SwLayoutFrm *pCell )
         const SwTwips nAdd = (pFrm->Frm().*fnRect->fnGetWidth)() -
                              (pFrm->Prt().*fnRect->fnGetWidth)();
 
-        // --> FME 2005-12-02 #127801# pFrm does not necessarily have to be a SwTxtFrm!
+        // pFrm does not necessarily have to be a SwTxtFrm!
         const SwTwips nCalcFitToContent = pFrm->IsTxtFrm() ?
                                           ((SwTxtFrm*)pFrm)->CalcFitToContent() :
                                           (pFrm->Prt().*fnRect->fnGetWidth)();
-        // <--
 
         nRet = Max( nRet, nCalcFitToContent + nAdd );
         pFrm = pFrm->GetNext();

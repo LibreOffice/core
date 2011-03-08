@@ -57,7 +57,7 @@ void ShapeList::addShape( SdrObject& rObject )
     }
     else
     {
-        DBG_ERROR("sd::ShapeList::addShape(), given shape already part of list!");
+        OSL_FAIL("sd::ShapeList::addShape(), given shape already part of list!");
     }
 }
 
@@ -80,7 +80,7 @@ SdrObject* ShapeList::removeShape( SdrObject& rObject )
     }
     else
     {
-        DBG_ERROR("sd::ShapeList::removeShape(), given shape not part of list!");
+        OSL_FAIL("sd::ShapeList::removeShape(), given shape not part of list!");
     }
     return 0;
 }
@@ -118,7 +118,7 @@ void ShapeList::replaceShape( SdrObject& rOldObject, SdrObject& rNewObject )
     }
     else
     {
-        DBG_ERROR("sd::ShapeList::replaceShape(), given shape not part of list!");
+        OSL_FAIL("sd::ShapeList::replaceShape(), given shape not part of list!");
         addShape( rNewObject );
     }
 }
@@ -185,7 +185,7 @@ void ShapeList::ObjectInDestruction(const SdrObject& rObject)
     }
     else
     {
-        DBG_ERROR("sd::ShapeList::ObjectInDestruction(), got a call from an unknown friend!");
+        OSL_FAIL("sd::ShapeList::ObjectInDestruction(), got a call from an unknown friend!");
     }
 }
 

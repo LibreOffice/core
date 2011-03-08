@@ -31,7 +31,6 @@
 
 String RID_APPTITLE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? StarCalc 4.0 : StarCalc 3.1 */
     Text [ en-US ] = "%PRODUCTNAME Calc" ;
 };
 

@@ -52,6 +52,7 @@
 #include "UITools.hxx"
 #include <comphelper/processfactory.hxx>
 #include <unotools/confignode.hxx>
+#include <osl/diagnose.h>
 
 //.........................................................................
 namespace dbaui
@@ -100,7 +101,7 @@ namespace dbaui
         DbuTypeCollectionItem* pCollectionItem = PTR_CAST(DbuTypeCollectionItem, _rItems.GetItem(DSID_TYPECOLLECTION));
         if (pCollectionItem)
             m_pCollection = pCollectionItem->getCollection();
-        DBG_ASSERT(m_pCollection, "OGeneralPage::OGeneralPage : really need a DSN type collection !");
+        OSL_ENSURE(m_pCollection, "OGeneralPage::OGeneralPage : really need a DSN type collection !");
 
         // If no driver for embedded DBs is installed, and no dBase driver, then hide the "Create new database" option
         sal_Int32 nCreateNewDBIndex = m_pCollection->getIndexOf( m_pCollection->getEmbeddedDatabase() );
@@ -360,8 +361,8 @@ namespace dbaui
             // collect some items and some values
             SFX_ITEMSET_GET(_rSet, pNameItem, SfxStringItem, DSID_NAME, sal_True);
             SFX_ITEMSET_GET(_rSet, pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True);
-            DBG_ASSERT(pUrlItem, "OGeneralPage::implInitControls : missing the type attribute !");
-            DBG_ASSERT(pNameItem, "OGeneralPage::implInitControls : missing the type attribute !");
+            OSL_ENSURE(pUrlItem, "OGeneralPage::implInitControls : missing the type attribute !");
+            OSL_ENSURE(pNameItem, "OGeneralPage::implInitControls : missing the type attribute !");
             sName = pNameItem->GetValue();
             sConnectURL = pUrlItem->GetValue();
         }

@@ -1,3 +1,3 @@
-ls  libxmlsec   : stlport soltools LIBXML2:libxml2 MOZ:moz NULL
+ls  libxmlsec   : soltools LIBXML2:libxml2 MOZ:moz NULL
 ls	libxmlsec			    usr1	-	all	ls_mkout NULL
 ls	libxmlsec			    nmake	-	all	ls_xmlsec1 NULL

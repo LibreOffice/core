@@ -62,8 +62,6 @@
 using namespace com::sun::star;
 
 using ::std::vector;
-using ::std::hash_map;
-using ::std::hash_set;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
@@ -76,30 +74,10 @@ using ::com::sun::star::uno::UNO_QUERY;
 #define SC_DBPROP_DATASOURCENAME    "DataSourceName"
 #define SC_DBPROP_COMMAND           "Command"
 #define SC_DBPROP_COMMANDTYPE       "CommandType"
-// -----------------------------------------------------------------------
- ScDPTableDataCache* ScImportSourceDesc::GetExistDPObjectCache( ScDocument* pDoc ) const
-{
-    ScDPTableDataCache* pCache = NULL;
-    ScDPCollection* pDPCollection= pDoc->GetDPCollection();
-    size_t nCount = pDPCollection->GetCount();
-    for (size_t i = nCount; i > 0; --i)
-    {
-        if ( const ScImportSourceDesc* pUsedDesc = (*pDPCollection)[i-1]->GetImportSourceDesc() )
-            if ( *this == *pUsedDesc )
-            {
-                long nID = (*pDPCollection)[i-1]->GetCacheId();
-                if ( nID >= 0 )
-                    pCache= pDPCollection->GetDPObjectCache( nID );
-                if ( pCache )
-                    return pCache;
-            }
-    }
-    return NULL;
-}
 
-ScDPTableDataCache* ScImportSourceDesc::CreateCache( ScDocument* pDoc , long nID  ) const
+ScDPCache* ScImportSourceDesc::CreateCache() const
 {
-    if ( !pDoc )
+    if (!mpDoc)
         return NULL;
 
     sal_Int32 nSdbType = -1;
@@ -113,14 +91,7 @@ ScDPTableDataCache* ScImportSourceDesc::CreateCache( ScDocument* pDoc , long nID
         return NULL;
     }
 
-
-   ScDPTableDataCache* pCache = GetExistDPObjectCache( pDoc );
-
-    if ( pCache && ( nID < 0 || nID == pCache->GetId() ) )
-        return pCache;
-
-    if ( pCache == NULL )
-        pCache = new ScDPTableDataCache( pDoc );
+    ScDPCache* pCache = new ScDPCache(mpDoc);
 
     uno::Reference<sdbc::XRowSet> xRowSet ;
     try
@@ -160,11 +131,8 @@ ScDPTableDataCache* ScImportSourceDesc::CreateCache( ScDocument* pDoc , long nID
             }
             else
                 xRowSet->execute();
-            SvNumberFormatter aFormat( pDoc->GetServiceManager(), ScGlobal::eLnge);
+            SvNumberFormatter aFormat(mpDoc->GetServiceManager(), ScGlobal::eLnge);
             pCache->InitFromDataBase( xRowSet, *aFormat.GetNullDate() );
-            pCache->SetId( nID );
-            pDoc->GetDPCollection()->AddDPObjectCache( pCache );
-            DBG_TRACE1("Create a cache id = %d \n", pCache->GetId() );
         }
     }
     catch ( sdbc::SQLException& rError )
@@ -179,7 +147,7 @@ ScDPTableDataCache* ScImportSourceDesc::CreateCache( ScDocument* pDoc , long nID
     {
         delete pCache;
         pCache = NULL;
-        DBG_ERROR("Unexpected exception in database");
+        OSL_FAIL("Unexpected exception in database");
     }
 
 
@@ -187,34 +155,11 @@ ScDPTableDataCache* ScImportSourceDesc::CreateCache( ScDocument* pDoc , long nID
      return pCache;
 }
 
-ScDPTableDataCache* ScImportSourceDesc::GetCache( ScDocument* pDoc, long nID ) const
+ScDatabaseDPData::ScDatabaseDPData(ScDocument* pDoc, const ScImportSourceDesc& rImport) :
+    ScDPTableData(pDoc),
+    mrImport(rImport),
+    aCacheTable(rImport.CreateCache())
 {
-    ScDPTableDataCache* pCache = pDoc->GetDPCollection()->GetDPObjectCache( nID );
-    if ( NULL == pCache && pDoc )
-        pCache = GetExistDPObjectCache( pDoc);
-    if ( NULL == pCache )
-        pCache = CreateCache( pDoc , nID );
-    return pCache;
-}
-
-long ScImportSourceDesc:: GetCacheId( ScDocument* pDoc, long nID ) const
-{
-    ScDPTableDataCache* pCache = GetCache( pDoc,  nID);
-    if ( NULL == pCache )
-        return -1;
-    else
-        return pCache->GetId();
-}
-
-// -----------------------------------------------------------------------
-
-ScDatabaseDPData::ScDatabaseDPData(
-    ScDocument* pDoc,
-    const ScImportSourceDesc& rImport, long nCacheId /*=-1 */ ) :
-    ScDPTableData(pDoc, rImport.GetCacheId( pDoc, nCacheId) ),
-    aCacheTable( pDoc, rImport.GetCacheId( pDoc, nCacheId))
-{
-
 }
 
 ScDatabaseDPData::~ScDatabaseDPData()
@@ -224,7 +169,7 @@ ScDatabaseDPData::~ScDatabaseDPData()
 void ScDatabaseDPData::DisposeData()
 {
     //! use OpenDatabase here?
-     aCacheTable.clear();
+    aCacheTable.clear();
 }
 
 long ScDatabaseDPData::GetColumnCount()
@@ -269,17 +214,20 @@ void ScDatabaseDPData::CreateCacheTable()
     if (!aCacheTable.empty())
         return;
 
+    if (!aCacheTable.hasCache())
+        aCacheTable.setCache(mrImport.CreateCache());
+
     aCacheTable.fillTable();
 }
 
-void ScDatabaseDPData::FilterCacheTable(const vector<ScDPCacheTable::Criterion>& rCriteria, const hash_set<sal_Int32>& rCatDims)
+void ScDatabaseDPData::FilterCacheTable(const vector<ScDPCacheTable::Criterion>& rCriteria, const boost::unordered_set<sal_Int32>& rCatDims)
 {
     CreateCacheTable();
     aCacheTable.filterByPageDimension(
-        rCriteria, (IsRepeatIfEmpty() ? rCatDims : hash_set<sal_Int32>()));
+        rCriteria, (IsRepeatIfEmpty() ? rCatDims : boost::unordered_set<sal_Int32>()));
 }
 
-void ScDatabaseDPData::GetDrillDownData(const vector<ScDPCacheTable::Criterion>& rCriteria, const hash_set<sal_Int32>& rCatDims, Sequence< Sequence<Any> >& rData)
+void ScDatabaseDPData::GetDrillDownData(const vector<ScDPCacheTable::Criterion>& rCriteria, const boost::unordered_set<sal_Int32>& rCatDims, Sequence< Sequence<Any> >& rData)
 {
     CreateCacheTable();
     sal_Int32 nRowSize = aCacheTable.getRowSize();
@@ -287,7 +235,7 @@ void ScDatabaseDPData::GetDrillDownData(const vector<ScDPCacheTable::Criterion>&
         return;
 
     aCacheTable.filterTable(
-        rCriteria, rData, IsRepeatIfEmpty() ? rCatDims : hash_set<sal_Int32>());
+        rCriteria, rData, IsRepeatIfEmpty() ? rCatDims : boost::unordered_set<sal_Int32>());
 }
 
 void ScDatabaseDPData::CalcResults(CalcInfo& rInfo, bool bAutoShow)

@@ -31,6 +31,8 @@
 
 #include "attributeoutputbase.hxx"
 #include "fields.hxx"
+#include "IMark.hxx"
+#include "docxexport.hxx"
 
 #include <sax/fshelper.hxx>
 #include <sax/fastattribs.hxx>
@@ -39,8 +41,6 @@
 #include <fldbas.hxx>
 
 #include <vector>
-
-class DocxExport;
 
 class SwGrfNode;
 class SdrObject;
@@ -51,10 +51,12 @@ namespace oox { namespace drawingml { class DrawingML; } }
 struct FieldInfos
 {
     const SwField*    pField;
+    const ::sw::mark::IFieldmark* pFieldmark;
     ww::eField  eType;
     bool        bOpen;
     bool        bClose;
     String     sCmd;
+    FieldInfos() : pField(NULL), pFieldmark(NULL), eType(ww::eUNKNOWN), bOpen(false), bClose(false){}
 };
 
 enum DocxColBreakStatus
@@ -98,6 +100,8 @@ public:
     /// Called after we end outputting the attributes.
     virtual void EndRunProperties( const SwRedlineData* pRedlineData );
 
+    virtual void FootnoteEndnoteRefTag();
+
     /// Output text (inside a run).
     virtual void RunText( const String& rText, rtl_TextEncoding eCharSet = RTL_TEXTENCODING_UTF8 );
 
@@ -140,31 +144,18 @@ public:
     virtual void ParagraphStyle( USHORT nStyle );
 
     virtual void TableInfoCell( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
-
     virtual void TableInfoRow( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
-
     virtual void TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
-
     virtual void TableDefaultBorders( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
-
     virtual void TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
-
     virtual void TableHeight( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
-
     virtual void TableCanSplit( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
-
     virtual void TableBidi( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
-
     virtual void TableVerticalCell( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
-
     virtual void TableNodeInfo( ww8::WW8TableNodeInfo::Pointer_t pNodeInfo );
-
     virtual void TableNodeInfoInner( ww8::WW8TableNodeInfoInner::Pointer_t pNodeInfoInner );
-
     virtual void TableOrientation( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
-
     virtual void TableSpacing( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
-
     virtual void TableRowEnd( sal_uInt32 nDepth = 1 );
 
     /// Start of the styles table.
@@ -240,7 +231,7 @@ public:
     void FontAlternateName( const String& rName ) const;
 
     /// Font charset.
-    void FontCharset( sal_uInt8 nCharSet ) const;
+    void FontCharset( sal_uInt8 nCharSet, rtl_TextEncoding nEncoding ) const;
 
     /// Font family.
     void FontFamilyType( FontFamily eFamily ) const;
@@ -272,6 +263,7 @@ public:
         const String &rNumberingString );
 
     void WriteField_Impl( const SwField* pFld, ww::eField eType, const String& rFldCmd, BYTE nMode );
+    void WriteFormData_Impl( const ::sw::mark::IFieldmark& rFieldmark );
 
     void WriteBookmarks_Impl( std::vector< rtl::OUString >& rStarts, std::vector< rtl::OUString >& rEnds );
 
@@ -307,24 +299,18 @@ private:
     void WriteOLE2Obj( const SdrObject* pSdrObj, const Size& rSize );
 
     void InitTableHelper( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
-
     void StartTable( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
-
     void StartTableRow( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
-
     void StartTableCell( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
-
     void TableCellProperties( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
-
     void EndTableCell( );
-
     void EndTableRow( );
-
     void EndTable();
 
     /// End cell, row, and even the entire table if necessary.
     void FinishTableRowCell( ww8::WW8TableNodeInfoInner::Pointer_t pInner, bool bForceEmptyParagraph = false );
 
+    void WriteFFData( const FieldInfos& rInfos );
 protected:
 
     /// Output frames - the implementation.
@@ -551,6 +537,7 @@ private:
 
     ::docx::FootnotesList *m_pFootnotesList;
     ::docx::FootnotesList *m_pEndnotesList;
+    int m_footnoteEndnoteRefTag;
 
     const WW8_SepInfo *m_pSectionInfo;
 
@@ -598,7 +585,8 @@ public:
     virtual ~DocxAttributeOutput();
 
     /// Return the right export class.
-    virtual MSWordExportBase& GetExport();
+    virtual DocxExport& GetExport();
+    const DocxExport& GetExport() const { return const_cast< DocxAttributeOutput* >( this )->GetExport(); }
 
     /// For eg. the output of the styles, we need to switch the serializer to enother one.
     void SetSerializer( ::sax_fastparser::FSHelperPtr pSerializer ) { m_pSerializer = pSerializer; }

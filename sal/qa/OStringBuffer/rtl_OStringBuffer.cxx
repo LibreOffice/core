@@ -40,8 +40,8 @@
 #include "cppunit/plugin/TestPlugIn.h"
 #include <string.h>
 
-using namespace rtl;
-
+using ::rtl::OStringBuffer;
+using ::rtl::OString;
 // This file contains cppunit tests for the
 // OString and OStringBuffer classes
 

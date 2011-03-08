@@ -73,6 +73,7 @@ ImplMacFontData::ImplMacFontData( const ImplDevFontAttributes& rDFA, ATSUFontID 
 ,   mbHasOs2Table( false )
 ,   mbCmapEncodingRead( false )
 ,   mbHasCJKSupport( false )
+,   mbFontCapabilitiesRead( false )
 {}
 
 // -----------------------------------------------------------------------
@@ -155,6 +156,55 @@ ImplFontCharMap* ImplMacFontData::GetImplFontCharMap() const
 
     mpCharMap = new ImplFontCharMap( aCmapResult );
     return mpCharMap;
+}
+
+bool ImplMacFontData::GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
+{
+    // read this only once per font
+    if( mbFontCapabilitiesRead )
+    {
+        rFontCapabilities = maFontCapabilities;
+        return !rFontCapabilities.maUnicodeRange.empty() || !rFontCapabilities.maCodePageRange.empty();
+    }
+    mbFontCapabilitiesRead = true;
+
+    // prepare to get the GSUB table raw data
+    ATSFontRef rFont = FMGetATSFontRefFromFont( mnFontId );
+    ByteCount nBufSize = 0;
+    OSStatus eStatus;
+    eStatus = ATSFontGetTable( rFont, GetTag("GSUB"), 0, 0, NULL, &nBufSize );
+    if( eStatus == noErr )
+    {
+        // allocate a buffer for the GSUB raw data
+        ByteVector aBuffer( nBufSize );
+        // get the GSUB raw data
+        ByteCount nRawLength = 0;
+        eStatus = ATSFontGetTable( rFont, GetTag("GSUB"), 0, nBufSize, (void*)&aBuffer[0], &nRawLength );
+        if( eStatus == noErr )
+        {
+            const unsigned char* pGSUBTable = &aBuffer[0];
+            vcl::getTTScripts(maFontCapabilities.maGSUBScriptTags, pGSUBTable, nRawLength);
+        }
+    }
+    eStatus = ATSFontGetTable( rFont, GetTag("OS/2"), 0, 0, NULL, &nBufSize );
+    if( eStatus == noErr )
+    {
+        // allocate a buffer for the GSUB raw data
+        ByteVector aBuffer( nBufSize );
+        // get the OS/2 raw data
+        ByteCount nRawLength = 0;
+        eStatus = ATSFontGetTable( rFont, GetTag("OS/2"), 0, nBufSize, (void*)&aBuffer[0], &nRawLength );
+        if( eStatus == noErr )
+        {
+            const unsigned char* pOS2Table = &aBuffer[0];
+            vcl::getTTCoverage(
+                maFontCapabilities.maUnicodeRange,
+                maFontCapabilities.maCodePageRange,
+                pOS2Table, nRawLength);
+        }
+    }
+    rFontCapabilities = maFontCapabilities;
+    return !rFontCapabilities.maUnicodeRange.empty() || !rFontCapabilities.maCodePageRange.empty();
 }
 
 // -----------------------------------------------------------------------
@@ -393,17 +443,17 @@ void AquaSalGraphics::initResolution( NSWindow* pWin )
                 }
                 else
                 {
-                    DBG_ERROR( "no resolution found in device description" );
+                    OSL_FAIL( "no resolution found in device description" );
                 }
             }
             else
             {
-                DBG_ERROR( "no device description" );
+                OSL_FAIL( "no device description" );
             }
         }
         else
         {
-            DBG_ERROR( "no screen found" );
+            OSL_FAIL( "no screen found" );
         }
 
         // #i107076# maintaining size-WYSIWYG-ness causes many problems for
@@ -1219,7 +1269,7 @@ void AquaSalGraphics::drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rS
 
 void AquaSalGraphics::drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBitmap,SalColor nTransparentColor )
 {
-    DBG_ERROR("not implemented for color masking!");
+    OSL_FAIL("not implemented for color masking!");
     drawBitmap( pPosAry, rSalBitmap );
 }
 
@@ -1984,6 +2034,14 @@ ImplFontCharMap* AquaSalGraphics::GetImplFontCharMap() const
     return mpMacFontData->GetImplFontCharMap();
 }
 
+bool AquaSalGraphics::GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
+{
+    if( !mpMacFontData )
+        return false;
+
+    return mpMacFontData->GetImplFontCapabilities(rFontCapabilities);
+}
+
 // -----------------------------------------------------------------------
 
 // fake a SFNT font directory entry for a font table
@@ -2358,7 +2416,7 @@ void AquaSalGraphics::GetGlyphWidths( const ImplFontData* pFontData, bool bVerti
     else if( pFontData->IsEmbeddable() )
     {
         // get individual character widths
-        DBG_ERROR("not implemented for non-subsettable fonts!\n");
+        OSL_FAIL("not implemented for non-subsettable fonts!\n");
     }
 }
 

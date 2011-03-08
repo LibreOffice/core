@@ -74,7 +74,7 @@ namespace FORMS_MODULE_NAMESPACE
     {
         if (!s_pImplementationNames)
         {
-            OSL_ASSERT("OFormsModule::revokeComponent : have no class infos ! Are you sure called this method at the right time ?");
+            OSL_FAIL("OFormsModule::revokeComponent : have no class infos ! Are you sure called this method at the right time ?");
             return;
         }
         OSL_ENSURE(s_pImplementationNames && s_pSupportedServices && s_pCreationFunctionPointers && s_pFactoryFunctionPointers,
@@ -116,7 +116,7 @@ namespace FORMS_MODULE_NAMESPACE
 
         if (!s_pImplementationNames)
         {
-            OSL_ASSERT("OFormsModule::writeComponentInfos : have no class infos ! Are you sure called this method at the right time ?");
+            OSL_FAIL("OFormsModule::writeComponentInfos : have no class infos ! Are you sure called this method at the right time ?");
             return sal_True;
         }
         OSL_ENSURE(s_pImplementationNames && s_pSupportedServices && s_pCreationFunctionPointers && s_pFactoryFunctionPointers,
@@ -147,7 +147,7 @@ namespace FORMS_MODULE_NAMESPACE
             }
             catch(Exception&)
             {
-                OSL_ASSERT("OFormsModule::writeComponentInfos : something went wrong while creating the keys !");
+                OSL_FAIL("OFormsModule::writeComponentInfos : something went wrong while creating the keys !");
                 return sal_False;
             }
         }
@@ -165,7 +165,7 @@ namespace FORMS_MODULE_NAMESPACE
 
         if (!s_pImplementationNames)
         {
-            OSL_ASSERT("OFormsModule::getComponentFactory : have no class infos ! Are you sure called this method at the right time ?");
+            OSL_FAIL("OFormsModule::getComponentFactory : have no class infos ! Are you sure called this method at the right time ?");
             return NULL;
         }
         OSL_ENSURE(s_pImplementationNames && s_pSupportedServices && s_pCreationFunctionPointers && s_pFactoryFunctionPointers,

@@ -703,7 +703,7 @@ PrinterGfx::getFontSubstitute () const
 {
     if( mpFontSubstitutes )
     {
-        ::std::hash_map< fontID, fontID >::const_iterator it =
+        ::boost::unordered_map< fontID, fontID >::const_iterator it =
               mpFontSubstitutes->find( mnFontID );
         if( it != mpFontSubstitutes->end() )
             return it->second;
@@ -747,7 +747,7 @@ const ::std::list< KernPair >& PrinterGfx::getKernPairs( bool bVertical ) const
     fontID nFont = mnFontID;
     if( mpFontSubstitutes )
     {
-        ::std::hash_map< fontID, fontID >::const_iterator it =
+        ::boost::unordered_map< fontID, fontID >::const_iterator it =
               mpFontSubstitutes->find( mnFontID );
         if( it != mpFontSubstitutes->end() )
             nFont = it->second;

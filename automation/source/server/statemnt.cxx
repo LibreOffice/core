@@ -187,7 +187,7 @@ void StatementFlow::SendViaSocket()
 #if OSL_DEBUG_LEVEL > 1
         m_pDbgWin->AddText( "SendViaSocket called recursively. Aborted!!!\n" );
 #endif
-        DBG_ERROR("SendViaSocket called recursively. Aborted!!!");
+        OSL_FAIL("SendViaSocket called recursively. Aborted!!!");
         return;
     }
     bSending = TRUE;
@@ -199,7 +199,7 @@ void StatementFlow::SendViaSocket()
     else
     {
         // Macht nix. Wenn das Basic nicht mehr da ist, ist sowiso alles egal
-        DBG_ERROR("Cannot send results to TestTool");
+        OSL_FAIL("Cannot send results to TestTool");
     }
 
     pRet->Reset();
@@ -263,7 +263,7 @@ BOOL StatementFlow::Execute()
 
         break;
     default:
-        DBG_ERROR( "Unknown Flowcontrol" );
+        OSL_FAIL( "Unknown Flowcontrol" );
         break;
     }
 
@@ -2417,7 +2417,7 @@ BOOL StatementCommand::Execute()
                                     break;
                                 }
                             default:
-                                DBG_ERROR( "Unknown Windowtype" );
+                                OSL_FAIL( "Unknown Windowtype" );
                                 REPORT_WIN_CLOSEDc(pControl, "Unknown Windowtype");
                                 ReportError( GEN_RES_STR0( S_RESETAPPLICATION_FAILED_UNKNOWN ), pControl->GetType() );
                                 #if OSL_DEBUG_LEVEL > 1
@@ -3448,7 +3448,7 @@ StatementControl::StatementControl( SCmdStream *pCmdIn, USHORT nControlIdType )
     }
     else
     {
-        DBG_ERROR( "Wrong ControlType" );
+        OSL_FAIL( "Wrong ControlType" );
     }
 
     pCmdIn->Read( nMethodId );
@@ -4155,10 +4155,6 @@ BOOL StatementControl::HandleCommonMethods( Window *pControl )
                 if ( (pControl->GetType() == WINDOW_TOOLBOX) && pTB->IsMenuEnabled() )
                 {
                     pTB->ExecuteCustomMenu();
-/*                    Rectangle aRect = pTB->GetMenubuttonRect();
-                    AnimateMouse( pControl, aRect.Center() );
-                    MouseEvent aMEvnt(aRect.Center(),1,MOUSE_SIMPLECLICK,MOUSE_LEFT);
-                    ImplMouseButtonDown( pTB, aMEvnt );*/
                 }
                 else
                 {
@@ -4657,10 +4653,6 @@ BOOL StatementControl::Execute()
                                 for ( anz=0 ; anz < pTControl->GetPageCount() && !aID.Matches( aWantedID ) ; anz++ )
                                 {
                                     pTControl->SelectTabPage( pTControl->GetPageId(i) );
-                                    /*if (pTControl->GetCurPageId())
-                                        pTControl->DeactivatePage();
-                                    pTControl->SetCurPageId( pTControl->GetPageId(i) );
-                                    pTControl->ActivatePage();*/
                                     aID = pTControl->GetTabPage(pTControl->GetCurPageId())->GetSmartUniqueOrHelpId();
                                     i++;
                                     if ( i >= pTControl->GetPageCount() )
@@ -4671,10 +4663,6 @@ BOOL StatementControl::Execute()
                                 if ( !aID.Matches( aWantedID ) )
                                 {
                                     pTControl->SelectTabPage( nActive );
-                                    /*if (pTControl->GetCurPageId())
-                                        pTControl->DeactivatePage();
-                                    pTControl->SetCurPageId( nActive );
-                                    pTControl->ActivatePage();*/
                                     ReportError( aWantedID, GEN_RES_STR1( S_TABPAGE_NOT_FOUND, MethodString( nMethodId ) ) );
                                 }
                             }
@@ -5841,10 +5829,6 @@ BOOL StatementControl::Execute()
                                             else
                                                    pRet->GenReturn ( RET_Value, aUId, comm_ULONG( pELB->getSelIndex() +1));
                                             break;
-/*                                      xxxcase M_SetNoSelection :
-                                            ((ListBox*)pControl)->SetNoSelection();
-                                            ((ListBox*)pControl)->Select();
-                                            break; */
                                         default:
                                             ReportError( aUId, GEN_RES_STR2c2( S_UNKNOWN_METHOD, MethodString(nMethodId), "RoadMap" ) );
                                             break;
@@ -5875,22 +5859,11 @@ BOOL StatementControl::Execute()
                                                     {
                                                         ::svt::table::PTableModel pModel = pTC->GetModel();
                                                         Any aCell = pModel->getCellContent()[nNr2-1][nNr1-1];
-                                                        /* doesn't work ATM since it gets casted to SbxDATE in VCLTestTool unfortunately
-                                                        SbxVariableRef xRes = new SbxVariable( SbxVARIANT );
-                                                        unoToSbxValue( xRes, aCell );
-                                                        pRet->GenReturn ( RET_Value, aUId, *xRes );*/
 
                                                         Type aType = aCell.getValueType();
                                                         TypeClass eTypeClass = aType.getTypeClass();
                                                         switch( eTypeClass )
                                                         {
-                                                            /*case TypeClass_ENUM:
-                                                                {
-                                                                    sal_Int32 nEnum = 0;
-                                                                    enum2int( nEnum, aValue );
-                                                                    pRet->GenReturn ( RET_Value, aUId, (comm_ULONG)nEnum );
-                                                                }
-                                                                break;*/
                                                             case TypeClass_BOOLEAN:
                                                                 pRet->GenReturn ( RET_Value, aUId, *(sal_Bool*)aCell.getValue() );
                                                                 break;
@@ -5986,18 +5959,6 @@ BOOL StatementControl::Execute()
                                                 if ( ValueOK( aUId, CUniString("GetSelIndex"), nNr1, pTC->GetSelectedRows().size() ) )
                                                     pRet->GenReturn ( RET_Value, aUId, comm_USHORT( pTC->GetSelectedRows()[nNr1-1] +1 ) );
                                                 break;
-/*                                          case M_GetSelText :
-                                                if ( ! (nParams & PARAM_USHORT_1) )
-                                                    nNr1 = 1;
-                                                if ( ValueOK(aUId, CUniString("GetSelText"),nNr1,((SvLBox*)pControl)->GetSelectionCount()) )
-                                                {
-                                                    nNr1--;
-                                                    COUNT_LBOX( FirstSelected, NextSelected, nNr1);
-                                                    GetFirstValidTextItem( pThisEntry );
-                                                    pRet->GenReturn ( RET_Value, aUId, pItem->GetText() );
-                                                }
-                                                break;
-                                                */
                                         default:
                                             ReportError( aUId, GEN_RES_STR2c2( S_UNKNOWN_METHOD, MethodString(nMethodId), "TableControl" ) );
                                             break;
@@ -6068,7 +6029,7 @@ BOOL StatementControl::Execute()
                                         pFloat = pControl->GET_REAL_PARENT();
                                     else
                                     {
-                                        DBG_ERROR("FloatingMode set but Parent is no FloatingWindow");
+                                        OSL_FAIL("FloatingMode set but Parent is no FloatingWindow");
                                     }
                                 }
                                 if ( pFloat && pFloat->GetType() == WINDOW_FLOATINGWINDOW )
@@ -6414,7 +6375,7 @@ BOOL StatementControl::Execute()
                         break;
                     }
                 default:
-                    DBG_ERROR( "Unknown Objekttype from UId or Method not suported" );
+                    OSL_FAIL( "Unknown Objekttype from UId or Method not suported" );
                     ReportError( aUId, GEN_RES_STR2( S_UNKNOWN_TYPE, UniString::CreateFromInt32( nRT ), MethodString(nMethodId) ) );
 #if OSL_DEBUG_LEVEL > 1
                     m_pDbgWin->AddText( " Unknown Objekttype from UId or Method not suported" );

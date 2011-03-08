@@ -42,7 +42,6 @@
 #include <com/sun/star/util/XStringWidth.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <unotools/localfilehelper.hxx>
-#include <tools/list.hxx>
 #include <tools/urlobj.hxx>
 
 #include <vcl/button.hxx>
@@ -94,7 +93,7 @@ FilterDialog::FilterDialog( Window* pParentWindow ,
 *//*-*************************************************************************************************************/
 void FilterDialog::SetURL( const String& sURL )
 {
-    // convert it and use given pure string as fallback if convertion failed
+    // convert it and use given pure string as fallback if conversion failed
     m_ftURL.SetText( impl_buildUIFileName(sURL) );
 }
 
@@ -230,7 +229,7 @@ String FilterDialog::impl_buildUIFileName( const String& sName )
     }
     else
     {
-        // otherwise its realy a url ... build short name by using INetURLObject
+        // otherwise its really a url ... build short name by using INetURLObject
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XStringWidth > xStringCalculator( new StringCalculator(&m_ftURL) );
         if( xStringCalculator.is() == sal_True )
         {

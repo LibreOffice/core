@@ -122,7 +122,7 @@ protected:
     ::connectivity::DriversConfig m_aDriverConfig;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
     sal_Int32       m_nLivingIterators;         /// just for debugging reasons, counts the living iterators
 #endif
 

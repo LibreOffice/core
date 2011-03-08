@@ -237,7 +237,7 @@ void ChartController::TheModel::tryTermination()
                 //since we have indicated to give up the ownership with paramter true in close call
                 //the one who has thrown the CloseVetoException is the new owner
 
-#if OSL_DEBUG_LEVEL > 2
+#if OSL_DEBUG_LEVEL > 1
                 OSL_ENSURE( !m_bOwnership,
                     "INFO: a well known owner has catched a CloseVetoException after calling close(true)" );
 #endif
@@ -1069,7 +1069,7 @@ bool lcl_isFormatObjectCommand( const rtl::OString& aCommand )
             , const uno::Sequence< beans::PropertyValue >& rArgs )
             throw (uno::RuntimeException)
 {
-    //@todo avoid OString (see Mathias mail on bug #104387#)
+    //@todo avoid OString
     rtl::OString aCommand( rtl::OUStringToOString( rURL.Path, RTL_TEXTENCODING_ASCII_US ) );
 
     if(aCommand.equals("Paste"))

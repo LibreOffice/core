@@ -387,7 +387,7 @@ void ScMyValidationsContainer::WriteValidations(ScXMLExport& rExport)
                         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY_LIST, XML_SORTED_ASCENDING);
                     break;
                     default:
-                        DBG_ERROR("unknown ListType");
+                        OSL_FAIL("unknown ListType");
                     }
                 }
             }
@@ -762,7 +762,7 @@ sal_Int32 ScRowFormatRanges::GetMaxRows() const
     }
     else
     {
-        DBG_ERROR("no ranges found");
+        OSL_FAIL("no ranges found");
     }
     return nMaxRows;
 }
@@ -1135,7 +1135,7 @@ rtl::OUString* ScColumnRowStylesBase::GetStyleNameByIndex(const sal_Int32 nIndex
 {
     if ( nIndex < 0 || nIndex >= sal::static_int_cast<sal_Int32>( aStyleNames.size() ) )
     {
-        // #123981# should no longer happen, use first style then
+        // should no longer happen, use first style then
         DBG_ERRORFILE("GetStyleNameByIndex: invalid index");
         return aStyleNames[0];
     }
@@ -1208,7 +1208,7 @@ ScRowStyles::Cache::Cache() :
 
 bool ScRowStyles::Cache::hasCache(sal_Int32 nTable, sal_Int32 nField) const
 {
-    return mnTable == nTable && mnStart <= nField && nField <= mnEnd;
+    return mnTable == nTable && mnStart <= nField && nField < mnEnd;
 }
 
 ScRowStyles::ScRowStyles()

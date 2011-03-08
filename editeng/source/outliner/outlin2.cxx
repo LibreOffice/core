@@ -36,7 +36,6 @@
 #include <editeng/eerdll.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/fhgtitem.hxx>
-#include <tools/list.hxx>
 #include <svl/style.hxx>
 #include <vcl/mapmod.hxx>
 
@@ -57,8 +56,8 @@ DBG_NAMEEX(Outliner)
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::linguistic2;
 
-// =====================================================================
-// ======================   Einfache Durchreicher =======================
+// ======================================================================
+// ======================   Simple pass-through   =======================
 // ======================================================================
 
 void Outliner::SetUpdateMode( BOOL bUpdate )

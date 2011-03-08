@@ -209,8 +209,19 @@ static int lo_select(int nfds, fd_set *fdread, fd_set *fdwrite, fd_set *fdexcept
    const struct timeval *orig_timeout);
 #endif
 
+static bool ( *old_qt_event_filter )( void* );
+static bool qt_event_filter( void* m )
+{
+    if( old_qt_event_filter != NULL && old_qt_event_filter( m ))
+        return true;
+    if( SalKDEDisplay::self() && SalKDEDisplay::self()->checkDirectInputEvent( static_cast< XEvent* >( m )))
+        return true;
+    return false;
+}
+
 void KDEXLib::setupEventLoop()
 {
+    old_qt_event_filter = QAbstractEventDispatcher::instance()->setEventFilter( qt_event_filter );
 #ifdef GLIB_EVENT_LOOP_SUPPORT
 // Glib is simple, it has g_main_context_set_poll_func() for wrapping the sleep call.
 // The catch is that Qt has a bug that allows triggering timers even when they should

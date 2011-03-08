@@ -98,7 +98,7 @@ BOOL Bitmap::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam, cons
         break;
 
         default:
-            DBG_ERROR( "Bitmap::Convert(): Unsupported filter" );
+            OSL_FAIL( "Bitmap::Convert(): Unsupported filter" );
         break;
     }
 

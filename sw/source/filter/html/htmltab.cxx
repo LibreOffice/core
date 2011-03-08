@@ -28,8 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-//#define TEST_RESIZE
-
 
 #include "hintids.hxx"
 #include <vcl/svapp.hxx>
@@ -63,9 +61,6 @@
 #include "poolfmt.hxx"
 #include "swtable.hxx"
 #include "cellatr.hxx"
-#ifdef TEST_RESIZE
-#include "viewsh.hxx"
-#endif
 #include "htmltbl.hxx"
 #include "swtblfmt.hxx"
 #include "htmlnum.hxx"
@@ -764,6 +759,7 @@ HTMLTableCell::HTMLTableCell():
     bRelWidth( sal_False ),
     bHasNumFmt(sal_False),
     bHasValue(sal_False),
+    bNoWrap(sal_False),
     mbCovered(sal_False)
 {}
 
@@ -1546,8 +1542,7 @@ void HTMLTable::FixFrameFmt( SwTableBox *pBox,
 
             if( bSet )
             {
-                // fix #30588#: BorderDist nicht mehr Bestandteil
-                // einer Zelle mit fixer Breite
+                // BorderDist nicht mehr Bestandteil einer Zelle mit fixer Breite
                 sal_uInt16 nBDist = static_cast< sal_uInt16 >(
                     (2*nCellPadding <= nInnerFrmWidth) ? nCellPadding
                                                       : (nInnerFrmWidth / 2) );
@@ -1568,8 +1563,7 @@ void HTMLTable::FixFrameFmt( SwTableBox *pBox,
             else
                 pFrmFmt->ResetFmtAttr( RES_BACKGROUND );
 
-            // fix #41003#: Format nur setzten, wenn es auch einen Value
-            // gibt oder die Box leer ist.
+            // Format nur setzten, wenn es auch einen Value gibt oder die Box leer ist.
             if( bHasNumFmt && (bHasValue || IsBoxEmpty(pBox)) )
             {
                 sal_Bool bLock = pFrmFmt->GetDoc()->GetNumberFormatter()
@@ -2362,10 +2356,9 @@ inline void HTMLTable::CloseColGroup( sal_uInt16 nSpan, sal_uInt16 _nWidth,
 void HTMLTable::InsertCol( sal_uInt16 nSpan, sal_uInt16 nColWidth, sal_Bool bRelWidth,
                            SvxAdjust eAdjust, sal_Int16 eVertOrient )
 {
-    // --> OD, MIB 2004-11-08 #i35143# - no columns, if rows already exist.
+    // #i35143# - no columns, if rows already exist.
     if ( nRows > 0 )
         return;
-    // <--
 
     sal_uInt16 i;
 
@@ -4620,7 +4613,7 @@ void SwHTMLParser::BuildTableSection( HTMLTable *pCurTable,
         delete pSaveStruct;
     }
 
-    // wir stehen jetzt (wahrscheinlich) vor <TBODY>,... oder </TABLE>
+    // now we stand (perhaps) in front of <TBODY>,... or </TABLE>
 }
 
 struct _TblColGrpSaveStruct : public SwPendingStackData
@@ -5480,26 +5473,6 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
             // SwTable aufbereiten
             sal_uInt16 nBrowseWidth = (sal_uInt16)GetCurrentBrowseWidth();
             pSaveStruct->MakeTable( nBrowseWidth, *pPam->GetPoint(), pDoc );
-
-#ifdef TEST_RESIZE
-            const SwTable *pSwTable = pTable->GetSwTable();
-            SwHTMLTableLayout *pLayoutInfo =
-                pSwTable ? ((SwTable *)pSwTable)->GetHTMLTableLayout() : 0;
-            if( pLayoutInfo )
-            {
-                ViewShell *pVSh = CheckActionViewShell();
-                if( pVSh )
-                {
-                    CallEndAction( sal_False, sal_False );
-                    CallStartAction( pVSh, sal_False );
-
-                    sal_uInt16 nNewBrwoseWidth =
-                        (sal_uInt16)GetCurrentBrowseWidth();
-                    if( nBrowseWidth != nNewBrowseWidth )
-                        pLayoutInfo->Resize( nNewBrowseWidth );
-                }
-            }
-#endif
         }
 
         GetNumInfo().Set( pTCntxt->GetNumInfo() );
@@ -5522,9 +5495,9 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
                 eJumpTo = JUMPTO_NONE;
             }
 
-            // fix #37886#: Wenn Import abgebrochen wurde kein erneutes Show
+            // Wenn Import abgebrochen wurde kein erneutes Show
             // aufrufen, weil die ViewShell schon geloescht wurde!
-            // fix #41669#: Genuegt nicht. Auch im ACCEPTING_STATE darf
+            // Genuegt nicht. Auch im ACCEPTING_STATE darf
             // kein Show aufgerufen werden, weil sonst waehrend des
             // Reschedules der Parser zerstoert wird, wenn noch ein
             // DataAvailable-Link kommt. Deshalb: Nur im WORKING-State.

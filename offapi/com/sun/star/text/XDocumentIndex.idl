@@ -69,7 +69,7 @@ published interface XDocumentIndex: com::sun::star::text::XTextContent
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::text::XDocumentIndex::update
-    /** initiates an upate to the document index.
+    /** initiates an update to the document index.
      */
     void update();
 

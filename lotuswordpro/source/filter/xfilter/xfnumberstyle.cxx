@@ -57,10 +57,6 @@
  * @file
  * Number style for table cell.
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2005-03-23 create this file.
- ************************************************************************/
 #include    "xfnumberstyle.hxx"
 
 XFNumberStyle::XFNumberStyle():m_aColor(0,0,0),m_aNegativeColor(255,0,0)

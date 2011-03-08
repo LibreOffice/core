@@ -222,7 +222,7 @@ namespace dbp
         }
         catch(Exception&)
         {
-            DBG_ERROR("OListComboWizard::implApplySettings: could not set the property values for the listbox!");
+            OSL_FAIL("OListComboWizard::implApplySettings: could not set the property values for the listbox!");
         }
     }
 
@@ -353,7 +353,7 @@ namespace dbp
         }
         catch(Exception&)
         {
-            DBG_ERROR("OContentTableSelection::initializePage: could not retrieve the table names!");
+            OSL_FAIL("OContentTableSelection::initializePage: could not retrieve the table names!");
         }
 
         m_aSelectTable.SelectEntry(getSettings().sListContentTable);

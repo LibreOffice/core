@@ -34,7 +34,6 @@
 #include "rootfrm.hxx"
 #include "cntfrm.hxx"
 #include "flyfrm.hxx"
-#include "errhdl.hxx"
 
 
 void SwFrm::Format( const SwBorderAttrs * )

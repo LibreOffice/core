@@ -37,7 +37,7 @@
 
 /* [Description]
 
-    This item describe the scriptype of the selected text and is only
+    This item describe the script type of the selected text and is only
     used for the user interface.
 */
 

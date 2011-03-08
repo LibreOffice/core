@@ -33,11 +33,9 @@
 #include <ctype.h>
 #include <editeng/unolingu.hxx>
 #include <tools/shl.hxx>    // needed for SW_MOD() macro
-#include <errhdl.hxx>   //OSL_ENSURE
 #include <dlelstnr.hxx>
 #include <swmodule.hxx>
 #include <IDocumentSettingAccess.hxx>
-#include <txtcfg.hxx>
 #include <guess.hxx>
 #include <inftxt.hxx>
 #include <pagefrm.hxx>

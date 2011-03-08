@@ -1806,7 +1806,7 @@ void GraphicManager::ImplAdjust( GDIMetaFile& rMtf, const GraphicAttr& rAttr, UL
 
     if( ( nAdjustmentFlags & ADJUSTMENT_TRANSPARENCY ) && aAttr.IsTransparent() )
     {
-        DBG_ERROR( "Missing implementation: Mtf-Transparency" );
+        OSL_FAIL( "Missing implementation: Mtf-Transparency" );
     }
 }
 
@@ -1854,12 +1854,12 @@ void GraphicManager::ImplAdjust( Animation& rAnimation, const GraphicAttr& rAttr
 
     if( ( nAdjustmentFlags & ADJUSTMENT_ROTATE ) && aAttr.IsRotated() )
     {
-        DBG_ERROR( "Missing implementation: Animation-Rotation" );
+        OSL_FAIL( "Missing implementation: Animation-Rotation" );
     }
 
     if( ( nAdjustmentFlags & ADJUSTMENT_TRANSPARENCY ) && aAttr.IsTransparent() )
     {
-        DBG_ERROR( "Missing implementation: Animation-Transparency" );
+        OSL_FAIL( "Missing implementation: Animation-Transparency" );
     }
 }
 

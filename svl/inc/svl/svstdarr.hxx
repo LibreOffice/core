@@ -32,7 +32,7 @@
 *   (die defines setzen sich aus "_SVSTDARR_" und dem Namen des Array
 *    ohne "Sv" zusammen)
 *
-*   VarArr:     SvBools, SvULongs, SvUShorts, SvLongs, SvShorts
+*   VarArr:     SvULongs, SvUShorts, SvLongs
 *   PtrArr:     SvStrings, SvStringsDtor
 *   SortArr:    SvStringsSort, SvStringsSortDtor,
 *               SvStringsISort, SvStringsISortDtor,
@@ -41,16 +41,6 @@
 
 #include "svl/svldllapi.h"
 #include <svl/svarray.hxx>
-
-#ifndef _SVSTDARR_BOOLS_DECL
-SV_DECL_VARARR_VISIBILITY( SvBools, BOOL, 1, 1, SVL_DLLPUBLIC )
-#define _SVSTDARR_BOOLS_DECL
-#endif
-
-#ifndef _SVSTDARR_BYTES_DECL
-SV_DECL_VARARR_VISIBILITY( SvBytes, BYTE, 1, 1, SVL_DLLPUBLIC )
-#define _SVSTDARR_BYTES_DECL
-#endif
 
 #ifndef _SVSTDARR_ULONGS_DECL
 SV_DECL_VARARR_VISIBILITY( SvULongs, ULONG, 1, 1, SVL_DLLPUBLIC )
@@ -120,11 +110,6 @@ SV_DECL_VARARR_VISIBILITY( SvLongs, long, 1, 1, SVL_DLLPUBLIC )
 #ifndef _SVSTDARR_LONGSSORT_DECL
 SV_DECL_VARARR_SORT_VISIBILITY( SvLongsSort, long, 1, 1, SVL_DLLPUBLIC )
 #define _SVSTDARR_LONGSSORT_DECL
-#endif
-
-#ifndef _SVSTDARR_SHORTS_DECL
-SV_DECL_VARARR_VISIBILITY( SvShorts, short, 1, 1, SVL_DLLPUBLIC )
-#define _SVSTDARR_SHORTS_DECL
 #endif
 
 #include <tools/string.hxx>

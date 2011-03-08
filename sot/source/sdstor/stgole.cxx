@@ -132,27 +132,13 @@ BOOL StgCompObjStream::Load()
         sal_Char* p = new sal_Char[ (USHORT) nLen1 ];
         if( Read( p, nLen1 ) == (ULONG) nLen1 )
         {
-            aUserName = nLen1 ? String( p, gsl_getSystemTextEncoding() ) : String();
-/*          // Now we can read the CB format
-            INT32 nLen2 = 0;
-            *this >> nLen2;
-            if( nLen2 > 0 )
-            {
-                // get a string name
-                if( nLen2 > nLen1 )
-                    delete p, p = new char[ nLen2 ];
-                if( Read( p, nLen2 ) == (ULONG) nLen2 && nLen2 )
-                    nCbFormat = Exchange::RegisterFormatName( String( p ) );
-                else
-                    SetError( SVSTREAM_GENERALERROR );
-            }
-            else if( nLen2 == -1L )
-                // Windows clipboard format
-                *this >> nCbFormat;
-            else
-                // unknown identifier
-                SetError( SVSTREAM_GENERALERROR );
-*/
+            //The encoding here is "ANSI", which is pretty useless seeing as
+            //the actual codepage used doesn't seem to be specified/stored
+            //anywhere :-(. Might as well pick 1252 and be consistent on
+            //all platforms and envs
+            //http://www.openoffice.org/nonav/issues/showattachment.cgi/68668/Orginal%20Document.doc
+            //for a good edge-case example
+            aUserName = nLen1 ? String( p, RTL_TEXTENCODING_MS_1252 ) : String();
             nCbFormat = ReadClipboardFormat( *this );
         }
         else
@@ -167,7 +153,7 @@ BOOL StgCompObjStream::Store()
     if( GetError() != SVSTREAM_OK )
         return FALSE;
     Seek( 0L );
-    ByteString aAsciiUserName( aUserName, RTL_TEXTENCODING_ASCII_US );
+    ByteString aAsciiUserName( aUserName, RTL_TEXTENCODING_MS_1252 );
     *this << (INT16) 1          // Version?
               << (INT16) -2                     // 0xFFFE = Byte Order Indicator
               << (INT32) 0x0A03         // Windows 3.10
@@ -176,20 +162,6 @@ BOOL StgCompObjStream::Store()
               << (INT32) (aAsciiUserName.Len() + 1)
               << (const char *)aAsciiUserName.GetBuffer()
               << (UINT8) 0;             // string terminator
-/*  // determine the clipboard format string
-    String aCbFmt;
-    if( nCbFormat > FORMAT_GDIMETAFILE )
-    aCbFmt = Exchange::GetFormatName( nCbFormat );
-    if( aCbFmt.Len() )
-        *this << (INT32) aCbFmt.Len() + 1
-               << (const char*) aCbFmt
-               << (UINT8) 0;
-    else if( nCbFormat )
-         *this << (INT32) -1            // for Windows
-                << (INT32) nCbFormat;
-    else
-        *this << (INT32) 0;         // no clipboard format
-*/
     WriteClipboardFormat( *this, nCbFormat );
     *this << (INT32) 0;             // terminator
     Commit();

@@ -83,7 +83,7 @@ struct PopupControllerEntry
     ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XDispatchProvider > m_xDispatchProvider;
 };
 
-typedef std::hash_map< rtl::OUString, PopupControllerEntry, OUStringHashCode, ::std::equal_to< rtl::OUString > > PopupControllerCache;
+typedef boost::unordered_map< rtl::OUString, PopupControllerEntry, OUStringHashCode, ::std::equal_to< rtl::OUString > > PopupControllerCache;
 
 class BmkMenu;
 class AddonMenu;

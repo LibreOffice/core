@@ -32,8 +32,6 @@ TabDialog RID_TD_ORGANIZE
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    /* ### ACHTUNG: Neuer Text in Resource? Makros verwalten : Verwalten */
-    /* ### ACHTUNG: Neuer Text in Resource? Makros verwalten : Verwalten */
     Text[ en-US ] = "%PRODUCTNAME Basic Macro Organizer";
     Moveable = TRUE ;
     Closeable = TRUE ;
@@ -115,7 +113,6 @@ TabPage RID_TP_MODULS
     {
         Pos = MAP_APPFONT ( 144 , 120 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Löschen... : ~L÷schen... */
         Text [ en-US ] = "~Delete" ;
         TabStop = TRUE ;
     };
@@ -172,7 +169,6 @@ TabPage RID_TP_DLGS
     {
         Pos = MAP_APPFONT ( 144 , 120 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Löschen... : ~L÷schen... */
         Text [ en-US ] = "~Delete" ;
         TabStop = TRUE ;
     };
@@ -225,7 +221,6 @@ TabPage RID_TP_LIBS
         Text [ en-US ] = "Close";
         Pos = MAP_APPFONT ( 144 , 23 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Schließen : Schlie˜en */
         TabStop = TRUE ;
     };
     PushButton RID_PB_PASSWORD
@@ -247,7 +242,6 @@ TabPage RID_TP_LIBS
     {
         Pos = MAP_APPFONT ( 144 , 86 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Hin~zufügen... : Hin~zuf³gen... */
         Text [ en-US ] = "~Import..." ;
     };
     PushButton RID_PB_EXPORT
@@ -261,7 +255,6 @@ TabPage RID_TP_LIBS
     {
         Pos = MAP_APPFONT ( 144 , 120 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Löschen... : ~L÷schen... */
         Text [ en-US ] = "~Delete" ;
         TabStop = TRUE ;
     };

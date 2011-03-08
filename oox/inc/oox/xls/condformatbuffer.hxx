@@ -29,7 +29,7 @@
 #ifndef OOX_XLS_CONDFORMATBUFFER_HXX
 #define OOX_XLS_CONDFORMATBUFFER_HXX
 
-#include <com/sun/star/sheet/ConditionOperator.hpp>
+#include <com/sun/star/sheet/ConditionOperator2.hpp>
 #include "oox/helper/containerhelper.hxx"
 #include "oox/xls/formulaparser.hxx"
 #include "oox/xls/worksheethelper.hxx"
@@ -176,8 +176,7 @@ public:
     void                finalizeImport();
 
     /** Converts an OOXML condition operator token to the API constant. */
-    static ::com::sun::star::sheet::ConditionOperator
-                        convertToApiOperator( sal_Int32 nToken );
+    static sal_Int32    convertToApiOperator( sal_Int32 nToken );
 
 private:
     CondFormatRef       createCondFormat();

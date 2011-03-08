@@ -44,13 +44,6 @@ stoponerror=tr
 
 # ------------------------------------------------------------------
 
-#CFLAGS+=-GR -DUNICODE -D_UNICODE
-
-#DBG_CONSOLE_OUT: when IDropTarget or IDropSource are called we write to a console
-#DBG_CLIPBOARD_DATA: To provide DoDragDrop with an data object we call OleGetClipboard
-#CFLAGS+= -DDBG_CONSOLE_OUT -DDBG_CLIPBOARD_DATA
-
-
 SLOFILES=	$(SLO)$/dndentry.obj	\
             $(SLO)$/target.obj		\
             $(SLO)$/idroptarget.obj	\

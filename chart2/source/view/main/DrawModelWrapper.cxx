@@ -175,7 +175,7 @@ DrawModelWrapper::DrawModelWrapper(
     }
     catch(...)
     {
-        DBG_ERROR("Can't get Hyphenator or SpellChecker for chart");
+        OSL_FAIL("Can't get Hyphenator or SpellChecker for chart");
     }
 
     //ref device for font rendering

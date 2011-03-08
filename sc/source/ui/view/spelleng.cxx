@@ -123,7 +123,7 @@ bool ScConversionEngineBase::FindNextConversionCell()
 
         for( SCTAB nTab = 0, nTabCount = mrDoc.GetTableCount(); nTab < nTabCount; ++nTab )
         {
-            //  #69965# always change the cell on the visible tab,
+            //  always change the cell on the visible tab,
             //  on the other selected tabs only if they contain the same text
 
             if( (nTab == mnStartTab) ||

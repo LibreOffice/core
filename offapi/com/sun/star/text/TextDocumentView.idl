@@ -97,7 +97,7 @@ published service TextDocumentView
     [optional, property, readonly] long LineCount;
 
     //-------------------------------------------------------------------------
-    /** specifies if spellchecking should be done while typing.
+    /** specifies if spell checking should be done while typing.
 
         @since OOo 2.0
      */

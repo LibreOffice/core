@@ -385,13 +385,11 @@ short SbxBasicFormater::GetDigitAtPos( double dNumber, short nPos,
                                 double& dNextNumber, BOOL& bFoundFirstDigit )
 // ACHTUNG: nPos kann auch negativ werden, f"ur Stellen nach dem Dezimal-Punkt
 {
-    double dTemp = dNumber;
-    double dDigit,dPos;
+    double dDigit;
     short  nMaxDigit;
 
     // erst mal aus der Zahl eine positive Zahl machen:
     dNumber = fabs( dNumber );
-    dPos = (double)nPos;
 
     // "uberpr"ufe ob Zahl zu klein f"ur angegebene Stelle ist
     nMaxDigit = (short)get_number_of_digits( dNumber );

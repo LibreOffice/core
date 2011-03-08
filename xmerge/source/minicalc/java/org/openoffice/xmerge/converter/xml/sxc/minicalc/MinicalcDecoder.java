@@ -111,8 +111,6 @@ final class MinicalcDecoder extends SpreadsheetDecoder {
             Debug.log(Debug.ERROR, "MinicalcDecoder.constructor:" + e.getMessage());
 
             throw new IOException(e.getMessage());
-            //      e.printStackTrace();
-
         }
     }
 
@@ -237,8 +235,6 @@ final class MinicalcDecoder extends SpreadsheetDecoder {
             Debug.log(Debug.ERROR, "MinicalcDecoder.setWorksheet:" + e.getMessage());
 
             throw new IOException(e.getMessage());
-            //      e.printStackTrace();
-
         }
     }
 
@@ -286,8 +282,6 @@ final class MinicalcDecoder extends SpreadsheetDecoder {
             Debug.log(Debug.ERROR, "MinicalcDecoder.goToNextCell:" + e.getMessage());
 
             throw new IOException(e.getMessage());
-            //      e.printStackTrace();
-
         }
 
         return gotCell;

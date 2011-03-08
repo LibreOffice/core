@@ -32,7 +32,6 @@
  ---------------------------------------------------------------------*/
 String STR_DROP_OVER
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Initialen über : Initialen ³ber */
     Text [ en-US ] = "Drop Caps over" ;
 };
 String STR_DROP_LINES
@@ -77,12 +76,10 @@ String STR_NO_CHARFMT
 };
 String STR_FOOTER
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Fußzeile : Fu˜zeile */
     Text [ en-US ] = "Footer" ;
 };
 String STR_NO_FOOTER
 {
-    /* ### ACHTUNG: Neuer Text in Resource? keine Fußzeile : keine Fu˜zeile */
     Text [ en-US ] = "No footer" ;
 };
 String STR_HEADER
@@ -127,7 +124,6 @@ String STR_SURROUND_INSIDE
 };
 String STR_SURROUND_OUTSIDE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Umlauf außen : Umlauf au˜en */
     Text [ en-US ] = "Outer wrap" ;
 };
 String STR_SURROUND_ANCHORONLY
@@ -140,12 +136,10 @@ String STR_FRM_WIDTH
 };
 String STR_FRM_FIXEDHEIGHT
 {
-    /* ### ACHTUNG: Neuer Text in Resource? feste Höhe: : feste H÷he: */
     Text [ en-US ] = "Fixed height:" ;
 };
 String STR_FRM_MINHEIGHT
 {
-    /* ### ACHTUNG: Neuer Text in Resource? min. Höhe: : min. H÷he: */
     Text [ en-US ] = "Min. height:" ;
 };
 String STR_FLY_AT_PARA
@@ -218,7 +212,6 @@ String STR_HORI_INSIDE
 };
 String STR_HORI_OUTSIDE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? außen : au˜en */
     Text [ en-US ] = "outside" ;
 };
 String STR_HORI_FULL
@@ -235,17 +228,10 @@ String STR_LINE_WIDTH
 };
 String STR_MAX_FTN_HEIGHT
 {
-    /* ### ACHTUNG: Neuer Text in Resource? max. Fußnotenbereich: : max. Fu˜notenbereich: */
     Text [ en-US ] = "Max. footnote area:" ;
 };
 String STR_EDIT_IN_READONLY
 {
-    /* ### ACHTUNG: Neuer Text in Resource? editierbar im schreibgeschütztem Dokument : editierbar im Schreibeschütztem Dokument */
-    /* ### ACHTUNG: Neuer Text in Resource? editierbar im schreibgeschütztem Dokument : editierbar im Schreibeschütztem Dokument */
-    /* ### ACHTUNG: Neuer Text in Resource? editierbar im schreibgeschütztem Dokument : editierbar im Schreibeschütztem Dokument */
-    /* ### ACHTUNG: Neuer Text in Resource? editierbar im schreibgeschütztem Dokument : editierbar im Schreibeschütztem Dokument */
-    /* ### ACHTUNG: Neuer Text in Resource? editierbar im schreibgeschütztem Dokument : editierbar im Schreibeschütztem Dokument */
-    /* ### ACHTUNG: Neuer Text in Resource? editierbar im schreibgeschütztem Dokument : editierbar im schreibgesch³tztem Dokument */
     Text [ en-US ] = "Editable in read-only document" ;
 };
 String STR_LAYOUT_SPLIT

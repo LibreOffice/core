@@ -35,7 +35,6 @@
 
 #include <tools/debug.hxx>
 #include <tools/string.hxx>
-#include <tools/list.hxx>
 
 typedef TextCharAttrib* TextCharAttribPtr;
 SV_DECL_PTRARR_DEL( TextCharAttribs, TextCharAttribPtr, 0, 4 )

@@ -45,6 +45,7 @@
 #include "dbaccess_helpid.hrc"
 #include "localresaccess.hxx"
 #include <osl/process.h>
+#include <osl/diagnose.h>
 #include <vcl/msgbox.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include "dbadmin.hxx"
@@ -75,9 +76,8 @@
 
 #ifdef _ADO_DATALINK_BROWSE_
 #if defined( WNT )
-    #include <tools/prewin.h>
-    #include <windows.h>
-    #include <tools/postwin.h>
+    #include <prewin.h>
+    #include <postwin.h>
 #endif
 #include <vcl/sysdata.hxx>
 #include "adodatalinks.hxx"
@@ -119,7 +119,7 @@ DBG_NAME(OConnectionHelper)
         if (pCollectionItem)
             m_pCollection = pCollectionItem->getCollection();
         m_aPB_Connection.SetClickHdl(LINK(this, OConnectionHelper, OnBrowseConnections));
-        DBG_ASSERT(m_pCollection, "OConnectionHelper::OConnectionHelper : really need a DSN type collection !");
+        OSL_ENSURE(m_pCollection, "OConnectionHelper::OConnectionHelper : really need a DSN type collection !");
         m_aConnectionURL.SetTypeCollection(m_pCollection);
     }
 
@@ -438,7 +438,7 @@ DBG_NAME(OConnectionHelper)
     void OConnectionHelper::impl_setURL( const String& _rURL, sal_Bool _bPrefix )
     {
         String sURL( _rURL );
-        DBG_ASSERT( m_pCollection, "OConnectionHelper::impl_setURL: have no interpreter for the URLs!" );
+        OSL_ENSURE( m_pCollection, "OConnectionHelper::impl_setURL: have no interpreter for the URLs!" );
 
         if ( m_pCollection && sURL.Len() )
         {
@@ -484,7 +484,7 @@ DBG_NAME(OConnectionHelper)
         // get the pure text
         String sURL = _bPrefix ? m_aConnectionURL.GetText() : m_aConnectionURL.GetTextNoPrefix();
 
-        DBG_ASSERT( m_pCollection, "OConnectionHelper::impl_getURL: have no interpreter for the URLs!" );
+        OSL_ENSURE( m_pCollection, "OConnectionHelper::impl_getURL: have no interpreter for the URLs!" );
 
         if ( m_pCollection && sURL.Len() )
         {
@@ -650,7 +650,7 @@ DBG_NAME(OConnectionHelper)
             }
             catch(Exception&)
             {
-                DBG_ERROR("OConnectionHelper::getInstalledAdabasDBDirs: could not enumerate the adabas config files!");
+                OSL_FAIL("OConnectionHelper::getInstalledAdabasDBDirs: could not enumerate the adabas config files!");
             }
         }
 

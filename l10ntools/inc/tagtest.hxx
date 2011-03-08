@@ -30,8 +30,7 @@
 #define _TAGTEST_HXX_
 
 #include <tools/string.hxx>
-#include <tools/list.hxx>
-#include <hash_map> /* std::hashmap*/
+#include <boost/unordered_map.hpp>
 #include <vector>
 
 class GSILine;
@@ -58,14 +57,11 @@ struct lessByteString{
 
 struct hashByteString{
     size_t operator()( const ByteString& rName ) const{
-                std::hash< const char* > myHash;
-                return myHash( rName.GetBuffer() );
+                return rtl_str_hashCode(rName.GetBuffer());
     }
 };
 
-
-
-typedef std::hash_map<ByteString , String , hashByteString,equalByteString>
+typedef boost::unordered_map<ByteString , String , hashByteString,equalByteString>
                                 StringHashMap;
 
 class TokenInfo
@@ -245,7 +241,7 @@ public:
             maList.clear();
         }
 
-    void insert( TokenInfo p, size_t nIndex = LIST_APPEND )
+    void insert( TokenInfo p, size_t nIndex = size_t(-1) )
         {
             if ( nIndex < maList.size() ) {
                 TokenListImpl::iterator it = maList.begin();

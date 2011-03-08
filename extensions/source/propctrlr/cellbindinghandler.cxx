@@ -175,7 +175,7 @@ namespace pcr
             aDependentProperties.push_back( PROPERTY_ID_BOUNDCOLUMN );
 
             // also reset the list entries if the cell range is reset
-            // #i28319# - 2004-04-27 - fs@openoffice.org
+            // #i28319#
             if ( !_bFirstTimeInit )
             {
                 try
@@ -202,7 +202,7 @@ namespace pcr
         break;  // case PROPERTY_ID_CONTROLSOURCE
 
         default:
-            DBG_ERROR( "CellBindingPropertyHandler::actuatingPropertyChanged: did not register for this property!" );
+            OSL_FAIL( "CellBindingPropertyHandler::actuatingPropertyChanged: did not register for this property!" );
         }
 
         for ( ::std::vector< PropertyId >::const_iterator loopAffected = aDependentProperties.begin();
@@ -282,7 +282,7 @@ namespace pcr
         break;
 
         default:
-            DBG_ERROR( "CellBindingPropertyHandler::getPropertyValue: cannot handle this!" );
+            OSL_FAIL( "CellBindingPropertyHandler::getPropertyValue: cannot handle this!" );
             break;
         }
         return aReturn;
@@ -342,7 +342,7 @@ namespace pcr
             break;
 
             default:
-                DBG_ERROR( "CellBindingPropertyHandler::setPropertyValue: cannot handle this!" );
+                OSL_FAIL( "CellBindingPropertyHandler::setPropertyValue: cannot handle this!" );
                 break;
             }
 
@@ -401,7 +401,7 @@ namespace pcr
                 break;
 
             default:
-                DBG_ERROR( "CellBindingPropertyHandler::convertToPropertyValue: cannot handle this!" );
+                OSL_FAIL( "CellBindingPropertyHandler::convertToPropertyValue: cannot handle this!" );
                 break;
         }
 
@@ -456,7 +456,7 @@ namespace pcr
                 break;
 
             default:
-                DBG_ERROR( "CellBindingPropertyHandler::convertToControlValue: cannot handle this!" );
+                OSL_FAIL( "CellBindingPropertyHandler::convertToControlValue: cannot handle this!" );
                 break;
         }
 

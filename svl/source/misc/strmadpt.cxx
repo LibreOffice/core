@@ -96,7 +96,6 @@ public:
     inline bool isEOF() const;
 
     bool addMark(sal_uInt32 nPosition);
-
     bool removeMark(sal_uInt32 nPosition);
 
     inline sal_uInt32 getReadPosition() const;

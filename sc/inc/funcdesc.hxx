@@ -29,14 +29,10 @@
 #ifndef SC_FUNCDESC_HXX
 #define SC_FUNCDESC_HXX
 
-/* Function descriptions for function wizard / autopilot / most recent used
- * list et al. Separated from the global.hxx lump, implementation still in
- * global.cxx
- */
+/* Function descriptions for function wizard / autopilot */
 
 #include "scfuncs.hrc"
 
-#include <tools/list.hxx>
 #include <formula/IFunctionDescription.hxx>
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
@@ -185,6 +181,18 @@ public:
     */
     virtual bool isParameterOptional(sal_uInt32 _nPos) const ;
 
+    /**
+      Compares functions by name, respecting special characters
+
+      @param a
+      pointer to first function descriptor
+
+      @param b
+      pointer to second function descriptor
+
+      @return "(a < b)"
+    */
+    static bool compareByName(const ScFuncDesc* a, const ScFuncDesc* b);
 
     /**
       Stores whether a parameter is optional or suppressed
@@ -228,26 +236,21 @@ public:
     ScFunctionList();
     ~ScFunctionList();
 
-    sal_uInt32           GetCount() const
-                    { return aFunctionList.Count(); }
+    sal_uInt32 GetCount() const
+               { return aFunctionList.size(); }
 
-    const ScFuncDesc*   First()
-                        { return (const ScFuncDesc*) aFunctionList.First(); }
+    const ScFuncDesc* First();
 
-    const ScFuncDesc*   Next()
-                        { return (const ScFuncDesc*) aFunctionList.Next(); }
+    const ScFuncDesc* Next();
 
-    const ScFuncDesc* GetFunction( sal_uInt32 nIndex ) const
-        { return static_cast<const ScFuncDesc*>(aFunctionList.GetObject(nIndex)); }
+    const ScFuncDesc* GetFunction( sal_uInt32 nIndex ) const;
 
-    ScFuncDesc* GetFunction( sal_uInt32 nIndex )
-        { return static_cast<ScFuncDesc*>(aFunctionList.GetObject(nIndex)); }
-
-    xub_StrLen      GetMaxFuncNameLen() const
-                    { return nMaxFuncNameLen; }
+    xub_StrLen GetMaxFuncNameLen() const
+               { return nMaxFuncNameLen; }
 
 private:
-    List        aFunctionList; /**< List of functions */
+    ::std::vector<const ScFuncDesc*> aFunctionList; /**< List of functions */
+    ::std::vector<const ScFuncDesc*>::iterator aFunctionListIter; /**< position in function list */
     xub_StrLen  nMaxFuncNameLen; /**< Length of longest function name */
 };
 
@@ -260,7 +263,7 @@ private:
 class ScFunctionCategory : public formula::IFunctionCategory
 {
 public:
-    ScFunctionCategory(ScFunctionMgr* _pMgr,List* _pCategory,sal_uInt32 _nCategory)
+    ScFunctionCategory(ScFunctionMgr* _pMgr,::std::vector<const ScFuncDesc*>* _pCategory,sal_uInt32 _nCategory)
             : m_pMgr(_pMgr),m_pCategory(_pCategory),m_nCategory(_nCategory){}
     virtual ~ScFunctionCategory(){}
 
@@ -288,7 +291,7 @@ public:
 
 private:
     ScFunctionMgr* m_pMgr; /**< function manager for this category */
-    List* m_pCategory; /**< list of functions in this category */
+    ::std::vector<const ScFuncDesc*>* m_pCategory; /**< list of functions in this category */
     mutable ::rtl::OUString m_sName; /**< name of this category */
     sal_uInt32 m_nCategory; /**< index number of this category */
 };
@@ -407,8 +410,9 @@ public:
 
 private:
     ScFunctionList* pFuncList; /**< list of all calc functions */
-    List*           aCatLists[MAX_FUNCCAT]; /**< array of all categories, 0 is the cumulative ('All') category */
-    mutable List*   pCurCatList; /**< pointer to current category */
+    ::std::vector<const ScFuncDesc*>* aCatLists[MAX_FUNCCAT]; /**< array of all categories, 0 is the cumulative ('All') category */
+    mutable ::std::vector<const ScFuncDesc*>::iterator pCurCatListIter; /**< position in current category */
+    mutable ::std::vector<const ScFuncDesc*>::iterator pCurCatListEnd; /**< end of current category */
 };
 
 #endif // SC_FUNCDESC_HXX

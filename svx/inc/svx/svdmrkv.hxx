@@ -286,7 +286,7 @@ public:
     // die selbst jedoch nicht markiert sind.
     const SdrMarkList& GetEdgesOfMarkedNodes() const { return mpSdrViewSelection->GetEdgesOfMarkedNodes(); }
     const SdrMarkList& GetMarkedEdgesOfMarkedNodes() const { return mpSdrViewSelection->GetMarkedEdgesOfMarkedNodes(); }
-    const List& GetTransitiveHullOfMarkedObjects() const { return mpSdrViewSelection->GetAllMarkedObjects(); }
+    const std::vector<SdrObject*>& GetTransitiveHullOfMarkedObjects() const { return mpSdrViewSelection->GetAllMarkedObjects(); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 

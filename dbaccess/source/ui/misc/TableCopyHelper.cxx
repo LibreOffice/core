@@ -99,7 +99,7 @@ void OTableCopyHelper::insertTable( const ::rtl::OUString& i_rSourceDataSource, 
 {
     if ( CommandType::QUERY != i_nCommandType && CommandType::TABLE != i_nCommandType )
     {
-        DBG_ERROR( "OTableCopyHelper::insertTable: invalid call (no supported format found)!" );
+        OSL_FAIL( "OTableCopyHelper::insertTable: invalid call (no supported format found)!" );
         return;
     }
 
@@ -266,10 +266,9 @@ sal_Bool OTableCopyHelper::copyTagTable(OTableCopyHelper::DropDescriptor& _rDesc
     if ( _bCheck )
         pImport->enableCheckOnly();
 
-    //dyf add 20070601
     //set the selected tablename
     pImport->setSTableName(_rDesc.sDefaultTableName);
-    //dyf add end
+
     pImport->setStream(pStream);
     return pImport->Read();
 }

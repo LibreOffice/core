@@ -130,9 +130,10 @@ extern "C"
     extern GdkDisplay* gdk_x11_lookup_xdisplay (void*xdisplay);
 }
 
-RunDialog::RunDialog( GtkWidget *pDialog, uno::Reference< awt::XExtendedToolkit >& rToolkit ) :
-    cppu::WeakComponentImplHelper1< awt::XTopWindowListener >( maLock ),
-    mpDialog(pDialog), mpCreatedParent(NULL), mxToolkit(rToolkit)
+RunDialog::RunDialog( GtkWidget *pDialog, uno::Reference< awt::XExtendedToolkit >& rToolkit,
+    uno::Reference< frame::XDesktop >& rDesktop ) :
+    cppu::WeakComponentImplHelper2< awt::XTopWindowListener, frame::XTerminateListener >( maLock ),
+    mpDialog(pDialog), mpCreatedParent(NULL), mxToolkit(rToolkit), mxDesktop(rDesktop)
 {
     awt::SystemDependentXWindow aWindowHandle;
 
@@ -181,6 +182,18 @@ RunDialog::~RunDialog()
 
 void SAL_CALL RunDialog::windowOpened( const ::com::sun::star::lang::EventObject& )
     throw (::com::sun::star::uno::RuntimeException)
+{
+    GdkThreadLock aLock;
+    g_timeout_add_full(G_PRIORITY_HIGH_IDLE, 0, (GSourceFunc)canceldialog, this, NULL);
+}
+
+void SAL_CALL RunDialog::queryTermination( const ::com::sun::star::lang::EventObject& )
+        throw(::com::sun::star::frame::TerminationVetoException, ::com::sun::star::uno::RuntimeException)
+{
+}
+
+void SAL_CALL RunDialog::notifyTermination( const ::com::sun::star::lang::EventObject& )
+        throw(::com::sun::star::uno::RuntimeException)
 {
     GdkThreadLock aLock;
     g_timeout_add_full(G_PRIORITY_HIGH_IDLE, 0, (GSourceFunc)canceldialog, this, NULL);

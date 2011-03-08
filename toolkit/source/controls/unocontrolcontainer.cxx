@@ -44,7 +44,6 @@
 #include <comphelper/sequence.hxx>
 
 #include <tools/debug.hxx>
-#include <tools/list.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 
@@ -74,8 +73,6 @@ public:
     inline const ::rtl::OUString&                   getName() const { return msName; }
     inline const uno::Reference< awt::XControl >&   getControl() const { return mxControl; }
 };
-
-//DECLARE_LIST( UnoControlHolderList, UnoControlHolder* );
 
 class UnoControlHolderList
 {

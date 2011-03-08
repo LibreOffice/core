@@ -42,8 +42,13 @@
 
 struct ScQueryParam;
 
-class SC_DLLPUBLIC ScDPTableDataCache
+/**
+ * This class represents the cached data part of the datapilot cache table
+ * implementation.
+ */
+class SC_DLLPUBLIC ScDPCache
 {
+    friend class ScDPCacheTable;
 public:
     typedef ::boost::ptr_vector<ScDPItemData>           DataListType;
 private:
@@ -51,26 +56,23 @@ private:
     typedef ::boost::ptr_vector< ::std::vector<SCROW> > RowGridType;
 
     ScDocument* mpDoc;
-
-    long    mnID;
-    long    mnColumnCount;
+    long mnColumnCount;
 
     DataGridType                maTableDataValues; // Data Pilot Table's index - value map
     RowGridType                 maSourceData;      // Data Pilot Table's source data
     RowGridType                 maGlobalOrder;     // Sorted members index
-    RowGridType                 maIndexOrder;      // Index the sorted numbers
+    mutable RowGridType         maIndexOrder;      // Index the sorted numbers
     DataListType                maLabelNames;      // Source label data
     std::vector<bool>           mbEmptyRow;        //If empty row?
 
     mutable ScDPItemDataPool    maAdditionalData;
 
 public:
-    SCROW GetOrder( long nDim, SCROW nIndex );
     SCROW GetIdByItemData( long nDim,  String sItemData  ) const;
     SCROW GetIdByItemData( long nDim, const ScDPItemData& rData ) const;
 
-    SCROW GetAdditionalItemID ( String sItemData );
-    SCROW GetAdditionalItemID( const ScDPItemData& rData );
+    SCROW GetAdditionalItemID ( String sItemData ) const;
+    SCROW GetAdditionalItemID( const ScDPItemData& rData ) const;
 
     SCCOL GetDimensionIndex( String sName) const;
     const ScDPItemData* GetSortedItemData( SCCOL nDim, SCROW nOrder ) const;
@@ -82,7 +84,6 @@ public:
 
     SCROW GetSortedItemDataId( SCCOL nDim, SCROW nOrder ) const;
     const DataListType& GetDimMemberValues( SCCOL nDim ) const;
-    void SetId( long nId ){ mnID = nId;}
     bool InitFromDoc(ScDocument* pDoc, const ScRange& rRange);
     bool InitFromDataBase(const  ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& xRowSet, const Date& rNullDate);
 
@@ -96,16 +97,16 @@ public:
 
     ScDocument* GetDoc() const;//ms-cache-core
     long GetColumnCount() const;
-    long GetId() const;
 
     const ScDPItemData* GetItemDataById( long nDim, SCROW nId ) const;
 
-    bool operator== ( const ScDPTableDataCache& r ) const;
+    bool operator== ( const ScDPCache& r ) const;
 
-    ScDPTableDataCache(ScDocument* pDoc);
-    virtual ~ScDPTableDataCache();
+    ScDPCache(ScDocument* pDoc);
+    virtual ~ScDPCache();
 
 private:
+    SCROW GetOrder( long nDim, SCROW nIndex ) const;
     void AddLabel( ScDPItemData* pData);
     bool AddData( long nDim, ScDPItemData* itemData );
 };

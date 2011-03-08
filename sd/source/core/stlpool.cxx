@@ -149,21 +149,22 @@ SfxStyleSheetBase* SdStyleSheetPool::GetTitleSheet(const String& rLayoutName)
 |*
 \************************************************************************/
 
-List* SdStyleSheetPool::CreateOutlineSheetList (const String& rLayoutName)
+void SdStyleSheetPool::CreateOutlineSheetList (const String& rLayoutName, std::vector<SfxStyleSheetBase*> &rOutlineStyles)
 {
     String aName(rLayoutName);
     aName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( SD_LT_SEPARATOR ));
     aName += String(SdResId(STR_LAYOUT_OUTLINE));
-    List* pList = new List;
+
     for (USHORT nSheet = 1; nSheet < 10; nSheet++)
     {
         String aFullName(aName);
         aFullName.Append( sal_Unicode( ' ' ));
         aFullName.Append( String::CreateFromInt32( (sal_Int32)nSheet ));
         SfxStyleSheetBase* pSheet = Find(aFullName, SD_STYLE_FAMILY_MASTERPAGE);
-        pList->Insert(pSheet, LIST_APPEND);
+
+        if (pSheet)
+            rOutlineStyles.push_back(pSheet);
     }
-    return pList;
 }
 
 /*************************************************************************
@@ -571,7 +572,7 @@ void SdStyleSheetPool::CopyTableStyles(SdStyleSheetPool& rSourcePool)
                         }
                         catch( Exception& )
                         {
-                            DBG_ERROR( "sd::SdStyleSheetPool::CopyTableStyles(), exception caught!" );
+                            OSL_FAIL( "sd::SdStyleSheetPool::CopyTableStyles(), exception caught!" );
                         }
 
                         if( xTargetStyle.is() )
@@ -588,7 +589,7 @@ void SdStyleSheetPool::CopyTableStyles(SdStyleSheetPool& rSourcePool)
         }
         catch( Exception& )
         {
-            DBG_ERROR("sd::SdStyleSheetPool::CopyTableStyles(), exception caught!");
+            OSL_FAIL("sd::SdStyleSheetPool::CopyTableStyles(), exception caught!");
         }
     }
 }
@@ -614,7 +615,7 @@ void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily 
 
                 xNewSheet->SetMask( xSheet->GetMask() );
 
-                // #91588# Also set parent relation for copied style sheets
+                // Also set parent relation for copied style sheets
                 String aParent( xSheet->GetParent() );
                 if( aParent.Len() )
                     aNewStyles.push_back( std::pair< rtl::Reference< SfxStyleSheetBase >, String >( xNewSheet, aParent ) );
@@ -654,44 +655,51 @@ void SdStyleSheetPool::CopyLayoutSheets(const String& rLayoutName, SdStyleSheetP
 
     String aOutlineTag(SdResId(STR_LAYOUT_OUTLINE));
 
-    List* pNameList = CreateLayoutSheetNames(rLayoutName);
+    std::vector<String> aNameList;
+    CreateLayoutSheetNames(rLayoutName,aNameList);
 
     String sEmpty;
-    String* pName = (String*)pNameList->First();
-    while (pName)
+    for (std::vector<String>::const_iterator it = aNameList.begin(); it != aNameList.end(); ++it)
     {
-        pSheet = Find(*pName, SD_STYLE_FAMILY_MASTERPAGE);
+        pSheet = Find(*it, SD_STYLE_FAMILY_MASTERPAGE);
         if (!pSheet)
         {
-            SfxStyleSheetBase* pSourceSheet = rSourcePool.Find(*pName, SD_STYLE_FAMILY_MASTERPAGE);
+            SfxStyleSheetBase* pSourceSheet = rSourcePool.Find(*it, SD_STYLE_FAMILY_MASTERPAGE);
             DBG_ASSERT(pSourceSheet, "CopyLayoutSheets: Quellvorlage nicht gefunden");
             if (pSourceSheet)
             {
                 // falls einer mit Methusalem-Doks. ankommt
-                SfxStyleSheetBase& rNewSheet = Make(*pName, SD_STYLE_FAMILY_MASTERPAGE);
+                SfxStyleSheetBase& rNewSheet = Make(*it, SD_STYLE_FAMILY_MASTERPAGE);
                 rNewSheet.SetHelpId( sEmpty, pSourceSheet->GetHelpId( sEmpty ) );
                 rNewSheet.GetItemSet().Put(pSourceSheet->GetItemSet());
                 rCreatedSheets.push_back( SdStyleSheetRef( static_cast< SdStyleSheet* >( &rNewSheet ) ) );
             }
         }
-        delete pName;
-        pName = (String*)pNameList->Next();
     }
-    delete pNameList;
 
     // Sonderbehandlung fuer Gliederungsvorlagen: Parentbeziehungen aufbauen
-    List* pOutlineSheets = CreateOutlineSheetList(rLayoutName);
-    SfxStyleSheetBase* pParent = (SfxStyleSheetBase*)pOutlineSheets->First();
-    pSheet = (SfxStyleSheetBase*)pOutlineSheets->Next();
-    while (pSheet)
+    std::vector<SfxStyleSheetBase*> aOutlineSheets;
+    CreateOutlineSheetList(rLayoutName,aOutlineSheets);
+
+    std::vector<SfxStyleSheetBase*>::iterator it = aOutlineSheets.begin();
+
+    SfxStyleSheetBase* pParent = *it;
+    ++it;
+
+    while (it != aOutlineSheets.end())
     {
-        // kein Parent?
+        pSheet = *it;
+
+        if (!pSheet)
+            break;
+
         if (pSheet->GetParent().Len() == 0)
             pSheet->SetParent(pParent->GetName());
+
         pParent = pSheet;
-        pSheet = (SfxStyleSheetBase*)pOutlineSheets->Next();
+
+        ++it;
     }
-    delete pOutlineSheets;
 }
 
 /*************************************************************************
@@ -701,47 +709,43 @@ void SdStyleSheetPool::CopyLayoutSheets(const String& rLayoutName, SdStyleSheetP
 |*
 \************************************************************************/
 
-List* SdStyleSheetPool::CreateLayoutSheetNames(const String& rLayoutName) const
+void SdStyleSheetPool::CreateLayoutSheetNames(const String& rLayoutName, std::vector<String> &aNameList) const
 {
     String aPrefix(rLayoutName);
     String aSep( RTL_CONSTASCII_USTRINGPARAM( SD_LT_SEPARATOR ));
     aPrefix.Insert(aSep);
 
-    List* pNameList = new List;
-
     String aName(SdResId(STR_LAYOUT_OUTLINE));
-    String* pName = NULL;
+    String aStr;
 
     for (USHORT nLevel = 1; nLevel < 10; nLevel++)
     {
-        pName = new String(aName);
-        pName->Append( sal_Unicode( ' ' ));
-        pName->Append( String::CreateFromInt32( sal_Int32( nLevel )));
-        pName->Insert(aPrefix, 0);
-        pNameList->Insert(pName, LIST_APPEND);
+        aStr = String( aPrefix );
+        aStr.Append(aName);
+        aStr.Append( sal_Unicode( ' ' ));
+        aStr.Append( String::CreateFromInt32( sal_Int32( nLevel )));
+        aNameList.push_back(aStr);
     }
 
-    pName = new String(SdResId(STR_LAYOUT_TITLE));
-    pName->Insert(aPrefix, 0);
-    pNameList->Insert(pName, LIST_APPEND);
+    aStr = String(SdResId(STR_LAYOUT_TITLE));
+    aStr.Insert(aPrefix, 0);
+    aNameList.push_back(aStr);
 
-    pName = new String(SdResId(STR_LAYOUT_SUBTITLE));
-    pName->Insert(aPrefix, 0);
-    pNameList->Insert(pName, LIST_APPEND);
+    aStr = String(SdResId(STR_LAYOUT_SUBTITLE));
+    aStr.Insert(aPrefix, 0);
+    aNameList.push_back(aStr);
 
-    pName = new String(SdResId(STR_LAYOUT_NOTES));
-    pName->Insert(aPrefix, 0);
-    pNameList->Insert(pName, LIST_APPEND);
+    aStr = String(SdResId(STR_LAYOUT_NOTES));
+    aStr.Insert(aPrefix, 0);
+    aNameList.push_back(aStr);
 
-    pName = new String(SdResId(STR_LAYOUT_BACKGROUNDOBJECTS));
-    pName->Insert(aPrefix, 0);
-    pNameList->Insert(pName, LIST_APPEND);
+    aStr = String(SdResId(STR_LAYOUT_BACKGROUNDOBJECTS));
+    aStr.Insert(aPrefix, 0);
+    aNameList.push_back(aStr);
 
-    pName = new String(SdResId(STR_LAYOUT_BACKGROUND));
-    pName->Insert(aPrefix, 0);
-    pNameList->Insert(pName, LIST_APPEND);
-
-    return pNameList;
+    aStr = String(SdResId(STR_LAYOUT_BACKGROUND));
+    aStr.Insert(aPrefix, 0);
+    aNameList.push_back(aStr);
 }
 
 /*************************************************************************
@@ -1017,7 +1021,7 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
         break;
 
         case HID_PSEUDOSHEET_TITLE:
-            /* #84013# title gets same bullet as subtitle and not that page symbol anymore */
+            /* title gets same bullet as subtitle and not that page symbol anymore */
         case HID_PSEUDOSHEET_SUBTITLE :
         {
             // Untertitel-Vorlage

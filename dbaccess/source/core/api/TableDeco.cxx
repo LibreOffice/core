@@ -35,6 +35,7 @@
 #include "core_resource.hxx"
 #include "core_resource.hrc"
 #include <tools/debug.hxx>
+#include <osl/diagnose.h>
 
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/enumhelper.hxx>
@@ -560,7 +561,7 @@ void ODBTableDecorator::fillPrivileges() const
     catch(const SQLException& e)
     {
         (void)e;
-        DBG_ERROR("ODBTableDecorator::ODBTableDecorator : could not collect the privileges !");
+        OSL_FAIL("ODBTableDecorator::ODBTableDecorator : could not collect the privileges !");
     }
 }
 
@@ -571,7 +572,7 @@ Reference< XPropertySet > SAL_CALL ODBTableDecorator::createDataDescriptor(  ) t
     ::connectivity::checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
 
     Reference< XDataDescriptorFactory > xFactory( m_xTable, UNO_QUERY );
-    DBG_ASSERT( xFactory.is(), "ODBTableDecorator::createDataDescriptor: invalid table!" );
+    OSL_ENSURE( xFactory.is(), "ODBTableDecorator::createDataDescriptor: invalid table!" );
     Reference< XColumnsSupplier > xColsSupp;
     if ( xFactory.is() )
         xColsSupp = xColsSupp.query( xFactory->createDataDescriptor() );

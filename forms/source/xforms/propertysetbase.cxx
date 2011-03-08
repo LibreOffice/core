@@ -125,7 +125,7 @@ void PropertySetBase::notifyAndCachePropertyValue( sal_Int32 nHandle )
         }
         catch( Exception& )
         {
-            DBG_ERROR( "PropertySetBase::notifyAndCachePropertyValue: this is not expected to fail!" );
+            OSL_FAIL( "PropertySetBase::notifyAndCachePropertyValue: this is not expected to fail!" );
         }
     }
     Any aOldValue = aPos->second;

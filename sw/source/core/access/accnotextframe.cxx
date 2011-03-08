@@ -40,9 +40,7 @@
 #include <ndnotxt.hxx>
 #include <flyfrm.hxx>
 #include <cntfrm.hxx>
-// --> OD 2009-07-14 #i73249#
-#include <hints.hxx>
-// <--
+#include <hints.hxx> //#i73249#
 #include "accnotextframe.hxx"
 
 using namespace ::com::sun::star;
@@ -73,7 +71,7 @@ SwAccessibleNoTextFrame::SwAccessibleNoTextFrame(
     msDesc()
 {
     const SwNoTxtNode* pNd = GetNoTxtNode();
-    // --> OD 2009-07-14 #i73249#
+    // #i73249#
     // consider new attributes Title and Description
     if( pNd )
     {
@@ -96,7 +94,7 @@ SwAccessibleNoTextFrame::~SwAccessibleNoTextFrame()
 void SwAccessibleNoTextFrame::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
 {
     const sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0 ;
-    // --> OD 2009-07-14 #i73249#
+    // #i73249#
     // suppress handling of RES_NAME_CHANGED in case that attribute Title is
     // used as the accessible name.
     if ( nWhich != RES_NAME_CHANGED ||
@@ -109,7 +107,7 @@ void SwAccessibleNoTextFrame::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
     OSL_ENSURE( pNd == aDepend.GetRegisteredIn(), "invalid frame" );
     switch( nWhich )
     {
-        // --> OD 2009-07-14 #i73249#
+        // #i73249#
         case RES_TITLE_CHANGED:
         {
             const String& sOldTitle(
@@ -171,7 +169,7 @@ void SwAccessibleNoTextFrame::Dispose( sal_Bool bRecursive )
     SwAccessibleFrameBase::Dispose( bRecursive );
 }
 
-// --> OD 2009-07-14 #i73249#
+// #i73249#
 OUString SAL_CALL SwAccessibleNoTextFrame::getAccessibleName (void)
         throw (uno::RuntimeException)
 {

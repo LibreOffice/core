@@ -28,65 +28,41 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_framework.hxx"
-
 #include <helper/titlebarupdate.hxx>
 
 //_________________________________________________________________________________________________________________
 //  my own includes
 //_________________________________________________________________________________________________________________
-
 #include <pattern/window.hxx>
-
 #include <threadhelp/writeguard.hxx>
-
 #include <threadhelp/readguard.hxx>
-
 #include <macros/generic.hxx>
-
 #include <services.h>
-
 #include <properties.h>
 
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
-
 #include <com/sun/star/awt/XWindow.hpp>
-
 #include <com/sun/star/lang/XServiceInfo.hpp>
-
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-
 #include <com/sun/star/frame/XModuleManager.hpp>
-
 #include <com/sun/star/container/XNameAccess.hpp>
-
 #include <com/sun/star/beans/XPropertySet.hpp>
-
 #include <com/sun/star/beans/XMaterialHolder.hpp>
-
 #include <com/sun/star/frame/XTitleChangeBroadcaster.hpp>
-
 #include <com/sun/star/beans/NamedValue.hpp>
 
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
-
 #include <comphelper/sequenceashashmap.hxx>
-
 #include <unotools/configmgr.hxx>
-
 #include <unotools/bootstrap.hxx>
-
 #include <vcl/window.hxx>
-
 #include <vcl/syswin.hxx>
-
 #include <toolkit/unohlp.hxx>
-
 #include <vcl/svapp.hxx>
-
 #include <vcl/wrkwin.hxx>
 
 //_________________________________________________________________________________________________________________
@@ -273,9 +249,6 @@ void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::fr
        )
     {
         WorkWindow* pWorkWindow = (WorkWindow*)pWindow;
-#ifdef COPY_TO_TITLE_FOR_DEBUG
-        pWorkWindow->SetText( sApplicationID );
-#endif
         pWorkWindow->SetApplicationID( sApplicationID );
     }
     // <- VCL SYNCHRONIZED

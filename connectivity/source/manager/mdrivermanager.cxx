@@ -46,7 +46,8 @@
 #include <osl/diagnose.h>
 
 #include <algorithm>
-#include <functional>
+
+#include <o3tl/compat_functional.hxx>
 
 namespace drivermanager
 {
@@ -142,7 +143,7 @@ Any SAL_CALL ODriverEnumeration::nextElement(  ) throw(NoSuchElementException, W
         }
     };
 
-    typedef ::std::unary_compose< ExtractDriverFromAccess, EnsureDriver > ExtractAfterLoad_BASE;
+    typedef ::o3tl::unary_compose< ExtractDriverFromAccess, EnsureDriver > ExtractAfterLoad_BASE;
     /// an STL functor which loads a driver described by a DriverAccess, and extracts the SdbcDriver
     struct ExtractAfterLoad : public ExtractAfterLoad_BASE
     {
@@ -676,7 +677,7 @@ Reference< XDriver > OSDBCDriverManager::implGetDriverForURL(const ::rtl::OUStri
             aFind = ::std::find_if(
                 m_aDriversBS.begin(),       // begin of search range
                 m_aDriversBS.end(),         // end of search range
-                std::unary_compose< AcceptsURL, ExtractAfterLoad >( AcceptsURL( _rURL ), ExtractAfterLoad() )
+                o3tl::unary_compose< AcceptsURL, ExtractAfterLoad >( AcceptsURL( _rURL ), ExtractAfterLoad() )
                                             // compose two functors: extract the driver from the access, then ask the resulting driver for acceptance
             );
         } // if ( m_aDriversBS.find(sDriverFactoryName ) == m_aDriversBS.end() )
@@ -697,7 +698,7 @@ Reference< XDriver > OSDBCDriverManager::implGetDriverForURL(const ::rtl::OUStri
         DriverCollectionIterator aPos = ::std::find_if(
             m_aDriversRT.begin(),       // begin of search range
             m_aDriversRT.end(),         // end of search range
-            std::unary_compose< AcceptsURL, ExtractDriverFromCollectionElement >( AcceptsURL( _rURL ), ExtractDriverFromCollectionElement() )
+            o3tl::unary_compose< AcceptsURL, ExtractDriverFromCollectionElement >( AcceptsURL( _rURL ), ExtractDriverFromCollectionElement() )
                                         // compose two functors: extract the driver from the access, then ask the resulting driver for acceptance
         );
 

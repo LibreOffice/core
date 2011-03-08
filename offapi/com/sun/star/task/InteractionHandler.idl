@@ -38,7 +38,7 @@ module com { module sun { module star { module task {
 //============================================================================
 /** An interaction request handler that lets the user handle requests via GUI dialogs.
 
-    <p>The interaction handler service has a numerof of <a href="#built_in_handler">built-in handlers</a>, responsible
+    <p>The interaction handler service has a number of <a href="#built_in_handler">built-in handlers</a>, responsible
     for a lot of well known interactions. Additionally, there's a configuration module which allows to
     <a href="#configuring_handlers">configure additional handlers</a>, responsible for arbitrary requests.</a></p>
 
@@ -127,7 +127,7 @@ module com { module sun { module star { module task {
 
         <DT><code>"Folder"</code></DT>
         <DD><const scope="com::sun::star::ucb">IOErrorCode::CANT_CREATE</const>
-        only.  The name of the foler in which a resource cannot be created (a
+        only.  The name of the folder in which a resource cannot be created (a
         <atom>string</atom>).</DD>
 
         <DT><code>"Volume"</code> and <code>"OtherVolume"</code></DT>
@@ -137,7 +137,7 @@ module com { module sun { module star { module task {
     </DL></P>
 
     <a name="configuring_handlers"></a>
-    <h3>Configurating additional Handlers</h3>
+    <h3>Configuring additional Handlers</h3>
 
     <p>It is possible to configure additional interaction handlers, to which certain requests can be delegated. The
     configuration node <code>/org.openoffice.Interaction/InteractionHandlers</code> is evaluated and respected
@@ -147,12 +147,12 @@ module com { module sun { module star { module task {
     by full-qualified type name. Also, for each type, it can specify whether it is responsible for only this particular
     type, or all possibly existent derived types.</p>
 
-    <p>Whenever the <code>InteractionHandler</code> encounteres a request it cannot fulfill itself, it will examine
+    <p>Whenever the <code>InteractionHandler</code> encounters a request it cannot fulfill itself, it will examine
     the configuration, to find a handler implementation for the request, and delegate it to the first matching
     handler.</p>
 
-    <p>If multiple custom interaction handlers declare themself responsible for the same request type, it is not
-    defined which handler will actully be invoked. Thus, when deploying a custom interaction handler, ensure
+    <p>If multiple custom interaction handlers declare themselves responsible for the same request type, it is not
+    defined which handler will actually be invoked. Thus, when deploying a custom interaction handler, ensure
     that the types you specify are general enough to cover all requests you want to handle, but also specific
     enough to not cover requests which other handlers might be interested in.</p>
  */

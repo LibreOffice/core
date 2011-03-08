@@ -250,14 +250,29 @@ void AbstractScDataPilotDatabaseDlg_Impl::GetValues( ScImportSourceDesc& rDesc )
 
 //AbstractScDataPilotSourceTypeDlg_Impl begin
 
-BOOL AbstractScDataPilotSourceTypeDlg_Impl::IsDatabase() const
+bool AbstractScDataPilotSourceTypeDlg_Impl::IsDatabase() const
 {
     return pDlg->IsDatabase();
 }
 
-BOOL AbstractScDataPilotSourceTypeDlg_Impl::IsExternal() const
+bool AbstractScDataPilotSourceTypeDlg_Impl::IsExternal() const
 {
     return pDlg->IsExternal();
+}
+
+bool AbstractScDataPilotSourceTypeDlg_Impl::IsNamedRange() const
+{
+    return pDlg->IsNamedRange();
+}
+
+rtl::OUString AbstractScDataPilotSourceTypeDlg_Impl::GetSelectedNamedRange() const
+{
+    return pDlg->GetSelectedNamedRange();
+}
+
+void AbstractScDataPilotSourceTypeDlg_Impl::AppendNamedRange(const ::rtl::OUString& rName)
+{
+    pDlg->AppendNamedRange(rName);
 }
 
 //AbstractScDataPilotSourceTypeDlg_Impl end

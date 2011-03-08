@@ -440,7 +440,7 @@ void VCLXMultiLineEdit::setProperty( const ::rtl::OUString& PropertyName, const 
                 case ::com::sun::star::awt::LineEndFormat::CARRIAGE_RETURN:           meLineEndType = LINEEND_CR; break;
                 case ::com::sun::star::awt::LineEndFormat::LINE_FEED:                 meLineEndType = LINEEND_LF; break;
                 case ::com::sun::star::awt::LineEndFormat::CARRIAGE_RETURN_LINE_FEED: meLineEndType = LINEEND_CRLF; break;
-                default: DBG_ERROR( "VCLXMultiLineEdit::setProperty: invalid line end value!" ); break;
+                default: OSL_FAIL( "VCLXMultiLineEdit::setProperty: invalid line end value!" ); break;
                 }
             }
             break;
@@ -496,7 +496,7 @@ void VCLXMultiLineEdit::setProperty( const ::rtl::OUString& PropertyName, const 
                 case LINEEND_CR:   nLineEndType = ::com::sun::star::awt::LineEndFormat::CARRIAGE_RETURN; break;
                 case LINEEND_LF:   nLineEndType = ::com::sun::star::awt::LineEndFormat::LINE_FEED; break;
                 case LINEEND_CRLF: nLineEndType = ::com::sun::star::awt::LineEndFormat::CARRIAGE_RETURN_LINE_FEED; break;
-                default: DBG_ERROR( "VCLXMultiLineEdit::getProperty: invalid line end value!" ); break;
+                default: OSL_FAIL( "VCLXMultiLineEdit::getProperty: invalid line end value!" ); break;
                 }
                 aProp <<= nLineEndType;
             }
@@ -529,7 +529,7 @@ void SAL_CALL VCLXMultiLineEdit::setFocus(  ) throw(::com::sun::star::uno::Runti
     // does is forwarding the focus to it's text window. This text window then does a "select all".
     // So if the text window already has the focus, and we give the focus to the multi line
     // edit, then all which happens is that everything is selected.
-    // #i27072# - 2004-04-25 - fs@openoffice.org
+    // #i27072#
     if ( GetWindow() && !GetWindow()->HasChildPathFocus() )
         GetWindow()->GrabFocus();
 }

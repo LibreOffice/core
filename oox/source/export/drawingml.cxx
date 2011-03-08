@@ -851,7 +851,7 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, sal_Bool bIs
     if( sURL.getLength() ) {
         OUString sRelId = mpFB->addRelation( mpFS->getOutputStream(),
                               US( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" ),
-                              sURL, US( "External" ) );
+                              sURL, true );
 
         mpFS->singleElementNS( XML_a, XML_hlinkClick,
                    FSNS( XML_r,XML_id ), USS( sRelId ),

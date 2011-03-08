@@ -434,7 +434,7 @@ namespace svx
                     }
                     else
                     {
-                        DBG_ERROR( "lcl_translateUnoStateToItem: invalid state!" );
+                        OSL_FAIL( "lcl_translateUnoStateToItem: invalid state!" );
                     }
                 }
                 }

@@ -138,9 +138,6 @@ COMPONENT_FILES=																			\
     $(ZIP1DIR)$/registry$/schema/org$/openoffice$/Office$/extension$/PresenterScreen.xcs   	\
     $(ZIP1DIR)$/registry$/data/$/org$/openoffice$/Office$/extension$/PresenterScreen.xcu 
 
-#COMPONENT_MERGED_XCU= \
-#	$(FIND_XCU)$/org$/openoffice$/Office$/extension$/PresenterScreen.xcu 
-
 COMPONENT_BITMAPS=												\
     $(ZIP1DIR)$/bitmaps$/BorderTop.png							\
     $(ZIP1DIR)$/bitmaps$/BorderTopLeft.png						\
@@ -262,9 +259,6 @@ ZIP1DEPS=					\
     $(COMPONENT_LIBRARY)	\
     $(COMPONENT_HELP)
 
-#	$(COMPONENT_MERGED_XCU) \
-
-
 LINKNAME:=help
 XHPLINKSRC:=$(ZIP1DIR)/help
 
@@ -371,7 +365,7 @@ PHONYDESC=.PHONY
 $(DESCRIPTION) $(PHONYDESC) : $$(@:f)
     @-$(MKDIRHIER) $(@:d)
     @echo LAST_WITH_LANG=$(WITH_LANG) > $(ZIP1DIR)_lang_track.mk
-    $(TYPE) description.tmp | sed s/UPDATED_PLATFORM/$(PLATFORMID)/ > $@
+    $(TYPE) description.xml | sed s/UPDATED_PLATFORM/$(PLATFORMID)/ > $@
 
 .ELSE
 ivo:

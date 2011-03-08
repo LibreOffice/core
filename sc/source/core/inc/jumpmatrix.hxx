@@ -141,7 +141,7 @@ public:
                                             nRow = 0;
                                         else if (nCols <= nCol || nRows <= nRow)
                                         {
-                                            DBG_ERROR("ScJumpMatrix::GetJump: dimension error");
+                                            OSL_FAIL("ScJumpMatrix::GetJump: dimension error");
                                             nCol = 0;
                                             nRow = 0;
                                         }

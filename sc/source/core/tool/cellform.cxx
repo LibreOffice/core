@@ -107,7 +107,7 @@ void ScCellFormat::GetString( ScBaseCell* pCell, ULONG nFormat, String& rString,
                     pFCell->GetFormula( rString );
                 else
                 {
-                    // #62160# A macro started from the interpreter, which has
+                    // A macro started from the interpreter, which has
                     // access to Formular Cells, becomes a CellText, even if
                     // that triggers further interpretation, except if those
                     // cells are already being interpreted.

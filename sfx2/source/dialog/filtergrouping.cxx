@@ -224,7 +224,7 @@ namespace sfx2
             if ( m_aClassReferrer.end() == aClassRef )
             {
                 // we do not know this global class
-                DBG_ERROR( "ReadGlobalFilter::operator(): unknown filter name!" );
+                OSL_FAIL( "ReadGlobalFilter::operator(): unknown filter name!" );
                 // TODO: perhaps we should be more tolerant - at the moment, the filter is dropped
                 // We could silently push_back it to the container ....
             }
@@ -693,12 +693,6 @@ namespace sfx2
             FilterGroupEntryReferrer::iterator aBelongsToLocal = aLocalClassesRef.find( sFilterName );
             if ( aLocalClassesRef.end() != aBelongsToLocal )
             {
-/*
-#ifdef DBG_UTIL
-                const ::rtl::OUString& rLocalClassDisplayName = aBelongsToLocal->second->First;
-                const ::rtl::OUString& rLocalClassExtension = aBelongsToLocal->second->Second;
-#endif
-*/
                 // okay, there is a local class which the filter belongs to
                 // -> append the wildcard
                 aExtendWildcard( *aBelongsToLocal );

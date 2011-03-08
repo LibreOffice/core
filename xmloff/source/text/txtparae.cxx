@@ -40,7 +40,7 @@
 
 #include <vector>
 #include <list>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
@@ -220,7 +220,7 @@ namespace
             };
 
         private:
-            typedef hash_map<
+            typedef boost::unordered_map<
                 Reference<XTextFrame>,
                 TextContentSet,
                 FrameRefHash> framebound_map_t;
@@ -2337,7 +2337,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                 exportSoftPageBreak(xPropSet,   bAutoStyles);
             }
             else {
-                DBG_ERROR("unknown text portion type");
+                OSL_FAIL("unknown text portion type");
             }
         }
         else

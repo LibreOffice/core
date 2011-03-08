@@ -45,7 +45,6 @@
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 
-#include <hash_map>
 #include <algorithm>
 #include <functional>
 

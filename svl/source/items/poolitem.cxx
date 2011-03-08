@@ -424,7 +424,7 @@ bool SfxPoolItem::HasMetrics() const
 
 bool SfxPoolItem::QueryValue( com::sun::star::uno::Any&, BYTE ) const
 {
-    DBG_ERROR("There is no implementation for QueryValue for this item!");
+    OSL_FAIL("There is no implementation for QueryValue for this item!");
     return false;
 }
 
@@ -432,7 +432,7 @@ bool SfxPoolItem::QueryValue( com::sun::star::uno::Any&, BYTE ) const
 
 bool SfxPoolItem::PutValue( const com::sun::star::uno::Any&, BYTE )
 {
-    DBG_ERROR("There is no implementation for PutValue for this item!");
+    OSL_FAIL("There is no implementation for PutValue for this item!");
     return false;
 }
 

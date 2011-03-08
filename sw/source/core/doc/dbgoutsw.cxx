@@ -112,7 +112,8 @@ SW_DLLPUBLIC const char * dbg_out(const String & aStr)
 
 SW_DLLPUBLIC const char * dbg_out(const ::rtl::OUString & aStr)
 {
-    return OUStringToOString(aStr, RTL_TEXTENCODING_ASCII_US).getStr();
+    aDbgOutResult = ByteString( rtl::OUStringToOString( aStr, RTL_TEXTENCODING_ASCII_US ) );
+    return aDbgOutResult.GetBuffer();
 }
 
 

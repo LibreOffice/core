@@ -30,7 +30,7 @@
 
 #include "envelp.hrc"
 
-// Lokale Resourcen *********************************************************
+// local resources *********************************************************
 
 #define BTN_PAGE      1
 #define BTN_SINGLE    2
@@ -44,7 +44,7 @@
 #define FL_DONTKNOW  10
 #define CB_SYNCHRON  11
 
-// Ueberlaufpruefung ********************************************************
+// overflow check ********************************************************
 
 #define LABPRT_ACT_END  0
 

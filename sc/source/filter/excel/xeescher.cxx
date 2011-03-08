@@ -1503,7 +1503,7 @@ void XclExpComments::SaveXml( XclExpXmlStream& rStrm )
     for( size_t i = 0; i < nNotes; ++i )
     {
         XclExpNoteList::RecordRefType xNote = mrNotes.GetRecord( i );
-        Authors::const_iterator aAuthor = aAuthors.find(
+        Authors::iterator aAuthor = aAuthors.find(
                 XclXmlUtils::ToOUString( xNote->GetAuthor() ) );
         sal_Int32 nAuthorId = distance( aAuthors.begin(), aAuthor );
         xNote->WriteXml( nAuthorId, rStrm );
@@ -1554,7 +1554,7 @@ boost::shared_ptr< XclExpRecordBase > XclExpObjectManager::ProcessDrawing( SdrPa
 {
     if( pSdrPage )
         mxEscherEx->AddSdrPage( *pSdrPage );
-    // #106213# the first dummy object may still be open
+    // the first dummy object may still be open
     DBG_ASSERT( mxEscherEx->GetGroupLevel() <= 1, "XclExpObjectManager::ProcessDrawing - still groups open?" );
     while( mxEscherEx->GetGroupLevel() )
         mxEscherEx->LeaveGroup();
@@ -1566,7 +1566,7 @@ boost::shared_ptr< XclExpRecordBase > XclExpObjectManager::ProcessDrawing( const
 {
     if( rxShapes.is() )
         mxEscherEx->AddUnoShapes( rxShapes );
-    // #106213# the first dummy object may still be open
+    // the first dummy object may still be open
     DBG_ASSERT( mxEscherEx->GetGroupLevel() <= 1, "XclExpObjectManager::ProcessDrawing - still groups open?" );
     while( mxEscherEx->GetGroupLevel() )
         mxEscherEx->LeaveGroup();

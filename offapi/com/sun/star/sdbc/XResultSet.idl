@@ -50,7 +50,7 @@
     <p>
     A ResultSet maintains a cursor pointing to its current row of
     data. Initially the cursor is positioned before the first row.
-    The 'next' method moves the cursor to the next row.
+    The "next" method moves the cursor to the next row.
     </p>
  */
 published interface XResultSet: com::sun::star::uno::XInterface

@@ -317,8 +317,7 @@ void SbiParser::OnGoto()
     UINT32 nLbl = 0;
     do
     {
-        SbiToken eTok2 = NIL;
-        eTok2 = Next(); // Label holen
+        Next(); // Label holen
         if( MayBeLabel() )
         {
             UINT32 nOff = pProc->GetLabels().Reference( aSym );

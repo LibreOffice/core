@@ -36,8 +36,6 @@
 #include <EnhancedPDFExportHelper.hxx>
 #include <viewopt.hxx>  // SwViewOptions
 #include <viewsh.hxx>
-#include <errhdl.hxx>
-#include <txtcfg.hxx>
 #include <SwPortionHandler.hxx>
 #include <porhyph.hxx>  //
 #include <inftxt.hxx>
@@ -65,7 +63,6 @@ Reference< XHyphenatedWord >  SwTxtFormatInfo::HyphWord(
 {
     if( rTxt.Len() < 4 || pFnt->IsSymbol(pVsh) )
         return 0;
-// OSL_ENSURE( IsHyphenate(), "SwTxtFormatter::HyphWord: why?" );
     Reference< XHyphenator >  xHyph = ::GetHyphenator();
     Reference< XHyphenatedWord > xHyphWord;
 
@@ -124,7 +121,6 @@ sal_Bool SwTxtFrm::Hyphenate( SwInterHyphInfo &rHyphInf )
         const xub_StrLen nEnd = rHyphInf.GetEnd();
         while( !bRet && aLine.GetStart() < nEnd )
         {
-            DBG_LOOP;
             bRet = aLine.Hyphenate( rHyphInf );
             if( !aLine.Next() )
                 break;

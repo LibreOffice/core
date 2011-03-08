@@ -37,7 +37,6 @@
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <tools/string.hxx>
-#include <tools/list.hxx>
 #include <tools/link.hxx>
 #include <vector>
 

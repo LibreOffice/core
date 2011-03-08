@@ -57,11 +57,6 @@
  * @file
  * Container for content.It will destroy all children when destroy.
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2005-01-27 create this file.
- * 2005-04-08 add copy constructure.
- ************************************************************************/
 #include    "xfcontentcontainer.hxx"
 #include    "xftextcontent.hxx"
 

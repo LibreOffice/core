@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* libwpg
  * Copyright (C) 2006 Ariya Hidayat (ariya@kde.org)
  * Copyright (C) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
@@ -195,7 +196,6 @@ void OdgExporter::endGraphics()
     tmpStyleStyleOpenElement.write(mpHandler);
 
     TagOpenElement tmpStyleDrawingPagePropertiesOpenElement("style:drawing-page-properties");
-    // tmpStyleDrawingPagePropertiesOpenElement.addAttribute("draw:background-size", "border");
     tmpStyleDrawingPagePropertiesOpenElement.addAttribute("draw:fill", "none");
     tmpStyleDrawingPagePropertiesOpenElement.write(mpHandler);
 
@@ -646,3 +646,5 @@ WPXString OdgExporter::doubleToString(const double value)
     }
     return WPXString(stringValue.c_str());
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

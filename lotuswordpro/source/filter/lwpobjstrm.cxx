@@ -360,10 +360,10 @@ sal_uInt16 LwpObjectStream::DecompressBuffer(sal_uInt8* pDst, sal_uInt8* pSrc, s
  */
 OUString LwpObjectStream::QuickReadStringPtr(void)
 {
-    sal_uInt16 len, diskSize;
+    sal_uInt16 diskSize;
 
     diskSize = QuickReaduInt16();
-    len = QuickReaduInt16();
+    QuickReaduInt16(); //len
 
     OUString str;
     rtl_TextEncoding rEncode =  RTL_TEXTENCODING_MS_1252;

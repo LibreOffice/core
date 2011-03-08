@@ -94,10 +94,9 @@ namespace dbaui
 
         SvNumberFormatter*  m_pFormatter;
         SvStream&           m_rInputStream;
-        //dyf add 2006/06/01
         //for save the selected tablename
         ::rtl::OUString     m_sDefaultTableName;
-        //dyf add end
+
         String              m_sTextToken;       // Zellen Inhalt
         String              m_sNumToken;        /// SDNUM value
         String              m_sValToken;        /// SDVAL value
@@ -167,9 +166,7 @@ namespace dbaui
 
         void    SetColumnTypes(const TColumnVector* rList,const OTypeInfoMap* _pInfoMap);
 
-        //dyf add 20070601
         inline void                    SetTableName(const ::rtl::OUString &_sTableName){ m_sDefaultTableName = _sTableName ; }
-        //dyf add end
 
         virtual void release() = 0;
 

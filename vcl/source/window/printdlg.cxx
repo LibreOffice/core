@@ -1540,7 +1540,7 @@ void PrintDialog::setupOptionalUI()
             }
             else
             {
-                DBG_ERROR( "Unsupported UI option" );
+                OSL_FAIL( "Unsupported UI option" );
             }
 
             pCurColumn = pSaveCurColumn;
@@ -2169,7 +2169,7 @@ PropertyValue* PrintDialog::getValueForWindow( Window* i_pWindow ) const
     }
     else
     {
-        DBG_ERROR( "changed control not in property map" );
+        OSL_FAIL( "changed control not in property map" );
     }
     return pVal;
 }

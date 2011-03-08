@@ -39,9 +39,6 @@ using namespace std;
 #include "hwpeq.h"
 #include <sal/types.h>
 #include <sal/macros.h>
-//#define TEST
-//#define DEBUG
-
 
 /* @Man: hwp수식을 LaTeX으로 바꾸기 */
 #ifdef WIN32
@@ -537,8 +534,7 @@ static int next_token(MzString &white, MzString &token, istream *strm)
   }
   else
     token << (char) ch;
-  // cout << "WHITE : " << "|" << white.c_str() << "|" << endl ;
-  // cout << "TOKEN : " << "|" << token.c_str() << "|" << endl ;
+
   return token.length();
 }
 
@@ -580,11 +576,7 @@ static int eq_word(MzString& outs, istream *strm, int status)
   int       ch, result, nargs;
   char      keyword[256];
   hwpeq     *eq;
-#ifdef DEBUG
-  static int    slevel = 0;
 
-  slevel++;
-#endif
   next_token(white, token, strm);
   if (token.length() <= 0)
       return 0;
@@ -641,11 +633,7 @@ static int eq_word(MzString& outs, istream *strm, int status)
     }
   }
   outs << state;
-#ifdef DEBUG
-  //if( slevel == 1 )
-   // cout << "LEVEL[" << slevel << "]" << state << "\n";
-  slevel--;
-#endif
+
   return result;
 }
 
@@ -749,9 +737,6 @@ void eq2latex(MzString& outs, char *s)
 
   istringstream tstrm(s);
   bool eqnarray = eq_sentence(tstr, &tstrm);
-#ifdef TEST
-  cout << "Step1: " << endl << tstr.c_str() << endl;
-#endif
   istringstream strm(tstr.c_str());
 
   if( eqnarray )

@@ -49,7 +49,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objface.hxx>
 
-#include <svx/hyprlink.hxx>
 #include "IAnyRefDialog.hxx"
 
 #include <svtools/ehdl.hxx>
@@ -128,7 +127,6 @@ SFX_IMPL_INTERFACE( ScModule, SfxShell, ScResId(RID_APPTITLE) )
     SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_APPLICATION | SFX_VISIBILITY_DESKTOP | SFX_VISIBILITY_STANDARD | SFX_VISIBILITY_CLIENT | SFX_VISIBILITY_VIEWER,
                                 ScResId(RID_OBJECTBAR_APP) );
     SFX_STATUSBAR_REGISTRATION( ScResId(SCCFG_STATUSBAR) );     // nur ID wichtig
-    SFX_CHILDWINDOW_REGISTRATION( SvxHyperlinkDlgWrapper::GetChildWindowId() );
 }
 
 //------------------------------------------------------------------
@@ -641,7 +639,7 @@ void ScModule::Execute( SfxRequest& rReq )
         break;
 
         default:
-            DBG_ERROR( "ScApplication: Unknown Message." );
+            OSL_FAIL( "ScApplication: Unknown Message." );
             break;
     }
 }
@@ -1047,7 +1045,6 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
     BOOL                    bUpdateMarks        = FALSE;
     BOOL                    bUpdateRefDev       = FALSE;
     BOOL                    bCalcAll            = FALSE;
-    BOOL                    bSaveSpellCheck     = FALSE;
     BOOL                    bSaveAppOptions     = FALSE;
     BOOL                    bSaveInputOptions   = FALSE;
 
@@ -1227,10 +1224,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
         }
 
         if ( bOldAutoSpell != bDoAutoSpell )
-        {
             SetAutoSpellProperty( bDoAutoSpell );
-            bSaveSpellCheck = TRUE;
-        }
         if ( pDocSh )
             pDocSh->PostPaintGridAll();                     // wegen Markierungen
         ScInputHandler* pInputHandler = GetInputHdl();
@@ -1313,12 +1307,6 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
     }
 
     //----------------------------------------------------------
-
-//  if ( bSaveSpellCheck )
-//  {
-        //  currently LinguProperties are saved only at program exit.
-        //  if a save method becomes available, it should be called here.
-//  }
 
     if ( bSaveAppOptions )
         pAppCfg->OptionsChanged();
@@ -1432,7 +1420,7 @@ ScInputHandler* ScModule::GetInputHdl( ScTabViewShell* pViewSh, BOOL bUseRef )
     if ( pViewSh )
         pHdl = pViewSh->GetInputHandler();      // Viewshell hat jetzt immer einen
 
-    //  #57989# wenn keine ViewShell uebergeben oder aktiv, kann NULL herauskommen
+    //  wenn keine ViewShell uebergeben oder aktiv, kann NULL herauskommen
     DBG_ASSERT( pHdl || !pViewSh, "GetInputHdl: kein InputHandler gefunden" );
     return pHdl;
 }
@@ -1601,7 +1589,7 @@ void ScModule::SetRefDialog( USHORT nId, BOOL bVis, SfxViewFrame* pViewFrm )
         if ( !pViewFrm )
             pViewFrm = SfxViewFrame::Current();
 
-        // #79379# bindings update causes problems with update of stylist if
+        // bindings update causes problems with update of stylist if
         // current style family has changed
         //if ( pViewFrm )
         //  pViewFrm->GetBindings().Update();       // to avoid trouble in LockDispatcher
@@ -1819,7 +1807,7 @@ void ScModule::SetReference( const ScRange& rRef, ScDocument* pDoc,
             pHdl->SetReference( aNew, pDoc );
         else
         {
-            DBG_ERROR("SetReference ohne Empfaenger");
+            OSL_FAIL("SetReference ohne Empfaenger");
         }
     }
 }
@@ -2194,7 +2182,7 @@ IMPL_LINK( ScModule, CalcFieldValueHdl, EditFieldInfo*, pInfo )
         }
         else
         {
-            DBG_ERROR("unbekannter Feldbefehl");
+            OSL_FAIL("unbekannter Feldbefehl");
             pInfo->SetRepresentation(String('?'));
         }
     }

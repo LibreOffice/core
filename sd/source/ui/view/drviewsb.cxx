@@ -33,7 +33,6 @@
 #include <svx/svdlayer.hxx>
 #include <svx/svxids.hrc>
 
-#include <svx/hyprlink.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/hlnkitem.hxx>
 #include <tools/urlobj.hxx>

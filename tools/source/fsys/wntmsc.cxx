@@ -42,14 +42,9 @@
 #include "wntmsc.hxx"
 #include <tools/errinf.hxx>
 #include <tools/debug.hxx>
-#include <tools/list.hxx>
 #include <tools/wldcrd.hxx>
 #include <tools/fsys.hxx>
 #include <tools/bigint.hxx>
-
-DECLARE_LIST( DirEntryList, DirEntry* );
-DECLARE_LIST( FSysSortList, FSysSort* );
-DECLARE_LIST( FileStatList, FileStat* );
 
 int Sys2SolarError_Impl( int nSysErr );
 

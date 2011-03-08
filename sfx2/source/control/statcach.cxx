@@ -30,11 +30,10 @@
 #include "precompiled_sfx2.hxx"
 
 #ifdef SOLARIS
-// HACK: prevent conflict between STLPORT and Workshop headers on Solaris 8
 #include <ctime>
 #endif
 
-#include <string> // HACK: prevent conflict between STLPORT and Workshop headers
+#include <string>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XFrameActionListener.hpp>
@@ -108,7 +107,6 @@ void SAL_CALL  BindDispatch_Impl::statusChanged( const ::com::sun::star::frame::
         SfxPoolItem *pItem=NULL;
         sal_uInt16 nId = pCache->GetId();
         SfxItemState eState = SFX_ITEM_DISABLED;
-        // pCache->Invalidate( sal_False );
         if ( !aStatus.IsEnabled )
         {
             // default
@@ -377,8 +375,6 @@ void SfxStateCache::SetState
 */
 
 {
-//    if ( pDispatch )
-//        return;
     SetState_Impl( eState, pState, bMaybeDirty );
 }
 

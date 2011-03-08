@@ -108,12 +108,11 @@ static void createTheme( rtl::OUString aThemeName,
 
     if (!pGallery ) {
             fprintf( stderr, "Could't acquire '%s'\n",
-                     (const sal_Char *) rtl::OUStringToOString( aGalleryURL,
-                                                                RTL_TEXTENCODING_UTF8 ) );
+                     rtl::OUStringToOString(aGalleryURL, RTL_TEXTENCODING_UTF8).getStr() );
             exit( 1 );
     }
     fprintf( stderr, "Work on gallery '%s'\n",
-                     (const sal_Char *) rtl::OUStringToOString( aGalleryURL, RTL_TEXTENCODING_UTF8 ) );
+                     rtl::OUStringToOString(aGalleryURL, RTL_TEXTENCODING_UTF8).getStr() );
 
     fprintf( stderr, "Existing themes: %lu\n",
              sal::static_int_cast< unsigned long >(
@@ -141,7 +140,7 @@ static void createTheme( rtl::OUString aThemeName,
     }
 
     fprintf( stderr, "Using DestDir: %s\n",
-             (const sal_Char *) rtl::OUStringToOString( aDestDir, RTL_TEXTENCODING_UTF8 ) );
+             rtl::OUStringToOString(aDestDir, RTL_TEXTENCODING_UTF8).getStr() );
     pGalTheme->SetDestDir(String(aDestDir));
 
     FileNameList::const_iterator aIter;
@@ -158,10 +157,10 @@ static void createTheme( rtl::OUString aThemeName,
 #if 1
         if ( ! pGalTheme->InsertURL( *aIter ) )
             fprintf( stderr, "Failed to import '%s'\n",
-                     (const sal_Char *) rtl::OUStringToOString( *aIter, RTL_TEXTENCODING_UTF8 ) );
+                     rtl::OUStringToOString(*aIter, RTL_TEXTENCODING_UTF8).getStr() );
         else
             fprintf( stderr, "Imported file '%s' (%lu)\n",
-                     (const sal_Char *) rtl::OUStringToOString( *aIter, RTL_TEXTENCODING_UTF8 ),
+                     rtl::OUStringToOString(*aIter, RTL_TEXTENCODING_UTF8).getStr(),
                      sal::static_int_cast< unsigned long >(
                          pGalTheme->GetObjectCount() ) );
 

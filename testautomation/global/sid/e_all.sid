@@ -153,7 +153,6 @@ EditDataRanges .uno:DataRanges
 ViewZoom SID_ATTR_ZOOM
 ViewBeamer SID_BROWSER
 ViewDataSources .uno:ViewDataSourceBrowser
-ViewToolbarsHyperlinkbar .uno:InsertHyperlink
 ViewToolbarsConfigure .uno:ConfigureDialog
 ViewToolbarsStatusbar SID_TOGGLESTATUSBAR
 ViewFullScreen SID_WIN_FULLSCREEN
@@ -200,7 +199,6 @@ ViewToolbarsTable .uno:AvailableToolbars?Toolbar:string=tableobjectbar
 ViewToolbarsTextFormatting .uno:AvailableToolbars?Toolbar:string=textobjectbar
 ViewToolbarsTextObject .uno:AvailableToolbars?Toolbar:string=drawtextobjectbar
 ViewToolbarsTools .uno:AvailableToolbars?Toolbar:string=toolbar
-ViewToolbarsInsertHyperlink .uno:InsertHyperlink
 ViewToolbarsInsertFormula .uno:InsertFormula
 ViewToolbarsCustomize .uno:ConfigureDialog
 ViewToolbarsPreviewbar .uno:AvailableToolbars?Toolbar:string=previewbar

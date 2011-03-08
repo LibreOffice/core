@@ -569,27 +569,6 @@ awt::Rectangle SAL_CALL AccessibleShape::getBounds (void)
             int x = aPixelPosition.getX() - aParentLocation.X;
             int y = aPixelPosition.getY() - aParentLocation.Y;
 
-            /*        //  The following block is a workarround for bug #99889# (property
-            //  BoundRect returnes coordinates relative to document window
-            //  instead of absolute coordinates for shapes in Writer).  Has to
-            //  be removed as soon as bug is fixed.
-
-            // Use a non-null anchor position as flag that the shape is in a
-            // Writer document.
-            if (xSetInfo.is())
-                if (xSetInfo->hasPropertyByName (sAnchorPositionName))
-                {
-                    uno::Any aPos = xSet->getPropertyValue (sAnchorPositionName);
-                    awt::Point aAnchorPosition;
-                    aPos >>= aAnchorPosition;
-                    if (aAnchorPosition.X > 0)
-                    {
-                        x = aPixelPosition.getX();
-                        y = aPixelPosition.getY();
-                    }
-                }
-            //  End of workarround.
-            */
             // Clip with parent (with coordinates relative to itself).
             ::Rectangle aBBox (
                 x, y, x + aPixelSize.getWidth(), y + aPixelSize.getHeight());
@@ -845,8 +824,6 @@ uno::Sequence<uno::Type> SAL_CALL
         ::getCppuType((const uno::Reference<document::XEventListener>*)0);
     const uno::Type aUnoTunnelType =
         ::getCppuType((const uno::Reference<lang::XUnoTunnel>*)0);
-    //    const uno::Type aStateSetType =
-    //      ::getCppuType((const uno::Reference<XAccessibleStateSet>*)0);
 
     // ... and merge them all into one list.
     sal_Int32   nTypeCount (aTypeList.getLength()),

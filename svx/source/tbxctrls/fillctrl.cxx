@@ -31,7 +31,7 @@
 
 // include ---------------------------------------------------------------
 
-#include <string> // HACK: prevent conflict between STLPORT and Workshop headers
+#include <string>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
@@ -446,7 +446,7 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
             break;
 
             default:
-                DBG_ERROR( "Nicht unterstuetzter Flaechentyp" );
+                OSL_FAIL( "Nicht unterstuetzter Flaechentyp" );
             break;
         }
     }

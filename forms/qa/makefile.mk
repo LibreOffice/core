@@ -43,7 +43,6 @@ JAVACLASSFILES	:= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(i:d)$/$(i:b).class)
 
 MAXLINELENGTH = 100000
 
-#JARCLASSDIRS    =
 JARTARGET       = $(TARGET).jar
 JARCOMPRESS 	= TRUE
 
@@ -66,7 +65,7 @@ ALL: 	ALLDEP
 
 .INCLUDE :  target.mk
 
-test:
+check:
     echo $(SOLARBINDIR)
 
 show_targets:

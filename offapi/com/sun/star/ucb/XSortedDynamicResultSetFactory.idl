@@ -57,10 +57,10 @@ published interface XSortedDynamicResultSetFactory: com::sun::star::uno::XInterf
         data, an (unsorted) XDynamicResultSet and the sorting info.
 
         @returns
-        a sorted resultset.
+        a sorted result set.
 
         @param Source
-        the (unsorted) source resultset
+        the (unsorted) source result set
 
         @param Info
         the sort criteria

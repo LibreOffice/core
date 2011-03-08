@@ -604,15 +604,6 @@ namespace drawinglayer
                             aTransform.identity();
                             aTransform.scale(fScaleUp, fScaleUp, 1.0);
 
-                            if(false)
-                            {
-                                // when really want to go to single pixel lines, move to center.
-                                // Without this translation, all hor/ver hairlines will be centered exactly
-                                // between two pixel lines (which looks best)
-                                const double fTranslateToCenter(mnAntiAlialize * 0.5);
-                                aTransform.translate(fTranslateToCenter, fTranslateToCenter, 0.0);
-                            }
-
                             aSnappedHairline.transform(aTransform);
 
                             mpZBufferRasterConverter3D->rasterconvertB3DPolygon(aSnappedHairline, 0, mpBZPixelRaster->getHeight(), mnAntiAlialize);
@@ -774,7 +765,7 @@ namespace drawinglayer
 
             if(mpRasterPrimitive3Ds)
             {
-                OSL_ASSERT("ZBufferProcessor3D: destructed, but there are unrendered transparent geometries. Use ZBufferProcessor3D::finish() to render these (!)");
+                OSL_FAIL("ZBufferProcessor3D: destructed, but there are unrendered transparent geometries. Use ZBufferProcessor3D::finish() to render these (!)");
                 delete mpRasterPrimitive3Ds;
             }
         }

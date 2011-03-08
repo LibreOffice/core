@@ -38,7 +38,7 @@ module com { module sun { module star { module i18n {
 //=============================================================================
 /** offers generic text conversion.
 
-    <p>This is an abstract service which does not make sense to be instatiated.
+    <p>This is an abstract service which does not make sense to be instantiated.
 
      @since OOo 1.1.2
 */

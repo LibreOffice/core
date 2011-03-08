@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 #include <svl/cjkoptions.hxx>
 #include <svx/flagsdef.hxx>
 #include "cuires.hrc"

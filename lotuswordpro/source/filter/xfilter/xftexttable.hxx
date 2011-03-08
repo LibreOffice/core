@@ -57,10 +57,6 @@
  * @file
  * Text table object. It's the table used in writer.
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2005-03-31 create and implements.
- ************************************************************************/
 #ifndef     _XFTEXTTABLE_HXX
 #define     _XFTEXTTABLE_HXX
 

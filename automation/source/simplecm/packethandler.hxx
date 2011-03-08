@@ -59,8 +59,8 @@ protected:
 public:
     PacketHandler( ITransmiter* pTransmitter_, IReceiver* pReceiver_, comm_BOOL bMC = FALSE );
 
-    comm_UINT16 GetReceiveProtocol() { return nReceiveProtocol; }
-    comm_UINT16 GetReceiveHeaderType() { return nReceiveHeaderType; }
+    comm_UINT16 GetReceiveProtocol() const { return nReceiveProtocol; }
+    comm_UINT16 GetReceiveHeaderType() const { return nReceiveHeaderType; }
 
     comm_BOOL ReceiveData( void* &pData, comm_UINT32 &nLen );               /// Recieve DataPacket from Socket
     virtual comm_BOOL SendHandshake( HandshakeType aHandshakeType, const void* pData = NULL, comm_UINT32 nLen = 0 );

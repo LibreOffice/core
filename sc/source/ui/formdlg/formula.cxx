@@ -335,7 +335,7 @@ bool ScFormulaDlg::calculateValue( const String& rStrExp, String& rStrResult )
 
     ::std::auto_ptr<ScFormulaCell> pFCell( new ScFormulaCell( pDoc, aCursorPos, rStrExp ) );
 
-    // #35521# HACK! um bei ColRowNames kein #REF! zu bekommen,
+    // HACK! um bei ColRowNames kein #REF! zu bekommen,
     // wenn ein Name eigentlich als Bereich in die Gesamt-Formel
     // eingefuegt wird, bei der Einzeldarstellung aber als
     // single-Zellbezug interpretiert wird

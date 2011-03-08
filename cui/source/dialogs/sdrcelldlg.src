@@ -100,7 +100,6 @@ TabDialog RID_SVX_FORMAT_CELLS_DLG
     {
         Pos = MAP_APPFONT ( 169 , 151 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Zurück : Zur³ck */
         Text [ de ] = "ZurÃ¼ck" ;
         Text [ en-US ] = "Return" ;
         TabStop = TRUE ;

@@ -81,11 +81,10 @@ extern "C"
 #       include <arpa/inet.h>
 #endif
 #if ( defined WNT )                     // Windows
-#include <tools/prewin.h>
-// #    include <windows.h>
+#include <prewin.h>
 #   include <winsock.h>
 #   include <string.h>
-#include <tools/postwin.h>
+#include <postwin.h>
 #endif
 
 

@@ -1250,7 +1250,7 @@ void SfxViewShell::SetWindow
 
 Size SfxViewShell::GetOptimalSizePixel() const
 {
-    DBG_ERROR( "Useless call!" );
+    OSL_FAIL( "Useless call!" );
     return Size();
 }
 
@@ -2120,7 +2120,7 @@ BOOL SfxViewShell::TryContextMenuInterception( Menu& rIn, const ::rtl::OUString&
                     // interceptor is indifferent
                     continue;
                 default:
-                    DBG_ERROR("Wrong return value of ContextMenuInterceptor!");
+                    OSL_FAIL("Wrong return value of ContextMenuInterceptor!");
                     continue;
             }
         }

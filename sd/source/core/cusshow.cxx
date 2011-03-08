@@ -37,7 +37,6 @@
 #include "sdpage.hxx"
 #include "drawdoc.hxx"
 
-// #90477#
 #include <tools/tenccvt.hxx>
 
 using namespace ::com::sun::star;

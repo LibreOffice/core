@@ -57,13 +57,13 @@ endif
 
 
 .PHONY: ALL
-ALL: test
+ALL: check
 
 include $(PRJ)/settings/stdtarget.mk
 
 
-.PHONY: test
-test: test-cpptest test-javatest test-javanative test-clientserver
+.PHONY: check
+check: test-cpptest test-javatest test-javanative test-clientserver
 
 .PHONY: test-cpptest
 test-cpptest: out.sdk/cppmain.uno.$(SHAREDLIB_EXT) out.sdk/types.rdb \
@@ -120,7 +120,7 @@ out.sdk/cppmain.uno.$(SHAREDLIB_EXT): out.sdk/cppmain.$(OBJ_EXT) version.map | \
             out.sdk
 	$(LINK) $(COMP_LINK_FLAGS) $(link_output_switch)$@ $< $(LINK_LIBS) \
             $(CPPULIB) $(CPPUHELPERLIB) $(SALLIB) $(SALHELPERLIB) \
-            $(STLPORTLIB) $(link_std_libs)
+            $(link_std_libs)
 
 out.sdk/cppmain.$(OBJ_EXT): cppmain.cc out.sdk/cpputypes.cppumaker.flag \
             out.sdk/types.cppumaker.flag | out.sdk

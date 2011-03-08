@@ -29,11 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_formula.hxx"
 
-#if STLPORT_VERSION<321
-#include <stddef.h>
-#else
 #include <cstddef>
-#endif
 #include <cstdio>
 
 #include <string.h>
@@ -876,7 +872,7 @@ BOOL FormulaTokenArray::HasMatrixDoubleRefOps()
                 sp = sal::static_int_cast<short>( sp - nParams );
                 if ( sp < 0 )
                 {
-                    DBG_ERROR( "FormulaTokenArray::HasMatrixDoubleRefOps: sp < 0" );
+                    OSL_FAIL( "FormulaTokenArray::HasMatrixDoubleRefOps: sp < 0" );
                     sp = 0;
                 }
                 pStack[sp++] = pResult;

@@ -26,13 +26,6 @@
  *
  ************************************************************************/
 
-#if !ENABLE_LAYOUT_EXPERIMENTAL
-//#undef ENABLE_LAYOUT
-#endif
-
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 // include ---------------------------------------------------------------
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
@@ -589,7 +582,6 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet& rSet )
         AddAutomaticLanguage_Impl(eLangType, pAutoEntryAttr->GetValue());
     UpdateFormatListBox_Impl(FALSE,TRUE);
 
-//! erAck 26.01.01
 //! This spoils everything because it rematches currency formats based on
 //! the selected aLbCurrency entry instead of the current format.
 //! Besides that everything seems to be initialized by now, so why call it?
@@ -1131,8 +1123,6 @@ void SvxNumberFormatTabPage::UpdateFormatListBox_Impl
             String aFormat=*aEntryList[nFmtLbSelPos];
             aEdFormat.SetText(aFormat);
             aFtComment.SetText(pNumFmtShell->GetComment4Entry(nFmtLbSelPos));
-
-            //@23.09.97 aEdFormat.SetText( aLbFormat.GetSelectEntry() );
         }
 
         if(!bOneAreaFlag || !bCat)

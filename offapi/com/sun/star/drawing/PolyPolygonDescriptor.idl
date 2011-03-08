@@ -42,8 +42,8 @@
 
 //=============================================================================
 
-/** This service describes a polypolygon.
-    <p>A polypolygon consists of multiple polygons combined in one.</p>
+/** This service describes a poly-polygon.
+    <p>A poly-polygon consists of multiple polygons combined in one.</p>
  */
 published service PolyPolygonDescriptor
 {

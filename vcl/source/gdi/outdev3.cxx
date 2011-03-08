@@ -996,8 +996,8 @@ ImplFontEntry::~ImplFontEntry()
 
 size_t ImplFontEntry::GFBCacheKey_Hash::operator()( const GFBCacheKey& rData ) const
 {
-    std::hash<sal_UCS4> a;
-    std::hash<int > b;
+    boost::hash<sal_UCS4> a;
+    boost::hash<int > b;
     return a(rData.first) ^ b(rData.second);
 }
 
@@ -1391,16 +1391,6 @@ void ImplDevFontList::InitGenericGlyphFallback( void ) const
                 break;
         pFallbackList[ j+1 ] = pTestFont;
     }
-
-#if defined(HDU_DEBUG)
-    for( int i = 0; i < nMaxLevel; ++i )
-    {
-        ImplDevFontListData* pFont = pFallbackList[ i ];
-        ByteString aFontName( pFont->GetFamilyName(), RTL_TEXTENCODING_UTF8 );
-        fprintf( stderr, "GlyphFallbackFont[%d] (quality=%05d): \"%s\"\n",
-            i, pFont->GetMinQuality(), aFontName.GetBuffer() );
-    }
-#endif
 
     mnFallbackCount = nMaxLevel;
     mpFallbackList  = pFallbackList;
@@ -2733,8 +2723,20 @@ ImplFontEntry* ImplFontCache::GetGlyphFallbackFont( ImplDevFontList* pFontList,
     // e.g. PsPrint Arial->Helvetica for udiaeresis when Helvetica doesn't support it
     if( nFallbackLevel >= 1)
     {
-        ImplDevFontListData* pFallbackData = pFontList->GetGlyphFallbackFont(
-            rFontSelData, rMissingCodes, nFallbackLevel-1 );
+        ImplDevFontListData* pFallbackData = NULL;
+
+        //fdo#33898 If someone has EUDC installed then they really want that to
+        //be used as the first-choice glyph fallback seeing as it's filled with
+        //private area codes with don't make any sense in any other font so
+        //prioritise it here if it's available. Ideally we would remove from
+        //rMissingCodes all the glyphs which it is able to resolve as an
+        //optimization, but that's tricky to achieve cross-platform without
+        //sufficient heavy-weight code that's likely to undo the value of the
+        //optimization
+        if (nFallbackLevel == 1)
+            pFallbackData = pFontList->FindFontFamily(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EUDC")));
+        if (!pFallbackData)
+            pFallbackData = pFontList->GetGlyphFallbackFont(rFontSelData, rMissingCodes, nFallbackLevel-1);
         // escape when there are no font candidates
         if( !pFallbackData  )
             return NULL;
@@ -5032,12 +5034,6 @@ void OutputDevice::SetFont( const Font& rNewFont )
         mpMetaFile->AddAction( new MetaTextFillColorAction( aFont.GetFillColor(), !aFont.IsTransparent() ) );
     }
 
-#if (OSL_DEBUG_LEVEL > 2) || defined (HDU_DEBUG)
-    fprintf( stderr, "   OutputDevice::SetFont( name=\"%s\", h=%ld)\n",
-         OUStringToOString( aFont.GetName(), RTL_TEXTENCODING_UTF8 ).getStr(),
-         aFont.GetSize().Height() );
-#endif
-
     if ( !maFont.IsSameInstance( aFont ) )
     {
         // Optimization MT/HDU: COL_TRANSPARENT means SetFont should ignore the font color,
@@ -6029,17 +6025,6 @@ SalLayout* OutputDevice::ImplGlyphFallbackLayout( SalLayout* pSalLayout, ImplLay
     rLayoutArgs.PrepareFallback();
     rLayoutArgs.mnFlags |= SAL_LAYOUT_FOR_FALLBACK;
 
-#if defined(HDU_DEBUG)
-    {
-        int nCharPos = -1;
-        bool bRTL = false;
-        fprintf(stderr,"OD:ImplLayout Glyph Fallback for");
-        for( int i=0; i<8 && rLayoutArgs.GetNextPos( &nCharPos, &bRTL); ++i )
-            fprintf(stderr," U+%04X", rLayoutArgs.mpStr[ nCharPos ] );
-        fprintf(stderr,"\n");
-        rLayoutArgs.ResetPos();
-    }
-#endif
     // get list of unicodes that need glyph fallback
     int nCharPos = -1;
     bool bRTL = false;
@@ -6086,17 +6071,6 @@ SalLayout* OutputDevice::ImplGlyphFallbackLayout( SalLayout* pSalLayout, ImplLay
                 continue;
             }
         }
-
-#if defined(HDU_DEBUG)
-        {
-            ByteString aOrigFontName( maFont.GetName(), RTL_TEXTENCODING_UTF8);
-            ByteString aFallbackName( aFontSelData.mpFontData->GetFamilyName(),
-                RTL_TEXTENCODING_UTF8);
-            fprintf(stderr,"\tGlyphFallback[lvl=%d] \"%s\" -> \"%s\" (q=%d)\n",
-                nFallbackLevel, aOrigFontName.GetBuffer(), aFallbackName.GetBuffer(),
-                aFontSelData.mpFontData->GetQuality());
-        }
-#endif
 
         ImplFontMetricData aSubstituteMetric(aFontSelData);
         pFallbackFont->mnSetFontFlags = mpGraphics->SetFont( &aFontSelData, nFallbackLevel );
@@ -7935,6 +7909,22 @@ BOOL OutputDevice::GetTextOutline( PolyPolygon& rPolyPoly,
             rPolyPoly.Insert(Polygon((*aIt).getB2DPolygon( i ))); // #i76339#
 
     return TRUE;
+}
+
+bool OutputDevice::GetFontCapabilities( FontCapabilities& rFontCapabilities ) const
+{
+    // we need a graphics
+    if( !mpGraphics && !ImplGetGraphics() )
+        return false;
+
+    if( mbNewFont )
+        ImplNewFont();
+    if( mbInitFont )
+        ImplInitFont();
+    if( !mpFontEntry )
+        return false;
+
+    return mpGraphics->GetImplFontCapabilities(rFontCapabilities);
 }
 
 // -----------------------------------------------------------------------

@@ -60,8 +60,10 @@ using namespace com::sun::star;
 using namespace com::sun::star::io;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::plugin;
-using namespace rtl;
 using namespace osl;
+
+using ::rtl::OUString;
+using ::rtl::OString;
 
 class PluginDisposer : public salhelper::Timer
 {
@@ -548,7 +550,7 @@ void XPlugin_Impl::loadPlugin()
             return;
     }
 
-    NPError aError = getPluginComm()->
+    getPluginComm()->
         NPP_New( (char*)OUStringToOString( m_aDescription.Mimetype,
                                                   m_aEncoding).getStr(),
                  getNPPInstance(),
@@ -595,7 +597,7 @@ void XPlugin_Impl::loadPlugin()
     m_aNPWindow.width   = aPosSize.Width ? aPosSize.Width : 600;
     m_aNPWindow.height  = aPosSize.Height ? aPosSize.Height : 600;
 
-    aError = getPluginComm()->NPP_SetWindow( this );
+    getPluginComm()->NPP_SetWindow( this );
 }
 
 void XPlugin_Impl::destroyStreams()

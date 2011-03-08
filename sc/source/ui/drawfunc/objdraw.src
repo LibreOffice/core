@@ -208,7 +208,6 @@
         Identifier = SID_DRAWTEXT_ATTR_DLG ; \
         HelpID = SID_DRAWTEXT_ATTR_DLG ; \
         Text [ en-US ] = "Te~xt..." ; \
-        /* ### ACHTUNG: Neuer Text in Resource? Textattribute für die selektierten Textobjekte festlegen : Textattribute f³r die selektierten Textobjekte festlegen */\
         Text [ x-comment ] = " ";\
     };
 
@@ -226,7 +225,6 @@
     {\
         Identifier = SID_ORIGINALSIZE ; \
         HelpId = SID_ORIGINALSIZE ; \
-        /* ### ACHTUNG: Neuer Text in Resource? Originalgröße : Originalgr÷˜e */\
         Text [ en-US ] = "~Original Size" ; \
         Text [ x-comment ] = " ";\
     };
@@ -295,7 +293,6 @@
                 {\
                     Identifier = SID_FRAME_UP ; \
                     HelpId = SID_FRAME_UP ; \
-                    /* ### ACHTUNG: Neuer Text in Resource? W~eiter nach vorn : Weiter nach vorn */\
                     Text [ en-US ] = "Bring ~Forward" ; \
                     Text [ x-comment ] = " ";\
                 };\
@@ -303,7 +300,6 @@
                 {\
                     Identifier = SID_FRAME_DOWN ; \
                     HelpId = SID_FRAME_DOWN ; \
-                    /* ### ACHTUNG: Neuer Text in Resource? Weiter ~nach hinten : Weiter nach hinten */\
                     Text [ en-US ] = "Send Back~ward" ; \
                     Text [ x-comment ] = " ";\
                 };\
@@ -1248,7 +1244,6 @@ ToolBox RID_GRAPHIC_OBJECTBAR
  //
 String RID_POPUP_DRAW
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Popup-Menü für Zeichenobjekte : Popup-Men³ f³r Zeichenobjekte */
     Text [ en-US ] = "Pop-up menu for drawing objects" ;
     Text [ x-comment ] = " ";
 };
@@ -1505,7 +1500,6 @@ Menu RID_POPUP_CHART
 
 String RID_POPUP_DRAWTEXT
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Popup-Menü für Text-Objekte : Popup-Men³ f³r Text-Objekte */
     Text [ en-US ] = "Pop-up menu for text objects" ;
     Text [ x-comment ] = " ";
 };

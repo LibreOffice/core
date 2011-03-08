@@ -102,7 +102,7 @@ LwpGraphicObject::~LwpGraphicObject()
 void LwpGraphicObject::Read()
 {
     LwpGraphicOleObject::Read();
-    sal_uInt16 disksize = m_pObjStrm->QuickReaduInt16();
+    m_pObjStrm->QuickReaduInt16(); //disksize
     sal_uInt16 strsize = m_pObjStrm->QuickReaduInt16();
     if (strsize<AFID_MAX_FILE_FORMAT_SIZE)
     {
@@ -133,7 +133,7 @@ void LwpGraphicObject::Read()
         }
         // end add
     }
-    disksize = m_pObjStrm->QuickReaduInt16();
+    m_pObjStrm->QuickReaduInt16(); //disksize
     strsize = m_pObjStrm->QuickReaduInt16();
     if (strsize<AFID_MAX_FILE_FORMAT_SIZE)
     {
@@ -322,18 +322,13 @@ void LwpGraphicObject::GetRect(INT32& nLeft, INT32& nTop, INT32& nRight, INT32& 
 
             if (pGeometry)
             {
-                LwpPoint aOrigin = pGeometry->GetOrigin();
-// 2005.6
-//frame width/height are not width/height of a chart
-//              sal_Int32 nWidth = pGeometry->GetWidth();
-//              sal_Int32 nHeight = pGeometry->GetHeight();
                 double fWidth =0;
                 double fHeight = 0;
                 GetGrafScaledSize(fWidth, fHeight);
 
                 sal_Int32 nWidth = fWidth * UNITS_PER_INCH /CM_PER_INCH;
                 sal_Int32 nHeight = fHeight * UNITS_PER_INCH /CM_PER_INCH;
-//end
+
                 nLeft = pLayout->GetMarginsValue(MARGIN_LEFT) * UNITS_PER_INCH /CM_PER_INCH;
                 nTop = pLayout->GetMarginsValue(MARGIN_TOP)* UNITS_PER_INCH /CM_PER_INCH;
                 nRight = nLeft+nWidth;

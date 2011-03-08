@@ -34,9 +34,6 @@ TARGET=pyprov
 
 .INCLUDE :  settings.mk
 
-# ------------------------------------------------------------------
-
-
 # --- Targets ------------------------------------------------------
 ALL : ALLTAR \
     $(DLLDEST)$/officehelper.py	\
@@ -46,7 +43,7 @@ $(DLLDEST)$/%.py: %.py
     cp $? $@
 
 # scripting provider extension
-.IF "$(L10N_framework)"==""
+.IF "$(L10N_framework)"=="" && "$(ENABLE_SCRIPTING_PYTHON)" == "YES"
 
 EXTENSIONNAME:=ScriptProviderForPython
 EXTENSION_ZIPNAME:=script-provider-for-python

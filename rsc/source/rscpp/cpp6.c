@@ -1030,9 +1030,7 @@ void ungetstring(char* text)
  */
 {
         register FILEINFO       *file;
-#ifndef ZTC /* BP */
         extern FILEINFO         *getfile();
-#endif
         file = getfile(strlen(text) + 1, "");
         strcpy(file->buffer, text);
 }

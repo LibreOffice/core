@@ -36,7 +36,6 @@
 #include "sb.hxx"
 #include "iosys.hxx"
 #include "disas.hxx"
-#include "sbtrace.hxx"
 
 
 static const char* pOp1[] = {
@@ -364,10 +363,6 @@ BOOL SbiDisas::DisasLine( String& rText )
     if( !Fetch() )
         return FALSE;
 
-#ifdef DBG_TRACE_BASIC
-    String aTraceStr_STMNT;
-#endif
-
     // New line?
     if( eOp == _STMNT && nOp1 != nLine )
     {
@@ -400,10 +395,6 @@ BOOL SbiDisas::DisasLine( String& rText )
             rText.AppendAscii( "; " );
             rText += s;
             rText.AppendAscii( _crlf() );
-
-#ifdef DBG_TRACE_BASIC
-            aTraceStr_STMNT = s;
-#endif
         }
     }
 
@@ -462,10 +453,6 @@ BOOL SbiDisas::DisasLine( String& rText )
     }
 
     rText += aPCodeStr;
-
-#ifdef DBG_TRACE_BASIC
-    dbg_RegisterTraceTextForPC( pMod, nPC, aTraceStr_STMNT, aPCodeStr );
-#endif
 
     return TRUE;
 }
@@ -611,13 +598,6 @@ void SbiDisas::OffOp( String& rText )
 }
 
 // Data type
-#ifdef HP9000 // TODO: remove this!
-static char* SbiDisas_TypeOp_pTypes[13] = {
-    "Empty","Null","Integer","Long","Single","Double",
-    "Currency","Date","String","Object","Error","Boolean",
-    "Variant" };
-#define pTypes SbiDisas_TypeOp_pTypes
-#endif
 void SbiDisas::TypeOp( String& rText )
 {
     // From 1996-01-19: type can contain flag for BYVAL (StepARGTYP)
@@ -628,12 +608,11 @@ void SbiDisas::TypeOp( String& rText )
     }
     if( nOp1 < 13 )
     {
-#ifndef HP9000
         static char pTypes[][13] = {
             "Empty","Null","Integer","Long","Single","Double",
             "Currency","Date","String","Object","Error","Boolean",
             "Variant" };
-#endif
+
         rText.AppendAscii( pTypes[ nOp1 ] );
     }
     else
@@ -642,9 +621,6 @@ void SbiDisas::TypeOp( String& rText )
         rText += (USHORT)nOp1;
     }
 }
-#ifdef HP9000
-#undef pTypes
-#endif
 
 // TRUE-Label, condition Opcode
 void SbiDisas::CaseOp( String& rText )

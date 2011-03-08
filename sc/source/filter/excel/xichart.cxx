@@ -137,6 +137,7 @@ using ::formula::FormulaToken;
 using ::formula::StackVar;
 using ::boost::shared_ptr;
 using ::std::pair;
+using ::std::auto_ptr;
 
 namespace cssc = ::com::sun::star::chart;
 namespace cssc2 = ::com::sun::star::chart2;
@@ -411,7 +412,7 @@ void XclImpChLineFormat::ReadChLineFormat( XclImpStream& rStrm )
 
     const XclImpRoot& rRoot = rStrm.GetRoot();
     if( rRoot.GetBiff() == EXC_BIFF8 )
-        // #116397# BIFF8: index into palette used instead of RGB data
+        // BIFF8: index into palette used instead of RGB data
         maData.maColor = rRoot.GetPalette().GetColor( rStrm.ReaduInt16() );
 }
 
@@ -444,7 +445,7 @@ void XclImpChAreaFormat::ReadChAreaFormat( XclImpStream& rStrm )
     const XclImpRoot& rRoot = rStrm.GetRoot();
     if( rRoot.GetBiff() == EXC_BIFF8 )
     {
-        // #116397# BIFF8: index into palette used instead of RGB data
+        // BIFF8: index into palette used instead of RGB data
         const XclImpPalette& rPal = rRoot.GetPalette();
         maData.maPattColor = rPal.GetColor( rStrm.ReaduInt16() );
         maData.maBackColor = rPal.GetColor( rStrm.ReaduInt16());
@@ -902,7 +903,7 @@ void XclImpChText::ReadHeaderRecord( XclImpStream& rStrm )
 
     if( GetBiff() == EXC_BIFF8 )
     {
-        // #116397# BIFF8: index into palette used instead of RGB data
+        // BIFF8: index into palette used instead of RGB data
         maData.maTextColor = GetPalette().GetColor( rStrm.ReaduInt16() );
         // placement and rotation
         rStrm >> maData.mnFlags2 >> maData.mnRotation;
@@ -1179,15 +1180,18 @@ void XclImpChText::ReadChFrLabelProps( XclImpStream& rStrm )
 
 namespace {
 
-void lclUpdateText( XclImpChTextRef& rxText, XclImpChTextRef xDefText )
+void lclUpdateText( XclImpChTextRef& rxText, const XclImpChText* xDefText )
 {
     if( rxText )
-        rxText->UpdateText( xDefText.get() );
+        rxText->UpdateText( xDefText );
     else
-        rxText = xDefText;
+    {
+        XclImpChTextRef xNew(new XclImpChText(*xDefText));
+        rxText = xNew;
+    }
 }
 
-void lclFinalizeTitle( XclImpChTextRef& rxTitle, XclImpChTextRef xDefText, const String& rAutoTitle )
+void lclFinalizeTitle( XclImpChTextRef& rxTitle, const XclImpChText* pDefText, const String& rAutoTitle )
 {
     /*  Do not update a title, if it is not visible (if rxTitle is null).
         Existing reference indicates enabled title. */
@@ -1196,7 +1200,7 @@ void lclFinalizeTitle( XclImpChTextRef& rxTitle, XclImpChTextRef xDefText, const
         if( !rxTitle->HasString() )
             rxTitle->SetString( rAutoTitle );
         if( rxTitle->HasString() )
-            rxTitle->UpdateText( xDefText.get() );
+            rxTitle->UpdateText(pDefText);
         else
             rxTitle.reset();
     }
@@ -1213,7 +1217,7 @@ void XclImpChMarkerFormat::ReadChMarkerFormat( XclImpStream& rStrm )
     const XclImpRoot& rRoot = rStrm.GetRoot();
     if( rRoot.GetBiff() == EXC_BIFF8 )
     {
-        // #116397# BIFF8: index into palette used instead of RGB data
+        // BIFF8: index into palette used instead of RGB data
         const XclImpPalette& rPal = rRoot.GetPalette();
         maData.maLineColor = rPal.GetColor( rStrm.ReaduInt16() );
         maData.maFillColor = rPal.GetColor( rStrm.ReaduInt16() );
@@ -1314,13 +1318,13 @@ void XclImpChAttachedLabel::ReadChAttachedLabel( XclImpStream& rStrm )
     rStrm >> mnFlags;
 }
 
-XclImpChTextRef XclImpChAttachedLabel::CreateDataLabel( XclImpChTextRef xParent ) const
+XclImpChTextRef XclImpChAttachedLabel::CreateDataLabel( const XclImpChText* pParent ) const
 {
     const sal_uInt16 EXC_CHATTLABEL_SHOWANYVALUE = EXC_CHATTLABEL_SHOWVALUE;
     const sal_uInt16 EXC_CHATTLABEL_SHOWANYPERCENT = EXC_CHATTLABEL_SHOWPERCENT | EXC_CHATTLABEL_SHOWCATEGPERC;
     const sal_uInt16 EXC_CHATTLABEL_SHOWANYCATEG = EXC_CHATTLABEL_SHOWCATEG | EXC_CHATTLABEL_SHOWCATEGPERC;
 
-    XclImpChTextRef xLabel( xParent ? new XclImpChText( *xParent ) : new XclImpChText( GetChRoot() ) );
+    XclImpChTextRef xLabel( pParent ? new XclImpChText( *pParent ) : new XclImpChText( GetChRoot() ) );
     xLabel->UpdateDataLabel(
         ::get_flag( mnFlags, EXC_CHATTLABEL_SHOWANYCATEG ),
         ::get_flag( mnFlags, EXC_CHATTLABEL_SHOWANYVALUE ),
@@ -1524,15 +1528,15 @@ void XclImpChDataFormat::UpdateDataLabel( const XclImpChDataFormat* pParentFmt )
         group, the contents of the CHATTACHEDLABEL record are used. In this
         case a new CHTEXT group is created and filled with the settings from
         the CHATTACHEDLABEL record. */
-    XclImpChTextRef xDefText;
-    if( pParentFmt )
-        xDefText = pParentFmt->GetDataLabel();
-    if( !xDefText )
-        xDefText = GetChartData().GetDefaultText( EXC_CHTEXTTYPE_DATALABEL );
-    if( mxLabel )
-        mxLabel->UpdateText( xDefText.get() );
-    else if( mxAttLabel )
-        mxLabel = mxAttLabel->CreateDataLabel( xDefText );
+    const XclImpChText* pDefText = NULL;
+    if (pParentFmt)
+        pDefText = pParentFmt->GetDataLabel();
+    if (!pDefText)
+        pDefText = GetChartData().GetDefaultText( EXC_CHTEXTTYPE_DATALABEL );
+    if (mxLabel)
+        mxLabel->UpdateText(pDefText);
+    else if (mxAttLabel)
+        mxLabel = mxAttLabel->CreateDataLabel( pDefText );
 }
 
 // ----------------------------------------------------------------------------
@@ -1590,7 +1594,7 @@ Reference< XRegressionCurve > XclImpChSerTrendLine::CreateRegressionCurve() cons
         aLabelProp.SetBoolProperty( EXC_CHPROP_SHOWCORRELATION, maData.mnShowRSquared != 0 );
 
         // #i83100# formatting of the equation text box
-        if( const XclImpChText* pLabel = mxDataFmt->GetDataLabel().get() )
+        if (const XclImpChText* pLabel = mxDataFmt->GetDataLabel())
         {
             pLabel->ConvertFont( aLabelProp );
             pLabel->ConvertFrame( aLabelProp );
@@ -1801,7 +1805,11 @@ void XclImpChSeries::FinalizeDataFormats()
         if( mxSeriesFmt )
         {
             // #i83100# set text label format, e.g. for trend line equations
-            mxSeriesFmt->SetDataLabel( maLabels.get( EXC_CHDATAFORMAT_ALLPOINTS ) );
+            XclImpChTextRef xLabel;
+            XclImpChTextMap::iterator itr = maLabels.find(EXC_CHDATAFORMAT_ALLPOINTS);
+            if (itr != maLabels.end())
+                xLabel = itr->second;
+            mxSeriesFmt->SetDataLabel(xLabel);
             // create missing automatic formats
             mxSeriesFmt->UpdateTrendLineFormat();
         }
@@ -2009,16 +2017,10 @@ void XclImpChSeries::ReadChSerTrendLine( XclImpStream& rStrm )
 
 void XclImpChSeries::ReadChSerErrorBar( XclImpStream& rStrm )
 {
-    XclImpChSerErrorBarRef xErrorBar( new XclImpChSerErrorBar( GetChRoot() ) );
-    xErrorBar->ReadChSerErrorBar( rStrm );
-    sal_uInt8 nBarType = xErrorBar->GetBarType();
-    XclImpChSerErrorBarMap::iterator itr = maErrorBars.lower_bound(nBarType);
-    if (itr != maErrorBars.end() && !maErrorBars.key_comp()(nBarType, itr->first))
-        // Overwrite the existing element.
-        itr->second = xErrorBar;
-    else
-        maErrorBars.insert(
-            itr, XclImpChSerErrorBarMap::value_type(nBarType, xErrorBar));
+    auto_ptr<XclImpChSerErrorBar> pErrorBar(new XclImpChSerErrorBar(GetChRoot()));
+    pErrorBar->ReadChSerErrorBar(rStrm);
+    sal_uInt8 nBarType = pErrorBar->GetBarType();
+    maErrorBars.insert(nBarType, pErrorBar);
 }
 
 XclImpChDataFormatRef XclImpChSeries::CreateDataFormat( sal_uInt16 nPointIdx, sal_uInt16 nFormatIdx )
@@ -2086,7 +2088,13 @@ void XclImpChSeries::ConvertTrendLines( Reference< XDataSeries > xDataSeries ) c
 
 Reference< XPropertySet > XclImpChSeries::CreateErrorBar( sal_uInt8 nPosBarId, sal_uInt8 nNegBarId ) const
 {
-    return XclImpChSerErrorBar::CreateErrorBar( maErrorBars.get( nPosBarId ).get(), maErrorBars.get( nNegBarId ).get() );
+    XclImpChSerErrorBarMap::const_iterator itrPosBar = maErrorBars.find(nPosBarId);
+    XclImpChSerErrorBarMap::const_iterator itrNegBar = maErrorBars.find(nNegBarId);
+    XclImpChSerErrorBarMap::const_iterator itrEnd = maErrorBars.end();
+    if (itrPosBar == itrEnd || itrNegBar == itrEnd)
+        return Reference<XPropertySet>();
+
+    return XclImpChSerErrorBar::CreateErrorBar(itrPosBar->second, itrNegBar->second);
 }
 
 // Chart type groups ==========================================================
@@ -2701,15 +2709,15 @@ void XclImpChTypeGroup::ReadChDropBar( XclImpStream& rStrm )
 {
     if (maDropBars.find(EXC_CHDROPBAR_UP) == maDropBars.end())
     {
-        XclImpChDropBarRef p(new XclImpChDropBar(EXC_CHDROPBAR_UP));
+        auto_ptr<XclImpChDropBar> p(new XclImpChDropBar(EXC_CHDROPBAR_UP));
         p->ReadRecordGroup(rStrm);
-        maDropBars.insert(XclImpChDropBarMap::value_type(EXC_CHDROPBAR_UP, p));
+        maDropBars.insert(EXC_CHDROPBAR_UP, p);
     }
     else if(maDropBars.find(EXC_CHDROPBAR_DOWN) == maDropBars.end())
     {
-        XclImpChDropBarRef p(new XclImpChDropBar(EXC_CHDROPBAR_DOWN));
+        auto_ptr<XclImpChDropBar> p(new XclImpChDropBar(EXC_CHDROPBAR_DOWN));
         p->ReadRecordGroup(rStrm);
-        maDropBars.insert(XclImpChDropBarMap::value_type(EXC_CHDROPBAR_DOWN, p));
+        maDropBars.insert(EXC_CHDROPBAR_DOWN, p);
     }
 }
 
@@ -2828,20 +2836,20 @@ void XclImpChTypeGroup::CreateStockSeries( Reference< XChartType > xChartType, s
             xHiLoLine->second->Convert( GetChRoot(), aSeriesProp, EXC_CHOBJTYPE_HILOLINE );
         }
         // white dropbar format
-        XclImpChDropBarRef xUpBar = maDropBars.get( EXC_CHDROPBAR_UP );
-        Reference< XPropertySet > xWhitePropSet;
-        if( xUpBar && aTypeProp.GetProperty( xWhitePropSet, EXC_CHPROP_WHITEDAY ) )
+        XclImpChDropBarMap::const_iterator itr = maDropBars.find(EXC_CHDROPBAR_UP);
+        Reference<XPropertySet> xWhitePropSet;
+        if (itr != maDropBars.end() && aTypeProp.GetProperty(xWhitePropSet, EXC_CHPROP_WHITEDAY))
         {
             ScfPropertySet aBarProp( xWhitePropSet );
-            xUpBar->Convert( GetChRoot(), aBarProp );
+            itr->second->Convert(GetChRoot(), aBarProp);
         }
         // black dropbar format
-        XclImpChDropBarRef xDownBar = maDropBars.get( EXC_CHDROPBAR_DOWN );
-        Reference< XPropertySet > xBlackPropSet;
-        if( xDownBar && aTypeProp.GetProperty( xBlackPropSet, EXC_CHPROP_BLACKDAY ) )
+        itr = maDropBars.find(EXC_CHDROPBAR_DOWN);
+        Reference<XPropertySet> xBlackPropSet;
+        if (itr != maDropBars.end() && aTypeProp.GetProperty(xBlackPropSet, EXC_CHPROP_BLACKDAY))
         {
             ScfPropertySet aBarProp( xBlackPropSet );
-            xDownBar->Convert( GetChRoot(), aBarProp );
+            itr->second->Convert(GetChRoot(), aBarProp);
         }
 
         // insert the series into the chart type object
@@ -3012,7 +3020,7 @@ void XclImpChTick::ReadChTick( XclImpStream& rStrm )
 
     if( GetBiff() == EXC_BIFF8 )
     {
-        // #116397# BIFF8: index into palette used instead of RGB data
+        // BIFF8: index into palette used instead of RGB data
         maData.maTextColor = GetPalette().GetColor( rStrm.ReaduInt16() );
         // rotation
         rStrm >> maData.mnRotation;
@@ -3157,7 +3165,7 @@ Reference< XAxis > XclImpChAxis::CreateAxis( const XclImpChTypeGroup& rTypeGroup
             // font settings from CHFONT record or from default text
             if( mxFont )
                 ConvertFontBase( GetChRoot(), aAxisProp );
-            else if( const XclImpChText* pDefText = GetChartData().GetDefaultText( EXC_CHTEXTTYPE_AXISLABEL ).get() )
+            else if( const XclImpChText* pDefText = GetChartData().GetDefaultText( EXC_CHTEXTTYPE_AXISLABEL ) )
                 pDefText->ConvertFont( aAxisProp );
             // label text rotation
             ConvertRotationBase( GetChRoot(), aAxisProp, true );
@@ -3376,16 +3384,22 @@ void XclImpChAxesSet::Finalize()
         if( mxZAxis ) mxZAxis->Finalize();
 
         // finalize axis titles
-        XclImpChTextRef xDefText = GetChartData().GetDefaultText( EXC_CHTEXTTYPE_AXISTITLE );
+        const XclImpChText* pDefText = GetChartData().GetDefaultText( EXC_CHTEXTTYPE_AXISTITLE );
         String aAutoTitle = CREATE_STRING( "Axis Title" );
-        lclFinalizeTitle( mxXAxisTitle, xDefText, aAutoTitle );
-        lclFinalizeTitle( mxYAxisTitle, xDefText, aAutoTitle );
-        lclFinalizeTitle( mxZAxisTitle, xDefText, aAutoTitle );
+        lclFinalizeTitle( mxXAxisTitle, pDefText, aAutoTitle );
+        lclFinalizeTitle( mxYAxisTitle, pDefText, aAutoTitle );
+        lclFinalizeTitle( mxZAxisTitle, pDefText, aAutoTitle );
 
         // #i47745# missing plot frame -> invisible border and area
         if( !mxPlotFrame )
             mxPlotFrame.reset( new XclImpChFrame( GetChRoot(), EXC_CHOBJTYPE_PLOTFRAME ) );
     }
+}
+
+XclImpChTypeGroupRef XclImpChAxesSet::GetTypeGroup( sal_uInt16 nGroupIdx ) const
+{
+    XclImpChTypeGroupMap::const_iterator itr = maTypeGroups.find(nGroupIdx);
+    return itr == maTypeGroups.end() ? XclImpChTypeGroupRef() : itr->second;
 }
 
 XclImpChTypeGroupRef XclImpChAxesSet::GetFirstTypeGroup() const
@@ -3677,16 +3691,9 @@ void XclImpChChart::ReadChDefaultText( XclImpStream& rStrm )
     sal_uInt16 nTextId = rStrm.ReaduInt16();
     if( (rStrm.GetNextRecId() == EXC_ID_CHTEXT) && rStrm.StartNextRecord() )
     {
-        XclImpChTextRef xText( new XclImpChText( GetChRoot() ) );
-        xText->ReadRecordGroup( rStrm );
-        XclImpChTextMap::iterator itr = maDefTexts.lower_bound(nTextId);
-        if (itr != maDefTexts.end() && !(maDefTexts.key_comp()(nTextId, itr->first)))
-        {
-            // Key exists. Update the existing element.
-            itr->second = xText;
-        }
-        else
-            maDefTexts.insert(itr, XclImpChTextMap::value_type(nTextId, xText));
+        auto_ptr<XclImpChText> pText(new XclImpChText(GetChRoot()));
+        pText->ReadRecordGroup(rStrm);
+        maDefTexts.insert(nTextId, pText);
     }
 }
 
@@ -3723,7 +3730,7 @@ XclImpChTypeGroupRef XclImpChChart::GetTypeGroup( sal_uInt16 nGroupIdx ) const
     return xTypeGroup;
 }
 
-XclImpChTextRef XclImpChChart::GetDefaultText( XclChTextType eTextType ) const
+const XclImpChText* XclImpChChart::GetDefaultText( XclChTextType eTextType ) const
 {
     sal_uInt16 nDefTextId = EXC_CHDEFTEXT_GLOBAL;
     bool bBiff8 = GetBiff() == EXC_BIFF8;
@@ -3737,7 +3744,7 @@ XclImpChTextRef XclImpChChart::GetDefaultText( XclChTextType eTextType ) const
     }
 
     XclImpChTextMap::const_iterator itr = maDefTexts.find(nDefTextId);
-    return itr == maDefTexts.end() ? XclImpChTextRef() : itr->second;
+    return itr == maDefTexts.end() ? NULL : itr->second;
 }
 
 bool XclImpChChart::IsManualPlotArea() const

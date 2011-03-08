@@ -116,7 +116,6 @@
 #include "spelldialog.hxx"
 #include <svx/fontwork.hxx>
 #include <svx/srchdlg.hxx>
-#include <svx/hyprlink.hxx>
 #include <svx/hyperdlg.hxx>
 #include <svx/imapdlg.hxx>
 
@@ -288,11 +287,9 @@ void ScDLL::Init()
     SvxSearchDialogWrapper      ::RegisterChildWindow(FALSE, pMod);
     SvxHlinkDlgWrapper          ::RegisterChildWindow(FALSE, pMod);
     SvxFontWorkChildWindow      ::RegisterChildWindow(FALSE, pMod);
-    SvxHyperlinkDlgWrapper      ::RegisterChildWindow(FALSE, pMod, SFX_CHILDWIN_FORCEDOCK);
     SvxIMapDlgChildWindow       ::RegisterChildWindow(FALSE, pMod);
     GalleryChildWindow          ::RegisterChildWindow(FALSE, pMod);
     ScSpellDialogChildWindow    ::RegisterChildWindow(FALSE, pMod);
-    ::avmedia::MediaPlayer      ::RegisterChildWindow(FALSE, pMod);
 
     ScValidityRefChildWin::RegisterChildWindow(FALSE, pMod);
 

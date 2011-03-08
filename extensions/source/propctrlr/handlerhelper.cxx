@@ -113,7 +113,7 @@ namespace pcr
             break;
 
         default:
-            DBG_ERROR( "PropertyHandlerHelper::describePropertyLine: don't know how to represent this at the UI!" );
+            OSL_FAIL( "PropertyHandlerHelper::describePropertyLine: don't know how to represent this at the UI!" );
             // NO break!
 
         case TypeClass_STRING:

@@ -35,9 +35,9 @@
 
 #include <WindowsAccessBridgeAdapter.h>
 
-#include <tools/prewin.h>
+#include <prewin.h>
 #include <wtypes.h>
-#include <tools/postwin.h>
+#include <postwin.h>
 #include <rtl/process.h>
 #include <tools/link.hxx>
 
@@ -167,7 +167,7 @@ Java_org_openoffice_accessibility_WindowsAccessBridgeAdapter_createMapping(JNIEn
         }
     }
 
-    catch ( RuntimeException e)
+    catch ( RuntimeException &e)
     {
         OSL_TRACE("RuntimeException caught while initializing the mapping");
     }
@@ -251,7 +251,7 @@ void handleWindowEvent(Window * pWindow, bool bShow)
                     }
                 }
             }
-            catch (::com::sun::star::uno::RuntimeException e)
+            catch (::com::sun::star::uno::RuntimeException &e)
             {
                 // Ignore show events that throw DisposedExceptions in getAccessibleContext(),
                 // but keep revoking these windows in hide(s).

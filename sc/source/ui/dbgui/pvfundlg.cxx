@@ -73,7 +73,8 @@ template< typename ListBoxType >
 bool lclFillListBox( ListBoxType& rLBox, const Sequence< OUString >& rStrings, USHORT nEmptyPos = LISTBOX_APPEND )
 {
     bool bEmpty = false;
-    if( const OUString* pStr = rStrings.getConstArray() )
+    const OUString* pStr = rStrings.getConstArray();
+    if( pStr )
     {
         for( const OUString* pEnd = pStr + rStrings.getLength(); pStr != pEnd; ++pStr )
         {

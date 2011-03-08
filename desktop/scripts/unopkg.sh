@@ -45,7 +45,7 @@ cd "$sd_cwd"
 
 # this is a temporary hack until we can live with the default search paths
 case "`uname -s`" in
-NetBSD|OpenBSD)
+NetBSD|OpenBSD|FreeBSD|DragonFly)
     sd_prog1="$sd_prog/../basis-link/program"
     sd_prog2="$sd_prog/../basis-link/ure-link/lib"
     LD_LIBRARY_PATH=$sd_prog1:$sd_prog2${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
@@ -54,6 +54,12 @@ NetBSD|OpenBSD)
     if [ -n "${JAVA_HOME}" ]; then
         export JAVA_HOME
     fi
+    ;;
+AIX)
+    sd_prog1="$sd_prog/../basis-link/program"
+    sd_prog2="$sd_prog/../basis-link/ure-link/lib"
+    LIBPATH=$sd_prog1:$sd_prog2${LIBPATH:+:${LIBPATH}}
+    export LIBPATH
     ;;
 esac
 

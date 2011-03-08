@@ -37,6 +37,11 @@ EXTENSION_ZIPNAME:=script-provider-for-beanshell
 
 COMPONENT_JARFILES=$(EXTENSIONDIR)$/$(EXTENSIONNAME).jar
 
+.IF "$(ENABLE_SCRIPTING_BEANSHELL)" != "YES"
+@all:
+    @echo "Script Provider for BeanShell build disabled."
+.ENDIF
+
 .INCLUDE : extension_pre.mk
 .INCLUDE : target.mk
 .INCLUDE : extension_post.mk

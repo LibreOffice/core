@@ -29,26 +29,18 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <vcl/svapp.hxx>
 #include <rtl/uuid.h>
 #include "access.hrc"
 #include <accpreview.hxx>
 
-
 const sal_Char sServiceName[] = "com.sun.star.text.AccessibleTextDocumentPageView";
 const sal_Char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessibleDocumentPageView";
-
-
-// using namespace accessibility;
 
 using ::com::sun::star::lang::IndexOutOfBoundsException;
 using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::uno::Sequence;
 using ::rtl::OUString;
-
-
-
 
 //
 // SwAccessiblePreview

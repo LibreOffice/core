@@ -39,7 +39,7 @@
 
 class SVGFontExport
 {
-    typedef ::std::hash_map< ::rtl::OUString, ::std::set< sal_Unicode >, ::comphelper::UStringHash > GlyphMap;
+    typedef ::boost::unordered_map< ::rtl::OUString, ::std::set< sal_Unicode >, ::comphelper::UStringHash > GlyphMap;
     typedef ::std::vector< ObjectRepresentation > ObjectVector;
 
 private:

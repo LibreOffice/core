@@ -98,8 +98,6 @@ void ScTabBgColorDlg::FillColorValueSets_Impl()
     ::boost::scoped_ptr<XColorTable> pOwnColorTable; // locally instantiated in case the doc shell doesn't have one.
 
     const Size aSize15x15 = Size( 15, 15 );
-    const Size aSize10x10 = Size( 10, 10 );
-    const Size aSize5x5 = Size( 5, 5 );
     USHORT nSelectedItem = 0;
 
     DBG_ASSERT( pDocSh, "DocShell not found!" );

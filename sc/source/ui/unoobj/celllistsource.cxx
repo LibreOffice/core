@@ -131,7 +131,6 @@ namespace calc
         EventObject aDisposeEvent( *this );
         m_aListEntryListeners.disposeAndClear( aDisposeEvent );
 
-//        OCellListSource_Base::disposing();
         WeakAggComponentImplHelperBase::disposing();
 
         // TODO: clean up here whatever you need to clean up (e.g. revoking listeners etc.)
@@ -338,7 +337,7 @@ namespace calc
             }
             catch( const Exception& )
             {
-                DBG_ERROR( "OCellListSource::notifyModified: caught a (non-runtime) exception!" );
+                OSL_FAIL( "OCellListSource::notifyModified: caught a (non-runtime) exception!" );
             }
         }
 
@@ -415,7 +414,7 @@ namespace calc
         }
         catch( const Exception& )
         {
-            DBG_ERROR( "OCellListSource::initialize: caught an exception while retrieving the cell object!" );
+            OSL_FAIL( "OCellListSource::initialize: caught an exception while retrieving the cell object!" );
         }
 
 

@@ -30,8 +30,9 @@
 #include    <osl/file.hxx>
 #include    <codemaker/typemanager.hxx>
 
-using namespace rtl;
-
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OStringToOUString;
 TypeManager::TypeManager()
 {
     m_pImpl = new TypeManagerImpl();

@@ -213,7 +213,6 @@
 #include "tools/fsys.hxx"
 #include "tools/gen.hxx"
 #include "tools/link.hxx"
-#include "tools/list.hxx"
 #include "tools/rc.hxx"
 #include "tools/rcid.h"
 #include "tools/ref.hxx"

@@ -40,6 +40,8 @@
 #include <boost/bind.hpp>
 #include <algorithm>
 
+#include <o3tl/compat_functional.hxx>
+
 #include "layermanager.hxx"
 
 using namespace ::com::sun::star;
@@ -162,7 +164,7 @@ namespace slideshow
                 std::for_each(maAllShapes.begin(),
                               maAllShapes.end(),
                               boost::bind( &Shape::clearAllViewLayers,
-                                           boost::bind( std::select1st<LayerShapeMap::value_type>(),
+                                           boost::bind( o3tl::select1st<LayerShapeMap::value_type>(),
                                                         _1 )));
 
                 for (LayerShapeMap::iterator
@@ -272,7 +274,7 @@ namespace slideshow
             std::for_each( maAllShapes.begin(),
                            maAllShapes.end(),
                            boost::bind(&Shape::render,
-                               boost::bind( ::std::select1st<LayerShapeMap::value_type>(), _1)) );
+                               boost::bind( ::o3tl::select1st<LayerShapeMap::value_type>(), _1)) );
         }
 
         void LayerManager::addShape( const ShapeSharedPtr& rShape )

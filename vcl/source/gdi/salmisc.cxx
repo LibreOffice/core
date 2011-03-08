@@ -326,7 +326,7 @@ BitmapBuffer* StretchAndConvert( const BitmapBuffer& rSrcBuffer, const SalTwoRec
             // initialize pFncGetPixel to something valid that is
             // least likely to crash
             pFncGetPixel = BitmapReadAccess::GetPixelFor_1BIT_MSB_PAL;
-            DBG_ERROR( "unknown read format" );
+            OSL_FAIL( "unknown read format" );
         break;
     }
 
@@ -357,7 +357,7 @@ BitmapBuffer* StretchAndConvert( const BitmapBuffer& rSrcBuffer, const SalTwoRec
             // least likely to crash
             pFncSetPixel = BitmapReadAccess::SetPixelFor_1BIT_MSB_PAL;
             pDstBuffer->mnBitCount = 1;
-            DBG_ERROR( "unknown write format" );
+            OSL_FAIL( "unknown write format" );
         break;
     }
 

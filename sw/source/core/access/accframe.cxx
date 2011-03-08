@@ -396,10 +396,8 @@ sal_Bool SwAccessibleFrame::IsOpaque( ViewShell *pVSh ) const
              rBack.GetGraphicPos() != GPOS_NONE )
             return sal_True;
 
-        /// OD 20.08.2002 #99657#
-        ///     If a fly frame has a transparent background color, we have
-        ///     to consider the background.
-        ///     But a background color "no fill"/"auto fill" has *not* to be considered.
+        // If a fly frame has a transparent background color, we have to consider the background.
+        // But a background color "no fill"/"auto fill" has *not* to be considered.
         if( pFrm->IsFlyFrm() &&
             (rBack.GetColor().GetTransparency() != 0) &&
             (rBack.GetColor() != COL_TRANSPARENT)

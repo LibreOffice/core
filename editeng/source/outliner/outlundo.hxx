@@ -100,9 +100,9 @@ public:
     virtual void    Repeat();
 };
 
-// Hilfs-Undo: Wenn es fuer eine Aktion keine OutlinerUndoAction gibst, weil
-// die EditEngine das handelt, aber z.B. noch das Bullet neu berechnet werden muss.
-
+// Help-Undo: If it does not exist an OutlinerUndoAction for a certain action
+// because this is handled by the EditEngine, but for example the bullet has
+// to be recalculated.
 class OutlinerUndoCheckPara : public OutlinerUndoBase
 {
     using SfxUndoAction::Repeat;
@@ -133,7 +133,7 @@ public:
     virtual void Redo();
     virtual void Repeat();
 
-    USHORT* pParas;  // 0 == nCount enthaelt Absatznummer
+    USHORT* pParas;  // 0 == nCount contains paragraph number
     Outliner* pOutliner;
     USHORT nCount;
 };

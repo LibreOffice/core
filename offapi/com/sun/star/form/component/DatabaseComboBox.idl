@@ -73,7 +73,7 @@ published service DatabaseComboBox
      */
     [property] boolean ConvertEmptyToNull;
 
-    /** describes the source of items in the combo box' list.
+    /** describes the source of items in the combo box's list.
 
         <p>The concrete meaning of this property depends on the value of <member>ListSourceType</member></p>
      */

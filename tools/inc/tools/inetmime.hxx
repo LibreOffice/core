@@ -28,13 +28,14 @@
 #ifndef TOOLS_INETMIME_HXX
 #define TOOLS_INETMIME_HXX
 
+#include <boost/ptr_container/ptr_vector.hpp>
+
 #include "tools/toolsdllapi.h"
 #include <rtl/alloc.h>
 #include <rtl/string.h>
 #include "rtl/tencinfo.h"
 #include <tools/debug.hxx>
 #include <tools/errcode.hxx>
-#include <tools/list.hxx>
 #include <tools/string.hxx>
 
 class DateTime;
@@ -1418,29 +1419,35 @@ inline INetContentTypeParameter::INetContentTypeParameter(const ByteString &
 {}
 
 //============================================================================
-class TOOLS_DLLPUBLIC INetContentTypeParameterList: private List
+class TOOLS_DLLPUBLIC INetContentTypeParameterList
 {
 public:
-    ~INetContentTypeParameterList() { Clear(); }
-
-    using List::Count;
 
     void Clear();
 
     void Insert(INetContentTypeParameter * pParameter, ULONG nIndex)
-    { List::Insert(pParameter, nIndex); }
+    {
+        maEntries.insert(maEntries.begin()+nIndex,pParameter);
+    }
 
-    inline const INetContentTypeParameter * GetObject(ULONG nIndex) const;
+    void Append(INetContentTypeParameter *pParameter)
+    {
+        maEntries.push_back(pParameter);
+    }
+
+    inline const INetContentTypeParameter * GetObject(ULONG nIndex) const
+    {
+        return &(maEntries[nIndex]);
+    }
 
     const INetContentTypeParameter * find(const ByteString & rAttribute)
         const;
+
+private:
+
+    boost::ptr_vector<INetContentTypeParameter> maEntries;
 };
 
-inline const INetContentTypeParameter *
-INetContentTypeParameterList::GetObject(ULONG nIndex) const
-{
-    return static_cast< INetContentTypeParameter * >(List::GetObject(nIndex));
-}
 
 #endif // TOOLS_INETMIME_HXX
 

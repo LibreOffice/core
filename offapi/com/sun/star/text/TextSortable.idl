@@ -51,9 +51,9 @@ module com {  module sun {  module star {  module text {
  */
 published service TextSortable
 {
-        /** the properties returned by a call to the 'createSortDescriptor' method
+        /** the properties returned by a call to the "createSortDescriptor" method
             of this interfaces implementation are those of the
-            'com.sun.star.text.TextSortDescriptor' service.
+            "com.sun.star.text.TextSortDescriptor" service.
 
            @see <type scope="com::sun::star::text">TextSortDescriptor</type>
          */

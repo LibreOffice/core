@@ -300,7 +300,7 @@ void GraphicPropertyItemConverter::FillSpecialItem(
                     }
                 }
             }
-            catch( beans::UnknownPropertyException ex )
+            catch( beans::UnknownPropertyException &ex )
             {
                 ASSERT_EXCEPTION( ex );
             }
@@ -314,11 +314,10 @@ void GraphicPropertyItemConverter::FillSpecialItem(
                     ? C2U( "GradientStepCount" )
                     : C2U( "FillGradientStepCount" );
 
-                sal_Int16 nStepCount = 0;
                 uno::Any aValue( GetPropertySet()->getPropertyValue( aPropName ) );
                 if( hasLongOrShortValue(aValue) )
                 {
-                    nStepCount = getShortForLongAlso(aValue);
+                    sal_Int16 nStepCount = getShortForLongAlso(aValue);
                     rOutItemSet.Put( XGradientStepCountItem( nStepCount ));
                 }
             }
@@ -545,7 +544,7 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
                     }
                 }
             }
-            catch( beans::UnknownPropertyException ex )
+            catch( beans::UnknownPropertyException &ex )
             {
                 ASSERT_EXCEPTION( ex );
             }

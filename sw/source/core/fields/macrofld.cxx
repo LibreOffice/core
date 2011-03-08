@@ -193,7 +193,7 @@ bool SwMacroField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
         rAny <<= bIsScriptURL ? OUString(GetMacroName()): OUString();
         break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }
@@ -217,7 +217,7 @@ bool SwMacroField::PutValue( const uno::Any& rAny, USHORT nWhichId )
         bIsScriptURL = isScriptURL(aMacro);
         break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
 
     return true;

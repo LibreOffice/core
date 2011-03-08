@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * Version: MPL 1.1 / GPLv3+ / LGPLv3+
  *
@@ -12,7 +13,7 @@
  * License.
  *
  * The Initial Developer of the Original Code is
- *       [ Kohei Yoshida <kyoshida@novell.com> ]
+ *         Kohei Yoshida <kyoshida@novell.com>
  * Portions created by the Initial Developer are Copyright (C) 2010 the
  * Initial Developer. All Rights Reserved.
  *
@@ -48,7 +49,7 @@ bool ScXMLCachedRowAttrAccess::rowHidden(sal_Int32 nTab, sal_Int32 nRow)
     {
         SCROW nRow1, nRow2;
         maHidden.mbValue = mpDoc->RowHidden(
-            static_cast<SCTAB>(nTab), static_cast<SCROW>(nRow), &nRow1, &nRow2);
+            static_cast<SCROW>(nRow), static_cast<SCTAB>(nTab), &nRow1, &nRow2);
         maHidden.mnRow1 = static_cast<sal_Int32>(nRow1);
         maHidden.mnRow2 = static_cast<sal_Int32>(nRow2);
     }
@@ -61,10 +62,11 @@ bool ScXMLCachedRowAttrAccess::rowFiltered(sal_Int32 nTab, sal_Int32 nRow)
     {
         SCROW nRow1, nRow2;
         maFiltered.mbValue = mpDoc->RowFiltered(
-            static_cast<SCTAB>(nTab), static_cast<SCROW>(nRow), &nRow1, &nRow2);
+            static_cast<SCROW>(nRow), static_cast<SCTAB>(nTab), &nRow1, &nRow2);
         maFiltered.mnRow1 = static_cast<sal_Int32>(nRow1);
         maFiltered.mnRow2 = static_cast<sal_Int32>(nRow2);
     }
     return maFiltered.mbValue;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

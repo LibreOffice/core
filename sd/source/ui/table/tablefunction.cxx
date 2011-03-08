@@ -109,7 +109,7 @@ static void apply_table_style( SdrTableObj* pObj, SdrModel* pModel, const OUStri
         }
         catch( Exception& )
         {
-            DBG_ERROR("sd::apply_default_table_style(), exception caught!");
+            OSL_FAIL("sd::apply_default_table_style(), exception caught!");
         }
     }
 }

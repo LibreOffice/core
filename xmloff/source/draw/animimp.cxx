@@ -661,14 +661,14 @@ void XMLAnimationsEffectContext::EndElement()
                 }
                 else
                 {
-                    DBG_ERROR("XMLAnimationsEffectContext::EndElement - Sound URL without a XPropertySet!");
+                    OSL_FAIL("XMLAnimationsEffectContext::EndElement - Sound URL without a XPropertySet!");
                 }
             }
         }
     }
     catch( Exception e )
     {
-        DBG_ERROR( "exception catched while importing animation information!" );
+        OSL_FAIL( "exception catched while importing animation information!" );
     }
 }
 

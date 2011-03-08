@@ -35,7 +35,7 @@
 
  *************************************************************************/
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <osl/diagnose.h>
 #include <cppuhelper/weak.hxx>
 #include <ucbhelper/contentidentifier.hxx>
@@ -117,7 +117,7 @@ struct hashString
     }
 };
 
-typedef std::hash_map
+typedef boost::unordered_map
 <
     rtl::OUString,
     Package*,

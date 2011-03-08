@@ -43,8 +43,10 @@ class ScDataPilotSourceTypeDlg : public ModalDialog
 private:
     FixedLine       aFlFrame;
     RadioButton     aBtnSelection;
+    RadioButton     aBtnNamedRange;
     RadioButton     aBtnDatabase;
     RadioButton     aBtnExternal;
+    ListBox         aLbNamedRange;
     OKButton        aBtnOk;
     CancelButton    aBtnCancel;
     HelpButton      aBtnHelp;
@@ -53,8 +55,14 @@ public:
             ScDataPilotSourceTypeDlg( Window* pParent, BOOL bEnableExternal );
             ~ScDataPilotSourceTypeDlg();
 
-    BOOL    IsDatabase() const;
-    BOOL    IsExternal() const;
+    bool IsDatabase() const;
+    bool IsExternal() const;
+    bool IsNamedRange() const;
+    rtl::OUString GetSelectedNamedRange() const;
+    void AppendNamedRange(const rtl::OUString& rNames);
+
+private:
+    DECL_LINK( RadioClickHdl, RadioButton * );
 };
 
 

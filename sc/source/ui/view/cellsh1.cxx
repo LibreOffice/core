@@ -94,6 +94,10 @@
 #include "spellparam.hxx"
 #include "postit.hxx"
 #include "clipparam.hxx"
+#include "pivot.hxx"
+#include "dpobject.hxx"
+#include "dpsdbtab.hxx"     // ScImportSourceDesc
+#include "dpshttab.hxx"     // ScSheetSourceDesc
 
 #include "globstr.hrc"
 #include "scui_def.hxx"
@@ -109,9 +113,12 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <cppuhelper/bootstrap.hxx>
 
+#include <boost/scoped_ptr.hpp>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
+using ::rtl::OUString;
 
 //------------------------------------------------------------------
 void ScCellShell::ExecuteEdit( SfxRequest& rReq )
@@ -641,7 +648,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     const SvNumberformat* pPrivEntry = pFormatter->GetEntry( nPrivFormat );
                     if (!pPrivEntry)
                     {
-                        DBG_ERROR("Zahlformat nicht gefunden !!!");
+                        OSL_FAIL("Zahlformat nicht gefunden !!!");
                     }
                     else
                     {
@@ -844,7 +851,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 }
                 else    // Aufruf per Maus
                 {
-                    //  #55284# nicht innerhalb einer zusammengefassten Zelle
+                    //  nicht innerhalb einer zusammengefassten Zelle
 
                     if ( nStartCol == nEndCol && nStartRow == nEndRow )
                     {
@@ -914,7 +921,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     }
                     else
                     {
-                        DBG_ERROR( "Richtung nicht eindeutig fuer AutoFill" );
+                        OSL_FAIL( "Richtung nicht eindeutig fuer AutoFill" );
                     }
                 }
             }
@@ -1213,7 +1220,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard( pWin );
                 if ( pOwnClip )
                 {
-                    // #129384# keep a reference in case the clipboard is changed during dialog or PasteFromClip
+                    // keep a reference in case the clipboard is changed during dialog or PasteFromClip
                     uno::Reference<datatransfer::XTransferable> aOwnClipRef( pOwnClip );
                     if ( pReqArgs!=NULL && pTabViewShell->SelectionEditable() )
                     {
@@ -1271,9 +1278,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                                                                                     RID_SCDLG_INSCONT);
                             DBG_ASSERT(pDlg, "Dialog create fail!");
                             pDlg->SetOtherDoc( bOtherDoc );
-                            // #53661# bei ChangeTrack MoveMode disablen
+                            // bei ChangeTrack MoveMode disablen
                             pDlg->SetChangeTrack( pDoc->GetChangeTrack() != NULL );
-                            // #72930# cut/move references may disable shift
+                            // cut/move references may disable shift
                             // directions if source and destination ranges intersect
                             if ( !bOtherDoc )
                             {
@@ -1829,7 +1836,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             {
                 const SfxStringItem& rTextItem = (const SfxStringItem&)pReqArgs->Get( SID_RANGE_NOTETEXT );
 
-                //  #43343# immer Cursorposition
+                //  immer Cursorposition
                 ScAddress aPos( GetViewData()->GetCurX(), GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
                 pTabViewShell->SetNoteText( aPos, rTextItem.GetValue() );
                 rReq.Done();
@@ -1970,7 +1977,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     }
                     else
                     {
-                        DBG_ERROR("NULL");
+                        OSL_FAIL("NULL");
                     }
                 }
             }
@@ -2066,7 +2073,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         //
 
         default:
-            DBG_ERROR("falscher Slot bei ExecuteEdit");
+            OSL_FAIL("falscher Slot bei ExecuteEdit");
             break;
     }
 }
@@ -2108,6 +2115,167 @@ void ScCellShell::ExecuteExternalSource(
     }
     else
         _rRequest.Ignore();
+}
+
+void ScCellShell::ExecuteDataPilotDialog()
+{
+    ScModule* pScMod = SC_MOD();
+    ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
+    ScViewData* pData = GetViewData();
+    ScDocument* pDoc = pData->GetDocument();
+
+    ::boost::scoped_ptr<ScDPObject> pNewDPObject(NULL);
+
+    // ScPivot is no longer used...
+    ScDPObject* pDPObj = pDoc->GetDPAtCursor(
+                                pData->GetCurX(), pData->GetCurY(),
+                                pData->GetTabNo() );
+    if ( pDPObj )   // on an existing table?
+    {
+        pNewDPObject.reset(new ScDPObject(*pDPObj));
+    }
+    else            // create new table
+    {
+        //  select database range or data
+        pTabViewShell->GetDBData( TRUE, SC_DB_OLD );
+        ScMarkData& rMark = GetViewData()->GetMarkData();
+        if ( !rMark.IsMarked() && !rMark.IsMultiMarked() )
+            pTabViewShell->MarkDataArea( FALSE );
+
+        //  output to cursor position for non-sheet data
+        ScAddress aDestPos( pData->GetCurX(), pData->GetCurY(),
+                                pData->GetTabNo() );
+
+        //  first select type of source data
+
+        bool bEnableExt = ScDPObject::HasRegisteredSources();
+
+        ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+        DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
+
+        ::boost::scoped_ptr<AbstractScDataPilotSourceTypeDlg> pTypeDlg(
+            pFact->CreateScDataPilotSourceTypeDlg(
+                pTabViewShell->GetDialogParent(), bEnableExt, RID_SCDLG_DAPITYPE));
+
+        // Populate named ranges (if any).
+        ScRangeName* pRangeName = pDoc->GetRangeName();
+        if (pRangeName)
+        {
+            ScRangeName::const_iterator itr = pRangeName->begin(), itrEnd = pRangeName->end();
+            for (; itr != itrEnd; ++itr)
+                pTypeDlg->AppendNamedRange(itr->GetName());
+        }
+
+        DBG_ASSERT(pTypeDlg, "Dialog create fail!");
+        if ( pTypeDlg->Execute() == RET_OK )
+        {
+            if ( pTypeDlg->IsExternal() )
+            {
+                uno::Sequence<rtl::OUString> aSources = ScDPObject::GetRegisteredSources();
+                ::boost::scoped_ptr<AbstractScDataPilotServiceDlg> pServDlg(
+                    pFact->CreateScDataPilotServiceDlg(
+                        pTabViewShell->GetDialogParent(), aSources, RID_SCDLG_DAPISERVICE));
+
+                DBG_ASSERT(pServDlg, "Dialog create fail!");
+                if ( pServDlg->Execute() == RET_OK )
+                {
+                    ScDPServiceDesc aServDesc(
+                            pServDlg->GetServiceName(),
+                            pServDlg->GetParSource(),
+                            pServDlg->GetParName(),
+                            pServDlg->GetParUser(),
+                            pServDlg->GetParPass() );
+                    pNewDPObject.reset(new ScDPObject(pDoc));
+                    pNewDPObject->SetServiceData( aServDesc );
+                }
+            }
+            else if ( pTypeDlg->IsDatabase() )
+            {
+                DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
+
+                ::boost::scoped_ptr<AbstractScDataPilotDatabaseDlg> pDataDlg(
+                    pFact->CreateScDataPilotDatabaseDlg(
+                        pTabViewShell->GetDialogParent(), RID_SCDLG_DAPIDATA));
+
+                DBG_ASSERT(pDataDlg, "Dialog create fail!");
+                if ( pDataDlg->Execute() == RET_OK )
+                {
+                    ScImportSourceDesc aImpDesc(pDoc);
+                    pDataDlg->GetValues( aImpDesc );
+                    pNewDPObject.reset(new ScDPObject(pDoc));
+                    pNewDPObject->SetImportDesc( aImpDesc );
+                }
+            }
+            else if (pTypeDlg->IsNamedRange())
+            {
+                OUString aName = pTypeDlg->GetSelectedNamedRange();
+                ScSheetSourceDesc aShtDesc(pDoc);
+                aShtDesc.SetRangeName(aName);
+                pNewDPObject.reset(new ScDPObject(pDoc));
+                pNewDPObject->SetSheetDesc(aShtDesc);
+            }
+            else        // selection
+            {
+                //! use database ranges (select before type dialog?)
+                ScRange aRange;
+                ScMarkType eType = GetViewData()->GetSimpleArea(aRange);
+                if ( (eType & SC_MARK_SIMPLE) == SC_MARK_SIMPLE )
+                {
+                    // Shrink the range to the data area.
+                    SCCOL nStartCol = aRange.aStart.Col(), nEndCol = aRange.aEnd.Col();
+                    SCROW nStartRow = aRange.aStart.Row(), nEndRow = aRange.aEnd.Row();
+                    if (pDoc->ShrinkToDataArea(aRange.aStart.Tab(), nStartCol, nStartRow, nEndCol, nEndRow))
+                    {
+                        aRange.aStart.SetCol(nStartCol);
+                        aRange.aStart.SetRow(nStartRow);
+                        aRange.aEnd.SetCol(nEndCol);
+                        aRange.aEnd.SetRow(nEndRow);
+                        rMark.SetMarkArea(aRange);
+                        pTabViewShell->MarkRange(aRange);
+                    }
+
+                    bool bOK = true;
+                    if ( pDoc->HasSubTotalCells( aRange ) )
+                    {
+                        //  confirm selection if it contains SubTotal cells
+
+                        QueryBox aBox( pTabViewShell->GetDialogParent(),
+                                        WinBits(WB_YES_NO | WB_DEF_YES),
+                                        ScGlobal::GetRscString(STR_DATAPILOT_SUBTOTAL) );
+                        if (aBox.Execute() == RET_NO)
+                            bOK = false;
+                    }
+                    if (bOK)
+                    {
+                        ScSheetSourceDesc aShtDesc(pDoc);
+                        aShtDesc.SetSourceRange(aRange);
+                        pNewDPObject.reset(new ScDPObject(pDoc));
+                        pNewDPObject->SetSheetDesc( aShtDesc );
+
+                        //  output below source data
+                        if ( aRange.aEnd.Row()+2 <= MAXROW - 4 )
+                            aDestPos = ScAddress( aRange.aStart.Col(),
+                                                    aRange.aEnd.Row()+2,
+                                                    aRange.aStart.Tab() );
+                    }
+                }
+            }
+        }
+
+        if ( pNewDPObject )
+            pNewDPObject->SetOutRange( aDestPos );
+    }
+
+    pTabViewShell->SetDialogDPObject( pNewDPObject.get() );   // is copied
+    if ( pNewDPObject )
+    {
+        //  start layout dialog
+
+        USHORT nId  = ScPivotLayoutWrapper::GetChildWindowId();
+        SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
+        SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
+        pScMod->SetRefDialog( nId, pWnd ? FALSE : TRUE );
+    }
 }
 
 IMPL_LINK( ScCellShell, DialogClosed, AbstractScLinkedAreaDlg*, EMPTYARG )

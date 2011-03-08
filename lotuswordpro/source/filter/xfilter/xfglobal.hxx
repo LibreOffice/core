@@ -58,10 +58,6 @@
  * Global functions or include files that are needed.
  * It's all for the full filter.
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2004-12-23 create this file.
- ************************************************************************/
 #ifndef     _GLOBAL_HXX
 #define     _GLOBAL_HXX
 

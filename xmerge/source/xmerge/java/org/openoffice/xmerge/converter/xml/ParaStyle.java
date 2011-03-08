@@ -532,8 +532,6 @@ public class ParaStyle extends Style implements Cloneable {
 
         for (int i = 0; i < NR_PROPERTIES; i++) {
             if (ps.isSet[i]) {
-                //                if (!isSet[i]) return false;
-
                 if (i < NR_PROPERTIES - 1) {
                     // Compare the actual values.  We allow a margin of error
                     // here because the conversion loses precision.

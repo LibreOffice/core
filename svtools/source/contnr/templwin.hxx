@@ -234,7 +234,8 @@ public:
 
 // class SvtTemplateWindow -----------------------------------------------
 
-class HistoryList_Impl;
+class FolderHistory;
+typedef ::std::vector< FolderHistory* > HistoryList_Impl;
 
 class SvtTemplateWindow : public Window
 {

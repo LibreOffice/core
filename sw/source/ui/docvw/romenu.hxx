@@ -28,9 +28,7 @@
 #ifndef _ROMENU_HXX
 #define _ROMENU_HXX
 
-
 #include <vcl/graph.hxx>
-#include <tools/list.hxx>
 #include <vcl/menu.hxx>
 #include <svl/stritem.hxx>
 
@@ -50,7 +48,7 @@ class SwReadOnlyPopup : public PopupMenu
                 sTargetFrameName,
                 sDescription,
                 sGrfName;
-    List        aThemeList;
+    std::vector<String> aThemeList;
     BOOL        bGrfToGalleryAsLnk;
     ImageMap*   pImageMap;
     INetImage*  pTargetURL;

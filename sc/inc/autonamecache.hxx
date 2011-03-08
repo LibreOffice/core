@@ -30,12 +30,12 @@
 #define SC_AUTONAMECACHE_HXX
 
 #include <vector>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include "address.hxx"
 #include "global.hxx"
 
 typedef ::std::vector< ScAddress > ScAutoNameAddresses;
-typedef ::std::hash_map< String, ScAutoNameAddresses, ScStringHashCode, ::std::equal_to< String > > ScAutoNameHashMap;
+typedef ::boost::unordered_map< String, ScAutoNameAddresses, ScStringHashCode, ::std::equal_to< String > > ScAutoNameHashMap;
 
 //
 //  Cache for faster lookup of automatic names during CompileXML

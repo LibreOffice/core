@@ -59,7 +59,7 @@
 published service TextGraphicObject
 {
     /** contains the definition of interfaces and properties that are supported by text frames,
-     graphic objects and embeddedobjects.
+     graphic objects and embedded objects.
      */
     service BaseFrame;
     //-------------------------------------------------------------------------
@@ -148,11 +148,11 @@ published service TextGraphicObject
      */
     [property] short AdjustBlue;
     //-------------------------------------------------------------------------
-    /** determins the gamma value of the graphic.
+    /** determines the gamma value of the graphic.
      */
     [property] double Gamma;
     //-------------------------------------------------------------------------
-    /** determins if the graphic is display in inverted colors.
+    /** determines if the graphic is display in inverted colors.
          It contains percentage values between -100 and +100.
      */
     [property] boolean GraphicIsInverted;

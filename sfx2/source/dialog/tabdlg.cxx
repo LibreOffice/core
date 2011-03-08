@@ -127,7 +127,7 @@ SfxPoolItem* SfxTabDialogItem::Clone(SfxItemPool* pToPool) const
 
 SfxPoolItem* SfxTabDialogItem::Create(SvStream& /*rStream*/, USHORT /*nVersion*/) const
 {
-    DBG_ERROR( "Use it only in UI!" );
+    OSL_FAIL( "Use it only in UI!" );
     return NULL;
 }
 
@@ -388,11 +388,7 @@ const SfxPoolItem* SfxTabPage::GetItem( const SfxItemSet& rSet, USHORT nSlot, sa
     const SfxItemPool* pPool = rSet.GetPool();
     USHORT nWh = pPool->GetWhich( nSlot, bDeep );
     const SfxPoolItem* pItem = 0;
-#ifdef DEBUG
-    SfxItemState eState;
-    eState =
-#endif
-            rSet.GetItemState( nWh, TRUE, &pItem );  // -Wall required??
+    rSet.GetItemState( nWh, TRUE, &pItem );
 
     if ( !pItem && nWh != nSlot )
         pItem = &pPool->GetDefaultItem( nWh );
@@ -1515,8 +1511,6 @@ IMPL_LINK( SfxTabDialog, DeactivatePageHdl, TabControl *, pTabCtrl )
             nRet = pPage->DeactivatePage( &aTmp );
         else
             nRet = pPage->DeactivatePage( NULL );
-//!     else
-//!         pPage->FillItemSet( aTmp );
 
         if ( ( SfxTabPage::LEAVE_PAGE & nRet ) == SfxTabPage::LEAVE_PAGE &&
              aTmp.Count() )
@@ -1594,7 +1588,6 @@ const SfxItemSet* SfxTabDialog::GetOutputItemSet
 
         if ( pDataObject->bOnDemand )
             return &pDataObject->pTabPage->GetItemSet();
-        // else
         return pOutSet;
     }
     return NULL;
@@ -1714,25 +1707,6 @@ const USHORT* SfxTabDialog::GetInputRanges( const SfxItemPool& rPool )
     if ( aUS.Count() > 1 )
         qsort( (void*)aUS.GetData(),
                aUS.Count(), sizeof(USHORT), TabDlgCmpUS_Impl );
-
-    // Ranges erzeugen
-    //!! Auskommentiert, da fehlerhaft
-    /*
-    pRanges = new USHORT[aUS.Count() * 2 + 1];
-    int j = 0;
-    i = 0;
-
-    while ( i < aUS.Count() )
-    {
-        pRanges[j++] = aUS[i];
-        // aufeinanderfolgende Zahlen
-        for( ; i < aUS.Count()-1; ++i )
-            if ( aUS[i] + 1 != aUS[i+1] )
-                break;
-        pRanges[j++] = aUS[i++];
-    }
-    pRanges[j] = 0;     // terminierende NULL
-    */
 
     pRanges = new USHORT[aUS.Count() + 1];
     memcpy(pRanges, aUS.GetData(), sizeof(USHORT) * aUS.Count());

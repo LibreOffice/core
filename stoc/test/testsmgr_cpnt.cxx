@@ -75,8 +75,11 @@ using namespace com::sun::star::registry;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
 using namespace osl;
-using namespace rtl;
 using namespace cppu;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
+using ::rtl::OString;
 
 
 Reference<XMultiServiceFactory> getProcessServiceManager()

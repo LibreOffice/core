@@ -433,7 +433,7 @@ PasswordContainerInteractionHandler::handle(
     if ( !xSupplyAuthentication.is() )
         return;
 
-    // Try to obatin credentials from password container.
+    // Try to obtain credentials from password container.
     if ( m_aPwContainerHelper.
              handleAuthenticationRequest( aAuthenticationRequest,
                                           xSupplyAuthentication,

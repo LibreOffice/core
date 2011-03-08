@@ -42,7 +42,6 @@
 #include <osl/endian.h>
 #include <docsh.hxx>
 
-#define _SVSTDARR_BOOLS
 #include <svl/svstdarr.hxx>
 
 #include <unotools/fltrcfg.hxx>
@@ -191,12 +190,21 @@ public:
 class WW8_WrtBookmarks
 {
 private:
-    SvULongs aSttCps, aEndCps;      // Array of Start- and End CPs
-    SvBools aFieldMarks;       // If the bookmark is in a field result
-    std::vector<String> maSwBkmkNms;    // Array of Sw - Bookmarknames
-    typedef std::vector<String>::iterator myIter;
+    //! Holds information about a single bookmark.
+    struct BookmarkInfo {
+        ULONG  startPos; //!< Starting character position.
+        ULONG  endPos;   //!< Ending character position.
+        bool   isField;  //!< True if the bookmark is in a field result.
+        String name;     //!< Name of this bookmark.
+        inline BookmarkInfo(ULONG start, ULONG end, bool isFld, const String& bkName) : startPos(start), endPos(end), isField(isFld), name(bkName) {};
+        //! Operator < is defined purely for sorting.
+        inline bool operator<(const BookmarkInfo &other) const { return startPos < other.startPos; }
+    };
+    std::vector<BookmarkInfo> aBookmarks;
+    typedef std::vector<BookmarkInfo>::iterator BkmIter;
 
-    USHORT GetPos( const String& rNm );
+    //! Return the position in aBookmarks where the string rNm can be found.
+    BkmIter GetPos( const String& rNm );
 
     //No copying
     WW8_WrtBookmarks(const WW8_WrtBookmarks&);
@@ -205,8 +213,11 @@ public:
     WW8_WrtBookmarks();
     ~WW8_WrtBookmarks();
 
+    //! Add a new bookmark to the list OR add an end position to an existing bookmark.
     void Append( WW8_CP nStartCp, const String& rNm, const ::sw::mark::IMark* pBkmk=NULL );
+    //! Write out bookmarks to file.
     void Write( WW8Export& rWrt );
+    //! Move existing field marks from one position to another.
     void MoveFieldMarks(ULONG nFrom,ULONG nTo);
 
 };
@@ -1257,7 +1268,6 @@ WW8_CP WW8_WrPct::Fc2Cp( ULONG nFc ) const
 /*  */
 
 WW8_WrtBookmarks::WW8_WrtBookmarks()
-    : aSttCps( 0, 16 ), aEndCps( 0, 16 )
 {
 }
 
@@ -1267,71 +1277,63 @@ WW8_WrtBookmarks::~WW8_WrtBookmarks()
 
 void WW8_WrtBookmarks::Append( WW8_CP nStartCp, const String& rNm,  const ::sw::mark::IMark* )
 {
-    USHORT nPos = GetPos( rNm );
-    if( USHRT_MAX == nPos )
+    BkmIter bkIter = GetPos( rNm );
+    if( bkIter == aBookmarks.end() )
     {
-        // new -> insert as start position
-        nPos = aSttCps.Count();
-        myIter aIter = maSwBkmkNms.end();
-        // sort by startposition
-        //      theory: write continuous -> then the new position is at end
-        while( nPos && aSttCps[ nPos - 1 ] > ULONG( nStartCp ))
-        {
-            --nPos;
-            --aIter;
-        }
-
-        aSttCps.Insert(nStartCp, nPos);
-        aEndCps.Insert(nStartCp, nPos);
-        aFieldMarks.Insert(BOOL(false), nPos);
-        maSwBkmkNms.insert(aIter, rNm);
+        // new bookmark -> insert with start==end
+        aBookmarks.push_back( BookmarkInfo(nStartCp, nStartCp, false, rNm) );
     }
     else
     {
-        // old -> its the end position
-        OSL_ENSURE( aEndCps[ nPos ] == aSttCps[ nPos ], "end position is valid" );
+        // old bookmark -> this should be the end position
+        OSL_ENSURE( bkIter->endPos == bkIter->startPos, "end position is valid" );
 
         //If this bookmark was around a field in writer, then we want to move
         //it to the field result in word. The end is therefore one cp
         //backwards from the 0x15 end mark that was inserted.
-        if (aFieldMarks[nPos])
+        if (bkIter->isField)
             --nStartCp;
-
-        aEndCps.Replace( nStartCp, nPos );
+        bkIter->endPos = nStartCp;
     }
 }
 
 
 void WW8_WrtBookmarks::Write( WW8Export& rWrt )
 {
-    USHORT nCount = aSttCps.Count(), i;
-    if( nCount )
+    if (!aBookmarks.empty())
     {
-        SvULongs aEndSortTab( 255 < nCount ? 255 : nCount, 4 );
-        // sort then endpositions
-        for( i = 0; i < nCount; ++i )
-        {
-            ULONG nCP = aEndCps[ i ];
-            USHORT nPos = i;
-            while( nPos && aEndSortTab[ nPos - 1 ] > nCP )
-                --nPos;
-            aEndSortTab.Insert( nCP, nPos );
-        }
+        //Make sure the bookmarks are sorted in order of start position.
+        std::sort(aBookmarks.begin(), aBookmarks.end());
 
-        // we have some bookmarks found in the document -> write them
-        // first the Bookmark Name Stringtable
-        rWrt.WriteAsStringTable(maSwBkmkNms, rWrt.pFib->fcSttbfbkmk,
-            rWrt.pFib->lcbSttbfbkmk);
+        // First write the Bookmark Name Stringtable
+        std::vector<String> aNames;
+        aNames.reserve(aBookmarks.size());
+        for (BkmIter bIt = aBookmarks.begin(); bIt < aBookmarks.end(); ++bIt)
+            aNames.push_back(bIt->name);
+        rWrt.WriteAsStringTable(aNames, rWrt.pFib->fcSttbfbkmk, rWrt.pFib->lcbSttbfbkmk);
 
-        // second the Bookmark start positions as pcf of longs
+        // Second write the Bookmark start positions as pcf of longs
         SvStream& rStrm = rWrt.bWrtWW8 ? *rWrt.pTableStrm : rWrt.Strm();
         rWrt.pFib->fcPlcfbkf = rStrm.Tell();
-        for( i = 0; i < nCount; ++i )
-            SwWW8Writer::WriteLong( rStrm, aSttCps[ i ] );
+        for (BkmIter bIt = aBookmarks.begin(); bIt < aBookmarks.end(); ++bIt)
+            SwWW8Writer::WriteLong( rStrm, bIt->startPos );
         SwWW8Writer::WriteLong(rStrm, rWrt.pFib->ccpText + rWrt.pFib->ccpTxbx);
-        for( i = 0; i < nCount; ++i )
+
+        //Lastly, need to write out the end positions (sorted by end position). But
+        //before that we need a lookup table (sorted by start position) to link
+        //start and end positions.
+        //   Start by sorting the end positions.
+        std::vector<ULONG> aEndSortTab;
+        aEndSortTab.reserve(aBookmarks.size());
+        for (BkmIter bIt = aBookmarks.begin(); bIt < aBookmarks.end(); ++bIt)
+            aEndSortTab.push_back(bIt->endPos);
+        std::sort(aEndSortTab.begin(), aEndSortTab.end());
+
+        //Now write out the lookups.
+        //Note that in most cases, the positions in both vectors will be very close.
+        for( ULONG i = 0; i < aBookmarks.size(); ++i )
         {
-            ULONG nEndCP = aEndCps[ i ];
+            ULONG nEndCP = aBookmarks[ i ].endPos;
             USHORT nPos = i;
             if( aEndSortTab[ nPos ] > nEndCP )
             {
@@ -1341,43 +1343,39 @@ void WW8_WrtBookmarks::Write( WW8Export& rWrt )
             else if( aEndSortTab[ nPos ] < nEndCP )
                 while( aEndSortTab[ ++nPos ] != nEndCP )
                     ;
-
             SwWW8Writer::WriteLong( rStrm, nPos );
         }
         rWrt.pFib->lcbPlcfbkf = rStrm.Tell() - rWrt.pFib->fcPlcfbkf;
 
-        // third the Bookmark end positions
+        // Finally, the actual Bookmark end positions.
         rWrt.pFib->fcPlcfbkl = rStrm.Tell();
-        for( i = 0; i < nCount; ++i )
+        for(ULONG i = 0; i < aEndSortTab.size(); ++i )
             SwWW8Writer::WriteLong( rStrm, aEndSortTab[ i ] );
         SwWW8Writer::WriteLong(rStrm, rWrt.pFib->ccpText + rWrt.pFib->ccpTxbx);
         rWrt.pFib->lcbPlcfbkl = rStrm.Tell() - rWrt.pFib->fcPlcfbkl;
     }
 }
 
-USHORT WW8_WrtBookmarks::GetPos( const String& rNm )
+WW8_WrtBookmarks::BkmIter WW8_WrtBookmarks::GetPos( const String& rNm )
 {
-    USHORT nRet = USHRT_MAX, n;
-    for (n = 0; n < aSttCps.Count(); ++n)
-        if (rNm == maSwBkmkNms[n])
-        {
-            nRet = n;
-            break;
-        }
-    return nRet;
+    for (BkmIter bIt = aBookmarks.begin(); bIt < aBookmarks.end(); ++bIt) {
+        if (rNm == bIt->name)
+            return bIt;
+    }
+    return aBookmarks.end();
 }
 
 void WW8_WrtBookmarks::MoveFieldMarks(ULONG nFrom, ULONG nTo)
 {
-    for (USHORT nI=0;nI<aSttCps.Count();++nI)
+    for (BkmIter i = aBookmarks.begin(); i < aBookmarks.end(); ++i)
     {
-        if (aSttCps[nI] == nFrom)
+        if (i->startPos == nFrom)
         {
-            aSttCps[nI] = nTo;
-            if (aEndCps[nI] == nFrom)
+            i->startPos = nTo;
+            if (i->endPos == nFrom)
             {
-                aFieldMarks[nI] = true;
-                aEndCps[nI] = nTo;
+                i->isField = true;
+                i->endPos = nTo;
             }
         }
     }
@@ -2442,7 +2440,7 @@ struct SwNodeHash
     size_t operator()(SwNode * pNode) const { return reinterpret_cast<size_t>(pNode); }
 };
 
-typedef ::std::hash_set<SwNode *, SwNodeHash> SwNodeHashSet;
+typedef ::boost::unordered_set<SwNode *, SwNodeHash> SwNodeHashSet;
 typedef ::std::deque<SwNode *> SwNodeDeque;
 #endif
 
@@ -2643,7 +2641,7 @@ void WW8Export::WriteFkpPlcUsw()
         if (pEscher || pDoc->ContainsMSVBasic())
         {
             /*
-             #82587# Everytime MS 2000 creates an escher stream there is always
+             Everytime MS 2000 creates an escher stream there is always
              an ObjectPool dir (even if empty). It turns out that if a copy of
              MS 2000 is used to open a document that contains escher graphics
              exported from StarOffice without this empty dir then *if* that
@@ -2658,10 +2656,7 @@ void WW8Export::WriteFkpPlcUsw()
              the existence of an ObjectPool dir is necessary for triggering
              some magic. cmc
             */
-            /*
-            #10570# Similiarly having msvbasic storage seems to also trigger
-            creating this stream
-            */
+            /* Similiarly having msvbasic storage seems to also trigger creating this stream */
             GetWriter().GetStorage().OpenSotStorage(CREATE_CONST_ASC(SL::aObjectPool),
                 STREAM_READWRITE | STREAM_SHARE_DENYALL);
         }
@@ -2694,8 +2689,8 @@ void WW8Export::WriteFkpPlcUsw()
         // Write SttbfAssoc
         WW8SttbAssoc * pSttbfAssoc = dynamic_cast<WW8SttbAssoc *>
             (pDoc->getExternalData(::sw::STTBF_ASSOC).get());
-        // --> OD 2009-10-19 #i106057#
-        if ( pSttbfAssoc )
+
+        if ( pSttbfAssoc )                      // #i106057#
         // <--
         {
         ::std::vector<String> aStrings;
@@ -2796,7 +2791,7 @@ void MSWordExportBase::AddLinkTarget(const String& rURL)
         if( pDoc->GotoOutline( aPos, aOutline ) )
         {
             ULONG nIdx = aPos.nNode.GetIndex();
-            aPair aImplicitBookmark;
+            aBookmarkPair aImplicitBookmark;
             aImplicitBookmark.first = aOutline;
             aImplicitBookmark.second = nIdx;
             maImplicitBookmarks.push_back(aImplicitBookmark);
@@ -2916,10 +2911,8 @@ void MSWordExportBase::ExportDocument( bool bWriteAll )
     if ( !pOCXExp )
         pOCXExp = new SwMSConvertControls( pDoc->GetDocShell(), pCurPam );
 
-    // --> OD 2007-10-08 #i81405#
-    // Collect anchored objects before changing the redline mode.
+    // #i81405# - Collect anchored objects before changing the redline mode.
     maFrames = GetFrames( *pDoc, bWriteAll? NULL : pOrigPam );
-    // <--
 
     mnRedlineMode = pDoc->GetRedlineMode();
     if ( pDoc->GetRedlineTbl().Count() )
@@ -3270,7 +3263,7 @@ void WW8Export::PrepareStorage()
 
 ULONG SwWW8Writer::WriteStorage()
 {
-    // #i34818# #120099# - update layout (if present), for SwWriteTable
+    // #i34818# - update layout (if present), for SwWriteTable
     ViewShell* pViewShell = NULL;
     pDoc->GetEditShell( &pViewShell );
     if( pViewShell != NULL )
@@ -3515,16 +3508,18 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
     const ::sw::mark::ICheckboxFieldmark* pAsCheckbox = dynamic_cast< const ::sw::mark::ICheckboxFieldmark* >( pFieldmark );
 
 
-    OSL_ENSURE(rFieldmark.GetFieldname().equalsAscii( ODF_FORMTEXT ) || rFieldmark.GetFieldname().equalsAscii( ODF_FORMDROPDOWN ) || rFieldmark.GetFieldname().equalsAscii( ODF_FORMCHECKBOX ), "Unknown field type!!!");
-    if ( ! ( rFieldmark.GetFieldname().equalsAscii( ODF_FORMTEXT ) ||
-                rFieldmark.GetFieldname().equalsAscii( ODF_FORMDROPDOWN ) ||
-                rFieldmark.GetFieldname().equalsAscii( ODF_FORMCHECKBOX ) ) )
+    OSL_ENSURE(rFieldmark.GetFieldname().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMTEXT ) ) ||
+                rFieldmark.GetFieldname().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMDROPDOWN ) ) ||
+                rFieldmark.GetFieldname().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMCHECKBOX ) ), "Unknown field type!!!");
+    if ( ! ( rFieldmark.GetFieldname().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMTEXT ) ) ||
+                rFieldmark.GetFieldname().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMDROPDOWN ) ) ||
+                rFieldmark.GetFieldname().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMCHECKBOX ) ) ) )
         return;
 
     int type = 0; // TextFieldmark
     if ( pAsCheckbox )
         type = 1;
-    if ( rFieldmark.GetFieldname().equalsAscii( ODF_FORMDROPDOWN ) )
+    if ( rFieldmark.GetFieldname().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMDROPDOWN ) ) )
         type=2;
 
     ::sw::mark::IFieldmark::parameter_map_t::const_iterator pNameParameter = rFieldmark.GetParameters()->find(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("name")));
@@ -3567,7 +3562,7 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
         ffres = 1;
     else if ( type == 2 )
     {
-        ::sw::mark::IFieldmark::parameter_map_t::const_iterator pResParameter = rFieldmark.GetParameters()->find(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN)));
+        ::sw::mark::IFieldmark::parameter_map_t::const_iterator pResParameter = rFieldmark.GetParameters()->find(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN_RESULT)));
         if(pResParameter != rFieldmark.GetParameters()->end())
             pResParameter->second >>= ffres;
         else
@@ -3610,7 +3605,6 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
         + sizeof(aFldData)
         + sizeof( aFldHeader.version ) + sizeof( aFldHeader.bits ) + sizeof( aFldHeader.cch ) + sizeof( aFldHeader.hps )
         + 2*ffname.getLength() + 4
-        + 2*ffdeftext.getLength() + 4
         + 2*ffformat.getLength() + 4
         + 2*ffhelptext.getLength() + 4
         + 2*ffstattext.getLength() + 4
@@ -3618,6 +3612,8 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
         + 2*ffexitmcr.getLength() + 4;
     if ( type )
         slen += 2; // wDef
+    else
+        slen += 2*ffdeftext.getLength() + 4; //xstzTextDef
     if ( type==2 ) {
         slen += 2; // sttb ( fExtend )
         slen += 4; // for num of list items
@@ -3638,7 +3634,8 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
 
     SwWW8Writer::WriteString_xstz( *pDataStrm, ffname, true ); // Form field name
 
-    SwWW8Writer::WriteString_xstz( *pDataStrm, ffdeftext, true );
+    if ( !type )
+        SwWW8Writer::WriteString_xstz( *pDataStrm, ffdeftext, true );
     if ( type )
         *pDataStrm << sal_uInt16(0);
 

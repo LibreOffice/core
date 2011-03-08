@@ -40,8 +40,13 @@
 
 using namespace padmin;
 using namespace osl;
-using namespace rtl;
 using namespace psp;
+
+using ::rtl::OUString;
+using ::rtl::OUStringHash;
+using ::rtl::OUStringToOString;
+using ::rtl::OString;
+using ::rtl::OStringHash;
 
 FontNameDlg::FontNameDlg( Window *pParent ) :
         ModalDialog( pParent, PaResId( RID_FONTNAMEDIALOG ) ),
@@ -174,7 +179,7 @@ void FontNameDlg::init()
     m_aRemoveButton.Enable( FALSE );
     m_aRenameButton.Enable( FALSE );
 
-    ::std::hash_map< OUString, int, OUStringHash > aFamilies;
+    ::boost::unordered_map< OUString, int, OUStringHash > aFamilies;
     ::std::list< fontID >::iterator font_it;
     for( font_it = aFonts.begin(); font_it != aFonts.end(); ++font_it )
     {
@@ -216,7 +221,7 @@ void FontNameDlg::init()
             else
                 aEntry = fillFontEntry( aInfo, String( ByteString( aFile ), osl_getThreadTextEncoding() ), aFamilies[ aInfo.m_aFamilyName ] > 1  );
             USHORT nEntry = m_aFontBox.InsertEntry( aEntry );
-            m_aFontBox.SetEntryData( nEntry, (void*)(*font_it) );
+            m_aFontBox.SetEntryData( nEntry, (void*)(sal_IntPtr)(*font_it) );
         }
     }
 }
@@ -491,8 +496,8 @@ void FontImportDialog::fillFontBox()
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
     m_aNewFontsBox.Clear();
 
-    ::std::hash_map< OUString, int, OUStringHash > aFamilies;
-    ::std::hash_map< OString, ::std::list< FastPrintFontInfo >, OStringHash >::iterator it;
+    ::boost::unordered_map< OUString, int, OUStringHash > aFamilies;
+    ::boost::unordered_map< OString, ::std::list< FastPrintFontInfo >, OStringHash >::iterator it;
     for( it = m_aNewFonts.begin(); it != m_aNewFonts.end(); ++it )
     {
         const OUString& rFamily( it->second.front().m_aFamilyName );

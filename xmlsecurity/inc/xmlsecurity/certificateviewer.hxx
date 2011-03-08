@@ -114,7 +114,7 @@ public:
 class CertificateViewerDetailsTP : public CertificateViewerTP
 {
 private:
-    SvxSimpleTable      maElementsLB;   // PB 2006/02/02 #i48648 now SvHeaderTabListBox
+    SvxSimpleTable      maElementsLB;   // #i48648 now SvHeaderTabListBox
     MultiLineEdit       maElementML;
     Font                maStdFont;
     Font                maFixedWidthFont;

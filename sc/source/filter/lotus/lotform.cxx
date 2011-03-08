@@ -267,7 +267,7 @@ void LotusToSc::LotusRelToScRel( UINT16 nCol, UINT16 nRow, ScSingleRefData& rSRD
                     nRow &= 0x1FFF;
                 break;
             default:
-                DBG_ERROR( "*LotusToSc::LotusRelToScRel(): etwas vergessen...?" );
+                OSL_FAIL( "*LotusToSc::LotusRelToScRel(): etwas vergessen...?" );
         }
     }
     else
@@ -287,7 +287,7 @@ void LotusToSc::LotusRelToScRel( UINT16 nCol, UINT16 nRow, ScSingleRefData& rSRD
                 nRow &= 0x3FFF;
                 break;
             default:
-                DBG_ERROR( "*LotusToSc::LotusRelToScRel(): etwas vergessen...?" );
+                OSL_FAIL( "*LotusToSc::LotusRelToScRel(): etwas vergessen...?" );
         }
     }
 
@@ -648,7 +648,7 @@ ConvErr LotusToSc::Convert( const ScTokenArray*& rpErg, INT32& rRest,
                 }
                 break;
                 default:
-                DBG_ERROR( "*LotusToSc::Convert(): unbekannter enum!" );
+                OSL_FAIL( "*LotusToSc::Convert(): unbekannter enum!" );
         }
     }
 

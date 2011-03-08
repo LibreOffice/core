@@ -65,7 +65,7 @@
 #include "sockethelper.hxx"
 
 using namespace osl;
-using namespace rtl;
+using ::rtl::OUString;
 
 #define IP_PORT_FTP     21
 #define IP_PORT_MYPORT9 8897

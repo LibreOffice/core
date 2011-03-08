@@ -37,7 +37,7 @@
 #include <osl/module.h>
 #include <rtl/ustring.hxx>
 
-using namespace rtl;
+using ::rtl::OUString;
 
 extern "C" {
 struct VersionInfo

@@ -43,12 +43,12 @@
 #define INCLUDED_STRING_H
 #endif
 #include <comphelper/stl_types.hxx>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <boost/shared_ptr.hpp>
 
-using namespace rtl;
 using namespace com::sun::star;
 
+using ::rtl::OUString;
 
 // Forward declarations of the factories.
 
@@ -255,7 +255,7 @@ enum FactoryId
     SlideLayoutControllerFactoryId,
     InsertSlideControllerFactoryId,
 };
-typedef ::std::hash_map<OUString, FactoryId, comphelper::UStringHash, comphelper::UStringEqual> FactoryMap;
+typedef ::boost::unordered_map<OUString, FactoryId, comphelper::UStringHash, comphelper::UStringEqual> FactoryMap;
 
 
 namespace {

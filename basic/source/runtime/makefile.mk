@@ -65,6 +65,7 @@ SLOFILES+= \
     $(SLO)$/dllmgr-none.obj
 .ENDIF
 .IF "$(GUI)$(COM)$(CPU)" == "WNTMSCI"
+SLOFILES+= \
     $(SLO)$/wnt-x86.obj
 .ELIF "$(GUI)$(COM)$(CPU)" == "WNTGCCI"
 SLOFILES+= \

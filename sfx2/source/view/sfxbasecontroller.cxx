@@ -91,7 +91,7 @@
 #include <comphelper/processfactory.hxx>
 #include <tools/diagnose_ex.h>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #include <sfx2/event.hxx>
 #include "viewfac.hxx"
@@ -178,7 +178,7 @@ static GroupIDToCommandGroup    GroupIDCommandGroupMap[] =
     { 0                 ,   0                                                   }
 };
 
-typedef std::hash_map< sal_Int16, sal_Int16 > GroupHashMap;
+typedef boost::unordered_map< sal_Int16, sal_Int16 > GroupHashMap;
 
 
 sal_Int16 MapGroupIDToCommandGroup( sal_Int16 nGroupID )
@@ -655,7 +655,7 @@ sal_Bool SAL_CALL SfxBaseController::attachModel( const REFERENCE< XMODEL >& xMo
     if ( m_pData->m_pViewShell && xModel.is() && xModel != m_pData->m_pViewShell->GetObjectShell()->GetModel() )
     {
         // don't allow to reattach a model!
-        DBG_ERROR("Can't reattach model!");
+        OSL_FAIL("Can't reattach model!");
         return sal_False;
     }
 

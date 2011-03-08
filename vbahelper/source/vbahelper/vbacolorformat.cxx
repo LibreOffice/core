@@ -57,7 +57,7 @@ ScVbaColorFormat::ScVbaColorFormat( const uno::Reference< XHelperInterface >& xP
     {
         uno::Reference< ov::msforms::XFillFormat > xFillFormat( xInternalParent, uno::UNO_QUERY_THROW );
         m_pFillFormat = ( ScVbaFillFormat* )( xFillFormat.get() );
-    }catch ( uno::RuntimeException  e )
+    }catch ( uno::RuntimeException& )
     {
         m_pFillFormat = NULL;
     }

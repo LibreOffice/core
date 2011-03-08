@@ -39,7 +39,6 @@
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 
-#include <com/sun/star/i18n/XCollator.hpp>
 #include <com/sun/star/awt/XExtendedToolkit.hpp>
 #include <com/sun/star/accessibility/AccessibleEventObject.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
@@ -165,22 +164,6 @@ uno::Reference < i18n::XCharacterClassification > vcl::unohelper::CreateCharacte
         if ( xI.is() )
         {
             uno::Any x = xI->queryInterface( ::getCppuType((const uno::Reference< i18n::XCharacterClassification >*)0) );
-            x >>= xB;
-        }
-    }
-    return xB;
-}
-
-uno::Reference < i18n::XCollator > vcl::unohelper::CreateCollator()
-{
-    uno::Reference < i18n::XCollator > xB;
-    uno::Reference< lang::XMultiServiceFactory > xMSF = GetMultiServiceFactory();
-    if ( xMSF.is() )
-    {
-        uno::Reference < uno::XInterface > xI = xMSF->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.Collator")) );
-        if ( xI.is() )
-        {
-            uno::Any x = xI->queryInterface( ::getCppuType((const uno::Reference< i18n::XCollator >*)0) );
             x >>= xB;
         }
     }

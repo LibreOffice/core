@@ -2292,7 +2292,7 @@ void ScInterpreter::ScBase()
                     double fInt = ::rtl::math::approxFloor( fVal / fBase );
                     double fMult = fInt * fBase;
 #if OSL_DEBUG_LEVEL > 1
-                    // #53943# =BASIS(1e308;36) => GPF mit
+                    // =BASIS(1e308;36) => GPF mit
                     // nDig = (size_t) ::rtl::math::approxFloor( fVal - fMult );
                     // trotz vorheriger Pruefung ob fVal >= fMult
                     double fDebug1 = fVal - fMult;

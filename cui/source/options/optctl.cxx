@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
 #include "optctl.hxx"
 #include <dialmgr.hxx>
 #include "optctl.hrc"

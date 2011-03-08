@@ -29,7 +29,6 @@ PRJ=..
 PRJNAME=xmlscript
 TARGET=xcr
 NO_BSYMBOLIC=TRUE
-#USE_DEFFILE=TRUE
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------

@@ -2687,6 +2687,15 @@ XubString WinSalFrame::GetKeyName( USHORT nKeyCode )
             case KEY_EQUAL:
                 cSVCode  = '=';
                 break;
+            case KEY_SEMICOLON:
+                cSVCode = ';';
+                break;
+            case KEY_BRACKETLEFT:
+                cSVCode = '[';
+                break;
+            case KEY_BRACKETRIGHT:
+                cSVCode = ']';
+                break;
         }
     }
 

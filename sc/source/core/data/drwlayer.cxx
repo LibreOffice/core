@@ -262,7 +262,7 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const String& rName ) :
     rPool.SetPoolDefaultItem(SdrShadowXDistItem(300));
     rPool.SetPoolDefaultItem(SdrShadowYDistItem(300));
 
-    // #111216# default for script spacing depends on locale, see SdDrawDocument ctor in sd
+    // default for script spacing depends on locale, see SdDrawDocument ctor in sd
     LanguageType eOfficeLanguage = Application::GetSettings().GetLanguage();
     if ( eOfficeLanguage == LANGUAGE_KOREAN || eOfficeLanguage == LANGUAGE_KOREAN_JOHAB ||
          eOfficeLanguage == LANGUAGE_JAPANESE )
@@ -289,7 +289,7 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const String& rName ) :
     Outliner& rHitOutliner = GetHitTestOutliner();
     rHitOutliner.SetCalcFieldValueHdl( LINK( pScMod, ScModule, CalcFieldValueHdl ) );
 
-    // #95129# SJ: set FontHeight pool defaults without changing static SdrEngineDefaults
+    // set FontHeight pool defaults without changing static SdrEngineDefaults
     SfxItemPool* pOutlinerPool = rOutliner.GetEditTextObjectPool();
     if ( pOutlinerPool )
          pItemPool->SetPoolDefaultItem(SvxFontHeightItem( 423, 100, EE_CHAR_FONTHEIGHT ));           // 12Pt
@@ -362,7 +362,7 @@ void ScDrawLayer::UpdateBasic()
 
 SdrModel* ScDrawLayer::AllocModel() const
 {
-    //  #103849# Allocated model (for clipboard etc) must not have a pointer
+    //  Allocated model (for clipboard etc) must not have a pointer
     //  to the original model's document, pass NULL as document:
 
     return new ScDrawLayer( NULL, aName );
@@ -650,9 +650,9 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
         if( bValid1 )
         {
             Point aPos( pDoc->GetColOffset( nCol1, nTab1 ), pDoc->GetRowOffset( nRow1, nTab1 ) );
-            if (!pDoc->ColHidden(nCol1, nTab1, nLastCol))
+            if (!pDoc->ColHidden(nCol1, nTab1, NULL, &nLastCol))
                 aPos.X() += pDoc->GetColWidth( nCol1, nTab1 ) / 4;
-            if (!pDoc->RowHidden(nRow1, nTab1, nLastRow))
+            if (!pDoc->RowHidden(nRow1, nTab1, NULL, &nLastRow))
                 aPos.Y() += pDoc->GetRowHeight( nRow1, nTab1 ) / 2;
             TwipsToMM( aPos.X() );
             TwipsToMM( aPos.Y() );
@@ -688,9 +688,9 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
         if( bValid2 )
         {
             Point aPos( pDoc->GetColOffset( nCol2, nTab2 ), pDoc->GetRowOffset( nRow2, nTab2 ) );
-            if (!pDoc->ColHidden(nCol2, nTab2, nLastCol))
+            if (!pDoc->ColHidden(nCol2, nTab2, NULL, &nLastCol))
                 aPos.X() += pDoc->GetColWidth( nCol2, nTab2 ) / 4;
-            if (!pDoc->RowHidden(nRow2, nTab2, nLastRow))
+            if (!pDoc->RowHidden(nRow2, nTab2, NULL, &nLastRow))
                 aPos.Y() += pDoc->GetRowHeight( nRow2, nTab2 ) / 2;
             TwipsToMM( aPos.X() );
             TwipsToMM( aPos.Y() );
@@ -1165,7 +1165,7 @@ void ScDrawLayer::DeleteObjectsInSelection( const ScMarkData& rMark )
             }
             else
             {
-                DBG_ERROR("pPage?");
+                OSL_FAIL("pPage?");
             }
         }
 }
@@ -1282,7 +1282,7 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
 
     if (bDrawIsInUndo)      //! can this happen?
     {
-        DBG_ERROR("CopyFromClip, bDrawIsInUndo");
+        OSL_FAIL("CopyFromClip, bDrawIsInUndo");
         return;
     }
 
@@ -1560,7 +1560,7 @@ String ScDrawLayer::GetVisibleName( SdrObject* pObj )
     String aName = pObj->GetName();
     if ( pObj->GetObjIdentifier() == OBJ_OLE2 )
     {
-        //  #95575# For OLE, the user defined name (GetName) is used
+        //  For OLE, the user defined name (GetName) is used
         //  if it's not empty (accepting possibly duplicate names),
         //  otherwise the persist name is used so every object appears
         //  in the Navigator at all.
@@ -1646,7 +1646,7 @@ void ScDrawLayer::EnsureGraphicNames()
             SdrObjListIter aIter( *pPage, IM_DEEPWITHGROUPS );
             SdrObject* pObject = aIter.Next();
 
-            /* #101799# The index passed to GetNewGraphicName() will be set to
+            /* The index passed to GetNewGraphicName() will be set to
                 the used index in each call. This prevents the repeated search
                 for all names from 1 to current index. */
             long nCounter = 0;

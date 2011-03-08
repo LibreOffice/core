@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #define _SVX_PARAITEM_HXX
 #define _SVX_TEXTITEM_HXX
 
@@ -331,7 +330,7 @@ void ViewShell::ImplEndAction( const BOOL bIdleEnd )
                         DLPostPaint2(true);
                     }
 
-                    // --> OD 2009-12-03 #i107365#
+                    // #i107365#
                     // Direct paint has been performed. Thus, take care of
                     // transparent child windows.
                     if ( GetWin() )
@@ -360,7 +359,6 @@ void ViewShell::ImplEndAction( const BOOL bIdleEnd )
                             }
                         }
                     }
-                    // <--
                 }
 
                 delete pVout;
@@ -666,7 +664,7 @@ void lcl_InvalidateAllCntnt( ViewShell& rSh, BYTE nInv )
     objects (Writer fly frame and drawing objects), which are anchored
     to paragraph or to character.
 
-    OD 2004-03-16 #i11860#
+    #i11860#
 
     @author OD
 */
@@ -1007,9 +1005,6 @@ void ViewShell::VisPortChgd( const SwRect &rRect)
 
                 if ( aPageRect.IsOver( aBoth ) )
                 {
-                    // #i9719#, - consider new border and shadow width
-                    const SwTwips nBorderWidth =
-                            GetOut()->PixelToLogic( Size( pPage->BorderPxWidth(), 0 ) ).Width();
                     const SwTwips nShadowWidth =
                             GetOut()->PixelToLogic( Size( pPage->ShadowPxWidth(), 0 ) ).Width();
 
@@ -1019,14 +1014,14 @@ void ViewShell::VisPortChgd( const SwRect &rRect)
                     {
                         case sw::sidebarwindows::SIDEBAR_LEFT:
                         {
-                            nPageLeft =  aPageRect.Left() - nBorderWidth - nSidebarWidth;
-                            nPageRight = aPageRect.Right() + nBorderWidth + nShadowWidth;
+                            nPageLeft =  aPageRect.Left() - nSidebarWidth;
+                            nPageRight = aPageRect.Right() + nShadowWidth;
                         }
                         break;
                         case sw::sidebarwindows::SIDEBAR_RIGHT:
                         {
-                            nPageLeft =  aPageRect.Left() - nBorderWidth;
-                            nPageRight = aPageRect.Right() + nBorderWidth + nShadowWidth + nSidebarWidth;
+                            nPageLeft =  aPageRect.Left();
+                            nPageRight = aPageRect.Right() + nShadowWidth + nSidebarWidth;
                         }
                         break;
                         case sw::sidebarwindows::SIDEBAR_NONE:
@@ -1224,19 +1219,6 @@ BOOL ViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRect )
                 // end paint and destroy ObjectContact again
                 DLPostPaint2(true);
                 pDrawView->DeleteWindowFromPaintView(pVout);
-
-                // temporary debug paint checking...
-                static bool bDoSaveForVisualControl(false);
-                if(bDoSaveForVisualControl)
-                {
-                    const bool bMapModeWasEnabledVDev(pVout->IsMapModeEnabled());
-                    pVout->EnableMapMode(false);
-                    const Bitmap aBitmap(pVout->GetBitmap(Point(), pVout->GetOutputSizePixel()));
-                    const String aTmpString(ByteString( "c:\\test.bmp" ), RTL_TEXTENCODING_UTF8);
-                    SvFileStream aNew(aTmpString, STREAM_WRITE|STREAM_TRUNC);
-                    aNew << aBitmap;
-                    pVout->EnableMapMode(bMapModeWasEnabledVDev);
-                }
             }
 
             pOut = pOld;
@@ -1311,9 +1293,6 @@ BOOL ViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRect )
 
                     if(!Imp()->bStopSmooth)
                     {
-                        static bool bDoItOnPixels(true);
-                        if(bDoItOnPixels)
-                        {
                             // start paint on logic base
                             const Rectangle aTargetLogic(Imp()->aSmoothRect.SVRect());
                             DLPrePaint2(Region(aTargetLogic));
@@ -1331,21 +1310,6 @@ BOOL ViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRect )
                             rTargetDevice.EnableMapMode(false);
                             pVout->EnableMapMode(false);
 
-                            // copy content
-                            static bool bTestDirectToWindowPaint(false);
-                            if(bTestDirectToWindowPaint)
-                            {
-                                const bool bMapModeWasEnabledWin(GetWin()->IsMapModeEnabled());
-                                GetWin()->EnableMapMode(false);
-
-                                GetWin()->DrawOutDev(
-                                    aTargetPixel.TopLeft(), aTargetPixel.GetSize(), // dest
-                                    aSourceTopLeft, aTargetPixel.GetSize(), // source
-                                    *pVout);
-
-                                GetWin()->EnableMapMode(bMapModeWasEnabledWin);
-                            }
-
                             rTargetDevice.DrawOutDev(
                                 aTargetPixel.TopLeft(), aTargetPixel.GetSize(), // dest
                                 aSourceTopLeft, aTargetPixel.GetSize(), // source
@@ -1357,34 +1321,6 @@ BOOL ViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRect )
 
                             // end paint on logoc base
                             DLPostPaint2(true);
-                        }
-                        else
-                        {
-                            Rectangle aRectangle(Imp()->aSmoothRect.SVRect());
-                            aRectangle.Left() -= aPixSz.Width();
-                            aRectangle.Right() += aPixSz.Width();
-                            aRectangle.Top() -= aPixSz.Height();
-                            aRectangle.Bottom() += aPixSz.Height();
-                            const Point aUpdateTopLeft(aRectangle.TopLeft());
-                            const Size aUpdateSize(aRectangle.GetSize());
-
-                            // #i75172# the part getting visible needs to be handled like a repaint.
-                            // For that, start with DLPrePaint2 and the correct Rectangle
-                            DLPrePaint2(Region(aRectangle));
-
-                            static bool bTestDirectToWindowPaint(false);
-                            if(bTestDirectToWindowPaint)
-                            {
-                                GetWin()->DrawOutDev(aUpdateTopLeft, aUpdateSize, aUpdateTopLeft, aUpdateSize, *pVout);
-                            }
-
-                            mpTargetPaintWindow->GetTargetOutputDevice().DrawOutDev(aUpdateTopLeft, aUpdateSize, aUpdateTopLeft, aUpdateSize, *pVout);
-
-                            // #i75172# Corret repaint end
-                            // Note: This also correcty creates the overlay, thus smooth scroll will
-                            // also be allowed now wth selection (see big IF above)
-                            DLPostPaint2(true);
-                        }
                     }
                     else
                         --nLockPaint;
@@ -1665,7 +1601,7 @@ void ViewShell::Paint(const Rectangle &rRect)
         return;
     }
 
-    //MA 30. Jul. 95: fix(16787): mit !nStartAction versuche ich mal mich gegen
+    // mit !nStartAction versuche ich mal mich gegen
     //fehlerhaften Code an anderen Stellen zu wehren. Hoffentlich fuehrt das
     //nicht zu Problemen!?
     if ( bPaintWorks && !nStartAction )
@@ -2244,7 +2180,7 @@ void ViewShell::ApplyAccessiblityOptions(SvtAccessibilityOptions& rAccessibility
         pAccOptions->SetStopAnimatedGraphics(! rAccessibilityOptions.GetIsAllowAnimatedGraphics());
         pAccOptions->SetStopAnimatedText(! rAccessibilityOptions.GetIsAllowAnimatedText());
 
-        // --> FME 2004-06-29 #114856# Formular view
+        // Formular view
         // Always set this option, not only if document is read-only:
         pOpt->SetSelectionInReadonly(rAccessibilityOptions.IsSelectionInReadonly());
     }

@@ -42,9 +42,9 @@ namespace rtl
 
 // class SvxShadowItem ---------------------------------------------------
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Dieses Item beschreibt ein Schattenattribut (Farbe, Breite, Lage).
+    This item describes the shadow attribute (color, width and position).
 */
 
 #define SHADOW_TOP      ((USHORT)0)
@@ -66,7 +66,7 @@ public:
 
     inline SvxShadowItem& operator=( const SvxShadowItem& rFmtShadow );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual Methods" from SfxPoolItem
     virtual int              operator==( const SfxPoolItem& ) const;
     virtual bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
     virtual bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
@@ -91,7 +91,7 @@ public:
     void SetWidth( USHORT nNew ) { nWidth = nNew; }
     void SetLocation( SvxShadowLocation eNew ) { eLocation = eNew; }
 
-        //Breite des Schattens auf der jeweiligen Seite berechnen.
+    // Calculate width of the shadow on the page.
     USHORT CalcShadowSpace( USHORT nShadow ) const;
 
     virtual USHORT          GetValueCount() const;

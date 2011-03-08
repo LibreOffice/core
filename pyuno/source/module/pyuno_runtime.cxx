@@ -64,6 +64,8 @@ using com::sun::star::script::XInvocation;
 using com::sun::star::beans::XMaterialHolder;
 using com::sun::star::beans::XIntrospection;
 
+#include <vector>
+
 namespace pyuno
 {
 #define USTR_ASCII(x) OUString( RTL_CONSTASCII_USTRINGPARAM( x ) )

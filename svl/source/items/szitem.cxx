@@ -160,7 +160,7 @@ bool  SfxSizeItem::QueryValue( com::sun::star::uno::Any& rVal,
             rVal <<= aTmp.getWidth(); break;
         case MID_HEIGHT:
             rVal <<= aTmp.getHeight(); break;
-    default: DBG_ERROR("Wrong MemberId!"); return false;
+    default: OSL_FAIL("Wrong MemberId!"); return false;
     }
 
     return true;

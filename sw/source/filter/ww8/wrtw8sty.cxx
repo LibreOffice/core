@@ -225,18 +225,39 @@ USHORT MSWordStyles::GetWWId( const SwFmt& rFmt ) const
         switch( nPoolId )
         {
         case RES_POOLCOLL_FOOTNOTE:         nRet = 29;  break;
+        case RES_POOLCOLL_MARGINAL:         nRet = 30;  break;
         case RES_POOLCOLL_HEADER:           nRet = 31;  break;
         case RES_POOLCOLL_FOOTER:           nRet = 32;  break;
         case RES_POOLCOLL_TOX_IDXH:         nRet = 33;  break;
+        case RES_POOLCOLL_LABEL:            nRet = 34;  break;
+        case RES_POOLCOLL_LABEL_DRAWING:    nRet = 35;  break;
         case RES_POOLCOLL_JAKETADRESS:      nRet = 36;  break;
         case RES_POOLCOLL_SENDADRESS:       nRet = 37;  break;
         case RES_POOLCOLL_ENDNOTE:          nRet = 43;  break;
+        case RES_POOLCOLL_TOX_AUTHORITIESH: nRet = 44;  break;
+        case RES_POOLCOLL_TOX_CNTNTH:       nRet = 46;  break;
+        case RES_POOLCOLL_BUL_LEVEL1:       nRet = 48;  break;
         case RES_POOLCOLL_LISTS_BEGIN:      nRet = 47;  break;
+        case RES_POOLCOLL_NUM_LEVEL1:       nRet = 49;  break;
+        case RES_POOLCOLL_BUL_LEVEL2:       nRet = 54;  break;
+        case RES_POOLCOLL_BUL_LEVEL3:       nRet = 55;  break;
+        case RES_POOLCOLL_BUL_LEVEL4:       nRet = 56;  break;
+        case RES_POOLCOLL_BUL_LEVEL5:       nRet = 57;  break;
+        case RES_POOLCOLL_NUM_LEVEL2:       nRet = 58;  break;
+        case RES_POOLCOLL_NUM_LEVEL3:       nRet = 59;  break;
+        case RES_POOLCOLL_NUM_LEVEL4:       nRet = 60;  break;
+        case RES_POOLCOLL_NUM_LEVEL5:       nRet = 61;  break;
         case RES_POOLCOLL_DOC_TITEL:        nRet = 62;  break;
         case RES_POOLCOLL_SIGNATURE:        nRet = 64;  break;
         case RES_POOLCOLL_TEXT:             nRet = 66;  break;
         case RES_POOLCOLL_TEXT_MOVE:        nRet = 67;  break;
+        case RES_POOLCOLL_BUL_NONUM1:       nRet = 68;  break;
+        case RES_POOLCOLL_BUL_NONUM2:       nRet = 69;  break;
+        case RES_POOLCOLL_BUL_NONUM3:       nRet = 70;  break;
+        case RES_POOLCOLL_BUL_NONUM4:       nRet = 71;  break;
+        case RES_POOLCOLL_BUL_NONUM5:       nRet = 72;  break;
         case RES_POOLCOLL_DOC_SUBTITEL:     nRet = 74;  break;
+        case RES_POOLCOLL_GREETING:         nRet = 75;  break;
         case RES_POOLCOLL_TEXT_IDENT:       nRet = 77;  break;
 
         case RES_POOLCHR_FOOTNOTE_ANCHOR:   nRet = 38;  break;
@@ -595,8 +616,6 @@ void MSWordStyles::OutputStylesTable()
     m_rExport.bStyDef = false;
 }
 
-/*  */
-
 //---------------------------------------------------------------------------
 //          Fonts
 //---------------------------------------------------------------------------
@@ -714,7 +733,7 @@ void wwFont::WriteDocx( const DocxAttributeOutput* rAttrOutput ) const
 
     if ( mbAlt )
         rAttrOutput->FontAlternateName( msAltNm );
-    rAttrOutput->FontCharset( sw::ms::rtl_TextEncodingToWinCharset( meChrSet ) );
+    rAttrOutput->FontCharset( sw::ms::rtl_TextEncodingToWinCharset( meChrSet ), meChrSet );
     rAttrOutput->FontFamilyType( meFamily );
     rAttrOutput->FontPitchType( mePitch );
 
@@ -880,8 +899,6 @@ void wwFontHelper::WriteFontTable( const RtfAttributeOutput& rAttrOutput )
         ::std::bind2nd( ::std::mem_fun( &wwFont::WriteRtf ), &rAttrOutput ) );
 }
 
-/*  */
-
 WW8_WrPlc0::WW8_WrPlc0( ULONG nOffset )
     : aPos( 4, 4 ), nOfs( nOffset )
 {
@@ -905,7 +922,6 @@ void WW8_WrPlc0::Write( SvStream& rStrm )
 
 //------------------------------------------------------------------------------
 
-/*  */
 //------------------------------------------------------------------------------
 // class MSWordSections : Uebersetzung PageDescs in Sections
 //      behandelt auch Header und Footer
@@ -1562,11 +1578,10 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
             // und raus damit ins WW-File
             const SfxItemSet* pOldI = pISet;
             pISet = &aSet;
-            // --> OD 2007-06-12 #TESTING#
+
             // Switch off test on default item values, if page description
             // set (value of <bOutPgDscSet>) isn't written.
             AttrOutput().OutputStyleItemSet( aSet, true, bOutPgDscSet );
-            // <--
 
             //Cannot export as normal page framedir, as continous sections
             //cannot contain any grid settings like proper sections
@@ -1882,7 +1897,6 @@ void MSWordExportBase::WriteHeaderFooterText( const SwFmt& rFmt, bool bHeader )
     }
 }
 
-/*  */
 //------------------------------------------------------------------------------
 // class WW8_WrPlcFtnEdn : Sammeln der Fuss/Endnoten und Ausgeben der Texte
 // und Plcs am Ende des Docs.
@@ -2009,7 +2023,6 @@ bool WW8_WrPlcSubDoc::WriteGenericTxt( WW8Export& rWrt, BYTE nTTyp,
                     rWrt.WriteSpecialText( pNdIdx->GetIndex() + 1,
                                            pNdIdx->GetNode().EndOfSectionIndex(),
                                            nTTyp );
-                    // --> OD 2008-08-07 #156757#
                     {
                         SwNodeIndex aContentIdx = *pNdIdx;
                         ++aContentIdx;
@@ -2034,7 +2047,6 @@ bool WW8_WrPlcSubDoc::WriteGenericTxt( WW8Export& rWrt, BYTE nTTyp,
                             }
                         }
                     }
-                    // <--
                 }
 
                 // CR at end of one textbox text ( otherwise WW gpft :-( )

@@ -31,7 +31,7 @@
 
 // include ---------------------------------------------------------------
 
-#include <string> // HACK: prevent conflict between STLPORT and Workshop headers
+#include <string>
 
 #include <vcl/toolbox.hxx>
 #include <sfx2/app.hxx>
@@ -197,7 +197,7 @@ void SvxLineStyleToolBoxControl::Update( const SfxPoolItem* pState )
             break;
 
             default:
-                DBG_ERROR( "Nicht unterstuetzter Linientyp" );
+                OSL_FAIL( "Nicht unterstuetzter Linientyp" );
                 break;
         }
     }

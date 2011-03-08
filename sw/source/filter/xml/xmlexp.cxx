@@ -68,9 +68,7 @@
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 
-// --> OD 2007-03-30 #i73788#
-#include <pausethreadstarting.hxx>
-// <--
+#include <pausethreadstarting.hxx> // #i73788#
 
 
 using ::rtl::OUString;
@@ -125,7 +123,6 @@ void SwXMLExport::SetCurPaM( SwPaM& rPaM, sal_Bool bWhole, sal_Bool bTabOnly )
 }
 #endif
 
-// #110680#
 SwXMLExport::SwXMLExport(
     const uno::Reference< lang::XMultiServiceFactory > xServiceFactory,
     sal_uInt16 nExportFlags)
@@ -150,7 +147,7 @@ SwXMLExport::SwXMLExport(
 }
 
 #ifdef XML_CORE_API
-// #110680#
+
 SwXMLExport::SwXMLExport(
     const uno::Reference< lang::XMultiServiceFactory > xServiceFactory,
     const Reference< XModel >& rModel,
@@ -188,9 +185,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
     if( !GetModel().is() )
         return ERR_SWG_WRITE_ERROR;
 
-    // --> OD 2007-03-30 #i73788#
-    SwPauseThreadStarting aPauseThreadStarting;
-    // <--
+    SwPauseThreadStarting aPauseThreadStarting; // #i73788#
 
     Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
     Reference < XText > xText = xTextDoc->getText();
@@ -199,7 +194,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
     if( !xTextTunnel.is() )
         return ERR_SWG_WRITE_ERROR;
 
-    // from here, we use core interfaces -> lock Solar-Mutex (#91949#)
+    // from here, we use core interfaces -> lock Solar-Mutex
     SolarMutexGuard aGuard;
 
     {
@@ -608,13 +603,12 @@ void SwXMLExport::_ExportContent()
         Reference<XDrawPage> xPage = xDrawPageSupplier->getDrawPage();
         if (xPage.is())
         {
-            // #103597# prevent export of form controls which are embedded in
-            // mute sections
+            // prevent export of form controls which are embedded in mute sections
             Reference<XIndexAccess> xIAPage( xPage, UNO_QUERY );
             GetTextParagraphExport()->PreventExportOfControlsInMuteSections(
                 xIAPage, GetFormExport() );
 
-            // #i36597# / 2004-12-13 / fs@openoffice.org
+            // #i36597#
             if ( GetFormExport()->pageContainsForms( xPage ) || GetFormExport()->documentContainsXForms() )
             {
                 ::xmloff::OOfficeFormsExport aOfficeForms(*this);
@@ -812,7 +806,6 @@ Reference< XInterface > SAL_CALL SwXMLExportStyles_createInstance(
         const Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )
 {
-    // #110680#
     return (cppu::OWeakObject*)new SwXMLExport( rSMgr,
         EXPORT_STYLES | EXPORT_MASTERSTYLES | EXPORT_AUTOSTYLES |
         EXPORT_FONTDECLS|EXPORT_OASIS );
@@ -836,7 +829,6 @@ Reference< XInterface > SAL_CALL SwXMLExportContent_createInstance(
         const Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )
 {
-    // #110680#
     return (cppu::OWeakObject*)new SwXMLExport(
         rSMgr,
         EXPORT_AUTOSTYLES | EXPORT_CONTENT | EXPORT_SCRIPTS |

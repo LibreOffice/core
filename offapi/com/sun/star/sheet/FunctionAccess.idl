@@ -48,7 +48,7 @@ published service FunctionAccess
 {
     //-------------------------------------------------------------------------
 
-    /** contributes properties to control the behaviour of some functions
+    /** contributes properties to control the behavior of some functions
         (i.e. NullDate, IgnoreCase, RegularExpressions).
      */
     service com::sun::star::sheet::SpreadsheetDocumentSettings;

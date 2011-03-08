@@ -26,14 +26,9 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 #include <com/sun/star/uno/Sequence.hxx>
-// header for SvStream
-#include <tools/stream.hxx>
-// header for SAL_STATIC_CAST
-#include <sal/types.h>
+#include <tools/stream.hxx>            // header for SvStream
+#include <sal/types.h>                 // header for SAL_STATIC_CAST
 #include "cfgchart.hxx"
 #include <dialmgr.hxx>
 #include <cuires.hrc>
@@ -96,13 +91,7 @@ void SvxChartColorTable::replace( size_t _nIndex, const XColorEntry & _rEntry )
     DBG_ASSERT( _nIndex <= m_aColorEntries.size(),
                 "SvxChartColorTable::replace invalid index" );
 
-    Color aCol1 = m_aColorEntries[ _nIndex ].GetColor(), aCol2;
     m_aColorEntries[ _nIndex ] = _rEntry;
-    aCol2 = m_aColorEntries[ _nIndex ].GetColor();
-    if ( aCol2 != const_cast< XColorEntry& >( _rEntry ).GetColor() )
-    {
-        DBG_ERRORFILE( "wrong color" );
-    }
 }
 
 void SvxChartColorTable::useDefault()

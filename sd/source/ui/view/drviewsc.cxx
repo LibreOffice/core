@@ -55,7 +55,6 @@
 #include "app.hrc"
 #include "strings.hrc"
 #include "helpids.h"
-#include "misc.hxx"
 #include "Window.hxx"
 #include "imapinfo.hxx"
 #include "futempl.hxx"
@@ -203,7 +202,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
 
         case SID_COMBINE:  // BASIC
         {
-            // #88224# End text edit to avoid conflicts
+            // End text edit to avoid conflicts
             if(mpDrawView->IsTextEdit())
                 mpDrawView->SdrEndTextEdit();
 
@@ -240,7 +239,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
 
         case SID_POLY_MERGE:
         {
-            // #88224# End text edit to avoid conflicts
+            // End text edit to avoid conflicts
             if(mpDrawView->IsTextEdit())
                 mpDrawView->SdrEndTextEdit();
 
@@ -261,7 +260,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
 
         case SID_POLY_SUBSTRACT:
         {
-            // #88224# End text edit to avoid conflicts
+            // End text edit to avoid conflicts
             if(mpDrawView->IsTextEdit())
                 mpDrawView->SdrEndTextEdit();
 
@@ -282,7 +281,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
 
         case SID_POLY_INTERSECT:
         {
-            // #88224# End text edit to avoid conflicts
+            // End text edit to avoid conflicts
             if(mpDrawView->IsTextEdit())
                 mpDrawView->SdrEndTextEdit();
 
@@ -783,9 +782,6 @@ USHORT DrawViewShell::GetIdBySubId( USHORT nSId )
         break;
 
         case SID_INSERT_DIAGRAM:
-#ifdef STARIMAGE_AVAILABLE
-        case SID_INSERT_IMAGE:
-#endif
         case SID_ATTR_TABLE:
         case SID_INSERTFILE:
         case SID_INSERT_GRAPHIC:
@@ -924,7 +920,7 @@ USHORT DrawViewShell::GetArrayId( USHORT nSId )
         if( mpSlotArray[ i ] == nSId )
             return( i );
     }
-    DBG_ERROR( "Slot im Array nicht gefunden!" );
+    OSL_FAIL( "Slot im Array nicht gefunden!" );
     return( USHRT_MAX );
 }
 

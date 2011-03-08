@@ -29,8 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
 // INCLUDE ---------------------------------------------------------------
 #include "XMLExportDataPilot.hxx"
 #include <xmloff/xmltoken.hxx>
@@ -125,7 +123,7 @@ rtl::OUString ScXMLExportDataPilot::getDPOperatorXML(const ScQueryOp aFilterOper
         case SC_TOPVAL :
             return GetXMLToken(XML_TOP_VALUES);
         default:
-            DBG_ERROR("This FilterOperator is not supported.");
+            OSL_FAIL("This FilterOperator is not supported.");
     }
     return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("="));
 }
@@ -180,14 +178,6 @@ void ScXMLExportDataPilot::WriteDPFilter(const ScQueryParam& aQueryParam)
         nQueryEntryCount = nEntries;
         if (nQueryEntryCount)
         {
-            // There is never a target range in a data pilot.
-/*          if (!aQueryParam.bInplace)
-            {
-                ScAddress aTargetAddress(aQueryParam.nDestCol, aQueryParam.nDestRow, aQueryParam.nDestTab);
-                rtl::OUString sAddress;
-                ScXMLConverter::GetStringFromAddress( sAddress, aTargetAddress, pDoc );
-                rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_TARGET_RANGE_ADDRESS, sAddress);
-            }*/
             if(!((aQueryParam.nCol1 == aQueryParam.nCol2) && (aQueryParam.nRow1 == aQueryParam.nRow2) &&
                         (static_cast<SCCOLROW>(aQueryParam.nCol1) == static_cast<SCCOLROW>(aQueryParam.nRow1)) &&
                         (aQueryParam.nCol1 == 0) && (aQueryParam.nTab == SCTAB_MAX)))
@@ -729,12 +719,10 @@ void ScXMLExportDataPilot::WriteDimension(ScDPSaveDimension* pDim, const ScDPDim
 
 void ScXMLExportDataPilot::WriteDimensions(ScDPSaveData* pDPSave)
 {
-    List aDimensions = pDPSave->GetDimensions();
-    sal_Int32 nDimCount = aDimensions.Count();
-    for (sal_Int32 nDim = 0; nDim < nDimCount; nDim++)
-    {
-        WriteDimension((ScDPSaveDimension*)aDimensions.GetObject(nDim), pDPSave->GetExistingDimensionData());
-    }
+    const boost::ptr_vector<ScDPSaveDimension> &rDimensions = pDPSave->GetDimensions();
+    boost::ptr_vector<ScDPSaveDimension>::const_iterator iter;
+    for (iter = rDimensions.begin(); iter != rDimensions.end(); ++iter)
+        WriteDimension(const_cast<ScDPSaveDimension*>(&(*iter)), pDPSave->GetExistingDimensionData());
 }
 
 void ScXMLExportDataPilot::WriteGrandTotal(::xmloff::token::XMLTokenEnum eOrient, bool bVisible, const OUString* pGrandTotal)

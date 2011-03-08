@@ -190,13 +190,13 @@ static void add_ugly_db_item( GtkMenuShell *pMenuShell, const char *pAsciiURL,
         Sequence < PropertyValue >& aEntry = aMenu[n];
         for ( sal_Int32 m=0; m<aEntry.getLength(); m++ )
         {
-            if ( aEntry[m].Name.equalsAsciiL( "URL", 3 ) )
+            if ( aEntry[m].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("URL")) )
                 aEntry[m].Value >>= aURL;
-            if ( aEntry[m].Name.equalsAsciiL( "Title", 5 ) )
+            if ( aEntry[m].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Title")) )
                 aEntry[m].Value >>= aDescription;
         }
 
-        if ( aURL.equalsAscii( BASE_URL ) && aDescription.getLength() )
+        if ( aURL.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(BASE_URL)) && aDescription.getLength() )
         {
             add_item (pMenuShell, pAsciiURL, &aDescription, nResId, pFnCallback);
             break;
@@ -306,18 +306,6 @@ static gboolean display_menu_cb( GtkWidget *,
     if (event->button == 2)
         return FALSE;
 
-#ifdef TEMPLATE_DIALOG_MORE_POLISHED
-    if (event->button == 1 &&
-        event->type == GDK_2BUTTON_PRESS)
-    {
-        open_template_cb( NULL );
-        return TRUE;
-    }
-    if (event->button == 3)
-    {
-        ... as below ...
-#endif
-
     refresh_menu( pMenu );
 
     gtk_menu_popup( GTK_MENU( pMenu ), NULL, NULL,
@@ -329,17 +317,29 @@ static gboolean display_menu_cb( GtkWidget *,
 
 #ifdef ENABLE_GIO
 /*
- * See rhbz#610103. If the quickstarter is running, then LibreOffice is
+ * If the quickstarter is running, then LibreOffice is
  * upgraded, then the old quickstarter is still running, but is now unreliable
  * as the old install has been deleted. A fairly intractable problem but we
  * can avoid much of the pain if we turn off the quickstarter if we detect
- * that it has been physically deleted.
+ * that it has been physically deleted or overwritten
 */
 static void notify_file_changed(GFileMonitor * /*gfilemonitor*/, GFile * /*arg1*/,
     GFile * /*arg2*/, GFileMonitorEvent event_type, gpointer /*user_data*/)
 {
-    if (event_type == G_FILE_MONITOR_EVENT_DELETED)
-        exit_quickstarter_cb(NULL);
+    //Shutdown the quick starter if anything has happened to make it unsafe
+    //to remain running, e.g. rpm --erased and all libs deleted, or
+    //rpm --upgrade and libs being overwritten
+    switch (event_type)
+    {
+        case G_FILE_MONITOR_EVENT_DELETED:
+        case G_FILE_MONITOR_EVENT_CREATED:
+        case G_FILE_MONITOR_EVENT_PRE_UNMOUNT:
+        case G_FILE_MONITOR_EVENT_UNMOUNTED:
+            exit_quickstarter_cb(GTK_WIDGET(pTrayIcon));
+            break;
+        default:
+            break;
+    }
 }
 #endif
 

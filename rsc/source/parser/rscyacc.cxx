@@ -33,6 +33,7 @@
 #include <string.h>
 
 #include <tools/rc.h>
+#include <tools/list.hxx>
 #include <rscerror.h>
 #include <rsctools.hxx>
 #include <rscclass.hxx>

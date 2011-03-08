@@ -35,7 +35,7 @@ module com {  module sun {  module star {  module table {
 //=============================================================================
 
 /** Specifies how text inside a cell is justified.  The justification methods
-    closely follow the methods described under the text-jutify property of the
+    closely follow the methods described under the text-justify property of the
     CSS Text Level 3 specification.  The latest version of the aforementioned
     specification is found here http://www.w3.org/TR/css3-text/.
  */

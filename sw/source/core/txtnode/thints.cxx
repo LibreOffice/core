@@ -64,7 +64,6 @@
 #include <fmtmeta.hxx>
 #include <breakit.hxx>
 #include <doc.hxx>
-#include <errhdl.hxx>
 #include <fldbas.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>

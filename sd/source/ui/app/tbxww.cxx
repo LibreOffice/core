@@ -155,7 +155,7 @@ void SdTbxControl::StateChanged( USHORT nSId,
     {
         TbxImageItem* pItem = PTR_CAST( TbxImageItem, pState );
         // Im StarDesktop kann jetzt auch ein anderes Item ankommen,
-        // das nicht ausgewertet werden darf (#33802# und #33838#)
+        // das nicht ausgewertet werden darf
         if( pItem )
         {
             ToolBox& rTbx = GetToolBox();

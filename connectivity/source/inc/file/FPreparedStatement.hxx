@@ -34,7 +34,6 @@
 #include <com/sun/star/sdbc/XPreparedStatement.hpp>
 #include <com/sun/star/sdbc/XParameters.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
-//  #include <com/sun/star/sdbc/XClearParameters.hpp>
 #include <com/sun/star/sdbc/XPreparedBatchExecution.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include "file/FResultSet.hxx"

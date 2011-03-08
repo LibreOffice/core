@@ -34,7 +34,7 @@
 #include <osl/mutex.hxx>
 #include "rtl/ustring.hxx"
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 /** Implementation of a least recently used (lru) cache.
     <br>
@@ -50,7 +50,7 @@ class LRU_Cache
         CacheEntry *        pPred;
         CacheEntry *        pSucc;
     };
-    typedef ::std::hash_map< t_Key, CacheEntry *, t_KeyHash, t_KeyEqual > t_Key2Element;
+    typedef ::boost::unordered_map< t_Key, CacheEntry *, t_KeyHash, t_KeyEqual > t_Key2Element;
 
     mutable ::osl::Mutex        _aCacheMutex;
     sal_Int32                   _nCachedElements;

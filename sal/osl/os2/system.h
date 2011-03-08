@@ -222,37 +222,6 @@ int debug_printf(const char *f, ...);
 #   define  NO_PTHREAD_RTL
 #endif
 
-#ifdef SCO
-#   define AF_IPX -1
-#   include <strings.h>
-#   include <pthread.h>
-#   include <shadow.h>
-#   include <netdb.h>
-#   include <sys/un.h>
-#   include <sys/netinet/tcp.h>
-#   include <sys/types.h>
-#   include <sys/byteorder.h>
-#   include <dlfcn.h>
-#   if BYTE_ORDER == LITTLE_ENDIAN
-#       define _LITTLE_ENDIAN
-#   elif BYTE_ORDER == BIG_ENDIAN
-#       define _BIG_ENDIAN
-#   elif BYTE_ORDER == PDP_ENDIAN
-#       define _PDP_ENDIAN
-#   endif
-#   define  sched_yield()               pthread_yield()
-#   define  pthread_testcancel()
-#   define  NO_PTHREAD_RTL
-#   define  NO_PTHREAD_PRIORITY
-extern int pthread_cancel(pthread_t);
-extern unsigned int nanosleep(unsigned int);
-#   define  SLEEP_TIMESPEC(timespec)    (timespec .tv_sec > 0) ? sleep(timespec .tv_sec), nanosleep(timespec .tv_nsec) : nanosleep(timespec .tv_nsec)
-#   define  PATH_MAX                    _POSIX_PATH_MAX
-#   define  S_ISSOCK                    S_ISFIFO
-#   define  PTHREAD_SIGACTION           pthread_sigaction
-#   define  STAT_PARENT                 stat
-#endif
-
 #ifdef AIX
 #   define AF_IPX -1
 #   include <strings.h>
@@ -274,34 +243,6 @@ extern unsigned int nanosleep(unsigned int);
 #   define  PTR_SIZE_T(s)               ((size_t *)&(s))
 #   define  NO_PTHREAD_SEMAPHORES
 #   define  NO_DL_FUNCTIONS
-#endif
-
-#ifdef HPUX
-#   define  AF_IPX -1
-#   undef   howmany
-#   undef   MAXINT
-#   include <pthread.h>
-#   include <sys/un.h>
-#   include <sys/sched.h>
-#   include <sys/xti.h>
-#   include <sys/pstat.h>
-#   include <shadow.h>
-#   include <crypt.h>
-#   include <machine/param.h>
-#   define  LIBPATH "SHLIB_PATH"
-#   define  PTR_SIZE_T(s)               ((int *)&(s))
-#   define  PTR_FD_SET(s)               ((int *)&(s))
-#   define  PTHREAD_VALUE(t)            ((t).field2)
-#   define  PTHREAD_NONE_INIT           { 0, -1 }
-#   define  PTHREAD_ATTR_DEFAULT        pthread_attr_default
-#   define  PTHREAD_MUTEXATTR_DEFAULT   pthread_mutexattr_default
-#   define  PTHREAD_CONDATTR_DEFAULT    pthread_condattr_default
-#   define  pthread_detach(t)           pthread_detach(&(t))
-#   define  NO_PTHREAD_PRIORITY
-#   define  NO_PTHREAD_SEMAPHORES
-#   define  NO_DL_FUNCTIONS
-#   undef   sigaction
-#   define  PTHREAD_SIGACTION           cma_sigaction
 #endif
 
 #ifdef SOLARIS
@@ -354,9 +295,9 @@ char *macxp_tempnam( const char *tmpdir, const char *prefix );
 #   include <netinet/tcp.h>
 #endif
 
-#if !defined(_WIN32)  && !defined(_WIN16) && !defined(OS2)  && \
-    !defined(LINUX)   && !defined(NETBSD) && !defined(FREEBSD) && !defined(SCO)  && \
-    !defined(AIX)     && !defined(HPUX)   && \
+#if !defined(_WIN32)  && !defined(OS2)  && \
+    !defined(LINUX)   && !defined(NETBSD) && !defined(FREEBSD) && \
+    !defined(AIX)     && \
     !defined(SOLARIS) && !defined(MAC) && \
     !defined(MACOSX)
 #   error "Target plattform not specified !"

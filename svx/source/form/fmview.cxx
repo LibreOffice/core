@@ -126,8 +126,6 @@ void FmFormView::Init()
         // This means this is a newly created document. This means, we want to have it in design
         // mode by default (though a newly created model returns true for GetOpenInDesignMode).
         // We _want_ to have this because it makes a lot of hacks following the original fix
-        // for #94595# unnecessary
-        // #96399# - 2002-10-11 - fs@openoffice.org
         DBG_ASSERT( !bInitDesignMode, "FmFormView::Init: doesn't the model default to FALSE anymore?" );
             // if this asserts, either the on-contruction default in the model has changed (then this here
             // may not be necessary anymore), or we're not dealing with a new document ....

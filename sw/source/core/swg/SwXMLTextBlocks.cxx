@@ -47,7 +47,6 @@
 #include <shellio.hxx>
 #include <poolfmt.hxx>
 #include <SwXMLTextBlocks.hxx>
-#include <errhdl.hxx>
 #include <SwXMLBlockImport.hxx>
 #include <SwXMLBlockExport.hxx>
 #include <swerror.h>
@@ -102,7 +101,7 @@ SwXMLTextBlocks::SwXMLTextBlocks( const String& rFile )
         }
         catch( const uno::Exception& )
         {
-            DBG_ERROR("exception while creating AutoText storage");
+            OSL_FAIL("exception while creating AutoText storage");
         }
     }
     InitBlockMode ( refStg );
@@ -278,10 +277,6 @@ ULONG SwXMLTextBlocks::CopyBlock( SwImpBlocks& rDestImp, String& rShort,
     {
         uno::Reference < embed::XStorage > rSourceRoot = xBlkRoot->openStorageElement( aGroup, embed::ElementModes::READ );
         uno::Reference < embed::XStorage > rDestRoot = ((SwXMLTextBlocks&)rDestImp).xBlkRoot->openStorageElement( sDestShortName, embed::ElementModes::READWRITE );
-        //if(!rSourceRoot.Is())
-        //    nError = ERR_SWG_READ_ERROR;
-        //else
-        //{
         rSourceRoot->copyToStorage( rDestRoot );
     }
     catch ( uno::Exception& )
@@ -289,26 +284,9 @@ ULONG SwXMLTextBlocks::CopyBlock( SwImpBlocks& rDestImp, String& rShort,
         nError = ERR_SWG_WRITE_ERROR;
     }
 
-    /* I think this should work now that text only blocks are in sub-storages as well
-    else
-    {
-        SvStorageStreamRef rSourceStream = xBlkRoot->OpenStream( aGroup, STREAM_STGREAD );
-        SvStorageStreamRef rDestStream = ((SwXMLTextBlocks&)rDestImp).xBlkRoot-> OpenStream( sDestShortName, STREAM_STGWRITE );
-        if(!rDestStream.Is())
-            nError = ERR_SWG_WRITE_ERROR;
-        else
-        {
-            if(!rSourceStream->CopyTo(&rDestStream))
-                nError = ERR_SWG_WRITE_ERROR;
-            else
-                rDestStream->Commit();
-        }
-    }
-    */
     if(!nError)
     {
         rShort = sDestShortName;
-        //((SwXMLTextBlocks&)rDestImp).xBlkRoot->Commit();
         ((SwXMLTextBlocks&)rDestImp).AddName( rShort, rLong, bTextOnly );
         ((SwXMLTextBlocks&)rDestImp).MakeBlockList();
     }
@@ -324,13 +302,6 @@ ULONG SwXMLTextBlocks::StartPutBlock( const String& rShort, const String& rPacka
     if(!xBlkRoot.is())
         return 0;
     GetIndex ( rShort );
-    /*
-    if( xBlkRoot->IsContained( rPackageName ) )
-    {
-        xBlkRoot->Remove( rPackageName );
-        xBlkRoot->Commit();
-    }
-    */
     try
     {
         xRoot = xBlkRoot->openStorageElement( rPackageName, embed::ElementModes::READWRITE );
@@ -431,14 +402,6 @@ ULONG SwXMLTextBlocks::PutBlock( SwPaM& , const String& )
     }
 
     //TODO/LATER: error handling
-    /*
-    ULONG nErr = xBlkRoot->GetError();
-    if( nErr == SVSTREAM_DISK_FULL )
-        nRes = ERR_W4W_WRITE_FULL;
-    else if( nErr != SVSTREAM_OK )
-        nRes = ERR_SWG_WRITE_ERROR;
-    nFlags |= nCommitFlags;
-    return nErr;*/
     return 0;
 }
 
@@ -624,7 +587,6 @@ void SwXMLTextBlocks::MakeBlockText( const String& rText )
 {
     SwTxtNode* pTxtNode = pDoc->GetNodes()[ pDoc->GetNodes().GetEndOfContent().
                                         GetIndex() - 1 ]->GetTxtNode();
-    //JP 18.09.98: Bug 56706 - Standard sollte zumindest gesetzt sein!
     if( pTxtNode->GetTxtColl() == pDoc->GetDfltTxtFmtColl() )
         pTxtNode->ChgFmtColl( pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD ));
 

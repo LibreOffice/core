@@ -824,7 +824,6 @@ namespace xmloff
         // In case the Text is not part of the property sequence (or occurs _before_
         // the DefaultText, which can happen for other value/default-value property names),
         // this means that the Text (the value property) is incorrectly imported.
-        // #102475# - 04.09.2002 - fs@openoffice.org
 
         sal_Bool bRestoreValuePropertyValue = sal_False;
         Any aValuePropertyValue;

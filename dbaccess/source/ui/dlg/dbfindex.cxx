@@ -36,7 +36,7 @@
 #include "moduledbu.hxx"
 #include "dbu_dlg.hrc"
 #include "dbfindex.hrc"
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <unotools/localfilehelper.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/pathoptions.hxx>
@@ -166,7 +166,7 @@ OTableIndex ODbaseIndexDialog::implRemoveIndex(const String& _rName, TableIndexL
     }
 
     (void)_bMustExist;
-    DBG_ASSERT(!_bMustExist || (aSearch != _rList.end()), "ODbaseIndexDialog::implRemoveIndex : did not find the index!");
+    OSL_ENSURE(!_bMustExist || (aSearch != _rList.end()), "ODbaseIndexDialog::implRemoveIndex : did not find the index!");
     return aReturn;
 }
 
@@ -543,7 +543,6 @@ void OTableInfo::WriteInfFile( const String& rDSN ) const
             // simply silent this. The strange algorithm here does a lot of things even if no files at all were
             // created or accessed, so it's possible that the file we're trying to delete does not even exist,
             // and this is a valid condition.
-            // 2003-05-15 - #109677# - fs@openoffice.org
         }
     }
 }

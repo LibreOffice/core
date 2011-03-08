@@ -38,7 +38,6 @@
 #include <svl/eitem.hxx>
 #include <tools/time.hxx>
 
-// includes below due to nRescheduleLocks
 #include "appdata.hxx"
 #include <sfx2/request.hxx>
 #include <sfx2/frame.hxx>
@@ -281,27 +280,6 @@ const String& SfxProgress::GetStateText_Impl() const
 }
 
 // -----------------------------------------------------------------------
-/*
-IMPL_STATIC_LINK( SfxProgress, SetStateHdl, PlugInLoadStatus*, pStatus )
-{
-    INetRequest* pReq = 0;
-    const INetHint *pHint = PTR_CAST( INetHint, pStatus->pHint );
-    pReq = PTR_CAST( INetRequest, pStatus->pBC );
-
-    String aString;
-    if( pReq )
-        aString = SfxMedium::GetStatusString( pHint->GetId(), pReq, pHint );
-    if( aString.Len() )
-    {
-        GetpApp()->ShowStatusText( aString );
-        if( pThis )
-            pThis->pImp->bIsStatusText = TRUE;
-    }
-    return 0;
-}
-*/
-
-// -----------------------------------------------------------------------
 
 // Required in App data
 static ULONG nLastTime = 0;
@@ -355,10 +333,6 @@ BOOL SfxProgress::SetState
 */
 
 {
-//  Was stoped by Stop-Button?
-//  if ( pImp->IsCancelled() )
-//      return FALSE;
-
     if( pImp->pActiveProgress ) return TRUE;
 
     nVal = nNewVal;
@@ -391,14 +365,6 @@ BOOL SfxProgress::SetState
                 SFX_ITEMSET_ARG( pMedium->GetItemSet(), pHiddenItem, SfxBoolItem, SID_HIDDEN, FALSE );
                 if ( !pHiddenItem || !pHiddenItem->GetValue() )
                 {
-                    // not in a view, perhaps it's just loading
-                    //SfxFrame* pFrame = pMedium->GetLoadTargetFrame();
-                    //if ( pFrame && pFrame->GetCurrentViewFrame() )
-                    //{
-                        // recycling frame
-                        //pImp->pView = pFrame->GetCurrentViewFrame();
-                    //}
-                    //else
                     {
                         SFX_ITEMSET_ARG( pMedium->GetItemSet(), pIndicatorItem, SfxUnoAnyItem, SID_PROGRESS_STATUSBAR_CONTROL, FALSE );
                         Reference< XStatusIndicator > xInd;

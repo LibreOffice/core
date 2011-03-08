@@ -74,6 +74,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <osl/diagnose.h>
 #include <tools/urlobj.hxx>
 #include <typelib/typedescription.hxx>
 #include <unotools/confignode.hxx>
@@ -152,7 +153,7 @@ FlushNotificationAdapter::FlushNotificationAdapter( const Reference< XFlushable 
     ,m_aListener( _rxListener )
 {
     DBG_CTOR( FlushNotificationAdapter, NULL );
-    DBG_ASSERT( _rxBroadcaster.is(), "FlushNotificationAdapter::FlushNotificationAdapter: invalid flushable!" );
+    OSL_ENSURE( _rxBroadcaster.is(), "FlushNotificationAdapter::FlushNotificationAdapter: invalid flushable!" );
 
     osl_incrementInterlockedCount( &m_refCount );
     {
@@ -160,7 +161,7 @@ FlushNotificationAdapter::FlushNotificationAdapter( const Reference< XFlushable 
             _rxBroadcaster->addFlushListener( this );
     }
     osl_decrementInterlockedCount( &m_refCount );
-    DBG_ASSERT( m_refCount == 1, "FlushNotificationAdapter::FlushNotificationAdapter: broadcaster isn't holding by hard ref!?" );
+    OSL_ENSURE( m_refCount == 1, "FlushNotificationAdapter::FlushNotificationAdapter: broadcaster isn't holding by hard ref!?" );
 }
 
 //------------------------------------------------------------
@@ -215,7 +216,7 @@ sal_Bool SAL_CALL OAuthenticationContinuation::canSetRealm(  ) throw(RuntimeExce
 
 void SAL_CALL OAuthenticationContinuation::setRealm( const ::rtl::OUString& /*Realm*/ ) throw(RuntimeException)
 {
-    DBG_ERROR("OAuthenticationContinuation::setRealm: not supported!");
+    OSL_FAIL("OAuthenticationContinuation::setRealm: not supported!");
 }
 
 sal_Bool SAL_CALL OAuthenticationContinuation::canSetUserName(  ) throw(RuntimeException)
@@ -259,7 +260,7 @@ sal_Bool SAL_CALL OAuthenticationContinuation::canSetAccount(  ) throw(RuntimeEx
 
 void SAL_CALL OAuthenticationContinuation::setAccount( const ::rtl::OUString& ) throw(RuntimeException)
 {
-    DBG_ERROR("OAuthenticationContinuation::setAccount: not supported!");
+    OSL_FAIL("OAuthenticationContinuation::setAccount: not supported!");
 }
 
 Sequence< RememberAuthentication > SAL_CALL OAuthenticationContinuation::getRememberAccountModes( RememberAuthentication& _reDefault ) throw(RuntimeException)
@@ -272,7 +273,7 @@ Sequence< RememberAuthentication > SAL_CALL OAuthenticationContinuation::getReme
 
 void SAL_CALL OAuthenticationContinuation::setRememberAccount( RememberAuthentication /*Remember*/ ) throw(RuntimeException)
 {
-    DBG_ERROR("OAuthenticationContinuation::setRememberAccount: not supported!");
+    OSL_FAIL("OAuthenticationContinuation::setRememberAccount: not supported!");
 }
 
 /** The class OSharedConnectionManager implements a structure to share connections.
@@ -378,14 +379,13 @@ Reference<XConnection> OSharedConnectionManager::getConnection( const rtl::OUStr
     aInfoCopy[nPos].Name      = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TableFilter"));
     aInfoCopy[nPos++].Value <<= _pDataSource->m_pImpl->m_aTableFilter;
     aInfoCopy[nPos].Name      = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TableTypeFilter"));
-    aInfoCopy[nPos++].Value <<= _pDataSource->m_pImpl->m_aTableTypeFilter; // #22377# OJ
+    aInfoCopy[nPos++].Value <<= _pDataSource->m_pImpl->m_aTableTypeFilter;
 
     ::rtl::OUString sUser = user;
     ::rtl::OUString sPassword = password;
     if ((0 == sUser.getLength()) && (0 == sPassword.getLength()) && (0 != _pDataSource->m_pImpl->m_sUser.getLength()))
     {   // ease the usage of this method. data source which are intended to have a user automatically
         // fill in the user/password combination if the caller of this method does not specify otherwise
-        // 86951 - 05/08/2001 - frank.schoenheit@germany.sun.com
         sUser = _pDataSource->m_pImpl->m_sUser;
         if (0 != _pDataSource->m_pImpl->m_aPassword.getLength())
             sPassword = _pDataSource->m_pImpl->m_aPassword;
@@ -698,7 +698,7 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const ::rtl::O
         }
         catch( const Exception& )
         {
-            DBG_ERROR( "ODatabaseSource::buildLowLevelConnection: got a strange exception while analyzing the error!" );
+            OSL_FAIL( "ODatabaseSource::buildLowLevelConnection: got a strange exception while analyzing the error!" );
         }
         if ( !xDriver.is() || !xDriver->acceptsURL( m_pImpl->m_sConnectURL ) )
         {
@@ -859,7 +859,7 @@ sal_Bool ODatabaseSource::convertFastPropertyValue(Any & rConvertedValue, Any & 
             }
             break;
             default:
-                DBG_ERROR( "ODatabaseSource::convertFastPropertyValue: unknown or readonly Property!" );
+                OSL_FAIL( "ODatabaseSource::convertFastPropertyValue: unknown or readonly Property!" );
         }
     }
     return bModified;
@@ -1064,7 +1064,7 @@ void ODatabaseSource::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) con
                 rValue <<= m_pImpl->m_aLayoutInformation;
                 break;
             default:
-                DBG_ERROR("unknown Property");
+                OSL_FAIL("unknown Property");
         }
     }
 }
@@ -1116,7 +1116,7 @@ Reference< XConnection > SAL_CALL ODatabaseSource::connectWithCompletion( const 
 
     if (!_rxHandler.is())
     {
-        DBG_ERROR("ODatabaseSource::connectWithCompletion: invalid interaction handler!");
+        OSL_FAIL("ODatabaseSource::connectWithCompletion: invalid interaction handler!");
         return getConnection(m_pImpl->m_sUser, m_pImpl->m_aPassword,_bIsolated);
     }
 
@@ -1201,7 +1201,7 @@ Reference< XConnection > ODatabaseSource::buildIsolatedConnection(const rtl::OUS
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::buildIsolatedConnection" );
     Reference< XConnection > xConn;
     Reference< XConnection > xSdbcConn = buildLowLevelConnection(user, password);
-    DBG_ASSERT( xSdbcConn.is(), "ODatabaseSource::buildIsolatedConnection: invalid return value of buildLowLevelConnection!" );
+    OSL_ENSURE( xSdbcConn.is(), "ODatabaseSource::buildIsolatedConnection: invalid return value of buildLowLevelConnection!" );
     // buildLowLevelConnection is expected to always succeed
     if ( xSdbcConn.is() )
     {
@@ -1351,7 +1351,7 @@ void SAL_CALL ODatabaseSource::flushed( const EventObject& /*rEvent*/ ) throw (R
     // XFlushListener at the embedded connection (which needs to provide the XFlushable functionality).
     // Then, when the connection is flushed, we commit both the database storage and our main storage.
     //
-    // #i55274# / 2005-09-30 / frank.schoenheit@sun.com
+    // #i55274#
 
     OSL_ENSURE( m_pImpl->isEmbeddedDatabase(), "ODatabaseSource::flushed: no embedded database?!" );
     sal_Bool bWasModified = m_pImpl->m_bModified;

@@ -64,7 +64,6 @@ public:
     void    SetEditMode(USHORT nMode);
     USHORT  GetEditMode() { return nEditMode; }
 
-    // #97016#
     virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle);
 
 protected:

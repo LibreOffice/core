@@ -351,7 +351,7 @@ bool ScTableProtectionImpl::isOptionEnabled(SCSIZE nOptId) const
 {
     if ( maOptions.size() <= static_cast<size_t>(nOptId) )
     {
-        DBG_ERROR("ScTableProtectionImpl::isOptionEnabled: wrong size");
+        OSL_FAIL("ScTableProtectionImpl::isOptionEnabled: wrong size");
         return false;
     }
 
@@ -362,7 +362,7 @@ void ScTableProtectionImpl::setOption(SCSIZE nOptId, bool bEnabled)
 {
     if ( maOptions.size() <= static_cast<size_t>(nOptId) )
     {
-        DBG_ERROR("ScTableProtectionImpl::setOption: wrong size");
+        OSL_FAIL("ScTableProtectionImpl::setOption: wrong size");
         return;
     }
 

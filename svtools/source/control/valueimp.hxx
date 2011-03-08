@@ -27,7 +27,6 @@
  ************************************************************************/
 
 #include <osl/mutex.hxx>
-#include <tools/list.hxx>
 #include <tools/color.hxx>
 #include <tools/string.hxx>
 #include <vcl/image.hxx>
@@ -100,9 +99,7 @@ struct ValueSetItem
      void               ClearAccessible();
 };
 
-// -----------------------------------------------------------------------------
-
-DECLARE_LIST( ValueItemList, ValueSetItem* )
+typedef ::std::vector< ValueSetItem* > ValueItemList;
 
 // -----------------------------------------------------------------------------
 

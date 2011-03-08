@@ -28,10 +28,6 @@ package integration.forms;
 
 import com.sun.star.form.binding.*;
 
-/**
- *
- * @author  fs@openoffice.org
- */
 public class TextValidator extends integration.forms.ControlValidator
 {
 

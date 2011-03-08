@@ -43,9 +43,9 @@ namespace rtl
 
 // class SvxFontItem -----------------------------------------------------
 
-/*
-    [Beschreibung]
-    Dieses Item beschreibt einen Font.
+/*  [Description]
+
+    This item describes a Font.
 */
 
 class EDITENG_DLLPUBLIC SvxFontItem : public SfxPoolItem
@@ -68,7 +68,7 @@ public:
         const rtl_TextEncoding eFontTextEncoding /*= RTL_TEXTENCODING_DONTKNOW*/,
         const USHORT nId  );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual Methods" from SfxPoolItem
     virtual int              operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*     Create(SvStream &, USHORT) const;
@@ -81,7 +81,7 @@ public:
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
 
-    // ZugriffsMethoden:
+    // Access methods:
     inline String &GetFamilyName() { return aFamilyName; }
     inline const String &GetFamilyName() const { return aFamilyName; }
 

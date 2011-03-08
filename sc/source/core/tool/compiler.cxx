@@ -695,15 +695,15 @@ static String lcl_makeExternalNameStr( const String& rFile, const String& rName,
     return String( aBuf.makeStringAndClear());
 }
 
-static bool lcl_getLastTabName( String& rTabName2, const String& rTabName1,
-                                const vector<String>& rTabNames, const ScComplexRefData& rRef )
+static bool lcl_getLastTabName( OUString& rTabName2, const OUString& rTabName1,
+                                const vector<OUString>& rTabNames, const ScComplexRefData& rRef )
 {
     SCsTAB nTabSpan = rRef.Ref2.nTab - rRef.Ref1.nTab;
     if (nTabSpan > 0)
     {
         size_t nCount = rTabNames.size();
-        vector<String>::const_iterator itrBeg = rTabNames.begin(), itrEnd = rTabNames.end();
-        vector<String>::const_iterator itr = ::std::find(itrBeg, itrEnd, rTabName1);
+        vector<OUString>::const_iterator itrBeg = rTabNames.begin(), itrEnd = rTabNames.end();
+        vector<OUString>::const_iterator itr = ::std::find(itrBeg, itrEnd, rTabName1);
         if (itr == rTabNames.end())
         {
             rTabName2 = ScGlobal::GetRscString(STR_NO_REF_TABLE);
@@ -1033,12 +1033,12 @@ struct ConventionOOO_A1 : public Convention_A1
 
             rBuffer.append(sal_Unicode(':'));
 
-            String aLastTabName;
+            OUString aLastTabName;
             bool bDisplayTabName = (aRef.Ref1.nTab != aRef.Ref2.nTab);
             if (bDisplayTabName)
             {
                 // Get the name of the last table.
-                vector<String> aTabNames;
+                vector<OUString> aTabNames;
                 pRefMgr->getAllCachedTableNames(nFileId, aTabNames);
                 if (aTabNames.empty())
                 {
@@ -1047,7 +1047,7 @@ struct ConventionOOO_A1 : public Convention_A1
 
                 if (!lcl_getLastTabName(aLastTabName, rTabName, aTabNames, aRef))
                 {
-                    DBG_ERROR( "ConventionOOO_A1::makeExternalRefStrImpl: sheet name not found");
+                    OSL_FAIL( "ConventionOOO_A1::makeExternalRefStrImpl: sheet name not found");
                     // aLastTabName contains #REF!, proceed.
                 }
             }
@@ -1246,11 +1246,11 @@ struct ConventionXL
         rBuffer.append(sal_Unicode(']'));
     }
 
-    static void makeExternalTabNameRange( ::rtl::OUStringBuffer& rBuf, const String& rTabName,
-                                          const vector<String>& rTabNames,
+    static void makeExternalTabNameRange( ::rtl::OUStringBuffer& rBuf, const OUString& rTabName,
+                                          const vector<OUString>& rTabNames,
                                           const ScComplexRefData& rRef )
     {
-        String aLastTabName;
+        OUString aLastTabName;
         if (!lcl_getLastTabName(aLastTabName, rTabName, rTabNames, rRef))
         {
             ScRangeStringConverter::AppendTableName(rBuf, aLastTabName);
@@ -1463,7 +1463,7 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
         if (!pFullName)
             return;
 
-        vector<String> aTabNames;
+        vector<OUString> aTabNames;
         pRefMgr->getAllCachedTableNames(nFileId, aTabNames);
         if (aTabNames.empty())
             return;
@@ -1670,7 +1670,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
         if (!pFullName)
             return;
 
-        vector<String> aTabNames;
+        vector<OUString> aTabNames;
         pRefMgr->getAllCachedTableNames(nFileId, aTabNames);
         if (aTabNames.empty())
             return;
@@ -2896,18 +2896,17 @@ BOOL ScCompiler::IsNamedRange( const String& rUpperName )
 {
     // IsNamedRange is called only from NextNewToken, with an upper-case string
 
-    USHORT n;
     ScRangeName* pRangeName = pDoc->GetRangeName();
-    if (pRangeName->SearchNameUpper( rUpperName, n ) )
+    const ScRangeData* pData = pRangeName->findByUpperName(rUpperName);
+    if (pData)
     {
-        ScRangeData* pData = (*pRangeName)[n];
         ScRawToken aToken;
         aToken.SetName( pData->GetIndex() );
         pRawToken = aToken.Clone();
-        return TRUE;
+        return true;
     }
     else
-        return FALSE;
+        return false;
 }
 
 bool ScCompiler::IsExternalNamedRange( const String& rSymbol )
@@ -2918,7 +2917,6 @@ bool ScCompiler::IsExternalNamedRange( const String& rSymbol )
      * spec first. Until then don't pretend to support external names that
      * wouldn't survive a save and reload cycle, return false instead. */
 
-#if 1
     if (!pConv)
         return false;
 
@@ -2941,10 +2939,6 @@ bool ScCompiler::IsExternalNamedRange( const String& rSymbol )
     aToken.SetExternalName(nFileId, pRealName ? *pRealName : aName);
     pRawToken = aToken.Clone();
     return true;
-#else
-    (void)rSymbol;
-    return false;
-#endif
 }
 
 BOOL ScCompiler::IsDBRange( const String& rName )
@@ -2973,7 +2967,7 @@ BOOL ScCompiler::IsColRowName( const String& rName )
     DeQuote( aName );
     SCTAB nThisTab = aPos.Tab();
     for ( short jThisTab = 1; jThisTab >= 0 && !bInList; jThisTab-- )
-    {   // #50300# first check ranges on this sheet, in case of duplicated names
+    {   // first check ranges on this sheet, in case of duplicated names
         for ( short jRow=0; jRow<2 && !bInList; jRow++ )
         {
             ScRangePairList* pRL;
@@ -3056,7 +3050,7 @@ BOOL ScCompiler::IsColRowName( const String& rName )
         ScAutoNameCache* pNameCache = pDoc->GetAutoNameCache();
         if ( pNameCache )
         {
-            //  #b6355215# use GetNameOccurrences to collect all positions of aName on the sheet
+            //  use GetNameOccurrences to collect all positions of aName on the sheet
             //  (only once), similar to the outer part of the loop in the "else" branch.
 
             const ScAutoNameAddresses& rAddresses = pNameCache->GetNameOccurrences( aName, aPos.Tab() );
@@ -3520,7 +3514,7 @@ BOOL ScCompiler::NextNewToken( bool bInArray )
 
     if ( (cSymbol[0] == '#' || cSymbol[0] == '$') && cSymbol[1] == 0 &&
             !bAutoCorrect )
-    {   // #101100# special case to speed up broken [$]#REF documents
+    {   // special case to speed up broken [$]#REF documents
         /* FIXME: ISERROR(#REF!) would be valid and TRUE and the formula to
          * be processed as usual. That would need some special treatment,
          * also in NextSymbol() because of possible combinations of
@@ -3557,7 +3551,7 @@ BOOL ScCompiler::NextNewToken( bool bInArray )
         bMayBeFuncName = ( *p == '(' );
     }
 
-    // #42016# Italian ARCTAN.2 resulted in #REF! => IsOpcode() before
+    // Italian ARCTAN.2 resulted in #REF! => IsOpcode() before
     // IsReference().
 
     String aUpper;
@@ -3893,7 +3887,7 @@ ScTokenArray* ScCompiler::CompileString( const String& rFormula, const String& r
 
 BOOL ScCompiler::HandleRange()
 {
-    ScRangeData* pRangeData = pDoc->GetRangeName()->FindIndex( pToken->GetIndex() );
+    ScRangeData* pRangeData = pDoc->GetRangeName()->findByIndex( pToken->GetIndex() );
     if (pRangeData)
     {
         USHORT nErr = pRangeData->GetErrCode();
@@ -3902,8 +3896,8 @@ BOOL ScCompiler::HandleRange()
         else if ( !bCompileForFAP )
         {
             ScTokenArray* pNew;
-            // #35168# put named formula into parentheses.
-            // #37680# But only if there aren't any yet, parenthetical
+            // put named formula into parentheses.
+            // But only if there aren't any yet, parenthetical
             // ocSep doesn't work, e.g. SUM((...;...))
             // or if not directly between ocSep/parenthesis,
             // e.g. SUM(...;(...;...)) no, SUM(...;(...)*3) yes,
@@ -3985,7 +3979,7 @@ BOOL ScCompiler::HandleExternalReference(const FormulaToken& _aToken)
             return GetToken();
         }
         default:
-            DBG_ERROR("Wrong type for external reference!");
+            OSL_FAIL("Wrong type for external reference!");
             return FALSE;
     }
     return TRUE;
@@ -4018,7 +4012,7 @@ BOOL ScCompiler::HasModifiedRange()
         OpCode eOpCode = t->GetOpCode();
         if ( eOpCode == ocName )
         {
-             ScRangeData* pRangeData = pDoc->GetRangeName()->FindIndex(t->GetIndex());
+             ScRangeData* pRangeData = pDoc->GetRangeName()->findByIndex(t->GetIndex());
 
             if (pRangeData && pRangeData->IsModified())
                 return TRUE;
@@ -4106,14 +4100,14 @@ void ScCompiler::MoveRelWrap( ScTokenArray& rArr, ScDocument* pDoc, const ScAddr
 ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
                                  const ScAddress& rOldPos, const ScRange& r,
                                  SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
-                                 BOOL& rChanged, BOOL& rRefSizeChanged )
+                                 bool& rChanged, bool& rRefSizeChanged )
 {
-    rChanged = rRefSizeChanged = FALSE;
+    rChanged = rRefSizeChanged = false;
     if ( eUpdateRefMode == URM_COPY )
     {   // Normally nothing has to be done here since RelRefs are used, also
         // SharedFormulas don't need any special handling, except if they
         // wrapped around sheet borders.
-        // #67383# But ColRowName tokens pointing to a ColRow header which was
+        // But ColRowName tokens pointing to a ColRow header which was
         // copied along with this formula need to be updated to point to the
         // copied header instead of the old position's new intersection.
         ScToken* t;
@@ -4130,7 +4124,7 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
                         SingleDoubleRefModifier( rRef ).Ref() )
                         != UR_NOTHING
                     )
-                    rChanged = TRUE;
+                    rChanged = true;
             }
         }
         // Check for SharedFormulas.
@@ -4141,7 +4135,7 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
         {
             if( j->GetOpCode() == ocName )
             {
-                ScRangeData* pName = pDoc->GetRangeName()->FindIndex( j->GetIndex() );
+                ScRangeData* pName = pDoc->GetRangeName()->findByIndex( j->GetIndex() );
                 if (pName && pName->HasType(RT_SHARED))
                     pRangeData = pName;
             }
@@ -4170,7 +4164,7 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
                     if (!bValid)
                     {
                         pRangeData = pName;
-                        rChanged = TRUE;
+                        rChanged = true;
                     }
                 }
             }
@@ -4194,12 +4188,12 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
         {
             if( t->GetOpCode() == ocName )
             {
-                ScRangeData* pName = pDoc->GetRangeName()->FindIndex( t->GetIndex() );
+                ScRangeData* pName = pDoc->GetRangeName()->findByIndex( t->GetIndex() );
                 if (pName && pName->HasType(RT_SHAREDMOD))
                 {
                     pRangeData = pName;     // maybe need a replacement of shared with own code
 #if ! SC_PRESERVE_SHARED_FORMULAS_IF_POSSIBLE
-                    rChanged = TRUE;
+                    rChanged = true;
 #endif
                 }
             }
@@ -4224,7 +4218,7 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
                                         SingleDoubleRefModifier(
                                             t->GetSingleRef()).Ref())
                                     != UR_NOTHING)
-                                rChanged = TRUE;
+                                rChanged = true;
                         }
                         break;
                     default:
@@ -4237,11 +4231,11 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
                                         aPos, r, nDx, nDy, nDz,
                                         t->GetDoubleRef()) != UR_NOTHING)
                             {
-                                rChanged = TRUE;
+                                rChanged = true;
                                 if (rRef.Ref2.nCol - rRef.Ref1.nCol != nCols ||
                                         rRef.Ref2.nRow - rRef.Ref1.nRow != nRows ||
                                         rRef.Ref2.nTab - rRef.Ref1.nTab != nTabs)
-                                    rRefSizeChanged = TRUE;
+                                    rRefSizeChanged = true;
                             }
                         }
                 }
@@ -4275,7 +4269,7 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
                     if ( rRef.IsRelName() )
                     {
                         ScRefUpdate::MoveRelWrap( pDoc, aPos, MAXCOL, MAXROW, aMod.Ref() );
-                        rChanged = TRUE;
+                        rChanged = true;
                     }
                     else
                     {
@@ -4284,7 +4278,7 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
                                     r, nDx, nDy, nDz, aMod.Ref() )
                                 != UR_NOTHING
                             )
-                            rChanged = TRUE;
+                            rChanged = true;
                     }
 #if SC_PRESERVE_SHARED_FORMULAS_IF_POSSIBLE
                     if ( bEasyShared )
@@ -4305,7 +4299,7 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
                     if ( rRef.Ref1.IsRelName() || rRef.Ref2.IsRelName() )
                     {
                         ScRefUpdate::MoveRelWrap( pDoc, aPos, MAXCOL, MAXROW, rRef );
-                        rChanged = TRUE;
+                        rChanged = true;
                     }
                     else
                     {
@@ -4314,12 +4308,12 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
                                 != UR_NOTHING
                             )
                         {
-                            rChanged = TRUE;
+                            rChanged = true;
                             if (rRef.Ref2.nCol - rRef.Ref1.nCol != nCols ||
                                     rRef.Ref2.nRow - rRef.Ref1.nRow != nRows ||
                                     rRef.Ref2.nTab - rRef.Ref1.nTab != nTabs)
                             {
-                                rRefSizeChanged = TRUE;
+                                rRefSizeChanged = true;
 #if SC_PRESERVE_SHARED_FORMULAS_IF_POSSIBLE
                                 bEasyShared = FALSE;
 #endif
@@ -4345,7 +4339,7 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
             if ( bEasyShared )
                 pRangeData = 0;
             else
-                rChanged = TRUE;
+                rChanged = true;
         }
 #endif
 #undef SC_PRESERVE_SHARED_FORMULAS_IF_POSSIBLE
@@ -4487,7 +4481,7 @@ ScRangeData* ScCompiler::UpdateInsertTab( SCTAB nTable, BOOL bIsName )
         {
             if (!bIsName)
             {
-                ScRangeData* pName = pDoc->GetRangeName()->FindIndex(t->GetIndex());
+                ScRangeData* pName = pDoc->GetRangeName()->findByIndex(t->GetIndex());
                 if (pName && pName->HasType(RT_SHAREDMOD))
                     pRangeData = pName;
             }
@@ -4598,7 +4592,7 @@ ScRangeData* ScCompiler::UpdateDeleteTab(SCTAB nTable, BOOL /* bIsMove */, BOOL 
         {
             if (!bIsName)
             {
-                ScRangeData* pName = pDoc->GetRangeName()->FindIndex(t->GetIndex());
+                ScRangeData* pName = pDoc->GetRangeName()->findByIndex(t->GetIndex());
                 if (pName && pName->HasType(RT_SHAREDMOD))
                     pRangeData = pName;
             }
@@ -4808,7 +4802,7 @@ ScRangeData* ScCompiler::UpdateMoveTab( SCTAB nOldTab, SCTAB nNewTab,
         {
             if (!bIsName)
             {
-                ScRangeData* pName = pDoc->GetRangeName()->FindIndex(t->GetIndex());
+                ScRangeData* pName = pDoc->GetRangeName()->findByIndex(t->GetIndex());
                 if (pName && pName->HasType(RT_SHAREDMOD))
                     pRangeData = pName;
             }
@@ -5062,7 +5056,7 @@ void ScCompiler::CreateStringFromIndex(rtl::OUStringBuffer& rBuffer,FormulaToken
     {
         case ocName:
         {
-            ScRangeData* pData = pDoc->GetRangeName()->FindIndex(_pTokenP->GetIndex());
+            ScRangeData* pData = pDoc->GetRangeName()->findByIndex(_pTokenP->GetIndex());
             if (pData)
             {
                 if (pData->HasType(RT_SHARED))

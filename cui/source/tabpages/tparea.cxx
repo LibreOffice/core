@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 #include <tools/shl.hxx>
 #include <tools/urlobj.hxx>
 #include <sfx2/app.hxx>
@@ -37,7 +34,7 @@
 
 #define _SVX_TPAREA_CXX
 
-#if defined (UNX) || defined (WTC) || defined (ICC) || defined(WNT)
+#if defined (UNX) || defined (ICC) || defined(WNT)
 #include <stdlib.h>
 #endif
 
@@ -1248,7 +1245,7 @@ BOOL SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
                 {
                     // Prozentwerte werden negativ gesetzt, damit
                     // diese nicht skaliert werden; dieses wird
-                    // im Item beruecksichtigt ( KA05.11.96 )
+                    // im Item beruecksichtigt
                     pItem = new XFillBmpSizeXItem( -labs( static_cast<long>(aMtrFldXSize.GetValue()) ) );
                 }
             }
@@ -1285,7 +1282,7 @@ BOOL SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
                 {
                     // Prozentwerte werden negativ gesetzt, damit
                     // diese vom MetricItem nicht skaliert werden;
-                    // dieses wird im Item beruecksichtigt ( KA05.11.96 )
+                    // dieses wird im Item beruecksichtigt
                     pItem = new XFillBmpSizeYItem( -labs( static_cast<long>(aMtrFldYSize.GetValue()) ) );
                 }
             }

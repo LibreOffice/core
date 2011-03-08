@@ -51,7 +51,11 @@
 
 using namespace vcl;
 using namespace psp;
-using namespace rtl;
+
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OStringBuffer;
+using ::rtl::OUStringToOString;
 
 GlyphSet::GlyphSet ()
         : mnFontID   (-1),

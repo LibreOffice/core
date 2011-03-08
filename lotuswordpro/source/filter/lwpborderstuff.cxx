@@ -57,11 +57,6 @@
 * @file
 * Border stuff of Wordpro.
 ************************************************************************/
-/*************************************************************************
-* Change History
-* 2005-01-11  Create and implement.
-* 2005-01-17  Add Get** functions.
-************************************************************************/
 #include    "lwpborderstuff.hxx"
 #include    "lwpstyledef.hxx"
 #include    "lwpfilehdr.hxx"
@@ -232,7 +227,7 @@ float   LwpBorderStuff::GetSideWidth(sal_uInt16 side)
     return 0;
 }
 
-void LwpBorderStuff::operator = (const LwpBorderStuff& rOther)
+LwpBorderStuff& LwpBorderStuff::operator = (const LwpBorderStuff& rOther)
 {
     m_nSides = rOther.m_nSides;
     m_nValid = rOther.m_nValid;
@@ -253,6 +248,8 @@ void LwpBorderStuff::operator = (const LwpBorderStuff& rOther)
     m_aColorRight = rOther.m_aColorRight;
     m_aColorTop = rOther.m_aColorTop;
     m_aColorBottom = rOther.m_aColorBottom;
+
+    return *this;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -230,7 +230,7 @@ public:
             }
             catch( uno::Exception& )
             {
-                OSL_ASSERT( "Unexpected exception!" );
+                OSL_FAIL( "Unexpected exception!" );
             }
         }
     }
@@ -1617,7 +1617,7 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
             bDialogUsed = sal_True;
         else
         {
-            DBG_ERROR( "Can't execute document info dialog!\n" );
+            OSL_FAIL( "Can't execute document info dialog!\n" );
         }
 
         try {

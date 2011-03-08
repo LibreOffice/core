@@ -127,8 +127,6 @@ void TaskPaneList::AddWindow( Window *pWindow )
             // beginning, until the first window is found which has the ChildPathFocus. Now
             // if this would be the ancestor window of another pane window, this would fudge
             // the result
-            // 2004-09-27 - fs@openoffice.org, while fixing #i33573#, which included replacing
-            // the original fix for #98916# with this one here.
             if ( pWindow->IsWindowOrChild( *p ) )
             {
                 insertionPos = p + 1;

@@ -224,11 +224,9 @@ enum SmModelPropertyHandles
     HANDLE_PRINTER_NAME,
     HANDLE_PRINTER_SETUP,
     HANDLE_SYMBOLS,
-    HANDLE_BASIC_LIBRARIES,     /* #93295# */
+    HANDLE_BASIC_LIBRARIES,
     HANDLE_RUNTIME_UID,
-    // --> PB 2004-08-25 #i33095# Security Options
-    HANDLE_LOAD_READONLY,
-    // <--
+    HANDLE_LOAD_READONLY, // Security Options
     HANDLE_DIALOG_LIBRARIES     // #i73329#
 };
 

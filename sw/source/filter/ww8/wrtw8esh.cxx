@@ -77,9 +77,7 @@
 #include <fmtsrnd.hxx>
 #include <fmtornt.hxx>
 #include <fmtfsize.hxx>
-// --> OD 2005-01-06 #i30669#
-#include <fmtfollowtextflow.hxx>
-// <--
+#include <fmtfollowtextflow.hxx> // #i30669#
 #include <dcontact.hxx>
 #include <frmfmt.hxx>
 #include <fmtcntnt.hxx>
@@ -101,9 +99,7 @@
 #include "writerwordglue.hxx"
 #include "wrtww8.hxx"
 #include "escher.hxx"
-// --> OD 2007-07-24 #148096#
 #include <ndtxt.hxx>
-// <--
 #include "WW8FFData.hxx"
 
 using namespace com::sun::star;
@@ -111,7 +107,7 @@ using namespace sw::util;
 using namespace sw::types;
 using namespace nsFieldFlags;
 
-//#110185# get a part fix for this type of element
+// get a part fix for this type of element
 bool WW8Export::MiserableFormFieldExportHack(const SwFrmFmt& rFrmFmt)
 {
     OSL_ENSURE(bWrtWW8, "Not allowed");
@@ -169,7 +165,6 @@ void WW8Export::DoComboBox(uno::Reference<beans::XPropertySet> xPropSet)
 
     rtl::OUString sHelp;
     {
-        // --> OD 2010-05-14 #160026#
         // property "Help" does not exist and due to the no-existence an exception is thrown.
         try
         {
@@ -485,7 +480,7 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
             Rectangle aRect;
             SwFmtVertOrient rVOr = rFmt.GetVertOrient();
             SwFmtHoriOrient rHOr = rFmt.GetHoriOrient();
-            // --> OD 2005-01-06 #i30669# - convert the positioning attributes.
+            // #i30669# - convert the positioning attributes.
             // Most positions are converted, if layout information exists.
             const bool bPosConverted =
                 WinwordAnchoring::ConvertPosition( rHOr, rVOr, rFmt );
@@ -501,7 +496,7 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
                     aRect.SetSize( rFmt.GetFrmSize().GetSize() );
                 else
                 {
-                    // --> FME 2007-06-20 #i56090# Do not only consider the first client
+                    // #i56090# Do not only consider the first client
                     // Note that we actually would have to find the maximum size of the
                     // frame format clients. However, this already should work in most cases.
                     const SwRect aSizeRect(rFmt.FindLayoutRect());
@@ -521,8 +516,8 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
                 }
             }
 
-            // --> OD 2005-01-06 #i30669# - use converted position, if conversion
-            // is performed. Unify position determination of Writer fly frames
+            // #i30669# - use converted position, if conversion is performed.
+            // Unify position determination of Writer fly frames
             // and drawing objects.
             if ( bPosConverted )
             {
@@ -534,7 +529,7 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
                 aObjPos = aRect.TopLeft();
                 if (text::VertOrientation::NONE == rVOr.GetVertOrient())
                 {
-                    // CMC, OD 24.11.2003 #i22673#
+                    // #i22673#
                     sal_Int16 eOri = rVOr.GetRelationOrient();
                     if (eOri == text::RelOrientation::CHAR || eOri == text::RelOrientation::TEXT_LINE)
                         aObjPos.Y() = -rVOr.GetPos();
@@ -2031,7 +2026,7 @@ void SwEscherEx::FinishEscher()
 /** method to perform conversion of positioning attributes with the help
     of corresponding layout information
 
-    OD 2005-01-06 #i30669#
+    #i30669#
     Because most of the Writer object positions doesn't correspond to the
     object positions in WW8, this method converts the positioning
     attributes. For this conversion the corresponding layout information
@@ -2039,8 +2034,6 @@ void SwEscherEx::FinishEscher()
     conversion is performed.
     No conversion is performed for as-character anchored objects. Whose
     object positions are already treated special in method <WriteData(..)>.
-
-    @author OD
 
     @param _iorHoriOri
     input/output parameter - containing the current horizontal position
@@ -2087,7 +2080,6 @@ bool WinwordAnchoring::ConvertPosition( SwFmtHoriOrient& _iorHoriOri,
         // be determined. --> no conversion
         return false;
     }
-    // --> OD 2006-09-26 #141404#
     // no conversion for anchored drawing object, which aren't attached to an
     // anchor frame.
     // This is the case for drawing objects, which are anchored inside a page
@@ -2105,7 +2097,6 @@ bool WinwordAnchoring::ConvertPosition( SwFmtHoriOrient& _iorHoriOri,
     // at page areas have to be converted, if it's set.
     const bool bFollowTextFlow = _rFrmFmt.GetFollowTextFlow().GetValue();
 
-    // --> OD 2007-07-24 #148096#
     // check, if horizontal and vertical position have to be converted due to
     // the fact, that the object is anchored at a paragraph, which has a "column
     // break before" attribute
@@ -2140,7 +2131,6 @@ bool WinwordAnchoring::ConvertPosition( SwFmtHoriOrient& _iorHoriOri,
         }
 
         // determine conversion type due to the position relation
-        // --> OD 2007-07-24 #148096#
         if ( bConvDueToAnchoredAtColBreakPara )
         {
             eHoriConv = CONV2PG;
@@ -2198,7 +2188,7 @@ bool WinwordAnchoring::ConvertPosition( SwFmtHoriOrient& _iorHoriOri,
                 if ( eHoriConv == CONV2PG )
                 {
                     _iorHoriOri.SetRelationOrient( text::RelOrientation::PAGE_FRAME );
-                    // --> OD 2005-01-27 #i33818#
+                    // #i33818#
                     bool bRelToTableCell( false );
                     aPos = pAnchoredObj->GetRelPosToPageFrm( bFollowTextFlow,
                                                              bRelToTableCell );
@@ -2247,7 +2237,6 @@ bool WinwordAnchoring::ConvertPosition( SwFmtHoriOrient& _iorHoriOri,
         }
 
         // determine conversion type due to the position relation
-        // --> OD 2007-07-24 #148096#
         if ( bConvDueToAnchoredAtColBreakPara )
         {
             eVertConv = CONV2PG;
@@ -2302,7 +2291,7 @@ bool WinwordAnchoring::ConvertPosition( SwFmtHoriOrient& _iorHoriOri,
                             "<WinwordAnchoring::ConvertPosition(..)> - unknown vertical relation" );
             }
         }
-        // <--
+
         if ( eVertConv != NO_CONV )
         {
             _iorVertOri.SetVertOrient( text::VertOrientation::NONE );
@@ -2312,7 +2301,7 @@ bool WinwordAnchoring::ConvertPosition( SwFmtHoriOrient& _iorHoriOri,
                 if ( eVertConv == CONV2PG )
                 {
                     _iorVertOri.SetRelationOrient( text::RelOrientation::PAGE_FRAME );
-                    // --> OD 2005-01-27 #i33818#
+                    // #i33818#
                     bool bRelToTableCell( false );
                     aPos = pAnchoredObj->GetRelPosToPageFrm( bFollowTextFlow,
                                                              bRelToTableCell );
@@ -2352,14 +2341,12 @@ void WinwordAnchoring::SetAnchoring(const SwFrmFmt& rFmt)
     SwFmtHoriOrient rHoriOri = rFmt.GetHoriOrient();
     SwFmtVertOrient rVertOri = rFmt.GetVertOrient();
 
-    // --> OD 2005-01-06 #i30669# - convert the positioning attributes.
+    // #i30669# - convert the positioning attributes.
     // Most positions are converted, if layout information exists.
     const bool bPosConverted = ConvertPosition( rHoriOri, rVertOri, rFmt );
-    // <--
 
     const sal_Int16 eHOri = rHoriOri.GetHoriOrient();
-    // CMC, OD 24.11.2003 #i22673#
-    const sal_Int16 eVOri = rVertOri.GetVertOrient();
+    const sal_Int16 eVOri = rVertOri.GetVertOrient(); // #i22673#
 
     const sal_Int16 eHRel = rHoriOri.GetRelationOrient();
     const sal_Int16 eVRel = rVertOri.GetRelationOrient();
@@ -2389,7 +2376,7 @@ void WinwordAnchoring::SetAnchoring(const SwFrmFmt& rFmt)
     }
 
     // vertical Adjustment
-    // CMC, OD 24.11.2003 #i22673#
+    // #i22673#
     // When adjustment is vertically relative to line or to char
     // bottom becomes top and vice versa
     const bool bVertSwap = !bPosConverted &&
@@ -2471,7 +2458,7 @@ void WinwordAnchoring::SetAnchoring(const SwFrmFmt& rFmt)
                 mnYRelTo = 2;
             break;
         case text::RelOrientation::CHAR:
-        case text::RelOrientation::TEXT_LINE: // CMC, OD 24.11.2003 #i22673# - vertical alignment at top of line
+        case text::RelOrientation::TEXT_LINE: // #i22673# - vertical alignment at top of line
         case text::RelOrientation::PAGE_LEFT:   //nonsense
         case text::RelOrientation::PAGE_RIGHT:  //nonsense
         case text::RelOrientation::FRAME_LEFT:  //nonsense

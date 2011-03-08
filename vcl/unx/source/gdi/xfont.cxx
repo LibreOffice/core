@@ -127,9 +127,6 @@ LoadXFont (Display* pDisplay, const char* pFontName)
     if ((pFont != NULL) && (pFont->fid == 0))
          pFont->fid = XLoadFont(pDisplay, pFontName);
 
-#ifdef HDU_DEBUG
-    fprintf( stderr, "XLoadFont \"%s\" => %d\n", pFontName, (pFont!= NULL) );
-#endif
     return pFont;
 }
 

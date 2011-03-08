@@ -43,7 +43,6 @@
 #include <pagefrm.hxx>  // SwPageFrm
 #include <paratr.hxx>
 #include <SwPortionHandler.hxx>
-#include <txtcfg.hxx>
 #include <porrst.hxx>
 #include <inftxt.hxx>
 #include <txtpaint.hxx> // ClipVout

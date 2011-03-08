@@ -612,22 +612,6 @@ void Writer::Impl_writeText( const Point& rPos, const String& rText, const sal_I
 
         // write text element
 
-/* test code to create a bound rect, not realy working for rotated text
-            Size        aTextSize( map( Size( mpVDev->GetTextWidth( rText ), mpVDev->GetTextHeight() ) ) );
-            Point       aMetricPoint( map( Point( aMetric.GetLeading(), aMetric.GetAscent() )  ) );
-
-            Point       aTmpPoint( map( Point( - aMetric.GetLeading(), - aMetric.GetAscent() )  ) ); ;
-            Rectangle   aTmpRectangle(aTmpPoint, aTextSize );
-            Polygon     aPoly( aTmpRectangle );
-
-            aPoly.Rotate( aTmpPoint, (USHORT) nOrientation );
-
-            Rectangle   aTextBoundRect( aPoly.GetBoundRect() );
-
-            aPoly.Move( aPt.X(), aPt.Y() - map( Size( 0, aMetric.GetDescent() ) ).Height() );
-
-*/
-
 #if 0 // makes the calculated bound rect visible for debuging
 {
         Polygon aTmpPoly( aPoly );
@@ -899,15 +883,6 @@ sal_uInt16 Writer::defineBitmap( const BitmapEx &bmpSource, sal_Int32 nJPEGQuali
         aFilterData[0].Value <<= nJPEGQualityLevel;
     }
 
-#if 0
-    // Debug code to see what we export to swf
-    {
-        SvFileStream aDstStm( String( RTL_CONSTASCII_USTRINGPARAM("e:\\test.jpg") ), STREAM_READ | STREAM_WRITE | STREAM_TRUNC );
-        aFilter.ExportGraphic( aGraphic, String(), aDstStm,
-                                aFilter.GetExportFormatNumberForShortName( OUString( RTL_CONSTASCII_USTRINGPARAM( JPG_SHORTNAME ) ) ), &aFilterData );
-    }
-#endif
-
     if( aFilter.ExportGraphic( aGraphic, String(), aDstStm,
                                 aFilter.GetExportFormatNumberForShortName( OUString( RTL_CONSTASCII_USTRINGPARAM( JPG_SHORTNAME ) ) ), &aFilterData ) == ERRCODE_NONE )
     {
@@ -1069,7 +1044,7 @@ void Writer::Impl_writeJPEG(sal_uInt16 nBitmapId, const sal_uInt8* pJpgData, sal
 #ifdef DBG_UTIL
         if (0xFF != *pJpgSearch)
         {
-            DBG_ERROR( "Expected JPEG marker." ); ((void)0);
+            OSL_FAIL( "Expected JPEG marker." ); ((void)0);
         }
 #endif
 
@@ -1139,7 +1114,7 @@ void Writer::Impl_writeJPEG(sal_uInt16 nBitmapId, const sal_uInt8* pJpgData, sal
             break;
 
         default:
-            DBG_ERROR( "JPEG marker I didn't handle!" );
+            OSL_FAIL( "JPEG marker I didn't handle!" );
 
         }
     }
@@ -1329,12 +1304,10 @@ bool Writer::Impl_writeFilling( SvtGraphicFill& rFilling )
             aMatrix.set(2, 2, 1.0);
 
             // scale bitmap
-            Rectangle originalPixelRect = Rectangle(Point(), aGraphic.GetBitmapEx().GetSizePixel());
-
             double XScale = (double)aNewRect.GetWidth()/aOldRect.GetWidth();
             double YScale = (double)aNewRect.GetHeight()/aOldRect.GetHeight();
 
-             aMatrix.scale( XScale, YScale );
+            aMatrix.scale( XScale, YScale );
 
             FillStyle aFillStyle( nBitmapId, !rFilling.IsTiling(), aMatrix );
 
@@ -1887,20 +1860,11 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
             case( META_MOVECLIPREGION_ACTION ):
             {
                 ( (MetaAction*) pAction )->Execute( mpVDev );
-//              mbClipAttrChanged = sal_True;
             }
             break;
 
             case( META_MAPMODE_ACTION ):
             {
-//              const MetaMapModeAction *pA = (const MetaMapModeAction*) pAction;
-//              MapMode mm = pA->GetMapMode();
-//              MapUnit mu = mm.GetMapUnit();
-//
-//              Point pt = mm.GetOrigin();
-//              Fraction fx = mm.GetScaleX();
-//              Fraction fy = mm.GetScaleY();
-
                 bMap++;
             }
             case( META_REFPOINT_ACTION ):
@@ -1931,7 +1895,6 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
             break;
 
             default:
-                //DBG_ERROR( "FlashActionWriter::ImplWriteActions: unsupported MetaAction #" );
             break;
         }
     }

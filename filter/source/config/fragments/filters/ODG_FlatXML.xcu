@@ -3,7 +3,7 @@
         <prop oor:name="Type"><value>draw_ODG_FlatXML</value></prop>
         <prop oor:name="DocumentService"><value>com.sun.star.drawing.DrawingDocument</value></prop>
         <prop oor:name="UIComponent"/>
-        <prop oor:name="UserData"><value oor:separator=",">com.sun.star.comp.filter.FlatXmlCpp,,com.sun.star.comp.Draw.XMLOasisImporter,com.sun.star.comp.Draw.XMLOasisExporter,,,true</value></prop>
+        <prop oor:name="UserData"><value oor:separator=",">com.sun.star.comp.filter.OdfFlatXml,,com.sun.star.comp.Draw.XMLOasisImporter,com.sun.star.comp.Draw.XMLOasisExporter,,,true</value></prop>
         <prop oor:name="FilterService"><value>com.sun.star.comp.Writer.XmlFilterAdaptor</value></prop>
         <prop oor:name="TemplateName"/>
         <prop oor:name="UIName">

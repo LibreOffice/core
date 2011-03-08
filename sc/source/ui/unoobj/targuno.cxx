@@ -193,7 +193,7 @@ uno::Reference< container::XNameAccess > SAL_CALL  ScLinkTargetTypeObj::getLinks
                 xCollection.set(new ScDatabaseRangesObj(pDocShell));
                 break;
             default:
-                DBG_ERROR("invalid type");
+                OSL_FAIL("invalid type");
         }
     }
 

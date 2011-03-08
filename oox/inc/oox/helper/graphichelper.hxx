@@ -65,7 +65,7 @@ namespace oox {
     resolves the graphic object from the passed URL and thus prevents it from
     being destroyed.
  */
-class GraphicHelper
+class OOX_DLLPUBLIC GraphicHelper
 {
 public:
     explicit            GraphicHelper(

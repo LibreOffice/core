@@ -7,6 +7,7 @@ Categories=Office;X-Red-Hat-Base;X-SuSE-Core-Office;X-MandrivaLinux-Office-Prese
 Exec=${UNIXBASISROOTNAME} --impress %U
 MimeType=application/vnd.oasis.opendocument.presentation;application/vnd.oasis.opendocument.presentation-template;application/vnd.sun.xml.impress;application/vnd.sun.xml.impress.template;application/vnd.stardivision.impress;application/mspowerpoint;application/vnd.ms-powerpoint;application/vnd.openxmlformats-officedocument.presentationml.presentation;application/vnd.ms-powerpoint.presentation.macroenabled.12;application/vnd.openxmlformats-officedocument.presentationml.template;application/vnd.ms-powerpoint.template.macroenabled.12;
 Name=%PRODUCTNAME Impress
+Name[pt_BR]=%PRODUCTNAME_BR Impress
 GenericName=Presentation
 Comment=Create and edit presentations for slideshows, meeting and Web pages by using Impress.
 InitialPreference=5

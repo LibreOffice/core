@@ -235,8 +235,7 @@ void SwDrawView::AddCustomHdl()
         return;
 
     SdrObject *pObj = rMrkList.GetMark(0)->GetMarkedSdrObj();
-    // --> OD 2006-11-06 #130889# - make code robust
-//    const SwFmtAnchor &rAnchor = ::FindFrmFmt(pObj)->GetAnchor();
+    // make code robust
     SwFrmFmt* pFrmFmt( ::FindFrmFmt( pObj ) );
     if ( !pFrmFmt )
     {
@@ -244,7 +243,6 @@ void SwDrawView::AddCustomHdl()
         return;
     }
     const SwFmtAnchor &rAnchor = pFrmFmt->GetAnchor();
-    // <--
 
     if (FLY_AS_CHAR == rAnchor.GetAnchorId())
         return;
@@ -380,8 +378,6 @@ inline SdrObject *lcl_FindParent( SdrObject *pObj )
 
 /** determine maximal order number for a 'child' object of given 'parent' object
 
-    OD 2004-08-20 #110810#
-
     @author OD
 */
 sal_uInt32 SwDrawView::_GetMaxChildOrdNum( const SwFlyFrm& _rParentObj,
@@ -417,8 +413,6 @@ sal_uInt32 SwDrawView::_GetMaxChildOrdNum( const SwFlyFrm& _rParentObj,
 
 /** method to move 'repeated' objects of the given moved object to the
     according level
-
-    OD 2004-08-23 #110810#
 
     @author OD
 */
@@ -505,16 +499,15 @@ void SwDrawView::_MoveRepeatedObjs( const SwAnchoredObject& _rMovedAnchoredObj,
     }
 }
 
-// --> OD 2004-08-20 #110810# - adjustment and re-factoring of method
+// --> adjustment and re-factoring of method
 void SwDrawView::ObjOrderChanged( SdrObject* pObj, ULONG nOldPos,
                                           ULONG nNewPos )
 {
-    // --> OD 2004-08-17 #110810# - nothing to do for group members
+    // nothing to do for group members
     if ( pObj->GetUpGroup() )
     {
         return;
     }
-    // <--
 
     // determine drawing page and assure that the order numbers are correct.
     SdrPage* pDrawPage = GetModel()->GetPage( 0 );
@@ -788,16 +781,14 @@ const SwFrm* SwDrawView::CalcAnchor()
     else
     {
         SwDrawContact *pC = (SwDrawContact*)GetUserCall(pObj);
-        // OD 17.06.2003 #108784# - determine correct anchor position for
-        // 'virtual' drawing objects.
-        // OD 2004-03-25 #i26791#
+        // determine correct anchor position for 'virtual' drawing objects.
+        // #i26791#
         pAnch = pC->GetAnchorFrm( pObj );
         if( !pAnch )
         {
             pC->ConnectToLayout();
-            // OD 17.06.2003 #108784# - determine correct anchor position for
-            // 'virtual' drawing objects.
-            // OD 2004-03-25 #i26791#
+            // determine correct anchor position for 'virtual' drawing objects.
+            // #i26791#
             pAnch = pC->GetAnchorFrm( pObj );
         }
         aMyRect = pObj->GetSnapRect();
@@ -824,7 +815,7 @@ const SwFrm* SwDrawView::CalcAnchor()
     {
         if ( pAnch->IsCntntFrm() )
         {
-            // OD 26.06.2003 #108784# - allow drawing objects in header/footer,
+            // allow drawing objects in header/footer,
             // but exclude control objects.
             bool bBodyOnly = CheckControlLayer( pObj );
             pAnch = ::FindAnchor( (SwCntntFrm*)pAnch, aPt, bBodyOnly );
@@ -952,9 +943,8 @@ void SwDrawView::CheckPossibilities()
                         uno::Reference < embed::XEmbeddedObject > xObj = pNd->GetOLEObj().GetOleRef();
                         if ( xObj.is() )
                         {
-                            // --> OD 2004-08-16 #110810# - improvement for
-                            // the future, when more than one Writer fly frame
-                            // can be selected.
+                            // --> improvement for the future, when more
+                            // than one Writer fly frame can be selected.
 
                             // TODO/LATER: retrieve Aspect - from where?!
                             bSzProtect |= ( embed::EmbedMisc::EMBED_NEVERRESIZE & xObj->getStatus( embed::Aspects::MSOLE_CONTENT ) ) ? TRUE : FALSE;
@@ -994,8 +984,6 @@ void SwDrawView::CheckPossibilities()
 
 /** replace marked <SwDrawVirtObj>-objects by its reference object for delete
     marked objects.
-
-    OD 18.06.2003 #108784#
 
     @author OD
 */
@@ -1046,8 +1034,7 @@ void SwDrawView::DeleteMarked()
     if ( pDoc->GetRootFrm() )
         pDoc->GetRootFrm()->StartAllAction();
     pDoc->StartUndo(UNDO_EMPTY, NULL);
-    // OD 18.06.2003 #108784# - replace marked <SwDrawVirtObj>-objects by its
-    // reference objects.
+    // replace marked <SwDrawVirtObj>-objects by its reference objects.
     {
         SdrPageView* pDrawPageView = rImp.GetPageView();
         if ( pDrawPageView )

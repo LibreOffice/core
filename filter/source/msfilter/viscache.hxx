@@ -30,12 +30,6 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/bitmap.hxx>
 
-/************************************************************************
-|*    Impl_CacheElement
-|*    Impl_Cache
-|*
-|*    Beschreibung
-*************************************************************************/
 class Impl_OlePres
 {
     ULONG   nFormat;

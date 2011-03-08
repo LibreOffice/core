@@ -1298,7 +1298,7 @@ static BOOL ImplDateGetValue( const XubString& rStr, Date& rDate, ExtDateFieldFo
 
             default:
             {
-                DBG_ERROR( "DateFormat???" );
+                OSL_FAIL( "DateFormat???" );
             }
         }
     }
@@ -1434,7 +1434,7 @@ XubString DateFormatter::ImplGetDateAsText( const Date& rDate,
         break;
         default:
         {
-            DBG_ERROR( "DateFormat???" );
+            OSL_FAIL( "DateFormat???" );
         }
     }
 
@@ -1607,7 +1607,7 @@ void DateField::ImplDateSpinArea( BOOL bUp )
                 }
                 break;
                 default:
-                    DBG_ERROR( "invalid conversion" );
+                    OSL_FAIL( "invalid conversion" );
                     break;
             }
         }
@@ -3300,7 +3300,7 @@ void TimeField::SetExtFormat( ExtTimeFieldFormat eFormat )
             SetFormat( TIMEF_SEC );
         }
         break;
-        default:    DBG_ERROR( "ExtTimeFieldFormat unknown!" );
+        default:    OSL_FAIL( "ExtTimeFieldFormat unknown!" );
     }
 
     if ( GetField() && GetField()->GetText().Len() )

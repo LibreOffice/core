@@ -344,7 +344,7 @@ sal_Bool LwpPara::RegisterMasterPage(XFParaStyle* pBaseStyle)
         pOverStyle->SetStyleName( A2OUSTR(""));
         pOverStyle->SetMasterPage(pLayout->GetStyleName());
         if (m_ParentStyleName.getLength())
-                    pOverStyle->SetParentStyleName(m_ParentStyleName); //Add by  2005/12/12
+                    pOverStyle->SetParentStyleName(m_ParentStyleName);
         XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
         m_StyleName = pXFStyleManager->AddStyle(pOverStyle)->GetStyleName();
     }
@@ -364,7 +364,7 @@ void LwpPara::RegisterStyle()
     XFParaStyle* pBaseStyle = static_cast<XFParaStyle*>(m_pFoundry->GetStyleManager()->GetStyle(m_ParaStyle));
     if (pBaseStyle == NULL) return;
     m_StyleName = pBaseStyle->GetStyleName();//such intf to be added
-    m_ParentStyleName = m_StyleName;//Add by ,2005/12/12
+    m_ParentStyleName = m_StyleName;
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
 
     if (GetParaStyle()->GetIndent())
@@ -522,7 +522,7 @@ void LwpPara::RegisterStyle()
                 }
             }
             if (m_ParentStyleName.getLength())
-                pOverStyle->SetParentStyleName(m_ParentStyleName); //Add by  2005/12/12
+                pOverStyle->SetParentStyleName(m_ParentStyleName);
             m_StyleName = pXFStyleManager->AddStyle(pOverStyle)->GetStyleName();
 
     }
@@ -536,7 +536,7 @@ void LwpPara::RegisterStyle()
                     *pOverStyle = *pBaseStyle;
                     OverrideIndent(NULL,m_pIndentOverride,pOverStyle);
                     if (m_ParentStyleName.getLength())
-                        pOverStyle->SetParentStyleName(m_ParentStyleName); //Add by  2005/12/12
+                        pOverStyle->SetParentStyleName(m_ParentStyleName);
                     m_StyleName = pXFStyleManager->AddStyle(pOverStyle)->GetStyleName();
                 }
             }
@@ -551,7 +551,7 @@ void LwpPara::RegisterStyle()
             *pOverStyle = *pOldStyle;
             pOverStyle->SetAlignType(enumXFAlignStart);
             if (m_ParentStyleName.getLength())
-                pOverStyle->SetParentStyleName(m_ParentStyleName); //Add by  2005/12/12
+                pOverStyle->SetParentStyleName(m_ParentStyleName);
             m_StyleName = pXFStyleManager->AddStyle(pOverStyle)->GetStyleName();
         }
     }
@@ -767,7 +767,7 @@ void LwpPara::RegisterStyle()
             XFMargins* pMargin = &pOverStyle->GetMargins();
             pMargin->SetTop(pMargin->GetTop()+pPrePara->GetBelowSpacing());
             if (m_ParentStyleName.getLength())
-                    pOverStyle->SetParentStyleName(m_ParentStyleName); //Add by  2005/12/12
+                    pOverStyle->SetParentStyleName(m_ParentStyleName);
             m_StyleName = pXFStyleManager->AddStyle(pOverStyle)->GetStyleName();
         }
     }
@@ -780,7 +780,7 @@ void LwpPara::RegisterStyle()
         //pOverStyle->SetStyleName(A2OUSTR(""));
         this->RegisterTabStyle(pParaStyle);
         if (m_ParentStyleName.getLength())
-                    pParaStyle->SetParentStyleName(m_ParentStyleName); //Add by  2005/12/12
+                    pParaStyle->SetParentStyleName(m_ParentStyleName);
         m_StyleName = pXFStyleManager->AddStyle(pParaStyle)->GetStyleName();
     }
 
@@ -798,7 +798,7 @@ void LwpPara::RegisterStyle()
         *pStyle = *GetXFParaStyle();
         pStyle->SetDropCap(m_nChars-1,m_nLines);
         if (m_ParentStyleName.getLength())
-                    pStyle->SetParentStyleName(m_ParentStyleName); //Add by  2005/12/12
+                    pStyle->SetParentStyleName(m_ParentStyleName);
         m_StyleName = pXFStyleManager->AddStyle(pStyle)->GetStyleName();
     }
     // maybe useful for futer version

@@ -82,7 +82,7 @@ bool ChartRenderer::DoPaint(OutputDevice* pOutDev, const Rectangle& rLogicObject
             if( aContainerChartSize.Width != aChartSize.Width
                 || aContainerChartSize.Height != aChartSize.Height )
             {
-                DBG_ERROR("chart size does not equal size assumed by the container");
+                OSL_FAIL("chart size does not equal size assumed by the container");
                 //correct the state here on the fly -> let the container size win
                 ChartModelHelper::setPageSize( aContainerChartSize, xModel );
             }

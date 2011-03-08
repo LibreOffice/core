@@ -30,7 +30,6 @@
 #define SC_OUTPUT_HXX
 
 #include "address.hxx"
-#include <tools/list.hxx>
 #include <tools/color.hxx>
 #include <tools/fract.hxx>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>

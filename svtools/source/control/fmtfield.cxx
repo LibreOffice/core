@@ -813,7 +813,6 @@ void FormattedField::FormatChanged( FORMAT_CHANGE_TYPE _nWhat )
 
     if ( ( 0 != ( _nWhat & FCT_FORMATTER ) ) && m_pFormatter )
         m_pFormatter->SetEvalDateFormat( NF_EVALDATEFORMAT_INTL_FORMAT );
-        // 95845 - 03.04.2002 - fs@openoffice.org
 
     ReFormat();
 }
@@ -1293,7 +1292,7 @@ void DoubleCurrencyField::FormatChanged(FORMAT_CHANGE_TYPE nWhat)
             UpdateCurrencyFormat();
             break;
         case FCT_KEYONLY:
-            DBG_ERROR("DoubleCurrencyField::FormatChanged : somebody modified my key !");
+            OSL_FAIL("DoubleCurrencyField::FormatChanged : somebody modified my key !");
             // We always build our own format from the settings we get via special methods (setCurrencySymbol etc.).
             // Nobody but ourself should modifiy the format key directly !
             break;

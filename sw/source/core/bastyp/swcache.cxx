@@ -29,9 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <tools/debug.hxx>
-#include <errhdl.hxx>
 #include <swcache.hxx>
 
 SV_IMPL_PTRARR(SwCacheObjArr,SwCacheObj*);
@@ -126,11 +124,8 @@ SwCache::SwCache( const USHORT nInitSize, const USHORT nGrowSize
 }
 
 #if OSL_DEBUG_LEVEL > 1
-
-
 SwCache::~SwCache()
 {
-#if OSL_DEBUG_LEVEL > 1
     {
         ByteString sOut( aName ); sOut += '\n';
         (( sOut += "Anzahl neuer Eintraege:             " )
@@ -163,7 +158,6 @@ SwCache::~SwCache()
         DBG_ERROR( sOut.GetBuffer() );
     }
     Check();
-#endif
 }
 #endif
 
@@ -524,8 +518,6 @@ SwCacheObj::~SwCacheObj()
 
 #if OSL_DEBUG_LEVEL > 1
 
-
-
 void SwCacheObj::Lock()
 {
     OSL_ENSURE( nLock < UCHAR_MAX, "To many Locks for CacheObject." );
@@ -552,7 +544,6 @@ SwCacheAccess::~SwCacheAccess()
 |*  SwCacheAccess::Get()
 |*************************************************************************/
 
-
 void SwCacheAccess::_Get()
 {
     OSL_ENSURE( !pObj, "SwCacheAcces Obj already available." );
@@ -571,14 +562,9 @@ void SwCacheAccess::_Get()
 |*  SwCacheAccess::IsAvailable()
 |*************************************************************************/
 
-
 BOOL SwCacheAccess::IsAvailable() const
 {
     return pObj != 0;
 }
-
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

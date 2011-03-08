@@ -32,7 +32,6 @@
 
 #include <tools/string.hxx>
 #include <tools/debug.hxx>
-#include "errhdl.hxx"
 #include "swtypes.hxx"
 #include "txttypes.hxx"
 

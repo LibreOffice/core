@@ -423,7 +423,7 @@ File gid_File_Help_Schart_Zip
     EXTRA_ALL_GOOD_HELP_LOCALIZATIONS_LANG(schart);
 End
 
-#if defined INCLUDE_JAVA_ACCESSBRIDGE && defined WNT
+#if defined SOLAR_JAVA && defined INCLUDE_JAVA_ACCESSBRIDGE && defined WNT
 
 File gid_File_Jar_Accessbridge
     TXT_FILE_BODY;
@@ -1900,6 +1900,15 @@ End
 #endif
 
 #ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_Br
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Br;
+	Name = "dict-br.oxt";
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Ca
     Dir = gid_Brand_Dir_Share_Extensions_Dict_Ca;
     Name = "dict-ca.oxt";
@@ -2080,6 +2089,15 @@ End
 #endif
 
 #ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_Oc
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Oc;
+	Name = "dict-oc.oxt";
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Pl
 	Dir = gid_Brand_Dir_Share_Extensions_Dict_Pl;
 	Name = "dict-pl.oxt";
@@ -2164,6 +2182,15 @@ End
 File gid_File_Extension_Dictionary_Th
 	Dir = gid_Brand_Dir_Share_Extensions_Dict_Th;
 	Name = "dict-th.oxt";
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_Uk
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Uk;
+	Name = "dict-uk.oxt";
 	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
 	UnixRights = 444;
 End

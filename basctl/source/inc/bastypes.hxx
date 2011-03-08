@@ -51,7 +51,7 @@ class SfxItemSet;
 #include <svtools/tabbar.hxx>
 #include <com/sun/star/script/XLibraryContainer.hpp>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <vector>
 
 #define LINE_SEP_CR     0x0D
@@ -309,7 +309,7 @@ private:
         }
     };
 
-    typedef ::std::hash_map< LibInfoKey, LibInfoItem*, LibInfoKeyHash, ::std::equal_to< LibInfoKey > > LibInfoMap;
+    typedef ::boost::unordered_map< LibInfoKey, LibInfoItem*, LibInfoKeyHash, ::std::equal_to< LibInfoKey > > LibInfoMap;
     LibInfoMap  m_aLibInfoMap;
 
 public:

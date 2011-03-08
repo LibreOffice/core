@@ -83,6 +83,21 @@ AC_ARG_ENABLE(ext-report-builder,
         [Enables the build of the Report Builder extension.]),
 ,)
 
+AC_ARG_ENABLE(ext-scripting-beanshell,
+    AS_HELP_STRING([--enable-ext-scripting-beanshell],
+        [Enables support for scripts in BeanShell.]),
+,)
+
+AC_ARG_ENABLE(ext-scripting-javascript,
+    AS_HELP_STRING([--enable-ext-scripting-javascript],
+        [Enables support for scripts in JavaScript.]),
+,)
+
+AC_ARG_ENABLE(ext-scripting-python,
+    AS_HELP_STRING([--enable-ext-scripting-python],
+        [Enables support for scripts in Python.]),
+,)
+
 AC_ARG_ENABLE(ext-typo,
     AS_HELP_STRING([--enable-ext-typo],
         [Enables the Typography Toolbar extension.]),
@@ -395,13 +410,6 @@ AC_ARG_ENABLE(neon,
 AC_ARG_ENABLE(Xaw,
     AS_HELP_STRING([--disable-Xaw],
         [Disables the use of Xaw for the Netscape/Mozilla plugin.]),
-,)
-
-AC_ARG_ENABLE(gcjaot,
-    AS_HELP_STRING([--enable-gcjaot],
-        [Build with[[out]] using Ahead of Time java compilation support to speed
-         up buildsi by compiling the jars also to native code.. --enable-gcjaot
-         is only known to work with bytecode created with gcj or ecj.]),
 ,)
 
 AC_ARG_ENABLE(check-only,
@@ -959,17 +967,10 @@ WITH_SYSTEM_MOZILLA=no)
 
 AC_ARG_WITH(stlport,
     AS_HELP_STRING([--with-stlport],
-        [The location that STLport is installed in. The STL header files are assumed
-         to be in stlport-home/stlport and the STLPort library in stlport-home/lib.])
-    [
-                          Usage:     --with-stlport=<abs. path to stlport home>
-
-                          Warning!!, disabling using --without-stlport or
-                          enabling using --with-stlport on a platform that
-                          defaults to the opposite will break ABI compatability.
-    ],
-    WITH_STLPORT=$withval ,
-WITH_STLPORT=auto)
+        [Build the STLPort library for compatibility with old extensions for
+         architectures where STLPort used to be used.]),
+    with_stlport=$withval ,
+with_stlport=auto)
 
 AC_ARG_WITH(jdk-home,
     AS_HELP_STRING([--with-jdk-home],
@@ -1175,34 +1176,19 @@ AC_ARG_WITH(poor-help-localizations,
     ],
 ,)
 
-AC_ARG_WITH(dict,
-    AS_HELP_STRING([--with-dict],
-        [Use this option to build LibreOffice with dictionary support.
-         ALL dictionaries are always included by default unless overridden with this option.
-         Separate multiple dictionaries with commas.
-         For all dictionaries, use --with-dict=ALL.])
-    [
-                          Usage:     --with-dict=ENGB,ENUS,ITIT
-    ],
-,)
+AC_ARG_WITH(intro-bitmap,
+[  --with-intro-bitmap    Prefer the specified intro bitmap over the
+                          the default one.
 
-AC_ARG_WITH(intro-bitmaps,
-    AS_HELP_STRING([--with-intro-bitmaps],
-        [Prefer the specified intro bitmaps over the the default one.
-         Can be more than one (separated by commas), the order means priority of
-         fallback if the first does not exist (in the installed tree).])
-    [
-                          Usage:     --with-intro-bitmaps=/path/my_lo_intro.bmp
-    ],
-,)
+                          Usage: --with-intro-bitmap=/path/my_ooo_intro.png
+],,)
 
-AC_ARG_WITH(about-bitmaps,
-    AS_HELP_STRING([--with-about-bitmaps],
-        [Similarly to --with-intro-bitmaps, this allows specification of bitmaps for the About box.])
-    [
-                          Usage:     --with-about-bitmaps=/path/my_lo_about.bmp
-    ],
-,)
+AC_ARG_WITH(about-bitmap,
+[  --with-about-bitmap    Similarly to --with-intro-bitmap, this allows
+                          specification of bitmap for the About box.
+
+                          Usage: --with-about-bitmap=/path/my_ooo_about.png
+],,)
 
 AC_ARG_WITH(vendor,
     AS_HELP_STRING([--with-vendor],
@@ -1296,6 +1282,7 @@ AC_ARG_WITH(max-jobs,
 ,)
 
 BUILD_TYPE="LibO"
+SCPDEFS=""
 
 echo "********************************************************************"
 echo "*"
@@ -1334,9 +1321,9 @@ if test -z "$BASH"; then
 fi
 AC_SUBST(BASH)
 
-AC_MSG_CHECKING([for GNU tar])
+AC_MSG_CHECKING([for GNU or BSD tar])
 for a in $GNUTAR gtar gnutar tar; do
-      $a --version 2> /dev/null | grep GNU  2>&1 > /dev/null
+      $a --version 2> /dev/null | egrep "GNU|bsdtar"  2>&1 > /dev/null
       if test $? -eq 0;  then
            GNUTAR=$a
            break
@@ -1344,7 +1331,7 @@ for a in $GNUTAR gtar gnutar tar; do
 done
 AC_MSG_RESULT($GNUTAR)
 if test -z "$GNUTAR"; then
-    AC_MSG_ERROR([not found. install GNU tar.])
+    AC_MSG_ERROR([not found. install GNU or BSD tar.])
 fi
 AC_SUBST(GNUTAR)
 
@@ -1498,12 +1485,6 @@ case "$host_os" in
         AC_MSG_RESULT([$PTHREAD_LIBS])
         _os=FreeBSD
         ;;
-    osf)
-        test_cups=no
-        test_cairo=no
-        test_randr=no
-        _os=OSF1
-        ;;
     *netbsd*)
         test_gtk=yes
         build_gstreamer=yes
@@ -1529,6 +1510,15 @@ case "$host_os" in
         PTHREAD_CFLAGS="-pthread -D_THREAD_SAFE"
         PTHREAD_LIBS="-pthread"
         _os=OpenBSD
+        ;;
+    dragonfly*)
+        test_gtk=yes
+        build_gstreamer=yes
+        test_kde=yes
+        test_kde4=yes
+        test_freetype=yes
+        PTHREAD_LIBS="-pthread"
+        _os=DragonFly
         ;;
    *)
    AC_MSG_ERROR([$_os operating system is not suitable to build LibreOffice!])
@@ -2069,27 +2059,6 @@ fi
 AC_SUBST(HAVE_LD_HASH_STYLE)
 
 dnl ===================================================================
-dnl  Test the Compaq compiler for OSF1
-dnl ===================================================================
-if test "$_os" = "OSF1"; then
-   if test "$CC" = "cc"; then
-      AC_PATH_PROGS(_cc, cc)
-      COMPATH=`echo $_cc | $SED -n "s/\/bin\/cc//p"`
-      AC_MSG_WARN([******* $_cc , $COMPATH])
-      AC_MSG_CHECKING([the Compaq C compiler version])
-      dnl cc -V outputs to standard error!!!!
-      _compaqc_version=`$CC -V 2>&1 | $AWK '{ print $3 }'`
-      _compaqc_major=`echo $_compaqc_version | $AWK -F. '{ print $1 }'`
-      if test "$_compaqc_major" != "T6"; then
-         AC_MSG_ERROR([found version "$_compaqc_version", use version 6 of the Compaq C compiler])
-      else
-         dnl compiler will do
-         AC_MSG_RESULT([checked])
-      fi
-   fi
-fi
-
-dnl ===================================================================
 dnl Check whether there's a Perl version available.
 dnl ===================================================================
 if test -z "$with_perl_home"; then
@@ -2384,23 +2353,27 @@ dnl ===================================================================
    else
       AC_PROG_CPP
    fi
-fi
 
-AC_CHECK_SIZEOF(long)
-SIZEOF_LONG=$ac_cv_sizeof_long
+   AC_CHECK_SIZEOF(long)
+   SIZEOF_LONG=$ac_cv_sizeof_long
+   AC_C_BIGENDIAN
+   WORDS_BIGENDIAN=$ac_cv_c_bigendian
+
+   dnl Check for large file support
+   AC_SYS_LARGEFILE
+   if test -n "$ac_cv_sys_file_offset_bits"; then
+      LFS_CFLAGS="-D_FILE_OFFSET_BITS=$ac_cv_sys_file_offset_bits"
+   fi
+   if test -n "$ac_cv_sys_large_files" && test "$ac_cv_sys_large_files" != "no"; then
+      LFS_CFLAGS="$LFS_CFLAGS -D_LARGE_FILES"
+   fi
+else
+   SIZEOF_LONG=4
+   WORDS_BIGENDIAN=no
+   LFS_CFLAGS=''
+fi
 AC_SUBST(SIZEOF_LONG)
-AC_C_BIGENDIAN
-WORDS_BIGENDIAN=$ac_cv_c_bigendian
 AC_SUBST(WORDS_BIGENDIAN)
-
-dnl Check for large file support
-AC_SYS_LARGEFILE
-if test -n "$ac_cv_sys_file_offset_bits"; then
-   LFS_CFLAGS="-D_FILE_OFFSET_BITS=$ac_cv_sys_file_offset_bits"
-fi
-if test -n "$ac_cv_sys_large_files" && test "$ac_cv_sys_large_files" != "no"; then
-   LFS_CFLAGS="$LFS_CFLAGS -D_LARGE_FILES"
-fi
 AC_SUBST(LFS_CFLAGS)
 
 dnl ===================================================================
@@ -2529,7 +2502,7 @@ dnl ===================================================================
 dnl Set the gcc/gxx include directories
 dnl ===================================================================
 # Removed the special FreeBSD treatment. The problem was that with_gxx_include_path
-# often contains an i386 which is expanded as a macro. Solved in stlport.
+# often contains an i386 which is expanded as a macro.
 if test "$GXX" = "yes"; then
    AC_MSG_CHECKING([for g++ include path])
    if test -z "$with_gxx_include_path"; then
@@ -2660,22 +2633,6 @@ if test "$_os" = "SunOS"; then
       fi
    fi
 fi
-dnl ===================================================================
-dnl Extra checking for the OSF compiler
-dnl ===================================================================
-if test "$_os" = "OSF1"; then
-   AC_MSG_CHECKING([Compaq C++ compiler version])
-   dnl cxx -V outputs to standard error!!!!
-   _compaqcxx_version=`$CXX -V 2>&1 | $AWK '{ print $3 }'`
-   _compaqcxx_major=`echo $_compaqcxx_version | $AWK -F. '{ print $1 }'`
-   if test "$_compaqcxx_major" != "V6"; then
-      AC_MSG_WARN([found version "$_compaqc_version", use version 6 of the Compaq C++ compiler])
-      echo "found version $_compaqc_version, use version 6 of the Compaq C++ compiler" >> warn
-   else
-      dnl compiler will do
-      AC_MSG_RESULT([checked])
-   fi
-fi
 
 dnl *************************************************************
 dnl Testing for exception handling - dwarf2 or sjlj exceptions...
@@ -2804,118 +2761,53 @@ fi
 dnl ===================================================================
 dnl Checks for what the default STL should be
 dnl ===================================================================
-   AC_MSG_CHECKING([what the default STL should be])
-   DEFAULT_TO_STLPORT="no"
+   AC_MSG_CHECKING([Whether building STLPort library makes sense])
+   BUILD_STLPORT="no"
    if test "$_os" = "Linux"; then
      case "$host_cpu" in
        i?86)
      case "$host_os" in k*bsd*-gnu*)
-         DEFAULT_TO_STLPORT="no"
+         BUILD_STLPORT="no"
         ;;
      *)
-             DEFAULT_TO_STLPORT="yes"
+             BUILD_STLPORT="yes"
         ;;
       esac
          ;;
        *)
-         DEFAULT_TO_STLPORT="no"
+         BUILD_STLPORT="no"
          ;;
      esac
    elif test "$_os" = "SunOS"; then
-      DEFAULT_TO_STLPORT="yes"
+      BUILD_STLPORT="yes"
    elif test "$_os" = "WINNT" -a "$WITH_MINGW" != "yes"; then
-      DEFAULT_TO_STLPORT="yes"
+      BUILD_STLPORT="yes"
    elif test "$_os" = "OS2"; then
-      DEFAULT_TO_STLPORT="yes"
+      BUILD_STLPORT="yes"
    elif test "$_os" = "FreeBSD"; then
-      DEFAULT_TO_STLPORT="yes"
+      BUILD_STLPORT="yes"
    fi
-   if test "$DEFAULT_TO_STLPORT" = "yes"; then
-      AC_MSG_RESULT([stlport])
+   if test "$BUILD_STLPORT" = "yes" ; then
+      AC_MSG_RESULT([yes])
    else
-      AC_MSG_RESULT([system])
-   fi
-   if test "$WITH_STLPORT" = "auto"; then
-      WITH_STLPORT=$DEFAULT_TO_STLPORT
+      AC_MSG_RESULT([no])
    fi
 
-dnl ===================================================================
-dnl Checks for STLPORT
-dnl ===================================================================
-   AC_MSG_CHECKING([for STL providing headers])
-   STLPORT4=""
-   USE_SYSTEM_STL=""
-   if test "$WITH_STLPORT" = "yes"; then
-      AC_MSG_RESULT([using internal stlport.])
-      if test "$DEFAULT_TO_STLPORT" != "yes"; then
-         AC_MSG_WARN([using stlport. Warning, breaks your ABI compatability!])
-         echo "using stlport. Warning, breaks your ABI compatability!" >>warn
-      fi
-   elif test "$WITH_STLPORT" = "no"; then
-      AC_MSG_RESULT([using system STL])
-      USE_SYSTEM_STL="YES"
-      if test "$DEFAULT_TO_STLPORT" != "no"; then
-         AC_MSG_WARN([using system STL. Warning, breaks your ABI compatability!])
-         echo "using system STL. Warning, breaks your ABI compatability!" >>warn
-      fi
+   AC_MSG_CHECKING([Whether STLPort library will be actually built])
+   if test "$with_stlport" = "auto" -o "$BUILD_STLPORT" = "no"; then
+      with_stlport=$BUILD_STLPORT
+   fi
+   if test "$with_stlport" = "yes" ; then
+      AC_MSG_RESULT([yes])
+	  WITH_STLPORT=YES
+	  SCPDEFS="$SCPDEFS -DWITH_STLPORT"
+	  BUILD_TYPE="$BUILD_TYPE STLPORT"
    else
-      STLPORT4=$WITH_STLPORT
-      if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
-         AC_TRY_CPP($STLPORT4/stlport/hash_map, AC_MSG_RESULT([checked.]), AC_MSG_ERROR([STLport headers not found.]))
-      else
-         dnl AC_TRY_CPP doesn't work for MSVC because C++ preprocessor is not found by autoconf.
-         if test -f "$STLPORT4/stlport/hash_map"; then
-            AC_MSG_RESULT([checked.])
-         else
-            AC_MSG_ERROR([STLport headers not found.])
-         fi
-      fi
-      if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
-         AC_MSG_CHECKING([for STLport libraries])
-         if test "$_os" = "SunOS"; then
-              if test -f "$STLPORT4/lib/libstlport_sunpro.so"; then
-                  AC_MSG_RESULT([checked])
-              elif test -f "$STLPORT4/lib/libstlport.so"; then
-                  AC_MSG_RESULT([checked])
-                  STLPORT_VER=500
-              else
-                  AC_MSG_ERROR([STLport libraries not found])
-              fi
-          elif test "$_os" = "Darwin"; then
-              if test -f "$STLPORT4/lib/libstlport_gcc.dylib"; then
-                  AC_MSG_RESULT([checked])
-              elif test -f "$STLPORT4/lib/libstlport.dylib"; then
-                  AC_MSG_RESULT([checked])
-                  STLPORT_VER=500
-              else
-                  AC_MSG_ERROR([STLport libraries not found])
-              fi
-           else
-               if test -f "$STLPORT4/lib/libstlport_gcc.so"; then
-                   AC_MSG_RESULT([checked])
-               elif test -f "$STLPORT4/lib/libstlport.so"; then
-                   AC_MSG_RESULT([checked])
-                   STLPORT_VER=500
-               else
-                   AC_MSG_ERROR([STLport libraries not found])
-               fi
-           fi
-       fi
-      if test "$DEFAULT_TO_STLPORT" != "yes"; then
-         AC_MSG_WARN([using stlport. Warning, breaks your ABI compatability!])
-         echo "using stlport. Warning, breaks your ABI compatability!" >>warn
-      fi
+      WITH_STLPORT=NO
+      AC_MSG_RESULT([no])
    fi
 
-if test -z "$STLPORT4"; then
-  STLPORT4="NO_STLPORT4"
-fi
-if test -z "$STLPORT_VER"; then
-  STLPORT_VER=400
-fi
-AC_SUBST(STLPORT4)
-AC_SUBST(STLPORT_VER)
-AC_SUBST(USE_SYSTEM_STL)
+AC_SUBST(WITH_STLPORT)
 
 dnl ===================================================================
 dnl visibility and c++0x features
@@ -3027,20 +2919,9 @@ dnl ===================================================================
 dnl system stl sanity tests
 dnl ===================================================================
 HAVE_GCC_VISIBILITY_BROKEN=
-if test "$USE_SYSTEM_STL" = "YES"; then
-   AC_MSG_CHECKING([if hash_map will be in __gnu_cxx namespace])
+if test \( "$_os" != "WINNT" -o "$WITH_MINGW" = "yes" \) ; then
+
    AC_LANG_PUSH([C++])
-
-   AC_TRY_COMPILE([#include <ext/hash_map>
-using namespace __gnu_cxx;
-],[hash_map<int, int> t; return 0;],
-  ac_cv_cxx_have_ext_hash_map=yes, ac_cv_cxx_have_ext_hash_map=no)
-
-   if test "$ac_cv_cxx_have_ext_hash_map" = "no"; then
-      AC_MSG_ERROR([Can't find hash_map. Try with --with-stlport])
-   else
-      AC_MSG_RESULT([$ac_cv_cxx_have_ext_hash_map])
-   fi
 
    if test "$HAVE_GCC_VISIBILITY_FEATURE" = "TRUE"; then
       AC_MSG_CHECKING([if STL headers are visibility safe])
@@ -3632,37 +3513,6 @@ if test "$SOLAR_JAVA" != ""; then
    AC_SUBST(AWTLIB)
 fi
 
-dnl ===================================================================
-dnl Check for optional gcj for AOT
-dnl ===================================================================
-if test "$SOLAR_JAVA" != ""; then
-  AC_MSG_CHECKING([whether to enable gcj aot compilation])
-  if test -n "$enable_gcjaot" && test "$enable_gcjaot" != "no"; then
-     AC_MSG_RESULT([yes])
-     if test `echo $WITH_JAVA | grep -c "gij"` -eq 0; then
-        gcjaot="gcj"
-     else
-        gcjaot=`echo $WITH_JAVA | $SED -e "s/gij/gcj/g"`
-     fi
-     AC_MSG_RESULT([$gcjaot])
-     if test -n "$with_jdk_home"; then
-        _javac_path="$with_jdk_home/bin/$gcjaot"
-        dnl Check if there is a gcj at all.
-        if test -x "$_javac_path"; then
-           JAVAAOTCOMPILER=$_javac_path
-        fi
-     fi
-     if test -z "$JAVAAOTCOMPILER"; then
-        AC_PATH_PROG(JAVAAOTCOMPILER, $gcjaot)
-     fi
-     if test -z "$JAVAAOTCOMPILER"; then
-        AC_MSG_WARN([$gcjaot not found, set with_jdk_home])
-     fi
-  else
-     AC_MSG_RESULT([no])
-  fi
-fi
-
 AC_SUBST(JAVA_HOME)
 AC_SUBST(JDK)
 AC_SUBST(JAVAFLAGS)
@@ -3671,7 +3521,6 @@ AC_SUBST(JAVA_TARGET_VER)
 AC_SUBST(JAVAINTERPRETER)
 AC_SUBST(JAVAIFLAGS)
 AC_SUBST(JAVACOMPILER)
-AC_SUBST(JAVAAOTCOMPILER)
 AC_SUBST(JAVADOC)
 
 dnl ===================================================================
@@ -3796,14 +3645,11 @@ if test "$enable_epm" = "yes"; then
     AIX)
         PKGFORMAT=rpm
         ;;
-    OpenBSD)
+    OpenBSD|DragonFly)
         PKGFORMAT=portable
         ;;
     *BSD)
         PKGFORMAT=bsd
-        ;;
-    OSF1)
-        PKGFORMAT=setld
         ;;
     WINNT)
         PKGFORMAT=msi
@@ -4378,12 +4224,16 @@ int main(int argc, char **argv) {
        else return 1;
 }
     ], [AC_MSG_RESULT([yes])], [AC_MSG_ERROR([no. you need at least db 4.1])])
-    save_LIBS="$LIBS"
+    DB_LIB=
     for dbver in '' -5.1 5.1 -5.0 5.0 -5 5 -4.8 4.8 -4.7 4.7 -4 4; do
-        AC_CHECK_LIB(db$dbver, db_create, [ DB_LIB="db$dbver"; DB_CPPLIB="db_cxx$dbver"; LIBS="-ldb$dbver $LIBS"; break ])
+        AC_CHECK_LIB(db$dbver, dbopen, [ DB_LIB="db$dbver"; DB_CPPLIB="db_cxx$dbver"; break; ] ,
+            AC_CHECK_LIB(db$dbver, __db185_open, [ DB_LIB="db$dbver"; DB_CPPLIB="db_cxx$dbver"; break; ]
+            )
+        )
     done
-    AC_CHECK_FUNC(db_create, [], [ AC_MSG_ERROR([db not installed or functional]) ])
-    LIBS="$save_LIBS"
+    if test -z "$DB_LIB" ; then 
+        AC_MSG_ERROR([db not installed or functional])
+    fi
     SCPDEFS="$SCPDEFS -DSYSTEM_DB"
 else
     AC_MSG_RESULT([internal])
@@ -4849,15 +4699,12 @@ if test -n "$with_system_mdds" -o -n "$with_system_headers" && \
     dnl Determine which hash container mdds shall use
     dnl ===================================================================
     AC_MSG_CHECKING([which hash container mdds shall use])
-    if test "x$HAVE_BOOST_UNORDERED_MAP" = "xTRUE"; then
-        MDDS_CPPFLAGS="-DMDDS_HASH_CONTAINER_BOOST"
-        AC_MSG_RESULT([boost::unordered_map])
-    elif test "x$HAVE_CXX0X" = "xTRUE"; then
+    if test "x$HAVE_CXX0X" = "xTRUE"; then
         MDDS_CPPFLAGS="-std=c++0x"
         AC_MSG_RESULT([std::unordered_map])
     else
-        MDDS_CPPFLAGS="-DMDDS_HASH_CONTAINER_STLPORT"
-        AC_MSG_RESULT([std::hash_map])
+        MDDS_CPPFLAGS="-DMDDS_HASH_CONTAINER_BOOST"
+        AC_MSG_RESULT([boost::unordered_map])
     fi
 
     AC_LANG_PUSH([C++])
@@ -5330,18 +5177,21 @@ if test -n "$with_system_icu" -o -n "$with_system_libs" && \
    if test -z "$SYSTEM_GENCMN"; then
       AC_MSG_ERROR([\"gencmn\" not found in \$PATH, install the icu development tool \"gencmn"\])
    fi
-   AC_MSG_CHECKING([ICU version])
-      AC_TRY_RUN([
-#include <unicode/uversion.h>
 
-int main(int argc, char **argv) {
-      if(U_ICU_VERSION_MAJOR_NUM < 4)
-        return 1;
-      else
-        return 0;
-}
-      ], [AC_MSG_RESULT(OK)], [AC_MSG_ERROR([not suitable, only >= 4.0 supported currently])])
-      AC_LANG_POP([C++])
+   AC_PATH_PROG( ICUCONFIG, icu-config)
+   AC_MSG_CHECKING([ICU version])
+   ICU_VERSION=`$ICUCONFIG --version`
+   ICU_MAJOR=`$ICUCONFIG --version | cut -d"." -f1`
+   ICU_MINOR=`$ICUCONFIG --version | cut -d"." -f2`
+   ICU_MICRO=`$ICUCONFIG --version | cut -d"." -f3`
+
+   if test "$ICU_MAJOR" -ge "4"; then
+      AC_MSG_RESULT([OK])
+   else
+      AC_MSG_ERROR([not suitable, only >= 4.0 supported currently])
+   fi
+
+    AC_LANG_POP([C++])
 else
     AC_MSG_RESULT([internal])
     SYSTEM_ICU=NO
@@ -5351,6 +5201,9 @@ AC_SUBST(SYSTEM_ICU)
 AC_SUBST(SYSTEM_GENBRK)
 AC_SUBST(SYSTEM_GENCCODE)
 AC_SUBST(SYSTEM_GENCMN)
+AC_SUBST(ICU_MAJOR)
+AC_SUBST(ICU_MINOR)
+AC_SUBST(ICU_MICRO)
 
 dnl ===================================================================
 dnl Graphite
@@ -5586,7 +5439,8 @@ fi
 dnl ===================================================================
 dnl Check for system openssl
 dnl ===================================================================
-if test "$_os" = "Darwin" -o "$_os" = "NetBSD" -o "$_os" = "OpenBSD" && test "$with_system_openssl" != "no"; then
+if test "$_os" = "Darwin" -o "$_os" = "NetBSD" -o "$_os" = "OpenBSD" -o \
+        "$_os" = "DragonFly" && test "$with_system_openssl" != "no"; then
    with_system_openssl=yes
 fi
 AC_MSG_CHECKING([which libssl to use])
@@ -5595,7 +5449,8 @@ if test -n "$with_system_openssl" -o -n "$with_system_libs" && \
     AC_MSG_RESULT([external])
     # Mac OS builds should get out without extra stuff is the Mac porters'
     # wish. And pkg-config is although Xcode ships a .pc for openssl
-    if test "$_os" = "Darwin" -o "$_os" = "NetBSD" -o "$_os" = "OpenBSD" ; then
+    if test "$_os" = "Darwin" -o "$_os" = "NetBSD" -o "$_os" = "OpenBSD" -o \
+            "$_os" = "DragonFly"; then
         OPENSSL_CFLAGS=
         OPENSSL_LIBS="-lssl -lcrypto"
     else
@@ -6798,6 +6653,42 @@ AC_SUBST(COMMONS_LANG_JAR)
 AC_SUBST(COMMONS_HTTPCLIENT_JAR)
 AC_SUBST(COMMONS_LOGGING_JAR)
 
+# scripting provider for BeanShell extension?
+AC_MSG_CHECKING([whether to build extension for support of scripts in BeanShell])
+AS_IF([test "x$enable_ext_scripting_beanshell" = "xyes"], [
+   AC_MSG_RESULT([yes])
+   ENABLE_SCRIPTING_BEANSHELL=YES
+],[
+   AC_MSG_RESULT([no])
+   ENABLE_SCRIPTING_BEANSHELL=NO
+   SCPDEFS="$SCPDEFS -DWITHOUT_EXTENSION_SCRIPTING_BEANSHELL"
+])
+AC_SUBST(ENABLE_SCRIPTING_BEANSHELL)
+
+# scripting provider for JavaScript extension?
+AC_MSG_CHECKING([whether to build extension for support of scripts in JavaScript])
+AS_IF([test "x$enable_ext_scripting_javascript" = "xyes"], [
+   AC_MSG_RESULT([yes])
+   ENABLE_SCRIPTING_JAVASCRIPT=YES
+],[
+   AC_MSG_RESULT([no])
+   ENABLE_SCRIPTING_JAVASCRIPT=NO
+   SCPDEFS="$SCPDEFS -DWITHOUT_EXTENSION_SCRIPTING_JAVASCRIPT"
+])
+AC_SUBST(ENABLE_SCRIPTING_JAVASCRIPT)
+
+# scripting provider for Python extension?
+AC_MSG_CHECKING([whether to build extension for support of scripts in Python])
+AS_IF([test "x$enable_ext_scripting_python" = "xyes"], [
+   AC_MSG_RESULT([yes])
+   ENABLE_SCRIPTING_PYTHON=YES
+],[
+   AC_MSG_RESULT([no])
+   ENABLE_SCRIPTING_PYTHON=NO
+   SCPDEFS="$SCPDEFS -DWITHOUT_EXTENSION_SCRIPTING_PYTHON"
+])
+AC_SUBST(ENABLE_SCRIPTING_PYTHON)
+
 dnl ===================================================================
 dnl Check whether the Qt3 and KDE3 libraries are available.
 dnl ===================================================================
@@ -7817,53 +7708,33 @@ else
 fi
 AC_SUBST(WITH_POOR_HELP_LOCALIZATIONS)
 
-AC_MSG_CHECKING([which dictionaries to include])
-if test -z "$with_dict"; then
-   WITH_DICT=,ALL,
-   AC_MSG_RESULT([ALL])
-else
-   WITH_DICT=","$with_dict","
-   AC_MSG_RESULT([$with_dict])
-fi
-AC_SUBST(WITH_DICT)
-
-AC_MSG_CHECKING([for additional 'intro' bitmaps])
-INTRO_BITMAPS=
-if test -z "$with_intro_bitmaps" -o "$with_intro_bitmaps" = "no" ; then
-   INTRO_BITMAPS=
+AC_MSG_CHECKING([for another 'intro' bitmap])
+INTRO_BITMAP=
+if test -z "$with_intro_bitmap" -o "$with_intro_bitmap" = "no" ; then
+   INTRO_BITMAP=
    AC_MSG_RESULT([none])
 else
-   for bitmap in `echo $with_intro_bitmaps | tr ',' ' '` ; do
-      case "$bitmap" in
-         *.bmp) ;;
-         *)     bitmap= ; AC_MSG_WARN([Intro bitmaps should be .bmp files!]) ;;
-      esac
-      if test -n "$bitmap" ; then
-         INTRO_BITMAPS="$INTRO_BITMAPS $bitmap"
-      fi
-   done
-   AC_MSG_RESULT([$INTRO_BITMAPS])
+   case "$with_intro_bitmap" in
+      *.png) INTRO_BITMAP="$with_intro_bitmap" ;;
+      *)     AC_MSG_WARN([Intro bitmap should be a .png file!]) ;;
+   esac
+   AC_MSG_RESULT([$INTRO_BITMAP])
 fi
-AC_SUBST(INTRO_BITMAPS)
+AC_SUBST(INTRO_BITMAP)
 
-AC_MSG_CHECKING([for additional 'about' bitmaps])
-ABOUT_BITMAPS=
-if test -z "$with_about_bitmaps" -o "$with_about_bitmaps" = "no" ; then
-   ABOUT_BITMAPS=
+AC_MSG_CHECKING([for another 'about' bitmap])
+ABOUT_BITMAP=
+if test -z "$with_about_bitmap" -o "$with_about_bitmap" = "no" ; then
+   ABOUT_BITMAP=
    AC_MSG_RESULT([none])
 else
-   for bitmap in `echo $with_about_bitmaps | tr ',' ' '` ; do
-      case "$bitmap" in
-         *.bmp) ;;
-         *)     bitmap= ; AC_MSG_WARN([About bitmaps should be .bmp files!]) ;;
-      esac
-      if test -n "$bitmap" ; then
-         ABOUT_BITMAPS="$ABOUT_BITMAPS $bitmap"
-      fi
-   done
-   AC_MSG_RESULT([$ABOUT_BITMAPS])
+   case "$with_about_bitmap" in
+      *.png) ABOUT_BITMAP="$with_about_bitmap" ;;
+      *)     AC_MSG_WARN([About bitmap should be a .png file!]) ;;
+   esac
+   AC_MSG_RESULT([$ABOUT_BITMAP])
 fi
-AC_SUBST(ABOUT_BITMAPS)
+AC_SUBST(ABOUT_BITMAP)
 
 OOO_VENDOR=
 AC_MSG_CHECKING([for vendor])

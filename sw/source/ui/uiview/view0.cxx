@@ -29,8 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-
 #include "hintids.hxx"
 #include <vcl/graph.hxx>
 #include <svx/galbrws.hxx>
@@ -518,7 +516,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
 
     pModule->ApplyUsrPref( *pOpt, this, bWebView ? VIEWOPT_DEST_WEB : VIEWOPT_DEST_TEXT );
 
-    //mod #i6193# let postits know about new spellcheck setting
+    // #i6193# let postits know about new spellcheck setting
     if ( nSlot == SID_AUTOSPELL_CHECK )
         GetPostItMgr()->SetSpellChecking();
 

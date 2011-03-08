@@ -136,7 +136,7 @@ BOOL ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
         }
         else
         {
-            DBG_ERROR("pSearchText == NULL");
+            OSL_FAIL("pSearchText == NULL");
             return bFound;
         }
 
@@ -144,7 +144,7 @@ BOOL ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
         if ( bFound &&
             ( (rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE)
             ||(rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE_ALL) ) &&
-                // #60558# Matrix nicht zerreissen, nur Matrixformel ersetzen
+                // Matrix nicht zerreissen, nur Matrixformel ersetzen
                 !( (eCellType == CELLTYPE_FORMULA &&
                 ((cMatrixFlag = ((ScFormulaCell*)pCell)->GetMatrixFlag()) == MM_REFERENCE))
                 // kein UndoDoc => Matrix nicht wiederherstellbar => nicht ersetzen
@@ -222,7 +222,7 @@ BOOL ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
                     pNote->SetText( ScAddress( nCol, nRow, nTab ), aString );
             }
             else if ( cMatrixFlag != MM_NONE )
-            {   // #60558# Matrix nicht zerreissen
+            {   // Matrix nicht zerreissen
                 if ( aString.Len() > 2 )
                 {   // {} raus, erst hier damit auch "{=" durch "{=..." ersetzt werden kann
                     if ( aString.GetChar( aString.Len()-1 ) == '}' )
@@ -612,7 +612,7 @@ BOOL ScTable::ReplaceStyle(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW&
             ApplyStyle( rCol, rRow, *pReplaceStyle );
         else
         {
-            DBG_ERROR("pReplaceStyle==0");
+            OSL_FAIL("pReplaceStyle==0");
         }
     }
 
@@ -676,7 +676,7 @@ BOOL ScTable::ReplaceAllStyle(const SvxSearchItem& rSearchItem, ScMarkData& rMar
         }
         else
         {
-            DBG_ERROR("pReplaceStyle==0");
+            OSL_FAIL("pReplaceStyle==0");
         }
     }
 
@@ -721,7 +721,7 @@ BOOL ScTable::SearchAndReplace(const SvxSearchItem& rSearchItem,
                 return SearchAndReplaceEmptyCells(rSearchItem, rCol, rRow, rMark, rUndoStr, pUndoDoc);
             }
 
-            //  #107259# reflect UseAsianOptions flag in SearchOptions
+            //  reflect UseAsianOptions flag in SearchOptions
             //  (use only ignore case and width if asian options are disabled).
             //  This is also done in SvxSearchDialog CommandHdl, but not in API object.
             if ( !rSearchItem.IsUseAsianOptions() )

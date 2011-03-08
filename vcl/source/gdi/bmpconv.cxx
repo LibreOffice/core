@@ -44,7 +44,8 @@ using namespace com::sun::star::script;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::reflection;
 using namespace com::sun::star::awt;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 namespace vcl {
 

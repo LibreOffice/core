@@ -194,7 +194,7 @@ xub_StrLen FunctionDescription::getSuppressedArgumentCount() const
     }
     catch(const uno::Exception&)
     {
-        DBG_ERROR("Exception caught!");
+        OSL_FAIL("Exception caught!");
     }
     return sFormula;
 }

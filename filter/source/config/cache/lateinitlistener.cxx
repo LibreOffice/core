@@ -47,9 +47,8 @@ namespace css = ::com::sun::star;
 //_______________________________________________
 // definitions
 
-/*-----------------------------------------------
-    14.08.2003 07:35
------------------------------------------------*/
+
+
 LateInitListener::LateInitListener(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
     : BaseLock(     )
     , m_xSMGR (xSMGR)
@@ -68,16 +67,14 @@ LateInitListener::LateInitListener(const css::uno::Reference< css::lang::XMultiS
     osl_decrementInterlockedCount( &m_refCount );
 }
 
-/*-----------------------------------------------
-    14.08.2003 07:25
------------------------------------------------*/
+
+
 LateInitListener::~LateInitListener()
 {
 }
 
-/*-----------------------------------------------
-    14.08.2003 08:45
------------------------------------------------*/
+
+
 void SAL_CALL LateInitListener::notifyEvent(const css::document::EventObject& aEvent)
     throw(css::uno::RuntimeException)
 {
@@ -114,9 +111,8 @@ void SAL_CALL LateInitListener::notifyEvent(const css::document::EventObject& aE
     }
 }
 
-/*-----------------------------------------------
-    14.08.2003 07:48
------------------------------------------------*/
+
+
 void SAL_CALL LateInitListener::disposing(const css::lang::EventObject& /* aEvent */ )
     throw(css::uno::RuntimeException)
 {

@@ -457,12 +457,12 @@ void SAL_CALL SdLayer::dispose(  ) throw (uno::RuntimeException)
 
 void SAL_CALL SdLayer::addEventListener( const uno::Reference< lang::XEventListener >& ) throw (uno::RuntimeException)
 {
-    DBG_ERROR("not implemented!");
+    OSL_FAIL("not implemented!");
 }
 
 void SAL_CALL SdLayer::removeEventListener( const uno::Reference< lang::XEventListener >& ) throw (uno::RuntimeException)
 {
-    DBG_ERROR("not implemented!");
+    OSL_FAIL("not implemented!");
 }
 
 
@@ -501,12 +501,12 @@ void SAL_CALL SdLayerManager::dispose(  ) throw (uno::RuntimeException)
 
 void SAL_CALL SdLayerManager::addEventListener( const uno::Reference< lang::XEventListener >& ) throw (uno::RuntimeException)
 {
-    DBG_ERROR("not implemented!");
+    OSL_FAIL("not implemented!");
 }
 
 void SAL_CALL SdLayerManager::removeEventListener( const uno::Reference< lang::XEventListener >& ) throw (uno::RuntimeException)
 {
-    DBG_ERROR("not implemented!");
+    OSL_FAIL("not implemented!");
 }
 
 // XServiceInfo

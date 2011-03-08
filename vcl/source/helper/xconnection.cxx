@@ -35,12 +35,12 @@
 #include "vcl/salinst.hxx"
 #include "vcl/svapp.hxx"
 
-using namespace rtl;
 using namespace osl;
 using namespace vcl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::awt;
 
+using ::rtl::OUString;
 
 DisplayConnection::DisplayConnection()
 {

@@ -119,7 +119,7 @@ ULONG SdrTableRtfExporter::Write()
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR("SdrTableRtfExporter::Write(), exception caught!");
+        OSL_FAIL("SdrTableRtfExporter::Write(), exception caught!");
     }
 
     // export rows
@@ -134,7 +134,7 @@ ULONG SdrTableRtfExporter::Write()
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR("SdrTableRtfExporter::Write(), exception caught!");
+        OSL_FAIL("SdrTableRtfExporter::Write(), exception caught!");
     }
 
     mrStrm << '}' << RTFOutFuncs::sNewLine;

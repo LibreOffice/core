@@ -32,7 +32,6 @@ PACKAGE = com$/sun$/star$/wizards$/table
 # --- Settings -----------------------------------------------------
 
 .INCLUDE : settings.mk
-#.INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 JARFILES= unoil.jar jurt.jar ridl.jar juh.jar java_uno.jar commonwizards.jar
 CUSTOMMANIFESTFILE= MANIFEST.MF
@@ -42,10 +41,6 @@ JARTARGET		= $(TARGET).jar
 JARCLASSPATH = commonwizards.jar
 
 # --- Files --------------------------------------------------------
-#SRS2NAME =              dbwizres
-#SRC2FILES=		dbwizres.src
-#RESLIB2SRSFILES= $(SRS)$/dbwizres.srs
-#RESLIB2NAME=	dbw
 
 JAVAFILES=	\
         CallTableWizard.java 	\

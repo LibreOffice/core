@@ -78,7 +78,7 @@ MzString::~MzString()
 }
 
 
-void MzString::operator = (MzString &s)
+MzString &MzString::operator = (MzString &s)
 {
     int n = s.length();
     if (allocate(n))
@@ -86,10 +86,11 @@ void MzString::operator = (MzString &s)
         if (n > 0) memcpy(Data, s.Data, n);
         Length = n;
     }
+    return *this;
 }
 
 
-void MzString::operator = (const char *s)
+MzString &MzString::operator = (const char *s)
 {
     if (s == NULL)
         s = "";
@@ -99,6 +100,7 @@ void MzString::operator = (const char *s)
         if (n > 0) memcpy(Data, s, n);
         Length = n;
     }
+    return *this;
 }
 
 

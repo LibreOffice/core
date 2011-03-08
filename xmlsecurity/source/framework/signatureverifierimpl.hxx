@@ -54,10 +54,6 @@ class SignatureVerifierImpl : public cppu::ImplInheritanceHelper3
  *  Collects all resources for a signature verification, then verifies the
  *  signature by invoking a xmlsec-based signature bridge component.
  *
- *   HISTORY
- *  05.01.2004 -    Interface supported: XSignatureVerifyResultBroadcaster,
- *          XInitialization, XServiceInfo
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com

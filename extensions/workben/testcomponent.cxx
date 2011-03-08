@@ -50,8 +50,11 @@
 
 #include <smart/com/sun/star/test/XSimpleTest.hxx>
 
-using namespace rtl;
 using namespace usr;
+
+using ::rtl::OString;
+using ::rtl::OWStringToOString;
+using ::rtl::OStringToOWString;
 
 
 // Needed to switch on solaris threads

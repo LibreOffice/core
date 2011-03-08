@@ -487,8 +487,8 @@ IMPL_LINK( DemoWindow, updateHdl, Timer*, EMPTYARG )
 {
     init();
 
-    double nTimeout;
     if( mxShow.is() )
+        double nTimeout;
         mxShow->update(nTimeout);
 
     return 0;

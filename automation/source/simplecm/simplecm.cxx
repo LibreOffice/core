@@ -33,6 +33,7 @@
 #define ENABLE_BYTESTRING_STREAM_OPERATORS
 #include <tools/solar.h>
 #include <automation/simplecm.hxx>
+#include <osl/diagnose.h>
 
 #include <automation/commdefines.hxx>
 #include "packethandler.hxx"
@@ -45,7 +46,7 @@ void debug_printf( const char *chars )
     static BOOL bPrint = (getenv("DEBUG") != NULL);
     if ( bPrint )
     {
-        printf( chars );
+        printf( "%c\n", chars );
         fflush( stdout );
     }
 }
@@ -336,7 +337,7 @@ BOOL SimpleCommunicationLinkViaSocket::SendHandshake( HandshakeType aHandshakeTy
             case CH_SetApplication:
                 break;
             default:
-                DBG_ERROR("Unknown HandshakeType");
+                OSL_FAIL("Unknown HandshakeType");
         }
     }
     return !bWasError;
@@ -484,7 +485,7 @@ void CommunicationManager::CallDataReceived( CommunicationLink* pCL )
     // should be impossible but happens for mysterious reasons
     if ( !pCL->pServiceData )
     {
-        DBG_ERROR( "Datastream is NULL" );
+        OSL_FAIL( "Datastream is NULL" );
         pCL->FinishCallback();
         return;
     }

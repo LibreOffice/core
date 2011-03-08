@@ -420,14 +420,12 @@ static int hash( str )
 {
     /* Hash (Kernighan and Ritchie) */
     register unsigned int hashval = 0;
-    //char *s = str;
 
     for ( ; *str; str++ )
     {
         hashval = ( hashval * SYMHASHSEED ) + ( *str );
     }
 
-    //fprintf( stderr, "hash: %s, %d\n", s, hashval & ( SYMHASHMEMBERS - 1 ) );
     return hashval & ( SYMHASHMEMBERS - 1 );
 }
 

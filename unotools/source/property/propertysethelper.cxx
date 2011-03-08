@@ -285,17 +285,17 @@ Any SAL_CALL PropertySetHelper::getPropertyDefault( const ::rtl::OUString& aProp
 
 void PropertySetHelper::_getPropertyStates( const utl::PropertyMapEntry** /*ppEntries*/, PropertyState* /*pStates*/ ) throw(UnknownPropertyException )
 {
-    DBG_ERROR( "you have to implement this yourself!" );
+    OSL_FAIL( "you have to implement this yourself!" );
 }
 
 void PropertySetHelper::_setPropertyToDefault( const utl::PropertyMapEntry* /*pEntry*/ )  throw(UnknownPropertyException )
 {
-    DBG_ERROR( "you have to implement this yourself!" );
+    OSL_FAIL( "you have to implement this yourself!" );
 }
 
 Any PropertySetHelper::_getPropertyDefault( const utl::PropertyMapEntry* /*pEntry*/ ) throw(UnknownPropertyException, WrappedTargetException )
 {
-    DBG_ERROR( "you have to implement this yourself!" );
+    OSL_FAIL( "you have to implement this yourself!" );
 
     Any aAny;
     return aAny;

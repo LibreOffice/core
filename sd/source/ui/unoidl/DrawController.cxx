@@ -166,7 +166,9 @@ void SAL_CALL DrawController::dispose (void)
         {
             mbDisposing = true;
 
-            boost::shared_ptr<ViewShell> pViewShell = mpBase->GetMainViewShell();
+            boost::shared_ptr<ViewShell> pViewShell;
+            if (mpBase)
+                pViewShell = mpBase->GetMainViewShell();
             if ( pViewShell )
             {
                 pViewShell->DeactivateCurrentFunction();

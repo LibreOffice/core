@@ -412,7 +412,7 @@ void Svx3DLightControl::ConstructLightObjects()
 {
     for(sal_uInt32 a(0); a < MAX_NUMBER_LIGHTS; a++)
     {
-        // get rid of evtl. existing light object
+        // get rid of possible existing light object
         if(maLightObjects[a])
         {
             mpScene->Remove3DObj(maLightObjects[a]);
@@ -587,8 +587,7 @@ void Svx3DLightControl::MouseButtonDown( const MouseEvent& rMEvt )
         }
         else
         {
-            // Einfacher Click ohne viel Bewegen, versuche eine
-            // Selektion
+            // Single click without moving much trying to do a selection
             TrySelection(rMEvt.GetPosPixel());
             bCallParent = false;
         }

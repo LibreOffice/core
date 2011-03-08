@@ -134,7 +134,6 @@ SHL11FILE=  $(MISC)$/app.slo
 SHL12FILE=  $(MISC)$/gdi.slo
 SHL13FILE=  $(MISC)$/win.slo
 SHL14FILE=  $(MISC)$/ctrl.slo
-#SHL15FILE=  $(MISC)$/ex.slo
 SHL16FILE=  $(MISC)$/salapp.slo
 SHL17FILE=  $(MISC)$/salwin.slo
 SHL18FILE=  $(MISC)$/salgdi.slo
@@ -214,11 +213,6 @@ LIB1FILES+= \
 .ENDIF # USE_BUILTIN_RASTERIZER
 
 SHL1LIBS=   $(LIB1TARGET)
-.IF "$(GUI)"!="UNX"
-.IF "$(COM)"!="GCC"
-#SHL1OBJS=   $(SLO)$/salshl.obj
-.ENDIF
-.ENDIF
 
 .IF "$(GUI)" != "UNX"
 SHL1RES=    $(RES)$/salsrc.res
@@ -334,7 +328,7 @@ SHL2STDLIBS+=`pkg-config --libs xrender`
 
 SHL2STDLIBS += -lXext -lSM -lICE -lX11
 .IF "$(OS)"!="MACOSX" && "$(OS)"!="FREEBSD" && "$(OS)"!="NETBSD" && \
-	&& "$(OS)"!="OPENBSD"
+    && "$(OS)"!="OPENBSD" "$(OS)"!="DRAGONFLY"
 # needed by salprnpsp.cxx
 SHL2STDLIBS+= -ldl
 .ENDIF

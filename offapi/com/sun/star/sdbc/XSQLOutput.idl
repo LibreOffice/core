@@ -211,7 +211,7 @@ published interface XSQLOutput: com::sun::star::uno::XInterface
         raises (SQLException);
       //-------------------------------------------------------------------------
 
-    /** writes the next attribute to the stream as a stream of unicode string.
+    /** writes the next attribute to the stream as a stream of Unicode string.
         @param x
             the value to pass to the database.
         @throws SQLException

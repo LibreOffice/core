@@ -88,7 +88,7 @@
 #define HID_DRAW_WIN                (HID_BASE + 52)
 #define HID_EDIT_WIN                (HID_BASE + 53)
 
-#define HID_INSERT_CTRL             (HID_BASE + 54) // TbxControl Einfuegen
+#define HID_INSERT_CTRL             (HID_BASE + 54) // Insert TbxControl.
 #define HID_INSERT_OBJ_CTRL         (HID_BASE + 55)
 #define HID_INSERT_FIELD_CTRL       (HID_BASE + 56)
 
@@ -108,7 +108,7 @@
 #define HID_PAGEPREVIEW             (HID_BASE + 67)
 #define HID_SOURCE_EDITWIN          (HID_BASE + 68)
 
-// Dialog Help-IDs **********************************************************
+// Dialog Help-IDs
 
 #define HID_CONVERT_FROM            (HID_BASE + 200)
 #define HID_CONVERT_TO              (HID_BASE + 201)
@@ -224,7 +224,7 @@
 #define HID_REFSELECTION_TOOLTIP    (HID_BASE + 309)    // #i83479#
 
 
-// TabPage Help-IDs *********************************************************
+// TabPage Help-IDs
 
 #define HID_DROPCAPS                (HID_BASE + 400)
 #define HID_FRM_EXT                 (HID_BASE + 401)
@@ -312,7 +312,7 @@
 #define HID_OPTCOMPATIBILITY_PAGE       (HID_BASE + 483)
 #define HID_COMPATIBILITY_OPTIONS_BOX   (HID_BASE + 484)
 
-// AutoPilot Help-IDs *********************************************************
+// AutoPilot Help-IDs
 
 #define HID_LETTER_PAGE1            (HID_BASE + 501)
 #define HID_LETTER_PAGE2            (HID_BASE + 502)
@@ -350,7 +350,7 @@
 #define HID_AUTOPILOT_PREV          (HID_BASE + 538)
 #define HID_AUTOPILOT_OK            (HID_BASE + 539)
 
-// HelpIds fuers Menue *****************************************************
+// HelpIds for Menu
 
 #define HID_MN_SUB_TBLROW           (HID_BASE + 600)
 #define HID_MN_SUB_TBLCOL           (HID_BASE + 601)
@@ -431,7 +431,7 @@
 #define HID_SMARTTAG_MAIN           (HID_BASE + 675)    // SMARTTAGS
 #define HID_LINGU_IGNORE_SELECTION  (HID_BASE + 676)    // grammar check context menu
 
-// Weiter Help-IDs **********************************************************
+// More Help-IDs
 
 #define HID_CLOSE_FILE              (HID_BASE + 1001)
 #define HID_LAUNCH_REGISTRY         (HID_BASE + 1002)

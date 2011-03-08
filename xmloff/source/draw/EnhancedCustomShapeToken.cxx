@@ -30,11 +30,18 @@
 #include "precompiled_xmloff.hxx"
 #include "EnhancedCustomShapeToken.hxx"
 #include <osl/mutex.hxx>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <string.h>
 
 namespace xmloff { namespace EnhancedCustomShapeToken {
 
+struct THash
+{
+    size_t operator()( const char* s ) const
+    {
+        return rtl_str_hashCode(s);
+    }
+};
 struct TCheck
 {
     bool operator()( const char* s1, const char* s2 ) const
@@ -42,7 +49,7 @@ struct TCheck
         return strcmp( s1, s2 ) == 0;
     }
 };
-typedef std::hash_map< const char*, EnhancedCustomShapeTokenEnum, std::hash<const char*>, TCheck> TypeNameHashMap;
+typedef boost::unordered_map< const char*, EnhancedCustomShapeTokenEnum, THash, TCheck> TypeNameHashMap;
 static TypeNameHashMap* pHashMap = NULL;
 static ::osl::Mutex& getHashMapMutex()
 {

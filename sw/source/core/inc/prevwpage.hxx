@@ -8,10 +8,6 @@
 class SwPageFrm;
 
 /** data structure for a preview page in the current preview layout
-
-    OD 12.12.2002 #103492# - struct <PrevwPage>
-
-    @author OD
 */
 struct PrevwPage
 {

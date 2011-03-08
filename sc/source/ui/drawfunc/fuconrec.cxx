@@ -35,7 +35,7 @@
 #include "drawview.hxx"
 
 #include <editeng/outlobj.hxx>
-// #98185# Create default drawing objects via keyboard
+// Create default drawing objects via keyboard
 #include <svx/svdopath.hxx>
 #include <svx/svdocapt.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -76,7 +76,7 @@ FuConstRectangle::~FuConstRectangle()
 
 BOOL FuConstRectangle::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    // #95491# remember button state for creation of own MouseEvents
+    // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
     BOOL bReturn = FuConstruct::MouseButtonDown(rMEvt);
@@ -120,7 +120,7 @@ BOOL FuConstRectangle::MouseMove(const MouseEvent& rMEvt)
 
 BOOL FuConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    // #95491# remember button state for creation of own MouseEvents
+    // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
     BOOL bReturn = FALSE;
@@ -226,15 +226,9 @@ void FuConstRectangle::Deactivate()
     pViewShell->SetActivePointer( aOldPointer );
 }
 
-// #98185# Create default drawing objects via keyboard
+// Create default drawing objects via keyboard
 SdrObject* FuConstRectangle::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
 {
-    // case SID_DRAW_LINE:
-    // case SID_DRAW_RECT:
-    // case SID_DRAW_ELLIPSE:
-    // case SID_DRAW_CAPTION:
-    // case SID_DRAW_CAPTION_VERTICAL:
-
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
         pView->GetCurrentObjInventor(), pView->GetCurrentObjIdentifier(),
         0L, pDrDoc);
@@ -259,7 +253,7 @@ SdrObject* FuConstRectangle::CreateDefaultObject(const sal_uInt16 nID, const Rec
                 }
                 else
                 {
-                    DBG_ERROR("Object is NO line object");
+                    OSL_FAIL("Object is NO line object");
                 }
 
                 break;
@@ -281,7 +275,7 @@ SdrObject* FuConstRectangle::CreateDefaultObject(const sal_uInt16 nID, const Rec
                         pObj->SetMergedItemSet(aSet);
                     }
 
-                    //  #105815# don't set default text, start edit mode instead
+                    //  don't set default text, start edit mode instead
                     //  (Edit mode is started in ScTabViewShell::ExecDraw, because
                     //  it must be handled by FuText)
                     // String aText(ScResId(STR_CAPTION_DEFAULT_TEXT));
@@ -293,7 +287,7 @@ SdrObject* FuConstRectangle::CreateDefaultObject(const sal_uInt16 nID, const Rec
                 }
                 else
                 {
-                    DBG_ERROR("Object is NO caption object");
+                    OSL_FAIL("Object is NO caption object");
                 }
 
                 break;

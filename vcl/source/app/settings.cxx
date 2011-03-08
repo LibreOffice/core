@@ -48,13 +48,11 @@
 #include <unotools/syslocaleoptions.hxx>
 
 #ifdef WNT
-#include "tools/prewin.h"
-#include <windows.h>
-#include "tools/postwin.h"
+#include <prewin.h>
+#include <postwin.h>
 #endif
 
-using namespace rtl;
-
+using ::rtl::OUString;
 // =======================================================================
 
 DBG_NAME( AllSettings )
@@ -712,6 +710,7 @@ void StyleSettings::Set3DColors( const Color& rColor )
         case STYLE_SYMBOLS_TANGO:      return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("tango"));
         case STYLE_SYMBOLS_OXYGEN:     return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("oxygen"));
         case STYLE_SYMBOLS_CLASSIC:    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("classic"));
+        case STYLE_SYMBOLS_HUMAN:      return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("human"));
     }
 
     return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("auto"));
@@ -735,6 +734,8 @@ ULONG StyleSettings::ImplNameToSymbolsStyle( const ::rtl::OUString &rName ) cons
         return STYLE_SYMBOLS_OXYGEN;
     else if ( rName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("classic")) )
         return STYLE_SYMBOLS_CLASSIC;
+    else if ( rName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("human")) )
+        return STYLE_SYMBOLS_HUMAN;
 
     return STYLE_SYMBOLS_AUTO;
 }
@@ -1582,8 +1583,6 @@ ImplAllSettingsData::ImplAllSettingsData()
     meUILanguage                  = LANGUAGE_SYSTEM;
     mpLocaleDataWrapper         = NULL;
     mpUILocaleDataWrapper       = NULL;
-    mpCollatorWrapper           = NULL;
-    mpUICollatorWrapper         = NULL;
     mpI18nHelper                = NULL;
     mpUII18nHelper              = NULL;
     maMiscSettings.SetEnableLocalizedDecimalSep( maSysLocale.GetOptions().IsDecimalSeparatorAsLocale() );
@@ -1609,8 +1608,6 @@ ImplAllSettingsData::ImplAllSettingsData( const ImplAllSettingsData& rData ) :
     // called
     mpLocaleDataWrapper         = NULL;
     mpUILocaleDataWrapper       = NULL;
-    mpCollatorWrapper           = NULL;
-    mpUICollatorWrapper         = NULL;
     mpI18nHelper                = NULL;
     mpUII18nHelper              = NULL;
 }
@@ -1623,10 +1620,6 @@ ImplAllSettingsData::~ImplAllSettingsData()
         delete mpLocaleDataWrapper;
     if ( mpUILocaleDataWrapper )
         delete mpUILocaleDataWrapper;
-    if ( mpCollatorWrapper )
-        delete mpCollatorWrapper;
-    if ( mpUICollatorWrapper )
-        delete mpUICollatorWrapper;
     if ( mpI18nHelper )
         delete mpI18nHelper;
     if ( mpUII18nHelper )
@@ -2053,32 +2046,6 @@ const vcl::I18nHelper& AllSettings::GetUILocaleI18nHelper() const
     }
     return *mpData->mpUII18nHelper;
 }
-
-
-// -----------------------------------------------------------------------
-/*
-const CollatorWrapper& AllSettings::GetCollatorWrapper() const
-{
-    if ( !mpData->mpCollatorWrapper )
-    {
-        ((AllSettings*)this)->mpData->mpCollatorWrapper = new CollatorWrapper( vcl::unohelper::GetMultiServiceFactory() );
-        ((AllSettings*)this)->mpData->mpCollatorWrapper->loadDefaultCollator( GetLocale(), 0 );
-    }
-    return *mpData->mpCollatorWrapper;
-}
-*/
-// -----------------------------------------------------------------------
-/*
-const CollatorWrapper& AllSettings::GetUICollatorWrapper() const
-{
-    if ( !mpData->mpUICollatorWrapper )
-    {
-        ((AllSettings*)this)->mpData->mpUICollatorWrapper = new CollatorWrapper( vcl::unohelper::GetMultiServiceFactory() );
-        ((AllSettings*)this)->mpData->mpUICollatorWrapper->loadDefaultCollator( GetUILocale(), 0 );
-    }
-    return *mpData->mpUICollatorWrapper;
-}
-*/
 
 void AllSettings::LocaleSettingsChanged( sal_uInt32 nHint )
 {

@@ -36,7 +36,6 @@
 
 #include "FieldDescControl.hxx"
 #include "FieldControls.hxx"
-#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include "TableDesignHelpBar.hxx"
 #include <vcl/scrbar.hxx>
@@ -71,6 +70,7 @@
 #include <memory>
 #include "dbu_control.hrc"
 #include "dbu_tbl.hrc"
+#include <osl/diagnose.h>
 
 
 using namespace dbaui;
@@ -312,7 +312,7 @@ String OFieldDescControl::BoolStringUI(const String& rPersistentString) const
     static String aOne('1');
     static String aNone(ModuleRes(STR_VALUE_NONE));
 
-    // FS - 66161 - 14.05.1999 - aeltere Versionen haben eventuell einen sprachabhaengigen String als Default gespeichert
+    // aeltere Versionen haben eventuell einen sprachabhaengigen String als Default gespeichert
     if (rPersistentString.Equals(aYes) || rPersistentString.Equals(aNo))
         return rPersistentString;
 
@@ -1759,7 +1759,7 @@ void OFieldDescControl::GetFocus()
 void OFieldDescControl::implFocusLost(Window* _pWhich)
 {
     DBG_CHKTHIS(OFieldDescControl,NULL);
-    DBG_ASSERT(!_pWhich || IsChild(_pWhich), "OFieldDescControl::implFocusLost : invalid window !");
+    OSL_ENSURE(!_pWhich || IsChild(_pWhich), "OFieldDescControl::implFocusLost : invalid window !");
 
     //////////////////////////////////////////////////////////////////////
     // Das aktive Control merken

@@ -66,15 +66,6 @@
 #define d_name          cFileName
 #define d_type          dwFileAttributes
 
-#if defined (TCPP) || defined (tcpp)
-#define _mkdir          mkdir
-#define _rmdir          rmdir
-#define _chdir          chdir
-#define _unlink         unlink
-#define _getcwd         getcwd
-#define _access         access
-#endif
-
 typedef struct
 {
     _WIN32_FIND_DATAA aDirEnt;

@@ -567,7 +567,7 @@ SwCalcExp* SwCalc::VarLook( const String& rStr, USHORT ins )
 
     // Name(p)=Adress.PLZ oder Adress.DATENSATZNUMMER
     // DBSETNUMBERFLD = DatenSATZ-nummernfeld (NICHT "setze Datensatznummer!!!")
-    // #101436#: At this point the "real" case variable has to be used
+    // At this point the "real" case variable has to be used
     String sTmpName( rStr );
     ::ReplacePoint( sTmpName );
 
@@ -721,8 +721,8 @@ void SwCalc::Pop( const VoidPtr )
 SwCalcOper SwCalc::GetToken()
 {
 #if OSL_DEBUG_LEVEL > 1
-//JP 25.01.2001: static for switch back to the "old" implementation of the
-//              calculator, which don't use the I18N routines.
+//static for switch back to the "old" implementation of the
+//calculator, which don't use the I18N routines.
 static int nUseOld = 0;
 if( !nUseOld )
 {
@@ -1333,7 +1333,7 @@ SwSbxValue SwCalc::Prim()
                                     nErg.PutLong( nErg.GetDouble() == 0.0 ? 1 : 0 );
                                 else
                                 {
-                                    DBG_ERROR( "unexpected case. computing binary NOT" );
+                                    OSL_FAIL( "unexpected case. computing binary NOT" );
                                     //!! computes a binary NOT
                                     nErg.Compute( SbxNOT, nErg );
                                 }
@@ -1430,7 +1430,6 @@ SwSbxValue SwCalc::Prim()
             eError = CALC_OVERFLOW;
     }
 
-    // added here because of #77448# (=2*3^2 should be 18)
     if( bChkPow && eCurrOper == CALC_POW )
     {
         double dleft = nErg.GetDouble();

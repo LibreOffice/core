@@ -35,8 +35,9 @@
 #include "osl/thread.h"
 #include "osl/process.h"
 
-using namespace rtl;
-
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
+using ::rtl::OString;
 sal_Bool CppuOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
     throw( IllegalArgument )
 {

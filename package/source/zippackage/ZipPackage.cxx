@@ -84,7 +84,6 @@
 #include <comphelper/ofopxmlhelper.hxx>
 #include <comphelper/documentconstants.hxx>
 
-using namespace rtl;
 using namespace std;
 using namespace osl;
 using namespace cppu;
@@ -102,6 +101,9 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::packages::zip;
 using namespace com::sun::star::packages::manifest;
 using namespace com::sun::star::packages::zip::ZipConstants;
+
+using ::rtl::OUString;
+using ::rtl::OString;
 
 #define LOGFILE_AUTHOR "mg115289"
 
@@ -208,7 +210,7 @@ ZipPackage::~ZipPackage( void )
 #if 0
     // As all folders and streams contain references to their parents,
     // we must remove these references so that they will be deleted when
-    // the hash_map of the root folder is cleared, releasing all subfolders
+    // the boost::unordered_map of the root folder is cleared, releasing all subfolders
     // and substreams which in turn release theirs, etc. When m_xRootFolder is
     // released when this destructor completes, the folder tree should be
     // deleted fully (and automagically).

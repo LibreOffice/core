@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 #include <vcl/wrkwin.hxx>
 #include <tools/shl.hxx>
 #include <tools/urlobj.hxx>
@@ -115,9 +112,7 @@ SvxGradientTabPage::SvxGradientTabPage
 
     // Solange NICHT vom Item unterstuetzt
 
-    //aMtrColorTo.Disable();
     aMtrColorTo.SetValue( 100 );
-    //aMtrColorFrom.Disable();
     aMtrColorFrom.SetValue( 100 );
 
     // Setzen des Output-Devices
@@ -312,9 +307,7 @@ long SvxGradientTabPage::CheckChanges_Impl()
                 break;
 
                 case RET_CANCEL:
-                    // return( -1L ); <-- wuerde die Seite nicht verlassen
                 break;
-                // return( TRUE ); // Abbruch
             }
             delete aMessDlg;
         }
@@ -484,7 +477,6 @@ IMPL_LINK( SvxGradientTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
         if( pWarnBox->Execute() != RET_OK )
             break;
     }
-    //Rectangle aDlgRect( pDlg->GetPosPixel(), pDlg->GetSizePixel() );
     delete pDlg;
     delete pWarnBox;
 
@@ -513,7 +505,6 @@ IMPL_LINK( SvxGradientTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
         if( TRUE ) {                // ??? overlapped with pDlg
                                     // and srolling
             Invalidate( aRect );
-            //aLbGradients.Invalidate();
         }
 #endif
 
@@ -719,7 +710,6 @@ IMPL_LINK( SvxGradientTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
             else
             {
                 LeaveWait();
-                //aIStream.Close();
                 ErrorBox( DLGWIN, WinBits( WB_OK ),
                     String( ResId( RID_SVXSTR_READ_DATA_ERROR, rMgr ) ) ).Execute();
             }

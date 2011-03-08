@@ -74,9 +74,8 @@ enum BorderPosition
     BORDER_TOP,
     BORDER_BOTTOM
 };
-/*-- 15.06.2006 08:22:33---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 struct PropertyDefinition
 {
     PropertyIds eId;
@@ -142,9 +141,8 @@ public:
 };
 typedef boost::shared_ptr<PropertyMap>  PropertyMapPtr;
 
-/*-- 24.07.2006 08:26:33---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 class SectionPropertyMap : public PropertyMap
 {
     //--> debug
@@ -285,9 +283,8 @@ public:
 };
 typedef boost::shared_ptr<SectionPropertyMap> SectionPropertyMapPtr;
 
-/*-- 28.12.2007 08:17:34---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 class ParagraphProperties
 {
     bool                    m_bFrameMode;
@@ -397,7 +394,6 @@ class StyleSheetPropertyMap : public PropertyMap, public ParagraphProperties
 
 {
     //special table style properties
-//    sal_Int32               mnCT_Spacing_after;
     sal_Int32               mnCT_Spacing_line;
     sal_Int32               mnCT_Spacing_lineRule;
 
@@ -409,7 +405,6 @@ class StyleSheetPropertyMap : public PropertyMap, public ParagraphProperties
     sal_Int32               mnCT_TblWidth_w;
     sal_Int32               mnCT_TblWidth_type;
 
-//    bool                    mbCT_Spacing_afterSet;
     bool                    mbCT_Spacing_lineSet;
     bool                    mbCT_Spacing_lineRuleSet;
 
@@ -428,8 +423,6 @@ public:
     explicit StyleSheetPropertyMap();
     ~StyleSheetPropertyMap();
 
-//    void SetCT_Spacing_after(      sal_Int32 nSet )
-//        {mnCT_Spacing_after = nSet;    mbCT_Spacing_afterSet = true;        }
     void SetCT_Spacing_line(       sal_Int32 nSet )
         {mnCT_Spacing_line = nSet;     mbCT_Spacing_lineSet = true;         }
     void SetCT_Spacing_lineRule(   sal_Int32  nSet )
@@ -449,12 +442,6 @@ public:
     void SetCT_TblWidth_type( sal_Int32 nSet )
         {mnCT_TblWidth_type = nSet;    mbCT_TblWidth_typeSet = true; }
 
-//    bool GetCT_Spacing_after(   sal_Int32& rToFill) const
-//    {
-//        if( mbCT_Spacing_afterSet )
-//            rToFill = mnCT_Spacing_after;
-//        return mbCT_Spacing_afterSet;
-//    }
     bool GetCT_Spacing_line(    sal_Int32& rToFill) const
     {
         if( mbCT_Spacing_lineSet )
@@ -505,9 +492,8 @@ public:
             mnOutlineLevel = nLevel;
     }
 };
-/*-- 27.12.2007 12:38:06---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 class ParagraphPropertyMap : public PropertyMap, public ParagraphProperties
 {
 public:
@@ -515,9 +501,8 @@ public:
     ~ParagraphPropertyMap();
 
 };
-/*-- 15.02.2008 16:06:52---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 class TablePropertyMap : public PropertyMap
 {
 public:

@@ -41,13 +41,12 @@ struct SvNamePos
         , nStmPos( nPos ) {}
 };
 
-/******************** class SvMetaModule *********************************/
 class SvMetaModule : public SvMetaExtern
 {
     SvMetaClassMemberList       aClassList;
     SvMetaTypeMemberList        aTypeList;
     SvMetaAttributeMemberList   aAttrList;
-// Browser
+// browser
     String                  aIdlFileName;
     SvString                aHelpFileName;
     SvString                aSlotIdFile;

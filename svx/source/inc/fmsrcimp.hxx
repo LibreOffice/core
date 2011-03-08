@@ -236,7 +236,7 @@ class SVX_DLLPUBLIC FmSearchEngine
     sal_Bool            m_bCancelAsynchRequest : 1;     // soll abgebrochen werden ?
     ::osl::Mutex        m_aCancelAsynchAccess;          // Zugriff auf m_bCancelAsynchRequest (eigentlich nur bei
                                                         // m_eMode == SM_USETHREAD interesant)
-    FMSEARCH_MODE   m_eMode;        //CHINA001  FmSearchDialog::SEARCH_MODE m_eMode;                // der aktuelle Modus
+    FMSEARCH_MODE   m_eMode;                            // der aktuelle Modus
     // der aktuelle Modus
 
     // Parameter fuer die Suche
@@ -319,13 +319,13 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >& xCursor,
         const ::rtl::OUString& strVisibleFields,
         const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xFormat,
-        FMSEARCH_MODE eMode);//CHINA001 FmSearchDialog::SEARCH_MODE eMode);
+        FMSEARCH_MODE eMode);
     FmSearchEngine(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >& xCursor,
         const ::rtl::OUString& strVisibleFields,
         const InterfaceArray& arrFields,
-        FMSEARCH_MODE eMode); //CHINA001 FmSearchDialog::SEARCH_MODE eMode);
+        FMSEARCH_MODE eMode);
 
     virtual ~FmSearchEngine();
 

@@ -45,8 +45,9 @@
 #include <map>
 #include <string>
 
-using namespace rtl;
 using namespace std;
+
+using ::rtl::OUString;
 
 typedef map< wstring, HTHEME > ThemeMap;
 static ThemeMap aThemeMap;
@@ -186,7 +187,7 @@ void SalData::deInitNWF( void )
     while( iter != aThemeMap.end() )
     {
         vsAPI.CloseThemeData(iter->second);
-        iter++;
+        ++iter;
     }
     aThemeMap.clear();
 }

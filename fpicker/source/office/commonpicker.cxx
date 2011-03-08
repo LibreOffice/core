@@ -169,7 +169,7 @@ namespace svt
         }
         else
         {
-            DBG_ERROR( "OCommonPicker::disposing: where did this come from?" );
+            OSL_FAIL( "OCommonPicker::disposing: where did this come from?" );
         }
     }
 

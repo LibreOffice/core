@@ -33,7 +33,7 @@
 #include <com/sun/star/connection/XConnection.hpp>
 #include <com/sun/star/connection/XConnectionBroadcaster.hpp>
 
-#include <hash_set>
+#include <boost/unordered_set.hpp>
 #       include <osl/socket.hxx>
 #       include <osl/pipe.hxx>
 
@@ -60,7 +60,7 @@ namespace stoc_connector
         }
     };
 
-    typedef ::std::hash_set< ::com::sun::star::uno::Reference< ::com::sun::star::io::XStreamListener>,
+    typedef ::boost::unordered_set< ::com::sun::star::uno::Reference< ::com::sun::star::io::XStreamListener>,
                              ReferenceHash< ::com::sun::star::io::XStreamListener>,
                              ReferenceEqual< ::com::sun::star::io::XStreamListener> >
             XStreamListener_hash_set;

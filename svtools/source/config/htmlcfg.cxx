@@ -33,9 +33,9 @@
 #include <svtools/parhtml.hxx>
 #include <unotools/syslocale.hxx>
 #include <tools/debug.hxx>
-#include <tools/list.hxx>
 #include <tools/link.hxx>
 #include <sal/macros.h>
+#include <list>
 
 // -----------------------------------------------------------------------
 #define HTMLCFG_UNKNOWN_TAGS            0x01
@@ -49,18 +49,17 @@
 #define HTMLCFG_NUMBERS_ENGLISH_US      0x100
 
 using namespace utl;
-using namespace rtl;
 using namespace com::sun::star::uno;
 
-static SvxHtmlOptions* pOptions = 0;
+using ::rtl::OUString;
 
-DECLARE_LIST( LinkList, Link * )
+static SvxHtmlOptions* pOptions = 0;
 
 #define C2U(cChar) OUString::createFromAscii(cChar)
 
 struct HtmlOptions_Impl
 {
-    LinkList    aList;
+    ::std::list<Link> aList;
     sal_Int32   nFlags;
     sal_Int32   nExportMode;
     sal_Int32   aFontSizeArr[HTML_FONT_COUNT];
@@ -161,13 +160,11 @@ void SvxHtmlOptions::Load( const Sequence< OUString >& aNames )
                     case  9://"Export/Browser",
                         {
                             sal_Int32 nExpMode = 0;
-//                          pValues[nProp] >>= pImp->nExportMode;
                             pValues[nProp] >>= nExpMode;
                             switch( nExpMode )
                             {
                                 case 0:     nExpMode = HTML_CFG_HTML32;     break;
                                 case 1:     nExpMode = HTML_CFG_MSIE_40;    break;
-//                              case 2:     nExpMode = HTML_CFG_NS30;       break;  depricated
                                 case 3:     nExpMode = HTML_CFG_WRITER;     break;
                                 case 4:     nExpMode = HTML_CFG_NS40;       break;
                                 case 5:     nExpMode = HTML_CFG_MSIE_40_OLD;break;
@@ -213,11 +210,9 @@ void    SvxHtmlOptions::Commit()
 {
     const Sequence<OUString>& aNames = GetPropertyNames();
 
-//  const OUString* pNames = aNames.getConstArray();
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
-//  const Type& rType = ::getBooleanCppuType();
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
         sal_Bool bSet = sal_False;
@@ -240,7 +235,6 @@ void    SvxHtmlOptions::Commit()
                     {
                         case HTML_CFG_HTML32:       nExpMode = 0;   break;
                         case HTML_CFG_MSIE_40:      nExpMode = 1;   break;
-//                      case HTML_CFG_NS30:         nExpMode = 2;   break;  depricated
                         case HTML_CFG_WRITER:       nExpMode = 3;   break;
                         case HTML_CFG_NS40:         nExpMode = 4;   break;
                         case HTML_CFG_MSIE_40_OLD:  nExpMode = 5;   break;
@@ -268,16 +262,16 @@ void    SvxHtmlOptions::Commit()
 
 void SvxHtmlOptions::AddListenerLink( const Link& rLink )
 {
-    pImp->aList.Insert( new Link( rLink ) );
+    pImp->aList.push_back( rLink );
 }
 
 void SvxHtmlOptions::RemoveListenerLink( const Link& rLink )
 {
-    for ( USHORT n=0; n<pImp->aList.Count(); n++ )
+    for ( ::std::list<Link>::iterator iter = pImp->aList.begin(); iter != pImp->aList.end(); ++iter )
     {
-        if ( (*pImp->aList.GetObject(n) ) == rLink )
+        if ( *iter == rLink )
         {
-            delete pImp->aList.Remove(n);
+            pImp->aList.erase(iter);
             break;
         }
     }
@@ -285,8 +279,8 @@ void SvxHtmlOptions::RemoveListenerLink( const Link& rLink )
 
 void SvxHtmlOptions::CallListeners()
 {
-    for ( USHORT n = 0; n < pImp->aList.Count(); ++n )
-        pImp->aList.GetObject(n)->Call( this );
+    for ( ::std::list<Link>::const_iterator iter = pImp->aList.begin(); iter != pImp->aList.end(); ++iter )
+        iter->Call( this );
 }
 
 

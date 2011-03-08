@@ -357,7 +357,7 @@ void SdrTableObjImpl::SetModel(SdrModel* /*pOldModel*/, SdrModel* pNewModel)
     }
     catch( Exception& )
     {
-        DBG_ERROR("svx::SdrTableObjImpl::SetModel(), exception caught!");
+        OSL_FAIL("svx::SdrTableObjImpl::SetModel(), exception caught!");
     }
 
     mxTableStyle = xNewTableStyle;
@@ -524,7 +524,7 @@ void SdrTableObjImpl::DragEdge( bool mbHorizontal, int nEdge, sal_Int32 nOffset 
     }
     catch( Exception& )
     {
-        DBG_ERROR( "svx::SdrTableObjImpl::DragEdge(), exception caught!" );
+        OSL_FAIL( "svx::SdrTableObjImpl::DragEdge(), exception caught!" );
     }
 }
 
@@ -629,7 +629,7 @@ CellRef SdrTableObjImpl::getCell(  const CellPos& rPos  ) const
     }
     catch( Exception& )
     {
-        DBG_ERROR( "svx::SdrTableObjImpl::getCell(), exception caught!" );
+        OSL_FAIL( "svx::SdrTableObjImpl::getCell(), exception caught!" );
     }
     return xCell;
 }
@@ -1169,7 +1169,7 @@ void SdrTableObj::InsertRows( sal_Int32 nIndex, sal_Int32 nCount /*= 1*/ )
     }
     catch( Exception& )
     {
-        DBG_ERROR("SdrTableObj::InsertRows(), exception caught!");
+        OSL_FAIL("SdrTableObj::InsertRows(), exception caught!");
     }
 }
 
@@ -1184,7 +1184,7 @@ void SdrTableObj::InsertColumns( sal_Int32 nIndex, sal_Int32 nCount /*= 1*/ )
     }
     catch( Exception& )
     {
-        DBG_ERROR("SdrTableObj::InsertColumns(), exception caught!");
+        OSL_FAIL("SdrTableObj::InsertColumns(), exception caught!");
     }
 }
 
@@ -1199,7 +1199,7 @@ void SdrTableObj::DeleteRows( sal_Int32 nIndex, sal_Int32 nCount /*= 1*/ )
     }
     catch( Exception& )
     {
-        DBG_ERROR("SdrTableObj::DeleteRows(), exception caught!");
+        OSL_FAIL("SdrTableObj::DeleteRows(), exception caught!");
     }
 }
 
@@ -1214,7 +1214,7 @@ void SdrTableObj::DeleteColumns( sal_Int32 nIndex, sal_Int32 nCount /*= 1*/ )
     }
     catch( Exception& )
     {
-        DBG_ERROR("SdrTableObj::DeleteColumns(), exception caught!");
+        OSL_FAIL("SdrTableObj::DeleteColumns(), exception caught!");
     }
 }
 
@@ -1618,7 +1618,7 @@ void SdrTableObj::setActiveCell( const CellPos& rPos )
     }
     catch( Exception& )
     {
-        DBG_ERROR("SdrTableObj::setActiveCell(), exception caught!");
+        OSL_FAIL("SdrTableObj::setActiveCell(), exception caught!");
     }
 }
 
@@ -2736,7 +2736,7 @@ SdrTableObj* SdrTableObj::CloneRange( const CellPos& rStart, const CellPos& rEnd
         }
         catch( Exception& )
         {
-            DBG_ERROR( "svx::SvxTableController::GetMarkedObjModel(), exception caught!" );
+            OSL_FAIL( "svx::SvxTableController::GetMarkedObjModel(), exception caught!" );
         }
     }
 

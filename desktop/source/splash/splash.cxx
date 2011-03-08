@@ -254,9 +254,7 @@ void SplashScreen::updateStatus()
 {
     if (!_bVisible || _bProgressEnd) return;
     if (!_bPaintProgress) _bPaintProgress = sal_True;
-    //_bPaintBitmap=sal_False;
     Paint(Rectangle());
-    //_bPaintBitmap=sal_True;
     Flush();
 }
 
@@ -322,8 +320,6 @@ void SplashScreen::loadConfig()
     if ( sProgressFrameColor.getLength() )
     {
         UINT8 nRed = 0;
-        UINT8 nGreen = 0;
-        UINT8 nBlue = 0;
         sal_Int32 idx = 0;
         sal_Int32 temp = sProgressFrameColor.getToken( 0, ',', idx ).toInt32();
         if ( idx != -1 )
@@ -333,8 +329,8 @@ void SplashScreen::loadConfig()
         }
         if ( idx != -1 )
         {
-            nGreen = static_cast< UINT8 >( temp );
-            nBlue = static_cast< UINT8 >( sProgressFrameColor.getToken( 0, ',', idx ).toInt32() );
+            UINT8 nGreen = static_cast< UINT8 >( temp );
+            UINT8 nBlue = static_cast< UINT8 >( sProgressFrameColor.getToken( 0, ',', idx ).toInt32() );
             _cProgressFrameColor = Color( nRed, nGreen, nBlue );
         }
     }
@@ -342,8 +338,6 @@ void SplashScreen::loadConfig()
     if ( sProgressBarColor.getLength() )
     {
         UINT8 nRed = 0;
-        UINT8 nGreen = 0;
-        UINT8 nBlue = 0;
         sal_Int32 idx = 0;
         sal_Int32 temp = sProgressBarColor.getToken( 0, ',', idx ).toInt32();
         if ( idx != -1 )
@@ -353,8 +347,8 @@ void SplashScreen::loadConfig()
         }
         if ( idx != -1 )
         {
-            nGreen = static_cast< UINT8 >( temp );
-            nBlue = static_cast< UINT8 >( sProgressBarColor.getToken( 0, ',', idx ).toInt32() );
+            UINT8 nGreen = static_cast< UINT8 >( temp );
+            UINT8 nBlue = static_cast< UINT8 >( sProgressBarColor.getToken( 0, ',', idx ).toInt32() );
             _cProgressBarColor = Color( nRed, nGreen, nBlue );
         }
     }
@@ -411,8 +405,7 @@ void SplashScreen::SetScreenBitmap(BitmapEx &rBitmap)
     aStrBuf.append( "intro_" );
     if ( _sAppName.getLength() > 0 )
     {
-        aStrBuf.append( OString( _sAppName, _sAppName.getLength(),
-                                 RTL_TEXTENCODING_UTF8 ) );
+        aStrBuf.append( OUStringToOString(_sAppName, RTL_TEXTENCODING_UTF8) );
         aStrBuf.append( "_" );
     }
     aResBuf.append( OString::valueOf( nWidth ));
@@ -420,12 +413,12 @@ void SplashScreen::SetScreenBitmap(BitmapEx &rBitmap)
     aResBuf.append( OString::valueOf( nHeight ));
 
     aStrBuf.append( aResBuf.getStr() );
-    if (Application::LoadBrandBitmap (aStrBuf.makeStringAndClear(), rBitmap))
+    if (Application::LoadBrandBitmap (aStrBuf.makeStringAndClear().getStr(), rBitmap))
         return;
 
     aStrBuf.append( "intro_" );
     aStrBuf.append( aResBuf.getStr() );
-    if (Application::LoadBrandBitmap (aResBuf.makeStringAndClear(), rBitmap))
+    if (Application::LoadBrandBitmap (aResBuf.makeStringAndClear().getStr(), rBitmap))
         return;
 
     Application::LoadBrandBitmap ("intro", rBitmap);

@@ -35,6 +35,7 @@
 #include "scdllapi.h"
 #include "queryparam.hxx"
 
+#include <boost/unordered_set.hpp>
 #include <vector>
 
 namespace com { namespace sun { namespace star { namespace sheet {
@@ -77,7 +78,7 @@ public:
     const ScQueryParam& GetQueryParam() const;
 
     bool operator== ( const ScSheetSourceDesc& rOther ) const;
-    ScDPTableDataCache* CreateCache(long nID = -1) const;
+    ScDPCache* CreateCache() const;
 
     /**
      * Check the sanity of the data source range.
@@ -88,9 +89,7 @@ public:
      *         returned.
      */
     ULONG CheckSourceRange() const;
-    ScDPTableDataCache* GetCache(long nID) const;
-    ScDPTableDataCache* GetExistDPObjectCache() const;
-    long GetCacheId(long nID) const;
+    long GetCacheId() const;
 
 private:
     mutable ScRange maSourceRange;
@@ -99,10 +98,9 @@ private:
     ScDocument*     mpDoc;
 };
 
-// --------------------------------------------------------------------
-//
-//  implementation of ScDPTableData with sheet data
-//
+/**
+ * Implementation of ScDPTableData with sheet data.
+ */
 class SC_DLLPUBLIC ScSheetDPData : public ScDPTableData
 {
 private:
@@ -111,10 +109,11 @@ private:
     bool            bIgnoreEmptyRows;
     bool            bRepeatIfEmpty;
 
+    const ScSheetSourceDesc& mrDesc;
     ScDPCacheTable  aCacheTable;
 
 public:
-    ScSheetDPData( ScDocument* pD, const ScSheetSourceDesc& rDesc, long nCacheId = -1 );
+    ScSheetDPData(ScDocument* pD, const ScSheetSourceDesc& rDesc);
     virtual ~ScSheetDPData();
 
     virtual long                    GetColumnCount();
@@ -128,9 +127,9 @@ public:
     virtual bool                    IsRepeatIfEmpty();
 
     virtual void                    CreateCacheTable();
-    virtual void                    FilterCacheTable(const ::std::vector<ScDPCacheTable::Criterion>& rCriteria, const ::std::hash_set<sal_Int32>& rCatDims);
+    virtual void                    FilterCacheTable(const ::std::vector<ScDPCacheTable::Criterion>& rCriteria, const ::boost::unordered_set<sal_Int32>& rCatDims);
     virtual void                    GetDrillDownData(const ::std::vector<ScDPCacheTable::Criterion>& rCriteria,
-                                                     const ::std::hash_set<sal_Int32>& rCatDims,
+                                                     const ::boost::unordered_set<sal_Int32>& rCatDims,
                                                      ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >& rData);
     virtual void                    CalcResults(CalcInfo& rInfo, bool bAutoShow);
     virtual const ScDPCacheTable&   GetCacheTable() const;

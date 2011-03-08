@@ -34,16 +34,11 @@
 #pragma warning (push,1)
 #pragma warning (disable:4005)
 
-    #include <tools/prewin.h>
-
-    #include <windows.h>
-    #include <string.h>
-    #include <tchar.h>
-    #include <winreg.h>
-    #include <winbase.h>
-    #include <objbase.h>
-
-    #include <tools/postwin.h>
+#include <prewin.h>
+#include <string.h>
+#include <tchar.h>
+#include <objbase.h>
+#include <postwin.h>
 
 #pragma warning (pop)
 
@@ -56,7 +51,9 @@ extern NPNetscapeFuncs aNPNFuncs;
 
 #include <tools/debug.hxx>
 
-using namespace rtl;
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OUStringToOString;
 
 #if OSL_DEBUG_LEVEL > 1
 void TRACE( char const * s );
@@ -426,7 +423,7 @@ NPError PluginComm_Impl::NPP_SetValue( NPP instance, NPNVariable variable, void 
 //--------------------------------------------------------------------------------------------------
 void * PluginComm_Impl::NPP_GetJavaClass()
 {
-    DBG_ERROR( "no java class available!" );
+    OSL_FAIL( "no java class available!" );
     return 0;
 }
 

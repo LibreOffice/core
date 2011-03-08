@@ -212,7 +212,7 @@ String JobSetup::GetValue( const String& rKey ) const
 {
     if( mpData )
     {
-        ::std::hash_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash >::const_iterator it;
+        ::boost::unordered_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash >::const_iterator it;
         it = mpData->maValueMap.find( rKey );
         return it != mpData->maValueMap.end() ? String( it->second ) : String();
     }
@@ -420,7 +420,7 @@ SvStream& operator<<( SvStream& rOStream, const JobSetup& rJobSetup )
             rOStream.Write( (char*)&aOldData, sizeof( aOldData ) );
             rOStream.Write( (char*)&aOldJobData, nOldJobDataSize );
             rOStream.Write( (char*)pJobData->mpDriverData, pJobData->mnDriverDataLen );
-            ::std::hash_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash >::const_iterator it;
+            ::boost::unordered_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash >::const_iterator it;
             for( it = pJobData->maValueMap.begin(); it != pJobData->maValueMap.end(); ++it )
             {
                 rOStream.WriteByteString( it->first, RTL_TEXTENCODING_UTF8 );

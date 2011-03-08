@@ -166,7 +166,7 @@ public:
         return *pVirtualDev;
     }
 
-    //virtuelle Methoden fuer den Optionendialog
+    //virtual methods for options dialog
     virtual SfxItemSet*  CreateItemSet( USHORT nId );
     virtual void         ApplyItemSet( USHORT nId, const SfxItemSet& rSet );
     virtual SfxTabPage*  CreateTabPage( USHORT nId, Window* pParent, const SfxItemSet& rSet );

@@ -87,7 +87,6 @@ UnknownAuthDialog::UnknownAuthDialog
     m_rXCert ( rXCert ),
     pResourceMgr ( pResMgr )
 {
-    //SetMapMode( MapMode( MAP_APPFONT ) );
     FreeResource();
 
     m_aWarnImage.SetImage( WarningBox::GetStandardImage() );

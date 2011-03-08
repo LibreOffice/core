@@ -51,7 +51,7 @@ void EditSelFunctionSet::CreateAnchor()
 
 void EditSelFunctionSet::DestroyAnchor()
 {
-    // Nur bei Mehrfachselektion
+    // Only with multiple selection
 }
 
 BOOL EditSelFunctionSet::SetCursorAtPoint( const Point& rPointPixel, BOOL )
@@ -73,13 +73,13 @@ BOOL EditSelFunctionSet::IsSelectionAtPoint( const Point& rPointPixel )
 void EditSelFunctionSet::DeselectAtPoint( const Point& )
 {
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// !  Implementieren, wenn Mehrfachselektion moeglich  !
+// !   Implement when multiple selection is possible   !
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 }
 
 void EditSelFunctionSet::BeginDrag()
 {
-    // Nur bei Mehrfachselektion
+    // Only with multiple selection
 }
 
 
@@ -94,8 +94,6 @@ void EditSelFunctionSet::DeselectAll()
 //  ----------------------------------------------------------------------
 EditSelectionEngine::EditSelectionEngine() : SelectionEngine( (Window*)0 )
 {
-    // Wegen Bug OV: (1994)
-    // 1995: RangeSelection lassen, SingleSelection nur fuer ListBoxen geeignet!
     SetSelectionMode( RANGE_SELECTION );
     EnableDrag( TRUE );
 }

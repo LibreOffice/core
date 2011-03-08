@@ -37,8 +37,8 @@
 
 #include <vector>
 #include <set>
-#include <hash_map>
-#include <hash_set>
+#include <boost/unordered_set.hpp>
+#include <boost/unordered_map.hpp>
 
 namespace com { namespace sun { namespace star { namespace sheet {
     struct DataPilotFieldFilter;
@@ -90,6 +90,10 @@ class ScDPInitState;
 class ScDPResultMember;
 class ScDocument;
 
+/**
+ * Base class that abstracts different data source types of a datapilot
+ * table.
+ */
 class SC_DLLPUBLIC ScDPTableData
 {
     //  cached data for GetDatePart
@@ -97,8 +101,7 @@ class SC_DLLPUBLIC ScDPTableData
     long    nLastHier;
     long    nLastLevel;
     long    nLastRet;
-    long                          mnCacheId;
-    const ScDocument*   mpDoc;
+    const ScDocument* mpDoc;
 public:
 
     /** This structure stores dimension information used when calculating
@@ -124,7 +127,7 @@ public:
         CalcInfo();
     };
 
-    ScDPTableData(ScDocument* pDoc, long nCacheId );
+    ScDPTableData(ScDocument* pDoc);
     virtual     ~ScDPTableData();
 
     long        GetDatePart( long nDateVal, long nHierarchy, long nLevel );
@@ -134,7 +137,6 @@ public:
 
     virtual long                    GetColumnCount() = 0;
     virtual   const std::vector< SCROW >& GetColumnEntries( long nColumn ) ;
-    long                                                     GetCacheId() const;
     virtual String                  getDimensionName(long nColumn) = 0;
     virtual BOOL                    getIsDataLayoutDimension(long nColumn) = 0;
     virtual BOOL                    IsDateDimension(long nDim) = 0;
@@ -146,9 +148,9 @@ public:
     virtual bool                    IsRepeatIfEmpty();
 
     virtual void                    CreateCacheTable() = 0;
-    virtual void                    FilterCacheTable(const ::std::vector<ScDPCacheTable::Criterion>& rCriteria, const ::std::hash_set<sal_Int32>& rDataDims) = 0;
+    virtual void                    FilterCacheTable(const ::std::vector<ScDPCacheTable::Criterion>& rCriteria, const ::boost::unordered_set<sal_Int32>& rDataDims) = 0;
     virtual void                    GetDrillDownData(const ::std::vector<ScDPCacheTable::Criterion>& rCriteria,
-                                                     const ::std::hash_set<sal_Int32>& rCatDims,
+                                                     const ::boost::unordered_set<sal_Int32>& rCatDims,
                                                      ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >& rData) = 0;
     virtual void                    CalcResults(CalcInfo& rInfo, bool bAutoShow) = 0;
     virtual const ScDPCacheTable&   GetCacheTable() const = 0;

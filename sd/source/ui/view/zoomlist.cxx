@@ -45,7 +45,7 @@ namespace sd {
 
 /*************************************************************************
 |*
-|* Konstruktor
+|* Constructor
 |*
 \************************************************************************/
 
@@ -59,7 +59,7 @@ ZoomList::ZoomList(ViewShell* pViewShell)
 
 /*************************************************************************
 |*
-|* Destruktor
+|* Destructor
 |*
 \************************************************************************/
 
@@ -71,7 +71,7 @@ ZoomList::~ZoomList()
     for (ULONG nObject=0; nObject<Count(); nObject++)
 #endif
     {
-        // Ggf. ZoomRects loeschen
+        // delete ZoomRects if necessary
         delete ((Rectangle*) GetObject(nObject));
     }
 }
@@ -79,7 +79,7 @@ ZoomList::~ZoomList()
 
 /*************************************************************************
 |*
-|* Neues ZoomRect aufnehmen
+|* Insert new ZoomRect
 |*
 \************************************************************************/
 
@@ -111,7 +111,7 @@ void ZoomList::InsertZoomRect(const Rectangle& rRect)
 
 /*************************************************************************
 |*
-|* Naechstes ZoomRect herausgeben
+|* Return next ZoomRect
 |*
 \************************************************************************/
 
@@ -135,7 +135,7 @@ Rectangle ZoomList::GetNextZoomRect()
 
 /*************************************************************************
 |*
-|* Letztes ZoomRect herausgeben
+|* Return last ZoomRect
 |*
 \************************************************************************/
 
@@ -156,7 +156,7 @@ Rectangle ZoomList::GetPreviousZoomRect()
 
 /*************************************************************************
 |*
-|* Gibt es ein naechstes ZoomRect?
+|* Is there a next ZoomRect?
 |*
 \************************************************************************/
 
@@ -175,7 +175,7 @@ BOOL ZoomList::IsNextPossible() const
 
 /*************************************************************************
 |*
-|* Gibt es ein vorheriges ZoomRect?
+|* Is there a previous ZoomRect?
 |*
 \************************************************************************/
 

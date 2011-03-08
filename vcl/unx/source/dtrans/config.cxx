@@ -57,8 +57,9 @@ public:
 
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
-using namespace rtl;
 using namespace x11;
+
+using ::rtl::OUString;
 
 sal_Int32 SelectionManager::getSelectionTimeout()
 {

@@ -34,7 +34,6 @@ ModalDialog DLG_INS_FOOTNOTE
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 160 , 100 ) ;
-    /* ### ACHTUNG: Neuer Text in Resource? Fußnote einfügen : Fu˜note einf³gen */
     Text [ en-US ] = "Insert Footnote/Endnote" ;
     Moveable = TRUE ;
     Edit ED_NUMBER_CHAR

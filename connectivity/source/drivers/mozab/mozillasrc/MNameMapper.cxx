@@ -40,7 +40,6 @@
 
 
 using namespace connectivity::mozab;
-using namespace rtl;
 
 bool
 MNameMapper::ltstr::operator()( const ::rtl::OUString &s1, const ::rtl::OUString &s2) const

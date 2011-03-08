@@ -94,7 +94,7 @@ static Reference< XNameAccess > getNodeAccess( const Reference< XMultiServiceFac
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR( "sd::getNodeAccess(), Exception catched!" );
+        OSL_FAIL( "sd::getNodeAccess(), Exception catched!" );
     }
 
     return xConfigAccess;
@@ -132,12 +132,12 @@ void implImportLabels( const Reference< XMultiServiceFactory >& xConfigProvider,
     catch( lang::WrappedTargetException& e )
     {
         (void)e;
-        DBG_ERROR( "sd::implImportLabels(), WrappedTargetException catched!" );
+        OSL_FAIL( "sd::implImportLabels(), WrappedTargetException catched!" );
     }
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR( "sd::implImportLabels(), Exception catched!" );
+        OSL_FAIL( "sd::implImportLabels(), Exception catched!" );
     }
 }
 
@@ -209,7 +209,7 @@ Reference< XAnimationNode > CustomAnimationPreset::create( const rtl::OUString& 
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR( "sd::CustomAnimationPresets::create(), exception catched!" );
+        OSL_FAIL( "sd::CustomAnimationPresets::create(), exception catched!" );
     }
 
     Reference< XAnimationNode > xNode;
@@ -304,22 +304,22 @@ Reference< XAnimationNode > implImportEffects( const Reference< XMultiServiceFac
     catch( xml::sax::SAXParseException& r )
     {
         (void)r;
-        DBG_ERROR( "sd::implImportEffects(), SAXParseException catched!" );
+        OSL_FAIL( "sd::implImportEffects(), SAXParseException catched!" );
     }
     catch( xml::sax::SAXException& r )
     {
         (void)r;
-        DBG_ERROR( "sd::implImportEffects(), SAXException catched!" );
+        OSL_FAIL( "sd::implImportEffects(), SAXException catched!" );
     }
     catch( io::IOException& r )
     {
         (void)r;
-        DBG_ERROR( "sd::implImportEffects(), IOException catched!" );
+        OSL_FAIL( "sd::implImportEffects(), IOException catched!" );
     }
     catch( Exception& r )
     {
         (void)r;
-        DBG_ERROR( "sd::importEffects(), Exception catched!" );
+        OSL_FAIL( "sd::importEffects(), Exception catched!" );
     }
 
     return xRootNode;
@@ -413,22 +413,22 @@ void CustomAnimationPresets::importEffects()
     catch( xml::sax::SAXParseException& r )
     {
         (void)r;
-        DBG_ERROR( "sd::CustomAnimationPresets::importEffects(), SAXParseException catched!" );
+        OSL_FAIL( "sd::CustomAnimationPresets::importEffects(), SAXParseException catched!" );
     }
     catch( xml::sax::SAXException& r )
     {
         (void)r;
-        DBG_ERROR( "sd::CustomAnimationPresets::importEffects(), SAXException catched!" );
+        OSL_FAIL( "sd::CustomAnimationPresets::importEffects(), SAXException catched!" );
     }
     catch( io::IOException& r )
     {
         (void)r;
-        DBG_ERROR( "sd::CustomAnimationPresets::importEffects(), IOException catched!" );
+        OSL_FAIL( "sd::CustomAnimationPresets::importEffects(), IOException catched!" );
     }
     catch( Exception& r )
     {
         (void)r;
-        DBG_ERROR( "sd::CustomAnimationPresets::importEffects(), Exception catched!" );
+        OSL_FAIL( "sd::CustomAnimationPresets::importEffects(), Exception catched!" );
     }
 }
 
@@ -473,12 +473,12 @@ void CustomAnimationPresets::importResources()
     catch( lang::WrappedTargetException& e )
     {
         (void)e;
-        DBG_ERROR( "sd::CustomAnimationPresets::importResources(), WrappedTargetException catched!" );
+        OSL_FAIL( "sd::CustomAnimationPresets::importResources(), WrappedTargetException catched!" );
     }
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR( "sd::CustomAnimationPresets::importResources(), Exception catched!" );
+        OSL_FAIL( "sd::CustomAnimationPresets::importResources(), Exception catched!" );
     }
 }
 
@@ -542,7 +542,7 @@ void CustomAnimationPresets::importPresets( const Reference< XMultiServiceFactor
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR( "sd::CustomAnimationPresets::importPresets(), Exception catched!" );
+        OSL_FAIL( "sd::CustomAnimationPresets::importPresets(), Exception catched!" );
     }
 
 #ifdef DEBUG

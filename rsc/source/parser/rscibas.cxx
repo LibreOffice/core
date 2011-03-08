@@ -50,7 +50,7 @@
 #include "rsclex.hxx"
 #include <yyrscyacc.hxx>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 /****************** M A C R O S ******************************************/
 void RscTypCont::SETCONST( RscConst * pClass, const char * szString, UINT32 nVal )
@@ -78,7 +78,7 @@ void RscTypCont::SETCONST( RscConst * pClass, Atom nName, UINT32 nVal )
 |*    Beschreibung
 *************************************************************************/
 
-typedef std::hash_map< rtl::OString, sal_uInt32, rtl::OStringHash > langmap;
+typedef boost::unordered_map< rtl::OString, sal_uInt32, rtl::OStringHash > langmap;
 static langmap ULong_Iso_map;
 
 sal_uInt32 GetLangId( const ByteString& aLang )

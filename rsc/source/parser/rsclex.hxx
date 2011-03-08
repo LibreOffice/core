@@ -27,14 +27,14 @@
  ************************************************************************/
 #include <tools/stack.hxx>
 
-#include <hash_set>
+#include <boost/unordered_set.hpp>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
 
 // a buffer for unique strings
 class StringContainer
 {
-    std::hash_set< rtl::OString, rtl::OStringHash >     m_aStrings;
+    boost::unordered_set< rtl::OString, rtl::OStringHash >      m_aStrings;
 public:
     StringContainer() {}
     ~StringContainer() {}
@@ -105,12 +105,12 @@ class ObjectStack {
 extern "C" int yyparse();   // forward Deklaration fuer erzeugte Funktion
 extern "C" void yyerror( char * );
 extern "C" int  yylex( void );
-#elif defined( HP9000 ) || defined( SCO ) || defined ( SOLARIS )
+#elif defined ( SOLARIS )
 extern "C" int yyparse();   // forward Deklaration fuer erzeugte Funktion
 extern "C" void yyerror( const char * );
 extern "C" int  yylex( void );
 #else
-#if defined ( WTC ) || defined ( GCC ) || (_MSC_VER >= 1400)
+#if defined ( GCC ) || (_MSC_VER >= 1400)
 int yyparse();              // forward Deklaration fuer erzeugte Funktion
 #else
 yyparse();              // forward Deklaration fuer erzeugte Funktion

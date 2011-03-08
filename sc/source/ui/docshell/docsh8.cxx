@@ -322,7 +322,7 @@ ULONG ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet,
         long nRowCount = 0;
         if ( nRowCount < 0 )
         {
-            DBG_ERROR("can't get row count");
+            OSL_FAIL("can't get row count");
             nRowCount = 0;
         }
 
@@ -477,7 +477,7 @@ ULONG ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet,
     }
     catch ( uno::Exception& )
     {
-        DBG_ERROR("Unexpected exception in database");
+        OSL_FAIL("Unexpected exception in database");
         nErr = ERRCODE_IO_GENERAL;
     }
 
@@ -976,7 +976,7 @@ ULONG ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet, BO
                             if ( pCell && pCell->GetCellType() != CELLTYPE_NOTE )
                             {
                                 if ( pCell->GetCellType() == CELLTYPE_EDIT )
-                                {   // #60761# Paragraphs erhalten
+                                {   // Paragraphs erhalten
                                     lcl_getLongVarCharEditString( aString,
                                             pCell, aEditEngine);
                                 }
@@ -1003,7 +1003,7 @@ ULONG ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet, BO
                     case sdbc::DataType::DATE:
                         {
                             aDocument.GetValue( nDocCol, nDocRow, nTab, fVal );
-                            // #39274# zwischen 0 Wert und 0 kein Wert unterscheiden
+                            // zwischen 0 Wert und 0 kein Wert unterscheiden
                             BOOL bIsNull = (fVal == 0.0);
                             if ( bIsNull )
                                 bIsNull = !aDocument.HasValueData( nDocCol, nDocRow, nTab );
@@ -1037,7 +1037,7 @@ ULONG ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet, BO
                         break;
 
                     default:
-                        DBG_ERROR( "ScDocShell::DBaseExport: unknown FieldType" );
+                        OSL_FAIL( "ScDocShell::DBaseExport: unknown FieldType" );
                         if ( nErr == eERR_OK )
                             nErr = SCWARN_EXPORT_DATALOST;
                         aDocument.GetValue( nDocCol, nDocRow, nTab, fVal );
@@ -1164,7 +1164,7 @@ ULONG ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet, BO
     }
     catch ( uno::Exception& )
     {
-        DBG_ERROR("Unexpected exception in database");
+        OSL_FAIL("Unexpected exception in database");
         nErr = ERRCODE_IO_GENERAL;
     }
 

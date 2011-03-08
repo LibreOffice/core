@@ -825,11 +825,13 @@ BOOL ScFormulaCell::HasColRowName() const
     return (pCode->GetNextColRowName() != NULL);
 }
 
-void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
+bool ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
                                     const ScRange& r,
                                     SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
                                     ScDocument* pUndoDoc, const ScAddress* pUndoCellPos )
 {
+    bool bCellStateChanged = false;
+
     SCCOL nCol1 = r.aStart.Col();
     SCROW nRow1 = r.aStart.Row();
     SCTAB nTab1 = r.aStart.Tab();
@@ -858,6 +860,7 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
                     nCol = 0;
                 else if ( nCol > MAXCOL )
                     nCol = MAXCOL;
+                bCellStateChanged = aPos.Col() != nCol;
                 aPos.SetCol( nCol );
             }
         }
@@ -871,6 +874,7 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
                     nRow = 0;
                 else if ( nRow > MAXROW )
                     nRow = MAXROW;
+                bCellStateChanged = aPos.Row() != nRow;
                 aPos.SetRow( nRow );
             }
         }
@@ -885,6 +889,7 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
                     nTab = 0;
                 else if ( nTab > nMaxTab )
                     nTab = nMaxTab;
+                bCellStateChanged = aPos.Tab() != nTab;
                 aPos.SetTab( nTab );
             }
         }
@@ -912,10 +917,10 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
     if( bHasRefs || bOnRefMove )
     {
         ScTokenArray* pOld = pUndoDoc ? pCode->Clone() : NULL;
-        BOOL bValChanged;
         ScRangeData* pRangeData;
-        BOOL bRangeModified;            // any range, not only shared formula
-        BOOL bRefSizeChanged;
+        bool bValChanged = false;
+        bool bRangeModified = false;    // any range, not only shared formula
+        bool bRefSizeChanged = false;
         if ( bHasRefs )
         {
             ScCompiler aComp(pDocument, aPos, *pCode);
@@ -927,11 +932,14 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
         }
         else
         {
-            bValChanged = FALSE;
+            bValChanged = false;
             pRangeData = NULL;
-            bRangeModified = FALSE;
-            bRefSizeChanged = FALSE;
+            bRangeModified = false;
+            bRefSizeChanged = false;
         }
+
+        bCellStateChanged |= bValChanged;
+
         if ( bOnRefMove )
             bOnRefMove = (bValChanged || (aPos != aOldPos));
             // Cell may reference itself, e.g. ocColumn, ocRow without parameter
@@ -1043,16 +1051,16 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
                 FALSE;
         }
 
-        BOOL bNeedDirty;
+        bool bNeedDirty = false;
         // NeedDirty bei Aenderungen ausser Copy und Move/Insert ohne RelNames
         if ( bRangeModified || pRangeData || bColRowNameCompile ||
                 (bValChanged && eUpdateRefMode != URM_COPY &&
                  (eUpdateRefMode != URM_MOVE || bHasRelName) &&
                  (!bIsInsert || bHasRelName || bInDeleteUndo ||
                   bRefSizeChanged)) || bOnRefMove)
-            bNeedDirty = TRUE;
+            bNeedDirty = true;
         else
-            bNeedDirty = FALSE;
+            bNeedDirty = false;
         if (pUndoDoc && (bValChanged || pRangeData || bOnRefMove))
         {
             //  Copy the cell to aUndoPos, which is its current position in the document,
@@ -1070,7 +1078,7 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
                 pUndoDoc->PutCell( aUndoPos, pFCell );
             }
         }
-        bValChanged = FALSE;
+        bValChanged = false;
         if ( pRangeData )
         {   // Replace shared formula with own formula
             pDocument->RemoveFromFormulaTree( this );   // update formula count
@@ -1082,13 +1090,13 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
             aComp2.SetGrammar(pDocument->GetGrammar());
             aComp2.UpdateSharedFormulaReference( eUpdateRefMode, aOldPos, r,
                 nDx, nDy, nDz );
-            bValChanged = TRUE;
-            bNeedDirty = TRUE;
+            bValChanged = true;
+            bNeedDirty = true;
         }
         if ( ( bCompile = (bCompile || bValChanged || bRangeModified || bColRowNameCompile) ) != 0 )
         {
             CompileTokenArray( bNewListening ); // kein Listening
-            bNeedDirty = TRUE;
+            bNeedDirty = true;
         }
         if ( !bInDeleteUndo )
         {   // In ChangeTrack Delete-Reject listeners are established in
@@ -1118,6 +1126,7 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
 
         delete pOld;
     }
+    return bCellStateChanged;
 }
 
 void ScFormulaCell::UpdateInsertTab(SCTAB nTable)
@@ -1361,7 +1370,7 @@ void ScFormulaCell::UpdateTranspose( const ScRange& rSource, const ScAddress& rD
     {
         if( t->GetOpCode() == ocName )
         {
-            ScRangeData* pName = pDocument->GetRangeName()->FindIndex( t->GetIndex() );
+            ScRangeData* pName = pDocument->GetRangeName()->findByIndex( t->GetIndex() );
             if (pName)
             {
                 if (pName->IsModified())
@@ -1446,7 +1455,7 @@ void ScFormulaCell::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY
     {
         if( t->GetOpCode() == ocName )
         {
-            ScRangeData* pName = pDocument->GetRangeName()->FindIndex( t->GetIndex() );
+            ScRangeData* pName = pDocument->GetRangeName()->findByIndex( t->GetIndex() );
             if (pName)
             {
                 if (pName->IsModified())
@@ -1508,18 +1517,18 @@ void ScFormulaCell::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY
         StartListeningTo( pDocument );      // Listener wie vorher
 }
 
-BOOL lcl_IsRangeNameInUse(USHORT nIndex, ScTokenArray* pCode, ScRangeName* pNames)
+BOOL lcl_IsRangeNameInUse(size_t nIndex, ScTokenArray* pCode, ScRangeName* pNames)
 {
     for (FormulaToken* p = pCode->First(); p; p = pCode->Next())
     {
         if (p->GetOpCode() == ocName)
         {
-            if (p->GetIndex() == nIndex)
+            if (p->GetIndex() == static_cast<USHORT>(nIndex))
                 return TRUE;
             else
             {
-                //  RangeData kann Null sein in bestimmten Excel-Dateien (#31168#)
-                ScRangeData* pSubName = pNames->FindIndex(p->GetIndex());
+                //  RangeData kann Null sein in bestimmten Excel-Dateien
+                ScRangeData* pSubName = pNames->findByIndex(p->GetIndex());
                 if (pSubName && lcl_IsRangeNameInUse(nIndex,
                                     pSubName->GetCode(), pNames))
                     return TRUE;
@@ -1543,7 +1552,7 @@ void lcl_FindRangeNamesInUse(std::set<USHORT>& rIndexes, ScTokenArray* pCode, Sc
             USHORT nTokenIndex = p->GetIndex();
             rIndexes.insert( nTokenIndex );
 
-            ScRangeData* pSubName = pNames->FindIndex(p->GetIndex());
+            ScRangeData* pSubName = pNames->findByIndex(p->GetIndex());
             if (pSubName)
                 lcl_FindRangeNamesInUse(rIndexes, pSubName->GetCode(), pNames);
         }
@@ -1604,7 +1613,7 @@ void ScFormulaCell::CompileDBFormula( BOOL bCreateFormulaString )
             switch ( p->GetOpCode() )
             {
                 case ocBad:             // DB-Bereich evtl. zugefuegt
-                case ocColRowName:      // #36762# falls Namensgleichheit
+                case ocColRowName:      // falls Namensgleichheit
                 case ocDBArea:          // DB-Bereich
                     bRecompile = TRUE;
                 break;
@@ -1655,7 +1664,7 @@ void ScFormulaCell::CompileNameFormula( BOOL bCreateFormulaString )
             switch ( p->GetOpCode() )
             {
                 case ocBad:             // RangeName evtl. zugefuegt
-                case ocColRowName:      // #36762# falls Namensgleichheit
+                case ocColRowName:      // falls Namensgleichheit
                     bRecompile = TRUE;
                 break;
                 default:

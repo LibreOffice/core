@@ -49,14 +49,17 @@
 
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>
+#include <tools/list.hxx>
 
-using namespace rtl;
+using ::rtl::OString;
+using ::rtl::OStringBuffer;
+using ::rtl::OStringHash;
 
 const char* StringContainer::putString( const char* pString )
 {
     OString aString( static_cast<const sal_Char*>(pString) );
     std::pair<
-        std::hash_set< OString, OStringHash >::iterator,
+        boost::unordered_set< OString, OStringHash >::iterator,
         bool > aInsert =
         m_aStrings.insert( aString );
 
@@ -295,7 +298,7 @@ int MakeToken( YYSTYPE * pTokenVal ){
     return( c1 );
 }
 
-#if defined( RS6000 ) || defined( HP9000 ) || defined( SCO )
+#if defined( RS6000 )
 extern "C" int yylex()
 #else
 int yylex()
@@ -314,7 +317,7 @@ int yylex()
 /****************** yyerror **********************************************/
 #ifdef RS6000
 extern "C" void yyerror( char* pMessage )
-#elif defined HP9000 || defined SCO || defined SOLARIS
+#elif defined SOLARIS
 extern "C" void yyerror( const char* pMessage )
 #else
 void yyerror( char* pMessage )

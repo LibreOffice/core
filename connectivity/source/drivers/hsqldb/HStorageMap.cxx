@@ -37,6 +37,8 @@
 #include "diagnose_ex.h"
 #include <osl/thread.h>
 
+#include <o3tl/compat_functional.hxx>
+
 //........................................................................
 namespace connectivity
 {
@@ -185,9 +187,9 @@ namespace connectivity
             TStorages& rMap = lcl_getStorageMap();
             // check if the storage is already in our map
             TStorages::iterator aFind = ::std::find_if(rMap.begin(),rMap.end(),
-                                        ::std::compose1(
+                                        ::o3tl::compose1(
                                             ::std::bind2nd(::std::equal_to<Reference<XStorage> >(),_xStorage)
-                                            ,::std::compose1(::std::select1st<TStorageURLPair>(),::std::compose1(::std::select1st<TStorages::mapped_type>(),::std::select2nd<TStorages::value_type>())))
+                                            ,::o3tl::compose1(::o3tl::select1st<TStorageURLPair>(),::o3tl::compose1(::o3tl::select1st<TStorages::mapped_type>(),::o3tl::select2nd<TStorages::value_type>())))
                     );
             if ( aFind == rMap.end() )
             {
@@ -216,9 +218,9 @@ namespace connectivity
             TStorages& rMap = lcl_getStorageMap();
             // check if the storage is already in our map
             TStorages::iterator aFind = ::std::find_if(rMap.begin(),rMap.end(),
-                                        ::std::compose1(
+                                        ::o3tl::compose1(
                                             ::std::bind2nd(::std::equal_to<Reference<XStorage> >(),_xStorage)
-                                            ,::std::compose1(::std::select1st<TStorageURLPair>(),::std::compose1(::std::select1st<TStorages::mapped_type>(),::std::select2nd<TStorages::value_type>())))
+                                            ,::o3tl::compose1(::o3tl::select1st<TStorageURLPair>(),::o3tl::compose1(::o3tl::select1st<TStorages::mapped_type>(),::o3tl::select2nd<TStorages::value_type>())))
                     );
             if ( aFind != rMap.end() )
                 sKey = aFind->first;

@@ -85,6 +85,7 @@
 #include <unotools/saveopt.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <osl/diagnose.h>
 #include <tools/errcode.hxx>
 #include <tools/urlobj.hxx>
 
@@ -205,7 +206,7 @@ ODatabaseDocument::ODatabaseDocument(const ::rtl::Reference<ODatabaseModelImpl>&
         {
             // if the previous incarnation of the DatabaseDocument already had an URL, then creating this incarnation
             // here is effectively loading the document.
-            // #i105505# / 2009-10-01 / frank.schoenheit@sun.com
+            // #i105505#
             m_aViewMonitor.onLoadedDocument();
         }
     }
@@ -800,7 +801,7 @@ void SAL_CALL ODatabaseDocument::disconnectController( const Reference< XControl
     if ( bLastControllerGone && !bIsClosing )
     {
         // if this was the last view, close the document as a whole
-        // #i51157# / 2006-03-16 / frank.schoenheit@sun.com
+        // #i51157#
         try
         {
             close( sal_True );
@@ -1291,18 +1292,18 @@ void SAL_CALL ODatabaseDocument::notifyDocumentEvent( const ::rtl::OUString& _Ev
 
 Sequence< PropertyValue > SAL_CALL ODatabaseDocument::getPrinter(  ) throw (RuntimeException)
 {
-    DBG_ERROR( "ODatabaseDocument::getPrinter: not supported!" );
+    OSL_FAIL( "ODatabaseDocument::getPrinter: not supported!" );
     return Sequence< PropertyValue >();
 }
 
 void SAL_CALL ODatabaseDocument::setPrinter( const Sequence< PropertyValue >& /*aPrinter*/ ) throw (IllegalArgumentException, RuntimeException)
 {
-    DBG_ERROR( "ODatabaseDocument::setPrinter: not supported!" );
+    OSL_FAIL( "ODatabaseDocument::setPrinter: not supported!" );
 }
 
 void SAL_CALL ODatabaseDocument::print( const Sequence< PropertyValue >& /*xOptions*/ ) throw (IllegalArgumentException, RuntimeException)
 {
-    DBG_ERROR( "ODatabaseDocument::print: not supported!" );
+    OSL_FAIL( "ODatabaseDocument::print: not supported!" );
 }
 
 void ODatabaseDocument::impl_reparent_nothrow( const WeakReference< XNameAccess >& _rxContainer )
@@ -1668,7 +1669,7 @@ void ODatabaseDocument::disposing()
     if ( !m_pImpl.is() )
     {
         // this means that we're already disposed
-        DBG_ASSERT( ODatabaseDocument_OfficeDocument::rBHelper.bDisposed, "ODatabaseDocument::disposing: no impl anymore, but not yet disposed!" );
+        OSL_ENSURE( ODatabaseDocument_OfficeDocument::rBHelper.bDisposed, "ODatabaseDocument::disposing: no impl anymore, but not yet disposed!" );
         return;
     }
 
@@ -1694,7 +1695,7 @@ void ODatabaseDocument::disposing()
     // SYNCHRONIZED ->
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
-    DBG_ASSERT( m_aControllers.empty(), "ODatabaseDocument::disposing: there still are controllers!" );
+    OSL_ENSURE( m_aControllers.empty(), "ODatabaseDocument::disposing: there still are controllers!" );
         // normally, nobody should explicitly dispose, but only XCloseable::close the document. And upon
         // closing, our controllers are closed, too
 
@@ -1717,7 +1718,7 @@ void ODatabaseDocument::disposing()
 
     // now, at the latest, the controller array should be empty. Controllers are
     // expected to listen for our disposal, and disconnect then
-    DBG_ASSERT( m_aControllers.empty(), "ODatabaseDocument::disposing: there still are controllers!" );
+    OSL_ENSURE( m_aControllers.empty(), "ODatabaseDocument::disposing: there still are controllers!" );
     impl_disposeControllerFrames_nothrow();
 
     aKeepAlive.push_back( m_xModuleManager );

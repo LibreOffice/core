@@ -42,7 +42,12 @@
 #include "fwkbase.hxx"
 
 using namespace osl;
-using namespace rtl;
+
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+using ::rtl::OString;
+using ::rtl::OUStringToOString;
+using ::rtl::OStringToOUString;
 #define JAVASETTINGS "javasettings"
 #define JAVASETTINGS_XML "javasettings.xml"
 #define VENDORSETTINGS "javavendors.xml"

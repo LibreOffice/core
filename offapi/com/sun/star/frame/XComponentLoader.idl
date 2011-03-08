@@ -145,7 +145,7 @@ published interface XComponentLoader: com::sun::star::uno::XInterface
                     Should be used for viewable components only. It is not allowed to dispose
                     it after use directly, because the frame containing the component is its owner.
                     Because the frame object is not accessible through the interface too,
-                    only an interacting user can do this by closing the frames' window.
+                    only an interacting user can do this by closing the frame's window.
                 </li>
                 <li>
                     <type>XController</type> for richer components<br/>

@@ -38,13 +38,17 @@
 
 #include "osl/thread.h"
 
-#include <hash_set>
+#include <boost/unordered_set.hpp>
 
 
-using namespace rtl;
 using namespace psp;
 using namespace padmin;
 using namespace std;
+
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+using ::rtl::OUStringHash;
+
 
 APTabPage::APTabPage( AddPrinterDialog* pParent, const ResId& rResId )
             : TabPage( pParent, rResId ),
@@ -1073,7 +1077,7 @@ String AddPrinterDialog::uniquePrinterName( const String& rBase )
     int nVersion = 1;
     list< OUString > aPrinterList;
     rManager.listPrinters( aPrinterList );
-    hash_set< OUString, OUStringHash > aPrinters;
+    boost::unordered_set< OUString, OUStringHash > aPrinters;
     for( list< OUString >::const_iterator it = aPrinterList.begin(); it != aPrinterList.end(); ++it )
         aPrinters.insert( *it );
     while( aPrinters.find( aResult ) != aPrinters.end() )

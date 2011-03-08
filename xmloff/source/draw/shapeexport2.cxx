@@ -408,7 +408,7 @@ void XMLShapeExport::ImpExportEvents( const uno::Reference< drawing::XShape >& x
             case presentation::ClickAction_VANISH:          eStrAction = XML_FADE_OUT; break;
             case presentation::ClickAction_SOUND:           eStrAction = XML_SOUND; break;
             default:
-                DBG_ERROR( "unknown presentation::ClickAction found!" );
+                OSL_FAIL( "unknown presentation::ClickAction found!" );
                 eStrAction = XML_UNKNOWN;
         }
 
@@ -581,7 +581,7 @@ void XMLShapeExport::ImpExportDescription( const uno::Reference< drawing::XShape
     }
     catch( uno::Exception& )
     {
-        DBG_ERROR( "could not export Title and/or Description for shape!" );
+        OSL_FAIL( "could not export Title and/or Description for shape!" );
     }
 }
 

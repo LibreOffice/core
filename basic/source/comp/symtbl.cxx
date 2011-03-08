@@ -500,7 +500,7 @@ void SbiProcDef::setPropertyMode( PropertyMode ePropMode )
             case PROPERTY_MODE_LET:     aCompleteProcName.AppendAscii( "Let " ); break;
             case PROPERTY_MODE_SET:     aCompleteProcName.AppendAscii( "Set " ); break;
             case PROPERTY_MODE_NONE:
-                DBG_ERROR( "Illegal PropertyMode PROPERTY_MODE_NONE" );
+                OSL_FAIL( "Illegal PropertyMode PROPERTY_MODE_NONE" );
                 break;
         }
         aCompleteProcName += aName;

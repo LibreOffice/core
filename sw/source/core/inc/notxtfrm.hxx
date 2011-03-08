@@ -40,7 +40,7 @@ class SwNoTxtFrm: public SwCntntFrm
 {
     friend void _FrmFinit();
 
-    short    nWeight;                   // "Wichtigkeit" der Grafik
+    short    nWeight;                   // importance of the graphic
 
     const Size& GetSize() const;
 
@@ -48,7 +48,6 @@ class SwNoTxtFrm: public SwCntntFrm
 
     void Format ( const SwBorderAttrs *pAttrs = 0 );
     void PaintCntnt  ( OutputDevice*, const SwRect&, const SwRect& ) const;
-    /// OD 25.09.2002 #99739# - delete unused 3rd parameter
     void PaintPicture( OutputDevice*, const SwRect& ) const;
 protected:
     virtual void MakeAll();
@@ -71,7 +70,7 @@ public:
     void StopAnimation( OutputDevice* = 0 ) const;
     BOOL HasAnimation()  const;
 
-    // Routinen fuer den Grafik-Cache
+    // Routine for the graphics cache
     USHORT GetWeight() { return nWeight; }
 };
 

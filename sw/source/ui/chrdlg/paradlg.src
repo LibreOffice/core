@@ -44,7 +44,6 @@ TabDialog DLG_PARA
             PageItem
             {
                 Identifier = TP_PARA_STD ;
-                /* ### ACHTUNG: Neuer Text in Resource? Einzüge und Abstände : Einz³ge und Abstõnde */
                 Text [ en-US ] = "Indents & Spacing" ;
                 PageResID = TP_PARA_STD ;
             };
@@ -57,7 +56,6 @@ TabDialog DLG_PARA
             PageItem
             {
                 Identifier = TP_PARA_EXT ;
-                /* ### ACHTUNG: Neuer Text in Resource? Textflu?: Textflu?*/
                 Text [ en-US ] = "Text Flow" ;
                 PageResID = TP_PARA_EXT ;
             };
@@ -112,7 +110,6 @@ TabDialog DLG_DRAWPARA
             PageItem
             {
                 Identifier = TP_PARA_STD ;
-                /* ### ACHTUNG: Neuer Text in Resource? Einzüge und Abstände : Einz³ge und Abstõnde */
                 Text [ en-US ] = "Indents & Spacing" ;
                 PageResID = TP_PARA_STD ;
             };

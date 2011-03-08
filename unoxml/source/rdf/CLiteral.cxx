@@ -160,7 +160,7 @@ void SAL_CALL CLiteral::initialize(const css::uno::Sequence< ::com::sun::star::u
 // ::com::sun::star::rdf::XNode:
 ::rtl::OUString SAL_CALL CLiteral::getStringValue() throw (css::uno::RuntimeException)
 {
-    if (!m_Language.equalsAscii("")) {
+    if (m_Language.getLength()) {
         ::rtl::OUStringBuffer buf(m_Value);
         buf.appendAscii("@");
         buf.append(m_Language);

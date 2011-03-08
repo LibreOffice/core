@@ -31,7 +31,7 @@
 
 #include "codemaker/options.hxx"
 
-using namespace rtl;
+using ::rtl::OString;
 
 Options::Options()
 {

@@ -160,7 +160,7 @@ namespace toolkit
             break;
             default:
             {
-                DBG_ERROR( "UnoScrollBarControl::adjustmentValueChanged - unknown Type" );
+                OSL_FAIL( "UnoScrollBarControl::adjustmentValueChanged - unknown Type" );
 
             }
         }

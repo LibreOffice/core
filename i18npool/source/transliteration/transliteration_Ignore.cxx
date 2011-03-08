@@ -35,7 +35,7 @@
 #include <transliteration_Ignore.hxx>
 
 using namespace com::sun::star::uno;
-using namespace rtl;
+using ::rtl::OUString;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 

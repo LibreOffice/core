@@ -88,7 +88,6 @@ private:
     DECL_LINK( FilterHdl_Impl, ListBox * );
     DECL_LINK( ODFVersionHdl_Impl, ListBox * );
 
-    bool    AcceptFilter( USHORT nPos );
     void    DetectHiddenControls();
 #endif
 

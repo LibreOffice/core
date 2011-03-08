@@ -482,7 +482,7 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                 aSaveStr.SearchAndReplaceAscii( "AM", aEmptyStr );
                 aSaveStr.SearchAndReplaceAscii( "PM", aEmptyStr );
 
-                // #117892# M.M. Put the word date and time formatter stuff in a common area
+                // Put the word date and time formatter stuff in a common area
                 // and get the rtf filter to use it
                 SwField *pFld = 0;
                 short nNumFmtType = NUMBERFORMAT_UNDEFINED;
@@ -1091,7 +1091,7 @@ void SwRTFParser::ReadField()
                 {
                     if(nRet == RTFFLD_PAGEREF)
                     {
-                        // #17371 Nasty hack to get a pageref within a hyperlink working
+                        // Nasty hack to get a pageref within a hyperlink working
                         sNestedFieldStr = sFieldStr;
                     }
 

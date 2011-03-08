@@ -200,7 +200,7 @@ void writeKeyValue_DBHelp( FILE* pFile, const std::string& aKeyStr, const std::s
 class HelpKeyword
 {
 private:
-    typedef std::hash_map<std::string, Data, pref_hash> DataHashtable;
+    typedef boost::unordered_map<std::string, Data, pref_hash> DataHashtable;
     DataHashtable _hash;
 
 public:
@@ -396,7 +396,6 @@ void HelpLinker::link() throw( HelpProcessingException )
 
     if( bExtensionMode )
     {
-        //indexDirParentName = sourceRoot;
         indexDirParentName = extensionDestination;
     }
     else
@@ -732,16 +731,6 @@ void HelpLinker::link() throw( HelpProcessingException )
             fs::copy( fsAdditionalFileName, fsTargetName );
         }
     }
-
-/*
-    /////////////////////////////////////////////////////////////////////////
-    /// remove temprary directory for index creation
-    /////////////////////////////////////////////////////////////////////////
-#ifndef CMC_DEBUG
-    if( !bExtensionMode )
-        fs::remove_all( indexDirParentName );
-#endif
-*/
 }
 
 

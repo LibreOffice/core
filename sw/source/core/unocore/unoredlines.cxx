@@ -115,14 +115,14 @@ OUString SwXRedlines::getImplementationName(void) throw( uno::RuntimeException )
 sal_Bool SwXRedlines::supportsService(const rtl::OUString& /*ServiceName*/)
     throw( uno::RuntimeException )
 {
-    DBG_ERROR("not implemented");
+    OSL_FAIL("not implemented");
     return sal_False;
 }
 
 uno::Sequence< OUString > SwXRedlines::getSupportedServiceNames(void)
     throw( uno::RuntimeException )
 {
-    DBG_ERROR("not implemented");
+    OSL_FAIL("not implemented");
     return uno::Sequence< OUString >();
 }
 

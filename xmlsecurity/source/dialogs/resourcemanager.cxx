@@ -372,7 +372,7 @@ vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
         {
             nNum = UINT8( pSerNumSeq[ i ] );
 
-            //MM : exchange the buffer[0] and buffer[1], which make it consistent with Mozilla and Windows
+            // exchange the buffer[0] and buffer[1], which make it consistent with Mozilla and Windows
             pBuffer[ 1 ] = pHexDigs[ nNum & 0x0F ];
             nNum >>= 4;
             pBuffer[ 0 ] = pHexDigs[ nNum ];

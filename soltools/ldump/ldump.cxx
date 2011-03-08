@@ -165,7 +165,6 @@ bool LibDump::Dump()
                         *pEnd = '\0';
                     strncpy( aBuf, pFound, strlen( pFound));
                     aBuf[ strlen( pFound) ] = '\0';
-//                    fprintf( stderr, "\n--- %s\n", aBuf);
                     break;
                 }
                 else
@@ -176,7 +175,7 @@ bool LibDump::Dump()
             }
         }
 
-        if ((aBuf[0] =='?') || !strncmp(aBuf, "__CT",4))
+        if (aBuf[0] =='?')
         {
             nLen = (int) strlen(aBuf);
             memset( aName, 0, sizeof( aName ) );
@@ -192,7 +191,10 @@ bool LibDump::Dump()
             // und raus damit
             PrintSym( aName, bExportByName );
         }
-        else if ( bAll == true )
+        else if ( bAll == true &&
+                  strncmp(aBuf, "__real@", 7) != 0 &&
+                  strncmp(aBuf, "__CT",4) != 0 &&
+                  strncmp(aBuf, "__TI3?", 6) != 0 )
         {
             int nPreLen = (int) strlen( cAPrefix );
 
@@ -208,7 +210,6 @@ bool LibDump::Dump()
                   nName++;
               }
             }
-            //fprintf( stderr, "Gefundenen Prefix : %s %d \n", aTmpBuf, nPreLen );
             // den ersten _ raus
             nLen = (int) strlen(aName);
 #ifndef _WIN64
@@ -577,7 +578,6 @@ LibDump::~LibDump()
 {
     delete [] cBName;
     delete [] cAPrefix;
-//  delete [] cLibName;
     delete [] cFilterName;
     delete [] cModName;
 }

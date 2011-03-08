@@ -57,11 +57,6 @@
  * @file
  * Interface for the all content object,ie. text,paragraph,picture,and so on.
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2004-12-23 create this file.
- * 2005-04-08 add clone function.
- ************************************************************************/
 #ifndef     _IXFCONTENT_HXX
 #define     _IXFCONTENT_HXX
 

@@ -30,11 +30,10 @@
 #define _CFG_MERGE_HXX
 
 #include <tools/string.hxx>
-#include <tools/list.hxx>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <vector>
 
-typedef std::hash_map<ByteString , ByteString , hashByteString,equalByteString>
+typedef boost::unordered_map<ByteString , ByteString , hashByteString,equalByteString>
                                 ByteStringHashMap;
 
 
@@ -194,7 +193,6 @@ private:
     std::vector<ByteString> aLanguages;
     ResData *pResData;
 
-    BOOL bGerman;
     ByteString sFilename;
     BOOL bEnglish;
 

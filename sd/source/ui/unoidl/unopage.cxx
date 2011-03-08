@@ -72,7 +72,6 @@
 #include <svx/svdoole2.hxx>
 #include <svx/svdpool.hxx>
 #include <svx/svdview.hxx>
-#include "misc.hxx"
 #include "View.hxx"
 #ifndef SVX_LIGHT
 #include "DrawDocShell.hxx"
@@ -471,11 +470,7 @@ SdrObject * SdGenericDrawPage::_CreateSdrObject( const Reference< drawing::XShap
     }
     else if( aType.EqualsAscii( "GraphicObjectShape" ) )
     {
-#ifdef STARIMAGE_AVAILABLE
-        eObjKind = PRESOBJ_IMAGE;
-#else
         eObjKind = PRESOBJ_GRAPHIC;
-#endif
     }
     else if( aType.EqualsAscii( "OrgChartShape" ) )
     {
@@ -1508,14 +1503,14 @@ Reference< container::XNameAccess > SAL_CALL SdGenericDrawPage::getLinks(  )
 
 void SdGenericDrawPage::setBackground( const Any& ) throw(lang::IllegalArgumentException)
 {
-    DBG_ERROR( "Don't call me, I'm useless!" );
+    OSL_FAIL( "Don't call me, I'm useless!" );
 }
 
 //----------------------------------------------------------------------
 
 void SdGenericDrawPage::getBackground( Any& ) throw()
 {
-    DBG_ERROR( "Don't call me, I'm useless!" );
+    OSL_FAIL( "Don't call me, I'm useless!" );
 }
 
 //----------------------------------------------------------------------
@@ -2979,7 +2974,7 @@ void SdMasterPage::setBackground( const Any& rValue )
     }
     catch( Exception& )
     {
-        DBG_ERROR("sd::SdMasterPage::setBackground(), exception caught!");
+        OSL_FAIL("sd::SdMasterPage::setBackground(), exception caught!");
     }
 }
 
@@ -3035,7 +3030,7 @@ void SdMasterPage::getBackground( Any& rValue ) throw()
     catch( Exception& )
     {
         rValue.clear();
-        DBG_ERROR("sd::SdMasterPage::getBackground(), exception caught!");
+        OSL_FAIL("sd::SdMasterPage::getBackground(), exception caught!");
     }
 }
 

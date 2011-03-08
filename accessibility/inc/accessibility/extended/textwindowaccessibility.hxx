@@ -59,7 +59,7 @@
 
 #include <memory>
 #include <queue>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 class TextEngine;
 class TextView;
@@ -396,7 +396,7 @@ private:
 };
 
 
-typedef ::std::hash_map< ::rtl::OUString,
+typedef ::boost::unordered_map< ::rtl::OUString,
                          ::css::beans::PropertyValue,
                          ::rtl::OUStringHash,
                          ::std::equal_to< ::rtl::OUString > > tPropValMap;

@@ -236,7 +236,7 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                                 case STATE_NOCHECK: nMethod = M_UnCheck; aMethod = CUniString("UnCheck"); break;
                                 case STATE_DONTKNOW: nMethod = M_TriState; aMethod = CUniString("TriState"); break;
                                 default: nMethod = M_Check;
-                                    DBG_ERROR( "Unknown state in TriStateBox::GetState()" );
+                                    OSL_FAIL( "Unknown state in TriStateBox::GetState()" );
                             }
                             if ( m_bRecord )
                             {
@@ -395,7 +395,7 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                                             case WINDOW_CANCELBUTTON: nMethod = M_Cancel; aMethod = CUniString("Cancel"); break;
                                             case WINDOW_HELPBUTTON: nMethod = M_Help; aMethod = CUniString("Help"); break;
                                             default: nMethod = M_Default;aMethod = CUniString("Unknown Button");
-                                                DBG_ERROR( "Unknown Button" );
+                                                OSL_FAIL( "Unknown Button" );
                                         }
                                         if ( m_bRecord )
                                         {
@@ -452,7 +452,7 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                                 case VCLEVENT_SPINFIELD_FIRST: nMethod = M_ToMin; aMethod = CUniString("ToMin"); break;
                                 case VCLEVENT_SPINFIELD_LAST: nMethod = M_ToMax; aMethod = CUniString("ToMax"); break;
                                 default: nMethod = M_ToMin; aMethod = CUniString("Unknown");
-                                    DBG_ERROR( "Unknown EventID in Spinfield" );
+                                    OSL_FAIL( "Unknown EventID in Spinfield" );
                             }
                             if ( m_bRecord )
                             {

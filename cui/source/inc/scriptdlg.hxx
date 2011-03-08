@@ -44,7 +44,7 @@
 #include <com/sun/star/script/browse/XBrowseNode.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #define OBJTYPE_BASICMANAGER    1L
 #define OBJTYPE_METHOD          2L
@@ -61,7 +61,7 @@
 #define INPUTMODE_NEWMACRO      2
 #define INPUTMODE_RENAME        3
 
-typedef ::std::hash_map < ::rtl::OUString, ::rtl::OUString ,
+typedef ::boost::unordered_map < ::rtl::OUString, ::rtl::OUString ,
     ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > Selection_hash;
 
 class SFEntry;

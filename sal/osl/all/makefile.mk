@@ -57,20 +57,12 @@ SLOFILES=	\
             $(SLO)$/debugbase.obj\
             $(SLO)$/loadmodulerelative.obj
 
-#			$(SLO)$/readline.obj\
-
-#.IF "$(UPDATER)"=="YES"
 OBJFILES=	\
             $(OBJ)$/utility.obj\
             $(OBJ)$/filepath.obj\
             $(OBJ)$/debugbase.obj\
             $(OBJ)$/loadmodulerelative.obj
 
-#			$(OBJ)$/readline.obj\
-#.ENDIF
-
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-
-

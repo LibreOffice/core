@@ -652,8 +652,25 @@ void ScUndoAutoFill::SetChangeTrack()
         nStartChangeAction = nEndChangeAction = 0;
 }
 
+namespace {
 
-//----------------------------------------------------------------------------
+bool eraseNameContaining(ScRangeName& rNames, const rtl::OUString& rCriteria)
+{
+    ScRangeName::iterator itr = rNames.begin(), itrEnd = rNames.end();
+    for (; itr != itrEnd; ++itr)
+    {
+        rtl::OUString aRName = itr->GetName();
+        if (aRName.indexOf(rCriteria) >= 0)
+        {
+            // Criteria found.  Erase this.
+            rNames.erase(itr);
+            return true;
+        }
+    }
+    return false;
+}
+
+}
 
 void ScUndoAutoFill::Undo()
 {
@@ -693,21 +710,17 @@ void ScUndoAutoFill::Undo()
     aName += String::CreateFromInt32(nMaxSharedIndex);
     aName += '_';
     ScRangeName* pRangeName = pDoc->GetRangeName();
-    BOOL bHasFound = FALSE;
-    for (USHORT i = 0; i < pRangeName->GetCount(); i++)
+    bool bHasFound = false;
+    // Remove all range names that contain ___SC_...
+    while (true)
     {
-        ScRangeData* pRangeData = (*pRangeName)[i];
-        if (pRangeData)
-        {
-            String aRName;
-            pRangeData->GetName(aRName);
-            if (aRName.Search(aName) != STRING_NOTFOUND)
-            {
-                pRangeName->AtFree(i);
-                bHasFound = TRUE;
-            }
-        }
+        bool bErased = eraseNameContaining(*pRangeName, aName);
+        if (bErased)
+            bHasFound = true;
+        else
+            break;
     }
+
     if (bHasFound)
         pRangeName->SetSharedMaxIndex(pRangeName->GetSharedMaxIndex()-1);
 
@@ -1081,20 +1094,18 @@ void ScUndoAutoFormat::Redo()
             aDestMark.MarkToMulti();
 
             // wie SC_SIZE_VISOPT
-            SCROW nLastRow = -1;
             for (SCROW nRow=nStartY; nRow<=nEndY; nRow++)
             {
                 BYTE nOld = pDoc->GetRowFlags(nRow,nTab);
-                bool bHidden = pDoc->RowHidden(nRow, nTab, nLastRow);
+                bool bHidden = pDoc->RowHidden(nRow, nTab);
                 if ( !bHidden && ( nOld & CR_MANUALSIZE ) )
                     pDoc->SetRowFlags( nRow, nTab, nOld & ~CR_MANUALSIZE );
             }
             pDoc->SetOptimalHeight( nStartY, nEndY, nTab, 0, &aVirtDev,
                                         nPPTX, nPPTY, aZoomX, aZoomY, FALSE );
 
-            SCCOL nLastCol = -1;
             for (SCCOL nCol=nStartX; nCol<=nEndX; nCol++)
-                if (!pDoc->ColHidden(nCol, nTab, nLastCol))
+                if (!pDoc->ColHidden(nCol, nTab))
                 {
                     USHORT nThisSize = STD_EXTRA_WIDTH + pDoc->GetOptimalColWidth( nCol, nTab,
                                                 &aVirtDev, nPPTX, nPPTY, aZoomX, aZoomY, bFormula,
@@ -1261,7 +1272,7 @@ void ScUndoReplace::Undo()
     }
     else
     {
-        // #78889# aUndoStr may contain line breaks
+        // aUndoStr may contain line breaks
         if ( aUndoStr.Search('\n') != STRING_NOTFOUND )
             pDoc->PutCell( aCursorPos, new ScEditCell( aUndoStr, pDoc ) );
         else
@@ -1486,7 +1497,7 @@ void ScUndoConversion::SetChangeTrack()
                 nStartChangeAction, nEndChangeAction );
         else
         {
-            DBG_ERROR( "ScUndoConversion::SetChangeTrack: kein UndoDoc" );
+            OSL_FAIL( "ScUndoConversion::SetChangeTrack: kein UndoDoc" );
             nStartChangeAction = nEndChangeAction = 0;
         }
     }
@@ -1534,7 +1545,7 @@ void ScUndoConversion::DoChange( ScDocument* pRefDoc, const ScAddress& rCursorPo
     }
     else
     {
-        DBG_ERROR("Kein Un-/RedoDoc bei Un-/RedoSpelling");
+        OSL_FAIL("Kein Un-/RedoDoc bei Un-/RedoSpelling");
     }
 }
 
@@ -1732,7 +1743,6 @@ void ScUndoRefreshLink::Undo()
                     pRedoDoc->AddUndoTab( nTab, nTab, TRUE, TRUE );
                 bFirst = FALSE;
                 pDoc->CopyToDocument(aRange, IDF_ALL, FALSE, pRedoDoc);
-//              pRedoDoc->TransferDrawPage( pDoc, nTab, nTab );
                 pRedoDoc->SetLink( nTab,
                                    pDoc->GetLinkMode(nTab),
                                    pDoc->GetLinkDoc(nTab),
@@ -1744,7 +1754,6 @@ void ScUndoRefreshLink::Undo()
 
             pDoc->DeleteAreaTab( aRange,IDF_ALL );
             pUndoDoc->CopyToDocument( aRange, IDF_ALL, FALSE, pDoc );
-//          pDoc->TransferDrawPage( pUndoDoc, nTab, nTab );
             pDoc->SetLink( nTab, pUndoDoc->GetLinkMode(nTab), pUndoDoc->GetLinkDoc(nTab),
                                  pUndoDoc->GetLinkFlt(nTab),  pUndoDoc->GetLinkOpt(nTab),
                                  pUndoDoc->GetLinkTab(nTab),
@@ -1774,7 +1783,6 @@ void ScUndoRefreshLink::Redo()
 
             pDoc->DeleteAreaTab( aRange, IDF_ALL );
             pRedoDoc->CopyToDocument( aRange, IDF_ALL, FALSE, pDoc );
-//          pDoc->TransferDrawPage( pRedoDoc, nTab, nTab );
             pDoc->SetLink( nTab,
                            pRedoDoc->GetLinkMode(nTab),
                            pRedoDoc->GetLinkDoc(nTab),
@@ -1822,7 +1830,7 @@ ScAreaLink* lcl_FindAreaLink( sfx2::LinkManager* pLinkManager, const String& rDo
                 return (ScAreaLink*)pBase;
     }
 
-    DBG_ERROR("ScAreaLink nicht gefunden");
+    OSL_FAIL("ScAreaLink nicht gefunden");
     return NULL;
 }
 

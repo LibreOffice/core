@@ -43,8 +43,9 @@ using namespace com::sun::star::io;
 using namespace com::sun::star::uno;
 using namespace cppu;
 using namespace osl;
-using namespace rtl;
 using namespace os2;
+
+using ::rtl::OUString;
 
 // =======================================================================
 

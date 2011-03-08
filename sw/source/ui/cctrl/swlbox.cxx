@@ -68,7 +68,7 @@ SwComboBox::SwComboBox(Window* pParent, const ResId& rId, USHORT nStyleBits ):
     ComboBox(pParent, rId),
     nStyle(nStyleBits)
 {
-    // Verwaltung fuer die Stringlist aus der Resource aufbauen
+    // create administration for the resource's Stringlist
     USHORT nSize = GetEntryCount();
     for( USHORT i=0; i < nSize; ++i )
     {

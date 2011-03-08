@@ -40,7 +40,7 @@
 #include <memory>
 #include <vector>
 #include <list>
-#include <hash_set>
+#include <boost/unordered_set.hpp>
 
 class ScDocument;
 class ScChartUnoData;
@@ -58,14 +58,14 @@ public:
         virtual void notify(sal_uInt16 nFileId, ScExternalRefManager::LinkUpdateType eType);
         void addFileId(sal_uInt16 nFileId);
         void removeFileId(sal_uInt16 nFileId);
-        ::std::hash_set<sal_uInt16>& getAllFileIds();
+        ::boost::unordered_set<sal_uInt16>& getAllFileIds();
 
     private:
         ExternalRefListener();
         ExternalRefListener(const ExternalRefListener& r);
 
         ScChartListener& mrParent;
-        ::std::hash_set<sal_uInt16> maFileIds;
+        ::boost::unordered_set<sal_uInt16> maFileIds;
         ScDocument*                 mpDoc;
     };
 

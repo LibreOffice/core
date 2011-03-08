@@ -64,18 +64,6 @@ public:
     // XHelperInterface
     virtual rtl::OUString& getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
-    // non interface methods
-    double getHeight();
-    void setHeight( double _fheight ) throw ( css::script::BasicErrorException );
-    double getWidth();
-    void setWidth( double _fwidth ) throw ( css::script::BasicErrorException );
-    double getLeft();
-    void setLeft( double _fleft );
-    double getTop();
-    void setTop( double _ftop );
-    // should make this part of the XHelperInterface with a default
-    // implementation returning NULL
-    css::uno::Reference< css::uno::XInterface > getUnoObject() const throw ( css::script::BasicErrorException );
 };
 
 #endif //SC_VBA_WINDOW_HXX

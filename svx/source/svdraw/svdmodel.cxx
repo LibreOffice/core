@@ -285,7 +285,7 @@ SdrModel::SdrModel(const SdrModel& /*rSrcModel*/):
 #endif
 
     // noch nicht implementiert
-    DBG_ERROR("SdrModel::CopyCtor() ist noch nicht implementiert");
+    OSL_FAIL("SdrModel::CopyCtor() ist noch nicht implementiert");
 }
 
 SdrModel::~SdrModel()
@@ -394,12 +394,12 @@ const SvNumberFormatter& SdrModel::GetNumberFormatter() const
 // noch nicht implementiert:
 void SdrModel::operator=(const SdrModel& /*rSrcModel*/)
 {
-    DBG_ERROR("SdrModel::operator=() ist noch nicht implementiert");
+    OSL_FAIL("SdrModel::operator=() ist noch nicht implementiert");
 }
 
 bool SdrModel::operator==(const SdrModel& /*rCmpModel*/) const
 {
-    DBG_ERROR("SdrModel::operator==() ist noch nicht implementiert");
+    OSL_FAIL("SdrModel::operator==() ist noch nicht implementiert");
     return FALSE;
 }
 
@@ -454,7 +454,7 @@ bool SdrModel::Undo()
     bool bRet = false;
     if( mpImpl->mpUndoManager )
     {
-        DBG_ERROR("svx::SdrModel::Undo(), method not supported with application undo manager!");
+        OSL_FAIL("svx::SdrModel::Undo(), method not supported with application undo manager!");
     }
     else
     {
@@ -478,7 +478,7 @@ bool SdrModel::Redo()
     bool bRet=FALSE;
     if( mpImpl->mpUndoManager )
     {
-        DBG_ERROR("svx::SdrModel::Redo(), method not supported with application undo manager!");
+        OSL_FAIL("svx::SdrModel::Redo(), method not supported with application undo manager!");
     }
     else
     {
@@ -502,7 +502,7 @@ bool SdrModel::Repeat(SfxRepeatTarget& rView)
     bool bRet = false;
     if( mpImpl->mpUndoManager )
     {
-        DBG_ERROR("svx::SdrModel::Redo(), method not supported with application undo manager!");
+        OSL_FAIL("svx::SdrModel::Redo(), method not supported with application undo manager!");
     }
     else
     {
@@ -617,7 +617,7 @@ void SdrModel::BegUndo(SdrUndoGroup* pUndoGrp)
 {
     if( mpImpl->mpUndoManager )
     {
-        DBG_ERROR("svx::SdrModel::BegUndo(), method not supported with application undo manager!" );
+        OSL_FAIL("svx::SdrModel::BegUndo(), method not supported with application undo manager!" );
         nUndoLevel++;
     }
     else if( IsUndoEnabled() )
@@ -680,7 +680,7 @@ void SdrModel::SetUndoComment(const XubString& rComment)
 
     if( mpImpl->mpUndoManager )
     {
-        DBG_ERROR("svx::SdrModel::SetUndoComment(), method not supported with application undo manager!" );
+        OSL_FAIL("svx::SdrModel::SetUndoComment(), method not supported with application undo manager!" );
     }
     else if( IsUndoEnabled() )
     {
@@ -696,7 +696,7 @@ void SdrModel::SetUndoComment(const XubString& rComment, const XubString& rObjDe
     DBG_ASSERT(nUndoLevel!=0,"SdrModel::SetUndoComment(): UndoLevel is 0!");
     if( mpImpl->mpUndoManager )
     {
-        DBG_ERROR("svx::SdrModel::SetUndoComment(), method not supported with application undo manager!" );
+        OSL_FAIL("svx::SdrModel::SetUndoComment(), method not supported with application undo manager!" );
     }
     else
     {
@@ -1776,7 +1776,7 @@ void SdrModel::Merge(SdrModel& rSourceModel,
                     bMPgNumsDirty=TRUE;
                     if (bUndo) AddUndo(GetSdrUndoFactory().CreateUndoNewPage(*pPg));
                 } else {
-                    DBG_ERROR("SdrModel::Merge(): MasterPage im SourceModel nicht gefunden");
+                    OSL_FAIL("SdrModel::Merge(): MasterPage im SourceModel nicht gefunden");
                 }
             }
         }
@@ -1833,7 +1833,7 @@ void SdrModel::Merge(SdrModel& rSourceModel,
                 }
 
             } else {
-                DBG_ERROR("SdrModel::Merge(): Zeichenseite im SourceModel nicht gefunden");
+                OSL_FAIL("SdrModel::Merge(): Zeichenseite im SourceModel nicht gefunden");
             }
             nDestPos++;
             if (bReverse) nSourcePos--;
@@ -1882,7 +1882,7 @@ void SdrModel::setUnoModel( ::com::sun::star::uno::Reference< ::com::sun::star::
 
 uno::Reference< uno::XInterface > SdrModel::createUnoModel()
 {
-    DBG_ERROR( "SdrModel::createUnoModel() - base implementation should not be called!" );
+    OSL_FAIL( "SdrModel::createUnoModel() - base implementation should not be called!" );
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xInt;
     return xInt;
 }

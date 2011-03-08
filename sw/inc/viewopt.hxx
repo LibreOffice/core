@@ -110,6 +110,7 @@ namespace svtools{ class ColorConfig;}
 #define VIEWOPT_VISITED_LINKS       0x0020
 #define VIEWOPT_FIELD_SHADINGS      0x0040
 #define VIEWOPT_SECTION_BOUNDARIES  0x0080
+#define VIEWOPT_SHADOW              0x0100
 
 // Implementierung in core/text/txtpaint.cxx
 extern void SyncVout( const OutputDevice *pOut );
@@ -133,6 +134,7 @@ class SwViewOption
     static Color    aSectionBoundColor;
     static Color    aPageBreakColor;
     static Color    aScriptIndicatorColor;
+    static Color    aShadowColor;
 
     static sal_Int32 nAppearanceFlags;  //
 protected:
@@ -557,6 +559,7 @@ public:
     static Color&   GetTextGridColor();
     static Color&   GetSpellColor();
     static Color&   GetSmarttagColor();
+    static Color&   GetShadowColor();
     SW_DLLPUBLIC static Color&   GetFontColor();
     static Color&   GetFieldShadingsColor();
     static Color&   GetSectionBoundColor();
@@ -572,6 +575,7 @@ public:
     static BOOL     IsVisitedLinks()    {return IsAppearanceFlag(VIEWOPT_VISITED_LINKS    );}
     static BOOL     IsFieldShadings()   {return IsAppearanceFlag(VIEWOPT_FIELD_SHADINGS);}
     static BOOL     IsSectionBoundaries() {return IsAppearanceFlag(VIEWOPT_SECTION_BOUNDARIES);}
+    static BOOL     IsShadow()          {return IsAppearanceFlag(VIEWOPT_SHADOW           );}
 
     static void     SetAppearanceFlag(sal_Int32 nFlag, BOOL bSet, BOOL bSaveInConfig = FALSE);
 

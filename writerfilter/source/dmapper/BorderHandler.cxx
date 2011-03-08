@@ -39,11 +39,8 @@ namespace writerfilter {
 namespace dmapper {
 
 using namespace ::com::sun::star;
-//using namespace ::std;
 
-/*-- 24.04.2007 09:06:35---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 BorderHandler::BorderHandler( bool bOOXML ) :
     m_nCurrentBorderPosition( BORDER_TOP ),
     m_nLineWidth(0),
@@ -56,15 +53,11 @@ BorderHandler::BorderHandler( bool bOOXML ) :
     std::fill_n(m_aFilledLines, nBorderCount, false);
     std::fill_n(m_aBorderLines, nBorderCount, table::BorderLine2());
 }
-/*-- 24.04.2007 09:06:35---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 BorderHandler::~BorderHandler()
 {
 }
-/*-- 24.04.2007 09:06:35---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void BorderHandler::attribute(Id rName, Value & rVal)
 {
 #ifdef DEBUG_DOMAINMAPPER
@@ -115,9 +108,7 @@ void BorderHandler::attribute(Id rName, Value & rVal)
             OSL_ENSURE( false, "unknown attribute");
     }
 }
-/*-- 24.04.2007 09:06:35---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void BorderHandler::sprm(Sprm & rSprm)
 {
 #ifdef DEBUG_DOMAINMAPPER
@@ -151,9 +142,7 @@ void BorderHandler::sprm(Sprm & rSprm)
 #endif
 
 }
-/*-- 24.04.2007 09:09:01---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 PropertyMapPtr  BorderHandler::getProperties()
 {
     static const PropertyIds aPropNames[BORDER_COUNT] =
@@ -178,7 +167,7 @@ PropertyMapPtr  BorderHandler::getProperties()
     }
     return pPropertyMap;
 }
-/*-- 14.11.2007 12:42:52---------------------------------------------------
+/*-------------------------------------------------------------------------
     used only in OOXML import
   -----------------------------------------------------------------------*/
 table::BorderLine2 BorderHandler::getBorderLine()

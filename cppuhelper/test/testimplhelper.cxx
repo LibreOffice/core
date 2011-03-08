@@ -81,11 +81,14 @@
 #include <com/sun/star/lang/IllegalAccessException.hpp>
 
 using namespace test;
-using namespace rtl;
 using namespace osl;
 using namespace cppu;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
+using ::rtl::OString;
 
 //==================================================================================================
 struct TestImpl : public ImplHelper4< CA, DBA, FE, G >

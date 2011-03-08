@@ -628,8 +628,8 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
         {0x0868, 1, L_FIX}, // "sprmCFUsePgsuSettings"
                             // chp.fUsePgsuSettings;1 or 0
         {0x486B, 2, L_FIX}, // "sprmCCpg" ;;word;
-        {0x486D, 2, L_FIX}, // "sprmCRgLid0" chp.rglid[0];LID: for non-FE text
-        {0x486E, 2, L_FIX}, // "sprmCRgLid1" chp.rglid[1];LID: for Far East text
+        {0x486D, 2, L_FIX}, // "sprmCRgLid0_80" chp.rglid[0];LID: for non-FE text
+        {0x486E, 2, L_FIX}, // "sprmCRgLid1_80" chp.rglid[1];LID: for Far East text
         {0x286F, 1, L_FIX}, // "sprmCIdctHint" chp.idctHint;IDCT:
         {0x2E00, 1, L_FIX}, // "sprmPicBrcl" pic.brcl;brcl (see PIC definition)
         {0xCE01, 0, L_VAR}, // "sprmPicScale" pic.mx, pic.my, pic.dxaCropleft,
@@ -745,8 +745,8 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
         {0xC650, 0, L_VAR}, // undocumented
         {0xC651, 0, L_VAR}, // undocumented
         {0xF661, 3, L_FIX}, // undocumented
-        {0x4873, 2, L_FIX}, // undocumented
-        {0x4874, 2, L_FIX}, // undocumented
+        {0x4873, 2, L_FIX}, // "sprmCRgLid0" chp.rglid[0];LID: for non-FE text
+        {0x4874, 2, L_FIX}, // "sprmCRgLid1" chp.rglid[1];LID: for Far East text
         {0x6463, 4, L_FIX}, // undocumented
         {0x2461, 1, L_FIX}, // undoc, must be asian version of "sprmPJc"
         {0x845D, 2, L_FIX}, // undoc, must be asian version of "sprmPDxaRight"
@@ -910,7 +910,7 @@ void WW8SprmIter::advance()
 
 void WW8SprmIter::UpdateMyMembers()
 {
-    if (pSprms && nRemLen > (mrSprmParser.getVersion()?1:0)) //see #125180#
+    if (pSprms && nRemLen > (mrSprmParser.getVersion()?1:0))
     {
         nAktId = mrSprmParser.GetSprmId(pSprms);
         pAktParams = pSprms + mrSprmParser.DistanceToData(nAktId);
@@ -1480,15 +1480,21 @@ short WW8_BRC::DetermineBorderProperties(bool bVer67, short *pSpace,
     return nMSTotalWidth;
 }
 
+/*
+ * WW8Cp2Fc is a good method, a CP always maps to a FC
+ * WW8Fc2Cp on the other hand is more dubious, a random FC
+ * may not map to a valid CP. Try and avoid WW8Fc2Cp where
+ * possible
+ */
 WW8_CP WW8ScannerBase::WW8Fc2Cp( WW8_FC nFcPos ) const
 {
     WW8_CP nFallBackCpEnd = WW8_CP_MAX;
     if( nFcPos == WW8_FC_MAX )
         return nFallBackCpEnd;
 
-    bool bIsUnicode = false;
     if( pPieceIter )    // Complex File ?
     {
+        bool bIsUnicode = false;
         ULONG nOldPos = pPieceIter->GetIdx();
 
         for (pPieceIter->SetIdx(0);
@@ -1546,9 +1552,11 @@ WW8_CP WW8ScannerBase::WW8Fc2Cp( WW8_FC nFcPos ) const
         return nFallBackCpEnd;
     }
     // No complex file
-    if (pWw8Fib->fExtChar)
-        bIsUnicode=true;
-    return ((nFcPos - pWw8Fib->fcMin) / (bIsUnicode ? 2 : 1));
+    if (!pWw8Fib->fExtChar)
+        nFallBackCpEnd = (nFcPos - pWw8Fib->fcMin);
+    else
+        nFallBackCpEnd = (nFcPos - pWw8Fib->fcMin + 1) / 2;
+    return nFallBackCpEnd;
 }
 
 WW8_FC WW8ScannerBase::WW8Cp2Fc(WW8_CP nCpPos, bool* pIsUnicode,
@@ -1593,10 +1601,12 @@ WW8_FC WW8ScannerBase::WW8Cp2Fc(WW8_CP nCpPos, bool* pIsUnicode,
 
         WW8_FC nRet = SVBT32ToUInt32( ((WW8_PCD*)pData)->fc );
         if (8 > pWw8Fib->nVersion)
-        if (pWw8Fib->fExtChar)
+        {
+            if (pWw8Fib->fExtChar)
                 *pIsUnicode=true;
             else
-                    *pIsUnicode = false;
+                *pIsUnicode = false;
+        }
         else
             nRet = WW8PLCFx_PCD::TransformPieceAddress( nRet, *pIsUnicode );
 
@@ -2028,7 +2038,7 @@ String WW8ReadPString(SvStream& rStrm, rtl_TextEncoding eEnc,
 
 String WW8Read_xstz(SvStream& rStrm, USHORT nChars, bool bAtEndSeekRel1)
 {
-    UINT16 b;
+    UINT16 b(0);
 
     if( nChars )
         b = nChars;
@@ -2695,8 +2705,7 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(ww::WordVersion eVersion, SvStream* pSt,
     //one more FC than grrpl entries
     maEntries.push_back(Entry(Get_Long(pStart)));
 
-    //#104773#, we expect them sorted, but it appears possible
-    //for them to arive unsorted
+    //we expect them sorted, but it appears possible for them to arive unsorted
     std::sort(maEntries.begin(), maEntries.end());
 
     mnIdx = 0;
@@ -2944,7 +2953,7 @@ bool WW8PLCFx_Fc_FKP::NewFkp()
 
     long nAktFkpFilePos = pFkp ? pFkp->GetFilePos() : -1;
     if (nAktFkpFilePos == nPo)
-        pFkp->Reset(GetStartFc()); // #79464# //
+        pFkp->Reset(GetStartFc());
     else
     {
         myiter aIter =
@@ -3270,7 +3279,6 @@ void WW8PLCFx_Cp_FKP::GetSprms(WW8PLCFxDesc* p)
     else
     {
         /*
-        #93702#
         For the odd case where we have a location in a fastsaved file which
         does not have an entry in the FKP, perhaps its para end is in the next
         piece, or perhaps the cp just doesn't exist at all in this document.
@@ -3959,7 +3967,7 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, UINT32 nStart, INT32 nLen,
                     rStrm.SeekRel( nExtraLen );
             }
         }
-        // #129053# read the value of the document variables, if requested.
+        // read the value of the document variables, if requested.
         if (pValueArray)
         {
                 for( USHORT i=0; i < nStrings; i++ )
@@ -4002,8 +4010,7 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, UINT32 nStart, INT32 nLen,
             else
                 rArray.push_back(aEmptyStr);
 
-            // #89125# Skip the extra data (for bVer67 versions this must come
-            // from external knowledge)
+            // Skip the extra data (for bVer67 versions this must come from external knowledge)
             if (nExtraLen)
             {
                 if (pExtraArray)
@@ -4265,20 +4272,8 @@ bool WW8PLCFx_Book::MapName(String& rName)
 
     bool bFound = false;
     USHORT i = 0;
-    WW8_CP nStartAkt, nEndAkt;
     do
     {
-        void* p;
-        USHORT nEndIdx;
-
-        if( pBook[0]->GetData( i, nStartAkt, p ) && p )
-            nEndIdx = SVBT16ToShort( *((SVBT16*)p) );
-        else
-        {
-            OSL_ENSURE( !this, "Bookmark-EndIdx nicht lesbar" );
-            nEndIdx = i;
-        }
-        nEndAkt = pBook[1]->GetPos( nEndIdx );
         if (COMPARE_EQUAL == rName.CompareIgnoreCaseToAscii(aBookNames[i]))
         {
             rName = aBookNames[i];
@@ -4846,7 +4841,6 @@ void WW8PLCFMan::AdvSprm(short nIdx, bool bStart)
                 p->nStartPos = p->nOrigEndPos+p->nCpOfs;
 
                 /*
-                #93702#
                 On failed seek we have run out of sprms, probably.  But if its
                 a fastsaved file (has pPcd) then we may be just in a sprm free
                 gap between pieces that have them, so set dirty flag in sprm
@@ -5696,7 +5690,7 @@ WW8Fib::WW8Fib(BYTE nVer)
             fFarEast = false;
             break;
     };
-    // <-- #i90932#
+    // <--
 
     Locale aTempLocale;
     SvxLanguageToLocale( aTempLocale, lid );
@@ -7282,7 +7276,6 @@ USHORT WW8DopTypography::GetConvertedLang() const
     //i.e. i.e. whats with the powers of two ?
 
     /*
-    #84082#
     One example of 3 for reserved1 which was really Japanese, perhaps last bit
     is for some other use ?, or redundant. If more examples trigger the assert
     we might be able to figure it out.

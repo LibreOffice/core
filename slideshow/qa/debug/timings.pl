@@ -5,8 +5,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 
 =head1 PROGRAM NAME AND AUTHOR
 
-Timings - $Revision: 1.2 $
-Last changes: $Author: rt $ $Date: 2004-11-26 18:43:32 $
+Timings
 
 =head1 WHAT IT IS
 

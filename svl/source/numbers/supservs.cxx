@@ -117,7 +117,7 @@ void SAL_CALL SvNumberFormatsSupplierServiceObject::initialize( const Sequence< 
 #ifdef DBG_UTIL
         else
         {
-            DBG_ERROR("SvNumberFormatsSupplierServiceObject::initialize : unknown argument !");
+            OSL_FAIL("SvNumberFormatsSupplierServiceObject::initialize : unknown argument !");
         }
 #endif
     }

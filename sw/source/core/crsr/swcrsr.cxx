@@ -2045,7 +2045,7 @@ BOOL SwCursor::GotoTblBox( const String& rName )
 
 BOOL SwCursor::MovePara(SwWhichPara fnWhichPara, SwPosPara fnPosPara )
 {
-    //JP 28.8.2001: for optimization test something before
+    //for optimization test something before
     const SwNode* pNd = &GetPoint()->nNode.GetNode();
     bool bShortCut = false;
     if ( fnWhichPara == fnParaCurr )

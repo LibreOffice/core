@@ -32,13 +32,10 @@ extern rtl::OUString FM_PROP_NAME;
 extern rtl::OUString FM_PROP_CONTROLSOURCE;
 extern rtl::OUString FM_PROP_FORMATKEY;
 extern rtl::OUString FM_PROP_VALUE;
-#ifdef TF_SDBAPI
-#else // !TF_SDBAPI
 extern rtl::OUString FM_PROP_EDITMODE;
 extern rtl::OUString FM_PROP_DATASOURCE;
 extern rtl::OUString FM_PROP_CURSORSOURCE;
 extern rtl::OUString FM_PROP_CURSORSOURCETYPE;
-#endif // !TF_SDBAPI
 extern rtl::OUString FM_PROP_TEXT;
 
 #endif // _SVX_FMPROP_HRC

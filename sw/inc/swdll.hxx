@@ -39,13 +39,12 @@ class StatusBar;
 
 class SwDLL
 
-/*  [Description]
-
-    This class is a wrapper for a Load-On-Demand-DLL. One instance
-    per SfxApplication will be created for the runtime of
-    SfxApplication-subclass::Main().
-
-    Remember: Do export this class! It is used by the application.
+/**
+ * This class is a wrapper for a Load-On-Demand-DLL. One instance
+ * per SfxApplication will be created for the runtime of
+ * SfxApplication-subclass::Main().
+ *
+ * Remember: Do export this class! It is used by the application.
 */
 
 {

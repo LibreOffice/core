@@ -113,7 +113,7 @@ String SvxRotateModeItem::GetValueText( USHORT nVal ) const
             aText.AppendAscii("...");
             break;
         default:
-            DBG_ERROR("SvxRotateModeItem: falscher enum");
+            OSL_FAIL("SvxRotateModeItem: falscher enum");
             break;
     }
     return aText;

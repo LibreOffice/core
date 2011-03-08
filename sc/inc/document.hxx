@@ -481,7 +481,7 @@ public:
                                         BOOL bStartOnly = FALSE) const;
     ScDBData*       GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
 
-    SC_DLLPUBLIC ScRangeData*   GetRangeAtBlock( const ScRange& rBlock, String* pName=NULL ) const;
+    SC_DLLPUBLIC const ScRangeData* GetRangeAtBlock( const ScRange& rBlock, String* pName=NULL ) const;
 
     SC_DLLPUBLIC ScDPCollection*        GetDPCollection();
     ScDPObject*         GetDPAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab) const;
@@ -688,7 +688,6 @@ public:
     sal_Int64       GetNewUnoId();
     void            AddUnoRefChange( sal_Int64 nId, const ScRangeList& rOldRanges );
 
-    // #109985#
     sal_Bool IsChart( const SdrObject* pObject );
 
     SC_DLLPUBLIC void           UpdateAllCharts();
@@ -751,6 +750,7 @@ public:
                                   SCCOL nCol2, SCROW nRow2, const ScMarkData& rMark);
 
     SC_DLLPUBLIC void           GetString( SCCOL nCol, SCROW nRow, SCTAB nTab, String& rString );
+    SC_DLLPUBLIC void           GetString( SCCOL nCol, SCROW nRow, SCTAB nTab, rtl::OUString& rString );
     SC_DLLPUBLIC void           GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab, String& rString );
     SC_DLLPUBLIC double         GetValue( const ScAddress& );
     SC_DLLPUBLIC void           GetValue( SCCOL nCol, SCROW nRow, SCTAB nTab, double& rValue );
@@ -1311,7 +1311,6 @@ public:
     SC_DLLPUBLIC void           ShowCol(SCCOL nCol, SCTAB nTab, BOOL bShow);
     SC_DLLPUBLIC void           ShowRow(SCROW nRow, SCTAB nTab, BOOL bShow);
     SC_DLLPUBLIC void           ShowRows(SCROW nRow1, SCROW nRow2, SCTAB nTab, BOOL bShow);
-    SC_DLLPUBLIC void           SetColFlags( SCCOL nCol, SCTAB nTab, BYTE nNewFlags );
     SC_DLLPUBLIC void           SetRowFlags( SCROW nRow, SCTAB nTab, BYTE nNewFlags );
     SC_DLLPUBLIC void           SetRowFlags( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, BYTE nNewFlags );
 
@@ -1333,9 +1332,7 @@ public:
         ::com::sun::star::sheet::TablePageBreakData> GetRowBreakData(SCTAB nTab) const;
 
     SC_DLLPUBLIC bool           RowHidden(SCROW nRow, SCTAB nTab, SCROW* pFirstRow = NULL, SCROW* pLastRow = NULL);
-    SC_DLLPUBLIC bool           RowHidden(SCROW nRow, SCTAB nTab, SCROW& rLastRow);
     SC_DLLPUBLIC bool           HasHiddenRows(SCROW nStartRow, SCROW nEndRow, SCTAB nTab);
-    SC_DLLPUBLIC bool           ColHidden(SCCOL nCol, SCTAB nTab, SCCOL& rLastCol);
     SC_DLLPUBLIC bool           ColHidden(SCCOL nCol, SCTAB nTab, SCCOL* pFirstCol = NULL, SCCOL* pLastCol = NULL);
     SC_DLLPUBLIC void           SetRowHidden(SCROW nStartRow, SCROW nEndRow, SCTAB nTab, bool bHidden);
     SC_DLLPUBLIC void           SetColHidden(SCCOL nStartCol, SCCOL nEndCol, SCTAB nTab, bool bHidden);
@@ -1347,7 +1344,6 @@ public:
     bool                        HasFilteredRows(SCROW nStartRow, SCROW nEndRow, SCTAB nTab);
     bool                        ColFiltered(SCCOL nCol, SCTAB nTab, SCCOL* pFirstCol = NULL, SCCOL* pLastCol = NULL);
     SC_DLLPUBLIC void           SetRowFiltered(SCROW nStartRow, SCROW nEndRow, SCTAB nTab, bool bFiltered);
-    SC_DLLPUBLIC void           SetColFiltered(SCCOL nStartCol, SCCOL nEndCol, SCTAB nTab, bool bFiltered);
     SCROW                       FirstNonFilteredRow(SCROW nStartRow, SCROW nEndRow, SCTAB nTab);
     SCROW                       LastNonFilteredRow(SCROW nStartRow, SCROW nEndRow, SCTAB nTab);
     SCROW                       CountNonFilteredRows(SCROW nStartRow, SCROW nEndRow, SCTAB nTab);
@@ -1369,7 +1365,7 @@ public:
 
     SCCOL           GetNextDifferentChangedCol( SCTAB nTab, SCCOL nStart) const;
 
-                    // #108550#; if bCareManualSize is set then the row
+                    // if bCareManualSize is set then the row
                     // heights are compared only if the manual size flag for
                     // the row is set. If the bCareManualSize is not set then
                     // the row heights are always compared.
@@ -1456,7 +1452,6 @@ public:
 
     void            Sort( SCTAB nTab, const ScSortParam& rSortParam, BOOL bKeepQuery );
     SCSIZE          Query( SCTAB nTab, const ScQueryParam& rQueryParam, BOOL bKeepSub );
-    BOOL            ValidQuery( SCROW nRow, SCTAB nTab, const ScQueryParam& rQueryParam, BOOL* pSpecial = NULL );
     SC_DLLPUBLIC BOOL           CreateQueryParam( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                         SCTAB nTab, ScQueryParam& rQueryParam );
     void            GetUpperCellString(SCCOL nCol, SCROW nRow, SCTAB nTab, String& rStr);

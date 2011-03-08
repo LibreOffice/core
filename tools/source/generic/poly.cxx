@@ -2248,7 +2248,7 @@ Polygon::Polygon(const basegfx::B2DPolygon& rPolygon)
         // #127979# Reduce source point count hard to the limit of the tools Polygon
         if(nB2DLocalCount > ((0x0000ffff / 3L) - 1L))
         {
-            DBG_ERROR("Polygon::Polygon: Too many points in given B2DPolygon, need to reduce hard to maximum of tools Polygon (!)");
+            OSL_FAIL("Polygon::Polygon: Too many points in given B2DPolygon, need to reduce hard to maximum of tools Polygon (!)");
             nB2DLocalCount = ((0x0000ffff / 3L) - 1L);
         }
 
@@ -2342,7 +2342,7 @@ Polygon::Polygon(const basegfx::B2DPolygon& rPolygon)
         // #127979# Reduce source point count hard to the limit of the tools Polygon
         if(nB2DLocalCount > (0x0000ffff - 1L))
         {
-            DBG_ERROR("Polygon::Polygon: Too many points in given B2DPolygon, need to reduce hard to maximum of tools Polygon (!)");
+            OSL_FAIL("Polygon::Polygon: Too many points in given B2DPolygon, need to reduce hard to maximum of tools Polygon (!)");
             nB2DLocalCount = (0x0000ffff - 1L);
         }
 

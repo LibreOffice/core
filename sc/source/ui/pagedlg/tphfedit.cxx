@@ -155,7 +155,7 @@ void ScEditWindow::SetNumType(SvxNumType eNumType)
 
 EditTextObject* ScEditWindow::CreateTextObject()
 {
-    //  wegen #38841# die Absatzattribute zuruecksetzen
+    //  Absatzattribute zuruecksetzen
     //  (GetAttribs beim Format-Dialog-Aufruf gibt immer gesetzte Items zurueck)
 
     const SfxItemSet& rEmpty = pEdEngine->GetEmptyItemSet();

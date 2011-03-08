@@ -128,7 +128,7 @@ lcl_SplineCalculation::lcl_SplineCalculation(
 {
     ::rtl::math::setInf( &m_fLastInterpolatedValue, sal_False );
 
-    // #108301# remove points that have equal x-values
+    // remove points that have equal x-values
     m_aPoints.erase( ::std::unique( m_aPoints.begin(), m_aPoints.end(),
                              lcl_EqualsFirstDoubleOfPair< double >() ),
                      m_aPoints.end() );

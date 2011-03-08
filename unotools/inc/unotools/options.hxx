@@ -31,6 +31,7 @@
 
 #include "sal/config.h"
 #include "unotools/unotoolsdllapi.h"
+#include <vector>
 
 /*
     The class utl::detail::Options provides a kind of multiplexer. It implements a ConfigurationListener
@@ -44,7 +45,6 @@
 namespace utl {
 
     class ConfigurationBroadcaster;
-    class IMPL_ConfigurationListenerList;
 
     // interface for configuration listener
     class UNOTOOLS_DLLPUBLIC ConfigurationListener
@@ -52,6 +52,7 @@ namespace utl {
     public:
         virtual void ConfigurationChanged( ConfigurationBroadcaster* p, sal_uInt32 nHint=0 ) = 0;
     };
+    typedef ::std::vector< ConfigurationListener* > IMPL_ConfigurationListenerList;
 
     // complete broadcasting implementation
     class UNOTOOLS_DLLPUBLIC ConfigurationBroadcaster

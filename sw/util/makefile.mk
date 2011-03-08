@@ -53,6 +53,7 @@ sw_res_files= \
     $(SRS)$/frmdlg.srs       \
     $(SRS)$/globdoc.srs      \
     $(SRS)$/index.srs        \
+    $(SRS)$/layout.srs       \
     $(SRS)$/lingu.srs        \
     $(SRS)$/misc.srs         \
     $(SRS)$/ribbar.srs       \
@@ -160,8 +161,6 @@ SHL2OBJS=   $(SLO)$/swdetect.obj \
         $(SLO)$/iodetect.obj
 
 .IF "$(DBG_LEVEL)">="2"
-SHL2OBJS+=  \
-        $(SLO)$/errhdl.obj
 SHL2STDLIBS+= \
         $(LIBXML2LIB)
 .ENDIF

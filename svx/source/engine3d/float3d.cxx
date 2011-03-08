@@ -1691,7 +1691,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     // evtl. PoolUnit ermitteln (Falls dies in Update() nicht passiert ist)
     if( !mpImpl->pPool )
     {
-        DBG_ERROR( "Kein Pool in GetAttr()! Evtl. inkompatibel zu drviewsi.cxx ?" );
+        OSL_FAIL( "Kein Pool in GetAttr()! Evtl. inkompatibel zu drviewsi.cxx ?" );
         mpImpl->pPool = rAttrs.GetPool();
         DBG_ASSERT( mpImpl->pPool, "Wo ist der Pool?" );
         ePoolUnit = mpImpl->pPool->GetMetric( SID_ATTR_LINE_WIDTH );

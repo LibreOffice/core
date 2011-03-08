@@ -218,7 +218,7 @@ public:
     virtual SdrObject* NbcRemoveObject(ULONG nObjNum);
     virtual SdrObject* RemoveObject(ULONG nObjNum);
 
-    // #95876# Also overload ReplaceObject methods to realize when
+    // Also overload ReplaceObject methods to realize when
     // objects are removed with this mechanism instead of RemoveObject
     virtual SdrObject* NbcReplaceObject(SdrObject* pNewObj, ULONG nObjNum);
     virtual SdrObject* ReplaceObject(SdrObject* pNewObj, ULONG nObjNum);

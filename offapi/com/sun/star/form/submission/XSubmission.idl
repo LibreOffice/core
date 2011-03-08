@@ -90,7 +90,7 @@ interface XSubmission : com::sun::star::uno::XInterface
             the listener to register
 
         @throws com::sun::star::lang::NoSupportException
-            when the component does not support external componentsw vetoing the submission
+            when the component does not support external components vetoing the submission
      */
     void addSubmissionVetoListener( [in] XSubmissionVetoListener listener )
         raises ( com::sun::star::lang::NoSupportException );
@@ -101,7 +101,7 @@ interface XSubmission : com::sun::star::uno::XInterface
             the listener to revoke
 
         @throws com::sun::star::lang::NoSupportException
-            when the component does not support external componentsw vetoing the submission
+            when the component does not support external components vetoing the submission
      */
     void removeSubmissionVetoListener( [in] XSubmissionVetoListener listener )
         raises ( com::sun::star::lang::NoSupportException );

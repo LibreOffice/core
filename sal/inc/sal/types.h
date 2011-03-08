@@ -105,7 +105,7 @@ typedef unsigned char       sal_uInt8;
     #define SAL_PRIuUINT64 "I64u"
     #define SAL_PRIxUINT64 "I64x"
     #define SAL_PRIXUINT64 "I64X"
-#elif defined(__SUNPRO_CC) || defined(__SUNPRO_C) || defined (__GNUC__) || defined(__hpux) || defined (sgi)
+#elif defined(__SUNPRO_CC) || defined(__SUNPRO_C) || defined (__GNUC__) || defined (sgi)
     #if SAL_TYPES_SIZEOFLONG == 8
         typedef signed long int         sal_Int64;
         typedef unsigned long int       sal_uInt64;
@@ -351,7 +351,7 @@ typedef struct _sal_Sequence
 #ifdef __cplusplus
 #if defined SAL_W32 || defined SOLARIS || defined LINUX || defined MACOSX || \
     defined FREEBSD || defined NETBSD || defined AIX || defined OS2 || \
-    defined OPENBSD
+    defined OPENBSD || defined DRAGONFLY
 #define SAL_CONST_CAST(type, expr) (const_cast< type >(expr))
 #define SAL_REINTERPRET_CAST(type, expr) (reinterpret_cast< type >(expr))
 #define SAL_STATIC_CAST(type, expr) (static_cast< type >(expr))

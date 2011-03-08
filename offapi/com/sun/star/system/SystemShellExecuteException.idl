@@ -46,7 +46,7 @@ module com { module sun { module star { module system {
 published exception SystemShellExecuteException: com::sun::star::uno::Exception
 {
     //=========================================================================
-    /** A Posix conforming error code or -1 for unknown errors.
+    /** A POSIX conforming error code or -1 for unknown errors.
     */
     long PosixError;
 };

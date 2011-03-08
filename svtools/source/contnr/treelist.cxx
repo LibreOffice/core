@@ -810,7 +810,7 @@ ULONG SvTreeList::GetVisibleCount( const SvListView* pView ) const
 #ifdef DBG_UTIL
     if( nPos > 10000000 )
     {
-        DBG_ERROR("nVisibleCount bad");
+        OSL_FAIL("nVisibleCount bad");
     }
 #endif
     ((SvListView*)pView)->nVisibleCount = nPos;
@@ -1310,7 +1310,7 @@ BOOL SvTreeList::Remove( SvListEntry* pEntry )
 
     if( !pEntry->pParent )
     {
-        DBG_ERROR("Removing entry not in model!");
+        OSL_FAIL("Removing entry not in model!");
         // unter gewissen Umstaenden (welche?) loescht der
         // Explorer aus der View Eintraege, die er nicht in die View
         // eingefuegt hat. Da sich der Kunde fuer ein platzendes
@@ -1800,7 +1800,7 @@ void SvListView::ActionRemoving( SvListEntry* pEntry )
 #ifdef DBG_UTIL
         if( nVisibleCount < nVisibleRemoved )
         {
-            DBG_ERROR("nVisibleRemoved bad");
+            OSL_FAIL("nVisibleRemoved bad");
         }
 #endif
         nVisibleCount -= nVisibleRemoved;
@@ -1878,7 +1878,7 @@ void SvListView::ModelNotification( USHORT nActionId, SvListEntry* pEntry1,
         case LISTACTION_RESORTING:
             break;
         default:
-            DBG_ERROR("unknown ActionId");
+            OSL_FAIL("unknown ActionId");
     }
 }
 

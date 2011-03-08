@@ -77,7 +77,7 @@ CFLAGSNOOPT=-O0
 # Compiler flags for describing the output path
 CFLAGSOUTOBJ=-o
 #plattform hart setzen
-CDEFS+=-DWIN32 -DWINVER=0x500 -D_WIN32_WINNT=0x500 -D_WIN32_IE=0x500 -D_M_IX86 -DSTLPORT_VERSION=450 -D_NATIVE_WCHAR_T_DEFINED -D_MSC_EXTENSIONS -D_FORCENAMELESSUNION
+CDEFS+=-DWIN32 -DWINVER=0x500 -D_WIN32_WINNT=0x500 -D_WIN32_IE=0x500 -D_M_IX86 -D_NATIVE_WCHAR_T_DEFINED -D_MSC_EXTENSIONS -D_FORCENAMELESSUNION
 .IF  "$(DYNAMIC_CRT)"!=""
 CDEFS+=-D_DLL
 .ENDIF
@@ -162,9 +162,6 @@ STDLIBGUIMT+=-lmingw32 -lmoldname -lmingwex -Wl,--end-group $(UWINAPILIB) -lm -l
 STDLIBCUIMT+=-lmingw32 -lmoldname -lmingwex -Wl,--end-group $(UWINAPILIB) -lm -lkernel32 -luser32 -lmsvcrt
 STDSHLGUIMT+=-lmingw32 -lmoldname -lmingwex -Wl,--end-group $(UWINAPILIB) -lm -lkernel32 -luser32 -lmsvcrt
 STDSHLCUIMT+=-lmingw32 -lmoldname -lmingwex -Wl,--end-group $(UWINAPILIB) -lm -lkernel32 -luser32 -lmsvcrt
-
-LIBSTLPORT=-lstlport_gcc
-LIBSTLPORTST=-lstlport_gcc_static $(STDLIBCPP)
 
 LIBMGR=ar
 LIBFLAGS=-rsu

@@ -61,8 +61,8 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::bridge;
 using namespace com::sun::star::connection;
-using namespace rtl;
 
+using ::rtl::OUString;
 
 #include <svtools/svmedit.hxx>
 
@@ -202,7 +202,7 @@ ControlDef::ControlDef(const String &aOldName, const String &aNewName, ControlDe
             pNewDef = new ControlDef( aOldName, aNewName, pOriginal->SonGetObject(i) ,TRUE );
             if (! SonInsert(pNewDef))
             {
-                DBG_ERROR("Name Doppelt im CopyConstructor. Neuer Name = Controlname!!");
+                OSL_FAIL("Name Doppelt im CopyConstructor. Neuer Name = Controlname!!");
                 delete pNewDef;
             }
         }
@@ -233,7 +233,7 @@ void CRevNames::Insert( String aName, SmartId aUId, ULONG nSeq )
 
     if ( !CNames::C40_PTR_INSERT( ControlItem, pRN) )
     {
-        DBG_ERROR("Interner Fehler beim Speichern der Lokalen KurzNamen");
+        OSL_FAIL("Interner Fehler beim Speichern der Lokalen KurzNamen");
         delete pRN;
     }
 
@@ -417,16 +417,12 @@ void TestToolObj::LoadIniFile()             // Laden der IniEinstellungen, die d
     abGP.Append( "502" );  // Windows on x64
 #elif defined SOLARIS && defined SPARC
     abGP.Append( "01" );  // Solaris SPARC
-#elif defined SCO
-    abGP.Append( "02" );  // SCO UNIX
 #elif defined LINUX && defined INTEL
     abGP.Append( "03" );  // Linux
 #elif defined AIX
     abGP.Append( "04" );
 #elif defined SOLARIS && defined INTEL
     abGP.Append( "05" );  // Solaris x86
-#elif defined HPUX
-    abGP.Append( "07" );
 #elif defined FREEBSD
     abGP.Append( "08" );
 #elif defined MACOSX
@@ -459,6 +455,10 @@ void TestToolObj::LoadIniFile()             // Laden der IniEinstellungen, die d
     abGP.Append( "25" );  // OpenBSD/i386
 #elif defined OPENBSD && defined X86_64
     abGP.Append( "26" );  // OpenBSD/amd64
+#elif defined DRAGONFLY && defined X86
+    abGP.Append( "27" );  // DragonFly/i386
+#elif defined DRAGONFLY && defined X86_64
+    abGP.Append( "28" );  // DragonFly/x86-64
 #else
 #error ("unknown platform. please request an ID for your platform on qa/dev")
 #endif
@@ -541,7 +541,7 @@ void TestToolObj::InitTestToolObj()
     }
     else
     {
-        DBG_ERROR("Testtool: Could not replace Wait method");
+        OSL_FAIL("Testtool: Could not replace Wait method");
     }
 
     MAKE_TT_KEYWORD( "Kontext", SbxCLASS_METHOD, SbxNULL, ID_Kontext );
@@ -927,7 +927,7 @@ void TestToolObj::ReadNames( String Filename, CNames *&pNames, CNames *&pUIds, B
                     aUId = SmartId( aLongname );
                 else
                 {
-                    DBG_ERROR("Unknown URL schema");
+                    OSL_FAIL("Unknown URL schema");
                 }
             }
 
@@ -948,7 +948,7 @@ void TestToolObj::ReadNames( String Filename, CNames *&pNames, CNames *&pUIds, B
                     if (!pNewDef->SonInsert( pNewDef2 ))         // Dialog in eigenen Namespace eintragen
                     {
                         delete pNewDef2;
-                        DBG_ERROR(" !!!! ACHTUNG !!!!  Fehler beim einf�gen in leere Liste!");
+                        OSL_FAIL(" !!!! ACHTUNG !!!!  Fehler beim einf�gen in leere Liste!");
                     }
                 }
 
@@ -1106,15 +1106,6 @@ void TestToolObj::WaitForAnswer ()
 {
     if ( bUseIPC )
     {
-    #ifdef DBG_UTILx
-        USHORT nSysWinModeMemo = GetpApp()->GetSystemWindowMode();
-        GetpApp()->SetSystemWindowMode( 0 );
-        ModelessDialog aDlg(NULL);
-        aDlg.SetOutputSizePixel(Size(200,0));
-        aDlg.SetText(CUniString("Waiting for Answer"));
-        aDlg.Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
-        GetpApp()->SetSystemWindowMode( nSysWinModeMemo );
-    #endif
         BOOL bWasRealWait = !bReturnOK;
         BasicRuntime aRun( NULL );
         if ( BasicRuntimeAccess::HasRuntime() )
@@ -1215,7 +1206,7 @@ void TestToolObj::SendViaSocket()
 {
     if ( !pCommunicationManager )
     {
-        DBG_ERROR("Kein CommunicationManager vorhanden!!");
+        OSL_FAIL("Kein CommunicationManager vorhanden!!");
         return;
     }
 
@@ -1300,7 +1291,7 @@ void TestToolObj::EndBlock()
     }
     else
     {
-        DBG_ERROR("EndBlock au�erhalb eines Blockes");
+        OSL_FAIL("EndBlock au�erhalb eines Blockes");
     }
 }
 
@@ -1415,14 +1406,14 @@ BOOL TestToolObj::ReadNamesBin( String Filename, CNames *&pSIds, CNames *&pContr
                 if (!pNewDef->SonInsert(pNewDef2))                              // Dialog in eigenen Namespace eintragen
                 {
                     delete pNewDef2;
-                    DBG_ERROR(" !!!! ACHTUNG !!!!  Fehler beim einf�gen in leere Liste!");
+                    OSL_FAIL(" !!!! ACHTUNG !!!!  Fehler beim einf�gen in leere Liste!");
                 }
             }
 
             const ControlItem *pItem = pNewDef;
             if (! pNames->Insert(pItem))
             {
-                DBG_ERROR(" !!!! ACHTUNG !!!!  Fehler beim einf�gen eines namens!");
+                OSL_FAIL(" !!!! ACHTUNG !!!!  Fehler beim einf�gen eines namens!");
                 delete pNewDef;
                 pFatherDef = NULL;
             }
@@ -1435,7 +1426,7 @@ BOOL TestToolObj::ReadNamesBin( String Filename, CNames *&pSIds, CNames *&pContr
         {
             if (!pFatherDef)
             {
-                DBG_ERROR( "Internal Error: Erster Kurzname mu� mit * beginnen. �berspringe." );
+                OSL_FAIL( "Internal Error: Erster Kurzname mu� mit * beginnen. �berspringe." );
             }
             else
             {
@@ -1443,7 +1434,7 @@ BOOL TestToolObj::ReadNamesBin( String Filename, CNames *&pSIds, CNames *&pContr
                 if (! pFatherDef->SonInsert(pNewDef))
                 {
                     delete pNewDef;
-                    DBG_ERROR(" !!!! ACHTUNG !!!!  Fehler beim einf�gen eines namens!");
+                    OSL_FAIL(" !!!! ACHTUNG !!!!  Fehler beim einf�gen eines namens!");
                 }
             }
         }
@@ -3759,7 +3750,7 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
             pRetStream->Read( nId );
         else
         {
-            DBG_ERROR( "truncated input stream" );
+            OSL_FAIL( "truncated input stream" );
         }
 
     }

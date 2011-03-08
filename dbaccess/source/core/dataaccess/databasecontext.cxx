@@ -487,7 +487,7 @@ void ODatabaseContext::storeTransientProperties( ODatabaseModelImpl& _rModelImpl
     }
 
     // additionally, remember the "failed password", which is not available as property
-    // #i86178# / 2008-02-19 / frank.schoenheit@sun.com
+    // #i86178#
     aRememberProps.put( "AuthFailedPassword", _rModelImpl.m_sFailedPassword );
 
     ::rtl::OUString sDocumentURL( _rModelImpl.getURL() );

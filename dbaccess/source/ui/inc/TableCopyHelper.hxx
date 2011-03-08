@@ -81,10 +81,10 @@ namespace dbaui
         struct DropDescriptor
         {
             ::svx::ODataAccessDescriptor    aDroppedData;
-            //dyf add 20070601
+
             //for transfor the tablename
             ::rtl::OUString                 sDefaultTableName;
-            //dyf add end
+
             String                          aUrl;
             SotStorageStreamRef             aHtmlRtfStorage;
             ElementType                     nType;

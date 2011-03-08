@@ -470,7 +470,7 @@ ScGridWindow::ScGridWindow( Window* pParent, ScViewData* pData, ScSplitPos eWhic
             eVWhich = SC_SPLIT_BOTTOM;
             break;
         default:
-            DBG_ERROR("GridWindow: falsche Position");
+            OSL_FAIL("GridWindow: falsche Position");
     }
 
     SetBackground();
@@ -563,7 +563,10 @@ void ScGridWindow::ExecPageFieldSelect( SCCOL nCol, SCROW nRow, BOOL bHasSelecti
                 ScDPSaveDimension* pDim = aSaveData.GetDimensionByName(aDimName);
 
                 if ( bHasSelection )
-                    pDim->SetCurrentPage( &rStr );
+                {
+                    const ::rtl::OUString aName = rStr;
+                    pDim->SetCurrentPage( &aName );
+                }
                 else
                     pDim->SetCurrentPage( NULL );
 
@@ -1290,7 +1293,7 @@ void ScGridWindow::ExecFilter( ULONG nSel,
                         aParam.DeleteQuery(nQueryPos);
                 }
 
-                //  #100597# end edit mode - like in ScCellShell::ExecuteDB
+                //  end edit mode - like in ScCellShell::ExecuteDB
                 if ( pViewData->HasEditView( pViewData->GetActivePart() ) )
                 {
                     SC_MOD()->InputEnterHandler();
@@ -1307,7 +1310,7 @@ void ScGridWindow::ExecFilter( ULONG nSel,
     }
     else
     {
-        DBG_ERROR("Wo ist der Datenbankbereich?");
+        OSL_FAIL("Wo ist der Datenbankbereich?");
     }
 }
 
@@ -1390,7 +1393,7 @@ BOOL ScGridWindow::TestMouse( const MouseEvent& rMEvt, BOOL bAction )
                             pViewData->SetFillMode(
                                 aMarkRange.aStart.Col(), aMarkRange.aStart.Row(), nX, nY );
 
-                        //  #108266# The simple selection must also be recognized when dragging,
+                        //  The simple selection must also be recognized when dragging,
                         //  where the Marking flag is set and MarkToSimple won't work anymore.
                         pViewData->GetMarkData().MarkToSimple();
                     }
@@ -1472,7 +1475,6 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt )
     // opened by inplace client and we would deactivate the inplace client,
     // the contex menu is closed by VCL asynchronously which in the end
     // would work on deleted objects or the context menu has no parent anymore)
-    // See #126086# and #128122#
     SfxViewShell* pViewSh = pViewData->GetViewShell();
     SfxInPlaceClient* pClient = pViewSh->GetIPClient();
     if ( pClient &&
@@ -1579,7 +1581,7 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt )
         if ( nPosX >= (SCsCOL) nEditCol && nPosX <= (SCsCOL) nEndCol &&
              nPosY >= (SCsROW) nEditRow && nPosY <= (SCsROW) nEndRow )
         {
-            //  #53966# beim Klick in die Tabellen-EditView immer den Focus umsetzen
+            //  beim Klick in die Tabellen-EditView immer den Focus umsetzen
             if (bFormulaMode)   // sonst ist es oben schon passiert
                 GrabFocus();
 
@@ -2528,7 +2530,7 @@ void ScGridWindow::Tracking( const TrackingEvent& rTEvt )
 
             BOOL bRefMode = pViewData->IsRefMode();
             if (bRefMode)
-                SC_MOD()->EndReference();       // #63148# Dialog nicht verkleinert lassen
+                SC_MOD()->EndReference();       // Dialog nicht verkleinert lassen
         }
     }
     else if ( rTEvt.IsTrackingEnded() )
@@ -2561,7 +2563,7 @@ void ScGridWindow::StartDrag( sal_Int8 /* nAction */, const Point& rPosPixel )
         SCROW       nEditRow;
         pViewData->GetEditView( eWhich, pEditView, nEditCol, nEditRow );
 
-        // #63263# don't remove the edit view while switching views
+        // don't remove the edit view while switching views
         ScModule* pScMod = SC_MOD();
         pScMod->SetInEditCommand( TRUE );
 
@@ -2603,7 +2605,6 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
     // menu from an inplace client is closed. Now we have the chance to
     // deactivate the inplace client without any problem regarding parent
     // windows and code on the stack.
-    // For more information, see #126086# and #128122#
     USHORT nCmd = rCEvt.GetCommand();
     ScTabViewShell* pTabViewSh = pViewData->GetViewShell();
     SfxInPlaceClient* pClient = pTabViewSh->GetIPClient();
@@ -2641,7 +2642,7 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
 
         if ( nCmd == COMMAND_CURSORPOS && !bEditView )
         {
-            //  #88458# CURSORPOS may be called without following text input,
+            //  CURSORPOS may be called without following text input,
             //  to set the input method window position
             //  -> input mode must not be started,
             //  manually calculate text insert position if not in input mode
@@ -3039,7 +3040,7 @@ static void ClearSingleSelection( ScViewData* pViewData )
 
 void ScGridWindow::KeyInput(const KeyEvent& rKEvt)
 {
-    // #96965# Cursor control for ref input dialog
+    // Cursor control for ref input dialog
     const KeyCode& rKeyCode = rKEvt.GetKeyCode();
     if( SC_MOD()->IsRefDialogOpen() )
     {
@@ -4145,7 +4146,7 @@ sal_Int8 ScGridWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
             }
             else
             {
-                DBG_ERROR("drop with link: no sheet nor area");
+                OSL_FAIL("drop with link: no sheet nor area");
                 bOk = FALSE;
             }
         }
@@ -4269,7 +4270,7 @@ void ScGridWindow::PasteSelection( const Point& rPosPixel )
                 // keep a reference to the data in case the selection is changed during paste
                 uno::Reference<datatransfer::XTransferable> xRef( pDrawTransfer );
 
-                //  #96821# bSameDocClipboard argument for PasteDraw is needed
+                //  bSameDocClipboard argument for PasteDraw is needed
                 //  because only DragData is checked directly inside PasteDraw
                 pViewData->GetView()->PasteDraw( aLogicPos, pDrawTransfer->GetModel(), FALSE,
                             pDrawTransfer->GetSourceDocID() == pViewData->GetDocument()->GetDocumentID() );
@@ -4396,7 +4397,6 @@ void ScGridWindow::UpdateFormulas()
     Point aScrPos = pViewData->GetScrPos( nX1, nY1, eWhich );
     long nMirrorWidth = GetSizePixel().Width();
     BOOL bLayoutRTL = pDoc->IsLayoutRTL( nTab );
-    // unused variable long nLayoutSign = bLayoutRTL ? -1 : 1;
     if ( bLayoutRTL )
     {
         long nEndPixel = pViewData->GetScrPos( nX2+1, nPosY, eWhich ).X();
@@ -4474,29 +4474,10 @@ void ScGridWindow::UpdateListValPos( BOOL bVisible, const ScAddress& rPos )
 void ScGridWindow::HideCursor()
 {
     ++nCursorHideCount;
-    if (nCursorHideCount==1)
-    {
-        DrawCursor();
-        DrawAutoFillMark();
-    }
 }
 
 void ScGridWindow::ShowCursor()
 {
-    if (nCursorHideCount==0)
-    {
-        DBG_ERROR("zuviel ShowCursor");
-        return;
-    }
-
-    if (nCursorHideCount==1)
-    {
-        // #i57745# Draw the cursor before setting the variable, in case the
-        // GetSizePixel call from drawing causes a repaint (resize handler is called)
-        DrawAutoFillMark();
-        DrawCursor();
-    }
-
     --nCursorHideCount;
 }
 
@@ -5439,7 +5420,7 @@ void ScGridWindow::UpdateAutoFillOverlay()
     DeleteAutoFillOverlay();
 
     //
-    //  get the AutoFill handle rectangle in pixels (moved from ScGridWindow::DrawAutoFillMark)
+    //  get the AutoFill handle rectangle in pixels
     //
 
     if ( bAutoMarkVisible && aAutoMarkPos.Tab() == pViewData->GetTabNo() &&

@@ -335,7 +335,7 @@ namespace sd
                 return maCloneNodeVector[nNode];
         }
 
-        DBG_ERROR( "sd::CustomAnimationClonerImpl::getClonedNode() failed!" );
+        OSL_FAIL( "sd::CustomAnimationClonerImpl::getClonedNode() failed!" );
         return xSource;
     }
 }

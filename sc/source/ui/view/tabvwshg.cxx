@@ -106,7 +106,6 @@ void ScTabViewShell::InsertURLButton( const String& rName, const String& rURL,
 
         if ( ::avmedia::MediaWindow::isMediaURL( rURL ) )
     {
-        // #105638# OJ
         aAny <<= sal_True;
         xPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DispatchURLInternal" )), aAny );
     }

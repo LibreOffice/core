@@ -41,7 +41,9 @@ class SalKDEDisplay : public SalX11Display
         inline void EventGuardRelease() { osl_releaseMutex( hEventGuard_ ); }
 //        virtual long Dispatch( XEvent *event );
         virtual void Yield();
+        bool checkDirectInputEvent( XEvent* ev );
     private:
+        Atom xim_protocol;
         static SalKDEDisplay* selfptr;
 };
 

@@ -114,7 +114,7 @@ namespace pcr
             if ( ( KEY_DELETE == nKey ) || ( KEY_BACKSPACE == nKey ) )
                 // silence this, we don't want to propagate this outside the property
                 // browser, as it will probably do harm there
-                // #i63285# / 2006-12-06 / frank.schoenheit@sun.com
+                // #i63285#
                 return 1;
         }
         return Window::Notify( _rNEvt );

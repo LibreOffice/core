@@ -47,7 +47,7 @@ module drafts { module com {  module sun {  module star {  module form {
 /** specifies a binding to a value which can be read and written.
 
     @deprecated
-        This interface is superseeded by <type scope="com::sun::star::form::binding">XValueBinding</type>
+        This interface is superseded by <type scope="com::sun::star::form::binding">XValueBinding</type>
 */
 interface XValueBinding : com::sun::star::uno::XInterface
 {

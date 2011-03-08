@@ -107,7 +107,7 @@ SAL_THROW (())
     } // DEBUG:
     else if ( pParent == NULL )
     {
-        DBG_ERROR( "Fatal error: top node isn't a dialog" );
+        OSL_FAIL( "Fatal error: top node isn't a dialog" );
     }
 
     OUString aOrdering;

@@ -37,7 +37,6 @@
 #include <SwPortionHandler.hxx>
 
 #include "viewopt.hxx"  // SwViewOptions
-#include "txtcfg.hxx"
 #include "portab.hxx"
 #include "inftxt.hxx"
 #include "itrform2.hxx"
@@ -493,7 +492,6 @@ sal_Bool SwTabPortion::PostFormat( SwTxtFormatInfo &rInf )
     KSHORT nPorWidth = 0;
     while( pPor )
     {
-           DBG_LOOP;
         nPorWidth = nPorWidth + pPor->Width();
         pPor = pPor->GetPortion();
     }

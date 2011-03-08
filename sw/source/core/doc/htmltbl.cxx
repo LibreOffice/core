@@ -57,8 +57,6 @@ using namespace ::com::sun::star;
 #define MAX_TABWIDTH (USHRT_MAX - 2001)
 
 
-/*  */
-
 class SwHTMLTableLayoutConstraints
 {
     USHORT nRow;                    // Start-Zeile
@@ -87,7 +85,6 @@ public:
     USHORT GetColumn() const { return nCol; }
 };
 
-/*  */
 
 SwHTMLTableLayoutCnts::SwHTMLTableLayoutCnts( const SwStartNode *pSttNd,
                                           SwHTMLTableLayout* pTab,
@@ -109,8 +106,6 @@ const SwStartNode *SwHTMLTableLayoutCnts::GetStartNode() const
 }
 
 
-/*  */
-
 SwHTMLTableLayoutCell::SwHTMLTableLayoutCell( SwHTMLTableLayoutCnts *pCnts,
                                           USHORT nRSpan, USHORT nCSpan,
                                           USHORT nWidth, BOOL bPrcWidth,
@@ -129,7 +124,6 @@ SwHTMLTableLayoutCell::~SwHTMLTableLayoutCell()
     }
 }
 
-/*  */
 
 SwHTMLTableLayoutColumn::SwHTMLTableLayoutColumn( USHORT nWidth,
                                                   BOOL bRelWidth,
@@ -141,8 +135,6 @@ SwHTMLTableLayoutColumn::SwHTMLTableLayoutColumn( USHORT nWidth,
     bLeftBorder( bLBorder )
 {}
 
-
-/*  */
 
 SwHTMLTableLayoutConstraints::SwHTMLTableLayoutConstraints(
     ULONG nMin, ULONG nMax, USHORT nRw, USHORT nColumn, USHORT nColSp ):
@@ -185,7 +177,6 @@ SwHTMLTableLayoutConstraints *SwHTMLTableLayoutConstraints::InsertNext(
     return pConstr;
 }
 
-/*  */
 
 typedef SwHTMLTableLayoutColumn *SwHTMLTableLayoutColumnPtr;
 typedef SwHTMLTableLayoutCell *SwHTMLTableLayoutCellPtr;
@@ -369,7 +360,7 @@ USHORT SwHTMLTableLayout::GetBrowseWidth( const SwDoc& rDoc )
             return (USHORT)pPageFrm->Prt().Width();
     }
 
-    // --> OD 2010-05-12 #i91658#
+    // #i91658#
     // Assertion removed which state that no browse width is available.
     // Investigation reveals that all calls can handle the case that no browse
     // width is provided.
@@ -504,7 +495,7 @@ void SwHTMLTableLayout::AutoLayoutPass1()
             SwHTMLTableLayoutCell *pCell = GetCell(j,i);
             SwHTMLTableLayoutCnts *pCnts = pCell->GetContents();
 
-            // fix #31488#: Zum Ermitteln der naechsten zu berechnenden
+            // Zum Ermitteln der naechsten zu berechnenden
             // Spalte muessen alle Zeilen herangezogen werden
             USHORT nColSpan = pCell->GetColSpan();
             if( nColSpan < nColSkip )
@@ -1190,7 +1181,7 @@ void SwHTMLTableLayout::AutoLayoutPass2( USHORT nAbsAvail, USHORT nRelAvail,
             // Weil bei Tabellen in Rahmen kein Resize aufgerufen wird,
             // wenn der Rahmen eine nicht-relative Breite besitzt, koennen
             // wir da solche Spielchen nicht spielen
-            // MIB 19.2.98: Wegen fix #47394# spielen wir solche Spielchen
+            // Spielen wir solche Spielchen
             // jetzt doch. Dort war eine Grafik in einer 1%-breiten
             // Tabelle und hat da natuerlich nicht hineingepasst.
             nAbsTabWidth = (USHORT)( ((ULONG)nAbsAvail * nWidthOption) / 100 );
@@ -1370,7 +1361,7 @@ void SwHTMLTableLayout::AutoLayoutPass2( USHORT nAbsAvail, USHORT nRelAvail,
             // die ihre Maximalbreite genau einhalten, also weder
             // schmaler noch breiter werden. Beim zurueckrechnen der
             // absoluten Breite aus der relativen Breite kann es
-            // zu Rundungsfehlern kommen (bug #45598#). Um die auszugeleichen
+            // zu Rundungsfehlern kommen. Um die auszugeleichen
             // werden zuerst die fixen Breiten entsprechend korrigiert
             // eingestellt und erst danach die relativen.
 
@@ -1548,7 +1539,6 @@ void SwHTMLTableLayout::AutoLayoutPass2( USHORT nAbsAvail, USHORT nRelAvail,
         if( nRelLeftFill && !pLeftFillerBox &&
             ( nWidthSet>0 || nAbsLeftFill<MINLAY+nInhLeftBorderWidth ||
               (HasColTags() && nAbsLeftFill < nAbsLeftSpace+nParentInhAbsLeftSpace+20) ) )
-//          (nAbsLeftFill<MINLAY || nAbsLeftFill<=nAbsLeftSpace) )
         {
             SwHTMLTableLayoutColumn *pColumn = GetColumn( 0 );
             pColumn->SetAbsColWidth( pColumn->GetAbsColWidth()+nAbsLeftFill );
@@ -1559,7 +1549,6 @@ void SwHTMLTableLayout::AutoLayoutPass2( USHORT nAbsAvail, USHORT nRelAvail,
         if( nRelRightFill && !pRightFillerBox &&
             ( nWidthSet>0 || nAbsRightFill<MINLAY+nInhRightBorderWidth ||
               (HasColTags() && nAbsRightFill < nAbsRightSpace+nParentInhAbsRightSpace+20) ) )
-//          (nAbsRightFill<MINLAY || nAbsRightFill<=nAbsRightSpace) )
         {
             SwHTMLTableLayoutColumn *pColumn = GetColumn( nCols-1 );
             pColumn->SetAbsColWidth( pColumn->GetAbsColWidth()+nAbsRightFill );

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,7 +37,7 @@
 #include <oox/export/drawingml.hxx>
 #include <sax/fshelper.hxx>
 #include <vcl/mapmod.hxx>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <map>
 
 namespace com { namespace sun { namespace star {
@@ -214,3 +215,5 @@ public:
 }}
 
 #endif /* ndef _OOX_EXPORT_CHART_HXX_ */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

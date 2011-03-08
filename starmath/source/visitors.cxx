@@ -496,8 +496,8 @@ SmTmpDevice2::SmTmpDevice2( OutputDevice &rTheDev, bool bUseMap100th_mm ) :
                   PUSH_LINECOLOR | PUSH_FILLCOLOR | PUSH_TEXTCOLOR );
     if ( bUseMap100th_mm  &&  MAP_100TH_MM != rOutDev.GetMapMode( ).GetMapUnit( ) )
     {
-        DBG_ERROR( "incorrect MapMode?" );
-        rOutDev.SetMapMode( MAP_100TH_MM );     //Immer fuer 100% fomatieren
+        OSL_FAIL( "incorrect MapMode?" );
+        rOutDev.SetMapMode( MAP_100TH_MM );     //format for 100% always
     }
 }
 
@@ -682,18 +682,9 @@ void SmDrawingVisitor::Visit( SmRootSymbolNode* pNode )
     //  This is done by shifting it's output-position to a point that
     //  corresponds exactly to a pixel on the output device.
     Point  aDrawPos( rDev.PixelToLogic( rDev.LogicToPixel( aBar.TopLeft( ) ) ) );
-    //aDrawPos.X( ) = aBar.Left( );     //! don't change X position
     aBar.SetPos( aDrawPos );
 
     rDev.DrawRect( aBar );
-
-#ifdef SM_RECT_DEBUG
-    if ( !pNode->IsDebug( ) )
-        return;
-
-    int  nRFlags = SM_RECT_CORE | SM_RECT_ITALIC | SM_RECT_LINES | SM_RECT_MID;
-    pNode->SmRect::Draw( rDev, Position, nRFlags );
-#endif
 }
 
 void SmDrawingVisitor::Visit( SmPolyLineNode* pNode )
@@ -715,14 +706,6 @@ void SmDrawingVisitor::Visit( SmPolyLineNode* pNode )
     aTmpDev.SetLineColor( pNode->GetFont( ).GetColor( ) );
 
     rDev.DrawPolyLine( pNode->GetPolygon( ), aInfo );
-
-#ifdef SM_RECT_DEBUG
-    if ( !pNode->IsDebug( ) )
-        return;
-
-    int  nRFlags = SM_RECT_CORE | SM_RECT_ITALIC | SM_RECT_LINES | SM_RECT_MID;
-    pNode->SmRect::Draw( rDev, Position, nRFlags );
-#endif
 }
 
 void SmDrawingVisitor::Visit( SmRectangleNode* pNode )
@@ -755,14 +738,6 @@ void SmDrawingVisitor::Visit( SmRectangleNode* pNode )
     aTmp.SetPos( aPos );
 
     rDev.DrawRect( aTmp );
-
-#ifdef SM_RECT_DEBUG
-    if ( !pNode->IsDebug( ) )
-        return;
-
-    int  nRFlags = SM_RECT_CORE | SM_RECT_ITALIC | SM_RECT_LINES | SM_RECT_MID;
-    pNode->SmRect::Draw( rDev, rPosition, nRFlags );
-#endif
 }
 
 void SmDrawingVisitor::DrawTextNode( SmTextNode* pNode )
@@ -779,14 +754,6 @@ void SmDrawingVisitor::DrawTextNode( SmTextNode* pNode )
     aPos = rDev.PixelToLogic( rDev.LogicToPixel( aPos ) );
 
     rDev.DrawStretchText( aPos, pNode->GetWidth( ), pNode->GetText( ) );
-
-#ifdef SM_RECT_DEBUG
-    if ( !pNode->IsDebug( ) )
-        return;
-
-    int  nRFlags = SM_RECT_CORE | SM_RECT_ITALIC | SM_RECT_LINES | SM_RECT_MID;
-    pNode->SmRect::Draw( rDev, Position, nRFlags );
-#endif
 }
 
 void SmDrawingVisitor::DrawSpecialNode( SmSpecialNode* pNode )
@@ -812,14 +779,6 @@ void SmDrawingVisitor::DrawChildren( SmNode* pNode )
         Position = rPosition + aOffset;
         it->Accept( this );
     }
-
-#ifdef SM_RECT_DEBUG
-    if ( !pNode->IsDebug( ) )
-        return;
-
-    int  nRFlags = SM_RECT_CORE | SM_RECT_ITALIC | SM_RECT_LINES | SM_RECT_MID;
-    pNode->SmRect::Draw( rDev, rPosition, nRFlags );
-#endif
 }
 
 /////////////////////////////// SmSetSelectionVisitor ////////////////////////////////
@@ -1051,11 +1010,8 @@ SmCaretPosGraphBuildingVisitor::SmCaretPosGraphBuildingVisitor( SmNode* pRootNod
 }
 
 void SmCaretPosGraphBuildingVisitor::Visit( SmLineNode* pNode ){
-    //pRightMost = NULL;
     SmNodeIterator it( pNode );
     while( it.Next( ) ){
-        //if( !pRightMost )
-        //    pRightMost = pGraph->Add( SmCaretPos( it.Current( ), 0 ) );
         it->Accept( this );
     }
 }
@@ -2244,33 +2200,39 @@ void SmNodeToTextVisitor::Visit( SmOperNode* pNode )
         SmNode* pChild;
         if( ( pChild = pSubSup->GetSubSup( LSUP ) ) ) {
             Separate( );
-            Append( "lsup " );
+            Append( "lsup { " );
             LineToText( pChild );
+            Append( "} " );
         }
         if( ( pChild = pSubSup->GetSubSup( LSUB ) ) ) {
             Separate( );
-            Append( "lsub " );
+            Append( "lsub { " );
             LineToText( pChild );
+            Append( "} " );
         }
         if( ( pChild = pSubSup->GetSubSup( RSUP ) ) ) {
             Separate( );
-            Append( "rsup " );
+            Append( "rsup { " );
             LineToText( pChild );
+            Append( "} " );
         }
         if( ( pChild = pSubSup->GetSubSup( RSUB ) ) ) {
             Separate( );
-            Append( "rsub " );
+            Append( "rsub { " );
             LineToText( pChild );
+            Append( "} " );
         }
         if( ( pChild = pSubSup->GetSubSup( CSUP ) ) ) {
             Separate( );
-            Append( "csup " );
+            Append( "csup { " );
             LineToText( pChild );
+            Append( "} " );
         }
         if( ( pChild = pSubSup->GetSubSup( CSUB ) ) ) {
             Separate( );
-            Append( "csub " );
+            Append( "csub { " );
             LineToText( pChild );
+            Append( "} " );
         }
     }
     LineToText( pNode->GetSubNode( 1 ) );
@@ -2401,19 +2363,23 @@ void SmNodeToTextVisitor::Visit( SmBinVerNode* pNode )
 {
     SmNode *pNum    = pNode->GetSubNode( 0 ),
            *pDenom  = pNode->GetSubNode( 2 );
+    Append( "{ " );
     LineToText( pNum );
     Append( "over" );
     LineToText( pDenom );
+    Append( "} " );
 }
 
 void SmNodeToTextVisitor::Visit( SmBinDiagonalNode* pNode )
 {
     SmNode *pLeftOperand  = pNode->GetSubNode( 0 ),
            *pRightOperand = pNode->GetSubNode( 1 );
+    Append( "{ " );
     LineToText( pLeftOperand );
     Separate( );
     Append( "wideslash " );
     LineToText( pRightOperand );
+    Append( "} " );
 }
 
 void SmNodeToTextVisitor::Visit( SmSubSupNode* pNode )
@@ -2525,7 +2491,7 @@ void SmNodeToTextVisitor::Visit( SmLineNode* pNode )
 
 void SmNodeToTextVisitor::Visit( SmExpressionNode* pNode )
 {
-    bool bracketsNeeded = pNode->GetNumSubNodes() != 1 || pNode->GetSubNode(0)->GetType() != NEXPRESSION;
+    bool bracketsNeeded = pNode->GetNumSubNodes() != 1 || pNode->GetSubNode(0)->GetType() == NBINHOR;
     if (bracketsNeeded) {
         Append( "{ " );
     }

@@ -256,7 +256,6 @@ namespace frm
             OControl::initFormControlPeer( getPeer() );
 
             // filter controls are _never_ readonly
-            // #107013# - 2002-02-03 - fs@openoffice.org
             Reference< XPropertySet > xModel( getModel(), UNO_QUERY_THROW );
             Reference< XPropertySetInfo > xModelPSI( xModel->getPropertySetInfo(), UNO_SET_THROW );
             if ( xModelPSI->hasPropertyByName( PROPERTY_READONLY ) )
@@ -757,7 +756,7 @@ namespace frm
             }
             else
             {
-                DBG_ERROR( "OFilterControl::initialize: unrecognized argument!" );
+                OSL_FAIL( "OFilterControl::initialize: unrecognized argument!" );
                 continue;
             }
 

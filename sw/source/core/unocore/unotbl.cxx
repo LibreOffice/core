@@ -69,6 +69,7 @@
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/TableColumnSeparator.hpp>
 #include <com/sun/star/text/XTextSection.hpp>
+#include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/table/TableBorder.hpp>
 #include <com/sun/star/table/TableBorderDistances.hpp>
@@ -166,10 +167,10 @@ void lcl_SetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertySimpleEntry* pE
         case  FN_TABLE_WIDTH:
         case  FN_TABLE_RELATIVE_WIDTH:
         {
-            sal_Int32 nWidth = 0;
             SwFmtFrmSize aSz( pFmt->GetFrmSize() );
             if(FN_TABLE_WIDTH == pEntry->nWID)
             {
+                sal_Int32 nWidth = 0;
                 aValue >>= nWidth;
                 aSz.SetWidthPercent(0);
                 aSz.SetWidth ( MM100_TO_TWIP ( nWidth ) );
@@ -963,7 +964,7 @@ table::CellContentType SwXCell::getType(void) throw( uno::RuntimeException )
         case RES_BOXATR_VALUE :     nRes = table::CellContentType_VALUE; break;
         case RES_BOXATR_FORMULA :   nRes = table::CellContentType_FORMULA; break;
         default :
-            DBG_ERROR( "unexpected case" );
+            OSL_FAIL( "unexpected case" );
     }
     return  nRes;
 }
@@ -2027,16 +2028,13 @@ void    SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
         aSet.Put(aKeep);
     }
 
-    sal_Bool bFullAlign = sal_True;
     const uno::Any* pHOrient;
     if(GetProperty(RES_HORI_ORIENT, MID_HORIORIENT_ORIENT, pHOrient))
     {
         SwFmtHoriOrient aOrient ( rFrmFmt.GetHoriOrient() );
         ((SfxPoolItem&)aOrient).PutValue(*pHOrient, MID_HORIORIENT_ORIENT|CONVERT_TWIPS);
-        bFullAlign = (aOrient.GetHoriOrient() == text::HoriOrientation::FULL);
         aSet.Put(aOrient);
     }
-
 
     const uno::Any* pSzRel       = 0;
     GetProperty(FN_TABLE_IS_RELATIVE_WIDTH, 0xff, pSzRel  );
@@ -2789,7 +2787,7 @@ uno::Sequence< OUString > SwXTextTable::getRowDescriptions(void) throw( uno::Run
         }
         else
         {
-            DBG_ERROR("Wo kommen die Labels her?");
+            OSL_FAIL("Wo kommen die Labels her?");
         }
     }
     else
@@ -2825,7 +2823,7 @@ void SwXTextTable::setRowDescriptions(const uno::Sequence< OUString >& rRowDesc)
         }
         else
         {
-            DBG_ERROR("Wohin mit den Labels?");
+            OSL_FAIL("Wohin mit den Labels?");
         }
     }
     else
@@ -2865,7 +2863,7 @@ uno::Sequence< OUString > SwXTextTable::getColumnDescriptions(void)
         }
         else
         {
-            DBG_ERROR("Wo kommen die Labels her?");
+            OSL_FAIL("Wo kommen die Labels her?");
         }
     }
     else
@@ -2903,7 +2901,7 @@ void SwXTextTable::setColumnDescriptions(const uno::Sequence< OUString >& rColum
         }
         else
         {
-            DBG_ERROR("Wo kommen die Labels her?");
+            OSL_FAIL("Wo kommen die Labels her?");
         }
     }
     else
@@ -3854,6 +3852,14 @@ void SwXCellRange::setPropertyValue(const OUString& rPropertyName,
                     pDoc->SetBoxAttr( *pCrsr, aNumberFormat);
                 }
                 break;
+                case RES_VERT_ORIENT:
+                {
+                    sal_Int16 nAlign = -1;
+                    aValue >>= nAlign;
+                    if( nAlign >= text::VertOrientation::NONE && nAlign <= text::VertOrientation::BOTTOM)
+                        pDoc->SetBoxAlign( *pCrsr, nAlign );
+                }
+                break;
                 case FN_UNO_RANGE_ROW_LABEL:
                 {
                     sal_Bool bTmp = *(sal_Bool*)aValue.getValue();
@@ -3929,6 +3935,15 @@ uno::Any SwXCellRange::getPropertyValue(const OUString& rPropertyName) throw( be
                     pDoc->GetTabBorders(*pTblCrsr, aSet);
                     const SvxBoxItem& rBoxItem = ((const SvxBoxItem&)aSet.Get(RES_BOX));
                     rBoxItem.QueryValue(aRet, pEntry->nMemberId);
+                }
+                break;
+                case RES_VERT_ORIENT:
+                {
+                    SwFmtVertOrient aVertOrient;
+                    if( pTblCrsr->GetDoc()->GetBoxAttr( *pTblCrsr, aVertOrient ) )
+                    {
+                        aVertOrient.QueryValue( aRet, pEntry->nMemberId );
+                    }
                 }
                 break;
                 case RES_BOXATR_FORMAT:
@@ -4029,7 +4044,7 @@ void SwXCellRange::GetDataSequence(
         pDblSeq->realloc( nSize );
     else
     {
-        DBG_ERROR( "argument missing" );
+        OSL_FAIL( "argument missing" );
         return;
     }
     uno::Any   *pAnyData = pAnySeq ? pAnySeq->getArray() : 0;
@@ -4126,7 +4141,7 @@ void SwXCellRange::GetDataSequence(
                         pDblData[nDtaCnt++] = fVal;
                     }
                     else {
-                        DBG_ERROR( "output sequence missing" );
+                        OSL_FAIL( "output sequence missing" );
                     }
                 }
             }
@@ -4383,7 +4398,7 @@ uno::Sequence< OUString > SwXCellRange::getRowDescriptions(void)
         }
         else
         {
-            DBG_ERROR("Wo kommen die Labels her?");
+            OSL_FAIL("Wo kommen die Labels her?");
         }
     }
     else
@@ -4420,7 +4435,7 @@ void SwXCellRange::setRowDescriptions(const uno::Sequence< OUString >& rRowDesc)
         }
         else
         {
-            DBG_ERROR("Wohin mit den Labels?");
+            OSL_FAIL("Wohin mit den Labels?");
         }
     }
 }
@@ -4457,7 +4472,7 @@ uno::Sequence< OUString > SwXCellRange::getColumnDescriptions(void)
         }
         else
         {
-            DBG_ERROR("Wo kommen die Labels her?");
+            OSL_FAIL("Wo kommen die Labels her?");
         }
     }
     else
@@ -4491,7 +4506,7 @@ void SwXCellRange::setColumnDescriptions(const uno::Sequence< OUString >& Column
         }
         else
         {
-            DBG_ERROR("Wo kommen die Labels her?");
+            OSL_FAIL("Wo kommen die Labels her?");
         }
     }
 }

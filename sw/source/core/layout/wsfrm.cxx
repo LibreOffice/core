@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <hintids.hxx>
 #include <hints.hxx>
 #include <tools/pstm.hxx>
@@ -1015,7 +1014,6 @@ void SwCntntFrm::Cut()
             {
                 // --> OD 2006-09-25 #b6448963#
                 // prevent delete of <ColLocked> footnote frame
-//                if( pUp->IsFtnFrm() )
                 if ( pUp->IsFtnFrm() && !pUp->IsColLocked())
                 // <--
                 {
@@ -1031,7 +1029,6 @@ void SwCntntFrm::Cut()
                 else
                 {
                     // --> OD 2006-09-25 #b6448963#
-//                    if ( pSct->IsColLocked() || !pSct->IsInFtn() )
                     if ( pSct->IsColLocked() || !pSct->IsInFtn() ||
                          ( pUp->IsFtnFrm() && pUp->IsColLocked() ) )
                     // <--

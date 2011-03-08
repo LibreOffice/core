@@ -49,7 +49,7 @@ class SdrObject;
 class SW_DLLPUBLIC SwFrmFmt: public SwFmt
 {
     friend class SwDoc;
-    friend class SwPageDesc;    //darf den protected CTor rufen.
+    friend class SwPageDesc;    // Is allowed to call protected CTor.
 
     ::com::sun::star::uno::WeakReference<
         ::com::sun::star::uno::XInterface> m_wXObject;
@@ -70,39 +70,40 @@ protected:
     {}
 
 public:
-    TYPEINFO();     //Bereits in Basisklasse Client drin.
+    TYPEINFO();     // Already in base class Client.
 
-    //Vernichtet alle Frms in aDepend (Frms werden per PTR_CAST erkannt).
+    // Destroys all Frms in aDepend (Frms are identified via PTR_CAST).
     virtual void DelFrms();
 
-    //Erzeugt die Ansichten
+    // Creates the views.
     virtual void MakeFrms();
 
     virtual Graphic MakeGraphic( ImageMap* pMap = NULL );
 
     virtual void Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue );
 
-    // returnt das IMapObject, das an dem Format (Fly), in der ImageMap
-    // an der Point Position definiert ist.
-    //  rPoint - teste auf der DocPosition
-    //  pFly - optionaler FlyFrame, falls der schon bekannt ist.
+    //  Returns the IMapObject defined at format (Fly)
+    //  in the ImageMap at position Point.
+    //  rPoint - test on DocPosition.
+    //  pFly - optional FlyFrame, in case it is already known.
     IMapObject* GetIMapObject( const Point& rPoint,
                                 const SwFlyFrm *pFly = 0 ) const;
 
-    // Gibt die tatsaechlche Groesse des Frames zurueck bzw. ein leeres
-    // Rechteck, wenn kein Layout existiert. Wird pPoint angegeben, dann
-    // wird der am dichtesten liegende Frame gesucht.
+
+    // Returns the real size of the frame - or an empty rectangle
+    // if no layout exists.
+    // If pPoint is given, look for the frame closest to it.
     SwRect FindLayoutRect( const BOOL bPrtArea = FALSE,
                             const Point* pPoint = 0,
                             const BOOL bCalcFrm = FALSE ) const;
 
-    // Sucht das SdrObject. Der SdrObjUserCall ist Client vom Format.
-    // Der UserCall kennt sein SdrObject.
+    // Searches SdrObject. SdrObjUserCall is client of the format.
+    // The UserCall knows its SdrObject.
           SwContact *FindContactObj();
     const SwContact *FindContactObj() const
         { return ((SwFrmFmt*)this)->FindContactObj(); }
 
-    // returns the SdrObject, that ist connected to the ContactObject.
+    // Returns the SdrObject, that ist connected to the ContactObject.
     // Only DrawFrmFmts are connected to the "real SdrObject". FlyFrmFmts
     // are connected to a Master and all FlyFrms has the "real SdrObject".
     // "Real SdrObject" has position and a Z-order.
@@ -121,7 +122,7 @@ public:
         HORI_L2R,
         HORI_R2L,
         VERT_R2L,
-        VERT_L2R    // not supported yet
+        VERT_L2R    // Not supported yet.
     };
 
     virtual SwFrmFmt::tLayoutDir GetLayoutDir() const;
@@ -142,13 +143,13 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL_DLL(SwFrmFmt)
 };
 
-//Das FlyFrame-Format ------------------------------
+// The FlyFrame-Format
 
 class SW_DLLPUBLIC SwFlyFrmFmt: public SwFrmFmt
 {
     friend class SwDoc;
 
-    //Beide nicht vorhanden.
+    // Both not existent.
     SwFlyFrmFmt( const SwFlyFrmFmt &rCpy );
     SwFlyFrmFmt &operator=( const SwFlyFrmFmt &rCpy );
 
@@ -166,7 +167,7 @@ public:
     TYPEINFO();
     ~SwFlyFrmFmt();
 
-    //Erzeugt die Ansichten
+    // Creates the views.
     virtual void MakeFrms();
 
     SwFlyFrm* GetFrm( const Point* pDocPos = 0,
@@ -188,7 +189,7 @@ public:
 
     /** SwFlyFrmFmt::IsBackgroundTransparent
 
-        overloading virtual method and its default implementation,
+        Overloading virtual method and its default implementation,
         because format of fly frame provides transparent backgrounds.
         Method determines, if background of fly frame is transparent.
 
@@ -201,7 +202,7 @@ public:
 
     /** SwFlyFrmFmt::IsBackgroundBrushInherited
 
-        method to determine, if the brush for drawing the
+        Method to determine, if the brush for drawing the
         background is "inherited" from its parent/grandparent.
         This is the case, if no background graphic is set and the background
         color is "no fill"/"auto fill"
@@ -215,7 +216,7 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwFlyFrmFmt)
 };
 
-//Das DrawFrame-Format -----------------------------
+//The DrawFrame-Format
 
 class SW_DLLPUBLIC SwDrawFrmFmt: public SwFrmFmt
 {
@@ -224,7 +225,7 @@ class SW_DLLPUBLIC SwDrawFrmFmt: public SwFrmFmt
     mutable const SdrObject * pSdrObjCached;
     mutable String sSdrObjCachedComment;
 
-    //Beide nicht vorhanden.
+    // Both not existent.
     SwDrawFrmFmt( const SwDrawFrmFmt &rCpy );
     SwDrawFrmFmt &operator=( const SwDrawFrmFmt &rCpy );
 
@@ -262,12 +263,12 @@ public:
     TYPEINFO();
     ~SwDrawFrmFmt();
 
-    //DrawObjecte werden aus den Arrays am Layout entfernt. Die DrawObjecte
-    //werden als geloescht gekennzeichnet.
+    // DrawObjects are removed from the arrays at the layout.
+    // The DrawObjects are marked as deleted.
     virtual void DelFrms();
 
-    //Anmelden der DrawObjecte in den Arrays am Layout. Loeschkennzeichen
-    //werden zurueckgesetzt.
+    // Register DrawObjects in the arrays at layout.
+    // Reset delete marks.
     virtual void MakeFrms();
 
     virtual Graphic MakeGraphic( ImageMap* pMap = NULL );

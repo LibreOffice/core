@@ -35,8 +35,8 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 
-
-using namespace rtl;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 namespace linguistic
 {

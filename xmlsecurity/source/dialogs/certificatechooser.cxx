@@ -188,7 +188,7 @@ void CertificateChooser::ImplInitialize()
             sEntry += '\t';
             sEntry += XmlSec::GetDateString( maCerts[ nC ]->getNotValidAfter() );
             SvLBoxEntry* pEntry = maCertLB.InsertEntry( sEntry );
-            pEntry->SetUserData( ( void* )nC ); // missuse user data as index
+            pEntry->SetUserData( ( void* )(sal_IntPtr)nC ); // missuse user data as index
         }
 
         // enable/disable buttons

@@ -283,7 +283,6 @@ sal_uInt16 FmFormShell::PrepareClose(sal_Bool bUI, sal_Bool bForBrowsing)
 {
     if ( GetImpl()->didPrepareClose() )
         // we already did a PrepareClose for the current modifications of the current form
-        // 2002-11-12 #104702# - fs@openoffice.org
         return sal_True;
 
     sal_Bool bResult = sal_True;
@@ -1219,7 +1218,7 @@ void FmFormShell::GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich)
         }
         catch( const Exception& )
         {
-            DBG_ERROR( "FmFormShell::GetFormState: caught an exception while determining the state!" );
+            OSL_FAIL( "FmFormShell::GetFormState: caught an exception while determining the state!" );
         }
         if (!bEnable)
             rSet.DisableItem(nWhich);

@@ -41,7 +41,6 @@
 #include <tools/rtti.hxx>
 #include <limits.h>
 #include <tools/ref.hxx>
-#include <tools/list.hxx>
 #include <tools/contnr.hxx>
 #include <tools/link.hxx>
 #include <tools/stream.hxx>
@@ -101,7 +100,6 @@
 #include <sot/sotdata.hxx>
 #include <vcl/keycod.hxx>
 #include <vcl/keycodes.hxx>
-#include <sot/sotref.hxx>
 #include <rechead.hxx>
 #include <tools/unqid.hxx>
 #include <vcl/apptypes.hxx>

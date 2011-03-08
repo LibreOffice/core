@@ -33,7 +33,7 @@
 #include "browserids.hxx"
 #include "listviewitems.hxx"
 #include "imageprovider.hxx"
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include "dbtreeview.hxx"
 #include "dbtreelistbox.hxx"
 #include "dbu_brw.hrc"
@@ -50,7 +50,7 @@ namespace dbaui
 // -----------------------------------------------------------------------------
 SbaTableQueryBrowser::EntryType SbaTableQueryBrowser::getChildType( SvLBoxEntry* _pEntry ) const
 {
-    DBG_ASSERT(isContainer(_pEntry), "SbaTableQueryBrowser::getChildType: invalid entry!");
+    OSL_ENSURE(isContainer(_pEntry), "SbaTableQueryBrowser::getChildType: invalid entry!");
     switch (getEntryType(_pEntry))
     {
         case etTableContainer:
@@ -125,7 +125,7 @@ void SbaTableQueryBrowser::select(SvLBoxEntry* _pEntry, sal_Bool _bSelect)
         m_pTreeModel->InvalidateEntry(_pEntry);
     }
     else {
-        DBG_ERROR("SbaTableQueryBrowser::select: invalid entry!");
+        OSL_FAIL("SbaTableQueryBrowser::select: invalid entry!");
     }
 }
 
@@ -145,7 +145,7 @@ sal_Bool SbaTableQueryBrowser::isSelected(SvLBoxEntry* _pEntry) const
     if (pTextItem)
         return static_cast<OBoldListboxString*>(pTextItem)->isEmphasized();
     else {
-        DBG_ERROR("SbaTableQueryBrowser::isSelected: invalid entry!");
+        OSL_FAIL("SbaTableQueryBrowser::isSelected: invalid entry!");
     }
     return sal_False;
 }

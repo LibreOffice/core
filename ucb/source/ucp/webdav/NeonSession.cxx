@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_ucb.hxx"
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <vector>
 #include <string.h>
 #include "osl/diagnose.h"
@@ -109,7 +109,7 @@ struct hashPtr
     }
 };
 
-typedef std::hash_map
+typedef boost::unordered_map
 <
     ne_request*,
     RequestData,

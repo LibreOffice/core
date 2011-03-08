@@ -115,8 +115,6 @@ SHL1DEPN += $(shell @$(FIND) $(SLO) -type f -name "*.OBJ" -print)
 
 SHL1LIBS=   $(LIB1TARGET)
 
-#SHL1OBJS=   $(SLO)$/sfxdll.obj
-
 SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME	=$(SHL1TARGET)
@@ -158,6 +156,5 @@ SHL3NOCHECK=TRUE
 .ENDIF # "$(GUI)"=="UNX"
 
 # --- Targets ------------------------------------------------------
-
 
 .INCLUDE :  target.mk

@@ -31,7 +31,7 @@
 
 #include <vcl/bitmapex.hxx>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 // ----------------
 // - ImplImageBmp -
@@ -54,7 +54,7 @@ public:
     void        Replace( USHORT nPos, const BitmapEx& rBmpEx );
 
     void        ReplaceColors( const Color* pSrcColors, const Color* pDstColors, ULONG nColorCount );
-    void        ColorTransform( BmpColorMode eColorMode );
+    void        ColorTransform();
     void            Invert();
 
     BitmapEx    GetBitmapEx( USHORT nPosCount, USHORT* pPosAry ) const;
@@ -112,7 +112,7 @@ struct ImageAryData
 struct ImplImageList
 {
     typedef std::vector<ImageAryData *> ImageAryDataVec;
-    typedef std::hash_map< rtl::OUString, ImageAryData *, rtl::OUStringHash >
+    typedef boost::unordered_map< rtl::OUString, ImageAryData *, rtl::OUStringHash >
         ImageAryDataNameHash;
 
     ImageAryDataVec             maImages;

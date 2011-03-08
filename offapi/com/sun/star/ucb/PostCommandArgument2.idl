@@ -50,7 +50,7 @@ published struct PostCommandArgument2 : PostCommandArgument
     string MediaType;
 
     //-------------------------------------------------------------------------
-    /** The URL of the referer.
+    /** The URL of the referrer.
     */
     string Referer;
 };

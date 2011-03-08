@@ -2087,19 +2087,6 @@ BOOL HTMLParser::InternalImgToPrivateURL( String& rURL )
     return bFound;
 }
 
-#ifdef USED
-void HTMLParser::SaveState( int nToken )
-{
-    SvParser::SaveState( nToken );
-}
-
-void HTMLParser::RestoreState()
-{
-    SvParser::RestoreState();
-}
-#endif
-
-
 enum eHtmlMetas {
     HTML_META_NONE = 0,
     HTML_META_AUTHOR,

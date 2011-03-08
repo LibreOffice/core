@@ -93,7 +93,6 @@ public:
     static void ApplyIndent(LwpPara* pPara, XFParaStyle* pParaStyle, LwpIndentOverride* pIndent);
     static void ApplySpacing(LwpPara* pPara, XFParaStyle* pParaStyle, LwpSpacingOverride* pSpacing);
 
-    // 2005/01/28
     static void ApplyTab(XFParaStyle* pParaStyle, LwpTabOverride* pTab);
 
     void RegisterStyle();
@@ -109,7 +108,6 @@ public:
 
     sal_Bool IsNumberRight();
 public:
-    //add by , 01/27/2004
     static void ApplySubBorder(LwpBorderStuff* pBorderStuff, LwpBorderStuff::BorderType eType, XFBorders* pXFBorders);
     //end
 

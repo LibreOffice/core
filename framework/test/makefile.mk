@@ -24,6 +24,7 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
+
 PRJ=..
 
 PRJNAME=			framework
@@ -35,29 +36,6 @@ USE_DEFFILE=		TRUE
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-
-# --- applikation: "test" --------------------------------------------------
-
-#APP1TARGET= 	test
-
-#APP1OBJS=		$(SLO)$/test.obj
-#DEPOBJFILES+= $(APP1OBJS)
-
-#APP1LIBS=		$(SLB)$/fwk_classes.lib				\
-#				$(SLB)$/fwk_helper.lib
-
-#APP1STDLIBS=	$(CPPULIB)							\
-#				$(CPPUHELPERLIB)					\
-#				$(SALLIB)							\
-#											\
-#				$(TOOLSLIB) 						\
-#				$(SVTOOLLIB)						\
-#				$(TKLIB)							\
-#				$(COMPHELPERLIB)					\
-#				$(VCLLIB)
-
-#APP1DEPN=		$(SLB)$/fwk_helper.lib				\
-#				$(SLB)$/fwk_classes.lib
 
 # --- application: "threadtest" --------------------------------------------------
 
@@ -90,4 +68,3 @@ APP2DEPN=		$(SLO)$/fairrwlock.obj				\
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
-

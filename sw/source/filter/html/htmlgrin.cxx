@@ -1014,9 +1014,9 @@ void SwHTMLParser::InsertBodyOptions()
     if( aLang.Len() )
     {
         LanguageType eLang = MsLangId::convertIsoStringToLanguage( aLang );
-        sal_uInt16 nWhich = 0;
         if( LANGUAGE_DONTKNOW != eLang )
         {
+            sal_uInt16 nWhich = 0;
             switch( SvtLanguageOptions::GetScriptTypeOfLanguage( eLang ) )
             {
             case SCRIPTTYPE_LATIN:
@@ -1383,7 +1383,7 @@ void SwHTMLParser::StripTrailingPara()
                         OSL_ENSURE(!this, "Hoppla, wo ist mein Vorgaenger-Node");
                         return;
                     }
-                    // --> OD 2007-09-27 #i81002# - refactoring
+                    // #i81002# - refactoring
                     // Do not directly manipulate member of <SwBookmark>
                     {
                         SwPosition aNewPos(*pNd);

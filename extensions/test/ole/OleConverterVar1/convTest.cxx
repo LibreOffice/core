@@ -63,7 +63,9 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace oletest;
 using namespace cppu;
-using namespace rtl;
+
+using ::rtl::OUString;
+
 HRESULT doTest();
 HRESULT InitializeParameter();
 void printResultVariantArray( VARIANT & var);

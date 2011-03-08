@@ -124,7 +124,7 @@ SAL_CALL XMLEncryption_NssImpl :: encrypt(
         throw RuntimeException() ;
     }
 
-    //MM : Get the element to be encrypted
+    // Get the element to be encrypted
     Reference< XXMLElementWrapper > xTarget = aTemplate->getTarget() ;
     if( !xTarget.is() ) {
         throw XMLEncryptionException() ;
@@ -144,7 +144,6 @@ SAL_CALL XMLEncryption_NssImpl :: encrypt(
     }
 
     pContent = pTarget->getNativeElement() ;
-    //MM : end
 
     if( pContent == NULL ) {
         throw XMLEncryptionException() ;

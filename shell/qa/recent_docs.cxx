@@ -41,7 +41,8 @@
 
 //########################################
 using namespace osl;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 namespace syssh = SystemShell;
 

@@ -29,8 +29,6 @@
 #ifndef _COMMAND_HXX
 #define _COMMAND_HXX
 
-
-#include <tools/list.hxx>
 #include <tools/string.hxx>
 #include <vector>
 
@@ -41,7 +39,6 @@ typedef ::std::vector< String* > StringList;
 
 typedef ::std::vector< ByteString* > ByteStringList;
 
-/******************** class SvCommand ************************************/
 class SvCommand
 {
 public:

@@ -91,7 +91,7 @@ namespace framework
             virtual void impl_setPopupMenu();
             virtual void impl_select(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >& _xDispatch,const ::com::sun::star::util::URL& aURL);
 
-            class UrlToDispatchMap : public ::std::hash_map< ::rtl::OUString,
+            class UrlToDispatchMap : public ::boost::unordered_map< ::rtl::OUString,
                                                              com::sun::star::uno::Reference< com::sun::star::frame::XDispatch >,
                                                              OUStringHashCode,
                                                              ::std::equal_to< ::rtl::OUString > >

@@ -770,7 +770,7 @@ const SfxFilter* SfxFilterMatcher::GetFilter4FilterName( const String& rName, Sf
     USHORT nIndex = aName.SearchAscii(": ");
     if (  nIndex != STRING_NOTFOUND )
     {
-        DBG_ERROR("Old filter name used!");
+        OSL_FAIL("Old filter name used!");
         aName = rName.Copy( nIndex + 2 );
     }
 
@@ -1026,7 +1026,7 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
         {
             nClipboardId = SotExchange::RegisterFormatName( sHumanName );
 
-            // #100570# For external filters ignore clipboard IDs
+            // For external filters ignore clipboard IDs
             if((nFlags & SFX_FILTER_STARONEFILTER) == SFX_FILTER_STARONEFILTER)
             {
                 nClipboardId = 0;
@@ -1038,7 +1038,7 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
         sal_Int32 nStartRealName = sFilterName.indexOf( DEFINE_CONST_UNICODE(": "), 0 );
         if( nStartRealName != -1 )
         {
-            DBG_ERROR("Old format, not supported!");
+            OSL_FAIL("Old format, not supported!");
             sFilterName = sFilterName.copy( nStartRealName+2 );
         }
 
@@ -1139,17 +1139,6 @@ void SfxFilterContainer::ReadFilters_Impl( BOOL bUpdate )
                     // Try to get filter .. but look for any exceptions!
                     // May be filter was deleted by another thread ...
                     ::rtl::OUString sFilterName = lFilterNames[nFilter];
-
-                    // This debug code can be used to break on inserting/updating
-                    // special debug filters at runtime.
-                    // Otherwise you have to check more then 300 filter names manually .-)
-                    // And conditional breakpoints on unicode values seams not to be supported .-(
-                    #ifdef DEBUG
-                    bool bDBGStop = FALSE;
-                    if (sFilterName.indexOf(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DBG_")))>-1)
-                        bDBGStop = TRUE;
-                    #endif
-
                     ReadSingleFilter_Impl( sFilterName, xTypeCFG, xFilterCFG, bUpdate );
                 }
             }

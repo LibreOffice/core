@@ -46,14 +46,13 @@
 #include <cmdid.h>
 #include <helpid.h>
 #include <swtypes.hxx>
-#include <errhdl.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
 #include <docsh.hxx>
 #include <uitool.hxx>
 #include <fmtinfmt.hxx>
 #include <macassgn.hxx>
-#include <chrdlg.hxx>       // der Dialog
+#include <chrdlg.hxx>       // the dialog
 #include <swmodule.hxx>
 #include <poolfmt.hxx>
 
@@ -117,7 +116,7 @@ SwCharDlg::~SwCharDlg()
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   FontList setzen
+    Description:    set FontList
  --------------------------------------------------------------------*/
 
 void SwCharDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
@@ -288,7 +287,7 @@ BOOL SwCharURLPage::FillItemSet(SfxItemSet& rSet)
     bModified |= aNameED.IsModified();
     bModified |= aTargetFrmLB.GetSavedValue() != aTargetFrmLB.GetText();
 
-    //zuerst die gueltigen Einstellungen setzen
+    // set valid settings first
     String sEntry = aVisitedLB.GetSelectEntry();
     USHORT nId = SwStyleNameMapper::GetPoolIdFromUIName( sEntry, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT);
     aINetFmt.SetVisitedFmtId(nId);

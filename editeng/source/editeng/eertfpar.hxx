@@ -62,10 +62,10 @@ public:
     virtual ULONG   GetNodeIdx() const;
     virtual USHORT  GetCntIdx() const;
 
-    // erzeuge von sich selbst eine Kopie
+    // clone
     virtual SvxPosition* Clone() const;
 
-    // erzeuge vom NodeIndex eine Kopie
+    // clone NodeIndex
     virtual SvxNodeIdx* MakeNodeIdx() const;
 };
 

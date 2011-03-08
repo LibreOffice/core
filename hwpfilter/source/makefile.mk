@@ -72,7 +72,6 @@ SLOFILES =	\
 # --- Shared-Library -----------------------------------------------
 
 SHL1TARGET= $(TARGET)
-#SHL1IMPLIB= ihwp
 
 SHL1STDLIBS= \
         $(CPPULIB)		\

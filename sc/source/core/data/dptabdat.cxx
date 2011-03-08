@@ -62,9 +62,8 @@ ScDPTableData::CalcInfo::CalcInfo() :
 
 // ---------------------------------------------------------------------------
 
-ScDPTableData::ScDPTableData(ScDocument* pDoc, long nCacheId ) :
-    mnCacheId( nCacheId ),
-    mpDoc ( pDoc )
+ScDPTableData::ScDPTableData(ScDocument* pDoc) :
+    mpDoc(pDoc)
 {
     nLastDateVal = nLastHier = nLastLevel = nLastRet = -1;      // invalid
 
@@ -94,7 +93,7 @@ long ScDPTableData::GetDatePart( long nDateVal, long nHierarchy, long nLevel )
                 case 2: nRet = aDate.GetMonth();                break;
                 case 3: nRet = aDate.GetDay();                  break;
                 default:
-                    DBG_ERROR("GetDatePart: wrong level");
+                    OSL_FAIL("GetDatePart: wrong level");
             }
             break;
         case SC_DAPI_HIERARCHY_WEEK:
@@ -105,11 +104,11 @@ long ScDPTableData::GetDatePart( long nDateVal, long nHierarchy, long nLevel )
                 case 1: nRet = aDate.GetWeekOfYear();           break;
                 case 2: nRet = (long)aDate.GetDayOfWeek();      break;
                 default:
-                    DBG_ERROR("GetDatePart: wrong level");
+                    OSL_FAIL("GetDatePart: wrong level");
             }
             break;
         default:
-            DBG_ERROR("GetDatePart: wrong hierarchy");
+            OSL_FAIL("GetDatePart: wrong hierarchy");
     }
 
     nLastDateVal = nDateVal;
@@ -148,14 +147,14 @@ BOOL ScDPTableData::IsNumOrDateGroup(long) const
 BOOL ScDPTableData::IsInGroup( const ScDPItemData&, long,
                                const ScDPItemData&, long ) const
 {
-    DBG_ERROR("IsInGroup shouldn't be called for non-group data");
+    OSL_FAIL("IsInGroup shouldn't be called for non-group data");
     return FALSE;
 }
 
 BOOL ScDPTableData::HasCommonElement( const ScDPItemData&, long,
                                       const ScDPItemData&, long ) const
 {
-    DBG_ERROR("HasCommonElement shouldn't be called for non-group data");
+    OSL_FAIL("HasCommonElement shouldn't be called for non-group data");
     return FALSE;
 }
 void ScDPTableData::FillRowDataFromCacheTable(sal_Int32 nRow, const ScDPCacheTable& rCacheTable,
@@ -264,11 +263,6 @@ long ScDPTableData::GetMembersCount( long nDim )
     return GetCacheTable().getFieldEntries( nDim ).size();
 }
 
-long ScDPTableData::GetCacheId() const
-{
-    return mnCacheId;
-}
-
 const ScDPItemData* ScDPTableData::GetMemberByIndex( long nDim, long nIndex )
 {
     if ( nIndex >= GetMembersCount( nDim ) )
@@ -301,13 +295,13 @@ long ScDPTableData::GetSourceDim( long nDim )
 
 }
 
- long ScDPTableData::Compare( long nDim, long nDataId1, long nDataId2)
+long ScDPTableData::Compare( long nDim, long nDataId1, long nDataId2)
 {
     if ( getIsDataLayoutDimension(nDim) )
         return 0;
 
-    long n1 = GetCacheTable().getCache()->GetOrder( nDim, nDataId1);
-    long n2 = GetCacheTable().getCache()->GetOrder( nDim, nDataId2);
+    long n1 = GetCacheTable().getOrder(nDim, nDataId1);
+    long n2 = GetCacheTable().getOrder(nDim, nDataId2);
     if ( n1 > n2 )
         return 1;
     else if ( n1 == n2 )

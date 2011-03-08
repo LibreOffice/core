@@ -48,7 +48,7 @@ module com { module sun { module star { module linguistic2 {
  published interface XLinguServiceEventBroadcaster;
 
 //=============================================================================
-/** offers spellchecking functionality.
+/** offers spell checking functionality.
 */
 published service SpellChecker
 {

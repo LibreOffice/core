@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#if (defined(_WIN32) || defined(_MSDOS) || defined(__IBMC__))
+#if (defined(_WIN32) || defined(__IBMC__))
 #include <io.h>
 #else
 #include <unistd.h>
@@ -635,7 +635,7 @@ Source *
     setsource(char *name, int path, int fd, char *str, int wrap)
 {
     Source *s = new(Source);
-    int len;
+    size_t len;
 
     s->line = 1;
     s->lineinc = 0;

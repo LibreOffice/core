@@ -220,6 +220,11 @@ Directory gid_Brand_Dir_Share_Extensions_Dict_Af
     DosName = "dict-af";
 End
 
+Directory gid_Brand_Dir_Share_Extensions_Dict_Br
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "dict-br";
+End
+
 Directory gid_Brand_Dir_Share_Extensions_Dict_Ca
     ParentID = gid_Brand_Dir_Share_Extensions;
     DosName = "dict-ca";
@@ -320,6 +325,11 @@ Directory gid_Brand_Dir_Share_Extensions_Dict_No
     DosName = "dict-no";
 End
 
+Directory gid_Brand_Dir_Share_Extensions_Dict_Oc
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "dict-oc";
+End
+
 Directory gid_Brand_Dir_Share_Extensions_Dict_Pl
     ParentID = gid_Brand_Dir_Share_Extensions;
     DosName = "dict-pl";
@@ -368,6 +378,11 @@ End
 Directory gid_Brand_Dir_Share_Extensions_Dict_Th
     ParentID = gid_Brand_Dir_Share_Extensions;
     DosName = "dict-th";
+End
+
+Directory gid_Brand_Dir_Share_Extensions_Dict_Uk
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "dict-uk";
 End
 
 Directory gid_Brand_Dir_Share_Extensions_Dict_Vi
@@ -782,7 +797,7 @@ File gid_Brand_File_Lib_Msvcr80
     BIN_FILE_BODY;
     Styles = (PACKED);
     Dir = gid_Brand_Dir_Program;
-#ifndef _STLP_DEBUG
+#ifndef _DEBUG_RUNTIME
     Name = "msvcr80.dll";
 #else
     Name = "msvcr80d.dll";
@@ -825,7 +840,7 @@ File gid_Brand_File_Lib_Msvcp80
     BIN_FILE_BODY;
     Styles = (PACKED);
     Dir = gid_Brand_Dir_Program;
-#ifndef _STLP_DEBUG
+#ifndef _DEBUG_RUNTIME
     Name = "msvcp80.dll";
 #else
     Name = "msvcp80d.dll";
@@ -842,7 +857,7 @@ File gid_Brand_File_Lib_Msvcm80
     BIN_FILE_BODY;
     Styles = (PACKED);
     Dir = gid_Brand_Dir_Program;
-#ifndef _STLP_DEBUG
+#ifndef _DEBUG_RUNTIME
     Name = "msvcm80.dll";
 #else
     Name = "msvcm80d.dll";
@@ -859,7 +874,7 @@ File gid_Brand_File_Msvcm80crt_Manifest
     BIN_FILE_BODY;
     Styles = (PACKED);
     Dir = gid_Brand_Dir_Program;
-#ifndef _STLP_DEBUG
+#ifndef _DEBUG_RUNTIME
     Name = "Microsoft.VC80.CRT.manifest";
 #else
     Name = "Microsoft.VC80.DebugCRT.manifest";

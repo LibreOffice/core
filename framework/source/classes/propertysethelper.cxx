@@ -291,13 +291,8 @@ css::uno::Any SAL_CALL PropertySetHelper::getPropertyValue(const ::rtl::OUString
 
     css::beans::Property aPropInfo = pIt->second;
 
-    sal_Bool bLocked = sal_True;
     if (m_bReleaseLockOnCall)
-    {
         aReadLock.unlock();
-        bLocked = sal_False;
-        // <- SAFE
-    }
 
     return impl_getPropertyValue(aPropInfo.Name, aPropInfo.Handle);
 }

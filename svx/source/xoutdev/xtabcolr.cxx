@@ -52,7 +52,8 @@
 #define GLOBALOVERFLOW
 
 using namespace com::sun::star;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 sal_Unicode const pszExtColor[]  = {'s','o','c'};
 

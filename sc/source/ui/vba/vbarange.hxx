@@ -117,7 +117,6 @@ class ScVbaRange : public ScVbaRange_BASE
     virtual void   setFormulaValue( const css::uno::Any& aValue, formula::FormulaGrammar::Grammar ) throw ( css::uno::RuntimeException);
     css::uno::Reference< ov::excel::XRange > getArea( sal_Int32 nIndex  ) throw( css::uno::RuntimeException );
     ScCellRangeObj* getCellRangeObj( )  throw ( css::uno::RuntimeException );
-    ScCellRangesObj* getCellRangesObj() throw ( css::uno::RuntimeException );
     css::uno::Reference< ov::XCollection >& getBorders();
     void groupUnGroup( bool bUnGroup = false ) throw ( css::script::BasicErrorException, css::uno::RuntimeException );
      css::uno::Reference< ov::excel::XRange > PreviousNext( bool bIsPrevious );

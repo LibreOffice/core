@@ -44,7 +44,6 @@ class ScVbaFormatConditions: public ScVbaFormatConditions_BASE
     css::uno::Reference< ov::excel::XRange > mxRangeParent;
     css::uno::Reference< css::beans::XPropertySet > mxParentRangePropertySet;
 public:
-    ScVbaFormatConditions( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::sheet::XSheetConditionalEntries >&, const css::uno::Reference< css::frame::XModel >&  );
     void notifyRange() throw ( css::script::BasicErrorException );
     virtual css::uno::Reference< ov::excel::XFormatCondition > Add( ::sal_Int32 Type, const css::uno::Any& Operator, const css::uno::Any& Formula1, const css::uno::Any& Formula2, const css::uno::Reference< ov::excel::XStyle >& _xCalcStyle ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     rtl::OUString getA1Formula(const css::uno::Any& _aFormula) throw ( css::script::BasicErrorException );

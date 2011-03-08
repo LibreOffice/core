@@ -238,7 +238,7 @@ void ScTabView::MakeDrawView( BYTE nForceDesignMode )
         SetDrawFuncPtr(new FuSelection( aViewData.GetViewShell(), GetActiveWin(), pDrawView,
                                         pLayer,aSfxRequest));
 
-        //  #106334# used when switching back from page preview: restore saved design mode state
+        //  used when switching back from page preview: restore saved design mode state
         //  (otherwise, keep the default from the draw view ctor)
         if ( nForceDesignMode != SC_FORCEMODE_NONE )
             pDrawView->SetDesignMode( (BOOL)nForceDesignMode );
@@ -286,7 +286,7 @@ void ScTabView::TabChanged()
         UpdateLayerLocks();
 
         pDrawView->RecalcScale();
-        pDrawView->UpdateWorkArea();    // #54782# PageSize ist pro Page unterschiedlich
+        pDrawView->UpdateWorkArea();    // PageSize ist pro Page unterschiedlich
 
         for (i=0; i<4; i++)
             if (pGridWin[i])
@@ -511,7 +511,7 @@ void ScTabView::DrawEnableAnim(BOOL bSet)
     USHORT i;
     if ( pDrawView )
     {
-        //  #71040# dont start animations if display of graphics is disabled
+        //  dont start animations if display of graphics is disabled
         //  graphics are controlled by VOBJ_TYPE_OLE
         if ( bSet && aViewData.GetOptions().GetObjMode(VOBJ_TYPE_OLE) == VOBJ_MODE_SHOW )
         {

@@ -39,7 +39,7 @@ class Window;
 class SdrModel;
 class Dialog;
 
-// #98185# Create default drawing objects via keyboard
+// Create default drawing objects via keyboard
 class SdrObject;
 
 //  Return-Werte fuer Command
@@ -74,7 +74,7 @@ protected:
     BOOL            bIsInDragMode;
     Point           aMDPos;                 // Position von MouseButtonDown
 
-    // #95491# member to hold state of the mouse buttons for creation
+    // member to hold state of the mouse buttons for creation
     // of own MouseEvents (like in ScrollHdl)
 private:
     sal_uInt16      mnCode;
@@ -84,7 +84,7 @@ public:
            SdrModel* pDoc, SfxRequest& rReq);
     virtual ~FuPoor();
 
-    // #95491# see member
+    // see member
     void SetMouseButtonCode(sal_uInt16 nNew) { if(nNew != mnCode) mnCode = nNew; }
     sal_uInt16 GetMouseButtonCode() const { return mnCode; }
 
@@ -98,10 +98,10 @@ public:
     virtual BOOL KeyInput(const KeyEvent& rKEvt);
     virtual BOOL MouseMove(const MouseEvent&) { return FALSE; }
 
-    // #95491# moved from inline to *.cxx
+    // moved from inline to *.cxx
     virtual BOOL MouseButtonUp(const MouseEvent& rMEvt); // { return FALSE; }
 
-    // #95491# moved from inline to *.cxx
+    // moved from inline to *.cxx
     virtual BOOL MouseButtonDown(const MouseEvent& rMEvt); // { return FALSE; }
 
     virtual BYTE Command(const CommandEvent& rCEvt);
@@ -120,7 +120,7 @@ public:
 
     void    StopDragTimer();
 
-    // #98185# Create default drawing objects via keyboard
+    // Create default drawing objects via keyboard
     virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle);
 
 protected:

@@ -536,7 +536,7 @@ const SfxPoolItem* SfxRequest::GetItem
                 return pItem;
 
             // Item da aber falsch => Programmierfehler
-            DBG_ERROR(  "invalid argument type" );
+            OSL_FAIL(  "invalid argument type" );
         }
     }
 
@@ -786,7 +786,7 @@ void SfxRequest::Done_Impl
                 if ( nSlotId == nSlot )
                 {
                     // mit Hosentr"ager und G"urtel reparieren des falschen Flags
-                    DBG_ERROR( "recursion RecordPerItem - use RecordPerSet!" );
+                    OSL_FAIL( "recursion RecordPerItem - use RecordPerSet!" );
                     SfxSlot *pSlot = (SfxSlot*) pImp->pSlot;
                     pSlot->nFlags &= ~((ULONG)SFX_SLOT_RECORDPERITEM);
                     pSlot->nFlags &=  SFX_SLOT_RECORDPERSET;

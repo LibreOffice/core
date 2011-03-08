@@ -34,10 +34,8 @@
 #include "swrect.hxx"
 #include "paratr.hxx"   // pTabStop, ADJ*
 #include "viewopt.hxx"  // SwViewOptions
-#include "errhdl.hxx"   // ASSERT
 #include <SwPortionHandler.hxx>
 
-#include "txtcfg.hxx"
 #include "porglue.hxx"
 #include "inftxt.hxx"
 #include "porlay.hxx"   // SwParaPortion, SetFull
@@ -225,7 +223,6 @@ void SwMarginPortion::AdjustRight( const SwLineLayout *pCurr )
         SwGluePortion *pLeft = 0;
         while( pPos )
         {
-            DBG_LOOP;
             if( pPos->InFixMargGrp() )
                 pLeft = (SwGluePortion*)pPos;
             pPos = pPos->GetPortion();
@@ -269,8 +266,6 @@ void SwMarginPortion::AdjustRight( const SwLineLayout *pCurr )
             }
             while( pPrev != pLeft )
             {
-                DBG_LOOP;
-
                 if( bNoMove || pPrev->PrtWidth() >= nRightGlue ||
                     pPrev->InHyphGrp() || pPrev->IsKernPortion() )
                 {

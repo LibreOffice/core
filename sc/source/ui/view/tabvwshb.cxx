@@ -89,7 +89,7 @@ void ScTabViewShell::ConnectObject( SdrOle2Obj* pObj )
     uno::Reference < embed::XEmbeddedObject > xObj = pObj->GetObjRef();
     Window* pWin = GetActiveWin();
 
-    //  #41412# wenn schon connected ist, nicht nochmal SetObjArea/SetSizeScale
+    //  wenn schon connected ist, nicht nochmal SetObjArea/SetSizeScale
 
     SfxInPlaceClient* pClient = FindIPClient( xObj, pWin );
     if ( !pClient )
@@ -117,7 +117,7 @@ void ScTabViewShell::ConnectObject( SdrOle2Obj* pObj )
 
 BOOL ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
 {
-    // #41081# Gueltigkeits-Hinweisfenster nicht ueber dem Objekt stehenlassen
+    // Gueltigkeits-Hinweisfenster nicht ueber dem Objekt stehenlassen
     RemoveHintWindow();
 
     uno::Reference < embed::XEmbeddedObject > xObj = pObj->GetObjRef();
@@ -200,7 +200,7 @@ BOOL ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
                     }
                     catch( const uno::Exception & )
                     {
-                        DBG_ERROR( "Exception caught while querying chart" );
+                        OSL_FAIL( "Exception caught while querying chart" );
                     }
                 }
             }
@@ -240,7 +240,7 @@ ErrCode ScTabViewShell::DoVerb(long nVerb)
     }
     else
     {
-        DBG_ERROR("kein Objekt fuer Verb gefunden");
+        OSL_FAIL("kein Objekt fuer Verb gefunden");
     }
 
     return nErr;

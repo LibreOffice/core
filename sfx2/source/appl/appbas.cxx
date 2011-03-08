@@ -109,7 +109,7 @@ String lcl_GetVersionString()
 
     if ( aVersion.Len() == 0 )
     {
-        DBG_ERROR( "No BUILDID in bootstrap file found" );
+        OSL_FAIL( "No BUILDID in bootstrap file found" );
     }
 
     aVersion.Erase( 0, aVersion.Search( ':' ) + 1 );
@@ -147,8 +147,6 @@ SbxVariable* MakeVariable( StarBASIC *pBas, SbxObject *pObject,
 
 BasicManager* SfxApplication::GetBasicManager()
 {
-//  DBG_ASSERT( pAppData_Impl->nBasicCallLevel != 0,
-//              "unnecessary call to GetBasicManager() - inefficient!" );
     if ( pAppData_Impl->nBasicCallLevel == 0 )
         // sicherheitshalber
         EnterBasicCall();
@@ -196,14 +194,8 @@ void SfxApplication::EnterBasicCall()
     {
         DBG_TRACE( "SfxShellObject: BASIC-on-demand" );
 
-        // das kann l"anger dauern, da Progress nicht geht, wenigstens Sanduhr
-//(mba)/task        SfxWaitCursor aWait;
-
         // zuerst das BASIC laden
         GetBasic();
-
-        // Factories anmelden
-//        SbxBase::AddFactory( new SfxSbxObjectFactory_Impl );
     }
 }
 
@@ -228,7 +220,6 @@ void SfxApplication::PropExec_Impl( SfxRequest &rReq )
             {
                 SbxObject* pObject = SbxBase::CreateObject( pItem->GetValue() );
                 pObject->AddRef();
-//(mba)                rReq.SetReturnValue( SfxObjectItem( 0, pObject ) );
                 rReq.Done();
             }
             break;
@@ -236,12 +227,6 @@ void SfxApplication::PropExec_Impl( SfxRequest &rReq )
 
         case SID_DELETE_BASICOBJECT:
         {
-            SFX_REQUEST_ARG(rReq, pItem, SfxObjectItem, nSID, sal_False);
-            if ( pItem )
-            {
-//(mba)                SbxObject* pObject = pItem->GetObject();
-//(mba)                pObject->ReleaseRef();
-            }
             break;
         }
 
@@ -293,7 +278,6 @@ void SfxApplication::PropExec_Impl( SfxRequest &rReq )
 //-------------------------------------------------------------------------
 void SfxApplication::PropState_Impl( SfxItemSet &rSet )
 {
-//  SfxViewFrame *pFrame = SfxViewFrame::Current();
     SfxWhichIter aIter(rSet);
     for ( sal_uInt16 nSID = aIter.FirstWhich(); nSID; nSID = aIter.NextWhich() )
     {

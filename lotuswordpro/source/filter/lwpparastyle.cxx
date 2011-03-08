@@ -220,7 +220,7 @@ void    LwpParaStyle::Apply(XFParaStyle *pParaStyle)
         }
     }
 
-    // 01/28/2005
+
     //add tab style
     pPiece = (LwpVirtualPiece*)m_TabStyle.obj();
     if( pPiece  )
@@ -231,7 +231,6 @@ void    LwpParaStyle::Apply(XFParaStyle *pParaStyle)
             ApplyTab(pParaStyle,pTab);
         }
     }
-    //add by  2005/02/16
     pPiece = (LwpVirtualPiece*)m_BreaksStyle.obj();
     if( pPiece  )
     {
@@ -241,7 +240,7 @@ void    LwpParaStyle::Apply(XFParaStyle *pParaStyle)
             ApplyBreaks(pParaStyle,pBreak);
         }
     }
-    //add end
+
 }
 
 void LwpParaStyle::ApplySubBorder(LwpBorderStuff* pBorderStuff, LwpBorderStuff::BorderType eType, XFBorders* pXFBorders)

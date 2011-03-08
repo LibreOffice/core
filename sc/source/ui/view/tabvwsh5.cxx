@@ -107,20 +107,20 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     //  beim "Save as" kann ein vorher schreibgeschuetztes Dokument
                     //  bearbeitbar werden, deshalb die Layer-Locks neu (#39884#)
                     //  (Invalidate etc. passiert schon vom Sfx her)
-                    //  #42091# bei SID_EDITDOC kommt kein SFX_HINT_TITLECHANGED, darum
+                    //  bei SID_EDITDOC kommt kein SFX_HINT_TITLECHANGED, darum
                     //  der eigene Hint aus DoSaveCompleted
                     //! was ist mit SFX_HINT_SAVECOMPLETED ?
 
                     UpdateLayerLocks();
 
-                    //  #54891# Design-Modus bei jedem Speichern anzupassen, waere zuviel
+                    //  Design-Modus bei jedem Speichern anzupassen, waere zuviel
                     //  (beim Speichern unter gleichem Namen soll er unveraendert bleiben)
                     //  Darum nur bei SFX_HINT_MODECHANGED (vom ViewFrame)
                 }
                 break;
 
             case SFX_HINT_MODECHANGED:
-                //  #54891#/#58510# Da man sich nicht mehr darauf verlassen kann, woher
+                //  Da man sich nicht mehr darauf verlassen kann, woher
                 //  dieser Hint kommt, den Design-Modus immer dann umschalten, wenn der
                 //  ReadOnly-Status sich wirklich geaendert hat:
 
@@ -175,9 +175,6 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 PaintLeftArea( pHint->GetStartRow(), pHint->GetEndRow() );
             if (nParts & PAINT_TOP)
                 PaintTopArea( pHint->GetStartCol(), pHint->GetEndCol() );
-            if (nParts & PAINT_INVERT)
-                InvertBlockMark( pHint->GetStartCol(), pHint->GetStartRow(),
-                                 pHint->GetEndCol(), pHint->GetEndRow() );
 
             // #i84689# call UpdateAllOverlays here instead of in ScTabView::PaintArea
             if (nParts & ( PAINT_LEFT | PAINT_TOP ))    // only if widths or heights changed
@@ -243,7 +240,7 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             case SC_TAB_HIDDEN:
                 break;
             default:
-                DBG_ERROR("unbekannter ScTablesHint");
+                OSL_FAIL("unbekannter ScTablesHint");
         }
 
         //  hier keine Abfrage auf IsActive() mehr, weil die Aktion von Basic ausgehen

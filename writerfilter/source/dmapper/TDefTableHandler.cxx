@@ -39,9 +39,8 @@ namespace dmapper {
 
 using namespace ::com::sun::star;
 
-/*-- 24.04.2007 09:06:35---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 TDefTableHandler::TDefTableHandler(bool bOOXML) :
     m_nLineWidth(0),
     m_nLineType(0),
@@ -50,15 +49,13 @@ TDefTableHandler::TDefTableHandler(bool bOOXML) :
     m_bOOXML( bOOXML )
 {
 }
-/*-- 24.04.2007 09:06:35---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 TDefTableHandler::~TDefTableHandler()
 {
 }
-/*-- 24.04.2007 09:06:35---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void TDefTableHandler::attribute(Id rName, Value & rVal)
 {
     sal_Int32 nIntValue = rVal.getInt();
@@ -137,9 +134,8 @@ void TDefTableHandler::attribute(Id rName, Value & rVal)
             OSL_ENSURE(false, "unknown attribute");
     }
 }
-/*-- 08.10.2007 12:55:32---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void TDefTableHandler::localResolve(Id rName, writerfilter::Reference<Properties>::Pointer_t pProperties)
 {
     if( pProperties.get())
@@ -178,9 +174,8 @@ void TDefTableHandler::localResolve(Id rName, writerfilter::Reference<Properties
         }
     }
 }
-/*-- 24.04.2007 09:06:35---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void TDefTableHandler::sprm(Sprm & rSprm)
 {
     switch( rSprm.getId() )
@@ -201,9 +196,8 @@ void TDefTableHandler::sprm(Sprm & rSprm)
         default:;
     }
 }
-/*-- 24.04.2007 09:09:01---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 PropertyMapPtr  TDefTableHandler::getRowProperties() const
 {
     PropertyMapPtr pPropertyMap(new PropertyMap);
@@ -230,9 +224,8 @@ PropertyMapPtr  TDefTableHandler::getRowProperties() const
 
     return pPropertyMap;
 }
-/*-- 10.05.2007 16:10:33---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void TDefTableHandler::fillCellProperties(
             size_t nCell, ::boost::shared_ptr< TablePropertyMap > pCellProperties ) const
 {
@@ -260,9 +253,8 @@ void TDefTableHandler::fillCellProperties(
     if( m_aInsideVBorderLines.size() > nCell )
         pCellProperties->Insert( META_PROP_VERTICAL_BORDER, false, uno::makeAny( m_aInsideVBorderLines[nCell] ) );
 }
-/*-- 09.05.2007 13:14:17---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 sal_Int32 TDefTableHandler::getTableWidth() const
 {
     sal_Int32 nWidth = 0;
@@ -273,9 +265,8 @@ sal_Int32 TDefTableHandler::getTableWidth() const
     }
     return nWidth;
 }
-/*-- 10.05.2007 16:09:10---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 size_t TDefTableHandler::getCellCount() const
 {
     return m_aCellVertAlign.size();

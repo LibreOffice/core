@@ -809,7 +809,7 @@ void SAL_CALL OReportDefinition::disposing()
         // don't dispose, this currently is the task of either the ref count going to
         // 0, or of the embedded object (if we're embedded, which is the only possible
         // case so far)
-        // #i78366# / 2007-06-18 / frank.schoenheit@sun.com
+        // #i78366#
     m_pImpl->m_xStorage.clear();
     m_pImpl->m_xViewData.clear();
     m_pImpl->m_xCurrentController.clear();

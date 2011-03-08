@@ -785,7 +785,7 @@ XclExpFormulaCell::XclExpFormulaCell(
 
         // alternative number format passed to XF buffer
         ULONG nAltScNumFmt = NUMBERFORMAT_ENTRY_NOT_FOUND;
-        /*  #73420# Xcl doesn't know Boolean number formats, we write
+        /*  Xcl doesn't know Boolean number formats, we write
             "TRUE";"FALSE" (language dependent). Don't do it for automatic
             formula formats, because Excel gets them right. */
         /*  #i8640# Don't set text format, if we have string results. */
@@ -794,7 +794,7 @@ XclExpFormulaCell::XclExpFormulaCell(
                 (nFormatType != NUMBERFORMAT_LOGICAL) &&
                 (nFormatType != NUMBERFORMAT_TEXT) )
             nAltScNumFmt = mrScFmlaCell.GetStandardFormat( rFormatter, nScNumFmt );
-        /*  #73420# If cell number format is Boolean and automatic formula
+        /*  If cell number format is Boolean and automatic formula
             format is Boolean don't write that ugly special format. */
         else if( (nFormatType == NUMBERFORMAT_LOGICAL) &&
                 (rFormatter.GetType( nScNumFmt ) == NUMBERFORMAT_LOGICAL) )
@@ -1938,7 +1938,7 @@ void XclExpRow::InsertCell( XclExpCellRef xCell, size_t nPos, bool bIsMergedBase
 {
     DBG_ASSERT( xCell, "XclExpRow::InsertCell - missing cell" );
 
-    /*  #109751# If we have a multi-line text in a merged cell, and the resulting
+    /*  If we have a multi-line text in a merged cell, and the resulting
         row height has not been confirmed, we need to force the EXC_ROW_UNSYNCED
         flag to be true to ensure Excel works correctly. */
     if( bIsMergedBase && xCell->IsMultiLineText() )
@@ -2359,7 +2359,7 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
                 aScRange.aEnd.IncCol( rMergeItem.GetColMerge() - 1 );
                 aScRange.aEnd.IncRow( rMergeItem.GetRowMerge() - 1 );
                 sal_uInt32 nXFId = xCell ? xCell->GetFirstXFId() : EXC_XFID_NOTFOUND;
-                // #120156# blank cells merged vertically may occur repeatedly
+                // blank cells merged vertically may occur repeatedly
                 DBG_ASSERT( (aScRange.aStart.Col() == aScRange.aEnd.Col()) || (nScCol == nLastScCol),
                     "XclExpCellTable::XclExpCellTable - invalid repeated blank merged cell" );
                 for( SCCOL nIndex = nScCol; nIndex <= nLastScCol; ++nIndex )

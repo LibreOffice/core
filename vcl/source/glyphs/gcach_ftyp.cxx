@@ -48,6 +48,8 @@
 #include "osl/file.hxx"
 #include "osl/thread.hxx"
 
+#include "sft.hxx"
+
 #include <ft2build.h>
 #include FT_FREETYPE_H
 #include FT_GLYPH_H
@@ -78,10 +80,8 @@ typedef FT_Vector* FT_Vector_CPtr;
 
 // TODO: move file mapping stuff to OSL
 #if defined(UNX)
-    #if !defined(HPUX)
-        // PORTERS: dlfcn is used for getting symbols from FT versions newer than baseline
-        #include <dlfcn.h>
-    #endif
+    // PORTERS: dlfcn is used for getting symbols from FT versions newer than baseline
+    #include <dlfcn.h>
     #include <unistd.h>
     #include <fcntl.h>
     #include <sys/stat.h>
@@ -136,7 +136,8 @@ FT_Error (*pFTOblique)(FT_GlyphSlot);
 static bool bEnableSizeFT = false;
 
 struct EqStr{ bool operator()(const char* a, const char* b) const { return !strcmp(a,b); } };
-typedef ::std::hash_map<const char*,FtFontFile*,::std::hash<const char*>, EqStr> FontFileList;
+struct HashStr { size_t operator()( const char* s ) const { return rtl_str_hashCode(s); } };
+typedef ::boost::unordered_map<const char*,FtFontFile*,HashStr, EqStr> FontFileList;
 namespace { struct vclFontFileList : public rtl::Static< FontFileList, vclFontFileList > {}; }
 
 // -----------------------------------------------------------------------
@@ -590,7 +591,7 @@ long FreetypeManager::AddFontDir( const String& rUrlName )
                 aDFA.maName        = String::CreateFromAscii( aFaceFT->family_name );
 
             if ( aFaceFT->style_name )
-                aDFA.maStyleName   = String::CreateFromAscii( aFaceFT->style_name );
+                aDFA.maStyleName = String::CreateFromAscii( aFaceFT->style_name );
 
             aDFA.mbSymbolFlag = false;
             for( int i = aFaceFT->num_charmaps; --i >= 0; )
@@ -706,11 +707,6 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
     mpLayoutEngine( NULL )
 {
     maFaceFT = pFI->GetFaceFT();
-
-#ifdef HDU_DEBUG
-    fprintf( stderr, "FTSF::FTSF(\"%s\", h=%d, w=%d, sy=%d) => %d\n",
-        pFI->GetFontFileName()->getStr(), rFSD.mnHeight, rFSD.mnWidth, pFI->IsSymbolFont(), maFaceFT!=0 );
-#endif
 
     if( !maFaceFT )
         return;
@@ -1768,6 +1764,29 @@ bool FreetypeServerFont::GetFontCodeRanges( CmapResult& rResult ) const
     return true;
 }
 
+bool FreetypeServerFont::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
+{
+    bool bRet = false;
+
+    ULONG nLength = 0;
+    // load GSUB table
+    const FT_Byte* pGSUB = mpFontInfo->GetTable("GSUB", &nLength);
+    if (pGSUB)
+        vcl::getTTScripts(rFontCapabilities.maGSUBScriptTags, pGSUB, nLength);
+
+    // load OS/2 table
+    const FT_Byte* pOS2 = mpFontInfo->GetTable("OS/2", &nLength);
+    if (pOS2)
+    {
+        bRet = vcl::getTTCoverage(
+            rFontCapabilities.maUnicodeRange,
+            rFontCapabilities.maCodePageRange,
+            pOS2, nLength);
+    }
+
+    return bRet;
+}
+
 // -----------------------------------------------------------------------
 // kerning stuff
 // -----------------------------------------------------------------------
@@ -2001,7 +2020,7 @@ ULONG FreetypeServerFont::GetKernPairs( ImplKernPairData** ppKernPairs ) const
         // prepare glyphindex to character mapping
         // TODO: this is needed to support VCL's existing kerning infrastructure,
         // eliminate it up by redesigning kerning infrastructure to work with glyph indizes
-        typedef std::hash_multimap<USHORT,sal_Unicode> Cmap;
+        typedef boost::unordered_multimap<USHORT,sal_Unicode> Cmap;
         Cmap aCmap;
         for( sal_Unicode aChar = 0x0020; aChar < 0xFFFE; ++aChar )
         {

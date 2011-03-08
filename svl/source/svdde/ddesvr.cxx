@@ -36,11 +36,6 @@
 #include <tools/debug.hxx>
 #include <osl/thread.h>
 
-//static long         hCurConv  = 0;
-//static DWORD        hDdeInst  = NULL;
-//static short        nInstance = 0;
-//static DdeServices* pServices;
-
 enum DdeItemType
 {
     DDEITEM,
@@ -65,7 +60,7 @@ HDDEDATA CALLBACK DdeInternal::SvrCallback(
             WORD nCode, WORD nCbType, HCONV hConv, HSZ hText1, HSZ hText2,
             HDDEDATA hData, DWORD, DWORD )
 #else
-#if defined ( MTW ) || ( defined ( GCC ) && defined ( OS2 )) || defined( ICC )
+#if ( defined ( GCC ) && defined ( OS2 )) || defined( ICC )
 HDDEDATA CALLBACK DdeInternal::SvrCallback(
             WORD nCode, WORD nCbType, HCONV hConv, HSZ hText1, HSZ hText2,
             HDDEDATA hData, DWORD, DWORD )
@@ -214,7 +209,7 @@ HDDEDATA CALLBACK _export DdeInternal::SvrCallback(
                     pC = new Conversation;
                     pC->hConv = hConv;
                     pC->pTopic = pTopic;
-                    pService->pConv->Insert( pC );
+                    pService->pConv->push_back( pC );
                 }
             }
             return (HDDEDATA)NULL;
@@ -222,9 +217,9 @@ HDDEDATA CALLBACK _export DdeInternal::SvrCallback(
 
     for ( pService = rAll.First(); pService; pService = rAll.Next() )
     {
-        for( pC = pService->pConv->First(); pC;
-             pC = pService->pConv->Next() )
+        for ( size_t i = 0, n = pService->pConv->size(); i < n; ++i )
         {
+            pC = (*pService->pConv)[ i ];
             if ( pC->hConv == hConv )
                 goto found;
         }
@@ -236,8 +231,17 @@ found:
     if ( nCode == XTYP_DISCONNECT)
     {
         pC->pTopic->_Disconnect( (long) hConv );
-        pService->pConv->Remove( pC );
-        delete pC;
+        for ( ConvList::iterator it = pService->pConv->begin();
+              it < pService->pConv->end();
+              ++it
+        ) {
+            if ( *it == pC )
+            {
+                delete *it;
+                pService->pConv->erase( it );
+                break;
+            }
+        }
         return (HDDEDATA)NULL;
     }
 
@@ -570,13 +574,15 @@ void DdeService::RemoveTopic( const DdeTopic& rTopic )
             aTopics.Remove( t );
             // JP 27.07.95: und alle Conversions loeschen !!!
             //              (sonst wird auf geloeschten Topics gearbeitet!!)
-            for( ULONG n = pConv->Count(); n; )
+            for( size_t n = pConv->size(); n; )
             {
-                Conversation* pC = pConv->GetObject( --n );
+                Conversation* pC = (*pConv)[ --n ];
                 if( pC->pTopic == &rTopic )
                 {
-                    pConv->Remove( pC );
-                    delete pC;
+                    ConvList::iterator it = pConv->begin();
+                    ::std::advance( it, n );
+                    delete *it;
+                    pConv->erase( it );
                 }
             }
             break;
@@ -588,7 +594,10 @@ void DdeService::RemoveTopic( const DdeTopic& rTopic )
 
 BOOL DdeService::HasCbFormat( USHORT nFmt )
 {
-    return BOOL( aFormats.GetPos( nFmt ) != LIST_ENTRY_NOTFOUND );
+    for ( size_t i = 0, n = aFormats.size(); i < n; ++i )
+        if ( aFormats[ i ] == nFmt )
+            return true;
+    return false;
 }
 
 // --- DdeService::HasFormat() -------------------------------------
@@ -603,15 +612,23 @@ BOOL DdeService::HasFormat( ULONG nFmt )
 void DdeService::AddFormat( ULONG nFmt )
 {
     nFmt = DdeData::GetExternalFormat( nFmt );
-    aFormats.Remove( nFmt );
-    aFormats.Insert( nFmt );
+    for ( size_t i = 0, n = aFormats.size(); i < n; ++i )
+        if ( aFormats[ i ] == nFmt )
+            return;
+    aFormats.push_back( nFmt );
 }
 
 // --- DdeService::RemoveFormat() ----------------------------------
 
 void DdeService::RemoveFormat( ULONG nFmt )
 {
-    aFormats.Remove( DdeData::GetExternalFormat( nFmt ) );
+    nFmt = DdeData::GetExternalFormat( nFmt );
+    for ( DdeFormats::iterator it = aFormats.begin(); it < aFormats.end(); ++it ) {
+        if ( *it == nFmt ) {
+            aFormats.erase( it );
+            break;
+        }
+    }
 }
 
 // --- DdeTopic::DdeTopic() ----------------------------------------
@@ -1018,8 +1035,9 @@ String DdeService::Formats()
     LPCTSTR     p;
     short       n = 0;
 
-    for ( f = aFormats.First(); f; f = aFormats.Next(), n++ )
+    for ( size_t i = 0; i < aFormats.size(); ++i, n++ )
     {
+        f = aFormats[ i ];
         if ( n )
             s += '\t';
         p = buf;

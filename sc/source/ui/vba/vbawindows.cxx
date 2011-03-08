@@ -27,7 +27,7 @@
  ************************************************************************/
 #include "vbawindows.hxx"
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
@@ -40,7 +40,7 @@
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
-typedef  std::hash_map< rtl::OUString,
+typedef  boost::unordered_map< rtl::OUString,
 sal_Int32, ::rtl::OUStringHash,
 ::std::equal_to< ::rtl::OUString > > NameIndexHash;
 
@@ -205,11 +205,6 @@ public:
     }
 
 };
-
-
-ScVbaWindows::ScVbaWindows( const uno::Reference< ov::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< container::XIndexAccess >& xIndexAccess  ):  ScVbaWindows_BASE( xParent, xContext, xIndexAccess )
-{
-}
 
 ScVbaWindows::ScVbaWindows( const uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext ) : ScVbaWindows_BASE( xParent, xContext, uno::Reference< container::XIndexAccess > ( new WindowsAccessImpl( xContext ) ) )
 {

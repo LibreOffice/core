@@ -34,7 +34,7 @@
 #include "swdllapi.h"
 
 #ifndef INCLUDED_HASH_MAP
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #define INCLUDED_HASH_MAP
 #endif
 #include <stringhash.hxx>
@@ -88,7 +88,7 @@ class String;
 struct SwTableEntry;
 
 
-typedef ::std::hash_map < const String*, sal_uInt16, StringHash, StringEq > NameToIdHash;
+typedef ::boost::unordered_map < const String*, sal_uInt16, StringHash, StringEq > NameToIdHash;
 
 class SwStyleNameMapper
 {

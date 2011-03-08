@@ -39,11 +39,12 @@
 
 //-----------------------------------------------------------------------------
 using namespace utl;
-using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
+
+using ::rtl::OUString;
 
 #define C2U(cChar) OUString(RTL_CONSTASCII_USTRINGPARAM(cChar))
 
@@ -259,7 +260,7 @@ void SvxAsianConfig::SetStartEndChars( const Locale& rLocale,
     }
 #ifdef DBG_UTIL
     else if(!bFound)
-        DBG_ERROR("attempt to clear unavailable data");
+        OSL_FAIL("attempt to clear unavailable data");
 #endif
     SetModified();
 }

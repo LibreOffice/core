@@ -62,7 +62,7 @@ namespace cppu
 //------------------------------------------------------------------------------
 static inline void out( const char * p ) SAL_THROW( () )
 {
-    printf( p );
+    printf( "%c\n", p );
 }
 static inline void out( const OUString & r ) throw ()
 {

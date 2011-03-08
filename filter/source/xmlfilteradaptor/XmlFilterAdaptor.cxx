@@ -61,7 +61,6 @@
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/propertysetinfo.hxx>
 
-using namespace rtl;
 using namespace comphelper;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -74,6 +73,8 @@ using namespace com::sun::star::xml;
 using namespace com::sun::star::xml::sax;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::task;
+
+using ::rtl::OUString;
 
 #define MAP_LEN(x) x, sizeof(x) - 1
 
@@ -151,7 +152,7 @@ sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star
      //********************
     //Template Loading if Required
     //********************
-    if (!msTemplateName.equalsAscii("")){
+    if (msTemplateName.getLength()){
         Reference< XStyleFamiliesSupplier > xstylefamiliessupplier(mxDoc, UNO_QUERY);
 
         Reference< XNameAccess >xName;

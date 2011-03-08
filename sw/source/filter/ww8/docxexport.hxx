@@ -29,7 +29,6 @@
 #ifndef _DOCXEXPORT_HXX_
 #define _DOCXEXPORT_HXX_
 
-#include "docxattributeoutput.hxx"
 #include "wrtww8.hxx"
 
 #include <sax/fshelper.hxx>
@@ -39,6 +38,7 @@
 #include <cstdio>
 #include <vector>
 
+class DocxAttributeOutput;
 class DocxExportFilter;
 class SwNode;
 class SwEndNode;
@@ -88,6 +88,7 @@ class DocxExport : public MSWordExportBase
 public:
 
     DocxExportFilter& GetFilter() { return *m_pFilter; };
+    const DocxExportFilter& GetFilter() const { return *m_pFilter; };
 
     /// Access to the attribute output class.
     virtual AttributeOutputBase& AttrOutput() const;

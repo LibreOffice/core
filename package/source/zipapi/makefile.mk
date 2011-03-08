@@ -37,7 +37,6 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 .IF "$(L10N_framework)"==""
-#CFLAGS+=/Ob0 /Od
 .IF "$(SYSTEM_ZLIB)" == "YES"
 CFLAGS+=-DSYSTEM_ZLIB
 .ENDIF

@@ -59,6 +59,7 @@
 
 #include <algorithm>
 #include <functional>
+#include <o3tl/compat_functional.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -646,7 +647,7 @@ void DlgEdObj::TabIndexChange( const beans::PropertyChangeEvent& evt ) throw (Ru
             ::std::transform(
                     aIndexToNameMap.begin(), aIndexToNameMap.end(),
                     aNameList.begin(),
-                    ::std::select2nd< IndexToNameMap::value_type >( )
+                    ::o3tl::select2nd< IndexToNameMap::value_type >( )
                 );
 
             // check tab index
@@ -1867,7 +1868,7 @@ awt::DeviceInfo DlgEdForm::getDeviceInfo() const
     {
         // don't create a temporary control all the time, this method here is called
         // way too often. Instead, use a cached DeviceInfo.
-        // 2007-02-05 / i74065 / frank.schoenheit@sun.com
+        // #i74065#
         if ( !!mpDeviceInfo )
             return *mpDeviceInfo;
 

@@ -28,7 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_cppu.hxx"
-#include <hash_set>
+#include <boost/unordered_map.hpp>
 #include <stdio.h>
 
 #include <osl/diagnose.h>
@@ -405,7 +405,7 @@ struct uno_ThreadPool_Hash
 
 
 
-typedef ::std::hash_map< uno_ThreadPool, ThreadPoolHolder, uno_ThreadPool_Hash, uno_ThreadPool_Equal > ThreadpoolHashSet;
+typedef ::boost::unordered_map< uno_ThreadPool, ThreadPoolHolder, uno_ThreadPool_Hash, uno_ThreadPool_Equal > ThreadpoolHashSet;
 
 static ThreadpoolHashSet *g_pThreadpoolHashSet;
 

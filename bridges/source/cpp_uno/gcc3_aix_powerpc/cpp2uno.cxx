@@ -497,7 +497,7 @@ static sal_uInt64 cpp_vtable_call(sal_Int32 r3, sal_Int32 r4, sal_Int32 r5,
     register double d11 asm("fr12"); fpreg[11] = d11;
     register double d12 asm("fr13"); fpreg[12] = d12;
 
-#if CMC_DEBUG
+#if OSL_DEBUG_LEVEL > 2
     for(int i = 0; i < 8; ++i)
     {
         fprintf(stderr, "general reg %d is %x\n", i, gpreg[i]);

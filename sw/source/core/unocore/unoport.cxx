@@ -570,7 +570,7 @@ uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL SwXTextPortion::setPr
         catch (beans::UnknownPropertyException &)
         {
             // should not occur because property was searched for before
-            DBG_ERROR( "unexpected exception catched" );
+            OSL_FAIL( "unexpected exception catched" );
             pFailed[ nFailed++ ].Result = beans::TolerantPropertySetResultType::UNKNOWN_PROPERTY;
         }
         catch (lang::IllegalArgumentException &)
@@ -682,7 +682,7 @@ uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SwXTextPortion:
         catch (beans::UnknownPropertyException &)
         {
             // should not occur because property was searched for before
-            DBG_ERROR( "unexpected exception catched" );
+            OSL_FAIL( "unexpected exception catched" );
             aResult.Result = beans::TolerantPropertySetResultType::UNKNOWN_PROPERTY;
         }
         catch (lang::IllegalArgumentException &)

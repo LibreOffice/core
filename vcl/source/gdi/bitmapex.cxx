@@ -298,36 +298,6 @@ Bitmap BitmapEx::GetBitmap( const Color* pTransReplaceColor ) const
 
 // ------------------------------------------------------------------
 
-BitmapEx BitmapEx::GetColorTransformedBitmapEx( BmpColorMode eColorMode ) const
-{
-    BitmapEx aRet;
-
-    if( BMP_COLOR_HIGHCONTRAST == eColorMode )
-    {
-        aRet = *this;
-        aRet.aBitmap = aBitmap.GetColorTransformedBitmap( eColorMode );
-    }
-    else if( BMP_COLOR_MONOCHROME_BLACK == eColorMode ||
-             BMP_COLOR_MONOCHROME_WHITE == eColorMode )
-    {
-        aRet = *this;
-        aRet.aBitmap = aRet.aBitmap.GetColorTransformedBitmap( eColorMode );
-
-        if( !aRet.aMask.IsEmpty() )
-        {
-            aRet.aMask.CombineSimple( aRet.aBitmap, BMP_COMBINE_OR );
-            aRet.aBitmap.Erase( ( BMP_COLOR_MONOCHROME_BLACK == eColorMode ) ? COL_BLACK : COL_WHITE );
-
-            DBG_ASSERT( aRet.aBitmap.GetSizePixel() == aRet.aMask.GetSizePixel(),
-                        "BitmapEx::GetColorTransformedBitmapEx(): size mismatch for bitmap and alpha mask." );
-        }
-    }
-
-    return aRet;
-}
-
-// ------------------------------------------------------------------
-
 Bitmap BitmapEx::GetMask() const
 {
     Bitmap aRet( aMask );

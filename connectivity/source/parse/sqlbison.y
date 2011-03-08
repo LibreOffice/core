@@ -3857,7 +3857,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 using namespace ::osl;
 using namespace ::dbtools;
-//	using namespace connectivity;
 
 //============================================================
 //= a helper for static ascii pseudo-unicode strings
@@ -3869,7 +3868,6 @@ struct _ConstAsciiString_
 	sal_Char  const* str;
 
 	operator rtl::OUString () const { return rtl::OUString(str, length, RTL_TEXTENCODING_ASCII_US); }
-//	operator ::rtl::OUString () const { return ::rtl::OUString(str, length, RTL_TEXTENCODING_ASCII_US); }
 	operator const sal_Char * () const { return str; }
 	operator ::rtl::OString() const { return str; }
 };

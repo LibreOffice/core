@@ -30,8 +30,6 @@
 
 #include <tools/link.hxx>
 
-#include "errhdl.hxx"       // hier kommt auch swtypes rein, was ich brauche
-
 // ----------------------------------------------------------------------------
 
 extern void SW_NEW_HDL();

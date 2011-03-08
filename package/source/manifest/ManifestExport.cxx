@@ -40,10 +40,12 @@
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/attributelist.hxx>
 
-using namespace rtl;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::xml::sax;
+
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 ManifestExport::ManifestExport(Reference < XDocumentHandler > xHandler,  const Sequence < Sequence < PropertyValue > > &rManList )
 {
@@ -159,6 +161,7 @@ ManifestExport::ManifestExport(Reference < XDocumentHandler > xHandler,  const S
             {
                 // this is ODF12 generation, let encrypted streams contain start-key-generation entry
                 bStoreStartKeyGeneration = sal_True;
+                pRootAttrList->AddAttribute ( sVersionAttribute, sCdataAttribute, aDocVersion );
             }
         }
         else

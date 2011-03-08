@@ -253,7 +253,7 @@ extern FILE *GetCfgFile()
 
             // create file name, beginnig with project root
             // (e.g.: source\ui\src\menue.src)
-//          printf("sFullEntry = %s\n",sFullEntry.GetBuffer());
+//            printf("sFullEntry = %s\n",sFullEntry.GetBuffer());
             sActFileName = sFullEntry.Copy( sPrjEntry.Len() + 1 );
 //            printf("sActFileName = %s\n",sActFileName.GetBuffer());
 
@@ -337,7 +337,12 @@ CfgStackData *CfgStack::GetStackData( size_t nPos )
 /*****************************************************************************/
 {
     if ( nPos == LIST_APPEND )
-        nPos = maList.size() - 1;
+    {
+        if (!maList.empty())
+            nPos = maList.size() - 1;
+        else
+            return 0;
+    }
 
     return maList[  nPos ];
 }
@@ -578,9 +583,6 @@ int CfgParser::Execute( int nToken, char * pToken )
 void CfgParser::Error( const ByteString &rError )
 /*****************************************************************************/
 {
-//  ByteString sError( rError );
-//    sError.Append("Error: In file ");
-//    sError.Append( sActFileName );
     yyerror(( char * ) rError.GetBuffer());
 }
 
@@ -657,10 +659,6 @@ void CfgExport::WorkOnRessourceEnd()
                     pStackData->sText[ ByteString("en-US") ].Len() )))
         {
             ByteString sFallback = pStackData->sText[ ByteString("en-US") ];
-
-            //if ( pStackData->sText[ ByteString("en-US") ].Len())
-            //  sFallback = pStackData->sText[ ByteString("en-US") ];
-
             ByteString sLocalId = pStackData->sIdentifier;
             ByteString sGroupId;
             if ( aStack.size() == 1 ) {
@@ -695,7 +693,6 @@ void CfgExport::WorkOnRessourceEnd()
                     sOutput += sText; sOutput += "\t\t\t\t";
                     sOutput += sTimeStamp;
 
-                    //if( !sCur.EqualsIgnoreCaseAscii("de") ||( sCur.EqualsIgnoreCaseAscii("de") && !Export::isMergingGermanAllowed( sPrj ) ) )
                     pOutputStream->WriteLine( sOutput );
             }
         }
@@ -725,7 +722,6 @@ CfgMerge::CfgMerge(
                 : CfgOutputParser( rOutputFile ),
                 pMergeDataFile( NULL ),
                 pResData( NULL ),
-                bGerman( FALSE ),
                 sFilename( rFilename ),
                 bEnglish( FALSE )
 {
@@ -776,8 +772,6 @@ void CfgMerge::WorkOnText(
             pResData->sResTyp = pStackData->sResTyp;
         }
 
-        //if ( nLangIndex.EqualsIgnoreCaseAscii("de") )
-        //  bGerman = TRUE;
         if (( nLangIndex.EqualsIgnoreCaseAscii("en-US") ))
             bEnglish = TRUE;
 
@@ -829,7 +823,6 @@ void CfgMerge::WorkOnRessourceEnd()
                 ByteString sContent;
                 pEntrys->GetText( sContent, STRING_TYP_TEXT, sCur , TRUE );
                 if (
-                    // (!sCur.EqualsIgnoreCaseAscii("de") )    &&
                     ( !sCur.EqualsIgnoreCaseAscii("en-US") ) &&
 
                     ( sContent != "-" ) && ( sContent.Len()))
@@ -869,7 +862,6 @@ void CfgMerge::WorkOnRessourceEnd()
     }
     delete pResData;
     pResData = NULL;
-    bGerman = FALSE;
     bEnglish = FALSE;
 }
 

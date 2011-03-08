@@ -30,7 +30,7 @@
 #include "precompiled_sw.hxx"
 
 
-#include <string> // HACK: prevent conflict between STLPORT and Workshop headers
+#include <string>
 #include <svl/eitem.hxx>
 #include <svx/htmlmode.hxx>
 #include <sfx2/dispatch.hxx>

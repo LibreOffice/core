@@ -57,10 +57,6 @@
  * @file
  * Frame style include position,size,rotation and so on.
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2005-01-17 create this file.
- ************************************************************************/
 #include    "xfframestyle.hxx"
 #include    "xfcolumns.hxx"
 #include    "xfborders.hxx"

@@ -78,7 +78,7 @@
 
 #include "i18npool/mslangid.hxx"
 
-#include <hash_set>
+#include <boost/unordered_set.hpp>
 
 #ifdef ENABLE_GRAPHITE
 #include <vcl/graphite_layout.hxx>
@@ -111,8 +111,7 @@ struct _XRegion
     BOX *rects;
     BOX extents;
 };
-using namespace rtl;
-
+using ::rtl::OUString;
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 // ----------------------------------------------------------------------------
@@ -129,7 +128,7 @@ class FontLookup
 
         struct hash;
         struct equal;
-        typedef ::std::hash_set< FontLookup,
+        typedef ::boost::unordered_set< FontLookup,
                                  FontLookup::hash,
                                  FontLookup::equal > fl_hashset;
 
@@ -420,21 +419,20 @@ SalDisplay::GetFont( const ExtendedXlfd *pRequestedFont,
     // TODO: either get rid of X11 fonts or get rid of the non-hashmapped cache
     if( !m_pFontCache )
     {
-        m_pFontCache = new SalFontCache( 64, 64, 16 ); // ???
+        m_pFontCache = new SalFontCache();
     }
     else
     {
         ExtendedFontStruct *pItem;
-        for ( pItem  = m_pFontCache->First();
-              pItem != NULL;
-              pItem  = m_pFontCache->Next() )
+        for ( size_t i = 0, n = m_pFontCache->size(); i < n; ++i )
         {
+            pItem = (*m_pFontCache)[ i ];
             if ( pItem->Match(pRequestedFont, rPixelSize, bVertical) )
             {
-                if( m_pFontCache->GetCurPos() )
+                if( i > 0 )
                 {
-                    m_pFontCache->Remove( pItem );
-                    m_pFontCache->Insert( pItem, 0UL );
+                    m_pFontCache->erase( m_pFontCache->begin() + i );
+                    m_pFontCache->insert( m_pFontCache->begin(), pItem );
                 }
                 return pItem;
             }
@@ -442,18 +440,17 @@ SalDisplay::GetFont( const ExtendedXlfd *pRequestedFont,
     }
 
     // before we expand the cache, we look for very old and unused items
-    if( m_pFontCache->Count() >= 64 )
+    if( m_pFontCache->size() >= 64 )
     {
         ExtendedFontStruct *pItem;
-        for ( pItem = m_pFontCache->Last();
-              pItem != NULL;
-              pItem = m_pFontCache->Prev() )
+        for ( size_t i = m_pFontCache->size(); i > 0; )
         {
+            pItem  = (*m_pFontCache)[ --i ];
             if( 1 == pItem->GetRefCount() )
             {
-                m_pFontCache->Remove( pItem );
+                m_pFontCache->erase( m_pFontCache->begin() + i );
                 pItem->ReleaseRef();
-                if( m_pFontCache->Count() < 64 )
+                if( m_pFontCache->size() < 64 )
                     break;
             }
         }
@@ -462,7 +459,7 @@ SalDisplay::GetFont( const ExtendedXlfd *pRequestedFont,
     ExtendedFontStruct *pItem = new ExtendedFontStruct( GetDisplay(),
                                         rPixelSize, bVertical,
                                         const_cast<ExtendedXlfd*>(pRequestedFont) );
-    m_pFontCache->Insert( pItem, 0UL );
+    m_pFontCache->insert( m_pFontCache->begin(), pItem );
     pItem->AddRef();
 
     return pItem;
@@ -475,13 +472,9 @@ SalDisplay::DestroyFontCache()
 {
     if( m_pFontCache )
     {
-        ExtendedFontStruct *pItem = m_pFontCache->First();
-        while( pItem )
-        {
-            delete pItem;
-            pItem = m_pFontCache->Next();
+        for ( size_t i = 0, n = m_pFontCache->size(); i < n; ++i ) {
+            delete (*m_pFontCache)[ i ];
         }
-        delete m_pFontCache;
     }
     if( mpFontList )
     {
@@ -522,8 +515,6 @@ void PspKernInfo::Initialize() const
     if( rKernPairs.empty() )
         return;
 
-    // feed psprint's kerning list into a lookup-friendly container
-    maUnicodeKernPairs.resize( rKernPairs.size() );
     PspKernPairs::const_iterator it = rKernPairs.begin();
     for(; it != rKernPairs.end(); ++it )
     {
@@ -577,21 +568,6 @@ X11SalGraphics::SelectFont()
 
 bool X11SalGraphics::setFont( const ImplFontSelectData *pEntry, int nFallbackLevel )
 {
-#ifdef HDU_DEBUG
-    ByteString aReqName( "NULL" );
-    if( pEntry )
-        aReqName = ByteString( pEntry->maName, RTL_TEXTENCODING_UTF8 );
-    ByteString aUseName( "NULL" );
-    if( pEntry && pEntry->mpFontData )
-        aUseName = ByteString( pEntry->mpFontData->GetFamilyName(), RTL_TEXTENCODING_UTF8 );
-    fprintf( stderr, "SetFont(lvl=%d,\"%s\", %d*%d, naa=%d,b=%d,i=%d) => \"%s\"\n",
-        nFallbackLevel, aReqName.GetBuffer(),
-    !pEntry?-1:pEntry->mnWidth, !pEntry?-1:pEntry->mnHeight,
-        !pEntry?-1:pEntry->mbNonAntialiased,
-    !pEntry?-1:pEntry->meWeight, !pEntry?-1:pEntry->meItalic,
-        aUseName.GetBuffer() );
-#endif
-
     // release all no longer needed font resources
     for( int i = nFallbackLevel; i < MAX_FALLBACK; ++i )
     {
@@ -1499,6 +1475,13 @@ ImplFontCharMap* X11SalGraphics::GetImplFontCharMap() const
     return new ImplFontCharMap( aCmapResult );
 }
 
+bool X11SalGraphics::GetImplFontCapabilities(vcl::FontCapabilities &rGetImplFontCapabilities) const
+{
+    if (!mpServerFont[0])
+        return false;
+    return mpServerFont[0]->GetFontCapabilities(rGetImplFontCapabilities);
+}
+
 // ----------------------------------------------------------------------------
 //
 // SalGraphics
@@ -1987,7 +1970,7 @@ public:
     bool FindFontSubstitute( ImplFontSelectData& ) const;
 
 private:
-    typedef ::std::hash_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash >
+    typedef ::boost::unordered_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash >
         CachedFontMapType;
     mutable CachedFontMapType maCachedFontMap;
 };

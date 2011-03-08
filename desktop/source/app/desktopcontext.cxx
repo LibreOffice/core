@@ -33,9 +33,10 @@
 #include <vcl/svapp.hxx>
 #include <svtools/javainteractionhandler.hxx>
 
-using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::task;
+
+using ::rtl::OUString;
 
 namespace desktop
 {

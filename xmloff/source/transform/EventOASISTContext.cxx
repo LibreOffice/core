@@ -44,7 +44,7 @@
 #include <comphelper/processfactory.hxx>
 #endif
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 using ::rtl::OUString;
 
@@ -53,7 +53,7 @@ using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
 
 class XMLTransformerOASISEventMap_Impl:
-    public ::std::hash_map< NameKey_Impl, ::rtl::OUString,
+    public ::boost::unordered_map< NameKey_Impl, ::rtl::OUString,
                             NameHash_Impl, NameHash_Impl >
 {
 public:
@@ -66,7 +66,7 @@ XMLTransformerOASISEventMap_Impl::XMLTransformerOASISEventMap_Impl( XMLTransform
     if( pInit )
     {
         XMLTransformerOASISEventMap_Impl::key_type aKey;
-        XMLTransformerOASISEventMap_Impl::data_type aData;
+        XMLTransformerOASISEventMap_Impl::mapped_type aData;
         while( pInit->m_pOASISName )
         {
             aKey.m_nPrefix = pInit->m_nOASISPrefix;

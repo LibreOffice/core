@@ -60,13 +60,6 @@ CDEFS+=-xalias_level=compatible
 .ENDIF
 .ENDIF
 
-#building with stlport, but cppunit was not built with stlport
-.IF "$(USE_SYSTEM_STL)"!="YES"
-.IF "$(SYSTEM_CPPUNIT)"=="YES"
-CFLAGSCXX+=-DADAPT_EXT_STL
-.ENDIF
-.ENDIF
-
 CFLAGSCXX += $(CPPUNIT_CFLAGS)
 
 # --- Common ----------------------------------------------------------
@@ -98,25 +91,6 @@ SHL1RPATH = NONE
 
 .ENDIF
 # END ------------------------------------------------------------------
-
-#APP2TARGET= bmpdemo
-
-#APP2OBJS=	\
-#	$(OBJ)$/bmpdemo.obj
-
-#APP2STDLIBS=$(TOOLSLIB) 		\
-#			$(COMPHELPERLIB)	\
-#			$(BASEGFXLIB)	    \
-#			$(BASEBMPLIB)	    \
-#			$(CPPULIB)			\
-#			$(CPPUHELPERLIB)	\
-#			$(UCBHELPERLIB)		\
-#			$(SALLIB)			\
-#			$(VCLLIB)
-#
-#.IF "$(GUI)"!="UNX"
-#APP2DEF=	$(MISC)$/$(TARGET).def
-#.ENDIF
 
 #------------------------------- All object files -------------------------------
 # do this here, so we get right dependencies

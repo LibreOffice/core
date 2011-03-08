@@ -94,9 +94,8 @@ public:
     virtual ::sal_Int32 SAL_CALL available(  ) throw (io::NotConnectedException, io::IOException, uno::RuntimeException);
     virtual void SAL_CALL closeInput(  ) throw (io::NotConnectedException, io::IOException, uno::RuntimeException);
 };
-/*-- 01.11.2006 13:56:20---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 XInputStreamHelper::XInputStreamHelper(const sal_uInt8* buf, size_t len, bool bBmp) :
         m_pBuffer( buf ),
         m_nLength( len ),
@@ -109,23 +108,20 @@ XInputStreamHelper::XInputStreamHelper(const sal_uInt8* buf, size_t len, bool bB
     m_nHeaderLength = m_bBmp ? sizeof( aHeader ) / sizeof(sal_uInt8) : 0;
 
 }
-/*-- 01.11.2006 13:56:20---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 XInputStreamHelper::~XInputStreamHelper()
 {
 }
-/*-- 01.11.2006 13:56:21---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 ::sal_Int32 XInputStreamHelper::readBytes( uno::Sequence< ::sal_Int8 >& aData, ::sal_Int32 nBytesToRead )
     throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException)
 {
     return readSomeBytes( aData, nBytesToRead );
 }
-/*-- 01.11.2006 13:56:21---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 ::sal_Int32 XInputStreamHelper::readSomeBytes( uno::Sequence< ::sal_Int8 >& aData, ::sal_Int32 nMaxBytesToRead )
         throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException)
 {
@@ -155,42 +151,36 @@ XInputStreamHelper::~XInputStreamHelper()
     }
     return nRet;
 }
-/*-- 01.11.2006 13:56:21---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void XInputStreamHelper::skipBytes( ::sal_Int32 nBytesToSkip ) throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException)
 {
     if( nBytesToSkip < 0 || m_nPosition + nBytesToSkip > (m_nLength + m_nHeaderLength))
         throw io::BufferSizeExceededException();
     m_nPosition += nBytesToSkip;
 }
-/*-- 01.11.2006 13:56:22---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 ::sal_Int32 XInputStreamHelper::available(  ) throw (io::NotConnectedException, io::IOException, uno::RuntimeException)
 {
     return ( m_nLength + m_nHeaderLength ) - m_nPosition;
 }
-/*-- 01.11.2006 13:56:22---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void XInputStreamHelper::closeInput(  ) throw (io::NotConnectedException, io::IOException, uno::RuntimeException)
 {
 }
-/*-- 02.11.2006 09:34:29---------------------------------------------------
 
- -----------------------------------------------------------------------*/
+
 struct GraphicBorderLine
 {
     sal_Int32   nLineWidth;
-//    sal_Int32   nLineType;
     sal_Int32   nLineColor;
     sal_Int32   nLineDistance;
     bool        bHasShadow;
 
     GraphicBorderLine() :
         nLineWidth(0)
-//        ,nLineType(0)
         ,nLineColor(0)
         ,nLineDistance(0)
         ,bHasShadow(false)
@@ -348,9 +338,8 @@ public:
         return bYSizeValid;
     }
 };
-/*-- 01.11.2006 09:42:42---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 GraphicImport::GraphicImport(uno::Reference < uno::XComponentContext >    xComponentContext,
                              uno::Reference< lang::XMultiServiceFactory > xTextFactory,
                              DomainMapper& rDMapper,
@@ -360,16 +349,14 @@ GraphicImport::GraphicImport(uno::Reference < uno::XComponentContext >    xCompo
   ,m_xTextFactory( xTextFactory)
 {
 }
-/*-- 01.11.2006 09:42:42---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 GraphicImport::~GraphicImport()
 {
     delete m_pImpl;
 }
-/*-- 01.11.2006 09:45:01---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void GraphicImport::attribute(Id nName, Value & val)
 {
 #ifdef DEBUG_DOMAINMAPPER
@@ -476,9 +463,6 @@ void GraphicImport::attribute(Id nName, Value & val)
         case NS_rtf::LN_CPROPS:break;// unknown - ignored
         //metafilepict
         case NS_rtf::LN_MM:
-//      according to the documentation 99 or 98 are provided - but they are not!
-//            m_pImpl->bIsBitmap = 99 == nIntValue ? true : false;
-//            m_pImpl->bIsTiff = 98 == nIntValue ? true : false;
 
         break; //mapmode
         case NS_rtf::LN_XEXT:
@@ -507,16 +491,6 @@ void GraphicImport::attribute(Id nName, Value & val)
 
                     {
 
-//                        rBLIPStream.SeekRel( nSkip + 20 );
-//                        // read in size of metafile in EMUS
-//                        rBLIPStream >> aMtfSize100.Width() >> aMtfSize100.Height();
-//                        // scale to 1/100mm
-//                        aMtfSize100.Width() /= 360, aMtfSize100.Height() /= 360;
-//                        if ( pVisArea )     // seem that we currently are skipping the visarea position
-//                            *pVisArea = Rectangle( Point(), aMtfSize100 );
-//                        // skip rest of header
-//                        nSkip = 6;
-//                        bMtfBLIP = bZCodecCompression = TRUE;
                     }
 
                     break;
@@ -526,7 +500,6 @@ void GraphicImport::attribute(Id nName, Value & val)
                     case 0x6E0 :            break;// One byte tag then PNG data
 
                     case 0x7A8 : m_pImpl->bIsBitmap = true;
-//                        nSkip += 1;         // One byte tag then DIB data
                     break;
 
                 }
@@ -622,7 +595,6 @@ void GraphicImport::attribute(Id nName, Value & val)
         break;
         case NS_rtf::LN_BRCTYPE:   // 0x175a
             //graphic borders don't support different line types
-            //m_pImpl->aBorders[m_pImpl->nCurrentBorderLine].nLineType = nIntValue;
         break;
         case NS_rtf::LN_ICO:   // 0x175b
             m_pImpl->aBorders[m_pImpl->nCurrentBorderLine].nLineColor = ConversionHelper::ConvertColor( nIntValue );
@@ -653,18 +625,6 @@ void GraphicImport::attribute(Id nName, Value & val)
             break;//bottom position
         case NS_rtf::LN_FHDR:
         case NS_rtf::LN_XAlign:
-/*
-        static const SwHoriOrient aHoriOriTab[ nCntXAlign ] =
-        {
-            HORI_NONE,     // From left position
-            HORI_LEFT,     // left
-            HORI_CENTER,   // centered
-            HORI_RIGHT,    // right
-            // --> OD 2004-12-06 #i36649#
-            // - inside -> HORI_LEFT and outside -> HORI_RIGHT
-            HORI_LEFT,   // inside
-            HORI_RIGHT   // outside
-*/
             if( nIntValue < 6 && nIntValue > 0 )
             {
                 static const sal_Int16 aHoriOrientTab[ 6 ] =
@@ -681,36 +641,6 @@ void GraphicImport::attribute(Id nName, Value & val)
             }
         break;
         case NS_rtf::LN_YAlign:
-/*
-        static const SwVertOrient aVertOriTab[ nCntYAlign ] =
-        {
-            VERT_NONE,         // From Top position
-            VERT_TOP,          // top
-            VERT_CENTER,       // centered
-            VERT_BOTTOM,       // bottom
-            VERT_LINE_TOP,     // inside (obscure)
-            VERT_LINE_BOTTOM   // outside (obscure)
-        };
-        // CMC,OD 24.11.2003 #i22673# - to-line vertical alignment
-        static const SwVertOrient aToLineVertOriTab[ nCntYAlign ] =
-        {
-            VERT_NONE,         // below
-            VERT_LINE_BOTTOM,  // top
-            VERT_LINE_CENTER,  // centered
-            VERT_LINE_TOP,     // bottom
-            VERT_LINE_BOTTOM,  // inside (obscure)
-            VERT_LINE_TOP      // outside (obscure)
-        };
-        if ( eVertRel == REL_VERT_LINE ) //m_pImpl->nVertRelation == text::RelOrientation::TEXT_LINE
-        {
-            eVertOri = aToLineVertOriTab[ nYAlign ];
-        }
-        else
-        {
-            eVertOri = aVertOriTab[ nYAlign ];
-        }
-
-*/
             if( nIntValue < 6 && nIntValue > 0)
             {
                 static const sal_Int16 aVertOrientTab[ 6 ] =
@@ -808,20 +738,10 @@ void GraphicImport::attribute(Id nName, Value & val)
         case NS_rtf::LN_FBELOWTEXT:
         case NS_rtf::LN_FANCHORLOCK:
         case NS_rtf::LN_CTXBX:
-//        {
-//            sal_Int32 nValue1 = val.getInt();
-//            nValue1++;
-//        }
         break;
         case NS_rtf::LN_shptxt:
             //todo: text content
         break;
-    /*    case NS_rtf::LN_CH = 10421;
-        case NS_rtf::LN_UNUSED0_5 = 10422;
-        case NS_rtf::LN_FLT = 10423;
-        case NS_rtf::LN_shpLeft = 10424;
-        case NS_rtf::LN_shpTop = 10425;
-            break;*/
         case NS_rtf::LN_dffheader: break;
         case NS_ooxml::LN_CT_PositiveSize2D_cx:// 90407;
         case NS_ooxml::LN_CT_PositiveSize2D_cy:// 90408;
@@ -903,14 +823,14 @@ void GraphicImport::attribute(Id nName, Value & val)
             //enable overlapping - ignored
         break;
         case NS_ooxml::LN_CT_Point2D_x: // 90405;
+            m_pImpl->nLeftPosition = ConversionHelper::convertTwipToMM100(nIntValue);
+            m_pImpl->nHoriRelation = text::RelOrientation::PAGE_FRAME;
+            m_pImpl->nHoriOrient = text::HoriOrientation::NONE;
+        break;
         case NS_ooxml::LN_CT_Point2D_y: // 90406;
-            if( m_pImpl->bUseSimplePos )
-            {
-                //todo: absolute positioning
-                NS_ooxml::LN_CT_Point2D_x == nName ? m_pImpl->nLeftPosition = ConversionHelper::convertTwipToMM100(nIntValue) :
-                                                        m_pImpl->nTopPosition = ConversionHelper::convertTwipToMM100(nIntValue);
-
-            }
+            m_pImpl->nTopPosition = ConversionHelper::convertTwipToMM100(nIntValue);
+            m_pImpl->nVertRelation = text::RelOrientation::PAGE_FRAME;
+            m_pImpl->nVertOrient = text::VertOrientation::NONE;
         break;
         case NS_ooxml::LN_CT_WrapTight_wrapText: // 90934;
             m_pImpl->bContour = true;
@@ -1050,9 +970,8 @@ uno::Reference<text::XTextContent> GraphicImport::GetGraphicObject()
     return xResult;
 }
 
-/*-- 22.11.2006 09:46:48---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void GraphicImport::ProcessShapeOptions(Value& val)
 {
     sal_Int32 nIntValue = val.getInt();
@@ -1076,26 +995,6 @@ void GraphicImport::ProcessShapeOptions(Value& val)
         case NS_dff::LN_shppibName/*261*/:
             break;  // rtf:shppibName
         case NS_dff::LN_shppibFlags/*262*/:  // rtf:shppibFlags
-        /*
-         * // MSOBLIPFLAGS ñ flags for pictures
-            typedef enum
-               {
-               msoblipflagDefault = 0,
-               msoblipflagComment = 0,   // Blip name is a comment
-               msoblipflagFile,          // Blip name is a file name
-               msoblipflagURL,           // Blip name is a full URL
-               msoblipflagType = 3,      // Mask to extract type
-               // Or the following flags with any of the above.
-               msoblipflagDontSave = 4,  // A "dont" is the depression in the metal
-                                         // body work of an automobile caused when a
-                                         // cyclist violently thrusts his or her nose
-                                         // at it, thus a DontSave is another name for
-                                         // a cycle lane.
-               msoblipflagDoNotSave = 4, // For those who prefer English
-               msoblipflagLinkToFile = 8,
-               };
-                             *
-         * */
         break;
         case NS_dff::LN_shppictureContrast/*264*/: // rtf:shppictureContrast docu: "1<<16"
             /*
@@ -1184,14 +1083,12 @@ void GraphicImport::ProcessShapeOptions(Value& val)
                 msolineDashDotGEL,         // dash short dash
                 msolineLongDashDotGEL,     // long dash short dash
                 msolineLongDashDotDotGEL   // long dash short dash short dash*/
-            //m_pImpl->aBorders[nCurrentBorderLine].nLineType = nIntValue;
         break;
         case NS_dff::LN_shpfNoLineDrawDash     /*511*/:
         break;  // rtf:shpfNoLineDrawDash
         case NS_dff::LN_shpwzDescription /*897*/: //alternative text
             m_pImpl->sAlternativeText = val.getString();
         break;
-//        case NS_dff::LN_shppihlShape /*898*/:
         case NS_dff::LN_shppWrapPolygonVertices/*899*/:
             break;  // rtf:shppWrapPolygonVertices
         case NS_dff::LN_shpdxWrapDistLeft /*900*/: // contains a twip/635 value
@@ -1216,9 +1113,8 @@ void GraphicImport::ProcessShapeOptions(Value& val)
             OSL_ENSURE( false, "shape option unsupported?");
     }
 }
-/*-- 01.11.2006 09:45:02---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void GraphicImport::sprm(Sprm & rSprm)
 {
 #ifdef DEBUG_DOMAINMAPPER
@@ -1271,10 +1167,12 @@ void GraphicImport::sprm(Sprm & rSprm)
             if( pProperties.get( ) )
             {
                 pProperties->resolve( *pHandler );
-
-                m_pImpl->nHoriRelation = pHandler->m_nRelation;
-                m_pImpl->nHoriOrient = pHandler->m_nOrient;
-                m_pImpl->nLeftPosition = pHandler->m_nPosition;
+                if( !m_pImpl->bUseSimplePos )
+                {
+                    m_pImpl->nHoriRelation = pHandler->m_nRelation;
+                    m_pImpl->nHoriOrient = pHandler->m_nOrient;
+                    m_pImpl->nLeftPosition = pHandler->m_nPosition;
+                }
             }
         }
         break;
@@ -1286,10 +1184,12 @@ void GraphicImport::sprm(Sprm & rSprm)
             if( pProperties.get( ) )
             {
                 pProperties->resolve( *pHandler );
-
-                m_pImpl->nVertRelation = pHandler->m_nRelation;
-                m_pImpl->nVertOrient = pHandler->m_nOrient;
-                m_pImpl->nTopPosition = pHandler->m_nPosition;
+                if( !m_pImpl->bUseSimplePos )
+                {
+                    m_pImpl->nVertRelation = pHandler->m_nRelation;
+                    m_pImpl->nVertOrient = pHandler->m_nOrient;
+                    m_pImpl->nTopPosition = pHandler->m_nPosition;
+                }
             }
         }
         break;
@@ -1344,9 +1244,8 @@ void GraphicImport::sprm(Sprm & rSprm)
     dmapper_logger->endElement();
 #endif
 }
-/*-- 01.11.2006 09:45:02---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void GraphicImport::entry(int /*pos*/, writerfilter::Reference<Properties>::Pointer_t /*ref*/)
 {
 }
@@ -1585,9 +1484,8 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
     return xGraphicObject;
 }
 
-/*-- 01.11.2006 09:45:02---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void GraphicImport::data(const sal_uInt8* buf, size_t len, writerfilter::Reference<Properties>::Pointer_t /*ref*/)
 {
         PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
@@ -1600,75 +1498,63 @@ void GraphicImport::data(const sal_uInt8* buf, size_t len, writerfilter::Referen
 
         m_xGraphicObject = createGraphicObject( aMediaProperties );
 }
-/*-- 01.11.2006 09:45:03---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void GraphicImport::startSectionGroup()
 {
 }
-/*-- 01.11.2006 09:45:03---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void GraphicImport::endSectionGroup()
 {
 }
-/*-- 01.11.2006 09:45:03---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void GraphicImport::startParagraphGroup()
 {
 }
-/*-- 01.11.2006 09:45:03---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void GraphicImport::endParagraphGroup()
 {
 }
-/*-- 01.11.2006 09:45:03---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void GraphicImport::startCharacterGroup()
 {
 }
-/*-- 01.11.2006 09:45:04---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void GraphicImport::endCharacterGroup()
 {
 }
-/*-- 01.11.2006 09:45:04---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void GraphicImport::text(const sal_uInt8 * /*_data*/, size_t /*len*/)
 {
 }
-/*-- 01.11.2006 09:45:05---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void GraphicImport::utext(const sal_uInt8 * /*_data*/, size_t /*len*/)
 {
 }
-/*-- 01.11.2006 09:45:05---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void GraphicImport::props(writerfilter::Reference<Properties>::Pointer_t /*ref*/)
 {
 }
-/*-- 01.11.2006 09:45:06---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void GraphicImport::table(Id /*name*/, writerfilter::Reference<Table>::Pointer_t /*ref*/)
 {
 }
-/*-- 01.11.2006 09:45:07---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void GraphicImport::substream(Id /*name*/, ::writerfilter::Reference<Stream>::Pointer_t /*ref*/)
 {
 }
-/*-- 01.11.2006 09:45:07---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void GraphicImport::info(const string & /*info*/)
 {
 }
@@ -1681,9 +1567,8 @@ void GraphicImport::endShape( )
 {
 }
 
-/*-- 09.08.2007 10:17:00---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 bool    GraphicImport::IsGraphic() const
 {
     return m_pImpl->bIsGraphic;

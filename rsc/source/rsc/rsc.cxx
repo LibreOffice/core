@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_rsc.hxx"
 /****************************************************************/
-/*                  Include File                                */
+/*                  Include File        */
 /****************************************************************/
 
 #include <stdlib.h>
@@ -50,13 +50,6 @@
 #include <ctype.h>
 #include <errno.h>
 
-#if defined( PM2 ) && defined( ZTC )
-#include <svpm.h>
-#ifndef unlink
-#define unlink( p ) DosDelete( (PSZ)(const char*)p )
-#endif
-#endif
-
 #include <tools/fsys.hxx>
 #include <tools/stream.hxx>
 #include <rscerror.h>
@@ -75,7 +68,10 @@
 #include <vector>
 
 
-using namespace rtl;
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OStringBuffer;
+using ::rtl::OStringToOUString;
 
 /*************** F o r w a r d s *****************************************/
 /*************** G l o b a l e   V a r i a b l e n **********************/
@@ -148,7 +144,7 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
     i = 1;
     while( ppStr && i < (aCmdLine.GetCount() -1) )
     {
-#if OSL_DEBUG_LEVEL > 2
+#if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "CmdLineArg: \"%s\"\n", *ppStr );
 #endif
         if( '-' == **ppStr )
@@ -888,7 +884,7 @@ ERRTYPE RscCompiler::Link()
                 aSysSearchPath.Append( cSearchDelim );
                 aSysSearchPath.Append( aToken );
             }
-#if OSL_DEBUG_LEVEL > 2
+#if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "setting search path for language %s: %s\n", it->aLangName.GetBuffer(), aSysSearchPath.GetBuffer() );
 #endif
             pTC->SetSysSearchPath( aSysSearchPath );
@@ -1133,7 +1129,7 @@ bool RscCompiler::GetImageFilePath( const RscCmdLine::OutputFile& rOutputFile,
             aAbsPath.ToAbs();
             const FileStat aFS( aAbsPath.GetFull() );
 
-#if OSL_DEBUG_LEVEL > 2
+#if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "Searching image: %s\n", ByteString( aRelPath.GetFull(), RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
 #endif
 
@@ -1177,7 +1173,7 @@ bool RscCompiler::GetImageFilePath( const RscCmdLine::OutputFile& rOutputFile,
                     fprintf( pSysListFile, "%s\n", rContext.pCmdLine->substitutePaths( aSysPathStr ).getStr() );
                 }
 
-#if OSL_DEBUG_LEVEL > 2
+#if OSL_DEBUG_LEVEL > 1
                 fprintf( stderr, "ImagePath to add: %s\n", rImagePath.GetBuffer() );
 #endif
             }

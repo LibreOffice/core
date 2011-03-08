@@ -50,7 +50,6 @@
 
 using namespace utl;
 using namespace osl;
-using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::container;
 using namespace com::sun::star::beans;
@@ -60,6 +59,8 @@ using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
 using namespace com::sun::star::registry;
+
+using ::rtl::OUString;
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -656,7 +657,7 @@ uno::Sequence< OUString > LinguProps::getSupportedServiceNames_Static()
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    uno::Sequence< OUString > aSNS( 1 );    // auch mehr als 1 Service moeglich
+    uno::Sequence< OUString > aSNS( 1 );    // more than 1 service possible
     aSNS.getArray()[0] = A2OU( SN_LINGU_PROPERTIES );
     return aSNS;
 }

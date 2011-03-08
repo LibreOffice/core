@@ -175,7 +175,7 @@ OUString SAL_CALL WPGImportFilter::detect( com::sun::star::uno::Sequence< Proper
     if (input)
         delete input;
 
-    if (!sTypeName.equalsAscii(""))
+    if (sTypeName.getLength())
     {
         if ( location == Descriptor.getLength() )
         {

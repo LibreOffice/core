@@ -137,7 +137,7 @@ void ScConflictsListHelper::Transform_Impl( ScChangeActionList& rActionList, ScC
         else
         {
             aItr = rActionList.erase( aItr );
-            DBG_ERROR( "ScConflictsListHelper::Transform_Impl: erased action from conflicts list!" );
+            OSL_FAIL( "ScConflictsListHelper::Transform_Impl: erased action from conflicts list!" );
         }
     }
 }

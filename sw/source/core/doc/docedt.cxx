@@ -347,11 +347,9 @@ void DelFlyInRange( const SwNodeIndex& rMkNdIdx,
 
                 pDoc->DelLayoutFmt( pFmt );
 
-                // --> FME 2004-10-06 #117913# DelLayoutFmt can also
-                // trigger the deletion of objects.
+                // DelLayoutFmt can also trigger the deletion of objects.
                 if( i > rTbl.Count() )
                     i = rTbl.Count();
-                // <--
             }
         }
     }
@@ -1058,11 +1056,9 @@ bool SwDoc::MoveRange( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
         {
             if( pTNd->CanJoinNext())
             {
-                // --> OD 2009-08-20 #i100466#
                 // Always join next, because <pTNd> has to stay as it is.
                 // A join previous from its next would more or less delete <pTNd>
                 pTNd->JoinNext();
-                // <--
                 bRemove = false;
             }
         }
@@ -1248,8 +1244,7 @@ bool SwDoc::MoveNodeRange( SwNodeRange& rRange, SwNodeIndex& rPos,
     return sal_True;
 }
 
-/* #107318# Convert list of ranges of whichIds to a corresponding list
-    of whichIds*/
+// Convert list of ranges of whichIds to a corresponding list of whichIds
 SvUShorts * lcl_RangesToUShorts(USHORT * pRanges)
 {
     SvUShorts * pResult = new SvUShorts();
@@ -1410,7 +1405,7 @@ void lcl_JoinText( SwPaM& rPam, sal_Bool bJoinPrev )
                 pDelNd->FmtToTxtAttr( pTxtNd );
             else
             {
-                /* #107318# This case was missed:
+                /* This case was missed:
 
                    <something></something>   <-- pTxtNd
                    <other>ccc</other>        <-- pDelNd
@@ -1436,8 +1431,7 @@ void lcl_JoinText( SwPaM& rPam, sal_Bool bJoinPrev )
             }
 
             pDoc->CorrRel( aIdx, *rPam.GetPoint(), 0, sal_True );
-            // --> OD 2009-08-20 #i100466#
-            // adjust given <rPam>, if it does not belong to the cursors
+            // #i100466# adjust given <rPam>, if it does not belong to the cursors
             if ( pDelNd == rPam.GetBound( sal_True ).nContent.GetIdxReg() )
             {
                 rPam.GetBound( sal_True ) = SwPosition( SwNodeIndex( *pTxtNd ), SwIndex( pTxtNd ) );
@@ -1446,7 +1440,6 @@ void lcl_JoinText( SwPaM& rPam, sal_Bool bJoinPrev )
             {
                 rPam.GetBound( sal_False ) = SwPosition( SwNodeIndex( *pTxtNd ), SwIndex( pTxtNd ) );
             }
-            // <--
             pTxtNd->JoinNext();
         }
     }
@@ -1578,12 +1571,12 @@ bool SwDoc::DeleteAndJoinImpl( SwPaM & rPam,
 {
     sal_Bool bJoinTxt, bJoinPrev;
     lcl_GetJoinFlags( rPam, bJoinTxt, bJoinPrev );
-    // --> OD 2009-08-20 #i100466#
+    // #i100466#
     if ( bForceJoinNext )
     {
         bJoinPrev = sal_False;
     }
-    // <--
+
     {
         bool const bSuccess( DeleteRangeImpl( rPam ) );
         if (!bSuccess)
@@ -1789,8 +1782,7 @@ bool SwDoc::DeleteRangeImplImpl(SwPaM & rPam)
     return true;
 }
 
-// OD 2009-08-20 #i100466#
-// Add handling of new optional parameter <bForceJoinNext>
+// #i100466# Add handling of new optional parameter <bForceJoinNext>
 bool SwDoc::DeleteAndJoin( SwPaM & rPam,
                            const bool bForceJoinNext )
 {
@@ -1950,12 +1942,11 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                                 uno::Reference< text::XFlatParagraph > xFlatPara = new SwXFlatParagraph( *((SwTxtNode*)pNd), aExpandText, pConversionMap );
 
                                 // get error position of cursor in XFlatParagraph
-                                sal_Int32 nGrammarErrorPosInText;
                                 linguistic2::ProofreadingResult aResult;
                                 sal_Int32 nGrammarErrors;
                                 do
                                 {
-                                    nGrammarErrorPosInText = ModelToViewHelper::ConvertToViewPosition( pConversionMap, nBeginGrammarCheck );
+                                    ModelToViewHelper::ConvertToViewPosition( pConversionMap, nBeginGrammarCheck );
                                     aResult = xGCIterator->checkSentenceAtPosition(
                                             xDoc, xFlatPara, aExpandText, lang::Locale(), nBeginGrammarCheck, -1, -1 );
 

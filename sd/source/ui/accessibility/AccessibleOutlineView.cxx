@@ -111,7 +111,7 @@ AccessibleOutlineView::~AccessibleOutlineView (void)
 
 void AccessibleOutlineView::Init (void)
 {
-    // #105479# Set event source _before_ starting to listen
+    // Set event source _before_ starting to listen
     maTextHelper.SetEventSource(this);
 
     AccessibleDocumentViewBase::Init ();

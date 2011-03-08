@@ -29,8 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
 // INCLUDE ---------------------------------------------------------------
 #include <rtl/ustrbuf.hxx>
 
@@ -56,21 +54,6 @@ ScXMLNamedExpressionsContext::ScXMLNamedExpressionsContext( ScXMLImport& rImport
                                       ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ ) :
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
-/*  sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for( sal_Int16 i=0; i < nAttrCount; ++i )
-    {
-        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        rtl::OUString aLocalName;
-        USHORT nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
-                                            sAttrName, &aLocalName );
-        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
-
-        const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetNamedRangeAttrTokenMap();
-
-        switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
-        {
-        }
-    }*/
     rImport.LockSolarMutex();
 }
 
@@ -175,10 +158,6 @@ SvXMLImportContext *ScXMLNamedRangeContext::CreateChildContext( USHORT nPrefix,
                                             const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )
 {
-/*  const SvXMLTokenMap& rTokenMap = GetScImport().GetTableElemTokenMap();
-    switch( rTokenMap.Get( nPrefix, rLName ) )
-    {
-    }*/
     return new SvXMLImportContext( GetImport(), nPrefix, rLName );
 }
 
@@ -238,10 +217,6 @@ SvXMLImportContext *ScXMLNamedExpressionContext::CreateChildContext( USHORT nPre
                                             const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )
 {
-/*  const SvXMLTokenMap& rTokenMap = GetScImport().GetTableElemTokenMap();
-    switch( rTokenMap.Get( nPrefix, rLName ) )
-    {
-    }*/
     return new SvXMLImportContext( GetImport(), nPrefix, rLName );;
 }
 

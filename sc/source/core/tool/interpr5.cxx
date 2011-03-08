@@ -194,8 +194,10 @@ void ScInterpreter::ScGCD()
                 }
                 break;
                 case svMatrix :
+                case svExternalSingleRef:
+                case svExternalDoubleRef:
                 {
-                    ScMatrixRef pMat = PopMatrix();
+                    ScMatrixRef pMat = GetMatrix();
                     if (pMat)
                     {
                         SCSIZE nC, nR;
@@ -288,8 +290,10 @@ void ScInterpreter:: ScLCM()
                 }
                 break;
                 case svMatrix :
+                case svExternalSingleRef:
+                case svExternalDoubleRef:
                 {
-                    ScMatrixRef pMat = PopMatrix();
+                    ScMatrixRef pMat = GetMatrix();
                     if (pMat)
                     {
                         SCSIZE nC, nR;
@@ -550,6 +554,31 @@ ScMatrixRef ScInterpreter::GetMatrix()
                     pMat->PutString( aStr, 0);
             }
         }
+        break;
+        case svExternalSingleRef:
+        {
+            ScExternalRefCache::TokenRef pToken;
+            PopExternalSingleRef(pToken);
+            if (!pToken)
+            {
+                PopError();
+                SetError( errIllegalArgument);
+                break;
+            }
+            if (pToken->GetType() == svDouble)
+            {
+                pMat = new ScMatrix(1, 1);
+                pMat->PutDouble(pToken->GetDouble(), 0, 0);
+            }
+            else
+            {
+                pMat = new ScMatrix(1, 1);
+                pMat->PutString(pToken->GetString(), 0, 0);
+            }
+        }
+        break;
+        case svExternalDoubleRef:
+            PopExternalDoubleRef(pMat);
         break;
         default:
             PopError();
@@ -968,15 +997,11 @@ void ScInterpreter::ScMatInv()
                             for (SCSIZE j=0; j < nR; ++j)
                             {
                                 double fTmp = pR->GetDouble( j, i);
-#if OSL_DEBUG_LEVEL > 1
                                 fprintf( stderr, "%8.2g  ", fTmp);
-#endif
                                 if (fabs( fTmp - (i == j)) > fInvEpsilon)
                                     SetError( errIllegalArgument);
                             }
-#if OSL_DEBUG_LEVEL > 1
                         fprintf( stderr, "\n%s\n", "");
-#endif
                         }
                     }
 #endif

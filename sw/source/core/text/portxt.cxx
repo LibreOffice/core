@@ -34,9 +34,7 @@
 
 #include <com/sun/star/i18n/ScriptType.hdl>
 #include <hintids.hxx>     // CH_TXTATR
-#include <errhdl.hxx>   // ASSERT
 #include <SwPortionHandler.hxx>
-#include <txtcfg.hxx>
 #include <porlay.hxx>
 #include <inftxt.hxx>
 #include <guess.hxx>    // SwTxtGuess, Zeilenumbruch
@@ -824,17 +822,18 @@ void SwFieldFormPortion::Paint( const SwTxtPaintInfo& rInf ) const
 
     if ( pBM != NULL )
     {
-        if ( pBM->GetFieldname( ).equalsAscii( ODF_FORMCHECKBOX ) )
+        if ( pBM->GetFieldname( ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMCHECKBOX ) ) )
         { // a checkbox...
             ICheckboxFieldmark* pCheckboxFm = dynamic_cast< ICheckboxFieldmark* >(pBM);
             bool checked = pCheckboxFm->IsChecked();
             rInf.DrawCheckBox(*this, checked);
         }
-        else if ( pBM->GetFieldname( ).equalsAscii(  ODF_FORMDROPDOWN ) )
+        else if ( pBM->GetFieldname( ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMDROPDOWN ) ) )
         { // a list...
             rtl::OUString aTxt;
+            getCurrentListIndex( pBM, &aTxt );
             rInf.DrawViewOpt( *this, POR_FLD );
-            rInf.DrawText( aTxt, *this, 0, 0/*aTxt.getLength()*/, false );
+            rInf.DrawText( aTxt, *this, 0, aTxt.getLength(), false );
         }
         else
         {
@@ -854,13 +853,13 @@ sal_Bool SwFieldFormPortion::Format( SwTxtFormatInfo & rInf )
     OSL_ENSURE( pBM != NULL, "Where is my form field bookmark???" );
     if ( pBM != NULL )
     {
-        if ( pBM->GetFieldname( ).equalsAscii( ODF_FORMCHECKBOX ) )
+        if ( pBM->GetFieldname( ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMCHECKBOX ) ) )
         {
             Width( rInf.GetTxtHeight(  ) );
             Height( rInf.GetTxtHeight(  ) );
             SetAscent( rInf.GetAscent(  ) );
         }
-        else if ( pBM->GetFieldname( ).equalsAscii( ODF_FORMDROPDOWN ) )
+        else if ( pBM->GetFieldname( ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMDROPDOWN ) ) )
         {
             ::rtl::OUString aTxt;
             getCurrentListIndex( pBM, &aTxt );

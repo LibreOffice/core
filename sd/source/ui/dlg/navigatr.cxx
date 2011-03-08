@@ -386,7 +386,7 @@ IMPL_LINK( SdNavigatorWin, ClickObjectHdl, void *, EMPTYARG )
                 mpBindings->GetDispatcher()->Execute(
                     SID_NAVIGATOR_OBJECT, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD, &aItem, 0L );
 
-                // #98821# moved here from SetGetFocusHdl. Reset the
+                // moved here from SetGetFocusHdl. Reset the
                 // focus only if something has been selected in the
                 // document.
                 SfxViewShell* pCurSh = SfxViewShell::Current();
@@ -742,7 +742,7 @@ USHORT SdNavigatorWin::GetDragTypeSdResId( NavigatorDragType eDT, BOOL bImage )
                 return( bImage ? TBI_EMBEDDED : STR_DRAGTYPE_EMBEDDED );
         case NAVIGATOR_DRAGTYPE_LINK:
                 return( bImage ? TBI_LINK : STR_DRAGTYPE_LINK );
-        default: DBG_ERROR( "Keine Resource fuer DragType vorhanden!" );
+        default: OSL_FAIL( "Keine Resource fuer DragType vorhanden!" );
     }
     return( 0 );
 }

@@ -701,10 +701,6 @@ bool BackendImpl::PackageImpl::checkDependencies(
                 return true;
             else
                 return false;
-                //throw css::deployment::DeploymentException(
-                //    OUSTR("Extension Manager: User declined the license."),
-                //    static_cast<OWeakObject*>(this),
-                //    Any( css::deployment::LicenseException(OUSTR("User declined the license."), 0, m_name, sLicense)));
         }
         return true;
     } catch (css::ucb::CommandFailedException&) {

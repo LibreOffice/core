@@ -42,7 +42,7 @@ class SwLabItem;
 
 class SwLabPrtPage : public SfxTabPage
 {
-    Printer*      pPrinter;             //Fuer die Schachteinstellug - leider.
+    Printer*      pPrinter;             // for the shaft setting - unfortunately
 
     RadioButton   aPageButton;
     RadioButton   aSingleButton;

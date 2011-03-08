@@ -626,7 +626,7 @@ namespace svxform
                     aValue <<= (sal_Int32)nMinValue;
                 else
                 {
-                    DBG_ERROR( "FormControlFactory::initializeFieldDependentProperties: unexpected property type (MinValue)!" );
+                    OSL_FAIL( "FormControlFactory::initializeFieldDependentProperties: unexpected property type (MinValue)!" );
                 }
                 _rxControlModel->setPropertyValue( FM_PROP_VALUEMIN, aValue );
 
@@ -638,7 +638,7 @@ namespace svxform
                     aValue <<= (sal_Int32)nMaxValue;
                 else
                 {
-                    DBG_ERROR( "FormControlFactory::initializeFieldDependentProperties: unexpected property type (MaxValue)!" );
+                    OSL_FAIL( "FormControlFactory::initializeFieldDependentProperties: unexpected property type (MaxValue)!" );
                 }
                 _rxControlModel->setPropertyValue( FM_PROP_VALUEMAX, aValue );
             }

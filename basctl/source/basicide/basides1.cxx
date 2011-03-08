@@ -598,11 +598,10 @@ void BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
             String aName( rSbxItem.GetName() );
             if ( !m_aCurLibName.Len() || ( aDocument == m_aCurDocument && aLibName == m_aCurLibName ) )
             {
-                IDEBaseWindow* pWin = 0;
                 if ( rSbxItem.GetType() == BASICIDE_TYPE_MODULE )
-                    pWin = FindBasWin( aDocument, aLibName, aName, TRUE );
+                    FindBasWin( aDocument, aLibName, aName, TRUE );
                 else if ( rSbxItem.GetType() == BASICIDE_TYPE_DIALOG )
-                    pWin = FindDlgWin( aDocument, aLibName, aName, TRUE );
+                    FindDlgWin( aDocument, aLibName, aName, TRUE );
             }
         }
         break;

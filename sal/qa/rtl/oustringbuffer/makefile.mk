@@ -25,46 +25,31 @@
 #
 #*************************************************************************
 
-PRJ=..$/..$/..
-INCPRE+= $(PRJ)$/qa$/inc
+PRJ := ..$/..$/..
+PRJNAME := sal
 
-PRJNAME=sal
-TARGET=rtl_oustringbuffer2
+TARGET := qa_rtl_oustringbuffer
 
-ENABLE_EXCEPTIONS=TRUE
+ENABLE_EXCEPTIONS := TRUE
 
-# --- Settings -----------------------------------------------------
+.INCLUDE: settings.mk
 
-.INCLUDE :  settings.mk
 
 CFLAGS+= $(LFS_CFLAGS)
 CXXFLAGS+= $(LFS_CFLAGS)
 
 CFLAGSCXX += $(CPPUNIT_CFLAGS)
 
-# BEGIN ----------------------------------------------------------------
-# auto generated Target:joblist by codegen.pl
-SHL1OBJS=  \
-    $(SLO)$/rtl_OUStringBuffer2.obj
+SHL1TARGET := $(TARGET)
+SHL1OBJS := \
+    $(SLO)$/test_oustringbuffer_utf32.obj \
+    $(SLO)$/test_oustringbuffer_tostring.obj \
+    $(SLO)$/test_oustringbuffer_noadditional.obj
+SHL1IMPLIB := i$(SHL1TARGET)
+SHL1STDLIBS := $(SALLIB) $(CPPUNITLIB)
+SHL1VERSIONMAP := $(PRJ)$/qa$/export.map
+DEF1NAME := $(SHL1TARGET)
 
-SHL1TARGET= rtl_OUStringBuffer2
-SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
-
-SHL1IMPLIB= i$(SHL1TARGET)
-# SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
-
-DEF1NAME    =$(SHL1TARGET)
-# DEF1EXPORTFILE= export.exp
-SHL1VERSIONMAP= $(PRJ)$/qa$/export.map
-# auto generated Target:joblist
-# END ------------------------------------------------------------------
-
-#------------------------------- All object files -------------------------------
-# do this here, so we get right dependencies
-# SLOFILES=$(SHL1OBJS)
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :  target.mk
-.INCLUDE : _cppunit.mk
+.INCLUDE: target.mk
+.INCLUDE: $(PRJ)$/qa$/cppunit_local.mk
 

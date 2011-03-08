@@ -58,7 +58,7 @@
 
 #include "bento.hxx"        // Public header
 
-//#define ASSERT(cond) UT_ASSERT(cond)      // Deleted by  2004-06-16
+//#define ASSERT(cond) UT_ASSERT(cond)
 namespace OpenStormBento
 {
 // String constants

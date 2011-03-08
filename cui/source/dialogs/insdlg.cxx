@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
@@ -367,7 +364,7 @@ short SvInsertOleDlg::Execute()
                 }
                 else
                 {
-                    OSL_ASSERT( "Can not get InteractionHandler!\n" );
+                    OSL_FAIL( "Can not get InteractionHandler!\n" );
                     aMedium.realloc( 1 );
                 }
 
@@ -679,7 +676,7 @@ short SvInsertAppletDialog::Execute()
         }
         catch ( uno::Exception& )
         {
-            DBG_ERROR( "No Applet!" );
+            OSL_FAIL( "No Applet!" );
         }
     }
     else
@@ -729,7 +726,7 @@ short SvInsertAppletDialog::Execute()
             }
             catch ( uno::Exception& )
             {
-                DBG_ERROR( "No Applet!" );
+                OSL_FAIL( "No Applet!" );
             }
         }
     }
@@ -912,7 +909,7 @@ short SfxInsertFloatingFrameDialog::Execute()
         }
         catch ( uno::Exception& )
         {
-            DBG_ERROR( "No IFrame!" );
+            OSL_FAIL( "No IFrame!" );
         }
     }
     else
@@ -999,7 +996,7 @@ short SfxInsertFloatingFrameDialog::Execute()
             }
             catch ( uno::Exception& )
             {
-                DBG_ERROR( "No IFrame!" );
+                OSL_FAIL( "No IFrame!" );
             }
         }
     }

@@ -1153,7 +1153,7 @@ void OAppDetailPageHelper::showPreview( const ::rtl::OUString& _sDataSourceName,
                 m_xFrame = Reference < XFrame > ( getBorderWin().getView()->getORB()->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Frame")) ), UNO_QUERY );
                 m_xFrame->initialize( m_xWindow );
 
-                // work-around for #150518#: no layout manager (and thus no toolbars) in the preview
+                // no layout manager (and thus no toolbars) in the preview
                 // Must be called after initialize ... but before any other call to this frame.
                 // Otherwise frame throws "life time exceptions" as e.g. NON_INITIALIZED
                 Reference< XPropertySet > xFrameProps( m_xFrame, UNO_QUERY_THROW );

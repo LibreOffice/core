@@ -36,22 +36,20 @@ TARGET=hunspell
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=hunspell-1.2.9
-TARFILE_MD5=68dd2e8253d9a7930e9fd50e2d7220d0
+TARFILE_NAME=hunspell-1.3.1
+TARFILE_MD5=9ed97fce60a9a65852402248a6659492
 ADDITIONAL_FILES+=config.h
 
 PATCH_FILES=\
+    hunspell-static.patch \
     hunspell-wntconfig.patch \
-    hunspell-solaris.patch \
-    hunspell-stacksmash.patch \
-    hunspell-valgrind.patch \
-    hunspell-1.2.9-crashfix.patch
+    hunspell-solaris.patch
 
 .IF "$(GUI)"=="UNX"
 
 #relative to CONFIGURE_DIR
 CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) configure
-CONFIGURE_FLAGS= --disable-shared --with-pic
+CONFIGURE_FLAGS= --disable-shared --disable-nls --with-pic
 .IF "$(COMNAME)"=="sunpro5"
 CONFIGURE_FLAGS+= CFLAGS=-xc99=none
 .ENDIF                  # "$(COMNAME)"=="sunpro5"
@@ -81,7 +79,7 @@ PATCH_FILES=\
     hunspell-mingw.patch
 
 CONFIGURE_ACTION=configure
-CONFIGURE_FLAGS= --disable-shared --with-pic LDFLAGS=-Wl,--enable-runtime-pseudo-reloc-v2
+CONFIGURE_FLAGS= --disable-shared --disable-nls --with-pic LDFLAGS=-Wl,--enable-runtime-pseudo-reloc-v2
 BUILD_ACTION=make
 OUT2LIB=$(BUILD_DIR)$/src$/hunspell$/.libs$/libhunspell-1.2.a
 .ELSE
@@ -94,7 +92,8 @@ BUILD_ACTION=cd src/hunspell && dmake
 .ENDIF # "$(GUI)"=="OS2"
 
 OUT2INC= \
-    $(BUILD_DIR)$/src$/hunspell$/*.hxx
+    $(BUILD_DIR)$/src$/hunspell$/*.hxx \
+    $(BUILD_DIR)$/src$/hunspell$/*.h
 
 # --- Targets ------------------------------------------------------
 

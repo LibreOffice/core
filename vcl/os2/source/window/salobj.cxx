@@ -99,7 +99,7 @@ MRESULT EXPENTRY SalSysObjWndProc( HWND hWnd, ULONG nMsg,
     MRESULT     nRet = 0;
     int         bDef = TRUE;
 
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 1
     debug_printf( "SalSysObjWndProc hWnd 0x%x nMsg %d\n", hWnd, nMsg);
 #endif
 
@@ -202,11 +202,6 @@ MRESULT EXPENTRY SalSysObjChildWndProc( HWND hWnd, ULONG nMsg,
     switch( nMsg )
     {
         case WM_ERASEBACKGROUND:
-            // Wegen PlugIn's loeschen wir erstmal den Hintergrund
-/*
-            nRet = (MRESULT)FALSE;
-            bDef = FALSE;
-*/
             break;
         case WM_PAINT:
             {

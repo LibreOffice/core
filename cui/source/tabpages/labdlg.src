@@ -149,8 +149,6 @@ TabPage RID_SVXPAGE_CAPTION
     {
         Pos = MAP_APPFONT ( 6 , 85  ) ;
         Size = MAP_APPFONT ( 42 , 8 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Länge : ~Lõnge */
-        /* ### ACHTUNG: Neuer Text in Resource? ~Länge : ~Lõnge */
         Text [ en-US ] = "~Length" ;
     };
     MetricField MF_LAENGE

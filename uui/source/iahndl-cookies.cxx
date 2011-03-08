@@ -31,7 +31,6 @@
 #include "com/sun/star/task/XInteractionRequest.hpp"
 
 #include "osl/mutex.hxx"
-#include "tools/list.hxx"
 #include "svl/httpcook.hxx"
 #include "vcl/svapp.hxx"
 

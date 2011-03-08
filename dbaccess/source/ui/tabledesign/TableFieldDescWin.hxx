@@ -40,7 +40,7 @@ namespace dbaui
     class OFieldDescription;
     //==================================================================
     // Ableitung von TabPage ist ein Trick von TH,
-    // um Aenderungen der Systemfarben zu bemerken (Bug #53905)
+    // um Aenderungen der Systemfarben zu bemerken
     class OTableFieldDescWin : public TabPage
                                 ,public IClipboardTest
     {

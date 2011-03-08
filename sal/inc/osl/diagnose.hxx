@@ -43,7 +43,7 @@
 #if ! defined(_RTL_INSTANCE_HXX_)
 #include "rtl/instance.hxx"
 #endif
-#include <hash_set>
+#include <boost/unordered_set.hpp>
 #include <functional>
 #include <typeinfo>
 
@@ -96,7 +96,7 @@ struct VoidPtrHash : ::std::unary_function<void const*, ::std::size_t> {
     }
 };
 
-typedef ::std::hash_set<void const*, VoidPtrHash, ::std::equal_to<void const*>,
+typedef ::boost::unordered_set<void const*, VoidPtrHash, ::std::equal_to<void const*>,
                         ::rtl::Allocator<void const*> > VoidPointerSet;
 
 struct ObjectRegistryData {

@@ -69,7 +69,7 @@ published interface XInteractionCookieHandling: com::sun::star::task::XInteracti
         <p>This method should be called before select().
 
         @param ConfirmCookie
-            A cookie that sould come from the sequence of
+            A cookie that should come from the sequence of
             cookies offered by the <type>HandleCookiesRequest</type> and that
             should have a policy of <member>CookiePolicy::CONFIRM</member>.
 

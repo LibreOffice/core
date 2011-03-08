@@ -45,7 +45,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <tools/stream.hxx>
 #include <tools/string.hxx>
-#include <tools/list.hxx>
 #include <svl/lstner.hxx>
 
 #include <tools/globname.hxx>
@@ -97,7 +96,6 @@ class SFX2_DLLPUBLIC SfxMedium : public SvRefBase
     SvGlobalName        aFilterClass;
     SvStream*           pInStream;
     SvStream*           pOutStream;
-//REMOVE        SvStorageRef        aStorage;
     const SfxFilter*    pFilter;
     SfxItemSet*         pSet;
     SfxMedium_Impl*     pImp;
@@ -165,11 +163,7 @@ public:
     void                ReOpen();
     void                CompleteReOpen();
     const String&       GetName() const {return aLogicName;}
-#if defined SINIX && defined GCC && defined C272
-    const INetURLObject& GetURLObject();
-#else
     const INetURLObject& GetURLObject() const;
-#endif
 
     void                CheckFileDate( const ::com::sun::star::util::DateTime& aInitDate );
     sal_Bool            DocNeedsFileDateCheck();
@@ -283,7 +277,6 @@ public:
     SAL_DLLPRIVATE void SetUpdatePickList(sal_Bool);
     SAL_DLLPRIVATE sal_Bool IsUpdatePickList() const;
 
-//REMOVE        void                SetStorage_Impl( SvStorage* pStor );
     SAL_DLLPRIVATE void SetLongName(const String &rName)
                         { aLongName = rName; }
     SAL_DLLPRIVATE const String & GetLongName() const { return aLongName; }

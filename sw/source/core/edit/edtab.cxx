@@ -80,7 +80,7 @@ const SwTable& SwEditShell::InsertTable( const SwInsertTableOptions& rInsTblOpts
         GetDoc()->SplitNode( *pPos, false );
     }
 
-    /* #109161# If called from a shell the adjust item is propagated
+    /* If called from a shell the adjust item is propagated
         from pPos to the new content nodes in the table.
      */
     const SwTable *pTable = GetDoc()->InsertTable( rInsTblOpts, *pPos,
@@ -449,9 +449,8 @@ BOOL SwEditShell::CanMergeTable( BOOL bWithPrev, BOOL* pChkNxtPrv ) const
             const SwTableNode* pChkNd = rNds[ pTblNd->GetIndex() - 1 ]->FindTableNode();
             if( pChkNd && !pChkNd->GetTable().ISA( SwDDETable ) &&
                 bNew == pChkNd->GetTable().IsNewModel() &&
-                // --> FME 2004-09-17 #117418# Consider table in table case
+                // Consider table in table case
                 pChkNd->EndOfSectionIndex() == pTblNd->GetIndex() - 1 )
-                // <--
                 *pChkNxtPrv = TRUE, bRet = TRUE;        // mit Prev ist moeglich
             else
             {
@@ -468,10 +467,9 @@ BOOL SwEditShell::CanMergeTable( BOOL bWithPrev, BOOL* pChkNxtPrv ) const
             if( bWithPrev )
             {
                 pTmpTblNd = rNds[ pTblNd->GetIndex() - 1 ]->FindTableNode();
-                // --> FME 2004-09-17 #117418# Consider table in table case
+                // Consider table in table case
                 if ( pTmpTblNd && pTmpTblNd->EndOfSectionIndex() != pTblNd->GetIndex() - 1 )
                     pTmpTblNd = 0;
-                // <--
             }
             else
                 pTmpTblNd = rNds[ pTblNd->EndOfSectionIndex() + 1 ]->GetTableNode();

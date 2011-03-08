@@ -208,16 +208,7 @@ typedef juint           jsize;
 
 #ifdef HAVE_LONG_LONG
 
-#ifdef OSF1
-
-/* long is default 64-bit on OSF1, -std1 does not allow long long */
-typedef long                  jlong;
-typedef unsigned long         julong;
-#define jlong_MAXINT          0x7fffffffffffffffL
-#define jlong_MININT          0x8000000000000000L
-#define jlong_ZERO            0x0L
-
-#elif (defined(WIN32) || defined(_WIN32))
+#if (defined(WIN32) || defined(_WIN32))
 
 typedef LONGLONG              jlong;
 typedef DWORDLONG             julong;

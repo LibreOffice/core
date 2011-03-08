@@ -139,7 +139,7 @@ bool SvxZoomItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) c
         case MID_VALUESET: rVal <<= (sal_Int16) nValueSet; break;
         case MID_TYPE: rVal <<= (sal_Int16) eType; break;
         default:
-            DBG_ERROR("svx::SvxZoomItem::QueryValue(), Wrong MemberId!");
+            OSL_FAIL("svx::SvxZoomItem::QueryValue(), Wrong MemberId!");
             return false;
     }
 
@@ -222,7 +222,7 @@ bool SvxZoomItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId
         }
 
         default:
-            DBG_ERROR("svx::SvxZoomItem::PutValue(), Wrong MemberId!");
+            OSL_FAIL("svx::SvxZoomItem::PutValue(), Wrong MemberId!");
             return false;
     }
 

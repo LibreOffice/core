@@ -40,7 +40,7 @@
 using ::com::sun::star::lang::Locale;
 using ::com::sun::star::uno::Sequence;
 using ::std::list;
-using ::std::hash_map;
+using ::boost::unordered_map;
 using ::rtl::OUString;
 
 using namespace ::com::sun::star;

@@ -26,13 +26,9 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 #include "optHeaderTabListbox.hxx"
 #include <vcl/svapp.hxx>
 #include <svtools/headbar.hxx>
-
 
 namespace svx
 {

@@ -288,7 +288,7 @@ SchXMLPlotAreaContext::SchXMLPlotAreaContext(
         }
         catch( beans::UnknownPropertyException & )
         {
-            DBG_ERROR( "Property required by service not supported" );
+            OSL_FAIL( "Property required by service not supported" );
         }
     }
 }
@@ -733,7 +733,6 @@ void SchXMLPlotAreaContext::CorrectAxisPositions()
                 {
                     Reference< chart2::XAxis > xMainXAxis = lcl_getAxis( xCooSys, 0, 0 );
                     Reference< chart2::XAxis > xMainYAxis = lcl_getAxis( xCooSys, 1, 0 );
-                    //Reference< chart2::XAxis > xMajorZAxis = lcl_getAxis( xCooSys, 2, 0 );
                     Reference< chart2::XAxis > xSecondaryXAxis = lcl_getAxis( xCooSys, 0, 1 );
                     Reference< chart2::XAxis > xSecondaryYAxis = lcl_getAxis( xCooSys, 1, 1 );
 
@@ -927,7 +926,7 @@ uno::Reference< drawing::XShape > SchXMLAxisContext::getTitleShape()
             break;
         }
         case SCH_XML_AXIS_UNDEF:
-            DBG_ERROR( "Invalid axis" );
+            OSL_FAIL( "Invalid axis" );
             break;
     }
 
@@ -1008,7 +1007,7 @@ void SchXMLAxisContext::CreateGrid( ::rtl::OUString sAutoStyleName,
             }
             break;
         case SCH_XML_AXIS_UNDEF:
-            DBG_ERROR( "Invalid axis" );
+            OSL_FAIL( "Invalid axis" );
             break;
     }
 
@@ -1107,7 +1106,7 @@ uno::Reference< chart2::XAxis > lcl_getAxis( const uno::Reference< frame::XModel
     }
     catch( uno::Exception & )
     {
-        DBG_ERROR( "Couldn't get axis" );
+        OSL_FAIL( "Couldn't get axis" );
     }
 
     return xAxis;
@@ -1163,7 +1162,7 @@ void SchXMLAxisContext::CreateAxis()
                 }
                 catch( beans::UnknownPropertyException & )
                 {
-                    DBG_ERROR( "Couldn't turn on x axis" );
+                    OSL_FAIL( "Couldn't turn on x axis" );
                 }
                 uno::Reference< chart::XAxisXSupplier > xSuppl( mxDiagram, uno::UNO_QUERY );
                 if( xSuppl.is())
@@ -1178,7 +1177,7 @@ void SchXMLAxisContext::CreateAxis()
                 }
                 catch( beans::UnknownPropertyException & )
                 {
-                    DBG_ERROR( "Couldn't turn on second x axis" );
+                    OSL_FAIL( "Couldn't turn on second x axis" );
                 }
                 uno::Reference< chart::XTwoAxisXSupplier > xSuppl( mxDiagram, uno::UNO_QUERY );
                 if( xSuppl.is())
@@ -1196,7 +1195,7 @@ void SchXMLAxisContext::CreateAxis()
                 }
                 catch( beans::UnknownPropertyException & )
                 {
-                    DBG_ERROR( "Couldn't turn on y axis" );
+                    OSL_FAIL( "Couldn't turn on y axis" );
                 }
                 uno::Reference< chart::XAxisYSupplier > xSuppl( mxDiagram, uno::UNO_QUERY );
                 if( xSuppl.is())
@@ -1214,7 +1213,7 @@ void SchXMLAxisContext::CreateAxis()
                         }
                         catch( beans::UnknownPropertyException & )
                         {
-                            DBG_ERROR( "Couldn't turn on x axis" );
+                            OSL_FAIL( "Couldn't turn on x axis" );
                         }
                     }
                 }
@@ -1228,7 +1227,7 @@ void SchXMLAxisContext::CreateAxis()
                 }
                 catch( beans::UnknownPropertyException & )
                 {
-                    DBG_ERROR( "Couldn't turn on second y axis" );
+                    OSL_FAIL( "Couldn't turn on second y axis" );
                 }
                 uno::Reference< chart::XTwoAxisYSupplier > xSuppl( mxDiagram, uno::UNO_QUERY );
                 if( xSuppl.is())
@@ -1247,7 +1246,7 @@ void SchXMLAxisContext::CreateAxis()
                 }
                 catch( beans::UnknownPropertyException & )
                 {
-                    DBG_ERROR( "Couldn't turn on z axis" );
+                    OSL_FAIL( "Couldn't turn on z axis" );
                 }
                 if( bSettingZAxisSuccedded )
                 {
@@ -1405,7 +1404,7 @@ void SchXMLAxisContext::SetAxisTitle()
                         }
                         catch( beans::UnknownPropertyException & )
                         {
-                            DBG_ERROR( "Property String for Title not available" );
+                            OSL_FAIL( "Property String for Title not available" );
                         }
                     }
                 }
@@ -1427,7 +1426,7 @@ void SchXMLAxisContext::SetAxisTitle()
                         }
                         catch( beans::UnknownPropertyException & )
                         {
-                            DBG_ERROR( "Property String for Title not available" );
+                            OSL_FAIL( "Property String for Title not available" );
                         }
                     }
                 }
@@ -1452,7 +1451,7 @@ void SchXMLAxisContext::SetAxisTitle()
                         }
                         catch( beans::UnknownPropertyException & )
                         {
-                                DBG_ERROR( "Property String for Title not available" );
+                                OSL_FAIL( "Property String for Title not available" );
                         }
                     }
                 }
@@ -1474,7 +1473,7 @@ void SchXMLAxisContext::SetAxisTitle()
                         }
                         catch( beans::UnknownPropertyException & )
                         {
-                            DBG_ERROR( "Property String for Title not available" );
+                            OSL_FAIL( "Property String for Title not available" );
                         }
                     }
                 }
@@ -1498,7 +1497,7 @@ void SchXMLAxisContext::SetAxisTitle()
                         }
                         catch( beans::UnknownPropertyException & )
                         {
-                            DBG_ERROR( "Property String for Title not available" );
+                            OSL_FAIL( "Property String for Title not available" );
                         }
                     }
                 }
@@ -1668,7 +1667,6 @@ void SchXMLCategoriesContext::StartElement( const uno::Reference< xml::sax::XAtt
         {
             uno::Reference< chart2::XChartDocument > xNewDoc( GetImport().GetModel(), uno::UNO_QUERY );
             mrAddress = xAttrList->getValueByIndex( i );
-            // lcl_ConvertRange( xAttrList->getValueByIndex( i ), xNewDoc );
         }
     }
 }

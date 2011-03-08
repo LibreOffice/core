@@ -183,7 +183,7 @@ void BibPosListener::cursorMoved(const lang::EventObject& /*aEvent*/) throw( uno
     catch(Exception& rEx)
     {
         (void) rEx; // make compiler happy
-        DBG_ERROR("BibPosListener::positioned: something went wrong !");
+        OSL_FAIL("BibPosListener::positioned: something went wrong !");
     }
 }
 
@@ -559,7 +559,6 @@ uno::Reference< awt::XControlModel >  BibGeneralPage::AddXControl(
                     xCtrWin->setVisible( sal_True );
                     xControl->setDesignMode( sal_True );
                         // initially switch on the desing mode - switch it off _after_ loading the form
-                        // 17.10.2001 - 93107 - frank.schoenheit@sun.com
 
                     xCtrWin->setPosSize(rPos.X(), rPos.Y(), rSize.Width(),
                         rSize.Height(), awt::PosSize::POSSIZE);
@@ -570,7 +569,7 @@ uno::Reference< awt::XControlModel >  BibGeneralPage::AddXControl(
     catch(Exception& rEx)
     {
         (void) rEx; // make compiler happy
-        DBG_ERROR("BibGeneralPage::AddXControl: something went wrong !");
+        OSL_FAIL("BibGeneralPage::AddXControl: something went wrong !");
     }
     return xCtrModel;
 }

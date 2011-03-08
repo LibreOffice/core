@@ -233,7 +233,7 @@ executeQuery (EBook* pBook, EBookQuery* pQuery, GList **ppList,
     {
         rtl::OString aUser( getUserName( pBook ) );
         const char *pAuth = e_source_get_property( pSource, "auth" );
-        bAuthSuccess = e_book_authenticate_user( pBook, aUser, rPassword, pAuth, pError );
+        bAuthSuccess = e_book_authenticate_user( pBook, aUser.getStr(), rPassword.getStr(), pAuth, pError );
     }
 
     if (bAuthSuccess)
@@ -517,7 +517,7 @@ void OEvoabResultSet::construct( const QueryData& _rData )
 {
     ENSURE_OR_THROW( _rData.getQuery(), "internal error: no EBookQuery" );
 
-    EBook *pBook = openBook( ::rtl::OUStringToOString( _rData.sTable, RTL_TEXTENCODING_UTF8 ) );
+    EBook *pBook = openBook(::rtl::OUStringToOString(_rData.sTable, RTL_TEXTENCODING_UTF8).getStr());
     if ( !pBook )
         m_pConnection->throwGenericSQLException( STR_CANNOT_OPEN_BOOK, *this );
 

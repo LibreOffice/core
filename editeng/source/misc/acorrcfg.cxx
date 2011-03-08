@@ -40,16 +40,13 @@
 #include <com/sun/star/uno/Sequence.hxx>
 
 using namespace utl;
-using namespace rtl;
 using namespace com::sun::star::uno;
+
+using ::rtl::OUString;
 
 #define C2U(cChar) OUString::createFromAscii(cChar)
 
 static SvxAutoCorrCfg* pAutoCorrCfg = 0;
-
-/*--------------------------------------------------------------------
-    Beschreibung:   Ctor Dtor
- --------------------------------------------------------------------*/
 
 SvxAutoCorrCfg::SvxAutoCorrCfg() :
     aBaseConfig(*this),
@@ -138,7 +135,7 @@ void SvxBaseAutoCorrCfg::Load(sal_Bool bInit)
     DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
     {
-        long nFlags = 0;        // default alles aus
+        long nFlags = 0;        // default all off
         sal_Int32 nTemp = 0;
         for(int nProp = 0; nProp < aNames.getLength(); nProp++)
         {

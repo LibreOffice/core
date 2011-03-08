@@ -62,7 +62,7 @@
 #include <cppuhelper/propshlp.hxx>
 #include <osl/diagnose.h>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 namespace dbaccess
 {
@@ -157,7 +157,7 @@ namespace dbaccess
     //= general columns map, could be used for readonly access
     //= no appending and dropping is supported
     //============================================================
-    typedef ::std::hash_map<rtl::OUString, OColumn*, ::comphelper::UStringMixHash, ::comphelper::UStringMixEqual> OColumnMap;
+    typedef ::boost::unordered_map<rtl::OUString, OColumn*, ::comphelper::UStringMixHash, ::comphelper::UStringMixEqual> OColumnMap;
     typedef ::std::vector<OColumn*> OColumnArray;
 
     class OContainerMediator;

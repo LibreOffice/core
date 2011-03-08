@@ -221,7 +221,7 @@ void ScSpellDialogChildWindow::Init()
     }
 
     mbOldIdleDisabled = mpDoc->IsIdleDisabled();
-    mpDoc->DisableIdle( TRUE );   // #42726# stop online spelling
+    mpDoc->DisableIdle( TRUE );   // stop online spelling
 
     // *** create Undo/Redo documents *** -------------------------------------
 

@@ -69,7 +69,7 @@ const com::sun::star::uno::Type CppuType_String       = ::getCppuType((const ::r
 // namespace directives
 //------------------------------------------------------------------------
 
-using namespace rtl;
+using ::rtl::OUString;
 using namespace osl;
 using namespace cppu;
 using namespace std;

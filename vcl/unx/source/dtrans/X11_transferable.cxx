@@ -43,10 +43,10 @@ using namespace com::sun::star::io;
 using namespace com::sun::star::uno;
 using namespace cppu;
 using namespace osl;
-using namespace rtl;
-
 
 using namespace x11;
+
+using ::rtl::OUString;
 
 
 X11Transferable::X11Transferable(

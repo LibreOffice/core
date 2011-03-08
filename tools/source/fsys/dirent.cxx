@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_tools.hxx"
 
-
 #if !defined UNX
 #include <io.h>
 #include <process.h>
@@ -47,7 +46,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <tools/debug.hxx>
-#include <tools/list.hxx>
 #include "comdep.hxx"
 #include <tools/fsys.hxx>
 #define _TOOLS_HXX
@@ -65,7 +63,8 @@
 
 
 using namespace osl;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 int ApiRet2ToSolarError_Impl( int nApiRet );
 
@@ -927,28 +926,6 @@ DirEntry* DirEntry::ImpGetTopPtr()
 
 /*************************************************************************
 |*
-|*    DirEntry::ImpGetPreTopPtr()
-|*
-|*    Beschreibung      liefert einen Pointer auf den vorletzten Entry
-|*
-*************************************************************************/
-
-DirEntry* DirEntry::ImpGetPreTopPtr()
-{
-    DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
-
-    DirEntry *pTemp = this;
-    if ( pTemp->pParent )
-    {
-        while ( pTemp->pParent->pParent )
-            pTemp = pTemp->pParent;
-    }
-
-    return pTemp;
-}
-
-/*************************************************************************
-|*
 |*    DirEntry::ImpChangeParent()
 |*
 *************************************************************************/
@@ -1409,7 +1386,7 @@ DirEntry& DirEntry::operator=( const DirEntry& rEntry )
     if ( this == &rEntry )
         return *this;
     if ( rEntry.nError != FSYS_ERR_OK ) {
-        DBG_ERROR("Zuweisung mit invalidem DirEntry");
+        OSL_FAIL("Zuweisung mit invalidem DirEntry");
         nError = rEntry.nError;
         return *this;
     }

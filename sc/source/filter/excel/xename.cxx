@@ -382,7 +382,7 @@ sal_uInt16 XclExpNameManagerImpl::InsertName( USHORT nScNameIdx )
 {
     sal_uInt16 nNameIdx = FindNameIdx( maNameMap, nScNameIdx );
     if( nNameIdx == 0 )
-        if( const ScRangeData* pRangeData = GetNamedRanges().FindIndex( nScNameIdx ) )
+        if( const ScRangeData* pRangeData = GetNamedRanges().findByIndex( nScNameIdx ) )
             nNameIdx = CreateName( *pRangeData );
     return nNameIdx;
 }
@@ -613,7 +613,7 @@ void XclExpNameManagerImpl::CreateBuiltInNames()
     ScDocument& rDoc = GetDoc();
     XclExpTabInfo& rTabInfo = GetTabInfo();
 
-    /*  #i2394# #100489# built-in defined names must be sorted by the name of the
+    /*  #i2394# built-in defined names must be sorted by the name of the
         containing sheet. Example: SheetA!Print_Range must be stored *before*
         SheetB!Print_Range, regardless of the position of SheetA in the document! */
     for( SCTAB nScTabIdx = 0, nScTabCount = rTabInfo.GetScTabCount(); nScTabIdx < nScTabCount; ++nScTabIdx )
@@ -672,13 +672,12 @@ void XclExpNameManagerImpl::CreateBuiltInNames()
 void XclExpNameManagerImpl::CreateUserNames()
 {
     const ScRangeName& rNamedRanges = GetNamedRanges();
-    for( USHORT nNameIdx = 0, nNameCount = rNamedRanges.GetCount(); nNameIdx < nNameCount; ++nNameIdx )
+    ScRangeName::const_iterator itr = rNamedRanges.begin(), itrEnd = rNamedRanges.end();
+    for (; itr != itrEnd; ++itr)
     {
-        const ScRangeData* pRangeData = rNamedRanges[ nNameIdx ];
-        DBG_ASSERT( rNamedRanges[ nNameIdx ], "XclExpNameManagerImpl::CreateUserNames - missing defined name" );
         // skip definitions of shared formulas
-        if( pRangeData && !pRangeData->HasType( RT_SHARED ) && !FindNameIdx( maNameMap, pRangeData->GetIndex() ) )
-            CreateName( *pRangeData );
+        if (!itr->HasType(RT_SHARED) && !FindNameIdx(maNameMap, itr->GetIndex()))
+            CreateName(*itr);
     }
 }
 

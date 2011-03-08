@@ -26,11 +26,9 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 #define _SVSTDARR_STRINGSISORTDTOR
 #define _SVSTDARR_STRINGSDTOR
+
 #include <svl/svstdarr.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/field.hxx>
@@ -2127,7 +2125,6 @@ IMPL_LINK( OfaQuoteTabPage, QuoteHdl, PushButton*, pBtn )
                         LANGUAGE_ENGLISH_US, DEFAULTFONT_FLAGS_ONLYONE, 0 ));
     pMap->SetText(nMode < SGL_END ? sStartQuoteDlg  :  sEndQuoteDlg );
     sal_UCS4 cDlg;
-    //The two lines below are added by BerryJia for Bug95846 Time:2002-8-13 15:50
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
     LanguageType eLang = Application::GetSettings().GetLanguage();
     switch( nMode )
@@ -2135,25 +2132,25 @@ IMPL_LINK( OfaQuoteTabPage, QuoteHdl, PushButton*, pBtn )
         case SGL_START:
             cDlg = cSglStartQuote;
             if(cDlg == 0)
-                cDlg = pAutoCorrect->GetQuote('\'',TRUE,eLang);   //add by BerryJia for Bug95846 Time:2002-8-13 15:50
+                cDlg = pAutoCorrect->GetQuote('\'',TRUE,eLang);
         break;
         case SGL_END:
             cDlg = cSglEndQuote;
             if(cDlg == 0)
-                cDlg = pAutoCorrect->GetQuote('\'',FALSE,eLang);  //add by BerryJia for Bug95846 Time:2002-8-13 15:50
+                cDlg = pAutoCorrect->GetQuote('\'',FALSE,eLang);
         break;
         case DBL_START:
             cDlg = cStartQuote;
             if(cDlg == 0)
-                cDlg = pAutoCorrect->GetQuote('\"',TRUE,eLang);   //add by BerryJia for Bug95846 Time:2002-8-13 15:50
+                cDlg = pAutoCorrect->GetQuote('\"',TRUE,eLang);
         break;
         case DBL_END:
             cDlg = cEndQuote;
             if(cDlg == 0)
-                cDlg = pAutoCorrect->GetQuote('\"',FALSE,eLang);  //add by BerryJia for Bug95846 Time:2002-8-13 15:50
+                cDlg = pAutoCorrect->GetQuote('\"',FALSE,eLang);
         break;
         default:
-            DBG_ERROR("svx::OfaQuoteTabPage::QuoteHdl(), how to initialize cDlg?" );
+            OSL_FAIL("svx::OfaQuoteTabPage::QuoteHdl(), how to initialize cDlg?" );
             cDlg = 0;
             break;
 

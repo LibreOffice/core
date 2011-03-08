@@ -59,8 +59,6 @@ $(SYSTEXTDOCS) : $(MISC)$/readme_text.xsl
     --stringparam os1 $(OS)	--stringparam gui1 $(GUI)	--stringparam com1  $(COM) \
     --stringparam cp1 $(CPUNAME)	--stringparam type text	--stringparam lang1 $(@:b:s/readme_//:s/README_//) \
     $<	$(MERGEDXRM)
-    fold -s -w 75 < $@ > $@.new
-    mv $@.new $@
 
 .IF "$(GUI)"=="WNT"
     $(PERL) -pi -e 's/\n/\r\n/' $@

@@ -257,7 +257,7 @@ class ConfigurationAccess_WindowState : // interfaces
         sal_Bool                  impl_initializeConfigAccess();
 
     private:
-        typedef ::std::hash_map< ::rtl::OUString,
+        typedef ::boost::unordered_map< ::rtl::OUString,
                                  WindowStateInfo,
                                  OUStringHashCode,
                                  ::std::equal_to< ::rtl::OUString > > ResourceURLToInfoCache;

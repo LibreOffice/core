@@ -684,7 +684,6 @@ void ViewShell::PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintDat
             pDoc->GetRootFrm()->Lower()->InvalidateSize();
         }
 
-        // --> FME 2005-02-10 #119474#
         // CalcPagesForPrint() should not be necessary here. The pages in the
         // visible area will be formatted in SwRootFrm::Paint().
         // Removing this gives us a performance gain during saving the
@@ -692,7 +691,6 @@ void ViewShell::PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintDat
         // formatting of the document.
         // Seiten fuers Drucken formatieren
         // pSh->CalcPagesForPrint( SHRT_MAX );
-        // <--
         pOleOut->Push( PUSH_CLIPREGION );
         pOleOut->IntersectClipRegion( aSwRect.SVRect() );
         pSh->GetLayout()->Paint( aSwRect );

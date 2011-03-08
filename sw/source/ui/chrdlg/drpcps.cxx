@@ -171,7 +171,7 @@ inline void SwDropCapsPict::InitPrinter( void )
 }
 
 /****************************************************************************
-Default-String aus Zeichenanzahl erzeugen (A, AB, ABC, ...)
+ Create Default-String from character-count (A, AB, ABC, ...)
 ****************************************************************************/
 
 
@@ -230,7 +230,7 @@ void SwDropCapsPict::UpdatePaintSettings( void )
         SwDropCapsPage* pPage = ( SwDropCapsPage* ) GetParent();
         if (!pPage->aTemplateBox.GetSelectEntryPos())
         {
-            // Font an Absatzanfang erfragen
+            // query the Font at paragraph's beginning
             pPage->rSh.SttCrsrMove();
             pPage->rSh.Push();
             pPage->rSh.ClearMark();
@@ -251,7 +251,7 @@ void SwDropCapsPict::UpdatePaintSettings( void )
         }
         else
         {
-            // Font an Zeichenvorlage erfragen
+            // query Font at character template
             SwCharFmt *pFmt = pPage->rSh.GetCharStyle(
                                     pPage->aTemplateBox.GetSelectEntry(),
                                     SwWrtShell::GETSTYLE_CREATEANY );
@@ -325,7 +325,7 @@ void  SwDropCapsPict::Paint(const Rectangle &/*rRect*/)
     for (USHORT i = 0; i < LINES; ++i)
         DrawRect(Rectangle(Point(BORDER, nY0 + i * mnTotLineH), Size(aOutputSizePixel.Width() - 2 * BORDER, mnLineH)));
 
-    // Texthintergrund mit Abstand (240 twips ~ 1 Zeilenhoehe)
+    // Text background with gap (240 twips ~ 1 line height)
     ULONG lDistance = mnDistance;
     USHORT nDistW = (USHORT) (ULONG) (((lDistance * 100) / 240) * mnTotLineH) / 100;
     SetFillColor( maBackColor );
@@ -335,7 +335,7 @@ void  SwDropCapsPict::Paint(const Rectangle &/*rRect*/)
         aTextSize.Width() += nDistW;
         DrawRect( Rectangle( Point( BORDER, nY0 ), aTextSize ) );
 
-        // Text zeichnen
+        // draw Text
         DrawPrev( Point( BORDER, nY0 - mnLeading ) );
     }
 
@@ -567,7 +567,7 @@ SwDropCapsPage::SwDropCapsPage(Window *pParent, const SfxItemSet &rSet) :
     USHORT nHtmlMode = ::GetHtmlMode((const SwDocShell*)SfxObjectShell::Current());
     bHtmlMode = nHtmlMode & HTMLMODE_ON ? TRUE : FALSE;
 
-    //Im Vorlagendialog kann der Text nicht beeinflusst werden
+    // In the template dialog the text is not influenceable
     aTextText.Enable( !bFormat );
     aTextEdit.Enable( !bFormat );
 
@@ -627,7 +627,7 @@ Page: Reset-Overload
 
 void  SwDropCapsPage::Reset(const SfxItemSet &rSet)
 {
-    // Zeichen, Zeilen, Abstand und Text
+    // Characters, lines, gap and text
     SwFmtDrop aFmtDrop((SwFmtDrop &) rSet.Get(RES_PARATR_DROP));
     if (aFmtDrop.GetLines() > 1)
     {
@@ -674,7 +674,7 @@ void  SwDropCapsPage::Reset(const SfxItemSet &rSet)
 }
 
 /****************************************************************************
-Page: Click-Handler der CheckBox
+Page: CheckBox's Click-Handler
 ****************************************************************************/
 
 
@@ -709,7 +709,7 @@ IMPL_LINK( SwDropCapsPage, ClickHdl, Button *, EMPTYARG )
 }
 
 /****************************************************************************
-Page: Click-Handler der CheckBox
+Page: CheckBox's Click-Handler
 ****************************************************************************/
 
 
@@ -725,7 +725,7 @@ IMPL_LINK( SwDropCapsPage, WholeWordHdl, CheckBox *, EMPTYARG )
 }
 
 /****************************************************************************
-Page: Modify-Handler der SpinFields
+Page: SpinFields' Modify-Handler
 ****************************************************************************/
 
 
@@ -733,7 +733,7 @@ IMPL_LINK( SwDropCapsPage, ModifyHdl, Edit *, pEdit )
 {
     String sPreview;
 
-    // Ggf. Text setzen
+    // set text if applicable
     if (pEdit == &aDropCapsField)
     {
         USHORT nVal;
@@ -763,7 +763,7 @@ IMPL_LINK( SwDropCapsPage, ModifyHdl, Edit *, pEdit )
         if (bSetText)
             aTextEdit.SetText(sPreview);
     }
-    else if (pEdit == &aTextEdit)   // Ggf. Anzahl setzen
+    else if (pEdit == &aTextEdit)   // set quantity if applicable
     {
         USHORT nTmp = aTextEdit.GetText().Len();
         aDropCapsField.SetValue(Max((USHORT)1, nTmp));
@@ -771,7 +771,7 @@ IMPL_LINK( SwDropCapsPage, ModifyHdl, Edit *, pEdit )
         sPreview = aTextEdit.GetText().Copy(0, nTmp);
     }
 
-    // Bild anpassen
+    // adjust image
     if (pEdit == &aDropCapsField || pEdit == &aTextEdit)
         pPict->SetText (sPreview);
     else if (pEdit == &aLinesField)
@@ -785,7 +785,7 @@ IMPL_LINK( SwDropCapsPage, ModifyHdl, Edit *, pEdit )
 }
 
 /****************************************************************************
-Page: Select-Handler der Template-Box.
+Page: Template-Box' Select-Handler.
 *****************************************************************************/
 
 
@@ -811,13 +811,13 @@ void SwDropCapsPage::FillSet( SfxItemSet &rSet )
         BOOL bOn = aDropCapsBox.IsChecked();
         if(bOn)
         {
-            // Anzahl, Zeilen, Abstand
+            // quantity, lines, gap
             aFmt.GetChars()     = (BYTE) aDropCapsField.GetValue();
             aFmt.GetLines()     = (BYTE) aLinesField.GetValue();
             aFmt.GetDistance()  = (USHORT) aDistanceField.Denormalize(aDistanceField.GetValue(FUNIT_TWIP));
             aFmt.GetWholeWord() = aWholeWordCB.IsChecked();
 
-            // Vorlage
+            // template
             if (aTemplateBox.GetSelectEntryPos())
                 aFmt.SetCharFmt(rSh.GetCharStyle(aTemplateBox.GetSelectEntry()));
         }
@@ -828,14 +828,14 @@ void SwDropCapsPage::FillSet( SfxItemSet &rSet )
             aFmt.GetDistance() = 0;
         }
 
-        // Attribute setzen
+        // set attributes
         const SfxPoolItem* pOldItem;
         if(0 == (pOldItem = GetOldItem( rSet, FN_FORMAT_DROPCAPS )) ||
                     aFmt != *pOldItem )
             rSet.Put(aFmt);
 
-        // Harte Textformatierung
-        // Bug 24974: In Gestalter/Vorlagenkatoplog macht das keinen Sinn!!
+        // hard text formatting
+        // Bug 24974: in designer/template catalog this doesn't make sense!!
         if( !bFormat && aDropCapsBox.IsChecked() )
         {
             String sText(aTextEdit.GetText());

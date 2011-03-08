@@ -380,6 +380,7 @@ StgAvlIterator::StgAvlIterator( StgAvlNode* p )
 {
     pRoot = p;
     nCount = 0;
+    nCur = 0;
     if( p )
         p->StgEnum( nCount );
 }

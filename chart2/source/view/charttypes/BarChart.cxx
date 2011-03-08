@@ -191,7 +191,7 @@ awt::Point BarChart::getLabelScreenPositionAndAlignment(
             {
                 fY -= (fScaledUpperYValue-fScaledLowerYValue)/2.0;
                 rAlignment = LABEL_ALIGN_CENTER;
-                DBG_ERROR( "top label placement is not really supported by horizontal bar charts" );
+                OSL_FAIL( "top label placement is not really supported by horizontal bar charts" );
             }
         }
         break;
@@ -208,7 +208,7 @@ awt::Point BarChart::getLabelScreenPositionAndAlignment(
             {
                 fY -= (fScaledUpperYValue-fScaledLowerYValue)/2.0;
                 rAlignment = LABEL_ALIGN_CENTER;
-                DBG_ERROR( "bottom label placement is not supported by horizontal bar charts" );
+                OSL_FAIL( "bottom label placement is not supported by horizontal bar charts" );
             }
         }
         break;
@@ -225,7 +225,7 @@ awt::Point BarChart::getLabelScreenPositionAndAlignment(
             {
                 fY -= (fScaledUpperYValue-fScaledLowerYValue)/2.0;
                 rAlignment = LABEL_ALIGN_CENTER;
-                DBG_ERROR( "left label placement is not supported by column charts" );
+                OSL_FAIL( "left label placement is not supported by column charts" );
             }
         }
         break;
@@ -242,7 +242,7 @@ awt::Point BarChart::getLabelScreenPositionAndAlignment(
             {
                 fY -= (fScaledUpperYValue-fScaledLowerYValue)/2.0;
                 rAlignment = LABEL_ALIGN_CENTER;
-                DBG_ERROR( "right label placement is not supported by column charts" );
+                OSL_FAIL( "right label placement is not supported by column charts" );
             }
         }
         break;
@@ -286,7 +286,7 @@ awt::Point BarChart::getLabelScreenPositionAndAlignment(
             fDepth = fabs(fScaledUpperBarDepth-fScaledLowerBarDepth)/2.0;
         break;
     default:
-        DBG_ERROR("this label alignment is not implemented yet");
+        OSL_FAIL("this label alignment is not implemented yet");
 
         break;
     }

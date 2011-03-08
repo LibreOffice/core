@@ -33,8 +33,6 @@
 #include <vector>
 #include "attributes.hxx"
 
-//using namespace ::std;
-
 struct TagAttribute
 {
     TagAttribute(){}

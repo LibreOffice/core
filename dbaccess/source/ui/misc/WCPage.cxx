@@ -304,7 +304,6 @@ sal_Bool OCopyTable::checkAppendData()
         xTables->getByName( m_edTableName.GetText() ) >>= xTable;
         ObjectCopySource aTableCopySource( m_pParent->m_xDestConnection, xTable );
         m_pParent->loadData( aTableCopySource, m_pParent->m_vDestColumns, m_pParent->m_aDestVec );
-        // #90027#
         const ODatabaseExport::TColumnVector* pDestColumns          = m_pParent->getDestVector();
         ODatabaseExport::TColumnVector::const_iterator aDestIter    = pDestColumns->begin();
         ODatabaseExport::TColumnVector::const_iterator aDestEnd     = pDestColumns->end();

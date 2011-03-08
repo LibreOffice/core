@@ -60,13 +60,16 @@
 
 using namespace utl;
 using namespace osl;
-using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
+
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+using ::rtl::OString;
 
 // XML-header of SPELLML queries
 #define SPELLML_HEADER "<?xml?>"
@@ -585,7 +588,7 @@ void SAL_CALL
             pPropHelper->AddAsPropListener();   //! after a reference is established
         }
         else {
-            DBG_ERROR( "wrong number of arguments in sequence" );
+            OSL_FAIL( "wrong number of arguments in sequence" );
         }
 
     }

@@ -35,11 +35,12 @@
 #include <xmloff/xmlcnimp.hxx>
 #include "unoatrcn.hxx"
 
-using namespace rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::xml;
+
+using ::rtl::OUString;
 
 typedef ::rtl::OUString *OUStringPtr;
 SV_DECL_PTRARR_DEL( SvXMLAttrContainerData_Impl, OUStringPtr, 5, 5 )
@@ -196,7 +197,7 @@ void SvXMLAttrContainerData::Remove( USHORT i )
     }
     else
     {
-        DBG_ERROR( "illegal index" );
+        OSL_FAIL( "illegal index" );
     }
 }
 

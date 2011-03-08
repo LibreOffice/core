@@ -31,6 +31,7 @@ PRJNAME = $(TARGET)
 PACKAGE = complex$/accelerators
 
 # --- Settings -----------------------------------------------------
+
 .INCLUDE: settings.mk
 
 #----- compile .java files -----------------------------------------

@@ -848,7 +848,6 @@ BOOL SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
                     const SvxBrushItem *pBrushItem =
                         (const SvxBrushItem *)pItem;
 
-                    /// OD 02.09.2002 #99657#
                     /// Body has a background color, if it is not "no fill"/"auto fill"
                     if( pBrushItem->GetColor() != COL_TRANSPARENT )
                         bBodyBGColorSet = TRUE;
@@ -1016,12 +1015,8 @@ BOOL SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
     {
         if( !pNext ||
             (CSS1_SELTYPE_PSEUDO==eNextType &&
-#ifdef FULL_FIRST_LETTER
-             pNext->GetString().EqualsIgnoreCaseAscii(sCSS1_first_letter)) )
-#else
              pNext->GetString().EqualsIgnoreCaseAscii(sCSS1_first_letter) &&
              SVX_ADJUST_LEFT == rPropInfo.eFloat) )
-#endif
         {
             // Entweder kein zusammengesetzter Selektor oder
             // ein X:first-line { float: left; ... }
@@ -1547,11 +1542,7 @@ void SwCSS1Parser::FillDropCap( SwFmtDrop& rDrop,
 
     // Bei harter Attributierung (pName==0) koennen wir aufhoehren, wenn
     // das Initial nur ueber eine Zeile geht.
-#ifdef FULL_FIRST_LETTER
-    if( nLines<=1 && !pName )
-#else
     if( nLines<=1 )
-#endif
         return;
 
     rDrop.GetLines() = nLines;

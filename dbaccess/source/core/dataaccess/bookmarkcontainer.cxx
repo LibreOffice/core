@@ -36,6 +36,7 @@
 #include "core_resource.hrc"
 
 #include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <comphelper/sequence.hxx>
 #include <comphelper/enumhelper.hxx>
 #include <comphelper/extract.hxx>
@@ -329,7 +330,7 @@ void OBookmarkContainer::implRemove(const ::rtl::OUString& _rName)
 
     if (m_aBookmarks.end() == aMapPos)
     {
-        DBG_ERROR("OBookmarkContainer::implRemove: inconsistence!");
+        OSL_FAIL("OBookmarkContainer::implRemove: inconsistence!");
         return;
     }
 
@@ -348,7 +349,7 @@ void OBookmarkContainer::implAppend(const ::rtl::OUString& _rName, const ::rtl::
 void OBookmarkContainer::implReplace(const ::rtl::OUString& _rName, const ::rtl::OUString& _rNewLink)
 {
     MutexGuard aGuard(m_rMutex);
-    DBG_ASSERT(checkExistence(_rName), "OBookmarkContainer::implReplace : invalid name !");
+    OSL_ENSURE(checkExistence(_rName), "OBookmarkContainer::implReplace : invalid name !");
 
     m_aBookmarks[_rName] = _rNewLink;
 }

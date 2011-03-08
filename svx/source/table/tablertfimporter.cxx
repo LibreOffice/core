@@ -309,7 +309,7 @@ void SdrTableRTFParser::FillTable()
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR("sdr::table::SdrTableRTFParser::InsertCell(), exception caught!" );
+        OSL_FAIL("sdr::table::SdrTableRTFParser::InsertCell(), exception caught!" );
     }
 }
 

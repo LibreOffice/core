@@ -121,7 +121,7 @@ void ScMarkData::SetMarkArea( const ScRange& rRange )
     aMarkRange.Justify();
     if ( !bMarked )
     {
-        // #77987# Upon creation of a document ScFormatShell GetTextAttrState
+        // Upon creation of a document ScFormatShell GetTextAttrState
         // may query (default) attributes although no sheet is marked yet.
         // => mark that one.
         if ( !GetSelectCount() )
@@ -213,7 +213,7 @@ SCTAB ScMarkData::GetFirstSelected() const
         if (bTabMarked[i])
             return i;
 
-    DBG_ERROR("GetFirstSelected: keine markiert");
+    OSL_FAIL("GetFirstSelected: keine markiert");
     return 0;
 }
 

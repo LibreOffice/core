@@ -41,6 +41,7 @@
 #include <automation/commtypes.hxx>
 #include <automation/commdefines.hxx>
 #include "communiio.hxx"
+#include <osl/diagnose.h>
 
 /**
 Forces switch to multichannel headers even for old communication Method
@@ -143,7 +144,7 @@ comm_BOOL PacketHandler::ReceiveData( void* &pData, comm_UINT32 &nLen )
                 break;
             default:
                 {
-                    DBG_ERROR("Unbekannter Headertyp in der Kommunikation");
+                    OSL_FAIL("Unbekannter Headertyp in der Kommunikation");
                     bWasError = TRUE;
                 }
 
@@ -285,7 +286,7 @@ comm_BOOL PacketHandler::SendHandshake( HandshakeType aHandshakeType, const void
             nBuffer += 0 ;  // one word extradata for options
             break;
         default:
-            DBG_ERROR("Unknown HandshakeType");
+            OSL_FAIL("Unknown HandshakeType");
     }
 
     if ( pData )

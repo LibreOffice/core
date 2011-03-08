@@ -118,7 +118,7 @@ BitmapDeviceSharedPtr SvpGlyphPeer::GetGlyphBmp( ServerFont& rServerFont,
                 bFound = rServerFont.GetGlyphBitmap8( nGlyphIndex, pGcpHelper->maRawBitmap );
                 break;
             default:
-                DBG_ERROR( "SVP GCP::GetGlyphBmp(): illegal scanline format");
+                OSL_FAIL( "SVP GCP::GetGlyphBmp(): illegal scanline format");
                 // fall back to black&white mask
                 nBmpFormat = Format::ONE_BIT_LSB_GREY;
                 bFound = false;
@@ -193,8 +193,6 @@ void PspKernInfo::Initialize() const
     if( rKernPairs.empty() )
         return;
 
-    // feed psprint's kerning list into a lookup-friendly container
-    maUnicodeKernPairs.resize( rKernPairs.size() );
     PspKernPairs::const_iterator it = rKernPairs.begin();
     for(; it != rKernPairs.end(); ++it )
     {
@@ -282,6 +280,14 @@ ImplFontCharMap* SvpSalGraphics::GetImplFontCharMap() const
     if( !m_pServerFont[0]->GetFontCodeRanges( aCmapResult ) )
         return NULL;
     return new ImplFontCharMap( aCmapResult );
+}
+
+bool SvpSalGraphics::GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
+{
+    if (!m_pServerFont[0])
+        return false;
+
+    return m_pServerFont[0]->GetFontCapabilities(rFontCapabilities);
 }
 
 // ---------------------------------------------------------------------------

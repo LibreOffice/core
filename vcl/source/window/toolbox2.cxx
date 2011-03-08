@@ -28,7 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
-#include <tools/list.hxx>
 #include <tools/debug.hxx>
 
 #include <tools/rc.h>
@@ -49,7 +48,8 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 using namespace vcl;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 // =======================================================================
 

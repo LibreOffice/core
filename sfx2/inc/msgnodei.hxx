@@ -29,11 +29,10 @@
 #ifndef _MSGNODEI_HXX
 #define _MSGNODEI_HXX
 
-
 #include <svl/eitem.hxx>
 #include <tools/string.hxx>
 #include <svl/poolitem.hxx>
-#include <tools/list.hxx>
+
 struct SfxMsgAttachFile {
     String  aFile;
     String  aName;

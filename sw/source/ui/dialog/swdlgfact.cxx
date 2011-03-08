@@ -123,8 +123,8 @@ IMPL_ABSTDLG_BASE(AbstractTabDialog_Impl); //add for SwCharDlg, SwFootNoteOption
 IMPL_ABSTDLG_BASE(AbstractSwConvertTableDlg_Impl); //add for SwConvertTableDlg
 IMPL_ABSTDLG_BASE(AbstractSwInsertDBColAutoPilot_Impl); //add for SwInsertDBColAutoPilot
 IMPL_ABSTDLG_BASE(AbstractDropDownFieldDialog_Impl); //add for DropDownFieldDialog
-IMPL_ABSTDLG_BASE(AbstarctSwLabDlg_Impl);//add for SwLabDlg
-IMPL_ABSTDLG_BASE(AbstarctSwSelGlossaryDlg_Impl);//add for SwSelGlossaryDlg
+IMPL_ABSTDLG_BASE(AbstractSwLabDlg_Impl);//add for SwLabDlg
+IMPL_ABSTDLG_BASE(AbstractSwSelGlossaryDlg_Impl);//add for SwSelGlossaryDlg
 IMPL_ABSTDLG_BASE(AbstractSwAutoFormatDlg_Impl); //add for SwAutoFormatDlg
 IMPL_ABSTDLG_BASE(AbstractSwFldDlg_Impl); //add for SwFldDlg
 IMPL_ABSTDLG_BASE(AbstractSwRenameXNamedDlg_Impl); //add for SwRenameXNamedDlg
@@ -255,57 +255,57 @@ void       AbstractDropDownFieldDialog_Impl::SetWindowState( const ByteString& r
     pDlg->SetWindowState(rStr);
 }
 
-void AbstarctSwLabDlg_Impl::SetCurPageId( USHORT nId )
+void AbstractSwLabDlg_Impl::SetCurPageId( USHORT nId )
 {
     pDlg->SetCurPageId( nId );
 }
 
-const SfxItemSet* AbstarctSwLabDlg_Impl::GetOutputItemSet() const
+const SfxItemSet* AbstractSwLabDlg_Impl::GetOutputItemSet() const
 {
     return pDlg->GetOutputItemSet();
 }
 
-const USHORT* AbstarctSwLabDlg_Impl::GetInputRanges(const SfxItemPool& pItem )
+const USHORT* AbstractSwLabDlg_Impl::GetInputRanges(const SfxItemPool& pItem )
 {
     return pDlg->GetInputRanges( pItem );
 }
 
-void AbstarctSwLabDlg_Impl::SetInputSet( const SfxItemSet* pInSet )
+void AbstractSwLabDlg_Impl::SetInputSet( const SfxItemSet* pInSet )
 {
      pDlg->SetInputSet( pInSet );
 }
 
-void AbstarctSwLabDlg_Impl::SetText( const XubString& rStr )
+void AbstractSwLabDlg_Impl::SetText( const XubString& rStr )
 {
     pDlg->SetText( rStr );
 }
 
-String AbstarctSwLabDlg_Impl::GetText() const
+String AbstractSwLabDlg_Impl::GetText() const
 {
     return pDlg->GetText();
 }
 
-const String& AbstarctSwLabDlg_Impl::GetBusinessCardStr() const
+const String& AbstractSwLabDlg_Impl::GetBusinessCardStr() const
 {
     return pDlg->GetBusinessCardStr();
 }
 
-Printer * AbstarctSwLabDlg_Impl::GetPrt()
+Printer * AbstractSwLabDlg_Impl::GetPrt()
 {
     return pDlg->GetPrt();
 }
 
-void AbstarctSwSelGlossaryDlg_Impl::InsertGlos(const String &rRegion, const String &rGlosName)
+void AbstractSwSelGlossaryDlg_Impl::InsertGlos(const String &rRegion, const String &rGlosName)
 {
     pDlg->InsertGlos( rRegion, rGlosName );
 }
 
-USHORT AbstarctSwSelGlossaryDlg_Impl::GetSelectedIdx() const
+USHORT AbstractSwSelGlossaryDlg_Impl::GetSelectedIdx() const
 {
     return pDlg->GetSelectedIdx();
 }
 
-void AbstarctSwSelGlossaryDlg_Impl::SelectEntryPos(USHORT nIdx)
+void AbstractSwSelGlossaryDlg_Impl::SelectEntryPos(USHORT nIdx)
 {
     pDlg->SelectEntryPos( nIdx );
 }
@@ -887,7 +887,7 @@ SfxAbstractTabDialog* SwAbstractDialogFactory_Impl::CreateSwEnvDlg ( Window* pPa
     return 0;
 }
 
-AbstarctSwLabDlg* SwAbstractDialogFactory_Impl::CreateSwLabDlg ( Window* pParent, const SfxItemSet& rSet, //add for SwLabDlg
+AbstractSwLabDlg* SwAbstractDialogFactory_Impl::CreateSwLabDlg ( Window* pParent, const SfxItemSet& rSet, //add for SwLabDlg
                                                      SwNewDBMgr* pNewDBMgr, BOOL bLabel,int nResId  )
 {
     SwLabDlg* pDlg=NULL;
@@ -902,7 +902,7 @@ AbstarctSwLabDlg* SwAbstractDialogFactory_Impl::CreateSwLabDlg ( Window* pParent
     }
 
     if ( pDlg )
-        return new AbstarctSwLabDlg_Impl( pDlg );
+        return new AbstractSwLabDlg_Impl( pDlg );
     return 0;
 }
 
@@ -968,7 +968,7 @@ AbstractSplitTableDialog * SwAbstractDialogFactory_Impl::CreateSplitTblDialog ( 
     return new AbstractSplitTableDialog_Impl( new SwSplitTblDlg( pParent, rSh) );
 }
 
-AbstarctSwSelGlossaryDlg * SwAbstractDialogFactory_Impl::CreateSwSelGlossaryDlg ( Window * pParent, const String &rShortName, int nResId )
+AbstractSwSelGlossaryDlg * SwAbstractDialogFactory_Impl::CreateSwSelGlossaryDlg ( Window * pParent, const String &rShortName, int nResId )
 {
     SwSelGlossaryDlg* pDlg=NULL;
     switch ( nResId )
@@ -982,7 +982,7 @@ AbstarctSwSelGlossaryDlg * SwAbstractDialogFactory_Impl::CreateSwSelGlossaryDlg 
     }
 
     if ( pDlg )
-        return new AbstarctSwSelGlossaryDlg_Impl( pDlg );
+        return new AbstractSwSelGlossaryDlg_Impl( pDlg );
     return 0;
 }
 

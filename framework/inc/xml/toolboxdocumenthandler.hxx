@@ -129,7 +129,7 @@ class OReadToolBoxDocumentHandler : private ThreadHelpBase, // Struct for right 
     private:
         ::rtl::OUString getErrorLineString();
 
-        class ToolBoxHashMap : public ::std::hash_map<  ::rtl::OUString                 ,
+        class ToolBoxHashMap : public ::boost::unordered_map<   ::rtl::OUString                 ,
                                                         ToolBox_XML_Entry               ,
                                                         OUStringHashCode                ,
                                                         ::std::equal_to< ::rtl::OUString >  >

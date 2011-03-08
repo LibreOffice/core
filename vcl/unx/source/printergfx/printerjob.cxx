@@ -57,7 +57,11 @@
 #include <vector>
 
 using namespace psp;
-using namespace rtl;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
+using ::rtl::OString;
+using ::rtl::OStringBuffer;
 
 // forward declaration
 

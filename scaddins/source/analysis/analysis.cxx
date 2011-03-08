@@ -194,8 +194,7 @@ void AnalysisAddIn::InitData( void )
         delete pResMgr;
 
     OString             aModName( "analysis" );
-    pResMgr = ResMgr::CreateResMgr( ( const sal_Char* ) aModName,
-                                        aFuncLoc );
+    pResMgr = ResMgr::CreateResMgr( aModName.getStr(), aFuncLoc );
 
     if( pFD )
         delete pFD;

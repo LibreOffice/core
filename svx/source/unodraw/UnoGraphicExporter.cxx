@@ -1277,7 +1277,7 @@ Graphic SvxGetGraphicForShape( SdrObject& rShape, bool bVector )
     }
     catch( Exception& )
     {
-        DBG_ERROR("SvxGetGraphicForShape(), exception caught!");
+        OSL_FAIL("SvxGetGraphicForShape(), exception caught!");
     }
     return aGraphic;
 }

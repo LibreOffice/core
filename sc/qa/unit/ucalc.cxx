@@ -42,45 +42,55 @@
 #include "precompiled_sc.hxx"
 
 #ifdef WNT
-# include <tools/prewin.h>
-# include <windows.h>
-# include <tools/postwin.h>
+# include <prewin.h>
+# include <postwin.h>
 # undef ERROR
 #endif
 
-#include "preextstl.h"
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
-#include "postextstl.h"
 
 #include <sal/config.h>
+#include <osl/file.hxx>
+#include <osl/process.h>
 
 #include <cppuhelper/bootstrap.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/oslfile2streamwrap.hxx>
 
 #include <vcl/svapp.hxx>
-#include <scdll.hxx>
-#include <document.hxx>
-#include <stringutil.hxx>
-#include <scmatrix.hxx>
-#include <drwlayer.hxx>
+#include "scdll.hxx"
+#include "document.hxx"
+#include "stringutil.hxx"
+#include "scmatrix.hxx"
+#include "drwlayer.hxx"
 
-#include <dpshttab.hxx>
-#include <dpobject.hxx>
-#include <dpsave.hxx>
+#include "docsh.hxx"
+#include "funcdesc.hxx"
+
+#include "dpshttab.hxx"
+#include "dpobject.hxx"
+#include "dpsave.hxx"
+
+#include "formula/IFunctionDescription.hxx"
 
 #include <svx/svdograf.hxx>
 #include <svx/svdpage.hxx>
 
+#include <sfx2/docfilt.hxx>
+#include <sfx2/docfile.hxx>
+
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <com/sun/star/sheet/GeneralFunction.hpp>
+
+#include <ucbhelper/contentbroker.hxx>
 
 #include <iostream>
 #include <vector>
 
-#define MDDS_HASH_CONTAINER_STLPORT 1
+#define MDDS_HASH_CONTAINER_BOOST 1
 #include <mdds/mixed_type_matrix.hpp>
 
 #define UCALC_DEBUG_OUTPUT 0
@@ -89,6 +99,7 @@ using namespace ::com::sun::star;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 using ::std::cout;
+using ::std::cerr;
 using ::std::endl;
 using ::std::vector;
 
@@ -214,30 +225,57 @@ public:
     virtual void setUp();
     virtual void tearDown();
 
+    bool testLoad(const rtl::OUString &rFilter, const rtl::OUString &rURL);
+
     void testCollator();
+    void testInput();
     void testSUM();
+    void testVolatileFunc();
     void testNamedRange();
     void testCSV();
     void testMatrix();
     void testDataPilot();
     void testSheetCopy();
 
+    /**
+     * Make sure the sheet streams are invalidated properly.
+     */
+    void testStreamValid();
+
+    /**
+     * Test built-in cell functions to make sure their categories and order
+     * are correct.
+     */
+    void testFunctionLists();
+
     void testGraphicsInGroup();
+
+    /**
+     * Ensure CVEs remain unbroken
+     */
+    void testCVEs();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testCollator);
+    CPPUNIT_TEST(testInput);
     CPPUNIT_TEST(testSUM);
+    CPPUNIT_TEST(testVolatileFunc);
     CPPUNIT_TEST(testNamedRange);
     CPPUNIT_TEST(testCSV);
     CPPUNIT_TEST(testMatrix);
     CPPUNIT_TEST(testDataPilot);
     CPPUNIT_TEST(testSheetCopy);
     CPPUNIT_TEST(testGraphicsInGroup);
+    CPPUNIT_TEST(testStreamValid);
+    CPPUNIT_TEST(testFunctionLists);
+    CPPUNIT_TEST(testCVEs);
     CPPUNIT_TEST_SUITE_END();
 
 private:
     uno::Reference< uno::XComponentContext > m_xContext;
     ScDocument *m_pDoc;
+    ScDocShellRef m_xDocShRef;
+    ::rtl::OUString m_aPWDURL;
 };
 
 Test::Test()
@@ -253,19 +291,40 @@ Test::Test()
     //of retaining references to the root ServiceFactory as its passed around
     comphelper::setProcessServiceFactory(xSM);
 
+    // initialise UCB-Broker
+    uno::Sequence<uno::Any> aUcbInitSequence(2);
+    aUcbInitSequence[0] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Local"));
+    aUcbInitSequence[1] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Office"));
+    bool bInitUcb = ucbhelper::ContentBroker::initialize(xSM, aUcbInitSequence);
+    CPPUNIT_ASSERT_MESSAGE("Should be able to initialize UCB", bInitUcb);
+
+    uno::Reference<ucb::XContentProviderManager> xUcb =
+        ucbhelper::ContentBroker::get()->getContentProviderManagerInterface();
+    uno::Reference<ucb::XContentProvider> xFileProvider(xSM->createInstance(
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.FileContentProvider"))), uno::UNO_QUERY);
+    xUcb->registerContentProvider(xFileProvider, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file")), sal_True);
+
     InitVCL(xSM);
 
     ScDLL::Init();
+
+    oslProcessError err = osl_getProcessWorkingDir(&m_aPWDURL.pData);
+    CPPUNIT_ASSERT_MESSAGE("no PWD!", err == osl_Process_E_None);
 }
 
 void Test::setUp()
 {
-    m_pDoc = new ScDocument;
+    m_xDocShRef = new ScDocShell(
+        SFXMODEL_STANDARD |
+        SFXMODEL_DISABLE_EMBEDDED_SCRIPTS |
+        SFXMODEL_DISABLE_DOCUMENT_RECOVERY);
+
+    m_pDoc = m_xDocShRef->GetDocument();
 }
 
 void Test::tearDown()
 {
-    delete m_pDoc;
+    m_xDocShRef.Clear();
 }
 
 Test::~Test()
@@ -280,6 +339,28 @@ void Test::testCollator()
     CollatorWrapper* p = ScGlobal::GetCollator();
     sal_Int32 nRes = p->compareString(s1, s2);
     CPPUNIT_ASSERT_MESSAGE("these strings are supposed to be different!", nRes != 0);
+}
+
+void Test::testInput()
+{
+    rtl::OUString aTabName(RTL_CONSTASCII_USTRINGPARAM("foo"));
+    CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
+                            m_pDoc->InsertTab (0, aTabName));
+
+    OUString numstr(RTL_CONSTASCII_USTRINGPARAM("'10.5"));
+    OUString str(RTL_CONSTASCII_USTRINGPARAM("'apple'"));
+    OUString test;
+
+    m_pDoc->SetString(0, 0, 0, numstr);
+    m_pDoc->GetString(0, 0, 0, test);
+    bool bTest = test.equalsAscii("10.5");
+    CPPUNIT_ASSERT_MESSAGE("String number should have the first apostrophe stripped.", bTest);
+    m_pDoc->SetString(0, 0, 0, str);
+    m_pDoc->GetString(0, 0, 0, test);
+    bTest = test.equalsAscii("'apple'");
+    CPPUNIT_ASSERT_MESSAGE("Text content should have retained the first apostrophe.", bTest);
+
+    m_pDoc->DeleteTab(0);
 }
 
 void Test::testSUM()
@@ -299,6 +380,36 @@ void Test::testSUM()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testVolatileFunc()
+{
+    rtl::OUString aTabName(RTL_CONSTASCII_USTRINGPARAM("foo"));
+    CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
+                            m_pDoc->InsertTab (0, aTabName));
+
+    double val = 1;
+    m_pDoc->SetValue(0, 0, 0, val);
+    m_pDoc->SetString(0, 1, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=IF(A1>0;NOW();0")));
+    double now1;
+    m_pDoc->GetValue(0, 1, 0, now1);
+    CPPUNIT_ASSERT_MESSAGE("Value of NOW() should be positive.", now1 > 0.0);
+
+    val = 0;
+    m_pDoc->SetValue(0, 0, 0, val);
+    m_xDocShRef->DoRecalc(true);
+    double zero;
+    m_pDoc->GetValue(0, 1, 0, zero);
+    CPPUNIT_ASSERT_MESSAGE("Result should equal the 3rd parameter of IF, which is zero.", zero == 0.0);
+
+    val = 1;
+    m_pDoc->SetValue(0, 0, 0, val);
+    m_xDocShRef->DoRecalc(true);
+    double now2;
+    m_pDoc->GetValue(0, 1, 0, now2);
+    CPPUNIT_ASSERT_MESSAGE("Result should be the value of NOW() again.", (now2 - now1) >= 0.0);
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testNamedRange()
 {
     rtl::OUString aTabName(RTL_CONSTASCII_USTRINGPARAM("Sheet1"));
@@ -312,7 +423,7 @@ void Test::testNamedRange()
     ScRangeData* pNew = new ScRangeData(m_pDoc,
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Divisor")),
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$Sheet1.$A$1:$A$1048576")), aA1, 0, formula::FormulaGrammar::GRAM_PODF_A1);
-    bool bSuccess = pNewRanges->Insert(pNew);
+    bool bSuccess = pNewRanges->insert(pNew);
     CPPUNIT_ASSERT_MESSAGE ("insertion failed", bSuccess);
 
     m_pDoc->SetRangeName(pNewRanges);
@@ -358,6 +469,36 @@ void Test::testCSV()
         CPPUNIT_ASSERT_MESSAGE ("CSV numeric detection failure", bResult == aTests[i].bResult);
         CPPUNIT_ASSERT_MESSAGE ("CSV numeric value failure", nValue == aTests[i].nValue);
     }
+}
+
+bool Test::testLoad(const rtl::OUString &rFilter, const rtl::OUString &rURL)
+{
+    SfxFilter aFilter(
+        rFilter,
+        rtl::OUString(), 0, 0, rtl::OUString(), 0, rtl::OUString(),
+        rtl::OUString(), rtl::OUString() );
+
+    ScDocShellRef xDocShRef = new ScDocShell;
+    SfxMedium aSrcMed(rURL, STREAM_STD_READ, true);
+    aSrcMed.SetFilter(&aFilter);
+    return xDocShRef->DoLoad(&aSrcMed);
+}
+
+void Test::testCVEs()
+{
+    bool bResult;
+
+    bResult = testLoad(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Quattro Pro 6.0")),
+        m_aPWDURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/CVE/CVE-2007-5745-1.wb2")));
+    CPPUNIT_ASSERT_MESSAGE("CVE-2007-5745 regression", bResult == true);
+
+    bResult = testLoad(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Quattro Pro 6.0")),
+        m_aPWDURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/CVE/CVE-2007-5745-2.wb2")));
+    CPPUNIT_ASSERT_MESSAGE("CVE-2007-5745 regression", bResult == true);
+
+    bResult = testLoad(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Quattro Pro 6.0")),
+        m_aPWDURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/CVE/CVE-2007-5747-1.wb2")));
+    CPPUNIT_ASSERT_MESSAGE("CVE-2007-5747 regression", bResult == false);
 }
 
 template<typename Evaluator>
@@ -686,7 +827,12 @@ void Test::testDataPilot()
             if (p)
             {
                 OUString aCheckVal = OUString::createFromAscii(p);
-                CPPUNIT_ASSERT_MESSAGE("Unexpected cell content.", aCheckVal.equals(aVal));
+                bool bEqual = aCheckVal.equals(aVal);
+                if (!bEqual)
+                {
+                    cerr << "Expected: " << aCheckVal << "  Actual: " << aVal << endl;
+                    CPPUNIT_ASSERT_MESSAGE("Unexpected cell content.", false);
+                }
             }
             else
                 CPPUNIT_ASSERT_MESSAGE("Empty cell expected.", aVal.Len() == 0);
@@ -738,6 +884,428 @@ void Test::testSheetCopy()
     bHidden = m_pDoc->RowHidden(11, 1, &nRow1, &nRow2);
     CPPUNIT_ASSERT_MESSAGE("rows 11 - maxrow should be visible", !bHidden && nRow1 == 11 && nRow2 == MAXROW);
     m_pDoc->DeleteTab(0);
+}
+
+void Test::testStreamValid()
+{
+    m_pDoc->InsertTab(0, OUString(RTL_CONSTASCII_USTRINGPARAM("Sheet1")));
+    m_pDoc->InsertTab(1, OUString(RTL_CONSTASCII_USTRINGPARAM("Sheet2")));
+    m_pDoc->InsertTab(2, OUString(RTL_CONSTASCII_USTRINGPARAM("Sheet3")));
+    m_pDoc->InsertTab(3, OUString(RTL_CONSTASCII_USTRINGPARAM("Sheet4")));
+    CPPUNIT_ASSERT_MESSAGE("We should have 4 sheet instances.", m_pDoc->GetTableCount() == 4);
+
+    OUString a1(RTL_CONSTASCII_USTRINGPARAM("A1"));
+    OUString a2(RTL_CONSTASCII_USTRINGPARAM("A2"));
+    OUString test;
+
+    // Put values into Sheet1.
+    m_pDoc->SetString(0, 0, 0, a1);
+    m_pDoc->SetString(0, 1, 0, a2);
+    m_pDoc->GetString(0, 0, 0, test);
+    CPPUNIT_ASSERT_MESSAGE("Unexpected value in Sheet1.A1", test.equals(a1));
+    m_pDoc->GetString(0, 1, 0, test);
+    CPPUNIT_ASSERT_MESSAGE("Unexpected value in Sheet1.A2", test.equals(a2));
+
+    // Put formulas into Sheet2 to Sheet4 to reference values from Sheet1.
+    m_pDoc->SetString(0, 0, 1, OUString(RTL_CONSTASCII_USTRINGPARAM("=Sheet1.A1")));
+    m_pDoc->SetString(0, 1, 1, OUString(RTL_CONSTASCII_USTRINGPARAM("=Sheet1.A2")));
+    m_pDoc->SetString(0, 0, 2, OUString(RTL_CONSTASCII_USTRINGPARAM("=Sheet1.A1")));
+    m_pDoc->SetString(0, 0, 3, OUString(RTL_CONSTASCII_USTRINGPARAM("=Sheet1.A2")));
+
+    m_pDoc->GetString(0, 0, 1, test);
+    CPPUNIT_ASSERT_MESSAGE("Unexpected value in Sheet2.A1", test.equals(a1));
+    m_pDoc->GetString(0, 1, 1, test);
+    CPPUNIT_ASSERT_MESSAGE("Unexpected value in Sheet2.A2", test.equals(a2));
+    m_pDoc->GetString(0, 0, 2, test);
+    CPPUNIT_ASSERT_MESSAGE("Unexpected value in Sheet3.A1", test.equals(a1));
+    m_pDoc->GetString(0, 0, 3, test);
+    CPPUNIT_ASSERT_MESSAGE("Unexpected value in Sheet3.A1", test.equals(a2));
+
+    // Set all sheet streams valid after all the initial cell values are in
+    // place. In reality we need to have real XML streams stored in order to
+    // claim they are valid, but we are just testing the flag values here.
+    m_pDoc->SetStreamValid(0, true);
+    m_pDoc->SetStreamValid(1, true);
+    m_pDoc->SetStreamValid(2, true);
+    m_pDoc->SetStreamValid(3, true);
+    CPPUNIT_ASSERT_MESSAGE("Stream is expected to be valid.", m_pDoc->IsStreamValid(0));
+    CPPUNIT_ASSERT_MESSAGE("Stream is expected to be valid.", m_pDoc->IsStreamValid(1));
+    CPPUNIT_ASSERT_MESSAGE("Stream is expected to be valid.", m_pDoc->IsStreamValid(2));
+    CPPUNIT_ASSERT_MESSAGE("Stream is expected to be valid.", m_pDoc->IsStreamValid(3));
+
+    // Now, insert a new row at row 2 position on Sheet1.  This will move cell
+    // A2 downward but cell A1 remains unmoved.
+    m_pDoc->InsertRow(0, 0, MAXCOL, 0, 1, 2);
+    m_pDoc->GetString(0, 0, 0, test);
+    CPPUNIT_ASSERT_MESSAGE("Cell A1 should not have moved.", test.equals(a1));
+    m_pDoc->GetString(0, 3, 0, test);
+    CPPUNIT_ASSERT_MESSAGE("the old cell A2 should now be at A4.", test.equals(a2));
+    const ScBaseCell* pCell = m_pDoc->GetCell(ScAddress(0, 1, 0));
+    CPPUNIT_ASSERT_MESSAGE("Cell A2 should be empty.", pCell == NULL);
+    pCell = m_pDoc->GetCell(ScAddress(0, 2, 0));
+    CPPUNIT_ASSERT_MESSAGE("Cell A3 should be empty.", pCell == NULL);
+
+    // After the move, Sheet1, Sheet2, and Sheet4 should have their stream
+    // invalidated, whereas Sheet3's stream should still be valid.
+    CPPUNIT_ASSERT_MESSAGE("Stream should have been invalidated.", !m_pDoc->IsStreamValid(0));
+    CPPUNIT_ASSERT_MESSAGE("Stream should have been invalidated.", !m_pDoc->IsStreamValid(1));
+    CPPUNIT_ASSERT_MESSAGE("Stream should have been invalidated.", !m_pDoc->IsStreamValid(3));
+    CPPUNIT_ASSERT_MESSAGE("Stream should still be valid.", m_pDoc->IsStreamValid(2));
+
+    m_pDoc->DeleteTab(3);
+    m_pDoc->DeleteTab(2);
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testFunctionLists()
+{
+    const char* aDataBase[] = {
+        "DAVERAGE",
+        "DCOUNT",
+        "DCOUNTA",
+        "DGET",
+        "DMAX",
+        "DMIN",
+        "DPRODUCT",
+        "DSTDEV",
+        "DSTDEVP",
+        "DSUM",
+        "DVAR",
+        "DVARP",
+        0
+    };
+
+    const char* aDateTime[] = {
+        "DATE",
+        "DATEVALUE",
+        "DAY",
+        "DAYS",
+        "DAYS360",
+        "EASTERSUNDAY",
+        "HOUR",
+        "MINUTE",
+        "MONTH",
+        "NOW",
+        "SECOND",
+        "TIME",
+        "TIMEVALUE",
+        "TODAY",
+        "WEEKDAY",
+        "WEEKNUM",
+        "YEAR",
+        0
+    };
+
+    const char* aFinancial[] = {
+        "CUMIPMT",
+        "CUMPRINC",
+        "DB",
+        "DDB",
+        "DURATION",
+        "EFFECTIVE",
+        "FV",
+        "IPMT",
+        "IRR",
+        "ISPMT",
+        "MIRR",
+        "NOMINAL",
+        "NPER",
+        "NPV",
+        "PMT",
+        "PPMT",
+        "PV",
+        "RATE",
+        "RRI",
+        "SLN",
+        "SYD",
+        "VDB",
+        0
+    };
+
+    const char* aInformation[] = {
+        "CELL",
+        "CURRENT",
+        "FORMULA",
+        "INFO",
+        "ISBLANK",
+        "ISERR",
+        "ISERROR",
+        "ISFORMULA",
+        "ISLOGICAL",
+        "ISNA",
+        "ISNONTEXT",
+        "ISNUMBER",
+        "ISREF",
+        "ISTEXT",
+        "N",
+        "NA",
+        "TYPE",
+        0
+    };
+
+    const char* aLogical[] = {
+        "AND",
+        "FALSE",
+        "IF",
+        "NOT",
+        "OR",
+        "TRUE",
+        0
+    };
+
+    const char* aMathematical[] = {
+        "ABS",
+        "ACOS",
+        "ACOSH",
+        "ACOT",
+        "ACOTH",
+        "ASIN",
+        "ASINH",
+        "ATAN",
+        "ATAN2",
+        "ATANH",
+        "CEILING",
+        "COMBIN",
+        "COMBINA",
+        "CONVERT",
+        "COS",
+        "COSH",
+        "COT",
+        "COTH",
+        "COUNTBLANK",
+        "COUNTIF",
+        "DEGREES",
+        "EUROCONVERT",
+        "EVEN",
+        "EXP",
+        "FACT",
+        "FLOOR",
+        "GCD",
+        "INT",
+        "ISEVEN",
+        "ISODD",
+        "LCM",
+        "LN",
+        "LOG",
+        "LOG10",
+        "MOD",
+        "ODD",
+        "PI",
+        "POWER",
+        "PRODUCT",
+        "RADIANS",
+        "RAND",
+        "ROUND",
+        "ROUNDDOWN",
+        "ROUNDUP",
+        "SIGN",
+        "SIN",
+        "SINH",
+        "SQRT",
+        "SUBTOTAL",
+        "SUM",
+        "SUMIF",
+        "SUMSQ",
+        "TAN",
+        "TANH",
+        "TRUNC",
+        0
+    };
+
+    const char* aArray[] = {
+        "FREQUENCY",
+        "GROWTH",
+        "LINEST",
+        "LOGEST",
+        "MDETERM",
+        "MINVERSE",
+        "MMULT",
+        "MUNIT",
+        "SUMPRODUCT",
+        "SUMX2MY2",
+        "SUMX2PY2",
+        "SUMXMY2",
+        "TRANSPOSE",
+        "TREND",
+        0
+    };
+
+    const char* aStatistical[] = {
+        "AVEDEV",
+        "AVERAGE",
+        "AVERAGEA",
+        "B",
+        "BETADIST",
+        "BETAINV",
+        "BINOMDIST",
+        "CHIDIST",
+        "CHIINV",
+        "CHISQDIST",
+        "CHISQINV",
+        "CHITEST",
+        "CONFIDENCE",
+        "CORREL",
+        "COUNT",
+        "COUNTA",
+        "COVAR",
+        "CRITBINOM",
+        "DEVSQ",
+        "EXPONDIST",
+        "FDIST",
+        "FINV",
+        "FISHER",
+        "FISHERINV",
+        "FORECAST",
+        "FTEST",
+        "GAMMA",
+        "GAMMADIST",
+        "GAMMAINV",
+        "GAMMALN",
+        "GAUSS",
+        "GEOMEAN",
+        "HARMEAN",
+        "HYPGEOMDIST",
+        "INTERCEPT",
+        "KURT",
+        "LARGE",
+        "LOGINV",
+        "LOGNORMDIST",
+        "MAX",
+        "MAXA",
+        "MEDIAN",
+        "MIN",
+        "MINA",
+        "MODE",
+        "NEGBINOMDIST",
+        "NORMDIST",
+        "NORMINV",
+        "NORMSDIST",
+        "NORMSINV",
+        "PEARSON",
+        "PERCENTILE",
+        "PERCENTRANK",
+        "PERMUT",
+        "PERMUTATIONA",
+        "PHI",
+        "POISSON",
+        "PROB",
+        "QUARTILE",
+        "RANK",
+        "RSQ",
+        "SKEW",
+        "SLOPE",
+        "SMALL",
+        "STANDARDIZE",
+        "STDEV",
+        "STDEVA",
+        "STDEVP",
+        "STDEVPA",
+        "STEYX",
+        "TDIST",
+        "TINV",
+        "TRIMMEAN",
+        "TTEST",
+        "VAR",
+        "VARA",
+        "VARP",
+        "VARPA",
+        "WEIBULL",
+        "ZTEST",
+        0
+    };
+
+    const char* aSpreadsheet[] = {
+        "ADDRESS",
+        "AREAS",
+        "CHOOSE",
+        "COLUMN",
+        "COLUMNS",
+        "DDE",
+        "ERRORTYPE",
+        "GETPIVOTDATA",
+        "HLOOKUP",
+        "HYPERLINK",
+        "INDEX",
+        "INDIRECT",
+        "LOOKUP",
+        "MATCH",
+        "OFFSET",
+        "ROW",
+        "ROWS",
+        "SHEET",
+        "SHEETS",
+        "STYLE",
+        "VLOOKUP",
+        0
+    };
+
+    const char* aText[] = {
+        "ARABIC",
+        "ASC",
+        "BAHTTEXT",
+        "BASE",
+        "CHAR",
+        "CLEAN",
+        "CODE",
+        "CONCATENATE",
+        "DECIMAL",
+        "DOLLAR",
+        "EXACT",
+        "FIND",
+        "FIXED",
+        "JIS",
+        "LEFT",
+        "LEN",
+        "LOWER",
+        "MID",
+        "PROPER",
+        "REPLACE",
+        "REPT",
+        "RIGHT",
+        "ROMAN",
+        "SEARCH",
+        "SUBSTITUTE",
+        "T",
+        "TEXT",
+        "TRIM",
+        "UNICHAR",
+        "UNICODE",
+        "UPPER",
+        "VALUE",
+        0
+    };
+
+    struct {
+        const char* Category; const char** Functions;
+    } aTests[] = {
+        { "Database",     aDataBase },
+        { "Date&Time",    aDateTime },
+        { "Financial",    aFinancial },
+        { "Information",  aInformation },
+        { "Logical",      aLogical },
+        { "Mathematical", aMathematical },
+        { "Array",        aArray },
+        { "Statistical",  aStatistical },
+        { "Spreadsheet",  aSpreadsheet },
+        { "Text",         aText },
+        { "Add-in",       0 },
+        { 0, 0 }
+    };
+
+    ScFunctionMgr* pFuncMgr = ScGlobal::GetStarCalcFunctionMgr();
+    sal_uInt32 n = pFuncMgr->getCount();
+    for (sal_uInt32 i = 0; i < n; ++i)
+    {
+        const formula::IFunctionCategory* pCat = pFuncMgr->getCategory(i);
+        CPPUNIT_ASSERT_MESSAGE("Unexpected category name", pCat->getName().equalsAscii(aTests[i].Category));
+        sal_uInt32 nFuncCount = pCat->getCount();
+        for (sal_uInt32 j = 0; j < nFuncCount; ++j)
+        {
+            const formula::IFunctionDescription* pFunc = pCat->getFunction(j);
+            CPPUNIT_ASSERT_MESSAGE("Unexpected function name", pFunc->getFunctionName().equalsAscii(aTests[i].Functions[j]));
+        }
+    }
 }
 
 void Test::testGraphicsInGroup()

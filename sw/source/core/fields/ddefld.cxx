@@ -33,7 +33,6 @@
 #include <sfx2/linkmgr.hxx>
 #include <doc.hxx>
 #include <editsh.hxx>
-#include <errhdl.hxx>
 #include <ndtxt.hxx>
 #include <fmtfld.hxx>
 #include <txtfld.hxx>
@@ -346,7 +345,7 @@ bool SwDDEFieldType::QueryValue( uno::Any& rVal, USHORT nWhichId ) const
         rVal <<= ::rtl::OUString(aExpansion);
     break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     if( nPart )
         rVal <<= OUString(GetCmd().GetToken(nPart-1, sfx2::cTokenSeperator));
@@ -374,7 +373,7 @@ bool SwDDEFieldType::PutValue( const uno::Any& rVal, USHORT nWhichId )
     }
     break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     if( nPart )
     {

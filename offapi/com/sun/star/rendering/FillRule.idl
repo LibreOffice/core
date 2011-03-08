@@ -36,7 +36,7 @@ module com { module sun { module star { module rendering {
  */
 enum FillRule
 {
-    /** Fill every area, where, when travelling along a line, the
+    /** Fill every area, where, when traveling along a line, the
         summed winding number (that is, -1 for a
         counter-clockwise-oriented polygon, and +1 for a
         clockwise-oriented) is non-zero.<p>
@@ -51,7 +51,7 @@ enum FillRule
 
     //-------------------------------------------------------------------------
 
-    /** Fill every area, where, when travelling along a line, an
+    /** Fill every area, where, when traveling along a line, an
         uneven number of intersections with polygon edges have
         happened.<p>
      */

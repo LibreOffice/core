@@ -31,7 +31,7 @@
 
 #include <inputsequencechecker_hi.hxx>
 
-using namespace rtl;
+using ::rtl::OUString;
 
 namespace com {
 namespace sun {

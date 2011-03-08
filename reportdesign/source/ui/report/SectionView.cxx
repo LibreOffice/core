@@ -209,7 +209,7 @@ void OSectionView::SetMarkedToLayer( SdrLayerID _nLayerNo )
 
         EndUndo();
 
-        //  #84073# check mark list now instead of later in a timer
+        // check mark list now instead of later in a timer
         CheckMarked();
         MarkListHasChanged();
     }

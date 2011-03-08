@@ -180,7 +180,7 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
     SCROW nEndRow = rMarked.aEnd.Row();
     SCTAB nEndTab = rMarked.aEnd.Tab();
 
-    //  Wegen #49655# nicht einfach GetDBAtCursor: Der zusammenhaengende Datenbereich
+    //  Nicht einfach GetDBAtCursor: Der zusammenhaengende Datenbereich
     //  fuer "unbenannt" (GetDataArea) kann neben dem Cursor legen, also muss auch ein
     //  benannter DB-Bereich dort gesucht werden.
 
@@ -761,7 +761,7 @@ void ScDocShell::UseScenario( SCTAB nTab, const String& rName, BOOL bRecord )
     }
     else
     {
-        DBG_ERROR( "UseScenario auf Szenario-Blatt" );
+        OSL_FAIL( "UseScenario auf Szenario-Blatt" );
     }
 }
 

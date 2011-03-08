@@ -47,7 +47,8 @@
 using namespace com::sun::star::lang;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 namespace
 {

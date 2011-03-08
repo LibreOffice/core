@@ -34,7 +34,7 @@
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
 
 #include "officeipcthread.hxx"
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <vector>
 
 namespace desktop
@@ -56,7 +56,7 @@ struct OUStringHashCode
     }
 };
 
-class DispatchWatcherHashMap : public ::std::hash_map< ::rtl::OUString, sal_Int32, OUStringHashCode, ::std::equal_to< ::rtl::OUString > >
+class DispatchWatcherHashMap : public ::boost::unordered_map< ::rtl::OUString, sal_Int32, OUStringHashCode, ::std::equal_to< ::rtl::OUString >  >
 {
     public:
         inline void free()

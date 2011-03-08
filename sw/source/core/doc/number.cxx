@@ -54,7 +54,7 @@
 #include <numrule.hxx>
 #include <SwNodeNum.hxx>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #include <list.hxx>
 #include <algorithm>
@@ -84,7 +84,7 @@ USHORT SwNumRule::aDefNumIndents[ MAXLEVEL ] = {
 
 const SwNumFmt& SwNumRule::Get( USHORT i ) const
 {
-    ASSERT_ID( i < MAXLEVEL && eRuleType < RULE_END, ERR_NUMLEVEL);
+    OSL_ASSERT( i < MAXLEVEL && eRuleType < RULE_END );
     return aFmts[ i ]
            ? *aFmts[ i ]
            : ( meDefaultNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION
@@ -96,7 +96,7 @@ const SwNumFmt* SwNumRule::GetNumFmt( USHORT i ) const
 {
     const SwNumFmt * pResult = NULL;
 
-    ASSERT_ID( i < MAXLEVEL && eRuleType < RULE_END, ERR_NUMLEVEL);
+    OSL_ASSERT( i < MAXLEVEL && eRuleType < RULE_END );
     if ( i < MAXLEVEL && eRuleType < RULE_END)
     {
         pResult = aFmts[ i ];
@@ -105,7 +105,7 @@ const SwNumFmt* SwNumRule::GetNumFmt( USHORT i ) const
     return pResult;
 }
 
-// --> OD 2008-07-08 #i91400#
+// #i91400#
 void SwNumRule::SetName( const String & rName,
                          IDocumentListsAccess& rDocListAccess)
 // <--
@@ -164,7 +164,7 @@ void SwNumRule::RemoveTxtNode( SwTxtNode& rTxtNode )
 }
 
 
-void SwNumRule::SetNumRuleMap(std::hash_map<String, SwNumRule *, StringHash> *
+void SwNumRule::SetNumRuleMap(boost::unordered_map<String, SwNumRule *, StringHash> *
                               _pNumRuleMap)
 {
     pNumRuleMap = _pNumRuleMap;
@@ -864,7 +864,7 @@ void SwNumRule::SetInvalidRule(BOOL bFlag)
         for ( aIter = maTxtNodeList.begin(); aIter != maTxtNodeList.end(); ++aIter )
         {
             const SwTxtNode* pTxtNode = *aIter;
-            // --> OD 2010-06-04 #i111681# - applying patch from cmc
+            // #i111681# - applying patch from cmc
             SwList* pList = pTxtNode->GetDoc()->getListByName( pTxtNode->GetListId() );
             OSL_ENSURE( pList, "<SwNumRule::SetInvalidRule(..)> - list at which the text node is registered at does not exist. This is a serious issue --> please inform OD.");
             if ( pList )
@@ -1297,8 +1297,6 @@ namespace numfunc
 
     /** class containing configuration data about user interface behavior
         regarding lists and list items.
-
-        OD 2007-10-01 #b660435#
         configuration item about behavior of <TAB>/<SHIFT-TAB>-key at first
         position of first list item
 

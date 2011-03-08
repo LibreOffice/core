@@ -455,13 +455,13 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ValueSetAcc::getAccessible
     const USHORT                                    nItemId = mpParent->GetItemId( Point( aPoint.X, aPoint.Y ) );
     uno::Reference< accessibility::XAccessible >    xRet;
 
-    if( VALUESET_ITEM_NOTFOUND != nItemId )
+    if( ((USHORT)-1) != nItemId )
     {
-        const USHORT nItemPos = mpParent->GetItemPos( nItemId );
+        const size_t nItemPos = mpParent->GetItemPos( nItemId );
 
         if( VALUESET_ITEM_NONEITEM != nItemPos )
         {
-            ValueSetItem* pItem = mpParent->mpImpl->mpItemList->GetObject( nItemPos );
+            ValueSetItem* pItem = (*mpParent->mpImpl->mpItemList)[ nItemPos ];
 
             if( ( pItem->meType != VALUESETITEM_SPACE ) && !pItem->maRect.IsEmpty() )
                xRet = pItem->GetAccessible( mbIsTransientChildrenDisabled );

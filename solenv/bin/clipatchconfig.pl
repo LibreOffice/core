@@ -27,7 +27,6 @@
 
 use warnings;
 use strict;
-# use diagnostics;
 
 sub trim;
 sub readRedirectionValues($);
@@ -52,7 +51,6 @@ if (scalar @ARGV < 3) {
 
 
 my %redirectionValue = readRedirectionValues($ARGV[1]);
-#print "|$_|  |$redirectionValue{$_}|\n",  for keys %redirectionValue;
 
 
 #Read config file in which we will replace the versions

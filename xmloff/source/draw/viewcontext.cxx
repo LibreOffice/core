@@ -36,10 +36,11 @@
 #include "VisAreaContext.hxx"
 
 using namespace com::sun::star;
-using namespace rtl;
 using ::xmloff::token::IsXMLToken;
 
 using ::xmloff::token::XML_EMBEDDED_VISIBLE_AREA;
+
+using ::rtl::OUString;
 
 //------------------------------------------------------------------
 

@@ -553,7 +553,7 @@ void SfxMacroConfig::ReleaseSlotId(sal_uInt16 nId)
         }
     }
 
-    DBG_ERROR("Macro-SlotId is not found!");
+    OSL_FAIL("Macro-SlotId is not found!");
 }
 
 //==========================================================================
@@ -572,7 +572,7 @@ void SfxMacroConfig::RegisterSlotId(sal_uInt16 nId)
         }
     }
 
-    DBG_ERROR("Macro-SlotId is not found!");
+    OSL_FAIL("Macro-SlotId is not found!");
 }
 
 //==========================================================================

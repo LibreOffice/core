@@ -29,10 +29,6 @@ PRJ=..$/..
 PRJNAME=editeng
 TARGET=misc
 
-#PROJECTPCH4DLL=TRUE
-#PROJECTPCH=eeng_pch
-#PROJECTPCHSOURCE=eeng_pch
-
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------------
@@ -40,7 +36,7 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  settings.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
-# --- Allgemein ----------------------------------------------------------
+# --- General ----------------------------------------------------------
 
 .IF "$(editdebug)" != "" || "$(EDITDEBUG)" != ""
 CDEFS+=-DEDITDEBUG

@@ -39,8 +39,6 @@
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_ULONGS
-#define _SVSTDARR_BOOLS
-#define _SVSTDARR_BYTES
 #define _SVSTDARR_USHORTSSORT
 #include <svl/svstdarr.hxx>
 #endif
@@ -871,7 +869,7 @@ class SwUndoTblNdsChg : public SwUndo
         SvULongs* pNewSttNds;
         SwUndoSaveSections* pDelSects;
     } Ptrs;
-    SvBools aMvBoxes;       // fuers SplitRow (aufgeteilte Nodes einer Box)
+    std::vector<bool> aMvBoxes;  // fuers SplitRow (aufgeteilte Nodes einer Box)
     long nMin, nMax;        // for redo of delete column
     ULONG nSttNode, nCurrBox;
     USHORT nCount, nRelDiff, nAbsDiff, nSetColType;
@@ -1371,9 +1369,13 @@ public:
 
 class SwUndoDelNum : public SwUndo, private SwUndRng
 {
-    SvULongs aNodeIdx;
-    SvBytes aLevels;
-    SvBools aRstLRSpaces;
+    struct NodeLevel
+    {
+        ULONG index;
+        int level;
+        inline NodeLevel(ULONG idx, int lvl) : index(idx), level(lvl) {};
+    };
+    std::vector<NodeLevel> aNodes;
     SwHistory* pHistory;
 public:
     SwUndoDelNum( const SwPaM& rPam );

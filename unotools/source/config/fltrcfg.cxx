@@ -37,8 +37,9 @@
 #include <com/sun/star/uno/Sequence.hxx>
 
 using namespace utl;
-using namespace rtl;
 using namespace com::sun::star::uno;
+
+using ::rtl::OUString;
 
 #define C2U(cChar) OUString(RTL_CONSTASCII_USTRINGPARAM(cChar))
 
@@ -373,7 +374,7 @@ static ULONG lcl_GetFlag(sal_Int32 nProp)
         case 10: nFlag = FILTERCFG_ENABLE_WORD_PREVIEW; break;
         case 11: nFlag = FILTERCFG_USE_ENHANCED_FIELDS; break;
 
-        default: DBG_ERROR("illegal value");
+        default: OSL_FAIL("illegal value");
     }
     return nFlag;
 }

@@ -92,6 +92,7 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <tools/diagnose_ex.h>
+#include <osl/diagnose.h>
 #include <connectivity/DriversConfig.hxx>
 
 #include <memory>
@@ -171,7 +172,7 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(Window* _pParent
     if (pCollectionItem)
         m_pCollection = pCollectionItem->getCollection();
 
-    DBG_ASSERT(m_pCollection, "ODbTypeWizDialogSetup::ODbTypeWizDialogSetup : really need a DSN type collection !");
+    OSL_ENSURE(m_pCollection, "ODbTypeWizDialogSetup::ODbTypeWizDialogSetup : really need a DSN type collection !");
 
     FreeResource();
 
@@ -387,7 +388,7 @@ void ODbTypeWizDialogSetup::activateDatabasePath()
     }
     break;
     default:
-        DBG_ERROR( "ODbTypeWizDialogSetup::activateDatabasePath: unknown creation mode!" );
+        OSL_FAIL( "ODbTypeWizDialogSetup::activateDatabasePath: unknown creation mode!" );
     }
 
     enableButtons( WZB_NEXT, m_pGeneralPage->GetDatabaseCreationMode() != OGeneralPage::eOpenExisting );
@@ -725,7 +726,7 @@ sal_Bool ODbTypeWizDialogSetup::leaveState(WizardState _nState)
 // -----------------------------------------------------------------------------
 void ODbTypeWizDialogSetup::setTitle(const ::rtl::OUString& /*_sTitle*/)
 {
-    DBG_ERROR( "ODbTypeWizDialogSetup::setTitle: not implemented!" );
+    OSL_FAIL( "ODbTypeWizDialogSetup::setTitle: not implemented!" );
         // why?
 }
 

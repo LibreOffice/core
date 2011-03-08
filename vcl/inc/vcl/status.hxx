@@ -32,8 +32,10 @@
 #include <vcl/sv.h>
 #include <vcl/dllapi.h>
 #include <vcl/window.hxx>
+#include <vector>
 
-class ImplStatusItemList;
+struct ImplStatusItem;
+typedef ::std::vector< ImplStatusItem* > ImplStatusItemList;
 
 // --------------------
 // - Progress-Ausgabe -

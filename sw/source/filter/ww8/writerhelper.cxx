@@ -32,47 +32,36 @@
 #include <com/sun/star/util/XCloseable.hpp>
 
 #include <doc.hxx>
-#   include "writerhelper.hxx"
-#   include <msfilter.hxx>
+#include "writerhelper.hxx"
+#include <msfilter.hxx>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
 
 #include <algorithm>                //std::swap
 #include <functional>               //std::binary_function
-#   include <svl/itemiter.hxx>  //SfxItemIter
-#   include <svx/svdobj.hxx>        //SdrObject
-#   include <svx/svdoole2.hxx>      //SdrOle2Obj
-#   include <svx/fmglob.hxx>        //FmFormInventor
-#   include <editeng/brkitem.hxx>       //SvxFmtBreakItem
-#   include <editeng/tstpitem.hxx>      //SvxTabStopItem
-#   include <ndtxt.hxx>             //SwTxtNode
-#    include <ndnotxt.hxx>          //SwNoTxtNode
-#    include <fmtcntnt.hxx>         //SwFmtCntnt
-#    include <swtable.hxx>          //SwTable
-#    include <frmfmt.hxx>           //SwFrmFmt
-#    include <flypos.hxx>           //SwPosFlyFrms
-#    include <fmtanchr.hxx>         //SwFmtAnchor
-#    include <ndgrf.hxx>            //SwGrfNode
-#    include <fmtfsize.hxx>         //SwFmtFrmSize
-#   include <SwStyleNameMapper.hxx> //SwStyleNameMapper
-#   include <docary.hxx>            //SwCharFmts
-#   include <charfmt.hxx>           //SwCharFmt
-#   include <fchrfmt.hxx>           //SwFmtCharFmt
+#include <svl/itemiter.hxx>  //SfxItemIter
+#include <svx/svdobj.hxx>        //SdrObject
+#include <svx/svdoole2.hxx>      //SdrOle2Obj
+#include <svx/fmglob.hxx>        //FmFormInventor
+#include <editeng/brkitem.hxx>       //SvxFmtBreakItem
+#include <editeng/tstpitem.hxx>      //SvxTabStopItem
+#include <ndtxt.hxx>             //SwTxtNode
+#include <ndnotxt.hxx>          //SwNoTxtNode
+#include <fmtcntnt.hxx>         //SwFmtCntnt
+#include <swtable.hxx>          //SwTable
+#include <frmfmt.hxx>           //SwFrmFmt
+#include <flypos.hxx>           //SwPosFlyFrms
+#include <fmtanchr.hxx>         //SwFmtAnchor
+#include <ndgrf.hxx>            //SwGrfNode
+#include <fmtfsize.hxx>         //SwFmtFrmSize
+#include <SwStyleNameMapper.hxx> //SwStyleNameMapper
+#include <docary.hxx>            //SwCharFmts
+#include <charfmt.hxx>           //SwCharFmt
+#include <fchrfmt.hxx>           //SwFmtCharFmt
 #ifndef _UNOTOOLS_STREAMWRAP_HXX
-#   include <unotools/streamwrap.hxx>
+#include <unotools/streamwrap.hxx>
 #endif
 #include <numrule.hxx>
-
-#ifdef DEBUGDUMP
-#       include <vcl/svapp.hxx>
-#   ifndef _TOOLS_URLOBJ_HXX
-#       include <tools/urlobj.hxx>
-#   endif
-#   ifndef _UNOTOOLS_UCBSTREAMHELPER_HXX
-#       include <unotools/ucbstreamhelper.hxx>
-#   endif
-#       include <unotools/localfilehelper.hxx>
-#endif
 
 using namespace com::sun::star;
 using namespace nsSwGetPoolIdFromName;
@@ -95,15 +84,15 @@ namespace
         return res;
     }
 
-    // --> OD 2009-02-04 #i98791# - adjust sorting
-    //Utility to sort SwTxtFmtColl's by their assigned outline style list level
+    // #i98791# - adjust sorting
+    // Utility to sort SwTxtFmtColl's by their assigned outline style list level
     class outlinecmp : public
         std::binary_function<const SwTxtFmtColl*, const SwTxtFmtColl*, bool>
     {
     public:
         bool operator()(const SwTxtFmtColl *pA, const SwTxtFmtColl *pB) const
         {
-            // --> OD 2009-02-04 #i98791#
+            // #i98791#
             bool bResult( false );
             const bool bIsAAssignedToOutlineStyle( pA->IsAssignedToListLevelOfOutlineStyle() );
             const bool bIsBAssignedToOutlineStyle( pB->IsAssignedToListLevelOfOutlineStyle() );
@@ -180,14 +169,11 @@ namespace sw
         : mpFlyFrm(&rFmt),
           maPos(rPos),
           maSize(),
-          // --> OD 2007-04-19 #i43447#
-          maLayoutSize(),
-          // <--
+          maLayoutSize(), // #i43447#
           meWriterType(eTxtBox),
           mpStartFrameContent(0),
-          // --> OD 2007-04-19 #i43447# - move to initialization list
+          // #i43447# - move to initialization list
           mbIsInline( (rFmt.GetAnchor().GetAnchorId() == FLY_AS_CHAR) )
-          // <--
     {
         switch (rFmt.Which())
         {
@@ -197,7 +183,7 @@ namespace sw
                     SwNodeIndex aIdx(*pIdx, 1);
                     const SwNode &rNd = aIdx.GetNode();
                     using sw::util::GetSwappedInSize;
-                    // --> OD 2007-04-19 #i43447# - determine layout size
+                    // #i43447# - determine layout size
                     {
                         SwRect aLayRect( rFmt.FindLayoutRect() );
                         Rectangle aRect( aLayRect.SVRect() );
@@ -222,8 +208,7 @@ namespace sw
                             break;
                         default:
                             meWriterType = eTxtBox;
-                            // --> OD 2007-04-19 #i43447#
-                            // Size equals layout size for text boxes
+                            // #i43447# - Size equals layout size for text boxes
                             maSize = maLayoutSize;
                             // <--
                             break;
@@ -341,51 +326,6 @@ namespace sw
                 mxIPRef = 0;
             }
         }
-
-#ifdef DEBUGDUMP
-        SvStream *CreateDebuggingStream(const String &rSuffix)
-        {
-            SvStream* pDbgOut = 0;
-            static sal_Int32 nCount;
-            String aFileName(String(RTL_CONSTASCII_STRINGPARAM("wwdbg")));
-            aFileName.Append(String::CreateFromInt32(++nCount));
-            aFileName.Append(rSuffix);
-            String aURLStr;
-            if (::utl::LocalFileHelper::ConvertPhysicalNameToURL(
-                Application::GetAppFileName(), aURLStr))
-            {
-                INetURLObject aURL(aURLStr);
-                aURL.removeSegment();
-                aURL.removeFinalSlash();
-                aURL.Append(aFileName);
-
-                pDbgOut = ::utl::UcbStreamHelper::CreateStream(
-                    aURL.GetMainURL(INetURLObject::NO_DECODE),
-                    STREAM_TRUNC | STREAM_WRITE);
-            }
-            return pDbgOut;
-        }
-
-        void DumpStream(const SvStream &rSrc, SvStream &rDest, sal_uInt32 nLen)
-        {
-            SvStream &rSource = const_cast<SvStream&>(rSrc);
-            ULONG nOrigPos = rSource.Tell();
-            if (nLen == STREAM_SEEK_TO_END)
-            {
-                rSource.Seek(STREAM_SEEK_TO_END);
-                nLen = rSource.Tell();
-            }
-            if (nLen - nOrigPos)
-            {
-                rSource.Seek(nOrigPos);
-                sal_Char* pDat = new sal_Char[nLen];
-                rSource.Read(pDat, nLen);
-                rDest.Write(pDat, nLen);
-                delete[] pDat;
-                rSource.Seek(nOrigPos);
-            }
-        }
-#endif
     }
 
     namespace util
@@ -437,15 +377,13 @@ namespace sw
             std::swap(mnFormLayer, rOther.mnFormLayer);
         }
 
-        // --> OD 2004-12-13 #i38889# - by default put objects into the invisible
-        // layers.
+        // #i38889# - by default put objects into the invisible layers.
         SetLayer::SetLayer(const SwDoc &rDoc)
             : mnHeavenLayer(rDoc.GetInvisibleHeavenId()),
               mnHellLayer(rDoc.GetInvisibleHellId()),
               mnFormLayer(rDoc.GetInvisibleControlsId())
         {
         }
-        // <--
 
         SetLayer::SetLayer(const SetLayer& rOther) throw()
             : mnHeavenLayer(rOther.mnHeavenLayer),
@@ -554,12 +492,11 @@ namespace sw
             return pFmt;
         }
 
-        // --> OD 2009-02-04 #i98791# - adjust sorting algorithm
+        // #i98791# - adjust sorting algorithm
         void SortByAssignedOutlineStyleListLevel(ParaStyles &rStyles)
         {
             std::sort(rStyles.begin(), rStyles.end(), outlinecmp());
         }
-        // <--
 
         /*
            Utility to extract flyfmts from a document, potentially from a
@@ -680,7 +617,7 @@ namespace sw
 
                 if(nPointCount > 0x0000ffff)
                 {
-                    DBG_ERROR("PolygonFromPolyPolygon: too many points for a single polygon (!)");
+                    OSL_FAIL("PolygonFromPolyPolygon: too many points for a single polygon (!)");
                     nPointCount = 0x0000ffff;
                 }
 

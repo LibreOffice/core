@@ -45,7 +45,9 @@
 #include <sys/wait.h>
 
 using namespace psp;
-using namespace rtl;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
 
 /*
  *  static helpers
@@ -198,7 +200,7 @@ SalInfoPrinter* SvpSalInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueIn
 
         // set/clear backwards compatibility flag
         bool bStrictSO52Compatibility = false;
-        std::hash_map<rtl::OUString, rtl::OUString, rtl::OUStringHash >::const_iterator compat_it =
+        boost::unordered_map<rtl::OUString, rtl::OUString, rtl::OUStringHash >::const_iterator compat_it =
             pJobSetup->maValueMap.find( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StrictSO52Compatibility" ) ) );
         if( compat_it != pJobSetup->maValueMap.end() )
         {

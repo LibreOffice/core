@@ -322,7 +322,7 @@ void TokenPool::GetElement( const UINT16 nId )
         {
 #ifdef DBG_UTIL
             case T_Id:
-                DBG_ERROR( "-TokenPool::GetElement(): hier hast Du nichts zu suchen!" );
+                OSL_FAIL( "-TokenPool::GetElement(): hier hast Du nichts zu suchen!" );
                 break;
 #endif
             case T_Str:
@@ -408,7 +408,7 @@ void TokenPool::GetElement( const UINT16 nId )
             }
             break;
             default:
-                DBG_ERROR("-TokenPool::GetElement(): Zustand undefiniert!?");
+                OSL_FAIL("-TokenPool::GetElement(): Zustand undefiniert!?");
         }
     }
 }
@@ -515,7 +515,7 @@ void TokenPool::GetElementRek( const UINT16 nId )
                 }
                 break;
                 default:
-                    DBG_ERROR("-TokenPool::GetElementRek(): Zustand undefiniert!?");
+                    OSL_FAIL("-TokenPool::GetElementRek(): Zustand undefiniert!?");
             }
         }
         else    // elementarer SC_Token

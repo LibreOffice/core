@@ -38,10 +38,11 @@
 #include "smdll.hxx"
 #include "format.hxx"
 
-using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
+
+using ::rtl::OUString;
 
 
 static const char* aRootName = "Office.Math";
@@ -544,7 +545,7 @@ void SmMathConfig::ReadSymbol( SmSym &rSymbol,
         }
         else
         {
-            DBG_ERROR( "symbol read error" );
+            OSL_FAIL( "symbol read error" );
         }
     }
 }
@@ -748,6 +749,7 @@ void SmMathConfig::ReadFontFormat( SmFontFormat &rFontFormat,
         ++pValue;
 
         OSL_ENSURE( bOK, "read FontFormat failed" );
+        (void)bOK;
     }
 }
 

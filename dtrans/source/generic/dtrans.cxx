@@ -38,7 +38,8 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 using namespace com::sun::star::uno;
 using namespace cppu;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 extern "C"
 {

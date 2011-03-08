@@ -80,7 +80,7 @@ private:
     FixedText           maHintDocFT;
     FixedText           maHintBasicFT;
     FixedText           maHintPackageFT;
-    SvxSimpleTable      maSignaturesLB; // PB 2006/02/02 #i48648 now SvHeaderTabListBox
+    SvxSimpleTable      maSignaturesLB; // #i48648 now SvHeaderTabListBox
     FixedImage          maSigsValidImg;
     FixedInfo           maSigsValidFI;
     FixedImage          maSigsInvalidImg;

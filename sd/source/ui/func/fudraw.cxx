@@ -434,7 +434,7 @@ BOOL FuDraw::KeyInput(const KeyEvent& rKEvt)
                     // nicht mehr versucht wird, ein Grafik-Objekt
                     // zu restaurieren, das gar nicht mehr existiert.
                     // Alle anderen OLE-Objekte sind davon nicht
-                    // betroffen (KA 06.10.95)
+                    // betroffen
                     OSL_ASSERT (mpViewShell->GetViewShell()!=NULL);
                     Client* pIPClient = static_cast<Client*>(
                         mpViewShell->GetViewShell()->GetIPClient());

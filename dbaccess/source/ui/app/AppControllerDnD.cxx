@@ -51,7 +51,6 @@
 #include <com/sun/star/sdbcx/XViewsSupplier.hpp>
 #include <com/sun/star/sdb/XQueryDefinitionsSupplier.hpp>
 #include <com/sun/star/sdbcx/XDrop.hpp>
-#include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/ucbhelper.hxx>
 #include "dlgsave.hxx"
@@ -91,6 +90,7 @@
 #include <sfx2/docfilt.hxx>
 #include <svtools/fileview.hxx>
 #include <tools/diagnose_ex.h>
+#include <osl/diagnose.h>
 #include "defaultobjectnamecheck.hxx"
 #include <osl/mutex.hxx>
 #include "subcomponentmanager.hxx"
@@ -211,7 +211,7 @@ void OApplicationController::deleteObjects( ElementType _eType, const ::std::vec
         // The list of elements to delete is allowed to contain related elements: A given element may
         // be the ancestor or child of another element from the list.
         // We want to ensure that ancestors get deleted first, so we normalize the list in this respect.
-        // #i33353# - 2004-09-27 - fs@openoffice.org
+        // #i33353#
         ::std::set< ::rtl::OUString > aDeleteNames;
             // Note that this implicitly uses ::std::less< ::rtl::OUString > a comparison operation, which
             // results in lexicographical order, which is exactly what we need, because "foo" is *before*
@@ -265,7 +265,7 @@ void OApplicationController::deleteObjects( ElementType _eType, const ::std::vec
 
                     // now that we removed the element, care for all it's child elements
                     // which may also be a part of the list
-                    // #i33353# - 2004-09-27 - fs@openoffice.org
+                    // #i33353#
                     OSL_ENSURE( aThisRound->getLength() - 1 >= 0, "OApplicationController::deleteObjects: empty name?" );
                     ::rtl::OUStringBuffer sSmallestSiblingName( *aThisRound );
                     sSmallestSiblingName.append( (sal_Unicode)( '/' + 1) );
@@ -586,7 +586,7 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
                     bValidDescriptor = (0 != sCommand.getLength());
                 if (!bValidDescriptor)
                 {
-                    DBG_ERROR("OApplicationController::paste: invalid descriptor!");
+                    OSL_FAIL("OApplicationController::paste: invalid descriptor!");
                     return sal_False;
                 }
 
@@ -637,7 +637,7 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
 
                     if (!bSuccess)
                     {
-                        DBG_ERROR("OApplicationController::paste: could not extract the source query object!");
+                        OSL_FAIL("OApplicationController::paste: could not extract the source query object!");
                         // TODO: maybe this is worth an error message to be displayed to the user ....
                         return sal_False;
                     }
@@ -648,7 +648,7 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
                 Reference< XSingleServiceFactory > xQueryFactory(xDestQueries, UNO_QUERY);
                 if (!xQueryFactory.is())
                 {
-                    DBG_ERROR("OApplicationController::paste: invalid destination query container!");
+                    OSL_FAIL("OApplicationController::paste: invalid destination query container!");
                     return sal_False;
                 }
 
@@ -680,7 +680,7 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
 
                 // create a new object
                 Reference< XPropertySet > xNewQuery(xQueryFactory->createInstance(), UNO_QUERY);
-                DBG_ASSERT(xNewQuery.is(), "OApplicationController::paste: invalid object created by factory!");
+                OSL_ENSURE(xNewQuery.is(), "OApplicationController::paste: invalid object created by factory!");
                 if (xNewQuery.is())
                 {
                     // initialize

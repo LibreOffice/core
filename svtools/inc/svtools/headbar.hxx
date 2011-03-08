@@ -187,7 +187,9 @@ nicht HIB_CLICKABLE setzen und dafuer HIB_FIXEDPOS.
 *************************************************************************/
 
 class Accelerator;
-class ImplHeadItemList;
+class ImplHeadItem;
+
+typedef ::std::vector< ImplHeadItem* > ImplHeadItemList;
 
 // -----------
 // - WinBits -

@@ -30,9 +30,8 @@
 #include "precompiled_editeng.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <svl/eitem.hxx>
-#include <tools/list.hxx>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <svl/itemprop.hxx>
 
 #include <editeng/unoipset.hxx>
@@ -156,7 +155,7 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry*
     }
     else
     {
-        DBG_ERROR( "No SfxPoolItem found for property!" );
+        OSL_FAIL( "No SfxPoolItem found for property!" );
     }
 
     return aVal;
@@ -168,18 +167,18 @@ void SvxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry* pMa
     if(!pMap || !pMap->nWID)
         return;
 
-    // item holen
+    // Get item
     const SfxPoolItem* pItem = 0;
     SfxPoolItem *pNewItem = 0;
     SfxItemState eState = rSet.GetItemState( pMap->nWID, sal_True, &pItem );
     SfxItemPool* pPool = rSet.GetPool();
 
-    // UnoAny in item-Wert stecken
+    // Put UnoAny in the item value
     if(eState < SFX_ITEM_DEFAULT || pItem == NULL)
     {
         if( pPool == NULL )
         {
-            DBG_ERROR( "No default item and no pool?" );
+            OSL_FAIL( "No default item and no pool?" );
             return;
         }
 
@@ -208,7 +207,7 @@ void SvxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry* pMa
 
         if( pNewItem->PutValue( aValue, nMemberId ) )
         {
-            // neues item in itemset setzen
+            // Set new item in item set
             rSet.Put( *pNewItem, pMap->nWID );
         }
         delete pNewItem;
@@ -218,25 +217,22 @@ void SvxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry* pMa
 //----------------------------------------------------------------------
 uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry* pMap ) const
 {
-    // Schon ein Wert eingetragen? Dann schnell fertig
+    // Already entered a value? Then finish quickly
     uno::Any* pUsrAny = GetUsrAnyForID(pMap->nWID);
     if(pUsrAny)
         return *pUsrAny;
 
-    // Noch kein UsrAny gemerkt, generiere Default-Eintrag und gib
-    // diesen zurueck
-
+    // No UsrAny detected yet, generate Default entry and return this
     const SfxMapUnit eMapUnit = mrItemPool.GetMetric((USHORT)pMap->nWID);
     BYTE nMemberId = pMap->nMemberId & (~SFX_METRIC_ITEM);
     if( eMapUnit == SFX_MAPUNIT_100TH_MM )
         nMemberId &= (~CONVERT_TWIPS);
-
     uno::Any aVal;
     SfxItemSet aSet( mrItemPool, pMap->nWID, pMap->nWID);
 
     if( (pMap->nWID < OWN_ATTR_VALUE_START) && (pMap->nWID > OWN_ATTR_VALUE_END ) )
     {
-        // Default aus ItemPool holen
+        // Get Default from ItemPool
         if(mrItemPool.IsWhich(pMap->nWID))
             aSet.Put(mrItemPool.GetDefaultItem(pMap->nWID));
     }
@@ -335,13 +331,13 @@ void SvxUnoConvertToMM( const SfxMapUnit eSourceMapUnit, uno::Any & rMetric ) th
                 rMetric <<= (sal_uInt32)(TWIPS_TO_MM(*(sal_uInt32*)rMetric.getValue()));
                 break;
             default:
-                DBG_ERROR("AW: Missing unit translation to 100th mm!");
+                OSL_FAIL("AW: Missing unit translation to 100th mm!");
             }
             break;
         }
         default:
         {
-            DBG_ERROR("AW: Missing unit translation to 100th mm!");
+            OSL_FAIL("AW: Missing unit translation to 100th mm!");
         }
     }
 }
@@ -373,13 +369,13 @@ void SvxUnoConvertFromMM( const SfxMapUnit eDestinationMapUnit, uno::Any & rMetr
                     rMetric <<= (sal_uInt32)(MM_TO_TWIPS(*(sal_uInt32*)rMetric.getValue()));
                     break;
                 default:
-                    DBG_ERROR("AW: Missing unit translation to 100th mm!");
+                    OSL_FAIL("AW: Missing unit translation to 100th mm!");
             }
             break;
         }
         default:
         {
-            DBG_ERROR("AW: Missing unit translation to PoolMetrics!");
+            OSL_FAIL("AW: Missing unit translation to PoolMetrics!");
         }
     }
 }

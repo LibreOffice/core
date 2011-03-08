@@ -313,8 +313,7 @@ void SwDoc::SetFtnInfo(const SwFtnInfo& rInfo)
             pFtnInfo->Modify( &aOld, &aNew );
         }
 
-        // --> OD 2008-01-09 #i81002#
-        // no update during loading
+        // #i81002# no update during loading
         if ( !IsInReading() )
         {
             UpdateRefFlds(NULL);
@@ -378,8 +377,7 @@ void SwDoc::SetEndNoteInfo(const SwEndNoteInfo& rInfo)
             pEndNoteInfo->Modify( &aOld, &aNew );
         }
 
-        // --> OD 2008-01-09 #i81002#
-        // no update during loading
+        // #i81002# no update during loading
         if ( !IsInReading() )
         {
             UpdateRefFlds(NULL);

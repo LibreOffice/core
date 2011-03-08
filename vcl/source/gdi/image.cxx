@@ -275,51 +275,6 @@ uno::Reference< graphic::XGraphic > Image::GetXGraphic() const
 
 // -----------------------------------------------------------------------
 
-Image Image::GetColorTransformedImage( ImageColorTransform eColorTransform ) const
-{
-    DBG_CHKTHIS( Image, NULL );
-
-    Image aRet;
-
-    if( IMAGECOLORTRANSFORM_HIGHCONTRAST == eColorTransform )
-    {
-        BitmapEx aBmpEx( GetBitmapEx() );
-
-        if( !aBmpEx.IsEmpty() )
-        {
-            Color*  pSrcColors = NULL;
-            Color*  pDstColors = NULL;
-            ULONG   nColorCount = 0;
-
-            Image::GetColorTransformArrays( eColorTransform, pSrcColors, pDstColors, nColorCount );
-
-            if( nColorCount && pSrcColors && pDstColors )
-            {
-                aBmpEx.Replace( pSrcColors, pDstColors, nColorCount );
-                aRet = Image( aBmpEx );
-            }
-
-            delete[] pSrcColors;
-            delete[] pDstColors;
-        }
-    }
-    else if( IMAGECOLORTRANSFORM_MONOCHROME_BLACK == eColorTransform ||
-             IMAGECOLORTRANSFORM_MONOCHROME_WHITE == eColorTransform  )
-    {
-        BitmapEx aBmpEx( GetBitmapEx() );
-
-        if( !aBmpEx.IsEmpty() )
-            aRet = Image( aBmpEx.GetColorTransformedBitmapEx( ( BmpColorMode )( eColorTransform ) ) );
-    }
-
-    if( !aRet )
-        aRet = *this;
-
-    return aRet;
-}
-
-// -----------------------------------------------------------------------
-
 void Image::Invert()
 {
     BitmapEx aInvertedBmp( GetBitmapEx() );

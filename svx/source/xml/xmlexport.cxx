@@ -81,7 +81,7 @@ sal_Bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutp
         uno::Reference< lang::XMultiServiceFactory> xServiceFactory( ::comphelper::getProcessServiceFactory() );
         if( !xServiceFactory.is() )
         {
-            DBG_ERROR( "got no service manager" );
+            OSL_FAIL( "got no service manager" );
             bDocRet = sal_False;
         }
 
@@ -90,7 +90,7 @@ sal_Bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutp
             uno::Reference< uno::XInterface > xWriter( xServiceFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Writer" ) ) ) );
             if( !xWriter.is() )
             {
-                DBG_ERROR( "com.sun.star.xml.sax.Writer service missing" );
+                OSL_FAIL( "com.sun.star.xml.sax.Writer service missing" );
                 bDocRet = sal_False;
             }
 
@@ -121,7 +121,7 @@ sal_Bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutp
                 uno::Reference< document::XFilter > xFilter( xServiceFactory->createInstanceWithArguments( OUString::createFromAscii( pExportService ), aArgs ), uno::UNO_QUERY );
                 if( !xFilter.is() )
                 {
-                    DBG_ERROR( "com.sun.star.comp.Draw.XMLExporter service missing" );
+                    OSL_FAIL( "com.sun.star.comp.Draw.XMLExporter service missing" );
                     bDocRet = sal_False;
                 }
 

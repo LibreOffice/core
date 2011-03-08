@@ -200,7 +200,7 @@ private:
 
     virtual void        ActivatePage( const SfxItemSet& rSet );
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
-    BOOL                ConfirmLeave( const String& rStringSelection );   //add by BerryJia for fixing Bug102610 Time:2002-8-29 11:00 (China Standard Time GMT+08:00)
+    BOOL                ConfirmLeave( const String& rStringSelection );
 
     SvxSearchTabPage( Window* pParent, const SfxItemSet& rSet );
     virtual ~SvxSearchTabPage();
@@ -278,7 +278,6 @@ public:
     virtual void        Reset( const SfxItemSet& rSet );
 };
 
-//added by jmeng begin
 class MozPluginTabPage : public SfxTabPage
 {
     FixedLine       aMSWordGB;
@@ -300,7 +299,7 @@ public:
     virtual void        Reset( const SfxItemSet& rSet );
 
 };
-//added by jmeng end
+
 #endif
 
 #ifdef WNT

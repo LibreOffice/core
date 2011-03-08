@@ -77,7 +77,7 @@ published interface XFolderPicker: com::sun::star::ui::dialogs::XExecutableDialo
     /** Returns the selected directory as url conform to <a href="http://www.w3.org/Addressing/rfc1738.txt">Rfc1738</a>.
 
         @returns
-        The selected directory as url if the user did close the dialog with ok
+        The selected directory as url if the user did close the dialog with Ok
         else the returned value is undefined.
     */
     string getDirectory( );

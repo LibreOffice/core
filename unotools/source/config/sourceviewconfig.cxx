@@ -38,8 +38,10 @@
 #include <itemholder1.hxx>
 
 using namespace utl;
-using namespace rtl;
 using namespace com::sun::star::uno;
+
+using ::rtl::OUString;
+
 namespace utl
 {
 class SourceViewConfig_Impl : public utl::ConfigItem

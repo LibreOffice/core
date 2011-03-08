@@ -75,10 +75,6 @@
 .INCLUDE : unxsogi.mk
 .ENDIF
 
-.IF "$(COM)$(OS)$(CPU)" == "GCCSCOI"
-.INCLUDE : unxscoi.mk
-.ENDIF
-
 .IF "$(COM)$(OS)$(CPU)" == "GCCLINUXS"
 .INCLUDE : unxlngs.mk
 .ENDIF
@@ -119,14 +115,6 @@
 .INCLUDE : unxlnga.mk
 .ENDIF
 
-.IF "$(COM)$(OS)$(CPU)" == "ACCHPUXR"
-.INCLUDE : unxhpxr.mk
-.ENDIF
-
-.IF "$(COM)$(OS)$(CPU)" == "GCCHPUXR"
-.INCLUDE : unxhpgr.mk
-.ENDIF
-
 .IF "$(COM)$(OS)$(CPU)" == "GCCNETBSDA"
 .INCLUDE : unxbsda.mk
 .ENDIF
@@ -157,6 +145,10 @@
 
 .IF "$(COM)$(OS)" == "GCCOPENBSD"
 .INCLUDE : unxobsd.mk
+.ENDIF
+
+.IF "$(COM)$(OS)" == "GCCDRAGONFLY"
+.INCLUDE : unxdfly.mk
 .ENDIF
 
 .IF "$(COM)$(OS)$(CPU)" == "GCCMACOSXP"

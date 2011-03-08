@@ -849,7 +849,7 @@ void SAL_CALL SvNumberFormatObj::addPropertyChangeListener( const rtl::OUString&
                         throw(beans::UnknownPropertyException,
                         lang::WrappedTargetException, uno::RuntimeException)
 {
-    DBG_ERROR("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SAL_CALL SvNumberFormatObj::removePropertyChangeListener( const rtl::OUString&,
@@ -857,7 +857,7 @@ void SAL_CALL SvNumberFormatObj::removePropertyChangeListener( const rtl::OUStri
                         throw(beans::UnknownPropertyException,
                         lang::WrappedTargetException, uno::RuntimeException)
 {
-    DBG_ERROR("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SAL_CALL SvNumberFormatObj::addVetoableChangeListener( const rtl::OUString&,
@@ -865,7 +865,7 @@ void SAL_CALL SvNumberFormatObj::addVetoableChangeListener( const rtl::OUString&
                         throw(beans::UnknownPropertyException,
                         lang::WrappedTargetException, uno::RuntimeException)
 {
-    DBG_ERROR("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SAL_CALL SvNumberFormatObj::removeVetoableChangeListener( const rtl::OUString&,
@@ -873,7 +873,7 @@ void SAL_CALL SvNumberFormatObj::removeVetoableChangeListener( const rtl::OUStri
                         throw(beans::UnknownPropertyException,
                         lang::WrappedTargetException, uno::RuntimeException)
 {
-    DBG_ERROR("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 // XPropertyAccess
@@ -1086,7 +1086,7 @@ void SAL_CALL SvNumberFormatSettingsObj::addPropertyChangeListener( const rtl::O
                         throw(beans::UnknownPropertyException,
                         lang::WrappedTargetException, uno::RuntimeException)
 {
-    DBG_ERROR("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SAL_CALL SvNumberFormatSettingsObj::removePropertyChangeListener( const rtl::OUString&,
@@ -1094,7 +1094,7 @@ void SAL_CALL SvNumberFormatSettingsObj::removePropertyChangeListener( const rtl
                         throw(beans::UnknownPropertyException,
                         lang::WrappedTargetException, uno::RuntimeException)
 {
-    DBG_ERROR("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SAL_CALL SvNumberFormatSettingsObj::addVetoableChangeListener( const rtl::OUString&,
@@ -1102,7 +1102,7 @@ void SAL_CALL SvNumberFormatSettingsObj::addVetoableChangeListener( const rtl::O
                         throw(beans::UnknownPropertyException,
                         lang::WrappedTargetException, uno::RuntimeException)
 {
-    DBG_ERROR("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SAL_CALL SvNumberFormatSettingsObj::removeVetoableChangeListener( const rtl::OUString&,
@@ -1110,7 +1110,7 @@ void SAL_CALL SvNumberFormatSettingsObj::removeVetoableChangeListener( const rtl
                         throw(beans::UnknownPropertyException,
                         lang::WrappedTargetException, uno::RuntimeException)
 {
-    DBG_ERROR("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 // XServiceInfo

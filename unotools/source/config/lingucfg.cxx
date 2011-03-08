@@ -51,8 +51,10 @@
 
 #include <itemholder1.hxx>
 
-using namespace rtl;
 using namespace com::sun::star;
+
+using ::rtl::OUString;
+using ::rtl::Uri;
 
 #define A2OU(x)        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( x ))
 #define EXPAND_PROTOCOL     "vnd.sun.star.expand:"

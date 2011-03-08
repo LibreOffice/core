@@ -613,7 +613,7 @@ namespace dbtools
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XParameters>& _xParameters,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxHandler,
-                            const ::std::bit_vector& _aParametersSet = ::std::bit_vector());
+                            const ::std::vector<bool, std::allocator<bool> >& _aParametersSet = ::std::vector<bool, std::allocator<bool> >());
 
     /** call the appropiate set method for the specific sql type @see com::sun::star::sdbc::DataType
         @param  _xParams        the parameters where to set the value

@@ -722,7 +722,7 @@ short Dialog::Execute()
         if( ! aParentDelData.IsDelete() )
             pDialogParent->ImplRemoveDel( &aParentDelData );
         else
-            DBG_ERROR( "Dialog::Execute() - Parent of dialog destroyed in Execute()" );
+            OSL_FAIL( "Dialog::Execute() - Parent of dialog destroyed in Execute()" );
     }
 #endif
     if ( !aDelData.IsDelete() )
@@ -730,7 +730,7 @@ short Dialog::Execute()
 #ifdef DBG_UTIL
     else
     {
-        DBG_ERROR( "Dialog::Execute() - Dialog destroyed in Execute()" );
+        OSL_FAIL( "Dialog::Execute() - Dialog destroyed in Execute()" );
     }
 #endif
 

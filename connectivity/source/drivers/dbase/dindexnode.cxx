@@ -66,7 +66,6 @@ ONDXKey::ONDXKey(const rtl::OUString& aStr, UINT32 nRec)
     }
 }
 // -----------------------------------------------------------------------------
-
 ONDXKey::ONDXKey(double aVal, UINT32 nRec)
     : ONDXKey_BASE(::com::sun::star::sdbc::DataType::DOUBLE)
      ,nRecord(nRec)
@@ -98,7 +97,7 @@ ONDXPage::~ONDXPage()
 //------------------------------------------------------------------
 void ONDXPage::QueryDelete()
 {
-    // Ablegen im GarbageCollector
+    // Store in GarbageCollector
     if (IsModified() && rIndex.m_pFileStream)
         (*rIndex.m_pFileStream) << *this;
 
@@ -137,7 +136,7 @@ ONDXPagePtr& ONDXPage::GetChild(ODbaseIndex* pIndex)
 //------------------------------------------------------------------
 USHORT ONDXPage::FindPos(const ONDXKey& rKey) const
 {
-    // sucht nach Platz fuer den vorgegeben key auf einer Seite
+    // searches the position for the given key in a page
     USHORT i = 0;
     while (i < nCount && rKey > ((*this)[i]).GetKey())
            i++;
@@ -148,11 +147,10 @@ USHORT ONDXPage::FindPos(const ONDXKey& rKey) const
 //------------------------------------------------------------------
 BOOL ONDXPage::Find(const ONDXKey& rKey)
 {
-    // sucht den vorgegeben key
-    // Besonderheit: gelangt der Algorithmus ans Ende
-    // wird immer die aktuelle Seite und die Knotenposition vermerkt
-    // auf die die Bedingung <= zutrifft
-    // dieses findet beim Insert besondere Beachtung
+    // searches the given key
+    // Speciality: At the end of the method
+    // the actual page and the position of the node, fulfilling the '<=' condition, are saved
+    // This is considered at insert.
     USHORT i = 0;
     while (i < nCount && rKey > ((*this)[i]).GetKey())
            i++;
@@ -161,7 +159,7 @@ BOOL ONDXPage::Find(const ONDXKey& rKey)
 
     if (!IsLeaf())
     {
-        // weiter absteigen
+        // descend further
         ONDXPagePtr aPage = (i==0) ? GetChild(&rIndex) : ((*this)[i-1]).GetChild(&rIndex, this);
         bResult = aPage.Is() && aPage->Find(rKey);
     }
@@ -183,8 +181,8 @@ BOOL ONDXPage::Find(const ONDXKey& rKey)
 //------------------------------------------------------------------
 BOOL ONDXPage::Insert(ONDXNode& rNode, sal_uInt32 nRowsLeft)
 {
-    // beim Erzeugen eines Index koennen auch mehrere Knoten eingefuegt werden
-    // diese sin dann aufsteigend sortiert
+    // When creating an index there can be multiple nodes added,
+    // these are sorted ascending
     BOOL bAppend = nRowsLeft > 0;
     if (IsFull())
     {
@@ -194,17 +192,16 @@ BOOL ONDXPage::Insert(ONDXNode& rNode, sal_uInt32 nRowsLeft)
             aSplitNode = rNode;
         else
         {
-            // merken des letzten Knotens
+            // Save the last node
             aSplitNode = (*this)[nCount-1];
             if(rNode.GetKey() <= aSplitNode.GetKey())
             {
 
-                // und damit habe ich im folgenden praktisch eine Node weniger
+                // this practically reduces the number of nodes by 1
                 if (IsLeaf() && this == &rIndex.m_aCurLeaf)
                 {
-                    // geht davon aus, dass der Knoten, auf dem die Bedingung (<=)
-                    // zutrifft, als m_nCurNode gesetzt ist
-                    --nCount;   // (sonst bekomme ich u.U. Assertions und GPFs - 60593)
+                    // assumes, that the node, for which the condition (<=) holds, is stored in m_nCurNode
+                    --nCount;   // (otherwise we might get Assertions and GPFs - 60593)
                     bResult = Insert(rIndex.m_nCurNode + 1, rNode);
                 }
                 else  // Position unbekannt
@@ -212,11 +209,11 @@ BOOL ONDXPage::Insert(ONDXNode& rNode, sal_uInt32 nRowsLeft)
                     USHORT nPos = NODE_NOTFOUND;
                     while (++nPos < nCount && rNode.GetKey() > ((*this)[nPos]).GetKey()) ;
 
-                    --nCount;   // (sonst bekomme ich u.U. Assertions und GPFs - 60593)
+                    --nCount;   // (otherwise we might get Assertions and GPFs - 60593)
                     bResult = Insert(nPos, rNode);
                 }
 
-                // konnte der neue Knoten eingefuegt werden
+                // can the new node be inserted
                 if (!bResult)
                 {
                     nCount++;
@@ -230,10 +227,10 @@ BOOL ONDXPage::Insert(ONDXNode& rNode, sal_uInt32 nRowsLeft)
         sal_uInt32 nNewPagePos = rIndex.GetPageCount();
         sal_uInt32 nNewPageCount = nNewPagePos + 1;
 
-        // Herausgeloesten Knoten beim Vater einfuegen
+        // insert extracted node into parent node
         if (!HasParent())
         {
-            // Kein Vater, dann neue Wurzel
+            // No parent, then new root
             ONDXPagePtr aNewRoot = rIndex.CreatePage(nNewPagePos + 1);
             aNewRoot->SetChild(this);
 
@@ -242,13 +239,12 @@ BOOL ONDXPage::Insert(ONDXNode& rNode, sal_uInt32 nRowsLeft)
             rIndex.SetPageCount(++nNewPageCount);
         }
 
-        // neues blatt erzeugen und Seite aufteilen
+        // create new leaf and divide page
         ONDXPagePtr aNewPage = rIndex.CreatePage(nNewPagePos,aParent);
         rIndex.SetPageCount(nNewPageCount);
 
-        // wieviele Knoten weren noch eingefuegt
-        // kommen noch ausreichend, dann koennen die Seiten bis zum Rand vollgestopft werden
-
+        // How many nodes are being inserted?
+        // Enough, then we can fill the page to the brim
         ONDXNode aInnerNode;
         if (!IsLeaf() || nRowsLeft < (sal_uInt32)(rIndex.GetMaxNodes() / 2))
             aInnerNode = Split(*aNewPage);
@@ -256,14 +252,14 @@ BOOL ONDXPage::Insert(ONDXNode& rNode, sal_uInt32 nRowsLeft)
         {
             aInnerNode = (*this)[nCount - 1];
 
-            // Knoten zeigt auf neue Seite
+            // Node points to the new page
             aInnerNode.SetChild(aNewPage);
 
-            // innere Knoten haben keine Recordnummer
+            // Inner nodes have no record number
             if (rIndex.isUnique())
                 aInnerNode.GetKey().ResetRecord();
 
-            // neue Seite zeigt nun auf Seite des herausgeloesten Knoten
+            // new page points to the page of the extracted node
             if (!IsLeaf())
                 aNewPage->SetChild(aInnerNode.GetChild());
         }
@@ -275,15 +271,15 @@ BOOL ONDXPage::Insert(ONDXNode& rNode, sal_uInt32 nRowsLeft)
             rIndex.m_aCurLeaf = aNewPage;
             rIndex.m_nCurNode = rIndex.m_aCurLeaf->Count() - 1;
 
-            // Freigeben nicht benoetigter Seiten, danach besteht keine Referenz
-            // mehr auf die Seite, danach kann 'this' nicht mehr gueltig sein!!!
+            // free not needed pages, there are no references to those on the page
+            // afterwards 'this' can't be valid anymore!!!
             ReleaseFull();
         }
 
-        // Einfuegen des herausgeloesten Knotens
+        // Insert extracted node
         return aTempParent->Insert(aInnerNode);
     }
-    else // Seite einfach weiter auffuellen
+    else // Fill the page up
     {
         if (bAppend)
         {
@@ -312,7 +308,7 @@ BOOL ONDXPage::Insert(USHORT nPos, ONDXNode& rNode)
     if (nCount)
     {
         ++nCount;
-        // nach rechts verschieben
+        // shift right
         for (USHORT i = std::min((USHORT)(nMaxCount-1), (USHORT)(nCount-1)); nPos < i; --i)
             (*this)[i] = (*this)[i-1];
     }
@@ -320,7 +316,7 @@ BOOL ONDXPage::Insert(USHORT nPos, ONDXNode& rNode)
         if (nCount < nMaxCount)
             nCount++;
 
-    // einfuegen an der Position
+    // insert at the position
     ONDXNode& rInsertNode = (*this)[nPos];
     rInsertNode = rNode;
     if (rInsertNode.GetChild().Is())
@@ -343,11 +339,11 @@ BOOL ONDXPage::Append(ONDXNode& rNode)
 //------------------------------------------------------------------
 void ONDXPage::Release(BOOL bSave)
 {
-    // freigeben der Pages
+    // free pages
     if (aChild.Is())
         aChild->Release(bSave);
 
-    // Pointer freigeben
+    // free pointer
     aChild.Clear();
 
     for (USHORT i = 0; i < rIndex.getHeader().db_maxkeys;i++)
@@ -367,8 +363,8 @@ void ONDXPage::ReleaseFull(BOOL bSave)
 
     if (aTempParent.Is())
     {
-        // Freigeben nicht benoetigter Seiten, danach besteht keine Referenz
-        // mehr auf die Seite, danach kann 'this' nicht mehr gueltig sein!!!
+        // Free pages not needed, there will be no reference anymore to the pages
+        // afterwards 'this' can't be valid anymore!!!
         USHORT nParentPos = aTempParent->Search(this);
         if (nParentPos != NODE_NOTFOUND)
             (*aTempParent)[nParentPos].GetChild().Clear();
@@ -381,40 +377,39 @@ BOOL ONDXPage::Delete(USHORT nNodePos)
 {
     if (IsLeaf())
     {
-        // Letztes Element wird geloescht
+        // The last element will not be deleted
         if (nNodePos == (nCount - 1))
         {
             ONDXNode aNode = (*this)[nNodePos];
 
-            // beim Parent muss nun der KeyValue ausgetauscht werden
+            // parent's KeyValue has to be replaced
             if (HasParent())
                 aParent->SearchAndReplace(aNode.GetKey(),
                                           (*this)[nNodePos-1].GetKey());
         }
     }
 
-    // Loeschen des Knoten
+    // Delete the node
     Remove(nNodePos);
 
-    // Unterlauf
+    // Underflow
     if (HasParent() && nCount < (rIndex.GetMaxNodes() / 2))
     {
-        // Feststellen, welcher Knoten auf die Seite zeigt
+        // determine, which node points to the page
         USHORT nParentNodePos = aParent->Search(this);
-        // letzte Element auf Vaterseite
-        // -> zusammenlegen mit vorletzter Seite
+        // last element on parent-page -> merge with secondlast page
         if (nParentNodePos == (aParent->Count() - 1))
         {
             if (!nParentNodePos)
-            // zusammenlegen mit linken nachbarn
+            // merge with left neighbour
                 Merge(nParentNodePos,aParent->GetChild(&rIndex));
             else
                 Merge(nParentNodePos,(*aParent)[nParentNodePos-1].GetChild(&rIndex,aParent));
         }
-        // sonst Seite mit naechster Seite zusammenlegen
+        // otherwise merge page with next page
         else
         {
-            // zusammenlegen mit rechten nachbarn
+            // merge with right neighbour
             Merge(nParentNodePos + 1,((*aParent)[nParentNodePos + 1].GetChild(&rIndex,aParent)));
             nParentNodePos++;
         }
@@ -422,7 +417,7 @@ BOOL ONDXPage::Delete(USHORT nNodePos)
             aParent->Delete(nParentNodePos);
     }
     else if (IsRoot())
-        // Sicherstellen das die Position der Wurzel festgehalten wird
+        // make sure that the position of the root is kept
         rIndex.SetRootPos(nPagePos);
     return TRUE;
 }
@@ -432,15 +427,15 @@ BOOL ONDXPage::Delete(USHORT nNodePos)
 ONDXNode ONDXPage::Split(ONDXPage& rPage)
 {
     DBG_ASSERT(IsFull(), "Falsches Splitting");
-    /*  Aufteilen einer Seite auf zwei
-        Blatt:
-            Seite 1 behaelt (n - (n/2))
-            Seite 2 erhaelt (n/2)
-            Knoten n/2 wird dupliziert
-        Innerer Knoten:
-            Seite 1 behaelt (n+1)/2
-            Seite 2 erhaelt (n/2-1)
-            Knoten ((n+1)/2 + 1) : wird herausgenommen
+    /*  devide one page into two
+        leaf:
+            Page 1 is (n - (n/2))
+            Page 2 is (n/2)
+            Node n/2 will be duplicated
+        inner node:
+            Page 1 is (n+1)/2
+            Page 2 is (n/2-1)
+            Node ((n+1)/2 + 1) : will be taken out
     */
     ONDXNode aResultNode;
     if (IsLeaf())
@@ -448,8 +443,7 @@ ONDXNode ONDXPage::Split(ONDXPage& rPage)
         for (USHORT i = (nCount - (nCount / 2)), j = 0 ; i < nCount; i++)
             rPage.Insert(j++,(*this)[i]);
 
-        // dieser Knoten enthaelt einen Schluessel der noch einmal im Tree vorkommt
-        // und ersetzt werden muss
+        // this node contains a key that already exists in the tree and must be replaced
         ONDXNode aLastNode = (*this)[nCount - 1];
         nCount = nCount - (nCount / 2);
         aResultNode = (*this)[nCount - 1];
@@ -466,13 +460,13 @@ ONDXNode ONDXPage::Split(ONDXPage& rPage)
         aResultNode = (*this)[(nCount + 1) / 2];
         nCount = (nCount + 1) / 2;
 
-        // neue Seite zeigt nun auf Seite des herausgeloesten Knoten
+        // new page points to page with extraced node
         rPage.SetChild(aResultNode.GetChild());
     }
-    // Knoten zeigt auf neue Seite
+    // node points to new page
     aResultNode.SetChild(&rPage);
 
-    // innere Knoten haben keine Recordnummer
+    // inner nodes have no record number
     if (rIndex.isUnique())
         aResultNode.GetKey().ResetRecord();
     bModified = TRUE;
@@ -485,25 +479,25 @@ void ONDXPage::Merge(USHORT nParentNodePos, ONDXPagePtr xPage)
     DBG_ASSERT(HasParent(), "kein Vater vorhanden");
     DBG_ASSERT(nParentNodePos != NODE_NOTFOUND, "Falscher Indexaufbau");
 
-    /*  Zusammenlegen zweier Seiten */
+    /*  Merge 2 pages   */
     ONDXNode aResultNode;
     USHORT nMaxNodes = rIndex.GetMaxNodes(),
            nMaxNodes_2 = nMaxNodes / 2;
 
-    // Feststellen ob Seite rechter oder linker Nachbar
-    BOOL    bRight    = ((*xPage)[0].GetKey() > (*this)[0].GetKey()); // TRUE, wenn xPage die rechte Seite ist
+    // Determine if page is right or left neighbour
+    BOOL    bRight    = ((*xPage)[0].GetKey() > (*this)[0].GetKey()); // TRUE, if xPage is the right page
     USHORT  nNewCount = (*xPage).Count() + Count();
 
     if (IsLeaf())
     {
-        // Bedingung fuers zusammenlegen
+        // Condition for merge
         if (nNewCount < (nMaxNodes_2 * 2))
         {
             USHORT nLastNode = bRight ? Count() - 1 : xPage->Count() - 1;
             if (bRight)
             {
                 DBG_ASSERT(&xPage != this,"xPage und THIS duerfen nicht gleich sein: Endlosschleife");
-                // alle Knoten aus xPage auf den linken Knoten verschieben (anhaengen)
+                // shift all nodes from xPage to the left node (append)
                 while (xPage->Count())
                 {
                     Append((*xPage)[0]);
@@ -513,26 +507,24 @@ void ONDXPage::Merge(USHORT nParentNodePos, ONDXPagePtr xPage)
             else
             {
                 DBG_ASSERT(&xPage != this,"xPage und THIS duerfen nicht gleich sein: Endlosschleife");
-                // xPage ist die linke Page und THIS die rechte
+                // xPage is the left page and THIS the right one
                 while (xPage->Count())
                 {
                     Insert(0,(*xPage)[xPage->Count()-1]);
                     xPage->Remove(xPage->Count()-1);
                 }
-                // alte Position von xPage beim Parent mit this ersetzen
+                // replace old position of xPage in parent with this
                 if (nParentNodePos)
                     (*aParent)[nParentNodePos-1].SetChild(this,aParent);
-                else // oder als rechten Knoten setzen
+                else // or set as right node
                     aParent->SetChild(this);
                 aParent->SetModified(TRUE);
 
             }
 
-            // Child beziehung beim Vaterknoten aufheben
+            // cancel Child-relationship at parent node
             (*aParent)[nParentNodePos].SetChild();
-            // Austauschen des KnotenWertes, nur wenn geaenderte Page
-            // die linke ist, ansonsten werde
-
+            // replace the Node-value, only if changed page is the left one, otherwise become
             if(aParent->IsRoot() && aParent->Count() == 1)
             {
                 (*aParent)[0].SetChild();
@@ -546,47 +538,46 @@ void ONDXPage::Merge(USHORT nParentNodePos, ONDXPagePtr xPage)
                 aParent->SearchAndReplace((*this)[nLastNode].GetKey(),(*this)[nCount-1].GetKey());
 
             xPage->SetModified(FALSE);
-            xPage->ReleaseFull(); // wird nicht mehr benoetigt
+            xPage->ReleaseFull(); // is not needed anymore
         }
-        // Ausgleichen der Elemente   nNewCount >= (nMaxNodes_2 * 2)
+        // balance the elements   nNewCount >= (nMaxNodes_2 * 2)
         else
         {
             if (bRight)
             {
-                // alle Knoten aus xPage auf den linken Knoten verschieben (anhaengen)
+                // shift all nodes from xPage to the left node (append)
                 ONDXNode aReplaceNode = (*this)[nCount - 1];
                 while (nCount < nMaxNodes_2)
                 {
                     Append((*xPage)[0]);
                     xPage->Remove(0);
                 }
-                // Austauschen des KnotenWertes: Setzt alten letzten Wert durch den letzten von xPage
+                // Replace the node values: replace old last value by the last of xPage
                 aParent->SearchAndReplace(aReplaceNode.GetKey(),(*this)[nCount-1].GetKey());
             }
             else
             {
-                // alle Knoten aus this vor die xPage Knoten einfuegen
+                // insert all nodes from this in front of the xPage nodes
                 ONDXNode aReplaceNode = (*this)[nCount - 1];
                 while (xPage->Count() < nMaxNodes_2)
                 {
                     xPage->Insert(0,(*this)[nCount-1]);
                     Remove(nCount-1);
                 }
-                // Austauschen des KnotenWertes
+                // Replace the node value
                 aParent->SearchAndReplace(aReplaceNode.GetKey(),(*this)[Count()-1].GetKey());
             }
         }
     }
     else // !IsLeaf()
     {
-        // Bedingung fuers zusammenlegen
+        // Condition for merge
         if (nNewCount < nMaxNodes_2 * 2)
         {
             if (bRight)
             {
                 DBG_ASSERT(&xPage != this,"xPage und THIS duerfen nicht gleich sein: Endlosschleife");
-                // Vaterknoten wird mit integriert
-                // erhaelt zunaechst Child von xPage
+                // Parent node will be integrated; is initialized with Child from xPage
                 (*aParent)[nParentNodePos].SetChild(xPage->GetChild(),aParent);
                 Append((*aParent)[nParentNodePos]);
                 for (USHORT i = 0 ; i < xPage->Count(); i++)
@@ -595,10 +586,9 @@ void ONDXPage::Merge(USHORT nParentNodePos, ONDXPagePtr xPage)
             else
             {
                 DBG_ASSERT(&xPage != this,"xPage und THIS duerfen nicht gleich sein: Endlosschleife");
-                // Vaterknoten wird mit integriert
-                // erhaelt zunaechst Child
-                (*aParent)[nParentNodePos].SetChild(GetChild(),aParent); // Parent merkt sich mein Child
-                Insert(0,(*aParent)[nParentNodePos]); // Node vom Parent bei mir einfuegen
+                // Parent-node will be integrated; is initialized with child
+                (*aParent)[nParentNodePos].SetChild(GetChild(),aParent); // Parent memorizes my child
+                Insert(0,(*aParent)[nParentNodePos]); // insert parent node into myself
                 while (xPage->Count())
                 {
                     Insert(0,(*xPage)[xPage->Count()-1]);
@@ -612,7 +602,7 @@ void ONDXPage::Merge(USHORT nParentNodePos, ONDXPagePtr xPage)
                     aParent->SetChild(this);
             }
 
-            // danach wird der Vaterknoten zurueckgesetzt
+            // afterwards parent node will be reset
             (*aParent)[nParentNodePos].SetChild();
             aParent->SetModified(TRUE);
 
@@ -626,15 +616,15 @@ void ONDXPage::Merge(USHORT nParentNodePos, ONDXPagePtr xPage)
                 SetModified(TRUE);
             }
             else if(nParentNodePos)
-                // Austauschen des KnotenWertes
-                // beim Append wird der Bereich erweitert, beim INsert verweist der alte Knoten von xPage auf this
-                // deshalb muss der Knoten auch hier aktualisiert werden
+                // replace the node value
+                // for Append the range will be enlarged, for Insert the old node from xPage will reference to this
+                // thats why the node must be updated here
                 aParent->SearchAndReplace((*aParent)[nParentNodePos-1].GetKey(),(*aParent)[nParentNodePos].GetKey());
 
             xPage->SetModified(FALSE);
             xPage->ReleaseFull();
         }
-        // Ausgleichen der Elemente
+        // balance the elements
         else
         {
             if (bRight)
@@ -673,7 +663,7 @@ void ONDXPage::Merge(USHORT nParentNodePos, ONDXPagePtr xPage)
 //------------------------------------------------------------------
 void ONDXNode::Read(SvStream &rStream, ODbaseIndex& rIndex)
 {
-    rStream >> aKey.nRecord; // schluessel
+    rStream >> aKey.nRecord; // key
 
     if (rIndex.getHeader().db_keytype)
     {
@@ -707,9 +697,9 @@ void ONDXNode::Write(SvStream &rStream, const ONDXPage& rPage) const
 {
     const ODbaseIndex& rIndex = rPage.GetIndex();
     if (!rIndex.isUnique() || rPage.IsLeaf())
-        rStream << (sal_uInt32)aKey.nRecord; // schluessel
+        rStream << (sal_uInt32)aKey.nRecord; // key
     else
-        rStream << (sal_uInt32)0;   // schluessel
+        rStream << (sal_uInt32)0;   // key
 
     if (rIndex.getHeader().db_keytype) // double
     {
@@ -785,7 +775,7 @@ StringCompare ONDXKey::Compare(const ONDXKey& rKey) const
         eResult = (m > n) ? COMPARE_GREATER : (n == m) ? COMPARE_EQUAL : COMPARE_LESS;
     }
 
-    // Record vergleich, wenn Index !Unique
+    // compare record, if index !Unique
     if (eResult == COMPARE_EQUAL && nRecord && rKey.nRecord)
         eResult = (nRecord > rKey.nRecord) ? COMPARE_GREATER :
                   (nRecord == rKey.nRecord) ? COMPARE_EQUAL : COMPARE_LESS;
@@ -865,7 +855,7 @@ SvStream& connectivity::dbase::operator >> (SvStream &rStream, ONDXPage& rPage)
 //------------------------------------------------------------------
 SvStream& connectivity::dbase::operator << (SvStream &rStream, const ONDXPage& rPage)
 {
-    // Seite existiert noch nicht
+    // Page doesn't exist yet
     ULONG nSize = (rPage.GetPagePos() + 1) * PAGE_SIZE;
     if (nSize > rStream.Seek(STREAM_SEEK_TO_END))
     {
@@ -952,7 +942,7 @@ BOOL ONDXPage::IsFull() const
 //------------------------------------------------------------------
 USHORT ONDXPage::Search(const ONDXKey& rSearch)
 {
-    // binare Suche spaeter
+    // binary search later
     USHORT i = NODE_NOTFOUND;
     while (++i < Count())
         if ((*this)[i].GetKey() == rSearch)
@@ -969,12 +959,11 @@ USHORT ONDXPage::Search(const ONDXPage* pPage)
         if (((*this)[i]).GetChild() == pPage)
             break;
 
-    // wenn nicht gefunden, dann wird davon ausgegangen, dass die Seite selbst
-    // auf die Page zeigt
+    // if not found, then we assume, that the page itself points to the page
     return (i < Count()) ? i : NODE_NOTFOUND;
 }
 // -----------------------------------------------------------------------------
-// laeuft rekursiv
+// runs recursively
 void ONDXPage::SearchAndReplace(const ONDXKey& rSearch,
                                   ONDXKey& rReplace)
 {

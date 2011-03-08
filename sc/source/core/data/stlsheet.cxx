@@ -245,7 +245,7 @@ SfxItemSet& ScStyleSheet::GetItemSet()
                 break;
         }
         bMySet = TRUE;
-    } // if ( !pSet )
+    }
     if ( nHelpId == HID_SC_SHEET_CELL_ERG1 )
     {
         if ( !pSet->Count() )
@@ -255,7 +255,7 @@ SfxItemSet& ScStyleSheet::GetItemSet()
             {
                 ULONG nNumFmt = pDoc->GetFormatTable()->GetStandardFormat( NUMBERFORMAT_CURRENCY,ScGlobal::eLnge );
                 pSet->Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nNumFmt ) );
-            } // if ( pDoc && pDoc->IsLoadingDone() )
+            }
         }
     }
 
@@ -292,7 +292,7 @@ void ScStyleSheet::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 //------------------------------------------------------------------------
 
-//  #66123# schmutzige Tricks, um die Standard-Vorlage immer als "Standard" zu speichern,
+//  schmutzige Tricks, um die Standard-Vorlage immer als "Standard" zu speichern,
 //  obwohl der fuer den Benutzer sichtbare Name uebersetzt ist:
 
 const String& ScStyleSheet::GetName() const

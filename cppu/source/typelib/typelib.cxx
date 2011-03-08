@@ -33,7 +33,7 @@
 #include <stdio.h>
 #endif
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <list>
 #include <set>
 #include <vector>
@@ -53,9 +53,12 @@
 #include <typelib/typedescription.h>
 #include <uno/any2.h>
 
-using namespace rtl;
 using namespace std;
 using namespace osl;
+
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+using ::rtl::OString;
 
 #ifdef SAL_W32
 #pragma pack(push, 8)
@@ -192,7 +195,7 @@ struct hashStr_Impl
 
 //-----------------------------------------------------------------------------
 // Heavy hack, the const sal_Unicode * is hold by the typedescription reference
-typedef hash_map< const sal_Unicode *, typelib_TypeDescriptionReference *,
+typedef boost::unordered_map< const sal_Unicode *, typelib_TypeDescriptionReference *,
                   hashStr_Impl, equalStr_Impl > WeakMap_Impl;
 
 typedef pair< void *, typelib_typedescription_Callback > CallbackEntry;

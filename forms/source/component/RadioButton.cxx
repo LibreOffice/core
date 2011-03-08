@@ -351,7 +351,7 @@ void SAL_CALL ORadioButtonModel::read(const Reference<XObjectInputStream>& _rxIn
             readCommonProperties(_rxInStream);
             break;
         default :
-            DBG_ERROR("ORadioButtonModel::read : unknown version !");
+            OSL_FAIL("ORadioButtonModel::read : unknown version !");
             defaultCommonProperties();
             break;
     }
@@ -425,7 +425,7 @@ sal_Bool ORadioButtonModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
         }
         catch(Exception&)
         {
-            DBG_ERROR("ORadioButtonModel::commitControlValueToDbColumn: could not commit !");
+            OSL_FAIL("ORadioButtonModel::commitControlValueToDbColumn: could not commit !");
         }
     }
     return sal_True;

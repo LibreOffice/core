@@ -28,6 +28,7 @@
 
 #include "docxexport.hxx"
 #include "docxexportfilter.hxx"
+#include "docxattributeoutput.hxx"
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
@@ -213,7 +214,7 @@ void DocxExport::WriteHeadersFooters( BYTE nHeadFootFlags,
     if ( nHeadFootFlags & nsHdFtFlags::WW8_FOOTER_FIRST )
         WriteHeaderFooter( rFirstPageFmt, false, "first" );
 
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "DocxExport::WriteHeadersFooters() - nBreakCode introduced, but ignored\n" );
 #endif
 }
@@ -223,14 +224,14 @@ void DocxExport::OutputField( const SwField* pFld, ww::eField eFldType, const St
     m_pAttrOutput->WriteField_Impl( pFld, eFldType, rFldCmd, nMode );
 }
 
-void DocxExport::WriteFormData( const ::sw::mark::IFieldmark& /*rFieldmark*/ )
+void DocxExport::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
 {
-    OSL_TRACE( "TODO DocxExport::WriteFormData()\n" );
+    m_pAttrOutput->WriteFormData_Impl( rFieldmark );
 }
 
 void DocxExport::WriteHyperlinkData( const ::sw::mark::IFieldmark& /*rFieldmark*/ )
 {
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "TODO DocxExport::WriteHyperlinkData()\n" );
 #endif
 }

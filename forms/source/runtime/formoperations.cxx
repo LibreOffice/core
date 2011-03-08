@@ -548,7 +548,7 @@ namespace frm
                     m_xLoadableForm->reload();
 
                     // refresh all controls in the form (and sub forms) which can be refreshed
-                    // #i90914# / 2008-07-02 / frank.schoenheit@sun.com
+                    // #i90914#
                     ::comphelper::IndexAccessIterator aIter( m_xLoadableForm );
                     Reference< XInterface > xElement( aIter.Next() );
                     while ( xElement.is() )
@@ -650,7 +650,6 @@ namespace frm
 
             case FormFeature::MoveToInsertRow:
                 // move to the last row before moving to the insert row
-                // 21.01.2002 - 96480 - fs@openoffice.org
                 m_xCursor->last();
                 m_xUpdateCursor->moveToInsertRow();
                 break;

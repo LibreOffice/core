@@ -611,6 +611,9 @@ public:
     inline String   GetTitle() const { return aTitleED.GetText(); }
 };
 
+/// Appends ?Language=xy&System=abc to the help URL in rURL
+void AppendConfigToken( String& rURL, sal_Bool bQuestionMark, const rtl::OUString &rLang = rtl::OUString() );
+
 #endif // #ifndef INCLUDED_SFX_NEWHELP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

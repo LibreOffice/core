@@ -74,13 +74,6 @@ public:
 
     // cell range -------------------------------------------------------------
 
-    /** Checks if the passed cell range is valid (checks start and end position).
-        @param rXclRange  The Excel cell range to check.
-        @param bWarn  true = Sets the internal flag that produces a warning box
-            after loading/saving the file, if the cell range is not valid.
-        @return  true = Cell range in rXclRange is valid. */
-    bool                CheckRange( const XclRange& rXclRange, bool bWarn );
-
     /** Converts the passed Excel cell range to a Calc cell range.
         @param rScRange  (Out) The converted Calc cell range, if valid.
         @param rXclRange  The Excel cell range to convert.

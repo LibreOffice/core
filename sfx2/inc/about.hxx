@@ -34,7 +34,6 @@
 #include <vcl/button.hxx>
 #include <vcl/accel.hxx>
 #include <svtools/svmedit.hxx>
-#include <tools/list.hxx>
 #include <svtools/stdctrl.hxx>
 #include "svtools/fixedhyper.hxx"
 #include <sfx2/basedlgs.hxx>        // SfxModalDialog

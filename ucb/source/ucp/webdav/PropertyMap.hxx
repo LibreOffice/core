@@ -29,7 +29,7 @@
 #ifndef _WEBDAV_UCP_PROPERTYMAP_HXX
 #define _WEBDAV_UCP_PROPERTYMAP_HXX
 
-#include <hash_set>
+#include <boost/unordered_set.hpp>
 #include <com/sun/star/beans/Property.hpp>
 
 namespace webdav_ucp {
@@ -53,7 +53,7 @@ struct hashPropertyName
     }
 };
 
-typedef std::hash_set
+typedef boost::unordered_set
 <
     ::com::sun::star::beans::Property,
     hashPropertyName,

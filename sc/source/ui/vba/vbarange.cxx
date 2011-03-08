@@ -271,11 +271,6 @@ ScCellRangeObj* ScVbaRange::getCellRangeObj() throw ( uno::RuntimeException )
     return dynamic_cast< ScCellRangeObj* >( getCellRangesBase() );
 }
 
-ScCellRangesObj* ScVbaRange::getCellRangesObj() throw ( uno::RuntimeException )
-{
-    return dynamic_cast< ScCellRangesObj* >( getCellRangesBase() );
-}
-
 SfxItemSet*  ScVbaRange::getCurrentDataSet( ) throw ( uno::RuntimeException )
 {
     SfxItemSet* pDataSet = excel::ScVbaCellRangeAccess::GetDataSet( getCellRangesBase() );
@@ -5390,10 +5385,10 @@ ScVbaRange::AutoFill(  const uno::Reference< excel::XRange >& Destination, const
 
     // default to include the number of Rows in the source range;
     SCCOLROW nSourceCount = ( sourceRange.aEnd.Row() - sourceRange.aStart.Row() ) + 1;
+    SCCOLROW nCount = 0;
 
     if ( sourceRange != destRange )
     {
-        SCCOLROW nCount = 0;
         // Find direction of fill, vertical or horizontal
         if ( sourceRange.aStart == destRange.aStart )
         {
@@ -6007,7 +6002,6 @@ uno::Any SAL_CALL ScVbaRange::AdvancedFilter( sal_Int32 Action, const uno::Any& 
 
     // CriteriaRange
     String aBuiltInCriteria; // Excel Built-In Filter Criteria.
-    ScRangeData* pData = NULL;
     table::CellRangeAddress refParentAddr;
     uno::Any aCriteriaRange = CriteriaRange;
     formula::FormulaGrammar::AddressConvention aConv = formula::FormulaGrammar::CONV_XL_A1;
@@ -6021,14 +6015,16 @@ uno::Any SAL_CALL ScVbaRange::AdvancedFilter( sal_Int32 Action, const uno::Any& 
     {
         // Get Excel BuiltIn Filter Criteria.
         ScRangeName* pRangeNames = pDoc->GetRangeName();
-        const USHORT nCount = pRangeNames ? pRangeNames->GetCount() : 0;
-        for ( USHORT index = 0; index < nCount; index++ )
+        if (pRangeNames)
         {
-            pData = ( ScRangeData* )( pRangeNames->At( index ) );
-            if ( pData && pData->HasType( RT_CRITERIA ) )
+            ScRangeName::const_iterator itr = pRangeNames->begin(), itrEnd = pRangeNames->end();
+            for (; itr != itrEnd; ++itr)
             {
-                pData->GetSymbol( aBuiltInCriteria, formula::FormulaGrammar::GRAM_NATIVE_XL_A1 );
-                break;
+                if (itr->HasType(RT_CRITERIA))
+                {
+                    itr->GetSymbol( aBuiltInCriteria, formula::FormulaGrammar::GRAM_NATIVE_XL_A1 );
+                    break;
+                }
             }
         }
         aCriteriaRange = aBuiltInCriteria.Len() > 0 ? uno::makeAny( rtl::OUString( aBuiltInCriteria ) ) : aCriteriaRange;

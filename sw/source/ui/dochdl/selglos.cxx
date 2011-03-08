@@ -65,7 +65,7 @@ SwSelGlossaryDlg::SwSelGlossaryDlg(Window * pParent, const String &rShortName)
 }
 
 /*--------------------------------------------------
- dtor ueberladen
+ overload dtor
 --------------------------------------------------*/
 SwSelGlossaryDlg::~SwSelGlossaryDlg() {}
 

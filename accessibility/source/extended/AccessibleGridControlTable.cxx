@@ -364,7 +364,7 @@ Reference< XAccessibleTable > AccessibleGridControlTable::implGetHeaderBar(
         }
         catch( lang::IndexOutOfBoundsException& )
         {
-            DBG_ERROR( "implGetHeaderBar - wrong child index" );
+            OSL_FAIL( "implGetHeaderBar - wrong child index" );
         }
         // RuntimeException goes to caller
     }

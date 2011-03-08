@@ -44,7 +44,10 @@
 #include "rtl_Process_Const.h"
 
 using namespace osl;
-using namespace rtl;
+
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OUStringToOString;
 
 /** print a UNI_CODE String. And also print some comments of the string.
 */

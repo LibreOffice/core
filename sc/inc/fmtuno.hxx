@@ -29,13 +29,13 @@
 #ifndef SC_FMTUNO_HXX
 #define SC_FMTUNO_HXX
 
-#include "address.hxx"
-#include "conditio.hxx"
+#include <vector>
+
 #include <formula/grammar.hxx>
-#include <tools/list.hxx>
 #include <svl/itemprop.hxx>
 #include <com/sun/star/sheet/XSheetConditionalEntries.hpp>
 #include <com/sun/star/sheet/XSheetCondition.hpp>
+#include <com/sun/star/sheet/XSheetCondition2.hpp>
 #include <com/sun/star/sheet/XSheetConditionalEntry.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -48,7 +48,10 @@
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implbase5.hxx>
+#include <com/sun/star/sheet/ConditionOperator2.hpp>
 
+#include "address.hxx"
+#include "conditio.hxx"
 
 class ScDocument;
 class ScTableConditionalEntry;
@@ -83,7 +86,7 @@ class ScTableConditionalFormat : public cppu::WeakImplHelper5<
                             com::sun::star::lang::XServiceInfo >
 {
 private:
-    List    aEntries;
+    std::vector<ScTableConditionalEntry*>   aEntries;
 
     ScTableConditionalEntry*    GetObjectByIndex_Impl(USHORT nIndex) const;
     void                        AddEntry_Impl(const ScCondFormatEntryItem& aEntry);
@@ -153,7 +156,7 @@ public:
 
 
 class ScTableConditionalEntry : public cppu::WeakImplHelper3<
-                            com::sun::star::sheet::XSheetCondition,
+                            com::sun::star::sheet::XSheetCondition2,
                             com::sun::star::sheet::XSheetConditionalEntry,
                             com::sun::star::lang::XServiceInfo >
 {
@@ -172,7 +175,11 @@ public:
                             // XSheetCondition
     virtual ::com::sun::star::sheet::ConditionOperator SAL_CALL getOperator()
                                 throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getConditionOperator()
+                                throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   setOperator( ::com::sun::star::sheet::ConditionOperator nOperator )
+                                throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   setConditionOperator( sal_Int32 nOperator )
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getFormula1() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   setFormula1( const ::rtl::OUString& aFormula1 )
@@ -202,7 +209,7 @@ public:
 
 
 class ScTableValidationObj : public cppu::WeakImplHelper5<
-                            com::sun::star::sheet::XSheetCondition,
+                            com::sun::star::sheet::XSheetCondition2,
                             com::sun::star::sheet::XMultiFormulaTokens,
                             com::sun::star::beans::XPropertySet,
                             com::sun::star::lang::XUnoTunnel,
@@ -247,7 +254,11 @@ public:
                             // XSheetCondition
     virtual ::com::sun::star::sheet::ConditionOperator SAL_CALL getOperator()
                                 throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getConditionOperator()
+                                throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   setOperator( ::com::sun::star::sheet::ConditionOperator nOperator )
+                                throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   setConditionOperator( sal_Int32 nOperator )
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getFormula1() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   setFormula1( const ::rtl::OUString& aFormula1 )

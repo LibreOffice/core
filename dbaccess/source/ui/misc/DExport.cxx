@@ -56,6 +56,7 @@
 #include "UITools.hxx"
 #include <unotools/configmgr.hxx>
 #include <memory>
+#include <o3tl/compat_functional.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <i18npool/mslangid.hxx>
@@ -869,7 +870,7 @@ Reference< XPreparedStatement > ODatabaseExport::createPreparedStatment( const R
     for(sal_uInt32 j=0; j < aInsertList.size() ;++i,++j)
     {
         ODatabaseExport::TPositions::const_iterator aFind = ::std::find_if(_rvColumns.begin(),_rvColumns.end(),
-            ::std::compose1(::std::bind2nd(::std::equal_to<sal_Int32>(),i+1),::std::select2nd<ODatabaseExport::TPositions::value_type>()));
+            ::o3tl::compose1(::std::bind2nd(::std::equal_to<sal_Int32>(),i+1),::o3tl::select2nd<ODatabaseExport::TPositions::value_type>()));
         if ( _rvColumns.end() != aFind && aFind->second != sal::static_int_cast< long >(CONTAINER_ENTRY_NOTFOUND) && aFind->first != sal::static_int_cast< long >(CONTAINER_ENTRY_NOTFOUND) )
         {
             OSL_ENSURE((aFind->first) < static_cast<sal_Int32>(aInsertList.size()),"aInsertList: Illegal index for vector");

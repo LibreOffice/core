@@ -35,6 +35,7 @@
 #include "macros.hxx"
 
 #include <rtl/math.hxx>
+#include <algorithm>
 
 using ::com::sun::star::uno::Sequence;
 using ::rtl::OUString;
@@ -365,7 +366,7 @@ void InternalData::insertColumn( sal_Int32 nAfterIndex )
     if( nAfterIndex < static_cast< sal_Int32 >( m_aColumnLabels.size()))
         m_aColumnLabels.insert( m_aColumnLabels.begin() + (nAfterIndex + 1), vector< OUString >(1) );
 
-#if OSL_DEBUG_LEVEL > 2
+#if OSL_DEBUG_LEVEL > 1
     traceData();
 #endif
 }
@@ -417,7 +418,7 @@ void InternalData::insertRow( sal_Int32 nAfterIndex )
     if( nAfterIndex < static_cast< sal_Int32 >( m_aRowLabels.size()))
         m_aRowLabels.insert( m_aRowLabels.begin() + nIndex, vector< OUString> (1));
 
-#if OSL_DEBUG_LEVEL > 2
+#if OSL_DEBUG_LEVEL > 1
     traceData();
 #endif
 }
@@ -453,7 +454,7 @@ void InternalData::deleteColumn( sal_Int32 nAtIndex )
     if( nAtIndex < static_cast< sal_Int32 >( m_aColumnLabels.size()))
         m_aColumnLabels.erase( m_aColumnLabels.begin() + nAtIndex );
 
-#if OSL_DEBUG_LEVEL > 2
+#if OSL_DEBUG_LEVEL > 1
     traceData();
 #endif
 }
@@ -493,7 +494,7 @@ void InternalData::deleteRow( sal_Int32 nAtIndex )
     if( nAtIndex < static_cast< sal_Int32 >( m_aRowLabels.size()))
         m_aRowLabels.erase( m_aRowLabels.begin() + nAtIndex );
 
-#if OSL_DEBUG_LEVEL > 2
+#if OSL_DEBUG_LEVEL > 1
     traceData();
 #endif
 }
@@ -538,7 +539,7 @@ vector< vector< OUString > > InternalData::getComplexColumnLabels() const
     return m_aColumnLabels;
 }
 
-#if OSL_DEBUG_LEVEL > 2
+#if OSL_DEBUG_LEVEL > 1
 void InternalData::traceData() const
 {
     OSL_TRACE( "InternalData: Data in rows\n" );

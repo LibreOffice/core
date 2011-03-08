@@ -110,7 +110,7 @@ public:
 double ScrollTextAnimNode::GetStateAtRelativeTime(
     sal_uInt32 nRelativeTime) const
 {
-    // #151174# Avoid division by zero.
+    // Avoid division by zero.
     if( mnDuration == 0 )
         return mfStop;
 
@@ -359,7 +359,7 @@ sal_uInt32 ActivityImpl::GetStepWidthLogic() const
     {
         // step 1 pixel, canned value
 
-        // #128389# with very high DPIs like in PDF export, this can
+        // with very high DPIs like in PDF export, this can
         // still get zero.  for that cases, set a default, too (taken
         // from ainfoscrolltext.cxx)
         nRetval = 100L;

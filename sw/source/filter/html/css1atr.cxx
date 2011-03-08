@@ -111,7 +111,7 @@
  * diese Section und die dazugeherigen Tabellen muessen in folgenden Files
  * gepflegt werden: rtf\rtfatr.cxx, sw6\sw6atr.cxx, w4w\w4watr.cxx
  */
-#if !defined(UNX) && !defined(MSC) && !defined(PPC) && !defined(CSET) && !defined(WTC) && !defined(__MINGW32__) && !defined(OS2)
+#if !defined(UNX) && !defined(MSC) && !defined(PPC) && !defined(__MINGW32__) && !defined(OS2)
 
 #define ATTRFNTAB_SIZE 130
 #if ATTRFNTAB_SIZE != POOLATTR_END - POOLATTR_BEGIN
@@ -350,49 +350,28 @@ static void AddUnitPropertyValue( long nVal, FieldUnit eUnit, ByteString& rOut )
     case FUNIT_KM:
         OSL_ENSURE( FUNIT_CM == eUnit, "Masseinheit wird nicht unterstuetzt" );
     case FUNIT_CM:
-#ifdef EXACT_VALUES
-        // 0.001cm = 0.57twip
-        nMul = 25400;   // 2.54 * 10000
-        nDiv = 1440;    // 72 * 20;
-        nFac = 1000;
-#else
         // 0.01cm = 5.7twip (ist zwar ungenau, aber die UI ist auch ungenau)
         nMul = 2540;    // 2.54 * 1000
         nDiv = 1440;    // 72 * 20;
         nFac = 100;
-#endif
         pUnit = sCSS1_UNIT_cm;
         break;
 
     case FUNIT_TWIP:
         OSL_ENSURE( FUNIT_POINT == eUnit, "Masseinheit wird nicht unterstuetzt" );
     case FUNIT_POINT:
-#ifdef EXACT_VALUES
-        // 0.01pt = 0.2twip
-        nMul = 1000;
-        nDiv = 20;
-        nFac = 100;
-#else
         // 0.1pt = 2.0twip (ist zwar ungenau, aber die UI ist auch ungenau)
         nMul = 100;
         nDiv = 20;
         nFac = 10;
-#endif
         pUnit = sCSS1_UNIT_pt;
         break;
 
     case FUNIT_PICA:
-#ifdef EXACT_VALUES
-        // 0.001pc = 0.24twip
-        nMul = 10000;
-        nDiv = 12 * 20;
-        nFac = 1000;
-#else
         // 0.01pc = 2.40twip (ist zwar ungenau, aber die UI ist auch ungenau)
         nMul = 1000;
         nDiv = 240;     // 12 * 20;
         nFac = 100;
-#endif
         pUnit = sCSS1_UNIT_pc;
         break;
 
@@ -404,17 +383,10 @@ static void AddUnitPropertyValue( long nVal, FieldUnit eUnit, ByteString& rOut )
     case FUNIT_INCH:
     default:
         OSL_ENSURE( FUNIT_INCH == eUnit, "Masseinheit wird nicht unterstuetzt" );
-#ifdef EXACT_VALUES
-        // 0.0001in = 0.144twip
-        nMul = 100000;
-        nDiv = 1440;    // 72 * 20;
-        nFac = 10000;
-#else
         // 0.01in = 14.4twip (ist zwar ungenau, aber die UI ist auch ungenau)
         nMul = 1000;
         nDiv = 1440;    // 72 * 20;
         nFac = 100;
-#endif
         pUnit = sCSS1_UNIT_inch;
         break;
     }
@@ -2345,7 +2317,6 @@ static BOOL OutCSS1_FrmFmtBrush( SwHTMLWriter& rWrt,
                                  const SvxBrushItem& rBrushItem )
 {
     BOOL bWritten = FALSE;
-    /// OD 02.09.2002 #99657#
     /// output brush of frame format, if its background color is not "no fill"/"auto fill"
     /// or it has a background graphic.
     if( rBrushItem.GetColor() != COL_TRANSPARENT ||
@@ -2901,7 +2872,7 @@ static Writer& OutCSS1_SvxLineSpacing( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
 
-    // #60393#: Netscape4 hat massive Probleme mit den Zellenhoehen
+    // Netscape4 hat massive Probleme mit den Zellenhoehen
     // wenn der Zeilenabstand innerhalb einer Tabelle geaendert wird
     // und die Breite der Tabelle nicht automatisch berechnet wird
     // (also wenn eine WIDTH-Option vorhanden ist).
@@ -3388,7 +3359,6 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
 
     // Erstmal die Farbe holen
     BOOL bColor = FALSE;
-    /// OD 02.09.2002 #99657#
     /// set <bTransparent> to TRUE, if color is "no fill"/"auto fill"
     BOOL bTransparent = (rColor.GetColor() == COL_TRANSPARENT);
     Color aColor;

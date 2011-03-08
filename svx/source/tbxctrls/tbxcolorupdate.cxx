@@ -150,7 +150,7 @@ namespace svx
                 }
                 else
                 {
-                    DBG_ERROR( "ToolboxButtonColorUpdater::Update: TBX_UPDATER_MODE_CHAR_COLOR / TBX_UPDATER_MODE_CHAR_BACKGROUND" );
+                    OSL_FAIL( "ToolboxButtonColorUpdater::Update: TBX_UPDATER_MODE_CHAR_COLOR / TBX_UPDATER_MODE_CHAR_BACKGROUND" );
                     // !!! DrawChar( aVirDev, aColor );
                 }
 

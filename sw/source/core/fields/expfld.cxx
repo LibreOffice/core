@@ -97,7 +97,7 @@ sal_Int32 lcl_APIToSubType(const uno::Any& rAny)
             case SetVariableType::FORMULA:  nSet = nsSwGetSetExpType::GSE_FORMULA; break;
             case SetVariableType::STRING:   nSet = nsSwGetSetExpType::GSE_STRING;   break;
             default:
-                DBG_ERROR("wrong value");
+                OSL_FAIL("wrong value");
                 nSet = -1;
         }
         return nSet;
@@ -668,7 +668,7 @@ bool SwSetExpFieldType::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
         }
         break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }
@@ -705,7 +705,7 @@ bool SwSetExpFieldType::PutValue( const uno::Any& rAny, USHORT nWhichId )
         }
         break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }
@@ -1076,7 +1076,7 @@ bool SwInputField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
         rAny <<= OUString( aToolTip );
         break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }
@@ -1098,7 +1098,7 @@ bool SwInputField::PutValue( const uno::Any& rAny, USHORT nWhichId )
         ::GetString( rAny, aToolTip );
         break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }

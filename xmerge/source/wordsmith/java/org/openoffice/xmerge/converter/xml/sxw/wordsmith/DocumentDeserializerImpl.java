@@ -551,15 +551,5 @@ implements DOCConstants, OfficeConstants, DocumentDeserializer {
 
          Debug.log(Debug.TRACE, str);
     }
-
-
-    /*
-    public static void main(String args[]) {
-
-     //   DocumentDeserializerImpl d = new DocumentDeserializerImpl(new InputStream());
-
-        Node nodes[] = parseText("Tab here:\tThen some more text");
-    }
-*/
 }
 

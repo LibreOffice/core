@@ -86,7 +86,7 @@ class SwInsertConfig : public utl::ConfigItem
 
     SvGlobalName        aGlobalNames[5];
 
-    sal_Bool            bInsWithCaption;       //Insert/Caption/Automatic   // Objekte beschriftet einfuegen
+    sal_Bool            bInsWithCaption;       //Insert/Caption/Automatic
     sal_Bool            bCaptionOrderNumberingFirst; //#i61007# caption order starting with numbering
 
     SwInsertTableOptions    aInsTblOpts;
@@ -113,9 +113,9 @@ class SwTableConfig : public utl::ConfigItem
     USHORT      nTblVInsert;        //int Table/Insert/Column
     TblChgMode  eTblChgMode;        //int Table/Change/Effect
 
-    sal_Bool    bInsTblFormatNum;       // Table/Input/NumberRecognition        // Automatische Zahlenerkennung
-    sal_Bool    bInsTblChangeNumFormat; // Table/Input/NumberFormatRecognition  // Automatische Zahlenformaterkennung
-    sal_Bool    bInsTblAlignNum;        // Table/Input/Alignment                // Zahlen ausrichten
+    sal_Bool    bInsTblFormatNum;       // Table/Input/NumberRecognition        // Automatic recognition of numbers.
+    sal_Bool    bInsTblChangeNumFormat; // Table/Input/NumberFormatRecognition  // Automatic recognition of number formats.
+    sal_Bool    bInsTblAlignNum;        // Table/Input/Alignment                // Align numbers.
 
     const com::sun::star::uno::Sequence<rtl::OUString>& GetPropertyNames();
     public:

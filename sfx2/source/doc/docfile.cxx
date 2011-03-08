@@ -531,7 +531,7 @@ Reference < XContent > SfxMedium::GetContent() const
         }
         else
         {
-            // TODO: DBG_ERROR("SfxMedium::GetContent()\nCreate Content? This code exists as fallback only. Please clarify, why its used.");
+            // TODO: OSL_FAIL("SfxMedium::GetContent()\nCreate Content? This code exists as fallback only. Please clarify, why its used.");
             String aURL;
             if ( aName.Len() )
                 ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aURL );
@@ -686,8 +686,6 @@ sal_Bool SfxMedium::CloseOutStream_Impl()
         //maybe we need a new flag when the storage was created from the outstream
         if ( pImp->xStorage.is() )
         {
-            //const SvStream *pStorage = aStorage->GetSvStream();
-            //if ( pStorage == pOutStream )
                 CloseStorage();
         }
 
@@ -770,7 +768,7 @@ sal_Bool SfxMedium::IsStorage()
         String aURL;
         if ( !::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aURL ) )
         {
-            DBG_ERROR("Physical name not convertable!");
+            OSL_FAIL("Physical name not convertable!");
         }
         pImp->bIsStorage = SotStorage::IsStorageFile( aURL ) && !SotStorage::IsOLEStorage( aURL);
         if ( !pImp->bIsStorage )
@@ -1423,8 +1421,6 @@ uno::Reference< embed::XStorage > SfxMedium::GetZipStorageToSign_Impl( sal_Bool 
 {
     if ( !GetError() && !pImp->m_xZipStorage.is() )
     {
-        // very careful!!!
-        // if bReadOnly == sal_False and there is no temporary file the original file might be used
         GetMedium_Impl();
 
         try
@@ -1873,7 +1869,7 @@ void SfxMedium::Transfer_Impl()
                }
             else
             {
-                DBG_ERROR( "Illegal Output stream parameter!\n" );
+                OSL_FAIL( "Illegal Output stream parameter!\n" );
                 SetError( ERRCODE_IO_GENERAL, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
             }
 
@@ -2179,7 +2175,6 @@ void SfxMedium::ClearBackup_Impl()
         if ( pImp->m_aBackupURL.getLength() )
         {
             if ( ::utl::UCBContentHelper::Kill( pImp->m_aBackupURL ) )
-              // || !::utl::UCBContentHelper::IsDocument( pImp->m_aBackupURL ) );
             {
                 pImp->m_bRemoveBackup = sal_False;
                 pImp->m_aBackupURL = ::rtl::OUString();
@@ -2187,7 +2182,7 @@ void SfxMedium::ClearBackup_Impl()
             else
             {
 
-                DBG_ERROR("Couldn't remove backup file!");
+                OSL_FAIL("Couldn't remove backup file!");
             }
         }
     }
@@ -2267,7 +2262,7 @@ void SfxMedium::GetMedium_Impl()
             {
                 if ( !::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aFileName ) )
                 {
-                    DBG_ERROR("Physical name not convertable!");
+                    OSL_FAIL("Physical name not convertable!");
                 }
             }
             else
@@ -2292,8 +2287,6 @@ void SfxMedium::GetMedium_Impl()
                 pImp->xInputStream->skipBytes(0);
                 if(m_bIsReadOnly)
                     GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, sal_True ) );
-
-                // m_xInputStreamToLoadFrom = 0;
             }
             else
             {
@@ -2441,7 +2434,7 @@ void SfxMedium::Init_Impl()
         INetProtocol eProt = aUrl.GetProtocol();
         if ( eProt == INET_PROT_NOT_VALID )
         {
-            DBG_ERROR ( "Unknown protocol!" );
+            OSL_FAIL( "Unknown protocol!" );
         }
         else
         {
@@ -2476,7 +2469,7 @@ void SfxMedium::Init_Impl()
           || !aLogicName.CompareToAscii( "private:stream", 14 ) == COMPARE_EQUAL ) )
     {
         pSet->ClearItem( SID_OUTPUTSTREAM );
-        DBG_ERROR( "Unexpected Output stream parameter!\n" );
+        OSL_FAIL( "Unexpected Output stream parameter!\n" );
     }
 
     if ( aLogicName.Len() )
@@ -2649,27 +2642,6 @@ void SfxMedium::Close()
 {
     if ( pImp->xStorage.is() )
     {
-        // don't close the streams if they belong to the
-        // storage
-        //TODO/MBA: how to?! Do we need the flag?!
-        /*
-        const SvStream *pStream = aStorage->GetSvStream();
-        if ( pStream && pStream == pInStream )
-        {
-            CloseZipStorage_Impl();
-            pInStream = NULL;
-            pImp->xInputStream = Reference < XInputStream >();
-            pImp->xLockBytes.Clear();
-            if ( pSet )
-                pSet->ClearItem( SID_INPUTSTREAM );
-            aStorage->SetDeleteStream( TRUE );
-        }
-        else if ( pStream && pStream == pOutStream )
-        {
-            pOutStream = NULL;
-            aStorage->SetDeleteStream( TRUE );
-        } */
-
         CloseStorage();
     }
 
@@ -2682,27 +2654,6 @@ void SfxMedium::CloseAndRelease()
 {
     if ( pImp->xStorage.is() )
     {
-        // don't close the streams if they belong to the
-        // storage
-        //TODO/MBA: how to?! Do we need the flag?!
-        /*
-        const SvStream *pStream = aStorage->GetSvStream();
-        if ( pStream && pStream == pInStream )
-        {
-            CloseZipStorage_Impl();
-            pInStream = NULL;
-            pImp->xInputStream = Reference < XInputStream >();
-            pImp->xLockBytes.Clear();
-            if ( pSet )
-                pSet->ClearItem( SID_INPUTSTREAM );
-            aStorage->SetDeleteStream( TRUE );
-        }
-        else if ( pStream && pStream == pOutStream )
-        {
-            pOutStream = NULL;
-            aStorage->SetDeleteStream( TRUE );
-        } */
-
         CloseStorage();
     }
 
@@ -2810,7 +2761,6 @@ void SfxMedium::SetIsRemote_Impl()
         case INET_PROT_POP3:
         case INET_PROT_NEWS:
         case INET_PROT_IMAP:
-//        case INET_PROT_OUT:
         case INET_PROT_VIM:
             bRemote = TRUE; break;
         default:
@@ -2881,7 +2831,7 @@ sal_Bool SfxMedium::IsTemporary() const
 
 sal_Bool SfxMedium::Exists( sal_Bool /*bForceSession*/ )
 {
-    DBG_ERROR( "Not implemented!" );
+    OSL_FAIL( "Not implemented!" );
     return sal_True;
 }
 
@@ -3033,13 +2983,6 @@ SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const Str
 
 SfxMedium::~SfxMedium()
 {
-    /* Attention
-        Don't enable CancelTransfers() till you know that the writer/web has changed his asynchronous load
-        behaviour. Otherwhise may StyleSheets inside a html file will be loaded at the right time.
-        => further the help will be empty then ... #100490#
-     */
-    //CancelTransfers();
-
     // if there is a requirement to clean the backup this is the last possibility to do it
     ClearBackup_Impl();
 
@@ -3052,12 +2995,12 @@ SfxMedium::~SfxMedium()
         String aTemp;
         if ( !::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aTemp ))
         {
-            DBG_ERROR("Physical name not convertable!");
+            OSL_FAIL("Physical name not convertable!");
         }
 
         if ( !::utl::UCBContentHelper::Kill( aTemp ) )
         {
-            DBG_ERROR("Couldn't remove temporary file!");
+            OSL_FAIL("Couldn't remove temporary file!");
         }
     }
 

@@ -124,7 +124,6 @@ DrawViewWrapper::DrawViewWrapper( SdrModel* pSdrModel, OutputDevice* pOut, bool 
             , m_apOutliner( SdrMakeOutliner( OUTLINERMODE_TEXTOBJECT, pSdrModel ) )
             , m_bRestoreMapMode( false )
 {
-    // #114898#
     SetBufferedOutputAllowed(true);
     SetBufferedOverlayAllowed(true);
 

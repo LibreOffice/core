@@ -4084,7 +4084,7 @@ case "$_os" in
 	"AIX")
 	  OS_VERSION=sysvr4
 	  ;;
-	"OpenBSD")
+	"OpenBSD"|DragonFly)
 	  OS_VERSION=linux
 	  ;;
    *)

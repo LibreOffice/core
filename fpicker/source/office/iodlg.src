@@ -280,7 +280,7 @@ String STR_FILTERNAME_ALL
 
 String STR_SVT_ALREADYEXISTOVERWRITE
 {
-    Text [ en-US ] = "The file already exists. Overwrite?" ;
+    Text [ en-US ] = "A file named \"$filename$\" already exists.\n\nDo you want to replace it?" ;
 };
 
 String STR_SVT_NEW_FOLDER

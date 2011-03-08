@@ -595,7 +595,7 @@ void AnimationWindow::UpdateControl( ULONG nListPos, BOOL bDisableCtrls )
                 ? ViewShell::OUTPUT_DRAWMODE_CONTRAST
                 : ViewShell::OUTPUT_DRAWMODE_COLOR );
             aVD.Erase();
-            pObject->SingleObjectPainter( aVD ); // #110094#-17
+            pObject->SingleObjectPainter( aVD );
             aBmp = BitmapEx( aVD.GetBitmap( aObjRect.TopLeft(), aObjSize ) );
         }
 

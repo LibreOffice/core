@@ -35,6 +35,7 @@
 #include <memory>
 #include <algorithm>
 #include <functional>
+#include <o3tl/compat_functional.hxx>
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/date.hxx>
@@ -51,6 +52,7 @@ using com::sun::star::uno::Any;
 using com::sun::star::uno::makeAny;
 using com::sun::star::util::Time;
 using namespace std;
+using namespace o3tl;
 
 typedef com::sun::star::util::Date UNODate;
 typedef com::sun::star::util::Time UNOTime;
@@ -539,7 +541,7 @@ Convert::Types_t Convert::getTypes()
 {
     Types_t aTypes( maMap.size() );
     transform( maMap.begin(), maMap.end(), aTypes.getArray(),
-               select1st<Map_t::value_type>() );
+               o3tl::select1st<Map_t::value_type>() );
     return aTypes;
 }
 

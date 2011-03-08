@@ -419,7 +419,7 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(const sal_Char* _pImplN
 
     for (sal_Int32 i=0; i<nClasses; ++i, ++pClasses, ++pServices, ++pFunctionsAsInts)
     {
-        if (rtl_ustr_ascii_compare(*pClasses, _pImplName) == 0)
+        if (rtl_ustr_ascii_compare(pClasses->getStr(), _pImplName) == 0)
         {
             ::cppu::ComponentInstantiation aCurrentCreateFunction =
                 reinterpret_cast< ::cppu::ComponentInstantiation>(*pFunctionsAsInts);

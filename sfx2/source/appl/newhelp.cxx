@@ -46,7 +46,7 @@
 #include "newhelp.hrc"
 #include "helpid.hrc"
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/configurationhelper.hxx>
@@ -131,8 +131,6 @@ using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::ui;
 
 using namespace ::comphelper;
-
-extern void AppendConfigToken_Impl( String& rURL, sal_Bool bQuestionMark ); // sfxhelp.cxx
 
 // defines ---------------------------------------------------------------
 
@@ -404,7 +402,7 @@ void ContentListBox_Impl::RequestingChilds( SvLBoxEntry* pParent )
     }
     catch( Exception& )
     {
-        DBG_ERROR( "ContentListBox_Impl::RequestingChilds(): unexpected exception" );
+        OSL_FAIL( "ContentListBox_Impl::RequestingChilds(): unexpected exception" );
     }
 }
 
@@ -605,7 +603,7 @@ namespace sfx2 {
         }
     };
 
-    typedef ::std::hash_map< ::rtl::OUString, int, hashOUString, equalOUString > KeywordInfo;
+    typedef ::boost::unordered_map< ::rtl::OUString, int, hashOUString, equalOUString > KeywordInfo;
 }
 
 #define UNIFY_AND_INSERT_TOKEN( aToken )                                                            \
@@ -645,7 +643,7 @@ void IndexTabPage_Impl::InitializeIndex()
         aURL += ::rtl::OUString( sFactory );
 
         String aTemp = aURL;
-        AppendConfigToken_Impl( aTemp, sal_True );
+        AppendConfigToken( aTemp, sal_True );
         aURL = aTemp;
 
         Content aCnt( aURL, Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
@@ -734,7 +732,7 @@ void IndexTabPage_Impl::InitializeIndex()
     }
     catch( Exception& )
     {
-        DBG_ERROR( "IndexTabPage_Impl::InitializeIndex(): unexpected exception" );
+        OSL_FAIL( "IndexTabPage_Impl::InitializeIndex(): unexpected exception" );
     }
 
     aIndexCB.SetUpdateMode( TRUE );
@@ -1090,7 +1088,7 @@ IMPL_LINK( SearchTabPage_Impl, SearchHdl, PushButton*, EMPTYARG )
         if ( !aFullWordsCB.IsChecked() )
             aSearchText = sfx2::PrepareSearchString( aSearchText, xBreakIterator, true );
         aSearchURL += aSearchText;
-        AppendConfigToken_Impl( aSearchURL, sal_False );
+        AppendConfigToken( aSearchURL, sal_False );
         if ( aScopeCB.IsChecked() )
             aSearchURL += DEFINE_CONST_UNICODE("&Scope=Heading");
         Sequence< ::rtl::OUString > aFactories = SfxContentHelper::GetResultSet( aSearchURL );
@@ -1515,7 +1513,7 @@ sal_Bool SfxHelpWindow_Impl::splitHelpURL(const ::rtl::OUString& sHelpURL,
     sHelpURL.append(sFactory);
     sHelpURL.append(sContent);
     String sURL = String(sHelpURL.makeStringAndClear());
-    AppendConfigToken_Impl(sURL, bUseQuestionMark);
+    AppendConfigToken(sURL, bUseQuestionMark);
     if (sAnchor.getLength())
         sURL += String(sAnchor);
     return ::rtl::OUString(sURL);
@@ -1634,7 +1632,7 @@ SfxHelpIndexWindow_Impl::~SfxHelpIndexWindow_Impl()
 void SfxHelpIndexWindow_Impl::Initialize()
 {
     String aHelpURL = HELP_URL;
-    AppendConfigToken_Impl( aHelpURL, sal_True );
+    AppendConfigToken( aHelpURL, sal_True );
     Sequence< ::rtl::OUString > aFactories = SfxContentHelper::GetResultSet( aHelpURL );
     const ::rtl::OUString* pFacs  = aFactories.getConstArray();
     UINT32 i, nCount = aFactories.getLength();
@@ -2344,7 +2342,7 @@ Reference< XTextRange > SfxHelpTextWindow_Impl::getCursor() const
     }
     catch( Exception& )
     {
-        DBG_ERROR( "SfxHelpTextWindow_Impl::getCursor(): unexpected exception" );
+        OSL_FAIL( "SfxHelpTextWindow_Impl::getCursor(): unexpected exception" );
     }
 
     return xCursor;
@@ -2412,7 +2410,7 @@ IMPL_LINK( SfxHelpTextWindow_Impl, SelectHdl, Timer*, EMPTYARG )
     }
     catch( Exception& )
     {
-        DBG_ERROR( "SfxHelpTextWindow_Impl::SelectHdl(): unexpected exception" );
+        OSL_FAIL( "SfxHelpTextWindow_Impl::SelectHdl(): unexpected exception" );
     }
 
     return 1;
@@ -2508,7 +2506,7 @@ IMPL_LINK( SfxHelpTextWindow_Impl, FindHdl, sfx2::SearchDialog*, pDlg )
     }
     catch( Exception& )
     {
-        DBG_ERROR( "SfxHelpTextWindow_Impl::SelectHdl(): unexpected exception" );
+        OSL_FAIL( "SfxHelpTextWindow_Impl::SelectHdl(): unexpected exception" );
     }
 
     return 0;
@@ -2921,7 +2919,6 @@ void SfxHelpWindow_Impl::MakeLayout()
             Some VCL-patches could not solve this problem so I've established the
             workaround: resize the help window if it's visible .-)
         */
-//      pScreenWin->Hide();
 
         ::com::sun::star::awt::Rectangle aRect = xWindow->getPosSize();
         sal_Int32 nOldWidth = bIndex ? nCollapseWidth : nExpandWidth;
@@ -2938,8 +2935,6 @@ void SfxHelpWindow_Impl::MakeLayout()
         }
         else if ( aWinPos.X() > 0 && aWinPos.Y() > 0 )
             pScreenWin->SetPosPixel( aWinPos );
-
-//      pScreenWin->Show();
     }
 
     Clear();
@@ -3088,9 +3083,6 @@ IMPL_LINK( SfxHelpWindow_Impl, OpenHdl, SfxHelpIndexWindow_Impl* , EMPTYARG )
 
     ::rtl::OUString sHelpURL;
 
-//  INetURLObject aObj(aEntry);
-//  BOOL bComplete = ( aObj.GetProtocol() == INET_PROT_VND_SUN_STAR_HELP );
-
     BOOL bComplete = rtl::OUString(aEntry).toAsciiLowerCase().match(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.help")),0);
 
     if (bComplete)
@@ -3192,7 +3184,7 @@ void SfxHelpWindow_Impl::openDone(const ::rtl::OUString& sURL    ,
         }
         catch( Exception& )
         {
-            DBG_ERROR( "SfxHelpWindow_Impl::OpenDoneHdl(): unexpected exception" );
+            OSL_FAIL( "SfxHelpWindow_Impl::OpenDoneHdl(): unexpected exception" );
         }
 
         // When the SearchPage opens the help doc, then select all words, which are equal to its text
@@ -3403,7 +3395,7 @@ void SfxHelpWindow_Impl::DoAction( USHORT nActionId )
                 }
                 catch( Exception& )
                 {
-                    DBG_ERROR( "SfxHelpWindow_Impl::DoAction(): unexpected exception" );
+                    OSL_FAIL( "SfxHelpWindow_Impl::DoAction(): unexpected exception" );
                 }
             }
             break;

@@ -74,7 +74,6 @@ public:
 
     DECL_LINK(SpellError, void* );
 
-    // #97016#
     virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle);
 
     /** is called when the currenct function should be aborted. <p>
@@ -103,7 +102,6 @@ protected:
     SfxRequest&         rRequest;
 
 private:
-    // #97016#
     void ImpSetAttributesForNewTextObject(SdrTextObj* pTxtObj);
     void ImpSetAttributesFitToSize(SdrTextObj* pTxtObj);
     void ImpSetAttributesFitToSizeVertical(SdrTextObj* pTxtObj);

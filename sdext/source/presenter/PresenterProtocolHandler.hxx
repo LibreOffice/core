@@ -35,7 +35,7 @@
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <rtl/ref.hxx>
 #include <boost/scoped_ptr.hpp>
 

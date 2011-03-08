@@ -53,7 +53,7 @@ private:
 
 protected:
     virtual void            SpellStart( SvxSpellArea eArea );
-    virtual BOOL            SpellContinue();    // Bereich pruefen
+    virtual BOOL            SpellContinue();    // Check area
     virtual void            ReplaceAll( const String &rNewText, INT16 nLanguage );
     virtual void            SpellEnd();
     virtual BOOL            SpellMore();
@@ -102,7 +102,7 @@ public:
 
     USHORT          Count() const               { return WrongRanges::Count(); }
 
-    // Wenn man weiss was man tut:
+    // When one knos what to do:
     WrongRange&     GetObject( USHORT n ) const { return WrongRanges::GetObject( n ); }
     void            InsertWrong( const WrongRange& rWrong, USHORT nPos );
 
@@ -134,7 +134,7 @@ inline void WrongList::InsertWrong( const WrongRange& rWrong, USHORT nPos )
 {
     WrongRanges::Insert( rWrong, nPos );
 #ifdef DBG_UTIL
-    DBG_ASSERT( !DbgIsBuggy(), "Insert: WrongList kaputt!" );
+    DBG_ASSERT( !DbgIsBuggy(), "Insert: WrongList broken!" );
 #endif
 }
 

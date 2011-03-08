@@ -29,11 +29,9 @@
 #include <precomp.h>
 #include "c_rcode.hxx"
 
-
 // NOT FULLY DECLARED SERVICES
 #include <ary/cpp/c_gate.hxx>
 #include <ary/cpp/c_namesp.hxx>
-// #include <ary/cpp/c_groups.hxx>
 #include <ary/loc/locp_le.hxx>
 #include "cpp_pe.hxx"
 #include <adc_cl.hxx>

@@ -83,7 +83,6 @@
 #include "fuvect.hxx"
 #include "stlpool.hxx"
 
-// #90356#
 #include "optsitem.hxx"
 #include "sdabstdlg.hxx"
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
@@ -171,7 +170,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 BOOL bMergeUndo = FALSE;
                 SfxUndoManager* pUndoManager = GetDocSh()->GetUndoManager();
 
-                // Anpassungen Start/EndWidth #63083#
+                // Anpassungen Start/EndWidth
                 if(nSId == SID_ATTR_LINE_WIDTH)
                 {
                     SdrObject* pObj = NULL;
@@ -192,7 +191,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                         {
                             BOOL bSetItemSet(FALSE);
 
-                            // #86265# do this for SFX_ITEM_DEFAULT and for SFX_ITEM_SET
+                            // do this for SFX_ITEM_DEFAULT and for SFX_ITEM_SET
                             if(SFX_ITEM_DONTCARE != aAttr.GetItemState(XATTR_LINESTARTWIDTH))
                             {
                                 INT32 nValAct = ((const XLineStartWidthItem&)aAttr.Get(XATTR_LINESTARTWIDTH)).GetValue();
@@ -203,7 +202,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                                 aAttr.Put(XLineStartWidthItem(nValNew));
                             }
 
-                            // #86265# do this for SFX_ITEM_DEFAULT and for SFX_ITEM_SET
+                            // do this for SFX_ITEM_DEFAULT and for SFX_ITEM_SET
                             if(SFX_ITEM_DONTCARE != aAttr.GetItemState(XATTR_LINEENDWIDTH))
                             {
                                 INT32 nValAct = ((const XLineEndWidthItem&)aAttr.Get(XATTR_LINEENDWIDTH)).GetValue();
@@ -323,7 +322,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             }
             else // nur zum Test
             {
-                DBG_ERROR(" Kein Wert fuer Silbentrennung!");
+                OSL_FAIL(" Kein Wert fuer Silbentrennung!");
                 SfxItemSet aSet( GetPool(), EE_PARA_HYPHENATE, EE_PARA_HYPHENATE );
                 BOOL bValue = TRUE;
                 aSet.Put( SfxBoolItem( EE_PARA_HYPHENATE, bValue ) );
@@ -612,7 +611,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                                     SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
                         break;
                     case SVX_ZOOM_PAGEWIDTH_NOBORDER:
-                        DBG_ERROR("sd::DrawViewShell::FuTemporary(), SVX_ZOOM_PAGEWIDTH_NOBORDER not handled!" );
+                        OSL_FAIL("sd::DrawViewShell::FuTemporary(), SVX_ZOOM_PAGEWIDTH_NOBORDER not handled!" );
                         break;
                 }
                 rReq.Ignore ();

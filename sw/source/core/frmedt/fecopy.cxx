@@ -52,12 +52,8 @@
 #include <svx/svdoole2.hxx>
 #include <svx/fmmodel.hxx>
 #include <svx/unomodel.hxx>
-// --> OD 2005-08-03 #i50824#
-#include <svx/svditer.hxx>
-// <--
-// --> OD 2006-03-01 #b6382898#
+#include <svx/svditer.hxx> // #i50824#
 #include <svx/svdograf.hxx>
-// <--
 #include <unotools/streamwrap.hxx>
 #include <fmtanchr.hxx>
 #include <fmtcntnt.hxx>
@@ -969,7 +965,7 @@ BOOL SwFEShell::Paste( SwDoc* pClpDoc, BOOL bIncludingPageFrames )
                         (FLY_AS_CHAR == aAnchor.GetAnchorId()))
                     {
                         SwPosition* pPos = PCURCRSR->GetPoint();
-                        // #108784# allow shapes (no controls) in header/footer
+                        // allow shapes (no controls) in header/footer
                         if( RES_DRAWFRMFMT == rCpyFmt.Which() &&
                             GetDoc()->IsInHeaderFooter( pPos->nNode ) &&
                             CheckControlLayer( rCpyFmt.FindSdrObject() ) )
@@ -1225,7 +1221,6 @@ BOOL SwFEShell::GetDrawObjGraphic( ULONG nFmt, Graphic& rGrf ) const
             // Rahmen selektiert
             if( CNT_GRF == GetCntType() )
             {
-                // --> OD 2005-02-09 #119353# - robust
                 const Graphic* pGrf( GetGraphic() );
                 if ( pGrf )
                 {
@@ -1286,7 +1281,6 @@ BOOL SwFEShell::GetDrawObjGraphic( ULONG nFmt, Graphic& rGrf ) const
                         }
                     }
                 }
-                // <--
             }
         }
         else if( SOT_FORMAT_GDIMETAFILE == nFmt )
@@ -1298,7 +1292,6 @@ BOOL SwFEShell::GetDrawObjGraphic( ULONG nFmt, Graphic& rGrf ) const
 }
 
 // --> OD 2005-08-03 #i50824#
-// --> OD 2006-03-01 #b6382898#
 // replace method <lcl_RemoveOleObjsFromSdrModel> by <lcl_ConvertSdrOle2ObjsToSdrGrafObjs>
 void lcl_ConvertSdrOle2ObjsToSdrGrafObjs( SdrModel* _pModel )
 {
@@ -1335,7 +1328,7 @@ void lcl_ConvertSdrOle2ObjsToSdrGrafObjs( SdrModel* _pModel )
         }
     }
 }
-// <--
+
 void SwFEShell::Paste( SvStream& rStrm, USHORT nAction, const Point* pPt )
 {
     SET_CURR_SHELL( this );
@@ -1363,7 +1356,7 @@ void SwFEShell::Paste( SvStream& rStrm, USHORT nAction, const Point* pPt )
         1 == pModel->GetPage(0)->GetObjCount() &&
         1 == pView->GetMarkedObjectList().GetMarkCount() )
     {
-        // OD 10.07.2003 #110742# - replace a marked 'virtual' drawing object
+        // replace a marked 'virtual' drawing object
         // by its corresponding 'master' drawing object in the mark list.
         SwDrawView::ReplaceMarkedDrawVirtObjs( *pView );
 
@@ -1480,10 +1473,8 @@ void SwFEShell::Paste( SvStream& rStrm, USHORT nAction, const Point* pPt )
             pView->SetDesignMode( sal_True );
 
         // --> OD 2005-08-03 #i50824#
-        // --> OD 2006-03-01 #b6382898#
         // method <lcl_RemoveOleObjsFromSdrModel> replaced by <lcl_ConvertSdrOle2ObjsToSdrGrafObjs>
         lcl_ConvertSdrOle2ObjsToSdrGrafObjs( pModel );
-        // <--
         pView->Paste( *pModel, aPos );
 
         ULONG nCnt = pView->GetMarkedObjectList().GetMarkCount();

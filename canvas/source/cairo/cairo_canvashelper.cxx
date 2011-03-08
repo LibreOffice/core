@@ -1065,7 +1065,7 @@ namespace cairocanvas
 
                 if(nPointCount)
                 {
-                    const sal_uInt32 nEdgeCount(aCandidate.isClosed() ? nPointCount + 1: nPointCount);
+                    const sal_uInt32 nEdgeCount(aCandidate.isClosed() ? nPointCount: nPointCount - 1);
                     basegfx::B2DPolygon aEdge;
                     aEdge.append(aCandidate.getB2DPoint(0));
                     aEdge.append(basegfx::B2DPoint(0.0, 0.0));

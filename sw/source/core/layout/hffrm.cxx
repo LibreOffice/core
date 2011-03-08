@@ -32,7 +32,6 @@
 #include "pagefrm.hxx"
 #include "viewsh.hxx"
 #include "doc.hxx"
-#include "errhdl.hxx"
 #include <fmtcntnt.hxx>
 #include <fmthdft.hxx>
 #include <fmtfsize.hxx>

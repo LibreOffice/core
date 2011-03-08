@@ -404,12 +404,11 @@ void ScEEImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor, SvNu
                 bHasGraphics |= GraphicSize( nCol, nRow, nTab, pE );
             if ( pE->pName )
             {   // Anchor Name => RangeName
-                USHORT nIndex;
-                if ( !pRangeNames->SearchName( *pE->pName, nIndex ) )
+                if (!pRangeNames->findByName(*pE->pName))
                 {
                     ScRangeData* pData = new ScRangeData( mpDoc, *pE->pName,
                         ScAddress( nCol, nRow, nTab ) );
-                    pRangeNames->Insert( pData );
+                    pRangeNames->insert( pData );
                 }
             }
         }
@@ -585,12 +584,12 @@ void ScEEImport::InsertGraphic( SCCOL nCol, SCROW nRow, SCTAB nTab,
         {
             Rectangle aRect ( aInsertPos, aLogicSize );
             SdrGrafObj* pObj = new SdrGrafObj( *pI->pGraphic, aRect );
-            // #118522# calling SetGraphicLink here doesn't work
+            // calling SetGraphicLink here doesn't work
             pObj->SetName( pI->aURL );
 
             pPage->InsertObject( pObj );
 
-            // #118522# SetGraphicLink has to be used after inserting the object,
+            // SetGraphicLink has to be used after inserting the object,
             // otherwise an empty graphic is swapped in and the contact stuff crashes.
             // See #i37444#.
             pObj->SetGraphicLink( pI->aURL, pI->aFilterName );

@@ -49,7 +49,7 @@ published enum LockDepth
     ONE,
 
     //-------------------------------------------------------------------------
-    /** Ininity (includes children and children's children and ...).
+    /** Infinity (includes children and children's children and ...).
     */
     INFINITY
 };

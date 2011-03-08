@@ -60,7 +60,6 @@
 using ::rtl::OUString;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
-//using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::office;
 using namespace ::com::sun::star::geometry;

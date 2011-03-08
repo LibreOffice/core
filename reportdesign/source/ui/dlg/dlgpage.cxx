@@ -36,7 +36,7 @@
 #include "dlgpage.hxx"
 #include "ModuleHelper.hxx"
 #include "RptResId.hrc"
-#include <svl/intitem.hxx> //add CHINA001
+#include <svl/intitem.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svl/aeitem.hxx>
 
@@ -53,7 +53,7 @@ SfxTabDialog ( pParent, ModuleRes( _nPageId ), pAttr ),
         rOutAttrs           ( *pAttr )
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "Dialogdiet fail!");
+    OSL_ENSURE(pFact, "Dialogdiet fail!");
     switch( _nPageId )
     {
         case RID_PAGEDIALOG_BACKGROUND:

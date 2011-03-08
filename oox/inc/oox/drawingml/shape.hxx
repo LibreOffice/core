@@ -130,6 +130,7 @@ public:
     void                            setName( const rtl::OUString& rName ) { msName = rName; }
     ::rtl::OUString                 getName( ) { return msName; }
     void                            setId( const rtl::OUString& rId ) { msId = rId; }
+    ::rtl::OUString                 getId() { return msId; }
     void                            setHidden( sal_Bool bHidden ) { mbHidden = bHidden; }
     sal_Bool                        getHidden() const { return mbHidden; };
     void                            setSubType( sal_Int32 nSubType ) { mnSubType = nSubType; }

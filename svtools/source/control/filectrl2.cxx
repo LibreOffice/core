@@ -89,7 +89,7 @@ void FileControl::ImplBrowseFile( )
     }
     catch( const Exception& )
     {
-        DBG_ERROR( "FileControl::ImplBrowseFile: caught an exception while executing the file picker!" );
+        OSL_FAIL( "FileControl::ImplBrowseFile: caught an exception while executing the file picker!" );
     }
 }
 

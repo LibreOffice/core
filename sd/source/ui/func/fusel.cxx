@@ -80,7 +80,6 @@
 
 #include "slideshow.hxx"
 
-// #108981#
 #include <svx/svdundo.hxx>
 #include <avmedia/mediawindow.hxx>
 
@@ -515,7 +514,7 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             }
             else
             {
-                // #90239# point IS marked and NO shift is pressed. Start
+                // point IS marked and NO shift is pressed. Start
                 // dragging of selected point(s)
                 pHdl = mpView->PickHandle(aMDPos);
                 if(pHdl)
@@ -793,7 +792,6 @@ BOOL FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                             pPool->GetActualStyleSheet());
                         if (pStyleSheet != NULL && mpView->IsUndoEnabled() )
                         {
-                            // #108981#
                             // Added UNDOs for the WaterCan mode. This was never done in
                             // the past, thus it was missing all the time.
                             SdrUndoAction* pUndoAttr = mpDoc->GetSdrUndoFactory().CreateUndoAttrObject(*pWaterCanCandidate, sal_True, sal_True);
@@ -803,7 +801,6 @@ BOOL FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
 
                             pWaterCanCandidate->SetStyleSheet (pStyleSheet, FALSE);
 
-                            // #108981#
                             mpView->EndUndo();
                         }
                     }
@@ -975,7 +972,7 @@ void FuSelection::Activate()
     {
         case SID_OBJECT_ROTATE:
         {
-            // (gemapter) Slot wird explizit auf Rotate gesetzt #31052#
+            // (gemapter) Slot wird explizit auf Rotate gesetzt
             if( mpViewShell->ISA(DrawViewShell) )
             {
                 USHORT* pSlotArray =

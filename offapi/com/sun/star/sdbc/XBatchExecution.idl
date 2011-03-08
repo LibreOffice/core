@@ -45,7 +45,7 @@
 published interface XBatchExecution: com::sun::star::uno::XInterface
 {
 
-    /** adds a SQL command to the current batch of commmands for the statement
+    /** adds a SQL command to the current batch of commands for the statement
         object.
         @param sql
             the SQL statement which should be appended to the batch.

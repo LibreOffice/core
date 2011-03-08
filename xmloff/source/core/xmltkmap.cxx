@@ -34,8 +34,9 @@
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmltoken.hxx>
 
-using namespace rtl;
 using namespace ::xmloff::token;
+
+using ::rtl::OUString;
 
 class SvXMLTokenMapEntry_Impl
 {

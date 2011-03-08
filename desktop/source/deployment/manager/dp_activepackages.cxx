@@ -41,7 +41,7 @@
 #include "rtl/uri.h"
 #include "rtl/uri.hxx"
 #include "rtl/ustring.hxx"
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #include "dp_identifier.hxx"
 #include "dp_persmap.h"

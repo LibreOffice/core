@@ -180,7 +180,7 @@ void SwLabPrtPage::Reset(const SfxItemSet& )
 
     if (pPrinter)
     {
-        // Drucker anzeigen
+        // show printer
         aPrinterInfo.SetText(pPrinter->GetName());
     }
     else

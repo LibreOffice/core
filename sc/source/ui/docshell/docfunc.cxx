@@ -105,6 +105,7 @@
 #include <basic/basmgr.hxx>
 #include <boost/scoped_ptr.hpp>
 #include <set>
+#include <vector>
 
 using namespace com::sun::star;
 using ::com::sun::star::uno::Sequence;
@@ -517,7 +518,7 @@ BOOL ScDocFunc::DetectiveRefresh( BOOL bAutomatic )
                         aFunc.ShowError( nCol, nRow );
                         break;
                     default:
-                        DBG_ERROR("falsche Op bei DetectiveRefresh");
+                        OSL_FAIL("falsche Op bei DetectiveRefresh");
                 }
             }
         }
@@ -547,14 +548,14 @@ static void lcl_collectAllPredOrSuccRanges(
     ScDocument* pDoc = rDocShell.GetDocument();
     vector<ScTokenRef> aRefTokens;
     ScRangeList aSrcRanges(rSrcRanges);
-    if ( aSrcRanges.empty() )
+    if (aSrcRanges.empty())
         return;
     ScRange* p = aSrcRanges.front();
     ScDetectiveFunc aDetFunc(pDoc, p->aStart.Tab());
     ScRangeList aDestRanges;
-    for ( size_t i = 1, ListSize = aSrcRanges.size(); i < ListSize; ++i )
+    for (size_t i = 0, n = aSrcRanges.size(); i < n; ++i)
     {
-        p = aSrcRanges[ i ];
+        p = aSrcRanges[i];
         if (bPred)
         {
             aDetFunc.GetAllPreds(
@@ -588,7 +589,7 @@ BOOL ScDocFunc::DeleteContents( const ScMarkData& rMark, USHORT nFlags,
 
     if ( !rMark.IsMarked() && !rMark.IsMultiMarked() )
     {
-        DBG_ERROR("ScDocFunc::DeleteContents ohne Markierung");
+        OSL_FAIL("ScDocFunc::DeleteContents ohne Markierung");
         return FALSE;
     }
 
@@ -673,7 +674,7 @@ BOOL ScDocFunc::DeleteContents( const ScMarkData& rMark, USHORT nFlags,
         if (nFlags & IDF_EDITATTR)          // Edit-Engine-Attribute
             nUndoDocFlags |= IDF_STRING;    // -> Zellen werden geaendert
         if (nFlags & IDF_NOTE)
-            nUndoDocFlags |= IDF_CONTENTS;  // #68795# copy all cells with their notes
+            nUndoDocFlags |= IDF_CONTENTS;  // copy all cells with their notes
         // note captions are handled in drawing undo
         nUndoDocFlags |= IDF_NOCAPTIONS;
         pDoc->CopyToDocument( aExtendedRange, nUndoDocFlags, bMulti, pUndoDoc, &aMultiMark );
@@ -818,7 +819,7 @@ BOOL ScDocFunc::SetNormalString( const ScAddress& rPos, const String& rText, BOO
     rDocShell.PostPaintCell( rPos );
     aModificator.SetDocumentModified();
 
-    // #107160# notify input handler here the same way as in PutCell
+    // notify input handler here the same way as in PutCell
     if (bApi)
         NotifyInputHandler( rPos );
 
@@ -1358,7 +1359,7 @@ BOOL ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
 
     if ( !ValidRow(nStartRow) || !ValidRow(nEndRow) )
     {
-        DBG_ERROR("invalid row in InsertCells");
+        OSL_FAIL("invalid row in InsertCells");
         return FALSE;
     }
 
@@ -1637,7 +1638,7 @@ BOOL ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
             nPaintFlags |= PAINT_TOP;
             break;
         default:
-            DBG_ERROR("Falscher Code beim Einfuegen");
+            OSL_FAIL("Falscher Code beim Einfuegen");
             bSuccess = FALSE;
             break;
     }
@@ -1793,7 +1794,7 @@ BOOL ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
 
     if ( !ValidRow(nStartRow) || !ValidRow(nEndRow) )
     {
-        DBG_ERROR("invalid row in DeleteCells");
+        OSL_FAIL("invalid row in DeleteCells");
         return FALSE;
     }
 
@@ -2099,7 +2100,7 @@ BOOL ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
             nPaintFlags |= PAINT_TOP;
             break;
         default:
-            DBG_ERROR("Falscher Code beim Loeschen");
+            OSL_FAIL("Falscher Code beim Loeschen");
             break;
     }
 
@@ -2279,7 +2280,7 @@ BOOL ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
 
     if ( !ValidRow(nStartRow) || !ValidRow(nEndRow) || !ValidRow(nDestRow) )
     {
-        DBG_ERROR("invalid row in MoveBlock");
+        OSL_FAIL("invalid row in MoveBlock");
         return FALSE;
     }
 
@@ -2833,8 +2834,8 @@ BOOL ScDocFunc::DeleteTable( SCTAB nTab, BOOL bRecord, BOOL /* bApi */ )
     {
         if (bRecord)
         {
-            SvShorts theTabs;
-            theTabs.Insert(nTab,theTabs.Count());
+            vector<SCTAB> theTabs;
+            theTabs.push_back(nTab);
             rDocShell.GetUndoManager()->AddUndoAction(
                         new ScUndoDeleteTab( &rDocShell, theTabs, pUndoDoc, pUndoData ));
         }
@@ -3169,7 +3170,7 @@ BOOL ScDocFunc::SetWidthOrHeight( BOOL bWidth, SCCOLROW nRangeCnt, SCCOLROW* pRa
     BOOL bShow = nSizeTwips > 0 || eMode != SC_SIZE_DIRECT;
     BOOL bOutline = FALSE;
 
-    pDoc->IncSizeRecalcLevel( nTab );       // nicht fuer jede Spalte einzeln
+    pDoc->InitializeNoteCaptions(nTab);
     for (SCCOLROW nRangeNo=0; nRangeNo<nRangeCnt; nRangeNo++)
     {
         SCCOLROW nStartNo = *(pRanges++);
@@ -3188,7 +3189,7 @@ BOOL ScDocFunc::SetWidthOrHeight( BOOL bWidth, SCCOLROW nRangeCnt, SCCOLROW* pRa
                     {
                         BYTE nOld = pDoc->GetRowFlags(nRow,nTab);
                         SCROW nLastRow = -1;
-                        bool bHidden = pDoc->RowHidden(nRow, nTab, nLastRow);
+                        bool bHidden = pDoc->RowHidden(nRow, nTab, NULL, &nLastRow);
                         if ( !bHidden && ( nOld & CR_MANUALSIZE ) )
                             pDoc->SetRowFlags( nRow, nTab, nOld & ~CR_MANUALSIZE );
                     }
@@ -3224,8 +3225,7 @@ BOOL ScDocFunc::SetWidthOrHeight( BOOL bWidth, SCCOLROW nRangeCnt, SCCOLROW* pRa
         {
             for (SCCOL nCol=static_cast<SCCOL>(nStartNo); nCol<=static_cast<SCCOL>(nEndNo); nCol++)
             {
-                SCCOL nLastCol = -1;
-                if ( eMode != SC_SIZE_VISOPT || !pDoc->ColHidden(nCol, nTab, nLastCol) )
+                if ( eMode != SC_SIZE_VISOPT || !pDoc->ColHidden(nCol, nTab) )
                 {
                     USHORT nThisSize = nSizeTwips;
 
@@ -3255,7 +3255,7 @@ BOOL ScDocFunc::SetWidthOrHeight( BOOL bWidth, SCCOLROW nRangeCnt, SCCOLROW* pRa
                         static_cast<SCROW>(nEndNo), nTab, bShow );
         }
     }
-    pDoc->DecSizeRecalcLevel( nTab );       // nicht fuer jede Spalte einzeln
+    pDoc->SetDrawPageSize(nTab);
 
     if (!bOutline)
         DELETEZ(pUndoTab);
@@ -4075,7 +4075,7 @@ BOOL ScDocFunc::FillSeries( const ScRange& rRange, const ScMarkData* pTabMark,
                 aSourceArea.aEnd.Col(), aSourceArea.aEnd.Row(), aSourceArea.aEnd.Tab(),
                 DirFromFillDir(eDir) );
 
-        //  #27665# mindestens eine Zeile/Spalte als Quellbereich behalten:
+        //  mindestens eine Zeile/Spalte als Quellbereich behalten:
         SCSIZE nTotLines = ( eDir == FILL_TO_BOTTOM || eDir == FILL_TO_TOP ) ?
             static_cast<SCSIZE>( aSourceArea.aEnd.Row() - aSourceArea.aStart.Row() + 1 ) :
             static_cast<SCSIZE>( aSourceArea.aEnd.Col() - aSourceArea.aStart.Col() + 1 );
@@ -4195,7 +4195,7 @@ BOOL ScDocFunc::FillAuto( ScRange& rRange, const ScMarkData* pTabMark, FillDir e
         case FILL_TO_TOP:
             if (nCount > sal::static_int_cast<ULONG>( aSourceArea.aStart.Row() ))
             {
-                DBG_ERROR("FillAuto: Row < 0");
+                OSL_FAIL("FillAuto: Row < 0");
                 nCount = aSourceArea.aStart.Row();
             }
             aDestArea.aStart.SetRow( sal::static_int_cast<SCROW>( aSourceArea.aStart.Row() - nCount ) );
@@ -4206,13 +4206,13 @@ BOOL ScDocFunc::FillAuto( ScRange& rRange, const ScMarkData* pTabMark, FillDir e
         case FILL_TO_LEFT:
             if (nCount > sal::static_int_cast<ULONG>( aSourceArea.aStart.Col() ))
             {
-                DBG_ERROR("FillAuto: Col < 0");
+                OSL_FAIL("FillAuto: Col < 0");
                 nCount = aSourceArea.aStart.Col();
             }
             aDestArea.aStart.SetCol( sal::static_int_cast<SCCOL>( aSourceArea.aStart.Col() - nCount ) );
             break;
         default:
-            DBG_ERROR("Falsche Richtung bei FillAuto");
+            OSL_FAIL("Falsche Richtung bei FillAuto");
             break;
     }
 
@@ -4543,11 +4543,10 @@ void ScDocFunc::CreateOneName( ScRangeName& rList,
             String aContent;
             ScRange( nX1, nY1, nTab, nX2, nY2, nTab ).Format( aContent, SCR_ABS_3D, pDoc );
 
-            BOOL bInsert = FALSE;
-            USHORT nOldPos;
-            if (rList.SearchName( aName, nOldPos ))         // vorhanden ?
+            bool bInsert = false;
+            ScRangeData* pOld = rList.findByName(aName);
+            if (pOld)
             {
-                ScRangeData* pOld = rList[nOldPos];
                 String aOldStr;
                 pOld->GetSymbol( aOldStr );
                 if (aOldStr != aContent)
@@ -4567,8 +4566,8 @@ void ScDocFunc::CreateOneName( ScRangeName& rList,
                                                     aMessage ).Execute();
                         if ( nResult == RET_YES )
                         {
-                            rList.AtFree(nOldPos);
-                            bInsert = TRUE;
+                            rList.erase(*pOld);
+                            bInsert = true;
                         }
                         else if ( nResult == RET_CANCEL )
                             rCancel = TRUE;
@@ -4576,15 +4575,15 @@ void ScDocFunc::CreateOneName( ScRangeName& rList,
                 }
             }
             else
-                bInsert = TRUE;
+                bInsert = true;
 
             if (bInsert)
             {
                 ScRangeData* pData = new ScRangeData( pDoc, aName, aContent,
                         ScAddress( nPosX, nPosY, nTab));
-                if (!rList.Insert(pData))
+                if (!rList.insert(pData))
                 {
-                    DBG_ERROR("nanu?");
+                    OSL_FAIL("nanu?");
                     delete pData;
                 }
             }
@@ -4691,13 +4690,12 @@ BOOL ScDocFunc::InsertNameList( const ScAddress& rStartPos, BOOL bApi )
     ScDocument* pUndoDoc = NULL;
 
     ScRangeName* pList = pDoc->GetRangeName();
-    USHORT nCount = pList->GetCount();
     USHORT nValidCount = 0;
-    USHORT i;
-    for (i=0; i<nCount; i++)
+    ScRangeName::iterator itrBeg = pList->begin(), itrEnd = pList->end();
+    for (ScRangeName::iterator itr = itrBeg; itr != itrEnd; ++itr)
     {
-        ScRangeData* pData = (*pList)[i];
-        if ( !pData->HasType( RT_DATABASE ) && !pData->HasType( RT_SHARED ) )
+        const ScRangeData& r = *itr;
+        if (r.HasType(RT_DATABASE && !r.HasType(RT_SHARED)))
             ++nValidCount;
     }
 
@@ -4723,11 +4721,11 @@ BOOL ScDocFunc::InsertNameList( const ScAddress& rStartPos, BOOL bApi )
 
             ScRangeData** ppSortArray = new ScRangeData* [ nValidCount ];
             USHORT j = 0;
-            for (i=0; i<nCount; i++)
+            for (ScRangeName::iterator itr = itrBeg; itr != itrEnd; ++itr)
             {
-                ScRangeData* pData = (*pList)[i];
-                if ( !pData->HasType( RT_DATABASE ) && !pData->HasType( RT_SHARED ) )
-                    ppSortArray[j++] = pData;
+                ScRangeData& r = *itr;
+                if (!r.HasType(RT_DATABASE) && !r.HasType(RT_SHARED))
+                    ppSortArray[j++] = &r;
             }
 #ifndef ICC
             qsort( (void*)ppSortArray, nValidCount, sizeof(ScRangeData*),
@@ -4770,7 +4768,7 @@ BOOL ScDocFunc::InsertNameList( const ScAddress& rStartPos, BOOL bApi )
 
             if (!AdjustRowHeight(ScRange(0,nStartRow,nTab,MAXCOL,nEndRow,nTab)))
                 rDocShell.PostPaint( nStartCol,nStartRow,nTab, nEndCol,nEndRow,nTab, PAINT_GRID );
-//!         rDocShell.UpdateOle(GetViewData());
+
             aModificator.SetDocumentModified();
             bDone = TRUE;
         }

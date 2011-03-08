@@ -80,7 +80,7 @@ IMPL_LINK_INLINE_START( SwBreakDlg, ClickHdl, void *, EMPTYARG )
 IMPL_LINK_INLINE_END( SwBreakDlg, ClickHdl, void *, EMPTYARG )
 
 /*------------------------------------------------------------------------
- Beschreibung:  Handler fuer Aendern Seitenummer
+ Description:   Handler for Change Page Number
 ------------------------------------------------------------------------*/
 
 IMPL_LINK_INLINE_START( SwBreakDlg, PageNumHdl, CheckBox *, pBox )
@@ -92,7 +92,7 @@ IMPL_LINK_INLINE_START( SwBreakDlg, PageNumHdl, CheckBox *, pBox )
 IMPL_LINK_INLINE_END( SwBreakDlg, PageNumHdl, CheckBox *, pBox )
 
 /*------------------------------------------------------------------------
- Beschreibung:  Durch Aendern der Seitennummer wird die Checkbox gecheckt.
+ Description:   By changing the Page number the checkbox is checked.
 ------------------------------------------------------------------------*/
 
 IMPL_LINK_INLINE_START( SwBreakDlg, PageNumModifyHdl, Edit *, EMPTYARG )
@@ -103,10 +103,10 @@ IMPL_LINK_INLINE_START( SwBreakDlg, PageNumModifyHdl, Edit *, EMPTYARG )
 IMPL_LINK_INLINE_END( SwBreakDlg, PageNumModifyHdl, Edit *, EMPTYARG )
 
 /*------------------------------------------------------------------------
- Beschreibung:  Ok-Handler;
-                prueft, ob die Seitenummer nPage eine legale Seitennummer
-                ist (linke Seiten mit geraden Nummern etc. bei einer Seitenvorlage
-                mit wechselnden Seiten)
+ Description:   Ok-Handler;
+                checks whether pagenumber nPage is a legal pagenumber
+                (left pages with even numbers etc. for a page template
+                with alternating pages)
 ------------------------------------------------------------------------*/
 
 IMPL_LINK( SwBreakDlg, OkHdl, Button *, EMPTYARG )
@@ -114,7 +114,7 @@ IMPL_LINK( SwBreakDlg, OkHdl, Button *, EMPTYARG )
     if(aPageNumBox.IsChecked()) {
         // In case of differing page descriptions, test validity
         const USHORT nPos = aPageCollBox.GetSelectEntryPos();
-        // auf Position 0 steht 'Ohne'.
+        // position 0 says 'Without'.
         const SwPageDesc *pPageDesc;
         if ( 0 != nPos && LISTBOX_ENTRY_NOTFOUND != nPos )
             pPageDesc = rSh.FindPageDescByName( aPageCollBox.GetSelectEntry(),
@@ -225,7 +225,7 @@ void SwBreakDlg::CheckEnable()
     bEnable &= bPage;
     if ( bEnable )
     {
-        // auf Position 0 steht 'Ohne' Seitenvorlage.
+        // position 0 says 'Without' page template.
         const USHORT nPos = aPageCollBox.GetSelectEntryPos();
         if ( 0 == nPos || LISTBOX_ENTRY_NOTFOUND == nPos )
             bEnable = FALSE;

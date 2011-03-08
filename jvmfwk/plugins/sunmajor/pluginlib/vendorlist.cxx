@@ -37,7 +37,11 @@
 #include <stdio.h>
 
 using namespace com::sun::star::uno;
-using namespace rtl;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
+using ::rtl::OStringToOUString;
+using ::rtl::OString;
 
 namespace jfw_plugin
 {

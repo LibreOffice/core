@@ -34,9 +34,10 @@
 #include "gnujre.hxx"
 #include "util.hxx"
 
-using namespace rtl;
 using namespace std;
 using namespace osl;
+using ::rtl::OUString;
+using ::rtl::Reference;
 
 namespace jfw_plugin
 {

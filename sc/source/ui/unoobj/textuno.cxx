@@ -496,7 +496,7 @@ void SAL_CALL ScHeaderFooterTextObj::insertTextContent(
             aSelection.nEndPos = aSelection.nStartPos + 1;
             pHeaderField->InitDoc( &aTextData.GetContentObj(), aTextData.GetPart(), aSelection );
 
-            //  #91431# for bAbsorb=FALSE, the new selection must be behind the inserted content
+            //  for bAbsorb=FALSE, the new selection must be behind the inserted content
             //  (the xml filter relies on this)
             if (!bAbsorb)
                 aSelection.nStartPos = aSelection.nEndPos;

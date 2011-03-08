@@ -35,7 +35,6 @@
 #include <hintids.hxx>
 #include <swtypes.hxx>
 #include <ndtxt.hxx>
-#include <errhdl.hxx>
 
 SwFmtChg::SwFmtChg( SwFmt *pFmt )
     : SwMsgPoolItem( RES_FMT_CHG ),
@@ -176,8 +175,7 @@ SfxPoolItem* SwMsgPoolItem::Clone( SfxItemPool* ) const
 #if OSL_DEBUG_LEVEL > 1
 const SfxPoolItem* GetDfltAttr( USHORT nWhich )
 {
-    ASSERT_ID( nWhich < POOLATTR_END && nWhich >= POOLATTR_BEGIN,
-               ERR_OUTOFSCOPE );
+    OSL_ASSERT( nWhich < POOLATTR_END && nWhich >= POOLATTR_BEGIN );
 
     SfxPoolItem *pHt = aAttrTab[ nWhich - POOLATTR_BEGIN ];
     OSL_ENSURE( pHt, "GetDfltFmtAttr(): Dflt == 0" );

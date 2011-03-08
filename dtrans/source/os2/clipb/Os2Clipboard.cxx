@@ -43,8 +43,9 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace cppu;
 using namespace osl;
-using namespace rtl;
 using namespace os2;
+
+using ::rtl::OUString;
 
 const Type CPPUTYPE_SEQINT8  = getCppuType( ( Sequence< sal_Int8 >* )0 );
 const Type CPPUTYPE_OUSTRING = getCppuType( (OUString*)0 );
@@ -75,7 +76,6 @@ MRESULT EXPENTRY DtransObjWndProc( HWND hWnd, ULONG nMsg, MPARAM nMP1, MPARAM nM
             Os2Clipboard* os2Clipboard = GetWindowPtr( hWnd);
             if (os2Clipboard)
             {
-                //MutexGuard aGuard(os2Clipboard->m_aMutex);
                 debug_printf("WM_DRAWCLIPBOARD os2Clipboard %08x\n", os2Clipboard);
                 if (os2Clipboard->m_bInSetClipboardData)
                 {
@@ -228,7 +228,7 @@ void SAL_CALL Os2Clipboard::setContents( const Reference< XTransferable >& xTran
         }
     }
 
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 0
     // dump list of available mimetypes
     Sequence< DataFlavor > aFlavors( m_aContents->getTransferDataFlavors() );
     for( int i = 0; i < aFlavors.getLength(); i++ )

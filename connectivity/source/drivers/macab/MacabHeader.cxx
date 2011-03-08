@@ -306,10 +306,11 @@ MacabHeader::iterator::~iterator ()
 {
 }
 
-void MacabHeader::iterator::operator= (MacabHeader *_record)
+MacabHeader::iterator& MacabHeader::iterator::operator= (MacabHeader *_record)
 {
     id = 0;
     record = _record;
+    return *this;
 }
 
 // -------------------------------------------------------------------------

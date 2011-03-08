@@ -36,6 +36,9 @@
 #include "sal/types.h"
 #include <com/sun/star/uno/Sequence.hxx>
 
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/i18n/XCollator.hpp>
+#include <com/sun/star/i18n/XBreakIterator.hpp>
 
 namespace rtl { class OUString; }
 
@@ -119,6 +122,27 @@ COMPHELPER_DLLPUBLIC ::rtl::OUString&
 COMPHELPER_DLLPUBLIC ::rtl::OUString convertCommaSeparated(
     ::com::sun::star::uno::Sequence< ::rtl::OUString > const & i_rSeq);
 
+/** Convert a decimal string to a number.
+
+    The string must be base-10, no sign but can contain any
+    codepoint listed in the "Number, Decimal Digit" Unicode
+    category.
+
+    No verification is made about the validity of the string,
+    passing string not containing decimal digit code points
+    gives unspecified results
+
+    If your string is guaranteed to contain only ASCII digit
+    use rtl::OUString::toInt32 instead.
+
+    @param str  The string to convert containing only decimal
+                digit codepoints.
+
+    @return     The value of the string as an int32.
+ */
+COMPHELPER_DLLPUBLIC sal_uInt32 decimalStringToNumber(
+    ::rtl::OUString const & str );
+
 /** Convert a single comma separated string to a sequence of strings.
 
     Note that no escaping of commas or anything fancy is done.
@@ -130,6 +154,43 @@ COMPHELPER_DLLPUBLIC ::rtl::OUString convertCommaSeparated(
  */
 COMPHELPER_DLLPUBLIC ::com::sun::star::uno::Sequence< ::rtl::OUString >
     convertCommaSeparated( ::rtl::OUString const & i_rString );
+
+/**
+  Compares two strings using natural order.
+
+  For non digit characters, the comparison use the same algorithm as
+  rtl_str_compare. When a number is encountered during the comparison,
+  natural order is used. Thus, Heading 10 will be considered as greater
+  than Heading 2. Numerical comparison is done using decimal representation.
+
+  Beware that "MyString 001" and "MyString 1" will be considered as equal
+  since leading 0 are meaningless.
+
+  @param    str         the object to be compared.
+  @return   0 - if both strings are equal
+            < 0 - if this string is less than the string argument
+            > 0 - if this string is greater than the string argument
+*/
+COMPHELPER_DLLPUBLIC sal_Int32 compareNatural( const ::rtl::OUString &rLHS, const ::rtl::OUString &rRHS,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCollator > &rCollator,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator > &rBI,
+    const ::com::sun::star::lang::Locale &rLocale );
+
+class COMPHELPER_DLLPUBLIC NaturalStringSorter
+{
+private:
+    ::com::sun::star::lang::Locale m_aLocale;
+    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCollator > m_xCollator;
+    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator > m_xBI;
+public:
+    NaturalStringSorter(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rContext,
+        const ::com::sun::star::lang::Locale &rLocale);
+    sal_Int32 compare(const rtl::OUString &rLHS, const rtl::OUString &rRHS) const
+    {
+        return compareNatural(rLHS, rRHS, m_xCollator, m_xBI, m_aLocale);
+    }
+};
 
 } }
 

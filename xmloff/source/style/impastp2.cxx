@@ -32,7 +32,9 @@
 #include "impastpl.hxx"
 
 using namespace std;
-using namespace rtl;
+
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 //#############################################################################
 //

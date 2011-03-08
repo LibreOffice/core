@@ -1103,13 +1103,12 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
                                     // be determined)
                                     // -1: don't know yet, 0: not used, 1: always a single labe cell, ...
                                     // -2: neither/failed
-//     sal_Int32 nValuesSeqLen = -1;   // used to see if all value sequences have the same size
     for (sal_Int32 nDS1 = 0;  nDS1 < nNumDS_LDS;  ++nDS1)
     {
         uno::Reference< chart2::data::XLabeledDataSequence > xLabeledDataSequence( pDS_LDS[nDS1] );
         if( !xLabeledDataSequence.is() )
         {
-            DBG_ERROR("got NULL for XLabeledDataSequence from Data source");
+            OSL_FAIL("got NULL for XLabeledDataSequence from Data source");
             continue;
         }
         const uno::Reference< chart2::data::XDataSequence > xCurLabel( xLabeledDataSequence->getLabel(), uno::UNO_QUERY );
@@ -1172,6 +1171,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
         {
             DBG_ASSERT( nCurLabelSeqLen == 0 && nCurValuesSeqLen == 1,
                     "trying to determine 'DataRowSource': something's fishy... should have been a single cell");
+            (void)nCurValuesSeqLen;
             nDirection = 0;     // default direction for a single cell should be 'columns'
         }
         else    // more than one cell is availabale (in values and label together!)
@@ -1182,7 +1182,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
                 nDirection = 0;
             else
             {
-                DBG_ERROR( "trying to determine 'DataRowSource': unexpected case found" );
+                OSL_FAIL( "trying to determine 'DataRowSource': unexpected case found" );
                 nDirection = -2;
             }
         }
@@ -1372,19 +1372,6 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
     if (!bNeedSequenceMapping)
         aSequenceMapping.realloc(0);
 
-
-#ifdef TL_NOT_USED  // in the end chart2 did not want to have the sequence minimized
-    // try to shorten the 'SequenceMapping' as much as possible
-    sal_Int32 k;
-    for (k = nNumDS_LDS - 1;  k >= 0;  --k)
-    {
-        if (pSequenceMapping[k] != k)
-            break;
-    }
-    aSequenceMapping.realloc( k + 1 );
-#endif
-
-
     //
     // build resulting properties
     //
@@ -1546,7 +1533,7 @@ sal_Bool SAL_CALL SwChartDataProvider::supportsService(
     throw (uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    return rServiceName.equalsAscii( SN_DATA_PROVIDER );
+    return rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SN_DATA_PROVIDER ) );
 }
 
 uno::Sequence< OUString > SAL_CALL SwChartDataProvider::getSupportedServiceNames(  )
@@ -1583,10 +1570,9 @@ void SwChartDataProvider::InvalidateTable( const SwTable *pTable )
            pTable->GetFrmFmt()->GetDoc()->GetChartControllerHelper().StartOrContinueLocking();
 
         const Set_DataSequenceRef_t &rSet = aDataSequences[ pTable ];
-        Set_DataSequenceRef_t::iterator aIt( rSet.begin() );
+        Set_DataSequenceRef_t::const_iterator aIt( rSet.begin() );
         while (aIt != rSet.end())
         {
-//            uno::Reference< util::XModifiable > xRef( uno::Reference< chart2::data::XDataSequence >(*aIt), uno::UNO_QUERY );
             uno::Reference< chart2::data::XDataSequence > xTemp(*aIt);  // temporary needed for g++ 3.3.5
             uno::Reference< util::XModifiable > xRef( xTemp, uno::UNO_QUERY );
             if (xRef.is())
@@ -1620,7 +1606,6 @@ sal_Bool SwChartDataProvider::DeleteBox( const SwTable *pTable, const SwTableBox
             sal_Bool bNowEmpty = sal_False;
 
             // check if weak reference is still valid...
-//            uno::Reference< chart2::data::XDataSequence > xRef( uno::Reference< chart2::data::XDataSequence>(*aIt), uno::UNO_QUERY );
             uno::Reference< chart2::data::XDataSequence > xTemp(*aIt);  // temporary needed for g++ 3.3.5
             uno::Reference< chart2::data::XDataSequence > xRef( xTemp, uno::UNO_QUERY );
             if (xRef.is())
@@ -1664,11 +1649,10 @@ void SwChartDataProvider::DisposeAllDataSequences( const SwTable *pTable )
         //! would become invalid.
         const Set_DataSequenceRef_t aSet( aDataSequences[ pTable ] );
 
-        Set_DataSequenceRef_t::iterator aIt( aSet.begin() );
-        Set_DataSequenceRef_t::iterator aEndIt( aSet.end() );
+        Set_DataSequenceRef_t::const_iterator aIt( aSet.begin() );
+        Set_DataSequenceRef_t::const_iterator aEndIt( aSet.end() );
         while (aIt != aEndIt)
         {
-//            uno::Reference< lang::XComponent > xRef( uno::Reference< chart2::data::XDataSequence >(*aIt), uno::UNO_QUERY );
             uno::Reference< chart2::data::XDataSequence > xTemp(*aIt);  // temporary needed for g++ 3.3.5
             uno::Reference< lang::XComponent > xRef( xTemp, uno::UNO_QUERY );
             if (xRef.is())
@@ -1716,9 +1700,9 @@ void SwChartDataProvider::AddRowCols(
     SwTableBox* pFirstBox   = *( rBoxes.GetData() + 0 );
     SwTableBox* pLastBox    = *( rBoxes.GetData() + nBoxes - 1 );
 
-    sal_Int32 nFirstCol = -1, nFirstRow = -1, nLastCol = -1, nLastRow = -1;
     if (pFirstBox && pLastBox)
     {
+        sal_Int32 nFirstCol = -1, nFirstRow = -1, nLastCol = -1, nLastRow = -1;
         lcl_GetCellPosition( pFirstBox->GetName(), nFirstCol, nFirstRow  );
         lcl_GetCellPosition( pLastBox->GetName(),  nLastCol,  nLastRow );
 
@@ -1729,24 +1713,19 @@ void SwChartDataProvider::AddRowCols(
         {
             //get range of indices in col/rows for new cells
             sal_Int32 nFirstNewCol = nFirstCol;
-            sal_Int32 nLastNewCol  = nLastCol;
             sal_Int32 nFirstNewRow = bBehind ?  nFirstRow + 1 : nFirstRow - nLines;
-            sal_Int32 nLastNewRow  = nFirstNewRow - 1 + nLines;
             if (bAddCols)
             {
                 DBG_ASSERT( nFirstCol == nLastCol, "column indices seem broken" );
                 nFirstNewCol = bBehind ?  nFirstCol + 1 : nFirstCol - nLines;
-                nLastNewCol  = nFirstNewCol - 1 + nLines;
                 nFirstNewRow = nFirstRow;
-                nLastNewRow  = nLastRow;
             }
 
             // iterate over all data-sequences for the table
             const Set_DataSequenceRef_t &rSet = aDataSequences[ &rTable ];
-            Set_DataSequenceRef_t::iterator aIt( rSet.begin() );
+            Set_DataSequenceRef_t::const_iterator aIt( rSet.begin() );
             while (aIt != rSet.end())
             {
-//               uno::Reference< chart2::data::XTextualDataSequence > xRef( uno::Reference< chart2::data::XDataSequence >(*aIt), uno::UNO_QUERY );
                 uno::Reference< chart2::data::XDataSequence > xTemp(*aIt);  // temporary needed for g++ 3.3.5
                 uno::Reference< chart2::data::XTextualDataSequence > xRef( xTemp, uno::UNO_QUERY );
                 if (xRef.is())
@@ -1810,14 +1789,9 @@ rtl::OUString SAL_CALL SwChartDataProvider::convertRangeToXML( const rtl::OUStri
     {
         String aRange( aRangeRepresentation.GetToken(i, ';') );
         SwFrmFmt    *pTblFmt  = 0;      // pointer to table format
-        // BM: For what should the check be necessary? for #i79009# it is required that NO check is done
-//         SwUnoCrsr   *pUnoCrsr = 0;      // here required to check if the cells in the range do actually exist
-//         std::auto_ptr< SwUnoCrsr > pAuto( pUnoCrsr );  // to end lifetime of object pointed to by pUnoCrsr
         GetFormatAndCreateCursorFromRangeRep( pDoc, aRange, &pTblFmt, NULL );
         if (!pTblFmt)
             throw lang::IllegalArgumentException();
-//    if (!pUnoCrsr)
-//        throw uno::RuntimeException();
         SwTable* pTable = SwTable::FindTable( pTblFmt );
         if  (pTable->IsTblComplex())
             throw uno::RuntimeException();
@@ -1921,7 +1895,6 @@ SwChartDataSource::SwChartDataSource(
 
 SwChartDataSource::~SwChartDataSource()
 {
-//    delete pTblCrsr;
 }
 
 uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > SAL_CALL SwChartDataSource::getDataSequences(  )
@@ -1943,7 +1916,7 @@ sal_Bool SAL_CALL SwChartDataSource::supportsService(
     throw (uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    return rServiceName.equalsAscii( SN_DATA_SOURCE );
+    return rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SN_DATA_SOURCE ) );
 }
 
 uno::Sequence< OUString > SAL_CALL SwChartDataSource::getSupportedServiceNames(  )
@@ -1983,7 +1956,7 @@ SwChartDataSequence::SwChartDataSequence(
             pDataProvider->addEventListener( dynamic_cast< lang::XEventListener * >(this) );
         }
         else {
-            DBG_ERROR( "table missing" );
+            OSL_FAIL( "table missing" );
         }
     }
     catch (uno::RuntimeException &)
@@ -2033,7 +2006,7 @@ SwChartDataSequence::SwChartDataSequence( const SwChartDataSequence &rObj ) :
             pDataProvider->addEventListener( dynamic_cast< lang::XEventListener * >(this) );
         }
         else {
-            DBG_ERROR( "table missing" );
+            OSL_FAIL( "table missing" );
         }
     }
     catch (uno::RuntimeException &)
@@ -2181,7 +2154,7 @@ uno::Sequence< OUString > SAL_CALL SwChartDataSequence::generateLabel(
                 bReturnEmptyTxt = nColSpan == nRowSpan;
             }
             else {
-                DBG_ERROR( "unexpected case" );
+                OSL_FAIL( "unexpected case" );
             }
 
             // build label sequence
@@ -2367,8 +2340,7 @@ void SAL_CALL SwChartDataSequence::addPropertyChangeListener(
         const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/ )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    //SolarMutexGuard aGuard;
-    DBG_ERROR( "not implemented" );
+    OSL_FAIL( "not implemented" );
 }
 
 void SAL_CALL SwChartDataSequence::removePropertyChangeListener(
@@ -2376,8 +2348,7 @@ void SAL_CALL SwChartDataSequence::removePropertyChangeListener(
         const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/ )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    //SolarMutexGuard aGuard;
-    DBG_ERROR( "not implemented" );
+    OSL_FAIL( "not implemented" );
 }
 
 void SAL_CALL SwChartDataSequence::addVetoableChangeListener(
@@ -2385,8 +2356,7 @@ void SAL_CALL SwChartDataSequence::addVetoableChangeListener(
         const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/ )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    //SolarMutexGuard aGuard;
-    DBG_ERROR( "not implemented" );
+    OSL_FAIL( "not implemented" );
 }
 
 void SAL_CALL SwChartDataSequence::removeVetoableChangeListener(
@@ -2394,8 +2364,7 @@ void SAL_CALL SwChartDataSequence::removeVetoableChangeListener(
         const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/ )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    //SolarMutexGuard aGuard;
-    DBG_ERROR( "not implemented" );
+    OSL_FAIL( "not implemented" );
 }
 
 OUString SAL_CALL SwChartDataSequence::getImplementationName(  )
@@ -2408,7 +2377,7 @@ sal_Bool SAL_CALL SwChartDataSequence::supportsService(
         const OUString& rServiceName )
     throw (uno::RuntimeException)
 {
-    return rServiceName.equalsAscii( SN_DATA_SEQUENCE );
+    return rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SN_DATA_SEQUENCE ) );
 }
 
 uno::Sequence< OUString > SAL_CALL SwChartDataSequence::getSupportedServiceNames(  )
@@ -2510,7 +2479,7 @@ void SAL_CALL SwChartDataSequence::dispose(  )
                 pDataProvider->RemoveDataSequence( *pTable, xRef );
             }
             else {
-                DBG_ERROR( "table missing" );
+                OSL_FAIL( "table missing" );
             }
         }
 
@@ -2597,7 +2566,7 @@ sal_Bool SwChartDataSequence::DeleteBox( const SwTableBox &rBox )
                 bMoveLeft = nMarkCol > nPointCol;
         }
         else {
-            DBG_ERROR( "neither vertical nor horizontal movement" );
+            OSL_FAIL( "neither vertical nor horizontal movement" );
         }
 
         // get new box (position) to use...
@@ -2636,11 +2605,11 @@ sal_Bool SwChartDataSequence::DeleteBox( const SwTableBox &rBox )
                 pPos->nContent  = aNewPos.nContent;
             }
             else {
-                DBG_ERROR( "neither point nor mark available for change" );
+                OSL_FAIL( "neither point nor mark available for change" );
             }
         }
         else {
-            DBG_ERROR( "failed to get position" );
+            OSL_FAIL( "failed to get position" );
         }
     }
 
@@ -2891,7 +2860,7 @@ sal_Bool SAL_CALL SwChartLabeledDataSequence::supportsService(
         const OUString& rServiceName )
     throw (uno::RuntimeException)
 {
-    return rServiceName.equalsAscii( SN_LABELED_DATA_SEQUENCE );
+    return rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SN_LABELED_DATA_SEQUENCE ) );
 }
 
 uno::Sequence< OUString > SAL_CALL SwChartLabeledDataSequence::getSupportedServiceNames(  )

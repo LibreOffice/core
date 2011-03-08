@@ -44,7 +44,7 @@ class IntlWrapper;
 
 class SW_DLLPUBLIC SwFmtVertOrient: public SfxPoolItem
 {
-    SwTwips         nYPos;  //Enthaelt _immer_ die aktuelle RelPos.
+    SwTwips         nYPos;  // Contains *always* the current RelPos.
     sal_Int16       eOrient;
     sal_Int16       eRelation;
 public:
@@ -53,7 +53,7 @@ public:
                      sal_Int16 eRel = com::sun::star::text::RelOrientation::PRINT_AREA );
     inline SwFmtVertOrient &operator=( const SwFmtVertOrient &rCpy );
 
-    // "pure virtual methods" of SfxPoolItem
+    // "Pure virtual methods" of SfxPoolItem.
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -73,25 +73,24 @@ public:
     void    SetPos( SwTwips nNew ) { nYPos = nNew; }
 };
 
-//  SwFmtHoriOrient, wie und woran orientiert --
-//  sich der FlyFrm in der Hoizontalen ----------
+//  SwFmtHoriOrient; how and towards what does the FlyFrm orient itself horizontally?
 
 #define IVER_HORIORIENT_TOGGLE ((USHORT)0x0001)
 #define IVER_HORIORIENT_REL ((USHORT)0x0002)
 
 class SW_DLLPUBLIC SwFmtHoriOrient: public SfxPoolItem
 {
-    SwTwips         nXPos;  //Enthaelt _immer_ die aktuelle RelPos.
+    SwTwips         nXPos;  // Contains *always* the current RelPos.
     sal_Int16       eOrient;
     sal_Int16       eRelation;
-    BOOL            bPosToggle : 1; // auf geraden Seiten Position spiegeln
+    BOOL            bPosToggle : 1; // Flip position on even pages.
 public:
     TYPEINFO();
     SwFmtHoriOrient( SwTwips nX = 0, sal_Int16 eHori = com::sun::star::text::HoriOrientation::NONE,
         sal_Int16 eRel = com::sun::star::text::RelOrientation::PRINT_AREA, BOOL bPos = FALSE );
     inline SwFmtHoriOrient &operator=( const SwFmtHoriOrient &rCpy );
 
-    // "pure virtual methods" of SfxPoolItem
+    // "Pure virtual methods" of SfxPoolItem.
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,

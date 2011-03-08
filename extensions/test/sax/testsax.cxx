@@ -51,9 +51,7 @@
 
 #include "factory.hxx"
 
-using namespace rtl;
 using namespace usr;
-
 
 #define BUILD_ERROR(expr, Message)\
         {\

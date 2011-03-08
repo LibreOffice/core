@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 #include "JoinTableView.hxx"
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include "querycontroller.hxx"
 #include "JoinDesignView.hxx"
 #include "dbu_qry.hrc"
@@ -473,7 +473,6 @@ namespace
         BOOL bFitsVert= (aUpperLeft.Y() >= 0) && (aLowerRight.Y() <= aSize.Height());
         if (!bFitsHor || !bFitsVert)
         {
-            // #100386# OJ
             if (!bFitsHor)
             {
                 // ensure the visibility of the right border
@@ -1089,7 +1088,7 @@ void OJoinTableView::ClearAll()
 BOOL OJoinTableView::ScrollWhileDragging()
 {
     DBG_CHKTHIS(OJoinTableView,NULL);
-    DBG_ASSERT(m_pDragWin != NULL, "OJoinTableView::ScrollWhileDragging darf nur waehrend Dragging eines Fensters aufgerufen werden !");
+    OSL_ENSURE(m_pDragWin != NULL, "OJoinTableView::ScrollWhileDragging darf nur waehrend Dragging eines Fensters aufgerufen werden !");
 
     // den Timer schon mal killen
     if (m_aDragScrollTimer.IsActive())
@@ -1292,7 +1291,7 @@ void OJoinTableView::Command(const CommandEvent& rEvt)
 OTableConnection* OJoinTableView::GetTabConn(const OTableWindow* pLhs,const OTableWindow* pRhs,bool _bSupressCrossOrNaturalJoin,const OTableConnection* _rpFirstAfter) const
 {
     OTableConnection* pConn = NULL;
-    DBG_ASSERT(pRhs || pLhs, "OJoinTableView::GetTabConn : invalid args !");
+    OSL_ENSURE(pRhs || pLhs, "OJoinTableView::GetTabConn : invalid args !");
         // only one NULL-arg allowed
 
     if ((!pLhs || pLhs->ExistsAConn()) && (!pRhs || pRhs->ExistsAConn()))

@@ -31,9 +31,6 @@
 
 #include "SchXMLTools.hxx"
 
-/*
-#include <tools/debug.hxx>
-*/
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/InlineContainer.hxx>
 // header for class SvXMLUnitConverter
@@ -398,14 +395,14 @@ Reference< chart2::data::XDataSequence > CreateDataSequence(
 
     if( !xChartDoc.is() )
     {
-        DBG_ERROR( "need a chart document" );
+        OSL_FAIL( "need a chart document" );
         return xRet;
     }
 
     Reference< chart2::data::XDataProvider > xDataProvider( xChartDoc->getDataProvider() );
     if( !xDataProvider.is() )
     {
-        DBG_ERROR( "need a data provider" );
+        OSL_FAIL( "need a data provider" );
         return xRet;
     }
 
@@ -416,7 +413,7 @@ Reference< chart2::data::XDataSequence > CreateDataSequence(
     }
     catch( const lang::IllegalArgumentException & )
     {
-        DBG_ERROR( "could not create data sequence" );
+        OSL_FAIL( "could not create data sequence" );
     }
 
     if( !xRet.is() && !xChartDoc->hasInternalDataProvider() )
@@ -431,7 +428,7 @@ Reference< chart2::data::XDataSequence > CreateDataSequence(
         }
         catch( const lang::IllegalArgumentException & )
         {
-            DBG_ERROR( "could not create data sequence" );
+            OSL_FAIL( "could not create data sequence" );
         }
     }
     return xRet;

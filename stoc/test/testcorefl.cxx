@@ -60,7 +60,6 @@
 #include <stdio.h>
 
 
-using namespace rtl;
 using namespace cppu;
 using namespace osl;
 using namespace ModuleA;
@@ -74,6 +73,10 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::registry;
 using namespace com::sun::star::reflection;
 using namespace com::sun::star::container;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
+using ::rtl::OString;
 
 
 //==================================================================================================

@@ -53,8 +53,13 @@
 
 #define PATH_DELEMITTER '/'
 
-using namespace rtl;
 using namespace osl;
+
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OStringBuffer;
+using ::rtl::OUStringToOString;
+using ::rtl::OStringToOUString;
 
 FileStream          listFile;
 RegistryKey         rootKey;

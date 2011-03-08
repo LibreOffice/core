@@ -112,8 +112,6 @@ void SwViewLayoutControl::Paint( const UserDrawEvent& rUsrEvt )
 {
     OutputDevice*       pDev =  rUsrEvt.GetDevice();
     Rectangle           aRect = rUsrEvt.GetRect();
-    Color               aOldLineColor = pDev->GetLineColor();
-    Color               aOldFillColor = pDev->GetFillColor();
 
     const bool bSingleColumn    = 0 == mpImpl->mnState;
     const bool bAutomatic       = 1 == mpImpl->mnState;

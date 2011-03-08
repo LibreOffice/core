@@ -94,18 +94,6 @@ extern "C" {
 #endif
 #endif
 
-#ifdef SCO
-#   include <sys/types.h>
-#   include <sys/byteorder.h>
-#   if BYTE_ORDER == LITTLE_ENDIAN
-#       define _LITTLE_ENDIAN
-#   elif BYTE_ORDER == BIG_ENDIAN
-#       define _BIG_ENDIAN
-#   elif BYTE_ORDER == PDP_ENDIAN
-#       define _PDP_ENDIAN
-#   endif
-#endif
-
 #ifdef AIX
 #   include <sys/machine.h>
 #   if BYTE_ORDER == LITTLE_ENDIAN
@@ -119,14 +107,6 @@ extern "C" {
 #   elif BYTE_ORDER == PDP_ENDIAN
 #       define _PDP_ENDIAN
 #   endif
-#endif
-
-#ifdef HPUX
-#   include <machine/param.h>
-#endif
-
-#ifdef _WIN16
-#   define  _LITTLE_ENDIAN
 #endif
 
 #ifdef OS2
@@ -156,10 +136,11 @@ extern "C" {
 
 /** Check supported platform.
  */
-#if !defined(_WIN32)  && !defined(_WIN16) && !defined(OS2)     && \
-    !defined(LINUX)   && !defined(NETBSD) && !defined(SCO)     && \
-    !defined(AIX)     && !defined(HPUX)   && !defined(OPENBSD) && \
-    !defined(SOLARIS) && !defined(MACOSX) && !defined(FREEBSD)
+#if !defined(_WIN32)  && !defined(OS2)     && \
+    !defined(LINUX)   && !defined(NETBSD) && \
+    !defined(AIX)     && !defined(OPENBSD) && \
+    !defined(SOLARIS) && !defined(MACOSX) && !defined(FREEBSD) && \
+    !defined(DRAGONFLY)
 #   error "Target platform not specified !"
 #endif
 

@@ -90,16 +90,12 @@ SC_SIMPLE_SERVICE_INFO( ScLabelRangeObj, "ScLabelRangeObj", "com.sun.star.sheet.
 SC_SIMPLE_SERVICE_INFO( ScLabelRangesObj, "ScLabelRangesObj", "com.sun.star.sheet.LabelRanges" )
 SC_SIMPLE_SERVICE_INFO( ScNamedRangesObj, "ScNamedRangesObj", "com.sun.star.sheet.NamedRanges" )
 
-//------------------------------------------------------------------------
-
-sal_Bool lcl_UserVisibleName( const ScRangeData* pData )
+bool lcl_UserVisibleName(const ScRangeData& rData)
 {
     //! als Methode an ScRangeData
 
-    return ( pData && !pData->HasType( RT_DATABASE ) && !pData->HasType( RT_SHARED ) );
+    return !rData.HasType(RT_DATABASE) && !rData.HasType(RT_SHARED);
 }
-
-//------------------------------------------------------------------------
 
 ScNamedRangeObj::ScNamedRangeObj(ScNamedRangesObj* pParent, ScDocShell* pDocSh, const String& rNm) :
     mpParent(pParent),
@@ -133,12 +129,9 @@ ScRangeData* ScNamedRangeObj::GetRangeData_Impl()
         ScRangeName* pNames = pDocShell->GetDocument()->GetRangeName();
         if (pNames)
         {
-            sal_uInt16 nPos = 0;
-            if (pNames->SearchName( aName, nPos ))
-            {
-                pRet = (*pNames)[nPos];
+            pRet = pNames->findByName(aName);
+            if (pRet)
                 pRet->ValidateTabRefs();        // adjust relative tab refs to valid tables
-            }
         }
     }
     return pRet;
@@ -150,54 +143,57 @@ void ScNamedRangeObj::Modify_Impl( const String* pNewName, const ScTokenArray* p
                                     const ScAddress* pNewPos, const sal_uInt16* pNewType,
                                     const formula::FormulaGrammar::Grammar eGrammar )
 {
-    if (pDocShell)
+    if (!pDocShell)
+        return;
+
+    ScDocument* pDoc = pDocShell->GetDocument();
+    ScRangeName* pNames = pDoc->GetRangeName();
+    if (!pNames)
+        return;
+
+    const ScRangeData* pOld = pNames->findByName(aName);
+    if (!pOld)
+        return;
+
+    ScRangeName* pNewRanges = new ScRangeName(*pNames);
+
+    String aInsName = pOld->GetName();
+    if (pNewName)
+        aInsName = *pNewName;
+
+    String aContent;                            // Content string based =>
+    pOld->GetSymbol( aContent, eGrammar);   // no problems with changed positions and such.
+    if (pNewContent)
+        aContent = *pNewContent;
+
+    ScAddress aPos = pOld->GetPos();
+    if (pNewPos)
+        aPos = *pNewPos;
+
+    sal_uInt16 nType = pOld->GetType();
+    if (pNewType)
+        nType = *pNewType;
+
+    ScRangeData* pNew = NULL;
+    if (pNewTokens)
+        pNew = new ScRangeData( pDoc, aInsName, *pNewTokens, aPos, nType );
+    else
+        pNew = new ScRangeData( pDoc, aInsName, aContent, aPos, nType, eGrammar );
+
+    pNew->SetIndex( pOld->GetIndex() );
+
+    pNewRanges->erase(*pOld);
+    if (pNewRanges->insert(pNew))
     {
-        ScDocument* pDoc = pDocShell->GetDocument();
-        ScRangeName* pNames = pDoc->GetRangeName();
-        if (pNames)
-        {
-            sal_uInt16 nPos = 0;
-            if (pNames->SearchName( aName, nPos ))
-            {
-                ScRangeName* pNewRanges = new ScRangeName( *pNames );
-                ScRangeData* pOld = (*pNames)[nPos];
+        ScDocFunc aFunc(*pDocShell);
+        aFunc.SetNewRangeNames(pNewRanges, mpParent->IsModifyAndBroadcast());
 
-                String aInsName(pOld->GetName());
-                if (pNewName)
-                    aInsName = *pNewName;
-                String aContent;                            // Content string based =>
-                pOld->GetSymbol( aContent, eGrammar);   // no problems with changed positions and such.
-                if (pNewContent)
-                    aContent = *pNewContent;
-                ScAddress aPos(pOld->GetPos());
-                if (pNewPos)
-                    aPos = *pNewPos;
-                sal_uInt16 nType = pOld->GetType();
-                if (pNewType)
-                    nType = *pNewType;
-
-                ScRangeData* pNew = NULL;
-                if ( pNewTokens )
-                    pNew = new ScRangeData( pDoc, aInsName, *pNewTokens, aPos, nType );
-                else
-                    pNew = new ScRangeData( pDoc, aInsName, aContent, aPos, nType, eGrammar );
-                pNew->SetIndex( pOld->GetIndex() );
-
-                pNewRanges->AtFree( nPos );
-                if ( pNewRanges->Insert(pNew) )
-                {
-                    ScDocFunc aFunc(*pDocShell);
-                    aFunc.SetNewRangeNames( pNewRanges, mpParent->IsModifyAndBroadcast());
-
-                    aName = aInsName;   //! broadcast?
-                }
-                else
-                {
-                    delete pNew;        //! uno::Exception/Fehler oder so
-                    delete pNewRanges;
-                }
-            }
-        }
+        aName = aInsName;   //! broadcast?
+    }
+    else
+    {
+        delete pNew;        //! uno::Exception/Fehler oder so
+        delete pNewRanges;
     }
 }
 
@@ -521,24 +517,23 @@ bool ScNamedRangesObj::IsModifyAndBroadcast() const
 
 ScNamedRangeObj* ScNamedRangesObj::GetObjectByIndex_Impl(sal_uInt16 nIndex)
 {
-    if (pDocShell)
+    if (!pDocShell)
+        return NULL;
+
+    ScRangeName* pNames = pDocShell->GetDocument()->GetRangeName();
+    if (!pNames)
+        return NULL;
+
+    ScRangeName::const_iterator itr = pNames->begin(), itrEnd = pNames->end();
+    sal_uInt16 nPos = 0;
+    for (; itr != itrEnd; ++itr)
     {
-        ScRangeName* pNames = pDocShell->GetDocument()->GetRangeName();
-        if (pNames)
+        if (lcl_UserVisibleName(*itr))
         {
-            sal_uInt16 nCount = pNames->GetCount();
-            sal_uInt16 nPos = 0;
-            for (sal_uInt16 i=0; i<nCount; i++)
-            {
-                ScRangeData* pData = (*pNames)[i];
-                if (lcl_UserVisibleName(pData))         // interne weglassen
-                {
-                    if ( nPos == nIndex )
-                        return new ScNamedRangeObj(this, pDocShell, pData->GetName());
-                    ++nPos;
-                }
-            }
+            if (nPos == nIndex)
+                return new ScNamedRangeObj(this, pDocShell, itr->GetName());
         }
+        ++nPos;
     }
     return NULL;
 }
@@ -555,8 +550,6 @@ void SAL_CALL ScNamedRangesObj::addNewByName( const rtl::OUString& aName,
         sal_Int32 nUnoType ) throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    String aNameStr(aName);
-    String aContStr(aContent);
     ScAddress aPos( (SCCOL)aPosition.Column, (SCROW)aPosition.Row, aPosition.Sheet );
 
     sal_uInt16 nNewType = RT_NAME;
@@ -570,14 +563,13 @@ void SAL_CALL ScNamedRangesObj::addNewByName( const rtl::OUString& aName,
     {
         ScDocument* pDoc = pDocShell->GetDocument();
         ScRangeName* pNames = pDoc->GetRangeName();
-        USHORT nIndex = 0;
-        if (pNames && !pNames->SearchName(aNameStr, nIndex))
+        if (pNames && !pNames->findByName(aName))
         {
             ScRangeName* pNewRanges = new ScRangeName( *pNames );
             // GRAM_PODF_A1 for API compatibility.
-            ScRangeData* pNew = new ScRangeData( pDoc, aNameStr, aContStr,
+            ScRangeData* pNew = new ScRangeData( pDoc, aName, aContent,
                                                 aPos, nNewType,formula::FormulaGrammar::GRAM_PODF_A1 );
-            if ( pNewRanges->Insert(pNew) )
+            if ( pNewRanges->insert(pNew) )
             {
                 ScDocFunc aFunc(*pDocShell);
                 aFunc.SetNewRangeNames(pNewRanges, mbModifyAndBroadcast);
@@ -626,23 +618,21 @@ void SAL_CALL ScNamedRangesObj::removeByName( const rtl::OUString& aName )
                                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    BOOL bDone = FALSE;
+    bool bDone = false;
     if (pDocShell)
     {
         ScRangeName* pNames = pDocShell->GetDocument()->GetRangeName();
         if (pNames)
         {
-            String aString(aName);
-            sal_uInt16 nPos = 0;
-            if (pNames->SearchName( aString, nPos ))
-                if ( lcl_UserVisibleName((*pNames)[nPos]) )
-                {
-                    ScRangeName* pNewRanges = new ScRangeName(*pNames);
-                    pNewRanges->AtFree(nPos);
-                    ScDocFunc aFunc(*pDocShell);
-                    aFunc.SetNewRangeNames( pNewRanges, mbModifyAndBroadcast);
-                    bDone = TRUE;
-                }
+            const ScRangeData* pData = pNames->findByName(aName);
+            if (pData && lcl_UserVisibleName(*pData))
+            {
+                ScRangeName* pNewRanges = new ScRangeName(*pNames);
+                pNewRanges->erase(*pData);
+                ScDocFunc aFunc(*pDocShell);
+                aFunc.SetNewRangeNames( pNewRanges, mbModifyAndBroadcast);
+                bDone = true;
+            }
         }
     }
 
@@ -682,9 +672,9 @@ sal_Int32 SAL_CALL ScNamedRangesObj::getCount() throw(uno::RuntimeException)
         ScRangeName* pNames = pDocShell->GetDocument()->GetRangeName();
         if (pNames)
         {
-            sal_uInt16 nCount = pNames->GetCount();
-            for (sal_uInt16 i=0; i<nCount; i++)
-                if (lcl_UserVisibleName( (*pNames)[i] ))    // interne weglassen
+            ScRangeName::const_iterator itr = pNames->begin(), itrEnd = pNames->end();
+            for (; itr != itrEnd; ++itr)
+                if (lcl_UserVisibleName(*itr))
                     ++nRet;
         }
     }
@@ -701,7 +691,6 @@ uno::Any SAL_CALL ScNamedRangesObj::getByIndex( sal_Int32 nIndex )
         return uno::makeAny(xRange);
     else
         throw lang::IndexOutOfBoundsException();
-//    return uno::Any();
 }
 
 uno::Type SAL_CALL ScNamedRangesObj::getElementType() throw(uno::RuntimeException)
@@ -761,7 +750,6 @@ uno::Any SAL_CALL ScNamedRangesObj::getByName( const rtl::OUString& aName )
         return uno::makeAny(xRange);
     else
         throw container::NoSuchElementException();
-//    return uno::Any();
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL ScNamedRangesObj::getElementNames()
@@ -776,16 +764,13 @@ uno::Sequence<rtl::OUString> SAL_CALL ScNamedRangesObj::getElementNames()
             long nVisCount = getCount();            // Namen mit lcl_UserVisibleName
             uno::Sequence<rtl::OUString> aSeq(nVisCount);
             rtl::OUString* pAry = aSeq.getArray();
-
-            sal_uInt16 nCount = pNames->GetCount();
             sal_uInt16 nVisPos = 0;
-            for (sal_uInt16 i=0; i<nCount; i++)
+            ScRangeName::const_iterator itr = pNames->begin(), itrEnd = pNames->end();
+            for (; itr != itrEnd; ++itr)
             {
-                ScRangeData* pData = (*pNames)[i];
-                if ( lcl_UserVisibleName(pData) )
-                    pAry[nVisPos++] = pData->GetName();
+                if (lcl_UserVisibleName(*itr))
+                    pAry[nVisPos++] = itr->GetName();
             }
-//          DBG_ASSERT(nVisPos == nVisCount, "huch, verzaehlt?");
             return aSeq;
         }
     }
@@ -801,10 +786,9 @@ sal_Bool SAL_CALL ScNamedRangesObj::hasByName( const rtl::OUString& aName )
         ScRangeName* pNames = pDocShell->GetDocument()->GetRangeName();
         if (pNames)
         {
-            sal_uInt16 nPos = 0;
-            if (pNames->SearchName( String(aName), nPos ))
-                if ( lcl_UserVisibleName((*pNames)[nPos]) )
-                    return sal_True;
+            const ScRangeData* pData = pNames->findByName(aName);
+            if (pData && lcl_UserVisibleName(*pData))
+                return sal_True;
         }
     }
     return sal_False;
@@ -1161,7 +1145,6 @@ uno::Any SAL_CALL ScLabelRangesObj::getByIndex( sal_Int32 nIndex )
         return uno::makeAny(xRange);
     else
         throw lang::IndexOutOfBoundsException();
-//    return uno::Any();
 }
 
 uno::Type SAL_CALL ScLabelRangesObj::getElementType() throw(uno::RuntimeException)

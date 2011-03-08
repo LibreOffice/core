@@ -51,7 +51,6 @@ TabDialog RID_SCDLG_STYLES_PAR
             PageItem
             {
                 Identifier = TP_FONT ;
-                /* ### ACHTUNG: Neuer Text in Resource? Schrift : Zeichen */
                 Text [ en-US ] = "Font" ;
             };
             PageItem

@@ -133,7 +133,7 @@ SvPersistStream& operator >> ( SvPersistStream & rStm,
     if( (nVer & ~PERSIST_LIST_DBGUTIL) != PERSIST_LIST_VER )
     {
         rStm.SetError( SVSTREAM_GENERALERROR );
-        DBG_ERROR( "persist list, false version" );
+        OSL_FAIL( "persist list, false version" );
     }
 
     UINT32 nObjLen(0), nObjPos(0);
@@ -442,14 +442,14 @@ UINT32 SvPersistStream::ReadCompressed
         if( nMask & 0x0F )
         {
             rStm.SetError( SVSTREAM_FILEFORMAT_ERROR );
-            DBG_ERROR( "format error" );
+            OSL_FAIL( "format error" );
         }
         rStm >> nRet;
     }
     else
     {
         rStm.SetError( SVSTREAM_FILEFORMAT_ERROR );
-        DBG_ERROR( "format error" );
+        OSL_FAIL( "format error" );
     }
     return nRet;
 }
@@ -743,7 +743,7 @@ UINT32 SvPersistStream::ReadObj
     if( P_VER < (nHdr & P_VER_MASK) )
     {
         SetError( SVSTREAM_FILEFORMAT_ERROR );
-        DBG_ERROR( "false version" );
+        OSL_FAIL( "false version" );
     }
 
     if( !(nHdr & P_ID_0) && GetError() == SVSTREAM_OK )

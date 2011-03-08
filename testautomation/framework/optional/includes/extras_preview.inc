@@ -44,7 +44,7 @@ testcase tShowAllObjectsAsPreview( cCategory as string )
     dim iObjectFolders as integer  ' the number of template/sample-folders
     
     dim iObject as Integer         ' the current template/sample within loops
-    dim iObjectCount( 20 ) as integer  ' number of templates/samples in the folders
+    dim iObjectCount( 100 ) as integer  ' number of templates/samples in the folders
    
   
     printlog( "" )

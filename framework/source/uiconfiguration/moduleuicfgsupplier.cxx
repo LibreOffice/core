@@ -122,7 +122,7 @@ ModuleUIConfigurationManagerSupplier::ModuleUIConfigurationManagerSupplier( cons
     , m_aListenerContainer( m_aLock.getShareableOslMutex() )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ModuleUIConfigurationManagerSupplier::ModuleUIConfigurationManagerSupplier" );
-    // Retrieve known modules and insert them into our hash_map to speed-up access time.
+    // Retrieve known modules and insert them into our boost::unordered_map to speed-up access time.
     Reference< XNameAccess > xNameAccess( m_xModuleMgr, UNO_QUERY );
     const Sequence< ::rtl::OUString >     aNameSeq   = xNameAccess->getElementNames();
     const ::rtl::OUString*                pNameSeq   = aNameSeq.getConstArray();

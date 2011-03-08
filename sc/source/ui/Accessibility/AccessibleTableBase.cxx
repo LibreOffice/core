@@ -115,7 +115,7 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumnCount(  )
 ::rtl::OUString SAL_CALL ScAccessibleTableBase::getAccessibleRowDescription( sal_Int32 nRow )
     throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
 {
-    DBG_ERROR("Here should be a implementation to fill the description");
+    OSL_FAIL("Here should be a implementation to fill the description");
 
     if ((nRow > (maRange.aEnd.Row() - maRange.aStart.Row())) || (nRow < 0))
         throw lang::IndexOutOfBoundsException();
@@ -127,7 +127,7 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumnCount(  )
 ::rtl::OUString SAL_CALL ScAccessibleTableBase::getAccessibleColumnDescription( sal_Int32 nColumn )
     throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
 {
-    DBG_ERROR("Here should be a implementation to fill the description");
+    OSL_FAIL("Here should be a implementation to fill the description");
 
     if ((nColumn > (maRange.aEnd.Col() - maRange.aStart.Col())) || (nColumn < 0))
         throw lang::IndexOutOfBoundsException();
@@ -198,7 +198,7 @@ uno::Reference< XAccessibleTable > SAL_CALL ScAccessibleTableBase::getAccessible
                     throw (uno::RuntimeException)
 {
     uno::Reference< XAccessibleTable > xAccessibleTable;
-    DBG_ERROR("Here should be a implementation to fill the row headers");
+    OSL_FAIL("Here should be a implementation to fill the row headers");
 
     //CommitChange
     return xAccessibleTable;
@@ -208,7 +208,7 @@ uno::Reference< XAccessibleTable > SAL_CALL ScAccessibleTableBase::getAccessible
                     throw (uno::RuntimeException)
 {
     uno::Reference< XAccessibleTable > xAccessibleTable;
-    DBG_ERROR("Here should be a implementation to fill the column headers");
+    OSL_FAIL("Here should be a implementation to fill the column headers");
 
     //CommitChange
     return xAccessibleTable;
@@ -217,7 +217,7 @@ uno::Reference< XAccessibleTable > SAL_CALL ScAccessibleTableBase::getAccessible
 uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleTableBase::getSelectedAccessibleRows(  )
                     throw (uno::RuntimeException)
 {
-    DBG_ERROR("not implemented yet");
+    OSL_FAIL("not implemented yet");
     uno::Sequence< sal_Int32 > aSequence;
     return aSequence;
 }
@@ -225,7 +225,7 @@ uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleTableBase::getSelectedAccessible
 uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleTableBase::getSelectedAccessibleColumns(  )
                     throw (uno::RuntimeException)
 {
-    DBG_ERROR("not implemented yet");
+    OSL_FAIL("not implemented yet");
     uno::Sequence< sal_Int32 > aSequence;
     return aSequence;
 }
@@ -233,21 +233,21 @@ uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleTableBase::getSelectedAccessible
 sal_Bool SAL_CALL ScAccessibleTableBase::isAccessibleRowSelected( sal_Int32 /* nRow */ )
     throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
 {
-    DBG_ERROR("not implemented yet");
+    OSL_FAIL("not implemented yet");
     return sal_False;
 }
 
 sal_Bool SAL_CALL ScAccessibleTableBase::isAccessibleColumnSelected( sal_Int32 /* nColumn */ )
     throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
 {
-    DBG_ERROR("not implemented yet");
+    OSL_FAIL("not implemented yet");
     return sal_False;
 }
 
 uno::Reference< XAccessible > SAL_CALL ScAccessibleTableBase::getAccessibleCellAt( sal_Int32 /* nRow */, sal_Int32 /* nColumn */ )
                     throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
 {
-    DBG_ERROR("not implemented yet");
+    OSL_FAIL("not implemented yet");
     uno::Reference< XAccessible > xAccessible;
     return xAccessible;
 }
@@ -255,7 +255,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleTableBase::getAccessibleCellA
 uno::Reference< XAccessible > SAL_CALL ScAccessibleTableBase::getAccessibleCaption(  )
                     throw (uno::RuntimeException)
 {
-    DBG_ERROR("not implemented yet");
+    OSL_FAIL("not implemented yet");
     uno::Reference< XAccessible > xAccessible;
     return xAccessible;
 }
@@ -263,7 +263,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleTableBase::getAccessibleCapti
 uno::Reference< XAccessible > SAL_CALL ScAccessibleTableBase::getAccessibleSummary(  )
                     throw (uno::RuntimeException)
 {
-    DBG_ERROR("not implemented yet");
+    OSL_FAIL("not implemented yet");
     uno::Reference< XAccessible > xAccessible;
     return xAccessible;
 }
@@ -271,7 +271,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleTableBase::getAccessibleSumma
 sal_Bool SAL_CALL ScAccessibleTableBase::isAccessibleSelected( sal_Int32 /* nRow */, sal_Int32 /* nColumn */ )
     throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
 {
-    DBG_ERROR("not implemented yet");
+    OSL_FAIL("not implemented yet");
     return sal_False;
 }
 
@@ -373,7 +373,7 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL
     ScAccessibleTableBase::getAccessibleRelationSet(void)
     throw (uno::RuntimeException)
 {
-    DBG_ERROR("should be implemented in the abrevated class");
+    OSL_FAIL("should be implemented in the abrevated class");
     return uno::Reference<XAccessibleRelationSet>();
 }
 
@@ -381,7 +381,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     ScAccessibleTableBase::getAccessibleStateSet(void)
     throw (uno::RuntimeException)
 {
-    DBG_ERROR("should be implemented in the abrevated class");
+    OSL_FAIL("should be implemented in the abrevated class");
     uno::Reference< XAccessibleStateSet > xAccessibleStateSet;
     return xAccessibleStateSet;
 }

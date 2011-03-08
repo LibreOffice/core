@@ -156,7 +156,7 @@ namespace dbp
         }
         catch(Exception&)
         {
-            DBG_ERROR("OTableSelectionPage::initializePage: caught an exception!");
+            OSL_FAIL("OTableSelectionPage::initializePage: caught an exception!");
         }
     }
 
@@ -191,7 +191,7 @@ namespace dbp
         }
         catch(Exception&)
         {
-            DBG_ERROR("OTableSelectionPage::commitPage: caught an exception!");
+            OSL_FAIL("OTableSelectionPage::commitPage: caught an exception!");
         }
 
         return sal_True;
@@ -306,7 +306,7 @@ namespace dbp
                     }
                     else
                     {
-                        DBG_ERROR("OTableSelectionPage::implFillTables: invalid data source object returned by the context");
+                        OSL_FAIL("OTableSelectionPage::implFillTables: invalid data source object returned by the context");
                     }
                 }
             }
@@ -315,7 +315,7 @@ namespace dbp
             catch(SQLException& e) { aSQLException <<= e; }
             catch (Exception&)
             {
-                DBG_ERROR("OTableSelectionPage::implFillTables: could not fill the table list!");
+                OSL_FAIL("OTableSelectionPage::implFillTables: could not fill the table list!");
             }
         }
 
@@ -347,7 +347,7 @@ namespace dbp
             catch(SQLException& e) { aSQLException <<= e; }
             catch (Exception&)
             {
-                DBG_ERROR("OTableSelectionPage::implFillTables: could not fill the table list!");
+                OSL_FAIL("OTableSelectionPage::implFillTables: could not fill the table list!");
             }
         }
 
@@ -388,7 +388,7 @@ namespace dbp
         }
         catch (Exception&)
         {
-            DBG_ERROR("OTableSelectionPage::implCollectDatasource: could not collect the data source names!");
+            OSL_FAIL("OTableSelectionPage::implCollectDatasource: could not collect the data source names!");
         }
     }
 

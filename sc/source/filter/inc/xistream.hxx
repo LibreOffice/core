@@ -336,13 +336,11 @@ public:
     XclImpStream&       operator>>( float& rfValue );
     XclImpStream&       operator>>( double& rfValue );
 
-    sal_Int8            ReadInt8();
     sal_uInt8           ReaduInt8();
     sal_Int16           ReadInt16();
     sal_uInt16          ReaduInt16();
     sal_Int32           ReadInt32();
     sal_uInt32          ReaduInt32();
-    float               ReadFloat();
     double              ReadDouble();
 
     /** Reads nBytes bytes to the existing(!) buffer pData.
@@ -416,8 +414,6 @@ public:
     void                IgnoreUniString( sal_uInt16 nChars, sal_uInt8 nFlags );
     /** Ignores 8 bit flags, ext. header, nChar characters, ext. data. */
     void                IgnoreUniString( sal_uInt16 nChars );
-    /** Ignores 16 bit character count, 8 bit flags, ext. header, character array, ext. data. */
-    void                IgnoreUniString();
 
     // *** read/ignore 8-bit-strings, store in String *** ---------------------
 

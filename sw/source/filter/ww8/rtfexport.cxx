@@ -29,6 +29,7 @@
 #include "rtfexport.hxx"
 #include "rtfexportfilter.hxx"
 #include "rtfsdrexport.hxx"
+#include "rtfattributeoutput.hxx"
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
@@ -547,8 +548,7 @@ void RtfExport::ExportDocument_Impl()
     // size and empty margins of the page
     if( pDoc->GetPageDescCnt() )
     {
-        //JP 06.04.99: Bug 64361 - Seeking the first SwFmtPageDesc. If
-        //              no set, the default is valid
+        // Seeking the first SwFmtPageDesc. If no set, the default is valid
         const SwFmtPageDesc* pSttPgDsc = 0;
         {
             const SwNode& rSttNd = *pDoc->GetNodes()[

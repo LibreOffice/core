@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
 #include <svl/zforlist.hxx>
 #include <svtools/grfmgr.hxx>
 #include <svl/flagitem.hxx>
@@ -942,7 +940,7 @@ BOOL OfaViewTabPage::FillItemSet( SfxItemSet& )
             case 1: eSet = SFX_SYMBOLS_SIZE_SMALL; break;
             case 2: eSet = SFX_SYMBOLS_SIZE_LARGE; break;
             default:
-                DBG_ERROR( "OfaViewTabPage::FillItemSet(): This state of aIconSizeLB should not be possible!" );
+                OSL_FAIL( "OfaViewTabPage::FillItemSet(): This state of aIconSizeLB should not be possible!" );
         }
         aMiscOptions.SetSymbolsSize( eSet );
     }
@@ -1863,10 +1861,8 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
     aComplexLanguageFT.Enable( bEnable );
     aComplexLanguageLB.Enable( bEnable );
 #endif
-    /*---------------------07-05-07--------------------------
-    check the box "For the current document only"
-    set the focus to the Western Language box
-    --------------------------------------------------------*/
+    // check the box "For the current document only"
+    // set the focus to the Western Language box
     const SfxPoolItem* pLang = 0;
     if ( SFX_ITEM_SET == rSet.GetItemState(SID_SET_DOCUMENT_LANGUAGE, FALSE, &pLang ) &&( (const SfxBoolItem*)pLang)->GetValue() == TRUE )
     {

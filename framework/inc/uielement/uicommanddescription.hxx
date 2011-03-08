@@ -34,7 +34,7 @@
 */
 #include <vector>
 #include <list>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 //_________________________________________________________________________________________________________________
 //  my own includes
@@ -90,12 +90,12 @@ private:
             throw (::com::sun::star::uno::RuntimeException);
 
 public:
-        typedef ::std::hash_map< ::rtl::OUString,
+        typedef ::boost::unordered_map< ::rtl::OUString,
                                  ::rtl::OUString,
                                  OUStringHashCode,
                                  ::std::equal_to< ::rtl::OUString > > ModuleToCommandFileMap;
 
-        typedef ::std::hash_map< ::rtl::OUString,
+        typedef ::boost::unordered_map< ::rtl::OUString,
                                  ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >,
                                  OUStringHashCode,
                                  ::std::equal_to< ::rtl::OUString > > UICommandsHashMap;

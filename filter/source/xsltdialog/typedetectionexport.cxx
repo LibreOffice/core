@@ -39,12 +39,13 @@
 
 #include <comphelper/attributelist.hxx>
 
-using namespace rtl;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::io;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::xml::sax;
+
+using ::rtl::OUString;
 
 TypeDetectionExporter::TypeDetectionExporter( Reference< XMultiServiceFactory >& xMSF )
 : mxMSF( xMSF )
@@ -228,7 +229,7 @@ void TypeDetectionExporter::doExport( Reference< XOutputStream > xOS,  const XML
     }
     catch( Exception& )
     {
-        DBG_ERROR( "TypeDetectionExporter::doExport exception catched!" );
+        OSL_FAIL( "TypeDetectionExporter::doExport exception catched!" );
     }
 }
 
@@ -258,7 +259,7 @@ void TypeDetectionExporter::addProperty( Reference< XDocumentHandler > xHandler,
     }
     catch( Exception& )
     {
-        DBG_ERROR( "TypeDetectionExporter::addProperty exception catched!" );
+        OSL_FAIL( "TypeDetectionExporter::addProperty exception catched!" );
     }
 }
 
@@ -289,7 +290,7 @@ void TypeDetectionExporter::addLocaleProperty( Reference< XDocumentHandler > xHa
     }
     catch( Exception& )
     {
-        DBG_ERROR( "TypeDetectionExporter::addLocaleProperty exception catched!" );
+        OSL_FAIL( "TypeDetectionExporter::addLocaleProperty exception catched!" );
     }
 }
 

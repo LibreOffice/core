@@ -283,8 +283,6 @@ template<typename T> inline T Abs(T a) { return (a>=0?a:-a); }
   #define __DLLEXTENSION "go"
 #elif defined AIX
   #define __DLLEXTENSION "ap.so"
-#elif defined HPUX
-  #define __DLLEXTENSION "hr.sl"
 #elif defined SOLARIS && defined SPARC && defined IS_LP64
   #define __DLLEXTENSION "su.so"
 #elif defined SOLARIS && defined SPARC && !defined __GNUC__
@@ -295,8 +293,6 @@ template<typename T> inline T Abs(T a) { return (a>=0?a:-a); }
   #define __DLLEXTENSION "si.so"
 #elif defined SOLARIS && defined INTEL && defined __GNUC__
   #define __DLLEXTENSION "sogi.so"
-#elif defined SCO
-  #define __DLLEXTENSION "ci.so"
 #elif defined NETBSD && defined X86
   #define __DLLEXTENSION "bi.so"
 #elif defined NETBSD && defined X86_64
@@ -339,6 +335,8 @@ template<typename T> inline T Abs(T a) { return (a>=0?a:-a); }
   #define __DLLEXTENSION "mxi.dylib"
 #elif defined OPENBSD
   #define __DLLEXTENSION "ob.so"
+#elif defined DRAGONFLY
+  #define __DLLEXTENSION "df.so"
 #else
   #error unknown plattform
 #endif

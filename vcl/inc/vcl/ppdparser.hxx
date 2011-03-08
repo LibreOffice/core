@@ -30,7 +30,7 @@
 
 #include <list>
 #include <vector>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #include "tools/string.hxx"
 #include "tools/stream.hxx"
@@ -63,7 +63,7 @@ class PPDKey
 {
     friend class PPDParser;
 
-    typedef ::std::hash_map< ::rtl::OUString, PPDValue, ::rtl::OUStringHash > hash_type;
+    typedef ::boost::unordered_map< ::rtl::OUString, PPDValue, ::rtl::OUStringHash > hash_type;
     typedef ::std::vector< PPDValue* > value_type;
 
     String              m_aKey;
@@ -127,7 +127,7 @@ class PPDParser
     friend class CUPSManager;
     friend class PPDCache;
 
-    typedef ::std::hash_map< ::rtl::OUString, PPDKey*, ::rtl::OUStringHash > hash_type;
+    typedef ::boost::unordered_map< ::rtl::OUString, PPDKey*, ::rtl::OUStringHash > hash_type;
     typedef ::std::vector< PPDKey* > value_type;
 
     void insertKey( const String& rKey, PPDKey* pKey );
@@ -295,7 +295,7 @@ public:
 
 class PPDContext
 {
-    typedef ::std::hash_map< const PPDKey*, const PPDValue*, PPDKeyhash > hash_type;
+    typedef ::boost::unordered_map< const PPDKey*, const PPDValue*, PPDKeyhash > hash_type;
     hash_type m_aCurrentValues;
     const PPDParser*                                    m_pParser;
 

@@ -66,7 +66,6 @@
 #include "../ui/inc/DrawDocShell.hxx"
 #include "Outliner.hxx"
 
-#include "misc.hxx"
 #include "eetext.hxx"
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
@@ -414,7 +413,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
 
         if ( pSdrObj->ISA(SdrTextObj) )
         {
-            // #96243# Tell the object EARLY that it is vertical to have the
+            // Tell the object EARLY that it is vertical to have the
             // defaults for AutoGrowWidth/Height reversed
             if(bVertical)
                 ((SdrTextObj*)pSdrObj)->SetVerticalWriting(TRUE);
@@ -430,7 +429,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
                 // Bei Praesentationsobjekten auf der MasterPage soll die
                 // Groesse vom Benutzwer frei waehlbar sein
 
-                // #96243# potential problem: This action was still NOT
+                // potential problem: This action was still NOT
                 // adapted for vertical text. This sure needs to be done.
                 if(bVertical)
                     aTempAttr.Put(SdrTextAutoGrowWidthItem(FALSE));
@@ -513,7 +512,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
         }
 
         // Objekt am StyleSheet anmelden
-        // #95114# Set style only when one was found (as in 5.2)
+        // Set style only when one was found (as in 5.2)
         if( mePageKind != PK_HANDOUT )
         {
             SfxStyleSheet* pSheetForPresObj = GetStyleSheetForPresObj(eObjKind);
@@ -670,7 +669,7 @@ SdStyleSheet* SdPage::getPresentationStyle( sal_uInt32 nHelpId ) const
     case HID_PSEUDOSHEET_NOTES:             nNameId = STR_LAYOUT_NOTES;             break;
 
     default:
-        DBG_ERROR( "SdPage::getPresentationStyle(), illegal argument!" );
+        OSL_FAIL( "SdPage::getPresentationStyle(), illegal argument!" );
         return 0;
     }
     aStyleName.Append( String( SdResId( nNameId ) ) );
@@ -913,7 +912,7 @@ SdrObject* SdPage::CreateDefaultPresObj(PresObjKind eObjKind, bool bInsert)
             }
             else
             {
-                DBG_ERROR( "SdPage::CreateDefaultPresObj() - can't create a header placeholder for a slide master" );
+                OSL_FAIL( "SdPage::CreateDefaultPresObj() - can't create a header placeholder for a slide master" );
                 return NULL;
             }
         }
@@ -961,13 +960,13 @@ SdrObject* SdPage::CreateDefaultPresObj(PresObjKind eObjKind, bool bInsert)
                 return CreatePresObj( PRESOBJ_SLIDENUMBER, FALSE, aRect, bInsert );
             }
 
-            DBG_ERROR("SdPage::CreateDefaultPresObj() - this should not happen!");
+            OSL_FAIL("SdPage::CreateDefaultPresObj() - this should not happen!");
             return NULL;
         }
     }
     else
     {
-        DBG_ERROR("SdPage::CreateDefaultPresObj() - unknown PRESOBJ kind" );
+        OSL_FAIL("SdPage::CreateDefaultPresObj() - unknown PRESOBJ kind" );
         return NULL;
     }
 }
@@ -1660,7 +1659,7 @@ SdrObject* SdPage::NbcRemoveObject(ULONG nObjNum)
     return FmFormPage::NbcRemoveObject(nObjNum);
 }
 
-// #95876# Also overload ReplaceObject methods to realize when
+// Also overload ReplaceObject methods to realize when
 // objects are removed with this mechanism instead of RemoveObject
 SdrObject* SdPage::NbcReplaceObject(SdrObject* pNewObj, ULONG nObjNum)
 {
@@ -1668,7 +1667,7 @@ SdrObject* SdPage::NbcReplaceObject(SdrObject* pNewObj, ULONG nObjNum)
     return FmFormPage::NbcReplaceObject(pNewObj, nObjNum);
 }
 
-// #95876# Also overload ReplaceObject methods to realize when
+// Also overload ReplaceObject methods to realize when
 // objects are removed with this mechanism instead of RemoveObject
 SdrObject* SdPage::ReplaceObject(SdrObject* pNewObj, ULONG nObjNum)
 {
@@ -1858,7 +1857,7 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
 
         if (pObj)
         {
-            // #88084# remember aTopLeft as original TopLeft
+            // remember aTopLeft as original TopLeft
             Point aTopLeft(pObj->GetCurrentBoundRect().TopLeft());
 
             if (!pObj->IsEdgeObj())
@@ -1868,7 +1867,7 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
                 **************************************************************/
                 if (mbScaleObjects)
                 {
-                    // #88084# use aTopLeft as original TopLeft
+                    // use aTopLeft as original TopLeft
                     aRefPnt = aTopLeft;
                 }
 
@@ -2011,7 +2010,7 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
                         else if ( nScriptType == SCRIPTTYPE_COMPLEX )
                             nWhich = EE_CHAR_FONTHEIGHT_CTL;
 
-                        // #88084# use more modern method to scale the text height
+                        // use more modern method to scale the text height
                         sal_uInt32 nFontHeight = ((SvxFontHeightItem&)pObj->GetMergedItem(nWhich)).GetHeight();
                         sal_uInt32 nNewFontHeight = sal_uInt32((double)nFontHeight * (double)aFractY);
 
@@ -2027,8 +2026,8 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
                 **************************************************************/
                 Point aNewPos;
 
-                // #76447# corrected scaling; only distances may be scaled
-                // #88084# use aTopLeft as original TopLeft
+                // corrected scaling; only distances may be scaled
+                // use aTopLeft as original TopLeft
                 aNewPos.X() = long((aTopLeft.X() - GetLftBorder()) * (double)aFractX) + nLeft;
                 aNewPos.Y() = long((aTopLeft.Y() - GetUppBorder()) * (double)aFractY) + nUpper;
 
@@ -2224,7 +2223,7 @@ SdrObject* SdPage::InsertAutoLayoutShape( SdrObject* pObj, PresObjKind eObjKind,
             {
                 pTextObject->SetVerticalWriting( bVertical );
 
-                // #94826# here make sure the correct anchoring is used when the object
+                // here make sure the correct anchoring is used when the object
                 // is re-used but orientation is changed
                 if(PRESOBJ_OUTLINE == eObjKind)
                     pTextObject->SetMergedItem(SdrTextHorzAdjustItem( bVertical ? SDRTEXTHORZADJUST_RIGHT : SDRTEXTHORZADJUST_BLOCK ));
@@ -2378,10 +2377,10 @@ void SdPage::SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eO
         pOutl->SetUpdateMode(FALSE);
         pOutl->SetParaAttribs( 0, pOutl->GetEmptyItemSet() );
 
-        // #95114# Always set the object's StyleSheet at the Outliner to
+        // Always set the object's StyleSheet at the Outliner to
         // use the current objects StyleSheet. Thus it's the same as in
         // SetText(...).
-        // #95114# Moved this implementation from where SetObjText(...) was called
+        // Moved this implementation from where SetObjText(...) was called
         // to inside this method to work even when outliner is fetched here.
         pOutl->SetStyleSheet(0, pObj->GetStyleSheet());
 
@@ -2694,7 +2693,7 @@ SdPage* SdPage::getImplementation( const ::com::sun::star::uno::Reference< ::com
     catch( ::com::sun::star::uno::Exception& e )
     {
         (void)e;
-        DBG_ERROR("sd::SdPage::getImplementation(), exception cathced!" );
+        OSL_FAIL("sd::SdPage::getImplementation(), exception cathced!" );
     }
 
     return 0;
@@ -2846,7 +2845,7 @@ bool SdPage::RestoreDefaultText( SdrObject* pObj )
 
                 if( pOldPara )
                 {
-                    // #94826# Here, only the vertical flag for the
+                    // Here, only the vertical flag for the
                     // OutlinerParaObjects needs to be changed. The
                     // AutoGrowWidth/Height items still exist in the
                     // not changed object.

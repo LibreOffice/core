@@ -41,10 +41,10 @@ namespace rtl
 
 // class SvxWordLineModeItem ---------------------------------------------
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Dieses Item beschreibt, ob Unterstrichen und Durchgestrichen auf
-    Wortgrenzen beschraenkt ist.
+    This item describes, whether underlined and strikethrough is limited
+    to word boundaries.
 */
 
 class EDITENG_DLLPUBLIC SvxWordLineModeItem : public SfxBoolItem
@@ -55,7 +55,7 @@ public:
     SvxWordLineModeItem( const BOOL bWordLineMode /*= FALSE*/,
                      const USHORT nId  );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual Methods" from SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*    Create(SvStream &, USHORT) const;
     virtual SvStream&       Store(SvStream &, USHORT nItemVersion) const;

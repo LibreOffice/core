@@ -1187,23 +1187,23 @@ sal_Bool SvxAccessibleTextAdapter::IsEditable( const ESelection& rSel )
 
 const SfxItemSet * SvxAccessibleTextAdapter::GetEmptyItemSetPtr()
 {
-    DBG_ERROR( "not implemented" );
+    OSL_FAIL( "not implemented" );
     return 0;
 }
 
 void SvxAccessibleTextAdapter::AppendParagraph()
 {
-    DBG_ERROR( "not implemented" );
+    OSL_FAIL( "not implemented" );
 }
 
 xub_StrLen SvxAccessibleTextAdapter::AppendTextPortion( USHORT, const String &, const SfxItemSet & )
 {
-    DBG_ERROR( "not implemented" );
+    OSL_FAIL( "not implemented" );
     return 0;
 }
 void        SvxAccessibleTextAdapter::CopyText(const SvxTextForwarder&)
 {
-    DBG_ERROR( "not implemented" );
+    OSL_FAIL( "not implemented" );
 }
 
 

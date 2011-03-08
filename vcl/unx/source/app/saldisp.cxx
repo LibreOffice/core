@@ -97,8 +97,9 @@ Status XineramaGetInfo(Display*, int, XRectangle*, unsigned char*, int*);
 #include <osl/socket.h>
 #include <poll.h>
 
-using namespace rtl;
 using namespace vcl_sal;
+
+using ::rtl::OUString;
 
 // -=-= #defines -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -893,7 +894,8 @@ void SalDisplay::Init()
         sscanf( pProperties, "%li", &nProperties_ );
     else
     {
-#if defined DBG_UTIL || defined SUN || defined LINUX || defined FREEBSD || defined NETBSD || defined OPENBSD
+#if defined DBG_UTIL || defined SUN || defined LINUX || defined FREEBSD || \
+    defined NETBSD || defined OPENBSD || defined DRAGONFLY
         nProperties_ |= PROPERTY_FEATURE_Maximize;
 #endif
         // Server Bugs & Properties
@@ -919,7 +921,8 @@ void SalDisplay::Init()
         if( GetServerVendor() == vendor_xfree )
         {
             nProperties_ |= PROPERTY_BUG_XCopyArea_GXxor;
-#if defined LINUX || defined FREEBSD || defined NETBSD || defined OPENBSD
+#if defined LINUX || defined FREEBSD || defined NETBSD || defined OPENBSD || \
+    defined DRAGONFLY
             // otherwm and olwm are a kind of default, which are not detected
             // carefully. if we are running linux (i.e. not netbsd) on an xfree
             // display, fvwm is most probable the wm to choose, confusing with mwm
@@ -1182,6 +1185,7 @@ void SalDisplay::ModifierMapping()
 XubString SalDisplay::GetKeyName( USHORT nKeyCode ) const
 {
     String aStrMap;
+    String aCustomKeyName;
 
     if( nKeyCode & KEY_MOD1 )
         aStrMap += GetKeyNameFromKeySym( nCtrlKeySym_ );
@@ -1334,13 +1338,13 @@ XubString SalDisplay::GetKeyName( USHORT nKeyCode ) const
             nKeySym = XK_grave;
             break;
         case KEY_BRACKETLEFT:
-            nKeySym = XK_bracketleft;
+            aCustomKeyName = '[';
             break;
         case KEY_BRACKETRIGHT:
-            nKeySym = XK_bracketright;
+            aCustomKeyName = ']';
             break;
         case KEY_SEMICOLON:
-            nKeySym = XK_semicolon;
+            aCustomKeyName = ';';
             break;
 
         default:
@@ -1359,6 +1363,14 @@ XubString SalDisplay::GetKeyName( USHORT nKeyCode ) const
         }
         else
             aStrMap.Erase();
+    }
+    else if (aCustomKeyName.Len())
+    {
+        // For semicolumn, bracket left and bracket right, it's better to use
+        // their keys than their names. (fdo#32891)
+        if (aStrMap.Len())
+            aStrMap += '+';
+        aStrMap += aCustomKeyName;
     }
     else
         aStrMap.Erase();
@@ -2178,7 +2190,7 @@ XLIB_Cursor SalDisplay::GetPointer( int ePointerStyle )
             break;
 
         default:
-            DBG_ERROR("pointer not implemented");
+            OSL_FAIL("pointer not implemented");
             aCur = XCreateFontCursor( pDisp_, XC_arrow );
             break;
     }
@@ -2790,7 +2802,7 @@ void SalDisplay::deregisterFrame( SalFrame* pFrame )
         osl_releaseMutex( hEventGuard_ );
     }
     else {
-        DBG_ERROR( "SalDisplay::deregisterFrame !acquireMutex\n" );
+        OSL_FAIL( "SalDisplay::deregisterFrame !acquireMutex\n" );
     }
 
     m_aFrames.remove( pFrame );

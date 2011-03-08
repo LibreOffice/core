@@ -316,7 +316,7 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
 
                     if ( pIMapObj )
                     {
-                        //  #44990# Bei ImageMaps die Description anzeigen, wenn vorhanden
+                        //  Bei ImageMaps die Description anzeigen, wenn vorhanden
                         aHelpText = pIMapObj->GetAltText();
                         if (!aHelpText.Len())
                             aHelpText = pIMapObj->GetURL();

@@ -38,7 +38,6 @@
 #include <sot/clsids.hxx>
 
 #include "edtwin.hxx"
-#include "errhdl.hxx"
 #include "wrtsh.hxx"
 #include "cmdid.h"
 #include "frmatr.hxx"
@@ -139,13 +138,12 @@ void SwTableFUNC::SetColWidth(USHORT nNum, SwTwips nNewWidth )
     // aktuelle Breite setzen
     // alle folgenden Verschieben
     BOOL bCurrentOnly = FALSE;
-    SwTwips nWidth = 0;
 
     if ( aCols.Count() > 0 )
     {
         if(aCols.Count() != GetColCount())
             bCurrentOnly = TRUE;
-        nWidth = GetColWidth(nNum);
+        SwTwips nWidth = GetColWidth(nNum);
 
         int nDiff = (int)(nNewWidth - nWidth);
         if( !nNum )

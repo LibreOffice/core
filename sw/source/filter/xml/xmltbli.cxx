@@ -78,7 +78,7 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
-using ::std::hash_map;
+using ::boost::unordered_map;
 using rtl::OUString;
 
 enum SwXMLTableElemTokens
@@ -1533,15 +1533,14 @@ void SwXMLTableContext::InsertColumn( sal_Int32 nWidth2, sal_Bool bRelWidth2,
         nWidth2 = MINLAY;
     else if( nWidth2 > USHRT_MAX )
         nWidth2 = USHRT_MAX;
-    aColumnWidths.Insert( (sal_uInt16)nWidth2, aColumnWidths.Count() );
-    aColumnRelWidths.Insert( bRelWidth2, aColumnRelWidths.Count() );
+    aColumnWidths.push_back( ColumnWidthInfo(nWidth2, bRelWidth2) );
     if( (pDfltCellStyleName && pDfltCellStyleName->getLength() > 0) ||
         pColumnDefaultCellStyleNames )
     {
         if( !pColumnDefaultCellStyleNames )
         {
             pColumnDefaultCellStyleNames = new SvStringsDtor;
-            sal_uInt16 nCount = aColumnRelWidths.Count() - 1;
+            ULONG nCount = aColumnWidths.size() - 1;
             while( nCount-- )
                 pColumnDefaultCellStyleNames->Insert( new String,
                     pColumnDefaultCellStyleNames->Count() );
@@ -1557,12 +1556,12 @@ sal_Int32 SwXMLTableContext::GetColumnWidth( sal_uInt32 nCol,
                                              sal_uInt32 nColSpan ) const
 {
     sal_uInt32 nLast = nCol+nColSpan;
-    if( nLast > aColumnWidths.Count() )
-        nLast = aColumnWidths.Count();
+    if( nLast > aColumnWidths.size() )
+        nLast = aColumnWidths.size();
 
     sal_Int32 nWidth2 = 0L;
-    for( sal_uInt16 i=(sal_uInt16)nCol; i < nLast; i++ )
-        nWidth2 += aColumnWidths[i];
+    for( sal_uInt32 i=nCol; i < nLast; ++i )
+        nWidth2 += aColumnWidths[i].width;
 
     return nWidth2;
 }
@@ -1643,8 +1642,7 @@ void SwXMLTableContext::InsertCell( const OUString& rStyleName,
     {
         for( i=GetColumnCount(); i<nColsReq; i++ )
         {
-            aColumnWidths.Insert( MINLAY, aColumnWidths.Count() );
-            aColumnRelWidths.Insert( sal_True, aColumnRelWidths.Count() );
+            aColumnWidths.push_back( ColumnWidthInfo(MINLAY, sal_True) );
         }
         // adjust columns in *all* rows, if columns must be inserted
         for( i=0; i<pRows->Count(); i++ )
@@ -1812,7 +1810,7 @@ const SwStartNode *SwXMLTableContext::GetPrevStartNode( sal_uInt32 nRow,
     {
         if( pPrevCell->GetStartNode() )
             pSttNd = pPrevCell->GetStartNode();
-        // --> OD 2009-03-19 #i95726# - Some fault tolerance
+        // #i95726# - Some fault tolerance
 //        else
         else if ( pPrevCell->GetSubTable() )
         // <--
@@ -1910,9 +1908,7 @@ SwTableBoxFmt* SwXMLTableContext::GetSharedBoxFormat(
         // (but preserve FillOrder)
         pBoxFmt2 = (SwTableBoxFmt*)pBox->ClaimFrmFmt();
         SwFmtFillOrder aFillOrder( pBoxFmt2->GetFillOrder() );
-        // --> OD 2007-01-25 #i73790# - method renamed
-        pBoxFmt2->ResetAllFmtAttr();
-        // <--
+        pBoxFmt2->ResetAllFmtAttr(); // #i73790# - method renamed
         pBoxFmt2->SetFmtAttr( aFillOrder );
         bNew = sal_True;    // it's a new format now
 
@@ -1957,9 +1953,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox( SwTableLine *pUpper,
     // TODO: Share formats!
     SwFrmFmt *pFrmFmt = pBox->ClaimFrmFmt();
     SwFmtFillOrder aFillOrder( pFrmFmt->GetFillOrder() );
-    // --> OD 2007-01-25 #i73790# - method renamed
-    pFrmFmt->ResetAllFmtAttr();
-    // <--
+    pFrmFmt->ResetAllFmtAttr(); // #i73790# - method renamed
     pFrmFmt->SetFmtAttr( aFillOrder );
 
     pFrmFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE, nColWidth ) );
@@ -2080,7 +2074,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
     {
         // set style
         const SfxItemSet *pAutoItemSet = 0;
-        if( pCell->GetStartNode() && sStyleName &&
+        if( pCell->GetStartNode() && sStyleName.getLength() &&
             GetSwImport().FindAutomaticStyle(
                 XML_STYLE_FAMILY_TABLE_CELL, sStyleName, &pAutoItemSet ) )
         {
@@ -2092,7 +2086,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
     if( pCell->GetStartNode() )
     {
 
-        // #104801# try to rescue broken documents with a certain pattern
+        // try to rescue broken documents with a certain pattern
         // if: 1) the cell has a default number format (number 0)
         //     2) the call has no formula
         //     3) the value is 0.0
@@ -2223,9 +2217,7 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
     // TODO: Share formats!
     SwFrmFmt *pFrmFmt = pLine->ClaimFrmFmt();
     SwFmtFillOrder aFillOrder( pFrmFmt->GetFillOrder() );
-    // --> OD 2007-01-25 #i73790# - method renamed
-    pFrmFmt->ResetAllFmtAttr();
-    // <--
+    pFrmFmt->ResetAllFmtAttr(); // #i73790# - method renamed
     pFrmFmt->SetFmtAttr( aFillOrder );
 
     const SfxItemSet *pAutoItemSet = 0;
@@ -2295,7 +2287,7 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
                 // No subtabels: We use the new table model.
                 SwXMLTableCell_Impl *pCell = GetCell(nTopRow,nCol);
 
-                // --> OD 2009-03-19 #i95726# - some fault tolerance
+                // #i95726# - some fault tolerance
                 if ( pCell == 0 )
                 {
                     OSL_ENSURE( false, "table seems to be corrupt." );
@@ -2330,7 +2322,7 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
             {
                 SwTableBox* pBox = 0;
                 SwXMLTableCell_Impl *pCell = GetCell( nTopRow, nStartCol );
-                // --> OD 2009-03-19 #i95726# - some fault tolerance
+                // #i95726# - some fault tolerance
                 if( ( !bHasSubTables || ( pCell->GetRowSpan() == (nBottomRow-nTopRow) ) ) &&
                     pCell->GetColSpan() == (nCol+1UL-nStartCol) &&
                     ( pCell->GetStartNode() || pCell->GetSubTable() ) )
@@ -2411,7 +2403,7 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
 void SwXMLTableContext::_MakeTable( SwTableBox *pBox )
 {
     // fix column widths
-    sal_uInt32 i;
+    std::vector<ColumnWidthInfo>::iterator colIter;
     sal_uInt32 nCols = GetColumnCount();
 
     // If there are empty rows (because of some row span of previous rows)
@@ -2421,14 +2413,14 @@ void SwXMLTableContext::_MakeTable( SwTableBox *pBox )
     {
         SwXMLTableRow_Impl *pPrevRow = (*pRows)[(sal_uInt16)nCurRow-1U];
         SwXMLTableCell_Impl *pCell;
-        for( i=0UL; i<nCols; i++ )
+        for( ULONG i = 0; i < aColumnWidths.size(); ++i )
         {
             if( ( pCell=pPrevRow->GetCell(i), pCell->GetRowSpan() > 1UL ) )
             {
                 FixRowSpan( nCurRow-1UL, i, 1UL );
             }
         }
-        for( i=(sal_uInt32)pRows->Count()-1UL; i>=nCurRow; i-- )
+        for( ULONG i = pRows->Count()-1UL; i>=nCurRow; --i )
             pRows->DeleteAndDestroy( (sal_uInt16)i );
     }
 
@@ -2438,28 +2430,27 @@ void SwXMLTableContext::_MakeTable( SwTableBox *pBox )
         InsertCell( aStyleName2, 1U, nCols, InsertTableSection() );
     }
 
-    // TODO: Do we have to keep both values, the realtive and the absolute
+    // TODO: Do we have to keep both values, the relative and the absolute
     // width?
     sal_Int32 nAbsWidth = 0L;
     sal_Int32 nMinAbsColWidth = 0L;
     sal_Int32 nRelWidth = 0L;
     sal_Int32 nMinRelColWidth = 0L;
     sal_uInt32 nRelCols = 0UL;
-    for( i=0U; i < nCols; i++ )
+    for( colIter = aColumnWidths.begin(); colIter < aColumnWidths.end(); ++colIter)
     {
-        sal_Int32 nColWidth = aColumnWidths[(sal_uInt16)i];
-        if( aColumnRelWidths[(sal_uInt16)i] )
+        if( colIter->isRelative )
         {
-            nRelWidth += nColWidth;
-            if( 0L == nMinRelColWidth || nColWidth < nMinRelColWidth )
-                nMinRelColWidth = nColWidth;
+            nRelWidth += colIter->width;
+            if( 0L == nMinRelColWidth || colIter->width < nMinRelColWidth )
+                nMinRelColWidth = colIter->width;
             nRelCols++;
         }
         else
         {
-            nAbsWidth += nColWidth;
-            if( 0L == nMinAbsColWidth || nColWidth < nMinAbsColWidth )
-                nMinAbsColWidth = nColWidth;
+            nAbsWidth += colIter->width;
+            if( 0L == nMinAbsColWidth || colIter->width < nMinAbsColWidth )
+                nMinAbsColWidth = colIter->width;
         }
     }
     sal_uInt32 nAbsCols = nCols - nRelCols;
@@ -2478,13 +2469,13 @@ void SwXMLTableContext::_MakeTable( SwTableBox *pBox )
             if( 0L == nMinRelColWidth )
                 nMinRelColWidth = nMinAbsColWidth;
 
-            for( i=0UL; nAbsCols > 0UL && i < nCols; i++ )
+            for( colIter = aColumnWidths.begin(); nAbsCols > 0UL && colIter < aColumnWidths.end(); ++colIter)
             {
-                if( !aColumnRelWidths[(sal_uInt16)i] )
+                if( !colIter->isRelative )
                 {
-                    sal_Int32 nRelCol = (aColumnWidths[(sal_uInt16)i] * nMinRelColWidth) /
-                                   nMinAbsColWidth;
-                    aColumnWidths.Replace( (sal_uInt16)nRelCol, (sal_uInt16)i );
+                    sal_Int32 nRelCol = ( colIter->width * nMinRelColWidth) / nMinAbsColWidth;
+                    colIter->width = nRelCol;
+                    colIter->isRelative = true;
                     nRelWidth += nRelCol;
                     nAbsCols--;
                 }
@@ -2504,14 +2495,13 @@ void SwXMLTableContext::_MakeTable( SwTableBox *pBox )
         {
             double n = (double)nWidth / (double)nRelWidth;
             nRelWidth = 0L;
-            for( i=0U; i < nCols-1UL; i++ )
+            for( colIter = aColumnWidths.begin(); colIter < aColumnWidths.end() - 1; ++colIter)
             {
-                sal_Int32 nW = (sal_Int32)(aColumnWidths[(sal_uInt16)i] * n);
-                aColumnWidths.Replace( (sal_uInt16)nW, (sal_uInt16)i );
+                sal_Int32 nW = (sal_Int32)( colIter->width * n);
+                colIter->width = (USHORT)nW;
                 nRelWidth += nW;
             }
-            aColumnWidths.Replace( (sal_uInt16)(nWidth-nRelWidth),
-                                   (sal_uInt16)nCols-1U );
+            aColumnWidths.back().width = (nWidth-nRelWidth);
         }
     }
     else
@@ -2559,9 +2549,9 @@ void SwXMLTableContext::_MakeTable( SwTableBox *pBox )
             // Otherwise, if there is enouth space for every column, every
             // column gets this space.
 
-            for( i=0UL; nRelCols > 0UL && i < nCols; i++ )
+            for( colIter = aColumnWidths.begin(); nRelCols > 0UL && colIter < aColumnWidths.end(); ++colIter )
             {
-                if( aColumnRelWidths[(sal_uInt16)i] )
+                if( colIter->isRelative )
                 {
                     sal_Int32 nAbsCol;
                     if( 1UL == nRelCols )
@@ -2578,18 +2568,17 @@ void SwXMLTableContext::_MakeTable( SwTableBox *pBox )
                         }
                         else if( bMinExtra )
                         {
-                            sal_Int32 nExtraRelCol =
-                                aColumnWidths[(sal_uInt16)i] - nMinRelColWidth;
+                            sal_Int32 nExtraRelCol = colIter->width - nMinRelColWidth;
                             nAbsCol = MINLAY + (nExtraRelCol * nExtraAbs) /
                                                  nExtraRel;
                         }
                         else
                         {
-                            nAbsCol = (aColumnWidths[(sal_uInt16)i] * nAbsForRelWidth) /
-                                      nRelWidth;
+                            nAbsCol = ( colIter->width * nAbsForRelWidth) / nRelWidth;
                         }
                     }
-                    aColumnWidths.Replace( (sal_uInt16)nAbsCol, (sal_uInt16)i );
+                    colIter->width = nAbsCol;
+                    colIter->isRelative = false;
                     nAbsForRelWidth -= nAbsCol;
                     nAbsWidth += nAbsCol;
                     nRelCols--;
@@ -2601,39 +2590,38 @@ void SwXMLTableContext::_MakeTable( SwTableBox *pBox )
         {
             if( nAbsWidth < nWidth )
             {
-                // If the table's width is larger than the absolute column widths,
-                // every column get some extra width.
+                // If the table's width is larger than the sum of the absolute
+                // column widths, every column get some extra width.
                 sal_Int32 nExtraAbs = nWidth - nAbsWidth;
-                sal_Int32 nAbsLastCol =
-                        aColumnWidths[(sal_uInt16)nCols-1U] + nExtraAbs;
-                for( i=0UL; i < nCols-1UL; i++ )
+                sal_Int32 nAbsLastCol = aColumnWidths.back().width + nExtraAbs;
+                for( colIter = aColumnWidths.begin(); colIter < aColumnWidths.end()-1UL; ++colIter )
                 {
-                    sal_Int32 nAbsCol = aColumnWidths[(sal_uInt16)i];
+                    sal_Int32 nAbsCol = colIter->width;
                     sal_Int32 nExtraAbsCol = (nAbsCol * nExtraAbs) /
                                              nAbsWidth;
                     nAbsCol += nExtraAbsCol;
-                    aColumnWidths.Replace( (sal_uInt16)nAbsCol, (sal_uInt16)i );
+                    colIter->width = nAbsCol;
                     nAbsLastCol -= nExtraAbsCol;
                 }
-                aColumnWidths.Replace( (sal_uInt16)nAbsLastCol, (sal_uInt16)nCols-1U );
+                aColumnWidths.back().width = nAbsLastCol;
             }
             else if( nAbsWidth > nWidth )
             {
-                // If the table's width is smaller than the absolute column
-                // widths, every column gets the minimum width plus some extra
-                // width.
+                // If the table's width is smaller than the sum of the absolute
+                // column widths, every column needs to shrink.
+                // Every column gets the minimum width plus some extra width.
                 sal_Int32 nExtraAbs = nWidth - (nCols * MINLAY);
                 sal_Int32 nAbsLastCol = MINLAY + nExtraAbs;
-                for( i=0UL; i < nCols-1UL; i++ )
+                for( colIter = aColumnWidths.begin(); colIter < aColumnWidths.end()-1UL; ++colIter )
                 {
-                    sal_Int32 nAbsCol = aColumnWidths[(sal_uInt16)i];
+                    sal_Int32 nAbsCol = colIter->width;
                     sal_Int32 nExtraAbsCol = (nAbsCol * nExtraAbs) /
                                              nAbsWidth;
                     nAbsCol = MINLAY + nExtraAbsCol;
-                    aColumnWidths.Replace( (sal_uInt16)nAbsCol, (sal_uInt16)i );
+                    colIter->width = nAbsCol;
                     nAbsLastCol -= nExtraAbsCol;
                 }
-                aColumnWidths.Replace( (sal_uInt16)nAbsLastCol, (sal_uInt16)nCols-1U );
+                aColumnWidths.back().width = nAbsLastCol;
             }
         }
     }
@@ -2644,7 +2632,7 @@ void SwXMLTableContext::_MakeTable( SwTableBox *pBox )
 
     sal_uInt32 nStartRow = 0UL;
     sal_uInt32 nRows = pRows->Count();
-    for( i=0UL; i<nRows; i++ )
+    for(sal_uInt32 i=0UL; i<nRows; ++i )
     {
         // Could we split the table behind the current line?
         sal_Bool bSplit = sal_True;
@@ -2750,7 +2738,7 @@ void SwXMLTableContext::MakeTable()
         {
         case text::HoriOrientation::FULL:
         case text::HoriOrientation::NONE:
-            // #78246#: For text::HoriOrientation::NONE we would prefere to use the sum
+            // For text::HoriOrientation::NONE we would prefere to use the sum
             // of the relative column widths as reference width.
             // Unfortunately this works only if this sum interpreted as
             // twip value is larger than the space that is avaialable.
@@ -2893,7 +2881,7 @@ const SwStartNode *SwXMLTableContext::InsertTableSection(
         SwDoc* pDoc = SwImport::GetDocFromXMLImport( GetSwImport() );
         const SwEndNode *pEndNd = pPrevSttNd ? pPrevSttNd->EndOfSectionNode()
                                              : pTableNode->EndOfSectionNode();
-        // --> OD 2007-07-02 #i78921# - make code robust
+        // #i78921# - make code robust
 #if OSL_DEBUG_LEVEL > 1
         OSL_ENSURE( pDoc, "<SwXMLTableContext::InsertTableSection(..)> - no <pDoc> at <SwXTextCursor> instance - <SwXTextCurosr> doesn't seem to be registered at a <SwUnoCrsr> instance." );
 #endif
@@ -2908,10 +2896,9 @@ const SwStartNode *SwXMLTableContext::InsertTableSection(
             pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD, false );
         pStNd = pDoc->GetNodes().MakeTextSection( aIdx, SwTableBoxStartNode,
                                                  pColl );
-        // --> FLR 2005-08-30 #125369#
         // Consider the case that a table is defined without a row.
         if( !pPrevSttNd && pBox1 != NULL )
-        // <--
+
         {
             pBox1->pSttNd = pStNd;
             SwCntntNode *pCNd = pDoc->GetNodes()[ pStNd->GetIndex() + 1 ]

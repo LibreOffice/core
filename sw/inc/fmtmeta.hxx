@@ -120,7 +120,6 @@ public:
     // SfxPoolItem
     virtual int              operator==( const SfxPoolItem & ) const;
     virtual SfxPoolItem *    Clone( SfxItemPool *pPool = 0 ) const;
-//    TYPEINFO();
 
     /// notify clients registered at m_pMeta that this meta is being (re-)moved
     void NotifyChangeTxtNode(SwTxtNode *const pTxtNode);

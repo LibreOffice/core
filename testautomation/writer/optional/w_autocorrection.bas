@@ -6,12 +6,6 @@
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
 '*
-'* $RCSfile: w_drawing_tools.bas,v $
-'*
-'* $Revision: 1.1 $
-'*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 09:11:25 $
-'*
 '* This file is part of OpenOffice.org.
 '*
 '* OpenOffice.org is free software: you can redistribute it and/or modify

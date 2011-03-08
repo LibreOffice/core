@@ -28,7 +28,7 @@
 #include "swmn.hrc"
 
 /*------------------------------------------------------------------------
- Beschreibung: Menu Window
+   Description: Menu Window
 ------------------------------------------------------------------------*/
 
 #define MN_FRM_CAPTION_ITEM \

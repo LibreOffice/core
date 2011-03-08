@@ -57,10 +57,6 @@
 * @file
 * Border stuff of Wordpro.
 ************************************************************************/
-/*************************************************************************
-* Change History
-* 2005-01-11 Create and implement.
-************************************************************************/
 #ifndef     _LWPBORDERSTUFF_HXX
 #define     _LWPBORDERSTUFF_HXX
 
@@ -90,9 +86,7 @@ public:
     sal_uInt16  GetSideType(sal_uInt16 side);
     LwpColor    GetSideColor(sal_uInt16 side);
     float       GetSideWidth(sal_uInt16 side);
-    //add by , 01/26/2004
-    void operator = (const LwpBorderStuff& rOther);
-    //end
+    LwpBorderStuff& operator = (const LwpBorderStuff& rOther);
     friend class LwpParaBorderOverride;
 private:
     sal_uInt16      m_nSides;

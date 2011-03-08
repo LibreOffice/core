@@ -39,7 +39,6 @@
 #include <PackageConstants.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 
-using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::io;
 

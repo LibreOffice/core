@@ -6,7 +6,6 @@ av  avmedia\source\viewer		nmake	-	all	av_viewer	        									NULL
 av  avmedia\source\framework	nmake	-	all	av_framework	        								NULL
 av  avmedia\source\win	    	nmake	-	all	av_win	            									NULL
 av	avmedia\source\java			nmake	-	all	av_java	            									NULL
-av	avmedia\source\xine			nmake	-	all	av_xine	            									NULL
 av	avmedia\source\quicktime	nmake	-	all	av_quicktime											NULL
 av	avmedia\source\gstreamer		nmake	-	all	av_gstreamer           									NULL
-av	avmedia\util				nmake	-	all	av_util av_viewer av_framework av_win av_java av_quicktime av_xine av_gstreamer	NULL
+av	avmedia\util				nmake	-	all	av_util av_viewer av_framework av_win av_java av_quicktime av_gstreamer	NULL

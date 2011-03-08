@@ -44,7 +44,6 @@
 #include <memory>
 
 
-using namespace rtl;
 using namespace cppu;
 using namespace osl;
 using namespace com::sun::star::datatransfer;
@@ -58,6 +57,7 @@ using namespace com::sun::star::lang;
 using namespace comphelper;
 using namespace std;
 
+using ::rtl::OUString;
 
 // For OOo internal D&D we provide the Transferable without NSDragPboard
 // interference as a shortcut

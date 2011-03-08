@@ -357,7 +357,7 @@ namespace frm
             break;
 
         default:
-            DBG_ERROR( "FontControlModel::convertFastPropertyValue: no font aggregate!" );
+            OSL_FAIL( "FontControlModel::convertFastPropertyValue: no font aggregate!" );
         }
         return bModified;
     }
@@ -460,7 +460,7 @@ namespace frm
         break;
 
         default:
-            DBG_ERROR( "FontControlModel::setFastPropertyValue_NoBroadcast: invalid property!" );
+            OSL_FAIL( "FontControlModel::setFastPropertyValue_NoBroadcast: invalid property!" );
         }
     }
 
@@ -539,7 +539,7 @@ namespace frm
             break;
 
         default:
-            DBG_ERROR( "FontControlModel::getPropertyDefaultByHandle: invalid property!" );
+            OSL_FAIL( "FontControlModel::getPropertyDefaultByHandle: invalid property!" );
         }
 
         return aReturn;

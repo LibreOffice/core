@@ -398,7 +398,7 @@ BOOL ScDocument::InsertTab( SCTAB nPos, const String& rName,
                     pCondFormList->UpdateReference( URM_INSDEL, aRange, 0,0,1 );
                 if ( pValidationList )
                     pValidationList->UpdateReference( URM_INSDEL, aRange, 0,0,1 );
-                // #81844# sheet names of references are not valid until sheet is inserted
+                // sheet names of references are not valid until sheet is inserted
                 if ( pChartListenerCollection )
                     pChartListenerCollection->UpdateScheduledSeriesRanges();
 
@@ -488,7 +488,7 @@ BOOL ScDocument::DeleteTab( SCTAB nTab, ScDocument* pRefUndoDoc )
                             pTab[i]->StartAllListeners();
                     SetDirty();
                 }
-                // #81844# sheet names of references are not valid until sheet is deleted
+                // sheet names of references are not valid until sheet is deleted
                 pChartListenerCollection->UpdateScheduledSeriesRanges();
 
                 SetAutoCalc( bOldAutoCalc );
@@ -778,7 +778,7 @@ void ScDocument::LimitChartIfAll( ScRangeListRef& rRangeList )
     }
     else
     {
-        DBG_ERROR("LimitChartIfAll: Ref==0");
+        OSL_FAIL("LimitChartIfAll: Ref==0");
     }
     rRangeList = aNew;
 }
@@ -895,7 +895,7 @@ BOOL ScDocument::InsertRow( SCCOL nStartCol, SCTAB nStartTab,
             if (pTab[i] && (!pTabMark || pTabMark->GetTableSelect(i)))
                 pTab[i]->InsertRow( nStartCol, nEndCol, nStartRow, nSize );
 
-        //  #82991# UpdateRef for drawing layer must be after inserting,
+        //  UpdateRef for drawing layer must be after inserting,
         //  when the new row heights are known.
         for (i=nStartTab; i<=nEndTab; i++)
             if (pTab[i] && (!pTabMark || pTabMark->GetTableSelect(i)))
@@ -914,7 +914,7 @@ BOOL ScDocument::InsertRow( SCCOL nStartCol, SCTAB nStartTab,
             for (i=0; i<=MAXTAB; i++)
                 if (pTab[i])
                     pTab[i]->StartNeededListeners();
-            // #69592# at least all cells using range names pointing relative
+            // at least all cells using range names pointing relative
             // to the moved range must recalculate
             for (i=0; i<=MAXTAB; i++)
                 if (pTab[i])
@@ -1003,7 +1003,7 @@ void ScDocument::DeleteRow( SCCOL nStartCol, SCTAB nStartTab,
         for (i=0; i<=MAXTAB; i++)
             if (pTab[i])
                 pTab[i]->StartNeededListeners();
-        // #69592# at least all cells using range names pointing relative to
+        // at least all cells using range names pointing relative to
         // the moved range must recalculate
         for (i=0; i<=MAXTAB; i++)
             if (pTab[i])
@@ -1106,7 +1106,7 @@ BOOL ScDocument::InsertCol( SCROW nStartRow, SCTAB nStartTab,
             for (i=0; i<=MAXTAB; i++)
                 if (pTab[i])
                     pTab[i]->StartNeededListeners();
-            // #69592# at least all cells using range names pointing relative
+            // at least all cells using range names pointing relative
             // to the moved range must recalculate
             for (i=0; i<=MAXTAB; i++)
                 if (pTab[i])
@@ -1193,7 +1193,7 @@ void ScDocument::DeleteCol(SCROW nStartRow, SCTAB nStartTab, SCROW nEndRow, SCTA
         for (i=0; i<=MAXTAB; i++)
             if (pTab[i])
                 pTab[i]->StartNeededListeners();
-        // #69592# at least all cells using range names pointing relative to
+        // at least all cells using range names pointing relative to
         // the moved range must recalculate
         for (i=0; i<=MAXTAB; i++)
             if (pTab[i])
@@ -1415,7 +1415,7 @@ void ScDocument::InitUndoSelected( ScDocument* pSrcDoc, const ScMarkData& rTabSe
     }
     else
         {
-        DBG_ERROR("InitUndo");
+        OSL_FAIL("InitUndo");
         }
 }
 
@@ -1437,7 +1437,7 @@ void ScDocument::InitUndo( ScDocument* pSrcDoc, SCTAB nTab1, SCTAB nTab2,
     }
     else
     {
-        DBG_ERROR("InitUndo");
+        OSL_FAIL("InitUndo");
     }
 }
 
@@ -1456,7 +1456,7 @@ void ScDocument::AddUndoTab( SCTAB nTab1, SCTAB nTab2, BOOL bColInfo, BOOL bRowI
     }
     else
     {
-        DBG_ERROR("InitUndo");
+        OSL_FAIL("InitUndo");
     }
 }
 
@@ -1467,7 +1467,7 @@ void ScDocument::SetCutMode( BOOL bVal )
         GetClipParam().mbCutMode = bVal;
     else
     {
-        DBG_ERROR("SetCutMode without bIsClip");
+        OSL_FAIL("SetCutMode without bIsClip");
     }
 }
 
@@ -1478,7 +1478,7 @@ BOOL ScDocument::IsCutMode()
         return GetClipParam().mbCutMode;
     else
     {
-        DBG_ERROR("IsCutMode ohne bIsClip");
+        OSL_FAIL("IsCutMode ohne bIsClip");
         return FALSE;
     }
 }
@@ -1706,12 +1706,13 @@ void ScDocument::TransposeClip( ScDocument* pTransClip, USHORT nFlags, BOOL bAsL
 
         //  Bereiche uebernehmen
 
-    pTransClip->pRangeName->FreeAll();
-    for (USHORT i = 0; i < pRangeName->GetCount(); i++)     //! DB-Bereiche Pivot-Bereiche auch !!!
+    pTransClip->pRangeName->clear();
+    ScRangeName::const_iterator itr = pRangeName->begin(), itrEnd = pRangeName->end();
+    for (; itr != itrEnd; ++itr)
     {
-        USHORT nIndex = ((ScRangeData*)((*pRangeName)[i]))->GetIndex();
-        ScRangeData* pData = new ScRangeData(*((*pRangeName)[i]));
-        if (!pTransClip->pRangeName->Insert(pData))
+        USHORT nIndex = itr->GetIndex();
+        ScRangeData* pData = new ScRangeData(*itr);
+        if (!pTransClip->pRangeName->insert(pData))
             delete pData;
         else
             pData->SetIndex(nIndex);
@@ -1761,6 +1762,29 @@ void ScDocument::TransposeClip( ScDocument* pTransClip, USHORT nFlags, BOOL bAsL
     GetClipParam().mbCutMode = false;
 }
 
+namespace {
+
+void copyUsedNamesToClip(ScRangeName* pClipRangeName, ScRangeName* pRangeName, const std::set<USHORT>& rUsedNames)
+{
+    pClipRangeName->clear();
+    ScRangeName::const_iterator itr = pRangeName->begin(), itrEnd = pRangeName->end();
+    for (; itr != itrEnd; ++itr)        //! DB-Bereiche Pivot-Bereiche auch !!!
+    {
+        USHORT nIndex = itr->GetIndex();
+        bool bInUse = (rUsedNames.count(nIndex) > 0);
+        if (!bInUse)
+            continue;
+
+        ScRangeData* pData = new ScRangeData(*itr);
+        if (!pClipRangeName->insert(pData))
+            delete pData;
+        else
+            pData->SetIndex(nIndex);
+    }
+}
+
+}
+
 void ScDocument::CopyRangeNamesToClip(ScDocument* pClipDoc, const ScRange& rClipRange, const ScMarkData* pMarks, bool bAllTabs)
 {
     std::set<USHORT> aUsedNames;        // indexes of named ranges that are used in the copied cells
@@ -1771,20 +1795,7 @@ void ScDocument::CopyRangeNamesToClip(ScDocument* pClipDoc, const ScRange& rClip
                     rClipRange.aStart.Col(), rClipRange.aStart.Row(),
                     rClipRange.aEnd.Col(), rClipRange.aEnd.Row(), aUsedNames);
 
-    pClipDoc->pRangeName->FreeAll();
-    for (USHORT i = 0; i < pRangeName->GetCount(); i++)        //! DB-Bereiche Pivot-Bereiche auch !!!
-    {
-        USHORT nIndex = ((ScRangeData*)((*pRangeName)[i]))->GetIndex();
-        bool bInUse = ( aUsedNames.find(nIndex) != aUsedNames.end() );
-        if (bInUse)
-        {
-            ScRangeData* pData = new ScRangeData(*((*pRangeName)[i]));
-            if (!pClipDoc->pRangeName->Insert(pData))
-                delete pData;
-            else
-                pData->SetIndex(nIndex);
-        }
-    }
+    copyUsedNamesToClip(pClipDoc->pRangeName, pRangeName, aUsedNames);
 }
 
 void ScDocument::CopyRangeNamesToClip(ScDocument* pClipDoc, const ScRange& rClipRange, SCTAB nTab)
@@ -1793,23 +1804,12 @@ void ScDocument::CopyRangeNamesToClip(ScDocument* pClipDoc, const ScRange& rClip
     std::set<USHORT> aUsedNames;
     if ( pTab[nTab] && pClipDoc->pTab[nTab] )
     {
-        pTab[nTab]->FindRangeNamesInUse( rClipRange.aStart.Col(), rClipRange.aStart.Row(), rClipRange.aEnd.Col(), rClipRange.aEnd.Row(), aUsedNames );
+        pTab[nTab]->FindRangeNamesInUse(
+            rClipRange.aStart.Col(), rClipRange.aStart.Row(),
+            rClipRange.aEnd.Col(), rClipRange.aEnd.Row(), aUsedNames );
     }
 
-    pClipDoc->pRangeName->FreeAll();
-    for ( USHORT i = 0; i < pRangeName->GetCount(); i++ )
-    {
-        USHORT nIndex = ((ScRangeData*)((*pRangeName)[i]))->GetIndex();
-        bool bInUse = ( aUsedNames.find(nIndex) != aUsedNames.end() );
-        if ( bInUse )
-        {
-            ScRangeData* pData = new ScRangeData(*((*pRangeName)[i]));
-            if ( !pClipDoc->pRangeName->Insert(pData) )
-                delete pData;
-            else
-                pData->SetIndex(nIndex);
-        }
-    }
+    copyUsedNamesToClip(pClipDoc->pRangeName, pRangeName, aUsedNames);
 }
 
 ScDocument::NumFmtMergeHandler::NumFmtMergeHandler(ScDocument* pDoc, ScDocument* pSrcDoc) :
@@ -1838,13 +1838,11 @@ void ScDocument::MergeNumberFormatter(ScDocument* pSrcDoc)
 
 void ScDocument::CopyRangeNamesFromClip(ScDocument* pClipDoc, ScClipRangeNameData& rRangeNames)
 {
-    sal_uInt16 nClipRangeNameCount = pClipDoc->pRangeName->GetCount();
     ScClipRangeNameData aClipRangeNames;
 
-    // array containing range names which might need update of indices
-    aClipRangeNames.mpRangeNames.resize(nClipRangeNameCount, NULL);
-
-    for (sal_uInt16 i = 0; i < nClipRangeNameCount; ++i)        //! DB-Bereiche Pivot-Bereiche auch
+    ScRangeName::const_iterator itr = pClipDoc->pRangeName->begin();
+    ScRangeName::const_iterator itrEnd = pClipDoc->pRangeName->end();
+    for (; itr != itrEnd; ++itr)        //! DB-Bereiche Pivot-Bereiche auch
     {
         /*  Copy only if the name doesn't exist in this document.
             If it exists we use the already existing name instead,
@@ -1853,27 +1851,25 @@ void ScDocument::CopyRangeNamesFromClip(ScDocument* pClipDoc, ScClipRangeNameDat
             A proper solution would ask the user how to proceed.
             The adjustment of the indices in the formulas is done later.
         */
-        ScRangeData* pClipRangeData = (*pClipDoc->pRangeName)[i];
-        USHORT k;
-        if ( pRangeName->SearchName( pClipRangeData->GetName(), k ) )
+        const ScRangeData* pExistingData = pRangeName->findByName(itr->GetName());
+        if (pExistingData)
         {
-            aClipRangeNames.mpRangeNames[i] = NULL;  // range name not inserted
-            USHORT nOldIndex = pClipRangeData->GetIndex();
-            USHORT nNewIndex = ((*pRangeName)[k])->GetIndex();
+            USHORT nOldIndex = itr->GetIndex();
+            USHORT nNewIndex = pExistingData->GetIndex();
             aClipRangeNames.insert(nOldIndex, nNewIndex);
             if ( !aClipRangeNames.mbReplace )
                 aClipRangeNames.mbReplace = ( nOldIndex != nNewIndex );
         }
         else
         {
-            ScRangeData* pData = new ScRangeData( *pClipRangeData );
+            ScRangeData* pData = new ScRangeData( *itr );
             pData->SetDocument(this);
-            if ( pRangeName->FindIndex( pData->GetIndex() ) )
+            if ( pRangeName->findByIndex( pData->GetIndex() ) )
                 pData->SetIndex(0);     // need new index, done in Insert
-            if ( pRangeName->Insert( pData ) )
+            if ( pRangeName->insert(pData) )
             {
-                aClipRangeNames.mpRangeNames[i] = pData;
-                USHORT nOldIndex = pClipRangeData->GetIndex();
+                aClipRangeNames.mpRangeNames.push_back(pData);
+                USHORT nOldIndex = itr->GetIndex();
                 USHORT nNewIndex = pData->GetIndex();
                 aClipRangeNames.insert(nOldIndex, nNewIndex);
                 if ( !aClipRangeNames.mbReplace )
@@ -1882,8 +1878,7 @@ void ScDocument::CopyRangeNamesFromClip(ScDocument* pClipDoc, ScClipRangeNameDat
             else
             {   // must be an overflow
                 delete pData;
-                aClipRangeNames.mpRangeNames[i] = NULL;
-                aClipRangeNames.insert(pClipRangeData->GetIndex(), 0);
+                aClipRangeNames.insert(itr->GetIndex(), 0);
                 aClipRangeNames.mbReplace = true;
             }
         }
@@ -1903,11 +1898,9 @@ void ScDocument::UpdateRangeNamesInFormulas(
 
     // first update all inserted named formulas if they contain other
     // range names and used indices changed
-    size_t nRangeNameCount = rRangeNames.mpRangeNames.size();
-    for (size_t i = 0; i < nRangeNameCount; ++i)        //! DB-Bereiche Pivot-Bereiche auch
+    for (size_t i = 0, n = rRangeNames.mpRangeNames.size(); i < n; ++i)        //! DB-Bereiche Pivot-Bereiche auch
     {
-        if ( rRangeNames.mpRangeNames[i] )
-            rRangeNames.mpRangeNames[i]->ReplaceRangeNamesInUse(rRangeNames.maRangeMap);
+        rRangeNames.mpRangeNames[i]->ReplaceRangeNamesInUse(rRangeNames.maRangeMap);
     }
     // then update the formulas, they might need just the updated range names
     for ( size_t nRange = 0, n = rDestRanges.size(); nRange < n; ++nRange )
@@ -2050,7 +2043,7 @@ void ScDocument::CopyBlockFromClip( SCCOL nCol1, SCROW nRow1,
                 while (!ppClipTab[nClipTab]) nClipTab = (nClipTab+1) % (MAXTAB+1);
                 SCsTAB nDz = ((SCsTAB)i) - nClipTab;
 
-                //  #89081# ranges of consecutive selected tables (in clipboard and dest. doc)
+                //  ranges of consecutive selected tables (in clipboard and dest. doc)
                 //  must be handled in one UpdateReference call
                 SCTAB nFollow = 0;
                 while ( i + nFollow < nTabEnd
@@ -2141,7 +2134,7 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
     {
         if (!pClipDoc)
         {
-            DBG_ERROR("CopyFromClip: no ClipDoc");
+            OSL_FAIL("CopyFromClip: no ClipDoc");
             pClipDoc = SC_MOD()->GetClipDoc();
         }
         if (pClipDoc->bIsClip && pClipDoc->GetTableCount())
@@ -2472,7 +2465,7 @@ void ScDocument::SetClipArea( const ScRange& rArea, BOOL bCut )
     }
     else
     {
-        DBG_ERROR("SetClipArea: kein Clip");
+        OSL_FAIL("SetClipArea: kein Clip");
     }
 }
 
@@ -2481,7 +2474,7 @@ void ScDocument::GetClipArea(SCCOL& nClipX, SCROW& nClipY, BOOL bIncludeFiltered
 {
     if (!bIsClip)
     {
-        DBG_ERROR("GetClipArea: kein Clip");
+        OSL_FAIL("GetClipArea: kein Clip");
         return;
     }
 
@@ -2543,7 +2536,7 @@ void ScDocument::GetClipStart(SCCOL& nClipX, SCROW& nClipY)
     }
     else
     {
-        DBG_ERROR("GetClipStart: kein Clip");
+        OSL_FAIL("GetClipStart: kein Clip");
     }
 }
 
@@ -2636,7 +2629,7 @@ void ScDocument::FillTab( const ScRange& rSrcArea, const ScMarkData& rMark,
     }
     else
     {
-        DBG_ERROR("falsche Tabelle");
+        OSL_FAIL("falsche Tabelle");
     }
 }
 
@@ -2695,7 +2688,7 @@ void ScDocument::FillTabMarked( SCTAB nSrcTab, const ScMarkData& rMark,
     }
     else
     {
-        DBG_ERROR("falsche Tabelle");
+        OSL_FAIL("falsche Tabelle");
     }
 }
 
@@ -2764,6 +2757,12 @@ void ScDocument::GetString( SCCOL nCol, SCROW nRow, SCTAB nTab, String& rString 
         rString.Erase();
 }
 
+void ScDocument::GetString( SCCOL nCol, SCROW nRow, SCTAB nTab, rtl::OUString& rString )
+{
+    String aStr;
+    GetString(nCol, nRow, nTab, aStr);
+    rString = aStr;
+}
 
 void ScDocument::GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab, String& rString )
 {
@@ -2896,7 +2895,7 @@ void ScDocument::GetCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
         rpCell = pTab[nTab]->GetCell( nCol, nRow );
     else
     {
-        DBG_ERROR("GetCell ohne Tabelle");
+        OSL_FAIL("GetCell ohne Tabelle");
         rpCell = NULL;
     }
 }
@@ -2908,7 +2907,7 @@ ScBaseCell* ScDocument::GetCell( const ScAddress& rPos ) const
     if (ValidTab(nTab) && pTab[nTab])
         return pTab[nTab]->GetCell( rPos );
 
-    DBG_ERROR("GetCell ohne Tabelle");
+    OSL_FAIL("GetCell ohne Tabelle");
     return NULL;
 }
 
@@ -3135,7 +3134,7 @@ void ScDocument::CompileXML()
     ScProgress aProgress( GetDocumentShell(), ScGlobal::GetRscString(
                 STR_PROGRESS_CALCULATING ), GetXMLImportedFormulaCount() );
 
-    // #b6355215# set AutoNameCache to speed up automatic name lookup
+    // set AutoNameCache to speed up automatic name lookup
     DBG_ASSERT( !pAutoNameCache, "AutoNameCache already set" );
     pAutoNameCache = new ScAutoNameCache( this );
 
@@ -3251,7 +3250,7 @@ USHORT ScDocument::GetColWidth( SCCOL nCol, SCTAB nTab ) const
 {
     if ( ValidTab(nTab) && pTab[nTab] )
         return pTab[nTab]->GetColWidth( nCol );
-    DBG_ERROR("Falsche Tabellennummer");
+    OSL_FAIL("Falsche Tabellennummer");
     return 0;
 }
 
@@ -3260,7 +3259,7 @@ USHORT ScDocument::GetOriginalWidth( SCCOL nCol, SCTAB nTab ) const
 {
     if ( ValidTab(nTab) && pTab[nTab] )
         return pTab[nTab]->GetOriginalWidth( nCol );
-    DBG_ERROR("Falsche Tabellennummer");
+    OSL_FAIL("Falsche Tabellennummer");
     return 0;
 }
 
@@ -3269,7 +3268,7 @@ USHORT ScDocument::GetCommonWidth( SCCOL nEndCol, SCTAB nTab ) const
 {
     if ( ValidTab(nTab) && pTab[nTab] )
         return pTab[nTab]->GetCommonWidth( nEndCol );
-    DBG_ERROR("Wrong table number");
+    OSL_FAIL("Wrong table number");
     return 0;
 }
 
@@ -3278,7 +3277,7 @@ USHORT ScDocument::GetOriginalHeight( SCROW nRow, SCTAB nTab ) const
 {
     if ( ValidTab(nTab) && pTab[nTab] )
         return pTab[nTab]->GetOriginalHeight( nRow );
-    DBG_ERROR("Wrong table number");
+    OSL_FAIL("Wrong table number");
     return 0;
 }
 
@@ -3287,7 +3286,7 @@ USHORT ScDocument::GetRowHeight( SCROW nRow, SCTAB nTab, bool bHiddenAsZero ) co
 {
     if ( ValidTab(nTab) && pTab[nTab] )
         return pTab[nTab]->GetRowHeight( nRow, NULL, NULL, bHiddenAsZero );
-    DBG_ERROR("Wrong sheet number");
+    OSL_FAIL("Wrong sheet number");
     return 0;
 }
 
@@ -3296,7 +3295,7 @@ USHORT ScDocument::GetRowHeight( SCROW nRow, SCTAB nTab, SCROW* pStartRow, SCROW
 {
     if ( ValidTab(nTab) && pTab[nTab] )
         return pTab[nTab]->GetRowHeight( nRow, pStartRow, pEndRow, bHiddenAsZero );
-    DBG_ERROR("Wrong sheet number");
+    OSL_FAIL("Wrong sheet number");
     return 0;
 }
 
@@ -3313,7 +3312,7 @@ ULONG ScDocument::GetRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab ) con
     if ( ValidTab(nTab) && pTab[nTab] )
         return pTab[nTab]->GetRowHeight( nStartRow, nEndRow);
 
-    DBG_ERROR("wrong sheet number");
+    OSL_FAIL("wrong sheet number");
     return 0;
 }
 
@@ -3336,7 +3335,7 @@ ULONG ScDocument::GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow,
     if ( ValidTab(nTab) && pTab[nTab] )
         return pTab[nTab]->GetScaledRowHeight( nStartRow, nEndRow, fScale);
 
-    DBG_ERROR("wrong sheet number");
+    OSL_FAIL("wrong sheet number");
     return 0;
 }
 
@@ -3344,7 +3343,7 @@ SCROW ScDocument::GetHiddenRowCount( SCROW nRow, SCTAB nTab ) const
 {
     if ( ValidTab(nTab) && pTab[nTab] )
         return pTab[nTab]->GetHiddenRowCount( nRow );
-    DBG_ERROR("Falsche Tabellennummer");
+    OSL_FAIL("Falsche Tabellennummer");
     return 0;
 }
 
@@ -3353,7 +3352,7 @@ ULONG ScDocument::GetColOffset( SCCOL nCol, SCTAB nTab ) const
 {
     if ( ValidTab(nTab) && pTab[nTab] )
         return pTab[nTab]->GetColOffset( nCol );
-    DBG_ERROR("Falsche Tabellennummer");
+    OSL_FAIL("Falsche Tabellennummer");
     return 0;
 }
 
@@ -3362,7 +3361,7 @@ ULONG ScDocument::GetRowOffset( SCROW nRow, SCTAB nTab ) const
 {
     if ( ValidTab(nTab) && pTab[nTab] )
         return pTab[nTab]->GetRowOffset( nRow );
-    DBG_ERROR("Falsche Tabellennummer");
+    OSL_FAIL("Falsche Tabellennummer");
     return 0;
 }
 
@@ -3376,7 +3375,7 @@ USHORT ScDocument::GetOptimalColWidth( SCCOL nCol, SCTAB nTab, OutputDevice* pDe
     if ( ValidTab(nTab) && pTab[nTab] )
         return pTab[nTab]->GetOptimalColWidth( nCol, pDev, nPPTX, nPPTY,
             rZoomX, rZoomY, bFormula, pMarkData, pParam );
-    DBG_ERROR("Falsche Tabellennummer");
+    OSL_FAIL("Falsche Tabellennummer");
     return 0;
 }
 
@@ -3390,7 +3389,7 @@ long ScDocument::GetNeededSize( SCCOL nCol, SCROW nRow, SCTAB nTab,
     if ( ValidTab(nTab) && pTab[nTab] )
         return pTab[nTab]->GetNeededSize
                 ( nCol, nRow, pDev, nPPTX, nPPTY, rZoomX, rZoomY, bWidth, bTotalSize );
-    DBG_ERROR("Falsche Tabellennummer");
+    OSL_FAIL("Falsche Tabellennummer");
     return 0;
 }
 
@@ -3405,7 +3404,7 @@ BOOL ScDocument::SetOptimalHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, U
     if ( ValidTab(nTab) && pTab[nTab] )
         return pTab[nTab]->SetOptimalHeight( nStartRow, nEndRow, nExtra,
                                                 pDev, nPPTX, nPPTY, rZoomX, rZoomY, bShrink );
-    DBG_ERROR("Falsche Tabellennummer");
+    OSL_FAIL("Falsche Tabellennummer");
     return FALSE;
 }
 
@@ -3459,13 +3458,6 @@ void ScDocument::ShowRows(SCROW nRow1, SCROW nRow2, SCTAB nTab, BOOL bShow)
 }
 
 
-void ScDocument::SetColFlags( SCCOL nCol, SCTAB nTab, BYTE nNewFlags )
-{
-    if ( ValidTab(nTab) && pTab[nTab] )
-        pTab[nTab]->SetColFlags( nCol, nNewFlags );
-}
-
-
 void ScDocument::SetRowFlags( SCROW nRow, SCTAB nTab, BYTE nNewFlags )
 {
     if ( ValidTab(nTab) && pTab[nTab] )
@@ -3484,7 +3476,7 @@ BYTE ScDocument::GetColFlags( SCCOL nCol, SCTAB nTab ) const
 {
     if ( ValidTab(nTab) && pTab[nTab] )
         return pTab[nTab]->GetColFlags( nCol );
-    DBG_ERROR("Falsche Tabellennummer");
+    OSL_FAIL("Falsche Tabellennummer");
     return 0;
 }
 
@@ -3492,7 +3484,7 @@ BYTE ScDocument::GetRowFlags( SCROW nRow, SCTAB nTab ) const
 {
     if ( ValidTab(nTab) && pTab[nTab] )
         return pTab[nTab]->GetRowFlags( nRow );
-    DBG_ERROR("Falsche Tabellennummer");
+    OSL_FAIL("Falsche Tabellennummer");
     return 0;
 }
 
@@ -3511,12 +3503,12 @@ const ScBitMaskCompressedArray< SCROW, BYTE> & ScDocument::GetRowFlagsArray(
         pFlags = pTab[nTab]->GetRowFlagsArray();
     else
     {
-        DBG_ERROR("wrong sheet number");
+        OSL_FAIL("wrong sheet number");
         pFlags = 0;
     }
     if (!pFlags)
     {
-        DBG_ERROR("no row flags at sheet");
+        OSL_FAIL("no row flags at sheet");
         static ScBitMaskCompressedArray< SCROW, BYTE> aDummy( MAXROW, 0);
         pFlags = &aDummy;
     }
@@ -3617,35 +3609,12 @@ bool ScDocument::RowHidden(SCROW nRow, SCTAB nTab, SCROW* pFirstRow, SCROW* pLas
     return pTab[nTab]->RowHidden(nRow, pFirstRow, pLastRow);
 }
 
-bool ScDocument::RowHidden(SCROW nRow, SCTAB nTab, SCROW& rLastRow)
-{
-    if (!ValidTab(nTab) || !pTab[nTab])
-    {
-        rLastRow = nRow;
-        return false;
-    }
-
-    return pTab[nTab]->RowHidden(nRow, rLastRow);
-}
-
-
 bool ScDocument::HasHiddenRows(SCROW nStartRow, SCROW nEndRow, SCTAB nTab)
 {
     if (!ValidTab(nTab) || !pTab[nTab])
         return false;
 
     return pTab[nTab]->HasHiddenRows(nStartRow, nEndRow);
-}
-
-bool ScDocument::ColHidden(SCCOL nCol, SCTAB nTab, SCCOL& rLastCol)
-{
-    if (!ValidTab(nTab) || !pTab[nTab])
-    {
-        rLastCol = nCol;
-        return false;
-    }
-
-    return pTab[nTab]->ColHidden(nCol, rLastCol);
 }
 
 bool ScDocument::ColHidden(SCCOL nCol, SCTAB nTab, SCCOL* pFirstCol, SCCOL* pLastCol)
@@ -3734,13 +3703,6 @@ void ScDocument::SetRowFiltered(SCROW nStartRow, SCROW nEndRow, SCTAB nTab, bool
     pTab[nTab]->SetRowFiltered(nStartRow, nEndRow, bFiltered);
 }
 
-void ScDocument::SetColFiltered(SCCOL nStartCol, SCCOL nEndCol, SCTAB nTab, bool bFiltered)
-{
-    if (!ValidTab(nTab) || !pTab[nTab])
-        return;
-
-    pTab[nTab]->SetColFiltered(nStartCol, nEndCol, bFiltered);
-}
 
 SCROW ScDocument::FirstNonFilteredRow(SCROW nStartRow, SCROW nEndRow, SCTAB nTab)
 {
@@ -3820,39 +3782,45 @@ SCCOL ScDocument::GetNextDifferentChangedCol( SCTAB nTab, SCCOL nStart) const
 
 SCROW ScDocument::GetNextDifferentChangedRow( SCTAB nTab, SCROW nStart, bool bCareManualSize) const
 {
-    const ScBitMaskCompressedArray< SCROW, BYTE> * pRowFlagsArray;
-    if ( ValidTab(nTab) && pTab[nTab] && ((pRowFlagsArray = pTab[nTab]->GetRowFlagsArray()) != NULL) &&
-            pTab[nTab]->mpRowHeights && pTab[nTab]->mpHiddenRows )
+    if (!ValidTab(nTab) || !pTab[nTab])
+        return 0;
+
+    const ScBitMaskCompressedArray<SCROW, BYTE>* pRowFlagsArray = pTab[nTab]->GetRowFlagsArray();
+    if (!pRowFlagsArray)
+        return 0;
+
+    if (!pTab[nTab]->mpRowHeights || !pTab[nTab]->mpHiddenRows)
+        return 0;
+
+    size_t nIndex;          // ignored
+    SCROW nFlagsEndRow;
+    SCROW nHiddenEndRow;
+    SCROW nHeightEndRow;
+    BYTE nFlags;
+    bool bHidden;
+    USHORT nHeight;
+    BYTE nStartFlags = nFlags = pRowFlagsArray->GetValue( nStart, nIndex, nFlagsEndRow);
+    bool bStartHidden = bHidden = pTab[nTab]->RowHidden( nStart, NULL, &nHiddenEndRow);
+    USHORT nStartHeight = nHeight = pTab[nTab]->GetRowHeight( nStart, NULL, &nHeightEndRow, false);
+    SCROW nRow;
+    while ((nRow = std::min( nHiddenEndRow, std::min( nFlagsEndRow, nHeightEndRow)) + 1) <= MAXROW)
     {
-        size_t nIndex;          // ignored
-        SCROW nFlagsEndRow;
-        SCROW nHiddenEndRow;
-        SCROW nHeightEndRow;
-        BYTE nFlags;
-        bool bHidden;
-        USHORT nHeight;
-        BYTE nStartFlags = nFlags = pRowFlagsArray->GetValue( nStart, nIndex, nFlagsEndRow);
-        bool bStartHidden = bHidden = pTab[nTab]->RowHidden( nStart, NULL, &nHiddenEndRow);
-        USHORT nStartHeight = nHeight = pTab[nTab]->GetRowHeight( nStart, NULL, &nHeightEndRow, false);
-        SCROW nRow;
-        while ((nRow = std::min( nHiddenEndRow, std::min( nFlagsEndRow, nHeightEndRow)) + 1) <= MAXROW)
-        {
-            if (nFlagsEndRow < nRow)
-                nFlags = pRowFlagsArray->GetValue( nRow, nIndex, nFlagsEndRow);
-            if (nHiddenEndRow < nRow)
-                bHidden = pTab[nTab]->RowHidden( nRow, NULL, &nHiddenEndRow);
-            if (nHeightEndRow < nRow)
-                nHeight = pTab[nTab]->GetRowHeight( nRow, NULL, &nHeightEndRow, false);
-            if (    ((nStartFlags & CR_MANUALBREAK) != (nFlags & CR_MANUALBREAK)) ||
-                    ((nStartFlags & CR_MANUALSIZE) != (nFlags & CR_MANUALSIZE)) ||
-                    (bStartHidden != bHidden) ||
-                    (bCareManualSize && (nStartFlags & CR_MANUALSIZE) && (nStartHeight != nHeight)) ||
-                    (!bCareManualSize && ((nStartHeight != nHeight))))
-                return nRow;
-        }
-        return MAXROW+1;
+        if (nFlagsEndRow < nRow)
+            nFlags = pRowFlagsArray->GetValue( nRow, nIndex, nFlagsEndRow);
+        if (nHiddenEndRow < nRow)
+            bHidden = pTab[nTab]->RowHidden( nRow, NULL, &nHiddenEndRow);
+        if (nHeightEndRow < nRow)
+            nHeight = pTab[nTab]->GetRowHeight( nRow, NULL, &nHeightEndRow, false);
+
+        if (((nStartFlags & CR_MANUALBREAK) != (nFlags & CR_MANUALBREAK)) ||
+            ((nStartFlags & CR_MANUALSIZE) != (nFlags & CR_MANUALSIZE)) ||
+            (bStartHidden != bHidden) ||
+            (bCareManualSize && (nStartFlags & CR_MANUALSIZE) && (nStartHeight != nHeight)) ||
+            (!bCareManualSize && ((nStartHeight != nHeight))))
+            return nRow;
     }
-    return 0;
+
+    return MAXROW+1;
 }
 
 BOOL ScDocument::GetColDefault( SCTAB nTab, SCCOL nCol, SCROW nLastRow, SCROW& nDefault)
@@ -3939,7 +3907,7 @@ const SfxPoolItem* ScDocument::GetAttr( SCCOL nCol, SCROW nRow, SCTAB nTab, USHO
             return pTemp;
         else
         {
-            DBG_ERROR( "Attribut Null" );
+            OSL_FAIL( "Attribut Null" );
         }
     }
     return &xPoolHelper->GetDocPool()->GetDefaultItem( nWhich );
@@ -4195,7 +4163,7 @@ BOOL ScDocument::ApplyFlagsTab( SCCOL nStartCol, SCROW nStartRow,
         if (pTab[nTab])
             return pTab[nTab]->ApplyFlags( nStartCol, nStartRow, nEndCol, nEndRow, nFlags );
 
-    DBG_ERROR("ApplyFlags: falsche Tabelle");
+    OSL_FAIL("ApplyFlags: falsche Tabelle");
     return FALSE;
 }
 
@@ -4207,7 +4175,7 @@ BOOL ScDocument::RemoveFlagsTab( SCCOL nStartCol, SCROW nStartRow,
         if (pTab[nTab])
             return pTab[nTab]->RemoveFlags( nStartCol, nStartRow, nEndCol, nEndRow, nFlags );
 
-    DBG_ERROR("RemoveFlags: falsche Tabelle");
+    OSL_FAIL("RemoveFlags: falsche Tabelle");
     return FALSE;
 }
 
@@ -4469,7 +4437,7 @@ BOOL ScDocument::IsBlockEmpty( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
         if (pTab[nTab])
             return pTab[nTab]->IsBlockEmpty( nStartCol, nStartRow, nEndCol, nEndRow, bIgnoreNotes );
 
-    DBG_ERROR("Falsche Tabellennummer");
+    OSL_FAIL("Falsche Tabellennummer");
     return FALSE;
 }
 
@@ -4480,7 +4448,7 @@ void ScDocument::LockTable(SCTAB nTab)
         pTab[nTab]->LockTable();
     else
     {
-        DBG_ERROR("Falsche Tabellennummer");
+        OSL_FAIL("Falsche Tabellennummer");
     }
 }
 
@@ -4491,7 +4459,7 @@ void ScDocument::UnlockTable(SCTAB nTab)
         pTab[nTab]->UnlockTable();
     else
     {
-        DBG_ERROR("Falsche Tabellennummer");
+        OSL_FAIL("Falsche Tabellennummer");
     }
 }
 
@@ -4513,7 +4481,7 @@ BOOL ScDocument::IsBlockEditable( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
             return pTab[nTab]->IsBlockEditable( nStartCol, nStartRow, nEndCol,
                 nEndRow, pOnlyNotBecauseOfMatrix );
 
-    DBG_ERROR("Falsche Tabellennummer");
+    OSL_FAIL("Falsche Tabellennummer");
     if ( pOnlyNotBecauseOfMatrix )
         *pOnlyNotBecauseOfMatrix = FALSE;
     return FALSE;
@@ -4687,7 +4655,7 @@ BOOL ScDocument::ExtendOverlapped( SCCOL& rStartCol, SCROW& rStartRow,
     }
     else
     {
-        DBG_ERROR("ExtendOverlapped: falscher Bereich");
+        OSL_FAIL("ExtendOverlapped: falscher Bereich");
     }
 
     return bFound;
@@ -4736,7 +4704,7 @@ BOOL ScDocument::ExtendMerge( SCCOL nStartCol, SCROW nStartRow,
     }
     else
     {
-        DBG_ERROR("ExtendMerge: falscher Bereich");
+        OSL_FAIL("ExtendMerge: falscher Bereich");
     }
 
     return bFound;
@@ -4887,7 +4855,7 @@ BOOL ScDocument::IsHorOverlapped( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
         return pAttr->IsHorOverlapped();
     else
     {
-        DBG_ERROR("Overlapped: Attr==0");
+        OSL_FAIL("Overlapped: Attr==0");
         return FALSE;
     }
 }
@@ -4901,7 +4869,7 @@ BOOL ScDocument::IsVerOverlapped( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
         return pAttr->IsVerOverlapped();
     else
     {
-        DBG_ERROR("Overlapped: Attr==0");
+        OSL_FAIL("Overlapped: Attr==0");
         return FALSE;
     }
 }
@@ -5005,7 +4973,7 @@ void ScDocument::DeleteSelectionTab( SCTAB nTab, USHORT nDelFlag, const ScMarkDa
         pTab[nTab]->DeleteSelection( nDelFlag, rMark );
     else
     {
-        DBG_ERROR("Falsche Tabelle");
+        OSL_FAIL("Falsche Tabelle");
     }
 }
 
@@ -5173,7 +5141,7 @@ Size ScDocument::GetPageSize( SCTAB nTab ) const
     if ( ValidTab(nTab)  && pTab[nTab] )
         return pTab[nTab]->GetPageSize();
 
-    DBG_ERROR("falsche Tab");
+    OSL_FAIL("falsche Tab");
     return Size();
 }
 
@@ -5207,7 +5175,7 @@ BOOL ScDocument::HasManualBreaks( SCTAB nTab ) const
     if ( ValidTab(nTab)  && pTab[nTab] )
         return pTab[nTab]->HasManualBreaks();
 
-    DBG_ERROR("falsche Tab");
+    OSL_FAIL("falsche Tab");
     return FALSE;
 }
 

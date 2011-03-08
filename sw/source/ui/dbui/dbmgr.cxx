@@ -28,9 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-#if STLPORT_VERSION>=321
 #include <cstdarg>
-#endif
 
 #include <stdio.h>
 #include <unotxdoc.hxx>
@@ -198,7 +196,7 @@ bool lcl_getCountFromResultSet( sal_Int32& rCount, const uno::Reference<XResultS
     }
     return false;
 }
-// #122799# copy compatibility options
+// copy compatibility options
 void lcl_CopyCompatibilityOptions( SwWrtShell& rSourceShell, SwWrtShell& rTargetShell)
 {
     IDocumentSettingAccess* pIDsa = rSourceShell.getIDocumentSettingAccess();
@@ -327,7 +325,7 @@ BOOL lcl_GetColumnCnt(SwDSParam* pParam,
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: Daten importieren
+    Description: import data
  --------------------------------------------------------------------*/
 BOOL SwNewDBMgr::MergeNew(const SwMergeDescriptor& rMergeDesc )
 {
@@ -363,7 +361,7 @@ BOOL SwNewDBMgr::MergeNew(const SwMergeDescriptor& rMergeDesc )
         *pTemp = *pImpl->pMergeData;
     else
     {
-        //#94779# calls from the calculator may have added a connection with an invalid commandtype
+        // calls from the calculator may have added a connection with an invalid commandtype
         //"real" data base connections added here have to re-use the already available
         //DSData and set the correct CommandType
         SwDBData aTempData(aData);
@@ -423,7 +421,7 @@ BOOL SwNewDBMgr::MergeNew(const SwMergeDescriptor& rMergeDesc )
 
     if (IsInitDBFields())
     {
-        // Bei Datenbankfeldern ohne DB-Name DB-Name von Dok einsetzen
+        // with database fields without DB-Name, use DB-Name from Doc
         SvStringsDtor aDBNames(1, 1);
         aDBNames.Insert( new String(), 0);
         SwDBData aInsertData = rMergeDesc.rSh.GetDBData();
@@ -440,7 +438,7 @@ BOOL SwNewDBMgr::MergeNew(const SwMergeDescriptor& rMergeDesc )
     switch(rMergeDesc.nMergeType)
     {
         case DBMGR_MERGE:
-            bRet = Merge(&rMergeDesc.rSh);   // Mischen
+            bRet = Merge(&rMergeDesc.rSh);
             break;
 
         case DBMGR_MERGE_MAILMERGE: // printing merge from 'old' merge dialog or from UNO-component
@@ -464,7 +462,7 @@ BOOL SwNewDBMgr::MergeNew(const SwMergeDescriptor& rMergeDesc )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Daten importieren
+    Description: import data
  --------------------------------------------------------------------*/
 BOOL SwNewDBMgr::Merge(SwWrtShell* pSh)
 {
@@ -581,7 +579,7 @@ void SwNewDBMgr::ImportDBEntry(SwWrtShell* pSh)
                 }
                 else
                 {
-                    // Spalte nicht gefunden -> Fehler anzeigen
+                    // column not found -> show error
                     String sInsert = '?';
                     sInsert += sColumn;
                     sInsert += '?';
@@ -608,13 +606,13 @@ void SwNewDBMgr::ImportDBEntry(SwWrtShell* pSh)
                     sStr += '\t';
             }
             pSh->SwEditShell::Insert2(sStr);
-            pSh->SwFEShell::SplitNode();    // Zeilenvorschub
+            pSh->SwFEShell::SplitNode();    // line feed
         }
     }
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Listbox mit Tabellenliste fuellen
+    Description: fill Listbox with tablelist
  --------------------------------------------------------------------*/
 BOOL SwNewDBMgr::GetTableNames(ListBox* pListBox, const String& rDBName)
 {
@@ -664,7 +662,7 @@ BOOL SwNewDBMgr::GetTableNames(ListBox* pListBox, const String& rDBName)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Listbox mit Spaltennamen einer Datenbank fuellen
+    Description: fill Listbox with column names of a database
  --------------------------------------------------------------------*/
 BOOL SwNewDBMgr::GetColumnNames(ListBox* pListBox,
             const String& rDBName, const String& rTableName, BOOL bAppend)
@@ -721,7 +719,7 @@ BOOL SwNewDBMgr::GetColumnNames(ListBox* pListBox,
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: CTOR
+    Description: CTOR
  --------------------------------------------------------------------*/
 SwNewDBMgr::SwNewDBMgr() :
             nMergeType(DBMGR_INSERT),
@@ -757,7 +755,7 @@ SwNewDBMgr::~SwNewDBMgr()
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Serienbriefe als einzelne Dokumente speichern
+    Description:    save bulk letters as single documents
  --------------------------------------------------------------------*/
 String lcl_FindUniqueName(SwWrtShell* pTargetShell, const String& rStartingPageDesc, ULONG nDocNo )
 {
@@ -934,7 +932,7 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                 nStartingPageNo = pSourceShell->GetVirtPageNum();
                 sStartingPageDesc = sModifiedStartingPageDesc = pSourceShell->GetPageDesc(
                                             pSourceShell->GetCurPageDesc()).GetName();
-                // #122799# copy compatibility options
+                // copy compatibility options
                 lcl_CopyCompatibilityOptions( *pSourceShell, *pTargetShell);
                 // #72821# copy dynamic defaults
                 lcl_CopyDynamicDefaults( *pSourceShell->GetDoc(), *pTargetShell->GetDoc() );
@@ -953,7 +951,7 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
             if (!IsMergeSilent())
                 aPrtMonDlg.Show();
 
-            // Progress, um KeyInputs zu unterbinden
+            // Progress, to prohibit KeyInputs
             SfxProgress aProgress(pSourrceDocSh, ::aEmptyStr, 1);
 
             // lock all dispatchers
@@ -1021,7 +1019,7 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                         sStat += String::CreateFromInt32( nDocNo );
                         aPrtMonDlg.aPrintInfo.SetText(sStat);
 
-                        // Rechenzeit fuer Save-Monitor:
+                        // computation time for Save-Monitor:
                         for (USHORT i = 0; i < 10; i++)
                             Application::Reschedule();
 
@@ -1346,8 +1344,8 @@ IMPL_LINK_INLINE_START( SwNewDBMgr, PrtCancelHdl, Button *, pButton )
 IMPL_LINK_INLINE_END( SwNewDBMgr, PrtCancelHdl, Button *, pButton )
 
 /*--------------------------------------------------------------------
-    Beschreibung: Numberformat der Spalte ermitteln und ggfs. in
-                    den uebergebenen Formatter uebertragen
+    Description: determine the column's Numberformat and transfer
+                    to the forwarded Formatter, if applicable.
   --------------------------------------------------------------------*/
 ULONG SwNewDBMgr::GetColumnFmt( const String& rDBName,
                                 const String& rTableName,
@@ -1435,7 +1433,7 @@ ULONG SwNewDBMgr::GetColumnFmt( uno::Reference< XDataSource> xSource,
                         SvNumberFormatter* pNFmtr,
                         long nLanguage )
 {
-    //JP 12.01.99: ggfs. das NumberFormat im Doc setzen
+    // set the NumberFormat in the doc if applicable
     ULONG nRet = 0;
 
     if(!xSource.is())
@@ -1953,7 +1951,7 @@ BOOL SwNewDBMgr::OpenDataSource(const String& rDataSource, const String& rTableO
             }
             catch(Exception&)
             {
-                //#98373# DB driver may not be ODBC 3.0 compliant
+                // DB driver may not be ODBC 3.0 compliant
                 pFound->bScrollable = TRUE;
             }
             pFound->xStatement = pFound->xConnection->createStatement();
@@ -2084,7 +2082,7 @@ SwDSParam* SwNewDBMgr::FindDSData(const SwDBData& rData, BOOL bCreate)
             (rData.nCommandType == -1 || rData.nCommandType == pParam->nCommandType ||
             (bCreate && pParam->nCommandType == -1)))
             {
-                //#94779# calls from the calculator may add a connection with an invalid commandtype
+                // calls from the calculator may add a connection with an invalid commandtype
                 //later added "real" data base connections have to re-use the already available
                 //DSData and set the correct CommandType
                 if(bCreate && pParam->nCommandType == -1)
@@ -2452,7 +2450,7 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
                 {
                     SfxViewFrame *pFrame = SfxViewFrame::LoadHiddenDocument( *xWorkDocSh, 0 );
                     SwView *pView = (SwView*) pFrame->GetViewShell();
-                    pView->AttrChangedNotify( &pView->GetWrtShell() );//Damit SelectShell gerufen wird.
+                    pView->AttrChangedNotify( &pView->GetWrtShell() );// in order for SelectShell to be called
                     //set the current DBMgr
                     SwDoc* pWorkDoc = pView->GetWrtShell().GetDoc();
                     SwNewDBMgr* pWorkDBMgr = pWorkDoc->GetNewDBMgr();
@@ -2521,8 +2519,6 @@ void SwNewDBMgr::InsertText(SwWrtShell& rSh,
     rtl::OUString sDataSource, sDataTableOrQuery;
     uno::Reference<XResultSet>  xResSet;
     Sequence<Any> aSelection;
-    BOOL bHasSelectionProperty = FALSE;
-    sal_Int32 nSelectionPos = 0;
     sal_Int16 nCmdType = CommandType::TABLE;
     const PropertyValue* pValues = rProperties.getConstArray();
     uno::Reference< XConnection> xConnection;
@@ -2535,11 +2531,7 @@ void SwNewDBMgr::InsertText(SwWrtShell& rSh,
         else if(pValues[nPos].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cCursor)))
             pValues[nPos].Value >>= xResSet;
         else if(pValues[nPos].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cSelection)))
-        {
-            bHasSelectionProperty = TRUE;
-            nSelectionPos = nPos;
             pValues[nPos].Value >>= aSelection;
-        }
         else if(pValues[nPos].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cCommandType)))
             pValues[nPos].Value >>= nCmdType;
         else if(pValues[nPos].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cActiveConnection)))
@@ -2749,7 +2741,7 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
                                         rMaster.GetFooter().IsActive();
 
 
-        // #122799# copy compatibility options
+        // copy compatibility options
         lcl_CopyCompatibilityOptions( rSourceShell, *pTargetShell);
         // #72821# copy dynamic defaults
         lcl_CopyDynamicDefaults( *rSourceShell.GetDoc(), *pTargetShell->GetDoc() );
@@ -2790,7 +2782,7 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
             //create a ViewFrame
             SwView* pWorkView = static_cast< SwView* >( SfxViewFrame::LoadHiddenDocument( *xWorkDocSh, 0 )->GetViewShell() );
             SwWrtShell& rWorkShell = pWorkView->GetWrtShell();
-            pWorkView->AttrChangedNotify( &rWorkShell );//Damit SelectShell gerufen wird.
+            pWorkView->AttrChangedNotify( &rWorkShell );// in order for SelectShell to be called
 
                 // merge the data
                 SwDoc* pWorkDoc = rWorkShell.GetDoc();

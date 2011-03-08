@@ -109,6 +109,7 @@ namespace vcl
     class PDFWriterImpl;
     class ExtOutDevData;
     class ITextLayout;
+    struct FontCapabilities;
 }
 
 #define OUTDEV_BUFFER_SIZE  128
@@ -198,8 +199,6 @@ struct KerningPair
 #define IMAGE_DRAW_DEACTIVE             ((USHORT)0x0004)
 #define IMAGE_DRAW_COLORTRANSFORM       ((USHORT)0x0008)
 #define IMAGE_DRAW_SEMITRANSPARENT      ((USHORT)0x0010)
-#define IMAGE_DRAW_MONOCHROME_BLACK     ((USHORT)0x0020)
-#define IMAGE_DRAW_MONOCHROME_WHITE     ((USHORT)0x0040)
 #define IMAGE_DRAW_3DLOOK               0
 #define IMAGE_DRAW_BTNLOOK              0
 
@@ -1074,6 +1073,7 @@ public:
     FontMetric          GetFontMetric() const;
     FontMetric          GetFontMetric( const Font& rFont ) const;
     BOOL                GetFontCharMap( FontCharMap& rFontCharMap ) const;
+    bool                GetFontCapabilities( vcl::FontCapabilities& rFontCapabilities ) const;
 
     xub_StrLen          HasGlyphs( const Font& rFont, const String& rStr,
                             xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN ) const;

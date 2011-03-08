@@ -55,6 +55,8 @@
 #define THIS_OS "AIX"
 #elif defined OPENBSD
 #define THIS_OS "OpenBSD"
+#elif defined DRAGONFLY
+#define THIS_OS "DragonFly"
 #endif
 
 #if ! defined THIS_OS

@@ -59,13 +59,10 @@
 #include <docsh.hxx>
 #include <redline.hxx>
 #include <swerror.h>
-
 #include <paratr.hxx>
 
-// --> OD 2007-03-30 #i73788#
+// #i73788#
 #include <pausethreadstarting.hxx>
-// <--
-
 
 using namespace ::com::sun::star;
 
@@ -371,7 +368,7 @@ ULONG SwReader::Read( const Reader& rOptions )
     {
         delete pPam;          // ein neues aufgemacht.
 
-        // --> FME 2005-02-25 #i42634# Moved common code of SwReader::Read() and
+        // #i42634# Moved common code of SwReader::Read() and
         // SwDocShell::UpdateLinks() to new SwDoc::UpdateLinks():
     // ATM still with Update
         pDoc->UpdateLinks( TRUE );
@@ -389,7 +386,7 @@ ULONG SwReader::Read( const Reader& rOptions )
 
     if( pCrsr )                 // das Doc ist jetzt modifiziert
         pDoc->SetModified();
-    // --> OD 2005-02-11 #i38810# - If links have been updated, the document
+    // #i38810# - If links have been updated, the document
     // have to be modified. During update of links the OLE link at the document
     // isn't set. Thus, the document's modified state has to be set again after
     // the OLE link is restored - see above <pDoc->SetOle2Link( aOLELink )>.
@@ -502,7 +499,7 @@ SwDoc* Reader::GetTemplateDoc()
             ClearTemplate();
             OSL_ENSURE( !pTemplate, "Who holds the template doc?" );
 
-                // #95605#: If the writer module is not installed,
+                // If the writer module is not installed,
                 // we cannot create a SwDocShell. We could create a
                 // SwWebDocShell however, because this exists always
                 // for the help.
@@ -633,7 +630,7 @@ void Reader::SetFltName( const String& )
 
 void Reader::SetNoOutlineNum( SwDoc& /*rDoc*/ )
 {
-    // JP 10.03.96: jetzt wieder keine Nummerierung in den Vorlagen
+    // jetzt wieder keine Nummerierung in den Vorlagen
 }
 
 
@@ -778,9 +775,8 @@ SwWriter::SwWriter(SfxMedium& rMedium, SwDoc &rDocument)
 
 ULONG SwWriter::Write( WriterRef& rxWriter, const String* pRealFileName )
 {
-    // --> OD 2007-03-30 #i73788#
+    // #i73788#
     SwPauseThreadStarting aPauseThreadStarting;
-    // <--
 
     BOOL bHasMark = FALSE;
     SwPaM * pPam;
@@ -872,7 +868,7 @@ ULONG SwWriter::Write( WriterRef& rxWriter, const String* pRealFileName )
 
     // falls der Standart PageDesc. immer noch auf initalen Werten steht
     // (wenn z.B. kein Drucker gesetzt wurde) dann setze jetzt auf DIN A4
-    // --> OD 2004-11-17 #i37248# - Modifications are only allowed at a new document.
+    // #i37248# - Modifications are only allowed at a new document.
     // <pOutDoc> contains a new document, if <pDoc> is set - see above.
     if ( pDoc && !pOutDoc->getPrinter( false ) )
     // <--
@@ -943,10 +939,8 @@ ULONG SwWriter::Write( WriterRef& rxWriter, const String* pRealFileName )
         if ( !IsError( nError ) && !pDoc )
         {
             rDoc.ResetModified();
-            // --> OD 2005-02-11 #i38810# - reset also flag, that indicates
-            // updated links
+            // #i38810# - reset also flag, that indicates updated links
             rDoc.SetLinksUpdated( sal_False );
-            // <-
         }
     }
 

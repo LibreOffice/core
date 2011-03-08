@@ -38,8 +38,6 @@
 #include "bootstrp/prj.hxx"
 #include "bootstrp/inimgr.hxx"
 
-//#define TEST  1
-
 #if defined(WNT) || defined(OS2)
 #define LIST_DELIMETER ';'
 #define PATH_DELIMETER '\\'
@@ -187,11 +185,8 @@ CommandData::~CommandData()
 {
     if ( pDepList )
     {
-        ByteString *pString = pDepList->First();
-        while ( pString )
-        {
-            delete pString;
-            pString = pDepList->Next();
+        for ( size_t i = 0, n = pDepList->size(); i < n; ++i ) {
+            delete (*pDepList)[ i ];
         }
         delete pDepList;
 
@@ -314,27 +309,17 @@ Prj::~Prj()
             delete maList[ i ];
         maList.clear();
 
-        ByteString *pString = pPrjDepList->First();
-        while ( pString )
-        {
-            delete pString;
-            pString = pPrjDepList->Next();
-        }
+        for ( size_t i = 0, n = pPrjDepList->size(); i < n; ++i )
+            delete (*pPrjDepList)[ i ];
         delete pPrjDepList;
-
         pPrjDepList = NULL;
     }
 
     if ( pPrjInitialDepList )
     {
-        ByteString *pString = pPrjInitialDepList->First();
-        while ( pString )
-        {
-            delete pString;
-            pString = pPrjInitialDepList->Next();
-        }
+        for ( size_t i = 0, n = pPrjInitialDepList->size(); i < n; ++i )
+            delete (*pPrjInitialDepList)[ i ];
         delete pPrjInitialDepList;
-
         pPrjInitialDepList = NULL;
     }
 }
@@ -410,12 +395,12 @@ CommandData* Prj::RemoveDirectory ( ByteString aLogFileName )
             if ( pDataDeps )
             {
                 ByteString* pString;
-                ULONG nDataDepsCount = pDataDeps->Count();
-                for ( ULONG j = nDataDepsCount; j > 0; j-- )
+                size_t nDataDepsCount = pDataDeps->size();
+                for ( size_t j = nDataDepsCount; j > 0; )
                 {
-                    pString = pDataDeps->GetObject( j - 1 );
+                    pString = (*pDataDeps)[ --j ];
                     if ( pString->GetToken( 0, '.') == aLogFileName )
-                        pDataDeps->Remove( pString );
+                        pDataDeps->erase( j );
                 }
             }
         }
@@ -490,8 +475,8 @@ Star::Star( GenericInformationList *pStandLst, ByteString &rVersion,
         GenericInformation *pInfo2 = pStandLst->GetInfo( sPath, TRUE );
         if ( pInfo2 && pInfo2->GetSubList())  {
             GenericInformationList *pDrives = pInfo2->GetSubList();
-            for ( ULONG i = 0; i < pDrives->Count(); i++ ) {
-                GenericInformation *pDrive = pDrives->GetObject( i );
+            for ( size_t i = 0; i < pDrives->size(); i++ ) {
+                GenericInformation *pDrive = (*pDrives)[ i ];
                 if ( pDrive ) {
                     DirEntry aEntry;
                     BOOL bOk = FALSE;
@@ -539,8 +524,8 @@ Star::Star( GenericInformationList *pStandLst, ByteString &rVersion,
                                 String sPrjDir( String::CreateFromAscii( "prj" ));
                                 String sSolarFile( String::CreateFromAscii( "build.lst" ));
 
-                                for ( ULONG j = 0; j < pProjects->Count(); j++ ) {
-                                    ByteString sProject( *pProjects->GetObject( j ));
+                                for ( size_t j = 0; j < pProjects->size(); j++ ) {
+                                    ByteString sProject( *(*pProjects)[ j ] );
                                     String ssProject( sProject, RTL_TEXTENCODING_ASCII_US );
 
                                     DirEntry aPrjEntry( aEntry );
@@ -676,13 +661,13 @@ void Star::ExpandPrj_Impl( Prj *pPrj, Prj *pDepPrj )
     ByteString* pDepend;
     ByteString* pPutStr;
     Prj *pNextPrj = NULL;
-    ULONG i, nRetPos;
+    size_t i, nRetPos;
 
     if ( pPrjLst ) {
         pDepLst = pDepPrj->GetDependencies();
         if ( pDepLst ) {
-            for ( i = 0; i < pDepLst->Count(); i++ ) {
-                pDepend = pDepLst->GetObject( i );
+            for ( i = 0; i < pDepLst->size(); i++ ) {
+                pDepend = (*pDepLst)[ i ];
                 pPutStr = new ByteString( *pDepend );
                 nRetPos = pPrjLst->PutString( pPutStr );
                 if( nRetPos == NOT_THERE )
@@ -1008,8 +993,8 @@ StarWriter::StarWriter( GenericInformationList *pStandLst, ByteString &rVersion,
         GenericInformation *pInfo2 = pStandLst->GetInfo( sPath, TRUE );
         if ( pInfo2 && pInfo2->GetSubList())  {
             GenericInformationList *pDrives = pInfo2->GetSubList();
-            for ( ULONG i = 0; i < pDrives->Count(); i++ ) {
-                GenericInformation *pDrive = pDrives->GetObject( i );
+            for ( size_t i = 0; i < pDrives->size(); i++ ) {
+                GenericInformation *pDrive = (*pDrives)[ i ];
                 if ( pDrive ) {
                     DirEntry aEntry;
                     BOOL bOk = FALSE;
@@ -1057,8 +1042,8 @@ StarWriter::StarWriter( GenericInformationList *pStandLst, ByteString &rVersion,
                                 String sPrjDir( String::CreateFromAscii( "prj" ));
                                 String sSolarFile( String::CreateFromAscii( "build.lst" ));
 
-                                for ( ULONG j = 0; j < pProjects->Count(); j++ ) {
-                                    ByteString sProject( *pProjects->GetObject( j ));
+                                for ( size_t j = 0; j < pProjects->size(); j++ ) {
+                                    ByteString sProject( *(*pProjects)[ j ] );
                                     String ssProject( sProject, RTL_TEXTENCODING_ASCII_US );
 
                                     DirEntry aPrjEntry( aEntry );
@@ -1175,8 +1160,8 @@ USHORT StarWriter::WritePrj( Prj *pPrj, SvFileStream& rStream )
             else
                 aDataString+= ByteString(":");
             aDataString += aTab;
-            for ( USHORT i = 0; i< pPrjDepList->Count(); i++ ) {
-                aDataString += *pPrjDepList->GetObject( i );
+            for ( size_t i = 0; i< pPrjDepList->size(); i++ ) {
+                aDataString += *(*pPrjDepList)[ i ];
                 aDataString += aSpace;
             }
             aDataString+= "NULL";
@@ -1222,8 +1207,8 @@ USHORT StarWriter::WritePrj( Prj *pPrj, SvFileStream& rStream )
 
                     pCmdDepList = pCmdData->GetDependencies();
                     if ( pCmdDepList )
-                        for ( USHORT i = 0; i< pCmdDepList->Count(); i++ ) {
-                            aDataString += *pCmdDepList->GetObject( i );
+                        for ( size_t i = 0; i< pCmdDepList->size(); i++ ) {
+                            aDataString += *(*pCmdDepList)[ i ];
                             aDataString += aSpace;
                     }
                     aDataString += "NULL";
@@ -1531,12 +1516,12 @@ Prj* StarWriter::RemoveProject ( ByteString aProjectName )
             if ( pPrjDeps )
             {
                 ByteString* pString;
-                ULONG nPrjDepsCount = pPrjDeps->Count();
-                for ( ULONG j = nPrjDepsCount; j > 0; j-- )
+                size_t nPrjDepsCount = pPrjDeps->size();
+                for ( ULONG j = nPrjDepsCount; j > 0; )
                 {
-                    pString = pPrjDeps->GetObject( j - 1 );
+                    pString = (*pPrjDeps)[ --j ];
                     if ( pString->GetToken( 0, '.') == aProjectName )
-                        pPrjDeps->Remove( pString );
+                        pPrjDeps->erase( j );
                 }
             }
         }

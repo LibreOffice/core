@@ -48,13 +48,13 @@
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
 #include "com/sun/star/util/URL.hpp"
-#include <preextstl.h>
+
 #include "cppuhelper/implbase1.hxx"
 #include "cppunit/TestAssert.h"
 #include "cppunit/TestFixture.h"
 #include "cppunit/extensions/HelperMacros.h"
 #include "cppunit/plugin/TestPlugIn.h"
-#include <postextstl.h>
+
 #include "osl/conditn.hxx"
 #include "osl/diagnose.h"
 #include "rtl/ustring.h"

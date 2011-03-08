@@ -27,7 +27,7 @@
  ************************************************************************/
 
 #include "oox/ole/vbamodule.hxx"
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/script/ModuleInfo.hpp>
@@ -56,7 +56,7 @@ using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 // ============================================================================
 typedef ::cppu::WeakImplHelper1< XIndexContainer > OleIdToNameContainer_BASE;
-typedef std::hash_map< sal_Int32, rtl::OUString >  ObjIdToName;
+typedef boost::unordered_map< sal_Int32, rtl::OUString >  ObjIdToName;
 
 class OleIdToNameContainer : public OleIdToNameContainer_BASE
 {

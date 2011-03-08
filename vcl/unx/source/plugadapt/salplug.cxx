@@ -41,8 +41,8 @@
 #include <cstdio>
 #include <unistd.h>
 
-using namespace rtl;
-
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 extern "C" {
 typedef SalInstance*(*salFactoryProc)( oslModule pModule);
 }

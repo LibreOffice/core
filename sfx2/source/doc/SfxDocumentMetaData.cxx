@@ -334,11 +334,8 @@ protected:
 
     /// check if we are initialized properly
     void SAL_CALL checkInit() const;
-    //    throw (css::uno::RuntimeException);
     /// initialize state from given DOM tree
     void SAL_CALL init(css::uno::Reference<css::xml::dom::XDocument> i_xDom);
-    //    throw (css::uno::RuntimeException, css::io::WrongFormatException,
-    //        css::uno::Exception);
     /// update element in DOM tree
     void SAL_CALL updateElement(const char *i_name,
         std::vector<std::pair<const char *, ::rtl::OUString> >* i_pAttrs = 0);
@@ -349,31 +346,24 @@ protected:
     /// extract base URL (necessary for converting relative links)
     css::uno::Reference<css::beans::XPropertySet> SAL_CALL getURLProperties(
         const css::uno::Sequence<css::beans::PropertyValue> & i_rMedium) const;
-    //    throw (css::uno::RuntimeException);
     /// get text of standard meta data element
     ::rtl::OUString SAL_CALL getMetaText(const char* i_name) const;
-    //    throw (css::uno::RuntimeException);
     /// set text of standard meta data element iff not equal to existing text
     bool SAL_CALL setMetaText(const char* i_name,
         const ::rtl::OUString & i_rValue);
-    //    throw (css::uno::RuntimeException);
     /// set text of standard meta data element iff not equal to existing text
     void SAL_CALL setMetaTextAndNotify(const char* i_name,
         const ::rtl::OUString & i_rValue);
-    //    throw (css::uno::RuntimeException);
     /// get text of standard meta data element's attribute
     ::rtl::OUString SAL_CALL getMetaAttr(const char* i_name,
         const char* i_attr) const;
-    //    throw (css::uno::RuntimeException);
     /// get text of a list of standard meta data elements (multiple occ.)
     css::uno::Sequence< ::rtl::OUString > SAL_CALL getMetaList(
         const char* i_name) const;
-    //    throw (css::uno::RuntimeException);
     /// set text of a list of standard meta data elements (multiple occ.)
     bool SAL_CALL setMetaList(const char* i_name,
         const css::uno::Sequence< ::rtl::OUString > & i_rValue,
         AttrVector const* = 0);
-    // throw (css::uno::RuntimeException);
     void createUserDefined();
 };
 
@@ -750,7 +740,7 @@ SfxDocumentMetaData::setMetaText(const char* i_name,
     css::uno::Reference<css::xml::dom::XNode> xNode = m_meta.find(name)->second;
 
     try {
-        if (i_rValue.equalsAscii("")) {
+        if (i_rValue.getLength() == 0) {
             if (xNode.is()) { // delete
                 m_xParent->removeChild(xNode);
                 xNode.clear();
@@ -1086,7 +1076,7 @@ void SAL_CALL SfxDocumentMetaData::updateUserDefinedAndAttributes()
 
     // update elements with attributes
     std::vector<std::pair<const char *, ::rtl::OUString> > attributes;
-    if (!m_TemplateName.equalsAscii("") || !m_TemplateURL.equalsAscii("")
+    if (m_TemplateName.getLength() || m_TemplateURL.getLength()
             || isValidDateTime(m_TemplateDate)) {
         attributes.push_back(std::make_pair(
                 static_cast<const char*>("xlink:type"),
@@ -1109,7 +1099,7 @@ void SAL_CALL SfxDocumentMetaData::updateUserDefinedAndAttributes()
     }
     attributes.clear();
 
-    if (!m_AutoloadURL.equalsAscii("") || (0 != m_AutoloadSecs)) {
+    if (m_AutoloadURL.getLength() || (0 != m_AutoloadSecs)) {
         attributes.push_back(std::make_pair(
                 static_cast<const char*>("xlink:href" ), m_AutoloadURL ));
         attributes.push_back(std::make_pair(
@@ -1121,7 +1111,7 @@ void SAL_CALL SfxDocumentMetaData::updateUserDefinedAndAttributes()
     }
     attributes.clear();
 
-    if (!m_DefaultTarget.equalsAscii("")) {
+    if (m_DefaultTarget.getLength()) {
         attributes.push_back(std::make_pair(
                 static_cast<const char*>("office:target-frame-name"),
                 m_DefaultTarget));
@@ -1176,8 +1166,6 @@ SfxDocumentMetaData::checkInit() const // throw (css::uno::RuntimeException)
 // initialize state from DOM tree
 void SAL_CALL SfxDocumentMetaData::init(
         css::uno::Reference<css::xml::dom::XDocument> i_xDoc)
-//        throw (css::uno::RuntimeException, css::io::WrongFormatException,
-//               css::uno::Exception)
 {
     if (!i_xDoc.is()) throw css::uno::RuntimeException(
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
@@ -1217,8 +1205,6 @@ void SAL_CALL SfxDocumentMetaData::init(
     try {
         m_xParent = xPath->selectSingleNode(xDocNode, prefix);
     } catch (com::sun::star::uno::Exception &) {
-//        DBG_WARNING("SfxDocumentMetaData::init: "
-//            "caught RuntimeException from libxml!");
     }
 
     if (!m_xParent.is()) {
@@ -1772,7 +1758,7 @@ SfxDocumentMetaData::getDocumentStatistics() throw (css::uno::RuntimeException)
     for (size_t i = 0; s_stdStats[i] != 0; ++i) {
         const char * aName = s_stdStatAttrs[i];
         ::rtl::OUString text = getMetaAttr("meta:document-statistic", aName);
-        if (text.equalsAscii("")) continue;
+        if (text.getLength() == 0) continue;
         css::beans::NamedValue stat;
         stat.Name = ::rtl::OUString::createFromAscii(s_stdStats[i]);
         sal_Int32 val;
@@ -1985,7 +1971,6 @@ SfxDocumentMetaData::loadFromStorage(
                 " XML parsing exception")), *this);
     }
     // NB: the implementation of XMLOasisMetaImporter calls initialize
-//    init(xDocBuilder->getDocument());
     checkInit();
 }
 
@@ -2077,7 +2062,7 @@ SfxDocumentMetaData::loadFromMedium(const ::rtl::OUString & URL,
     css::uno::Reference<css::io::XInputStream> xIn;
     ::comphelper::MediaDescriptor md(Medium);
     // if we have an URL parameter, it replaces the one in the media descriptor
-    if (!URL.equalsAscii("")) {
+    if (URL.getLength()) {
         md[ ::comphelper::MediaDescriptor::PROP_URL() ] <<= URL;
     }
     if (sal_True == md.addInputStream()) {
@@ -2120,7 +2105,7 @@ SfxDocumentMetaData::storeToMedium(const ::rtl::OUString & URL,
            css::lang::WrappedTargetException, css::io::IOException)
 {
     ::comphelper::MediaDescriptor md(Medium);
-    if (!URL.equalsAscii("")) {
+    if (URL.getLength()) {
         md[ ::comphelper::MediaDescriptor::PROP_URL() ] <<= URL;
     }
     SfxMedium aMedium(md.getAsConstPropertyValueList());
@@ -2229,7 +2214,6 @@ SfxDocumentMetaData::createClone()
                     "SfxDocumentMetaData::createClone: exception")),
                 css::uno::Reference<css::uno::XInterface>(*this), a);
     }
-//    return static_cast< ::cppu::OWeakObject * > (pNew);
     return css::uno::Reference<css::util::XCloneable> (pNew);
 }
 

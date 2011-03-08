@@ -361,6 +361,14 @@
                         <value xsi:nil="true"/>
                     </prop>
                 </node>
+                <node oor:name="Shadow">
+                    <prop oor:name="IsVisible">
+                        <value>true</value>
+                    </prop>
+                    <prop oor:name="Color">
+                        <value xsi:nil="true"/>
+                    </prop>
+                </node>
                 <node oor:name="WriterTextGrid">
                     <prop oor:name="Color">
                         <value xsi:nil="true"/>

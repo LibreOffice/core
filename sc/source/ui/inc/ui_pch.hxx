@@ -43,7 +43,6 @@
 #include <tools/contnr.hxx>
 #include <vcl/sv.h>
 #include <tools/ref.hxx>
-#include <tools/list.hxx>
 #include <tools/link.hxx>
 #include <i18npool/lang.h>
 #include <sfx2/sfx.hrc>
@@ -64,7 +63,6 @@
 #include <vcl/region.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/bitmap.hxx>
-#include <sot/sotref.hxx>
 #include <svx/svxids.hrc>
 #include <vcl/vclenum.hxx>
 #include <sot/object.hxx>

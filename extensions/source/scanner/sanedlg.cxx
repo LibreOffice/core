@@ -40,9 +40,6 @@
 #include <math.h>
 #include <sal/macros.h>
 
-#define USE_SAVE_STATE
-#undef  SAVE_ALL_STATES
-
 ResId SaneResId( sal_uInt32 nID )
 {
     static ResMgr* pResMgr = ResMgr::CreateResMgr( "san" );
@@ -224,7 +221,7 @@ void SaneDlg::InitFields()
                     maReslBox.SetMin( (long)pDouble[0] );
                     maReslBox.SetMax( (long)pDouble[1] );
                     maReslBox.InsertValue( (long)pDouble[0] );
-                    // mh@openoffice.org: issue 68557: Can only select 75 and 2400 dpi in Scanner dialogue
+                    // Can only select 75 and 2400 dpi in Scanner dialogue
                     // scanner allows random setting of dpi resolution, a slider might be useful
                     // support that
                     // workaround: offer at least some more standard dpi resolution between
@@ -1170,7 +1167,6 @@ void SaneDlg::UpdateScanArea( BOOL bSend )
 
 BOOL SaneDlg::LoadState()
 {
-#ifdef USE_SAVE_STATE
     int i;
 
     if( ! Sane::IsSane() )
@@ -1236,14 +1232,10 @@ BOOL SaneDlg::LoadState()
     InitFields();
 
     return TRUE;
-#else
-    return FALSE;
-#endif
 }
 
 void SaneDlg::SaveState()
 {
-#ifdef USE_SAVE_STATE
     if( ! Sane::IsSane() )
         return;
 
@@ -1256,59 +1248,6 @@ void SaneDlg::SaveState()
     aConfig.SetGroup( "SANE" );
     aConfig.WriteKey( "SO_LastSANEDevice", ByteString( maDeviceBox.GetSelectEntry(), RTL_TEXTENCODING_UTF8 ) );
 
-#ifdef SAVE_ALL_STATES
-    for( int i = 1; i < mrSane.CountOptions(); i++ )
-    {
-        String aOption=mrSane.GetOptionName( i );
-        SANE_Value_Type nType = mrSane.GetOptionType( i );
-        switch( nType )
-        {
-            case SANE_TYPE_BOOL:
-            {
-                BOOL bValue;
-                if( mrSane.GetOptionValue( i, bValue ) )
-                {
-                    ByteString aString( "BOOL=" );
-                    aString += (ULONG)bValue;
-                    aConfig.WriteKey( aOption, aString );
-                }
-            }
-            break;
-            case SANE_TYPE_STRING:
-            {
-                String aString( "STRING=" );
-                String aValue;
-                if( mrSane.GetOptionValue( i, aValue ) )
-                {
-                    aString += aValue;
-                    aConfig.WriteKey( aOption, aString );
-                }
-            }
-            break;
-            case SANE_TYPE_FIXED:
-            case SANE_TYPE_INT:
-            {
-                String aString( "NUMERIC=" );
-                double fValue;
-                char buf[256];
-                for( int n = 0; n < mrSane.GetOptionElements( i ); n++ )
-                {
-                    if( ! mrSane.GetOptionValue( i, fValue, n ) )
-                        break;
-                    if( n > 0 )
-                        aString += ":";
-                    sprintf( buf, "%lg", fValue );
-                    aString += buf;
-                }
-                if( n >= mrSane.GetOptionElements( i ) )
-                    aConfig.WriteKey( aOption, aString );
-            }
-            break;
-            default:
-                break;
-        }
-     }
-#else
     static char const* pSaveOptions[] = {
         "resolution",
         "tl-x",
@@ -1373,8 +1312,6 @@ void SaneDlg::SaveState()
             }
         }
     }
-#endif
-#endif
 }
 
 BOOL SaneDlg::SetAdjustedNumericalValue(

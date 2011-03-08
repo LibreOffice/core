@@ -90,7 +90,7 @@ void ScNumFormatAbbrev::PutFormatIndex(ULONG nFormat,
     }
     else
     {
-        DBG_ERROR("SCNumFormatAbbrev:: unbekanntes Zahlformat");
+        OSL_FAIL("SCNumFormatAbbrev:: unbekanntes Zahlformat");
         eLnge = LANGUAGE_SYSTEM;
         eSysLnge = LANGUAGE_GERMAN;     // sonst passt "Standard" nicht
         sFormatstring.AssignAscii( RTL_CONSTASCII_STRINGPARAM( pStandardName ) );

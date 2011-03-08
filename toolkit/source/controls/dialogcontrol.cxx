@@ -49,7 +49,6 @@
 #include <com/sun/star/awt/WindowAttribute.hpp>
 #include <com/sun/star/resource/XStringResourceResolver.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
-#include <tools/list.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
@@ -68,9 +67,9 @@
 #include "grid/gridcontrol.hxx"
 
 #include <map>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <algorithm>
-#include <functional>
+#include <o3tl/compat_functional.hxx>
 #include "tools/urlobj.hxx"
 #include "osl/file.hxx"
 #include <com/sun/star/awt/XSimpleTabController.hpp>
@@ -151,7 +150,7 @@ struct DisposeControlModel : public ::std::unary_function< Reference< XControlMo
         }
         catch( const Exception& )
         {
-            DBG_ERROR( "DisposeControlModel::(): caught an exception while disposing a component!" );
+            OSL_FAIL( "DisposeControlModel::(): caught an exception while disposing a component!" );
         }
     }
 };
@@ -250,7 +249,7 @@ typedef ::cppu::WeakImplHelper1< container::XNameContainer > SimpleNameContainer
 template< typename T >
 class SimpleNamedThingContainer : public SimpleNameContainer_BASE
 {
-    typedef std::hash_map< rtl::OUString, Reference< T >, ::rtl::OUStringHash,
+    typedef boost::unordered_map< rtl::OUString, Reference< T >, ::rtl::OUStringHash,
        ::std::equal_to< ::rtl::OUString > > NamedThingsHash;
     NamedThingsHash things;
     ::osl::Mutex m_aMutex;
@@ -477,7 +476,7 @@ void SAL_CALL UnoControlDialogModel::dispose(  ) throw(RuntimeException)
     ::std::transform(
         maModels.begin(), maModels.end(),               // source range
         aChildModels.begin(),                           // target location
-        ::std::select1st< UnoControlModelHolder >( )    // operation to apply -> select the XControlModel part
+        ::o3tl::select1st< UnoControlModelHolder >( )   // operation to apply -> select the XControlModel part
     );
 
     // now dispose
@@ -780,7 +779,7 @@ Sequence< ::rtl::OUString > UnoControlDialogModel::getElementNames() throw(Runti
     ::std::transform(
         maModels.begin(), maModels.end(),               // source range
         aNames.getArray(),                              // target range
-        ::std::select2nd< UnoControlModelHolder >()     // operator to apply: select the second element (the name)
+        ::o3tl::select2nd< UnoControlModelHolder >()        // operator to apply: select the second element (the name)
     );
 
     return aNames;
@@ -910,7 +909,7 @@ sal_Bool SAL_CALL UnoControlDialogModel::getGroupControl(  ) throw (RuntimeExcep
 // ----------------------------------------------------------------------------
 void SAL_CALL UnoControlDialogModel::setGroupControl( sal_Bool ) throw (RuntimeException)
 {
-    DBG_ERROR( "UnoControlDialogModel::setGroupControl: explicit grouping not supported" );
+    OSL_FAIL( "UnoControlDialogModel::setGroupControl: explicit grouping not supported" );
 }
 
 // ----------------------------------------------------------------------------
@@ -992,7 +991,7 @@ Sequence< Reference< XControlModel > > SAL_CALL UnoControlDialogModel::getContro
     ::std::transform(
             aSortedModels.begin(), aSortedModels.end(),
             ::std::copy( aUnindexedModels.begin(), aUnindexedModels.end(), aReturn.getArray() ),
-            ::std::select2nd< MapIndexToModel::value_type >( )
+            ::o3tl::select2nd< MapIndexToModel::value_type >( )
         );
 
     return aReturn;
@@ -1005,7 +1004,7 @@ void SAL_CALL UnoControlDialogModel::setGroup( const Sequence< Reference< XContr
     // We only have a sequence of control models, and we _know_ (yes, that's a HACK relying on
     // implementation details) that VCL does grouping according to the order of controls automatically
     // At least VCL does this for all we're interested in: Radio buttons.
-    DBG_ERROR( "UnoControlDialogModel::setGroup: grouping not supported" );
+    OSL_FAIL( "UnoControlDialogModel::setGroup: grouping not supported" );
 }
 
 // ----------------------------------------------------------------------------
@@ -1028,7 +1027,7 @@ namespace
         }
         catch( const Exception& )
         {
-            DBG_ERROR( "lcl_getDialogStep: caught an exception while determining the dialog page!" );
+            OSL_FAIL( "lcl_getDialogStep: caught an exception while determining the dialog page!" );
         }
         return nStep;
     }
@@ -1053,7 +1052,7 @@ void SAL_CALL UnoControlDialogModel::getGroup( sal_Int32 _nGroup, Sequence< Refe
 
     if ( ( _nGroup < 0 ) || ( _nGroup >= (sal_Int32)maGroups.size() ) )
     {
-        DBG_ERROR( "UnoControlDialogModel::getGroup: invalid argument and I am not allowed to throw an exception!" );
+        OSL_FAIL( "UnoControlDialogModel::getGroup: invalid argument and I am not allowed to throw an exception!" );
         _rGroup.realloc( 0 );
         _rName = ::rtl::OUString();
     }
@@ -1617,7 +1616,6 @@ void UnoDialogControl::ImplInsertControl( Reference< XControlModel >& rxModel, c
         addControl( rName, xCtrl );
             // will implicitly call addingControl, where we can add the PropertiesChangeListener to the model
             // (which we formerly did herein)
-            // 08.01.2001 - 96008 - fs@openoffice.org
 
         ImplSetPosSize( xCtrl );
     }
@@ -1760,7 +1758,6 @@ sal_Bool UnoDialogControl::setModel( const Reference< XControlModel >& rxModel )
             removeControl( *pCtrls );
                 // will implicitly call removingControl, which will remove the PropertyChangeListener
                 // (which we formerly did herein)
-                // 08.01.2001 - 96008 - fs@openoffice.org
 
         Reference< XContainer > xC( getModel(), UNO_QUERY );
         if ( xC.is() )
@@ -2413,7 +2410,6 @@ void UnoParentControl::ImplInsertControl( Reference< XControlModel >& rxModel, c
         addControl( rName, xCtrl );
             // will implicitly call addingControl, where we can add the PropertiesChangeListener to the model
             // (which we formerly did herein)
-            // 08.01.2001 - 96008 - fs@openoffice.org
 
         ImplSetPosSize( xCtrl );
     }
@@ -2520,7 +2516,6 @@ sal_Bool UnoParentControl::setModel( const Reference< XControlModel >& rxModel )
             removeControl( *pCtrls );
                 // will implicitly call removingControl, which will remove the PropertyChangeListener
                 // (which we formerly did herein)
-                // 08.01.2001 - 96008 - fs@openoffice.org
 
         Reference< XContainer > xC( getModel(), UNO_QUERY );
         if ( xC.is() )

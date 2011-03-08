@@ -92,7 +92,6 @@
 #include "../ui/inc/optsitem.hxx"
 #include "../ui/inc/FrameView.hxx"
 
-// #90477#
 #include <tools/tenccvt.hxx>
 
 using ::rtl::OUString;
@@ -176,7 +175,6 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
 , mpDrawPageListWatcher(0)
 , mpMasterPageListWatcher(0)
 {
-    // #109538#
     mpDrawPageListWatcher = ::std::auto_ptr<ImpDrawPageListWatcher>(
         new ImpDrawPageListWatcher(*this));
     mpMasterPageListWatcher = ::std::auto_ptr<ImpMasterPageListWatcher>(
@@ -194,7 +192,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     SdOptions* pOptions = SD_MOD()->GetSdOptions(meDocType);
     pOptions->GetScale( nX, nY );
 
-    // #92067# Allow UI scale only for draw documents.
+    // Allow UI scale only for draw documents.
     if( eType == DOCUMENT_TYPE_DRAW )
         SetUIUnit( (FieldUnit)pOptions->GetMetric(), Fraction( nX, nY ) );  // user-defined
     else
@@ -272,7 +270,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     }
     catch(...)
     {
-        DBG_ERROR("Can't get SpellChecker");
+        OSL_FAIL("Can't get SpellChecker");
     }
 
     rOutliner.SetDefaultLanguage( Application::GetSettings().GetLanguage() );
@@ -326,7 +324,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     }
     catch(...)
     {
-        DBG_ERROR("Can't get SpellChecker");
+        OSL_FAIL("Can't get SpellChecker");
     }
 
     pHitTestOutliner->SetDefaultLanguage( Application::GetSettings().GetLanguage() );
@@ -400,7 +398,6 @@ SdDrawDocument::~SdDrawDocument()
     CloseBookmarkDoc();
     SetAllocDocSh(FALSE);
 
-    // #116168#
     ClearModel(sal_True);
 
     if (pLinkManager)
@@ -572,7 +569,7 @@ void SdDrawDocument::SetChanged(sal_Bool bFlag)
 
 void SdDrawDocument::NbcSetChanged(sal_Bool bFlag)
 {
-    // #100237# forward to baseclass
+    // forward to baseclass
     FmFormModel::SetChanged(bFlag);
 }
 
@@ -681,7 +678,7 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
         SdStyleSheetPool* pSPool = (SdStyleSheetPool*) GetStyleSheetPool();
         USHORT nPage, nPageCount;
 
-        // #96323# create missing layout style sheets for broken documents
+        // create missing layout style sheets for broken documents
         //         that where created with the 5.2
         nPageCount = GetMasterSdPageCount( PK_STANDARD );
         for (nPage = 0; nPage < nPageCount; nPage++)
@@ -755,9 +752,10 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
         String aName = pPage->GetLayoutName();
         aName.Erase( aName.SearchAscii( SD_LT_SEPARATOR ));
 
-        List* pOutlineList = pSPool->CreateOutlineSheetList(aName);
-        SfxStyleSheet* pTitleSheet = (SfxStyleSheet*)
-                                        pSPool->GetTitleSheet(aName);
+        std::vector<SfxStyleSheetBase*> aOutlineList;
+        pSPool->CreateOutlineSheetList(aName,aOutlineList);
+
+        SfxStyleSheet* pTitleSheet = (SfxStyleSheet*)pSPool->GetTitleSheet(aName);
 
         SdrObject* pObj = rPresentationShapes.getNextShape(0);
 
@@ -784,14 +782,16 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
                     if( pOPO && pOPO->GetOutlinerMode() == OUTLINERMODE_DONTKNOW )
                         pOPO->SetOutlinerMode( OUTLINERMODE_OUTLINEOBJECT );
 
-                    for (USHORT nSheet = 0; nSheet < 10; nSheet++)
+                    std::vector<SfxStyleSheetBase*>::iterator iter;
+                    for (iter = aOutlineList.begin(); iter != aOutlineList.end(); ++iter)
                     {
-                        SfxStyleSheet* pSheet = (SfxStyleSheet*)pOutlineList->GetObject(nSheet);
+                        SfxStyleSheet* pSheet = reinterpret_cast<SfxStyleSheet*>(*iter);
+
                         if (pSheet)
                         {
                             pObj->StartListening(*pSheet);
 
-                            if( nSheet == 0)
+                            if( iter == aOutlineList.begin())
                                 // Textrahmen hoert auf StyleSheet der Ebene1
                                 pObj->NbcSetStyleSheet(pSheet, TRUE);
                         }
@@ -815,8 +815,6 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
 
             pObj = rPresentationShapes.getNextShape(pObj);
         }
-
-        delete pOutlineList;
     }
 }
 
@@ -972,8 +970,6 @@ SvxNumType SdDrawDocument::GetPageNumType() const
 
 void SdDrawDocument::SetPrinterIndependentLayout (sal_Int32 nMode)
 {
-    // #108104#
-
     switch (nMode)
     {
         case ::com::sun::star::document::PrinterIndependentLayout::DISABLED:
@@ -981,7 +977,6 @@ void SdDrawDocument::SetPrinterIndependentLayout (sal_Int32 nMode)
             // Just store supported modes and inform the doc shell.
             mnPrinterIndependentLayout = nMode;
 
-            // #108104#
             // Since it is possible that a SdDrawDocument is constructed without a
             // SdDrawDocShell the pointer member mpDocSh needs to be tested
             // before the call is executed. This is e.-g. used for copy/paste.
@@ -1013,13 +1008,11 @@ void SdDrawDocument::SetStartWithPresentation( bool bStartWithPresentation )
     mbStartWithPresentation = bStartWithPresentation;
 }
 
-// #109538#
 void SdDrawDocument::PageListChanged()
 {
     mpDrawPageListWatcher->Invalidate();
 }
 
-// #109538#
 void SdDrawDocument::MasterPageListChanged()
 {
     mpMasterPageListWatcher->Invalidate();

@@ -36,7 +36,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include "scdllapi.h"
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 class ImageList;
 class Bitmap;
@@ -97,17 +97,10 @@ const sal_Unicode CHAR_ZWNBSP   = 0x2060;
 #define MINZOOM     20
 #define MAXZOOM     400
 
-#ifdef SC_ROWLIMIT_TYPECONVERSION_NOCONVPASS
-const size_t MAXSUBTOTAL        = 3;
-const size_t MAXQUERY           = 8;
-const size_t PIVOT_MAXFIELD     = 8;
-const size_t PIVOT_MAXPAGEFIELD = 10;
-#else
 const SCSIZE MAXSUBTOTAL        = 3;
 const SCSIZE MAXQUERY           = 8;
 const SCSIZE PIVOT_MAXFIELD     = 8;
 const SCSIZE PIVOT_MAXPAGEFIELD = 10;
-#endif
 
 #define SC_START_INDEX_DB_COLL 50000
                                         // Above this threshold are indices
@@ -165,10 +158,9 @@ const SCSIZE PIVOT_MAXPAGEFIELD = 10;
 #define PAINT_TOP           2
 #define PAINT_LEFT          4
 #define PAINT_EXTRAS        8
-#define PAINT_INVERT        16
-#define PAINT_MARKS         32
-#define PAINT_OBJECTS       64
-#define PAINT_SIZE          128
+#define PAINT_MARKS         16
+#define PAINT_OBJECTS       32
+#define PAINT_SIZE          64
 #define PAINT_ALL           ( PAINT_GRID | PAINT_TOP | PAINT_LEFT | PAINT_EXTRAS | PAINT_OBJECTS | PAINT_SIZE )
 
 

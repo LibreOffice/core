@@ -38,13 +38,14 @@
 #include <osl/mutex.hxx>
 #include <comphelper/stl_types.hxx>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include "itemholder1.hxx"
 
 using namespace utl;
-using namespace rtl;
 using namespace com::sun::star::beans ;
 using namespace com::sun::star::uno;
+
+using ::rtl::OUString;
 
 #define CFG_FILENAME            OUString( RTL_CONSTASCII_USTRINGPARAM( "Office.OptionsDialog" ) )
 #define ROOT_NODE               OUString( RTL_CONSTASCII_USTRINGPARAM( "OptionsDialogGroups" ) )
@@ -66,7 +67,7 @@ private:
         }
     };
 
-    typedef std::hash_map< OUString, sal_Bool, OUStringHashCode, ::std::equal_to< OUString > > OptionNodeList;
+    typedef boost::unordered_map< OUString, sal_Bool, OUStringHashCode, ::std::equal_to< OUString > > OptionNodeList;
 
     OUString        m_sPathDelimiter;
     OptionNodeList  m_aOptionNodeList;

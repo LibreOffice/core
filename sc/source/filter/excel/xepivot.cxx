@@ -544,7 +544,8 @@ void XclExpPCField::InsertNumDateGroupItems( const ScDPObject& rDPObj, const ScD
         ScDPNumGroupDimension aTmpDim( rNumInfo );
         if( nDatePart != 0 )
             aTmpDim.MakeDateHelper( rNumInfo, nDatePart );
-        const std::vector< SCROW > aMemberIds = aTmpDim.GetNumEntries(  static_cast< SCCOL >( GetBaseFieldIndex() ), aDPData.GetCacheTable().getCache(), aOrignial );
+        const std::vector<SCROW>& aMemberIds = aTmpDim.GetNumEntries(
+            static_cast<SCCOL>( GetBaseFieldIndex() ), aDPData.GetCacheTable().getCache(), aOrignial);
         for ( size_t  nIdx = 0 ; nIdx < aMemberIds.size(); nIdx++ )
         {
             const ScDPItemData* pData = aDPData.GetMemberById(  static_cast< long >( GetBaseFieldIndex() ) , aMemberIds[ nIdx] );
@@ -664,7 +665,7 @@ XclExpPivotCache::XclExpPivotCache( const XclExpRoot& rRoot, const ScDPObject& r
                 if( 2 * (nDocRow2 - nDocRow1) < (nSrcRow2 - nSrcRow1) )
                     ::set_flag( maPCInfo.mnFlags, EXC_SXDB_SAVEDATA, false );
 
-                // #160184# Excel must refresh tables to make drilldown working
+                // Excel must refresh tables to make drilldown working
                 ::set_flag( maPCInfo.mnFlags, EXC_SXDB_REFRESH_LOAD );
 
                 // adjust row indexes, keep one row of empty area to surely have the empty cache item
@@ -1290,21 +1291,19 @@ XclExpPivotTable::XclExpPivotTable( const XclExpRoot& rRoot, const ScDPObject& r
             for( sal_uInt16 nFieldIdx = 0, nFieldCount = mrPCache.GetFieldCount(); nFieldIdx < nFieldCount; ++nFieldIdx )
                 maFieldList.AppendNewRecord( new XclExpPTField( *this, nFieldIdx ) );
 
-            const List& rDimList = pSaveData->GetDimensions();
-            ULONG nDimIdx, nDimCount = rDimList.Count();
+            boost::ptr_vector<ScDPSaveDimension>::const_iterator iter;
+            const boost::ptr_vector<ScDPSaveDimension>& rDimList = pSaveData->GetDimensions();
 
             /*  2)  First process all data dimensions, they are needed for extended
                     settings of row/column/page fields (sorting/auto show). */
-            for( nDimIdx = 0; nDimIdx < nDimCount; ++nDimIdx )
-                if( const ScDPSaveDimension* pSaveDim = static_cast< const ScDPSaveDimension* >( rDimList.GetObject( nDimIdx ) ) )
-                    if( pSaveDim->GetOrientation() == DataPilotFieldOrientation_DATA )
-                        SetDataFieldPropertiesFromDim( *pSaveDim );
+            for (iter = rDimList.begin(); iter != rDimList.end(); ++iter)
+                if (iter->GetOrientation() == DataPilotFieldOrientation_DATA)
+                    SetDataFieldPropertiesFromDim(*iter);
 
             /*  3)  Row/column/page/hidden fields. */
-            for( nDimIdx = 0; nDimIdx < nDimCount; ++nDimIdx )
-                if( const ScDPSaveDimension* pSaveDim = static_cast< const ScDPSaveDimension* >( rDimList.GetObject( nDimIdx ) ) )
-                    if( pSaveDim->GetOrientation() != DataPilotFieldOrientation_DATA )
-                        SetFieldPropertiesFromDim( *pSaveDim );
+            for (iter = rDimList.begin(); iter != rDimList.end(); ++iter)
+                if (iter->GetOrientation() != DataPilotFieldOrientation_DATA)
+                    SetDataFieldPropertiesFromDim(*iter);
 
             // Finalize -------------------------------------------------------
 
@@ -1721,13 +1720,13 @@ void XclExpPivotTable::WriteSxli( XclExpStream& rStrm, sal_uInt16 nLineCount, sa
         sal_uInt16 nLineSize = 8 + 2 * nIndexCount;
         rStrm.StartRecord( EXC_ID_SXLI, nLineSize * nLineCount );
 
-        /*  #158444# Excel expects the records to be filled completely, do not
+        /*  Excel expects the records to be filled completely, do not
             set a segment size... */
 //        rStrm.SetSliceSize( nLineSize );
 
         for( sal_uInt16 nLine = 0; nLine < nLineCount; ++nLine )
         {
-            // #106598# Excel XP needs a partly initialized SXLI record
+            // Excel XP needs a partly initialized SXLI record
             rStrm   << sal_uInt16( 0 )      // number of equal index entries
                     << EXC_SXVI_TYPE_DATA
                     << nIndexCount

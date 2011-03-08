@@ -132,7 +132,7 @@ void SchemaRestrictionContext::CreateDataType()
     }
     catch( const Exception& )
     {
-        DBG_ERROR( "exception during type creation" );
+        OSL_FAIL( "exception during type creation" );
     }
     DBG_ASSERT( mxDataType.is(), "can't create type" );
 }
@@ -357,7 +357,7 @@ SvXMLImportContext* SchemaRestrictionContext::HandleChild(
         break;
 
     default:
-        DBG_ERROR( "unknown facet" );
+        OSL_FAIL( "unknown facet" );
     }
 
     // finally, set the property

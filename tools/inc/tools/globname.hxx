@@ -28,10 +28,11 @@
 #ifndef _GLOBNAME_HXX
 #define _GLOBNAME_HXX
 
+#include <vector>
+
 #include "tools/toolsdllapi.h"
 #include <com/sun/star/uno/Sequence.hxx>
 #include <tools/string.hxx>
-#include <tools/list.hxx>
 
 /*************************************************************************
 *************************************************************************/
@@ -120,7 +121,7 @@ public:
 
 class SvGlobalNameList
 {
-    List aList;
+    std::vector<ImpSvGlobalName*> aList;
 public:
                     SvGlobalNameList();
                     ~SvGlobalNameList();
@@ -128,7 +129,7 @@ public:
     void            Append( const SvGlobalName & );
     SvGlobalName    GetObject( ULONG );
     BOOL            IsEntry( const SvGlobalName & rName );
-    ULONG           Count() const { return aList.Count(); }
+    ULONG           Count() const { return aList.size(); }
 private:
                 // nicht erlaubt
                 SvGlobalNameList( const SvGlobalNameList & );

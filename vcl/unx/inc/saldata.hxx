@@ -45,10 +45,8 @@ class SalPrinter;
 
 // -=-= typedefs -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-DECLARE_LIST( SalDisplays, SalDisplay* )
-
-#if defined SCO || defined LINUX || defined NETBSD || defined AIX || \
-    defined HPUX || defined FREEBSD || defined OPENBSD
+#if defined LINUX || defined NETBSD || defined AIX || \
+    defined FREEBSD || defined OPENBSD || defined DRAGONFLY
 #include <pthread.h>
 #else
 typedef unsigned int pthread_t;
@@ -88,8 +86,7 @@ public:
     inline  void            StopTimer();
     void                    Timeout() const;
 
-    const rtl::OUString&    GetLocalHostName() const
-    { return maLocalHostName; }
+    const rtl::OUString&    GetLocalHostName();
 
     static int XErrorHdl( Display*, XErrorEvent* );
     static int XIOErrorHdl( Display* );

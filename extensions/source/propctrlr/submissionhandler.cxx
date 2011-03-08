@@ -167,7 +167,7 @@ namespace pcr
             break;
 
             default:
-                DBG_ERROR( "SubmissionPropertyHandler::getPropertyValue: cannot handle this property!" );
+                OSL_FAIL( "SubmissionPropertyHandler::getPropertyValue: cannot handle this property!" );
                 break;
             }
         }

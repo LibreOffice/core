@@ -625,12 +625,7 @@ void    AccFrameSelector::NotifyFocusListeners(sal_Bool bGetFocus)
             aEvent.FocusFlags |= AwtFocusChangeReason::AROUND;
         if(nFocusFlags&GETFOCUS_UNIQUEMNEMONIC)
             aEvent.FocusFlags |= AwtFocusChangeReason::UNIQUEMNEMONIC;
-    //        if(nFocusFlags&GETFOCUS_INIT)
-    //            aEvent.FocusFlags |= AwtFocusChangeReason::
     }
-//    else
-    //how can I find the current focus window?
-//        aEvent.NextFocus = ;
     aEvent.Temporary = sal_False;
 
     Reference < XAccessibleContext > xThis( this );

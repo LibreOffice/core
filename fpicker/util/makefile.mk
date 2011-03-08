@@ -58,7 +58,9 @@ SHL1STDLIBS=		$(COMMON_LIBS) \
             $(OLEAUT32LIB)\
             $(COMDLG32LIB)\
             $(KERNEL32LIB)\
-            $(UUIDLIB)
+            $(UUIDLIB)\
+            Delayimp.lib\
+            /DELAYLOAD:shell32.dll
 
 SHL1DEPN=
 SHL1IMPLIB=i$(SHL1TARGET)

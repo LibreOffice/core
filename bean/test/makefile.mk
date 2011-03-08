@@ -42,26 +42,7 @@ JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 
 MAXLINELENGTH = 100000
 
-#JARCLASSDIRS    = $(PACKAGE)
-#JARTARGET       = $(TARGET).jar
-#JARCOMPRESS 	= TRUE
-
-# --- Parameters for the test --------------------------------------
-
-# test base is java complex
-#CT_TESTBASE = -TestBase java_complex
-
-# test looks something like the.full.package.TestName
-#CT_TEST     = -o $(PACKAGE:s\$/\.\).$(JAVAFILES:b)
-
-# start the runner application
-#CT_APP      = org.openoffice.Runner
-
-#CT_NOOFFICE = -NoOffice
-
-
 OFFICE_CLASSPATH_TMP:=$(foreach,i,$(JARFILES) $(office)$/program$/classes$/$(i)$(PATH_SEPERATOR))
-
 OFFICE_CLASSPATH=$(OFFICE_CLASSPATH_TMP:t"")$(PATH_SEPERATOR)$(CLASSDIR)
 
 OOOBEAN_OPTIONS=-Dcom.sun.star.officebean.Options=-norestore 

@@ -193,7 +193,7 @@ BOOL SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
     const USHORT nMPos = aMetricLB.GetSelectEntryPos();
     if ( nMPos != aMetricLB.GetSavedValue() )
     {
-        // Doppel-Cast fuer VA3.0
+        // Double-Cast for VA3.0
         USHORT nFieldUnit = (USHORT)(long)aMetricLB.GetEntryData( nMPos );
         rSet.Put( SfxUInt16Item( SID_ATTR_METRIC, (UINT16)nFieldUnit ) );
         bRet = TRUE;
@@ -313,14 +313,14 @@ void SwLoadOptPage::Reset( const SfxItemSet& rSet)
 }
 
 /*-----------------13.01.97 14.44-------------------
-    Metric des Deftabstops umschalten
+    Switch Deftabstops' metric
 --------------------------------------------------*/
 IMPL_LINK(SwLoadOptPage, MetricHdl, ListBox*, EMPTYARG)
 {
     const USHORT nMPos = aMetricLB.GetSelectEntryPos();
     if(nMPos != USHRT_MAX)
     {
-        // Doppel-Cast fuer VA3.0
+        // Double-Cast for VA3.0
         FieldUnit eFieldUnit = (FieldUnit)(long)aMetricLB.GetEntryData( nMPos );
         BOOL bModified = aTabMF.IsModified();
         long nVal = bModified ?
@@ -524,7 +524,7 @@ BOOL SwCaptionOptPage::FillItemSet( SfxItemSet&  )
     BOOL bRet = FALSE;
     SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
 
-    SaveEntry(aCheckLB.FirstSelected());    // Aktuellen Eintrag uebernehmen
+    SaveEntry(aCheckLB.FirstSelected());    // apply current entry
 
     SvLBoxEntry* pEntry = aCheckLB.First();
 
@@ -847,7 +847,7 @@ void SwCaptionOptPage::DrawSample()
     {
         //#i61007# order of captions
         bool bOrderNumberingFirst = aLbCaptionOrder.GetSelectEntryPos() == 1;
-        // Nummer
+        // number
         USHORT nNumFmt = (USHORT)(ULONG)aFormatBox.GetEntryData(
                                         aFormatBox.GetSelectEntryPos() );
         if( SVX_NUM_NUMBER_NONE != nNumFmt )

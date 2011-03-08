@@ -30,11 +30,12 @@
 #define SC_DPTABSRC_HXX
 
 #include <vector>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
+#include <boost/unordered_set.hpp>
 #include <list>
 #include <memory>
+
 #include <tools/string.hxx>
-#include <tools/list.hxx>
 #include "global.hxx"       // enum ScSubTotalFunc
 #include <com/sun/star/sheet/XDimensionsSupplier.hpp>
 #include <com/sun/star/sheet/XHierarchiesSupplier.hpp>
@@ -132,22 +133,22 @@ private:
     ScDPResultMember*       pRowResRoot;
     com::sun::star::uno::Sequence<com::sun::star::sheet::MemberResult>* pColResults;
     com::sun::star::uno::Sequence<com::sun::star::sheet::MemberResult>* pRowResults;
-    List                    aColLevelList;
-    List                    aRowLevelList;
+    std::vector<ScDPLevel*> aColLevelList;
+    std::vector<ScDPLevel*> aRowLevelList;
     BOOL                    bResultOverflow;
 
     ::std::auto_ptr<rtl::OUString> mpGrandTotalName;
 
     void                    CreateRes_Impl();
     void                    FillMemberResults();
-    void                    FillLevelList( USHORT nOrientation, List& rList );
+    void                    FillLevelList( USHORT nOrientation, std::vector<ScDPLevel*> &rList );
     void                    FillCalcInfo(bool bIsRow, ScDPTableData::CalcInfo& rInfo, bool &bHasAutoShow);
 
     /**
      * Compile a list of dimension indices that are either, column, row or
      * page dimensions (i.e. all but data dimensions).
      */
-    void                    GetCategoryDimensionIndices(::std::hash_set<sal_Int32>& rCatDims);
+    void                    GetCategoryDimensionIndices(::boost::unordered_set<sal_Int32>& rCatDims);
 
     /**
      * Set visibilities of individual rows in the cache table based on the
@@ -158,13 +159,12 @@ private:
     void                    SetDupCount( long nNew );
 
 public:
-                                ScDPSource( ScDPTableData* pD );    // TableData is deleted by Source
+                                ScDPSource( ScDPTableData* pD );
     virtual                     ~ScDPSource();
 
     ScDPTableData*          GetData()       { return pData; }
     const ScDPTableData*    GetData() const { return pData; }
 
-    void                    SetGrandTotalName(const ::rtl::OUString& rName);
     const ::rtl::OUString*  GetGrandTotalName() const;
 
     USHORT                  GetOrientation(long nColumn);
@@ -174,7 +174,7 @@ public:
     long                    GetDataDimensionCount();
     ScDPDimension*          GetDataDimension(long nIndex);
     String                  GetDataDimName(long nIndex);
-    ScDPTableDataCache*         GetCache();
+    const ScDPCache* GetCache();
     const ScDPItemData*            GetItemDataById( long nDim, long nId );
     long                                       GetDataLayoutDim(){ return pData->GetColumnCount(); }
     SCROW                                GetMemberId(  long  nDim, const ScDPItemData& rData );
@@ -182,7 +182,6 @@ public:
     USHORT                  GetDataLayoutOrientation();
 
     BOOL                    IsDateDimension(long nDim);
-    UINT32                  GetNumberFormat(long nDim);
 
     BOOL                    SubTotalAllowed(long nColumn);      //! move to ScDPResultData
 
@@ -442,8 +441,6 @@ public:
     const ScDPItemData&         GetSelectedData();
 
     const ::com::sun::star::sheet::DataPilotFieldReference& GetReferenceValue() const;
-
-    BOOL                      IsVisible( const ScDPItemData& rData );
 };
 
 class ScDPHierarchies : public cppu::WeakImplHelper2<
@@ -689,7 +686,7 @@ public:
 };
 
 // hash map from name to index in the member array, for fast name access
-typedef ::std::hash_map< ::rtl::OUString, sal_Int32, ::rtl::OUStringHash > ScDPMembersHashMap;
+typedef ::boost::unordered_map< ::rtl::OUString, sal_Int32, ::rtl::OUStringHash > ScDPMembersHashMap;
 
 class ScDPMembers : public cppu::WeakImplHelper2<
                             com::sun::star::container::XNameAccess,

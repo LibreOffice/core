@@ -35,11 +35,12 @@
 #include <libgnomevfs/gnome-vfs-ops.h>
 
 using namespace cppu;
-using namespace rtl;
 using namespace com::sun::star::io;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::ucb;
 using namespace gvfs;
+
+using ::rtl::OUString;
 
 Stream::Stream( GnomeVFSHandle         *handle,
         const GnomeVFSFileInfo *aInfo ) :

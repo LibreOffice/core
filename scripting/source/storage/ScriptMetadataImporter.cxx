@@ -310,15 +310,6 @@ void ScriptMetadataImporter::startElement(
                     RTL_TEXTENCODING_ASCII_US).pData->buffer );
             break;
         case FILEPROPS:
-            /**
-            mm_files.insert( strpair_pair( ms_filename,
-                str_pair( xAttribs->getValueByName(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("name")) ),
-                xAttribs->getValueByName(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("value")) ) )
-                )
-            );
-            */
             mv_fileprops.push_back(str_pair( xAttribs->getValueByName(
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("name")) ),
                 xAttribs->getValueByName(

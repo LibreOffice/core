@@ -308,16 +308,12 @@ mbInSection(false), mbInParagraphGroup(false), mbInCharacterGroup(false)
                                 mpFib->get_fcPlcfbteChpx(),
                                 mpFib->get_lcbPlcfbteChpx()));
 
-    //clog << "BinTable(CHP):" << mpBinTableCHPX->toString();
-
     parseBinTableCpAndFcs(*mpBinTableCHPX, PROP_CHP);
 
     mpSEDs = PLCF<WW8SED>::Pointer_t(new PLCF<WW8SED>
                                      (*mpTableStream,
                                       mpFib->get_fcPlcfsed(),
                                       mpFib->get_lcbPlcfsed()));
-
-    //mpSEDs->dump(clog);
 
     {
         PLCFHelper<WW8SED>::processPLCFCpAndFcs
@@ -590,7 +586,6 @@ string WW8DocumentImpl::getType() const
 void WW8DocumentImpl::parseBinTableCpAndFcs(WW8BinTable & rTable,
                                             PropertyType eType_)
 {
-    //clog << "<bintable type=\"" << propertyTypeToString(eType_) << "\">" << endl;
     for (sal_uInt32 i = 0; i < rTable.getEntryCount(); i++)
     {
 #if 0
@@ -606,8 +601,6 @@ void WW8DocumentImpl::parseBinTableCpAndFcs(WW8BinTable & rTable,
 
         bool bComplex = mpPieceTable->isComplex(aFcFromTable);
         aFcFromTable.setComplex(bComplex);
-
-        //clog << "<entry fc=\"" << aFcFromTable.toString() << "\">" << endl;
 
         try
         {
@@ -645,8 +638,6 @@ void WW8DocumentImpl::parseBinTableCpAndFcs(WW8BinTable & rTable,
                 bool bComplexFKP = mpPieceTable->isComplex(aFc);
                 aFc.setComplex(bComplexFKP);
 
-                //clog << "<fkpentry fc=\"" << aFc.toString() << "\"/>" << endl;
-
                 try
                 {
                     Cp aCp = mpPieceTable->fc2cp(aFc);
@@ -654,8 +645,6 @@ void WW8DocumentImpl::parseBinTableCpAndFcs(WW8BinTable & rTable,
                     CpAndFc aCpAndFc(aCp, aFc, eType_);
 
                     mCpAndFcs.insert(aCpAndFc);
-
-                    //clog << aCpAndFc << endl;
                 }
                 catch (ExceptionNotFound e)
                 {
@@ -667,11 +656,7 @@ void WW8DocumentImpl::parseBinTableCpAndFcs(WW8BinTable & rTable,
         {
             clog << e.getText() << endl;
         }
-
-        //clog << "</entry>" << endl;
     }
-
-    //clog << "</bintable>" << endl;
 }
 
 WW8Stream::Pointer_t WW8DocumentImpl::getSubStream
@@ -1660,15 +1645,6 @@ void WW8DocumentImpl::resolve(Stream & rStream)
 {
     if (! bSubDocument)
     {
-
-        //mpPieceTable->dump(clog);
-
-        //copy(mCpAndFcs.begin(), mCpAndFcs.end(), ostream_iterator<CpAndFc>(clog, ", "));
-
-        //mpDocStream->dump(output);
-
-        //output.addItem(mTextboxHeaderEndCpAndFc.toString());
-
 #if 1
         output.addItem("<substream-names>");
         output.addItem(mpStream->getSubStreamNames());
@@ -1719,7 +1695,6 @@ void WW8DocumentImpl::resolve(Stream & rStream)
         if (mpDffBlock.get() != NULL)
         {
             DffBlock * pTmp = new DffBlock(*mpDffBlock);
-            //pTmp->dump(clog);
             writerfilter::Reference<Properties>::Pointer_t pDffBlock =
                 writerfilter::Reference<Properties>::Pointer_t(pTmp);
 

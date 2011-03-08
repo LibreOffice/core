@@ -56,16 +56,12 @@ TabPage RID_SFXPAGE_SPELL
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 115 , 66 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Wörterbücher : W÷rterb³cher */
-        /* ### ACHTUNG: Neuer Text in Resource? Wörterbücher : W÷rterb³cher */
         Text [ en-US ] = "Dictionaries" ;
     };
     CheckBox BTN_CAPS
     {
         Pos = MAP_APPFONT ( 12 , 82 ) ;
         Size = MAP_APPFONT ( 103 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Großgeschriebene Wörter : ~Gro˜geschriebene W÷rter */
-        /* ### ACHTUNG: Neuer Text in Resource? ~Großgeschriebene Wörter : ~Gro˜geschriebene W÷rter */
         Text [ en-US ] = "~Capital words" ;
         TabStop = TRUE ;
     };
@@ -73,8 +69,6 @@ TabPage RID_SFXPAGE_SPELL
     {
         Pos = MAP_APPFONT ( 12 , 95 ) ;
         Size = MAP_APPFONT ( 103 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Wörter mit Ziffern  : ~W÷rter mit Ziffern  */
-        /* ### ACHTUNG: Neuer Text in Resource? ~Wörter mit Ziffern  : ~W÷rter mit Ziffern  */
         Text [ en-US ] = "~Words with numbers " ;
         TabStop = TRUE ;
     };
@@ -82,8 +76,6 @@ TabPage RID_SFXPAGE_SPELL
     {
         Pos = MAP_APPFONT ( 12 , 108 ) ;
         Size = MAP_APPFONT ( 103 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Groß- u. ~Kleinschreibung  : Gro˜- u. ~Kleinschreibung  */
-        /* ### ACHTUNG: Neuer Text in Resource? Groß- u. ~Kleinschreibung  : Gro˜- u. ~Kleinschreibung  */
         Text [ en-US ] = "~Case sensitive " ;
         TabStop = TRUE ;
     };
@@ -91,8 +83,6 @@ TabPage RID_SFXPAGE_SPELL
     {
         Pos = MAP_APPFONT ( 6 , 71 ) ;
         Size = MAP_APPFONT ( 115 , 53 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Prüfen : Pr³fen */
-        /* ### ACHTUNG: Neuer Text in Resource? Prüfen : Pr³fen */
         Text [ en-US ] = "Check" ;
     };
 };

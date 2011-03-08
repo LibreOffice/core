@@ -29,60 +29,9 @@
 #ifndef _TOOLSDLL_HXX
 #define _TOOLSDLL_HXX
 
-#ifdef WIN
-
-#include <string.h>
-#include <tools/svwin.h>
-#include <tools/solar.h>
-#include <tools/shl.hxx>
-
-// ----------------
-// - MemMgr-Daten -
-// ----------------
-
-// Anzahl Freispeicherlisten
-#define MEM_FREELIST_COUNT  15
-
-
-// --------------
-// - Tools-Data -
-// --------------
-
-struct SVDATA;
-struct FreeBlock;
-
-struct MemData
-{
-    FreeBlock*  pFirstBlocks[MEM_FREELIST_COUNT];   // Erste Bloecke in Freispeicherlisten
-    void*       pNewHandler;                        // New-Handler
-    int         nMultiThread;                       // MultiThread an/aus
-};
-
-struct ToolsData
-{
-    // !!! SVDATA muss in jedem Fall ganz vorne in der Struktur stehen !!!
-    SVDATA*     pSVData;                // Pointer auf StarView-Daten
-    HANDLE      hMem;                   // Handler der Tools-Daten
-    MemData     aMemD;                  // Daten der Speicherverwaltung
-    void*       aAppData[SHL_COUNT];    // Daten fuer andere Shared Libs
-};
-
-
-// ----------------------
-// - Zugriffsfunktionen -
-// ----------------------
-
-// IN APPDATA.ASM
-extern "C"
-{
-ToolsData*  FAR PASCAL ImpGetAppData();
-void        FAR PASCAL ImpSetAppData( ToolsData* pData );
-}
-
-// IN TOOLSDLL.CXX
-ToolsData* ImpGetToolsData();
-
-#endif
+/* Yes, this file is now effectively empty. Remove it completely in a
+ * later commit.
+ */
 
 #endif // _DLL_HXX
 

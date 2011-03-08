@@ -28,7 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
-#include <tools/list.hxx>
 #include <vcl/idlemgr.hxx>
 #include <vcl/svapp.hxx>
 
@@ -41,15 +40,13 @@ struct ImplIdleData
     BOOL        mbTimeout;
 };
 
-DECLARE_LIST( ImplIdleList, ImplIdleData* )
-
 #define IMPL_IDLETIMEOUT         350
 
 // =======================================================================
 
 ImplIdleMgr::ImplIdleMgr()
 {
-    mpIdleList  = new ImplIdleList( 8, 8, 8 );
+    mpIdleList  = new ImplIdleList();
 
     maTimer.SetTimeout( IMPL_IDLETIMEOUT );
     maTimer.SetTimeoutHdl( LINK( this, ImplIdleMgr, TimeoutHdl ) );
@@ -60,13 +57,10 @@ ImplIdleMgr::ImplIdleMgr()
 ImplIdleMgr::~ImplIdleMgr()
 {
     // Liste loeschen
-    ImplIdleData* pIdleData = mpIdleList->First();
-    while ( pIdleData )
-    {
-        delete pIdleData;
-        pIdleData = mpIdleList->Next();
+    for ( size_t i = 0, n = mpIdleList->size(); i < n; ++i ) {
+        delete (*mpIdleList)[ i ];
     }
-
+    mpIdleList->clear();
     delete mpIdleList;
 }
 
@@ -74,30 +68,30 @@ ImplIdleMgr::~ImplIdleMgr()
 
 BOOL ImplIdleMgr::InsertIdleHdl( const Link& rLink, USHORT nPriority )
 {
-    ULONG           nPos = LIST_APPEND;
-    ImplIdleData*   pIdleData = mpIdleList->First();
-    while ( pIdleData )
-    {
-        // Wenn Link schon existiert, dann gebe FALSE zurueck
-        if ( pIdleData->maIdleHdl == rLink )
+    size_t nPos = (size_t)-1;
+    size_t n = mpIdleList->size();
+    for ( size_t i = 0; i < n; ++i ) {
+        // we need to check each element to verify that rLink isn't in the array
+        if ( (*mpIdleList)[ i ]->maIdleHdl == rLink ) {
             return FALSE;
-
-        // Nach Prioritaet sortieren
-        if ( nPriority <= pIdleData->mnPriority )
-            nPos = mpIdleList->GetCurPos();
-
-        // Schleife nicht beenden, da noch
-        // geprueft werden muss, ob sich der Link
-        // schon in der Liste befindet
-
-        pIdleData = mpIdleList->Next();
+        }
+        if ( nPriority <= (*mpIdleList)[ i ]->mnPriority ) {
+            nPos = i;
+        }
     }
 
-    pIdleData               = new ImplIdleData;
+    ImplIdleData* pIdleData = new ImplIdleData;
     pIdleData->maIdleHdl    = rLink;
     pIdleData->mnPriority   = nPriority;
     pIdleData->mbTimeout    = FALSE;
-    mpIdleList->Insert( pIdleData, nPos );
+
+    if ( nPos < mpIdleList->size() ) {
+        ImplIdleList::iterator it = mpIdleList->begin();
+        ::std::advance( it, nPos );
+        mpIdleList->insert( it, pIdleData );
+    } else {
+        mpIdleList->push_back( pIdleData );
+    }
 
     // Wenn Timer noch nicht gestartet ist, dann starten
     if ( !maTimer.IsActive() )
@@ -110,21 +104,16 @@ BOOL ImplIdleMgr::InsertIdleHdl( const Link& rLink, USHORT nPriority )
 
 void ImplIdleMgr::RemoveIdleHdl( const Link& rLink )
 {
-    ImplIdleData* pIdleData = mpIdleList->First();
-    while ( pIdleData )
-    {
-        if ( pIdleData->maIdleHdl == rLink )
-        {
-            mpIdleList->Remove();
-            delete pIdleData;
+    for ( ImplIdleList::iterator it = mpIdleList->begin(); it < mpIdleList->end(); ++it ) {
+        if ( (*it)->maIdleHdl == rLink ) {
+            delete *it;
+            mpIdleList->erase( it );
             break;
         }
-
-        pIdleData = mpIdleList->Next();
     }
 
     // keine Handdler mehr da
-    if ( !mpIdleList->Count() )
+    if ( mpIdleList->empty() )
         maTimer.Stop();
 }
 
@@ -132,19 +121,19 @@ void ImplIdleMgr::RemoveIdleHdl( const Link& rLink )
 
 IMPL_LINK( ImplIdleMgr, TimeoutHdl, Timer*, EMPTYARG )
 {
-    ImplIdleData* pIdleData = mpIdleList->First();
-    while ( pIdleData )
-    {
-        if ( !pIdleData->mbTimeout )
-        {
+    for ( size_t i = 0; i < mpIdleList->size(); ++i ) {
+        ImplIdleData* pIdleData = (*mpIdleList)[ i ];
+        if ( !pIdleData->mbTimeout ) {
             pIdleData->mbTimeout = TRUE;
             pIdleData->maIdleHdl.Call( GetpApp() );
-            // Kann im Handler entfernt worden sein
-            if ( mpIdleList->GetPos( pIdleData ) != LIST_ENTRY_NOTFOUND )
-                pIdleData->mbTimeout = FALSE;
+            // May have been removed in the handler
+            for ( size_t j = 0; j < mpIdleList->size(); ++j ) {
+                if ( (*mpIdleList)[ j ] == pIdleData ) {
+                    pIdleData->mbTimeout = FALSE;
+                    break;
+                }
+            }
         }
-
-        pIdleData = mpIdleList->Next();
     }
 
     return 0;

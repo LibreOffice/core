@@ -30,7 +30,7 @@
 #include "precompiled_lingucomponent.hxx"
 
 #if defined(WNT)
-#include <tools/prewin.h>
+#include <prewin.h>
 #endif
 
 #if defined(WNT)
@@ -38,7 +38,7 @@
 #endif
 
 #if defined(WNT)
-#include <tools/postwin.h>
+#include <postwin.h>
 #endif
 
 
@@ -99,7 +99,7 @@ rtl::OString Win_GetShortPathName( const rtl::OUString &rLongPathName )
     if (nShortLen < nShortBufSize) // conversion successful?
         aRes = rtl::OString( OU2ENC( rtl::OUString( aShortBuffer, nShortLen ), osl_getThreadTextEncoding()) );
     else
-        DBG_ERROR( "Win_GetShortPathName: buffer to short" );
+        OSL_FAIL( "Win_GetShortPathName: buffer to short" );
 
     return aRes;
 }
@@ -124,9 +124,6 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
     rtl::OUString aSystemPrefix;
     rtl::OUString aSystemSuffix;
 #endif
-    bool bSpell = false;
-    bool bHyph  = false;
-    bool bThes  = false;
     if (strcmp( pDicType, "DICT" ) == 0)
     {
         aFormatName     = A2OU("DICT_SPELL");
@@ -135,7 +132,6 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
         aSystemDir      = A2OU( DICT_SYSTEM_DIR );
         aSystemSuffix       = aDicExtension;
 #endif
-        bSpell = true;
     }
     else if (strcmp( pDicType, "HYPH" ) == 0)
     {
@@ -146,7 +142,6 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
         aSystemPrefix       = A2OU( "hyph_" );
         aSystemSuffix       = aDicExtension;
 #endif
-        bHyph = true;
     }
     else if (strcmp( pDicType, "THES" ) == 0)
     {
@@ -157,7 +152,6 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
         aSystemPrefix       = A2OU( "th_" );
         aSystemSuffix       = A2OU( "_v2.dat" );
 #endif
-        bThes = true;
     }
 
 
@@ -254,7 +248,7 @@ void MergeNewStyleDicsAndOldStyleDics(
 
             if (nLang == LANGUAGE_DONTKNOW || nLang == LANGUAGE_NONE)
             {
-                DBG_ERROR( "old style dictionary with invalid language found!" );
+                OSL_FAIL( "old style dictionary with invalid language found!" );
                 continue;
             }
 
@@ -264,7 +258,7 @@ void MergeNewStyleDicsAndOldStyleDics(
         }
         else
         {
-            DBG_ERROR( "old style dictionary with no language found!" );
+            OSL_FAIL( "old style dictionary with no language found!" );
         }
     }
 }

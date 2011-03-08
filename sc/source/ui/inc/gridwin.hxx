@@ -362,8 +362,6 @@ public:
 
     void            HideCursor();
     void            ShowCursor();
-    void            DrawCursor();
-    void            DrawAutoFillMark();
     void            UpdateAutoFillMark(BOOL bMarked, const ScRange& rMarkRange);
 
     void            UpdateListValPos( BOOL bVisible, const ScAddress& rPos );

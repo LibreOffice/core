@@ -67,7 +67,7 @@
 #include <comphelper/propertysetinfo.hxx>
 #include <unotools/saveopt.hxx>
 
-// #80365# include necessary for XML progress bar at load time
+// include necessary for XML progress bar at load time
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
 #include <svtools/sfxecode.hxx>
@@ -493,7 +493,7 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
     /** property map for export info set */
     PropertyMapEntry aImportInfoMap[] =
     {
-        // #80365# necessary properties for XML progress bar at load time
+        // necessary properties for XML progress bar at load time
         { MAP_LEN( "ProgressRange" ),   0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
         { MAP_LEN( "ProgressMax" ),     0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
         { MAP_LEN( "ProgressCurrent" ), 0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
@@ -550,7 +550,7 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
 
     // -------------------------------------
 
-    // #80365# try to get an XStatusIndicator from the Medium
+    // try to get an XStatusIndicator from the Medium
     if( mbShowProgress )
     {
         SfxItemSet* pSet = mrMedium.GetItemSet();
@@ -761,7 +761,7 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
         }
         catch( Exception& )
         {
-            DBG_ERROR("sd::SdXMLFilter::Import(), exception during clearing of unused named items");
+            OSL_FAIL("sd::SdXMLFilter::Import(), exception during clearing of unused named items");
         }
     }
 
@@ -846,7 +846,7 @@ sal_Bool SdXMLFilter::Export()
 
     if( !mxModel.is() )
     {
-        DBG_ERROR("Got NO Model in XMLExport");
+        OSL_FAIL("Got NO Model in XMLExport");
         return FALSE;
     }
 
@@ -860,7 +860,7 @@ sal_Bool SdXMLFilter::Export()
 
         if( !xServiceInfo.is() || !xServiceInfo->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.GenericDrawingDocument" ) ) ) )
         {
-            DBG_ERROR( "Model is no DrawingDocument in XMLExport" );
+            OSL_FAIL( "Model is no DrawingDocument in XMLExport" );
             return FALSE;
         }
 
@@ -868,7 +868,7 @@ sal_Bool SdXMLFilter::Export()
 
         if( !xServiceFactory.is() )
         {
-            DBG_ERROR( "got no service manager" );
+            OSL_FAIL( "got no service manager" );
             return FALSE;
         }
 
@@ -876,7 +876,7 @@ sal_Bool SdXMLFilter::Export()
 
         if( !xWriter.is() )
         {
-            DBG_ERROR( "com.sun.star.xml.sax.Writer service missing" );
+            OSL_FAIL( "com.sun.star.xml.sax.Writer service missing" );
             return FALSE;
         }
         uno::Reference<xml::sax::XDocumentHandler>  xHandler( xWriter, uno::UNO_QUERY );
@@ -884,7 +884,6 @@ sal_Bool SdXMLFilter::Export()
         /** property map for export info set */
         PropertyMapEntry aExportInfoMap[] =
         {
-            // #82003#
             { MAP_LEN( "ProgressRange" ),   0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
             { MAP_LEN( "ProgressMax" ),     0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
             { MAP_LEN( "ProgressCurrent" ), 0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
@@ -968,7 +967,6 @@ sal_Bool SdXMLFilter::Export()
                 xGrfResolver = pGraphicHelper;
             }
 
-            // #82003#
             if(mbShowProgress)
             {
                 CreateStatusIndicator();
@@ -1083,7 +1081,6 @@ sal_Bool SdXMLFilter::Export()
             }
             while( bDocRet && pServices->mpService );
 
-            // #82003#
             if(mbShowProgress)
             {
                 if(mxStatusIndicator.is())
@@ -1091,7 +1088,7 @@ sal_Bool SdXMLFilter::Export()
             }
         }
     }
-    catch(uno::Exception e)
+    catch(uno::Exception &e)
     {
 #if OSL_DEBUG_LEVEL > 1
         ByteString aError( "uno Exception caught while exporting:\n" );

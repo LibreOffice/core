@@ -29,11 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-#if STLPORT_VERSION>=321
 #include <cstdarg>
-#endif
-
 
 #include <hintids.hxx>
 
@@ -175,15 +171,15 @@ void SwModule::InsertEnv( SfxRequest& rReq )
     xDocSh->DoInitNew( 0 );
     pFrame = SfxViewFrame::LoadHiddenDocument( *xDocSh, 0 );
     pNewView = (SwView*) pFrame->GetViewShell();
-    pNewView->AttrChangedNotify( &pNewView->GetWrtShell() );//Damit SelectShell gerufen wird.
+    pNewView->AttrChangedNotify( &pNewView->GetWrtShell() ); // so that SelectShell is being called
     pSh = pNewView->GetWrtShellPtr();
 
     String aTmp( SW_RES(STR_ENV_TITLE) );
     aTmp += String::CreateFromInt32( ++nTitleNo );
     xDocSh->SetTitle( aTmp );
 
-    // Ggf. alte Collections "Absender" und "Empfaenger" in neues
-    // Dokument kopieren
+    // if applicable, copy the old Collections "Sender" and "Reciever" to
+    // a new document
     if ( pOldSh )
     {
         ::lcl_CopyCollAttr(pOldSh, pSh, RES_POOLCOLL_JAKETADRESS);
@@ -249,10 +245,10 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         aEnvCfg.GetItem() = rItem;
         aEnvCfg.Commit();
 
-        //Wenn wir Drucken uebernehmen wir den eingestellten Jobsetup aus
-        //dem Dialog. Die Informationen muessen hier vor dem evtl. zerstoeren
-        //der neuen Shell gesetzt werden, weil deren Drucker an den Dialog
-        //gereicht wurde.
+        // When we print we take the Jobsetup that is set up in the dialog.
+        // Information has to be set here, before a possible destruction of
+        // the new shell because the shell's printer has been handed to the
+        // dialog.
         if ( nMode != ENV_NEWDOC )
         {
             OSL_ENSURE(pOldSh, "No document - wasn't 'Insert' disabled???");
@@ -286,7 +282,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
 
             if (bEnvChange)
             {
-                // Folgevorlage: Seite 2
+                // followup template: page 2
                 pFollow = pSh->GetPageDesc(pSh->GetCurPageDesc()).GetFollow();
 
                 // Delete text from the first page
@@ -307,7 +303,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
                 pSh->SttEndDoc(TRUE);
             }
             else
-                // Folgevorlage: Seite 1
+                // Followup template: page 1
                 pFollow = &pSh->GetPageDesc(pSh->GetCurPageDesc());
 
             // Insert page break
@@ -326,12 +322,12 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         else
         {
             pFollow = &pSh->GetPageDesc(pSh->GetCurPageDesc());
-            // Los geht's (Drucken)
+            // Let's go (print)
             pSh->StartAllAction();
             pSh->DoUndo(FALSE);
 
-            // Neue Collections "Absender" und "Empfaenger" wieder in neues
-            // Dokument kopieren
+            // Again, copy the new collections "Sender" and "Reciever" to
+            // a new document
             if ( pOldSh )
             {
                 ::lcl_CopyCollAttr(pOldSh, pSh, RES_POOLCOLL_JAKETADRESS);
@@ -342,7 +338,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         SET_CURR_SHELL(pSh);
         pSh->SetNewDoc();   // Avoid performance problems
 
-        // Flys dieser Seite merken
+        // Remember Flys of this site
         SvPtrarr aFlyArr(0, 5);
         if( ENV_NEWDOC != nMode && !bEnvChange )
             pSh->GetPageObjs( aFlyArr );
@@ -353,8 +349,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
 
         Printer *pPrt = pSh->getIDocumentDeviceAccess()->getPrinter( true );
 
-        // Raender (setzen sich zusammen aus Shift-Offset und
-        // Ausrichtung)
+    // Borders (are put together by Shift-Offset and alignment)
         Size aPaperSize = pPrt->PixelToLogic( pPrt->GetPaperSizePixel(),
                                               MAP_TWIP);
         if ( !aPaperSize.Width() && !aPaperSize.Height() )
@@ -408,7 +403,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         aType.SetNumberingType(SVX_NUM_NUMBER_NONE);
         pDesc->SetNumType(aType);
 
-        // Folgevorlage
+        // Followup template
         if (pFollow)
             pDesc->SetFollow(pFollow);
 
@@ -427,12 +422,12 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         pSh->ChgPageDesc( nPos, *pDesc);
         pSh->ChgCurPageDesc(*pDesc);
 
-        // Rahmen einfuegen
+        // Insert Frame
         SwFlyFrmAttrMgr aMgr(FALSE, pSh, FRMMGR_TYPE_ENVELP);
         SwFldMgr aFldMgr;
         aMgr.SetHeightSizeType(ATT_VAR_SIZE);
 
-        //Defaults ueberschreiben!
+        // Overwrite defaults!
         aMgr.GetAttrSet().Put( SvxBoxItem(RES_BOX) );
         aMgr.SetULSpace( 0L, 0L );
         aMgr.SetLRSpace( 0L, 0L );
@@ -467,7 +462,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         pSh->SetTxtFmtColl( pAddr );
         InsertLabEnvText(*pSh, aFldMgr, rItem.aAddrText);
 
-        // Flys auf die "alten" Seiten verschieben
+        // Move Flys to the "old" pages
         if (aFlyArr.Count())
             pSh->SetPageObjsNewPage(aFlyArr, 1);
 
@@ -496,7 +491,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
                                     };
                 pFrame->GetBindings().Invalidate( aInva );
 
-                // Datenbankbeamer oeffnen
+                // Open database beamer
                 ShowDBObj(*pNewView, pSh->GetDBData());
             }
         }
@@ -510,7 +505,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
 
         rReq.Done();
     }
-    else    //Abbruch
+    else    // Abort
     {
         rReq.Ignore();
 

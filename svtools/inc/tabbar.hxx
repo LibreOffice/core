@@ -32,14 +32,17 @@
 #include "svtools/svtdllapi.h"
 #include <tools/link.hxx>
 #include <vcl/window.hxx>
+#include <vector>
 
 class MouseEvent;
 class TrackingEvent;
 class DataChangedEvent;
-class ImplTabBarList;
 class ImplTabButton;
 class ImplTabSizer;
 class TabBarEdit;
+
+struct ImplTabBarItem;
+typedef ::std::vector< ImplTabBarItem* > ImplTabBarList;
 
 // -----------------
 // - Dokumentation -
@@ -383,6 +386,7 @@ private:
     Link            maStartRenamingHdl;
     Link            maAllowRenamingHdl;
     Link            maEndRenamingHdl;
+    size_t          maCurrentItemList;
 
     using Window::ImplInit;
     SVT_DLLPRIVATE void            ImplInit( WinBits nWinStyle );
@@ -399,9 +403,13 @@ private:
     SVT_DLLPRIVATE void         ImplActivatePage();
     SVT_DLLPRIVATE long         ImplDeactivatePage();
     SVT_DLLPRIVATE void            ImplPrePaint();
-    SVT_DLLPRIVATE ImplTabBarItem* ImplGetLastTabBarItem( USHORT nItemCount ) const;
+    SVT_DLLPRIVATE ImplTabBarItem* ImplGetLastTabBarItem( USHORT nItemCount );
     SVT_DLLPRIVATE Rectangle       ImplGetInsertTabRect(ImplTabBarItem* pItem) const;
                     DECL_DLLPRIVATE_LINK( ImplClickHdl, ImplTabButton* );
+
+    ImplTabBarItem* seek( size_t i );
+    ImplTabBarItem* prev();
+    ImplTabBarItem* next();
 
 public:
     static const sal_uInt16 APPEND;

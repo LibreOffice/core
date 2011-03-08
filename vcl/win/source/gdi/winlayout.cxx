@@ -65,10 +65,10 @@
 #undef ULONG
 #endif // USE_UNISCRIBE
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <set>
 
-typedef std::hash_map<int,int> IntMap;
+typedef boost::unordered_map<int,int> IntMap;
 typedef std::set<int> IntSet;
 
 // Graphite headers
@@ -84,7 +84,9 @@ typedef std::set<int> IntSet;
 
 #define DROPPED_OUTGLYPH 0xFFFF
 
-using namespace rtl;
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OUStringToOString;
 
 // =======================================================================
 

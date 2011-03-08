@@ -83,8 +83,8 @@ namespace connectivity
                         else
                             pWild += pos;
                     else
-                        break;          // ACHTUNG laeuft unter bestimmten
-                                        // Umstaenden in den nachsten case rein!!
+                        break;          // WARNING in certain circumstances
+                // it will run into the next 'case'!!
                 case CHAR_WILD:
                     while ( *pWild == CHAR_WILD )
                         pWild++;
@@ -285,7 +285,7 @@ namespace connectivity
             {
                 ::rtl::OString sClassName = ::rtl::OUStringToOString(_sClassName, RTL_TEXTENCODING_ASCII_US);
                 sClassName = sClassName.replace('.','/');
-                jobject out = pEnv->FindClass(sClassName);
+                jobject out = pEnv->FindClass(sClassName.getStr());
                 bRet = out != NULL;
                 pEnv->DeleteLocalRef( out );
             }
@@ -310,8 +310,8 @@ sal_Bool isCharOk(sal_Unicode c,const ::rtl::OUString& _rSpecials)
 //------------------------------------------------------------------------------
 sal_Bool isValidSQLName(const ::rtl::OUString& rName,const ::rtl::OUString& _rSpecials)
 {
-    // Ueberpruefung auf korrekte Namensgebung im SQL Sinne
-    // Dieses ist wichtig fuer Tabellennamen beispielsweise
+    // Test for correct naming (in SQL sense)
+    // This is important for table names for example
     const sal_Unicode* pStr = rName.getStr();
     if (*pStr > 127 || isdigit(*pStr))
         return sal_False;
@@ -336,7 +336,7 @@ sal_Bool isValidSQLName(const ::rtl::OUString& rName,const ::rtl::OUString& _rSp
     return sal_True;
 }
 //------------------------------------------------------------------
-// Erzeugt einen neuen Namen falls noetig
+// Creates a new name if necessary
 ::rtl::OUString convertName2SQLName(const ::rtl::OUString& rName,const ::rtl::OUString& _rSpecials)
 {
     if(isValidSQLName(rName,_rSpecials))

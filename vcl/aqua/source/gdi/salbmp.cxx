@@ -265,7 +265,7 @@ bool AquaSalBitmap::AllocateUserData()
         case 24:    mnBytesPerRow = (mnWidth << 1) + mnWidth; break;
         case 32:    mnBytesPerRow = mnWidth << 2; break;
         default:
-            DBG_ERROR("vcl::AquaSalBitmap::AllocateUserData(), illegal bitcount!");
+            OSL_FAIL("vcl::AquaSalBitmap::AllocateUserData(), illegal bitcount!");
         }
     }
 
@@ -276,7 +276,7 @@ bool AquaSalBitmap::AllocateUserData()
     }
     catch( const std::bad_alloc& )
     {
-        DBG_ERROR( "vcl::AquaSalBitmap::AllocateUserData: bad alloc" );
+        OSL_FAIL( "vcl::AquaSalBitmap::AllocateUserData: bad alloc" );
         maUserBuffer.reset( NULL );
         mnBytesPerRow = 0;
     }

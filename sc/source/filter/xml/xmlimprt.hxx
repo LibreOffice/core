@@ -53,7 +53,7 @@
 #include <com/sun/star/sheet/XSheetCellRangeContainer.hpp>
 
 #include <vector>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 class ScRangeList;
 class ScMyStyleNumberFormats;
@@ -653,7 +653,7 @@ struct ScMyImportValidation
     rtl::OUString                                   sFormula2;
     rtl::OUString                                   sFormulaNmsp1;
     rtl::OUString                                   sFormulaNmsp2;
-    rtl::OUString                                   sBaseCellAddress;   // #b4974740# string is used directly
+    rtl::OUString                                   sBaseCellAddress;   // string is used directly
     com::sun::star::sheet::ValidationAlertStyle     aAlertStyle;
     com::sun::star::sheet::ValidationType           aValidationType;
     com::sun::star::sheet::ConditionOperator        aOperator;
@@ -671,7 +671,7 @@ class ScMyStylesImportHelper;
 
 class ScXMLImport: public SvXMLImport
 {
-    typedef ::std::hash_map< ::rtl::OUString, sal_Int16, ::rtl::OUStringHash >  CellTypeMap;
+    typedef ::boost::unordered_map< ::rtl::OUString, sal_Int16, ::rtl::OUStringHash >   CellTypeMap;
     CellTypeMap             aCellTypeMap;
 
     ScDocument*             pDoc;
@@ -684,17 +684,12 @@ class ScXMLImport: public SvXMLImport
     rtl::OUString                       sStandardFormat;
     rtl::OUString                       sType;
 
-//  SvXMLAutoStylePoolP     *pScAutoStylePool;
     UniReference < XMLPropertyHandlerFactory >  xScPropHdlFactory;
     UniReference < XMLPropertySetMapper >       xCellStylesPropertySetMapper;
     UniReference < XMLPropertySetMapper >       xColumnStylesPropertySetMapper;
     UniReference < XMLPropertySetMapper >       xRowStylesPropertySetMapper;
     UniReference < XMLPropertySetMapper >       xTableStylesPropertySetMapper;
-//  SvXMLImportContextRef       xStyles;
-//  SvXMLImportContextRef       xAutoStyles;
 
-//  SvXMLImportItemMapper   *pParaItemMapper;// paragraph item import
-//  SvI18NMap               *pI18NMap;          // name mapping for I18N
     SvXMLTokenMap           *pDocElemTokenMap;
     SvXMLTokenMap           *pStylesElemTokenMap;
     SvXMLTokenMap           *pStylesAttrTokenMap;
@@ -823,8 +818,6 @@ public:
                                     const ::rtl::OUString& rLocalName );
     SvXMLImportContext *CreateStylesContext(const ::rtl::OUString& rLocalName,
                                      const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList, sal_Bool bAutoStyles );
-//  SvXMLImportContext *CreateUseStylesContext(const ::rtl::OUString& rLocalName ,
-//                                  const ::com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList);
     SvXMLImportContext *CreateBodyContext(
                                     const ::rtl::OUString& rLocalName,
                                     const ::com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList );
@@ -844,21 +837,10 @@ public:
 
     sal_Int16 GetCellType(const ::rtl::OUString& rStrValue) const;
 
-//  SvI18NMap& GetI18NMap() { return *pI18NMap; }
-
-//  inline const SvXMLImportItemMapper& GetParaItemMapper() const;
-//  SvXMLImportContext *CreateParaItemImportContext( USHORT nPrefix,
-//                                const ::rtl::OUString& rLocalName,
-//                                const ::com::sun::star::uno::Reference<
-//                                  ::com::sun::star::xml::sax::XAttributeList& xAttrList,
-//                                SfxItemSet& rItemSet );
-
     UniReference < XMLPropertySetMapper > GetCellStylesPropertySetMapper() const { return xCellStylesPropertySetMapper; }
     UniReference < XMLPropertySetMapper > GetColumnStylesPropertySetMapper() const { return xColumnStylesPropertySetMapper; }
     UniReference < XMLPropertySetMapper > GetRowStylesPropertySetMapper() const { return xRowStylesPropertySetMapper; }
     UniReference < XMLPropertySetMapper > GetTableStylesPropertySetMapper() const { return xTableStylesPropertySetMapper; }
-//  SvXMLImportContextRef           GetAutoStyles() const { return xAutoStyles; }
-//  SvXMLImportContextRef           GetStyles() const { return xStyles; }
 
     const SvXMLTokenMap& GetDocElemTokenMap();
     const SvXMLTokenMap& GetBodyElemTokenMap();
@@ -924,11 +906,6 @@ public:
     const SvXMLTokenMap& GetDataPilotMembersElemTokenMap();
     const SvXMLTokenMap& GetDataPilotMemberAttrTokenMap();
     const SvXMLTokenMap& GetConsolidationAttrTokenMap();
-//  const SvXMLTokenMap& GetTextPElemTokenMap();
-//  const SvXMLTokenMap& GetTextPAttrTokenMap();
-//  const SvXMLTokenMap& GetStyleStylesElemTokenMap();
-//  const SvXMLTokenMap& GetTextListBlockAttrTokenMap();
-//  const SvXMLTokenMap& GetTextListBlockElemTokenMap();
 
     void    AddNamedExpression(const ScMyNamedExpression* pMyNamedExpression) {
         if (!pMyNamedExpressions)
@@ -996,7 +973,6 @@ public:
     // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
 
-    // ::com::sun::star::xml::sax::XDocumentHandler
     virtual void SAL_CALL startDocument(void)
         throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL endDocument(void)

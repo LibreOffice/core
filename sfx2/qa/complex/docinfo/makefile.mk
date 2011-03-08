@@ -31,8 +31,8 @@ PRJNAME = sfx2
 PACKAGE = complex$/docinfo
 
 # --- Settings -----------------------------------------------------
-.INCLUDE: settings.mk
 
+.INCLUDE: settings.mk
 
 #----- compile .java files -----------------------------------------
 

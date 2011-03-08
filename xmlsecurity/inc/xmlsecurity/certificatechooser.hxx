@@ -61,7 +61,7 @@ private:
     SignatureInformations maCertsToIgnore;
 
     FixedText           maHintFT;
-    SvxSimpleTable      maCertLB;   // PB 2006/02/02 #i48648 now SvHeaderTabListBox
+    SvxSimpleTable      maCertLB;   // #i48648 now SvHeaderTabListBox
 
     PushButton          maViewBtn;
 

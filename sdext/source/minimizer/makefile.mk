@@ -38,7 +38,6 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # set in minimizer.pmk
-#EXTENSIONNAME:=PresentationMinimizer
 EXTENSION_ZIPNAME:=presentation-minimizer
 
 .IF "$(ENABLE_MINIMIZER)" != "YES"

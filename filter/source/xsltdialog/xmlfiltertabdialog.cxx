@@ -45,11 +45,12 @@
 #include "xmlfiltersettingsdialog.hrc"
 #include "xmlfilterhelpids.hrc"
 
-using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::container;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
+
+using ::rtl::OUString;
 
 XMLFilterTabDialog::XMLFilterTabDialog( Window *pParent, ResMgr& rResMgr, const Reference< XMultiServiceFactory >& rxMSF, const filter_info_impl* pInfo ) :
     TabDialog( pParent, ResId( DLG_XML_FILTER_TABDIALOG, rResMgr ) ),
@@ -161,7 +162,7 @@ bool XMLFilterTabDialog::onOk()
             }
             catch( Exception& )
             {
-                DBG_ERROR( "XMLFilterTabDialog::onOk exception catched!" );
+                OSL_FAIL( "XMLFilterTabDialog::onOk exception catched!" );
             }
         }
     }
@@ -219,7 +220,7 @@ bool XMLFilterTabDialog::onOk()
             }
             catch( Exception& )
             {
-                DBG_ERROR( "XMLFilterTabDialog::onOk exception catched!" );
+                OSL_FAIL( "XMLFilterTabDialog::onOk exception catched!" );
             }
         }
     }

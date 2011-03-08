@@ -166,7 +166,7 @@ SlideSorterViewShell::~SlideSorterViewShell (void)
     catch( ::com::sun::star::uno::Exception& e )
     {
         (void)e;
-        DBG_ERROR("sd::SlideSorterViewShell::~SlideSorterViewShell(), exception caught!" );
+        OSL_FAIL("sd::SlideSorterViewShell::~SlideSorterViewShell(), exception caught!" );
     }
 }
 
@@ -664,7 +664,6 @@ void SlideSorterViewShell::SetZoomRect (const Rectangle& rZoomRect)
 
     ViewShell::SetZoomRect(aRect);
 
-    // #106268#
     GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOM );
     GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOMSLIDER );
 }

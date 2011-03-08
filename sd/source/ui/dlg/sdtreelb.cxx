@@ -249,7 +249,7 @@ SdPageObjsTLB::SdPageObjsTLB( Window* pParentWin, const SdResId& rSdResId )
     // Tree-ListBox mit Linien versehen
     SetWindowBits( WinBits( WB_TABSTOP | WB_BORDER | WB_HASLINES |
                             WB_HASBUTTONS | // WB_HASLINESATROOT |
-                            WB_HSCROLL | // #31562#
+                            WB_HSCROLL |
                             WB_HASBUTTONSATROOT ) );
     SetNodeBitmaps( Bitmap( SdResId( BMP_EXPAND ) ),
                     Bitmap( SdResId( BMP_COLLAPSE ) ) );
@@ -995,7 +995,7 @@ void SdPageObjsTLB::DoDrag()
         sal_Int8        nDNDActions = DND_ACTION_COPYMOVE;
 
         if( eDragType == NAVIGATOR_DRAGTYPE_LINK )
-            nDNDActions = DND_ACTION_LINK;  // #93240# Either COPY *or* LINK, never both!
+            nDNDActions = DND_ACTION_LINK;  // Either COPY *or* LINK, never both!
 
         SvTreeListBox::ReleaseMouse();
 

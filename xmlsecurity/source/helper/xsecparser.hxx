@@ -53,9 +53,6 @@ class XSecParser: public cppu::WeakImplHelper2
  *  security elements in the SAX event stream, then notifies
  *  the XSecController.
  *
- *   HISTORY
- *  05.01.2004 -    Interface supported: XDocumentHandler, XInitialization
- *
  *   NOTES
  *  This class is used when importing a document.
  *

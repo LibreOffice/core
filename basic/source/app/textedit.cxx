@@ -201,7 +201,7 @@ void TextEditImp::ImpDoHighlight( const String& rSource, ULONG nLineOff )
     if ( rLast.nStart > rLast.nEnd )    // Only up to the bug of MD repaired
     {
 #if OSL_DEBUG_LEVEL > 1
-        DBG_ERROR( "MD-Bug is not repaired!" );
+        OSL_FAIL( "MD-Bug is not repaired!" );
 #endif
         nCount--;
         aPortionList.Remove( nCount);
@@ -324,7 +324,7 @@ void TextEditImp::ImpDoHighlight( const String& rSource, ULONG nLineOff )
             default:
                 {
                     aColor = Color( RGB_COLORDATA( 0xff, 0x80, 0x80 ) );
-                    DBG_ERROR( "Unknown syntax color" );
+                    OSL_FAIL( "Unknown syntax color" );
                 }
         }
         pTextEngine->SetAttrib( TextAttribFontColor( aColor ), nLine, r.nStart, r.nEnd+1 );

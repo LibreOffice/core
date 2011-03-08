@@ -45,6 +45,7 @@ mkdir: %_DEST%\inc%_EXT%\vcl
 ..\inc\vcl\floatwin.hxx %_DEST%\inc%_EXT%\vcl\floatwin.hxx
 ..\inc\vcl\fntstyle.hxx %_DEST%\inc%_EXT%\vcl\fntstyle.hxx
 ..\inc\vcl\font.hxx %_DEST%\inc%_EXT%\vcl\font.hxx
+..\inc\vcl\fontcapabilities.hxx %_DEST%\inc%_EXT%\vcl\fontcapabilities.hxx
 ..\inc\vcl\fontcvt.hxx %_DEST%\inc%_EXT%\vcl\fontcvt.hxx
 ..\inc\vcl\gdimtf.hxx %_DEST%\inc%_EXT%\vcl\gdimtf.hxx
 ..\inc\vcl\gfxlink.hxx %_DEST%\inc%_EXT%\vcl\gfxlink.hxx

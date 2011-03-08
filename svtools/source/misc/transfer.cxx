@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 #ifdef WNT
-#include <tools/prewin.h>
+#include <prewin.h>
 #if defined _MSC_VER
 #pragma warning(push, 1)
 #pragma warning(disable: 4917)
@@ -38,7 +38,7 @@
 #if defined _MSC_VER
 #pragma warning(pop)
 #endif
-#include <tools/postwin.h>
+#include <postwin.h>
 #endif
 #include <osl/mutex.hxx>
 #include <rtl/memory.h>
@@ -634,7 +634,7 @@ void TransferableHelper::ImplFlush()
         }
         catch( const ::com::sun::star::uno::Exception& )
         {
-            DBG_ERROR( "Could not flush clipboard" );
+            OSL_FAIL( "Could not flush clipboard" );
         }
 
         Application::AcquireSolarMutex( nRef );
@@ -1038,7 +1038,7 @@ sal_Bool TransferableHelper::SetInterface( const ::com::sun::star::uno::Referenc
 
 sal_Bool TransferableHelper::WriteObject( SotStorageStreamRef&, void*, sal_uInt32, const DataFlavor& )
 {
-    DBG_ERROR( "TransferableHelper::WriteObject( ... ) not implemented" );
+    OSL_FAIL( "TransferableHelper::WriteObject( ... ) not implemented" );
     return sal_False;
 }
 
@@ -2301,7 +2301,7 @@ TransferableDataHelper TransferableDataHelper::CreateFromSystemClipboard( Window
             {
                 aRet = TransferableDataHelper( xTransferable );
                    aRet.mxClipboard = xClipboard;
-                    // also copy the clipboard - 99030 - 23.05.2002 - fs@openoffice.org
+                    // also copy the clipboard
             }
            }
         catch( const ::com::sun::star::uno::Exception& )

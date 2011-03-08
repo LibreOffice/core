@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include "hintids.hxx"
 #include <svl/aeitem.hxx>
 #include <svl/itempool.hxx>
@@ -74,10 +73,8 @@
 #include "dselect.hxx"
 #include "edtwin.hxx"
 
-// #108784#
 #include <dcontact.hxx>
 
-// #108784#
 #include <svx/svdpagv.hxx>
 #include <svx/extrusionbar.hxx>
 #include <vcl/svapp.hxx>
@@ -417,7 +414,7 @@ void SwView::ExitDraw()
 
     if(pShell)
     {
-        //#126062 # the shell may be invalid at close/reload/SwitchToViewShell
+        // the shell may be invalid at close/reload/SwitchToViewShell
         SfxDispatcher* pDispatch = GetViewFrame()->GetDispatcher();
         USHORT nIdx = 0;
         SfxShell* pTest = 0;
@@ -494,7 +491,6 @@ sal_Bool SwView::EnterDrawTextMode(const Point& aDocPos)
         !pSdrView->PickHandle( aDocPos ) && IsTextTool() &&
         pSdrView->PickObj( aDocPos, pSdrView->getHitTolLog(), pObj, pPV, SDRSEARCH_PICKTEXTEDIT ) &&
 
-        // #108784#
         // To allow SwDrawVirtObj text objects to be activated, allow their type, too.
         ( pObj->ISA( SdrTextObj ) ||
           ( pObj->ISA(SwDrawVirtObj) &&
@@ -552,19 +548,17 @@ sal_Bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin,
             pOutliner->SetVertical( SID_DRAW_TEXT_VERTICAL == nDrawSfxId ||
                                     SID_DRAW_CAPTION_VERTICAL == nDrawSfxId );
 
-        // OD 09.12.2002 #103045# - set default horizontal text direction at outliner
+        // set default horizontal text direction at outliner
         EEHorizontalTextDirection aDefHoriTextDir =
             pSh->IsShapeDefaultHoriTextDirR2L() ? EE_HTEXTDIR_R2L : EE_HTEXTDIR_L2R;
         pOutliner->SetDefaultHorizontalTextDirection( aDefHoriTextDir );
     }
 
-    // #108784#
     // To allow editing the referenced object from a SwDrawVirtObj here
     // the original needs to be fetched evenually. This ATM activates the
     // text edit mode for the original object.
     SdrObject* pToBeActivated = pObj;
 
-    // #108784#
     // Always the original object is edited. To allow the TextEdit to happen
     // where the VirtObj is positioned, on demand a occurring offset is set at
     // the TextEdit object. That offset is used for creating and managing the

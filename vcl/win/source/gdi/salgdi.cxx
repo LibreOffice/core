@@ -40,8 +40,7 @@
 #include <tools/poly.hxx>
 #include <rtl/strbuf.hxx>
 
-using namespace rtl;
-
+using ::rtl::OStringBuffer;
 // =======================================================================
 
 // comment out to prevent use of beziers on GDI functions

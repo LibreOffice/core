@@ -1073,9 +1073,8 @@ sal_Bool  LwpTableLayout::FindSplitColMark(XFTable* pXFTable,sal_uInt8* pCellMar
 void LwpTableLayout::ConvertTable(XFTable* pXFTable,sal_uInt16 nStartRow,
                 sal_uInt16 nEndRow,sal_uInt8 nStartCol,sal_uInt8 nEndCol)
 {
-    //out put column info TO BE CHANGED,note by ,2005/4/4
+    //out put column info TO BE CHANGED
     ConvertColumn(pXFTable,nStartCol,nEndCol);
-    //note end
 
     std::map<sal_uInt16,LwpRowLayout*>::iterator iter;
 
@@ -1194,11 +1193,9 @@ void LwpTableLayout::PostProcessParagraph(XFCell *pCell, sal_uInt16 nRowID, sal_
     if(pCellLayout)
     {
         XFParagraph * pXFPara = NULL;
-        //mod by ,fix bug 2759,2006/3/22
         pXFPara = static_cast<XFParagraph*>(pCell->FindFirstContent(enumXFContentPara));
         if (!pXFPara)
             return;
-        //mod end
         XFColor aColor;
         XFColor aNullColor = XFColor();
 

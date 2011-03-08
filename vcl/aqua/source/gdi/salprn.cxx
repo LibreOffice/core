@@ -49,13 +49,15 @@
 
 #include <algorithm>
 
-using namespace rtl;
 using namespace vcl;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
+
+using ::rtl::OUString;
+using ::rtl::OStringToOUString;
 
 // =======================================================================
 
@@ -150,7 +152,7 @@ void AquaSalInfoPrinter::SetupPrinterGraphics( CGContextRef i_rContext ) const
             mpGraphics->SetPrinterGraphics( i_rContext, nDPIX, nDPIY, 1.0 );
         }
         else
-            DBG_ERROR( "no print info in SetupPrinterGraphics" );
+            OSL_FAIL( "no print info in SetupPrinterGraphics" );
     }
 }
 
@@ -773,7 +775,7 @@ BOOL AquaSalPrinter::StartJob( const XubString* i_pFileName,
                                bool i_bDirect,
                                ImplJobSetup* i_pSetupData )
 {
-    DBG_ERROR( "should never be called" );
+    OSL_FAIL( "should never be called" );
     return FALSE;
 }
 

@@ -114,7 +114,7 @@ interface XMailServer: ::com::sun::star::uno::XInterface {
     /**
         Returns all connection types which are supported by the
         mail server. Possible connection types are for instance
-        secure connections like 'SSL' or 'TLS'.
+        secure connections like "SSL" or "TLS".
 
         @returns
         a sequence of supported connection types.
@@ -228,7 +228,7 @@ interface XMailServer: ::com::sun::star::uno::XInterface {
                com::sun::star::mail::MailException);
 
     /**
-        Logoff the currently logged in user.
+        Log off the currently logged in user.
 
         @throws com::sun::star::mail::MessagingException
         if errors occur during logoff.
@@ -263,7 +263,7 @@ interface XMailServer: ::com::sun::star::uno::XInterface {
         @throws com::sun::star::datatransfer::UnsupportedFlavorException
         is thrown when the body of the mail message is provided in an
         unsupported mime content type or may be thrown if one of the file
-        attachments specifies an unspupported mime content type.
+        attachments specifies an unsupported mime content type.
 
         @see com::sun::star::io::NotConnectedExceptionException
         @see com::sun::star::mail::SendMailMessageFailedException

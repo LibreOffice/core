@@ -61,6 +61,7 @@ public:
     ValueType getValue(SCCOLROW nPos);
     ExtValueType getSumValue(SCCOLROW nPos1, SCCOLROW nPos2);
     bool getRangeData(SCCOLROW nPos, RangeData& rData);
+    bool getRangeDataLeaf(SCCOLROW nPos, RangeData& rData);
     void removeSegment(SCCOLROW nPos1, SCCOLROW nPos2);
     void insertSegment(SCCOLROW nPos, SCCOLROW nSize, bool bSkipStartBoundary);
 
@@ -75,33 +76,25 @@ public:
         mbTreeSearchEnabled = b;
     }
 
-    void setInsertFromBack(bool b)
-    {
-        mbInsertFromBack = b;
-    }
-
 private:
     typedef ::mdds::flat_segment_tree<SCCOLROW, ValueType> fst_type;
     fst_type maSegments;
     typename fst_type::const_iterator maItr;
 
     bool mbTreeSearchEnabled:1;
-    bool mbInsertFromBack:1;
 };
 
 template<typename _ValueType, typename _ExtValueType>
 ScFlatSegmentsImpl<_ValueType, _ExtValueType>::ScFlatSegmentsImpl(SCCOLROW nMax, ValueType nDefault) :
     maSegments(0, nMax+1, nDefault),
-    mbTreeSearchEnabled(true),
-    mbInsertFromBack(false)
+    mbTreeSearchEnabled(true)
 {
 }
 
 template<typename _ValueType, typename _ExtValueType>
 ScFlatSegmentsImpl<_ValueType, _ExtValueType>::ScFlatSegmentsImpl(const ScFlatSegmentsImpl<_ValueType, _ExtValueType>& r) :
     maSegments(r.maSegments),
-    mbTreeSearchEnabled(r.mbTreeSearchEnabled),
-    mbInsertFromBack(r.mbInsertFromBack)
+    mbTreeSearchEnabled(r.mbTreeSearchEnabled)
 {
 }
 
@@ -114,11 +107,7 @@ template<typename _ValueType, typename _ExtValueType>
 bool ScFlatSegmentsImpl<_ValueType, _ExtValueType>::setValue(SCCOLROW nPos1, SCCOLROW nPos2, ValueType nValue)
 {
     ::std::pair<typename fst_type::const_iterator, bool> ret;
-    if (mbInsertFromBack)
-        ret = maSegments.insert_back(nPos1, nPos2+1, nValue);
-    else
-        ret = maSegments.insert(maItr, nPos1, nPos2+1, nValue);
-
+    ret = maSegments.insert(maItr, nPos1, nPos2+1, nValue);
     maItr = ret.first;
     return ret.second;
 }
@@ -172,28 +161,38 @@ ScFlatSegmentsImpl<_ValueType, _ExtValueType>::getSumValue(SCCOLROW nPos1, SCCOL
 template<typename _ValueType, typename _ExtValueType>
 bool ScFlatSegmentsImpl<_ValueType, _ExtValueType>::getRangeData(SCCOLROW nPos, RangeData& rData)
 {
+    if (!mbTreeSearchEnabled)
+        return getRangeDataLeaf(nPos, rData);
+
     ValueType nValue;
     SCCOLROW nPos1, nPos2;
 
-    if (mbTreeSearchEnabled)
-    {
-        if (!maSegments.is_tree_valid())
-            maSegments.build_tree();
+    if (!maSegments.is_tree_valid())
+        maSegments.build_tree();
 
-        if (!maSegments.search_tree(nPos, nValue, &nPos1, &nPos2))
-            return false;
-    }
-    else
-    {
-        // Conduct leaf-node only search.  Faster when searching between range insertion.
-        ::std::pair<typename fst_type::const_iterator, bool> ret =
-            maSegments.search(maItr, nPos, nValue, &nPos1, &nPos2);
+    if (!maSegments.search_tree(nPos, nValue, &nPos1, &nPos2))
+        return false;
 
-        if (!ret.second)
-            return false;
+    rData.mnPos1 = nPos1;
+    rData.mnPos2 = nPos2-1; // end point is not inclusive.
+    rData.mnValue = nValue;
+    return true;
+}
 
-        maItr = ret.first;
-    }
+template<typename _ValueType, typename _ExtValueType>
+bool ScFlatSegmentsImpl<_ValueType, _ExtValueType>::getRangeDataLeaf(SCCOLROW nPos, RangeData& rData)
+{
+    ValueType nValue;
+    SCCOLROW nPos1, nPos2;
+
+    // Conduct leaf-node only search.  Faster when searching between range insertion.
+    ::std::pair<typename fst_type::const_iterator, bool> ret =
+        maSegments.search(maItr, nPos, nValue, &nPos1, &nPos2);
+
+    if (!ret.second)
+        return false;
+
+    maItr = ret.first;
 
     rData.mnPos1 = nPos1;
     rData.mnPos2 = nPos2-1; // end point is not inclusive.
@@ -398,6 +397,18 @@ bool ScFlatBoolRowSegments::getRangeData(SCROW nRow, RangeData& rData)
     return true;
 }
 
+bool ScFlatBoolRowSegments::getRangeDataLeaf(SCROW nRow, RangeData& rData)
+{
+    ScFlatBoolSegmentsImpl::RangeData aData;
+    if (!mpImpl->getRangeDataLeaf(static_cast<SCCOLROW>(nRow), aData))
+        return false;
+
+    rData.mbValue = aData.mnValue;
+    rData.mnRow1  = static_cast<SCROW>(aData.mnPos1);
+    rData.mnRow2  = static_cast<SCROW>(aData.mnPos2);
+    return true;
+}
+
 void ScFlatBoolRowSegments::removeSegment(SCROW nRow1, SCROW nRow2)
 {
     mpImpl->removeSegment(static_cast<SCCOLROW>(nRow1), static_cast<SCCOLROW>(nRow2));
@@ -406,16 +417,6 @@ void ScFlatBoolRowSegments::removeSegment(SCROW nRow1, SCROW nRow2)
 void ScFlatBoolRowSegments::insertSegment(SCROW nRow, SCROW nSize, bool bSkipStartBoundary)
 {
     mpImpl->insertSegment(static_cast<SCCOLROW>(nRow), static_cast<SCCOLROW>(nSize), bSkipStartBoundary);
-}
-
-void ScFlatBoolRowSegments::enableTreeSearch(bool bEnable)
-{
-    mpImpl->enableTreeSearch(bEnable);
-}
-
-void ScFlatBoolRowSegments::setInsertFromBack(bool bEnable)
-{
-    mpImpl->setInsertFromBack(bEnable);
 }
 
 SCROW ScFlatBoolRowSegments::findLastNotOf(bool bValue) const
@@ -470,19 +471,6 @@ void ScFlatBoolColSegments::insertSegment(SCCOL nCol, SCCOL nSize, bool bSkipSta
 {
     mpImpl->insertSegment(static_cast<SCCOLROW>(nCol), static_cast<SCCOLROW>(nSize), bSkipStartBoundary);
 }
-
-void ScFlatBoolColSegments::enableTreeSearch(bool bEnable)
-{
-    mpImpl->enableTreeSearch(bEnable);
-}
-
-void ScFlatBoolColSegments::setInsertFromBack(bool bInsertFromBack)
-{
-    mpImpl->setInsertFromBack(bInsertFromBack);
-}
-
-// ============================================================================
-
 
 // ============================================================================
 
@@ -578,11 +566,6 @@ SCROW ScFlatUInt16RowSegments::findLastNotOf(sal_uInt16 nValue) const
 void ScFlatUInt16RowSegments::enableTreeSearch(bool bEnable)
 {
     mpImpl->enableTreeSearch(bEnable);
-}
-
-void ScFlatUInt16RowSegments::setInsertFromBack(bool bInsertFromBack)
-{
-    mpImpl->setInsertFromBack(bInsertFromBack);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

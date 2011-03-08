@@ -68,11 +68,6 @@ WW8sprmPChgTabsPapx::get_tbdAdd(sal_uInt32 pos)
                     0x4 + get_dxaDel_count() * 2 + 1 + get_dxaAdd_count() * 2
                     + pos, 1));
     return pRet;
-
-/*    return writerfilter::Reference<Properties>::Pointer_t
-        (new WW8TBD(this,
-                    0x4 + get_dxaDel_count() * 2 + 1 + get_dxaAdd_count() * 2
-                    + pos, 1));*/
 }
 }}
 

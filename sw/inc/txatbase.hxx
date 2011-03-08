@@ -31,7 +31,6 @@
 #include <tools/solar.h>
 #include <svl/poolitem.hxx>
 #include <hintids.hxx>
-#include <errhdl.hxx>
 
 #include <boost/utility.hpp>
 

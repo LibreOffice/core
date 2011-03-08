@@ -33,6 +33,7 @@
 #include <tools/fsys.hxx>
 #include <vcl/button.hxx>
 #include <vcl/unohelp.hxx>
+#include <vector>
 
 class FixedText;
 class Edit;
@@ -56,7 +57,7 @@ struct ImpFilterItem
     }
 };
 
-DECLARE_LIST( ImpFilterList, ImpFilterItem* )
+typedef ::std::vector< ImpFilterItem* > ImpFilterList;
 #include <vcl/lstbox.hxx>
 
 class KbdListBox : public ListBox
@@ -95,10 +96,6 @@ private:
     DirEntry            aPath;          // aktuell angewaehlter Pfad
     USHORT              nDirCount;      // Anzahl der Verzeichnis-
                                         // Verschachtelungen
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCollator >
-                        xCollator;
-
 protected:
 
     virtual void        UpdateEntries( const BOOL bWithDirs );
@@ -167,9 +164,9 @@ public:
     void                SetCurFilter( const String& rFilter );
     String              GetCurFilter() const;
 
-    USHORT              GetFilterCount() const  { return (USHORT)aFilterList.Count(); }
-    inline String       GetFilterName( USHORT nPos ) const;
-    inline String       GetFilterType( USHORT nPos ) const;
+    size_t              GetFilterCount() const  { return aFilterList.size(); }
+    inline String       GetFilterName( size_t nPos ) const;
+    inline String       GetFilterType( size_t nPos ) const;
 
     virtual void        SetPath( const String& rPath );
     virtual void        SetPath( const Edit& rEdit );
@@ -180,21 +177,21 @@ public:
     FileDialog*     GetFileDialog() const { return (FileDialog*)GetPathDialog(); }
 };
 
-inline String ImpFileDialog::GetFilterName( USHORT nPos ) const
+inline String ImpFileDialog::GetFilterName( size_t nPos ) const
 {
     String aName;
-    ImpFilterItem* pItem = aFilterList.GetObject( nPos );
-    if ( pItem )
-        aName = pItem->aName;
+    if ( nPos < aFilterList.size() ) {
+        aName = aFilterList[ nPos ]->aName;
+    }
     return aName;
 }
 
-inline String ImpFileDialog::GetFilterType( USHORT nPos ) const
+inline String ImpFileDialog::GetFilterType( size_t nPos ) const
 {
     String aFilterMask;
-    ImpFilterItem* pItem = aFilterList.GetObject( nPos );
-    if ( pItem )
-        aFilterMask = pItem->aMask;
+    if ( nPos < aFilterList.size() ) {
+        aFilterMask = aFilterList[ nPos ]->aMask;
+    }
     return aFilterMask;
 }
 

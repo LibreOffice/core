@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include <string> // HACK: prevent conflict between STLPORT and Workshop headers
+#include <string>
 
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/awt/MenuItemStyle.hpp>
@@ -989,7 +989,8 @@ SFX_IMPL_TOOLBOX_CONTROL( ExtrusionColorControl, SvxColorItem );
 
 ExtrusionColorControl::ExtrusionColorControl(
     USHORT nSlotId, USHORT nId, ToolBox& rTbx )
-: SfxToolBoxControl ( nSlotId, nId, rTbx )
+: SfxToolBoxControl ( nSlotId, nId, rTbx ),
+  mLastColor( COL_AUTO )
 {
     rTbx.SetItemBits( nId, TIB_DROPDOWNONLY | rTbx.GetItemBits( nId ) );
     mpBtnUpdater = new ToolboxButtonColorUpdater( nSlotId, nId, &GetToolBox(), TBX_UPDATER_MODE_CHAR_COLOR_NEW );
@@ -1018,7 +1019,8 @@ SfxPopupWindow* ExtrusionColorControl::CreatePopupWindow()
         SID_EXTRUSION_3D_COLOR,
         m_xFrame,
         SVX_RESSTR( RID_SVXSTR_EXTRUSION_COLOR ),
-        &GetToolBox() );
+        &GetToolBox(),
+        mLastColor );
     pColorWin->StartPopupMode( &GetToolBox(), FLOATWIN_POPUPMODE_GRABFOCUS|FLOATWIN_POPUPMODE_ALLOWTEAROFF );
     pColorWin->StartSelection();
     SetPopupWindow( pColorWin );
@@ -1040,7 +1042,10 @@ void ExtrusionColorControl::StateChanged( USHORT nSID, SfxItemState eState, cons
             pItem = PTR_CAST( SvxColorItem, pState );
 
         if ( pItem )
+        {
             mpBtnUpdater->Update( pItem->GetValue());
+            mLastColor = pItem->GetValue();
+        }
     }
 
     rTbx.EnableItem( nId, SFX_ITEM_DISABLED != eState );

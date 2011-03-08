@@ -66,9 +66,7 @@
 #define XML_LINE_TLBR 0
 #define XML_LINE_BLTR 1
 
-using ::rtl::OUString;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::frame;
@@ -79,6 +77,7 @@ using namespace ::formula;
 
 using rtl::OUString;
 using com::sun::star::uno::Reference;
+using com::sun::star::uno::UNO_QUERY;
 
 ScXMLCellImportPropertyMapper::ScXMLCellImportPropertyMapper(
         const UniReference< XMLPropertySetMapper >& rMapper,
@@ -349,7 +348,7 @@ void XMLTableStyleContext::SetOperator( uno::Sequence< beans::PropertyValue >& r
 
 void XMLTableStyleContext::SetBaseCellAddress( uno::Sequence< beans::PropertyValue >& rProps, const OUString& rBaseCell ) const
 {
-    /*  #b4974740# Source position must be set as string, because it may refer
+    /*  Source position must be set as string, because it may refer
         to a sheet that hasn't been loaded yet. */
     lclAppendProperty( rProps, OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_SOURCESTR ) ), rBaseCell );
 }
@@ -618,7 +617,7 @@ sal_Int32 XMLTableStyleContext::GetNumberFormat()
                     pMyStyles->FindStyleChildContext(XML_STYLE_FAMILY_DATA_STYLE, sDataStyleName, sal_True));
             else
             {
-                DBG_ERROR("not possible to get style");
+                OSL_FAIL("not possible to get style");
             }
         }
         if (pStyle)

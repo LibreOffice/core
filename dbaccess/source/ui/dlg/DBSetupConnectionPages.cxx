@@ -51,7 +51,6 @@
 #include <comphelper/types.hxx>
 
 #include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
-// #106016# ------------------------------------
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/sdbc/XDriverAccess.hpp>
 #include "dbustrings.hrc"
@@ -66,6 +65,7 @@
 #include <unotools/pathoptions.hxx>
 #include <svtools/roadmapwizard.hxx>
 #include "TextConnectionHelper.hxx"
+#include <osl/diagnose.h>
 
 
 //.........................................................................
@@ -202,7 +202,7 @@ DBG_NAME(OTextConnectionPageSetup)
             ::dbaccess::ODsnTypeCollection* pCollection = NULL;
             if (pCollectionItem)
                 pCollection = pCollectionItem->getCollection();
-            DBG_ASSERT(pCollection, "OLDAPConnectionPageSetup::FillItemSet : really need a DSN type collection !");
+            OSL_ENSURE(pCollection, "OLDAPConnectionPageSetup::FillItemSet : really need a DSN type collection !");
 
             String sUrl = pCollection->getPrefix( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:address:ldap:")));
             sUrl += m_aETHostServer.GetText();

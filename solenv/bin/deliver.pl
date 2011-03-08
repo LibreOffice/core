@@ -268,7 +268,6 @@ sub do_linklib
         }
         else
         {
-            # $lib =~ /^(lib[\w-]+(\.so|\.dylib))\.(\d+)$/;
             $long = 0;
         }
 

@@ -49,9 +49,6 @@ public:
     virtual SfxPoolItem*     Clone(SfxItemPool *pPool=NULL) const;
             const Fraction&  GetValue() const { return nValue; }
             void             SetValue(const Fraction& rVal) { nValue = rVal; }
-#ifdef SDR_ISPOOLABLE
-    virtual int IsPoolable() const;
-#endif
 };
 
 

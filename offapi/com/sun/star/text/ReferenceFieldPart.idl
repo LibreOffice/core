@@ -40,7 +40,7 @@ module com { module sun { module star { module text {
 published constants ReferenceFieldPart
 {
     //-------------------------------------------------------------------------
-    /** The page number is displayed using arabic numbers.
+    /** The page number is displayed using Arabic numbers.
     */
     const short PAGE = 0;
 
@@ -82,7 +82,7 @@ published constants ReferenceFieldPart
     */
     const short ONLY_SEQUENCE_NUMBER = 7;
         //-------------------------------------------------------------------------
-        /** The numbering label and depending of the reference field context numbering lables of
+        /** The numbering label and depending of the reference field context numbering labels of
             superior list levels of the reference are displayed.
 
             <p>This option is only valid, if the source of the reference is a bookmark or a set reference.</p>
@@ -112,7 +112,7 @@ published constants ReferenceFieldPart
         */
         const short NUMBER_NO_CONTEXT = 9;
         //-------------------------------------------------------------------------
-        /** The numbering label and numbering lables of superior list levels of the reference are displayed.
+        /** The numbering label and numbering labels of superior list levels of the reference are displayed.
 
             <p>This option is only valid, if the source of the reference is a bookmark or a set reference.</p>
             <p>The contents of the list label of the paragraph, at which the bookmark respectively the

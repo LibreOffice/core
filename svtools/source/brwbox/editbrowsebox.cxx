@@ -501,7 +501,6 @@ namespace svt
 
         // we are about to leave the current cell. If there is a "this cell has been modified" notification
         // pending (asynchronously), this may be deadly -> do it synchronously
-        // 95826 - 2002-10-14 - fs@openoffice.org
         if ( nCellModifiedEvent )
         {
             Application::RemoveUserEvent( nCellModifiedEvent );
@@ -512,7 +511,6 @@ namespace svt
         if (0 == rEvt.GetColumnId())
         {   // it was the handle column. save the current cell content if necessary
             // (clicking on the handle column results in selecting the current row)
-            // 23.01.2001 - 82797 - FS
             if (IsEditing() && aController->IsModified())
                 SaveModified();
         }

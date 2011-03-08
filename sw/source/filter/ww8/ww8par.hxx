@@ -148,6 +148,7 @@ SV_DECL_PTRARR_SORT_DEL(WW8OleMaps, WW8OleMap_Ptr,16,16)
 class WW8Reader : public StgReader
 {
     virtual ULONG Read(SwDoc &, const String& rBaseURL, SwPaM &,const String &);
+    ULONG OpenMainStream( SvStorageStreamRef& rRef, USHORT& rBuffSize );
 public:
     virtual int GetReaderType();
 
@@ -563,7 +564,7 @@ private:
     virtual BOOL GetOLEStorageName( long nOLEId, String& rStorageName,
         SvStorageRef& rSrcStorage, com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rDestStorage ) const;
     virtual BOOL ShapeHasText( ULONG nShapeId, ULONG nFilePos ) const;
-    // --> OD 2004-12-14 #i32596# - new parameter <_nCalledByGroup>, which
+    // #i32596# - new parameter <_nCalledByGroup>, which
     // indicates, if the OLE object is imported inside a group object
     virtual SdrObject* ImportOLE( long nOLEId,
                                   const Graphic& rGrf,
@@ -701,9 +702,7 @@ public:
     sal_uInt32 GetPageLeft() const;
     sal_uInt32 GetPageRight() const;
     sal_uInt32 GetPageWidth() const;
-    // --> OD 2007-07-03 #148498#
     sal_uInt32 GetWWPageTopMargin() const;
-    // <--
     bool empty() const { return maSegments.empty(); }
     sal_uInt32 GetTextAreaWidth() const;
 };
@@ -941,12 +940,8 @@ private:
     WW8PLCFMan* pPlcxMan;
     std::map<short, String> aLinkStringMap;
 
-    // --> OD 2010-05-06 #i103711#
-    std::set<const SwNode*> maTxtNodesHavingFirstLineOfstSet;
-    // <--
-    // --> OD 2010-05-11 #i105414#
-    std::set<const SwNode*> maTxtNodesHavingLeftIndentSet;
-    // <--
+    std::set<const SwNode*> maTxtNodesHavingFirstLineOfstSet; // #i103711#
+    std::set<const SwNode*> maTxtNodesHavingLeftIndentSet; // #i105414#
 
     WW8RStyle* pStyles;     // Pointer auf die Style-Einleseklasse
     SwFmt* pAktColl;        // gerade zu erzeugende Collection
@@ -1123,7 +1118,8 @@ private:
         pReffingStck = 0;
     }
     void DeleteAnchorStk()  { DeleteStk( pAnchorStck ); pAnchorStck = 0; }
-    bool AddTextToParagraph(const String& sAddString);
+    void emulateMSWordAddTextToParagraph(const rtl::OUString& rAddString);
+    void simpleAddTextToParagraph(const String& rAddString);
     bool HandlePageBreakChar();
     bool ReadChar(long nPosCp, long nCpOfs);
     bool ReadPlainChars(WW8_CP& rPos, long nEnd, long nCpOfs);
@@ -1149,8 +1145,8 @@ private:
     void ImportTox( int nFldId, String aStr );
 
     void EndSprm( USHORT nId );
-    // --> OD 2010-05-06 #i103711#
-    // --> OD 2010-05-11 #i105414#
+    // #i103711#
+    // #i105414#
     void NewAttr( const SfxPoolItem& rAttr,
                   const bool bFirstLineOfStSet = false,
                   const bool bLeftIndentSet = false );
@@ -1159,7 +1155,6 @@ private:
     bool GetFontParams(USHORT, FontFamily&, String&, FontPitch&,
         rtl_TextEncoding&);
     bool SetNewFontAttr(USHORT nFCode, bool bSetEnums, USHORT nWhich);
-    USHORT CorrectResIdForCharset(CharSet nCharSet, USHORT nWhich);
     void ResetCharSetVars();
     void ResetCJKCharSetVars();
 
@@ -1405,7 +1400,7 @@ private:
 
     void StoreMacroCmds();
 
-    // --> OD 2008-04-10 #i84783#
+    // #i84783#
     // determine object attribute "Layout in Table Cell"
     bool IsObjectLayoutInTableCell( const UINT32 nLayoutInTableCell ) const;
     // <--
@@ -1613,8 +1608,8 @@ public:     // eigentlich private, geht aber leider nur public
 bool CanUseRemoteLink(const String &rGrfName);
 void UseListIndent(SwWW8StyInf &rStyle, const SwNumFmt &rFmt);
 void SetStyleIndent(SwWW8StyInf &rStyleInfo, const SwNumFmt &rFmt);
-// --> OD 2010-05-06 #i103711#
-// --> OD 2010-05-11 #i105414#
+// #i103711#
+// #i105414#
 void SyncIndentWithList( SvxLRSpaceItem &rLR,
                          const SwNumFmt &rFmt,
                          const bool bFirstLineOfStSet,

@@ -515,7 +515,6 @@ sal_Bool Writer::streamSound( const char * filename )
         if (ret_code < 0)
             throw 0;
 
-        int lame_frame_size = lame_get_framesize(m_lame_flags);
         int samples_per_frame = 22050 / 12; // AS: (samples/sec) / (frames/sec) = samples/frame
         int mp3buffer_size = static_cast<int>(samples_per_frame*1.25 + 7200 + 7200);
 
@@ -583,7 +582,7 @@ sal_Bool Writer::streamSound( const char * filename )
 
             SvMemoryStream strm(mp3buffer, ret + ret2, STREAM_READWRITE);
 
-            mpTag->addUI16(samples_to_write); //lame_frame_size);
+            mpTag->addUI16(samples_to_write);
             mpTag->addUI16(0);
             mpTag->addStream(strm);
 

@@ -41,7 +41,7 @@
 
 //=============================================================================
 
-/** This service specifies a html image map.
+/** This service specifies a HTML image map.
  */
 published service ImageMap
 {
@@ -52,7 +52,7 @@ published service ImageMap
         the objects inside this image map.
         @see ImageMapRectangleObject
         @see ImageMapCircleObject
-        @see ImageMapPolygonObjec
+        @see ImageMapPolygonObject
     */
     interface ::com::sun::star::container::XIndexContainer;
 };

@@ -606,7 +606,7 @@ sal_Int32 VDataSeries::getLabelPlacement( sal_Int32 nPointIndex, const uno::Refe
             return nLabelPlacement;
         }
 
-        DBG_ERROR("no label placement supported");
+        OSL_FAIL("no label placement supported");
     }
     catch( uno::Exception& e )
     {

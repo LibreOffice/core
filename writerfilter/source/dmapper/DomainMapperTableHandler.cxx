@@ -119,9 +119,8 @@ void DomainMapperTableHandler::startTable(unsigned int nRows,
 #endif
 }
 
-/*-- 22.02.2008 10:18:37---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 PropertyMapPtr lcl_SearchParentStyleSheetAndMergeProperties(const StyleSheetEntryPtr pStyleSheet, StyleSheetTablePtr pStyleSheetTable)
 {
 #ifdef DEBUG_DOMAINMAPPER
@@ -801,9 +800,6 @@ void DomainMapperTableHandler::startCell(const Handle_t & start,
 #endif
 
     //add a new 'row' of properties
-//    if( m_pCellProperties.size() <= sal::static_int_cast< sal_uInt32, sal_Int32>(m_nRowIndex) )
-//        m_pCellProperties.push_back( RowProperties_t() );
-//    m_pCellProperties[m_nRowIndex].push_back( pProps );
     m_pCellSeq = CellSequencePointer_t(new CellSequence_t(2));
     if (!start.get())
         return;

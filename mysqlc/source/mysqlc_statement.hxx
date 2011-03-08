@@ -14,9 +14,7 @@
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>
 #include <com/sun/star/util/XCancellable.hpp>
 
-#include <preextstl.h>
 #include <cppconn/statement.h>
-#include <postextstl.h>
 #include <cppuhelper/compbase5.hxx>
 #include <list>
 

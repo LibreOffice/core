@@ -82,7 +82,7 @@ static inline String GetViewOptUserItem( const SvtViewOptions& rOpt )
 }
 
 
-// defines f"ur den Style der BrowseBox
+// defines for the style of the BrowseBox
 
 #define STYLE_MULTI_SELECTION   \
     CNTVIEWSTYLE_NODE_BUTTONS | \
@@ -219,7 +219,7 @@ void SvtUpButton_Impl::FillURLMenu( PopupMenu* _pMenu )
     delete _pURLs;
     _pURLs = new SvStringsDtor;
 
-    // "Ubergeordnete Ebenen bestimmen.
+    // determine parent levels
     INetURLObject aObject( pBox->GetViewURL() );
     sal_Int32 nCount = aObject.getSegmentCount();
 

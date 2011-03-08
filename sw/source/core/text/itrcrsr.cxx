@@ -30,7 +30,6 @@
 #include "precompiled_sw.hxx"
 
 #include "hintids.hxx"
-#include "errhdl.hxx"
 #include "ndtxt.hxx"
 #include "frmfmt.hxx"
 #include "paratr.hxx"
@@ -48,7 +47,6 @@
 #include <IDocumentSettingAccess.hxx>
 #include <pagefrm.hxx>
 
-#include "txtcfg.hxx"
 #include "itrtxt.hxx"
 #include "txtfrm.hxx"
 #include "flyfrms.hxx"
@@ -1042,7 +1040,6 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                 // Ausgleich vor 's'.
                 while( pPor && !pPor->GetLen() )
                 {
-                    DBG_LOOP;
                     nX += pPor->Width();
                     if( !pPor->IsMarginPortion() )
                     {
@@ -1289,7 +1286,7 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
 
     // x ist der horizontale Offset innerhalb der Zeile.
     SwTwips x = rPoint.X();
-    CONST SwTwips nLeftMargin  = GetLineStart();
+    const SwTwips nLeftMargin  = GetLineStart();
     SwTwips nRightMargin = GetLineEnd();
     if( nRightMargin == nLeftMargin )
         nRightMargin += 30;

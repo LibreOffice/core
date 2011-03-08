@@ -370,7 +370,6 @@ void SdDrawDocument::CreateLayoutTemplates()
     aLRSpaceItem.SetTxtFirstLineOfst(600);      // Erstzeileneinzug 6mm, rechts 0
     pISet->Put(aLRSpaceItem);
 
-/* #i35937# */
     // ---- Titel ---------------------------------------------------------
 
     aName = String(SdResId(STR_POOLSHEET_TITLE));
@@ -429,8 +428,6 @@ void SdDrawDocument::CreateLayoutTemplates()
 
     SvxLRSpaceItem aLRSpItem( 200, 200, 0, 0, EE_PARA_LRSPACE);
     pISet->Put( aLRSpItem );    // Erstzeileneinzug 0 mm, links und rechts 2 mm
-
-/* #i35937# */
 
     pISet->Put(SvxULSpaceItem(100, 100, EE_PARA_ULSPACE ));      // Absatzrand oben/unten 1 mm
 
@@ -545,7 +542,7 @@ static void implCreateTableTemplate( const Reference< XNameContainer >& xTableFa
     }
     catch( Exception& )
     {
-        DBG_ERROR("sd::implCreateTableTemplate(), exception caught!");
+        OSL_FAIL("sd::implCreateTableTemplate(), exception caught!");
     }
 }
 
@@ -1038,7 +1035,7 @@ IMPL_LINK(SdDrawDocument, OnlineSpellEventHdl, EditStatus*, pEditStat)
 |*
 \************************************************************************/
 
-// #91457# removed link and replaced with Imp method
+// removed link and replaced with Imp method
 void SdDrawDocument::ImpOnlineSpellCallback(SpellCallbackInfo* pInfo, SdrObject* pObj, SdrOutliner* pOutl)
 {
     delete mpOnlineSearchItem;
@@ -1047,7 +1044,7 @@ void SdDrawDocument::ImpOnlineSpellCallback(SpellCallbackInfo* pInfo, SdrObject*
     USHORT nCommand = pInfo->nCommand;
 
     if (nCommand == SPELLCMD_IGNOREWORD
-        // #91457# restart when add to dictionary takes place, too.
+        // restart when add to dictionary takes place, too.
         || nCommand == SPELLCMD_ADDTODICTIONARY)
     {
         if(pObj && pOutl && pObj->ISA(SdrTextObj))
@@ -1355,7 +1352,7 @@ void SdDrawDocument::SetTextDefaults() const
             case( FRMDIR_VERT_TOP_RIGHT ): eRet = ::com::sun::star::text::WritingMode_TB_RL; break;
 
             default:
-                DBG_ERROR( "Frame direction not supported yet" );
+                OSL_FAIL( "Frame direction not supported yet" );
             break;
         }
     }
@@ -1374,7 +1371,7 @@ void SdDrawDocument::SetDefaultWritingMode(::com::sun::star::text::WritingMode e
         case ::com::sun::star::text::WritingMode_RL_TB: nVal = FRMDIR_HORI_RIGHT_TOP; break;
         case ::com::sun::star::text::WritingMode_TB_RL: nVal = FRMDIR_VERT_TOP_RIGHT; break;
         default:
-            DBG_ERROR( "Frame direction not supported yet" );
+            OSL_FAIL( "Frame direction not supported yet" );
             return;
         }
 
@@ -1396,7 +1393,7 @@ void SdDrawDocument::getDefaultFonts( Font& rLatinFont, Font& rCJKFont, Font& rC
 {
     LanguageType eLatin = GetLanguage( EE_CHAR_LANGUAGE );
 
-    //  #108374# / #107782#: If the UI language is Korean, the default Latin font has to
+    //  If the UI language is Korean, the default Latin font has to
     //  be queried for Korean, too (the Latin language from the document can't be Korean).
     //  This is the same logic as in SwDocShell::InitNew.
     LanguageType eUiLanguage = Application::GetSettings().GetUILanguage();

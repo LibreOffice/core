@@ -90,8 +90,6 @@ using namespace ::com::sun::star::uno;
 
 //====================================================================
 
-//====================================================================
-
 static
 bool operator> (const util::DateTime& i_rLeft, const util::DateTime& i_rRight)
 {
@@ -588,29 +586,7 @@ BOOL SfxObjectShell::Insert(SfxObjectShell &rSource,
         else
             bRet = FALSE;
     }
-/*
-    else if (nSourceIdx1 == CONTENT_CONFIG)
-    {
-        nIdx1 = CONTENT_CONFIG;
 
-        SfxConfigManager *pCfgMgr = SFX_CFGMANAGER();
-        if ( !GetConfigManager() )
-        {
-            SetConfigManager(new SfxConfigManager(0, pCfgMgr));
-            SetTemplateConfig(FALSE);
-            if (this == Current())
-                GetConfigManager()->Activate(pCfgMgr);
-        }
-
-        if (GetConfigManager()->CopyItem(
-            nSourceIdx2, nIdx2, rSource.GetConfigManager()))
-        {
-            SetModified(TRUE);
-            bRet = TRUE;
-            SFX_APP()->GetDispatcher_Impl()->Update_Impl(TRUE);
-        }
-    }
-*/
     return bRet;
 }
 
@@ -821,7 +797,6 @@ void SfxObjectShell::LoadStyles
     {
         SfxStyleSheetBase *pSource;
         SfxStyleSheetBase *pDest;
-//      Styles_Impl () : pSource(0), pDest(0) {}
     };
 
     SfxStyleSheetBasePool *pSourcePool = rSource.GetStyleSheetPool();
@@ -852,7 +827,6 @@ void SfxObjectShell::LoadStyles
     for ( USHORT i = 0; i < nFound; ++i )
     {
         pFound[i].pDest->GetItemSet().PutExtended(pFound[i].pSource->GetItemSet(), SFX_ITEM_DONTCARE, SFX_ITEM_DEFAULT);
-//      pFound[i].pDest->SetHelpId(pFound[i].pSource->GetHelpId());
         if(pFound[i].pSource->HasParentSupport())
             pFound[i].pDest->SetParent(pFound[i].pSource->GetParent());
         if(pFound[i].pSource->HasFollowSupport())
@@ -1003,27 +977,8 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
                     // remember date/time of check
                     xDocProps->setTemplateDate(aTemplDate);
                     // TODO/LATER: new functionality to store document info is required ( didn't work for SO7 XML format )
-//REPLACE                   pInfo->Save(xDocStor);
                 }
             }
-/*
-        SfxConfigManager *pCfgMgr = SFX_CFGMANAGER();
-        {
-            SfxConfigManager *pTemplCfg = new SfxConfigManager(aTemplStor, pCfgMgr);
-            SetConfigManager(pTemplCfg);
-            SetTemplateConfig(TRUE);
-
-            // Falls der gerade zerst"orte CfgMgr des Dokuments der
-            // aktive war, pCfgMgr lieber neu holen
-            pCfgMgr = SFX_CFGMANAGER();
-
-            // ggf. den neuen ConfigManager aktivieren
-            if ( this == SfxObjectShell::Current() )
-                pTemplCfg->Activate(pCfgMgr);
-        }
-*/
-        // Template und Template-DocInfo werden nicht mehr gebraucht
-//            delete pTemplInfo;
         }
     }
 }

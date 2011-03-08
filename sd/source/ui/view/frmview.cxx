@@ -466,7 +466,7 @@ static OUString createHelpLinesString( const SdrHelpLineList& rHelpLines )
                 aLines.append( (sal_Int32)rPos.Y() );
                 break;
             default:
-                DBG_ERROR( "Unsupported helpline Kind!" );
+                OSL_FAIL( "Unsupported helpline Kind!" );
         }
     }
 
@@ -584,7 +584,7 @@ static void createHelpLinesFromString( const rtl::OUString& rLines, SdrHelpLineL
             aNewHelpLine.SetKind( SDRHELPLINE_HORIZONTAL );
             break;
         default:
-            DBG_ERROR( "syntax error in snap lines settings string" );
+            OSL_FAIL( "syntax error in snap lines settings string" );
             return;
         }
 

@@ -41,6 +41,7 @@
 #include <memory>
 
 using namespace com::sun::star;
+using ::rtl::OUStringBuffer;
 
 namespace {
 

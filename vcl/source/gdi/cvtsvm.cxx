@@ -943,7 +943,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                                 }
     #ifdef DBG_UTIL
                                 else
-                                    DBG_ERROR("More than one DX array element missing on SVM import");
+                                    OSL_FAIL("More than one DX array element missing on SVM import");
     #endif
                             }
                         }

@@ -2492,7 +2492,7 @@ void MyApp::Main()
             cppu::defaultBootstrap_InitialComponentContext() );
         if ( !xCtx.is() )
         {
-            DBG_ERROR( "Error creating initial component context!" );
+            OSL_FAIL( "Error creating initial component context!" );
             return;
         }
 
@@ -2501,13 +2501,13 @@ void MyApp::Main()
 
         if ( !xFac.is() )
         {
-            DBG_ERROR( "No service manager!" );
+            OSL_FAIL( "No service manager!" );
             return;
         }
     }
     catch ( uno::Exception )
     {
-        DBG_ERROR( "Exception during creation of initial component context!" );
+        OSL_FAIL( "Exception during creation of initial component context!" );
         return;
     }
 

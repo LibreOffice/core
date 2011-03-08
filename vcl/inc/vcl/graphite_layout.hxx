@@ -41,13 +41,11 @@
 #include <vector>
 #include <utility>
 // Libraries
-#include <preextstl.h>
 #include <graphite/GrClient.h>
 #include <graphite/Font.h>
 #include <graphite/GrConstants.h>
 #include <graphite/GrAppData.h>
 #include <graphite/SegmentAux.h>
-#include <postextstl.h>
 // Platform
 #include <vcl/sallayout.hxx>
 #include <vcl/dllapi.h>

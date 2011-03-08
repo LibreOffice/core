@@ -100,8 +100,8 @@ namespace dbaccess
         */
         ORowSetValueVector                          m_aPrematureParamValues;
         ORowSetValueVector                          m_aParameterValueForCache;
-        ::std::bit_vector                           m_aParametersSet;
-        ::std::bit_vector                           m_aReadOnlyDataColumns;
+        ::std::vector<bool>                         m_aParametersSet;
+        ::std::vector<bool>                         m_aReadOnlyDataColumns;
 
         ::cppu::OInterfaceContainerHelper           m_aRowsetListeners;
         ::cppu::OInterfaceContainerHelper           m_aApproveListeners;

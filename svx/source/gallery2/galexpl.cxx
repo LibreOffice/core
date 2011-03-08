@@ -109,7 +109,7 @@ BOOL GalleryExplorer::IsLinkage() const
 
 // ------------------------------------------------------------------------
 
-BOOL GalleryExplorer::FillThemeList( List& rThemeList )
+bool GalleryExplorer::FillThemeList( std::vector<String>& rThemeList )
 {
     Gallery* pGal = ImplGetGallery();
 
@@ -120,11 +120,11 @@ BOOL GalleryExplorer::FillThemeList( List& rThemeList )
             const GalleryThemeEntry* pEntry = pGal->GetThemeInfo( i );
 
             if( pEntry && !pEntry->IsReadOnly() && !pEntry->IsHidden() )
-                rThemeList.Insert( new String( pEntry->GetThemeName() ), LIST_APPEND );
+                rThemeList.push_back(pEntry->GetThemeName());
         }
     }
 
-    return( rThemeList.Count() > 0 );
+    return !rThemeList.empty();
 }
 
 // ------------------------------------------------------------------------

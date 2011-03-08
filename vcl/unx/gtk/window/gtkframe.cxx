@@ -559,7 +559,6 @@ void GtkSalFrame::InitCommon()
     // init members
     m_pCurrentCursor    = NULL;
     m_nKeyModifiers     = 0;
-    m_bSingleAltPress   = false;
     m_bFullscreen       = false;
     m_nState            = GDK_WINDOW_STATE_WITHDRAWN;
     m_nVisibility       = GDK_VISIBILITY_FULLY_OBSCURED;
@@ -1143,7 +1142,7 @@ void GtkSalFrame::SetIcon( USHORT nIcon )
                         aMask = AlphaMask( aIcon.GetMask() );
                     break;
                     default:
-                        DBG_ERROR( "unhandled transparent type" );
+                        OSL_FAIL( "unhandled transparent type" );
                     break;
                 }
             }
@@ -2843,7 +2842,6 @@ gboolean GtkSalFrame::signalFocus( GtkWidget*, GdkEventFocus* pEvent, gpointer f
     if( !pEvent->in )
     {
         pThis->m_nKeyModifiers = 0;
-        pThis->m_bSingleAltPress = false;
         pThis->m_bSendModChangeOnRelease = false;
     }
 
@@ -3046,10 +3044,7 @@ gboolean GtkSalFrame::signalKey( GtkWidget*, GdkEventKey* pEvent, gpointer frame
     if( pThis->m_pIMHandler )
     {
         if( pThis->m_pIMHandler->handleKeyEvent( pEvent ) )
-        {
-            pThis->m_bSingleAltPress = false;
             return TRUE;
-        }
     }
     GTK_YIELD_GRAB();
 
@@ -3136,36 +3131,6 @@ gboolean GtkSalFrame::signalKey( GtkWidget*, GdkEventKey* pEvent, gpointer frame
 
         pThis->CallCallback( SALEVENT_KEYMODCHANGE, &aModEvt );
 
-        if( ! aDel.isDeleted() )
-        {
-            // emulate KEY_MENU
-            if( ( pEvent->keyval == GDK_Alt_L || pEvent->keyval == GDK_Alt_R ) &&
-                ( nModCode & ~(KEY_MOD3|KEY_MOD2)) == 0 )
-            {
-                if( pEvent->type == GDK_KEY_PRESS )
-                    pThis->m_bSingleAltPress = true;
-
-                else if( pThis->m_bSingleAltPress )
-                {
-                    SalKeyEvent aKeyEvt;
-
-                    aKeyEvt.mnCode     = KEY_MENU | nModCode;
-                    aKeyEvt.mnRepeat   = 0;
-                    aKeyEvt.mnTime     = pEvent->time;
-                    aKeyEvt.mnCharCode = 0;
-
-                    // simulate KEY_MENU
-                    pThis->CallCallback( SALEVENT_KEYINPUT, &aKeyEvt );
-                    if( ! aDel.isDeleted() )
-                    {
-                        pThis->CallCallback( SALEVENT_KEYUP, &aKeyEvt );
-                        pThis->m_bSingleAltPress = false;
-                    }
-                }
-            }
-            else
-                pThis->m_bSingleAltPress = false;
-        }
     }
     else
     {
@@ -3178,10 +3143,7 @@ gboolean GtkSalFrame::signalKey( GtkWidget*, GdkEventKey* pEvent, gpointer frame
                               (pEvent->type == GDK_KEY_PRESS),
                               false );
         if( ! aDel.isDeleted() )
-        {
             pThis->m_bSendModChangeOnRelease = false;
-            pThis->m_bSingleAltPress = false;
-        }
     }
 
     if( !aDel.isDeleted() && pThis->m_pIMHandler )

@@ -365,7 +365,7 @@ bool SvxMarginItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
             rVal <<= (sal_Int32)( bConvert ? TWIP_TO_MM100(nBottomMargin) : nBottomMargin );
             break;
         default:
-            DBG_ERROR("unknown MemberId");
+            OSL_FAIL("unknown MemberId");
             return false;
     }
     return true;
@@ -396,7 +396,7 @@ bool SvxMarginItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
             nBottomMargin = (sal_Int16)( bConvert ? MM100_TO_TWIP(nVal) : nVal );
             break;
         default:
-            DBG_ERROR("unknown MemberId");
+            OSL_FAIL("unknown MemberId");
             return false;
     }
     return true;

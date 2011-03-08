@@ -711,6 +711,8 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
                     pVDev->EnableMapMode(false);
                     const AlphaMask aAlpha(pVDev->GetBitmap(aPoint, pVDev->GetOutputSizePixel()));
 
+                    delete pVDev;
+
                     // draw masked content to target and restore MapMode
                     DrawBitmapEx(aDstRect.TopLeft(), BitmapEx(aPaint, aAlpha));
                     EnableMapMode(bOrigMapModeEnabled);

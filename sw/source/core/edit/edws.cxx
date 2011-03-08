@@ -177,7 +177,7 @@ sal_uInt16 SwEditShell::GetCntType() const
         case ND_OLENODE:    nRet = CNT_OLE; break;
         }
 
-    ASSERT_ID( nRet, ERR_OUTOFSCOPE );
+    OSL_ASSERT( nRet );
     return nRet;
 }
 

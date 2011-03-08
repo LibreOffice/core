@@ -186,7 +186,7 @@ public:
     static OLocale registerLocale( const OUString & language, const OUString & country,
                             const OUString & variant )
     {
-        return rtl_locale_register( language, country, variant );
+        return rtl_locale_register( language.getStr(), country.getStr(), variant.getStr() );
     }
 
     /**
@@ -196,7 +196,7 @@ public:
      */
     static OLocale registerLocale( const OUString & language, const OUString & country )
     {
-        return rtl_locale_register( language, country, NULL );
+        return rtl_locale_register( language.getStr(), country.getStr(), NULL );
     }
 
     /** @deprecated
@@ -207,7 +207,7 @@ public:
      */
     static void setDefault( const OUString & language, const OUString & country,
                             const OUString & variant )
-             { rtl_locale_setDefault(language, country, variant); }
+             { rtl_locale_setDefault(language.getStr(), country.getStr(), variant.getStr()); }
 
     /**
          Getter for programmatic name of field,

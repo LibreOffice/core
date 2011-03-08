@@ -326,7 +326,7 @@ BOOL ScDBDocFunc::RepeatDB( const String& rDBName, BOOL bRecord, BOOL bApi )
 
                 //  DB- und andere Bereiche
                 ScRangeName* pDocRange = pDoc->GetRangeName();
-                if (pDocRange->GetCount())
+                if (!pDocRange->empty())
                     pUndoRange = new ScRangeName( *pDocRange );
                 ScDBCollection* pDocDB = pDoc->GetDBCollection();
                 if (pDocDB->GetCount())
@@ -427,7 +427,7 @@ BOOL ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
                                                     rSortParam.nCol2, rSortParam.nRow2 );
     if (!pDBData)
     {
-        DBG_ERROR( "Sort: keine DBData" );
+        OSL_FAIL( "Sort: keine DBData" );
         return FALSE;
     }
 
@@ -558,7 +558,7 @@ BOOL ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
         rDocShell.GetDocFunc().MoveBlock( aSource, aDest, FALSE, FALSE, FALSE, TRUE );
     }
 
-    // #105780# don't call ScDocument::Sort with an empty SortParam (may be empty here if bCopy is set)
+    // don't call ScDocument::Sort with an empty SortParam (may be empty here if bCopy is set)
     if ( aLocalParam.bDoSort[0] )
         pDoc->Sort( nTab, aLocalParam, bRepeatQuery );
 
@@ -606,7 +606,7 @@ BOOL ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
         }
         else
         {
-            DBG_ERROR("Zielbereich nicht da");
+            OSL_FAIL("Zielbereich nicht da");
         }
     }
 
@@ -663,7 +663,7 @@ BOOL ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
                                                     rQueryParam.nCol2, rQueryParam.nRow2 );
     if (!pDBData)
     {
-        DBG_ERROR( "Query: keine DBData" );
+        OSL_FAIL( "Query: keine DBData" );
         return FALSE;
     }
 
@@ -885,12 +885,14 @@ BOOL ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
                                                     nCol, nAttrRow, nDestTab );
                 DBG_ASSERT(pSrcPattern,"Pattern ist 0");
                 if (pSrcPattern)
+                {
                     pDoc->ApplyPatternAreaTab( nCol, nAttrRow, nCol, aLocalParam.nRow2,
                                                     nDestTab, *pSrcPattern );
-                const ScStyleSheet* pStyle = pSrcPattern->GetStyleSheet();
-                if (pStyle)
-                    pDoc->ApplyStyleAreaTab( nCol, nAttrRow, nCol, aLocalParam.nRow2,
+                    const ScStyleSheet* pStyle = pSrcPattern->GetStyleSheet();
+                    if (pStyle)
+                        pDoc->ApplyStyleAreaTab( nCol, nAttrRow, nCol, aLocalParam.nRow2,
                                                     nDestTab, *pStyle );
+                }
             }
 
             delete pAttribDoc;
@@ -933,7 +935,7 @@ BOOL ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
         }
         else
         {
-            DBG_ERROR("Zielbereich nicht da");
+            OSL_FAIL("Zielbereich nicht da");
         }
     }
 
@@ -1000,7 +1002,7 @@ BOOL ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
                                                 rParam.nCol2, rParam.nRow2 );
     if (!pDBData)
     {
-        DBG_ERROR( "SubTotals: keine DBData" );
+        OSL_FAIL( "SubTotals: keine DBData" );
         return FALSE;
     }
 
@@ -1021,11 +1023,9 @@ BOOL ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
     }
 
     BOOL bOk = TRUE;
-    BOOL bDelete = FALSE;
     if (rParam.bReplace)
         if (pDoc->TestRemoveSubTotals( nTab, rParam ))
         {
-            bDelete = TRUE;
             bOk = ( MessBox( rDocShell.GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
                 // "StarCalc" "Daten loeschen?"
                 ScGlobal::GetRscString( STR_MSSG_DOSUBTOTALS_0 ),
@@ -1078,7 +1078,7 @@ BOOL ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
 
             //  DB- und andere Bereiche
             ScRangeName* pDocRange = pDoc->GetRangeName();
-            if (pDocRange->GetCount())
+            if (!pDocRange->empty())
                 pUndoRange = new ScRangeName( *pDocRange );
             ScDBCollection* pDocDB = pDoc->GetDBCollection();
             if (pDocDB->GetCount())
@@ -1109,7 +1109,9 @@ BOOL ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
                 Sort( nTab, aSortParam, FALSE, FALSE, bApi );
             }
 
+            pDoc->InitializeNoteCaptions(nTab);
             bSuccess = pDoc->DoSubTotals( nTab, aNewParam );
+            pDoc->SetDrawPageSize(nTab);
         }
         ScRange aDirtyRange( aNewParam.nCol1, aNewParam.nRow1, nTab,
             aNewParam.nCol2, aNewParam.nRow2, nTab );
@@ -1287,17 +1289,17 @@ BOOL ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
                 pDestObj->SetAlive(TRUE);
                 if ( !pDoc->GetDPCollection()->InsertNewTable(pDestObj) )
                 {
-                    DBG_ERROR("cannot insert DPObject");
+                    OSL_FAIL("cannot insert DPObject");
                     DELETEZ( pDestObj );
                 }
             }
             if ( pDestObj )
             {
-                // #78541# create new database connection for "refresh"
+                // create new database connection for "refresh"
                 // (and re-read column entry collections)
                 // so all changes take effect
                 if ( pNewObj == pOldObj && pDestObj->IsImportData() )
-                    pDestObj->InvalidateSource();
+                    pDestObj->ClearSource();
 
                 pDestObj->InvalidateData();             // before getting the new output area
 
@@ -1483,7 +1485,7 @@ void ScDBDocFunc::UpdateImport( const String& rTarget, const String& rDBName,
         pData->GetArea(aRange);
         pViewSh->MarkRange(aRange);         // selektieren
 
-        if ( bContinue )        // #41905# Fehler beim Import -> Abbruch
+        if ( bContinue )        // Fehler beim Import -> Abbruch
         {
             //  interne Operationen, wenn welche gespeichert
 

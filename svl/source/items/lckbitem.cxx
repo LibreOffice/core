@@ -157,7 +157,7 @@ bool SfxLockBytesItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE )
         return true;
     }
 
-    DBG_ERROR( "SfxLockBytesItem::PutValue - Wrong type!" );
+    OSL_FAIL( "SfxLockBytesItem::PutValue - Wrong type!" );
     return true;
 }
 

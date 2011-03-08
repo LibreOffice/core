@@ -67,12 +67,6 @@ using ::com::sun::star::uno::Reference;
 
 #define TRANSCOL Color( COL_WHITE )
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 IMapWindow::IMapWindow( Window* pParent, const ResId& rResId, const Reference< XFrame >& rxDocumentFrame ) :
             GraphCtrl( pParent, rResId ),
             DropTargetHelper( this ),
@@ -87,15 +81,9 @@ IMapWindow::IMapWindow( Window* pParent, const ResId& rResId, const Reference< X
     pIMapPool->FreezeIdRanges();
 }
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 IMapWindow::~IMapWindow()
 {
-    // Liste loeschen
+    // Delete Liste
     for ( size_t i = 0, n = aTargetList.size(); i < n; ++i )
         delete aTargetList[ i ];
 
@@ -103,22 +91,10 @@ IMapWindow::~IMapWindow()
     delete[] pItemInfo;
 }
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 void IMapWindow::SetImageMap( const ImageMap& rImageMap )
 {
     ReplaceImageMap( rImageMap, FALSE );
 }
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 void IMapWindow::ReplaceImageMap( const ImageMap& rImageMap, BOOL /*bScaleToGraphic*/ )
 {
@@ -157,12 +133,6 @@ void IMapWindow::ReplaceImageMap( const ImageMap& rImageMap, BOOL /*bScaleToGrap
     }
 }
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 BOOL IMapWindow::ReplaceActualIMapInfo( const NotifyInfo& rNewInfo )
 {
     const SdrObject*    pSdrObj = GetSelectedSdrObject();
@@ -182,12 +152,6 @@ BOOL IMapWindow::ReplaceActualIMapInfo( const NotifyInfo& rNewInfo )
 
     return bRet;
 }
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 const ImageMap& IMapWindow::GetImageMap()
 {
@@ -211,31 +175,19 @@ const ImageMap& IMapWindow::GetImageMap()
     return aIMap;
 }
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 void IMapWindow::SetTargetList( TargetList& rTargetList )
 {
-    // alte Liste loeschen
+    // Delete old List
     for( size_t i = 0, n = aTargetList.size(); i < n; ++i )
         delete aTargetList[ i ];
     aTargetList.clear();
 
-    // mit uebergebener Liste fuellen
+    // Fill with the provided list
     for( size_t i = 0, n = rTargetList.size(); i < n; ++i )
         aTargetList.push_back( new String( *rTargetList[ i ] ) );
 
     pModel->SetChanged( sal_False );
 }
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 SdrObject* IMapWindow::CreateObj( const IMapObject* pIMapObj )
 {
@@ -251,7 +203,7 @@ SdrObject* IMapWindow::CreateObj( const IMapObject* pIMapObj )
             IMapRectangleObject*    pIMapRectObj = (IMapRectangleObject*) pIMapObj;
             Rectangle               aDrawRect( pIMapRectObj->GetRectangle( FALSE ) );
 
-            // auf Zeichenflaeche clippen
+            // clipped on CanvasPane
             aDrawRect.Intersection( aClipRect );
 
             pSdrObj = (SdrObject*) new SdrRectObj( aDrawRect );
@@ -267,7 +219,7 @@ SdrObject* IMapWindow::CreateObj( const IMapObject* pIMapObj )
             const Point         aOffset( nRadius, nRadius );
             Rectangle           aCircle( aCenter - aOffset, aCenter + aOffset );
 
-            // auf Zeichenflaeche begrenzen
+            // limited to CanvasPane
             aCircle.Intersection( aClipRect );
 
             pSdrObj = (SdrObject*) new SdrCircObj( OBJ_CIRC, aCircle, 0, 36000 );
@@ -279,13 +231,12 @@ SdrObject* IMapWindow::CreateObj( const IMapObject* pIMapObj )
         {
             IMapPolygonObject*  pIMapPolyObj = (IMapPolygonObject*) pIMapObj;
 
-            // Falls wir eigentlich eine Ellipse sind,
-            // erzeugen wir auch wieder eine Ellipse
+            // If it actually is an ellipse, then another ellipse is created again
             if ( pIMapPolyObj->HasExtraEllipse() )
             {
                 Rectangle aDrawRect( pIMapPolyObj->GetExtraEllipse() );
 
-                // auf Zeichenflaeche clippen
+                // clipped on CanvasPane
                 aDrawRect.Intersection( aClipRect );
 
                 pSdrObj = (SdrObject*) new SdrCircObj( OBJ_CIRC, aDrawRect, 0, 36000 );
@@ -295,7 +246,7 @@ SdrObject* IMapWindow::CreateObj( const IMapObject* pIMapObj )
                 const Polygon&  rPoly = pIMapPolyObj->GetPolygon( FALSE );
                 Polygon         aDrawPoly( rPoly );
 
-                // auf Zeichenflaeche clippen
+                // clipped on CanvasPane
                 aDrawPoly.Clip( aClipRect );
 
                 basegfx::B2DPolygon aPolygon;
@@ -329,7 +280,6 @@ SdrObject* IMapWindow::CreateObj( const IMapObject* pIMapObj )
             aSet.Put( XLineColorItem( String(), Color( COL_BLACK ) ) );
         }
 
-        //pSdrObj->SetItemSetAndBroadcast(aSet);
         pSdrObj->SetMergedItemSetAndBroadcast(aSet);
 
         pSdrObj->InsertUserData( new IMapUserData( pCloneIMapObj ) );
@@ -338,12 +288,6 @@ SdrObject* IMapWindow::CreateObj( const IMapObject* pIMapObj )
 
     return pSdrObj;
 }
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 void IMapWindow::InitSdrModel()
 {
@@ -356,12 +300,6 @@ void IMapWindow::InitSdrModel()
     pView->SetAttributes( aSet );
     pView->SetFrameDragSingles( TRUE );
 }
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 void IMapWindow::SdrObjCreated( const SdrObject& rObj )
 {
@@ -412,12 +350,6 @@ void IMapWindow::SdrObjCreated( const SdrObject& rObj )
     }
 }
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 void IMapWindow::SdrObjChanged( const SdrObject& rObj )
 {
     IMapUserData* pUserData = (IMapUserData*) rObj.GetUserData( 0 );
@@ -458,7 +390,7 @@ void IMapWindow::SdrObjChanged( const SdrObject& rObj )
                 IMapPolygonObject* pObj = new IMapPolygonObject( aPoly, aURL, aAltText, aDesc, aTarget, String(), bActive, FALSE );
                 pObj->SetExtraEllipse( aPoly.GetBoundRect() );
 
-                // wurde von uns nur temporaer angelegt
+                // was only created by us temporarily
                 delete pPathObj;
                 pUserData->ReplaceObject( IMapObjectPtr(pObj) );
             }
@@ -487,35 +419,17 @@ void IMapWindow::SdrObjChanged( const SdrObject& rObj )
     }
 }
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 void IMapWindow::MouseButtonUp(const MouseEvent& rMEvt)
 {
     GraphCtrl::MouseButtonUp( rMEvt );
     UpdateInfo( TRUE );
 }
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 void IMapWindow::MarkListHasChanged()
 {
     GraphCtrl::MarkListHasChanged();
     UpdateInfo( FALSE );
 }
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 SdrObject* IMapWindow::GetHitSdrObj( const Point& rPosPixel ) const
 {
@@ -546,12 +460,6 @@ SdrObject* IMapWindow::GetHitSdrObj( const Point& rPosPixel ) const
     return pObj;
 }
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 IMapObject* IMapWindow::GetIMapObj( const SdrObject* pSdrObj ) const
 {
     IMapObject* pIMapObj = NULL;
@@ -566,12 +474,6 @@ IMapObject* IMapWindow::GetIMapObj( const SdrObject* pSdrObj ) const
 
     return pIMapObj;
 }
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 SdrObject* IMapWindow::GetSdrObj( const IMapObject* pIMapObj ) const
 {
@@ -595,12 +497,6 @@ SdrObject* IMapWindow::GetSdrObj( const IMapObject* pIMapObj ) const
 
     return pSdrObj;
 }
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 void IMapWindow::Command(const CommandEvent& rCEvt)
 {
@@ -653,22 +549,10 @@ void IMapWindow::Command(const CommandEvent& rCEvt)
         Window::Command(rCEvt);
 }
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 sal_Int8 IMapWindow::AcceptDrop( const AcceptDropEvent& rEvt )
 {
     return( ( GetHitSdrObj( rEvt.maPosPixel ) != NULL ) ? rEvt.mnAction : DND_ACTION_NONE );
 }
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 sal_Int8 IMapWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
@@ -696,12 +580,6 @@ sal_Int8 IMapWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
     return nRet;
 }
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 void IMapWindow::RequestHelp( const HelpEvent& rHEvt )
 {
@@ -734,12 +612,6 @@ void IMapWindow::RequestHelp( const HelpEvent& rHEvt )
     }
 }
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 void IMapWindow::SetCurrentObjState( BOOL bActive )
 {
     SdrObject* pObj = GetSelectedSdrObject();
@@ -766,12 +638,6 @@ void IMapWindow::SetCurrentObjState( BOOL bActive )
         pView->SetAttributes( aSet, FALSE );
     }
 }
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 void IMapWindow::UpdateInfo( BOOL bNewObj )
 {
@@ -801,12 +667,6 @@ void IMapWindow::UpdateInfo( BOOL bNewObj )
         aInfoLink.Call( this );
     }
 }
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 void IMapWindow::DoMacroAssign()
 {
@@ -840,12 +700,6 @@ void IMapWindow::DoMacroAssign()
         delete pMacroDlg;
     }
 }
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 void IMapWindow::DoPropertyDialog()
 {
@@ -884,12 +738,6 @@ void IMapWindow::DoPropertyDialog()
         }
     }
 }
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 IMPL_LINK( IMapWindow, MenuSelectHdl, Menu*, pMenu )
 {

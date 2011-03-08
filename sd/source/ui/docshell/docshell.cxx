@@ -91,7 +91,6 @@ using namespace sd;
 SFX_IMPL_INTERFACE(DrawDocShell, SfxObjectShell, SdResId(0))
 {
     SFX_CHILDWINDOW_REGISTRATION(SvxSearchDialogWrapper::GetChildWindowId());
-        SFX_CHILDWINDOW_REGISTRATION(SID_HYPERLINK_INSERT);
 }
 
 
@@ -522,8 +521,8 @@ void DrawDocShell::SetModified( BOOL bSet /* = TRUE */ )
 {
     SfxObjectShell::SetModified( bSet );
 
-    // #100237# change model state, too
-    // #103182# only set the changed state if modification is enabled
+    // change model state, too
+    // only set the changed state if modification is enabled
     if( IsEnableSetModified() )
     {
         if ( mpDoc )
@@ -539,7 +538,7 @@ void DrawDocShell::SetModified( BOOL bSet /* = TRUE */ )
 |*
 \************************************************************************/
 
-// #91457# ExecuteSpellPopup now handled by DrawDocShell. This is necessary
+// ExecuteSpellPopup now handled by DrawDocShell. This is necessary
 // to get hands on the outliner and the text object.
 IMPL_LINK(DrawDocShell, OnlineSpellCallback, SpellCallbackInfo*, pInfo)
 {

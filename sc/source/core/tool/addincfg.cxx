@@ -56,7 +56,7 @@ ScAddInCfg::ScAddInCfg() :
 
 void ScAddInCfg::Commit()
 {
-    DBG_ERROR("ScAddInCfg shouldn't be modified");
+    OSL_FAIL("ScAddInCfg shouldn't be modified");
 }
 
 void ScAddInCfg::Notify( const uno::Sequence<rtl::OUString>& )

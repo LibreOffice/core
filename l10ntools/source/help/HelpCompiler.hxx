@@ -30,7 +30,7 @@
 #define HELPCOMPILER_HXX
 
 #include <string>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <vector>
 #include <list>
 #include <fstream>
@@ -215,11 +215,11 @@ struct SuperFastHash
 
 #define pref_hash joaat_hash
 
-typedef std::hash_map<std::string, std::string, pref_hash> Stringtable;
+typedef boost::unordered_map<std::string, std::string, pref_hash> Stringtable;
 typedef std::list<std::string> LinkedList;
 typedef std::vector<std::string> HashSet;
 
-typedef std::hash_map<std::string, LinkedList, pref_hash> Hashtable;
+typedef boost::unordered_map<std::string, LinkedList, pref_hash> Hashtable;
 
 class StreamTable
 {

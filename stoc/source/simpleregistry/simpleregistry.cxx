@@ -50,7 +50,12 @@ using namespace com::sun::star::registry;
 using namespace com::sun::star::lang;
 using namespace cppu;
 using namespace osl;
-using namespace rtl;
+
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+using ::rtl::OString;
+using ::rtl::OStringToOUString;
+using ::rtl::OUStringToOString;
 
 #define SERVICENAME "com.sun.star.registry.SimpleRegistry"
 #define IMPLNAME    "com.sun.star.comp.stoc.SimpleRegistry"

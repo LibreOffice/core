@@ -154,7 +154,6 @@ BearbeitenDiagrammdaten SID_DIAGRAM_DATA
 ' **** Alle
 AnsichtMassstab SID_ATTR_ZOOM
 AnsichtBrowser SID_BROWSER
-AnsichtHyperlinkleiste SID_HYPERLINK_INSERT
 AnsichtStatusleiste SID_TOGGLESTATUSBAR SID_TOGGLESTATUSBAR
 AnsichtGanzerBildschirm SID_WIN_FULLSCREEN SID_FULLSCREEN
 

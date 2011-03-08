@@ -440,7 +440,7 @@ bool readOCXNAME( OUString& sCName, SvStorageStream* pStream )
 }
 
 
-/*  #110435# (DR, 2003-11-12) ** Import of Unicode strings in form controls **
+/* ** Import of Unicode strings in form controls **
 
     Strings may be stored either as compressed or uncompressed Unicode
     character array. There are no encoded byte strings anywhere.
@@ -1171,7 +1171,7 @@ class ContainerRecReader
             }
             else
             {
-                DBG_ERROR("Terminating import, unexpected error");
+                OSL_FAIL("Terminating import, unexpected error");
                 return false;
             }
         }
@@ -3855,7 +3855,7 @@ void OCX_MultiPage::ProcessControl(OCX_Control* pControl, SvStorageStream* /* pS
     else
     {
         OSL_TRACE("!!!! Unsupported Control 0x%x ", rec.nTypeIdent);
-        DBG_ERROR("MultiPage error expected Page control");
+        OSL_FAIL("MultiPage error expected Page control");
     }
 
 }
@@ -3912,7 +3912,7 @@ sal_Bool OCX_MultiPage::Import(com::sun::star::uno::Reference<
     // need to sort the controls according to the order of the ids
     for ( sal_Int32 index = 1 ; ( sCaptions.size() == idToPage.size() ) && itCtrlId != itCtrlId_end; ++itCtrlId, ++itCaption, ++index )
     {
-        std::hash_map< sal_Int32, OCX_Page* >::iterator it = idToPage.find( *itCtrlId );
+        boost::unordered_map< sal_Int32, OCX_Page* >::iterator it = idToPage.find( *itCtrlId );
         if ( it != idToPage.end() )
         {
             it->second->msTitle = *itCaption;
@@ -4872,7 +4872,7 @@ void OCX_FontData::Import(uno::Reference< beans::XPropertySet > &rPropSet)
         rPropSet->setPropertyValue( WW8_ASCII2STR("FontStrikeout"), aTmp);
     }
 
-    // 2004-09-17: very strange way of storing font sizes...
+    // very strange way of storing font sizes...
     // 1pt->30, 2pt->45, 3pt->60, 4pt->75, 5pt->105, 6pt->120, 7pt->135
     // 8pt->165, 9pt->180, 10pt->195, 11pt->225, ...
     aTmp <<= sal_Int16( (nFontSize <= 30) ? 1 : ((nFontSize + 10) / 20) );
@@ -4918,7 +4918,7 @@ sal_Bool OCX_FontData::Export(SvStorageStreamRef &rContent,
         if (nFontHeight)
         {
             nFlags |= 0x04;
-            // 2004-09-17: very strange way of storing font sizes:
+            // very strange way of storing font sizes:
             // 1pt->30, 2pt->45, 3pt->60, 4pt->75, 5pt->105, 6pt->120, 7pt->135
             // 8pt->165, 9pt->180, 10pt->195, 11pt->225, ...
             nFontSize = (nFontHeight == 1) ? 30 : (static_cast<sal_uInt32>((nFontHeight*4+1)/3)*15);
@@ -6181,7 +6181,7 @@ bool OCX_ParentControl::createFromContainerRecord( const ContainerRecord& record
                 break;
             default:
                 OSL_TRACE( "**** Unknown control 0x%x", record.nTypeIdent );
-                DBG_ERROR( "Unknown control");
+                OSL_FAIL( "Unknown control");
                 return false;
         }
         pControl->sName = record.cName;

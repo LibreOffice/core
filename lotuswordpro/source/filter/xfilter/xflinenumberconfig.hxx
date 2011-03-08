@@ -57,10 +57,6 @@
  * @file
  * Line numbering config for the full document.
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2005-03-23 create this file.
- ************************************************************************/
 #ifndef     _XFLINENUMBERCONFIG_HXX
 #define     _XFLINENUMBERCONFIG_HXX
 

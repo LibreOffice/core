@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 #include "cfgutil.hxx"
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -1513,7 +1510,7 @@ void SfxConfigGroupListBox_Impl::RequestingChilds( SvLBoxEntry *pEntry )
         }
 
         default:
-            DBG_ERROR( "Falscher Gruppentyp!" );
+            OSL_FAIL( "Falscher Gruppentyp!" );
             break;
     }
 }

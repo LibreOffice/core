@@ -36,11 +36,9 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE : settings.mk
 
-.IF "$(L10N_framework)"==""
-
 # --- Files --------------------------------------------------------
-# the following flag un-inlines function calls and disables optimisations
-#CFLAGS+=/Ob0 /Od
+
+.IF "$(L10N_framework)"==""
 
 SLOFILES= \
         $(SLO)$/ZipPackage.obj			\
@@ -52,9 +50,6 @@ SLOFILES= \
         $(SLO)$/ZipPackageStream.obj	\
         $(SLO)$/wrapstreamforshare.obj	\
         $(SLO)$/zipfileaccess.obj
-
-#		$(SLO)$/InteractionRequest.obj  \
-#		$(SLO)$/InteractionContinuation.obj
 
 .ENDIF # L10N_framework
 

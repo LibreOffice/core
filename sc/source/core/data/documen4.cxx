@@ -147,7 +147,7 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
     if (i == MAXTAB + 1)
     {
         Sound::Beep();
-        DBG_ERROR("ScDocument::InsertMatrixFormula Keine Tabelle markiert");
+        OSL_FAIL("ScDocument::InsertMatrixFormula Keine Tabelle markiert");
         return;
     }
 
@@ -234,7 +234,7 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,      // Mehrfachopera
     if (i == MAXTAB + 1)
     {
         Sound::Beep();
-        DBG_ERROR("ScDocument::InsertTableOp: Keine Tabelle markiert");
+        OSL_FAIL("ScDocument::InsertTableOp: Keine Tabelle markiert");
         return;
     }
 
@@ -408,7 +408,7 @@ void ScDocument::DoColResize( SCTAB nTab, SCCOL nCol1, SCCOL nCol2, SCSIZE nAdd 
         pTab[nTab]->DoColResize( nCol1, nCol2, nAdd );
     else
     {
-        DBG_ERROR("DoColResize: falsche Tabelle");
+        OSL_FAIL("DoColResize: falsche Tabelle");
     }
 }
 
@@ -634,7 +634,7 @@ const SfxPoolItem* ScDocument::GetEffItem(
         }
         return &rSet.Get( nWhich );
     }
-    DBG_ERROR("kein Pattern");
+    OSL_FAIL("kein Pattern");
     return NULL;
 }
 
@@ -666,7 +666,7 @@ const ScConditionalFormat* ScDocument::GetCondFormat(
             return pCondFormList->GetFormat( nIndex );
         else
         {
-            DBG_ERROR("pCondFormList ist 0");
+            OSL_FAIL("pCondFormList ist 0");
         }
     }
 

@@ -31,7 +31,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <list>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <utility>
 
 #include <osl/diagnose.h>
@@ -98,7 +98,7 @@ struct hashOUString_Impl
         { return rName.hashCode(); }
 };
 
-typedef hash_map
+typedef boost::unordered_map
 <
     OUString,
     void *,

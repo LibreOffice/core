@@ -200,7 +200,7 @@ void ScCellShell::ExecuteCursor( SfxRequest& rReq )
             break;
 
         default:
-            DBG_ERROR("Unbekannte Message bei ViewShell (Cursor)");
+            OSL_FAIL("Unbekannte Message bei ViewShell (Cursor)");
             return;
     }
 
@@ -370,7 +370,7 @@ void ScCellShell::ExecuteMove( SfxRequest& rReq )
             break;
 
         default:
-            DBG_ERROR("Unbekannte Message bei ViewShell (Cursor)");
+            OSL_FAIL("Unbekannte Message bei ViewShell (Cursor)");
             return;
     }
 
@@ -387,7 +387,7 @@ void ScCellShell::ExecutePageSel( SfxRequest& rReq )
         case SID_CURSORTOPOFFILE_SEL:   rReq.SetSlot( SID_CURSORTOPOFFILE );  break;
         case SID_CURSORENDOFFILE_SEL:   rReq.SetSlot( SID_CURSORENDOFFILE );  break;
         default:
-            DBG_ERROR("Unbekannte Message bei ViewShell (ExecutePageSel)");
+            OSL_FAIL("Unbekannte Message bei ViewShell (ExecutePageSel)");
             return;
     }
     rReq.AppendItem( SfxBoolItem(FN_PARAM_2, TRUE) );
@@ -442,7 +442,7 @@ void ScCellShell::ExecutePage( SfxRequest& rReq )
             break;
 
         default:
-            DBG_ERROR("Unbekannte Message bei ViewShell (ExecutePage)");
+            OSL_FAIL("Unbekannte Message bei ViewShell (ExecutePage)");
             return;
     }
 

@@ -36,6 +36,7 @@
 #include "scdllapi.h"
 
 #include <map>
+#include <boost/ptr_container/ptr_set.hpp>
 
 //------------------------------------------------------------------------
 
@@ -66,7 +67,7 @@ typedef USHORT RangeType;
 
 class ScTokenArray;
 
-class ScRangeData : public ScDataObject
+class ScRangeData
 {
 private:
     String          aName;
@@ -76,14 +77,13 @@ private:
     RangeType       eType;
     ScDocument*     pDoc;
     USHORT          nIndex;
-    BOOL            bModified;          // wird bei UpdateReference gesetzt/geloescht
+    BOOL            bModified;          // is set/cleared by UpdateReference
 
     // max row and column to use for wrapping of references.  If -1 use the
     // application's default.
     SCROW           mnMaxRow;
     SCCOL           mnMaxCol;
 
-    friend class ScRangeName;
     ScRangeData( USHORT nIndex );
 public:
     typedef ::std::map<sal_uInt16, sal_uInt16> IndexMap;
@@ -102,13 +102,10 @@ public:
     SC_DLLPUBLIC                ScRangeData( ScDocument* pDoc,
                                  const String& rName,
                                  const ScAddress& rTarget );
-                                // rTarget ist ABSPOS Sprungmarke
+                                // rTarget is ABSPOS jump label
                     ScRangeData(const ScRangeData& rScRangeData);
 
-    SC_DLLPUBLIC virtual        ~ScRangeData();
-
-
-    virtual ScDataObject* Clone() const;
+    SC_DLLPUBLIC ~ScRangeData();
 
     BOOL            operator== (const ScRangeData& rData) const;
 
@@ -116,10 +113,11 @@ public:
     const String&   GetName( void ) const           { return aName; }
     const String&   GetUpperName( void ) const      { return aUpperName; }
     ScAddress       GetPos() const                  { return aPos; }
-    // Der Index muss eindeutig sein. Ist er 0, wird ein neuer Index vergeben
+    // The index has to be unique. If index=0 a new index value is assigned.
     void            SetIndex( USHORT nInd )         { nIndex = nInd; }
     USHORT    GetIndex() const                { return nIndex; }
     ScTokenArray*   GetCode()                       { return pCode; }
+    const ScTokenArray* GetCode() const             { return pCode; }
     USHORT          GetErrCode();
     BOOL            HasReferences() const;
     void            SetDocument( ScDocument* pDocument){ pDoc = pDocument; }
@@ -128,7 +126,8 @@ public:
     void            AddType( RangeType nType )      { eType = eType|nType; }
     RangeType       GetType() const                 { return eType; }
     BOOL            HasType( RangeType nType ) const;
-    SC_DLLPUBLIC void           GetSymbol( String& rSymbol, const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT ) const;
+    SC_DLLPUBLIC void GetSymbol( String& rSymbol, const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT ) const;
+    SC_DLLPUBLIC void GetSymbol( rtl::OUString& rSymbol, const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT ) const;
     void            UpdateSymbol( rtl::OUStringBuffer& rBuffer, const ScAddress&,
                                     const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT );
     void            UpdateReference( UpdateRefMode eUpdateRefMode,
@@ -174,48 +173,48 @@ extern "C" int SAL_CALL ScRangeData_QsortNameCompare( const void*, const void* )
                             { return ScRangeData_QsortNameCompare(a,b); }
 #endif
 
-//------------------------------------------------------------------------
+bool operator< (const ScRangeData& left, const ScRangeData& right);
 
-class ScRangeName : public ScSortedCollection
+class ScRangeName
 {
 private:
-    ScDocument* pDoc;
-    USHORT nSharedMaxIndex;
+    typedef ::boost::ptr_set<ScRangeData> DataType;
+    DataType    maData;
 
-    using ScSortedCollection::Clone;    // calcwarnings: shouldn't be used
-
+    ScDocument* mpDoc;
+    sal_uInt16  mnSharedMaxIndex;
 public:
-    ScRangeName(USHORT nLim = 4, USHORT nDel = 4, BOOL bDup = FALSE,
-                ScDocument* pDocument = NULL) :
-        ScSortedCollection  ( nLim, nDel, bDup ),
-        pDoc                ( pDocument ),
-        nSharedMaxIndex     ( 1 ) {}            // darf nicht 0 sein!!
+    typedef DataType::const_iterator const_iterator;
+    typedef DataType::iterator iterator;
 
-    ScRangeName(const ScRangeName& rScRangeName, ScDocument* pDocument);
+    ScRangeName(ScDocument* pDoc = NULL);
+    ScRangeName(const ScRangeName& r);
 
-    virtual ScDataObject*     Clone(ScDocument* pDocP) const
-                             { return new ScRangeName(*this, pDocP); }
-    ScRangeData*            operator[]( const USHORT nIndex) const
-                             { return (ScRangeData*)At(nIndex); }
-    virtual short           Compare(ScDataObject* pKey1, ScDataObject* pKey2) const;
-    virtual BOOL            IsEqual(ScDataObject* pKey1, ScDataObject* pKey2) const;
+    SC_DLLPUBLIC const ScRangeData* findByRange(const ScRange& rRange) const;
+    SC_DLLPUBLIC ScRangeData* findByName(const rtl::OUString& rName);
+    SC_DLLPUBLIC const ScRangeData* findByName(const rtl::OUString& rName) const;
+    ScRangeData* findByUpperName(const rtl::OUString& rName);
+    const ScRangeData* findByUpperName(const rtl::OUString& rName) const;
+    SC_DLLPUBLIC ScRangeData* findByIndex(USHORT i);
+    void UpdateReference(UpdateRefMode eUpdateRefMode, const ScRange& rRange,
+                         SCsCOL nDx, SCsROW nDy, SCsTAB nDz);
+    void UpdateTabRef(SCTAB nTable, sal_uInt16 nFlag, SCTAB nNewTable = 0);
+    void UpdateTranspose(const ScRange& rSource, const ScAddress& rDest);
+    void UpdateGrow(const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY);
+    sal_uInt16 GetSharedMaxIndex();
+    void SetSharedMaxIndex(sal_uInt16 nInd);
 
-    SC_DLLPUBLIC ScRangeData*           GetRangeAtBlock( const ScRange& ) const;
-
-    SC_DLLPUBLIC BOOL                   SearchName( const String& rName, USHORT& rPos ) const;
-                            // SearchNameUpper must be called with an upper-case search string
-    BOOL                    SearchNameUpper( const String& rUpperName, USHORT& rPos ) const;
-    void                    UpdateReference(UpdateRefMode eUpdateRefMode,
-                                const ScRange& rRange,
-                                SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
-    void                    UpdateTabRef(SCTAB nTable, USHORT nFlag, SCTAB nNewTable = 0);
-    void                    UpdateTranspose( const ScRange& rSource, const ScAddress& rDest );
-    void                    UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY );
-    virtual BOOL            Insert(ScDataObject* pScDataObject);
-    SC_DLLPUBLIC ScRangeData*           FindIndex(USHORT nIndex);
-    USHORT                  GetSharedMaxIndex()             { return nSharedMaxIndex; }
-    void                    SetSharedMaxIndex(USHORT nInd)  { nSharedMaxIndex = nInd; }
-    USHORT                  GetEntryIndex();
+    SC_DLLPUBLIC const_iterator begin() const;
+    SC_DLLPUBLIC const_iterator end() const;
+    SC_DLLPUBLIC iterator begin();
+    SC_DLLPUBLIC iterator end();
+    SC_DLLPUBLIC size_t size() const;
+    bool empty() const;
+    SC_DLLPUBLIC bool insert(ScRangeData* p);
+    void erase(const ScRangeData& r);
+    void erase(const iterator& itr);
+    void clear();
+    bool operator== (const ScRangeName& r) const;
 };
 
 #endif

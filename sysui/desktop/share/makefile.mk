@@ -150,10 +150,10 @@ $(LAUNCHERFLAGFILE) : $(LAUNCHERDEPN)
     @@-$(MKDIRHIER) $(@:db).$(INPATH).$(@:f)
     @echo Creating desktop entries for $(@:f) ..
     @echo ---------------------------------
-    @$(PERL) brand.pl -p '$${{PRODUCTNAME}} $${{PRODUCTVERSION}}' -u $(UNIXWRAPPERNAME) --iconprefix '$${{WITHOUTDOTUNIXPRODUCTNAME}}-' $< $(@:db).$(INPATH).$(@:f)
-    @$(PERL) translate.pl -p '$${{PRODUCTNAME}} $${{PRODUCTVERSION}}' -d $(@:db).$(INPATH).$(@:f) --ext "desktop" --key "Name" $(ULFDIR)$/launcher_name.ulf
-    @$(PERL) translate.pl -p '$${{PRODUCTNAME}} $${{PRODUCTVERSION}}' -d $(@:db).$(INPATH).$(@:f) --ext "desktop" --key "Comment" $(ULFDIR)$/launcher_comment.ulf
-    @$(PERL) translate.pl -p '$${{PRODUCTNAME}} $${{PRODUCTVERSION}}' -d $(@:db).$(INPATH).$(@:f) --ext "desktop" --key "GenericName" $(ULFDIR)$/launcher_genericname.ulf
+    @$(PERL) brand.pl -p '$${{PRODUCTNAME}} $${{PRODUCTVERSION}}'  -b '$${{PRODUCTNAME_BR}} $${{PRODUCTVERSION}}' -u $(UNIXWRAPPERNAME) --iconprefix '$${{WITHOUTDOTUNIXPRODUCTNAME}}-' $< $(@:db).$(INPATH).$(@:f)
+    @$(PERL) translate.pl -p '$${{PRODUCTNAME}} $${{PRODUCTVERSION}}' -b '$${{PRODUCTNAME_BR}} $${{PRODUCTVERSION}}' -d $(@:db).$(INPATH).$(@:f) --ext "desktop" --key "Name" $(ULFDIR)$/launcher_name.ulf
+    @$(PERL) translate.pl -p '$${{PRODUCTNAME}} $${{PRODUCTVERSION}}' -b '$${{PRODUCTNAME_BR}} $${{PRODUCTVERSION}}' -d $(@:db).$(INPATH).$(@:f) --ext "desktop" --key "Comment" $(ULFDIR)$/launcher_comment.ulf
+    @$(PERL) translate.pl -p '$${{PRODUCTNAME}} $${{PRODUCTVERSION}}' -p '$${{PRODUCTNAME_BR}} $${{PRODUCTVERSION}}' -d $(@:db).$(INPATH).$(@:f) --ext "desktop" --key "GenericName" $(ULFDIR)$/launcher_genericname.ulf
 .IF "$(WITH_LIBSN)"=="YES"
     @noop x$(foreach,i,$(LAUNCHERLIST) $(shell @echo "StartupNotify=true" >> $(@:db).$(INPATH).$(@:f)/$i.desktop))x
 .ENDIF
@@ -220,7 +220,7 @@ $(COMMONMISC)$/{$(PRODUCTLIST)}$/mimelnklist : ../mimetypes/{$(MIMELIST)}.deskto
 $(COMMONMISC)$/{$(PRODUCTLIST)}$/create_tree.sh : makefile.mk
 $(COMMONMISC)$/{$(PRODUCTLIST)}$/create_tree.sh : $$(@:f)
     @@-$(MKDIRHIER) $(@:d)
-    @echo "#\!/bin/bash" > $@.$(INPATH)
+    @echo "#!/bin/bash" > $@.$(INPATH)
     @echo "PREFIX=$(UNIXFILENAME.$(@:d:d:f))" >> $@.$(INPATH)
     @echo "ICON_PREFIX=$(ICONPREFIX.$(@:d:d:f))" >> $@.$(INPATH)
     @echo "ICON_SOURCE_DIR=../../../desktop/icons" >> $@.$(INPATH)

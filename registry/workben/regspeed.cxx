@@ -103,7 +103,8 @@ protected:
 };
 #endif
 
-using namespace rtl;
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
 
 #if (defined UNX) || (defined OS2)
 int main( int argc, char * argv[] )

@@ -527,6 +527,9 @@ public:
     SC_DLLPUBLIC void Format( String&, USHORT = 0, ScDocument* = NULL,
                  const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 ) const;
 
+    SC_DLLPUBLIC void Format( rtl::OUString&, USHORT = 0, ScDocument* = NULL,
+                 const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 ) const;
+
     inline void GetVars( SCCOL& nCol1, SCROW& nRow1, SCTAB& nTab1,
         SCCOL& nCol2, SCROW& nRow2, SCTAB& nTab2 ) const;
     // The document for the maximum defined sheet number

@@ -116,6 +116,7 @@
 
 #include <algorithm>
 #include <functional>
+#include <vector>
 
 // wird fuer Invalidate verwendet -> mitpflegen
 sal_uInt16 DatabaseSlotMap[] =
@@ -954,7 +955,6 @@ void FmXFormShell::disposing()
         // if we're here, then we expect that PrepareClose has been called, and thus the user
         // got a chance to commit or reject any changes. So in case we're here and there
         // are still uncommitted changes, the user explicitly wanted this.
-        // 2002-11-11 - 104702 - fs@openoffice.org
 
     m_pTextShell->dispose();
 
@@ -1050,9 +1050,8 @@ void FmXFormShell::InvalidateSlot( sal_Int16 nId, sal_Bool bWithId )
     ::osl::MutexGuard aGuard(m_aInvalidationSafety);
     if (m_nLockSlotInvalidation)
     {
-        m_arrInvalidSlots.Insert(nId, m_arrInvalidSlots.Count());
         BYTE nFlags = ( bWithId ? 0x01 : 0 );
-        m_arrInvalidSlots_Flags.Insert(nFlags, m_arrInvalidSlots_Flags.Count());
+        m_arrInvalidSlots.push_back( InvalidSlotInfo(nId, nFlags) );
     }
     else
         if (nId)
@@ -1090,21 +1089,14 @@ IMPL_LINK(FmXFormShell, OnInvalidateSlots, void*, EMPTYARG)
     ::osl::MutexGuard aGuard(m_aInvalidationSafety);
     m_nInvalidationEvent = 0;
 
-    DBG_ASSERT(m_arrInvalidSlots.Count() == m_arrInvalidSlots_Flags.Count(),
-        "FmXFormShell::OnInvalidateSlots : inconsistent slot arrays !");
-    BYTE nFlags;
-    for (sal_Int16 i=0; i<m_arrInvalidSlots.Count(); ++i)
+    for (std::vector<InvalidSlotInfo>::const_iterator i = m_arrInvalidSlots.begin(); i < m_arrInvalidSlots.end(); ++i)
     {
-        nFlags = m_arrInvalidSlots_Flags[i];
-
-        if (m_arrInvalidSlots[i])
-            m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(m_arrInvalidSlots[i], sal_True, (nFlags & 0x01));
+        if (i->id)
+            m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(i->id, sal_True, (i->flags & 0x01));
         else
             m_pShell->GetViewShell()->GetViewFrame()->GetBindings().InvalidateShell(*m_pShell);
     }
-
-    m_arrInvalidSlots.Remove(0, m_arrInvalidSlots.Count());
-    m_arrInvalidSlots_Flags.Remove(0, m_arrInvalidSlots_Flags.Count());
+    m_arrInvalidSlots.clear();
     return 0L;
 }
 
@@ -1261,7 +1253,7 @@ bool FmXFormShell::executeControlConversionSlot( const Reference< XFormComponent
                             xIndexParent->replaceByIndex(nIndex, aNewModel);
                         else
                         {
-                            DBG_ERROR("FmXFormShell::executeControlConversionSlot: could not replace the model !");
+                            OSL_FAIL("FmXFormShell::executeControlConversionSlot: could not replace the model !");
                             Reference< ::com::sun::star::lang::XComponent> xNewComponent(xNewModel, UNO_QUERY);
                             if (xNewComponent.is())
                                 xNewComponent->dispose();
@@ -1270,7 +1262,7 @@ bool FmXFormShell::executeControlConversionSlot( const Reference< XFormComponent
                     }
                     catch(Exception&)
                     {
-                        DBG_ERROR("FmXFormShell::executeControlConversionSlot: could not replace the model !");
+                        OSL_FAIL("FmXFormShell::executeControlConversionSlot: could not replace the model !");
                         Reference< ::com::sun::star::lang::XComponent> xNewComponent(xNewModel, UNO_QUERY);
                         if (xNewComponent.is())
                             xNewComponent->dispose();
@@ -1773,7 +1765,7 @@ void FmXFormShell::SetY2KState(sal_uInt16 n)
                 }
                 catch(Exception&)
                 {
-                    DBG_ERROR("FmXFormShell::SetY2KState: Exception occurred!");
+                    OSL_FAIL("FmXFormShell::SetY2KState: Exception occurred!");
                 }
 
             }
@@ -1814,7 +1806,7 @@ void FmXFormShell::SetY2KState(sal_uInt16 n)
                 }
                 catch(Exception&)
                 {
-                    DBG_ERROR("FmXFormShell::SetY2KState: Exception occurred!");
+                    OSL_FAIL("FmXFormShell::SetY2KState: Exception occurred!");
                 }
 
             }
@@ -2392,7 +2384,7 @@ IMPL_LINK(FmXFormShell, OnFoundData, FmFoundRecordInformation*, pfriWhere)
     }
 
     // wenn das Feld sich in einem GridControl befindet, muss ich dort noch in die entsprechende Spalte gehen
-    sal_Int32 nGridColumn = m_arrRelativeGridColumn.GetObject(pfriWhere->nFieldPos);
+    sal_Int32 nGridColumn = m_arrRelativeGridColumn[pfriWhere->nFieldPos];
     if (nGridColumn != -1)
     {   // dummer weise muss ich mir das Control erst wieder besorgen
         Reference< XControl> xControl( impl_getControl( xControlModel, *pFormObject ) );
@@ -2468,7 +2460,7 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
     // die Liste der zu involvierenden Felder zusammenstellen (sind die ControlSources aller Felder, die eine solche Eigenschaft habe)
     UniString strFieldList, sFieldDisplayNames;
     m_arrSearchedControls.Remove(0, m_arrSearchedControls.Count());
-    m_arrRelativeGridColumn.Remove(0, m_arrRelativeGridColumn.Count());
+    m_arrRelativeGridColumn.clear();
 
     // folgendes kleines Problem : Ich brauche, um gefundene Felder zu markieren, SdrObjekte. Um hier festzustellen, welche Controls
     // ich in die Suche einbeziehen soll, brauche ich Controls (also XControl-Interfaces). Ich muss also ueber eines von beiden
@@ -2577,7 +2569,7 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
                             // und das SdrObjekt zum Feld
                             m_arrSearchedControls.C40_INSERT(SdrObject, pCurrent, m_arrSearchedControls.Count());
                             // die Nummer der Spalte
-                            m_arrRelativeGridColumn.Insert(nViewPos, m_arrRelativeGridColumn.Count());
+                            m_arrRelativeGridColumn.push_back(nViewPos);
                         }
                     }
                 } while (sal_False);
@@ -2606,7 +2598,7 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
                         m_arrSearchedControls.C40_INSERT(SdrObject, pCurrent, m_arrSearchedControls.Count());
 
                         // die Nummer der Spalte (hier ein Dummy, nur fuer GridControls interesant)
-                        m_arrRelativeGridColumn.Insert(-1, m_arrRelativeGridColumn.Count());
+                        m_arrRelativeGridColumn.push_back(-1);
 
                         // und fuer die formatierte Suche ...
                         pfmscContextInfo->arrFields.push_back(Reference< XInterface>(xControl, UNO_QUERY));
@@ -3201,7 +3193,7 @@ void FmXFormShell::stopFiltering(sal_Bool bSave)
                     }
                     catch(Exception&)
                     {
-                        DBG_ERROR("FmXFormShell::stopFiltering : could not get the original filter !");
+                        OSL_FAIL("FmXFormShell::stopFiltering : could not get the original filter !");
                         // put dummies into the arrays so the they have the right size
 
                         if (aOriginalFilters.size() == aOriginalApplyFlags.size())
@@ -3238,7 +3230,7 @@ void FmXFormShell::stopFiltering(sal_Bool bSave)
                 }
                 catch(Exception&)
                 {
-                    DBG_ERROR("FmXFormShell::stopFiltering: Exception occurred!");
+                    OSL_FAIL("FmXFormShell::stopFiltering: Exception occurred!");
                 }
 
                 if (!isRowSetAlive(xFormSet))
@@ -3737,7 +3729,7 @@ void FmXFormShell::CreateExternalView()
 #ifdef DBG_UTIL
     else
     {
-        DBG_ERROR("FmXFormShell::CreateExternalView : could not create the external form view !");
+        OSL_FAIL("FmXFormShell::CreateExternalView : could not create the external form view !");
     }
 #endif
     InvalidateSlot( SID_FM_VIEW_AS_GRID, sal_False );
@@ -3801,7 +3793,6 @@ void FmXFormShell::viewDeactivated( FmFormView& _rCurrentView, sal_Bool _bDeacti
 
     // if we have an async load operation pending for the 0-th page for this view,
     // we need to cancel this
-    // 103727 - 2002-09-26 - fs@openoffice.org
     FmFormPage* pPage = _rCurrentView.GetCurPage();
     if ( pPage )
     {
@@ -3947,7 +3938,7 @@ void FmXFormShell::smartControlReset( const Reference< XIndexAccess >& _rxModels
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::smartControlReset" );
     if (!_rxModels.is())
     {
-        DBG_ERROR("FmXFormShell::smartControlReset: invalid container!");
+        OSL_FAIL("FmXFormShell::smartControlReset: invalid container!");
         return;
     }
 
@@ -4331,7 +4322,7 @@ void ControlConversionMenuController::StateChanged(sal_uInt16 nSID, SfxItemState
     }
     else
     {
-        DBG_ERROR("ControlConversionMenuController::StateChanged : unknown id !");
+        OSL_FAIL("ControlConversionMenuController::StateChanged : unknown id !");
     }
 }
 

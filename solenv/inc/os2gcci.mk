@@ -53,7 +53,7 @@ CDEFS+=-E
 .ENDIF
 
 # _PTHREADS is needed for the stl
-CDEFS+=-DX86 -D_REENTRANT -DNEW_SOLAR -D_USE_NAMESPACE=1 -DSTLPORT_VERSION=400
+CDEFS+=-DX86 -D_REENTRANT -DNEW_SOLAR -D_USE_NAMESPACE=1
 
 # this is a platform with JAVA support
 .IF "$(SOLAR_JAVA)"!=""
@@ -128,7 +128,7 @@ CFLAGSOUTOBJ=-o
 #   (this_type(p).swap(*this))
 # - truncwarn: "conversion of 64 bit type value to smaller type causes
 #   truncation" at least with CC 5.8 is reported only at the end of a
-#   compilation unit that uses std::hash_map<sal_Int64, sal_Int64> (see
+#   compilation unit that uses boost::unordered_map<sal_Int64, sal_Int64> (see
 #   sfx2/source/toolbox/imgmgr.cxx:1.27) and thus unfortunately needs to be
 #   disabled globally
 CFLAGSWARNCC=
@@ -255,9 +255,6 @@ STDLIBGUIST=$(STDLIBCPP)
 # libraries for linking shared libraries
 STDSHLGUIMT=$(STDLIBCPP)
 STDSHLCUIMT=$(STDLIBCPP)
-
-LIBSTLPORT=$(DYNAMIC) stlp45.lib
-LIBSTLPORTST=$(STATIC) stlp45.lib $(DYNAMIC)
 
 
 # name of library manager

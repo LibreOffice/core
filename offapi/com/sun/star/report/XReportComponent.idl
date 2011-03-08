@@ -156,7 +156,7 @@ interface XReportComponent
     /**is used for subreports and contains the names of the columns of the subreport
     which are related to the master fields of the parent report.
     <p>Entries in this sequence can either denote column names in the sub report,
-    or paramater names.<br/>
+    or parameter names.<br/>
     For instance, you could base the report on the SQL statement
     <code>SELECT * FROM invoices WHERE cust_ref = :cid</code>, and add <code>cid</code>
     to the DetailFields property. In this case, the parameter will be filled from
@@ -168,7 +168,7 @@ interface XReportComponent
     master field.<br/>
     If a string in this property denotes both a column name and a parameter name, it
     is undefined which way it is interpreted, but implementations of the service are required
-    to either decide for the paramter or the column, and proceed as usual.
+    to either decide for the parameter or the column, and proceed as usual.
     </p>
     <p>The columns specified herein typically represent a part of the primary key
     fields or their aliases of the detail report.</p>
@@ -184,7 +184,7 @@ interface XReportComponent
 
 
     /** Specifies the section where the control belongs to.
-        This is a shortcut to get control hierachy up.
+        This is a shortcut to get control hierarchy up.
         This value is <NULL/> when the control was not inserted in any section.
     */
     [attribute,readonly] com::sun::star::report::XSection Section;

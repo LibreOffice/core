@@ -52,14 +52,6 @@ sal_Bool PptToXml::filter( const SEQ( NMSP_BEANS::PropertyValue )& aDescriptor,
         NMSP_RTL::OUString strTemp;
         aDescriptor[ i ].Value >>= strTemp;
 
-/* we will open the document by url, so the stream is not needed
-        if( aDescriptor[i].Name == B2UCONST( "InputStream" ) )
-        {
-            REF( NMSP_IO::XInputStream ) rInputStream;
-            aDescriptor[ i].Value >>= rInputStream;
-        }
-        else
-*/
         if ( aDescriptor[ i ].Name == B2UCONST( "URL" ) )
         {
             NMSP_RTL::OUString sURL;
@@ -73,7 +65,6 @@ sal_Bool PptToXml::filter( const SEQ( NMSP_BEANS::PropertyValue )& aDescriptor,
                     xDocStream->SetVersion( xStg->GetVersion() );
                     xDocStream->SetKey( xStg->GetKey() );
 
-//                  xHdl->unknown( PPT_DTD_STRING );
                     xHdl->startDocument();
 
 

@@ -1064,7 +1064,7 @@ XclExpChTrInsert::XclExpChTrInsert(
         case SC_CAT_DELETE_COLS:    nOpCode = EXC_CHTR_OP_DELCOL;   break;
         case SC_CAT_DELETE_ROWS:    nOpCode = EXC_CHTR_OP_DELROW;   break;
         default:
-            DBG_ERROR( "XclExpChTrInsert::XclExpChTrInsert - unknown action" );
+            OSL_FAIL( "XclExpChTrInsert::XclExpChTrInsert - unknown action" );
     }
 
     if( nOpCode & EXC_CHTR_OP_COLFLAG )

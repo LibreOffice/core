@@ -7,6 +7,7 @@ Categories=Office;X-Red-Hat-Base;X-SuSE-Core-Office;X-MandrivaLinux-Office-Other
 Exec=${UNIXBASISROOTNAME} --math %U
 MimeType=application/vnd.oasis.opendocument.formula;application/vnd.sun.xml.math;application/vnd.stardivision.math;
 Name=%PRODUCTNAME Math
+Name[pt_BR]=%PRODUCTNAME_BR Math
 GenericName=Formula Editor
 Comment=Create and edit scientific formulas and equations by using Math.
 InitialPreference=5

@@ -275,8 +275,7 @@ sal_Bool OPropertyContainerHelper::convertFastPropertyValue(
             Any aNewRequestedValue( _rValue );
 
             // normalization
-            // (#102329# - 2002-08-14 - fs@openoffice.org)
-            // (#i29490# - 2004-06-16 - fs@openoffice.org)
+            // #i29490#
             if ( !aNewRequestedValue.getValueType().equals( aPos->aProperty.Type ) )
             {   // the actually given value is not of the same type as the one required
                 Any aProperlyTyped( NULL, aPos->aProperty.Type.getTypeLibType() );

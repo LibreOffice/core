@@ -48,13 +48,11 @@ TabPage RID_SVXPAGE_CHAR_NAME
     {
         Pos = MAP_APPFONT ( 12 , 14 );
         Size = MAP_APPFONT ( 80 , 8 );
-        Text [ en-US ] = "Font";
     };
     FixedText FT_WEST_NAME_NOCJK
     {
         Pos = MAP_APPFONT ( 12 , 6 );
         Size = MAP_APPFONT ( 112 , 8 );
-        Text [ en-US ] = "~Font";
     };
     ComboBox LB_WEST_NAME
     {
@@ -76,13 +74,11 @@ TabPage RID_SVXPAGE_CHAR_NAME
     {
         Pos = MAP_APPFONT ( 96 , 14 );
         Size = MAP_APPFONT ( 40 , 8 );
-        Text [ en-US ] = "~Typeface";
     };
     FixedText FT_WEST_STYLE_NOCJK
     {
         Pos = MAP_APPFONT ( 130 , 6 );
         Size = MAP_APPFONT ( 72 , 8 );
-        Text [ en-US ] = "~Typeface";
     };
     ComboBox LB_WEST_STYLE
     {
@@ -182,7 +178,6 @@ TabPage RID_SVXPAGE_CHAR_NAME
     {
         Pos = MAP_APPFONT ( 12 , 54 );
         Size = MAP_APPFONT ( 80 , 8 );
-        Text [ en-US ] = "Font";
     };
     ComboBox LB_EAST_NAME
     {
@@ -196,7 +191,6 @@ TabPage RID_SVXPAGE_CHAR_NAME
     {
         Pos = MAP_APPFONT ( 96 , 54 );
         Size = MAP_APPFONT ( 40 , 8 );
-        Text [ en-US ] = "T~ypeface";
     };
     ComboBox LB_EAST_STYLE
     {
@@ -252,7 +246,6 @@ TabPage RID_SVXPAGE_CHAR_NAME
     {
         Pos = MAP_APPFONT ( 12 , 94 );
         Size = MAP_APPFONT ( 80 , 8 );
-        Text [ en-US ] = "Font";
     };
     ComboBox LB_CTL_NAME
     {
@@ -266,7 +259,6 @@ TabPage RID_SVXPAGE_CHAR_NAME
     {
         Pos = MAP_APPFONT ( 96 , 94 );
         Size = MAP_APPFONT ( 40 , 8 );
-        Text [ en-US ] = "Ty~peface";
     };
     ComboBox LB_CTL_STYLE
     {
@@ -352,6 +344,22 @@ TabPage RID_SVXPAGE_CHAR_NAME
     String STR_CHARNAME_TRANSPARENT
     {
         Text [ en-US ] = "Transparent";
+    };
+    String STR_CHARNAME_FAMILY
+    {
+        Text [ en-US ] = "Family";
+    };
+    String STR_CHARNAME_FONT
+    {
+        Text [ en-US ] = "Font";
+    };
+    String STR_CHARNAME_STYLE
+    {
+        Text [ en-US ] = "Style";
+    };
+    String STR_CHARNAME_TYPEFACE
+    {
+        Text [ en-US ] = "Typeface";
     };
 };
 

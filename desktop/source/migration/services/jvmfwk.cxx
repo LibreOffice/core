@@ -52,6 +52,8 @@
 #include <stdio.h>
 
 #include "osl/thread.hxx"
+using ::rtl::OUString;
+
 #define OUSTR(x) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( x ))
 
 #define SERVICE_NAME "com.sun.star.migration.Java"
@@ -61,7 +63,6 @@
 #define USER_CLASS_PATH 2
 
 namespace css = com::sun::star;
-using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
@@ -78,7 +79,7 @@ public:
     JavaInfo* pData;
     CJavaInfo();
     ~CJavaInfo();
-    operator JavaInfo* ();
+    operator JavaInfo* () const;
 };
 
 CJavaInfo::CJavaInfo(): pData(NULL)
@@ -90,7 +91,7 @@ CJavaInfo::~CJavaInfo()
     jfw_freeJavaInfo(pData);
 }
 
-CJavaInfo::operator JavaInfo*()
+CJavaInfo::operator JavaInfo*() const
 {
     return pData;
 }

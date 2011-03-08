@@ -538,7 +538,9 @@ LwpListList* LwpOrderedObjectManager::GetNextActiveListList(LwpListList * pLast)
 }
 
 LwpStyleManager::LwpStyleManager()
-{}
+    : m_pFoundry(0)
+{
+}
 
 LwpStyleManager::~LwpStyleManager()
 {

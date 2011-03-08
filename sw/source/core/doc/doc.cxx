@@ -74,7 +74,6 @@
 #include <txtrfmrk.hxx>
 #include <frmatr.hxx>
 #include <linkenum.hxx>
-#include <errhdl.hxx>
 #include <pagefrm.hxx>
 #include <rootfrm.hxx>
 #include <swtable.hxx>
@@ -125,9 +124,7 @@
 /* @@@MAINTAINABILITY-HORROR@@@
    Probably unwanted dependency on SwDocShell
 */
-// --> OD 2005-08-29 #125370#
 #include <layouter.hxx>
-// <--
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
@@ -183,19 +180,16 @@ bool SwDoc::get(/*[in]*/ DocumentSettingId id) const
         case TABLE_ROW_KEEP: return mbTableRowKeep;
         case IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION: return mbIgnoreTabsAndBlanksForLineCalculation;
         case DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE: return mbDoNotCaptureDrawObjsOnPage;
-        // --> OD 2006-08-25 #i68949#
+        // #i68949#
         case CLIP_AS_CHARACTER_ANCHORED_WRITER_FLY_FRAME: return mbClipAsCharacterAnchoredWriterFlyFrames;
-        // <--
         case UNIX_FORCE_ZERO_EXT_LEADING: return mbUnixForceZeroExtLeading;
         case USE_OLD_PRINTER_METRICS: return mbOldPrinterMetrics;
         case TABS_RELATIVE_TO_INDENT : return mbTabRelativeToIndent;
         case PROTECT_FORM: return mbProtectForm;
-        // --> OD 2008-06-05 #i89181#
+        // #i89181#
         case TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST: return mbTabAtLeftIndentForParagraphsInList;
-        // <--
-    case INVERT_BORDER_SPACING: return mbInvertBorderSpacing;
+        case INVERT_BORDER_SPACING: return mbInvertBorderSpacing;
         case COLLAPSE_EMPTY_CELL_PARA: return mbCollapseEmptyCellPara;
-         // COMPATIBILITY FLAGS END
 
         case BROWSE_MODE: return mbBrowseMode;
         case HTML_MODE: return mbHTMLMode;
@@ -251,7 +245,7 @@ void SwDoc::set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value)
                 if (pOutlineRule)
                 {
                     pOutlineRule->Validate();
-                    // --> OD 2005-10-21 - counting of phantoms depends on <IsOldNumbering()>
+                    // counting of phantoms depends on <IsOldNumbering()>
                     pOutlineRule->SetCountPhantoms( !mbOldNumbering );
                 }
             }
@@ -294,7 +288,7 @@ void SwDoc::set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value)
             mbDoNotCaptureDrawObjsOnPage = value;
             break;
 
-        // --> OD 2006-08-25 #i68949#
+        // #i68949#
         case CLIP_AS_CHARACTER_ANCHORED_WRITER_FLY_FRAME:
             mbClipAsCharacterAnchoredWriterFlyFrames = value;
             break;
@@ -313,7 +307,7 @@ void SwDoc::set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value)
         case TABS_RELATIVE_TO_INDENT:
             mbTabRelativeToIndent = value;
             break;
-        // --> OD 2008-06-05 #i89181#
+        // #i89181#
         case TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST:
             mbTabAtLeftIndentForParagraphsInList = value;
             break;
@@ -507,10 +501,9 @@ void SwDoc::setPrinter(/*[in]*/ SfxPrinter *pP,/*[in]*/ bool bDeleteOld,/*[in]*/
     }
 
     if ( bCallPrtDataChanged &&
-         // --> FME 2005-01-21 #i41075# Do not call PrtDataChanged() if we do not
+         // #i41075# Do not call PrtDataChanged() if we do not
          // use the printer for formatting:
          !get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE) )
-        // <--
         PrtDataChanged();
 }
 
@@ -576,14 +569,13 @@ void SwDoc::setReferenceDeviceType(/*[in]*/ bool bNewVirtual,/*[in]*/ bool bNewH
         }
         else
         {
-            // --> FME 2005-01-21 #i41075#
+            // #i41075#
             // We have to take care that a printer exists before calling
             // PrtDataChanged() in order to prevent that PrtDataChanged()
             // triggers this funny situation:
             // getReferenceDevice()->getPrinter()->CreatePrinter_()
             // ->setPrinter()-> PrtDataChanged()
             SfxPrinter* pPrinter = getPrinter( true );
-            // <--
             if( pDrawModel )
                 pDrawModel->SetRefDevice( pPrinter );
         }
@@ -877,11 +869,10 @@ bool SwDoc::InsertString( const SwPaM &rRg, const String &rStr,
     }
     else
     {           // ist Undo und Gruppierung eingeschaltet, ist alles anders !
-        SwUndoInsert * pUndo = NULL; // #111827#
+        SwUndoInsert * pUndo = NULL;
 
         // don't group the start if hints at the start should be expanded
         if (!(nInsertMode & IDocumentContentOperations::INS_FORCEHINTEXPAND))
-        // -> #111827#
         {
             USHORT const nUndoSize = pUndos->Count();
             if (0 != nUndoSize)
@@ -904,7 +895,6 @@ bool SwDoc::InsertString( const SwPaM &rRg, const String &rStr,
                 }
             }
         }
-        // <- #111827#
 
         CharClass const& rCC = GetAppCharClass();
         xub_StrLen nInsPos = rPos.nContent.GetIndex();
@@ -1306,9 +1296,8 @@ void SwDoc::CalculatePagesForPrinting(
                 ( (bRightPg && bPrintRightPages) ||
                     (!bRightPg && bPrintLeftPages) ) )
             {
-                // --> FME 2005-12-12 #b6354161# Feature - Print empty pages
+                // Feature - Print empty pages
                 if ( bPrintEmptyPages || pStPage->Frm().Height() )
-                // <--
                 {
                     rValidPages.insert( nPageNo );
                     rValidStartFrms[ nPageNo ] = pStPage;
@@ -1338,11 +1327,8 @@ void SwDoc::CalculatePagesForPrinting(
 
     // get PageRange value to use
     OUString aPageRange;
-    if (bIsPDFExport)
-    {
-        aPageRange = rOptions.getStringValue( "PageRange", OUString() );
-    }
-    else
+    // #i116085# - adjusting fix for i113919
+    if ( !bIsPDFExport )
     {
         // PageContent :
         // 0 -> print all pages (default if aPageRange is empty)
@@ -1952,14 +1938,11 @@ bool SwDoc::IsModified() const
 
 void SwDoc::SetModified()
 {
-    // --> OD 2005-08-29 #125370#
     SwLayouter::ClearMovedFwdFrms( *this );
     SwLayouter::ClearObjsTmpConsiderWrapInfluence( *this );
     SwLayouter::ClearFrmsNotToWrap( *this );
-    // <--
-    // --> OD 2006-05-10 #i65250#
+    // #i65250#
     SwLayouter::ClearMoveBwdLayoutInfo( *this );
-    // <--
     // dem Link wird der Status returnt, wie die Flags waren und werden
     //  Bit 0:  -> alter Zustand
     //  Bit 1:  -> neuer Zustand
@@ -2297,12 +2280,10 @@ BOOL SwDoc::RemoveInvisibleContent()
                 SwScriptInfo::DeleteHiddenRanges( *pTxtNd );
             }
 
-            // --> FME 2006-01-11 #120473#
             // Footnotes/Frames may have been removed, therefore we have
             // to reset n:
             if ( bRemoved )
                 n = aPam.GetPoint()->nNode.GetIndex();
-            // <--
         }
     }
 
@@ -2606,7 +2587,6 @@ void SwDoc::ChgTOX(SwTOXBase & rTOX, const SwTOXBase & rNew)
     }
 }
 
-// #111827#
 String SwDoc::GetPaMDescr(const SwPaM & rPam) const
 {
     String aResult;
@@ -2645,7 +2625,6 @@ String SwDoc::GetPaMDescr(const SwPaM & rPam) const
     return aResult;
 }
 
-// -> #111840#
 SwField * SwDoc::GetField(const SwPosition & rPos)
 {
     SwTxtFld * const pAttr = GetTxtFld(rPos);
@@ -2662,7 +2641,6 @@ SwTxtFld * SwDoc::GetTxtFld(const SwPosition & rPos)
                     rPos.nContent.GetIndex(), RES_TXTATR_FIELD) )
         : 0;
 }
-// <- #111840#
 
 bool SwDoc::ContainsHiddenChars() const
 {

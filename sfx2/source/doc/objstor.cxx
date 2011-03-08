@@ -291,7 +291,7 @@ sal_Bool SfxObjectShell::PutURLContentsToVersionStream_Impl(
         }
         catch ( uno::Exception& )
         {
-            DBG_ERROR( "Creation of a storage copy is failed!" );
+            OSL_FAIL( "Creation of a storage copy is failed!" );
             ::utl::UCBContentHelper::Kill( aTempURL );
 
             aTempURL = ::rtl::OUString();
@@ -769,8 +769,6 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
 
         if( IsOwnStorageFormat_Impl(*pMed) && pMed->GetFilter() )
         {
-//???? dv           DirEntry aDirEntry( pMed->GetPhysicalName() );
-//???? dv           SetFileName( aDirEntry.GetFull() );
         }
         Broadcast( SfxSimpleHint(SFX_HINT_NAMECHANGED) );
 
@@ -1019,9 +1017,6 @@ sal_Bool SfxObjectShell::DoSave()
         bOk = pMedium->Commit();
     }
 
-//#88046
-//    if ( bOk )
-//        SetModified( sal_False );
     return bOk;
 }
 
@@ -1072,7 +1067,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
     {
         // if no filter was set, use the default filter
         // this should be changed in the feature, it should be an error!
-        DBG_ERROR("No filter set!");
+        OSL_FAIL("No filter set!");
         pFilter = GetFactory().GetFilterContainer()->GetAnyFilter( SFX_FILTER_IMPORT | SFX_FILTER_EXPORT );
         rMedium.SetFilter(pFilter);
     }
@@ -1355,7 +1350,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
             }
             catch( uno::Exception& )
             {
-                DBG_ERROR( "Setting of common encryption key failed!" );
+                OSL_FAIL( "Setting of common encryption key failed!" );
                 SetError( ERRCODE_IO_GENERAL, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
             }
         }
@@ -1444,7 +1439,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                 catch( uno::Exception& )
                 {
                     AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Preserve versions has failed." ) ) );
-                    DBG_ERROR( "Couldn't copy versions!\n" );
+                    OSL_FAIL( "Couldn't copy versions!\n" );
                     bOk = sal_False;
                     // TODO/LATER: a specific error could be set
                 }
@@ -1605,7 +1600,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                         {
                             // it should not happen, the copies signature is invalid!
                             // throw the changes away
-                            OSL_ASSERT( "An invalid signature was copied!" );
+                            OSL_FAIL( "An invalid signature was copied!" );
                         }
                     }
                 }
@@ -1733,7 +1728,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
             struct _ea eaType;
             strcpy( filePath, CHAR_POINTER( aSystemFileURL));
             strcpy( docType, CHAR_POINTER( rMedium.GetFilter()->GetServiceName()));
-#if OSL_DEBUG_LEVEL>1
+#if OSL_DEBUG_LEVEL > 1
             printf( "file name: %s\n", filePath);
             printf( "filter name: %s\n", CHAR_POINTER(rMedium.GetFilter()->GetFilterName()));
             printf( "service name: %s\n", docType);
@@ -1760,7 +1755,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
             eaType.value = &eaAscii;
             // put EA to file
             rc = _ea_put( &eaType, filePath, 0, ".TYPE");
-#if OSL_DEBUG_LEVEL>1
+#if OSL_DEBUG_LEVEL > 1
             printf( "ea name: %s, rc %d, errno %d\n", eaAscii.szType, rc, errno);
 #endif
         }
@@ -1871,7 +1866,6 @@ sal_Bool SfxObjectShell::ConnectTmpStorage_Impl(
             // TODO/LATER: may be it should be done in SwitchPersistence also
             // TODO/LATER: find faster way to copy storage; perhaps sharing with backup?!
             xStorage->copyToStorage( xTmpStorage );
-            //CopyStoragesOfUnknownMediaType( xStorage, xTmpStorage );
             bResult = SaveCompleted( xTmpStorage );
 
             if ( bResult )
@@ -1942,7 +1936,7 @@ sal_Bool SfxObjectShell::DoSaveObjectAs( SfxMedium& rMedium, BOOL bCommit )
                 }
                 catch( uno::Exception& )
                 {
-                    DBG_ERROR( "The strotage was not commited on DoSaveAs!\n" );
+                    OSL_FAIL( "The strotage was not commited on DoSaveAs!\n" );
                 }
             }
         }
@@ -1979,11 +1973,7 @@ sal_Bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed )
 
     sal_Bool bOk = sal_True;
     sal_Bool bMedChanged = pNewMed && pNewMed!=pMedium;
-/*  sal_Bool bCreatedTempStor = pNewMed && pMedium &&
-        IsPackageStorageFormat_Impl(*pMedium) &&
-        !IsPackageStorageFormat_Impl(*pNewMed) &&
-        pMedium->GetName().Len();
-*/
+
     DBG_ASSERT( !pNewMed || pNewMed->GetError() == ERRCODE_NONE, "DoSaveCompleted: Medium has error!" );
 
     // delete Medium (and Storage!) after all notifications
@@ -2221,7 +2211,7 @@ sal_Bool SfxObjectShell::InsertFrom( SfxMedium& rMedium )
     }
     if ( xLoader.is() )
     {
-        // #131744#: it happens that xLoader does not support xImporter!
+        // it happens that xLoader does not support xImporter!
         try{
         uno::Reference< lang::XComponent >  xComp( GetModel(), uno::UNO_QUERY_THROW );
         uno::Reference< document::XImporter > xImporter( xLoader, uno::UNO_QUERY_THROW );
@@ -2316,7 +2306,7 @@ sal_Bool SfxObjectShell::ImportFrom( SfxMedium& rMedium )
     }
     if ( xLoader.is() )
     {
-        // #131744#: it happens that xLoader does not support xImporter!
+        // it happens that xLoader does not support xImporter!
         try{
         uno::Reference< lang::XComponent >  xComp( GetModel(), uno::UNO_QUERY_THROW );
         uno::Reference< document::XImporter > xImporter( xLoader, uno::UNO_QUERY_THROW );
@@ -2549,7 +2539,6 @@ sal_Bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
     // writing is done through a copy, that will be transferred to the target ( of course after calling HandsOff )
     SfxMedium* pMediumTmp = new SfxMedium( pRetrMedium->GetName(), pRetrMedium->GetOpenMode(), pRetrMedium->IsDirect(), pFilter, pSet );
     pMediumTmp->SetLongName( pRetrMedium->GetLongName() );
-//    pMediumTmp->CreateTempFileNoCopy();
     if ( pMediumTmp->GetErrorCode() != ERRCODE_NONE )
     {
         SetError( pMediumTmp->GetError(), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
@@ -2559,10 +2548,6 @@ sal_Bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
 
     // copy version list from "old" medium to target medium, so it can be used on saving
     pMediumTmp->TransferVersionList_Impl( *pRetrMedium );
-/*
-    if ( pFilter && ( pFilter->GetFilterFlags() & SFX_FILTER_PACKED ) )
-        SetError( GetMedium()->Unpack_Impl( pRetrMedium->GetPhysicalName() ), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
-*/
 
     // an interaction handler here can aquire only in case of GUI Saving
     // and should be removed after the saving is done
@@ -2726,9 +2711,6 @@ sal_Bool SfxObjectShell::CommonSaveAs_Impl
         return sal_False;
     }
 
-    // this notification should be already sent by caller in sfxbasemodel
-    // SFX_APP()->NotifyEvent(SfxEventHint( bSaveTo? SFX_EVENT_SAVETODOC : SFX_EVENT_SAVEASDOC,this));
-
     if( SFX_ITEM_SET != aParams->GetItemState(SID_UNPACK) && SvtSaveOptions().IsSaveUnpacked() )
         aParams->Put( SfxBoolItem( SID_UNPACK, sal_False ) );
 
@@ -2757,7 +2739,6 @@ sal_Bool SfxObjectShell::CommonSaveAs_Impl
             pSet->ClearItem( SID_CHARSET );
             pSet->ClearItem( SID_FILTER_NAME );
             pSet->ClearItem( SID_OPTIONS );
-            //pSet->ClearItem( SID_FILE_FILTEROPTIONS );
             pSet->ClearItem( SID_VERSION );
             pSet->ClearItem( SID_EDITDOC );
             pSet->ClearItem( SID_OVERWRITE );
@@ -2836,7 +2817,7 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
 
 #ifdef DBG_UTIL
     if ( pMergedParams->GetItemState( SID_DOC_SALVAGE) >= SFX_ITEM_SET )
-        DBG_ERROR("Salvage item present in Itemset, check the parameters!");
+        OSL_FAIL("Salvage item present in Itemset, check the parameters!");
 #endif
 
     // should be unneccessary - too hot to handle!
@@ -2873,13 +2854,6 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
     if ( pImp->bPreserveVersions )
         pNewFile->TransferVersionList_Impl( *pMedium );
 
-/*
-    if ( GetMedium()->GetFilter() && ( GetMedium()->GetFilter()->GetFilterFlags() & SFX_FILTER_PACKED ) )
-    {
-        SfxMedium *pMed = bCopyTo ? pMedium : pNewFile;
-        pNewFile->SetError( GetMedium()->Unpack_Impl( pMed->GetPhysicalName() ) , ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
-    }
-*/
     // Save the document ( first as temporary file, then transfer to the target URL by committing the medium )
     sal_Bool bOk = sal_False;
     if ( !pNewFile->GetErrorCode() && SaveTo_Impl( *pNewFile, NULL ) )
@@ -2947,7 +2921,7 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
 
 sal_Bool SfxObjectShell::LoadFrom( SfxMedium& /*rMedium*/ )
 {
-    DBG_ERROR( "Base implementation, must not be called in general!" );
+    OSL_FAIL( "Base implementation, must not be called in general!" );
     return sal_True;
 }
 

@@ -683,14 +683,6 @@ namespace accessibility
                         else if ( maLastSelection.HasRange() &&
                                   aSelection.HasRange() )
                         {
-                            // send event TEXT_SELECTION_CHANGED for difference
-                            // between last and new selection. (#i27299#)
-//                            // selection was on, now is different: take union of ranges
-//                            maParaManager.FireEvent( ::std::min(sortedSelection.first,
-//                                                           sortedLastSelection.second),
-//                                                     ::std::max(sortedSelection.first,
-//                                                           sortedLastSelection.second)+1,
-//                                                     nTextSelChgEventId );
                             // use sorted last and new selection
                             ESelection aTmpLastSel( maLastSelection );
                             aTmpLastSel.Adjust();
@@ -899,7 +891,7 @@ namespace accessibility
         }
         catch( const uno::Exception& )
         {
-            DBG_ERROR("AccessibleTextHelper_Impl::UpdateVisibleChildren error while determining visible children");
+            OSL_FAIL("AccessibleTextHelper_Impl::UpdateVisibleChildren error while determining visible children");
 
             // something failed - currently no children
             mnFirstVisibleChild = -1;
@@ -964,7 +956,7 @@ namespace accessibility
         if( mnFirstVisibleChild >= 0 &&
             mnFirstVisibleChild > mnLastVisibleChild )
         {
-            DBG_ERROR( "AccessibleTextHelper: range invalid" );
+            OSL_FAIL( "AccessibleTextHelper: range invalid" );
         }
     }
 #endif
@@ -1196,7 +1188,7 @@ namespace accessibility
                 }
                 catch( const uno::Exception& )
                 {
-                    DBG_ERROR("AccessibleTextHelper_Impl::ProcessQueue: could not create new paragraph");
+                    OSL_FAIL("AccessibleTextHelper_Impl::ProcessQueue: could not create new paragraph");
                 }
             }
             else if( aFunctor.GetHintId() == TEXT_HINT_PARAREMOVED )
@@ -1231,7 +1223,7 @@ namespace accessibility
             }
 #ifdef DBG_UTIL
             else
-                DBG_ERROR("AccessibleTextHelper_Impl::ProcessQueue() invalid hint id");
+                OSL_FAIL("AccessibleTextHelper_Impl::ProcessQueue() invalid hint id");
 #endif
         }
         else if( nNewParas != nCurrParas )

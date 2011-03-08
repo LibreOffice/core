@@ -368,7 +368,7 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
                 break;
 
             default:
-                DBG_ERROR( "unsupported bitmap format" );
+                OSL_FAIL( "unsupported bitmap format" );
                 break;
         }
 

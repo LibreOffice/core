@@ -103,19 +103,11 @@ using namespace ::com::sun::star;
  * diese Section und die dazugeherigen Tabellen muessen in folgenden Files
  * gepflegt werden: rtf\rtfatr.cxx, sw6\sw6atr.cxx, w4w\w4watr.cxx
  */
-#if !defined(UNX) && !defined(MSC) && !defined(PPC) && !defined(CSET) && !defined(WTC) && !defined(__MINGW32__) && !defined(OS2)
+#if !defined(UNX) && !defined(MSC) && !defined(PPC) && !defined(__MINGW32__) && !defined(OS2)
 
 #define ATTRFNTAB_SIZE 130
 #if ATTRFNTAB_SIZE != POOLATTR_END - POOLATTR_BEGIN
 #error Attribut-Tabelle ist ungueltigt. Wurden neue Hint-IDs zugefuegt ??
-#endif
-
-#ifdef FORMAT_TABELLE
-// da sie nicht benutzt wird!
-#define FORMATTAB_SIZE 7
-#if FORMATTAB_SIZE != RES_FMT_END - RES_FMT_BEGIN
-#error Format-Tabelle ist ungueltigt. Wurden neue Hint-IDs zugefuegt ??
-#endif
 #endif
 
 #define NODETAB_SIZE 3
@@ -326,7 +318,7 @@ struct SwHTMLFmtInfo
 
     // Konstruktor fuer einen Dummy zum Suchen
     SwHTMLFmtInfo( const SwFmt *pF ) :
-        pFmt( pF ), pItemSet( 0 )
+        pFmt( pF ), pRefFmt(0), pItemSet( 0 ), nFirstLineIndent(0)
     {}
 
 
@@ -357,7 +349,7 @@ SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
                               BOOL bOutStyles,
                               LanguageType eDfltLang,
                               sal_uInt16 nCSS1Script, BOOL bHardDrop ) :
-    pFmt( pF ), pItemSet( 0 ), bScriptDependent( sal_False )
+    pFmt( pF ), pRefFmt(0), pItemSet( 0 ), bScriptDependent( sal_False )
 {
     USHORT nRefPoolId = 0;
     // Den Selektor des Formats holen
@@ -627,7 +619,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         if( bNumbered )
         {
             nBulletGrfLvl = nLvl; // nur veruebergehend!!!
-            // --> OD 2005-11-15 #i57919#
+            // #i57919#
             // correction of re-factoring done by cws swnumtree:
             // - <nNumStart> has to contain the restart value, if the
             //   numbering is restarted at this text node. Value <USHRT_MAX>
@@ -900,7 +892,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
     else
     {
         rHWrt.nDfltTopMargin = pFmtInfo->nTopMargin;
-        // #60393#: Wenn im letzten Absatz einer Tabelle der
+        // Wenn im letzten Absatz einer Tabelle der
         // untere Absatz-Abstand veraendert wird, vertut sich
         // Netscape total. Deshalb exportieren wir hier erstmal
         // nichts, indem wir den Abstand aus dem Absatz als Default
@@ -947,7 +939,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         rHWrt.IsHTMLMode( HTMLMODE_NO_CONTROL_CENTERING ) &&
         rHWrt.HasControls() )
     {
-        // #64687#: The align=... attribute does behave strange in netscape
+        // The align=... attribute does behave strange in netscape
         // if there are controls in a paragraph, because the control and
         // all text behind the control does not recognize this attribute.
         ByteString sOut( '<' );
@@ -2413,7 +2405,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
     xub_StrLen nOffset = 0;
     String aOutlineTxt;
     String aFullText;
-    // --> OD 2006-06-12 #b6435904#
+
     // export numbering string as plain text only for the outline numbering,
     // because the outline numbering isn't exported as a numbering - see <SwHTMLNumRuleInfo::Set(..)>
     if ( pNd->IsOutline() &&
@@ -3114,14 +3106,10 @@ Writer& OutHTML_INetFmt( Writer& rWrt, const SwFmtINetFmt& rINetFmt, BOOL bOn )
 
     rWrt.Strm() << sOut.GetBuffer();
 
-#define REL_HACK
-#ifdef REL_HACK
     String sRel;
-#endif
 
     if( aURL.Len() || bEvents )
     {
-#ifdef REL_HACK
         String sTmp( aURL );
         sTmp.ToUpperAscii();
         xub_StrLen nPos = sTmp.SearchAscii( "\" REL=" );
@@ -3130,7 +3118,6 @@ Writer& OutHTML_INetFmt( Writer& rWrt, const SwFmtINetFmt& rINetFmt, BOOL bOn )
             sRel = aURL.Copy( nPos+1 );
             aURL.Erase( nPos );
         }
-#endif
         aURL.EraseLeadingChars().EraseTrailingChars();
 
         ((sOut = ' ') += OOO_STRING_SVTOOLS_HTML_O_href) += "=\"";
@@ -3159,10 +3146,9 @@ Writer& OutHTML_INetFmt( Writer& rWrt, const SwFmtINetFmt& rINetFmt, BOOL bOn )
         sOut = '\"';
     }
 
-#ifdef REL_HACK
     if( sRel.Len() )
         sOut += ByteString( sRel, RTL_TEXTENCODING_ASCII_US );
-#endif
+
     if( sOut.Len() )
         rWrt.Strm() << sOut.GetBuffer();
 

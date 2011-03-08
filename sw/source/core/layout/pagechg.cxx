@@ -59,7 +59,6 @@
 #include "frmtool.hxx"
 #include "fldbas.hxx"
 #include "hints.hxx"
-#include "errhdl.hxx"
 #include "swtable.hxx"
 
 #include "ftnidx.hxx"

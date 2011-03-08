@@ -30,9 +30,9 @@
 #define _CTRLTOOL_HXX
 
 #include "svtools/svtdllapi.h"
+#include <tools/list.hxx>
 
 #include <sal/types.h>
-#include <tools/list.hxx>
 #include <vcl/metric.hxx>
 
 class ImplFontListNameInfo;
@@ -229,7 +229,7 @@ private:
 class SVT_DLLPUBLIC FontSizeNames
 {
 private:
-    struct ImplFSNameItem*  mpArray;
+    const struct ImplFSNameItem*    mpArray;
     ULONG                   mnElem;
 
 public:

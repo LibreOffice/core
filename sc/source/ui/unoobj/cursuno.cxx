@@ -168,7 +168,7 @@ void SAL_CALL ScCellCursorObj::collapseToCurrentArray() throw(uno::RuntimeExcept
     // about a exception
     /*if (!bFound)
     {
-        DBG_ERROR("keine Matrix");
+        OSL_FAIL("keine Matrix");
         //! Exception, oder was?
     }*/
 }
@@ -223,7 +223,7 @@ void SAL_CALL ScCellCursorObj::collapseToSize( sal_Int32 nColumns, sal_Int32 nRo
     SolarMutexGuard aGuard;
     if ( nColumns <= 0 || nRows <= 0 )
     {
-        DBG_ERROR("leerer Range geht nicht");
+        OSL_FAIL("leerer Range geht nicht");
         //! und dann?
     }
     else

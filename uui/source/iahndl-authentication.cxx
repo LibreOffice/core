@@ -153,7 +153,6 @@ void getRememberModes(
     }
     else
     {
-        //bool bHasRememberModeNo = false;
         bool bHasRememberModeSession = false;
         bool bHasRememberModePersistent = false;
 
@@ -162,7 +161,6 @@ void getRememberModes(
             switch ( rRememberModes[i] )
             {
             case ucb::RememberAuthentication_NO:
-                //bHasRememberModeNo = true;
                 break;
             case ucb::RememberAuthentication_SESSION:
                 bHasRememberModeSession = true;
@@ -298,7 +296,7 @@ handleAuthenticationRequest_(
 
             if (ePreferredRememberMode != eAlternateRememberMode)
             {
-                // user had te choice.
+                // user had the choice.
                 if (aInfo.GetIsRememberPassword())
                     xSupplyAuthentication->setRememberPassword(
                         ePreferredRememberMode);

@@ -122,7 +122,7 @@ sub search_via_build_lst {
     my $previous_dir = '';
     my $rep_root_candidate = $self->{INITIAL_DIRECTORY};
     do {
-        foreach (@possible_build_lists) {# ('build.lst', 'build.xlist');
+        foreach (@possible_build_lists) {
             if (-e $rep_root_candidate . '/prj/'.$_) {
                 $self->{REPOSITORY_ROOT} = File::Basename::dirname($rep_root_candidate);
                 return 1;

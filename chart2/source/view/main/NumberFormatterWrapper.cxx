@@ -99,7 +99,7 @@ rtl::OUString NumberFormatterWrapper::getFormattedString(
     Color* pTextColor = NULL;
     if( !m_pNumberFormatter )
     {
-        DBG_ERROR("Need a NumberFormatter");
+        OSL_FAIL("Need a NumberFormatter");
         return aText;
     }
     // i99104 handle null date correctly

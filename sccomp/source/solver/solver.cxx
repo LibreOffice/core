@@ -50,7 +50,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <cppuhelper/factory.hxx>
 #include <vector>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #include <tools/resmgr.hxx>
 
@@ -119,7 +119,7 @@ struct ScSolverCellEqual
     }
 };
 
-typedef std::hash_map< table::CellAddress, std::vector<double>, ScSolverCellHash, ScSolverCellEqual > ScSolverCellHashMap;
+typedef boost::unordered_map< table::CellAddress, std::vector<double>, ScSolverCellHash, ScSolverCellEqual > ScSolverCellHashMap;
 
 // -----------------------------------------------------------------------
 

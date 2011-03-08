@@ -771,7 +771,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
 #ifdef DGB_UTIL
     if (rVEvt.pRootObj!=NULL) {
         if (rVEvt.pRootObj->GetObjList()!=rVEvt.pPV->GetObjList()) {
-            DBG_ERROR("SdrView::PickAnything(): pRootObj->GetObjList()!=pPV->GetObjList() !");
+            OSL_FAIL("SdrView::PickAnything(): pRootObj->GetObjList()!=pPV->GetObjList() !");
         }
     }
 #endif

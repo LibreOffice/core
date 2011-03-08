@@ -31,7 +31,7 @@
 #include <ooo/vba/XDocumentProperties.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <vbahelper/vbacollectionimpl.hxx>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 typedef CollTestImplHelper< ov::XDocumentProperties > SwVbaDocumentproperties_BASE;
 

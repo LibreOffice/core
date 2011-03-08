@@ -64,7 +64,6 @@ public:
 
     void SetAttributes( SdrObject* pObj );
 
-    // #97016#
     virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle);
 
     // #i33136#

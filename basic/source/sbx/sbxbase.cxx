@@ -49,18 +49,11 @@ TYPEINIT0(SbxBase)
 
 SbxAppData* GetSbxData_Impl()
 {
-#ifndef DOS
     SbxAppData** ppData = (SbxAppData**) ::GetAppData( SHL_SBX );
     SbxAppData* p = *ppData;
     if( !p )
         p = *ppData  = new SbxAppData;
     return p;
-#else
-    SbxAppData** ppData;
-    SbxAppData* p;
-    p = *ppData  = new SbxAppData;
-    return p;
-#endif
 }
 
 SbxAppData::~SbxAppData()

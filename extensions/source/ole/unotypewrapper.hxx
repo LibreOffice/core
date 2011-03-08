@@ -35,7 +35,7 @@
 #define STRICT
 #define _WIN32_WINNT 0x0403
 #define _WIN32_DCOM
-#if OSL_DEBUG_LEVEL > 2
+#if OSL_DEBUG_LEVEL > 1
 #define _ATL_DEBUG_INTERFACES
 #endif
 #include <atlbase.h>

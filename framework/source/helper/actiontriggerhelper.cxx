@@ -45,12 +45,13 @@
 
 const USHORT START_ITEMID = 1000;
 
-using namespace rtl;
 using namespace com::sun::star::awt;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
+
+using ::rtl::OUString;
 
 namespace framework
 {
@@ -138,7 +139,6 @@ void InsertSubMenuItems( Menu* pSubMenu, USHORT& nItemId, Reference< XIndexConta
                         OUString aHelpURL;
                         Reference< XBitmap > xBitmap;
                         Reference< XIndexContainer > xSubContainer;
-                        sal_Bool bSpecialItemId = sal_False;
 
                         USHORT nNewItemId = nItemId++;
                         GetMenuItemAttributes( xPropSet, aLabel, aCommandURL, aHelpURL, xBitmap, xSubContainer );
@@ -153,7 +153,6 @@ void InsertSubMenuItems( Menu* pSubMenu, USHORT& nItemId, Reference< XIndexConta
                                 // command url but uses the item id as a unqiue identifier. These entries
                                 // got a special url during conversion from menu=>actiontriggercontainer.
                                 // Now we have to extract this special url and set the correct item id!!!
-                                bSpecialItemId = sal_True;
                                 nNewItemId = (USHORT)aCommandURL.copy( nIndex+aSlotURL.getLength() ).toInt32();
                                 pSubMenu->InsertItem( nNewItemId, aLabel );
                             }

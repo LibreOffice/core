@@ -37,7 +37,6 @@
 #include <tools/stream.hxx>
 #include <tools/errinf.hxx>
 #include <basic/sbx.hxx>
-#include <tools/list.hxx>
 #include <tools/shl.hxx>
 #include <tools/rc.hxx>
 #include <vcl/svapp.hxx>
@@ -56,7 +55,7 @@
 #include <osl/mutex.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include "errobject.hxx"
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/ModuleInfo.hpp>
@@ -375,12 +374,12 @@ SbxObject* cloneTypeObjectImpl( const SbxObject& rTypeObj )
                 SbxBase* pParObj = pVar->GetObject();
                 SbxDimArray* pSource = PTR_CAST(SbxDimArray,pParObj);
                 SbxDimArray* pDest = new SbxDimArray( pVar->GetType() );
-                INT32 lb = 0;
-                INT32 ub = 0;
 
                 pDest->setHasFixedSize( pSource->hasFixedSize() );
                 if ( pSource->GetDims() && pSource->hasFixedSize() )
                 {
+                    INT32 lb = 0;
+                    INT32 ub = 0;
                     for ( INT32 j = 1 ; j <= pSource->GetDims(); ++j )
                     {
                         pSource->GetDim32( (INT32)j, lb, ub );
@@ -502,7 +501,7 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
             SbMethod* pImplMethod = pIfaceMethod->getImplMethod();
             if( !pImplMethod )
             {
-                DBG_ERROR( "No ImplMethod" );
+                OSL_FAIL( "No ImplMethod" );
                 continue;
             }
 
@@ -512,7 +511,7 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
             SbMethod* pImplMethodCopy = p ? PTR_CAST(SbMethod,p) : NULL;
             if( !pImplMethodCopy )
             {
-                DBG_ERROR( "Found no ImplMethod copy" );
+                OSL_FAIL( "Found no ImplMethod copy" );
                 continue;
             }
             SbIfaceMapperMethod* pNewIfaceMethod =
@@ -946,7 +945,7 @@ struct ClassModuleRunInitItem
     {}
 };
 
-typedef std::hash_map< ::rtl::OUString, ClassModuleRunInitItem,
+typedef boost::unordered_map< ::rtl::OUString, ClassModuleRunInitItem,
     ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > ModuleInitDependencyMap;
 
 static ModuleInitDependencyMap* GpMIDMap = NULL;
@@ -976,7 +975,7 @@ void SbModule::implProcessModuleRunInit( ClassModuleRunInitItem& rItem )
                     if( rParentItem.m_bProcessing )
                     {
                         // TODO: raise error?
-                        DBG_ERROR( "Cyclic module dependency detected" );
+                        OSL_FAIL( "Cyclic module dependency detected" );
                         continue;
                     }
 

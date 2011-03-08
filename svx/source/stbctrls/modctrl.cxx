@@ -122,7 +122,6 @@ Point centerImage(const Rectangle& rBoundingRect, const Image& rImg)
 }
 void SvxModifyControl::Paint( const UserDrawEvent& rUsrEvt )
 {
-    const Rectangle     aControlRect = getControlRect();
     OutputDevice*       pDev =  rUsrEvt.GetDevice();
     Rectangle           aRect = rUsrEvt.GetRect();
 

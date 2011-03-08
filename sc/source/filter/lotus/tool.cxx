@@ -513,7 +513,7 @@ void LotusRangeList::Append( LotusRange* pLR, const String& rName )
     ScRangeData*    pData = new ScRangeData(
         pLotusRoot->pDoc, rName, aTokArray );
 
-    pLotusRoot->pScRangeName->Insert( pData );
+    pLotusRoot->pScRangeName->insert( pData );
 
     pLR->SetId( nIdCnt );
 
@@ -575,7 +575,7 @@ void RangeNameBufferWK3::Add( const String& rOrgName, const ScComplexRefData& rC
     pData->SetIndex( nIntCount );
     nIntCount++;
 
-    pLotusRoot->pScRangeName->Insert( pData );
+    pLotusRoot->pScRangeName->insert( pData );
 }
 
 
@@ -639,7 +639,7 @@ BOOL RangeNameBufferWK3::FindAbs( const String& rRef, UINT16& rIndex )
                 pData->SetIndex( rIndex );
                 nIntCount++;
 
-                pLotusRoot->pScRangeName->Insert( pData );
+                pLotusRoot->pScRangeName->insert( pData );
             }
 
             return TRUE;

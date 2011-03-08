@@ -60,7 +60,6 @@
 #include "xmlfileview.hxx"
 
 
-using namespace rtl;
 using namespace utl;
 using namespace osl;
 using namespace comphelper;
@@ -74,6 +73,8 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::io;
 using namespace com::sun::star::xml;
 using namespace com::sun::star::xml::sax;
+
+using ::rtl::OUString;
 
 class GlobalEventListenerImpl : public ::cppu::WeakImplHelper1< com::sun::star::document::XEventListener >
 {
@@ -135,7 +136,7 @@ static bool checkComponent( Reference< XComponent >& rxComponent, const OUString
     }
     catch( Exception& )
     {
-        DBG_ERROR( "checkComponent exception catched!" );
+        OSL_FAIL( "checkComponent exception catched!" );
     }
 
     return false;
@@ -194,7 +195,7 @@ XMLFilterTestDialog::XMLFilterTestDialog( Window* pParent, ResMgr& rResMgr, cons
     }
     catch( Exception& )
     {
-        DBG_ERROR( "XMLFilterTestDialog::XMLFilterTestDialog exception catched!" );
+        OSL_FAIL( "XMLFilterTestDialog::XMLFilterTestDialog exception catched!" );
     }
 }
 
@@ -207,7 +208,7 @@ XMLFilterTestDialog::~XMLFilterTestDialog()
     }
     catch( Exception& )
     {
-        DBG_ERROR( "XMLFilterTestDialog::~XMLFilterTestDialog exception catched!" );
+        OSL_FAIL( "XMLFilterTestDialog::~XMLFilterTestDialog exception catched!" );
     }
 
     delete mpSourceDLG;
@@ -452,7 +453,7 @@ void XMLFilterTestDialog::onExportBrowse()
     }
     catch(Exception&)
     {
-        DBG_ERROR("XMLFilterTestDialog::onExportBrowse exception caught!");
+        OSL_FAIL("XMLFilterTestDialog::onExportBrowse exception caught!");
     }
 
     initDialog();
@@ -559,7 +560,7 @@ void XMLFilterTestDialog::doExport( Reference< XComponent > xComp )
     }
     catch( Exception& )
     {
-        DBG_ERROR( "XMLFilterTestDialog::doExport exception catched!" );
+        OSL_FAIL( "XMLFilterTestDialog::doExport exception catched!" );
     }
 }
 
@@ -692,7 +693,7 @@ void XMLFilterTestDialog::import( const OUString& rURL )
     }
     catch(Exception&)
     {
-        DBG_ERROR("XMLFilterTestDialog::import catched an exception" );
+        OSL_FAIL("XMLFilterTestDialog::import catched an exception" );
     }
 }
 
@@ -772,7 +773,7 @@ Reference< XComponent > XMLFilterTestDialog::getFrontMostDocument( const OUStrin
     }
     catch( Exception& )
     {
-        DBG_ERROR( "XMLFilterTestDialog::getFrontMostDocument exception catched!" );
+        OSL_FAIL( "XMLFilterTestDialog::getFrontMostDocument exception catched!" );
     }
 
     return xRet;

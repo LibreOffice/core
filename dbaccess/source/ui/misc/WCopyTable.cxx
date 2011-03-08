@@ -75,6 +75,7 @@
 #include <vcl/waitobj.hxx>
 
 #include <functional>
+#include <o3tl/compat_functional.hxx>
 
 using namespace ::dbaui;
 using namespace ::com::sun::star::uno;
@@ -616,8 +617,7 @@ OCopyTableWizard::OCopyTableWizard( Window * pParent, const ::rtl::OUString& _rD
     impl_loadSourceData();
 
     bool bAllowViews = true;
-    // if the source is a, don't allow creating views #100644# (oj)
-    // (fs: Hmm? A SELECT * FROM <view> would be created, where #100644# claims this is nonsense. Why?
+    // if the source is a, don't allow creating views
     if ( m_rSourceObject.isView() )
         bAllowViews = false;
     // no views if the target connection does not support creating them
@@ -931,7 +931,7 @@ IMPL_LINK( OCopyTableWizard, ImplOKHdl, OKButton*, EMPTYARG )
                     if ( supportsPrimaryKey() )
                     {
                         ODatabaseExport::TColumns::iterator aFind = ::std::find_if(m_vDestColumns.begin(),m_vDestColumns.end()
-                            ,::std::compose1(::std::mem_fun(&OFieldDescription::IsPrimaryKey),::std::select2nd<ODatabaseExport::TColumns::value_type>()));
+                            ,::o3tl::compose1(::std::mem_fun(&OFieldDescription::IsPrimaryKey),::o3tl::select2nd<ODatabaseExport::TColumns::value_type>()));
                         if ( aFind == m_vDestColumns.end() && m_xInteractionHandler.is() )
                         {
 
@@ -1376,8 +1376,8 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
                     ODatabaseExport::TPositions::iterator aPosFind = ::std::find_if(
                         m_vColumnPos.begin(),
                         m_vColumnPos.end(),
-                        ::std::compose1(    ::std::bind2nd( ::std::equal_to< sal_Int32 >(), nPos ),
-                                            ::std::select1st< ODatabaseExport::TPositions::value_type >()
+                        ::o3tl::compose1(    ::std::bind2nd( ::std::equal_to< sal_Int32 >(), nPos ),
+                                            ::o3tl::select1st< ODatabaseExport::TPositions::value_type >()
                         )
                     );
 

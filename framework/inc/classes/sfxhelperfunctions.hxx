@@ -36,39 +36,68 @@
 #include <svtools/toolboxcontroller.hxx>
 #include <svtools/statusbarcontroller.hxx>
 
-typedef svt::ToolboxController* ( *pfunc_setToolBoxControllerCreator)( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, ToolBox* pToolbox, unsigned short nID, const ::rtl::OUString& aCommandURL );
-typedef svt::StatusbarController* ( *pfunc_setStatusBarControllerCreator)( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, StatusBar* pStatusBar, unsigned short nID, const ::rtl::OUString& aCommandURL );
-typedef void ( *pfunc_getRefreshToolbars)( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
-typedef void ( *pfunc_createDockingWindow)( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const ::rtl::OUString& rResourceURL );
-typedef bool ( *pfunc_isDockingWindowVisible)( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const ::rtl::OUString& rResourceURL );
-typedef void ( *pfunc_activateToolPanel)( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame, const ::rtl::OUString& i_rPanelURL );
+typedef svt::ToolboxController* ( *pfunc_setToolBoxControllerCreator)(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+    ToolBox* pToolbox,
+    unsigned short nID,
+    const ::rtl::OUString& aCommandURL );
+
+typedef svt::StatusbarController* ( *pfunc_setStatusBarControllerCreator)(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+    StatusBar* pStatusBar,
+    unsigned short nID,
+    const ::rtl::OUString& aCommandURL );
+
+typedef void ( *pfunc_getRefreshToolbars)(
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
+
+typedef void ( *pfunc_createDockingWindow)(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+    const ::rtl::OUString& rResourceURL );
+
+typedef bool ( *pfunc_isDockingWindowVisible)(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+    const ::rtl::OUString& rResourceURL );
+
+typedef void ( *pfunc_activateToolPanel)(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame,
+    const ::rtl::OUString& i_rPanelURL );
+
 
 namespace framework
 {
-
 pfunc_setToolBoxControllerCreator SAL_CALL SetToolBoxControllerCreator( pfunc_setToolBoxControllerCreator pSetToolBoxControllerCreator );
-
-svt::ToolboxController* SAL_CALL CreateToolBoxController( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, ToolBox* pToolbox, unsigned short nID, const ::rtl::OUString& aCommandURL );
+svt::ToolboxController* SAL_CALL CreateToolBoxController(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+    ToolBox* pToolbox,
+    unsigned short nID,
+    const ::rtl::OUString& aCommandURL );
 
 pfunc_setStatusBarControllerCreator SAL_CALL SetStatusBarControllerCreator( pfunc_setStatusBarControllerCreator pSetStatusBarControllerCreator );
-
-svt::StatusbarController* SAL_CALL CreateStatusBarController( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, StatusBar* pStatusBar, unsigned short nID, const ::rtl::OUString& aCommandURL );
+svt::StatusbarController* SAL_CALL CreateStatusBarController(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+    StatusBar* pStatusBar,
+    unsigned short nID,
+     const ::rtl::OUString& aCommandURL );
 
 pfunc_getRefreshToolbars SAL_CALL SetRefreshToolbars( pfunc_getRefreshToolbars pRefreshToolbarsFunc );
-
-void SAL_CALL RefreshToolbars( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
+void SAL_CALL RefreshToolbars(
+     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
 
 pfunc_createDockingWindow SAL_CALL SetDockingWindowCreator( pfunc_createDockingWindow pCreateDockingWindow );
-
-void SAL_CALL CreateDockingWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const ::rtl::OUString& rResourceURL );
+void SAL_CALL CreateDockingWindow(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+    const ::rtl::OUString& rResourceURL );
 
 pfunc_isDockingWindowVisible SAL_CALL SetIsDockingWindowVisible( pfunc_isDockingWindowVisible pIsDockingWindowVisible );
-
-bool SAL_CALL IsDockingWindowVisible( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const ::rtl::OUString& rResourceURL );
+bool SAL_CALL IsDockingWindowVisible(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+    const ::rtl::OUString& rResourceURL );
 
 pfunc_activateToolPanel SAL_CALL SetActivateToolPanel( pfunc_activateToolPanel i_pActivator );
-
-void SAL_CALL ActivateToolPanel( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame, const ::rtl::OUString& i_rPanelURL );
+void SAL_CALL ActivateToolPanel(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame,
+    const ::rtl::OUString& i_rPanelURL );
 }
 
 #endif // __FRAMEWORK_CLASSES_SFXHELPERFUNCTIONS_HXX_

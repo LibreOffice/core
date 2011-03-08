@@ -134,7 +134,7 @@ uno::Reference<XAccessible>
     if (nIndex < 0 || (unsigned long)nIndex >= maVisibleChildren.size())
         throw lang::IndexOutOfBoundsException (
             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "no accessible child with index ")) + nIndex,
+                "no accessible child with index ")) + ::rtl::OUString::valueOf(nIndex),
             mxParent);
 
     return GetChild (maVisibleChildren[nIndex],nIndex);

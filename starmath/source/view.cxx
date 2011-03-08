@@ -451,13 +451,16 @@ void SmGraphicWindow::KeyInput(const KeyEvent& rKEvt)
 #endif /* DEBUG_ENABLE_DUMPASDOT */
         }break;
         case KEY_DELETE:
-        case KEY_BACKSPACE:
         {
             if(!rCursor.HasSelection()){
                 rCursor.Move(this, nCode == KEY_DELETE ? MoveRight : MoveLeft, false);
                 if(rCursor.HasComplexSelection()) break;
             }
             rCursor.Delete();
+        }break;
+        case KEY_BACKSPACE:
+        {
+            rCursor.DeletePrev(this);
         }break;
         case KEY_ADD:
             rCursor.InsertElement(PlusElement);
@@ -548,7 +551,7 @@ void SmGraphicWindow::Command(const CommandEvent& rCEvt)
                     aPos = rCEvt.GetMousePosPixel();
                 OSL_ENSURE( pViewShell, "view shell missing" );
 
-                // added for replaceability of context menus #96085, #93782
+                // added for replaceability of context menus
                 pViewShell->GetViewFrame()->GetBindings().GetDispatcher()
                         ->ExecutePopup( aResId, this, &aPos );
 
@@ -814,7 +817,7 @@ void SmCmdBoxWindow::StateChanged( StateChangedType nStateChange )
 {
     if (STATE_CHANGE_INITSHOW == nStateChange)
     {
-        Resize();   // #98848# avoid SmEditWindow not being painted correctly
+        Resize();   // avoid SmEditWindow not being painted correctly
 
         // set initial position of window in floating mode
         if (true == IsFloatingMode())
@@ -916,7 +919,7 @@ SFX_IMPL_INTERFACE(SmViewShell, SfxViewShell, SmResId(0))
     SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_TOOLS | SFX_VISIBILITY_STANDARD |
                                 SFX_VISIBILITY_FULLSCREEN | SFX_VISIBILITY_SERVER,
                                 SmResId(RID_MATH_TOOLBOX ));
-    //Dummy-Objectbar, damit es bei aktivieren nicht staendig zuppelt.
+    //Dummy-Objectbar, to avoid quiver while activating
 
     SFX_CHILDWINDOW_REGISTRATION(SID_TASKPANE);
     SFX_CHILDWINDOW_REGISTRATION(SmToolBoxWrapper::GetChildWindowId());
@@ -991,8 +994,8 @@ void SmViewShell::SetZoomFactor( const Fraction &rX, const Fraction &rY )
     const Fraction &rFrac = rX < rY ? rX : rY;
     GetGraphicWindow().SetZoom( (USHORT) long(rFrac * Fraction( 100, 1 )) );
 
-    //Um Rundungsfehler zu minimieren lassen wir von der Basisklasse ggf.
-    //auch die krummen Werte einstellen
+    //To avoid rounding errors base class regulates crooked values too
+    //if necessary
     SfxViewShell::SetZoomFactor( rX, rY );
 }
 
@@ -1475,7 +1478,7 @@ bool SmViewShell::Insert( SfxMedium& rMedium )
             pEditWin->InsertText( aText );
         else
         {
-            DBG_ERROR( "EditWindow missing" );
+            OSL_FAIL( "EditWindow missing" );
             aTemp += aText;
             aText  = aTemp;
         }
@@ -1520,7 +1523,7 @@ bool SmViewShell::InsertFrom(SfxMedium &rMedium)
             pEditWin->InsertText( aText );
         else
         {
-            DBG_ERROR( "EditWindow missing" );
+            OSL_FAIL( "EditWindow missing" );
             aTemp += aText;
             aText  = aTemp;
         }
@@ -1641,7 +1644,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
                 }
                 catch (uno::Exception &)
                 {
-                    DBG_ERROR( "SmViewShell::Execute (SID_PASTEOBJECT): failed to get storage from input stream" );
+                    OSL_FAIL( "SmViewShell::Execute (SID_PASTEOBJECT): failed to get storage from input stream" );
                 }
             }
         }

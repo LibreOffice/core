@@ -76,10 +76,9 @@ BOOL ScExportBase::GetDataArea( SCTAB nTab, SCCOL& nStartCol,
 BOOL ScExportBase::TrimDataArea( SCTAB nTab, SCCOL& nStartCol,
             SCROW& nStartRow, SCCOL& nEndCol, SCROW& nEndRow ) const
 {
-    SCCOL nLastCol;
-    while ( nStartCol <= nEndCol && pDoc->ColHidden(nStartCol, nTab, nLastCol))
+    while ( nStartCol <= nEndCol && pDoc->ColHidden(nStartCol, nTab))
         ++nStartCol;
-    while ( nStartCol <= nEndCol && pDoc->ColHidden(nEndCol, nTab, nLastCol))
+    while ( nStartCol <= nEndCol && pDoc->ColHidden(nEndCol, nTab))
         --nEndCol;
     nStartRow = pDoc->FirstVisibleRow(nStartRow, nEndRow, nTab);
     nEndRow = pDoc->LastVisibleRow(nStartRow, nEndRow, nTab);

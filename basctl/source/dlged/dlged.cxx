@@ -130,7 +130,7 @@ void DlgEditor::ShowDialog()
             }
             catch( UnknownPropertyException& )
             {
-                DBG_ERROR( "DlgEditor::ShowDialog(): No ResourceResolver property" );
+                OSL_FAIL( "DlgEditor::ShowDialog(): No ResourceResolver property" );
             }
         }
 

@@ -42,7 +42,7 @@ class IntlWrapper;
 
 class SW_DLLPUBLIC SwFmtHeader: public SfxPoolItem, public SwClient
 {
-    BOOL bActive;       //Nur zur Steuerung (Erzeugung des Inhaltes)
+    BOOL bActive;       // Only for controlling (creation of content).
 
 public:
     SwFmtHeader( BOOL bOn = FALSE );
@@ -74,7 +74,7 @@ public:
 
 class SW_DLLPUBLIC SwFmtFooter: public SfxPoolItem, public SwClient
 {
-    BOOL bActive;       //Nur zur Steuerung (Erzeugung des Inhaltes)
+    BOOL bActive;       // Only for controlling (creation of content).
 
 public:
     SwFmtFooter( BOOL bOn = FALSE );

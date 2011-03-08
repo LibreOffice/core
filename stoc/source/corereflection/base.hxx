@@ -44,7 +44,7 @@
 #include <list>
 #include <algorithm>
 #endif
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -61,12 +61,12 @@
 
 using namespace std;
 using namespace osl;
-using namespace rtl;
 using namespace cppu;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::reflection;
 using namespace com::sun::star::container;
+using ::rtl::OUString;
 
 
 namespace stoc_corefl
@@ -97,9 +97,9 @@ inline typelib_TypeDescription * getTypeByName( const OUString & rName )
     return pTypeDescr;
 }
 
-typedef std::hash_map< OUString, WeakReference< XIdlField >,
+typedef boost::unordered_map< OUString, WeakReference< XIdlField >,
     FctHashOUString, equal_to< OUString > > OUString2Field;
-typedef std::hash_map< OUString, WeakReference< XIdlMethod >,
+typedef boost::unordered_map< OUString, WeakReference< XIdlMethod >,
     FctHashOUString, equal_to< OUString > > OUString2Method;
 
 //==================================================================================================

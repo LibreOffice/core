@@ -137,7 +137,7 @@ void OCurrencyModel::implConstruct()
         }
         catch(Exception&)
         {
-            DBG_ERROR( "OCurrencyModel::implConstruct: caught an exception while initializing the aggregate!" );
+            OSL_FAIL( "OCurrencyModel::implConstruct: caught an exception while initializing the aggregate!" );
         }
     }
 }

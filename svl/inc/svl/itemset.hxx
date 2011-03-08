@@ -30,11 +30,7 @@
 
 #include "svl/svldllapi.h"
 
-#if STLPORT_VERSION<321
-#include <stdarg.h>
-#else
 #include <cstdarg>  // std::va_list and friends
-#endif
 #include <svl/poolitem.hxx>
 #include <tools/rtti.hxx>
 #include <tools/solar.h>

@@ -65,12 +65,11 @@
 // static ----------------------------------------------------------------
 
 // Word 97 incompatibility (#i19922#)
-//static const long MINBODY = 284;            // 0,5cm in twips aufgerundet
 static const long MINBODY = 56;  // 1mm in twips rounded
 
 // default distance to Header or footer
 static const long DEF_DIST_WRITER = 500;    // 5mm (Writer)
-static const long DEF_DIST_CALC = 250;      // 2,5mm (Calc)
+static const long DEF_DIST_CALC = 250;      // 2.5mm (Calc)
 
 static USHORT pRanges[] =
 {
@@ -90,7 +89,7 @@ static USHORT pRanges[] =
     0
 };
 
-// gibt den Bereich der Which-Werte zurueck
+// returns the Which values to the range
 
 
 USHORT* SvxHeaderPage::GetRanges()
@@ -168,12 +167,12 @@ SvxHFPage::SvxHFPage( Window* pParent, USHORT nResId, const SfxItemSet& rAttr, U
     InitHandler();
     aBspWin.EnableRTL( FALSE );
 
-    // diese Page braucht ExchangeSupport
+    // This Page needs ExchangeSupport
     SetExchangeSupport();
 
     FreeResource();
 
-    // Metrik einstellen
+    // Set metrics
     FieldUnit eFUnit = GetModuleFieldUnit( rAttr );
     SetFieldUnit( aDistEdit, eFUnit );
     SetFieldUnit( aHeightEdit, eFUnit );
@@ -234,20 +233,18 @@ BOOL SvxHFPage::FillItemSet( SfxItemSet& rSet )
         delete pBoolItem;
     }
 
-    // Groesse
+    // Size
     SvxSizeItem aSizeItem( (const SvxSizeItem&)rOldSet.Get( nWSize ) );
     Size        aSize( aSizeItem.GetSize() );
     long        nDist = GetCoreValue( aDistEdit, eUnit );
     long        nH    = GetCoreValue( aHeightEdit, eUnit );
 
-    // fixe Hoehe?
-//  if ( !aHeightDynBtn.IsChecked() )
-        nH += nDist; // dann Abstand dazu addieren
+    nH += nDist; // add distance
     aSize.Height() = nH;
     aSizeItem.SetSize( aSize );
     aSet.Put( aSizeItem );
 
-    // Raender
+    // Margins
     SvxLRSpaceItem aLR( nWLRSpace );
     aLR.SetLeft( (USHORT)GetCoreValue( aLMEdit, eUnit ) );
     aLR.SetRight( (USHORT)GetCoreValue( aRMEdit, eUnit ) );
@@ -260,7 +257,7 @@ BOOL SvxHFPage::FillItemSet( SfxItemSet& rSet )
         aUL.SetUpper( (USHORT)nDist );
     aSet.Put( aUL );
 
-    // Hintergrund und Umrandung?
+    // Background and border?
     if ( pBBSet )
         aSet.Put( *pBBSet );
     else
@@ -284,7 +281,7 @@ BOOL SvxHFPage::FillItemSet( SfxItemSet& rSet )
         }
     }
 
-    // Das SetItem wegschreiben
+    // Flush the SetItem
     SvxSetItem aSetItem( GetWhich( nId ), aSet );
     rSet.Put( aSetItem );
 
@@ -298,11 +295,10 @@ void SvxHFPage::Reset( const SfxItemSet& rSet )
     ResetBackground_Impl( rSet );
 
     SfxItemPool* pPool = GetItemSet().GetPool();
-    DBG_ASSERT( pPool, "Wo ist der Pool" );
+    DBG_ASSERT( pPool, "Where is the pool" );
     SfxMapUnit eUnit = pPool->GetMetric( GetWhich( SID_ATTR_PAGE_SIZE ) );
 
-    // Kopf-/Fusszeilen-Attribute auswerten
-    //
+    // Evaluate header-/footer- attributes
     const SvxSetItem* pSetItem = 0;
 
     if ( SFX_ITEM_SET == rSet.GetItemState( GetWhich(nId), FALSE,
@@ -335,12 +331,12 @@ void SvxHFPage::Reset( const SfxItemSet& rSet )
 
 
             if ( nId == SID_ATTR_PAGE_HEADERSET )
-            {   // Kopfzeile
+            {   // Header
                 SetMetricValue( aDistEdit, rUL.GetLower(), eUnit );
                 SetMetricValue( aHeightEdit, rSize.GetSize().Height() - rUL.GetLower(), eUnit );
             }
             else
-            {   // Fusszeile
+            {   // Footer
                 SetMetricValue( aDistEdit, rUL.GetUpper(), eUnit );
                 SetMetricValue( aHeightEdit, rSize.GetSize().Height() - rUL.GetUpper(), eUnit );
             }
@@ -402,10 +398,6 @@ void SvxHFPage::Reset( const SfxItemSet& rSet )
 
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:   Handler initialisieren
- --------------------------------------------------------------------*/
-
 void SvxHFPage::InitHandler()
 {
     aTurnOnBox.SetClickHdl(LINK(this,   SvxHFPage, TurnOnHdl));
@@ -421,10 +413,6 @@ void SvxHFPage::InitHandler()
     aRMEdit.SetLoseFocusHdl(LINK(this,  SvxHFPage, RangeHdl));
     aBackgroundBtn.SetClickHdl(LINK(this,SvxHFPage, BackgroundHdl));
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:   Ein/aus
- --------------------------------------------------------------------*/
 
 IMPL_LINK( SvxHFPage, TurnOnHdl, CheckBox *, pBox )
 {
@@ -480,10 +468,6 @@ IMPL_LINK( SvxHFPage, TurnOnHdl, CheckBox *, pBox )
     return 0;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:   Abstand im Bsp Modifizieren
- --------------------------------------------------------------------*/
-
 IMPL_LINK_INLINE_START( SvxHFPage, DistModify, MetricField *, EMPTYARG )
 {
     UpdateExample();
@@ -499,10 +483,6 @@ IMPL_LINK_INLINE_START( SvxHFPage, HeightModify, MetricField *, EMPTYARG )
 }
 IMPL_LINK_INLINE_END( SvxHFPage, HeightModify, MetricField *, EMPTYARG )
 
-/*--------------------------------------------------------------------
-    Beschreibung: Raender einstellen
- --------------------------------------------------------------------*/
-
 IMPL_LINK_INLINE_START( SvxHFPage, BorderModify, MetricField *, EMPTYARG )
 {
     UpdateExample();
@@ -510,21 +490,17 @@ IMPL_LINK_INLINE_START( SvxHFPage, BorderModify, MetricField *, EMPTYARG )
 }
 IMPL_LINK_INLINE_END( SvxHFPage, BorderModify, MetricField *, EMPTYARG )
 
-/*--------------------------------------------------------------------
-    Beschreibung:   Hintergrund
- --------------------------------------------------------------------*/
-
 IMPL_LINK( SvxHFPage, BackgroundHdl, Button *, EMPTYARG )
 {
     if ( !pBBSet )
     {
-        // nur die n"otigen Items f"uer Umrandung und Hintergrund benutzen
+        // Use only the necessary items for border and background
         USHORT nBrush = GetWhich( SID_ATTR_BRUSH );
         USHORT nOuter = GetWhich( SID_ATTR_BORDER_OUTER );
         USHORT nInner = GetWhich( SID_ATTR_BORDER_INNER, sal_False );
         USHORT nShadow = GetWhich( SID_ATTR_BORDER_SHADOW );
 
-        // einen leeren Set erzeugenc
+        // Create an empty set
         pBBSet = new SfxItemSet( *GetItemSet().GetPool(), nBrush, nBrush,
                                  nOuter, nOuter, nInner, nInner,
                                  nShadow, nShadow, 0 );
@@ -532,12 +508,12 @@ IMPL_LINK( SvxHFPage, BackgroundHdl, Button *, EMPTYARG )
 
         if ( SFX_ITEM_SET ==
              GetItemSet().GetItemState( GetWhich( nId ), FALSE, &pItem ) )
-            // wenn es schon einen gesetzen Set gibt, dann diesen benutzen
+            // if there is one that is already set, then use this
             pBBSet->Put( ( (SvxSetItem*)pItem)->GetItemSet() );
 
         if ( SFX_ITEM_SET ==
              GetItemSet().GetItemState( nInner, FALSE, &pItem ) )
-            // das gesetze InfoItem wird immer ben"otigt
+            // The set InfoItem is always required
             pBBSet->Put( *pItem );
     }
 
@@ -592,10 +568,6 @@ IMPL_LINK( SvxHFPage, BackgroundHdl, Button *, EMPTYARG )
     return 0;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:   Bsp
- --------------------------------------------------------------------*/
-
 void SvxHFPage::UpdateExample()
 {
     if ( nId == SID_ATTR_PAGE_HEADERSET )
@@ -616,10 +588,6 @@ void SvxHFPage::UpdateExample()
     }
     aBspWin.Invalidate();
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung: Hintergrund im Beispiel setzen
- --------------------------------------------------------------------*/
 
 void SvxHFPage::ResetBackground_Impl( const SfxItemSet& rSet )
 {
@@ -713,7 +681,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
 
     if ( pItem )
     {
-        // linken und rechten Rand einstellen
+        // Set left and right margins
         const SvxLRSpaceItem& rLRSpace = (const SvxLRSpaceItem&)*pItem;
 
         aBspWin.SetLeft( rLRSpace.GetLeft() );
@@ -729,7 +697,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
 
     if ( pItem )
     {
-        // oberen und unteren Rand einstellen
+        // Set top and bottom margins
         const SvxULSpaceItem& rULSpace = (const SvxULSpaceItem&)*pItem;
 
         aBspWin.SetTop( rULSpace.GetUpper() );
@@ -757,13 +725,13 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
 
     if ( pItem )
     {
-        // Orientation und Size aus dem PageItem
+        // Orientation and Size from the PageItem
         const SvxSizeItem& rSize = (const SvxSizeItem&)*pItem;
-        // die Groesse ist ggf. schon geswappt (Querformat)
+        // if the size is already swapped (Landscape)
         aBspWin.SetSize( rSize.GetSize() );
     }
 
-    // Kopfzeilen-Attribute auswerten
+    // Evaluate Header attribute
     const SvxSetItem* pSetItem = 0;
 
     if ( SFX_ITEM_SET == rSet.GetItemState( GetWhich( SID_ATTR_PAGE_HEADERSET ),
@@ -865,10 +833,6 @@ int SvxHFPage::DeactivatePage( SfxItemSet* _pSet )
     return LEAVE_PAGE;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:   Berech
- --------------------------------------------------------------------*/
-
 IMPL_LINK( SvxHFPage, RangeHdl, Edit *, EMPTYARG )
 {
     long nHHeight = aBspWin.GetHdHeight();
@@ -896,7 +860,7 @@ IMPL_LINK( SvxHFPage, RangeHdl, Edit *, EMPTYARG )
         nFDist   = nDist;
     }
 
-    // Aktuelle Werte der Seitenraender
+    // Current values of the side edges
     long nBT = aBspWin.GetTop();
     long nBB = aBspWin.GetBottom();
     long nBL = aBspWin.GetLeft();
@@ -905,7 +869,7 @@ IMPL_LINK( SvxHFPage, RangeHdl, Edit *, EMPTYARG )
     long nH  = aBspWin.GetSize().Height();
     long nW  = aBspWin.GetSize().Width();
 
-    // Grenzen
+    // Borders
     if ( nId == SID_ATTR_PAGE_HEADERSET )
     {
         // Header
@@ -931,7 +895,7 @@ IMPL_LINK( SvxHFPage, RangeHdl, Edit *, EMPTYARG )
         aDistEdit.SetMax( aDistEdit.Normalize( nDist ), FUNIT_TWIP );
     }
 
-    // Einzuege beschraenken
+    // Limit Indentation
     nMax = nW - nBL - nBR -
            static_cast<long>(aRMEdit.Denormalize( aRMEdit.GetValue( FUNIT_TWIP ) )) - MINBODY;
     aLMEdit.SetMax( aLMEdit.Normalize( nMax ), FUNIT_TWIP );

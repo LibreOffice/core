@@ -43,7 +43,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/app.hxx>
-#include <avmedia/mediaplayer.hxx>
 
 #include "tabvwsh.hxx"
 #include "docsh.hxx"
@@ -96,7 +95,6 @@ SFX_IMPL_INTERFACE(ScTabViewShell,SfxViewShell,ScResId(SCSTR_TABVIEWSHELL))
     SFX_CHILDWINDOW_REGISTRATION(SID_HYPERLINK_DIALOG);
     SFX_CHILDWINDOW_REGISTRATION(GalleryChildWindow::GetChildWindowId());
     SFX_CHILDWINDOW_REGISTRATION(ScSpellDialogChildWindow::GetChildWindowId());
-    SFX_CHILDWINDOW_REGISTRATION( ::avmedia::MediaPlayer::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION(ScValidityRefChildWin::GetChildWindowId());
 }
 

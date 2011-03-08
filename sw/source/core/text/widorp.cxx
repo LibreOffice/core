@@ -45,7 +45,6 @@
 #include <fmtftn.hxx>
 #include <rowfrm.hxx>
 
-#include "txtcfg.hxx"
 #include "widorp.hxx"
 #include "txtfrm.hxx"
 #include "itrtxt.hxx"
@@ -525,7 +524,6 @@ sal_Bool WidowsAndOrphans::WouldFit( SwTxtMargin &rLine, SwTwips &rMaxHeight, sa
 
     while( nMinLines > rLine.GetLineNr() )
     {
-        DBG_LOOP;
         if( !rLine.NextLine() )
             return sal_False;
         nLineSum += rLine.GetLineHeight();

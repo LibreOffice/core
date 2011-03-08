@@ -48,11 +48,7 @@ using namespace ::com::sun::star;
 sal_Char const sAudio[] = "audio";
 sal_Char const sVideo[] = "video";
 
-/*************************************************************************
-|*
-|* Filedialog to insert Plugin-Fileformats
-|*
-\************************************************************************/
+// Filedialog to insert Plugin-Fileformats
 
 ErrCode SvxPluginFileDlg::Execute()
 {
@@ -196,12 +192,6 @@ SvxPluginFileDlg::SvxPluginFileDlg (Window *, sal_uInt16 nKind ) :
     maFileDlg.SetCurrentFilter( aAllFilter );
 }
 
-/*************************************************************************
-|*
-|* Dtor
-|*
-\************************************************************************/
-
 SvxPluginFileDlg::~SvxPluginFileDlg()
 {
 }
@@ -209,7 +199,7 @@ SvxPluginFileDlg::~SvxPluginFileDlg()
 /*************************************************************************
 |*
 |* Plugins available for the the MIME-Typ in nKind
-|* (whith nKind = SID_INSERT_SOUND for MIME-Type audio
+|* (with nKind = SID_INSERT_SOUND for MIME-Type audio
 |*                SID_INSERT_VIDEO for MIME-Type video
 |*
 \************************************************************************/

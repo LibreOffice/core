@@ -51,7 +51,7 @@
 
 #include <vector>
 #include <map>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <list>
 
 #include <boost/shared_array.hpp>
@@ -439,8 +439,8 @@ public:
         {}
     };
 
-    typedef std::hash_map< rtl::OString, SvMemoryStream*, rtl::OStringHash > PDFAppearanceStreams;
-    typedef std::hash_map< rtl::OString, PDFAppearanceStreams, rtl::OStringHash > PDFAppearanceMap;
+    typedef boost::unordered_map< rtl::OString, SvMemoryStream*, rtl::OStringHash > PDFAppearanceStreams;
+    typedef boost::unordered_map< rtl::OString, PDFAppearanceStreams, rtl::OStringHash > PDFAppearanceMap;
 
     struct PDFWidget : public PDFAnnotation
     {
@@ -645,7 +645,7 @@ private:
     bool                                m_bEmitStructure;
     bool                                m_bNewMCID;
     /* role map of struct tree root */
-    std::hash_map< rtl::OString, rtl::OString, rtl::OStringHash >
+    boost::unordered_map< rtl::OString, rtl::OString, rtl::OStringHash >
                                         m_aRoleMap;
 
     /* contains all widgets used in the PDF
@@ -655,8 +655,8 @@ private:
     std::map< sal_Int32, sal_Int32 >    m_aRadioGroupWidgets;
     /* used to store control id during beginControlAppearance/endControlAppearance */
     sal_Int32                           m_nCurrentControl;
-    /* hash_map for field names, used to ensure unique field names */
-    std::hash_map< rtl::OString, sal_Int32, rtl::OStringHash > m_aFieldNameMap;
+    /* boost::unordered_map for field names, used to ensure unique field names */
+    boost::unordered_map< rtl::OString, sal_Int32, rtl::OStringHash > m_aFieldNameMap;
 
     /* contains Bitmaps for gradient functions until they are written
      *  to the file stream */

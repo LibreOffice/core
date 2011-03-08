@@ -269,7 +269,7 @@ void ScDrawView::SetMarkedOriginalSize()
         {
             // TODO/LEAN: working with visual area can switch object to running state
             uno::Reference < embed::XEmbeddedObject > xObj( ((SdrOle2Obj*)pObj)->GetObjRef(), uno::UNO_QUERY );
-            if ( xObj.is() )    // #121612# NULL for an invalid object that couldn't be loaded
+            if ( xObj.is() )    // NULL for an invalid object that couldn't be loaded
             {
                 sal_Int64 nAspect = ((SdrOle2Obj*)pObj)->GetAspect();
 

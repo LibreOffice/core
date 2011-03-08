@@ -30,7 +30,6 @@
  ************************************************************************/
 
 #include "pdfioutdev_gpl.hxx"
-//#include "SecurityHandler.h"
 #ifdef WNT
 # include <io.h>
 # include <fcntl.h>  /*_O_BINARY*/

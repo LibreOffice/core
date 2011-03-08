@@ -701,7 +701,6 @@
 #define SID_BMPMASK_PIPETTE                             ( SID_SVX_START + 351 )
 #define SID_BMPMASK_BMPSELECT                           ( SID_SVX_START + 352 )
 #define SID_BMPMASK_EXEC                                ( SID_SVX_START + 353 )
-//#define SID_HYPERLINK_INSERT                            ( SID_SVX_START + 360 )   -> sfxsids.hrc
 //#define SID_HYPERLINK_GETLINK                           ( SID_SVX_START + 361 )   -> sfxsids.hrc
 //#define SID_HYPERLINK_SETLINK                           ( SID_SVX_START + 362 )   -> sfxsids.hrc
 #define SID_NO_GRAPHICS                                 ( SID_SVX_START + 364 )

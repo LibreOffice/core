@@ -3,7 +3,7 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyrigt 2010 Novell, Inc.
+ * Copyright 2010 Novell, Inc.
  *
  * LibreOffice - a multi-platform office productivity suite
  *

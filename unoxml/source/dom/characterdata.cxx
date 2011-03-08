@@ -80,7 +80,7 @@ namespace DOM
         {
             // get current data
             OString aData((const sal_Char*)xmlNodeGetContent(m_aNodePtr));
-            OUString tmp(aData, aData.getLength(), RTL_TEXTENCODING_UTF8);
+            OUString tmp(rtl::OStringToOUString(aData, RTL_TEXTENCODING_UTF8));
             if (offset > tmp.getLength() || offset < 0 || count < 0) {
                 DOMException e;
                 e.Code = DOMExceptionType_INDEX_SIZE_ERR;
@@ -142,7 +142,7 @@ namespace DOM
         {
             // get current data
             OString aData((const sal_Char*)xmlNodeGetContent(m_aNodePtr));
-            OUString tmp(aData, aData.getLength(), RTL_TEXTENCODING_UTF8);
+            OUString tmp(rtl::OStringToOUString(aData, RTL_TEXTENCODING_UTF8));
             if (offset > tmp.getLength() || offset < 0) {
                 DOMException e;
                 e.Code = DOMExceptionType_INDEX_SIZE_ERR;
@@ -172,7 +172,7 @@ namespace DOM
         {
             // get current data
             OString aData((const sal_Char*)xmlNodeGetContent(m_aNodePtr));
-            OUString tmp(aData, aData.getLength(), RTL_TEXTENCODING_UTF8);
+            OUString tmp(rtl::OStringToOUString(aData, RTL_TEXTENCODING_UTF8));
             if (offset > tmp.getLength() || offset < 0 || count < 0){
                 DOMException e;
                 e.Code = DOMExceptionType_INDEX_SIZE_ERR;
@@ -218,7 +218,7 @@ namespace DOM
         {
             // get current data
             OString aData((const sal_Char*)xmlNodeGetContent(m_aNodePtr));
-            OUString tmp(aData, aData.getLength(), RTL_TEXTENCODING_UTF8);
+            OUString tmp(rtl::OStringToOUString(aData, RTL_TEXTENCODING_UTF8));
             if (offset > tmp.getLength() || offset < 0 || count < 0) {
                 DOMException e;
                 e.Code = DOMExceptionType_INDEX_SIZE_ERR;

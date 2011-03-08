@@ -38,7 +38,7 @@ module com {  module sun {  module star {  module util {
 
 //=============================================================================
 
-/** offers the possibility of cancelling a job.
+/** offers the possibility of canceling a job.
 
     <p>This is supported by objects which represent a job.
  */

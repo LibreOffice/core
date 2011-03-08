@@ -797,7 +797,7 @@ void ScTabView::AlignToCursor( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
             case SC_FOLLOW_NONE:
                 break;
             default:
-                DBG_ERROR("Falscher Cursormodus");
+                OSL_FAIL("Falscher Cursormodus");
                 break;
         }
 
@@ -1431,13 +1431,13 @@ void ScTabView::SetTabNo( SCTAB nTab, BOOL bNew, BOOL bExtendSelection )
 {
     if ( !ValidTab(nTab) )
     {
-        DBG_ERROR("SetTabNo: falsche Tabelle");
+        OSL_FAIL("SetTabNo: falsche Tabelle");
         return;
     }
 
     if ( nTab != aViewData.GetTabNo() || bNew )
     {
-        //  #57724# Die FormShell moechte vor dem Umschalten benachrichtigt werden
+        //  Die FormShell moechte vor dem Umschalten benachrichtigt werden
         FmFormShell* pFormSh = aViewData.GetViewShell()->GetFormShell();
         if (pFormSh)
         {
@@ -1482,7 +1482,7 @@ void ScTabView::SetTabNo( SCTAB nTab, BOOL bNew, BOOL bExtendSelection )
                     --nTab;
                 else
                 {
-                    DBG_ERROR("keine sichtbare Tabelle");
+                    OSL_FAIL("keine sichtbare Tabelle");
                     pDoc->SetVisible( 0, TRUE );
                 }
             }
@@ -1616,7 +1616,7 @@ void ScTabView::SetTabNo( SCTAB nTab, BOOL bNew, BOOL bExtendSelection )
         if ( aViewData.IsPagebreakMode() )
             UpdatePageBreakData();              //! asynchron ??
 
-        //  #53551# Form-Layer muss den sichtbaren Ausschnitt der neuen Tabelle kennen
+        //  Form-Layer muss den sichtbaren Ausschnitt der neuen Tabelle kennen
         //  dafuer muss hier schon der MapMode stimmen
         for (USHORT i=0; i<4; i++)
             if (pGridWin[i])
@@ -1679,7 +1679,7 @@ void ScTabView::MakeEditView( ScEditEngineDefaulter* pEngine, SCCOL nCol, SCROW 
                      ( nCol >= nScrX && nCol <= nScrX + aViewData.VisibleCellsX(eHWhich) + 1 &&
                        nRow >= nScrY && nRow <= nScrY + aViewData.VisibleCellsY(eVWhich) + 1 );
 
-                //  #102421# for the active part, create edit view even if outside the visible area,
+                //  for the active part, create edit view even if outside the visible area,
                 //  so input isn't lost (and the edit view may be scrolled into the visible area)
 
                 //  #i26433# during spelling, the spelling view must be active
@@ -1866,7 +1866,7 @@ void ScTabView::PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
                 if (nCol1 < nScrX) nCol1 = nScrX;
                 if (nCol2 < nScrX)
                 {
-                    if ( eMode == SC_UPDATE_ALL )   // #91240# for UPDATE_ALL, paint anyway
+                    if ( eMode == SC_UPDATE_ALL )   // for UPDATE_ALL, paint anyway
                         nCol2 = nScrX;              // (because of extending strings to the right)
                     else
                         bOut = TRUE;                // completely outside the window
@@ -1973,13 +1973,12 @@ void ScTabView::PaintRangeFinder( long nNumber )
                             BOOL bHiddenEdge = FALSE;
                             SCROW nTmp;
                             ScDocument* pDoc = aViewData.GetDocument();
-                            SCCOL nLastCol = -1;
-                            while ( nCol1 > 0 && pDoc->ColHidden(nCol1, nTab, nLastCol) )
+                            while ( nCol1 > 0 && pDoc->ColHidden(nCol1, nTab) )
                             {
                                 --nCol1;
                                 bHiddenEdge = TRUE;
                             }
-                            while ( nCol2 < MAXCOL && pDoc->ColHidden(nCol2, nTab, nLastCol) )
+                            while ( nCol2 < MAXCOL && pDoc->ColHidden(nCol2, nTab) )
                             {
                                 ++nCol2;
                                 bHiddenEdge = TRUE;
@@ -2220,89 +2219,6 @@ void ScTabView::PaintLeftArea( SCROW nStartRow, SCROW nEndRow )
     }
 }
 
-//  InvertBlockMark - Block invertieren
-
-void ScTabView::InvertBlockMark(SCCOL nStartX, SCROW nStartY,
-                                SCCOL nEndX, SCROW nEndY)
-{
-    if ( !aViewData.IsActive() )
-        return;                                 // invertiert wird nur auf aktiver View
-
-    PutInOrder( nStartX, nEndX );
-    PutInOrder( nStartY, nEndY );
-
-    ScMarkData& rMark = aViewData.GetMarkData();
-    ScDocShell* pDocSh = aViewData.GetDocShell();
-    ScDocument* pDoc = pDocSh->GetDocument();
-    SCTAB nTab = aViewData.GetTabNo();
-
-    if ( pDocSh->GetLockCount() )
-    {
-        //  if paint is locked, avoid repeated inverting
-        //  add repaint areas to paint lock data instead
-        pDocSh->PostPaint( nStartX,nStartY,nTab, nEndX,nEndY,nTab, PAINT_GRID );
-        return;
-    }
-
-    BOOL bSingle = rMark.IsMultiMarked();
-    BOOL bMerge = pDoc->HasAttrib( nStartX, nStartY, nTab, nEndX, nEndY, nTab,
-                                    HASATTR_MERGED | HASATTR_OVERLAPPED );
-
-    USHORT i;
-    if ( bMerge || bSingle )
-    {
-        for (i=0; i<4; i++)
-            if (pGridWin[i])
-                if (pGridWin[i]->IsVisible())
-                    pGridWin[i]->InvertSimple( nStartX, nStartY, nEndX, nEndY,
-                                                bMerge, bBlockNeg );
-    }
-    else
-    {
-        for (i=0; i<4; i++)
-            if (pGridWin[i])
-                if (pGridWin[i]->IsVisible())
-                {
-                    ScSplitPos ePos = (ScSplitPos) i;
-                    Point aStartPoint = aViewData.GetScrPos( nStartX, nStartY, ePos );
-                    Point aEndPoint = aViewData.GetScrPos( nEndX+1, nEndY+1, ePos );
-                    if ( pDoc->IsLayoutRTL( nTab ) )
-                    {
-                        long nTemp = aStartPoint.X();
-                        aStartPoint.X() = aEndPoint.X() + 1;    // +1 - excluding start of nEndX+1
-                        aEndPoint.X() = nTemp;
-                    }
-                    else
-                        aEndPoint.X() -= 1;
-                    aEndPoint.Y() -= 1;
-                    if ( aEndPoint.X() >= aStartPoint.X() && aEndPoint.Y() >= aStartPoint.Y() )
-                    {
-                        MapMode aOld = pGridWin[ePos]->GetMapMode();
-                        pGridWin[ePos]->SetMapMode(MAP_PIXEL);
-                        pGridWin[ePos]->Invert( Rectangle(aStartPoint,aEndPoint), INVERT_HIGHLIGHT );
-                        pGridWin[ePos]->SetMapMode(aOld);
-                        pGridWin[ePos]->CheckInverted();
-                    }
-                }
-    }
-
-        //
-        //  wenn Controls betroffen, neu malen
-        //
-
-    BOOL bHide = TRUE;                  // wird Teil der Markierung aufgehoben ?
-    if (rMark.IsMarked())
-    {
-        ScRange aMarkRange;
-        rMark.GetMarkArea( aMarkRange );
-        if ( aMarkRange.aStart.Col() <= nStartX && aMarkRange.aEnd.Col() >= nEndX &&
-             aMarkRange.aStart.Row() <= nStartY && aMarkRange.aEnd.Row() >= nEndY )
-        {
-            bHide = FALSE;              // der ganze Bereich ist markiert
-        }
-    }
-}
-
 BOOL ScTabView::PaintExtras()
 {
     BOOL bRet = FALSE;
@@ -2433,7 +2349,7 @@ void ScTabView::ActivatePart( ScSplitPos eWhich )
 
         BOOL bRefMode = SC_MOD()->IsFormulaMode();
 
-        //  #40565# the HasEditView call during SetCursor would fail otherwise
+        //  the HasEditView call during SetCursor would fail otherwise
         if ( aViewData.HasEditView(eOld) && !bRefMode )
             UpdateInputLine();
 
@@ -2497,7 +2413,7 @@ void ScTabView::ActivatePart( ScSplitPos eWhich )
         SfxInPlaceClient* pClient = aViewData.GetViewShell()->GetIPClient();
         BOOL bOleActive = ( pClient && pClient->IsObjectInPlaceActive() );
 
-        //  #103823# don't switch ViewShell's active window during RefInput, because the focus
+        //  don't switch ViewShell's active window during RefInput, because the focus
         //  might change, and subsequent SetReference calls wouldn't find the right EditView
         if ( !bRefMode && !bOleActive )
             aViewData.GetViewShell()->SetWindow( pGridWin[eWhich] );
@@ -2584,7 +2500,7 @@ void ScTabView::ZoomChanged()
 
     SetNewVisArea();
 
-    InterpretVisible();     // #69343# have everything calculated before painting
+    InterpretVisible();     // have everything calculated before painting
 
     SfxBindings& rBindings = aViewData.GetBindings();
     rBindings.Invalidate( SID_ATTR_ZOOM );
@@ -2600,7 +2516,7 @@ void ScTabView::ZoomChanged()
         // flush OverlayManager before changing the MapMode
         pWin->flushOverlayManager();
 
-        //  #93650# make sure the EditView's position and size are updated
+        //  make sure the EditView's position and size are updated
         //  with the right (logic, not drawing) MapMode
         pWin->SetMapMode( aViewData.GetLogicMode() );
         UpdateEditView();

@@ -39,9 +39,10 @@
 #define INCLUDED_STRING_H
 #endif
 
-using namespace rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
+
+using ::rtl::OUString;
 
 // module
 extern uno::Sequence< OUString > SAL_CALL SwUnoModule_getSupportedServiceNames() throw();

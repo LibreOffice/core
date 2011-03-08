@@ -14,6 +14,8 @@
  *
  * The Initial Developer of the Original Code is
  *       Thorsten Behrens <tbehrens@novell.com>
+ * Portions created by the Initial Developer are Copyright (C) 2011 the
+ * Initial Developer. All Rights Reserved.
  *
  * Contributor(s):
  *   Thorsten Behrens <tbehrens@novell.com>
@@ -28,18 +30,15 @@
 #include "precompiled_sw.hxx"
 
 #ifdef WNT
-# include <tools/prewin.h>
-# include <windows.h>
-# include <tools/postwin.h>
+#include <prewin.h>
+#include <postwin.h>
 #endif
 
-#include "preextstl.h"
 #include <cppunit/TestSuite.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestCase.h>
 #include <cppunit/plugin/TestPlugIn.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include "postextstl.h"
 
 #include <osl/file.hxx>
 #include <osl/process.h>
@@ -48,11 +47,15 @@
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
+
 #include <sfx2/app.hxx>
+#include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
+
 #include <tools/urlobj.hxx>
 #include <unotools/tempfile.hxx>
+#include <ucbhelper/contentbroker.hxx>
 
 #include "init.hxx"
 #include "swtypes.hxx"
@@ -65,6 +68,11 @@ SO2_DECL_REF(SwDocShell)
 SO2_IMPL_REF(SwDocShell)
 
 using namespace ::com::sun::star;
+
+static USHORT aWndFunc(Window *, USHORT, const String &, const String &)
+{
+    return ERRCODE_BUTTON_OK;
+}
 
 /* Implementation of Swdoc-Test class */
 
@@ -123,10 +131,16 @@ void SwDocTest::testFileNameFields()
 
     INetURLObject aTempFileURL(aTempFile.GetURL());
     String sFileURL = aTempFileURL.GetMainURL(INetURLObject::NO_DECODE);
-    SfxMedium* pDstMed = new SfxMedium(sFileURL, STREAM_STD_READWRITE, true);
+    SfxMedium aDstMed(sFileURL, STREAM_STD_READWRITE, true);
 
-    m_xDocShRef->DoSaveAs(*pDstMed);
-    m_xDocShRef->DoSaveCompleted(pDstMed);
+    SfxFilter aFilter(
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Text")),
+        rtl::OUString(), 0, 0, rtl::OUString(), 0, rtl::OUString(),
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TEXT")), rtl::OUString() );
+    aDstMed.SetFilter(&aFilter);
+
+    m_xDocShRef->DoSaveAs(aDstMed);
+    m_xDocShRef->DoSaveCompleted(&aDstMed);
 
     const INetURLObject &rUrlObj = m_xDocShRef->GetMedium()->GetURLObject();
 
@@ -161,6 +175,8 @@ void SwDocTest::testFileNameFields()
         sExpected = sExpected.copy(0, sExpected.getLength() - 4);
         CPPUNIT_ASSERT_MESSAGE("Expected Readable FileName", sResult == sExpected);
     }
+
+    m_xDocShRef->DoInitNew(0);
 }
 
 void SwDocTest::randomTest()
@@ -180,9 +196,25 @@ SwDocTest::SwDocTest()
     //of retaining references to the root ServiceFactory as its passed around
     comphelper::setProcessServiceFactory(xSM);
 
+    // initialise UCB-Broker
+    uno::Sequence<uno::Any> aUcbInitSequence(2);
+    aUcbInitSequence[0] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Local"));
+    aUcbInitSequence[1] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Office"));
+    bool bInitUcb = ucbhelper::ContentBroker::initialize(xSM, aUcbInitSequence);
+    CPPUNIT_ASSERT_MESSAGE("Should be able to initialize UCB", bInitUcb);
+
+    uno::Reference<ucb::XContentProviderManager> xUcb =
+        ucbhelper::ContentBroker::get()->getContentProviderManagerInterface();
+    uno::Reference<ucb::XContentProvider> xFileProvider(xSM->createInstance(
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.FileContentProvider"))), uno::UNO_QUERY);
+    xUcb->registerContentProvider(xFileProvider, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file")), sal_True);
+
+
     InitVCL(xSM);
 
     SwDLL::Init();
+
+    ErrorHandler::RegisterDisplay(&aWndFunc);
 }
 
 void SwDocTest::setUp()

@@ -33,7 +33,7 @@
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 /*************************************************************************
     UNO III Implementation
 *************************************************************************/
@@ -50,7 +50,7 @@ struct equalOUString
   }
 };
 
-typedef ::std::hash_map< ::rtl::OUString,
+typedef ::boost::unordered_map< ::rtl::OUString,
                                  SfxItemPropertySimpleEntry,
                                  ::rtl::OUStringHash,
                                  equalOUString > SfxItemPropertyHashMap_t;

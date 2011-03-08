@@ -30,15 +30,11 @@
 #define _SSTRING_HXX
 
 #include <tools/string.hxx>
-#include <tools/list.hxx>
+#include <vector>
 
 #define NOT_THERE       LIST_ENTRY_NOTFOUND
 
-#define  SStringList SUniStringList
-#define  StringList UniStringList
-
-DECLARE_LIST( ByteStringList, ByteString* )
-DECLARE_LIST( UniStringList, UniString* )
+typedef ::std::vector< ByteString* > ByteStringList;
 
 class SvStream;
 
@@ -46,61 +42,34 @@ class SvStream;
 // - class SStringList -
 // ---------------------
 
-class SByteStringList : public ByteStringList
+class SByteStringList
 {
+private:
+    ByteStringList  maList;
+
 public:
                 SByteStringList();
                 ~SByteStringList();
 
                 // neuen ByteString in Liste einfuegen
-    ULONG       PutString( ByteString* );
-    ByteString*     RemoveString( const ByteString& rName );
+    size_t      PutString( ByteString* );
+    ByteString* RemoveString( const ByteString& rName );
 
                 // Position des ByteString in Liste, wenn nicht enthalten, dann
                 // return = NOT_THERE
-    ULONG       IsString( ByteString* );
+    size_t      IsString( ByteString* );
 
                 // Vorgaenger ermitteln ( auch wenn selbst noch nicht in
                 // Liste enthalten
-    ULONG       GetPrevString( ByteString* );
+    size_t      GetPrevString( ByteString* );
     void        CleanUp();
+    size_t      size() const;
+    ByteString* erase( size_t i );
 
-    SByteStringList& operator<<  ( SvStream& rStream );
-    SByteStringList& operator>>  ( SvStream& rStream );
-};
-
-// ---------------------
-// - class SUniStringList -
-// ---------------------
-
-class SUniStringList : public UniStringList
-{
-public:
-                SUniStringList();
-                ~SUniStringList();
-
-                // neuen UniString in Liste einfuegen
-    ULONG       PutString( UniString* );
-    UniString*  RemoveString( const UniString& rName );
-
-                // Position des UniString in Liste, wenn nicht enthalten, dann
-                // return = NOT_THERE
-    ULONG       IsString( UniString* );
-
-                // Vorgaenger ermitteln ( auch wenn selbst noch nicht in
-                // Liste enthalten
-    ULONG       GetPrevString( UniString* );
-};
-
-class Text
-{
-protected:
-    String      aString;
-
-public:
-                Text( char* pChar );
-                Text( String &rStr ) { aString = rStr; }
-    void        Stderr();
+    SByteStringList&    operator<<  ( SvStream& rStream );
+    SByteStringList&    operator>>  ( SvStream& rStream );
+    ByteString*         operator[]( size_t i ) const;
+    ByteString*         at( size_t i ) const;
 };
 
 #endif

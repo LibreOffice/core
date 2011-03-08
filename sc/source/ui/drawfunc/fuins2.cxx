@@ -319,7 +319,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
                     }
                     else
                     {
-                        DBG_ERROR("Invalid URL!");
+                        OSL_FAIL("Invalid URL!");
                         //! error message
                         //! can this happen???
                     }
@@ -401,7 +401,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
 
             if ( nAspect != embed::Aspects::MSOLE_ICON )
             {
-                //  #73279# Math objects change their object size during InsertObject.
+                //  Math objects change their object size during InsertObject.
                 //  New size must be set in SdrObject, or a wrong scale will be set at
                 //  ActivateObject.
 
@@ -427,7 +427,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
                 // XXX Activate aus Makro ist toedlich !!! ???
                 if (bIsFromFile)
                 {
-                    // #45012# Objekt ist selektiert, also Draw-Shell aktivieren
+                    // Objekt ist selektiert, also Draw-Shell aktivieren
                     pViewShell->SetDrawShell( TRUE );
                 }
                 else
@@ -441,7 +441,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
         }
         catch( uno::Exception& )
         {
-            OSL_ASSERT( "May need error handling here!\n" );
+            OSL_FAIL( "May need error handling here!\n" );
         }
     }
     else
@@ -612,7 +612,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
                     nToTable = ((const SfxUInt16Item*)pItem)->GetValue();
                 else if ( pItem->ISA( SfxBoolItem ) )
                 {
-                    //  #46033# in der idl fuer Basic steht FN_PARAM_4 als SfxBoolItem
+                    //  in der idl fuer Basic steht FN_PARAM_4 als SfxBoolItem
                     //  -> wenn gesetzt, neue Tabelle, sonst aktuelle Tabelle
 
                     if ( ((const SfxBoolItem*)pItem)->GetValue() )
@@ -654,7 +654,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
                 }
                 else
                 {
-                    DBG_ERROR( "Could not create new table :-/" );
+                    OSL_FAIL( "Could not create new table :-/" );
                 }
             }
             else if ( nToTable != pData->GetTabNo() )
@@ -763,7 +763,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
                             }
                             catch( uno::Exception& )
                             {
-                                OSL_ASSERT( "Chart wizard couldn't be positioned automatically\n" );
+                                OSL_FAIL( "Chart wizard couldn't be positioned automatically\n" );
                             }
                         }
 

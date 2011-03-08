@@ -44,7 +44,7 @@ module drafts { module com {  module sun {  module star {  module form {
 /** specifies a listener for changes in a string entry list
 
     @deprecated
-        This interface is superseeded by <type scope="com::sun::star::form::binding">XListEntryListener</type>
+        This interface is superseded by <type scope="com::sun::star::form::binding">XListEntryListener</type>
 */
 interface XListEntryListener : com::sun::star::lang::XEventListener
 {

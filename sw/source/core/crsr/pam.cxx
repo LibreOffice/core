@@ -44,13 +44,12 @@
 #include <swtable.hxx>
 #include <crsskip.hxx>
 
-// --> FME 2004-06-29 #114856# Formular view
+// Formular view
 #include <flyfrm.hxx>
 #include <fmteiro.hxx>
 #include <section.hxx>
 #include <sectfrm.hxx>
-// <--
-#include <ndtxt.hxx> // #111827#
+#include <ndtxt.hxx>
 
 #include <IMark.hxx>
 #include <hints.hxx>
@@ -641,8 +640,7 @@ USHORT SwPaM::GetPageNum( BOOL bAtPoint, const Point* pLayPos )
     return 0;
 }
 
-// --> FME 2004-06-29 #114856# Formular view
-// See also SwCrsrShell::IsCrsrReadonly()
+// Formular view - See also SwCrsrShell::IsCrsrReadonly()
 const SwFrm* lcl_FindEditInReadonlyFrm( const SwFrm& rFrm )
 {
     const SwFrm* pRet = 0;
@@ -666,7 +664,6 @@ const SwFrm* lcl_FindEditInReadonlyFrm( const SwFrm& rFrm )
 
     return pRet;
 }
-// <--
 
 // steht in etwas geschuetztem oder in die Selektion umspannt
 // etwas geschuetztes.
@@ -767,41 +764,6 @@ BOOL SwPaM::HasReadonlySel( bool bFormView ) const
                         }
                     }
                 }
-
-#ifdef CHECK_CELL_READONLY
-//JP 22.01.99: bisher wurden Tabelle, die in der Text-Selektion standen
-//              nicht beachtet. Wollte man das haben, dann muss dieser
-//              Code freigeschaltet werden
-
-                if( !bRet )
-                {
-                    // dann noch ueber alle Tabellen
-                    const SwFrmFmts& rFmts = *GetDoc()->GetTblFrmFmts();
-                    for( n = rFmts.Count(); n ;  )
-                    {
-                        SwFrmFmt* pFmt = (SwFrmFmt*)rFmts[ --n ];
-                        const SwTable* pTbl = SwTable::FindTable( pFmt );
-                        ULONG nIdx = pTbl ? pTbl->GetTabSortBoxes()[0]->GetSttIdx()
-                                          : 0;
-                        if( nSttIdx <= nIdx && nEndIdx >= nIdx )
-                        {
-                            // dann teste mal alle Boxen
-                            const SwTableSortBoxes& rBoxes = pTbl->GetTabSortBoxes();
-
-                            for( USHORT i =  rBoxes.Count(); i; )
-                                if( rBoxes[ --i ]->GetFrmFmt()->GetProtect().
-                                    IsCntntProtected() )
-                                {
-                                    bRet = TRUE;
-                                    break;
-                                }
-
-                            if( bRet )
-                                break;
-                        }
-                    }
-                }
-#endif
             }
         }
     }
@@ -819,7 +781,7 @@ BOOL SwPaM::HasReadonlySel( bool bFormView ) const
 
         sw::mark::IFieldmark* pFieldmark = pMarksAccess->getFieldmarkFor( *GetPoint() );
         if ( pFieldmark )
-            bUnhandledMark = pFieldmark->GetFieldname( ).equalsAscii( ODF_UNHANDLED );
+            bUnhandledMark = pFieldmark->GetFieldname( ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_UNHANDLED ) );
     }
 
     if (!bRet)
@@ -1168,7 +1130,6 @@ BOOL GoPrevSection( SwPaM & rPam, SwMoveFn fnMove )
     return TRUE;
 }
 
-// #111827#
 String SwPaM::GetTxt() const
 {
     String aResult;

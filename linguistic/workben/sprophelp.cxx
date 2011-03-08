@@ -42,9 +42,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <osl/mutex.hxx>
 
-//using namespace utl;
 using namespace osl;
-using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
@@ -52,6 +50,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
+using ::rtl::OUString;
 
 #define A2OU(x) ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( x ))
 
@@ -317,7 +316,7 @@ void SAL_CALL
                 break;
             }
             default:
-                DBG_ERROR( "unknown property" );
+                OSL_FAIL( "unknown property" );
         }
         if (pbVal)
             rEvt.NewValue >>= *pbVal;
@@ -345,7 +344,7 @@ void PropertyHelper_Spell::SetTmpPropVals( const PropertyValues &rPropVals )
     bResIsSpellUpperCase            = bIsSpellUpperCase;
     bResIsSpellWithDigits           = bIsSpellWithDigits;
     bResIsSpellCapitalization       = bIsSpellCapitalization;
-    //
+
     INT32 nLen = rPropVals.getLength();
     if (nLen)
     {
@@ -362,7 +361,7 @@ void PropertyHelper_Spell::SetTmpPropVals( const PropertyValues &rPropVals )
                 case UPH_IS_SPELL_WITH_DIGITS         : pbResVal = &bResIsSpellWithDigits; break;
                 case UPH_IS_SPELL_CAPITALIZATION      : pbResVal = &bResIsSpellCapitalization; break;
                 default:
-                    DBG_ERROR( "unknown property" );
+                    OSL_FAIL( "unknown property" );
             }
             if (pbResVal)
                 pVal[i].Value >>= *pbResVal;

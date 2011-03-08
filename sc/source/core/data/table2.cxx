@@ -61,8 +61,6 @@
 #include "globstr.hrc"
 #include "segmenttree.hxx"
 
-#include <math.h>
-
 // STATIC DATA -----------------------------------------------------------
 
 
@@ -179,6 +177,11 @@ void ScTable::InsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE
     DecRecalcLevel( false );
 
     InvalidatePageBreaks();
+
+    if (IsStreamValid())
+        // TODO: In the future we may want to check if the table has been
+        // really modified before setting the stream invalid.
+        SetStreamValid(false);
 }
 
 
@@ -224,6 +227,11 @@ void ScTable::DeleteRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE
     DecRecalcLevel();
 
     InvalidatePageBreaks();
+
+    if (IsStreamValid())
+        // TODO: In the future we may want to check if the table has been
+        // really modified before setting the stream invalid.
+        SetStreamValid(false);
 }
 
 
@@ -311,6 +319,11 @@ void ScTable::InsertCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE
     DecRecalcLevel();
 
     InvalidatePageBreaks();
+
+    if (IsStreamValid())
+        // TODO: In the future we may want to check if the table has been
+        // really modified before setting the stream invalid.
+        SetStreamValid(false);
 }
 
 
@@ -371,6 +384,11 @@ void ScTable::DeleteCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE
     DecRecalcLevel();
 
     InvalidatePageBreaks();
+
+    if (IsStreamValid())
+        // TODO: In the future we may want to check if the table has been
+        // really modified before setting the stream invalid.
+        SetStreamValid(false);
 }
 
 
@@ -380,8 +398,6 @@ void ScTable::DeleteArea(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, USH
     if (nRow2 > MAXROW) nRow2 = MAXROW;
     if (ValidColRow(nCol1, nRow1) && ValidColRow(nCol2, nRow2))
     {
-//      IncRecalcLevel();
-
         {   // scope for bulk broadcast
             ScBulkBroadcast aBulkBroadcast( pDocument->GetBASM());
             for (SCCOL i = nCol1; i <= nCol2; i++)
@@ -399,6 +415,11 @@ void ScTable::DeleteArea(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, USH
             ApplyPatternArea( nCol1, nRow1, nCol2, nRow2, aPattern );
         }
     }
+
+    if (IsStreamValid())
+        // TODO: In the future we may want to check if the table has been
+        // really modified before setting the stream invalid.
+        SetStreamValid(false);
 }
 
 
@@ -422,6 +443,11 @@ void ScTable::DeleteSelection( USHORT nDelFlag, const ScMarkData& rMark )
         SfxItemPoolCache aCache( pPool, &aSet );
         ApplySelectionCache( &aCache, rMark );
     }
+
+    if (IsStreamValid())
+        // TODO: In the future we may want to check if the table has been
+        // really modified before setting the stream invalid.
+        SetStreamValid(false);
 }
 
 
@@ -557,7 +583,7 @@ void ScTable::TransposeClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
 
         if ( bAsLink && nFlags == IDF_ALL )
         {
-            //  #68989# with IDF_ALL, also create links (formulas) for empty cells
+            //  with IDF_ALL, also create links (formulas) for empty cells
 
             for ( nRow=nRow1; nRow<=nRow2; nRow++ )
             {
@@ -722,108 +748,100 @@ void ScTable::CopyToTable(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             const ScMarkData* pMarkData,
                             BOOL bAsLink, BOOL bColRowFlags)
 {
-    if (ValidColRow(nCol1, nRow1) && ValidColRow(nCol2, nRow2))
-    {
-        if (nFlags)
-            for (SCCOL i = nCol1; i <= nCol2; i++)
-                aCol[i].CopyToColumn(nRow1, nRow2, nFlags, bMarked,
+    if (!ValidColRow(nCol1, nRow1) || !ValidColRow(nCol2, nRow2))
+        return;
+
+    if (nFlags)
+        for (SCCOL i = nCol1; i <= nCol2; i++)
+            aCol[i].CopyToColumn(nRow1, nRow2, nFlags, bMarked,
                                 pDestTab->aCol[i], pMarkData, bAsLink);
 
-        if (bColRowFlags)       // Spaltenbreiten/Zeilenhoehen/Flags
+    if (!bColRowFlags)      // Spaltenbreiten/Zeilenhoehen/Flags
+        return;
+
+    //  Charts muessen beim Ein-/Ausblenden angepasst werden
+    ScChartListenerCollection* pCharts = pDestTab->pDocument->GetChartListenerCollection();
+
+    bool bFlagChange = false;
+
+    BOOL bWidth  = (nRow1==0 && nRow2==MAXROW && pColWidth && pDestTab->pColWidth);
+    BOOL bHeight = (nCol1==0 && nCol2==MAXCOL && mpRowHeights && pDestTab->mpRowHeights);
+
+    if (bWidth || bHeight)
+    {
+        pDestTab->IncRecalcLevel();
+
+        if (bWidth)
         {
-            //  Charts muessen beim Ein-/Ausblenden angepasst werden
-            ScChartListenerCollection* pCharts = pDestTab->pDocument->GetChartListenerCollection();
-
-            bool bFlagChange = false;
-
-            BOOL bWidth  = (nRow1==0 && nRow2==MAXROW && pColWidth && pDestTab->pColWidth);
-            BOOL bHeight = (nCol1==0 && nCol2==MAXCOL && mpRowHeights && pDestTab->mpRowHeights);
-
-            if (bWidth||bHeight)
+            for (SCCOL i = nCol1; i <= nCol2; ++i)
             {
-                pDestTab->IncRecalcLevel();
+                bool bThisHidden = ColHidden(i);
+                bool bHiddenChange = (pDestTab->ColHidden(i) != bThisHidden);
+                bool bChange = bHiddenChange || (pDestTab->pColWidth[i] != pColWidth[i]);
+                pDestTab->pColWidth[i] = pColWidth[i];
+                pDestTab->pColFlags[i] = pColFlags[i];
+                pDestTab->SetColHidden(i, i, bThisHidden);
+                //! Aenderungen zusammenfassen?
+                if (bHiddenChange && pCharts)
+                    pCharts->SetRangeDirty(ScRange( i, 0, nTab, i, MAXROW, nTab ));
 
-                if (bWidth)
-                {
-                    for (SCCOL i=nCol1; i<=nCol2; i++)
-                    {
-                        bool bThisHidden = ColHidden(i);
-                        bool bHiddenChange = (pDestTab->ColHidden(i) != bThisHidden);
-                        bool bChange = bHiddenChange || (pDestTab->pColWidth[i] != pColWidth[i]);
-                        pDestTab->pColWidth[i] = pColWidth[i];
-                        pDestTab->pColFlags[i] = pColFlags[i];
-                        pDestTab->SetColHidden(i, i, bThisHidden);
-                        //! Aenderungen zusammenfassen?
-                        if (bHiddenChange && pCharts)
-                            pCharts->SetRangeDirty(ScRange( i, 0, nTab, i, MAXROW, nTab ));
+                if (bChange)
+                    bFlagChange = true;
+            }
+            pDestTab->SetColManualBreaks( maColManualBreaks);
+        }
 
-                        if (bChange)
-                            bFlagChange = true;
-                    }
-                    pDestTab->SetColManualBreaks( maColManualBreaks);
-                }
+        if (bHeight)
+        {
+            bool bChange = pDestTab->GetRowHeight(nRow1, nRow2) != GetRowHeight(nRow1, nRow2);
 
-                if (bHeight)
-                {
-                    bool bChange = pDestTab->GetRowHeight(nRow1, nRow2) != GetRowHeight(nRow1, nRow2);
+            if (bChange)
+                bFlagChange = true;
 
-                    if (bChange)
-                        bFlagChange = true;
+            pDestTab->CopyRowHeight(*this, nRow1, nRow2, 0);
+            pDestTab->pRowFlags->CopyFrom(*pRowFlags, nRow1, nRow2);
 
-                    pDestTab->CopyRowHeight(*this, nRow1, nRow2, 0);
-                    pDestTab->pRowFlags->CopyFrom(*pRowFlags, nRow1, nRow2);
+            // Hidden flags.
+            for (SCROW i = nRow1; i <= nRow2; ++i)
+            {
+                SCROW nLastRow;
+                bool bHidden = RowHidden(i, NULL, &nLastRow);
+                if (nLastRow >= nRow2)
+                    // the last row shouldn't exceed the upper bound the caller specified.
+                    nLastRow = nRow2;
 
-                    // Hidden flags.
-                    for (SCROW i = nRow1; i <= nRow2; ++i)
-                    {
-                        SCROW nThisLastRow, nDestLastRow;
-                        bool bThisHidden = RowHidden(i, NULL, &nThisLastRow);
-                        bool bDestHidden = pDestTab->RowHidden(i, NULL, &nDestLastRow);
+                bool bHiddenChanged = pDestTab->SetRowHidden(i, nLastRow, bHidden);
+                if (bHiddenChanged && pCharts)
+                    // Hidden flags differ.
+                    pCharts->SetRangeDirty(ScRange(0, i, nTab, MAXCOL, nLastRow, nTab));
 
-                        // If the segment sizes differ, we take the shorter segment of the two.
-                        SCROW nLastRow = ::std::min(nThisLastRow, nDestLastRow);
-                        if (nLastRow >= nRow2)
-                            // the last row shouldn't exceed the upper bound the caller specified.
-                            nLastRow = nRow2;
+                if (bHiddenChanged)
+                    bFlagChange = true;
 
-                        pDestTab->SetRowHidden(i, nLastRow, bThisHidden);
-
-                        bool bThisHiddenChange = (bThisHidden != bDestHidden);
-                        if (bThisHiddenChange && pCharts)
-                        {
-                            // Hidden flags differ.
-                            pCharts->SetRangeDirty(ScRange(0, i, nTab, MAXCOL, nLastRow, nTab));
-                        }
-
-                        if (bThisHiddenChange)
-                            bFlagChange = true;
-
-                        // Jump to the last row of the identical flag segment.
-                        i = nLastRow;
-                    }
-
-                    // Filtered flags.
-                    for (SCROW i = nRow1; i <= nRow2; ++i)
-                    {
-                        SCROW nLastRow;
-                        bool bFiltered = RowFiltered(i, NULL, &nLastRow);
-                        if (nLastRow >= nRow2)
-                            // the last row shouldn't exceed the upper bound the caller specified.
-                            nLastRow = nRow2;
-                        pDestTab->SetRowFiltered(i, nLastRow, bFiltered);
-                        i = nLastRow;
-                    }
-                    pDestTab->SetRowManualBreaks( maRowManualBreaks);
-                }
-                pDestTab->DecRecalcLevel();
+                // Jump to the last row of the identical flag segment.
+                i = nLastRow;
             }
 
-            if (bFlagChange)
-                pDestTab->InvalidatePageBreaks();
-
-            pDestTab->SetOutlineTable( pOutlineTable );     // auch nur wenn bColRowFlags
+            // Filtered flags.
+            for (SCROW i = nRow1; i <= nRow2; ++i)
+            {
+                SCROW nLastRow;
+                bool bFiltered = RowFiltered(i, NULL, &nLastRow);
+                if (nLastRow >= nRow2)
+                    // the last row shouldn't exceed the upper bound the caller specified.
+                    nLastRow = nRow2;
+                pDestTab->SetRowFiltered(i, nLastRow, bFiltered);
+                i = nLastRow;
+            }
+            pDestTab->SetRowManualBreaks( maRowManualBreaks);
         }
+        pDestTab->DecRecalcLevel();
     }
+
+    if (bFlagChange)
+        pDestTab->InvalidatePageBreaks();
+
+    pDestTab->SetOutlineTable( pOutlineTable );     // auch nur wenn bColRowFlags
 }
 
 
@@ -1112,7 +1130,7 @@ ScBaseCell* ScTable::GetCell( SCCOL nCol, SCROW nRow ) const
     if (ValidColRow( nCol, nRow ))
         return aCol[nCol].GetCell( nRow );
 
-    DBG_ERROR("GetCell ausserhalb");
+    OSL_FAIL("GetCell ausserhalb");
     return NULL;
 }
 
@@ -1244,11 +1262,6 @@ void ScTable::SetRelNameDirty()
 void ScTable::SetLoadingMedium(bool bLoading)
 {
     mpRowHeights->enableTreeSearch(!bLoading);
-
-    // When loading a medium, prefer inserting row heights from the back
-    // position since the row heights are stored and read in ascending order
-    // during import.
-    mpRowHeights->setInsertFromBack(bLoading);
 }
 
 
@@ -1323,7 +1336,7 @@ const ScPatternAttr* ScTable::GetPattern( SCCOL nCol, SCROW nRow ) const
         return aCol[nCol].GetPattern( nRow );
     else
     {
-        DBG_ERROR("wrong column or row");
+        OSL_FAIL("wrong column or row");
         return pDocument->GetDefPattern();      // for safety
     }
 }
@@ -1460,7 +1473,7 @@ void ScTable::FindMaxRotCol( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCC
 {
     if ( !pColWidth || !mpRowHeights || !pColFlags || !pRowFlags )
     {
-        DBG_ERROR( "Spalten-/Zeileninfo fehlt" );
+        OSL_FAIL( "Spalten-/Zeileninfo fehlt" );
         return;
     }
 
@@ -1782,7 +1795,7 @@ void ScTable::UnlockTable()
         --nLockCount;
     else
     {
-        DBG_ERROR("UnlockTable ohne LockTable");
+        OSL_FAIL("UnlockTable ohne LockTable");
     }
 }
 
@@ -2094,7 +2107,7 @@ void ScTable::SetColWidth( SCCOL nCol, USHORT nNewWidth )
     }
     else
     {
-        DBG_ERROR("Falsche Spaltennummer oder keine Breiten");
+        OSL_FAIL("Falsche Spaltennummer oder keine Breiten");
     }
 }
 
@@ -2116,24 +2129,20 @@ void ScTable::SetRowHeight( SCROW nRow, USHORT nNewHeight )
     {
         if (!nNewHeight)
         {
-            DBG_ERROR("Zeilenhoehe 0 in SetRowHeight");
+            OSL_FAIL("Zeilenhoehe 0 in SetRowHeight");
             nNewHeight = ScGlobal::nStdRowHeight;
         }
 
         sal_uInt16 nOldHeight = mpRowHeights->getValue(nRow);
         if ( nNewHeight != nOldHeight )
         {
-            IncRecalcLevel();
-            InitializeNoteCaptions();
             mpRowHeights->setValue(nRow, nRow, nNewHeight);
-            DecRecalcLevel();
-
             InvalidatePageBreaks();
         }
     }
     else
     {
-        DBG_ERROR("Falsche Zeilennummer oder keine Hoehen");
+        OSL_FAIL("Falsche Zeilennummer oder keine Hoehen");
     }
 }
 
@@ -2177,11 +2186,9 @@ BOOL ScTable::SetRowHeightRange( SCROW nStartRow, SCROW nEndRow, USHORT nNewHeig
     BOOL bChanged = FALSE;
     if (VALIDROW(nStartRow) && VALIDROW(nEndRow) && mpRowHeights)
     {
-        IncRecalcLevel();
-        InitializeNoteCaptions();
         if (!nNewHeight)
         {
-            DBG_ERROR("Zeilenhoehe 0 in SetRowHeight");
+            OSL_FAIL("Zeilenhoehe 0 in SetRowHeight");
             nNewHeight = ScGlobal::nStdRowHeight;
         }
 
@@ -2230,7 +2237,7 @@ BOOL ScTable::SetRowHeightRange( SCROW nStartRow, SCROW nEndRow, USHORT nNewHeig
     }
     else
     {
-        DBG_ERROR("Falsche Zeilennummer oder keine Hoehen");
+        OSL_FAIL("Falsche Zeilennummer oder keine Hoehen");
     }
 
     return bChanged;
@@ -2258,7 +2265,7 @@ void ScTable::SetManualHeight( SCROW nStartRow, SCROW nEndRow, BOOL bManual )
     }
     else
     {
-        DBG_ERROR("Falsche Zeilennummer oder keine Zeilenflags");
+        OSL_FAIL("Falsche Zeilennummer oder keine Zeilenflags");
     }
 }
 
@@ -2296,7 +2303,7 @@ USHORT ScTable::GetCommonWidth( SCCOL nEndCol )
 
     if ( !ValidCol(nEndCol) )
     {
-        DBG_ERROR("wrong column");
+        OSL_FAIL("wrong column");
         nEndCol = MAXCOL;
     }
 
@@ -2391,7 +2398,7 @@ ULONG ScTable::GetRowHeight( SCROW nStartRow, SCROW nEndRow ) const
         while (nRow <= nEndRow)
         {
             SCROW nLastRow = -1;
-            if (!RowHidden(nRow, nLastRow))
+            if (!RowHidden(nRow, NULL, &nLastRow))
             {
                 if (nLastRow > nEndRow)
                     nLastRow = nEndRow;
@@ -2417,7 +2424,7 @@ ULONG ScTable::GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow, double fScale
         while (nRow <= nEndRow)
         {
             SCROW nLastRow = -1;
-            if (!RowHidden(nRow, nLastRow))
+            if (!RowHidden(nRow, NULL, &nLastRow))
             {
                 if (nLastRow > nEndRow)
                     nLastRow = nEndRow;
@@ -2453,7 +2460,7 @@ SCROW ScTable::GetHiddenRowCount( SCROW nRow )
         return 0;
 
     SCROW nLastRow = -1;
-    if (!RowHidden(nRow, nLastRow) || !ValidRow(nLastRow))
+    if (!RowHidden(nRow, NULL, &nLastRow) || !ValidRow(nLastRow))
         return 0;
 
     return nLastRow - nRow + 1;
@@ -2482,7 +2489,7 @@ void ScTable::ShowCol(SCCOL nCol, bool bShow)
     }
     else
     {
-        DBG_ERROR("Falsche Spaltennummer oder keine Flags");
+        OSL_FAIL("Falsche Spaltennummer oder keine Flags");
     }
 }
 
@@ -2506,7 +2513,7 @@ void ScTable::ShowRow(SCROW nRow, bool bShow)
     }
     else
     {
-        DBG_ERROR("Falsche Zeilennummer oder keine Flags");
+        OSL_FAIL("Falsche Zeilennummer oder keine Flags");
     }
 }
 
@@ -2515,16 +2522,11 @@ void ScTable::DBShowRow(SCROW nRow, bool bShow)
 {
     if (VALIDROW(nRow) && pRowFlags)
     {
-        bool bWasVis = !RowHidden(nRow);
-        IncRecalcLevel();
-        InitializeNoteCaptions();
-
         //  Filter-Flag immer setzen, auch wenn Hidden unveraendert
-        SetRowHidden(nRow, nRow, !bShow);
+        bool bChanged = SetRowHidden(nRow, nRow, !bShow);
         SetRowFiltered(nRow, nRow, !bShow);
-    DecRecalcLevel();
 
-        if (bWasVis != bShow)
+        if (bChanged)
         {
             ScChartListenerCollection* pCharts = pDocument->GetChartListenerCollection();
             if ( pCharts )
@@ -2538,7 +2540,7 @@ void ScTable::DBShowRow(SCROW nRow, bool bShow)
     }
     else
     {
-        DBG_ERROR("Falsche Zeilennummer oder keine Flags");
+        OSL_FAIL("Falsche Zeilennummer oder keine Flags");
     }
 }
 
@@ -2549,7 +2551,7 @@ void ScTable::DBShowRows(SCROW nRow1, SCROW nRow2, bool bShow)
     while (nStartRow <= nRow2)
     {
         SCROW nEndRow = -1;
-        bool bWasVis = !RowHidden(nStartRow, nEndRow);
+        bool bWasVis = !RowHiddenLeaf(nStartRow, NULL, &nEndRow);
         if (nEndRow > nRow2)
             nEndRow = nRow2;
 
@@ -2589,7 +2591,7 @@ void ScTable::ShowRows(SCROW nRow1, SCROW nRow2, bool bShow)
     while (nStartRow <= nRow2)
     {
         SCROW nEndRow = -1;
-        bool bWasVis = !RowHidden(nStartRow, nEndRow);
+        bool bWasVis = !RowHiddenLeaf(nStartRow, NULL, &nEndRow);
         if (nEndRow > nRow2)
             nEndRow = nRow2;
 
@@ -2629,7 +2631,7 @@ void ScTable::SetColFlags( SCCOL nCol, BYTE nNewFlags )
         pColFlags[nCol] = nNewFlags;
     else
     {
-        DBG_ERROR("Falsche Spaltennummer oder keine Flags");
+        OSL_FAIL("Falsche Spaltennummer oder keine Flags");
     }
 }
 
@@ -2640,7 +2642,7 @@ void ScTable::SetRowFlags( SCROW nRow, BYTE nNewFlags )
         pRowFlags->SetValue( nRow, nNewFlags);
     else
     {
-        DBG_ERROR("Falsche Zeilennummer oder keine Flags");
+        OSL_FAIL("Falsche Zeilennummer oder keine Flags");
     }
 }
 
@@ -2651,7 +2653,7 @@ void ScTable::SetRowFlags( SCROW nStartRow, SCROW nEndRow, BYTE nNewFlags )
         pRowFlags->SetValue( nStartRow, nEndRow, nNewFlags);
     else
     {
-        DBG_ERROR("Falsche Zeilennummer(n) oder keine Flags");
+        OSL_FAIL("Falsche Zeilennummer(n) oder keine Flags");
     }
 }
 
@@ -2783,7 +2785,7 @@ void ScTable::ExtendHidden( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2 )
     if (rY2 < MAXROW)
     {
         SCROW nEndRow = -1;
-        if (RowHidden(rY2+1, nEndRow) && ValidRow(nEndRow))
+        if (RowHidden(rY2+1, NULL, &nEndRow) && ValidRow(nEndRow))
             rY2 = nEndRow;
     }
 }
@@ -2810,7 +2812,7 @@ void ScTable::StripHidden( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2 )
     if (rY1 < rY2)
     {
         SCROW nEndRow = -1;
-        if (RowHidden(rY1, nEndRow) && ValidRow(nEndRow) && nEndRow <= rY2)
+        if (RowHidden(rY1, NULL, &nEndRow) && ValidRow(nEndRow) && nEndRow <= rY2)
             rY1 = nEndRow;
     }
 }
@@ -2829,7 +2831,6 @@ short DiffSign( T a, T b )
 void ScTable::DoAutoOutline( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow )
 {
     BOOL bSizeChanged = FALSE;
-    BOOL bMissed      = FALSE;
 
     SCCOL nCol;
     SCROW nRow;
@@ -2872,8 +2873,6 @@ void ScTable::DoAutoOutline( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SC
                                     {
                                         bFound = TRUE;
                                     }
-                                    else
-                                        bMissed = TRUE;
                                 }
                 }
         }
@@ -2902,8 +2901,6 @@ void ScTable::DoAutoOutline( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SC
                             {
                                 bFound = TRUE;
                             }
-                            else
-                                bMissed = TRUE;
                         }
             }
         }
@@ -3040,7 +3037,7 @@ ULONG ScTable::GetRowOffset( SCROW nRow ) const
     }
     else
     {
-        DBG_ERROR("GetRowOffset: Daten fehlen");
+        OSL_FAIL("GetRowOffset: Daten fehlen");
     }
     return n;
 }
@@ -3084,7 +3081,7 @@ ULONG ScTable::GetColOffset( SCCOL nCol ) const
     }
     else
     {
-        DBG_ERROR("GetColumnOffset: Daten fehlen");
+        OSL_FAIL("GetColumnOffset: Daten fehlen");
     }
     return n;
 }

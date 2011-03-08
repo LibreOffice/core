@@ -32,7 +32,6 @@
 
 
 #include "tabcol.hxx"
-#include <errhdl.hxx>       // fuer Create-Methoden
 
 
 SwTabCols::SwTabCols( USHORT nSize ) :

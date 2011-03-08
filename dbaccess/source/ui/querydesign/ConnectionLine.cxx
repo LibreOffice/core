@@ -37,7 +37,7 @@
 #ifndef _INC_MATH
 #include <math.h>
 #endif
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <vcl/lineinfo.hxx>
 
 
@@ -64,7 +64,7 @@ namespace
     Rectangle GetTextPos(const OTableWindow* _pWin, const Point& _aConnPos,const Point& _aDescrLinePos)
     {
         OTableWindowListBox* pListBox = _pWin ? _pWin->GetListBox() : NULL;
-        DBG_ASSERT(_pWin && pListBox, "OConnectionLine::GetSourceTextPos : invalid call !");
+        OSL_ENSURE(_pWin && pListBox, "OConnectionLine::GetSourceTextPos : invalid call !");
 
         Rectangle aReturn;
         if ( pListBox )

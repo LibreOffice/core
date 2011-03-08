@@ -33,7 +33,6 @@
 #include "ndtxt.hxx"
 #include "flyfrm.hxx"
 #include "paratr.hxx"
-#include "errhdl.hxx"
 #include <vcl/outdev.hxx>
 #include <editeng/paravertalignitem.hxx>
 
@@ -43,13 +42,12 @@
 #include <tgrditem.hxx>
 #include <porfld.hxx>
 
-#include "txtcfg.hxx"
 #include "itrtxt.hxx"
 #include "txtfrm.hxx"
 #include "porfly.hxx"
 
 #if OSL_DEBUG_LEVEL > 1
-# include "txtfrm.hxx"      // GetFrmID,
+#include "txtfrm.hxx"      // GetFrmID,
 #endif
 
 /*************************************************************************
@@ -58,15 +56,6 @@
 
 void SwTxtIter::CtorInitTxtIter( SwTxtFrm *pNewFrm, SwTxtInfo *pNewInf )
 {
-#ifdef DBGTXT
-    // nStopAt laesst sich vom CV bearbeiten.
-    static MSHORT nStopAt = 0;
-    if( nStopAt == pNewFrm->GetFrmId() )
-    {
-        int i = pNewFrm->GetFrmId();
-    }
-#endif
-
     SwTxtNode *pNode = pNewFrm->GetTxtNode();
 
     OSL_ENSURE( pNewFrm->GetPara(), "No paragraph" );
@@ -186,7 +175,6 @@ const SwLineLayout *SwTxtIter::NextLine()
     const SwLineLayout *pNext = Next();
     while( pNext && pNext->IsDummy() && pNext->GetNext() )
     {
-        DBG_LOOP;
         pNext = Next();
     }
     return pNext;
@@ -201,7 +189,6 @@ const SwLineLayout *SwTxtIter::GetNextLine() const
     const SwLineLayout *pNext = pCurr->GetNext();
     while( pNext && pNext->IsDummy() && pNext->GetNext() )
     {
-        DBG_LOOP;
         pNext = pNext->GetNext();
     }
     return (SwLineLayout*)pNext;
@@ -250,7 +237,6 @@ const SwLineLayout *SwTxtIter::PrevLine()
     const SwLineLayout *pLast = pMyPrev;
     while( pMyPrev && pMyPrev->IsDummy() )
     {
-        DBG_LOOP;
         pLast = pMyPrev;
         pMyPrev = Prev();
     }
@@ -265,7 +251,7 @@ void SwTxtIter::Bottom()
 {
     while( Next() )
     {
-        DBG_LOOP;
+        // nothing
     }
 }
 
@@ -483,7 +469,6 @@ void SwTxtIter::CntHyphens( sal_uInt8 &nEndCnt, sal_uInt8 &nMidCnt) const
         return;
     while( pLay != pCurr )
     {
-        DBG_LOOP;
         if ( pLay->IsEndHyph() )
             nEndCnt++;
         else

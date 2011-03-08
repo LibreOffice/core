@@ -25,7 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-// MyEDITENG, wegen exportiertem EditEng
+// MyEDITENG, due to exported EditEng
 #ifndef _MyEDITENG_HXX
 #define _MyEDITENG_HXX
 
@@ -92,7 +92,7 @@ namespace basegfx { class B2DPolyPolygon; }
 #include <i18npool/lang.h>
 #include "editeng/editengdllapi.h"
 
-#include <tools/rtti.hxx>   // wegen typedef TypeId
+#include <tools/rtti.hxx>   // due to typedef TypeId
 
 #include <editeng/eedata.hxx>
 class SvxFieldData;
@@ -296,13 +296,13 @@ public:
     Point           GetDocPos( const Point& rPaperPos ) const;
     BOOL            IsTextPos( const Point& rPaperPos, USHORT nBorder = 0 );
 
-    // StartDocPos entspr. VisArea.TopLeft().
+    // StartDocPos corrresponds to VisArea.TopLeft().
     void            Draw( OutputDevice* pOutDev, const Rectangle& rOutRect );
     void            Draw( OutputDevice* pOutDev, const Rectangle& rOutRect, const Point& rStartDocPos );
     void            Draw( OutputDevice* pOutDev, const Rectangle& rOutRect, const Point& rStartDocPos, BOOL bClip );
     void            Draw( OutputDevice* pOutDev, const Point& rStartPos, short nOrientation = 0 );
 
-//  ULONG: Fehlercode des Streams.
+//  ULONG: Error code of the stream.
     ULONG           Read( SvStream& rInput, const String& rBaseURL, EETextFormat, SvKeyValueIterator* pHTTPHeaderAttrs = NULL );
     ULONG           Write( SvStream& rOutput, EETextFormat );
 
@@ -315,7 +315,7 @@ public:
     void            SetImportHdl( const Link& rLink );
     Link            GetImportHdl() const;
 
-    // Flat-Mode: Keine Zeichenformatierung auswerten => Fuer Outliner
+    // Do not evaluate font formatting => For Outliner
     BOOL            IsFlatMode() const;
     void            SetFlatMode( BOOL bFlat );
 
@@ -383,7 +383,7 @@ public:
     USHORT          GetBigTextObjectStart() const;
     BOOL            ShouldCreateBigTextObject() const;
 
-    // Zum schnellen Vorab-Pruefen ohne View:
+    // For fast Pre-Test without view:
     EESpellState    HasSpellErrors();
     BOOL            HasText( const SvxSearchItem& rSearchItem );
 
@@ -427,7 +427,6 @@ public:
     virtual void    StyleSheetChanged( SfxStyleSheet* pStyle );
     virtual void    ParagraphHeightChanged( USHORT nPara );
 
-    // #101498#
     virtual void DrawingText(
         const Point& rStartPos, const String& rText, USHORT nTextStart, USHORT nTextLen, const sal_Int32* pDXArray,
         const SvxFont& rFont, USHORT nPara, xub_StrLen nIndex, BYTE nRightToLeft,

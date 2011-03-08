@@ -34,7 +34,8 @@
 #include "rtl/ustring.hxx"
 #include "scdllapi.h"
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
+#include <boost/unordered_set.hpp>
 #include <memory>
 
 class ScDocument;
@@ -56,7 +57,7 @@ public:
     void BroadcastModuleUpdate(const ::rtl::OUString& aModuleName);
 
 private:
-    typedef std::hash_map< ::rtl::OUString, bool, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > NameBoolMap;
+    typedef boost::unordered_map< ::rtl::OUString, bool, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > NameBoolMap;
     NameBoolMap mhFuncToVolatile;
     com::sun::star::uno::Reference< com::sun::star::container::XContainerListener > mxContainerListener;
 

@@ -178,7 +178,7 @@ void OEvoabTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
                 for (xub_StrLen j = 0; j < aField2.Len(); j++)
                 {
                     sal_Unicode c = aField2.GetChar(j);
-                    // nur Ziffern und Dezimalpunkt und Tausender-Trennzeichen?
+                    // only digits, decimalpoint and thousands-delimiter
                     if ((!cDecimalDelimiter || c != cDecimalDelimiter) &&
                         (!cThousandDelimiter || c != cThousandDelimiter) &&
                         !aCharClass.isDigit(aField2,j))
@@ -198,12 +198,12 @@ void OEvoabTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
                     bNumeric = FALSE;
                 if (bNumeric && cThousandDelimiter)
                 {
-                    // Ist der Trenner richtig angegeben?
+                    // is the delimiter given correctly
                     String aValue = aField2.GetToken(0,cDecimalDelimiter);
                     for (sal_Int32 j = aValue.Len() - 4; j >= 0; j -= 4)
                     {
                         sal_Unicode c = aValue.GetChar(j);
-                        // nur Ziffern und Dezimalpunkt und Tausender-Trennzeichen?
+                        // only digits, decimalpoint and thousands-delimiter?
                         if (c == cThousandDelimiter && j)
                             continue;
                         else
@@ -214,7 +214,7 @@ void OEvoabTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
                     }
                 }
 
-                // jetzt koennte es noch ein Datumsfeld sein
+                // Now it might still be a Date-field
                 if (!bNumeric)
                 {
                     try
@@ -267,7 +267,7 @@ void OEvoabTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
                     break;
                 default:
                     eType = DataType::VARCHAR;
-                    nPrecision = 0; // nyi: Daten koennen aber laenger sein!
+                    nPrecision = 0; // nyi: Data can be longer
                     nScale = 0;
                     aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VARCHAR"));
             };
@@ -362,7 +362,7 @@ void OEvoabTable::construct()
         sal_Int32 nSize = m_pFileStream->Tell();
         m_pFileStream->Seek(STREAM_SEEK_TO_BEGIN);
 
-        // Buffersize abhaengig von der Filegroesse
+        // Buffer size is dependent on the file-size
         m_pFileStream->SetBufferSize(nSize > 1000000 ? 32768 :
                                     nSize > 100000  ? 16384 :
                                     nSize > 10000   ? 4096  : 1024);
@@ -513,7 +513,7 @@ sal_Bool OEvoabTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols,sa
         return TRUE;
 
     OEvoabConnection* pConnection = (OEvoabConnection*)m_pConnection;
-    // Felder:
+    // Fields:
     xub_StrLen nStartPos = 0;
     String aStr;
     OSQLColumns::Vector::const_iterator aIter = _rCols.get().begin();
@@ -526,7 +526,7 @@ sal_Bool OEvoabTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols,sa
             (_rRow->get())[i+1]->setNull();
         else
         {
-            // Laengen je nach Datentyp:
+            // Lengths for each data-type:
             sal_Int32   nLen,
                         nType = 0;
             if(bIsTable)
@@ -573,7 +573,7 @@ sal_Bool OEvoabTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols,sa
                 }   break;
                 case DataType::DOUBLE:
                 case DataType::INTEGER:
-                case DataType::DECIMAL:             // #99178# OJ
+                case DataType::DECIMAL:
                 case DataType::NUMERIC:
                 {
                     sal_Unicode cDecimalDelimiter = pConnection->getDecimalDelimiter();
@@ -584,23 +584,22 @@ sal_Bool OEvoabTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols,sa
                                !cDecimalDelimiter && nType == DataType::INTEGER,
                                "FalscherTyp");
 
-                    // In Standard-Notation (DezimalPUNKT ohne Tausender-Komma) umwandeln:
+                    // Convert to standard-notation (DecimalPOINT without Thousands-comma):
                     for (xub_StrLen j = 0; j < aStr.Len(); ++j)
                     {
                         if (cDecimalDelimiter && aStr.GetChar(j) == cDecimalDelimiter)
                             aStrConverted += '.';
                         else if ( aStr.GetChar(j) == '.' ) // special case, if decimal seperator isn't '.' we have to vut the string after it
-                            break; // #99189# OJ
+                            break;
                         else if (cThousandDelimiter && aStr.GetChar(j) == cThousandDelimiter)
                         {
-                            // weglassen
+                            // leave out
                         }
                         else
                             aStrConverted += aStr.GetChar(j) ;
                     }
                     double nVal = ::rtl::math::stringToDouble(aStrConverted.GetBuffer(),',','.',NULL,NULL);
 
-                    // #99178# OJ
                     if ( DataType::DECIMAL == nType || DataType::NUMERIC == nType )
                         *(_rRow->get())[i+1] = ORowSetValue(String::CreateFromDouble(nVal));
                     else
@@ -609,7 +608,7 @@ sal_Bool OEvoabTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols,sa
 
                 default:
                 {
-                    // Wert als String in Variable der Row uebernehmen
+                    // Copy Value as String in Row-variable
                     *(_rRow->get())[i+1] = ORowSetValue(aStr);
                 }
                 break;
@@ -718,7 +717,7 @@ sal_Bool OEvoabTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_In
         return sal_False;
     OEvoabConnection* pConnection = (OEvoabConnection*)m_pConnection;
     // ----------------------------------------------------------
-    // Positionierung vorbereiten:
+    // prepare positioning:
     //OSL_TRACE("OEvoabTable::(before SeekRow,m_pFileStriam Exist)m_aCurrentLine = %d\n", ((OUtoCStr(::rtl::OUString(m_aCurrentLine))) ? (OUtoCStr(::rtl::OUString(m_aCurrentLine))):("NULL")) );
 
     m_nFilePos = nCurPos;
@@ -851,7 +850,7 @@ sal_Bool OEvoabTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_In
             if (m_pFileStream->IsEof())
                 return sal_False;
 
-            m_nFilePos = m_pFileStream->Tell(); // Byte-Position in der Datei merken (am ZeilenANFANG)
+            m_nFilePos = m_pFileStream->Tell(); // save Byte-Position in the file (at start of line)
             m_pFileStream->ReadByteStringLine(m_aCurrentLine,pConnection->getTextEncoding());
             if (m_pFileStream->IsEof())
                 return sal_False;

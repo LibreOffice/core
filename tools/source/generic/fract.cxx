@@ -569,7 +569,7 @@ void Fraction::ReduceInaccurate( unsigned nSignificantBits )
     if ( !nMul || !nDiv )
     {
         // Return without reduction
-        DBG_ERROR( "Oops, we reduced too much..." );
+        OSL_FAIL( "Oops, we reduced too much..." );
         return;
     }
 

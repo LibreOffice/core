@@ -34,13 +34,11 @@
 #endif
 
 #include "cmdid.h"
-#include <tools/list.hxx>
 #include "swmodule.hxx"
 #include "view.hxx"
 #include "wrtsh.hxx"
 #include "globals.hrc"
 #include "helpid.h"
-
 
 #include <sfx2/styfitem.hxx>
 
@@ -106,7 +104,7 @@ SwCondCollPage::SwCondCollPage(Window *pParent, const SfxItemSet &rSet)
     aTbLinks.SetWindowBits(WB_HSCROLL|WB_CLIPCHILDREN);
     aTbLinks.SetSelectionMode( SINGLE_SELECTION );
     aTbLinks.SetTabs( &nTabs[0], MAP_APPFONT );
-    aTbLinks.Resize();  // OS: Hack fuer richtige Selektion
+    aTbLinks.Resize();  // OS: Hack for the right selection
     aTbLinks.SetSpaceBetweenEntries( 0 );
     aTbLinks.SetHelpId(HID_COND_COLL_TABLIST);
 

@@ -40,7 +40,7 @@ namespace com { namespace sun { namespace star {
     namespace beans { class XPropertySet; }
 } } }
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 class ScOutlineArray;
 class SvXMLExportPropertyMapper;
@@ -88,7 +88,7 @@ class ScXMLExport : public SvXMLExport
     UniReference < SvXMLExportPropertyMapper >  xRowStylesExportPropertySetMapper;
     UniReference < SvXMLExportPropertyMapper >  xTableStylesExportPropertySetMapper;
     XMLNumberFormatAttributesExportHelper* pNumberFormatAttributesExportHelper;
-    typedef ::std::hash_map<sal_Int32, sal_Int32>  NumberFormatIndexMap;
+    typedef ::boost::unordered_map<sal_Int32, sal_Int32>  NumberFormatIndexMap;
     NumberFormatIndexMap                aNumFmtIndexMap;
     ScMySharedData*                     pSharedData;
     ScColumnStyles*                 pColumnStyles;

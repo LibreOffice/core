@@ -359,14 +359,30 @@ send_args( int fd, rtl_uString *pCwdPath )
 
         // this is not a param, we have to prepend filenames with file://
         // FIXME: improve the check
-        if ( ( pTmp->buffer[0] != (sal_Unicode)'-' ) &&
-             ( rtl_ustr_indexOfAscii_WithLength( pTmp->buffer, pTmp->length, "slot:", 5 /* length */ ) ) )
+        if ( ( pTmp->buffer[0] != (sal_Unicode)'-' ) )
         {
             sal_Int32 nFirstColon = rtl_ustr_indexOfChar_WithLength( pTmp->buffer, pTmp->length, ':' );
             sal_Int32 nFirstSlash = rtl_ustr_indexOfChar_WithLength( pTmp->buffer, pTmp->length, '/' );
 
             // check that pTmp is not an URI yet
-            if ( nFirstColon < 1 || ( nFirstSlash != nFirstColon + 1 ) )
+            // note ".uno" ".slot" & "vnd.sun.star.script" are special urls that
+            // don't expect a following '/'
+
+             const char* schemes[] = { "slot:",  ".uno:", "vnd.sun.star.script:" };
+             sal_Bool bIsSpecialURL = sal_False;
+             int index = 0;
+             int len =  SAL_N_ELEMENTS(schemes);
+             for ( ; index < len; ++index )
+             {
+                 if ( rtl_ustr_indexOfAscii_WithLength( pTmp->buffer
+                     , pTmp->length , schemes[ index ], strlen(schemes[ index ] ))  == 0  )
+                 {
+                     bIsSpecialURL = sal_True;
+                     break;
+                 }
+             }
+
+            if ( !bIsSpecialURL && ( nFirstColon < 1 || ( nFirstSlash != nFirstColon + 1 ) ) )
             {
                 // some of the switches (currently just -pt) don't want to
                 // have the filenames as URIs
@@ -462,8 +478,6 @@ static void
 get_bootstrap_value( int *array, int size, rtlBootstrapHandle handle, const char *name )
 {
     rtl_uString *pKey = NULL, *pValue = NULL;
-    sal_Int32 nIndex = 0;
-    int i = 0;
 
     /* get the value from the ini file */
     rtl_uString_newFromAscii( &pKey, name );
@@ -473,7 +487,8 @@ get_bootstrap_value( int *array, int size, rtlBootstrapHandle handle, const char
     if ( rtl_uString_getLength( pValue ) > 0 )
     {
         rtl_uString *pToken = NULL;
-
+        int i = 0;
+        sal_Int32 nIndex = 0;
         for ( ; ( nIndex >= 0 ) && ( i < size ); ++i )
         {
             nIndex = rtl_uString_getToken( &pToken, pValue, 0, ',', nIndex );

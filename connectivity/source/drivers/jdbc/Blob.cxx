@@ -53,7 +53,7 @@ java_sql_Blob::~java_sql_Blob()
 
 jclass java_sql_Blob::getMyClass() const
 {
-    // die Klasse muss nur einmal geholt werden, daher statisch
+    // the class must be fetched only once, therefore it's static
     if( !theClass )
         theClass = findMyClass("java/sql/Blob");
     return theClass;
@@ -65,10 +65,10 @@ sal_Int64 SAL_CALL java_sql_Blob::length(  ) throw(::com::sun::star::sdbc::SQLEx
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
 
     {
-        // temporaere Variable initialisieren
+        // initialize temporary variable
         static const char * cSignature = "()J";
         static const char * cMethodName = "length";
-        // Java-Call absetzen
+        // submit Java-Call
         static jmethodID mID(NULL);
         obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
         out = t.pEnv->CallLongMethod( object, mID );
@@ -82,10 +82,10 @@ sal_Int64 SAL_CALL java_sql_Blob::length(  ) throw(::com::sun::star::sdbc::SQLEx
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     ::com::sun::star::uno::Sequence< sal_Int8 > aSeq;
     {
-        // temporaere Variable initialisieren
+        // initialize temporary variable
         static const char * cSignature = "(JI)[B";
         static const char * cMethodName = "getBytes";
-        // Java-Call absetzen
+        // submit Java-Call
         static jmethodID mID(NULL);
         obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
         jbyteArray out = (jbyteArray)t.pEnv->CallObjectMethod( object, mID,pos,count);
@@ -98,7 +98,7 @@ sal_Int64 SAL_CALL java_sql_Blob::length(  ) throw(::com::sun::star::sdbc::SQLEx
             t.pEnv->DeleteLocalRef(out);
         }
     } //t.pEnv
-    // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
+    // WARNING: the caller becomes the owner of the returned pointer
     return  aSeq;
 }
 
@@ -107,7 +107,7 @@ sal_Int64 SAL_CALL java_sql_Blob::length(  ) throw(::com::sun::star::sdbc::SQLEx
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     static jmethodID mID(NULL);
     jobject out = callObjectMethod(t.pEnv,"getBinaryStream","()Ljava/io/InputStream;", mID);
-    // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
+    // WARNING: the caller becomes the owner of the returned pointer
     return out==0 ? 0 : new java_io_InputStream( t.pEnv, out );
 }
 
@@ -117,13 +117,13 @@ sal_Int64 SAL_CALL java_sql_Blob::position( const ::com::sun::star::uno::Sequenc
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
 
     {
-        // temporaere Variable initialisieren
+        // initialize temporary variable
         static const char * cSignature = "([BI)J";
         static const char * cMethodName = "position";
-        // Java-Call absetzen
+        // submit Java-Call
         static jmethodID mID(NULL);
         obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
-        // Parameter konvertieren
+        // convert Parameter
         jbyteArray pByteArray = t.pEnv->NewByteArray(pattern.getLength());
         t.pEnv->SetByteArrayRegion(pByteArray,0,pattern.getLength(),(jbyte*)pattern.getConstArray());
         out = t.pEnv->CallLongMethod( object, mID, pByteArray,start );
@@ -140,7 +140,7 @@ sal_Int64 SAL_CALL java_sql_Blob::positionOfBlob( const ::com::sun::star::uno::R
     // the pattern parameter. Since the effort for proper implementation is rather high - we would need
     // to translated patter into a byte[] -, we defer this functionality for the moment (hey, it was
     // unusable, anyway)
-    // 2005-11-15 / #i57457# / frank.schoenheit@sun.com
+    // #i57457#
     return 0;
 }
 

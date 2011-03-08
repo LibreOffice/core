@@ -136,7 +136,7 @@ SotFactory::SotFactory( const SvGlobalName & rName,
     DBG_ASSERT( aEmptyName != *this, "create factory without SvGlobalName" );
     if( Find( *this ) )
     {
-        DBG_ERROR( "create factories with the same unique name" );
+        OSL_FAIL( "create factories with the same unique name" );
     }
     }
 #endif

@@ -89,20 +89,6 @@ WW8LFO::get_LFOData()
     (new WW8LFOData(mpParent, nPayloadOffset, nPayloadSize));
 }
 
-/*
-writerfilter::Reference<Properties>::Pointer_t
-WW8LFO::get_lfolevel(sal_uInt32 nIndex)
-{
-    WW8LFOTable * pLFOTable = dynamic_cast<WW8LFOTable *>(mpParent);
-    sal_uInt32 nPayloadIndex = pLFOTable->getPayloadIndex(mnIndex) + nIndex;
-    sal_uInt32 nPayloadOffset = pLFOTable->getPayloadOffset(nPayloadIndex);
-    sal_uInt32 nPayloadSize = pLFOTable->getPayloadSize(nPayloadIndex);
-
-    return writerfilter::Reference<Properties>::Pointer_t
-        (new WW8LFOLevel(mpParent, nPayloadOffset, nPayloadSize));
-}
-*/
-
 void WW8LFOLevel::resolveNoAuto(Properties & /*rHandler*/)
 {
 

@@ -191,7 +191,7 @@ void lcl_addPointToPoly( drawing::PolyPolygonShape3D& rPoly
         if( nNewResultPointCount > nReallocLength )
         {
             nReallocLength = nNewResultPointCount;
-            DBG_ERROR("this should not be the case to avoid performance problems");
+            OSL_FAIL("this should not be the case to avoid performance problems");
         }
         pOuterSequenceX->realloc(nReallocLength);
         pOuterSequenceY->realloc(nReallocLength);

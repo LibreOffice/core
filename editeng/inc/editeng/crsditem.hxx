@@ -42,9 +42,8 @@ namespace rtl
 
 // class SvxCrossedOutItem -----------------------------------------------
 
-/*
-    [Beschreibung]
-    Dieses Item beschreibt, ob und wie durchstrichen ist.
+/*  [Description]
+    This item describes, whether and how it is striked out.
 */
 
 class EDITENG_DLLPUBLIC SvxCrossedOutItem : public SfxEnumItem
@@ -55,7 +54,7 @@ public:
     SvxCrossedOutItem( const FontStrikeout eSt /*= STRIKEOUT_NONE*/,
                        const USHORT nId  );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual Methods" from SfxPoolItem
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
@@ -69,7 +68,7 @@ public:
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
-    // MS VC4.0 kommt durcheinander
+    // MS VC4.0 messes things up
     void                    SetValue( USHORT nNewVal )
                                 {SfxEnumItem::SetValue(nNewVal); }
 

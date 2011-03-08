@@ -221,7 +221,7 @@
 						<desc>Specifies the custom dictionaries to be used. The Ignore list (IgnoreAllList (All)) is administered in the RAM only for the current spellcheck.</desc>
 						<label>Custom dictionaries</label>
 					</info>
-					<value oor:separator=";">IgnoreAllList;soffice.dic;standard.dic;oracle.dic</value>
+					<value oor:separator=";">IgnoreAllList;soffice.dic;standard.dic;technical.dic</value>
 				</prop>
 				<prop oor:name="IsUseDictionaryList" oor:type="xs:boolean">
 					<!-- OldLocation: NEW -->

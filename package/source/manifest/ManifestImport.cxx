@@ -37,8 +37,9 @@
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 using namespace com::sun::star;
-using namespace rtl;
 using namespace std;
+
+using ::rtl::OUString;
 
 // ---------------------------------------------------
 ManifestImport::ManifestImport( vector < Sequence < PropertyValue > > & rNewManVector )

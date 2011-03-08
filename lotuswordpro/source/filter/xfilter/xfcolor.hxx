@@ -57,10 +57,6 @@
  * @file
  * Color object to serial to xml filter.
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2005-01-17 create this file.
- ************************************************************************/
 #ifndef     _XFCOLOR_HXX
 #define     _XFCOLOR_HXX
 
@@ -86,13 +82,13 @@ public:
     {
         unsigned int    c = color&0x00ffffff;
         unsigned int    temp = c;
-        m_nRed = temp&0x000000ff;
+        m_nRed = static_cast<sal_uInt8>(temp&0x000000ff);
 
         temp = c;
-        m_nGreen = (temp&0x0000ff00)>>8;
+        m_nGreen = static_cast<sal_uInt8>((temp&0x0000ff00)>>8);
 
         temp = c;
-        m_nBlue = (temp&0x00ff0000)>>16;
+        m_nBlue = static_cast<sal_uInt8>((temp&0x00ff0000)>>16);
 
         m_bValid = sal_True;
     }

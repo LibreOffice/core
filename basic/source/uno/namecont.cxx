@@ -90,10 +90,14 @@ using namespace com::sun::star::frame;
 using namespace com::sun::star::deployment;
 using namespace com::sun::star;
 using namespace cppu;
-using namespace rtl;
 using namespace osl;
 
 using com::sun::star::uno::Reference;
+
+using ::rtl::OUString;
+using ::rtl::OStringBuffer;
+using ::rtl::OUStringToOString;
+using ::rtl::Uri;
 
 // #i34411: Flag for error handling during migration
 static bool GbMigrationSuppressErrors = false;
@@ -943,7 +947,7 @@ sal_Bool SfxLibraryContainer::init_Impl(
         catch( uno::Exception& )
         {
             // TODO: error handling?
-            OSL_ASSERT( "Cannot access extensions!" );
+            OSL_FAIL( "Cannot access extensions!" );
         }
     }
 
@@ -1159,7 +1163,7 @@ sal_Bool SfxLibraryContainer::init_Impl(
         // #i93163
         if( bCleanUp )
         {
-            DBG_ERROR( "Upgrade of Basic installation failed somehow" );
+            OSL_FAIL( "Upgrade of Basic installation failed somehow" );
 
             static char strErrorSavFolderName[] = "__basic_80_err";
             INetURLObject aPrevUserBasicInetObj_Err( aUserBasicInetObj );
@@ -1399,7 +1403,6 @@ void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
                     xProps->setPropertyValue( aPropName, uno::makeAny( aMime ) );
 
                     // #87671 Allow encryption
-//REMOVE                            aPropName = String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("Encrypted") );
                     aPropName = String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "UseCommonStoragePasswordEncryption" ) );
                     xProps->setPropertyValue( aPropName, uno::makeAny( sal_True ) );
 
@@ -1547,7 +1550,6 @@ void SfxLibraryContainer::implStoreLibraryIndexFile( SfxLibrary* pLib,
                 xProps->setPropertyValue( aPropName, uno::makeAny( aMime ) );
 
                 // #87671 Allow encryption
-//REMOVE                    aPropName = String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("Encrypted") );
                 aPropName = String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "UseCommonStoragePasswordEncryption" ) );
                 xProps->setPropertyValue( aPropName, uno::makeAny( sal_True ) );
 

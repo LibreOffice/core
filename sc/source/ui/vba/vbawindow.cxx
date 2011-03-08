@@ -47,7 +47,7 @@
 #include <tabvwsh.hxx>
 #include <docuno.hxx>
 #include <sc.hrc>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/wrkwin.hxx>
 #include "unonames.hxx"
@@ -56,7 +56,7 @@ using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 using namespace ::ooo::vba::excel::XlWindowState;
 
-typedef  std::hash_map< rtl::OUString,
+typedef  boost::unordered_map< rtl::OUString,
 SCTAB, ::rtl::OUStringHash,
 ::std::equal_to< ::rtl::OUString > > NameIndexHash;
 
@@ -270,19 +270,6 @@ ScVbaWindow::ScrollWorkbookTabs( const uno::Any& /*Sheets*/, const uno::Any& /*P
 {
 // #TODO #FIXME need some implementation to scroll through the tabs
 // but where is this done?
-/*
-    sal_Int32 nSheets = 0;
-    sal_Int32 nPosition = 0;
-    throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("No Implemented" )), uno::Reference< uno::XInterface >() );
-    sal_Bool bSheets = ( Sheets >>= nSheets );
-    sal_Bool bPosition = ( Position >>= nPosition );
-    if ( bSheets || bPosition ) // at least one param specified
-        if ( bSheets )
-            ;// use sheets
-        else if ( bPosition )
-            ; //use position
-*/
-
 }
 uno::Reference< beans::XPropertySet >
 getPropsFromModel( const uno::Reference< frame::XModel >& xModel )

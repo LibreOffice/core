@@ -318,6 +318,14 @@ static const CustomShapeTypeTranslationTable pCustomShapeTypeTranslationTable[] 
     { "mso-spt202", "rect" }
 };
 
+struct StringHash
+{
+    size_t operator()( const char* s ) const
+    {
+        return rtl_str_hashCode(s);
+    }
+};
+
 struct StringCheck
 {
     bool operator()( const char* s1, const char* s2 ) const
@@ -326,7 +334,7 @@ struct StringCheck
     }
 };
 
-typedef std::hash_map< const char*, const char*, std::hash<const char*>, StringCheck> CustomShapeTypeTranslationHashMap;
+typedef boost::unordered_map< const char*, const char*, StringHash, StringCheck> CustomShapeTypeTranslationHashMap;
 static CustomShapeTypeTranslationHashMap* pCustomShapeTypeTranslationHashMap = NULL;
 
 static const char* lcl_GetPresetGeometry( const char* sShapeType )
@@ -430,9 +438,11 @@ ShapeExport& ShapeExport::WriteBezierShape( Reference< XShape > xShape, sal_Bool
 
     PolyPolygon aPolyPolygon = EscherPropertyContainer::GetPolyPolygon( xShape );
     Rectangle aRect( aPolyPolygon.GetBoundRect() );
-    awt::Size size = MapSize( awt::Size( aRect.GetWidth(), aRect.GetHeight() ) );
 
+#if OSL_DEBUG_LEVEL > 0
+    awt::Size size = MapSize( awt::Size( aRect.GetWidth(), aRect.GetHeight() ) );
     DBG(printf("poly count %d\nsize: %d x %d", aPolyPolygon.Count(), int( size.Width ), int( size.Height )));
+#endif
 
     // non visual shape properties
     pFS->startElementNS( mnXmlNamespace, XML_nvSpPr, FSEND );
@@ -867,7 +877,7 @@ ShapeExport& ShapeExport::WriteRectangleShape( Reference< XShape > xShape )
 }
 
 typedef ShapeExport& (ShapeExport::*ShapeConverter)( Reference< XShape > );
-typedef std::hash_map< const char*, ShapeConverter, std::hash<const char*>, StringCheck> NameToConvertMapType;
+typedef boost::unordered_map< const char*, ShapeConverter, StringHash, StringCheck> NameToConvertMapType;
 
 static const NameToConvertMapType& lcl_GetConverters()
 {
@@ -983,7 +993,7 @@ ShapeExport& ShapeExport::WriteUnknownShape( Reference< XShape > )
 
 size_t ShapeExport::ShapeHash::operator()( const ::com::sun::star::uno::Reference < ::com::sun::star::drawing::XShape > rXShape ) const
 {
-    return maHashFunction( USS( rXShape->getShapeType() ) );
+    return rXShape->getShapeType().hashCode();
 }
 
 sal_Int32 ShapeExport::GetNewShapeID( const Reference< XShape > rXShape )

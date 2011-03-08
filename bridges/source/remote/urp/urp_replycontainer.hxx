@@ -25,7 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <list>
 
 #include <osl/mutex.hxx>
@@ -36,7 +36,7 @@
 namespace bridges_urp
 {
     class ClientJob;
-    typedef ::std::hash_map< ::rtl::ByteSequence ,
+    typedef ::boost::unordered_map< ::rtl::ByteSequence ,
                              ::std::list < ClientJob * > ,
                              HashThreadId ,
                              EqualThreadId > Id2ClientJobStackMap;

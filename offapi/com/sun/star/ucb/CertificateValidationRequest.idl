@@ -40,7 +40,7 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/** An error specifing an invalid certificate.
+/** An error specifying an invalid certificate.
 */
 exception CertificateValidationRequest: com::sun::star::task::ClassifiedInteractionRequest
 {

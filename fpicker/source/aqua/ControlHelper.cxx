@@ -86,7 +86,7 @@ ControlHelper::~ControlHelper()
         [m_pUserPane release];
     }
 
-    for(std::list<NSControl *>::iterator control = m_aActiveControls.begin(); control != m_aActiveControls.end(); control++) {
+    for(std::list<NSControl *>::iterator control = m_aActiveControls.begin(); control != m_aActiveControls.end(); ++control) {
         NSControl* pControl = (*control);
         NSString* sLabelName = m_aMapListLabels[pControl];
         if (sLabelName != nil) {

@@ -58,7 +58,7 @@ SAL_DLLPUBLIC_EXPORT Window* CreateWindow (VCLXWindow** vcl, OUString const& nam
     {
         ;
     }
-    else if (name.equalsAscii ("sfxmodelessdialog"))
+    else if (name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("sfxmodelessdialog")))
     {
         window = new SfxModelessDialog_unprotect (parent, ImplGetWinBits (attributes, 0));
         *vcl = new layoutimpl::VCLXDialog ();

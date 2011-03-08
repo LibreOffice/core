@@ -204,13 +204,12 @@ sal_Bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter, Reference< com:
                     aMtf.SetPrefMapMode( aMapMode );
                     aMtf.Record( pOut );
 
-                    // --> FME 2004-10-08 #i35176#
+                    // #i35176#
                     // IsLastPage property.
                     const sal_Int32 nCurrentRenderer = nSel - 1;
                     nSel = aMultiSelection.NextSelected();
                     if ( pLastPage && sal_Int32(SFX_ENDOFSELECTION) == nSel )
                         *pLastPage <<= sal_True;
-                    // <--
 
                     rRenderable->render( nCurrentRenderer, rSelection, rRenderOptions );
 
@@ -789,7 +788,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                 pPDFExtOutDevData->SetIsReduceImageResolution( mbReduceImageResolution );
                 pPDFExtOutDevData->SetIsExportNamedDestinations( mbExportBmkToDest );
 
-                Sequence< PropertyValue > aRenderOptions( 5 );
+                Sequence< PropertyValue > aRenderOptions( 6 );
                 aRenderOptions[ 0 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "RenderDevice" ) );
                 aRenderOptions[ 0 ].Value <<= Reference< awt::XDevice >( pXDevice );
                 aRenderOptions[ 1 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportNotesPages" ) );
@@ -801,12 +800,8 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                 aRenderOptions[ 3 ].Value <<= sal_False;
                 aRenderOptions[ 4 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "IsSkipEmptyPages" ) );
                 aRenderOptions[ 4 ].Value <<= mbSkipEmptyPages;
-                #if 0
-                // #i113919# writer has to begun "PageRange" for itself changing its renderer count
-                // we should unify this behavior but not for OOo 3.3
                 aRenderOptions[ 5 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) );
                 aRenderOptions[ 5 ].Value <<= aPageRange;
-                #endif
 
                 if( aPageRange.getLength() || !aSelection.hasValue() )
                 {
@@ -1432,88 +1427,6 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
                                     else if ( fTransparency == 1.0 )
                                         bSkipSequence = sal_True;
                                 }
-/* #i81548# removing optimization for fill textures, because most of the texture settings are not
-   exported properly. In OpenOffice 3.1 the drawing layer will support graphic primitives, then it
-   will not be a problem to optimize the filltexture export. But for wysiwyg is more important than
-   filesize.
-                                else if( aFill.getFillType() == SvtGraphicFill::fillTexture && aFill.isTiling() )
-                                {
-                                    sal_Int32 nPattern = mnCachePatternId;
-                                    Graphic aPatternGraphic;
-                                    aFill.getGraphic( aPatternGraphic );
-                                    bool bUseCache = false;
-                                    SvtGraphicFill::Transform aPatTransform;
-                                    aFill.getTransform( aPatTransform );
-
-                                    if(  mnCachePatternId >= 0 )
-                                    {
-                                        SvtGraphicFill::Transform aCacheTransform;
-                                        maCacheFill.getTransform( aCacheTransform );
-                                        if( aCacheTransform.matrix[0] == aPatTransform.matrix[0] &&
-                                            aCacheTransform.matrix[1] == aPatTransform.matrix[1] &&
-                                            aCacheTransform.matrix[2] == aPatTransform.matrix[2] &&
-                                            aCacheTransform.matrix[3] == aPatTransform.matrix[3] &&
-                                            aCacheTransform.matrix[4] == aPatTransform.matrix[4] &&
-                                            aCacheTransform.matrix[5] == aPatTransform.matrix[5]
-                                            )
-                                        {
-                                            Graphic aCacheGraphic;
-                                            maCacheFill.getGraphic( aCacheGraphic );
-                                            if( aCacheGraphic == aPatternGraphic )
-                                                bUseCache = true;
-                                        }
-                                    }
-
-                                    if( ! bUseCache )
-                                    {
-
-                                        // paint graphic to metafile
-                                        GDIMetaFile aPattern;
-                                        rDummyVDev.SetConnectMetaFile( &aPattern );
-                                        rDummyVDev.Push();
-                                        rDummyVDev.SetMapMode( aPatternGraphic.GetPrefMapMode() );
-
-                                        aPatternGraphic.Draw( &rDummyVDev, Point( 0, 0 ) );
-                                        rDummyVDev.Pop();
-                                        rDummyVDev.SetConnectMetaFile( NULL );
-                                        aPattern.WindStart();
-
-                                        MapMode aPatternMapMode( aPatternGraphic.GetPrefMapMode() );
-                                        // prepare pattern from metafile
-                                        Size aPrefSize( aPatternGraphic.GetPrefSize() );
-                                        // FIXME: this magic -1 shouldn't be necessary
-                                        aPrefSize.Width() -= 1;
-                                        aPrefSize.Height() -= 1;
-                                        aPrefSize = rWriter.GetReferenceDevice()->
-                                            LogicToLogic( aPrefSize,
-                                                          &aPatternMapMode,
-                                                          &rWriter.GetReferenceDevice()->GetMapMode() );
-                                        // build bounding rectangle of pattern
-                                        Rectangle aBound( Point( 0, 0 ), aPrefSize );
-                                        rWriter.BeginPattern( aBound );
-                                        rWriter.Push();
-                                        rDummyVDev.Push();
-                                        rWriter.SetMapMode( aPatternMapMode );
-                                        rDummyVDev.SetMapMode( aPatternMapMode );
-                                        ImplWriteActions( rWriter, NULL, aPattern, rDummyVDev );
-                                        rDummyVDev.Pop();
-                                        rWriter.Pop();
-
-                                        nPattern = rWriter.EndPattern( aPatTransform );
-
-                                        // try some caching and reuse pattern
-                                        mnCachePatternId = nPattern;
-                                        maCacheFill = aFill;
-                                    }
-
-                                    // draw polypolygon with pattern fill
-                                    PolyPolygon aPath;
-                                    aFill.getPath( aPath );
-                                    rWriter.DrawPolyPolygon( aPath, nPattern, aFill.getFillRule() == SvtGraphicFill::fillEvenOdd );
-
-                                    bSkipSequence = sal_True;
-                                }
-*/
                             }
                             if ( bSkipSequence )
                             {
@@ -1603,7 +1516,7 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
                 case( META_MASKSCALE_ACTION ):
                 case( META_MASKSCALEPART_ACTION ):
                 {
-                    DBG_ERROR( "MetaMask...Action not supported yet" );
+                    OSL_FAIL( "MetaMask...Action not supported yet" );
                 }
                 break;
 
@@ -1824,7 +1737,7 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
                     if( !bAssertionFired )
                     {
                         bAssertionFired = true;
-                        DBG_ERROR( "PDFExport::ImplWriteActions: deprecated and unsupported MetaAction encountered" );
+                        OSL_FAIL( "PDFExport::ImplWriteActions: deprecated and unsupported MetaAction encountered" );
                     }
                 break;
             }

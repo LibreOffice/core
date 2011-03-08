@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  *  aquaOpenGLView.h
  */
@@ -34,3 +35,5 @@
 - (id)initWithCoder:(NSCoder *)coder;
 
 @end
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -342,7 +342,7 @@ void SvXMLExportItemMapper::handleSpecialItem( SvXMLAttributeList& /*rAttrList*/
                                     const SvXMLNamespaceMap& /*rNamespaceMap*/,
                                     const SfxItemSet* /*pSet*/ /* = NULL */ ) const
 {
-    DBG_ERROR( "special item not handled in xml export" );
+    OSL_FAIL( "special item not handled in xml export" );
 }
 
 /** this method is called for every item that has the
@@ -353,7 +353,7 @@ void SvXMLExportItemMapper::handleNoItem( SvXMLAttributeList& /*rAttrList*/,
                                const SvXMLNamespaceMap& /*rNamespaceMap*/,
                                const SfxItemSet& /*rSet*/ ) const
 {
-    DBG_ERROR( "no item not handled in xml export" );
+    OSL_FAIL( "no item not handled in xml export" );
 }
 
 /** this method is called for every item that has the
@@ -366,7 +366,7 @@ void SvXMLExportItemMapper::handleElementItem(
                         const SfxItemSet& /*rSet*/,
                         sal_uInt16 /*nFlags*/ ) const
 {
-    DBG_ERROR( "element item not handled in xml export" );
+    OSL_FAIL( "element item not handled in xml export" );
 }
 
 
@@ -425,7 +425,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
                     break;
 
                 default:
-                    DBG_ERROR( "unknown member id!");
+                    OSL_FAIL( "unknown member id!");
                     bOk = sal_False;
                     break;
             }
@@ -454,7 +454,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
                     break;
 
                 default:
-                    DBG_ERROR("unknown MemberId");
+                    OSL_FAIL("unknown MemberId");
             };
 
             bOk = sal_True;
@@ -1046,7 +1046,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
         break;
 
         default:
-            DBG_ERROR("GetXMLValue not implemented for this item.");
+            OSL_FAIL("GetXMLValue not implemented for this item.");
             break;
     }
 

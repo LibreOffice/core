@@ -455,7 +455,7 @@ namespace svxform
                     aContextMenu.EnableItem( SID_FM_TAB_DIALOG, bSingleSelection && m_nFormsSelected );
 
                     // in XML forms, we don't allow for the properties of a form
-                    // #i36484# / 2004-11-04 /- fs@openoffice.org
+                    // #i36484#
                     if ( pFormShell->GetImpl()->isEnhancedForm() && !m_nControlsSelected )
                         aContextMenu.RemoveItem( aContextMenu.GetItemPos( SID_FM_SHOW_PROPERTY_BROWSER ) );
 
@@ -1319,7 +1319,7 @@ namespace svxform
         }
         catch( const Exception& )
         {
-            DBG_ERROR( "NavigatorTree::doPaste: caught an exception!" );
+            OSL_FAIL( "NavigatorTree::doPaste: caught an exception!" );
         }
     }
 
@@ -1459,7 +1459,7 @@ namespace svxform
         }
         catch ( const Exception& )
         {
-            DBG_ERROR("NavigatorTree::NewForm : could not set esssential properties !");
+            OSL_FAIL("NavigatorTree::NewForm : could not set esssential properties !");
         }
 
 
@@ -1865,7 +1865,7 @@ namespace svxform
         // start UNDO at this point. Unfortunately, this results in 2 UNDO actions, since DeleteMarked is
         // creating an own one. However, if we'd move it before DeleteMarked, Writer does not really like
         // this ... :(
-        // 2004-07-05 - #i31038# - fs@openoffice.org
+        // #i31038#
         {
             // ---------------
             // initialize UNDO

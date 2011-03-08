@@ -177,7 +177,7 @@ namespace dbp
         }
         catch(Exception&)
         {
-            DBG_ERROR("OGroupBoxWizard::createRadios: caught an exception while creating the radio shapes!");
+            OSL_FAIL("OGroupBoxWizard::createRadios: caught an exception while creating the radio shapes!");
         }
     }
 

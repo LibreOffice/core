@@ -32,10 +32,10 @@
 #include "osl/thread.h"
 #include "otherjre.hxx"
 
-using namespace rtl;
 using namespace std;
 
-
+using ::rtl::OUString;
+using ::rtl::Reference;
 namespace jfw_plugin
 {
 

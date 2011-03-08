@@ -28,14 +28,14 @@
 #ifndef _GRFATR_HXX
 #define _GRFATR_HXX
 
-#include <hintids.hxx>      // fuer die WhichIds @@@ must be included first @@@
+#include <hintids.hxx>      // For the WhichIds @@@ must be included first @@@
 #include <tools/gen.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <svx/grfcrop.hxx>
 #include "swdllapi.h"
-#include <swatrset.hxx>     // fuer inlines
-#include <format.hxx>       // fuer inlines
+#include <swatrset.hxx>     // For inlines.
+#include <format.hxx>       // For inlines.
 
 /******************************************************************************
  *  class SwMirrorGrf
@@ -53,7 +53,7 @@ RES_MIRROR_GRAPH_END
 
 class SW_DLLPUBLIC SwMirrorGrf : public SfxEnumItem
 {
-    BOOL bGrfToggle; // auf geraden Seiten Grafiken spiegeln
+    BOOL bGrfToggle; // Flip graphics on even pages.
 
 public:
     SwMirrorGrf( MirrorGraph eMiro = RES_MIRROR_GRAPH_DONT )
@@ -310,7 +310,7 @@ public:
 
 
 /******************************************************************************
- *  Implementierung der GrafikAttribut Methoden vom SwAttrSet
+ *  Implementation of graphics attributes methods of SwAttr
  ******************************************************************************/
 
 inline const SwMirrorGrf &SwAttrSet::GetMirrorGrf(BOOL bInP) const
@@ -339,7 +339,7 @@ inline const SwDrawModeGrf      &SwAttrSet::GetDrawModeGrf(BOOL bInP) const
     { return (const SwDrawModeGrf&)Get( RES_GRFATR_DRAWMODE,bInP); }
 
 /******************************************************************************
- *  Implementierung der GrafikAttribut Methoden vom SwFmt
+ *  Implementation of graphics attributes methods of SwFmt
  ******************************************************************************/
 
 inline const SwMirrorGrf &SwFmt::GetMirrorGrf(BOOL bInP) const

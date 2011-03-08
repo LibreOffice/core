@@ -144,11 +144,11 @@ published service DataSource
                 whether the <type scope="com::sun::star::sdbc">XDriver</type> which is to provide
                 the connection supports a setting with the respective name, using its
                 <member scope="com::sun::star::sdbc">XDriver::getPropertyInfo<member> method.br/>
-                If so, the settings is passed to the drivers's
+                If so, the settings is passed to the driver's
                 <member scope="com::sun::star::sdbc">XDriver::connect<member> method. If not,
                 the setting is ignored.</li>
             <li>External components may use the settings to carry arbitrary information with
-                the data source. Usually, this is used to control the behaviour of components
+                the data source. Usually, this is used to control the behavior of components
                 working with the data source.</li>
         </ul>
     */
@@ -170,7 +170,7 @@ published service DataSource
         <p>Additionally, the property bag supports default values of properties, and thus the
         <type scope="com::sun::star::beans">XPropertyState</type> interface. If you add an own property to
         the bag using <member scope="com::sun::star::beans">XPropertyContainer::addProperty</member>, you need
-        to specifiy an initial value, which is also used as default value (exceptions see below).</p>
+        to specify an initial value, which is also used as default value (exceptions see below).</p>
 
         <p>Effectively, the property bag represented by <code>Settings</code> contains two classes of properties:
         Pre-defined ones and user-defined ones.</p>
@@ -179,25 +179,25 @@ published service DataSource
         application UI for the data source, or a particular backend driver employed by the data source. There's
         a large set of such properties, no all of them are effectively used for a concrete data source, nonetheless,
         they're all present in the <code>Settings</code>.<br/>
-        Such properties are not removeable from the bag, that is, their
+        Such properties are not removable from the bag, that is, their
         <member scope="com::sun::star::beans">PropertyAttribute::REMOVEABLE</member> attribute is <em>not</em> set.<br/>
         Usually, you'll find that all of this properties have the
         <member scope="com::sun::star::beans::">PropertyState::PropertyState_DEFAULT_VALUE</member> state.</p>
 
         <p><em>User-defined</em> properties are the ones which are added at runtime by any instance. They might or might
-        not be removeable, this depends on whether or not the code adding them specifies the
+        not be removable, this depends on whether or not the code adding them specifies the
         <member scope="com::sun::star::beans">PropertyAttribute::REMOVEABLE</member> attribute. Also, they might
         or might not have a default value, determined by the
         <member scope="com::sun::star::beans">PropertyAttribute::MAYBEDEFAULT</member> attribute at the time they're added
         to the bag.</p>
 
-        <p>When a data source is made persistent, then properties which are not removeable (which are assumed to be the
+        <p>When a data source is made persistent, then properties which are not removable (which are assumed to be the
         pre-defined properties) are ignored when they are in <code>DEFAULT</code> state. All other properties are
         always made persistent, except when an explicit
         <member scope="com::sun::star::beans">PropertyAttribute::TRANSIENT</member> attribute prohibits this.</p>
 
         <p>Similar, when you obtain the <member>Info</member> property of a <code>DataSource</code>, the
-        <code>Settings</code> bag is asked for all its property values, and the ones which are removeable and
+        <code>Settings</code> bag is asked for all its property values, and the ones which are removable and
         in state default are stripped, and <em>not</em> returned in the <code>Info</code> sequence.</p>
     */
     [property, readonly, optional] com::sun::star::beans::XPropertySet Settings;

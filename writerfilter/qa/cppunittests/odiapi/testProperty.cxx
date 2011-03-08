@@ -40,7 +40,10 @@ using namespace writerfilter;
 using namespace std;
 using namespace util;
 using namespace osl;
-using namespace rtl;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
+using ::rtl::OString;
 
 /** Helper function, get a temporary file name
  */

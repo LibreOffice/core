@@ -48,8 +48,7 @@
     #include <rtl_String_Utils_Const.h>
 #endif
 
-using namespace rtl;
-
+using ::rtl::OString;
 sal_uInt32 AStringLen( const sal_Char *pAStr )
 {
     sal_uInt32  nStrLen = 0;

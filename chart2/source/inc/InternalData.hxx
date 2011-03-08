@@ -86,7 +86,7 @@ public:
     void setComplexColumnLabels( const tVecVecString& rNewColumnLabels );
     tVecVecString getComplexColumnLabels() const;
 
-#if OSL_DEBUG_LEVEL > 2
+#if OSL_DEBUG_LEVEL > 1
     void traceData() const;
 #endif
 

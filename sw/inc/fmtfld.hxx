@@ -39,25 +39,25 @@ class SwField;
 class SwTxtFld;
 class SwView;
 
-// ATT_FLD ***********************************
+// ATT_FLD
 class SW_DLLPUBLIC SwFmtFld : public SfxPoolItem, public SwClient, public SfxBroadcaster
 {
     friend class SwTxtFld;
     friend void _InitCore();
 
     SwField *pField;
-    SwTxtFld* pTxtAttr;     // mein TextAttribut
+    SwTxtFld* pTxtAttr;
 
-    SwFmtFld();             // das default-Attibut
+    SwFmtFld(); // Default attibute.
 
-    // protected CopyCtor
+    // Protected CopyCtor.
     // @@@ copy construction allowed, but copy assignment is not? @@@
     SwFmtFld& operator=(const SwFmtFld& rFld);
 
 public:
     TYPEINFO();
 
-    // single argument constructors shall be explicit.
+    // Single argument constructors shall be explicit.
     explicit SwFmtFld( const SwField &rFld );
 
     // @@@ copy construction allowed, but copy assignment is not? @@@
@@ -65,7 +65,7 @@ public:
 
     virtual ~SwFmtFld();
 
-    // "pure virtual methods" of SfxPoolItem
+    // "Pure virtual methods" of SfxPoolItem.
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
 

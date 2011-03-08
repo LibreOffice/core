@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 #include <algorithm>
 #include <ucbhelper/content.hxx>
 #include <osl/mutex.hxx>
@@ -194,12 +191,12 @@ void SearchThread::ImplSearch( const INetURLObject& rStartURL,
                         {
                             SolarMutexGuard aGuard;
 
-                            mpBrowser->aFoundList.Insert(
-                                new String( aFoundURL.GetMainURL( INetURLObject::NO_DECODE ) ),
-                                LIST_APPEND );
+                            mpBrowser->aFoundList.push_back(
+                                new String( aFoundURL.GetMainURL( INetURLObject::NO_DECODE ) )
+                            );
                             mpBrowser->aLbxFound.InsertEntry(
                                 GetReducedString( aFoundURL, 50 ),
-                                (USHORT) mpBrowser->aFoundList.Count() - 1 );
+                                (USHORT) mpBrowser->aFoundList.size() - 1 );
                         }
                     }
                 }
@@ -315,9 +312,9 @@ void SAL_CALL TakeThread::run()
     {
         // kompletten Filenamen aus FoundList holen
         if( mpBrowser->bTakeAll )
-            aURL = INetURLObject(*mpBrowser->aFoundList.GetObject( nPos = i ));
+            aURL = INetURLObject( *mpBrowser->aFoundList[ nPos = i ] );
         else
-            aURL = INetURLObject(*mpBrowser->aFoundList.GetObject( nPos = mpBrowser->aLbxFound.GetSelectEntryPos( i ) ));
+            aURL = INetURLObject(*mpBrowser->aFoundList[ nPos = mpBrowser->aLbxFound.GetSelectEntryPos( i ) ]);
 
         // Position in Taken-Liste uebernehmen
         mrTakenList.Insert( (void*) (ULONG)nPos, LIST_APPEND );
@@ -384,7 +381,7 @@ IMPL_LINK( TakeProgress, ClickCancelBtn, void*, EMPTYARG )
 IMPL_LINK( TakeProgress, CleanUpHdl, void*, EMPTYARG )
 {
     TPGalleryThemeProperties*   mpBrowser = (TPGalleryThemeProperties*) GetParent();
-    ::std::bit_vector           aRemoveEntries( mpBrowser->aFoundList.Count(), false );
+    ::std::vector<bool, std::allocator<bool> >           aRemoveEntries( mpBrowser->aFoundList.size(), false );
     ::std::vector< String >     aRemainingVector;
     sal_uInt32                  i, nCount;
 
@@ -401,15 +398,14 @@ IMPL_LINK( TakeProgress, CleanUpHdl, void*, EMPTYARG )
     // refill found list
     for( i = 0, nCount = aRemoveEntries.size(); i < nCount; ++i )
         if( !aRemoveEntries[ i ] )
-            aRemainingVector.push_back( *mpBrowser->aFoundList.GetObject( i ) );
+            aRemainingVector.push_back( *mpBrowser->aFoundList[ i ] );
 
-    for( String* pStr = mpBrowser->aFoundList.First(); pStr; pStr = mpBrowser->aFoundList.Next() )
-        delete pStr;
-
-    mpBrowser->aFoundList.Clear();
+    for ( i = 0, nCount = mpBrowser->aFoundList.size(); i < nCount; ++i )
+        delete mpBrowser->aFoundList[ i ];
+    mpBrowser->aFoundList.clear();
 
     for( i = 0, nCount = aRemainingVector.size(); i < nCount; ++i )
-        mpBrowser->aFoundList.Insert( new String( aRemainingVector[ i ] ), LIST_APPEND );
+        mpBrowser->aFoundList.push_back( new String( aRemainingVector[ i ] ) );
 
     aRemainingVector.clear();
 
@@ -818,8 +814,8 @@ TPGalleryThemeProperties::~TPGalleryThemeProperties()
     xMediaPlayer.clear();
     xDialogListener.clear();
 
-    for( String* pStr = aFoundList.First(); pStr; pStr = aFoundList.Next() )
-        delete pStr;
+    for ( size_t i = 0, n = aFoundList.size(); i < n; ++i )
+        delete aFoundList[ i ];
 
     for( void* pEntry = aFilterEntryList.First(); pEntry; pEntry = aFilterEntryList.Next() )
         delete (FilterEntry*) pEntry;
@@ -997,10 +993,10 @@ void TPGalleryThemeProperties::SearchFiles()
 {
     SearchProgress* pProgress = new SearchProgress( this, aURL );
 
-    for( String* pStr = aFoundList.First(); pStr; pStr = aFoundList.Next() )
-        delete pStr;
+    for ( size_t i = 0, n = aFoundList.size(); i < n; ++i )
+        delete aFoundList[ i ];
+    aFoundList.clear();
 
-    aFoundList.Clear();
     aLbxFound.Clear();
 
     pProgress->SetFileType( aCbbFileType.GetText() );
@@ -1061,9 +1057,7 @@ IMPL_LINK( TPGalleryThemeProperties, ClickSearchHdl, void *, EMPTYARG )
         }
         catch(IllegalArgumentException)
         {
-#ifdef DBG_UTIL
-            DBG_ERROR( "Folder picker failed with illegal arguments" );
-#endif
+            OSL_FAIL( "Folder picker failed with illegal arguments" );
         }
     }
 
@@ -1115,7 +1109,7 @@ void TPGalleryThemeProperties::DoPreview()
 
     if( aString != aPreviewString )
     {
-        INetURLObject   _aURL( *aFoundList.GetObject( aLbxFound.GetEntryPos( aString ) ) );
+        INetURLObject   _aURL( *aFoundList[ aLbxFound.GetEntryPos( aString ) ] );
         bInputAllowed = FALSE;
 
         if ( !aWndPreview.SetGraphic( _aURL ) )
@@ -1197,7 +1191,7 @@ IMPL_LINK( TPGalleryThemeProperties, SelectFoundHdl, void *, EMPTYARG )
             else
                 aCbxPreview.Disable();
 
-            if( aFoundList.Count() )
+            if( aFoundList.size() )
                 aBtnTakeAll.Enable();
             else
                 aBtnTakeAll.Disable();
@@ -1238,7 +1232,7 @@ IMPL_LINK( TPGalleryThemeProperties, PreviewTimerHdl, void *, EMPTYARG )
 
 IMPL_LINK( TPGalleryThemeProperties, EndSearchProgressHdl, SearchProgress *, EMPTYARG )
 {
-  if( aFoundList.Count() )
+  if( aFoundList.size() )
   {
       aLbxFound.SelectEntryPos( 0 );
       aBtnTakeAll.Enable();

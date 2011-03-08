@@ -13,7 +13,7 @@ JAVAFLAGSDEBUG=-g
 #LINKOUTPUT_FILTER=" |& $(SOLARENV)$/bin$/msg_filter"
 
 # _PTHREADS is needed for the stl
-CDEFS+= -DX86 $(PTHREAD_CFLAGS) -D_PTHREADS -D_REENTRANT -DNEW_SOLAR -D_USE_NAMESPACE=1 -DSTLPORT_VERSION=450
+CDEFS+= -DX86 $(PTHREAD_CFLAGS) -D_PTHREADS -D_REENTRANT -DNEW_SOLAR -D_USE_NAMESPACE=1
 
 # enable visibility define in "sal/types.h"
 .IF "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
@@ -149,11 +149,6 @@ STDSHLGUIMT=-lX11 -lXext -lm -lc -lgcc_s -lstdc++ -lpthread
 STDSHLCUIMT=-lm -lc -lgcc_s -lstdc++ -lpthread
 
 LIBSALCPPRT*=-Wl,--whole-archive -lsalcpprt -Wl,--no-whole-archive
-
-LIBSTLPORT=$(DYNAMIC) -lstlport_gcc -lgcc_s -lstdc++
-LIBSTLPORTST=$(STATIC) -lstlport_gcc $(DYNAMIC)
-
-#FILLUPARC=$(STATIC) -lsupc++ $(DYNAMIC)
 
 # name of library manager
 LIBMGR=ar

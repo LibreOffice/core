@@ -30,10 +30,10 @@
 #include "precompiled_vcl.hxx"
 
 #ifdef WNT
-#include <tools/prewin.h>
+#include <prewin.h>
 #include <process.h>    // for _beginthreadex
 #include <ole2.h>   // for _beginthreadex
-#include <tools/postwin.h>
+#include <postwin.h>
 #endif
 
 // [ed 5/14/02 Add in explicit check for quartz graphics.  OS X will define
@@ -331,6 +331,33 @@ BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XM
     return TRUE;
 }
 
+namespace
+{
+
+/** Serves for destroying the VCL UNO wrapper as late as possible. This avoids
+  crash at exit in some special cases when a11y is enabled (e.g., when
+  a bundled extension is registered/deregistered during startup, forcing exit
+  while the app is still in splash screen.)
+ */
+class VCLUnoWrapperDeleter : public cppu::WeakImplHelper1<com::sun::star::lang::XEventListener>
+{
+    virtual void SAL_CALL disposing(EventObject const& rSource) throw(RuntimeException);
+};
+
+void
+VCLUnoWrapperDeleter::disposing(EventObject const& /* rSource */)
+    throw(RuntimeException)
+{
+    ImplSVData* const pSVData = ImplGetSVData();
+    if (pSVData && pSVData->mpUnoWrapper)
+    {
+        pSVData->mpUnoWrapper->Destroy();
+        pSVData->mpUnoWrapper = NULL;
+    }
+}
+
+}
+
 void DeInitVCL()
 {
     ImplSVData* pSVData = ImplGetSVData();
@@ -444,11 +471,21 @@ void DeInitVCL()
         pSVData->mpDefaultWin = NULL;
     }
 
-    // #114285# Moved here from ImplDeInitSVData...
     if ( pSVData->mpUnoWrapper )
     {
-        pSVData->mpUnoWrapper->Destroy();
-        pSVData->mpUnoWrapper = NULL;
+        try
+        {
+            Reference<XComponent> const xDesktop(
+                    comphelper::createProcessComponent(
+                        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"))),
+                    UNO_QUERY_THROW)
+                ;
+            xDesktop->addEventListener(new VCLUnoWrapperDeleter());
+        }
+        catch (Exception const&)
+        {
+            // ignore
+        }
     }
 
     pSVData->maAppData.mxMSF.clear();

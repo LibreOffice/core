@@ -25,9 +25,10 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-// eigene Klasse fuer IO, die die systemunabhaengige Darstellung
-// uebernimmt (bytes dreht, Character konvertiert)
-// das Schreiben erfolgt aus Effizienzgruenden binaer
+
+// Special class for IO. Used for system-independent representation
+// (change of byte-order, conversion of characters)
+// Writes in binary format for efficiency.
 #ifndef _IO_HXX
 #define _IO_HXX
 
@@ -51,7 +52,7 @@ class SwIOin {
 private:
         SvFileStream aStr; //$ ifstream
 public:
-    // Stream wird im entsprechenden Mode erzeugt.
+    // Stream is created in respective mode.
     SwIOin(const String &rFilename, StreamMode nMode =
                                     STREAM_READ | STREAM_NOCREATE );
 
@@ -65,8 +66,8 @@ public:
     SwIOin& operator>>(unsigned long& val);
     String ReadString();
     KeyCode ReadKeyCode();
-    // kann erweitert werden fuer weitere Arrays von
-    // Basistypen; nLen ist die Anzahl der Elemente
+    // Can be extended for more arrays of base types.
+    // nLen is count of elements.
     SwIOin& Read(char *buf, unsigned nLen);
 
     int operator!() { return aStr.GetError() != SVSTREAM_OK; }
@@ -80,7 +81,7 @@ private:
     void _write(const char *buf, unsigned size);
     SvFileStream aStr; //$ ofstream
 public:
-    // Stream wird im entsprechenden Mode erzeugt.
+    // Stream is created in respective mode.
     SwIOout( const String &rFilename, StreamMode nMode =
                                       STREAM_WRITE | STREAM_NOCREATE );
     SwIOout& operator<<(char val);
@@ -93,8 +94,8 @@ public:
     SwIOout& operator<<(unsigned long val);
     SwIOout& operator<<(const String &);
     SwIOout& operator<<(const KeyCode &);
-    // kann erweitert werden fuer weitere Arrays von
-    // Basistypen; nLen ist die Anzahl der Elemente
+    // Can be extended for more arrays of base types.
+    // nLen is count of elements.
     SwIOout& Write(const char *buf, unsigned nLen);
 
     int operator!() { return aStr.GetError() != SVSTREAM_OK; }
@@ -109,7 +110,7 @@ private:
     SvFileStream aStr; //$ fstream
 
 public:
-    // Stream wird im entsprechenden Mode erzeugt.
+    // Stream is created in respective mode.
     SwIOinout(const String &rFilename, StreamMode nMode =
                                        STREAM_READWRITE  | STREAM_NOCREATE );
 
@@ -123,8 +124,8 @@ public:
     SwIOinout& operator>>(unsigned long& val);
     String ReadString();
     KeyCode ReadKeyCode();
-    // kann erweitert werden fuer weitere Arrays von
-    // Basistypen; nLen ist die Anzahl der Elemente
+    // Can be extended for more arrays of base types.
+    // nLen is count of elements.
     SwIOinout& Read(char *buf, unsigned nLen);
     SwIOinout& Read(unsigned short *buf, unsigned nLen );
 
@@ -138,8 +139,8 @@ public:
     SwIOinout& operator<<(unsigned long val);
     SwIOinout& operator<<(const String &);
     SwIOinout& operator<<(const KeyCode &);
-    // kann erweitert werden fuer weitere Arrays von
-    // Basistypen; nLen ist die Anzahl der Elemente
+    // Can be extended for more arrays of base types.
+    // nLen is count of elements.
     SwIOinout& Write(const char *buf, unsigned nLen);
 
     int operator!() { return aStr.GetError() != SVSTREAM_OK; }

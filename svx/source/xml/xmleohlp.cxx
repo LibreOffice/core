@@ -349,7 +349,7 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplGetStorageNames(
 
     if( -1 != rContainerStorageName.indexOf( '/' ) )
     {
-        DBG_ERROR( "SvXMLEmbeddedObjectHelper: invalid path name" );
+        OSL_FAIL( "SvXMLEmbeddedObjectHelper: invalid path name" );
         return sal_False;
     }
 

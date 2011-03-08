@@ -46,9 +46,7 @@
 #include <istyleaccess.hxx>
 #include <SwStyleNameMapper.hxx>
 
-// --> OD 2009-07-13 #i73249#
-#include <frmfmt.hxx>
-// <--
+#include <frmfmt.hxx> // #i73249#
 
 SwNoTxtNode::SwNoTxtNode( const SwNodeIndex & rWhere,
                   const BYTE nNdType,
@@ -252,7 +250,7 @@ Graphic SwNoTxtNode::GetGraphic() const
     return aRet;
 }
 
-// --> OD 2009-07-14 #i73249#
+// #i73249#
 void SwNoTxtNode::SetTitle( const String& rTitle, bool bBroadcast )
 {
     // Title attribute of <SdrObject> replaces own AlternateText attribute

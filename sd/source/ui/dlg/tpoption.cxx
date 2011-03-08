@@ -550,7 +550,6 @@ void SdTpOptionsMisc::Reset( const SfxItemSet& rAttrs )
 
     aCbScale.SetText( GetScale( nX, nY ) );
 
-    // #92067# broken feature disabled for 6.0
     aFtOriginal.Hide();
     aFtEquivalent.Hide();
     aMtrFldOriginalWidth.Hide();
@@ -725,7 +724,7 @@ IMPL_LINK( SdTpOptionsMisc, ModifyOriginalScaleHdl, void *, EMPTYARG )
         aFract = Fraction( aFract1.GetDenominator(), aFract1.GetNumerator() );
         nValue = aFract;
 
-        // #92067# Swap nominator and denominator
+        // Swap nominator and denominator
         aCbScale.SetText( GetScale( nValue, 1 ) );
     }
     else
@@ -735,7 +734,7 @@ IMPL_LINK( SdTpOptionsMisc, ModifyOriginalScaleHdl, void *, EMPTYARG )
         if( fValue > (double)nValue )
             nValue++;
 
-        // #92067# Swap nominator and denominator
+        // Swap nominator and denominator
         aCbScale.SetText( GetScale( 1, nValue ) );
     }
     return( 0L );

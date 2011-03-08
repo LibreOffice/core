@@ -53,13 +53,6 @@ DlgEdPropListenerImpl::~DlgEdPropListenerImpl()
 
 void SAL_CALL DlgEdPropListenerImpl::disposing( const ::com::sun::star::lang::EventObject& ) throw( ::com::sun::star::uno::RuntimeException)
 {
-    /*
-    // disconnect the listener
-    if (pDlgEdObj)
-    {
-        (pDlgEdObj->m_xPropertyChangeListener).clear();
-    }
-    */
 }
 
 // XPropertyChangeListener
@@ -94,13 +87,6 @@ DlgEdEvtContListenerImpl::~DlgEdEvtContListenerImpl()
 
 void SAL_CALL DlgEdEvtContListenerImpl::disposing( const  ::com::sun::star::lang::EventObject& ) throw( ::com::sun::star::uno::RuntimeException)
 {
-    /*
-    // disconnect the listener
-    if (pDlgEdObj)
-    {
-        (pDlgEdObj->m_xContainerListener).clear();
-    }
-    */
 }
 
 // XContainerListener

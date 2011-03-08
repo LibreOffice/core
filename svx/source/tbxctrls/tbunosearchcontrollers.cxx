@@ -132,15 +132,28 @@ long FindTextFieldControl::PreNotify( NotifyEvent& rNEvt )
         case EVENT_KEYINPUT:
         {
             const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
-            sal_Bool bCtrl = pKeyEvent->GetKeyCode().IsMod1();
-            sal_Bool bAlt = pKeyEvent->GetKeyCode().IsMod2();
             sal_Bool bShift = pKeyEvent->GetKeyCode().IsShift();
             sal_uInt16 nCode = pKeyEvent->GetKeyCode().GetCode();
 
-            if ( (bCtrl && bAlt && KEY_F == nCode) || KEY_ESCAPE == nCode )
+            if ( KEY_ESCAPE == nCode )
             {
                 nRet = 1;
                 GrabFocusToDocument();
+
+                // hide the findbar
+                css::uno::Reference< css::beans::XPropertySet > xPropSet(m_xFrame, css::uno::UNO_QUERY);
+                if (xPropSet.is())
+                {
+                    css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
+                    css::uno::Any aValue = xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ) ) );
+                    aValue >>= xLayoutManager;
+                    if (xLayoutManager.is())
+                    {
+                        const ::rtl::OUString sResourceURL( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/findbar" ) );
+                        xLayoutManager->hideElement( sResourceURL );
+                        xLayoutManager->destroyElement( sResourceURL );
+                    }
+                }
             }
 
             if ( KEY_RETURN == nCode )
@@ -388,7 +401,7 @@ css::uno::Reference< css::awt::XWindow > SAL_CALL FindTextToolbarController::cre
         ToolBox* pToolbar =  ( ToolBox* )pParent;
         m_pFindTextFieldControl = new FindTextFieldControl( pToolbar, WinBits( WB_DROPDOWN | WB_VSCROLL), m_xFrame, m_xServiceManager );
 
-        Size aSize(100, m_pFindTextFieldControl->GetTextHeight() + 200);
+        Size aSize(250, m_pFindTextFieldControl->GetTextHeight() + 200);
         m_pFindTextFieldControl->SetSizePixel( aSize );
         m_pFindTextFieldControl->SetModifyHdl(LINK(this, FindTextToolbarController, EditModifyHdl));
     }
@@ -806,10 +819,17 @@ void SAL_CALL FindbarDispatcher::dispatch( const css::util::URL& aURL, const css
         if (!xLayoutManager.is())
             return;
 
-        const ::rtl::OUString sResourceURL = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/findbar" ));
+        const ::rtl::OUString sResourceURL( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/findbar" ) );
         css::uno::Reference< css::ui::XUIElement > xUIElement = xLayoutManager->getElement(sResourceURL);
         if (!xUIElement.is())
-            return;
+        {
+            // show the findbar if necessary
+            xLayoutManager->createElement( sResourceURL );
+            xLayoutManager->showElement( sResourceURL );
+            xUIElement = xLayoutManager->getElement( sResourceURL );
+            if ( !xUIElement.is() )
+                return;
+        }
 
         css::uno::Reference< css::awt::XWindow > xWindow(xUIElement->getRealInterface(), css::uno::UNO_QUERY);
         Window* pWindow = VCLUnoHelper::GetWindow( xWindow );

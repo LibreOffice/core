@@ -681,15 +681,6 @@ void ScMyTables::DeleteTable()
         {
             rImport.GetDocument()->RenameTab( static_cast<SCTAB>(nCurrentSheet),
                 sCurrentSheetName, sal_False, sal_True);
-
-/*          rtl::OUString sErrorMessage(RTL_CONSTASCII_USTRINGPARAM("Could not create a table with the name "));
-            sErrorMessage += sCurrentSheetName;
-            sErrorMessage += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(". The new name is "));
-            sErrorMessage += sCurrentName;
-            uno::Sequence<rtl::OUString> aSeq(1);
-            aSeq[0] = sErrorMessage;
-            uno::Reference<xml::sax::XLocator> xLocator;
-            rImport.SetError(XMLERROR_API | XMLERROR_FLAG_ERROR, aSeq, rtl::OUString(), xLocator);*/
         }
     }
 }
@@ -795,7 +786,7 @@ sal_Bool ScMyTables::IsPartOfMatrix(sal_Int32 nColumn, sal_Int32 nRow)
         {
             if (nCurrentSheet > aItr->aRange.Sheet)
             {
-                DBG_ERROR("should never hapen, because the list should be cleared in DeleteTable");
+                OSL_FAIL("should never hapen, because the list should be cleared in DeleteTable");
                 aItr = aMatrixRangeList.erase(aItr);
             }
             else if ((nRow > aItr->aRange.EndRow) && (nColumn > aItr->aRange.EndColumn))

@@ -78,14 +78,12 @@
                 {\
                     Identifier = SID_FRAME_UP ; \
                     HelpId = SID_FRAME_UP ; \
-                    /* ### ACHTUNG: Neuer Text in Resource? W~eiter nach vorn : Weiter nach vorn */\
                     Text [ en-US ] = "Bring ~Forward" ; \
                 };\
                 MenuItem\
                 {\
                     Identifier = SID_FRAME_DOWN ; \
                     HelpId = SID_FRAME_DOWN ; \
-                    /* ### ACHTUNG: Neuer Text in Resource? Weiter ~nach hinten : Weiter nach hinten */\
                     Text [ en-US ] = "Send Back~ward" ; \
                 };\
                 MenuItem\
@@ -180,7 +178,6 @@
  //
 String RID_POPUP_DRAWFORM
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Popup-Menü für Zeichenobjekte : Popup-Men³ f³r Zeichenobjekte */
     Text [ en-US ] = "Popup menu for form objects";
 };
  //

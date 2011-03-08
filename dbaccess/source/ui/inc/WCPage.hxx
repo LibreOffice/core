@@ -70,9 +70,7 @@ namespace dbaui
         DECL_LINK( KeyClickHdl, Button* );
 
         sal_Bool checkAppendData();
-        //--------dyf add
         void SetAppendDataRadio();
-        //--------add end
 
     public:
         virtual void            Reset();

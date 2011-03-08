@@ -7,6 +7,7 @@ Categories=Office;X-Red-Hat-Base;X-SuSE-Core-Office;X-MandrivaLinux-Office-Sprea
 Exec=${UNIXBASISROOTNAME} --calc %U
 MimeType=application/vnd.oasis.opendocument.spreadsheet;application/vnd.oasis.opendocument.spreadsheet-template;application/vnd.sun.xml.calc;application/vnd.sun.xml.calc.template;application/vnd.stardivision.calc;application/vnd.stardivision.chart;application/msexcel;application/vnd.ms-excel;application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;application/vnd.ms-excel.sheet.macroenabled.12;application/vnd.openxmlformats-officedocument.spreadsheetml.template;application/vnd.ms-excel.template.macroenabled.12;application/vnd.ms-excel.sheet.binary.macroenabled.12;text/csv;application/x-dbf;
 Name=%PRODUCTNAME Calc
+Name[pt_BR]=%PRODUCTNAME_BR Calc
 GenericName=Spreadsheet
 Comment=Perform calculation, analyze information and manage lists in spreadsheets by using Calc.
 InitialPreference=5

@@ -79,9 +79,6 @@
 
 #include <vbahelper/vbahelper.hxx>
 #include <sfx2/app.hxx>
-// #FIXME needs service
-//#include "vbashape.hxx"
-//#include "unonames.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;

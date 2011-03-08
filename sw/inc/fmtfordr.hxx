@@ -32,7 +32,6 @@
 #include <hintids.hxx>
 #include <format.hxx>
 
-//Die FillOrder ---------------------------------
 
 enum SwFillOrder
 {
@@ -50,7 +49,7 @@ public:
     SwFmtFillOrder( SwFillOrder = ATT_TOP_DOWN );
     inline SwFmtFillOrder &operator=( const SwFmtFillOrder &rCpy );
 
-    // "pure virtual methods" of SfxPoolItem
+    // "Pure virtual methods" of SfxPoolItem.
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual USHORT          GetValueCount() const;
 

@@ -31,7 +31,7 @@
 
 #include <idlc/idlctypes.hxx>
 
-typedef ::std::hash_map< ::rtl::OString,
+typedef ::boost::unordered_map< ::rtl::OString,
                          ::rtl::OString,
                          HashString,
                          EqualString > OptionMap;

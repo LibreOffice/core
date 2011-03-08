@@ -49,6 +49,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <tools/urlobj.hxx>
 #include <svl/filenotation.hxx>
+#include <osl/diagnose.h>
 
 //........................................................................
 namespace dbaui
@@ -185,7 +186,7 @@ namespace dbaui
     //--------------------------------------------------------------------
     void OpenDocumentButton::impl_init( const sal_Char* _pAsciiModuleName )
     {
-        DBG_ASSERT( _pAsciiModuleName, "OpenDocumentButton::impl_init: invalid module name!" );
+        OSL_ENSURE( _pAsciiModuleName, "OpenDocumentButton::impl_init: invalid module name!" );
         m_sModule = ::rtl::OUString::createFromAscii( _pAsciiModuleName );
 
         // our label should equal the UI text of the "Open" command
@@ -215,7 +216,7 @@ namespace dbaui
     //--------------------------------------------------------------------
     void OpenDocumentListBox::impl_init( const sal_Char* _pAsciiModuleName )
     {
-        DBG_ASSERT( _pAsciiModuleName, "OpenDocumentListBox::impl_init: invalid module name!" );
+        OSL_ENSURE( _pAsciiModuleName, "OpenDocumentListBox::impl_init: invalid module name!" );
 
         Sequence< Sequence< PropertyValue> > aHistory = SvtHistoryOptions().GetList( ePICKLIST );
         Reference< XNameAccess > xFilterFactory;
@@ -291,7 +292,7 @@ namespace dbaui
     OpenDocumentListBox::StringPair OpenDocumentListBox::impl_getDocumentAtIndex( USHORT _nListIndex, bool _bSystemNotation ) const
     {
         MapIndexToStringPair::const_iterator pos = m_aURLs.find( _nListIndex );
-        DBG_ASSERT( pos != m_aURLs.end(), "OpenDocumentListBox::impl_getDocumentAtIndex: invalid index!" );
+        OSL_ENSURE( pos != m_aURLs.end(), "OpenDocumentListBox::impl_getDocumentAtIndex: invalid index!" );
 
         StringPair aDocumentDescriptor;
         if ( pos != m_aURLs.end() )

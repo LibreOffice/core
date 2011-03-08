@@ -79,9 +79,7 @@
 
 #include <svtools/embedhlp.hxx>
 #include <svtools/chartprettypainter.hxx>
-// --> OD 2009-03-05 #i99665#
-#include <dview.hxx>
-// <--
+#include <dview.hxx> // #i99665#
 
 using namespace com::sun::star;
 
@@ -228,7 +226,6 @@ void lcl_ClearArea( const SwFrm &rFrm,
                 ::DrawGraphic( pItem, &rOut, aOrigRect, aRegion[i] );
         else
         {
-            // OD 2004-04-23 #116347#
             rOut.Push( PUSH_FILLCOLOR|PUSH_LINECOLOR );
             rOut.SetFillColor( rFrm.GetShell()->Imp()->GetRetoucheColor());
             rOut.SetLineColor();
@@ -254,7 +251,7 @@ void SwNoTxtFrm::Paint( const SwRect &rRect, const SwPrtOptions * /*pPrintData*/
     if( !pSh->GetViewOptions()->IsGraphic() )
     {
         StopAnimation();
-        // OD 10.01.2003 #i6467# - no paint of placeholder for page preview
+        // #i6467# - no paint of placeholder for page preview
         if ( pSh->GetWin() && !pSh->IsPreView() )
         {
             const SwNoTxtNode* pNd = GetNode()->GetNoTxtNode();
@@ -286,7 +283,7 @@ void SwNoTxtFrm::Paint( const SwRect &rRect, const SwPrtOptions * /*pPrintData*/
     if( pGrfNd )
         pGrfNd->SetFrameInPaint( TRUE );
 
-    // OD 16.04.2003 #i13147# - add 2nd parameter with value <sal_True> to
+    // #i13147# - add 2nd parameter with value <sal_True> to
     // method call <FindFlyFrm().GetContour(..)> to indicate that it is called
     // for paint in order to avoid load of the intrinsic graphic.
     if ( ( !pOut->GetConnectMetaFile() ||
@@ -323,7 +320,7 @@ void SwNoTxtFrm::Paint( const SwRect &rRect, const SwPrtOptions * /*pPrintData*/
 
         if ( bClip )
             pOut->IntersectClipRegion( aPaintArea.SVRect() );
-        /// OD 25.09.2002 #99739# - delete unused 3rd parameter
+        /// delete unused 3rd parameter
         PaintPicture( pOut, aGrfArea );
     }
     else
@@ -378,9 +375,8 @@ void lcl_CalcRect( Point& rPt, Size& rDim, USHORT nMirror )
 void SwNoTxtFrm::GetGrfArea( SwRect &rRect, SwRect* pOrigRect,
                              BOOL ) const
 {
-    // JP 23.01.2001: currently only used for scaling, cropping and mirroring
-    // the contour of graphics!
-    //                  all other is handled by the GraphicObject
+    //currently only used for scaling, cropping and mirroring the contour of graphics!
+    //all other is handled by the GraphicObject
 
     //In rRect wird das sichbare Rechteck der Grafik gesteckt.
     //In pOrigRect werden Pos+Size der Gesamtgrafik gesteck.
@@ -630,7 +626,7 @@ void SwNoTxtFrm::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
 {
     USHORT nWhich = pNew ? pNew->Which() : pOld ? pOld->Which() : 0;
 
-    // --> OD 2007-03-06 #i73788#
+    // #i73788#
     // no <SwCntntFrm::Modify(..)> for RES_LINKED_GRAPHIC_STREAM_ARRIVED
     if ( RES_GRAPHIC_PIECE_ARRIVED != nWhich &&
          RES_GRAPHIC_ARRIVED != nWhich &&
@@ -702,10 +698,8 @@ void SwNoTxtFrm::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
 
     case RES_GRAPHIC_PIECE_ARRIVED:
     case RES_GRAPHIC_ARRIVED:
-    // --> OD 2007-03-06 #i73788#
-    // handle RES_LINKED_GRAPHIC_STREAM_ARRIVED as RES_GRAPHIC_ARRIVED
+    // i73788# - handle RES_LINKED_GRAPHIC_STREAM_ARRIVED as RES_GRAPHIC_ARRIVED
     case RES_LINKED_GRAPHIC_STREAM_ARRIVED:
-    // <--
         if ( GetNode()->GetNodeType() == ND_GRFNODE )
         {
             bComplete = FALSE;
@@ -731,7 +725,7 @@ void SwNoTxtFrm::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
                 else if ( pSh->VisArea().IsOver( aRect ) &&
                    OUTDEV_WINDOW == pSh->GetOut()->GetOutDevType() )
                 {
-                    // OD 27.11.2002 #105519# - invalidate instead of painting
+                    //invalidate instead of painting
                     pSh->GetWin()->Invalidate( aRect.SVRect() );
                 }
 
@@ -784,9 +778,9 @@ void lcl_correctlyAlignRect( SwRect& rAlignedGrfArea, const SwRect& rInArea, Out
 // Ausgabe der Grafik. Hier wird entweder eine QuickDraw-Bmp oder
 // eine Grafik vorausgesetzt. Ist nichts davon vorhanden, wird
 // eine Ersatzdarstellung ausgegeben.
-/// OD 25.09.2002 #99739# - delete unused 3rd parameter.
-/// OD 25.09.2002 #99739# - use aligned rectangle for drawing graphic.
-/// OD 25.09.2002 #99739# - pixel-align coordinations for drawing graphic.
+/// delete unused 3rd parameter.
+/// use aligned rectangle for drawing graphic.
+/// pixel-align coordinations for drawing graphic.
 void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) const
 {
     ViewShell* pShell = GetShell();
@@ -800,7 +794,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
 
     const bool bIsChart = pOLENd && ChartPrettyPainter::IsChart( pOLENd->GetOLEObj().GetObject() );
 
-    /// OD 25.09.2002 #99739# - calculate aligned rectangle from parameter <rGrfArea>.
+    /// calculate aligned rectangle from parameter <rGrfArea>.
     ///     Use aligned rectangle <aAlignedGrfArea> instead of <rGrfArea> in
     ///     the following code.
     SwRect aAlignedGrfArea = rGrfArea;
@@ -808,7 +802,6 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
 
     if( !bIsChart )
     {
-        /// OD 25.09.2002 #99739#
         /// Because for drawing a graphic left-top-corner and size coordinations are
         /// used, these coordinations have to be determined on pixel level.
         ::SwAlignGrfRect( &aAlignedGrfArea, *pOut );
@@ -833,14 +826,13 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
 
         if( !bPrn )
         {
-            // --> OD 2007-01-02 #i73788#
+            // #i73788#
             if ( pGrfNd->IsLinkedInputStreamReady() )
             {
                 pGrfNd->UpdateLinkWithInputStream();
             }
             // <--
-            // --> OD 2008-01-30 #i85717#
-            // --> OD 2008-07-21 #i90395# - check, if asynchronous retrieval
+            // #i85717#, #i90395# - check, if asynchronous retrieval
             // if input stream for the graphic is possible
 //            else if( GRAPHIC_DEFAULT == rGrfObj.GetType() &&
             else if ( ( rGrfObj.GetType() == GRAPHIC_DEFAULT ||
@@ -856,9 +848,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
                     !(aTmpSz = pGrfNd->GetTwipSize()).Width() ||
                     !aTmpSz.Height() || !pGrfNd->GetAutoFmtLvl() )
                 {
-                    // --> OD 2006-12-22 #i73788#
-                    pGrfNd->TriggerAsyncRetrieveInputStream();
-                    // <--
+                    pGrfNd->TriggerAsyncRetrieveInputStream(); // #i73788#
                 }
                 String aTxt( pGrfNd->GetTitle() );
                 if ( !aTxt.Len() )
@@ -956,7 +946,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
     }
     else if( pOLENd )
     {
-        // --> OD 2009-03-05 #i99665#
+        // #i99665#
         // Adjust AntiAliasing mode at output device for chart OLE
         const USHORT nFormerAntialiasingAtOutput( pOut->GetAntialiasing() );
         if ( pOLENd->IsChart() &&
@@ -979,7 +969,6 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
             pJobSetup = new JobSetup();
 
         // #i42323#
-        // The reason for #114233# is gone, so i remove it again
         //TODO/LATER: is it a problem that the JopSetup isn't used?
         //xRef->DoDraw( pOut, aAlignedGrfArea.Pos(), aAlignedGrfArea.SSize(), *pJobSetup );
 
@@ -1011,7 +1000,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
             ((SwFEShell*)pShell)->ConnectObj( pOLENd->GetOLEObj().GetObject(), pFly->Prt(), pFly->Frm());
         }
 
-        // --> OD 2009-03-05 #i99665#
+        // #i99665#
         if ( pOLENd->IsChart() &&
              pShell->Imp()->GetDrawView()->IsAntiAliasing() )
         {

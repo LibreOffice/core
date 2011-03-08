@@ -61,13 +61,13 @@
 #include    <rtl/ustrbuf.hxx>
 #include    <osl/file.hxx>
 
-using namespace rtl;
 using namespace osl;
 using namespace store;
 
-#if defined ( GCC ) && ( defined ( SCO ) )
-sal_helper::ORealDynamicLoader* sal_helper::ODynamicLoader<RegistryTypeReader_Api>::m_pLoader = NULL;
-#endif
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
+using ::rtl::OUStringBuffer;
+using ::rtl::OString;
 
 namespace {
 

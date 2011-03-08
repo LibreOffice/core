@@ -70,6 +70,10 @@
 
 #define STR_CHARNAME_NOSTYLE        150
 #define STR_CHARNAME_TRANSPARENT    151
+#define STR_CHARNAME_FAMILY         152
+#define STR_CHARNAME_FONT           153
+#define STR_CHARNAME_STYLE          154
+#define STR_CHARNAME_TYPEFACE       155
 
 // EffectsPage --------------------------------------------------------------
 

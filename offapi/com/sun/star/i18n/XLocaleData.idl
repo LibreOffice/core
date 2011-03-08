@@ -112,7 +112,7 @@ published interface XLocaleData: com::sun::star::uno::XInterface
                                 [in] com::sun::star::lang::Locale aLocale );
 
     //------------------------------------------------------------------------
-    /** returns all LC_MISC forbidden charatcers for a locale.
+    /** returns all LC_MISC forbidden characters for a locale.
      */
     ForbiddenCharacters getForbiddenCharacters (
                                 [in] com::sun::star::lang::Locale aLocale );

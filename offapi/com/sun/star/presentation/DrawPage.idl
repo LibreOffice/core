@@ -111,7 +111,7 @@ published service DrawPage
 
     //-------------------------------------------------------------------------
 
-    /** defines the text that is displayd in a header textfield rendered on this
+    /** defines the text that is displayed in a header textfield rendered on this
         page.
     */
     [optional, property] string HeaderText;
@@ -126,7 +126,7 @@ published service DrawPage
 
     //-------------------------------------------------------------------------
 
-    /** defines the text that is displayd in a footer textfield rendered on this
+    /** defines the text that is displayed in a footer textfield rendered on this
         page.
     */
     [optional, property] string FooterText;
@@ -157,7 +157,7 @@ published service DrawPage
 
     //-------------------------------------------------------------------------
 
-    /** defines the text that is displayd in a date and time textfield rendered on this
+    /** defines the text that is displayed in a date and time textfield rendered on this
         page. This value is only used if <code>IsDateTimeFixed</code> is <true/>.
     */
     [optional, property] string DateTimeText;

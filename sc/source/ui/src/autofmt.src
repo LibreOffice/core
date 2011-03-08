@@ -33,8 +33,6 @@ ModalDialog RID_SCDLG_AUTOFORMAT
     HelpId = SID_AUTOFORMAT ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 312 , 121 ) ;
-    /* ### ACHTUNG: Neuer Text in Resource? AutoFormat : Autoformat */
-    /* ### ACHTUNG: Neuer Text in Resource? AutoFormat : Autoformat */
     Text [ en-US ] = "AutoFormat" ;
     Moveable = TRUE ;
     Closeable = FALSE ;
@@ -62,7 +60,6 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 172 , 146 ) ;
         Size = MAP_APPFONT ( 75 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Breite/Höhe anpassen : ~Breite/H÷he anpassen */
         Text [ en-US ] = "A~utoFit width and height" ;
         TabStop = TRUE ;
     };
@@ -138,7 +135,6 @@ ModalDialog RID_SCDLG_AUTOFORMAT
     {
         Pos = MAP_APPFONT ( 256 , 63 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Einfügen... : ~Einf³gen... */
         Text [ en-US ] = "~Add..." ;
         TabStop = TRUE ;
     };
@@ -146,7 +142,6 @@ ModalDialog RID_SCDLG_AUTOFORMAT
     {
         Pos = MAP_APPFONT ( 256 , 81 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
         Text [ en-US ] = "~Delete" ;
         TabStop = TRUE ;
     };
@@ -168,7 +163,6 @@ ModalDialog RID_SCDLG_AUTOFORMAT
     };
     String STR_ADD_TITLE
     {
-        /* ### ACHTUNG: Neuer Text in Resource? AutoFormat hinzufügen : Autoformat hinzufügen */
         Text [ en-US ] = "Add AutoFormat" ;
     };
 
@@ -183,17 +177,14 @@ ModalDialog RID_SCDLG_AUTOFORMAT
     };
     String STR_DEL_TITLE
     {
-        /* ### ACHTUNG: Neuer Text in Resource? AutoFormat löschen : AutoFormat l÷schen */
         Text [ en-US ] = "Delete AutoFormat" ;
     };
     String STR_DEL_MSG
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Wollen Sie das AutoFormat # wirklich löschen? : Wollen Sie das AutoFormat # wirklich l÷schen? */
         Text [ en-US ] = "Do you really want to delete the # AutoFomat?" ;
     };
     String STR_BTN_CLOSE
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Schlie~ßen : Schlie~˜en */
         Text [ en-US ] = "~Close" ;
     };
     String STR_JAN
@@ -206,7 +197,6 @@ ModalDialog RID_SCDLG_AUTOFORMAT
     };
     String STR_MAR
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Mär : Mõr */
         Text [ en-US ] = "Mar" ;
     };
     String STR_NORTH
@@ -219,7 +209,6 @@ ModalDialog RID_SCDLG_AUTOFORMAT
     };
     String STR_SOUTH
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Süd : S³d */
         Text [ en-US ] = "South" ;
     };
     String STR_SUM

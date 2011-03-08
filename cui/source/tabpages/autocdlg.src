@@ -205,7 +205,6 @@ TabPage RID_OFAPAGE_AUTOFMT_APPLY
     COMMON_CLB_ENTRIES
     String ST_DEL_EMPTY_PARA
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Leere Absätze entfernen : Leere Absõtze entfernen */
         Text [ en-US ] = "Remove blank paragraphs" ;
     };
     String ST_USER_STYLE
@@ -218,7 +217,6 @@ TabPage RID_OFAPAGE_AUTOFMT_APPLY
     };
     String ST_RIGHT_MARGIN
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Zusammenfassen von einzeiligen Absätzen ab : Zusammenfassen von einzeiligen Absõtzen ab */
          //        Text [ norwegian_wrong ] = "+++Combine single line paragraphs at" ;
          //        Text [ swedish_wrong ] = ~Kombinera enradiga stycken B738vid " ;
         Text [ en-US ] = "Combine single line paragraphs if length greater than" ;

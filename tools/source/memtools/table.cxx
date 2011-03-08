@@ -123,7 +123,6 @@ BOOL Table::Insert( ULONG nKey, void* p )
         {
             USHORT n = 0;
             USHORT nTempCount = (USHORT)nCount * 2;
-            //<!--Modified by PengYunQuan for resolving a NULL pointer access
 
             if( void** pNodes = Container::ImpGetOnlyNodes() )
             {
@@ -153,7 +152,6 @@ BOOL Table::Insert( ULONG nKey, void* p )
                 if ( ImplGetIndex( nKey, &i ) != TABLE_ENTRY_NOTFOUND )
                     return FALSE;
             }
-            //-->Modified by PengYunQuan for resolving a NULL pointer access
         }
         else
         {

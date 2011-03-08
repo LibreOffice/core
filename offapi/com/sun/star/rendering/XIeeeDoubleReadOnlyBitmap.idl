@@ -87,7 +87,7 @@ interface XIeeeDoubleReadOnlyBitmap : XBitmap
 
         @param rect
         A rectangle, within the bounds of the bitmap, to retrieve the
-        contens from.
+        consent from.
 
         @throws <type>VolatileContentDestroyedException</type>
         if the bitmap is volatile, and the content has been destroyed by the system.

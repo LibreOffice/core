@@ -35,8 +35,9 @@
 #include <algorithm>
 #include <functional>
 #include <iostream>
-#if OSL_DEBUG_LEVEL > 0
-#   include <cstdio>
+
+#if OSL_DEBUG_LEVEL > 1
+#include <cstdio>
 #endif
 
 #include <hintids.hxx>
@@ -119,17 +120,17 @@ using namespace nsFieldFlags;
 static String lcl_getFieldCode( const IFieldmark* pFieldmark ) {
     OSL_ENSURE(pFieldmark!=NULL, "where is my fieldmark???");
 
-    if ( pFieldmark->GetFieldname( ).equalsAscii( ODF_FORMTEXT ) ) {
+    if ( pFieldmark->GetFieldname( ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMTEXT ) ) ) {
         return String::CreateFromAscii(" FORMTEXT ");
-    } else if ( pFieldmark->GetFieldname( ).equalsAscii( ODF_FORMDROPDOWN ) ) {
+    } else if ( pFieldmark->GetFieldname( ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMDROPDOWN ) ) ) {
         return String::CreateFromAscii(" FORMDROPDOWN ");
-    } else if ( pFieldmark->GetFieldname( ).equalsAscii( ODF_FORMCHECKBOX ) ) {
+    } else if ( pFieldmark->GetFieldname( ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMCHECKBOX ) ) ) {
         return String::CreateFromAscii(" FORMCHECKBOX ");
-    } else if ( pFieldmark->GetFieldname( ).equalsAscii( ODF_TOC ) ) {
+    } else if ( pFieldmark->GetFieldname( ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_TOC ) ) ) {
         return String::CreateFromAscii(" TOC ");
-    } else if ( pFieldmark->GetFieldname( ).equalsAscii( ODF_HYPERLINK ) ) {
+    } else if ( pFieldmark->GetFieldname( ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_HYPERLINK ) ) ) {
         return String::CreateFromAscii(" HYPERLINK ");
-    } else if ( pFieldmark->GetFieldname( ).equalsAscii( ODF_PAGEREF ) ) {
+    } else if ( pFieldmark->GetFieldname( ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_PAGEREF ) ) ) {
         return String::CreateFromAscii(" PAGEREF ");
     } else {
         return pFieldmark->GetFieldname();
@@ -138,17 +139,17 @@ static String lcl_getFieldCode( const IFieldmark* pFieldmark ) {
 
 ww::eField lcl_getFieldId( const IFieldmark* pFieldmark ) {
     OSL_ENSURE(pFieldmark!=NULL, "where is my fieldmark???");
-    if ( pFieldmark->GetFieldname( ).equalsAscii( ODF_FORMTEXT ) ) {
+    if ( pFieldmark->GetFieldname( ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMTEXT ) ) ) {
         return ww::eFORMTEXT;
-    } else if ( pFieldmark->GetFieldname( ).equalsAscii( ODF_FORMDROPDOWN ) ) {
+    } else if ( pFieldmark->GetFieldname( ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMDROPDOWN ) ) ) {
         return ww::eFORMDROPDOWN;
-    } else if ( pFieldmark->GetFieldname( ).equalsAscii( ODF_FORMCHECKBOX ) ) {
+    } else if ( pFieldmark->GetFieldname( ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMCHECKBOX ) ) ) {
         return ww::eFORMCHECKBOX;
-    } else if ( pFieldmark->GetFieldname( ).equalsAscii( ODF_TOC ) ) {
+    } else if ( pFieldmark->GetFieldname( ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_TOC ) ) ) {
         return ww::eTOC;
-    } else if ( pFieldmark->GetFieldname( ).equalsAscii( ODF_HYPERLINK ) ) {
+    } else if ( pFieldmark->GetFieldname( ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_HYPERLINK ) ) ) {
         return ww::eHYPERLINK;
-    } else if ( pFieldmark->GetFieldname( ).equalsAscii( ODF_PAGEREF ) ) {
+    } else if ( pFieldmark->GetFieldname( ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_PAGEREF ) ) ) {
         return ww::ePAGEREF;
     } else {
         return ww::eUNKNOWN;
@@ -602,9 +603,10 @@ const SfxPoolItem* SwWW8AttrIter::HasTextItem( USHORT nWhich ) const
 {
     const SfxPoolItem* pRet = 0;
     const SwpHints* pTxtAttrs = rNd.GetpSwpHints();
-    xub_StrLen nTmpSwPos = m_rExport.m_aCurrentCharPropStarts.top();
-    if (pTxtAttrs)
+
+    if (pTxtAttrs && m_rExport.m_aCurrentCharPropStarts.size())
     {
+        xub_StrLen nTmpSwPos = m_rExport.m_aCurrentCharPropStarts.top();
         for (USHORT i = 0; i < pTxtAttrs->Count(); ++i)
         {
             const SwTxtAttr* pHt = (*pTxtAttrs)[i];
@@ -1805,6 +1807,8 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
         const SwRedlineData* pRedlineData = aAttrIter.GetRedline( nAktPos );
 
         AttrOutput().StartRun( pRedlineData );
+        if( nTxtTyp == TXT_FTN || nTxtTyp == TXT_EDN )
+            AttrOutput().FootnoteEndnoteRefTag();
 
         xub_StrLen nNextAttr = GetNextPos( &aAttrIter, rNode, nAktPos );
 
@@ -1831,11 +1835,11 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                 ::sw::mark::IFieldmark const * const pFieldmark = pMarkAccess->getFieldmarkFor( aPosition );
                 OSL_ENSURE( pFieldmark, "Looks like this doc is broken...; where is the Fieldmark for the FIELDSTART??" );
 
-                if ( pFieldmark->GetFieldname().equalsAscii( ODF_FORMTEXT ) )
+                if ( pFieldmark->GetFieldname().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMTEXT ) ) )
                     AppendBookmark( pFieldmark->GetName(), false );
                 ww::eField eFieldId = lcl_getFieldId( pFieldmark );
                 String sCode = lcl_getFieldCode( pFieldmark );
-                if ( pFieldmark->GetFieldname().equalsAscii( ODF_UNHANDLED ) )
+                if ( pFieldmark->GetFieldname().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_UNHANDLED ) ) )
                 {
                     IFieldmark::parameter_map_t::const_iterator it = pFieldmark->GetParameters()->find(
                             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ODF_ID_PARAM )) );
@@ -1856,13 +1860,13 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                     }
                 }
                 OutputField( NULL, eFieldId, sCode, WRITEFIELD_START | WRITEFIELD_CMD_START );
-                if ( pFieldmark->GetFieldname( ).equalsAscii( ODF_FORMTEXT ) )
+                if ( pFieldmark->GetFieldname( ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMTEXT ) ) )
                     WriteFormData( *pFieldmark );
-                else if ( pFieldmark->GetFieldname( ).equalsAscii( ODF_HYPERLINK ) )
+                else if ( pFieldmark->GetFieldname( ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_HYPERLINK ) ) )
                     WriteHyperlinkData( *pFieldmark );
                 OutputField( NULL, lcl_getFieldId( pFieldmark ), String(), WRITEFIELD_CMD_END );
 
-                if ( pFieldmark->GetFieldname().equalsAscii( ODF_UNHANDLED ) )
+                if ( pFieldmark->GetFieldname().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_UNHANDLED ) ) )
                 {
                     // Check for the presence of a linked OLE object
                     IFieldmark::parameter_map_t::const_iterator it = pFieldmark->GetParameters()->find(
@@ -1884,7 +1888,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                 OSL_ENSURE( pFieldmark, "Looks like this doc is broken...; where is the Fieldmark for the FIELDEND??" );
 
                 ww::eField eFieldId = lcl_getFieldId( pFieldmark );
-                if ( pFieldmark->GetFieldname().equalsAscii( ODF_UNHANDLED ) )
+                if ( pFieldmark->GetFieldname().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_UNHANDLED ) ) )
                 {
                     IFieldmark::parameter_map_t::const_iterator it = pFieldmark->GetParameters()->find(
                             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ODF_ID_PARAM )) );
@@ -1897,7 +1901,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                 }
 
                 OutputField( NULL, eFieldId, String(), WRITEFIELD_CLOSE );
-                if ( pFieldmark->GetFieldname().equalsAscii( ODF_FORMTEXT ) )
+                if ( pFieldmark->GetFieldname().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMTEXT ) ) )
                     AppendBookmark( pFieldmark->GetName(), false );
             }
             else if ( ch == CH_TXT_ATR_FORMELEMENT )
@@ -1906,8 +1910,8 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                 ::sw::mark::IFieldmark const * const pFieldmark = pMarkAccess->getFieldmarkFor( aPosition );
                 OSL_ENSURE( pFieldmark, "Looks like this doc is broken...; where is the Fieldmark for the FIELDSTART??" );
 
-                bool isDropdownOrCheckbox = pFieldmark->GetFieldname( ).equalsAscii( ODF_FORMDROPDOWN ) ||
-                    pFieldmark->GetFieldname( ).equalsAscii( ODF_FORMCHECKBOX );
+                bool isDropdownOrCheckbox = pFieldmark->GetFieldname( ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMDROPDOWN ) ) ||
+                    pFieldmark->GetFieldname( ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMCHECKBOX ) );
 
                 if ( isDropdownOrCheckbox )
                     AppendBookmark( pFieldmark->GetName(), 0 );
@@ -2055,13 +2059,13 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
             {
                 pTmpSet = new SfxItemSet( rNode.GetSwAttrSet() );
                 SvxULSpaceItem aUL( *(SvxULSpaceItem*)pItem );
-                // OD, MMAHER 2004-03-01 #i25901#- consider compatibility option
+                // #i25901#- consider compatibility option
                 if (!pDoc->get(IDocumentSettingAccess::PARA_SPACE_MAX_AT_PAGES))
                 {
                     if( !(ND_HAS_PREV_LAYNODE & nPrvNxtNd ))
                         aUL.SetUpper( 0 );
                 }
-                // OD, MMAHER 2004-03-01 #i25901# - consider compatibility option
+                // #i25901# - consider compatibility option
                 if (!pDoc->get(IDocumentSettingAccess::ADD_PARA_SPACING_TO_TABLE_CELLS))
                 {
                     if( !(ND_HAS_NEXT_LAYNODE & nPrvNxtNd ))
@@ -2089,7 +2093,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                 pTmpSet = new SfxItemSet( rNode.GetSwAttrSet() );
 
             SvxLRSpaceItem aLR(ItemGet<SvxLRSpaceItem>(*pTmpSet, RES_LR_SPACE));
-            // --> OD 2008-06-03 #i86652#
+            // #i86652#
             if ( pFmt->GetPositionAndSpaceMode() ==
                                     SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
@@ -2099,7 +2103,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
 
             if( rNode.IsNumbered() && rNode.IsCountedInList() )
             {
-                // --> OD 2008-06-03 #i86652#
+                // #i86652#
                 if ( pFmt->GetPositionAndSpaceMode() ==
                                         SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                 {
@@ -2110,7 +2114,6 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                 }
                 // <--
 
-                // --> OD 2009-03-09 #100020#
                 // correct fix for issue i94187
                 if (SFX_ITEM_SET !=
                     pTmpSet->GetItemState(RES_PARATR_NUMRULE, false) )
@@ -2134,7 +2137,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
             else
                 pTmpSet->ClearItem(RES_PARATR_NUMRULE);
 
-            // --> OD 2008-06-03 #i86652#
+            // #i86652#
             if ( pFmt->GetPositionAndSpaceMode() ==
                                     SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
@@ -2168,7 +2171,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
 
             pTmpSet->Put(SvxFrameDirectionItem(FRMDIR_HORI_RIGHT_TOP, RES_FRAMEDIR));
         }
-        // --> OD 2005-10-18 #126238# - move code for handling of numbered,
+        // move code for handling of numbered,
         // but not counted paragraphs to this place. Otherwise, the paragraph
         // isn't exported as numbered, but not counted, if no other attribute
         // is found in <pTmpSet>
@@ -2197,7 +2200,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
             // new left margin = old left + label space
             const SwNumRule* pRule = rNode.GetNumRule();
             const SwNumFmt& rNumFmt = pRule->Get( static_cast< USHORT >(rNode.GetActualListLevel()) );
-            // --> OD 2008-06-03 #i86652#
+            // #i86652#
             if ( rNumFmt.GetPositionAndSpaceMode() ==
                                     SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
@@ -2220,7 +2223,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
             }
         }
 
-        // --> OD 2007-04-24 #i75457#
+        // #i75457#
         // Export page break after attribute from paragraph style.
         // If page break attribute at the text node exist, an existing page
         // break after at the paragraph style hasn't got to be considered.
@@ -2248,7 +2251,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
             }
         }
 
-        // --> FME 2007-05-30 #i76520# Emulate non-splitting tables
+        // #i76520# Emulate non-splitting tables
         if ( bOutTable )
         {
             const SwTableNode* pTableNode = rNode.FindTableNode();
@@ -2322,6 +2325,11 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                 delete pNewSet;
         }
     }
+
+    // write attributes of the node itself
+    AttrOutput().StartRunProperties();
+    OutputItemSet( rNode.GetSwAttrSet(), false, true, i18n::ScriptType::LATIN, false);
+    AttrOutput().EndRunProperties( NULL );
 
     AttrOutput().EndParagraphProperties();
 
@@ -2535,7 +2543,6 @@ void WW8AttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFmt, const Point
             bUseEscher = true;
 
         /*
-         #110185#
          A special case for converting some inline form controls to form fields
          when in winword 8+ mode
         */
@@ -2580,11 +2587,7 @@ void WW8AttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFmt, const Point
             Point aOffset;
             if ( m_rWW8Export.mpParentFrame )
             {
-                /*
-                #90804#
-                Munge flys in fly into absolutely positioned elements for
-                word 6
-                */
+                /* Munge flys in fly into absolutely positioned elements for word 6 */
                 const SwTxtNode* pParTxtNode = rAnch.GetCntntAnchor()->nNode.GetNode().GetTxtNode();
                 const SwRect aPageRect = pParTxtNode->FindPageFrmRect( FALSE, 0, FALSE );
 
@@ -2740,9 +2743,7 @@ void MSWordExportBase::OutputContentNode( const SwCntntNode& rNode )
             OutputOLENode( *rNode.GetOLENode() );
             break;
         default:
-#if OSL_DEBUG_LEVEL > 0
             OSL_TRACE("Unhandled node, type == %d\n", rNode.GetNodeType() );
-#endif
             break;
     }
 }

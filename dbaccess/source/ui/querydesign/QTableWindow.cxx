@@ -31,7 +31,7 @@
 #include "QTableWindow.hxx"
 #include "QueryTableView.hxx"
 #include "dbustrings.hrc"
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include "dbaccess_helpid.hrc"
 #include "QueryDesignView.hxx"
 #include "browserids.hxx"
@@ -126,7 +126,7 @@ sal_Bool OQueryTableWindow::Init()
 
     if (!bSuccess)
     {   // es soll nur ein Dummy-Window aufgemacht werden ...
-        DBG_ASSERT(GetAliasName().getLength(), "OQueryTableWindow::Init : kein Alias- UND kein Tabellenname geht nicht !");
+        OSL_ENSURE(GetAliasName().getLength(), "OQueryTableWindow::Init : kein Alias- UND kein Tabellenname geht nicht !");
             // .. aber das braucht wenigstens einen Alias
 
         // ::com::sun::star::form::ListBox anlegen
@@ -163,14 +163,14 @@ void OQueryTableWindow::deleteUserData(void*& _pUserData)
 //------------------------------------------------------------------------------
 void OQueryTableWindow::OnEntryDoubleClicked(SvLBoxEntry* pEntry)
 {
-    DBG_ASSERT(pEntry != NULL, "OQueryTableWindow::OnEntryDoubleClicked : pEntry darf nicht NULL sein !");
+    OSL_ENSURE(pEntry != NULL, "OQueryTableWindow::OnEntryDoubleClicked : pEntry darf nicht NULL sein !");
         // man koennte das auch abfragen und dann ein return hinsetzen, aber so weist es vielleicht auf Fehler bei Aufrufer hin
 
     if (getTableView()->getDesignView()->getController().isReadOnly())
         return;
 
     OTableFieldInfo* pInf = static_cast<OTableFieldInfo*>(pEntry->GetUserData());
-    DBG_ASSERT(pInf != NULL, "OQueryTableWindow::OnEntryDoubleClicked : Feld hat keine FieldInfo !");
+    OSL_ENSURE(pInf != NULL, "OQueryTableWindow::OnEntryDoubleClicked : Feld hat keine FieldInfo !");
 
     // eine DragInfo aufbauen
     OTableFieldDescRef aInfo = new OTableFieldDesc(GetTableName(),m_pListBox->GetEntryText(pEntry));
@@ -186,7 +186,7 @@ void OQueryTableWindow::OnEntryDoubleClicked(SvLBoxEntry* pEntry)
 //------------------------------------------------------------------------------
 sal_Bool OQueryTableWindow::ExistsField(const ::rtl::OUString& strFieldName, OTableFieldDescRef& rInfo)
 {
-    DBG_ASSERT(m_pListBox != NULL, "OQueryTableWindow::ExistsField : habe keine ::com::sun::star::form::ListBox !");
+    OSL_ENSURE(m_pListBox != NULL, "OQueryTableWindow::ExistsField : habe keine ::com::sun::star::form::ListBox !");
     OSL_ENSURE(rInfo.is(),"OQueryTableWindow::ExistsField: invlid argument for OTableFieldDescRef!");
     Reference< XConnection> xConnection = getTableView()->getDesignView()->getController().getConnection();
     sal_Bool bExists = sal_False;
@@ -203,7 +203,7 @@ sal_Bool OQueryTableWindow::ExistsField(const ::rtl::OUString& strFieldName, OTa
                 if (bCase(strFieldName,::rtl::OUString(m_pListBox->GetEntryText(pEntry))))
                 {
                     OTableFieldInfo* pInf = static_cast<OTableFieldInfo*>(pEntry->GetUserData());
-                    DBG_ASSERT(pInf != NULL, "OQueryTableWindow::ExistsField : Feld hat keine FieldInfo !");
+                    OSL_ENSURE(pInf != NULL, "OQueryTableWindow::ExistsField : Feld hat keine FieldInfo !");
 
                     rInfo->SetTabWindow(this);
                     rInfo->SetField(strFieldName);

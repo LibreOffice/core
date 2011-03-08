@@ -35,11 +35,14 @@
 #include <stdio.h>
 #include <vector>
 
-using namespace rtl;
 using namespace std;
 using namespace osl;
 
 using jvmaccess::JavaInfo;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
+using ::rtl::OString;
 
 #define OUSTR( x )  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( x ))
 

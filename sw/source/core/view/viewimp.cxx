@@ -34,7 +34,6 @@
 #include "rootfrm.hxx"
 #include "pagefrm.hxx"
 #include "viewimp.hxx"
-#include "errhdl.hxx"
 #include "viewopt.hxx"
 #include "flyfrm.hxx"
 #include "frmfmt.hxx"
@@ -247,18 +246,7 @@ void SwViewImp::MakeDrawView()
         // #i68597# If document is read-only, we will not profit from overlay, so switch it off.
         if(pDrawView && pDrawView->IsBufferedOverlayAllowed())
         {
-            bool bIsReadOnly(pSwViewOption->IsReadonly());
-
-#if OSL_DEBUG_LEVEL > 1
-            // add test possibilities
-            static bool bAlwaysActivateForTest(false);
-            if(bAlwaysActivateForTest && bIsReadOnly)
-            {
-                bIsReadOnly = false;
-            }
-#endif
-
-            if(bIsReadOnly)
+            if(pSwViewOption->IsReadonly())
             {
                 pDrawView->SetBufferedOverlayAllowed(false);
             }

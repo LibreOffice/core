@@ -39,7 +39,7 @@
 
 #include <tools/resid.hxx>
 #include <fmtornt.hxx>
-#include <swtypes.hxx>      // Leerstring
+#include <swtypes.hxx>      // empty string
 #include <wrtsh.hxx>
 #include <uinums.hxx>
 #include <poolfmt.hxx>
@@ -67,10 +67,10 @@ SV_IMPL_PTRARR( _SwNumFmtsAttrs, SfxPoolItem* )
 // SwNumRulesWithName ----------------------------------------------------
 // PUBLIC METHODES -------------------------------------------------------
 /*------------------------------------------------------------------------
- Beschreibung:  Speichern einer Regel
- Parameter:     rCopy -- die zu speichernde Regel
-                nIdx -- Position, an der die Regel zu speichern ist.
-                        Eine alte Regel an dieser Position wird ueberschrieben.
+ Description:   Saving a rule
+ Parameter:     rCopy -- the rule to save
+                    nIdx -- position, where the rule is to be saved.
+                        An old rule at that position will be overwritten.
 ------------------------------------------------------------------------*/
 
 SwBaseNumRules::SwBaseNumRules( const String& rFileName )
@@ -128,8 +128,8 @@ void SwBaseNumRules::ApplyNumRules(const SwNumRulesWithName &rCopy, USHORT nIdx)
 BOOL SwBaseNumRules::Store(SvStream &rStream)
 {
     rStream << ACT_NUM_VERSION;
-        // Schreiben, welche Positionen durch eine Regel belegt sind
-        // Anschliessend Schreiben der einzelnen Rules
+        // Write, what positions are occupied by a rule
+        // Then write each of the rules
     for(USHORT i = 0; i < nMaxRules; ++i)
     {
         if(pNumRules[i])
@@ -149,8 +149,8 @@ int SwBaseNumRules::Load(SvStream &rStream)
 
     rStream >> nVersion;
 
-    // wegen eines kleinen aber schweren Fehlers schreibt die PreFinal die
-    // gleiche VERSION_40A wie das SP2 #55402#
+    // due to a small but serious mistake, PreFinal writes the same VERION_40A as SP2
+    // #55402#
     if(VERSION_40A == nVersion)
     {
         OSL_ENSURE(false, "Version 364 is not clear #55402#");
@@ -244,8 +244,8 @@ SwNumRulesWithName::SwNumRulesWithName( SvStream &rStream, USHORT nVersion )
     {
         if( VERSION_30B == nVersion )
             c = 1;
-        // wegen eines kleinen aber schweren Fehlers schreibt die PreFinal die
-        // gleiche VERSION_40A wie das SP2 #55402#
+        // due to a small but serious mistake, PreFinal writes the same VERION_40A as SP2
+        // #55402#
         else if(nVersion < VERSION_40A && n > 5)
             c = 0;
         else
@@ -294,7 +294,7 @@ void SwNumRulesWithName::Store( SvStream &rStream )
 SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( const SwNumFmt& rFmt )
     : aFmt( rFmt ), nCharPoolId( USHRT_MAX )
 {
-    // relative Abstaende ?????
+    // relative gaps?????
 
     SwCharFmt* pFmt = rFmt.GetCharFmt();
     if( pFmt )
@@ -364,7 +364,7 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( SvStream& rStream,
             rStream >> nL;          aFmt.SetLSpace( lNumIndent );
             rStream >> nL;          aFmt.SetFirstLineOffset( (short)nL );
         }
-        else                // alter StartWert war ein Byte
+        else                // old start-value was a Byte
         {
             short nShort;
             rStream >> nUS;         aFmt.SetStart( nUS );
@@ -515,7 +515,7 @@ void SwNumRulesWithName::_SwNumFmtGlobal::Store( SvStream& rStream )
         pItem->Store( rStream, nIVers );
     }
 
-    // Erweiterungen fuer Version 40A
+    // Extensions for 40A
 
     if( SVX_NUM_BITMAP == aFmt.GetNumberingType() )
     {
@@ -546,13 +546,13 @@ void SwNumRulesWithName::_SwNumFmtGlobal::ChgNumFmt( SwWrtShell& rSh,
     SwCharFmt* pFmt = 0;
     if( sCharFmtName.Len() )
     {
-        // suche erstmal ueber den Namen
+        // at first, look for the name
         USHORT nArrLen = rSh.GetCharFmtCount();
         for( USHORT i = 1; i < nArrLen; ++i )
         {
             pFmt = &rSh.GetCharFmt( i );
             if( COMPARE_EQUAL == pFmt->GetName().CompareTo( sCharFmtName ))
-                // ist vorhanden, also belasse die Attribute wie sie sind!
+                // exists, so leave attributes as they are!
                 break;
             pFmt = 0;
         }
@@ -567,7 +567,7 @@ void SwNumRulesWithName::_SwNumFmtGlobal::ChgNumFmt( SwWrtShell& rSh,
             else
                 pFmt = rSh.GetCharFmtFromPool( nCharPoolId );
 
-            if( !pFmt->GetDepends() )       // Attribute setzen
+            if( !pFmt->GetDepends() )       // set attributes
                 for( USHORT n = aItems.Count(); n; )
                     pFmt->SetFmtAttr( *aItems[ --n ] );
         }

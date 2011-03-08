@@ -151,7 +151,7 @@ class SwImplProtocol
 {
     SvFileStream *pStream;      // Ausgabestream
     SvUShortsSort *pFrmIds;     // welche FrmIds sollen aufgezeichnet werden ( NULL == alle )
-    SvLongs *pVar;              // Variables
+    std::vector<long> aVars;    // Variables
     ByteString aLayer;          // Einrueckung der Ausgabe ("  " pro Start/End)
     USHORT nTypes;              // welche Typen sollen aufgezeichnet werden
     USHORT nLineCount;          // Ausgegebene Zeilen
@@ -175,7 +175,7 @@ public:
     void ChkStream() { if( !pStream ) NewStream(); }
     void SnapShot( const SwFrm* pFrm, ULONG nFlags );
     void GetVar( const USHORT nNo, long& rVar )
-        { if( pVar && nNo < pVar->Count() ) rVar = (*pVar)[ nNo ]; }
+        { if( nNo < aVars.size() ) rVar = aVars[ nNo ]; }
 };
 
 /* --------------------------------------------------
@@ -301,7 +301,7 @@ void SwProtocol::GetVar( const USHORT nNo, long& rVar )
 }
 
 SwImplProtocol::SwImplProtocol()
-    : pStream( NULL ), pFrmIds( NULL ), pVar( NULL ), nTypes( 0xffff ),
+    : pStream( NULL ), pFrmIds( NULL ), nTypes( 0xffff ),
       nLineCount( 0 ), nMaxLines( USHRT_MAX ), nTestMode( 0 )
 {
     NewStream();
@@ -328,7 +328,7 @@ SwImplProtocol::~SwImplProtocol()
         delete pStream;
     }
     delete pFrmIds;
-    delete pVar;
+    aVars.clear();
 }
 
 /* --------------------------------------------------
@@ -374,8 +374,6 @@ void SwImplProtocol::CheckLine( ByteString& rLine )
         else if( "[var" == aTmp )// variables
         {
             nInitFile = 6;
-            if( !pVar )
-                pVar = new SvLongs( 5, 5 );
         }
         else
             nInitFile = 0;          // Nanu: Unbekannter Bereich?
@@ -426,7 +424,7 @@ void SwImplProtocol::CheckLine( ByteString& rLine )
                         break;
                 case 5: nMaxLines = (USHORT)nVal;
                         break;
-                case 6: pVar->Insert( (long)nVal, pVar->Count() );
+                case 6: aVars.push_back( (long)nVal );
                         break;
             }
         }

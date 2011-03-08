@@ -30,6 +30,7 @@ PRJNAME = $(TARGET)
 PACKAGE = complex$/ModuleManager
 
 # --- Settings -----------------------------------------------------
+
 .INCLUDE: settings.mk
 
 #----- compile .java files -----------------------------------------

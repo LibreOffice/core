@@ -37,6 +37,7 @@
 #include "xeroot.hxx"
 #include "xestring.hxx"
 #include <boost/shared_ptr.hpp>
+#include <boost/ptr_container/ptr_map.hpp>
 
 class Size;
 
@@ -119,11 +120,6 @@ public:
     sal_Int32           CalcChartYFromHmm( sal_Int32 nPosY ) const;
     /** Converts the passed rectangle from 1/100 mm to Excel chart units. */
     XclChRectangle      CalcChartRectFromHmm( const ::com::sun::star::awt::Rectangle& rRect ) const;
-
-    /** Converts the passed horizontal coordinate from a relative position to Excel chart units. */
-    sal_Int32           CalcChartXFromRelative( double fPosX ) const;
-    /** Converts the passed vertical coordinate from a relative position to Excel chart units. */
-    sal_Int32           CalcChartYFromRelative( double fPosY ) const;
 
     /** Reads all line properties from the passed property set. */
     void                ConvertLineFormat(
@@ -992,7 +988,7 @@ private:
 
 private:
     typedef XclExpRecordList< XclExpChSeries >          XclExpChSeriesList;
-    typedef ScfRefMap< sal_uInt16, XclExpChLineFormat > XclExpChLineFormatMap;
+    typedef ::boost::ptr_map<sal_uInt16, XclExpChLineFormat> XclExpChLineFormatMap;
 
     XclChTypeGroup      maData;             /// Contents of the CHTYPEGROUP record.
     XclExpChType        maType;             /// Chart type (e.g. CHBAR, CHLINE, ...).

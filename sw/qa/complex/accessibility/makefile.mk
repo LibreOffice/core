@@ -31,8 +31,8 @@ PRJNAME = sw
 PACKAGE = complex$/accessibility
 
 # --- Settings -----------------------------------------------------
-.INCLUDE: settings.mk
 
+.INCLUDE: settings.mk
 
 #----- compile .java files -----------------------------------------
 

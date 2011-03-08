@@ -42,8 +42,9 @@
 #include "miscuno.hxx"
 
 using namespace utl;
-using namespace rtl;
 using namespace com::sun::star::uno;
+
+using ::rtl::OUString;
 
 //------------------------------------------------------------------
 
@@ -109,12 +110,12 @@ void ScFilterOptions::Commit()
 {
     // options are never modified from office
 
-    DBG_ERROR("trying to commit changed ScFilterOptions?");
+    OSL_FAIL("trying to commit changed ScFilterOptions?");
 }
 
-void ScFilterOptions::Notify( const Sequence<rtl::OUString>& /* aPropertyNames */ )
+void ScFilterOptions::Notify( const Sequence<OUString>& /* aPropertyNames */ )
 {
-    DBG_ERROR("properties have been changed");
+    OSL_FAIL("properties have been changed");
 }
 
 

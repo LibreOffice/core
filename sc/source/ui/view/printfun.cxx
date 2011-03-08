@@ -132,7 +132,7 @@ void ScPageRowEntry::SetPagesX(size_t nNew)
 {
     if (pHidden)
     {
-        DBG_ERROR("SetPagesX nicht nach SetHidden");
+        OSL_FAIL("SetPagesX nicht nach SetHidden");
         delete[] pHidden;
         pHidden = NULL;
     }
@@ -214,7 +214,7 @@ void ScPrintFunc::Construct( const ScPrintOptions* pOptions )
         pParamSet = &pStyleSheet->GetItemSet();
     else
     {
-        DBG_ERROR("Seitenvorlage nicht gefunden" );
+        OSL_FAIL("Seitenvorlage nicht gefunden" );
         pParamSet = NULL;
     }
 
@@ -412,7 +412,7 @@ ScPrintFunc::~ScPrintFunc()
 
     //  Druckereinstellungen werden jetzt von aussen wiederhergestellt
 
-    //  #64294# Fuer DrawingLayer/Charts muss der MapMode am Drucker (RefDevice) immer stimmen
+    //  Fuer DrawingLayer/Charts muss der MapMode am Drucker (RefDevice) immer stimmen
     SfxPrinter* pDocPrinter = pDoc->GetPrinter();   // auch fuer Preview den Drucker nehmen
     if (pDocPrinter)
         pDocPrinter->SetMapMode(aOldPrinterMode);
@@ -881,7 +881,7 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
     aPageSize = ((const SvxSizeItem&) pParamSet->Get(ATTR_PAGE_SIZE)).GetSize();
     if ( !aPageSize.Width() || !aPageSize.Height() )
     {
-        DBG_ERROR("PageSize Null ?!?!?");
+        OSL_FAIL("PageSize Null ?!?!?");
         aPageSize = SvxPaperInfo::GetPaperSize( PAPER_A4 );
     }
 
@@ -1039,7 +1039,7 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
     }
     else
     {
-        //  #74834# don't print hidden tables if there's no print range defined there
+        //  don't print hidden tables if there's no print range defined there
         if ( pDoc->IsVisible( nPrintTab ) )
         {
             aAreaParam.bPrintArea = FALSE;
@@ -1213,7 +1213,7 @@ void lcl_DrawGraphic( const SvxBrushItem &rBrush, OutputDevice *pOut, OutputDevi
                       break;
         case GPOS_TILED:
                     {
-                        //  #104004# use GraphicObject::DrawTiled instead of an own loop
+                        //  use GraphicObject::DrawTiled instead of an own loop
                         //  (pixel rounding is handled correctly, and a very small bitmap
                         //  is duplicated into a bigger one for better performance)
 
@@ -1222,7 +1222,7 @@ void lcl_DrawGraphic( const SvxBrushItem &rBrush, OutputDevice *pOut, OutputDevi
                         if( pOut->GetPDFWriter() &&
                             (aObject.GetType() == GRAPHIC_BITMAP || aObject.GetType() == GRAPHIC_DEFAULT) )
                         {
-                            // #104004# For PDF export, every draw
+                            // For PDF export, every draw
                             // operation for bitmaps takes a noticeable
                             // amount of place (~50 characters). Thus,
                             // optimize between tile bitmap size and
@@ -1320,7 +1320,7 @@ void ScPrintFunc::DrawBorder( long nScrX, long nScrY, long nScrW, long nScrH,
     if (nEffHeight<=0 || nEffWidth<=0)
         return;                                         // leer
 
-    //  #105733# SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
+    //  SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
     BOOL bCellContrast = bUseStyleColor;
 
     if ( pBackground && !bCellContrast )
@@ -1750,7 +1750,7 @@ void ScPrintFunc::MakeEditEngine()
         pEditDefaults->Put( rPattern.GetItem(ATTR_FONT_HEIGHT), EE_CHAR_FONTHEIGHT );
         pEditDefaults->Put( rPattern.GetItem(ATTR_CJK_FONT_HEIGHT), EE_CHAR_FONTHEIGHT_CJK );
         pEditDefaults->Put( rPattern.GetItem(ATTR_CTL_FONT_HEIGHT), EE_CHAR_FONTHEIGHT_CTL );
-        //  #69193# dont use font color, because background color is not used
+        //  dont use font color, because background color is not used
         //! there's no way to set the background for note pages
         pEditDefaults->ClearItem( EE_CHAR_COLOR );
         if (ScGlobal::IsSystemRTL())
@@ -2013,7 +2013,7 @@ long ScPrintFunc::PrintNotes( long nPageNo, long nNoteStart, BOOL bDoPrint, ScPr
 
     if ( pPrinter && bDoPrint )
     {
-        DBG_ERROR( "StartPage does not exist anymore" );
+        OSL_FAIL( "StartPage does not exist anymore" );
     }
 
     if ( bDoPrint || pLocationData )
@@ -2036,7 +2036,7 @@ long ScPrintFunc::PrintNotes( long nPageNo, long nNoteStart, BOOL bDoPrint, ScPr
 
     if ( pPrinter && bDoPrint )
     {
-        DBG_ERROR( "EndPage does not exist anymore" );
+        OSL_FAIL( "EndPage does not exist anymore" );
     }
 
     return nCount;
@@ -2101,7 +2101,7 @@ void ScPrintFunc::PrintPage( long nPageNo, SCCOL nX1, SCROW nY1, SCCOL nX2, SCRO
 
     if ( pPrinter && bDoPrint )
     {
-        DBG_ERROR( "StartPage does not exist anymore" );
+        OSL_FAIL( "StartPage does not exist anymore" );
     }
 
     //  Kopf- und Fusszeilen (ohne Zentrierung)
@@ -2382,7 +2382,7 @@ void ScPrintFunc::PrintPage( long nPageNo, SCCOL nX1, SCROW nY1, SCCOL nX2, SCRO
 
     if ( pPrinter && bDoPrint )
     {
-        DBG_ERROR( "EndPage does not exist anymore" );
+        OSL_FAIL( "EndPage does not exist anymore" );
     }
 
     aLastSourceRange = ScRange( nX1, nY1, nPrintTab, nX2, nY2, nPrintTab );
@@ -3045,10 +3045,9 @@ void ScPrintFunc::CalcPages()               // berechnet aPageRect und Seiten au
     nTotalY = 0;
 
     bool bVisCol = false;
-    SCCOL nLastCol = -1;
     for (SCCOL i=nStartCol; i<=nEndCol; i++)
     {
-        bool bHidden = pDoc->ColHidden(i, nPrintTab, nLastCol);
+        bool bHidden = pDoc->ColHidden(i, nPrintTab);
         bool bPageBreak = (pDoc->HasColBreak(i, nPrintTab) & BREAK_PAGE);
         if ( i>nStartCol && bVisCol && bPageBreak )
         {

@@ -44,7 +44,6 @@
 #include <pam.hxx>
 #include <viewopt.hxx>
 #include <ndtxt.hxx>
-#include <errhdl.hxx>
 #include <swundo.hxx>
 #include <undobj.hxx>
 #include <txttxmrk.hxx>

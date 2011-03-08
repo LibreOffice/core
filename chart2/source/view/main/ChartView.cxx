@@ -191,7 +191,7 @@ void SAL_CALL ChartView::initialize( const uno::Sequence< uno::Any >& aArguments
     uno::Reference< frame::XModel > xNewChartModel;
     if( !(aArguments[0] >>= xNewChartModel) )
     {
-        DBG_ERROR( "need a Reference to frame::XModel as first parameter for view initialization" );
+        OSL_FAIL( "need a Reference to frame::XModel as first parameter for view initialization" );
     }
     impl_setChartModel( xNewChartModel );
 
@@ -2499,27 +2499,7 @@ void lcl_removeEmptyGroupShapes( const Reference< drawing::XShapes>& xParent )
 
 bool ChartView::impl_AddInDrawsAllByItself()
 {
-    bool bRet = false;
-    /*
-    uno::Reference< beans::XPropertySet > xProp( m_xChartModel, uno::UNO_QUERY );
-    if( xProp.is()) try
-    {
-        uno::Reference< util::XRefreshable > xAddIn;
-        xProp->getPropertyValue( C2U( "AddIn" ) ) >>= xAddIn;
-        if( xAddIn.is() )
-        {
-            rtl::OUString aBaseDiagram;
-            xProp->getPropertyValue( C2U( "BaseDiagram" ) ) >>= aBaseDiagram;
-            if(aBaseDiagram.getLength())
-                bRet = true;
-        }
-    }
-    catch( uno::Exception& e )
-    {
-        ASSERT_EXCEPTION( e );
-    }
-    */
-    return bRet;
+    return false;
 }
 
 void ChartView::impl_refreshAddIn()
@@ -2580,7 +2560,7 @@ void ChartView::createShapes()
         pPage->SetSize(Size(aPageSize.Width,aPageSize.Height));
     else
     {
-        DBG_ERROR("could not set page size correctly");
+        OSL_FAIL("could not set page size correctly");
     }
 
     {

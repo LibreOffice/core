@@ -561,7 +561,7 @@ void ScHTMLLayoutParser::SetWidths()
     }
     else
     {   // einige mit einige ohne Width
-        // #36350# wieso eigentlich kein pE ?!?
+        // wieso eigentlich kein pE ?!?
         if ( nFirstTableCell < maList.size() )
         {
             USHORT* pOffsets = new USHORT[ nColsPerRow+1 ];
@@ -781,7 +781,7 @@ IMPL_LINK( ScHTMLLayoutParser, HTMLImportHdl, ImportInfo*, pInfo )
             if ( pInfo->aSelection.nEndPos )
             {
                 // If text remains: create paragraph, without calling CloseEntry().
-                if( bInCell )   // #108269# ...but only in opened table cells.
+                if( bInCell )   // ...but only in opened table cells.
                 {
                     bInCell = FALSE;
                     NextRow( pInfo );
@@ -845,7 +845,7 @@ void ScHTMLLayoutParser::TableDataOn( ImportInfo* pInfo )
         CloseEntry( pInfo );
     if ( !nTableLevel )
     {
-        DBG_ERROR( "Dummbatz-Dok! <TH> oder <TD> ohne vorheriges <TABLE>" );
+        OSL_FAIL( "Dummbatz-Dok! <TH> oder <TD> ohne vorheriges <TABLE>" );
         TableOn( pInfo );
     }
     bInCell = TRUE;
@@ -958,7 +958,6 @@ void ScHTMLLayoutParser::TableDataOff( ImportInfo* pInfo )
 void ScHTMLLayoutParser::TableOn( ImportInfo* pInfo )
 {
     String aTabName;
-    bool bBorderOn = false;
 
     if ( ++nTableLevel > 1 )
     {   // Table in Table
@@ -991,7 +990,7 @@ void ScHTMLLayoutParser::TableOn( ImportInfo* pInfo )
                     }
                     break;
                     case HTML_O_BORDER:
-                        bBorderOn = ((pOption->GetString().Len() == 0) || (pOption->GetNumber() != 0));
+                        // Border is: ((pOption->GetString().Len() == 0) || (pOption->GetNumber() != 0));
                     break;
                     case HTML_O_ID:
                         aTabName.Assign( pOption->GetString() );
@@ -1049,7 +1048,7 @@ void ScHTMLLayoutParser::TableOn( ImportInfo* pInfo )
                     }
                     break;
                     case HTML_O_BORDER:
-                        bBorderOn = ((pOption->GetString().Len() == 0) || (pOption->GetNumber() != 0));
+                        //BorderOn is: ((pOption->GetString().Len() == 0) || (pOption->GetNumber() != 0));
                     break;
                     case HTML_O_ID:
                         aTabName.Assign( pOption->GetString() );
@@ -1075,7 +1074,7 @@ void ScHTMLLayoutParser::TableOff( ImportInfo* pInfo )
         TableRowOff( pInfo );      // das optionale TableRowOff war nicht
     if ( !nTableLevel )
     {
-        DBG_ERROR( "Dummbatz-Dok! </TABLE> ohne oeffnendes <TABLE>" );
+        OSL_FAIL( "Dummbatz-Dok! </TABLE> ohne oeffnendes <TABLE>" );
         return ;
     }
     if ( --nTableLevel > 0 )
@@ -1131,9 +1130,9 @@ void ScHTMLLayoutParser::TableOff( ImportInfo* pInfo )
                             ULONG nRowKey = nRow + j;
                             SCROW nR = (SCROW)(ULONG)pTab1->Get( nRowKey );
                             if ( !nR )
-                                pTab1->Insert( nRowKey, (void*) nRowsPerRow1 );
+                                pTab1->Insert( nRowKey, (void*)(sal_IntPtr)nRowsPerRow1 );
                             else if ( nRowsPerRow1 > nR )
-                                pTab1->Replace( nRowKey, (void*) nRowsPerRow1 );
+                                pTab1->Replace( nRowKey, (void*)(sal_IntPtr)nRowsPerRow1 );
                                 //2do: wie geht das noch besser?
                             else if ( nRowsPerRow1 < nR && nRowSpan == 1
                               && nTable == nMaxTable )
@@ -1145,8 +1144,8 @@ void ScHTMLLayoutParser::TableOff( ImportInfo* pInfo )
                                     SCROW nR2 = (SCROW)(ULONG)pTab1->Get( nRowKey+1 );
                                     if ( nR2 > nAdd )
                                     {   // nur wenn wirklich Platz
-                                        pTab1->Replace( nRowKey, (void*) nR );
-                                        pTab1->Replace( nRowKey+1, (void*) (nR2 - nAdd) );
+                                        pTab1->Replace( nRowKey, (void*)(sal_IntPtr)nR );
+                                        pTab1->Replace( nRowKey+1, (void*)(sal_IntPtr)(nR2 - nAdd) );
                                         nRowsPerRow2 = nR / nRows;
                                     }
                                 }
@@ -1165,9 +1164,9 @@ void ScHTMLLayoutParser::TableOff( ImportInfo* pInfo )
                             ULONG nRowKey = nRow + j;
                             SCROW nR = (SCROW)(ULONG)pTab2->Get( nRowKey );
                             if ( !nR )
-                                pTab2->Insert( nRowKey, (void*) nRowsPerRow2 );
+                                pTab2->Insert( nRowKey, (void*)(sal_IntPtr)nRowsPerRow2 );
                             else if ( nRowsPerRow2 > nR )
-                                pTab2->Replace( nRowKey, (void*) nRowsPerRow2 );
+                                pTab2->Replace( nRowKey, (void*)(sal_IntPtr)nRowsPerRow2 );
                         }
                     }
                 }
@@ -2098,7 +2097,7 @@ void ScHTMLTable::BodyOn( const ImportInfo& rInfo )
     bool bPushed = PushEntry( rInfo );
     if( !mpParentTable )
     {
-        // #108269# do not start new row, if nothing (no title) precedes the body.
+        // do not start new row, if nothing (no title) precedes the body.
         if( bPushed || !mbRowOn )
             ImplRowOn();
         if( bPushed || !mbDataOn )
@@ -2675,7 +2674,7 @@ void ScHTMLTable::RecalcDocPos( const ScHTMLPos& rBasePos )
             }
             else
             {
-                // #111667# fill up incomplete entry lists
+                // fill up incomplete entry lists
                 SCROW nFirstUnusedRow = aCellDocPos.mnRow + aCellDocSize.mnRows;
                 while( aEntryDocPos.mnRow < nFirstUnusedRow )
                 {

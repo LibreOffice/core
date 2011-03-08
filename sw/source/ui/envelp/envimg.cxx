@@ -39,7 +39,6 @@
 #include <unotools/useroptions.hxx>
 #include <tools/shl.hxx>
 #include <swmodule.hxx>
-#include <errhdl.hxx>
 #include <swtypes.hxx>
 #include <envimg.hxx>
 
@@ -55,8 +54,9 @@
 #endif
 
 using namespace utl;
-using namespace rtl;
 using namespace ::com::sun::star::uno;
+
+using ::rtl::OUString;
 
 
 TYPEINIT1_AUTOFACTORY( SwEnvItem, SfxPoolItem );

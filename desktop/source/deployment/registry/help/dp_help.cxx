@@ -236,13 +236,6 @@ BackendImpl::PackageImpl::PackageImpl(
     : Package( myBackend, url, name, name, xPackageType, bRemoved,
                identifier)
 {
-//         if (bRemoved)
-//         {
-//             ::boost::optional<HelpBackendDb::Data> opt =
-//                 getMyBackend()->readDataFromDb(url);
-//             if (opt)
-//                 m_dbData = *opt;
-//         }
 }
 
 // Package

@@ -50,7 +50,6 @@
 #include <postmac.h>
 
 
-using namespace rtl;
 using namespace cppu;
 using namespace osl;
 using namespace com::sun::star::datatransfer;
@@ -60,6 +59,8 @@ using namespace com::sun::star::datatransfer::clipboard;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace comphelper;
+
+using ::rtl::OUString;
 
 OUString dropTarget_getImplementationName()
 {

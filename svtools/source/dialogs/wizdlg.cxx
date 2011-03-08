@@ -590,7 +590,7 @@ void WizardDialog::RemovePage( TabPage* pPage )
         pPageData = pPageData->mpNext;
     }
 
-    DBG_ERROR( "WizardDialog::RemovePage() - Page not in list" );
+    OSL_FAIL( "WizardDialog::RemovePage() - Page not in list" );
 }
 
 // -----------------------------------------------------------------------
@@ -676,7 +676,7 @@ void WizardDialog::RemoveButton( Button* pButton )
         pBtnData = pBtnData->mpNext;
     }
 
-    DBG_ERROR( "WizardDialog::RemoveButton() - Button not in list" );
+    OSL_FAIL( "WizardDialog::RemoveButton() - Button not in list" );
 }
 
 // -----------------------------------------------------------------------

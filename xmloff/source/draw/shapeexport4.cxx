@@ -1137,7 +1137,7 @@ void XMLShapeExport::ImpExportTableShape( const uno::Reference< drawing::XShape 
                         }
                         catch( uno::Exception& )
                         {
-                            DBG_ERROR("XMLShapeExport::ImpExportTableShape(), exception caught!");
+                            OSL_FAIL("XMLShapeExport::ImpExportTableShape(), exception caught!");
                         }
                     }
                 }
@@ -1218,7 +1218,7 @@ void XMLShapeExport::ImpExportTableShape( const uno::Reference< drawing::XShape 
             }
             catch( uno::Exception& )
             {
-                DBG_ERROR("xmloff::XMLShapeExport::ImpExportTableShape(), exception caught!");
+                OSL_FAIL("xmloff::XMLShapeExport::ImpExportTableShape(), exception caught!");
             }
         }
 
@@ -1228,7 +1228,7 @@ void XMLShapeExport::ImpExportTableShape( const uno::Reference< drawing::XShape 
     }
     catch( uno::Exception& )
     {
-        DBG_ERROR( "xmloff::XMLShapeExport::ImpExportTableShape(), exception caught!" );
+        OSL_FAIL( "xmloff::XMLShapeExport::ImpExportTableShape(), exception caught!" );
     }
 }
 

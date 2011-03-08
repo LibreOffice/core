@@ -149,7 +149,7 @@ using namespace nsSwDocInfoSubType;
  * gepflegt werden: rtf\rtfatr.cxx, sw6\sw6atr.cxx, w4w\w4watr.cxx
 */
 
-#if !defined(MSC) && !defined(UNX) && !defined(PPC) && !defined(CSET) && !defined(WTC) && !defined(__MINGW32__) && !defined(OS2)
+#if !defined(MSC) && !defined(UNX) && !defined(PPC) && !defined(__MINGW32__) && !defined(OS2)
 
 #define ATTRFNTAB_SIZE 130
 #if ATTRFNTAB_SIZE != POOLATTR_END - POOLATTR_BEGIN
@@ -451,7 +451,7 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
         }
         else if ( SFX_ITEM_SET == pSet->GetItemState( RES_BREAK, false, &pItem ) )
         {
-            // --> FME 2007-05-30 #146867# Word does not like hard break attributes in some table cells
+            // Word does not like hard break attributes in some table cells
             bool bRemoveHardBreakInsideTable = false;
             if ( bOutTable )
             {
@@ -488,8 +488,7 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
                 */
                 if ( pAktPageDesc )
                 {
-                    // --> OD 2007-05-30 #i76301#
-                    // assure that there is a page break before set at the node.
+                    // #i76301# - assure that there is a page break before set at the node.
                     const SvxFmtBreakItem* pBreak = dynamic_cast<const SvxFmtBreakItem*>(pItem);
                     if ( pBreak &&
                          pBreak->GetBreak() == SVX_BREAK_PAGE_BEFORE )
@@ -545,7 +544,7 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
     bBreakBefore = false;
 }
 
-// --> OD 2007-05-29 #i76300#
+// #i76300#
 bool MSWordExportBase::OutputFollowPageDesc( const SfxItemSet* pSet, const SwTxtNode* pNd )
 {
     bool bRet = false;
@@ -709,7 +708,7 @@ void WW8AttributeOutput::OutlineNumbering( BYTE nLvl, const SwNumFmt &rNFmt, con
     }
 }
 
-// --> OD 2007-06-04 #i77805#
+// #i77805#
 bool WW8Export::DisallowInheritingOutlineNumbering(const SwFmt &rFmt)
 {
     bool bRet( false );
@@ -786,7 +785,7 @@ void MSWordExportBase::OutputFormat( const SwFmt& rFmt, bool bPapFmt, bool bChpF
             {
                 //otherwise we might have to remove outline numbering from
                 //what gets exported if the parent style was outline numbered
-                // --> OD 2007-06-04 #i77805#
+                // #i77805#
                 // If inherited outline numbering is suppress, the left/right
                 // margins has to be exported explicitly.
                 if ( bStyDef && DisallowInheritingOutlineNumbering(rFmt) )
@@ -919,9 +918,7 @@ String MSWordExportBase::GetBookmarkName( USHORT nTyp, const String* pName, USHO
             sRet += String::CreateFromInt32( nSeqNo );
             break;
     }
-    // --> OD 2005-06-08 #i43956# - encode bookmark accordingly
-    return BookmarkToWord( sRet );
-    // <--
+    return BookmarkToWord( sRet ); // #i43956# - encode bookmark accordingly
 }
 
 //-----------------------------------------------------------------------
@@ -1315,10 +1312,10 @@ void WW8AttributeOutput::CharLanguage( const SvxLanguageItem& rLanguage )
         switch ( rLanguage.Which() )
         {
             case RES_CHRATR_LANGUAGE:
-                nId = NS_sprm::LN_CRgLid0;
+                nId = NS_sprm::LN_CRgLid0_80;
                 break;
             case RES_CHRATR_CJK_LANGUAGE:
-                nId = NS_sprm::LN_CRgLid1;
+                nId = NS_sprm::LN_CRgLid1_80;
                 break;
             case RES_CHRATR_CTL_LANGUAGE:
                 nId = NS_sprm::LN_CLidBi;
@@ -1330,25 +1327,24 @@ void WW8AttributeOutput::CharLanguage( const SvxLanguageItem& rLanguage )
 
     if ( nId )
     {
-        if ( m_rWW8Export.bWrtWW8 ) // use sprmCRgLid0 rather than sprmCLid
+        if ( m_rWW8Export.bWrtWW8 ) // use sprmCRgLid0_80 rather than sprmCLid
             m_rWW8Export.InsUInt16( nId );
         else
             m_rWW8Export.pO->Insert( (BYTE)nId, m_rWW8Export.pO->Count() );
         m_rWW8Export.InsUInt16( rLanguage.GetLanguage() );
 
-        // unknown as to exactly why, but this seems to shadow the other
-        // paramater in word 2000 and without it spellchecking doesn't work
-        if ( nId == NS_sprm::LN_CRgLid0 )
+        // Word 2000 and above apparently require both old and new versions of
+        // these sprms to be set, without it spellchecking doesn't work
+        if ( nId == NS_sprm::LN_CRgLid0_80 )
         {
-            m_rWW8Export.InsUInt16( 0x4873 );
+            m_rWW8Export.InsUInt16( NS_sprm::LN_CRgLid0 );
             m_rWW8Export.InsUInt16( rLanguage.GetLanguage() );
         }
-        else if ( nId == NS_sprm::LN_CLidBi )
+        else if ( nId == NS_sprm::LN_CRgLid1_80 )
         {
-            m_rWW8Export.InsUInt16( 0x4874 );
+            m_rWW8Export.InsUInt16( NS_sprm::LN_CRgLid1 );
             m_rWW8Export.InsUInt16( rLanguage.GetLanguage() );
         }
-
     }
 }
 
@@ -1649,10 +1645,10 @@ void WW8AttributeOutput::TextINetFormat( const SwFmtINetFmt& rINet )
     }
 }
 
-// --> OD 2005-06-08 #i43956# - add optional parameter <pLinkStr>
+// #i43956# - add optional parameter <pLinkStr>
 // It's needed to write the hyperlink data for a certain cross-reference
 // - it contains the name of the link target, which is a bookmark.
-// --> OD 2008-08-14 #158418# - add optional parameter <bIncludeEmptyPicLocation>
+// add optional parameter <bIncludeEmptyPicLocation>
 // It is needed to write an empty picture location for page number field separators
 static void InsertSpecialChar( WW8Export& rWrt, BYTE c,
                                String* pLinkStr = 0L,
@@ -1669,7 +1665,6 @@ static void InsertSpecialChar( WW8Export& rWrt, BYTE c,
 
     rWrt.WriteChar(c);
 
-    // --> OD 2008-08-14 #158418#
     // store empty sprmCPicLocation for field separator
     if ( bIncludeEmptyPicLocation &&
          ( c == 0x13 || c == 0x14 || c == 0x15 ) )
@@ -1677,9 +1672,8 @@ static void InsertSpecialChar( WW8Export& rWrt, BYTE c,
         SwWW8Writer::InsUInt16( aItems, NS_sprm::LN_CPicLocation );
         SwWW8Writer::InsUInt32( aItems, 0x00000000 );
     }
-    // <--
 
-    // --> OD 2005-06-08 #i43956# - write hyperlink data and attributes
+    // #i43956# - write hyperlink data and attributes
     if ( rWrt.bWrtWW8 && c == 0x01 && pLinkStr )
     {
         // write hyperlink data to data stream
@@ -1792,9 +1786,8 @@ void WW8Export::OutputField( const SwField* pFld, ww::eField eFldType,
     bool bUnicode = IsUnicode();
     WW8_WrPlcFld* pFldP = CurrentFieldPlc();
 
-    // --> OD 2008-08-14 #158418#
     const bool bIncludeEmptyPicLocation = ( eFldType == ww::ePAGE );
-    // <--
+
     if (WRITEFIELD_START & nMode)
     {
         BYTE aFld13[2] = { 0x13, 0x00 };  // will change
@@ -1803,9 +1796,7 @@ void WW8Export::OutputField( const SwField* pFld, ww::eField eFldType,
             aFld13[0] |= 0x80;
         aFld13[1] = static_cast< BYTE >(eFldType);  // Typ nachtragen
         pFldP->Append( Fc2Cp( Strm().Tell() ), aFld13 );
-        // --> OD 2008-08-14 #158418#
         InsertSpecialChar( *this, 0x13, 0, bIncludeEmptyPicLocation );
-        // <--
     }
     if (WRITEFIELD_CMD_START & nMode)
     {
@@ -1816,7 +1807,7 @@ void WW8Export::OutputField( const SwField* pFld, ww::eField eFldType,
             SwWW8Writer::WriteString8(Strm(), rFldCmd, false,
                 RTL_TEXTENCODING_MS_1252);
         }
-        // --> OD 2005-06-08 #i43956# - write hyperlink character including
+        // #i43956# - write hyperlink character including
         // attributes and corresponding binary data for certain reference fields.
         bool bHandleBookmark = false;
 
@@ -1859,9 +1850,7 @@ void WW8Export::OutputField( const SwField* pFld, ww::eField eFldType,
         static const BYTE aFld14[2] = { 0x14, 0xff };
         pFldP->Append( Fc2Cp( Strm().Tell() ), aFld14 );
         pFldP->ResultAdded();
-        // --> OD 2008-08-14 #158418#
         InsertSpecialChar( *this, 0x14, 0, bIncludeEmptyPicLocation );
-        // <--
     }
     if (WRITEFIELD_END & nMode)
     {
@@ -1929,9 +1918,7 @@ void WW8Export::OutputField( const SwField* pFld, ww::eField eFldType,
         }
 
         pFldP->Append( Fc2Cp( Strm().Tell() ), aFld15 );
-        // --> OD 2008-08-14 #158418#
         InsertSpecialChar( *this, 0x15, 0, bIncludeEmptyPicLocation );
-        // <--
     }
 }
 
@@ -2078,7 +2065,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
 
                     if( 3 == nRet )
                         aFillTxt = aTxt;
-                    else if ((4 == nRet) || (2 == nRet)) //#109414#
+                    else if ((4 == nRet) || (2 == nRet))
                         aFillTxt = '\t';
                     else
                         aFillTxt.Erase();
@@ -2230,10 +2217,8 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                   }
 
                 if( nsSwTOXElement::TOX_TEMPLATE & pTOX->GetCreateType() )
-                    // --> OD 2009-02-27 #i99641#
-                    // Consider additional styles regardless of TOX-outlinelevel
+                    // #i99641# - Consider additional styles regardless of TOX-outlinelevel
                     for( n = 0; n < MAXLEVEL; ++n )
-                    // <--
                     {
                         const String& rStyles = pTOX->GetStyleNames( n );
                         if( rStyles.Len() )
@@ -3458,7 +3443,6 @@ void WW8AttributeOutput::FormatFrameSize( const SwFmtFrmSize& rSize )
 
 ULONG WW8Export::ReplaceCr( BYTE nChar )
 {
-    // Bug #49917#
     OSL_ENSURE( nChar, "gegen 0 ersetzt bringt WW97/95 zum Absturz" );
 
     bool bReplaced = false;
@@ -3510,8 +3494,7 @@ ULONG WW8Export::ReplaceCr( BYTE nChar )
         }
         else if ((nUCode == 0x0c) && (nChar == 0x0e))
         {
-            //#108854# a column break after a section has
-            //no effect in writer
+            // a column break after a section has no effect in writer
             bReplaced = true;
         }
         rStrm.Seek( nPos );
@@ -3587,10 +3570,8 @@ void AttributeOutputBase::FormatBreak( const SvxFmtBreakItem& rBreak )
     {
         BYTE nC = 0;
         bool bBefore = false;
-        // --> OD 2007-05-29 #i76300#
-        // Note: Can only be <true>, if <bBefore> equals <false>.
+        // #i76300# - Note: Can only be <true>, if <bBefore> equals <false>.
         bool bCheckForFollowPageDesc = false;
-        // <--
 
         switch ( rBreak.GetBreak() )
         {
@@ -3621,9 +3602,8 @@ void AttributeOutputBase::FormatBreak( const SvxFmtBreakItem& rBreak )
             case SVX_BREAK_PAGE_AFTER:
             case SVX_BREAK_PAGE_BOTH:
                 nC = msword::PageBreak;
-                // --> OD 2007-05-29 #i76300#
-                // check for follow page description, if current writing attributes
-                // of a paragraph.
+                // #i76300# - check for follow page description,
+                // if current writing attributes of a paragraph.
                 if ( dynamic_cast< const SwTxtNode* >( GetExport().pOutFmtNode ) &&
                      GetExport().GetCurItemSet() )
                 {
@@ -3636,9 +3616,9 @@ void AttributeOutputBase::FormatBreak( const SvxFmtBreakItem& rBreak )
                 break;
         }
 
-        if ( ( bBefore == GetExport().bBreakBefore ) && nC )  // #49917#
+        if ( ( bBefore == GetExport().bBreakBefore ) && nC )
         {
-            // --> OD 2007-05-29 #i76300#
+            // #i76300#
             bool bFollowPageDescWritten = false;
             if ( bCheckForFollowPageDesc && !bBefore )
             {
@@ -4917,7 +4897,7 @@ void WW8AttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStops )
             nCurrentLeft = ((const SvxLRSpaceItem*)pLR)->GetTxtLeft();
     }
 
-    // --> FLR 2009-03-17 #i100264#
+    // #i100264#
     if ( m_rWW8Export.bStyDef &&
          m_rWW8Export.pCurrentStyle != NULL &&
          m_rWW8Export.pCurrentStyle->DerivedFrom() != NULL )

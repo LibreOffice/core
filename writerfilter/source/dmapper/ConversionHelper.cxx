@@ -470,16 +470,14 @@ bool lcl_IsNotAM(::rtl::OUString& rFmt, sal_Int32 nPos)
     return aNewFormat.makeStringAndClear();
 
 }
-/*-------------------------------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 sal_Int32 convertTwipToMM100(sal_Int32 _t)
 {
     return TWIP_TO_MM100( _t );
 }
-/*-- 09.08.2007 09:34:44---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 sal_Int32 convertEMUToMM100(sal_Int32 _t)
 {
     return _t / 360;
@@ -498,9 +496,8 @@ sal_Int32 ConvertColor(sal_Int32 nWordColor)
     sal_Int32 nRet = (t<<24) + (r<<16) + (g<<8) + b;
     return nRet;
 }
-/*-- 27.06.2007 13:42:32---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 sal_Int16 convertTableJustification( sal_Int32 nIntValue )
 {
     sal_Int16 nOrient = text::HoriOrientation::LEFT_AND_WIDTH;
@@ -515,51 +512,7 @@ sal_Int16 convertTableJustification( sal_Int32 nIntValue )
     }
     return nOrient;
 }
-/*-- 06.08.2007 15:27:30---------------------------------------------------
-     conversion form xsd::DateTime
-    [-]CCYY-MM-DDThh:mm:ss[Z|(+|-)hh:mm]
-  -----------------------------------------------------------------------*/
-com::sun::star::util::DateTime convertDateTime( const ::rtl::OUString& rDateTimeString )
-{
-    util::DateTime aRet( 0, 0, 0, 0, 1, 1, 1901 );
-    //
-    sal_Int32 nIndex = 0;
-    ::rtl::OUString sDate( rDateTimeString.getToken( 0, 'T', nIndex ));
-    sal_Int32 nDateIndex = 0;
-    aRet.Year = (sal_uInt16)sDate.getToken( 0, '-', nDateIndex ).toInt32();
-    if( nDateIndex > 0)
-        aRet.Month = (sal_uInt16)sDate.getToken( 0, '-', nDateIndex ).toInt32();
-    if( nDateIndex > 0)
-        aRet.Day = (sal_uInt16)sDate.getToken( 0, '-', nDateIndex ).toInt32();
-    ::rtl::OUString sTime;
-    if(nIndex > 0)
-    {
-        sTime = ( rDateTimeString.getToken( 0, 'Z', nIndex ));
-        sal_Int32 nTimeIndex = 0;
-        aRet.Hours = (sal_uInt16)sTime.getToken( 0, ':', nTimeIndex ).toInt32();
-        if( nTimeIndex > 0)
-            aRet.Minutes = (sal_uInt16)sTime.getToken( 0, ':', nTimeIndex ).toInt32();
-        if( nTimeIndex > 0)
-        {
-            ::rtl::OUString sSeconds = sTime.getToken( 0, ':', nTimeIndex );
-            nTimeIndex = 0;
-            aRet.Seconds = (sal_uInt16)sSeconds.getToken( 0, '.', nTimeIndex ).toInt32();
-            aRet.HundredthSeconds = (sal_uInt16)sSeconds.getToken( 0, '.', nTimeIndex ).toInt32();
-        }
 
-// todo: ignore time offset for a while - there's no time zone available
-//        nIndex = 0;
-//        ::rtl::OUString sOffset( rDateTimeString.getToken( 1, 'Z', nIndex ));
-//        if( sOffset.getLength() )
-//        {
-//              add hour and minute offset and increase/decrease date if necessary
-//        }
-    }
-    return aRet;
-}
-/*-- 05.03.2008 09:10:13---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 sal_Int16 ConvertNumberingType(sal_Int32 nNFC)
 {
     sal_Int16 nRet;

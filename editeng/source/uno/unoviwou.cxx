@@ -51,7 +51,7 @@ SvxDrawOutlinerViewForwarder::~SvxDrawOutlinerViewForwarder()
 
 Point SvxDrawOutlinerViewForwarder::GetTextOffset() const
 {
-    // #101029# calc text offset from shape anchor
+    // calc text offset from shape anchor
     Rectangle aOutputRect( mrOutlinerView.GetOutputArea() );
 
     return aOutputRect.TopLeft() - maTextShapeTopLeft;
@@ -70,7 +70,6 @@ Rectangle SvxDrawOutlinerViewForwarder::GetVisArea() const
     {
         Rectangle aVisArea = mrOutlinerView.GetVisArea();
 
-        // #101029#
         Point aTextOffset( GetTextOffset() );
         aVisArea.Move( aTextOffset.X(), aTextOffset.Y() );
 
@@ -100,7 +99,6 @@ Point SvxDrawOutlinerViewForwarder::LogicToPixel( const Point& rPoint, const Map
         Point aPoint1( rPoint );
         Point aTextOffset( GetTextOffset() );
 
-        // #101029#
         aPoint1.X() += aTextOffset.X();
         aPoint1.Y() += aTextOffset.Y();
 
@@ -126,7 +124,6 @@ Point SvxDrawOutlinerViewForwarder::PixelToLogic( const Point& rPoint, const Map
         Point aPoint2( OutputDevice::LogicToLogic( aPoint1,
                                                    aMapMode.GetMapUnit(),
                                                    rMapMode ) );
-        // #101029#
         Point aTextOffset( GetTextOffset() );
 
         aPoint2.X() -= aTextOffset.X();

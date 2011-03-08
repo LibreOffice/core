@@ -44,9 +44,6 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <rtl/ustrbuf.hxx>
 
-// #110680#
-//#include <comphelper/processfactory.hxx>
-
 #include <com/sun/star/i18n/NativeNumberXmlAttributes.hpp>
 
 #include <xmloff/xmlnumfe.hxx>
@@ -74,8 +71,6 @@ using namespace ::svt;
 
 //-------------------------------------------------------------------------
 
-//  4th condition for text formats doesn't work
-//#define XMLNUM_MAX_PARTS  4
 #define XMLNUM_MAX_PARTS    3
 
 //-------------------------------------------------------------------------
@@ -161,22 +156,22 @@ void SvXMLNumUsedList_Impl::SetUsed( sal_uInt32 nKey )
 
 sal_Bool SvXMLNumUsedList_Impl::IsUsed( sal_uInt32 nKey ) const
 {
-    SvXMLuInt32Set::iterator aItr = aUsed.find(nKey);
+    SvXMLuInt32Set::const_iterator aItr = aUsed.find(nKey);
     return (aItr != aUsed.end());
 }
 
 sal_Bool SvXMLNumUsedList_Impl::IsWasUsed( sal_uInt32 nKey ) const
 {
-    SvXMLuInt32Set::iterator aItr = aWasUsed.find(nKey);
+    SvXMLuInt32Set::const_iterator aItr = aWasUsed.find(nKey);
     return (aItr != aWasUsed.end());
 }
 
 void SvXMLNumUsedList_Impl::Export()
 {
-    SvXMLuInt32Set::iterator aItr = aUsed.begin();
+    SvXMLuInt32Set::const_iterator aItr = aUsed.begin();
     while (aItr != aUsed.end())
     {
-        std::pair<SvXMLuInt32Set::iterator, bool> aPair = aWasUsed.insert( *aItr );
+        std::pair<SvXMLuInt32Set::const_iterator, bool> aPair = aWasUsed.insert( *aItr );
         if (aPair.second)
             nWasUsedCount++;
         ++aItr;
@@ -219,7 +214,7 @@ void SvXMLNumUsedList_Impl::GetWasUsed(uno::Sequence<sal_Int32>& rWasUsed)
     sal_Int32* pWasUsed = rWasUsed.getArray();
     if (pWasUsed)
     {
-        SvXMLuInt32Set::iterator aItr = aWasUsed.begin();
+        SvXMLuInt32Set::const_iterator aItr = aWasUsed.begin();
         while (aItr != aWasUsed.end())
         {
             *pWasUsed = *aItr;
@@ -236,7 +231,7 @@ void SvXMLNumUsedList_Impl::SetWasUsed(const uno::Sequence<sal_Int32>& rWasUsed)
     const sal_Int32* pWasUsed = rWasUsed.getConstArray();
     for (sal_uInt16 i = 0; i < nCount; i++, pWasUsed++)
     {
-        std::pair<SvXMLuInt32Set::iterator, bool> aPair = aWasUsed.insert( *pWasUsed );
+        std::pair<SvXMLuInt32Set::const_iterator, bool> aPair = aWasUsed.insert( *pWasUsed );
         if (aPair.second)
             nWasUsedCount++;
     }
@@ -270,9 +265,6 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
     {
         lang::Locale aLocale( MsLangId::convertLanguageToLocale( MsLangId::getSystemLanguage() ) );
 
-        // #110680#
-        // pCharClass = new CharClass( ::comphelper::getProcessServiceFactory(), aLocale );
-        // pLocaleData = new LocaleDataWrapper( ::comphelper::getProcessServiceFactory(), aLocale );
         pCharClass = new CharClass( rExport.getServiceFactory(), aLocale );
         pLocaleData = new LocaleDataWrapper( rExport.getServiceFactory(), aLocale );
     }
@@ -308,9 +300,6 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
     {
         lang::Locale aLocale( MsLangId::convertLanguageToLocale( MsLangId::getSystemLanguage() ) );
 
-        // #110680#
-        // pCharClass = new CharClass( ::comphelper::getProcessServiceFactory(), aLocale );
-        // pLocaleData = new LocaleDataWrapper( ::comphelper::getProcessServiceFactory(), aLocale );
         pCharClass = new CharClass( rExport.getServiceFactory(), aLocale );
         pLocaleData = new LocaleDataWrapper( rExport.getServiceFactory(), aLocale );
     }
@@ -754,7 +743,7 @@ void SvXMLNumFmtExport::WriteMapElement_Impl( sal_Int32 nOp, double fLimit,
             case NUMBERFORMAT_OP_GT: aCondStr.append( (sal_Unicode) '>' );  break;
             case NUMBERFORMAT_OP_GE: aCondStr.appendAscii( ">=" );          break;
             default:
-                DBG_ERROR("unknown operator");
+                OSL_FAIL("unknown operator");
         }
         ::rtl::math::doubleToUStringBuffer( aCondStr, fLimit,
                 rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
@@ -814,9 +803,6 @@ sal_Bool SvXMLNumFmtExport::WriteTextWithCurrency_Impl( const OUString& rString,
     //  returns TRUE if currency element was written
 
     sal_Bool bRet = sal_False;
-
-//  pLocaleData->setLocale( rLocale );
-//  String sCurString = pLocaleData->getCurrSymbol();
 
     LanguageType nLang = MsLangId::convertLocaleToLanguage( rLocale );
     pFormatter->ChangeIntl( nLang );
@@ -1746,7 +1732,7 @@ OUString SvXMLNumFmtExport::GetStyleName( sal_uInt32 nKey )
         return lcl_CreateStyleName( nKey, 0, sal_True, sPrefix );
     else
     {
-        DBG_ERROR("There is no written Data-Style");
+        OSL_FAIL("There is no written Data-Style");
         return rtl::OUString();
     }
 }
@@ -1760,7 +1746,7 @@ void SvXMLNumFmtExport::SetUsed( sal_uInt32 nKey )
     if (pFormatter->GetEntry(nKey))
         pUsedList->SetUsed( nKey );
     else {
-        DBG_ERROR("no existing Numberformat found with this key");
+        OSL_FAIL("no existing Numberformat found with this key");
     }
 }
 

@@ -121,7 +121,6 @@ DEF1DEPN=\
         $(DEF1EXPORTFILE)\
         makefile.mk
 
-#SHL1VERINFO=$(SHL1TARGET).rc
 SHL1OBJS=$(SLOFILES)
 
 #No default libraries

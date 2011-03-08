@@ -39,7 +39,7 @@
 #include "rtl/logfile.hxx"
 #include "uno/environment.hxx"
 #include <com/sun/star/uno/Type.hxx>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <memory>
 
 namespace

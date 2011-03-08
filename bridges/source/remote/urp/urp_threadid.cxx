@@ -32,7 +32,8 @@
 
 #include <rtl/strbuf.hxx>
 
-using namespace rtl;
+using ::rtl::OString;
+using ::rtl::OStringBuffer;
 
 namespace bridges_urp
 {

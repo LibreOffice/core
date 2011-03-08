@@ -43,7 +43,6 @@
 #include <com/sun/star/container/ContainerEvent.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <tools/list.hxx>
 #include <vector>
 
 //____________________________________________________________________________________________________________

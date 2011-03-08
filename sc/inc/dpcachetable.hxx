@@ -35,8 +35,7 @@
 #include "collect.hxx"
 
 #include <vector>
-#include <hash_map>
-#include <hash_set>
+#include <boost/unordered_set.hpp>
 #include <boost/shared_ptr.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -50,19 +49,12 @@ namespace com { namespace sun { namespace star {
 }}}
 
 class Date;
-
+class ScDPItemData;
+class ScDPCache;
 class ScDocument;
 class ScRange;
-class ScDPDimension;
-class ScDPCollection;
-struct ScDPCacheCell;
-struct ScQueryParam;
-class ScDPItemData;
-class Date;
-
-class ScDPTableDataCache;
 struct ScDPValueData;
-// ----------------------------------------------------------------------------
+struct ScQueryParam;
 
 class SC_DLLPUBLIC ScDPCacheTable
 {
@@ -129,13 +121,13 @@ public:
         Criterion();
     };
 
-    ScDPCacheTable( ScDocument* pDoc, long nId );
+    ScDPCacheTable(ScDPCache* pCache);
     ~ScDPCacheTable();
 
     sal_Int32 getRowSize() const;
     sal_Int32 getColSize() const;
 
-    ScDPTableDataCache* getCache() const;
+    const ScDPCache* getCache() const;
 
     /** Fill the internal table from the cell range provided.  This function
         assumes that the first row is the column header. */
@@ -153,7 +145,7 @@ public:
 
     /** Set filter on/off flag to each row to control visibility.  The caller
         must ensure that the table is filled before calling this function. */
-    void filterByPageDimension(const ::std::vector<Criterion>& rCriteria, const ::std::hash_set<sal_Int32>& rRepeatIfEmptyDims);
+    void filterByPageDimension(const ::std::vector<Criterion>& rCriteria, const ::boost::unordered_set<sal_Int32>& rRepeatIfEmptyDims);
 
     /** Get the cell instance at specified location within the data grid. Note
         that the data grid doesn't include the header row.  Don't delete the
@@ -172,14 +164,19 @@ public:
         a drill-down data table. */
     void filterTable(const ::std::vector<Criterion>& rCriteria,
                      ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >& rTabData,
-                     const ::std::hash_set<sal_Int32>& rRepeatIfEmptyDims);
+                     const ::boost::unordered_set<sal_Int32>& rRepeatIfEmptyDims);
 
+    SCROW getOrder(long nDim, SCROW nIndex) const;
     void clear();
     bool empty() const;
+    void setCache(ScDPCache* p);
+    bool hasCache() const;
 
 private:
     ScDPCacheTable();
     ScDPCacheTable(const ScDPCacheTable&);
+
+    ScDPCache* getCache();
 
     /**
      * Check if a given row meets all specified criteria.
@@ -187,9 +184,7 @@ private:
      * @param nRow index of row to be tested.
      * @param rCriteria a list of criteria
      */
-    bool isRowQualified(sal_Int32 nRow, const ::std::vector<Criterion>& rCriteria, const ::std::hash_set<sal_Int32>& rRepeatIfEmptyDims) const;
-    void getValueData(ScDocument* pDoc, const ScAddress& rPos, ScDPCacheCell& rCell);
-    void initNoneCache( ScDocument* pDoc );
+    bool isRowQualified(sal_Int32 nRow, const ::std::vector<Criterion>& rCriteria, const ::boost::unordered_set<sal_Int32>& rRepeatIfEmptyDims) const;
 
 private:
     /** unique field entires for each field (column). */
@@ -199,8 +194,7 @@ private:
         has the index of 0. */
     ::std::vector<bool> maRowsVisible;
 
-    ScDPTableDataCache* mpCache;
-    ScDPTableDataCache* mpNoneCache;
+    ScDPCache* mpCache;
 };
 #endif
 

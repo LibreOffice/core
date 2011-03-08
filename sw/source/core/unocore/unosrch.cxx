@@ -527,9 +527,9 @@ uno::Any SwXTextSearch::getPropertyValue(const OUString& rPropertyName) throw( b
 
     const SfxItemPropertySimpleEntry*  pEntry = m_pPropSet->getPropertyMap()->getByName(rPropertyName);
     sal_Bool bSet = sal_False;
-    sal_Int16 nSet = 0;
     if(pEntry)
     {
+        sal_Int16 nSet = 0;
         switch(pEntry->nWID)
         {
             case WID_SEARCH_ALL :           bSet = bAll; goto SET_BOOL;

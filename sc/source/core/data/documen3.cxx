@@ -103,12 +103,12 @@ void ScDocument::SetRangeName( ScRangeName* pNewRangeName )
 }
 
 
-ScRangeData* ScDocument::GetRangeAtBlock( const ScRange& rBlock, String* pName ) const
+const ScRangeData* ScDocument::GetRangeAtBlock( const ScRange& rBlock, String* pName ) const
 {
-    ScRangeData* pData = NULL;
+    const ScRangeData* pData = NULL;
     if ( pRangeName )
     {
-        pData = pRangeName->GetRangeAtBlock( rBlock );
+        pData = pRangeName->findByRange( rBlock );
         if (pData && pName)
             *pName = pData->GetName();
     }
@@ -708,7 +708,7 @@ BOOL ScDocument::TestCopyScenario( SCTAB nSrcTab, SCTAB nDestTab ) const
     if (ValidTab(nSrcTab) && ValidTab(nDestTab))
         return pTab[nSrcTab]->TestCopyScenarioTo( pTab[nDestTab] );
 
-    DBG_ERROR("falsche Tabelle bei TestCopyScenario");
+    OSL_FAIL("falsche Tabelle bei TestCopyScenario");
     return FALSE;
 }
 
@@ -728,7 +728,7 @@ void ScDocument::RemoveUnoObject( SfxListener& rObject )
 
         if ( bInUnoBroadcast )
         {
-            //  #107294# Broadcasts from ScDocument::BroadcastUno are the only way that
+            //  Broadcasts from ScDocument::BroadcastUno are the only way that
             //  uno object methods are called without holding a reference.
             //
             //  If RemoveUnoObject is called from an object dtor in the finalizer thread
@@ -760,7 +760,7 @@ void ScDocument::RemoveUnoObject( SfxListener& rObject )
     }
     else
     {
-        DBG_ERROR("No Uno broadcaster");
+        OSL_FAIL("No Uno broadcaster");
     }
 }
 
@@ -901,7 +901,7 @@ void ScDocument::UpdateReference( UpdateRefMode eUpdateRefMode,
         }
         SetExpandRefs( bExpandRefsOld );
 
-        // #30428# after moving, no clipboard move ref-updates are possible
+        // after moving, no clipboard move ref-updates are possible
         if ( eUpdateRefMode != URM_COPY && IsClipboardSource() )
         {
             ScDocument* pClipDoc = SC_MOD()->GetClipDoc();
@@ -1179,7 +1179,7 @@ BOOL ScDocument::UpdateOutlineCol( SCCOL nStartCol, SCCOL nEndCol, SCTAB nTab, B
     if ( ValidTab(nTab) && pTab[nTab] )
         return pTab[nTab]->UpdateOutlineCol( nStartCol, nEndCol, bShow );
 
-    DBG_ERROR("missing tab");
+    OSL_FAIL("missing tab");
     return FALSE;
 }
 
@@ -1188,7 +1188,7 @@ BOOL ScDocument::UpdateOutlineRow( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, B
     if ( ValidTab(nTab) && pTab[nTab] )
         return pTab[nTab]->UpdateOutlineRow( nStartRow, nEndRow, bShow );
 
-    DBG_ERROR("missing tab");
+    OSL_FAIL("missing tab");
     return FALSE;
 }
 
@@ -1208,18 +1208,8 @@ SCSIZE ScDocument::Query(SCTAB nTab, const ScQueryParam& rQueryParam, BOOL bKeep
     if ( ValidTab(nTab) && pTab[nTab] )
         return pTab[nTab]->Query((ScQueryParam&)rQueryParam, bKeepSub);
 
-    DBG_ERROR("missing tab");
+    OSL_FAIL("missing tab");
     return 0;
-}
-
-
-BOOL ScDocument::ValidQuery( SCROW nRow, SCTAB nTab, const ScQueryParam& rQueryParam, BOOL* pSpecial )
-{
-    if ( ValidTab(nTab) && pTab[nTab] )
-        return pTab[nTab]->ValidQuery( nRow, rQueryParam, pSpecial );
-
-    DBG_ERROR("missing tab");
-    return FALSE;
 }
 
 
@@ -1236,7 +1226,7 @@ BOOL ScDocument::CreateQueryParam(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW n
     if ( ValidTab(nTab) && pTab[nTab] )
         return pTab[nTab]->CreateQueryParam(nCol1, nRow1, nCol2, nRow2, rQueryParam);
 
-    DBG_ERROR("missing tab");
+    OSL_FAIL("missing tab");
     return FALSE;
 }
 
@@ -1413,16 +1403,12 @@ BOOL ScDocument::GetFormulaEntries( TypedScStrCollection& rStrings )
 
     if ( pRangeName )
     {
-        sal_uInt16 nRangeCount = pRangeName->GetCount();
-        for ( sal_uInt16 i = 0; i < nRangeCount; i++ )
+        ScRangeName::const_iterator itr = pRangeName->begin(), itrEnd = pRangeName->end();
+        for (; itr != itrEnd; ++itr)
         {
-            ScRangeData* pData = (*pRangeName)[i];
-            if (pData)
-            {
-                TypedStrData* pNew = new TypedStrData( pData->GetName(), 0.0, SC_STRTYPE_NAMES );
-                if ( !rStrings.Insert(pNew) )
-                    delete pNew;
-            }
+            TypedStrData* pNew = new TypedStrData(itr->GetName(), 0.0, SC_STRTYPE_NAMES);
+            if (!rStrings.Insert(pNew))
+                delete pNew;
         }
     }
 
@@ -1492,7 +1478,7 @@ Rectangle ScDocument::GetEmbeddedRect() const                       // 1/100 mm
     ScTable* pTable = pTab[aEmbedRange.aStart.Tab()];
     if (!pTable)
     {
-        DBG_ERROR("GetEmbeddedRect ohne Tabelle");
+        OSL_FAIL("GetEmbeddedRect ohne Tabelle");
     }
     else
     {
@@ -1580,7 +1566,7 @@ ScRange ScDocument::GetRange( SCTAB nTab, const Rectangle& rMMRect ) const
     ScTable* pTable = pTab[nTab];
     if (!pTable)
     {
-        DBG_ERROR("GetRange ohne Tabelle");
+        OSL_FAIL("GetRange ohne Tabelle");
         return ScRange();
     }
 
@@ -1714,7 +1700,7 @@ void ScDocument::SnapVisArea( Rectangle& rRect ) const
     ScTable* pTable = pTab[nVisibleTab];
     if (!pTable)
     {
-        DBG_ERROR("SetEmbedded ohne Tabelle");
+        OSL_FAIL("SetEmbedded ohne Tabelle");
         return;
     }
 
@@ -1765,7 +1751,7 @@ BOOL ScDocument::IsTabProtected( SCTAB nTab ) const
     if (VALIDTAB(nTab) && pTab[nTab])
         return pTab[nTab]->IsProtected();
 
-    DBG_ERROR("Falsche Tabellennummer");
+    OSL_FAIL("Falsche Tabellennummer");
     return FALSE;
 }
 
@@ -1879,7 +1865,7 @@ Rectangle ScDocument::GetMMRect( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol
 {
     if (!ValidTab(nTab) || !pTab[nTab])
     {
-        DBG_ERROR("GetMMRect: falsche Tabelle");
+        OSL_FAIL("GetMMRect: falsche Tabelle");
         return Rectangle(0,0,0,0);
     }
 

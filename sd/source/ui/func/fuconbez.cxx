@@ -384,7 +384,6 @@ void FuConstructBezierPolygon::SetEditMode(USHORT nMode)
     rBindings.Invalidate(SID_BEZIER_INSERT);
 }
 
-// #97016#
 SdrObject* FuConstructBezierPolygon::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
 {
     // case SID_DRAW_POLYGON:
@@ -525,7 +524,7 @@ SdrObject* FuConstructBezierPolygon::CreateDefaultObject(const sal_uInt16 nID, c
         }
         else
         {
-            DBG_ERROR("Object is NO path object");
+            OSL_FAIL("Object is NO path object");
         }
 
         pObj->SetLogicRect(rRectangle);

@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 #include "QTableConnection.hxx"
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include "QueryTableView.hxx"
 #include "ConnectionLine.hxx"
 using namespace dbaui;
@@ -73,7 +73,7 @@ OQueryTableConnection& OQueryTableConnection::operator=(const OQueryTableConnect
 //------------------------------------------------------------------------
 sal_Bool OQueryTableConnection::operator==(const OQueryTableConnection& rCompare)
 {
-    DBG_ASSERT(GetData() && rCompare.GetData(), "OQueryTableConnection::operator== : einer der beiden Teilnehmer hat keine Daten !");
+    OSL_ENSURE(GetData() && rCompare.GetData(), "OQueryTableConnection::operator== : einer der beiden Teilnehmer hat keine Daten !");
 
     // allzuviel brauche ich nicht vergleichen (schon gar nicht alle Member) : lediglich die Fenster, an denen wir haengen, und
     // die Indizies in der entsprechenden Tabelle muessen uebereinstimmen

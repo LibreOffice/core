@@ -42,7 +42,7 @@ XMLTransformerActions::XMLTransformerActions( XMLTransformerActionInit *pInit )
     if( pInit )
     {
         XMLTransformerActions::key_type aKey;
-        XMLTransformerActions::data_type aData;
+        XMLTransformerActions::mapped_type aData;
         while( pInit->m_nActionType != XML_TACTION_EOT )
         {
             aKey.m_nPrefix = pInit->m_nPrefix;
@@ -71,7 +71,7 @@ void XMLTransformerActions::Add( XMLTransformerActionInit *pInit )
     if( pInit )
     {
         XMLTransformerActions::key_type aKey;
-        XMLTransformerActions::data_type aData;
+        XMLTransformerActions::mapped_type aData;
         while( pInit->m_nActionType != XML_TACTION_EOT )
         {
             aKey.m_nPrefix = pInit->m_nPrefix;

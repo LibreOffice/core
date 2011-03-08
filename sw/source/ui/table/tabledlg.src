@@ -588,7 +588,6 @@ TabPage TP_TABLE_TEXTFLOW
          //         Disable = TRUE;
         Pos = MAP_APPFONT ( 178 , 14 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
-         // ### ACHTUNG: Neuer Text in Resource? S~palte : ~Spalte
         Text [ en-US ] = "Col~umn" ;
     };
     RadioButton RB_PAGEBREAKBEFORE

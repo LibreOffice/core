@@ -38,7 +38,7 @@ module com { module sun { module star { module util {
 published enum SearchAlgorithms {
     ABSOLUTE,       // "normal" a kind of Boyer-Moore
     REGEXP,                 // regular expression
-    APPROXIMATE     // Leveinstein distance
+    APPROXIMATE     // Levenshtein distance
 };
 
 published constants SearchFlags
@@ -59,7 +59,7 @@ published constants SearchFlags
     /// Flag for "regular expression" search / interpret as extended regular expression
     const long  REG_EXTENDED        = 0x00000100;
     /** Flag for "regular expression" search / No replace, i.e., avoid sub regular
-         expresions, return true/false to match
+         expressions, return true/false to match
 
 <!-- JRH: Check this for sense of the expression. -->
     */
@@ -123,7 +123,7 @@ published  struct SearchOptions  {
     /// this many characters can be additional in the found word in a "Weight Levenshtein-Distance"
     long            insertedChars;
 
-    /** asian flags for the transliteration. Same meaning as the enum of TransliteratorModule
+    /** Asian flags for the transliteration. Same meaning as the enum of TransliteratorModule
 
         @see com/sun/star/i18n/XTransliteration.idl
     */

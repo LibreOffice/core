@@ -36,7 +36,7 @@
 #include "dbu_misc.hrc"
 #include "dbustrings.hrc"
 #include <sfx2/sfxhtml.hxx>
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <tools/tenccvt.hxx>
 #include "moduledbu.hxx"
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
@@ -347,11 +347,10 @@ void OHTMLReader::fetchOptions()
     }
 }
 //---------------------------------------------------------------------------------
-void OHTMLReader::TableDataOn(SvxCellHorJustify& eVal,int nToken)
+void OHTMLReader::TableDataOn(SvxCellHorJustify& eVal)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLReader::TableDataOn" );
     DBG_CHKTHIS(OHTMLReader,NULL);
-    sal_Bool bHorJustifyCenterTH = (nToken == HTML_TABLEHEADER_ON);
     const HTMLOptions* pHtmlOptions = GetOptions();
     sal_Int16 nArrLen = pHtmlOptions->Count();
     for ( sal_Int16 i = 0; i < nArrLen; i++ )
@@ -361,7 +360,6 @@ void OHTMLReader::TableDataOn(SvxCellHorJustify& eVal,int nToken)
         {
             case HTML_O_ALIGN:
             {
-                bHorJustifyCenterTH = sal_False;
                 const String& rOptVal = pOption->GetString();
                 if (rOptVal.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_AL_right ))
                     eVal = SVX_HOR_JUSTIFY_RIGHT;
@@ -438,7 +436,7 @@ sal_Int16 OHTMLReader::GetWidthPixel( const HTMLOption* pOption )
     const String& rOptVal = pOption->GetString();
     if ( rOptVal.Search('%') != STRING_NOTFOUND )
     {   // Prozent
-        DBG_ASSERT( m_nColumnWidth, "WIDTH Option: m_nColumnWidth==0 und Width%" );
+        OSL_ENSURE( m_nColumnWidth, "WIDTH Option: m_nColumnWidth==0 und Width%" );
         return (sal_Int16)((pOption->GetNumber() * m_nColumnWidth) / 100);
     }
     else
@@ -489,7 +487,7 @@ sal_Bool OHTMLReader::CreateTable(int nToken)
                 break;
             case HTML_TABLEDATA_ON:
             case HTML_TABLEHEADER_ON:
-                TableDataOn(eVal,nTmpToken2);
+                TableDataOn(eVal);
                 bTableHeader = TRUE;
                 break;
             case HTML_TABLEDATA_OFF:

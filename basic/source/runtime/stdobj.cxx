@@ -35,7 +35,7 @@
 #include <sal/macros.h>
 #include "rtlproto.hxx"
 #include "sbintern.hxx"
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 // Das nArgs-Feld eines Tabelleneintrags ist wie folgt verschluesselt:
 // Zur Zeit wird davon ausgegangen, dass Properties keine Parameter
 // benoetigen!
@@ -82,7 +82,7 @@ struct StringHashCode
 class VBABlacklist
 {
 friend class VBABlackListQuery;
-    std::hash_map< String, bool, StringHashCode > mBlackList;
+    boost::unordered_map< String, bool, StringHashCode > mBlackList;
     VBABlacklist()
     {
         const char* list[] = { "Red" };

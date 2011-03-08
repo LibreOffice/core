@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -225,24 +226,6 @@ Reference< chart2::data::XLabeledDataSequence > lcl_getCategories( const Referen
                         ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
     }
 
-    /*
-    //unused ranges are very problematic as they bear the risk to damage the rectangular structure completly
-    if(!xResult.is())
-    {
-        Sequence< Reference< chart2::data::XLabeledDataSequence > > aUnusedSequences( xDiagram->getUnusedData() );
-
-        lcl_MatchesRole aHasCategories( OUString(RTL_CONSTASCII_USTRINGPARAM("categories")) );
-        for( sal_Int32 nN=0; nN<aUnusedSequences.getLength(); nN++ )
-        {
-            if( aHasCategories( aUnusedSequences[nN] ) )
-            {
-                xResult.set( aUnusedSequences[nN] );
-                break;
-            }
-        }
-    }
-    */
-
     return xResult;
 }
 
@@ -413,7 +396,7 @@ bool lcl_hasChartType( const Reference< chart2::XDiagram > & xDiagram, const OUS
     }
     catch( uno::Exception & )
     {
-        DBG_ERROR( "Exception while searching for chart type in diagram" );
+        OSL_FAIL( "Exception while searching for chart type in diagram" );
     }
     return false;
 }
@@ -903,7 +886,7 @@ void ChartExport::_ExportContent()
                         }
                         catch( beans::UnknownPropertyException & )
                         {
-                            DBG_ERROR( "Property ChartRangeAddress not supported by ChartDocument" );
+                            OSL_FAIL( "Property ChartRangeAddress not supported by ChartDocument" );
                         }
                     }
                 }
@@ -913,7 +896,7 @@ void ChartExport::_ExportContent()
     }
     else
     {
-        DBG_ERROR( "Couldn't export chart due to wrong XModel" );
+        OSL_FAIL( "Couldn't export chart due to wrong XModel" );
     }
 }
 
@@ -1087,10 +1070,6 @@ void ChartExport::exportLegend( Reference< ::com::sun::star::chart::XChartDocume
         // shape properties
         exportShapeProps( xProp );
     }
-
-    // manula layout
-
-    // text properties
 
     // legendEntry
 
@@ -1334,15 +1313,12 @@ void ChartExport::exportBarChart( Reference< chart2::XChartType > xChartType )
                 sShapeType = "box";
                 break;
             case cssc::ChartSolidType::CONE:
-            //case cssc::DataPointGeometry3D::CONE:
                 sShapeType = "cone";
                 break;
             case cssc::ChartSolidType::CYLINDER:
-            //case cssc::DataPointGeometry3D::CYLINDER:
                 sShapeType = "cylinder";
                 break;
             case cssc::ChartSolidType::PYRAMID:
-            //case cssc::DataPointGeometry3D::PYRAMID:
                 sShapeType = "pyramid";
                 break;
         }
@@ -1790,9 +1766,6 @@ void ChartExport::exportCandleStickSeries(
             Sequence< Reference< chart2::data::XLabeledDataSequence > > aSeqCnt(
                 xSource->getDataSequences());
 
-            //sal_Int32 nSeriesLength =
-            //    lcl_getSequenceLengthByRole( aSeqCnt, OUString(RTL_CONSTASCII_USTRINGPARAM("values-last")));
-
             Reference< chart2::XChartDocument > xNewDoc( getModel(), uno::UNO_QUERY );
             const char* sSeries[] = {"values-first","values-max","values-min","values-last",0};
             for( sal_Int32 idx = 0; sSeries[idx] != 0 ; idx++ )
@@ -1943,7 +1916,6 @@ void ChartExport::exportSeriesValues( const Reference< chart2::data::XDataSequen
 {
     FSHelperPtr pFS = GetFS();
     Reference< chart2::XChartDocument > xNewDoc( getModel(), uno::UNO_QUERY );
-    // sal_Int32 nValueType = XML_val;
     pFS->startElement( FSNS( XML_c, nValueType ),
             FSEND );
 
@@ -2059,18 +2031,6 @@ void ChartExport::exportAxes( )
     for( sal_Int32 nIdx = 0; nIdx < nSize; nIdx++ )
     {
         exportAxis( maAxes[nIdx] );
-        /*
-        sal_Int32 nAxisId = maAxes[nIdx].nAxisId;
-        switch( nAxisId )
-        {
-            case AXIS_PRIMARY_X:
-                exportXAxis( maAxes[nIdx] );
-                break;
-            case AXIS_PRIMARY_Y:
-                exportYAxis( maAxes[nIdx] );
-                break;
-        }
-        */
     }
 }
 
@@ -2615,12 +2575,8 @@ void ChartExport::exportDataPoints(
             OUString( RTL_CONSTASCII_USTRINGPARAM( "VaryColorsByPoint" ))) >>= bVaryColorsByPoint;
     }
 
-    //sal_Int32 nSize = aDataPointSeq.getLength();
-    //DBG_ASSERT( nSize <= nSeriesLength, "Too many point attributes" );
-
     const sal_Int32 * pPoints = aDataPointSeq.getConstArray();
     sal_Int32 nElement;
-    //sal_Int32 nRepeat;
     Reference< chart2::XColorScheme > xColorScheme;
     if( mxNewDiagram.is())
         xColorScheme.set( mxNewDiagram->getDefaultColorScheme());
@@ -2846,3 +2802,5 @@ sal_Bool ChartExport::isDeep3dChart()
 
 }// drawingml
 }// oox
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

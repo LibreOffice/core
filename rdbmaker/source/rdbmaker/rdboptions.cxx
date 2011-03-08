@@ -30,8 +30,7 @@
 
 #include    "rdboptions.hxx"
 
-using namespace rtl;
-
+using ::rtl::OString;
 sal_Bool RdbOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
     throw( IllegalArgument )
 {

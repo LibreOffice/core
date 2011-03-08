@@ -303,7 +303,7 @@ sal_Bool OStatement_Base::lockIfNecessary (const ::rtl::OUString& sql) throw( SQ
         try
         {
             SQLINTEGER nLock = SQL_CONCUR_LOCK;
-            THROW_SQL(N3SQLSetStmtAttr(m_aStatementHandle, SQL_CONCURRENCY,(SQLPOINTER)nLock,SQL_IS_UINTEGER));
+            THROW_SQL(N3SQLSetStmtAttr(m_aStatementHandle, SQL_CONCURRENCY,(SQLPOINTER)(sal_IntPtr)nLock,SQL_IS_UINTEGER));
         }
         catch (SQLWarning& warn)
         {
@@ -700,6 +700,7 @@ sal_Int32 OStatement_Base::getResultSetType() const
     sal_uInt32 nValue = SQL_CURSOR_FORWARD_ONLY;
     SQLRETURN nRetCode = N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_CURSOR_SENSITIVITY,&nValue,SQL_IS_UINTEGER,0);
     nRetCode = N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_CURSOR_TYPE,&nValue,SQL_IS_UINTEGER,0);
+    OSL_UNUSED( nRetCode );
     switch(nValue)
     {
         case SQL_CURSOR_FORWARD_ONLY:
@@ -764,14 +765,14 @@ sal_Int32 OStatement_Base::getMaxFieldSize() const
 void OStatement_Base::setQueryTimeOut(sal_Int32 seconds)
 {
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
-    SQLRETURN nRetCode = N3SQLSetStmtAttr(m_aStatementHandle, SQL_ATTR_QUERY_TIMEOUT,(SQLPOINTER)seconds,SQL_IS_UINTEGER);
+    SQLRETURN nRetCode = N3SQLSetStmtAttr(m_aStatementHandle, SQL_ATTR_QUERY_TIMEOUT,(SQLPOINTER)(sal_IntPtr)seconds,SQL_IS_UINTEGER);
     OSL_UNUSED( nRetCode );
 }
 //------------------------------------------------------------------------------
 void OStatement_Base::setMaxRows(sal_Int32 _par0)
 {
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
-    SQLRETURN nRetCode = N3SQLSetStmtAttr(m_aStatementHandle, SQL_ATTR_MAX_ROWS, (SQLPOINTER)_par0,SQL_IS_UINTEGER);
+    SQLRETURN nRetCode = N3SQLSetStmtAttr(m_aStatementHandle, SQL_ATTR_MAX_ROWS, (SQLPOINTER)(sal_IntPtr)_par0,SQL_IS_UINTEGER);
     OSL_UNUSED( nRetCode );
 }
 //------------------------------------------------------------------------------
@@ -784,7 +785,7 @@ void OStatement_Base::setResultSetConcurrency(sal_Int32 _par0)
         nSet = SQL_CONCUR_VALUES;
 
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
-    N3SQLSetStmtAttr(m_aStatementHandle, SQL_ATTR_CONCURRENCY,(SQLPOINTER)nSet,SQL_IS_UINTEGER);
+    N3SQLSetStmtAttr(m_aStatementHandle, SQL_ATTR_CONCURRENCY,(SQLPOINTER)(sal_IntPtr)nSet,SQL_IS_UINTEGER);
 
 }
 //------------------------------------------------------------------------------
@@ -830,10 +831,10 @@ void OStatement_Base::setResultSetType(sal_Int32 _par0)
             }
             else
                 nSet = SQL_CURSOR_DYNAMIC;
-            if(N3SQLSetStmtAttr(m_aStatementHandle, SQL_ATTR_CURSOR_TYPE,(SQLPOINTER)nSet,SQL_IS_UINTEGER) != SQL_SUCCESS)
+            if(N3SQLSetStmtAttr(m_aStatementHandle, SQL_ATTR_CURSOR_TYPE,(SQLPOINTER)(sal_uIntPtr)nSet,SQL_IS_UINTEGER) != SQL_SUCCESS)
             {
                 nSet = SQL_CURSOR_KEYSET_DRIVEN;
-                N3SQLSetStmtAttr(m_aStatementHandle, SQL_ATTR_CURSOR_TYPE,(SQLPOINTER)nSet,SQL_IS_UINTEGER);
+                N3SQLSetStmtAttr(m_aStatementHandle, SQL_ATTR_CURSOR_TYPE,(SQLPOINTER)(sal_uIntPtr)nSet,SQL_IS_UINTEGER);
             }
             nSet =  SQL_SENSITIVE;
             break;
@@ -843,14 +844,14 @@ void OStatement_Base::setResultSetType(sal_Int32 _par0)
     }
 
 
-    N3SQLSetStmtAttr(m_aStatementHandle, SQL_ATTR_CURSOR_SENSITIVITY,(SQLPOINTER)nSet,SQL_IS_UINTEGER);
+    N3SQLSetStmtAttr(m_aStatementHandle, SQL_ATTR_CURSOR_SENSITIVITY,(SQLPOINTER)(sal_uIntPtr)nSet,SQL_IS_UINTEGER);
 }
 //------------------------------------------------------------------------------
 void OStatement_Base::setEscapeProcessing( const sal_Bool _bEscapeProc )
 {
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     SQLUINTEGER nEscapeProc( _bEscapeProc ? SQL_NOSCAN_OFF : SQL_NOSCAN_ON );
-    SQLRETURN nRetCode = N3SQLSetStmtAttr( m_aStatementHandle, SQL_ATTR_NOSCAN, (SQLPOINTER)nEscapeProc, SQL_IS_UINTEGER );
+    SQLRETURN nRetCode = N3SQLSetStmtAttr( m_aStatementHandle, SQL_ATTR_NOSCAN, (SQLPOINTER)(sal_uIntPtr)nEscapeProc, SQL_IS_UINTEGER );
     (void)nRetCode;
 }
 
@@ -858,7 +859,7 @@ void OStatement_Base::setEscapeProcessing( const sal_Bool _bEscapeProc )
 void OStatement_Base::setFetchDirection(sal_Int32 _par0)
 {
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
-    sal_Int32 nCursType = 0;
+    sal_IntPtr nCursType = 0;
     SQLRETURN nRetCode  = SQL_SUCCESS;
     if(_par0 == FetchDirection::FORWARD)
     {
@@ -877,17 +878,18 @@ void OStatement_Base::setFetchSize(sal_Int32 _par0)
 {
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
 
-    SQLRETURN nRetCode = N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_ROW_ARRAY_SIZE,(SQLPOINTER)_par0,SQL_IS_UINTEGER);
+    SQLRETURN nRetCode = N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_ROW_ARRAY_SIZE,(SQLPOINTER)(sal_IntPtr)_par0,SQL_IS_UINTEGER);
 
     delete m_pRowStatusArray;
     m_pRowStatusArray = new SQLUSMALLINT[_par0];
     nRetCode = N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_ROW_STATUS_PTR,m_pRowStatusArray,SQL_IS_POINTER);
+    OSL_UNUSED( nRetCode );
 }
 //------------------------------------------------------------------------------
 void OStatement_Base::setMaxFieldSize(sal_Int32 _par0)
 {
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
-    N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_MAX_LENGTH,(SQLPOINTER)_par0,SQL_IS_UINTEGER);
+    N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_MAX_LENGTH,(SQLPOINTER)(sal_IntPtr)_par0,SQL_IS_UINTEGER);
 }
 //------------------------------------------------------------------------------
 void OStatement_Base::setCursorName(const ::rtl::OUString &_par0)
@@ -918,7 +920,7 @@ sal_Bool OStatement_Base::getEscapeProcessing() const
 void OStatement_Base::setUsingBookmarks(sal_Bool _bUseBookmark)
 {
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
-    sal_uInt32 nValue = _bUseBookmark ? SQL_UB_VARIABLE : SQL_UB_OFF;
+    sal_uIntPtr nValue = _bUseBookmark ? SQL_UB_VARIABLE : SQL_UB_OFF;
     SQLRETURN nRetCode = N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_USE_BOOKMARKS,(SQLPOINTER)nValue,SQL_IS_UINTEGER);
     OSL_UNUSED( nRetCode );
 }

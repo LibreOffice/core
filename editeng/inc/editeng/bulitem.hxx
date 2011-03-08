@@ -54,7 +54,7 @@
 #define BJ_VCENTER          0x20
 
 // Valid-Bits
-// Erstmal nur die Werte, die vom Dialog geaendert werden...
+// First, only the values that are changed by the dialogue ...
 #define VALID_FONTCOLOR     0x0001
 #define VALID_FONTNAME      0x0002
 #define VALID_SYMBOL        0x0004
@@ -82,7 +82,8 @@ class EDITENG_DLLPUBLIC SvxBulletItem : public SfxPoolItem
     USHORT          nScale;
     sal_Unicode     cSymbol;
     BYTE            nJustify;
-    USHORT          nValidMask; // Nur temporaer fuer GetAttribs/SetAttribs, wegen des grossen Bullets
+    USHORT          nValidMask; // Only temporary for GetAttribs / setAttribs,
+                                // because of the large Bullets
 
 #ifdef _SVX_BULITEM_CXX
     void    SetDefaultFont_Impl();

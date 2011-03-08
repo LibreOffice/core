@@ -340,7 +340,7 @@ void ScXMLDataPilotTableContext::AddDimension(ScDPSaveDimension* pDim, bool bHas
 {
     if (pDPSave)
     {
-        //  #91045# if a dimension with that name has already been inserted,
+        //  if a dimension with that name has already been inserted,
         //  mark the new one as duplicate
         if ( !pDim->IsDataLayout() &&
                 pDPSave->GetExistingDimensionByName(pDim->GetName()) )
@@ -409,7 +409,7 @@ void ScXMLDataPilotTableContext::EndElement()
     {
         case SQL :
         {
-            ScImportSourceDesc aImportDesc;
+            ScImportSourceDesc aImportDesc(pDoc);
             aImportDesc.aDBName = sDatabaseName;
             aImportDesc.aObject = sSourceObject;
             aImportDesc.nType = sheet::DataImportMode_SQL;
@@ -419,7 +419,7 @@ void ScXMLDataPilotTableContext::EndElement()
         break;
         case TABLE :
         {
-            ScImportSourceDesc aImportDesc;
+            ScImportSourceDesc aImportDesc(pDoc);
             aImportDesc.aDBName = sDatabaseName;
             aImportDesc.aObject = sSourceObject;
             aImportDesc.nType = sheet::DataImportMode_TABLE;
@@ -428,7 +428,7 @@ void ScXMLDataPilotTableContext::EndElement()
         break;
         case QUERY :
         {
-            ScImportSourceDesc aImportDesc;
+            ScImportSourceDesc aImportDesc(pDoc);
             aImportDesc.aDBName = sDatabaseName;
             aImportDesc.aObject = sSourceObject;
             aImportDesc.nType = sheet::DataImportMode_QUERY;
@@ -1044,8 +1044,7 @@ void ScXMLDataPilotFieldContext::EndElement()
         pDim->SetOrientation(nOrientation);
         if (bSelectedPage)
         {
-            String sPage(sSelectedPage);
-            pDim->SetCurrentPage(&sPage);
+            pDim->SetCurrentPage(&sSelectedPage);
         }
         pDataPilotTable->AddDimension(pDim, mbHasHiddenMember);
         if (bIsGroupField)

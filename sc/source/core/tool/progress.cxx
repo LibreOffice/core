@@ -92,7 +92,7 @@ ScProgress::ScProgress( SfxObjectShell* pObjSh, const String& rText,
         }
         else
         {
-            DBG_ERROR( "ScProgress: there can be only one!" );
+            OSL_FAIL( "ScProgress: there can be only one!" );
             pProgress = NULL;
         }
     }
@@ -107,8 +107,8 @@ ScProgress::ScProgress( SfxObjectShell* pObjSh, const String& rText,
     else if ( pObjSh && ( pObjSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED ||
                           pObjSh->GetProgress() ) )
     {
-        //  #62808# no own progress for embedded objects,
-        //  #73633# no second progress if the document already has one
+        //  no own progress for embedded objects,
+        //  no second progress if the document already has one
 
         pProgress = NULL;
     }

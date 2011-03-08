@@ -145,7 +145,7 @@ IMPL_LINK( SdFileDialog_Imp, PlayMusicHdl, void *, EMPTYARG )
         catch( css::lang::IllegalArgumentException )
         {
 #ifdef DBG_UTIL
-            DBG_ERROR( "Cannot access play button" );
+            OSL_FAIL( "Cannot access play button" );
 #endif
         }
     }
@@ -179,7 +179,7 @@ IMPL_LINK( SdFileDialog_Imp, PlayMusicHdl, void *, EMPTYARG )
                 catch( css::lang::IllegalArgumentException )
                 {
 #ifdef DBG_UTIL
-                    DBG_ERROR( "Cannot access play button" );
+                    OSL_FAIL( "Cannot access play button" );
 #endif
                 }
             }
@@ -215,7 +215,7 @@ IMPL_LINK( SdFileDialog_Imp, IsMusicStoppedHdl, void *, EMPTYARG )
         catch( css::lang::IllegalArgumentException )
         {
 #ifdef DBG_UTIL
-            DBG_ERROR( "Cannot access play button" );
+            OSL_FAIL( "Cannot access play button" );
 #endif
         }
     }
@@ -274,7 +274,7 @@ SdFileDialog_Imp::SdFileDialog_Imp( const short     nDialogType,
             catch( css::lang::IllegalArgumentException )
             {
 #ifdef DBG_UTIL
-                DBG_ERROR( "Cannot set play button label" );
+                OSL_FAIL( "Cannot set play button label" );
 #endif
             }
         }
@@ -287,7 +287,7 @@ SdFileDialog_Imp::SdFileDialog_Imp( const short     nDialogType,
             catch( css::lang::IllegalArgumentException )
             {
 #ifdef DBG_UTIL
-                DBG_ERROR( "Cannot disable selection checkbox" );
+                OSL_FAIL( "Cannot disable selection checkbox" );
 #endif
             }
         }

@@ -110,6 +110,7 @@
 #include <vcl/stdtext.hxx>
 #include "UITools.hxx"
 #include "TokenWriter.hxx"
+#include <osl/diagnose.h>
 
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
@@ -251,9 +252,8 @@ void SAL_CALL SbaXGridControl::createPeer(const Reference< ::com::sun::star::awt
 {
     FmXGridControl::createPeer(rToolkit, rParentPeer);
 
-    DBG_ASSERT(/*(0 == m_nPeerCreationLevel) && */!mbCreatingPeer, "FmXGridControl::createPeer : recursion!");
+    OSL_ENSURE(!mbCreatingPeer, "FmXGridControl::createPeer : recursion!");
         // see the base class' createPeer for a comment on this
-        // 14.05.2001 - 86836 - frank.schoenheit@germany.sun.com
 
     // TODO: why the hell this whole class does not use any mutex?
 
@@ -544,7 +544,7 @@ void SAL_CALL SbaXGridPeer::dispatch(const URL& aURL, const Sequence< PropertyVa
 
             case dtColumnAttribs:
             {
-                DBG_ASSERT(nColId != -1, "SbaXGridPeer::dispatch : invalid parameter !");
+                OSL_ENSURE(nColId != -1, "SbaXGridPeer::dispatch : invalid parameter !");
                 if (nColId != -1)
                     break;
                 pGrid->SetColAttrs(nColId);
@@ -553,7 +553,7 @@ void SAL_CALL SbaXGridPeer::dispatch(const URL& aURL, const Sequence< PropertyVa
 
             case dtColumnWidth:
             {
-                DBG_ASSERT(nColId != -1, "SbaXGridPeer::dispatch : invalid parameter !");
+                OSL_ENSURE(nColId != -1, "SbaXGridPeer::dispatch : invalid parameter !");
                 if (nColId != -1)
                     break;
                 pGrid->SetColWidth(nColId);
@@ -1266,7 +1266,7 @@ void SbaGridControl::Command(const CommandEvent& rEvt)
 void SbaGridControl::DoColumnDrag(sal_uInt16 nColumnPos)
 {
     Reference< XPropertySet >  xDataSource(getDataSource(), UNO_QUERY);
-    DBG_ASSERT(xDataSource.is(), "SbaGridControl::DoColumnDrag : invalid data source !");
+    OSL_ENSURE(xDataSource.is(), "SbaGridControl::DoColumnDrag : invalid data source !");
 
     Reference< XPropertySet > xAffectedCol;
     Reference< XPropertySet > xAffectedField;
@@ -1289,7 +1289,7 @@ void SbaGridControl::DoColumnDrag(sal_uInt16 nColumnPos)
     }
     catch(Exception&)
     {
-        DBG_ERROR("SbaGridControl::DoColumnDrag : something went wrong while getting the column");
+        OSL_FAIL("SbaGridControl::DoColumnDrag : something went wrong while getting the column");
     }
     if (0 == sField.getLength())
         return;
@@ -1302,7 +1302,7 @@ void SbaGridControl::DoColumnDrag(sal_uInt16 nColumnPos)
 // -----------------------------------------------------------------------
 void SbaGridControl::CopySelectedRowsToClipboard()
 {
-    DBG_ASSERT( GetSelectRowCount() > 0, "SbaGridControl::CopySelectedRowsToClipboard: invalid call!" );
+    OSL_ENSURE( GetSelectRowCount() > 0, "SbaGridControl::CopySelectedRowsToClipboard: invalid call!" );
     implTransferSelectedRows( (sal_Int16)FirstSelectedRow(), true );
 }
 
@@ -1316,7 +1316,7 @@ void SbaGridControl::DoRowDrag( sal_Int16 nRowPos )
 void SbaGridControl::implTransferSelectedRows( sal_Int16 nRowPos, bool _bTrueIfClipboardFalseIfDrag )
 {
     Reference< XPropertySet > xForm( getDataSource(), UNO_QUERY );
-    DBG_ASSERT( xForm.is(), "SbaGridControl::implTransferSelectedRows: invalid form!" );
+    OSL_ENSURE( xForm.is(), "SbaGridControl::implTransferSelectedRows: invalid form!" );
 
     // build the sequence of numbers of selected rows
     Sequence< Any > aSelectedRows;
@@ -1372,7 +1372,7 @@ void SbaGridControl::DoFieldDrag(sal_uInt16 nColumnPos, sal_Int16 nRowPos)
     }
     catch(Exception&)
     {
-        DBG_ERROR("SbaGridControl::DoFieldDrag : could not retrieve the cell's contents !");
+        OSL_FAIL("SbaGridControl::DoFieldDrag : could not retrieve the cell's contents !");
         return;
     }
 
@@ -1531,7 +1531,7 @@ sal_Int8 SbaGridControl::ExecuteDrop( const BrowserExecuteDropEvent& rEvt )
         if (IsCurrentAppending())
             --nCorrectRowCount; // the current data record doesn't really exist, we are appending a new one
 
-        DBG_ASSERT((nCol != BROWSER_INVALIDID) && (nRow < nCorrectRowCount), "SbaGridControl::Drop : dropped on an invalid position !");
+        OSL_ENSURE((nCol != BROWSER_INVALIDID) && (nRow < nCorrectRowCount), "SbaGridControl::Drop : dropped on an invalid position !");
             // AcceptDrop should have caught this
 
         // from now we work with ids instead of positions

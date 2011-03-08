@@ -375,7 +375,7 @@ void ScChildrenShapes::Notify(SfxBroadcaster&, const SfxHint& rHint)
         {
             SdrObject* pObj = const_cast<SdrObject*>(pSdrHint->GetObject());
             if (pObj && /*(pObj->GetLayer() != SC_LAYER_INTERN) && */(pObj->GetPage() == GetDrawPage()) &&
-                (pObj->GetPage() == pObj->GetObjList()) ) //#108480# only do something if the object lies direct on the page
+                (pObj->GetPage() == pObj->GetObjList()) ) //only do something if the object lies direct on the page
             {
                 switch (pSdrHint->GetKind())
                 {
@@ -1348,7 +1348,7 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             if (mpChildrenShapes)
                 DELETEZ(mpChildrenShapes);
 
-            // #124567# Accessibility: Shapes / form controls after reload not accessible
+            // Accessibility: Shapes / form controls after reload not accessible
             if ( !mpChildrenShapes )
             {
                 mpChildrenShapes = new ScChildrenShapes( this, mpViewShell, meSplitPos );

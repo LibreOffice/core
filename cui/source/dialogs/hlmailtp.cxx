@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>

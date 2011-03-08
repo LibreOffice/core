@@ -29,6 +29,7 @@
 #include "rtfsdrexport.hxx"
 #include "rtfexport.hxx"
 #include "writerhelper.hxx"
+#include "rtfattributeoutput.hxx"
 
 #include <com/sun/star/i18n/ScriptType.hdl>
 #include <osl/diagnose.h>

@@ -57,7 +57,7 @@ published interface XExtendedCalendar : ::com::sun::star::i18n::XCalendar
 
         <p> Note that the string returned depends completely on the
         locale's calendar. It is not predictable if the string will be
-        numeric or a name, or if in case it retuns a numeric string
+        numeric or a name, or if in case it returns a numeric string
         how many digits that will have. For example, a short year
         display string will normally be two digits with a Gregorian
         calendar, but with a Jewish calendar it will have three

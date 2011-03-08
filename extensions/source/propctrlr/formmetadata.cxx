@@ -651,7 +651,7 @@ namespace pcr
         }
         else
         {
-            DBG_ERROR( "DefaultEnumRepresentation::getValueFromDescription: could not translate the enum string!" );
+            OSL_FAIL( "DefaultEnumRepresentation::getValueFromDescription: could not translate the enum string!" );
             _out_rValue.clear();
         }
     }
@@ -675,7 +675,7 @@ namespace pcr
         }
         else
         {
-            DBG_ERROR( "DefaultEnumRepresentation::getDescriptionForValue: could not translate an enum value" );
+            OSL_FAIL( "DefaultEnumRepresentation::getDescriptionForValue: could not translate an enum value" );
         }
         return sReturn;
     }

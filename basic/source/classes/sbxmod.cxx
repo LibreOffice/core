@@ -45,7 +45,6 @@
 #include "runtime.hxx"
 #include "token.hxx"
 #include "sbunoobj.hxx"
-#include "sbtrace.hxx"
 
 #include <svtools/syntaxhighlight.hxx>
 
@@ -1121,9 +1120,6 @@ USHORT SbModule::Run( SbMethod* pMeth )
     StarBASICRef xBasic;
     if( bDelInst )
     {
-#ifdef DBG_TRACE_BASIC
-        dbg_InitTrace();
-#endif
         // #32779: Hold Basic during the execution
         xBasic = (StarBASIC*) GetParent();
 
@@ -1180,10 +1176,6 @@ USHORT SbModule::Run( SbMethod* pMeth )
             pMOD = this;
             SbiRuntime* pRt = new SbiRuntime( this, pMeth, pMeth->nStart );
 
-#ifdef DBG_TRACE_BASIC
-            dbg_traceNotifyCall( this, pMeth, pINST->nCallLvl );
-#endif
-
             pRt->pNext = pINST->pRun;
             if( pRt->pNext )
                 pRt->pNext->block();
@@ -1195,11 +1187,6 @@ USHORT SbModule::Run( SbMethod* pMeth )
             while( pRt->Step() ) {}
             if( pRt->pNext )
                 pRt->pNext->unblock();
-
-#ifdef DBG_TRACE_BASIC
-            bool bLeave = true;
-            dbg_traceNotifyCall( this, pMeth, pINST->nCallLvl, bLeave );
-#endif
 
             // #63710 It can happen by an another thread handling at events,
             // that the show call returns to an dialog (by closing the
@@ -1304,18 +1291,9 @@ void SbModule::RunInit()
         // The init code starts always here
         SbiRuntime* pRt = new SbiRuntime( this, NULL, 0 );
 
-#ifdef DBG_TRACE_BASIC
-        dbg_traceNotifyCall( this, NULL, 0 );
-#endif
-
         pRt->pNext = pINST->pRun;
         pINST->pRun = pRt;
         while( pRt->Step() ) {}
-
-#ifdef DBG_TRACE_BASIC
-        bool bLeave = true;
-        dbg_traceNotifyCall( this, NULL, 0, bLeave );
-#endif
 
         pINST->pRun = pRt->pNext;
         delete pRt;

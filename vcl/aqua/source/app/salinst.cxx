@@ -246,7 +246,7 @@ BOOL ImplSVMainHook( int * pnInit )
     }
     else
     {
-        DBG_ERROR( "NSApplication initialization could not be done" );
+        OSL_FAIL( "NSApplication initialization could not be done" );
     }
 
     return TRUE;   // indicate that ImplSVMainHook is implemented
@@ -610,7 +610,7 @@ void AquaSalInstance::handleAppDefinedEvent( NSEvent* pEvent )
         {
             if ( ((*it)->mbFullScreen == true) )
                 bIsFullScreenMode = true;
-            it++;
+            ++it;
         }
 
         switch ([pEvent data1])
@@ -667,7 +667,7 @@ void AquaSalInstance::handleAppDefinedEvent( NSEvent* pEvent )
     break;
 
     default:
-        DBG_ERROR( "unhandled NSApplicationDefined event" );
+        OSL_FAIL( "unhandled NSApplicationDefined event" );
         break;
     };
 }

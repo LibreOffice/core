@@ -120,9 +120,6 @@ RESLIB1IMAGES=$(PRJ)$/res
 RESLIB1SRSFILES=$(RESLIB1LIST)
 RESLIB1DEPN=$(RESLIB1LIST)
 
-#RESLIB1SRSFILES=$(SRS)$/$(TARGET).srs
-#RESLIB1DEPN=	SRCFILES
-
 # --- Targets -----------------------------------------------------------------
 
 .INCLUDE: target.mk

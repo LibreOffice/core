@@ -58,13 +58,15 @@
 #include "currentcontextchecker.hxx"
 #include "multi.hxx"
 
-using namespace rtl;
 using namespace osl;
 using namespace cppu;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 using namespace test::testtools::bridgetest;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
 
 #define SERVICENAME     "com.sun.star.test.bridge.CppTestObject"
 #define IMPLNAME        "com.sun.star.comp.bridge.CppTestObject"

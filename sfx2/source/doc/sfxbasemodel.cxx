@@ -790,8 +790,6 @@ void SAL_CALL SfxBaseModel::dispose() throw(::com::sun::star::uno::RuntimeExcept
     {
         // as long as an SfxObjectShell is assigned to an SfxBaseModel it is still existing here
         // so we can't dispose the shared DocumentInfoObject here
-        // uno::Reference < lang::XComponent > xComp( m_pData->m_xDocumentInfo, uno::UNO_QUERY );
-        // xComp->dispose();
         m_pData->m_xDocumentInfo = 0;
     }
 
@@ -868,10 +866,10 @@ uno::Reference< document::XDocumentInfo > SAL_CALL SfxBaseModel::getDocumentInfo
         try {
             rtl::OUString aName(RTL_CONSTASCII_USTRINGPARAM("MediaType"));
             uno::Reference < beans::XPropertySet > xSet(
-                getDocumentStorage(), uno::UNO_QUERY );
+                getDocumentStorage(), uno::UNO_QUERY_THROW );
             uno::Any aMediaType = xSet->getPropertyValue( aName );
             uno::Reference < beans::XPropertySet > xDocSet(
-                m_pData->m_xDocumentInfo, uno::UNO_QUERY );
+                m_pData->m_xDocumentInfo, uno::UNO_QUERY_THROW );
             xDocSet->setPropertyValue( aName, aMediaType );
         } catch (uno::Exception &) {
             //ignore
@@ -901,7 +899,6 @@ SfxBaseModel::getDocumentProperties()
             ::comphelper::getProcessServiceFactory()->createInstance(
                 DEFINE_CONST_UNICODE("com.sun.star.document.DocumentProperties") ),
             uno::UNO_QUERY_THROW);
-//        xDocProps->initialize(uno::Sequence<uno::Any>());
         m_pData->m_xDocumentProperties.set(xDocProps, uno::UNO_QUERY_THROW);
         uno::Reference<util::XModifyBroadcaster> xMB(m_pData->m_xDocumentProperties, uno::UNO_QUERY_THROW);
         xMB->addModifyListener(new SfxDocInfoListener_Impl(*m_pData->m_pObjectShell));
@@ -1770,22 +1767,8 @@ void SAL_CALL SfxBaseModel::load(   const uno::Sequence< beans::PropertyValue >&
             throw frame::IllegalArgumentIOException();
         }
 
-        // !TODO: currently not working
-        //SFX_ITEMSET_ARG( pParams, pFrameItem, SfxFrameItem, SID_DOCFRAME, FALSE );
-        //if( pFrameItem && pFrameItem->GetFrame() )
-        //{
-        //  SfxFrame* pFrame = pFrameItem->GetFrame();
-        //  pMedium->SetLoadTargetFrame( pFrame );
-        //}
-
         SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, sal_False );
         sal_Bool bSalvage = pSalvageItem ? sal_True : sal_False;
-
-        // SFX_ITEMSET_ARG( pMedium->GetItemSet(), pTemplateItem, SfxBoolItem, SID_TEMPLATE, sal_False);
-        // sal_Bool bTemplate = pTemplateItem && pTemplateItem->GetValue();
-        //
-        // does already happen in DoLoad call
-        //m_pData->m_pObjectShell->SetActivateEvent_Impl( bTemplate ? SFX_EVENT_CREATEDOC : SFX_EVENT_OPENDOC );
 
         // load document
         sal_uInt32 nError = ERRCODE_NONE;
@@ -1880,7 +1863,7 @@ void SAL_CALL SfxBaseModel::load(   const uno::Sequence< beans::PropertyValue >&
             if ( m_pData->m_pObjectShell->GetMedium() != pMedium )
             {
                 // for whatever reason document now has another medium
-                DBG_ERROR("Document has rejected the medium?!");
+                OSL_FAIL("Document has rejected the medium?!");
                 delete pMedium;
             }
 
@@ -2455,11 +2438,6 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
             {
             case SFX_EVENT_STORAGECHANGED:
             {
-                // for now this event is sent only on creation of a new storage for new document
-                // and in case of reload of medium without document reload
-                // other events are used to detect storage change
-                // NotifyStorageListeners_Impl();
-
                 if ( m_pData->m_xUIConfigurationManager.is()
                   && m_pData->m_pObjectShell->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
                 {
@@ -2536,14 +2514,6 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
             {
                 postEvent_Impl( GlobalEventConfig::GetEventName( STR_EVENT_MODECHANGED ) );
             }
-/*
-            else if ( pSimpleHint->GetId() == SFX_HINT_DYING
-                || pSimpleHint->GetId() == SFX_HINT_DEINITIALIZING )
-            {
-                SfxObjectShellLock pShellLock = m_pData->m_pObjectShellLock;
-                m_pData->m_pObjectShellLock = SfxObjectShellLock();
-            }
-*/
         }
     }
 }
@@ -2648,8 +2618,6 @@ void SfxBaseModel::impl_store(  const   ::rtl::OUString&                   sURL 
 {
     if( !sURL.getLength() )
         throw frame::IllegalArgumentIOException();
-
-    //sal_Bool aSaveAsTemplate = sal_False;
 
     sal_Bool bSaved = sal_False;
     if ( !bSaveTo && m_pData->m_pObjectShell && sURL.getLength()
@@ -3005,8 +2973,6 @@ void SAL_CALL SfxBaseModel::addPrintJobListener( const uno::Reference< view::XPr
         if ( xPJB.is() )
             xPJB->addPrintJobListener( xListener );
     }
-//  else
-//      m_pData->m_aInterfaceContainer.addInterface( ::getCppuType((const uno::Reference< view::XPrintJobListener >*)0), xListener );
 }
 
 void SAL_CALL SfxBaseModel::removePrintJobListener( const uno::Reference< view::XPrintJobListener >& xListener ) throw (uno::RuntimeException)
@@ -3019,8 +2985,6 @@ void SAL_CALL SfxBaseModel::removePrintJobListener( const uno::Reference< view::
         if ( xPJB.is() )
             xPJB->removePrintJobListener( xListener );
     }
-//  else
-//      m_pData->m_aInterfaceContainer.addInterface( ::getCppuType((const uno::Reference< view::XPrintJobListener >*)0), xListener );
 }
 
 // simple declaration of class SvObject is enough
@@ -3807,10 +3771,10 @@ css::uno::Sequence< ::rtl::OUString > SAL_CALL SfxBaseModel::getAvailableViewCon
     SfxModelGuard aGuard( *this );
 
     const SfxObjectFactory& rDocumentFactory = GetObjectShell()->GetFactory();
-    const sal_Int32 nViewFactoryCount = rDocumentFactory.GetViewFactoryCount();
+    const sal_Int16 nViewFactoryCount = rDocumentFactory.GetViewFactoryCount();
 
     Sequence< ::rtl::OUString > aViewNames( nViewFactoryCount );
-    for ( sal_Int32 nViewNo = 0; nViewNo < nViewFactoryCount; ++nViewNo )
+    for ( sal_Int16 nViewNo = 0; nViewNo < nViewFactoryCount; ++nViewNo )
         aViewNames[nViewNo] = rDocumentFactory.GetViewFactory( nViewNo ).GetAPIViewName();
     return aViewNames;
 }

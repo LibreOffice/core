@@ -193,7 +193,7 @@ void XclImpColRowSettings::SetManualRowHeight( SCROW nScRow )
 
 void XclImpColRowSettings::SetDefaultXF( SCCOL nScCol1, SCCOL nScCol2, sal_uInt16 nXFIndex )
 {
-    /*  #109555# assign the default column formatting here to ensure that
+    /*  assign the default column formatting here to ensure that
         explicit cell formatting is not overwritten. */
     DBG_ASSERT( (nScCol1 <= nScCol2) && ValidCol( nScCol2 ), "XclImpColRowSettings::SetDefaultXF - invalid column index" );
     nScCol2 = ::std::min( nScCol2, MAXCOL );

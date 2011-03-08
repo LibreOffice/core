@@ -47,7 +47,6 @@
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
-#include <errhdl.hxx>
 #include <docsh.hxx>
 #include <content.hxx>
 #include <frmfmt.hxx>
@@ -750,24 +749,6 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibiblityChanged)
                             nMemberCount++;
                         }
                     }
-                    /*  this code can be used once we want redline comments in the margin
-                    else    // redcomment
-                    {
-                        SwRedline* pRedline = static_cast<SwRedline*>((*i)->GetBroadCaster());
-                        if ( pRedline->GetComment().Len() )
-                        {
-                            String sEntry = pRedline->GetComment();
-                            RemoveNewline(sEntry);
-                            SwPostItContent* pCnt = new SwPostItContent(
-                                                this,
-                                                sEntry,
-                                                pRedline,
-                                                nMemberCount);
-                            pMember->Insert(pCnt);
-                            nMemberCount++;
-                        }
-                    }
-                    */
                 }
             }
         }

@@ -146,9 +146,6 @@ xmlNodePtr XMLElementWrapper_XmlSecImpl::getNativeElement(  ) const
  *   RESULT
  *  pNode - the libxml2 node wrapped by this object
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -174,9 +171,6 @@ void XMLElementWrapper_XmlSecImpl::setNativeElement(const xmlNodePtr pNode)
  *
  *   RESULT
  *  empty
- *
- *   HISTORY
- *  05.01.2004 -    implemented
  *
  *   AUTHOR
  *  Michael Mi

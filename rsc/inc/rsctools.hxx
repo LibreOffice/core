@@ -36,7 +36,6 @@ class  RscPtrPtr;
 #endif
 #include <stdio.h>
 #include <tools/string.hxx>
-#include <tools/list.hxx>
 #include <vector>
 
 /******************* T y p e s *******************************************/

@@ -105,12 +105,6 @@ sub copy_install_sets_to_ship
     installer::logger::print_message( "... copy installation set from " . $destdir . " to " . $localshipinstalldir . "\n" );
     installer::systemactions::copy_complete_directory($destdir, $localshipinstalldir);
 
-    if (( ! $installer::globals::iswindowsbuild ) && ( $installer::globals::addjavainstaller ))
-    {
-        # Setting Unix rights for Java starter ("setup")
-        chmod 0775, "$localshipinstalldir/setup";
-    }
-
     # unpacking the tar.gz file for Solaris
     if ( $installer::globals::issolarisbuild ) { unpack_all_targzfiles_in_directory($localshipinstalldir); }
 
@@ -549,43 +543,6 @@ sub clean_jds_temp_dirs
             installer::systemactions::remove_complete_directory($installer::globals::jdsremovedirs[$i], 1);
         }
     }
-}
-
-###########################################################
-# Copying a reference array
-###########################################################
-
-sub copy_array_from_references
-{
-    my ( $arrayref ) = @_;
-
-    my @newarray = ();
-
-    for ( my $i = 0; $i <= $#{$arrayref}; $i++ )
-    {
-        push(@newarray, ${$arrayref}[$i]);
-    }
-
-    return \@newarray;
-}
-
-###########################################################
-# Copying a reference hash
-###########################################################
-
-sub copy_hash_from_references
-{
-    my ($hashref) = @_;
-
-    my %newhash = ();
-    my $key;
-
-    foreach $key (keys %{$hashref})
-    {
-        $newhash{$key} = $hashref->{$key};
-    }
-
-    return \%newhash;
 }
 
 ###########################################################
@@ -1783,14 +1740,9 @@ sub get_all_files_from_filelist
 
     my @allpackages = ();
 
-    for ( my $i = 0; $i <= $#{$listfile}; $i++ )
-    {
-        my $line = ${$listfile}[$i];
-        if ( $line =~ /^\s*\#/ ) { next; } # this is a comment line
-        if ( $line =~ /^\s*$/ ) { next; } # empty line
-        $line =~ s/^\s*//;
-        $line =~ s/\s*$//;
-        push(@allpackages, $line);
+    for (@{$listfile}) {
+        next unless /^\s*([^#].*?)\s*$/;
+        push @allpackages, $1;
     }
 
     return \@allpackages;
@@ -2305,7 +2257,7 @@ sub add_variables_from_inc_to_hashref
     my $includefilelist = "";
     if ( $allvariables->{'ADD_INCLUDE_FILES'} ) { $includefilelist = $allvariables->{'ADD_INCLUDE_FILES'}; }
 
-    my $includefiles = installer::converter::convert_stringlist_into_array_without_linebreak_and_quotes(\$includefilelist, ",");
+    my $includefiles = installer::converter::convert_stringlist_into_array_without_newline(\$includefilelist, ",");
 
     for ( my $i = 0; $i <= $#{$includefiles}; $i++ )
     {

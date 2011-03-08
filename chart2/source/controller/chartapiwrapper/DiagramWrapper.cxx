@@ -757,7 +757,7 @@ void SAL_CALL DiagramWrapper::setPosition( const awt::Point& aPosition )
         aRelativePosition.Secondary = double(aPosition.Y)/double(aPageSize.Height);
         if( aRelativePosition.Primary < 0 || aRelativePosition.Secondary < 0 || aRelativePosition.Primary > 1 || aRelativePosition.Secondary > 1 )
         {
-            DBG_ERROR("DiagramWrapper::setPosition called with a position out of range -> automatic values are taken instead" );
+            OSL_FAIL("DiagramWrapper::setPosition called with a position out of range -> automatic values are taken instead" );
             uno::Any aEmpty;
             xProp->setPropertyValue( C2U( "RelativePosition" ), aEmpty );
             return;
@@ -790,7 +790,7 @@ void SAL_CALL DiagramWrapper::setSize( const awt::Size& aSize )
 
         if( aRelativeSize.Primary > 1 || aRelativeSize.Secondary > 1 )
         {
-            DBG_ERROR("DiagramWrapper::setSize called with sizes bigger than page -> automatic values are taken instead" );
+            OSL_FAIL("DiagramWrapper::setSize called with sizes bigger than page -> automatic values are taken instead" );
             uno::Any aEmpty;
             xProp->setPropertyValue( C2U( "RelativeSize" ), aEmpty );
             return;
@@ -2043,7 +2043,7 @@ void SAL_CALL DiagramWrapper::setDiagram(
     throw (uno::RuntimeException)
 {
     //@todo: remove this method from interface
-    DBG_ERROR("DiagramWrapper::setDiagram is not implemented, should be removed and not be called" );
+    OSL_FAIL("DiagramWrapper::setDiagram is not implemented, should be removed and not be called" );
 }
 
 // ================================================================================

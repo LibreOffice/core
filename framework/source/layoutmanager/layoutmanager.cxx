@@ -130,13 +130,13 @@ bool lcl_checkUIElement(const Reference< XUIElement >& xUIElement,css::awt::Rect
         _rPosSize = _xWindow->getPosSize();
 
         Window* pWindow = VCLUnoHelper::GetWindow( _xWindow );
-        if ( pWindow->GetType() == WINDOW_TOOLBOX )
+        if ( pWindow && pWindow->GetType() == WINDOW_TOOLBOX )
         {
             ::Size aSize = ((ToolBox*)pWindow)->CalcWindowSizePixel( 1 );
             _rPosSize.Width = aSize.Width();
             _rPosSize.Height = aSize.Height();
         }
-    } // if ( xUIElement.is() )
+    }
     return bRet;
 }
 
@@ -817,7 +817,7 @@ void LayoutManager::implts_createCustomToolBar( const rtl::OUString& aTbxResName
     if ( aTbxResName.getLength() > 0 )
     {
         createElement( aTbxResName );
-        if ( aTitle )
+        if ( !aTitle.isEmpty() )
         {
             Reference< XUIElement > xUIElement = getElement( aTbxResName );
             if ( xUIElement.is() )
@@ -1007,9 +1007,9 @@ void LayoutManager::implts_createAddonsToolBars()
                     // Set generic title for add-on toolbar
                     SolarMutexGuard aGuard;
                     Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
-                    if ( pWindow->GetText().Len() == 0 )
+                    if ( pWindow && pWindow->GetText().Len() == 0 )
                         pWindow->SetText( aGenericAddonTitle );
-                    if ( pWindow->GetType() == WINDOW_TOOLBOX )
+                    if ( pWindow && pWindow->GetType() == WINDOW_TOOLBOX )
                     {
                         ToolBox* pToolbar = (ToolBox *)pWindow;
                         pToolbar->SetMenuType();
@@ -3672,21 +3672,11 @@ throw (::com::sun::star::uno::RuntimeException)
     WriteGuard aWriteLock( m_aLock );
     m_xFrame = xFrame;
     aWriteLock.unlock();
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    // if ( xFrame.is() )
-    //    xFrame->getContainerWindow()->addWindowListener( Reference< css::awt::XWindowListener >( static_cast< OWeakObject* >( this ), UNO_QUERY ));
 }
 
 void SAL_CALL LayoutManager::reset()
 throw (RuntimeException)
 {
-    sal_Bool bComponentAttached( sal_False );
-
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    ReadGuard aReadLock( m_aLock );
-    bComponentAttached = m_bComponentAttached;
-    aReadLock.unlock();
-
     implts_reset( sal_True );
 }
 
@@ -4726,7 +4716,6 @@ throw (RuntimeException)
     RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::LayoutManager::hideElement" );
 
 
-    sal_Bool            bResult( sal_False );
     sal_Bool            bNotify( sal_False );
     ::rtl::OUString            aElementType;
     ::rtl::OUString            aElementName;
@@ -4755,7 +4744,6 @@ throw (RuntimeException)
                     if ( pMenuBar )
                     {
                         pMenuBar->SetDisplayable( sal_False );
-                        bResult = sal_True;
                         bNotify = sal_True;
                     }
                 }
@@ -4774,14 +4762,13 @@ throw (RuntimeException)
                     implts_writeWindowStateData( m_aStatusBarAlias, m_aStatusBarElement );
                     doLayout();
                     bNotify = sal_True;
-                    bResult = sal_True;
                 }
             }
         }
         else if ( aElementType.equalsIgnoreAsciiCaseAscii( "progressbar" ) &&
                   aElementName.equalsIgnoreAsciiCaseAscii( "progressbar" ))
         {
-            bResult = bNotify = implts_hideProgressBar();
+            bNotify = implts_hideProgressBar();
         }
         else if ( aElementType.equalsIgnoreAsciiCaseAscii( "toolbar" ))
         {
@@ -4806,7 +4793,6 @@ throw (RuntimeException)
                         if ( xDockWindow.is() && !xDockWindow->isFloating() )
                             doLayout();
 
-                        bResult = sal_True;
                         bNotify = sal_True;
                     } // if ( xDockWindow.is() )
                     break;

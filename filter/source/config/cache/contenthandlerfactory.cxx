@@ -51,9 +51,8 @@ namespace css = ::com::sun::star;
 //_______________________________________________
 // definitions
 
-/*-----------------------------------------------
-    09.07.2003 07:43
------------------------------------------------*/
+
+
 ContentHandlerFactory::ContentHandlerFactory(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
 {
     BaseContainer::init(xSMGR                                                 ,
@@ -62,16 +61,14 @@ ContentHandlerFactory::ContentHandlerFactory(const css::uno::Reference< css::lan
                         FilterCache::E_CONTENTHANDLER                         );
 }
 
-/*-----------------------------------------------
-    09.07.2003 07:43
------------------------------------------------*/
+
+
 ContentHandlerFactory::~ContentHandlerFactory()
 {
 }
 
-/*-----------------------------------------------
-    16.07.2003 13:38
------------------------------------------------*/
+
+
 css::uno::Reference< css::uno::XInterface > SAL_CALL ContentHandlerFactory::createInstance(const ::rtl::OUString& sHandler)
     throw(css::uno::Exception       ,
           css::uno::RuntimeException)
@@ -79,9 +76,8 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL ContentHandlerFactory::crea
     return createInstanceWithArguments(sHandler, css::uno::Sequence< css::uno::Any >());
 }
 
-/*-----------------------------------------------
-    16.07.2003 13:40
------------------------------------------------*/
+
+
 css::uno::Reference< css::uno::XInterface > SAL_CALL ContentHandlerFactory::createInstanceWithArguments(const ::rtl::OUString&                     sHandler  ,
                                                                                                         const css::uno::Sequence< css::uno::Any >& lArguments)
     throw(css::uno::Exception       ,
@@ -161,9 +157,8 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL ContentHandlerFactory::crea
     // <- SAFE
 }
 
-/*-----------------------------------------------
-    09.07.2003 07:46
------------------------------------------------*/
+
+
 css::uno::Sequence< ::rtl::OUString > SAL_CALL ContentHandlerFactory::getAvailableServiceNames()
     throw(css::uno::RuntimeException)
 {
@@ -171,17 +166,15 @@ css::uno::Sequence< ::rtl::OUString > SAL_CALL ContentHandlerFactory::getAvailab
     return getElementNames();
 }
 
-/*-----------------------------------------------
-    09.07.2003 07:43
------------------------------------------------*/
+
+
 ::rtl::OUString ContentHandlerFactory::impl_getImplementationName()
 {
     return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.filter.config.ContentHandlerFactory" ));
 }
 
-/*-----------------------------------------------
-    09.07.2003 07:43
------------------------------------------------*/
+
+
 css::uno::Sequence< ::rtl::OUString > ContentHandlerFactory::impl_getSupportedServiceNames()
 {
     css::uno::Sequence< ::rtl::OUString > lServiceNames(1);
@@ -189,9 +182,8 @@ css::uno::Sequence< ::rtl::OUString > ContentHandlerFactory::impl_getSupportedSe
     return lServiceNames;
 }
 
-/*-----------------------------------------------
-    09.07.2003 07:43
------------------------------------------------*/
+
+
 css::uno::Reference< css::uno::XInterface > SAL_CALL ContentHandlerFactory::impl_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
 {
     ContentHandlerFactory* pNew = new ContentHandlerFactory(xSMGR);

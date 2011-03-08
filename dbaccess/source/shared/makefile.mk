@@ -35,8 +35,6 @@ LIB2TARGET=$(SLB)$/fltshared.lib
 LIB3TARGET=$(SLB)$/cfgshared.lib
 LIB4TARGET=$(SLB)$/sdbtshared.lib
 
-#ENABLE_EXCEPTIONS=TRUE
-
 # --- Settings ----------------------------------
 
 .INCLUDE : settings.mk

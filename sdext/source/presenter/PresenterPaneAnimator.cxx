@@ -210,7 +210,7 @@ namespace {
         void CreateSubstitution (const Reference<rendering::XSpriteCanvas>& rxCanvas);
         void ThawPanes (void);
         void Restore (void);
-        ::boost::shared_ptr<PresenterSprite> GetSubstitution (void);
+        ::boost::shared_ptr<PresenterSprite> GetSubstitution (void) const;
         css::geometry::RealRectangle2D GetOriginalBoundingBox (void) const;
         css::geometry::RealRectangle2D GetCurrentBoundingBox (void) const;
         void MovePanes (
@@ -1133,8 +1133,7 @@ void PaneGroup::Restore (void)
 
 
 
-
-::boost::shared_ptr<PresenterSprite> PaneGroup::GetSubstitution (void)
+::boost::shared_ptr<PresenterSprite> PaneGroup::GetSubstitution (void) const
 {
     return mpSubstitution;
 }

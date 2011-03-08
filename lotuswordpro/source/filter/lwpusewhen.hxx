@@ -57,10 +57,6 @@
  * @file
  *  For LWP filter architecture prototype
  ************************************************************************/
-/*************************************************************************
- * Change History
- Jan 2005           Created
- ************************************************************************/
 
 #ifndef _LWPUSEWHEN_HXX
 #define _LWPUSEWHEN_HXX
@@ -97,21 +93,14 @@ public:
     inline void Read(LwpObjectStream* pStrm);
 
     inline sal_Bool IsUseOnAllPages();
-
     inline sal_Bool IsUseOnAllEvenPages();
-
     inline sal_Bool IsUseOnAllOddPages();
-
     inline sal_Bool IsUseOnPage();
 
     inline sal_Bool IsStartOnThisPage();
-
     inline sal_Bool IsStartOnNextPage();
-
     inline sal_Bool IsStartOnNextEvenPage();
-
     inline sal_Bool IsStartOnNextOddPage();
-
     inline sal_Bool IsStartOnThisHF();
 
     inline sal_uInt16 GetUsePage();

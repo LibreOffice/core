@@ -25,7 +25,7 @@
  *
  ************************************************************************/
 #ifndef _SVTOOLS_HRC
-#define _SVTOOLS_HRC "$Revision:   1.0"
+#define _SVTOOLS_HRC
 
 #include <svl/solar.hrc>
 

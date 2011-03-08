@@ -660,8 +660,8 @@ void SwXMLItemSetStyleContext_Impl::ConnectPageDesc()
     SwDoc *pDoc = SwImport::GetDocFromXMLImport( GetSwImport() );
 
     String sName;
-    // --> OD 2005-02-01 #i40788# - first determine the display name of the
-    // page style, then map this name to the corresponding user interface name.
+    // #i40788# - first determine the display name of the page style,
+    // then map this name to the corresponding user interface name.
     sName = GetImport().GetStyleDisplayName( XML_STYLE_FAMILY_MASTER_PAGE,
                                              GetMasterPageName() );
     SwStyleNameMapper::FillUIName( sName,

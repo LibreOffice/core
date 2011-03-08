@@ -36,9 +36,8 @@
  * Win32 surface backend for OpenOffice.org Cairo Canvas                *
  ************************************************************************/
 
-#include <tools/prewin.h>
-#include <windows.h>
-#include <tools/postwin.h>
+#include <prewin.h>
+#include <postwin.h>
 
 #include <osl/diagnose.h>
 #include <vcl/bitmap.hxx>

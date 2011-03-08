@@ -46,9 +46,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 
-// '\0' terminiertes Array mit Zeichen, die im StarMath Font als Buchstaben
-// betrachtet werden sollen, (um im Gegensatz zu den anderen Operatoren
-// und Symbolen ein "normales"(ungecliptes) SmRect zu erhalten).
+// '\0' terminated Array with symbol, which should be treat as letters in
+// StarMath Font, (to get a normal (non-clipped) SmRect in contrast to the
+// other operators and symbols).
 static xub_Unicode const aMathAlpha[] =
 {
     MS_ALEPH,               MS_IM,                  MS_RE,
@@ -63,8 +63,7 @@ static xub_Unicode const aMathAlpha[] =
 };
 
 bool SmIsMathAlpha(const XubString &rText)
-    // ergibt genau dann true, wenn das Zeichen (aus dem StarMath Font) wie ein
-    // Buchstabe behandelt werden soll.
+    // true iff symbol (from StarMath Font) should be treated as letter
 {
     if (rText.Len() == 0)
         return false;
@@ -72,12 +71,12 @@ bool SmIsMathAlpha(const XubString &rText)
     OSL_ENSURE(rText.Len() == 1, "Sm : string must be exactly one character long");
     xub_Unicode cChar = rText.GetChar(0);
 
-    // ist es ein griechisches Zeichen ?
+    // is it a greek symbol?
     if (xub_Unicode(0xE0AC) <= cChar  &&  cChar <= xub_Unicode(0xE0D4))
         return true;
     else
     {
-        // kommt es in 'aMathAlpha' vor ?
+        // appears it in 'aMathAlpha'?
         const xub_Unicode *pChar = aMathAlpha;
         while (*pChar  &&  *pChar != cChar)
             pChar++;
@@ -176,8 +175,8 @@ void SmRect::BuildRect(const OutputDevice &rDev, const SmFormat *pFormat,
 
         long  nDelta = pWindow->GetFontMetric().GetIntLeading();
         if (nDelta == 0)
-        {   // dieser Wert entspricht etwa einem Leading von 80 bei einer
-            // Fonthoehe von 422 (12pt)
+        {   // this value approx. fits a Leading of 80 at a
+            // Fontheight of 422 (12pt)
             nDelta = nFontHeight * 8L / 43;
         }
         SetTop(GetTop() - nDelta);
@@ -194,7 +193,7 @@ void SmRect::BuildRect(const OutputDevice &rDev, const SmFormat *pFormat,
 #if OSL_DEBUG_LEVEL > 1
     if (!bSuccess)
     {
-        DBG_ERROR( "Sm : Ooops... (fehlt evtl. der Font?)");
+        OSL_FAIL( "Sm : Ooops... (fehlt evtl. der Font?)");
     }
 #endif
 
@@ -218,8 +217,8 @@ void SmRect::BuildRect(const OutputDevice &rDev, const SmFormat *pFormat,
 
     if (bAllowSmaller)
     {
-        // fuer Symbole und Operatoren aus dem StarMath Font passen wir den
-        // oberen und unteren Rand dem Zeichen an.
+        // for symbols and operators from the StarMath Font
+        // we adjust upper and lower margin of the symbol
         SetTop(nGlyphTop);
         SetBottom(nGlyphBottom);
     }
@@ -615,87 +614,6 @@ SmRect SmRect::AsGlyphRect() const
     return aRect;
 }
 
-#ifdef SM_RECT_DEBUG
-
-// forward declaration
-void SmDrawFrame(OutputDevice &rDev, const Rectangle &rRec,
-                 const Color aCol = COL_BLACK);
-
-void SmRect::Draw(OutputDevice &rDev, const Point &rPosition, int nFlags) const
-{
-    if (IsEmpty())
-        return;
-
-    rDev.Push(PUSH_LINECOLOR);
-
-    if (nFlags & SM_RECT_LINES)
-    {   long   nLeftSpace  = 0,
-               nRightSpace = 0;
-
-        if (nFlags & SM_RECT_ITALIC)
-        {   nLeftSpace  = GetItalicLeftSpace();
-            nRightSpace = GetItalicRightSpace();
-        }
-
-        long  nLeft  = GetLeft()  - nLeftSpace,
-              nRight = GetRight() + nRightSpace;
-
-        Point aOffset (rPosition - GetTopLeft());
-
-        rDev.SetLineColor(COL_LIGHTBLUE);
-        rDev.DrawLine(Point(nLeft,  GetAlignB()) += aOffset,
-                      Point(nRight, GetAlignB()) += aOffset);
-        rDev.DrawLine(Point(nLeft,  GetAlignT()) += aOffset,
-                      Point(nRight, GetAlignT()) += aOffset);
-        if (HasBaseline())
-            rDev.DrawLine(Point(nLeft,  GetBaseline()) += aOffset,
-                          Point(nRight, GetBaseline()) += aOffset);
-
-        rDev.SetLineColor(COL_GRAY);
-        rDev.DrawLine(Point(nLeft,  GetHiAttrFence()) += aOffset,
-                      Point(nRight, GetHiAttrFence()) += aOffset);
-    }
-
-    if (nFlags & SM_RECT_MID)
-    {   Point   aCenter = rPosition
-                          + (Point(GetItalicCenterX(), GetAlignM()) -= GetTopLeft()),
-                aLenX     (GetWidth() / 5, 0),
-                aLenY     (0, GetHeight() / 16);
-
-        rDev.SetLineColor(COL_LIGHTGREEN);
-        rDev.DrawLine(aCenter - aLenX, aCenter + aLenX);
-        rDev.DrawLine(aCenter - aLenY, aCenter + aLenY);
-    }
-
-    if (nFlags & SM_RECT_ITALIC)
-        SmDrawFrame(rDev, Rectangle(rPosition - Point(GetItalicLeftSpace(), 0),
-                GetItalicSize()));
-
-    if (nFlags & SM_RECT_CORE)
-        SmDrawFrame(rDev, Rectangle(rPosition, GetSize()), COL_LIGHTRED);
-
-    rDev.Pop();
-}
-
-
-void SmDrawFrame(OutputDevice &rDev, const Rectangle &rRec,
-                 const Color aCol)
-{
-    rDev.Push(PUSH_LINECOLOR);
-
-    rDev.SetLineColor(aCol);
-
-    rDev.DrawLine(rRec.TopLeft(),     rRec.BottomLeft());
-    rDev.DrawLine(rRec.BottomLeft(),  rRec.BottomRight());
-    rDev.DrawLine(rRec.BottomRight(), rRec.TopRight());
-    rDev.DrawLine(rRec.TopRight(),    rRec.TopLeft());
-
-    rDev.Pop();
-}
-
-#endif //SM_RECT_DEBUG
-
-
 bool SmGetGlyphBoundRect(const OutputDevice &rDev,
                          const XubString &rText, Rectangle &rRect)
     // basically the same as 'GetTextBoundRect' (in class 'OutputDevice')
@@ -730,7 +648,7 @@ bool SmGetGlyphBoundRect(const OutputDevice &rDev,
     // in significant incorrect bounding rectangles for some charcters.
     Size aFntSize = aFnt.GetSize();
 
-    // HDU: workaround to avoid HUGE font sizes and resulting problems (#112783#)
+    // HDU: workaround to avoid HUGE font sizes and resulting problems
     long nScaleFactor = 1;
     while( aFntSize.Height() > 2000 * nScaleFactor )
         nScaleFactor *= 2;

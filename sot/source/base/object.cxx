@@ -459,7 +459,7 @@ void SotObject::RemoveOwnerLock()
         ReleaseRef();
     }
     else {
-        DBG_ERROR("OwnerLockCount underflow!");
+        OSL_FAIL("OwnerLockCount underflow!");
     }
 }
 

@@ -66,7 +66,8 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 
 using namespace com::sun::star;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 #define GLOBALOVERFLOW
 

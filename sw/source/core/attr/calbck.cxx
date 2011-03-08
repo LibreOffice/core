@@ -340,10 +340,9 @@ SwClient *SwModify::_Remove(SwClient * pDepend)
             if( pTmp->pAkt == pDepend || pTmp->pDelNext == pDepend )
                 pTmp->pDelNext = pR;
 
-            // --> FME 2006-02-03 #127369# Notify SwClientIter if mpWatchClient is removed
+            // Notify SwClientIter if mpWatchClient is removed
             if ( pTmp->mpWatchClient == pDepend )
                 pTmp->mpWatchClient = 0;
-            // <--
 
             pTmp = pTmp->pNxtIter;
         }

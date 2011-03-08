@@ -29,9 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-#include <tools/list.hxx>
-
 #include <hintids.hxx>
 #include "uitool.hxx"
 #include <sfx2/app.hxx>
@@ -66,10 +63,8 @@
 #include "fmtcol.hxx"
 #include "section.hxx"
 
-// -> #i23726#
 #include "ndtxt.hxx"
 #include "pam.hxx"
-// <- #i23726#
 
 #include <IDocumentSettingAccess.hxx>
 
@@ -129,7 +124,7 @@ void lcl_ConvertToCols(const SvxColumnItem& rColItem,
                           SwFmtCol& rCols)
 {
     OSL_ENSURE( rCols.GetNumCols() == rColItem.Count(), "Column count mismatch" );
-    // #126939# ruler executes that change the columns shortly after the selection has changed
+    // ruler executes that change the columns shortly after the selection has changed
     // can result in a crash
     if(rCols.GetNumCols() != rColItem.Count())
         return;
@@ -584,17 +579,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
     {
         SvxLRSpaceItem aParaMargin((const SvxLRSpaceItem&)rReq.
                                         GetArgs()->Get(nSlot));
-        if(nFrmType & FRMTYPE_FLY_ANY)
-        {
-            if(nFrmType & FRMTYPE_COLUMN)
-            {
-                USHORT nCurFrameCol = rSh.GetCurColNum() - 1;
-                const SwFrmFmt* pFmt =  rSh.GetFlyFrmFmt();
-                const SwFmtCol* pCols = &pFmt->GetCol();
-                const SwColumns& rCols = pCols->GetColumns();
-                USHORT nColumnCount = rCols.Count();
-            }
-        }
+
         aParaMargin.SetRight( aParaMargin.GetRight() - nRightBorderDistance );
         aParaMargin.SetTxtLeft(aParaMargin.GetTxtLeft() - nLeftBorderDistance );
 
@@ -604,7 +589,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
         // #i23726#
         if (pNumRuleNodeFromDoc)
         {
-            // --> FME 2005-02-22 #i42922# Mouse move of numbering label
+            // --> #i42922# Mouse move of numbering label
             // has to consider the left indent of the paragraph
             SfxItemSet aSet( GetPool(), RES_LR_SPACE, RES_LR_SPACE );
             rSh.GetCurAttr( aSet );
@@ -613,11 +598,9 @@ void SwView::ExecTabWin( SfxRequest& rReq )
             // <--
 
             SwPosition aPos(*pNumRuleNodeFromDoc);
-            // --> OD 2008-06-09 #i90078#
+            // #i90078#
             rSh.SetIndent( static_cast< short >(aParaMargin.GetTxtLeft() - rLR.GetTxtLeft()), aPos);
-            // <--
-            // --> OD 2005-02-18 #i42921# - invalidate state of indent in order
-            // to get a ruler update.
+            // #i42921# invalidate state of indent in order to get a ruler update.
             aParaMargin.SetWhich( nSlot );
             GetViewFrame()->GetBindings().SetState( aParaMargin );
             // <--
@@ -698,13 +681,6 @@ void SwView::ExecTabWin( SfxRequest& rReq )
 
             nBorder = (bVerticalWriting ? nPageHeight : nPageWidth) - aTabCols.GetLeftMin() - aColItem.GetRight();
 
-#ifdef DEBUG
-            long nTmp1 = nPageWidth;
-            long nTmp2 = aTabCols.GetLeftMin() + nBorder;
-            (void)nTmp1;
-            (void)nTmp2;
-#endif
-
             if ( aColItem.GetRight() > 0 )
                 aTabCols.SetRight( nBorder );
 
@@ -718,7 +694,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
             if(bIsTableRTL)
             {
                 USHORT nColCount = aColItem.Count() - 1;
-                for ( USHORT i = 0; i < nColCount; ++i )
+                for ( USHORT i = 0; i < nColCount && i < aTabCols.Count(); ++i )
                 {
                     const SvxColumnDescription& rCol = aColItem[nColCount - i];
                     aTabCols[i] = aTabCols.GetRight() - rCol.nStart;
@@ -727,7 +703,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
             }
             else
             {
-                for ( USHORT i = 0; i < aColItem.Count()-1; ++i )
+                for ( USHORT i = 0; i < aColItem.Count()-1 && i < aTabCols.Count(); ++i )
                 {
                     const SvxColumnDescription& rCol = aColItem[i];
                     aTabCols[i] = rCol.nEnd + aTabCols.GetLeft();
@@ -1100,7 +1076,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     if (pNumRuleNodeFromDoc)
                     {
                         short nOffset = static_cast< short >(aLR.GetTxtLeft() +
-                                        // --> FME 2005-02-22 #i42922# Mouse move of numbering label
+                                        // #i42922# Mouse move of numbering label
                                         // has to consider the left indent of the paragraph
                                         pNumRuleNodeFromDoc->GetLeftMarginWithNum( TRUE ) );
                                        // <--

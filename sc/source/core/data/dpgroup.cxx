@@ -54,8 +54,8 @@
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
 
 #include <vector>
-#include <hash_set>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
+#include <boost/unordered_set.hpp>
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Any;
@@ -67,8 +67,6 @@ using ::rtl::OUString;
 using ::rtl::OUStringHash;
 
 using ::std::vector;
-using ::std::hash_set;
-using ::std::hash_map;
 using ::boost::shared_ptr;
 
 #define D_TIMEFACTOR              86400.0
@@ -82,7 +80,7 @@ const sal_Int32 SC_DP_DATE_LAST = 10000;
 // ============================================================================
 namespace
 {
-    BOOL lcl_Search( SCCOL nSourceDim, ScDPTableDataCache* pCache , const std::vector< SCROW >& vIdx, SCROW nNew , SCROW& rIndex)
+    BOOL lcl_Search( SCCOL nSourceDim, const ScDPCache* pCache , const std::vector< SCROW >& vIdx, SCROW nNew , SCROW& rIndex)
     {
         rIndex = vIdx.size();
         BOOL bFound = FALSE;
@@ -114,7 +112,7 @@ namespace
         return bFound;
     }
 
-    void  lcl_Insert( SCCOL nSourceDim, ScDPTableDataCache* pCache ,  std::vector< SCROW >& vIdx, SCROW nNew )
+    void  lcl_Insert( SCCOL nSourceDim, const ScDPCache* pCache ,  std::vector< SCROW >& vIdx, SCROW nNew )
     {
         SCROW nIndex = 0;
         if ( !lcl_Search( nSourceDim, pCache, vIdx, nNew ,nIndex ) )
@@ -122,18 +120,18 @@ namespace
     }
 
     template<bool bUpdateData>
-    SCROW lcl_InsertValue( SCCOL nSourceDim, ScDPTableDataCache* pCache ,  std::vector< SCROW >& vIdx, const ScDPItemData & rData );
+    SCROW lcl_InsertValue(SCCOL nSourceDim, const ScDPCache* pCache, std::vector<SCROW>& vIdx, const ScDPItemData & rData);
 
     template<>
-    SCROW lcl_InsertValue<false>( SCCOL nSourceDim, ScDPTableDataCache* pCache ,  std::vector< SCROW >& vIdx, const ScDPItemData & rData )
+    SCROW lcl_InsertValue<false>(SCCOL nSourceDim, const ScDPCache* pCache, std::vector<SCROW>& vIdx, const ScDPItemData & rData)
     {
-        SCROW nNewID = pCache->GetAdditionalItemID( rData );
-        lcl_Insert( nSourceDim, pCache, vIdx, nNewID );
+        SCROW nNewID = pCache->GetAdditionalItemID(rData);
+        lcl_Insert(nSourceDim, pCache, vIdx, nNewID);
         return nNewID;
     }
 
     template<>
-    SCROW lcl_InsertValue<true>( SCCOL nSourceDim, ScDPTableDataCache* pCache ,  std::vector< SCROW >& vIdx, const ScDPItemData & rData )
+    SCROW lcl_InsertValue<true>(SCCOL nSourceDim, const ScDPCache* pCache, std::vector<SCROW>& vIdx, const ScDPItemData & rData)
     {
         SCROW nItemId = lcl_InsertValue<false>( nSourceDim, pCache, vIdx, rData );
 
@@ -144,13 +142,13 @@ namespace
     }
 
     template<bool bUpdateData>
-    void lcl_InsertValue ( SCCOL nSourceDim, ScDPTableDataCache* pCache ,  std::vector< SCROW >& vIdx, const String&  rString, const double& fValue )
+    void lcl_InsertValue ( SCCOL nSourceDim, const ScDPCache* pCache,  std::vector< SCROW >& vIdx, const String&  rString, const double& fValue )
     {
         lcl_InsertValue<bUpdateData>( nSourceDim, pCache, vIdx, ScDPItemData( rString, fValue, TRUE ) );
     }
 
     template<bool bUpdateData>
-    void lcl_InsertValue ( SCCOL nSourceDim, ScDPTableDataCache* pCache ,  std::vector< SCROW >& vIdx, const String&  rString, const double& fValue, sal_Int32 nDatePart )
+    void lcl_InsertValue ( SCCOL nSourceDim, const ScDPCache* pCache, std::vector< SCROW >& vIdx, const String&  rString, const double& fValue, sal_Int32 nDatePart )
     {
         lcl_InsertValue<bUpdateData>( nSourceDim, pCache, vIdx, ScDPItemData( nDatePart, rString, fValue, ScDPItemData::MK_DATA|ScDPItemData::MK_VAL|ScDPItemData::MK_DATEPART ) );
     }
@@ -356,7 +354,7 @@ bool ScDPGroupDateFilter::match( const ScDPItemData & rCellData ) const
                 return sec == matchSec;
             }
             default:
-                DBG_ERROR("invalid time part");
+                OSL_FAIL("invalid time part");
         }
         return false;
     }
@@ -395,7 +393,7 @@ bool ScDPGroupDateFilter::match( const ScDPItemData & rCellData ) const
             return days == matchDays;
         }
         default:
-            DBG_ERROR("invalid date part");
+            OSL_FAIL("invalid date part");
     }
 
     return false;
@@ -459,7 +457,7 @@ String lcl_GetDateGroupName( sal_Int32 nDatePart, sal_Int32 nValue, SvNumberForm
             aRet.Append( lcl_GetTwoDigitString( nValue ) );
             break;
         default:
-            DBG_ERROR("invalid date part");
+            OSL_FAIL("invalid date part");
     }
     return aRet;
 }
@@ -529,7 +527,7 @@ sal_Int32 lcl_GetDatePartValue( double fValue, sal_Int32 nDatePart, SvNumberForm
                 }
                 break;
             default:
-                DBG_ERROR("invalid date part");
+                OSL_FAIL("invalid date part");
         }
     }
 
@@ -602,7 +600,8 @@ String lcl_GetSpecialDateName( double fValue, bool bFirst, SvNumberFormatter* pF
     return aBuffer.makeStringAndClear();
 }
 
-void ScDPDateGroupHelper::FillColumnEntries( SCCOL nSourceDim, ScDPTableDataCache* pCache, std::vector< SCROW >& rEntries, const std::vector< SCROW >& rOriginal  ) const
+void ScDPDateGroupHelper::FillColumnEntries(
+    SCCOL nSourceDim, const ScDPCache* pCache, std::vector<SCROW>& rEntries, const std::vector<SCROW>& rOriginal) const
 {
     // auto min/max is only used for "Years" part, but the loop is always needed
     double fSourceMin = 0.0;
@@ -662,7 +661,7 @@ void ScDPDateGroupHelper::FillColumnEntries( SCCOL nSourceDim, ScDPTableDataCach
         case com::sun::star::sheet::DataPilotFieldGroupBy::MINUTES:  nStart = 0; nEnd = 59;  break;
         case com::sun::star::sheet::DataPilotFieldGroupBy::SECONDS:  nStart = 0; nEnd = 59;  break;
         default:
-            DBG_ERROR("invalid date part");
+            OSL_FAIL("invalid date part");
     }
 
     for ( sal_Int32 nValue = nStart; nValue <= nEnd; nValue++ )
@@ -902,8 +901,8 @@ void ScDPNumGroupDimension::MakeDateHelper( const ScDPNumGroupInfo& rInfo, sal_I
     aGroupInfo.Enable = sal_True;   //! or query both?
 }
 
-const std::vector< SCROW >& ScDPNumGroupDimension::GetNumEntries( SCCOL nSourceDim, ScDPTableDataCache* pCache,
-                    const std::vector< SCROW >& rOriginal  ) const
+const std::vector<SCROW>& ScDPNumGroupDimension::GetNumEntries(
+    SCCOL nSourceDim, const ScDPCache* pCache, const std::vector<SCROW>& rOriginal) const
 {
     if ( maMemberEntries.empty() )
     {
@@ -1010,7 +1009,7 @@ const std::vector< SCROW >& ScDPNumGroupDimension::GetNumEntries( SCCOL nSourceD
 }
 
 ScDPGroupTableData::ScDPGroupTableData( const shared_ptr<ScDPTableData>& pSource, ScDocument* pDocument ) :
-    ScDPTableData(pDocument, pSource->GetCacheId() ),
+    ScDPTableData(pDocument),
     pSourceData( pSource ),
     pDoc( pDocument )
 {
@@ -1097,7 +1096,7 @@ const std::vector< SCROW >& ScDPGroupTableData::GetColumnEntries( long  nColumn 
     {
         // dimension number is unchanged for numerical groups
         const  std::vector< SCROW >& rOriginal = pSourceData->GetColumnEntries( nColumn );
-        return pNumGroups[nColumn].GetNumEntries( (SCCOL)nColumn,  GetCacheTable().getCache(), rOriginal );
+        return pNumGroups[nColumn].GetNumEntries( (SCCOL)nColumn, GetCacheTable().getCache(), rOriginal );
     }
 
     return pSourceData->GetColumnEntries( nColumn );
@@ -1191,12 +1190,12 @@ void ScDPGroupTableData::CreateCacheTable()
 
 void ScDPGroupTableData::ModifyFilterCriteria(vector<ScDPCacheTable::Criterion>& rCriteria)
 {
-    typedef hash_map<long, const ScDPGroupDimension*> GroupFieldMapType;
+    typedef boost::unordered_map<long, const ScDPGroupDimension*> GroupFieldMapType;
     GroupFieldMapType aGroupFieldIds;
     {
         ScDPGroupDimensionVec::const_iterator itr = aGroups.begin(), itrEnd = aGroups.end();
         for (; itr != itrEnd; ++itr)
-            aGroupFieldIds.insert( hash_map<long, const ScDPGroupDimension*>::value_type(itr->GetGroupDim(), &(*itr)) );
+            aGroupFieldIds.insert( boost::unordered_map<long, const ScDPGroupDimension*>::value_type(itr->GetGroupDim(), &(*itr)) );
     }
 
     vector<ScDPCacheTable::Criterion> aNewCriteria;
@@ -1289,14 +1288,14 @@ void ScDPGroupTableData::ModifyFilterCriteria(vector<ScDPCacheTable::Criterion>&
     rCriteria.swap(aNewCriteria);
 }
 
-void ScDPGroupTableData::FilterCacheTable(const vector<ScDPCacheTable::Criterion>& rCriteria, const hash_set<sal_Int32>& rCatDims)
+void ScDPGroupTableData::FilterCacheTable(const vector<ScDPCacheTable::Criterion>& rCriteria, const boost::unordered_set<sal_Int32>& rCatDims)
 {
     vector<ScDPCacheTable::Criterion> aNewCriteria(rCriteria);
     ModifyFilterCriteria(aNewCriteria);
     pSourceData->FilterCacheTable(aNewCriteria, rCatDims);
 }
 
-void ScDPGroupTableData::GetDrillDownData(const vector<ScDPCacheTable::Criterion>& rCriteria, const hash_set<sal_Int32>& rCatDims, Sequence< Sequence<Any> >& rData)
+void ScDPGroupTableData::GetDrillDownData(const vector<ScDPCacheTable::Criterion>& rCriteria, const boost::unordered_set<sal_Int32>& rCatDims, Sequence< Sequence<Any> >& rData)
 {
     vector<ScDPCacheTable::Criterion> aNewCriteria(rCriteria);
     ModifyFilterCriteria(aNewCriteria);
@@ -1339,7 +1338,7 @@ void ScDPGroupTableData::FillGroupValues( /*ScDPItemData* pItemData*/ SCROW* pIt
 {
     long nGroupedColumns = aGroups.size();
 
-    ScDPTableDataCache* pCache = GetCacheTable().getCache();
+    const ScDPCache* pCache = GetCacheTable().getCache();
     for (long nDim=0; nDim<nCount; nDim++)
     {
         const ScDPDateGroupHelper* pDateHelper = NULL;
@@ -1462,7 +1461,7 @@ BOOL ScDPGroupTableData::IsInGroup( const ScDPItemData& rGroupData, long nGroupI
                 // date group information, too.
                 if ( !pBaseDateHelper )
                 {
-                    DBG_ERROR( "mix of date and non-date groups" );
+                    OSL_FAIL( "mix of date and non-date groups" );
                     return TRUE;
                 }
 
@@ -1482,7 +1481,7 @@ BOOL ScDPGroupTableData::IsInGroup( const ScDPItemData& rGroupData, long nGroupI
         }
     }
 
-    DBG_ERROR("IsInGroup: no group dimension found");
+    OSL_FAIL("IsInGroup: no group dimension found");
     return TRUE;
 }
 
@@ -1508,7 +1507,7 @@ BOOL ScDPGroupTableData::HasCommonElement( const ScDPItemData& rFirstData, long 
             // If one is a date group dimension, the other one must be, too.
             if ( !pFirstDateHelper || !pSecondDateHelper )
             {
-                DBG_ERROR( "mix of date and non-date groups" );
+                OSL_FAIL( "mix of date and non-date groups" );
                 return TRUE;
             }
 
@@ -1541,7 +1540,7 @@ BOOL ScDPGroupTableData::HasCommonElement( const ScDPItemData& rFirstData, long 
         }
     }
 
-    DBG_ERROR("HasCommonElement: no group dimension found");
+    OSL_FAIL("HasCommonElement: no group dimension found");
     return TRUE;
 }
 

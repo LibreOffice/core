@@ -53,7 +53,7 @@ BOOL SwEditShell::Undo( SwUndoId nUndoId, USHORT nCnt )
 {
     SET_CURR_SHELL( this );
 
-    // #105332# current undo state was not saved
+    // current undo state was not saved
     BOOL bRet = FALSE;
     BOOL bSaveDoesUndo = GetDoc()->DoesUndo();
 
@@ -130,12 +130,12 @@ BOOL SwEditShell::Undo( SwUndoId nUndoId, USHORT nCnt )
         GetDoc()->SetRedlineMode( eOld );
         GetDoc()->CompressRedlines();
 
-        //JP 18.09.97: autom. Erkennung  fuer die neue "Box"
+        // autom. Erkennung  fuer die neue "Box"
         SaveTblBoxCntnt();
     }
     EndAllAction();
 
-    // #105332# undo state was not restored but set to FALSE everytime
+    // undo state was not restored but set to FALSE everytime
     GetDoc()->DoUndo( bSaveDoesUndo );
     return bRet;
 }
@@ -146,7 +146,7 @@ USHORT SwEditShell::Redo( USHORT nCnt )
 
     BOOL bRet = FALSE;
 
-    // #105332# undo state was not saved
+    // undo state was not saved
     BOOL bSaveDoesUndo = GetDoc()->DoesUndo();
 
     GetDoc()->DoUndo( FALSE );
@@ -216,13 +216,13 @@ USHORT SwEditShell::Redo( USHORT nCnt )
         GetDoc()->SetRedlineMode( eOld );
         GetDoc()->CompressRedlines();
 
-        //JP 18.09.97: autom. Erkennung  fuer die neue "Box"
+        // autom. Erkennung  fuer die neue "Box"
         SaveTblBoxCntnt();
     }
 
     EndAllAction();
 
-    // #105332# undo state was not restored but set FALSE everytime
+    // undo state was not restored but set FALSE everytime
     GetDoc()->DoUndo( bSaveDoesUndo );
     return bRet;
 }

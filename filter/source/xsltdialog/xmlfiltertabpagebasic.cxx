@@ -36,8 +36,7 @@
 #include "xmlfiltersettingsdialog.hxx"
 #include "xmlfilterhelpids.hrc"
 
-using namespace rtl;
-
+using ::rtl::OUString;
 XMLFilterTabPageBasic::XMLFilterTabPageBasic( Window* pParent, ResMgr& rResMgr ) :
     TabPage( pParent, ResId( RID_XML_FILTER_TABPAGE_BASIC, rResMgr ) ),
     maFTFilterName( this, ResId( FT_XML_FILTER_NAME, rResMgr ) ),

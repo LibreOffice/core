@@ -170,7 +170,6 @@ ModalDialog DLG_FILTERCRIT
     {
         Pos = MAP_APPFONT ( 15 , 14 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Verknüpfung : Verkn³pfung */
         Center = TRUE ;
         Text [ en-US ] = "Operator" ;
     };

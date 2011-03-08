@@ -204,8 +204,6 @@ ModalDialog DLG_AUTOFMT_TABLE
     };
     String STR_INVALID_AFNAME
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Sie haben einen ungültigen Namen angegeben.\nDas AutoFormat konnte nicht angelegt werden.\nWählen Sie einen anderen Namen. : Sie haben einen ungültigen Namen angegeben.\nDas Autoformat konnte nicht angelegt werden.\nWählen Sie einen anderen Namen. */
-        /* ### ACHTUNG: Neuer Text in Resource? Sie haben einen ungültigen Namen angegeben.\nDas AutoFormat konnte nicht angelegt werden.\nWählen Sie einen anderen Namen. : Sie haben einen ungültigen Namen angegeben.\nDas Autoformat konnte nicht angelegt werden.\nWählen Sie einen anderen Namen. */
         Text [ en-US ] = "You have entered an invalid name.\nThe desired AutoFormat could not be created. \nTry again using a different name." ;
     };
 };

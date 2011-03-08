@@ -35,9 +35,10 @@
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <cppuhelper/implbase1.hxx>
 
-using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::xml::sax;
+
+using ::rtl::OUString;
 
 #define ELEMENT_ACCELERATORLIST     "acceleratorlist"
 #define ELEMENT_ACCELERATORITEM     "item"

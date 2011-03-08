@@ -50,9 +50,9 @@ typedef sal_uInt8 FT_Byte;
 typedef std::map<USHORT,USHORT> GlyphSubstitution;
 
 
-inline long NEXT_Long( const unsigned char* &p )
+inline sal_uInt32 NEXT_Long( const unsigned char* &p )
 {
-    long nVal = (p[0]<<24) + (p[1]<<16) + (p[2]<<8) + p[3];
+    sal_uInt32 nVal = (p[0]<<24) + (p[1]<<16) + (p[2]<<8) + p[3];
     p += 4;
     return nVal;
 }

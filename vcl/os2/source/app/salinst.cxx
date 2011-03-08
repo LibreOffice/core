@@ -308,7 +308,7 @@ void ImplDbgTestSolarMutex()
             SalYieldMutex* pYieldMutex = pSalData->mpFirstInstance->mpSalYieldMutex;
             if ( pYieldMutex->mnThreadId != nCurThreadId )
             {
-                DBG_ERROR( "SolarMutex not locked, and not thread save code in VCL is called from outside of the main thread" );
+                OSL_FAIL( "SolarMutex not locked, and not thread save code in VCL is called from outside of the main thread" );
             }
         }
     }
@@ -319,7 +319,7 @@ void ImplDbgTestSolarMutex()
             SalYieldMutex* pYieldMutex = pSalData->mpFirstInstance->mpSalYieldMutex;
             if ( pYieldMutex->mnThreadId != nCurThreadId )
             {
-                DBG_ERROR( "SolarMutex not locked in the main thread" );
+                OSL_FAIL( "SolarMutex not locked in the main thread" );
             }
         }
     }
@@ -356,7 +356,7 @@ void InitSalMain()
     HAB hAB;
     HMQ hMQ;
     SalData* pData = GetAppSalData();
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 0
 printf("InitSalMain\n");
 #endif
 
@@ -389,7 +389,7 @@ printf("InitSalMain\n");
 
 void DeInitSalMain()
 {
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 0
 printf("DeInitSalMain\n");
 #endif
 
@@ -443,7 +443,7 @@ SalInstance* CreateSalInstance()
     if ( !hComWnd )
         return NULL;
 
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 1
     debug_printf("CreateSalInstance hComWnd %x\n", hComWnd);
 #endif
     Os2SalInstance* pInst = new Os2SalInstance;

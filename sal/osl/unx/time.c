@@ -34,7 +34,7 @@
 
 /* FIXME: detection should be done in configure script */
 #if defined(MACOSX) || defined(FREEBSD) || defined(NETBSD) || \
-    defined(LINUX) || defined(OPENBSD)
+    defined(LINUX) || defined(OPENBSD) || defined(DRAGONFLY)
 #define STRUCT_TM_HAS_GMTOFF 1
 
 #elif defined(SOLARIS)

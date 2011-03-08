@@ -32,12 +32,6 @@
 #include <tools/poly.hxx>
 #include <svx/graphctl.hxx>
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 class ContourWindow : public GraphCtrl
 {
     PolyPolygon         aPolyPoly;

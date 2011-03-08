@@ -29,7 +29,6 @@
 #ifndef _GRFCACHE_HXX
 #define _GRFCACHE_HXX
 
-#include <tools/list.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/timer.hxx>
 #include <svtools/grfmgr.hxx>

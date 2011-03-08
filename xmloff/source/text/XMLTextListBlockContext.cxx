@@ -86,7 +86,6 @@ XMLTextListBlockContext::XMLTextListBlockContext(
     // Inherit style name from parent list, as well as the flags whether
     // numbering must be restarted and formats have to be created.
     OUString sParentListStyleName;
-    sal_Bool bParentRestartNumbering( sal_False );
     if( mxParentListBlock.Is() )
     {
         XMLTextListBlockContext *pParent =
@@ -97,7 +96,6 @@ XMLTextListBlockContext::XMLTextListBlockContext(
         mnLevel = pParent->GetLevel() + 1;
         mbRestartNumbering = pParent->IsRestartNumbering() ||
                              bRestartNumberingAtSubList;
-        bParentRestartNumbering = pParent->IsRestartNumbering();
         mbSetDefaults = pParent->mbSetDefaults;
         msListId = pParent->GetListId();
         msContinueListId = pParent->GetContinueListId();

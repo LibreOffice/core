@@ -31,8 +31,6 @@
 
 #include <svx/dialogs.hrc>
 
-
-#include <tools/list.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/dispatch.hxx>

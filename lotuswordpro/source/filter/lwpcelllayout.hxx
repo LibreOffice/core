@@ -141,7 +141,7 @@ protected:
     LeaderDotType cType;
     OUString m_CellStyleNames[enumCellBorderTopLimit];
 
-    OUString m_NumfmtName;//Add by , to support number color,2005/11/30
+    OUString m_NumfmtName;//Add to support number color
 private:
     LwpCellList* GetCellList(LwpFoundry* pFoundry, LwpObjectID aTableID, sal_uInt16 nRow, sal_uInt8 nCol);
 };

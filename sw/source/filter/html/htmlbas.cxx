@@ -282,7 +282,7 @@ void SwHTMLWriter::OutBasic()
 
     BasicManager *pBasicMan = pDoc->GetDocShell()->GetBasicManager();
     OSL_ENSURE( pBasicMan, "Wo ist der Basic-Manager?" );
-    //JP 17.07.96: Bug 29538 - nur das DocumentBasic schreiben
+    // nur das DocumentBasic schreiben
     if( !pBasicMan || pBasicMan == SFX_APP()->GetBasicManager() )
     {
         SFX_APP()->LeaveBasicCall();

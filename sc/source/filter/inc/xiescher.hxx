@@ -31,7 +31,6 @@
 
 #include <vector>
 #include <map>
-#include <hash_map>
 #include <filter/msfilter/msdffimp.hxx>
 #include <filter/msfilter/msocximex.hxx>
 #include <vcl/graph.hxx>

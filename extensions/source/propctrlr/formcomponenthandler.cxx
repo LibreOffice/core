@@ -1000,7 +1000,7 @@ namespace pcr
         String sDisplayName = m_pInfoService->getPropertyTranslation( nPropId );
         if ( !sDisplayName.Len() )
         {
-            DBG_ERROR( "FormComponentPropertyHandler::describePropertyLine: did getSupportedProperties not work properly?" );
+            OSL_FAIL( "FormComponentPropertyHandler::describePropertyLine: did getSupportedProperties not work properly?" );
             throw UnknownPropertyException();
         }
 
@@ -1513,7 +1513,7 @@ namespace pcr
                 eResult = InteractiveSelectionResult_Pending;
             break;
         default:
-            DBG_ERROR( "FormComponentPropertyHandler::onInteractivePropertySelection: request for a property which does not have dedicated UI!" );
+            OSL_FAIL( "FormComponentPropertyHandler::onInteractivePropertySelection: request for a property which does not have dedicated UI!" );
             break;
         }
         return eResult;
@@ -1801,7 +1801,7 @@ namespace pcr
         break;
 
         default:
-            DBG_ERROR( "FormComponentPropertyHandler::actuatingPropertyChanged: did not register for this property!" );
+            OSL_FAIL( "FormComponentPropertyHandler::actuatingPropertyChanged: did not register for this property!" );
             break;
 
         }   // switch ( nActuatingPropId )
@@ -2389,7 +2389,7 @@ namespace pcr
         }
         catch (Exception&)
         {
-            DBG_ERROR( "FormComponentPropertyHandler::impl_initFieldList_nothrow: caught an exception!" );
+            OSL_FAIL( "FormComponentPropertyHandler::impl_initFieldList_nothrow: caught an exception!" );
         }
     }
 
@@ -2443,7 +2443,7 @@ namespace pcr
             }
             catch( const Exception& )
             {
-                DBG_ERROR( "FormComponentPropertyHandler::impl_ensureRowsetConnection_nothrow: caught an exception during error handling!" );
+                OSL_FAIL( "FormComponentPropertyHandler::impl_ensureRowsetConnection_nothrow: caught an exception during error handling!" );
             }
             // additional info about what happended
             String sInfo( PcrRes( RID_STR_UNABLETOCONNECT ) );
@@ -2503,7 +2503,7 @@ namespace pcr
         }
         catch (Exception&)
         {
-            DBG_ERROR("FormComponentPropertyHandler::impl_describeCursorSource_nothrow: caught an exception !");
+            OSL_FAIL("FormComponentPropertyHandler::impl_describeCursorSource_nothrow: caught an exception !");
         }
     }
 
@@ -2846,7 +2846,6 @@ namespace pcr
         if ( INET_PROT_FILE == aParser.GetProtocol() )
             // set the initial directory only for file-URLs. Everything else
             // is considered to be potentially expensive
-            // 106126 - 2002/12/10 - fs@openoffice.org
             aFileDlg.SetDisplayDirectory( sURL );
 
         _rClearBeforeDialog.clear();
@@ -2900,7 +2899,6 @@ namespace pcr
         if ( INET_PROT_FILE == aParser.GetProtocol() )
             // set the initial directory only for file-URLs. Everything else
             // is considered to be potentially expensive
-            // 106126 - 2002/12/10 - fs@openoffice.org
             aFileDlg.SetDisplayDirectory( sDataSource );
 
         const String s_sDatabaseType = String::CreateFromAscii("StarOffice XML (Base)");

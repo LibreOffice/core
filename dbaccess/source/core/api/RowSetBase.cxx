@@ -1085,7 +1085,7 @@ sal_Bool SAL_CALL ORowSetBase::previous(  ) throw(SQLException, RuntimeException
         }
         else
         {
-            DBG_ERROR( "ORowSetBase::previous: inconsistency!" );
+            OSL_FAIL( "ORowSetBase::previous: inconsistency!" );
                 // we should never reach this place, as we should not get into this whole branch if m_bBeforeFirst
                 // was |true| from the beginning
             movementFailed();
@@ -1135,7 +1135,6 @@ void ORowSetBase::setCurrentRow( sal_Bool _bMoved, sal_Bool _bDoNotify, const OR
         OSL_ENSURE(rRow.is() ,"Invalid size of vector!");
 #endif
         // the cache could repositioned so we need to adjust the cache
-        // #104144# OJ
         if ( _bMoved && m_aCurrentRow.isNull() )
         {
             positionCache( MOVE_NONE_REFRESH_ONLY );
@@ -1281,7 +1280,7 @@ void ORowSetBase::firePropertyChange(const ORowSetRow& _rOldRow)
     try
     {
         TDataColumns::iterator aEnd = m_aDataColumns.end();
-        for(TDataColumns::iterator aIter = m_aDataColumns.begin();aIter != aEnd;++aIter,++i) // #104278# OJ ++i inserted
+        for(TDataColumns::iterator aIter = m_aDataColumns.begin();aIter != aEnd;++aIter,++i)
             (*aIter)->fireValueChange(_rOldRow.is() ? (_rOldRow->get())[i+1] : ::connectivity::ORowSetValue());
     }
     catch(Exception&)
@@ -1383,6 +1382,7 @@ void ORowSetBase::positionCache( CursorMoveDirection _ePrepareForDirection )
         }
     }
     OSL_ENSURE( bSuccess, "ORowSetBase::positionCache: failed!" );
+    (void)bSuccess;
 
     DBG_TRACE2("DBACCESS ORowSetBase::positionCache() Clone = %i ID = %i\n",m_bClone,osl_getThreadIdentifier(NULL));
 }

@@ -47,7 +47,7 @@
 #include <com/sun/star/media/XPlayer.hpp>
 #include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
 #include <svtools/dialogclosedlistener.hxx>
-#include <bootstrp/sstring.hxx>
+#include <vector>
 
 // ------------
 // - Forwards -
@@ -58,6 +58,8 @@ class GalleryTheme;
 class SearchProgress;
 class TakeProgress;
 class TPGalleryThemeProperties;
+
+typedef ::std::vector< UniString*  > StringList;
 
 // ---------------
 // - FilterEntry -

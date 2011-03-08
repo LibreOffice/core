@@ -44,7 +44,7 @@ CXXFLAGS+= $(LFS_CFLAGS)
 # --- test dll ------------------------------------------------------
 SHL1TARGET     = Module_DLL
 SHL1OBJS       = $(SLO)$/osl_Module_DLL.obj
-SHL1STDLIBS    = $(SALLIB)
+SHL1STDLIBS    = $(SALLIB) $(CPPUNITLIB)
 SHL1IMPLIB     = i$(SHL1TARGET)
 SHL1DEF        = $(MISC)$/$(SHL1TARGET).def
 DEF1NAME       = $(SHL1TARGET)
@@ -55,7 +55,7 @@ SHL1VERSIONMAP = export_dll.map
 SHL2OBJS=  $(SLO)$/osl_Module.obj
 
 SHL2TARGET= osl_Module
-SHL2STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
+SHL2STDLIBS= $(SALLIB) $(CPPUNITLIB)
 
 .IF "$(GUI)" == "WNT"
 SHL2STDLIBS+=i$(SHL2TARGET).lib
@@ -75,5 +75,5 @@ SHL2VERSIONMAP= $(PRJ)$/qa$/export.map
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-.INCLUDE : _cppunit.mk
+.INCLUDE : $(PRJ)$/qa$/cppunit_local.mk
 

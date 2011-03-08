@@ -80,7 +80,7 @@ class SwList;
 #include <com/sun/star/linguistic2/XProofreadingIterator.hpp>
 #include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <stringhash.hxx>
 
 #include <svtools/embedhlp.hxx>
@@ -363,9 +363,9 @@ class SW_DLLPUBLIC SwDoc :
     mutable SwNumRuleTbl    *pNumRuleTbl;   // List of all named NumRules.
 
     // Hash map to find numrules by name
-    mutable std::hash_map<String, SwNumRule *, StringHash> maNumRuleMap;
+    mutable boost::unordered_map<String, SwNumRule *, StringHash> maNumRuleMap;
 
-    typedef std::hash_map< String, SwList*, StringHash > tHashMapForLists;
+    typedef boost::unordered_map< String, SwList*, StringHash > tHashMapForLists;
     // container to hold the lists of the text document
     tHashMapForLists maLists;
     // relation between list style and its default list
@@ -584,7 +584,7 @@ private:
     bool mbIgnoreTabsAndBlanksForLineCalculation    : 1;   // #i3952#
     bool mbDoNotCaptureDrawObjsOnPage               : 1;   // #i62875#
     bool mbOutlineLevelYieldsOutlineRule            : 1;
-    bool mbClipAsCharacterAnchoredWriterFlyFrames   : 1;   // #b6402800#
+    bool mbClipAsCharacterAnchoredWriterFlyFrames   : 1;
     bool mbUnixForceZeroExtLeading                  : 1;   // #i60945#
     bool mbOldPrinterMetrics                        : 1;
     bool mbTabRelativeToIndent                      : 1;   // #i24363# tab stops relative to indent

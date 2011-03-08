@@ -67,7 +67,7 @@ struct SingleProofreadingError
     string aFullComment;
 
     // a list of correction suggestions
-    // Usually emtpy if only automatic checking was done.
+    // Usually empty if only automatic checking was done.
     sequence< string > aSuggestions;
 
     // a list of properties

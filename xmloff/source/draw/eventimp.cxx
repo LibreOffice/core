@@ -262,10 +262,6 @@ SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImp,  sal_uInt16 nPrfx, cons
             {
                 msMacroName = sValue;
             }
-//          else if( IsXMLToken( aLocalName, XML_LIBRARY ) )
-//          {
-//              msLibrary = sValue;
-//          }
             break;
 
         case XML_NAMESPACE_XLINK:
@@ -498,7 +494,7 @@ void SdXMLEventContext::EndElement()
                     pProperties->State = beans::PropertyState_DIRECT_VALUE;
                     break;
                 case ClickAction_MACRO:
-                    DBG_ERROR("xmloff::SdXMLEventContext::EndElement(), ClickAction_MACRO must be handled in different if case");
+                    OSL_FAIL("xmloff::SdXMLEventContext::EndElement(), ClickAction_MACRO must be handled in different if case");
                     break;
                 default:
                     break;

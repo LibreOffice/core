@@ -233,7 +233,7 @@ ImplPrnQueueList::~ImplPrnQueueList()
 
 void ImplPrnQueueList::Add( SalPrinterQueueInfo* pData )
 {
-    std::hash_map< rtl::OUString, sal_Int32, rtl::OUStringHash >::iterator it =
+    boost::unordered_map< rtl::OUString, sal_Int32, rtl::OUStringHash >::iterator it =
         m_aNameToIndex.find( pData->maPrinterName );
     if( it == m_aNameToIndex.end() )
     {
@@ -258,7 +258,7 @@ void ImplPrnQueueList::Add( SalPrinterQueueInfo* pData )
 ImplPrnQueueData* ImplPrnQueueList::Get( const rtl::OUString& rPrinter )
 {
     ImplPrnQueueData* pData = NULL;
-    std::hash_map<rtl::OUString,sal_Int32,rtl::OUStringHash>::iterator it =
+    boost::unordered_map<rtl::OUString,sal_Int32,rtl::OUStringHash>::iterator it =
         m_aNameToIndex.find( rPrinter );
     if( it != m_aNameToIndex.end() )
         pData = &m_aQueueInfos[it->second];

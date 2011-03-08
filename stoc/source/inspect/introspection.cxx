@@ -76,7 +76,7 @@
 
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -89,7 +89,10 @@ using namespace com::sun::star::beans::PropertyConcept;
 using namespace com::sun::star::beans::MethodConcept;
 using namespace cppu;
 using namespace osl;
-using namespace rtl;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
+using ::rtl::OString;
 
 #define IMPLEMENTATION_NAME "com.sun.star.comp.stoc.Introspection"
 #define SERVICE_NAME        "com.sun.star.beans.Introspection"
@@ -174,7 +177,7 @@ struct eqName_Impl
     }
 };
 
-typedef std::hash_map
+typedef boost::unordered_map
 <
     OUString,
     sal_Int32,
@@ -186,7 +189,7 @@ IntrospectionNameMap;
 
 // Hashtable zur Zuordnung der exakten Namen zu den zu Lower-Case
 // konvertierten Namen, dient zur Unterst�tzung von XExactName
-typedef std::hash_map
+typedef boost::unordered_map
 <
     OUString,
     OUString,
@@ -1318,20 +1321,6 @@ Sequence< Property > ImplIntrospectionAccess::getProperties(sal_Int32 PropertyCo
         sal_Int32 nConcept = pConcepts[ i ];
         if( nConcept & PropertyConcepts )
             pDestProps[ iDest++ ] = pSourceProps[ i ];
-
-        /*
-        // Property mit Concepts ausgeben
-        OUString aPropName = pSourceProps[ i ].Name;
-        String aNameStr = OOUStringToString(aPropName, CHARSET_SYSTEM);
-        String ConceptStr;
-        if( nConcept & PROPERTYSET )
-            ConceptStr += "PROPERTYSET";
-        if( nConcept & ATTRIBUTES )
-            ConceptStr += "ATTRIBUTES";
-        if( nConcept & METHODS )
-            ConceptStr += "METHODS";
-        printf( "Property %ld: %s, Concept = %s\n", i, aNameStr.GetStr(), ConceptStr.GetStr() );
-        */
     }
 
     // PropertyConcept merken, dies entspricht maLastPropertySeq
@@ -1567,7 +1556,7 @@ struct hashIntrospectionAccessCache_Impl
 
 };
 
-typedef std::hash_map
+typedef boost::unordered_map
 <
     hashIntrospectionKey_Impl,
     IntrospectionAccessStatic_Impl*,
@@ -1666,7 +1655,7 @@ size_t TypeProviderAccessCache_Impl::operator()(const hashTypeProviderKey_Impl &
 }
 
 
-typedef std::hash_map
+typedef boost::unordered_map
 <
     hashTypeProviderKey_Impl,
     IntrospectionAccessStatic_Impl*,
@@ -1993,7 +1982,7 @@ struct eqInterface_Impl
     }
 };
 
-typedef std::hash_map
+typedef boost::unordered_map
 <
     void*,
     void*,

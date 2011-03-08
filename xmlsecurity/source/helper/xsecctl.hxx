@@ -172,12 +172,6 @@ class XSecController : public cppu::WeakImplHelper4
  *  Controlls the whole xml security framework to create signatures or to
  *  verify signatures.
  *
- *   HISTORY
- *  05.01.2004 -    Interface supported: XSecurityController,
- *          XFastPropertySet, XSAXEventKeeperStatusChangeListener,
- *                  XSignatureCreationResultListener,
- *                  XSignatureVerifyResultListener
- *
  *   NOTES
  *  The XFastPropertySet interface is used to transfer common values to
  *  classes in other module, for instance, the signature id for all

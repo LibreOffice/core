@@ -236,7 +236,7 @@ void ADOS::ThrowException(ADOConnection* _pAdoCon,const Reference< XInterface >&
 
     pErrors->AddRef( );
 
-    // alle aufgelaufenen Fehler auslesen und ausgeben
+    // read all noted errors and issue them
     sal_Int32 nLen;
     pErrors->get_Count(&nLen);
     if (nLen)

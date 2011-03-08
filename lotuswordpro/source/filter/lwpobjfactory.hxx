@@ -101,7 +101,7 @@ private:
                 return(rKey1==rKey2);
             }
     };
-    typedef std::hash_map<LwpObjectID, LwpObject *, hashFunc, eqFunc> LwpObjMap;
+    typedef boost::unordered_map<LwpObjectID, LwpObject *, hashFunc, eqFunc> LwpObjMap;
     LwpObjMap m_ObjList;
     LwpIndexManager m_IndexMgr;
     void ClearObjectMap();

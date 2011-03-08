@@ -51,6 +51,7 @@
 #include <SalGtkFilePicker.hxx>
 
 #include <tools/string.hxx>
+#include <tools/urlobj.hxx>
 
 #include <algorithm>
 #include <set>
@@ -487,7 +488,7 @@ shrinkFilterName( const rtl::OUString &rFilterName, bool bAllowNoStar = false )
     int i;
     int nBracketLen = -1;
     int nBracketEnd = -1;
-    const sal_Unicode *pStr = rFilterName;
+    const sal_Unicode *pStr = rFilterName.getStr();
     OUString aRealName = rFilterName;
 
     for( i = aRealName.getLength() - 1; i > 0; i-- )
@@ -978,7 +979,10 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute() throw( uno::RuntimeException )
     uno::Reference< awt::XExtendedToolkit > xToolkit(
         m_xServiceMgr->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.Toolkit")) ), uno::UNO_QUERY);
 
-    RunDialog* pRunDialog = new RunDialog(m_pDialog, xToolkit);
+    uno::Reference< frame::XDesktop > xDesktop(
+        m_xServiceMgr->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ), uno::UNO_QUERY);
+
+    RunDialog* pRunDialog = new RunDialog(m_pDialog, xToolkit, xDesktop);
     uno::Reference < awt::XTopWindowListener > xLifeCycle(pRunDialog);
     while( GTK_RESPONSE_NO == btn )
     {
@@ -999,19 +1003,45 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute() throw( uno::RuntimeException )
                             CResourceProvider aResProvider;
                             GtkWidget *dlg;
 
+
+                            INetURLObject aFileObj( sFileName );
+
+                            OString baseName(
+                              OUStringToOString(
+                                aFileObj.getName(
+                                  INetURLObject::LAST_SEGMENT,
+                                  true,
+                                  INetURLObject::DECODE_WITH_CHARSET
+                                ),
+                                RTL_TEXTENCODING_UTF8
+                              )
+                            );
+                            OString aMsg(
+                              OUStringToOString(
+                                aResProvider.getResString( FILE_PICKER_OVERWRITE ),
+                                RTL_TEXTENCODING_UTF8
+                              )
+                            );
+                            OString toReplace( RTL_CONSTASCII_STRINGPARAM( "$filename$" ));
+
+                            aMsg = aMsg.replaceAt(
+                              aMsg.indexOf( toReplace ),
+                              toReplace.getLength(),
+                              baseName
+                            );
+
                             dlg = gtk_message_dialog_new( NULL,
                                 GTK_DIALOG_MODAL,
                                 GTK_MESSAGE_QUESTION,
                                 GTK_BUTTONS_YES_NO,
-                                  OUStringToOString(
-                                    aResProvider.getResString( FILE_PICKER_OVERWRITE ),
-                                    RTL_TEXTENCODING_UTF8 ).getStr() );
+                                aMsg.getStr()
+                            );
 
                             gtk_window_set_title( GTK_WINDOW( dlg ),
                                 OUStringToOString(aResProvider.getResString(FILE_PICKER_TITLE_SAVE ),
                                 RTL_TEXTENCODING_UTF8 ).getStr() );
 
-                            RunDialog* pAnotherDialog = new RunDialog(dlg, xToolkit);
+                            RunDialog* pAnotherDialog = new RunDialog(dlg, xToolkit, xDesktop);
                             uno::Reference < awt::XTopWindowListener > xAnotherLifeCycle(pAnotherDialog);
                             btn = pAnotherDialog->run();
 
@@ -1844,7 +1874,7 @@ case_insensitive_filter (const GtkFileFilterInfo *filter_info, gpointer data)
     if( !g_ascii_strcasecmp( pFilter, pExtn ) )
         bRetval = TRUE;
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "'%s' match extn '%s' vs '%s' yeilds %d\n",
         filter_info->uri, pExtn, pFilter, bRetval );
 #endif
@@ -1861,7 +1891,7 @@ GtkFileFilter* SalGtkFilePicker::implAddFilter( const OUString& rFilter, const O
 
     OUString aShrunkName = shrinkFilterName( rFilter );
     OString aFilterName = rtl::OUStringToOString( aShrunkName, RTL_TEXTENCODING_UTF8 );
-    gtk_file_filter_set_name( filter, aFilterName );
+    gtk_file_filter_set_name( filter, aFilterName.getStr() );
 
     static const OUString aStarDot(RTL_CONSTASCII_USTRINGPARAM( "*." ));
     OUString aTokens;
@@ -1885,12 +1915,12 @@ GtkFileFilter* SalGtkFilePicker::implAddFilter( const OUString& rFilter, const O
                 aTokens = aTokens += aToken;
                 gtk_file_filter_add_custom (filter, GTK_FILE_FILTER_URI,
                     case_insensitive_filter,
-                    g_strdup( rtl::OUStringToOString( aToken, RTL_TEXTENCODING_UTF8 ) ),
+                    g_strdup( rtl::OUStringToOString(aToken, RTL_TEXTENCODING_UTF8).getStr() ),
                     (GDestroyNotify) g_free );
 
                 OSL_TRACE( "fustering with %s\n", rtl::OUStringToOString( aToken, RTL_TEXTENCODING_UTF8 ).getStr());
             }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 0
             else
             {
                 g_warning( "Duff filter token '%s'\n",

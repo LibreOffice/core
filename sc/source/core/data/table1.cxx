@@ -1033,7 +1033,7 @@ BOOL ScTable::ValidNextPos( SCCOL nCol, SCROW nRow, const ScMarkData& rMark,
 
     if (bMarked || bUnprotected)        //! auch sonst ???
     {
-        //  #53697# ausgeblendete muessen uebersprungen werden, weil der Cursor sonst
+        //  ausgeblendete muessen uebersprungen werden, weil der Cursor sonst
         //  auf der naechsten Zelle landet, auch wenn die geschuetzt/nicht markiert ist.
         //! per Extra-Parameter steuern, nur fuer Cursor-Bewegung ???
 
@@ -1070,7 +1070,7 @@ void ScTable::GetNextPos( SCCOL& rCol, SCROW& rRow, SCsCOL nMovX, SCsROW nMovY,
         while ( VALIDROW(nRow) &&
                 (RowHidden(nRow) || pDocument->HasAttrib(nCol, nRow, nTab, nCol, nRow, nTab, HASATTR_OVERLAPPED)) )
         {
-            //  #53697# ausgeblendete ueberspringen (s.o.)
+            //  ausgeblendete ueberspringen (s.o.)
             nRow += nMovY;
             nRow = rMark.GetNextMarked( nCol, nRow, bUp );
         }
@@ -1079,7 +1079,7 @@ void ScTable::GetNextPos( SCCOL& rCol, SCROW& rRow, SCsCOL nMovX, SCsROW nMovY,
         {
             nCol = sal::static_int_cast<SCsCOL>( nCol + static_cast<SCsCOL>(nMovY) );
             while ( VALIDCOL(nCol) && ColHidden(nCol) )
-                nCol = sal::static_int_cast<SCsCOL>( nCol + static_cast<SCsCOL>(nMovY) );   //  #53697# skip hidden rows (see above)
+                nCol = sal::static_int_cast<SCsCOL>( nCol + static_cast<SCsCOL>(nMovY) );   //  skip hidden rows (see above)
             if (nCol < 0)
             {
                 nCol = MAXCOL;
@@ -1100,7 +1100,7 @@ void ScTable::GetNextPos( SCCOL& rCol, SCROW& rRow, SCsCOL nMovX, SCsROW nMovY,
             while ( VALIDROW(nRow) &&
                     (RowHidden(nRow) || pDocument->HasAttrib(nCol, nRow, nTab, nCol, nRow, nTab, HASATTR_OVERLAPPED)) )
             {
-                //  #53697# ausgeblendete ueberspringen (s.o.)
+                //  ausgeblendete ueberspringen (s.o.)
                 nRow += nMovY;
                 nRow = rMark.GetNextMarked( nCol, nRow, bUp );
             }
@@ -1280,6 +1280,7 @@ void ScTable::UpdateReference( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW 
                      SCCOL nCol2, SCROW nRow2, SCTAB nTab2, SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
                      ScDocument* pUndoDoc, BOOL bIncludeDraw, bool bUpdateNoteCaptionPos )
 {
+    bool bUpdated = false;
     SCCOL i;
     SCCOL iMax;
     if ( eUpdateRefMode == URM_COPY )
@@ -1293,8 +1294,8 @@ void ScTable::UpdateReference( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW 
         iMax = MAXCOL;
     }
     for ( ; i<=iMax; i++)
-        aCol[i].UpdateReference( eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2,
-                                    nDx, nDy, nDz, pUndoDoc );
+        bUpdated |= aCol[i].UpdateReference(
+            eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, nDx, nDy, nDz, pUndoDoc );
 
     if ( bIncludeDraw )
         UpdateDrawRef( eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, nDx, nDy, nDz, bUpdateNoteCaptionPos );
@@ -1379,6 +1380,9 @@ void ScTable::UpdateReference( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW 
                                     PAINT_GRID ) );
         }
     }
+
+    if (bUpdated && IsStreamValid())
+        SetStreamValid(false);
 }
 
 void ScTable::UpdateTranspose( const ScRange& rSource, const ScAddress& rDest,
@@ -1476,7 +1480,7 @@ void ScTable::ExtendPrintArea( OutputDevice* pDev,
 {
     if ( !pColFlags || !pRowFlags )
     {
-        DBG_ERROR("keine ColInfo oder RowInfo in ExtendPrintArea");
+        OSL_FAIL("keine ColInfo oder RowInfo in ExtendPrintArea");
         return;
     }
 
@@ -1487,7 +1491,6 @@ void ScTable::ExtendPrintArea( OutputDevice* pDev,
     // First, mark those columns that we need to skip i.e. hidden and empty columns.
 
     ScFlatBoolColSegments aSkipCols;
-    aSkipCols.setInsertFromBack(true); // speed optimazation.
     aSkipCols.setFalse(0, MAXCOL);
     for (SCCOL i = 0; i <= MAXCOL; ++i)
     {

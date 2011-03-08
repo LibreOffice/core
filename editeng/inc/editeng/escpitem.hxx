@@ -43,14 +43,14 @@ namespace rtl
 // class SvxEscapementItem -----------------------------------------------
 
 #define DFLT_ESC_SUPER   33     // 1/3
-#define DFLT_ESC_SUB    -33     // auch 1/3 fr"uher 8/100
+#define DFLT_ESC_SUB    -33     // also 1/3 previously 8/100
 #define DFLT_ESC_PROP    58
 #define DFLT_ESC_AUTO_SUPER 101
 #define DFLT_ESC_AUTO_SUB  -101
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Dieses Item beschreibt die Schrift-Position.
+    This item describes the writing position.
 */
 
 class EDITENG_DLLPUBLIC SvxEscapementItem : public SfxEnumItemInterface
@@ -66,7 +66,7 @@ public:
     SvxEscapementItem( const short nEsc, const BYTE nProp,
                    const USHORT nId  );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual Methods" from SfxPoolItem
     virtual int              operator==( const SfxPoolItem& ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,

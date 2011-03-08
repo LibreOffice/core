@@ -33,6 +33,7 @@
 #define _SOT_FORMATS_INCLUDE_SYSTEMFORMATS
 #include <tools/debug.hxx>
 #include <tools/solar.h>
+#include <tools/list.hxx>
 #include <tools/globname.hxx>
 #include <tools/string.hxx>
 #include <sot/sotdata.hxx>

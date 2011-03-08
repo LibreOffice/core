@@ -25,7 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-// MyEDITVIEW, wegen exportiertem EditView
+// MyEDITVIEW, due to exported EditView
 #ifndef _MyEDITVIEW_HXX
 #define _MyEDITVIEW_HXX
 
@@ -76,7 +76,7 @@ class EDITENG_DLLPUBLIC EditView
     friend class ImpEditEngine;
     friend class EditSelFunctionSet;
 
-public: // brauche ich fuer Undo
+public: // Needed for Undo
     ImpEditView*    GetImpEditView() const      { return pImpEditView; }
     ImpEditEngine*  GetImpEditEngine() const;
 
@@ -126,13 +126,13 @@ public:
 
     USHORT          GetSelectedScriptType() const;
 
-                        // Position der VisArea im Ausgabefenster.
-                        // Eine Groessenaenderung betrifft auch die VisArea
+                        // VisArea position of the Output window.
+                        // A size change also affects the VisArea
     void                SetOutputArea( const Rectangle& rRec );
     const Rectangle&    GetOutputArea() const;
 
-                        // Dokumentposition.
-                        // Eine Groessenaenderung betrifft auch die VisArea
+                        // Document position.
+                        // A size change also affects the VisArea
     void                SetVisArea( const Rectangle& rRec );
     const Rectangle&    GetVisArea() const;
 
@@ -166,7 +166,7 @@ public:
     void            Undo();
     void            Redo();
 
-    // speziell fuer Olli
+    // especially for Olli
     USHORT          GetParagraph( const Point& rMousePosPixel );
     Point           GetWindowPosTopLeft( USHORT nParagraph );
     void            MoveParagraphs( Range aParagraphs, USHORT nNewPos );
@@ -195,7 +195,7 @@ public:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > GetTransferable();
 
-    // An EditView, damit bei TRUE flackerfreies Update:
+    // An EditView, so that when TRUE the update will be free from flickering:
     void            SetEditEngineUpdateMode( BOOL bUpdate );
     void            ForceUpdate();
 

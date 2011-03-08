@@ -86,12 +86,10 @@ void SwAccessibleDocumentBase::SetVisArea()
     if( aOldVisArea != rNewVisArea )
     {
         SwAccessibleFrame::SetVisArea( GetMap()->GetVisArea() );
-        // --> OD 2007-12-07 #i58139#
-        // showing state of document view needs also be updated.
+        // #i58139# - showing state of document view needs also be updated.
         // Thus, call method <Scrolled(..)> instead of <ChildrenScrolled(..)>
 //        ChildrenScrolled( GetFrm(), aOldVisArea );
         Scrolled( aOldVisArea );
-        // <--
     }
 }
 
@@ -504,7 +502,7 @@ uno::Reference<XAccessible> SwAccessibleDocument::getSelectedAccessibleChild(
     return maSelectionHelper.getSelectedAccessibleChild(nSelectedChildIndex);
 }
 
-// --> OD 2004-11-16 #111714# - index has to be treated as global child index.
+// index has to be treated as global child index.
 void SwAccessibleDocument::deselectAccessibleChild(
     sal_Int32 nChildIndex )
     throw ( lang::IndexOutOfBoundsException,

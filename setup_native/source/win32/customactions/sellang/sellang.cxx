@@ -28,41 +28,34 @@
  *
  ************************************************************************/
 
+/* Currently the "all" installer has a bit over 100 UI languages, and
+ * I doubt it will grow a lot over that.
+ */
+#define MAX_LANGUAGES 200
+
 #define WIN32_LEAN_AND_MEAN
 #define _WIN32_WINNT 0x0500
 #undef WINVER
 #define WINVER 0x0500
 
-#pragma warning(push, 1) /* disable warnings within system headers as
-                          * warnings are now treated as errors...
-                          */
 #include <windows.h>
 #include <msiquery.h>
 #include <malloc.h>
 
-#ifdef UNICODE
-#define _UNICODE
-#define _tstring    wstring
-#else
-#define _tstring    string
-#endif
-#include <tchar.h>
-#include <string>
 #include <stdio.h>
-#pragma warning(pop)
+#include <stdlib.h>
+#include <string.h>
 
 #include <sal/macros.h>
 #include <systools/win32/uwinapi.h>
 
-/* #define VERBOSE_DEBUG_OUTPUT 1 */
-
 static const char *
 langid_to_string( LANGID langid, int *have_default_lang )
 {
-    /* Map from LANGID to string. The languages below are in the same
-     * seemingly random order as in
-     * setup_native/source/win32/msi-encodinglist.txt.
-     * Only the language part is returned in the string.
+    /* Map from LANGID to string. The languages below are now in
+     * alphabetical order of codes as in
+     * setup_native/source/win32/msi-encodinglist.txt. Only the
+     * language part is returned in the string.
      */
     switch (PRIMARYLANGID (langid)) {
     case LANG_ENGLISH:
@@ -70,112 +63,110 @@ langid_to_string( LANGID langid, int *have_default_lang )
             langid == MAKELANGID(LANG_ENGLISH, SUBLANG_DEFAULT))
             *have_default_lang = 1;
         return "en";
-#define CASE(primary, name) \
+#define CASE(name, primary) \
         case LANG_##primary: return #name
-    CASE(PORTUGUESE, pt);
-    CASE(RUSSIAN, ru);
-    CASE(GREEK, el);
-    CASE(DUTCH, nl);
-    CASE(FRENCH, fr);
-    CASE(SPANISH, es);
-    CASE(FINNISH, fi);
-    CASE(HUNGARIAN, hu);
-    CASE(CATALAN, ca);
-    CASE(ITALIAN, it);
-    CASE(CZECH, cs);
-    CASE(SLOVAK, sk);
-    CASE(DANISH, da);
-    CASE(SWEDISH, sv);
-    CASE(POLISH, pl);
-    CASE(GERMAN, de);
-    CASE(THAI, th);
-    CASE(ESTONIAN, et);
-    CASE(JAPANESE, ja);
-    CASE(KOREAN, ko);
-    // CASE(KHMER, km);
-    // CASE(WELSH, cy);
-    CASE(CHINESE, zh);
-    CASE(TURKISH, tr);
-    CASE(HINDI, hi);
-    CASE(PUNJABI, pa);
-    CASE(TAMIL, ta);
-    CASE(ARABIC, ar);
-    CASE(HEBREW, he);
-    CASE(AFRIKAANS, af);
-    CASE(ALBANIAN, sq);
-    CASE(ARMENIAN, hy);
-    CASE(BASQUE, eu);
-    CASE(BELARUSIAN, be);
-    CASE(BENGALI, bn);
-    CASE(BULGARIAN, bg);
-    CASE(ICELANDIC, is);
-    CASE(INDONESIAN, id);
-    // CASE(LAO, lo);
-    CASE(LATVIAN, lv);
-    CASE(LITHUANIAN, lt);
-    // CASE(MALTESE, mt);
-    // CASE(ROMANSH, rm);
-    CASE(ROMANIAN, ro);
-    // CASE(KINYARWANDA, rw);
-    CASE(SANSKRIT, sa);
-    // CASE(SETSWANA, tn);
-    CASE(FARSI, fa);
-    CASE(FAEROESE, fo);
-    CASE(SLOVENIAN, sl);
-    // CASE(SORBIAN, sb);
-    // CASE(SUTU, st);
-    CASE(SWAHILI, sw);
-    CASE(TATAR, tt);
-    // CASE(TSONGA, ts);
-    CASE(UKRAINIAN, uk);
-    CASE(URDU, ur);
-    CASE(VIETNAMESE, vi);
-    // CASE(XHOSA, xh);
-    // CASE(YIDDISH, yi);
-    // CASE(ZULU, zu);
-    CASE(GUJARATI, gu);
-    // CASE(BRETON, br);
-    CASE(NEPALI, ne);
-    // CASE(NDEBELE, nr);
-    // CASE(SWAZI, ss);
-    // CASE(VENDA, ve);
-    // CASE(IRISH, ga);
-    CASE(MACEDONIAN, mk);
-    CASE(TELUGU, te);
-    CASE(MALAYALAM, ml);
-    CASE(MARATHI, mr);
-    CASE(ORIYA, or);
-    // CASE(KURDISH, ku);
-    // CASE(TAGALOG, tg);
-    // CASE(TIGRINYA, ti);
-    CASE(GALICIAN, gl);
-    CASE(KANNADA, kn);
-    CASE(MALAY, ms);
-    // CASE(TAJIK, tg);
-    CASE(GEORGIAN, ka);
-    // CASE(ESPERANTO, eo);
+    CASE(af, AFRIKAANS);
+    CASE(ar, ARABIC);
+    CASE(as, ASSAMESE);
+    CASE(be, BELARUSIAN);
+    CASE(bg, BULGARIAN);
+    CASE(bn, BENGALI);
+    CASE(br, BRETON);
+    CASE(ca, CATALAN);
+    CASE(cs, CZECH);
+    CASE(cy, WELSH);
+    CASE(da, DANISH);
+    CASE(de, GERMAN);
+    CASE(el, GREEK);
+    CASE(es, SPANISH);
+    CASE(et, ESTONIAN);
+    CASE(eu, BASQUE);
+    CASE(fa, FARSI);
+    CASE(fi, FINNISH);
+    CASE(fo, FAEROESE);
+    CASE(fr, FRENCH);
+    CASE(ga, IRISH);
+    CASE(gl, GALICIAN);
+    CASE(gu, GUJARATI);
+    CASE(he, HEBREW);
+    CASE(hi, HINDI);
+    CASE(hu, HUNGARIAN);
+    CASE(hy, ARMENIAN);
+    CASE(id, INDONESIAN);
+    CASE(is, ICELANDIC);
+    CASE(it, ITALIAN);
+    CASE(ja, JAPANESE);
+    CASE(ka, GEORGIAN);
+    CASE(km, KHMER);
+    CASE(kn, KANNADA);
+    CASE(ko, KOREAN);
+    CASE(ks, KASHMIRI);
+    CASE(lo, LAO);
+    CASE(lt, LITHUANIAN);
+    CASE(lv, LATVIAN);
+    CASE(mk, MACEDONIAN);
+    CASE(ml, MALAYALAM);
+    CASE(mn, MONGOLIAN);
+    CASE(mr, MARATHI);
+    CASE(ms, MALAY);
+    CASE(mt, MALTESE);
+    CASE(ne, NEPALI);
+    CASE(nl, DUTCH);
+    CASE(ns, SOTHO);
+    CASE(or, ORIYA);
+    CASE(pa, PUNJABI);
+    CASE(pl, POLISH);
+    CASE(pt, PORTUGUESE);
+    CASE(rm, ROMANSH);
+    CASE(ro, ROMANIAN);
+    CASE(ru, RUSSIAN);
+    CASE(rw, KINYARWANDA);
+    CASE(sa, SANSKRIT);
+    CASE(sb, UPPER_SORBIAN);
+    CASE(sd, SINDHI);
+    CASE(sk, SLOVAK);
+    CASE(sl, SLOVENIAN);
+    CASE(sq, ALBANIAN);
+    CASE(sv, SWEDISH);
+    CASE(sw, SWAHILI);
+    CASE(ta, TAMIL);
+    CASE(te, TELUGU);
+    CASE(tg, TAJIK);
+    CASE(th, THAI);
+    CASE(ti, TIGRIGNA);
+    CASE(tn, TSWANA);
+    CASE(tr, TURKISH);
+    CASE(tt, TATAR);
+    CASE(uk, UKRAINIAN);
+    CASE(ur, URDU);
+    CASE(uz, UZBEK);
+    CASE(vi, VIETNAMESE);
+    CASE(xh, XHOSA);
+    CASE(zh, CHINESE);
+    CASE(zu, ZULU);
 #undef CASE
     /* Special cases */
     default:
         switch (langid) {
         case MAKELANGID(LANG_SERBIAN, 0x05): return "bs";
-#define CASE(primary, sub, name) \
+#define CASE(name, primary, sub) \
         case MAKELANGID(LANG_##primary, SUBLANG_##sub): return #name
 
-        CASE(NORWEGIAN, NORWEGIAN_BOKMAL, nb);
-        CASE(NORWEGIAN, NORWEGIAN_NYNORSK, nn);
-        CASE(SERBIAN, DEFAULT, hr);
-        CASE(SERBIAN, SERBIAN_LATIN, sh);
-        CASE(SERBIAN, SERBIAN_CYRILLIC, sr);
-        // CASE(SOTHO, DEFAULT, ns);
-        // CASE(SOTHO, SOTHO_SOUTHERN, st);
+        CASE(hr, SERBIAN, DEFAULT);
+        CASE(nb, NORWEGIAN, NORWEGIAN_BOKMAL);
+        CASE(nn, NORWEGIAN, NORWEGIAN_NYNORSK);
+        CASE(sh, SERBIAN, SERBIAN_LATIN);
+        CASE(sr, SERBIAN, SERBIAN_CYRILLIC);
 #undef CASE
         default: return "";
         }
     }
 }
 
-static const char *ui_langs[100];
+/* Here we collect the UI languages present on the system;
+ * MAX_LANGUAGES is certainly enough for that
+ */
+static const char *ui_langs[MAX_LANGUAGES];
 static int num_ui_langs = 0;
 
 BOOL CALLBACK
@@ -202,17 +193,11 @@ present_in_ui_langs(const char *lang)
 
 extern "C" UINT __stdcall SelectLanguage( MSIHANDLE handle )
 {
-#ifdef VERBOSE_DEBUG_OUTPUT
-    char tem[2000];
-#endif
     char feature[100];
     MSIHANDLE database, view, record;
     DWORD length;
     int nlangs = 0;
-    /* Keeping this code simple and stupid... won't bother with any
-     * dynamic arrays or whatnot. 100 is more than enough for this purpose.
-     */
-    char langs[100][6];
+    char langs[MAX_LANGUAGES][6];
 
     database = MsiGetActiveDatabase(handle);
 
@@ -221,21 +206,14 @@ extern "C" UINT __stdcall SelectLanguage( MSIHANDLE handle )
         return ERROR_SUCCESS;
     }
 
-#ifdef VERBOSE_DEBUG_OUTPUT
-    MessageBoxA(NULL, "MsiDatabaseOpenViewA success!", "SelectLanguage", MB_OK);
-#endif
-
     if (MsiViewExecute(view, NULL) != ERROR_SUCCESS) {
         MsiCloseHandle(view);
         MsiCloseHandle(database);
         return ERROR_SUCCESS;
     }
 
-#ifdef VERBOSE_DEBUG_OUTPUT
-    MessageBoxA(NULL, "MsiViewExecute success!", "SelectLanguage", MB_OK);
-#endif
-
-    while (MsiViewFetch(view, &record) == ERROR_SUCCESS) {
+    while (nlangs < MAX_LANGUAGES &&
+           MsiViewFetch(view, &record) == ERROR_SUCCESS) {
         length = sizeof(feature);
         if (MsiRecordGetStringA(record, 1, feature, &length) != ERROR_SUCCESS) {
             MsiCloseHandle(record);
@@ -265,23 +243,7 @@ extern "C" UINT __stdcall SelectLanguage( MSIHANDLE handle )
         const char *system_default_lang = langid_to_string(GetSystemDefaultUILanguage(), &have_system_default_lang);
         const char *user_locale_lang = langid_to_string(LANGIDFROMLCID(GetThreadLocale()), NULL);
 
-#ifdef VERBOSE_DEBUG_OUTPUT
-        sprintf(tem, "GetSystemDefaultUILanguage(): %#x = %s", GetSystemDefaultUILanguage(), system_default_lang);
-        MessageBoxA(NULL, tem, "SelectLanguage", MB_OK);
-#endif
-
         EnumUILanguagesA(enum_ui_lang_proc, 0, 0);
-
-#ifdef VERBOSE_DEBUG_OUTPUT
-        sprintf(tem, "Have %d UI languages: ", num_ui_langs);
-        for (i = 0; i < num_ui_langs; i++) {
-            char *p = tem + strlen(tem);
-            sprintf(p, "%s%s",
-                    ui_langs[i],
-                    (i + 1 < num_ui_langs) ? ", " : "");
-        }
-        MessageBoxA(NULL, tem, "SelectLanguage", MB_OK);
-#endif
 
         /* If one of the alternative languages in a multi-language installer
          * is the system default UI language, deselect those languages that
@@ -302,20 +264,12 @@ extern "C" UINT __stdcall SelectLanguage( MSIHANDLE handle )
         if (system_default_lang[0]) {
             for (i = 0; i < nlangs; i++) {
                 if (memcmp (system_default_lang, langs[i], 2) == 0) {
-#ifdef VERBOSE_DEBUG_OUTPUT
-                    sprintf(tem, "We have the system default language %s in the installer", system_default_lang);
-                    MessageBoxA(NULL, tem, "SelectLanguage", MB_OK);
-#endif
                     have_system_default_lang = 1;
                 }
             }
         }
 
         if (!have_system_default_lang) {
-#ifdef VERBOSE_DEBUG_OUTPUT
-            sprintf(tem, "We don't have the system default language %s in the installer, so pretend that English is the system default, sigh.", system_default_lang);
-            MessageBoxA(NULL, tem, "SelectLanguage", MB_OK);
-#endif
             system_default_lang = "en";
             have_system_default_lang = 1;
         }
@@ -327,17 +281,6 @@ extern "C" UINT __stdcall SelectLanguage( MSIHANDLE handle )
                     UINT rc;
                     sprintf(feature, "gm_Langpack_r_%s", langs[i]);
                     rc = MsiSetFeatureStateA(handle, feature, INSTALLSTATE_ABSENT);
-                    if (rc != ERROR_SUCCESS) {
-#ifdef VERBOSE_DEBUG_OUTPUT
-                        sprintf(tem, "MsiSetFeatureStateA %s failed: %d", feature, rc);
-                        MessageBoxA(NULL, tem, "SelectLanguage", MB_OK);
-#endif
-                    } else {
-#ifdef VERBOSE_DEBUG_OUTPUT
-                        sprintf(tem, "MsiSetFeatureStateA %s OK!", feature);
-                        MessageBoxA(NULL, tem, "SelectLanguage", MB_OK);
-#endif
-                    }
                 }
             }
         }

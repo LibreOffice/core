@@ -60,12 +60,6 @@ CONVERTFILES=\
     engine/makefile.vc8 \
     engine/test/RegressionTest/RtTextSrc.h
 
-#.IF "$(OS)"=="WNT" && "$(COM)"!="GCC"
-#CONFIGURE_DIR=win32
-#.ELSE
-#CONFIGURE_DIR=engine
-#.ENDIF
-
 CONFIGURE_DIR=engine
 
 .IF "$(COM)"=="MSC"
@@ -74,8 +68,6 @@ VCNUM=7
 .ELSE
 VCNUM=8
 .ENDIF
-# make use of stlport headerfiles
-EXT_USE_STLPORT=TRUE
 BUILD_ACTION=nmake VERBOSE=1
 .IF "$(debug)"!=""
 BUILD_FLAGS= "CFG=DEBUG"
@@ -103,14 +95,6 @@ GR_CONFIGURE_FLAGS= --enable-final=yes --enable-static --disable-shared
 .ENDIF
 EXTRA_GR_CXX_FLAGS=-fPIC
 
-.IF "$(USE_SYSTEM_STL)"!="YES"
-# #i112124# STLPort seems to require libstdc++
-EXTRA_GR_LD_FLAGS=$(LIBSTLPORT) -lm -lstdc++
-GR_LIB_PATH=LD_LIBRARY_PATH=$(SOLARVERSION)/$(INPATH)/lib$(UPDMINOREXT)
-.ELSE
-GR_LIB_PATH=
-.ENDIF
-
 .IF "$(OS)"=="WNT"
 PATCH_FILES+=graphite-2.3.1.patch.mingw
 EXTRA_GR_CXX_FLAGS=-mthreads -nostdinc
@@ -122,13 +106,12 @@ EXTRA_GR_LD_FLAGS+=-no-undefined -Wl,--enable-runtime-pseudo-reloc-v2
 
 # don't use SOLARLIB for LDFLAGS because it pulls in system graphite so build will fail
 # 
-CONFIGURE_ACTION=bash -c 'CXXFLAGS="$(INCLUDE) $(CFLAGSCXX) $(CFLAGSCOBJ) $(CDEFS) $(CDEFSOBJ) $(SOLARINC) $(LFS_CFLAGS) $(EXTRA_GR_CXX_FLAGS)" $(GR_LIB_PATH) LDFLAGS="-L$(SOLARVERSION)/$(INPATH)/lib$(UPDMINOREXT) $(EXTRA_GR_LD_FLAGS)" ./configure $(GR_CONFIGURE_FLAGS)'
+CONFIGURE_ACTION=bash -c 'CXXFLAGS="$(INCLUDE) $(CFLAGSCXX) $(CFLAGSCOBJ) $(CDEFS) $(CDEFSOBJ) $(SOLARINC) $(LFS_CFLAGS) $(EXTRA_GR_CXX_FLAGS)" LDFLAGS="-L$(SOLARVERSION)/$(INPATH)/lib$(UPDMINOREXT) $(EXTRA_GR_LD_FLAGS)" ./configure $(GR_CONFIGURE_FLAGS)'
 .ENDIF
 
 BUILD_DIR=$(CONFIGURE_DIR)
 
 .IF "$(OS)"=="WNT" && "$(COM)"!="GCC"
-#OUT2LIB=win32$/bin.msvc$/*.lib
 .IF "$(debug)"!=""
 OUT2LIB=engine$/debug$/*.lib
 .ELSE
@@ -144,21 +127,6 @@ BUILD_ACTION=$(GNUMAKE) -j$(EXTMAXPROCESS)
 
 .IF "$(OS)"=="MACOSX"
 OUT2LIB+=src$/.libs$/libgraphite.*.dylib
-.ELSE
-.IF "$(OS)"=="WNT" && "$(COM)"!="GCC"
-#OUT2LIB+=engine$/src$/.libs$/libgraphite*.dll
-.IF "$(debug)"!=""
-OUT2BIN= \
-#    engine$/debug$/*.dll \
-    engine$/debug$/*.pdb
-.ELSE
-OUT2BIN=
-#    engine$/release$/*.dll
-#    engine$/release$/*.pdb
-.ENDIF
-.ELSE
-#OUT2LIB+=engine$/src$/.libs$/libgraphite.so.*.*.*
-.ENDIF
 .ENDIF
 
 
@@ -172,8 +140,8 @@ OUT2INC=wrappers$/win32$/WinFont.h
 dddd:
     @echo Nothing to do
 .ENDIF
-# --- Targets ------------------------------------------------------
 
+# --- Targets ------------------------------------------------------
 
 .INCLUDE :	set_ext.mk
 .INCLUDE :	target.mk

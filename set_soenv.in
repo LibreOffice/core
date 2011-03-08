@@ -40,7 +40,7 @@ my ( $outfile, $bootfile, $newline, $comment,
      $compiler, $ds, $ps,
      $wps, $cur_dir, $par_dir, $I, $L, $tmp, $MINGW,
      $USE_MINGW, $platform,
-     $cygwinver, $empty, $no_ant, $no_stl, $no_gcc_include,
+     $cygwinver, $empty, $no_ant, $no_gcc_include,
      $no_gxx_include, $warnfile, $Warning, $result, $unsetvars, $exportvars, $win_format_var, $perl_os, @mingw_lib_include_paths, $mingw_lib_include_path);
 #
 #-------------------------------------------------
@@ -48,7 +48,6 @@ my ( $outfile, $bootfile, $newline, $comment,
 #-------------------------------------------------
 #
 # Platform independent constant values.
-my @DICTIONARIES = ("DADK", "DEDE", "ENGB", "ENUS", "HUHU", "ITIT", "RURU", "THTH", "SWTZ" );
 my ( $CALL_CDECL, $COMMON_OUTDIR, $BMP_WRITES_FLAG,
      $common_build, $NO_REC_RES, $SO3, $SOLAR_JAVA,
      $SOLAR_PLUGIN, $UPDATER, $BUILD_DELIVER, $VCL,
@@ -71,8 +70,7 @@ my ( $BIG_SVX, $COM, $ARCH, $CPU, $CPUNAME, $CVER, $GLIBC, $GUI, $GUIBASE,
 my ( $USR, $ETC, $BIN, $LIB, $LIB64, $INC, $INCLUDE, $DEV, $OPT, $LOCAL, $SOLENV, $SOLVER, $CONFIG, $DEFIMGS,
      $USR_BIN, $USR_LIB, $USR_LOCAL, $USR_CCS, $JAVA_BIN, $JAVA_LIB, $JAVA_INCLUDE,
      $SOLARENVINC, $USR_DT, $USR_OPENWIN, $XLIB, $XINC,
-     $CYGWIN_PATH, $language, $dict, $ASM_PATH, $NSIS_PATH, $ps_STLPORT_LIB, $L_STLPORT_LIB,
-     $STLPORT_stlport, $STLPORT_inc_stlport, $PERL_PATH, $CL_X64 );
+     $CYGWIN_PATH, $language, $dict, $ASM_PATH, $NSIS_PATH, $PERL_PATH, $CL_X64 );
 
 # Environment variables.
 my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $JAVAFLAGS, $OOO_SHELL,
@@ -86,7 +84,7 @@ my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $JAVAFLAGS, $OOO_SHELL,
      $COMP_ENV, $ILIB, $JAVAHOME, $PSDK_HOME, $DIRECTXSDK_LIB, $USE_NEW_SDK, $FRAME_HOME,
      $USE_DIRECTX5, $ATL_LIB, $ATL_INCLUDE, $MFC_LIB, $MFC_INCLUDE, $NO_HIDS, $TMPDIR,
      $COMMON_BUILD_TOOLS, $WIN_GREP, $WIN_FIND, $WIN_LS,
-     $WIN_GNUCOPY, $WIN_TOUCH, $STLPORT4, $MOZILLA_VERSION, $MOZILLA_TOOLKIT, $PREBUILD_MOZAB, $MOZILLABUILD,
+     $WIN_GNUCOPY, $WIN_TOUCH, $MOZILLA_VERSION, $MOZILLA_TOOLKIT, $PREBUILD_MOZAB, $MOZILLABUILD,
 	 $PROEXT, $TARFILE_LOCATION,
      $PYTHON, $SYSTEM_PYTHON, $SYSTEM_MOZILLA, $EPM_FLAGS);
 #
@@ -116,10 +114,8 @@ $par_dir        = "..";             # parrent directory
 $I              = " -I";            # include search path
 $L              = " -L";            # library search path
 $empty          = "";               # used as argument
-$no_stl         = "NO_STLPORT4";    # possible argument
 $warnfile       = "warn";           # logfile configure warnings.
 $Warning        = "";               # container for warning messages
-$STLPORT4       = '@STLPORT4@';     # Location of STLport4
 $SYSTEM_PYTHON	= '@SYSTEM_PYTHON@';
 if ($SYSTEM_PYTHON eq "NO") {
     $PYTHON              = "python";
@@ -518,6 +514,12 @@ elsif ( $platform =~ m/linux/ )
             $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc64".$ds."client";
             $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc64".$ds."native_threads";
          }
+	 # OpenJDK
+	 elsif ($JDK =~ m/sun/) {
+	    $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc64";
+	    $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc64".$ds."server";
+	    $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc64".$ds."native_threads";
+	 }
       }
       else {
          print "Setting Linux PPC specific values... ";
@@ -651,26 +653,6 @@ elsif ( $platform =~ m/linux/ )
 
 
    $INPATH         = $OUTPATH.$PROEXT;
-}
-elsif ( $platform =~ m/osf1/ )
-{     print "Setting Tru64 specific values... ";
-      $outfile        = "Tru64AlphaEnv.Set.sh";
-      $BIG_SVX        = "TRUE";
-      $COM            = "CXX";
-      $COMPATH        = '@COMPATH@';
-      $CPU            = "A";
-      $CPUNAME        = "ALPHA_";
-      $CVER           = "C62";
-      $GUI            = "UNX";
-      $GUIBASE        = "unx";
-      $GVER           = "VCL";
-      $OUTPATH        = "unxt64";
-      $INPATH         = $OUTPATH.$PROEXT;
-      $OS             = "TRU64";
-      $PATH_SEPERATOR = $ps;
-      $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."alpha";
-      $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."alpha".$ds."client";
-      $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."alpha".$ds."native_threads";
 }
 elsif ( $platform =~ m/cygwin/ )
 {
@@ -810,6 +792,45 @@ elsif ( $platform =~ m/darwin/ )
       $PATH_SEPERATOR = $ps;
       # GUIBASE is set below; may be "aqua" or "unx".
 }
+elsif ( $platform =~ m/dragonfly/ )
+{
+   if ($platform =~ m/^i386/)
+   {  print "Setting DragonFly i386 specific values... ";
+      $outfile        = "DragonFlyX86Env.Set.sh";
+      $CPU            = "I";
+      $CPUNAME        = "INTEL";
+      $OUTPATH        = "unxdflyi";
+      $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386";
+      $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."client";
+      $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads";
+   }
+   elsif ($platform =~ m/^x86_64/)
+   {  print "Setting DragonFly x86-64 specific values... ";
+      $outfile        = "DragonFlyX86-64Env.Set.sh";
+      $CPU            = "X";
+      $CPUNAME        = "X86_64";
+      $OUTPATH        = "unxdflyx";
+      $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."amd64";
+      $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."amd64".$ds."server";
+      $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."amd64".$ds."native_threads";
+   }
+   else
+   { print "Unsupported DragonFly architecture: $platform \n";
+     exit 1;
+   }
+   # General DragonFly settings:
+      $CVER           = "C341";
+      $OUTPATH        = $OUTPATH."3";
+      $BIG_SVX        = "TRUE";
+      $COM            = "GCC";
+      $COMPATH        = '@COMPATH@';
+      $GUI            = "UNX";
+      $GUIBASE        = "unx";
+      $GVER           = "VCL";
+      $INPATH         = $OUTPATH.$PROEXT;
+      $OS             = "DRAGONFLY";
+      $PATH_SEPERATOR = $ps;
+}
 elsif ( $platform =~ m/aix/ )
 {
    print "Setting AIX PPC specific values... ";
@@ -868,11 +889,6 @@ if ( $platform =~ m/cygwin|os2/ ) {
 }
 # 3. bash path.
 $OOO_SHELL = '@BASH@';
-
-if ( '@STLPORT4@' eq $no_stl )
-{
-   $STLPORT4 = "$no_stl";
-}
 
 # ml.exe assembler path for Windows users.
 if ($platform =~ m/cygwin/)
@@ -947,19 +963,6 @@ $USR_OPENWIN          = $USR.$ds."openwin";
 $USR_DT               = $USR.$ds."dt";
 $COMMON_BUILD_TOOLS   = '$SRC_ROOT'.$ds."external".$ds."common";
 
-if ($STLPORT4 ne $no_stl) {
-	$ps_STLPORT_LIB		= $ps.'$STLPORT4'.$LIB64;
-	$L_STLPORT_LIB		= $L.'$STLPORT4'.$LIB64;
-	$STLPORT_stlport 	= $I.'$STLPORT4'.$ds.'stlport';
-	$STLPORT_inc_stlport	= $I.'$STLPORT4'.$ds.'include'.$ds.'stlport';
-} else {
-        $ps_STLPORT_LIB         = "";
-        $L_STLPORT_LIB          = "";
-        $STLPORT_stlport        = $I.$SRC_ROOT.$SOLVER.$ds.$UPD.$ds.$INPATH.$INC.$ds."stl";
-        $STLPORT_inc_stlport    = "";
-}
-
-
 # Windows NT only variables
 if ($platform =~ m/cygwin/)
 {
@@ -983,7 +986,7 @@ if ($platform =~ m/cygwin/)
 if ( $JAVA_HOME ne "" && $JAVA_HOME ne "NO_JAVA_HOME" )
 {
    $JAVA_BIN             = $JAVA_HOME.$BIN;
-   $JAVA_INCLUDE         = $JAVA_HOME.$ds."include";
+   $JAVA_INCLUDE         = $JAVA_HOME.$INCLUDE;
 }
 
 
@@ -1072,7 +1075,7 @@ if ($platform =~ m/solaris/)
                         $L.$USR_DT.$LIB.
                         $L.$USR_OPENWIN.$LIB;
 }
-elsif ($platform =~ m/linux|netbsd|osf1|freebsd|aix|openbsd/)
+elsif ($platform =~ m/linux|netbsd|freebsd|aix|openbsd|dragonfly/)
 {
    $SOLAREXTRALIB     = $L.$par_dir.$LIB64;
 }
@@ -1092,14 +1095,12 @@ if ($platform =~ m/cygwin|os2/)
 
    $ILIB             = $cur_dir;
 
-   if ($STLPORT4 ne $no_stl) {
-       $ILIB      .=   $wps.$STLPORT4.$LIB64;
-   }
-
    # Mingw is different
    if ( $COM eq "MSC" )
-   {  $ILIB       .=    $wps.$SOLARVER.$ds.$INPATH.$LIB.
-                        $wps.$JAVA_HOME.$LIB;
+   {  $ILIB       .=    $wps.$SOLARVER.$ds.$INPATH.$LIB;
+      if ( $JAVA_HOME ne "" && $JAVA_HOME ne "NO_JAVA_HOME" ) {
+          $ILIB   .= $wps.$JAVA_HOME.$LIB;
+      }
       if ( $CL_X64 ne "TRUE" ) {
           $ILIB   .= $wps.$COMPATH.$LIB.
 		             $wps.$PSDK_HOME.$LIB;
@@ -1137,7 +1138,7 @@ if ($platform =~ m/cygwin|os2/)
 }
 
 # The general environment path.
-if ($platform =~ m/linux|netbsd|odf1|freebsd|aix|solaris|openbsd/)
+if ($platform =~ m/linux|netbsd|freebsd|aix|solaris|openbsd|dragonfly/)
 {  $PATH              = $cur_dir.
 #                        $ps.'$SOLARVER'.$ds.'$INPATH'.$BIN.
                         $ps.'$SOLARENV'.$ds.'$OUTPATH'.$BIN.
@@ -1247,7 +1248,6 @@ elsif ($platform =~ m/cygwin/)
    if ( $PATH !~ /(?:[:]|\A)(?:$tmppath)(?:[:]|\Z)/ ) {
       $PATH           .= $ps.$tmppath;
    }
-   $PATH              .= $ps_STLPORT_LIB;
    # nsis path for Windows users.
    $NSIS_PATH = PathFormat('@NSIS_PATH@');
    $tmppath = CygFormat($NSIS_PATH);
@@ -1359,10 +1359,9 @@ if ($platform =~ m/solaris/)
                         $L.$JRELIBDIR.
                         $L.$JRETOOLKITDIR.
                         $L.$JRETHREADDIR.
-                        $L_STLPORT_LIB.
                         $L.$XLIB;
 }
-elsif ($platform =~ m/linux|netbsd|osf1|aix|freebsd|openbsd/)
+elsif ($platform =~ m/linux|netbsd|aix|freebsd|openbsd|dragonfly/)
 {  $SOLARLIB          = $L.$par_dir.$LIB.
                         $L.'$SOLARENV'.$ds.'$OUTPATH'.$LIB.
                         $L.'$SOLARVER'.$ds.'$INPATH'.$LIB.
@@ -1373,8 +1372,7 @@ elsif ($platform =~ m/linux|netbsd|osf1|aix|freebsd|openbsd/)
    $SOLARLIB         .= $L.'$JAVA_HOME'.$LIB64.
                         $L.$JRELIBDIR.
                         $L.$JRETOOLKITDIR.
-                        $L.$JRETHREADDIR.
-                        $L_STLPORT_LIB;
+                        $L.$JRETHREADDIR;
 
    if ( $XLIB ne "/usr/lib" && $XLIB ne "/usr/lib64" ) {
       $SOLARLIB       .= $L.$XLIB;
@@ -1383,12 +1381,10 @@ elsif ($platform =~ m/linux|netbsd|osf1|aix|freebsd|openbsd/)
 elsif ($platform =~ m/cygwin|os2/)
 {  $SOLARLIB          = $L.'$SOLARVER'.$ds.'$INPATH'.$LIB.
                         $L.$par_dir.$LIB.
-                        $L_STLPORT_LIB.
                         $L.'$SOLARENV'.$ds.'$OUTPATH'.$LIB;
 }
 elsif ($platform =~ m/darwin/)
 {  $SOLARLIB          = $L.'$SOLARVER'.$ds.'$INPATH'.$LIB.
-                        $L_STLPORT_LIB.
                         $L.$USR_LIB;
     # [ed] 6/15/02 Add in X11 libraries onto the library path
     if ($GUIBASE eq "unx") {
@@ -1411,14 +1407,8 @@ $SOLARINC             = $I.$cur_dir.
                         $I.'$SOLARENV'.$INC.
                         $I.'$SRC_ROOT'.$ds."res";
 
-if ($platform =~ m/solaris|linux|osf1|freebsd|netbsd|aix|openbsd/)
+if ($platform =~ m/solaris|linux|freebsd|netbsd|aix|openbsd|dragonfly/)
 {
-$SOLARINC	     .= $STLPORT_stlport;
-if ($platform =~ m/linux|freebsd|netbsd|openbsd/)
-{
-# This simply adds an include path, so even cases that break the FHS work
-$SOLARINC            .= $STLPORT_inc_stlport;
-}
 if ($platform =~ m/solaris/ && ! $CC =~ "gcc")
 {
 $SOLARINC            .= '/SC5 ';
@@ -1426,31 +1416,26 @@ $SOLARINC            .= '/SC5 ';
 # Platform dependent include path at the top of this list of include paths
 if ($platform =~ m/solaris/)
 {
-    $SOLARINC         .= $I.$COMPATH.$ds."include";
+    $SOLARINC         .= $I.$COMPATH.$INCLUDE;
 }
-if ($platform =~ m/linux/)
-{
-# This simply adds an include path, so even cases that break the FHS work
-   $SOLARINC         .= $STLPORT_inc_stlport;
-}
-
 
 	$SOLARINC      .= $I.'$SOLARENV'.$INC.$ds."Xp31";
 
 	# pickup system jpeg over java jpeg on OpenBSD
 	if ($platform =~ m/openbsd/)
-	{  $SOLARINC  .= $I.$USR_LOCAL.$INCLUDE;
+	{   $SOLARINC  .= $I.$USR_LOCAL.$INCLUDE;
 	}
-	{  $SOLARINC  .= $I.'$JAVA_HOME'.$INCLUDE;
+    if ( $JAVA_HOME ne "" && $JAVA_HOME ne "NO_JAVA_HOME" )
+    {   $SOLARINC  .= $I.'$JAVA_HOME'.$INCLUDE;
 	}
 
 	#include system dependent Java include directory
-	if (!($JDK eq "gcj"))
+	if (!($JDK eq "gcj") && $JAVA_HOME ne "" && $JAVA_HOME ne "NO_JAVA_HOME")
 	{
    		if ($platform =~ m/solaris/)
    		{  $SOLARINC   .=$I.'$JAVA_HOME'.$INCLUDE.$ds."solaris";
    		}
-   		elsif  ($platform =~ m/linux|osf1/)
+   		elsif  ($platform =~ m/linux/)
    		{  $SOLARINC   .=$I.'$JAVA_HOME'.$INCLUDE.$ds."linux";
    		}
    		elsif ($platform =~ m/freebsd/)
@@ -1471,42 +1456,39 @@ if ($platform =~ m/linux/)
 
    		#java threads include path
 
-   		$SOLARINC .=$I.'$JAVA_HOME'.$INCLUDE.$ds."native_threads".$ds."include";
+        $SOLARINC .=$I.'$JAVA_HOME'.$INCLUDE.$ds."native_threads".$INCLUDE;
 	}
     #The tail, if needed
-    if ($platform =~ m/linux|freebsd|netbsd|aix|openbsd/)
+    if ($platform =~ m/linux|freebsd|netbsd|aix|openbsd|dragonfly/)
     {  $SOLARINC  .= $I.$XINC;
-    }
-    elsif ($platform =~ m/osf1/)
-    {  $SOLARINC  .= $I.$XINC.
-                     $I.$USR.$INCLUDE;
     }
 }
 elsif ($platform =~ m/cygwin/)
-{  $SOLARINC         .= $STLPORT_stlport.
-                        $I.'$JAVA_HOME'.$ds."include".$ds."win32".
-                        $I.'$JAVA_HOME'.$ds."include";
+{  if ($JAVA_HOME ne "" && $JAVA_HOME ne "NO_JAVA_HOME")
+   {  $SOLARINC       .= $I.'$JAVA_HOME'.$INCLUDE.$ds."win32".
+                         $I.'$JAVA_HOME'.$INCLUDE;
+   }
    # Mingw is different
    if ( $COM eq "MSC" )
    {  $SOLARINC       .= $I.'$PSDK_HOME'.$INCLUDE.
-                         $I.'$COMPATH'.$ds."include";
+                         $I.'$COMPATH'.$INCLUDE;
       if ( '@ENABLE_DIRECTX@' ne "" ) {
           $SOLARINC   .= $I.PathFormat('@DIRECTXSDK_HOME@').$INCLUDE;
       }
    }
    elsif ( $COM eq "GCC" )
-   {  $SOLARINC       .= $I.'$SOLARVER'.$ds.'$INPATH'.$INC.$ds."external".$ds."mingw".$ds."include";
+   {  $SOLARINC       .= $I.'$SOLARVER'.$ds.'$INPATH'.$INC.$ds."external".$ds."mingw".$INCLUDE;
      if ( $USE_MINGW eq "cygwin" )
-     {  $SOLARINC    .= $I.PathFormat($USR.$ds."include".$ds."mingw").
-                        $I.PathFormat($USR.$ds."include".$ds."w32api").
-                        $I.PathFormat($USR.$ds."include"); }
+     {  $SOLARINC    .= $I.PathFormat($USR.$INCLUDE.$ds."mingw").
+                        $I.PathFormat($USR.$INCLUDE.$ds."w32api").
+                        $I.PathFormat($USR.$INCLUDE); }
      else
-     {  $SOLARINC    .= $I.'$COMPATH'.$ds."include"; }
+     {  $SOLARINC    .= $I.'$COMPATH'.$INCLUDE; }
      @mingw_lib_include_paths = split( / /, "@MINGW_LIB_INCLUDE_PATH@" );
      $SOLARINC .= $I.PathFormat("@MINGW_BACKWARD_INCLUDE_PATH@");
      foreach $mingw_lib_include_path (@mingw_lib_include_paths)
        {   chomp $mingw_lib_include_path;
-           if ( $mingw_lib_include_path ne $COMPATH.$ds."include" && $mingw_lib_include_path ne "" )
+           if ( $mingw_lib_include_path ne $COMPATH.$INCLUDE && $mingw_lib_include_path ne "" )
            {
               $SOLARINC   .= $I.PathFormat($mingw_lib_include_path);
            }
@@ -1514,13 +1496,12 @@ elsif ($platform =~ m/cygwin/)
      $SOLARINC .= $I.PathFormat("@GXX_INCLUDE_PATH@").$I.PathFormat("@GXX_INCLUDE_PATH@".$ds."mingw32").
                   $I.'$PSDK_HOME'.$INCLUDE;
    }
-   if ( '@ENABLE_DIRECTX@' ne "" ) {
+   if ( $COM ne "MSC" && '@ENABLE_DIRECTX@' ne "" ) {
        $SOLARINC   .= $I.PathFormat('@DIRECTXSDK_HOME@').$INCLUDE;
    }
 }
 elsif ($platform =~ m/darwin/)
-{  $SOLARINC         .= $STLPORT_stlport.
-						$I.$FRAMEWORKSHOME.$ds."JavaVM.framework".$ds."Versions".$ds."Current".$ds."Headers".
+{  $SOLARINC         .= $I.$FRAMEWORKSHOME.$ds."JavaVM.framework".$ds."Versions".$ds."Current".$ds."Headers".
                         $I.$FRAMEWORKSHOME.$ds."JavaVM.framework".$ds."Headers";
    # [ed] 6/15/02 Add in X11 headers as appropriate for the build
    if ($GUIBASE eq "unx") {
@@ -1568,8 +1549,6 @@ ToFile( "ANT_HOME",          PathFormat("@ANT_HOME@"), "e" );
 ToFile( "ANT_LIB",           PathFormat("@ANT_LIB@"), "e" );
 ToFile( "ANT",               PathFormat("@ANT@"), "e" );
 ToFile( "JDKLIB",            $JAVA_LIB,          "e" );
-ToFile( "STLPORT4",          $STLPORT4,          "e" );
-ToFile( "STLPORT_VER",       "@STLPORT_VER@",    "e" );
 ToFile( "ASM_PATH",          $ASM_PATH,          "e" );
 ToFile( "BUILD_SOSL",        $BUILD_SOSL,        "e" );
 ToFile( "FRAMEWORKSHOME",    $FRAMEWORKSHOME,    "e" );
@@ -1579,33 +1558,10 @@ ToFile( "Empty",             $empty,             "n" );
 # Writing the platform independent constant values to file.
 # (c = comment, e = environment variable, a = alias )
 ToFile( "Platform independent constant values.", $empty, "c" );
-# dictionaries
-if ('@WITH_DICT@' =~ m/ALL,/s)
-{
-   foreach $dict (@DICTIONARIES)
-   {
-      ToFile( "DIC_$dict",     "TRUE",          "e" );
-   }
-   ToFile( "DIC_ALL",          "TRUE",          "e" );
-}
-else
-{	
-   foreach $dict (@DICTIONARIES)
-   {   if ('@WITH_DICT@' =~ m/$dict,/s)
-       {   my $val="TRUE";
-           ToFile( "DIC_$dict",     $val,          "e" );
-       }
-       else
-       {   my $val;
-           undef $val;
-           ToFile( "DIC_$dict",     $val,          "e" );
-       }
-   }
-}
 # Languages
 ToFile( "WITH_LANG",         "@WITH_LANG@",      "e" );
-ToFile( "INTRO_BITMAPS",     "@INTRO_BITMAPS@",  "e" );
-ToFile( "ABOUT_BITMAPS",     "@ABOUT_BITMAPS@",  "e" );
+ToFile( "INTRO_BITMAP",      "@INTRO_BITMAP@",   "e" );
+ToFile( "ABOUT_BITMAP",      "@ABOUT_BITMAP@",   "e" );
 ToFile( "OOO_VENDOR",        "@OOO_VENDOR@",     "e" );
 ToFile( "OOODMAKEMODE",      "YES",              "e" );
 ToFile( "WITH_POOR_HELP_LOCALIZATIONS", "@WITH_POOR_HELP_LOCALIZATIONS@", "e" );
@@ -1661,6 +1617,9 @@ ToFile( "ENABLE_PRESENTER_EXTRA_UI","@ENABLE_PRESENTER_EXTRA_UI@","e" );
 ToFile( "ENABLE_MINIMIZER",   "@ENABLE_MINIMIZER@","e" );
 ToFile( "ENABLE_PRESENTER_SCREEN","@ENABLE_PRESENTER_SCREEN@","e" );
 ToFile( "ENABLE_REPORTBUILDER","@ENABLE_REPORTBUILDER@","e" );
+ToFile( "ENABLE_SCRIPTING_BEANSHELL","@ENABLE_SCRIPTING_BEANSHELL@","e" );
+ToFile( "ENABLE_SCRIPTING_JAVASCRIPT","@ENABLE_SCRIPTING_JAVASCRIPT@","e" );
+ToFile( "ENABLE_SCRIPTING_PYTHON","@ENABLE_SCRIPTING_PYTHON@","e" );
 ToFile( "ENABLE_UNIX_QUICKSTARTER", "@ENABLE_UNIX_QUICKSTARTER@", "e" );
 ToFile( "SYSTEM_JFREEREPORT","@SYSTEM_JFREEREPORT@","e" );
 ToFile( "WITH_THEMES",       "@WITH_THEMES@",      "e");
@@ -1813,7 +1772,6 @@ if ( '@JDK@' ne '' )
    ToFile( "JAVAINTERPRETER", PathFormat("@JAVAINTERPRETER@"), "e" );
    ToFile( "JAVAIFLAGS",      "@JAVAIFLAGS@",    "e" );
    ToFile( "JAVACOMPILER",    PathFormat("@JAVACOMPILER@"), "e" );
-   ToFile( "JAVAAOTCOMPILER", PathFormat("@JAVAAOTCOMPILER@"), "e" );
    ToFile( "JAVADOC",         PathFormat("@JAVADOC@"), "e" );
 }
 ToFile( "SCPDEFS",           '@SCPDEFS@',        "e" );
@@ -1837,7 +1795,7 @@ ToFile( "CXX",               $CXX,               "e" );
 ToFile( "USE_CCACHE",        "@USE_CCACHE@",     "e" );
 ToFile( "MINGWCXX",          "@MINGWCXX@",       "e" );
 ToFile( "MINGWSTRIP",        "@MINGWSTRIP@",     "e" );
-ToFile( "USE_SYSTEM_STL",    "@USE_SYSTEM_STL@", "e" );
+ToFile( "WITH_STLPORT",      "@WITH_STLPORT@", "e" );
 ToFile( "ALLOC",             "@ALLOC@",          "e" );
 ToFile( "ENABLE_SYMBOLS",    "@ENABLE_SYMBOLS@",    "e" );
 ToFile( "DISABLE_STRIP",     "@DISABLE_STRIP@",     "e" );
@@ -1906,6 +1864,9 @@ if ($SYSTEM_PYTHON eq "NO") {
 ToFile( "HOME",              "@HOME@",             "e" );
 }
 ToFile( "SYSTEM_ICU",        "@SYSTEM_ICU@",       "e" );
+ToFile( "ICU_MAJOR",         "@ICU_MAJOR@",        "e" );
+ToFile( "ICU_MINOR",         "@ICU_MINOR@",        "e" );
+ToFile( "ICU_MICRO",         "@ICU_MICRO@",        "e" );
 ToFile( "SYSTEM_GENBRK",     "@SYSTEM_GENBRK@",    "e" );
 ToFile( "SYSTEM_GENCCODE",   "@SYSTEM_GENCCODE@",  "e" );
 ToFile( "SYSTEM_GENCMN",     "@SYSTEM_GENCMN@",    "e" );

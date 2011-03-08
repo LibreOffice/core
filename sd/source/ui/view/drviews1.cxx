@@ -55,14 +55,6 @@
 #include <svx/globl3d.hxx>
 #include <svx/fmglob.hxx>
 #include <editeng/outliner.hxx>
-
-
-#include "misc.hxx"
-
-#ifdef STARIMAGE_AVAILABLE
-#include <sim2/simdll.hxx>
-#endif
-
 #include <svx/dialogs.hrc>
 
 #include "view/viewoverlaymanager.hxx"
@@ -122,7 +114,7 @@ void DrawViewShell::UIActivating( SfxInPlaceClient* pCli )
 {
     ViewShell::UIActivating(pCli);
 
-    // #94252# Disable own controls
+    // Disable own controls
     maTabControl.Disable();
     if (GetLayerTabControl() != NULL)
         GetLayerTabControl()->Disable();
@@ -130,7 +122,7 @@ void DrawViewShell::UIActivating( SfxInPlaceClient* pCli )
 
 void DrawViewShell::UIDeactivated( SfxInPlaceClient* pCli )
 {
-    // #94252# Enable own controls
+    // Enable own controls
     maTabControl.Enable();
     if (GetLayerTabControl() != NULL)
         GetLayerTabControl()->Enable();
@@ -186,7 +178,6 @@ void DrawViewShell::SelectionHasChanged (void)
         SID_3D_STATE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
 
     SdrOle2Obj* pOleObj = NULL;
-    SdrGrafObj* pGrafObj = NULL;
 
     if ( mpDrawView->AreObjectsMarked() )
     {
@@ -206,10 +197,7 @@ void DrawViewShell::SelectionHasChanged (void)
                 UpdateIMapDlg( pObj );
             }
             else if (nSdrObjKind == OBJ_GRAF)
-            {
-                pGrafObj = (SdrGrafObj*) pObj;
                 UpdateIMapDlg( pObj );
-            }
         }
     }
 
@@ -287,7 +275,7 @@ void DrawViewShell::SelectionHasChanged (void)
         GetViewShellBase().GetToolBarManager()->SelectionHasChanged(*this,*mpDrawView);
     }
 
-    // #96124# Invalidate for every subshell
+    // Invalidate for every subshell
     GetViewShellBase().GetViewShellManager()->InvalidateAllSubShells(this);
 
     mpDrawView->UpdateSelectionClipboard( FALSE );
@@ -600,7 +588,7 @@ SvxRuler* DrawViewShell::CreateVRuler(::sd::Window* pWin)
         GetViewFrame()->GetBindings(), aWBits);
     pRuler->SetSourceUnit(pWin->GetMapMode().GetMapUnit());
 
-    // #96629# Metric same as HRuler, use document setting
+    // Metric same as HRuler, use document setting
     UINT16 nMetric = (UINT16)GetDoc()->GetUIUnit();
 
     if( nMetric == 0xffff )
@@ -716,6 +704,9 @@ SdPage* DrawViewShell::getCurrentPage() const
 
 void DrawViewShell::ResetActualPage()
 {
+    if (!GetDoc())
+        return;
+
     USHORT nCurrentPage = maTabControl.GetCurPageId() - 1;
     USHORT nPageCount   = (meEditMode == EM_PAGE)?GetDoc()->GetSdPageCount(mePageKind):GetDoc()->GetMasterSdPageCount(mePageKind);
     if (nPageCount > 0)
@@ -795,76 +786,6 @@ ErrCode DrawViewShell::DoVerb(long nVerb)
             {
                 ActivateObject( (SdrOle2Obj*) pObj, nVerb);
             }
-#ifdef STARIMAGE_AVAILABLE
-            else if (nInv = SdrInventor && nSdrObjKind == OBJ_GRAF &&
-                     ((SdrGrafObj*) pObj)->GetGraphicType() == GRAPHIC_BITMAP &&
-                     SFX_APP()->HasFeature(SFX_FEATURE_SIMAGE))
-            {
-                SdrGrafObj* pSdrGrafObj = (SdrGrafObj*) pObj;
-                short nOK = RET_YES;
-
-                if ( pSdrGrafObj->GetFileName().Len() )
-                {
-                    // Graphik ist gelinkt, soll der Link aufgehoben werden?
-                    QueryBox aBox(pWindow, WB_YES_NO | WB_DEF_YES,
-                                  String( SdResId(STR_REMOVE_LINK) ) );
-                    nOK = aBox.Execute();
-
-                    if (nOK == RET_YES)
-                    {
-                        // Link aufheben (File- und Filtername zuruecksetzen)
-                        pSdrGrafObj->SetGraphicLink(String(), String());
-                    }
-                }
-
-                if (nOK == RET_YES)
-                {
-                    /**************************************************************
-                    * OLE-Objekt erzeugen, StarImage starten
-                    * Grafik-Objekt loeschen (durch OLE-Objekt ersetzt)
-                    **************************************************************/
-                    //HMHmpDrView->HideMarkHdl();
-
-                    SvStorageRef aStor = new SvStorage(String());
-                    SvInPlaceObjectRef aNewIPObj = &((SvFactory*)SvInPlaceObject::ClassFactory())
-                    ->CreateAndInit(SimModuleDummy::GetID(SOFFICE_FILEFORMAT_CURRENT), aStor);
-                    if ( aNewIPObj.Is() )
-                    {
-                        SdrGrafObj* pTempSdrGrafObj = (SdrGrafObj*) pSdrGrafObj->Clone ();
-
-                        SvEmbeddedInfoObject * pInfo;
-                        pInfo = GetViewFrame()->GetObjectShell()->
-                                       InsertObject( aNewIPObj, String() );
-
-                        String aName;
-                        if (pInfo)
-                        {
-                            aName = pInfo->GetObjName();
-                        }
-
-                        Rectangle aRect = pObj->GetLogicRect();
-                        SdrOle2Obj* pSdrOle2Obj = new SdrOle2Obj( aNewIPObj,
-                                                                  aName, aRect );
-
-                        SdrPageView* pPV = mpDrawView->GetSdrPageView();
-
-                        pPV->GetObjList()->InsertObject( pSdrOle2Obj );
-                        mpDrawView->ReplaceObjectAtView( pObj, *pPV, pTempSdrGrafObj );
-
-                        pSdrOle2Obj->SetLogicRect(aRect);
-                        aNewIPObj->SetVisAreaSize(aRect.GetSize());
-
-                        SimDLL::Update(aNewIPObj, pTempSdrGrafObj->GetGraphic(), pWindow);
-                        ActivateObject(pSdrOle2Obj, SVVERB_SHOW);
-
-                        Client* pClient = (Client*) GetIPClient();
-
-                        if (pClient)
-                            pClient->SetSdrGrafObj( pTempSdrGrafObj );
-                    }
-                }
-            }
-#endif
         }
     }
 

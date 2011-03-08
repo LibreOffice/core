@@ -221,7 +221,7 @@ const BitmapPalette& Bitmap::GetGreyPalette( int nEntries )
     }
     else
     {
-        DBG_ERROR( "Bitmap::GetGreyPalette: invalid entry count (2/4/16/256 allowed)" );
+        OSL_FAIL( "Bitmap::GetGreyPalette: invalid entry count (2/4/16/256 allowed)" );
         return aGreyPalette2;
     }
 }
@@ -1735,38 +1735,6 @@ Bitmap Bitmap::CreateDisplayBitmap( OutputDevice* pDisplay )
     }
 
     return aDispBmp;
-}
-
-// ------------------------------------------------------------------
-
-Bitmap Bitmap::GetColorTransformedBitmap( BmpColorMode eColorMode ) const
-{
-    Bitmap  aRet;
-
-    if( BMP_COLOR_HIGHCONTRAST == eColorMode )
-    {
-        Color*  pSrcColors = NULL;
-        Color*  pDstColors = NULL;
-        ULONG   nColorCount = 0;
-
-        aRet = *this;
-
-        Image::GetColorTransformArrays( (ImageColorTransform) eColorMode, pSrcColors, pDstColors, nColorCount );
-
-        if( nColorCount && pSrcColors && pDstColors )
-               aRet.Replace( pSrcColors, pDstColors, nColorCount );
-
-        delete[] pSrcColors;
-        delete[] pDstColors;
-    }
-    else if( BMP_COLOR_MONOCHROME_BLACK == eColorMode ||
-             BMP_COLOR_MONOCHROME_WHITE == eColorMode )
-    {
-        aRet = *this;
-        aRet.MakeMono( BMP_COLOR_MONOCHROME_THRESHOLD );
-    }
-
-    return aRet;
 }
 
 // ------------------------------------------------------------------

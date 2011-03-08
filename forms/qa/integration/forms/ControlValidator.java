@@ -27,8 +27,6 @@
 package integration.forms;
 
 /** base class for components validating the content of form controls
- *
- * @author  fs@openoffice.org
  */
 public abstract class ControlValidator implements com.sun.star.form.validation.XValidator
 {

@@ -561,7 +561,6 @@ void OEditModel::write(const Reference<XObjectOutputStream>& _rxOutStream) throw
     {   // -> fuer die Dauer des Speicherns meinem aggregierten Model die alte TextLen einreden
 
         // before doing this we have to save the current text value of the aggregate, as this may be affected by resetting the text len
-        // FS - 08.12.99 - 70606
         aCurrentText = m_xAggregateSet->getPropertyValue(PROPERTY_TEXT);
 
         m_xAggregateSet->getPropertyValue(PROPERTY_MAXTEXTLEN) >>= nOldTextLen;

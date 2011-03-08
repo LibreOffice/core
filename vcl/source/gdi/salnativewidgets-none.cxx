@@ -31,7 +31,7 @@
 
 #include <vcl/salgdi.hxx>
 
-using namespace rtl;
+using ::rtl::OUString;
 
 /****************************************************************
  *  Placeholder for no native widgets

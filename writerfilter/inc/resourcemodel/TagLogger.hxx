@@ -36,7 +36,7 @@
 #include <WriterFilterDllApi.hxx>
 #include <resourcemodel/WW8ResourceModel.hxx>
 #include <string>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <boost/shared_ptr.hpp>
 #include <libxml/xmlwriter.h>
 

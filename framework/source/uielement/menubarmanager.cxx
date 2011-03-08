@@ -524,9 +524,9 @@ throw ( RuntimeException )
                 // #b6673979# enable some slots hardly, because UNIX clipboard does not notify all changes
                 // Can be removed if follow up task will be fixed directly within applications.
                 if (
-                    ( pMenuItemHandler->aMenuItemURL.equalsAscii (".uno:Paste"         ) ) ||
-                    ( pMenuItemHandler->aMenuItemURL.equalsAscii (".uno:PasteSpecial"  ) ) ||
-                    ( pMenuItemHandler->aMenuItemURL.equalsAscii (".uno:PasteClipboard") )      // special for draw/impress
+                    ( pMenuItemHandler->aMenuItemURL.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:Paste"))) ||
+                    ( pMenuItemHandler->aMenuItemURL.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:PasteSpecial"))) ||
+                    ( pMenuItemHandler->aMenuItemURL.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:PasteClipboard")))      // special for draw/impress
                    )
                     bEnabledItem = sal_True;
                 #endif

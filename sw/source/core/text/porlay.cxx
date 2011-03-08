@@ -29,10 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-#include "errhdl.hxx"   // ASSERT
-
-#include "txtcfg.hxx"
 #include "porlay.hxx"
 #include "itrform2.hxx"
 #include "porglue.hxx"
@@ -341,7 +337,6 @@ SwMarginPortion *SwLineLayout::CalcLeftMargin()
     SwLinePortion *pPos = pLeft->GetPortion();
     while( pPos )
     {
-        DBG_LOOP;
         if( pPos->IsFlyPortion() )
         {
             // Die FlyPortion wird ausgesogen ...
@@ -452,7 +447,6 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
             //  Fix-Portion.
             while( pPos )
             {
-                DBG_LOOP;
                 OSL_ENSURE( POR_LIN != pPos->GetWhichPor(),
                         "SwLineLayout::CalcLine: don't use SwLinePortions !" );
 
@@ -915,9 +909,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
     //
 
     // remove invalid entries from script information arrays
-    const USHORT nScriptRemove = aScriptChg.Count() - nCnt;
-    aScriptChg.Remove( nCnt, nScriptRemove );
-    aScriptType.Remove( nCnt, nScriptRemove );
+    aScriptChanges.erase( aScriptChanges.begin() + nCnt, aScriptChanges.end() );
 
     // get the start of the last compression group
     USHORT nLastCompression = nChg;
@@ -933,10 +925,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
     }
 
     // remove invalid entries from compression information arrays
-    const USHORT nCompRemove = aCompChg.Count() - nCntComp;
-    aCompChg.Remove( nCntComp, nCompRemove );
-    aCompLen.Remove( nCntComp, nCompRemove );
-    aCompType.Remove( nCntComp, nCompRemove );
+    aCompressionChanges.erase(aCompressionChanges.begin() + nCntComp, aCompressionChanges.end() );
 
     // get the start of the last kashida group
     USHORT nLastKashida = nChg;
@@ -981,8 +970,8 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
 
         if ( nScript != nNextScript )
         {
-            aScriptChg.Insert( nEnd, nCnt );
-            aScriptType.Insert( nScript, nCnt++ );
+            aScriptChanges.push_back( ScriptChangeInfo(nEnd, nScript) );
+            nCnt++;
             nScript = nNextScript;
         }
     }
@@ -991,7 +980,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
     // UPDATE THE SCRIPT INFO ARRAYS:
     //
 
-    while ( nChg < rTxt.Len() || ( !aScriptChg.Count() && !rTxt.Len() ) )
+    while ( nChg < rTxt.Len() || ( aScriptChanges.empty() && !rTxt.Len() ) )
     {
         OSL_ENSURE( i18n::ScriptType::WEAK != nScript,
                 "Inserting WEAK into SwScriptInfo structure" );
@@ -1032,18 +1021,18 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
             if (nType == U_NON_SPACING_MARK || nType == U_ENCLOSING_MARK ||
                 nType == U_COMBINING_SPACING_MARK )
             {
-                aScriptChg.Insert( nChg - 1, nCnt );
+                aScriptChanges.push_back( ScriptChangeInfo(nChg-1, nScript) );
             }
             else
             {
-                aScriptChg.Insert( nChg, nCnt );
+                aScriptChanges.push_back( ScriptChangeInfo(nChg, nScript) );
             }
         }
         else
         {
-            aScriptChg.Insert( nChg, nCnt );
+            aScriptChanges.push_back( ScriptChangeInfo(nChg, nScript) );
         }
-        aScriptType.Insert( nScript, nCnt++ );
+        ++nCnt;
 
         // if current script is asian, we search for compressable characters
         // in this range
@@ -1087,10 +1076,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
                         if ( CHARCOMPRESS_PUNCTUATION_KANA == aCompEnum ||
                              ePrevState != KANA )
                         {
-                            aCompChg.Insert( nPrevChg, nCntComp );
-                            BYTE nTmpType = ePrevState;
-                            aCompType.Insert( nTmpType, nCntComp );
-                            aCompLen.Insert( nLastCompression - nPrevChg, nCntComp++ );
+                            aCompressionChanges.push_back( CompressionChangeInfo(nPrevChg, nLastCompression - nPrevChg, ePrevState) );
                         }
                     }
 
@@ -1108,10 +1094,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
                 if ( CHARCOMPRESS_PUNCTUATION_KANA == aCompEnum ||
                      ePrevState != KANA )
                 {
-                    aCompChg.Insert( nPrevChg, nCntComp );
-                    BYTE nTmpType = ePrevState;
-                    aCompType.Insert( nTmpType, nCntComp );
-                    aCompLen.Insert( nLastCompression - nPrevChg, nCntComp++ );
+                    aCompressionChanges.push_back( CompressionChangeInfo(nPrevChg, nLastCompression - nPrevChg, ePrevState) );
                 }
             }
         }
@@ -1286,7 +1269,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
 
         nLastCompression = nChg;
         nLastKashida = nChg;
-    };
+    }
 
 #if OSL_DEBUG_LEVEL > 1
     // check kashida data
@@ -1306,9 +1289,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
 #endif
 
     // remove invalid entries from direction information arrays
-    const USHORT nDirRemove = aDirChg.Count();
-    aDirChg.Remove( 0, nDirRemove );
-    aDirType.Remove( 0, nDirRemove );
+    aDirectionChanges.clear();
 
     // Perform Unicode Bidi Algorithm for text direction information
     bool bPerformUBA = UBIDI_LTR != nDefaultDir;
@@ -1328,7 +1309,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
         // 1. All text in RTL runs will use the CTL font
         // #i89825# change the script type also to CTL (hennerdrewes)
         // 2. Text in embedded LTR runs that does not have any strong LTR characters (numbers!)
-        for ( USHORT nDirIdx = 0; nDirIdx < aDirChg.Count(); ++nDirIdx )
+        for ( USHORT nDirIdx = 0; nDirIdx < aDirectionChanges.size(); ++nDirIdx )
         {
             const BYTE nCurrDirType = GetDirType( nDirIdx );
                 // nStart ist start of RTL run:
@@ -1360,37 +1341,33 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
                 // we have to insert a new script change:
                 if ( nStart > 0 && nStartPosOfGroup < nStart )
                 {
-                    aScriptChg.Insert( nStart, nScriptIdx );
-                    aScriptType.Insert( nScriptTypeOfGroup, nScriptIdx );
+                    aScriptChanges.insert(aScriptChanges.begin() + nScriptIdx,
+                                          ScriptChangeInfo(nStart, nScriptTypeOfGroup) );
                     ++nScriptIdx;
                 }
 
                 // Remove entries in ScriptArray which end inside the RTL run:
-                while ( nScriptIdx < aScriptChg.Count() && GetScriptChg( nScriptIdx ) <= nEnd )
+                while ( nScriptIdx < aScriptChanges.size() && GetScriptChg( nScriptIdx ) <= nEnd )
                 {
-                    aScriptChg.Remove( nScriptIdx, 1 );
-                    aScriptType.Remove( nScriptIdx, 1 );
+                    aScriptChanges.erase(aScriptChanges.begin() + nScriptIdx);
                 }
 
                 // Insert a new entry in ScriptArray for the end of the RTL run:
-                aScriptChg.Insert( nEnd, nScriptIdx );
-                aScriptType.Insert( i18n::ScriptType::COMPLEX, nScriptIdx );
+                aScriptChanges.insert(aScriptChanges.begin() + nScriptIdx,
+                                      ScriptChangeInfo(nEnd, i18n::ScriptType::COMPLEX) );
 
 #if OSL_DEBUG_LEVEL > 1
-                BYTE nScriptType;
-                BYTE nLastScriptType = i18n::ScriptType::WEAK;
-                xub_StrLen nScriptChg;
-                xub_StrLen nLastScriptChg = 0;
-                (void) nLastScriptChg;
-                (void) nLastScriptType;
-
-                for ( USHORT i2 = 0; i2 < aScriptChg.Count(); ++i2 )
+                // Check that ScriptChangeInfos are in increasing order of
+                // position and that we don't have "empty" changes.
+                BYTE nLastTyp = i18n::ScriptType::WEAK;
+                xub_StrLen nLastPos = 0;
+                for (std::vector<ScriptChangeInfo>::const_iterator i2 = aScriptChanges.begin(); i2 < aScriptChanges.end(); ++i2)
                 {
-                    nScriptChg = GetScriptChg( i2 );
-                    nScriptType = GetScriptType( i2 );
-                    OSL_ENSURE( nLastScriptType != nScriptType &&
-                            nLastScriptChg < nScriptChg,
+                    OSL_ENSURE( nLastTyp != i2->type &&
+                            nLastPos < i2->position,
                             "Heavy InitScriptType() confusion" );
+                    nLastPos = i2->position;
+                    nLastTyp = i2->type;
                 }
 #endif
             }
@@ -1401,10 +1378,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
 void SwScriptInfo::UpdateBidiInfo( const String& rTxt )
 {
     // remove invalid entries from direction information arrays
-    const USHORT nDirRemove = aDirChg.Count();
-    aDirChg.Remove( 0, nDirRemove );
-    aDirType.Remove( 0, nDirRemove );
-
+    aDirectionChanges.clear();
     //
     // Bidi functions from icu 2.0
     //
@@ -1419,14 +1393,10 @@ void SwScriptInfo::UpdateBidiInfo( const String& rTxt )
     int32_t nStart = 0;
     int32_t nEnd;
     UBiDiLevel nCurrDir;
-    // counter for direction information arrays
-    USHORT nCntDir = 0;
-
     for ( USHORT nIdx = 0; nIdx < nCount; ++nIdx )
     {
         ubidi_getLogicalRun( pBidi, nStart, &nEnd, &nCurrDir );
-        aDirChg.Insert( (USHORT)nEnd, nCntDir );
-        aDirType.Insert( (BYTE)nCurrDir, nCntDir++ );
+        aDirectionChanges.push_back( DirectionChangeInfo(nEnd, nCurrDir) );
         nStart = nEnd;
     }
 
@@ -2286,7 +2256,6 @@ xub_StrLen SwParaPortion::GetParLen() const
     const SwLineLayout *pLay = this;
     while( pLay )
     {
-        DBG_LOOP;
         nLen = nLen + pLay->GetLen();
         pLay = pLay->GetNext();
     }
