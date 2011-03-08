@@ -238,6 +238,11 @@ public:
     void testSheetCopy();
 
     /**
+     * Make sure the sheet streams are invalidated properly.
+     */
+    void testStreamValid();
+
+    /**
      * Test built-in cell functions to make sure their categories and order
      * are correct.
      */
@@ -261,6 +266,7 @@ public:
     CPPUNIT_TEST(testDataPilot);
     CPPUNIT_TEST(testSheetCopy);
     CPPUNIT_TEST(testGraphicsInGroup);
+    CPPUNIT_TEST(testStreamValid);
     CPPUNIT_TEST(testFunctionLists);
     CPPUNIT_TEST(testCVEs);
     CPPUNIT_TEST_SUITE_END();
@@ -877,6 +883,81 @@ void Test::testSheetCopy()
     CPPUNIT_ASSERT_MESSAGE("rows 5 - 10 should be hidden", bHidden && nRow1 == 5 && nRow2 == 10);
     bHidden = m_pDoc->RowHidden(11, 1, &nRow1, &nRow2);
     CPPUNIT_ASSERT_MESSAGE("rows 11 - maxrow should be visible", !bHidden && nRow1 == 11 && nRow2 == MAXROW);
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testStreamValid()
+{
+    m_pDoc->InsertTab(0, OUString(RTL_CONSTASCII_USTRINGPARAM("Sheet1")));
+    m_pDoc->InsertTab(1, OUString(RTL_CONSTASCII_USTRINGPARAM("Sheet2")));
+    m_pDoc->InsertTab(2, OUString(RTL_CONSTASCII_USTRINGPARAM("Sheet3")));
+    m_pDoc->InsertTab(3, OUString(RTL_CONSTASCII_USTRINGPARAM("Sheet4")));
+    CPPUNIT_ASSERT_MESSAGE("We should have 4 sheet instances.", m_pDoc->GetTableCount() == 4);
+
+    OUString a1(RTL_CONSTASCII_USTRINGPARAM("A1"));
+    OUString a2(RTL_CONSTASCII_USTRINGPARAM("A2"));
+    OUString test;
+
+    // Put values into Sheet1.
+    m_pDoc->SetString(0, 0, 0, a1);
+    m_pDoc->SetString(0, 1, 0, a2);
+    m_pDoc->GetString(0, 0, 0, test);
+    CPPUNIT_ASSERT_MESSAGE("Unexpected value in Sheet1.A1", test.equals(a1));
+    m_pDoc->GetString(0, 1, 0, test);
+    CPPUNIT_ASSERT_MESSAGE("Unexpected value in Sheet1.A2", test.equals(a2));
+
+    // Put formulas into Sheet2 to Sheet4 to references values from Sheet1.
+
+    m_pDoc->SetString(0, 0, 1, OUString(RTL_CONSTASCII_USTRINGPARAM("=Sheet1.A1")));
+    m_pDoc->SetString(0, 1, 1, OUString(RTL_CONSTASCII_USTRINGPARAM("=Sheet1.A2")));
+    m_pDoc->SetString(0, 0, 2, OUString(RTL_CONSTASCII_USTRINGPARAM("=Sheet1.A1")));
+    m_pDoc->SetString(0, 0, 3, OUString(RTL_CONSTASCII_USTRINGPARAM("=Sheet1.A2")));
+
+    m_pDoc->GetString(0, 0, 1, test);
+    CPPUNIT_ASSERT_MESSAGE("Unexpected value in Sheet2.A1", test.equals(a1));
+    m_pDoc->GetString(0, 1, 1, test);
+    CPPUNIT_ASSERT_MESSAGE("Unexpected value in Sheet2.A2", test.equals(a2));
+    m_pDoc->GetString(0, 0, 2, test);
+    CPPUNIT_ASSERT_MESSAGE("Unexpected value in Sheet3.A1", test.equals(a1));
+    m_pDoc->GetString(0, 0, 3, test);
+    CPPUNIT_ASSERT_MESSAGE("Unexpected value in Sheet3.A1", test.equals(a2));
+
+    // Set all sheet streams valid after all the initial cell values are in
+    // place. In reality we need to have real XML streams stored in order to
+    // claim they are valid, but we are just testing the flag values here.
+    m_pDoc->SetStreamValid(0, true);
+    m_pDoc->SetStreamValid(1, true);
+    m_pDoc->SetStreamValid(2, true);
+    m_pDoc->SetStreamValid(3, true);
+    CPPUNIT_ASSERT_MESSAGE("Stream is expected to be valid.", m_pDoc->IsStreamValid(0));
+    CPPUNIT_ASSERT_MESSAGE("Stream is expected to be valid.", m_pDoc->IsStreamValid(1));
+    CPPUNIT_ASSERT_MESSAGE("Stream is expected to be valid.", m_pDoc->IsStreamValid(2));
+    CPPUNIT_ASSERT_MESSAGE("Stream is expected to be valid.", m_pDoc->IsStreamValid(3));
+
+    // Now, insert a new row at row 2 position on Sheet1.  This will move cell
+    // A2 downward but cell A1 remains unmoved.
+    m_pDoc->InsertRow(0, 0, MAXCOL, 0, 1, 2);
+    m_pDoc->GetString(0, 0, 0, test);
+    CPPUNIT_ASSERT_MESSAGE("Cell A1 should not have moved.", test.equals(a1));
+    m_pDoc->GetString(0, 3, 0, test);
+    CPPUNIT_ASSERT_MESSAGE("the old cell A2 should now be at A4.", test.equals(a2));
+    const ScBaseCell* pCell = m_pDoc->GetCell(ScAddress(0, 1, 0));
+    CPPUNIT_ASSERT_MESSAGE("Cell A2 should be empty.", pCell == NULL);
+    pCell = m_pDoc->GetCell(ScAddress(0, 2, 0));
+    CPPUNIT_ASSERT_MESSAGE("Cell A3 should be empty.", pCell == NULL);
+
+#if 0 // This currently fails.
+    // After the move, Sheet1, Sheet2, and Sheet4 should have their stream
+    // invalidated, whereas Sheet3's stream should still be valid.
+    CPPUNIT_ASSERT_MESSAGE("Stream should have been invalidated.", !m_pDoc->IsStreamValid(0));
+    CPPUNIT_ASSERT_MESSAGE("Stream should have been invalidated.", !m_pDoc->IsStreamValid(1));
+    CPPUNIT_ASSERT_MESSAGE("Stream should have been invalidated.", !m_pDoc->IsStreamValid(3));
+    CPPUNIT_ASSERT_MESSAGE("Stream should still be valid.", m_pDoc->IsStreamValid(2));
+#endif
+
+    m_pDoc->DeleteTab(3);
+    m_pDoc->DeleteTab(2);
+    m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
 }
 
