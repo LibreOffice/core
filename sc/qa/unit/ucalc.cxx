@@ -906,8 +906,7 @@ void Test::testStreamValid()
     m_pDoc->GetString(0, 1, 0, test);
     CPPUNIT_ASSERT_MESSAGE("Unexpected value in Sheet1.A2", test.equals(a2));
 
-    // Put formulas into Sheet2 to Sheet4 to references values from Sheet1.
-
+    // Put formulas into Sheet2 to Sheet4 to reference values from Sheet1.
     m_pDoc->SetString(0, 0, 1, OUString(RTL_CONSTASCII_USTRINGPARAM("=Sheet1.A1")));
     m_pDoc->SetString(0, 1, 1, OUString(RTL_CONSTASCII_USTRINGPARAM("=Sheet1.A2")));
     m_pDoc->SetString(0, 0, 2, OUString(RTL_CONSTASCII_USTRINGPARAM("=Sheet1.A1")));
