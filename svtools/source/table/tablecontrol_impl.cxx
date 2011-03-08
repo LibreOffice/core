@@ -1407,14 +1407,14 @@ namespace svt { namespace table
             if ( _rUpdateRect.GetIntersection( aRowIterator.getRect() ).IsEmpty() )
                 continue;
 
-            bool const isActiveRow = ( aRowIterator.getRow() == getCurrentRow() );
+            bool const isControlFocused = m_rAntiImpl.HasControlFocus();
             bool const isSelectedRow = isRowSelected( aRowIterator.getRow() );
 
             Rectangle const aRect = aRowIterator.getRect().GetIntersection( aAllDataCellsArea );
 
             // give the redenderer a chance to prepare the row
             pRenderer->PrepareRow(
-                aRowIterator.getRow(), isActiveRow, isSelectedRow,
+                aRowIterator.getRow(), isControlFocused, isSelectedRow,
                 *m_pDataWindow, aRect, rStyle
             );
 
@@ -1422,7 +1422,7 @@ namespace svt { namespace table
             if ( m_pModel->hasRowHeaders() )
             {
                 const Rectangle aCurrentRowHeader( aRowHeaderArea.GetIntersection( aRowIterator.getRect() ) );
-                pRenderer->PaintRowHeader( isActiveRow, isSelectedRow, *m_pDataWindow, aCurrentRowHeader,
+                pRenderer->PaintRowHeader( isControlFocused, isSelectedRow, *m_pDataWindow, aCurrentRowHeader,
                     rStyle );
             }
 
@@ -1436,7 +1436,7 @@ namespace svt { namespace table
                 )
             {
                 bool isSelectedColumn = false;
-                pRenderer->PaintCell( aCell.getColumn(), isSelectedRow || isSelectedColumn, isActiveRow,
+                pRenderer->PaintCell( aCell.getColumn(), isSelectedRow || isSelectedColumn, isControlFocused,
                                 *m_pDataWindow, aCell.getRect(), rStyle );
             }
         }
@@ -1468,30 +1468,25 @@ namespace svt { namespace table
         bool bSuccess = false;
         bool selectionChanged = false;
 
-        Rectangle rCells;
         switch ( _eAction )
         {
         case cursorDown:
-        if(m_pSelEngine->GetSelectionMode() == SINGLE_SELECTION)
+        if ( m_pSelEngine->GetSelectionMode() == SINGLE_SELECTION )
         {
             //if other rows already selected, deselect them
-            if(m_aSelectedRows.size()>0)
+            if ( m_aSelectedRows.size()>0 )
             {
-                for(std::vector<RowPos>::iterator it=m_aSelectedRows.begin();
-                        it!=m_aSelectedRows.end();++it)
-                {
-                    invalidateSelectedRegion(*it, *it, rCells);
-                }
+                invalidateSelectedRows();
                 m_aSelectedRows.clear();
             }
-            if(m_nCurRow < m_nRowCount-1)
+            if ( m_nCurRow < m_nRowCount-1 )
             {
                 ++m_nCurRow;
                 m_aSelectedRows.push_back(m_nCurRow);
             }
             else
                 m_aSelectedRows.push_back(m_nCurRow);
-            invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
+            invalidateRow( m_nCurRow );
             ensureVisible(m_nCurColumn,m_nCurRow,false);
             selectionChanged = true;
             bSuccess = true;
@@ -1508,23 +1503,19 @@ namespace svt { namespace table
         {
             if(m_aSelectedRows.size()>0)
             {
-                for(std::vector<RowPos>::iterator it=m_aSelectedRows.begin();
-                    it!=m_aSelectedRows.end();++it)
-                {
-                    invalidateSelectedRegion(*it, *it, rCells);
-                }
+                invalidateSelectedRows();
                 m_aSelectedRows.clear();
             }
             if(m_nCurRow>0)
             {
                 --m_nCurRow;
                 m_aSelectedRows.push_back(m_nCurRow);
-                invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
+                invalidateRow( m_nCurRow );
             }
             else
             {
                 m_aSelectedRows.push_back(m_nCurRow);
-                invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
+                invalidateRow( m_nCurRow );
             }
             ensureVisible(m_nCurColumn,m_nCurRow,false);
             selectionChanged = true;
@@ -1606,7 +1597,7 @@ namespace svt { namespace table
             //else select the row->put it in the vector
             else
                 m_aSelectedRows.push_back(m_nCurRow);
-            invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
+            invalidateRow( m_nCurRow );
             selectionChanged = true;
             bSuccess = true;
         }
@@ -1629,14 +1620,10 @@ namespace svt { namespace table
                     //and select the current row
                     if(m_nAnchor==-1)
                     {
-                        for(std::vector<RowPos>::iterator it=m_aSelectedRows.begin();
-                            it!=m_aSelectedRows.end();++it)
-                        {
-                            invalidateSelectedRegion(*it, *it, rCells);
-                        }
+                        invalidateSelectedRows();
                         m_aSelectedRows.clear();
                         m_aSelectedRows.push_back(m_nCurRow);
-                        invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
+                        invalidateRow( m_nCurRow );
                     }
                     else
                     {
@@ -1654,12 +1641,12 @@ namespace svt { namespace table
                              if(nextRow>-1 && m_aSelectedRows[nextRow] == m_nCurRow)
                              {
                                  m_aSelectedRows.erase(m_aSelectedRows.begin()+prevRow);
-                                 invalidateSelectedRegion(m_nCurRow+1, m_nCurRow+1, rCells);
+                                 invalidateRow( m_nCurRow + 1 );
                              }
                              else
                             {
                                  m_aSelectedRows.push_back(m_nCurRow);
-                                 invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
+                                 invalidateRow( m_nCurRow );
                              }
                          }
                         else
@@ -1669,7 +1656,7 @@ namespace svt { namespace table
                                 m_aSelectedRows.push_back(m_nCurRow);
                                 m_nCurRow--;
                                 m_aSelectedRows.push_back(m_nCurRow);
-                                invalidateSelectedRegion(m_nCurRow+1, m_nCurRow, rCells);
+                                invalidateSelectedRegion( m_nCurRow+1, m_nCurRow );
                             }
                         }
                     }
@@ -1684,12 +1671,12 @@ namespace svt { namespace table
                         m_aSelectedRows.push_back(m_nCurRow);
                         m_nCurRow--;
                         m_aSelectedRows.push_back(m_nCurRow);
-                        invalidateSelectedRegion(m_nCurRow+1, m_nCurRow, rCells);
+                        invalidateSelectedRegion( m_nCurRow+1, m_nCurRow );
                     }
                     else
                     {
                         m_aSelectedRows.push_back(m_nCurRow);
-                        invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
+                        invalidateRow( m_nCurRow );
                     }
                 }
                 m_pSelEngine->SetAnchor(sal_True);
@@ -1716,14 +1703,10 @@ namespace svt { namespace table
                     //and select the current row
                     if(m_nAnchor==-1)
                     {
-                        for(std::vector<RowPos>::iterator it=m_aSelectedRows.begin();
-                            it!=m_aSelectedRows.end();++it)
-                        {
-                            invalidateSelectedRegion(*it, *it, rCells);
-                        }
+                        invalidateSelectedRows();
                         m_aSelectedRows.clear();
                         m_aSelectedRows.push_back(m_nCurRow);
-                        invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
+                        invalidateRow( m_nCurRow );
                         }
                     else
                     {
@@ -1741,12 +1724,12 @@ namespace svt { namespace table
                              if(nextRow>-1 && m_aSelectedRows[nextRow] == m_nCurRow)
                              {
                                  m_aSelectedRows.erase(m_aSelectedRows.begin()+prevRow);
-                                 invalidateSelectedRegion(m_nCurRow-1, m_nCurRow-1, rCells);
+                                 invalidateRow( m_nCurRow - 1 );
                              }
                              else
                              {
                                  m_aSelectedRows.push_back(m_nCurRow);
-                                 invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
+                                 invalidateRow( m_nCurRow );
                              }
                         }
                         else
@@ -1756,7 +1739,7 @@ namespace svt { namespace table
                                 m_aSelectedRows.push_back(m_nCurRow);
                                 m_nCurRow++;
                                 m_aSelectedRows.push_back(m_nCurRow);
-                                invalidateSelectedRegion(m_nCurRow-1, m_nCurRow, rCells);
+                                invalidateSelectedRegion( m_nCurRow-1, m_nCurRow );
                             }
                         }
                     }
@@ -1769,12 +1752,12 @@ namespace svt { namespace table
                         m_aSelectedRows.push_back(m_nCurRow);
                         m_nCurRow++;
                         m_aSelectedRows.push_back(m_nCurRow);
-                        invalidateSelectedRegion(m_nCurRow-1, m_nCurRow, rCells);
+                        invalidateSelectedRegion( m_nCurRow-1, m_nCurRow );
                     }
                     else
                     {
                         m_aSelectedRows.push_back(m_nCurRow);
-                        invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
+                        invalidateRow( m_nCurRow );
                     }
                 }
                 m_pSelEngine->SetAnchor(sal_True);
@@ -1796,7 +1779,7 @@ namespace svt { namespace table
             {
                 //select the region between the current and the upper row
                 RowPos iter = m_nCurRow;
-                invalidateSelectedRegion(m_nCurRow, 0, rCells);
+                invalidateSelectedRegion( m_nCurRow, 0 );
                 //put the rows in vector
                 while(iter>=0)
                 {
@@ -1822,7 +1805,7 @@ namespace svt { namespace table
                 return bSuccess = false;
             //select the region between the current and the last row
             RowPos iter = m_nCurRow;
-            invalidateSelectedRegion(m_nCurRow, m_nRowCount-1, rCells);
+            invalidateSelectedRegion( m_nCurRow, m_nRowCount-1 );
             //put the rows in the vector
             while(iter<=m_nRowCount)
             {
@@ -2019,48 +2002,59 @@ namespace svt { namespace table
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void TableControl_Impl::invalidateSelectedRegion(RowPos _nPrevRow, RowPos _nCurRow, Rectangle& _rCellRect)
+    void TableControl_Impl::invalidateSelectedRegion( RowPos _nPrevRow, RowPos _nCurRow )
     {
         DBG_CHECK_ME();
-        //get the visible area of the table control and set the Left and right border of the region to be repainted
+        // get the visible area of the table control and set the Left and right border of the region to be repainted
         Rectangle const aAllCells( impl_getAllVisibleCellsArea() );
-        _rCellRect.Left() = aAllCells.Left();
-        _rCellRect.Right() = aAllCells.Right();
-        //if only one row is selected
-        if(_nPrevRow == _nCurRow)
+
+        Rectangle aInvalidateRect;
+        aInvalidateRect.Left() = aAllCells.Left();
+        aInvalidateRect.Right() = aAllCells.Right();
+        // if only one row is selected
+        if ( _nPrevRow == _nCurRow )
         {
             Rectangle aCellRect;
             impl_getCellRect( m_nCurColumn, _nCurRow, aCellRect );
-            _rCellRect.Top() = aCellRect.Top();
-            _rCellRect.Bottom() = aCellRect.Bottom();
+            aInvalidateRect.Top() = aCellRect.Top();
+            aInvalidateRect.Bottom() = aCellRect.Bottom();
         }
         //if the region is above the current row
         else if(_nPrevRow < _nCurRow )
         {
             Rectangle aCellRect;
             impl_getCellRect( m_nCurColumn, _nPrevRow, aCellRect );
-            _rCellRect.Top() = aCellRect.Top();
+            aInvalidateRect.Top() = aCellRect.Top();
             impl_getCellRect( m_nCurColumn, _nCurRow, aCellRect );
-            _rCellRect.Bottom() = aCellRect.Bottom();
+            aInvalidateRect.Bottom() = aCellRect.Bottom();
         }
         //if the region is beneath the current row
         else
         {
             Rectangle aCellRect;
             impl_getCellRect( m_nCurColumn, _nCurRow, aCellRect );
-            _rCellRect.Top() = aCellRect.Top();
+            aInvalidateRect.Top() = aCellRect.Top();
             impl_getCellRect( m_nCurColumn, _nPrevRow, aCellRect );
-            _rCellRect.Bottom() = aCellRect.Bottom();
+            aInvalidateRect.Bottom() = aCellRect.Bottom();
         }
-        m_pDataWindow->Invalidate(_rCellRect);
+        m_pDataWindow->Invalidate( aInvalidateRect );
     }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void TableControl_Impl::invalidateSelectedRows()
+    {
+        for (   ::std::vector< RowPos >::iterator selRow = m_aSelectedRows.begin();
+                selRow != m_aSelectedRows.end();
+                ++selRow
+            )
+        {
+            invalidateRow( *selRow );
+        }
+    }
+
     //------------------------------------------------------------------------------------------------------------------
     void TableControl_Impl::invalidateRowRange( RowPos const i_firstRow, RowPos const i_lastRow )
     {
-        if ( m_nCursorHidden == 2 )
-            // WTF? what kind of hack is this?
-            --m_nCursorHidden;
-
         RowPos const firstRow = i_firstRow < m_nTopRow ? m_nTopRow : i_firstRow;
         RowPos const lastVisibleRow = m_nTopRow + impl_getVisibleRows( true ) - 1;
         RowPos const lastRow = ( ( i_lastRow == ROW_INVALID ) || ( i_lastRow > lastVisibleRow ) ) ? lastVisibleRow : i_lastRow;
@@ -2669,8 +2663,7 @@ namespace svt { namespace table
                 }
                 m_pTableControl->setAnchor( m_pTableControl->getAnchor() - 1 );
             }
-            Rectangle aCellRect;
-            m_pTableControl->invalidateSelectedRegion( m_pTableControl->getCurRow(), newRow, aCellRect );
+            m_pTableControl->invalidateSelectedRegion( m_pTableControl->getCurRow(), newRow );
             bHandled = sal_True;
         }
         //no region selected
@@ -2693,8 +2686,7 @@ namespace svt { namespace table
             if ( m_pTableControl->getSelectedRowCount() > 1 && m_pTableControl->getSelEngine()->GetSelectionMode() != SINGLE_SELECTION )
                 m_pTableControl->getSelEngine()->AddAlways(sal_True);
 
-            Rectangle aCellRect;
-            m_pTableControl->invalidateSelectedRegion( newRow, newRow, aCellRect );
+            m_pTableControl->invalidateRow( newRow );
             bHandled = sal_True;
         }
         m_pTableControl->goTo( newCol, newRow );
@@ -2719,8 +2711,7 @@ namespace svt { namespace table
     void TableFunctionSet::DeselectAtPoint( const Point& rPoint )
     {
         (void)rPoint;
-        Rectangle aCellRange;
-        m_pTableControl->invalidateSelectedRegion( m_nCurrentRow, m_nCurrentRow, aCellRange );
+        m_pTableControl->invalidateRow( m_nCurrentRow );
         m_pTableControl->markRowAsDeselected( m_nCurrentRow );
     }
 
@@ -2729,11 +2720,10 @@ namespace svt { namespace table
     {
         if ( m_pTableControl->hasRowSelection() )
         {
-            Rectangle aCellRange;
             for ( size_t i=0; i<m_pTableControl->getSelectedRowCount(); ++i )
             {
                 RowPos const rowIndex = m_pTableControl->getSelectedRowIndex(i);
-                m_pTableControl->invalidateSelectedRegion( rowIndex, rowIndex, aCellRange );
+                m_pTableControl->invalidateRow( rowIndex );
             }
 
             m_pTableControl->markAllRowsAsDeselected();

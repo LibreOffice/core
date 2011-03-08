@@ -133,9 +133,8 @@ namespace svt { namespace table
                 However, the renderer is also allowed to render any
                 cell-independent content of this row.
 
-            @param _bActive
-                <TRUE/> if and only if the row to be painted contains the
-                currently active cell.
+            @param i_hasControlFocus
+                <TRUE/> if and only if the table control currently has the focus
             @param _bSelected
                 <TRUE/> if and only if the row to be prepared is
                 selected currently.
@@ -147,7 +146,7 @@ namespace svt { namespace table
             @param _rStyle
                 the style to be used for drawing
         */
-        virtual void    PrepareRow( RowPos _nRow, bool _bActive, bool _bSelected,
+        virtual void    PrepareRow( RowPos _nRow, bool i_hasControlFocus, bool _bSelected,
                             OutputDevice& _rDevice, const Rectangle& _rRowArea,
                             const StyleSettings& _rStyle ) = 0;
 
@@ -156,9 +155,8 @@ namespace svt { namespace table
             The row to be painted is denoted by the most recent call to
             ->PrepareRow.
 
-            @param _bActive
-                <TRUE/> if and only if the row to be painted contains the
-                currently active cell.
+            @param i_hasControlFocus
+                <TRUE/> if and only if the table control currently has the focus
                 <br/>
                 Note that this flag is equal to the respective flag in the
                 previous ->PrepareRow call, it's passed here for convinience
@@ -177,9 +175,9 @@ namespace svt { namespace table
             @param _rStyle
                 the style to be used for drawing
         */
-        virtual void    PaintRowHeader( bool _bActive, bool _bSelected,
-                            OutputDevice& _rDevice, const Rectangle& _rArea,
-                const StyleSettings& _rStyle ) = 0;
+        virtual void    PaintRowHeader( bool i_hasControlFocus, bool _bSelected,
+                            OutputDevice& _rDevice, Rectangle const & _rArea,
+                            StyleSettings const & _rStyle ) = 0;
 
         /** paints a certain cell
 
@@ -194,8 +192,8 @@ namespace svt { namespace table
                 Note that this flag is equal to the respective flag in the
                 previous ->PrepareRow call, it's passed here for convinience
                 only.
-            @param _bActive
-                <TRUE/> if the cell is currently active.
+            @param i_hasControlFocus
+                <TRUE/> if and only if the table control currently has the focus
                 <br/>
                 Note that this flag is equal to the respective flag in the
                 previous ->PrepareRow call, it's passed here for convinience
@@ -208,7 +206,7 @@ namespace svt { namespace table
                 the style to be used for drawing
         */
         virtual void    PaintCell( ColPos const i_col,
-                            bool _bActive, bool _bSelected,
+                            bool i_hasControlFocus, bool _bSelected,
                             OutputDevice& _rDevice, const Rectangle& _rArea,
                             const StyleSettings& _rStyle ) = 0;
 

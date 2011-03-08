@@ -328,7 +328,7 @@ namespace svt { namespace table
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void GridTableRenderer::PrepareRow( RowPos _nRow, bool _bActive, bool _bSelected,
+    void GridTableRenderer::PrepareRow( RowPos _nRow, bool i_hasControlFocus, bool _bSelected,
         OutputDevice& _rDevice, const Rectangle& _rRowArea, const StyleSettings& _rStyle )
     {
         // remember the row for subsequent calls to the other ->ITableRenderer methods
@@ -344,7 +344,7 @@ namespace svt { namespace table
         if ( _bSelected )
         {
             // selected rows use the background color from the style
-            backgroundColor = _rStyle.GetHighlightColor();
+            backgroundColor = i_hasControlFocus ? _rStyle.GetHighlightColor() : _rStyle.GetDeactiveColor();
             if ( !aLineColor )
                 lineColor = backgroundColor;
         }
@@ -388,13 +388,10 @@ namespace svt { namespace table
         _rDevice.DrawRect( _rRowArea );
 
         _rDevice.Pop();
-
-        (void)_bActive;
-        // row containing the active cell not rendered any special at the moment
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void GridTableRenderer::PaintRowHeader( bool _bActive, bool _bSelected, OutputDevice& _rDevice, const Rectangle& _rArea,
+    void GridTableRenderer::PaintRowHeader( bool i_hasControlFocus, bool _bSelected, OutputDevice& _rDevice, const Rectangle& _rArea,
         const StyleSettings& _rStyle )
     {
         _rDevice.Push( PUSH_LINECOLOR | PUSH_TEXTCOLOR );
@@ -417,8 +414,7 @@ namespace svt { namespace table
             _rDevice.DrawText( aTextRect, rowTitle, nDrawTextFlags );
         }
 
-        // TODO: active? selected?
-        (void)_bActive;
+        (void)i_hasControlFocus;
         (void)_bSelected;
         _rDevice.Pop();
     }
@@ -444,7 +440,7 @@ namespace svt { namespace table
     };
 
     //------------------------------------------------------------------------------------------------------------------
-    void GridTableRenderer::PaintCell( ColPos const i_column, bool _bSelected, bool _bActive,
+    void GridTableRenderer::PaintCell( ColPos const i_column, bool _bSelected, bool i_hasControlFocus,
         OutputDevice& _rDevice, const Rectangle& _rArea, const StyleSettings& _rStyle )
     {
         _rDevice.Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
@@ -461,7 +457,7 @@ namespace svt { namespace table
             if ( _bSelected && !aLineColor )
             {
                 // if no line color is specified by the model, use the usual selection color for lines in selected cells
-                lineColor = _rStyle.GetHighlightColor();
+                lineColor = i_hasControlFocus ? _rStyle.GetHighlightColor() : _rStyle.GetDeactiveColor();
             }
 
             _rDevice.SetLineColor( lineColor );
@@ -470,9 +466,6 @@ namespace svt { namespace table
         }
 
         _rDevice.Pop();
-
-        (void)_bActive;
-        // no special painting for the active cell at the moment
     }
 
     //------------------------------------------------------------------------------------------------------------------
