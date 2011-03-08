@@ -285,6 +285,7 @@ void Help::UpdateTip( sal_uIntPtr nId, Window* pParent, const Rectangle& rScreen
         pParent->OutputToScreenPixel( pParent->GetPointerPosPixel() ), &rScreenRect );
 
     pHelpWin->SetHelpText( rText );
+    pHelpWin->Invalidate();
 }
 
 // -----------------------------------------------------------------------
