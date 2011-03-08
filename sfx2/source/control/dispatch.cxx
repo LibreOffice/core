@@ -832,7 +832,7 @@ void SfxDispatcher::DoDeactivate_Impl( sal_Bool bMDI, SfxViewFrame* pNew )
 
     if ( bMDI )
     {
-        DBG_TRACE(ByteString("Deactivate Dispatcher ").Append(ByteString::CreateFromInt64( (sal_uIntPtr) this )).GetBuffer());
+        OSL_TRACE(ByteString("Deactivate Dispatcher ").Append(ByteString::CreateFromInt64( (sal_uIntPtr) this )).GetBuffer());
         DBG_ASSERT( pImp->bActive, "Deactivate error" );
         pImp->bActive = sal_False;
 
@@ -853,7 +853,7 @@ void SfxDispatcher::DoDeactivate_Impl( sal_Bool bMDI, SfxViewFrame* pNew )
         }
     }
     else {
-        DBG_TRACE( ByteString ("Non-MDI-DeActivate Dispatcher").Append(ByteString::CreateFromInt64( (sal_uIntPtr) this )).GetBuffer() );
+        OSL_TRACE( ByteString ("Non-MDI-DeActivate Dispatcher").Append(ByteString::CreateFromInt64( (sal_uIntPtr) this )).GetBuffer() );
     }
 
     if ( IsAppDispatcher() && !pSfxApp->IsDowning() )
@@ -2697,7 +2697,7 @@ void SfxDispatcher::DebugOutput_Impl() const
     {
         SfxShell *pShell = GetShell(nShell-1);
         const SfxInterface *pIFace = pShell->GetInterface();
-        DBG_TRACE (pIFace->GetClassName().GetBuffer());
+        OSL_TRACE(pIFace->GetClassName().GetBuffer());
     }
 
     DbgGetData()->nTraceOut = nOld;

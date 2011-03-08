@@ -529,7 +529,7 @@ void SfxStateCache::DeleteFloatingWindows()
     SfxControllerItem *pNextCtrl=0;
     for ( SfxControllerItem *pCtrl=pController; pCtrl; pCtrl=pNextCtrl )
     {
-        DBG_TRACE((ByteString("pCtrl: ").Append(ByteString::CreateFromInt64((sal_uIntPtr)pCtrl))).GetBuffer());
+        OSL_TRACE((ByteString("pCtrl: ").Append(ByteString::CreateFromInt64((sal_uIntPtr)pCtrl))).GetBuffer());
         pNextCtrl = pCtrl->GetItemLink();
         pCtrl->DeleteFloatingWindow();
     }
