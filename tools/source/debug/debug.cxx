@@ -272,7 +272,7 @@ void ImplDbgUnlock()
 
 // =======================================================================
 
-#if (defined WNT || defined OS2) && !defined SVX_LIGHT
+#if (defined WNT || defined OS2)
 //#define SV_MEMMGR //
 #endif
 #ifdef SV_MEMMGR
