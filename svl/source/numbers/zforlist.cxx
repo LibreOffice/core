@@ -2744,6 +2744,10 @@ void SvNumberFormatter::GenerateFormat(String& sString,
     utl::DigitGroupingIterator aGrouping( xLocaleData->getDigitGrouping());
     const xub_StrLen nDigitsInFirstGroup = static_cast<xub_StrLen>(aGrouping.get());
     const String& rThSep = GetNumThousandSep();
+
+    SvNumberformat* pFormat = (SvNumberformat*) aFTable.Get(nIndex);
+    BOOL insertBrackets = pFormat->IsNegativeInBracket();
+
     if (nAnzLeading == 0)
     {
         if (!bThousand)
@@ -2836,15 +2840,35 @@ void SvNumberFormatter::GenerateFormat(String& sString,
             sString += ';';
         sString += sNegStr;
     }
-    if (IsRed && eType != NUMBERFORMAT_CURRENCY)
+    if ( (IsRed || insertBrackets ) && eType != NUMBERFORMAT_CURRENCY)
     {
         String sTmpStr = sString;
+
+        if ( pFormat->HasPositiveBracketPlaceholder() )
+        {
+             sTmpStr += '_';
+             sTmpStr += ')';
+        }
         sTmpStr += ';';
-        sTmpStr += '[';
-        sTmpStr += pFormatScanner->GetRedString();
-        sTmpStr += ']';
-        sTmpStr += '-';
-        sTmpStr +=sString;
+
+        if (IsRed)
+        {
+            sTmpStr += '[';
+            sTmpStr += pFormatScanner->GetRedString();
+            sTmpStr += ']';
+        }
+
+        if (insertBrackets)
+        {
+            sTmpStr += '(';
+            sTmpStr += sString;
+            sTmpStr += ')';
+        }
+        else
+        {
+            sTmpStr += '-';
+            sTmpStr +=sString;
+        }
         sString = sTmpStr;
     }
 }
