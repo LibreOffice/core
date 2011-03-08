@@ -148,18 +148,27 @@ namespace svt { namespace table
 
         if ( sHelpText.getLength() )
         {
+            // hide the standard (singleton) help window, so we do not have two help windows open at the same time
+            Help::HideBalloonAndQuickHelp();
+
             Rectangle const aControlScreenRect(
                 OutputToScreenPixel( Point( 0, 0 ) ),
                 GetOutputSizePixel()
             );
 
             if ( m_nTipWindowHandle )
+            {
+                OSL_TRACE( ::rtl::OUStringToOString( sHelpText, RTL_TEXTENCODING_ASCII_US ) );
                 Help::UpdateTip( m_nTipWindowHandle, this, aControlScreenRect, sHelpText );
+            }
             else
                 m_nTipWindowHandle = Help::ShowTip( this, aControlScreenRect, sHelpText, nHelpStyle );
         }
         else
+        {
             impl_hideTipWindow();
+            Window::RequestHelp( rHEvt );
+        }
     }
 
     //------------------------------------------------------------------------------------------------------------------
