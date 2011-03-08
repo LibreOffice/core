@@ -96,7 +96,7 @@ ModalDialog RID_SCDLG_IMPORTOPT
     CheckBox CB_FIXEDWIDTH
     {
         HelpID = "sc:CheckBox:RID_SCDLG_IMPORTOPT:CB_FIXEDWIDTH";
-        Pos = MAP_APPFONT( 12, 80 );
+        Pos = MAP_APPFONT( 12, 92 );
         Size = MAP_APPFONT( 172, 10 );
         Hide = TRUE;
         Text [ en-US ] = "Fixed column ~width";
@@ -104,11 +104,19 @@ ModalDialog RID_SCDLG_IMPORTOPT
     CheckBox CB_SAVESHOWN
     {
         HelpID = "sc:CheckBox:RID_SCDLG_IMPORTOPT:CB_SAVESHOWN";
-        Pos = MAP_APPFONT( 12, 66 );
+        Pos = MAP_APPFONT( 12, 78 );
         Size = MAP_APPFONT( 172, 10 );
         TabStop = TRUE;
         Hide = TRUE;
         Text [ en-US ] = "Save cell content as ~shown";
+    };
+    CheckBox CB_QUOTEALL
+    {
+        HelpID = "sc:CheckBox:RID_SCDLG_IMPORTOPT:CB_QUOTEALL";
+        Pos = MAP_APPFONT( 20, 64 );
+        Size = MAP_APPFONT( 164, 10 );
+        Hide = TRUE;
+        Text [ en-US ] = "~Quote all text cells";
     };
     OKButton BTN_OK
     {

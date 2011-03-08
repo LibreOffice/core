@@ -51,6 +51,7 @@ SchLegendPosTabPage::SchLegendPosTabPage(Window* pWindow,
     , m_aFtTextDirection( this, SchResId( FT_LEGEND_TEXTDIR ) )
     , m_aLbTextDirection( this, SchResId( LB_LEGEND_TEXTDIR ), &m_aFlTextOrient, &m_aFtTextDirection )
 {
+    m_apLegendPositionResources->SetAccessibleRelationMemberOf(&aGrpLegend);
     FreeResource();
 }
 

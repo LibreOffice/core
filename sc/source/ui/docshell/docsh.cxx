@@ -1650,6 +1650,8 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
     sal_uInt16 nOldNumberFormatInt = rStream.GetNumberFormatInt();
     ByteString aStrDelimEncoded;    // only used if not Unicode
     UniString aStrDelimDecoded;     // only used if context encoding
+    ByteString aDelimEncoded;
+    UniString aDelimDecoded;
     sal_Bool bContextOrNotAsciiEncoding;
     if ( eCharSet == RTL_TEXTENCODING_UNICODE )
     {
@@ -1659,6 +1661,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
     else
     {
         aStrDelimEncoded = ByteString( cStrDelim, eCharSet );
+        aDelimEncoded = ByteString( cDelim, eCharSet );
         rtl_TextEncodingInfo aInfo;
         aInfo.StructSize = sizeof(aInfo);
         if ( rtl_getTextEncodingInfo( eCharSet, &aInfo ) )
@@ -1667,7 +1670,10 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                 (((aInfo.Flags & RTL_TEXTENCODING_INFO_CONTEXT) != 0) ||
                  ((aInfo.Flags & RTL_TEXTENCODING_INFO_ASCII) == 0));
             if ( bContextOrNotAsciiEncoding )
+            {
                 aStrDelimDecoded = String( aStrDelimEncoded, eCharSet );
+                aDelimDecoded = String( aDelimEncoded, eCharSet );
+            }
         }
         else
             bContextOrNotAsciiEncoding = sal_False;
@@ -1895,14 +1901,21 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                     if ( eCharSet == RTL_TEXTENCODING_UNICODE )
                     {
                         xub_StrLen nPos = aString.Search( cStrDelim );
+                        // #i116636# quotes are needed if text delimiter (quote), field delimiter, or LF is in the cell text
+                        bool bNeedQuotes = rAsciiOpt.bQuoteAllText ||
+                                            ( nPos != STRING_NOTFOUND ) ||
+                                            ( aString.Search( cDelim ) != STRING_NOTFOUND ) ||
+                                            ( aString.Search( sal_Unicode(_LF) ) != STRING_NOTFOUND );
                         while ( nPos != STRING_NOTFOUND )
                         {
                             aString.Insert( cStrDelim, nPos );
                             nPos = aString.Search( cStrDelim, nPos+2 );
                         }
-                        rStream.WriteUniOrByteChar( cStrDelim, eCharSet );
+                        if ( bNeedQuotes )
+                            rStream.WriteUniOrByteChar( cStrDelim, eCharSet );
                         rStream.WriteUnicodeText( aString );
-                        rStream.WriteUniOrByteChar( cStrDelim, eCharSet );
+                        if ( bNeedQuotes )
+                            rStream.WriteUniOrByteChar( cStrDelim, eCharSet );
                     }
                     else
                     {
@@ -1928,6 +1941,10 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                             UniString aStrDec( aStrEnc, eCharSet );
                             // search on re-decoded string
                             xub_StrLen nPos = aStrDec.Search( aStrDelimDecoded );
+                            bool bNeedQuotes = rAsciiOpt.bQuoteAllText ||
+                                                ( nPos != STRING_NOTFOUND ) ||
+                                                ( aStrDec.Search( aDelimDecoded ) != STRING_NOTFOUND ) ||
+                                                ( aStrDec.Search( sal_Unicode(_LF) ) != STRING_NOTFOUND );
                             while ( nPos != STRING_NOTFOUND )
                             {
                                 aStrDec.Insert( aStrDelimDecoded, nPos );
@@ -1935,15 +1952,21 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                                         nPos+1+aStrDelimDecoded.Len() );
                             }
                             // write byte re-encoded
-                            rStream.WriteUniOrByteChar( cStrDelim, eCharSet );
+                            if ( bNeedQuotes )
+                                rStream.WriteUniOrByteChar( cStrDelim, eCharSet );
                             rStream.WriteUnicodeOrByteText( aStrDec, eCharSet );
-                            rStream.WriteUniOrByteChar( cStrDelim, eCharSet );
+                            if ( bNeedQuotes )
+                                rStream.WriteUniOrByteChar( cStrDelim, eCharSet );
                         }
                         else
                         {
                             ByteString aStrEnc( aString, eCharSet );
                             // search on encoded string
                             xub_StrLen nPos = aStrEnc.Search( aStrDelimEncoded );
+                            bool bNeedQuotes = rAsciiOpt.bQuoteAllText ||
+                                                ( nPos != STRING_NOTFOUND ) ||
+                                                ( aStrEnc.Search( aDelimEncoded ) != STRING_NOTFOUND ) ||
+                                                ( aStrEnc.Search( sal_Char(_LF) ) != STRING_NOTFOUND );
                             while ( nPos != STRING_NOTFOUND )
                             {
                                 aStrEnc.Insert( aStrDelimEncoded, nPos );
@@ -1951,11 +1974,13 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                                         nPos+1+aStrDelimEncoded.Len() );
                             }
                             // write byte encoded
-                            rStream.Write( aStrDelimEncoded.GetBuffer(),
-                                    aStrDelimEncoded.Len() );
+                            if ( bNeedQuotes )
+                                rStream.Write( aStrDelimEncoded.GetBuffer(),
+                                        aStrDelimEncoded.Len() );
                             rStream.Write( aStrEnc.GetBuffer(), aStrEnc.Len() );
-                            rStream.Write( aStrDelimEncoded.GetBuffer(),
-                                    aStrDelimEncoded.Len() );
+                            if ( bNeedQuotes )
+                                rStream.Write( aStrDelimEncoded.GetBuffer(),
+                                        aStrDelimEncoded.Len() );
                         }
                     }
                 }
