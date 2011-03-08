@@ -57,8 +57,6 @@ XMLGradientStyleContext::XMLGradientStyleContext( SvXMLImport& rImport, sal_uInt
                                               const uno::Reference< xml::sax::XAttributeList >& xAttrList)
 :   SvXMLStyleContext(rImport, nPrfx, rLName, xAttrList)
 {
-    // set Family
-//  SetFamily( XML_STYLE_FAMILY_FILLSTYLE_GRADIENT_ID );
 
     // start import
     XMLGradientStyleImport aGradientStyle( GetImport() );

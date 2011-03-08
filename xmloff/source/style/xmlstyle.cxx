@@ -866,7 +866,6 @@ SvXMLImportContext *SvXMLStylesContext::CreateChildContext( sal_uInt16 nPrefix,
 
     SvXMLStyleContext *pStyle =
         CreateStyleChildContext( nPrefix, rLocalName, xAttrList );
-//      DBG_ASSERT( pStyle->GetFamily(), "Style without a family" );
     if( pStyle )
     {
         if( !pStyle->IsTransient() )

@@ -87,15 +87,6 @@ XMLEventsImportContext::~XMLEventsImportContext()
 {
 //  // if, for whatever reason, the object gets destroyed prematurely,
 //  // we need to delete the collected events
-//  EventsVector::iterator aEnd = aCollectEvents.end();
-//  for(EventsVector::iterator aIter = aCollectEvents.begin();
-//      aIter != aEnd;
-//      aIter++)
-//  {
-//      EventNameValuesPair* pPair = &(*aIter);
-//      delete pPair;
-//  }
-//  aCollectEvents.clear();
 }
 
 
@@ -175,8 +166,6 @@ void XMLEventsImportContext::SetEvents(
             ++aIter)
         {
             AddEventValues(aIter->first, aIter->second);
-//          EventNameValuesPair* pPair = &(*aIter);
-//          delete pPair;
         }
         aCollectEvents.clear();
     }
@@ -235,9 +224,6 @@ void XMLEventsImportContext::AddEventValues(
     }
     else
     {
-//      EventNameValuesPair* aPair = new EventNameValuesPair(rEventName,
-//                                                          rValues);
-//      aCollectEvents.push_back(*aPair);
         EventNameValuesPair aPair(rEventName, rValues);
         aCollectEvents.push_back(aPair);
     }

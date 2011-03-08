@@ -560,7 +560,6 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
                 aFDesc.Pitch = eBulletFontPitch;
                 aFDesc.CharSet = eBulletFontEncoding;
                 aFDesc.Weight = WEIGHT_DONTKNOW;
-                //aFDesc.Transparant = sal_True;
                 sal_Bool bStarSymbol = sal_False;
                 if( aFDesc.Name.equalsIgnoreAsciiCase( sStarBats ) )
                 {
@@ -603,7 +602,6 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
             else if( xBase64Stream.is() )
             {
                 sStr = GetImport().ResolveGraphicObjectURLFromBase64( xBase64Stream );
-//              xBase64Stream = 0;
             }
 
             if( sStr.getLength() )
@@ -1348,7 +1346,6 @@ void SvxXMLListStyleContext::SetDefaultStyle(
     if( !bOrdered )
     {
         // TODO: Bullet-Font
-        //aNumFmt.SetBulletFont( &SwNumRule::GetDefBulletFont() );
         awt::FontDescriptor aFDesc;
         aFDesc.Name = OUString(
 #if defined UNX
@@ -1361,7 +1358,6 @@ void SvxXMLListStyleContext::SetDefaultStyle(
         aFDesc.Pitch = PITCH_DONTKNOW ;
         aFDesc.CharSet = RTL_TEXTENCODING_SYMBOL ;
         aFDesc.Weight = WEIGHT_DONTKNOW;
-        //aFDesc.Transparant = sal_True;
         pProps->Name =
                     OUString(RTL_CONSTASCII_USTRINGPARAM( XML_UNO_NAME_NRULE_BULLET_FONT ));
         (pProps++)->Value <<= aFDesc;

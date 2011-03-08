@@ -80,18 +80,6 @@ SvXMLImportContext* XMLStarBasicContextFactory::CreateContext(
 
         if (XML_NAMESPACE_SCRIPT == nPrefix)
         {
-//          if (IsXMLToken(sLocalName, XML_LIBRARY))
-//          {
-//              sLibraryVal = xAttrList->getValueByIndex(nAttr);
-//          }
-//          if (IsXMLToken(sLocalName, XML_LOCATION))
-//          {
-//              sLibraryVal = xAttrList->getValueByIndex(nAttr);
-//                if ( IsXMLToken( sLibraryVal, XML_APPLICATION ) )
-//                    sLibraryVal =
-//                        OUString(RTL_CONSTASCII_USTRINGPARAM("StarOffice"));
-//          }
-//          else
             if (IsXMLToken(sLocalName, XML_MACRO_NAME))
             {
                 sMacroNameVal = xAttrList->getValueByIndex(nAttr);

@@ -727,14 +727,6 @@ vector< XMLPropertyState > SvXMLExportPropertyMapper::_Filter(
         ContextFilter( aPropStateArray, xPropSet );
 
     // Have to do if we change from a vector to a list or something like that
-    /*vector< XMLPropertyState >::iterator aItr = aPropStateArray.begin();
-    while (aItr != aPropStateArray.end())
-    {
-        if (aItr->mnIndex == -1)
-            aItr = aPropStateArray.erase(aItr);
-        else
-            aItr++;
-    }*/
 
     if( bDelInfo )
         delete pFilterInfo;
@@ -1106,7 +1098,7 @@ void SvXMLExportPropertyMapper::_exportXML(
                     MID_FLAG_MERGE_ATTRIBUTE ) != 0 )
         {
             aValue = rAttrList.getValueByName( sName );
-            bRemove = sal_True; //aValue.getLength() != 0;
+            bRemove = sal_True;
         }
 
         if( maPropMapper->exportXML( aValue, rProperty, rUnitConverter ) )

@@ -351,7 +351,6 @@ SvXMLMetaExport::~SvXMLMetaExport()
 
 void SvXMLMetaExport::Export()
 {
-//    exportDom(xDOM, mrExport); // this would not work (root node, namespaces)
     uno::Reference< xml::sax::XSAXSerializable> xSAXable(mxDocProps,
         uno::UNO_QUERY);
     if (xSAXable.is()) {

@@ -367,13 +367,10 @@ sal_Bool XMLStyleExport::exportDefaultStyle(
                                   XML_DEFAULT_STYLE,
                                   sal_True, sal_True );
         // <style:properties>
-        //::std::vector< XMLPropertyState > xPropStates =
-        //  rPropMapper->FilterDefaults( xPropSet );
         ::std::vector< XMLPropertyState > xPropStates =
             rPropMapper->FilterDefaults( xPropSet );
         rPropMapper->exportXML( GetExport(), xPropStates,
                                      XML_EXPORT_FLAG_IGN_WS );
-//      exportStyleContent( rStyle );
     }
     return sal_True;
 }

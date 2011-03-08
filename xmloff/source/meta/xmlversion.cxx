@@ -383,7 +383,6 @@ void SAL_CALL XMLVersionListPersistence::store( const uno::Reference< embed::XSt
 
             Reference< XDocumentHandler > xHandler( xWriter, uno::UNO_QUERY );
 
-            // XMLVersionListExport aExp( pList, sVerName, xHandler );
             XMLVersionListExport aExp( xServiceFactory, rVersions, sVerName, xHandler );
 
             aExp.exportDoc( ::xmloff::token::XML_VERSION );
@@ -445,7 +444,6 @@ uno::Sequence< util::RevisionTag > SAL_CALL XMLVersionListPersistence::load( con
                     "XMLReader::Read: com.sun.star.xml.sax.Parser service missing" );
 
             // get filter
-            // Reference< XDocumentHandler > xFilter = new XMLVersionListImport( pList );
             Reference< XDocumentHandler > xFilter = new XMLVersionListImport( xServiceFactory, aVersions );
 
             // connect parser and filter

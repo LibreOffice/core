@@ -186,10 +186,6 @@ XMLTableExport::XMLTableExport(SvXMLExport& rExp, const rtl::Reference< SvXMLExp
         OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME)),
         mxRowExportPropertySetMapper.get(),
         OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_ROW_STYLES_PREFIX)));
-//  mrExport.GetAutoStylePool()->AddFamily(XML_STYLE_FAMILY_TABLE_TABLE
-//      OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME)),
-//      xTableStylesExportPropertySetMapper,
-//      OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_TABLE_STYLES_PREFIX)));
     mrExport.GetAutoStylePool()->AddFamily(XML_STYLE_FAMILY_TABLE_CELL,
         OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME)),
         mxCellExportPropertySetMapper.get(),

@@ -191,9 +191,6 @@ public:
         com::sun::star::uno::Sequence<sal_Int32>& aFamilies,
         com::sun::star::uno::Sequence<rtl::OUString>& aNames );
 
-//  ::rtl::OUString Add( sal_Int32 nFamily, const ::rtl::OUString& rParent,
-//                       const ::std::vector< XMLPropertyState >& rProperties,
-//                       sal_Bool bCache = sal_False );
     sal_Bool Add( ::rtl::OUString& rName, sal_Int32 nFamily,
                 const ::rtl::OUString& rParent,
                 const ::std::vector< XMLPropertyState >& rProperties,

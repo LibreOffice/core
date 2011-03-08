@@ -55,27 +55,6 @@ namespace xmloff
     class OAttribute2Property;
 
     //=====================================================================
-    //= ControlReference
-    //=====================================================================
-    /// a structure containing a property set (the referred control) and a string (the list of referring controls)
-/*  struct ControlReference
-    {
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-                    xReferredControl;
-        ::rtl::OUString
-                    sReferringControls;
-
-        ControlReference(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxReferredControl,
-                const ::rtl::OUString& _rReferringControls)
-            :xReferredControl(_rxReferredControl)
-            ,sReferringControls(_rReferringControls)
-        {
-        }
-    };
-*/
-
-    //=====================================================================
     //= OFormLayerXMLImport_Impl
     //=====================================================================
     class OFormLayerXMLImport_Impl

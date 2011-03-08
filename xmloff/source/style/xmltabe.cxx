@@ -125,10 +125,6 @@ void SvxXMLTabStopExport::Export( const uno::Any& rAny )
         const ::com::sun::star::style::TabStop* pTabs = aSeq.getConstArray();
         const sal_Int32 nTabs   = aSeq.getLength();
 
-        // ignore default tab stop here
-        //if( 1 == nTabs && style::TabAlign_DEFAULT == pTabs[0].Alignment )
-        //  return;
-
         SvXMLElementExport rElem( rExport, XML_NAMESPACE_STYLE, XML_TAB_STOPS,
                                   sal_True, sal_True );
 

@@ -460,7 +460,6 @@ void OSinglePropertyContext::StartElement(const Reference< sax::XAttributeList >
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
         const ::rtl::OUString& rAttrName = _rxAttrList->getNameByIndex( i );
-        //const ::rtl::OUString& rValue = _rxAttrList->getValueByIndex( i );
 
         ::rtl::OUString aLocalName;
         sal_uInt16 nPrefix =

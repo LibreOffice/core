@@ -56,8 +56,6 @@ enum SvXMLTokenMapAttrs
     XML_TOK_IMAGE_TYPE,
     XML_TOK_IMAGE_SHOW,
     XML_TOK_IMAGE_ACTUATE,
-    /* XML_TOK_IMAGE_SIZEW,
-       XML_TOK_IMAGE_SIZEH,*/
     XML_TOK_TABSTOP_END=XML_TOK_UNKNOWN
 };
 
@@ -108,18 +106,7 @@ sal_Bool XMLImageStyle::ImpExportXML( const OUString& rStrName, const uno::Any& 
                 rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
                 rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
             }
-/*
-            // size
-            awt::Size aSize = xBitmap->getSize();
 
-            rUnitConverter.convertNumber( aOut, aSize.Width );
-            aStrValue = aOut.makeStringAndClear();
-            AddAttribute( XML_NAMESPACE_SVG, XML_WIDTH, aStrValue );
-
-            rUnitConverter.convertNumber( aOut, aSize.Height );
-            aStrValue = aOut.makeStringAndClear();
-            AddAttribute( XML_NAMESPACE_SVG, XML_HEIGHT, aStrValue );
-*/
             // Do Write
             SvXMLElementExport aElem( rExport, XML_NAMESPACE_DRAW, XML_FILL_IMAGE, sal_True, sal_True );
 
@@ -160,8 +147,6 @@ sal_Bool XMLImageStyle::ImpImportXML( const uno::Reference< xml::sax::XAttribute
     { XML_NAMESPACE_XLINK, XML_TYPE, XML_TOK_IMAGE_TYPE },
     { XML_NAMESPACE_XLINK, XML_SHOW, XML_TOK_IMAGE_SHOW },
     { XML_NAMESPACE_XLINK, XML_ACTUATE, XML_TOK_IMAGE_ACTUATE },
-    /*{ XML_NAMESPACE_XLINK, XML_HREF, XML_TOK_IMAGE_URL },
-    { XML_NAMESPACE_XLINK, XML_HREF, XML_TOK_IMAGE_URL },*/
     XML_TOKEN_MAP_END
 };
 

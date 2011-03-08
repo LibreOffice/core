@@ -780,12 +780,7 @@ namespace xmloff
                                                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("US")),
                                                 ::rtl::OUString()
                                             );
-                // #110680#
-                //Reference< XInterface > xFormatsSupplierUntyped =
-                //  ::comphelper::getProcessServiceFactory()->createInstanceWithArguments(
-                //      SERVICE_NUMBERFORMATSSUPPLIER,
-                //      aSupplierArgs
-                //  );
+
                 Reference< XInterface > xFormatsSupplierUntyped =
                     m_rContext.getServiceFactory()->createInstanceWithArguments(
                         SERVICE_NUMBERFORMATSSUPPLIER,

@@ -344,16 +344,6 @@ void SvXMLImportPropertyMapper::importXML(
     }
 
     finished( rProperties, nStartIdx, nEndIdx );
-
-    // Have to do if we change from a vector to a list or something like that
-    /*std::vector <XMLPropertyState>::iterator aItr = rProperties.begin();
-    while (aItr != rProperties.end())
-    {
-        if (aItr->mnIndex == -1)
-            aItr = rProperties.erase(aItr);
-        else
-            aItr++;
-    }*/
 }
 
 /** this method is called for every item that has the MID_FLAG_SPECIAL_ITEM_IMPORT flag set */

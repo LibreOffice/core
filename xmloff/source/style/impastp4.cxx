@@ -175,10 +175,6 @@ void SvXMLAutoStylePoolP_Impl::GetRegisteredNames(
 // if not added, yet.
 //
 
-/*OUString SvXMLAutoStylePoolP_Impl::Add( sal_Int32 nFamily,
-                                         const OUString& rParent,
-                                        const vector< XMLPropertyState >& rProperties,
-                                        sal_Bool bCache )*/
 sal_Bool SvXMLAutoStylePoolP_Impl::Add(OUString& rName, sal_Int32 nFamily,
                 const OUString& rParent,
                 const ::std::vector< XMLPropertyState >& rProperties,
