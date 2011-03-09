@@ -38,7 +38,6 @@
 #include <tools/pstm.hxx>
 
 #define _SVSTDARR_LONGSSORT
-#define _SVSTDARR_LONGS
 #include <svl/svstdarr.hxx>
 #include <editeng/paperinf.hxx>
 #include <editeng/tstpitem.hxx>

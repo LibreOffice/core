@@ -116,7 +116,6 @@
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_USHORTSSORT
-#define _SVSTDARR_LONGS
 #include <svl/svstdarr.hxx>
 #endif
 

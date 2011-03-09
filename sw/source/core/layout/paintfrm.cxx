@@ -35,7 +35,6 @@
 
 #include <vcl/sound.hxx>
 #include <tools/poly.hxx>
-#define _SVSTDARR_LONGS
 #include <svl/svstdarr.hxx>
 #include <svx/xoutbmp.hxx>
 #include <sfx2/progress.hxx>

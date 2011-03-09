@@ -28,11 +28,6 @@
 #ifndef _TABCOL_HXX
 #define _TABCOL_HXX
 
-#ifndef _SVSTDARR_HXX
-#define _SVSTDARR_LONGS
-#include <svl/svstdarr.hxx>
-#endif
-
 #ifndef INCLUDED_VECTOR
 #include <vector>
 #define INCLUDED_VECTOR

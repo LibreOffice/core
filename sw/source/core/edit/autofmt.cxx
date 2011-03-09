@@ -29,8 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-#define _SVSTDARR_LONGS
 #define _SVSTDARR_USHORTS
 
 #include <ctype.h>

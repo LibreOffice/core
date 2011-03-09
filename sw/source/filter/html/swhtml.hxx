@@ -28,13 +28,10 @@
 #ifndef _SWHTML_HXX
 #define _SWHTML_HXX
 
-#if !defined(_SVSTDARR_XUB_STRLEN_DECL) || !defined(_SVSTDARR_LONGS_DECL) || \
+#if !defined(_SVSTDARR_XUB_STRLEN_DECL) || \
     !defined(_SVSTDARR_USHORTS_DECL) || !defined(_SVSTDARR_STRINGSDTOR_DECL)
 #ifndef _SVSTDARR_XUB_STRLEN_DECL
 #define _SVSTDARR_XUB_STRLEN
-#endif
-#ifndef _SVSTDARR_LONGS_DECL
-#define _SVSTDARR_LONGS
 #endif
 #ifndef _SVSTDARR_USHORTS_DECL
 #define _SVSTDARR_USHORTS
