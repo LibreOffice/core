@@ -75,10 +75,6 @@ const char *NegativeList[] = {
     "officecfg/data/org/openoffice/Office/SFX.xcd",
     "officecfg/data/org/openoffice/Office/Accelerators.xcu",
     "hidother.src",
-    "dictionaries/da_DK/help/da/help.tree",
-    "dictionaries/da_DK/help/da/org.openoffice.da.hunspell.dictionaries/page1.xph",
-    "dictionaries/hu_HU/help/hu/help.tree",
-    "dictionaries/hu_HU/help/hu/org.openoffice.hu.hunspell.dictionaries/page1.xph",
     "NULL"
 };
 
