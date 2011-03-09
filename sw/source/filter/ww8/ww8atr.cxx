@@ -2430,19 +2430,13 @@ bool MSWordExportBase::GetNumberFmt(const SwField& rFld, String& rStr)
     const SvNumberformat* pNumFmt = pNFmtr->GetEntry( nFmtIdx );
     if( pNumFmt )
     {
-        //sal_uInt16 nLng = rFld.GetLanguage();
-        LocaleDataWrapper aLocDat( pNFmtr->GetServiceManager(),
-            MsLangId::convertLanguageToLocale( LANGUAGE_ENGLISH_US ) );
+        sal_uInt16 nLng = rFld.GetLanguage();
+        LocaleDataWrapper aLocDat(pNFmtr->GetServiceManager(),
+                                  MsLangId::convertLanguageToLocale(nLng));
 
-        if( !pKeyMap )
-        {
-            pKeyMap = new NfKeywordTable;
-            NfKeywordTable& rKeyMap = *(NfKeywordTable*)pKeyMap;
-            pNFmtr->FillKeywordTable( rKeyMap, LANGUAGE_ENGLISH_US );
-        }
-
-        String sFmt(pNumFmt->GetMappedFormatstring(*(NfKeywordTable*)pKeyMap,
+        String sFmt(pNumFmt->GetMappedFormatstring(GetNfKeywordTable(),
             aLocDat));
+
         if (sFmt.Len())
         {
             sw::ms::SwapQuotesInField(sFmt);

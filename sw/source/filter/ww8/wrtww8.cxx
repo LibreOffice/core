@@ -3385,7 +3385,7 @@ sal_uLong SwWW8Writer::Write( SwPaM& rPaM, SfxMedium& rMed,
 
 MSWordExportBase::MSWordExportBase( SwDoc *pDocument, SwPaM *pCurrentPam, SwPaM *pOriginalPam )
     : aMainStg(sMainStream), pISet(0), pUsedNumTbl(0), mpTopNodeOfHdFtPage(0),
-    pBmpPal(0), pKeyMap(0), pOLEExp(0), pOCXExp(0), pOleMap(0),
+    pBmpPal(0), pOLEExp(0), pOCXExp(0), pOleMap(0),
     mpTableInfo(new ww8::WW8TableInfo()), nUniqueList(0),
     mnHdFtIndex(0), pAktPageDesc(0), pPapPlc(0), pChpPlc(0), pChpIter(0),
     pStyles( NULL ),
@@ -3400,8 +3400,6 @@ MSWordExportBase::MSWordExportBase( SwDoc *pDocument, SwPaM *pCurrentPam, SwPaM 
 MSWordExportBase::~MSWordExportBase()
 {
     delete pBmpPal;
-    if (pKeyMap)
-        delete[] (NfKeywordTable*)pKeyMap;
     delete pOLEExp;
     delete pOCXExp;
     delete pOleMap;
@@ -3883,6 +3881,37 @@ void MSWordExportBase::OutputEndNode( const SwEndNode &rNode )
 #ifdef DEBUG
     ::std::clog << "</OutWW8_SwEndNode>" << ::std::endl;
 #endif
+}
+
+const NfKeywordTable & MSWordExportBase::GetNfKeywordTable()
+{
+    if (pKeyMap.get() == NULL)
+    {
+        pKeyMap.reset(new NfKeywordTable);
+        NfKeywordTable & rKeywordTable = *pKeyMap;
+        rKeywordTable[NF_KEY_D] = ::rtl::OUString::createFromAscii("d");
+        rKeywordTable[NF_KEY_DD] = ::rtl::OUString::createFromAscii("dd");
+        rKeywordTable[NF_KEY_DDD] = ::rtl::OUString::createFromAscii("ddd");
+        rKeywordTable[NF_KEY_DDDD] = ::rtl::OUString::createFromAscii("dddd");
+        rKeywordTable[NF_KEY_M] = ::rtl::OUString::createFromAscii("M");
+        rKeywordTable[NF_KEY_MM] = ::rtl::OUString::createFromAscii("MM");
+        rKeywordTable[NF_KEY_MMM] = ::rtl::OUString::createFromAscii("MMM");
+        rKeywordTable[NF_KEY_MMMM] = ::rtl::OUString::createFromAscii("MMMM");
+        rKeywordTable[NF_KEY_NN] = ::rtl::OUString::createFromAscii("ddd");
+        rKeywordTable[NF_KEY_NNN] = ::rtl::OUString::createFromAscii("dddd");
+        rKeywordTable[NF_KEY_NNNN] = ::rtl::OUString::createFromAscii("dddd");
+        rKeywordTable[NF_KEY_YY] = ::rtl::OUString::createFromAscii("yy");
+        rKeywordTable[NF_KEY_YYYY] = ::rtl::OUString::createFromAscii("yyyy");
+        rKeywordTable[NF_KEY_H] = ::rtl::OUString::createFromAscii("H");
+        rKeywordTable[NF_KEY_HH] = ::rtl::OUString::createFromAscii("HH");
+        rKeywordTable[NF_KEY_MI] = ::rtl::OUString::createFromAscii("m");
+        rKeywordTable[NF_KEY_MMI] = ::rtl::OUString::createFromAscii("mm");
+        rKeywordTable[NF_KEY_S] = ::rtl::OUString::createFromAscii("s");
+        rKeywordTable[NF_KEY_SS] = ::rtl::OUString::createFromAscii("ss");
+        rKeywordTable[NF_KEY_AMPM] = ::rtl::OUString::createFromAscii("AM/PM");
+    }
+
+    return *pKeyMap;
 }
 
 /* vi:set tabstop=4 shiftwidth=4 expandtab: */
