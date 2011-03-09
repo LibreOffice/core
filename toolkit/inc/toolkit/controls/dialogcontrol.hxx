@@ -48,10 +48,11 @@ protected:
     ::com::sun::star::uno::Any          ImplGetDefaultValue( sal_uInt16 nPropId ) const;
     ::cppu::IPropertyArrayHelper&       SAL_CALL getInfoHelper();
 public:
-                        UnoControlDialogModel();
+                        UnoControlDialogModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
                         UnoControlDialogModel( const UnoControlDialogModel& rModel );
                         ~UnoControlDialogModel();
 
+    UnoControlModel*    Clone() const;
     // ::com::sun::star::beans::XMultiPropertySet
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
 
@@ -75,8 +76,8 @@ private:
 
 public:
 
-    UnoDialogControl();
-    ~UnoDialogControl();
+                                UnoDialogControl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
+                                ~UnoDialogControl();
     ::rtl::OUString             GetComponentServiceName();
 
     ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return UnoControlContainer::queryInterface(rType); }

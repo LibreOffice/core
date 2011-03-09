@@ -46,7 +46,7 @@ SVT_DLLPUBLIC int GetHTMLToken( const String& rName );
 int GetHTMLOption( const String& rName );
 
 // suche die 24-bit-Farbe zu einem Farbnamen (nicht gefunden = ULONG_MAX)
-SVT_DLLPUBLIC ULONG GetHTMLColor( const String& rName );
+SVT_DLLPUBLIC sal_uIntPtr GetHTMLColor( const String& rName );
 
 // beginnen immer ab 256, groesser als ein char
 const int HTML_TOKEN_START      = 0x100;

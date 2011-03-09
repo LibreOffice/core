@@ -55,9 +55,6 @@
 #endif
 
 
-#define BOOL win32BOOL
-#define INT32 win32INT32
-#define UINT32 win32UINT32
 #define GradientStyle_RECT win32GradientStyle_RECT
 #define Polygon win32Polygon
 #define PolyPolygon win32PolyPolygon
@@ -211,9 +208,6 @@ namespace dxcanvas
 #endif
 
 #undef DELETE
-#undef BOOL
-#undef INT32
-#undef UINT32
 #undef PolyPolygon
 
 #endif /* _DXCANVAS_WINSTUFF_HXX */

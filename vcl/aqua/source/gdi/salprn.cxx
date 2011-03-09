@@ -176,9 +176,9 @@ void AquaSalInfoPrinter::ReleaseGraphics( SalGraphics* )
 
 // -----------------------------------------------------------------------
 
-BOOL AquaSalInfoPrinter::Setup( SalFrame* i_pFrame, ImplJobSetup* i_pSetupData )
+sal_Bool AquaSalInfoPrinter::Setup( SalFrame* i_pFrame, ImplJobSetup* i_pSetupData )
 {
-    return FALSE;
+    return sal_False;
 }
 
 // -----------------------------------------------------------------------
@@ -251,14 +251,14 @@ static Paper recognizePaper( double i_fWidth, double i_fHeight )
     return aPaper;
 }
 
-BOOL AquaSalInfoPrinter::SetPrinterData( ImplJobSetup* io_pSetupData )
+sal_Bool AquaSalInfoPrinter::SetPrinterData( ImplJobSetup* io_pSetupData )
 {
     // FIXME: implement driver data
     if( io_pSetupData && io_pSetupData->mpDriverData )
         return SetData( ~0, io_pSetupData );
 
 
-    BOOL bSuccess = TRUE;
+    sal_Bool bSuccess = sal_True;
 
     // set system type
     io_pSetupData->mnSystem = JOBSETUP_SYSTEM_MAC;
@@ -285,11 +285,11 @@ BOOL AquaSalInfoPrinter::SetPrinterData( ImplJobSetup* io_pSetupData )
         io_pSetupData->meOrientation = mePageOrientation;
 
         io_pSetupData->mnPaperBin = 0;
-        io_pSetupData->mpDriverData = reinterpret_cast<BYTE*>(rtl_allocateMemory( 4 ));
+        io_pSetupData->mpDriverData = reinterpret_cast<sal_uInt8*>(rtl_allocateMemory( 4 ));
         io_pSetupData->mnDriverDataLen = 4;
     }
     else
-        bSuccess = FALSE;
+        bSuccess = sal_False;
 
 
     return bSuccess;
@@ -319,10 +319,10 @@ void AquaSalInfoPrinter::setPaperSize( long i_nWidth, long i_nHeight, Orientatio
 
 // -----------------------------------------------------------------------
 
-BOOL AquaSalInfoPrinter::SetData( ULONG i_nFlags, ImplJobSetup* io_pSetupData )
+sal_Bool AquaSalInfoPrinter::SetData( sal_uLong i_nFlags, ImplJobSetup* io_pSetupData )
 {
     if( ! io_pSetupData || io_pSetupData->mnSystem != JOBSETUP_SYSTEM_MAC )
-        return FALSE;
+        return sal_False;
 
 
     if( mpPrintInfo )
@@ -360,14 +360,14 @@ BOOL AquaSalInfoPrinter::SetData( ULONG i_nFlags, ImplJobSetup* io_pSetupData )
 
 // -----------------------------------------------------------------------
 
-ULONG AquaSalInfoPrinter::GetPaperBinCount( const ImplJobSetup* i_pSetupData )
+sal_uLong AquaSalInfoPrinter::GetPaperBinCount( const ImplJobSetup* i_pSetupData )
 {
     return 0;
 }
 
 // -----------------------------------------------------------------------
 
-XubString AquaSalInfoPrinter::GetPaperBinName( const ImplJobSetup* i_pSetupData, ULONG i_nPaperBin )
+XubString AquaSalInfoPrinter::GetPaperBinName( const ImplJobSetup* i_pSetupData, sal_uLong i_nPaperBin )
 {
     return XubString();
 }
@@ -380,14 +380,14 @@ static bool getUseNativeDialog()
     try
     {
         // get service provider
-        Reference< XMultiServiceFactory > xSMgr( unohelper::GetMultiServiceFactory() );
+        uno::Reference< XMultiServiceFactory > xSMgr( unohelper::GetMultiServiceFactory() );
         // create configuration hierachical access name
         if( xSMgr.is() )
         {
             try
             {
-                Reference< XMultiServiceFactory > xConfigProvider(
-                    Reference< XMultiServiceFactory >(
+                uno::Reference< XMultiServiceFactory > xConfigProvider(
+                   uno::Reference< XMultiServiceFactory >(
                         xSMgr->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
                                         "com.sun.star.configuration.ConfigurationProvider" ))),
                         UNO_QUERY )
@@ -399,8 +399,8 @@ static bool getUseNativeDialog()
                     aVal.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ) );
                     aVal.Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Common/Misc" ) );
                     aArgs.getArray()[0] <<= aVal;
-                    Reference< XNameAccess > xConfigAccess(
-                        Reference< XNameAccess >(
+                    uno::Reference< XNameAccess > xConfigAccess(
+                        uno::Reference< XNameAccess >(
                             xConfigProvider->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
                                                 "com.sun.star.configuration.ConfigurationAccess" )),
                                                                             aArgs ),
@@ -436,7 +436,7 @@ static bool getUseNativeDialog()
     return bNative;
 }
 
-ULONG AquaSalInfoPrinter::GetCapabilities( const ImplJobSetup* i_pSetupData, USHORT i_nType )
+sal_uLong AquaSalInfoPrinter::GetCapabilities( const ImplJobSetup* i_pSetupData, sal_uInt16 i_nType )
 {
     switch( i_nType )
     {
@@ -518,7 +518,7 @@ static Size getPageSize( vcl::PrinterController& i_rController, sal_Int32 i_nPag
     return aPageSize;
 }
 
-BOOL AquaSalInfoPrinter::StartJob( const String* i_pFileName,
+sal_Bool AquaSalInfoPrinter::StartJob( const String* i_pFileName,
                                    const String& i_rJobName,
                                    const String& i_rAppName,
                                    ImplJobSetup* i_pSetupData,
@@ -526,9 +526,9 @@ BOOL AquaSalInfoPrinter::StartJob( const String* i_pFileName,
                                    )
 {
     if( mbJob )
-        return FALSE;
+        return sal_False;
 
-    BOOL bSuccess = FALSE;
+    sal_Bool bSuccess = sal_False;
     bool bWasAborted = false;
     AquaSalInstance* pInst = GetSalData()->mpFirstInstance;
     PrintAccessoryViewState aAccViewState;
@@ -663,7 +663,7 @@ BOOL AquaSalInfoPrinter::StartJob( const String* i_pFileName,
                 if( bShowPanel && mnCurPageRangeStart == 0 && nCurJob == 0) // only the first range of pages (in the first job) gets the accesory view
                     pReleaseAfterUse = [AquaPrintAccessoryView setupPrinterPanel: pPrintOperation withController: &i_rController withState: &aAccViewState];
 
-                bSuccess = TRUE;
+                bSuccess = sal_True;
                 mbJob = true;
                 pInst->startedPrintJob();
                 [pPrintOperation runOperation];
@@ -681,7 +681,7 @@ BOOL AquaSalInfoPrinter::StartJob( const String* i_pFileName,
 
     // inform application that it can release its data
     // this is awkward, but the XRenderable interface has no method for this,
-    // so we need to call XRenderadble::render one last time with IsLastPage = TRUE
+    // so we need to call XRenderadble::render one last time with IsLastPage = sal_True
     i_rController.setLastPage( sal_True );
     GDIMetaFile aPageFile;
     if( mrContext )
@@ -699,26 +699,26 @@ BOOL AquaSalInfoPrinter::StartJob( const String* i_pFileName,
 
 // -----------------------------------------------------------------------
 
-BOOL AquaSalInfoPrinter::EndJob()
+sal_Bool AquaSalInfoPrinter::EndJob()
 {
     mnStartPageOffsetX = mnStartPageOffsetY = 0;
     mbJob = false;
-    return TRUE;
+    return sal_True;
 }
 
 // -----------------------------------------------------------------------
 
-BOOL AquaSalInfoPrinter::AbortJob()
+sal_Bool AquaSalInfoPrinter::AbortJob()
 {
     mbJob = false;
 
     // FIXME: implementation
-    return FALSE;
+    return sal_False;
 }
 
 // -----------------------------------------------------------------------
 
-SalGraphics* AquaSalInfoPrinter::StartPage( ImplJobSetup* i_pSetupData, BOOL i_bNewJobData )
+SalGraphics* AquaSalInfoPrinter::StartPage( ImplJobSetup* i_pSetupData, sal_Bool i_bNewJobData )
 {
     if( i_bNewJobData && i_pSetupData )
         SetPrinterData( i_pSetupData );
@@ -732,15 +732,15 @@ SalGraphics* AquaSalInfoPrinter::StartPage( ImplJobSetup* i_pSetupData, BOOL i_b
 
 // -----------------------------------------------------------------------
 
-BOOL AquaSalInfoPrinter::EndPage()
+sal_Bool AquaSalInfoPrinter::EndPage()
 {
     mpGraphics->InvalidateContext();
-    return TRUE;
+    return sal_True;
 }
 
 // -----------------------------------------------------------------------
 
-ULONG AquaSalInfoPrinter::GetErrorCode() const
+sal_uLong AquaSalInfoPrinter::GetErrorCode() const
 {
     return 0;
 }
@@ -760,7 +760,7 @@ AquaSalPrinter::~AquaSalPrinter()
 
 // -----------------------------------------------------------------------
 
-BOOL AquaSalPrinter::StartJob( const String* i_pFileName,
+sal_Bool AquaSalPrinter::StartJob( const String* i_pFileName,
                                const String& i_rJobName,
                                const String& i_rAppName,
                                ImplJobSetup* i_pSetupData,
@@ -771,49 +771,49 @@ BOOL AquaSalPrinter::StartJob( const String* i_pFileName,
 
 // -----------------------------------------------------------------------
 
-BOOL AquaSalPrinter::StartJob( const XubString* i_pFileName,
+sal_Bool AquaSalPrinter::StartJob( const XubString* i_pFileName,
                                const XubString& i_rJobName,
                                const XubString& i_rAppName,
-                               ULONG i_nCopies,
+                               sal_uLong i_nCopies,
                                bool i_bCollate,
                                bool i_bDirect,
                                ImplJobSetup* i_pSetupData )
 {
     DBG_ERROR( "should never be called" );
-    return FALSE;
+    return sal_False;
 }
 
 // -----------------------------------------------------------------------
 
-BOOL AquaSalPrinter::EndJob()
+sal_Bool AquaSalPrinter::EndJob()
 {
     return mpInfoPrinter->EndJob();
 }
 
 // -----------------------------------------------------------------------
 
-BOOL AquaSalPrinter::AbortJob()
+sal_Bool AquaSalPrinter::AbortJob()
 {
     return mpInfoPrinter->AbortJob();
 }
 
 // -----------------------------------------------------------------------
 
-SalGraphics* AquaSalPrinter::StartPage( ImplJobSetup* i_pSetupData, BOOL i_bNewJobData )
+SalGraphics* AquaSalPrinter::StartPage( ImplJobSetup* i_pSetupData, sal_Bool i_bNewJobData )
 {
     return mpInfoPrinter->StartPage( i_pSetupData, i_bNewJobData );
 }
 
 // -----------------------------------------------------------------------
 
-BOOL AquaSalPrinter::EndPage()
+sal_Bool AquaSalPrinter::EndPage()
 {
     return mpInfoPrinter->EndPage();
 }
 
 // -----------------------------------------------------------------------
 
-ULONG AquaSalPrinter::GetErrorCode()
+sal_uLong AquaSalPrinter::GetErrorCode()
 {
     return mpInfoPrinter->GetErrorCode();
 }

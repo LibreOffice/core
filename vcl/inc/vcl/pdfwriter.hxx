@@ -229,7 +229,7 @@ public:
         rtl::OUString       Name;       // a distinct name to identify the control
         rtl::OUString       Description;// descriptive text for the contro (e.g. for tool tip)
         rtl::OUString       Text;       // user text to appear on the control
-        USHORT              TextStyle;  // style flags
+        sal_uInt16              TextStyle;  // style flags
         bool                ReadOnly;
         Rectangle           Location;   // describes the area filled by the control
         bool                Border;     // true: widget should have a border, false: no border
@@ -537,6 +537,11 @@ The following structure describes the permissions used in PDF security
         String          Producer;       // OpenOffice
     };
 
+    enum ColorMode
+    {
+        DrawColor, DrawGreyscale
+    };
+
     struct PDFWriterContext
     {
         /* must be a valid file: URL usable by osl */
@@ -599,6 +604,7 @@ The following structure describes the permissions used in PDF security
         com::sun::star::lang::Locale    DocumentLocale; // defines the document default language
         sal_uInt32                      DPIx, DPIy;     // how to handle MapMode( MAP_PIXEL )
                                                         // 0 here specifies a default handling
+        PDFWriter::ColorMode            ColorMode;
 
         PDFWriterContext() :
                 RelFsys( false ), //i56629, i49415?, i64585?
@@ -627,7 +633,8 @@ The following structure describes the permissions used in PDF security
                 OpenBookmarkLevels( -1 ),
                 Encryption(),
                 DPIx( 0 ),
-                DPIy( 0 )
+                DPIy( 0 ),
+                ColorMode( PDFWriter::DrawColor )
         {}
     };
 
@@ -700,7 +707,7 @@ The following structure describes the permissions used in PDF security
 
     /* functions for graphics state */
     /* flag values: see vcl/outdev.hxx */
-    void                Push( USHORT nFlags = 0xffff );
+    void                Push( sal_uInt16 nFlags = 0xffff );
     void                Pop();
 
     void               SetClipRegion();
@@ -709,9 +716,9 @@ The following structure describes the permissions used in PDF security
     void               IntersectClipRegion( const Rectangle& rRect );
     void               IntersectClipRegion( const basegfx::B2DPolyPolygon& rRegion );
 
-    void               SetAntialiasing( USHORT nMode =  0 );
+    void               SetAntialiasing( sal_uInt16 nMode =  0 );
 
-    void               SetLayoutMode( ULONG nMode );
+    void               SetLayoutMode( sal_uLong nMode );
     void               SetDigitLanguage( LanguageType eLang );
 
     void               SetLineColor( const Color& rColor );
@@ -742,16 +749,16 @@ The following structure describes the permissions used in PDF security
                                       FontStrikeout eStrikeout,
                                       FontUnderline eUnderline,
                                       FontUnderline eOverline,
-                                      BOOL bUnderlineAbove = FALSE );
+                                      sal_Bool bUnderlineAbove = sal_False );
     void                DrawTextArray( const Point& rStartPt, const XubString& rStr,
                                        const sal_Int32* pDXAry = NULL,
                                        xub_StrLen nIndex = 0,
                                        xub_StrLen nLen = STRING_LEN );
-    void                DrawStretchText( const Point& rStartPt, ULONG nWidth,
+    void                DrawStretchText( const Point& rStartPt, sal_uLong nWidth,
                                          const XubString& rStr,
                                          xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN );
     void                DrawText( const Rectangle& rRect,
-                                  const XubString& rStr, USHORT nStyle = 0 );
+                                  const XubString& rStr, sal_uInt16 nStyle = 0 );
 
     void                DrawPixel( const Point& rPt, const Color& rColor );
     void                DrawPixel( const Point& rPt )
@@ -771,7 +778,7 @@ The following structure describes the permissions used in PDF security
     void                DrawPolyPolygon( const PolyPolygon& rPolyPoly );
     void                DrawRect( const Rectangle& rRect );
     void                DrawRect( const Rectangle& rRect,
-                                  ULONG nHorzRount, ULONG nVertRound );
+                                  sal_uLong nHorzRount, sal_uLong nVertRound );
     void                DrawEllipse( const Rectangle& rRect );
     void                DrawArc( const Rectangle& rRect,
                                  const Point& rStartPt, const Point& rEndPt );
@@ -811,7 +818,7 @@ The following structure describes the permissions used in PDF security
 
     void                DrawWallpaper( const Rectangle& rRect, const Wallpaper& rWallpaper );
     void                DrawTransparent( const PolyPolygon& rPolyPoly,
-                                         USHORT nTransparencePercent );
+                                         sal_uInt16 nTransparencePercent );
 
     /** Start a transparency group
 
@@ -844,7 +851,7 @@ The following structure describes the permissions used in PDF security
     @param nTransparencePercent
     The transparency factor
     */
-    void                EndTransparencyGroup( const Rectangle& rBoundRect, USHORT nTransparencePercent );
+    void                EndTransparencyGroup( const Rectangle& rBoundRect, sal_uInt16 nTransparencePercent );
 
     /** End a transparency group with an alpha mask
 

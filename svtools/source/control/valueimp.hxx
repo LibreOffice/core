@@ -83,8 +83,8 @@ class ValueSet;
 struct ValueSetItem
 {
     ValueSet&           mrParent;
-    USHORT              mnId;
-    USHORT              mnBits;
+    sal_uInt16              mnId;
+    sal_uInt16              mnBits;
     ValueSetItemType    meType;
     Image               maImage;
     Color               maColor;
@@ -142,7 +142,7 @@ public:
     ~ValueSetAcc();
 
     void                FireAccessibleEvent( short nEventId, const ::com::sun::star::uno::Any& rOldValue, const ::com::sun::star::uno::Any& rNewValue );
-    BOOL                HasAccessibleListeners() const { return( mxEventListeners.size() > 0 ); }
+    sal_Bool                HasAccessibleListeners() const { return( mxEventListeners.size() > 0 ); }
 
     static ValueSetAcc* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxData ) throw();
 
@@ -222,7 +222,7 @@ private:
 
     /** Return the number of items.  This takes the None-Item into account.
     */
-    USHORT getItemCount (void) const;
+    sal_uInt16 getItemCount (void) const;
 
     /** Return the item associated with the given index.  The None-Item is
         taken into account which, when present, is taken to be the first
@@ -233,7 +233,7 @@ private:
         @return
             Returns NULL when the given index is out of range.
     */
-    ValueSetItem* getItem (USHORT nIndex) const;
+    ValueSetItem* getItem (sal_uInt16 nIndex) const;
 
     /** Check whether or not the object has been disposed (or is in the
         state of beeing disposed).  If that is the case then
@@ -288,7 +288,7 @@ public:
     void    ParentDestroyed();
 
     void    FireAccessibleEvent( short nEventId, const ::com::sun::star::uno::Any& rOldValue, const ::com::sun::star::uno::Any& rNewValue );
-    BOOL    HasAccessibleListeners() const { return( mxEventListeners.size() > 0 ); }
+    sal_Bool    HasAccessibleListeners() const { return( mxEventListeners.size() > 0 ); }
 
     static ValueItemAcc* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxData ) throw();
 

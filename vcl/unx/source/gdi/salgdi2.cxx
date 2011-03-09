@@ -150,7 +150,7 @@ inline GC X11SalGraphics::GetMonoGC( Pixmap hPixmap )
     if( !bMonoGC_ )
     {
         SetClipRegion( pMonoGC_ );
-        bMonoGC_ = TRUE;
+        bMonoGC_ = sal_True;
     }
 
     return pMonoGC_;
@@ -167,7 +167,7 @@ inline GC X11SalGraphics::GetCopyGC()
     if( !bCopyGC_ )
     {
         SetClipRegion( pCopyGC_ );
-        bCopyGC_ = TRUE;
+        bCopyGC_ = sal_True;
     }
     return pCopyGC_;
 }
@@ -185,7 +185,7 @@ GC X11SalGraphics::GetInvertGC()
     if( !bInvertGC_ )
     {
         SetClipRegion( pInvertGC_ );
-        bInvertGC_ = TRUE;
+        bInvertGC_ = sal_True;
     }
     return pInvertGC_;
 }
@@ -233,7 +233,7 @@ GC X11SalGraphics::GetInvert50GC()
     if( !bInvert50GC_ )
     {
         SetClipRegion( pInvert50GC_ );
-        bInvert50GC_ = TRUE;
+        bInvert50GC_ = sal_True;
     }
     return pInvert50GC_;
 }
@@ -251,7 +251,7 @@ inline GC X11SalGraphics::GetStippleGC()
     {
         XSetFunction( GetXDisplay(), pStippleGC_, bXORMode_ ? GXxor : GXcopy );
         SetClipRegion( pStippleGC_ );
-        bStippleGC_ = TRUE;
+        bStippleGC_ = sal_True;
     }
 
     return pStippleGC_;
@@ -308,8 +308,8 @@ int X11SalGraphics::Clip( int          &nX,
         && RectangleOut == Clip( pPaintRegion_, nX, nY, nDX, nDY, nSrcX, nSrcY ) )
         return RectangleOut;
 
-    if( pClipRegion_
-        && RectangleOut == Clip( pClipRegion_,  nX, nY, nDX, nDY, nSrcX, nSrcY ) )
+    if( mpClipRegion
+        && RectangleOut == Clip( mpClipRegion,  nX, nY, nDX, nDY, nSrcX, nSrcY ) )
         return RectangleOut;
 
     int nPaint;
@@ -323,9 +323,9 @@ int X11SalGraphics::Clip( int          &nX,
         nPaint = RectangleIn;
 
     int nClip;
-    if( pClipRegion_ )
+    if( mpClipRegion )
     {
-        nClip = XRectInRegion( pClipRegion_, nX, nY, nDX, nDY );
+        nClip = XRectInRegion( mpClipRegion, nX, nY, nDX, nDY );
         if( RectangleOut == nClip )
             return RectangleOut;
     }
@@ -608,7 +608,7 @@ void X11SalGraphics::copyBits( const SalTwoRect *pPosAry,
 void X11SalGraphics::copyArea ( long nDestX,    long nDestY,
                                 long nSrcX,     long nSrcY,
                                 long nSrcWidth, long nSrcHeight,
-                                USHORT )
+                                sal_uInt16 )
 {
     SalTwoRect aPosAry;
 
@@ -661,11 +661,11 @@ void X11SalGraphics::drawBitmap( const SalTwoRect* pPosAry,
     DBG_ASSERT( !bPrinter_, "Drawing of transparent bitmaps on printer devices is strictly forbidden" );
 
     // decide if alpha masking or transparency masking is needed
-    BitmapBuffer* pAlphaBuffer = const_cast<SalBitmap&>(rMaskBitmap).AcquireBuffer( TRUE );
+    BitmapBuffer* pAlphaBuffer = const_cast<SalBitmap&>(rMaskBitmap).AcquireBuffer( sal_True );
     if( pAlphaBuffer != NULL )
     {
         int nMaskFormat = pAlphaBuffer->mnFormat;
-        const_cast<SalBitmap&>(rMaskBitmap).ReleaseBuffer( pAlphaBuffer, TRUE );
+        const_cast<SalBitmap&>(rMaskBitmap).ReleaseBuffer( pAlphaBuffer, sal_True );
         if( nMaskFormat == BMP_FORMAT_8BIT_PAL )
             drawAlphaBitmap( *pPosAry, rSrcBitmap, rMaskBitmap );
     }
@@ -686,7 +686,7 @@ void X11SalGraphics::drawMaskedBitmap( const SalTwoRect* pPosAry,
     // figure work mode depth. If this is a VDev Drawable, use its
     // bitdepth to create pixmaps for, otherwise, XCopyArea will
     // refuse to work.
-    const USHORT    nDepth( m_pVDev ?
+    const sal_uInt16    nDepth( m_pVDev ?
                             m_pVDev->GetDepth() :
                             pSalDisp->GetVisual( m_nScreen ).GetDepth() );
     Pixmap          aFG( XCreatePixmap( pXDisp, aDrawable, pPosAry->mnDestWidth,
@@ -745,8 +745,8 @@ void X11SalGraphics::drawMaskedBitmap( const SalTwoRect* pPosAry,
         DBG_TESTTRANS( aBG );
 
         // #105055# Disable XOR temporarily
-        BOOL bOldXORMode( bXORMode_ );
-        bXORMode_ = FALSE;
+        sal_Bool bOldXORMode( bXORMode_ );
+        bXORMode_ = sal_False;
 
         // copy pixmap #2 (result) to background
         XCopyArea( pXDisp, aBG, aDrawable, GetCopyGC(),
@@ -834,7 +834,7 @@ bool X11SalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
 
     // TODO: use SalX11Bitmap functionality and caching for the Alpha Pixmap
     // problem is that they don't provide an 8bit Pixmap on a non-8bit display
-    BitmapBuffer* pAlphaBuffer = const_cast<SalBitmap&>(rAlphaBmp).AcquireBuffer( TRUE );
+    BitmapBuffer* pAlphaBuffer = const_cast<SalBitmap&>(rAlphaBmp).AcquireBuffer( sal_True );
 
     // an XImage needs its data top_down
     // TODO: avoid wrongly oriented images in upper layers!
@@ -879,7 +879,7 @@ bool X11SalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
     if( pAlphaBits != (char*)pAlphaBuffer->mpBits )
         delete[] pAlphaBits;
 
-    const_cast<SalBitmap&>(rAlphaBmp).ReleaseBuffer( pAlphaBuffer, TRUE );
+    const_cast<SalBitmap&>(rAlphaBmp).ReleaseBuffer( pAlphaBuffer, sal_True );
 
     XRenderPictureAttributes aAttr;
     aAttr.repeat = true;
@@ -888,8 +888,8 @@ bool X11SalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
         return false;
 
     // set clipping
-    if( pClipRegion_ && !XEmptyRegion( pClipRegion_ ) )
-        rPeer.SetPictureClipRegion( aDstPic, pClipRegion_ );
+    if( mpClipRegion && !XEmptyRegion( mpClipRegion ) )
+        rPeer.SetPictureClipRegion( aDstPic, mpClipRegion );
 
     // paint source * mask over destination picture
     rPeer.CompositePicture( PictOpOver, aSrcPic, aAlphaPic, aDstPic,
@@ -1045,7 +1045,7 @@ SalBitmap *X11SalGraphics::getBitmap( long nX, long nY, long nDX, long nDY )
     }
 
     X11SalBitmap*   pSalBitmap = new X11SalBitmap;
-    USHORT          nBitCount = GetBitCount();
+    sal_uInt16          nBitCount = GetBitCount();
 
     if( &GetDisplay()->GetColormap( m_nScreen ) != &GetColormap() )
         nBitCount = 1;

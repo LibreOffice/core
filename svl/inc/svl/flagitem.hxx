@@ -34,7 +34,7 @@
 
 class SvStream;
 
-extern USHORT nSfxFlagVal[16];
+extern sal_uInt16 nSfxFlagVal[16];
 
 // -----------------------------------------------------------------------
 
@@ -42,24 +42,24 @@ DBG_NAMEEX_VISIBILITY(SfxFlagItem, SVL_DLLPUBLIC)
 
 class SVL_DLLPUBLIC SfxFlagItem: public SfxPoolItem
 {
-    USHORT                   nVal;
+    sal_uInt16                   nVal;
 
 public:
                              TYPEINFO();
 
-                             SfxFlagItem( USHORT nWhich = 0, USHORT nValue = 0 );
-                             SfxFlagItem( USHORT nWhich, SvStream & );
+                             SfxFlagItem( sal_uInt16 nWhich = 0, sal_uInt16 nValue = 0 );
+                             SfxFlagItem( sal_uInt16 nWhich, SvStream & );
                              SfxFlagItem( const SfxFlagItem& );
 
                              ~SfxFlagItem() {
                                 DBG_DTOR(SfxFlagItem, 0); }
 
-    virtual BYTE             GetFlagCount() const;
-    virtual XubString        GetFlagText( BYTE nFlag ) const;
+    virtual sal_uInt8            GetFlagCount() const;
+    virtual XubString        GetFlagText( sal_uInt8 nFlag ) const;
 
     virtual int              operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*     Create(SvStream &, USHORT nVersion) const;
-    virtual SvStream&        Store(SvStream &, USHORT nItemVersion) const;
+    virtual SfxPoolItem*     Create(SvStream &, sal_uInt16 nVersion) const;
+    virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion) const;
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -67,14 +67,14 @@ public:
                                     SfxMapUnit ePresMetric,
                                     XubString &rText,
                                     const IntlWrapper * = 0 ) const;
-            USHORT           GetValue() const { return nVal; }
-            void             SetValue( USHORT nNewVal ) {
+            sal_uInt16           GetValue() const { return nVal; }
+            void             SetValue( sal_uInt16 nNewVal ) {
                                  DBG_ASSERT( GetRefCount() == 0, "SetValue() with pooled item" );
                                  nVal = nNewVal;
                              }
-            int              GetFlag( BYTE nFlag ) const {
+            int              GetFlag( sal_uInt8 nFlag ) const {
                                  return ( (nVal & nSfxFlagVal[nFlag]) != 0 ); }
-            void             SetFlag( BYTE nFlag, int bVal );
+            void             SetFlag( sal_uInt8 nFlag, int bVal );
 };
 
 #endif

@@ -82,7 +82,7 @@ protected:
     ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper();
 
 public:
-                        UnoControlEditModel();
+                        UnoControlEditModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
                         UnoControlEditModel( const UnoControlEditModel& rModel ) : UnoControlModel( rModel ) {;}
 
     UnoControlModel*    Clone() const { return new UnoControlEditModel( *this ); }
@@ -116,7 +116,7 @@ private:
     // They only support XTextComponent, so keep the text
     // here, maybe there is no Peer when calling setText()...
     ::rtl::OUString     maText;
-    USHORT              mnMaxTextLen;
+    sal_uInt16              mnMaxTextLen;
 
     sal_Bool            mbSetTextInPeer;
     sal_Bool            mbSetMaxTextLenInPeer;
@@ -124,7 +124,7 @@ private:
 
 public:
 
-                                UnoEditControl();
+                                UnoEditControl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
     ::rtl::OUString             GetComponentServiceName();
     TextListenerMultiplexer&    GetTextListeners()  { return maTextListeners; }
 
@@ -185,7 +185,7 @@ protected:
     ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
 
 public:
-                        UnoControlFileControlModel();
+                        UnoControlFileControlModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
                         UnoControlFileControlModel( const UnoControlFileControlModel& rModel ) : UnoControlModel( rModel ) {;}
 
     UnoControlModel*    Clone() const { return new UnoControlFileControlModel( *this ); }
@@ -206,7 +206,7 @@ public:
 class UnoFileControl : public UnoEditControl
 {
 public:
-                        UnoFileControl();
+                        UnoFileControl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
     ::rtl::OUString     GetComponentServiceName();
 
     // ::com::sun::star::lang::XServiceInfo
@@ -226,7 +226,12 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > getGraphicFromURL_nothrow( const ::rtl::OUString& _rURL );
 
 protected:
-    GraphicControlModel() : mbAdjustingImagePosition( false ), mbAdjustingGraphic( false ) { }
+    GraphicControlModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory )
+        :UnoControlModel( i_factory )
+        ,mbAdjustingImagePosition( false )
+        ,mbAdjustingGraphic( false )
+    {
+    }
     GraphicControlModel( const GraphicControlModel& _rSource ) : UnoControlModel( _rSource ), mbAdjustingImagePosition( false ), mbAdjustingGraphic( false ) { }
 
     // ::cppu::OPropertySetHelper
@@ -242,14 +247,14 @@ private:
 //  ----------------------------------------------------
 //  class UnoControlButtonModel
 //  ----------------------------------------------------
-class UnoControlButtonModel :   public GraphicControlModel
+class UnoControlButtonModel : public GraphicControlModel
 {
 protected:
     ::com::sun::star::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const;
     ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
 
 public:
-                        UnoControlButtonModel();
+                        UnoControlButtonModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
                         UnoControlButtonModel( const UnoControlButtonModel& rModel ) : GraphicControlModel( rModel ) {;}
 
     UnoControlModel*    Clone() const { return new UnoControlButtonModel( *this ); }
@@ -282,7 +287,7 @@ private:
 
 public:
 
-                        UnoButtonControl();
+                        UnoButtonControl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
     ::rtl::OUString     GetComponentServiceName();
 
     void SAL_CALL createPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& Toolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& Parent ) throw(::com::sun::star::uno::RuntimeException);
@@ -327,7 +332,7 @@ protected:
     ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
 
 public:
-                                    UnoControlImageControlModel();
+                                    UnoControlImageControlModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
                                     UnoControlImageControlModel( const UnoControlImageControlModel& rModel ) : GraphicControlModel( rModel ), mbAdjustingImageScaleMode( false ) { }
 
     UnoControlModel*    Clone() const { return new UnoControlImageControlModel( *this ); }
@@ -359,7 +364,7 @@ private:
 
 public:
 
-                            UnoImageControlControl();
+                            UnoImageControlControl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
     ::rtl::OUString         GetComponentServiceName();
 
     void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -387,7 +392,7 @@ protected:
     ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper();
 
 public:
-                        UnoControlRadioButtonModel();
+                        UnoControlRadioButtonModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
                         UnoControlRadioButtonModel( const UnoControlRadioButtonModel& rModel ) : GraphicControlModel( rModel ) {;}
 
     UnoControlModel*    Clone() const { return new UnoControlRadioButtonModel( *this ); }
@@ -421,7 +426,7 @@ private:
 
 public:
 
-                            UnoRadioButtonControl();
+                            UnoRadioButtonControl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
     ::rtl::OUString         GetComponentServiceName();
 
     void SAL_CALL createPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& Toolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& Parent ) throw(::com::sun::star::uno::RuntimeException);
@@ -466,7 +471,7 @@ protected:
     ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper();
 
 public:
-                        UnoControlCheckBoxModel();
+                        UnoControlCheckBoxModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
                         UnoControlCheckBoxModel( const UnoControlCheckBoxModel& rModel ) : GraphicControlModel( rModel ) {;}
 
     UnoControlModel*    Clone() const { return new UnoControlCheckBoxModel( *this ); }
@@ -499,7 +504,7 @@ private:
 
 public:
 
-                            UnoCheckBoxControl();
+                            UnoCheckBoxControl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
                             ~UnoCheckBoxControl(){;}
     ::rtl::OUString         GetComponentServiceName();
 
@@ -547,7 +552,7 @@ protected:
     ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper();
 
 public:
-    UnoControlFixedHyperlinkModel();
+    UnoControlFixedHyperlinkModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
     UnoControlFixedHyperlinkModel( const UnoControlFixedHyperlinkModel& rModel ) : UnoControlModel( rModel ) {;}
 
     UnoControlModel*    Clone() const { return new UnoControlFixedHyperlinkModel( *this ); }
@@ -573,7 +578,7 @@ private:
     ActionListenerMultiplexer   maActionListeners;
 
 public:
-    UnoFixedHyperlinkControl();
+    UnoFixedHyperlinkControl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
 
     ::rtl::OUString     GetComponentServiceName();
 
@@ -621,7 +626,7 @@ protected:
     ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper();
 
 public:
-                        UnoControlFixedTextModel();
+                        UnoControlFixedTextModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
                         UnoControlFixedTextModel( const UnoControlFixedTextModel& rModel ) : UnoControlModel( rModel ) {;}
 
     UnoControlModel*    Clone() const { return new UnoControlFixedTextModel( *this ); }
@@ -645,7 +650,7 @@ class UnoFixedTextControl : public UnoControlBase,
                             public ::com::sun::star::awt::XLayoutConstrains
 {
 public:
-                        UnoFixedTextControl();
+                        UnoFixedTextControl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
     ::rtl::OUString     GetComponentServiceName();
 
     ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return UnoControlBase::queryInterface(rType); }
@@ -686,7 +691,7 @@ protected:
     ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper();
 
 public:
-                        UnoControlGroupBoxModel();
+                        UnoControlGroupBoxModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
                         UnoControlGroupBoxModel( const UnoControlGroupBoxModel& rModel ) : UnoControlModel( rModel ) {;}
 
     UnoControlModel*    Clone() const { return new UnoControlGroupBoxModel( *this ); }
@@ -708,7 +713,7 @@ public:
 class UnoGroupBoxControl :  public UnoControlBase
 {
 public:
-                        UnoGroupBoxControl();
+                        UnoGroupBoxControl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
     ::rtl::OUString     GetComponentServiceName();
 
     sal_Bool SAL_CALL isTransparent(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -725,12 +730,20 @@ struct UnoControlListBoxModel_Data;
 typedef ::cppu::AggImplInheritanceHelper1   <   UnoControlModel
                                             ,   ::com::sun::star::awt::XItemList
                                             >   UnoControlListBoxModel_Base;
-class TOOLKIT_DLLPUBLIC UnoControlListBoxModel    :public UnoControlListBoxModel_Base
+class TOOLKIT_DLLPUBLIC UnoControlListBoxModel : public UnoControlListBoxModel_Base
 {
 protected:
-    UnoControlListBoxModel(bool asComboBox);
+    enum ConstructorMode
+    {
+        ConstructDefault,
+        ConstructWithoutProperties
+    };
+
 public:
-                        UnoControlListBoxModel();
+                        UnoControlListBoxModel(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory,
+                            ConstructorMode const i_mode = ConstructDefault
+                        );
                         UnoControlListBoxModel( const UnoControlListBoxModel& i_rSource );
                         ~UnoControlListBoxModel();
 
@@ -828,7 +841,7 @@ typedef ::cppu::AggImplInheritanceHelper5   <   UnoControlBase
 class TOOLKIT_DLLPUBLIC UnoListBoxControl : public UnoListBoxControl_Base
 {
 public:
-                        UnoListBoxControl();
+                        UnoListBoxControl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
     ::rtl::OUString     GetComponentServiceName();
 
     void SAL_CALL createPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& Toolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& Parent ) throw(::com::sun::star::uno::RuntimeException);
@@ -908,7 +921,7 @@ protected:
     ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper();
 
 public:
-                        UnoControlComboBoxModel();
+                        UnoControlComboBoxModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
                         UnoControlComboBoxModel( const UnoControlComboBoxModel& rModel ) : UnoControlListBoxModel( rModel ) {;}
 
     UnoControlModel*    Clone() const { return new UnoControlComboBoxModel( *this ); }
@@ -942,7 +955,7 @@ private:
 
 public:
 
-                UnoComboBoxControl();
+                        UnoComboBoxControl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
     ::rtl::OUString     GetComponentServiceName();
 
     void SAL_CALL createPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& Toolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& Parent ) throw(::com::sun::star::uno::RuntimeException);
@@ -1006,10 +1019,10 @@ class UnoSpinFieldControl : public UnoEditControl,
 {
 private:
     SpinListenerMultiplexer     maSpinListeners;
-    BOOL                        mbRepeat;
+    sal_Bool                        mbRepeat;
 
 public:
-                                UnoSpinFieldControl();
+                                UnoSpinFieldControl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
 
     ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return UnoEditControl::queryInterface(rType); }
     ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
@@ -1047,7 +1060,7 @@ protected:
     ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper();
 
 public:
-                UnoControlDateFieldModel();
+                UnoControlDateFieldModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
                 UnoControlDateFieldModel( const UnoControlDateFieldModel& rModel ) : UnoControlModel( rModel ) {;}
 
     UnoControlModel*    Clone() const { return new UnoControlDateFieldModel( *this ); }
@@ -1074,7 +1087,7 @@ private:
     sal_Int32       mnLast;
     sal_Bool        mbLongFormat;
 public:
-                    UnoDateFieldControl();
+                            UnoDateFieldControl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
     ::rtl::OUString         GetComponentServiceName();
 
     ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return UnoSpinFieldControl::queryInterface(rType); }
@@ -1123,7 +1136,7 @@ protected:
     ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper();
 
 public:
-                        UnoControlTimeFieldModel();
+                        UnoControlTimeFieldModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
                         UnoControlTimeFieldModel( const UnoControlTimeFieldModel& rModel ) : UnoControlModel( rModel ) {;}
 
     UnoControlModel*    Clone() const { return new UnoControlTimeFieldModel( *this ); }
@@ -1150,7 +1163,7 @@ private:
     sal_Int32       mnLast;
 
 public:
-                        UnoTimeFieldControl();
+                        UnoTimeFieldControl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
     ::rtl::OUString     GetComponentServiceName();
 
     ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return UnoSpinFieldControl::queryInterface(rType); }
@@ -1198,7 +1211,7 @@ protected:
     ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper();
 
 public:
-                UnoControlNumericFieldModel();
+                UnoControlNumericFieldModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
                 UnoControlNumericFieldModel( const UnoControlNumericFieldModel& rModel ) : UnoControlModel( rModel ) {;}
 
     UnoControlModel*    Clone() const { return new UnoControlNumericFieldModel( *this ); }
@@ -1225,7 +1238,7 @@ private:
     double mnLast;
 
 public:
-                        UnoNumericFieldControl();
+                        UnoNumericFieldControl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
     ::rtl::OUString     GetComponentServiceName();
 
     ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return UnoSpinFieldControl::queryInterface(rType); }
@@ -1275,7 +1288,7 @@ protected:
     ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper();
 
 public:
-                        UnoControlCurrencyFieldModel();
+                        UnoControlCurrencyFieldModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
                         UnoControlCurrencyFieldModel( const UnoControlCurrencyFieldModel& rModel ) : UnoControlModel( rModel ) {;}
 
     UnoControlModel*    Clone() const { return new UnoControlCurrencyFieldModel( *this ); }
@@ -1302,7 +1315,7 @@ private:
     double mnLast;
 
 public:
-                        UnoCurrencyFieldControl();
+                        UnoCurrencyFieldControl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
     ::rtl::OUString     GetComponentServiceName();
 
     ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return UnoSpinFieldControl::queryInterface(rType); }
@@ -1351,7 +1364,7 @@ protected:
     ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper();
 
 public:
-                        UnoControlPatternFieldModel();
+                        UnoControlPatternFieldModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
                         UnoControlPatternFieldModel( const UnoControlPatternFieldModel& rModel ) : UnoControlModel( rModel ) {;}
 
     UnoControlModel*    Clone() const { return new UnoControlPatternFieldModel( *this ); }
@@ -1377,7 +1390,7 @@ protected:
     void            ImplSetPeerProperty( const ::rtl::OUString& rPropName, const ::com::sun::star::uno::Any& rVal );
 
 public:
-                        UnoPatternFieldControl();
+                        UnoPatternFieldControl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
     ::rtl::OUString     GetComponentServiceName();
 
     ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return UnoSpinFieldControl::queryInterface(rType); }
@@ -1412,7 +1425,7 @@ protected:
     ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper();
 
 public:
-                        UnoControlProgressBarModel();
+                        UnoControlProgressBarModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
                         UnoControlProgressBarModel( const UnoControlProgressBarModel& rModel ) : UnoControlModel( rModel ) {;}
 
     UnoControlModel*    Clone() const { return new UnoControlProgressBarModel( *this ); }
@@ -1434,7 +1447,7 @@ class UnoProgressBarControl :   public UnoControlBase,
                                 public ::com::sun::star::awt::XProgressBar
 {
 public:
-                                UnoProgressBarControl();
+                                UnoProgressBarControl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
     ::rtl::OUString             GetComponentServiceName();
 
     ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return UnoControlBase::queryInterface(rType); }
@@ -1468,7 +1481,7 @@ protected:
     ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper();
 
 public:
-                        UnoControlFixedLineModel();
+                        UnoControlFixedLineModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
                         UnoControlFixedLineModel( const UnoControlFixedLineModel& rModel ) : UnoControlModel( rModel ) {;}
 
     UnoControlModel*    Clone() const { return new UnoControlFixedLineModel( *this ); }
@@ -1490,7 +1503,7 @@ public:
 class UnoFixedLineControl : public UnoControlBase
 {
 public:
-                        UnoFixedLineControl();
+                        UnoFixedLineControl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
     ::rtl::OUString     GetComponentServiceName();
 
     sal_Bool SAL_CALL isTransparent(  ) throw(::com::sun::star::uno::RuntimeException);

@@ -89,26 +89,26 @@ public:
     void                    Set( long nStart, long nEnd );
     void                    Set( const PolyScanSegment& rSegment ) { Set( rSegment.mnStart, rSegment.mnEnd ); }
 
-    inline BOOL             GetFirstX( long& rX );
-    inline BOOL             GetNextX( long& rX );
+    inline sal_Bool             GetFirstX( long& rX );
+    inline sal_Bool             GetNextX( long& rX );
 
-    BOOL                    GetFirstSegment( PolyScanSegment& rSegment );
-    BOOL                    GetNextSegment( PolyScanSegment& rSegment );
+    sal_Bool                    GetFirstSegment( PolyScanSegment& rSegment );
+    sal_Bool                    GetNextSegment( PolyScanSegment& rSegment );
 };
 
 // ------------------------------------------------------------------------
 
-inline BOOL PolyScanline::GetFirstX( long& rX )
+inline sal_Bool PolyScanline::GetFirstX( long& rX )
 {
     mpAct = mpFirst;
-    return( mpAct ? ( rX = mpAct->mnX, mpAct = mpAct->mpNext, TRUE ) : FALSE );
+    return( mpAct ? ( rX = mpAct->mnX, mpAct = mpAct->mpNext, sal_True ) : sal_False );
 }
 
 // ------------------------------------------------------------------------
 
-inline BOOL PolyScanline::GetNextX( long& rX )
+inline sal_Bool PolyScanline::GetNextX( long& rX )
 {
-    return( mpAct ? ( rX = mpAct->mnX, mpAct = mpAct->mpNext, TRUE ) : FALSE );
+    return( mpAct ? ( rX = mpAct->mnX, mpAct = mpAct->mpNext, sal_True ) : sal_False );
 }
 
 // ---------------
@@ -148,8 +148,8 @@ public:
 
     Rectangle       GetBoundRect() const { return Rectangle( mnLeft, mnTop, mnRight, mnBottom ); }
 
-    ULONG           Count() const { return Height(); }
-    PolyScanline*   operator[]( ULONG nPos ) const;
+    sal_uLong           Count() const { return Height(); }
+    PolyScanline*   operator[]( sal_uLong nPos ) const;
 };
 
 #endif // _SV_POLYSCAN_HXX

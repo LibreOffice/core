@@ -52,7 +52,7 @@ ResData::~ResData()
 {
     if ( pStringList ) {
         // delete existing res. of type StringList
-        for ( ULONG i = 0; i < pStringList->Count(); i++ ) {
+        for ( sal_uLong i = 0; i < pStringList->Count(); i++ ) {
             ExportListEntry* test = pStringList->GetObject( i );
             if( test != NULL ) delete test;
         }
@@ -60,7 +60,7 @@ ResData::~ResData()
     }
     if ( pFilterList ) {
         // delete existing res. of type FilterList
-        for ( ULONG i = 0; i < pFilterList->Count(); i++ ) {
+        for ( sal_uLong i = 0; i < pFilterList->Count(); i++ ) {
             ExportListEntry* test = pFilterList->GetObject( i );
             delete test;
         }
@@ -68,7 +68,7 @@ ResData::~ResData()
     }
     if ( pItemList ) {
         // delete existing res. of type ItemList
-        for ( ULONG i = 0; i < pItemList->Count(); i++ ) {
+        for ( sal_uLong i = 0; i < pItemList->Count(); i++ ) {
             ExportListEntry* test = pItemList->GetObject( i );
             delete test;
         }
@@ -76,7 +76,7 @@ ResData::~ResData()
     }
     if ( pUIEntries ) {
         // delete existing res. of type UIEntries
-        for ( ULONG i = 0; i < pUIEntries->Count(); i++ ) {
+        for ( sal_uLong i = 0; i < pUIEntries->Count(); i++ ) {
             ExportListEntry* test = pUIEntries->GetObject( i );
             delete test;
         }
@@ -145,8 +145,8 @@ void Export::QuotHTMLXRM( ByteString &rString )
 /*****************************************************************************/
 {
     ByteString sReturn;
-    //BOOL bBreak = FALSE;
-    for ( USHORT i = 0; i < rString.Len(); i++ ) {
+    //sal_Bool bBreak = sal_False;
+    for ( sal_uInt16 i = 0; i < rString.Len(); i++ ) {
         ByteString sTemp = rString.Copy( i );
         if ( sTemp.Search( "<Arg n=" ) == 0 ) {
             while ( i < rString.Len() && rString.GetChar( i ) != '>' ) {
@@ -214,7 +214,7 @@ void Export::QuotHTML( ByteString &rString )
 /*****************************************************************************/
 {
     ByteString sReturn;
-    for ( USHORT i = 0; i < rString.Len(); i++ ) {
+    for ( sal_uInt16 i = 0; i < rString.Len(); i++ ) {
         ByteString sTemp = rString.Copy( i );
         if ( sTemp.Search( "<Arg n=" ) == 0 ) {
             while ( i < rString.Len() && rString.GetChar( i ) != '>' ) {
@@ -444,7 +444,7 @@ void Export::InitLanguages( bool bMergeMode ){
     if( !isInitialized ){
         ByteString sTmp;
         ByteStringBoolHashMap aEnvLangs;
-        for ( USHORT x = 0; x < sLanguages.GetTokenCount( ',' ); x++ ){
+        for ( sal_uInt16 x = 0; x < sLanguages.GetTokenCount( ',' ); x++ ){
             sTmp = sLanguages.GetToken( x, ',' ).GetToken( 0, '=' );
             sTmp.EraseLeadingAndTrailingChars();
             if( bMergeMode && !isAllowed( sTmp ) ){}
@@ -461,7 +461,7 @@ void Export::InitForcedLanguages( bool bMergeMode ){
 /*****************************************************************************/
     ByteString sTmp;
     ByteStringBoolHashMap aEnvLangs;
-    for ( USHORT x = 0; x < sForcedLanguages.GetTokenCount( ',' ); x++ ){
+    for ( sal_uInt16 x = 0; x < sForcedLanguages.GetTokenCount( ',' ); x++ ){
         sTmp = sForcedLanguages.GetToken( x, ',' ).GetToken( 0, '=' );
         sTmp.EraseLeadingAndTrailingChars();
         if( bMergeMode && isAllowed( sTmp ) ){}
@@ -558,7 +558,7 @@ void Export::FillInListFallbacks(
 /*****************************************************************************/
 {
 
-    for ( ULONG i = 0; i < pList->Count(); i++ ) {
+    for ( sal_uLong i = 0; i < pList->Count(); i++ ) {
         ExportListEntry *pEntry = pList->GetObject( i );
         if ( !( *pEntry )[ nSource ].Len()){
              ( *pEntry )[ nSource ] = ( *pEntry )[ nFallback ];
@@ -582,7 +582,7 @@ ByteString Export::GetTimeStamp()
 }
 
 /*****************************************************************************/
-BOOL Export::ConvertLineEnds(
+sal_Bool Export::ConvertLineEnds(
     ByteString sSource, ByteString sDestination )
 /*****************************************************************************/
 {
@@ -591,11 +591,11 @@ BOOL Export::ConvertLineEnds(
 
     SvFileStream aSource( sSourceFile, STREAM_READ );
     if ( !aSource.IsOpen())
-        return FALSE;
+        return sal_False;
     SvFileStream aDestination( sDestinationFile, STREAM_STD_WRITE | STREAM_TRUNC );
     if ( !aDestination.IsOpen()) {
         aSource.Close();
-        return FALSE;
+        return sal_False;
     }
 
     ByteString sLine;
@@ -613,7 +613,7 @@ BOOL Export::ConvertLineEnds(
     aSource.Close();
     aDestination.Close();
 
-    return TRUE;
+    return sal_True;
 }
 
 /*****************************************************************************/
@@ -623,7 +623,7 @@ ByteString Export::GetNativeFile( ByteString sSource )
     DirEntry aTemp( GetTempFile());
     ByteString sReturn( aTemp.GetFull(), RTL_TEXTENCODING_ASCII_US );
 
-    for ( USHORT i = 0; i < 10; i++ )
+    for ( sal_uInt16 i = 0; i < 10; i++ )
         if ( ConvertLineEnds( sSource, sReturn ))
             return sReturn;
 

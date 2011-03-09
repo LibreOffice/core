@@ -53,7 +53,7 @@ void MoreButton::ImplInit( Window* pParent, WinBits nStyle )
     mpMBData     = new ImplMoreButtonData;
     mnDelta      = 0;
     meUnit       = MAP_PIXEL;
-    mbState      = FALSE;
+    mbState      = sal_False;
 
     mpMBData->mpItemList = NULL;
 
@@ -67,7 +67,7 @@ void MoreButton::ImplInit( Window* pParent, WinBits nStyle )
     ShowState();
 
     SetSymbolAlign( SYMBOLALIGN_RIGHT );
-    ImplSetSmallSymbol( TRUE );
+    ImplSetSmallSymbol( sal_True );
 
     if ( ! ( nStyle & ( WB_RIGHT | WB_LEFT ) ) )
     {
@@ -119,12 +119,12 @@ void MoreButton::ImplLoadRes( const ResId& rResId )
 {
     PushButton::ImplLoadRes( rResId );
 
-    ULONG nObjMask = ReadLongRes();
+    sal_uLong nObjMask = ReadLongRes();
 
     if ( nObjMask & RSC_MOREBUTTON_STATE )
     {
         // Nicht Methode rufen, da Dialog nicht umgeschaltet werden soll
-        mbState = (BOOL)ReadShortRes();
+        mbState = (sal_Bool)ReadShortRes();
         // SetText( GetText() );
         ShowState();
     }

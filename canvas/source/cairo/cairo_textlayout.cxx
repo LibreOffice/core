@@ -81,7 +81,7 @@ namespace cairocanvas
                               sal_Int8      nTextDirection )
         {
             // TODO(P3): avoid if already correctly set
-            ULONG nLayoutMode;
+            sal_uLong nLayoutMode;
             switch( nTextDirection )
             {
                 default:
@@ -104,6 +104,11 @@ namespace cairocanvas
             // set calculated layout mode. Origin is always the left edge,
             // as required at the API spec
             rOutDev.SetLayoutMode( nLayoutMode | TEXT_LAYOUT_TEXTORIGIN_LEFT );
+        }
+
+        bool compareFallbacks(const SystemGlyphData&rA, const SystemGlyphData &rB)
+        {
+            return rA.fallbacklevel < rB.fallbacklevel;
         }
     }
 
@@ -363,7 +368,6 @@ namespace cairocanvas
         return true;
     }
 
-
   /**
    * TextLayout::draw
    *
@@ -404,18 +408,41 @@ namespace cairocanvas
                                                       ::canvas::tools::numeric_cast<USHORT>(maText.Length),
                                                       maLogicalAdvancements.getLength() ? aOffsets.get() : NULL);
 
+        // Sort them so that all glyphs on the same glyph fallback level are consecutive
+        std::sort(aSysLayoutData.rGlyphData.begin(), aSysLayoutData.rGlyphData.end(), compareFallbacks);
+        bool bCairoRenderable = true;
+
+        //Pull all the fonts we need to render the text
+        typedef std::pair<SystemFontData,int> FontLevel;
+        typedef std::vector<FontLevel> FontLevelVector;
+        FontLevelVector aFontData;
+        SystemGlyphDataVector::const_iterator aIter=aSysLayoutData.rGlyphData.begin();
+        const SystemGlyphDataVector::const_iterator aEnd=aSysLayoutData.rGlyphData.end();
+        for( ; aIter != aEnd; ++aIter )
+        {
+            if( aFontData.empty() || aIter->fallbacklevel != aFontData.back().second )
+            {
+                aFontData.push_back(FontLevel(rOutDev.GetSysFontData(aIter->fallbacklevel),
+                                              aIter->fallbacklevel));
+                if( !isCairoRenderable(aFontData.back().first) )
+                {
+                    bCairoRenderable = false;
+                    OSL_TRACE(":cairocanvas::TextLayout::draw(S,O,p,v,r): VCL FALLBACK %s%s%s%s - %s",
+                              maLogicalAdvancements.getLength() ? "ADV " : "",
+                              aFontData.back().first.bAntialias ? "AA " : "",
+                              aFontData.back().first.bFakeBold ? "FB " : "",
+                              aFontData.back().first.bFakeItalic ? "FI " : "",
+                              ::rtl::OUStringToOString( maText.Text.copy( maText.StartPosition, maText.Length ),
+                                                        RTL_TEXTENCODING_UTF8 ).getStr());
+                    break;
+                }
+            }
+        }
+
         // The ::GetSysTextLayoutData(), i.e. layouting of text to glyphs can change the font being used.
         // The fallback checks need to be done after final font is known.
-        if (!isCairoRenderable(aSysLayoutData.aSysFontData))    // VCL FALLBACKS
+        if (!bCairoRenderable)    // VCL FALLBACKS
         {
-            OSL_TRACE(":cairocanvas::TextLayout::draw(S,O,p,v,r): VCL FALLBACK %s%s%s%s - %s",
-                      maLogicalAdvancements.getLength() ? "ADV " : "",
-                      aSysLayoutData.aSysFontData.bAntialias ? "AA " : "",
-                      aSysLayoutData.aSysFontData.bFakeBold ? "FB " : "",
-                      aSysLayoutData.aSysFontData.bFakeItalic ? "FI " : "",
-                      ::rtl::OUStringToOString( maText.Text.copy( maText.StartPosition, maText.Length ),
-                                                RTL_TEXTENCODING_UTF8 ).getStr());
-
             if (maLogicalAdvancements.getLength())        // VCL FALLBACK - with glyph advances
             {
                 rOutDev.DrawTextArray( rOutpos, maText.Text, aOffsets.get(),
@@ -438,144 +465,158 @@ namespace cairocanvas
          * Setup platform independent glyph vector into cairo-based glyphs vector.
          **/
 
-        // setup glyphs
-        std::vector<cairo_glyph_t> cairo_glyphs;
-        cairo_glyphs.reserve( 256 );
-
-        for( int nStart = 0; nStart < (int) aSysLayoutData.rGlyphData.size(); nStart++ )
+        // Loop through the fonts used and render the matching glyphs for each
+        FontLevelVector::const_iterator aFontDataIter = aFontData.begin();
+        const FontLevelVector::const_iterator aFontDataEnd = aFontData.end();
+        for( ; aFontDataIter != aFontDataEnd; ++aFontDataIter )
         {
-            cairo_glyph_t aGlyph;
-            SystemGlyphData systemGlyph = aSysLayoutData.rGlyphData.at(nStart);
-            aGlyph.index = systemGlyph.index;
-#ifdef CAIRO_HAS_WIN32_SURFACE
-            // Cairo requires standard glyph indexes (ETO_GLYPH_INDEX), while vcl/win/* uses ucs4 chars.
-            // Convert to standard indexes
-            aGlyph.index = cairo::ucs4toindex((unsigned int) aGlyph.index, aSysLayoutData.aSysFontData.hFont);
-#endif
-            aGlyph.x = systemGlyph.x;
-            aGlyph.y = systemGlyph.y;
-            cairo_glyphs.push_back(aGlyph);
-        }
+            const SystemFontData &rSysFontData = aFontDataIter->first;
 
-        if (cairo_glyphs.empty()) return true;  //true or false??
+            // setup glyphs
+            std::vector<cairo_glyph_t> cairo_glyphs;
+            cairo_glyphs.reserve( 256 );
 
-        /**
-         * Setup font
-         **/
-        cairo_font_face_t* font_face = NULL;
+            SystemGlyphDataVector::const_iterator aIter=aSysLayoutData.rGlyphData.begin();
+            const SystemGlyphDataVector::const_iterator aEnd=aSysLayoutData.rGlyphData.end();
+            for( ; aIter != aEnd; ++aIter )
+            {
+                SystemGlyphData systemGlyph = *aIter;
+                if( systemGlyph.fallbacklevel != aFontDataIter->second )
+                    continue;
 
-#ifdef CAIRO_HAS_QUARTZ_SURFACE
-        // TODO: use cairo_quartz_font_face_create_for_cgfont(cgFont)
-        //       when CGFont (Mac OS X 10.5 API) is provided by the AQUA VCL backend.
-        font_face = cairo_quartz_font_face_create_for_atsu_font_id((ATSUFontID) aSysLayoutData.aSysFontData.aATSUFontID);
-
-#elif defined CAIRO_HAS_WIN32_SURFACE
-  #if (OSL_DEBUG_LEVEL > 1)
-        GetObjectW( aSysLayoutData.aSysFontData.hFont, sizeof(logfont), &logfont );
-  #endif
-        // Note: cairo library uses logfont fallbacks when lfEscapement, lfOrientation and lfWidth are not zero.
-        // VCL always has non-zero value for lfWidth
-        font_face = cairo_win32_font_face_create_for_hfont(aSysLayoutData.aSysFontData.hFont);
-
-#elif defined CAIRO_HAS_XLIB_SURFACE
-        font_face = cairo_ft_font_face_create_for_ft_face((FT_Face)aSysLayoutData.aSysFontData.nFontId,
-                                                          aSysLayoutData.aSysFontData.nFontFlags);
-#else
-# error Native API needed.
-#endif
-
-        CairoSharedPtr pSCairo = pSurface->getCairo();
-
-        cairo_set_font_face( pSCairo.get(), font_face);
-
-        // create default font options. cairo_get_font_options() does not retrieve the surface defaults,
-        // only what has been set before with cairo_set_font_options()
-        cairo_font_options_t* options = cairo_font_options_create();
-        if (aSysLayoutData.aSysFontData.bAntialias) {
-            // CAIRO_ANTIALIAS_GRAY provides more similar result to VCL Canvas,
-            // so we're not using CAIRO_ANTIALIAS_SUBPIXEL
-            cairo_font_options_set_antialias(options, CAIRO_ANTIALIAS_GRAY);
-        }
-        cairo_set_font_options( pSCairo.get(), options);
-
-        // Font color
-        Color mTextColor = rOutDev.GetTextColor();
-        cairo_set_source_rgb(pSCairo.get(),
-                             mTextColor.GetRed()/255.0,
-                             mTextColor.GetGreen()/255.0,
-                             mTextColor.GetBlue()/255.0);
-
-        // Font rotation and scaling
-        cairo_matrix_t m;
-        Font aFont = rOutDev.GetFont();
-        FontMetric aMetric( rOutDev.GetFontMetric(aFont) );
-        long nWidth = 0;
-
-        // width calculation is deep magic and platform/font dependant.
-        // width == 0 means no scaling, and usually width == height means the same.
-        // Other values mean horizontal scaling (narrow or stretching)
-        // see issue #101566
-
-        //proper scale calculation across platforms
-        if (aFont.GetWidth() == 0) {
-            nWidth = aFont.GetHeight();
-        } else {
-            // any scaling needs to be relative to the platform-dependent definition
-            // of height of the font
-            nWidth = aFont.GetWidth() * aFont.GetHeight() / aMetric.GetHeight();
-        }
-
-        cairo_matrix_init_identity(&m);
-
-        if (aSysLayoutData.orientation) cairo_matrix_rotate(&m, (3600 - aSysLayoutData.orientation) * M_PI / 1800.0);
-
-        cairo_matrix_scale(&m, nWidth, aFont.GetHeight());
-
-        //faux italics
-        if (aSysLayoutData.aSysFontData.bFakeItalic) m.xy = -m.xx * 0x6000L / 0x10000L;
-
-        cairo_set_font_matrix(pSCairo.get(), &m);
-
-        OSL_TRACE("\r\n:cairocanvas::TextLayout::draw(S,O,p,v,r): Size:(%d,%d), W:%d->%d, Pos (%d,%d), G(%d,%d,%d) %s%s%s%s || Name:%s - %s",
-                  aFont.GetWidth(),
-                  aFont.GetHeight(),
-                  aMetric.GetWidth(),
-                  nWidth,
-                  (int) rOutpos.X(),
-                  (int) rOutpos.Y(),
-                  cairo_glyphs[0].index, cairo_glyphs[1].index, cairo_glyphs[2].index,
-                  maLogicalAdvancements.getLength() ? "ADV " : "",
-                  aSysLayoutData.aSysFontData.bAntialias ? "AA " : "",
-                  aSysLayoutData.aSysFontData.bFakeBold ? "FB " : "",
-                  aSysLayoutData.aSysFontData.bFakeItalic ? "FI " : "",
-#if (defined CAIRO_HAS_WIN32_SURFACE) && (OSL_DEBUG_LEVEL > 1)
-                  ::rtl::OUStringToOString( reinterpret_cast<const sal_Unicode*> (logfont.lfFaceName), RTL_TEXTENCODING_UTF8 ).getStr(),
-#else
-                  ::rtl::OUStringToOString( aFont.GetName(), RTL_TEXTENCODING_UTF8 ).getStr(),
-#endif
-                  ::rtl::OUStringToOString( maText.Text.copy( maText.StartPosition, maText.Length ),
-                                            RTL_TEXTENCODING_UTF8 ).getStr()
-            );
-
-        cairo_show_glyphs(pSCairo.get(), &cairo_glyphs[0], cairo_glyphs.size());
-
-        //faux bold
-        if (aSysLayoutData.aSysFontData.bFakeBold) {
-            double bold_dx = 0.5 * sqrt( 0.7 * aFont.GetHeight() );
-            int total_steps = 2 * ((int) (bold_dx + 0.5));
-
-            // loop to draw the text for every half pixel of displacement
-            for (int nSteps = 0; nSteps < total_steps; nSteps++) {
-                for(int nGlyphIdx = 0; nGlyphIdx < (int) cairo_glyphs.size(); nGlyphIdx++) {
-                    cairo_glyphs[nGlyphIdx].x += bold_dx * nSteps / total_steps;
-                }
-                cairo_show_glyphs(pSCairo.get(), &cairo_glyphs[0], cairo_glyphs.size());
+                cairo_glyph_t aGlyph;
+                aGlyph.index = systemGlyph.index;
+    #ifdef CAIRO_HAS_WIN32_SURFACE
+                // Cairo requires standard glyph indexes (ETO_GLYPH_INDEX), while vcl/win/* uses ucs4 chars.
+                // Convert to standard indexes
+                aGlyph.index = cairo::ucs4toindex((unsigned int) aGlyph.index, rSysFontData.hFont);
+    #endif
+                aGlyph.x = systemGlyph.x;
+                aGlyph.y = systemGlyph.y;
+                cairo_glyphs.push_back(aGlyph);
             }
-            OSL_TRACE(":cairocanvas::TextLayout::draw(S,O,p,v,r): FAKEBOLD - dx:%d", (int) bold_dx);
-        }
 
-        cairo_restore( pSCairo.get() );
-        cairo_font_face_destroy(font_face);
+            if (cairo_glyphs.empty())
+                continue;
+
+            /**
+             * Setup font
+             **/
+            cairo_font_face_t* font_face = NULL;
+
+    #ifdef CAIRO_HAS_QUARTZ_SURFACE
+            // TODO: use cairo_quartz_font_face_create_for_cgfont(cgFont)
+            //       when CGFont (Mac OS X 10.5 API) is provided by the AQUA VCL backend.
+            font_face = cairo_quartz_font_face_create_for_atsu_font_id((ATSUFontID) rSysFontData.aATSUFontID);
+
+    #elif defined CAIRO_HAS_WIN32_SURFACE
+      #if (OSL_DEBUG_LEVEL > 1)
+            GetObjectW( rSysFontData.hFont, sizeof(logfont), &logfont );
+      #endif
+            // Note: cairo library uses logfont fallbacks when lfEscapement, lfOrientation and lfWidth are not zero.
+            // VCL always has non-zero value for lfWidth
+            font_face = cairo_win32_font_face_create_for_hfont(rSysFontData.hFont);
+
+    #elif defined CAIRO_HAS_XLIB_SURFACE
+            font_face = cairo_ft_font_face_create_for_ft_face((FT_Face)rSysFontData.nFontId,
+                                                              rSysFontData.nFontFlags);
+    #else
+    # error Native API needed.
+    #endif
+
+            CairoSharedPtr pSCairo = pSurface->getCairo();
+
+            cairo_set_font_face( pSCairo.get(), font_face);
+
+            // create default font options. cairo_get_font_options() does not retrieve the surface defaults,
+            // only what has been set before with cairo_set_font_options()
+            cairo_font_options_t* options = cairo_font_options_create();
+            if (rSysFontData.bAntialias) {
+                // CAIRO_ANTIALIAS_GRAY provides more similar result to VCL Canvas,
+                // so we're not using CAIRO_ANTIALIAS_SUBPIXEL
+                cairo_font_options_set_antialias(options, CAIRO_ANTIALIAS_GRAY);
+            }
+            cairo_set_font_options( pSCairo.get(), options);
+
+            // Font color
+            Color mTextColor = rOutDev.GetTextColor();
+            cairo_set_source_rgb(pSCairo.get(),
+                                 mTextColor.GetRed()/255.0,
+                                 mTextColor.GetGreen()/255.0,
+                                 mTextColor.GetBlue()/255.0);
+
+            // Font rotation and scaling
+            cairo_matrix_t m;
+            Font aFont = rOutDev.GetFont();
+            FontMetric aMetric( rOutDev.GetFontMetric(aFont) );
+            long nWidth = 0;
+
+            // width calculation is deep magic and platform/font dependant.
+            // width == 0 means no scaling, and usually width == height means the same.
+            // Other values mean horizontal scaling (narrow or stretching)
+            // see issue #101566
+
+            //proper scale calculation across platforms
+            if (aFont.GetWidth() == 0) {
+                nWidth = aFont.GetHeight();
+            } else {
+                // any scaling needs to be relative to the platform-dependent definition
+                // of height of the font
+                nWidth = aFont.GetWidth() * aFont.GetHeight() / aMetric.GetHeight();
+            }
+
+            cairo_matrix_init_identity(&m);
+
+            if (aSysLayoutData.orientation) cairo_matrix_rotate(&m, (3600 - aSysLayoutData.orientation) * M_PI / 1800.0);
+
+            cairo_matrix_scale(&m, nWidth, aFont.GetHeight());
+
+            //faux italics
+            if (rSysFontData.bFakeItalic) m.xy = -m.xx * 0x6000L / 0x10000L;
+
+            cairo_set_font_matrix(pSCairo.get(), &m);
+
+            OSL_TRACE("\r\n:cairocanvas::TextLayout::draw(S,O,p,v,r): Size:(%d,%d), W:%d->%d, Pos (%d,%d), G(%d,%d,%d) %s%s%s%s || Name:%s - %s",
+                      aFont.GetWidth(),
+                      aFont.GetHeight(),
+                      aMetric.GetWidth(),
+                      nWidth,
+                      (int) rOutpos.X(),
+                      (int) rOutpos.Y(),
+                      cairo_glyphs[0].index, cairo_glyphs[1].index, cairo_glyphs[2].index,
+                      maLogicalAdvancements.getLength() ? "ADV " : "",
+                      rSysFontData.bAntialias ? "AA " : "",
+                      rSysFontData.bFakeBold ? "FB " : "",
+                      rSysFontData.bFakeItalic ? "FI " : "",
+    #if (defined CAIRO_HAS_WIN32_SURFACE) && (OSL_DEBUG_LEVEL > 1)
+                      ::rtl::OUStringToOString( reinterpret_cast<const sal_Unicode*> (logfont.lfFaceName), RTL_TEXTENCODING_UTF8 ).getStr(),
+    #else
+                      ::rtl::OUStringToOString( aFont.GetName(), RTL_TEXTENCODING_UTF8 ).getStr(),
+    #endif
+                      ::rtl::OUStringToOString( maText.Text.copy( maText.StartPosition, maText.Length ),
+                                                RTL_TEXTENCODING_UTF8 ).getStr()
+                );
+
+            cairo_show_glyphs(pSCairo.get(), &cairo_glyphs[0], cairo_glyphs.size());
+
+            //faux bold
+            if (rSysFontData.bFakeBold) {
+                double bold_dx = 0.5 * sqrt( 0.7 * aFont.GetHeight() );
+                int total_steps = 2 * ((int) (bold_dx + 0.5));
+
+                // loop to draw the text for every half pixel of displacement
+                for (int nSteps = 0; nSteps < total_steps; nSteps++) {
+                    for(int nGlyphIdx = 0; nGlyphIdx < (int) cairo_glyphs.size(); nGlyphIdx++) {
+                        cairo_glyphs[nGlyphIdx].x += bold_dx * nSteps / total_steps;
+                    }
+                    cairo_show_glyphs(pSCairo.get(), &cairo_glyphs[0], cairo_glyphs.size());
+                }
+                OSL_TRACE(":cairocanvas::TextLayout::draw(S,O,p,v,r): FAKEBOLD - dx:%d", (int) bold_dx);
+            }
+
+            cairo_restore( pSCairo.get() );
+            cairo_font_face_destroy(font_face);
+        }
         return true;
     }
 

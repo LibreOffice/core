@@ -116,7 +116,7 @@ public: // TODO: hide members behind accessor methods
 // TODO: make cloning cheaper
 
 // abstract base class for physical font faces
-class VCL_DLLPUBLIC ImplFontData : public ImplDevFontAttributes
+class VCL_PLUGIN_PUBLIC ImplFontData : public ImplDevFontAttributes
 {
 public:
     // by using an ImplFontData object as a factory for its corresponding
@@ -185,7 +185,7 @@ public: // TODO: change to private
 // TODO: merge with ImplFontCache
 // TODO: rename to LogicalFontManager
 
-class VCL_DLLPUBLIC ImplDevFontList
+class VCL_PLUGIN_PUBLIC ImplDevFontList
 {
 private:
     friend class WinGlyphFallbackSubstititution;
@@ -235,7 +235,7 @@ protected:
     ImplDevFontListData*    ImplFindByTokenNames( const String& ) const;
     ImplDevFontListData*    ImplFindByAliasName( const String& rSearchName, const String& rShortName ) const;
     ImplDevFontListData*    ImplFindBySubstFontAttr( const utl::FontNameAttr& ) const;
-    ImplDevFontListData*    ImplFindByAttributes( ULONG nSearchType, FontWeight, FontWidth,
+    ImplDevFontListData*    ImplFindByAttributes( sal_uLong nSearchType, FontWeight, FontWidth,
                                 FontFamily, FontItalic, const String& rSearchFamily ) const;
     ImplDevFontListData*    FindDefaultFont() const;
 
@@ -254,8 +254,8 @@ private:
 
 struct ImplKernPairData
 {
-    USHORT              mnChar1;
-    USHORT              mnChar2;
+    sal_uInt16              mnChar1;
+    sal_uInt16              mnChar2;
     long                mnKern;
 };
 
@@ -324,7 +324,7 @@ public: // TODO: hide members behind accessor methods
 // TODO: rename ImplFontEntry to LogicalFontInstance
 // TODO: allow sharing of metrics for related fonts
 
-class VCL_DLLPUBLIC ImplFontEntry
+class VCL_PLUGIN_PUBLIC ImplFontEntry
 {
 public:
     explicit            ImplFontEntry( const ImplFontSelectData& );
@@ -335,8 +335,8 @@ public: // TODO: make data members private
     ImplFontMetricData  maMetric;           // Font Metric
     const ConvertChar*  mpConversion;       // used e.g. for StarBats->StarSymbol
     long                mnLineHeight;
-    ULONG               mnRefCount;
-    USHORT              mnSetFontFlags;     // Flags returned by SalGraphics::SetFont()
+    sal_uLong               mnRefCount;
+    sal_uInt16              mnSetFontFlags;     // Flags returned by SalGraphics::SetFont()
     short               mnOwnOrientation;   // text angle if lower layers don't rotate text themselves
     short               mnOrientation;      // text angle in 3600 system
     bool                mbInit;             // true if maMetric member is valid
@@ -393,7 +393,7 @@ public:
     void                AddLine( ImplTextLineInfo* pLine );
     void                Clear();
 
-    ImplTextLineInfo*   GetLine( USHORT nLine ) const
+    ImplTextLineInfo*   GetLine( sal_uInt16 nLine ) const
                             { return mpLines[nLine]; }
     xub_StrLen          Count() const { return mnLines; }
 

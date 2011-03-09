@@ -49,7 +49,7 @@ protected:
     Link            maDownHdlLink;
     Link            maFirstHdlLink;
     Link            maLastHdlLink;
-    BOOL            mbRepeat:1,
+    sal_Bool            mbRepeat:1,
                     mbSpin:1,
                     mbInitialUp:1,
                     mbInitialDown:1,
@@ -81,7 +81,7 @@ public:
                     SpinField( Window* pParent, const ResId& rResId );
                     ~SpinField();
 
-    virtual BOOL    ShowDropDown( BOOL bShow );
+    virtual sal_Bool    ShowDropDown( sal_Bool bShow );
 
     virtual void    Up();
     virtual void    Down();
@@ -92,7 +92,7 @@ public:
     virtual void    MouseButtonUp( const MouseEvent& rMEvt );
     virtual void    MouseMove( const MouseEvent& rMEvt );
     virtual void    Paint( const Rectangle& rRect );
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG nFlags );
+    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
     virtual void    Resize();
     virtual void    StateChanged( StateChangedType nType );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
@@ -109,7 +109,7 @@ public:
 
     virtual Size    CalcMinimumSize() const;
     virtual Size    GetOptimalSize(WindowSizeType eType) const;
-    virtual Size    CalcSize( USHORT nChars ) const;
+    virtual Size    CalcSize( sal_uInt16 nChars ) const;
 };
 
 #endif // _SV_SPINFLD_HXX

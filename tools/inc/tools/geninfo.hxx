@@ -62,7 +62,7 @@ public:
     GenericInformation( const ByteString &rKey, const ByteString &rValue,
                         GenericInformationList *pParentList = NULL,
                         GenericInformationList *pSubInfos = NULL );
-    GenericInformation( const GenericInformation& rInf, BOOL bCopySubs = TRUE);
+    GenericInformation( const GenericInformation& rInf, sal_Bool bCopySubs = sal_True);
 
     ~GenericInformation();
 
@@ -73,18 +73,18 @@ public:
   void SetComment( const ByteString &rComment ) { sComment = rComment; }
 
     // this methods used to handle sub informations
-    BOOL InsertSubInfo( GenericInformation *pInfo );
+    sal_Bool InsertSubInfo( GenericInformation *pInfo );
   // siehe GenericInformationList
-  BOOL InsertSubInfo( const ByteString &rPathKey, const ByteString &rValue,
-              BOOL bSearchByPath = FALSE, BOOL bNewPath = FALSE);
-    void RemoveSubInfo( GenericInformation *pInfo, BOOL bDelete = FALSE );
-  //  void RemoveSelf( BOOL bDelete = FALSE ); // loescht sich selbst aus der Parentliste
+  sal_Bool InsertSubInfo( const ByteString &rPathKey, const ByteString &rValue,
+              sal_Bool bSearchByPath = sal_False, sal_Bool bNewPath = sal_False);
+    void RemoveSubInfo( GenericInformation *pInfo, sal_Bool bDelete = sal_False );
+  //  void RemoveSelf( sal_Bool bDelete = sal_False ); // loescht sich selbst aus der Parentliste
   // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  // bei bDelete = TRUE werden auch alle Sublisten UND DIE INFO SELBST geloescht.
+  // bei bDelete = sal_True werden auch alle Sublisten UND DIE INFO SELBST geloescht.
   // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-    GenericInformation *GetSubInfo( ByteString &rKey, BOOL bSearchByPath = FALSE,
-                    BOOL bCreatePath = FALSE );
+    GenericInformation *GetSubInfo( ByteString &rKey, sal_Bool bSearchByPath = sal_False,
+                    sal_Bool bCreatePath = sal_False );
                 // path can be something like this: src370/drives/o:
 
     void SetSubList( GenericInformationList *pSubList )
@@ -132,43 +132,43 @@ GenericLockInformation( const ByteString &rKey, const ByteString &rValue,
   /* der Schreibschutz darf nur aktiviert werden, wenn
    * der Status auf Lesen steht
    */
-  BOOL SetWriteLock(UINT32 nKey = 0) { return ((read==aLockState) &&
-                           (aLockState=writeonly, nLockKey=nKey, TRUE)); }
+  sal_Bool SetWriteLock(sal_uInt32 nKey = 0) { return ((read==aLockState) &&
+                           (aLockState=writeonly, nLockKey=nKey, sal_True)); }
   /* Schreibschutz darf nur geloest werden, wenn
    * der Schreibschutz drin ist, und
    * entweder der LockKey Null ist(Generalschluessel) oder der Key zum LockKey passt
    */
-  BOOL ReleaseWriteLock(UINT32 nKey = 0) { return ((writeonly==aLockState) &&
+  sal_Bool ReleaseWriteLock(sal_uInt32 nKey = 0) { return ((writeonly==aLockState) &&
                            (!nLockKey||nKey==nLockKey) &&
-                           (aLockState=read, nLockKey=0, TRUE)); } // setzt den zustand auf "read"
-  BOOL SetReadLock(UINT32 nKey = 0) { return ((read==aLockState) &&
-                          (aLockState=readonly, nLockKey=nKey, TRUE)); }
-  BOOL ReleaseReadLock(UINT32 nKey = 0) { return ((readonly==aLockState) &&
+                           (aLockState=read, nLockKey=0, sal_True)); } // setzt den zustand auf "read"
+  sal_Bool SetReadLock(sal_uInt32 nKey = 0) { return ((read==aLockState) &&
+                          (aLockState=readonly, nLockKey=nKey, sal_True)); }
+  sal_Bool ReleaseReadLock(sal_uInt32 nKey = 0) { return ((readonly==aLockState) &&
                           (!nLockKey||nKey==nLockKey) &&
-                          (aLockState=read, nLockKey=0, TRUE)); } // setzt den zustand auf "read"
+                          (aLockState=read, nLockKey=0, sal_True)); } // setzt den zustand auf "read"
 
   LockState GetLockState() const { return aLockState; }
-  BOOL IsWriteLocked() const { return (writeonly==aLockState); }
-  BOOL IsReadLocked() const { return (readonly==aLockState); }
-  BOOL IsNotLocked() const { return (read==aLockState); }
-  BOOL IsLocker( UINT32 nKey ) { return (nKey==nLockKey || !nLockKey); }
+  sal_Bool IsWriteLocked() const { return (writeonly==aLockState); }
+  sal_Bool IsReadLocked() const { return (readonly==aLockState); }
+  sal_Bool IsNotLocked() const { return (read==aLockState); }
+  sal_Bool IsLocker( sal_uInt32 nKey ) { return (nKey==nLockKey || !nLockKey); }
 
   /* wenn der Schreibschutz aktiviert wurde,
    * und bei vorhandenem Schreibschutz die Keys stimmen
    * rufe die Parentmethode auf */
-  BOOL InsertSubInfo( GenericInformation *pInfo, UINT32 nKey = 0 ) {
+  sal_Bool InsertSubInfo( GenericInformation *pInfo, sal_uInt32 nKey = 0 ) {
     return ((writeonly==aLockState) &&
         (!nLockKey || nKey==nLockKey) &&
-        (GenericInformation::InsertSubInfo( pInfo ), TRUE)); }
+        (GenericInformation::InsertSubInfo( pInfo ), sal_True)); }
 
-  BOOL InsertSubInfo( const ByteString &rPathKey, const ByteString &rValue, UINT32 nKey = 0,
-              BOOL bSearchByPath = FALSE, BOOL bNewPath = FALSE) {
+  sal_Bool InsertSubInfo( const ByteString &rPathKey, const ByteString &rValue, sal_uInt32 nKey = 0,
+              sal_Bool bSearchByPath = sal_False, sal_Bool bNewPath = sal_False) {
     return ((writeonly==aLockState) &&
         (!nLockKey || nKey==nLockKey) &&
-        (GenericInformation::InsertSubInfo( rPathKey, rValue, bSearchByPath, bNewPath ), TRUE)); }
+        (GenericInformation::InsertSubInfo( rPathKey, rValue, bSearchByPath, bNewPath ), sal_True)); }
   /* 29.jan.98: erweiterung um lesemoeglichkeit vom Lockclienten */
-  GenericInformation *GetSubInfo( ByteString &rKey, BOOL bSearchByPath = FALSE,
-                  BOOL bCreatePath = FALSE, UINT32 nKey = 0 ) {
+  GenericInformation *GetSubInfo( ByteString &rKey, sal_Bool bSearchByPath = sal_False,
+                  sal_Bool bCreatePath = sal_False, sal_uInt32 nKey = 0 ) {
     if (writeonly==aLockState && nLockKey && nKey!=nLockKey )
       return NULL;
     return GenericInformation::GetSubInfo(rKey, bSearchByPath, bCreatePath); }
@@ -177,7 +177,7 @@ GenericLockInformation( const ByteString &rKey, const ByteString &rValue,
 private:
 
   LockState aLockState;
-  UINT32    nLockKey;
+  sal_uInt32    nLockKey;
 };
 
 //
@@ -197,10 +197,10 @@ private:
 
 protected:
     // methods
-    ULONG InsertSorted( GenericInformation *pInfo, BOOL bOverwrite,
-                            ULONG nStart, ULONG nEnd );
-    GenericInformation *Search( ULONG &rPos, ByteString sKey,
-                            ULONG nStart, ULONG nEnd );
+    sal_uIntPtr InsertSorted( GenericInformation *pInfo, sal_Bool bOverwrite,
+                            sal_uIntPtr nStart, sal_uIntPtr nEnd );
+    GenericInformation *Search( sal_uIntPtr &rPos, ByteString sKey,
+                            sal_uIntPtr nStart, sal_uIntPtr nEnd );
 
 public:
     GenericInformationList( GenericInformation *pParent = NULL );
@@ -208,19 +208,19 @@ public:
     ~GenericInformationList();
 
     // this methods used to handle the informations using binary search
-    GenericInformation *GetInfo( ByteString &rKey, BOOL bSearchByPath = FALSE,
-                     BOOL bCreatePath = FALSE );
+    GenericInformation *GetInfo( ByteString &rKey, sal_Bool bSearchByPath = sal_False,
+                     sal_Bool bCreatePath = sal_False );
   /* path can be something like this: src370/drives/o:
    * bCreatePath will create the neccecary paths to the GI */
 
-    BOOL InsertInfo( GenericInformation *pInfo, BOOL bOverwrite = TRUE );
+    sal_Bool InsertInfo( GenericInformation *pInfo, sal_Bool bOverwrite = sal_True );
   /* legt eine GenericInformation im Baum an mit Key-Value
    * wenn bNewPath gesetzt, wird der nichtexistente Teil des Pfades neu kreiert
    * wenn bNewPath nicht gesetzt ist und ein Teil des Pfades nicht vorhanden ist,
-   * gibt die Methode FALSE zurueck.*/
-  BOOL InsertInfo( const ByteString &rPathKey, const ByteString &rValue,
-           BOOL bSearchByPath = FALSE, BOOL bNewPath = FALSE);
-    void RemoveInfo( GenericInformation *pInfo, BOOL bDelete = FALSE );
+   * gibt die Methode sal_False zurueck.*/
+  sal_Bool InsertInfo( const ByteString &rPathKey, const ByteString &rValue,
+           sal_Bool bSearchByPath = sal_False, sal_Bool bNewPath = sal_False);
+    void RemoveInfo( GenericInformation *pInfo, sal_Bool bDelete = sal_False );
 
     GenericInformation* SetOwner( GenericInformation *pNewOwner );
 

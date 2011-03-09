@@ -120,7 +120,7 @@ public:
     // ... als Enum pOptEnums ist ein HTMLOptionEnum-Array
     sal_uInt16 GetEnum( const HTMLOptionEnum *pOptEnums,
                         sal_uInt16 nDflt=0 ) const;
-    BOOL GetEnum( sal_uInt16 &rEnum, const HTMLOptionEnum *pOptEnums ) const;
+    sal_Bool GetEnum( sal_uInt16 &rEnum, const HTMLOptionEnum *pOptEnums ) const;
 
     // ... und als ein par spezielle Enums
     HTMLInputType GetInputType() const;                 // <INPUT TYPE=...>
@@ -134,20 +134,20 @@ SV_DECL_PTRARR(HTMLOptions,HTMLOptionPtr,16,16)
 
 class SVT_DLLPUBLIC HTMLParser : public SvParser
 {
-    BOOL bNewDoc        : 1;        // neues Doc lesen ?
-    BOOL bIsInHeader    : 1;        // scanne Header-Bereich
-    BOOL bIsInBody      : 1;        // scanne Body-Bereich
-    BOOL bReadListing   : 1;        // Lese Listings
-    BOOL bReadXMP       : 1;        // Lese XMP
-    BOOL bReadPRE       : 1;        // Lese preformatted Text
-    BOOL bReadTextArea  : 1;        // Lese TEXTAREA
-    BOOL bReadScript    : 1;        // Lesen von <SCRIPT>
-    BOOL bReadStyle     : 1;        // Lesen von <STYLE>
-    BOOL bEndTokenFound : 1;        // </SCRIPT> oder </STYLE> gefunden
+    sal_Bool bNewDoc        : 1;        // neues Doc lesen ?
+    sal_Bool bIsInHeader    : 1;        // scanne Header-Bereich
+    sal_Bool bIsInBody      : 1;        // scanne Body-Bereich
+    sal_Bool bReadListing   : 1;        // Lese Listings
+    sal_Bool bReadXMP       : 1;        // Lese XMP
+    sal_Bool bReadPRE       : 1;        // Lese preformatted Text
+    sal_Bool bReadTextArea  : 1;        // Lese TEXTAREA
+    sal_Bool bReadScript    : 1;        // Lesen von <SCRIPT>
+    sal_Bool bReadStyle     : 1;        // Lesen von <STYLE>
+    sal_Bool bEndTokenFound : 1;        // </SCRIPT> oder </STYLE> gefunden
 
-    BOOL bPre_IgnoreNewPara : 1;    // Flags fuers lesen von PRE-Absaetzen
-    BOOL bReadNextChar : 1;         // TRUE: NextChar nochmals lesen (JavaScript!)
-    BOOL bReadComment : 1;          // TRUE: NextChar nochmals lesen (JavaScript!)
+    sal_Bool bPre_IgnoreNewPara : 1;    // Flags fuers lesen von PRE-Absaetzen
+    sal_Bool bReadNextChar : 1;         // sal_True: NextChar nochmals lesen (JavaScript!)
+    sal_Bool bReadComment : 1;          // sal_True: NextChar nochmals lesen (JavaScript!)
 
     sal_uInt32 nPre_LinePos;            // Pos in der Line im PRE-Tag
 
@@ -166,43 +166,43 @@ protected:
 
     virtual ~HTMLParser();
 
-    void FinishHeader( BOOL bBody ) { bIsInHeader = FALSE; bIsInBody = bBody; }
+    void FinishHeader( sal_Bool bBody ) { bIsInHeader = sal_False; bIsInBody = bBody; }
 
 public:
-    HTMLParser( SvStream& rIn, int bReadNewDoc = TRUE );
+    HTMLParser( SvStream& rIn, int bReadNewDoc = sal_True );
 
     virtual SvParserState CallParser();   // Aufruf des Parsers
 
-    BOOL IsNewDoc() const       { return bNewDoc; }
-    BOOL IsInHeader() const     { return bIsInHeader; }
-    BOOL IsInBody() const       { return bIsInBody; }
-    BOOL IsValidSyntax() const  { return TRUE; }
-    BOOL IsReadListing() const  { return bReadListing; }
-    BOOL IsReadXMP() const      { return bReadXMP; }
-    BOOL IsReadPRE() const      { return bReadPRE; }
-    BOOL IsReadScript() const   { return bReadScript; }
-    BOOL IsReadStyle() const    { return bReadStyle; }
+    sal_Bool IsNewDoc() const       { return bNewDoc; }
+    sal_Bool IsInHeader() const     { return bIsInHeader; }
+    sal_Bool IsInBody() const       { return bIsInBody; }
+    sal_Bool IsValidSyntax() const  { return sal_True; }
+    sal_Bool IsReadListing() const  { return bReadListing; }
+    sal_Bool IsReadXMP() const      { return bReadXMP; }
+    sal_Bool IsReadPRE() const      { return bReadPRE; }
+    sal_Bool IsReadScript() const   { return bReadScript; }
+    sal_Bool IsReadStyle() const    { return bReadStyle; }
 
-    void SetReadNextChar()      { bReadNextChar = TRUE; }
+    void SetReadNextChar()      { bReadNextChar = sal_True; }
 
     // PRE-/LISTING oder XMP-Modus starten/beenden oder Tags entsprechend
     // filtern
-    inline void StartPRE( BOOL bRestart=FALSE );
-    void FinishPRE() { bReadPRE = FALSE; }
+    inline void StartPRE( sal_Bool bRestart=sal_False );
+    void FinishPRE() { bReadPRE = sal_False; }
     int FilterPRE( int nToken );
 
-    inline void StartListing( BOOL bRestart=FALSE );
-    void FinishListing() { bReadListing = FALSE; }
+    inline void StartListing( sal_Bool bRestart=sal_False );
+    void FinishListing() { bReadListing = sal_False; }
     int FilterListing( int nToken );
 
-    inline void StartXMP( BOOL bRestart=FALSE );
-    void FinishXMP() { bReadXMP = FALSE; }
+    inline void StartXMP( sal_Bool bRestart=sal_False );
+    void FinishXMP() { bReadXMP = sal_False; }
     int FilterXMP( int nToken );
 
-    void FinishTextArea() { bReadTextArea = FALSE; }
+    void FinishTextArea() { bReadTextArea = sal_False; }
 
     // PRE-/LSITING- und XMP-Modus beenden
-    void FinishPREListingXMP() { bReadPRE = bReadListing = bReadXMP = FALSE; }
+    void FinishPREListingXMP() { bReadPRE = bReadListing = bReadXMP = sal_False; }
 
     // Das aktuelle Token dem aktuellen Modus (PRE, XMP, ...) entsprechend
     // Filtern und die Flags setzen. Wird von Continue aufgerufen, bevor
@@ -212,7 +212,7 @@ public:
 
     // Scannen eines Scripts beenden (sollte nur unmittelbar nach dem
     // Lesen eines <SCRIPT> aufgerufen werden
-    void EndScanScript() { bReadScript = FALSE; }
+    void EndScanScript() { bReadScript = sal_False; }
 
     void ReadRawData( const sal_Char *pEndToken ) { aEndToken.AssignAscii(pEndToken); }
 
@@ -253,43 +253,43 @@ public:
 
     // Ist der uebergebene 0-terminierte String (vermutlich) der Anfang
     // eines HTML-Files? Er sollte mind. 80 Zeichen lang sein.
-    // Mit Ausnahme des Falls, dass SwitchToUCS2==FALSE und
+    // Mit Ausnahme des Falls, dass SwitchToUCS2==sal_False und
     // SVPAR_CS_DONTKNOW uebergeben wird muss der String mit zwei(!)
     // 0-Bytes an einer geraden(!) Position terminiert sein.
     static FASTBOOL IsHTMLFormat( const sal_Char* pHeader,
-                      BOOL bSwitchToUCS2 = FALSE,
+                      sal_Bool bSwitchToUCS2 = sal_False,
                       rtl_TextEncoding eEnc=RTL_TEXTENCODING_DONTKNOW );
 
-    BOOL ParseScriptOptions( String& rLangString, const String&, HTMLScriptLanguage& rLang,
+    sal_Bool ParseScriptOptions( String& rLangString, const String&, HTMLScriptLanguage& rLang,
                              String& rSrc, String& rLibrary, String& rModule );
 
     // Einen Kommentar um den Inhalt von <SCRIPT> oder <STYLE> entfernen
     // Bei 'bFull' wird ggf. die gesammte Zeile hinter einem "<!--"
     // entfernt (fuer JavaSript)
-    static void RemoveSGMLComment( String &rString, BOOL bFull );
+    static void RemoveSGMLComment( String &rString, sal_Bool bFull );
 
-    static BOOL InternalImgToPrivateURL( String& rURL );
+    static sal_Bool InternalImgToPrivateURL( String& rURL );
     static rtl_TextEncoding GetEncodingByHttpHeader( SvKeyValueIterator *pHTTPHeader );
-    BOOL SetEncodingByHTTPHeader( SvKeyValueIterator *pHTTPHeader );
+    sal_Bool SetEncodingByHTTPHeader( SvKeyValueIterator *pHTTPHeader );
 };
 
-inline void HTMLParser::StartPRE( BOOL bRestart )
+inline void HTMLParser::StartPRE( sal_Bool bRestart )
 {
-    bReadPRE = TRUE;
+    bReadPRE = sal_True;
     bPre_IgnoreNewPara = !bRestart;
     nPre_LinePos = 0UL;
 }
 
-inline void HTMLParser::StartListing( BOOL bRestart )
+inline void HTMLParser::StartListing( sal_Bool bRestart )
 {
-    bReadListing = TRUE;
+    bReadListing = sal_True;
     bPre_IgnoreNewPara = !bRestart;
     nPre_LinePos = 0UL;
 }
 
-inline void HTMLParser::StartXMP( BOOL bRestart )
+inline void HTMLParser::StartXMP( sal_Bool bRestart )
 {
-    bReadXMP = TRUE;
+    bReadXMP = sal_True;
     bPre_IgnoreNewPara = !bRestart;
     nPre_LinePos = 0UL;
 }

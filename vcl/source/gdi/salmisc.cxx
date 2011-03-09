@@ -101,12 +101,12 @@ static void ImplPALToPAL( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuff
     BitmapColor*        pColMapBuf = aColMap.ImplGetColorBuffer();
     BitmapColor         aIndex( 0 );
 
-    for( USHORT i = 0, nSrcCount = aColMap.GetEntryCount(), nDstCount = rDstBuffer.maPalette.GetEntryCount(); i < nSrcCount; i++ )
+    for( sal_uInt16 i = 0, nSrcCount = aColMap.GetEntryCount(), nDstCount = rDstBuffer.maPalette.GetEntryCount(); i < nSrcCount; i++ )
     {
         if( ( i < nDstCount ) && ( rSrcBuffer.maPalette[ i ] == rDstBuffer.maPalette[ i ] ) )
-            aIndex.SetIndex( sal::static_int_cast<BYTE>(i) );
+            aIndex.SetIndex( sal::static_int_cast<sal_uInt8>(i) );
         else
-            aIndex.SetIndex( sal::static_int_cast<BYTE>(rDstBuffer.maPalette.GetBestIndex( rSrcBuffer.maPalette[ i ] )) );
+            aIndex.SetIndex( sal::static_int_cast<sal_uInt8>(rDstBuffer.maPalette.GetBestIndex( rSrcBuffer.maPalette[ i ] )) );
 
         pColMapBuf[ i ] = aIndex;
     }
@@ -212,7 +212,7 @@ static void ImplTCToTC( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuffer
     if( BMP_SCANLINE_FORMAT( rSrcBuffer.mnFormat ) == BMP_FORMAT_24BIT_TC_BGR )
     {
         BitmapColor aCol;
-        BYTE*       pPixel;
+        sal_uInt8*      pPixel;
 
         for( long nActY = 0, nMapY; nActY < nHeight; nActY++ )
         {
@@ -253,7 +253,7 @@ static void ImplTCToPAL( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuffe
     const ColorMask&    rSrcMask = rSrcBuffer.maColorMask;
     const ColorMask&    rDstMask = rDstBuffer.maColorMask;
     BitmapPalette       aColMap( rSrcBuffer.maPalette.GetEntryCount() );
-    BYTE*               pColToPalMap = new BYTE[ TC_TO_PAL_COLORS ];
+    sal_uInt8*              pColToPalMap = new sal_uInt8[ TC_TO_PAL_COLORS ];
     BitmapColor         aIndex( 0 );
 
     for( long nR = 0; nR < 16; nR++ )
@@ -262,10 +262,10 @@ static void ImplTCToPAL( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuffe
         {
             for( long nB = 0; nB < 16; nB++ )
             {
-                BitmapColor aCol( sal::static_int_cast<BYTE>(nR << 4),
-                                  sal::static_int_cast<BYTE>(nG << 4),
-                                  sal::static_int_cast<BYTE>(nB << 4) );
-                pColToPalMap[ ImplIndexFromColor( aCol ) ] = (BYTE) rDstBuffer.maPalette.GetBestIndex( aCol );
+                BitmapColor aCol( sal::static_int_cast<sal_uInt8>(nR << 4),
+                                  sal::static_int_cast<sal_uInt8>(nG << 4),
+                                  sal::static_int_cast<sal_uInt8>(nB << 4) );
+                pColToPalMap[ ImplIndexFromColor( aCol ) ] = (sal_uInt8) rDstBuffer.maPalette.GetBestIndex( aCol );
             }
         }
     }
@@ -293,7 +293,7 @@ static void ImplTCToPAL( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuffe
 // ---------------------
 
 BitmapBuffer* StretchAndConvert( const BitmapBuffer& rSrcBuffer, const SalTwoRect& rTwoRect,
-                                 ULONG nDstBitmapFormat, BitmapPalette* pDstPal, ColorMask* pDstMask )
+                                 sal_uLong nDstBitmapFormat, BitmapPalette* pDstPal, ColorMask* pDstMask )
 {
     FncGetPixel     pFncGetPixel;
     FncSetPixel     pFncSetPixel;
@@ -330,7 +330,7 @@ BitmapBuffer* StretchAndConvert( const BitmapBuffer& rSrcBuffer, const SalTwoRec
     }
 
     // set function for setting pixels
-    const ULONG nDstScanlineFormat = BMP_SCANLINE_FORMAT( nDstBitmapFormat );
+    const sal_uLong nDstScanlineFormat = BMP_SCANLINE_FORMAT( nDstBitmapFormat );
     switch( nDstScanlineFormat )
     {
         IMPL_CASE_SET_FORMAT( _1BIT_MSB_PAL, 1 );
@@ -367,7 +367,7 @@ BitmapBuffer* StretchAndConvert( const BitmapBuffer& rSrcBuffer, const SalTwoRec
     pDstBuffer->mnScanlineSize = AlignedWidth4Bytes( pDstBuffer->mnBitCount * pDstBuffer->mnWidth );
     try
     {
-        pDstBuffer->mpBits = new BYTE[ pDstBuffer->mnScanlineSize * pDstBuffer->mnHeight ];
+        pDstBuffer->mpBits = new sal_uInt8[ pDstBuffer->mnScanlineSize * pDstBuffer->mnHeight ];
     }
     catch( const std::bad_alloc& )
     {

@@ -35,6 +35,9 @@
 #define RID_SVTOOLS_BITMAP_START        (RID_SVTOOLS_START + 0)
 #define RID_SVTOOLS_IMAGELIST_START     (RID_SVTOOLS_START + 0)
 
+#define ABOUT_STR_COPYRIGHT             (RID_SVTOOLS_START + 1)
+#define ABOUT_STR_DEVELOPER_ARY         (RID_SVTOOLS_START + 2)
+
 //.............................................................................
 // various unsorted stuff
 
@@ -249,6 +252,10 @@
 #define STR_SVT_ACC_DESC_FOLDER             (STR_SVT_ACC_BEGIN+4)
 #define STR_SVT_ACC_DESC_FILE               (STR_SVT_ACC_BEGIN+5)
 #define STR_SVT_ACC_EMPTY_FIELD             (STR_SVT_ACC_BEGIN+6)
+//IAccessible2 implementation
+#define STR_SVT_ACC_LISTENTRY_SELCTED_STATE     (STR_SVT_ACC_BEGIN+7)
+#define STR_SVT_ACC_RULER_VERT_NAME (STR_SVT_ACC_BEGIN+8)
+#define STR_SVT_ACC_RULER_HORZ_NAME (STR_SVT_ACC_BEGIN+9)
 #define STR_SVT_ACC_END                     (STR_SVT_ACC_EMPTY_FIELD)
 
 #define STR_SVT_INDEXENTRY_START            (STR_SVT_ACC_END + 1)
@@ -386,6 +393,11 @@
 #define RID_IMG_PRNDLG_NOCOLLATE            (STR_SVT_PRNDLG_START + 30)
 #define RID_IMG_PRNDLG_COLLATE_HC           (STR_SVT_PRNDLG_START + 31)
 #define RID_IMG_PRNDLG_NOCOLLATE_HC         (STR_SVT_PRNDLG_START + 32)
+
+// IAccessible2 implementation in 2009
+#define STR_PARAGRAPH_START                 (STR_SVT_PRNDLG_START + 50)
+#define STR_PARAGRAPH                       (STR_PARAGRAPH_START + 0)
+#define STR_PARAGRAPH_END                   (STR_PARAGRAPH)
 
 #endif  // #ifndef _SVTOOLS_HRC
 
