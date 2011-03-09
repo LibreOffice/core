@@ -30,17 +30,17 @@
 #include "helpid.h"
 
 /*--------------------------------------------------------------------
-    Beschreibung: Strings fuer die Types
+    Description: strings for the types
  --------------------------------------------------------------------*/
 String STR_FLD_EDIT_DLG
 {
     Text [ en-US ] = "Edit Fields" ;
 };
 /*--------------------------------------------------------------------
-    Beschreibung: Strings fuer die Types
+    Description: strings for the types
  --------------------------------------------------------------------*/
  //
- // Bereich Dokument
+ // range document
  //
 String STR_DATEFLD
 {
@@ -83,7 +83,7 @@ String STR_EXTUSERFLD
     Text [ en-US ] = "Sender" ;
 };
  //
- // Bereich Funktionen
+ // range functions
  //
 String STR_SETFLD
 {
@@ -150,7 +150,7 @@ String STR_DROPDOWN
     Text [ en-US ] = "Input list" ;
 };
  //
- // Bereich Referenzen
+ // range references
  //
 String STR_SETREFFLD
 {
@@ -161,7 +161,7 @@ String STR_GETREFFLD
     Text [ en-US ] = "Insert Reference" ;
 };
  //
- //  Bereich Datenbank
+ //  range database
  //
 String STR_DBFLD
 {
@@ -192,7 +192,7 @@ String STR_HIDDENTXTFLD
     Text [ en-US ] = "Hidden text" ;
 };
  //
- //  Bereich Benutzerfelder
+ //  range user fields
  //
 String STR_USERFLD
 {
@@ -215,14 +215,14 @@ String STR_HIDDENPARAFLD
     Text [ en-US ] = "Hidden Paragraph" ;
 };
  //
- // Bereich DokumentInfo
+ // range DocumentInfo
  //
 String STR_DOCINFOFLD
 {
     Text [ en-US ] = "DocInformation" ;
 };
 /*--------------------------------------------------------------------
-    Beschreibung: SubCmd-Strings
+    Description: SubCmd-Strings
  --------------------------------------------------------------------*/
 String FLD_DATE_STD
 {
@@ -241,7 +241,7 @@ String FLD_TIME_FIX
     Text [ en-US ] = "Time (fixed)" ;
 };
  //
- //  SubCmd Statistik
+ //  SubCmd Statistic
  //
 String FLD_STAT_TABLE
 {
@@ -271,7 +271,7 @@ String FLD_STAT_PAGE
 {
     Text [ en-US ] = "Pages" ;
 };
- //  SubCmd DDETypen
+ //  SubCmd DDETypes
  //
 String FMT_DDE_HOT
 {
@@ -286,7 +286,7 @@ String FLD_INPUT_TEXT
     TEXT = "[Text]" ;
 };
 /*--------------------------------------------------------------------
-    Beschreibung: SubType Extuser
+    Description: SubType Extuser
  --------------------------------------------------------------------*/
 String FLD_EU_FIRMA
 {
@@ -357,7 +357,7 @@ String FLD_PAGEREF_ON
     Text [ en-US ] = "on" ;
 };
 /*--------------------------------------------------------------------
-    Beschreibung: Pfadname
+    Description: path name
  --------------------------------------------------------------------*/
  // Formate FileName
 String FMT_FF_NAME
@@ -385,7 +385,7 @@ String FMT_FF_UI_RANGE
     Text [ en-US ] = "Category" ;
 };
 /*--------------------------------------------------------------------
-    Beschreibung: Format Kapitel
+    Description: format chapter
  --------------------------------------------------------------------*/
 String FMT_CHAPTER_NAME
 {
@@ -404,7 +404,7 @@ String FMT_CHAPTER_NAMENO
     Text [ en-US ] = "Chapter number and name" ;
 };
 /*--------------------------------------------------------------------
-    Beschreibung: Formate
+    Description: formats
  --------------------------------------------------------------------*/
 String FMT_NUM_ABC
 {
@@ -443,7 +443,7 @@ String FMT_NUM_PAGESPECIAL
     Text [ en-US ] = "Text" ;
 };
 /*--------------------------------------------------------------------
-    Beschreibung: Author
+    Description: Author
  --------------------------------------------------------------------*/
 String FMT_AUTHOR_NAME
 {
@@ -454,7 +454,7 @@ String FMT_AUTHOR_SCUT
     Text [ en-US ] = "Initials" ;
 };
 /*--------------------------------------------------------------------
-    Beschreibung:   Varibale setzen
+    Description:   set variable
  --------------------------------------------------------------------*/
 String FMT_SETVAR_SYS
 {
@@ -489,7 +489,7 @@ String FMT_DBFLD_SYS
     Text [ en-US ] = "System" ;
 };
 /*--------------------------------------------------------------------
-    Beschreibung: Ablagefelder
+    Description: storage fields
  --------------------------------------------------------------------*/
 String FMT_REG_AUTHOR
 {
@@ -504,7 +504,7 @@ String FMT_REG_DATE
     Text [ en-US ] = "Date" ;
 };
 /*--------------------------------------------------------------------
-    Beschreibung: Formate Referenzen
+    Description: formats references
  --------------------------------------------------------------------*/
 String FMT_REF_TEXT
 {
@@ -551,7 +551,7 @@ String FMT_REF_NUMBER_FULL_CONTEXT
     Text [ en-US ] = "Number (full context)";
 };
 /*--------------------------------------------------------------------
-    Beschreibung: Platzhalter
+    Description: paceholder
  --------------------------------------------------------------------*/
 String FMT_MARK_TEXT
 {
@@ -574,14 +574,14 @@ String FMT_MARK_OLE
     Text [ en-US ] = "Object" ;
 };
 /*--------------------------------------------------------------------
-    Beschreibung: Nur-Text
+    Description: text only
  --------------------------------------------------------------------*/
 String FMT_TEXT
 {
     TEXT = "Text" ;
 };
 /*--------------------------------------------------------------------
-    Beschreibung: globale String-Ressourcen
+    Description: global String resources
  --------------------------------------------------------------------*/
 String STR_ALL
 {
@@ -592,7 +592,7 @@ String STR_INSERT
     Text [ en-US ] = "Insert" ;
 };
 /*--------------------------------------------------------------------
-    Beschreibung:   AustauschStrings fuer Edit/NameFT
+    Description:   ExchangeStrings for Edit/NameFT
  --------------------------------------------------------------------*/
 String STR_COND
 {
