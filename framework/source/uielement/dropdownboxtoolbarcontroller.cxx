@@ -191,7 +191,7 @@ throw ( RuntimeException )
 Sequence<PropertyValue> DropdownToolbarController::getExecuteArgs(sal_Int16 KeyModifier) const
 {
     Sequence<PropertyValue> aArgs( 2 );
-    ::rtl::OUString aSelectedText = m_pListBoxControl->GetText();
+    ::rtl::OUString aSelectedText = m_pListBoxControl->GetSelectEntry();
 
     // Add key modifier to argument list
     aArgs[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "KeyModifier" ));
