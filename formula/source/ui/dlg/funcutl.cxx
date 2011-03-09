@@ -49,7 +49,7 @@ namespace formula
 ValWnd::ValWnd( Window* pParent, const ResId& rId ) : Window( pParent, rId )
 {
     Font aFnt( GetFont() );
-    aFnt.SetTransparent( TRUE );
+    aFnt.SetTransparent( sal_True );
     aFnt.SetWeight( WEIGHT_LIGHT );
     if ( pParent->IsBackground() )
     {
@@ -110,7 +110,7 @@ ArgEdit::ArgEdit( Window* pParent, const ResId& rResId )
 //----------------------------------------------------------------------------
 
 void ArgEdit::Init( ArgEdit* pPrevEdit, ArgEdit* pNextEdit,
-                    ScrollBar& rArgSlider, USHORT nArgCount )
+                    ScrollBar& rArgSlider, sal_uInt16 nArgCount )
 {
     pEdPrev = pPrevEdit;
     pEdNext = pNextEdit;
@@ -125,8 +125,8 @@ void ArgEdit::Init( ArgEdit* pPrevEdit, ArgEdit* pNextEdit,
 void __EXPORT ArgEdit::KeyInput( const KeyEvent& rKEvt )
 {
     KeyCode     aCode   = rKEvt.GetKeyCode();
-    BOOL        bUp     = (aCode.GetCode() == KEY_UP);
-    BOOL        bDown   = (aCode.GetCode() == KEY_DOWN);
+    sal_Bool        bUp     = (aCode.GetCode() == KEY_UP);
+    sal_Bool        bDown   = (aCode.GetCode() == KEY_DOWN);
     ArgEdit*    pEd     = NULL;
 
     if (   pSlider
@@ -136,8 +136,8 @@ void __EXPORT ArgEdit::KeyInput( const KeyEvent& rKEvt )
         if ( nArgs > 1 )
         {
             long    nThumb       = pSlider->GetThumbPos();
-            BOOL    bDoScroll    = FALSE;
-            BOOL    bChangeFocus = FALSE;
+            sal_Bool    bDoScroll    = sal_False;
+            sal_Bool    bChangeFocus = sal_False;
 
             if ( bDown )
             {
@@ -151,13 +151,13 @@ void __EXPORT ArgEdit::KeyInput( const KeyEvent& rKEvt )
                     else
                     {
                         pEd = pEdNext;
-                        bChangeFocus = TRUE;
+                        bChangeFocus = sal_True;
                     }
                 }
                 else if ( pEdNext )
                 {
                     pEd = pEdNext;
-                    bChangeFocus = TRUE;
+                    bChangeFocus = sal_True;
                 }
             }
             else // if ( bUp )
@@ -172,13 +172,13 @@ void __EXPORT ArgEdit::KeyInput( const KeyEvent& rKEvt )
                     else
                     {
                         pEd = pEdPrev;
-                        bChangeFocus = TRUE;
+                        bChangeFocus = sal_True;
                     }
                 }
                 else if ( pEdPrev )
                 {
                     pEd = pEdPrev;
-                    bChangeFocus = TRUE;
+                    bChangeFocus = sal_True;
                 }
             }
 
@@ -743,7 +743,7 @@ EditBox::EditBox(   Window* pParent,WinBits nWinStyle)
 #************************************************************************/
 EditBox::EditBox( Window* pParent, const ResId& rResId )
         :Control(pParent,rResId),
-        bMouseFlag(FALSE)
+        bMouseFlag(sal_False)
 {
     WinBits nStyle=GetStyle();
     SetStyle( nStyle| WB_DIALOGCONTROL);
@@ -849,15 +849,15 @@ void EditBox::GetFocus()
 #************************************************************************/
 long EditBox::PreNotify( NotifyEvent& rNEvt )
 {
-    long nResult=TRUE;
+    long nResult=sal_True;
 
     if(pMEdit==NULL) return nResult;
 
-    USHORT nSwitch=rNEvt.GetType();
+    sal_uInt16 nSwitch=rNEvt.GetType();
     if(nSwitch==EVENT_KEYINPUT)// || nSwitch==EVENT_KEYUP)
     {
         const KeyCode& aKeyCode=rNEvt.GetKeyEvent()->GetKeyCode();
-        USHORT nKey=aKeyCode.GetCode();
+        sal_uInt16 nKey=aKeyCode.GetCode();
         if( (nKey==KEY_RETURN && !aKeyCode.IsShift()) || nKey==KEY_TAB )
         {
             nResult=GetParent()->Notify(rNEvt);
@@ -875,7 +875,7 @@ long EditBox::PreNotify( NotifyEvent& rNEvt )
 
         if(nSwitch==EVENT_MOUSEBUTTONDOWN || nSwitch==EVENT_MOUSEBUTTONUP)
         {
-            bMouseFlag=TRUE;
+            bMouseFlag=sal_True;
             Application::PostUserEvent( LINK( this, EditBox, ChangedHdl ) );
         }
     }
@@ -930,7 +930,7 @@ void EditBox::UpdateOldSel()
 RefEdit::RefEdit( Window* _pParent,IControlReferenceHandler* pParent, const ResId& rResId ) :
     Edit( _pParent, rResId ),
     pAnyRefDlg( pParent ),
-    bSilentFocus( FALSE )
+    bSilentFocus( sal_False )
 {
     aTimer.SetTimeoutHdl( LINK( this, RefEdit, UpdateHdl ) );
     aTimer.SetTimeout( SC_ENABLE_TIME );
@@ -939,7 +939,7 @@ RefEdit::RefEdit( Window* _pParent,IControlReferenceHandler* pParent, const ResI
 RefEdit::RefEdit( Window* pParent, const ResId& rResId ) :
     Edit( pParent, rResId ),
     pAnyRefDlg( NULL ),
-    bSilentFocus( FALSE )
+    bSilentFocus( sal_False )
 {
 }
 
@@ -967,9 +967,9 @@ void RefEdit::StartUpdateData()
 
 void RefEdit::SilentGrabFocus()
 {
-    bSilentFocus = TRUE;
+    bSilentFocus = sal_True;
     GrabFocus();
-    bSilentFocus = FALSE;
+    bSilentFocus = sal_False;
 }
 
 void RefEdit::SetRefDialog( IControlReferenceHandler* pDlg )

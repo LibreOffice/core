@@ -48,15 +48,15 @@ class EDITENG_DLLPUBLIC SvxSizeItem : public SfxPoolItem
 public:
     TYPEINFO();
 
-    SvxSizeItem( const USHORT nId );
-    SvxSizeItem( const USHORT nId, const Size& rSize);
+    SvxSizeItem( const sal_uInt16 nId );
+    SvxSizeItem( const sal_uInt16 nId, const Size& rSize);
 
     inline SvxSizeItem& operator=( const SvxSizeItem &rCpy );
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int              operator==( const SfxPoolItem& ) const;
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -64,8 +64,8 @@ public:
                                     String &rText, const IntlWrapper * = 0 ) const;
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*     Create(SvStream &, USHORT) const;
-    virtual SvStream&        Store(SvStream &, USHORT nItemVersion ) const;
+    virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const;
+    virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion ) const;
     virtual int              ScaleMetrics( long nMult, long nDiv );
     virtual int              HasMetrics() const;
 

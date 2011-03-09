@@ -41,11 +41,11 @@ class SVX_DLLPUBLIC XFillBmpStretchItem : public SfxBoolItem
 {
 public:
                             TYPEINFO();
-                            XFillBmpStretchItem( BOOL bStretch = TRUE );
+                            XFillBmpStretchItem( sal_Bool bStretch = sal_True );
                             XFillBmpStretchItem( SvStream& rIn );
 
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = NULL ) const;
-    virtual SfxPoolItem*    Create( SvStream& rIn, USHORT nVer ) const;
+    virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const;
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,

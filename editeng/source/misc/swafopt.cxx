@@ -56,14 +56,14 @@ SvxSwAutoFmtFlags::SvxSwAutoFmtFlags()
     bAFmtDelSpacesBetweenLines =
     bAFmtByInpDelSpacesAtSttEnd =
     bAFmtByInpDelSpacesBetweenLines =
-    bDummy = TRUE;
+    bDummy = sal_True;
 
     bReplaceStyles =
     bDelEmptyNode =
     bWithRedlining =
     bAutoCmpltEndless =
     bAutoCmpltAppendBlanc =
-    bAutoCmpltShowAsTip = FALSE;
+    bAutoCmpltShowAsTip = sal_False;
 
     bSetBorder =
     bCreateTable =
@@ -72,10 +72,10 @@ SvxSwAutoFmtFlags::SvxSwAutoFmtFlags()
     bRightMargin =
     bAutoCompleteWords =
     bAutoCmpltCollectWords =
-    bAutoCmpltKeepList = TRUE;
+    bAutoCmpltKeepList = sal_True;
 
     bDummy6 = bDummy7 = bDummy8 =
-         FALSE;
+         sal_False;
 
     nRightMargin = 50;      // dflt. 50 %
     nAutoCmpltExpandKey = KEY_RETURN;
@@ -84,7 +84,7 @@ SvxSwAutoFmtFlags::SvxSwAutoFmtFlags()
     aBulletFont.SetFamily( FAMILY_DONTKNOW );
     aBulletFont.SetPitch( PITCH_DONTKNOW );
     aBulletFont.SetWeight( WEIGHT_DONTKNOW );
-    aBulletFont.SetTransparent( TRUE );
+    aBulletFont.SetTransparent( sal_True );
 
     cBullet = 0x2022;
     cByInputBullet = cBullet;

@@ -50,11 +50,11 @@ private:
     SvxBmpMask  &rBmpMask;
 
 protected:
-    virtual void StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                const SfxPoolItem* pState );
 
 public:
-    SvxBmpMaskSelectItem( USHORT nId, SvxBmpMask& rMask,
+    SvxBmpMaskSelectItem( sal_uInt16 nId, SvxBmpMask& rMask,
                           SfxBindings& rBindings );
 };
 
@@ -68,7 +68,7 @@ class SVX_DLLPUBLIC SvxBmpMaskChildWindow : public SfxChildWindow
 {
  public:
                             SvxBmpMaskChildWindow( Window*,
-                                                   USHORT, SfxBindings*,
+                                                   sal_uInt16, SfxBindings*,
                                                    SfxChildWinInfo* );
 
     SFX_DECL_CHILDWINDOW(SvxBmpMaskChildWindow);
@@ -96,6 +96,9 @@ class SVX_DLLPUBLIC SvxBmpMask : public SfxDockingWindow
     PushButton          aBtnExec;
     FixedLine           aGrpQ;
 
+    FixedText           aFt1;
+    FixedText           aFt2;
+    FixedText           aFt3;
     CheckBox            aCbx1;
     MaskSet*            pQSet1;
     MetricField         aSp1;
@@ -119,9 +122,7 @@ class SVX_DLLPUBLIC SvxBmpMask : public SfxDockingWindow
     MaskData*           pData;
     CheckBox            aCbxTrans;
     ColorLB             aLbColorTrans;
-    FixedText           aFt1;
-    FixedText           aFt2;
-    FixedText           aFt3;
+
     const XColorTable*  pColTab;
     Color               aPipetteColor;
     SvxBmpMaskSelectItem aSelItem;
@@ -129,12 +130,12 @@ class SVX_DLLPUBLIC SvxBmpMask : public SfxDockingWindow
     Image               maImgPipette;
     Image               maImgPipetteH;
 
-    virtual BOOL        Close();
+    virtual sal_Bool        Close();
 
 #ifdef BMPMASK_PRIVATE
 
-    USHORT              InitColorArrays( Color* pSrcCols, Color* pDstCols,
-                                         ULONG* pTols );
+    sal_uInt16              InitColorArrays( Color* pSrcCols, Color* pDstCols,
+                                         sal_uIntPtr* pTols );
 
     Bitmap              ImpMask( const Bitmap& rBitmap );
     BitmapEx            ImpMask( const BitmapEx& rBitmapEx );
@@ -163,14 +164,14 @@ public:
     void                SetColor( const Color& rColor );
     void                PipetteClicked();
 
-    BOOL                NeedsColorTable() const;
+    sal_Bool                NeedsColorTable() const;
     void                SetColorTable( const XColorTable* pColorTable );
 
-    void                SetExecState( BOOL bEnable );
+    void                SetExecState( sal_Bool bEnable );
 
     Graphic             Mask( const Graphic& rGraphic );
 
-    BOOL                IsEyedropping() const;
+    sal_Bool                IsEyedropping() const;
 
     void                onSelect( MaskSet* pSet );
 

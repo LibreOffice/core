@@ -50,13 +50,13 @@ class EDITENG_DLLPUBLIC SvxAutoKernItem : public SfxBoolItem
 public:
     TYPEINFO();
 
-    SvxAutoKernItem( const BOOL bAutoKern /*= FALSE*/,
-                     const USHORT nId );
+    SvxAutoKernItem( const sal_Bool bAutoKern /*= sal_False*/,
+                     const sal_uInt16 nId );
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*    Create(SvStream &, USHORT) const;
-    virtual SvStream&       Store(SvStream &, USHORT nItemVersion) const;
+    virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const;
+    virtual SvStream&       Store(SvStream &, sal_uInt16 nItemVersion) const;
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,

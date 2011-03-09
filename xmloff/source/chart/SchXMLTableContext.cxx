@@ -327,7 +327,7 @@ SchXMLTableContext::~SchXMLTableContext()
 }
 
 SvXMLImportContext *SchXMLTableContext::CreateChildContext(
-    USHORT nPrefix,
+    sal_uInt16 nPrefix,
     const rtl::OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& )
 {
@@ -374,7 +374,7 @@ void SchXMLTableContext::StartElement( const uno::Reference< xml::sax::XAttribut
     {
         rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
         rtl::OUString aLocalName;
-        USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
         if ( nPrefix == XML_NAMESPACE_TABLE )
         {
             if ( IsXMLToken( aLocalName, XML_NAME ) )
@@ -524,7 +524,7 @@ SchXMLTableColumnsContext::~SchXMLTableColumnsContext()
 }
 
 SvXMLImportContext* SchXMLTableColumnsContext::CreateChildContext(
-    USHORT nPrefix,
+    sal_uInt16 nPrefix,
     const rtl::OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& )
 {
@@ -567,7 +567,7 @@ void SchXMLTableColumnContext::StartElement( const uno::Reference< xml::sax::XAt
     {
         rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
         rtl::OUString aLocalName;
-        USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         if( nPrefix == XML_NAMESPACE_TABLE &&
             IsXMLToken( aLocalName, XML_NUMBER_COLUMNS_REPEATED ) )
@@ -629,7 +629,7 @@ SchXMLTableRowsContext::~SchXMLTableRowsContext()
 }
 
 SvXMLImportContext* SchXMLTableRowsContext::CreateChildContext(
-    USHORT nPrefix,
+    sal_uInt16 nPrefix,
     const rtl::OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& )
 {
@@ -675,7 +675,7 @@ SchXMLTableRowContext::~SchXMLTableRowContext()
 }
 
 SvXMLImportContext* SchXMLTableRowContext::CreateChildContext(
-    USHORT nPrefix,
+    sal_uInt16 nPrefix,
     const rtl::OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& )
 {
@@ -711,13 +711,13 @@ private:
 
 public:
     SchXMLRangeSomewhereContext( SvXMLImport& rImport,
-                            USHORT nPrefix,
+                            sal_uInt16 nPrefix,
                             const ::rtl::OUString& rLocalName,
                             ::rtl::OUString& rRangeString );
     virtual ~SchXMLRangeSomewhereContext();
 
     virtual SvXMLImportContext* CreateChildContext(
-        USHORT nPrefix,
+        sal_uInt16 nPrefix,
         const ::rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual void EndElement();
@@ -761,7 +761,7 @@ void SchXMLTableCellContext::StartElement( const uno::Reference< xml::sax::XAttr
     for( sal_Int16 i = 0; i < nAttrCount; i++ )
     {
         rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
-        USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ))
         {
@@ -801,7 +801,7 @@ void SchXMLTableCellContext::StartElement( const uno::Reference< xml::sax::XAttr
 }
 
 SvXMLImportContext* SchXMLTableCellContext::CreateChildContext(
-    USHORT nPrefix,
+    sal_uInt16 nPrefix,
     const rtl::OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& )
 {
@@ -1219,7 +1219,7 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
 //---------------------------------------------------------------------------------------------------
 
 SchXMLRangeSomewhereContext::SchXMLRangeSomewhereContext( SvXMLImport& rImport,
-                                                USHORT nPrefix,
+                                                sal_uInt16 nPrefix,
                                                 const OUString& rLocalName,
                                                 OUString& rRangeString ) :
         SvXMLImportContext( rImport, nPrefix, rLocalName ),
@@ -1232,7 +1232,7 @@ SchXMLRangeSomewhereContext::~SchXMLRangeSomewhereContext()
 }
 
 SvXMLImportContext* SchXMLRangeSomewhereContext::CreateChildContext(
-    USHORT nPrefix,
+    sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& )
 {

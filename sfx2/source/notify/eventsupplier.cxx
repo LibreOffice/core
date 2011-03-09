@@ -97,7 +97,7 @@ void SAL_CALL SfxEvents_Impl::replaceByName( const OUSTRING & aName, const ANY &
             // create Configuration at first, creation might call this method also and that would overwrite everything
             // we might have stored before!
             if ( mpObjShell && !mpObjShell->IsLoading() )
-                mpObjShell->SetModified( TRUE );
+                mpObjShell->SetModified( sal_True );
 
             ::comphelper::NamedValueCollection aNormalizedDescriptor;
             NormalizeMacro( aEventDescriptor, aNormalizedDescriptor, mpObjShell );
@@ -375,7 +375,7 @@ SfxEvents_Impl::~SfxEvents_Impl()
 }
 
 //--------------------------------------------------------------------------------------------------------
-SvxMacro* SfxEvents_Impl::ConvertToMacro( const ANY& rElement, SfxObjectShell* pObjShell, BOOL bNormalizeMacro )
+SvxMacro* SfxEvents_Impl::ConvertToMacro( const ANY& rElement, SfxObjectShell* pObjShell, sal_Bool bNormalizeMacro )
 {
     SvxMacro* pMacro = NULL;
     SEQUENCE < PROPERTYVALUE > aProperties;

@@ -56,8 +56,8 @@ TYPEINIT1_FACTORY(SvxRotateModeItem, SfxEnumItem, new SvxRotateModeItem(SVX_ROTA
 //  SvxRotateModeItem - Ausrichtung bei gedrehtem Text
 //-----------------------------------------------------------------------
 
-SvxRotateModeItem::SvxRotateModeItem( SvxRotateMode eMode, USHORT _nWhich )
-    : SfxEnumItem( _nWhich, (USHORT)eMode )
+SvxRotateModeItem::SvxRotateModeItem( SvxRotateMode eMode, sal_uInt16 _nWhich )
+    : SfxEnumItem( _nWhich, (sal_uInt16)eMode )
 {
 }
 
@@ -70,9 +70,9 @@ __EXPORT SvxRotateModeItem::~SvxRotateModeItem()
 {
 }
 
-SfxPoolItem* __EXPORT SvxRotateModeItem::Create( SvStream& rStream, USHORT ) const
+SfxPoolItem* __EXPORT SvxRotateModeItem::Create( SvStream& rStream, sal_uInt16 ) const
 {
-    USHORT nVal;
+    sal_uInt16 nVal;
     rStream >> nVal;
     return new SvxRotateModeItem( (SvxRotateMode) nVal,Which() );
 }
@@ -100,7 +100,7 @@ SfxItemPresentation __EXPORT SvxRotateModeItem::GetPresentation(
     return ePres;
 }
 
-String __EXPORT SvxRotateModeItem::GetValueText( USHORT nVal ) const
+String __EXPORT SvxRotateModeItem::GetValueText( sal_uInt16 nVal ) const
 {
     String aText;
 
@@ -119,7 +119,7 @@ String __EXPORT SvxRotateModeItem::GetValueText( USHORT nVal ) const
     return aText;
 }
 
-USHORT __EXPORT SvxRotateModeItem::GetValueCount() const
+sal_uInt16 __EXPORT SvxRotateModeItem::GetValueCount() const
 {
     return 4;       // STANDARD, TOP, CENTER, BOTTOM
 }
@@ -129,14 +129,14 @@ SfxPoolItem* __EXPORT SvxRotateModeItem::Clone( SfxItemPool* ) const
     return new SvxRotateModeItem( *this );
 }
 
-USHORT __EXPORT SvxRotateModeItem::GetVersion( USHORT /*nFileVersion*/ ) const
+sal_uInt16 __EXPORT SvxRotateModeItem::GetVersion( sal_uInt16 /*nFileVersion*/ ) const
 {
     return 0;
 }
 
 //  QueryValue/PutValue: Der ::com::sun::star::table::CellVertJustify enum wird mitbenutzt...
 
-sal_Bool SvxRotateModeItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/ ) const
+sal_Bool SvxRotateModeItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     table::CellVertJustify eUno = table::CellVertJustify_STANDARD;
     switch ( (SvxRotateMode)GetValue() )
@@ -150,7 +150,7 @@ sal_Bool SvxRotateModeItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/ ) con
     return sal_True;
 }
 
-sal_Bool SvxRotateModeItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
+sal_Bool SvxRotateModeItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     table::CellVertJustify eUno;
     if(!(rVal >>= eUno))
@@ -170,7 +170,7 @@ sal_Bool SvxRotateModeItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
         case table::CellVertJustify_BOTTOM:   eSvx = SVX_ROTATE_MODE_BOTTOM;    break;
         default: ;//prevent warning
     }
-    SetValue( (USHORT)eSvx );
+    SetValue( (sal_uInt16)eSvx );
     return sal_True;
 }
 

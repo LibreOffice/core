@@ -65,10 +65,10 @@ class SVX_DLLPUBLIC GraphCtrl : public Control
     GraphCtrlUserCall*  pUserCall;
     WinBits             nWinStyle;
     SdrObjKind          eObjKind;
-    USHORT              nPolyEdit;
-    BOOL                bEditMode;
-    BOOL                bSdrMode;
-    BOOL                bAnim;
+    sal_uInt16              nPolyEdit;
+    sal_Bool                bEditMode;
+    sal_Bool                bSdrMode;
+    sal_Bool                bAnim;
 
                         DECL_LINK( UpdateHdl, Timer* );
 
@@ -103,17 +103,17 @@ public:
     void                SetWinStyle( WinBits nWinBits );
     WinBits             GetWinStyle() const { return nWinStyle; }
 
-    void                SetGraphic( const Graphic& rGraphic, BOOL bNewModel = TRUE );
+    void                SetGraphic( const Graphic& rGraphic, sal_Bool bNewModel = sal_True );
     const Graphic&      GetGraphic() const { return aGraphic; }
     const Size&         GetGraphicSize() const { return aGraphSize; }
 
     const Point&        GetMousePos() const { return aMousePos; }
 
-    void                SetEditMode( const BOOL bEditMode );
-    BOOL                IsEditMode() const { return bEditMode; }
+    void                SetEditMode( const sal_Bool bEditMode );
+    sal_Bool                IsEditMode() const { return bEditMode; }
 
-    void                SetPolyEditMode( const USHORT nPolyEdit );
-    USHORT              GetPolyEditMode() const { return nPolyEdit; }
+    void                SetPolyEditMode( const sal_uInt16 nPolyEdit );
+    sal_uInt16              GetPolyEditMode() const { return nPolyEdit; }
 
     void                SetObjKind( const SdrObjKind eObjKind );
     SdrObjKind          GetObjKind() const { return eObjKind; }
@@ -121,7 +121,7 @@ public:
     SdrModel*           GetSdrModel() const { return pModel; }
     SdrView*            GetSdrView() const { return pView; }
     SdrObject*          GetSelectedSdrObject() const;
-    BOOL                IsChanged() const { return bSdrMode ? pModel->IsChanged() : FALSE; }
+    sal_Bool                IsChanged() const { return bSdrMode ? pModel->IsChanged() : sal_False; }
 
     void                SetMousePosLink( const Link& rLink ) { aMousePosLink = rLink; }
     const Link&         GetMousePosLink() const { return aMousePosLink; }
