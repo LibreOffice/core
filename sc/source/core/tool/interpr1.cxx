@@ -6692,12 +6692,12 @@ void ScInterpreter::ScOffset()
             nRowNew = (long) ::rtl::math::approxFloor(GetDoubleWithDefault( -1.0 ));
         nColPlus = (long) ::rtl::math::approxFloor(GetDouble());
         nRowPlus = (long) ::rtl::math::approxFloor(GetDouble());
-        SCCOL nCol1;
-        SCROW nRow1;
-        SCTAB nTab1;
-        SCCOL nCol2;
-        SCROW nRow2;
-        SCTAB nTab2;
+        SCCOL nCol1(0);
+        SCROW nRow1(0);
+        SCTAB nTab1(0);
+        SCCOL nCol2(0);
+        SCROW nRow2(0);
+        SCTAB nTab2(0);
         if (nColNew == 0 || nRowNew == 0)
         {
             PushIllegalArgument();
