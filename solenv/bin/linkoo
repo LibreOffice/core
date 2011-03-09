@@ -251,7 +251,7 @@ sub scan_and_link_files($$$)
     }
 
     # Now scan the solver
-    my $upd = 330;
+    my $upd = 300;
     $upd = $ENV{UPD} if (defined $ENV{UPD});
     scan_one_dir ($installed_files, \%build_files, "$build_path/solver/$upd/$target", 1);
 

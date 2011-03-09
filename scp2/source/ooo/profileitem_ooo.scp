@@ -191,6 +191,16 @@ ProfileItem gid_Profileitem_Uno_Uno_Bundled_Extensions_User
     Value = "${$BRAND_BASE_DIR/program/" PROFILENAME(bootstrap) ":UserInstallation}/user/extensions/bundled";
 End
 
+ProfileItem gid_Profileitem_Uno_Uno_Bundled_Extensions_Prereg
+    ProfileID = gid_Profile_Uno_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 1;
+    Key = "BUNDLED_EXTENSIONS_PREREG";
+    Value = "$BRAND_BASE_DIR/share/prereg/bundled";
+End
+
+
 ProfileItem gid_Profileitem_Uno_Uno_Shared_Packages
     ProfileID = gid_Profile_Uno_Ini;
     ModuleID = gid_Module_Root;
@@ -287,6 +297,14 @@ ProfileItem gid_Profileitem_Fundamentalbasis_Uno_Bundled_Extensions_User
     Value = "${$ORIGIN/" PROFILENAME(uno) ":BUNDLED_EXTENSIONS_USER}";
 End
 
+ProfileItem gid_Profileitem_Fundamentalbasis_Uno_Bundled_Extensions_Prereg
+    ModuleID = gid_Module_Root;
+    ProfileID = gid_Profile_Fundamentalbasis_Ini;
+    Section = "Bootstrap";
+    Key = "BUNDLED_EXTENSIONS_PREREG";
+    Value = "${$ORIGIN/" PROFILENAME(uno) ":BUNDLED_EXTENSIONS_PREREG}";
+End
+
 ProfileItem gid_Profileitem_Fundamentalbasis_Uno_Shared_Packages_Cache
     ModuleID = gid_Module_Root;
     ProfileID = gid_Profile_Fundamentalbasis_Ini;
@@ -324,11 +342,7 @@ ProfileItem gid_Profileitem_Fundamentalbasis_Ure_More_Types
     ProfileID = gid_Profile_Fundamentalbasis_Ini;
     Section = "Bootstrap";
     Key = "URE_MORE_TYPES";
-#if defined ENABLE_VBA && !defined VBA_EXTENSION
     Value = "$ORIGIN/offapi.rdb $ORIGIN/oovbaapi.rdb ${${$ORIGIN/" PROFILENAME(uno) ":PKG_UserUnoFile}:UNO_TYPES} ${${$ORIGIN/" PROFILENAME(uno) ":PKG_SharedUnoFile}:UNO_TYPES} ${${$ORIGIN/" PROFILENAME(uno) ":PKG_BundledUnoFile}:UNO_TYPES}";
-#else
-    Value = "$ORIGIN/offapi.rdb ${${$ORIGIN/" PROFILENAME(uno) ":PKG_UserUnoFile}:UNO_TYPES} ${${$ORIGIN/" PROFILENAME(uno) ":PKG_SharedUnoFile}:UNO_TYPES} ${${$ORIGIN/" PROFILENAME(uno) ":PKG_BundledUnoFile}:UNO_TYPES}";
-#endif
 End
 
 ProfileItem gid_Profileitem_Fundamentalbasis_Ure_More_Services

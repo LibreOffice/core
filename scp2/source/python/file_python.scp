@@ -46,9 +46,7 @@ File gid_File_Lib_Pythonloader
   #else
     Name = "pythonloader.uno.dll";
   #endif
-    RegistryID = gid_Starregistry_Services_Rdb;
-    NativeServicesURLPrefix = "vnd.sun.star.expand:$OOO_BASE_DIR/program/";
-    Styles = (PACKED,UNO_COMPONENT);
+    Styles = (PACKED);
 End
 
 File gid_File_Py_Unohelper

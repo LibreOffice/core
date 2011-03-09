@@ -859,7 +859,7 @@ End
 RegistryItem gid_Regitem_ots_FullDetails
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext_PropertyHdl;
-    Subkey = "opendocument.Calctemplate.1";
+    Subkey = "opendocument.CalcTemplate.1";
     Name = "FullDetails";
     Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
 End
@@ -922,7 +922,7 @@ RegistryItem gid_Regitem_OpenOffice_OTS_OpenWith_Calc
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".ots\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Calc_Bin;
-    Name = "opendocument.CalcDocument.1";
+    Name = "opendocument.CalcTemplate.1";
     Value = " ";
 End
 

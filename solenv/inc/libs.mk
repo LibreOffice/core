@@ -66,7 +66,7 @@ SALHELPERLIB=-lsalhelper$(UDK_MAJOR)$(COMID)
 SALHELPERLIB=-luno_salhelper$(COMID)
 .ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 XMLSCRIPTLIB =-lxcr$(DLLPOSTFIX)
-COMPHELPERLIB=-lcomphelp$(COMPHLP_MAJOR)$(COMID)
+COMPHELPERLIB=-lcomphelp$(COMID)
 CONNECTIVITYLIB=-lconnectivity
 LDAPBERLIB=-lldapber
 TOOLSLIBST=-latools
@@ -183,9 +183,7 @@ SAXLIB=-lsax$(DLLPOSTFIX)
 MAILLIB=-lmail
 DOCMGRLIB=-ldmg$(DLLPOSTFIX)
 BASICLIB=-lsb$(DLLPOSTFIX)
-.IF "$(ENABLE_VBA)"=="YES"
 VBAHELPERLIB=-lvbahelper$(DLLPOSTFIX)
-.ENDIF
 DBTOOLSLIB=-ldbtools$(DLLPOSTFIX)
 HM2LIBSH=-lhmwrpdll
 HM2LIBST=-lhmwrap
@@ -355,6 +353,7 @@ LPSOLVELIB=-llpsolve55
 SOFFICELIB=-lsofficeapp
 UNOPKGAPPLIB=-lunopkgapp
 TESTLIB=-ltest
+XMLREADERLIB=-lxmlreader
 
 .ELSE				# ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"
 
@@ -535,5 +534,6 @@ SOFFICELIB=isofficeapp.lib
 UNOPKGAPPLIB=iunopkgapp.lib
 TESTLIB=itest.lib
 BOOSTTHREADLIB=boostthread.lib
+XMLREADERLIB=ixmlreader.lib
 
 .ENDIF              # ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"

@@ -232,13 +232,12 @@ _VC_MANIFEST_BASENAME=__VC90
 .ENDIF
 
 .IF "$(CL_X64)" == ""
-LINK=link /MACHINE:IX86
+LINK=link /MACHINE:IX86 /IGNORE:4102 /IGNORE:4197
 .ELSE
 LINK=link /MACHINE:X64
 .ENDIF
     # do *not* add $(NOLOGO) to LINK or LINKFLAGS. Strangely, the wntmsci12 linker links fine then, but exits with
     # a return value 1, which makes dmake think it failed
-LINKOUTPUTFILTER= $(PIPEERROR) $(GREP) -v "LNK4197:"
 .IF "$(PRODUCT)"!="full"
 .ELSE
 LINKFLAGS=/MAP /OPT:NOREF

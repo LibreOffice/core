@@ -27,7 +27,7 @@
 
 #include "macros.inc"
 
-STD_UNO_LIB_FILE( gid_File_Lib_Solver, solver)
+STD_LIB_FILE( gid_File_Lib_Solver, solver)
 
 #ifndef SYSTEM_LPSOLVE
 File gid_File_Lib_Lpsolve
@@ -36,7 +36,7 @@ File gid_File_Lib_Lpsolve
 End
 #endif
 
-STD_UNO_LIB_FILE( gid_File_Lib_Analysis, analysis)
+STD_LIB_FILE( gid_File_Lib_Analysis, analysis)
 
 File gid_File_Share_Registry_Calc_Xcd
     TXT_FILE_BODY;
@@ -45,17 +45,17 @@ File gid_File_Share_Registry_Calc_Xcd
     Name = "calc.xcd";
 End
 
-STD_UNO_LIB_FILE( gid_File_Lib_Calc, calc)
+STD_LIB_FILE( gid_File_Lib_Calc, calc)
 
-STD_UNO_LIB_FILE( gid_File_Lib_Date, date)
+STD_LIB_FILE( gid_File_Lib_Date, date)
 
-STD_UNO_LIB_FILE( gid_File_Lib_Sc, sc)
+STD_LIB_FILE( gid_File_Lib_Sc, sc)
 
 STD_LIB_FILE( gid_File_Lib_Scui, scui)
 
 STD_UNO_LIB_FILE( gid_File_Lib_Scfilt, scfilt)
 
-STD_UNO_LIB_FILE( gid_File_Lib_Scd, scd)
+STD_LIB_FILE( gid_File_Lib_Scd, scd)
 
 STD_RES_FILE( gid_File_Res_Solver, solver)
 

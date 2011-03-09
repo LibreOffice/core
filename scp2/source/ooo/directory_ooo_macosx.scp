@@ -31,8 +31,8 @@
 Directory gid_Dir_Bundle
     ParentID = PD_PROGDIR;
     HostName = "%PRODUCTNAME.app";
-    LangPackHostName = "%PRODUCTNAME %PRODUCTVERSION Language Pack.app";
-    PatchHostName = "%PRODUCTNAME %PRODUCTVERSION Patch.app";
+    LangPackHostName = "%PRODUCTNAME Language Pack.app";
+    PatchHostName = "%PRODUCTNAME Patch.app";
 End
 #endif
 

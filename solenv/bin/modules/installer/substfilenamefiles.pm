@@ -34,8 +34,7 @@ use installer::pathanalyzer;
 use installer::systemactions;
 
 #########################################################
-# Analyzing files with flag SCPZIP_REPLACE
-# $item can be "File" or "ScpAction"
+# Analyzing files with flag SUBST_FILENAME
 #########################################################
 
 sub resolving_subst_filename_flag

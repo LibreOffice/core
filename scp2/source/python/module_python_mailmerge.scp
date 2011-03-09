@@ -32,7 +32,6 @@ File gid_File_Pymailmerge
     TXT_FILE_BODY;
     Dir = gid_Dir_Program;
     Name = "mailmerge.py";
-    RegistryID = gid_Starregistry_Services_Rdb;
-    Styles = (PACKED,UNO_COMPONENT);
+    Styles = (PACKED);
 End
 #endif

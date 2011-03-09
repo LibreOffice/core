@@ -115,9 +115,6 @@ sub set_global_environment_variables
     if ( $ENV{'LAST_MINOR'} ) { $installer::globals::lastminor = $ENV{'LAST_MINOR'}; }
 
     if ( $ENV{'PROEXT'} ) { $installer::globals::pro = 1; }
-    if ( $ENV{'SOLAR_JAVA'} ) { $installer::globals::solarjava = 1; }
-    if ( $ENV{'JDKLIB'} ) { $installer::globals::jdklib = $ENV{'JDKLIB'}; }
-    if ( $ENV{'JREPATH'} ) { $installer::globals::jrepath = $ENV{'JREPATH'}; }
 
     if ( $ENV{'VERBOSE'} && ( (lc $ENV{'VERBOSE'}) eq "false" ) ) { $installer::globals::quiet = 1; }
     if ( $ENV{'PREPARE_WINPATCH'} ) { $installer::globals::prepare_winpatch = 1; }
@@ -129,6 +126,7 @@ sub set_global_environment_variables
     if ( $ENV{'SOLAR_JAVA'} ) { $installer::globals::solarjavaset = 1; }
     if ( $ENV{'RPM'} ) { $installer::globals::rpm = $ENV{'RPM'}; }
     if ( $ENV{'DONTCOMPRESS'} ) { $installer::globals::solarisdontcompress = 1; }
+    if ( $ENV{'IGNORE_ERROR_IN_LOGFILE'} ) { $installer::globals::ignore_error_in_logfile = 1; }
     if (( $ENV{'DISABLE_STRIP'} ) && ( $ENV{'DISABLE_STRIP'} ne '' )) { $installer::globals::strip = 0; }
 
     if ( $installer::globals::localinstalldir ) { $installer::globals::localinstalldirset = 1; }

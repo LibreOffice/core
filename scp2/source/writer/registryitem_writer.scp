@@ -1314,7 +1314,7 @@ RegistryItem gid_Regitem_OpenOffice_OTT_OpenWith_Writer
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".ott\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    Name = "opendocument.WriterDocument.1";
+    Name = "opendocument.WriterTemplate.1";
     Value = " ";
 End
 
@@ -1323,7 +1323,7 @@ RegistryItem gid_Regitem_OpenOffice_OTH_OpenWith_Writer
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".oth\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    Name = "opendocument.WriterDocument.1";
+    Name = "opendocument.WriterWebTemplate.1";
     Value = " ";
 End
 
@@ -1332,7 +1332,7 @@ RegistryItem gid_Regitem_OpenOffice_ODM_OpenWith_Writer
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".odm\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    Name = "opendocument.WriterDocument.1";
+    Name = "opendocument.WriterGlobalDocument.1";
     Value = " ";
 End
 
@@ -1432,7 +1432,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Name = ".ott";
-    Value = "opendocument.WriterDocument.1";
+    Value = "opendocument.WriterTemplate.1";
     Styles = ();
 End
 
@@ -1441,7 +1441,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Name = ".stw";
-    Value = "soffice.StarWriterDocument.6";
+    Value = "soffice.StarWriterTemplate.6";
     Styles = ();
 End
 
@@ -1513,7 +1513,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Name = ".oth";
-    Value = "opendocument.WriterDocument.1";
+    Value = "opendocument.WriterWebTemplate.1";
     Styles = ();
 End
 
@@ -1522,7 +1522,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Name = ".odm";
-    Value = "opendocument.WriterDocument.1";
+    Value = "opendocument.WriterGlobalDocument.1";
     Styles = ();
 End
 

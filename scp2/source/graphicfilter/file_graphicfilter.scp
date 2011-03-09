@@ -34,8 +34,8 @@ File gid_File_Share_Registry_Graphicfilter_Xcd
     Name = "graphicfilter.xcd";
 End
 
-STD_UNO_LIB_FILE( gid_File_Lib_Flash, flash )
+STD_LIB_FILE( gid_File_Lib_Flash, flash )
 
-STD_UNO_LIB_FILE( gid_File_Lib_Svg, svgfilter )
+STD_LIB_FILE( gid_File_Lib_Svg, svgfilter )
 
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_WPGImport, wpgimport )

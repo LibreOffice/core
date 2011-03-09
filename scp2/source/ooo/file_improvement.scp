@@ -37,5 +37,5 @@ End
 #endif
 
 #if defined(BUILD_SPECIAL)
-STD_UNO_LIB_FILE( gid_File_Lib_Oooimprovement , oooimprovement)
+STD_LIB_FILE( gid_File_Lib_Oooimprovement , oooimprovement)
 #endif

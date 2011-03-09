@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-#undef Boolean
-#undef BOOL
+//#undef Boolean
+//#undef BOOL
 #undef Button
 #undef Byte
 #undef Control
@@ -46,7 +46,7 @@
 #undef SetCursor
 #undef StringPtr
 #undef DirInfo
-#undef ULONG
+//#undef ULONG
 #undef Line
 #undef TimeValue
 #undef Pattern

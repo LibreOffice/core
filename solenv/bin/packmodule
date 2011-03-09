@@ -1,0 +1,63 @@
+#! /usr/bin/env python
+#*************************************************************************
+#
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+# 
+# Copyright 2000, 2010 Oracle and/or its affiliates.
+#
+# OpenOffice.org - a multi-platform office productivity suite
+#
+# This file is part of OpenOffice.org.
+#
+# OpenOffice.org is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License version 3
+# only, as published by the Free Software Foundation.
+#
+# OpenOffice.org is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License version 3 for more details
+# (a copy is included in the LICENSE file that accompanied this code).
+#
+# You should have received a copy of the GNU Lesser General Public License
+# version 3 along with OpenOffice.org.  If not, see
+# <http://www.openoffice.org/license.html>
+# for a copy of the LGPLv3 License.
+#
+#*************************************************************************
+import os, os.path, sys, zipfile
+
+def paths_to_pack(loglines):
+    """Returns a generator iterating the outdir fields (with platform) of gb_deliver.log lines."""
+    lines=[]
+    for line in loglines:
+        fields = line.split()
+        if len(fields) >= 3:
+            lines.append(fields[2])
+    return lines
+
+def stripped_paths_to_pack(loglines):
+    """returns a generator iterating the outdir fields (stripped of the platform) of gb_deliver.log lines."""
+    return (path.partition('/')[2] for path in paths_to_pack(loglines))
+
+def main(args):
+    """creates/overwrites a file at OUTDIR/zip/MODULE.zip containing the contents of the gb_deliver.log."""
+    if len(args) != 3:
+        print('usage: packmodule OUTDIR MODULE')
+        sys.exit(2)
+    (executable, outdir, module) = args
+    os.chdir(outdir)
+    zipdir = 'zip'
+    try:
+        os.makedirs(zipdir)
+    except OSError:
+        pass
+    deliverlog = open(os.path.join('inc', module, 'gb_deliver.log'))
+    packedmodule = zipfile.ZipFile(os.path.join(zipdir,module+'.zip'), 'w')
+    [packedmodule.write(path) for path in stripped_paths_to_pack(deliverlog)]
+    packedmodule.close()
+
+if __name__ == "__main__":
+    main(sys.argv)
+
+# vim:set et sw=4 ts=4 filetype=python:

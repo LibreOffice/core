@@ -1,3 +1,4 @@
+..\systemstlguards\*.h %_DEST%\inc%_EXT%\stl\*.h
 ..\%__SRC%\lib\lib*.so %_DEST%\lib%_EXT%\lib*.so
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
 

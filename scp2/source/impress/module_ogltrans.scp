@@ -38,8 +38,7 @@ End
 
 File gid_File_Lib_OpenGLTransitions
     TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT);
-    RegistryID = gid_Starregistry_Services_Rdb;
+    Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
     #ifdef QUARTZ

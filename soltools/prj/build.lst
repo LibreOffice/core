@@ -10,5 +10,4 @@ so	soltools\javadep						nmake	-	all	so_jvdep so_mkdep so_adjvis.u NULL
 so	soltools\support						nmake	-	all	so_supp so_mkdep so_adjvis.u NULL
 so	soltools\giparser						nmake	-	all	so_gip so_supp so_adjvis.u NULL
 so	soltools\adjustvisibility				nmake	-	u	so_adjvis so_mkdep NULL
-so	soltools\HIDCompiler					nmake	-	all	so_hidc so_mkdep so_adjvis.u so_wunistd.n NULL
 so  soltools\testhxx                        nmake   -   all so_testhxx so_mkdep NULL

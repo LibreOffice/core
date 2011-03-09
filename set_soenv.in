@@ -74,15 +74,15 @@ my ( $USR, $ETC, $BIN, $LIB, $LIB64, $INC, $INCLUDE, $DEV, $OPT, $LOCAL, $SOLENV
 
 # Environment variables.
 my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $JAVAFLAGS, $OOO_SHELL,
-     $UPD, $WORK_STAMP, $SOURCE_ROOT_DIR ,
-     $SOLARSRC, $DEVROOT, $SOLARVER, $SOLARVERSION, $SOLARENV, $SOLARDEFIMG,
+     $UPD, $WORK_STAMP, $SOURCE_ROOT_DIR , $gb_REPOS, $BUILD_TYPE,
+     $SOLARSRC, $DEVROOT, $SOLARVER, $SOLARVERSION, $WORKDIR, $OUTDIR, $SOLARENV, $SOLARDEFIMG,
      $STAR_INIROOT, $STAR_INIROOTOLD, $STAR_STANDLST, $STAR_SSCOMMON, $STAR_SSOLARINI,
      $DMAKEROOT, $CLASSPATH, $XCLASSPATH, $COMPATH,
      $MSPDB_PATH, $MIDL_PATH, $CSC_PATH,
      $PATH, $SOLAREXTRAINC, $SOLAREXTRALIB, $SOLARLIB,
      $SOLARINC, $LOCALINI, $FRAMEWORKSHOME, $COMEX, $PERL,
      $COMP_ENV, $ILIB, $JAVAHOME, $PSDK_HOME, $DIRECTXSDK_LIB, $USE_NEW_SDK, $FRAME_HOME,
-     $USE_DIRECTX5, $ATL_LIB, $ATL_INCLUDE, $MFC_LIB, $MFC_INCLUDE, $NO_HIDS, $TMPDIR,
+     $USE_DIRECTX5, $ATL_LIB, $ATL_INCLUDE, $MFC_LIB, $MFC_INCLUDE, $TMPDIR,
      $COMMON_BUILD_TOOLS, $WIN_GREP, $WIN_FIND, $WIN_LS,
      $WIN_GNUCOPY, $WIN_TOUCH, $MOZILLA_VERSION, $MOZILLA_TOOLKIT, $PREBUILD_MOZAB, $MOZILLABUILD,
 	 $PROEXT, $TARFILE_LOCATION,
@@ -1040,8 +1040,12 @@ else
 #Location of Solar version.
 $SOLARVERSION         = '$SOLARVER';
 
+#Location of gnu make directories.
+$WORKDIR              = '$SOLARVER/$INPATH/workdir';
+$OUTDIR              = '$SOLARVER/$INPATH';
 #Some directories that are symlinks under rawbuild, have to use realpath on Cygwin
 $SOLARDEFIMG          = PathFormat($SRC_ROOT.$DEFIMGS);
+
 
 $SOLARENVINC          = '$SOLARENV'.$INC;
 # Location of
@@ -1513,6 +1517,17 @@ else
 {  AddWarning( "set_soenv", "$platform not configured for system dependant include dir" );
 }
 
+$gb_REPOS = $SRC_ROOT;
+
+if ('@WITH_LANG@' ne "")
+{
+    $gb_REPOS .= " ".$SOURCE_ROOT_DIR."/l10n";
+    $BUILD_TYPE = "@BUILD_TYPE@ L10N";
+}
+else
+{
+    $BUILD_TYPE = "@BUILD_TYPE@";
+}
 
 #
 # F. Setting the different aliases.
@@ -1598,8 +1613,6 @@ ToFile( "DEFAULT_MOZILLA_TOOLKIT", $MOZILLA_TOOLKIT, "e" );
 ToFile( "ENABLE_NSS_MODULE",  "@ENABLE_NSS_MODULE@", "e" );
 ToFile( "MOZILLABUILD",  "@MOZILLABUILD@", "e" );
 ToFile( "BUILD_VER_STRING",  "@BUILD_VER_STRING@", "e" );
-ToFile( "ENABLE_VBA",  "@ENABLE_VBA@", "e" );
-ToFile( "VBA_EXTENSION",  "@VBA_EXTENSION@", "e" );
 if ($platform =~ m/linux/ && $platform =~ m/powerpc/) {
 ToFile( "JITC_PROCESSOR_TYPE","6",                 "e" );
 }
@@ -1698,6 +1711,16 @@ ToFile( "DYNAMIC_CRT",       $DYNAMIC_CRT,       "e" );
 ToFile( "SET_EXCEPTIONS",    $SET_EXCEPTIONS,    "e" );
 ToFile( "use_shl_versions",  $use_shl_versions,  "e" );
 ToFile( "FLIPCMD",           $FLIPCMD,           "e" );
+if ( $platform =~ m/darwin/ )
+{
+# MAXOSX_DEPLOYMENT_TARGET : The minimum version required to run the build,
+# build can assume functions/libraries of that version to be available
+# unless you want to do runtime checks for 10.5 api, you also want to use the 10.4 sdk
+# (safer/easier than dealing with the MAC_OS_X_VERSION_MAX_ALLOWED macro)
+# http://developer.apple.com/technotes/tn2002/tn2064.html
+    ToFile( "MACOSX_DEPLOYMENT_TARGET",       "10.4",       "e" );
+}
+
 #
 # Writing the variables to file.
 # (c = comment, e = environment variable, a = alias, n = newline )
@@ -1742,6 +1765,8 @@ ToFile( "UPD",               $UPD,               "e" );
 ToFile( "WORK_STAMP",        $WORK_STAMP,        "e" );
 ToFile( "SOLARVER",          $SOLARVER,          "e" );
 ToFile( "SOLARVERSION",      $SOLARVERSION,      "e" );
+ToFile( "WORKDIR",           $WORKDIR,           "e" );
+ToFile( "OUTDIR",            $OUTDIR,            "e" );
 ToFile( "SOLARENV",          $SOLARENV,          "e" );
 ToFile( "SOLARDEFIMG",       $SOLARDEFIMG,       "e" );
 ToFile( "SOLARENVINC",       $SOLARENVINC,       "e" );
@@ -1807,7 +1832,6 @@ ToFile( "ENABLE_FONTCONFIG", "@ENABLE_FONTCONFIG@", "e" );
 ToFile( "ENABLE_DIRECTX",    "@ENABLE_DIRECTX@",    "e" );
 ToFile( "ENABLE_LAYOUT",     "@ENABLE_LAYOUT@",     "e" );
 ToFile( "ENABLE_PCH",        "@ENABLE_PCH@",       "e" );
-ToFile( "NO_HIDS",           "@NO_HIDS@",       "e" );
 ToFile( "ENABLE_GRAPHITE",   "@ENABLE_GRAPHITE@",   "e");
 ToFile( "SYSTEM_GRAPHITE",   "@SYSTEM_GRAPHITE@",   "e");
 ToFile( "GRAPHITE_LIBS",     "@GRAPHITE_LIBS@",     "e");
@@ -1837,7 +1861,7 @@ ToFile( "WITH_FONTS",        "@WITH_FONTS@",       "e" );
 ToFile( "WITHOUT_AFMS",      "@WITHOUT_AFMS@",     "e" );
 ToFile( "WITHOUT_PPDS",      "@WITHOUT_PPDS@",     "e" );
 ToFile( "WITH_BINFILTER",    "@WITH_BINFILTER@",   "e" );
-ToFile( "BUILD_TYPE",        "@BUILD_TYPE@",       "e" );
+ToFile( "BUILD_TYPE",        "$BUILD_TYPE",       "e" );
 ToFile( "VERBOSE",           "@VERBOSE@",          "e" );
 ToFile( "ENABLE_ZENITY",           "@ENABLE_ZENITY@",          "e" );
 ToFile( "ENABLE_EVOAB2",     "@ENABLE_EVOAB2@",    "e" );
@@ -1876,6 +1900,8 @@ ToFile( "FREETYPE_LIBS",     "@FREETYPE_LIBS@",    "e" );
 ToFile( "SYSTEM_POPPLER",    "@SYSTEM_POPPLER@",   "e" );
 ToFile( "POPPLER_CFLAGS",    "@POPPLER_CFLAGS@",   "e" );
 ToFile( "POPPLER_LIBS",      "@POPPLER_LIBS@",     "e" );
+ToFile( "GSTREAMER_CFLAGS",  "@GSTREAMER_CFLAGS@", "e" );
+ToFile( "GSTREAMER_LIBS",    "@GSTREAMER_LIBS@",   "e" );
 ToFile( "SYSTEM_CAIRO",      "@SYSTEM_CAIRO@",     "e" );
 ToFile( "BUILD_PIXMAN",      "@BUILD_PIXMAN@",     "e" );
 ToFile( "CAIRO_CFLAGS",      "@CAIRO_CFLAGS@",     "e" );
@@ -1982,6 +2008,8 @@ if ($platform !~ m/cygwin|os2/) {
 }
 ToFile( "SOLARSRC",           $SOLARSRC,           "e" );
 ToFile( "SOURCE_ROOT_DIR",    $SOURCE_ROOT_DIR,    "e" );
+ToFile( "gb_REPOS",           $gb_REPOS,           "e" );
+
 if ( $platform =~ m/cygwin/ )
 {
    ToFile( "ILIB",              $ILIB,              "e" );
@@ -1994,6 +2022,7 @@ if ( $platform =~ m/cygwin/ )
       ToFile( "MINGW_SHARED_GCCLIB",         "@MINGW_SHARED_GCCLIB@",              "e" );
       ToFile( "MINGW_GCCLIB_EH",      "@MINGW_GCCLIB_EH@",              "e" );
       ToFile( "MINGW_SHARED_GXXLIB",         "@MINGW_SHARED_GXXLIB@",              "e" );
+      ToFile( "MINGW_SHARED_LIBSTDCPP",         "@MINGW_SHARED_LIBSTDCPP@",              "e" );
       ToFile( "MINGW_GCCDLL",         "@MINGW_GCCDLL@",              "e" );
       ToFile( "MINGW_GXXDLL",         "@MINGW_GXXDLL@",              "e" );
    }
@@ -2058,8 +2087,8 @@ if ( $platform =~ m/cygwin/ ) {
 if ($platform =~ m/solaris|darwin|freebsd/)
 {
   ToFile( "GNUPATCH",   "@GNUPATCH@",	"e");
-  ToFile( "GNUCOPY",	"@GNUCP@",	"e");
 }
+ToFile( "GNUCOPY",	"@GNUCP@",	"e");
 # OS/2 define .pl as executable for 4os2
 # use - as switch char for dmake (os2/switchar.c)
 if ($platform =~ m/os2/)

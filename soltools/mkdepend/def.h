@@ -61,8 +61,9 @@ in this Software without prior written authorization from the X Consortium.
 #endif
 
 #define MAXDEFINES  512
-#define MAXFILES    2048  /* Increased from 512. -mcafee */
-                          /* Increased from 1024. -mh */
+#define MAXFILES    ( 1<<16 ) /* Increased from 512. -mcafee */
+                              /* Increased from 1024. -mh */
+                              /* Increased from 2048. -b_michaelsen */
 #define MAXDIRS     64
 #define SYMHASHSEED     131  /* 131 1313 13131 ... */
 #define SYMHASHMEMBERS  64  /* must be 2^x to work right */

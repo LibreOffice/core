@@ -54,11 +54,9 @@ use installer::packagepool;
 use installer::parameter;
 use installer::pathanalyzer;
 use installer::profiles;
-use installer::regmerge;
 use installer::scppatchsoname;
 use installer::scpzipfiles;
 use installer::scriptitems;
-use installer::servicesfile;
 use installer::setupscript;
 use installer::simplepackage;
 use installer::sorter;
@@ -904,43 +902,6 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
     installer::worker::resolving_hidden_flag($filesinproductlanguageresolvedarrayref, $allvariableshashref, "File", $languagestringref);
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles13c.log", $filesinproductlanguageresolvedarrayref); }
-
-    #####################################
-    # Creating services.rdb
-    #####################################
-
-    if ( $allvariableshashref->{'SERVICESPROJEKT'} )
-    {
-        if (! $installer::globals::languagepack && ! $installer::globals::helppack)
-        {
-            # ATTENTION: For creating the services.rdb it is necessary to execute the native file
-            # "regcomp" or "regcomp.exe". Therefore this function can only be executed on the
-            # corresponding platform.
-
-            if ( $installer::globals::servicesrdb_can_be_created )
-            {
-                installer::logger::print_message( "... creating preregistered services.rdb ...\n" );
-
-                installer::servicesfile::create_services_rdb($allvariableshashref, $filesinproductlanguageresolvedarrayref, $includepatharrayref, $languagestringref);
-                if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles14.log", $filesinproductlanguageresolvedarrayref); }
-            }
-        }
-    }
-
-    #####################################
-    # Calls of regmerge
-    #####################################
-
-    if (!($installer::globals::is_copy_only_project))
-    {
-        if (! $installer::globals::languagepack && ! $installer::globals::helppack)
-        {
-            installer::logger::print_message( "... merging files into registry database ...\n" );
-
-            installer::regmerge::merge_registration_files($filesinproductlanguageresolvedarrayref, $includepatharrayref, $languagestringref, $allvariableshashref);
-            if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles14b.log", $filesinproductlanguageresolvedarrayref); }
-        }
-    }
 
     ############################################
     # Collecting directories for epm list file
@@ -2039,7 +2000,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         installer::windows::registry::create_registry_table($registryitemsinproductlanguageresolvedarrayref, \@allregistrycomponents, $newidtdir, $languagesarrayref, $allvariableshashref);
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "registryitems4.log", $registryitemsinproductlanguageresolvedarrayref); }
 
-        installer::windows::component::create_component_table($filesinproductlanguageresolvedarrayref, $registryitemsinproductlanguageresolvedarrayref, $directoriesforepmarrayref, \@allfilecomponents, \@allregistrycomponents, $newidtdir, $componentid, $componentidkeypath);
+        installer::windows::component::create_component_table($filesinproductlanguageresolvedarrayref, $registryitemsinproductlanguageresolvedarrayref, $directoriesforepmarrayref, \@allfilecomponents, \@allregistrycomponents, $newidtdir, $componentid, $componentidkeypath, $allvariableshashref);
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles19.log", $filesinproductlanguageresolvedarrayref); }
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "registryitems5.log", $registryitemsinproductlanguageresolvedarrayref); }
 
@@ -2250,6 +2211,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                 installer::logger::print_message( "... creating msi database (language $onelanguage) ... \n" );
 
                 installer::windows::msiglobal::set_uuid_into_component_table($languageidtdir, $allvariableshashref);    # setting new GUID for the components using the tool uuidgen.exe
+                installer::windows::msiglobal::prepare_64bit_database($languageidtdir, $allvariableshashref);   # making last 64 bit changes
                 installer::windows::msiglobal::create_msi_database($languageidtdir ,$msifilename);
 
                 # validating the database   # ToDo
