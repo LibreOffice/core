@@ -1,6 +1,6 @@
 --- misc/gettext-0.18.1.1/gettext-runtime/intl/makefile.mk	Wed Aug 20 14:33:55 2008
 +++ misc/build/gettext-0.18.1.1/gettext-runtime/intl/makefile.mk	Wed Aug 20 14:26:42 2008
-@@ -1 +1,111 @@
+@@ -1 +1,108 @@
 -dummy
 +#*************************************************************************
 +#
@@ -43,11 +43,8 @@
 +.INCLUDE : settings.mk
 +
 +#.IF "$(GUI)$(CPU)"=="WNTP"
-+#CFLAGS+= -I .. -D HAVE_CONFIG_H -D FC_CACHEDIR=\".\" -DBUILDING_LIBINTL -DBUILDING_DLL -DIN_LIBINTL -DENABLE_RELOCATABLE=1 -DIN_LIBRARY -DNO_XMALLOC -Dset_relocation_prefix=libintl_set_relocation_prefix -Drelocate=libintl_relocate -DDEPENDS_ON_LIBICONV=1
-+#CFLAGS+= -DLOCALEDIR=\"d:/tools/o_rsvglibs/DEV300/ooo/gettext/./wntmsci12/misc/share/locale\" -DLOCALE_ALIAS_PATH=\"d:/tools/o_rsvglibs/DEV300/ooo/gettext/./wntmsci12/misc/share/locale\" -DLIBDIR=\"d:/tools/o_rsvglibs/DEV300/ooo/gettext/./wntmsci12/misc/lib\"
-+#CFLAGS+=-DDLL_EXPORT -DPIC -D_LIBC
-+CFLAGS+=-c -DLOCALEDIR=\"d:/tools/o_rsvglibs/DEV300/ooo/gettext/./wntmsci12/misc/share/locale\" -DLOCALE_ALIAS_PATH=\"d:/tools/o_rsvglibs/DEV300/ooo/gettext/./wntmsci12/misc/share/locale\" -DLIBDIR=\"d:/tools/o_rsvglibs/DEV300/ooo/gettext/./wntmsci12/misc/lib\" 
-+CFLAGS+=-DBUILDING_LIBINTL -DBUILDING_DLL -DIN_LIBINTL -DENABLE_RELOCATABLE=1 -DIN_LIBRARY -DINSTALLDIR=\"d:/tools/o_rsvglibs/DEV300/ooo/gettext/./wntmsci12/misc/lib\" -DNO_XMALLOC -Dset_relocation_prefix=libintl_set_relocation_prefix -Drelocate=libintl_relocate 
++CFLAGS+=-c -DLOCALEDIR=\"./share/locale\" -DLOCALE_ALIAS_PATH=\"./share/locale\" -DLIBDIR=\"./lib\" 
++CFLAGS+=-DBUILDING_LIBINTL -DBUILDING_DLL -DIN_LIBINTL -DENABLE_RELOCATABLE=1 -DIN_LIBRARY -DINSTALLDIR=\"./lib\" -DNO_XMALLOC -Dset_relocation_prefix=libintl_set_relocation_prefix -Drelocate=libintl_relocate 
 +CFLAGS+=-DDEPENDS_ON_LIBICONV=1 -DHAVE_CONFIG_H -I. -I. -I.. -DDLL_EXPORT -DPIC
 +
 + #.ENDIF
@@ -1098,7 +1095,7 @@
 +/* #undef ICONV_FLAVOR */
 +
 +/* Define to the value of ${prefix}, as a string. */
-+#define INSTALLPREFIX "d:/tools/o_rsvglibs/DEV300/ooo/gettext/./wntmsci12/misc"
++#define INSTALLPREFIX "."
 +
 +/* Define if integer division by zero raises signal SIGFPE. */
 +#define INTDIV0_RAISES_SIGFPE 0
