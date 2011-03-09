@@ -80,6 +80,12 @@
                               EnterWindowMask           |\
                               LeaveWindowMask
 
+namespace {
+
+namespace css = com::sun::star;
+
+}
+
 using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::datatransfer::dnd;
 using namespace com::sun::star::lang;
@@ -279,7 +285,8 @@ SelectionManager::SelectionManager() :
         m_nXdndActionMove( None ),
         m_nXdndActionLink( None ),
         m_nXdndActionAsk( None ),
-        m_nXdndActionPrivate( None )
+        m_nXdndActionPrivate( None ),
+        m_bShutDown( false )
 {
     m_aDropEnterEvent.data.l[0] = None;
     m_aDragRunning.reset();
@@ -632,7 +639,7 @@ OString SelectionManager::convertToCompound( const OUString& rText )
 // ------------------------------------------------------------------------
 
 bool SelectionManager::convertData(
-                                   const Reference< XTransferable >& xTransferable,
+                                   const css::uno::Reference< XTransferable >& xTransferable,
                                    Atom nType,
                                    Atom nSelection,
                                    int& rFormat,
@@ -1527,7 +1534,7 @@ bool SelectionManager::sendData( SelectionAdaptor* pAdaptor,
 #if OSL_DEBUG_LEVEL > 1
                         fprintf( stderr, "trying bitmap conversion\n" );
 #endif
-                        Reference<XBitmap> xBM( new BmpTransporter( aData ) );
+                        css::uno::Reference<XBitmap> xBM( new BmpTransporter( aData ) );
                         Sequence<Any> aArgs(2), aOutArgs;
                         Sequence<sal_Int16> aOutIndex;
                         aArgs.getArray()[0] = makeAny( xBM );
@@ -1674,7 +1681,7 @@ bool SelectionManager::handleSelectionRequest( XSelectionRequestEvent& rRequest 
     if( pAdaptor &&
         XGetSelectionOwner( m_pDisplay, rRequest.selection ) == m_aWindow )
     {
-        Reference< XTransferable > xTrans( pAdaptor->getTransferable() );
+        css::uno::Reference< XTransferable > xTrans( pAdaptor->getTransferable() );
         if( rRequest.target == m_nTARGETSAtom )
         {
             // someone requests our types
@@ -1843,7 +1850,7 @@ bool SelectionManager::handleSelectionRequest( XSelectionRequestEvent& rRequest 
             dsde.DropAction         = DNDConstants::ACTION_NONE;
             dsde.DropSuccess        = sal_False;
         }
-        Reference< XDragSourceListener > xListener( m_xDragSourceListener );
+        css::uno::Reference< XDragSourceListener > xListener( m_xDragSourceListener );
         m_xDragSourceListener.clear();
         aGuard.clear();
         if( xListener.is() )
@@ -2364,7 +2371,7 @@ void SelectionManager::dropComplete( sal_Bool bSuccess, XLIB_Window aDropWindow,
             dsde.DragSource         = static_cast< XDragSource* >(this);
             dsde.DropAction         = getUserDragAction();
             dsde.DropSuccess        = bSuccess;
-            Reference< XDragSourceListener > xListener = m_xDragSourceListener;
+            css::uno::Reference< XDragSourceListener > xListener = m_xDragSourceListener;
             m_xDragSourceListener.clear();
 
             aGuard.clear();
@@ -2448,7 +2455,7 @@ void SelectionManager::sendDragStatus( Atom nDropAction )
         dsde.DropAction         = m_nSourceActions;
         dsde.UserAction         = getUserDragAction();
 
-        Reference< XDragSourceListener > xListener( m_xDragSourceListener );
+        css::uno::Reference< XDragSourceListener > xListener( m_xDragSourceListener );
         // caution: do not change anything after this
         aGuard.clear();
         if( xListener.is() )
@@ -2710,7 +2717,7 @@ bool SelectionManager::handleDragEvent( XEvent& rMessage )
             dsde.DragSource         = static_cast< XDragSource* >(this);
             dsde.DropAction         = m_nTargetAcceptAction;
             dsde.DropSuccess        = m_bDropSuccess;
-            Reference< XDragSourceListener > xListener( m_xDragSourceListener );
+            css::uno::Reference< XDragSourceListener > xListener( m_xDragSourceListener );
             m_xDragSourceListener.clear();
             aGuard.clear();
             xListener->dragDropEnd( dsde );
@@ -2776,7 +2783,7 @@ bool SelectionManager::handleDragEvent( XEvent& rMessage )
             dsde.DragSource         = static_cast< XDragSource* >(this);
             dsde.DropAction         = DNDConstants::ACTION_NONE;
             dsde.DropSuccess        = sal_False;
-            Reference< XDragSourceListener > xListener( m_xDragSourceListener );
+            css::uno::Reference< XDragSourceListener > xListener( m_xDragSourceListener );
             m_xDragSourceListener.clear();
             aGuard.clear();
             xListener->dragDropEnd( dsde );
@@ -2902,7 +2909,7 @@ bool SelectionManager::handleDragEvent( XEvent& rMessage )
                     m_nDropTimeout                  = time( NULL );
                     // HACK :-)
                     aGuard.clear();
-                    static_cast< X11Clipboard* >( pAdaptor )->setContents( m_xDragSourceTransferable, Reference< ::com::sun::star::datatransfer::clipboard::XClipboardOwner >() );
+                    static_cast< X11Clipboard* >( pAdaptor )->setContents( m_xDragSourceTransferable, css::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardOwner >() );
                     aGuard.reset();
                     bCancel = false;
                 }
@@ -2917,7 +2924,7 @@ bool SelectionManager::handleDragEvent( XEvent& rMessage )
             dsde.DragSource         = static_cast< XDragSource* >(this);
             dsde.DropAction         = DNDConstants::ACTION_NONE;
             dsde.DropSuccess        = sal_False;
-            Reference< XDragSourceListener > xListener( m_xDragSourceListener );
+            css::uno::Reference< XDragSourceListener > xListener( m_xDragSourceListener );
             m_xDragSourceListener.clear();
             aGuard.clear();
             xListener->dragDropEnd( dsde );
@@ -3071,7 +3078,7 @@ void SelectionManager::updateDragWindow( int nX, int nY, XLIB_Window aRoot )
 {
     ResettableMutexGuard aGuard( m_aMutex );
 
-    Reference< XDragSourceListener > xListener( m_xDragSourceListener );
+    css::uno::Reference< XDragSourceListener > xListener( m_xDragSourceListener );
 
     m_nLastDragX = nX;
     m_nLastDragY = nY;
@@ -3231,8 +3238,8 @@ void SelectionManager::startDrag(
                                  sal_Int8 sourceActions,
                                  sal_Int32,
                                  sal_Int32,
-                                 const Reference< XTransferable >& transferable,
-                                 const Reference< XDragSourceListener >& listener
+                                 const css::uno::Reference< XTransferable >& transferable,
+                                 const css::uno::Reference< XDragSourceListener >& listener
                                  ) throw()
 {
 #if OSL_DEBUG_LEVEL > 1
@@ -3516,8 +3523,8 @@ void SelectionManager::dragDoDispatch()
     {
         ClearableMutexGuard aGuard(m_aMutex);
 
-        Reference< XDragSourceListener > xListener( m_xDragSourceListener );
-        Reference< XTransferable > xTransferable( m_xDragSourceTransferable );
+        css::uno::Reference< XDragSourceListener > xListener( m_xDragSourceListener );
+        css::uno::Reference< XTransferable > xTransferable( m_xDragSourceTransferable );
         m_xDragSourceListener.clear();
         m_xDragSourceTransferable.clear();
 
@@ -3787,10 +3794,10 @@ void SelectionManager::run( void* pThis )
     timeval aLast;
     gettimeofday( &aLast, 0 );
 
-    Reference< XMultiServiceFactory > xFact( ::comphelper::getProcessServiceFactory() );
+    css::uno::Reference< XMultiServiceFactory > xFact( ::comphelper::getProcessServiceFactory() );
     if( xFact.is() )
     {
-        Reference< XDesktop > xDesktop( xFact->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.frame.Desktop" ) ), UNO_QUERY );
+        css::uno::Reference< XDesktop > xDesktop( xFact->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.frame.Desktop" ) ), UNO_QUERY );
         if( xDesktop.is() )
             xDesktop->addTerminateListener(This);
     }
@@ -3805,7 +3812,7 @@ void SelectionManager::run( void* pThis )
         if( (aNow.tv_sec - aLast.tv_sec) > 0 )
         {
             ClearableMutexGuard aGuard(This->m_aMutex);
-            std::list< std::pair< SelectionAdaptor*, Reference< XInterface > > > aChangeList;
+            std::list< std::pair< SelectionAdaptor*, css::uno::Reference< XInterface > > > aChangeList;
 
             for( std::hash_map< Atom, Selection* >::iterator it = This->m_aSelections.begin(); it != This->m_aSelections.end(); ++it )
             {
@@ -3815,7 +3822,7 @@ void SelectionManager::run( void* pThis )
                     if( aOwner != it->second->m_aLastOwner )
                     {
                         it->second->m_aLastOwner = aOwner;
-                        std::pair< SelectionAdaptor*, Reference< XInterface > >
+                        std::pair< SelectionAdaptor*, css::uno::Reference< XInterface > >
                             aKeep( it->second->m_pAdaptor, it->second->m_pAdaptor->getReference() );
                         aChangeList.push_back( aKeep );
                     }
@@ -3838,6 +3845,11 @@ void SelectionManager::run( void* pThis )
 void SelectionManager::shutdown() throw()
 {
     ResettableMutexGuard aGuard(m_aMutex);
+    if( m_bShutDown )
+    {
+        return;
+    }
+    m_bShutDown = true;
     // stop dispatching
     if( m_aThread )
     {
@@ -3927,7 +3939,7 @@ void SAL_CALL SelectionManager::queryTermination( const ::com::sun::star::lang::
 void SAL_CALL SelectionManager::notifyTermination( const ::com::sun::star::lang::EventObject& rEvent )
     throw( ::com::sun::star::uno::RuntimeException )
 {
-    Reference< XDesktop > xDesktop( rEvent.Source, UNO_QUERY );
+    css::uno::Reference< XDesktop > xDesktop( rEvent.Source, UNO_QUERY );
     if( xDesktop.is() == sal_True )
         xDesktop->removeTerminateListener( this );
     #if OSL_DEBUG_LEVEL > 1
@@ -4060,7 +4072,7 @@ void SelectionManager::deregisterDropTarget( XLIB_Window aWindow )
         dsde.DragSource         = static_cast< XDragSource* >(this);
         dsde.DropAction         = DNDConstants::ACTION_NONE;
         dsde.DropSuccess        = sal_False;
-        Reference< XDragSourceListener > xListener( m_xDragSourceListener );
+        css::uno::Reference< XDragSourceListener > xListener( m_xDragSourceListener );
         m_xDragSourceListener.clear();
         aGuard.clear();
         xListener->dragDropEnd( dsde );
@@ -4071,7 +4083,7 @@ void SelectionManager::deregisterDropTarget( XLIB_Window aWindow )
  *  SelectionAdaptor
  */
 
-Reference< XTransferable > SelectionManager::getTransferable() throw()
+css::uno::Reference< XTransferable > SelectionManager::getTransferable() throw()
 {
     return m_xDragSourceTransferable;
 }
@@ -4091,9 +4103,9 @@ void SelectionManager::fireContentsChanged() throw()
 
 // ------------------------------------------------------------------------
 
-Reference< XInterface > SelectionManager::getReference() throw()
+css::uno::Reference< XInterface > SelectionManager::getReference() throw()
 {
-    return Reference< XInterface >( static_cast<OWeakObject*>(this) );
+    return css::uno::Reference< XInterface >( static_cast<OWeakObject*>(this) );
 }
 
 // ------------------------------------------------------------------------
@@ -4124,7 +4136,7 @@ void SelectionManagerHolder::initialize( const Sequence< Any >& arguments ) thro
 
     if( arguments.getLength() > 0 )
     {
-        Reference< XDisplayConnection > xConn;
+        css::uno::Reference< XDisplayConnection > xConn;
         arguments.getConstArray()[0] >>= xConn;
         if( xConn.is() )
         {
@@ -4159,8 +4171,8 @@ sal_Int32 SelectionManagerHolder::getDefaultCursor( sal_Int8 dragAction ) throw(
 void SelectionManagerHolder::startDrag(
                                        const ::com::sun::star::datatransfer::dnd::DragGestureEvent& trigger,
                                        sal_Int8 sourceActions, sal_Int32 cursor, sal_Int32 image,
-                                       const Reference< ::com::sun::star::datatransfer::XTransferable >& transferable,
-                                       const Reference< ::com::sun::star::datatransfer::dnd::XDragSourceListener >& listener
+                                       const css::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& transferable,
+                                       const css::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragSourceListener >& listener
                                        ) throw()
 {
     if( m_xRealDragSource.is() )

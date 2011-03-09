@@ -53,6 +53,7 @@
 #include "vcl/salimestatus.hxx"
 #include "vcl/salsys.hxx"
 #include "vcl/svids.hrc"
+#include "vcl/xconnection.hxx"
 
 #include "unotools/fontcfg.hxx"
 
@@ -70,6 +71,12 @@
 #include "com/sun/star/java/JavaDisabledException.hpp"
 
 #include <stdio.h>
+
+namespace {
+
+namespace css = com::sun::star;
+
+}
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -172,6 +179,8 @@ void ImplDeInitSVData()
         delete pSVData->maCtrlData.mpFieldUnitStrings, pSVData->maCtrlData.mpFieldUnitStrings = NULL;
     if( pSVData->maCtrlData.mpCleanUnitStrings )
         delete pSVData->maCtrlData.mpCleanUnitStrings, pSVData->maCtrlData.mpCleanUnitStrings = NULL;
+    if( pSVData->mpPaperNames )
+        delete pSVData->mpPaperNames, pSVData->mpPaperNames = NULL;
 }
 
 // -----------------------------------------------------------------------
@@ -336,16 +345,16 @@ com::sun::star::uno::Any AccessBridgeCurrentContext::getValueByName( const rtl::
 }
 
 
-bool ImplInitAccessBridge(BOOL bAllowCancel, BOOL &rCancelled)
+bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
 {
-    rCancelled = FALSE;
+    rCancelled = sal_False;
 
     bool bErrorMessage = true;
 
     // Note:
-    // if bAllowCancel is TRUE we were called from application startup
+    // if bAllowCancel is sal_True we were called from application startup
     //  where we will disable any Java errorboxes and show our own accessibility dialog if Java throws an exception
-    // if bAllowCancel is FALSE we were called from Tools->Options
+    // if bAllowCancel is sal_False we were called from Tools->Options
     //  where we will see Java errorboxes, se we do not show our dialogs in addition to Java's
 
     try
@@ -362,12 +371,12 @@ bool ImplInitAccessBridge(BOOL bAllowCancel, BOOL &rCancelled)
         ImplSVData* pSVData = ImplGetSVData();
         if( ! pSVData->mxAccessBridge.is() )
         {
-            Reference< XMultiServiceFactory > xFactory(vcl::unohelper::GetMultiServiceFactory());
+            css::uno::Reference< XMultiServiceFactory > xFactory(vcl::unohelper::GetMultiServiceFactory());
 
             if( xFactory.is() )
             {
-                Reference< XExtendedToolkit > xToolkit =
-                    Reference< XExtendedToolkit >(Application::GetVCLToolkit(), UNO_QUERY);
+                css::uno::Reference< XExtendedToolkit > xToolkit =
+                    css::uno::Reference< XExtendedToolkit >(Application::GetVCLToolkit(), UNO_QUERY);
 
                 Sequence< Any > arguments(1);
                 arguments[0] = makeAny(xToolkit);
@@ -422,7 +431,7 @@ bool ImplInitAccessBridge(BOOL bAllowCancel, BOOL &rCancelled)
 
             // Do not change the setting in case the user chooses to cancel
             if( SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL == ret )
-                rCancelled = TRUE;
+                rCancelled = sal_True;
         }
 
         return false;
@@ -447,7 +456,7 @@ bool ImplInitAccessBridge(BOOL bAllowCancel, BOOL &rCancelled)
 
             // Do not change the setting in case the user chooses to cancel
             if( SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL == ret )
-                rCancelled = TRUE;
+                rCancelled = sal_True;
         }
 
         return false;
@@ -472,7 +481,7 @@ bool ImplInitAccessBridge(BOOL bAllowCancel, BOOL &rCancelled)
 
             // Do not change the setting in case the user chooses to cancel
             if( SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL == ret )
-                rCancelled = TRUE;
+                rCancelled = sal_True;
         }
 
         return false;
@@ -497,7 +506,7 @@ bool ImplInitAccessBridge(BOOL bAllowCancel, BOOL &rCancelled)
 
             // Do not change the setting in case the user chooses to cancel
             if( SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL == ret )
-                rCancelled = TRUE;
+                rCancelled = sal_True;
         }
 
         return false;
@@ -539,7 +548,7 @@ bool ImplInitAccessBridge(BOOL bAllowCancel, BOOL &rCancelled)
 
                     // Do not change the setting in case the user chooses to cancel
                     if( SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL == ret )
-                        rCancelled = TRUE;
+                        rCancelled = sal_True;
                 }
                 else
                 {

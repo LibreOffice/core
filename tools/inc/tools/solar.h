@@ -34,57 +34,24 @@
 
 /*** common solar defines ***********************************/
 
-#ifndef TRUE
-#define TRUE        1
-#endif
-#ifndef FALSE
-#define FALSE       0
-#endif
-
 #ifdef _SOLAR__PRIVATE
 #undef _SOLAR__PRIVATE
 #endif
 #define _SOLAR__PRIVATE 1
 #define __REFERENCED    0
 
-/*** common solar types ********************************************/
-/* NOTE: these types are deprecated, or soon will be.  They should */
-/* not be used in new code, and should be replaced with their      */
-/* corresponding types from sal/types.h in old code when possible. */
-/*   Previous typedefs from before sal convergence are in comments */
-/*   to the right of the new types.                                */
-
-typedef sal_Bool        BOOL;   /* typedef unsigned char   BOOL; */
-typedef sal_uInt8       BYTE;   /* typedef unsigned char   BYTE; */
-typedef sal_uInt16      USHORT; /* typedef unsigned short  USHORT; */
-typedef sal_uIntPtr     ULONG;  /* typedef unsigned long   ULONG; */
-typedef int             FASTBOOL;
-
-#if !defined(VCL_NEED_BASETSD) || defined(__MINGW32__)
-#ifndef _SOLAR_NOUINT
-typedef sal_Int16           INT16;  /* typedef short           INT16; */
-typedef sal_uInt16          UINT16; /* typedef unsigned short  UINT16; */
-#if defined(SAL_W32)
-typedef sal_sChar           INT8;
-#else
-typedef sal_Char            INT8;   /* typedef char            INT8; */
-#endif
-typedef sal_uInt8           UINT8;  /* typedef unsigned char   UINT8; */
-#endif /* _SOLAR_NOUINT */
-#endif
-
-#ifndef VCL_NEED_BASETSD
-#ifndef _SOLAR_NOUINT
-/* types with exact defined size (not just the minimum size) */
-typedef sal_Int64           INT64;  /* typedef long            INT64;  previously "void" on Windows */
-typedef sal_uInt64          UINT64; /* typedef unsigned long   UINT64; previously "void" on Windows */
-typedef sal_Int32           INT32;  /* typedef int             INT32;  previously "long" on Windows */
-typedef sal_uInt32          UINT32; /* typedef unsigned int    UINT32; previously "unsigned long" on Windows */
-#endif /* _SOLAR_NOUINT */
-#endif
+/************************************************************
+ Intermediate type to solve type clash with Windows headers.
+ Should be removed as soon as all code parts have been reviewed
+ and the correct type is known. Most of the times ULONG is meant
+ to be a 32-Bit unsigned integer type as sal_uInt32 is often
+ used for data exchange or for similiar method args.
+*************************************************************/
+typedef sal_uIntPtr    sal_uLong; /* Replaces type ULONG */
 
 /*** misc. macros to leverage platform and compiler differences ********/
 
+typedef int             FASTBOOL;
 #define DELETEZ( p )    ( delete p,p = 0 )
 
 #define __FAR_DATA
@@ -114,69 +81,69 @@ typedef sal_uInt32          UINT32; /* typedef unsigned int    UINT32; previousl
    always little endian;
    not necessarily aligned */
 
-typedef BYTE                SVBT8[1];
-typedef BYTE                SVBT16[2];
-typedef BYTE                SVBT32[4];
-typedef BYTE                SVBT64[8];
+typedef sal_uInt8               SVBT8[1];
+typedef sal_uInt8               SVBT16[2];
+typedef sal_uInt8               SVBT32[4];
+typedef sal_uInt8               SVBT64[8];
 
 #ifdef __cplusplus
 
-inline BYTE     SVBT8ToByte  ( const SVBT8  p ) { return p[0]; }
-inline USHORT   SVBT16ToShort( const SVBT16 p ) { return (USHORT)p[0]
-                                                   + ((USHORT)p[1] <<  8); }
+inline sal_uInt8    SVBT8ToByte  ( const SVBT8  p ) { return p[0]; }
+inline sal_uInt16   SVBT16ToShort( const SVBT16 p ) { return (sal_uInt16)p[0]
+                                                   + ((sal_uInt16)p[1] <<  8); }
 inline sal_uInt32   SVBT32ToUInt32 ( const SVBT32 p ) { return (sal_uInt32)p[0]
                                                    + ((sal_uInt32)p[1] <<  8)
                                                    + ((sal_uInt32)p[2] << 16)
                                                    + ((sal_uInt32)p[3] << 24); }
 #if defined OSL_LITENDIAN
 inline double   SVBT64ToDouble( const SVBT64 p ) { double n;
-                                                    ((BYTE*)&n)[0] = p[0];
-                                                    ((BYTE*)&n)[1] = p[1];
-                                                    ((BYTE*)&n)[2] = p[2];
-                                                    ((BYTE*)&n)[3] = p[3];
-                                                    ((BYTE*)&n)[4] = p[4];
-                                                    ((BYTE*)&n)[5] = p[5];
-                                                    ((BYTE*)&n)[6] = p[6];
-                                                    ((BYTE*)&n)[7] = p[7];
+                                                    ((sal_uInt8*)&n)[0] = p[0];
+                                                    ((sal_uInt8*)&n)[1] = p[1];
+                                                    ((sal_uInt8*)&n)[2] = p[2];
+                                                    ((sal_uInt8*)&n)[3] = p[3];
+                                                    ((sal_uInt8*)&n)[4] = p[4];
+                                                    ((sal_uInt8*)&n)[5] = p[5];
+                                                    ((sal_uInt8*)&n)[6] = p[6];
+                                                    ((sal_uInt8*)&n)[7] = p[7];
                                                     return n; }
 #else
 inline double   SVBT64ToDouble( const SVBT64 p ) { double n;
-                                                    ((BYTE*)&n)[0] = p[7];
-                                                    ((BYTE*)&n)[1] = p[6];
-                                                    ((BYTE*)&n)[2] = p[5];
-                                                    ((BYTE*)&n)[3] = p[4];
-                                                    ((BYTE*)&n)[4] = p[3];
-                                                    ((BYTE*)&n)[5] = p[2];
-                                                    ((BYTE*)&n)[6] = p[1];
-                                                    ((BYTE*)&n)[7] = p[0];
+                                                    ((sal_uInt8*)&n)[0] = p[7];
+                                                    ((sal_uInt8*)&n)[1] = p[6];
+                                                    ((sal_uInt8*)&n)[2] = p[5];
+                                                    ((sal_uInt8*)&n)[3] = p[4];
+                                                    ((sal_uInt8*)&n)[4] = p[3];
+                                                    ((sal_uInt8*)&n)[5] = p[2];
+                                                    ((sal_uInt8*)&n)[6] = p[1];
+                                                    ((sal_uInt8*)&n)[7] = p[0];
                                                     return n; }
 #endif
 
-inline void     ByteToSVBT8  ( BYTE   n, SVBT8  p ) { p[0] = n; }
-inline void     ShortToSVBT16( USHORT n, SVBT16 p ) { p[0] = (BYTE) n;
-                                                      p[1] = (BYTE)(n >>  8); }
-inline void     UInt32ToSVBT32 ( sal_uInt32  n, SVBT32 p ) { p[0] = (BYTE) n;
-                                                      p[1] = (BYTE)(n >>  8);
-                                                      p[2] = (BYTE)(n >> 16);
-                                                      p[3] = (BYTE)(n >> 24); }
+inline void     ByteToSVBT8  ( sal_uInt8   n, SVBT8 p ) { p[0] = n; }
+inline void     ShortToSVBT16( sal_uInt16 n, SVBT16 p ) { p[0] = (sal_uInt8) n;
+                                                      p[1] = (sal_uInt8)(n >>  8); }
+inline void     UInt32ToSVBT32 ( sal_uInt32  n, SVBT32 p ) { p[0] = (sal_uInt8) n;
+                                                      p[1] = (sal_uInt8)(n >>  8);
+                                                      p[2] = (sal_uInt8)(n >> 16);
+                                                      p[3] = (sal_uInt8)(n >> 24); }
 #if defined OSL_LITENDIAN
-inline void     DoubleToSVBT64( double n, SVBT64 p ) { p[0] = ((BYTE*)&n)[0];
-                                                       p[1] = ((BYTE*)&n)[1];
-                                                       p[2] = ((BYTE*)&n)[2];
-                                                       p[3] = ((BYTE*)&n)[3];
-                                                       p[4] = ((BYTE*)&n)[4];
-                                                       p[5] = ((BYTE*)&n)[5];
-                                                       p[6] = ((BYTE*)&n)[6];
-                                                       p[7] = ((BYTE*)&n)[7]; }
+inline void     DoubleToSVBT64( double n, SVBT64 p ) { p[0] = ((sal_uInt8*)&n)[0];
+                                                       p[1] = ((sal_uInt8*)&n)[1];
+                                                       p[2] = ((sal_uInt8*)&n)[2];
+                                                       p[3] = ((sal_uInt8*)&n)[3];
+                                                       p[4] = ((sal_uInt8*)&n)[4];
+                                                       p[5] = ((sal_uInt8*)&n)[5];
+                                                       p[6] = ((sal_uInt8*)&n)[6];
+                                                       p[7] = ((sal_uInt8*)&n)[7]; }
 #else
-inline void     DoubleToSVBT64( double n, SVBT64 p ) { p[0] = ((BYTE*)&n)[7];
-                                                       p[1] = ((BYTE*)&n)[6];
-                                                       p[2] = ((BYTE*)&n)[5];
-                                                       p[3] = ((BYTE*)&n)[4];
-                                                       p[4] = ((BYTE*)&n)[3];
-                                                       p[5] = ((BYTE*)&n)[2];
-                                                       p[6] = ((BYTE*)&n)[1];
-                                                       p[7] = ((BYTE*)&n)[0]; }
+inline void     DoubleToSVBT64( double n, SVBT64 p ) { p[0] = ((sal_uInt8*)&n)[7];
+                                                       p[1] = ((sal_uInt8*)&n)[6];
+                                                       p[2] = ((sal_uInt8*)&n)[5];
+                                                       p[3] = ((sal_uInt8*)&n)[4];
+                                                       p[4] = ((sal_uInt8*)&n)[3];
+                                                       p[5] = ((sal_uInt8*)&n)[2];
+                                                       p[6] = ((sal_uInt8*)&n)[1];
+                                                       p[7] = ((sal_uInt8*)&n)[0]; }
 #endif
 #endif
 #endif
@@ -358,7 +325,7 @@ template<typename T> inline T Abs(T a) { return (a>=0?a:-a); }
 #ifdef STRING32
 #define xub_StrLen      sal_uInt32
 #else
-#define xub_StrLen      USHORT
+#define xub_StrLen      sal_uInt16
 #endif
 
 // -- moved here from libcall.hxx ----------------------------------------

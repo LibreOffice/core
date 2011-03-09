@@ -34,7 +34,7 @@
 // - Window-Types -
 // ----------------
 
-typedef USHORT WindowType;
+typedef sal_uInt16 WindowType;
 #define WINDOW_BASE                 0x0100
 #define WINDOW_FIRST                (WINDOW_BASE + 0x30)
 #define WINDOW_MESSBOX              (WINDOW_FIRST)
@@ -117,7 +117,8 @@ typedef USHORT WindowType;
 #define WINDOW_INTROWINDOW          (WINDOW_FIRST + 0x4f)
 #define WINDOW_LISTBOXWINDOW        (WINDOW_FIRST + 0x50)
 #define WINDOW_DOCKINGAREA          (WINDOW_FIRST + 0x51)
-#define WINDOW_LAST                 (WINDOW_DOCKINGAREA)
+#define WINDOW_RULER                (WINDOW_FIRST + 0x52)
+#define WINDOW_LAST                 (WINDOW_RULER)
 
 
 // ---------------
@@ -319,7 +320,7 @@ enum TriState { STATE_NOCHECK, STATE_CHECK, STATE_DONTKNOW };
 // - ButtonDialog-Types -
 // ----------------------
 
-typedef USHORT StandardButtonType;
+typedef sal_uInt16 StandardButtonType;
 #define BUTTON_OK           ((StandardButtonType)0)
 #define BUTTON_CANCEL       ((StandardButtonType)1)
 #define BUTTON_YES          ((StandardButtonType)2)

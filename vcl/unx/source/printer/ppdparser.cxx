@@ -311,7 +311,7 @@ void PPDDecompressStream::Open( const rtl::OUString& i_rFile )
     mpFileStream->Seek( 0 );
 
     // check for compress'ed or gzip'ed file
-    ULONG nCompressMethod = 0;
+    sal_uLong nCompressMethod = 0;
     if( aLine.Len() > 1 && static_cast<unsigned char>(aLine.GetChar( 0 )) == 0x1f )
     {
         if( static_cast<unsigned char>(aLine.GetChar( 1 )) == 0x8b ) // check for gzip
@@ -1110,7 +1110,7 @@ void PPDParser::parse( ::std::list< ByteString >& rLines )
             m_pTranslator->insertValue( aUniKey, aOption, aValue, aValueTranslation, aTransLocale );
 
         // eventually update query and remove from option list
-        if( bQuery && pKey->m_bQueryValue == FALSE )
+        if( bQuery && pKey->m_bQueryValue == sal_False )
         {
             pKey->m_aQueryValue = *pValue;
             pKey->m_bQueryValue = true;
@@ -1125,7 +1125,7 @@ void PPDParser::parse( ::std::list< ByteString >& rLines )
         if( aLine.CompareTo( "*Default", 8 ) == COMPARE_EQUAL )
         {
             String aKey( aLine.Copy( 8 ), RTL_TEXTENCODING_MS_1252 );
-            USHORT nPos = aKey.Search( ':' );
+            sal_uInt16 nPos = aKey.Search( ':' );
             if( nPos != STRING_NOTFOUND )
             {
                 aKey.Erase( nPos );
@@ -1417,7 +1417,7 @@ String PPDParser::getSlot( int nSlot ) const
     if( nSlot > 0 && nSlot < m_pInputSlots->countValues() )
         return m_pInputSlots->getValue( nSlot )->m_aOption;
     else if( m_pInputSlots->countValues() > 0 )
-        return m_pInputSlots->getValue( (ULONG)0 )->m_aOption;
+        return m_pInputSlots->getValue( (sal_uLong)0 )->m_aOption;
 
     return String();
 }
@@ -1430,7 +1430,7 @@ String PPDParser::getSlotCommand( int nSlot ) const
     if( nSlot > 0 && nSlot < m_pInputSlots->countValues() )
         return m_pInputSlots->getValue( nSlot )->m_aValue;
     else if( m_pInputSlots->countValues() > 0 )
-        return m_pInputSlots->getValue( (ULONG)0 )->m_aValue;
+        return m_pInputSlots->getValue( (sal_uLong)0 )->m_aValue;
 
     return String();
 }
@@ -1457,7 +1457,7 @@ String PPDParser::getPaperDimension( int nPaperDimension ) const
     if( nPaperDimension > 0 && nPaperDimension < m_pPaperDimensions->countValues() )
         return m_pPaperDimensions->getValue( nPaperDimension )->m_aOption;
     else if( m_pPaperDimensions->countValues() > 0 )
-        return m_pPaperDimensions->getValue( (ULONG)0 )->m_aOption;
+        return m_pPaperDimensions->getValue( (sal_uLong)0 )->m_aOption;
 
     return String();
 }
@@ -1470,7 +1470,7 @@ String PPDParser::getPaperDimensionCommand( int nPaperDimension ) const
     if( nPaperDimension > 0 && nPaperDimension < m_pPaperDimensions->countValues() )
         return m_pPaperDimensions->getValue( nPaperDimension )->m_aValue;
     else if( m_pPaperDimensions->countValues() > 0 )
-        return m_pPaperDimensions->getValue( (ULONG)0 )->m_aValue;
+        return m_pPaperDimensions->getValue( (sal_uLong)0 )->m_aValue;
 
     return String();
 }
@@ -1578,7 +1578,7 @@ String PPDParser::getDuplex( int nDuplex ) const
     if( nDuplex > 0 && nDuplex < m_pDuplexTypes->countValues() )
         return m_pDuplexTypes->getValue( nDuplex )->m_aOption;
     else if( m_pDuplexTypes->countValues() > 0 )
-        return m_pDuplexTypes->getValue( (ULONG)0 )->m_aOption;
+        return m_pDuplexTypes->getValue( (sal_uLong)0 )->m_aOption;
 
     return String();
 }
@@ -1591,7 +1591,7 @@ String PPDParser::getDuplexCommand( int nDuplex ) const
     if( nDuplex > 0 && nDuplex < m_pDuplexTypes->countValues() )
         return m_pDuplexTypes->getValue( nDuplex )->m_aValue;
     else if( m_pDuplexTypes->countValues() > 0 )
-        return m_pDuplexTypes->getValue( (ULONG)0 )->m_aValue;
+        return m_pDuplexTypes->getValue( (sal_uLong)0 )->m_aValue;
 
     return String();
 }
@@ -2033,7 +2033,7 @@ void PPDContext::getUnconstrainedValues( const PPDKey* pKey, ::std::list< const 
 
 // -------------------------------------------------------------------
 
-void* PPDContext::getStreamableBuffer( ULONG& rBytes ) const
+void* PPDContext::getStreamableBuffer( sal_uLong& rBytes ) const
 {
     rBytes = 0;
     if( ! m_aCurrentValues.size() )
@@ -2079,7 +2079,7 @@ void* PPDContext::getStreamableBuffer( ULONG& rBytes ) const
 
 // -------------------------------------------------------------------
 
-void PPDContext::rebuildFromStreamBuffer( void* pBuffer, ULONG nBytes )
+void PPDContext::rebuildFromStreamBuffer( void* pBuffer, sal_uLong nBytes )
 {
     if( ! m_pParser )
         return;

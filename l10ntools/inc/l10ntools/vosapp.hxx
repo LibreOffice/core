@@ -10,19 +10,19 @@
 class Application
 {
 public:
-    USHORT GetCommandLineParamCount();
-    XubString GetCommandLineParam( USHORT nParam );
+    sal_uInt16 GetCommandLineParamCount();
+    XubString GetCommandLineParam( sal_uInt16 nParam );
     virtual void Main() = 0;
 };
 
 // Urg: Cut & Paste from svapp.cxx: we don't want to depend on vcl
-USHORT Application::GetCommandLineParamCount()
+sal_uInt16 Application::GetCommandLineParamCount()
 {
     vos::OStartupInfo aStartInfo;
-    return (USHORT)aStartInfo.getCommandArgCount();
+    return (sal_uInt16)aStartInfo.getCommandArgCount();
 }
 
-XubString Application::GetCommandLineParam( USHORT nParam )
+XubString Application::GetCommandLineParam( sal_uInt16 nParam )
 {
     vos::OStartupInfo aStartInfo;
     rtl::OUString aParam;

@@ -31,10 +31,12 @@
 #include "com/sun/star/uno/Reference.hxx"
 
 #include "vcl/sv.h"
+#include "vcl/displayconnectiondispatch.hxx"
 #include "vcl/dllapi.h"
 
 #include "tools/string.hxx"
 
+#include "rtl/ref.hxx"
 #include "rtl/string.hxx"
 
 #include <list>
@@ -68,33 +70,23 @@ namespace vos { class IMutex; }
 // - SalInstance -
 // ---------------
 
-class VCL_DLLPUBLIC SalInstance
+class VCL_PLUGIN_PUBLIC SalInstance
 {
-public:
-    typedef bool(*Callback)(void*,void*,int);
 private:
-    void*                       m_pEventInst;
-    void*                       m_pErrorInst;
-    Callback                    m_pEventCallback;
-    Callback                    m_pErrorCallback;
+    rtl::Reference< vcl::DisplayConnectionDispatch > m_pEventInst;
 
 public:
-    SalInstance() :
-            m_pEventInst( NULL ),
-            m_pErrorInst( NULL ),
-            m_pEventCallback( NULL ),
-            m_pErrorCallback( NULL )
-    {}
+    SalInstance() {}
     virtual ~SalInstance();
 
     // Frame
     // DisplayName for Unix ???
-    virtual SalFrame*       CreateChildFrame( SystemParentData* pParent, ULONG nStyle ) = 0;
-    virtual SalFrame*       CreateFrame( SalFrame* pParent, ULONG nStyle ) = 0;
+    virtual SalFrame*       CreateChildFrame( SystemParentData* pParent, sal_uLong nStyle ) = 0;
+    virtual SalFrame*       CreateFrame( SalFrame* pParent, sal_uLong nStyle ) = 0;
     virtual void                DestroyFrame( SalFrame* pFrame ) = 0;
 
     // Object (System Child Window)
-    virtual SalObject*          CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, BOOL bShow = TRUE ) = 0;
+    virtual SalObject*          CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, sal_Bool bShow = sal_True ) = 0;
     virtual void                DestroyObject( SalObject* pObject ) = 0;
 
     // VirtualDevice
@@ -103,7 +95,7 @@ public:
     // pData allows for using a system dependent graphics or device context
     virtual SalVirtualDevice*   CreateVirtualDevice( SalGraphics* pGraphics,
                                                      long nDX, long nDY,
-                                                     USHORT nBitCount, const SystemGraphicsData *pData = NULL ) = 0;
+                                                     sal_uInt16 nBitCount, const SystemGraphicsData *pData = NULL ) = 0;
     virtual void                DestroyVirtualDevice( SalVirtualDevice* pDevice ) = 0;
 
     // Printer
@@ -132,8 +124,8 @@ public:
 
     // YieldMutex
     virtual vos::IMutex*        GetYieldMutex() = 0;
-    virtual ULONG               ReleaseYieldMutex() = 0;
-    virtual void                AcquireYieldMutex( ULONG nCount ) = 0;
+    virtual sal_uLong               ReleaseYieldMutex() = 0;
+    virtual void                AcquireYieldMutex( sal_uLong nCount ) = 0;
     // return true, if yield mutex is owned by this thread, else false
     virtual bool                CheckYieldMutex() = 0;
 
@@ -141,10 +133,10 @@ public:
     // must returned by UserEvent (SalFrame::PostEvent)
     // and timer
     virtual void                Yield( bool bWait, bool bHandleAllCurrentEvents ) = 0;
-    virtual bool                AnyInput( USHORT nType ) = 0;
+    virtual bool                AnyInput( sal_uInt16 nType ) = 0;
 
                             // Menues
-    virtual SalMenu*        CreateMenu( BOOL bMenuBar, Menu* pMenu );
+    virtual SalMenu*        CreateMenu( sal_Bool bMenuBar, Menu* pMenu );
     virtual void            DestroyMenu( SalMenu* pMenu);
     virtual SalMenuItem*    CreateMenuItem( const SalItemParams* pItemData );
     virtual void            DestroyMenuItem( SalMenuItem* pItem );
@@ -154,22 +146,12 @@ public:
 
     // methods for XDisplayConnection
 
-    // the parameters for the callbacks are:
-    //    void* pInst:          pInstance form the SetCallback call
-    //    void* pEvent:         address of the system specific event structure
-    //    int   nBytes:         length of the system specific event structure
-    void                SetEventCallback( void* pInstance, Callback pCallback )
-    { m_pEventInst = pInstance; m_pEventCallback = pCallback; }
-    Callback GetEventCallback() const
-    { return m_pEventCallback; }
+    void                SetEventCallback( rtl::Reference< vcl::DisplayConnectionDispatch > const & pInstance )
+    { m_pEventInst = pInstance; }
     bool                CallEventCallback( void* pEvent, int nBytes )
-    { return m_pEventCallback ? m_pEventCallback( m_pEventInst, pEvent, nBytes ) : false; }
-    void                SetErrorEventCallback( void* pInstance, Callback pCallback )
-    { m_pErrorInst = pInstance; m_pErrorCallback = pCallback; }
-    Callback            GetErrorEventCallback() const
-    { return m_pErrorCallback; }
+    { return m_pEventInst.is() && m_pEventInst->dispatchEvent( pEvent, nBytes ); }
     bool                CallErrorCallback( void* pEvent, int nBytes )
-    { return m_pErrorCallback ? m_pErrorCallback( m_pErrorInst, pEvent, nBytes ) : false; }
+    { return m_pEventInst.is() && m_pEventInst->dispatchErrorEvent( pEvent, nBytes ); }
 
     enum ConnectionIdentifierType { AsciiCString, Blob };
     virtual void*               GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes ) = 0;
@@ -197,7 +179,7 @@ void DestroySalInstance( SalInstance* pInst );
 
 void SalAbort( const XubString& rErrorText );
 
-VCL_DLLPUBLIC const ::rtl::OUString& SalGetDesktopEnvironment();
+VCL_PLUGIN_PUBLIC const ::rtl::OUString& SalGetDesktopEnvironment();
 
 // -----------
 // - SalData -
@@ -214,6 +196,6 @@ void DeInitSalMain();
 // ----------
 
 // Callbacks (indepen in \sv\source\app\svmain.cxx)
-VCL_DLLPUBLIC BOOL SVMain();
+VCL_DLLPUBLIC sal_Bool SVMain();
 
 #endif // _SV_SALINST_HXX

@@ -59,7 +59,7 @@ DBG_NAMEEX( OutputDevice )
 
 // ------------------------------------------------------------------------
 
-void OutputDevice::DrawGrid( const Rectangle& rRect, const Size& rDist, ULONG nFlags )
+void OutputDevice::DrawGrid( const Rectangle& rRect, const Size& rDist, sal_uLong nFlags )
 {
     DBG_TRACE( "OutputDevice::DrawGrid()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
@@ -117,8 +117,8 @@ void OutputDevice::DrawGrid( const Rectangle& rRect, const Size& rDist, ULONG nF
     if( mbInitFillColor )
         ImplInitFillColor();
 
-    const BOOL bOldMap = mbMap;
-    EnableMapMode( FALSE );
+    const sal_Bool bOldMap = mbMap;
+    EnableMapMode( sal_False );
 
     if( nFlags & GRID_DOTS )
     {
@@ -233,7 +233,7 @@ void OutputDevice::DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly,
 // ------------------------------------------------------------------------
 
 void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
-                                    USHORT nTransparencePercent )
+                                    sal_uInt16 nTransparencePercent )
 {
     DBG_TRACE( "OutputDevice::DrawTransparent()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
@@ -355,7 +355,7 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
             const Size      aDPISize( LogicToPixel( Size( 1, 1 ), MAP_INCH ) );
             const long      nBaseExtent = Max( FRound( aDPISize.Width() / 300. ), 1L );
             long            nMove;
-            const USHORT    nTrans = ( nTransparencePercent < 13 ) ? 0 :
+            const sal_uInt16    nTrans = ( nTransparencePercent < 13 ) ? 0 :
                                      ( nTransparencePercent < 38 ) ? 25 :
                                      ( nTransparencePercent < 63 ) ? 50 :
                                      ( nTransparencePercent < 88 ) ? 75 : 100;
@@ -376,8 +376,8 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
             Push( PUSH_CLIPREGION | PUSH_LINECOLOR );
             IntersectClipRegion( rPolyPoly );
             SetLineColor( GetFillColor() );
-            const BOOL bOldMap = mbMap;
-            EnableMapMode( FALSE );
+            const sal_Bool bOldMap = mbMap;
+            EnableMapMode( sal_False );
 
             if(nMove)
             {
@@ -464,16 +464,16 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
                 {
                     VirtualDevice   aVDev( *this, 1 );
                     const Size      aDstSz( aDstRect.GetSize() );
-                    const BYTE      cTrans = (BYTE) MinMax( FRound( nTransparencePercent * 2.55 ), 0, 255 );
+                    const sal_uInt8     cTrans = (sal_uInt8) MinMax( FRound( nTransparencePercent * 2.55 ), 0, 255 );
 
                     if( aDstRect.Left() || aDstRect.Top() )
                         aPolyPoly.Move( -aDstRect.Left(), -aDstRect.Top() );
 
                     if( aVDev.SetOutputSizePixel( aDstSz ) )
                     {
-                        const BOOL bOldMap = mbMap;
+                        const sal_Bool bOldMap = mbMap;
 
-                        EnableMapMode( FALSE );
+                        EnableMapMode( sal_False );
 
                         aVDev.SetLineColor( COL_BLACK );
                         aVDev.SetFillColor( COL_BLACK );
@@ -501,25 +501,25 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
                                 if( aPaint.GetBitCount() <= 8 )
                                 {
                                     const BitmapPalette&    rPal = pW->GetPalette();
-                                    const USHORT            nCount = rPal.GetEntryCount();
-                                    BitmapColor*            pMap = (BitmapColor*) new BYTE[ nCount * sizeof( BitmapColor ) ];
+                                    const sal_uInt16            nCount = rPal.GetEntryCount();
+                                    BitmapColor*            pMap = (BitmapColor*) new sal_uInt8[ nCount * sizeof( BitmapColor ) ];
 
-                                    for( USHORT i = 0; i < nCount; i++ )
+                                    for( sal_uInt16 i = 0; i < nCount; i++ )
                                     {
                                         BitmapColor aCol( rPal[ i ] );
-                                        pMap[ i ] = BitmapColor( (BYTE) rPal.GetBestIndex( aCol.Merge( aFillCol, cTrans ) ) );
+                                        pMap[ i ] = BitmapColor( (sal_uInt8) rPal.GetBestIndex( aCol.Merge( aFillCol, cTrans ) ) );
                                     }
 
                                     if( pR->GetScanlineFormat() == BMP_FORMAT_1BIT_MSB_PAL &&
                                         pW->GetScanlineFormat() == BMP_FORMAT_8BIT_PAL )
                                     {
-                                        const BYTE cBlack = aBlack.GetIndex();
+                                        const sal_uInt8 cBlack = aBlack.GetIndex();
 
                                         for( nY = 0; nY < nHeight; nY++ )
                                         {
                                             Scanline    pWScan = pW->GetScanline( nY );
                                             Scanline    pRScan = pR->GetScanline( nY );
-                                            BYTE        cBit = 128;
+                                            sal_uInt8       cBit = 128;
 
                                             for( nX = 0; nX < nWidth; nX++, cBit >>= 1, pWScan++ )
                                             {
@@ -527,7 +527,7 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
                                                     cBit = 128, pRScan++;
 
                                                 if( ( *pRScan & cBit ) == cBlack )
-                                                    *pWScan = (BYTE) pMap[ *pWScan ].GetIndex();
+                                                    *pWScan = (sal_uInt8) pMap[ *pWScan ].GetIndex();
                                             }
                                         }
                                     }
@@ -539,20 +539,20 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
                                                     pW->SetPixel( nY, nX, pMap[ pW->GetPixel( nY, nX ).GetIndex() ] );
                                     }
 
-                                    delete[] (BYTE*) pMap;
+                                    delete[] (sal_uInt8*) pMap;
                                 }
                                 else
                                 {
                                     if( pR->GetScanlineFormat() == BMP_FORMAT_1BIT_MSB_PAL &&
                                         pW->GetScanlineFormat() == BMP_FORMAT_24BIT_TC_BGR )
                                     {
-                                        const BYTE cBlack = aBlack.GetIndex();
+                                        const sal_uInt8 cBlack = aBlack.GetIndex();
 
                                         for( nY = 0; nY < nHeight; nY++ )
                                         {
                                             Scanline    pWScan = pW->GetScanline( nY );
                                             Scanline    pRScan = pR->GetScanline( nY );
-                                            BYTE        cBit = 128;
+                                            sal_uInt8       cBit = 128;
 
                                             for( nX = 0; nX < nWidth; nX++, cBit >>= 1, pWScan += 3 )
                                             {
@@ -616,9 +616,9 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
         if( mpAlphaVDev )
         {
             const Color aFillCol( mpAlphaVDev->GetFillColor() );
-            mpAlphaVDev->SetFillColor( Color(sal::static_int_cast<UINT8>(255*nTransparencePercent/100),
-                                             sal::static_int_cast<UINT8>(255*nTransparencePercent/100),
-                                             sal::static_int_cast<UINT8>(255*nTransparencePercent/100)) );
+            mpAlphaVDev->SetFillColor( Color(sal::static_int_cast<sal_uInt8>(255*nTransparencePercent/100),
+                                             sal::static_int_cast<sal_uInt8>(255*nTransparencePercent/100),
+                                             sal::static_int_cast<sal_uInt8>(255*nTransparencePercent/100)) );
 
             mpAlphaVDev->DrawTransparent( rPolyPoly, nTransparencePercent );
 
@@ -731,19 +731,19 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
                     AlphaMask   aAlpha;
                     MapMode     aMap( GetMapMode() );
                     Point       aOutPos( PixelToLogic( aDstRect.TopLeft() ) );
-                    const BOOL  bOldMap = mbMap;
+                    const sal_Bool  bOldMap = mbMap;
 
                     aMap.SetOrigin( Point( -aOutPos.X(), -aOutPos.Y() ) );
                     pVDev->SetMapMode( aMap );
-                    const BOOL  bVDevOldMap = pVDev->IsMapModeEnabled();
+                    const sal_Bool  bVDevOldMap = pVDev->IsMapModeEnabled();
 
                     // create paint bitmap
                     ( (GDIMetaFile&) rMtf ).WindStart();
                     ( (GDIMetaFile&) rMtf ).Play( pVDev, rPos, rSize );
                     ( (GDIMetaFile&) rMtf ).WindStart();
-                    pVDev->EnableMapMode( FALSE );
+                    pVDev->EnableMapMode( sal_False );
                     aPaint = pVDev->GetBitmap( Point(), pVDev->GetOutputSizePixel() );
-                    pVDev->EnableMapMode( bVDevOldMap ); // #i35331#: MUST NOT use EnableMapMode( TRUE ) here!
+                    pVDev->EnableMapMode( bVDevOldMap ); // #i35331#: MUST NOT use EnableMapMode( sal_True ) here!
 
                     // create mask bitmap
                     pVDev->SetLineColor( COL_BLACK );
@@ -754,22 +754,22 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
                     ( (GDIMetaFile&) rMtf ).WindStart();
                     ( (GDIMetaFile&) rMtf ).Play( pVDev, rPos, rSize );
                     ( (GDIMetaFile&) rMtf ).WindStart();
-                    pVDev->EnableMapMode( FALSE );
+                    pVDev->EnableMapMode( sal_False );
                     aMask = pVDev->GetBitmap( Point(), pVDev->GetOutputSizePixel() );
-                    pVDev->EnableMapMode( bVDevOldMap ); // #i35331#: MUST NOT use EnableMapMode( TRUE ) here!
+                    pVDev->EnableMapMode( bVDevOldMap ); // #i35331#: MUST NOT use EnableMapMode( sal_True ) here!
 
                     // create alpha mask from gradient
                     pVDev->SetDrawMode( DRAWMODE_GRAYGRADIENT );
                     pVDev->DrawGradient( Rectangle( rPos, rSize ), rTransparenceGradient );
                     pVDev->SetDrawMode( DRAWMODE_DEFAULT );
-                    pVDev->EnableMapMode( FALSE );
+                    pVDev->EnableMapMode( sal_False );
                     pVDev->DrawMask( Point(), pVDev->GetOutputSizePixel(), aMask, Color( COL_WHITE ) );
 
                     aAlpha = pVDev->GetBitmap( Point(), pVDev->GetOutputSizePixel() );
 
                     delete pVDev;
 
-                    EnableMapMode( FALSE );
+                    EnableMapMode( sal_False );
                     DrawBitmapEx( aDstRect.TopLeft(), BitmapEx( aPaint, aAlpha ) );
                     EnableMapMode( bOldMap );
                 }
@@ -793,8 +793,8 @@ void OutputDevice::ImplDrawColorWallpaper( long nX, long nY,
     Color aOldFillColor = GetFillColor();
     SetLineColor();
     SetFillColor( rWallpaper.GetColor() );
-    BOOL bMap = mbMap;
-    EnableMapMode( FALSE );
+    sal_Bool bMap = mbMap;
+    EnableMapMode( sal_False );
     DrawRect( Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) ) );
     SetLineColor( aOldLineColor );
     SetFillColor( aOldFillColor );
@@ -813,10 +813,10 @@ void OutputDevice::ImplDrawBitmapWallpaper( long nX, long nY,
     Size                    aSize;
     GDIMetaFile*            pOldMetaFile = mpMetaFile;
     const WallpaperStyle    eStyle = rWallpaper.GetStyle();
-    const BOOL              bOldMap = mbMap;
-    BOOL                    bDrawn = FALSE;
-    BOOL                    bDrawGradientBackground = FALSE;
-    BOOL                    bDrawColorBackground = FALSE;
+    const sal_Bool              bOldMap = mbMap;
+    sal_Bool                    bDrawn = sal_False;
+    sal_Bool                    bDrawGradientBackground = sal_False;
+    sal_Bool                    bDrawColorBackground = sal_False;
 
     if( pCached )
         aBmpEx = *pCached;
@@ -825,13 +825,13 @@ void OutputDevice::ImplDrawBitmapWallpaper( long nX, long nY,
 
     const long nBmpWidth = aBmpEx.GetSizePixel().Width();
     const long nBmpHeight = aBmpEx.GetSizePixel().Height();
-    const BOOL bTransparent = aBmpEx.IsTransparent();
+    const sal_Bool bTransparent = aBmpEx.IsTransparent();
 
     // draw background
     if( bTransparent )
     {
         if( rWallpaper.IsGradient() )
-            bDrawGradientBackground = TRUE;
+            bDrawGradientBackground = sal_True;
         else
         {
             if( !pCached && !rWallpaper.GetColor().GetTransparency() )
@@ -843,15 +843,15 @@ void OutputDevice::ImplDrawBitmapWallpaper( long nX, long nY,
                 aBmpEx = aVDev.GetBitmap( Point(), aVDev.GetOutputSizePixel() );
             }
 
-            bDrawColorBackground = TRUE;
+            bDrawColorBackground = sal_True;
         }
     }
     else if( eStyle != WALLPAPER_TILE && eStyle != WALLPAPER_SCALE )
     {
         if( rWallpaper.IsGradient() )
-            bDrawGradientBackground = TRUE;
+            bDrawGradientBackground = sal_True;
         else
-            bDrawColorBackground = TRUE;
+            bDrawColorBackground = sal_True;
     }
 
     // background of bitmap?
@@ -860,7 +860,7 @@ void OutputDevice::ImplDrawBitmapWallpaper( long nX, long nY,
     else if( bDrawColorBackground && bTransparent )
     {
         ImplDrawColorWallpaper( nX, nY, nWidth, nHeight, rWallpaper );
-        bDrawColorBackground = FALSE;
+        bDrawColorBackground = sal_False;
     }
 
     // calc pos and size
@@ -877,7 +877,7 @@ void OutputDevice::ImplDrawBitmapWallpaper( long nX, long nY,
     }
 
     mpMetaFile = NULL;
-    EnableMapMode( FALSE );
+    EnableMapMode( sal_False );
     Push( PUSH_CLIPREGION );
     IntersectClipRegion( Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) ) );
 
@@ -977,7 +977,7 @@ void OutputDevice::ImplDrawBitmapWallpaper( long nX, long nY,
                 for( long nBmpX = nStartX; nBmpX <= nRight; nBmpX += nBmpWidth )
                     DrawBitmapEx( Point( nBmpX, nBmpY ), aBmpEx );
 
-            bDrawn = TRUE;
+            bDrawn = sal_True;
         }
         break;
     }
@@ -1052,8 +1052,8 @@ void OutputDevice::ImplDrawGradientWallpaper( long nX, long nY,
 {
     Rectangle       aBound;
     GDIMetaFile*    pOldMetaFile = mpMetaFile;
-    const BOOL      bOldMap = mbMap;
-    BOOL            bNeedGradient = TRUE;
+    const sal_Bool      bOldMap = mbMap;
+    sal_Bool            bNeedGradient = sal_True;
 
 /*
     if ( rWallpaper.IsRect() )
@@ -1063,7 +1063,7 @@ void OutputDevice::ImplDrawGradientWallpaper( long nX, long nY,
         aBound = Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) );
 
     mpMetaFile = NULL;
-    EnableMapMode( FALSE );
+    EnableMapMode( sal_False );
     Push( PUSH_CLIPREGION );
     IntersectClipRegion( Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) ) );
 
@@ -1080,7 +1080,7 @@ void OutputDevice::ImplDrawGradientWallpaper( long nX, long nY,
             if( mnOutOffX+nWidth > gradientWidth )
                 ImplDrawColorWallpaper(  nX, nY, nWidth, nHeight, rWallpaper.GetGradient().GetEndColor() );
             if( mnOutOffX > gradientWidth )
-                bNeedGradient = FALSE;
+                bNeedGradient = sal_False;
             else
                 aBound = Rectangle( Point( -mnOutOffX, nY ), Size( gradientWidth, nHeight ) );
         }
@@ -1142,7 +1142,7 @@ void OutputDevice::Erase()
     if ( !IsDeviceOutputNecessary() || ImplIsRecordLayout() )
         return;
 
-    BOOL bNativeOK = FALSE;
+    sal_Bool bNativeOK = sal_False;
     if( meOutDevType == OUTDEV_WINDOW )
     {
         Window* pWindow = static_cast<Window*>(this);
@@ -1226,7 +1226,7 @@ bool OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
 
             aRect.Justify();
             bDrawn = mpGraphics->DrawEPS( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(),
-                         (BYTE*) rGfxLink.GetData(), rGfxLink.GetDataSize(), this );
+                         (sal_uInt8*) rGfxLink.GetData(), rGfxLink.GetDataSize(), this );
         }
 
         // else draw the substitution graphics

@@ -58,7 +58,7 @@ void TabPage::ImplInit( Window* pParent, WinBits nStyle )
     // if the tabpage is drawn (ie filled) by a native widget, make sure all contols will have transparent background
     // otherwise they will paint with a wrong background
     if( IsNativeControlSupported(CTRL_TAB_BODY, PART_ENTIRE_CONTROL) && GetParent() && (GetParent()->GetType() == WINDOW_TABCONTROL) )
-        EnableChildTransparentMode( TRUE );
+        EnableChildTransparentMode( sal_True );
 }
 
 // -----------------------------------------------------------------------
@@ -68,16 +68,16 @@ void TabPage::ImplInitSettings()
     Window* pParent = GetParent();
     if ( pParent->IsChildTransparentModeEnabled() && !IsControlBackground() )
     {
-        EnableChildTransparentMode( TRUE );
+        EnableChildTransparentMode( sal_True );
         SetParentClipMode( PARENTCLIPMODE_NOCLIP );
-        SetPaintTransparent( TRUE );
+        SetPaintTransparent( sal_True );
         SetBackground();
     }
     else
     {
-        EnableChildTransparentMode( FALSE );
+        EnableChildTransparentMode( sal_False );
         SetParentClipMode( 0 );
-        SetPaintTransparent( FALSE );
+        SetPaintTransparent( sal_False );
 
         if ( IsControlBackground() )
             SetBackground( GetControlBackground() );
@@ -167,7 +167,7 @@ void TabPage::Paint( const Rectangle& )
 }
 
 // -----------------------------------------------------------------------
-void TabPage::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG )
+void TabPage::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong )
 {
     Point aPos = pDev->LogicToPixel( rPos );
     Size aSize = pDev->LogicToPixel( rSize );

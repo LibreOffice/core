@@ -296,7 +296,7 @@ class ControllerProperties
             std::map< int, rtl::OUString >::const_iterator name_it = maTagToPropertyName.find( nTag );
             if( name_it != maTagToPropertyName.end() && ! name_it->second.equalsAscii( "PrintContent" ) )
             {
-                MacOSBOOL bEnabled = mpController->isUIOptionEnabled( name_it->second ) ? YES : NO;
+                BOOL bEnabled = mpController->isUIOptionEnabled( name_it->second ) ? YES : NO;
                 if( pCtrl )
                 {
                     [pCtrl setEnabled: bEnabled];
@@ -816,7 +816,6 @@ static void addBool( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachO
         [pBtn setEnabled: NO];
     linebreakCell( [pBtn cell], rText );
     [pBtn sizeToFit];
-    [pCurParent addSubview: [pBtn autorelease]];
     
     rRightColumn.push_back( ColumnItem( pBtn ) );
     
@@ -828,10 +827,17 @@ static void addBool( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachO
     [pBtn setTag: nTag];
     
     aCheckRect = [pBtn frame];
+    // #i115837# add a murphy factor; it can apparently occasionally happen
+    // that sizeToFit does not a perfect job and that the button linebreaks again
+    // if - and only if - there is already a '\n' contained in the text and the width
+    // is minimally of
+    aCheckRect.size.width += 1;
     
     // move to rCurY
     aCheckRect.origin.y = rCurY - aCheckRect.size.height;
     [pBtn setFrame: aCheckRect];
+
+    [pCurParent addSubview: [pBtn autorelease]];
     
     // update rCurY
     rCurY = aCheckRect.origin.y - 5;

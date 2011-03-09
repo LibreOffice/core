@@ -95,9 +95,9 @@ namespace
 
 // -----------------------------------------------------------------------
 
-void ImageControl::ImplDraw( OutputDevice& rDev, ULONG nDrawFlags, const Point& rPos, const Size& rSize ) const
+void ImageControl::ImplDraw( OutputDevice& rDev, sal_uLong nDrawFlags, const Point& rPos, const Size& rSize ) const
 {
-    USHORT nStyle = 0;
+    sal_uInt16 nStyle = 0;
     if ( !(nDrawFlags & WINDOW_DRAW_NODISABLE) )
     {
         if ( !IsEnabled() )
@@ -119,7 +119,7 @@ void ImageControl::ImplDraw( OutputDevice& rDev, ULONG nDrawFlags, const Point& 
             return;
 
         WinBits nWinStyle = GetStyle();
-        USHORT nTextStyle = FixedText::ImplGetTextStyle( nWinStyle );
+        sal_uInt16 nTextStyle = FixedText::ImplGetTextStyle( nWinStyle );
         if ( !(nDrawFlags & WINDOW_DRAW_NODISABLE) )
             if ( !IsEnabled() )
                 nTextStyle |= TEXT_DRAW_DISABLE;
@@ -174,7 +174,7 @@ void ImageControl::Paint( const Rectangle& /*rRect*/ )
     {
         Window *pWin = GetWindow( WINDOW_BORDER );
 
-        BOOL bFlat = (GetBorderStyle() == 2);
+        sal_Bool bFlat = (GetBorderStyle() == 2);
         Rectangle aRect( Point(0,0), pWin->GetOutputSizePixel() );
         Color oldLineCol = pWin->GetLineColor();
         Color oldFillCol = pWin->GetFillColor();
@@ -193,7 +193,7 @@ void ImageControl::Paint( const Rectangle& /*rRect*/ )
 }
 
 // -----------------------------------------------------------------------
-void ImageControl::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG nFlags )
+void ImageControl::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags )
 {
     const Point     aPos  = pDev->LogicToPixel( rPos );
     const Size      aSize = pDev->LogicToPixel( rSize );

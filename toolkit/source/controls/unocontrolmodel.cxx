@@ -41,7 +41,6 @@
 #include <toolkit/controls/unocontrolmodel.hxx>
 #include <toolkit/helper/macros.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <cppuhelper/extract.hxx>
 #include <rtl/memory.h>
 #include <rtl/uuid.h>
 #include <tools/diagnose_ex.h>
@@ -59,6 +58,7 @@
 #include <unotools/configmgr.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/extract.hxx>
 #include <vcl/svapp.hxx>
 #include <uno/data.h>
 
@@ -154,7 +154,24 @@ static void lcl_ImplMergeFontProperty( FontDescriptor& rFD, sal_uInt16 nPropId, 
 //  class UnoControlModel
 //  ----------------------------------------------------
 UnoControlModel::UnoControlModel()
-    : OPropertySetHelper( BrdcstHelper ), maDisposeListeners( *this )
+    :UnoControlModel_Base()
+    ,MutexAndBroadcastHelper()
+    ,OPropertySetHelper( BrdcstHelper )
+    ,maDisposeListeners( *this )
+    ,maContext( ::comphelper::getProcessServiceFactory() )
+{
+    OSL_ENSURE( false, "UnoControlModel::UnoControlModel: not implemented. Well, not really." );
+    // just implemented to let the various FooImplInheritanceHelper compile, you should use the
+    // version taking a service factory
+    mpData = new ImplPropertyTable;
+}
+
+UnoControlModel::UnoControlModel( const Reference< XMultiServiceFactory >& i_factory )
+    :UnoControlModel_Base()
+    ,MutexAndBroadcastHelper()
+    ,OPropertySetHelper( BrdcstHelper )
+    ,maDisposeListeners( *this )
+    ,maContext( i_factory )
 {
     // Die Properties muessen vom Model in die Tabelle gestopft werden,
     // nur vorhandene Properties sind gueltige Properties, auch wenn VOID.
@@ -162,18 +179,11 @@ UnoControlModel::UnoControlModel()
 }
 
 UnoControlModel::UnoControlModel( const UnoControlModel& rModel )
-    : XControlModel()
-    , XPropertyState()
-    , XPersistObject()
-    , XComponent()
-    , XServiceInfo()
-    , XTypeProvider()
-    , XUnoTunnel()
-    , XCloneable()
+    : UnoControlModel_Base()
     , MutexAndBroadcastHelper()
     , OPropertySetHelper( BrdcstHelper )
-    , OWeakAggObject()
     , maDisposeListeners( *this )
+    , maContext( rModel.maContext )
 {
     mpData = new ImplPropertyTable;
 
@@ -403,7 +413,7 @@ sal_Bool UnoControlModel::ImplHasProperty( sal_uInt16 nPropId ) const
                     aLocale.Country = sDefaultCurrency.copy( nSepPos + 1 );
                 }
 
-                LocaleDataWrapper aLocaleInfo( ::comphelper::getProcessServiceFactory(), aLocale );
+                LocaleDataWrapper aLocaleInfo( maContext.getLegacyServiceFactory(), aLocale );
                 if ( !sBankSymbol.getLength() )
                     sBankSymbol = aLocaleInfo.getCurrBankSymbol();
 
@@ -484,36 +494,20 @@ void UnoControlModel::ImplRegisterProperties( const std::list< sal_uInt16 > &rId
 // ::com::sun::star::uno::XInterface
 ::com::sun::star::uno::Any UnoControlModel::queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XControlModel*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::io::XPersistObject*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::lang::XComponent*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::lang::XServiceInfo*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::util::XCloneable*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::beans::XPropertyState*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::beans::XMultiPropertySet*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::beans::XFastPropertySet*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::beans::XPropertySet*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::lang::XTypeProvider*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::lang::XUnoTunnel*, this ) );
-    return (aRet.hasValue() ? aRet : OWeakAggObject::queryAggregation( rType ));
+    Any aRet = UnoControlModel_Base::queryAggregation( rType );
+    if ( !aRet.hasValue() )
+        aRet = ::cppu::OPropertySetHelper::queryInterface( rType );
+    return aRet;
 }
 
 // ::com::sun::star::lang::XUnoTunnel
 IMPL_XUNOTUNNEL( UnoControlModel )
 
+// XInterface
+IMPLEMENT_FORWARD_REFCOUNT( UnoControlModel, UnoControlModel_Base )
+
 // ::com::sun::star::lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( UnoControlModel )
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel>* ) NULL ),
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::io::XPersistObject>* ) NULL ),
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>* ) NULL ),
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XServiceInfo>* ) NULL ),
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable>* ) NULL ),
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState>* ) NULL ),
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XMultiPropertySet>* ) NULL ),
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XFastPropertySet>* ) NULL ),
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>* ) NULL )
-IMPL_XTYPEPROVIDER_END
+IMPLEMENT_FORWARD_XTYPEPROVIDER2( UnoControlModel, UnoControlModel_Base, ::cppu::OPropertySetHelper )
 
 
 uno::Reference< util::XCloneable > UnoControlModel::createClone() throw(::com::sun::star::uno::RuntimeException)
@@ -1155,7 +1149,7 @@ sal_Bool UnoControlModel::convertFastPropertyValue( Any & rConvertedValue, Any &
             }
             else
             {
-                BOOL bConverted = FALSE;
+                sal_Bool bConverted = sal_False;
                 // 13.03.2001 - 84923 - frank.schoenheit@germany.sun.com
 
                 switch (pDestType->getTypeClass())

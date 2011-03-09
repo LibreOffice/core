@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2009 by Sun Microsystems, Inc.
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -14,12 +14,12 @@
 #
 # OpenOffice.org is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU Lesser General Public License version 3 for more details
 # (a copy is included in the LICENSE file that accompanied this code).
 #
 # You should have received a copy of the GNU Lesser General Public License
-# version 3 along with OpenOffice.org.	If not, see
+# version 3 along with OpenOffice.org.  If not, see
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
 #
@@ -145,15 +145,15 @@ $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/svxbox.hxx,svtools/svx
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/sychconv.hxx,svtools/sychconv.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/syntaxhighlight.hxx,svtools/syntaxhighlight.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/tabbar.hxx,svtools/tabbar.hxx))
-$(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/table/abstracttablecontrol.hxx,svtools/table/abstracttablecontrol.hxx))
+$(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/table/tablecontrolinterface.hxx,svtools/table/tablecontrolinterface.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/table/defaultinputhandler.hxx,svtools/table/defaultinputhandler.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/table/gridtablerenderer.hxx,svtools/table/gridtablerenderer.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/table/tablecontrol.hxx,svtools/table/tablecontrol.hxx))
-$(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/table/tabledatawindow.hxx,svtools/table/tabledatawindow.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/table/tableinputhandler.hxx,svtools/table/tableinputhandler.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/table/tablemodel.hxx,svtools/table/tablemodel.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/table/tablerenderer.hxx,svtools/table/tablerenderer.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/table/tabletypes.hxx,svtools/table/tabletypes.hxx))
+$(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/table/tablesort.hxx,svtools/table/tablesort.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/taskbar.hxx,svtools/taskbar.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/templatefoldercache.hxx,svtools/templatefoldercache.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/templdlg.hxx,svtools/templdlg.hxx))
