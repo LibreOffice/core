@@ -533,8 +533,8 @@ void Clipboard::CreateSlideTransferable (
         SdDrawDocument* pTransferableDocument = rSlideSorter.GetModel().GetDocument();
         if (pTransferableDocument == NULL)
             break;
-        BOOL bIsMasterPage;
-        const USHORT nPageIndex (pTransferableDocument->GetPageByName(sBookmark, bIsMasterPage));
+        sal_Bool bIsMasterPage = sal_False;
+        const sal_uInt16 nPageIndex (pTransferableDocument->GetPageByName(sBookmark, bIsMasterPage));
         if (nPageIndex == SDRPAGE_NOTFOUND)
             break;
 
@@ -604,7 +604,7 @@ void Clipboard::StartDrag (
 
 void Clipboard::DragFinished (sal_Int8 nDropAction)
 {
-    SdTransferable* pDragTransferable = SD_MOD()->pTransferDrag;
+    // SdTransferable* pDragTransferable = SD_MOD()->pTransferDrag;
 
     if (mnDragFinishedUserEventId == 0)
     {
