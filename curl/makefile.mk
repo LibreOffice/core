@@ -67,10 +67,6 @@ curl_CFLAGS+=-I$(SYSBASE)$/usr$/include
 curl_LDFLAGS+=-L$(SYSBASE)$/usr$/lib
 .ENDIF			# "$(SYSBASE)"!=""
 
-.IF "$(OS)$(COM)$(CPU)"=="LINUXGCCI"
-curl_LDFLAGS+=-Wl,-z,noexecstack
-.ENDIF
-
 .IF "$(OS)$(CPU)"=="SOLARISU"
 curl_CFLAGS+:=$(ARCH_FLAGS)
 curl_LDFLAGS+:=$(ARCH_FLAGS)
@@ -101,7 +97,7 @@ curl_CC+=-shared-libgcc
 .ENDIF
 curl_LIBS=-lws2_32 -lwinmm
 .IF "$(MINGW_SHARED_GXXLIB)"=="YES"
-curl_LIBS+=-lstdc++_s
+curl_LIBS+=$(MINGW_SHARED_LIBSTDCPP)
 .ENDIF
 CONFIGURE_DIR=.$/
 #relative to CONFIGURE_DIR

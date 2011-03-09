@@ -78,7 +78,7 @@ cairo_CC=$(CC) -mthreads
 cairo_CC+=-shared-libgcc
 .ENDIF
 .IF "$(MINGW_SHARED_GXXLIB)"=="YES"
-cairo_LIBS+=-lstdc++_s
+cairo_LIBS+=$(MINGW_SHARED_LIBSTDCPP)
 .ENDIF
 
 CONFIGURE_DIR=
