@@ -622,7 +622,7 @@
  	gmarshal.strings \
  	gobject-query.exe \
  	libgobject-2.0-0.dll	\
-@@ -24,8 +23,11 @@
+@@ -24,8 +23,10 @@
  	testgobject.exe
  
  gobject_OBJECTS =		\
@@ -630,7 +630,6 @@
 +	gbinding.obj \
  	gboxed.obj		\
  	gclosure.obj		\
-+	gmarshal.obj              \
  	genums.obj		\
  	gobject.obj		\
  	gparam.obj		\
