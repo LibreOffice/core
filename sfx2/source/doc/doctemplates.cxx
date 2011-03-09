@@ -278,7 +278,7 @@ public:
                                 ~SfxDocTplService_Impl();
 
     sal_Bool                    init() { if ( !mbIsInitialized ) init_Impl(); return mbIsInitialized; }
-    Content                     getContent() { return maRootContent; }
+    Content                     getContent() const { return maRootContent; }
 
     void                        setLocale( const Locale & rLocale );
     Locale                      getLocale();
