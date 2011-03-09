@@ -794,7 +794,7 @@ sal_Int32 SdTransferable::GetUserDataCount (void) const
 
 ::boost::shared_ptr<SdTransferable::UserData> SdTransferable::GetUserData (const sal_Int32 nIndex) const
 {
-    if (nIndex>=0 && nIndex<maUserData.size())
+    if (nIndex>=0 && nIndex<sal_Int32(maUserData.size()))
         return maUserData[nIndex];
     else
         return ::boost::shared_ptr<UserData>();
