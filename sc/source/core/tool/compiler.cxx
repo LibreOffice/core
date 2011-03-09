@@ -3888,7 +3888,20 @@ ScTokenArray* ScCompiler::CompileString( const String& rFormula, const String& r
 
 BOOL ScCompiler::HandleRange()
 {
-    ScRangeData* pRangeData = pDoc->GetRangeName()->findByIndex( pToken->GetIndex() );
+    ScRangeData* pRangeData = NULL;
+
+    bool bGlobal = pToken->GetByte();
+    if (bGlobal)
+        // global named range.
+        pRangeData = pDoc->GetRangeName()->findByIndex( pToken->GetIndex() );
+    else
+    {
+        // sheet local named range.
+        ScRangeName* pRN = pDoc->GetRangeName(aPos.Tab());
+        if (pRN)
+            pRangeData = pRN->findByIndex( pToken->GetIndex() );
+    }
+
     if (pRangeData)
     {
         USHORT nErr = pRangeData->GetErrCode();
@@ -5057,7 +5070,19 @@ void ScCompiler::CreateStringFromIndex(rtl::OUStringBuffer& rBuffer,FormulaToken
     {
         case ocName:
         {
-            ScRangeData* pData = pDoc->GetRangeName()->findByIndex(_pTokenP->GetIndex());
+            bool bGlobal = _pTokenP->GetByte();
+            ScRangeData* pData = NULL;
+            if (bGlobal)
+                // global named range.
+                pData = pDoc->GetRangeName()->findByIndex(_pTokenP->GetIndex());
+            else
+            {
+                // sheet local named range.
+                ScRangeName* pRN = pDoc->GetRangeName(aPos.Tab());
+                if (pRN)
+                    pData = pRN->findByIndex(_pTokenP->GetIndex());
+            }
+
             if (pData)
             {
                 if (pData->HasType(RT_SHARED))

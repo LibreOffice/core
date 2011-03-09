@@ -826,6 +826,7 @@ const TokenId TokenPool::StoreExtRef( sal_uInt16 nFileId, const String& rTabName
 void TokenPool::Reset( void )
 {
     nP_IdAkt = nP_IdLast = nElementAkt = nP_StrAkt = nP_DblAkt = nP_ErrAkt = nP_RefTrAkt = nP_ExtAkt = nP_NlfAkt = nP_MatrixAkt = 0;
+    maRangeNames.clear();
     maExtNames.clear();
     maExtCellRefs.clear();
     maExtAreaRefs.clear();

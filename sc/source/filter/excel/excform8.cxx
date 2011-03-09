@@ -427,8 +427,8 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
             case 0x43:
             case 0x63:
             case 0x23: // Name                                  [318 269]
-                aIn >> nUINT16;
             {
+                aIn >> nUINT16;
                 aIn.Ignore( 2 );
                 const XclImpName* pName = GetNameManager().GetName( nUINT16 );
                 if (pName)
