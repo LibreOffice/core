@@ -24,44 +24,54 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_embed_XEncryptionProtectedSource2_idl__
-#define __com_sun_star_embed_XEncryptionProtectedSource2_idl__
+#ifndef __com_sun_star_xml_crypto_xdigestcontextsupplier_idl_
+#define __com_sun_star_xml_crypto_xdigestcontextsupplier_idl_
 
-#ifndef __com_sun_star_embed_XEncryptionProtectedSource_idl__
-#include <com/sun/star/embed/XEncryptionProtectedSource.idl>
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
 #endif
 
-#ifndef __com_sun_star_beans_NamedValue_idl__
-#include <com/sun/star/beans/NamedValue.idl>
+#ifndef __com_sun_star_xml_crypto_XDigestContext_idl__
+#include <com/sun/star/xml/crypto/XDigestContext.idl>
+#endif
+
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
 #endif
 
 //============================================================================
 
-module com {  module sun {  module star {  module embed {
+ module com {  module sun {  module star {  module xml { module crypto {
 
 //============================================================================
-/** This interface allows to set a password for an object.
+/** This interface allows to get an object to generate a digest of a specified
+    format.
 
     @since OOo 3.4
  */
-interface XEncryptionProtectedSource2: XEncryptionProtectedSource
+interface XDigestContextSupplier : com::sun::star::uno::XInterface
 {
-    // -----------------------------------------------------------------------
-    /** sets an encryption data for the object.
+    //------------------------------------------------------------------------
+    /** returns an object that allows to generate the specified digest.
 
-        @param aEncryptionData
-            the new encryption data
+        @param nDigestID
+            the internal ID specifying the algorithm,
+            should take value from <type>DigestID</type>
 
-        @throws ::com::sun::star::io::IOException
-            in case the data could not be set
+        @param aParams
+            optional parameters that could be used to initialize the digest,
+            for example, it could contain a key and etc.
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            one of provided arguments is illegal
      */
-    void setEncryptionData( [in] sequence< ::com::sun::star::beans::NamedValue > aEncryptionData )
-        raises( ::com::sun::star::io::IOException );
+    XDigestContext getDigestContext( [in] long nDigestID, [in] any aParams )
+        raises( ::com::sun::star::lang::IllegalArgumentException );
 };
 
 //============================================================================
 
-}; }; }; };
+}; }; }; }; };
 
 #endif
 

@@ -24,27 +24,37 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+#ifndef __com_sun_star_xml_crypto_CipherID_idl__
+#define __com_sun_star_xml_crypto_CipherID_idl__
 
-#ifndef __com_sun_star_xml_crypto_seinitializer_idl_
-#define __com_sun_star_xml_crypto_seinitializer_idl_
 
-#include <com/sun/star/xml/crypto/XSEInitializer.idl>
-#include <com/sun/star/xml/crypto/XDigestContextSupplier.idl>
-#include <com/sun/star/xml/crypto/XCipherContextSupplier.idl>
+//============================================================================
 
 module com { module sun { module star { module xml { module crypto {
 
-/**
- * Service of SEInitializer
- */
-service SEInitializer {
-    interface ::com::sun::star::xml::crypto::XSEInitializer;
-    interface ::com::sun::star::xml::crypto::XDigestContextSupplier;
-    interface ::com::sun::star::xml::crypto::XCipherContextSupplier;
+//============================================================================
+/** The constant set contains identifiers of supported cipher-creation
+    algorithms.
+
+    @see <type>XCipherContextSupplier</type>
+    @since OOo 3.4
+*/
+constants CipherID
+{
+    //------------------------------------------------------------------------
+    /** identifier of AES algorithm in CBC mode
+     */
+    const long AES_CBC = 1;
+
+    //------------------------------------------------------------------------
+    /** identifier of the Blowfish algorithm in 8-bit CFB mode
+     */
+    const long BLOWFISH_CFB_8 = 2;
 };
 
-} ; } ; } ; } ; } ;
+//============================================================================
 
+}; }; }; }; };
 
 #endif
 

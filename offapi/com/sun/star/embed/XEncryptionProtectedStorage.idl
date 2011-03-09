@@ -1,0 +1,120 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_embed_XEncryptionProtectedStorage_idl__
+#define __com_sun_star_embed_XEncryptionProtectedStorage_idl__
+
+#ifndef __com_sun_star_embed_XEncryptionProtectedSource2_idl__
+#include <com/sun/star/embed/XEncryptionProtectedSource2.idl>
+#endif
+
+#ifndef __com_sun_star_beans_NamedValue_idl__
+#include <com/sun/star/beans/NamedValue.idl>
+#endif
+
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+
+#ifndef __com_sun_star_xml_crypto_DigestID_idl__
+#include <com/sun/star/xml/crypto/DigestID.idl>
+#endif
+
+#ifndef __com_sun_star_xml_crypto_CipherID_idl__
+#include <com/sun/star/xml/crypto/CipherID.idl>
+#endif
+
+//============================================================================
+
+module com {  module sun {  module star {  module embed {
+
+//============================================================================
+/** This interface allows to set a password for an object.
+
+    @since OOo 3.4
+ */
+interface XEncryptionProtectedStorage: XEncryptionProtectedSource2
+{
+    // -----------------------------------------------------------------------
+    /** allows to set the encryption algorithms for the object.
+        <p>
+        The algorithms will of course be used only for streams that have been
+        marked to be encrypted. If no stream in the storage is marked to be
+        encrypted, the algorithms-related information may have no effect to
+        the result package.
+        </p>
+
+        <p>
+        The following values could be part of the provided sequence:
+        </p>
+        <dl>
+            <dt>StartKeyGenerationAlgorithm</dt>
+            <dd>
+                    specifies the algorithm that was used to generate
+                    the EncryptionKey from the original password; in case
+                    the contents should be decrypted, the algorithm might
+                    be already known by the object; if a different one is
+                    set an exception should be thrown to indicate the
+                    error; it should take values from
+                    <type scope="com::sun::star::xml:crypto">DigestID</type>.
+            </dd>
+            <dt>EncryptionAlgorithm</dt>
+            <dd>
+                    specifies the algorithm that should be used to
+                    encrypt/decrypt the contents; in case the contents
+                    should be decrypted, the algorithm might be already
+                    known by the object; if a different one is set
+                    an exception should be thrown to indicate the error;
+                    it should take values from
+                    <type scope="com::sun::star::xml:crypto">CipherID</type>.
+            </dd>
+            <dt>ChecksumAlgorithm</dt>
+            <dd>
+                    specifies the algorithm that was used to generate
+                    the checksum of the encrypted data; in case
+                    the contents should be decrypted, the algorithm might
+                    be already known by the object; if a different one is
+                    set an exception should be thrown to indicate the
+                    error; it should take values from
+                    <type scope="com::sun::star::xml:crypto">DigestID</type>.
+            </dd>
+        </dl>
+     */
+    void setEncryptionAlgorithms( [in] sequence< ::com::sun::star::beans::NamedValue > aAlgorithms )
+        raises( ::com::sun::star::lang::IllegalArgumentException );
+
+    // -----------------------------------------------------------------------
+    /** allows to get the encryption algorithms of the object.
+     */
+    sequence< ::com::sun::star::beans::NamedValue > getEncryptionAlgorithms();
+};
+
+//============================================================================
+
+}; }; }; };
+
+#endif
+

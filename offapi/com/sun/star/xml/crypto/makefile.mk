@@ -58,6 +58,12 @@ IDLFILES=\
     XMLSignatureException.idl     \
     XMLEncryptionException.idl     \
     XUriBinding.idl    \
+    CipherID.idl \
+    DigestID.idl \
+    XCipherContext.idl \
+    XCipherContextSupplier.idl \
+    XDigestContext.idl \
+    XDigestContextSupplier.idl \
     SecurityOperationStatus.idl
 
 # ------------------------------------------------------------------
