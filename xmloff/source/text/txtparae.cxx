@@ -30,10 +30,6 @@
 #include "precompiled_xmloff.hxx"
 #include "unointerfacetouniqueidentifiermapper.hxx"
 #include <tools/debug.hxx>
-#ifndef _SVSTDARR_LONGS_DECL
-#define _SVSTDARR_LONGS
-#include <svl/svstdarr.hxx>
-#endif
 #include <svl/svarray.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/types.h>
@@ -41,6 +37,7 @@
 #include <vector>
 #include <list>
 #include <boost/unordered_map.hpp>
+#include <tools/string.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
