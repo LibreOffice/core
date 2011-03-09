@@ -9464,11 +9464,12 @@ uno::Reference< rendering::XCanvas > Window::ImplGetCanvas( const Size& rFullscr
         if( (nDisplay >= Application::GetScreenCount()) )
         {
             xCanvas.set( xCanvasFactory->createInstanceWithArguments(
-                             bSpriteCanvas ?
-                             OUString( "com.sun.star.rendering.SpriteCanvas.MultiScreen" ) :
-                             OUString( "com.sun.star.rendering.Canvas" ),
-                             aArg ),
-                         UNO_QUERY );
+                                 bSpriteCanvas ?
+                                 OUString( "com.sun.star.rendering.SpriteCanvas.MultiScreen" ) :
+                                 OUString( "com.sun.star.rendering.Canvas.MultiScreen" ),
+                                 aArg ),
+                             UNO_QUERY );
+
         }
         else
         {
@@ -9483,7 +9484,6 @@ uno::Reference< rendering::XCanvas > Window::ImplGetCanvas( const Size& rFullscr
 #ifdef WNT
         }
 #endif
-
         mpWindowImpl->mxCanvas = xCanvas;
     }
 
