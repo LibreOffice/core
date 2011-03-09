@@ -673,7 +673,8 @@ public:
     // a new method for accessing the last BoundRect.
     virtual const Rectangle& GetLastBoundRect() const;
 
-    virtual void RecalcBoundRect();
+    // If bForced is true, the boundrect is also calculated when the model is locked
+    virtual void RecalcBoundRect(bool bForced = false);
 
     void BroadcastObjectChange() const;
 
