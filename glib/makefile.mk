@@ -284,6 +284,8 @@ OUT2INC+=gobject/gtype.h
 OUT2INC+=gobject/gvaluearray.h
 
 .ELIF "$(OS)"=="WNT"
+CONVERTFILES=gobject/gmarshal.c
+
 PATCH_FILES=glib-2.28.1-win32.patch
 CONFIGURE_ACTION=
 ADDITIONAL_FILES= config.h \
