@@ -568,7 +568,8 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     sal_uLong nIMin = nIStart;
     sal_uLong nIMax = nIEnd;
     PutInOrder(nIMin,nIMax);
-    if (!IsDataFiltered())  //modify for i89232
+    sal_Bool bHasFiltered = IsDataFiltered();
+    if (!bHasFiltered)  //modify for i89232
     {
         if (bVertical)
             DeleteArea(nCol1, static_cast<SCROW>(nIMin), nCol2, static_cast<SCROW>(nIMax), IDF_AUTOFILL);
@@ -620,7 +621,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     pNewPattern = NULL;
             }
 
-            if ( bVertical && nISrcStart == nISrcEnd )
+            if ( bVertical && nISrcStart == nISrcEnd && !bHasFiltered )
             {
                 //  Attribute komplett am Stueck setzen
                 if (pNewPattern || pSrcPattern != pDocument->GetDefPattern())
@@ -638,37 +639,44 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 break;      // Schleife abbrechen
             }
 
-            if ( pSrcPattern != aCol[nCol].GetPattern( static_cast<SCROW>(nRow) ) )
+            if ( !RowFiltered(nRow) )
             {
-                //  Vorlage auch uebernehmen
-                //! am AttrArray mit ApplyPattern zusammenfassen ??
-                if ( pStyleSheet )
-                    aCol[nCol].ApplyStyle( static_cast<SCROW>(nRow), *pStyleSheet );
+                if ( bHasFiltered )
+                    DeleteArea(static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow),
+                               static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), IDF_AUTOFILL);
 
-                //  ApplyPattern statt SetPattern um alte MergeFlags stehenzulassen
-                if ( pNewPattern )
-                    aCol[nCol].ApplyPattern( static_cast<SCROW>(nRow), *pNewPattern );
-                else
-                    aCol[nCol].ApplyPattern( static_cast<SCROW>(nRow), *pSrcPattern );
-            }
+                if ( pSrcPattern != aCol[nCol].GetPattern( static_cast<SCROW>(nRow) ) )
+                {
+                    //  Vorlage auch uebernehmen
+                    //! am AttrArray mit ApplyPattern zusammenfassen ??
+                    if ( pStyleSheet )
+                        aCol[nCol].ApplyStyle( static_cast<SCROW>(nRow), *pStyleSheet );
 
-            if (nAtSrc==nISrcEnd)
-            {
-                if ( nAtSrc != nISrcStart )
-                {   // mehr als eine Source-Zelle
-                    nAtSrc = nISrcStart;
+                    //  ApplyPattern statt SetPattern um alte MergeFlags stehenzulassen
+                    if ( pNewPattern )
+                        aCol[nCol].ApplyPattern( static_cast<SCROW>(nRow), *pNewPattern );
+                    else
+                        aCol[nCol].ApplyPattern( static_cast<SCROW>(nRow), *pSrcPattern );
+                }
+
+                if (nAtSrc==nISrcEnd)
+                {
+                    if ( nAtSrc != nISrcStart )
+                    {   // mehr als eine Source-Zelle
+                        nAtSrc = nISrcStart;
+                        bGetPattern = sal_True;
+                    }
+                }
+                else if (bPositive)
+                {
+                    ++nAtSrc;
                     bGetPattern = sal_True;
                 }
-            }
-            else if (bPositive)
-            {
-                ++nAtSrc;
-                bGetPattern = sal_True;
-            }
-            else
-            {
-                --nAtSrc;
-                bGetPattern = sal_True;
+                else
+                {
+                    --nAtSrc;
+                    bGetPattern = sal_True;
+                }
             }
 
             if (rInner == nIEnd) break;
@@ -736,7 +744,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         {
             sal_uLong nSource = nISrcStart;
             double nDelta;
-            if (( nScFillModeMouseModifier & KEY_MOD1 )||IsDataFiltered()) //i89232
+            if (( nScFillModeMouseModifier & KEY_MOD1 )||bHasFiltered) //i89232
                 nDelta = 0.0;
             else if ( bPositive )
                 nDelta = 1.0;
@@ -779,7 +787,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                     ((ScStringCell*)pSrcCell)->GetString( aValue );
                                 else
                                     ((ScEditCell*)pSrcCell)->GetString( aValue );
-                                if ( !(nScFillModeMouseModifier & KEY_MOD1) && !IsDataFiltered())   //i89232
+                                if ( !(nScFillModeMouseModifier & KEY_MOD1) && !bHasFiltered)   //i89232
                                 {
                                     nCellDigits = 0;    // look at each source cell individually
                                     nHeadNoneTail = lcl_DecompValueString(
@@ -804,97 +812,94 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
 
                 if (!bRowFiltered)
                 {
-                    if (IsDataFiltered())
-                        DeleteArea(static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow),
-                                   static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), IDF_AUTOFILL);
                 //End of i89232
 
-                switch (eCellType)
-                {
-                    case CELLTYPE_VALUE:
-                        aCol[nCol].Insert(static_cast<SCROW>(nRow), new ScValueCell(nVal + nDelta));
-                        break;
-                    case CELLTYPE_STRING:
-                    case CELLTYPE_EDIT:
-                        if ( nHeadNoneTail )
-                        {
-                            // #i48009# with the "nStringValue+(long)nDelta" expression within the
-                            // lcl_ValueString calls, gcc 3.4.1 makes wrong optimizations (ok in 3.4.3),
-                            // so nNextValue is now calculated ahead.
-                            sal_Int32 nNextValue = nStringValue+(sal_Int32)nDelta;
-
-                            String aStr;
-                            if ( nHeadNoneTail < 0 )
+                    switch (eCellType)
+                    {
+                        case CELLTYPE_VALUE:
+                            aCol[nCol].Insert(static_cast<SCROW>(nRow), new ScValueCell(nVal + nDelta));
+                            break;
+                        case CELLTYPE_STRING:
+                        case CELLTYPE_EDIT:
+                            if ( nHeadNoneTail )
                             {
-                                aCol[nCol].Insert( static_cast<SCROW>(nRow),
-                                        lcl_getSuffixCell( pDocument,
-                                            nNextValue, nCellDigits, aValue,
-                                            eCellType, bIsOrdinalSuffix));
+                                // #i48009# with the "nStringValue+(long)nDelta" expression within the
+                                // lcl_ValueString calls, gcc 3.4.1 makes wrong optimizations (ok in 3.4.3),
+                                // so nNextValue is now calculated ahead.
+                                sal_Int32 nNextValue = nStringValue+(sal_Int32)nDelta;
+
+                                String aStr;
+                                if ( nHeadNoneTail < 0 )
+                                {
+                                    aCol[nCol].Insert( static_cast<SCROW>(nRow),
+                                            lcl_getSuffixCell( pDocument,
+                                                nNextValue, nCellDigits, aValue,
+                                                eCellType, bIsOrdinalSuffix));
+                                }
+                                else
+                                {
+                                    aStr = aValue;
+                                    aStr += lcl_ValueString( nNextValue, nCellDigits );
+                                    aCol[nCol].Insert( static_cast<SCROW>(nRow),
+                                            new ScStringCell( aStr));
+                                }
                             }
                             else
                             {
-                                aStr = aValue;
-                                aStr += lcl_ValueString( nNextValue, nCellDigits );
-                                aCol[nCol].Insert( static_cast<SCROW>(nRow),
-                                        new ScStringCell( aStr));
-                            }
-                        }
-                        else
-                        {
-                            ScAddress aDestPos( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), nTab );
-                            switch ( eCellType )
-                            {
-                                case CELLTYPE_STRING:
-                                case CELLTYPE_EDIT:
-                                    aCol[nCol].Insert( aDestPos.Row(), pSrcCell->CloneWithoutNote( *pDocument ) );
-                                break;
-                                default:
+                                ScAddress aDestPos( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), nTab );
+                                switch ( eCellType )
                                 {
-                                    // added to avoid warnings
+                                    case CELLTYPE_STRING:
+                                    case CELLTYPE_EDIT:
+                                        aCol[nCol].Insert( aDestPos.Row(), pSrcCell->CloneWithoutNote( *pDocument ) );
+                                    break;
+                                    default:
+                                    {
+                                        // added to avoid warnings
+                                    }
                                 }
                             }
+                            break;
+                        case CELLTYPE_FORMULA :
+                            FillFormula( nFormulaCounter, bFirst,
+                                    (ScFormulaCell*) pSrcCell,
+                                    static_cast<SCCOL>(nCol),
+                                    static_cast<SCROW>(nRow), (rInner == nIEnd) );
+                            if (nFormulaCounter - nActFormCnt > nMaxFormCnt)
+                                nMaxFormCnt = nFormulaCounter - nActFormCnt;
+                            break;
+                        default:
+                        {
+                            // added to avoid warnings
                         }
-                        break;
-                    case CELLTYPE_FORMULA :
-                        FillFormula( nFormulaCounter, bFirst,
-                                (ScFormulaCell*) pSrcCell,
-                                static_cast<SCCOL>(nCol),
-                                static_cast<SCROW>(nRow), (rInner == nIEnd) );
-                        if (nFormulaCounter - nActFormCnt > nMaxFormCnt)
-                            nMaxFormCnt = nFormulaCounter - nActFormCnt;
-                        break;
-                    default:
-                    {
-                        // added to avoid warnings
                     }
-                }
 
-                if (nSource==nISrcEnd)
-                {
-                    if ( nSource != nISrcStart )
-                    {   // mehr als eine Source-Zelle
-                        nSource = nISrcStart;
+                    if (nSource==nISrcEnd)
+                    {
+                        if ( nSource != nISrcStart )
+                        {   // mehr als eine Source-Zelle
+                            nSource = nISrcStart;
+                            bGetCell = sal_True;
+                        }
+                        if ( !(nScFillModeMouseModifier & KEY_MOD1) && !bHasFiltered ) //i89232
+                        {
+                            if ( bPositive )
+                                nDelta += 1.0;
+                            else
+                                nDelta -= 1.0;
+                        }
+                        nFormulaCounter = nActFormCnt;
+                        bFirst = sal_False;
+                    }
+                    else if (bPositive)
+                    {
+                        ++nSource;
                         bGetCell = sal_True;
                     }
-                        if ( !(nScFillModeMouseModifier & KEY_MOD1) && !IsDataFiltered() ) //i89232
+                    else
                     {
-                        if ( bPositive )
-                            nDelta += 1.0;
-                        else
-                            nDelta -= 1.0;
-                    }
-                    nFormulaCounter = nActFormCnt;
-                    bFirst = sal_False;
-                }
-                else if (bPositive)
-                {
-                    ++nSource;
-                    bGetCell = sal_True;
-                }
-                else
-                {
-                    --nSource;
-                    bGetCell = sal_True;
+                        --nSource;
+                        bGetCell = sal_True;
                     }
                 }
 
@@ -997,7 +1002,6 @@ String ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW n
             //Add for i89232
             if ((eFillDir == FILL_TO_BOTTOM)||(eFillDir == FILL_TO_TOP))
             {
-                long nfilteredrow = 0;
                 long nBegin = 0;
                 long nEnd = 0;
                 if (nEndY > nRow1)
@@ -1010,16 +1014,12 @@ String ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW n
                     nBegin = nEndY;
                     nEnd = nRow1 -1;
                 }
-                for (long nRowIndex = nBegin; nRowIndex <= nEnd; nRowIndex++)
-                {
-                    sal_uInt8 nFlags = pRowFlags->GetValue(nRowIndex);
-                    if (nFlags & CR_FILTERED)
-                        nfilteredrow++;
-                }
+                long nNonFiltered = CountNonFilteredRows(nBegin, nEnd);
+                long nFiltered = nEnd + 1 - nBegin - nNonFiltered;
                 if (nIndex >0)
-                    nIndex = nIndex - nfilteredrow;
+                    nIndex = nIndex - nFiltered;
                 else
-                    nIndex = nIndex + nfilteredrow;
+                    nIndex = nIndex + nFiltered;
             }
             //End of i89232
 
