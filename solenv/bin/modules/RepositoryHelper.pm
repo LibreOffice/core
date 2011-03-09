@@ -118,8 +118,7 @@ sub search_for_hg {
 
 sub search_via_build_lst {
     my $self = shift;
-#    my @possible_build_lists = ('build.lst', 'build.xlist'); # build lists names
-    my @possible_build_lists = ('build.lst'); # build lists names
+    my @possible_build_lists = ('gbuild.lst', 'build.lst'); # build lists names
     my $previous_dir = '';
     my $rep_root_candidate = $self->{INITIAL_DIRECTORY};
     do {

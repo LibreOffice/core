@@ -39,7 +39,7 @@ endef
 
 define gb_Deliver_add_deliverable
 gb_Deliver_DELIVERABLES += $$(patsubst $(REPODIR)/%,%,$(2)):$$(patsubst $(REPODIR)/%,%,$(1))
-$(if $(gb_HIRESTIME),,.LOW_RESOLUTION_TIME : $(1))
+$(if $(gb_LOWRESTIME),.LOW_RESOLUTION_TIME : $(1),)
 
 endef
 

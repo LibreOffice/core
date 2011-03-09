@@ -1984,7 +1984,7 @@ AC_MSG_CHECKING([the GNU make version])
 _make_version=`$GNUMAKE --version | grep GNU | $SED -e 's@^[[^0-9]]*@@' -e 's@ .*@@' -e 's@,.*@@'`;
 _make_longver=`echo $_make_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
 if test "$_make_longver" -ge "038100" ; then
-   AC_MSG_RESULT([$GNUMAKE $_make_version])
+    AC_MSG_RESULT([$GNUMAKE $_make_version])
 else
    AC_MSG_ERROR([failed ($GNUMAKE version >= 3.81 needed])
 fi

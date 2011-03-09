@@ -2,40 +2,48 @@
 
 SHELL=/usr/bin/env bash
 
+ifeq ($(USE_GMAKE),)
+GBUILD_OPT:=
+else
+GBUILD_OPT:=--gmake
+endif
+
 all: Makefile dmake/dmake@EXEEXT@ src.downloaded
-	. ./*[Ee]nv.[Ss]et.sh && \
+
+	@. ./*[Ee]nv.[Ss]et.sh && \
         cd instsetoo_native && \
-        build.pl -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
+        build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
 
 install:
-	@echo "Installing in $${prefix:-/usr/local}..."
-	. ./*[Ee]nv.[Ss]et.sh && \
-	ooinstall "$${prefix:-@prefix@}"
-	@echo && \
+	@. ./*[Ee]nv.[Ss]et.sh && \
+	echo "Installing in $${prefix:-@prefix@}..." && \
+	ooinstall "$${prefix:-@prefix@}" && \
+	echo "" && \
 	echo "Installation finished, you can now execute:" && \
 	echo "$${prefix:-@prefix@}/program/soffice"
 
 dev-install:
-	. ./*[Ee]nv.[Ss]et.sh && \
-        ooinstall -l @abs_builddir@/install
-	@echo && \
+	@. ./*[Ee]nv.[Ss]et.sh && \
+        ooinstall -l @abs_builddir@/install && \
+        echo "" && \
         echo "Developer installation finished, you can now execute:" && \
         echo "@abs_builddir@/install/program/soffice"
 
 distclean: dmake/dmake@EXEEXT@
-	. ./*[Ee]nv.[Ss]et.sh && \
+	@. ./*[Ee]nv.[Ss]et.sh && \
         dmake distclean
 
 clean: dmake/dmake@EXEEXT@
-	. ./*[Ee]nv.[Ss]et.sh && \
-        dmake clean
+	@. ./*[Ee]nv.[Ss]et.sh && \
+        dmake clean && \
+        if [ -n "$$USE_GMAKE" ] ; then make -f GNUmakefile.mk -sr clean ; fi
 
 dmake/dmake@EXEEXT@:
-	. ./*[Ee]nv.[Ss]et.sh && \
+	@. ./*[Ee]nv.[Ss]et.sh && \
         ./bootstrap
 
 src.downloaded: ooo.lst download
-	. ./*[Ee]nv.[Ss]et.sh && \
+	@. ./*[Ee]nv.[Ss]et.sh && \
 	$$SRC_ROOT/download $$SRC_ROOT/ooo.lst && touch $@
 
 fetch: src.downloaded
@@ -44,19 +52,19 @@ Makefile: configure.in set_soenv.in Makefile.in
 	./autogen.sh
 
 check: Makefile dmake/dmake@EXEEXT@ fetch
-	. ./*[Ee]nv.[Ss]et.sh && \
+	@. ./*[Ee]nv.[Ss]et.sh && \
 	cd smoketestoo_native && \
 	export SAL_USE_VCLPLUGIN="svp" && \
-        build.pl -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
+        build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
 
 id:
-	. ./*[Ee]nv.[Ss]et.sh && \
+	@. ./*[Ee]nv.[Ss]et.sh && \
 		create-ids
 
 tags:
-	. ./*[Ee]nv.[Ss]et.sh && \
+	@. ./*[Ee]nv.[Ss]et.sh && \
 		create-tags
 
 docs:
-	. ./*[Ee]nv.[Ss]et.sh && \
+	@. ./*[Ee]nv.[Ss]et.sh && \
 		mkdocs.sh $$SRC_ROOT/docs $$SOLARENV/inc/doxygen.cfg

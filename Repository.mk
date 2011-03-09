@@ -48,7 +48,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     cui \
     drawinglayer \
     editeng \
-    eggtray \
     fwe \
     fwi \
     fwk \
@@ -58,6 +57,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     lng \
     msfilter \
     msword \
+    oox \
     qstart_gtk \
     sax \
     sb \
@@ -97,7 +97,6 @@ $(eval $(call gb_Helper_register_libraries,RTLIBS, \
     i18nisolang1 \
     i18nutil \
     ucbhelper \
-    vos3 \
 ))
 
 $(eval $(call gb_Helper_register_libraries,RTVERLIBS, \
@@ -131,7 +130,6 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
     salcpprt \
     vclmain \
     zlib \
-    vclmain \
 ))
 
 # vim: set noet sw=4 ts=4:

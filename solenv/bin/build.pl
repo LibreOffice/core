@@ -141,7 +141,7 @@
     my %platforms = (); # platforms available or being working with
     my %platforms_to_copy = (); # copy output trees for the platforms when --prepare
     my $tmp_dir = get_tmp_dir(); # temp directory for checkout and other actions
-    my @possible_build_lists = ('build.lst', 'build.xlist'); # build lists names
+    my @possible_build_lists = ('gbuild.lst', 'build.lst', 'build.xlist'); # build lists names
     my %build_list_paths = (); # build lists names
     my %build_lists_hash = (); # hash of arrays $build_lists_hash{$module} = \($path, $xml_list_object)
     my $pre_job = 'announce'; # job to add for not-single module build
@@ -199,6 +199,8 @@
     my $zenity_in = '';
     my $zenity_out = '';
     my $zenity_err = '';
+    my $allow_gbuild = 0;
+    my %is_gbuild = ();
     my $verbose = 0;
 
     my @modules_built = ();
@@ -540,10 +542,17 @@ sub get_build_list_path {
         my $possible_dir_path = $module_paths{$_}.'/prj/';
         if (-d $possible_dir_path) {
             foreach my $build_list (@possible_build_lists) {
-                my $possible_build_list_path = correct_path($possible_dir_path . $build_list);
-                if (-f $possible_build_list_path) {
-                    $build_list_paths{$module} = $possible_build_list_path;
-                    return $possible_build_list_path;
+                # if gbuild are allow we favor gbuild.lst as the build instruction
+                if($build_list ne "gbuild.lst" || $allow_gbuild) {
+                    my $possible_build_list_path = correct_path($possible_dir_path . $build_list);
+                    if (-f $possible_build_list_path) {
+                        $build_list_paths{$module} = $possible_build_list_path;
+                        if ($build_list eq "gbuild.lst") {
+#                           print  "Using gmake for module $module\n";
+                            $is_gbuild{$module} = 1;
+                        };
+                        return $possible_build_list_path;
+                    };
                 };
             }
             print_error("There's no build list for $module");
@@ -876,7 +885,7 @@ sub get_prj_platform {
         s/\r\n//;
         $line++;
         if ($_ =~ /\snmake\s/) {
-            if ($' =~ /\s*-\s+(\w+)[,\S+]*\s+(\S+)/ ) {
+            if ($' =~ /\s*-\s+(\w+)[,\S+]*\s+(\S+)/ ) { #'
                 my $platform = $1;
                 my $alias = $2;
                 print_error ("There is no correct alias set in the line $line!") if ($alias eq 'NULL');
@@ -968,7 +977,7 @@ sub get_deps_hash {
                 $platform = $1;
                 $dependencies = $';
                 while ($dependencies =~ /,(\w+)/o) {
-                    $dependencies = $';
+                    $dependencies = $'; #'
                 };
                 $dependencies =~ /\s+(\S+)\s+/o;
                 $dir_alias = $1;
@@ -980,7 +989,7 @@ sub get_deps_hash {
                 delete $dead_dependencies{$dir_alias} if (defined $dead_dependencies{$dir_alias});
                 print_error("Directory alias $dir_alias is defined at least twice!! Please, correct build.lst in module $module_to_build") if (defined $$dependencies_hash{$dir_alias});
                 $platform_hash{$dir_alias}++;
-                $dependencies = $';
+                $dependencies = $'; #'
                 print_error("$module_to_build/prj/build.lst has wrongly written dependencies string:\n$_\n") if (!$dependencies);
                 $deps_hash{$_}++ foreach (get_dependency_array($dependencies));
                 $$dependencies_hash{$dir_alias} = \%deps_hash;
@@ -1347,7 +1356,7 @@ sub get_dependency_array {
         print_error("Project $prj has wrongly written dependencies string:\n $string") if (!$dep_string);
         $dep_string =~ /(\S+)\s*/o;
         $parent_prj = $1;
-        $dep_string = $';
+        $dep_string = $'; #'
         if ($parent_prj =~ /\.(\w+)$/o) {
             $parent_prj = $`;
             if (($prj_platform{$parent_prj} ne $1) &&
@@ -1467,9 +1476,10 @@ sub get_options {
         $arg =~ /^--checkmodules$/       and $checkparents = 1 and $ignore = 1 and next;
         $arg =~ /^-s$/        and $show = 1                         and next;
         $arg =~ /^--deliver$/    and $deliver = 1                     and next;
+        $arg =~ /^--gmake$/    and $allow_gbuild = 1 and print "ALLOW GBUILD" and next;
         $arg =~ /^(--job=)/       and $custom_job = $' and next;
         $arg =~ /^(--pre_job=)/       and $pre_custom_job = $' and next;
-        $arg =~ /^(--post_job=)/       and $post_custom_job = $' and next;
+        $arg =~ /^(--post_job=)/       and $post_custom_job = $' and next; #'
         $arg =~ /^-d$/    and $deliver = 1                     and next;
         $arg =~ /^--dlv_switch$/    and $dlv_switch = shift @ARGV    and next;
         $arg =~ /^--file$/        and $cmd_file = shift @ARGV             and next;
@@ -1618,11 +1628,12 @@ sub get_module_and_buildlist_paths {
         $source_config_file = $source_config->get_config_file_path();
         $active_modules{$_}++ foreach ($source_config->get_active_modules());
         my %active_modules_copy = %active_modules;
-        foreach ($source_config->get_all_modules()) {
-            delete $active_modules_copy{$_} if defined($active_modules_copy{$_});
-            next if ($_ eq $initial_module);
-            $module_paths{$_} = $source_config->get_module_path($_);
-            $build_list_paths{$_} = $source_config->get_module_build_list($_)
+        foreach my $module ($source_config->get_all_modules()) {
+            delete $active_modules_copy{$module} if defined($active_modules_copy{$module});
+            next if ($module eq $initial_module);
+            $module_paths{$module} = $source_config->get_module_path($module);
+            $build_list_paths{$module} = $source_config->get_module_build_list($module);
+            $is_gbuild{$module} = $source_config->{GBUILD};
         }
         $dead_parents{$_}++ foreach (keys %active_modules_copy);
     };
@@ -2026,7 +2037,7 @@ sub do_custom_job {
     my ($module_job, $dependencies_hash) = @_;
     $module_job =~ /(\s)/o;
     my $module = $`;
-    my $job = $';
+    my $job = $'; #'
     html_store_job_info($dependencies_hash, $module_job);
     my $error_code = 0;
     if ($job eq $pre_job) {
@@ -2461,7 +2472,7 @@ sub get_modules_passed {
             if ($option =~ /(:)/) {
                 $option = $`;
                 print_error("\'--from\' switch collision") if ($build_all_cont);
-                $build_all_cont = $';
+                $build_all_cont = $'; #'
             };
             $$hash_ref{$option}++;
         };
@@ -3325,7 +3336,7 @@ sub run_server {
         my %client_hash = ();
         foreach (@client_data) {
             /(=)/;
-            $client_hash{$`} = $';
+            $client_hash{$`} = $'; #'
         }
         my $pid = $client_hash{pid} . '@' . $client_host;
         if (defined $client_hash{platform}) {
@@ -3432,8 +3443,15 @@ sub get_job_string {
     my $log_file = $jobs_hash{$job_dir}->{LONG_LOG_PATH};
     my $full_job_dir = $job_dir;
     if ($job_dir =~ /(\s)/o) {
-        $job = $';
-        $job = $deliver_command if ($job eq $post_job);
+        $job = $'; #'
+        print $echo . "determine if we need to deliver $job_dir\n";
+        if ($job eq $post_job) {
+            if( $is_gbuild{$job_dir} ) {
+                print "Skip deliver for gmake-built module $job_dir\n";
+                return'';
+            };
+            $job = $deliver_command
+        };
         $full_job_dir = $module_paths{$`};
     }
     my $log_dir = File::Basename::dirname($log_file);
