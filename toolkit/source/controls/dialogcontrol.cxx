@@ -354,7 +354,10 @@ throw (::com::sun::star::uno::RuntimeException)
         Reference< XControl > xDialogControl( *this, UNO_QUERY_THROW );
         Reference< XDevice > xDialogDevice( xDialogControl->getPeer(), UNO_QUERY );
         OSL_ENSURE( xDialogDevice.is(), "UnoDialogControl::windowResized: no peer, but a windowResized event?" );
-        if ( xDialogDevice.is() )
+
+        // #i87592 In design mode the drawing layer works with sizes with decoration.
+        // Therefore we have to substract them before writing back to the properties (model).
+        if ( xDialogDevice.is() && mbDesignMode )
         {
             DeviceInfo aDeviceInfo( xDialogDevice->getInfo() );
             aAppFontSize.Width() -= aDeviceInfo.LeftInset + aDeviceInfo.RightInset;
