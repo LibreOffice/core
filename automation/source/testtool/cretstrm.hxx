@@ -36,7 +36,7 @@
 class CRetStream : public CmdBaseStream
 {
     SvStream *pSammel;
-    USHORT nId;
+    sal_uInt16 nId;
 
 public:
     CRetStream( SvStream *pIn );
@@ -45,7 +45,7 @@ public:
     using CmdBaseStream::Read;
     void Read ( comm_USHORT &nNr ){CmdBaseStream::Read ( nNr );}
     void Read ( comm_ULONG &nNr ){CmdBaseStream::Read ( nNr );}
-    virtual void Read ( SmartId* &pId ){CmdBaseStream::Read ( pId );}
+    virtual void Read ( rtl::OString* &pId ){CmdBaseStream::Read ( pId );}
     void Read ( comm_BOOL &bBool ){CmdBaseStream::Read ( bBool );}
     void Read( String &aString );
     void Read( SbxValue &aValue );

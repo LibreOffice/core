@@ -93,10 +93,10 @@ GraphicFilterDialog::GraphicFilterDialog( Window* pParent, const ResId& rResId, 
     mfScaleY        ( 0.0 ),
     maSizePixel     ( LogicToPixel( rGraphic.GetPrefSize(), rGraphic.GetPrefMapMode() ) ),
     maPreview       ( this, CUI_RES( CTL_PREVIEW ) ),
-    maFlParameter   ( this, CUI_RES( FL_PARAMETER ) ),
     maBtnOK         ( this, CUI_RES( BTN_OK ) ),
     maBtnCancel     ( this, CUI_RES( BTN_CANCEL ) ),
-    maBtnHelp       ( this, CUI_RES( BTN_HELP ) )
+    maBtnHelp       ( this, CUI_RES( BTN_HELP ) ),
+    maFlParameter   ( this, CUI_RES( FL_PARAMETER ) )
 {
     const Size  aPreviewSize( maPreview.GetOutputSizePixel() );
     Size        aGrfSize( maSizePixel );
@@ -170,7 +170,7 @@ IMPL_LINK( GraphicFilterDialog, ImplModifyHdl, void*, EMPTYARG )
 // ----------------
 
 GraphicFilterMosaic::GraphicFilterMosaic( Window* pParent, const Graphic& rGraphic,
-                                          USHORT nTileWidth, USHORT nTileHeight, BOOL bEnhanceEdges ) :
+                                          sal_uInt16 nTileWidth, sal_uInt16 nTileHeight, sal_Bool bEnhanceEdges ) :
     GraphicFilterDialog( pParent, CUI_RES( RID_SVX_GRFFILTER_DLG_MOSAIC ), rGraphic ),
     maFtWidth   ( this, CUI_RES( DLG_FILTERMOSAIC_FT_WIDTH ) ),
     maMtrWidth  ( this, CUI_RES( DLG_FILTERMOSAIC_MTR_WIDTH ) ),
@@ -192,6 +192,12 @@ GraphicFilterMosaic::GraphicFilterMosaic( Window* pParent, const Graphic& rGraph
     maCbxEdges.SetToggleHdl( GetModifyHdl() );
 
     maMtrWidth.GrabFocus();
+
+    maFtWidth.SetAccessibleRelationMemberOf(&maFlParameter);
+    maMtrWidth.SetAccessibleRelationMemberOf(&maFlParameter);
+    maFtHeight.SetAccessibleRelationMemberOf(&maFlParameter);
+    maMtrHeight.SetAccessibleRelationMemberOf(&maFlParameter);
+    maCbxEdges.SetAccessibleRelationMemberOf(&maFlParameter);
 }
 
 // -----------------------------------------------------------------------------
@@ -243,7 +249,7 @@ Graphic GraphicFilterMosaic::GetFilteredGraphic( const Graphic& rGraphic,
 // ------------------
 
 GraphicFilterSolarize::GraphicFilterSolarize( Window* pParent, const Graphic& rGraphic,
-                                              BYTE cGreyThreshold, BOOL bInvert ) :
+                                              sal_uInt8 cGreyThreshold, sal_Bool bInvert ) :
     GraphicFilterDialog ( pParent, CUI_RES( RID_SVX_GRFFILTER_DLG_SOLARIZE ), rGraphic ),
     maFtThreshold   ( this, CUI_RES( DLG_FILTERSOLARIZE_FT_THRESHOLD ) ),
     maMtrThreshold  ( this, CUI_RES( DLG_FILTERSOLARIZE_MTR_THRESHOLD ) ),
@@ -307,7 +313,7 @@ Graphic GraphicFilterSolarize::GetFilteredGraphic( const Graphic& rGraphic,
 // ----------------------
 
 GraphicFilterSepia::GraphicFilterSepia( Window* pParent, const Graphic& rGraphic,
-                                        USHORT nSepiaPercent ) :
+                                        sal_uInt16 nSepiaPercent ) :
     GraphicFilterDialog ( pParent, CUI_RES( RID_SVX_GRFFILTER_DLG_SEPIA ), rGraphic ),
     maFtSepia       ( this, CUI_RES( DLG_FILTERSEPIA_FT_SEPIA ) ),
     maMtrSepia      ( this, CUI_RES( DLG_FILTERSEPIA_MTR_SEPIA ) )
@@ -357,7 +363,7 @@ Graphic GraphicFilterSepia::GetFilteredGraphic( const Graphic& rGraphic,
 // -----------------------
 
 GraphicFilterPoster::GraphicFilterPoster( Window* pParent, const Graphic& rGraphic,
-                                          USHORT nPosterCount ) :
+                                          sal_uInt16 nPosterCount ) :
     GraphicFilterDialog ( pParent, CUI_RES( RID_SVX_GRFFILTER_DLG_POSTER ), rGraphic ),
     maFtPoster      ( this, CUI_RES( DLG_FILTERPOSTER_FT_POSTER ) ),
     maNumPoster     ( this, CUI_RES( DLG_FILTERPOSTER_NUM_POSTER ) )
@@ -383,7 +389,7 @@ Graphic GraphicFilterPoster::GetFilteredGraphic( const Graphic& rGraphic,
                                                  double /*fScaleX*/, double /*fScaleY*/ )
 {
     Graphic         aRet;
-    const USHORT    nPosterCount = GetPosterColorCount();
+    const sal_uInt16    nPosterCount = GetPosterColorCount();
 
     if( rGraphic.IsAnimated() )
     {
@@ -443,7 +449,7 @@ Graphic GraphicFilterEmboss::GetFilteredGraphic( const Graphic& rGraphic,
                                                  double /*fScaleX*/, double /*fScaleY*/ )
 {
     Graphic aRet;
-    USHORT  nAzim, nElev;
+    sal_uInt16  nAzim, nElev;
 
     switch( maCtlLight.GetActualRP() )
     {

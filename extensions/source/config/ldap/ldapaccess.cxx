@@ -280,7 +280,7 @@ void LdapConnection::loadModule()
 {
     if ( !s_Ldap_Module )
     {
-#if defined(WIN) || defined(WNT)
+#if defined(WNT)
 #       define LIBLDAP "nsldap32v50.dll"
 #else
 #   ifdef WITH_OPENLDAP

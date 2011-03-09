@@ -73,10 +73,10 @@ private:
     PushButton              aNewLibButton;
     PushButton              aNewModButton;
 
-    BOOL                bNewDelIsDel;
-    BOOL                bForceStoreBasic;
+    sal_Bool                bNewDelIsDel;
+    sal_Bool                bForceStoreBasic;
 
-    USHORT              nMode;
+    sal_uInt16              nMode;
 
     DECL_LINK( MacroSelectHdl, SvTreeListBox * );
     DECL_LINK( MacroDoubleClickHdl, SvTreeListBox * );
@@ -88,7 +88,7 @@ private:
     void                SaveSetCurEntry( SvTreeListBox& rBox, SvLBoxEntry* pEntry );
     void                UpdateFields();
 
-    void                EnableButton( Button& rButton, BOOL bEnable );
+    void                EnableButton( Button& rButton, sal_Bool bEnable );
 
     String              GetInfo( SbxVariable* pVar );
 
@@ -96,7 +96,7 @@ private:
     void                RestoreMacroDescription();
 
 public:
-                        MacroChooser( Window* pParent, BOOL bCreateEntries = TRUE );
+                        MacroChooser( Window* pParent, sal_Bool bCreateEntries = sal_True );
                         ~MacroChooser();
 
     SbMethod*           GetMacro();
@@ -105,8 +105,8 @@ public:
 
     virtual short       Execute();
 
-    void                SetMode( USHORT nMode );
-    USHORT              GetMode() const { return nMode; }
+    void                SetMode( sal_uInt16 nMode );
+    sal_uInt16              GetMode() const { return nMode; }
 };
 
 #endif  // _MACRODLG_HXX

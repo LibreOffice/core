@@ -31,6 +31,7 @@
 
 TabPage RID_PAGE_TABLESELECTION
 {
+    HelpID = "extensions:TabPage:RID_PAGE_TABLESELECTION";
     SVLook = TRUE ;
     Size = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
     Text [ en-US ] = "Data";
@@ -58,6 +59,7 @@ TabPage RID_PAGE_TABLESELECTION
     };
     ListBox LB_DATASOURCE
     {
+        HelpID = "extensions:ListBox:RID_PAGE_TABLESELECTION:LB_DATASOURCE";
         Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + 3 , 26  ) ;
         Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 27 , 14 ) ;
         SVLook = TRUE ;
@@ -68,6 +70,7 @@ TabPage RID_PAGE_TABLESELECTION
 
     PushButton PB_FORMDATASOURCE
     {
+        HelpID = "extensions:PushButton:RID_PAGE_TABLESELECTION:PB_FORMDATASOURCE";
         Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + 3 + WINDOW_HALF_SIZE_X - 24 , 25  ) ;
         Size = MAP_APPFONT ( 14 , 14 ) ;
         Text [ en-US ] = "~...";
@@ -82,6 +85,7 @@ TabPage RID_PAGE_TABLESELECTION
     };
     ListBox LB_TABLE
     {
+        HelpID = "extensions:ListBox:RID_PAGE_TABLESELECTION:LB_TABLE";
         Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + 3, 57  ) ;
         Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10 , WINDOW_SIZE_Y - 6 - 57 ) ;
         SVLook = TRUE ;
@@ -105,6 +109,7 @@ TabPage RID_PAGE_TABLESELECTION
 
 TabPage RID_PAGE_OPTION_DBFIELD
 {
+    HelpID = "extensions:TabPage:RID_PAGE_OPTION_DBFIELD";
     SVLook = TRUE ;
     Size = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
     Text [ en-US ] = "Database Field";
@@ -129,6 +134,7 @@ TabPage RID_PAGE_OPTION_DBFIELD
     };
     RadioButton RB_STOREINFIELD_YES
     {
+        HelpID = "extensions:RadioButton:RID_PAGE_OPTION_DBFIELD:RB_STOREINFIELD_YES";
         Pos = MAP_APPFONT ( 7 , 53  ) ;
         Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X + 20, 10 ) ;
         Group = TRUE;
@@ -137,6 +143,7 @@ TabPage RID_PAGE_OPTION_DBFIELD
     };
     ListBox LB_STOREINFIELD
     {
+        HelpID = "extensions:ListBox:RID_PAGE_OPTION_DBFIELD:LB_STOREINFIELD";
         Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + 23, 51 ) ;
         Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 30, 14 ) ;
         TabStop = TRUE;
@@ -147,6 +154,7 @@ TabPage RID_PAGE_OPTION_DBFIELD
     };
     RadioButton RB_STOREINFIELD_NO
     {
+        HelpID = "extensions:RadioButton:RID_PAGE_OPTION_DBFIELD:RB_STOREINFIELD_NO";
         Pos = MAP_APPFONT ( 7 , 68 ) ;
         Size = MAP_APPFONT ( WINDOW_SIZE_X - 14, 10 ) ;
         TabStop = FALSE;
@@ -156,6 +164,7 @@ TabPage RID_PAGE_OPTION_DBFIELD
 
 TabPage RID_PAGE_FORM_DATASOURCE_STATUS
 {
+    HelpID = "extensions:TabPage:RID_PAGE_FORM_DATASOURCE_STATUS";
     FixedLine FL_FORMSETINGS
     {
         Pos = MAP_APPFONT ( 4 , 3  ) ;

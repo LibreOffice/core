@@ -39,7 +39,7 @@
 
 // static ----------------------------------------------------------------
 
-BOOL            EnableSSO();
+sal_Bool            EnableSSO();
 CreateTabPage   GetSSOCreator( void );
 
 // class OfaOptionsTreeListBox -------------------------------------------
@@ -53,14 +53,14 @@ class OfaOptionsTreeListBox : public SvTreeListBox
     using  SvListView::Collapse;
 
 private:
-    BOOL            bInCollapse;
+    sal_Bool            bInCollapse;
 
 public:
     OfaOptionsTreeListBox(Window* pParent, const ResId& rResId) :
-        SvTreeListBox( pParent, rResId ), bInCollapse(FALSE) {}
+        SvTreeListBox( pParent, rResId ), bInCollapse(sal_False) {}
 
-    virtual BOOL    Collapse( SvLBoxEntry* pParent );
-    BOOL            IsInCollapse()const {return bInCollapse;}
+    virtual sal_Bool    Collapse( SvLBoxEntry* pParent );
+    sal_Bool            IsInCollapse()const {return bInCollapse;}
 };
 
 // struct OrderedEntry ---------------------------------------------------
@@ -154,7 +154,7 @@ typedef ::std::vector< OptionsNode* > VectorOfNodes;
 
 struct LastPageSaver
 {
-    USHORT          m_nLastPageId;
+    sal_uInt16          m_nLastPageId;
     rtl::OUString   m_sLastPageURL_Tools;
     rtl::OUString   m_sLastPageURL_ExtMgr;
 
@@ -201,14 +201,14 @@ private:
     // for the ColorTabPage
     SfxItemSet*     pColorPageItemSet;
     XColorTable*    pColorTab;
-    USHORT          nChangeType;
-    USHORT          nUnknownType;
-    USHORT          nUnknownPos;
-    BOOL            bIsAreaTP;
+    sal_uInt16          nChangeType;
+    sal_uInt16          nUnknownType;
+    sal_uInt16          nUnknownPos;
+    sal_Bool            bIsAreaTP;
 
-    BOOL            bForgetSelection;
-    BOOL            bExternBrowserActive;
-    BOOL            bImageResized;
+    sal_Bool            bForgetSelection;
+    sal_Bool            bExternBrowserActive;
+    sal_Bool            bImageResized;
     bool            bInSelectHdl_Impl;
     bool            bIsFromExtensionManager;
 
@@ -222,8 +222,8 @@ private:
 
     static LastPageSaver*   pLastPageSaver;
 
-    SfxItemSet*     CreateItemSet( USHORT nId );
-    void            ApplyItemSet( USHORT nId, const SfxItemSet& rSet );
+    SfxItemSet*     CreateItemSet( sal_uInt16 nId );
+    void            ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet );
     void            InitTreeAndHandler();
     void            Initialize( const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& _xFrame );
     void            ResizeTreeLB( void );   // resizes dialog so that treelistbox has no horizontal scroll bar
@@ -262,16 +262,16 @@ public:
     OfaTreeOptionsDialog( Window* pParent, const rtl::OUString& rExtensionId );
     ~OfaTreeOptionsDialog();
 
-    OptionsPageInfo*    AddTabPage( USHORT nId, const String& rPageName, USHORT nGroup );
-    USHORT              AddGroup(   const String& rGroupName,  SfxShell* pCreateShell,
-                                    SfxModule* pCreateModule, USHORT nDialogId );
+    OptionsPageInfo*    AddTabPage( sal_uInt16 nId, const String& rPageName, sal_uInt16 nGroup );
+    sal_uInt16              AddGroup(   const String& rGroupName,  SfxShell* pCreateShell,
+                                    SfxModule* pCreateModule, sal_uInt16 nDialogId );
 
     void                ActivateLastSelection();
-    void                ActivatePage( USHORT nResId );
+    void                ActivatePage( sal_uInt16 nResId );
     void                ActivatePage( const String& rPageURL );
     void                ApplyItemSets();
 
-    USHORT              GetColorChanged() const { return nChangeType; }
+    sal_uInt16              GetColorChanged() const { return nChangeType; }
     XColorTable*        GetColorTable() { return pColorTab; }
 
     // helper functions to call the language settings TabPage from the SpellDialog
@@ -335,12 +335,6 @@ private:
 
 public:
     ExtensionsTabPage(
-        Window* pParent, const ResId&,
-        const rtl::OUString& rPageURL, const rtl::OUString& rEvtHdl,
-        const com::sun::star::uno::Reference<
-            com::sun::star::awt::XContainerWindowProvider >& rProvider );
-
-    ExtensionsTabPage(
         Window* pParent, WinBits nStyle,
         const rtl::OUString& rPageURL, const rtl::OUString& rEvtHdl,
         const com::sun::star::uno::Reference<
@@ -353,7 +347,6 @@ public:
 
     void            ResetPage();
     void            SavePage();
-    void            HideWindow();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

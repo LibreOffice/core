@@ -57,7 +57,7 @@ void SCmdStream::Read (String* &pString)
     if ( !pString )
         pString = new String();
     comm_UniChar* pStr;
-    USHORT nLenInChars;
+    sal_uInt16 nLenInChars;
     CmdBaseStream::Read( pStr, nLenInChars );
 
     *pString = String( pStr, nLenInChars );
@@ -67,7 +67,7 @@ void SCmdStream::Read (String* &pString)
 void SCmdStream::Read (String &aString)
 {
     comm_UniChar* pStr;
-    USHORT nLenInChars;
+    sal_uInt16 nLenInChars;
     CmdBaseStream::Read( pStr, nLenInChars );
 
     aString = String( pStr, nLenInChars );
@@ -76,8 +76,8 @@ void SCmdStream::Read (String &aString)
 
 void SCmdStream::Read ( SfxPoolItem *&pItem )
 {
-    USHORT nType;
-    USHORT nId;
+    sal_uInt16 nType;
+    sal_uInt16 nId;
     Read(nId);
 #if OSL_DEBUG_LEVEL > 1
         StatementList::m_pDbgWin->AddText( "Parameter: " );
@@ -146,7 +146,7 @@ void SCmdStream::Read ( SfxPoolItem *&pItem )
 
 void SCmdStream::Read ( ::com::sun::star::beans::PropertyValue &rItem )
 {
-    USHORT nType;
+    sal_uInt16 nType;
     String aId;
     Read(aId);
     rItem.Name = rtl::OUString( aId );

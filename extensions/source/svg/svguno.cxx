@@ -61,36 +61,6 @@ extern "C" void SAL_CALL component_getImplementationEnvironment( const sal_Char 
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-// -----------------------
-// - component_writeInfo -
-// -----------------------
-
-extern "C" sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, void* pRegistryKey )
-{
-    sal_Bool bRet = sal_False;
-
-    if( pRegistryKey )
-    {
-        try
-        {
-            REF( NMSP_REGISTRY::XRegistryKey ) xNewKey1(
-                static_cast< NMSP_REGISTRY::XRegistryKey* >( pRegistryKey )->createKey(
-                B2UCONST( "/com.sun.star.comp.extensions.SVGWriter/UNO/SERVICES/com.sun.star.svg.SVGWriter" ) ) );
-            REF( NMSP_REGISTRY::XRegistryKey ) xNewKey2(
-                static_cast< NMSP_REGISTRY::XRegistryKey* >( pRegistryKey )->createKey(
-                B2UCONST( "/com.sun.star.comp.extensions.SVGPrinter/UNO/SERVICES/com.sun.star.svg.SVGPrinter" ) ) );
-
-            bRet = sal_True;
-        }
-        catch( NMSP_REGISTRY::InvalidRegistryException& )
-        {
-            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
-        }
-    }
-
-    return bRet;
-}
-
 // ------------------------
 // - component_getFactory -
 // ------------------------

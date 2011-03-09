@@ -100,15 +100,15 @@ SbMethod* CreateMacro( SbModule* pModule, const String& rMacroName )
             aMacroName = String( RTL_CONSTASCII_USTRINGPARAM( "Main" ) );
         else
         {
-            BOOL bValid = FALSE;
+            sal_Bool bValid = sal_False;
             String aStdMacroText( RTL_CONSTASCII_USTRINGPARAM( "Macro" ) );
-            USHORT nMacro = 1;
+            sal_uInt16 nMacro = 1;
             while ( !bValid )
             {
                 aMacroName = aStdMacroText;
                 aMacroName += String::CreateFromInt32( nMacro );
                 // Pruefen, ob vorhanden...
-                bValid = pModule->GetMethods()->Find( aMacroName, SbxCLASS_METHOD ) ? FALSE : TRUE;
+                bValid = pModule->GetMethods()->Find( aMacroName, SbxCLASS_METHOD ) ? sal_False : sal_True;
                 nMacro++;
             }
         }
@@ -198,7 +198,7 @@ bool RenameDialog( Window* pErrorParent, const ScriptDocument& rDocument, const 
     }
 
     BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
-    IDEBaseWindow* pWin = pIDEShell ? pIDEShell->FindWindow( rDocument, rLibName, rOldName, BASICIDE_TYPE_DIALOG, FALSE ) : NULL;
+    IDEBaseWindow* pWin = pIDEShell ? pIDEShell->FindWindow( rDocument, rLibName, rOldName, BASICIDE_TYPE_DIALOG, sal_False ) : NULL;
     Reference< XNameContainer > xExistingDialog;
     if ( pWin )
         xExistingDialog = ((DialogWindow*)pWin)->GetEditor()->GetDialog();
@@ -218,7 +218,7 @@ bool RenameDialog( Window* pErrorParent, const ScriptDocument& rDocument, const 
         ((DialogWindow*)pWin)->UpdateBrowser();
 
         // update tabwriter
-        USHORT nId = (USHORT)(pIDEShell->GetIDEWindowTable()).GetKey( pWin );
+        sal_uInt16 nId = (sal_uInt16)(pIDEShell->GetIDEWindowTable()).GetKey( pWin );
         DBG_ASSERT( nId, "No entry in Tabbar!" );
         if ( nId )
         {
@@ -238,7 +238,7 @@ bool RemoveDialog( const ScriptDocument& rDocument, const String& rLibName, cons
     BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
     if ( pIDEShell )
     {
-        DialogWindow* pDlgWin = pIDEShell->FindDlgWin( rDocument, rLibName, rDlgName, FALSE );
+        DialogWindow* pDlgWin = pIDEShell->FindDlgWin( rDocument, rLibName, rDlgName, sal_False );
         if( pDlgWin )
         {
             Reference< container::XNameContainer > xDialogModel = pDlgWin->GetDialog();
@@ -353,17 +353,17 @@ void StopBasic()
 
 //----------------------------------------------------------------------------
 
-void BasicStopped( BOOL* pbAppWindowDisabled,
-        BOOL* pbDispatcherLocked, USHORT* pnWaitCount,
+void BasicStopped( sal_Bool* pbAppWindowDisabled,
+        sal_Bool* pbDispatcherLocked, sal_uInt16* pnWaitCount,
         SfxUInt16Item** ppSWActionCount, SfxUInt16Item** ppSWLockViewCount )
 {
     // Nach einem Error oder dem expliziten abbrechen des Basics muessen
     // ggf. einige Locks entfernt werden...
 
     if ( pbAppWindowDisabled )
-        *pbAppWindowDisabled = FALSE;
+        *pbAppWindowDisabled = sal_False;
     if ( pbDispatcherLocked )
-        *pbDispatcherLocked = FALSE;
+        *pbDispatcherLocked = sal_False;
     if ( pnWaitCount )
         *pnWaitCount = 0;
     if ( ppSWActionCount )
@@ -388,9 +388,9 @@ void BasicStopped( BOOL* pbAppWindowDisabled,
     Window* pDefParent = Application::GetDefDialogParent();
     if ( pDefParent && !pDefParent->IsEnabled() )
     {
-        pDefParent->Enable( TRUE );
+        pDefParent->Enable( sal_True );
         if ( pbAppWindowDisabled )
-            *pbAppWindowDisabled = TRUE;
+            *pbAppWindowDisabled = sal_True;
     }
 
 }
@@ -441,7 +441,7 @@ long HandleBasicError( StarBASIC* pBasic )
         BasicManager* pBasMgr = BasicIDE::FindBasicManager( pBasic );
         if ( pBasMgr )
         {
-            BOOL bProtected = FALSE;
+            sal_Bool bProtected = sal_False;
             ScriptDocument aDocument( ScriptDocument::getDocumentForBasicManager( pBasMgr ) );
             OSL_ENSURE( aDocument.isValid(), "BasicIDE::HandleBasicError: no document for the given BasicManager!" );
             if ( aDocument.isValid() )
@@ -453,7 +453,7 @@ long HandleBasicError( StarBASIC* pBasic )
                     Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
                     if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aOULibName ) && !xPasswd->isLibraryPasswordVerified( aOULibName ) )
                     {
-                        bProtected = TRUE;
+                        bProtected = sal_True;
                     }
                 }
             }

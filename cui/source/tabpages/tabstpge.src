@@ -45,6 +45,7 @@ TabPage RID_SVXPAGE_TABULATOR
     };
     MetricBox ED_TABPOS
     {
+        HelpID = "cui:MetricBox:RID_SVXPAGE_TABULATOR:ED_TABPOS";
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 39 , 165 ) ;
         Minimum = -5600 ;
@@ -66,6 +67,7 @@ TabPage RID_SVXPAGE_TABULATOR
     };
     RadioButton BTN_TABTYPE_LEFT
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_TABULATOR:BTN_TABTYPE_LEFT";
         Pos = MAP_APPFONT ( 66 , 14 ) ;
         Size = MAP_APPFONT ( 89 , 10 ) ;
         Text [ en-US ] = "~Left" ;
@@ -78,6 +80,7 @@ TabPage RID_SVXPAGE_TABULATOR
     };
     RadioButton BTN_TABTYPE_RIGHT
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_TABULATOR:BTN_TABTYPE_RIGHT";
         Pos = MAP_APPFONT ( 66 , 28 ) ;
         Size = MAP_APPFONT ( 89 , 10 ) ;
         Text [ en-US ] = "Righ~t" ;
@@ -89,6 +92,7 @@ TabPage RID_SVXPAGE_TABULATOR
     };
     RadioButton BTN_TABTYPE_CENTER
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_TABULATOR:BTN_TABTYPE_CENTER";
         Pos = MAP_APPFONT ( 66 , 42 ) ;
         Size = MAP_APPFONT ( 89 , 10 ) ;
         Text [ en-US ] = "C~entered" ;
@@ -100,6 +104,7 @@ TabPage RID_SVXPAGE_TABULATOR
     };
     RadioButton BTN_TABTYPE_DECIMAL
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_TABULATOR:BTN_TABTYPE_DECIMAL";
         Pos = MAP_APPFONT ( 66 , 56 ) ;
         Size = MAP_APPFONT ( 89 , 10 ) ;
         Text [ en-US ] = "Deci~mal" ;
@@ -117,6 +122,7 @@ TabPage RID_SVXPAGE_TABULATOR
     };
     Edit ED_TABTYPE_DECCHAR
     {
+        HelpID = "cui:Edit:RID_SVXPAGE_TABULATOR:ED_TABTYPE_DECCHAR";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 156 , 68 ) ;
         Size = MAP_APPFONT ( 9 , 12 ) ;
@@ -130,6 +136,7 @@ TabPage RID_SVXPAGE_TABULATOR
     };
     RadioButton BTN_FILLCHAR_NO
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_TABULATOR:BTN_FILLCHAR_NO";
         Pos = MAP_APPFONT ( 66 , 97 ) ;
         Size = MAP_APPFONT ( 89 , 10 ) ;
         Text [ en-US ] = "N~one" ;
@@ -137,30 +144,35 @@ TabPage RID_SVXPAGE_TABULATOR
     };
     RadioButton BTN_FILLCHAR_POINTS
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_TABULATOR:BTN_FILLCHAR_POINTS";
         Pos = MAP_APPFONT ( 66 , 111 ) ;
         Size = MAP_APPFONT ( 89 , 10 ) ;
         Text = "~........" ;
     };
     RadioButton BTN_FILLCHAR_DASHLINE
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_TABULATOR:BTN_FILLCHAR_DASHLINE";
         Pos = MAP_APPFONT ( 66 , 125 ) ;
         Size = MAP_APPFONT ( 89 , 10 ) ;
         Text = "~--------" ;
     };
     RadioButton BTN_FILLCHAR_UNDERSCORE
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_TABULATOR:BTN_FILLCHAR_UNDERSCORE";
         Pos = MAP_APPFONT ( 66 , 139 ) ;
         Size = MAP_APPFONT ( 89 , 10 ) ;
         Text = "~_____" ;
     };
     RadioButton BTN_FILLCHAR_OTHER
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_TABULATOR:BTN_FILLCHAR_OTHER";
         Pos = MAP_APPFONT ( 66 , 153 ) ;
         Size = MAP_APPFONT ( 89 , 10 ) ;
         Text [ en-US ] = "Character" ;
     };
     Edit ED_FILLCHAR_OTHER
     {
+        HelpID = "cui:Edit:RID_SVXPAGE_TABULATOR:ED_FILLCHAR_OTHER";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 156 , 151 ) ;
         Size = MAP_APPFONT ( 9 , 12 ) ;
@@ -168,18 +180,21 @@ TabPage RID_SVXPAGE_TABULATOR
     };
     PushButton BTN_NEW
     {
+        HelpID = "cui:PushButton:RID_SVXPAGE_TABULATOR:BTN_NEW";
         Pos = MAP_APPFONT ( 204 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~New" ;
     };
     PushButton BTN_DELALL
     {
+        HelpID = "cui:PushButton:RID_SVXPAGE_TABULATOR:BTN_DELALL";
         Pos = MAP_APPFONT ( 204 , 23 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "Delete ~All" ;
     };
     PushButton BTN_DEL
     {
+        HelpID = "cui:PushButton:RID_SVXPAGE_TABULATOR:BTN_DEL";
         Pos = MAP_APPFONT ( 204 , 40 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Delete" ;
@@ -192,40 +207,9 @@ TabPage RID_SVXPAGE_TABULATOR
     {
         Text [ en-US ] = "Righ~t/Bottom" ;
     };
+    String ST_FILLCHAR_OTHER
+    {
+        Text [ en-US ] = "Character" ;
+    };
 };
- // ********************************************************************** EOF
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

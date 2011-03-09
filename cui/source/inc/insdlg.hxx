@@ -56,18 +56,18 @@ public:
     com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > GetObject()
                         { return m_xObj; }
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetIconIfIconified( ::rtl::OUString* pGraphicMediaType );
-    virtual BOOL IsCreateNew() const;
+    virtual sal_Bool IsCreateNew() const;
 };
 
 class SvInsertOleDlg : public InsertObjectDialog_Impl
 {
     RadioButton aRbNewObject;
     RadioButton aRbObjectFromfile;
+    FixedLine aGbObject;
     ListBox aLbObjecttype;
     Edit aEdFilepath;
     PushButton aBtnFilepath;
     CheckBox aCbFilelink;
-    FixedLine aGbObject;
     OKButton aOKButton1;
     CancelButton aCancelButton1;
     HelpButton aHelpButton1;
@@ -85,12 +85,10 @@ class SvInsertOleDlg : public InsertObjectDialog_Impl
     ListBox&            GetObjectTypes()
                         { return aLbObjecttype; }
     String              GetFilePath() const { return aEdFilepath.GetText(); }
-    BOOL                IsLinked() const    { return aCbFilelink.IsChecked(); }
-    BOOL                IsCreateNew() const { return aRbNewObject.IsChecked(); }
+    sal_Bool                IsLinked() const    { return aCbFilelink.IsChecked(); }
+    sal_Bool                IsCreateNew() const { return aRbNewObject.IsChecked(); }
 
 public:
-    static void         FillObjectServerList( SvObjectServerList* );
-
                         SvInsertOleDlg( Window* pParent,
                             const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage,
                             const SvObjectServerList* pServers = NULL );
@@ -105,11 +103,11 @@ public:
 class SvInsertPlugInDialog : public InsertObjectDialog_Impl
 {
 private:
+    FixedLine aGbFileurl;
     Edit aEdFileurl;
     PushButton aBtnFileurl;
-    FixedLine aGbFileurl;
-    MultiLineEdit aEdPluginsOptions;
     FixedLine aGbPluginsOptions;
+    MultiLineEdit aEdPluginsOptions;
     OKButton aOKButton1;
     CancelButton aCancelButton1;
     HelpButton aHelpButton1;
@@ -176,24 +174,25 @@ private:
     Edit                    aEDURL;
     PushButton              aBTOpen;
 
+    FixedLine               aFLScrolling;
     RadioButton             aRBScrollingOn;
     RadioButton             aRBScrollingOff;
     RadioButton             aRBScrollingAuto;
-    FixedLine               aFLScrolling;
+
 
     FixedLine               aFLSepLeft;
+    FixedLine               aFLFrameBorder;
     RadioButton             aRBFrameBorderOn;
     RadioButton             aRBFrameBorderOff;
-    FixedLine               aFLFrameBorder;
 
     FixedLine               aFLSepRight;
+    FixedLine               aFLMargin;
     FixedText               aFTMarginWidth;
     NumericField            aNMMarginWidth;
     CheckBox                aCBMarginWidthDefault;
     FixedText               aFTMarginHeight;
     NumericField            aNMMarginHeight;
     CheckBox                aCBMarginHeightDefault;
-    FixedLine               aFLMargin;
 
     OKButton aOKButton1;
     CancelButton aCancelButton1;

@@ -39,6 +39,7 @@
 
 TabPage RID_SVXPAGE_INET_MOZPLUGIN
 {
+    HelpID = "cui:TabPage:RID_SVXPAGE_INET_MOZPLUGIN";
     OutputSize = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
     SVLook = TRUE ;
@@ -52,6 +53,7 @@ TabPage RID_SVXPAGE_INET_MOZPLUGIN
     };
     CheckBox CB_MOZPLUGIN_CODE
     {
+        HelpID = "cui:CheckBox:RID_SVXPAGE_INET_MOZPLUGIN:CB_MOZPLUGIN_CODE";
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT (  236 , 10  ) ;
         TabStop = TRUE ;
@@ -83,6 +85,7 @@ TabPage RID_SVXPAGE_INET_PROXY
     };
     ListBox LB_PROXYMODE
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_INET_PROXY:LB_PROXYMODE";
         Pos = MAP_APPFONT ( 65 , GB_TYPES_TOP + 11 ) ;
         Size = MAP_APPFONT ( 49 , 48 ) ;
         Border = TRUE ;
@@ -106,6 +109,7 @@ TabPage RID_SVXPAGE_INET_PROXY
     };
     Edit ED_HTTP_PROXY
     {
+        HelpID = "cui:Edit:RID_SVXPAGE_INET_PROXY:ED_HTTP_PROXY";
         Pos = MAP_APPFONT ( 65 , GB_TYPES_TOP + 27 ) ;
         Size = MAP_APPFONT ( 123 , 12 ) ;
         Border = TRUE ;
@@ -124,6 +128,7 @@ TabPage RID_SVXPAGE_INET_PROXY
     };
     Edit ED_HTTP_PORT
     {
+        HelpID = "cui:Edit:RID_SVXPAGE_INET_PROXY:ED_HTTP_PORT";
         Pos = MAP_APPFONT ( ED_PORT_COL , GB_TYPES_TOP + 27 ) ;
         Size = MAP_APPFONT ( ED_PORT_WIDTH , 12 ) ;
         Border = TRUE ;
@@ -137,6 +142,7 @@ TabPage RID_SVXPAGE_INET_PROXY
     };
     Edit ED_HTTPS_PROXY
     {
+        HelpID = "cui:Edit:RID_SVXPAGE_INET_PROXY:ED_HTTPS_PROXY";
         Pos = MAP_APPFONT ( 65 , GB_TYPES_TOP + 43 ) ;
         Size = MAP_APPFONT ( 123 , 12 ) ;
         Border = TRUE ;
@@ -150,6 +156,7 @@ TabPage RID_SVXPAGE_INET_PROXY
     };
     Edit ED_HTTPS_PORT
     {
+        HelpID = "cui:Edit:RID_SVXPAGE_INET_PROXY:ED_HTTPS_PORT";
         Pos = MAP_APPFONT ( ED_PORT_COL , GB_TYPES_TOP + 43 ) ;
         Size = MAP_APPFONT ( ED_PORT_WIDTH , 12 ) ;
         Border = TRUE ;
@@ -163,6 +170,7 @@ TabPage RID_SVXPAGE_INET_PROXY
     };
     Edit ED_FTP_PROXY
     {
+        HelpID = "cui:Edit:RID_SVXPAGE_INET_PROXY:ED_FTP_PROXY";
         Pos = MAP_APPFONT ( 65 , GB_TYPES_TOP + 59 ) ;
         Size = MAP_APPFONT ( 123 , 12 ) ;
         Border = TRUE ;
@@ -176,6 +184,7 @@ TabPage RID_SVXPAGE_INET_PROXY
     };
     Edit ED_FTP_PORT
     {
+        HelpID = "cui:Edit:RID_SVXPAGE_INET_PROXY:ED_FTP_PORT";
         Pos = MAP_APPFONT ( ED_PORT_COL , GB_TYPES_TOP + 59 ) ;
         Size = MAP_APPFONT ( ED_PORT_WIDTH , 12 ) ;
         Border = TRUE ;
@@ -188,6 +197,7 @@ TabPage RID_SVXPAGE_INET_PROXY
     };
     Edit ED_SOCKS_PROXY
     {
+        HelpID = "cui:Edit:RID_SVXPAGE_INET_PROXY:ED_SOCKS_PROXY";
         Pos = MAP_APPFONT ( 65 , GB_TYPES_TOP + 75 ) ;
         Size = MAP_APPFONT ( 123 , 12 ) ;
         Border = TRUE ;
@@ -201,6 +211,7 @@ TabPage RID_SVXPAGE_INET_PROXY
     };
     Edit ED_SOCKS_PORT
     {
+        HelpID = "cui:Edit:RID_SVXPAGE_INET_PROXY:ED_SOCKS_PORT";
         Pos = MAP_APPFONT ( ED_PORT_COL , GB_TYPES_TOP + 75 ) ;
         Size = MAP_APPFONT ( ED_PORT_WIDTH , 12 ) ;
         Border = TRUE ;
@@ -213,6 +224,7 @@ TabPage RID_SVXPAGE_INET_PROXY
     };
     Edit ED_NOPROXYFOR
     {
+        HelpID = "cui:Edit:RID_SVXPAGE_INET_PROXY:ED_NOPROXYFOR";
         Pos = MAP_APPFONT ( 65 , GB_TYPES_TOP + 91 ) ;
         Size = MAP_APPFONT ( 123 , 12 ) ;
         Border = TRUE ;
@@ -231,18 +243,21 @@ TabPage RID_SVXPAGE_INET_PROXY
     };
     RadioButton RB_DNS_AUTO
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_INET_PROXY:RB_DNS_AUTO";
         Pos = MAP_APPFONT( 12, 111 );
         Size = MAP_APPFONT( 236, 10 );
         Text [ en-US ] = "~Automatic" ;
     };
     RadioButton RB_DNS_MANUAL
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_INET_PROXY:RB_DNS_MANUAL";
         Pos = MAP_APPFONT( 12, 124 );
         Size = MAP_APPFONT( 75, 10 );
         Text [ en-US ] = "~Manual" ;
     };
     PatternField ED_DNS
     {
+        HelpID = "cui:PatternField:RID_SVXPAGE_INET_PROXY:ED_DNS";
         Pos = MAP_APPFONT( 90, 126 );
         Size = MAP_APPFONT( 66, 12 );
         Border = TRUE ;
@@ -283,6 +298,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
     };
     ListBox LB_SEARCH
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_INET_SEARCH:LB_SEARCH";
         Pos = MAP_APPFONT ( 12 , GB_SEARCH_TOP + 11 ) ;
         Size = MAP_APPFONT ( 39 , 120 ) ;
         Border = TRUE ;
@@ -299,6 +315,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
     };
     Edit ED_SEARCH_NAME
     {
+        HelpID = "cui:Edit:RID_SVXPAGE_INET_SEARCH:ED_SEARCH_NAME";
         Pos = MAP_APPFONT ( EDIT_START_XPOS , GB_SEARCH_TOP + 11 ) ;
         Size = MAP_APPFONT ( 125 , 12 ) ;
         Border = TRUE ;
@@ -311,6 +328,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
     };
     RadioButton RB_AND
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_INET_SEARCH:RB_AND";
         Pos = MAP_APPFONT ( EDIT_START_XPOS , GB_SEARCH_TOP + 26 ) ;
         Size = MAP_APPFONT ( 125 , 10 ) ;
         Check = TRUE ;
@@ -318,12 +336,14 @@ TabPage RID_SVXPAGE_INET_SEARCH
     };
     RadioButton RB_OR
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_INET_SEARCH:RB_OR";
         Pos = MAP_APPFONT ( EDIT_START_XPOS , GB_SEARCH_TOP + 39 ) ;
         Size = MAP_APPFONT ( 125 , 10 ) ;
         Text [ en-US ] = "~Or" ;
     };
     RadioButton RB_EXACT
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_INET_SEARCH:RB_EXACT";
         Pos = MAP_APPFONT ( EDIT_START_XPOS , GB_SEARCH_TOP + 52 ) ;
         Size = MAP_APPFONT ( 125 , 10 ) ;
         Text [ en-US ] = "E~xact" ;
@@ -336,6 +356,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
     };
     Edit ED_URL
     {
+        HelpID = "cui:Edit:RID_SVXPAGE_INET_SEARCH:ED_URL";
         Pos = MAP_APPFONT ( EDIT_START_XPOS , GB_SEARCH_TOP + 65 ) ;
         Size = MAP_APPFONT ( 125 , 12 ) ;
         Border = TRUE ;
@@ -348,6 +369,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
     };
     Edit ED_POSTFIX
     {
+        HelpID = "cui:Edit:RID_SVXPAGE_INET_SEARCH:ED_POSTFIX";
         Pos = MAP_APPFONT ( EDIT_START_XPOS , GB_SEARCH_TOP + 80 ) ;
         Size = MAP_APPFONT ( 125 , 12 ) ;
         Border = TRUE ;
@@ -360,6 +382,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
     };
     Edit ED_SEPARATOR
     {
+        HelpID = "cui:Edit:RID_SVXPAGE_INET_SEARCH:ED_SEPARATOR";
         Pos = MAP_APPFONT ( EDIT_START_XPOS , GB_SEARCH_TOP + 95 ) ;
         Size = MAP_APPFONT ( 42 , 12 ) ;
         Border = TRUE ;
@@ -372,6 +395,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
     };
     ListBox ED_CASE
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_INET_SEARCH:ED_CASE";
         Pos = MAP_APPFONT ( EDIT_START_XPOS, GB_SEARCH_TOP + 110 ) ;
         Size = MAP_APPFONT ( 42 , 48 ) ;
         Border = TRUE ;
@@ -385,24 +409,28 @@ TabPage RID_SVXPAGE_INET_SEARCH
     };
     PushButton PB_NEW
     {
+        HelpID = "cui:PushButton:RID_SVXPAGE_INET_SEARCH:PB_NEW";
         Pos = MAP_APPFONT ( 39 , GB_SEARCH_TOP + 131 + 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "N~ew";
     };
     PushButton PB_ADD
     {
+        HelpID = "cui:PushButton:RID_SVXPAGE_INET_SEARCH:PB_ADD";
         Pos = MAP_APPFONT ( 92 , GB_SEARCH_TOP + 131 + 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Add" ;
     };
     PushButton PB_CHANGE
     {
+        HelpID = "cui:PushButton:RID_SVXPAGE_INET_SEARCH:PB_CHANGE";
         Pos = MAP_APPFONT ( 145 , GB_SEARCH_TOP + 131 + 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Modify" ;
     };
     PushButton PB_DELETE
     {
+        HelpID = "cui:PushButton:RID_SVXPAGE_INET_SEARCH:PB_DELETE";
         Pos = MAP_APPFONT ( 198 , GB_SEARCH_TOP + 131 + 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Delete" ;
@@ -422,6 +450,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
 
 TabPage RID_SVXPAGE_INET_SECURITY
 {
+    HelpID = "cui:TabPage:RID_SVXPAGE_INET_SECURITY";
     OutputSize = TRUE ;
     Size = MAP_APPFONT( TP_WIDTH , TP_HEIGHT );
     SVLook = TRUE;
@@ -442,6 +471,7 @@ TabPage RID_SVXPAGE_INET_SECURITY
     };
     PushButton PB_SEC_SECURITYOPTIONS
     {
+        HelpID = "cui:PushButton:RID_SVXPAGE_INET_SECURITY:PB_SEC_SECURITYOPTIONS";
         Pos = MAP_APPFONT( COL_3, ROW_2a );
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
         Text [ en-US ] = "Options...";
@@ -454,6 +484,7 @@ TabPage RID_SVXPAGE_INET_SECURITY
     };
     CheckBox CB_SEC_SAVEPASSWORDS
     {
+        HelpID = "cui:CheckBox:RID_SVXPAGE_INET_SECURITY:CB_SEC_SAVEPASSWORDS";
         Pos = MAP_APPFONT( COL_1, ROW_3 - 4 );
         Size = MAP_APPFONT( COL_2-COL_1, 16 );
         Wordbreak = TRUE;
@@ -461,12 +492,14 @@ TabPage RID_SVXPAGE_INET_SECURITY
     };
     PushButton PB_SEC_CONNECTIONS
     {
+        HelpID = "cui:PushButton:RID_SVXPAGE_INET_SECURITY:PB_SEC_CONNECTIONS";
         Pos = MAP_APPFONT( COL_3, ROW_3-1 );
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
         Text [ en-US ] = "Connections...";
     };
     CheckBox CB_SEC_MASTERPASSWORD
     {
+        HelpID = "cui:CheckBox:RID_SVXPAGE_INET_SECURITY:CB_SEC_MASTERPASSWORD";
         Pos = MAP_APPFONT( COL_1a, ROW_4 );
         Size = MAP_APPFONT( COL_2-COL_1a, RSC_CD_CHECKBOX_HEIGHT );
         Text [ en-US ] = "Protected by a master password (recommended)";
@@ -480,6 +513,7 @@ TabPage RID_SVXPAGE_INET_SECURITY
     };
     PushButton PB_SEC_MASTERPASSWORD
     {
+        HelpID = "cui:PushButton:RID_SVXPAGE_INET_SECURITY:PB_SEC_MASTERPASSWORD";
         Pos = MAP_APPFONT( COL_3, ROW_4a );
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
         Text [ en-US ] = "Master Password...";
@@ -499,6 +533,7 @@ TabPage RID_SVXPAGE_INET_SECURITY
     };
     PushButton PB_SEC_MACROSEC
     {
+        HelpID = "cui:PushButton:RID_SVXPAGE_INET_SECURITY:PB_SEC_MACROSEC";
         Pos = MAP_APPFONT( COL_3, ROW_6-2 );
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
         Text [ en-US ] = "Macro Security...";
@@ -519,6 +554,7 @@ ErrorBox RID_SVXERR_OPT_PROXYPORTS
 
 ModalDialog RID_SVXDLG_OPT_JAVASCRIPT_DISABLE
 {
+    HelpID = "cui:ModalDialog:RID_SVXDLG_OPT_JAVASCRIPT_DISABLE";
     OutputSize = TRUE;
     Size = MAP_APPFONT( 150, 81 );
     Moveable = TRUE;
@@ -537,6 +573,7 @@ ModalDialog RID_SVXDLG_OPT_JAVASCRIPT_DISABLE
     };
     CheckBox CB_JSCPT_DISABLE
     {
+        HelpID = "cui:CheckBox:RID_SVXDLG_OPT_JAVASCRIPT_DISABLE:CB_JSCPT_DISABLE";
         Pos = MAP_APPFONT( 39, 45 );
         Size = MAP_APPFONT( 195, 12 );
         Hide = TRUE;
@@ -587,6 +624,7 @@ TabPage RID_SVXPAGE_INET_MAIL
 
     Edit ED_MAILERURL
     {
+        HelpID = "cui:Edit:RID_SVXPAGE_INET_MAIL:ED_MAILERURL";
         Pos = MAP_APPFONT ( 60 , 18 ) ;
         Size = MAP_APPFONT ( 171 , 12 ) ;
         Border = TRUE;
@@ -594,6 +632,7 @@ TabPage RID_SVXPAGE_INET_MAIL
 
     PushButton PB_MAILERURL
     {
+        HelpID = "cui:PushButton:RID_SVXPAGE_INET_MAIL:PB_MAILERURL";
         Pos = MAP_APPFONT ( 234 , 17 ) ;
         Size = MAP_APPFONT ( 14 , 14 ) ;
         Text = "..." ;

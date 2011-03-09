@@ -32,6 +32,7 @@
 
 TabPage RID_SVXPAGE_EVENTASSIGN
 {
+    HelpID = "cui:TabPage:RID_SVXPAGE_EVENTASSIGN";
     Hide = TRUE ;
     SVLook = TRUE ;
     DialogControl = TRUE ;
@@ -77,7 +78,7 @@ TabPage RID_SVXPAGE_EVENTASSIGN
         Pos = MAP_APPFONT ( COL2 , ROW7  ) ;
         Size = MAP_APPFONT ( WIDTH1 , RSC_CD_FIXEDTEXT_HEIGHT + HEIGHT_EXTRA7 ) ;
         WordBreak = TRUE;
-        Text [ en-US ] = "~Existing macros in:\n" ;
+        Text [ en-US ] = "~Existing macros\n" ;
     };
     Control LB_MACROS
     {
@@ -89,6 +90,7 @@ TabPage RID_SVXPAGE_EVENTASSIGN
     };
     PushButton PB_ASSIGN
     {
+        HelpID = "cui:PushButton:RID_SVXPAGE_EVENTASSIGN:PB_ASSIGN";
         Pos = MAP_APPFONT ( COL4 , ROW0  ) ;
         Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
         Disable = TRUE ;
@@ -97,21 +99,12 @@ TabPage RID_SVXPAGE_EVENTASSIGN
     };
     PushButton PB_DELETE
     {
+        HelpID = "cui:PushButton:RID_SVXPAGE_EVENTASSIGN:PB_DELETE";
         Pos = MAP_APPFONT ( COL4 , ROW2  ) ;
         Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
         Disable = TRUE ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Remove" ;
-    };
-    ListBox LB_SCRIPTTYPE
-    {
-        Pos = MAP_APPFONT ( COL4 , ROW4  ) ;
-        Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , 60 ) ;
-        // en-US was missing
-        Text [ en-US ] = "~Scripting Language" ;
-        TabStop = TRUE ;
-        Disable = FALSE ;
-        DropDown = TRUE ;
     };
     String STR_MACROS
     {

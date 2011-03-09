@@ -90,3 +90,11 @@ SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 dummy:
     @echo " Nothing to build for GUIBASE=$(GUIBASE)"
 .ENDIF
+
+ALLTAR : $(MISC)/MacOSXSpell.component
+
+$(MISC)/MacOSXSpell.component .ERRREMOVE : \
+        $(SOLARENV)/bin/createcomponent.xslt MacOSXSpell.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt MacOSXSpell.component

@@ -158,9 +158,9 @@ public:
     NPSavedData aData;
 
     ConnectorInstance( NPP inst, char* type,
-                       int args, char* pargnbuf, ULONG nargnbytes,
-                       char* pargvbuf, ULONG nargvbytes,
-                       char* savedata, ULONG savebytes );
+                       int args, char* pargnbuf, sal_uLong nargnbytes,
+                       char* pargvbuf, sal_uLong nargvbytes,
+                       char* savedata, sal_uLong savebytes );
     ~ConnectorInstance();
 };
 
@@ -177,22 +177,22 @@ protected:
     std::vector<NPStream*>              m_aNPWrapStreams;
     std::vector<ConnectorInstance*>     m_aInstances;
 
-    ULONG   FillBuffer( char*&, const char*, ULONG, va_list );
+    sal_uLong   FillBuffer( char*&, const char*, sal_uLong, va_list );
 public:
     PluginConnector( int nSocket );
     ~PluginConnector();
 
-    virtual MediatorMessage* WaitForAnswer( ULONG nMessageID );
-    MediatorMessage*    Transact( const char*, ULONG, ... );
-    MediatorMessage*    Transact( UINT32, ... );
-    void                Respond( ULONG nID, char*, ULONG, ... );
-    ULONG               Send( UINT32, ... );
+    virtual MediatorMessage* WaitForAnswer( sal_uLong nMessageID );
+    MediatorMessage*    Transact( const char*, sal_uLong, ... );
+    MediatorMessage*    Transact( sal_uInt32, ... );
+    void                Respond( sal_uLong nID, char*, sal_uLong, ... );
+    sal_uLong               Send( sal_uInt32, ... );
 
-    static const UINT32 UnknownStreamID = 0xffffffff;
-    static const UINT32 UnknownNPPID = 0xffffffff;
+    static const sal_uInt32 UnknownStreamID = 0xffffffff;
+    static const sal_uInt32 UnknownNPPID = 0xffffffff;
 
-    UINT32  GetStreamID( NPStream* pStream );
-    UINT32  GetNPPID( NPP );
+    sal_uInt32  GetStreamID( NPStream* pStream );
+    sal_uInt32  GetNPPID( NPP );
 
     std::vector<NPStream*>& getStreamList() { return m_aNPWrapStreams; }
 
@@ -211,7 +211,7 @@ public:
     }
 
     ConnectorInstance* getInstance( NPP );
-    ConnectorInstance* getInstanceById( UINT32 );
+    ConnectorInstance* getInstanceById( sal_uInt32 );
 };
 
 enum CommandAtoms

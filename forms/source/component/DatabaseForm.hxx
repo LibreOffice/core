@@ -200,7 +200,7 @@ class ODatabaseForm :public OFormComponents
                 // will be used as additional context information
                 // when an exception is catched and forwarded to the listeners
 
-    INT32                       m_nResetsPending;
+    sal_Int32                       m_nResetsPending;
 //  <overwritten_properties>
     sal_Int32                   m_nPrivileges;
     sal_Bool                    m_bInsertOnly;

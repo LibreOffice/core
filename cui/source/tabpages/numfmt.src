@@ -45,6 +45,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     };
     ListBox LB_CATEGORY
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_NUMBERFORMAT:LB_CATEGORY";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 14 ) ;
         Size = MAP_APPFONT ( 70 , 71 ) ;
@@ -72,6 +73,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     };
     Edit ED_FORMAT
     {
+        HelpID = "cui:Edit:RID_SVXPAGE_NUMBERFORMAT:ED_FORMAT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 147 ) ;
         Size = MAP_APPFONT ( 200 , 12 ) ;
@@ -85,6 +87,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     };
     Edit ED_COMMENT
     {
+        HelpID = "cui:Edit:RID_SVXPAGE_NUMBERFORMAT:ED_COMMENT";
         Hide = TRUE ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 163 ) ;
@@ -99,6 +102,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
 
     ListBox LB_CURRENCY
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_NUMBERFORMAT:LB_CURRENCY";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 82 , 14 ) ;
         Size = MAP_APPFONT ( 90 , 71 ) ;
@@ -127,6 +131,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     };
     NumericField ED_DECIMALS
     {
+        HelpID = "cui:NumericField:RID_SVXPAGE_NUMBERFORMAT:ED_DECIMALS";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 84 , 102 ) ;
         Size = MAP_APPFONT ( 24 , 12 ) ;
@@ -146,6 +151,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     };
     NumericField ED_LEADZEROES
     {
+        HelpID = "cui:NumericField:RID_SVXPAGE_NUMBERFORMAT:ED_LEADZEROES";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 84 , 118 ) ;
         Size = MAP_APPFONT ( 24 , 12 ) ;
@@ -159,12 +165,14 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     };
     CheckBox BTN_NEGRED
     {
+        HelpID = "cui:CheckBox:RID_SVXPAGE_NUMBERFORMAT:BTN_NEGRED";
         Pos = MAP_APPFONT ( 133 , 104 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text [ en-US ] = "~Negative numbers red" ;
     };
     CheckBox BTN_THOUSAND
     {
+        HelpID = "cui:CheckBox:RID_SVXPAGE_NUMBERFORMAT:BTN_THOUSAND";
         Pos = MAP_APPFONT ( 133 , 120 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text [ en-US ] = "~Thousands separator" ;
@@ -183,6 +191,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     };
     ListBox LB_LANGUAGE
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_NUMBERFORMAT:LB_LANGUAGE";
         Border = TRUE ;
         Sort = TRUE ;
         Pos = MAP_APPFONT ( 178 , 14 ) ;
@@ -191,6 +200,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     };
     CheckBox CB_SOURCEFORMAT
     {
+        HelpID = "cui:CheckBox:RID_SVXPAGE_NUMBERFORMAT:CB_SOURCEFORMAT";
         Pos = MAP_APPFONT ( 178 , 42 ) ;
         Size = MAP_APPFONT ( 76 , 10 ) ;
         Text [ en-US ] = "So~urce format" ;

@@ -196,31 +196,4 @@ IMPL_LINK( SvxImprovementDialog, HandleOK, OKButton*, EMPTYARG )
     return 0;
 }
 
-// class SvxInfoWindow ---------------------------------------------------
-
-SvxInfoWindow::SvxInfoWindow( Window* pParent, const ResId& rResId ) :
-    Window( pParent, rResId ),
-    m_aInfoText( this )
-{
-    m_aInfoText.SetPosSizePixel( Point( 10, 10 ), Size( 150, 10 ) );
-
-    const StyleSettings& rSettings = GetSettings().GetStyleSettings();
-    Wallpaper aWall( rSettings.GetWindowColor() );
-    SetBackground( aWall );
-    Font aNewFont( m_aInfoText.GetFont() );
-    aNewFont.SetTransparent( TRUE );
-    m_aInfoText.SetFont( aNewFont );
-    m_aInfoText.SetBackground( aWall );
-    m_aInfoText.SetControlForeground( rSettings.GetWindowTextColor() );
-}
-
-void SvxInfoWindow::SetInfoText( const String& rText )
-{
-    m_aInfoText.SetText( rText );
-    Size aSize = m_aInfoText.CalcMinimumSize();
-    Size aWinSize = GetSizePixel();
-    Point aPos( ( aWinSize.Width() - aSize.Width() ) / 2, ( aWinSize.Height() - aSize.Height() ) / 2 );
-    m_aInfoText.SetPosSizePixel( aPos, aSize );
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

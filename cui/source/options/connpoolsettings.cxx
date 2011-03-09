@@ -37,13 +37,6 @@ namespace offapp
     //= DriverPooling
     //====================================================================
     //--------------------------------------------------------------------
-    DriverPooling::DriverPooling()
-        :bEnabled(sal_False)
-        ,nTimeoutSeconds(0)
-    {
-    }
-
-    //--------------------------------------------------------------------
     DriverPooling::DriverPooling( const String& _rName, sal_Bool _bEnabled, const sal_Int32 _nTimeout )
         :sName(_rName)
         ,bEnabled(_bEnabled)

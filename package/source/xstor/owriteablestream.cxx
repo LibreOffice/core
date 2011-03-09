@@ -66,29 +66,25 @@ using namespace ::com::sun::star;
 namespace package
 {
 //-----------------------------------------------
-uno::Sequence< sal_Int8 > MakeKeyFromPass( const ::rtl::OUString& aPass, sal_Bool bUseUTF )
+bool PackageEncryptionDatasEqual( const ::comphelper::SequenceAsHashMap& aHash1, const ::comphelper::SequenceAsHashMap& aHash2 )
 {
-    // MS_1252 encoding was used for SO60 document format password encoding,
-    // this encoding supports only a minor subset of nonascii characters,
-    // but for compatibility reasons it has to be used for old document formats
+    bool bResult = ( aHash1.size() && aHash1.size() == aHash2.size() );
+    for ( ::comphelper::SequenceAsHashMap::const_iterator aIter = aHash1.begin();
+          bResult && aIter != aHash1.end();
+          aIter++ )
+    {
+        uno::Sequence< sal_Int8 > aKey1;
+        bResult = ( ( aIter->second >>= aKey1 ) && aKey1.getLength() );
+        if ( bResult )
+        {
+            uno::Sequence< sal_Int8 > aKey2 = aHash2.getUnpackedValueOrDefault( aIter->first, uno::Sequence< sal_Int8 >() );
+            bResult = ( aKey1.getLength() == aKey2.getLength() );
+            for ( sal_Int32 nInd = 0; bResult && nInd < aKey1.getLength(); nInd++ )
+                bResult = ( aKey1[nInd] == aKey2[nInd] );
+        }
+    }
 
-    ::rtl::OString aByteStrPass;
-    if ( bUseUTF )
-        aByteStrPass = ::rtl::OUStringToOString( aPass, RTL_TEXTENCODING_UTF8 );
-    else
-        aByteStrPass = ::rtl::OUStringToOString( aPass, RTL_TEXTENCODING_MS_1252 );
-
-    sal_uInt8 pBuffer[RTL_DIGEST_LENGTH_SHA1];
-    rtlDigestError nError = rtl_digest_SHA1( aByteStrPass.getStr(),
-                                            aByteStrPass.getLength(),
-                                            pBuffer,
-                                            RTL_DIGEST_LENGTH_SHA1 );
-
-    if ( nError != rtl_Digest_E_None )
-        throw uno::RuntimeException();
-
-    return uno::Sequence< sal_Int8 >( (sal_Int8*)pBuffer, RTL_DIGEST_LENGTH_SHA1 );
-
+    return bResult;
 }
 
 //-----------------------------------------------
@@ -257,8 +253,8 @@ OWriteStream_Impl::OWriteStream_Impl( OStorage_Impl* pParent,
 , m_xFactory( xFactory )
 , m_pParent( pParent )
 , m_bForceEncrypted( bForceEncrypted )
-, m_bUseCommonPass( !bForceEncrypted && nStorageType == embed::StorageFormats::PACKAGE )
-, m_bHasCachedPassword( sal_False )
+, m_bUseCommonEncryption( !bForceEncrypted && nStorageType == embed::StorageFormats::PACKAGE )
+, m_bHasCachedEncryptionData( sal_False )
 , m_bCompressedSetExplicit( !bDefaultCompress )
 , m_xPackage( xPackage )
 , m_bHasInsertedStreamOptimization( sal_False )
@@ -365,7 +361,7 @@ sal_Bool OWriteStream_Impl::IsEncrypted()
     if ( m_nStorageType != embed::StorageFormats::PACKAGE )
         return sal_False;
 
-    if ( m_bForceEncrypted || m_bHasCachedPassword )
+    if ( m_bForceEncrypted || m_bHasCachedEncryptionData )
         return sal_True;
 
     if ( m_aTempURL.getLength() || m_xCacheStream.is() )
@@ -412,7 +408,7 @@ sal_Bool OWriteStream_Impl::IsEncrypted()
     if ( !bWasEncr && bToBeEncr && !aKey.getLength() )
     {
         // the stream is intended to use common storage password
-        m_bUseCommonPass = sal_True;
+        m_bUseCommonEncryption = sal_True;
         return sal_False;
     }
     else
@@ -434,8 +430,8 @@ void OWriteStream_Impl::SetDecrypted()
 
     // remove encryption
     m_bForceEncrypted = sal_False;
-    m_bHasCachedPassword = sal_False;
-    m_aPass = ::rtl::OUString();
+    m_bHasCachedEncryptionData = sal_False;
+    m_aEncryptionData.clear();
 
     for ( sal_Int32 nInd = 0; nInd < m_aProps.getLength(); nInd++ )
     {
@@ -445,10 +441,13 @@ void OWriteStream_Impl::SetDecrypted()
 }
 
 //-----------------------------------------------
-void OWriteStream_Impl::SetEncryptedWithPass( const ::rtl::OUString& aPass )
+void OWriteStream_Impl::SetEncrypted( const ::comphelper::SequenceAsHashMap& aEncryptionData )
 {
     OSL_ENSURE( m_nStorageType == embed::StorageFormats::PACKAGE, "The encryption is supported only for package storages!\n" );
     if ( m_nStorageType != embed::StorageFormats::PACKAGE )
+        throw uno::RuntimeException();
+
+    if ( !aEncryptionData.size() )
         throw uno::RuntimeException();
 
     GetStreamProperties();
@@ -464,10 +463,10 @@ void OWriteStream_Impl::SetEncryptedWithPass( const ::rtl::OUString& aPass )
             m_aProps[nInd].Value <<= sal_True;
     }
 
-    m_bUseCommonPass = sal_False; // very important to set it to false
+    m_bUseCommonEncryption = sal_False; // very important to set it to false
 
-    m_bHasCachedPassword = sal_True;
-    m_aPass = aPass;
+    m_bHasCachedEncryptionData = sal_True;
+    m_aEncryptionData = aEncryptionData;
 }
 
 //-----------------------------------------------
@@ -798,7 +797,7 @@ void OWriteStream_Impl::InsertStreamDirectly( const uno::Reference< io::XInputSt
             xPropertySet->setPropertyValue( aProps[nInd].Name, aProps[nInd].Value );
         }
         else if ( m_nStorageType == embed::StorageFormats::PACKAGE && aProps[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "UseCommonStoragePasswordEncryption" ) ) )
-            aProps[nInd].Value >>= m_bUseCommonPass;
+            aProps[nInd].Value >>= m_bUseCommonEncryption;
         else
             throw lang::IllegalArgumentException();
 
@@ -817,7 +816,7 @@ void OWriteStream_Impl::InsertStreamDirectly( const uno::Reference< io::XInputSt
         m_bCompressedSetExplicit = sal_True;
     }
 
-    if ( m_bUseCommonPass )
+    if ( m_bUseCommonEncryption )
     {
         if ( m_nStorageType != embed::StorageFormats::PACKAGE )
             throw uno::RuntimeException();
@@ -916,7 +915,7 @@ void OWriteStream_Impl::Commit()
             xPropertySet->setPropertyValue( m_aProps[nInd].Name, m_aProps[nInd].Value );
     }
 
-    if ( m_bUseCommonPass )
+    if ( m_bUseCommonEncryption )
     {
         if ( m_nStorageType != embed::StorageFormats::PACKAGE )
             throw uno::RuntimeException();
@@ -927,13 +926,13 @@ void OWriteStream_Impl::Commit()
         xPropertySet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Encrypted") ),
                                         uno::makeAny( sal_True ) );
     }
-    else if ( m_bHasCachedPassword )
+    else if ( m_bHasCachedEncryptionData )
     {
         if ( m_nStorageType != embed::StorageFormats::PACKAGE )
             throw uno::RuntimeException();
 
         xPropertySet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EncryptionKey") ),
-                                        uno::makeAny( ::package::MakeKeyFromPass( m_aPass, sal_True ) ) );
+                                        uno::makeAny( m_aEncryptionData.getUnpackedValueOrDefault( PACKAGE_ENCRYPTIONDATA_SHA1UTF8, uno::Sequence< sal_Int8 >() ) ) );
     }
 
     // the stream should be free soon, after package is stored
@@ -971,9 +970,9 @@ void OWriteStream_Impl::Revert()
 
     m_bHasDataToFlush = sal_False;
 
-    m_bUseCommonPass = sal_True;
-    m_bHasCachedPassword = sal_False;
-    m_aPass = ::rtl::OUString();
+    m_bUseCommonEncryption = sal_True;
+    m_bHasCachedEncryptionData = sal_False;
+    m_aEncryptionData.clear();
 
     if ( m_nStorageType == embed::StorageFormats::OFOPXML )
     {
@@ -1009,7 +1008,7 @@ uno::Sequence< beans::PropertyValue > OWriteStream_Impl::GetStreamProperties()
 //-----------------------------------------------
 uno::Sequence< beans::PropertyValue > OWriteStream_Impl::InsertOwnProps(
                                                                     const uno::Sequence< beans::PropertyValue >& aProps,
-                                                                    sal_Bool bUseCommonPass )
+                                                                    sal_Bool bUseCommonEncryption )
 {
     uno::Sequence< beans::PropertyValue > aResult( aProps );
     sal_Int32 nLen = aResult.getLength();
@@ -1019,13 +1018,13 @@ uno::Sequence< beans::PropertyValue > OWriteStream_Impl::InsertOwnProps(
         for ( sal_Int32 nInd = 0; nInd < nLen; nInd++ )
             if ( aResult[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "UseCommonStoragePasswordEncryption" ) ) )
             {
-                aResult[nInd].Value <<= bUseCommonPass;
+                aResult[nInd].Value <<= bUseCommonEncryption;
                 return aResult;
             }
 
         aResult.realloc( ++nLen );
         aResult[nLen - 1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseCommonStoragePasswordEncryption") );
-        aResult[nLen - 1].Value <<= bUseCommonPass;
+        aResult[nLen - 1].Value <<= bUseCommonEncryption;
     }
     else if ( m_nStorageType == embed::StorageFormats::OFOPXML )
     {
@@ -1174,11 +1173,11 @@ uno::Sequence< beans::PropertyValue > OWriteStream_Impl::ReadPackageStreamProper
 
 //-----------------------------------------------
 void OWriteStream_Impl::CopyInternallyTo_Impl( const uno::Reference< io::XStream >& xDestStream,
-                                                const ::rtl::OUString& aPass )
+                                                const ::comphelper::SequenceAsHashMap& aEncryptionData )
 {
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() ) ;
 
-    OSL_ENSURE( !m_bUseCommonPass, "The stream can not be encrypted!" );
+    OSL_ENSURE( !m_bUseCommonEncryption, "The stream can not be encrypted!" );
 
     if ( m_nStorageType != embed::StorageFormats::PACKAGE )
         throw packages::NoEncryptionException();
@@ -1189,16 +1188,16 @@ void OWriteStream_Impl::CopyInternallyTo_Impl( const uno::Reference< io::XStream
     }
     else
     {
-        uno::Reference< io::XStream > xOwnStream = GetStream( embed::ElementModes::READ, aPass, sal_False );
+        uno::Reference< io::XStream > xOwnStream = GetStream( embed::ElementModes::READ, aEncryptionData, sal_False );
         if ( !xOwnStream.is() )
             throw io::IOException(); // TODO
 
         OStorage_Impl::completeStorageStreamCopy_Impl( xOwnStream, xDestStream, m_nStorageType, GetAllRelationshipsIfAny() );
     }
 
-    uno::Reference< embed::XEncryptionProtectedSource > xEncr( xDestStream, uno::UNO_QUERY );
+    uno::Reference< embed::XEncryptionProtectedSource2 > xEncr( xDestStream, uno::UNO_QUERY );
     if ( xEncr.is() )
-        xEncr->setEncryptionPassword( aPass );
+        xEncr->setEncryptionData( aEncryptionData.getAsConstNamedValueList() );
 }
 
 //-----------------------------------------------
@@ -1238,7 +1237,7 @@ void OWriteStream_Impl::CopyInternallyTo_Impl( const uno::Reference< io::XStream
 }
 
 //-----------------------------------------------
-uno::Reference< io::XStream > OWriteStream_Impl::GetStream( sal_Int32 nStreamMode, const ::rtl::OUString& aPass, sal_Bool bHierarchyAccess )
+uno::Reference< io::XStream > OWriteStream_Impl::GetStream( sal_Int32 nStreamMode, const ::comphelper::SequenceAsHashMap& aEncryptionData, sal_Bool bHierarchyAccess )
 {
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() ) ;
 
@@ -1256,9 +1255,9 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream( sal_Int32 nStreamMod
     if ( !xPropertySet.is() )
         throw uno::RuntimeException();
 
-    if ( m_bHasCachedPassword )
+    if ( m_bHasCachedEncryptionData )
     {
-        if ( !m_aPass.equals( aPass ) )
+        if ( !::package::PackageEncryptionDatasEqual( m_aEncryptionData, aEncryptionData ) )
             throw packages::WrongPasswordException();
 
         // the correct key must be set already
@@ -1266,26 +1265,26 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream( sal_Int32 nStreamMod
     }
     else
     {
-        SetEncryptionKeyProperty_Impl( xPropertySet, ::package::MakeKeyFromPass( aPass, sal_True ) );
+        SetEncryptionKeyProperty_Impl( xPropertySet, aEncryptionData.getUnpackedValueOrDefault( PACKAGE_ENCRYPTIONDATA_SHA1UTF8, uno::Sequence< sal_Int8 >() ) );
 
         try {
             xResultStream = GetStream_Impl( nStreamMode, bHierarchyAccess );
 
-            m_bUseCommonPass = sal_False; // very important to set it to false
-            m_bHasCachedPassword = sal_True;
-            m_aPass = aPass;
+            m_bUseCommonEncryption = sal_False; // very important to set it to false
+            m_bHasCachedEncryptionData = sal_True;
+            m_aEncryptionData = aEncryptionData;
         }
         catch( packages::WrongPasswordException& )
         {
             // retry with different encoding
-            SetEncryptionKeyProperty_Impl( xPropertySet, ::package::MakeKeyFromPass( aPass, sal_False ) );
+            SetEncryptionKeyProperty_Impl( xPropertySet, aEncryptionData.getUnpackedValueOrDefault( PACKAGE_ENCRYPTIONDATA_SHA1MS1252, uno::Sequence< sal_Int8 >() ) );
             try {
                 // the stream must be cashed to be resaved
                 xResultStream = GetStream_Impl( nStreamMode | embed::ElementModes::SEEKABLE, bHierarchyAccess );
 
-                m_bUseCommonPass = sal_False; // very important to set it to false
-                m_bHasCachedPassword = sal_True;
-                m_aPass = aPass;
+                m_bUseCommonEncryption = sal_False; // very important to set it to false
+                m_bHasCachedEncryptionData = sal_True;
+                m_aEncryptionData = aEncryptionData;
 
                 // the stream must be resaved with new password encryption
                 if ( nStreamMode & embed::ElementModes::WRITE )
@@ -1345,10 +1344,10 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream( sal_Int32 nStreamMod
 
     if ( IsEncrypted() )
     {
-        ::rtl::OUString aGlobalPass;
+        ::comphelper::SequenceAsHashMap aGlobalEncryptionData;
         try
         {
-            aGlobalPass = GetCommonRootPass();
+            aGlobalEncryptionData = GetCommonRootEncryptionData();
         }
         catch( packages::NoEncryptionException& aNoEncryptionException )
         {
@@ -1358,7 +1357,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream( sal_Int32 nStreamMod
             throw packages::WrongPasswordException();
         }
 
-        xResultStream = GetStream( nStreamMode, aGlobalPass, bHierarchyAccess );
+        xResultStream = GetStream( nStreamMode, aGlobalEncryptionData, bHierarchyAccess );
     }
     else
         xResultStream = GetStream_Impl( nStreamMode, bHierarchyAccess );
@@ -1387,7 +1386,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream_Impl( sal_Int32 nStre
         if ( !xInStream.is() )
             throw io::IOException();
 
-        OInputCompStream* pStream = new OInputCompStream( *this, xInStream, InsertOwnProps( m_aProps, m_bUseCommonPass ), m_nStorageType );
+        OInputCompStream* pStream = new OInputCompStream( *this, xInStream, InsertOwnProps( m_aProps, m_bUseCommonEncryption ), m_nStorageType );
         uno::Reference< io::XStream > xCompStream(
                         static_cast< ::cppu::OWeakObject* >( pStream ),
                         uno::UNO_QUERY );
@@ -1412,7 +1411,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream_Impl( sal_Int32 nStre
         if ( !xInStream.is() )
             throw io::IOException();
 
-        OInputSeekStream* pStream = new OInputSeekStream( *this, xInStream, InsertOwnProps( m_aProps, m_bUseCommonPass ), m_nStorageType );
+        OInputSeekStream* pStream = new OInputSeekStream( *this, xInStream, InsertOwnProps( m_aProps, m_bUseCommonEncryption ), m_nStorageType );
         uno::Reference< io::XStream > xSeekStream(
                         static_cast< ::cppu::OWeakObject* >( pStream ),
                         uno::UNO_QUERY );
@@ -1514,7 +1513,7 @@ uno::Reference< io::XInputStream > OWriteStream_Impl::GetRawInStream()
 }
 
 //-----------------------------------------------
-::rtl::OUString OWriteStream_Impl::GetCommonRootPass()
+::comphelper::SequenceAsHashMap OWriteStream_Impl::GetCommonRootEncryptionData()
     throw ( packages::NoEncryptionException )
 {
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() ) ;
@@ -1522,7 +1521,7 @@ uno::Reference< io::XInputStream > OWriteStream_Impl::GetRawInStream()
     if ( m_nStorageType != embed::StorageFormats::PACKAGE || !m_pParent )
         throw packages::NoEncryptionException();
 
-    return m_pParent->GetCommonRootPass();
+    return m_pParent->GetCommonRootEncryptionData();
 }
 
 //-----------------------------------------------
@@ -1561,11 +1560,11 @@ void OWriteStream_Impl::CreateReadonlyCopyBasedOnData( const uno::Reference< io:
     if ( !xInStream.is() )
         throw io::IOException();
 
-    // TODO: remember last state of m_bUseCommonPass
+    // TODO: remember last state of m_bUseCommonEncryption
     if ( !xTargetStream.is() )
         xTargetStream = uno::Reference< io::XStream > (
             static_cast< ::cppu::OWeakObject* >(
-                new OInputSeekStream( xInStream, InsertOwnProps( aProps, m_bUseCommonPass ), m_nStorageType ) ),
+                new OInputSeekStream( xInStream, InsertOwnProps( aProps, m_bUseCommonEncryption ), m_nStorageType ) ),
             uno::UNO_QUERY_THROW );
 }
 
@@ -1582,10 +1581,10 @@ void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTar
     if ( IsEncrypted() )
     {
         // an encrypted stream must contain input stream
-        ::rtl::OUString aGlobalPass;
+        ::comphelper::SequenceAsHashMap aGlobalEncryptionData;
         try
         {
-            aGlobalPass = GetCommonRootPass();
+            aGlobalEncryptionData = GetCommonRootEncryptionData();
         }
         catch( packages::NoEncryptionException& aNoEncryptionException )
         {
@@ -1595,7 +1594,7 @@ void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTar
             throw packages::WrongPasswordException();
         }
 
-        GetCopyOfLastCommit( xTargetStream, aGlobalPass );
+        GetCopyOfLastCommit( xTargetStream, aGlobalEncryptionData );
     }
     else
     {
@@ -1604,12 +1603,12 @@ void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTar
         // in case of new inserted package stream it is possible that input stream still was not set
         GetStreamProperties();
 
-        CreateReadonlyCopyBasedOnData( xDataToCopy, m_aProps, m_bUseCommonPass, xTargetStream );
+        CreateReadonlyCopyBasedOnData( xDataToCopy, m_aProps, m_bUseCommonEncryption, xTargetStream );
     }
 }
 
 //-----------------------------------------------
-void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTargetStream, const ::rtl::OUString& aPass )
+void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTargetStream, const ::comphelper::SequenceAsHashMap& aEncryptionData )
 {
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
 
@@ -1622,12 +1621,12 @@ void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTar
 
     uno::Reference< io::XInputStream > xDataToCopy;
 
-    if ( m_bHasCachedPassword )
+    if ( m_bHasCachedEncryptionData )
     {
         // TODO: introduce last commited cashed password information and use it here
         // that means "use common pass" also should be remembered on flash
-        uno::Sequence< sal_Int8 > aNewKey = ::package::MakeKeyFromPass( aPass, sal_True );
-        uno::Sequence< sal_Int8 > aOldKey = ::package::MakeKeyFromPass( aPass, sal_False );
+        uno::Sequence< sal_Int8 > aNewKey = aEncryptionData.getUnpackedValueOrDefault( PACKAGE_ENCRYPTIONDATA_SHA1UTF8, uno::Sequence< sal_Int8 >() );
+        uno::Sequence< sal_Int8 > aOldKey = aEncryptionData.getUnpackedValueOrDefault( PACKAGE_ENCRYPTIONDATA_SHA1MS1252, uno::Sequence< sal_Int8 >() );
 
         uno::Reference< beans::XPropertySet > xProps( m_xPackageStream, uno::UNO_QUERY );
         if ( !xProps.is() )
@@ -1649,7 +1648,7 @@ void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTar
     else
     {
         uno::Reference< beans::XPropertySet > xPropertySet( m_xPackageStream, uno::UNO_QUERY );
-        SetEncryptionKeyProperty_Impl( xPropertySet, ::package::MakeKeyFromPass( aPass, sal_True ) );
+        SetEncryptionKeyProperty_Impl( xPropertySet, aEncryptionData.getUnpackedValueOrDefault( PACKAGE_ENCRYPTIONDATA_SHA1UTF8, uno::Sequence< sal_Int8 >() ) );
 
         try {
             xDataToCopy = m_xPackageStream->getDataStream();
@@ -1662,7 +1661,7 @@ void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTar
         }
         catch( packages::WrongPasswordException& aWrongPasswordException )
         {
-            SetEncryptionKeyProperty_Impl( xPropertySet, ::package::MakeKeyFromPass( aPass, sal_False ) );
+            SetEncryptionKeyProperty_Impl( xPropertySet, aEncryptionData.getUnpackedValueOrDefault( PACKAGE_ENCRYPTIONDATA_SHA1MS1252, uno::Sequence< sal_Int8 >() ) );
             try {
                 xDataToCopy = m_xPackageStream->getDataStream();
 
@@ -1698,7 +1697,7 @@ void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTar
     // in case of new inserted package stream it is possible that input stream still was not set
     GetStreamProperties();
 
-    CreateReadonlyCopyBasedOnData( xDataToCopy, m_aProps, m_bUseCommonPass, xTargetStream );
+    CreateReadonlyCopyBasedOnData( xDataToCopy, m_aProps, m_bUseCommonEncryption, xTargetStream );
 }
 
 //-----------------------------------------------
@@ -2030,6 +2029,7 @@ uno::Any SAL_CALL OWriteStream::queryInterface( const uno::Type& rType )
     {
         aReturn <<= ::cppu::queryInterface
                     (   rType
+                        ,   static_cast<embed::XEncryptionProtectedSource2*> ( this )
                         ,   static_cast<embed::XEncryptionProtectedSource*> ( this ) );
     }
     else if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML )
@@ -2082,7 +2082,7 @@ uno::Sequence< uno::Type > SAL_CALL OWriteStream::getTypes()
             {
                 if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE )
                 {
-                    m_pData->m_pTypeCollection = new ::cppu::OTypeCollection
+                    ::cppu::OTypeCollection aTmpCollection
                                     (   ::getCppuType( ( const uno::Reference< lang::XTypeProvider >* )NULL )
                                     ,   ::getCppuType( ( const uno::Reference< io::XInputStream >* )NULL )
                                     ,   ::getCppuType( ( const uno::Reference< io::XOutputStream >* )NULL )
@@ -2090,11 +2090,15 @@ uno::Sequence< uno::Type > SAL_CALL OWriteStream::getTypes()
                                     ,   ::getCppuType( ( const uno::Reference< io::XSeekable >* )NULL )
                                     ,   ::getCppuType( ( const uno::Reference< io::XTruncate >* )NULL )
                                     ,   ::getCppuType( ( const uno::Reference< lang::XComponent >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< embed::XEncryptionProtectedSource2 >* )NULL )
                                     ,   ::getCppuType( ( const uno::Reference< embed::XEncryptionProtectedSource >* )NULL )
                                     ,   ::getCppuType( ( const uno::Reference< embed::XExtendedStorageStream >* )NULL )
                                     ,   ::getCppuType( ( const uno::Reference< embed::XTransactedObject >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< embed::XTransactionBroadcaster >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< beans::XPropertySet >* )NULL ) );
+                                    ,   ::getCppuType( ( const uno::Reference< embed::XTransactionBroadcaster >* )NULL ) );
+
+                    m_pData->m_pTypeCollection = new ::cppu::OTypeCollection
+                                    (   ::getCppuType( ( const uno::Reference< beans::XPropertySet >* )NULL )
+                                    ,   aTmpCollection.getTypes() );
                 }
                 else if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML )
                 {
@@ -2140,6 +2144,7 @@ uno::Sequence< uno::Type > SAL_CALL OWriteStream::getTypes()
                                     ,   ::getCppuType( ( const uno::Reference< io::XSeekable >* )NULL )
                                     ,   ::getCppuType( ( const uno::Reference< io::XTruncate >* )NULL )
                                     ,   ::getCppuType( ( const uno::Reference< lang::XComponent >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< embed::XEncryptionProtectedSource2 >* )NULL )
                                     ,   ::getCppuType( ( const uno::Reference< embed::XEncryptionProtectedSource >* )NULL )
                                     ,   ::getCppuType( ( const uno::Reference< beans::XPropertySet >* )NULL ) );
                 }
@@ -2704,7 +2709,7 @@ void SAL_CALL OWriteStream::setEncryptionPassword( const ::rtl::OUString& aPass 
 
     OSL_ENSURE( m_pImpl->m_xPackageStream.is(), "No package stream is set!\n" );
 
-    m_pImpl->SetEncryptedWithPass( aPass );
+    m_pImpl->SetEncrypted( ::comphelper::OStorageHelper::CreatePackageEncryptionData( aPass ) );
 
     ModifyParentUnlockMutex_Impl( aGuard );
 }
@@ -2727,6 +2732,27 @@ void SAL_CALL OWriteStream::removeEncryption()
     OSL_ENSURE( m_pImpl->m_xPackageStream.is(), "No package stream is set!\n" );
 
     m_pImpl->SetDecrypted();
+
+    ModifyParentUnlockMutex_Impl( aGuard );
+}
+
+//-----------------------------------------------
+void SAL_CALL OWriteStream::setEncryptionData( const uno::Sequence< beans::NamedValue >& aEncryptionData )
+    throw (io::IOException, uno::RuntimeException)
+{
+    ::osl::ResettableMutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+
+    CheckInitOnDemand();
+
+    if ( !m_pImpl )
+    {
+        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        throw lang::DisposedException();
+    }
+
+    OSL_ENSURE( m_pImpl->m_xPackageStream.is(), "No package stream is set!\n" );
+
+    m_pImpl->SetEncrypted( aEncryptionData );
 
     ModifyParentUnlockMutex_Impl( aGuard );
 }
@@ -3172,24 +3198,24 @@ void SAL_CALL OWriteStream::setPropertyValue( const ::rtl::OUString& aPropertyNa
     else if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE
             && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "UseCommonStoragePasswordEncryption" ) ) )
     {
-        sal_Bool bUseCommonPass = sal_False;
-        if ( aValue >>= bUseCommonPass )
+        sal_Bool bUseCommonEncryption = sal_False;
+        if ( aValue >>= bUseCommonEncryption )
         {
             if ( m_bInitOnDemand && m_pImpl->m_bHasInsertedStreamOptimization )
             {
                 // the data stream is provided to the packagestream directly
-                m_pImpl->m_bUseCommonPass = bUseCommonPass;
+                m_pImpl->m_bUseCommonEncryption = bUseCommonEncryption;
             }
-            else if ( bUseCommonPass )
+            else if ( bUseCommonEncryption )
             {
-                if ( !m_pImpl->m_bUseCommonPass )
+                if ( !m_pImpl->m_bUseCommonEncryption )
                 {
                     m_pImpl->SetDecrypted();
-                    m_pImpl->m_bUseCommonPass = sal_True;
+                    m_pImpl->m_bUseCommonEncryption = sal_True;
                 }
             }
             else
-                m_pImpl->m_bUseCommonPass = sal_False;
+                m_pImpl->m_bUseCommonEncryption = sal_False;
         }
         else
             throw lang::IllegalArgumentException(); //TODO
@@ -3284,7 +3310,7 @@ uno::Any SAL_CALL OWriteStream::getPropertyValue( const ::rtl::OUString& aProp )
     }
     else if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE
             && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "UseCommonStoragePasswordEncryption" ) ) )
-        return uno::makeAny( m_pImpl->m_bUseCommonPass );
+        return uno::makeAny( m_pImpl->m_bUseCommonEncryption );
     else if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Size" ) ) )
     {
         CheckInitOnDemand();

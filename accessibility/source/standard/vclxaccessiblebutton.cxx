@@ -293,7 +293,7 @@ sal_Bool VCLXAccessibleButton::setCurrentValue( const Any& aNumber ) throw (Runt
         else if ( nValue > 1 )
             nValue = 1;
 
-        pButton->SetPressed( (BOOL) nValue );
+        pButton->SetPressed( (sal_Bool) nValue );
         bReturn = sal_True;
     }
 

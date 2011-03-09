@@ -27,59 +27,53 @@
 #ifndef _BASCTL_HELPID_HRC
 #define _BASCTL_HELPID_HRC
 
-// include ---------------------------------------------------------------
+#define HID_BASICIDE_TOOLBOX                              "BASCTL_HID_BASICIDE_TOOLBOX"
+#define HID_BASICIDE_OBJECTS                              "BASCTL_HID_BASICIDE_OBJECTS"
+#define HID_MACRO_OPTIONS                                 "BASCTL_HID_MACRO_OPTIONS"
+#define HID_BASICIDE_BRKPNTS                              "BASCTL_HID_BASICIDE_BRKPNTS"
+#define HID_BASICIDE_MODULS                               "BASCTL_HID_BASICIDE_MODULS"
+#define HID_BASICIDE_LIBS_TP                              "BASCTL_HID_BASICIDE_LIBS_TP"
+#define HID_BASICIDE_LIBS_DLG                             "BASCTL_HID_BASICIDE_LIBS_DLG"
+#define HID_BASICIDE_CONTROLS                             "BASCTL_HID_BASICIDE_CONTROLS"
+#define HID_BASICIDE_MACROS                               "BASCTL_HID_BASICIDE_MACROS"
+#define HID_BASICIDE_LIBS                                 "BASCTL_HID_BASICIDE_LIBS"
+#define HID_BASICIDE_ORG_TC                               "BASCTL_HID_BASICIDE_ORG_TC"
 
-#include <svl/solar.hrc>
+#define HID_BASICIDE_MODULES_TREE                         "BASCTL_HID_BASICIDE_MODULES_TREE"
+#define HID_BASICIDE_LIBS_TREE                            "BASCTL_HID_BASICIDE_LIBS_TREE"
+#define HID_BASICIDE_LIBSDLG_TREE                         "BASCTL_HID_BASICIDE_LIBSDLG_TREE"
+#define HID_BASICIDE_OBJECTCAT                            "BASCTL_HID_BASICIDE_OBJECTCAT"
 
-// Help-Ids --------------------------------------------------------------
+#define HID_BASICIDE_PROP_BROWSER                         "BASCTL_HID_BASICIDE_PROP_BROWSER"
 
-#define HID_BASICIDE_TOOLBOX                    (HID_BASICIDE_START +   0)
-#define HID_BASICIDE_OBJECTS                    (HID_BASICIDE_START +   1)
-#define HID_MACRO_OPTIONS                       (HID_BASICIDE_START +   2)
-#define HID_BASICIDE_BRKPNTS                    (HID_BASICIDE_START +   3)
-#define HID_BASICIDE_MODULS                     (HID_BASICIDE_START +   4)
-#define HID_BASICIDE_LIBS_TP                    (HID_BASICIDE_START +   5)
-#define HID_BASICIDE_LIBS_DLG                   (HID_BASICIDE_START +   6)
-#define HID_BASICIDE_CONTROLS                   (HID_BASICIDE_START +   7)
-#define HID_BASICIDE_MACROS                     (HID_BASICIDE_START +   8)
-#define HID_BASICIDE_LIBS                       (HID_BASICIDE_START +   9)
-#define HID_BASICIDE_ORG_TC                     (HID_BASICIDE_START +  10)
+#define HID_BASICIDE_PROP_BROWSER_LBOX                    "BASCTL_HID_BASICIDE_PROP_BROWSER_LBOX"
 
-#define HID_BASICIDE_MODULES_TREE               (HID_BASICIDE_START +  11)
-#define HID_BASICIDE_LIBS_TREE                  (HID_BASICIDE_START +  12)
-#define HID_BASICIDE_LIBSDLG_TREE               (HID_BASICIDE_START +  13)
-#define HID_BASICIDE_OBJECTCAT                  (HID_BASICIDE_START +  14)
+#define HID_BASICIDE_OBJCAT_SHOW                          "BASCTL_HID_BASICIDE_OBJCAT_SHOW"
+#define HID_BASICIDE_OBJCAT_PROPS                         "BASCTL_HID_BASICIDE_OBJCAT_PROPS"
+#define HID_BASICIDE_OBJCAT_HELP                          "BASCTL_HID_BASICIDE_OBJCAT_HELP"
 
-#define HID_BASICIDE_PROP_BROWSER               (HID_BASICIDE_START +  15)
+#define HID_BASICIDE_BRKDLG                               "BASCTL_HID_BASICIDE_BRKDLG"
+#define HID_BASICIDE_ACTIV                                "BASCTL_HID_BASICIDE_ACTIV"
+#define HID_BASICIDE_BRKPROPS                             "BASCTL_HID_BASICIDE_BRKPROPS"
+#define HID_BASICIDE_REMOVEWATCH                          "BASCTL_HID_BASICIDE_REMOVEWATCH"
+#define HID_BASICIDE_GOTOALL                              "BASCTL_HID_BASICIDE_GOTOALL"
 
-#define HID_BASICIDE_PROP_BROWSER_LBOX          (HID_BASICIDE_START +  16)
+#define HID_BASICIDE_MODULWINDOW                          "BASCTL_HID_BASICIDE_MODULWINDOW"
+#define HID_BASICIDE_DIALOGWINDOW                         "BASCTL_HID_BASICIDE_DIALOGWINDOW"
 
-#define HID_BASICIDE_OBJCAT_SHOW                (HID_BASICIDE_START +  17)
-#define HID_BASICIDE_OBJCAT_PROPS               (HID_BASICIDE_START +  18)
-#define HID_BASICIDE_OBJCAT_HELP                (HID_BASICIDE_START +  19)
+#define HID_BASICIDE_EDITORWINDOW                         "BASCTL_HID_BASICIDE_EDITORWINDOW"
+#define HID_BASICIDE_BREAKPOINTWINDOW                     "BASCTL_HID_BASICIDE_BREAKPOINTWINDOW"
+#define HID_BASICIDE_WATCHWINDOW                          "BASCTL_HID_BASICIDE_WATCHWINDOW"
+#define HID_BASICIDE_STACKWINDOW                          "BASCTL_HID_BASICIDE_STACKWINDOW"
+#define HID_BASICIDE_TABBAR                               "BASCTL_HID_BASICIDE_TABBAR"
+#define HID_BASICIDE_WATCHWINDOW_EDIT                     "BASCTL_HID_BASICIDE_WATCHWINDOW_EDIT"
+#define HID_BASICIDE_WATCHWINDOW_LIST                     "BASCTL_HID_BASICIDE_WATCHWINDOW_LIST"
+#define HID_BASICIDE_STACKWINDOW_LIST                     "BASCTL_HID_BASICIDE_STACKWINDOW_LIST"
 
-#define HID_BASICIDE_BRKDLG                     (HID_BASICIDE_START +  20)
-#define HID_BASICIDE_ACTIV                      (HID_BASICIDE_START +  21)
-#define HID_BASICIDE_BRKPROPS                   (HID_BASICIDE_START +  22)
-#define HID_BASICIDE_REMOVEWATCH                (HID_BASICIDE_START +  23)
-#define HID_BASICIDE_GOTOALL                    (HID_BASICIDE_START +  24)
-
-#define HID_BASICIDE_MODULWINDOW                (HID_BASICIDE_START +  25)
-#define HID_BASICIDE_DIALOGWINDOW               (HID_BASICIDE_START +  26)
-
-#define HID_BASICIDE_EDITORWINDOW               (HID_BASICIDE_START +  27)
-#define HID_BASICIDE_BREAKPOINTWINDOW           (HID_BASICIDE_START +  28)
-#define HID_BASICIDE_WATCHWINDOW                (HID_BASICIDE_START +  29)
-#define HID_BASICIDE_STACKWINDOW                (HID_BASICIDE_START +  30)
-#define HID_BASICIDE_TABBAR                     (HID_BASICIDE_START +  31)
-#define HID_BASICIDE_WATCHWINDOW_EDIT           (HID_BASICIDE_START +  32)
-#define HID_BASICIDE_WATCHWINDOW_LIST           (HID_BASICIDE_START +  33)
-#define HID_BASICIDE_STACKWINDOW_LIST           (HID_BASICIDE_START +  34)
-
-#define HID_BASICIDE_MANAGE_LANGUAGE            (HID_BASICIDE_START +  35)
-#define HID_BASICIDE_SETDEFAULT_LANGUAGE        (HID_BASICIDE_START +  36)
-#define HID_BASICIDE_ADDNEW_LANGUAGE            (HID_BASICIDE_START +  37)
-#define HID_BASICIDE_ADDNEW_CONTROL             (HID_BASICIDE_START +  38)
+#define HID_BASICIDE_MANAGE_LANGUAGE                      "BASCTL_HID_BASICIDE_MANAGE_LANGUAGE"
+#define HID_BASICIDE_SETDEFAULT_LANGUAGE                  "BASCTL_HID_BASICIDE_SETDEFAULT_LANGUAGE"
+#define HID_BASICIDE_ADDNEW_LANGUAGE                      "BASCTL_HID_BASICIDE_ADDNEW_LANGUAGE"
+#define HID_BASICIDE_ADDNEW_CONTROL                       "BASCTL_HID_BASICIDE_ADDNEW_CONTROL"
 
 #endif
 

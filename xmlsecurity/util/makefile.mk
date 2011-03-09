@@ -173,3 +173,30 @@ DEF4NAME=$(SHL4TARGET)
 
 $(MISC)$/$(SHL3TARGET).flt: makefile.mk
     $(TYPE) $(SHL3TARGET).flt > $@
+
+ALLTAR : \
+    $(MISC)/xmlsecurity.component \
+    $(MISC)/xsec_fw.component \
+    $(MISC)/xsec_xmlsec.component
+
+.IF "$(OS)" == "WNT"
+my_platform = .windows
+.END
+
+$(MISC)/xmlsecurity.component .ERRREMOVE : \
+        $(SOLARENV)/bin/createcomponent.xslt xmlsecurity.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL4TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt xmlsecurity.component
+
+$(MISC)/xsec_fw.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        xsec_fw.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt xsec_fw.component
+
+$(MISC)/xsec_xmlsec.component .ERRREMOVE : \
+        $(SOLARENV)/bin/createcomponent.xslt xsec_xmlsec.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL2TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt xsec_xmlsec$(my_platform).component

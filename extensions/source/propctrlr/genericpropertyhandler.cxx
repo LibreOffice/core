@@ -43,7 +43,7 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 /** === end UNO includes === **/
 #include <tools/debug.hxx>
-#include <cppuhelper/extract.hxx>
+#include <comphelper/extract.hxx>
 
 #include <algorithm>
 #include <o3tl/compat_functional.hxx>

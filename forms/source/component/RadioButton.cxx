@@ -329,7 +329,7 @@ void SAL_CALL ORadioButtonModel::read(const Reference<XObjectInputStream>& _rxIn
     ::osl::MutexGuard aGuard(m_aMutex);
 
     // Version
-    UINT16 nVersion = _rxInStream->readShort();
+    sal_uInt16 nVersion = _rxInStream->readShort();
 
     ::rtl::OUString sReferenceValue;
     sal_Int16 nDefaultChecked( 0 );

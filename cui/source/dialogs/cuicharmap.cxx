@@ -58,26 +58,26 @@
 
 // class SvxCharacterMap =================================================
 
-SvxCharacterMap::SvxCharacterMap( Window* pParent, BOOL bOne, const SfxItemSet* pSet ) :
+SvxCharacterMap::SvxCharacterMap( Window* pParent, sal_Bool bOne, const SfxItemSet* pSet ) :
     SfxModalDialog( pParent, CUI_RES( RID_SVXDLG_CHARMAP ) ),
     mpCharMapData( 0 )
 {
-    SFX_ITEMSET_ARG( pSet, pItem, SfxBoolItem, FN_PARAM_1, FALSE );
+    SFX_ITEMSET_ARG( pSet, pItem, SfxBoolItem, FN_PARAM_1, sal_False );
     if ( pItem )
         bOne = pItem->GetValue();
 
     mpCharMapData =  new SvxCharMapData( this, bOne, &CUI_MGR() );
 
-    SFX_ITEMSET_ARG( pSet, pCharItem, SfxInt32Item, SID_ATTR_CHAR, FALSE );
+    SFX_ITEMSET_ARG( pSet, pCharItem, SfxInt32Item, SID_ATTR_CHAR, sal_False );
     if ( pCharItem )
         SetChar( pCharItem->GetValue() );
 
-    SFX_ITEMSET_ARG( pSet, pDisableItem, SfxBoolItem, FN_PARAM_2, FALSE );
+    SFX_ITEMSET_ARG( pSet, pDisableItem, SfxBoolItem, FN_PARAM_2, sal_False );
     if ( pDisableItem && pDisableItem->GetValue() )
         DisableFontSelection();
 
-    SFX_ITEMSET_ARG( pSet, pFontItem, SvxFontItem, SID_ATTR_CHAR_FONT, FALSE );
-    SFX_ITEMSET_ARG( pSet, pFontNameItem, SfxStringItem, SID_FONT_NAME, FALSE );
+    SFX_ITEMSET_ARG( pSet, pFontItem, SvxFontItem, SID_ATTR_CHAR_FONT, sal_False );
+    SFX_ITEMSET_ARG( pSet, pFontNameItem, SfxStringItem, SID_FONT_NAME, sal_False );
     if ( pFontItem )
     {
         Font aFont( pFontItem->GetFamilyName(), pFontItem->GetStyleName(), GetCharFont().GetSize() );
@@ -169,7 +169,7 @@ short SvxCharacterMap::Execute()
 
 // class SvxShowText =====================================================
 
-SvxShowText::SvxShowText( Window* pParent, const ResId& rResId, BOOL bCenter )
+SvxShowText::SvxShowText( Window* pParent, const ResId& rResId, sal_Bool bCenter )
 :   Control( pParent, rResId ),
     mbCenter( bCenter)
 {}
@@ -236,7 +236,7 @@ void SvxShowText::SetFont( const Font& rFont )
     aFont.SetWeight( WEIGHT_NORMAL );
     aFont.SetAlign( ALIGN_TOP );
     aFont.SetSize( PixelToLogic( Size( 0, nWinHeight/2 ) ) );
-    aFont.SetTransparent( TRUE );
+    aFont.SetTransparent( sal_True );
     Control::SetFont( aFont );
     mnY = ( nWinHeight - GetTextHeight() ) / 2;
 
@@ -258,7 +258,7 @@ SvxShowText::~SvxShowText()
 
 // class SvxCharacterMap =================================================
 
-SvxCharMapData::SvxCharMapData( SfxModalDialog* pDialog, BOOL bOne_, ResMgr* pResContext )
+SvxCharMapData::SvxCharMapData( SfxModalDialog* pDialog, sal_Bool bOne_, ResMgr* pResContext )
 :   mpDialog( pDialog ),
     aShowSet        ( pDialog, ResId( CT_SHOWSET, *pResContext ) ),
     aShowText       ( pDialog, ResId( CT_SHOWTEXT, *pResContext ) ),
@@ -271,13 +271,13 @@ SvxCharMapData::SvxCharMapData( SfxModalDialog* pDialog, BOOL bOne_, ResMgr* pRe
     aSubsetText     ( pDialog, ResId( FT_SUBSET, *pResContext ) ),
     aSubsetLB       ( pDialog, ResId( LB_SUBSET, *pResContext ) ),
     aSymbolText     ( pDialog, ResId( FT_SYMBOLE, *pResContext ) ),
-    aShowChar       ( pDialog, ResId( CT_SHOWCHAR, *pResContext ), TRUE ),
+    aShowChar       ( pDialog, ResId( CT_SHOWCHAR, *pResContext ), sal_True ),
     aCharCodeText   ( pDialog, ResId( FT_CHARCODE, *pResContext ) ),
     bOne( bOne_ ),
     pSubsetMap( NULL )
 {
     aFont = pDialog->GetFont();
-    aFont.SetTransparent( TRUE );
+    aFont.SetTransparent( sal_True );
     aFont.SetFamily( FAMILY_DONTKNOW );
     aFont.SetPitch( PITCH_DONTKNOW );
     aFont.SetCharSet( RTL_TEXTENCODING_DONTKNOW );
@@ -301,8 +301,8 @@ SvxCharMapData::SvxCharMapData( SfxModalDialog* pDialog, BOOL bOne_, ResMgr* pRe
         if ( aFontName != aLastName )
         {
             aLastName = aFontName;
-            USHORT nPos = aFontLB.InsertEntry( aFontName );
-            aFontLB.SetEntryData( nPos, (void*)(ULONG)i );
+            sal_uInt16 nPos = aFontLB.InsertEntry( aFontName );
+            aFontLB.SetEntryData( nPos, (void*)(sal_uLong)i );
         }
     }
     // the font may not be in the list =>
@@ -317,7 +317,7 @@ SvxCharMapData::SvxCharMapData( SfxModalDialog* pDialog, BOOL bOne_, ResMgr* pRe
             if ( aFontLB.GetEntryPos( aToken ) != LISTBOX_ENTRY_NOTFOUND )
             {
                 aDefStr = aToken;
-                bFound = TRUE;
+                bFound = sal_True;
                 break;
             }
         }
@@ -381,7 +381,7 @@ IMPL_LINK( SvxCharMapData, OKHdl, OKButton *, EMPTYARG )
     rtl::OUString aOUStr( &cChar, 1 );
         aShowText.SetText( aOUStr );
     }
-    mpDialog->EndDialog( TRUE );
+    mpDialog->EndDialog( sal_True );
     return 0;
 }
 
@@ -389,8 +389,8 @@ IMPL_LINK( SvxCharMapData, OKHdl, OKButton *, EMPTYARG )
 
 IMPL_LINK( SvxCharMapData, FontSelectHdl, ListBox *, EMPTYARG )
 {
-    USHORT nPos = aFontLB.GetSelectEntryPos(),
-        nFont = (USHORT)(ULONG)aFontLB.GetEntryData( nPos );
+    sal_uInt16 nPos = aFontLB.GetSelectEntryPos(),
+        nFont = (sal_uInt16)(sal_uLong)aFontLB.GetEntryData( nPos );
     aFont = mpDialog->GetDevFont( nFont );
     aFont.SetWeight( WEIGHT_DONTKNOW );
     aFont.SetItalic( ITALIC_NONE );
@@ -416,7 +416,7 @@ IMPL_LINK( SvxCharMapData, FontSelectHdl, ListBox *, EMPTYARG )
         delete pSubsetMap;
     pSubsetMap = NULL;
 
-    BOOL bNeedSubset = (aFont.GetCharSet() != RTL_TEXTENCODING_SYMBOL);
+    sal_Bool bNeedSubset = (aFont.GetCharSet() != RTL_TEXTENCODING_SYMBOL);
     if( bNeedSubset )
     {
         FontCharMap aFontCharMap;
@@ -430,7 +430,7 @@ IMPL_LINK( SvxCharMapData, FontSelectHdl, ListBox *, EMPTYARG )
         const Subset* s;
         while( NULL != (s = pSubsetMap->GetNextSubset( bFirst ))  )
         {
-            USHORT nPos_ = aSubsetLB.InsertEntry( s->GetName() );
+            sal_uInt16 nPos_ = aSubsetLB.InsertEntry( s->GetName() );
             aSubsetLB.SetEntryData( nPos_, (void*)s );
             // NOTE: subset must live at least as long as the selected font
             if( bFirst )
@@ -438,7 +438,7 @@ IMPL_LINK( SvxCharMapData, FontSelectHdl, ListBox *, EMPTYARG )
             bFirst = false;
         }
         if( aSubsetLB.GetEntryCount() <= 1 )
-            bNeedSubset = FALSE;
+            bNeedSubset = sal_False;
     }
 
     aSubsetText.Show( bNeedSubset);
@@ -451,7 +451,7 @@ IMPL_LINK( SvxCharMapData, FontSelectHdl, ListBox *, EMPTYARG )
 
 IMPL_LINK( SvxCharMapData, SubsetSelectHdl, ListBox *, EMPTYARG )
 {
-    USHORT nPos = aSubsetLB.GetSelectEntryPos();
+    sal_uInt16 nPos = aSubsetLB.GetSelectEntryPos();
     const Subset* pSubset = reinterpret_cast<const Subset*> (aSubsetLB.GetEntryData(nPos));
     if( pSubset )
     {
@@ -466,7 +466,7 @@ IMPL_LINK( SvxCharMapData, SubsetSelectHdl, ListBox *, EMPTYARG )
 
 IMPL_LINK( SvxCharMapData, CharDoubleClickHdl, Control *, EMPTYARG )
 {
-    mpDialog->EndDialog( TRUE );
+    mpDialog->EndDialog( sal_True );
     return 0;
 }
 
@@ -567,7 +567,7 @@ IMPL_LINK( SvxCharMapData, AssignHdl, PushButton *, EMPTYARG )
     {
         const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
         const SfxPoolItem* pItem;
-        if( SFX_ITEM_SET == pOutSet->GetItemState( SID_CHARMAP, FALSE, &pItem ) )
+        if( SFX_ITEM_SET == pOutSet->GetItemState( SID_CHARMAP, sal_False, &pItem ) )
         {
             // show assigned shortcut
         }

@@ -27,6 +27,7 @@
 #include <sanedlg.hrc>
 ModalDialog RID_SANE_DIALOG
 {
+    HelpID = "extensions:ModalDialog:RID_SANE_DIALOG";
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 10 , 10 ) ;
@@ -46,12 +47,14 @@ ModalDialog RID_SANE_DIALOG
     };
     PushButton RID_DEVICEINFO_BTN
     {
+        HelpID = "extensions:PushButton:RID_SANE_DIALOG:RID_DEVICEINFO_BTN";
         Pos = MAP_APPFONT ( THIRD_COLUMN , 44 ) ;
         Size = MAP_APPFONT ( 55 , 22 ) ;
         Text [ en-US ] = "About\n Dev~ice" ;
     };
     PushButton RID_PREVIEW_BTN
     {
+        HelpID = "extensions:PushButton:RID_SANE_DIALOG:RID_PREVIEW_BTN";
         Pos = MAP_APPFONT ( THIRD_COLUMN , 71 ) ;
         Size = MAP_APPFONT ( 55 , 22 ) ;
         Text [ en-US ] = "Create\nPreview" ;
@@ -76,6 +79,7 @@ ModalDialog RID_SANE_DIALOG
     };
     MetricField RID_SCAN_LEFT_BOX
     {
+        HelpID = "extensions:MetricField:RID_SANE_DIALOG:RID_SCAN_LEFT_BOX";
         Spin = TRUE ;
         Repeat = TRUE ;
         Border = TRUE ;
@@ -90,6 +94,7 @@ ModalDialog RID_SANE_DIALOG
     };
     MetricField RID_SCAN_TOP_BOX
     {
+        HelpID = "extensions:MetricField:RID_SANE_DIALOG:RID_SCAN_TOP_BOX";
         Spin = TRUE ;
         Repeat = TRUE ;
         Border = TRUE ;
@@ -104,6 +109,7 @@ ModalDialog RID_SANE_DIALOG
     };
     MetricField RID_SCAN_RIGHT_BOX
     {
+        HelpID = "extensions:MetricField:RID_SANE_DIALOG:RID_SCAN_RIGHT_BOX";
         Spin = TRUE ;
         Repeat = TRUE ;
         Border = TRUE ;
@@ -118,6 +124,7 @@ ModalDialog RID_SANE_DIALOG
     };
     MetricField RID_SCAN_BOTTOM_BOX
     {
+        HelpID = "extensions:MetricField:RID_SANE_DIALOG:RID_SCAN_BOTTOM_BOX";
         Spin = TRUE ;
         Repeat = TRUE ;
         Border = TRUE ;
@@ -132,6 +139,7 @@ ModalDialog RID_SANE_DIALOG
     };
     ListBox RID_DEVICE_BOX
     {
+        HelpID = "extensions:ListBox:RID_SANE_DIALOG:RID_DEVICE_BOX";
         Border = TRUE ;
         Dropdown = TRUE ;
         Sort = TRUE ;
@@ -146,6 +154,7 @@ ModalDialog RID_SANE_DIALOG
     };
     NumericBox RID_SCAN_RESOLUTION_BOX
     {
+        HelpID = "extensions:NumericBox:RID_SANE_DIALOG:RID_SCAN_RESOLUTION_BOX";
         Dropdown = TRUE ;
         Pos = MAP_APPFONT ( SECOND_COLUMN + 70 , 23 ) ;
         Size = MAP_APPFONT ( 60 , 80 ) ;
@@ -158,6 +167,7 @@ ModalDialog RID_SANE_DIALOG
     };
     CheckBox RID_SCAN_ADVANCED_BOX
     {
+        HelpID = "extensions:CheckBox:RID_SANE_DIALOG:RID_SCAN_ADVANCED_BOX";
         Check = FALSE ;
         Pos = MAP_APPFONT ( SECOND_COLUMN + 120 , 40 ) ;
         Size = MAP_APPFONT ( 8 , 8 ) ;
@@ -188,17 +198,20 @@ ModalDialog RID_SANE_DIALOG
     };
     CheckBox RID_SCAN_BOOL_OPTION_BOX
     {
+        HelpID = "extensions:CheckBox:RID_SANE_DIALOG:RID_SCAN_BOOL_OPTION_BOX";
         Pos = MAP_APPFONT ( SECOND_COLUMN + 120 , 225 ) ;
         Size = MAP_APPFONT ( 8 , 8 ) ;
     };
     Edit RID_SCAN_STRING_OPTION_EDT
     {
+        HelpID = "extensions:Edit:RID_SANE_DIALOG:RID_SCAN_STRING_OPTION_EDT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( SECOND_COLUMN , 234 ) ;
         Size = MAP_APPFONT ( 130 , 12 ) ;
     };
     ListBox RID_SCAN_QUANTUM_RANGE_BOX
     {
+        HelpID = "extensions:ListBox:RID_SANE_DIALOG:RID_SCAN_QUANTUM_RANGE_BOX";
         Border = TRUE ;
         Dropdown = TRUE ;
         Pos = MAP_APPFONT ( SECOND_COLUMN , 234 ) ;
@@ -206,6 +219,7 @@ ModalDialog RID_SANE_DIALOG
     };
     ListBox RID_SCAN_STRING_RANGE_BOX
     {
+        HelpID = "extensions:ListBox:RID_SANE_DIALOG:RID_SCAN_STRING_RANGE_BOX";
         Border = TRUE ;
         Dropdown = TRUE ;
         Pos = MAP_APPFONT ( SECOND_COLUMN , 234 ) ;
@@ -213,6 +227,7 @@ ModalDialog RID_SANE_DIALOG
     };
     Edit RID_SCAN_NUMERIC_OPTION_EDT
     {
+        HelpID = "extensions:Edit:RID_SANE_DIALOG:RID_SCAN_NUMERIC_OPTION_EDT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( SECOND_COLUMN , 234 ) ;
         Size = MAP_APPFONT ( 130 , 12 ) ;
@@ -225,6 +240,7 @@ ModalDialog RID_SANE_DIALOG
     };
     NumericField RID_SCAN_NUMERIC_VECTOR_BOX
     {
+        HelpID = "extensions:NumericField:RID_SANE_DIALOG:RID_SCAN_NUMERIC_VECTOR_BOX";
         Border = TRUE ;
         Spin = TRUE ;
         Repeat = TRUE ;
@@ -233,6 +249,7 @@ ModalDialog RID_SANE_DIALOG
     };
     PushButton RID_SCAN_BUTTON_OPTION_BTN
     {
+        HelpID = "extensions:PushButton:RID_SANE_DIALOG:RID_SCAN_BUTTON_OPTION_BTN";
         Pos = MAP_APPFONT ( SECOND_COLUMN , 234 ) ;
         Size = MAP_APPFONT ( 130 , 14 ) ;
         Text [ en-US ] = "Set" ;

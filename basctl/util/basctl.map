@@ -4,7 +4,6 @@ UDK_3_0_0 {
         basicide_macro_organizer;
         basicide_handle_basic_error;
         component_getImplementationEnvironment;
-        component_writeInfo;
         component_getFactory;
     local:
     *;

@@ -521,7 +521,7 @@
 #include "unotools/confignode.hxx"
 #include "unotools/processfactory.hxx"
 
-#include "vcl/fldunit.hxx"
+#include "tools/fldunit.hxx"
 
 #include "osl/module.hxx"
 #include "osl/mutex.hxx"

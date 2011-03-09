@@ -63,46 +63,6 @@ using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
 
-// class SvxJavaTable ----------------------------------------------------
-
-SvxJavaTable::SvxJavaTable( Window* _pParent, const ResId& _rId ) :
-
-    SvxSimpleTable( _pParent, _rId )
-
-{
-}
-
-SvxJavaTable::~SvxJavaTable()
-{
-}
-
-void SvxJavaTable::SetTabs()
-{
-    SvxSimpleTable::SetTabs();
-}
-
-void SvxJavaTable::MouseButtonUp( const MouseEvent& _rMEvt )
-{
-    m_aCurMousePoint = _rMEvt.GetPosPixel();
-    SvxSimpleTable::MouseButtonUp( _rMEvt );
-}
-
-void SvxJavaTable::KeyInput( const KeyEvent& rKEvt )
-{
-    if ( !rKEvt.GetKeyCode().GetModifier() && KEY_SPACE == rKEvt.GetKeyCode().GetCode() )
-    {
-        SvLBoxEntry* pEntry = FirstSelected();
-        if ( GetCheckButtonState( pEntry ) == SV_BUTTON_UNCHECKED )
-        {
-            SetCheckButtonState( pEntry, SV_BUTTON_CHECKED );
-            GetCheckButtonHdl().Call( NULL );
-            return ;
-        }
-    }
-
-    SvxSimpleTable::KeyInput( rKEvt );
-}
-
 // -----------------------------------------------------------------------
 
 bool areListsEqual( const Sequence< ::rtl::OUString >& rListA, const Sequence< ::rtl::OUString >& rListB )
@@ -236,7 +196,7 @@ SvxJavaOptionsPage::~SvxJavaOptionsPage()
 
 IMPL_LINK( SvxJavaOptionsPage, EnableHdl_Impl, CheckBox *, EMPTYARG )
 {
-    BOOL bEnable = m_aJavaEnableCB.IsChecked();
+    sal_Bool bEnable = m_aJavaEnableCB.IsChecked();
     m_aJavaFoundLabel.Enable( bEnable );
     m_aJavaPathText.Enable( bEnable );
     m_aAddBtn.Enable( bEnable );
@@ -538,7 +498,7 @@ void SvxJavaOptionsPage::AddJRE( JavaInfo* _pInfo )
 
 void SvxJavaOptionsPage::HandleCheckEntry( SvLBoxEntry* _pEntry )
 {
-    m_aJavaList.Select( _pEntry, TRUE );
+    m_aJavaList.Select( _pEntry, sal_True );
     SvButtonState eState = m_aJavaList.GetCheckButtonState( _pEntry );
 
     if ( SV_BUTTON_CHECKED == eState )
@@ -636,9 +596,9 @@ SfxTabPage* SvxJavaOptionsPage::Create( Window* pParent, const SfxItemSet& rAttr
 
 // -----------------------------------------------------------------------
 
-BOOL SvxJavaOptionsPage::FillItemSet( SfxItemSet& /*rCoreSet*/ )
+sal_Bool SvxJavaOptionsPage::FillItemSet( SfxItemSet& /*rCoreSet*/ )
 {
-    BOOL bModified = FALSE;
+    sal_Bool bModified = sal_False;
     javaFrameworkError eErr = JFW_E_NONE;
     if ( m_pParamDlg )
     {
@@ -654,7 +614,7 @@ BOOL SvxJavaOptionsPage::FillItemSet( SfxItemSet& /*rCoreSet*/ )
                     "SvxJavaOptionsPage::FillItemSet(): error in jfw_setVMParameters" );
         pParamArrIter = pParamArr;
         rtl_freeMemory( pParamArr );
-        bModified = TRUE;
+        bModified = sal_True;
     }
 
     if ( m_pPathDlg )
@@ -665,17 +625,17 @@ BOOL SvxJavaOptionsPage::FillItemSet( SfxItemSet& /*rCoreSet*/ )
             eErr = jfw_setUserClassPath( sPath.pData );
             DBG_ASSERT( JFW_E_NONE == eErr,
                         "SvxJavaOptionsPage::FillItemSet(): error in jfw_setUserClassPath" );
-            bModified = TRUE;
+            bModified = sal_True;
         }
     }
 
-    ULONG nCount = m_aJavaList.GetEntryCount();
-    for ( ULONG i = 0; i < nCount; ++i )
+    sal_uLong nCount = m_aJavaList.GetEntryCount();
+    for ( sal_uLong i = 0; i < nCount; ++i )
     {
         if ( m_aJavaList.GetCheckButtonState( m_aJavaList.GetEntry(i) ) == SV_BUTTON_CHECKED )
         {
             JavaInfo* pInfo = NULL;
-            if ( i < static_cast< ULONG >( m_nInfoSize ) )
+            if ( i < static_cast< sal_uLong >( m_nInfoSize ) )
                 pInfo = m_parJavaInfo[i];
             else
                 pInfo = m_aAddedInfos[ i - m_nInfoSize ];
@@ -700,7 +660,7 @@ BOOL SvxJavaOptionsPage::FillItemSet( SfxItemSet& /*rCoreSet*/ )
                     eErr = jfw_setSelectedJRE( pInfo );
                     DBG_ASSERT( JFW_E_NONE == eErr,
                                 "SvxJavaOptionsPage::FillItemSet(): error in jfw_setSelectedJRE" );
-                    bModified = TRUE;
+                    bModified = sal_True;
                 }
             }
             jfw_freeJavaInfo( pSelectedJava );
@@ -717,7 +677,7 @@ BOOL SvxJavaOptionsPage::FillItemSet( SfxItemSet& /*rCoreSet*/ )
         eErr = jfw_setEnabled( m_aJavaEnableCB.IsChecked() );
         DBG_ASSERT( JFW_E_NONE == eErr,
                     "SvxJavaOptionsPage::FillItemSet(): error in jfw_setEnabled" );
-        bModified = TRUE;
+        bModified = sal_True;
     }
 
     return bModified;
@@ -802,7 +762,7 @@ IMPL_LINK( SvxJavaParameterDlg, AssignHdl_Impl, PushButton *, EMPTYARG )
     String sParam = STRIM( m_aParameterEdit.GetText() );
     if ( sParam.Len() > 0 )
     {
-        USHORT nPos = m_aAssignedList.GetEntryPos( sParam );
+        sal_uInt16 nPos = m_aAssignedList.GetEntryPos( sParam );
         if ( LISTBOX_ENTRY_NOTFOUND == nPos )
             nPos = m_aAssignedList.InsertEntry( sParam );
         m_aAssignedList.SelectEntryPos( nPos );
@@ -826,7 +786,7 @@ IMPL_LINK( SvxJavaParameterDlg, SelectHdl_Impl, ListBox *, EMPTYARG )
 
 IMPL_LINK( SvxJavaParameterDlg, DblClickHdl_Impl, ListBox *, EMPTYARG )
 {
-    USHORT nPos = m_aAssignedList.GetSelectEntryPos();
+    sal_uInt16 nPos = m_aAssignedList.GetSelectEntryPos();
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
         m_aParameterEdit.SetText( m_aAssignedList.GetEntry( nPos ) );
     return 0;
@@ -836,11 +796,11 @@ IMPL_LINK( SvxJavaParameterDlg, DblClickHdl_Impl, ListBox *, EMPTYARG )
 
 IMPL_LINK( SvxJavaParameterDlg, RemoveHdl_Impl, PushButton *, EMPTYARG )
 {
-    USHORT nPos = m_aAssignedList.GetSelectEntryPos();
+    sal_uInt16 nPos = m_aAssignedList.GetSelectEntryPos();
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         m_aAssignedList.RemoveEntry( nPos );
-        USHORT nCount = m_aAssignedList.GetEntryCount();
+        sal_uInt16 nCount = m_aAssignedList.GetEntryCount();
         if ( nCount )
         {
             if ( nPos >= nCount )
@@ -866,10 +826,10 @@ short SvxJavaParameterDlg::Execute()
 
 Sequence< ::rtl::OUString > SvxJavaParameterDlg::GetParameters() const
 {
-    USHORT nCount = m_aAssignedList.GetEntryCount();
+    sal_uInt16 nCount = m_aAssignedList.GetEntryCount();
     Sequence< ::rtl::OUString > aParamList( nCount );
     ::rtl::OUString* pArray = aParamList.getArray();
-     for ( USHORT i = 0; i < nCount; ++i )
+     for ( sal_uInt16 i = 0; i < nCount; ++i )
          pArray[i] = ::rtl::OUString( m_aAssignedList.GetEntry(i) );
     return aParamList;
 }
@@ -879,7 +839,7 @@ Sequence< ::rtl::OUString > SvxJavaParameterDlg::GetParameters() const
 void SvxJavaParameterDlg::SetParameters( Sequence< ::rtl::OUString >& rParams )
 {
     m_aAssignedList.Clear();
-    ULONG i, nCount = rParams.getLength();
+    sal_uLong i, nCount = rParams.getLength();
     const ::rtl::OUString* pArray = rParams.getConstArray();
     for ( i = 0; i < nCount; ++i )
     {
@@ -944,7 +904,7 @@ SvxJavaClassPathDlg::SvxJavaClassPathDlg( Window* pParent ) :
 
 SvxJavaClassPathDlg::~SvxJavaClassPathDlg()
 {
-    USHORT i, nCount = m_aPathList.GetEntryCount();
+    sal_uInt16 i, nCount = m_aPathList.GetEntryCount();
     for ( i = 0; i < nCount; ++i )
         delete static_cast< String* >( m_aPathList.GetEntryData(i) );
 }
@@ -972,7 +932,7 @@ IMPL_LINK( SvxJavaClassPathDlg, AddArchiveHdl_Impl, PushButton *, EMPTYARG )
         String sFile = aURL.getFSysPath( INetURLObject::FSYS_DETECT );
         if ( !IsPathDuplicate( sURL ) )
         {
-            USHORT nPos = m_aPathList.InsertEntry( sFile, SvFileInformationManager::GetImage( aURL, false ) );
+            sal_uInt16 nPos = m_aPathList.InsertEntry( sFile, SvFileInformationManager::GetImage( aURL, false ) );
             m_aPathList.SelectEntryPos( nPos );
         }
         else
@@ -1010,7 +970,7 @@ IMPL_LINK( SvxJavaClassPathDlg, AddPathHdl_Impl, PushButton *, EMPTYARG )
         String sNewFolder = aURL.getFSysPath( INetURLObject::FSYS_DETECT );
         if ( !IsPathDuplicate( sFolderURL ) )
         {
-            USHORT nPos = m_aPathList.InsertEntry( sNewFolder, SvFileInformationManager::GetImage( aURL, false ) );
+            sal_uInt16 nPos = m_aPathList.InsertEntry( sNewFolder, SvFileInformationManager::GetImage( aURL, false ) );
             m_aPathList.SelectEntryPos( nPos );
         }
         else
@@ -1028,11 +988,11 @@ IMPL_LINK( SvxJavaClassPathDlg, AddPathHdl_Impl, PushButton *, EMPTYARG )
 
 IMPL_LINK( SvxJavaClassPathDlg, RemoveHdl_Impl, PushButton *, EMPTYARG )
 {
-    USHORT nPos = m_aPathList.GetSelectEntryPos();
+    sal_uInt16 nPos = m_aPathList.GetSelectEntryPos();
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         m_aPathList.RemoveEntry( nPos );
-        USHORT nCount = m_aPathList.GetEntryCount();
+        sal_uInt16 nCount = m_aPathList.GetEntryCount();
         if ( nCount )
         {
             if ( nPos >= nCount )
@@ -1059,8 +1019,8 @@ bool SvxJavaClassPathDlg::IsPathDuplicate( const String& _rPath )
 {
     bool bRet = false;
     INetURLObject aFileObj( _rPath );
-    USHORT nCount = m_aPathList.GetEntryCount();
-    for ( USHORT i = 0; i < nCount; ++i )
+    sal_uInt16 nCount = m_aPathList.GetEntryCount();
+    for ( sal_uInt16 i = 0; i < nCount; ++i )
     {
         INetURLObject aOtherObj( m_aPathList.GetEntry(i), INetURLObject::FSYS_DETECT );
         if ( aOtherObj == aFileObj )
@@ -1078,8 +1038,8 @@ bool SvxJavaClassPathDlg::IsPathDuplicate( const String& _rPath )
 String SvxJavaClassPathDlg::GetClassPath() const
 {
     String sPath;
-    USHORT nCount = m_aPathList.GetEntryCount();
-    for ( USHORT i = 0; i < nCount; ++i )
+    sal_uInt16 nCount = m_aPathList.GetEntryCount();
+    for ( sal_uInt16 i = 0; i < nCount; ++i )
     {
         if ( sPath.Len() > 0 )
             sPath += CLASSPATH_DELIMITER;

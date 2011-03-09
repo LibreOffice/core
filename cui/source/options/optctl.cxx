@@ -81,48 +81,48 @@ SfxTabPage* SvxCTLOptionsPage::Create( Window* pParent, const SfxItemSet& rAttrS
     return new SvxCTLOptionsPage( pParent, rAttrSet );
 }
 // -----------------------------------------------------------------------------
-BOOL SvxCTLOptionsPage::FillItemSet( SfxItemSet& )
+sal_Bool SvxCTLOptionsPage::FillItemSet( SfxItemSet& )
 {
-    BOOL bModified = FALSE;
+    sal_Bool bModified = sal_False;
     SvtCTLOptions aCTLOptions;
 
     // Sequence checking
-    BOOL bChecked = m_aSequenceCheckingCB.IsChecked();
+    sal_Bool bChecked = m_aSequenceCheckingCB.IsChecked();
     if ( bChecked != m_aSequenceCheckingCB.GetSavedValue() )
     {
         aCTLOptions.SetCTLSequenceChecking( bChecked );
-        bModified = TRUE;
+        bModified = sal_True;
     }
 
     bChecked = m_aRestrictedCB.IsChecked();
     if( bChecked != m_aRestrictedCB.GetSavedValue() )
     {
         aCTLOptions.SetCTLSequenceCheckingRestricted( bChecked );
-        bModified = TRUE;
+        bModified = sal_True;
     }
     bChecked = m_aTypeReplaceCB.IsChecked();
     if( bChecked != m_aTypeReplaceCB.GetSavedValue())
     {
         aCTLOptions.SetCTLSequenceCheckingTypeAndReplace(bChecked);
-        bModified = TRUE;
+        bModified = sal_True;
     }
 
-    BOOL bLogicalChecked = m_aMovementLogicalRB.IsChecked();
-    BOOL bVisualChecked = m_aMovementVisualRB.IsChecked();
+    sal_Bool bLogicalChecked = m_aMovementLogicalRB.IsChecked();
+    sal_Bool bVisualChecked = m_aMovementVisualRB.IsChecked();
     if ( bLogicalChecked != m_aMovementLogicalRB.GetSavedValue() ||
          bVisualChecked != m_aMovementVisualRB.GetSavedValue() )
     {
         SvtCTLOptions::CursorMovement eMovement =
             bLogicalChecked ? SvtCTLOptions::MOVEMENT_LOGICAL : SvtCTLOptions::MOVEMENT_VISUAL;
         aCTLOptions.SetCTLCursorMovement( eMovement );
-        bModified = TRUE;
+        bModified = sal_True;
     }
 
-    USHORT nPos = m_aNumeralsLB.GetSelectEntryPos();
+    sal_uInt16 nPos = m_aNumeralsLB.GetSelectEntryPos();
     if ( nPos != m_aNumeralsLB.GetSavedValue() )
     {
         aCTLOptions.SetCTLTextNumerals( (SvtCTLOptions::TextNumerals)nPos );
-        bModified = TRUE;
+        bModified = sal_True;
     }
 
     return bModified;
@@ -151,7 +151,7 @@ void SvxCTLOptionsPage::Reset( const SfxItemSet& )
             DBG_ERRORFILE( "SvxCTLOptionsPage::Reset(): invalid movement enum" );
     }
 
-    USHORT nPos = (USHORT)aCTLOptions.GetCTLTextNumerals();
+    sal_uInt16 nPos = (sal_uInt16)aCTLOptions.GetCTLTextNumerals();
     DBG_ASSERT( nPos < m_aNumeralsLB.GetEntryCount(), "SvxCTLOptionsPage::Reset(): invalid numerals enum" );
     m_aNumeralsLB.SelectEntryPos( nPos );
 

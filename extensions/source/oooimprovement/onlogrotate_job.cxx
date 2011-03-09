@@ -36,15 +36,21 @@
 #include "soapsender.hxx"
 
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
-#include <osl/mutex.hxx>
+#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/XTerminateListener.hpp>
+#include <osl/conditn.hxx>
 #include <osl/thread.hxx>
 #include <osl/time.h>
+#include <cppuhelper/implbase1.hxx>
+#include <memory>
 
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::uno;
+using ::com::sun::star::frame::XTerminateListener;
+using ::com::sun::star::frame::XDesktop;
 using ::com::sun::star::ucb::XSimpleFileAccess;
 using ::rtl::OUString;
 using ::std::vector;
@@ -103,26 +109,25 @@ namespace
         public:
             OnLogRotateThread(Reference<XMultiServiceFactory> sf);
             virtual void SAL_CALL run();
-            void disposing();
+            void stop();
+
         private:
             Reference<XMultiServiceFactory> m_ServiceFactory;
-            ::osl::Mutex m_ServiceFactoryMutex;
+            ::osl::Condition m_Stop;
     };
 
     OnLogRotateThread::OnLogRotateThread(Reference<XMultiServiceFactory> sf)
         : m_ServiceFactory(sf)
-    { }
+    {
+        OSL_ASSERT(sf.is());
+    }
 
     void SAL_CALL OnLogRotateThread::run()
     {
+        TimeValue wait_intervall = {30,0};
+        if (m_Stop.wait(&wait_intervall) == ::osl::Condition::result_timeout)
         {
-            ::osl::Thread::yield();
-            TimeValue wait_intervall = {30,0};
-            osl_waitThread(&wait_intervall);
-        }
-        {
-            ::osl::Guard< ::osl::Mutex> service_factory_guard(m_ServiceFactoryMutex);
-            if(m_ServiceFactory.is())
+            try
             {
                 if(Config(m_ServiceFactory).getInvitationAccepted())
                 {
@@ -132,15 +137,46 @@ namespace
                 else
                     LogStorage(m_ServiceFactory).clear();
             }
-            m_ServiceFactory.clear();
+            catch(...) {}
         }
     }
 
-    void OnLogRotateThread::disposing()
+    void OnLogRotateThread::stop()
     {
-        ::osl::Guard< ::osl::Mutex> service_factory_guard(m_ServiceFactoryMutex);
-        m_ServiceFactory.clear();
+        m_Stop.set();
     }
+
+    class OnLogRotateThreadWatcher : public ::cppu::WeakImplHelper1<XTerminateListener>
+    {
+        public:
+            OnLogRotateThreadWatcher(Reference<XMultiServiceFactory> sf)
+                : m_Thread(new OnLogRotateThread(sf))
+            {
+                m_Thread->create();
+            }
+            virtual ~OnLogRotateThreadWatcher()
+            {
+                m_Thread->stop();
+                m_Thread->join();
+            };
+
+            // XTerminateListener
+            virtual void SAL_CALL queryTermination(const EventObject&) throw(RuntimeException)
+                { };
+            virtual void SAL_CALL notifyTermination(const EventObject&) throw(RuntimeException)
+            {
+                m_Thread->stop();
+                m_Thread->join();
+            };
+            // XEventListener
+            virtual void SAL_CALL disposing(const EventObject&) throw(RuntimeException)
+            {
+                m_Thread->stop();
+                m_Thread->join();
+            };
+        private:
+            ::std::auto_ptr<OnLogRotateThread> m_Thread;
+    };
 }
 
 namespace oooimprovement
@@ -164,9 +200,11 @@ namespace oooimprovement
         const Reference<XJobListener>& listener)
         throw(RuntimeException)
     {
-        OnLogRotateThread* thread = new OnLogRotateThread(m_ServiceFactory);
-        thread->create();
-
+        Reference<XDesktop> xDesktop(
+            m_ServiceFactory->createInstance(OUString::createFromAscii("com.sun.star.frame.Desktop")),
+            UNO_QUERY);
+        if(xDesktop.is())
+            xDesktop->addTerminateListener(Reference<XTerminateListener>(new OnLogRotateThreadWatcher(m_ServiceFactory)));
         Any result;
         listener->jobFinished(Reference<XAsyncJob>(this), result);
     }
@@ -191,7 +229,7 @@ namespace oooimprovement
     Sequence<OUString> SAL_CALL OnLogRotateJob::getSupportedServiceNames_static()
     {
         Sequence<OUString> aServiceNames(1);
-        aServiceNames[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.XAsyncJob"));
+        aServiceNames[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.AsyncJob"));
         return aServiceNames;
     }
 

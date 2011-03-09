@@ -50,6 +50,7 @@
 #include <dialmgr.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
+#include "paragrph.hrc"
 
 #define DLGWIN this->GetParent()->GetParent()
 
@@ -107,6 +108,10 @@ SvxGradientTabPage::SvxGradientTabPage
 {
     FreeResource();
 
+    aCtlPreview.SetAccessibleName(String(CUI_RES(STR_EXAMPLE)));
+    aLbGradients.SetAccessibleName( GetText());
+
+
     // diese Page braucht ExchangeSupport
     SetExchangeSupport();
 
@@ -145,8 +150,13 @@ SvxGradientTabPage::SvxGradientTabPage
     aBtnSave.SetClickHdl(
         LINK( this, SvxGradientTabPage, ClickSaveHdl_Impl ) );
 
+    aBtnAdd.SetAccessibleRelationMemberOf( &aFlProp );
+    aBtnModify.SetAccessibleRelationMemberOf( &aFlProp );
+    aBtnDelete.SetAccessibleRelationMemberOf( &aFlProp );
+    aLbGradients.SetAccessibleRelationLabeledBy(&aLbGradients);
+
     // #i76307# always paint the preview in LTR, because this is what the document does
-    aCtlPreview.EnableRTL( FALSE );
+    aCtlPreview.EnableRTL( sal_False );
 }
 
 // -----------------------------------------------------------------------
@@ -165,12 +175,12 @@ void SvxGradientTabPage::Construct()
 
 void SvxGradientTabPage::ActivatePage( const SfxItemSet&  )
 {
-    USHORT nPos;
-    USHORT nCount;
+    sal_uInt16 nPos;
+    sal_uInt16 nCount;
 
     if( *pDlgType == 0 ) // Flaechen-Dialog
     {
-        *pbAreaTP = FALSE;
+        *pbAreaTP = sal_False;
 
         if( pColorTab )
         {
@@ -259,13 +269,13 @@ long SvxGradientTabPage::CheckChanges_Impl()
                           aLbColorTo.GetSelectEntryColor(),
                           (XGradientStyle) aLbGradientType.GetSelectEntryPos(),
                           static_cast<long>(aMtrAngle.GetValue() * 10), // sollte in Resource geaendert werden
-                          (USHORT) aMtrCenterX.GetValue(),
-                          (USHORT) aMtrCenterY.GetValue(),
-                          (USHORT) aMtrBorder.GetValue(),
-                          (USHORT) aMtrColorFrom.GetValue(),
-                          (USHORT) aMtrColorTo.GetValue() );
+                          (sal_uInt16) aMtrCenterX.GetValue(),
+                          (sal_uInt16) aMtrCenterY.GetValue(),
+                          (sal_uInt16) aMtrBorder.GetValue(),
+                          (sal_uInt16) aMtrColorFrom.GetValue(),
+                          (sal_uInt16) aMtrColorTo.GetValue() );
 
-    USHORT nPos = aLbGradients.GetSelectEntryPos();
+    sal_uInt16 nPos = aLbGradients.GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         XGradient aGradient = pGradientList->GetGradient( nPos )->GetGradient();
@@ -322,15 +332,15 @@ long SvxGradientTabPage::CheckChanges_Impl()
 
 // -----------------------------------------------------------------------
 
-BOOL SvxGradientTabPage::FillItemSet( SfxItemSet& rSet )
+sal_Bool SvxGradientTabPage::FillItemSet( SfxItemSet& rSet )
 {
-    if( *pDlgType == 0 && *pPageType == PT_GRADIENT && *pbAreaTP == FALSE )
+    if( *pDlgType == 0 && *pPageType == PT_GRADIENT && *pbAreaTP == sal_False )
     {
         // CheckChanges(); <-- doppelte Abfrage ?
 
         XGradient*  pXGradient = NULL;
         String      aString;
-        USHORT      nPos = aLbGradients.GetSelectEntryPos();
+        sal_uInt16      nPos = aLbGradients.GetSelectEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
             pXGradient = new XGradient( pGradientList->GetGradient( nPos )->GetGradient() );
@@ -344,11 +354,11 @@ BOOL SvxGradientTabPage::FillItemSet( SfxItemSet& rSet )
                         aLbColorTo.GetSelectEntryColor(),
                         (XGradientStyle) aLbGradientType.GetSelectEntryPos(),
                         static_cast<long>(aMtrAngle.GetValue() * 10), // sollte in Resource geaendert werden
-                        (USHORT) aMtrCenterX.GetValue(),
-                        (USHORT) aMtrCenterY.GetValue(),
-                        (USHORT) aMtrBorder.GetValue(),
-                        (USHORT) aMtrColorFrom.GetValue(),
-                        (USHORT) aMtrColorTo.GetValue() );
+                        (sal_uInt16) aMtrCenterX.GetValue(),
+                        (sal_uInt16) aMtrCenterY.GetValue(),
+                        (sal_uInt16) aMtrBorder.GetValue(),
+                        (sal_uInt16) aMtrColorFrom.GetValue(),
+                        (sal_uInt16) aMtrColorTo.GetValue() );
         }
         DBG_ASSERT( pXGradient, "XGradient konnte nicht erzeugt werden" );
         rSet.Put( XFillStyleItem( XFILL_GRADIENT ) );
@@ -356,7 +366,7 @@ BOOL SvxGradientTabPage::FillItemSet( SfxItemSet& rSet )
 
         delete pXGradient;
     }
-    return TRUE;
+    return sal_True;
 }
 
 // -----------------------------------------------------------------------
@@ -399,11 +409,11 @@ IMPL_LINK( SvxGradientTabPage, ModifiedHdl_Impl, void *, pControl )
                           aLbColorTo.GetSelectEntryColor(),
                           eXGS,
                           static_cast<long>(aMtrAngle.GetValue() * 10), // sollte in Resource geaendert werden
-                          (USHORT) aMtrCenterX.GetValue(),
-                          (USHORT) aMtrCenterY.GetValue(),
-                          (USHORT) aMtrBorder.GetValue(),
-                          (USHORT) aMtrColorFrom.GetValue(),
-                          (USHORT) aMtrColorTo.GetValue() );
+                          (sal_uInt16) aMtrCenterX.GetValue(),
+                          (sal_uInt16) aMtrCenterY.GetValue(),
+                          (sal_uInt16) aMtrBorder.GetValue(),
+                          (sal_uInt16) aMtrColorFrom.GetValue(),
+                          (sal_uInt16) aMtrColorTo.GetValue() );
 
     // Enablen/Disablen von Controls
     if( pControl == &aLbGradientType || pControl == this )
@@ -429,18 +439,18 @@ IMPL_LINK( SvxGradientTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
 
     long nCount = pGradientList->Count();
     long j = 1;
-    BOOL bDifferent = FALSE;
+    sal_Bool bDifferent = sal_False;
 
     while( !bDifferent )
     {
         aName  = aNewName;
         aName += sal_Unicode(' ');
         aName += UniString::CreateFromInt32( j++ );
-        bDifferent = TRUE;
+        bDifferent = sal_True;
 
         for( long i = 0; i < nCount && bDifferent; i++ )
             if( aName == pGradientList->GetGradient( i )->GetName() )
-                bDifferent = FALSE;
+                bDifferent = sal_False;
     }
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
@@ -448,17 +458,17 @@ IMPL_LINK( SvxGradientTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
     AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc );
     DBG_ASSERT(pDlg, "Dialogdiet fail!");
     WarningBox*    pWarnBox = NULL;
-    USHORT         nError   = RID_SVXSTR_WARN_NAME_DUPLICATE;
+    sal_uInt16         nError   = RID_SVXSTR_WARN_NAME_DUPLICATE;
 
     while( pDlg->Execute() == RET_OK )
     {
         pDlg->GetName( aName );
 
-        bDifferent = TRUE;
+        bDifferent = sal_True;
 
         for( long i = 0; i < nCount && bDifferent; i++ )
             if( aName == pGradientList->GetGradient( i )->GetName() )
-                bDifferent = FALSE;
+                bDifferent = sal_False;
 
         if( bDifferent )
         {
@@ -486,11 +496,11 @@ IMPL_LINK( SvxGradientTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
                               aLbColorTo.GetSelectEntryColor(),
                               (XGradientStyle) aLbGradientType.GetSelectEntryPos(),
                               static_cast<long>(aMtrAngle.GetValue() * 10), // sollte in Resource geaendert werden
-                              (USHORT) aMtrCenterX.GetValue(),
-                              (USHORT) aMtrCenterY.GetValue(),
-                              (USHORT) aMtrBorder.GetValue(),
-                              (USHORT) aMtrColorFrom.GetValue(),
-                              (USHORT) aMtrColorTo.GetValue() );
+                              (sal_uInt16) aMtrCenterX.GetValue(),
+                              (sal_uInt16) aMtrCenterY.GetValue(),
+                              (sal_uInt16) aMtrBorder.GetValue(),
+                              (sal_uInt16) aMtrColorFrom.GetValue(),
+                              (sal_uInt16) aMtrColorTo.GetValue() );
         XGradientEntry* pEntry = new XGradientEntry( aXGradient, aName );
 
         pGradientList->Insert( pEntry, nCount );
@@ -502,7 +512,7 @@ IMPL_LINK( SvxGradientTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
 #ifdef WNT
         // hack: #31355# W.P.
         Rectangle aRect( aLbGradients.GetPosPixel(), aLbGradients.GetSizePixel() );
-        if( TRUE ) {                // ??? overlapped with pDlg
+        if( sal_True ) {                // ??? overlapped with pDlg
                                     // and srolling
             Invalidate( aRect );
         }
@@ -528,7 +538,7 @@ IMPL_LINK( SvxGradientTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
 
 IMPL_LINK( SvxGradientTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
 {
-    USHORT nPos = aLbGradients.GetSelectEntryPos();
+    sal_uInt16 nPos = aLbGradients.GetSelectEntryPos();
 
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
@@ -544,33 +554,33 @@ IMPL_LINK( SvxGradientTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
         DBG_ASSERT(pDlg, "Dialogdiet fail!");
 
         long nCount = pGradientList->Count();
-        BOOL bDifferent = FALSE;
-        BOOL bLoop = TRUE;
+        sal_Bool bDifferent = sal_False;
+        sal_Bool bLoop = sal_True;
 
         while( bLoop && pDlg->Execute() == RET_OK )
         {
             pDlg->GetName( aName );
-            bDifferent = TRUE;
+            bDifferent = sal_True;
 
             for( long i = 0; i < nCount && bDifferent; i++ )
             {
                 if( aName == pGradientList->GetGradient( i )->GetName() &&
                     aName != aOldName )
-                    bDifferent = FALSE;
+                    bDifferent = sal_False;
             }
 
             if( bDifferent )
             {
-                bLoop = FALSE;
+                bLoop = sal_False;
                 XGradient aXGradient( aLbColorFrom.GetSelectEntryColor(),
                                       aLbColorTo.GetSelectEntryColor(),
                                       (XGradientStyle) aLbGradientType.GetSelectEntryPos(),
                                       static_cast<long>(aMtrAngle.GetValue() * 10), // sollte in Resource geaendert werden
-                                      (USHORT) aMtrCenterX.GetValue(),
-                                      (USHORT) aMtrCenterY.GetValue(),
-                                      (USHORT) aMtrBorder.GetValue(),
-                                      (USHORT) aMtrColorFrom.GetValue(),
-                                      (USHORT) aMtrColorTo.GetValue() );
+                                      (sal_uInt16) aMtrCenterX.GetValue(),
+                                      (sal_uInt16) aMtrCenterY.GetValue(),
+                                      (sal_uInt16) aMtrBorder.GetValue(),
+                                      (sal_uInt16) aMtrColorFrom.GetValue(),
+                                      (sal_uInt16) aMtrColorTo.GetValue() );
 
                 XGradientEntry* pEntry = new XGradientEntry( aXGradient, aName );
 
@@ -600,7 +610,7 @@ IMPL_LINK( SvxGradientTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
 
 IMPL_LINK( SvxGradientTabPage, ClickDeleteHdl_Impl, void *, EMPTYARG )
 {
-    USHORT nPos = aLbGradients.GetSelectEntryPos();
+    sal_uInt16 nPos = aLbGradients.GetSelectEntryPos();
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
@@ -636,7 +646,7 @@ IMPL_LINK( SvxGradientTabPage, ClickDeleteHdl_Impl, void *, EMPTYARG )
 IMPL_LINK( SvxGradientTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
 {
     ResMgr& rMgr = CUI_MGR();
-    USHORT nReturn = RET_YES;
+    sal_uInt16 nReturn = RET_YES;
 
     if ( *pnGradientListState & CT_MODIFIED )
     {
@@ -806,10 +816,10 @@ IMPL_LINK( SvxGradientTabPage, ChangeGradientHdl_Impl, void *, EMPTYARG )
     else
     {
         const SfxPoolItem* pPoolItem = NULL;
-        if( SFX_ITEM_SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLSTYLE ), TRUE, &pPoolItem ) )
+        if( SFX_ITEM_SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLSTYLE ), sal_True, &pPoolItem ) )
         {
             if( ( XFILL_GRADIENT == (XFillStyle) ( ( const XFillStyleItem* ) pPoolItem )->GetValue() ) &&
-                ( SFX_ITEM_SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLGRADIENT ), TRUE, &pPoolItem ) ) )
+                ( SFX_ITEM_SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLGRADIENT ), sal_True, &pPoolItem ) ) )
             {
                 pGradient = new XGradient( ( ( const XFillGradientItem* ) pPoolItem )->GetGradientValue() );
             }
@@ -828,7 +838,7 @@ IMPL_LINK( SvxGradientTabPage, ChangeGradientHdl_Impl, void *, EMPTYARG )
         XGradientStyle eXGS = pGradient->GetGradientStyle();
 
         aLbGradientType.SelectEntryPos(
-            sal::static_int_cast< USHORT >( eXGS ) );
+            sal::static_int_cast< sal_uInt16 >( eXGS ) );
         // Wenn der EIntrag nicht in der Listbox ist, werden die Farben
         // temporaer hinzugenommen
         aLbColorFrom.SetNoSelection();

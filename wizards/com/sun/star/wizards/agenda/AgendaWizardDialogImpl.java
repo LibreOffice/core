@@ -40,7 +40,6 @@ import com.sun.star.lang.EventObject;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.task.XInteractionHandler;
 import com.sun.star.text.XTextDocument;
-//import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.CloseVetoException;
 import com.sun.star.util.XCloseable;
@@ -50,6 +49,7 @@ import com.sun.star.wizards.common.FileAccess;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.NoValidPathException;
 import com.sun.star.wizards.common.SystemDialog;
+import com.sun.star.wizards.common.HelpIds;
 import com.sun.star.wizards.document.OfficeDocument;
 import com.sun.star.wizards.text.ViewHandler;
 import com.sun.star.wizards.ui.PathSelection;
@@ -202,7 +202,7 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
 
     public void insertPathSelectionControl() {
         myPathSelection = new PathSelection(xMSF, this, PathSelection.TransferMode.SAVE, PathSelection.DialogTypes.FILE);
-        myPathSelection.insert(6, 97, 70, 205, (short) 45, resources.reslblTemplatePath_value, true, "HID:" + ( HID + 24 ), "HID:" + ( HID + 25 ));
+        myPathSelection.insert(6, 97, 70, 205, (short) 45, resources.reslblTemplatePath_value, true, HelpIds.getHelpIdString( HID + 24 ), HelpIds.getHelpIdString( HID + 25 ));
         myPathSelection.sDefaultDirectory = sUserTemplatePath;
         myPathSelection.sDefaultName = "myAgendaTemplate.ott";
         myPathSelection.sDefaultFilter = "writer8_template";
@@ -484,7 +484,7 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
 
             xTextDocument = (XTextDocument)UnoRuntime.queryInterface(XTextDocument.class,agendaTemplate.document);
 
-            bSaveSuccess = OfficeDocument.store(xMSF, xTextDocument, sPath , "writer8_template", false, resources.resErrSaveTemplate );
+            bSaveSuccess = OfficeDocument.store(xMSF, xTextDocument, sPath , "writer8_template", false );
         } catch (Exception e) {
             SystemDialog.showMessageBox(xMSF, xControl.getPeer(), "ErrBox", VclWindowPeerAttribute.OK, resources.resErrSaveTemplate);
             //e.printStackTrace();
@@ -594,4 +594,4 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
 
 
 }
-    
+

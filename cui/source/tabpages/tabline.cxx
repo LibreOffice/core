@@ -63,7 +63,7 @@ SvxLineTabDialog::SvxLineTabDialog
     const SfxItemSet* pAttr,
     SdrModel* pModel,
     const SdrObject* pSdrObj,
-    BOOL bHasObj
+    sal_Bool bHasObj
 ) :
 
     SfxTabDialog    ( pParent, CUI_RES( RID_SVXDLG_LINE ), pAttr ),
@@ -87,7 +87,7 @@ SvxLineTabDialog::SvxLineTabDialog
     nPosLineEndLb( 0 ),
     mnPos( 0 ),
     mbAreaTP( sal_False ),
-    mbDeleteColorTable( TRUE )
+    mbDeleteColorTable( sal_True )
 {
     FreeResource();
 
@@ -204,7 +204,7 @@ short SvxLineTabDialog::Ok()
     SavePalettes();
 
     // Es wird RET_OK zurueckgeliefert, wenn wenigstens eine
-    // TabPage in FillItemSet() TRUE zurueckliefert. Dieses
+    // TabPage in FillItemSet() sal_True zurueckliefert. Dieses
     // geschieht z.Z. standardmaessig.
     return( SfxTabDialog::Ok() );
 }
@@ -222,7 +222,7 @@ IMPL_LINK_INLINE_END( SvxLineTabDialog, CancelHdlImpl, void *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-void SvxLineTabDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
+void SvxLineTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
     switch( nId )
     {

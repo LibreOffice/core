@@ -89,9 +89,9 @@ void SAL_CALL SVInputStream::skipBytes( sal_Int32 nBytesToSkip ) throw (::com::s
 
 sal_Int32 SAL_CALL SVInputStream::available(  ) throw (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
-    ULONG nCurrent = pStream->Tell();
-    ULONG nSize = pStream->Seek( STREAM_SEEK_TO_END );
-    ULONG nAvailable = nSize - nCurrent;
+    sal_uLong nCurrent = pStream->Tell();
+    sal_uLong nSize = pStream->Seek( STREAM_SEEK_TO_END );
+    sal_uLong nAvailable = nSize - nCurrent;
     pStream->Seek( nCurrent );
     return nAvailable;
 }
@@ -160,8 +160,8 @@ class ElementNode : public Node
 public:
     ElementNode( const String& aName, Reference < XAttributeList > xAttributes );
     void AppendNode( NodeRef xNewNode );
-    ULONG GetChildCount(){ return aDocumentNodeList.Count(); }
-    NodeRef GetChild( USHORT nIndex ){ return aDocumentNodeList.GetObject( nIndex ); }
+    sal_uLong GetChildCount(){ return aDocumentNodeList.Count(); }
+    NodeRef GetChild( sal_uInt16 nIndex ){ return aDocumentNodeList.GetObject( nIndex ); }
     Reference < XAttributeList > GetAttributes(){ return xAttributeList; }
 
     String GetNodeName() { return aNodeName; }
@@ -208,7 +208,7 @@ class SAXParser : public cppu::WeakImplHelper2< XErrorHandler, XDocumentHandler 
 
     NodeRef xTreeRoot;
     NodeRef xCurrentNode;
-    ULONG nTimestamp;
+    sal_uLong nTimestamp;
     ParseAction aAction;
 
 public:
@@ -219,11 +219,11 @@ public:
     NodeRef GetCurrentNode(){ return xCurrentNode; }
     void SetCurrentNode( NodeRef xCurrent ){ xCurrentNode = xCurrent; }
     NodeRef GetRootNode(){ return xTreeRoot; }
-    ULONG GetTimestamp(){ return nTimestamp; }
+    sal_uLong GetTimestamp(){ return nTimestamp; }
     void Touch(){ nTimestamp = Time::GetSystemTicks(); }
 
     // Methods SAXParser
-    BOOL Parse( ParseAction aAct );
+    sal_Bool Parse( ParseAction aAct );
     String GetErrors(){ return aErrors; }
 
     // Methods XErrorHandler
@@ -254,13 +254,13 @@ SAXParser::~SAXParser()
     xParser.clear();
 }
 
-BOOL SAXParser::Parse( ParseAction aAct )
+sal_Bool SAXParser::Parse( ParseAction aAct )
 {
     aAction = aAct;
     Touch();
     SvStream* pStream = new SvFileStream( aFilename, STREAM_STD_READ );
     if ( pStream->GetError() )
-        return FALSE;
+        return sal_False;
 
     InputSource sSource;
     sSource.aInputStream = new SVInputStream( pStream );    // is refcounted and hence deletet appropriately
@@ -296,8 +296,8 @@ BOOL SAXParser::Parse( ParseAction aAct )
             xParser->setDocumentHandler( NULL );    // otherwile Object holds itself
     }
     else
-        return FALSE;
-    return TRUE;
+        return sal_False;
+    return sal_True;
 }
 
 
@@ -365,13 +365,13 @@ void SAXParser::characters( const ::rtl::OUString& aChars ) throw (::com::sun::s
 {
     if ( aAction == COLLECT_DATA_IGNORE_WHITESPACE )
     {   // check for whitespace
-        BOOL bAllWhitespace = TRUE;
+        sal_Bool bAllWhitespace = sal_True;
         for ( int i = 0 ; bAllWhitespace && i < aChars.getLength() ; i++ )
             if ( aChars[i] != 10 // LF
               && aChars[i] != 13 // CR
               && aChars[i] != ' ' // Blank
               && aChars[i] != '\t' ) // Tab
-                bAllWhitespace = FALSE;
+                bAllWhitespace = sal_False;
         if ( bAllWhitespace )
             return;
     }
@@ -457,7 +457,7 @@ void StatementCommand::HandleSAXParser()
                     {
                         if ( !pSAXParser->Parse( PARSE_ONLY ) )
                             ReportError( GEN_RES_STR1( S_NO_SAX_PARSER, RcString( nMethodId ) ) );
-                        pRet->GenReturn ( RET_Value, aSmartMethodId, pSAXParser->GetErrors() );
+                        pRet->GenReturn ( RET_Value, nMethodId, pSAXParser->GetErrors() );
                     }
 
                     xParserKeepaliveReference.clear();
@@ -487,7 +487,7 @@ void StatementCommand::HandleSAXParser()
 
                         if ( !pSAXParser->Parse( aAction ) )
                             ReportError( GEN_RES_STR1( S_NO_SAX_PARSER, RcString( nMethodId ) ) );
-                        pRet->GenReturn ( RET_Value, aSmartMethodId, pSAXParser->GetErrors() );
+                        pRet->GenReturn ( RET_Value, nMethodId, pSAXParser->GetErrors() );
                     }
                 }
                 else
@@ -496,7 +496,7 @@ void StatementCommand::HandleSAXParser()
             break;
         case RC_SAXGetNodeType:
             {
-                   pRet->GenReturn ( RET_Value, aSmartMethodId, (comm_ULONG)pSAXParser->GetCurrentNode()->GetNodeType() );
+                   pRet->GenReturn ( RET_Value, nMethodId, (comm_ULONG)pSAXParser->GetCurrentNode()->GetNodeType() );
             }
             break;
         case RC_SAXGetAttributeCount:
@@ -511,23 +511,23 @@ void StatementCommand::HandleSAXParser()
                     switch ( nMethodId )
                     {
                         case RC_SAXGetElementName:
-                            pRet->GenReturn ( RET_Value, aSmartMethodId, pElementNode->GetNodeName() );
+                            pRet->GenReturn ( RET_Value, nMethodId, pElementNode->GetNodeName() );
                             break;
                         case RC_SAXGetChildCount:
-                            pRet->GenReturn ( RET_Value, aSmartMethodId, (comm_ULONG)pElementNode->GetChildCount() );
+                            pRet->GenReturn ( RET_Value, nMethodId, (comm_ULONG)pElementNode->GetChildCount() );
                             break;
                         case RC_SAXGetAttributeCount:
                             if ( xAttributeList.is() )
-                                pRet->GenReturn ( RET_Value, aSmartMethodId, (comm_ULONG)xAttributeList->getLength() );
+                                pRet->GenReturn ( RET_Value, nMethodId, (comm_ULONG)xAttributeList->getLength() );
                             else
-                                pRet->GenReturn ( RET_Value, aSmartMethodId, (comm_ULONG)0 );
+                                pRet->GenReturn ( RET_Value, nMethodId, (comm_ULONG)0 );
                             break;
                         case RC_SAXGetAttributeName:
                             {
-                                if( (nParams & PARAM_USHORT_1) && ValueOK( aSmartMethodId, RcString( nMethodId ), nNr1, xAttributeList.is()?xAttributeList->getLength():0 ) )
+                                if( (nParams & PARAM_USHORT_1) && ValueOK( rtl::OString(), RcString( nMethodId ), nNr1, xAttributeList.is()?xAttributeList->getLength():0 ) )
                                 {
                                     String aRet( xAttributeList->getNameByIndex( nNr1-1 ) );
-                                    pRet->GenReturn ( RET_Value, aSmartMethodId, aRet );
+                                    pRet->GenReturn ( RET_Value, nMethodId, aRet );
                                 }
                                 else
                                     ReportError( GEN_RES_STR0( S_INVALID_PARAMETERS ) );
@@ -536,15 +536,15 @@ void StatementCommand::HandleSAXParser()
                         case RC_SAXGetAttributeValue:
                             // Number or String
                             {
-                                if( (nParams & PARAM_USHORT_1) && ValueOK( aSmartMethodId, RcString( nMethodId ), nNr1, xAttributeList.is()?xAttributeList->getLength():0 ) )
+                                if( (nParams & PARAM_USHORT_1) && ValueOK( rtl::OString(), RcString( nMethodId ), nNr1, xAttributeList.is()?xAttributeList->getLength():0 ) )
                                 {
                                     String aRet( xAttributeList->getValueByIndex( nNr1-1 ) );
-                                    pRet->GenReturn ( RET_Value, aSmartMethodId, aRet );
+                                    pRet->GenReturn ( RET_Value, nMethodId, aRet );
                                 }
                                 else if( (nParams & PARAM_STR_1) && xAttributeList.is() )
                                 {
                                     String aRet( xAttributeList->getValueByName( aString1 ) );
-                                    pRet->GenReturn ( RET_Value, aSmartMethodId, aRet );
+                                    pRet->GenReturn ( RET_Value, nMethodId, aRet );
                                 }
                                 else
                                     ReportError( GEN_RES_STR0( S_INVALID_PARAMETERS ) );
@@ -565,7 +565,7 @@ void StatementCommand::HandleSAXParser()
                 {
                     NodeRef xNode=pSAXParser->GetCurrentNode();
                     CharacterNode* aCharacterNode = (CharacterNode*)(&xNode);
-                       pRet->GenReturn ( RET_Value, aSmartMethodId, aCharacterNode->GetCharacters() );
+                       pRet->GenReturn ( RET_Value, nMethodId, aCharacterNode->GetCharacters() );
                 }
                 else
                     ReportError( GEN_RES_STR0( S_INVALID_PARAMETERS ) );
@@ -576,22 +576,22 @@ void StatementCommand::HandleSAXParser()
         case RC_SAXHasElement:
             // Number or String
             {
-                BOOL bCheckOnly = nMethodId == RC_SAXHasElement;
+                sal_Bool bCheckOnly = nMethodId == RC_SAXHasElement;
 
                 if( (nParams & PARAM_USHORT_1) && !(nParams & PARAM_STR_1) )
                 {
                     if ( nNr1 == 0 )
                     {
                         if ( bCheckOnly )
-                            pRet->GenReturn ( RET_Value, aSmartMethodId, pSAXParser->GetCurrentNode()->GetParent().Is() );
+                            pRet->GenReturn ( RET_Value, nMethodId, pSAXParser->GetCurrentNode()->GetParent().Is() );
                         else if ( pSAXParser->GetCurrentNode()->GetParent().Is() )
                             pSAXParser->SetCurrentNode( pSAXParser->GetCurrentNode()->GetParent() );
                     }
                     else if ( !pElementNode )
                         ReportError( GEN_RES_STR0( S_INVALID_PARAMETERS ) );
                     else if ( bCheckOnly )
-                        pRet->GenReturn ( RET_Value, aSmartMethodId, ValueOK( aSmartMethodId, String(), nNr1, pElementNode->GetChildCount() ) );
-                    else if ( ValueOK( aSmartMethodId, RcString( nMethodId ), nNr1, pElementNode->GetChildCount() ) )
+                        pRet->GenReturn ( RET_Value, nMethodId, ValueOK( rtl::OString(), RcString( nMethodId ), nNr1, pElementNode->GetChildCount() ) );
+                    else if ( ValueOK( rtl::OString(), RcString( nMethodId ), nNr1, pElementNode->GetChildCount() ) )
                         pSAXParser->SetCurrentNode( pElementNode->GetChild( nNr1-1 ) );
                 }
                 else if( (nParams & PARAM_STR_1) )
@@ -599,16 +599,16 @@ void StatementCommand::HandleSAXParser()
                     if ( aString1.EqualsAscii( "/" ) )
                     {
                         if ( bCheckOnly )
-                            pRet->GenReturn ( RET_Value, aSmartMethodId, (comm_BOOL)TRUE );
+                            pRet->GenReturn ( RET_Value, nMethodId, (comm_BOOL)sal_True );
                         else
                             pSAXParser->SetCurrentNode( pSAXParser->GetRootNode() );
                     }
                     else if ( aString1.Copy(0,2).EqualsAscii( "*:" ) )
                     {
-                        ULONG nTimestamp = (ULONG)aString1.GetToken( 1, ':' ).ToInt64();
-                        ULONG nPointer = (ULONG)aString1.GetToken( 2, ':' ).ToInt64();
+                        sal_uLong nTimestamp = (sal_uLong)aString1.GetToken( 1, ':' ).ToInt64();
+                        sal_uLong nPointer = (sal_uLong)aString1.GetToken( 2, ':' ).ToInt64();
                         if ( bCheckOnly )
-                            pRet->GenReturn ( RET_Value, aSmartMethodId, (comm_BOOL)(pSAXParser->GetTimestamp() == nTimestamp) );
+                            pRet->GenReturn ( RET_Value, nMethodId, (comm_BOOL)(pSAXParser->GetTimestamp() == nTimestamp) );
                         else
                             if ( pSAXParser->GetTimestamp() == nTimestamp )
                             {
@@ -622,13 +622,13 @@ void StatementCommand::HandleSAXParser()
                     }
                     else if ( pElementNode )
                     {
-                        USHORT nNthOccurrence;
+                        sal_uInt16 nNthOccurrence;
                         if( (nParams & PARAM_USHORT_1) )
                             nNthOccurrence = nNr1;
                         else
                             nNthOccurrence = 1;
 
-                        USHORT i;
+                        sal_uInt16 i;
                         NodeRef xNew;
                         for ( i = 0 ; i < pElementNode->GetChildCount() && !xNew.Is() ; i++ )
                         {
@@ -651,7 +651,7 @@ void StatementCommand::HandleSAXParser()
                                 xNew.Clear();
                         }
                         if ( bCheckOnly )
-                            pRet->GenReturn ( RET_Value, aSmartMethodId, xNew.Is() );
+                            pRet->GenReturn ( RET_Value, nMethodId, xNew.Is() );
                         else
                             if ( xNew.Is() )
                                 pSAXParser->SetCurrentNode( xNew );
@@ -660,7 +660,7 @@ void StatementCommand::HandleSAXParser()
                     }
                     else
                         if ( bCheckOnly )
-                            pRet->GenReturn ( RET_Value, aSmartMethodId, (comm_BOOL)FALSE );
+                            pRet->GenReturn ( RET_Value, nMethodId, (comm_BOOL)sal_False );
                         else
                             ReportError( GEN_RES_STR0( S_INVALID_PARAMETERS ) );
                 }
@@ -670,15 +670,15 @@ void StatementCommand::HandleSAXParser()
             break;
         case RC_SAXGetElementPath:
             {
-                DBG_ASSERT( sizeof( ULONG ) == sizeof ( void* ), "Pointertype has different size than ULONG");
+                DBG_ASSERT( sizeof( sal_uIntPtr ) == sizeof ( void* ), "Pointertype has different size than sal_uIntPtr");
                 String aPath;
                 aPath.AppendAscii( "*:" );
                 aPath.Append( String::CreateFromInt64( pSAXParser->GetTimestamp() ) );
                 aPath.AppendAscii( ":" );
                 NodeRef xNode=pSAXParser->GetCurrentNode();
                 Node* pNode = (Node*)(&xNode);
-                aPath.Append( String::CreateFromInt64( (ULONG)pNode ) );
-                pRet->GenReturn ( RET_Value, aSmartMethodId, aPath );
+                aPath.Append( String::CreateFromInt64( (sal_uIntPtr)pNode ) );
+                pRet->GenReturn ( RET_Value, nMethodId, aPath );
             }
             break;
 

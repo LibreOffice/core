@@ -65,12 +65,12 @@ public:
     ~SvxTabulatorTabPage();
 
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
-    static USHORT*      GetRanges();
+    static sal_uInt16*      GetRanges();
 
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 
-    void                DisableControls( const USHORT nFlag );
+    void                DisableControls( const sal_uInt16 nFlag );
 
 protected:
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
@@ -79,10 +79,11 @@ private:
     SvxTabulatorTabPage( Window* pParent, const SfxItemSet& rSet );
 
     // Tabulatoren und Positionen
-    MetricBox       aTabBox;
     FixedLine       aTabLabel;
+    MetricBox       aTabBox;
     FixedLine       aTabLabelVert;
 
+    FixedLine       aTabTypeLabel;
     // TabType
     RadioButton     aLeftTab;
     RadioButton     aRightTab;
@@ -96,8 +97,8 @@ private:
 
     FixedText       aDezCharLabel;
     Edit            aDezChar;
-    FixedLine       aTabTypeLabel;
 
+    FixedLine       aFillLabel;
     // Fuellzeichen
     RadioButton     aNoFillChar;
     RadioButton     aFillPoints;
@@ -105,8 +106,6 @@ private:
     RadioButton     aFillSolidLine;
     RadioButton     aFillSpecial;
     Edit            aFillChar;
-    FixedLine       aFillLabel;
-
     // Buttons
     PushButton      aNewBtn;
     PushButton      aDelAllBtn;
@@ -117,10 +116,10 @@ private:
     SvxTabStopItem  aNewTabs;
     long            nDefDist;
     FieldUnit       eDefUnit;
-    BOOL            bCheck;
+    sal_Bool            bCheck;
 
 #ifdef _SVX_TABSTPGE_CXX
-    void            InitTabPos_Impl( USHORT nPos = 0 );
+    void            InitTabPos_Impl( sal_uInt16 nPos = 0 );
     void            SetFillAndTabType_Impl();
 
     // Handler

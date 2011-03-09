@@ -294,11 +294,11 @@ Sequence< ::rtl::OUString > SAL_CALL OControl::getSupportedServiceNames_Static()
 //------------------------------------------------------------------------------
 void SAL_CALL OControl::disposing(const com::sun::star::lang::EventObject& _rEvent) throw (RuntimeException)
 {
-    InterfaceRef xAggAsIface;
+    Reference< XInterface > xAggAsIface;
     query_aggregation(m_xAggregate, xAggAsIface);
 
     // does the disposing come from the aggregate ?
-    if (xAggAsIface != InterfaceRef(_rEvent.Source, UNO_QUERY))
+    if (xAggAsIface != Reference< XInterface >(_rEvent.Source, UNO_QUERY))
     {   // no -> forward it
                 Reference<com::sun::star::lang::XEventListener> xListener;
         if (query_aggregation(m_xAggregate, xListener))
@@ -308,16 +308,16 @@ void SAL_CALL OControl::disposing(const com::sun::star::lang::EventObject& _rEve
 
 // XControl
 //------------------------------------------------------------------------------
-void SAL_CALL OControl::setContext(const InterfaceRef& Context) throw (RuntimeException)
+void SAL_CALL OControl::setContext(const Reference< XInterface >& Context) throw (RuntimeException)
 {
     if (m_xControl.is())
         m_xControl->setContext(Context);
 }
 
 //------------------------------------------------------------------------------
-InterfaceRef SAL_CALL OControl::getContext() throw (RuntimeException)
+Reference< XInterface > SAL_CALL OControl::getContext() throw (RuntimeException)
 {
-    return m_xControl.is() ? m_xControl->getContext() : InterfaceRef();
+    return m_xControl.is() ? m_xControl->getContext() : Reference< XInterface >();
 }
 
 //------------------------------------------------------------------------------
@@ -709,13 +709,13 @@ void OControlModel::doSetDelegator()
 
 // XChild
 //------------------------------------------------------------------------------
-InterfaceRef SAL_CALL OControlModel::getParent() throw(RuntimeException)
+Reference< XInterface > SAL_CALL OControlModel::getParent() throw(RuntimeException)
 {
     return m_xParent;
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OControlModel::setParent(const InterfaceRef& _rxParent) throw(com::sun::star::lang::NoSupportException, RuntimeException)
+void SAL_CALL OControlModel::setParent(const Reference< XInterface >& _rxParent) throw(com::sun::star::lang::NoSupportException, RuntimeException)
 {
     osl::MutexGuard aGuard(m_aMutex);
 
@@ -918,7 +918,7 @@ void OControlModel::read(const Reference<stario::XObjectInputStream>& InStream) 
     }
 
     // 2. Lesen des Versionsnummer
-    UINT16 nVersion = InStream->readShort();
+    sal_uInt16 nVersion = InStream->readShort();
 
     // 3. Lesen der allgemeinen Properties
     ::comphelper::operator>>( InStream, m_aName);
@@ -1755,7 +1755,7 @@ void SAL_CALL OBoundControlModel::read( const Reference< stario::XObjectInputStr
     OControlModel::read(_rxInStream);
 
     osl::MutexGuard aGuard(m_aMutex);
-    UINT16 nVersion = _rxInStream->readShort(); (void)nVersion;
+    sal_uInt16 nVersion = _rxInStream->readShort(); (void)nVersion;
     ::comphelper::operator>>( _rxInStream, m_aControlSource);
 }
 
@@ -1864,30 +1864,24 @@ void OBoundControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, co
             throw com::sun::star::lang::IllegalArgumentException();
         case PROPERTY_ID_CONTROLLABEL:
         {
-            DBG_ASSERT(!rValue.hasValue() || (rValue.getValueType().getTypeClass() == TypeClass_INTERFACE),
-                "OBoundControlModel::setFastPropertyValue_NoBroadcast : invalid argument !");
-            if (!rValue.hasValue())
+            if ( rValue.hasValue() && ( rValue.getValueTypeClass() != TypeClass_INTERFACE ) )
+                throw com::sun::star::lang::IllegalArgumentException();
+
+            Reference< XInterface > xNewValue( rValue, UNO_QUERY );
+            if ( !xNewValue.is() )
             {   // set property to "void"
-                Reference<com::sun::star::lang::XComponent> xComp(m_xLabelControl, UNO_QUERY);
-                if (xComp.is())
-                    xComp->removeEventListener(static_cast<com::sun::star::lang::XEventListener*>(static_cast<XPropertyChangeListener*>(this)));
+                Reference< XComponent > xComp( m_xLabelControl, UNO_QUERY );
+                if ( xComp.is() )
+                    xComp->removeEventListener( static_cast< XPropertyChangeListener* >( this ) );
                 m_xLabelControl = NULL;
                 break;
             }
 
-            InterfaceRef xNewValue;
-            rValue >>= xNewValue;
-
-            Reference<XControlModel> xAsModel(xNewValue, UNO_QUERY);
-            Reference<com::sun::star::lang::XServiceInfo> xAsServiceInfo(xNewValue, UNO_QUERY);
-            Reference<XPropertySet> xAsPropSet(xNewValue, UNO_QUERY);
-            Reference<XChild> xAsChild(xNewValue, UNO_QUERY);
-            if (!xAsModel.is() || !xAsServiceInfo.is() || !xAsPropSet.is() || !xAsChild.is())
-            {
-                throw com::sun::star::lang::IllegalArgumentException();
-            }
-
-            if (!xAsServiceInfo->supportsService(m_aLabelServiceName))
+            Reference< XControlModel >  xAsModel        ( xNewValue,        UNO_QUERY );
+            Reference< XServiceInfo >   xAsServiceInfo  ( xAsModel,         UNO_QUERY );
+            Reference< XPropertySet >   xAsPropSet      ( xAsServiceInfo,   UNO_QUERY );
+            Reference< XChild >         xAsChild        ( xAsPropSet,       UNO_QUERY );
+            if ( !xAsChild.is() || !xAsServiceInfo->supportsService( m_aLabelServiceName ) )
             {
                 throw com::sun::star::lang::IllegalArgumentException();
             }
@@ -1895,7 +1889,7 @@ void OBoundControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, co
             // check if weself and the given model have a common anchestor (up to the forms collection)
             Reference<XChild> xCont;
             query_interface(static_cast<XWeak*>(this), xCont);
-            InterfaceRef xMyTopLevel = xCont->getParent();
+            Reference< XInterface > xMyTopLevel = xCont->getParent();
             while (xMyTopLevel.is())
             {
                 Reference<XForm> xAsForm(xMyTopLevel, UNO_QUERY);
@@ -1904,9 +1898,9 @@ void OBoundControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, co
                     break;
 
                 Reference<XChild> xLoopAsChild(xMyTopLevel, UNO_QUERY);
-                xMyTopLevel = xLoopAsChild.is() ? xLoopAsChild->getParent() : InterfaceRef();
+                xMyTopLevel = xLoopAsChild.is() ? xLoopAsChild->getParent() : Reference< XInterface >();
             }
-            InterfaceRef xNewTopLevel = xAsChild->getParent();
+            Reference< XInterface > xNewTopLevel = xAsChild->getParent();
             while (xNewTopLevel.is())
             {
                 Reference<XForm> xAsForm(xNewTopLevel, UNO_QUERY);
@@ -1914,7 +1908,7 @@ void OBoundControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, co
                     break;
 
                 Reference<XChild> xLoopAsChild(xNewTopLevel, UNO_QUERY);
-                xNewTopLevel = xLoopAsChild.is() ? xLoopAsChild->getParent() : InterfaceRef();
+                xNewTopLevel = xLoopAsChild.is() ? xLoopAsChild->getParent() : Reference< XInterface >();
             }
             if (xNewTopLevel != xMyTopLevel)
             {
@@ -2131,7 +2125,7 @@ sal_Bool OBoundControlModel::connectToField(const Reference<XRowSet>& rForm)
                     m_xColumnUpdate = Reference< XColumnUpdate >( m_xField, UNO_QUERY );
                     m_xColumn = Reference< XColumn >( m_xField, UNO_QUERY );
 
-                    INT32 nNullableFlag = ColumnValue::NO_NULLS;
+                    sal_Int32 nNullableFlag = ColumnValue::NO_NULLS;
                     m_xField->getPropertyValue(PROPERTY_ISNULLABLE) >>= nNullableFlag;
                     m_bRequired = (ColumnValue::NO_NULLS == nNullableFlag);
                         // we're optimistic : in case of ColumnValue_NULLABLE_UNKNOWN we assume nullability ....

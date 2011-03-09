@@ -51,18 +51,21 @@ TabPage RID_SVXPAGE_TRANSPARENCE
     };
     RadioButton RBT_TRANS_OFF
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_TRANSPARENCE:RBT_TRANS_OFF";
         Pos = MAP_APPFONT ( 12 , 14  ) ;
         Size = MAP_APPFONT ( 110 , 10 ) ;
         Text [ en-US ] = "~No transparency";
     };
     RadioButton RBT_TRANS_LINEAR
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_TRANSPARENCE:RBT_TRANS_LINEAR";
         Pos = MAP_APPFONT ( 12 , 28  ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
         Text [ en-US ] = "~Transparency";
     };
     MetricField MTR_TRANSPARENT
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_TRANSPARENCE:MTR_TRANSPARENT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 72 , 26 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -78,6 +81,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
     };
     RadioButton RBT_TRANS_GRADIENT
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_TRANSPARENCE:RBT_TRANS_GRADIENT";
         Pos = MAP_APPFONT ( 12 , 42 ) ;
         Size = MAP_APPFONT ( 110 , 10 ) ;
         Text [ en-US ] = "Gradient";
@@ -90,6 +94,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
     };
     ListBox LB_TRGR_GRADIENT_TYPES
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_TRANSPARENCE:LB_TRGR_GRADIENT_TYPES";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 72 , 54  ) ;
         Size = MAP_APPFONT ( 53 , 63 ) ;
@@ -113,6 +118,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
     };
     MetricField MTR_TRGR_CENTER_X
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_TRANSPARENCE:MTR_TRGR_CENTER_X";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 72 , 70 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -134,6 +140,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
     };
     MetricField MTR_TRGR_CENTER_Y
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_TRANSPARENCE:MTR_TRGR_CENTER_Y";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 72 , 86 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -155,6 +162,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
     };
     MetricField MTR_TRGR_ANGLE
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_TRANSPARENCE:MTR_TRGR_ANGLE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 72 , 102 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -175,6 +183,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
     };
     MetricField MTR_TRGR_BORDER
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_TRANSPARENCE:MTR_TRGR_BORDER";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 66 + TRANS_GRAD_OFFSET_X, 54 + TRANS_GRAD_OFFSET_Y) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -196,6 +205,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
     };
     MetricField MTR_TRGR_START_VALUE
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_TRANSPARENCE:MTR_TRGR_START_VALUE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 72 , 134 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -217,6 +227,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
     };
     MetricField MTR_TRGR_END_VALUE
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_TRANSPARENCE:MTR_TRGR_END_VALUE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 72 , 150 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -261,6 +272,7 @@ TabPage RID_SVXPAGE_AREA
     };
     ListBox LB_AREA_TYPE
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_AREA:LB_AREA_TYPE";
         Pos = MAP_APPFONT ( 12 , 14  ) ;
         Size = MAP_APPFONT ( 108 , 60 ) ;
         DropDown = TRUE;
@@ -278,6 +290,7 @@ TabPage RID_SVXPAGE_AREA
 
     ListBox LB_COLOR
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_AREA:LB_COLOR";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 30 ) ;
         Size = MAP_APPFONT ( 108 , 103 ) ;
@@ -285,6 +298,7 @@ TabPage RID_SVXPAGE_AREA
     };
     ListBox LB_GRADIENT
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_AREA:LB_GRADIENT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 30 ) ;
         Size = MAP_APPFONT ( 108 , 103 ) ;
@@ -292,6 +306,7 @@ TabPage RID_SVXPAGE_AREA
     };
     ListBox LB_HATCHING
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_AREA:LB_HATCHING";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 30 ) ;
         Size = MAP_APPFONT ( 108 , 103 ) ;
@@ -299,6 +314,7 @@ TabPage RID_SVXPAGE_AREA
     };
     ListBox LB_BITMAP
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_AREA:LB_BITMAP";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 30 ) ;
         Size = MAP_APPFONT ( 108 , 103 ) ;
@@ -331,6 +347,7 @@ TabPage RID_SVXPAGE_AREA
     };
     TriStateBox TSB_STEPCOUNT
     {
+        HelpID = "cui:TriStateBox:RID_SVXPAGE_AREA:TSB_STEPCOUNT";
         Pos = MAP_APPFONT ( 138 , 15 ) ;
         Size = MAP_APPFONT ( 68 , 10 ) ;
         TabStop = TRUE ;
@@ -338,6 +355,7 @@ TabPage RID_SVXPAGE_AREA
     };
     NumericField NUM_FLD_STEPCOUNT
     {
+        HelpID = "cui:NumericField:RID_SVXPAGE_AREA:NUM_FLD_STEPCOUNT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 208 , 14 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -355,6 +373,7 @@ TabPage RID_SVXPAGE_AREA
 
     CheckBox CB_HATCHBCKGRD
     {
+        HelpID = "cui:CheckBox:RID_SVXPAGE_AREA:CB_HATCHBCKGRD";
         Pos = MAP_APPFONT ( 132 , 3 ) ;
         Size = MAP_APPFONT ( 122 , 10 ) ;
         TabStop = TRUE ;
@@ -362,6 +381,7 @@ TabPage RID_SVXPAGE_AREA
     };
     ListBox LB_HATCHBCKGRDCOLOR
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_AREA:LB_HATCHBCKGRDCOLOR";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 141 , 16 ) ;
         Size = MAP_APPFONT ( 70 , 100 ) ;
@@ -380,6 +400,7 @@ TabPage RID_SVXPAGE_AREA
     };
     TriStateBox TSB_ORIGINAL
     {
+        HelpID = "cui:TriStateBox:RID_SVXPAGE_AREA:TSB_ORIGINAL";
         Pos = MAP_APPFONT ( 138 , 15 ) ;
         Size = MAP_APPFONT ( 48 , 10 ) ;
         TabStop = TRUE ;
@@ -387,6 +408,7 @@ TabPage RID_SVXPAGE_AREA
     };
     TriStateBox TSB_SCALE
     {
+        HelpID = "cui:TriStateBox:RID_SVXPAGE_AREA:TSB_SCALE";
         Pos = MAP_APPFONT ( 138 , 30 ) ;
         Size = MAP_APPFONT ( 48 , 10 ) ;
         TabStop = TRUE ;
@@ -400,6 +422,7 @@ TabPage RID_SVXPAGE_AREA
     };
     MetricField MTR_FLD_X_SIZE
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_AREA:MTR_FLD_X_SIZE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 212 , 14 ) ;
         Size = MAP_APPFONT ( 36 , 12 ) ;
@@ -424,6 +447,7 @@ TabPage RID_SVXPAGE_AREA
     };
     MetricField MTR_FLD_Y_SIZE
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_AREA:MTR_FLD_Y_SIZE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 212 , 29  ) ;
         Size = MAP_APPFONT ( 36 , 12 ) ;
@@ -469,6 +493,7 @@ TabPage RID_SVXPAGE_AREA
     };
     MetricField MTR_FLD_X_OFFSET
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_AREA:MTR_FLD_X_OFFSET";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 219 , 87 ) ;
         Size = MAP_APPFONT ( 29 , 12 ) ;
@@ -484,6 +509,7 @@ TabPage RID_SVXPAGE_AREA
     };
     MetricField MTR_FLD_Y_OFFSET
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_AREA:MTR_FLD_Y_OFFSET";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 219 , 102 ) ;
         Size = MAP_APPFONT ( 29 , 12 ) ;
@@ -499,6 +525,7 @@ TabPage RID_SVXPAGE_AREA
     };
     TriStateBox TSB_TILE
     {
+        HelpID = "cui:TriStateBox:RID_SVXPAGE_AREA:TSB_TILE";
         Pos = MAP_APPFONT ( 138 , 117  ) ;
         Size = MAP_APPFONT ( 54 , 10 ) ;
         TabStop = TRUE ;
@@ -506,6 +533,7 @@ TabPage RID_SVXPAGE_AREA
     };
     TriStateBox TSB_STRETCH
     {
+        HelpID = "cui:TriStateBox:RID_SVXPAGE_AREA:TSB_STRETCH";
         Pos = MAP_APPFONT ( 194 , 117  ) ;
         Size = MAP_APPFONT ( 54 , 10 ) ;
         TabStop = TRUE ;
@@ -519,18 +547,21 @@ TabPage RID_SVXPAGE_AREA
     };
     RadioButton RBT_ROW
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_AREA:RBT_ROW";
         Pos = MAP_APPFONT ( 138 , 144  ) ;
         Size = MAP_APPFONT ( 75 , 10 ) ;
         Text [ en-US ] = "Ro~w" ;
     };
     RadioButton RBT_COLUMN
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_AREA:RBT_COLUMN";
         Pos = MAP_APPFONT ( 138 , 158 ) ;
         Size = MAP_APPFONT ( 75 , 10 ) ;
         Text [ en-US ] = "Colu~mn" ;
     };
     MetricField MTR_FLD_OFFSET
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_AREA:MTR_FLD_OFFSET";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 219 , 157 ) ;
         Size = MAP_APPFONT ( 29 , 12 ) ;
@@ -560,6 +591,7 @@ TabPage RID_SVXPAGE_SHADOW
     };
     TriStateBox TSB_SHOW_SHADOW
     {
+        HelpID = "cui:TriStateBox:RID_SVXPAGE_SHADOW:TSB_SHOW_SHADOW";
         Pos = MAP_APPFONT ( 12 , 14  ) ;
         Size = MAP_APPFONT ( 110 , 10 ) ;
         TabStop = TRUE ;
@@ -587,6 +619,7 @@ TabPage RID_SVXPAGE_SHADOW
     };
     MetricField MTR_FLD_DISTANCE
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_SHADOW:MTR_FLD_DISTANCE";
         Pos = MAP_APPFONT ( 65 , 67  ) ;
         Size = MAP_APPFONT ( 47 , 12 ) ;
         Border = TRUE ;
@@ -604,6 +637,7 @@ TabPage RID_SVXPAGE_SHADOW
     };
     ListBox LB_SHADOW_COLOR
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_SHADOW:LB_SHADOW_COLOR";
         Pos = MAP_APPFONT ( 65 , 86  ) ;
         Size = MAP_APPFONT ( 57 , 100 ) ;
         DropDown = TRUE ;
@@ -625,6 +659,7 @@ TabPage RID_SVXPAGE_SHADOW
     };
     MetricField MTR_SHADOW_TRANSPARENT
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_SHADOW:MTR_SHADOW_TRANSPARENT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 65 , 105  ) ;
         Size = MAP_APPFONT ( 47 , 12 ) ;
@@ -667,6 +702,7 @@ TabPage RID_SVXPAGE_HATCH
     };
     MetricField MTR_FLD_DISTANCE
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_HATCH:MTR_FLD_DISTANCE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 25  ) ;
         Size = MAP_APPFONT ( 50 , 12 ) ;
@@ -689,6 +725,7 @@ TabPage RID_SVXPAGE_HATCH
     };
     MetricField MTR_FLD_ANGLE
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_HATCH:MTR_FLD_ANGLE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 52  ) ;
         Size = MAP_APPFONT ( 50 , 12 ) ;
@@ -717,6 +754,7 @@ TabPage RID_SVXPAGE_HATCH
     };
     ListBox LB_LINE_TYPE
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_HATCH:LB_LINE_TYPE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 134 ) ;
         Size = MAP_APPFONT ( 62 , 62 ) ;
@@ -737,6 +775,7 @@ TabPage RID_SVXPAGE_HATCH
     };
     ListBox LB_LINE_COLOR
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_HATCH:LB_LINE_COLOR";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 161 ) ;
         Size = MAP_APPFONT ( 62 , 100 ) ;
@@ -746,6 +785,7 @@ TabPage RID_SVXPAGE_HATCH
     };
     ListBox LB_HATCHINGS
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_HATCH:LB_HATCHINGS";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 103 , 14  ) ;
         Size = MAP_APPFONT ( 88 , 110 ) ;
@@ -759,6 +799,7 @@ TabPage RID_SVXPAGE_HATCH
     };
     PushButton BTN_ADD
     {
+        HelpID = "cui:PushButton:RID_SVXPAGE_HATCH:BTN_ADD";
         Pos = MAP_APPFONT ( 197 , 14 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Add..." ;
@@ -766,6 +807,7 @@ TabPage RID_SVXPAGE_HATCH
     };
     PushButton BTN_MODIFY
     {
+        HelpID = "cui:PushButton:RID_SVXPAGE_HATCH:BTN_MODIFY";
         Pos = MAP_APPFONT ( 197 , 32  ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Modify..." ;
@@ -773,6 +815,7 @@ TabPage RID_SVXPAGE_HATCH
     };
     PushButton BTN_DELETE
     {
+        HelpID = "cui:PushButton:RID_SVXPAGE_HATCH:BTN_DELETE";
         Pos = MAP_APPFONT ( 197 , 68  ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Delete..." ;
@@ -780,6 +823,7 @@ TabPage RID_SVXPAGE_HATCH
     };
     ImageButton BTN_LOAD
     {
+        HelpID = "cui:ImageButton:RID_SVXPAGE_HATCH:BTN_LOAD";
         Pos = MAP_APPFONT ( 197 , 104  ) ;
         Size = MAP_APPFONT ( 16 , 16 ) ;
         TabStop = TRUE ;
@@ -795,6 +839,7 @@ TabPage RID_SVXPAGE_HATCH
     };
     ImageButton BTN_SAVE
     {
+        HelpID = "cui:ImageButton:RID_SVXPAGE_HATCH:BTN_SAVE";
         Pos = MAP_APPFONT ( 197 , 124 ) ;
         Size = MAP_APPFONT ( 16 , 16 ) ;
         TabStop = TRUE ;
@@ -843,6 +888,7 @@ TabPage RID_SVXPAGE_BITMAP
     };
     ListBox LB_COLOR
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_BITMAP:LB_COLOR";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 115  ) ;
         Size = MAP_APPFONT ( 62 , 100 ) ;
@@ -858,6 +904,7 @@ TabPage RID_SVXPAGE_BITMAP
     };
     ListBox LB_BACKGROUND_COLOR
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_BITMAP:LB_BACKGROUND_COLOR";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 142  ) ;
         Size = MAP_APPFONT ( 62 , 100 ) ;
@@ -872,6 +919,7 @@ TabPage RID_SVXPAGE_BITMAP
     };
     ListBox LB_BITMAPS
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_BITMAP:LB_BITMAPS";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 103 , 14  ) ;
         Size = MAP_APPFONT ( 88 , 110 ) ;
@@ -885,6 +933,7 @@ TabPage RID_SVXPAGE_BITMAP
     };
     PushButton BTN_ADD
     {
+        HelpID = "cui:PushButton:RID_SVXPAGE_BITMAP:BTN_ADD";
         Pos = MAP_APPFONT ( 197 , 14 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Add..." ;
@@ -892,6 +941,7 @@ TabPage RID_SVXPAGE_BITMAP
     };
     PushButton BTN_MODIFY
     {
+        HelpID = "cui:PushButton:RID_SVXPAGE_BITMAP:BTN_MODIFY";
         Pos = MAP_APPFONT ( 197 , 32  ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Modify..." ;
@@ -899,6 +949,7 @@ TabPage RID_SVXPAGE_BITMAP
     };
     PushButton BTN_IMPORT
     {
+        HelpID = "cui:PushButton:RID_SVXPAGE_BITMAP:BTN_IMPORT";
         Pos = MAP_APPFONT ( 197 , 50  ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Import..." ;
@@ -906,6 +957,7 @@ TabPage RID_SVXPAGE_BITMAP
     };
     PushButton BTN_DELETE
     {
+        HelpID = "cui:PushButton:RID_SVXPAGE_BITMAP:BTN_DELETE";
         Pos = MAP_APPFONT ( 197 , 68 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Delete..." ;
@@ -913,6 +965,7 @@ TabPage RID_SVXPAGE_BITMAP
     };
     ImageButton BTN_LOAD
     {
+        HelpID = "cui:ImageButton:RID_SVXPAGE_BITMAP:BTN_LOAD";
         Pos = MAP_APPFONT ( 197 , 104  ) ;
         Size = MAP_APPFONT ( 16 , 16 ) ;
         TabStop = TRUE ;
@@ -928,6 +981,7 @@ TabPage RID_SVXPAGE_BITMAP
     };
     ImageButton BTN_SAVE
     {
+        HelpID = "cui:ImageButton:RID_SVXPAGE_BITMAP:BTN_SAVE";
         Pos = MAP_APPFONT ( 197 , 124  ) ;
         Size = MAP_APPFONT ( 16 , 16 ) ;
         TabStop = TRUE ;
@@ -963,6 +1017,7 @@ TabPage RID_SVXPAGE_GRADIENT
     };
     ListBox LB_GRADIENT_TYPES
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_GRADIENT:LB_GRADIENT_TYPES";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 49 , 14  ) ;
         Size = MAP_APPFONT ( 48, 63 ) ;
@@ -986,6 +1041,7 @@ TabPage RID_SVXPAGE_GRADIENT
     };
     MetricField MTR_CENTER_X
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_GRADIENT:MTR_CENTER_X";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 49 , 30  ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -1007,6 +1063,7 @@ TabPage RID_SVXPAGE_GRADIENT
     };
     MetricField MTR_CENTER_Y
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_GRADIENT:MTR_CENTER_Y";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 49 , 46  ) ;
         Size = MAP_APPFONT ( 40, 12 ) ;
@@ -1028,6 +1085,7 @@ TabPage RID_SVXPAGE_GRADIENT
     };
     MetricField MTR_ANGLE
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_GRADIENT:MTR_ANGLE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 49 , 62 ) ;
         Size = MAP_APPFONT ( 40, 12 ) ;
@@ -1048,6 +1106,7 @@ TabPage RID_SVXPAGE_GRADIENT
     };
     MetricField MTR_BORDER
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_GRADIENT:MTR_BORDER";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 49 , 78  ) ;
         Size = MAP_APPFONT ( 40, 12 ) ;
@@ -1069,6 +1128,7 @@ TabPage RID_SVXPAGE_GRADIENT
     };
     ListBox LB_COLOR_FROM
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_GRADIENT:LB_COLOR_FROM";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 49 , 97 ) ;
         Size = MAP_APPFONT ( 48, 100 ) ;
@@ -1078,6 +1138,7 @@ TabPage RID_SVXPAGE_GRADIENT
     };
     MetricField MTR_COLOR_FROM
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_GRADIENT:MTR_COLOR_FROM";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 49 , 113  ) ;
         Size = MAP_APPFONT ( 40, 12 ) ;
@@ -1099,6 +1160,7 @@ TabPage RID_SVXPAGE_GRADIENT
     };
     ListBox LB_COLOR_TO
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_GRADIENT:LB_COLOR_TO";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 49 , 131 ) ;
         Size = MAP_APPFONT ( 48, 100 ) ;
@@ -1108,6 +1170,7 @@ TabPage RID_SVXPAGE_GRADIENT
     };
     MetricField MTR_COLOR_TO
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_GRADIENT:MTR_COLOR_TO";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 49 , 147 ) ;
         Size = MAP_APPFONT ( 40, 12 ) ;
@@ -1123,6 +1186,7 @@ TabPage RID_SVXPAGE_GRADIENT
     };
     ListBox LB_GRADIENTS
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_GRADIENT:LB_GRADIENTS";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 103 , 14  ) ;
         Size = MAP_APPFONT ( 88 , 110 ) ;
@@ -1136,6 +1200,7 @@ TabPage RID_SVXPAGE_GRADIENT
     };
     PushButton BTN_ADD
     {
+        HelpID = "cui:PushButton:RID_SVXPAGE_GRADIENT:BTN_ADD";
         Pos = MAP_APPFONT ( 197 , 14 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Add..." ;
@@ -1143,6 +1208,7 @@ TabPage RID_SVXPAGE_GRADIENT
     };
     PushButton BTN_MODIFY
     {
+        HelpID = "cui:PushButton:RID_SVXPAGE_GRADIENT:BTN_MODIFY";
         Pos = MAP_APPFONT ( 197 , 32  ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Modify..." ;
@@ -1150,6 +1216,7 @@ TabPage RID_SVXPAGE_GRADIENT
     };
     PushButton BTN_DELETE
     {
+        HelpID = "cui:PushButton:RID_SVXPAGE_GRADIENT:BTN_DELETE";
         Pos = MAP_APPFONT ( 197 , 68 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Delete..." ;
@@ -1157,6 +1224,7 @@ TabPage RID_SVXPAGE_GRADIENT
     };
     ImageButton BTN_LOAD
     {
+        HelpID = "cui:ImageButton:RID_SVXPAGE_GRADIENT:BTN_LOAD";
         Pos = MAP_APPFONT ( 197 , 104  ) ;
         Size = MAP_APPFONT ( 16 , 16 ) ;
         TabStop = TRUE ;
@@ -1172,6 +1240,7 @@ TabPage RID_SVXPAGE_GRADIENT
     };
     ImageButton BTN_SAVE
     {
+        HelpID = "cui:ImageButton:RID_SVXPAGE_GRADIENT:BTN_SAVE";
         Pos = MAP_APPFONT ( 197 , 124  ) ;
         Size = MAP_APPFONT ( 16 , 16 ) ;
         TabStop = TRUE ;
@@ -1208,6 +1277,7 @@ TabPage RID_SVXPAGE_COLOR
     };
     Edit EDT_NAME
     {
+        HelpID = "cui:Edit:RID_SVXPAGE_COLOR:EDT_NAME";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 42 , 14  ) ;
         Size = MAP_APPFONT ( 76 , 12 ) ;
@@ -1221,6 +1291,7 @@ TabPage RID_SVXPAGE_COLOR
     };
     ListBox LB_COLOR
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_COLOR:LB_COLOR";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 42 , 30  ) ;
         Size = MAP_APPFONT ( 76 , 100 ) ;
@@ -1258,6 +1329,7 @@ TabPage RID_SVXPAGE_COLOR
     };
     ListBox LB_COLORMODEL
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_COLOR:LB_COLORMODEL";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 157 , 71 ) ;
         Size = MAP_APPFONT ( 34 , 12 ) ;
@@ -1277,6 +1349,7 @@ TabPage RID_SVXPAGE_COLOR
     };
     MetricField MTR_FLD_1
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_COLOR:MTR_FLD_1";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 157 , 87 ) ;
         Size = MAP_APPFONT ( 30 , 12 ) ;
@@ -1296,6 +1369,7 @@ TabPage RID_SVXPAGE_COLOR
     };
     MetricField MTR_FLD_2
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_COLOR:MTR_FLD_2";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 157 , 103 ) ;
         Size = MAP_APPFONT ( 30 , 12 ) ;
@@ -1315,6 +1389,7 @@ TabPage RID_SVXPAGE_COLOR
     };
     MetricField MTR_FLD_3
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_COLOR:MTR_FLD_3";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 157 , 119 ) ;
         Size = MAP_APPFONT ( 30 , 12 ) ;
@@ -1334,6 +1409,7 @@ TabPage RID_SVXPAGE_COLOR
     };
     MetricField MTR_FLD_4
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_COLOR:MTR_FLD_4";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 157 , 135 ) ;
         Size = MAP_APPFONT ( 30 , 12 ) ;
@@ -1347,6 +1423,7 @@ TabPage RID_SVXPAGE_COLOR
     };
     PushButton BTN_ADD
     {
+        HelpID = "cui:PushButton:RID_SVXPAGE_COLOR:BTN_ADD";
         Pos = MAP_APPFONT ( 197 , 14 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Add" ;
@@ -1354,6 +1431,7 @@ TabPage RID_SVXPAGE_COLOR
     };
     PushButton BTN_WORK_ON
     {
+        HelpID = "cui:PushButton:RID_SVXPAGE_COLOR:BTN_WORK_ON";
         Pos = MAP_APPFONT ( 197 , 50 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Edit..." ;
@@ -1361,6 +1439,7 @@ TabPage RID_SVXPAGE_COLOR
     };
     PushButton BTN_DELETE
     {
+        HelpID = "cui:PushButton:RID_SVXPAGE_COLOR:BTN_DELETE";
         Pos = MAP_APPFONT ( 197 , 68  ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Delete..." ;
@@ -1368,6 +1447,7 @@ TabPage RID_SVXPAGE_COLOR
     };
     PushButton BTN_MODIFY
     {
+        HelpID = "cui:PushButton:RID_SVXPAGE_COLOR:BTN_MODIFY";
         Pos = MAP_APPFONT ( 197, 32  ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Modify" ;
@@ -1375,6 +1455,7 @@ TabPage RID_SVXPAGE_COLOR
     };
     ImageButton BTN_LOAD
     {
+        HelpID = "cui:ImageButton:RID_SVXPAGE_COLOR:BTN_LOAD";
         Pos = MAP_APPFONT ( 197 , 104  ) ;
         Size = MAP_APPFONT ( 16 , 16 ) ;
         TabStop = TRUE ;
@@ -1390,6 +1471,7 @@ TabPage RID_SVXPAGE_COLOR
     };
     ImageButton BTN_SAVE
     {
+        HelpID = "cui:ImageButton:RID_SVXPAGE_COLOR:BTN_SAVE";
         Pos = MAP_APPFONT ( 197 , 124  ) ;
         Size = MAP_APPFONT ( 16 , 16 ) ;
         TabStop = TRUE ;
@@ -1463,4 +1545,13 @@ TabDialog RID_SVXDLG_AREA
     };
 };
 
- // ********************************************************************** EOF
+String STR_LB_HATCHINGSTYLE
+{
+    Text [ en-US ] = "Hatching Style" ;
+};
+
+String STR_CUI_COLORMODEL
+{
+    Text [ en-US ] = "Color Mode" ;
+};
+

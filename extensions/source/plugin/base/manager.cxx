@@ -81,9 +81,9 @@ const Sequence< ::rtl::OUString >& PluginManager::getAdditionalSearchPaths()
         String aPluginPath( aOptions.GetPluginPath() );
         if( aPluginPath.Len() )
         {
-            USHORT nPaths = aPluginPath.GetTokenCount( ';' );
+            sal_uInt16 nPaths = aPluginPath.GetTokenCount( ';' );
             aPaths.realloc( nPaths );
-            for( USHORT i = 0; i < nPaths; i++ )
+            for( sal_uInt16 i = 0; i < nPaths; i++ )
                 aPaths.getArray()[i] = aPluginPath.GetToken( i, ';' );
         }
     }
@@ -181,7 +181,7 @@ Sequence<com::sun::star::plugin::PluginDescription> XPluginManager_Impl::getPlug
     return aRet;
 }
 
-Reference< ::com::sun::star::plugin::XPlugin > XPluginManager_Impl::createPlugin( const Reference< ::com::sun::star::plugin::XPluginContext >& acontext, INT16 mode, const Sequence< ::rtl::OUString >& argn, const Sequence< ::rtl::OUString >& argv, const ::com::sun::star::plugin::PluginDescription& plugintype)
+Reference< ::com::sun::star::plugin::XPlugin > XPluginManager_Impl::createPlugin( const Reference< ::com::sun::star::plugin::XPluginContext >& acontext, sal_Int16 mode, const Sequence< ::rtl::OUString >& argn, const Sequence< ::rtl::OUString >& argv, const ::com::sun::star::plugin::PluginDescription& plugintype)
     throw( RuntimeException,::com::sun::star::plugin::PluginException )
 {
     XPlugin_Impl* pImpl = new XPlugin_Impl( m_xSMgr );

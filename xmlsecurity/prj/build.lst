@@ -1,4 +1,4 @@
-xs	xmlsecurity	:    l10n xmloff unotools offapi unoil svx MOZ:moz LIBXMLSEC:libxmlsec NSS:nss NULL
+xs	xmlsecurity	:    L10N:l10n xmloff unotools offapi unoil svx MOZ:moz LIBXMLSEC:libxmlsec NSS:nss LIBXSLT:libxslt NULL
 xs	xmlsecurity                                                        usr1	 -	all	xs_mkout	NULL
 xs	xmlsecurity\inc				                                       nmake -	all	xs_inc NULL
 xs	xmlsecurity\source\framework                                       nmake -	all	xs_fw xs_inc NULL

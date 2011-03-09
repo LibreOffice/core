@@ -80,7 +80,7 @@ EXCEPTIONSFILES= \
 SLOFILES =  $(EXCEPTIONSFILES)
 
 SRS1NAME=$(TARGET)
-SRC1FILES=	basidesh.src macrodlg.src moptions.src moduldlg.src objdlg.src brkdlg.src tbxctl.src basicprint.src
+SRC1FILES=	basidesh.src macrodlg.src moptions.src moduldlg.src objdlg.src brkdlg.src basicprint.src
 
 .INCLUDE :  target.mk
 

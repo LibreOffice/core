@@ -24,86 +24,90 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-package complex;
+package complex.bean;
 
 
-import complexlib.ComplexTestCase;
-import java.io.*;
-import java.awt.Rectangle;
-import java.awt.Insets;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.image.BufferedImage;
-import java.awt.image.PixelGrabber;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
+// import complexlib.ComplexTestCase;
+import com.sun.star.lang.XMultiServiceFactory;
 import java.awt.event.*;
-import java.awt.Frame;
-import java.awt.Toolkit;
-import java.awt.Robot;
 import java.awt.event.KeyEvent;
-import java.awt.Button;
-import javax.imageio.ImageIO;
-import javax.imageio.stream.FileImageOutputStream;
 import com.sun.star.comp.beans.OOoBean;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.text.XTextDocument;
 
 import java.awt.*;
 
-public class OOoBeanTest extends ComplexTestCase
+// import org.junit.After;
+import org.junit.AfterClass;
+// import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.openoffice.test.OfficeConnection;
+import static org.junit.Assert.*;
+
+class PrivateLocalOfficeConnection extends com.sun.star.comp.beans.LocalOfficeConnection
+{
+    public PrivateLocalOfficeConnection(com.sun.star.uno.XComponentContext xContext)
+    {
+        super(xContext);
+    }
+}
+
+public class OOoBeanTest
 {
 
-    public String[] getTestMethodNames()
-    {
-        // TODO think about trigger of sub-tests from outside
-        return new String[]
-        {
-              "test1",
-              "test2",
-              "test3",
-              "test4",
-              "test5",
-              "test6",
-              "test6a",
-              "test7",
-              "test8"
-        };
-    }
+//    public String[] getTestMethodNames()
+//    {
+//        // TODO think about trigger of sub-tests from outside
+//        return new String[]
+//        {
+//              "test1",
+//              "test2",
+//              "test3",
+//              "test4",
+//              "test5",
+//              "test6",
+//              "test6a",
+//              "test7",
+//              "test8"
+//        };
+//    }
 
     /** For X-Windows we need to prolong the time between painting windows. Because
         it takes longer than on Windows.
     */
-    int getSleepTime(int time)
+    private int getSleepTime(int time)
     {
         int ret = time;
         if (isWindows() == false)
+        {
             return time * 5;
+        }
         return time;
     }
 
     /** If it cannot be determined if we run on Windows then we assume
         that we do not.
     */
-    boolean isWindows()
+    private boolean isWindows()
     {
         boolean ret = false;
         String os = System.getProperty("os.name");
         if (os != null)
         {
             os = os.trim();
-            if (os.indexOf("Win") == 0)
+            if (os.toLowerCase().indexOf("win") == 0)
+            {
                 ret = true;
+            }
         }
         return ret;
     }
 
-    public String getText(OOoBean bean) throws Exception
+    private String getText(OOoBean bean) throws Exception
     {
         com.sun.star.frame.XModel model = (com.sun.star.frame.XModel)bean.getDocument();
         com.sun.star.text.XTextDocument myDoc =
-            (XTextDocument) UnoRuntime.queryInterface(com.sun.star.text.XTextDocument.class,
-                                                      model);
+            UnoRuntime.queryInterface(com.sun.star.text.XTextDocument.class, model);
         com.sun.star.text.XText xText = myDoc.getText();
         return xText.getString();
     }
@@ -112,34 +116,40 @@ public class OOoBeanTest extends ComplexTestCase
      *  2.Add OOoBean (no document loaded yet)
      *  3.Show frame
      *  4.Load document
+     * @throws Exception
      */
-    public void test1() throws Exception
+    @Test public void test1() throws Exception
     {
         WriterFrame f = null;
         try
         {
-            f = new WriterFrame(100 ,100, 500 ,400, false);
+            f = new WriterFrame(100 ,100, 500 ,400, false, connection.getComponentContext());
             f.setText("OOoBean test.");
             Thread.sleep(1000);
         }
         finally
         {
             if (f != null)
+            {
                 f.dispose();
+            }
         }
     }
 
     /** Sizing, painting
+     * @throws Exception
      */
-    public void test2() throws Exception
+    @Test public void test2() throws Exception
     {
         WriterFrame f = null;
         ScreenComparer capturer = null;
         try
         {
-            f = new WriterFrame(100, 100, 500,500, false);
+            f = new WriterFrame(100, 100, 500,500, false, connection.getComponentContext());
             if (f.checkUnoFramePosition() == false)
-                failed("Sizing error: Client are of Java frame does not match the UNO window.", true);
+            {
+                fail("Sizing error: Client are of Java frame does not match the UNO window.");
+            }
             capturer = new ScreenComparer(100, 100, 500, 500);
 
             //Minimize Window and back
@@ -153,15 +163,19 @@ public class OOoBeanTest extends ComplexTestCase
                 f.setExtendedState(Frame.ICONIFIED);
                 Thread.sleep(getSleepTime(200));
                 if (f.checkUnoFramePosition() == false)
-                    failed("Sizing error: Frame was iconified.", true);
+                {
+                    fail("Sizing error: Frame was iconified.");
+                }
                 f.setExtendedState(Frame.NORMAL);
                 Thread.sleep(getSleepTime(200));
                 if (f.checkUnoFramePosition() == false)
-                    failed("Sizing error: Frame size set back to normal after it was iconified.", true);
+                {
+                    fail("Sizing error: Frame size set back to normal after it was iconified.");
+                }
                 capturer.grabTwo(f.getClientArea());
                 if (capturer.compare() == false)
                 {
-                    failed("Painting error: Minimize (iconify) frame and back to normal size.", true);
+                    fail("Painting error: Minimize (iconify) frame and back to normal size.");
                     capturer.writeImages();
                 }
             }
@@ -174,15 +188,19 @@ public class OOoBeanTest extends ComplexTestCase
                 f.setExtendedState(Frame.MAXIMIZED_BOTH);
                 Thread.sleep(getSleepTime(200));
                 if (f.checkUnoFramePosition() == false)
-                    failed("Sizing error: Frame maximized.", true);
+                {
+                    fail("Sizing error: Frame maximized.");
+                }
                 f.setExtendedState(Frame.NORMAL);
                 Thread.sleep(getSleepTime(200));
                 if (f.checkUnoFramePosition() == false)
-                    failed("Sizing error: Frame set from maximized to normal.", true);
+                {
+                    fail("Sizing error: Frame set from maximized to normal.");
+                }
                 capturer.grabTwo(f.getClientArea());
                 if (capturer.compare() == false)
                 {
-                    failed("Painting error: Maximize frame and back to normal size", true);
+                    fail("Painting error: Maximize frame and back to normal size");
                     capturer.writeImages();
                 }
             }
@@ -194,12 +212,14 @@ public class OOoBeanTest extends ComplexTestCase
             f.setBounds(0, 0, oldPosition.width, oldPosition.height);
             Thread.sleep(getSleepTime(200));
             if (f.checkUnoFramePosition() == false)
-                failed("Sizing error: Frame moved.", true);
+            {
+                fail("Sizing error: Frame moved.");
+            }
 
             capturer.grabTwo(f.getClientArea());
             if (capturer.compare() == false)
             {
-                failed("Painting error: Move frame to a different position.", true);
+                fail("Painting error: Move frame to a different position.");
                 capturer.writeImages();
             }
 
@@ -217,7 +237,7 @@ public class OOoBeanTest extends ComplexTestCase
                 capturer.grabTwo(f.getClientArea());
                 if (capturer.compare() == false)
                 {
-                    failed("Painting error: Move frame to a different position.", true);
+                    fail("Painting error: Move frame to a different position.");
                     capturer.writeImages();
                 }
                 curY+= 50;
@@ -242,12 +262,14 @@ public class OOoBeanTest extends ComplexTestCase
                 f.toFront();
                 Thread.sleep(getSleepTime(200));
                 if (f.checkUnoFramePosition() == false)
-                    failed("Sizing error: Frame moved from back to front.", true);
+                {
+                    fail("Sizing error: Frame moved from back to front.");
+                }
 
                 capturer.grabTwo(f.getClientArea());
                 if (capturer.compare() == false)
                 {
-                    failed("Painting error: Move frame to back and to front.", true);
+                    fail("Painting error: Move frame to back and to front.");
                     capturer.writeImages();
                 }
             }
@@ -257,7 +279,9 @@ public class OOoBeanTest extends ComplexTestCase
         finally
         {
             if (f != null)
+            {
                 f.dispose();
+            }
         }
     }
 
@@ -267,33 +291,39 @@ public class OOoBeanTest extends ComplexTestCase
        3. Create Frame (do not show yet)
        4. Add OOoBean to Frame
        5. Show Frame
-    */
-    public void test3() throws Exception
+     * @throws Exception
+     */
+    @Test public void test3() throws Exception
     {
         WriterFrame f = null;
         try
         {
-            f = new WriterFrame(100, 100, 500, 300, true);
+            f = new WriterFrame(100, 100, 500, 300, true, connection.getComponentContext());
             if (f.checkUnoFramePosition() == false)
-                failed("Sizing error.", true);
+            {
+                fail("Sizing error.");
+            }
 
         }
         finally
         {
             if (f != null)
+            {
                 f.dispose();
+            }
         }
     }
 
     /** Test repeated OOoBean.aquireSystemWindow and OOoBean.releaseSystemWindow
      * calls.
+     * @throws Exception
      */
-    public void test4() throws Exception
+    @Test public void test4() throws Exception
     {
         WriterFrame f = null;
         try
         {
-            f = new WriterFrame(100, 100, 500, 300, false);
+            f = new WriterFrame(100, 100, 500, 300, false, connection.getComponentContext());
             OOoBean b = f.getBean();
             for (int i = 0; i < 100; i++)
             {
@@ -301,26 +331,33 @@ public class OOoBeanTest extends ComplexTestCase
                 b.aquireSystemWindow();
             }
             if (f.checkUnoFramePosition() == false)
-                failed("Sizing error.", true);
+            {
+                fail("Sizing error.");
+            }
         }
         finally
         {
             if (f != null)
+            {
                 f.dispose();
+            }
             if (isWindows() == false)
+            {
                 Thread.sleep(10000);
+            }
         }
     }
 
     /** Adding and removing the bean to a Java frame multiple times.
      * Test painting and sizing.
+     * @throws Exception
      */
-    public void test5() throws Exception
+    @Test public void test5() throws Exception
     {
         WriterFrame f = null;
         try
         {
-            f = new WriterFrame(100, 100, 500, 400, false);
+            f = new WriterFrame(100, 100, 500, 400, false, connection.getComponentContext());
             f.goToStart();
             f.pageDown();
             Thread.sleep(1000);
@@ -340,21 +377,27 @@ public class OOoBeanTest extends ComplexTestCase
 
             if (capturer.compare() == false)
             {
-                failed("Painting error: adding and removing OOoBean " +
-                       "repeatedly to java.lang.Frame.", true);
+                fail("Painting error: adding and removing OOoBean " +
+                       "repeatedly to java.lang.Frame.");
                 capturer.writeImages();
             }
 
             if (f.checkUnoFramePosition() == false)
-                failed("Sizing error.", true);
+            {
+                fail("Sizing error.");
+            }
 
         }
         finally
         {
             if (f != null)
+            {
                 f.dispose();
+            }
             if (isWindows() == false)
+            {
                 Thread.sleep(10000);
+            }
         }
     }
 
@@ -363,12 +406,13 @@ public class OOoBeanTest extends ComplexTestCase
      * it should still be possible to enter text in the window. This does not
      * work all the time on Windows. This is probably a timing problem. When using
      * Thread.sleep (position #1) then it should work.
+     * @throws Exception
      */
-    public void test6() throws Exception
+    @Test public void test6() throws Exception
     {
         for (int j = 0; j < 10; j++)
         {
-            final OOoBean bean = new OOoBean();
+            final OOoBean bean = new OOoBean(new PrivateLocalOfficeConnection(connection.getComponentContext()));
             java.awt.Frame frame = null;
             bean.setOOoCallTimeOut(10000);
             try {
@@ -395,7 +439,9 @@ public class OOoBeanTest extends ComplexTestCase
                 }
 
                 if (isWindows() == false)
+                {
                     Thread.sleep(5000);
+                }
 
                 Robot roby = new Robot();
                 roby.keyPress(KeyEvent.VK_H);
@@ -405,10 +451,10 @@ public class OOoBeanTest extends ComplexTestCase
                 String s = getText(bean);
                 if ( ! s.equals(buf.toString()))
                 {
-                    failed("Focus error: After removing and adding the bean, the" +
+                    fail("Focus error: After removing and adding the bean, the" +
                            "office window does not receive keyboard input.\n" +
                            "Try typing in the window, you've got 30s!!! This " +
-                           "test may not work with Linux/Solaris", true);
+                           "test may not work with Linux/Solaris");
                     Thread.sleep(30000);
                     break;
                 }
@@ -428,12 +474,13 @@ public class OOoBeanTest extends ComplexTestCase
      * different. The bean is added and removed from withing the event dispatch
      * thread. Using Thread.sleep at various points (#1, #2, #3) seems to workaround
      * the problem.
+     * @throws Exception
      */
-    public void test6a() throws Exception
+    @Test public void test6a() throws Exception
     {
         for (int j = 0; j < 50; j++)
         {
-            final OOoBean bean = new OOoBean();
+            final OOoBean bean = new OOoBean(new PrivateLocalOfficeConnection(connection.getComponentContext()));
             final java.awt.Frame frame = new Frame("Openoffice.org");
             bean.setOOoCallTimeOut(10000);
 
@@ -486,7 +533,9 @@ public class OOoBeanTest extends ComplexTestCase
                 }
 
                 if (isWindows() == false)
+                {
                     Thread.sleep(5000);
+                }
 
                 Robot roby = new Robot();
                 roby.mouseMove(300, 200);
@@ -521,10 +570,10 @@ public class OOoBeanTest extends ComplexTestCase
 
                     if ( ! sH.equals(s2))
                     {
-                        failed("Focus error: After removing and adding the bean, the" +
+                        fail("Focus error: After removing and adding the bean, the" +
                                "office window does not receive keyboard input.\n" +
                                "Try typing in the window, you've got 30s!!! This " +
-                               "test may not work with Linux/Solaris", true);
+                               "test may not work with Linux/Solaris");
                         System.out.println("j: " + j + "   i: " + i);
                         Thread.sleep(30000);
                         break;
@@ -543,13 +592,14 @@ public class OOoBeanTest extends ComplexTestCase
     }
 
     /** Repeatedly loading a document in one and the same OOoBean instance.
+     * @throws Exception
      */
-    public void test7() throws Exception
+    @Test public void test7() throws Exception
     {
         WriterFrame f = null;
         try
         {
-            f = new WriterFrame(100 ,100, 500 ,400, false);
+            f = new WriterFrame(100 ,100, 500 ,400, false, connection.getComponentContext());
             String text = "OOoBean test.";
 
             for (int i = 0; i < 10; i++)
@@ -561,28 +611,34 @@ public class OOoBeanTest extends ComplexTestCase
                 f.validate();
 
                 if (text.equals(f.getText()) == false)
-                    failed("Repeated loading of a document failed.");
+                {
+                    fail("Repeated loading of a document failed.");
+                }
                 Thread.sleep(1000);
             }
         }
         finally
         {
             if (f != null)
+            {
                 f.dispose();
+            }
         }
     }
 
     /** Using multiple instances of OOoBean at the same time
+     * @throws Exception
      */
-    public void test8() throws Exception
+
+    @Test public void test8() throws Exception
     {
-        OOoBean bean1 = new OOoBean();
+        OOoBean bean1 = new OOoBean(new PrivateLocalOfficeConnection(connection.getComponentContext()));
         BeanPanel bp1 = new BeanPanel(bean1);
-        OOoBean bean2 = new OOoBean();
+        OOoBean bean2 = new OOoBean(new PrivateLocalOfficeConnection(connection.getComponentContext()));
         BeanPanel bp2 = new BeanPanel(bean2);
-        OOoBean bean3 = new OOoBean();
+        OOoBean bean3 = new OOoBean(new PrivateLocalOfficeConnection(connection.getComponentContext()));
         BeanPanel bp3 = new BeanPanel(bean3);
-        OOoBean bean4 = new OOoBean();
+        OOoBean bean4 = new OOoBean(new PrivateLocalOfficeConnection(connection.getComponentContext()));
         BeanPanel bp4 = new BeanPanel(bean4);
 
         try
@@ -650,6 +706,31 @@ public class OOoBeanTest extends ComplexTestCase
             return new Dimension(200, 200);
         }
     }
+
+
+
+
+    private XMultiServiceFactory getMSF()
+    {
+        final XMultiServiceFactory xMSF1 = UnoRuntime.queryInterface(XMultiServiceFactory.class, connection.getComponentContext().getServiceManager());
+        return xMSF1;
+    }
+
+    // setup and close connections
+    @BeforeClass public static void setUpConnection() throws Exception {
+        System.out.println("setUpConnection()");
+        connection.setUp();
+    }
+
+    @AfterClass public static void tearDownConnection()
+        throws InterruptedException, com.sun.star.uno.Exception
+    {
+        System.out.println("tearDownConnection()");
+        connection.tearDown();
+    }
+
+    private static final OfficeConnection connection = new OfficeConnection();
+
 
 }
 

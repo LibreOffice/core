@@ -151,18 +151,6 @@ public:
 
     // returns the location (upper-left corner) of the group of action buttons
     inline Point    GetActionButtonsLocation( ) const { return aIgnoreBtn.GetPosPixel(); }
-
-    // updates the help texts for the "change" and "change all" buttons according to the currently
-    // entered texts
-            void UpdateChangesHelp( const String& _rNewText );
-    inline  void UpdateChangesHelp( ) { UpdateChangesHelp( GetWordInputControl().GetText() ); }
-
-    // updates the help texts for the "ignore" and "always ignore" buttons according to the currently
-    // entered texts
-            void UpdateIgnoreHelp( );
-
-    String          GetNewEditWord();
-    void            SetNewEditWord( const String& _rNew );
 };
 
 

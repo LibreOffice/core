@@ -99,7 +99,7 @@ namespace frm
             @precond
                 our mutex is locked
         */
-        void    impl_ensureEnabledState_nothrow() const;
+        void    impl_ensureEnabledState_nothrow_nolck();
     };
 
     //--------------------------------------------------------------------
@@ -130,16 +130,24 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    void WindowStateGuard_Impl::impl_ensureEnabledState_nothrow() const
+    void WindowStateGuard_Impl::impl_ensureEnabledState_nothrow_nolck()
     {
         try
         {
-            sal_Bool bEnabled = m_xWindow->isEnabled();
+            Reference< XWindow2 > xWindow;
+            sal_Bool bEnabled = sal_False;
             sal_Bool bShouldBeEnabled = sal_False;
-            OSL_VERIFY( m_xModelProps->getPropertyValue( PROPERTY_ENABLED ) >>= bShouldBeEnabled );
+            {
+                ::osl::MutexGuard aGuard( m_aMutex );
+                if ( !m_xWindow.is() || !m_xModelProps.is() )
+                    return;
+                xWindow = m_xWindow;
+                bEnabled = xWindow->isEnabled();
+                OSL_VERIFY( m_xModelProps->getPropertyValue( PROPERTY_ENABLED ) >>= bShouldBeEnabled );
+            }
 
-            if ( !bShouldBeEnabled && bEnabled )
-                m_xWindow->setEnable( sal_False );
+            if ( !bShouldBeEnabled && bEnabled && xWindow.is() )
+                xWindow->setEnable( sal_False );
         }
         catch( const Exception& )
         {
@@ -150,15 +158,13 @@ namespace frm
     //--------------------------------------------------------------------
     void SAL_CALL WindowStateGuard_Impl::windowEnabled( const EventObject& /*e*/ ) throw (RuntimeException)
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
-        impl_ensureEnabledState_nothrow();
+        impl_ensureEnabledState_nothrow_nolck();
     }
 
     //--------------------------------------------------------------------
     void SAL_CALL WindowStateGuard_Impl::windowDisabled( const EventObject& /*e*/ ) throw (RuntimeException)
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
-        impl_ensureEnabledState_nothrow();
+        impl_ensureEnabledState_nothrow_nolck();
     }
 
     //--------------------------------------------------------------------

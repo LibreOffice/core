@@ -75,10 +75,7 @@ using namespace ::com::sun::star;
 #define FIXTODOUBLE( nFix )     ((double)nFix.Whole+(double)nFix.Frac/65536.)
 #define FIXTOLONG( nFix )       ((long)floor(FIXTODOUBLE(nFix)+0.5))
 
-#if defined WIN
-#define TWAIN_LIBNAME           "TWAIN.DLL"
-#define TWAIN_FUNCNAME          "DSM_Entry"
-#elif defined WNT
+#if defined WNT
 #define TWAIN_LIBNAME           "TWAIN_32.DLL"
 #define TWAIN_FUNCNAME          "DSM_Entry"
 #endif
@@ -1005,7 +1002,7 @@ SEQ( ScannerContext ) SAL_CALL ScannerManager::getAvailableScanners() throw()
 
 // -----------------------------------------------------------------------------
 
-BOOL SAL_CALL ScannerManager::configureScanner( ScannerContext& rContext )
+sal_Bool SAL_CALL ScannerManager::configureScanner( ScannerContext& rContext )
     throw( ScannerException )
 {
     osl::MutexGuard aGuard( maProtector );

@@ -36,7 +36,7 @@
 class BibResId : public ResId
 {
  public:
-    BibResId( USHORT nId );
+    BibResId( sal_uInt16 nId );
 };
 
 

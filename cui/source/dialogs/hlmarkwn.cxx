@@ -60,9 +60,9 @@ using namespace ::rtl;
 struct TargetData
 {
     OUString        aUStrLinkname;
-    BOOL        bIsTarget;
+    sal_Bool        bIsTarget;
 
-    TargetData ( OUString aUStrLName, BOOL bTarget )
+    TargetData ( OUString aUStrLName, sal_Bool bTarget )
         :   bIsTarget ( bTarget )
     {
         if ( bIsTarget )
@@ -130,8 +130,8 @@ SvxHlinkDlgMarkWnd::SvxHlinkDlgMarkWnd( SvxHyperlinkTabPageBase *pParent )
     maBtApply( this, CUI_RES (BT_APPLY) ),
     maBtClose( this, CUI_RES (BT_CLOSE) ),
     maLbTree ( this, CUI_RES (TLB_MARK) ),
-    mbUserMoved ( FALSE ),
-    mbFirst     ( TRUE ),
+    mbUserMoved ( sal_False ),
+    mbFirst     ( sal_True ),
     mpParent    ( pParent ),
     mnError     ( LERR_NOERROR )
 {
@@ -142,9 +142,12 @@ SvxHlinkDlgMarkWnd::SvxHlinkDlgMarkWnd( SvxHyperlinkTabPageBase *pParent )
     maLbTree.SetDoubleClickHdl  ( LINK ( this, SvxHlinkDlgMarkWnd, ClickApplyHdl_Impl ) );
 
     // Tree-ListBox mit Linien versehen
-    maLbTree.SetWindowBits( WinBits( WB_TABSTOP | WB_BORDER | WB_HASLINES |
+    maLbTree.SetStyle( maLbTree.GetStyle() | WB_TABSTOP | WB_BORDER | WB_HASLINES |
                             WB_HASBUTTONS |  //WB_HASLINESATROOT |
-                            WB_HSCROLL | WB_HASBUTTONSATROOT ) );
+                            WB_HSCROLL | WB_HASBUTTONSATROOT );
+
+    maLbTree.SetAccessibleName(String(CUI_RES(STR_MARK_TREE)));
+
 }
 
 SvxHlinkDlgMarkWnd::~SvxHlinkDlgMarkWnd()
@@ -158,9 +161,9 @@ SvxHlinkDlgMarkWnd::~SvxHlinkDlgMarkWnd()
 |*
 |************************************************************************/
 
-USHORT SvxHlinkDlgMarkWnd::SetError( USHORT nError)
+sal_uInt16 SvxHlinkDlgMarkWnd::SetError( sal_uInt16 nError)
 {
-    USHORT nOldError = mnError;
+    sal_uInt16 nOldError = mnError;
     mnError = nError;
 
     if( mnError != LERR_NOERROR )
@@ -177,11 +180,11 @@ USHORT SvxHlinkDlgMarkWnd::SetError( USHORT nError)
 |*
 |************************************************************************/
 
-BOOL SvxHlinkDlgMarkWnd::MoveTo ( Point aNewPos )
+sal_Bool SvxHlinkDlgMarkWnd::MoveTo ( Point aNewPos )
 {
     if ( !mbUserMoved )
     {
-        BOOL bOldStatus = mbUserMoved;
+        sal_Bool bOldStatus = mbUserMoved;
         SetPosPixel ( aNewPos );
         mbUserMoved = bOldStatus;
     }
@@ -194,12 +197,12 @@ void SvxHlinkDlgMarkWnd::Move ()
     Window::Move();
 
     if ( IsReallyVisible() )
-        mbUserMoved = TRUE;
+        mbUserMoved = sal_True;
 }
 
-BOOL SvxHlinkDlgMarkWnd::ConnectToDialog( BOOL bDoit )
+sal_Bool SvxHlinkDlgMarkWnd::ConnectToDialog( sal_Bool bDoit )
 {
-    BOOL bOldStatus = mbUserMoved;
+    sal_Bool bOldStatus = mbUserMoved;
 
     mbUserMoved = !bDoit;
 
@@ -246,7 +249,7 @@ void SvxHlinkDlgMarkWnd::RefreshTree ( String aStrURL )
 |*
 |************************************************************************/
 
-BOOL SvxHlinkDlgMarkWnd::RefreshFromDoc( OUString aURL )
+sal_Bool SvxHlinkDlgMarkWnd::RefreshFromDoc( OUString aURL )
 {
     mnError = LERR_NOERROR;
 
@@ -269,7 +272,7 @@ BOOL SvxHlinkDlgMarkWnd::RefreshFromDoc( OUString aURL )
                     {
                         uno::Sequence< beans::PropertyValue > aArg(1);
                         aArg.getArray()[0].Name = OUString(RTL_CONSTASCII_USTRINGPARAM( "Hidden" ));
-                        aArg.getArray()[0].Value <<= (sal_Bool) TRUE;
+                        aArg.getArray()[0].Value <<= (sal_Bool) sal_True;
                         xComp = xLoader->loadComponentFromURL( aURL, OUString(RTL_CONSTASCII_USTRINGPARAM( "_blank" )), 0, aArg );
                     }
                     catch( const io::IOException& )
@@ -322,19 +325,19 @@ int SvxHlinkDlgMarkWnd::FillTree( uno::Reference< container::XNameAccess > xLink
 {
     int nEntries=0;
     const uno::Sequence< OUString > aNames( xLinks->getElementNames() );
-    const ULONG nLinks = aNames.getLength();
+    const sal_uLong nLinks = aNames.getLength();
     const OUString* pNames = aNames.getConstArray();
 
     Color aMaskColor( COL_LIGHTMAGENTA );
     const OUString aProp_LinkDisplayName( RTL_CONSTASCII_USTRINGPARAM( "LinkDisplayName" ) );
     const OUString aProp_LinkTarget( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.LinkTarget" ) );
     const OUString aProp_LinkDisplayBitmap( RTL_CONSTASCII_USTRINGPARAM( "LinkDisplayBitmap" ) );
-    for( ULONG i = 0; i < nLinks; i++ )
+    for( sal_uLong i = 0; i < nLinks; i++ )
     {
         uno::Any aAny;
         OUString aLink( *pNames++ );
 
-        BOOL bError = FALSE;
+        sal_Bool bError = sal_False;
         try
         {
             aAny = xLinks->getByName( aLink );
@@ -343,7 +346,7 @@ int SvxHlinkDlgMarkWnd::FillTree( uno::Reference< container::XNameAccess > xLink
         {
             // if the name of the target was invalid (like empty headings)
             // no object can be provided
-            bError = TRUE;
+            bError = sal_True;
         }
         if(bError)
             continue;
@@ -362,7 +365,7 @@ int SvxHlinkDlgMarkWnd::FillTree( uno::Reference< container::XNameAccess > xLink
 
                 // is it a target ?
                 uno::Reference< lang::XServiceInfo > xSI( xTarget, uno::UNO_QUERY );
-                BOOL bIsTarget = xSI->supportsService( aProp_LinkTarget );
+                sal_Bool bIsTarget = xSI->supportsService( aProp_LinkTarget );
 
                 // create userdata
                 TargetData *pData = new TargetData ( aLink, bIsTarget );
@@ -380,7 +383,7 @@ int SvxHlinkDlgMarkWnd::FillTree( uno::Reference< container::XNameAccess > xLink
                         pEntry = maLbTree.InsertEntry ( aStrDisplayname,
                                                         aBmp, aBmp,
                                                         pParentEntry,
-                                                        FALSE, LIST_APPEND,
+                                                        sal_False, LIST_APPEND,
                                                         (void*)pData );
                         nEntries++;
                     }
@@ -389,7 +392,7 @@ int SvxHlinkDlgMarkWnd::FillTree( uno::Reference< container::XNameAccess > xLink
                         // insert Displayname into treelist without bitmaps
                         pEntry = maLbTree.InsertEntry ( aStrDisplayname,
                                                         pParentEntry,
-                                                        FALSE, LIST_APPEND,
+                                                        sal_False, LIST_APPEND,
                                                         (void*)pData );
                         nEntries++;
                     }
@@ -399,7 +402,7 @@ int SvxHlinkDlgMarkWnd::FillTree( uno::Reference< container::XNameAccess > xLink
                     // insert Displayname into treelist without bitmaps
                     pEntry = maLbTree.InsertEntry ( aStrDisplayname,
                                                     pParentEntry,
-                                                    FALSE, LIST_APPEND,
+                                                    sal_False, LIST_APPEND,
                                                     (void*)pData );
                     nEntries++;
                 }
@@ -446,14 +449,14 @@ void SvxHlinkDlgMarkWnd::ClearTree()
 
 SvLBoxEntry* SvxHlinkDlgMarkWnd::FindEntry ( String aStrName )
 {
-    BOOL bFound=FALSE;
+    sal_Bool bFound=sal_False;
     SvLBoxEntry* pEntry = maLbTree.First();
 
     while ( pEntry && !bFound )
     {
         TargetData* pUserData = ( TargetData * ) pEntry->GetUserData ();
         if ( aStrName == String( pUserData->aUStrLinkname ) )
-            bFound = TRUE;
+            bFound = sal_True;
         else
             pEntry = maLbTree.Next( pEntry );
     }

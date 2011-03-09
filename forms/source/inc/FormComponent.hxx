@@ -384,13 +384,13 @@ protected:
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rFactory,   // factory to create the aggregate with
         const ::rtl::OUString& _rUnoControlModelTypeName,                       // service name of te model to aggregate
         const ::rtl::OUString& rDefault = ::rtl::OUString(),                    // service name of the default control
-        const sal_Bool _bSetDelegator = sal_True                                // set to FALSE if you want to call setDelegator later (after returning from this ctor)
+        const sal_Bool _bSetDelegator = sal_True                                // set to sal_False if you want to call setDelegator later (after returning from this ctor)
     );
     OControlModel(
         const OControlModel* _pOriginal,                                        // the original object to clone
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rFactory,   // factory to create the aggregate with
         const sal_Bool _bCloneAggregate = sal_True,                             // should the aggregate of the original be cloned, too?
-        const sal_Bool _bSetDelegator = sal_True                                // set to FALSE if you want to call setDelegator later (after returning from this ctor)
+        const sal_Bool _bSetDelegator = sal_True                                // set to sal_False if you want to call setDelegator later (after returning from this ctor)
     );
     virtual ~OControlModel();
 
@@ -711,8 +711,8 @@ protected:
         const ::rtl::OUString& _rUnoControlModelTypeName,   // service name of te model to aggregate
         const ::rtl::OUString& _rDefault,                   // service name of the default control
         const sal_Bool _bCommitable,                        // is the control (model) commitable ?
-        const sal_Bool _bSupportExternalBinding,            // set to TRUE if you want to support XBindableValue
-        const sal_Bool _bSupportsValidation                 // set to TRUE if you want to support XValidatable
+        const sal_Bool _bSupportExternalBinding,            // set to sal_True if you want to support XBindableValue
+        const sal_Bool _bSupportsValidation                 // set to sal_True if you want to support XValidatable
     );
     OBoundControlModel(
         const OBoundControlModel* _pOriginal,               // the original object to clone

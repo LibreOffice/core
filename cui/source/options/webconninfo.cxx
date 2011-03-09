@@ -51,10 +51,10 @@ namespace svx
 PasswordTable::PasswordTable( Window* pParent, const ResId& rResId ) :
     SvxSimpleTable( pParent, rResId )
 {
-    SetWindowBits( GetStyle() | WB_NOINITIALSELECTION );
+    SetStyle( GetStyle() | WB_NOINITIALSELECTION );
 }
 
-void PasswordTable::InsertHeaderItem( USHORT nColumn, const String& rText, HeaderBarItemBits nBits )
+void PasswordTable::InsertHeaderItem( sal_uInt16 nColumn, const String& rText, HeaderBarItemBits nBits )
 {
     GetTheHeaderBar()->InsertItem( nColumn, rText, 0, nBits );
 }
@@ -66,11 +66,11 @@ void PasswordTable::ResetTabs()
 
 void PasswordTable::Resort( bool bForced )
 {
-    USHORT nColumn = GetSelectedCol();
+    sal_uInt16 nColumn = GetSelectedCol();
     if ( 0 == nColumn || bForced ) // only the first column is sorted
     {
         HeaderBarItemBits nBits = GetTheHeaderBar()->GetItemBits(1);
-        BOOL bUp = ( ( nBits & HIB_UPARROW ) == HIB_UPARROW );
+        sal_Bool bUp = ( ( nBits & HIB_UPARROW ) == HIB_UPARROW );
         SvSortMode eMode = SortAscending;
 
         if ( bUp )
@@ -160,8 +160,8 @@ WebConnectionInfoDialog::WebConnectionInfoDialog( Window* pParent ) :
     m_aChangeBtn.SetClickHdl( LINK( this, WebConnectionInfoDialog, ChangePasswordHdl ) );
     m_aPasswordsLB.SetSelectHdl( LINK( this, WebConnectionInfoDialog, EntrySelectedHdl ) );
 
-    m_aRemoveBtn.Enable( FALSE );
-    m_aChangeBtn.Enable( FALSE );
+    m_aRemoveBtn.Enable( sal_False );
+    m_aChangeBtn.Enable( sal_False );
 
     HeaderBarClickedHdl( NULL );
 }
@@ -310,10 +310,8 @@ IMPL_LINK( WebConnectionInfoDialog, ChangePasswordHdl, PushButton*, EMPTYARG )
             ::rtl::OUString aURL = m_aPasswordsLB.GetEntryText( pEntry, 0 );
             ::rtl::OUString aUserName = m_aPasswordsLB.GetEntryText( pEntry, 1 );
 
-            ::comphelper::DocPasswordRequest* pPasswordRequest
-                  = new ::comphelper::DocPasswordRequest(
-                      ::comphelper::DocPasswordRequestType_STANDARD,
-                      task::PasswordRequestMode_PASSWORD_CREATE, aURL );
+            ::comphelper::SimplePasswordRequest* pPasswordRequest
+                  = new ::comphelper::SimplePasswordRequest( task::PasswordRequestMode_PASSWORD_CREATE );
             uno::Reference< task::XInteractionRequest > rRequest( pPasswordRequest );
 
             uno::Reference< task::XInteractionHandler > xInteractionHandler(
@@ -351,12 +349,12 @@ IMPL_LINK( WebConnectionInfoDialog, EntrySelectedHdl, void*, EMPTYARG )
     SvLBoxEntry* pEntry = m_aPasswordsLB.GetCurEntry();
     if ( !pEntry )
     {
-        m_aRemoveBtn.Enable( FALSE );
-        m_aChangeBtn.Enable( FALSE );
+        m_aRemoveBtn.Enable( sal_False );
+        m_aChangeBtn.Enable( sal_False );
     }
     else
     {
-        m_aRemoveBtn.Enable( TRUE );
+        m_aRemoveBtn.Enable( sal_True );
 
         // url container entries (-> use system credentials) have
         // no password

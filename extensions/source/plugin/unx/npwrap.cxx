@@ -233,7 +233,7 @@ static void signal_handler( int nSig )
 
 static gboolean noClosure( gpointer )
 {
-    return TRUE;
+    return sal_True;
 }
 
 // Xt events
@@ -252,7 +252,7 @@ static gboolean checkXtEvent( GSource* )
 static gboolean dispatchXtEvent( GSource*, GSourceFunc, gpointer )
 {
     XtAppProcessEvent( app_context, XtIMAll );
-    return TRUE;
+    return sal_True;
 }
 
 static GSourceFuncs aXtEventFuncs =
@@ -273,7 +273,7 @@ static gboolean pollXtTimerCallback(gpointer)
             break;
         XtAppProcessEvent(app_context, XtIMAll & ~XtIMXEvent);
     }
-    return TRUE;
+    return sal_True;
 }
 
 static gboolean prepareWakeupEvent( GSource*, gint* )
@@ -308,7 +308,7 @@ static gboolean dispatchWakeupEvent( GSource*, GSourceFunc, gpointer )
         pConnector = NULL;
     }
 
-    return TRUE;
+    return sal_True;
 }
 
 static GSourceFuncs aWakeupEventFuncs = {
@@ -418,7 +418,7 @@ int main( int argc, char **argv)
     }
 
     g_source_set_priority( pXTSource, GDK_PRIORITY_EVENTS );
-    g_source_set_can_recurse( pXTSource, TRUE );
+    g_source_set_can_recurse( pXTSource, sal_True );
     g_source_attach( pXTSource, NULL );
     aXtPollDesc.fd = ConnectionNumber( pXtAppDisplay );
     aXtPollDesc.events = G_IO_IN;
@@ -480,7 +480,7 @@ int main( int argc, char **argv)
     do
     {
         #ifdef ENABLE_GTK
-        g_main_context_iteration( NULL, TRUE );
+        g_main_context_iteration( NULL, sal_True );
         #else
         XtAppProcessEvent( app_context, XtIMAll );
         #endif

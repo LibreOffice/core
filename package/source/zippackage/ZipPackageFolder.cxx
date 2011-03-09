@@ -60,7 +60,6 @@ using namespace std;
 using namespace ::com::sun::star;
 
 using rtl::OUString;
-
 namespace { struct lcl_CachedImplId : public rtl::Static< Sequence < sal_Int8 >, lcl_CachedImplId > {}; }
 
 ZipPackageFolder::ZipPackageFolder ( const Reference< XMultiServiceFactory >& xFactory,
@@ -272,11 +271,10 @@ Sequence< OUString > SAL_CALL ZipPackageFolder::getElementNames(  )
 {
     sal_uInt32 i=0, nSize = maContents.size();
     Sequence < OUString > aSequence ( nSize );
-    OUString *pNames = aSequence.getArray();
     for ( ContentHash::const_iterator aIterator = maContents.begin(), aEnd = maContents.end();
           aIterator != aEnd;
           ++i, ++aIterator)
-        pNames[i] = (*aIterator).first;
+        aSequence[i] = (*aIterator).first;
     return aSequence;
 }
 sal_Bool SAL_CALL ZipPackageFolder::hasByName( const OUString& aName )
@@ -359,7 +357,6 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
         const ContentInfo &rInfo = *(*aCI).second;
 
         Sequence < PropertyValue > aPropSet (PKG_SIZE_NOENCR_MNFST);
-        PropertyValue *pValue = aPropSet.getArray();
 
         if ( rInfo.bFolder )
             pFolder = rInfo.pFolder;
@@ -370,12 +367,17 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
         {
             OUString sTempName = rPath + rShortName + OUString( RTL_CONSTASCII_USTRINGPARAM ( "/" ) );
 
-            pValue[PKG_MNFST_MEDIATYPE].Name = sMediaTypeProperty;
-            pValue[PKG_MNFST_MEDIATYPE].Value <<= pFolder->GetMediaType();
-            pValue[PKG_MNFST_VERSION].Name = sVersionProperty;
-            pValue[PKG_MNFST_VERSION].Value <<= pFolder->GetVersion();
-            pValue[PKG_MNFST_FULLPATH].Name = sFullPathProperty;
-            pValue[PKG_MNFST_FULLPATH].Value <<= sTempName;
+            if ( pFolder->GetMediaType().getLength() )
+            {
+                aPropSet[PKG_MNFST_MEDIATYPE].Name = sMediaTypeProperty;
+                aPropSet[PKG_MNFST_MEDIATYPE].Value <<= pFolder->GetMediaType();
+                aPropSet[PKG_MNFST_VERSION].Name = sVersionProperty;
+                aPropSet[PKG_MNFST_VERSION].Value <<= pFolder->GetVersion();
+                aPropSet[PKG_MNFST_FULLPATH].Name = sFullPathProperty;
+                aPropSet[PKG_MNFST_FULLPATH].Value <<= sTempName;
+            }
+            else
+                aPropSet.realloc( 0 );
 
             pFolder->saveContents( sTempName, rManList, rZipOut, rEncryptionKey, rRandomPool);
         }
@@ -396,12 +398,12 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
             sal_Bool bToBeEncrypted = pStream->IsToBeEncrypted() && (bHaveEncryptionKey || pStream->HasOwnKey());
             sal_Bool bToBeCompressed = bToBeEncrypted ? sal_True : pStream->IsToBeCompressed();
 
-            pValue[PKG_MNFST_MEDIATYPE].Name = sMediaTypeProperty;
-            pValue[PKG_MNFST_MEDIATYPE].Value <<= pStream->GetMediaType( );
-            pValue[PKG_MNFST_VERSION].Name = sVersionProperty;
-            pValue[PKG_MNFST_VERSION].Value <<= ::rtl::OUString(); // no version is stored for streams currently
-            pValue[PKG_MNFST_FULLPATH].Name = sFullPathProperty;
-            pValue[PKG_MNFST_FULLPATH].Value <<= pTempEntry->sPath;
+            aPropSet[PKG_MNFST_MEDIATYPE].Name = sMediaTypeProperty;
+            aPropSet[PKG_MNFST_MEDIATYPE].Value <<= pStream->GetMediaType( );
+            aPropSet[PKG_MNFST_VERSION].Name = sVersionProperty;
+            aPropSet[PKG_MNFST_VERSION].Value <<= ::rtl::OUString(); // no version is stored for streams currently
+            aPropSet[PKG_MNFST_FULLPATH].Name = sFullPathProperty;
+            aPropSet[PKG_MNFST_FULLPATH].Value <<= pTempEntry->sPath;
 
 
             OSL_ENSURE( pStream->GetStreamMode() != PACKAGE_STREAM_NOTSET, "Unacceptable ZipPackageStream mode!" );
@@ -523,23 +525,22 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                     // a magic header
                     aPropSet.realloc(PKG_SIZE_ENCR_MNFST);
 
-                    pValue = aPropSet.getArray();
-                    pValue[PKG_MNFST_INIVECTOR].Name = sInitialisationVectorProperty;
-                    pValue[PKG_MNFST_INIVECTOR].Value <<= pStream->getInitialisationVector();
-                    pValue[PKG_MNFST_SALT].Name = sSaltProperty;
-                    pValue[PKG_MNFST_SALT].Value <<= pStream->getSalt();
-                    pValue[PKG_MNFST_ITERATION].Name = sIterationCountProperty;
-                    pValue[PKG_MNFST_ITERATION].Value <<= pStream->getIterationCount ();
+                    aPropSet[PKG_MNFST_INIVECTOR].Name = sInitialisationVectorProperty;
+                    aPropSet[PKG_MNFST_INIVECTOR].Value <<= pStream->getInitialisationVector();
+                    aPropSet[PKG_MNFST_SALT].Name = sSaltProperty;
+                    aPropSet[PKG_MNFST_SALT].Value <<= pStream->getSalt();
+                    aPropSet[PKG_MNFST_ITERATION].Name = sIterationCountProperty;
+                    aPropSet[PKG_MNFST_ITERATION].Value <<= pStream->getIterationCount ();
 
                     // Need to store the uncompressed size in the manifest
                     OSL_ENSURE( nOwnStreamOrigSize >= 0, "The stream size was not correctly initialized!\n" );
-                    pValue[PKG_MNFST_UCOMPSIZE].Name = sSizeProperty;
-                    pValue[PKG_MNFST_UCOMPSIZE].Value <<= nOwnStreamOrigSize;
+                    aPropSet[PKG_MNFST_UCOMPSIZE].Name = sSizeProperty;
+                    aPropSet[PKG_MNFST_UCOMPSIZE].Value <<= nOwnStreamOrigSize;
 
                     if ( bRawStream || bTransportOwnEncrStreamAsRaw )
                     {
-                        pValue[PKG_MNFST_DIGEST].Name = sDigestProperty;
-                        pValue[PKG_MNFST_DIGEST].Value <<= pStream->getDigest();
+                        aPropSet[PKG_MNFST_DIGEST].Name = sDigestProperty;
+                        aPropSet[PKG_MNFST_DIGEST].Value <<= pStream->getDigest();
                     }
                 }
             }
@@ -656,8 +657,8 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
 
                 if ( bToBeEncrypted )
                 {
-                    pValue[PKG_MNFST_DIGEST].Name = sDigestProperty;
-                    pValue[PKG_MNFST_DIGEST].Value <<= pStream->getDigest();
+                    aPropSet[PKG_MNFST_DIGEST].Name = sDigestProperty;
+                    aPropSet[PKG_MNFST_DIGEST].Value <<= pStream->getDigest();
                     pStream->SetIsEncrypted ( sal_True );
                 }
             }
@@ -696,7 +697,8 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
         }
 
         // folder can have a mediatype only in package format
-        if ( m_nFormat == embed::StorageFormats::PACKAGE || ( m_nFormat == embed::StorageFormats::OFOPXML && !rInfo.bFolder ) )
+        if ( aPropSet.getLength()
+          && ( m_nFormat == embed::StorageFormats::PACKAGE || ( m_nFormat == embed::StorageFormats::OFOPXML && !rInfo.bFolder ) ) )
             rManList.push_back( aPropSet );
     }
 

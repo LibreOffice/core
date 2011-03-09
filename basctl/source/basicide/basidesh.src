@@ -31,6 +31,8 @@
 #include <svx/globlmn.hrc>
 #endif
 #include "dlgresid.hrc"
+#include <sfx2/sfxcommands.h>
+#include <svx/svxcommands.h>
 
 #define MASKCOLOR   MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; };
 
@@ -423,13 +425,13 @@ Menu RID_POPUP_TABBAR
                     MenuItem
                     {
                         Identifier = SID_BASICIDE_NEWMODULE ;
-                        HelpId = SID_BASICIDE_NEWMODULE ;
+                        HelpId = CMD_SID_BASICIDE_NEWMODULE ;
                         Text [ en-US ] = "BASIC Module" ;
                     };
                     MenuItem
                     {
                         Identifier = SID_BASICIDE_NEWDIALOG ;
-                        HelpId = SID_BASICIDE_NEWDIALOG ;
+                        HelpId = CMD_SID_BASICIDE_NEWDIALOG ;
                         Text [ en-US ] = "BASIC Dialog" ;
                     };
                 };
@@ -438,19 +440,19 @@ Menu RID_POPUP_TABBAR
         MenuItem
         {
             Identifier = SID_BASICIDE_DELETECURRENT ;
-            HelpId = SID_BASICIDE_DELETECURRENT ;
+            HelpId = CMD_SID_BASICIDE_DELETECURRENT ;
             Text [ en-US ] = "Delete" ;
         };
         MenuItem
         {
             Identifier = SID_BASICIDE_RENAMECURRENT ;
-            HelpId = SID_BASICIDE_RENAMECURRENT ;
+            HelpId = CMD_SID_BASICIDE_RENAMECURRENT ;
             Text [ en-US ] = "Rename" ;
         };
         MenuItem
         {
             Identifier = SID_BASICIDE_HIDECURPAGE ;
-            HelpId = SID_BASICIDE_HIDECURPAGE ;
+            HelpId = CMD_SID_BASICIDE_HIDECURPAGE ;
             Text [ en-US ] = "Hide" ;
         };
         MenuItem
@@ -460,7 +462,7 @@ Menu RID_POPUP_TABBAR
         MenuItem
         {
             Identifier = SID_BASICIDE_MODULEDLG ;
-            HelpId = SID_BASICIDE_MODULEDLG ;
+            HelpId = CMD_SID_BASICIDE_MODULEDLG ;
             Text [ en-US ] = "Modules..." ;
         };
     };
@@ -474,7 +476,7 @@ Menu RID_POPUP_DLGED
         MenuItem
         {
             Identifier = SID_SHOW_PROPERTYBROWSER ;
-            HelpId = SID_SHOW_PROPERTYBROWSER ;
+            HelpId = CMD_SID_SHOW_PROPERTYBROWSER ;
             Text [ en-US ] = "Properties...";
         };
     };

@@ -52,7 +52,7 @@
 
 // static ----------------------------------------------------------------
 
-static USHORT pRanges[] =
+static sal_uInt16 pRanges[] =
 {
     SID_ATTR_POSTIT_AUTHOR,
     SID_ATTR_POSTIT_TEXT,
@@ -63,8 +63,8 @@ static USHORT pRanges[] =
 
 SvxPostItDialog::SvxPostItDialog( Window* pParent,
                                   const SfxItemSet& rCoreSet,
-                                  BOOL bPrevNext,
-                                  BOOL bRedline ) :
+                                  sal_Bool bPrevNext,
+                                  sal_Bool bRedline ) :
 
     SfxModalDialog( pParent, CUI_RES( RID_SVXDLG_POSTIT ) ),
 
@@ -102,8 +102,8 @@ SvxPostItDialog::SvxPostItDialog( Window* pParent,
     aFont.SetWeight( WEIGHT_LIGHT );
     aEditED.SetFont( aFont );
 
-    BOOL bNew = TRUE;
-    USHORT nWhich            = 0;
+    sal_Bool bNew = sal_True;
+    sal_uInt16 nWhich            = 0;
 
     if ( !bPrevNext )
     {
@@ -114,9 +114,9 @@ SvxPostItDialog::SvxPostItDialog( Window* pParent,
     nWhich = rSet.GetPool()->GetWhich( SID_ATTR_POSTIT_AUTHOR );
     String aAuthorStr, aDateStr, aTextStr;
 
-    if ( rSet.GetItemState( nWhich, TRUE ) >= SFX_ITEM_AVAILABLE )
+    if ( rSet.GetItemState( nWhich, sal_True ) >= SFX_ITEM_AVAILABLE )
     {
-        bNew = FALSE;
+        bNew = sal_False;
         const SvxPostItAuthorItem& rAuthor =
             (const SvxPostItAuthorItem&)rSet.Get( nWhich );
         aAuthorStr = rAuthor.GetValue();
@@ -126,7 +126,7 @@ SvxPostItDialog::SvxPostItDialog( Window* pParent,
 
     nWhich = rSet.GetPool()->GetWhich( SID_ATTR_POSTIT_DATE );
 
-    if ( rSet.GetItemState( nWhich, TRUE ) >= SFX_ITEM_AVAILABLE )
+    if ( rSet.GetItemState( nWhich, sal_True ) >= SFX_ITEM_AVAILABLE )
     {
         const SvxPostItDateItem& rDate =
             (const SvxPostItDateItem&)rSet.Get( nWhich );
@@ -140,7 +140,7 @@ SvxPostItDialog::SvxPostItDialog( Window* pParent,
 
     nWhich = rSet.GetPool()->GetWhich( SID_ATTR_POSTIT_TEXT );
 
-    if ( rSet.GetItemState( nWhich, TRUE ) >= SFX_ITEM_AVAILABLE )
+    if ( rSet.GetItemState( nWhich, sal_True ) >= SFX_ITEM_AVAILABLE )
     {
         const SvxPostItTextItem& rText =
             (const SvxPostItTextItem&)rSet.Get( nWhich );
@@ -157,6 +157,10 @@ SvxPostItDialog::SvxPostItDialog( Window* pParent,
         SetText( CUI_RESSTR( STR_NOTIZ_INSERT ) );
 
     FreeResource();
+
+    aEditED.SetAccessibleRelationLabeledBy(&aEditFT);
+    aEditED.SetAccessibleRelationMemberOf(&aPostItFL);
+    aAuthorBtn.SetAccessibleRelationMemberOf(&aPostItFL);
 }
 
 // -----------------------------------------------------------------------
@@ -179,14 +183,14 @@ void SvxPostItDialog::ShowLastAuthor(const String& rAuthor, const String& rDate)
 
 // -----------------------------------------------------------------------
 
-USHORT* SvxPostItDialog::GetRanges()
+sal_uInt16* SvxPostItDialog::GetRanges()
 {
     return pRanges;
 }
 
 // -----------------------------------------------------------------------
 
-void SvxPostItDialog::EnableTravel(BOOL bNext, BOOL bPrev)
+void SvxPostItDialog::EnableTravel(sal_Bool bNext, sal_Bool bPrev)
 {
     aPrevBtn.Enable(bPrev);
     aNextBtn.Enable(bNext);
@@ -228,7 +232,7 @@ IMPL_LINK( SvxPostItDialog, Stamp, Button *, EMPTYARG )
     }
     aStr += aLocaleWrapper.getDate(aDate);
     aStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ", " ) );
-    aStr += aLocaleWrapper.getTime(aTime, FALSE, FALSE);
+    aStr += aLocaleWrapper.getTime(aTime, sal_False, sal_False);
     aStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " ----\n" ) );
 
 

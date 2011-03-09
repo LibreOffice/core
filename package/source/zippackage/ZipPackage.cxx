@@ -1646,7 +1646,7 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
         throw PropertyVetoException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
     else if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("EncryptionKey") ) )
     {
-        if (!( aValue >>= m_aEncryptionKey ) )
+        if (!( aValue >>= m_aEncryptionKey ) || m_aEncryptionKey.getLength() == 0 )
             throw IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 2 );
     }
     else if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("UseManifest") ) )

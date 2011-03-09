@@ -46,6 +46,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
     };
     MetricField ED_LEFTINDENT
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_STD_PARAGRAPH:ED_LEFTINDENT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 135 , 14 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -68,6 +69,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
     };
     MetricField ED_RIGHTINDENT
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_STD_PARAGRAPH:ED_RIGHTINDENT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 135 , 30 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -90,6 +92,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
     };
     MetricField ED_FLINEINDENT
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_STD_PARAGRAPH:ED_FLINEINDENT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 135 , 46 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -107,6 +110,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
     };
     CheckBox CB_AUTO
     {
+        HelpID = "cui:CheckBox:RID_SVXPAGE_STD_PARAGRAPH:CB_AUTO";
         Pos = MAP_APPFONT ( 12 , 61 ) ;
         Size = MAP_APPFONT ( 120 , 10 ) ;
         Hide = TRUE ;
@@ -127,6 +131,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
     };
     MetricField ED_TOPDIST
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_STD_PARAGRAPH:ED_TOPDIST";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 135 , 88 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -149,6 +154,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
     };
     MetricField ED_BOTTOMDIST
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_STD_PARAGRAPH:ED_BOTTOMDIST";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 135 , 104 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -170,6 +176,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
     };
     ListBox LB_LINEDIST
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_STD_PARAGRAPH:LB_LINEDIST";
         Pos = MAP_APPFONT ( 12 , 133 ) ;
         Size = MAP_APPFONT ( 55 , 72 ) ;
         DropDown = TRUE ;
@@ -197,6 +204,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
     };
     MetricField ED_LINEDISTPERCENT
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_STD_PARAGRAPH:ED_LINEDISTPERCENT";
         Disable = TRUE ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 135 , 133 ) ;
@@ -216,6 +224,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
     };
     MetricField ED_LINEDISTMETRIC
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_STD_PARAGRAPH:ED_LINEDISTMETRIC";
         Disable = TRUE ;
         Border = TRUE ;
         Hide = TRUE ;
@@ -245,6 +254,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
     };
     CheckBox CB_REGISTER
     {
+        HelpID = "cui:CheckBox:RID_SVXPAGE_STD_PARAGRAPH:CB_REGISTER";
         Pos = MAP_APPFONT ( 12 , 162 ) ;
         Size = MAP_APPFONT ( 120 , 10 ) ;
         Hide = TRUE ;
@@ -275,6 +285,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
     };
     RadioButton BTN_LEFTALIGN
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_ALIGN_PARAGRAPH:BTN_LEFTALIGN";
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 161 , 10 ) ;
         Text [ en-US ] = "~Left" ;
@@ -282,18 +293,21 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
     };
     RadioButton BTN_RIGHTALIGN
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_ALIGN_PARAGRAPH:BTN_RIGHTALIGN";
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 161 , 10 ) ;
         Text [ en-US ] = "Righ~t" ;
     };
     RadioButton BTN_CENTERALIGN
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_ALIGN_PARAGRAPH:BTN_CENTERALIGN";
         Pos = MAP_APPFONT ( 12 , 42 ) ;
         Size = MAP_APPFONT ( 161 , 10 ) ;
         Text [ en-US ] = "~Center" ;
     };
     RadioButton BTN_JUSTIFYALIGN
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_ALIGN_PARAGRAPH:BTN_JUSTIFYALIGN";
         Pos = MAP_APPFONT ( 12 , 56 ) ;
         Size = MAP_APPFONT ( 161 , 10 ) ;
         Text [ en-US ] = "Justified" ;
@@ -315,6 +329,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
     };
     ListBox LB_LASTLINE
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_ALIGN_PARAGRAPH:LB_LASTLINE";
         Pos = MAP_APPFONT ( 105 , 70 ) ;
         Size = MAP_APPFONT ( 70 , 50 ) ;
         DropDown = TRUE ;
@@ -329,6 +344,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
     };
     CheckBox CB_EXPAND
     {
+        HelpID = "cui:CheckBox:RID_SVXPAGE_ALIGN_PARAGRAPH:CB_EXPAND";
         Pos = MAP_APPFONT ( 20 , 86 ) ;
         Size = MAP_APPFONT ( 153 , 10 ) ;
         Hide = TRUE ;
@@ -336,6 +352,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
     };
     CheckBox CB_SNAP
     {
+        HelpID = "cui:CheckBox:RID_SVXPAGE_ALIGN_PARAGRAPH:CB_SNAP";
         Pos = MAP_APPFONT ( 20 , 100 ) ;
         Size = MAP_APPFONT ( 153 , 10 ) ;
         Hide = TRUE ;
@@ -363,6 +380,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
     };
     ListBox LB_VERTALIGN
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_ALIGN_PARAGRAPH:LB_VERTALIGN";
         Pos = MAP_APPFONT ( 105 , 133 ) ;
         Size = MAP_APPFONT ( 70 , 50 ) ;
         DropDown = TRUE ;
@@ -392,6 +410,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
     };
     ListBox LB_TEXTDIRECTION
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_ALIGN_PARAGRAPH:LB_TEXTDIRECTION";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 105 , 165 ) ;
         Size = MAP_APPFONT ( 146 , 50 ) ;
@@ -408,12 +427,14 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     Size = MAP_APPFONT ( 260 , 185 ) ;
     TriStateBox BTN_HYPHEN
     {
+        HelpID = "cui:TriStateBox:RID_SVXPAGE_EXT_PARAGRAPH:BTN_HYPHEN";
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         Text [ en-US ] = "A~utomatically" ;
     };
     NumericField ED_HYPHENBEFORE
     {
+        HelpID = "cui:NumericField:RID_SVXPAGE_EXT_PARAGRAPH:ED_HYPHENBEFORE";
         Disable = TRUE ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 21 , 26 ) ;
@@ -438,6 +459,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     };
     NumericField ED_HYPHENAFTER
     {
+        HelpID = "cui:NumericField:RID_SVXPAGE_EXT_PARAGRAPH:ED_HYPHENAFTER";
         Disable = TRUE ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 21 , 41 ) ;
@@ -469,6 +491,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     };
     NumericField ED_MAXHYPH
     {
+        HelpID = "cui:NumericField:RID_SVXPAGE_EXT_PARAGRAPH:ED_MAXHYPH";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 21 , 55 ) ;
         Size = MAP_APPFONT ( 24 , 12 ) ;
@@ -501,6 +524,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     };
     TriStateBox BTN_PAGEBREAK
     {
+        HelpID = "cui:TriStateBox:RID_SVXPAGE_EXT_PARAGRAPH:BTN_PAGEBREAK";
          //         Disable = TRUE;
         Pos = MAP_APPFONT ( 12 , 86 ) ;
         Size = MAP_APPFONT ( 61 , 10 ) ;
@@ -515,6 +539,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     };
     ListBox LB_BREAKTYPE
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_EXT_PARAGRAPH:LB_BREAKTYPE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 98 , 84 ) ;
         Size = MAP_APPFONT ( 61 , 50 ) ;
@@ -534,6 +559,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     };
     ListBox LB_BREAKPOSITION
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_EXT_PARAGRAPH:LB_BREAKPOSITION";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 211 , 84 ) ;
         Size = MAP_APPFONT ( 40 , 50 ) ;
@@ -546,6 +572,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     };
     TriStateBox BTN_PAGECOLL
     {
+        HelpID = "cui:TriStateBox:RID_SVXPAGE_EXT_PARAGRAPH:BTN_PAGECOLL";
          //         Disable = TRUE;
         Pos = MAP_APPFONT (21 , 100 ) ;
         Size = MAP_APPFONT ( 75 , 10 ) ;
@@ -554,6 +581,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     };
     ListBox LB_PAGECOLL
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_EXT_PARAGRAPH:LB_PAGECOLL";
          //         Disable = TRUE;
         Pos = MAP_APPFONT ( 98 , 98 ) ;
         Size = MAP_APPFONT ( 61 , 50 ) ;
@@ -569,6 +597,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     };
     NumericField ED_PAGENUM
     {
+        HelpID = "cui:NumericField:RID_SVXPAGE_EXT_PARAGRAPH:ED_PAGENUM";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 211 , 98 ) ;
         Size = MAP_APPFONT ( 26 , 12 ) ;
@@ -583,6 +612,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     };
     TriStateBox BTN_KEEPTOGETHER
     {
+        HelpID = "cui:TriStateBox:RID_SVXPAGE_EXT_PARAGRAPH:BTN_KEEPTOGETHER";
         Pos = MAP_APPFONT ( 12 , 127 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         Text [ en-US ] = "~Do not split paragraph" ;
@@ -590,12 +620,14 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     };
     TriStateBox CB_KEEPTOGETHER
     {
+        HelpID = "cui:TriStateBox:RID_SVXPAGE_EXT_PARAGRAPH:CB_KEEPTOGETHER";
         Pos = MAP_APPFONT ( 12, 141 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         Text [ en-US ] = "~Keep with next paragraph" ;
     };
     TriStateBox BTN_ORPHANS
     {
+        HelpID = "cui:TriStateBox:RID_SVXPAGE_EXT_PARAGRAPH:BTN_ORPHANS";
         Disable = TRUE ;
         Pos = MAP_APPFONT ( 12 , 155 ) ;
         Size = MAP_APPFONT ( 120 , 10 ) ;
@@ -604,6 +636,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     };
     NumericField ED_ORPHANS
     {
+        HelpID = "cui:NumericField:RID_SVXPAGE_EXT_PARAGRAPH:ED_ORPHANS";
         Disable = TRUE ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 134 , 153 ) ;
@@ -628,6 +661,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     };
     TriStateBox BTN_WIDOWS
     {
+        HelpID = "cui:TriStateBox:RID_SVXPAGE_EXT_PARAGRAPH:BTN_WIDOWS";
         Disable = TRUE ;
         Pos = MAP_APPFONT ( 12 , 169 ) ;
         Size = MAP_APPFONT ( 120 , 10 ) ;
@@ -636,6 +670,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     };
     NumericField ED_WIDOWS
     {
+        HelpID = "cui:NumericField:RID_SVXPAGE_EXT_PARAGRAPH:ED_WIDOWS";
         Disable = TRUE ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 134 , 167 ) ;
@@ -675,57 +710,33 @@ TabPage RID_SVXPAGE_PARA_ASIAN
     };
     TriStateBox CB_AS_FORBIDDEN
     {
+        HelpID = "cui:TriStateBox:RID_SVXPAGE_PARA_ASIAN:CB_AS_FORBIDDEN";
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
         Text [ en-US ] = "Apply list of forbidden characters to the beginning and end of lines";
     };
     TriStateBox CB_AS_HANG_PUNC
     {
+        HelpID = "cui:TriStateBox:RID_SVXPAGE_PARA_ASIAN:CB_AS_HANG_PUNC";
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
         Text [ en-US ] = "Allow hanging punctuation";
     };
     TriStateBox CB_AS_SCRIPT_SPACE
     {
+        HelpID = "cui:TriStateBox:RID_SVXPAGE_PARA_ASIAN:CB_AS_SCRIPT_SPACE";
         Pos = MAP_APPFONT ( 12 , 42 ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
         Text [ en-US ] = "Apply spacing between Asian, Latin and Complex text";
     };
 };
 
-// ********************************************************************** EOF
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+String STR_EXAMPLE
+{
+    Text [ en-US ] = "Example" ;
+};
+String STR_PAGE_STYLE
+{
+    Text [ en-US ] = "Page Style" ;
+};
 

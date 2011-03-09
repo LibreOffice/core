@@ -62,7 +62,7 @@ TabDialog RID_TD_ORGANIZE
 };
 TabPage RID_TP_MODULS
 {
-     // HelpId = HID_BASICIDE_MODULS ;
+    HelpId = "basctl:TabPage:RID_TP_MODULS" ;
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 210 , 140 ) ;
@@ -82,6 +82,7 @@ TabPage RID_TP_MODULS
     };
     PushButton RID_PB_EDIT
     {
+        HelpID = "basctl:PushButton:RID_TP_MODULS:RID_PB_EDIT";
         Text [ en-US ] = "~Edit";
         Pos = MAP_APPFONT ( 144 , 6 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
@@ -97,6 +98,7 @@ TabPage RID_TP_MODULS
     };
     PushButton RID_PB_NEWMOD
     {
+        HelpID = "basctl:PushButton:RID_TP_MODULS:RID_PB_NEWMOD";
         Pos = MAP_APPFONT ( 144 , 103 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Text [ en-US ] = "~New..." ;
@@ -104,6 +106,7 @@ TabPage RID_TP_MODULS
     };
     PushButton RID_PB_NEWDLG
     {
+        HelpID = "basctl:PushButton:RID_TP_MODULS:RID_PB_NEWDLG";
         Pos = MAP_APPFONT ( 144 , 103 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Text [ en-US ] = "~New..." ;
@@ -111,6 +114,7 @@ TabPage RID_TP_MODULS
     };
     PushButton RID_PB_DELETE
     {
+        HelpID = "basctl:PushButton:RID_TP_MODULS:RID_PB_DELETE";
         Pos = MAP_APPFONT ( 144 , 120 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Text [ en-US ] = "~Delete" ;
@@ -119,6 +123,7 @@ TabPage RID_TP_MODULS
 };
 TabPage RID_TP_DLGS
 {
+    HelpID = "basctl:TabPage:RID_TP_DLGS";
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 210 , 140 ) ;
@@ -138,6 +143,7 @@ TabPage RID_TP_DLGS
     };
     PushButton RID_PB_EDIT
     {
+        HelpID = "basctl:PushButton:RID_TP_DLGS:RID_PB_EDIT";
         Text [ en-US ] = "~Edit";
         Pos = MAP_APPFONT ( 144 , 6 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
@@ -153,6 +159,7 @@ TabPage RID_TP_DLGS
     };
     PushButton RID_PB_NEWMOD
     {
+        HelpID = "basctl:PushButton:RID_TP_DLGS:RID_PB_NEWMOD";
         Pos = MAP_APPFONT ( 144 , 103 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Text [ en-US ] = "~New..." ;
@@ -160,6 +167,7 @@ TabPage RID_TP_DLGS
     };
     PushButton RID_PB_NEWDLG
     {
+        HelpID = "basctl:PushButton:RID_TP_DLGS:RID_PB_NEWDLG";
         Pos = MAP_APPFONT ( 144 , 103 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Text [ en-US ] = "~New..." ;
@@ -167,6 +175,7 @@ TabPage RID_TP_DLGS
     };
     PushButton RID_PB_DELETE
     {
+        HelpID = "basctl:PushButton:RID_TP_DLGS:RID_PB_DELETE";
         Pos = MAP_APPFONT ( 144 , 120 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Text [ en-US ] = "~Delete" ;
@@ -175,7 +184,7 @@ TabPage RID_TP_DLGS
 };
 TabPage RID_TP_LIBS
 {
-     // HelpId = HID_BASICIDE_LIBS_TP ;
+    HelpId = "basctl:TabPage:RID_TP_LIBS" ;
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 210 , 140 ) ;
@@ -187,6 +196,7 @@ TabPage RID_TP_LIBS
     };
     ListBox RID_LB_BASICS
     {
+        HelpID = "basctl:ListBox:RID_TP_LIBS:RID_LB_BASICS";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 17 ) ;
         Size = MAP_APPFONT ( 130 , 80 ) ;
@@ -210,6 +220,7 @@ TabPage RID_TP_LIBS
 
     PushButton RID_PB_EDIT
     {
+        HelpID = "basctl:PushButton:RID_TP_LIBS:RID_PB_EDIT";
         Text [ en-US ] = "~Edit";
         Pos = MAP_APPFONT ( 144 , 6 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
@@ -225,6 +236,7 @@ TabPage RID_TP_LIBS
     };
     PushButton RID_PB_PASSWORD
     {
+        HelpID = "basctl:PushButton:RID_TP_LIBS:RID_PB_PASSWORD";
         Pos = MAP_APPFONT ( 144 , 43 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Text [ en-US ] = "~Password..." ;
@@ -233,6 +245,7 @@ TabPage RID_TP_LIBS
 
     PushButton RID_PB_NEWLIB
     {
+        HelpID = "basctl:PushButton:RID_TP_LIBS:RID_PB_NEWLIB";
         Pos = MAP_APPFONT ( 144 , 69 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Text [ en-US ] = "~New..." ;
@@ -240,12 +253,14 @@ TabPage RID_TP_LIBS
     };
     PushButton RID_PB_APPEND
     {
+        HelpID = "basctl:PushButton:RID_TP_LIBS:RID_PB_APPEND";
         Pos = MAP_APPFONT ( 144 , 86 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Text [ en-US ] = "~Import..." ;
     };
     PushButton RID_PB_EXPORT
     {
+        HelpID = "basctl:PushButton:RID_TP_LIBS:RID_PB_EXPORT";
         Pos = MAP_APPFONT ( 144 , 103 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Text [ en-US ] = "E~xport..." ;
@@ -253,6 +268,7 @@ TabPage RID_TP_LIBS
     };
     PushButton RID_PB_DELETE
     {
+        HelpID = "basctl:PushButton:RID_TP_LIBS:RID_PB_DELETE";
         Pos = MAP_APPFONT ( 144 , 120 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Text [ en-US ] = "~Delete" ;
@@ -261,7 +277,7 @@ TabPage RID_TP_LIBS
 };
 ModalDialog RID_DLG_LIBS
 {
-     // HelpId = HID_BASICIDE_LIBS_DLG ;
+    HelpId = "basctl:ModalDialog:RID_DLG_LIBS" ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 168 , 132 ) ;
@@ -301,6 +317,7 @@ ModalDialog RID_DLG_LIBS
     };
     CheckBox RID_CB_REF
     {
+        HelpID = "basctl:CheckBox:RID_DLG_LIBS:RID_CB_REF";
         Pos = MAP_APPFONT ( 12 , 100 ) ;
         Size = MAP_APPFONT ( 146 , 10 ) ;
         TabStop = TRUE ;
@@ -308,6 +325,7 @@ ModalDialog RID_DLG_LIBS
     };
     CheckBox RID_CB_REPL
     {
+        HelpID = "basctl:CheckBox:RID_DLG_LIBS:RID_CB_REPL";
         Pos = MAP_APPFONT ( 12 , 113 ) ;
         Size = MAP_APPFONT ( 146 , 10 ) ;
         Text [ en-US ] = "Replace existing libraries" ;
@@ -315,6 +333,7 @@ ModalDialog RID_DLG_LIBS
 };
 ModalDialog RID_DLG_NEWLIB
 {
+    HelpID = "basctl:ModalDialog:RID_DLG_NEWLIB";
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 160 , 55 ) ;
@@ -341,6 +360,7 @@ ModalDialog RID_DLG_NEWLIB
     };
     Edit RID_ED_LIBNAME
     {
+        HelpID = "basctl:Edit:RID_DLG_NEWLIB:RID_ED_LIBNAME";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 19 ) ;
         Size = MAP_APPFONT ( 92 , 12 ) ;
@@ -350,6 +370,7 @@ ModalDialog RID_DLG_NEWLIB
 
 ModalDialog RID_DLG_EXPORT
 {
+    HelpID = "basctl:ModalDialog:RID_DLG_EXPORT";
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 115 , 55 ) ;
@@ -372,6 +393,7 @@ ModalDialog RID_DLG_EXPORT
 
     RadioButton RB_EXPORTASPACKAGE
     {
+        HelpID = "basctl:RadioButton:RID_DLG_EXPORT:RB_EXPORTASPACKAGE";
         Pos = MAP_APPFONT( 6, 6 );
         Size = MAP_APPFONT( 103, 10 );
         Group = TRUE;
@@ -380,6 +402,7 @@ ModalDialog RID_DLG_EXPORT
     };
     RadioButton RB_EXPORTASBASIC
     {
+        HelpID = "basctl:RadioButton:RID_DLG_EXPORT:RB_EXPORTASBASIC";
         Pos = MAP_APPFONT( 6, 19 );
         Size = MAP_APPFONT( 103, 10 );
         //Group = TRUE;

@@ -76,12 +76,12 @@ private:
     const SfxItemSet&   rOutAttrs;
     const SdrView*      pView;
 
-    BOOL                bAutoGrowSizeEnabled;
-    BOOL                bContourEnabled;
-    BOOL                bAutoGrowWidthEnabled;
-    BOOL                bAutoGrowHeightEnabled;
-    BOOL                bWordWrapTextEnabled;
-    BOOL                bFitToSizeEnabled;
+    sal_Bool                bAutoGrowSizeEnabled;
+    sal_Bool                bContourEnabled;
+    sal_Bool                bAutoGrowWidthEnabled;
+    sal_Bool                bAutoGrowHeightEnabled;
+    sal_Bool                bWordWrapTextEnabled;
+    sal_Bool                bFitToSizeEnabled;
 
 
 #ifdef _SVX_TEXTATTR_CXX
@@ -89,8 +89,8 @@ private:
     DECL_LINK( ClickHdl_Impl, void * );
 #endif
 
-    /** Return whether the text direction is from left to right (</TRUE>) or
-        top to bottom (</FALSE>).
+    /** Return whether the text direction is from left to right (</sal_True>) or
+        top to bottom (</sal_False>).
     */
     bool IsTextDirectionLeftToRight (void) const;
 
@@ -99,9 +99,9 @@ public:
     ~SvxTextAttrPage();
 
     static SfxTabPage*  Create( Window*, const SfxItemSet& );
-    static  USHORT*     GetRanges();
+    static  sal_uInt16*     GetRanges();
 
-    virtual BOOL        FillItemSet( SfxItemSet& );
+    virtual sal_Bool        FillItemSet( SfxItemSet& );
     virtual void        Reset( const SfxItemSet & );
 
     virtual void        PointChanged( Window* pWindow, RECT_POINT eRP );

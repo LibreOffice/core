@@ -3,19 +3,20 @@
 af    1252  1078   # Afrikaans
 ar    1256  1025
 ar-SA 1256  1025
-as-IN    0  1101   # Assamese
 as       0  1101   # Assamese
+as-IN    0  1101   # Assamese
 ast   1252  1610
 be-BY 1251  1059   # Belarusian
 bg    1251  1026   # Bulgarian
 bn       0  2117   # Bengali
 bn-BD    0  2117   # Bengali Bangladesh
 bn-IN    0  1093   # Bengali India
+bo       0  2121   
 br    1252  1150   # Breton
 brx      0  1603   # Bodo (India)
 bs       0  5146   # bosnian
-bo       0  2121   
 ca    1252  1027   # Catalan
+ca-XV   1252  32771  # Catalan Valencian
 cs    1250  1029   # Czech
 cy    1252  1106   # Welsh
 da    1252  1030
@@ -38,11 +39,12 @@ fr-CA 1252  3084
 ga       0  2108   # Irish
 gd       0  1084   # Gaelic (Scotland)
 gl    1252  1110   # Galician
-gu    0  1095   # Gujarati
+gu       0  1095   # Gujarati
 gu-IN    0  1095   # Gujarati
 he    1255  1037
 hi       0  1081
 hr    1250  1050   # Croatian
+ht    1252  1626   # Haitian
 hu    1250  1038
 hy       0  1067   # Armenian
 id    1252  1057   # Indonesian
@@ -50,6 +52,8 @@ is    1252  1039   # Icelandic
 it    1252  1040
 ja     932  1041
 ka       0  1079   # Georgian
+kid   1252  1033   # key id pseudo language
+kk       0  1087
 km       0  1107   # Khmer
 kn       0  1099   # Kannada
 kn-IN    0  1099   # Kannada
@@ -57,15 +61,14 @@ ko     949  1042
 kok      0  1111   # Konkani
 ks       0  1120   # Kashmiri
 ku       0  1574
-kid   1252  1033   # key id pseudo language
 ky       0  2100
 lo       0  1108   # Lao
 lt    1257  1063   # Lithuanian
 lv    1257  1062   # Latvian
 mai      0  1605   # Maithili (India)
 mk    1251  1071   # Macedonian
-ml-IN    0  1100
 ml       0  1100
+ml-IN    0  1100
 mn       0  1104   # Mongolian
 mni      0  1112   # Manipuri
 mn-TR    0  2128   # Mongolian Classical/traditional
@@ -81,18 +84,17 @@ nn    1252  2068
 no    1252  1044
 nr       0  1580   # Ndebele South
 ns       0  1132   # Northern Sotho (Sepedi)
-or       0  1096   # Oriya
 oc    1252  1154   # Occitan-lengadocian
+om       0  2162
+or       0  1096   # Oriya
 or-IN    0  1096
 pa-IN    0  1094   # Punjabi
 pap      0  2171 
-om       0  2162
 pl    1250  1045
+ps       0  2171
 pt    1252  2070
 pt-BR 1252  1046
 pt-PT 1252  2070
-ps       0  2171
-ca-XV   1252  32771  # Catalan Valencian
 rm       0  1047   # Raeto-Romance
 ro    1250  1048   # Romanian
 ru    1251  1049
@@ -103,6 +105,7 @@ sb       0  1070   # Sorbian
 sc       0  3047
 sd       0  1113   # Sindhi
 sh    1250  2074   # Serbian Latin
+si       0  2133
 sk    1250  1051   # Slovak
 sl    1250  1060   # Slovenian
 sq    1250  1052   # Albanian
@@ -113,11 +116,10 @@ st       0  1072   # Southern Sotho, Sutu
 sv    1252  1053
 sw    1252  1089   # Swahili
 sw-TZ 1252  1089   # Swahili
-si       0  2133
 ta       0  1097   # Tamil
 ta-IN    0  1097   # Tamil
-te-IN    0  1098
 te       0  1098
+te-IN    0  1098
 tg       0  1064   # Tajik
 th     874  1054
 ti       0  1139   # Tigrinya
@@ -126,11 +128,11 @@ tn       0  1074   # Setsuana
 tr    1254  1055   # Turkish
 ts       0  1073   # Tsonga
 tt    1251  1092   # Tatar
+ug       0  2200
 uk    1251  1058   # Ukrainian
 ur    1256  1056   # Urdu
 ur-IN    0  2080
 uz       0  1091   # Uzbek (Latin)
-ug       0  2200
 ve       0  1075   # Venda
 vi    1258  1066   # Vietnamese
 xh       0  1076   # Xhosa
@@ -138,4 +140,3 @@ yi       0  1085   # Yiddish
 zh-CN  936  2052
 zh-TW  950  1028
 zu       0  1077   # Zulu
-kk       0  1087

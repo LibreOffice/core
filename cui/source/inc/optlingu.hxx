@@ -87,7 +87,7 @@ class SvxEditModulesDlg : public ModalDialog
 
     SvLBoxButtonData*   pCheckButtonData;
 
-    SvLBoxEntry*    CreateEntry(String& rTxt, USHORT nCol);
+    SvLBoxEntry*    CreateEntry(String& rTxt, sal_uInt16 nCol);
 
 #ifdef _SVX_OPTLINGU_CXX
     DECL_LINK( SelectHdl_Impl, SvxCheckListBox * );
@@ -150,10 +150,10 @@ private:
     SvxLinguData_Impl*  pLinguData;
 
     SvxLinguTabPage( Window* pParent, const SfxItemSet& rCoreSet );
-    SvLBoxEntry*    CreateEntry(String& rTxt, USHORT nCol);
+    SvLBoxEntry*    CreateEntry(String& rTxt, sal_uInt16 nCol);
 
-    void    AddDicBoxEntry( const com::sun::star::uno::Reference< com::sun::star::linguistic2::XDictionary > &rxDic, USHORT nIdx );
-    ULONG   GetDicUserData( const com::sun::star::uno::Reference< com::sun::star::linguistic2::XDictionary > &rxDic, USHORT nIdx );
+    void    AddDicBoxEntry( const com::sun::star::uno::Reference< com::sun::star::linguistic2::XDictionary > &rxDic, sal_uInt16 nIdx );
+    sal_uLong   GetDicUserData( const com::sun::star::uno::Reference< com::sun::star::linguistic2::XDictionary > &rxDic, sal_uInt16 nIdx );
 
 #ifdef _SVX_OPTLINGU_CXX
     DECL_LINK( SelectHdl_Impl, SvxCheckListBox * );

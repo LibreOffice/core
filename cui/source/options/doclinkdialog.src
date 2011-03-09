@@ -46,6 +46,7 @@
 
 ModalDialog DLG_DOCUMENTLINK
 {
+    HelpID = "cui:ModalDialog:DLG_DOCUMENTLINK";
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( DIALOG_SIZE_X , DIALOG_SIZE_Y ) ;
@@ -64,6 +65,7 @@ ModalDialog DLG_DOCUMENTLINK
     };
     ComboBox CMB_URL
     {
+        HelpID = "cui:ComboBox:DLG_DOCUMENTLINK:CMB_URL";
         Pos = MAP_APPFONT ( 6 , LINE_1_Y + OFFSET_Y + HEIGHT_LABEL - 3) ;
         Size = MAP_APPFONT ( DIALOG_SIZE_X - 3*LINE_1_Y - BUTTON_SIZE_X , HEIGHT_EDIT ) ;
 
@@ -75,6 +77,7 @@ ModalDialog DLG_DOCUMENTLINK
     };
     PushButton PB_BROWSEFILE
     {
+        HelpID = "cui:PushButton:DLG_DOCUMENTLINK:PB_BROWSEFILE";
         Pos = MAP_APPFONT ( DIALOG_SIZE_X - BUTTON_SIZE_X - 6 , LINE_1_Y + OFFSET_Y + HEIGHT_LABEL - 4) ;
         Size = MAP_APPFONT ( BUTTON_SIZE_X, BUTTON_SIZE_Y );
         Text [ en-US ] = "~Browse...";
@@ -90,6 +93,7 @@ ModalDialog DLG_DOCUMENTLINK
     };
     Edit ET_NAME
     {
+        HelpID = "cui:Edit:DLG_DOCUMENTLINK:ET_NAME";
         Pos = MAP_APPFONT ( 6, LINE_1_Y + 3*OFFSET_Y + 2*HEIGHT_LABEL + BUTTON_SIZE_Y - 6) ;
         Size = MAP_APPFONT ( DIALOG_SIZE_X - 3*LINE_1_Y - BUTTON_SIZE_X , HEIGHT_EDIT ) ;
         TabStop = TRUE ;

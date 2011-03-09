@@ -32,7 +32,7 @@
 #include <string.h>
 #include <math.h>
 
-#if defined( WNT ) || defined (WIN)
+#if defined( WNT )
 #include <tools/svwin.h>
 #endif
 #ifdef OS2
@@ -53,10 +53,7 @@
 #define FIXTODOUBLE( nFix )         ((double)nFix.Whole+(double)nFix.Frac/65536.)
 #define FIXTOLONG( nFix )           ((long)floor(FIXTODOUBLE(nFix)+0.5))
 
-#if defined WIN
-#define TWAIN_LIBNAME               "TWAIN.DLL"
-#define TWAIN_FUNCNAME              "DSM_Entry"
-#elif defined WNT
+#if defined WNT
 #define TWAIN_LIBNAME               "TWAIN_32.DLL"
 #define TWAIN_FUNCNAME              "DSM_Entry"
 #elif defined OS2
@@ -180,7 +177,7 @@ void ImpTwain::Destroy()
 
 // -----------------------------------------------------------------------------
 
-BOOL ImpTwain::SelectSource()
+sal_Bool ImpTwain::SelectSource()
 {
     TW_UINT16 nRet = TWRC_FAILURE;
 
@@ -205,9 +202,9 @@ BOOL ImpTwain::SelectSource()
 
 // -----------------------------------------------------------------------------
 
-BOOL ImpTwain::InitXfer()
+sal_Bool ImpTwain::InitXfer()
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
 
     if( !!aBitmap )
         aBitmap = Bitmap();
@@ -439,7 +436,7 @@ void ImpTwain::ImplFallback( ULONG nEvent )
 IMPL_LINK( ImpTwain, ImplFallbackHdl, void*, pData )
 {
     const ULONG nEvent = (ULONG) pData;
-    BOOL        bFallback = TRUE;
+    sal_Bool        bFallback = sal_True;
 
     switch( nCurState )
     {
@@ -494,7 +491,7 @@ IMPL_LINK( ImpTwain, ImplFallbackHdl, void*, pData )
             if( nEvent != TWAIN_EVENT_NONE )
                 aNotifyLink.Call( (void*) nEvent );
 
-            bFallback = FALSE;
+            bFallback = sal_False;
         }
         break;
     }

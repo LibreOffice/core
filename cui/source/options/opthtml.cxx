@@ -38,7 +38,7 @@
 #include <sal/macros.h>
 
 // Umwandlung der Modi zu den Positionen in der Listbox
-const USHORT aPosToExportArr[] =
+const sal_uInt16 aPosToExportArr[] =
 {
     HTML_CFG_HTML32,
     HTML_CFG_MSIE_40,
@@ -48,7 +48,7 @@ const USHORT aPosToExportArr[] =
 
 //#define DEPRECATED_ENTRY  0xFFFF
 
-const USHORT aExportToPosArr[] =
+const sal_uInt16 aExportToPosArr[] =
 {
     0,  //HTML 3.2
     1,  //MS Internet Explorer 4.0
@@ -122,23 +122,23 @@ SfxTabPage* OfaHtmlTabPage::Create( Window* pParent,
     return new OfaHtmlTabPage(pParent, rAttrSet);
 }
 
-BOOL OfaHtmlTabPage::FillItemSet( SfxItemSet& )
+sal_Bool OfaHtmlTabPage::FillItemSet( SfxItemSet& )
 {
     SvxHtmlOptions* pHtmlOpt = SvxHtmlOptions::Get();
     if(aSize1NF.GetSavedValue() != aSize1NF.GetText())
-        pHtmlOpt->SetFontSize(0, (USHORT)aSize1NF.GetValue());
+        pHtmlOpt->SetFontSize(0, (sal_uInt16)aSize1NF.GetValue());
     if(aSize2NF.GetSavedValue() != aSize2NF.GetText())
-        pHtmlOpt->SetFontSize(1, (USHORT)aSize2NF.GetValue());
+        pHtmlOpt->SetFontSize(1, (sal_uInt16)aSize2NF.GetValue());
     if(aSize3NF.GetSavedValue() != aSize3NF.GetText())
-        pHtmlOpt->SetFontSize(2, (USHORT)aSize3NF.GetValue());
+        pHtmlOpt->SetFontSize(2, (sal_uInt16)aSize3NF.GetValue());
     if(aSize4NF.GetSavedValue() != aSize4NF.GetText())
-        pHtmlOpt->SetFontSize(3, (USHORT)aSize4NF.GetValue());
+        pHtmlOpt->SetFontSize(3, (sal_uInt16)aSize4NF.GetValue());
     if(aSize5NF.GetSavedValue() != aSize5NF.GetText())
-        pHtmlOpt->SetFontSize(4, (USHORT)aSize5NF.GetValue());
+        pHtmlOpt->SetFontSize(4, (sal_uInt16)aSize5NF.GetValue());
     if(aSize6NF.GetSavedValue() != aSize6NF.GetText())
-        pHtmlOpt->SetFontSize(5, (USHORT)aSize6NF.GetValue());
+        pHtmlOpt->SetFontSize(5, (sal_uInt16)aSize6NF.GetValue());
     if(aSize7NF.GetSavedValue() != aSize7NF.GetText())
-        pHtmlOpt->SetFontSize(6, (USHORT)aSize7NF.GetValue());
+        pHtmlOpt->SetFontSize(6, (sal_uInt16)aSize7NF.GetValue());
 
     if(aNumbersEnglishUSCB.IsChecked() != aNumbersEnglishUSCB.GetSavedValue())
         pHtmlOpt->SetNumbersEnglishUS(aNumbersEnglishUSCB.IsChecked());
@@ -167,7 +167,7 @@ BOOL OfaHtmlTabPage::FillItemSet( SfxItemSet& )
     if( aCharSetLB.GetSelectTextEncoding() != pHtmlOpt->GetTextEncoding() )
         pHtmlOpt->SetTextEncoding( aCharSetLB.GetSelectTextEncoding() );
 
-    return FALSE;
+    return sal_False;
 }
 
 void OfaHtmlTabPage::Reset( const SfxItemSet& )
@@ -183,10 +183,10 @@ void OfaHtmlTabPage::Reset( const SfxItemSet& )
     aNumbersEnglishUSCB.Check(pHtmlOpt->IsNumbersEnglishUS());
     aUnknownTagCB.Check(pHtmlOpt->IsImportUnknown());
     aIgnoreFontNamesCB.Check(pHtmlOpt->IsIgnoreFontFamily());
-    USHORT nExport = pHtmlOpt->GetExportMode();
+    sal_uInt16 nExport = pHtmlOpt->GetExportMode();
     if( nExport >= SAL_N_ELEMENTS( aExportToPosArr ) )
         nExport = 4;    // default for bad config entry is NS 4.0
-    USHORT nPosArr = aExportToPosArr[ nExport ];
+    sal_uInt16 nPosArr = aExportToPosArr[ nExport ];
 //  if( nPosArr == DEPRECATED_ENTRY )
 //      nPosArr = aExportToPosArr[ 4 ];     // again: NS 4.0 is default
     aExportLB.SelectEntryPos( nPosArr );
@@ -222,15 +222,15 @@ void OfaHtmlTabPage::Reset( const SfxItemSet& )
 
 IMPL_LINK(OfaHtmlTabPage, ExportHdl_Impl, ListBox*, pBox)
 {
-    USHORT nExport = aPosToExportArr[ pBox->GetSelectEntryPos() ];
+    sal_uInt16 nExport = aPosToExportArr[ pBox->GetSelectEntryPos() ];
     switch( nExport )
     {
         case HTML_CFG_MSIE_40:
         case HTML_CFG_NS40  :
         case HTML_CFG_WRITER :
-            aPrintExtensionCB.Enable(TRUE);
+            aPrintExtensionCB.Enable(sal_True);
         break;
-        default: aPrintExtensionCB.Enable(FALSE);
+        default: aPrintExtensionCB.Enable(sal_False);
     }
 
     return 0;

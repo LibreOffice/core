@@ -27,312 +27,305 @@
 #ifndef EXTENSIONS_PROPCTRLR_HRC
 #define EXTENSIONS_PROPCTRLR_HRC
 
-#include "extensio.hrc"
+#define UID_PROP_DLG_FONT_TYPE                          "EXTENSIONS_UID_PROP_DLG_FONT_TYPE"
+#define UID_PROP_DLG_IMAGE_URL                          "EXTENSIONS_UID_PROP_DLG_IMAGE_URL"
+#define UID_PROP_DLG_BACKGROUNDCOLOR                    "EXTENSIONS_UID_PROP_DLG_BACKGROUNDCOLOR"
+#define UID_PROP_DLG_SYMBOLCOLOR                        "EXTENSIONS_UID_PROP_DLG_SYMBOLCOLOR"
+#define UID_PROP_DLG_ATTR_DATASOURCE                    "EXTENSIONS_UID_PROP_DLG_ATTR_DATASOURCE"
+#define UID_PROP_DLG_ATTR_TARGET_URL                    "EXTENSIONS_UID_PROP_DLG_ATTR_TARGET_URL"
+#define UID_PROP_DLG_NUMBER_FORMAT                      "EXTENSIONS_UID_PROP_DLG_NUMBER_FORMAT"
+#define UID_PROP_DLG_CONTROLLABEL                       "EXTENSIONS_UID_PROP_DLG_CONTROLLABEL"
+#define UID_PROP_DLG_FILLCOLOR                          "EXTENSIONS_UID_PROP_DLG_FILLCOLOR"
+#define UID_PROP_DLG_TABINDEX                           "EXTENSIONS_UID_PROP_DLG_TABINDEX"
+#define UID_PROP_DLG_SQLCOMMAND                         "EXTENSIONS_UID_PROP_DLG_SQLCOMMAND"
+#define UID_PROP_DLG_FORMLINKFIELDS                     "EXTENSIONS_UID_PROP_DLG_FORMLINKFIELDS"
+#define UID_PROP_DLG_FILTER                             "EXTENSIONS_UID_PROP_DLG_FILTER"
+#define UID_PROP_DLG_ORDER                              "EXTENSIONS_UID_PROP_DLG_ORDER"
+#define UID_PROP_DLG_SELECTION                          "EXTENSIONS_UID_PROP_DLG_SELECTION"
+#define UID_PROP_DLG_BIND_EXPRESSION                    "EXTENSIONS_UID_PROP_DLG_BIND_EXPRESSION"
+#define UID_PROP_DLG_XSD_REQUIRED                       "EXTENSIONS_UID_PROP_DLG_XSD_REQUIRED"
+#define UID_PROP_DLG_XSD_RELEVANT                       "EXTENSIONS_UID_PROP_DLG_XSD_RELEVANT"
+#define UID_PROP_DLG_XSD_READONLY                       "EXTENSIONS_UID_PROP_DLG_XSD_READONLY"
+#define UID_PROP_DLG_XSD_CONSTRAINT                     "EXTENSIONS_UID_PROP_DLG_XSD_CONSTRAINT"
+#define UID_PROP_DLG_XSD_CALCULATION                    "EXTENSIONS_UID_PROP_DLG_XSD_CALCULATION"
+#define UID_PROP_ADD_DATA_TYPE                          "EXTENSIONS_UID_PROP_ADD_DATA_TYPE"
+#define UID_PROP_REMOVE_DATA_TYPE                       "EXTENSIONS_UID_PROP_REMOVE_DATA_TYPE"
+#define UID_PROP_DLG_BORDERCOLOR                        "EXTENSIONS_UID_PROP_DLG_BORDERCOLOR"
 
-#define HID_PROP_INPUT_REQUIRED                 ( HID_PROPC_START +   0)
-#define HID_PROP_GROUPBOX                       ( HID_PROPC_START +   1)
-#define HID_PROP_CONTROLSOURCE                  ( HID_PROPC_START +   2)
-#define HID_PROP_NAME                           ( HID_PROPC_START +   3)
-#define HID_PROP_TABINDEX                       ( HID_PROPC_START +   4)
-#define HID_PROP_MASTERFIELDS                   ( HID_PROPC_START +   5)
-#define HID_PROP_SLAVEFIELDS                    ( HID_PROPC_START +   6)
-#define HID_PROP_DATASOURCE                     ( HID_PROPC_START +   7)
-#define HID_PROP_CURSORSOURCE                   ( HID_PROPC_START +   8)
-#define HID_PROP_CURSORSOURCETYPE               ( HID_PROPC_START +   9)
-#define HID_PROP_CURSORTYPE                     ( HID_PROPC_START +  10)
-#define HID_PROP_READONLY                       ( HID_PROPC_START +  11)
-#define HID_PROP_DATAENTRY                      ( HID_PROPC_START +  12)
-#define HID_PROP_NAVIGATION                     ( HID_PROPC_START +  13)
-#define HID_PROP_CYCLE                          ( HID_PROPC_START +  14)
-#define HID_PROP_ALLOW_ADDITIONS                ( HID_PROPC_START +  15)
-#define HID_PROP_ALLOW_EDITS                    ( HID_PROPC_START +  16)
-#define HID_PROP_ALLOW_DELETIONS                ( HID_PROPC_START +  17)
-#define HID_PROP_DIRTY                          ( HID_PROPC_START +  18)
-#define HID_PROP_OLDVALUE                       ( HID_PROPC_START +  19)
-#define HID_PROP_VALUE                          ( HID_PROPC_START +  20)
-#define HID_PROP_LOCKED                         ( HID_PROPC_START +  21)
-#define HID_PROP_FORMATKEY                      ( HID_PROPC_START +  22)
-#define HID_PROP_REQUIRED                       ( HID_PROPC_START +  23)
-#define HID_PROP_WHEEL_BEHAVIOR                 ( HID_PROPC_START +  24)
-#define HID_PROP_UNIQUE                         ( HID_PROPC_START +  25)
-#define HID_PROP_CLASSID                        ( HID_PROPC_START +  26)
-#define HID_PROP_LEFT                           ( HID_PROPC_START +  27)
-#define HID_PROP_RIGHT                          ( HID_PROPC_START +  28)
-#define HID_PROP_HEIGHT                         ( HID_PROPC_START +  29)
-#define HID_PROP_WIDTH                          ( HID_PROPC_START +  30)
-#define HID_PROP_BOUNDCOLUMN                    ( HID_PROPC_START +  31)
-#define HID_PROP_LISTSOURCETYPE                 ( HID_PROPC_START +  32)
-#define HID_PROP_LISTSOURCE                     ( HID_PROPC_START +  33)
-#define HID_PROP_LISTINDEX                      ( HID_PROPC_START +  34)
-#define HID_PROP_TEXT                           ( HID_PROPC_START +  35)
-#define HID_PROP_LABEL                          ( HID_PROPC_START +  36)
-#define HID_PROP_STRINGITEMLIST                 ( HID_PROPC_START +  37)
-#define HID_PROP_SEARCHING                      ( HID_PROPC_START +  38)
-#define HID_PROP_FONT                           ( HID_PROPC_START +  39)
-#define HID_PROP_ROWHEIGHT                      ( HID_PROPC_START +  40)
-#define HID_PROP_BACKGROUNDCOLOR                ( HID_PROPC_START +  41)
-#define HID_PROP_FILLCOLOR                      ( HID_PROPC_START +  42)
-#define HID_PROP_LINECOLOR                      ( HID_PROPC_START +  43)
-#define HID_PROP_BORDER                         ( HID_PROPC_START +  44)
-#define HID_PROP_ALIGN                          ( HID_PROPC_START +  45)
-#define HID_PROP_DROPDOWN                       ( HID_PROPC_START +  46)
-#define HID_PROP_MULTILINE                      ( HID_PROPC_START +  47)
-#define HID_PROP_HSCROLL                        ( HID_PROPC_START +  48)
-#define HID_PROP_VSCROLL                        ( HID_PROPC_START +  49)
-#define HID_PROP_TABSTOP                        ( HID_PROPC_START +  50)
-#define HID_PROP_REFVALUE                       ( HID_PROPC_START +  51)
-#define HID_PROP_BUTTONTYPE                     ( HID_PROPC_START +  52)
-#define HID_PROP_SUBMIT_ACTION                  ( HID_PROPC_START +  53)
-#define HID_PROP_SUBMIT_METHOD                  ( HID_PROPC_START +  54)
-#define HID_PROP_SUBMIT_ENCODING                ( HID_PROPC_START +  55)
-#define HID_PROP_DEFAULTVALUE                   ( HID_PROPC_START +  56)
-#define HID_PROP_SUBMIT_TARGET                  ( HID_PROPC_START +  57)
-#define HID_PROP_DEFAULT_STATE                  ( HID_PROPC_START +  58)
-#define HID_PROP_IMAGE_URL                      ( HID_PROPC_START +  59)
-#define HID_PROP_DEFAULT_SELECT_SEQ             ( HID_PROPC_START +  60)
-#define HID_PROP_MULTISELECTION                 ( HID_PROPC_START +  61)
-#define HID_PROP_DATE                           ( HID_PROPC_START +  62)
-#define HID_PROP_DATEMIN                        ( HID_PROPC_START +  63)
-#define HID_PROP_DATEMAX                        ( HID_PROPC_START +  64)
-#define HID_PROP_DATEFORMAT                     ( HID_PROPC_START +  65)
-#define HID_PROP_TIME                           ( HID_PROPC_START +  66)
-#define HID_PROP_TIMEMIN                        ( HID_PROPC_START +  67)
-#define HID_PROP_TIMEMAX                        ( HID_PROPC_START +  68)
-#define HID_PROP_TIMEFORMAT                     ( HID_PROPC_START +  69)
-#define HID_PROP_VALUEMIN                       ( HID_PROPC_START +  70)
-#define HID_PROP_VALUEMAX                       ( HID_PROPC_START +  71)
-#define HID_PROP_VALUESTEP                      ( HID_PROPC_START +  72)
-#define HID_PROP_CURRENCYSYMBOL                 ( HID_PROPC_START +  73)
-#define HID_PROP_EDITMASK                       ( HID_PROPC_START +  74)
-#define HID_PROP_LITERALMASK                    ( HID_PROPC_START +  75)
-#define HID_PROP_ENABLED                        ( HID_PROPC_START +  76)
-#define HID_PROP_AUTOCOMPLETE                   ( HID_PROPC_START +  77)
-#define HID_PROP_LINECOUNT                      ( HID_PROPC_START +  78)
-#define HID_PROP_MAXTEXTLEN                     ( HID_PROPC_START +  79)
-#define HID_PROP_SPIN                           ( HID_PROPC_START +  80)
-#define HID_PROP_STRICTFORMAT                   ( HID_PROPC_START +  81)
-#define HID_PROP_SHOWTHOUSANDSEP                ( HID_PROPC_START +  82)
-#define HID_PROP_VERTICAL_ALIGN                 ( HID_PROPC_START +  83)
-#define HID_PROP_PRINTABLE                      ( HID_PROPC_START +  84)
-#define HID_PROP_TARGET_URL                     ( HID_PROPC_START +  85)
-#define HID_PROP_TARGET_FRAME                   ( HID_PROPC_START +  86)
-#define HID_PROP_TAG                            ( HID_PROPC_START +  87)
-#define HID_PROP_ECHO_CHAR                      ( HID_PROPC_START +  88)
-#define HID_PROP_EMPTY_IS_NULL                  ( HID_PROPC_START +  89)
-#define HID_PROP_DECIMAL_ACCURACY               ( HID_PROPC_START +  90)
-#define HID_PROP_ENABLE_VISIBLE                 ( HID_PROPC_START +  91)
-#define HID_PROP_DEFAULT_BUTTON                 ( HID_PROPC_START +  92)
-#define HID_PROP_HIDDEN_VALUE                   ( HID_PROPC_START +  93)
-#define HID_PROP_TRISTATE                       ( HID_PROPC_START +  94)
-#define HID_PROP_NAVIGATIONBAR                  ( HID_PROPC_START +  95)
-#define HID_PROP_FILTER                         ( HID_PROPC_START +  96)
-#define HID_PROP_SORT_CRITERIA                  ( HID_PROPC_START +  97)
-#define HID_PROP_DEFAULT_LONG_VALUE             ( HID_PROPC_START +  98)
-#define HID_PROP_DEFAULT_TIME                   ( HID_PROPC_START +  99)
-#define HID_PROP_DEFAULT_DATE                   ( HID_PROPC_START + 100)
-#define HID_PROP_HELPTEXT                       ( HID_PROPC_START + 101)
-#define HID_PROP_HELPURL                        ( HID_PROPC_START + 102)
-#define HID_PROP_RECORDMARKER                   ( HID_PROPC_START + 103)
-#define HID_PROP_FILTERPROPOSAL                 ( HID_PROPC_START + 104)
-#define HID_PROP_EFFECTIVEMIN                   ( HID_PROPC_START + 105)
-#define HID_PROP_EFFECTIVEMAX                   ( HID_PROPC_START + 106)
-#define HID_PROP_EFFECTIVEDEFAULT               ( HID_PROPC_START + 107)
-#define HID_PROP_CONTROLLABEL                   ( HID_PROPC_START + 108)
-#define HID_PROP_CURRSYM_POSITION               ( HID_PROPC_START + 109)
-#define HID_PROP_ESCAPE_PROCESSING              ( HID_PROPC_START + 110)
-#define HID_PROP_TITLE                          ( HID_PROPC_START + 111)
-#define HID_PROP_STEP                           ( HID_PROPC_START + 112)
-#define HID_PROP_PROGRESSVALUE                  ( HID_PROPC_START + 113)
-#define HID_PROP_PROGRESSVALUE_MIN              ( HID_PROPC_START + 114)
-#define HID_PROP_PROGRESSVALUE_MAX              ( HID_PROPC_START + 115)
-#define HID_PROP_SCROLLVALUE                    ( HID_PROPC_START + 116)
-#define HID_PROP_SCROLLVALUE_MAX                ( HID_PROPC_START + 117)
-#define HID_PROP_LINEINCREMENT                  ( HID_PROPC_START + 118)
-#define HID_PROP_BLOCKINCREMENT                 ( HID_PROPC_START + 119)
-#define HID_PROP_VISIBLESIZE                    ( HID_PROPC_START + 120)
-#define HID_PROP_ORIENTATION                    ( HID_PROPC_START + 121)
-#define HID_PROP_POSITIONX                      ( HID_PROPC_START + 122)
-#define HID_PROP_POSITIONY                      ( HID_PROPC_START + 123)
-#define HID_PROP_PUSHBUTTONTYPE                 ( HID_PROPC_START + 124)
-#define HID_PROP_STATE                          ( HID_PROPC_START + 125)
-#define HID_PROP_SCALEIMAGE                     ( HID_PROPC_START + 126)
-#define HID_PROP_BOUND_CELL                     ( HID_PROPC_START + 127)
-#define HID_PROP_LIST_CELL_RANGE                ( HID_PROPC_START + 128)
-#define HID_PROP_CELL_EXCHANGE_TYPE             ( HID_PROPC_START + 129)
-#define HID_PROP_SELECTEDITEMS                  ( HID_PROPC_START + 130)
-#define HID_PROP_SCROLLVALUE_MIN                ( HID_PROPC_START + 131)
-#define HID_PROP_DEFAULT_SCROLLVALUE            ( HID_PROPC_START + 132)
-#define HID_PROP_REPEAT_DELAY                   ( HID_PROPC_START + 133)
-#define HID_PROP_SYMBOLCOLOR                    ( HID_PROPC_START + 134)
-#define HID_PROP_SPINVALUE                      ( HID_PROPC_START + 135)
-#define HID_PROP_SPINVALUE_MIN                  ( HID_PROPC_START + 136)
-#define HID_PROP_SPINVALUE_MAX                  ( HID_PROPC_START + 137)
-#define HID_PROP_DEFAULT_SPINVALUE              ( HID_PROPC_START + 138)
-#define HID_PROP_SPININCREMENT                  ( HID_PROPC_START + 139)
-#define HID_PROP_REPEAT                         ( HID_PROPC_START + 140)
-#define HID_PROP_WORDBREAK                      ( HID_PROPC_START + 141)
-#define HID_PROP_SHOW_SCROLLBARS                ( HID_PROPC_START + 142)
-#define HID_PROP_TABORDER_CONTROLS              ( HID_PROPC_START + 143)
-#define HID_FIELDLINK_DETAIL_COLUMN             ( HID_PROPC_START + 144)
-#define HID_FIELDLINK_MASTER_COLUMN             ( HID_PROPC_START + 145)
-#define UID_FIELDLINK_DETAIL1                   ( HID_PROPC_START + 146)
-#define UID_FIELDLINK_MASTER1                   ( HID_PROPC_START + 147)
-#define UID_FIELDLINK_DETAIL2                   ( HID_PROPC_START + 148)
-#define UID_FIELDLINK_MASTER2                   ( HID_PROPC_START + 149)
-#define UID_FIELDLINK_DETAIL3                   ( HID_PROPC_START + 150)
-#define UID_FIELDLINK_MASTER3                   ( HID_PROPC_START + 151)
-#define UID_FIELDLINK_DETAIL4                   ( HID_PROPC_START + 152)
-#define UID_FIELDLINK_MASTER4                   ( HID_PROPC_START + 153)
-#define HID_PROP_ICONSIZE                       ( HID_PROPC_START + 154)
-#define HID_PROP_SHOW_POSITION                  ( HID_PROPC_START + 155)
-#define HID_PROP_SHOW_NAVIGATION                ( HID_PROPC_START + 156)
-#define HID_PROP_SHOW_RECORDACTIONS             ( HID_PROPC_START + 157)
-#define HID_PROP_SHOW_FILTERSORT                ( HID_PROPC_START + 158)
-#define HID_PROP_AUTOLINEBREAK                  ( HID_PROPC_START + 159)
-#define HID_PROP_TEXTTYPE                       ( HID_PROPC_START + 160)
-#define HID_PROP_LINEEND_FORMAT                 ( HID_PROPC_START + 161)
-#define HID_PROP_XSD_TOTAL_DIGITS               ( HID_PROPC_START + 162)
-#define HID_PROP_XSD_FRACTION_DIGITS            ( HID_PROPC_START + 163)
-#define HID_PROP_XSD_MAX_INCLUSIVE              ( HID_PROPC_START + 164)
-#define HID_PROP_XSD_MAX_EXCLUSIVE              ( HID_PROPC_START + 165)
-#define HID_PROP_XSD_MIN_INCLUSIVE              ( HID_PROPC_START + 166)
-#define HID_PROP_XSD_MIN_EXCLUSIVE              ( HID_PROPC_START + 167)
-#define HID_PROP_UNCHECKEDREFVALUE              ( HID_PROPC_START + 168)
-#define HID_PROP_SUBMISSION_ID                  ( HID_PROPC_START + 169)
-#define UID_PROP_DLG_FONT_TYPE                  ( HID_PROPC_START + 170)
-#define UID_PROP_DLG_IMAGE_URL                  ( HID_PROPC_START + 171)
-#define UID_PROP_DLG_BACKGROUNDCOLOR            ( HID_PROPC_START + 172)
-#define UID_PROP_DLG_SYMBOLCOLOR                ( HID_PROPC_START + 173)
-#define UID_PROP_DLG_ATTR_DATASOURCE            ( HID_PROPC_START + 174)
-#define UID_PROP_DLG_ATTR_TARGET_URL            ( HID_PROPC_START + 175)
-#define UID_PROP_DLG_NUMBER_FORMAT              ( HID_PROPC_START + 176)
-#define UID_PROP_DLG_CONTROLLABEL               ( HID_PROPC_START + 177)
-#define UID_PROP_DLG_FILLCOLOR                  ( HID_PROPC_START + 178)
-#define UID_PROP_DLG_TABINDEX                   ( HID_PROPC_START + 179)
-#define UID_PROP_DLG_SQLCOMMAND                 ( HID_PROPC_START + 180)
-#define UID_PROP_DLG_FORMLINKFIELDS             ( HID_PROPC_START + 181)
-#define UID_PROP_DLG_FILTER                     ( HID_PROPC_START + 182)
-#define UID_PROP_DLG_ORDER                      ( HID_PROPC_START + 183)
-#define UID_PROP_DLG_SELECTION                  ( HID_PROPC_START + 184)
-#define UID_EVT_MACRODLG                        ( HID_PROPC_START + 185)
-#define UID_BRWEVT_APPROVEACTIONPERFORMED       ( HID_PROPC_START + 186)
-#define UID_BRWEVT_ACTIONPERFORMED              ( HID_PROPC_START + 187)
-#define UID_BRWEVT_CHANGED                      ( HID_PROPC_START + 188)
-#define UID_BRWEVT_TEXTCHANGED                  ( HID_PROPC_START + 189)
-#define UID_BRWEVT_ITEMSTATECHANGED             ( HID_PROPC_START + 190)
-#define UID_BRWEVT_FOCUSGAINED                  ( HID_PROPC_START + 191)
-#define UID_BRWEVT_FOCUSLOST                    ( HID_PROPC_START + 192)
-#define UID_BRWEVT_KEYTYPED                     ( HID_PROPC_START + 193)
-#define UID_BRWEVT_KEYUP                        ( HID_PROPC_START + 194)
-#define UID_BRWEVT_MOUSEENTERED                 ( HID_PROPC_START + 195)
-#define UID_BRWEVT_MOUSEDRAGGED                 ( HID_PROPC_START + 196)
-#define UID_BRWEVT_MOUSEMOVED                   ( HID_PROPC_START + 197)
-#define UID_BRWEVT_MOUSEPRESSED                 ( HID_PROPC_START + 198)
-#define UID_BRWEVT_MOUSERELEASED                ( HID_PROPC_START + 199)
-#define UID_BRWEVT_MOUSEEXITED                  ( HID_PROPC_START + 200)
-#define UID_BRWEVT_APPROVERESETTED              ( HID_PROPC_START + 201)
-#define UID_BRWEVT_RESETTED                     ( HID_PROPC_START + 202)
-#define UID_BRWEVT_SUBMITTED                    ( HID_PROPC_START + 203)
-#define UID_BRWEVT_BEFOREUPDATE                 ( HID_PROPC_START + 204)
-#define UID_BRWEVT_AFTERUPDATE                  ( HID_PROPC_START + 205)
-#define UID_BRWEVT_LOADED                       ( HID_PROPC_START + 206)
-#define UID_BRWEVT_RELOADING                    ( HID_PROPC_START + 207)
-#define UID_BRWEVT_RELOADED                     ( HID_PROPC_START + 208)
-#define UID_BRWEVT_UNLOADING                    ( HID_PROPC_START + 209)
-#define UID_BRWEVT_UNLOADED                     ( HID_PROPC_START + 210)
-#define UID_BRWEVT_CONFIRMDELETE                ( HID_PROPC_START + 211)
-#define UID_BRWEVT_APPROVEROWCHANGE             ( HID_PROPC_START + 212)
-#define UID_BRWEVT_ROWCHANGE                    ( HID_PROPC_START + 213)
-#define UID_BRWEVT_POSITIONING                  ( HID_PROPC_START + 214)
-#define UID_BRWEVT_POSITIONED                   ( HID_PROPC_START + 215)
-#define UID_BRWEVT_APPROVEPARAMETER             ( HID_PROPC_START + 216)
-#define UID_BRWEVT_ERROROCCURRED                 ( HID_PROPC_START + 217)
-#define UID_BRWEVT_ADJUSTMENTVALUECHANGED       ( HID_PROPC_START + 218)
-#define HID_PROP_XML_DATA_MODEL                 ( HID_PROPC_START + 219)
-#define HID_PROP_BIND_EXPRESSION                ( HID_PROPC_START + 220)
-#define HID_PROP_XSD_REQUIRED                   ( HID_PROPC_START + 221)
-#define HID_PROP_XSD_RELEVANT                   ( HID_PROPC_START + 222)
-#define HID_PROP_XSD_READONLY                   ( HID_PROPC_START + 223)
-#define HID_PROP_XSD_CONSTRAINT                 ( HID_PROPC_START + 224)
-#define HID_PROP_XSD_CALCULATION                ( HID_PROPC_START + 225)
-#define HID_PROP_XSD_DATA_TYPE                  ( HID_PROPC_START + 226)
-#define HID_PROP_XSD_WHITESPACES                ( HID_PROPC_START + 227)
-#define HID_PROP_XSD_PATTERN                    ( HID_PROPC_START + 228)
-#define HID_PROP_XSD_LENGTH                     ( HID_PROPC_START + 229)
-#define HID_PROP_XSD_MIN_LENGTH                 ( HID_PROPC_START + 230)
-#define HID_PROP_XSD_MAX_LENGTH                 ( HID_PROPC_START + 231)
-#define UID_PROP_DLG_BIND_EXPRESSION            ( HID_PROPC_START + 232)
-#define UID_PROP_DLG_XSD_REQUIRED               ( HID_PROPC_START + 233)
-#define UID_PROP_DLG_XSD_RELEVANT               ( HID_PROPC_START + 234)
-#define UID_PROP_DLG_XSD_READONLY               ( HID_PROPC_START + 235)
-#define UID_PROP_DLG_XSD_CONSTRAINT             ( HID_PROPC_START + 236)
-#define UID_PROP_DLG_XSD_CALCULATION            ( HID_PROPC_START + 237)
-#define UID_PROP_ADD_DATA_TYPE                  ( HID_PROPC_START + 238)
-#define UID_PROP_REMOVE_DATA_TYPE               ( HID_PROPC_START + 239)
-#define HID_PROP_LIST_BINDING                   ( HID_PROPC_START + 240)
-#define HID_PROP_BINDING_NAME                   ( HID_PROPC_START + 241)
-#define HID_PROP_SELECTION_TYPE                 ( HID_PROPC_START + 242)
-#define HID_PROP_ROOT_DISPLAYED                 ( HID_PROPC_START + 243)
-#define HID_PROP_SHOWS_HANDLES                  ( HID_PROPC_START + 244)
-#define HID_PROP_SHOWS_ROOT_HANDLES             ( HID_PROPC_START + 245)
-#define HID_PROP_EDITABLE                       ( HID_PROPC_START + 246)
-#define HID_PROP_INVOKES_STOP_NOT_EDITING       ( HID_PROPC_START + 247)
-#define HID_PROP_ROW_HEIGHT                     ( HID_PROPC_START + 248)
-#define HID_PROP_DECORATION                     ( HID_PROPC_START + 249)
-#define HID_EVT_ACTIONPERFORMED                 ( HID_PROPC_START + 250)
-#define HID_EVT_AFTERUPDATE                     ( HID_PROPC_START + 251)
-#define HID_EVT_BEFOREUPDATE                    ( HID_PROPC_START + 252)
-#define HID_EVT_CONFIRMDELETE                   ( HID_PROPC_START + 253)
-#define HID_EVT_ERROROCCURRED                    ( HID_PROPC_START + 254)
-#define HID_EVT_FOCUSGAINED                     ( HID_PROPC_START + 255)
-#define HID_EVT_FOCUSLOST                       ( HID_PROPC_START + 256)
-#define HID_EVT_ITEMSTATECHANGED                ( HID_PROPC_START + 257)
-#define HID_EVT_KEYTYPED                        ( HID_PROPC_START + 258)
-#define HID_EVT_LOADED                          ( HID_PROPC_START + 259)
-#define HID_EVT_MOUSEDRAGGED                    ( HID_PROPC_START + 260)
-#define HID_EVT_MOUSEENTERED                    ( HID_PROPC_START + 261)
-#define HID_EVT_MOUSEEXITED                     ( HID_PROPC_START + 262)
-#define HID_EVT_MOUSEMOVED                      ( HID_PROPC_START + 263)
-#define HID_EVT_MOUSEPRESSED                    ( HID_PROPC_START + 264)
-#define HID_EVT_MOUSERELEASED                   ( HID_PROPC_START + 265)
-#define HID_EVT_POSITIONED                      ( HID_PROPC_START + 266)
-#define HID_EVT_RESETTED                        ( HID_PROPC_START + 267)
-#define HID_EVT_SUBMITTED                       ( HID_PROPC_START + 268)
-#define HID_EVT_TEXTCHANGED                     ( HID_PROPC_START + 269)
-#define HID_EVT_UNLOADED                        ( HID_PROPC_START + 270)
-#define HID_EVT_CHANGED                         ( HID_PROPC_START + 271)
-#define HID_EVT_APPROVEACTIONPERFORMED          ( HID_PROPC_START + 272)
-#define HID_EVT_APPROVERESETTED                 ( HID_PROPC_START + 273)
-#define HID_EVT_KEYUP                           ( HID_PROPC_START + 274)
-#define HID_EVT_APPROVEPARAMETER                ( HID_PROPC_START + 275)
-#define HID_EVT_POSITIONING                     ( HID_PROPC_START + 276)
-#define HID_EVT_RELOADED                        ( HID_PROPC_START + 277)
-#define HID_EVT_APPROVEROWCHANGE                ( HID_PROPC_START + 278)
-#define HID_EVT_ROWCHANGE                       ( HID_PROPC_START + 279)
-#define HID_EVT_RELOADING                       ( HID_PROPC_START + 280)
-#define HID_EVT_UNLOADING                       ( HID_PROPC_START + 281)
-#define HID_EVT_ADJUSTMENTVALUECHANGED          ( HID_PROPC_START + 282)
-#define HID_PROP_TOGGLE                         ( HID_PROPC_START + 283)
-#define HID_PROP_FOCUSONCLICK                   ( HID_PROPC_START + 284)
-#define HID_PROP_HIDEINACTIVESELECTION          ( HID_PROPC_START + 285)
-#define HID_PROP_VISUALEFFECT                   ( HID_PROPC_START + 286)
-#define HID_PROP_BORDERCOLOR                    ( HID_PROPC_START + 287)
-#define UID_PROP_DLG_BORDERCOLOR                ( HID_PROPC_START + 288)
-#define HID_PROP_IMAGEPOSITION                  ( HID_PROPC_START + 289)
-#define HID_PROP_NOLABEL                        ( HID_PROPC_START + 290)
-#define HID_PROP_WRITING_MODE                   ( HID_PROPC_START + 291)
-#define HID_PROP_ANCHOR_TYPE                    ( HID_PROPC_START + 292)
-#define HID_FM_PROPDLG_TABCTR                   ( HID_PROPC_START + 293)
-#define HID_FM_PROPDLG_TAB_GENERAL              ( HID_PROPC_START + 294)
-#define HID_FM_PROPDLG_TAB_DATA                 ( HID_PROPC_START + 295)
-#define HID_FM_PROPDLG_TAB_EVT                  ( HID_PROPC_START + 296)
-#define HID_PROP_GROUP_NAME                     ( HID_PROPC_START + 297)
-    // please adjust HID_LAST_PROPC_ID if you add new ids here!
+#define UID_BRWEVT_APPROVEACTIONPERFORMED               "EXTENSIONS_UID_BRWEVT_APPROVEACTIONPERFORMED"
+#define UID_BRWEVT_ACTIONPERFORMED                      "EXTENSIONS_UID_BRWEVT_ACTIONPERFORMED"
+#define UID_BRWEVT_CHANGED                              "EXTENSIONS_UID_BRWEVT_CHANGED"
+#define UID_BRWEVT_TEXTCHANGED                          "EXTENSIONS_UID_BRWEVT_TEXTCHANGED"
+#define UID_BRWEVT_ITEMSTATECHANGED                     "EXTENSIONS_UID_BRWEVT_ITEMSTATECHANGED"
+#define UID_BRWEVT_FOCUSGAINED                          "EXTENSIONS_UID_BRWEVT_FOCUSGAINED"
+#define UID_BRWEVT_FOCUSLOST                            "EXTENSIONS_UID_BRWEVT_FOCUSLOST"
+#define UID_BRWEVT_KEYTYPED                             "EXTENSIONS_UID_BRWEVT_KEYTYPED"
+#define UID_BRWEVT_KEYUP                                "EXTENSIONS_UID_BRWEVT_KEYUP"
+#define UID_BRWEVT_MOUSEENTERED                         "EXTENSIONS_UID_BRWEVT_MOUSEENTERED"
+#define UID_BRWEVT_MOUSEDRAGGED                         "EXTENSIONS_UID_BRWEVT_MOUSEDRAGGED"
+#define UID_BRWEVT_MOUSEMOVED                           "EXTENSIONS_UID_BRWEVT_MOUSEMOVED"
+#define UID_BRWEVT_MOUSEPRESSED                         "EXTENSIONS_UID_BRWEVT_MOUSEPRESSED"
+#define UID_BRWEVT_MOUSERELEASED                        "EXTENSIONS_UID_BRWEVT_MOUSERELEASED"
+#define UID_BRWEVT_MOUSEEXITED                          "EXTENSIONS_UID_BRWEVT_MOUSEEXITED"
+#define UID_BRWEVT_APPROVERESETTED                      "EXTENSIONS_UID_BRWEVT_APPROVERESETTED"
+#define UID_BRWEVT_RESETTED                             "EXTENSIONS_UID_BRWEVT_RESETTED"
+#define UID_BRWEVT_SUBMITTED                            "EXTENSIONS_UID_BRWEVT_SUBMITTED"
+#define UID_BRWEVT_BEFOREUPDATE                         "EXTENSIONS_UID_BRWEVT_BEFOREUPDATE"
+#define UID_BRWEVT_AFTERUPDATE                          "EXTENSIONS_UID_BRWEVT_AFTERUPDATE"
+#define UID_BRWEVT_LOADED                               "EXTENSIONS_UID_BRWEVT_LOADED"
+#define UID_BRWEVT_RELOADING                            "EXTENSIONS_UID_BRWEVT_RELOADING"
+#define UID_BRWEVT_RELOADED                             "EXTENSIONS_UID_BRWEVT_RELOADED"
+#define UID_BRWEVT_UNLOADING                            "EXTENSIONS_UID_BRWEVT_UNLOADING"
+#define UID_BRWEVT_UNLOADED                             "EXTENSIONS_UID_BRWEVT_UNLOADED"
+#define UID_BRWEVT_CONFIRMDELETE                        "EXTENSIONS_UID_BRWEVT_CONFIRMDELETE"
+#define UID_BRWEVT_APPROVEROWCHANGE                     "EXTENSIONS_UID_BRWEVT_APPROVEROWCHANGE"
+#define UID_BRWEVT_ROWCHANGE                            "EXTENSIONS_UID_BRWEVT_ROWCHANGE"
+#define UID_BRWEVT_POSITIONING                          "EXTENSIONS_UID_BRWEVT_POSITIONING"
+#define UID_BRWEVT_POSITIONED                           "EXTENSIONS_UID_BRWEVT_POSITIONED"
+#define UID_BRWEVT_APPROVEPARAMETER                     "EXTENSIONS_UID_BRWEVT_APPROVEPARAMETER"
+#define UID_BRWEVT_ERROROCCURRED                        "EXTENSIONS_UID_BRWEVT_ERROROCCURRED"
+#define UID_BRWEVT_ADJUSTMENTVALUECHANGED               "EXTENSIONS_UID_BRWEVT_ADJUSTMENTVALUECHANGED"
 
-#define HID_LAST_PROPC_ID   HID_PROP_GROUP_NAME
-
-#if HID_LAST_PROPC_ID > HID_PROPC_END
-    #error help id overflow (PROPC)
-#endif
+#define HID_PROP_INPUT_REQUIRED                         "EXTENSIONS_HID_PROP_INPUT_REQUIRED"
+#define HID_PROP_GROUPBOX                               "EXTENSIONS_HID_PROP_GROUPBOX"
+#define HID_PROP_CONTROLSOURCE                          "EXTENSIONS_HID_PROP_CONTROLSOURCE"
+#define HID_PROP_NAME                                   "EXTENSIONS_HID_PROP_NAME"
+#define HID_PROP_TABINDEX                               "EXTENSIONS_HID_PROP_TABINDEX"
+#define HID_PROP_MASTERFIELDS                           "EXTENSIONS_HID_PROP_MASTERFIELDS"
+#define HID_PROP_SLAVEFIELDS                            "EXTENSIONS_HID_PROP_SLAVEFIELDS"
+#define HID_PROP_DATASOURCE                             "EXTENSIONS_HID_PROP_DATASOURCE"
+#define HID_PROP_CURSORSOURCE                           "EXTENSIONS_HID_PROP_CURSORSOURCE"
+#define HID_PROP_CURSORSOURCETYPE                       "EXTENSIONS_HID_PROP_CURSORSOURCETYPE"
+#define HID_PROP_CURSORTYPE                             "EXTENSIONS_HID_PROP_CURSORTYPE"
+#define HID_PROP_READONLY                               "EXTENSIONS_HID_PROP_READONLY"
+#define HID_PROP_DATAENTRY                              "EXTENSIONS_HID_PROP_DATAENTRY"
+#define HID_PROP_NAVIGATION                             "EXTENSIONS_HID_PROP_NAVIGATION"
+#define HID_PROP_CYCLE                                  "EXTENSIONS_HID_PROP_CYCLE"
+#define HID_PROP_ALLOW_ADDITIONS                        "EXTENSIONS_HID_PROP_ALLOW_ADDITIONS"
+#define HID_PROP_ALLOW_EDITS                            "EXTENSIONS_HID_PROP_ALLOW_EDITS"
+#define HID_PROP_ALLOW_DELETIONS                        "EXTENSIONS_HID_PROP_ALLOW_DELETIONS"
+#define HID_PROP_DIRTY                                  "EXTENSIONS_HID_PROP_DIRTY"
+#define HID_PROP_OLDVALUE                               "EXTENSIONS_HID_PROP_OLDVALUE"
+#define HID_PROP_VALUE                                  "EXTENSIONS_HID_PROP_VALUE"
+#define HID_PROP_LOCKED                                 "EXTENSIONS_HID_PROP_LOCKED"
+#define HID_PROP_FORMATKEY                              "EXTENSIONS_HID_PROP_FORMATKEY"
+#define HID_PROP_REQUIRED                               "EXTENSIONS_HID_PROP_REQUIRED"
+#define HID_PROP_WHEEL_BEHAVIOR                         "EXTENSIONS_HID_PROP_WHEEL_BEHAVIOR"
+#define HID_PROP_UNIQUE                                 "EXTENSIONS_HID_PROP_UNIQUE"
+#define HID_PROP_CLASSID                                "EXTENSIONS_HID_PROP_CLASSID"
+#define HID_PROP_LEFT                                   "EXTENSIONS_HID_PROP_LEFT"
+#define HID_PROP_RIGHT                                  "EXTENSIONS_HID_PROP_RIGHT"
+#define HID_PROP_HEIGHT                                 "EXTENSIONS_HID_PROP_HEIGHT"
+#define HID_PROP_WIDTH                                  "EXTENSIONS_HID_PROP_WIDTH"
+#define HID_PROP_BOUNDCOLUMN                            "EXTENSIONS_HID_PROP_BOUNDCOLUMN"
+#define HID_PROP_LISTSOURCETYPE                         "EXTENSIONS_HID_PROP_LISTSOURCETYPE"
+#define HID_PROP_LISTSOURCE                             "EXTENSIONS_HID_PROP_LISTSOURCE"
+#define HID_PROP_LISTINDEX                              "EXTENSIONS_HID_PROP_LISTINDEX"
+#define HID_PROP_TEXT                                   "EXTENSIONS_HID_PROP_TEXT"
+#define HID_PROP_LABEL                                  "EXTENSIONS_HID_PROP_LABEL"
+#define HID_PROP_STRINGITEMLIST                         "EXTENSIONS_HID_PROP_STRINGITEMLIST"
+#define HID_PROP_SEARCHING                              "EXTENSIONS_HID_PROP_SEARCHING"
+#define HID_PROP_FONT                                   "EXTENSIONS_HID_PROP_FONT"
+#define HID_PROP_ROWHEIGHT                              "EXTENSIONS_HID_PROP_ROWHEIGHT"
+#define HID_PROP_BACKGROUNDCOLOR                        "EXTENSIONS_HID_PROP_BACKGROUNDCOLOR"
+#define HID_PROP_FILLCOLOR                              "EXTENSIONS_HID_PROP_FILLCOLOR"
+#define HID_PROP_LINECOLOR                              "EXTENSIONS_HID_PROP_LINECOLOR"
+#define HID_PROP_BORDER                                 "EXTENSIONS_HID_PROP_BORDER"
+#define HID_PROP_ALIGN                                  "EXTENSIONS_HID_PROP_ALIGN"
+#define HID_PROP_DROPDOWN                               "EXTENSIONS_HID_PROP_DROPDOWN"
+#define HID_PROP_MULTILINE                              "EXTENSIONS_HID_PROP_MULTILINE"
+#define HID_PROP_HSCROLL                                "EXTENSIONS_HID_PROP_HSCROLL"
+#define HID_PROP_VSCROLL                                "EXTENSIONS_HID_PROP_VSCROLL"
+#define HID_PROP_TABSTOP                                "EXTENSIONS_HID_PROP_TABSTOP"
+#define HID_PROP_REFVALUE                               "EXTENSIONS_HID_PROP_REFVALUE"
+#define HID_PROP_BUTTONTYPE                             "EXTENSIONS_HID_PROP_BUTTONTYPE"
+#define HID_PROP_SUBMIT_ACTION                          "EXTENSIONS_HID_PROP_SUBMIT_ACTION"
+#define HID_PROP_SUBMIT_METHOD                          "EXTENSIONS_HID_PROP_SUBMIT_METHOD"
+#define HID_PROP_SUBMIT_ENCODING                        "EXTENSIONS_HID_PROP_SUBMIT_ENCODING"
+#define HID_PROP_DEFAULTVALUE                           "EXTENSIONS_HID_PROP_DEFAULTVALUE"
+#define HID_PROP_SUBMIT_TARGET                          "EXTENSIONS_HID_PROP_SUBMIT_TARGET"
+#define HID_PROP_DEFAULT_STATE                          "EXTENSIONS_HID_PROP_DEFAULT_STATE"
+#define HID_PROP_IMAGE_URL                              "EXTENSIONS_HID_PROP_IMAGE_URL"
+#define HID_PROP_DEFAULT_SELECT_SEQ                     "EXTENSIONS_HID_PROP_DEFAULT_SELECT_SEQ"
+#define HID_PROP_MULTISELECTION                         "EXTENSIONS_HID_PROP_MULTISELECTION"
+#define HID_PROP_DATE                                   "EXTENSIONS_HID_PROP_DATE"
+#define HID_PROP_DATEMIN                                "EXTENSIONS_HID_PROP_DATEMIN"
+#define HID_PROP_DATEMAX                                "EXTENSIONS_HID_PROP_DATEMAX"
+#define HID_PROP_DATEFORMAT                             "EXTENSIONS_HID_PROP_DATEFORMAT"
+#define HID_PROP_TIME                                   "EXTENSIONS_HID_PROP_TIME"
+#define HID_PROP_TIMEMIN                                "EXTENSIONS_HID_PROP_TIMEMIN"
+#define HID_PROP_TIMEMAX                                "EXTENSIONS_HID_PROP_TIMEMAX"
+#define HID_PROP_TIMEFORMAT                             "EXTENSIONS_HID_PROP_TIMEFORMAT"
+#define HID_PROP_VALUEMIN                               "EXTENSIONS_HID_PROP_VALUEMIN"
+#define HID_PROP_VALUEMAX                               "EXTENSIONS_HID_PROP_VALUEMAX"
+#define HID_PROP_VALUESTEP                              "EXTENSIONS_HID_PROP_VALUESTEP"
+#define HID_PROP_CURRENCYSYMBOL                         "EXTENSIONS_HID_PROP_CURRENCYSYMBOL"
+#define HID_PROP_EDITMASK                               "EXTENSIONS_HID_PROP_EDITMASK"
+#define HID_PROP_LITERALMASK                            "EXTENSIONS_HID_PROP_LITERALMASK"
+#define HID_PROP_ENABLED                                "EXTENSIONS_HID_PROP_ENABLED"
+#define HID_PROP_AUTOCOMPLETE                           "EXTENSIONS_HID_PROP_AUTOCOMPLETE"
+#define HID_PROP_LINECOUNT                              "EXTENSIONS_HID_PROP_LINECOUNT"
+#define HID_PROP_MAXTEXTLEN                             "EXTENSIONS_HID_PROP_MAXTEXTLEN"
+#define HID_PROP_SPIN                                   "EXTENSIONS_HID_PROP_SPIN"
+#define HID_PROP_STRICTFORMAT                           "EXTENSIONS_HID_PROP_STRICTFORMAT"
+#define HID_PROP_SHOWTHOUSANDSEP                        "EXTENSIONS_HID_PROP_SHOWTHOUSANDSEP"
+#define HID_PROP_VERTICAL_ALIGN                         "EXTENSIONS_HID_PROP_VERTICAL_ALIGN"
+#define HID_PROP_PRINTABLE                              "EXTENSIONS_HID_PROP_PRINTABLE"
+#define HID_PROP_TARGET_URL                             "EXTENSIONS_HID_PROP_TARGET_URL"
+#define HID_PROP_TARGET_FRAME                           "EXTENSIONS_HID_PROP_TARGET_FRAME"
+#define HID_PROP_TAG                                    "EXTENSIONS_HID_PROP_TAG"
+#define HID_PROP_ECHO_CHAR                              "EXTENSIONS_HID_PROP_ECHO_CHAR"
+#define HID_PROP_EMPTY_IS_NULL                          "EXTENSIONS_HID_PROP_EMPTY_IS_NULL"
+#define HID_PROP_DECIMAL_ACCURACY                       "EXTENSIONS_HID_PROP_DECIMAL_ACCURACY"
+#define HID_PROP_ENABLE_VISIBLE                         "EXTENSIONS_HID_PROP_ENABLE_VISIBLE"
+#define HID_PROP_DEFAULT_BUTTON                         "EXTENSIONS_HID_PROP_DEFAULT_BUTTON"
+#define HID_PROP_HIDDEN_VALUE                           "EXTENSIONS_HID_PROP_HIDDEN_VALUE"
+#define HID_PROP_TRISTATE                               "EXTENSIONS_HID_PROP_TRISTATE"
+#define HID_PROP_NAVIGATIONBAR                          "EXTENSIONS_HID_PROP_NAVIGATIONBAR"
+#define HID_PROP_FILTER                                 "EXTENSIONS_HID_PROP_FILTER"
+#define HID_PROP_SORT_CRITERIA                          "EXTENSIONS_HID_PROP_SORT_CRITERIA"
+#define HID_PROP_DEFAULT_LONG_VALUE                     "EXTENSIONS_HID_PROP_DEFAULT_LONG_VALUE"
+#define HID_PROP_DEFAULT_TIME                           "EXTENSIONS_HID_PROP_DEFAULT_TIME"
+#define HID_PROP_DEFAULT_DATE                           "EXTENSIONS_HID_PROP_DEFAULT_DATE"
+#define HID_PROP_HELPTEXT                               "EXTENSIONS_HID_PROP_HELPTEXT"
+#define HID_PROP_HELPURL                                "EXTENSIONS_HID_PROP_HELPURL"
+#define HID_PROP_RECORDMARKER                           "EXTENSIONS_HID_PROP_RECORDMARKER"
+#define HID_PROP_FILTERPROPOSAL                         "EXTENSIONS_HID_PROP_FILTERPROPOSAL"
+#define HID_PROP_EFFECTIVEMIN                           "EXTENSIONS_HID_PROP_EFFECTIVEMIN"
+#define HID_PROP_EFFECTIVEMAX                           "EXTENSIONS_HID_PROP_EFFECTIVEMAX"
+#define HID_PROP_EFFECTIVEDEFAULT                       "EXTENSIONS_HID_PROP_EFFECTIVEDEFAULT"
+#define HID_PROP_CONTROLLABEL                           "EXTENSIONS_HID_PROP_CONTROLLABEL"
+#define HID_PROP_CURRSYM_POSITION                       "EXTENSIONS_HID_PROP_CURRSYM_POSITION"
+#define HID_PROP_ESCAPE_PROCESSING                      "EXTENSIONS_HID_PROP_ESCAPE_PROCESSING"
+#define HID_PROP_TITLE                                  "EXTENSIONS_HID_PROP_TITLE"
+#define HID_PROP_STEP                                   "EXTENSIONS_HID_PROP_STEP"
+#define HID_PROP_PROGRESSVALUE                          "EXTENSIONS_HID_PROP_PROGRESSVALUE"
+#define HID_PROP_PROGRESSVALUE_MIN                      "EXTENSIONS_HID_PROP_PROGRESSVALUE_MIN"
+#define HID_PROP_PROGRESSVALUE_MAX                      "EXTENSIONS_HID_PROP_PROGRESSVALUE_MAX"
+#define HID_PROP_SCROLLVALUE                            "EXTENSIONS_HID_PROP_SCROLLVALUE"
+#define HID_PROP_SCROLLVALUE_MAX                        "EXTENSIONS_HID_PROP_SCROLLVALUE_MAX"
+#define HID_PROP_LINEINCREMENT                          "EXTENSIONS_HID_PROP_LINEINCREMENT"
+#define HID_PROP_BLOCKINCREMENT                         "EXTENSIONS_HID_PROP_BLOCKINCREMENT"
+#define HID_PROP_VISIBLESIZE                            "EXTENSIONS_HID_PROP_VISIBLESIZE"
+#define HID_PROP_ORIENTATION                            "EXTENSIONS_HID_PROP_ORIENTATION"
+#define HID_PROP_POSITIONX                              "EXTENSIONS_HID_PROP_POSITIONX"
+#define HID_PROP_POSITIONY                              "EXTENSIONS_HID_PROP_POSITIONY"
+#define HID_PROP_PUSHBUTTONTYPE                         "EXTENSIONS_HID_PROP_PUSHBUTTONTYPE"
+#define HID_PROP_STATE                                  "EXTENSIONS_HID_PROP_STATE"
+#define HID_PROP_SCALEIMAGE                             "EXTENSIONS_HID_PROP_SCALEIMAGE"
+#define HID_PROP_BOUND_CELL                             "EXTENSIONS_HID_PROP_BOUND_CELL"
+#define HID_PROP_LIST_CELL_RANGE                        "EXTENSIONS_HID_PROP_LIST_CELL_RANGE"
+#define HID_PROP_CELL_EXCHANGE_TYPE                     "EXTENSIONS_HID_PROP_CELL_EXCHANGE_TYPE"
+#define HID_PROP_SELECTEDITEMS                          "EXTENSIONS_HID_PROP_SELECTEDITEMS"
+#define HID_PROP_SCROLLVALUE_MIN                        "EXTENSIONS_HID_PROP_SCROLLVALUE_MIN"
+#define HID_PROP_DEFAULT_SCROLLVALUE                    "EXTENSIONS_HID_PROP_DEFAULT_SCROLLVALUE"
+#define HID_PROP_REPEAT_DELAY                           "EXTENSIONS_HID_PROP_REPEAT_DELAY"
+#define HID_PROP_SYMBOLCOLOR                            "EXTENSIONS_HID_PROP_SYMBOLCOLOR"
+#define HID_PROP_SPINVALUE                              "EXTENSIONS_HID_PROP_SPINVALUE"
+#define HID_PROP_SPINVALUE_MIN                          "EXTENSIONS_HID_PROP_SPINVALUE_MIN"
+#define HID_PROP_SPINVALUE_MAX                          "EXTENSIONS_HID_PROP_SPINVALUE_MAX"
+#define HID_PROP_DEFAULT_SPINVALUE                      "EXTENSIONS_HID_PROP_DEFAULT_SPINVALUE"
+#define HID_PROP_SPININCREMENT                          "EXTENSIONS_HID_PROP_SPININCREMENT"
+#define HID_PROP_REPEAT                                 "EXTENSIONS_HID_PROP_REPEAT"
+#define HID_PROP_WORDBREAK                              "EXTENSIONS_HID_PROP_WORDBREAK"
+#define HID_PROP_SHOW_SCROLLBARS                        "EXTENSIONS_HID_PROP_SHOW_SCROLLBARS"
+#define HID_PROP_TABORDER_CONTROLS                      "EXTENSIONS_HID_PROP_TABORDER_CONTROLS"
+#define HID_FIELDLINK_DETAIL_COLUMN                     "EXTENSIONS_HID_FIELDLINK_DETAIL_COLUMN"
+#define HID_FIELDLINK_MASTER_COLUMN                     "EXTENSIONS_HID_FIELDLINK_MASTER_COLUMN"
+#define UID_FIELDLINK_DETAIL1                           "EXTENSIONS_UID_FIELDLINK_DETAIL1"
+#define UID_FIELDLINK_MASTER1                           "EXTENSIONS_UID_FIELDLINK_MASTER1"
+#define UID_FIELDLINK_DETAIL2                           "EXTENSIONS_UID_FIELDLINK_DETAIL2"
+#define UID_FIELDLINK_MASTER2                           "EXTENSIONS_UID_FIELDLINK_MASTER2"
+#define UID_FIELDLINK_DETAIL3                           "EXTENSIONS_UID_FIELDLINK_DETAIL3"
+#define UID_FIELDLINK_MASTER3                           "EXTENSIONS_UID_FIELDLINK_MASTER3"
+#define UID_FIELDLINK_DETAIL4                           "EXTENSIONS_UID_FIELDLINK_DETAIL4"
+#define UID_FIELDLINK_MASTER4                           "EXTENSIONS_UID_FIELDLINK_MASTER4"
+#define HID_PROP_ICONSIZE                               "EXTENSIONS_HID_PROP_ICONSIZE"
+#define HID_PROP_SHOW_POSITION                          "EXTENSIONS_HID_PROP_SHOW_POSITION"
+#define HID_PROP_SHOW_NAVIGATION                        "EXTENSIONS_HID_PROP_SHOW_NAVIGATION"
+#define HID_PROP_SHOW_RECORDACTIONS                     "EXTENSIONS_HID_PROP_SHOW_RECORDACTIONS"
+#define HID_PROP_SHOW_FILTERSORT                        "EXTENSIONS_HID_PROP_SHOW_FILTERSORT"
+#define HID_PROP_AUTOLINEBREAK                          "EXTENSIONS_HID_PROP_AUTOLINEBREAK"
+#define HID_PROP_TEXTTYPE                               "EXTENSIONS_HID_PROP_TEXTTYPE"
+#define HID_PROP_LINEEND_FORMAT                         "EXTENSIONS_HID_PROP_LINEEND_FORMAT"
+#define HID_PROP_XSD_TOTAL_DIGITS                       "EXTENSIONS_HID_PROP_XSD_TOTAL_DIGITS"
+#define HID_PROP_XSD_FRACTION_DIGITS                    "EXTENSIONS_HID_PROP_XSD_FRACTION_DIGITS"
+#define HID_PROP_XSD_MAX_INCLUSIVE                      "EXTENSIONS_HID_PROP_XSD_MAX_INCLUSIVE"
+#define HID_PROP_XSD_MAX_EXCLUSIVE                      "EXTENSIONS_HID_PROP_XSD_MAX_EXCLUSIVE"
+#define HID_PROP_XSD_MIN_INCLUSIVE                      "EXTENSIONS_HID_PROP_XSD_MIN_INCLUSIVE"
+#define HID_PROP_XSD_MIN_EXCLUSIVE                      "EXTENSIONS_HID_PROP_XSD_MIN_EXCLUSIVE"
+#define HID_PROP_UNCHECKEDREFVALUE                      "EXTENSIONS_HID_PROP_UNCHECKEDREFVALUE"
+#define HID_PROP_SUBMISSION_ID                          "EXTENSIONS_HID_PROP_SUBMISSION_ID"
+#define UID_EVT_MACRODLG                                "EXTENSIONS_UID_EVT_MACRODLG"
+#define HID_PROP_XML_DATA_MODEL                         "EXTENSIONS_HID_PROP_XML_DATA_MODEL"
+#define HID_PROP_BIND_EXPRESSION                        "EXTENSIONS_HID_PROP_BIND_EXPRESSION"
+#define HID_PROP_XSD_REQUIRED                           "EXTENSIONS_HID_PROP_XSD_REQUIRED"
+#define HID_PROP_XSD_RELEVANT                           "EXTENSIONS_HID_PROP_XSD_RELEVANT"
+#define HID_PROP_XSD_READONLY                           "EXTENSIONS_HID_PROP_XSD_READONLY"
+#define HID_PROP_XSD_CONSTRAINT                         "EXTENSIONS_HID_PROP_XSD_CONSTRAINT"
+#define HID_PROP_XSD_CALCULATION                        "EXTENSIONS_HID_PROP_XSD_CALCULATION"
+#define HID_PROP_XSD_DATA_TYPE                          "EXTENSIONS_HID_PROP_XSD_DATA_TYPE"
+#define HID_PROP_XSD_WHITESPACES                        "EXTENSIONS_HID_PROP_XSD_WHITESPACES"
+#define HID_PROP_XSD_PATTERN                            "EXTENSIONS_HID_PROP_XSD_PATTERN"
+#define HID_PROP_XSD_LENGTH                             "EXTENSIONS_HID_PROP_XSD_LENGTH"
+#define HID_PROP_XSD_MIN_LENGTH                         "EXTENSIONS_HID_PROP_XSD_MIN_LENGTH"
+#define HID_PROP_XSD_MAX_LENGTH                         "EXTENSIONS_HID_PROP_XSD_MAX_LENGTH"
+#define HID_PROP_LIST_BINDING                           "EXTENSIONS_HID_PROP_LIST_BINDING"
+#define HID_PROP_BINDING_NAME                           "EXTENSIONS_HID_PROP_BINDING_NAME"
+#define HID_PROP_SELECTION_TYPE                         "EXTENSIONS_HID_PROP_SELECTION_TYPE"
+#define HID_PROP_ROOT_DISPLAYED                         "EXTENSIONS_HID_PROP_ROOT_DISPLAYED"
+#define HID_PROP_SHOWS_HANDLES                          "EXTENSIONS_HID_PROP_SHOWS_HANDLES"
+#define HID_PROP_SHOWS_ROOT_HANDLES                     "EXTENSIONS_HID_PROP_SHOWS_ROOT_HANDLES"
+#define HID_PROP_EDITABLE                               "EXTENSIONS_HID_PROP_EDITABLE"
+#define HID_PROP_INVOKES_STOP_NOT_EDITING               "EXTENSIONS_HID_PROP_INVOKES_STOP_NOT_EDITING"
+#define HID_PROP_ROW_HEIGHT                             "EXTENSIONS_HID_PROP_ROW_HEIGHT"
+#define HID_PROP_DECORATION                             "EXTENSIONS_HID_PROP_DECORATION"
+#define HID_EVT_ACTIONPERFORMED                         "EXTENSIONS_HID_EVT_ACTIONPERFORMED"
+#define HID_EVT_AFTERUPDATE                             "EXTENSIONS_HID_EVT_AFTERUPDATE"
+#define HID_EVT_BEFOREUPDATE                            "EXTENSIONS_HID_EVT_BEFOREUPDATE"
+#define HID_EVT_CONFIRMDELETE                           "EXTENSIONS_HID_EVT_CONFIRMDELETE"
+#define HID_EVT_ERROROCCURRED                           "EXTENSIONS_HID_EVT_ERROROCCURRED"
+#define HID_EVT_FOCUSGAINED                             "EXTENSIONS_HID_EVT_FOCUSGAINED"
+#define HID_EVT_FOCUSLOST                               "EXTENSIONS_HID_EVT_FOCUSLOST"
+#define HID_EVT_ITEMSTATECHANGED                        "EXTENSIONS_HID_EVT_ITEMSTATECHANGED"
+#define HID_EVT_KEYTYPED                                "EXTENSIONS_HID_EVT_KEYTYPED"
+#define HID_EVT_LOADED                                  "EXTENSIONS_HID_EVT_LOADED"
+#define HID_EVT_MOUSEDRAGGED                            "EXTENSIONS_HID_EVT_MOUSEDRAGGED"
+#define HID_EVT_MOUSEENTERED                            "EXTENSIONS_HID_EVT_MOUSEENTERED"
+#define HID_EVT_MOUSEEXITED                             "EXTENSIONS_HID_EVT_MOUSEEXITED"
+#define HID_EVT_MOUSEMOVED                              "EXTENSIONS_HID_EVT_MOUSEMOVED"
+#define HID_EVT_MOUSEPRESSED                            "EXTENSIONS_HID_EVT_MOUSEPRESSED"
+#define HID_EVT_MOUSERELEASED                           "EXTENSIONS_HID_EVT_MOUSERELEASED"
+#define HID_EVT_POSITIONED                              "EXTENSIONS_HID_EVT_POSITIONED"
+#define HID_EVT_RESETTED                                "EXTENSIONS_HID_EVT_RESETTED"
+#define HID_EVT_SUBMITTED                               "EXTENSIONS_HID_EVT_SUBMITTED"
+#define HID_EVT_TEXTCHANGED                             "EXTENSIONS_HID_EVT_TEXTCHANGED"
+#define HID_EVT_UNLOADED                                "EXTENSIONS_HID_EVT_UNLOADED"
+#define HID_EVT_CHANGED                                 "EXTENSIONS_HID_EVT_CHANGED"
+#define HID_EVT_APPROVEACTIONPERFORMED                  "EXTENSIONS_HID_EVT_APPROVEACTIONPERFORMED"
+#define HID_EVT_APPROVERESETTED                         "EXTENSIONS_HID_EVT_APPROVERESETTED"
+#define HID_EVT_KEYUP                                   "EXTENSIONS_HID_EVT_KEYUP"
+#define HID_EVT_APPROVEPARAMETER                        "EXTENSIONS_HID_EVT_APPROVEPARAMETER"
+#define HID_EVT_POSITIONING                             "EXTENSIONS_HID_EVT_POSITIONING"
+#define HID_EVT_RELOADED                                "EXTENSIONS_HID_EVT_RELOADED"
+#define HID_EVT_APPROVEROWCHANGE                        "EXTENSIONS_HID_EVT_APPROVEROWCHANGE"
+#define HID_EVT_ROWCHANGE                               "EXTENSIONS_HID_EVT_ROWCHANGE"
+#define HID_EVT_RELOADING                               "EXTENSIONS_HID_EVT_RELOADING"
+#define HID_EVT_UNLOADING                               "EXTENSIONS_HID_EVT_UNLOADING"
+#define HID_EVT_ADJUSTMENTVALUECHANGED                  "EXTENSIONS_HID_EVT_ADJUSTMENTVALUECHANGED"
+#define HID_PROP_TOGGLE                                 "EXTENSIONS_HID_PROP_TOGGLE"
+#define HID_PROP_FOCUSONCLICK                           "EXTENSIONS_HID_PROP_FOCUSONCLICK"
+#define HID_PROP_HIDEINACTIVESELECTION                  "EXTENSIONS_HID_PROP_HIDEINACTIVESELECTION"
+#define HID_PROP_VISUALEFFECT                           "EXTENSIONS_HID_PROP_VISUALEFFECT"
+#define HID_PROP_BORDERCOLOR                            "EXTENSIONS_HID_PROP_BORDERCOLOR"
+#define HID_PROP_IMAGEPOSITION                          "EXTENSIONS_HID_PROP_IMAGEPOSITION"
+#define HID_PROP_NOLABEL                                "EXTENSIONS_HID_PROP_NOLABEL"
+#define HID_PROP_WRITING_MODE                           "EXTENSIONS_HID_PROP_WRITING_MODE"
+#define HID_PROP_ANCHOR_TYPE                            "EXTENSIONS_HID_PROP_ANCHOR_TYPE"
+#define HID_FM_PROPDLG_TABCTR                           "EXTENSIONS_HID_FM_PROPDLG_TABCTR"
+#define HID_FM_PROPDLG_TAB_GENERAL                      "EXTENSIONS_HID_FM_PROPDLG_TAB_GENERAL"
+#define HID_FM_PROPDLG_TAB_DATA                         "EXTENSIONS_HID_FM_PROPDLG_TAB_DATA"
+#define HID_FM_PROPDLG_TAB_EVT                          "EXTENSIONS_HID_FM_PROPDLG_TAB_EVT"
+#define HID_PROP_GROUP_NAME                             "EXTENSIONS_HID_PROP_GROUP_NAME"
 
 #endif // EXTENSIONS_PROPCTRLR_HRC

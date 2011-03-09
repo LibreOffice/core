@@ -221,7 +221,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    sal_uInt16 OPropertyEditor::AppendPage( const String & _rText, const SmartId& _rHelpId )
+    sal_uInt16 OPropertyEditor::AppendPage( const String & _rText, const rtl::OString& _rHelpId )
     {
         // obtain a new id
         sal_uInt16 nId = m_nNextId++;
@@ -237,7 +237,7 @@ namespace pcr
         pPage->getListBox().SetObserver(m_pObserver);
         pPage->getListBox().EnableHelpSection( m_bHasHelpSection );
         pPage->getListBox().SetHelpLineLimites( m_nMinHelpLines, m_nMaxHelpLines );
-        pPage->SetSmartHelpId( _rHelpId );
+        pPage->SetHelpId( _rHelpId );
 
         // immediately activate the page
         m_aTabControl.SetTabPage(nId, pPage);
@@ -247,10 +247,10 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    void OPropertyEditor::SetHelpId( sal_uInt32 nHelpId )
+    void OPropertyEditor::SetHelpId( const rtl::OString& rHelpId )
     {
-        Control::SetHelpId(0);
-        m_aTabControl.SetHelpId(nHelpId);
+        Control::SetHelpId("");
+        m_aTabControl.SetHelpId(rHelpId);
     }
 
     //------------------------------------------------------------------
@@ -482,7 +482,7 @@ namespace pcr
     //------------------------------------------------------------------
     void OPropertyEditor::EnablePropertyControls( const ::rtl::OUString& _rEntryName, sal_Int16 _nControls, bool _bEnable )
     {
-        for ( USHORT i = 0; i < m_aTabControl.GetPageCount(); ++i )
+        for ( sal_uInt16 i = 0; i < m_aTabControl.GetPageCount(); ++i )
         {
             OBrowserPage* pPage = static_cast< OBrowserPage* >( m_aTabControl.GetTabPage( m_aTabControl.GetPageId( i ) ) );
             if ( pPage )
@@ -493,7 +493,7 @@ namespace pcr
     //------------------------------------------------------------------
     void OPropertyEditor::EnablePropertyLine( const ::rtl::OUString& _rEntryName, bool _bEnable )
     {
-        for ( USHORT i = 0; i < m_aTabControl.GetPageCount(); ++i )
+        for ( sal_uInt16 i = 0; i < m_aTabControl.GetPageCount(); ++i )
         {
             OBrowserPage* pPage = static_cast< OBrowserPage* >( m_aTabControl.GetTabPage( m_aTabControl.GetPageId( i ) ) );
             if ( pPage )

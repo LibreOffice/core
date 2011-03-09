@@ -284,22 +284,6 @@ void ensureClassInfos()
 
 }
 
-//---------------------------------------------------------------------------------------
-void registerServiceProvider(const ::rtl::OUString& _rServiceImplName, const Sequence< ::rtl::OUString >& _rServices, XRegistryKey* _pKey)
-{
-    ::rtl::OUString sMainKeyName (RTL_CONSTASCII_USTRINGPARAM("/") );
-    sMainKeyName += _rServiceImplName;
-    sMainKeyName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES") );
-    Reference< XRegistryKey > xNewKey = _pKey->createKey(sMainKeyName);
-    OSL_ENSURE(xNewKey.is(), "forms::registerProvider : could not create a registry key !");
-    if (!xNewKey.is())
-        return;
-
-    const ::rtl::OUString* pSupportedServices = _rServices.getConstArray();
-    for (sal_Int32 i=0; i<_rServices.getLength(); ++i, ++pSupportedServices)
-        xNewKey->createKey(*pSupportedServices);
-}
-
 //=======================================================================================
 extern "C"
 {
@@ -340,57 +324,6 @@ void SAL_CALL createRegistryInfo_FORMS()
 SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(const sal_Char** _ppEnvTypeName, uno_Environment** /*_ppEnv*/)
 {
     *_ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
-//---------------------------------------------------------------------------------------
-SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(void* _pServiceManager, XRegistryKey* _pRegistryKey)
-{
-    if (_pRegistryKey)
-    {
-        try
-        {
-            // ========================================================================
-            // the real way - use the OModule
-            createRegistryInfo_FORMS();
-            if ( !::frm::OFormsModule::writeComponentInfos(
-                    static_cast<XMultiServiceFactory*>( _pServiceManager ),
-                    static_cast<XRegistryKey*>( _pRegistryKey ) )
-                )
-                return sal_False;
-
-            // ========================================================================
-            // a lot of stuff which is implemented "manually" here in this file
-
-            // collect the class infos
-            ensureClassInfos();
-
-            // both our static sequences should have the same length ...
-            sal_Int32 nClasses = s_aClassImplementationNames.getLength();
-            OSL_ENSURE(s_aClassServiceNames.getLength() == nClasses,
-                "forms::component_writeInfo : invalid class infos !");
-
-            // loop through the sequences and register the service providers
-            const ::rtl::OUString* pClasses = s_aClassImplementationNames.getConstArray();
-            const Sequence< ::rtl::OUString >* pServices = s_aClassServiceNames.getConstArray();
-
-            for (sal_Int32 i=0; i<nClasses; ++i, ++pClasses, ++pServices)
-                registerServiceProvider(*pClasses, *pServices, _pRegistryKey);
-
-            s_aClassImplementationNames.realloc(0);
-            s_aClassServiceNames.realloc(0);
-            s_aFactories.realloc(0);
-
-            return sal_True;
-        }
-        catch ( InvalidRegistryException& )
-        {
-            OSL_ENSURE(sal_False, "forms::component_writeInfo : InvalidRegistryException !");
-        }
-    }
-    s_aClassImplementationNames.realloc(0);
-    s_aClassServiceNames.realloc(0);
-    s_aFactories.realloc(0);
-    return sal_False;
 }
 
 //---------------------------------------------------------------------------------------

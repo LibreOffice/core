@@ -127,3 +127,10 @@ DEF2EXPORTFILE=$(TARGET).dxp
 
 .INCLUDE :  target.mk
 
+ALLTAR : $(MISC)/oleautobridge.component
+
+$(MISC)/oleautobridge.component .ERRREMOVE : \
+        $(SOLARENV)/bin/createcomponent.xslt oleautobridge.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt oleautobridge.component

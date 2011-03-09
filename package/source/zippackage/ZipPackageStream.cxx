@@ -59,7 +59,6 @@ using namespace com::sun::star;
 using namespace cppu;
 
 using rtl::OUString;
-
 namespace { struct lcl_CachedImplId : public rtl::Static< Sequence < sal_Int8 >, lcl_CachedImplId > {}; }
 
 const ::com::sun::star::uno::Sequence < sal_Int8 >& ZipPackageStream::static_getImplementationId()

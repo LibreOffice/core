@@ -54,14 +54,14 @@ namespace pcr
         ,m_nMaxLines( 8 )
     {
         SetBackground();
-        SetPaintTransparent(TRUE);
+        SetPaintTransparent(sal_True);
         m_aSeparator.SetText( String( PcrRes( RID_STR_HELP_SECTION_LABEL ) ) );
         m_aSeparator.SetBackground();
         m_aSeparator.Show();
 
         m_aHelpText.SetControlBackground( /*m_aSeparator.GetBackground().GetColor() */);
         m_aHelpText.SetBackground();
-        m_aHelpText.SetPaintTransparent(TRUE);
+        m_aHelpText.SetPaintTransparent(sal_True);
         m_aHelpText.Show();
     }
 

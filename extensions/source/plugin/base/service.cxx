@@ -59,33 +59,6 @@ extern "C" {
         *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
     }
 
-    sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, void* pXUnoKey )
-    {
-        if( pXUnoKey )
-        {
-            try
-            {
-                Reference< ::com::sun::star::registry::XRegistryKey > xKey( reinterpret_cast< ::com::sun::star::registry::XRegistryKey* >( pXUnoKey ) );
-
-                ::rtl::OUString aImplName (RTL_CONSTASCII_USTRINGPARAM("/"));
-                aImplName += XPluginManager_Impl::getImplementationName_Static();
-                aImplName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES/com.sun.star.plugin.PluginManager"));
-                xKey->createKey( aImplName );
-
-                aImplName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
-                aImplName += PluginModel::getImplementationName_Static();
-                aImplName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES/com.sun.star.plugin.PluginModel"));
-                xKey->createKey( aImplName );
-
-                return sal_True;
-            }
-            catch( ::com::sun::star::registry::InvalidRegistryException& )
-            {
-            }
-        }
-        return sal_False;
-    }
-
     void* SAL_CALL component_getFactory(
         const sal_Char* pImplementationName,
         void* pXUnoSMgr,

@@ -49,7 +49,7 @@ of the tab page.
 class LineItemWrapper : public sfx::SingleItemWrapper< SvxLineItem, const SvxBorderLine* >
 {
 public:
-    inline explicit     LineItemWrapper( USHORT nSlot ) : SingleItemWrapperType( nSlot ) {}
+    inline explicit     LineItemWrapper( sal_uInt16 nSlot ) : SingleItemWrapperType( nSlot ) {}
 
     virtual const SvxBorderLine* GetItemValue( const SvxLineItem& rItem ) const
                             { return rItem.GetLine(); }
@@ -275,17 +275,10 @@ ShadowConnection::ShadowConnection( const SfxItemSet& rItemSet,
 // ============================================================================
 // ============================================================================
 
-sfx::ItemConnectionBase* CreateFrameLineConnection( USHORT nSlot,
+sfx::ItemConnectionBase* CreateFrameLineConnection( sal_uInt16 nSlot,
         FrameSelector& rFrameSel, FrameBorderType eBorder, sfx::ItemConnFlags nFlags )
 {
     return new FrameLineConnection( nSlot, new FrameSelectorWrapper( rFrameSel, eBorder ), nFlags );
-}
-
-sfx::ItemConnectionBase* CreateFrameBoxConnection( USHORT /*nBoxSlot*/, USHORT /*nBoxInfoSlot*/,
-        FrameSelector& /*rFrameSel*/, FrameBorderType /*eBorder*/, sfx::ItemConnFlags /*nFlags*/ )
-{
-    DBG_ERRORFILE( "svx::CreateFrameBoxConnection - not implemented" );
-    return 0;
 }
 
 sfx::ItemConnectionBase* CreateMarginConnection( const SfxItemSet& rItemSet,

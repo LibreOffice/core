@@ -46,37 +46,6 @@ extern "C" void SAL_CALL component_getImplementationEnvironment( const sal_Char*
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-// -----------------------
-// - component_writeInfo -
-// -----------------------
-
-extern "C" sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, void* pRegistryKey )
-{
-    sal_Bool bRet = sal_False;
-
-    if( pRegistryKey )
-    {
-        try
-        {
-            ::rtl::OUString aImplName( '/' );
-
-            aImplName += ScannerManager::getImplementationName_Static();
-            aImplName += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES/" ) );
-            aImplName += ScannerManager::getImplementationName_Static();
-
-            REF( XRegistryKey ) xNewKey1( static_cast< XRegistryKey* >( pRegistryKey )->createKey( aImplName ) );
-
-            bRet = sal_True;
-        }
-        catch( InvalidRegistryException& )
-        {
-            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
-        }
-    }
-
-    return bRet;
-}
-
 // ------------------------
 // - component_getFactory -
 // ------------------------

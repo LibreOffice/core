@@ -44,11 +44,11 @@ namespace frm
     /// the id of an attribute
     typedef sal_Int32   AttributeId;
     /// the "which id" of an item in an SfxItemSet
-    typedef USHORT      WhichId;
+    typedef sal_uInt16      WhichId;
     /// a SFX slot id
-    typedef USHORT      SfxSlotId;
+    typedef sal_uInt16      SfxSlotId;
     /// a script type
-    typedef USHORT      ScriptType;
+    typedef sal_uInt16      ScriptType;
 
     //====================================================================
     //= AttributeCheckState

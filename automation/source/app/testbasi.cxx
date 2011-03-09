@@ -43,7 +43,7 @@ TYPEINIT1(TTBasic,MyBasic)
 /*class MyFactory : public SbxFactory
 {
 public:
-    virtual SbxBase* Create( UINT16 nSbxId, UINT32 = SBXCR_SBX );
+    virtual SbxBase* Create( sal_uInt16 nSbxId, sal_uInt32 = SBXCR_SBX );
 };
 
 static SampleObjectFac aFac1;
@@ -52,7 +52,7 @@ static CommunicationFactory aComManFac;
 static ProcessFactory aProcessFac;
 static short nInst = 0;
 
-SbxBase* MyFactory::Create( UINT16 nSbxId, UINT32 nCr )
+SbxBase* MyFactory::Create( sal_uInt16 nSbxId, sal_uInt32 nCr )
 {
     if( nCr == SBXCR_TEST && nSbxId == SBXID_MYBASIC )
         return new MyBasic;
@@ -87,7 +87,7 @@ void TTBasic::LoadIniFile()
     ((TestToolObj*)pTestObject)->LoadIniFile();
 }
 
-SbTextType TTBasic::GetSymbolType( const String &rSymbol, BOOL bWasTTControl )
+SbTextType TTBasic::GetSymbolType( const String &rSymbol, sal_Bool bWasTTControl )
 {
     return ((TestToolObj*)pTestObject)->GetSymbolType( rSymbol, bWasTTControl );
 }
@@ -102,7 +102,7 @@ IMPL_LINK( TTBasic, CErrorImpl, ErrorEntry*, pData )
     return CError( pData->nError, pData->aText, pData->nLine, pData->nCol1, pData->nCol2 );
 }
 
-BOOL TTBasic::Compile( SbModule* p )
+sal_Bool TTBasic::Compile( SbModule* p )
 {
     p->SetComment( ((TestToolObj*)pTestObject)->GetRevision(p->GetSource()) );
     SbModule* pOldModule = GetCompileModule();
@@ -110,7 +110,7 @@ BOOL TTBasic::Compile( SbModule* p )
     p->SetSource( ((TestToolObj*)pTestObject)->PreCompile(p->GetSource()) );
     SetCompileModule( pOldModule );
     if ( ((TestToolObj*)pTestObject)->WasPrecompilerError() )
-        return FALSE;
+        return sal_False;
     return MyBasic::Compile( p );
 }
 
@@ -140,7 +140,7 @@ void TTBasic::ReportRuntimeError( AppBasEd *pEditWin )
     MyBasic::ReportRuntimeError( pEditWin );
 }
 
-void TTBasic::DebugFindNoErrors( BOOL bDebugFindNoErrors )
+void TTBasic::DebugFindNoErrors( sal_Bool bDebugFindNoErrors )
 {
     ((TestToolObj*)pTestObject)->DebugFindNoErrors( bDebugFindNoErrors );
 }

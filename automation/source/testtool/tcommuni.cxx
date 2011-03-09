@@ -43,7 +43,7 @@
 #include <basic/testtool.hxx>
 
 CommunicationManagerClientViaSocketTT::CommunicationManagerClientViaSocketTT()
-: CommunicationManagerClientViaSocket( TRUE )
+: CommunicationManagerClientViaSocket( sal_True )
 , aAppPath()
 , aAppParams()
 , pProcess( NULL )
@@ -51,14 +51,14 @@ CommunicationManagerClientViaSocketTT::CommunicationManagerClientViaSocketTT()
 }
 
 
-BOOL CommunicationManagerClientViaSocketTT::StartCommunication()
+sal_Bool CommunicationManagerClientViaSocketTT::StartCommunication()
 {
-    bApplicationStarted = FALSE;
+    bApplicationStarted = sal_False;
     return CommunicationManagerClientViaSocket::StartCommunication( ByteString( GetHostConfig(), RTL_TEXTENCODING_UTF8 ), GetTTPortConfig() );
 }
 
 
-BOOL CommunicationManagerClientViaSocketTT::StartCommunication( String aApp, String aParams, Environment *pChildEnv )
+sal_Bool CommunicationManagerClientViaSocketTT::StartCommunication( String aApp, String aParams, Environment *pChildEnv )
 {
     aAppPath = aApp;
     aAppParams = aParams;
@@ -67,7 +67,7 @@ BOOL CommunicationManagerClientViaSocketTT::StartCommunication( String aApp, Str
 }
 
 
-BOOL CommunicationManagerClientViaSocketTT::RetryConnect()
+sal_Bool CommunicationManagerClientViaSocketTT::RetryConnect()
 {
     if ( !bApplicationStarted )
     {
@@ -79,8 +79,8 @@ BOOL CommunicationManagerClientViaSocketTT::RetryConnect()
             pProcess = new Process();
             pProcess->SetImage( aAppPath, aAppParams, &aAppEnv );
 
-            BOOL bSucc = pProcess->Start();
-            bApplicationStarted = TRUE;
+            sal_Bool bSucc = pProcess->Start();
+            bApplicationStarted = sal_True;
 
             if ( bSucc )
             {
@@ -90,7 +90,7 @@ BOOL CommunicationManagerClientViaSocketTT::RetryConnect()
             }
             return bSucc;
         }
-        return FALSE;
+        return sal_False;
     }
     else
     {
@@ -101,18 +101,18 @@ BOOL CommunicationManagerClientViaSocketTT::RetryConnect()
             aWait.Start();
             while ( aWait.IsActive() )
                 GetpApp()->Yield();
-            return TRUE;
+            return sal_True;
         }
         else
-            return FALSE;
+            return sal_False;
     }
 }
 
-BOOL CommunicationManagerClientViaSocketTT::KillApplication()
+sal_Bool CommunicationManagerClientViaSocketTT::KillApplication()
 {
     if ( pProcess )
         return pProcess->Terminate();
-    return TRUE;
+    return sal_True;
 }
 
 #define GETSET(aVar, KeyName, Dafault)                 \
@@ -128,7 +128,7 @@ String GetHostConfig()
 {
     String aHostToTalk;
 
-    for ( USHORT i = 0 ; i < Application::GetCommandLineParamCount() ; i++ )
+    for ( sal_uInt16 i = 0 ; i < Application::GetCommandLineParamCount() ; i++ )
     {
         if ( Application::GetCommandLineParam( i ).Copy(0,6).CompareIgnoreCaseToAscii("-host=") == COMPARE_EQUAL
 #ifndef UNX
@@ -147,11 +147,11 @@ String GetHostConfig()
 }
 
 
-ULONG GetTTPortConfig()
+sal_uLong GetTTPortConfig()
 {
     String aPortToTalk;
 
-    for ( USHORT i = 0 ; i < Application::GetCommandLineParamCount() ; i++ )
+    for ( sal_uInt16 i = 0 ; i < Application::GetCommandLineParamCount() ; i++ )
     {
         if ( Application::GetCommandLineParam( i ).Copy(0,6).CompareIgnoreCaseToAscii("-port=") == COMPARE_EQUAL
 #ifndef UNX
@@ -160,7 +160,7 @@ ULONG GetTTPortConfig()
           )
         {
             aPortToTalk = Application::GetCommandLineParam( i ).Copy(6);
-            return (ULONG)aPortToTalk.ToInt64();
+            return (sal_uLong)aPortToTalk.ToInt64();
         }
     }
 
@@ -169,15 +169,15 @@ ULONG GetTTPortConfig()
     aConf.SetGroup("Communication");
 
     GETSET( abPortToTalk, "TTPort", ByteString::CreateFromInt32( TESTTOOL_DEFAULT_PORT ) );
-    return (ULONG)abPortToTalk.ToInt64();
+    return (sal_uLong)abPortToTalk.ToInt64();
 }
 
 
-ULONG GetUnoPortConfig()
+sal_uLong GetUnoPortConfig()
 {
     String aPortToTalk;
 
-    for ( USHORT i = 0 ; i < Application::GetCommandLineParamCount() ; i++ )
+    for ( sal_uInt16 i = 0 ; i < Application::GetCommandLineParamCount() ; i++ )
     {
         if ( Application::GetCommandLineParam( i ).Copy(0,9).CompareIgnoreCaseToAscii("-unoport=") == COMPARE_EQUAL
 #ifndef UNX
@@ -186,7 +186,7 @@ ULONG GetUnoPortConfig()
           )
         {
             aPortToTalk = Application::GetCommandLineParam( i ).Copy(6);
-            return (ULONG)aPortToTalk.ToInt64();
+            return (sal_uLong)aPortToTalk.ToInt64();
         }
     }
 
@@ -195,7 +195,7 @@ ULONG GetUnoPortConfig()
     aConf.SetGroup("Communication");
 
     GETSET( abPortToTalk, "UnoPort", ByteString::CreateFromInt32( UNO_DEFAULT_PORT ) );
-    return (ULONG)abPortToTalk.ToInt64();
+    return (sal_uLong)abPortToTalk.ToInt64();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

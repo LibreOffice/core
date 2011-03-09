@@ -34,7 +34,7 @@
  // RID_SVXDLG_THES -------------------------------------------------------
 ModalDialog RID_SVXDLG_THESAURUS
 {
-    HelpId = SID_THESAURUS ;
+    HelpId = CMD_SID_THESAURUS ;
     OutputSize = TRUE ;
     Size = MAP_APPFONT ( 235, 230 ) ;
     Text [ en-US ] = "Thesaurus" ;
@@ -50,6 +50,7 @@ ModalDialog RID_SVXDLG_THESAURUS
 
     ImageButton BTN_LEFT
     {
+        HelpID = "cui:ImageButton:RID_SVXDLG_THESAURUS:BTN_LEFT";
         Pos = MAP_APPFONT ( 5 , 15 ) ;
         Size = MAP_APPFONT ( 14 , 14 ) ;
         TABSTOP = TRUE ;
@@ -64,12 +65,14 @@ ModalDialog RID_SVXDLG_THESAURUS
     };
     ComboBox CB_WORD
     {
+        HelpID = "cui:ComboBox:RID_SVXDLG_THESAURUS:CB_WORD";
         DropDown = TRUE ;
         Pos = MAP_APPFONT ( 24 , 16 ) ;
         Size = MAP_APPFONT ( 141 , 60 ) ;   // have drop down space for several lines
     };
     MenuButton MB_LANGUAGE
     {
+        HelpID = "cui:MenuButton:RID_SVXDLG_THESAURUS:MB_LANGUAGE";
         Pos = MAP_APPFONT ( 170 , 16 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Text [ en-US ] = "~Language" ;
@@ -100,6 +103,7 @@ ModalDialog RID_SVXDLG_THESAURUS
     };
     Edit ED_REPL
     {
+        HelpID = "cui:Edit:RID_SVXDLG_THESAURUS:ED_REPL";
         BORDER = TRUE ;
         Pos = MAP_APPFONT ( 5 , 184 ) ;
         Size = MAP_APPFONT ( 225 , 12 ) ;

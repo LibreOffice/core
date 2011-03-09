@@ -49,6 +49,7 @@ ModalDialog RID_SFXDLG_NEWDICT
     };
     Edit ED_DICTNAME
     {
+        HelpID = "cui:Edit:RID_SFXDLG_NEWDICT:ED_DICTNAME";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 55 , 14 ) ;
         Size = MAP_APPFONT ( 90 , 12 ) ;
@@ -63,6 +64,7 @@ ModalDialog RID_SFXDLG_NEWDICT
     };
     ListBox LB_DICTLANG
     {
+        HelpID = "cui:ListBox:RID_SFXDLG_NEWDICT:LB_DICTLANG";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 55 , 30 ) ;
         Size = MAP_APPFONT ( 90 , 66 ) ;
@@ -70,6 +72,7 @@ ModalDialog RID_SFXDLG_NEWDICT
     };
     CheckBox BTN_EXCEPT
     {
+        HelpID = "cui:CheckBox:RID_SFXDLG_NEWDICT:BTN_EXCEPT";
         Pos = MAP_APPFONT ( 12 , 44 ) ;
         Size = MAP_APPFONT ( 57 , 10 ) ;
         Text [ en-US ] = "~Exception (-)" ;
@@ -118,6 +121,7 @@ ModalDialog RID_SFXDLG_EDITDICT
     };
     ListBox LB_ALLDICTS
     {
+        HelpID = "cui:ListBox:RID_SFXDLG_EDITDICT:LB_ALLDICTS";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 82 , 9 ) ;
         Size = MAP_APPFONT ( 121 , 62 ) ;
@@ -131,6 +135,7 @@ ModalDialog RID_SFXDLG_EDITDICT
     };
     ListBox LB_DICTLANG
     {
+        HelpID = "cui:ListBox:RID_SFXDLG_EDITDICT:LB_DICTLANG";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 82 , 25 ) ;
         Size = MAP_APPFONT ( 121 , 66 ) ;
@@ -152,6 +157,7 @@ ModalDialog RID_SFXDLG_EDITDICT
     };
     Edit ED_WORD
     {
+        HelpID = "cui:Edit:RID_SFXDLG_EDITDICT:ED_WORD";
         Pos = MAP_APPFONT ( 12 , 56 ) ;
         Size = MAP_APPFONT ( 71 , 12 ) ;
         Border = TRUE ;
@@ -166,6 +172,7 @@ ModalDialog RID_SFXDLG_EDITDICT
 
     Edit ED_REPLACE
     {
+        HelpID = "cui:Edit:RID_SFXDLG_EDITDICT:ED_REPLACE";
         Pos = MAP_APPFONT ( 83 , 56 ) ;
         Size = MAP_APPFONT ( 120 , 12 ) ;
         Border = TRUE ;
@@ -174,6 +181,7 @@ ModalDialog RID_SFXDLG_EDITDICT
 
     PushButton PB_NEW_REPLACE
     {
+        HelpID = "cui:PushButton:RID_SFXDLG_EDITDICT:PB_NEW_REPLACE";
         Pos = MAP_APPFONT ( 209 , 56 ) ;
         Size = MAP_APPFONT ( 55 , 12 ) ;
         TabStop = TRUE ;
@@ -181,6 +189,7 @@ ModalDialog RID_SFXDLG_EDITDICT
     };
     PushButton PB_DELETE_REPLACE
     {
+        HelpID = "cui:PushButton:RID_SFXDLG_EDITDICT:PB_DELETE_REPLACE";
         Pos = MAP_APPFONT ( 209 , 71 ) ;
         Size = MAP_APPFONT ( 55 , 12 ) ;
         TabStop = TRUE ;

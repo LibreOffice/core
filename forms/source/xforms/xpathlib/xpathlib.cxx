@@ -328,7 +328,7 @@ static sal_Bool parseDateTime(const ::rtl::OUString& aString, DateTime& aDateTim
     sal_Int32 nMinute = aTimeString.getToken(0, ':', nIndex).toInt32();
     sal_Int32 nSecond = aTimeString.getToken(0, ':', nIndex).toInt32();
 
-    Date tmpDate((USHORT)nDay, (USHORT)nMonth, (USHORT)nYear);
+    Date tmpDate((sal_uInt16)nDay, (sal_uInt16)nMonth, (sal_uInt16)nYear);
     Time tmpTime(nHour, nMinute, nSecond);
     DateTime tmpDateTime(tmpDate, tmpTime);
     if (aString.indexOf(aUTCString) < 0)

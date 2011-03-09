@@ -3,3 +3,5 @@
 ..\%__SRC%\lib\lib*.so %_DEST%\lib%_EXT%\lib*.so
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
 ..\dtd\*.dtd %_DEST%\bin%_EXT%\*.*
+..\%__SRC%\misc\package2.component %_DEST%\xml%_EXT%\package2.component
+..\%__SRC%\misc\xstor.component %_DEST%\xml%_EXT%\xstor.component

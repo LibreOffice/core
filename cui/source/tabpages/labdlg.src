@@ -53,6 +53,7 @@ TabPage RID_SVXPAGE_CAPTION
     };
     MetricField MF_ABSTAND
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_CAPTION:MF_ABSTAND";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 50 , 51  ) ;
         Size = MAP_APPFONT ( 50 , 12 ) ;
@@ -73,6 +74,7 @@ TabPage RID_SVXPAGE_CAPTION
     };
     ListBox LB_WINKEL
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_CAPTION:LB_WINKEL";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 143 , 51  ) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
@@ -96,6 +98,7 @@ TabPage RID_SVXPAGE_CAPTION
     };
     ListBox LB_ANSATZ
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_CAPTION:LB_ANSATZ";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 50 , 67  ) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
@@ -119,6 +122,7 @@ TabPage RID_SVXPAGE_CAPTION
     };
     MetricField MF_ANSATZ
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_CAPTION:MF_ANSATZ";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 143 , 67  ) ;
         Size = MAP_APPFONT ( 50 , 12 ) ;
@@ -139,6 +143,7 @@ TabPage RID_SVXPAGE_CAPTION
     };
     ListBox LB_ANSATZ_REL
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_CAPTION:LB_ANSATZ_REL";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 143 , 67  ) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
@@ -153,6 +158,7 @@ TabPage RID_SVXPAGE_CAPTION
     };
     MetricField MF_LAENGE
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_CAPTION:MF_LAENGE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 50 , 83  ) ;
         Size = MAP_APPFONT ( 50 , 12 ) ;
@@ -167,6 +173,7 @@ TabPage RID_SVXPAGE_CAPTION
     };
     CheckBox CB_LAENGE
     {
+        HelpID = "cui:CheckBox:RID_SVXPAGE_CAPTION:CB_LAENGE";
         Pos = MAP_APPFONT ( 106 , 84  ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         TabStop = TRUE ;

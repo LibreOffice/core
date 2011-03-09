@@ -32,6 +32,7 @@
 #include <sanedlg.hxx>
 #include <osl/thread.hxx>
 #include <boost/shared_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 
 #if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
@@ -203,7 +204,7 @@ void ScannerThread::run()
     {
         int nOption = m_pHolder->m_aSane.GetOptionByName( "preview" );
         if( nOption != -1 )
-            m_pHolder->m_aSane.SetOptionValue( nOption, (BOOL)FALSE );
+            m_pHolder->m_aSane.SetOptionValue( nOption, (sal_Bool)sal_False );
 
         m_pHolder->m_nError =
             m_pHolder->m_aSane.Start( *pTransporter ) ?
@@ -277,7 +278,7 @@ SEQ( ScannerContext ) ScannerManager::getAvailableScanners() throw()
 
 // -----------------------------------------------------------------------------
 
-BOOL ScannerManager::configureScanner( ScannerContext& scanner_context ) throw( ScannerException )
+sal_Bool ScannerManager::configureScanner( ScannerContext& scanner_context ) throw( ScannerException )
 {
     osl::MutexGuard aGuard( theSaneProtector::get() );
     sanevec &rSanes = theSanes::get().m_aSanes;
@@ -286,7 +287,7 @@ BOOL ScannerManager::configureScanner( ScannerContext& scanner_context ) throw( 
     fprintf( stderr, "ScannerManager::configureScanner\n" );
 #endif
 
-    if( scanner_context.InternalData < 0 || (ULONG)scanner_context.InternalData >= rSanes.size() )
+    if( scanner_context.InternalData < 0 || (sal_uLong)scanner_context.InternalData >= rSanes.size() )
         throw ScannerException(
             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Scanner does not exist")),
             REF( XScannerManager )( this ),
@@ -303,7 +304,7 @@ BOOL ScannerManager::configureScanner( ScannerContext& scanner_context ) throw( 
 
     pHolder->m_bBusy = true;
     SaneDlg aDlg( NULL, pHolder->m_aSane );
-    BOOL bRet = (BOOL)aDlg.Execute();
+    sal_Bool bRet = (sal_Bool)aDlg.Execute();
     pHolder->m_bBusy = false;
 
     return bRet;
@@ -321,7 +322,7 @@ void ScannerManager::startScan( const ScannerContext& scanner_context,
     fprintf( stderr, "ScannerManager::startScan\n" );
 #endif
 
-    if( scanner_context.InternalData < 0 || (ULONG)scanner_context.InternalData >= rSanes.size() )
+    if( scanner_context.InternalData < 0 || (sal_uLong)scanner_context.InternalData >= rSanes.size() )
         throw ScannerException(
             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Scanner does not exist")),
             REF( XScannerManager )( this ),
@@ -347,7 +348,7 @@ ScanError ScannerManager::getError( const ScannerContext& scanner_context ) thro
     osl::MutexGuard aGuard( theSaneProtector::get() );
     sanevec &rSanes = theSanes::get().m_aSanes;
 
-    if( scanner_context.InternalData < 0 || (ULONG)scanner_context.InternalData >= rSanes.size() )
+    if( scanner_context.InternalData < 0 || (sal_uLong)scanner_context.InternalData >= rSanes.size() )
         throw ScannerException(
             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Scanner does not exist")),
             REF( XScannerManager )( this ),
@@ -366,7 +367,7 @@ REF( AWT::XBitmap ) ScannerManager::getBitmap( const ScannerContext& scanner_con
     osl::MutexGuard aGuard( theSaneProtector::get() );
     sanevec &rSanes = theSanes::get().m_aSanes;
 
-    if( scanner_context.InternalData < 0 || (ULONG)scanner_context.InternalData >= rSanes.size() )
+    if( scanner_context.InternalData < 0 || (sal_uLong)scanner_context.InternalData >= rSanes.size() )
         throw ScannerException(
             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Scanner does not exist")),
             REF( XScannerManager )( this ),

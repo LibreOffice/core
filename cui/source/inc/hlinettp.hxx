@@ -47,18 +47,18 @@ private:
     RadioButton         maRbtLinktypTelnet;
     FixedText           maFtTarget;
     SvxHyperURLBox      maCbbTarget;
+    ImageButton         maBtBrowse;
     FixedText           maFtLogin;
     Edit                maEdLogin;
+    ImageButton         maBtTarget;
     FixedText           maFtPassword;
     Edit                maEdPassword;
     CheckBox            maCbAnonymous;
-    ImageButton         maBtBrowse;
-    ImageButton         maBtTarget;
 
     String              maStrOldUser;
     String              maStrOldPassword;
 
-    BOOL                mbMarkWndOpen;
+    sal_Bool                mbMarkWndOpen;
 
     String              maStrStdDocURL;
 
@@ -89,8 +89,8 @@ protected:
     virtual void GetCurentItemData ( String& aStrURL, String& aStrName,
                                      String& aStrIntName, String& aStrFrame,
                                      SvxLinkInsertMode& eMode );
-    virtual BOOL ShouldOpenMarkWnd () {return ( mbMarkWndOpen && maRbtLinktypInternet.IsChecked() );}
-    virtual void SetMarkWndShouldOpen (BOOL bOpen) {mbMarkWndOpen=bOpen;}
+    virtual sal_Bool ShouldOpenMarkWnd () {return ( mbMarkWndOpen && maRbtLinktypInternet.IsChecked() );}
+    virtual void SetMarkWndShouldOpen (sal_Bool bOpen) {mbMarkWndOpen=bOpen;}
 
 public:
     SvxHyperlinkInternetTp ( Window *pParent, const SfxItemSet& rItemSet);
@@ -99,7 +99,7 @@ public:
     static  IconChoicePage* Create( Window* pWindow, const SfxItemSet& rItemSet );
 
     virtual void        SetMarkStr ( String& aStrMark );
-    virtual void        SetOnlineMode( BOOL bEnable );
+    virtual void        SetOnlineMode( sal_Bool bEnable );
 
     virtual void        SetInitFocus();
 };

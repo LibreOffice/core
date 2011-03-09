@@ -114,7 +114,7 @@ char* GetPasswordFunction( PK11SlotInfo* pSlot, PRBool bRetry, void* /*arg*/ )
             if ( pPasswordRequest->isPassword() )
             {
                 ByteString aPassword = ByteString( String( pPasswordRequest->getPassword() ), gsl_getSystemTextEncoding() );
-                USHORT nLen = aPassword.Len();
+                sal_uInt16 nLen = aPassword.Len();
                 char* pPassword = (char*) PORT_Alloc( nLen+1 ) ;
                 pPassword[nLen] = 0;
                 memcpy( pPassword, aPassword.GetBuffer(), nLen );

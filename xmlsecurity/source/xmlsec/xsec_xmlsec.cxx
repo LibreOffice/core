@@ -95,12 +95,10 @@ extern "C"
 {
 
 #if defined( XMLSEC_CRYPTO_NSS )
-extern sal_Bool nss_component_writeInfo( void*, void* );
 extern void* nss_component_getFactory( const sal_Char*, void*, void* );
 #endif
 
 #if defined( XMLSEC_CRYPTO_MSCRYPTO )
-extern sal_Bool mscrypt_component_writeInfo( void*, void* );
 extern void* mscrypt_component_getFactory( const sal_Char*, void*, void* );
 #endif
 
@@ -108,69 +106,6 @@ void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment **)
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
-
-sal_Bool SAL_CALL component_writeInfo( void* pServiceManager , void* pRegistryKey )
-{
-    sal_Bool result = sal_False;
-    sal_Int32 i ;
-    OUString sKeyName ;
-    Reference< XRegistryKey > xNewKey ;
-    Sequence< OUString > seqServices ;
-    Reference< XRegistryKey > xKey( reinterpret_cast< XRegistryKey* >( pRegistryKey ) ) ;
-
-    if( xKey.is() ) {
-        // XMLElementWrapper_XmlSecImpl
-        sKeyName = OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) ) ;
-        sKeyName += XMLElementWrapper_XmlSecImpl_getImplementationName() ;
-        sKeyName += OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES")) ;
-
-        xNewKey = xKey->createKey( sKeyName ) ;
-        if( xNewKey.is() ) {
-            seqServices = XMLElementWrapper_XmlSecImpl_getSupportedServiceNames() ;
-            for( i = seqServices.getLength() ; i -- ;  )
-                xNewKey->createKey( seqServices.getConstArray()[i] ) ;
-        }
-
-        // XMLDocumentWrapper_XmlSecImpl
-        sKeyName = OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) ) ;
-        sKeyName += XMLDocumentWrapper_XmlSecImpl_getImplementationName() ;
-        sKeyName += OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES")) ;
-
-        xNewKey = xKey->createKey( sKeyName ) ;
-        if( xNewKey.is() ) {
-            seqServices = XMLDocumentWrapper_XmlSecImpl_getSupportedServiceNames() ;
-            for( i = seqServices.getLength() ; i -- ;  )
-                xNewKey->createKey( seqServices.getConstArray()[i] ) ;
-        }
-
-        // SerialNumberAdapterImpl
-        sKeyName = OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) ) ;
-        sKeyName += SerialNumberAdapterImpl_getImplementationName() ;
-        sKeyName += OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES")) ;
-
-        xNewKey = xKey->createKey( sKeyName ) ;
-        if( xNewKey.is() ) {
-            seqServices = SerialNumberAdapterImpl_getSupportedServiceNames() ;
-            for( i = seqServices.getLength() ; i -- ;  )
-                xNewKey->createKey( seqServices.getConstArray()[i] ) ;
-        }
-
-#if defined( XMLSEC_CRYPTO_NSS )
-        result = nss_component_writeInfo( pServiceManager, pRegistryKey ) ;
-        if( !result )
-            return sal_False ;
-#endif
-
-#if defined( XMLSEC_CRYPTO_MSCRYPTO )
-        result = mscrypt_component_writeInfo( pServiceManager, pRegistryKey ) ;
-        if( !result )
-            return sal_False ;
-#endif
-    }
-
-    return result;
 }
 
 void* SAL_CALL component_getFactory( const sal_Char* pImplName , void* pServiceManager , void* pRegistryKey )

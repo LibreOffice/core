@@ -61,7 +61,7 @@ SvxHyperlinkMailTp::SvxHyperlinkMailTp ( Window *pParent, const SfxItemSet& rIte
     maEdSubject     ( this, CUI_RES (ED_SUBJECT) )
 {
     // Disable display of bitmap names.
-    maBtAdrBook.EnableTextDisplay (FALSE);
+    maBtAdrBook.EnableTextDisplay (sal_False);
 
     InitStdControls();
     FreeResource();
@@ -86,6 +86,9 @@ SvxHyperlinkMailTp::SvxHyperlinkMailTp ( Window *pParent, const SfxItemSet& rIte
 
     if ( !SvtModuleOptions().IsModuleInstalled( SvtModuleOptions::E_SDATABASE ) )
         maBtAdrBook.Hide();
+
+    maBtAdrBook.SetAccessibleRelationMemberOf( &maGrpMailNews );
+    maBtAdrBook.SetAccessibleRelationLabeledBy( &maFtReceiver );
 }
 
 SvxHyperlinkMailTp::~SvxHyperlinkMailTp ()
@@ -209,7 +212,7 @@ void SvxHyperlinkMailTp::SetScheme( const String& aScheme )
     //if  aScheme is empty or unknown the default beaviour is like it where MAIL
     const sal_Char sNewsScheme[]   = INET_NEWS_SCHEME;
 
-    BOOL bMail = aScheme.SearchAscii( sNewsScheme ) != 0;
+    sal_Bool bMail = aScheme.SearchAscii( sNewsScheme ) != 0;
 
     //update protocol button selection:
     maRbtMail.Check(bMail);

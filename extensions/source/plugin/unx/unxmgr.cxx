@@ -243,7 +243,7 @@ static void CheckPluginRegistryFiles( const rtl::OString& rPath, list< PluginDes
 Sequence<PluginDescription> XPluginManager_Impl::impl_getPluginDescriptions() throw()
 {
     static Sequence<PluginDescription> aDescriptions;
-    static BOOL bHavePlugins = FALSE;
+    static sal_Bool bHavePlugins = sal_False;
     if( ! bHavePlugins )
     {
         rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
@@ -321,7 +321,7 @@ Sequence<PluginDescription> XPluginManager_Impl::impl_getPluginDescriptions() th
             delete *iter;
         }
         aPlugins.clear();
-        bHavePlugins = TRUE;
+        bHavePlugins = sal_True;
     }
     return aDescriptions;
 }

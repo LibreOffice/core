@@ -32,6 +32,7 @@
 
 FloatingWindow RID_BASICIDE_OBJCAT
 {
+    HelpID = "basctl:FloatingWindow:RID_BASICIDE_OBJCAT";
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 191 , 179 ) ;
@@ -82,3 +83,9 @@ FloatingWindow RID_BASICIDE_OBJCAT
         Size = MAP_APPFONT ( 185 , 18 ) ;
     };
 };
+
+String RID_STR_TLB_MACROS
+{
+    Text [ en-US ] = "Objects Tree";
+};
+

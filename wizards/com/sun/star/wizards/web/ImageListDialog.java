@@ -32,8 +32,10 @@ import com.sun.star.awt.XButton;
 import com.sun.star.awt.XFixedText;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.wizards.common.Helper;
+import com.sun.star.wizards.common.HelpIds;
 import com.sun.star.wizards.common.JavaTools;
 import com.sun.star.wizards.common.IRenderer;
+import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.ui.ImageList;
 import com.sun.star.wizards.ui.UIConsts;
 import com.sun.star.wizards.ui.UnoDialog2;
@@ -131,18 +133,18 @@ public abstract class ImageListDialog extends UnoDialog2 implements UIConsts
         Helper.setUnoPropertyValues(xDialogModel,
                 new String[]
                 {
-                    "Closeable", "Height", "HelpURL", "Moveable", "Name", "PositionX", "PositionY", "Step", "Title", "Width"
+                    "Closeable", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, "Moveable", PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, "Title", PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
-                    Boolean.TRUE, new Integer(dialogHeight), "HID:" + hid, Boolean.TRUE, "imgDialog", new Integer(59), new Integer(24), INTEGERS[1], resources[RES_TITLE], new Integer(dialogWidth)
+                    Boolean.TRUE, new Integer(dialogHeight), HelpIds.getHelpIdString(hid), Boolean.TRUE, "imgDialog", new Integer(59), new Integer(24), INTEGERS[1], resources[RES_TITLE], new Integer(dialogWidth)
                 });
         //Set member- FontDescriptors...
         fontDescriptor1.Weight = 150;
 
         final String[] PROPNAMES = new String[]
         {
-            "DefaultButton", "Height", "HelpURL", "Label", "Name", "PositionX", "PositionY", "PushButtonType", "TabIndex", "Width"
+            "DefaultButton", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, "PushButtonType", PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
         };
 
         Integer iButtonsX = new Integer(6 + ilWidth + 6);
@@ -151,13 +153,13 @@ public abstract class ImageListDialog extends UnoDialog2 implements UIConsts
                 PROPNAMES,
                 new Object[]
                 {
-                    Boolean.TRUE, INTEGER_14, "HID:" + (hid + 3), resources[RES_OK], "btnOK", iButtonsX, new Integer(22), new Short((short) com.sun.star.awt.PushButtonType.OK_value), new Short((short) 7), INTEGER_50
+                    Boolean.TRUE, INTEGER_14, HelpIds.getHelpIdString(hid + 3), resources[RES_OK], "btnOK", iButtonsX, new Integer(22), new Short((short) com.sun.star.awt.PushButtonType.OK_value), new Short((short) 7), INTEGER_50
                 });
         btnCancel = insertButton("btnCancel", null,
                 PROPNAMES,
                 new Object[]
                 {
-                    Boolean.FALSE, INTEGER_14, "HID:" + (hid + 4), resources[RES_CANCEL], "btnCancel", iButtonsX, new Integer(41), new Short((short) com.sun.star.awt.PushButtonType.CANCEL_value), new Short((short) 8), INTEGER_50
+                    Boolean.FALSE, INTEGER_14, HelpIds.getHelpIdString(hid + 4), resources[RES_CANCEL], "btnCancel", iButtonsX, new Integer(41), new Short((short) com.sun.star.awt.PushButtonType.CANCEL_value), new Short((short) 8), INTEGER_50
                 });
         btnHelp = insertButton("btnHelp", null,
                 PROPNAMES,
@@ -175,7 +177,7 @@ public abstract class ImageListDialog extends UnoDialog2 implements UIConsts
                     PROPNAMES,
                     new Object[]
                     {
-                        Boolean.FALSE, INTEGER_14, "HID:" + (hid + 1), resources[RES_OTHER], "btnOther", iButtonsX, new Integer(otherY), new Short((short) com.sun.star.awt.PushButtonType.STANDARD_value), new Short((short) 5), INTEGER_50
+                        Boolean.FALSE, INTEGER_14, HelpIds.getHelpIdString(hid + 1), resources[RES_OTHER], "btnOther", iButtonsX, new Integer(otherY), new Short((short) com.sun.star.awt.PushButtonType.STANDARD_value), new Short((short) 5), INTEGER_50
                     });
         }
 
@@ -188,7 +190,7 @@ public abstract class ImageListDialog extends UnoDialog2 implements UIConsts
                     PROPNAMES,
                     new Object[]
                     {
-                        Boolean.FALSE, INTEGER_14, "HID:" + (hid + 2), resources[RES_DESELECT], "btnNoImage", iButtonsX, new Integer(deselectY), new Short((short) com.sun.star.awt.PushButtonType.STANDARD_value), new Short((short) 4), INTEGER_50
+                        Boolean.FALSE, INTEGER_14, HelpIds.getHelpIdString(hid + 2), resources[RES_DESELECT], "btnNoImage", iButtonsX, new Integer(deselectY), new Short((short) com.sun.star.awt.PushButtonType.STANDARD_value), new Short((short) 4), INTEGER_50
                     });
         }
 
@@ -199,14 +201,14 @@ public abstract class ImageListDialog extends UnoDialog2 implements UIConsts
         il.create(this);
 
         /*lblContainer = insertLabel("lblContainer",
-        new String[] {"Height", "Name", "PositionX", "PositionY", "TabIndex", "Width"},
+        new String[] {PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH},
         new Object[] { new Integer(176),"lblContainer",new Integer(6),new Integer(17),new Short((short)5),new Integer(214)}
         );*/
 
         lblTitle = insertLabel("lblTitle",
                 new String[]
                 {
-                    "FontDescriptor", "Height", "Label", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    "FontDescriptor", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {

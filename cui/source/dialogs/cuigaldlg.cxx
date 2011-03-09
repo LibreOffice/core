@@ -38,7 +38,6 @@
 #include <svx/gallery1.hxx>
 #include <svx/galtheme.hxx>
 #include "cuigaldlg.hxx"
-#include <svl/pickerhelper.hxx>
 #include "helpid.hrc"
 #include <unotools/syslocale.hxx>
 #include <cppuhelper/implbase1.hxx>
@@ -53,6 +52,9 @@
 #include <sfx2/sfxuno.hxx>
 #include "dialmgr.hxx"
 #include "gallery.hrc"
+#include <svx/dialogs.hrc>
+#include <svx/dialmgr.hxx>
+
 
 // --------------
 // - Namespaces -
@@ -131,7 +133,7 @@ void SAL_CALL SearchThread::onTerminated()
 
 void SearchThread::ImplSearch( const INetURLObject& rStartURL,
                                const ::std::vector< String >& rFormats,
-                               BOOL bRecursive )
+                               sal_Bool bRecursive )
 {
     {
         SolarMutexGuard aGuard;
@@ -166,7 +168,7 @@ void SearchThread::ImplSearch( const INetURLObject& rStartURL,
                     bFolder = sal_False;
 
                 if( bRecursive && bFolder )
-                    ImplSearch( aFoundURL, rFormats, TRUE );
+                    ImplSearch( aFoundURL, rFormats, sal_True );
                 else
                 {
                     sal_Bool bDocument = xRow->getBoolean( 2 ); // property "IsDocument"
@@ -196,7 +198,7 @@ void SearchThread::ImplSearch( const INetURLObject& rStartURL,
                             );
                             mpBrowser->aLbxFound.InsertEntry(
                                 GetReducedString( aFoundURL, 50 ),
-                                (USHORT) mpBrowser->aFoundList.size() - 1 );
+                                (sal_uInt16) mpBrowser->aFoundList.size() - 1 );
                         }
                     }
                 }
@@ -296,9 +298,9 @@ void SAL_CALL TakeThread::run()
 {
     String              aName;
     INetURLObject       aURL;
-    USHORT              nEntries;
+    sal_uInt16              nEntries;
     GalleryTheme*       pThm = mpBrowser->GetXChgData()->pTheme;
-    USHORT              nPos;
+    sal_uInt16              nPos;
     GalleryProgress*    pStatusProgress;
 
     {
@@ -308,7 +310,7 @@ void SAL_CALL TakeThread::run()
         pThm->LockBroadcaster();
     }
 
-    for( USHORT i = 0; i < nEntries && schedule(); i++ )
+    for( sal_uInt16 i = 0; i < nEntries && schedule(); i++ )
     {
         // kompletten Filenamen aus FoundList holen
         if( mpBrowser->bTakeAll )
@@ -317,7 +319,7 @@ void SAL_CALL TakeThread::run()
             aURL = INetURLObject(*mpBrowser->aFoundList[ nPos = mpBrowser->aLbxFound.GetSelectEntryPos( i ) ]);
 
         // Position in Taken-Liste uebernehmen
-        mrTakenList.Insert( (void*) (ULONG)nPos, LIST_APPEND );
+        mrTakenList.Insert( (void*) (sal_uLong)nPos, LIST_APPEND );
 
         {
             SolarMutexGuard aGuard;
@@ -386,12 +388,12 @@ IMPL_LINK( TakeProgress, CleanUpHdl, void*, EMPTYARG )
     sal_uInt32                  i, nCount;
 
     GetParent()->EnterWait();
-    mpBrowser->aLbxFound.SetUpdateMode( FALSE );
+    mpBrowser->aLbxFound.SetUpdateMode( sal_False );
     mpBrowser->aLbxFound.SetNoSelection();
 
     // mark all taken positions in aRemoveEntries
     for( i = 0UL, nCount = maTakenList.Count(); i < nCount; ++i )
-        aRemoveEntries[ (ULONG) maTakenList.GetObject( i ) ] = true;
+        aRemoveEntries[ (sal_uLong) maTakenList.GetObject( i ) ] = true;
 
     maTakenList.Clear();
 
@@ -421,7 +423,7 @@ IMPL_LINK( TakeProgress, CleanUpHdl, void*, EMPTYARG )
 
     aRemainingVector.clear();
 
-    mpBrowser->aLbxFound.SetUpdateMode( TRUE );
+    mpBrowser->aLbxFound.SetUpdateMode( sal_True );
     mpBrowser->SelectFoundHdl( NULL );
     GetParent()->LeaveWait();
 
@@ -564,7 +566,7 @@ GalleryIdDialog::GalleryIdDialog( Window* pParent, GalleryTheme* _pThm ) :
 
     GalleryTheme::InsertAllThemes( aLbResName );
 
-    aLbResName.SelectEntryPos( (USHORT) pThm->GetId() );
+    aLbResName.SelectEntryPos( (sal_uInt16) pThm->GetId() );
     aLbResName.GrabFocus();
 
     aBtnOk.SetClickHdl( LINK( this, GalleryIdDialog, ClickOkHdl ) );
@@ -575,10 +577,10 @@ GalleryIdDialog::GalleryIdDialog( Window* pParent, GalleryTheme* _pThm ) :
 IMPL_LINK( GalleryIdDialog, ClickOkHdl, void*, EMPTYARG )
 {
     Gallery*    pGal = pThm->GetParent();
-    const ULONG nId = GetId();
-    BOOL        bDifferentThemeExists = FALSE;
+    const sal_uLong nId = GetId();
+    sal_Bool        bDifferentThemeExists = sal_False;
 
-    for( ULONG i = 0, nCount = pGal->GetThemeCount(); i < nCount && !bDifferentThemeExists; i++ )
+    for( sal_uLong i = 0, nCount = pGal->GetThemeCount(); i < nCount && !bDifferentThemeExists; i++ )
     {
         const GalleryThemeEntry* pInfo = pGal->GetThemeInfo( i );
 
@@ -593,7 +595,7 @@ IMPL_LINK( GalleryIdDialog, ClickOkHdl, void*, EMPTYARG )
             InfoBox aBox( this, aStr );
             aBox.Execute();
             aLbResName.GrabFocus();
-            bDifferentThemeExists = TRUE;
+            bDifferentThemeExists = sal_True;
         }
     }
 
@@ -632,7 +634,7 @@ GalleryThemeProperties::GalleryThemeProperties( Window* pParent, ExchangeData* _
 
 // ------------------------------------------------------------------------
 
-void GalleryThemeProperties::PageCreated( USHORT nId, SfxTabPage &rPage )
+void GalleryThemeProperties::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
     if( RID_SVXTABPAGE_GALLERY_GENERAL == nId )
         ( (TPGalleryThemeGeneral&) rPage ).SetXChgData( pData );
@@ -660,6 +662,11 @@ TPGalleryThemeGeneral::TPGalleryThemeGeneral( Window* pParent, const SfxItemSet&
             aFtMSShowChangeDate     ( this, CUI_RES( FT_MS_SHOW_CHANGEDATE ) )
 {
     FreeResource();
+
+    String aAccName(SVX_RES(RID_SVXSTR_GALLERY_THEMENAME));
+    aEdtMSName.SetAccessibleName(aAccName);
+    aFiMSImage.SetAccessibleName(aAccName);
+    aEdtMSName.SetAccessibleRelationLabeledBy( &aFiMSImage );
 }
 
 // ------------------------------------------------------------------------
@@ -672,8 +679,8 @@ void TPGalleryThemeGeneral::SetXChgData( ExchangeData* _pData )
     String              aOutStr( String::CreateFromInt32( pThm->GetObjectCount() ) );
     String              aObjStr( CUI_RES( RID_SVXSTR_GALLERYPROPS_OBJECT ) );
     String              aAccess;
-    String              aType( CUI_RES( RID_SVXSTR_GALLERYPROPS_GALTHEME ) );
-    BOOL                bReadOnly = pThm->IsReadOnly() && !pThm->IsImported();
+    String              aType( SVX_RES( RID_SVXSTR_GALLERYPROPS_GALTHEME ) );
+    sal_Bool            bReadOnly = pThm->IsReadOnly() && !pThm->IsImported();
 
     aEdtMSName.SetHelpId( HID_GALLERY_EDIT_MSNAME );
     aEdtMSName.SetText( pThm->GetName() );
@@ -712,7 +719,7 @@ void TPGalleryThemeGeneral::SetXChgData( ExchangeData* _pData )
     aFtMSShowChangeDate.SetText( aAccess );
 
     // Image setzen
-    USHORT nId;
+    sal_uInt16 nId;
 
     if( pThm->IsImported() )
         nId = RID_SVXBMP_THEME_IMPORTED_BIG;
@@ -728,10 +735,10 @@ void TPGalleryThemeGeneral::SetXChgData( ExchangeData* _pData )
 
 // ------------------------------------------------------------------------
 
-BOOL TPGalleryThemeGeneral::FillItemSet( SfxItemSet& /*rSet*/ )
+sal_Bool TPGalleryThemeGeneral::FillItemSet( SfxItemSet& /*rSet*/ )
 {
     pData->aEditedTitle = aEdtMSName.GetText();
-    return TRUE;
+    return sal_True;
 }
 
 // ------------------------------------------------------------------------
@@ -747,24 +754,27 @@ SfxTabPage* TPGalleryThemeGeneral::Create( Window* pParent, const SfxItemSet& rS
 
 TPGalleryThemeProperties::TPGalleryThemeProperties( Window* pWindow, const SfxItemSet& rSet ) :
         SfxTabPage          ( pWindow, CUI_RES( RID_SVXTABPAGE_GALLERYTHEME_FILES ), rSet ),
+        aFtFileType         ( this, CUI_RES(FT_FILETYPE ) ),
+        aCbbFileType        ( this, CUI_RES(CBB_FILETYPE ) ),
+        aLbxFound           ( this, CUI_RES(LBX_FOUND ) ),
         aBtnSearch          ( this, CUI_RES(BTN_SEARCH ) ),
         aBtnTake            ( this, CUI_RES(BTN_TAKE ) ),
         aBtnTakeAll         ( this, CUI_RES(BTN_TAKEALL ) ),
         aCbxPreview         ( this, CUI_RES(CBX_PREVIEW ) ),
-        aCbbFileType        ( this, CUI_RES(CBB_FILETYPE ) ),
-        aLbxFound           ( this, CUI_RES(LBX_FOUND ) ),
-        aFtFileType         ( this, CUI_RES(FT_FILETYPE ) ),
         aWndPreview         ( this, CUI_RES( WND_BRSPRV ) ),
         nCurFilterPos       (0),
         nFirstExtFilterPos  (0),
-        bEntriesFound       (FALSE),
-        bInputAllowed       (TRUE),
-        bSearchRecursive    (FALSE),
+        bEntriesFound       (sal_False),
+        bInputAllowed       (sal_True),
+        bSearchRecursive    (sal_False),
         xDialogListener     ( new ::svt::DialogClosedListener() )
 {
     FreeResource();
 
     xDialogListener->SetDialogClosedLink( LINK( this, TPGalleryThemeProperties, DialogClosedHdl ) );
+    aLbxFound.SetAccessibleName(String(SVX_RES(RID_SVXSTR_GALLERY_FILESFOUND)));
+    aWndPreview.SetAccessibleName(aCbxPreview.GetText());
+    aLbxFound.SetAccessibleRelationLabeledBy(&aLbxFound);
 }
 
 // ------------------------------------------------------------------------
@@ -857,7 +867,7 @@ void TPGalleryThemeProperties::FillFilterList()
     FilterEntry*        pFilterEntry;
     FilterEntry*        pTestEntry;
     sal_uInt16          i, nKeyCount;
-    BOOL                bInList;
+    sal_Bool                bInList;
 
     // graphic filters
     for( i = 0, nKeyCount = pFilter->GetImportFormatCount(); i < nKeyCount; i++ )
@@ -865,12 +875,12 @@ void TPGalleryThemeProperties::FillFilterList()
         aExt = pFilter->GetImportFormatShortName( i );
         aName = pFilter->GetImportFormatName( i );
         pTestEntry = (FilterEntry*) aFilterEntryList.First();
-        bInList = FALSE;
+        bInList = sal_False;
 
         String aExtensions;
         int j = 0;
         String sWildcard;
-        while( TRUE )
+        while( sal_True )
         {
             sWildcard = pFilter->GetImportWildcard( i, j++ );
             if ( !sWildcard.Len() )
@@ -888,7 +898,7 @@ void TPGalleryThemeProperties::FillFilterList()
         {
             if ( pTestEntry->aFilterName == aExt )
             {
-                bInList = TRUE;
+                bInList = sal_True;
                 break;
             }
             pTestEntry = (FilterEntry*) aFilterEntryList.Next();
@@ -931,7 +941,7 @@ void TPGalleryThemeProperties::FillFilterList()
     {
         int j = 0;
         String sWildcard;
-        while( TRUE )
+        while( sal_True )
         {
             sWildcard = pFilter->GetImportWildcard( i, j++ );
             if ( !sWildcard.Len() )
@@ -957,7 +967,7 @@ void TPGalleryThemeProperties::FillFilterList()
         }
      }
 
-#if defined(WIN) || defined(WNT)
+#if defined(WNT)
     if ( aExtensions.Len() > 240 )
         aExtensions = DEFINE_CONST_UNICODE( "*.*" );
 #endif
@@ -1110,7 +1120,7 @@ void TPGalleryThemeProperties::DoPreview()
     if( aString != aPreviewString )
     {
         INetURLObject   _aURL( *aFoundList[ aLbxFound.GetEntryPos( aString ) ] );
-        bInputAllowed = FALSE;
+        bInputAllowed = sal_False;
 
         if ( !aWndPreview.SetGraphic( _aURL ) )
         {
@@ -1125,7 +1135,7 @@ void TPGalleryThemeProperties::DoPreview()
                 xMediaPlayer->start();
         }
 
-        bInputAllowed = TRUE;
+        bInputAllowed = sal_True;
         aPreviewString = aString;
     }
 }
@@ -1149,7 +1159,7 @@ IMPL_LINK( TPGalleryThemeProperties, ClickTakeHdl, void*, EMPTYARG )
         }
         else
         {
-            bTakeAll = FALSE;
+            bTakeAll = sal_False;
             TakeFiles();
         }
     }
@@ -1164,7 +1174,7 @@ IMPL_LINK( TPGalleryThemeProperties, ClickTakeAllHdl, void *, EMPTYARG )
     if( bInputAllowed )
     {
         aPreviewTimer.Stop();
-        bTakeAll = TRUE;
+        bTakeAll = sal_True;
         TakeFiles();
     }
 
@@ -1177,7 +1187,7 @@ IMPL_LINK( TPGalleryThemeProperties, SelectFoundHdl, void *, EMPTYARG )
 {
     if( bInputAllowed )
     {
-        BOOL bPreviewPossible = FALSE;
+        sal_Bool bPreviewPossible = sal_False;
 
         aPreviewTimer.Stop();
 
@@ -1186,7 +1196,7 @@ IMPL_LINK( TPGalleryThemeProperties, SelectFoundHdl, void *, EMPTYARG )
             if( aLbxFound.GetSelectEntryCount() == 1 )
             {
                 aCbxPreview.Enable();
-                bPreviewPossible = TRUE;
+                bPreviewPossible = sal_True;
             }
             else
                 aCbxPreview.Disable();
@@ -1237,14 +1247,14 @@ IMPL_LINK( TPGalleryThemeProperties, EndSearchProgressHdl, SearchProgress *, EMP
       aLbxFound.SelectEntryPos( 0 );
       aBtnTakeAll.Enable();
       aCbxPreview.Enable();
-      bEntriesFound = TRUE;
+      bEntriesFound = sal_True;
   }
   else
   {
       aLbxFound.InsertEntry( String( CUI_RES( RID_SVXSTR_GALLERY_NOFILES ) ) );
       aBtnTakeAll.Disable();
       aCbxPreview.Disable();
-      bEntriesFound = FALSE;
+      bEntriesFound = sal_False;
   }
   return 0L;
 }

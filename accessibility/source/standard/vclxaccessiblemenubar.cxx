@@ -173,7 +173,7 @@ sal_Int32 VCLXAccessibleMenuBar::getAccessibleIndexInParent(  ) throw (RuntimeEx
             Window* pParent = pWindow->GetAccessibleParentWindow();
             if ( pParent )
             {
-                for ( USHORT n = pParent->GetAccessibleChildWindowCount(); n; )
+                for ( sal_uInt16 n = pParent->GetAccessibleChildWindowCount(); n; )
                 {
                     Window* pChild = pParent->GetAccessibleChildWindow( --n );
                     if ( pChild == pWindow )

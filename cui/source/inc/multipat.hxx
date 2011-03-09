@@ -74,7 +74,7 @@ protected:
     DECL_LINK( CheckHdl_Impl, svx::SvxRadioButtonListBox * );
 
 public:
-    SvxMultiPathDialog( Window* pParent, BOOL bEmptyAllowed = FALSE );
+    SvxMultiPathDialog( Window* pParent, sal_Bool bEmptyAllowed = sal_False );
     ~SvxMultiPathDialog();
 
     String          GetPath() const;

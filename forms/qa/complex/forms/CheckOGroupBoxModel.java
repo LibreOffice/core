@@ -24,7 +24,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
 package complex.forms;
 
 import com.sun.star.beans.Property;
@@ -37,88 +36,127 @@ import com.sun.star.drawing.XControlShape;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
-import complexlib.ComplexTestCase;
-import java.io.PrintWriter;
+// import complexlib.ComplexTestCase;
+import com.sun.star.util.CloseVetoException;
+import com.sun.star.util.XCloseable;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import util.FormTools;
 import util.SOfficeFactory;
 import util.ValueChanger;
 
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.openoffice.test.OfficeConnection;
+import static org.junit.Assert.*;
+
 /**
  */
-public class CheckOGroupBoxModel extends ComplexTestCase {
+public class CheckOGroupBoxModel
+{
 
-    private XMultiPropertySet xPropSet = null;
+    private XMultiPropertySet m_xPropSet;
+    private XComponent m_xDrawDoc;
 
-    public String[] getTestMethodNames() {
-        return new String[] {"setPropertyValues"};
-    }
+//    public String[] getTestMethodNames() {
+//        return new String[] {"setPropertyValues"};
+//    }
+    @Before public void before()
+    {
+        // XComponent xDrawDoc = null;
+        SOfficeFactory SOF = SOfficeFactory.getFactory(getMSF());
 
-    public void before() {
-        XComponent xDrawDoc = null;
-        SOfficeFactory SOF = SOfficeFactory.getFactory(((XMultiServiceFactory) param.getMSF()));
-
-        try {
-            log.println("creating a draw document");
-            xDrawDoc = SOF.createDrawDoc(null);
-        } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace((PrintWriter)log);
-            failed("Couldn't create document.");
+        try
+        {
+            System.out.println("creating a draw document");
+            m_xDrawDoc = SOF.createDrawDoc(null);
+        }
+        catch (com.sun.star.uno.Exception e)
+        {
+            fail("Couldn't create document.");
         }
 
         String objName = "GroupBox";
-        XControlShape shape = FormTools.insertControlShape(xDrawDoc, 5000, 7000, 2000, 2000, objName);
-        xPropSet = (XMultiPropertySet)UnoRuntime.queryInterface(XMultiPropertySet.class, shape.getControl());
+        XControlShape shape = FormTools.insertControlShape(m_xDrawDoc, 5000, 7000, 2000, 2000, objName);
+        m_xPropSet = UnoRuntime.queryInterface(XMultiPropertySet.class, shape.getControl());
     }
 
-
-    public void setPropertyValues() {
+    @After public void after()
+    {
+        XCloseable xClose = UnoRuntime.queryInterface(XCloseable.class, m_xDrawDoc);
+        if (xClose != null)
+        {
+            try
+            {
+                xClose.close(true);
+            }
+            catch (CloseVetoException ex)
+            {
+                fail("Can't close document. Exception caught: " + ex.getMessage());
+                /* ignore! */
+            }
+        }
+    }
+    @Test public void setPropertyValues()
+    {
         String[] boundPropsToTest = getBoundPropsToTest();
 
         MyChangeListener ml = new MyChangeListener();
-        xPropSet.addPropertiesChangeListener(boundPropsToTest, ml);
+        m_xPropSet.addPropertiesChangeListener(boundPropsToTest, ml);
 
-        Object[] gValues = xPropSet.getPropertyValues(boundPropsToTest);
+        Object[] gValues = m_xPropSet.getPropertyValues(boundPropsToTest);
         Object[] newValue = new Object[gValues.length];
-        log.println("Trying to change all properties.");
-        for (int i=0; i<boundPropsToTest.length; i++) {
+        System.out.println("Trying to change all properties.");
+        for (int i = 0; i < boundPropsToTest.length; i++)
+        {
             newValue[i] = ValueChanger.changePValue(gValues[i]);
         }
-        try {
-            xPropSet.setPropertyValues(boundPropsToTest, newValue);
-        } catch (com.sun.star.beans.PropertyVetoException e) {
-            e.printStackTrace((PrintWriter)log);
-            failed("Exception occurred while trying to change the properties.");
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace((PrintWriter)log);
-            failed("Exception occurred while trying to change the properties.");
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace((PrintWriter)log);
-            failed("Exception occurred while trying to change the properties.");
+        try
+        {
+            m_xPropSet.setPropertyValues(boundPropsToTest, newValue);
+        }
+        catch (com.sun.star.beans.PropertyVetoException e)
+        {
+            fail("Exception occured while trying to change the properties.");
+        }
+        catch (com.sun.star.lang.IllegalArgumentException e)
+        {
+            fail("Exception occured while trying to change the properties.");
+        }
+        catch (com.sun.star.lang.WrappedTargetException e)
+        {
+            fail("Exception occured while trying to change the properties.");
         } // end of try-catch
 
-        assure("Listener was not called.", ml.wasListenerCalled());
-        xPropSet.removePropertiesChangeListener(ml);
+        assertTrue("Listener was not called.", ml.wasListenerCalled());
+        m_xPropSet.removePropertiesChangeListener(ml);
     }
 
-    private String[] getBoundPropsToTest() {
-        Property[] properties = xPropSet.getPropertySetInfo().getProperties();
+    private String[] getBoundPropsToTest()
+    {
+        Property[] properties = m_xPropSet.getPropertySetInfo().getProperties();
         String[] testPropsNames = null;
 
-        Vector tNames = new Vector();
+        Vector<String> tNames = new Vector<String>();
 
-        for (int i = 0; i < properties.length; i++) {
+        for (int i = 0; i < properties.length; i++)
+        {
 
             Property property = properties[i];
             String name = property.Name;
-            boolean isWritable = ((property.Attributes &
-                PropertyAttribute.READONLY) == 0);
-            boolean isNotNull = ((property.Attributes &
-                PropertyAttribute.MAYBEVOID) == 0);
-            boolean isBound = ((property.Attributes &
-                PropertyAttribute.BOUND) != 0);
+            boolean isWritable = ((property.Attributes
+                    & PropertyAttribute.READONLY) == 0);
+            boolean isNotNull = ((property.Attributes
+                    & PropertyAttribute.MAYBEVOID) == 0);
+            boolean isBound = ((property.Attributes
+                    & PropertyAttribute.BOUND) != 0);
 
-            if ( isWritable && isNotNull && isBound) {
+            if (isWritable && isNotNull && isBound)
+            {
                 tNames.add(name);
             }
 
@@ -126,22 +164,59 @@ public class CheckOGroupBoxModel extends ComplexTestCase {
 
         //get a array of bound properties
         testPropsNames = new String[tNames.size()];
-        testPropsNames = (String[])tNames.toArray(testPropsNames);
+        testPropsNames = tNames.toArray(testPropsNames);
         return testPropsNames;
     }
 
     /**
-    * Listener implementation which sets a flag when
-    * listener was called.
-    */
-    public class MyChangeListener implements XPropertiesChangeListener {
+     * Listener implementation which sets a flag when
+     * listener was called.
+     */
+    public class MyChangeListener implements XPropertiesChangeListener
+    {
+
         boolean propertiesChanged = false;
-        public void propertiesChange(PropertyChangeEvent[] e) {
-             propertiesChanged = true;
+
+        public void propertiesChange(PropertyChangeEvent[] e)
+        {
+            propertiesChanged = true;
         }
-        public void disposing (EventObject obj) {}
-        public boolean wasListenerCalled() { return propertiesChanged; }
-        public void reset() { propertiesChanged = false; }
+
+        public void disposing(EventObject obj)
+        {
+        }
+
+        public boolean wasListenerCalled()
+        {
+            return propertiesChanged;
+        }
+
+        public void reset()
+        {
+            propertiesChanged = false;
+        }
     };
 
+    private XMultiServiceFactory getMSF()
+    {
+        final XMultiServiceFactory xMSF1 = UnoRuntime.queryInterface(XMultiServiceFactory.class, connection.getComponentContext().getServiceManager());
+        return xMSF1;
+    }
+
+    // setup and close connections
+    @BeforeClass
+    public static void setUpConnection() throws Exception
+    {
+        System.out.println("setUpConnection()");
+        connection.setUp();
+    }
+
+    @AfterClass
+    public static void tearDownConnection()
+            throws InterruptedException, com.sun.star.uno.Exception
+    {
+        System.out.println("tearDownConnection()");
+        connection.tearDown();
+    }
+    private static final OfficeConnection connection = new OfficeConnection();
 }

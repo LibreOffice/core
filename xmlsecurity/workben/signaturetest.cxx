@@ -220,7 +220,7 @@ MyWin::MyWin( Window* pParent, WinBits nWinStyle ) :
 
     maCryptoCheckBox.SetPosSizePixel( TEXTFIELDSTARTX, nY, aOutputSize.Width()-2*TEXTFIELDSTARTX, FIXEDLINEHEIGHT );
     maCryptoCheckBox.SetText( String( RTL_CONSTASCII_USTRINGPARAM( "Use Default Token (NSS option only)" ) ) );
-    maCryptoCheckBox.Check( TRUE );
+    maCryptoCheckBox.Check( sal_True );
     maEditTokenName.Disable();
     maFixedTextTokenName.Disable();
     maCryptoCheckBox.SetClickHdl( LINK( this, MyWin, CryptoCheckBoxHdl ) );

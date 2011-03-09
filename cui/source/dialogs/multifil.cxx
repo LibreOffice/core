@@ -74,13 +74,13 @@ IMPL_LINK( SvxMultiFileDialog, AddHdl_Impl, PushButton *, pBtn )
         OSL_ENSURE( xID.is(), "AddHdl_Impl: invalid ID interface!" );
         // ensure the content of files are valid
 
-        USHORT nCount = aPathLB.GetEntryCount();
-        BOOL bDuplicated = FALSE;
+        sal_uInt16 nCount = aPathLB.GetEntryCount();
+        sal_Bool bDuplicated = sal_False;
         try
         {
             if( nCount > 0 ) // start comparison
             {
-                USHORT i;
+                sal_uInt16 i;
                 ::ucbhelper::Content & VContent = aContent; // temporary Content reference
                 Reference< XContent > xVContent;
                 Reference< XContentIdentifier > xVID;
@@ -111,7 +111,7 @@ IMPL_LINK( SvxMultiFileDialog, AddHdl_Impl, PushButton *, pBtn )
                         {
                             if ( 0 == xProvider->compareContentIds( xID, xVID ) )
                             {
-                                bDuplicated = TRUE;
+                                bDuplicated = sal_True;
                                 break;
                             }
                         }
@@ -132,7 +132,7 @@ IMPL_LINK( SvxMultiFileDialog, AddHdl_Impl, PushButton *, pBtn )
         }
         else
         {
-            USHORT nPos = aPathLB.InsertEntry( sInsFile, LISTBOX_APPEND );
+            sal_uInt16 nPos = aPathLB.InsertEntry( sInsFile, LISTBOX_APPEND );
             aPathLB.SetEntryData( nPos, (void*) new String( sInsFile ) );
         }
 
@@ -144,9 +144,9 @@ IMPL_LINK( SvxMultiFileDialog, AddHdl_Impl, PushButton *, pBtn )
 
 IMPL_LINK( SvxMultiFileDialog, DelHdl_Impl, PushButton *, EMPTYARG )
 {
-    USHORT nPos = aPathLB.GetSelectEntryPos();
+    sal_uInt16 nPos = aPathLB.GetSelectEntryPos();
     aPathLB.RemoveEntry( nPos );
-    USHORT nCnt = aPathLB.GetEntryCount();
+    sal_uInt16 nCnt = aPathLB.GetEntryCount();
 
     if ( nCnt )
     {
@@ -161,7 +161,7 @@ IMPL_LINK( SvxMultiFileDialog, DelHdl_Impl, PushButton *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-SvxMultiFileDialog::SvxMultiFileDialog( Window* pParent, BOOL bEmptyAllowed ) :
+SvxMultiFileDialog::SvxMultiFileDialog( Window* pParent, sal_Bool bEmptyAllowed ) :
 
     SvxMultiPathDialog( pParent, bEmptyAllowed )
 
