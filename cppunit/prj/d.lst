@@ -17,6 +17,7 @@ mkdir: %_DEST%\inc%_EXT%\cppunit\ui\text
 ..\%__SRC%\lib\icppunit_dll.lib %_DEST%\lib%_EXT%\icppunit_dll.lib
 
 ..\%__SRC%\bin\cygcppunit-1-12-1.dll %_DEST%\bin%_EXT%\cygcppunit-1-12-1.dll
+..\%__SRC%\lib\libcppunit.dll.a %_DEST%\lib%_EXT%\libcppunit.dll.a
 
 ..\%__SRC%\lib\libcppunit-1.12.1.dylib %_DEST%\lib%_EXT%\libcppunit-1.12.1.dylib
 symlink: %_DEST%\lib%_EXT%\libcppunit-1.12.1.dylib %_DEST%\lib%_EXT%\libcppunit.dylib

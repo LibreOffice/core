@@ -4,7 +4,7 @@
      return(0);
  }
  
-+#if !defined(LIBXML_VERSION) || LIBXML_VERSION < 20706
++#if !defined(LIBXML_VERSION) || LIBXML_VERSION < 20704
 +/*
 + * xmlC14NMode:
 + * 

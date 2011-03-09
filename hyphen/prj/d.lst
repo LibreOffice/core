@@ -1,5 +1,5 @@
 ..\%__SRC%\slb\hyphen.lib     %_DEST%\lib%_EXT%\hyphen.lib
 
 ..\%__SRC%\inc\hyphen.h %_DEST%\inc%_EXT%\hyphen.h
-..\%__SRC%\misc\build\hyphen-2.4\.libs\libhyphen.a %_DEST%\lib%_EXT%\libhyphen.a
-..\%__SRC%\misc\build\hyphen-2.4\hyph_en_US.dic %_DEST%\bin%_EXT%\hyph_en_US.dic
+..\%__SRC%\misc\build\hyphen-2.7.1\.libs\libhyphen.a %_DEST%\lib%_EXT%\libhyphen.a
+..\%__SRC%\misc\build\hyphen-2.7.1\hyph_en_US.dic %_DEST%\bin%_EXT%\hyph_en_US.dic

@@ -84,13 +84,14 @@ CONFIGURE_FLAGS = --prefix=$(shell cd $(PACKAGE_DIR) && \
     LDFLAGS='$(LDFLAGS)' \
     LIBS='$(MY_LIBS)'
 
-BUILD_ACTION = $(GNUMAKE)
+BUILD_ACTION = $(GNUMAKE) -j$(EXTMAXPROCESS)
 BUILD_FLAGS = install
 
 OUTDIR2INC = ooo-install/include/cppunit
 
 OUT2BIN = ooo-install/bin/DllPlugInTester.exe \
     ooo-install/bin/cygcppunit-1-12-1.dll
+OUT2LIB = ooo-install/lib/libcppunit.dll.a
 
 .INCLUDE: set_ext.mk
 .INCLUDE: target.mk
@@ -118,7 +119,7 @@ CONFIGURE_FLAGS = --prefix=$(shell cd $(PACKAGE_DIR) && \
     LDFLAGS='$(LDFLAGS)' \
     LIBS='$(MY_LIBS)'
 
-BUILD_ACTION = $(GNUMAKE)
+BUILD_ACTION = $(GNUMAKE) -j$(EXTMAXPROCESS)
 BUILD_FLAGS = install
 
 OUTDIR2INC = ooo-install/include/cppunit
