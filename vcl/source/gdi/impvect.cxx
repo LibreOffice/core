@@ -363,7 +363,7 @@ public:
     inline void     ImplAdd( BYTE nCode );
     void            ImplEndAdd( ULONG nTypeFlag );
 
-    const Polygon&  ImplGetPoly() { return maPoly; }
+    const Polygon&  ImplGetPoly() const { return maPoly; }
 };
 
 // -----------------------------------------------------------------------------
