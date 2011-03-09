@@ -1834,10 +1834,10 @@ const SwRect SwContourCache::ContourRect( const SwFmt* pFmt,
 
     Range aRange( Min( nTmpTop, nTmpBottom ), Max( nTmpTop, nTmpBottom ) );
 
-    SvLongs *pTmp = pTextRanger[ 0 ]->GetTextRanges( aRange );
+    LongDqPtr pTmp = pTextRanger[ 0 ]->GetTextRanges( aRange );
 
     MSHORT nCount;
-    if( 0 != ( nCount = pTmp->Count() ) )
+    if( 0 != ( nCount = pTmp->size() ) )
     {
         MSHORT nIdx = 0;
         while( nIdx < nCount && (*pTmp)[ nIdx ] < nXPos )

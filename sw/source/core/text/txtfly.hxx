@@ -27,7 +27,6 @@
  ************************************************************************/
 #ifndef _TXTFLY_HXX
 #define _TXTFLY_HXX
-#include <svl/svarray.hxx>
 
 #include "swtypes.hxx"
 #include "swrect.hxx"
