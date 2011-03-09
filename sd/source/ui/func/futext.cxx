@@ -661,9 +661,24 @@ BOOL FuText::MouseButtonUp(const MouseEvent& rMEvt)
     mpViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );
 
     Point aPnt( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
+sal_Bool bOldReadOnly = sal_False;
+    if ( mpView && mpDocSh->IsReadOnly() )
+    {
+    if ( mpView &&  mpView->GetTextEditOutlinerView() )
+{
+        bOldReadOnly = mpView->GetTextEditOutlinerView()->IsReadOnly();
+        mpView->GetTextEditOutlinerView()->SetReadOnly(sal_True);
+}
+    }
 
     if( (mpView && mpView->MouseButtonUp(rMEvt, mpWindow)) || rMEvt.GetClicks() == 2 )
+    {
+    if ( mpView &&  mpView->GetTextEditOutlinerView() )
+            mpView->GetTextEditOutlinerView()->SetReadOnly(bOldReadOnly);
         return (TRUE); // Event von der SdrView ausgewertet
+    }
+    if ( mpView &&  mpView->GetTextEditOutlinerView() )
+        mpView->GetTextEditOutlinerView()->SetReadOnly(bOldReadOnly);
 
     BOOL bEmptyTextObj = FALSE;
 
