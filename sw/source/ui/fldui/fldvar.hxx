@@ -52,7 +52,7 @@ class SelectionListBox : public ListBox
 public:
     SelectionListBox( SwFldVarPage* pDialog, const ResId& rResId );
 
-    //  Selektieren per Ctrl oder Alt erkennen und mit SelectHdl auswerten
+    //  detect selection via Ctrl or Alt and evaluate with SelectHdl
     BOOL            IsCallAddSelection() const {return bCallAddSelection;}
     void            ResetCallAddSelection() {bCallAddSelection = FALSE;}
 };

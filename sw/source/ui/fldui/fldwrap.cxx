@@ -56,20 +56,20 @@ SwChildWinWrapper::SwChildWinWrapper(Window *pParentWindow, USHORT nId) :
         SfxChildWindow(pParentWindow, nId),
         m_pDocSh(0)
 {
-    // Flackern der Buttons vermeiden:
+    // avoid flickering of buttons:
     m_aUpdateTimer.SetTimeout(200);
     m_aUpdateTimer.SetTimeoutHdl(LINK(this, SwChildWinWrapper, UpdateHdl));
 }
 
 IMPL_LINK( SwChildWinWrapper, UpdateHdl, void*, EMPTYARG )
 {
-    GetWindow()->Activate();    // Dialog aktualisieren
+    GetWindow()->Activate();    // update dialog
 
     return 0;
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Nach Dok-Wechsel Dialog neu initialisieren
+    Description: newly initialise dialog after Doc switch
  --------------------------------------------------------------------*/
 BOOL SwChildWinWrapper::ReInitDlg(SwDocShell *)
 {
@@ -78,7 +78,7 @@ BOOL SwChildWinWrapper::ReInitDlg(SwDocShell *)
     if (m_pDocSh != GetOldDocShell())
     {
         m_aUpdateTimer.Stop();
-        bRet = TRUE;            // Sofortiges Update
+        bRet = TRUE;            // immediate Update
     }
     else
         m_aUpdateTimer.Start();
@@ -110,13 +110,13 @@ SwFldDlgWrapper::SwFldDlgWrapper( Window* _pParent, USHORT nId,
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Nach Dok-Wechsel Dialog neu initialisieren
+    Description: newly initialise dialog after Doc switch
  --------------------------------------------------------------------*/
 BOOL SwFldDlgWrapper::ReInitDlg(SwDocShell *pDocSh)
 {
     BOOL bRet;
 
-    if ((bRet = SwChildWinWrapper::ReInitDlg(pDocSh)) == TRUE)  // Sofort aktualisieren, Dok-Wechsel
+    if ((bRet = SwChildWinWrapper::ReInitDlg(pDocSh)) == TRUE)  // update immediately, Doc switch
     {
         pDlgInterface->ReInitDlg();
     }
@@ -165,7 +165,7 @@ SwFldDataOnlyDlgWrapper::SwFldDataOnlyDlgWrapper( Window* _pParent, USHORT nId,
 BOOL SwFldDataOnlyDlgWrapper::ReInitDlg(SwDocShell *pDocSh)
 {
     BOOL bRet;
-    if ((bRet = SwChildWinWrapper::ReInitDlg(pDocSh)) == TRUE)  // Sofort aktualisieren, Dok-Wechsel
+    if ((bRet = SwChildWinWrapper::ReInitDlg(pDocSh)) == TRUE)  // update immediately, Doc switch
     {
         pDlgInterface->ReInitDlg();
     }

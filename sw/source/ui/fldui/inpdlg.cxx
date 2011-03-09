@@ -52,7 +52,7 @@
 
 
 /*--------------------------------------------------------------------
-    Beschreibung: Feldeinfuegen bearbeiten
+    Description: edit field-insert
  --------------------------------------------------------------------*/
 
 SwFldInputDlg::SwFldInputDlg( Window *pParent, SwWrtShell &rS,
@@ -74,7 +74,7 @@ SwFldInputDlg::SwFldInputDlg( Window *pParent, SwWrtShell &rS,
     aNextBT     (this, SW_RES(PB_NEXT   )),
     aHelpBT     (this, SW_RES(PB_HELP    ))
 {
-    // Font fuers Edit umschalten
+    // switch font for Edit
     Font aFont(aEditED.GetFont());
     aFont.SetWeight(WEIGHT_LIGHT);
     aEditED.SetFont(aFont);
@@ -92,10 +92,10 @@ SwFldInputDlg::SwFldInputDlg( Window *pParent, SwWrtShell &rS,
         aHelpBT.SetPosPixel(aPos);
     }
 
-    // Auswertung hier
+    // evaluation here
     String aStr;
     if( RES_INPUTFLD == pField->GetTyp()->Which() )
-    {   // Es ist eine Eingabefeld
+    {   // it is an input field
         //
         pInpFld = (SwInputField*)pField;
         aLabelED.SetText( pInpFld->GetPar2() );
@@ -108,7 +108,7 @@ SwFldInputDlg::SwFldInputDlg( Window *pParent, SwWrtShell &rS,
                 break;
 
             case INP_USR:
-                // Benutzerfeld
+                // user field
                 if( 0 != ( pUsrType = (SwUserFieldType*)rSh.GetFldType(
                             RES_USERFLD, pInpFld->GetPar1() ) ) )
                     aStr = pUsrType->GetContent();
@@ -117,7 +117,7 @@ SwFldInputDlg::SwFldInputDlg( Window *pParent, SwWrtShell &rS,
     }
     else
     {
-        // es ist eine SetExpression
+        // it is a SetExpression
         pSetFld = (SwSetExpField*)pField;
         String sFormula(pSetFld->GetFormula());
         //values are formatted - formulas are not
@@ -153,7 +153,7 @@ void SwFldInputDlg::StateChanged( StateChangedType nType )
 }
 
 /*--------------------------------------------------------------------
-     Beschreibung:  Schliessen
+     Description:   Close
  --------------------------------------------------------------------*/
 
 void SwFldInputDlg::Apply()

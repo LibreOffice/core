@@ -89,7 +89,7 @@ SwJavaEditDialog::SwJavaEditDialog(Window* pParent, SwWrtShell* pWrtSh) :
     pFileDlg(NULL),
     pOldDefDlgParent(NULL)
 {
-    // Handler installieren
+    // install handler
     aPrevBtn.SetClickHdl( LINK( this, SwJavaEditDialog, PrevHdl ) );
     aNextBtn.SetClickHdl( LINK( this, SwJavaEditDialog, NextHdl ) );
     aOKBtn.SetClickHdl( LINK( this, SwJavaEditDialog, OKHdl ) );
@@ -113,7 +113,7 @@ SwJavaEditDialog::SwJavaEditDialog(Window* pParent, SwWrtShell* pWrtSh) :
     if( !bNew )
         SetText( SW_RES( STR_JAVA_EDIT ) );
     else
-        // neu anlegen
+        // newly create
         SetText( SW_RES( STR_JAVA_INSERT ) );
 
     FreeResource();
@@ -170,7 +170,7 @@ void SwJavaEditDialog::CheckTravel()
 
     if(!bNew)
     {
-        // Traveling nur bei mehr als einem Feld
+        // Traveling only when more than one field
         pSh->StartAction();
         pSh->CreateCrsr();
 
