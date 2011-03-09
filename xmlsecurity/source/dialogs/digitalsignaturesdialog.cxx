@@ -266,9 +266,9 @@ DigitalSignaturesDialog::~DigitalSignaturesDialog()
 {
 }
 
-BOOL DigitalSignaturesDialog::Init( const rtl::OUString& rTokenName )
+BOOL DigitalSignaturesDialog::Init()
 {
-    bool bInit = maSignatureHelper.Init( rTokenName );
+    bool bInit = maSignatureHelper.Init();
 
     DBG_ASSERT( bInit, "Error initializing security context!" );
 

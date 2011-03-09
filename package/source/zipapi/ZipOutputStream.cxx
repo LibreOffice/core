@@ -27,19 +27,22 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_package.hxx"
-#include <ZipOutputStream.hxx>
+
 #include <com/sun/star/packages/zip/ZipConstants.hpp>
+#include <com/sun/star/io/XOutputStream.hpp>
+#include <comphelper/storagehelper.hxx>
+
 #include <osl/time.h>
+
 #include <EncryptionData.hxx>
 #include <PackageConstants.hxx>
 #include <ZipEntry.hxx>
 #include <ZipFile.hxx>
-#include <vos/ref.hxx>
-#include <com/sun/star/io/XOutputStream.hpp>
-
-#include <comphelper/storagehelper.hxx>
+#include <ZipPackageStream.hxx>
+#include <ZipOutputStream.hxx>
 
 using namespace rtl;
+using namespace com::sun::star;
 using namespace com::sun::star::io;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::packages;
@@ -48,7 +51,7 @@ using namespace com::sun::star::packages::zip::ZipConstants;
 
 /** This class is used to write Zip files
  */
-ZipOutputStream::ZipOutputStream( Reference < XOutputStream > &xOStream )
+ZipOutputStream::ZipOutputStream( uno::Reference < XOutputStream > &xOStream )
 : xStream(xOStream)
 , aBuffer(n_ConstBufferSize)
 , aDeflater(DEFAULT_COMPRESSION, sal_True)
@@ -57,8 +60,7 @@ ZipOutputStream::ZipOutputStream( Reference < XOutputStream > &xOStream )
 , nMethod(DEFLATED)
 , bFinished(sal_False)
 , bEncryptCurrentEntry(sal_False)
-
-
+, m_pCurrentStream(NULL)
 {
 }
 
@@ -80,7 +82,7 @@ void SAL_CALL ZipOutputStream::setLevel( sal_Int32 nNewLevel )
 }
 
 void SAL_CALL ZipOutputStream::putNextEntry( ZipEntry& rEntry,
-                        vos::ORef < EncryptionData > &xEncryptData,
+                        ZipPackageStream* pStream,
                         sal_Bool bEncrypt)
     throw(IOException, RuntimeException)
 {
@@ -100,12 +102,12 @@ void SAL_CALL ZipOutputStream::putNextEntry( ZipEntry& rEntry,
     {
         bEncryptCurrentEntry = sal_True;
 
-        ZipFile::StaticGetCipher( xEncryptData, aCipher, sal_False );
+        ZipFile::StaticGetCipher( pStream->GetEncryptionData(), aCipher, sal_False );
 
         aDigest = rtl_digest_createSHA1();
         mnDigested = 0;
         rEntry.nFlag |= 1 << 4;
-        pCurrentEncryptData = xEncryptData.getBodyPtr();
+        m_pCurrentStream = pStream;
     }
     sal_Int32 nLOCLength = writeLOC(rEntry);
     rEntry.nOffset = static_cast < sal_Int32 > (aChucker.GetPosition()) - nLOCLength;
@@ -170,14 +172,17 @@ void SAL_CALL ZipOutputStream::closeEntry(  )
             aEncryptionBuffer.realloc ( 0 );
             bEncryptCurrentEntry = sal_False;
             rtl_cipher_destroy ( aCipher );
-            pCurrentEncryptData->aDigest.realloc ( RTL_DIGEST_LENGTH_SHA1 );
+            uno::Sequence< sal_uInt8 > aDigestSeq( RTL_DIGEST_LENGTH_SHA1 );
             aDigestResult = rtl_digest_getSHA1 ( aDigest,
-                                                 reinterpret_cast < sal_uInt8 * > ( pCurrentEncryptData->aDigest.getArray() ),
+                                                 aDigestSeq.getArray(),
                                                  RTL_DIGEST_LENGTH_SHA1 );
             OSL_ASSERT( aDigestResult == rtl_Digest_E_None );
             rtl_digest_destroySHA1 ( aDigest );
+            if ( m_pCurrentStream )
+                m_pCurrentStream->setDigest( aDigestSeq );
         }
         pCurrentEntry = NULL;
+        m_pCurrentStream = NULL;
     }
 }
 
@@ -293,7 +298,7 @@ void ZipOutputStream::writeCEN( const ZipEntry &rEntry )
     throw(IOException, RuntimeException)
 {
     if ( !::comphelper::OStorageHelper::IsValidZipEntryFileName( rEntry.sPath, sal_True ) )
-        throw IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unexpected character is used in file name." ) ), Reference< XInterface >() );
+        throw IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unexpected character is used in file name." ) ), uno::Reference< XInterface >() );
 
     ::rtl::OString sUTF8Name = ::rtl::OUStringToOString( rEntry.sPath, RTL_TEXTENCODING_UTF8 );
     sal_Int16 nNameLength       = static_cast < sal_Int16 > ( sUTF8Name.getLength() );
@@ -342,7 +347,7 @@ sal_Int32 ZipOutputStream::writeLOC( const ZipEntry &rEntry )
     throw(IOException, RuntimeException)
 {
     if ( !::comphelper::OStorageHelper::IsValidZipEntryFileName( rEntry.sPath, sal_True ) )
-        throw IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unexpected character is used in file name." ) ), Reference< XInterface >() );
+        throw IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unexpected character is used in file name." ) ), uno::Reference< XInterface >() );
 
     ::rtl::OString sUTF8Name = ::rtl::OUStringToOString( rEntry.sPath, RTL_TEXTENCODING_UTF8 );
     sal_Int16 nNameLength       = static_cast < sal_Int16 > ( sUTF8Name.getLength() );

@@ -24,31 +24,40 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _ENCRYPTED_DATA_HEADER_HXX_
-#define _ENCRYPTED_DATA_HEADER_HXX_
 
-#include <sal/types.h>
+#ifndef _DIGESTCONTEXT_HXX
+#define _DIGESTCONTEXT_HXX
 
-/* The structure of this header is as follows:
+#include <com/sun/star/xml/crypto/XDigestContext.hpp>
 
-   Header signature 4 bytes
-   Version number   2 bytes
-   Iteraction count 4 bytes
-   Size             4 bytes
-   EncAlgorithm     4 bytes
-   DigestAlgorithm  4 bytes
-   DerivedKeySize   4 bytes
-   Salt length      2 bytes
-   IV length        2 bytes
-   Digest length    2 bytes
-   MediaType length 2 bytes
-   Salt content     X bytes
-   IV content       X bytes
-   digest content   X bytes
-   MediaType        X bytes
+#include <cppuhelper/implbase1.hxx>
+#include <osl/mutex.hxx>
 
-*/
-const sal_uInt32 n_ConstHeader = 0x05024d4dL; // "MM\002\005"
-const sal_Int32 n_ConstHeaderSize = 34; // + salt length + iv length + digest length + mediatype length
-const sal_Int16 n_ConstCurrentVersion = 1;
+class ODigestContext : public cppu::WeakImplHelper1< ::com::sun::star::xml::crypto::XDigestContext >
+{
+private:
+    ::osl::Mutex m_aMutex;
+
+    PK11Context* m_pContext;
+    sal_Int32 m_nDigestLength;
+    bool m_bDisposed;
+    bool m_bBroken;
+
+public:
+    ODigestContext( PK11Context* pContext, sal_Int32 nDigestLength )
+    : m_pContext( pContext )
+    , m_nDigestLength( nDigestLength )
+    , m_bDisposed( false )
+    , m_bBroken( false )
+    {}
+
+    virtual ~ODigestContext();
+
+
+    // XDigestContext
+    virtual void SAL_CALL updateDigest( const ::com::sun::star::uno::Sequence< ::sal_Int8 >& aData ) throw (::com::sun::star::lang::DisposedException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::sal_Int8 > SAL_CALL finalizeDigestAndDispose() throw (::com::sun::star::lang::DisposedException, ::com::sun::star::uno::RuntimeException);
+};
+
 #endif
+

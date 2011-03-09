@@ -33,7 +33,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <cppuhelper/implbase1.hxx>
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 #include <Inflater.hxx>
 #include <ZipEntry.hxx>
 #include <CRC32.hxx>
@@ -57,7 +57,7 @@ protected:
     com::sun::star::uno::Reference < com::sun::star::io::XSeekable > mxZipSeek;
     com::sun::star::uno::Sequence < sal_Int8 > maCompBuffer, maHeader;
     ZipEntry maEntry;
-    vos::ORef < EncryptionData > mxData;
+    ::rtl::Reference< EncryptionData > mxData;
     rtlCipher maCipher;
     Inflater maInflater;
     sal_Bool mbRawStream, mbWrappedRaw, mbFinished;
@@ -71,7 +71,7 @@ public:
                  SotMutexHolderRef aMutexHolder,
                  ZipEntry & rEntry,
                  com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xNewZipStream,
-                 const vos::ORef < EncryptionData > &rData,
+                 const ::rtl::Reference< EncryptionData >& rData,
                  sal_Int8 nStreamMode,
                  sal_Bool bIsEncrypted,
                  const ::rtl::OUString& aMediaType,
@@ -79,7 +79,7 @@ public:
 
     // allows to read package raw stream
     XUnbufferedStream( const com::sun::star::uno::Reference < com::sun::star::io::XInputStream >& xRawStream,
-                 const vos::ORef < EncryptionData > &rData );
+                 const ::rtl::Reference< EncryptionData >& rData );
 
 
     virtual ~XUnbufferedStream();

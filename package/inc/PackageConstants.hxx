@@ -47,6 +47,15 @@ const sal_Int32 n_ConstDigestLength = 1024;
 #define PKG_SIZE_NOENCR_MNFST 3
 #define PKG_SIZE_ENCR_MNFST   8
 
+// the properties related constants
+#define ENCRYPTION_KEY_PROPERTY "EncryptionKey"
+#define STORAGE_ENCRYPTION_KEYS_PROPERTY "StorageEncryptionKeys"
+#define ENCRYPTION_ALGORITHMS_PROPERTY "EncryptionAlgorithms"
+#define HAS_ENCRYPTED_ENTRIES_PROPERTY "HasEncryptedEntries"
+#define HAS_NONENCRYPTED_ENTRIES_PROPERTY "HasNonEncryptedEntries"
+#define IS_INCONSISTENT_PROPERTY "IsInconsistent"
+#define MEDIATYPE_FALLBACK_USED_PROPERTY "MediaTypeFallbackUsed"
+
 
 #endif
 

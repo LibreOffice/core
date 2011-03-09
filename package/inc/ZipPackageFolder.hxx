@@ -86,7 +86,7 @@ public:
     void setRemoveOnInsertMode_Impl( sal_Bool bRemove ) { this->mbAllowRemoveOnInsert = bRemove; }
 
     // Recursive functions
-    void  saveContents(rtl::OUString &rPath, std::vector < com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > > &rManList, ZipOutputStream & rZipOut, com::sun::star::uno::Sequence < sal_Int8 > &rEncryptionKey, rtlRandomPool & rRandomPool)
+    void  saveContents(rtl::OUString &rPath, std::vector < com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > > &rManList, ZipOutputStream & rZipOut, const com::sun::star::uno::Sequence< sal_Int8 > &rEncryptionKey, rtlRandomPool & rRandomPool)
         throw(::com::sun::star::uno::RuntimeException);
     void  releaseUpwardRef();
 

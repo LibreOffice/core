@@ -27,86 +27,89 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_package.hxx"
-#include <ManifestExport.hxx>
-#include <ManifestDefines.hxx>
-#ifndef _COM_SUN_STAR_XML_SAX_XATTRIBUTELIST_HXX
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
-#endif
-#include <rtl/ustrbuf.hxx>
-#ifndef _BASE64_CODEC_HXX_
-#include <Base64Codec.hxx>
-#endif
-#include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
-#ifndef _COM_SUN_STAR_XML_SAX_XDOCUMENTHANDLER_HXX
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#endif
-#ifndef _COM_SUN_STAR_XML_BEANS_PROPERTYVALUE_HPP
-#include <com/sun/star/beans/PropertyValue.hpp>
-#endif
 
+#include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
+#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+#include <com/sun/star/xml/sax/XAttributeList.hpp>
+#include <com/sun/star/xml/crypto/DigestID.hpp>
+#include <com/sun/star/xml/crypto/CipherID.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/uno/RuntimeException.hpp>
+
+#include <ManifestDefines.hxx>
+#include <ManifestExport.hxx>
+#include <Base64Codec.hxx>
+
+#include <rtl/ustrbuf.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/attributelist.hxx>
 
-using namespace rtl;
-using namespace com::sun::star::beans;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::xml::sax;
+using namespace ::com::sun::star;
 
-ManifestExport::ManifestExport(Reference < XDocumentHandler > xHandler,  const Sequence < Sequence < PropertyValue > > &rManList )
+ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > xHandler,  const uno::Sequence< uno::Sequence < beans::PropertyValue > >& rManList )
 {
-    const OUString sFileEntryElement    ( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_FILE_ENTRY ) );
-    const OUString sManifestElement     ( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_MANIFEST ) );
-    const OUString sEncryptionDataElement( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_ENCRYPTION_DATA ) );
-    const OUString sAlgorithmElement    ( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_ALGORITHM ) );
-    const OUString sStartKeyGenerationElement ( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_START_KEY_GENERATION ) );
-    const OUString sKeyDerivationElement( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_KEY_DERIVATION ) );
+    const ::rtl::OUString sFileEntryElement     ( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_FILE_ENTRY ) );
+    const ::rtl::OUString sManifestElement      ( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_MANIFEST ) );
+    const ::rtl::OUString sEncryptionDataElement( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_ENCRYPTION_DATA ) );
+    const ::rtl::OUString sAlgorithmElement     ( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_ALGORITHM ) );
+    const ::rtl::OUString sStartKeyGenerationElement ( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_START_KEY_GENERATION ) );
+    const ::rtl::OUString sKeyDerivationElement ( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_KEY_DERIVATION ) );
 
-    const OUString sCdataAttribute      ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_CDATA ) );
-    const OUString sMediaTypeAttribute  ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_MEDIA_TYPE ) );
-    const OUString sVersionAttribute    ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_VERSION ) );
-    const OUString sFullPathAttribute   ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_FULL_PATH ) );
-    const OUString sSizeAttribute       ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_SIZE ) );
-    const OUString sKeySizeAttribute    ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_KEY_SIZE ) );
-    const OUString sSaltAttribute       ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_SALT ) );
-    const OUString sInitialisationVectorAttribute ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_INITIALISATION_VECTOR ) );
-    const OUString sIterationCountAttribute ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_ITERATION_COUNT ) );
-    const OUString sAlgorithmNameAttribute  ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_ALGORITHM_NAME ) );
-    const OUString sStartKeyGenerationNameAttribute ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_START_KEY_GENERATION_NAME ) );
-    const OUString sKeyDerivationNameAttribute  ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_KEY_DERIVATION_NAME ) );
-    const OUString sChecksumTypeAttribute   ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_CHECKSUM_TYPE ) );
-    const OUString sChecksumAttribute   ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_CHECKSUM) );
+    const ::rtl::OUString sCdataAttribute       ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_CDATA ) );
+    const ::rtl::OUString sMediaTypeAttribute   ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_MEDIA_TYPE ) );
+    const ::rtl::OUString sVersionAttribute     ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_VERSION ) );
+    const ::rtl::OUString sFullPathAttribute    ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_FULL_PATH ) );
+    const ::rtl::OUString sSizeAttribute        ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_SIZE ) );
+    const ::rtl::OUString sKeySizeAttribute     ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_KEY_SIZE ) );
+    const ::rtl::OUString sSaltAttribute        ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_SALT ) );
+    const ::rtl::OUString sInitialisationVectorAttribute ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_INITIALISATION_VECTOR ) );
+    const ::rtl::OUString sIterationCountAttribute  ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_ITERATION_COUNT ) );
+    const ::rtl::OUString sAlgorithmNameAttribute   ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_ALGORITHM_NAME ) );
+    const ::rtl::OUString sStartKeyGenerationNameAttribute ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_START_KEY_GENERATION_NAME ) );
+    const ::rtl::OUString sKeyDerivationNameAttribute   ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_KEY_DERIVATION_NAME ) );
+    const ::rtl::OUString sChecksumTypeAttribute    ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_CHECKSUM_TYPE ) );
+    const ::rtl::OUString sChecksumAttribute    ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_CHECKSUM) );
 
-    const OUString sFullPathProperty    ( RTL_CONSTASCII_USTRINGPARAM ( "FullPath" ) );
-    const OUString sVersionProperty     ( RTL_CONSTASCII_USTRINGPARAM ( "Version" ) );
-    const OUString sMediaTypeProperty   ( RTL_CONSTASCII_USTRINGPARAM ( "MediaType" ) );
-    const OUString sIterationCountProperty  ( RTL_CONSTASCII_USTRINGPARAM ( "IterationCount" ) );
-    const OUString sSaltProperty        ( RTL_CONSTASCII_USTRINGPARAM ( "Salt" ) );
-    const OUString sInitialisationVectorProperty( RTL_CONSTASCII_USTRINGPARAM ( "InitialisationVector" ) );
-    const OUString sSizeProperty        ( RTL_CONSTASCII_USTRINGPARAM ( "Size" ) );
-    const OUString sDigestProperty      ( RTL_CONSTASCII_USTRINGPARAM ( "Digest" ) );
+    const ::rtl::OUString sFullPathProperty     ( RTL_CONSTASCII_USTRINGPARAM ( "FullPath" ) );
+    const ::rtl::OUString sVersionProperty  ( RTL_CONSTASCII_USTRINGPARAM ( "Version" ) );
+    const ::rtl::OUString sMediaTypeProperty    ( RTL_CONSTASCII_USTRINGPARAM ( "MediaType" ) );
+    const ::rtl::OUString sIterationCountProperty   ( RTL_CONSTASCII_USTRINGPARAM ( "IterationCount" ) );
+    const ::rtl::OUString  sDerivedKeySizeProperty  ( RTL_CONSTASCII_USTRINGPARAM ( "DerivedKeySize" ) );
+    const ::rtl::OUString sSaltProperty         ( RTL_CONSTASCII_USTRINGPARAM ( "Salt" ) );
+    const ::rtl::OUString sInitialisationVectorProperty( RTL_CONSTASCII_USTRINGPARAM ( "InitialisationVector" ) );
+    const ::rtl::OUString sSizeProperty         ( RTL_CONSTASCII_USTRINGPARAM ( "Size" ) );
+    const ::rtl::OUString sDigestProperty       ( RTL_CONSTASCII_USTRINGPARAM ( "Digest" ) );
+    const ::rtl::OUString sEncryptionAlgProperty    ( RTL_CONSTASCII_USTRINGPARAM ( "EncryptionAlgorithm" ) );
+    const ::rtl::OUString sStartKeyAlgProperty  ( RTL_CONSTASCII_USTRINGPARAM ( "StartKeyAlgorithm" ) );
+    const ::rtl::OUString sDigestAlgProperty    ( RTL_CONSTASCII_USTRINGPARAM ( "DigestAlgorithm" ) );
 
-    const OUString sWhiteSpace          ( RTL_CONSTASCII_USTRINGPARAM ( " " ) );
-    const OUString sBlowfish            ( RTL_CONSTASCII_USTRINGPARAM ( "Blowfish CFB" ) );
-    const OUString sPBKDF2              ( RTL_CONSTASCII_USTRINGPARAM ( "PBKDF2" ) );
-    const OUString sChecksumType        ( RTL_CONSTASCII_USTRINGPARAM ( CHECKSUM_TYPE ) );
-    const OUString sStartKeySize        ( RTL_CONSTASCII_USTRINGPARAM ( START_KEY_SIZE ) );
-    const OUString sDerivedKeySize      ( RTL_CONSTASCII_USTRINGPARAM ( DERIVED_KEY_SIZE ) );
-    const OUString sSHA1                ( RTL_CONSTASCII_USTRINGPARAM ( ALGORITHM_SHA1 ) );
+    const ::rtl::OUString sWhiteSpace           ( RTL_CONSTASCII_USTRINGPARAM ( " " ) );
+
+    const ::rtl::OUString sSHA256_URL           ( RTL_CONSTASCII_USTRINGPARAM ( SHA256_URL ) );
+    const ::rtl::OUString  sSHA1_Name           ( RTL_CONSTASCII_USTRINGPARAM ( SHA1_NAME ) );
+
+    const ::rtl::OUString  sSHA1_1k_Name        ( RTL_CONSTASCII_USTRINGPARAM ( SHA1_1K_NAME ) );
+    const ::rtl::OUString  sSHA256_1k_URL       ( RTL_CONSTASCII_USTRINGPARAM ( SHA256_1K_URL ) );
+
+    const ::rtl::OUString  sBlowfish_Name       ( RTL_CONSTASCII_USTRINGPARAM ( BLOWFISH_NAME ) );
+    const ::rtl::OUString  sAES256_URL          ( RTL_CONSTASCII_USTRINGPARAM ( AES256_URL ) );
+
+    const ::rtl::OUString  sPBKDF2_Name         ( RTL_CONSTASCII_USTRINGPARAM ( PBKDF2_NAME ) );
 
     ::comphelper::AttributeList * pRootAttrList = new ::comphelper::AttributeList;
-    const Sequence < PropertyValue > *pSequence = rManList.getConstArray();
+    const uno::Sequence < beans::PropertyValue > *pSequence = rManList.getConstArray();
     const sal_uInt32 nManLength = rManList.getLength();
 
     // find the mediatype of the document if any
-    OUString aDocMediaType;
-    OUString aDocVersion;
+    ::rtl::OUString aDocMediaType;
+    ::rtl::OUString aDocVersion;
     for (sal_uInt32 nInd = 0; nInd < nManLength ; nInd++ )
     {
-        OUString aMediaType;
-        OUString aPath;
-        OUString aVersion;
+        ::rtl::OUString aMediaType;
+        ::rtl::OUString aPath;
+        ::rtl::OUString aVersion;
 
-        const PropertyValue *pValue = pSequence[nInd].getConstArray();
+        const beans::PropertyValue *pValue = pSequence[nInd].getConstArray();
         for (sal_uInt32 j = 0, nNum = pSequence[nInd].getLength(); j < nNum; j++, pValue++)
         {
             if (pValue->Name.equals (sMediaTypeProperty) )
@@ -126,7 +129,7 @@ ManifestExport::ManifestExport(Reference < XDocumentHandler > xHandler,  const S
                 break;
         }
 
-        if ( aPath.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) ) ) )
+        if ( aPath.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) ) ) )
         {
             aDocMediaType = aMediaType;
             aDocVersion = aVersion;
@@ -139,28 +142,28 @@ ManifestExport::ManifestExport(Reference < XDocumentHandler > xHandler,  const S
     sal_Bool bStoreStartKeyGeneration = sal_False;
     if ( aDocMediaType.getLength() )
     {
-        if ( aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_TEXT_ASCII ) ) )
-          || aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_TEXT_WEB_ASCII ) ) )
-          || aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_TEXT_GLOBAL_ASCII ) ) )
-          || aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_DRAWING_ASCII ) ) )
-          || aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_ASCII ) ) )
-          || aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET_ASCII ) ) )
-          || aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_CHART_ASCII ) ) )
-          || aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_DATABASE_ASCII ) ) )
-          || aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_FORMULA_ASCII ) ) )
+        if ( aDocMediaType.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_TEXT_ASCII ) ) )
+          || aDocMediaType.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_TEXT_WEB_ASCII ) ) )
+          || aDocMediaType.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_TEXT_GLOBAL_ASCII ) ) )
+          || aDocMediaType.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_DRAWING_ASCII ) ) )
+          || aDocMediaType.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_ASCII ) ) )
+          || aDocMediaType.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET_ASCII ) ) )
+          || aDocMediaType.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_CHART_ASCII ) ) )
+          || aDocMediaType.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_DATABASE_ASCII ) ) )
+          || aDocMediaType.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_FORMULA_ASCII ) ) )
 
-          || aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_TEXT_TEMPLATE_ASCII ) ) )
-          || aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_DRAWING_TEMPLATE_ASCII ) ) )
-          || aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_TEMPLATE_ASCII ) ) )
-          || aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET_TEMPLATE_ASCII ) ) )
-          || aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_CHART_TEMPLATE_ASCII ) ) )
-          || aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_FORMULA_TEMPLATE_ASCII ) ) ) )
+          || aDocMediaType.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_TEXT_TEMPLATE_ASCII ) ) )
+          || aDocMediaType.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_DRAWING_TEMPLATE_ASCII ) ) )
+          || aDocMediaType.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_TEMPLATE_ASCII ) ) )
+          || aDocMediaType.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET_TEMPLATE_ASCII ) ) )
+          || aDocMediaType.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_CHART_TEMPLATE_ASCII ) ) )
+          || aDocMediaType.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_FORMULA_TEMPLATE_ASCII ) ) ) )
 
         {
             // oasis format
-            pRootAttrList->AddAttribute ( OUString( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_XMLNS ) ),
+            pRootAttrList->AddAttribute ( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_XMLNS ) ),
                                         sCdataAttribute,
-                                        OUString( RTL_CONSTASCII_USTRINGPARAM ( MANIFEST_OASIS_NAMESPACE ) ) );
+                                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( MANIFEST_OASIS_NAMESPACE ) ) );
             bAcceptNonemptyVersion = sal_True;
             if ( aDocVersion.compareTo( ODFVER_012_TEXT ) >= 0 )
             {
@@ -168,7 +171,7 @@ ManifestExport::ManifestExport(Reference < XDocumentHandler > xHandler,  const S
                 bStoreStartKeyGeneration = sal_True;
 
                 // starting from ODF12 the version should be also in manifest:manifest element
-                pRootAttrList->AddAttribute ( OUString( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_VERSION ) ),
+                pRootAttrList->AddAttribute ( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_VERSION ) ),
                                             sCdataAttribute,
                                             aDocVersion );
             }
@@ -177,21 +180,21 @@ ManifestExport::ManifestExport(Reference < XDocumentHandler > xHandler,  const S
         {
             // even if it is no SO6 format the namespace must be specified
             // thus SO6 format is used as default one
-            pRootAttrList->AddAttribute ( OUString( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_XMLNS ) ),
+            pRootAttrList->AddAttribute ( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_XMLNS ) ),
                                         sCdataAttribute,
-                                        OUString( RTL_CONSTASCII_USTRINGPARAM ( MANIFEST_NAMESPACE ) ) );
+                                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( MANIFEST_NAMESPACE ) ) );
 
             bProvideDTD = sal_True;
         }
     }
 
-    Reference < XAttributeList > xRootAttrList (pRootAttrList);
+    uno::Reference < xml::sax::XAttributeList > xRootAttrList (pRootAttrList);
 
     xHandler->startDocument();
-    Reference < XExtendedDocumentHandler > xExtHandler ( xHandler, UNO_QUERY );
+    uno::Reference < xml::sax::XExtendedDocumentHandler > xExtHandler ( xHandler, uno::UNO_QUERY );
     if ( xExtHandler.is() && bProvideDTD )
     {
-        OUString aDocType ( RTL_CONSTASCII_USTRINGPARAM ( MANIFEST_DOCTYPE ) );
+        ::rtl::OUString aDocType ( RTL_CONSTASCII_USTRINGPARAM ( MANIFEST_DOCTYPE ) );
         xExtHandler->unknown ( aDocType );
         xHandler->ignorableWhitespace ( sWhiteSpace );
     }
@@ -200,9 +203,9 @@ ManifestExport::ManifestExport(Reference < XDocumentHandler > xHandler,  const S
     for (sal_uInt32 i = 0 ; i < nManLength ; i++)
     {
         ::comphelper::AttributeList *pAttrList = new ::comphelper::AttributeList;
-        const PropertyValue *pValue = pSequence[i].getConstArray();
-        OUString aString;
-        const PropertyValue *pVector = NULL, *pSalt = NULL, *pIterationCount = NULL, *pDigest = NULL;
+        const beans::PropertyValue *pValue = pSequence[i].getConstArray();
+        ::rtl::OUString aString;
+        const uno::Any *pVector = NULL, *pSalt = NULL, *pIterationCount = NULL, *pDigest = NULL, *pDigestAlg = NULL, *pEncryptAlg = NULL, *pStartKeyAlg = NULL, *pDerivedKeySize = NULL;
         for (sal_uInt32 j = 0, nNum = pSequence[i].getLength(); j < nNum; j++, pValue++)
         {
             if (pValue->Name.equals (sMediaTypeProperty) )
@@ -226,47 +229,87 @@ ManifestExport::ManifestExport(Reference < XDocumentHandler > xHandler,  const S
             {
                 sal_Int32 nSize = 0;
                 pValue->Value >>= nSize;
-                OUStringBuffer aBuffer;
+                ::rtl::OUStringBuffer aBuffer;
                 aBuffer.append ( nSize );
                 pAttrList->AddAttribute ( sSizeAttribute, sCdataAttribute, aBuffer.makeStringAndClear() );
             }
             else if (pValue->Name.equals (sInitialisationVectorProperty) )
-                pVector = pValue;
+                pVector = &pValue->Value;
             else if (pValue->Name.equals (sSaltProperty) )
-                pSalt = pValue;
+                pSalt = &pValue->Value;
             else if (pValue->Name.equals (sIterationCountProperty) )
-                pIterationCount = pValue;
+                pIterationCount = &pValue->Value;
             else if (pValue->Name.equals ( sDigestProperty ) )
-                pDigest = pValue;
+                pDigest = &pValue->Value;
+            else if (pValue->Name.equals ( sDigestAlgProperty ) )
+                pDigestAlg = &pValue->Value;
+            else if (pValue->Name.equals ( sEncryptionAlgProperty ) )
+                pEncryptAlg = &pValue->Value;
+            else if (pValue->Name.equals ( sStartKeyAlgProperty ) )
+                pStartKeyAlg = &pValue->Value;
+            else if (pValue->Name.equals ( sDerivedKeySizeProperty ) )
+                pDerivedKeySize = &pValue->Value;
         }
+
         xHandler->ignorableWhitespace ( sWhiteSpace );
-        Reference < XAttributeList > xAttrList ( pAttrList );
+        uno::Reference < xml::sax::XAttributeList > xAttrList ( pAttrList );
         xHandler->startElement( sFileEntryElement , xAttrList);
-        if ( pVector && pSalt && pIterationCount )
+        if ( pVector && pSalt && pIterationCount && pDigest && pDigestAlg && pEncryptAlg && pStartKeyAlg && pDerivedKeySize )
         {
             // ==== Encryption Data
             ::comphelper::AttributeList * pNewAttrList = new ::comphelper::AttributeList;
-            Reference < XAttributeList > xNewAttrList (pNewAttrList);
-            OUStringBuffer aBuffer;
-            Sequence < sal_uInt8 > aSequence;
+            uno::Reference < xml::sax::XAttributeList > xNewAttrList (pNewAttrList);
+            ::rtl::OUStringBuffer aBuffer;
+            uno::Sequence < sal_uInt8 > aSequence;
 
             xHandler->ignorableWhitespace ( sWhiteSpace );
-            if ( pDigest )
-            {
-                pNewAttrList->AddAttribute ( sChecksumTypeAttribute, sCdataAttribute, sChecksumType );
-                pDigest->Value >>= aSequence;
-                Base64Codec::encodeBase64 ( aBuffer, aSequence );
-                pNewAttrList->AddAttribute ( sChecksumAttribute, sCdataAttribute, aBuffer.makeStringAndClear() );
-            }
+
+            // ==== Digest
+            ::rtl::OUString sChecksumType;
+            sal_Int32 nDigestAlgID = 0;
+            *pDigestAlg >>= nDigestAlgID;
+            if ( nDigestAlgID == xml::crypto::DigestID::SHA256_1K )
+                sChecksumType = sSHA256_1k_URL;
+            else if ( nDigestAlgID == xml::crypto::DigestID::SHA1_1K )
+                sChecksumType = sSHA1_1k_Name;
+            else
+                throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Unexpected digest algorithm is provided!" ) ), uno::Reference< uno::XInterface >() );
+
+            pNewAttrList->AddAttribute ( sChecksumTypeAttribute, sCdataAttribute, sChecksumType );
+            *pDigest >>= aSequence;
+            Base64Codec::encodeBase64 ( aBuffer, aSequence );
+            pNewAttrList->AddAttribute ( sChecksumAttribute, sCdataAttribute, aBuffer.makeStringAndClear() );
+
             xHandler->startElement( sEncryptionDataElement , xNewAttrList);
 
             // ==== Algorithm
             pNewAttrList = new ::comphelper::AttributeList;
             xNewAttrList = pNewAttrList;
 
-            pNewAttrList->AddAttribute ( sAlgorithmNameAttribute, sCdataAttribute, sBlowfish );
+            sal_Int32 nEncAlgID = 0;
+            sal_Int32 nDerivedKeySize = 0;
+            *pEncryptAlg >>= nEncAlgID;
+            *pDerivedKeySize >>= nDerivedKeySize;
 
-            pVector->Value >>= aSequence;
+            ::rtl::OUString sEncAlgName;
+            if ( nEncAlgID == xml::crypto::CipherID::AES_CBC )
+            {
+                OSL_ENSURE( nDerivedKeySize, "Unexpected key size is provided!" );
+                if ( nDerivedKeySize != 32 )
+                    throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Unexpected key size is provided!" ) ), uno::Reference< uno::XInterface >() );
+
+                sEncAlgName = sAES256_URL;
+            }
+            else if ( nEncAlgID == xml::crypto::CipherID::BLOWFISH_CFB_8 )
+            {
+                sEncAlgName = sBlowfish_Name;
+            }
+            else
+                throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Unexpecte encryption algorithm is provided!" ) ), uno::Reference< uno::XInterface >() );
+
+            pNewAttrList->AddAttribute ( sAlgorithmNameAttribute, sCdataAttribute, sEncAlgName );
+
+            *pVector >>= aSequence;
             Base64Codec::encodeBase64 ( aBuffer, aSequence );
             pNewAttrList->AddAttribute ( sInitialisationVectorAttribute, sCdataAttribute, aBuffer.makeStringAndClear() );
 
@@ -279,17 +322,20 @@ ManifestExport::ManifestExport(Reference < XDocumentHandler > xHandler,  const S
             pNewAttrList = new ::comphelper::AttributeList;
             xNewAttrList = pNewAttrList;
 
-            pNewAttrList->AddAttribute ( sKeyDerivationNameAttribute, sCdataAttribute, sPBKDF2 );
+            pNewAttrList->AddAttribute ( sKeyDerivationNameAttribute, sCdataAttribute, sPBKDF2_Name );
 
             if ( bStoreStartKeyGeneration )
-                pNewAttrList->AddAttribute ( sKeySizeAttribute, sCdataAttribute, sDerivedKeySize );
+            {
+                aBuffer.append( nDerivedKeySize );
+                pNewAttrList->AddAttribute ( sKeySizeAttribute, sCdataAttribute, aBuffer.makeStringAndClear() );
+            }
 
             sal_Int32 nCount = 0;
-            pIterationCount->Value >>= nCount;
+            *pIterationCount >>= nCount;
             aBuffer.append (nCount);
             pNewAttrList->AddAttribute ( sIterationCountAttribute, sCdataAttribute, aBuffer.makeStringAndClear() );
 
-            pSalt->Value >>= aSequence;
+            *pSalt >>= aSequence;
             Base64Codec::encodeBase64 ( aBuffer, aSequence );
             pNewAttrList->AddAttribute ( sSaltAttribute, sCdataAttribute, aBuffer.makeStringAndClear() );
 
@@ -306,8 +352,26 @@ ManifestExport::ManifestExport(Reference < XDocumentHandler > xHandler,  const S
                 pNewAttrList = new ::comphelper::AttributeList;
                 xNewAttrList = pNewAttrList;
 
-                // currently SHA1 is used to generate 20-bytes start key
-                pNewAttrList->AddAttribute ( sStartKeyGenerationNameAttribute, sCdataAttribute, sSHA1 );
+                ::rtl::OUString sStartKeyAlg;
+                ::rtl::OUString sStartKeySize;
+                sal_Int32 nStartKeyAlgID = 0;
+                *pStartKeyAlg >>= nStartKeyAlgID;
+                if ( nStartKeyAlgID == xml::crypto::DigestID::SHA256 )
+                {
+                    sStartKeyAlg = sSHA256_URL;
+                    aBuffer.append( (sal_uInt8)32 );
+                    sStartKeySize = aBuffer.makeStringAndClear();
+                }
+                else if ( nStartKeyAlgID == xml::crypto::DigestID::SHA1 )
+                {
+                    sStartKeyAlg = sSHA1_Name;
+                    aBuffer.append( (sal_uInt8)20 );
+                    sStartKeySize = aBuffer.makeStringAndClear();
+                }
+                else
+                    throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Unexpected start key algorithm is provided!" ) ), uno::Reference< uno::XInterface >() );
+
+                pNewAttrList->AddAttribute ( sStartKeyGenerationNameAttribute, sCdataAttribute, sStartKeyAlg );
                 pNewAttrList->AddAttribute ( sKeySizeAttribute, sCdataAttribute, sStartKeySize );
 
                 xHandler->ignorableWhitespace ( sWhiteSpace );

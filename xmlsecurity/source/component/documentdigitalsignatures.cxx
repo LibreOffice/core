@@ -220,7 +220,7 @@ sal_Bool DocumentDigitalSignatures::ImplViewSignatures(
     sal_Bool bChanges = sal_False;
     DigitalSignaturesDialog aSignaturesDialog(
         NULL, mxCtx, eMode, bReadOnly, m_sODFVersion, m_bHasDocumentSignature);
-    bool bInit = aSignaturesDialog.Init( rtl::OUString() );
+    bool bInit = aSignaturesDialog.Init();
     DBG_ASSERT( bInit, "Error initializing security context!" );
     if ( bInit )
     {
@@ -276,7 +276,7 @@ DocumentDigitalSignatures::ImplVerifySignatures(
 
     XMLSignatureHelper aSignatureHelper( mxCtx );
 
-    bool bInit = aSignatureHelper.Init( rtl::OUString() );
+    bool bInit = aSignatureHelper.Init();
 
     DBG_ASSERT( bInit, "Error initializing security context!" );
 
@@ -379,7 +379,7 @@ void DocumentDigitalSignatures::manageTrustedSources(  ) throw (RuntimeException
     Reference< dcss::xml::crypto::XSecurityEnvironment > xSecEnv;
 
     XMLSignatureHelper aSignatureHelper( mxCtx );
-    if ( aSignatureHelper.Init( rtl::OUString() ) )
+    if ( aSignatureHelper.Init() )
         xSecEnv = aSignatureHelper.GetSecurityEnvironment();
 
     MacroSecurity aDlg( NULL, mxCtx, xSecEnv );
@@ -391,7 +391,7 @@ void DocumentDigitalSignatures::showCertificate(
 {
     XMLSignatureHelper aSignatureHelper( mxCtx );
 
-    bool bInit = aSignatureHelper.Init( rtl::OUString() );
+    bool bInit = aSignatureHelper.Init();
 
     DBG_ASSERT( bInit, "Error initializing security context!" );
 

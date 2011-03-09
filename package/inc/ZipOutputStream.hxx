@@ -40,7 +40,7 @@
 #include <vector>
 
 struct ZipEntry;
-class EncryptionData;
+class ZipPackageStream;
 namespace vos
 {
     template < class T > class ORef;
@@ -60,7 +60,7 @@ protected:
     ZipEntry            *pCurrentEntry;
     sal_Int16           nMethod, nLevel, mnDigested;
     sal_Bool            bFinished, bEncryptCurrentEntry;
-    EncryptionData      *pCurrentEncryptData;
+    ZipPackageStream*   m_pCurrentStream;
 
 public:
     ZipOutputStream( com::sun::star::uno::Reference < com::sun::star::io::XOutputStream > &xOStream );
@@ -78,7 +78,7 @@ public:
     void SAL_CALL setLevel( sal_Int32 nNewLevel )
         throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL putNextEntry( ZipEntry& rEntry,
-            vos::ORef < EncryptionData > &rData,
+            ZipPackageStream* pStream,
             sal_Bool bEncrypt = sal_False )
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     void SAL_CALL closeEntry(  )

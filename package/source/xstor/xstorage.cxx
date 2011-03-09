@@ -45,6 +45,7 @@
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 
+#include <PackageConstants.hxx>
 
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -571,7 +572,7 @@ void OStorage_Impl::GetStorageProperties()
         if ( !m_bControlMediaType )
         {
             uno::Reference< beans::XPropertySet > xPackageProps( m_xPackage, uno::UNO_QUERY_THROW );
-            xPackageProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaTypeFallbackUsed" ) ) ) >>= m_bMTFallbackUsed;
+            xPackageProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( MEDIATYPE_FALLBACK_USED_PROPERTY ) ) ) >>= m_bMTFallbackUsed;
 
             xProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) ) ) >>= m_aMediaType;
             m_bControlMediaType = sal_True;
@@ -749,9 +750,17 @@ void OStorage_Impl::CopyToStorage( const uno::Reference< embed::XStorage >& xDes
         {
             try
             {
-                uno::Reference< embed::XEncryptionProtectedSource2 > xEncr( xDest, uno::UNO_QUERY );
+                uno::Reference< embed::XEncryptionProtectedStorage > xEncr( xDest, uno::UNO_QUERY );
                 if ( xEncr.is() )
+                {
                     xEncr->setEncryptionData( GetCommonRootEncryptionData().getAsConstNamedValueList() );
+
+                    uno::Sequence< beans::NamedValue > aAlgorithms;
+                    uno::Reference< beans::XPropertySet > xPackPropSet( m_xPackage, uno::UNO_QUERY_THROW );
+                    xPackPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ENCRYPTION_ALGORITHMS_PROPERTY ) ) )
+                        >>= aAlgorithms;
+                    xEncr->setEncryptionAlgorithms( aAlgorithms );
+                }
             }
             catch( packages::NoEncryptionException& aNoEncryptionException )
             {
@@ -2277,7 +2286,8 @@ uno::Any SAL_CALL OStorage::queryInterface( const uno::Type& rType )
                         (   rType
                         ,   static_cast<embed::XStorageRawAccess*> ( this )
                         ,   static_cast<embed::XEncryptionProtectedSource*> ( this )
-                        ,   static_cast<embed::XEncryptionProtectedSource2*> ( this ) );
+                        ,   static_cast<embed::XEncryptionProtectedSource2*> ( this )
+                        ,   static_cast<embed::XEncryptionProtectedStorage*> ( this ) );
         }
         else
         {
@@ -2337,6 +2347,7 @@ uno::Sequence< uno::Type > SAL_CALL OStorage::getTypes()
                                     ,   ::getCppuType( ( const uno::Reference< embed::XTransactedObject >* )NULL )
                                     ,   ::getCppuType( ( const uno::Reference< embed::XTransactionBroadcaster >* )NULL )
                                     ,   ::getCppuType( ( const uno::Reference< util::XModifiable >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< embed::XEncryptionProtectedStorage >* )NULL )
                                     ,   ::getCppuType( ( const uno::Reference< embed::XEncryptionProtectedSource2 >* )NULL )
                                     ,   ::getCppuType( ( const uno::Reference< embed::XEncryptionProtectedSource >* )NULL )
                                     ,   ::getCppuType( ( const uno::Reference< beans::XPropertySet >* )NULL ) );
@@ -4696,17 +4707,22 @@ void SAL_CALL OStorage::removeEncryption()
         // TODO: check if the password is valid
         // update all streams that was encrypted with old password
 
-        uno::Reference< beans::XPropertySet > xPackPropSet( m_pImpl->m_xPackage, uno::UNO_QUERY );
-        if ( !xPackPropSet.is() )
-            throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
-
+        uno::Reference< beans::XPropertySet > xPackPropSet( m_pImpl->m_xPackage, uno::UNO_QUERY_THROW );
         try
         {
-            xPackPropSet->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "EncryptionKey" ) ),
-                                            uno::makeAny( uno::Sequence< sal_Int8 >() ) );
+            xPackPropSet->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( STORAGE_ENCRYPTION_KEYS_PROPERTY ) ),
+                                            uno::makeAny( uno::Sequence< beans::NamedValue >() ) );
 
             m_pImpl->m_bHasCommonEncryptionData = sal_False;
             m_pImpl->m_aCommonEncryptionData.clear();
+        }
+        catch( uno::RuntimeException& aRException )
+        {
+            m_pImpl->AddLog( aRException.Message );
+            m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
+
+            OSL_ENSURE( sal_False, "The call must not fail, it is pretty simple!" );
+            throw;
         }
         catch( uno::Exception& aException )
         {
@@ -4767,15 +4783,12 @@ void SAL_CALL OStorage::setEncryptionData( const uno::Sequence< beans::NamedValu
                                                 aCaught );
         }
 
-        uno::Reference< beans::XPropertySet > xPackPropSet( m_pImpl->m_xPackage, uno::UNO_QUERY );
-        if ( !xPackPropSet.is() )
-            throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
-
+        uno::Reference< beans::XPropertySet > xPackPropSet( m_pImpl->m_xPackage, uno::UNO_QUERY_THROW );
         try
         {
             ::comphelper::SequenceAsHashMap aEncryptionMap( aEncryptionData );
-            xPackPropSet->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "EncryptionKey" ) ),
-                                            uno::makeAny( aEncryptionMap.getUnpackedValueOrDefault( PACKAGE_ENCRYPTIONDATA_SHA1UTF8, uno::Sequence< sal_Int8 >() ) ) );
+            xPackPropSet->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( STORAGE_ENCRYPTION_KEYS_PROPERTY ) ),
+                                            uno::makeAny( aEncryptionMap.getAsConstNamedValueList() ) );
 
             m_pImpl->m_bHasCommonEncryptionData = sal_True;
             m_pImpl->m_aCommonEncryptionData = aEncryptionMap;
@@ -4789,6 +4802,148 @@ void SAL_CALL OStorage::setEncryptionData( const uno::Sequence< beans::NamedValu
         }
     }
 
+}
+
+//____________________________________________________________________________________________________
+//  XEncryptionProtectedStorage
+//____________________________________________________________________________________________________
+
+//-----------------------------------------------
+void SAL_CALL OStorage::setEncryptionAlgorithms( const uno::Sequence< beans::NamedValue >& aAlgorithms )
+    throw (lang::IllegalArgumentException, uno::RuntimeException)
+{
+    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::setEncryptionAlgorithms" );
+
+    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+
+    if ( !m_pImpl )
+    {
+        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        throw lang::DisposedException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
+    }
+
+    if ( m_pData->m_nStorageType != embed::StorageFormats::PACKAGE )
+        throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() ); // the interface must be visible only for package storage
+
+    if ( !aAlgorithms.getLength() )
+        throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Unexpected empty encryption algorithms list!") ), uno::Reference< uno::XInterface >() );
+
+    OSL_ENSURE( m_pData->m_bIsRoot, "setEncryptionAlgorithms() method is not available for nonroot storages!\n" );
+    if ( m_pData->m_bIsRoot )
+    {
+        try {
+            m_pImpl->ReadContents();
+        }
+        catch ( uno::RuntimeException& aRuntimeException )
+        {
+            m_pImpl->AddLog( aRuntimeException.Message );
+            m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
+            throw;
+        }
+        catch ( uno::Exception& aException )
+        {
+            m_pImpl->AddLog( aException.Message );
+            m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
+
+            uno::Any aCaught( ::cppu::getCaughtException() );
+            throw lang::WrappedTargetException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Can not open package!\n" ) ),
+                                                uno::Reference< uno::XInterface >(  static_cast< OWeakObject* >( this ),
+                                                                                    uno::UNO_QUERY ),
+                                                aCaught );
+        }
+
+        uno::Reference< beans::XPropertySet > xPackPropSet( m_pImpl->m_xPackage, uno::UNO_QUERY_THROW );
+        try
+        {
+            xPackPropSet->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ENCRYPTION_ALGORITHMS_PROPERTY ) ),
+                                            uno::makeAny( aAlgorithms ) );
+        }
+        catch ( uno::RuntimeException& aRuntimeException )
+        {
+            m_pImpl->AddLog( aRuntimeException.Message );
+            m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
+            throw;
+        }
+        catch( lang::IllegalArgumentException& aIAException )
+        {
+            m_pImpl->AddLog( aIAException.Message );
+            m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
+
+            throw;
+        }
+        catch( uno::Exception& aException )
+        {
+            m_pImpl->AddLog( aException.Message );
+            m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
+
+            throw io::IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
+        }
+    }
+}
+
+//-----------------------------------------------
+uno::Sequence< beans::NamedValue > SAL_CALL OStorage::getEncryptionAlgorithms()
+    throw (uno::RuntimeException)
+{
+    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::getEncryptionAlgorithms" );
+
+    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+
+    if ( !m_pImpl )
+    {
+        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        throw lang::DisposedException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
+    }
+
+    if ( m_pData->m_nStorageType != embed::StorageFormats::PACKAGE )
+        throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() ); // the interface must be visible only for package storage
+
+    uno::Sequence< beans::NamedValue > aResult;
+    OSL_ENSURE( m_pData->m_bIsRoot, "getEncryptionAlgorithms() method is not available for nonroot storages!\n" );
+    if ( m_pData->m_bIsRoot )
+    {
+        try {
+            m_pImpl->ReadContents();
+        }
+        catch ( uno::RuntimeException& aRuntimeException )
+        {
+            m_pImpl->AddLog( aRuntimeException.Message );
+            m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
+            throw;
+        }
+        catch ( uno::Exception& aException )
+        {
+            m_pImpl->AddLog( aException.Message );
+            m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
+
+            uno::Any aCaught( ::cppu::getCaughtException() );
+            throw lang::WrappedTargetException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Can not open package!\n" ) ),
+                                                uno::Reference< uno::XInterface >(  static_cast< OWeakObject* >( this ),
+                                                                                    uno::UNO_QUERY ),
+                                                aCaught );
+        }
+
+        uno::Reference< beans::XPropertySet > xPackPropSet( m_pImpl->m_xPackage, uno::UNO_QUERY_THROW );
+        try
+        {
+            xPackPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ENCRYPTION_ALGORITHMS_PROPERTY ) ) ) >>= aResult;
+        }
+        catch ( uno::RuntimeException& aRuntimeException )
+        {
+            m_pImpl->AddLog( aRuntimeException.Message );
+            m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
+            throw;
+        }
+        catch( uno::Exception& aException )
+        {
+            m_pImpl->AddLog( aException.Message );
+            m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
+
+            throw io::IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
+        }
+    }
+
+    return aResult;
 }
 
 
@@ -4863,13 +5018,13 @@ void SAL_CALL OStorage::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                 m_pImpl->m_bIsModified = sal_True;
             }
         }
-        else if ( ( m_pData->m_bIsRoot && ( aPropertyName.equalsAscii( "HasEncryptedEntries" )
-                                    || aPropertyName.equalsAscii( "HasNonEncryptedEntries" )
-                                    || aPropertyName.equalsAscii( "IsInconsistent" )
+        else if ( ( m_pData->m_bIsRoot && ( aPropertyName.equalsAscii( HAS_ENCRYPTED_ENTRIES_PROPERTY )
+                                    || aPropertyName.equalsAscii( HAS_NONENCRYPTED_ENTRIES_PROPERTY )
+                                    || aPropertyName.equalsAscii( IS_INCONSISTENT_PROPERTY )
                                     || aPropertyName.equalsAscii( "URL" )
                                     || aPropertyName.equalsAscii( "RepairPackage" ) ) )
            || aPropertyName.equalsAscii( "IsRoot" )
-           || aPropertyName.equalsAscii( "MediaTypeFallbackUsed" ) )
+           || aPropertyName.equalsAscii( MEDIATYPE_FALLBACK_USED_PROPERTY ) )
             throw beans::PropertyVetoException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
         else
             throw beans::UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
@@ -4943,7 +5098,7 @@ uno::Any SAL_CALL OStorage::getPropertyValue( const ::rtl::OUString& aPropertyNa
 
     if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE
       && ( aPropertyName.equalsAscii( "MediaType" )
-        || aPropertyName.equalsAscii( "MediaTypeFallbackUsed" )
+        || aPropertyName.equalsAscii( MEDIATYPE_FALLBACK_USED_PROPERTY )
         || aPropertyName.equalsAscii( "Version" ) ) )
     {
         try
@@ -5000,9 +5155,9 @@ uno::Any SAL_CALL OStorage::getPropertyValue( const ::rtl::OUString& aPropertyNa
             return uno::makeAny( sal_False ); // RepairPackage
         }
         else if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE
-          && ( aPropertyName.equalsAscii( "HasEncryptedEntries" )
-            || aPropertyName.equalsAscii( "HasNonEncryptedEntries" )
-            || aPropertyName.equalsAscii( "IsInconsistent" ) ) )
+          && ( aPropertyName.equalsAscii( HAS_ENCRYPTED_ENTRIES_PROPERTY )
+            || aPropertyName.equalsAscii( HAS_NONENCRYPTED_ENTRIES_PROPERTY )
+            || aPropertyName.equalsAscii( IS_INCONSISTENT_PROPERTY ) ) )
         {
             try {
                 m_pImpl->ReadContents();

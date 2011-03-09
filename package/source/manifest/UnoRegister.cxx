@@ -39,6 +39,7 @@
 #include <zipfileaccess.hxx>
 
 using namespace ::rtl;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
@@ -65,9 +66,9 @@ extern "C" void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
     void * pRet = 0;
-    Reference< XMultiServiceFactory > xSMgr(
+    uno::Reference< XMultiServiceFactory > xSMgr(
             reinterpret_cast< XMultiServiceFactory * >( pServiceManager ) );
-    Reference< XSingleServiceFactory > xFactory;
+    uno::Reference< XSingleServiceFactory > xFactory;
 
     if (ManifestReader::static_getImplementationName().compareToAscii( pImplName ) == 0)
         xFactory = ManifestReader::createServiceFactory ( xSMgr );

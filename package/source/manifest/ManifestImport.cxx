@@ -29,10 +29,11 @@
 #include "precompiled_package.hxx"
 #include <ManifestImport.hxx>
 #include <ManifestDefines.hxx>
-#ifndef _BASE64_CODEC_HXX_
 #include <Base64Codec.hxx>
-#endif
+
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
+#include <com/sun/star/xml/crypto/DigestID.hpp>
+#include <com/sun/star/xml/crypto/CipherID.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 using namespace com::sun::star::uno;
@@ -45,6 +46,7 @@ using namespace std;
 ManifestImport::ManifestImport( vector < Sequence < PropertyValue > > & rNewManVector )
 : nNumProperty ( 0 )
 , bIgnoreEncryptData    ( sal_False )
+, nDerivedKeySize( 0 )
 , rManVector ( rNewManVector )
 
 , sFileEntryElement     ( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_FILE_ENTRY ) )
@@ -61,6 +63,7 @@ ManifestImport::ManifestImport( vector < Sequence < PropertyValue > > & rNewManV
 , sSaltAttribute                ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_SALT ) )
 , sInitialisationVectorAttribute ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_INITIALISATION_VECTOR ) )
 , sIterationCountAttribute      ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_ITERATION_COUNT ) )
+, sKeySizeAttribute             ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_KEY_SIZE ) )
 , sAlgorithmNameAttribute       ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_ALGORITHM_NAME ) )
 , sKeyDerivationNameAttribute   ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_KEY_DERIVATION_NAME ) )
 , sChecksumAttribute            ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_CHECKSUM ) )
@@ -70,15 +73,33 @@ ManifestImport::ManifestImport( vector < Sequence < PropertyValue > > & rNewManV
 , sMediaTypeProperty            ( RTL_CONSTASCII_USTRINGPARAM ( "MediaType" ) )
 , sVersionProperty              ( RTL_CONSTASCII_USTRINGPARAM ( "Version" ) )
 , sIterationCountProperty       ( RTL_CONSTASCII_USTRINGPARAM ( "IterationCount" ) )
+, sDerivedKeySizeProperty       ( RTL_CONSTASCII_USTRINGPARAM ( "DerivedKeySize" ) )
 , sSaltProperty                 ( RTL_CONSTASCII_USTRINGPARAM ( "Salt" ) )
 , sInitialisationVectorProperty ( RTL_CONSTASCII_USTRINGPARAM ( "InitialisationVector" ) )
 , sSizeProperty                 ( RTL_CONSTASCII_USTRINGPARAM ( "Size" ) )
 , sDigestProperty               ( RTL_CONSTASCII_USTRINGPARAM ( "Digest" ) )
+, sEncryptionAlgProperty        ( RTL_CONSTASCII_USTRINGPARAM ( "EncryptionAlgorithm" ) )
+, sStartKeyAlgProperty          ( RTL_CONSTASCII_USTRINGPARAM ( "StartKeyAlgorithm" ) )
+, sDigestAlgProperty            ( RTL_CONSTASCII_USTRINGPARAM ( "DigestAlgorithm" ) )
 
 , sWhiteSpace                   ( RTL_CONSTASCII_USTRINGPARAM ( " " ) )
-, sBlowfish                     ( RTL_CONSTASCII_USTRINGPARAM ( "Blowfish CFB" ) )
-, sPBKDF2                       ( RTL_CONSTASCII_USTRINGPARAM ( "PBKDF2" ) )
-, sChecksumType                 ( RTL_CONSTASCII_USTRINGPARAM ( CHECKSUM_TYPE ) )
+
+, sSHA256_URL                   ( RTL_CONSTASCII_USTRINGPARAM ( SHA256_URL ) )
+, sSHA1_Name                    ( RTL_CONSTASCII_USTRINGPARAM ( SHA1_NAME ) )
+, sSHA1_URL                     ( RTL_CONSTASCII_USTRINGPARAM ( SHA1_URL ) )
+
+, sSHA1_1k_Name                 ( RTL_CONSTASCII_USTRINGPARAM ( SHA1_1K_NAME ) )
+, sSHA1_1k_URL                  ( RTL_CONSTASCII_USTRINGPARAM ( SHA1_1K_URL ) )
+, sSHA256_1k_URL                ( RTL_CONSTASCII_USTRINGPARAM ( SHA256_1K_URL ) )
+
+, sBlowfish_Name                ( RTL_CONSTASCII_USTRINGPARAM ( BLOWFISH_NAME ) )
+, sBlowfish_URL                 ( RTL_CONSTASCII_USTRINGPARAM ( BLOWFISH_URL ) )
+, sAES128_URL                   ( RTL_CONSTASCII_USTRINGPARAM ( AES128_URL ) )
+, sAES192_URL                   ( RTL_CONSTASCII_USTRINGPARAM ( AES192_URL ) )
+, sAES256_URL                   ( RTL_CONSTASCII_USTRINGPARAM ( AES256_URL ) )
+
+, sPBKDF2_Name                  ( RTL_CONSTASCII_USTRINGPARAM ( PBKDF2_NAME ) )
+, sPBKDF2_URL                   ( RTL_CONSTASCII_USTRINGPARAM ( PBKDF2_URL ) )
 {
     aStack.reserve( 10 );
 }
@@ -143,15 +164,31 @@ void SAL_CALL ManifestImport::startElement( const OUString& aName, const uno::Re
             if ( aConvertedName.equals( sEncryptionDataElement ) )
             {
                 // If this element exists, then this stream is encrypted and we need
-                // to store the initialisation vector, salt and iteration count used
+                // to import the initialisation vector, salt and iteration count used
                 OUString aString = aConvertedAttribs[sChecksumTypeAttribute];
-                if ( aString == sChecksumType && !bIgnoreEncryptData )
+                if ( !bIgnoreEncryptData )
                 {
-                    aString = aConvertedAttribs[sChecksumAttribute];
-                    Sequence < sal_uInt8 > aDecodeBuffer;
-                    Base64Codec::decodeBase64 ( aDecodeBuffer, aString );
-                    aSequence[nNumProperty].Name = sDigestProperty;
-                    aSequence[nNumProperty++].Value <<= aDecodeBuffer;
+                    if ( aString.equals( sSHA1_1k_Name ) || aString.equals( sSHA1_1k_URL ) )
+                    {
+                        aSequence[nNumProperty].Name = sDigestAlgProperty;
+                        aSequence[nNumProperty++].Value <<= xml::crypto::DigestID::SHA1_1K;
+                    }
+                    else if ( aString.equals( sSHA256_1k_URL ) )
+                    {
+                        aSequence[nNumProperty].Name = sDigestAlgProperty;
+                        aSequence[nNumProperty++].Value <<= xml::crypto::DigestID::SHA256_1K;
+                    }
+                    else
+                        bIgnoreEncryptData = sal_True;
+
+                    if ( !bIgnoreEncryptData )
+                    {
+                        aString = aConvertedAttribs[sChecksumAttribute];
+                        Sequence < sal_uInt8 > aDecodeBuffer;
+                        Base64Codec::decodeBase64 ( aDecodeBuffer, aString );
+                        aSequence[nNumProperty].Name = sDigestProperty;
+                        aSequence[nNumProperty++].Value <<= aDecodeBuffer;
+                    }
                 }
             }
         }
@@ -159,39 +196,83 @@ void SAL_CALL ManifestImport::startElement( const OUString& aName, const uno::Re
         {
             if ( aConvertedName == sAlgorithmElement )
             {
-                OUString aString = aConvertedAttribs[sAlgorithmNameAttribute];
-                if ( aString == sBlowfish && !bIgnoreEncryptData )
+                if ( !bIgnoreEncryptData )
                 {
-                    aString = aConvertedAttribs[sInitialisationVectorAttribute];
-                    Sequence < sal_uInt8 > aDecodeBuffer;
-                    Base64Codec::decodeBase64 ( aDecodeBuffer, aString );
-                    aSequence[nNumProperty].Name = sInitialisationVectorProperty;
-                    aSequence[nNumProperty++].Value <<= aDecodeBuffer;
+                    OUString aString = aConvertedAttribs[sAlgorithmNameAttribute];
+                    if ( aString.equals( sBlowfish_Name ) || aString.equals( sBlowfish_URL ) )
+                    {
+                        aSequence[nNumProperty].Name = sEncryptionAlgProperty;
+                        aSequence[nNumProperty++].Value <<= xml::crypto::CipherID::BLOWFISH_CFB_8;
+                    }
+                    else if ( aString.equals( sAES256_URL ) )
+                    {
+                        aSequence[nNumProperty].Name = sEncryptionAlgProperty;
+                        aSequence[nNumProperty++].Value <<= xml::crypto::CipherID::AES_CBC;
+                        OSL_ENSURE( nDerivedKeySize && nDerivedKeySize != 32, "Unexpected derived key length!" );
+                        nDerivedKeySize = 32;
+                    }
+                    else if ( aString.equals( sAES192_URL ) )
+                    {
+                        aSequence[nNumProperty].Name = sEncryptionAlgProperty;
+                        aSequence[nNumProperty++].Value <<= xml::crypto::CipherID::AES_CBC;
+                        OSL_ENSURE( nDerivedKeySize && nDerivedKeySize != 24, "Unexpected derived key length!" );
+                        nDerivedKeySize = 24;
+                    }
+                    else if ( aString.equals( sAES128_URL ) )
+                    {
+                        aSequence[nNumProperty].Name = sEncryptionAlgProperty;
+                        aSequence[nNumProperty++].Value <<= xml::crypto::CipherID::AES_CBC;
+                        OSL_ENSURE( nDerivedKeySize && nDerivedKeySize != 16, "Unexpected derived key length!" );
+                        nDerivedKeySize = 16;
+                    }
+                    else
+                        bIgnoreEncryptData = sal_True;
+
+                    if ( !bIgnoreEncryptData )
+                    {
+                        aString = aConvertedAttribs[sInitialisationVectorAttribute];
+                        Sequence < sal_uInt8 > aDecodeBuffer;
+                        Base64Codec::decodeBase64 ( aDecodeBuffer, aString );
+                        aSequence[nNumProperty].Name = sInitialisationVectorProperty;
+                        aSequence[nNumProperty++].Value <<= aDecodeBuffer;
+                    }
                 }
-                else
-                    // If we don't recognise the algorithm, then the key derivation info
-                    // is useless to us
-                    bIgnoreEncryptData = sal_True;
             }
             else if ( aConvertedName == sKeyDerivationElement )
             {
-                OUString aString = aConvertedAttribs[sKeyDerivationNameAttribute];
-                if ( aString == sPBKDF2 && !bIgnoreEncryptData )
+                if ( !bIgnoreEncryptData )
                 {
-                    aString = aConvertedAttribs[sSaltAttribute];
-                    Sequence < sal_uInt8 > aDecodeBuffer;
-                    Base64Codec::decodeBase64 ( aDecodeBuffer, aString );
-                    aSequence[nNumProperty].Name = sSaltProperty;
-                    aSequence[nNumProperty++].Value <<= aDecodeBuffer;
+                    OUString aString = aConvertedAttribs[sKeyDerivationNameAttribute];
+                    if ( aString.equals( sPBKDF2_Name ) || aString.equals( sPBKDF2_URL ) )
+                    {
+                        aString = aConvertedAttribs[sSaltAttribute];
+                        Sequence < sal_uInt8 > aDecodeBuffer;
+                        Base64Codec::decodeBase64 ( aDecodeBuffer, aString );
+                        aSequence[nNumProperty].Name = sSaltProperty;
+                        aSequence[nNumProperty++].Value <<= aDecodeBuffer;
 
-                    aString = aConvertedAttribs[sIterationCountAttribute];
-                    aSequence[nNumProperty].Name = sIterationCountProperty;
-                    aSequence[nNumProperty++].Value <<= aString.toInt32();
+                        aString = aConvertedAttribs[sIterationCountAttribute];
+                        aSequence[nNumProperty].Name = sIterationCountProperty;
+                        aSequence[nNumProperty++].Value <<= aString.toInt32();
+
+                        aString = aConvertedAttribs[sKeySizeAttribute];
+                        if ( aString.getLength() )
+                        {
+                            sal_Int32 nKey = aString.toInt32();
+                            OSL_ENSURE( !nDerivedKeySize || nKey == nDerivedKeySize , "Provided derived key length differs from the expected one!" );
+                            nDerivedKeySize = nKey;
+                        }
+                        else if ( !nDerivedKeySize )
+                            nDerivedKeySize = 16;
+                        else
+                            OSL_ENSURE( sal_False, "Default derived key length differs from the expected one!" );
+
+                        aSequence[nNumProperty].Name = sDerivedKeySizeProperty;
+                        aSequence[nNumProperty++].Value <<= nDerivedKeySize;
+                    }
+                    else
+                        bIgnoreEncryptData = sal_True;
                 }
-                else
-                    // If we don't recognise the key derivation technique, then the
-                    // algorithm info is useless to us
-                    bIgnoreEncryptData = sal_True;
             }
         }
     }
