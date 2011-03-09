@@ -464,6 +464,7 @@ public:
     ScFieldEditEngine*  CreateFieldEditEngine();
     void                DisposeFieldEditEngine(ScFieldEditEngine*& rpEditEngine);
 
+    SC_DLLPUBLIC ScRangeName*   GetRangeName(SCTAB nTab) const;
     SC_DLLPUBLIC ScRangeName*   GetRangeName() const;
     void            SetRangeName( ScRangeName* pNewRangeName );
     SCTAB           GetMaxTableNumber() { return nMaxTableNumber; }

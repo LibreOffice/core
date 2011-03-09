@@ -236,6 +236,22 @@ public:
     virtual FormulaToken*       Clone() const { return new ScExternalDoubleRefToken(*this); }
 };
 
+class ScNameToken : public ScToken
+{
+private:
+    sal_uInt16 mnIndex;
+    bool mbGlobal; // true = global, false = local
+private:
+                                ScNameToken(); // disabled
+public:
+                                ScNameToken(sal_uInt16 nIndex, bool bGlobal);
+                                ScNameToken(const ScNameToken& r);
+    virtual                     ~ScNameToken();
+    virtual BYTE                GetByte() const;
+    virtual USHORT              GetIndex() const;
+    virtual BOOL                operator==( const formula::FormulaToken& rToken ) const;
+    virtual FormulaToken*       Clone() const { return new ScNameToken(*this); }
+};
 
 class ScExternalNameToken : public ScToken
 {

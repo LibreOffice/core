@@ -3018,10 +3018,11 @@ void ScTable::SetDrawPageSize(bool bResetStreamValid, bool bUpdateNoteCaptionPos
         SetStreamValid(FALSE);
 }
 
-ScRangeName* ScTable::GetRangeName()
+ScRangeName* ScTable::GetRangeName() const
 {
     if (!mpRangeName)
         mpRangeName = new ScRangeName(pDocument);
+    return mpRangeName;
 }
 
 

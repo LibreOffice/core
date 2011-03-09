@@ -223,12 +223,14 @@ void ScRawToken::SetDouble(double rVal)
     nRefCnt = 0;
 }
 
-void ScRawToken::SetName( USHORT n )
+void ScRawToken::SetName(bool bGlobal, sal_uInt16 nIndex)
 {
-    eOp    = ocName;
-    eType  = svIndex;
-    nIndex = n;
+    eOp = ocName;
+    eType = svIndex;
     nRefCnt = 0;
+
+    name.bGlobal = bGlobal;
+    name.nIndex = nIndex;
 }
 
 void ScRawToken::SetExternalSingleRef( sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& rRef )
@@ -321,7 +323,7 @@ ScRawToken* ScRawToken::Clone() const
             case svSingleRef:
             case svDoubleRef:   n += sizeof(aRef); break;
             case svMatrix:      n += sizeof(ScMatrix*); break;
-            case svIndex:       n += sizeof(USHORT); break;
+            case svIndex:       n += sizeof(name); break;
             case svJump:        n += nJump[ 0 ] * 2 + 2; break;
             case svExternal:    n = sal::static_int_cast<USHORT>( n + GetStrLenBytes( cStr+1 ) + GetStrLenBytes( 2 ) ); break;
 
@@ -376,7 +378,7 @@ FormulaToken* ScRawToken::CreateToken() const
             IF_NOT_OPCODE_ERROR( ocPush, ScMatrixToken);
             return new ScMatrixToken( pMat );
         case svIndex :
-            return new FormulaIndexToken( eOp, nIndex );
+            return new ScNameToken(name.nIndex, name.bGlobal);
         case svExternalSingleRef:
             {
                 String aTabName(extref.cTabName);
@@ -941,6 +943,37 @@ BOOL ScExternalDoubleRefToken::operator ==( const FormulaToken& r ) const
         return false;
 
     return maDoubleRef == static_cast<const ScToken&>(r).GetDoubleRef();
+}
+
+// ============================================================================
+
+ScNameToken::ScNameToken(sal_uInt16 nIndex, bool bGlobal) :
+    ScToken(svIndex, ocName), mnIndex(nIndex), mbGlobal(bGlobal) {}
+
+ScNameToken::ScNameToken(const ScNameToken& r) :
+    ScToken(r), mnIndex(r.mnIndex), mbGlobal(r.mbGlobal) {}
+
+ScNameToken::~ScNameToken() {}
+
+BYTE ScNameToken::GetByte() const
+{
+    return static_cast<BYTE>(mbGlobal);
+}
+
+USHORT ScNameToken::GetIndex() const
+{
+    return mnIndex;
+}
+
+BOOL ScNameToken::operator==( const FormulaToken& r ) const
+{
+    if ( !FormulaToken::operator==(r) )
+        return false;
+
+    if (mbGlobal != static_cast<bool>(r.GetByte()))
+        return false;
+
+    return mnIndex == r.GetIndex();
 }
 
 // ============================================================================

@@ -90,6 +90,14 @@ using namespace com::sun::star;
 
 //------------------------------------------------------------------------
 
+ScRangeName* ScDocument::GetRangeName(SCTAB nTab) const
+{
+    if (!ValidTab(nTab) || !pTab[nTab])
+        return NULL;
+
+    return pTab[nTab]->GetRangeName();
+}
+
 ScRangeName* ScDocument::GetRangeName() const
 {
     return pRangeName;

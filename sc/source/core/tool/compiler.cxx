@@ -2896,12 +2896,13 @@ BOOL ScCompiler::IsNamedRange( const String& rUpperName )
 {
     // IsNamedRange is called only from NextNewToken, with an upper-case string
 
+    // TODO: Get it to work with sheet local names.
     ScRangeName* pRangeName = pDoc->GetRangeName();
     const ScRangeData* pData = pRangeName->findByUpperName(rUpperName);
     if (pData)
     {
         ScRawToken aToken;
-        aToken.SetName( pData->GetIndex() );
+        aToken.SetName(true, pData->GetIndex());
         pRawToken = aToken.Clone();
         return true;
     }
@@ -2949,7 +2950,7 @@ BOOL ScCompiler::IsDBRange( const String& rName )
     {
         ScDBData* pData = (*pDBColl)[n];
         ScRawToken aToken;
-        aToken.SetName( pData->GetIndex() );
+        aToken.SetName(true, pData->GetIndex()); // DB range is always global.
         aToken.eOp = ocDBArea;
         pRawToken = aToken.Clone();
         return TRUE;

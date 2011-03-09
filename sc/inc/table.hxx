@@ -188,7 +188,7 @@ private:
     USHORT          nScenarioFlags;
     BOOL            bActiveScenario;
     NameToNameMap       localNameToGlobalName;
-    ScRangeName*    mpRangeName;
+    mutable ScRangeName* mpRangeName;
     bool            mbPageBreaksValid;
 
 friend class ScDocument;                    // fuer FillInfo
@@ -794,7 +794,7 @@ public:
     void        DestroySortCollator();
     void        SetDrawPageSize( bool bResetStreamValid = true, bool bUpdateNoteCaptionPos = true );
 
-    ScRangeName* GetRangeName();
+    ScRangeName* GetRangeName() const;
 
 private:
     void        FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,

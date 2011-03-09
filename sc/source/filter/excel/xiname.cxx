@@ -51,7 +51,6 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
     mbVBName( false )
 {
     ExcelToSc& rFmlaConv = GetOldFmlaConverter();
-    ScRangeName& rRangeNames = GetNamedRanges();
 
     // 1) *** read data from stream *** ---------------------------------------
 
@@ -143,11 +142,13 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
         mnScTab = static_cast< SCTAB >( nUsedTab - 1 );
     }
 
+#if 0
     // find an unused name
     String aOrigName( maScName );
     sal_Int32 nCounter = 0;
     while( rRangeNames.findByName(maScName) )
         maScName.Assign( aOrigName ).Append( ' ' ).Append( String::CreateFromInt32( ++nCounter ) );
+#endif
 
     // 3) *** convert the name definition formula *** -------------------------
 
@@ -222,9 +223,14 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
         ScRangeData* pData = new ScRangeData( GetDocPtr(), maScName, *pTokArr, ScAddress(), nNameType );
         pData->GuessPosition();             // calculate base position for relative refs
         pData->SetIndex( nXclNameIdx );     // used as unique identifier in formulas
-        rRangeNames.insert( pData );        // takes ownership of pData
-        if( nXclTab != EXC_NAME_GLOBAL )
+        if (nXclTab == EXC_NAME_GLOBAL)
+            GetDoc().GetRangeName()->insert(pData);
+        else
         {
+            ScRangeName* pLocalNames = GetDoc().GetRangeName(mnScTab);
+            if (pLocalNames)
+                pLocalNames->insert(pData);
+
             if (GetBiff() == EXC_BIFF8)
             {
                 ScRange aRange;

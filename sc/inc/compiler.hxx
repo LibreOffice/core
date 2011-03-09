@@ -154,8 +154,11 @@ public:
             sal_uInt16  nFileId;
             sal_Unicode cName[MAXSTRLEN+1];
         } extname;
+        struct {
+            bool        bGlobal;
+            sal_uInt16  nIndex;
+        } name;
         ScMatrix*    pMat;
-        USHORT       nIndex;                // index into name collection
         sal_Unicode  cStr[ MAXSTRLEN+1 ];   // string (up to 255 characters + 0)
         short        nJump[MAXJUMPCOUNT+1]; // If/Chose token
     };
@@ -183,7 +186,7 @@ public:
     void SetDouble( double fVal );
 
     // These methods are ok to use, reference count not cleared.
-    void SetName( USHORT n );
+    void SetName(bool bGlobal, sal_uInt16 nIndex);
     void SetExternalSingleRef( sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& rRef );
     void SetExternalDoubleRef( sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& rRef );
     void SetExternalName( sal_uInt16 nFileId, const String& rName );
