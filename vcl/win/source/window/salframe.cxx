@@ -810,7 +810,7 @@ static void ImplSalCalcFullScreenSize( const WinSalFrame* pFrame,
         else
         {
             Rectangle aCombined;
-            Reference< XPropertySet > xMonitor( xMultiMon->getByIndex( 0 ), UNO_QUERY_THROW );
+            uno::Reference< XPropertySet > xMonitor( xMultiMon->getByIndex( 0 ), UNO_QUERY_THROW );
             com::sun::star::awt::Rectangle aRect;
             if( xMonitor->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "ScreenArea" ) ) ) >>= aRect )
             {
@@ -820,7 +820,7 @@ static void ImplSalCalcFullScreenSize( const WinSalFrame* pFrame,
                 aCombined.Bottom() = aRect.Y + aRect.Height;
                 for( sal_Int32 i = 1 ; i < nMonitors ; i++ )
                 {
-                    xMonitor = Reference< XPropertySet >( xMultiMon->getByIndex(i), UNO_QUERY_THROW );
+                    xMonitor = uno::Reference< XPropertySet >( xMultiMon->getByIndex(i), UNO_QUERY_THROW );
                     if( xMonitor->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "ScreenArea" ) ) ) >>= aRect )
                     {
                         aCombined.Union( Rectangle( aRect.X, aRect.Y, aRect.X+aRect.Width, aRect.Y+aRect.Height ) );
