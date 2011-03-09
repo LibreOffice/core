@@ -1293,26 +1293,6 @@ sal_Int32 SlideShow::GetDisplay()
     if( pOptions )
         nDisplay = pOptions->GetDisplay();
 
-    if (nDisplay <= 0 )
-    {
-        try
-        {
-            Reference<XMultiServiceFactory > xFactory(
-                ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW);
-            Reference<XPropertySet> xMonitorProperties(
-                xFactory->createInstance( "com.sun.star.awt.DisplayAccess" ),
-                UNO_QUERY_THROW);
-            xMonitorProperties->getPropertyValue("ExternalDisplay") >>= nDisplay;
-        }
-        catch( Exception& )
-        {
-        }
-    }
-    else
-    {
-        nDisplay--;
-    }
-
     return nDisplay;
 }
 

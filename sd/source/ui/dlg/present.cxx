@@ -214,6 +214,9 @@ void SdStartPresentationDlg::InitMonitorSettings()
             {
             }
 
+            sal_Int32 nSelected (nPrimaryIndex);
+            const sal_Int32 nDefaultValue (
+                ( ( const SfxInt32Item& ) rOutAttrs.Get( ATTR_PRESENT_DISPLAY ) ).GetValue());
             const String sPlaceHolder( RTL_CONSTASCII_USTRINGPARAM( "%1" ) );
             for( sal_Int32 nDisplay = 0; nDisplay < mnMonitors; nDisplay++ )
             {
@@ -221,12 +224,24 @@ void SdStartPresentationDlg::InitMonitorSettings()
                 const String aNumber( String::CreateFromInt32( nDisplay + 1 ) );
                 aName.SearchAndReplace( sPlaceHolder, aNumber );
                 maLBMonitor.InsertEntry( aName );
+
+                // Store display index together with name.
+                const USHORT nEntryIndex (maLBMonitor.GetEntryCount()-1);
+                maLBMonitor.SetEntryData(nEntryIndex, (void*)nDisplay);
+
+                // Remember to select the default display.
+                if (nDefaultValue == nDisplay)
+                    nSelected = nEntryIndex;
             }
 
-            if( bUnifiedDisplay )
+            if( !bUnifiedDisplay )
                 maLBMonitor.InsertEntry( msAllMonitors );
+                const USHORT nEntryIndex (maLBMonitor.GetEntryCount()-1);
+                maLBMonitor.SetEntryData(nEntryIndex, (void*)-1);
+                if (nDefaultValue == -1)
+                    nSelected = nEntryIndex;
+            }
 
-            sal_Int32 nSelected = ( ( const SfxInt32Item& ) rOutAttrs.Get( ATTR_PRESENT_DISPLAY ) ).GetValue();
             if( nSelected <= 0 )
                 nSelected = nExternalIndex;
             else
@@ -262,7 +277,7 @@ void SdStartPresentationDlg::GetAttr( SfxItemSet& rAttr )
 
     sal_uInt16 nPos = maLBMonitor.GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
-        rAttr.Put( SfxInt32Item ( ATTR_PRESENT_DISPLAY, nPos + 1 ) );
+        rAttr.Put( SfxInt32Item ( ATTR_PRESENT_DISPLAY, (sal_Int32)maLBMonitor.GetEntryData(nPos)) );
 
     nPos = aLbCustomshow.GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
