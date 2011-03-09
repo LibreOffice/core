@@ -1570,6 +1570,13 @@ namespace
         if (aMasked.count() == 1)
             return aMasked.find_first();
 
+        if (aMasked[vcl::UnicodeCoverage::CYRILLIC])
+        {
+            //Probably strongly tuned for Georgian
+            if (aMasked.count() == 2 && aMasked[vcl::UnicodeCoverage::GEORGIAN])
+                return vcl::UnicodeCoverage::GEORGIAN;
+        }
+
         boost::dynamic_bitset<sal_uInt32> aCJKMask(vcl::UnicodeCoverage::MAX_UC_ENUM);
         aCJKMask.set();
         aCJKMask.set(vcl::UnicodeCoverage::CJK_SYMBOLS_AND_PUNCTUATION, false);
