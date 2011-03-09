@@ -28,6 +28,8 @@
 #ifndef _TABCOL_HXX
 #define _TABCOL_HXX
 
+#include <tools/solar.h>
+
 #ifndef INCLUDED_VECTOR
 #include <vector>
 #define INCLUDED_VECTOR
