@@ -45,7 +45,7 @@ private:
 public:
     TYPEINFO();
 
-    DlgEdPage( DlgEdModel& rModel, FASTBOOL bMasterPage=FALSE );
+    DlgEdPage( DlgEdModel& rModel, FASTBOOL bMasterPage=sal_False );
     DlgEdPage( const DlgEdPage& );
     virtual ~DlgEdPage();
 
@@ -55,7 +55,7 @@ public:
     void            SetDlgEdForm( DlgEdForm* pForm ) { pDlgEdForm = pForm; }
     DlgEdForm*      GetDlgEdForm() const { return pDlgEdForm; }
 
-    virtual SdrObject* SetObjectOrdNum(ULONG nOldObjNum, ULONG nNewObjNum);
+    virtual SdrObject* SetObjectOrdNum(sal_uLong nOldObjNum, sal_uLong nNewObjNum);
 };
 
 #endif //_BASCTL_DLGEDPAGE_HXX

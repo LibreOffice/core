@@ -41,6 +41,21 @@
 #define FT_LINE_ENDS_WIDTH 6
 #define LB_START_STYLE 3
 #define LB_END_STYLE 4
+//IAccessibility2 Impplementaton 2009-----
+#define STR_STYLE (LB_END_STYLE+1)
+#define STR_LB_START_STYLE  30
+#define STR_LB_END_STYLE    31
+#define STR_MTR_FLD_START_WIDTH 32
+#define STR_MTR_FLD_END_WIDTH   33
+#define STR_CENTER_START    34
+#define STR_CENTER_END      35
+#define STR_START_TYPE      36
+#define STR_END_TYPE        37
+#define STR_START_NUM       38
+#define STR_END_NUM         39
+#define STR_START_LENGTH    40
+#define STR_END_LENGTH      41
+//-----IAccessibility2 Impplementaton 2009
 #define MTR_FLD_START_WIDTH 3
 #define MTR_FLD_END_WIDTH 2
 #define CBX_SYNCHRONIZE 1
@@ -103,4 +118,13 @@
 #define MN_SYMBOLS_AUTO    5
 #define MN_GALLERY_ENTRY 100
 
-
+/*
+//IAccessibility2 Implementation 2009-----
+#define STR_START_TYPE      1
+#define STR_END_TYPE        2
+#define STR_START_NUM       3
+#define STR_END_NUM         4
+#define STR_START_LENGTH    5
+#define STR_END_LENGTH      6
+//-----IAccessibility2 Implementation 2009
+*/

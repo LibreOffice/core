@@ -82,8 +82,8 @@ SvxGrfCropPage::SvxGrfCropPage ( Window *pParent, const SfxItemSet &rSet )
     aOrigSizePB(    this, CUI_RES( PB_ORGSIZE )),
     aExampleWN(     this, CUI_RES( WN_BSP     )),
     pLastCropField(0),
-    bInitialized(FALSE),
-    bSetOrigSize(FALSE)
+    bInitialized(sal_False),
+    bSetOrigSize(sal_False)
 {
     FreeResource();
 
@@ -134,6 +134,8 @@ SvxGrfCropPage::SvxGrfCropPage ( Window *pParent, const SfxItemSet &rSet )
 
     aTimer.SetTimeoutHdl(LINK(this, SvxGrfCropPage, Timeout));
     aTimer.SetTimeout( 1500 );
+
+    aOrigSizePB.SetAccessibleRelationLabeledBy( &aOrigSizeFT );
 }
 
 /*--------------------------------------------------------------------
@@ -163,7 +165,7 @@ void SvxGrfCropPage::Reset( const SfxItemSet &rSet )
     const SfxItemPool& rPool = *rSet.GetPool();
 
     if(SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich(
-                                    SID_ATTR_GRAF_KEEP_ZOOM ), TRUE, &pItem ))
+                                    SID_ATTR_GRAF_KEEP_ZOOM ), sal_True, &pItem ))
     {
         if( ((const SfxBoolItem*)pItem)->GetValue() )
             aZoomConstRB.Check();
@@ -172,8 +174,8 @@ void SvxGrfCropPage::Reset( const SfxItemSet &rSet )
         aZoomConstRB.SaveValue();
     }
 
-    USHORT nW = rPool.GetWhich( SID_ATTR_GRAF_CROP );
-    if( SFX_ITEM_SET == rSet.GetItemState( nW, TRUE, &pItem))
+    sal_uInt16 nW = rPool.GetWhich( SID_ATTR_GRAF_CROP );
+    if( SFX_ITEM_SET == rSet.GetItemState( nW, sal_True, &pItem))
     {
         FieldUnit eUnit = MapToFieldUnit( rSet.GetPool()->GetMetric( nW ));
 
@@ -198,7 +200,7 @@ void SvxGrfCropPage::Reset( const SfxItemSet &rSet )
     }
 
     nW = rPool.GetWhich( SID_ATTR_PAGE_SIZE );
-    if ( SFX_ITEM_SET == rSet.GetItemState( nW, FALSE, &pItem ) )
+    if ( SFX_ITEM_SET == rSet.GetItemState( nW, sal_False, &pItem ) )
     {
         // Orientation und Size aus dem PageItem
         FieldUnit eUnit = MapToFieldUnit( rSet.GetPool()->GetMetric( nW ));
@@ -221,8 +223,8 @@ void SvxGrfCropPage::Reset( const SfxItemSet &rSet )
                         MapMode( (MapUnit)rSet.GetPool()->GetMetric( nW ) ) );
     }
 
-    BOOL bFound = FALSE;
-    if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_GRAF_GRAPHIC, FALSE, &pItem ) )
+    sal_Bool bFound = sal_False;
+    if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_GRAF_GRAPHIC, sal_False, &pItem ) )
     {
         const Graphic* pGrf = ((SvxBrushItem*)pItem)->GetGraphic();
         if( pGrf )
@@ -234,30 +236,30 @@ void SvxGrfCropPage::Reset( const SfxItemSet &rSet )
             aExampleWN.SetGraphic( *pGrf );
             aExampleWN.SetFrameSize( aOrigSize );
 
-            bFound = TRUE;
+            bFound = sal_True;
             if( ((SvxBrushItem*)pItem)->GetGraphicLink() )
                 aGraphicName = *((SvxBrushItem*)pItem)->GetGraphicLink();
         }
     }
 
     GraphicHasChanged( bFound );
-    bReset = TRUE;
+    bReset = sal_True;
     ActivatePage( rSet );
-    bReset = FALSE;
+    bReset = sal_False;
 }
 
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
 
-BOOL SvxGrfCropPage::FillItemSet(SfxItemSet &rSet)
+sal_Bool SvxGrfCropPage::FillItemSet(SfxItemSet &rSet)
 {
     const SfxItemPool& rPool = *rSet.GetPool();
-    BOOL bModified = FALSE;
+    sal_Bool bModified = sal_False;
     if( aWidthMF.GetSavedValue() != aWidthMF.GetText() ||
         aHeightMF.GetSavedValue() != aHeightMF.GetText() )
     {
-        USHORT nW = rPool.GetWhich( SID_ATTR_GRAF_FRMSIZE );
+        sal_uInt16 nW = rPool.GetWhich( SID_ATTR_GRAF_FRMSIZE );
         FieldUnit eUnit = MapToFieldUnit( rSet.GetPool()->GetMetric( nW ));
 
         SvxSizeItem aSz( nW );
@@ -267,7 +269,7 @@ BOOL SvxGrfCropPage::FillItemSet(SfxItemSet &rSet)
         const SfxItemSet* pExSet = GetTabDialog() ? GetTabDialog()->GetExampleSet() : NULL;
         const SfxPoolItem* pItem = 0;
         if( pExSet && SFX_ITEM_SET ==
-                pExSet->GetItemState( nW, FALSE, &pItem ) )
+                pExSet->GetItemState( nW, sal_False, &pItem ) )
             aSz = *(const SvxSizeItem*)pItem;
         else
             aSz = (const SvxSizeItem&)GetItemSet().Get( nW );
@@ -292,7 +294,7 @@ BOOL SvxGrfCropPage::FillItemSet(SfxItemSet &rSet)
     if( aLeftMF.IsModified() || aRightMF.IsModified() ||
         aTopMF.IsModified()  || aBottomMF.IsModified() )
     {
-        USHORT nW = rPool.GetWhich( SID_ATTR_GRAF_CROP );
+        sal_uInt16 nW = rPool.GetWhich( SID_ATTR_GRAF_CROP );
         FieldUnit eUnit = MapToFieldUnit( rSet.GetPool()->GetMetric( nW ));
         SvxGrfCrop* pNew = (SvxGrfCrop*)rSet.Get( nW ).Clone();
 
@@ -310,7 +312,7 @@ BOOL SvxGrfCropPage::FillItemSet(SfxItemSet &rSet)
                     SID_ATTR_GRAF_KEEP_ZOOM), aZoomConstRB.IsChecked() ) );
     }
 
-    bInitialized = FALSE;
+    bInitialized = sal_False;
 
     return bModified;
 }
@@ -326,12 +328,12 @@ void SvxGrfCropPage::ActivatePage(const SfxItemSet& rSet)
     DBG_ASSERT( pPool, "Wo ist der Pool" );
 #endif
 
-    bSetOrigSize = FALSE;
+    bSetOrigSize = sal_False;
 
     // Size
     Size aSize;
     const SfxPoolItem* pItem;
-    if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_GRAF_FRMSIZE, FALSE, &pItem ) )
+    if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_GRAF_FRMSIZE, sal_False, &pItem ) )
         aSize = ((const SvxSizeItem*)pItem)->GetSize();
 
     nOldWidth = aSize.Width();
@@ -365,9 +367,9 @@ void SvxGrfCropPage::ActivatePage(const SfxItemSet& rSet)
             aHeightMF.SetValue(nHeight, FUNIT_TWIP);
     }
     aHeightMF.SaveValue();
-    bInitialized = TRUE;
+    bInitialized = sal_True;
 
-    if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_GRAF_GRAPHIC, FALSE, &pItem ) )
+    if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_GRAF_GRAPHIC, sal_False, &pItem ) )
     {
         const SvxBrushItem& rBrush = *(SvxBrushItem*)pItem;
         if( rBrush.GetGraphicLink() &&
@@ -384,7 +386,7 @@ void SvxGrfCropPage::ActivatePage(const SfxItemSet& rSet)
             CalcMinMaxBorder();
         }
         else
-            GraphicHasChanged( FALSE );
+            GraphicHasChanged( sal_False );
     }
 
     CalcZoom();
@@ -398,7 +400,7 @@ int SvxGrfCropPage::DeactivatePage(SfxItemSet *_pSet)
 {
     if ( _pSet )
         FillItemSet( *_pSet );
-    return TRUE;
+    return sal_True;
 }
 
 /*--------------------------------------------------------------------
@@ -453,7 +455,7 @@ IMPL_LINK( SvxGrfCropPage, SizeHdl, MetricField *, pField )
                   lcl_GetValue(aRightMF, eUnit) );
         if(!nWidth)
             nWidth++;
-        USHORT nZoom = (USHORT)( aSize.Width() * 100L / nWidth);
+        sal_uInt16 nZoom = (sal_uInt16)( aSize.Width() * 100L / nWidth);
         aWidthZoomMF.SetValue(nZoom);
     }
     else
@@ -463,7 +465,7 @@ IMPL_LINK( SvxGrfCropPage, SizeHdl, MetricField *, pField )
                   lcl_GetValue(aBottomMF, eUnit));
         if(!nHeight)
             nHeight++;
-        USHORT nZoom = (USHORT)( aSize.Height() * 100L/ nHeight);
+        sal_uInt16 nZoom = (sal_uInt16)( aSize.Height() * 100L/ nHeight);
         aHeightZoomMF.SetValue(nZoom);
     }
 
@@ -481,7 +483,7 @@ IMPL_LINK( SvxGrfCropPage, CropHdl, const MetricField *, pField )
     FieldUnit eUnit = MapToFieldUnit( pPool->GetMetric( pPool->GetWhich(
                                                     SID_ATTR_GRAF_CROP ) ) );
 
-    BOOL bZoom = aZoomConstRB.IsChecked();
+    sal_Bool bZoom = aZoomConstRB.IsChecked();
     if( pField == &aLeftMF || pField == &aRightMF )
     {
         long nLeft = lcl_GetValue( aLeftMF, eUnit );
@@ -576,7 +578,7 @@ IMPL_LINK( SvxGrfCropPage, OrigSizeHdl, PushButton *, EMPTYARG )
     aHeightMF.SetValue( aHeightMF.Normalize( nHeight ), eUnit );
     aWidthZoomMF.SetValue(100);
     aHeightZoomMF.SetValue(100);
-    bSetOrigSize = TRUE;
+    bSetOrigSize = sal_True;
     return 0;
 }
 /*--------------------------------------------------------------------
@@ -596,13 +598,13 @@ void SvxGrfCropPage::CalcZoom()
                       lcl_GetValue( aRightMF, eUnit );
     long nULBorders = lcl_GetValue( aTopMF, eUnit ) +
                       lcl_GetValue( aBottomMF, eUnit );
-    USHORT nZoom = 0;
+    sal_uInt16 nZoom = 0;
     long nDen;
     if( (nDen = aOrigSize.Width() - nLRBorders) > 0)
-        nZoom = (USHORT)((( nWidth  * 1000L / nDen )+5)/10);
+        nZoom = (sal_uInt16)((( nWidth  * 1000L / nDen )+5)/10);
     aWidthZoomMF.SetValue(nZoom);
     if( (nDen = aOrigSize.Height() - nULBorders) > 0)
-        nZoom = (USHORT)((( nHeight * 1000L / nDen )+5)/10);
+        nZoom = (sal_uInt16)((( nHeight * 1000L / nDen )+5)/10);
     else
         nZoom = 0;
     aHeightZoomMF.SetValue(nZoom);
@@ -651,7 +653,7 @@ void SvxGrfCropPage::CalcMinMaxBorder()
                     FixedText mit der Originalgroesse fuellen
  --------------------------------------------------------------------*/
 
-void SvxGrfCropPage::GraphicHasChanged( BOOL bFound )
+void SvxGrfCropPage::GraphicHasChanged( sal_Bool bFound )
 {
     if( bFound )
     {

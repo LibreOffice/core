@@ -63,12 +63,12 @@ namespace linguistic2{
 class SvxNewDictionaryDialog : public ModalDialog
 {
 private:
+    FixedLine            aNewDictBox;
     FixedText           aNameText;
     Edit                aNameEdit;
     FixedText           aLanguageText;
     SvxLanguageBox      aLanguageLB;
     CheckBox            aExceptBtn;
-    FixedLine            aNewDictBox;
     OKButton            aOKBtn;
     CancelButton        aCancelBtn;
     HelpButton          aHelpBtn;
@@ -132,8 +132,8 @@ private:
     PushButton              aDeletePB;
     FixedLine                aEditDictsBox;
 
-    CancelButton            aCloseBtn;
     HelpButton              aHelpBtn;
+    CancelButton            aCloseBtn;
     String                  sModify;
     String                  sNew;
     DecorationView          aDecoView;
@@ -148,7 +148,7 @@ private:
     long                nWidth;
     sal_Bool            bFirstSelect;
     sal_Bool            bDoNothing;
-    BOOL                bDicIsReadonly;
+    sal_Bool                bDicIsReadonly;
 
 #ifdef _SVX_OPTDICT_CXX
     DECL_LINK( SelectBookHdl_Impl, ListBox * );
@@ -165,7 +165,7 @@ private:
                             ::com::sun::star::linguistic2::XDictionary >  &xDic );
 
     void            RemoveDictEntry(SvLBoxEntry* pEntry);
-    USHORT          GetLBInsertPos(const String &rDicWord);
+    sal_uInt16          GetLBInsertPos(const String &rDicWord);
 
 #endif
 

@@ -59,5 +59,8 @@
 #define BTN_DELALL                      52
 #define ST_LEFTTAB_ASIAN                53
 #define ST_RIGHTTAB_ASIAN               54
+//IAccessibility2 Implementation 2009-----
+#define ST_FILLCHAR_OTHER               55
+//-----IAccessibility2 Implementation 2009
 #endif
 

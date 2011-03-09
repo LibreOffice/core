@@ -82,7 +82,7 @@ private:
 
     void                        ImplSearch( const INetURLObject& rStartURL,
                                             const ::std::vector< String >& rFormats,
-                                            BOOL bRecursive );
+                                            sal_Bool bRecursive );
 
     virtual void SAL_CALL       run();
     virtual void SAL_CALL       onTerminated();
@@ -243,7 +243,7 @@ public:
                     GalleryIdDialog( Window* pParent, GalleryTheme* pThm );
                     ~GalleryIdDialog() {}
 
-    ULONG           GetId() const { return aLbResName.GetSelectEntryPos(); }
+    sal_uLong           GetId() const { return aLbResName.GetSelectEntryPos(); }
 };
 
 // --------------------------
@@ -254,7 +254,7 @@ class GalleryThemeProperties : public SfxTabDialog
 {
     ExchangeData*   pData;
 
-    virtual void    PageCreated( USHORT nId, SfxTabPage &rPage );
+    virtual void    PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
 
 public:
 
@@ -285,7 +285,7 @@ private:
     ExchangeData*       pData;
 
     virtual void        Reset( const SfxItemSet& ) {}
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
 
 
 public:
@@ -309,13 +309,13 @@ class TPGalleryThemeProperties : public SfxTabPage
     friend class TakeProgress;
     friend class TakeThread;
 
+    FixedText           aFtFileType;
+    ComboBox            aCbbFileType;
+    MultiListBox        aLbxFound;
     PushButton          aBtnSearch;
     PushButton          aBtnTake;
     PushButton          aBtnTakeAll;
     CheckBox            aCbxPreview;
-    ComboBox            aCbbFileType;
-    MultiListBox        aLbxFound;
-    FixedText           aFtFileType;
     GalleryPreview      aWndPreview;
 
     ExchangeData*       pData;
@@ -325,19 +325,19 @@ class TPGalleryThemeProperties : public SfxTabPage
     String              aLastFilterName;
     String              aPreviewString;
     INetURLObject       aURL;
-    USHORT              nCurFilterPos;
-    USHORT              nFirstExtFilterPos;
-    BOOL                bEntriesFound;
-    BOOL                bInputAllowed;
-    BOOL                bTakeAll;
-    BOOL                bSearchRecursive;
+    sal_uInt16              nCurFilterPos;
+    sal_uInt16              nFirstExtFilterPos;
+    sal_Bool                bEntriesFound;
+    sal_Bool                bInputAllowed;
+    sal_Bool                bTakeAll;
+    sal_Bool                bSearchRecursive;
 
     ::com::sun::star::uno::Reference< ::svt::DialogClosedListener >                  xDialogListener;
     ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer >             xMediaPlayer;
     ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFolderPicker > xFolderPicker;
 
     virtual void        Reset( const SfxItemSet& /*rSet*/ ) {}
-    virtual BOOL        FillItemSet( SfxItemSet& /*rSet*/ ) { return TRUE; }
+    virtual sal_Bool        FillItemSet( SfxItemSet& /*rSet*/ ) { return sal_True; }
     ::rtl::OUString     addExtension( const ::rtl::OUString&, const ::rtl::OUString& );
     void                FillFilterList();
 

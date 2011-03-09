@@ -133,7 +133,7 @@ public:
     ~DigitalSignaturesDialog();
 
     // Initialize the dialog and the security environment, returns TRUE on success
-    BOOL    Init();
+    sal_Bool    Init();
 
             // Set the storage which should be signed or verified
     void    SetStorage( const cssu::Reference < css::embed::XStorage >& rxStore );

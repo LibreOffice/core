@@ -85,7 +85,7 @@
 */
 
 struct  SvxPage_Impl;
-typedef USHORT MarginPosition;
+typedef sal_uInt16 MarginPosition;
 
 class SvxPageDescPage : public SfxTabPage
 {
@@ -125,6 +125,7 @@ class SvxPageDescPage : public SfxTabPage
     FixedText           aBottomMarginLbl;
     MetricField         aBottomMarginEdit;
 
+    FixedLine           aBottomSeparatorFl;
     // layout settings
     FixedLine           aLayoutFL;
     FixedText           aPageText;
@@ -132,7 +133,6 @@ class SvxPageDescPage : public SfxTabPage
     FixedText           aNumberFormatText;
     ListBox             aNumberFormatBox;
 
-    FixedLine           aBottomSeparatorFl;
 
     //Extras Calc
     FixedText           aTblAlignFT;
@@ -165,7 +165,7 @@ class SvxPageDescPage : public SfxTabPage
     long                nLastBottomMargin;
 
     Size                aMaxSize;
-    BOOL                bLandscape;
+    sal_Bool                bLandscape;
     FASTBOOL            bBorderModified;
     SvxModeType         eMode;
     Paper               ePaperStart;
@@ -218,9 +218,9 @@ protected:
 
 public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
-    static USHORT*      GetRanges();
+    static sal_uInt16*      GetRanges();
 
-    virtual BOOL        FillItemSet( SfxItemSet& rOutSet );
+    virtual sal_Bool        FillItemSet( SfxItemSet& rOutSet );
     virtual void        Reset( const SfxItemSet& rSet );
     virtual void        FillUserData();
 

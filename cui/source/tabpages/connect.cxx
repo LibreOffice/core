@@ -49,9 +49,10 @@
 #include <dialmgr.hxx>
 #include "svx/dlgutil.hxx"
 
+#include "paragrph.hrc"
 #include <cuires.hrc>
 
-static USHORT pRanges[] =
+static sal_uInt16 pRanges[] =
 {
     SDRATTR_EDGE_FIRST,
     SDRATTR_EDGE_LAST,
@@ -123,6 +124,8 @@ SvxConnectionPage::SvxConnectionPage( Window* pWindow, const SfxItemSet& rInAttr
         aAttrSet                ( *rInAttrs.GetPool() )
 {
     FreeResource();
+
+    aCtlPreview.SetAccessibleName(String(CUI_RES(STR_EXAMPLE)));
 
     SfxItemPool* pPool = rOutAttrs.GetPool();
     DBG_ASSERT( pPool, "Wo ist der Pool" );
@@ -287,23 +290,23 @@ void __EXPORT SvxConnectionPage::Reset( const SfxItemSet& rAttrs )
         pItem = &pPool->GetDefaultItem( SDRATTR_EDGELINEDELTAANZ );
     if( pItem )
     {
-        UINT16 nValue = ( ( const SdrEdgeLineDeltaAnzItem* )pItem )->GetValue();
+        sal_uInt16 nValue = ( ( const SdrEdgeLineDeltaAnzItem* )pItem )->GetValue();
         if( nValue <= 2 )
         {
-            aFtLine3.Enable( FALSE );
-            aMtrFldLine3.Enable( FALSE );
+            aFtLine3.Enable( sal_False );
+            aMtrFldLine3.Enable( sal_False );
             aMtrFldLine3.SetEmptyFieldValue();
         }
         if( nValue <= 1 )
         {
-            aFtLine2.Enable( FALSE );
-            aMtrFldLine2.Enable( FALSE );
+            aFtLine2.Enable( sal_False );
+            aMtrFldLine2.Enable( sal_False );
             aMtrFldLine2.SetEmptyFieldValue();
         }
         if( nValue == 0 )
         {
-            aFtLine1.Enable( FALSE );
-            aMtrFldLine1.Enable( FALSE );
+            aFtLine1.Enable( sal_False );
+            aMtrFldLine1.Enable( sal_False );
             aMtrFldLine1.SetEmptyFieldValue();
         }
     }
@@ -315,7 +318,7 @@ void __EXPORT SvxConnectionPage::Reset( const SfxItemSet& rAttrs )
     if( pItem )
     {
         SdrEdgeKind nValue = ( ( const SdrEdgeKindItem* )pItem )->GetValue();
-        aLbType.SelectEntryPos( sal::static_int_cast< USHORT >(nValue) );
+        aLbType.SelectEntryPos( sal::static_int_cast< sal_uInt16 >(nValue) );
     }
     else
         aLbType.SetNoSelection();
@@ -328,68 +331,68 @@ void __EXPORT SvxConnectionPage::Reset( const SfxItemSet& rAttrs )
 |*
 \************************************************************************/
 
-BOOL SvxConnectionPage::FillItemSet( SfxItemSet& rAttrs)
+sal_Bool SvxConnectionPage::FillItemSet( SfxItemSet& rAttrs)
 {
-    BOOL     bModified = FALSE;
-    INT32    nValue;
+    sal_Bool     bModified = sal_False;
+    sal_Int32    nValue;
 
     if( aMtrFldHorz1.GetText() != aMtrFldHorz1.GetSavedValue() )
     {
         nValue = GetCoreValue( aMtrFldHorz1, eUnit );
         rAttrs.Put( SdrEdgeNode1HorzDistItem( nValue ) );
-        bModified = TRUE;
+        bModified = sal_True;
     }
 
     if( aMtrFldHorz2.GetText() != aMtrFldHorz2.GetSavedValue() )
     {
         nValue = GetCoreValue( aMtrFldHorz2, eUnit );
         rAttrs.Put( SdrEdgeNode2HorzDistItem( nValue ) );
-        bModified = TRUE;
+        bModified = sal_True;
     }
 
     if( aMtrFldVert1.GetText() != aMtrFldVert1.GetSavedValue() )
     {
         nValue = GetCoreValue( aMtrFldVert1, eUnit );
         rAttrs.Put( SdrEdgeNode1VertDistItem( nValue ) );
-        bModified = TRUE;
+        bModified = sal_True;
     }
 
     if( aMtrFldVert2.GetText() != aMtrFldVert2.GetSavedValue() )
     {
         nValue = GetCoreValue( aMtrFldVert2, eUnit );
         rAttrs.Put( SdrEdgeNode2VertDistItem( nValue ) );
-        bModified = TRUE;
+        bModified = sal_True;
     }
 
     if( aMtrFldLine1.GetText() != aMtrFldLine1.GetSavedValue() )
     {
         nValue = GetCoreValue( aMtrFldLine1, eUnit );
         rAttrs.Put( SdrEdgeLine1DeltaItem( nValue ) );
-        bModified = TRUE;
+        bModified = sal_True;
     }
 
     if( aMtrFldLine2.GetText() != aMtrFldLine2.GetSavedValue() )
     {
         nValue = GetCoreValue( aMtrFldLine2, eUnit );
         rAttrs.Put( SdrEdgeLine2DeltaItem( nValue ) );
-        bModified = TRUE;
+        bModified = sal_True;
     }
 
     if( aMtrFldLine3.GetText() != aMtrFldLine3.GetSavedValue() )
     {
         nValue = GetCoreValue( aMtrFldLine3, eUnit );
         rAttrs.Put( SdrEdgeLine3DeltaItem( nValue ) );
-        bModified = TRUE;
+        bModified = sal_True;
     }
 
 
-    USHORT nPos = aLbType.GetSelectEntryPos();
+    sal_uInt16 nPos = aLbType.GetSelectEntryPos();
     if( nPos != aLbType.GetSavedValue() )
     {
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
             rAttrs.Put( SdrEdgeKindItem( (SdrEdgeKind) nPos ) );
-            bModified = TRUE;
+            bModified = sal_True;
         }
     }
 
@@ -428,7 +431,7 @@ SfxTabPage* SvxConnectionPage::Create( Window* pWindow,
 |*
 \************************************************************************/
 
-USHORT* SvxConnectionPage::GetRanges()
+sal_uInt16* SvxConnectionPage::GetRanges()
 {
     return( pRanges );
 }
@@ -443,50 +446,50 @@ IMPL_LINK( SvxConnectionPage, ChangeAttrHdl_Impl, void *, p )
 {
     if( p == &aMtrFldHorz1 )
     {
-        INT32 nValue = GetCoreValue( aMtrFldHorz1, eUnit );
+        sal_Int32 nValue = GetCoreValue( aMtrFldHorz1, eUnit );
         aAttrSet.Put( SdrEdgeNode1HorzDistItem( nValue ) );
     }
 
     if( p == &aMtrFldHorz2 )
     {
-        INT32 nValue = GetCoreValue( aMtrFldHorz2, eUnit );
+        sal_Int32 nValue = GetCoreValue( aMtrFldHorz2, eUnit );
         aAttrSet.Put( SdrEdgeNode2HorzDistItem( nValue ) );
     }
 
     if( p == &aMtrFldVert1 )
     {
-        INT32 nValue = GetCoreValue( aMtrFldVert1, eUnit );
+        sal_Int32 nValue = GetCoreValue( aMtrFldVert1, eUnit );
         aAttrSet.Put( SdrEdgeNode1VertDistItem( nValue ) );
     }
 
     if( p == &aMtrFldVert2 )
     {
-        INT32 nValue = GetCoreValue( aMtrFldVert2, eUnit );
+        sal_Int32 nValue = GetCoreValue( aMtrFldVert2, eUnit );
         aAttrSet.Put( SdrEdgeNode2VertDistItem( nValue ) );
     }
 
     if( p == &aMtrFldLine1 )
     {
-        INT32 nValue = GetCoreValue( aMtrFldLine1, eUnit );
+        sal_Int32 nValue = GetCoreValue( aMtrFldLine1, eUnit );
         aAttrSet.Put( SdrEdgeLine1DeltaItem( nValue ) );
     }
 
     if( p == &aMtrFldLine2 )
     {
-        INT32 nValue = GetCoreValue( aMtrFldLine2, eUnit );
+        sal_Int32 nValue = GetCoreValue( aMtrFldLine2, eUnit );
         aAttrSet.Put( SdrEdgeLine2DeltaItem( nValue ) );
     }
 
     if( p == &aMtrFldLine3 )
     {
-        INT32 nValue = GetCoreValue( aMtrFldLine3, eUnit );
+        sal_Int32 nValue = GetCoreValue( aMtrFldLine3, eUnit );
         aAttrSet.Put( SdrEdgeLine3DeltaItem( nValue ) );
     }
 
 
     if( p == &aLbType )
     {
-        USHORT nPos = aLbType.GetSelectEntryPos();
+        sal_uInt16 nPos = aLbType.GetSelectEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
             aAttrSet.Put( SdrEdgeKindItem( (SdrEdgeKind) nPos ) );
@@ -498,7 +501,7 @@ IMPL_LINK( SvxConnectionPage, ChangeAttrHdl_Impl, void *, p )
     if( p == &aLbType )
     {
         // Anzahl der Linienversaetze ermitteln
-        USHORT nCount = aCtlPreview.GetLineDeltaAnz();
+        sal_uInt16 nCount = aCtlPreview.GetLineDeltaAnz();
 
         aFtLine3.Enable( nCount > 2 );
         aMtrFldLine3.Enable( nCount > 2 );
@@ -543,10 +546,10 @@ void SvxConnectionPage::FillTypeLB()
     if( pItem )
     {
         const SdrEdgeKindItem* pEdgeKindItem = (const SdrEdgeKindItem*) pItem;
-        USHORT nCount = pEdgeKindItem->GetValueCount();
+        sal_uInt16 nCount = pEdgeKindItem->GetValueCount();
         String aStr;
 
-        for( USHORT i = 0; i < nCount; i++ )
+        for( sal_uInt16 i = 0; i < nCount; i++ )
         {
             aStr = pEdgeKindItem->GetValueTextByPos( i );
             aLbType.InsertEntry( aStr );

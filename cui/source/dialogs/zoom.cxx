@@ -58,23 +58,23 @@
 
 // static ----------------------------------------------------------------
 
-#define SPECIAL_FACTOR  ((USHORT)0xFFFF)
+#define SPECIAL_FACTOR  ((sal_uInt16)0xFFFF)
 
 // class SvxZoomDialog ---------------------------------------------------
 
-USHORT SvxZoomDialog::GetFactor() const
+sal_uInt16 SvxZoomDialog::GetFactor() const
 {
     if ( a100Btn.IsChecked() )
         return 100;
     if ( aUserBtn.IsChecked() )
-        return (USHORT)aUserEdit.GetValue();
+        return (sal_uInt16)aUserEdit.GetValue();
     else
         return SPECIAL_FACTOR;
 }
 
 // -----------------------------------------------------------------------
 
-void SvxZoomDialog::SetFactor( USHORT nNewFactor, USHORT nBtnId )
+void SvxZoomDialog::SetFactor( sal_uInt16 nNewFactor, sal_uInt16 nBtnId )
 {
     aUserEdit.Disable();
 
@@ -117,7 +117,7 @@ void SvxZoomDialog::SetFactor( USHORT nNewFactor, USHORT nBtnId )
 
 // -----------------------------------------------------------------------
 
-void SvxZoomDialog::HideButton( USHORT nBtnId )
+void SvxZoomDialog::HideButton( sal_uInt16 nBtnId )
 {
     switch ( nBtnId )
     {
@@ -140,7 +140,7 @@ void SvxZoomDialog::HideButton( USHORT nBtnId )
 
 // -----------------------------------------------------------------------
 
-void SvxZoomDialog::SetLimits( USHORT nMin, USHORT nMax )
+void SvxZoomDialog::SetLimits( sal_uInt16 nMin, sal_uInt16 nMax )
 {
     DBG_ASSERT( nMin < nMax, "invalid limits" );
     aUserEdit.SetMin( nMin );
@@ -177,7 +177,7 @@ SvxZoomDialog::SvxZoomDialog( Window* pParent, const SfxItemSet& rCoreSet ) :
 
     rSet        ( rCoreSet ),
     pOutSet     ( NULL ),
-    bModified   ( FALSE )
+    bModified   ( sal_False )
 
 {
 #if ENABLE_LAYOUT
@@ -205,9 +205,9 @@ SvxZoomDialog::SvxZoomDialog( Window* pParent, const SfxItemSet& rCoreSet ) :
     aUserEdit.SetModifyHdl( LINK( this, SvxZoomDialog, SpinHdl ) );
 
     // Default-Werte
-    USHORT nValue = 100;
-    USHORT nMin = 10;
-    USHORT nMax = 1000;
+    sal_uInt16 nValue = 100;
+    sal_uInt16 nMin = 10;
+    sal_uInt16 nMax = 1000;
 
     // ggf. erst den alten Wert besorgen
     const SfxUInt16Item* pOldUserItem = 0;
@@ -230,15 +230,23 @@ SvxZoomDialog::SvxZoomDialog( Window* pParent, const SfxItemSet& rCoreSet ) :
     aUserEdit.SetLast( nMax );
     aUserEdit.SetValue( nValue );
 
+    aUserEdit.SetAccessibleRelationLabeledBy( &aUserBtn );
+    aUserEdit.SetAccessibleName(aUserBtn.GetText());
+    aColumnsEdit.SetAccessibleRelationLabeledBy(&aColumnsBtn);
+    aColumnsEdit.SetAccessibleName(aColumnsBtn.GetText());
+    aColumnsEdit.SetAccessibleRelationMemberOf(&aColumnsBtn);
+    aBookModeChk.SetAccessibleRelationLabeledBy(&aColumnsBtn);
+    aBookModeChk.SetAccessibleRelationMemberOf(&aColumnsBtn);
+
     const SfxPoolItem& rItem = rSet.Get( rSet.GetPool()->GetWhich( SID_ATTR_ZOOM ) );
 
     if ( rItem.ISA(SvxZoomItem) )
     {
         const SvxZoomItem& rZoomItem = (const SvxZoomItem&)rItem;
-        const USHORT nZoom = rZoomItem.GetValue();
+        const sal_uInt16 nZoom = rZoomItem.GetValue();
         const SvxZoomType eType = rZoomItem.GetType();
-        const USHORT nValSet = rZoomItem.GetValueSet();
-        USHORT nBtnId = 0;
+        const sal_uInt16 nValSet = rZoomItem.GetValueSet();
+        sal_uInt16 nBtnId = 0;
 
         switch ( eType )
         {
@@ -269,14 +277,14 @@ SvxZoomDialog::SvxZoomDialog( Window* pParent, const SfxItemSet& rCoreSet ) :
     }
     else
     {
-        const USHORT nZoom = ( (const SfxUInt16Item&)rItem ).GetValue();
+        const sal_uInt16 nZoom = ( (const SfxUInt16Item&)rItem ).GetValue();
         SetFactor( nZoom );
     }
 
     const SfxPoolItem* pViewLayoutItem = 0;
-    if ( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_VIEWLAYOUT, FALSE, &pViewLayoutItem ) )
+    if ( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_VIEWLAYOUT, sal_False, &pViewLayoutItem ) )
     {
-        const USHORT nColumns = static_cast<const SvxViewLayoutItem*>(pViewLayoutItem)->GetValue();
+        const sal_uInt16 nColumns = static_cast<const SvxViewLayoutItem*>(pViewLayoutItem)->GetValue();
         const bool bBookMode  = static_cast<const SvxViewLayoutItem*>(pViewLayoutItem)->IsBookMode();
 
         if ( 0 == nColumns )
@@ -335,7 +343,7 @@ SvxZoomDialog::~SvxZoomDialog()
 
 IMPL_LINK( SvxZoomDialog, UserHdl, RadioButton *, pBtn )
 {
-    bModified |= TRUE;
+    bModified |= sal_True;
 
     if ( pBtn == &aUserBtn )
     {
@@ -353,7 +361,7 @@ IMPL_LINK( SvxZoomDialog, SpinHdl, MetricField *, EMPTYARG )
 {
     if ( !aUserBtn.IsChecked() )
         return 0;
-    bModified |= TRUE;
+    bModified |= sal_True;
     return 0;
 }
 
@@ -361,7 +369,7 @@ IMPL_LINK( SvxZoomDialog, SpinHdl, MetricField *, EMPTYARG )
 
 IMPL_LINK( SvxZoomDialog, ViewLayoutUserHdl, RadioButton *, pBtn )
 {
-    bModified |= TRUE;
+    bModified |= sal_True;
 
     if ( pBtn == &aAutomaticBtn )
     {
@@ -404,7 +412,7 @@ IMPL_LINK( SvxZoomDialog, ViewLayoutSpinHdl, MetricField *, pEdt )
         aBookModeChk.Disable();
     }
 
-    bModified |= TRUE;
+    bModified |= sal_True;
 
     return 0;
 }
@@ -416,7 +424,7 @@ IMPL_LINK( SvxZoomDialog, ViewLayoutCheckHdl, CheckBox *, pChk )
     if ( pChk == &aBookModeChk && !aColumnsBtn.IsChecked() )
         return 0;
 
-    bModified |= TRUE;
+    bModified |= sal_True;
 
     return 0;
 }
@@ -432,7 +440,7 @@ IMPL_LINK( SvxZoomDialog, OKHdl, Button *, pBtn )
 
         if ( &aOKBtn == pBtn )
         {
-            USHORT nFactor = GetFactor();
+            sal_uInt16 nFactor = GetFactor();
 
             if ( SPECIAL_FACTOR == nFactor )
             {
@@ -458,7 +466,7 @@ IMPL_LINK( SvxZoomDialog, OKHdl, Button *, pBtn )
             }
             else if ( aColumnsBtn.IsChecked() )
             {
-                aViewLayoutItem.SetValue( static_cast<USHORT>(aColumnsEdit.GetValue()) );
+                aViewLayoutItem.SetValue( static_cast<sal_uInt16>(aColumnsEdit.GetValue()) );
                 aViewLayoutItem.SetBookMode( aBookModeChk.IsChecked() );
             }
         }
@@ -479,7 +487,7 @@ IMPL_LINK( SvxZoomDialog, OKHdl, Button *, pBtn )
 
         if ( pSh )
             pSh->PutItem( SfxUInt16Item( SID_ATTR_ZOOM_USER,
-                                         (UINT16)aUserEdit.GetValue() ) );
+                                         (sal_uInt16)aUserEdit.GetValue() ) );
         EndDialog( RET_OK );
     }
     else

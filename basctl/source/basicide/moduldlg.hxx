@@ -64,7 +64,7 @@ private:
     DECL_LINK(OkButtonHandler, Button *);
 
 public:
-    NewObjectDialog(Window * pParent, USHORT nMode, bool bCheckName = false);
+    NewObjectDialog(Window * pParent, sal_uInt16 nMode, bool bCheckName = false);
                 ~NewObjectDialog();
 
     String      GetObjectName() const { return aEdit.GetText(); }
@@ -94,18 +94,18 @@ public:
 class ExtBasicTreeListBox : public BasicTreeListBox
 {
 protected:
-    virtual BOOL    EditingEntry( SvLBoxEntry* pEntry, Selection& rSel  );
-    virtual BOOL    EditedEntry( SvLBoxEntry* pEntry, const String& rNewText );
+    virtual sal_Bool    EditingEntry( SvLBoxEntry* pEntry, Selection& rSel  );
+    virtual sal_Bool    EditedEntry( SvLBoxEntry* pEntry, const String& rNewText );
 
     virtual DragDropMode    NotifyStartDrag( TransferDataContainer& rData, SvLBoxEntry* pEntry );
-    virtual BOOL            NotifyAcceptDrop( SvLBoxEntry* pEntry );
+    virtual sal_Bool            NotifyAcceptDrop( SvLBoxEntry* pEntry );
 
-    virtual BOOL    NotifyMoving( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
-                        SvLBoxEntry*& rpNewParent, ULONG& rNewChildPos );
-    virtual BOOL    NotifyCopying( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
-                        SvLBoxEntry*& rpNewParent, ULONG& rNewChildPos );
-    BOOL            NotifyCopyingMoving( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
-                        SvLBoxEntry*& rpNewParent, ULONG& rNewChildPos, BOOL bMove );
+    virtual sal_Bool    NotifyMoving( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
+                        SvLBoxEntry*& rpNewParent, sal_uLong& rNewChildPos );
+    virtual sal_Bool    NotifyCopying( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
+                        SvLBoxEntry*& rpNewParent, sal_uLong& rNewChildPos );
+    sal_Bool            NotifyCopyingMoving( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
+                        SvLBoxEntry*& rpNewParent, sal_uLong& rNewChildPos, sal_Bool bMove );
 
 public:
     ExtBasicTreeListBox( Window* pParent, const ResId& rRes );
@@ -118,7 +118,7 @@ public:
 class BasicCheckBox : public SvTabListBox
 {
 private:
-    USHORT              nMode;
+    sal_uInt16              nMode;
     SvLBoxButtonData*   pCheckButton;
     ScriptDocument      m_aDocument;
     void                Init();
@@ -127,20 +127,20 @@ public:
                     BasicCheckBox( Window* pParent, const ResId& rResId );
                     ~BasicCheckBox();
 
-    SvLBoxEntry*    DoInsertEntry( const String& rStr, ULONG nPos = LISTBOX_APPEND );
+    SvLBoxEntry*    DoInsertEntry( const String& rStr, sal_uLong nPos = LISTBOX_APPEND );
     SvLBoxEntry*    FindEntry( const String& rName );
 
-    void            CheckEntryPos( ULONG nPos, BOOL bCheck = TRUE );
-    BOOL            IsChecked( ULONG nPos ) const;
+    void            CheckEntryPos( sal_uLong nPos, sal_Bool bCheck = sal_True );
+    sal_Bool            IsChecked( sal_uLong nPos ) const;
 
     virtual void    InitEntry( SvLBoxEntry*, const XubString&, const Image&, const Image&, SvLBoxButtonKind eButtonKind );
-    virtual BOOL    EditingEntry( SvLBoxEntry* pEntry, Selection& rSel );
-    virtual BOOL    EditedEntry( SvLBoxEntry* pEntry, const String& rNewText );
+    virtual sal_Bool    EditingEntry( SvLBoxEntry* pEntry, Selection& rSel );
+    virtual sal_Bool    EditedEntry( SvLBoxEntry* pEntry, const String& rNewText );
 
     void            SetDocument( const ScriptDocument& rDocument ) { m_aDocument = rDocument; }
 
-    void            SetMode( USHORT n );
-    USHORT          GetMode() const         { return nMode; }
+    void            SetMode( sal_uInt16 n );
+    sal_uInt16          GetMode() const         { return nMode; }
 };
 
 class LibDialog: public ModalDialog
@@ -161,11 +161,11 @@ public:
     void            SetStorageName( const String& rName );
 
     BasicCheckBox&  GetLibBox()                 { return aLibBox; }
-    BOOL            IsReference() const         { return aReferenceBox.IsChecked(); }
-    BOOL            IsReplace() const           { return aReplaceBox.IsChecked(); }
+    sal_Bool            IsReference() const         { return aReferenceBox.IsChecked(); }
+    sal_Bool            IsReplace() const           { return aReplaceBox.IsChecked(); }
 
-    void            EnableReference( BOOL b )   { aReferenceBox.Enable( b ); }
-    void            EnableReplace( BOOL b )     { aReplaceBox.Enable( b ); }
+    void            EnableReference( sal_Bool b )   { aReferenceBox.Enable( b ); }
+    void            EnableReplace( sal_Bool b )     { aReplaceBox.Enable( b ); }
 };
 
 
@@ -176,7 +176,7 @@ private:
     BasicEntryDescriptor    m_aCurEntry;
 
 public:
-                    OrganizeDialog( Window* pParent, INT16 tabId, BasicEntryDescriptor& rDesc );
+                    OrganizeDialog( Window* pParent, sal_Int16 tabId, BasicEntryDescriptor& rDesc );
                     ~OrganizeDialog();
 
     virtual short   Execute();
@@ -202,7 +202,7 @@ protected:
     void                DeleteCurrent();
     void                NewModule();
     void                NewDialog();
-    void                EndTabDialog( USHORT nRet );
+    void                EndTabDialog( sal_uInt16 nRet );
 
     TabDialog*          pTabDlg;
 
@@ -210,7 +210,7 @@ protected:
     virtual void        DeactivatePage();
 
 public:
-                        ObjectPage( Window* pParent, const ResId& rResId, USHORT nMode );
+                        ObjectPage( Window* pParent, const ResId& rResId, sal_uInt16 nMode );
 
     void                SetCurrentEntry( BasicEntryDescriptor& rDesc );
     void                SetTabDlg( TabDialog* p ) { pTabDlg = p;}
@@ -229,9 +229,9 @@ protected:
     PushButton          aEditButton;
     CancelButton        aCloseButton;
     PushButton          aPasswordButton;
-    PushButton          aExportButton;
     PushButton          aNewLibButton;
     PushButton          aInsertLibButton;
+    PushButton          aExportButton;
     PushButton          aDelButton;
 
     ScriptDocument      m_aCurDocument;
@@ -250,11 +250,11 @@ protected:
     void                Export();
     void                ExportAsPackage( const String& aLibName );
     void                ExportAsBasic( const String& aLibName );
-    void                EndTabDialog( USHORT nRet );
+    void                EndTabDialog( sal_uInt16 nRet );
     void                FillListBox();
     void                InsertListBoxEntry( const ScriptDocument& rDocument, LibraryLocation eLocation );
     void                SetCurLib();
-    SvLBoxEntry*        ImpInsertLibEntry( const String& rLibName, ULONG nPos );
+    SvLBoxEntry*        ImpInsertLibEntry( const String& rLibName, sal_uLong nPos );
     virtual void        ActivatePage();
     virtual void        DeactivatePage();
 

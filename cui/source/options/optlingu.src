@@ -344,6 +344,19 @@ TabPage RID_SFXPAGE_LINGU
     {
         Text [ en-US ] = "Hyphenate special regions";
     };
+    String STR_LINGU_MODULES_EDIT
+    {
+        Text [ en-US ] = "Edit Available language modules";
+    };
+    String STR_LINGU_DICS_EDIT_DIC
+    {
+        Text [ en-US ] = "Edit User-defined dictionaries";
+    };
+    String STR_LINGU_OPTIONS_EDIT
+    {
+        Text [ en-US ] = "Edit Options";
+    };
+    // ------ IAccessibility2 implementation 2009.
 };
 // end: TabPage RID_SFXPAGE_LINGU
 

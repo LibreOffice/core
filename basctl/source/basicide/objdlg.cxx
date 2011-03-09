@@ -108,8 +108,10 @@ ObjectCatalog::ObjectCatalog( Window * pParent )
                              WB_HSCROLL );
 
     aMacroTreeList.SetSelectHdl( LINK( this, ObjectCatalog, TreeListHighlightHdl ) );
-
+    aMacroTreeList.SetAccessibleName(String(IDEResId(RID_STR_TLB_MACROS)));
     aMacroTreeList.ScanAllEntries();
+    aMacroTreeList.GrabFocus();
+
     CheckButtons();
 
     Point aPos = IDE_DLL()->GetExtraData()->GetObjectCatalogPos();
@@ -146,10 +148,10 @@ void __EXPORT ObjectCatalog::Move()
     IDE_DLL()->GetExtraData()->SetObjectCatalogPos( GetPosPixel() );
 }
 
-BOOL __EXPORT ObjectCatalog::Close()
+sal_Bool __EXPORT ObjectCatalog::Close()
 {
     aCancelHdl.Call( this );
-    return TRUE;
+    return sal_True;
 }
 
 void __EXPORT ObjectCatalog::Resize()
@@ -184,7 +186,7 @@ void __EXPORT ObjectCatalog::Resize()
 
 IMPL_LINK( ObjectCatalog, ToolBoxHdl, ToolBox*, pToolBox )
 {
-    USHORT nCurItem = pToolBox->GetCurItemId();
+    sal_uInt16 nCurItem = pToolBox->GetCurItemId();
     switch ( nCurItem )
     {
         case TBITEM_SHOW:
@@ -231,9 +233,9 @@ void ObjectCatalog::CheckButtons()
     SvLBoxEntry* pCurEntry = aMacroTreeList.GetCurEntry();
     BasicEntryType eType = pCurEntry ? ((BasicEntry*)pCurEntry->GetUserData())->GetType() : OBJ_TYPE_UNKNOWN;
     if ( eType == OBJ_TYPE_DIALOG || eType == OBJ_TYPE_MODULE || eType == OBJ_TYPE_METHOD )
-        aToolBox.EnableItem( TBITEM_SHOW, TRUE );
+        aToolBox.EnableItem( TBITEM_SHOW, sal_True );
     else
-        aToolBox.EnableItem( TBITEM_SHOW, FALSE );
+        aToolBox.EnableItem( TBITEM_SHOW, sal_False );
 }
 
 

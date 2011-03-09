@@ -61,7 +61,7 @@ class SvxGraphicFilter
 {
 public:
 
-    static ULONG    ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObject& rFilterObject );
+    static sal_uLong    ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObject& rFilterObject );
     static void     DisableGraphicFilterSlots( SfxItemSet& rSet );
 };
 */
@@ -97,16 +97,16 @@ private:
     double          mfScaleX;
     double          mfScaleY;
     Size            maSizePixel;
-    PreviewWindow   maPreview;
-    FixedLine       maFlParameter;
-    OKButton        maBtnOK;
-    CancelButton    maBtnCancel;
-    HelpButton      maBtnHelp;
 
                     DECL_LINK( ImplPreviewTimeoutHdl, Timer* pTimer );
                     DECL_LINK( ImplModifyHdl, void* p );
 
 protected:
+    PreviewWindow   maPreview;
+    OKButton        maBtnOK;
+    CancelButton    maBtnCancel;
+    HelpButton      maBtnHelp;
+    FixedLine       maFlParameter;
 
     const Link&     GetModifyHdl() const { return maModifyHdl; }
     const Size&     GetGraphicSizePixel() const { return maSizePixel; }
@@ -136,13 +136,13 @@ private:
 public:
 
                     GraphicFilterMosaic( Window* pParent, const Graphic& rGraphic,
-                                         USHORT nTileWidth, USHORT nTileHeight, BOOL bEnhanceEdges );
+                                         sal_uInt16 nTileWidth, sal_uInt16 nTileHeight, sal_Bool bEnhanceEdges );
                     ~GraphicFilterMosaic();
 
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY );
     long            GetTileWidth() const { return static_cast<long>(maMtrWidth.GetValue()); }
     long            GetTileHeight() const { return static_cast<long>(maMtrHeight.GetValue()); }
-    BOOL            IsEnhanceEdges() const { return maCbxEdges.IsChecked(); }
+    sal_Bool            IsEnhanceEdges() const { return maCbxEdges.IsChecked(); }
 };
 
 // -------------------------
@@ -160,12 +160,12 @@ private:
 public:
 
                     GraphicFilterSolarize( Window* pParent, const Graphic& rGraphic,
-                                           BYTE nGreyThreshold, BOOL bInvert );
+                                           sal_uInt8 nGreyThreshold, sal_Bool bInvert );
                     ~GraphicFilterSolarize();
 
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY );
-    BYTE            GetGreyThreshold() const { return( (BYTE) FRound( maMtrThreshold.GetValue() * 2.55 ) ); }
-    BOOL            IsInvert() const { return maCbxInvert.IsChecked(); }
+    sal_uInt8           GetGreyThreshold() const { return( (sal_uInt8) FRound( maMtrThreshold.GetValue() * 2.55 ) ); }
+    sal_Bool            IsInvert() const { return maCbxInvert.IsChecked(); }
 };
 
 // ----------------------
@@ -182,12 +182,12 @@ private:
 public:
 
                     GraphicFilterSepia( Window* pParent, const Graphic& rGraphic,
-                                        USHORT nSepiaPercent );
+                                        sal_uInt16 nSepiaPercent );
                     ~GraphicFilterSepia();
 
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY );
-    USHORT          GetSepiaPercent() const
-    { return sal::static_int_cast< USHORT >(maMtrSepia.GetValue()); }
+    sal_uInt16          GetSepiaPercent() const
+    { return sal::static_int_cast< sal_uInt16 >(maMtrSepia.GetValue()); }
 };
 
 // -----------------------
@@ -204,11 +204,11 @@ private:
 public:
 
                     GraphicFilterPoster( Window* pParent, const Graphic& rGraphic,
-                                         USHORT nPosterColorCount );
+                                         sal_uInt16 nPosterColorCount );
                     ~GraphicFilterPoster();
 
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY );
-    USHORT          GetPosterColorCount() const { return( (USHORT) maNumPoster.GetValue() ); }
+    sal_uInt16          GetPosterColorCount() const { return( (sal_uInt16) maNumPoster.GetValue() ); }
 };
 
 // -----------------------
