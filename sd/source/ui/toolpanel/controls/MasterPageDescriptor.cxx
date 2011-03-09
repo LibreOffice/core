@@ -107,7 +107,7 @@ void MasterPageDescriptor::SetToken (MasterPageContainer::Token aToken)
 
 
 
-Image MasterPageDescriptor::GetPreview (MasterPageContainer::PreviewSize eSize)
+Image MasterPageDescriptor::GetPreview (MasterPageContainer::PreviewSize eSize) const
 {
     if (eSize == MasterPageContainer::SMALL)
         return maSmallPreview;
