@@ -119,7 +119,6 @@ private:
 private:
     void                    ReadCmapTable( HDC ) const;
     void                    GetFontCapabilities( HDC hDC ) const;
-    void                    ReadOs2Table( HDC ) const;
 
 #ifdef GNG_VERT_HACK
     void                    ReadGsubTable( HDC ) const;
