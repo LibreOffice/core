@@ -281,7 +281,7 @@ public:
 
     Rectangle   GetVisArea() const;
 
-    List*       CreateSelectionList();
+    void        CreateSelectionList (std::vector<Paragraph*> &aSelList) ;
 
     // Retruns the number of selected paragraphs
     ULONG       Select( Paragraph* pParagraph,

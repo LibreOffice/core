@@ -1039,18 +1039,17 @@ void OutlinerView::PasteSpecial()
     }
 }
 
-List* OutlinerView::CreateSelectionList()
+void OutlinerView::CreateSelectionList (std::vector<Paragraph*> &aSelList)
 {
     DBG_CHKTHIS( OutlinerView, 0 );
 
     ParaRange aParas = ImpGetSelectedParagraphs( TRUE );
-    List* pSelList = new List;
+
     for ( USHORT nPara = aParas.nStartPara; nPara <= aParas.nEndPara; nPara++ )
     {
         Paragraph* pPara = pOwner->pParaList->GetParagraph( nPara );
-        pSelList->Insert( pPara, LIST_APPEND );
+        aSelList.push_back(pPara);
     }
-    return pSelList;
 }
 
 SfxStyleSheet* OutlinerView::GetStyleSheet() const
