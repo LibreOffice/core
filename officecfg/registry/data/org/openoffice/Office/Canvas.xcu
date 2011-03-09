@@ -79,6 +79,34 @@
     </value>
    </prop>
   </node>
+  <node oor:name="com.sun.star.rendering.Canvas.MultiScreen" oor:op="replace">
+   <prop oor:name="PreferredImplementations" oor:type="oor:string-list">
+    <value oor:separator=",">com.sun.star.comp.rendering.Canvas.VCL
+    </value>
+   </prop>
+   <prop oor:name="AcceleratedImplementations" oor:type="oor:string-list">
+    <value oor:separator=",">com.sun.star.comp.rendering.Canvas.VCL
+    </value>
+   </prop>
+   <prop oor:name="AntialiasingImplementations" oor:type="oor:string-list">
+    <value oor:separator=",">com.sun.star.comp.rendering.Canvas.VCL
+    </value>
+   </prop>
+  </node>
+  <node oor:name="com.sun.star.rendering.SpriteCanvas.MultiScreen" oor:op="replace">
+   <prop oor:name="PreferredImplementations" oor:type="oor:string-list">
+    <value oor:separator=",">com.sun.star.comp.rendering.SpriteCanvas.VCL
+    </value>
+   </prop>
+   <prop oor:name="AcceleratedImplementations" oor:type="oor:string-list">
+    <value oor:separator=",">com.sun.star.comp.rendering.SpriteCanvas.VCL
+    </value>
+   </prop>
+   <prop oor:name="AntialiasingImplementations" oor:type="oor:string-list">
+    <value oor:separator=",">com.sun.star.comp.rendering.SpriteCanvas.VCL
+    </value>
+   </prop>
+  </node>
  </node>
 </oor:component-data>
 
