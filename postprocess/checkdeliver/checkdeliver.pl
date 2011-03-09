@@ -162,10 +162,11 @@ sub check
         print_logged( "Error: cannot open file \'$listname\'\n$!" );
         exit 2;
     }
-    foreach ( <DELIVERLOG> ) {
+    while ( <DELIVERLOG> ) {
         next if ( /^LINK / );
         # What's this modules' repository?
-        if ( /COPY (\w[\w\s-]*?)\/$module\/prj\/build.lst/ ) {
+        if ( /COPY\s+(.+?)\/$module\/prj\/build.lst/ ) {
+#        if ( /COPY (\w[\w\s-]*?)\/$module\/prj\/build.lst/ ) {
             $repository = $1;
         }
         # For now we concentrate on binaries, located in 'bin' or 'lib' and 'misc/build/<...>/[bin|lib]'.
