@@ -296,11 +296,25 @@ ADDITIONAL_FILES= config.h \
 
 BUILD_ACTION=nmake -f makefile.msc
 
-OUT2LIB+=gio/libgio-2.0-0.dll
-OUT2LIB+=glib/libglib-2.0-0.dll
-OUT2LIB+=gmodule/libgmodule-2.0-0.dll
-OUT2LIB+=gobject/libgobject-2.0-0.dll
-OUT2LIB+=gthread/libgthread-2.0-0.dll
+OUT2BIN+=gio/libgio-2.0-0.dll
+OUT2BIN+=glib/libglib-2.0-0.dll
+OUT2BIN+=gmodule/libgmodule-2.0-0.dll
+OUT2BIN+=gobject/libgobject-2.0-0.dll
+OUT2BIN+=gthread/libgthread-2.0-0.dll
+
+OUT2LIB+=build/win32/dirent/dirent.lib
+OUT2LIB+=gio/gio-2.0.lib
+OUT2LIB+=gio/gvdb/giogvdb.lib
+OUT2LIB+=gio/win32/giowin32.lib
+OUT2LIB+=glib/glib-2.0.lib
+OUT2LIB+=glib/glib-2.28s.lib
+OUT2LIB+=glib/gnulib/gnulib.lib
+OUT2LIB+=glib/pcre/pcre.lib
+OUT2LIB+=gmodule/gmodule-2.0.lib
+OUT2LIB+=gobject/glib-genmarshal.lib
+OUT2LIB+=gobject/gobject-2.0.lib
+OUT2LIB+=gthread/gthread-2.0.lib
+
 
 OUT2INC+=glib/glib.h
 OUT2INC+=glib/glib-object.h
