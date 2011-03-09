@@ -2896,13 +2896,24 @@ BOOL ScCompiler::IsNamedRange( const String& rUpperName )
 {
     // IsNamedRange is called only from NextNewToken, with an upper-case string
 
-    // TODO: Get it to work with sheet local names.
+    // Try global named ranges first, then sheet local next.  BTW does this
+    // order matter?
+    bool bGlobal = true;
     ScRangeName* pRangeName = pDoc->GetRangeName();
     const ScRangeData* pData = pRangeName->findByUpperName(rUpperName);
+    if (!pData)
+    {
+        pRangeName = pDoc->GetRangeName(aPos.Tab());
+        if (pRangeName)
+            pData = pRangeName->findByUpperName(rUpperName);
+        if (pData)
+            bGlobal = false;
+    }
+
     if (pData)
     {
         ScRawToken aToken;
-        aToken.SetName(true, pData->GetIndex());
+        aToken.SetName(bGlobal, pData->GetIndex());
         pRawToken = aToken.Clone();
         return true;
     }
