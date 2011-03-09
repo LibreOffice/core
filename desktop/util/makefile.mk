@@ -200,7 +200,7 @@ ALLTAR : $(BIN)$/soffice_oo$(EXECPOST)
 .IF "$(LINK_SO)"=="TRUE"
 $(BIN)$/so$/soffice_mac$(EXECPOST) : $(APP1TARGETN)
     $(COPY) $< $@
-
+    
 ALLTAR : $(BIN)$/so$/soffice_mac$(EXECPOST)
 .ENDIF # "$(LINK_SO)"=="TRUE"
 

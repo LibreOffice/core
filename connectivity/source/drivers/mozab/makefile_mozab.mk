@@ -56,7 +56,7 @@ MOZINC = . \
         -I$(MOZ_INC)$/uconv \
         -I$(MOZ_INC)$/xpcom_obsolete \
         -I$(MOZ_INC)$/content
-
+        
 .IF "$(GUI)" == "WNT"
   CDEFS +=    \
         -DMOZILLA_CLIENT \

@@ -113,7 +113,7 @@ SV_IMPL_VARARR( EECharAttribArray, EECharAttrib );
 
 static SfxItemPool* pGlobalPool=0;
 
-// ----------------------------------------------------------------------
+// ----------------------------------------------------------------------
 // EditEngine
 // ----------------------------------------------------------------------
 EditEngine::EditEngine( SfxItemPool* pItemPool )

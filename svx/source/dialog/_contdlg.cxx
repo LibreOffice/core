@@ -940,7 +940,7 @@ void SvxSuperContourDlg::DataChanged( const DataChangedEvent& rDCEvt )
 
 IMPL_LINK( SvxSuperContourDlg, MiscHdl, void*, EMPTYARG )
 {
-    SvtMiscOptions aMiscOptions;
+       SvtMiscOptions aMiscOptions;
     aTbx1.SetOutStyle( aMiscOptions.GetToolboxStyle() );
 
     return 0L;

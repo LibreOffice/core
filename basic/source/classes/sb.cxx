@@ -80,7 +80,7 @@ SbxObject* StarBASIC::getVBAGlobals( )
         if ( GetUNOConstant("ThisComponent", aThisDoc) )
         {
             Reference< XMultiServiceFactory > xDocFac( aThisDoc, UNO_QUERY );
-            if ( xDocFac.is() )
+                        if ( xDocFac.is() )
             {
                 try
                 {

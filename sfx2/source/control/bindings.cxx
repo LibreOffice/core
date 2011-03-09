@@ -1706,7 +1706,7 @@ IMPL_LINK( SfxBindings, NextJob_Impl, Timer *, pTimer )
         // iterate through the bound functions
         sal_Bool bJobDone = sal_False;
         while ( !bJobDone )
-          {
+        {
             SfxStateCache* pCache = (*pImp->pCaches)[pImp->nMsgPos];
             DBG_ASSERT( pCache, "invalid SfxStateCache-position in job queue" );
             sal_Bool bWasDirty = pCache->IsControllerDirty();

@@ -191,7 +191,7 @@ SfxVirtualMenu::SfxVirtualMenu( USHORT nOwnId,
                 SfxVirtualMenu* pOwnParent, Menu& rMenu, BOOL bWithHelp,
                 SfxBindings &rBindings, BOOL bOLEServer, BOOL bRes, BOOL bIsAddonMenu ):
     pItems(0),
-    pImageControl(0),
+       pImageControl(0),
     pBindings(&rBindings),
     pResMgr(0),
     pAutoDeactivate(0),

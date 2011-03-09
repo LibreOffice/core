@@ -180,7 +180,7 @@ public:
     virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 };
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // class EditCharAttribWeight
 // -------------------------------------------------------------------------
 class EditCharAttribWeight : public EditCharAttrib
@@ -190,7 +190,7 @@ public:
 
     virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 };
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // class EditCharAttribItalic
 // -------------------------------------------------------------------------
 class EditCharAttribItalic : public EditCharAttrib
@@ -201,7 +201,7 @@ public:
     virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 };
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // class EditCharAttribShadow
 // -------------------------------------------------------------------------
 class EditCharAttribShadow : public EditCharAttrib
@@ -212,7 +212,7 @@ public:
     virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 };
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // class EditCharAttribEscapement
 // -------------------------------------------------------------------------
 class EditCharAttribEscapement : public EditCharAttrib
@@ -223,7 +223,7 @@ public:
     virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 };
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // class EditCharAttribOutline
 // -------------------------------------------------------------------------
 class EditCharAttribOutline : public EditCharAttrib
@@ -234,7 +234,7 @@ public:
     virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 };
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // class EditCharAttribStrikeout
 // -------------------------------------------------------------------------
 class EditCharAttribStrikeout : public EditCharAttrib
@@ -245,7 +245,7 @@ public:
     virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 };
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // class EditCharAttribUnderline
 // -------------------------------------------------------------------------
 class EditCharAttribUnderline : public EditCharAttrib
@@ -289,7 +289,7 @@ public:
     virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 };
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // class EditCharAttribFontHeight
 // -------------------------------------------------------------------------
 class EditCharAttribFontHeight : public EditCharAttrib
@@ -300,7 +300,7 @@ public:
     virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 };
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // class EditCharAttribFontWidth
 // -------------------------------------------------------------------------
 class EditCharAttribFontWidth : public EditCharAttrib
@@ -311,7 +311,7 @@ public:
     virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 };
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // class EditCharAttribColor
 // -------------------------------------------------------------------------
 class EditCharAttribColor : public EditCharAttrib
@@ -322,7 +322,7 @@ public:
     virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 };
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // class EditCharAttribLanguage
 // -------------------------------------------------------------------------
 class EditCharAttribLanguage : public EditCharAttrib
@@ -333,7 +333,7 @@ public:
     virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 };
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // class EditCharAttribTab
 // -------------------------------------------------------------------------
 class EditCharAttribTab : public EditCharAttrib
@@ -344,7 +344,7 @@ public:
     virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 };
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // class EditCharAttribLineBreak
 // -------------------------------------------------------------------------
 class EditCharAttribLineBreak : public EditCharAttrib
@@ -355,7 +355,7 @@ public:
     virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 };
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // class EditCharAttribField
 // -------------------------------------------------------------------------
 class EditCharAttribField: public EditCharAttrib
@@ -390,7 +390,7 @@ public:
                     }
 };
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // class EditCharAttribPairKerning
 // -------------------------------------------------------------------------
 class EditCharAttribPairKerning : public EditCharAttrib
@@ -401,7 +401,7 @@ public:
     virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 };
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // class EditCharAttribKerning
 // -------------------------------------------------------------------------
 class EditCharAttribKerning : public EditCharAttrib
@@ -412,7 +412,7 @@ public:
     virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 };
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // class EditCharAttribWordLineMode
 // -------------------------------------------------------------------------
 class EditCharAttribWordLineMode: public EditCharAttrib

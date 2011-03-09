@@ -1216,7 +1216,7 @@ void FmFilterNavigator::UpdateContent(const Reference< XIndexAccess > & xControl
         if (pEntry)
         {
             if (!IsExpanded(pEntry))
-                    Expand(pEntry);
+                Expand(pEntry);
             Select(pEntry, sal_True);
         }
     }

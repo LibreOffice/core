@@ -157,7 +157,7 @@ start:
             else
                 nRes = (INT16) ImpRound( dVal );
             break;
-        }
+            }
         case SbxLPSTR:
         case SbxSTRING:
         case SbxBYREF | SbxSTRING:

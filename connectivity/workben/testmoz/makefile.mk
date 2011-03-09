@@ -57,14 +57,14 @@ APP1OBJS=       $(OBJFILES)
 APP1STDLIBS = $(APPSTDLIBS)
 
 
-
+    
 APP2TARGET = mozThread
 APP2OBJS   = $(OBJ)$/initUNO.obj	\
      $(OBJ)$/mozthread.obj
-
+                 
 APP2STDLIBS = $(APPSTDLIBS)
 
 # --- Targets ------------------------------------------------------
-
+    
 .INCLUDE :      target.mk
 
