@@ -78,7 +78,7 @@ import com.sun.star.util.ChangesEvent;
 /* These examples show how to use the following features of the Config API:
 
     o Accessing data
-    o Updating data synchronously and asynchronously
+    o Updating data
     o Updating properties in groups
     o Adding and removing items in sets
     o Resetting data to their defaults
@@ -144,20 +144,6 @@ public class ConfigExamples
         mxProvider = null;
     }
 
-    /** Run the examples with an AdministrationProvider
-    */
-    public void runForAdmin(Object [] aAdminArgs)
-        throws com.sun.star.uno.Exception
-    {
-        mxProvider = createAdminProvider(aAdminArgs);
-
-        runExamples( );
-
-        // this is not the default ConfigurationProvider, so we can dispose it
-        ((XComponent)UnoRuntime.queryInterface( XComponent.class, mxProvider )).dispose();
-        mxProvider = null;
-    }
-
     /** Run the examples with a given ConfigurationProvider
     */
     public void runExamples( )
@@ -170,11 +156,11 @@ public class ConfigExamples
 
             browseDataExample();
 
-            updateGroupSyncExample();
+            updateGroupExample();
 
             resetGroupExample();
 
-            updateSetAsyncExample();
+            updateSetExample();
 
             System.out.println("\nAll Examples completed.");
         }
@@ -245,25 +231,6 @@ public class ConfigExamples
         return xProvider;
     }
 
-    /** Create an administration provider
-
-        @param aAdminArguments
-            An array of extra arguments to be used to create the provider
-     */
-    public XMultiServiceFactory createAdminProvider(Object[] aAdminArguments)
-        throws com.sun.star.uno.Exception
-    {
-        final String sAdminService = "com.sun.star.configuration.AdministrationProvider";
-
-        // create the provider and remember it as a XMultiServiceFactory
-        XMultiServiceFactory xAdminProvider = (XMultiServiceFactory)
-            UnoRuntime.queryInterface(XMultiServiceFactory.class,
-                mxServiceManager.createInstanceWithArgumentsAndContext(
-                    sAdminService, aAdminArguments, mxContext));
-
-        return xAdminProvider;
-    }
-
     /** Create a specified read-only configuration view
      */
     public Object createConfigurationView( String sPath )
@@ -288,7 +255,7 @@ public class ConfigExamples
         return xViewRoot;
     }
 
-    /** Create a specified updatable configuration view using default synchronicity
+    /** Create a specified updatable configuration view
      */
     Object createUpdatableView( String sPath )
         throws com.sun.star.uno.Exception
@@ -305,36 +272,6 @@ public class ConfigExamples
 
         Object[] aArguments = new Object[1];
         aArguments[0] = aPathArgument;
-
-        // create the view
-        Object xViewRoot = xProvider.createInstanceWithArguments(cUpdatableView, aArguments);
-
-        return xViewRoot;
-    }
-
-    /** Create a specified updatable configuration view
-     */
-    Object createUpdatableView( String sPath, boolean bAsync )
-        throws com.sun.star.uno.Exception
-    {
-        XMultiServiceFactory xProvider = getProvider();
-
-        // The service name: Need update access:
-        final String cUpdatableView = "com.sun.star.configuration.ConfigurationUpdateAccess";
-
-        // creation arguments: nodepath
-        com.sun.star.beans.PropertyValue aPathArgument = new com.sun.star.beans.PropertyValue();
-        aPathArgument.Name = "nodepath";
-        aPathArgument.Value = sPath;
-
-        // creation arguments: commit mode - write-through or write-back
-        com.sun.star.beans.PropertyValue aModeArgument = new com.sun.star.beans.PropertyValue();
-        aModeArgument.Name = "lazywrite";
-        aModeArgument.Value = new Boolean(bAsync);
-
-        Object[] aArguments = new Object[2];
-        aArguments[0] = aPathArgument;
-        aArguments[1] = aModeArgument;
 
         // create the view
         Object xViewRoot = xProvider.createInstanceWithArguments(cUpdatableView, aArguments);
@@ -374,13 +311,13 @@ public class ConfigExamples
         }
     }
 
-    /** This method demonstrates synchronous update access to group data
+    /** This method demonstrates update access to group data
      */
-    protected void updateGroupSyncExample ()
+    protected void updateGroupExample ()
     {
         try
         {
-            System.out.println("\n--- starting example: update group data synchronously --------------");
+            System.out.println("\n--- starting example: update group data --------------");
             editGridOptions( );
         }
         catch ( Exception e )
@@ -408,13 +345,13 @@ public class ConfigExamples
         }
     }
 
-    /** This method demonstrates asynchronous update access to set data
+    /** This method demonstrates update access to set data
      */
-    protected void updateSetAsyncExample ()
+    protected void updateSetExample ()
     {
         try
         {
-            System.out.println("\n--- starting example: update set data asynchronously ---------------");
+            System.out.println("\n--- starting example: update set data ---------------");
             storeSampleDataSource( );
         }
         catch ( Exception e )
@@ -639,8 +576,8 @@ public class ConfigExamples
         // The path to the root element
         final String cGridOptionsPath = "/org.openoffice.Office.Calc/Grid";
 
-      // create the SYNCHRONOUS view for better error handling
-        Object xViewRoot = createUpdatableView( cGridOptionsPath, false);
+      // create the view
+        Object xViewRoot = createUpdatableView( cGridOptionsPath );
 
         // the 'editor'
         GridOptionsEditor dialog = new GridOptionsEditor();
@@ -816,7 +753,7 @@ public class ConfigExamples
     {
         try
         {
-            Object xOtherViewRoot = createUpdatableView(xKey, false);
+            Object xOtherViewRoot = createUpdatableView(xKey);
 
             XNameReplace aReplace = (XNameReplace)UnoRuntime.queryInterface(XNameReplace.class, xOtherViewRoot);
 
@@ -1002,9 +939,6 @@ public class ConfigExamples
 
     /** This method gets the DataSourceDescription for a data source.
         It either gets the existing entry or creates a new instance.
-
-        The method attempts to keep the view used as small as possible. In particular there
-        is no view created, that contains data for all data source that are registered.
     */
     Object createDataSourceDescription(XMultiServiceFactory xProvider, String sDataSourceName )
         throws com.sun.star.uno.Exception
@@ -1020,22 +954,10 @@ public class ConfigExamples
         aPathArgument.Name = "nodepath";
         aPathArgument.Value = cDataSourcesPath ;
 
-        // creation arguments: commit mode
-        com.sun.star.beans.PropertyValue aModeArgument = new com.sun.star.beans.PropertyValue();
-        aModeArgument.Name = "lazywrite";
-        aModeArgument.Value = new Boolean( true );
-
-        // creation arguments: depth
-        com.sun.star.beans.PropertyValue aDepthArgument = new com.sun.star.beans.PropertyValue();
-        aDepthArgument.Name = "depth";
-        aDepthArgument.Value = new Integer( 1 );
-
-        Object[] aArguments = new Object[3];
+        Object[] aArguments = new Object[1];
         aArguments[0] = aPathArgument;
-        aArguments[1] = aModeArgument;
-        aArguments[2] = aDepthArgument;
 
-        // create the view: asynchronously updatable, with depth 1
+        // create the view
         Object xViewRoot =
             xProvider.createInstanceWithArguments(cUpdatableView, aArguments);
 
@@ -1045,7 +967,7 @@ public class ConfigExamples
         Object xDataSourceDescriptor = null; // the result
         if ( xSetOfDataSources .hasByName( sDataSourceName ))
         {
-            // the element is there, but it is loaded only with depth zero !
+            // the element is there
             try
             {
                 // the view should point to the element directly, so we need to extend the path
@@ -1057,12 +979,11 @@ public class ConfigExamples
                 // use the name of the element now
                 aPathArgument.Value = sElementPath;
 
-                // create another view now (without depth limit)
-                Object[] aDeepArguments = new Object[2];
+                // create another view now
+                Object[] aDeepArguments = new Object[1];
                 aDeepArguments[0] = aPathArgument;
-                aDeepArguments[1] = aModeArgument;
 
-                // create the view: asynchronously updatable, with unlimited depth
+                // create the view
                 xDataSourceDescriptor  =
                       xProvider.createInstanceWithArguments(cUpdatableView, aDeepArguments);
 
