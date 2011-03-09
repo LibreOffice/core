@@ -75,7 +75,7 @@ public:
     void setGeometryHelper( ov::AbstractGeometryAttributes* pHelper );
     // sets the name of the associated library ( used for UserForm controls )
     void setLibraryAndCodeName( const rtl::OUString& sLibCodeName ) { m_sLibraryAndCodeName = sLibCodeName; }
-    rtl::OUString getLibraryAndCodeName() { return m_sLibraryAndCodeName; }
+    rtl::OUString getLibraryAndCodeName() const { return m_sLibraryAndCodeName; }
 
     // XControl
     virtual sal_Bool SAL_CALL getEnabled() throw (css::uno::RuntimeException);
