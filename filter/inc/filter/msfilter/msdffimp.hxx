@@ -130,6 +130,7 @@ class MSFILTER_DLLPUBLIC DffPropertyReader : public DffPropSet
     DffPropSet*             pDefaultPropSet;
 
     void        ApplyCustomShapeTextAttributes( SfxItemSet& rSet ) const;
+    void        CheckAndCorrectExcelTextRotation( SvStream& rIn, SfxItemSet& rSet, DffObjData& rObjData ) const;
     void        ApplyCustomShapeAdjustmentAttributes( SfxItemSet& rSet ) const;
     void        ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxItemSet& rSet, const DffObjData& rObjData ) const;
     void        ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eShapeType ) const; // #i28269#
@@ -151,7 +152,7 @@ public:
 
     void        SetDefaultPropSet( SvStream& rIn, UINT32 nOffDgg ) const;
     void        ApplyAttributes( SvStream& rIn, SfxItemSet& rSet ) const;
-    void        ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, const DffObjData& rObjData ) const;
+    void        ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, DffObjData& rObjData ) const;
 };
 
 
@@ -345,13 +346,18 @@ struct DffObjData
     UINT32      nSpFlags;
     MSO_SPT     eShapeType;
 
-    BOOL bShapeType     : 1;
-    BOOL bClientAnchor  : 1;
-    BOOL bClientData    : 1;
-    BOOL bChildAnchor   : 1;
-    BOOL bOpt           : 1;
-    BOOL bIsAutoText    : 1;
-
+    BOOL bShapeType             : 1;
+    BOOL bClientAnchor          : 1;
+    BOOL bClientData            : 1;
+    BOOL bChildAnchor           : 1;
+    BOOL bOpt                   : 1;
+    BOOL bOpt2                  : 1;    // secondary property set available
+    BOOL bIsAutoText            : 1;
+    BOOL bRotateTextWithShape   : 1;    // Word/PowerPoint is rotating text with shape,
+                                        // old Excel versions can't rotate text with shapes, up from 2003 this
+                                        // feature has been added, the corresponding property (upright in the txBody)
+                                        // can be found in the optional XML data of the shape (metroBlob 937 of the
+                                        // second property set)
     int nCalledByGroup;
 
     DffObjData( const DffRecordHeader& rObjHd,
@@ -367,7 +373,9 @@ struct DffObjData
         bClientData( FALSE ),
         bChildAnchor( FALSE ),
         bOpt( FALSE ),
+        bOpt2( FALSE ),
         bIsAutoText( FALSE ),
+        bRotateTextWithShape( TRUE ),
         nCalledByGroup( nClByGroup ){}
 };
 
@@ -560,7 +568,7 @@ public:
 
     void*               pSvxMSDffDummy1;
     void*               pSvxMSDffDummy2;
-    void*               pSvxMSDffDummy3;
+    DffPropertyReader*  pSecPropSet;
     List*               pEscherBlipCache;
 
     DffRecordManager    maShapeRecords;
