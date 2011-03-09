@@ -292,7 +292,7 @@ void ScDPObject::SetSheetDesc(const ScSheetSourceDesc& rDesc)
     DELETEZ( pImpDesc );
     DELETEZ( pServDesc );
 
-    delete pImpDesc;
+    delete pSheetDesc;
     pSheetDesc = new ScSheetSourceDesc(rDesc);
 
     //  make valid QueryParam
@@ -304,6 +304,7 @@ void ScDPObject::SetSheetDesc(const ScSheetSourceDesc& rDesc)
     pSheetDesc->aQueryParam.bHasHeader = sal_True;
 
     InvalidateSource();     // new source must be created
+    SetCacheId( -1 );       // #i116504# don't use the same cache ID for a different range
 }
 
 void ScDPObject::SetImportDesc(const ScImportSourceDesc& rDesc)
@@ -318,6 +319,7 @@ void ScDPObject::SetImportDesc(const ScImportSourceDesc& rDesc)
     pImpDesc = new ScImportSourceDesc(rDesc);
 
     InvalidateSource();     // new source must be created
+    SetCacheId( -1 );
 }
 
 void ScDPObject::SetServiceData(const ScDPServiceDesc& rDesc)

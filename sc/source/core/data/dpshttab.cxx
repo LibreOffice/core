@@ -67,7 +67,7 @@ ScSheetDPData::ScSheetDPData( ScDocument* pD, const ScSheetSourceDesc& rDesc , l
     pSpecial(NULL),
     bIgnoreEmptyRows( sal_False ),
     bRepeatIfEmpty(sal_False),
-    aCacheTable( pD, rDesc.GetCacheId( pD, nCacheId))
+    aCacheTable( pD, GetCacheId() )     // base class ID is initialized with the GetCacheId call above
 {
     SCSIZE nEntryCount( aQuery.GetEntryCount());
     pSpecial = new sal_Bool[nEntryCount];

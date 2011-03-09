@@ -2120,7 +2120,7 @@ void ScDocument::RemoveDPObjectCache( long nID )
 
 void ScDocument::RemoveUnusedDPObjectCaches()
 {
-    for ( std::list<ScDPTableDataCache*>::iterator iter = m_listDPObjectsCaches.begin(); iter!=m_listDPObjectsCaches.end(); iter++ )
+    for ( std::list<ScDPTableDataCache*>::iterator iter = m_listDPObjectsCaches.begin(); iter!=m_listDPObjectsCaches.end(); )
     {
         long  nID = (*iter)->GetId();
         sal_uInt16 nCount = GetDPCollection()->GetCount();
@@ -2133,10 +2133,11 @@ void ScDocument::RemoveUnusedDPObjectCaches()
         if ( i == nCount )
         {
             ScDPTableDataCache* pCache = *iter;
-            m_listDPObjectsCaches.erase( iter );
+            iter = m_listDPObjectsCaches.erase( iter );
             delete pCache;
             continue;
         }
+        ++iter;
     }
 }
 

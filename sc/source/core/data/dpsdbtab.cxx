@@ -214,7 +214,7 @@ ScDatabaseDPData::ScDatabaseDPData(
     ScDocument* pDoc,
     const ScImportSourceDesc& rImport, long nCacheId /*=-1 */ ) :
     ScDPTableData(pDoc, rImport.GetCacheId( pDoc, nCacheId) ),
-    aCacheTable( pDoc, rImport.GetCacheId( pDoc, nCacheId))
+    aCacheTable( pDoc, GetCacheId() )     // base class ID is initialized with the GetCacheId call above
 {
 
 }
