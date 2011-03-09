@@ -931,7 +931,7 @@ sal_uInt16 Clipboard::InsertSlides (
 
 
 
-Clipboard::DropType Clipboard::IsDropAccepted (DropTargetHelper& rTargetHelper) const
+Clipboard::DropType Clipboard::IsDropAccepted (DropTargetHelper&) const
 {
     const SdTransferable* pDragTransferable = SD_MOD()->pTransferDrag;
     if (pDragTransferable == NULL)
