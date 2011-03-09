@@ -1539,11 +1539,13 @@ namespace
         aGenericMask.set(vcl::UnicodeCoverage::SPECIALS, false);
         aGenericMask.set(vcl::UnicodeCoverage::NONPLANE_0, false);
         aGenericMask.set(vcl::UnicodeCoverage::PRIVATE_USE_PLANE_15, false);
+        aGenericMask.set(vcl::UnicodeCoverage::CJK_SYMBOLS_AND_PUNCTUATION, false);
 
         boost::dynamic_bitset<sal_uInt32> aMasked = rFontCapabilities.maUnicodeRange & aGenericMask;
 
         if (aMasked.count() == 1)
             return aMasked.find_first();
+
 
         if (aMasked[vcl::UnicodeCoverage::ARABIC])
         {
