@@ -345,8 +345,15 @@ void TokenPool::GetElement( const UINT16 nId )
                 }
                 break;
             case T_RN:
-                pScToken->AddName( pElement[ nId ] );
-                break;
+            {
+                UINT16 n = pElement[nId];
+                if (n < maRangeNames.size())
+                {
+                    const RangeName& r = maRangeNames[n];
+                    pScToken->AddRangeName(r.mnIndex, r.mbGlobal);
+                }
+            }
+            break;
             case T_Ext:
                 {
                 UINT16          n = pElement[ nId ];
@@ -388,6 +395,7 @@ void TokenPool::GetElement( const UINT16 nId )
                     pScToken->AddExternalName(r.mnFileId, r.maName);
                 }
             }
+            break;
             case T_ExtRefC:
             {
                 UINT16 n = pElement[nId];
@@ -397,6 +405,7 @@ void TokenPool::GetElement( const UINT16 nId )
                     pScToken->AddExternalSingleReference(r.mnFileId, r.maTabName, r.maRef);
                 }
             }
+            break;
             case T_ExtRefA:
             {
                 UINT16 n = pElement[nId];
@@ -457,8 +466,15 @@ void TokenPool::GetElementRek( const UINT16 nId )
                     }
                     break;
                 case T_RN:
-                    pScToken->AddName( pElement[ *pAkt ] );
-                    break;
+                {
+                    UINT16 n = pElement[nId];
+                    if (n < maRangeNames.size())
+                    {
+                        const RangeName& r = maRangeNames[n];
+                        pScToken->AddRangeName(r.mnIndex, r.mbGlobal);
+                    }
+                }
+                break;
                 case T_Ext:
                     {
                     UINT16      n = pElement[ *pAkt ];
@@ -495,6 +511,7 @@ void TokenPool::GetElementRek( const UINT16 nId )
                         pScToken->AddExternalName(r.mnFileId, r.maName);
                     }
                 }
+                break;
                 case T_ExtRefC:
                 {
                     UINT16 n = pElement[*pAkt];
@@ -504,6 +521,7 @@ void TokenPool::GetElementRek( const UINT16 nId )
                         pScToken->AddExternalSingleReference(r.mnFileId, r.maTabName, r.maRef);
                     }
                 }
+                break;
                 case T_ExtRefA:
                 {
                     UINT16 n = pElement[*pAkt];
@@ -570,14 +588,7 @@ const TokenId TokenPool::Store( const double& rDouble )
 
 const TokenId TokenPool::Store( const UINT16 nIndex )
 {
-    if( nElementAkt >= nElement )
-        GrowElement();
-
-    pElement[ nElementAkt ] = nIndex;           // Daten direkt im Index!
-    pType[ nElementAkt ] = T_RN;                // Typinfo Range Name eintragen
-
-    nElementAkt++;
-    return ( const TokenId ) nElementAkt;               // Ausgabe von altem Wert + 1!
+    return StoreName(nIndex, true);
 }
 
 
@@ -736,6 +747,24 @@ const TokenId TokenPool::StoreMatrix()
     nP_MatrixAkt++;
 
     return ( const TokenId ) nElementAkt;
+}
+
+const TokenId TokenPool::StoreName( sal_uInt16 nIndex, bool bGlobal )
+{
+    if ( nElementAkt >= nElement )
+        GrowElement();
+
+    pElement[nElementAkt] = static_cast<UINT16>(maRangeNames.size());
+    pType[nElementAkt] = T_RN;
+
+    maRangeNames.push_back(RangeName());
+    RangeName& r = maRangeNames.back();
+    r.mnIndex = nIndex;
+    r.mbGlobal = bGlobal;
+
+    ++nElementAkt;
+
+    return static_cast<const TokenId>(nElementAkt);
 }
 
 const TokenId TokenPool::StoreExtName( sal_uInt16 nFileId, const String& rName )

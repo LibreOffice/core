@@ -1611,6 +1611,11 @@ FormulaToken* ScTokenArray::AddMatrix( const ScMatrixRef& p )
     return Add( new ScMatrixToken( p ) );
 }
 
+FormulaToken* ScTokenArray::AddRangeName( sal_uInt16 n, bool bGlobal )
+{
+    return Add(new ScNameToken(n, bGlobal));
+}
+
 FormulaToken* ScTokenArray::AddExternalName( sal_uInt16 nFileId, const String& rName )
 {
     return Add( new ScExternalNameToken(nFileId, rName) );

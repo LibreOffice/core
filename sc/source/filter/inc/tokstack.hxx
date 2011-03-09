@@ -137,6 +137,14 @@ class TokenPool
         UINT16                      nP_Matrix;
         UINT16                      nP_MatrixAkt;
 
+        /** for storage of named ranges */
+        struct RangeName
+        {
+            sal_uInt16 mnIndex;
+            bool mbGlobal;
+        };
+        ::std::vector<RangeName> maRangeNames;
+
         /** for storage of external names */
         struct ExtName
         {
@@ -207,6 +215,7 @@ class TokenPool
                                         // 4 externals (e.g. AddIns, Makros...)
         const TokenId               StoreNlf( const ScSingleRefData& rTr );
         const TokenId               StoreMatrix();
+        const TokenId               StoreName( sal_uInt16 nIndex, bool bGlobal );
         const TokenId               StoreExtName( sal_uInt16 nFileId, const String& rName );
         const TokenId               StoreExtRef( sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& rRef );
         const TokenId               StoreExtRef( sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& rRef );

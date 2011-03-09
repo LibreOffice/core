@@ -522,7 +522,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
                 if(pName && !pName->GetScRangeData())
                     aStack << aPool.Store( ocMacro, pName->GetXclName() );
                 else
-                    aStack << aPool.Store( nUINT16 );
+                    aStack << aPool.StoreName(nUINT16, true);
             }
                 break;
             case 0x44:
@@ -702,7 +702,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
                     aPool >> aStack;
                 }
                 else
-                    aStack << aPool.Store( nUINT16 );
+                    aStack << aPool.StoreName( nUINT16, true );
                 aIn.Ignore( 12 );
                 break;
             case 0x5A:
@@ -1743,8 +1743,8 @@ BOOL ExcelToSc::GetShrFmla( const ScTokenArray*& rpErgebnis, XclImpStream& aIn, 
 
             aIn >> nRow >> nCol;
 
-            aStack << aPool.Store( GetOldRoot().pShrfmlaBuff->Find(
-                ScAddress( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), GetCurrScTab() ) ) );
+            aStack << aPool.StoreName( GetOldRoot().pShrfmlaBuff->Find(
+                ScAddress(static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), GetCurrScTab())), true);
 
             bRet = TRUE;
         }

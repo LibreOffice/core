@@ -430,12 +430,15 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 aIn >> nUINT16;
             {
                 aIn.Ignore( 2 );
-                //Determine if this is a user-defined Macro name.
                 const XclImpName* pName = GetNameManager().GetName( nUINT16 );
-                if(pName && !pName->GetScRangeData())
-                    aStack << aPool.Store( ocMacro, pName->GetXclName() );
-                else
-                    aStack << aPool.Store( nUINT16 );
+                if (pName)
+                {
+                    if (pName->GetScRangeData())
+                        aStack << aPool.StoreName(nUINT16, pName->IsGlobal());
+                    else
+                        // used-defined macro name.
+                        aStack << aPool.Store(ocMacro, pName->GetXclName());
+                }
             }
             break;
             case 0x44:
@@ -618,10 +621,13 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 {
                     // internal defined name with explicit sheet, i.e.: =Sheet1!AnyName
                     const XclImpName* pName = GetNameManager().GetName( nNameIdx );
-                    if( pName && !pName->GetScRangeData() )
-                        aStack << aPool.Store( ocMacro, pName->GetXclName() );
-                    else
-                        aStack << aPool.Store( nNameIdx );
+                    if (pName)
+                    {
+                        if (pName->GetScRangeData())
+                            aStack << aPool.StoreName( nNameIdx, pName->IsGlobal());
+                        else
+                            aStack << aPool.Store(ocMacro, pName->GetXclName());
+                    }
                 }
                 else if( const XclImpExtName* pExtName = rLinkMan.GetExternName( nXtiIndex, nNameIdx ) )
                 {

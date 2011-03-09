@@ -72,6 +72,7 @@ public:
     /** ScSingleRefOpToken with ocMatRef. */
     formula::FormulaToken* AddMatrixSingleReference( const ScSingleRefData& rRef );
     formula::FormulaToken* AddDoubleReference( const ScComplexRefData& rRef );
+    formula::FormulaToken* AddRangeName( sal_uInt16 n, bool bGlobal );
     formula::FormulaToken* AddExternalName( sal_uInt16 nFileId, const String& rName );
     formula::FormulaToken* AddExternalSingleReference( sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& rRef );
     formula::FormulaToken* AddExternalDoubleReference( sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& rRef );
