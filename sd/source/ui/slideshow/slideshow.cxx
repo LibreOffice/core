@@ -1228,28 +1228,6 @@ sal_Int32 SlideShow::GetDisplay()
     if( pOptions )
         nDisplay = pOptions->GetDisplay();
 
-    if (nDisplay <= 0 )
-    {
-        try
-        {
-            Reference<XMultiServiceFactory > xFactory(
-                ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW);
-            Reference<XPropertySet> xMonitorProperties(
-                xFactory->createInstance(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.DisplayAccess"))),
-                UNO_QUERY_THROW);
-            const OUString sPropertyName (RTL_CONSTASCII_USTRINGPARAM("DefaultDisplay"));
-            xMonitorProperties->getPropertyValue(sPropertyName) >>= nDisplay;
-        }
-        catch( Exception& )
-        {
-        }
-    }
-    else
-    {
-        nDisplay--;
-    }
-
     return nDisplay;
 }
 
