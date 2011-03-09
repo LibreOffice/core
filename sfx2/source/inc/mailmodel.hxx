@@ -100,6 +100,6 @@ public:
     SendMailResult      Send( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame, const rtl::OUString& rType );
 };
 
-BOOL CreateFromAddress_Impl( String& rFrom );
+sal_Bool CreateFromAddress_Impl( String& rFrom );
 
 #endif // INCLUDED_SFX_MAILMODEL_HXX

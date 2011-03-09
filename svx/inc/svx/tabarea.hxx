@@ -62,7 +62,7 @@ enum PageType
 
 // define ----------------------------------------------------------------
 
-typedef USHORT ChangeType; // auch in tab_line.hxx (mitpflegen !!!)
+typedef sal_uInt16 ChangeType; // auch in tab_line.hxx (mitpflegen !!!)
 
 #define CT_NONE                 ( (ChangeType) 0x0000 )
 #define CT_MODIFIED             ( (ChangeType) 0x0001 )

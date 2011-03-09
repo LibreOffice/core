@@ -42,14 +42,14 @@ public:
 
                             TYPEINFO();
 
-                            SdrGrafGamma100Item( ULONG nGamma100 = 100 ) : SfxUInt32Item( SDRATTR_GRAFGAMMA, nGamma100 ) {}
+                            SdrGrafGamma100Item( sal_uIntPtr nGamma100 = 100 ) : SfxUInt32Item( SDRATTR_GRAFGAMMA, nGamma100 ) {}
                             SdrGrafGamma100Item( SvStream& rIn ) : SfxUInt32Item( SDRATTR_GRAFGAMMA, rIn ) {}
 
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = NULL ) const;
-    virtual SfxPoolItem*    Create( SvStream& rIn, USHORT nVer ) const;
+    virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const;
 
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 };
 
 #endif // _SDGGAITM_HXX

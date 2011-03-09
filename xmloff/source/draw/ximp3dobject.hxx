@@ -47,7 +47,7 @@ protected:
     // the shape group this object should be created inside
 
     com::sun::star::drawing::HomogenMatrix mxHomMat;
-    BOOL                        mbSetTransform;
+    sal_Bool                        mbSetTransform;
 
 /*
     void SetStyle();
@@ -75,8 +75,8 @@ class SdXML3DCubeObjectShapeContext : public SdXML3DObjectContext
 {
     ::basegfx::B3DVector    maMinEdge;
     ::basegfx::B3DVector    maMaxEdge;
-    BOOL                    mbMinEdgeUsed;
-    BOOL                    mbMaxEdgeUsed;
+    sal_Bool                    mbMinEdgeUsed;
+    sal_Bool                    mbMaxEdgeUsed;
 
 public:
     TYPEINFO();
@@ -99,8 +99,8 @@ class SdXML3DSphereObjectShapeContext : public SdXML3DObjectContext
 {
     ::basegfx::B3DVector    maCenter;
     ::basegfx::B3DVector    maSize;
-    BOOL                    mbCenterUsed;
-    BOOL                    mbSizeUsed;
+    sal_Bool                    mbCenterUsed;
+    sal_Bool                    mbSizeUsed;
 
 public:
     TYPEINFO();

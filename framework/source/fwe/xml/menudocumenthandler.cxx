@@ -937,7 +937,7 @@ throw ( SAXException, RuntimeException )
                     m_xWriteDocumentHandler->ignorableWhitespace( ::rtl::OUString() );
                     m_xWriteDocumentHandler->endElement( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_MENU )) );
                     m_xWriteDocumentHandler->ignorableWhitespace( ::rtl::OUString() );
-                    bSeparator = FALSE;
+                    bSeparator = sal_False;
                 }
             }
             else
@@ -946,7 +946,7 @@ throw ( SAXException, RuntimeException )
                 {
                     if ( aCommandURL.getLength() > 0 )
                     {
-                        bSeparator = FALSE;
+                        bSeparator = sal_False;
                         WriteMenuItem( aCommandURL, aLabel, aHelpURL, nItemBits );
                     }
                 }
@@ -954,7 +954,7 @@ throw ( SAXException, RuntimeException )
                 {
                     // Don't write two separators together
                     WriteMenuSeparator();
-                    bSeparator = TRUE;
+                    bSeparator = sal_True;
                 }
             }
         }

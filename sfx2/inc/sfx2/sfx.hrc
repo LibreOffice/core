@@ -208,18 +208,7 @@
 
 #define RID_DEFAULTABOUT                    (RID_SFX_START+0)
 
-#define ABOUT_BTN_OK                        1
-
-#define ABOUT_FTXT_VERSION                  1
-#define ABOUT_FTXT_COPYRIGHT                2
-
-#define ABOUT_STR_DEVELOPER_ARY             1
-#define ABOUT_STR_FRENCH_COPYRIGHT          2
-#define ABOUT_STR_ACCEL                     3
-#define ABOUT_STR_COPYRIGHT                 4
-
 #define RID_APPTITLE                        (RID_SFX_START+4)
-#define RID_BUILDVERSION                    (RID_SFX_START+5)
 
 #define RID_DOCALREADYLOADED_DLG            (RID_SFX_START+1)
 
@@ -258,14 +247,15 @@
 #define STR_MB                              (RID_SFX_START+113)
 #define STR_GB                              (RID_SFX_START+114)
 
-#define STR_VERSION_TYPE                    (RID_SFX_START+115)
-#define STR_VERSION_ID                      (RID_SFX_START+116)
 #define STR_STANDARD_SHORTCUT               (RID_SFX_START+117)
 #define STR_REPAIREDDOCUMENT                (RID_SFX_START+118)
 
 #define STR_ERRUNOEVENTBINDUNG              (RID_SFX_START+119)
 #define STR_SHARED                          (RID_SFX_START+120)
 #define RID_XMLSEC_DOCUMENTSIGNED           (RID_SFX_START+121)
+// IAccessibility2 implementation 2009. ------
+#define STR_ACCTITLE_PRODUCTIVITYTOOLS      (RID_SFX_START+157)
+// ------ IAccessibility2 implementation 2009.
 
 //=========================================================================
 

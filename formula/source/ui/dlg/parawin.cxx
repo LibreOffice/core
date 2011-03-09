@@ -56,30 +56,30 @@ ParaWin::ParaWin(Window* pParent,IControlReferenceHandler* _pDlg,Point aPos):
     aFtArgName      ( this, ModuleRes( FT_PARNAME ) ),
     aFtArgDesc      ( this, ModuleRes( FT_PARDESC ) ),
 
-    aFtArg1         ( this, ModuleRes( FT_ARG1 ) ),
-    aFtArg2         ( this, ModuleRes( FT_ARG2 ) ),
-    aFtArg3         ( this, ModuleRes( FT_ARG3 ) ),
-    aFtArg4         ( this, ModuleRes( FT_ARG4 ) ),
-
     aBtnFx1         ( this, ModuleRes( BTN_FX1 ) ),
-    aBtnFx2         ( this, ModuleRes( BTN_FX2 ) ),
-    aBtnFx3         ( this, ModuleRes( BTN_FX3 ) ),
-    aBtnFx4         ( this, ModuleRes( BTN_FX4 ) ),
-
+    aFtArg1         ( this, ModuleRes( FT_ARG1 ) ),
     aEdArg1         ( this, ModuleRes( ED_ARG1 ) ),
-    aEdArg2         ( this, ModuleRes( ED_ARG2 ) ),
-    aEdArg3         ( this, ModuleRes( ED_ARG3 ) ),
-    aEdArg4         ( this, ModuleRes( ED_ARG4 ) ),
-
     aRefBtn1        ( this, ModuleRes( RB_ARG1 ) ),
+
+    aBtnFx2         ( this, ModuleRes( BTN_FX2 ) ),
+    aFtArg2         ( this, ModuleRes( FT_ARG2 ) ),
+    aEdArg2         ( this, ModuleRes( ED_ARG2 ) ),
     aRefBtn2        ( this, ModuleRes( RB_ARG2 ) ),
+
+    aBtnFx3         ( this, ModuleRes( BTN_FX3 ) ),
+    aFtArg3         ( this, ModuleRes( FT_ARG3 ) ),
+    aEdArg3         ( this, ModuleRes( ED_ARG3 ) ),
     aRefBtn3        ( this, ModuleRes( RB_ARG3 ) ),
+
+    aBtnFx4         ( this, ModuleRes( BTN_FX4 ) ),
+    aFtArg4         ( this, ModuleRes( FT_ARG4 ) ),
+    aEdArg4         ( this, ModuleRes( ED_ARG4 ) ),
     aRefBtn4        ( this, ModuleRes( RB_ARG4 ) ),
 
     aSlider         ( this, ModuleRes( WND_SLIDER ) ),
     m_sOptional     ( ModuleRes( STR_OPTIONAL ) ),
     m_sRequired     ( ModuleRes( STR_REQUIRED ) ),
-    bRefMode        (FALSE)
+    bRefMode        (sal_False)
 {
     Image aFxHC( ModuleRes( IMG_FX_H ) );
     FreeResource();
@@ -106,13 +106,13 @@ ParaWin::ParaWin(Window* pParent,IControlReferenceHandler* _pDlg,Point aPos):
     ClearAll();
 }
 
-void ParaWin::UpdateArgDesc( USHORT nArg )
+void ParaWin::UpdateArgDesc( sal_uInt16 nArg )
 {
     if (nArg==NOT_FOUND) return;
 
     if ( nArgs > 4 )
-        nArg = sal::static_int_cast<USHORT>( nArg + GetSliderPos() );
-        //@ nArg += (USHORT)aSlider.GetThumbPos();
+        nArg = sal::static_int_cast<sal_uInt16>( nArg + GetSliderPos() );
+        //@ nArg += (sal_uInt16)aSlider.GetThumbPos();
 
     if ( (nArgs > 0) && (nArg<nArgs) )
     {
@@ -124,7 +124,7 @@ void ParaWin::UpdateArgDesc( USHORT nArg )
 
         if ( nArgs < VAR_ARGS )
         {
-            USHORT nRealArg = (aVisibleArgMapping.size() < nArg) ? aVisibleArgMapping[nArg] : nArg;
+            sal_uInt16 nRealArg = (aVisibleArgMapping.size() < nArg) ? aVisibleArgMapping[nArg] : nArg;
             aArgDesc  = pFuncDesc->getParameterDescription(nRealArg);
             aArgName  = pFuncDesc->getParameterName(nRealArg);
             aArgName += ' ';
@@ -132,9 +132,9 @@ void ParaWin::UpdateArgDesc( USHORT nArg )
         }
         else
         {
-            USHORT nFix = nArgs - VAR_ARGS;
-            USHORT nPos = ( nArg < nFix ? nArg : nFix );
-            USHORT nRealArg = (nPos < aVisibleArgMapping.size() ?
+            sal_uInt16 nFix = nArgs - VAR_ARGS;
+            sal_uInt16 nPos = ( nArg < nFix ? nArg : nFix );
+            sal_uInt16 nRealArg = (nPos < aVisibleArgMapping.size() ?
                     aVisibleArgMapping[nPos] : aVisibleArgMapping.back());
             aArgDesc  = pFuncDesc->getParameterDescription(nRealArg);
             aArgName  = pFuncDesc->getParameterName(nRealArg);
@@ -150,14 +150,14 @@ void ParaWin::UpdateArgDesc( USHORT nArg )
     }
 }
 
-void ParaWin::UpdateArgInput( USHORT nOffset, USHORT i )
+void ParaWin::UpdateArgInput( sal_uInt16 nOffset, sal_uInt16 i )
 {
-    USHORT nArg = nOffset + i;
+    sal_uInt16 nArg = nOffset + i;
     if ( nArgs < VAR_ARGS)
     {
         if(nArg<nArgs)
         {
-            USHORT nRealArg = aVisibleArgMapping[nArg];
+            sal_uInt16 nRealArg = aVisibleArgMapping[nArg];
             SetArgNameFont  (i,(pFuncDesc->isParameterOptional(nRealArg))
                                             ? aFntLight : aFntBold );
             SetArgName      (i,pFuncDesc->getParameterName(nRealArg));
@@ -165,9 +165,9 @@ void ParaWin::UpdateArgInput( USHORT nOffset, USHORT i )
     }
     else
     {
-        USHORT nFix = nArgs - VAR_ARGS;
-        USHORT nPos = ( nArg < nFix ? nArg : nFix );
-        USHORT nRealArg = (nPos < aVisibleArgMapping.size() ?
+        sal_uInt16 nFix = nArgs - VAR_ARGS;
+        sal_uInt16 nPos = ( nArg < nFix ? nArg : nFix );
+        sal_uInt16 nRealArg = (nPos < aVisibleArgMapping.size() ?
                 aVisibleArgMapping[nPos] : aVisibleArgMapping.back());
         SetArgNameFont( i,
                 (nArg > nFix || pFuncDesc->isParameterOptional(nRealArg)) ?
@@ -197,12 +197,12 @@ ParaWin::~ParaWin()
     aBtnFx4.SetGetFocusHdl( aEmptyLink );
 }
 
-USHORT ParaWin::GetActiveLine()
+sal_uInt16 ParaWin::GetActiveLine()
 {
     return nActiveLine;
 }
 
-void ParaWin::SetActiveLine(USHORT no)
+void ParaWin::SetActiveLine(sal_uInt16 no)
 {
     if(no<nArgs)
     {
@@ -212,10 +212,10 @@ void ParaWin::SetActiveLine(USHORT no)
         if(nNewEdPos<0 || nNewEdPos>3)
         {
             nOffset+=nNewEdPos;
-            SetSliderPos((USHORT) nOffset);
+            SetSliderPos((sal_uInt16) nOffset);
             nOffset=GetSliderPos();
         }
-        nEdFocus=no-(USHORT)nOffset;
+        nEdFocus=no-(sal_uInt16)nOffset;
         UpdateArgDesc( nEdFocus );
     }
 }
@@ -233,7 +233,7 @@ RefEdit* ParaWin::GetActiveEdit()
 }
 
 
-String ParaWin::GetArgument(USHORT no)
+String ParaWin::GetArgument(sal_uInt16 no)
 {
     String aStr;
     if(no<aParaArray.size())
@@ -256,7 +256,7 @@ String  ParaWin::GetActiveArgName()
 }
 
 
-void ParaWin::SetArgument(USHORT no, const String& aString)
+void ParaWin::SetArgument(sal_uInt16 no, const String& aString)
 {
     if(no<aParaArray.size())
     {
@@ -334,32 +334,32 @@ void ParaWin::SetEditDesc(const String& aText)
     aFtEditDesc.SetText(aText);
 }
 
-void ParaWin::SetArgName(USHORT no,const String& aText)
+void ParaWin::SetArgName(sal_uInt16 no,const String& aText)
 {
     aArgInput[no].SetArgName(aText);
 }
 
-void ParaWin::SetArgNameFont(USHORT no,const Font& aFont)
+void ParaWin::SetArgNameFont(sal_uInt16 no,const Font& aFont)
 {
     aArgInput[no].SetArgNameFont(aFont);
 }
 
-void ParaWin::SetArgVal(USHORT no,const String& aText)
+void ParaWin::SetArgVal(sal_uInt16 no,const String& aText)
 {
     aArgInput[no].SetArgVal(aText);
 }
 
-void ParaWin::HideParaLine(USHORT no)
+void ParaWin::HideParaLine(sal_uInt16 no)
 {
     aArgInput[no].Hide();
 }
 
-void ParaWin::ShowParaLine(USHORT no)
+void ParaWin::ShowParaLine(sal_uInt16 no)
 {
     aArgInput[no].Show();
 }
 
-void ParaWin::SetEdFocus(USHORT no)
+void ParaWin::SetEdFocus(sal_uInt16 no)
 {
     UpdateArgDesc(no);
     if(no<4 && no<aParaArray.size())
@@ -367,7 +367,7 @@ void ParaWin::SetEdFocus(USHORT no)
 }
 
 
-void ParaWin::InitArgInput( USHORT nPos, FixedText& rFtArg, ImageButton& rBtnFx,
+void ParaWin::InitArgInput( sal_uInt16 nPos, FixedText& rFtArg, ImageButton& rBtnFx,
                         ArgEdit& rEdArg, RefButton& rRefBtn)
 {
 
@@ -390,7 +390,7 @@ void ParaWin::ClearAll()
     SetArgumentOffset(0);
 }
 
-void ParaWin::SetArgumentOffset(USHORT nOffset)
+void ParaWin::SetArgumentOffset(sal_uInt16 nOffset)
 {
     DelParaArray();
     aSlider.SetThumbPos(0);
@@ -430,8 +430,8 @@ void ParaWin::SetArgumentOffset(USHORT nOffset)
 
 void ParaWin::UpdateParas()
 {
-    USHORT i;
-    USHORT nOffset = GetSliderPos();
+    sal_uInt16 i;
+    sal_uInt16 nOffset = GetSliderPos();
 
     if ( nArgs > 0 )
     {
@@ -446,19 +446,19 @@ void ParaWin::UpdateParas()
 }
 
 
-USHORT ParaWin::GetSliderPos()
+sal_uInt16 ParaWin::GetSliderPos()
 {
-    return (USHORT) aSlider.GetThumbPos();
+    return (sal_uInt16) aSlider.GetThumbPos();
 }
 
-void ParaWin::SetSliderPos(USHORT nSliderPos)
+void ParaWin::SetSliderPos(sal_uInt16 nSliderPos)
 {
-    USHORT nOffset = GetSliderPos();
+    sal_uInt16 nOffset = GetSliderPos();
 
     if(aSlider.IsVisible() && nOffset!=nSliderPos)
     {
         aSlider.SetThumbPos(nSliderPos);
-        for ( USHORT i=0; i<4; i++ )
+        for ( sal_uInt16 i=0; i<4; i++ )
         {
             UpdateArgInput( nSliderPos, i );
         }
@@ -467,9 +467,9 @@ void ParaWin::SetSliderPos(USHORT nSliderPos)
 
 void ParaWin::SliderMoved()
 {
-    USHORT nOffset = GetSliderPos();
+    sal_uInt16 nOffset = GetSliderPos();
 
-    for ( USHORT i=0; i<4; i++ )
+    for ( sal_uInt16 i=0; i<4; i++ )
     {
         UpdateArgInput( nOffset, i );
     }
@@ -496,9 +496,9 @@ void ParaWin::FxClick()
 
 IMPL_LINK( ParaWin, GetFxHdl, ArgInput*, pPtr )
 {
-    USHORT nOffset = GetSliderPos();
+    sal_uInt16 nOffset = GetSliderPos();
     nEdFocus=NOT_FOUND;
-    for ( USHORT nPos=0; nPos<5;nPos++)
+    for ( sal_uInt16 nPos=0; nPos<5;nPos++)
     {
         if(pPtr == &aArgInput[nPos])
         {
@@ -518,9 +518,9 @@ IMPL_LINK( ParaWin, GetFxHdl, ArgInput*, pPtr )
 
 IMPL_LINK( ParaWin, GetFxFocusHdl, ArgInput*, pPtr )
 {
-    USHORT nOffset = GetSliderPos();
+    sal_uInt16 nOffset = GetSliderPos();
     nEdFocus=NOT_FOUND;
-    for ( USHORT nPos=0; nPos<5;nPos++)
+    for ( sal_uInt16 nPos=0; nPos<5;nPos++)
     {
         if(pPtr == &aArgInput[nPos])
         {
@@ -542,9 +542,9 @@ IMPL_LINK( ParaWin, GetFxFocusHdl, ArgInput*, pPtr )
 
 IMPL_LINK( ParaWin, GetEdFocusHdl, ArgInput*, pPtr )
 {
-    USHORT nOffset = GetSliderPos();
+    sal_uInt16 nOffset = GetSliderPos();
     nEdFocus=NOT_FOUND;
-    for ( USHORT nPos=0; nPos<5;nPos++)
+    for ( sal_uInt16 nPos=0; nPos<5;nPos++)
     {
         if(pPtr == &aArgInput[nPos])
         {
@@ -574,9 +574,9 @@ IMPL_LINK( ParaWin, ScrollHdl, ScrollBar*, EMPTYARG )
 
 IMPL_LINK( ParaWin, ModifyHdl, ArgInput*, pPtr )
 {
-    USHORT nOffset = GetSliderPos();
+    sal_uInt16 nOffset = GetSliderPos();
     nEdFocus=NOT_FOUND;
-    for ( USHORT nPos=0; nPos<5;nPos++)
+    for ( sal_uInt16 nPos=0; nPos<5;nPos++)
     {
         if(pPtr == &aArgInput[nPos])
         {

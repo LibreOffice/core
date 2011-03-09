@@ -30,6 +30,7 @@
 
 #include "SchXMLChartContext.hxx"
 #include "SchXMLImport.hxx"
+#include "SchXMLLegendContext.hxx"
 #include "SchXMLPlotAreaContext.hxx"
 #include "SchXMLParagraphContext.hxx"
 #include "SchXMLTableContext.hxx"
@@ -52,7 +53,6 @@
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/chart/XDiagram.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
-#include <com/sun/star/chart/ChartLegendPosition.hpp>
 #include <com/sun/star/util/XStringMapping.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
@@ -60,7 +60,6 @@
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/XVisualObject.hpp>
-#include <com/sun/star/drawing/FillStyle.hpp>
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
@@ -234,19 +233,6 @@ uno::Sequence< sal_Int32 > lcl_getNumberSequenceFromString( const ::rtl::OUStrin
 
 } // anonymous namespace
 
-static __FAR_DATA SvXMLEnumMapEntry aXMLLegendAlignmentMap[] =
-{
-//  { XML_LEFT,         chart::ChartLegendPosition_LEFT     },
-    // #i35421#
-    { XML_START,        chart::ChartLegendPosition_LEFT     },
-    { XML_TOP,          chart::ChartLegendPosition_TOP      },
-//  { XML_RIGHT,        chart::ChartLegendPosition_RIGHT    },
-    // #i35421#
-    { XML_END,          chart::ChartLegendPosition_RIGHT    },
-    { XML_BOTTOM,       chart::ChartLegendPosition_BOTTOM   },
-    { XML_TOKEN_INVALID, 0 }
-};
-
 // ----------------------------------------
 
 SchXMLChartContext::SchXMLChartContext( SchXMLImportHelper& rImpHelper,
@@ -289,7 +275,7 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
         rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
         rtl::OUString aLocalName;
         rtl::OUString aValue = xAttrList->getValueByIndex( i );
-        USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ))
         {
@@ -1031,7 +1017,7 @@ void SchXMLChartContext::MergeSeriesForStockChart()
 }
 
 SvXMLImportContext* SchXMLChartContext::CreateChildContext(
-    USHORT nPrefix,
+    sal_uInt16 nPrefix,
     const rtl::OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
@@ -1210,7 +1196,7 @@ void SchXMLTitleContext::StartElement( const uno::Reference< xml::sax::XAttribut
         rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
         rtl::OUString aLocalName;
         rtl::OUString aValue = xAttrList->getValueByIndex( i );
-        USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         if( nPrefix == XML_NAMESPACE_SVG )
         {
@@ -1255,7 +1241,7 @@ void SchXMLTitleContext::StartElement( const uno::Reference< xml::sax::XAttribut
 }
 
 SvXMLImportContext* SchXMLTitleContext::CreateChildContext(
-    USHORT nPrefix,
+    sal_uInt16 nPrefix,
     const rtl::OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& )
 {
@@ -1273,115 +1259,3 @@ SvXMLImportContext* SchXMLTitleContext::CreateChildContext(
 }
 
 // ----------------------------------------
-
-SchXMLLegendContext::SchXMLLegendContext( SchXMLImportHelper& rImpHelper,
-                                          SvXMLImport& rImport, const rtl::OUString& rLocalName ) :
-        SvXMLImportContext( rImport, XML_NAMESPACE_CHART, rLocalName ),
-        mrImportHelper( rImpHelper )
-{
-}
-
-void SchXMLLegendContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
-{
-    uno::Reference< chart::XChartDocument > xDoc = mrImportHelper.GetChartDocument();
-    if( ! xDoc.is())
-        return;
-
-    // turn on legend
-    uno::Reference< beans::XPropertySet > xDocProp( xDoc, uno::UNO_QUERY );
-    if( xDocProp.is())
-    {
-        uno::Any aTrueBool;
-        aTrueBool <<= (sal_Bool)(sal_True);
-        try
-        {
-            xDocProp->setPropertyValue( rtl::OUString::createFromAscii( "HasLegend" ), aTrueBool );
-        }
-        catch( beans::UnknownPropertyException )
-        {
-            DBG_ERROR( "Property HasLegend not found" );
-        }
-    }
-
-    // parse attributes
-    sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
-    const SvXMLTokenMap& rAttrTokenMap = mrImportHelper.GetLegendAttrTokenMap();
-
-    awt::Point aLegendPos;
-    bool bHasXPosition=false;
-    bool bHasYPosition=false;
-
-    rtl::OUString sAutoStyleName;
-
-    for( sal_Int16 i = 0; i < nAttrCount; i++ )
-    {
-        rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
-        rtl::OUString aLocalName;
-        rtl::OUString aValue = xAttrList->getValueByIndex( i );
-        USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-
-        switch( rAttrTokenMap.Get( nPrefix, aLocalName ))
-        {
-            case XML_TOK_LEGEND_POSITION:
-                {
-                    // set anchor position
-                    uno::Reference< beans::XPropertySet > xProp( xDoc->getLegend(), uno::UNO_QUERY );
-                    if( xProp.is())
-                    {
-                        try
-                        {
-                            USHORT nEnumVal;
-                            if( GetImport().GetMM100UnitConverter().convertEnum( nEnumVal, aValue, aXMLLegendAlignmentMap ))
-                            {
-                                uno::Any aAny;
-                                aAny <<= (chart::ChartLegendPosition)(nEnumVal);
-                                xProp->setPropertyValue( rtl::OUString::createFromAscii( "Alignment" ), aAny );
-                            }
-                        }
-                        catch( beans::UnknownPropertyException )
-                        {
-                            DBG_ERROR( "Property Alignment (legend) not found" );
-                        }
-                    }
-                }
-                break;
-
-            case XML_TOK_LEGEND_X:
-                GetImport().GetMM100UnitConverter().convertMeasure( aLegendPos.X, aValue );
-                bHasXPosition = true;
-                break;
-            case XML_TOK_LEGEND_Y:
-                GetImport().GetMM100UnitConverter().convertMeasure( aLegendPos.Y, aValue );
-                bHasYPosition = true;
-                break;
-            case XML_TOK_LEGEND_STYLE_NAME:
-                sAutoStyleName = aValue;
-        }
-    }
-
-    uno::Reference< drawing::XShape > xLegendShape( xDoc->getLegend(), uno::UNO_QUERY );
-    if( xLegendShape.is() && bHasXPosition && bHasYPosition )
-        xLegendShape->setPosition( aLegendPos );
-
-    // set auto-styles for Legend
-    uno::Reference< beans::XPropertySet > xProp( xLegendShape, uno::UNO_QUERY );
-    if( xProp.is())
-    {
-        // the fill style has the default "none" in XML, but "solid" in the model.
-        xProp->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FillStyle" )),
-                                 uno::makeAny( drawing::FillStyle_NONE ));
-        const SvXMLStylesContext* pStylesCtxt = mrImportHelper.GetAutoStylesContext();
-        if( pStylesCtxt )
-        {
-            const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(
-                mrImportHelper.GetChartFamilyID(), sAutoStyleName );
-
-            if( pStyle && pStyle->ISA( XMLPropStyleContext ))
-                (( XMLPropStyleContext* )pStyle )->FillPropertySet( xProp );
-        }
-    }
-}
-
-SchXMLLegendContext::~SchXMLLegendContext()
-{
-}

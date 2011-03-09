@@ -43,12 +43,12 @@ class XMLOFF_DLLPUBLIC XMLDocumentSettingsContext : public SvXMLImportContext
     ::std::auto_ptr< XMLDocumentSettingsContext_Data >  m_pData;
 
 public:
-    XMLDocumentSettingsContext(SvXMLImport& rImport, USHORT nPrfx, const rtl::OUString& rLName,
+    XMLDocumentSettingsContext(SvXMLImport& rImport, sal_uInt16 nPrfx, const rtl::OUString& rLName,
                                     const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::xml::sax::XAttributeList>& xAttrList);
     virtual ~XMLDocumentSettingsContext();
 
-    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                                     const rtl::OUString& rLocalName,
                                                     const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );

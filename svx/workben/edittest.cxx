@@ -153,7 +153,7 @@
 // VARS...
 short nRotation = 0;
 USHORT nZoom = 100;
-BOOL bURLClicked = FALSE;
+sal_Bool bURLClicked = sal_False;
 
 using namespace ::com::sun::star::connection;
 using namespace ::vos;

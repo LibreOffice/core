@@ -63,19 +63,19 @@ namespace svxform
             on the type of our document
         */
         SVX_DLLPUBLIC ::rtl::OUString
-                getToolboxResourceName( USHORT _nSlotId ) const;
+                getToolboxResourceName( sal_uInt16 _nSlotId ) const;
 
         /** toggles the toolbox associated with the given slot
         */
-        SVX_DLLPUBLIC void    toggleToolbox( USHORT _nSlotId ) const;
+        SVX_DLLPUBLIC void    toggleToolbox( sal_uInt16 _nSlotId ) const;
 
         /** determines whether the toolbox associated with the given slot is currently visible
         */
-        SVX_DLLPUBLIC bool    isToolboxVisible( USHORT _nSlotId ) const;
+        SVX_DLLPUBLIC bool    isToolboxVisible( sal_uInt16 _nSlotId ) const;
 
         /** ensures that a given toolbox is visible
         */
-        inline void showToolbox( USHORT _SlotId ) const
+        inline void showToolbox( sal_uInt16 _SlotId ) const
         {
             if ( !isToolboxVisible( _SlotId ) )
                 toggleToolbox( _SlotId );

@@ -114,21 +114,6 @@ enum SvxChartDataDescr
 
 #define CHDESCR_COUNT   (CHDESCR_TEXTANDVALUE + 1)
 
-enum SvxChartLegendPos
-{
-    CHLEGEND_NONE,
-    CHLEGEND_LEFT,
-    CHLEGEND_TOP,
-    CHLEGEND_RIGHT,
-    CHLEGEND_BOTTOM,
-    CHLEGEND_NONE_TOP,
-    CHLEGEND_NONE_LEFT,
-    CHLEGEND_NONE_RIGHT,
-    CHLEGEND_NONE_BOTTOM
-};
-
-#define CHLEGEND_COUNT  (CHLEGEND_BOTTOM + 1)
-
 enum SvxChartTextOrder
 {
     CHTXTORDER_SIDEBYSIDE,
@@ -192,13 +177,13 @@ class SVX_DLLPUBLIC SvxChartStyleItem : public SfxEnumItem
 public:
     TYPEINFO();
     SvxChartStyleItem(SvxChartStyle eStyle /*= CHSTYLE_2D_LINE*/,
-                      USHORT nId );
-    SvxChartStyleItem(SvStream& rIn, USHORT nId );
+                      sal_uInt16 nId );
+    SvxChartStyleItem(SvStream& rIn, sal_uInt16 nId );
 
     virtual SfxPoolItem* Clone(SfxItemPool* pPool = 0) const;
-    virtual SfxPoolItem* Create(SvStream& rIn, USHORT nVer) const;
+    virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const;
 
-    USHORT GetValueCount() const { return CHSTYLE_COUNT; }
+    sal_uInt16 GetValueCount() const { return CHSTYLE_COUNT; }
     SvxChartStyle GetValue() const
         { return (SvxChartStyle)SfxEnumItem::GetValue(); }
 };
@@ -210,16 +195,16 @@ class SVX_DLLPUBLIC SvxChartRegressItem : public SfxEnumItem
 public:
     TYPEINFO();
     SvxChartRegressItem(SvxChartRegress eRegress /*= CHREGRESS_LINEAR*/,
-                        USHORT nId );
-    SvxChartRegressItem(SvStream& rIn, USHORT nId );
+                        sal_uInt16 nId );
+    SvxChartRegressItem(SvStream& rIn, sal_uInt16 nId );
 
     virtual SfxPoolItem* Clone(SfxItemPool* pPool = 0) const;
-    virtual SfxPoolItem* Create(SvStream& rIn, USHORT nVer) const;
+    virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const;
 
-    USHORT GetValueCount() const { return CHREGRESS_COUNT; }
+    sal_uInt16 GetValueCount() const { return CHREGRESS_COUNT; }
     SvxChartRegress GetValue() const
         { return (SvxChartRegress)SfxEnumItem::GetValue(); }
-    USHORT GetVersion (USHORT nFileFormatVersion) const;
+    sal_uInt16 GetVersion (sal_uInt16 nFileFormatVersion) const;
 };
 
 //------------------------------------------------------------------
@@ -229,35 +214,16 @@ class SVX_DLLPUBLIC SvxChartDataDescrItem : public SfxEnumItem
 public:
     TYPEINFO();
     SvxChartDataDescrItem(SvxChartDataDescr eDataDescr /*= CHDESCR_NONE*/,
-                          USHORT nId );
+                          sal_uInt16 nId );
     SvxChartDataDescrItem(SvStream& rIn,
-                          USHORT nId );
+                          sal_uInt16 nId );
 
     virtual SfxPoolItem* Clone(SfxItemPool* pPool = 0) const;
-    virtual SfxPoolItem* Create(SvStream& rIn, USHORT nVer) const;
+    virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const;
 
-    USHORT GetValueCount() const { return CHDESCR_COUNT; }
+    sal_uInt16 GetValueCount() const { return CHDESCR_COUNT; }
     SvxChartDataDescr GetValue() const
         { return (SvxChartDataDescr)SfxEnumItem::GetValue(); }
-};
-
-//------------------------------------------------------------------
-
-class SVX_DLLPUBLIC SvxChartLegendPosItem : public SfxEnumItem
-{
-public:
-    TYPEINFO();
-    SvxChartLegendPosItem(SvxChartLegendPos eLegendPos /*= CHLEGEND_NONE*/,
-                          USHORT nId );
-    SvxChartLegendPosItem(SvStream& rIn,
-                          USHORT nId );
-
-    virtual SfxPoolItem* Clone(SfxItemPool* pPool = 0) const;
-    virtual SfxPoolItem* Create(SvStream& rIn, USHORT nVer) const;
-
-    USHORT GetValueCount() const { return CHLEGEND_COUNT; }
-    SvxChartLegendPos GetValue() const
-        { return (SvxChartLegendPos)SfxEnumItem::GetValue(); }
 };
 
 //------------------------------------------------------------------
@@ -267,17 +233,17 @@ class SVX_DLLPUBLIC SvxChartTextOrderItem : public SfxEnumItem
 public:
     TYPEINFO();
     SvxChartTextOrderItem(SvxChartTextOrder eOrder /*= CHTXTORDER_SIDEBYSIDE*/,
-                          USHORT nId );
+                          sal_uInt16 nId );
     SvxChartTextOrderItem(SvStream& rIn,
-                          USHORT nId );
+                          sal_uInt16 nId );
 
     virtual SfxPoolItem* Clone(SfxItemPool* pPool = 0) const;
-    virtual SfxPoolItem* Create(SvStream& rIn, USHORT nVer) const;
+    virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const;
 
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
-    USHORT GetValueCount() const { return CHTXTORDER_COUNT; }
+    sal_uInt16 GetValueCount() const { return CHTXTORDER_COUNT; }
     SvxChartTextOrder GetValue() const
         { return (SvxChartTextOrder)SfxEnumItem::GetValue(); }
 };
@@ -289,14 +255,14 @@ class SVX_DLLPUBLIC SvxChartTextOrientItem : public SfxEnumItem
 public:
     TYPEINFO();
     SvxChartTextOrientItem(SvxChartTextOrient /*eOrient = CHTXTORIENT_STANDARD*/,
-                           USHORT nId );
+                           sal_uInt16 nId );
     SvxChartTextOrientItem(SvStream& rIn,
-                           USHORT nId );
+                           sal_uInt16 nId );
 
     virtual SfxPoolItem* Clone(SfxItemPool* pPool = 0) const;
-    virtual SfxPoolItem* Create(SvStream& rIn, USHORT nVer) const;
+    virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const;
 
-    USHORT GetValueCount() const { return CHTXTORDER_COUNT; }
+    sal_uInt16 GetValueCount() const { return CHTXTORDER_COUNT; }
     SvxChartTextOrient GetValue() const
         { return (SvxChartTextOrient)SfxEnumItem::GetValue(); }
 };
@@ -308,18 +274,18 @@ class SVX_DLLPUBLIC SvxChartKindErrorItem : public SfxEnumItem
 public:
     TYPEINFO();
     SvxChartKindErrorItem(SvxChartKindError /*eOrient = CHERROR_NONE*/,
-                           USHORT nId );
+                           sal_uInt16 nId );
     SvxChartKindErrorItem(SvStream& rIn,
-                           USHORT nId );
+                           sal_uInt16 nId );
 
     virtual SfxPoolItem* Clone(SfxItemPool* pPool = 0) const;
-    virtual SfxPoolItem* Create(SvStream& rIn, USHORT nVer) const;
+    virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const;
 
-    USHORT GetValueCount() const { return CHERROR_COUNT; }
+    sal_uInt16 GetValueCount() const { return CHERROR_COUNT; }
     SvxChartKindError GetValue() const
         { return (SvxChartKindError)SfxEnumItem::GetValue(); }
 
-    USHORT GetVersion (USHORT nFileFormatVersion) const;
+    sal_uInt16 GetVersion (sal_uInt16 nFileFormatVersion) const;
 };
 
 //------------------------------------------------------------------
@@ -329,18 +295,18 @@ class SVX_DLLPUBLIC SvxChartIndicateItem : public SfxEnumItem
 public:
     TYPEINFO();
     SvxChartIndicateItem(SvxChartIndicate eOrient /*= CHINDICATE_NONE*/,
-                           USHORT nId );
+                           sal_uInt16 nId );
     SvxChartIndicateItem(SvStream& rIn,
-                           USHORT nId );
+                           sal_uInt16 nId );
 
     virtual SfxPoolItem* Clone(SfxItemPool* pPool = 0) const;
-    virtual SfxPoolItem* Create(SvStream& rIn, USHORT nVer) const;
+    virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const;
 
-    USHORT GetValueCount() const { return CHINDICATE_COUNT; }
+    sal_uInt16 GetValueCount() const { return CHINDICATE_COUNT; }
     SvxChartIndicate GetValue() const
         { return (SvxChartIndicate)SfxEnumItem::GetValue(); }
 
-    USHORT GetVersion (USHORT nFileFormatVersion) const;
+    sal_uInt16 GetVersion (sal_uInt16 nFileFormatVersion) const;
 };
 
 //------------------------------------------------------------------
@@ -351,13 +317,13 @@ class SVX_DLLPUBLIC SvxDoubleItem : public SfxPoolItem
 
 public:
     TYPEINFO();
-    SvxDoubleItem(double fValue /*= 0.0*/, USHORT nId );
-    SvxDoubleItem(SvStream& rIn, USHORT nId );
+    SvxDoubleItem(double fValue /*= 0.0*/, sal_uInt16 nId );
+    SvxDoubleItem(SvStream& rIn, sal_uInt16 nId );
     SvxDoubleItem(const SvxDoubleItem& rItem);
 
 
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
 
 
@@ -369,8 +335,8 @@ public:
 
     virtual int              operator == (const SfxPoolItem&) const;
     virtual SfxPoolItem* Clone(SfxItemPool *pPool = NULL) const;
-    virtual SfxPoolItem* Create(SvStream& rIn, USHORT nVersion) const;
-    virtual SvStream& Store(SvStream& rOut, USHORT nItemVersion ) const;
+    virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVersion) const;
+    virtual SvStream& Store(SvStream& rOut, sal_uInt16 nItemVersion ) const;
 
     virtual double GetMin() const;
     virtual double GetMax() const;
