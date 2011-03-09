@@ -6015,6 +6015,58 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
     return pSalLayout;
 }
 
+void OutputDevice::forceFallbackFontToFit(SalLayout &rFallback, ImplFontEntry &rFallbackFont,
+    ImplFontSelectData &rFontSelData, int nFallbackLevel,
+    ImplLayoutArgs& rLayoutArgs, const ImplFontMetricData& rOrigMetric) const
+{
+    Rectangle aBoundRect;
+    bool bHaveBounding = false;
+    Rectangle aRectangle;
+
+    rFallback.AdjustLayout( rLayoutArgs );
+
+    //All we care about here is getting the vertical bounds of this text and
+    //make sure it will fit inside the available space
+    Point aPos;
+    for( int nStart = 0;;)
+    {
+        sal_GlyphId nLGlyph;
+        if( !rFallback.GetNextGlyphs( 1, &nLGlyph, aPos, nStart ) )
+            break;
+
+        int nFontTag = nFallbackLevel << GF_FONTSHIFT;
+        nLGlyph |= nFontTag;
+
+        // get bounding rectangle of individual glyph
+        if( mpGraphics->GetGlyphBoundRect( nLGlyph, aRectangle ) )
+        {
+            // merge rectangle
+            aRectangle += aPos;
+            aBoundRect.Union( aRectangle );
+            bHaveBounding = true;
+        }
+    }
+
+    //Shrink it down if it won't fit
+    if (bHaveBounding)
+    {
+        long  nGlyphsAscent = -aBoundRect.Top();
+        float fScaleTop = nGlyphsAscent > rOrigMetric.mnAscent ?
+            rOrigMetric.mnAscent/(float)nGlyphsAscent : 1;
+        long  nGlyphsDescent = aBoundRect.Bottom();
+        float fScaleBottom = nGlyphsDescent > rOrigMetric.mnDescent ?
+            rOrigMetric.mnDescent/(float)nGlyphsDescent : 1;
+        float fScale = fScaleBottom < fScaleTop ? fScaleBottom : fScaleTop;
+        if (fScale < 1)
+        {
+            long nOrigHeight = rFontSelData.mnHeight;
+            rFontSelData.mnHeight *= fScale;
+            rFallbackFont.mnSetFontFlags = mpGraphics->SetFont( &rFontSelData, nFallbackLevel );
+            rFontSelData.mnHeight = nOrigHeight;
+        }
+    }
+}
+
 // -----------------------------------------------------------------------
 
 SalLayout* OutputDevice::ImplGlyphFallbackLayout( SalLayout* pSalLayout, ImplLayoutArgs& rLayoutArgs ) const
@@ -6072,22 +6124,7 @@ SalLayout* OutputDevice::ImplGlyphFallbackLayout( SalLayout* pSalLayout, ImplLay
             }
         }
 
-        ImplFontMetricData aSubstituteMetric(aFontSelData);
         pFallbackFont->mnSetFontFlags = mpGraphics->SetFont( &aFontSelData, nFallbackLevel );
-        mpGraphics->GetFontMetric(&aSubstituteMetric, nFallbackLevel);
-
-        long nOriginalHeight = aOrigMetric.mnAscent + aOrigMetric.mnDescent;
-        long nSubstituteHeight = aSubstituteMetric.mnAscent + aSubstituteMetric.mnDescent;
-        //Too tall, shrink it a bit. Need a better calculation to include extra
-        //factors and any extra wriggle room we might have available ?
-        if (nSubstituteHeight > nOriginalHeight)
-        {
-            float fScale = nOriginalHeight/(float)nSubstituteHeight;
-            long nOrigHeight = aFontSelData.mnHeight;
-            aFontSelData.mnHeight *= fScale;
-            pFallbackFont->mnSetFontFlags = mpGraphics->SetFont( &aFontSelData, nFallbackLevel );
-            aFontSelData.mnHeight = nOrigHeight;
-        }
 
         // create and add glyph fallback layout to multilayout
         rLayoutArgs.ResetPos();
@@ -6096,6 +6133,9 @@ SalLayout* OutputDevice::ImplGlyphFallbackLayout( SalLayout* pSalLayout, ImplLay
         {
             if( pFallback->LayoutText( rLayoutArgs ) )
             {
+                forceFallbackFontToFit(*pFallback, *pFallbackFont, aFontSelData,
+                    nFallbackLevel, rLayoutArgs, aOrigMetric);
+
                 if( !pMultiSalLayout )
                     pMultiSalLayout = new MultiSalLayout( *pSalLayout );
                 pMultiSalLayout->AddFallback( *pFallback,

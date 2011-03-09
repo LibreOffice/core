@@ -276,6 +276,8 @@ enum OutDevViewType { OUTDEV_VIEWTYPE_DONTKNOW, OUTDEV_VIEWTYPE_PRINTPREVIEW, OU
 
 class VirtualDevice;
 class Printer;
+class ImplFontSelectData;
+class ImplFontMetricData;
 
 const char* ImplDbgCheckOutputDevice( const void* pObj );
 
@@ -563,6 +565,9 @@ public:
     // Helper for line geometry paint with support for graphic expansion (pattern and fat_to_area)
     void impPaintLineGeometryWithEvtlExpand(const LineInfo& rInfo, basegfx::B2DPolyPolygon aLinePolyPolygon);
 
+    SAL_DLLPRIVATE void forceFallbackFontToFit(SalLayout &rFallback, ImplFontEntry &rFallbackFont,
+        ImplFontSelectData &rFontSelData, int nFallbackLevel,
+        ImplLayoutArgs& rLayoutArgs, const ImplFontMetricData& rOrigMetric) const;
 protected:
                         OutputDevice();
 
