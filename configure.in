@@ -6640,6 +6640,189 @@ AC_SUBST(USE_XINERAMA)
 AC_SUBST(XINERAMA_LINK)
 
 dnl ===================================================================
+dnl Test whether to build librsvg or rely on the system version
+dnl ===================================================================
+AC_MSG_CHECKING([whether to build own version of librsvg])
+
+case "$_os" in
+	WINNT*) # Windows
+	    SYSTEM_LIBRSVG=NO
+	    AC_MSG_RESULT([yes])
+		;;
+	Darwin*)
+	    SYSTEM_LIBRSVG=NO
+	    AC_MSG_RESULT([yes])
+	    ;;
+   *)
+   SYSTEM_LIBRSVG=YES
+   AC_MSG_RESULT([no])
+   ;;
+esac
+AC_SUBST(SYSTEM_LIBRSVG)
+
+dnl ===================================================================
+dnl Test whether to build gdk-pixbuf or rely on the system version
+dnl ===================================================================
+AC_MSG_CHECKING([whether to build own version of gdk-pixbuf])
+
+case "$_os" in
+	WINNT*) # Windows
+	    SYSTEM_GDKPIXBUF=NO
+	    AC_MSG_RESULT([yes])
+		;;
+	Darwin*)
+	    SYSTEM_GDKPIXBUF=NO
+	    AC_MSG_RESULT([yes])
+	    ;;
+   *)
+   SYSTEM_GDKPIXBUF=YES
+   AC_MSG_RESULT([no])
+   ;;
+esac
+AC_SUBST(SYSTEM_GDKPIXBUF)
+
+dnl ===================================================================
+dnl Test whether to build glib or rely on the system version
+dnl ===================================================================
+AC_MSG_CHECKING([whether to build own version of glib])
+
+case "$_os" in
+	WINNT*) # Windows
+	    SYSTEM_GLIB=NO
+	    AC_MSG_RESULT([yes])
+		;;
+	Darwin*)
+	    SYSTEM_GLIB=NO
+	    AC_MSG_RESULT([yes])
+	    ;;
+   *)
+   SYSTEM_GLIB=YES
+   AC_MSG_RESULT([no])
+   ;;
+esac
+AC_SUBST(SYSTEM_GLIB)
+
+dnl ===================================================================
+dnl Test whether to build gettext or rely on the system version
+dnl ===================================================================
+AC_MSG_CHECKING([whether to build own version of gettext])
+
+case "$_os" in
+	WINNT*) # Windows
+	    SYSTEM_GETTEXT=NO
+	    AC_MSG_RESULT([yes])
+		;;
+	Darwin*)
+	    SYSTEM_GETTEXT=NO
+	    AC_MSG_RESULT([yes])
+	    ;;
+   *)
+   SYSTEM_GETTEXT=YES
+   AC_MSG_RESULT([no])
+   ;;
+esac
+AC_SUBST(SYSTEM_GETTEXT)
+
+dnl ===================================================================
+dnl Test whether to build libcroco or rely on the system version
+dnl ===================================================================
+AC_MSG_CHECKING([whether to build own version of libcroco])
+
+case "$_os" in
+	WINNT*) # Windows
+	    SYSTEM_LIBCROCO=NO
+	    AC_MSG_RESULT([yes])
+		;;
+	Darwin*)
+	    SYSTEM_LIBCROCO=NO
+	    AC_MSG_RESULT([yes])
+	    ;;
+   *)
+   SYSTEM_LIBCROCO=YES
+   AC_MSG_RESULT([no])
+   ;;
+esac
+AC_SUBST(SYSTEM_LIBCROCO)
+
+dnl ===================================================================
+dnl Test whether to build pango or rely on the system version
+dnl ===================================================================
+AC_MSG_CHECKING([whether to build own version of pango])
+
+case "$_os" in
+	WINNT*) # Windows
+	    SYSTEM_PANGO=NO
+	    AC_MSG_RESULT([yes])
+		;;
+	Darwin*)
+	    SYSTEM_PANGO=NO
+	    AC_MSG_RESULT([yes])
+	    ;;
+   *)
+   SYSTEM_PANGO=YES
+   AC_MSG_RESULT([no])
+   ;;
+esac
+AC_SUBST(SYSTEM_PANGO)
+
+dnl ===================================================================
+dnl Test whether to build libpng or rely on the system version
+dnl ===================================================================
+AC_MSG_CHECKING([whether to build own version of libpng])
+
+case "$_os" in
+	WINNT*) # Windows
+	    SYSTEM_LIBPNG=NO
+	    AC_MSG_RESULT([yes])
+		;;
+	Darwin*)
+	    SYSTEM_LIBPNG=NO
+	    AC_MSG_RESULT([yes])
+	    ;;
+   *)
+   SYSTEM_LIBPNG=YES
+   AC_MSG_RESULT([no])
+   ;;
+esac
+AC_SUBST(SYSTEM_LIBPNG)
+
+dnl ===================================================================
+dnl Test whether to build libjpeg or rely on the system version
+dnl ===================================================================
+dnl FIXME: this is currently because we have jpeg-6b for our filters
+dnl        and jpeg-8 as dependency for librsvg
+dnl        this should be unified into using only one version for both
+
+AC_MSG_CHECKING([whether to build own version of libjpeg])
+
+if test "$SYSTEM_JPEG" == "YES"; then
+SYSTEM_LIBJPEG=YES
+else
+case "$_os" in
+	WINNT*) # Windows
+	    SYSTEM_LIBJPEG=NO
+	    AC_MSG_RESULT([yes])
+		;;
+	Darwin*)
+	    SYSTEM_LIBJPEG=NO
+	    AC_MSG_RESULT([yes])
+	    ;;
+   *)
+   SYSTEM_LIBJPEG=YES
+   AC_MSG_RESULT([no])
+   ;;
+esac
+fi
+
+if test "$SYSTEM_LIBJPEG" == "YES"; then
+   AC_MSG_RESULT([no])
+else
+   AC_MSG_RESULT([yes])
+fi
+AC_SUBST(SYSTEM_LIBJPEG)
+
+
+dnl ===================================================================
 dnl Test for the presence of Ant and that it works
 dnl ===================================================================
 
