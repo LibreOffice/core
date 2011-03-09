@@ -51,7 +51,7 @@ STDLIB1=$(SHLWAPILIB)
 .IF "$(LINK_SO)"=="TRUE"
 APP2TARGET=so$/guiloader
 APP2NOSAL=TRUE
-APP2ICON=$(SOLARRESDIR)$/icons/so9-main-app.ico
+APP2ICON=$(SOLARRESDIR)$/icons/so9_main_app.ico
 APP2OBJS=\
     $(OBJ)$/extendloaderenvironment.obj \
     $(OBJ)$/genericloader.obj \
