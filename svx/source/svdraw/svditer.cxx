@@ -37,46 +37,42 @@
 // #99190#
 #include <svx/scene3d.hxx>
 
-SdrObjListIter::SdrObjListIter(const SdrObjList& rObjList, SdrIterMode eMode, BOOL bReverse)
-:   maObjList(1024, 64, 64),
-    mnIndex(0L),
+SdrObjListIter::SdrObjListIter(const SdrObjList& rObjList, SdrIterMode eMode, bool bReverse)
+:   mnIndex(0L),
     mbReverse(bReverse)
 {
-    ImpProcessObjectList(rObjList, eMode, TRUE);
+    ImpProcessObjectList(rObjList, eMode, true);
     Reset();
 }
 
-SdrObjListIter::SdrObjListIter(const SdrObjList& rObjList, BOOL bUseZOrder, SdrIterMode eMode, BOOL bReverse)
-:   maObjList(1024, 64, 64),
-    mnIndex(0L),
+SdrObjListIter::SdrObjListIter(const SdrObjList& rObjList, bool bUseZOrder, SdrIterMode eMode, bool bReverse)
+:   mnIndex(0L),
     mbReverse(bReverse)
 {
     ImpProcessObjectList(rObjList, eMode, bUseZOrder);
     Reset();
 }
 
-SdrObjListIter::SdrObjListIter( const SdrObject& rObj, SdrIterMode eMode, BOOL bReverse )
-:   maObjList(1024, 64, 64),
-    mnIndex(0L),
+SdrObjListIter::SdrObjListIter( const SdrObject& rObj, SdrIterMode eMode, bool bReverse )
+:   mnIndex(0L),
     mbReverse(bReverse)
 {
     if ( rObj.ISA( SdrObjGroup ) )
-        ImpProcessObjectList(*rObj.GetSubList(), eMode, TRUE);
+        ImpProcessObjectList(*rObj.GetSubList(), eMode, true);
     else
-        maObjList.Insert( (void*)&rObj, LIST_APPEND );
+        maObjList.push_back(const_cast<SdrObject*>(&rObj));
     Reset();
 }
 
-SdrObjListIter::SdrObjListIter( const SdrMarkList& rMarkList, SdrIterMode eMode, BOOL bReverse )
-:   maObjList(1024, 64, 64),
-    mnIndex(0L),
+SdrObjListIter::SdrObjListIter( const SdrMarkList& rMarkList, SdrIterMode eMode, bool bReverse )
+:   mnIndex(0L),
     mbReverse(bReverse)
 {
     ImpProcessMarkList(rMarkList, eMode);
     Reset();
 }
 
-void SdrObjListIter::ImpProcessObjectList(const SdrObjList& rObjList, SdrIterMode eMode, BOOL bUseZOrder)
+void SdrObjListIter::ImpProcessObjectList(const SdrObjList& rObjList, SdrIterMode eMode, bool bUseZOrder)
 {
     for( ULONG nIdx = 0, nCount = rObjList.GetObjCount(); nIdx < nCount; ++nIdx )
     {
@@ -92,10 +88,10 @@ void SdrObjListIter::ImpProcessMarkList( const SdrMarkList& rMarkList, SdrIterMo
 {
     for( ULONG nIdx = 0, nCount = rMarkList.GetMarkCount(); nIdx < nCount; ++nIdx )
         if( SdrObject* pObj = rMarkList.GetMark( nIdx )->GetMarkedSdrObj() )
-            ImpProcessObj( pObj, eMode, FALSE );
+            ImpProcessObj( pObj, eMode, false );
 }
 
-void SdrObjListIter::ImpProcessObj(SdrObject* pObj, SdrIterMode eMode, BOOL bUseZOrder)
+void SdrObjListIter::ImpProcessObj(SdrObject* pObj, SdrIterMode eMode, bool bUseZOrder)
 {
     bool bIsGroup = pObj->IsGroupObject();
     // #99190# 3D objects are no group objects, IsGroupObject()
@@ -104,7 +100,7 @@ void SdrObjListIter::ImpProcessObj(SdrObject* pObj, SdrIterMode eMode, BOOL bUse
         bIsGroup = false;
 
     if( !bIsGroup || (eMode != IM_DEEPNOGROUPS) )
-        maObjList.Insert( pObj, LIST_APPEND );
+        maObjList.push_back(pObj);
 
     if( bIsGroup && (eMode != IM_FLAT) )
         ImpProcessObjectList( *pObj->GetSubList(), eMode, bUseZOrder );
