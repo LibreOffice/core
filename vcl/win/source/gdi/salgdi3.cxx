@@ -1393,7 +1393,6 @@ void ImplWinFontData::ReadOs2Table( HDC hDC ) const
         mbHasArabicSupport = (ulUnicodeRange1 & 0x00002000);
    }
 }
-
 // -----------------------------------------------------------------------
 
 void ImplWinFontData::ReadGsubTable( HDC hDC ) const
