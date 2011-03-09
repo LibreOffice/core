@@ -1,11 +1,12 @@
 --- misc/build/boost_1_44_0/libs/thread/src/win32/makefile.mk
 +++ misc/build/boost_1_44_0/libs/thread/src/win32/makefile.mk
-@@ -1,1 +1,20 @@
+@@ -1,1 +1,21 @@
 -dummy
 +PRJ=..$/..$/..$/..$/..$/..$/..$/..
 +
 +PRJNAME=boostthread
 +TARGET=boostthread
++ENABLE_EXCEPTIONS=TRUE
 +LIBTARGET=NO
 +
 +.IF "$(GUI)"=="WNT"
