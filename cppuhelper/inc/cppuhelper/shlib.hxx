@@ -66,6 +66,8 @@ SAL_CALL loadSharedLibComponentFactory(
     directory.  The resulting path of the library will be checked against environment variable
     CPLD_ACCESSPATH if set.
 
+    @obsolete component_writeInfo should no longer be used in new components
+
     @param rLibName name of the library
     @param rPath optional path
     @param xMgr service manager to be provided to the component

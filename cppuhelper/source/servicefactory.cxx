@@ -29,13 +29,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_cppuhelper.hxx"
 
-#if OSL_DEBUG_LEVEL > 0
-#include <stdio.h>
-#endif
 #include <vector>
 
 #include "rtl/string.hxx"
-#include "rtl/ustrbuf.hxx"
 #include "rtl/bootstrap.hxx"
 #include "osl/diagnose.h"
 #include "osl/file.h"
@@ -47,6 +43,7 @@
 #include "cppuhelper/servicefactory.hxx"
 #include "cppuhelper/bootstrap.hxx"
 
+#include "com/sun/star/uno/DeploymentException.hpp"
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/lang/XInitialization.hpp"
 #include "com/sun/star/lang/XSingleServiceFactory.hpp"
@@ -65,6 +62,7 @@ using namespace ::rtl;
 using namespace ::osl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+namespace css = com::sun::star;
 
 namespace cppu
 {
@@ -418,39 +416,42 @@ Reference< XComponentContext > bootstrapInitialContext(
                     keys.getConstArray();
                 for ( sal_Int32 nPos = keys.getLength(); nPos--; )
                 {
-                    Reference< registry::XRegistryKey > const & xKey2 =
-                        pKeys[ nPos ];
-                    try
-                    {
-                        OUStringBuffer buf( 32 );
-                        buf.appendAscii(
-                            RTL_CONSTASCII_STRINGPARAM("/singletons/") );
-                        buf.append(
-                            xKey2->getKeyName().copy(
-                                sizeof("/SINGLETONS") /* -\0 +'/' */ ) );
-                        entry.name = buf.makeStringAndClear();
-                        entry.value <<= xKey2->getStringValue();
-                        context_values.push_back( entry );
+                    css::uno::Sequence< rtl::OUString > impls(
+                        css::uno::Reference< css::registry::XRegistryKey >(
+                            pKeys[nPos]->openKey(
+                                rtl::OUString(
+                                    RTL_CONSTASCII_USTRINGPARAM(
+                                        "REGISTERED_BY"))),
+                            css::uno::UNO_SET_THROW)->getAsciiListValue());
+                    switch (impls.getLength()) {
+                    case 0:
+                        throw css::uno::DeploymentException(
+                            (pKeys[nPos]->getKeyName() +
+                             rtl::OUString(
+                                 RTL_CONSTASCII_USTRINGPARAM(
+                                     "/REGISTERED_BY is empty"))),
+                            css::uno::Reference< css::uno::XInterface >());
+                    case 1:
+                        break;
+                    default:
+                        OSL_TRACE(
+                            ("arbitrarily chosing \"%s\" among multiple"
+                             " implementations for \"%s\""),
+                            rtl::OUStringToOString(
+                                impls[0], RTL_TEXTENCODING_UTF8).getStr(),
+                            rtl::OUStringToOString(
+                                pKeys[nPos]->getKeyName(),
+                                RTL_TEXTENCODING_UTF8).getStr());
+                        break;
                     }
-                    catch (Exception & rExc)
-                    {
-#if OSL_DEBUG_LEVEL > 0
-                        OString aStr(
-                            OUStringToOString(
-                                xKey2->getKeyName().copy( 11 ),
-                                RTL_TEXTENCODING_ASCII_US ) );
-                        OString aStr2(
-                            OUStringToOString(
-                                rExc.Message, RTL_TEXTENCODING_ASCII_US ) );
-                        fprintf(
-                            stderr,
-                            "### failed reading singleton [%s]"
-                            " service name from registry: %s\n",
-                            aStr.getStr(), aStr2.getStr() );
-#else
-                        (void) rExc; // avoid warning about unused variable
-#endif
-                    }
+                    context_values.push_back(
+                        ContextEntry_Init(
+                            (rtl::OUString(
+                                RTL_CONSTASCII_USTRINGPARAM("/singletons/")) +
+                             pKeys[nPos]->getKeyName().copy(
+                                 RTL_CONSTASCII_LENGTH("/SINGLETONS/"))),
+                            css::uno::makeAny(impls[0]),
+                            true));
                 }
             }
         }

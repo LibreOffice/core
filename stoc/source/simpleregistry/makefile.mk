@@ -39,7 +39,8 @@ UNOUCROUT=$(OUT)$/inc$/bootstrap
 # ------------------------------------------------------------------
 
 SLOFILES= \
-        $(SLO)$/simpleregistry.obj
+    $(SLO)/simpleregistry.obj \
+    $(SLO)/textualservices.obj
 
 # --- Targets ------------------------------------------------------
 

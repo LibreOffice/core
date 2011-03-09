@@ -381,9 +381,15 @@ SAL_CALL defaultBootstrap_InitialComponentContext(
     Bootstrap const & bootstrap )
     SAL_THROW( (Exception) )
 {
-    OUString bootstrapPath( get_this_libpath() );
-    OUString iniDir;
+    OUString bootstrapPath;
+    if (!bootstrap.getFrom(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URE_INTERNAL_LIB_DIR")),
+            bootstrapPath))
+    {
+        bootstrapPath = get_this_libpath();
+    }
 
+    OUString iniDir;
     osl_getProcessWorkingDir(&iniDir.pData);
 
     Reference<lang::XMultiComponentFactory> smgr_XMultiComponentFactory(

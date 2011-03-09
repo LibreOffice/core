@@ -33,6 +33,8 @@
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 
+#include "printtrace.h"
+
 #define NO_DEBUG_CRT
 
 static pfunc_osl_printDebugMessage  _pPrintDebugMessage = NULL;
@@ -62,45 +64,21 @@ void SAL_CALL osl_breakDebug(void)
     DebugBreak();
 }
 
-
-
-/* Uncomment this define to get profiling time output */
-/* #define OSL_PROFILING */
-/* comment this define to stop output thread identifier*/
-#define OSL_TRACE_THREAD 1
-void SAL_CALL osl_trace(const sal_Char* lpszFormat, ...)
-{
+void osl_trace(char const * pszFormat, ...) {
     va_list args;
-
-    va_start(args, lpszFormat);
-
-#if defined(OSL_PROFILING)
-    fprintf(stderr, "time : %06lu : ", osl_getGlobalTimer() );
-#else
-#if defined(OSL_TRACE_THREAD)
-    fprintf(stderr,"Thread: %6d :",osl_getThreadIdentifier(NULL));
-#else
-    fprintf(stderr,"Trace Message : ");
-#endif
-#endif
-
+    va_start(args, pszFormat);
     if ( IsDebuggerPresent() )
     {
         sal_Char    szMessage[512];
-        int written = _vsnprintf( szMessage, sizeof(szMessage) - 2, lpszFormat, args );
+        int written = _vsnprintf(
+            szMessage, sizeof(szMessage) - 2, pszFormat, args );
         if ( written == -1 )
             written = sizeof(szMessage) - 2;
         szMessage[ written++ ] = '\n';
         szMessage[ written ] = 0;
         OutputDebugString( szMessage );
     }
-
-    vfprintf(stderr,lpszFormat, args);
-
-    fprintf(stderr,"\n");
-
-    fflush(stderr);
-
+    printTrace((unsigned long) _getpid(), pszFormat, args);
     va_end(args);
 }
 

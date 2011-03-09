@@ -1,0 +1,82 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_script_XDirectInvocation_idl__
+#define __com_sun_star_script_XDirectInvocation_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+
+#ifndef __com_sun_star_script_CannotConvertException_idl__
+#include <com/sun/star/script/CannotConvertException.idl>
+#endif
+
+#ifndef __com_sun_star_reflection_InvocationTargetException_idl__
+#include <com/sun/star/reflection/InvocationTargetException.idl>
+#endif
+
+#ifndef __com_sun_star_beans_UnknownPropertyException_idl__
+#include <com/sun/star/beans/UnknownPropertyException.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module script {
+
+//=============================================================================
+/** provides access to an object's methods and properties.
+ */
+published interface XDirectInvocation: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    /** provides access to methods and properties exposed by an object.
+
+        @param aParams all parameters, out parameters are not supported
+     */
+    any directInvoke( [in] string aName,
+             [in] sequence<any> aParams )
+            raises( com::sun::star::lang::IllegalArgumentException,
+                    com::sun::star::script::CannotConvertException,
+                    com::sun::star::reflection::InvocationTargetException );
+
+    //-------------------------------------------------------------------------
+    /** returns <TRUE/> if the method or property with the specified name exists, else <FALSE/>.
+     */
+    boolean hasMember( [in] string aName );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

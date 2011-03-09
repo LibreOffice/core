@@ -55,6 +55,18 @@
 #include <com/sun/star/chart/ChartAxisMarkPosition.idl>
 #endif
 
+#ifndef __com_sun_star_chart_ChartAxisType_idl__
+#include <com/sun/star/chart/ChartAxisType.idl>
+#endif
+
+#ifndef __com_sun_star_chart_TimeIncrement_idl__
+#include <com/sun/star/chart/TimeIncrement.idl>
+#endif
+
+#ifndef __com_sun_star_chart_XAxis_idl__
+#include <com/sun/star/chart/XAxis.idl>
+#endif
+
 #ifndef _com_sun_star_xml_UserDefinedAttributeSupplier_idl_
 #include <com/sun/star/xml/UserDefinedAttributeSupplier.idl>
 #endif
@@ -72,8 +84,6 @@
  */
 published service ChartAxis
 {
-
-
     /** set the properties for the entire axis line as well as for the
         tick marks.
      */
@@ -83,13 +93,18 @@ published service ChartAxis
      */
     service com::sun::star::style::CharacterProperties;
 
-        /** If a <type>ChartAxis</type> may be stored as XML element, this
-            service should be supported in order to preserve unparsed XML
-            attributes.
+    /** If a <type>ChartAxis</type> may be stored as XML element, this
+        service should be supported in order to preserve unparsed XML
+        attributes.
 
         @since OOo 1.1.2
      */
     [optional] service com::sun::star::xml::UserDefinedAttributeSupplier;
+
+    /** Access to the sub elements of an axis like title and grids.
+        @since OOo 3.4
+     */
+    [optional] interface com::sun::star::chart::XAxis;
 
     interface com::sun::star::beans::XPropertySet;
 
@@ -166,6 +181,20 @@ published service ChartAxis
         not (linear).
      */
     [optional, property] boolean Logarithmic;
+
+    //-------------------------------------------------------------------------
+
+    /** determines which type of axis this is, e.g. a date-axis or a category-axis @see ChartAxisType
+        @since OOo 3.4
+     */
+    [optional, property] long AxisType;
+
+    //-------------------------------------------------------------------------
+
+    /** if the current axis is a date-axis the intervals are choosen as given with TimeIncrement
+        @since OOo 3.4
+     */
+    [optional, maybevoid, property] TimeIncrement TimeIncrement;
 
     //-------------------------------------------------------------------------
 

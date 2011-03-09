@@ -196,6 +196,34 @@ private:
     */
     boost::optional< ::std::vector< ::rtl::OUString> > m_JRELocations;
 
+    /** Only in INSTALL mode. Then NodeJava.write writes a <modified> element
+        which contains the seconds value of the TimeValue (osl/time.h), obtained
+        with osl_getSystemTime.
+        It returns 0 if the value cannot be obtained.
+        This is used to fix the problem that the modified time of the settings
+        file is incorrect because it resides on an NFS volume where the NFS
+        server and NFS client do not have the same system time. For example if
+        the server time is ahead of the client time then checkSettingsFileStatus
+        deleted the settings. So even if javaldx determined a Java
+        (jfw_findAndSelectJRE) then jfw_startVM returned a JFW_E_NO_SELECT. Then
+        it looked again for a java by calling jfw_findAndSelectJRE, which
+        returned a JFW_E_NONE. But the following jfw_startVM returned again
+        JFW_E_NO_SELECT. So it looped. (see issue i114509)
+
+        NFS server and NFS client should have the same time. It is common
+        practise to enforce this in networks. We actually should not work
+        around a malconfigured network. We must however, make sure that we do
+        not loop. Maybe a better approach is, that:
+        - assume that mtime and system time are reliable
+        - checkSettingsFile uses system time and mtime of the settings file,
+        instset of using getModifiedTime.
+        - allow a small error margin
+        - jfw_startVM must return a JFW_E_EXPIRED_SETTINGS
+        - XJavaVM::startVM should prevent the loop by processing the new return+        value
+
+    */
+    sal_uInt32 getModifiedTime() const;
+
 public:
 
     NodeJava(Layer theLayer = USER_OR_INSTALL);

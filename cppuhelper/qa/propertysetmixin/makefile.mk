@@ -37,6 +37,8 @@ PACKAGE = test/cppuhelper/propertysetmixin/comp
 
 ENABLE_EXCEPTIONS := TRUE
 
+my_components = $(TARGET).cpp $(TARGET).java
+
 .INCLUDE: settings.mk
 
 .IF "$(OS)" == "WNT"
@@ -75,51 +77,62 @@ JARFILES = java_uno.jar juh.jar jurt.jar ridl.jar
 ALLTAR: test
 
 $(MISC)/$(TARGET)/types.urd: types.idl
-    - $(MKDIR) $(@:d)
+    $(MKDIRHIER) $(@:d)
     $(IDLC) -O$(@:d) -I$(SOLARIDLDIR) -cid -we $<
 
 $(MISC)/$(TARGET)/types.rdb: $(MISC)/$(TARGET)/types.urd
     - $(RM) $@
     $(REGMERGE) $@ /UCR $<
 
-$(MISC)/$(TARGET)/uno.rdb: $(MISC)/$(TARGET)/types.rdb $(SHL2TARGETN) \
-        $(MISC)/$(TARGET)/$(TARGET).uno.jar $(MISC)/$(TARGET)/bootstrap.rdb
-    - $(MKDIR) $(@:d)
-    $(COPY) $(SOLARBINDIR)/types.rdb $@
-    $(REGMERGE) $@ / $(MISC)/$(TARGET)/types.rdb
-    $(REGCOMP) -register -r $@ -wop -c javaloader.uno -c javavm.uno \
-        -c reflection.uno -c stocservices.uno -c $(SHL2TARGETN)
-    $(REGCOMP) -register -br $(MISC)/$(TARGET)/bootstrap.rdb -r $@ \
-        -c $(my_file)$(PWD)/$(MISC)/$(TARGET)/$(TARGET).uno.jar \
-        -env:URE_INTERNAL_JAVA_DIR=$(my_file)$(SOLARBINDIR)
-
-$(MISC)/$(TARGET)/bootstrap.rdb:
-    - $(MKDIR) $(@:d)
-    $(COPY) $(SOLARBINDIR)/types.rdb $@
-    $(REGCOMP) -register -r $@ -wop -c javaloader.uno -c javavm.uno \
-        -c stocservices.uno
-
 $(MISC)/$(TARGET)/cppumaker.flag: $(MISC)/$(TARGET)/types.rdb
     $(CPPUMAKER) -O$(MISC)/$(TARGET)/inc -BUCR -Gc \
-        -X$(SOLARBINDIR)/types.rdb $<
+        -X$(SOLARBINDIR)/udkapi.rdb $<
     $(TOUCH) $@
 
 $(SLOFILES): $(MISC)/$(TARGET)/cppumaker.flag
 
 $(MISC)/$(TARGET)/javamaker.flag: $(MISC)/$(TARGET)/types.rdb
-    $(JAVAMAKER) -O$(CLASSDIR) -BUCR -nD -Gc -X$(SOLARBINDIR)/types.rdb $<
+    $(JAVAMAKER) -O$(CLASSDIR) -BUCR -nD -Gc -X$(SOLARBINDIR)/udkapi.rdb $<
     $(TOUCH) $@
 
 $(JAVATARGET): $(MISC)/$(TARGET)/javamaker.flag
+
+$(MISC)/$(TARGET)/services.rdb .ERRREMOVE: $(SOLARENV)/bin/packcomponents.xslt \
+        $(MISC)/$(TARGET)/services.input \
+        $(my_components:^"$(MISC)/$(TARGET)/":+".component")
+    $(XSLTPROC) --nonet --stringparam prefix $(PWD)/$(MISC)/$(TARGET)/ -o $@ \
+        $(SOLARENV)/bin/packcomponents.xslt $(MISC)/$(TARGET)/services.input
+
+$(MISC)/$(TARGET)/services.input:
+    $(MKDIRHIER) $(@:d)
+    echo \
+        '<list>$(my_components:^"<filename>":+".component</filename>")</list>' \
+        > $@
+
+$(MISC)/$(TARGET)/$(TARGET).cpp.component .ERRREMOVE: \
+        $(SOLARENV)/bin/createcomponent.xslt $(TARGET).cpp.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_INBUILD_NATIVE)$(SHL2TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt $(TARGET).cpp.component
+
+$(MISC)/$(TARGET)/$(TARGET).java.component .ERRREMOVE: \
+        $(SOLARENV)/bin/createcomponent.xslt $(TARGET).java.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_INBUILD_JAVA)$(TARGET).uno.jar' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt $(TARGET).java.component
 
 $(MISC)/$(TARGET)/$(TARGET).uno.jar: $(JAVATARGET) \
         $(MISC)/$(TARGET)/javamaker.flag manifest
     jar cfm $@ manifest -C $(CLASSDIR) test/cppuhelper/propertysetmixin
 
-test .PHONY: $(SHL1TARGETN) $(MISC)/$(TARGET)/uno.rdb
+test .PHONY: $(SHL1TARGETN) $(SHL2TARGETN) $(MISC)/$(TARGET)/$(TARGET).uno.jar \
+        $(MISC)/$(TARGET)/types.rdb $(MISC)/$(TARGET)/services.rdb
     $(CPPUNITTESTER) $(SHL1TARGETN) \
-        -env:URE_INTERNAL_JAVA_DIR=$(my_file)$(SOLARBINDIR) \
+        '-env:UNO_TYPES=$(my_file)$(SOLARBINDIR)/udkapi.rdb $(my_file)$(PWD)/$(MISC)/$(TARGET)/types.rdb' \
+        '-env:UNO_SERVICES=$(my_file)$(SOLARXMLDIR)/ure/services.rdb $(my_file)$(PWD)/$(MISC)/$(TARGET)/services.rdb'\
         -env:URE_INTERNAL_LIB_DIR=$(my_file)$(SOLARSHAREDBIN) \
-        -env:arg-reg=$(MISC)/$(TARGET)/uno.rdb -env:arg-path=$(SOLARSHAREDBIN)
+        -env:URE_INTERNAL_JAVA_DIR=$(my_file)$(SOLARBINDIR) \
+        -env:OOO_INBUILD_SHAREDLIB_DIR=$(my_file)$(PWD)/$(DLLDEST) \
+        -env:OOO_INBUILD_JAR_DIR=$(my_file)$(PWD)/$(MISC)/$(TARGET)
 
 .END

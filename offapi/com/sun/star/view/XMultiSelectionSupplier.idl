@@ -66,7 +66,7 @@ interface XMultiSelectionSupplier: XSelectionSupplier
             added to the current selection. For example, if the selection already contains
             objects that are forbidden to be selected together with <var>Selection</var>
 
-        @raises com::sun::star::lang::IllegalArgumentException
+        @throws com::sun::star::lang::IllegalArgumentException
             If <var>Selection</var> is not a selectable object for this <type>XMultiSelectionSupplier</type>.
             <p>Adding an object to the selection that is already part of the selection should not raise this exception</p>
      */
@@ -87,7 +87,7 @@ interface XMultiSelectionSupplier: XSelectionSupplier
             added to the current selection. For example, if the selection already contains
             objects that are forbidden to be selected together with <var>Selection</var>.
 
-        @raises com::sun::star::lang::IllegalArgumentException
+        @throws com::sun::star::lang::IllegalArgumentException
             If <var>Selection</var> is not a selectable object for this <type>XMultiSelectionSupplier</type>.
             <p>Removing an object from the selection that is not part of the selection should not raise this exception</p>
      */

@@ -1,0 +1,165 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_embed_XStorage2_idl__
+#define __com_sun_star_embed_XStorage2_idl__
+
+#ifndef __com_sun_star_embed_XStorage_idl__
+#include <com/sun/star/embed/XStorage.idl>
+#endif
+
+#ifndef __com_sun_star_beans_NamedValue_idl__
+#include <com/sun/star/beans/NamedValue.idl>
+#endif
+
+
+//============================================================================
+
+ module com {  module sun {  module star {  module embed {
+
+//============================================================================
+/** This interface extends the base XStorage interface.
+ */
+interface XStorage2 : XStorage
+{
+    // -----------------------------------------------------------------------
+    /** allows to get access to a child encrypted stream with EncryptionData.
+
+        <p>
+        If storage does not allow any encryption this method will always throw
+        <type scope="com::sun::star::packages">NoEncryptionException</type>.
+        </p>
+
+        <p>
+        In case the stream is open in readonly mode the
+        <method scope="com::sun::star::io">XStream::getOutputStream</method>
+        method will return an empty reference.
+        </p>
+
+        @param sStreamName
+            the name of the substream that should be open
+
+        @param nOpenMode
+            a mode the stream should be open in,
+            can be a combination of <type>ElementModes</type> values
+
+        @param aEncryptionData
+            this parameter allowes to specify an encryption data to decrypt the
+            stream, the encryption data must be correct, otherwise an
+            exception will be thrown
+
+        @throws ::com::sun::star::embed::InvalidStorageException
+            this storage is in invalid state for any reason
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            one of provided arguments is illegal
+
+        @throws ::com::sun::star::packages::NoEncryptionException
+            the stream is not encrypted
+
+        @throws ::com::sun::star::packages::WrongPasswordException
+            the provided encryption data is wrong
+
+        @throws ::com::sun::star::io::IOException
+            in case of io errors during stream opening
+
+        @throws ::com::sun::star::embed::StorageWrappedTargetException
+            wraps other exceptions
+     */
+    ::com::sun::star::io::XStream  openEncryptedStream(
+            [in] string sStreamName,
+            [in] long nOpenMode,
+            [in] sequence< ::com::sun::star::beans::NamedValue > aEncryptionData )
+        raises( ::com::sun::star::embed::InvalidStorageException,
+                ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::packages::NoEncryptionException,
+                ::com::sun::star::packages::WrongPasswordException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::embed::StorageWrappedTargetException );
+
+    // -----------------------------------------------------------------------
+    /** allows to get readonly copy of a child encrypted stream with encryption
+        data.
+
+        <p>
+        If storage does not allow any encryption this method will always throw
+        <type scope="com::sun::star::packages">NoEncryptionException</type>.
+        </p>
+
+        <p>
+        The stream is open in readonly mode so the
+        <method scope="com::sun::star::io">XStream::getOutputStream</method>
+        method will return an empty reference.
+        </p>
+
+        <p>
+        This method allows to specify encryption data for the child stream
+        explicitly.
+        </p>
+
+        @param sStreamName
+            the name of the substream that should be copied
+
+        @param aEncryptionData
+            this parameter allowes to specify an encryption data for the
+            stream, the encryption data must be correct, otherwise an
+            exception will be thrown
+
+        @throws ::com::sun::star::embed::InvalidStorageException
+            this storage is in invalid state for any reason
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            one of provided arguments is illegal
+
+        @throws ::com::sun::star::packages::NoEncryptionException
+            the stream is not encrypted
+
+        @throws ::com::sun::star::packages::WrongPasswordException
+            the provided encryption data is wrong
+
+        @throws ::com::sun::star::io::IOException
+            in case of io errors during stream opening
+
+        @throws ::com::sun::star::embed::StorageWrappedTargetException
+            wraps other exceptions
+     */
+    ::com::sun::star::io::XStream cloneEncryptedStream(
+            [in] string sStreamName,
+            [in] sequence< ::com::sun::star::beans::NamedValue > aEncryptionData )
+        raises( ::com::sun::star::embed::InvalidStorageException,
+                ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::packages::NoEncryptionException,
+                ::com::sun::star::packages::WrongPasswordException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::embed::StorageWrappedTargetException );
+};
+
+//============================================================================
+
+}; }; }; };
+
+#endif
+

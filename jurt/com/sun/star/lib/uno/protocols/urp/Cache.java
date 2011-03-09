@@ -52,7 +52,7 @@ final class Cache {
         if (e == null) {
             if (map.size() < maxSize) {
                 // There is still room for a new entry at the front:
-                e = new Entry(content, map.size(), last, null);
+                e = new Entry(content, map.size(), null, first);
                 if (first == null) {
                     last = e;
                 } else {

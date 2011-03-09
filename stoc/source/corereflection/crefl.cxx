@@ -31,7 +31,6 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/implementationentry.hxx>
 
-#include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/reflection/XTypeDescription.hpp>
 #include "com/sun/star/uno/RuntimeException.hpp"
@@ -182,8 +181,6 @@ void IdlReflectionServiceImpl::dispose()
 
     MutexGuard aGuard( _aComponentMutex );
     _aElements.clear();
-    _xTDMgr.clear();
-    _xMgr.clear();
 #ifdef TEST_LIST_CLASSES
     OSL_ENSURE( g_aClassNames.size() == 0, "### idl classes still alive!" );
     ClassNameList::const_iterator iPos( g_aClassNames.begin() );
@@ -509,35 +506,6 @@ void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-//==================================================================================================
-sal_Bool SAL_CALL component_writeInfo(
-    void * pServiceManager, void * pRegistryKey )
-{
-    if (component_writeInfoHelper( pServiceManager, pRegistryKey, g_entries ))
-    {
-        try
-        {
-            // register singleton
-            registry::XRegistryKey * pKey =
-                reinterpret_cast< registry::XRegistryKey * >( pRegistryKey );
-            Reference< registry::XRegistryKey > xKey(
-                pKey->createKey(
-                    OUSTR(IMPLNAME "/UNO/SINGLETONS/com.sun.star.reflection.theCoreReflection") ) );
-            xKey->setStringValue( OUSTR("com.sun.star.reflection.CoreReflection") );
-            return sal_True;
-        }
-        catch (Exception & exc)
-        {
-#if OSL_DEBUG_LEVEL > 0
-            OString cstr( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
-            OSL_ENSURE( 0, cstr.getStr() );
-#else
-            (void) exc; // unused
-#endif
-        }
-    }
-    return sal_False;
 }
 //==================================================================================================
 void * SAL_CALL component_getFactory(

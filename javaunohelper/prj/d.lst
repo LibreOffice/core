@@ -2,5 +2,6 @@
 ..\%__SRC%\bin\juh*.dll %_DEST%\bin%_EXT%\juh*.dll
 ..\%__SRC%\lib\libjuh*.so %_DEST%\lib%_EXT%\libjuh*.so
 ..\%__SRC%\lib\libjuh*.dylib %_DEST%\lib%_EXT%\libjuh*.dylib
+..\%__SRC%\misc\juh.component %_DEST%\xml%_EXT%\juh.component
 
 ..\%__SRC%\bin\juh_src.zip %COMMON_DEST%\bin%_EXT%\juh_src.zip

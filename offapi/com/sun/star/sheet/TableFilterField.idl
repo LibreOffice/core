@@ -28,13 +28,8 @@
 #ifndef __com_sun_star_sheet_TableFilterField_idl__
 #define __com_sun_star_sheet_TableFilterField_idl__
 
-#ifndef __com_sun_star_sheet_FilterConnection_idl__
 #include <com/sun/star/sheet/FilterConnection.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_FilterOperator_idl__
 #include <com/sun/star/sheet/FilterOperator.idl>
-#endif
 
 //=============================================================================
 
@@ -44,7 +39,7 @@ module com {  module sun {  module star {  module sheet {
 
 /** describes a single condition in a filter descriptor.
 
-    @see com::sun::star::sheet::SheetFilterDescriptor
+    @see SheetFilterDescriptor
  */
 published struct TableFilterField
 {
@@ -52,7 +47,7 @@ published struct TableFilterField
 
     /** specifies how the condition is connected to the previous condition.
      */
-    com::sun::star::sheet::FilterConnection Connection;
+    FilterConnection Connection;
 
     //-------------------------------------------------------------------------
 
@@ -64,7 +59,7 @@ published struct TableFilterField
 
     /** specifies the type of the condition.
      */
-    com::sun::star::sheet::FilterOperator Operator;
+    FilterOperator Operator;
 
     //-------------------------------------------------------------------------
 

@@ -28,19 +28,11 @@
 #define __com_sun_star_awt_grid_UnoControlGridModel_idl__
 
 #include <com/sun/star/awt/grid/XGridColumnModel.idl>
-
 #include <com/sun/star/awt/grid/XGridDataModel.idl>
-
-#include <com/sun/star/awt/grid/ScrollBarMode.idl>
-
 #include <com/sun/star/awt/UnoControlModel.idl>
-
 #include <com/sun/star/view/SelectionType.idl>
-
 #include <com/sun/star/awt/FontDescriptor.idl>
-
 #include <com/sun/star/style/VerticalAlignment.idl>
-
 #include <com/sun/star/util/Color.idl>
 
 //=============================================================================
@@ -49,7 +41,7 @@ module com {  module sun {  module star {  module awt { module grid {
 
 //=============================================================================
 
-/** specifies the standard model of a <type>UnoControlGridModel</type>.
+/** specifies the standard model of a <type>UnoControlGrid</type> control.
 
     @since OOo 3.3.0
  */
@@ -59,19 +51,51 @@ service UnoControlGridModel
     service com::sun::star::awt::UnoControlModel;
 
     /** Specifies whether the grid control should display a special header column.
-        <p>The default value is <FALSE/></p>
+
+    <p>The default value is <FALSE/></p>
     */
     [property] boolean ShowRowHeader;
 
+    /** specifies the width of the row header column, if applicable.
+
+        <p>The width is specified in application font units - see <type scope="com::sun::star::util">MeasureUnit</type>.</p>
+
+        <p>The value given here is ignored if <member>ShowRowHeader</member> is <FALSE/>.</p>
+    */
+    [property] long RowHeaderWidth;
+
     /** Specifies whether the grid control should display a title row.
-        <p>The default value is <TRUE/></p>
+
+    <p>The default value is <TRUE/></p>
     */
     [property] boolean ShowColumnHeader;
+
+    /** specifies the height of the column header row, if applicable.
+
+        <p>The height is specified in application font units - see <type scope="com::sun::star::util">MeasureUnit</type>.</p>
+
+        <p>The value given here is ignored if <member>ShowColumnHeader</member> is <FALSE/>.</p>
+
+        <p>If the property is <void/>, the grid control shall automatically determine a height which conveniently allows,
+        according to the used font, to display one line of text.</p>
+    */
+    [property, maybevoid] long ColumnHeaderHeight;
+
+    /** Specifies the height of rows in the grid control.
+
+        <p>The height is specified in application font units - see <type scope="com::sun::star::util">MeasureUnit</type>.</p>
+    */
+    [property, maybevoid] long RowHeight;
 
     /** Specifies the <type>XGridColumnModel</type> that is providing the column structure.
 
         <p>You can implement your own instance of <type>XGridColumnModel</type> or use
         the <type>DefaultGridColumnModel</type>.
+
+        <p>The column model is in the ownership of the grid model: When you set a new column model, or dispose
+        the grid model, then the (old) column model is disposed, too.</p>
+
+        <p>The default for this property is an empty instance of the <type>DefaultGridColumnModel</type>.</p>
     */
     [property] XGridColumnModel ColumnModel;
 
@@ -79,8 +103,13 @@ service UnoControlGridModel
 
         <p>You can implement your own instance of <type>XGridDataModel</type> or use
         the <type>DefaultGridDataModel</type>.
+
+        <p>The data model is in the ownership of the grid model: When you set a new data model, or dispose
+        the grid model, then the (old) data model is disposed, too.</p>
+
+        <p>The default for this property is an empty instance of the <type>DefaultGridDataModel</type>.</p>
     */
-    [property] XGridDataModel DataModel;
+    [property] XGridDataModel GridDataModel;
 
     /** Specifies the vertical scrollbar mode.
         <p>The default value is <FALSE/></p>
@@ -101,26 +130,48 @@ service UnoControlGridModel
     */
     [property] ::com::sun::star::view::SelectionType SelectionModel;
 
-    /** Specifies the background color of rows. If color for even rows is set, then specifies
-        the color of odd rows. Default value is white.
-    */
-    [property] ::com::sun::star::util::Color RowBackgroundColor;
+    /** controls whether or not to paint horizontal and vertical lines between the grid cells.
 
-    /** Specifies the background color of even rows. Default value is white.
+        @see LineColor
     */
-    [property] ::com::sun::star::util::Color EvenRowBackgroundColor;
+    [property] boolean UseGridLines;
 
-    /** Specifies the background color of header. Default value is white.
-    */
-    [property] ::com::sun::star::util::Color HeaderBackgroundColor;
+    /** specifies the color to be used when drawing lines between cells
 
-    /** Specifies the text color. Default value is black.
-    */
-    [property] ::com::sun::star::util::Color TextColor;
+        <p>If this property has a value of <VOID/>, the grid control renderer will use some default color,
+        depending on the system's style settings.</p>
 
-    /** Specifies the line color. Default value is white.
+        @see UseGridLines
     */
-    [property] ::com::sun::star::util::Color LineColor;
+    [property, maybevoid] ::com::sun::star::util::Color             GridLineColor;
+
+    /** specifies the color to be used when drawing the background of row or column headers
+
+        <p>If this property has a value of <VOID/>, the grid control renderer will use some default color,
+        depending on the system's style settings.</p>
+    */
+    [property, maybevoid] ::com::sun::star::util::Color             HeaderBackgroundColor;
+
+    /** specifies the color to be used when drawing the text within row or column headers
+
+        <p>If this property has a value of <VOID/>, the grid control renderer will use some default color,
+        depending on the system's style settings.</p>
+    */
+    [property, maybevoid] ::com::sun::star::util::Color             HeaderTextColor;
+
+    /** specifies the colors to be used as background for data rows.
+
+        <p>If this sequence is non-empty, the data rows will be rendered with alternating background colors: Assuming
+        the sequence has <code>n</code> elements, each row will use the background color as specified by its number's
+        remainder modulo <code>n</code>.</p>
+
+        <p>If this sequence is empty, all rows will use the same background color as the control as whole.</p>
+
+        <p>If this property does not exist at a particular implementation, or is <VOID/>, rows will be painted
+        in alternating background colors, every second row having a background color derived from the control's
+        selection color.</p>
+    */
+    [property, maybevoid] sequence< ::com::sun::star::util::Color > RowBackgroundColors;
 
     /** specifies the vertical alignment of the content in the control.
 
@@ -135,6 +186,20 @@ service UnoControlGridModel
     /** specifies the font attributes of the text in the control.
      */
     [property] com::sun::star::awt::FontDescriptor FontDescriptor;
+
+    /** specifies the color to be used when drawing cell texts
+
+        <p>If this property has a value of <VOID/>, the grid control renderer will use some default color,
+        depending on the system's style settings.</p>
+    */
+    [property, maybevoid] ::com::sun::star::util::Color             TextColor;
+
+    /** specifies the color to be used when drawing text lines (underlining and strikethrough)
+
+        <p>If this property has a value of <VOID/>, the grid control renderer will use some default color,
+        depending on the system's style settings.</p>
+     */
+    [property, maybevoid] com::sun::star::util::Color               TextLineColor;
 
     /** specifies the <type scope="com::sun::star::text">FontEmphasis</type>
         value of the text in the control.

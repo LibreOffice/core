@@ -32,21 +32,14 @@ import com.sun.star.uno.IBridge;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.TypeClass;
 import com.sun.star.uno.XInterface;
-import complexlib.ComplexTestCase;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-public final class Marshaling_Test extends ComplexTestCase {
-    public String getTestObjectName() {
-        return getClass().getName();
-    }
-
-    public String[] getTestMethodNames() {
-        return new String[] { "test" };
-    }
-
-    public void test() throws Exception {
+public final class Marshaling_Test {
+    @Test public void test() throws Exception {
         short cacheSize = (short)256;
         TestBridge testBridge = new TestBridge();
         Marshal marshal = new Marshal(testBridge, cacheSize);
@@ -239,7 +232,7 @@ public final class Marshaling_Test extends ComplexTestCase {
             if(op1 instanceof Any)
                 op1 = ((Any)op1).getObject();
 
-            assure("", compareObjects(op1, op2));
+            assertTrue(compareObjects(op1, op2));
         }
     }
 

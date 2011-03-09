@@ -1,16 +1,3 @@
-mkdir: %_DEST%\inc%_EXT%\bridges
-mkdir: %_DEST%\inc%_EXT%\bridges\remote
-
-..\inc\bridges\remote\connection.h %_DEST%\inc%_EXT%\bridges\remote\connection.h
-..\inc\bridges\remote\context.h %_DEST%\inc%_EXT%\bridges\remote\context.h
-..\inc\bridges\remote\remote.h %_DEST%\inc%_EXT%\bridges\remote\remote.h
-
-..\%__SRC%\lib\irmcxt* %_DEST%\lib%_EXT%\*
-..\%__SRC%\lib\librmcxt.*.* %_DEST%\lib%_EXT%\*
-..\%__SRC%\bin\rmcxt*.dll %_DEST%\bin%_EXT%\*
-
-..\%__SRC%\lib\liburp_uno* %_DEST%\lib%_EXT%\liburp_uno*
-..\%__SRC%\bin\urp_uno* %_DEST%\bin%_EXT%\urp_uno*
 ..\%__SRC%\lib\libjava_uno* %_DEST%\lib%_EXT%\libjava_uno*
 ..\%__SRC%\bin\java_uno* %_DEST%\bin%_EXT%\java_uno*
 ..\%__SRC%\class\java_uno*.jar %_DEST%\bin%_EXT%\java_uno*.jar
@@ -22,8 +9,3 @@ mkdir: %_DEST%\inc%_EXT%\bridges\remote
 ..\%__SRC%\lib\libgcc3_uno.* %_DEST%\lib%_EXT%\libgcc3_uno.*
 ..\%__SRC%\bin\gcc3_uno.* %_DEST%\bin%_EXT%\gcc3_uno.*
 ..\%__SRC%\lib\libsunpro5_uno.* %_DEST%\lib%_EXT%\libsunpro5_uno.*
-
-..\%__SRC%\lib\rmcxt3.lib %_DEST%\lib%_EXT%\rmcxt.lib
-
-
-linklib: librmcxt.*.*

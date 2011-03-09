@@ -36,6 +36,8 @@
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 
+#include "printtrace.h"
+
 BYTE oslTraceEnv[] = "OSL_TRACE_TO_FILE";
 
 typedef pfunc_osl_printDebugMessage oslDebugMessageFunc;
@@ -54,29 +56,11 @@ void SAL_CALL osl_breakDebug()
 /************************************************************************/
 /* osl_trace */
 /************************************************************************/
-/* comment this define to stop output thread identifier*/
-#define OSL_TRACE_THREAD 1
-void SAL_CALL osl_trace (
-    const sal_Char* lpszFormat, ...)
-{
+void osl_trace(char const * pszFormat, ...) {
     va_list args;
-
-#if defined(OSL_PROFILING)
-    fprintf(stderr, "Time: %06lu : ", osl_getGlobalTimer() );
-#else
-#if defined(OSL_TRACE_THREAD)
-    fprintf(stderr,"Thread: %6d :",osl_getThreadIdentifier(NULL));
-#else
-    fprintf(stderr, "Trace Message: ");
-#endif
-#endif
-
-    va_start(args, lpszFormat);
-    vfprintf(stderr, lpszFormat, args);
+    va_start(args, pszFormat);
+    printTrace(0, pszFormat, args); /* TODO: pid */
     va_end(args);
-
-    fprintf(stderr,"\n");
-    fflush(stderr);
 }
 
 /*----------------------------------------------------------------------------*/

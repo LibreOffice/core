@@ -1,0 +1,94 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_script_vba_XVBAMacroResolver_idl__
+#define __com_sun_star_script_vba_XVBAMacroResolver_idl__
+
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module script { module vba {
+
+//=============================================================================
+
+/** Converts VBA macro names to script URLs and vice versa.
+ */
+interface XVBAMacroResolver
+{
+    //-------------------------------------------------------------------------
+
+    /** Returns the script URL representing the passed VBA macro name.
+
+        @param aVBAMacroName
+            The VBA macro name to be resolved to a script URL. The macro name
+            may consist of up to three parts, divided by periods. The first two
+            parts are optional. The first part represents the VBA project name.
+            The second part represents the module name. The third part
+            represents the procedure name. Example: All the VBA macro names
+            "VBAProject.Module1.TestMacro", "Module1.TestMacro",
+            "VBAProject.TestMacro", and "TestMacro" may refer to the same VBA
+            procedure located in "Module" of the project "VBAProject". If the
+            module name is missing, then all modules are searched for a macro
+            with the specified name.
+
+        @return
+            The script URL referring to the passed VBA macro.
+
+        @throws <type scope="::com::sun::star::lang">IllegalArgumentException</type>
+            if a macro with the passed name does not exist.
+    **/
+    string resolveVBAMacroToScriptURL( [in] string aVBAMacroName )
+        raises (::com::sun::star::lang::IllegalArgumentException);
+
+    //-------------------------------------------------------------------------
+
+    /** Returns the VBA macro name for a macro with the passed script URL.
+
+        @param aScriptURL
+            The script URL to be resolved to a VBA macro name. Must be a
+            document-local script.
+
+        @return
+            The VBA macro name referring to a macro with the passed script URL.
+
+        @throws <type scope="::com::sun::star::lang">IllegalArgumentException</type>
+            if a macro with the passed name does not exist.
+    **/
+    string resolveScriptURLtoVBAMacro( [in] string aScriptURL )
+        raises (::com::sun::star::lang::IllegalArgumentException);
+
+    //-------------------------------------------------------------------------
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+//=============================================================================
+
+#endif

@@ -73,6 +73,8 @@ struct ImplementationEntry
 
 /** Helper function for implementation of the component_writeInfo()-function.
 
+    @obsolete component_writeInfo should no longer be used in new components
+
     @param pServiceManager The first parameter passed to component_writeInfo()-function
                            (This is an instance of the service manager, that creates the factory).
     @param pRegistryKey    The second parameter passed to the component_writeInfo()-function.
@@ -91,9 +93,9 @@ sal_Bool component_writeInfoHelper(
 
     @param pImplName       The implementation-name to be instantiated ( This is the
                            first parameter passed to the component_getFactory
-    @param pServiceManager The first parameter passed to component_writeInfo()-function
+    @param pServiceManager The second parameter passed to component_getFactory()-function
                            (This is a of the service manager, that creates the factory).
-    @param pRegistryKey    The second parameter passed to the component_writeInfo()-function.
+    @param pRegistryKey    The third parameter passed to the component_getFactory()-function.
                            This is a reference to the registry key, where the implementation
                            data has been written to.
     @param entries         Each element of the entries-array must contains a function pointer

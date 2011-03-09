@@ -924,7 +924,7 @@ inline double stringToDouble(CharT const * pBegin, CharT const * pEnd,
     if (pStatus != 0)
         *pStatus = eStatus;
     if (pParsedEnd != 0)
-        *pParsedEnd = p;
+        *pParsedEnd = p == p0 ? pBegin : p;
 
     return fVal;
 }

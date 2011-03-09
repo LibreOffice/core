@@ -35,40 +35,39 @@ module com {  module sun {  module star {  module awt {  module grid {
 
 //=============================================================================
 
-/** An event used by a <type>XGridDataModel</type> to notify changes in the data
-    model to the <type>XGridControl</type>.
-    You usually need to fill this event only if you implement the <type>XGridDataModel</type>
-    yourself.
+/** used to notify changes in the data represented by an <type>XMutableGridDataModel</type>.
 
-    @see XGridDataModel
-    @see XGridControl
+    <p>Effectively, a <code>GridDataEvent</code> denotes a continuous two-dimensional cell range
+    within a grid's data model, which is affected by a certain change.</p>
+
+    @see XMutableGridDataModel
     @see XGridDataListener
 
     @since OOo 3.3.0
  */
 struct GridDataEvent: com::sun::star::lang::EventObject
 {
-    //-------------------------------------------------------------------------
+    /** denotes the first column affected by a change.
 
-    /** Contains the property name of the changed value **/
-    string valueName;
+        <p>If <code>FirstColumn</code> is -1, the listener should assume that all rows of a grid's data model
+        are affected.</p>
+    */
+    long    FirstColumn;
 
-    /** Contains the old value **/
-    any oldValue;
+    /** denotes the last column affected by a change
+    */
+    long    LastColumn;
 
-    /** Contains the new value **/
-    any newValue;
+    /** denotes the first row affected by a change.
 
-    /** Contains the index of the changed row**/
-    long index;
+        <p>If <code>FirstRow</code> is -1, the listener should assume that all rows of a grid's data model
+        are affected.</p>
+    */
+    long    FirstRow;
 
-    /** Contains the header name of the changed row**/
-    string headerName;
-
-    /** Contains the changed row**/
-    sequence<any> rowData;
-
-
+    /** denotes the last row affected by a change
+    */
+    long    LastRow;
 };
 
 //=============================================================================

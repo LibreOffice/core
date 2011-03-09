@@ -73,30 +73,22 @@ SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=	$(SHL1TARGET)
 SLOFILES=       $(SLO)$/pyuno_loader.obj
 
-COMPONENTS= \
-    stocservices.uno	\
-    invocation.uno		\
-    introspection.uno	\
-    invocadapt.uno		\
-    proxyfac.uno 		\
-    reflection.uno	\
-    .$/pythonloader.uno
-
 # --- Targets ------------------------------------------------------
 
 ALL : ALLTAR \
-    $(DLLDEST)$/pythonloader.py	\
-    $(DLLDEST)$/pyuno_services.rdb
+    $(DLLDEST)$/pythonloader.py
 .ENDIF # L10N_framework
 
 .INCLUDE :  target.mk
 .IF "$(L10N_framework)"==""
 $(DLLDEST)$/%.py: %.py
     cp $? $@
-
-$(DLLDEST)$/pyuno_services.rdb : makefile.mk $(DLLDEST)$/$(DLLPRE)$(TARGET)$(DLLPOST)
-    -rm -f $@ $(DLLDEST)$/pyuno_services.tmp $(DLLDEST)$/pyuno_services.rdb
-    cd $(DLLDEST) && $(REGCOMP) -register -r pyuno_services.tmp -wop $(foreach,i,$(COMPONENTS) -c $(i))
-    cd $(DLLDEST) && mv pyuno_services.tmp pyuno_services.rdb
 .ENDIF # L10N_framework
 
+ALLTAR : $(MISC)/pythonloader.component
+
+$(MISC)/pythonloader.component .ERRREMOVE : \
+        $(SOLARENV)/bin/createcomponent.xslt pythonloader.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        'vnd.sun.star.expand:$$OOO_BASE_DIR/program/$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt pythonloader.component

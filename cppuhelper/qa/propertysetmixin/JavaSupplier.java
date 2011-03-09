@@ -75,11 +75,6 @@ public final class JavaSupplier extends WeakBase implements XSupplier {
             : null;
     }
 
-    public static boolean __writeRegistryServiceInfo(XRegistryKey regKey) {
-        return FactoryHelper.writeRegistryServiceInfo(
-            implementationName, serviceName, regKey);
-    }
-
     private static final String implementationName
     = JavaSupplier.class.getName();
     private static final String serviceName

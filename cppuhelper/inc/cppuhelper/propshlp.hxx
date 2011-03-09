@@ -596,6 +596,29 @@ protected:
         ::com::sun::star::uno::Any& rValue,
         sal_Int32 nHandle ) const = 0;
 
+    /** sets an dependent property's value
+
+        <p>Sometimes setting a given property needs to implicitly modify another property's value. Calling |setPropertyValue|
+        from within |setFastPropertyValue_NoBroadcast| is not an option here, as it would notify the property listeners
+        while our mutex is still locked. Setting the dependent property's value directly (e.g. by calling |setFastPropertyValue_NoBroadcast|
+        recursively) is not an option, too, since it would miss firing the property change event.</p>
+
+        <p>So, in such cases, you use |setDependentFastPropertyValue| from within |setFastPropertyValue_NoBroadcast|.
+        It will convert and actually set the property value (invoking |convertFastPropertyValue| and |setFastPropertyValue_NoBroadcast|
+        for the given handle and value), and add the property change event to the list of events to be notified
+        when the bottom-most |setFastPropertyValue_NoBroadcast| on the stack returns.</p>
+
+        <p><strong>Note</strong>: The method will <em>not</em> invoke veto listeners for the property.</p>
+
+        <p><strong>Note</strong>: It's the caller's responsibility to ensure that our mutex is locked. This is
+        canonically given when the method is invoked from within |setFastPropertyValue_NoBroadcast|, in other
+        contexts, you might need to take own measures.</p>
+    */
+    void    setDependentFastPropertyValue(
+                sal_Int32 i_handle,
+                const ::com::sun::star::uno::Any& i_value
+            );
+
     /** The common data of a broadcaster. Use the mutex, disposing state and the listener container. */
     OBroadcastHelper    &rBHelper;
     /**
@@ -611,11 +634,21 @@ protected:
 
     /** reserved for future use. finally, the future has arrived...
      */
-    const std::auto_ptr<const Impl> m_pReserved;
+    const std::auto_ptr<Impl> m_pReserved;
 
 private:
     OPropertySetHelper( const OPropertySetHelper & ) SAL_THROW( () );
     OPropertySetHelper &    operator = ( const OPropertySetHelper & ) SAL_THROW( () );
+
+    /** notifies the given changes in property's values, <em>plus</em> all property changes collected during recent
+        |setDependentFastPropertyValue| calls.
+    */
+    void    impl_fireAll(
+                sal_Int32* i_handles,
+                const ::com::sun::star::uno::Any * i_newValues,
+                const ::com::sun::star::uno::Any * i_oldValues,
+                sal_Int32 i_count
+            );
 
 public:
 // Suppress warning about virtual functions but non-virtual destructor:

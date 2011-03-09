@@ -126,7 +126,7 @@ public:
 
         @param len initial sequence length
     */
-    inline Sequence( sal_Int32 len );
+    inline explicit Sequence( sal_Int32 len );
 
     /** Destructor: Releases sequence handle. Last handle will destruct
         elements and free memory.

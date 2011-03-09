@@ -149,18 +149,24 @@ published service SpreadsheetViewSettings
     //-------------------------------------------------------------------------
 
     /** enables display of embedded objects in the view.
+
+        @see SpreadsheetViewObjectsMode
      */
     [property] short ShowObjects;
 
     //-------------------------------------------------------------------------
 
     /** enables the display of charts in the view.
+
+        @see SpreadsheetViewObjectsMode
      */
     [property] short ShowCharts;
 
     //-------------------------------------------------------------------------
 
     /** enables the display of drawing objects in the view.
+
+        @see SpreadsheetViewObjectsMode
      */
     [property] short ShowDrawing;
 
@@ -175,14 +181,14 @@ published service SpreadsheetViewSettings
 
         @see com::sun::star::view::DocumentZoomType
     */
-        [property] short ZoomType;
+    [property] short ZoomType;
 
         //-------------------------------------------------------------------------
         /** Defines the zoom value to use.
             Valid only if the ZoomType is set to
             <member scope="com::sun::star::view::DocumentZoomType">BY_VALUE</member>.
     */
-        [property] short ZoomValue;
+    [property] short ZoomValue;
 };
 
 //=============================================================================

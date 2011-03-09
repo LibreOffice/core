@@ -56,9 +56,6 @@
 #include <com/sun/star/reflection/XIdlField2.hpp>
 #include <com/sun/star/reflection/XIdlMethod.hpp>
 
-#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
-
-
 using namespace std;
 using namespace osl;
 using namespace cppu;

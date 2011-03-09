@@ -227,15 +227,10 @@ rtl::OUString serviceGetImplementationName()
                              "com.sun.star.comp.stoc.JavaVirtualMachine"));
 }
 
-rtl::OUString serviceGetServiceName()
-{
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                             "com.sun.star.java.JavaVirtualMachine"));
-}
-
 css::uno::Sequence< rtl::OUString > serviceGetSupportedServiceNames()
 {
-    rtl::OUString aServiceName = serviceGetServiceName();
+    rtl::OUString aServiceName(
+        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.java.JavaVirtualMachine"));
     return css::uno::Sequence< rtl::OUString >(&aServiceName, 1);
 }
 
@@ -619,34 +614,6 @@ component_getImplementationEnvironment(sal_Char const ** pEnvTypeName,
                                        uno_Environment **)
 {
     *pEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
-extern "C" sal_Bool SAL_CALL component_writeInfo(void * pServiceManager,
-                                                 void * pRegistryKey)
-{
-    if (cppu::component_writeInfoHelper(pServiceManager, pRegistryKey,
-                                        aServiceImplementation))
-    {
-        try
-        {
-            css::uno::Reference< css::registry::XRegistryKey >(
-                    reinterpret_cast< css::registry::XRegistryKey * >(
-                        pRegistryKey)->
-                createKey(
-                    rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM(
-                            "com.sun.star.comp.stoc.JavaVirtualMachine"
-                            "/UNO/SINGLETONS/"
-                            "com.sun.star.java.theJavaVirtualMachine"))))->
-                setStringValue(serviceGetServiceName());
-            return true;
-        }
-        catch (css::uno::Exception &)
-        {
-            OSL_ENSURE(false, "com.sun.star.uno.Exception caught");
-        }
-    }
-    return false;
 }
 
 extern "C" void * SAL_CALL component_getFactory(sal_Char const * pImplName,

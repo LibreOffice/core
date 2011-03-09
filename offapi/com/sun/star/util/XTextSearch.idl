@@ -35,97 +35,151 @@
 
 module com { module sun { module star { module util {
 
-published enum SearchAlgorithms {
-    ABSOLUTE,       // "normal" a kind of Boyer-Moore
-    REGEXP,                 // regular expression
-    APPROXIMATE     // Levenshtein distance
+published enum SearchAlgorithms
+{
+    /// Literal
+    ABSOLUTE,   // implemented as a kind of Boyer-Moore
+    /// Regular expression
+    REGEXP,
+    /// Weighted Levenshtein Distance
+    APPROXIMATE
 };
 
+/// Flags for search methods
 published constants SearchFlags
 {
-    //Flag for all search methods
-
     /**
-        @deprecated : the constant ALL_IGNORE_CASE is never supported -
-                        it must use the transliteration flags of
-                        the SearchOptions.
-                        <p>@see TransliterationModulesNew
+        @deprecated The constant ALL_IGNORE_CASE is never supported - use
+                    <const scope="com::sun::star::i18n">TransliterationModules::IGNORE_CASE</const>
+                    with
+                    <member>SearchOptions::transliterateFlags</member>
+                    instead.
+
+        @see <type scope="com::sun::star::i18n">TransliterationModules</type>
     */
     const long  ALL_IGNORE_CASE     = 0x00000001;
 
-    /// Flag for normal (Boyer-Moore) search
+    /** Flag for normal (Boyer-Moore) search / Search for word only. */
     const long  NORM_WORD_ONLY      = 0x00000010;
 
-    /// Flag for "regular expression" search / interpret as extended regular expression
-    const long  REG_EXTENDED        = 0x00000100;
-    /** Flag for "regular expression" search / No replace, i.e., avoid sub regular
-         expressions, return true/false to match
+    /** Flag for "regular expression" search / Interpret as extended
+        regular expression.
 
-<!-- JRH: Check this for sense of the expression. -->
+        @deprecated The flag is currently not supported by OOo.
     */
-    const long  REG_NOSUB       = 0x00000200;
+    const long  REG_EXTENDED        = 0x00000100;
 
-    /// Flag for "regular expression" search / Special new  line treatment
-    const long  REG_NEWLINE     = 0x00000400;
+    /** Flag for "regular expression" search / No register information
+        or backreferences, i.e., avoid sub expressions. Return only
+        true/false if matched or not.
 
-    /** A NEWLINE character in string will not be matched by  a period outside bracket
-        expression or by any form of a non matching list.
-        A circumflex (^) in pattern when used to specify expression anchoring
-<!-- JRH: anhoring to anchoring.  -->
-        will match the zero length string immediately after a newline in string,
-        regardless of the setting of REG_NOTBOL
-        A dollar-sign ($) in pattern when used to specify expression anchoring,
-        will match zero-length string immediately before a new line in string,
-        regardless of the setting of REG_NOTEOL
-*/
+        @deprecated The flag is currently not supported by OOo.
+    */
+    const long  REG_NOSUB           = 0x00000200;
+
+    /** Flag for "regular expression" search / Special new line
+        treatment.
+
+        @deprecated The flag is currently not supported by OOo.
+
+        <p> A NEWLINE character in string will not be matched by a
+        period outside bracket expression or by any form of a non
+        matching list. </p>
+
+        <p> A circumflex (^) in pattern when used to specify expression
+        anchoring will match the zero length string immediately after a
+        newline in string, regardless of the setting of
+        REG_NOT_BEGINOFLINE. </p>
+
+        <p> A dollar-sign ($) in pattern when used to specify expression
+        anchoring, will match zero-length string immediately before a
+        new line in string, regardless of the setting of
+        REG_NOT_ENDOFLINE. </p>
+    */
+    const long  REG_NEWLINE         = 0x00000400;
+
+    /** The first character in the string is not the beginning of the
+        line therefore ^ will not match with first character of the
+        string.
+    */
     const long  REG_NOT_BEGINOFLINE = 0x00000800;
 
-    /** The first character in the string is not the beginning of the line therefore ^  will not
-        match with first character of the string
+    /** The last character in the string is not the end of the line
+        therefore $ will not match with last character of the string.
     */
     const long  REG_NOT_ENDOFLINE   = 0x00001000;
 
+    /** Flag for "Weighted Levenshtein Distance" search / Relaxed
+        checking of limit, split weigh pools.
 
-    /// Flags for "Weight Levenshtein-Distance" search
+        <p> If not specified (<b>strict</b>), the search is sucessful if
+        the WLD is within a calculated limit where each insertion,
+        deletion and replacement adds a weight to a common pool of
+        weights. This is the mathematically correct WLD. </p>
+
+        <p> From a user's point of view the strict WLD is an
+        exclusive-OR of the arguments given, for example if allowed
+        insertions=2 and allowed replacements=2, the search fails if 2
+        characters had been inserted and an additional operation would
+        be needed to match. Depending on the weights it may also fail if
+        1 character was inserted and 1 character replaced and an
+        additional operation would be needed to match. The strict
+        algorithm may match less than expected from a first glance of
+        the specified arguments, but does not return false positives. </p>
+
+        <p> If specified (<b>relaxed</b>), the search is also successful
+        if the combined pool for insertions and deletions is below a
+        doubled calculated limit and replacements are treated
+        differently. Additionally, swapped characters are counted as one
+        replacement. </p>
+
+        <p> From a user's point of view the relaxed WLD is an
+        inclusive-OR of the arguments given, for example if allowed
+        insertions=2 and allowed replacements=2, the search succeeds if
+        2 characters had been inserted and an additional replacement is
+        needed to match. The relaxed algorithm may return false
+        positives, but meets user expectation better. </p>
+    */
     const long  LEV_RELAXED     = 0x00010000;
 };
 
 
 published  struct SearchOptions  {
     //-------------------------------------------------------------------------
-    /// search type, can be: ABSOLUTE, REGEXP, APPROXIMATE
+    /** search type */
     SearchAlgorithms    algorithmType;
 
     /** some flags - can be mixed
 
-        @see SearchFlags
+        @see <type>SearchFlags</type>
     */
     long            searchFlag;
 
-    /// the search text
+    /** The text or pattern to be searched. */
     string          searchString;
 
-    /** the replace text
-    (is for optional replacing - SearchOption is only the data container for it)*/
+    /** The replacement text
+        (is for optional replacing - SearchOption is only the data container for it) */
     string          replaceString;
 
-    /// this is the language for case insensitive search
+    /** The locale for case insensitive search. */
     ::com::sun::star::lang::Locale  Locale;
 
-    /** this many characters can be different between the found and search word
-    in a "Weight Levenshtein-Distance"*/
+    /** This many characters can be different (as a replacement) between
+        the found word and the search pattern in a "Weighted Levenshtein
+        Distance" search. */
     long            changedChars;
 
-    /** this many characters can be missed in the found word
-    in a "Weight Levenshtein-Distance"*/
+    /** This many characters can be missing in the found word in a
+        "Weighted Levenshtein Distance" search. */
     long            deletedChars;
 
-    /// this many characters can be additional in the found word in a "Weight Levenshtein-Distance"
+    /** This many characters can be additional in the found word in a
+        "Weighted Levenshtein Distance" search. */
     long            insertedChars;
 
-    /** Asian flags for the transliteration. Same meaning as the enum of TransliteratorModule
-
-        @see com/sun/star/i18n/XTransliteration.idl
+    /** Flags for the transliteration. Same meaning as the enum of
+        <type scope="com::sun::star::i18n">TransliterationModules</type>
     */
     long            transliterateFlags;
 };
