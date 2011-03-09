@@ -841,7 +841,8 @@ void Help()
         "====================================\n" );
     fprintf( stdout,
         "As part of the L10N framework, localize extracts and merges translations\n"
-        "out of and into the whole source tree.\n\n"
+        "out of and into the toplevel modules defined in ModuleList array in\n"
+        "l10ntools/source/localize.cxx.\n\n"
         "Syntax: localize -e -l en-US -f FileName \n"
         "Parameter:\n"
         "\t-e: Extract mode\n"
@@ -855,7 +856,7 @@ void Help()
         "\nExample 1:\n"
         "==========\n"
         "localize -e -l en-US -f MyFile\n\n"
-        "All strings will be extracted for language de and language en-US.\n"
+        "All strings will be extracted for language en-US.\n"
     );
 }
 
