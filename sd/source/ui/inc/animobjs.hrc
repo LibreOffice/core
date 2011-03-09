@@ -47,3 +47,6 @@
 #define LB_ADJUSTMENT 2
 #define LB_LOOP_COUNT 3
 #define GRP_ANIMATION_GROUP 2
+//IAccessibility2 Implementation 2009-----
+#define STR_DISPLAY 1
+//-----IAccessibility2 Implementation 2009

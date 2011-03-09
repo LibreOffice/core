@@ -97,25 +97,25 @@ public:
         const AcceptDropEvent& rEvt,
         DropTargetHelper& rTargetHelper,
         ::sd::Window* pTargetWindow = NULL,
-        USHORT nPage = SDRPAGE_NOTFOUND,
-        USHORT nLayer = SDRPAGE_NOTFOUND );
+        sal_uInt16 nPage = SDRPAGE_NOTFOUND,
+        sal_uInt16 nLayer = SDRPAGE_NOTFOUND );
 
     sal_Int8 ExecuteDrop (
         const ExecuteDropEvent& rEvt,
         DropTargetHelper& rTargetHelper,
         ::sd::Window* pTargetWindow = NULL,
-        USHORT nPage = SDRPAGE_NOTFOUND,
-        USHORT nLayer = SDRPAGE_NOTFOUND);
+        sal_uInt16 nPage = SDRPAGE_NOTFOUND,
+        sal_uInt16 nLayer = SDRPAGE_NOTFOUND);
 
     void Abort (void);
 
 protected:
-    virtual USHORT DetermineInsertPosition (
+    virtual sal_uInt16 DetermineInsertPosition (
         const SdTransferable& rTransferable);
 
-    virtual USHORT InsertSlides (
+    virtual sal_uInt16 InsertSlides (
         const SdTransferable& rTransferable,
-        USHORT nInsertPosition);
+        sal_uInt16 nInsertPosition);
 
 private:
     SlideSorter& mrSlideSorter;
@@ -136,7 +136,7 @@ private:
 
     /** When pages are moved or copied then the selection of the slide
         sorter has to be updated.  This flag is used to remember whether the
-        selection has to be updated or can stay as it is (FALSE).
+        selection has to be updated or can stay as it is (sal_False).
     */
     bool mbUpdateSelectionPending;
 
@@ -147,7 +147,7 @@ private:
     ::boost::scoped_ptr<UndoContext> mpUndoContext;
 
     ::boost::scoped_ptr<SelectionObserver::Context> mpSelectionObserverContext;
-    ULONG mnDragFinishedUserEventId;
+    sal_uLong mnDragFinishedUserEventId;
 
     void CreateSlideTransferable (
         ::Window* pWindow,
@@ -228,8 +228,8 @@ private:
         const void* pDropEvent ,
         DropTargetHelper& rTargetHelper,
         ::sd::Window* pTargetWindow,
-        USHORT nPage,
-        USHORT nLayer);
+        sal_uInt16 nPage,
+        sal_uInt16 nLayer);
 
     /** Return whether the insertion defined by the transferable is
         trivial, ie would not change either source nor target document.

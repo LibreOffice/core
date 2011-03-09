@@ -709,7 +709,7 @@ void SAL_CALL SlideShow::end() throw(RuntimeException)
                 WorkWindow* pWorkWindow = dynamic_cast<WorkWindow*>(pShell->GetViewFrame()->GetTopFrame().GetWindow().GetParent());
                 if( pWorkWindow )
                 {
-                    pWorkWindow->StartPresentationMode( FALSE, isAlwaysOnTop() );
+                    pWorkWindow->StartPresentationMode( sal_False, isAlwaysOnTop() );
                 }
             }
         }
@@ -750,7 +750,7 @@ void SAL_CALL SlideShow::end() throw(RuntimeException)
                         framework::FrameworkHelper::GetViewURL(ePreviousType),
                         framework::FrameworkHelper::msCenterPaneURL);
 
-                    pViewShell->GetViewFrame()->GetBindings().InvalidateAll( TRUE );
+                    pViewShell->GetViewFrame()->GetBindings().InvalidateAll( sal_True );
                 }
             }
         }
@@ -769,7 +769,7 @@ void SAL_CALL SlideShow::end() throw(RuntimeException)
                     // switch to the previously visible Slide
                     DrawViewShell* pDrawViewShell = dynamic_cast<DrawViewShell*>( pViewShell );
                     if( pDrawViewShell )
-                        pDrawViewShell->SwitchPage( (USHORT)xController->getRestoreSlide() );
+                        pDrawViewShell->SwitchPage( (sal_uInt16)xController->getRestoreSlide() );
                     else
                     {
                         Reference<XDrawView> xDrawView (
@@ -1183,8 +1183,8 @@ void SlideShow::StartFullscreenPresentation( )
     const sal_Int32 nDisplay (GetDisplay());
     WorkWindow* pWorkWindow = new FullScreenWorkWindow(this, mpCurrentViewShellBase);
     pWorkWindow->SetBackground(Wallpaper(COL_BLACK));
-    pWorkWindow->StartPresentationMode( TRUE, mpDoc->getPresentationSettings().mbAlwaysOnTop ? PRESENTATION_HIDEALLAPPS : 0, nDisplay);
-    //    pWorkWindow->ShowFullScreenMode(FALSE, nDisplay);
+    pWorkWindow->StartPresentationMode( sal_True, mpDoc->getPresentationSettings().mbAlwaysOnTop ? PRESENTATION_HIDEALLAPPS : 0, nDisplay);
+    //    pWorkWindow->ShowFullScreenMode(sal_False, nDisplay);
 
     if (pWorkWindow->IsVisible())
     {
@@ -1204,7 +1204,7 @@ void SlideShow::StartFullscreenPresentation( )
         // new view shell--a prerequisite to process slot calls and initialize
         // its panes--a GrabFocus() has to be called later on.
         SfxFrame* pNewFrame = SfxFrame::Create( *mpDoc->GetDocSh(), *pWorkWindow, PRESENTATION_FACTORY_ID, true );
-        pNewFrame->SetPresentationMode(TRUE);
+        pNewFrame->SetPresentationMode(sal_True);
 
         mpFullScreenViewShellBase = static_cast<ViewShellBase*>(pNewFrame->GetCurrentViewFrame()->GetViewShell());
         if(mpFullScreenViewShellBase != NULL)

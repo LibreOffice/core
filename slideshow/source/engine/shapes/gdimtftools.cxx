@@ -307,19 +307,19 @@ sal_Int32 getNextActionOffset( MetaAction * pCurrAct )
     switch (pCurrAct->GetType()) {
     case META_TEXT_ACTION: {
         MetaTextAction * pAct = static_cast<MetaTextAction *>(pCurrAct);
-        return (pAct->GetLen() == (USHORT)STRING_LEN
+        return (pAct->GetLen() == (sal_uInt16)STRING_LEN
                 ? pAct->GetText().Len() - pAct->GetIndex() : pAct->GetLen());
     }
     case META_TEXTARRAY_ACTION: {
         MetaTextArrayAction * pAct =
             static_cast<MetaTextArrayAction *>(pCurrAct);
-        return (pAct->GetLen() == (USHORT)STRING_LEN
+        return (pAct->GetLen() == (sal_uInt16)STRING_LEN
                 ? pAct->GetText().Len() - pAct->GetIndex() : pAct->GetLen());
     }
     case META_STRETCHTEXT_ACTION: {
         MetaStretchTextAction * pAct =
             static_cast<MetaStretchTextAction *>(pCurrAct);
-        return (pAct->GetLen() == (USHORT)STRING_LEN
+        return (pAct->GetLen() == (sal_uInt16)STRING_LEN
                 ? pAct->GetText().Len() - pAct->GetIndex() : pAct->GetLen());
     }
     case META_FLOATTRANSPARENT_ACTION: {
@@ -357,12 +357,12 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
     // update modes)
     VirtualDevice aVDev;
     aVDev.SetOutputSizePixel( aAnimSize );
-    aVDev.EnableMapMode( FALSE );
+    aVDev.EnableMapMode( sal_False );
 
     // setup mask VDev (alpha VDev is currently rather slow)
     VirtualDevice aVDevMask;
     aVDevMask.SetOutputSizePixel( aAnimSize );
-    aVDevMask.EnableMapMode( FALSE );
+    aVDevMask.EnableMapMode( sal_False );
 
     switch( aAnimation.GetCycleMode() )
     {
@@ -391,7 +391,7 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
             break;
     }
 
-    for( USHORT i=0, nCount=aAnimation.Count(); i<nCount; ++i )
+    for( sal_uInt16 i=0, nCount=aAnimation.Count(); i<nCount; ++i )
     {
         const AnimationBitmap& rAnimBmp( aAnimation.Get(i) );
         switch(rAnimBmp.eDisposal)

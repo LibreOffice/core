@@ -133,9 +133,9 @@ struct TransitionEffect
         mfDuration = 2.0;
         mnTime = 0;
         mePresChange = PRESCHANGE_MANUAL;
-        mbSoundOn = FALSE;
-        mbLoopSound = FALSE;
-        mbStopSound = FALSE;
+        mbSoundOn = sal_False;
+        mbLoopSound = sal_False;
+        mbStopSound = sal_False;
 
         mbEffectAmbiguous = false;
         mbDurationAmbiguous = false;
@@ -184,12 +184,12 @@ struct TransitionEffect
         {
             if( mbStopSound )
             {
-                rOutPage.SetStopSound( TRUE );
-                rOutPage.SetSound( FALSE );
+                rOutPage.SetStopSound( sal_True );
+                rOutPage.SetSound( sal_False );
             }
             else
             {
-                rOutPage.SetStopSound( FALSE );
+                rOutPage.SetStopSound( sal_False );
                 rOutPage.SetSound( mbSoundOn );
                 rOutPage.SetSoundFile( maSound );
             }
@@ -223,9 +223,9 @@ struct TransitionEffect
 
     // other settings
     double      mfDuration;
-    ULONG       mnTime;
+    sal_uLong       mnTime;
     PresChange  mePresChange;
-    BOOL        mbSoundOn;
+    sal_Bool        mbSoundOn;
     String      maSound;
     bool        mbLoopSound;
     bool        mbStopSound;
@@ -839,7 +839,7 @@ void SlideTransitionPane::updateControls()
             if( lcl_findSoundInList( maSoundList, aEffect.maSound, nPos ))
             {
                 // skip first three entries
-                maLB_SOUND.SelectEntryPos( (USHORT)nPos + 3 );
+                maLB_SOUND.SelectEntryPos( (sal_uInt16)nPos + 3 );
                 maCurrentSoundFile = aEffect.maSound;
             }
         }
@@ -860,8 +860,8 @@ void SlideTransitionPane::updateControls()
 
     if( aEffect.mbPresChangeAmbiguous )
     {
-        maRB_ADVANCE_ON_MOUSE.Check( FALSE );
-        maRB_ADVANCE_AUTO.Check( FALSE );
+        maRB_ADVANCE_ON_MOUSE.Check( sal_False );
+        maRB_ADVANCE_AUTO.Check( sal_False );
     }
     else
     {
@@ -890,7 +890,7 @@ void SlideTransitionPane::updateControlState()
 
     maPB_APPLY_TO_ALL.Enable( mbHasSelection );
     maPB_PLAY.Enable( mbHasSelection );
-//     maPB_SLIDE_SHOW.Enable( TRUE );
+//     maPB_SLIDE_SHOW.Enable( sal_True );
     maCB_AUTO_PREVIEW.Enable( mbHasSelection );
 }
 
@@ -964,7 +964,7 @@ void SlideTransitionPane::openSoundFileDialog()
                 String aStr( sal_Unicode( '%' ));
                 aStrWarning.SearchAndReplace( aStr , aFile );
                 WarningBox aWarningBox( NULL, WB_3DLOOK | WB_RETRY_CANCEL, aStrWarning );
-                aWarningBox.SetModalInputMode (TRUE);
+                aWarningBox.SetModalInputMode (sal_True);
                 bQuitLoop = (aWarningBox.Execute() != RET_RETRY);
 
                 bValidSoundFile = false;
@@ -973,7 +973,7 @@ void SlideTransitionPane::openSoundFileDialog()
 
         if( bValidSoundFile )
             // skip first three entries in list
-            maLB_SOUND.SelectEntryPos( (USHORT)nPos + 3 );
+            maLB_SOUND.SelectEntryPos( (sal_uInt16)nPos + 3 );
     }
 
     if( ! bValidSoundFile )
@@ -982,7 +982,7 @@ void SlideTransitionPane::openSoundFileDialog()
         {
             tSoundListType::size_type nPos = 0;
             if( lcl_findSoundInList( maSoundList, maCurrentSoundFile, nPos ))
-                maLB_SOUND.SelectEntryPos( (USHORT)nPos + 3 );
+                maLB_SOUND.SelectEntryPos( (sal_uInt16)nPos + 3 );
             else
                 maLB_SOUND.SelectEntryPos( 0 );  // NONE
         }

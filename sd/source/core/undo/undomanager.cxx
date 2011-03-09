@@ -32,13 +32,13 @@
 
 using namespace sd;
 
-UndoManager::UndoManager( USHORT nMaxUndoActionCount /* = 20 */ )
+UndoManager::UndoManager( sal_uInt16 nMaxUndoActionCount /* = 20 */ )
 : SfxUndoManager( nMaxUndoActionCount )
 , mpLinkedUndoManager(NULL)
 {
 }
 
-void UndoManager::EnterListAction(const UniString &rComment, const UniString& rRepeatComment, USHORT nId /* =0 */)
+void UndoManager::EnterListAction(const UniString &rComment, const UniString& rRepeatComment, sal_uInt16 nId /* =0 */)
 {
     if( !IsDoing() )
     {
@@ -47,7 +47,7 @@ void UndoManager::EnterListAction(const UniString &rComment, const UniString& rR
     }
 }
 
-void UndoManager::AddUndoAction( SfxUndoAction *pAction, BOOL bTryMerg /* = FALSE */ )
+void UndoManager::AddUndoAction( SfxUndoAction *pAction, sal_Bool bTryMerg /* = sal_False */ )
 {
     if( !IsDoing() )
     {

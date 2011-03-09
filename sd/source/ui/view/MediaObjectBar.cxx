@@ -98,7 +98,7 @@ MediaObjectBar::~MediaObjectBar()
 void MediaObjectBar::GetState( SfxItemSet& rSet )
 {
     SfxWhichIter    aIter( rSet );
-    USHORT          nWhich = aIter.FirstWhich();
+    sal_uInt16          nWhich = aIter.FirstWhich();
 
     while( nWhich )
     {
@@ -140,7 +140,7 @@ void MediaObjectBar::Execute( SfxRequest& rReq )
         const SfxItemSet*   pArgs = rReq.GetArgs();
         const SfxPoolItem*  pItem;
 
-        if( !pArgs || ( SFX_ITEM_SET != pArgs->GetItemState( SID_AVMEDIA_TOOLBOX, FALSE, &pItem ) ) )
+        if( !pArgs || ( SFX_ITEM_SET != pArgs->GetItemState( SID_AVMEDIA_TOOLBOX, sal_False, &pItem ) ) )
             pItem = NULL;
 
         if( pItem )

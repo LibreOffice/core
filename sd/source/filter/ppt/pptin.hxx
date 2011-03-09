@@ -61,7 +61,7 @@ class ImplSdPPTImport : public SdrPowerPointImport
 //  SvStream*       mpPicStream;
     DffRecordHeader maDocHd;
     List            maSlideNameList;
-    BOOL            mbDocumentFound;
+    sal_Bool            mbDocumentFound;
     sal_uInt32      mnFilterOptions;
     SdDrawDocument* mpDoc;
     PresChange      mePresChange;

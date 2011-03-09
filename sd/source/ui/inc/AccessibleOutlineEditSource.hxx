@@ -73,7 +73,7 @@ namespace accessibility
         virtual SfxBroadcaster&         GetBroadcaster() const;
 
         // the view forwarder
-        virtual BOOL        IsValid() const;
+        virtual sal_Bool        IsValid() const;
         virtual Rectangle   GetVisArea() const;
         virtual Point       LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const;
         virtual Point       PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const;

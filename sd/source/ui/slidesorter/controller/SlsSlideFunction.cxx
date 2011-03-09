@@ -61,20 +61,20 @@ void SlideFunction::ScrollEnd (void)
 {
 }
 
-BOOL SlideFunction::MouseMove(const MouseEvent& )
+sal_Bool SlideFunction::MouseMove(const MouseEvent& )
 {
-    return FALSE;
+    return sal_False;
 }
 
-BOOL SlideFunction::MouseButtonUp(const MouseEvent& )
+sal_Bool SlideFunction::MouseButtonUp(const MouseEvent& )
 {
-    return FALSE;
+    return sal_False;
 
 }
 
-BOOL SlideFunction::MouseButtonDown(const MouseEvent& )
+sal_Bool SlideFunction::MouseButtonDown(const MouseEvent& )
 {
-    return FALSE;
+    return sal_False;
 }
 
 } } } // end of namespace ::sd::slidesorter::controller

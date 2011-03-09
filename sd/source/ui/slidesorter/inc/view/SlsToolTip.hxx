@@ -77,7 +77,7 @@ private:
     model::SharedPageDescriptor mpDescriptor;
     ::rtl::OUString msDefaultHelpText;
     ::rtl::OUString msCurrentHelpText;
-    ULONG mnHelpWindowHandle;
+    sal_uLong mnHelpWindowHandle;
     Timer maTimer;
 
     /** Request to show the tool tip.

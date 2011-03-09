@@ -66,9 +66,9 @@ FuOutline::FuOutline (
 |*
 \************************************************************************/
 
-BOOL FuOutline::Command(const CommandEvent& rCEvt)
+sal_Bool FuOutline::Command(const CommandEvent& rCEvt)
 {
-    BOOL bResult = FALSE;
+    sal_Bool bResult = sal_False;
 
     OutlinerView* pOlView =
         static_cast<OutlineView*>(mpView)->GetViewByWindow(mpWindow);
@@ -77,7 +77,7 @@ BOOL FuOutline::Command(const CommandEvent& rCEvt)
     if (pOlView)
     {
         pOlView->Command(rCEvt);        // liefert leider keinen Returnwert
-        bResult = TRUE;
+        bResult = sal_True;
     }
     return bResult;
 }

@@ -38,7 +38,7 @@ namespace sd { namespace slidesorter { namespace controller {
 SdTransferable* TransferableData::CreateTransferable (
     SdDrawDocument* pSrcDoc,
     ::sd::View* pWorkView,
-    BOOL bInitOnGetData,
+    sal_Bool bInitOnGetData,
     SlideSorterViewShell* pViewShell,
     const ::std::vector<Representative>& rRepresentatives)
 {
