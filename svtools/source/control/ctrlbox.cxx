@@ -1113,6 +1113,14 @@ namespace
                 sSampleText = rtl::OUString(aEthi, SAL_N_ELEMENTS(aEthi));
                 break;
             }
+            case vcl::UnicodeCoverage::CHEROKEE:
+            {
+                const sal_Unicode aCher[] = {
+                    0x13D7, 0x13AA, 0x13EA, 0x13B6, 0x13D9, 0x13D7
+                };
+                sSampleText = rtl::OUString(aCher, SAL_N_ELEMENTS(aCher));
+                break;
+            }
             case vcl::UnicodeCoverage::KHMER:
             {
                 const sal_Unicode aKhmr[] = {
