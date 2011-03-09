@@ -467,7 +467,7 @@ void TokenPool::GetElementRek( const UINT16 nId )
                     break;
                 case T_RN:
                 {
-                    UINT16 n = pElement[nId];
+                    UINT16 n = pElement[*pAkt];
                     if (n < maRangeNames.size())
                     {
                         const RangeName& r = maRangeNames[n];
