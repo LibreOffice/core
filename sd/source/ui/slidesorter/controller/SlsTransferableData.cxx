@@ -109,7 +109,7 @@ void TransferableData::DragFinished (sal_Int8 nDropAction)
 
 
 
-void TransferableData::Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint)
+void TransferableData::Notify (SfxBroadcaster&, const SfxHint& rHint)
 {
     if (rHint.ISA(SfxSimpleHint) && mpViewShell!=NULL)
     {
