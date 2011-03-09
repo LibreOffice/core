@@ -32,7 +32,7 @@
 *   (die defines setzen sich aus "_SVSTDARR_" und dem Namen des Array
 *    ohne "Sv" zusammen)
 *
-*   VarArr:     SvULongs, SvUShorts, SvLongs
+*   VarArr:     SvULongs, SvUShorts
 *   PtrArr:     SvStrings, SvStringsDtor
 *   SortArr:    SvStringsSort, SvStringsSortDtor,
 *               SvStringsISort, SvStringsISortDtor,
@@ -100,11 +100,6 @@ private:
 };
 
 #define _SVSTDARR_USHORTSSORT_DECL
-#endif
-
-#ifndef _SVSTDARR_LONGS_DECL
-SV_DECL_VARARR_VISIBILITY( SvLongs, long, 1, 1, SVL_DLLPUBLIC )
-#define _SVSTDARR_LONGS_DECL
 #endif
 
 #ifndef _SVSTDARR_LONGSSORT_DECL

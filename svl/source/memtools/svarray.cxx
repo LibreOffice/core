@@ -34,7 +34,6 @@
 #define _SVSTDARR_ULONGS
 #define _SVSTDARR_ULONGSSORT
 #define _SVSTDARR_USHORTS
-#define _SVSTDARR_LONGS
 #define _SVSTDARR_LONGSSORT
 #define _SVSTDARR_STRINGS
 #define _SVSTDARR_STRINGSDTOR
@@ -76,7 +75,6 @@ USHORT SvPtrarrPlain::GetPos( const VoidPtr aElement ) const
 
 SV_IMPL_VARARR( SvULongs, ULONG )
 SV_IMPL_VARARR( SvUShorts, USHORT )
-SV_IMPL_VARARR( SvLongs, long)
 
 SV_IMPL_VARARR_SORT( SvULongsSort, ULONG )
 SV_IMPL_VARARR_SORT( SvLongsSort, long )
