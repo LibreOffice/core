@@ -57,6 +57,7 @@
 #include <basegfx/tuple/b2i64tuple.hxx>
 #include <basegfx/range/b2irange.hxx>
 #include <com/sun/star/rendering/XIntegerReadOnlyBitmap.hpp>
+#include <com/sun/star/rendering/PanoseProportion.hpp>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <com/sun/star/rendering/StrokeAttributes.hpp>
 #include <com/sun/star/rendering/PathJoinType.hpp>
@@ -1517,6 +1518,10 @@ namespace drawinglayer
                     aFontRequest.FontDescription.IsVertical = rFontAttr.getVertical() ? util::TriState_YES : util::TriState_NO;
                     // TODO(F2): improve vclenum->panose conversion
                     aFontRequest.FontDescription.FontDescription.Weight = static_cast< sal_uInt8 >(rFontAttr.getWeight());
+                    aFontRequest.FontDescription.FontDescription.Proportion =
+                        rFontAttr.getMonospaced()
+                            ? rendering::PanoseProportion::MONO_SPACED
+                            : rendering::PanoseProportion::ANYTHING;
                     aFontRequest.FontDescription.FontDescription.Letterform = rFontAttr.getItalic() ? 9 : 0;
 
                     // init CellSize to 1.0, else a default font height will be used

@@ -36,7 +36,7 @@
 #include <ndtxt.hxx>
 
 SwTxtTOXMark::SwTxtTOXMark( SwTOXMark& rAttr,
-                    xub_StrLen nStartPos, xub_StrLen* pEnd )
+            xub_StrLen const nStartPos, xub_StrLen const*const pEnd)
     : SwTxtAttrEnd( rAttr, nStartPos, nStartPos )
     , m_pTxtNode( 0 )
     , m_pEnd( 0 )

@@ -34,7 +34,7 @@ module com { module sun { module star { module rendering {
     These constants control the automatic rendering of emphasis marks
     for a given font.<p>
 
-    @since OOo 2.0.0
+    @since OOo 2.0
  */
 constants EmphasisMark
 {

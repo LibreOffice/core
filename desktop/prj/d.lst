@@ -31,7 +31,7 @@ mkdir: %_DEST%\bin%_EXT%\odf4ms
 ..\%__SRC%\bin\swriter.exe %_DEST%\bin%_EXT%\swriter.exe
 ..\%__SRC%\bin\sbase.exe %_DEST%\bin%_EXT%\sbase.exe
 ..\%__SRC%\bin\sweb.exe %_DEST%\bin%_EXT%\sweb.exe
-..\%__SRC%\bin\quickstart.exe %_DEST%\bin%_EXT%\quickstart.exe
+..\%__SRC%\bin\os2quickstart.exe %_DEST%\bin%_EXT%\quickstart.exe
 ..\%__SRC%\bin\so\scalc.exe %_DEST%\bin%_EXT%\so\scalc.exe
 ..\%__SRC%\bin\so\sdraw.exe %_DEST%\bin%_EXT%\so\sdraw.exe
 ..\%__SRC%\bin\so\simpress.exe %_DEST%\bin%_EXT%\so\simpress.exe
@@ -39,6 +39,11 @@ mkdir: %_DEST%\bin%_EXT%\odf4ms
 ..\%__SRC%\bin\so\swriter.exe %_DEST%\bin%_EXT%\so\swriter.exe
 ..\%__SRC%\bin\so\sbase.exe %_DEST%\bin%_EXT%\so\sbase.exe
 ..\%__SRC%\bin\so\sweb.exe %_DEST%\bin%_EXT%\so\sweb.exe
+
+..\%__SRC%\bin\quickstart.exe %_DEST%\bin%_EXT%\quickstart.exe
+..\%__SRC%\bin\quickstart.exe %_DEST%\bin%_EXT%\install_quickstart.exe
+..\%__SRC%\bin\soquickstart.exe %_DEST%\bin%_EXT%\so\quickstart.exe
+..\%__SRC%\bin\soquickstart.exe %_DEST%\bin%_EXT%\so\install_quickstart.exe
 
 ..\%__SRC%\misc\soffice.exe.manifest %_DEST%\bin%_EXT%\soffice.exe.manifest
 ..\%__SRC%\misc\soffice.bin.manifest %_DEST%\bin%_EXT%\soffice.bin.manifest

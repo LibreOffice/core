@@ -58,7 +58,7 @@ interface XDocumentEventListener;
     anymore.</p>
 
     @see DocumentEvent
-    @since OpenOffice.org 3.1
+    @since OOo 3.1
 */
 interface XDocumentEventBroadcaster
 {

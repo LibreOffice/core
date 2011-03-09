@@ -486,6 +486,8 @@ testcase tFormatStylistTemplateNew
 endcase 'tFormatStylistTemplateNew
 '--------------------------------------------------------
 testcase tiFormatStylist
+warnlog "#i116803# - Crash when closing stylist with closer"
+goto endsub
 
     Dim Num1 as integer '  graphics : first line indent ; the one with 0,6cm in the summary
     Dim Num2 as integer '  presentations : background   ; just one tabpage pops up: Area
@@ -530,6 +532,8 @@ testcase tiFormatStylist
     end if
     sleep 1
 
+
+
     FormatStylist
     Kontext "Gestalter"
     printlog "opening graphics styles"
@@ -559,7 +563,7 @@ testcase tiFormatStylist
         sleep 1
         printlog "presentation styles"
         Praesentationsvorlagen.Click
-
+        printlog "Select number 2"
         Vorlagenliste.Select Num2
         sleep 1
         printlog "opening context menu"
@@ -681,6 +685,10 @@ testcase tiFormatStylist
         TabOptionenNumerierung.Cancel
         sleep 1
     endif
+
+
+
+
     kontext "DocumentImpress"
     printlog "Closing Stylist"
     if lcase(gPlatform) = "osx" then

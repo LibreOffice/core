@@ -75,6 +75,8 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     tk \
     tl \
     utl \
+    unordf \
+    unoxml \
     vbahelper \
     vcl \
     xcr \
@@ -87,8 +89,10 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
 ))
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
-    icuuc \
     cppunit \
+    icuuc \
+    rdf \
+    xslt \
 ))
 
 

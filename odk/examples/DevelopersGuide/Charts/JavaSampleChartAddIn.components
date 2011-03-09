@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components xmlns="http://openoffice.org/2010/uno-components">
+  <component loader="com.sun.star.loader.Java2" uri="JavaSampleChartAddIn.uno.jar">
+    <implementation name="JavaSampleChartAddIn">
+      <service name="com.sun.star.comp.Chart.JavaSampleChartAddIn"/>
+      <service name="com.sun.star.chart.Diagram"/>
+      <service name="com.sun.star.chart.ChartAxisYSupplier"/>
+    </implementation>
+  </component>
+</components>

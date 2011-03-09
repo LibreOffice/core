@@ -705,6 +705,7 @@ sub create_simple_package
 
         if (( $onefile->{'Styles'} ) && ( $onefile->{'Styles'} =~ /\bBINARYTABLE_ONLY\b/ )) { next; }
         if (( $installer::globals::patch ) && ( $onefile->{'Styles'} ) && ( ! ( $onefile->{'Styles'} =~ /\bPATCH\b/ ))) { next; }
+        if (( $installer::globals::patch ) && ( $installer::globals::packageformat eq "dmg" )) { push(@installer::globals::patchfilecollector, "$onefile->{'destination'}\n"); }
 
         my $source = $onefile->{'sourcepath'};
         my $destination = $onefile->{'destination'};

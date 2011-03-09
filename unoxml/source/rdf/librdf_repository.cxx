@@ -1069,8 +1069,9 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
             "librdf_Repository::exportGraph: "
             "librdf_model_context_as_stream failed"), *this);
     }
-//    const char *format("rdfxml");
-    const char *format("rdfxml-abbrev");
+    const char *format("rdfxml");
+    // #i116443#: abbrev breaks when certain URIs are used as data types
+//    const char *format("rdfxml-abbrev");
     const boost::shared_ptr<librdf_serializer> pSerializer(
         librdf_new_serializer(m_pWorld.get(), format, NULL, NULL),
         safe_librdf_free_serializer);

@@ -1,6 +1,6 @@
 su	sysui	:	L10N:l10n offapi xml2cmp rdbmaker l10ntools setup_native NULL
-su	sysui\source\win32\QuickStart		nmake	-	w	su_win32_quickstart NULL
-su	sysui\source\win32\QuickStart\so	nmake	-	w	su_win32_quickstart_so su_win32_quickstart.w NULL
+#su	sysui\source\win32\QuickStart		nmake	-	w	su_win32_quickstart NULL
+#su	sysui\source\win32\QuickStart\so	nmake	-	w	su_win32_quickstart_so su_win32_quickstart.w NULL
 su	sysui\desktop\icons					nmake	-	w	su_iconsw NULL
 su	sysui\desktop\os2					nmake	-	p	su_iconsw NULL
 su  sysui\desktop\macosx                nmake   -   u   su_dtmacosx su_dtshare.u NULL
@@ -16,4 +16,4 @@ su  sysui\desktop\debian                nmake   -   u   su_dtdebian su_dtshare.u
 su  sysui\desktop\slackware             nmake   -   u   su_dtslackware su_dtshare.u NULL
 su  sysui\desktop\solaris               nmake   -   u   su_dtsolaris su_dtshare.u NULL
 su  sysui\desktop\util                  nmake   -   u   su_desktop su_dtredhat.u su_dtsuse.u su_dtmdk.u su_dtfreedesktop.u su_dtdebian.u su_dtslackware.u NULL
-su  sysui\util		                    nmake   -   all su_util su_dtsolaris.u su_desktop.u su_win32_quickstart_so.w su_iconsw.w NULL
+su  sysui\util		                    nmake   -   all su_util su_dtsolaris.u su_desktop.u su_iconsw.w NULL

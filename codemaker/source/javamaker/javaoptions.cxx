@@ -33,6 +33,12 @@
 #include "osl/process.h"
 #include "osl/thread.h"
 
+#ifdef SAL_UNX
+#define SEPARATOR '/'
+#else
+#define SEPARATOR '\\'
+#endif
+
 using namespace rtl;
 
 sal_Bool JavaOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
@@ -45,7 +51,9 @@ sal_Bool JavaOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
     {
         bCmdFile = sal_True;
 
-        m_program = av[0];
+        OString name(av[0]);
+        sal_Int32 index = name.lastIndexOf(SEPARATOR);
+        m_program = name.copy((index > 0 ? index+1 : 0));
 
         if (ac < 2)
         {
@@ -282,7 +290,7 @@ OString JavaOptions::prepareHelp()
     help += "    -nD        = no dependent types are generated.\n";
     help += "    -G         = generate only target files which does not exists.\n";
     help += "    -Gc        = generate only target files which content will be changed.\n";
-    help += "    -X<file>   = extra types which will not be taken into account for generation.\n";
+    help += "    -X<file>   = extra types which will not be taken into account for generation.\n\n";
     help += prepareVersion();
 
     return help;
@@ -290,9 +298,8 @@ OString JavaOptions::prepareHelp()
 
 OString JavaOptions::prepareVersion()
 {
-    OString version("\nSun Microsystems (R) ");
-    version += m_program + " Version 2.0\n\n";
-
+    OString version(m_program);
+    version += " Version 2.0\n\n";
     return version;
 }
 

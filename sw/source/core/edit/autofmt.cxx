@@ -1542,6 +1542,9 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                         aFmt.SetBulletFont( pBullFnt );
                         aFmt.SetBulletChar( cBullChar );
                         aFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
+                        // #i93908# clear suffix for bullet lists
+                        aFmt.SetPrefix(::rtl::OUString());
+                        aFmt.SetSuffix(::rtl::OUString());
                         aFmt.SetFirstLineOffset( lBullFirstLineOffset );
                         aFmt.SetAbsLSpace( nAbsPos );
                         if( !aFmt.GetCharFmt() )

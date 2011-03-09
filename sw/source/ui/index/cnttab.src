@@ -575,8 +575,8 @@ TabPage TP_TOX_ENTRY
     };
     Window WIN_TOKEN
     {
-        Pos = MAP_APPFONT (  70, 16 ) ;
-        Size = MAP_APPFONT ( 136, 12 ) ;
+        Pos = MAP_APPFONT (  70, 15 ) ;
+        Size = MAP_APPFONT ( 136, 14 ) ;
         ImageButton WIN_LEFT_SCROLL
         {
             HelpID = "sw:ImageButton:TP_TOX_ENTRY:WIN_LEFT_SCROLL";

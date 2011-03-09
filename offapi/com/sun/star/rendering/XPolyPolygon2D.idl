@@ -47,7 +47,7 @@ module com { module sun { module star { module rendering {
 
 /** Generic interface for poly-polygons in 2D.
 
-    @since OOo 2.0.0
+    @since OOo 2.0
  */
 interface XPolyPolygon2D : ::com::sun::star::uno::XInterface
 {

@@ -123,7 +123,7 @@ testcase i64991
         Kontext
         Active.Setpage TabSeite
         Kontext "TabSeite"
-        if Not Quer.IsChecked then Warnlog "#i64991#Setting a printer make the page styles to be lost"
+        if Not Quer.IsChecked then Warnlog "Setting a printer make the page styles to be lost"
         TabSeite.Cancel
 
         Call wTypeKeys ("<Down>")
@@ -134,7 +134,7 @@ testcase i64991
         Kontext
         Active.Setpage TabSeite
         Kontext "TabSeite"
-        if Not Hoch.IsChecked then Warnlog "#i64991#Setting a printer make the page styles to be lost"
+        if Not Hoch.IsChecked then Warnlog "Setting a printer make the page styles to be lost"
         TabSeite.Cancel
     end if
 

@@ -148,7 +148,7 @@ interface XTextLayout;
     <member>getDevice()</member> call) - they will then internally
     optimize to the underlying graphics subsystem.<p>
 
-    @since OOo 2.0.0
+    @since OOo 2.0
  */
 interface XCanvas : ::com::sun::star::uno::XInterface
 {

@@ -1312,6 +1312,17 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
                 //Erstmal das Format zum Fly besorgen und das Layout entkoppeln.
                 SwFrmFmt *pOldFmt = rDoc.GetNodes()[nNdIdx]->GetFlyFmt();
                 ASSERT( pOldFmt, "Format des Fly nicht gefunden." );
+                // --> OD #i115719#
+                // <title> and <description> attributes are lost when calling <DelFrms()>.
+                // Thus, keep them and restore them after the calling <MakeFrms()>
+                const bool bIsSwFlyFrmFmtInstance( dynamic_cast<SwFlyFrmFmt*>(pOldFmt) != 0 );
+                const String sTitle( bIsSwFlyFrmFmtInstance
+                                     ? static_cast<SwFlyFrmFmt*>(pOldFmt)->GetObjTitle()
+                                     : String() );
+                const String sDescription( bIsSwFlyFrmFmtInstance
+                                           ? static_cast<SwFlyFrmFmt*>(pOldFmt)->GetObjDescription()
+                                           : String() );
+                // <--
                 pOldFmt->DelFrms();
 
                 pNewFmt = rDoc.MakeFlyFrmFmt( rDoc.GetUniqueFrameName(),
@@ -1449,6 +1460,13 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
                 //Nun nur noch die Flys erzeugen lassen. Das ueberlassen
                 //wir vorhanden Methoden (insb. fuer InCntFlys etwas aufwendig).
                 pNewFmt->MakeFrms();
+                // --> OD #i115719#
+                if ( bIsSwFlyFrmFmtInstance )
+                {
+                    static_cast<SwFlyFrmFmt*>(pOldFmt)->SetObjTitle( sTitle );
+                    static_cast<SwFlyFrmFmt*>(pOldFmt)->SetObjDescription( sDescription );
+                }
+                // <--
             }
             break;
 

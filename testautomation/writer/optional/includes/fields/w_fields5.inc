@@ -182,7 +182,7 @@ testcase tVariablesSetValueToNumber
    for i = 0 to j
        Call wTypeKeys "<Shift Right>"
        if fGetFieldContent() <> sResult(i) then
-           QaErrorLog i & "#i94596# - Should get " & sResult(i) & " but get " & fGetFieldContent()
+           Warnlog i & "Should get " & sResult(i) & " but get " & fGetFieldContent()
        end if
        Call wTypeKeys "<Down><Home>"
    next i
@@ -194,8 +194,6 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tVariablesSetFormats
-    qaerrorlog "#i94596# - tVariablesSetFormats outcommented due to bug."
-    goto endsub
 
   Dim sName     as String
   Dim sValue    as String

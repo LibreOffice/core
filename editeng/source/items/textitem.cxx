@@ -256,6 +256,16 @@ SvxFontItem::SvxFontItem( const FontFamily eFam, const XubString& aName,
 }
 
 // -----------------------------------------------------------------------
+SvxFontItem& SvxFontItem::operator=(const SvxFontItem& rFont)
+{
+    aFamilyName =  rFont.GetFamilyName();
+    aStyleName =   rFont.GetStyleName();
+    eFamily =      rFont.GetFamily();
+    ePitch =   rFont.GetPitch();
+    eTextEncoding = rFont.GetCharSet();
+    return *this;
+}
+// -----------------------------------------------------------------------
 
 sal_Bool SvxFontItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
@@ -3806,11 +3816,11 @@ void GetDefaultFonts( SvxFontItem& rLatin, SvxFontItem& rAsian, SvxFontItem& rCo
                                                   aOutTypeArr[ n ].nLanguage,
                                                   DEFAULTFONT_FLAGS_ONLYONE, 0 ) );
         SvxFontItem* pItem = aItemArr[ n ];
-        pItem->GetFamily() = aFont.GetFamily();
-        pItem->GetFamilyName() = aFont.GetName();
-        pItem->GetStyleName().Erase();
-        pItem->GetPitch() = aFont.GetPitch();
-        pItem->GetCharSet() = aFont.GetCharSet();
+        pItem->SetFamily( aFont.GetFamily() );
+        pItem->SetFamilyName( aFont.GetName() );
+        pItem->SetStyleName( String() );
+        pItem->SetPitch( aFont.GetPitch());
+        pItem->SetCharSet(aFont.GetCharSet());
     }
 }
 

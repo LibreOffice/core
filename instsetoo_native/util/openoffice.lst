@@ -6,7 +6,7 @@ Globals
 		{
 			OOOBASEVERSION 3.4
 			OOOPACKAGEVERSION 3.4.0
-			UREPACKAGEVERSION 1.8.0
+			UREPACKAGEVERSION 3.4.0
 			URELAYERVERSION 1
 			BASISROOTNAME OpenOffice.org
 			UNIXBASISROOTNAME openoffice.org
@@ -23,7 +23,7 @@ Globals
 			USE_FILEVERSION 1
 			LIBRARYVERSION 9.4.0
             POOLPRODUCT 1
-            REGISTRATION_HOST https://registration2.services.openoffice.org/RegistrationWeb
+            REGISTRATION_HOST https://hs-ws1.oracle.com/RegistrationWeb
 			REGISTRATIONURL http://survey.services.openoffice.org/user/index.php
 			PROGRESSBARCOLOR 14,133,205
 			PROGRESSSIZE 320,7
@@ -254,8 +254,8 @@ URE
         variables
         {
             PRODUCTNAME URE
-            PRODUCTVERSION 1.8
-            PACKAGEVERSION 1.8
+            PRODUCTVERSION 3.4
+            PACKAGEVERSION 3.4
             PACKAGEREVISION 1
             PRODUCTEXTENSION
             LONG_PRODUCTEXTENSION

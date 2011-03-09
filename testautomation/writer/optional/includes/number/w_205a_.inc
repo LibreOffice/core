@@ -866,7 +866,7 @@ testcase tToolsFootnoteEndnote
     if Davor.GetText <> "Hihi " then Warnlog "Endnote: 'Before' is wrong. Not 'Hihi ' but " +  Davor.GetText
     if Dahinter.GetText <> " HaHa" then Warnlog "Endnote: Text after is wrong. Not ' HaHa' but " +  Dahinter.GetText
     if Absatz.GetSelIndex <> 3 then Warnlog "Endnote: Wrong entry selected in paragraph. Not 3 but " + Absatz.GetSelIndex
-    if Seite.GetSelIndex <> 2 then Warnlog "#i40579#Endnote: Wrong Page entry selected. Not 2 but " + Seite.GetSelIndex
+    if Seite.GetSelIndex <> 2 then Warnlog "Endnote: Wrong Page entry selected. Not 2 but " + Seite.GetSelIndex
     if ZeichenvorlageTextbereich.GetSelIndex <> 4 then Warnlog "Endnote: Text area has been changed!"
     if ZeichenvorlageEndnotenbereich.GetSelIndex <> 5 then Warnlog "Endnote: Endnote area has been changed!"
     TabEndnoten.Cancel

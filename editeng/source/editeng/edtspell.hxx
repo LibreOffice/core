@@ -158,6 +158,7 @@ public:
     virtual sal_Bool    Delete( sal_uInt16 nStt, sal_uInt16 nEnd );
     virtual sal_Bool    Insert( sal_uInt16 nPos, const String& rTxt );
     virtual sal_Bool    Replace( sal_uInt16 nPos, const String& rTxt );
+    virtual sal_Bool    ReplaceRange( xub_StrLen nPos, xub_StrLen nLen, const String& rTxt );
 
     virtual sal_Bool    SetAttr( sal_uInt16 nStt, sal_uInt16 nEnd, sal_uInt16 nSlotId, SfxPoolItem& );
     virtual sal_Bool    SetINetAttr( sal_uInt16 nStt, sal_uInt16 nEnd, const String& rURL );

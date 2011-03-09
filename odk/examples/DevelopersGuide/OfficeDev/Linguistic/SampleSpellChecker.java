@@ -431,7 +431,7 @@ public class SampleSpellChecker extends ComponentBase implements
 
     // __________ static things __________
 
-    public static String _aSvcImplName = "com.sun.star.linguistic2.JavaSamples.SampleSpellChecker";
+    public static String _aSvcImplName = SampleSpellChecker.class.getName();
 
     public static String[] getSupportedServiceNames_Static()
     {
@@ -474,18 +474,22 @@ public class SampleSpellChecker extends ComponentBase implements
      * @param   xRegKey       the registryKey
      * @see                  com.sun.star.comp.loader.JavaLoader
      */
-    public static boolean __writeRegistryServiceInfo(
-            com.sun.star.registry.XRegistryKey xRegKey )
-    {
-        boolean bResult = true;
-        String[] aServices = getSupportedServiceNames_Static();
-        int i, nLength = aServices.length;
-        for( i = 0; i < nLength; ++i )
-        {
-            bResult = bResult && com.sun.star.comp.loader.FactoryHelper.writeRegistryServiceInfo(
-                _aSvcImplName, aServices[i], xRegKey );
-        }
-        return bResult;
-    }
+    // This method not longer necessary since OOo 3.4 where the component registration
+    // was changed to passive component registration. For more details see
+    // http://wiki.services.openoffice.org/wiki/Passive_Component_Registration
+
+//     public static boolean __writeRegistryServiceInfo(
+//             com.sun.star.registry.XRegistryKey xRegKey )
+//     {
+//         boolean bResult = true;
+//         String[] aServices = getSupportedServiceNames_Static();
+//         int i, nLength = aServices.length;
+//         for( i = 0; i < nLength; ++i )
+//         {
+//             bResult = bResult && com.sun.star.comp.loader.FactoryHelper.writeRegistryServiceInfo(
+//                 _aSvcImplName, aServices[i], xRegKey );
+//         }
+//         return bResult;
+//     }
 }
 

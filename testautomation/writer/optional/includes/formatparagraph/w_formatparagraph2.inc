@@ -197,7 +197,7 @@ testcase tParagraphAlignment4
     Call fPositionAndSize("TabPositionAndSizeWriter")
         if fCalculateTolerance(Horizontalby.Gettext , sPositionX1) > 0.02 then
             if gPlatGroup = "unx" then
-                QaErrorLog "#i94769# - Different font-sizes under Linux/Unix compared with windows."
+                Warnlog "Different font-sizes under Linux/Unix compared with windows."
             else
                 Warnlog "Alignment Justified doesn't work -1 !"
             end if
@@ -210,7 +210,7 @@ testcase tParagraphAlignment4
     Call fPositionAndSize("TabPositionAndSizeWriter")
         if Horizontalby.Gettext <> sPositionX2 then 
             if gPlatGroup = "unx" then
-                QaErrorLog "#i94769# - Different font-sizes under Linux/Unix compared with windows."
+                Warnlog "Different font-sizes under Linux/Unix compared with windows."
             else
                 warnlog "Alignment Justified doesn't work -2 !"
             end if
@@ -310,7 +310,7 @@ testcase tParagraphAlignment6
     Call fPositionAndSize("TabPositionAndSizeWriter")
         if Horizontalby.Gettext <> sPositionX1 then 
             if gPlatGroup = "unx" then
-                QaErrorLog "#i94769# - Different font-sizes under Linux/Unix compared with windows."
+                Warnlog "Different font-sizes under Linux/Unix compared with windows."
             else
                 warnlog "Alignment Justified doesn't work -1 !"
             end if

@@ -398,6 +398,11 @@ static AquaSalFrame* getMouseContainerFrame()
     return self;
 }
 
+-(AquaSalFrame*)getSalFrame
+{
+    return mpFrame;
+}
+
 -(void)resetCursorRects
 {
     if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )

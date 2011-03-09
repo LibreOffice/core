@@ -857,6 +857,15 @@ void BasicFrame::Resize()
     }
 }
 
+Rectangle BasicFrame::GetInnerRect() const
+{
+    Rectangle aRect( Point(0,0), GetOutputSizePixel() );
+    aRect.Bottom() = pStatus->GetPosPixel().Y()-1;
+    if( aRect.Bottom() < 0 ) // sanity check
+        aRect.Bottom() = 0;
+    return aRect;
+}
+
 void BasicFrame::Move()
 {
     Config aConf(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));

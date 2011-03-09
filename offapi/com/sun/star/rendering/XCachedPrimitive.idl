@@ -45,7 +45,7 @@ module com { module sun { module star { module rendering {
     This interface provides a method to quickly redraw some
     <type>XCanvas</type> primitives, using cached data.<p>
 
-    @since OOo 2.0.0
+    @since OOo 2.0
  */
 interface XCachedPrimitive : ::com::sun::star::uno::XInterface
 {

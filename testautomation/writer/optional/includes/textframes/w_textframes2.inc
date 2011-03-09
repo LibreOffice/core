@@ -178,7 +178,7 @@ testcase tTextframes_19
     
     Kontext "Active"
     if Active.Exists then
-        Warnlog "#i40348# The frame should move by keyboard!"
+        Warnlog "The frame should move by keyboard!"
         Active.Ok
     end if
     
@@ -188,7 +188,7 @@ testcase tTextframes_19
         Wait 500
         if GetClipboardText <> sTestText then Warnlog "Something wrong in the test . Clipboard:" +GetClipboardText
     catch
-        Warnlog "#i40348#"
+        Warnlog "The frame should move by keyboard!"
     endcatch
     
     Call hCloseDocument

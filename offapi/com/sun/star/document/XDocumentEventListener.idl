@@ -47,7 +47,7 @@ module com { module sun { module star { module document {
     anymore.</p>
 
     @see XDocumentEventBroadcaster
-    @since OpenOffice.org 3.1
+    @since OOo 3.1
  */
 interface XDocumentEventListener : ::com::sun::star::lang::XEventListener
 {

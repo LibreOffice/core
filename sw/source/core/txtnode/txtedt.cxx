@@ -966,11 +966,11 @@ void SwTxtNode::SetLanguageAndFont( const SwPaM &rPaM,
     if (pFont)
     {
         SvxFontItem aFontItem = (SvxFontItem&) aSet.Get( nFontWhichId );
-        aFontItem.GetFamilyName()   = pFont->GetName();
-        aFontItem.GetFamily()       = pFont->GetFamily();
-        aFontItem.GetStyleName()    = pFont->GetStyleName();
-        aFontItem.GetPitch()        = pFont->GetPitch();
-        aFontItem.GetCharSet()      = pFont->GetCharSet();
+        aFontItem.SetFamilyName(   pFont->GetName());
+        aFontItem.SetFamily(       pFont->GetFamily());
+        aFontItem.SetStyleName(    pFont->GetStyleName());
+        aFontItem.SetPitch(        pFont->GetPitch());
+        aFontItem.SetCharSet( pFont->GetCharSet() );
         aSet.Put( aFontItem );
     }
 

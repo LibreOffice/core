@@ -47,7 +47,7 @@ interface XDatabaseRegistrationsListener;
     if possible at all, use this interface, instead of modifying or querying the configuration
     data directly.</p>
 
-    @since OpenOffice.org 3.3
+    @since OOo 3.3
  */
 interface XDatabaseRegistrations
 {

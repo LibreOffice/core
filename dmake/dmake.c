@@ -380,16 +380,19 @@ char **argv;
    _warn = TRUE;
 
    /* If -r was not given find and parse startup-makefile. */
-   if( Rules ) {
-      char *fname;
+   if( Rules )
+   {
+     char *fname = NIL(char);
 
-      /* Search_file() also checks the environment variable. */
-      if( (mkfil=Search_file("MAKESTARTUP", &fname)) != NIL(FILE) ) {
-         Parse(mkfil);
-     Def_macro( "MAKESTARTUP", fname, M_EXPANDED|M_MULTI|M_FORCE );
-      }
-      else
-         Fatal( "Configuration file `%s' not found", fname );
+     /* Search_file() also checks the environment variable. */
+     if( (mkfil=Search_file("MAKESTARTUP", &fname)) != NIL(FILE) )
+     {
+       Parse(mkfil);
+       Def_macro( "MAKESTARTUP", fname, M_EXPANDED|M_MULTI|M_FORCE );
+     }
+     else
+       Fatal( "Configuration file `%s' not found", fname );
+     if ( fname != NIL(char)) { FREE( fname ); fname = NIL(char); }
    }
 
    /* Define the targets set on the command line now. */
@@ -428,8 +431,7 @@ char **argv;
       char *p;
 
       if( strcmp(f, "stdin") == 0 ) f = "-";
-      p = DmStrAdd( "-f", f, FALSE );
-      Def_macro( "MAKEFILE", p, M_PRECIOUS|M_NOEXPORT );
+      Def_macro( "MAKEFILE", p = DmStrAdd( "-f", f, FALSE ), M_PRECIOUS|M_NOEXPORT ); FREE(p);
       Parse( mkfil );
    }
    else if( !Rules )
@@ -663,23 +665,25 @@ char **rname;
     */
 
    if( (hp = GET_MACRO(macname)) != NIL(HASH) ) {
-      /* Only expand if needed. */
-      if( hp->ht_flag & M_EXPANDED ) {
-     ename = fname = DmStrDup(hp->ht_value);
-      } else {
-     ename = fname = Expand(hp->ht_value);
-      }
+     /* Only expand if needed. */
+     if( hp->ht_flag & M_EXPANDED ) {
+       ename = fname = DmStrDup(hp->ht_value);
+     } else {
+       ename = fname = Expand(hp->ht_value);
+     }
 
-      if( hp->ht_flag & M_PRECIOUS ) fil = Openfile(fname, FALSE, FALSE);
+     if( hp->ht_flag & M_PRECIOUS ) fil = Openfile(fname, FALSE, FALSE);
    }
 
    if( fil == NIL(FILE) ) {
-      fname=Expand(Read_env_string(macname));
-      if( (fil = Openfile(fname, FALSE, FALSE)) != NIL(FILE) ) FREE(ename);
+     fname=Expand(Read_env_string(macname));
+     if( (fil = Openfile(fname, FALSE, FALSE)) != NIL(FILE) ) FREE(ename);
    }
 
-   if( fil == NIL(FILE) && hp != NIL(HASH) )
-      fil = Openfile(fname=ename, FALSE, FALSE);
+   if( fil == NIL(FILE) && hp != NIL(HASH) ) {
+     if ( fname != NIL(char) ) { FREE(fname); fname = NIL(char); }
+     fil = Openfile(fname=ename, FALSE, FALSE);
+   }
 
    if( rname ) *rname = fname;
 

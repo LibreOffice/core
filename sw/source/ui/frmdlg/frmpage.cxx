@@ -1321,7 +1321,7 @@ void SwFrmPage::InitPos(RndStdIds eId,
     aAtHorzPosFT.Enable( bEnable );
     aAtHorzPosED.Enable( bEnable );
 
-    bEnable = nV == text::VertOrientation::NONE && !bFormat;
+    bEnable = nV == text::VertOrientation::NONE;
     if ( !bEnable )
     {
         aAtVertPosED.SetValue( 0, FUNIT_TWIP );

@@ -4123,6 +4123,8 @@ SwViewOptionAdjust_Impl::SwViewOptionAdjust_Impl( SwWrtShell& rSh, const SwViewO
 SwViewOptionAdjust_Impl::~SwViewOptionAdjust_Impl()
 {
     m_rShell.ApplyViewOptions( m_aOldViewOptions );
+    //#i115062# invalidate meta character slot
+    m_rShell.GetView().GetViewFrame()->GetBindings().Invalidate( FN_VIEW_META_CHARS );
 }
 
 

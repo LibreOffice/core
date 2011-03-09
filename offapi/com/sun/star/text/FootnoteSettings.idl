@@ -126,7 +126,7 @@ published service FootnoteSettings
     /** contains the name of the character style that is used
         for footnote/endnote anchor in the text.
 
-        @since OOo 2.0.0
+        @since OOo 2.0
      */
     [optional, property] string AnchorCharStyleName;
 

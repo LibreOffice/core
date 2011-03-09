@@ -28,70 +28,35 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_registry.hxx"
 
+#include "registry/registry.hxx"
+#include "fileurl.hxx"
+#include "options.hxx"
+
+#include "rtl/ustring.hxx"
+#include "osl/diagnose.h"
+
 #include <stdio.h>
 #include <string.h>
 
-#include "registry/registry.hxx"
-#include    <rtl/ustring.hxx>
-#include    <rtl/alloc.h>
-#include <osl/process.h>
-#include <osl/diagnose.h>
-#include <osl/thread.h>
-#include <osl/file.hxx>
+using namespace rtl;
+using namespace registry::tools;
 
-#ifdef SAL_UNX
-#define SEPARATOR '/'
-#else
-#define SEPARATOR '\\'
-#endif
-
-using namespace ::rtl;
-using namespace ::osl;
-
-sal_Bool isFileUrl(const OString& fileName)
+class Options_Impl : public Options
 {
-    if (fileName.indexOf("file://") == 0 )
-        return sal_True;
-    return sal_False;
-}
+    bool m_bVerbose;
 
-OUString convertToFileUrl(const OString& fileName)
-{
-    if ( isFileUrl(fileName) )
-    {
-        return OStringToOUString(fileName, osl_getThreadTextEncoding());
-    }
+public:
+    explicit Options_Impl (char const * program)
+        : Options(program), m_bVerbose(false)
+    {}
+    bool isVerbose() const { return m_bVerbose; }
 
-    OUString uUrlFileName;
-    OUString uFileName(fileName.getStr(), fileName.getLength(), osl_getThreadTextEncoding());
-    if ( fileName.indexOf('.') == 0 || fileName.indexOf(SEPARATOR) < 0 )
-    {
-        OUString uWorkingDir;
-        if (osl_getProcessWorkingDir(&uWorkingDir.pData) != osl_Process_E_None)
-        {
-            OSL_ASSERT(false);
-        }
-        if (FileBase::getAbsoluteFileURL(uWorkingDir, uFileName, uUrlFileName)
-            != FileBase::E_None)
-        {
-            OSL_ASSERT(false);
-        }
-    } else
-    {
-        if (FileBase::getFileURLFromSystemPath(uFileName, uUrlFileName)
-            != FileBase::E_None)
-        {
-            OSL_ASSERT(false);
-        }
-    }
+protected:
+    virtual void printUsage_Impl() const;
+    virtual bool initOptions_Impl(std::vector< std::string > & rArgs);
+};
 
-    return uUrlFileName;
-}
-
-int realargc;
-char* realargv[2048];
-
-static void dumpHelp()
+void Options_Impl::printUsage_Impl() const
 {
     fprintf(stderr, "using: regmerge [-v|--verbose] mergefile mergeKeyName regfile_1 ... regfile_n\n");
     fprintf(stderr, "       regmerge @regcmds\nOptions:\n");
@@ -103,100 +68,28 @@ static void dumpHelp()
     fprintf(stderr, "  regfile_1..n  : specifies one or more registry files which are merged.\n");
 }
 
-static bool checkCommandFile(char* cmdfile)
+bool Options_Impl::initOptions_Impl (std::vector< std::string > & rArgs)
 {
-    FILE    *commandfile;
-    char    option[256];
-    bool    bVerbose = false;
-
-    commandfile = fopen(cmdfile+1, "r");
-    if( commandfile == NULL )
+    std::vector< std::string >::iterator first = rArgs.begin(), last = rArgs.end();
+    if ((first != last) && ((*first)[0] == '-'))
     {
-        fprintf(stderr, "ERROR: Can't open command file \"%s\"\n", cmdfile);
-    } else
-    {
-        while ( fscanf(commandfile, "%s", option) != EOF )
+        std::string option(*first);
+        if ((option.compare("-v") == 0) || (option.compare("--verbose") == 0))
         {
-            if (option[0]== '@')
-            {
-                bool bRet = checkCommandFile(option);
-                // ensure that the option will not be overwritten
-                if ( !bRet )
-                    bVerbose = bRet;
-            } else {
-                if (option[0]== '-') {
-                    if (strncmp(option, "-v", 2)  == 0 ||
-                        strncmp(option, "--verbose", 9) == 0)
-                    {
-                        bVerbose = true;
-                    } else {
-                        fprintf(stderr, "ERROR: unknown option \"%s\"\n", option);
-                        dumpHelp();
-                        exit(-1);
-                    }
-                }else
-                {
-                    realargv[realargc]= strdup(option);
-                    realargc++;
-                }
-            }
-            if (realargc == 2047)
-            {
-                fprintf(stderr, "ERROR: more than 2048 arguments.\n");
-                break;
-            }
+            m_bVerbose = true;
         }
-        fclose(commandfile);
-    }
-
-    return bVerbose;
-}
-
-static bool checkCommandArgs(int argc, char **argv)
-{
-    bool bVerbose = false;
-
-    realargc = 0;
-
-    for (int i=0; i<argc; i++)
-    {
-        if (argv[i][0]== '@')
+        else if ((option.compare("-h") == 0) || (option.compare("-?") == 0))
         {
-            bool bRet = checkCommandFile(argv[i]);
-            // ensure that the option will not be overwritten
-            if ( !bRet )
-                bVerbose = bRet;
-        } else {
-            if (argv[i][0]== '-') {
-                if (strncmp(argv[i], "-v", 2)  == 0 ||
-                    strncmp(argv[i], "--verbose", 9) == 0)
-                {
-                    bVerbose = true;
-                } else {
-                    fprintf(stderr, "ERROR: unknown option \"%s\"\n", argv[i]);
-                    dumpHelp();
-                    exit(-1);
-                }
-            } else
-            {
-                realargv[realargc]= strdup(argv[i]);
-                realargc++;
-            }
+            return printUsage();
         }
+        else
+        {
+            return badOption("unknown", option.c_str());
+        }
+        (void) rArgs.erase(first);
     }
-
-    return bVerbose;
+    return true;
 }
-
-static void cleanCommandArgs()
-{
-    for (int i=0; i<realargc; i++)
-    {
-        free(realargv[i]);
-    }
-}
-
-
 
 #if (defined UNX) || (defined OS2)
 int main( int argc, char * argv[] )
@@ -204,79 +97,83 @@ int main( int argc, char * argv[] )
 int _cdecl main( int argc, char * argv[] )
 #endif
 {
-    bool bVerbose = checkCommandArgs(argc, argv);
+    Options_Impl options(argv[0]);
 
-    if (realargc < 4)
+    std::vector< std::string > args;
+    for (int i = 1; i < argc; i++)
     {
-        dumpHelp();
-        cleanCommandArgs();
-        exit(1);
+        if (!Options::checkArgument(args, argv[i], strlen(argv[i])))
+        {
+            options.printUsage();
+            return (1);
+        }
+    }
+    if (!options.initOptions(args))
+    {
+        return (1);
+    }
+    if (args.size() < 3)
+    {
+        options.printUsage();
+        return (1);
     }
 
-    ::rtl::OUString regName( convertToFileUrl(realargv[1]) );
-
     Registry reg;
+    OUString regName( convertToFileUrl(args[0].c_str(), args[0].size()) );
     if (reg.open(regName, REG_READWRITE) != REG_NO_ERROR)
     {
         if (reg.create(regName) != REG_NO_ERROR)
         {
-            if (bVerbose)
-                fprintf(stderr, "open registry \"%s\" failed\n", realargv[1]);
-            cleanCommandArgs();
-            exit(-1);
+            if (options.isVerbose())
+                fprintf(stderr, "open registry \"%s\" failed\n", args[0].c_str());
+            return (-1);
         }
     }
 
     RegistryKey rootKey;
-    if (reg.openRootKey(rootKey) == REG_NO_ERROR)
+    if (reg.openRootKey(rootKey) != REG_NO_ERROR)
     {
-        ::rtl::OUString mergeKeyName( ::rtl::OUString::createFromAscii(realargv[2]) );
-        ::rtl::OUString targetRegName;
-        for (int i = 3; i < realargc; i++)
+        if (options.isVerbose())
+            fprintf(stderr, "open root key of registry \"%s\" failed\n", args[0].c_str());
+        return (-4);
+    }
+
+    OUString mergeKeyName( OUString::createFromAscii(args[1].c_str()) );
+    for (size_t i = 2; i < args.size(); i++)
+    {
+        OUString targetRegName( convertToFileUrl(args[i].c_str(), args[i].size()) );
+        RegError _ret = reg.mergeKey(rootKey, mergeKeyName, targetRegName, sal_False, options.isVerbose());
+        if (_ret != REG_NO_ERROR)
         {
-            targetRegName = convertToFileUrl(realargv[i]);
-            RegError _ret = reg.mergeKey(rootKey, mergeKeyName, targetRegName, sal_False, bVerbose);
-            if (_ret != REG_NO_ERROR)
+            if (_ret == REG_MERGE_CONFLICT)
             {
-                if (_ret == REG_MERGE_CONFLICT)
-                {
-                    if (bVerbose)
-                        fprintf(stderr, "merging registry \"%s\" under key \"%s\" in registry \"%s\".\n",
-                                realargv[i], realargv[2], realargv[1]);
-                } else
-                {
-                    if (bVerbose)
-                        fprintf(stderr, "ERROR: merging registry \"%s\" under key \"%s\" in registry \"%s\" failed.\n",
-                                realargv[i], realargv[2], realargv[1]);
-                    exit(-2);
-                }
-            } else
-            {
-                if (bVerbose)
+                if (options.isVerbose())
                     fprintf(stderr, "merging registry \"%s\" under key \"%s\" in registry \"%s\".\n",
-                            realargv[i], realargv[2], realargv[1]);
+                            args[i].c_str(), args[1].c_str(), args[0].c_str());
+            }
+            else
+            {
+                if (options.isVerbose())
+                    fprintf(stderr, "ERROR: merging registry \"%s\" under key \"%s\" in registry \"%s\" failed.\n",
+                            args[i].c_str(), args[1].c_str(), args[0].c_str());
+                return (-2);
             }
         }
-
-        rootKey.releaseKey();
-    } else
-    {
-        if (bVerbose)
-            fprintf(stderr, "open root key of registry \"%s\" failed\n",
-                    realargv[1]);
-        exit(-4);
+        else
+        {
+            if (options.isVerbose())
+                fprintf(stderr, "merging registry \"%s\" under key \"%s\" in registry \"%s\".\n",
+                        args[i].c_str(), args[1].c_str(), args[0].c_str());
+        }
     }
 
+    rootKey.releaseKey();
     if (reg.close() != REG_NO_ERROR)
     {
-        if (bVerbose)
-            fprintf(stderr, "closing registry \"%s\" failed\n", realargv[1]);
-        cleanCommandArgs();
-        exit(-5);
+        if (options.isVerbose())
+            fprintf(stderr, "closing registry \"%s\" failed\n", args[0].c_str());
+        return (-5);
     }
 
-    cleanCommandArgs();
     return(0);
 }
-
-

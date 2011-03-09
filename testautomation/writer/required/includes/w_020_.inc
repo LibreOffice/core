@@ -387,7 +387,7 @@ testcase t_TB_Form
         Kontext "FormControls"
         if NOT ControlProperties.IsEnabled then
             if gPlatform = "osx" then
-                warnlog "#i82427#-Mac OS X (Aqua): Drawing function does not draw anything"
+                warnlog "Mac OS X (Aqua): Drawing function does not draw anything"
             else
                 warnlog "Control properties button disabled!"
             end if
@@ -848,7 +848,7 @@ testcase tHtmlDoc_TB_Form
         Kontext "FormControls"
         if NOT ControlProperties.IsEnabled then
             if gPlatform = "osx" then
-                warnlog "#i82427#-Mac OS X (Aqua): Drawing function does not draw anything"
+                warnlog "Mac OS X (Aqua): Drawing function does not draw anything"
             else
                 warnlog "Control properties button disabled!"
             end if

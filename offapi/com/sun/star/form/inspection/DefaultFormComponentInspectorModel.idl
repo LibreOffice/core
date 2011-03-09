@@ -62,7 +62,7 @@ service DefaultFormComponentInspectorModel : com::sun::star::inspection::XObject
     /** creates a default DefaultFormComponentInspectorModel, providing factories for all
         handlers listed above.
 
-        @since OOo 2.2.0
+        @since OOo 2.2
     */
     createDefault();
 
@@ -85,7 +85,7 @@ service DefaultFormComponentInspectorModel : com::sun::star::inspection::XObject
         @see XObjectInspectorModel::MinHelpTextLines
         @see XObjectInspectorModel::MaxHelpTextLines
 
-        @since OOo 2.2.0
+        @since OOo 2.2
     */
     createWithHelpSection(
         [in] long minHelpTextLines,

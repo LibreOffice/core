@@ -383,7 +383,7 @@ void BasicTreeListBox::ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, const
     // dialogs
     if ( nMode & BROWSEMODE_DIALOGS )
     {
-         Reference< script::XLibraryContainer > xDlgLibContainer( rDocument.getLibraryContainer( E_SCRIPTS ) );
+         Reference< script::XLibraryContainer > xDlgLibContainer( rDocument.getLibraryContainer( E_DIALOGS ) );
 
          if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && xDlgLibContainer->isLibraryLoaded( aOULibName ) )
          {

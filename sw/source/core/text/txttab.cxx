@@ -84,7 +84,6 @@ sal_uInt16 SwLineInfo::NumberOfTabStops() const
 /*************************************************************************
  *                      SwTxtFormatter::NewTabPortion()
  *************************************************************************/
-
 SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto ) const
 {
     SwTabPortion *pTabPor = 0;
@@ -216,63 +215,74 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
             cFill = 0;
             eAdj = SVX_TAB_ADJUST_LEFT;
         }
-        // --> OD 2008-02-07 #newlistlevelattrs#
-        long nForced = 0;
-        if ( !bTabsRelativeToIndent )
-        {
-            if ( bRTL )
-            {
-                Point aPoint( Left(), 0 );
-                pFrm->SwitchLTRtoRTL( aPoint );
-                nForced = pFrm->Frm().Right() - aPoint.X();
-            }
-            else
-            {
-                nForced = Left() - pFrm->Frm().Left();
-            }
-        }
-        if( pCurr->HasForcedLeftMargin() )
-        {
-            SwLinePortion* pPor = pCurr->GetPortion();
-            while( pPor && !pPor->IsFlyPortion() )
-                pPor = pPor->GetPortion();
-            if( pPor )
-                nForced += pPor->Width();
-        }
 
-        // <--
-        // --> OD 2009-04-03 #i100732#
-        // correction of condition, when a tab stop at the left margin can
-        // be applied:
-        // If the paragraph is not inside a list having a list tab stop following
-        // the list label or no further tab stop found in such a paragraph or
-        // the next tab stop position does not equal the list tab stop,
-        // a tab stop at the left margin can be applied. If this condition is
-        // not hold, it is overruled by compatibility option TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST.
-        const bool bTabAtLeftMargin =
-            ( !aLineInf.IsListTabStopIncluded() ||
-              !pTabStop ||
-              nNextPos != aLineInf.GetListTabStopPosition() ) ||
-            // compatibility option TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST:
-            pFrm->GetTxtNode()->getIDocumentSettingAccess()->
-                get(IDocumentSettingAccess::TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST);
-        if ( bTabAtLeftMargin &&
-        // <--
-             ( ( bRTL && nCurrentAbsPos > nTabLeft - nForced ) ||
-               ( !bRTL && nCurrentAbsPos < nTabLeft + nForced ) ) &&
-               // --> OD 2009-07-21 #i103685#
-               //  adjust condition:
-               // - back to pre OOo 3.0 condition, if tab stops are relative to indent
-               // - further checks needed, if tab stops are not relative to indent
-               ( nNextPos > 0 &&
-               ( bTabsRelativeToIndent ||
-                 ( !pTabStop || nNextPos > nForced ) ) ) )
-               // <--
+        // --> OD #i115705# - correction and refactoring:
+        // overrule determined next tab stop position in order to apply
+        // a tab stop at the left margin under the following conditions:
+        // - the new tab portion is inside the hanging indent
+        // - a tab stop at the left margin is allowed
+        // - the determined next tab stop is a default tab stop position OR
+        //   the determined next tab stop is beyond the left margin
         {
-            eAdj = SVX_TAB_ADJUST_DEFAULT;
-            cFill = 0;
-            nNextPos = nForced;
+            long nLeftMarginTabPos = 0;
+            {
+                if ( !bTabsRelativeToIndent )
+                {
+                    if ( bRTL )
+                    {
+                        Point aPoint( Left(), 0 );
+                        pFrm->SwitchLTRtoRTL( aPoint );
+                        nLeftMarginTabPos = pFrm->Frm().Right() - aPoint.X();
+                    }
+                    else
+                    {
+                        nLeftMarginTabPos = Left() - pFrm->Frm().Left();
+                    }
+                }
+                if( pCurr->HasForcedLeftMargin() )
+                {
+                    SwLinePortion* pPor = pCurr->GetPortion();
+                    while( pPor && !pPor->IsFlyPortion() )
+                    {
+                        pPor = pPor->GetPortion();
+                    }
+                    if ( pPor )
+                    {
+                        nLeftMarginTabPos += pPor->Width();
+                    }
+                }
+            }
+            const bool bNewTabPortionInsideHangingIndent =
+                        bRTL ? nCurrentAbsPos > nTabLeft - nLeftMarginTabPos
+                             : nCurrentAbsPos < nTabLeft + nLeftMarginTabPos;
+            if ( bNewTabPortionInsideHangingIndent )
+            {
+                // If the paragraph is not inside a list having a list tab stop following
+                // the list label or no further tab stop found in such a paragraph or
+                // the next tab stop position does not equal the list tab stop,
+                // a tab stop at the left margin can be applied. If this condition is
+                // not hold, it is overruled by compatibility option TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST.
+                const bool bTabAtLeftMarginAllowed =
+                    ( !aLineInf.IsListTabStopIncluded() ||
+                      !pTabStop ||
+                      nNextPos != aLineInf.GetListTabStopPosition() ) ||
+                    // compatibility option TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST:
+                    pFrm->GetTxtNode()->getIDocumentSettingAccess()->
+                        get(IDocumentSettingAccess::TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST);
+                if ( bTabAtLeftMarginAllowed )
+                {
+                    if ( !pTabStop || eAdj == SVX_TAB_ADJUST_DEFAULT ||
+                         ( nNextPos > nLeftMarginTabPos ) )
+                    {
+                        eAdj = SVX_TAB_ADJUST_DEFAULT;
+                        cFill = 0;
+                        nNextPos = nLeftMarginTabPos;
+                    }
+                }
+            }
         }
+        // <--
+
         nNextPos += bRTL ? nLinePos - nTabLeft : nTabLeft - nLinePos;
         ASSERT( nNextPos >= 0, "GetTabStop: Don't go back!" );
         nNewTabPos = KSHORT(nNextPos);

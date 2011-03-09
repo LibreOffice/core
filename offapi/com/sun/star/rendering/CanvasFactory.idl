@@ -49,7 +49,7 @@ module com { module sun { module star { module rendering {
     a service name to try first.
     </p>
 
-    @since OOo 2.0.0
+    @since OOo 2.0
 */
 service CanvasFactory : com::sun::star::lang::XMultiComponentFactory;
 

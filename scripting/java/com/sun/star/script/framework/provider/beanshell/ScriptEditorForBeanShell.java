@@ -47,6 +47,7 @@ import java.util.HashMap;
 
 import com.sun.star.script.provider.XScriptContext;
 import com.sun.star.script.framework.provider.ScriptEditor;
+import com.sun.star.script.framework.provider.SwingInvocation;
 import com.sun.star.script.framework.container.ScriptMetaData;
 import com.sun.star.script.framework.provider.ClassLoaderFactory;
 
@@ -128,7 +129,9 @@ public class ScriptEditorForBeanShell
      */
     public static ScriptEditorForBeanShell getEditor(URL url)
     {
-        return (ScriptEditorForBeanShell)BEING_EDITED.get(url);
+        synchronized (BEING_EDITED) {
+            return (ScriptEditorForBeanShell)BEING_EDITED.get(url);
+        }
     }
 
     /**
@@ -194,8 +197,7 @@ public class ScriptEditorForBeanShell
      * @param  context     The context in which to execute the script
      *
      */
-    public void edit(XScriptContext context, ScriptMetaData entry) {
-
+    public void edit(final XScriptContext context, ScriptMetaData entry) {
         if (entry != null ) {
             try {
                 ClassLoader cl = null;
@@ -205,26 +207,30 @@ public class ScriptEditorForBeanShell
                 catch (Exception ignore) // TODO re-examine error handling
                 {
                 }
+                final ClassLoader theCl = cl;
                 String sUrl = entry.getParcelLocation();
                 if ( !sUrl.endsWith( "/" ) )
                 {
                     sUrl += "/";
                 }
                 sUrl +=  entry.getLanguageName();
-                URL url = entry.getSourceURL();
-
-                // check if there is already an editing session for this script
-                if (BEING_EDITED.containsKey(url))
-                {
-                    ScriptEditorForBeanShell editor =
-                        (ScriptEditorForBeanShell) BEING_EDITED.get(url);
-
-                    editor.frame.toFront();
-                }
-                else
-                {
-                    new ScriptEditorForBeanShell(context, cl, url);
-                }
+                final URL url = entry.getSourceURL();
+                SwingInvocation.invoke(
+                    new Runnable() {
+                        public void run() {
+                            ScriptEditorForBeanShell editor;
+                            synchronized (BEING_EDITED) {
+                                editor = (ScriptEditorForBeanShell)
+                                    BEING_EDITED.get(url);
+                                if (editor == null) {
+                                    editor = new ScriptEditorForBeanShell(
+                                        context, theCl, url);
+                                    BEING_EDITED.put(url, editor);
+                                }
+                            }
+                            editor.frame.toFront();
+                        }
+                    });
             }
             catch (IOException ioe) {
                 showErrorMessage( "Error loading file: " + ioe.getMessage() );
@@ -269,8 +275,6 @@ public class ScriptEditorForBeanShell
         this.model.setView(this.view);
         initUI();
         frame.show();
-
-        BEING_EDITED.put(url, this);
     }
 
     private void showErrorMessage(String message) {
@@ -384,7 +388,7 @@ public class ScriptEditorForBeanShell
 
     private void shutdown()
     {
-        if (BEING_EDITED.containsKey(scriptURL)) {
+        synchronized (BEING_EDITED) {
             BEING_EDITED.remove(scriptURL);
         }
     }

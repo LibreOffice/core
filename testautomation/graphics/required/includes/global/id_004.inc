@@ -45,8 +45,6 @@ sub id_004
     call tiInsertGraphic
     call tiInsertObjectSound
     call tiInsertObjectVideo
-    call tiInsertObjectSound
-    call tiInsertObjectVideo
     call tiInsertChart
     call tiInsertObjectOLEObjects
     call tiInsertSpreadsheet

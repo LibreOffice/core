@@ -25,30 +25,38 @@
  *
  ************************************************************************/
 
-#include "node.hxx"
-#include "element.hxx"
-#include "attr.hxx"
-#include "elementlist.hxx"
-#include "attributesmap.hxx"
-#include "../events/mutationevent.hxx"
-
-#include "comphelper/attributelist.hxx"
-#include <com/sun/star/xml/sax/FastToken.hdl>
+#include <element.hxx>
 
 #include <string.h>
+
+#include <boost/shared_ptr.hpp>
+
+#include <rtl/ustrbuf.hxx>
+
+#include <com/sun/star/xml/sax/FastToken.hdl>
+
+#include <comphelper/attributelist.hxx>
+
+#include <node.hxx>
+#include <attr.hxx>
+#include <elementlist.hxx>
+#include <attributesmap.hxx>
+#include <document.hxx>
+
+#include "../events/mutationevent.hxx"
 
 
 namespace DOM
 {
 
-    CElement::CElement(const xmlNodePtr aNodePtr)
+    CElement::CElement(CDocument const& rDocument, ::osl::Mutex const& rMutex,
+            xmlNodePtr const pNode)
+        : CElement_Base(rDocument, rMutex, NodeType_ELEMENT_NODE, pNode)
     {
-        m_aNodeType = NodeType_ELEMENT_NODE;
-        init_node(aNodePtr);
     }
 
-    void SAL_CALL CElement::saxify(
-            const Reference< XDocumentHandler >& i_xHandler) {
+    void CElement::saxify(const Reference< XDocumentHandler >& i_xHandler)
+    {
         if (!i_xHandler.is()) throw RuntimeException();
         comphelper::AttributeList *pAttrs =
             new comphelper::AttributeList();
@@ -71,7 +79,8 @@ namespace DOM
         // add attributes
         for (xmlAttrPtr pAttr = m_aNodePtr->properties;
                         pAttr != 0; pAttr = pAttr->next) {
-            CNode * pNode = CNode::get(reinterpret_cast<xmlNodePtr>(pAttr));
+            ::rtl::Reference<CNode> const pNode = GetOwnerDocument().GetCNode(
+                    reinterpret_cast<xmlNodePtr>(pAttr));
             OSL_ENSURE(pNode != 0, "CNode::get returned 0");
             OUString prefix = pNode->getPrefix();
             OUString name = (prefix.getLength() == 0)
@@ -89,14 +98,16 @@ namespace DOM
         // recurse
         for (xmlNodePtr pChild = m_aNodePtr->children;
                         pChild != 0; pChild = pChild->next) {
-            CNode * pNode = CNode::get(pChild);
+            ::rtl::Reference<CNode> const pNode(
+                    GetOwnerDocument().GetCNode(pChild));
             OSL_ENSURE(pNode != 0, "CNode::get returned 0");
             pNode->saxify(i_xHandler);
         }
         i_xHandler->endElement(name);
     }
 
-    void SAL_CALL CElement::fastSaxify( Context& i_rContext ) {
+    void CElement::fastSaxify( Context& i_rContext )
+    {
         if (!i_rContext.mxDocHandler.is()) throw RuntimeException();
         pushContext(i_rContext);
         addNamespaces(i_rContext,m_aNodePtr);
@@ -105,7 +116,8 @@ namespace DOM
         i_rContext.mxAttribList->clear();
         for (xmlAttrPtr pAttr = m_aNodePtr->properties;
                         pAttr != 0; pAttr = pAttr->next) {
-            CNode * pNode = CNode::get(reinterpret_cast<xmlNodePtr>(pAttr));
+            ::rtl::Reference<CNode> const pNode = GetOwnerDocument().GetCNode(
+                    reinterpret_cast<xmlNodePtr>(pAttr));
             OSL_ENSURE(pNode != 0, "CNode::get returned 0");
 
             const xmlChar* xName = pAttr->name;
@@ -168,7 +180,8 @@ namespace DOM
         // recurse
         for (xmlNodePtr pChild = m_aNodePtr->children;
                         pChild != 0; pChild = pChild->next) {
-            CNode * pNode = CNode::get(pChild);
+            ::rtl::Reference<CNode> const pNode(
+                    GetOwnerDocument().GetCNode(pChild));
             OSL_ENSURE(pNode != 0, "CNode::get returned 0");
             pNode->fastSaxify(i_rContext);
         }
@@ -195,85 +208,135 @@ namespace DOM
         popContext(i_rContext);
     }
 
+    bool CElement::IsChildTypeAllowed(NodeType const nodeType)
+    {
+        switch (nodeType) {
+            case NodeType_ELEMENT_NODE:
+            case NodeType_TEXT_NODE:
+            case NodeType_COMMENT_NODE:
+            case NodeType_PROCESSING_INSTRUCTION_NODE:
+            case NodeType_CDATA_SECTION_NODE:
+            case NodeType_ENTITY_REFERENCE_NODE:
+                return true;
+            case NodeType_ATTRIBUTE_NODE:
+                /* this is not relly allowed by the DOM spec, but this
+                   implementation has evidently supported it (by special case
+                   handling, so the attribute does not actually become a child)
+                   so allow it for backward compatiblity */
+                return true;
+            default:
+                return false;
+        }
+    }
+
+
     /**
         Retrieves an attribute value by name.
         return empty string if attribute is not set
     */
-    OUString CElement::getAttribute(const OUString& name)
+    OUString SAL_CALL CElement::getAttribute(OUString const& name)
         throw (RuntimeException)
     {
-        OUString aValue;
-        // search properties
-        if (m_aNodePtr != NULL)
-        {
-            OString o1 = OUStringToOString(name, RTL_TEXTENCODING_UTF8);
-            xmlChar *xValue = xmlGetProp(m_aNodePtr, (xmlChar*)o1.getStr());
-            if (xValue != NULL) {
-                aValue = OUString((sal_Char*)xValue, strlen((char*)xValue), RTL_TEXTENCODING_UTF8);
-            }
+        ::osl::MutexGuard const g(m_rMutex);
+
+        if (0 == m_aNodePtr) {
+            return ::rtl::OUString();
         }
-        return aValue;
+        // search properties
+        OString o1 = OUStringToOString(name, RTL_TEXTENCODING_UTF8);
+        ::boost::shared_ptr<xmlChar const> const pValue(
+            xmlGetProp(m_aNodePtr, (xmlChar*)o1.getStr()), xmlFree);
+        OUString const ret( (pValue)
+            ?   OUString(reinterpret_cast<sal_Char const*>(pValue.get()),
+                        strlen(reinterpret_cast<char const*>(pValue.get())),
+                        RTL_TEXTENCODING_UTF8)
+            :   OUString() );
+        return ret;
     }
 
     /**
     Retrieves an attribute node by name.
     */
-    Reference< XAttr > CElement::getAttributeNode(const OUString& name)
+    Reference< XAttr > SAL_CALL CElement::getAttributeNode(OUString const& name)
         throw (RuntimeException)
     {
-        Reference< XAttr > aAttr;
-        if (m_aNodePtr != NULL)
-        {
-            OString o1 = OUStringToOString(name, RTL_TEXTENCODING_UTF8);
-            xmlChar *xName = (xmlChar*)o1.getStr();
-            xmlAttrPtr pAttr = xmlHasProp(m_aNodePtr, xName);
-            aAttr = Reference< XAttr >(static_cast< CAttr* >(CNode::get((xmlNodePtr)pAttr)));
+        ::osl::MutexGuard const g(m_rMutex);
+
+        if (0 == m_aNodePtr) {
+            return 0;
         }
-        return aAttr;
+        OString o1 = OUStringToOString(name, RTL_TEXTENCODING_UTF8);
+        xmlChar const*const pName =
+            reinterpret_cast<xmlChar const*>(o1.getStr());
+        xmlAttrPtr const pAttr = xmlHasProp(m_aNodePtr, pName);
+        if (0 == pAttr) {
+            return 0;
+        }
+        Reference< XAttr > const xRet(
+            static_cast< XNode* >(GetOwnerDocument().GetCNode(
+                    reinterpret_cast<xmlNodePtr>(pAttr)).get()),
+            UNO_QUERY_THROW);
+        return xRet;
     }
 
     /**
     Retrieves an Attr node by local name and namespace URI.
     */
-    Reference< XAttr > CElement::getAttributeNodeNS(
+    Reference< XAttr > SAL_CALL CElement::getAttributeNodeNS(
             const OUString& namespaceURI, const OUString& localName)
         throw (RuntimeException)
     {
-        Reference< XAttr > aAttr;
-        if (m_aNodePtr != NULL)
-        {
-            OString o1 = OUStringToOString(localName, RTL_TEXTENCODING_UTF8);
-            xmlChar *xName = (xmlChar*)o1.getStr();
-            OString o2 = OUStringToOString(namespaceURI, RTL_TEXTENCODING_UTF8);
-            xmlChar *xNS = (xmlChar*)o2.getStr();
-            xmlAttrPtr pAttr = xmlHasNsProp(m_aNodePtr, xName, xNS);
-            aAttr = Reference< XAttr >(static_cast< CAttr* >(CNode::get((xmlNodePtr)pAttr)));
+        ::osl::MutexGuard const g(m_rMutex);
+
+        if (0 == m_aNodePtr) {
+            return 0;
         }
-        return aAttr;
+        OString o1 = OUStringToOString(localName, RTL_TEXTENCODING_UTF8);
+        xmlChar const*const pName =
+            reinterpret_cast<xmlChar const*>(o1.getStr());
+        OString o2 = OUStringToOString(namespaceURI, RTL_TEXTENCODING_UTF8);
+        xmlChar const*const pNS =
+            reinterpret_cast<xmlChar const*>(o2.getStr());
+        xmlAttrPtr const pAttr = xmlHasNsProp(m_aNodePtr, pName, pNS);
+        if (0 == pAttr) {
+            return 0;
+        }
+        Reference< XAttr > const xRet(
+            static_cast< XNode* >(GetOwnerDocument().GetCNode(
+                    reinterpret_cast<xmlNodePtr>(pAttr)).get()),
+            UNO_QUERY_THROW);
+        return xRet;
     }
 
     /**
     Retrieves an attribute value by local name and namespace URI.
     return empty string if attribute is not set
     */
-    OUString CElement::getAttributeNS(const OUString& namespaceURI, const OUString& localName)
+    OUString SAL_CALL
+    CElement::getAttributeNS(
+            OUString const& namespaceURI, OUString const& localName)
         throw (RuntimeException)
     {
-        OUString aValue;
-        // search properties
-        if (m_aNodePtr != NULL)
-        {
-            OString o1 = OUStringToOString(localName, RTL_TEXTENCODING_UTF8);
-            xmlChar *xName = (xmlChar*)o1.getStr();
-            OString o2 = OUStringToOString(namespaceURI, RTL_TEXTENCODING_UTF8);
-            xmlChar *xNS = (xmlChar*)o2.getStr();
-            xmlChar *xValue = (xmlChar*)xmlGetNsProp(m_aNodePtr, xName, xNS);
-            if (xValue != NULL) {
-                aValue = OUString((sal_Char*)xValue, strlen((char*)xValue), RTL_TEXTENCODING_UTF8);
-                xmlFree(xValue);
-            }
+        ::osl::MutexGuard const g(m_rMutex);
+
+        if (0 == m_aNodePtr) {
+            return ::rtl::OUString();
         }
-        return aValue;
+        OString o1 = OUStringToOString(localName, RTL_TEXTENCODING_UTF8);
+        xmlChar const*const pName =
+            reinterpret_cast<xmlChar const*>(o1.getStr());
+        OString o2 = OUStringToOString(namespaceURI, RTL_TEXTENCODING_UTF8);
+        xmlChar const*const pNS =
+            reinterpret_cast<xmlChar const*>(o2.getStr());
+        ::boost::shared_ptr<xmlChar const> const pValue(
+                xmlGetNsProp(m_aNodePtr, pName, pNS), xmlFree);
+        if (0 == pValue) {
+            return ::rtl::OUString();
+        }
+        OUString const ret(reinterpret_cast<sal_Char const*>(pValue.get()),
+                        strlen(reinterpret_cast<char const*>(pValue.get())),
+                        RTL_TEXTENCODING_UTF8);
+        return ret;
     }
 
     /**
@@ -281,11 +344,15 @@ namespace DOM
     in the order in which they are
     encountered in a preorder traversal of this Element tree.
     */
-    Reference< XNodeList > CElement::getElementsByTagName(const OUString& name)
+    Reference< XNodeList > SAL_CALL
+    CElement::getElementsByTagName(OUString const& rLocalName)
         throw (RuntimeException)
     {
-        Reference< XNodeList > aList = Reference< XNodeList >(new CElementList(this, name));
-        return aList;
+        ::osl::MutexGuard const g(m_rMutex);
+
+        Reference< XNodeList > const xList(
+                new CElementList(this, m_rMutex, rLocalName));
+        return xList;
     }
 
     /**
@@ -293,26 +360,32 @@ namespace DOM
     name and namespace URI in the order in which they are encountered in
     a preorder traversal of this Element tree.
     */
-    Reference< XNodeList > CElement::getElementsByTagNameNS(const OUString& namespaceURI,
-            const OUString& localName)
+    Reference< XNodeList > SAL_CALL
+    CElement::getElementsByTagNameNS(
+            OUString const& rNamespaceURI, OUString const& rLocalName)
         throw (RuntimeException)
     {
-        Reference< XNodeList > aList = Reference< XNodeList >(new CElementList(this, localName, namespaceURI));
-        return aList;
+        ::osl::MutexGuard const g(m_rMutex);
+
+        Reference< XNodeList > const xList(
+            new CElementList(this, m_rMutex, rLocalName, &rNamespaceURI));
+        return xList;
     }
 
     /**
     The name of the element.
     */
-    OUString CElement::getTagName()
+    OUString SAL_CALL CElement::getTagName()
         throw (RuntimeException)
     {
-        OUString aName;
-        if (m_aNodePtr != NULL)
-        {
-            aName = OUString((sal_Char*)m_aNodePtr->name, strlen((char*)m_aNodePtr->name), RTL_TEXTENCODING_UTF8);
+        ::osl::MutexGuard const g(m_rMutex);
+
+        if (0 == m_aNodePtr) {
+            return ::rtl::OUString();
         }
-        return aName;
+        OUString const ret((sal_Char*)m_aNodePtr->name,
+                strlen((char*)m_aNodePtr->name), RTL_TEXTENCODING_UTF8);
+        return ret;
     }
 
 
@@ -320,9 +393,11 @@ namespace DOM
     Returns true when an attribute with a given name is specified on this
     element or has a default value, false otherwise.
     */
-    sal_Bool CElement::hasAttribute(const OUString& name)
+    sal_Bool SAL_CALL CElement::hasAttribute(OUString const& name)
         throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
         OString o1 = OUStringToOString(name, RTL_TEXTENCODING_UTF8);
         xmlChar *xName = (xmlChar*)o1.getStr();
         return (m_aNodePtr != NULL && xmlHasProp(m_aNodePtr, xName) != NULL);
@@ -332,9 +407,12 @@ namespace DOM
     Returns true when an attribute with a given local name and namespace
     URI is specified on this element or has a default value, false otherwise.
     */
-    sal_Bool CElement::hasAttributeNS(const OUString& namespaceURI, const OUString& localName)
+    sal_Bool SAL_CALL CElement::hasAttributeNS(
+            OUString const& namespaceURI, OUString const& localName)
         throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
         OString o1 = OUStringToOString(localName, RTL_TEXTENCODING_UTF8);
         xmlChar *xName = (xmlChar*)o1.getStr();
         OString o2 = OUStringToOString(namespaceURI, RTL_TEXTENCODING_UTF8);
@@ -345,195 +423,252 @@ namespace DOM
     /**
     Removes an attribute by name.
     */
-    void CElement::removeAttribute(const OUString& name)
+    void SAL_CALL CElement::removeAttribute(OUString const& name)
         throw (RuntimeException, DOMException)
     {
-        xmlChar *xName = (xmlChar*)OUStringToOString(name, RTL_TEXTENCODING_UTF8).getStr();
-        if (m_aNodePtr != NULL) {
-            xmlUnsetProp(m_aNodePtr, xName);
+        ::osl::MutexGuard const g(m_rMutex);
+
+        if (0 == m_aNodePtr) {
+            return;
+        }
+        OString o1 = OUStringToOString(name, RTL_TEXTENCODING_UTF8);
+        xmlChar const*const pName =
+            reinterpret_cast<xmlChar const*>(o1.getStr());
+        xmlAttrPtr const pAttr = xmlHasProp(m_aNodePtr, pName);
+        if (0 == xmlUnsetProp(m_aNodePtr, pName)) {
+            ::rtl::Reference<CNode> const pCNode(GetOwnerDocument().GetCNode(
+                    reinterpret_cast<xmlNodePtr>(pAttr), false));
+            if (pCNode.is()) {
+                pCNode->invalidate(); // freed by xmlUnsetProp
+            }
         }
     }
 
     /**
     Removes an attribute by local name and namespace URI.
     */
-    void CElement::removeAttributeNS(const OUString& namespaceURI, const OUString& localName)
+    void SAL_CALL CElement::removeAttributeNS(
+            OUString const& namespaceURI, OUString const& localName)
         throw (RuntimeException, DOMException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
+        if (0 == m_aNodePtr) {
+            return;
+        }
         OString o1 = OUStringToOString(localName, RTL_TEXTENCODING_UTF8);
-        xmlChar *xName = (xmlChar*)o1.getStr();
+        xmlChar const*const pName =
+            reinterpret_cast<xmlChar const*>(o1.getStr());
         OString o2 = OUStringToOString(namespaceURI, RTL_TEXTENCODING_UTF8);
-        xmlChar *xURI = (xmlChar*)o2.getStr();
-        if (m_aNodePtr != NULL) {
-            // XXX
-            xmlNsPtr pNs = xmlSearchNsByHref(m_aNodePtr->doc, m_aNodePtr, xURI);
-            xmlUnsetNsProp(m_aNodePtr, pNs, xName);
+        xmlChar const*const pURI =
+            reinterpret_cast<xmlChar const*>(o2.getStr());
+        xmlNsPtr const pNs =
+            xmlSearchNsByHref(m_aNodePtr->doc, m_aNodePtr, pURI);
+        xmlAttrPtr const pAttr = xmlHasNsProp(m_aNodePtr, pName, pURI);
+        if (0 == xmlUnsetNsProp(m_aNodePtr, pNs, pName)) {
+            ::rtl::Reference<CNode> const pCNode(GetOwnerDocument().GetCNode(
+                    reinterpret_cast<xmlNodePtr>(pAttr), false));
+            if (pCNode.is()) {
+                pCNode->invalidate(); // freed by xmlUnsetNsProp
+            }
         }
     }
 
     /**
     Removes the specified attribute node.
     */
-    Reference< XAttr > CElement::removeAttributeNode(const Reference< XAttr >& oldAttr)
+    Reference< XAttr > SAL_CALL
+    CElement::removeAttributeNode(Reference< XAttr > const& oldAttr)
         throw (RuntimeException, DOMException)
     {
-        Reference< XAttr > aAttr;
-        if(m_aNodePtr != NULL)
-        {
-        xmlAttrPtr pAttr = (xmlAttrPtr) CNode::getNodePtr(oldAttr.get());
+        ::osl::MutexGuard const g(m_rMutex);
 
-            if (pAttr->parent != m_aNodePtr)
-            {
-                DOMException e;
-                e.Code = DOMExceptionType_HIERARCHY_REQUEST_ERR;
-                throw e;
-            }
-            if (pAttr->doc != m_aNodePtr->doc)
-            {
-                DOMException e;
-                e.Code = DOMExceptionType_WRONG_DOCUMENT_ERR;
-                throw e;
-            }
-
-            if (oldAttr->getNamespaceURI().getLength() > 0)
-                aAttr = oldAttr->getOwnerDocument()->createAttributeNS(
-                    oldAttr->getNamespaceURI(), oldAttr->getName());
-            else
-                aAttr = oldAttr->getOwnerDocument()->createAttribute(oldAttr->getName());
-            aAttr->setValue(oldAttr->getValue());
-            xmlRemoveProp(pAttr);
-
+        if (0 == m_aNodePtr) {
+            return 0;
         }
+
+        ::rtl::Reference<CNode> const pCNode(
+            CNode::GetImplementation(Reference<XNode>(oldAttr.get())));
+        if (!pCNode.is()) { throw RuntimeException(); }
+
+        xmlNodePtr const pNode = pCNode->GetNodePtr();
+        xmlAttrPtr const pAttr = (xmlAttrPtr) pNode;
+        if (!pAttr) { throw RuntimeException(); }
+
+        if (pAttr->parent != m_aNodePtr)
+        {
+            DOMException e;
+            e.Code = DOMExceptionType_HIERARCHY_REQUEST_ERR;
+            throw e;
+        }
+        if (pAttr->doc != m_aNodePtr->doc)
+        {
+            DOMException e;
+            e.Code = DOMExceptionType_WRONG_DOCUMENT_ERR;
+            throw e;
+        }
+
+        Reference< XAttr > aAttr;
+        if (oldAttr->getNamespaceURI().getLength() > 0) {
+            ::rtl::OUStringBuffer qname(oldAttr->getPrefix());
+            if (0 != qname.getLength()) {
+                qname.append(sal_Unicode(':'));
+            }
+            qname.append(oldAttr->getName());
+            aAttr = GetOwnerDocument().createAttributeNS(
+                oldAttr->getNamespaceURI(), qname.makeStringAndClear());
+        } else {
+            aAttr = GetOwnerDocument().createAttribute(oldAttr->getName());
+        }
+        aAttr->setValue(oldAttr->getValue());
+        xmlRemoveProp(pAttr);
+        pCNode->invalidate(); // freed by xmlRemoveProp
+
         return aAttr;
     }
 
     /**
     Adds a new attribute node.
     */
-    Reference< XAttr > CElement::_setAttributeNode(const Reference< XAttr >& newAttr, sal_Bool bNS)
-        throw (RuntimeException)
+    Reference< XAttr >
+    CElement::setAttributeNode_Impl_Lock(
+            Reference< XAttr > const& xNewAttr, bool const bNS)
     {
-        Reference< XAttr > aAttr;
-        if (m_aNodePtr != NULL)
-        {
-            // check whether the attrib belongs to this document
-            Reference< XDocument > newDoc(newAttr->getOwnerDocument(), UNO_QUERY);
-            Reference< XDocument > oldDoc(CNode::getOwnerDocument(), UNO_QUERY);
-            if (newDoc != oldDoc) {
-                throw RuntimeException();
-            }
-
-            // get the implementation
-        xmlAttrPtr pAttr = (xmlAttrPtr) CNode::getNodePtr(newAttr.get());
-
-            // check whether the attribute is not in use by another element
-            xmlNsPtr pNs = NULL;
-            if (pAttr->parent != NULL)
-                if(strcmp((char*)pAttr->parent->name, "__private") == 0
-                    && pNs && pAttr->ns != NULL)
-                {
-                    pNs = xmlSearchNs(m_aNodePtr->doc, m_aNodePtr, pAttr->ns->prefix);
-                    if (pNs == NULL || strcmp((char*)pNs->href, (char*)pAttr->ns->href) !=0 )
-                        pNs = xmlNewNs(m_aNodePtr, pAttr->ns->href, pAttr->ns->href);
-                else
-                    throw RuntimeException();
-            }
-
-            xmlAttrPtr res = NULL;
-
-            if (bNS)
-                res = xmlNewNsProp(m_aNodePtr, pNs, pAttr->name, pAttr->children->content);
-            else
-                res = xmlNewProp(m_aNodePtr, pAttr->name, pAttr->children->content);
-
-            // free carrier node ...
-            if(pAttr->parent != NULL && strcmp((char*)pAttr->parent->name, "__private")== 0)
-                xmlFreeNode(pAttr->parent);
-            // ... remove the old attr from the node cache
-            CNode::remove((xmlNodePtr)pAttr);
-
-            // get the new attr node
-            aAttr = Reference< XAttr >(static_cast< CAttr*  >(CNode::get((xmlNodePtr)res)));
+        if (xNewAttr->getOwnerDocument() != getOwnerDocument()) {
+            DOMException e;
+            e.Code = DOMExceptionType_WRONG_DOCUMENT_ERR;
+            throw e;
         }
 
-        if (aAttr.is())
-        {
-            // attribute adition event
-            // dispatch DOMAttrModified event
-            Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
-            Reference< XMutationEvent > event(docevent->createEvent(
-                OUString::createFromAscii("DOMAttrModified")), UNO_QUERY);
-            event->initMutationEvent(OUString::createFromAscii("DOMAttrModified"),
-                sal_True, sal_False, Reference< XNode >(aAttr, UNO_QUERY),
-                OUString(), aAttr->getValue(), aAttr->getName(), AttrChangeType_ADDITION);
-            dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
-            dispatchSubtreeModified();
+        ::osl::ClearableMutexGuard guard(m_rMutex);
+
+        if (0 == m_aNodePtr) {
+            throw RuntimeException();
         }
-        return aAttr;
+
+        // get the implementation
+        CAttr *const pCAttr = dynamic_cast<CAttr*>(
+                CNode::GetImplementation(xNewAttr));
+        if (!pCAttr) { throw RuntimeException(); }
+        xmlAttrPtr const pAttr =
+            reinterpret_cast<xmlAttrPtr>(pCAttr->GetNodePtr());
+        if (!pAttr) { throw RuntimeException(); }
+
+        // check whether the attribute is not in use by another element
+        if (pAttr->parent) {
+            DOMException e;
+            e.Code = DOMExceptionType_INUSE_ATTRIBUTE_ERR;
+            throw e;
+        }
+
+        xmlAttrPtr res = NULL;
+        xmlChar const*const pContent(
+                (pAttr->children) ? pAttr->children->content : 0);
+
+        if (bNS) {
+            xmlNsPtr const pNs( pCAttr->GetNamespace(m_aNodePtr) );
+            res = xmlNewNsProp(m_aNodePtr, pNs, pAttr->name, pContent);
+        } else {
+            res = xmlNewProp(m_aNodePtr, pAttr->name, pContent);
+        }
+
+        // get the new attr node
+        Reference< XAttr > const xAttr(
+            static_cast< XNode* >(GetOwnerDocument().GetCNode(
+                    reinterpret_cast<xmlNodePtr>(res)).get()),
+            UNO_QUERY_THROW);
+
+        // attribute adition event
+        // dispatch DOMAttrModified event
+        Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
+        Reference< XMutationEvent > event(docevent->createEvent(
+            OUString::createFromAscii("DOMAttrModified")), UNO_QUERY);
+        event->initMutationEvent(OUString::createFromAscii("DOMAttrModified"),
+            sal_True, sal_False, Reference< XNode >(xAttr, UNO_QUERY),
+            OUString(), xAttr->getValue(), xAttr->getName(),
+            AttrChangeType_ADDITION);
+
+        guard.clear(); // release mutex before calling event handlers
+
+        dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
+        dispatchSubtreeModified();
+
+        return xAttr;
     }
 
-    Reference< XAttr > CElement::setAttributeNode(const Reference< XAttr >& newAttr)
+    Reference< XAttr >
+    CElement::setAttributeNode(const Reference< XAttr >& newAttr)
         throw (RuntimeException, DOMException)
     {
-        return _setAttributeNode(newAttr, sal_False);
+        return setAttributeNode_Impl_Lock(newAttr, false);
     }
 
     /**
     Adds a new attribute.
     */
-    Reference< XAttr > CElement::setAttributeNodeNS(const Reference< XAttr >& newAttr)
+    Reference< XAttr >
+    CElement::setAttributeNodeNS(const Reference< XAttr >& newAttr)
         throw (RuntimeException, DOMException)
     {
-        return _setAttributeNode(newAttr, sal_True);
+        return setAttributeNode_Impl_Lock(newAttr, true);
     }
 
     /**
     Adds a new attribute.
     */
-    void CElement::setAttribute(const OUString& name, const OUString& value)
+    void SAL_CALL
+    CElement::setAttribute(OUString const& name, OUString const& value)
         throw (RuntimeException, DOMException)
     {
+        ::osl::ClearableMutexGuard guard(m_rMutex);
+
         OString o1 = OUStringToOString(name, RTL_TEXTENCODING_UTF8);
         xmlChar *xName = (xmlChar*)o1.getStr();
         OString o2 = OUStringToOString(value, RTL_TEXTENCODING_UTF8);
         xmlChar *xValue = (xmlChar*)o2.getStr();
-        if (m_aNodePtr != NULL)
-        {
-            OUString oldValue;
-            AttrChangeType aChangeType = AttrChangeType_MODIFICATION;
-            xmlChar *xOld = xmlGetProp(m_aNodePtr, xName);
-            if (xOld == NULL)
-            {
-                aChangeType = AttrChangeType_ADDITION;
-                xmlNewProp(m_aNodePtr, xName, xValue);
-            }
-            else
-            {
-                oldValue = OUString((char*)xOld, strlen((char*)xOld), RTL_TEXTENCODING_UTF8);
-                xmlSetProp(m_aNodePtr, xName, xValue);
-            }
 
-            // dispatch DOMAttrModified event
-
-            Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
-            Reference< XMutationEvent > event(docevent->createEvent(
-                OUString::createFromAscii("DOMAttrModified")), UNO_QUERY);
-            event->initMutationEvent(OUString::createFromAscii("DOMAttrModified"),
-                sal_True, sal_False, Reference< XNode >(getAttributeNode(name), UNO_QUERY),
-                oldValue, value, name, aChangeType);
-            dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
-            dispatchSubtreeModified();
+        if (0 == m_aNodePtr) {
+            throw RuntimeException();
         }
+        OUString oldValue;
+        AttrChangeType aChangeType = AttrChangeType_MODIFICATION;
+        ::boost::shared_ptr<xmlChar const> const pOld(
+            xmlGetProp(m_aNodePtr, xName), xmlFree);
+        if (pOld == NULL) {
+            aChangeType = AttrChangeType_ADDITION;
+            xmlNewProp(m_aNodePtr, xName, xValue);
+        } else {
+            oldValue = OUString(reinterpret_cast<sal_Char const*>(pOld.get()),
+                        strlen(reinterpret_cast<char const*>(pOld.get())),
+                        RTL_TEXTENCODING_UTF8);
+            xmlSetProp(m_aNodePtr, xName, xValue);
+        }
+
+        // dispatch DOMAttrModified event
+        Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
+        Reference< XMutationEvent > event(docevent->createEvent(
+            OUString::createFromAscii("DOMAttrModified")), UNO_QUERY);
+        event->initMutationEvent(OUString::createFromAscii("DOMAttrModified"),
+            sal_True, sal_False,
+            Reference< XNode >(getAttributeNode(name), UNO_QUERY),
+            oldValue, value, name, aChangeType);
+
+        guard.clear(); // release mutex before calling event handlers
+        dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
+        dispatchSubtreeModified();
     }
 
     /**
     Adds a new attribute.
     */
-    void CElement::setAttributeNS(
-            const OUString& namespaceURI, const OUString& qualifiedName, const OUString& value)
+    void SAL_CALL
+    CElement::setAttributeNS(OUString const& namespaceURI,
+            OUString const& qualifiedName, OUString const& value)
         throw (RuntimeException, DOMException)
     {
         if (namespaceURI.getLength() == 0) throw RuntimeException();
+
+        ::osl::ClearableMutexGuard guard(m_rMutex);
 
         OString o1, o2, o3, o4, o5;
         xmlChar *xPrefix = NULL;
@@ -559,63 +694,72 @@ namespace DOM
         o5 = OUStringToOString(value, RTL_TEXTENCODING_UTF8);
         xmlChar *xURI= (xmlChar*)o4.getStr();
         xmlChar *xValue = (xmlChar*)o5.getStr();
-        if (m_aNodePtr != NULL)
-        {
-            //find the right namespace
-            xmlNsPtr pNs = xmlSearchNs(m_aNodePtr->doc, m_aNodePtr, xPrefix);
-            // if no namespace found, create a new one
-            if (pNs == NULL)
-                pNs = xmlNewNs(m_aNodePtr, xURI, xPrefix);
 
-            if (strcmp((char*)pNs->href, (char*)xURI) == 0)
-            {
-                // found namespace matches
-
-                OUString oldValue;
-                AttrChangeType aChangeType = AttrChangeType_MODIFICATION;
-                xmlChar *xOld = xmlGetNsProp(m_aNodePtr, xLName, pNs->href);
-                if (xOld == NULL)
-                {
-                    aChangeType = AttrChangeType_ADDITION;
-                    xmlNewNsProp(m_aNodePtr, pNs, xLName, xValue);
-                }
-                else
-                {
-                    oldValue = OUString((char *)xOld, strlen((char *)xOld), RTL_TEXTENCODING_UTF8);
-                    xmlSetNsProp(m_aNodePtr, pNs, xLName, xValue);
-                }
-                // dispatch DOMAttrModified event
-                Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
-                Reference< XMutationEvent > event(docevent->createEvent(
-                    OUString::createFromAscii("DOMAttrModified")), UNO_QUERY);
-                event->initMutationEvent(OUString::createFromAscii("DOMAttrModified"), sal_True, sal_False,
-                    Reference< XNode >(getAttributeNodeNS(namespaceURI, OUString((char*)xLName, strlen((char*)xLName), RTL_TEXTENCODING_UTF8)), UNO_QUERY),
-                    oldValue, value, qualifiedName, aChangeType);
-                dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
-                dispatchSubtreeModified();
-
-            } else {
-                // ambigious ns prefix
-                throw RuntimeException();
-            }
-
+        if (0 == m_aNodePtr) {
+            throw RuntimeException();
         }
+
+        //find the right namespace
+        xmlNsPtr pNs = xmlSearchNs(m_aNodePtr->doc, m_aNodePtr, xPrefix);
+        // if no namespace found, create a new one
+        if (pNs == NULL) {
+            pNs = xmlNewNs(m_aNodePtr, xURI, xPrefix);
+        }
+
+        if (strcmp((char*)pNs->href, (char*)xURI) != 0) {
+            // ambiguous ns prefix
+            throw RuntimeException();
+        }
+
+        // found namespace matches
+
+        OUString oldValue;
+        AttrChangeType aChangeType = AttrChangeType_MODIFICATION;
+        ::boost::shared_ptr<xmlChar const> const pOld(
+                xmlGetNsProp(m_aNodePtr, xLName, pNs->href), xmlFree);
+        if (pOld == NULL) {
+            aChangeType = AttrChangeType_ADDITION;
+            xmlNewNsProp(m_aNodePtr, pNs, xLName, xValue);
+        } else {
+            oldValue = OUString(reinterpret_cast<sal_Char const*>(pOld.get()),
+                        strlen(reinterpret_cast<char const*>(pOld.get())),
+                        RTL_TEXTENCODING_UTF8);
+            xmlSetNsProp(m_aNodePtr, pNs, xLName, xValue);
+        }
+        // dispatch DOMAttrModified event
+        Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
+        Reference< XMutationEvent > event(docevent->createEvent(
+            OUString::createFromAscii("DOMAttrModified")), UNO_QUERY);
+        event->initMutationEvent(
+            OUString::createFromAscii("DOMAttrModified"),
+            sal_True, sal_False,
+            Reference< XNode >(getAttributeNodeNS(namespaceURI, OUString((char*)xLName, strlen((char*)xLName), RTL_TEXTENCODING_UTF8)), UNO_QUERY),
+            oldValue, value, qualifiedName, aChangeType);
+
+        guard.clear(); // release mutex before calling event handlers
+        dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
+        dispatchSubtreeModified();
     }
 
-    Reference< XNamedNodeMap > SAL_CALL CElement::getAttributes()throw (RuntimeException)
+    Reference< XNamedNodeMap > SAL_CALL
+    CElement::getAttributes() throw (RuntimeException)
     {
-        Reference< XNamedNodeMap > aMap;
-        if (hasAttributes()) {
-            aMap = Reference< XNamedNodeMap >(new CAttributesMap(this));
-        }
-        return aMap;
+        ::osl::MutexGuard const g(m_rMutex);
+
+        Reference< XNamedNodeMap > const xMap(
+                new CAttributesMap(this, m_rMutex));
+        return xMap;
     }
+
     OUString SAL_CALL CElement::getNodeName()throw (RuntimeException)
     {
         return getLocalName();
     }
+
     OUString SAL_CALL CElement::getLocalName()throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
         OUString aName;
         if (m_aNodePtr != NULL)
         {
@@ -624,26 +768,31 @@ namespace DOM
         }
         return aName;
     }
+
     OUString SAL_CALL CElement::getNodeValue() throw (RuntimeException)
     {
         return OUString();
     }
 
-    void SAL_CALL CElement::setElementName(const OUString& aName) throw (RuntimeException, DOMException)
+    void SAL_CALL CElement::setElementName(const OUString& aName)
+        throw (RuntimeException, DOMException)
     {
-        if (aName.getLength() > 0 && aName.indexOf(OUString::createFromAscii(":")) < 0)
-        {
-            OString oName = OUStringToOString(aName, RTL_TEXTENCODING_UTF8);
-            xmlChar *xName = (xmlChar*)oName.getStr();
-            // xmlFree((void*)m_aNodePtr->name);
-            m_aNodePtr->name = xmlStrdup(xName);
-        }
-        else
+        if ((aName.getLength() <= 0) ||
+            (0 <= aName.indexOf(OUString::createFromAscii(":"))))
         {
             DOMException e;
             e.Code = DOMExceptionType_INVALID_CHARACTER_ERR;
             throw e;
         }
+
+        ::osl::MutexGuard const g(m_rMutex);
+
+        if (0 == m_aNodePtr) {
+            throw RuntimeException();
+        }
+        OString oName = OUStringToOString(aName, RTL_TEXTENCODING_UTF8);
+        xmlChar *xName = (xmlChar*)oName.getStr();
+        xmlNodeSetName(m_aNodePtr, xName);
     }
 
 }

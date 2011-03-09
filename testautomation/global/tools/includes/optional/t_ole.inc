@@ -126,6 +126,8 @@ end function
 '*******************************************************************************
 
 function GetOleDefaultNames()
+    dim sAllOle as string
+    dim j as integer
 
     const CFN = "global::tools::includes::optional::t_ole.inc::GetOleDefaultNames(): "
     if ( GVERBOSE ) then printlog( CFN & "Retrieving OLE names" )
@@ -138,6 +140,24 @@ function GetOleDefaultNames()
     gOLEDraw    = hGetOleObjectName( "Draw"    )
     gOLEMath    = hGetOleObjectName( "Math"    )    
 
+    ' There is no programatical way to retrieve the word for 'further objects'
+    ' Only way to get it language independent is to retrieve all other words and take the last other entry that lasts
+    ' Only available on windows platform
+    if  ( gPlatgroup = "w95" )  then
+        sAllOle = gOLEWriter & gOLECalc & gOLEChart & gOLEImpress & gOLEDraw & gOLEMath
+        Call hNewDocument
+        InsertObjectOLEObject
+        Kontext "OLEObjektEinfuegen"
+        NeuErstellen.Check
+        WaitSlot()
+        for j=1 to ObjektTyp.GetItemCount
+            ObjektTyp.Select j
+            if 0 = instr (sAllOle, ObjektTyp.GetSelText ) then
+            gOleOthers = ObjektTyp.GetSelText
+            endif
+        next j
+        OLEObjektEinfuegen.cancel
+        hCloseDocument
+    endif
 end function
 
-'*******************************************************************************

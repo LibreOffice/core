@@ -440,7 +440,7 @@ testcase tAcceptReject_6
    	try
    		AutoListe.Select 2
     catch
-    	QAErrorlog "#i99937#Change of author (User name) disregarded when changed during Office session"
+    	Warnlog "Change of author (User name) disregarded when changed during Office session"
 		Redlining.Close
 		Call hCloseDocument
 		goto endsub

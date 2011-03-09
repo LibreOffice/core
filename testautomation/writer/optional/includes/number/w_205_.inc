@@ -274,35 +274,35 @@ testcase tFormatNumberingPosition
     Active.SetPage TabPositionNumerierung
     Kontext "TabPositionNumerierung"
     Level.Select 1
-'    if Alignment.GetSelIndex <> 2 then Warnlog "#i38904#Level 1: Wrong alignment:  Should = 2   Ist = "+ Alignment.GetSelIndex
+'    if Alignment.GetSelIndex <> 2 then Warnlog "Level 1: Wrong alignment:  Should = 2   Ist = "+ Alignment.GetSelIndex
     if V1 <> AlignedAt.GetText then Warnlog "Level 1: Wrong Text <-> Rand:  Should = "+ V1+ "  Is = "+ AlignedAt.GetText
     if V2 <> IndentAt.GetText then Warnlog "Level 1: Wrong indent:  Should = "+ V2+ "  Is = "+ IndentAt.GetText
     Level.Select 3
 '    if Not Relativ.IsChecked then Warnlog "Relativ is checked in Level 3!"
-    if Alignment.GetSelIndex <> 3 then Warnlog "#i38904#Level 3: Wrong alignment:  Should = 3   Is = "+ Alignment.GetSelIndex
+    if Alignment.GetSelIndex <> 3 then Warnlog "Level 3: Wrong alignment:  Should = 3   Is = "+ Alignment.GetSelIndex
     if V3 <> AlignedAt.GetText then Warnlog "Level 3: Wrong Text <-> Spacing to text:  Should = "+ V3+ "  Is = "+ AlignedAt.GetText
 '    if V4 <> AbstandTextNumerierung.GetText then Warnlog "Level 3: Wrong indent:  Should = "+ V4+ "  Is = "+ AbstandTextNumerierung.GetText
     Level.Select 4
 '    if Not Relativ.IsChecked then Warnlog "Relativ is checked in Level 4!"
-    if Alignment.GetSelIndex <> 1 then Warnlog "#i38904#Level 4: Wrong alignment:  Should = 1   Is = "+ Alignment.GetSelIndex
+    if Alignment.GetSelIndex <> 1 then Warnlog "Level 4: Wrong alignment:  Should = 1   Is = "+ Alignment.GetSelIndex
     if V5 <> AlignedAt.GetText then Warnlog "Level 4: Wrong Text <-> Spacing to text:  Should = "+ V5+ "  Is = "+ AlignedAt.GetText
 '    if V6 <> AbstandTextNumerierung.GetText then Warnlog "Level 4: Wrong indent:  Should = "+ V6+ "  Is = "+ AbstandTextNumerierung.GetText
     if V7 <> IndentAt.GetText then Warnlog "Level 4: Wrong indent:  Should = "+ V7+ "  Is = "+ IndentAt.GetText
     Level.Select 6
 '    if Not Relativ.IsChecked then Warnlog "Relativ is checked in Level 6!"
-    if Alignment.GetSelIndex <> 3 then Warnlog "#i38904#Level 6: Wrong alignment:  Should = 3   Is = "+ Alignment.GetSelIndex
+    if Alignment.GetSelIndex <> 3 then Warnlog "Level 6: Wrong alignment:  Should = 3   Is = "+ Alignment.GetSelIndex
     if V8 <> AlignedAt.GetText then Warnlog "Level 6: Wrong Text <-> Spacing to text:  Should = "+ V8+ "  Is = "+ AlignedAt.GetText
 '    if V9 <> AbstandTextNumerierung.GetText then Warnlog "Level 6: Wrong indent:  Should = "+ V9+ "  Is = "+ AbstandTextNumerierung.GetText
     if V10 <> IndentAt.GetText then Warnlog "Level 6: Wrong indent:  Should = "+ V10+ "  Is = "+ IndentAt.GetText
     Level.Select 9
 '    if Not Relativ.IsChecked then Warnlog "Relativ is checked in Level 9!"
-    if Alignment.GetSelIndex <> 1 then Warnlog "#i38904#Level 9: Wrong alignment:  Should = 1   Is = "+ Alignment.GetSelIndex
+    if Alignment.GetSelIndex <> 1 then Warnlog "Level 9: Wrong alignment:  Should = 1   Is = "+ Alignment.GetSelIndex
     if V11 <> AlignedAt.GetText then Warnlog "Level 9: Wrong Text <-> Spacing to text:  Should = "+ V11+ "  Is = "+ AlignedAt.GetText
 '    if V12 <> AbstandTextNumerierung.GetText then Warnlog "Level 9: Wrong indent:  Should = "+ V12+ "  Is = "+ AbstandTextNumerierung.GetText
     if V13 <> IndentAt.GetText then Warnlog "Level 9: Wrong indent:  Should = "+ V13+ "  Is = "+ IndentAt.GetText
     Level.Select 10
 '    if Not Relativ.IsChecked then Warnlog "Relativ is checked in Level 10!"
-    if Alignment.GetSelIndex <> 3 then Warnlog "#i38904#Level 10: Wrong alignment:  Should = 3   Is = "+ Alignment.GetSelIndex
+    if Alignment.GetSelIndex <> 3 then Warnlog "Level 10: Wrong alignment:  Should = 3   Is = "+ Alignment.GetSelIndex
     if V14 <> AlignedAt.GetText then Warnlog "Level 10: Wrong Text <-> Spacing to text:  Should = "+ V14+ "  Is = "+ AlignedAt.GetText
 '    if V15 <> AbstandTextNumerierung.GetText then Warnlog "Level 10: Wrong indent:  Should = "+ V15+ "  Is = "+ AbstandTextNumerierung.GetText
     if V16 <> IndentAt.GetText then Warnlog "Level 10: Wrong indent:  Should = "+ V16+ "  Is = "+ IndentAt.GetText
@@ -324,35 +324,35 @@ testcase tFormatNumberingPosition
     Kontext "TabPositionNumerierung"
     Level.Select 1
     
-    if Alignment.GetSelIndex <> 2 then Warnlog "#i38904#Level 1: Wrong alignment:  Should = 2   Ist = "+ Alignment.GetSelIndex
+    if Alignment.GetSelIndex <> 2 then Warnlog "Level 1: Wrong alignment:  Should = 2   Ist = "+ Alignment.GetSelIndex
     if V1 <> AlignedAt.GetText then Warnlog "Level 1: Wrong Text <-> Rand:  Should = "+ V1+ "  Is = "+ AlignedAt.GetText
     if V2 <> IndentAt.GetText then Warnlog "Level 1: Wrong indent:  Should = "+ V2+ "  Is = "+ IndentAt.GetText
     Level.Select 3
 '    if Not Relativ.IsChecked then Relativ.Check
-    if Alignment.GetSelIndex <> 3 then Warnlog "#i38904#Level 3: Wrong alignment:  Should = 3   Is = "+ Alignment.GetSelIndex
+    if Alignment.GetSelIndex <> 3 then Warnlog "Level 3: Wrong alignment:  Should = 3   Is = "+ Alignment.GetSelIndex
     if V3 <> AlignedAt.GetText then Warnlog "Level 3: Wrong Text <-> Spacing to text:  Should = "+ V3+ "  Is = "+ AlignedAt.GetText
 '    if V4 <> AbstandTextNumerierung.GetText then Warnlog "Level 3: Wrong indent:  Should = "+ V4+ "  Is = "+ AbstandTextNumerierung.GetText
     Level.Select 4
 '    if Not Relativ.IsChecked then Relativ.Check
-    if Alignment.GetSelIndex <> 1 then Warnlog "#i38904#Level 4: Wrong alignment:  Should = 1   Is = "+ Alignment.GetSelIndex
+    if Alignment.GetSelIndex <> 1 then Warnlog "Level 4: Wrong alignment:  Should = 1   Is = "+ Alignment.GetSelIndex
     if V5 <> AlignedAt.GetText then Warnlog "Level 4: Wrong Text <-> Spacing to text:  Should = "+ V5+ "  Is = "+ AlignedAt.GetText
 '    if V6 <> AbstandTextNumerierung.GetText then Warnlog "Level 4: Wrong indent:  Should = "+ V6+ "  Is = "+ AbstandTextNumerierung.GetText
     if V7 <> IndentAt.GetText then Warnlog "Level 4: Wrong indent:  Should = "+ V7+ "  Is = "+ IndentAt.GetText
     Level.Select 6
 '    if Not Relativ.IsChecked then Relativ.Check
-    if Alignment.GetSelIndex <> 3 then Warnlog "#i38904#Level 6: Wrong alignment:  Should = 3   Is = "+ Alignment.GetSelIndex
+    if Alignment.GetSelIndex <> 3 then Warnlog "Level 6: Wrong alignment:  Should = 3   Is = "+ Alignment.GetSelIndex
     if V8 <> AlignedAt.GetText then Warnlog "Level 6: Wrong Text <-> Spacing to text:  Should = "+ V8+ "  Is = "+ AlignedAt.GetText
 '    if V9 <> AbstandTextNumerierung.GetText then Warnlog "Level 6: Wrong indent:  Should = "+ V9+ "  Is = "+ AbstandTextNumerierung.GetText
     if V10 <> IndentAt.GetText then Warnlog "Level 6: Wrong indent:  Should = "+ V10+ "  Is = "+ IndentAt.GetText
     Level.Select 9
 '    if Not Relativ.IsChecked then Relativ.Check
-    if Alignment.GetSelIndex <> 1 then Warnlog "#i38904#Level 9: Wrong alignment:  Should = 1   Is = "+ Alignment.GetSelIndex
+    if Alignment.GetSelIndex <> 1 then Warnlog "Level 9: Wrong alignment:  Should = 1   Is = "+ Alignment.GetSelIndex
     if V11 <> AlignedAt.GetText then Warnlog "Level 9: Wrong Text <-> Spacing to text:  Should = "+ V11+ "  Is = "+ AlignedAt.GetText
 '    if V12 <> AbstandTextNumerierung.GetText then Warnlog "Level 9: Wrong indent:  Should = "+ V12+ "  Is = "+ AbstandTextNumerierung.GetText
     if V13 <> IndentAt.GetText then Warnlog "Level 9: Wrong indent:  Should = "+ V13+ "  Is = "+ IndentAt.GetText
     Level.Select 10
 '    if Not Relativ.IsChecked then Relativ.Check
-    if Alignment.GetSelIndex <> 3 then Warnlog "#i38904#Level 10: Wrong alignment:  Should = 3   Is = "+ Alignment.GetSelIndex
+    if Alignment.GetSelIndex <> 3 then Warnlog "Level 10: Wrong alignment:  Should = 3   Is = "+ Alignment.GetSelIndex
     if V14 <> AlignedAt.GetText then Warnlog "Level 10: Wrong Text <-> Spacing to text:  Should = "+ V14+ "  Is = "+ AlignedAt.GetText
 '    if V15 <> AbstandTextNumerierung.GetText then Warnlog "Level 10: Wrong indent:  Should = "+ V15+ "  Is = "+ AbstandTextNumerierung.GetText
     if V16 <> IndentAt.GetText then Warnlog "Level 10: Wrong indent:  Should = "+ V16+ "  Is = "+ IndentAt.GetText

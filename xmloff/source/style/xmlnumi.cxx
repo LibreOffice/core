@@ -501,6 +501,22 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
         nCount++;
     }
 
+    if (bBullet && sSuffix.getLength())
+    {
+        sal_uInt16 const nVersion(GetImport().getGeneratorVersion());
+        sal_Int32 nUPD;
+        sal_Int32 nBuildId;
+        if (GetImport().getBuildIds(nUPD, nBuildId)
+            && (   (SvXMLImport::OOo_1x == nVersion)
+                || (SvXMLImport::OOo_2x == nVersion)
+                || (310 == nUPD) || (320 == nUPD) || (330 == nUPD)
+                || ((300 == nUPD) && (nBuildId <= 9573))))
+        {
+            // #i93908# OOo < 3.4 wrote a bogus suffix for bullet chars
+            sSuffix = ::rtl::OUString(); // clear it
+        }
+    }
+
     Sequence<beans::PropertyValue> aPropSeq( nCount );
     if( nCount > 0 )
     {

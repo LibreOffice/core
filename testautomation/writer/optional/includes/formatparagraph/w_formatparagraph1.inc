@@ -939,7 +939,7 @@ testcase tParagraphIndent13
         if Not Navigator.Exists then ViewNavigator
         Kontext "NavigatorWriter"
         Sleep 1
-        if Seitennummer.GetText <> "8" then Warnlog "#i73903#The 8th line should be in 8th page !"
+        if Seitennummer.GetText <> "8" then Warnlog "The 8th line should be in 8th page !"
     fCloseNavigator
 
    '/// check if the pic moves
@@ -1008,7 +1008,7 @@ testcase tParagraphIndent14
         if Not Navigator.Exists then ViewNavigator
         Kontext "NavigatorWriter"
         Sleep 1
-        if Seitennummer.GetText <> "8" then Warnlog "#i73903#The 8th line should be in 8th page !"
+        if Seitennummer.GetText <> "8" then Warnlog "The 8th line should be in 8th page !"
     fCloseNavigator
 
    '/// check if the pic moves

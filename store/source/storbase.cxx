@@ -158,7 +158,8 @@ PageData::Allocator_Impl::~Allocator_Impl()
 void PageData::Allocator_Impl::allocate_Impl (void ** ppPage, sal_uInt16 * pnSize)
 {
     OSL_PRECOND((ppPage != 0) && (pnSize != 0), "contract violation");
-    *ppPage = rtl_cache_alloc(m_page_cache), *pnSize = m_page_size;
+    if ((ppPage != 0) && (pnSize != 0))
+        *ppPage = rtl_cache_alloc(m_page_cache), *pnSize = m_page_size;
 }
 
 void PageData::Allocator_Impl::deallocate_Impl (void * pPage)

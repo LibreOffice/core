@@ -37,5 +37,5 @@ class KDESalInstance : public X11SalInstance
     public:
         KDESalInstance( SalYieldMutex* pMutex ) : X11SalInstance( pMutex ) {}
         virtual ~KDESalInstance() {}
-        virtual SalFrame* CreateFrame( SalFrame* pParent, ULONG nStyle );
+        virtual SalFrame* CreateFrame( SalFrame* pParent, sal_uLong nStyle );
 };

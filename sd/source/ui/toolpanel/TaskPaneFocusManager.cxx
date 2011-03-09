@@ -31,9 +31,9 @@
 #include "TaskPaneFocusManager.hxx"
 
 #include <vcl/window.hxx>
-#include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/event.hxx>
+#include <rtl/instance.hxx>
 #include <hash_map>
 
 namespace {
@@ -70,16 +70,23 @@ class FocusManager::LinkMap
 
 
 
-FocusManager* FocusManager::spInstance = NULL;
-
-
 FocusManager& FocusManager::Instance (void)
 {
+    static FocusManager* spInstance = NULL;
+
     if (spInstance == NULL)
     {
-        ::vos::OGuard aGuard (::Application::GetSolarMutex());
+        ::osl::MutexGuard aGuard (::osl::Mutex::getGlobalMutex());
         if (spInstance == NULL)
-            spInstance = new FocusManager ();
+        {
+            static FocusManager aInstance;
+            OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
+            spInstance = &aInstance;
+        }
+    }
+    else
+    {
+        OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
     }
     return *spInstance;
 }

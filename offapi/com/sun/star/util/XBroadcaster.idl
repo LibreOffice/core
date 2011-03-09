@@ -39,7 +39,7 @@ module com {  module sun {  module star {  module util {
 
 /** allows to control notification behaviour of a broadcaster.
 
-    @since 3.0
+    @since OOo 3.0
  */
 interface XBroadcaster: com::sun::star::uno::XInterface
 {

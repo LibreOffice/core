@@ -345,7 +345,7 @@ sub sMenufunktionen(Fuer_Was as string)
             Sleep 1
             if i >= 20 then
                 if gPlatform = "osx" then
-                    Warnlog "#i82427#-Mac OS X (Aqua): Drawing function does not draw anything"
+                    Warnlog "Mac OS X (Aqua): Drawing function does not draw anything"
                 else
                     Warnlog "Button (" + i + ")" + Fuer_Was + " is disabled "
                 end if
@@ -363,7 +363,7 @@ sub sMenufunktionen(Fuer_Was as string)
         printlog Fuer_Was
     else
         if gPlatform = "osx" then
-            Warnlog "#i82427#-Mac OS X (Aqua): Drawing function does not draw anything"
+            Warnlog "Mac OS X (Aqua): Drawing function does not draw anything"
         else
             Warnlog "  - Controlfieldproperties "+ Fuer_Was +" from Menu not available!"
         end if

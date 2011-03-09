@@ -118,6 +118,11 @@ RtfSdrExport& RtfExport::SdrExporter() const
     return *m_pSdrExport;
 }
 
+bool RtfExport::HackIsWW8OrHigher() const
+{
+    return true;
+}
+
 bool RtfExport::CollapseScriptsforWordOk( sal_uInt16 nScript, sal_uInt16 nWhich )
 {
     // FIXME is this actually true for rtf? - this is copied from DOCX
@@ -480,6 +485,10 @@ void RtfExport::WritePageDescTable()
     }
     Strm() << '}' << sNewLine;
     bOutPageDescs = sal_False;
+
+    // reset table infos, otherwise the depth of the cells will be incorrect,
+    // in case the page style (header or footer) had tables
+    mpTableInfo = ww8::WW8TableInfo::Pointer_t(new ww8::WW8TableInfo());
 }
 
 void RtfExport::ExportDocument_Impl()
@@ -1243,16 +1252,19 @@ void RtfExport::WriteHeaderFooter(const SwFrmFmt& rFmt, bool bHeader, const sal_
 
 class SwRTFWriter : public Writer
 {
-       public:
+    bool        m_bOutOutlineOnly;
+    public:
                SwRTFWriter( const String& rFilterName, const String& rBaseURL );
                virtual ~SwRTFWriter();
                virtual sal_uLong WriteStream();
 };
 
-SwRTFWriter::SwRTFWriter( const String& /*rFltName*/, const String & rBaseURL )
+SwRTFWriter::SwRTFWriter( const String& rFltName, const String & rBaseURL )
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
     SetBaseURL( rBaseURL );
+    // export outline nodes, only (send outline to clipboard/presentation)
+    m_bOutOutlineOnly = 'O' == rFltName.GetChar( 0 );
 }
 
 SwRTFWriter::~SwRTFWriter()
@@ -1262,6 +1274,7 @@ sal_uLong SwRTFWriter::WriteStream()
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
     RtfExport aExport( NULL, pDoc, new SwPaM( *pCurPam->End(), *pCurPam->Start() ), pCurPam, this );
+    aExport.mbOutOutlineOnly =  m_bOutOutlineOnly;
     aExport.ExportDocument( true );
     return 0;
 }

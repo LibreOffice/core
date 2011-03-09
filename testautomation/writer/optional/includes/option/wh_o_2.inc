@@ -114,7 +114,7 @@ testcase tToolsOptionsHTMLPrint
     ToolsOptions
     Call hToolsOptions ( "HTML" , "PRINT" )
 
-    if ( bCheckboxStatus(1) = Grafiken.IsChecked               ) Then WarnLog "#i108219#'Graphics' state changed"
+    if ( bCheckboxStatus(1) = Grafiken.IsChecked               ) Then WarnLog "'Graphics' state changed"
     if ( bCheckboxStatus(2) = Kontrollfelder.IsChecked         ) Then WarnLog "'Controls' state changed"
     if ( bCheckboxStatus(3) = Hintergrund.IsChecked            ) Then WarnLog "'Background' state changed"
     if ( bCheckboxStatus(4) = SchwarzDrucken.IsChecked         ) Then WarnLog "'Print black' state changed"

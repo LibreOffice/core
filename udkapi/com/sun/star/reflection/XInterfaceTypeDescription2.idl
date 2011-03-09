@@ -39,7 +39,7 @@ interface XTypeDescription;
     <p>This type supersedes <type>XInterfaceTypeDescription</type>, which only
     supported single inheritance.</p>
 
-    @since OOo 2.0.0
+    @since OOo 2.0
  */
 interface XInterfaceTypeDescription2: XInterfaceTypeDescription {
     /** Returns a sequence of all directly inherited (mandatory) base interface

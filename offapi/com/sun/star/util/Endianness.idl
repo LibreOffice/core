@@ -34,7 +34,7 @@ module com { module sun { module star { module util {
     The endianness specifies the order in which the bytes of larger
     types are laid out in memory.<p>
 
-    @since OOo 2.0.0
+    @since OOo 2.0
  */
 constants Endianness
 {

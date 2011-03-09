@@ -241,7 +241,7 @@ published service SheetCell
 
     /**
 
-    @since OOo 2.0.0
+    @since OOo 2.0
 
     */
     [optional] interface com::sun::star::util::XModifyBroadcaster;

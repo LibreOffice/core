@@ -278,7 +278,7 @@ testcase tInsertReferenceChapter
    Call wTypeKeys "<Shift Home>"
 
    if fGetFieldContent( ) <> "2" then
-       Warnlog "#i40625# Should get 2 , but get " & fGetFieldContent()
+       Warnlog "Should get 2 , but get " & fGetFieldContent()
    end if
 
  '/// Close the document
@@ -776,7 +776,7 @@ testcase tInsertBookmarkChapter
    Call wTypeKeys "<Shift Home>"
 
    if fGetFieldContent( ) <> "2" then
-       Warnlog "#i40625# Should get 2 , but get " & fGetFieldContent()
+       Warnlog "Should get 2 , but get " & fGetFieldContent()
    end if
 
  '/// Close the document

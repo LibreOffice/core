@@ -50,7 +50,7 @@ module com { module sun { module star { module document {
     The <type scope="com::sun::star::xml::sax">XDocumentHandler</type>
     interface is used to stream the XML data into the filter.</p>
 
-    @since OOo 2.0.0
+    @since OOo 2.0
  */
 published service XMLBasicImporter
 {

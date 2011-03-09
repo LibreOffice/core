@@ -177,8 +177,6 @@ endcase
 
 testcase tPickGraphic
 
-    Warnlog "#i115132#Missing .uno Slots in context menus"
-    goto endsub
 	printlog "Open context menu on not focussed graphic"
 	Call hNewDocument
 	Printlog "   Set zoom to 100%"
@@ -266,9 +264,6 @@ endcase
 ' -----------------------------------------------------------------------------
 
 testcase tHyperlinkEdit
-
-    Warnlog "#i115132#Missing .uno Slots in context menus"
-    goto endsub
 
     printlog "Context menu on hyperlinks"
     printlog "   Open a new text document"
@@ -391,9 +386,6 @@ endcase
 ' -----------------------------------------------------------------------------
 
 testcase tPickDrawingObjects
-
-    Warnlog "#i115132#Missing .uno Slots in context menus"
-    goto endsub
 
     printlog "Context menu on drawing objects"
     printlog "   Open a new text document"

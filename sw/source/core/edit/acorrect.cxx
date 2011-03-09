@@ -157,6 +157,10 @@ sal_Bool SwAutoCorrDoc::Insert( xub_StrLen nPos, const String& rTxt )
 
 sal_Bool SwAutoCorrDoc::Replace( xub_StrLen nPos, const String& rTxt )
 {
+    return ReplaceRange( nPos, rTxt.Len(), rTxt );
+}
+sal_Bool SwAutoCorrDoc::ReplaceRange( xub_StrLen nPos, xub_StrLen nSourceLength, const String& rTxt )
+{
     SwPaM* pPam = &rCrsr;
     if( pPam->GetPoint()->nContent.GetIndex() != nPos )
     {
@@ -204,14 +208,26 @@ sal_Bool SwAutoCorrDoc::Replace( xub_StrLen nPos, const String& rTxt )
 
                 pPam->SetMark();
                 pPam->GetPoint()->nContent = Min( pNd->GetTxt().Len(),
-                                              xub_StrLen( nPos + rTxt.Len() ));
+                                              xub_StrLen( nPos + nSourceLength ));
                 pDoc->ReplaceRange( *pPam, rTxt, false );
                 pPam->Exchange();
                 pPam->DeleteMark();
             }
         }
         else
-            pDoc->Overwrite( *pPam, rTxt );
+        {
+            if( nSourceLength != rTxt.Len() )
+            {
+                pPam->SetMark();
+                pPam->GetPoint()->nContent = Min( pNd->GetTxt().Len(),
+                                              xub_StrLen( nPos + nSourceLength ));
+                pDoc->ReplaceRange( *pPam, rTxt, false );
+                pPam->Exchange();
+                pPam->DeleteMark();
+            }
+            else
+                pDoc->Overwrite( *pPam, rTxt );
+        }
 
 //      pDoc->SetRedlineMode_intern( eOld );
         if( bUndoIdInitialized )

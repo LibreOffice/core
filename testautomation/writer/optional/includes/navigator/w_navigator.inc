@@ -80,13 +80,13 @@ testcase tViewNavigator1
     try
 		Navigator.Size (300, 400)
 	catch
-		Warnlog "Sizen Navigator doesn't work.. see #i32449"
+		Warnlog "Sizen Navigator doesn't work"
 	endcatch
     Sleep 1
     try
 		Navigator.Size (xSize%, ySize%)
 	catch
-		Printlog "Sizen Navigator doesn't work.. see #i32449"
+		Printlog "Sizen Navigator doesn't work"
 	endcatch
 
     Sleep 1
@@ -176,12 +176,12 @@ testcase tViewNavigator2
     try
         DocumentWriter.FadeOut
     catch
-        Warnlog "#i35096#Unable to Fade out Navigator!"
+        Warnlog "Unable to Fade out Navigator!"
     endcatch  
     try
         DocumentWriter.FadeIn
     catch
-        Warnlog "#i35096#Unable to Fade out Navigator!"
+        Warnlog "Unable to Fade out Navigator!"
     endcatch
 
     Kontext "Navigator"
@@ -231,7 +231,7 @@ testcase tViewNavigator3
 		Navigation.TearOff
 		NavigationTearOff = true
 	catch
-		Warnlog "Unable to tear off Navigation Toolbar! (#i32092)"
+		Warnlog "Unable to tear off Navigation Toolbar!"
 	endcatch
 	if NavigationTearOff = true then
 		Sleep 1

@@ -240,6 +240,30 @@ typedef CRITICAL_SECTION rtl_memory_lock_type;
 #define RTL_CACHE_FLAG_QUANTUMCACHE (2 << 13) /* used as arena quantum cache */
 
 
+/** Valgrind support macros.
+ */
+#if !defined(HAVE_MEMCHECK_H) || (OSL_DEBUG_LEVEL == 0)
+#if !defined(NVALGRIND)
+#define NVALGRIND 1
+#endif /* ! NVALGRIND */
+#endif /* ! HAVE_MEMCHECK_H || (OSL_DEBUG_LEVEL == 0) */
+
+#if defined(NVALGRIND)
+#define VALGRIND_MAKE_MEM_UNDEFINED(addr, size)
+#define VALGRIND_MAKE_MEM_DEFINED(addr, size)
+#define VALGRIND_MALLOCLIKE_BLOCK(addr, sizeB, rzB, is_zeroed)
+#define VALGRIND_FREELIKE_BLOCK(addr, rzB)
+#define VALGRIND_CREATE_MEMPOOL(pool, rzB, is_zeroed)
+#define VALGRIND_DESTROY_MEMPOOL(pool)
+#define VALGRIND_MEMPOOL_ALLOC(pool, addr, size)
+#define VALGRIND_MEMPOOL_FREE(pool, addr)
+#elif defined(HAVE_MEMCHECK_H)
+#include <memcheck.h>
+#if !defined(FORCE_SYSALLOC)
+#define FORCE_SYSALLOC 1
+#endif /* !FORCE_SYSALLOC */
+#endif /* NVALGRIND || HAVE_MEMCHECK_H */
+
 #ifdef __cplusplus
 }
 #endif

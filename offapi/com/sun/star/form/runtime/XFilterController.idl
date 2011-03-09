@@ -73,7 +73,7 @@ interface XFilterControllerListener;
     @see com::sun::star::sdb::XSingleSelectQueryAnalyzer::getStructuredFilter
     @see com::sun::star::sdb::SQLFilterOperator
 
-    @since OpenOffice.org 3.3
+    @since OOo 3.3
  */
 interface XFilterController
 {

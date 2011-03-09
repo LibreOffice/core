@@ -112,13 +112,13 @@ testcase tFormatStylist1
     try
         Stylist.Size 300, 400
     catch
-        Warnlog "Sizen Stylist doesn't work.. see #i32449"
+        Warnlog "Sizen Stylist doesn't work"
     endcatch    
     Sleep 1
     try
         Stylist.Size xSize%, ySize%
     catch
-        Warnlog "Sizen Stylist doesn't work.. see #i32449"
+        Warnlog "Sizen Stylist doesn't work"
     endcatch
     Sleep 1
 
@@ -498,7 +498,7 @@ testcase tFormatStylist6
         Kontext
         Active.Setpage TabHyperlinkZeichen
         Kontext "TabHyperlinkZeichen"
-            if URLName.GetText <> "http://www.mikeportnoy.com/" then Warnlog "#i41171#TabHyperlink: URL is wrong " + URLName.Gettext
+            if URLName.GetText <> "http://www.mikeportnoy.com/" then Warnlog "TabHyperlink: URL is wrong " + URLName.Gettext
         TabHyperlinkZeichen.OK
     end if
 
@@ -635,7 +635,7 @@ testcase tAssigningStyles1
     printlog "More..."
     Select Case iSprache
         Case 01 : sStyles = Array("Clear formatting", "Default", "Heading 1", "Heading 2", "Heading 3", "Text body", "More...")
-        Case 07 : sStyles = Array("Отменить форматирование", "Базовый", "Заголовок 1", "Заголовок 2", "Заголовок 3", "Основной текст", "Дополнительно...")
+        Case 07 : sStyles = Array("Отменить форматирование", "Базовый", "Заголовок 1", "Заголовок 2", "Заголовок 3", "О�?новной тек�?т", "Дополнительно...")
         Case 31 : sStyles = Array("Opmaak wissen", "Kop 1", "Kop 2", "Kop 3", "Standaard", "Tekstblok", "Meer...")
         Case 33 : sStyles = Array("Effacer le formatage", "Corps de texte", "Par défaut", "Titre 1", "Titre 2", "Titre 3", "Autres...")
         Case 34 : sStyles = Array("Borrar formato", "Cuerpo de texto", "Encabezado 1", "Encabezado 2", "Encabezado 3", "Predeterminado", "Más...")
@@ -645,10 +645,10 @@ testcase tAssigningStyles1
         Case 48 : sStyles = Array("Wyczyść formatowanie", "Domyślnie", "Nagłówek 1", "Nagłówek 2", "Nagłówek 3", "Treść tekstu", "Więcej...")
         Case 49 : sStyles = Array("Formatierung löschen", "Standard", "Textkörper", "Überschrift 1", "Überschrift 2", "Überschrift 3", "Weitere...")
         Case 55 : sStyles = Array("Limpar formatação", "Corpo do texto", "Padrão", "Título 1", "Título 2", "Título 3", "Mais...")
-        Case 81 : sStyles = Array("書式設定の解除", "本文", "標準", "見出し 1", "見出し 2", "見出し 3", "詳細...")
-        Case 82 : sStyles = Array("서식 지우기", "기본값", "제목 1", "제목 2", "제목 3", "텍스트 본문", "자세히...")
-        Case 86 : sStyles = Array("清除格式", "默认", "标题 1", "标题 2", "标题 3", "正文", "更多(~M)...")
-        Case 88 : sStyles = Array("清除格式", "內文", "標題 1", "標題 2", "標題 3", "預設", "更多...")
+        Case 81 : sStyles = Array("書�?設定�?�解除", "本文", "標準", "見出�?� 1", "見出�?� 2", "見出�?� 3", "詳細...")
+        Case 82 : sStyles = Array("서�? 지우기", "기본값", "제목 1", "제목 2", "제목 3", "�?스트 본문", "�?세히...")
+        Case 86 : sStyles = Array("清除格�?", "默认", "标题 1", "标题 2", "标题 3", "正文", "更多(~M)...")
+        Case 88 : sStyles = Array("清除格�?", "內文", "標題 1", "標題 2", "標題 3", "�?設", "更多...")
         Case 90 : sStyles = Array("Biçimlendirmeyi temizle", "Başlık 1", "Başlık 2", "Başlık 3", "Metin gövdesi", "Varsayılan", "Diğer...")
         Case else : Warnlog "Current language not supported. Please add styles to list!"
                     Kontext "Textobjectbar"

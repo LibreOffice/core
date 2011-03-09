@@ -605,16 +605,16 @@ sal_Bool SAL_CALL osl_isEqualSocketAddr (
     oslSocketAddr Addr1,
     oslSocketAddr Addr2)
 {
-    struct sockaddr* pAddr1= &(Addr1->m_sockaddr);
-    struct sockaddr* pAddr2= &(Addr2->m_sockaddr);
-
-    OSL_ASSERT(pAddr1);
-    OSL_ASSERT(pAddr2);
-
-    if (pAddr1->sa_family == pAddr2->sa_family)
+    OSL_ASSERT((0 != Addr1) && (0 != Addr2));
+    if ((0 != Addr1) || (0 != Addr2))
     {
-        switch (pAddr1->sa_family)
-        {
+      struct sockaddr* pAddr1= &(Addr1->m_sockaddr);
+      struct sockaddr* pAddr2= &(Addr2->m_sockaddr);
+
+      if (pAddr1->sa_family == pAddr2->sa_family)
+      {
+          switch (pAddr1->sa_family)
+          {
             case AF_INET:
             {
                 struct sockaddr_in* pInetAddr1= (struct sockaddr_in*)pAddr1;
@@ -623,16 +623,16 @@ sal_Bool SAL_CALL osl_isEqualSocketAddr (
                 if ((pInetAddr1->sin_family == pInetAddr2->sin_family) &&
                     (pInetAddr1->sin_addr.s_addr == pInetAddr2->sin_addr.s_addr) &&
                     (pInetAddr1->sin_port == pInetAddr2->sin_port))
-                    return (sal_True);
+                  return (sal_True);
             }
 
             default:
             {
-                return (memcmp(pAddr1, Addr2, sizeof(struct sockaddr)) == 0);
+                return (memcmp(pAddr1, pAddr2, sizeof(struct sockaddr)) == 0);
             }
-        }
+          }
+      }
     }
-
     return (sal_False);
 }
 
@@ -1173,7 +1173,6 @@ oslHostAddr SAL_CALL osl_createHostAddr (
         rtl_string_release(strHostname);
     }
 
-
     return HostAddr;
 }
 
@@ -1197,7 +1196,7 @@ oslHostAddr SAL_CALL osl_psz_createHostAddr (
 
     pHostAddr= (oslHostAddr) malloc(sizeof(struct oslHostAddrImpl));
     OSL_ASSERT(pHostAddr);
-    if (pAddr == NULL)
+    if (pHostAddr == NULL)
     {
         free (cn);
         return ((oslHostAddr)NULL);
@@ -2530,7 +2529,10 @@ sal_Bool __osl_socket_poll (
     int           timeout;
     int           result;
 
-    OSL_ASSERT(pSocket);
+    OSL_ASSERT(0 != pSocket);
+    if (0 == pSocket)
+      return sal_False; /* EINVAL */
+
     pSocket->m_nLastError = 0;
 
     fds.fd      = pSocket->m_Socket;
@@ -2573,7 +2575,10 @@ sal_Bool __osl_socket_poll (
     struct timeval tv;
     int            result;
 
-    OSL_ASSERT(pSocket);
+    OSL_ASSERT(0 != pSocket);
+    if (0 == pSocket)
+      return sal_False; /* EINVAL */
+
     pSocket->m_nLastError = 0;
 
     FD_ZERO(&fds);

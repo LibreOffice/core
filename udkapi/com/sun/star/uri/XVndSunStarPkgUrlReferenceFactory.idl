@@ -37,7 +37,7 @@ published interface XUriReference;
 /**
    creates &ldquo;vnd.sun.star.pkg&rdquo; URL references.
 
-   @since OOo 2.0.0
+   @since OOo 2.0
  */
 published interface XVndSunStarPkgUrlReferenceFactory {
     /**

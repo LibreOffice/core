@@ -51,7 +51,7 @@ module com {  module sun {  module star {  module sheet {
     single quotes they are escaped by doubling them, as usual, for example
     <code>=[2]!'''Sheet name''.A1'</code> in a "soffice" service.</p>
 
-    @since OOo3.1
+    @since OOo 3.1
  */
 struct DDELinkInfo
 {

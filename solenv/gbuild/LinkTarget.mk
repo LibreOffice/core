@@ -239,7 +239,7 @@ $(call gb_LinkTarget_get_clean_target,%) :
         $(call gb_LinkTarget_get_external_headers_target,$*) \
         $(DLLTARGET) \
         $(AUXTARGETS)) && \
-    cat $${RESPONSEFILE} |xargs -n 200 rm -f && \
+    cat $${RESPONSEFILE} /dev/null | xargs -n 200 rm -f && \
     rm -f $${RESPONSEFILE}
 
 
@@ -254,7 +254,7 @@ $(call gb_Helper_abbreviate_dirs,\
         $(foreach object,$(5),$(call gb_ObjCxxObject_get_dep_target,$(object)))\
          $(foreach object,$(6),$(call gb_GenCxxObject_get_dep_target,$(object)))\
         ) && \
-    cat $${RESPONSEFILE} |xargs -n 200 cat > $(1)) && \
+    cat $${RESPONSEFILE} /dev/null | xargs -n 200 cat > $(1)) && \
     rm -f $${RESPONSEFILE}
 
 endef

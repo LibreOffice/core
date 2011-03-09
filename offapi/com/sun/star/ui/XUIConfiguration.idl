@@ -47,7 +47,7 @@ module com { module sun { module star { module ui {
     <p>This can be useful for UI to enable/disable some functions without
     actually accessing the data.</p>
 
-    @since OOo 2.0.0
+    @since OOo 2.0
 */
 
 interface XUIConfiguration : ::com::sun::star::uno::XInterface

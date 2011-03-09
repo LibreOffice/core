@@ -100,7 +100,7 @@ KDESalGraphics::~KDESalGraphics()
         delete m_image;
 }
 
-BOOL KDESalGraphics::IsNativeControlSupported( ControlType type, ControlPart part )
+sal_Bool KDESalGraphics::IsNativeControlSupported( ControlType type, ControlPart part )
 {
     if (type == CTRL_PUSHBUTTON) return true;
 
@@ -154,9 +154,9 @@ BOOL KDESalGraphics::IsNativeControlSupported( ControlType type, ControlPart par
     return false;
 }
 
-BOOL KDESalGraphics::hitTestNativeControl( ControlType, ControlPart,
+sal_Bool KDESalGraphics::hitTestNativeControl( ControlType, ControlPart,
                                            const Rectangle&, const Point&,
-                                           BOOL& )
+                                           sal_Bool& )
 {
     return FALSE;
 }
@@ -232,7 +232,7 @@ namespace
     }
 }
 
-BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
+sal_Bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
                                         const Rectangle& rControlRegion, ControlState nControlState,
                                         const ImplControlValue& value,
                                         const OUString& )
@@ -243,7 +243,7 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
         return false;
     }
 
-    BOOL returnVal = true;
+   sal_Bool returnVal = true;
 
     QRect widgetRect = region2QRect(rControlRegion);
     if( type == CTRL_SPINBOX && part == PART_ALL_BUTTONS )
@@ -562,8 +562,8 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
         {
             if( pTempClipRegion )
             {
-                if( pClipRegion_ )
-                    XIntersectRegion( pTempClipRegion, pClipRegion_, pTempClipRegion );
+                if( mpClipRegion )
+                    XIntersectRegion( pTempClipRegion, mpClipRegion, pTempClipRegion );
                 XSetRegion( GetXDisplay(), gc, pTempClipRegion );
             }
             QPixmap pixmap = QPixmap::fromImage(*m_image, Qt::ColorOnly | Qt::OrderedDither | Qt::OrderedAlphaDither);
@@ -574,8 +574,8 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
 
             if( pTempClipRegion )
             {
-                if( pClipRegion_ )
-                    XSetRegion( GetXDisplay(), gc, pClipRegion_ );
+                if( mpClipRegion )
+                    XSetRegion( GetXDisplay(), gc, mpClipRegion );
                 else
                     XSetClipMask( GetXDisplay(), gc, None );
             }
@@ -589,7 +589,7 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
     return returnVal;
 }
 
-BOOL KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
+sal_Bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
                                              const Rectangle& controlRegion, ControlState controlState,
                                              const ImplControlValue& val,
                                              const OUString&,
@@ -769,7 +769,7 @@ BOOL KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
             if( part == PART_BORDER )
             {
                 int nFrameWidth = getFrameWidth();
-                USHORT nStyle = val.getNumericVal();
+                sal_uInt16 nStyle = val.getNumericVal();
                 if( nStyle & FRAME_DRAW_NODRAW )
                 {
                     // in this case the question is: how thick would a frame be

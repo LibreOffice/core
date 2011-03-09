@@ -244,42 +244,47 @@ Reference< XInterface > SAL_CALL create_MyService2Impl(
 }
 
 /*
-extern "C" void SAL_CALL component_getImplementationEnvironment(
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
     sal_Char const ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-extern "C" sal_Bool SAL_CALL component_writeInfo(
-    lang::XMultiServiceFactory * xMgr, registry::XRegistryKey * xRegistry )
-{
-    if (xRegistry)
-    {
-        try
-        {
-            // implementation of MyService1A
-            Reference< registry::XRegistryKey > xKey(
-                xRegistry->createKey( OUString( RTL_CONSTASCII_USTRINGPARAM(
-                    "my_module.my_sc_implementation.MyService1/UNO/SERVICES") ) ) );
-            // subkeys denote implemented services of implementation
-            xKey->createKey( OUString( RTL_CONSTASCII_USTRINGPARAM(
-                "my_module.MyService1") ) );
-            // implementation of MyService1B
-            xKey = xRegistry->createKey( OUString( RTL_CONSTASCII_USTRINGPARAM(
-                "my_module.my_sc_implementation.MyService2/UNO/SERVICES") ) );
-            // subkeys denote implemented services of implementation
-            xKey->createKey( OUString( RTL_CONSTASCII_USTRINGPARAM(
-                "my_module.MyService2") ) );
-            return sal_True; // success
-        }
-        catch (registry::InvalidRegistryException &)
-        {
-            // function fails if exception caught
-        }
-    }
-    return sal_False;
-}
-extern "C" void * SAL_CALL component_getFactory(
+// This method not longer necessary since OOo 3.4 where the component registration was
+// was changed to passive component registration. For more details see
+// http://wiki.services.openoffice.org/wiki/Passive_Component_Registration
+//
+// extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
+//     lang::XMultiServiceFactory * xMgr, registry::XRegistryKey * xRegistry )
+// {
+//     if (xRegistry)
+//     {
+//         try
+//         {
+//             // implementation of MyService1A
+//             Reference< registry::XRegistryKey > xKey(
+//                 xRegistry->createKey( OUString( RTL_CONSTASCII_USTRINGPARAM(
+//                     "my_module.my_sc_implementation.MyService1/UNO/SERVICES") ) ) );
+//             // subkeys denote implemented services of implementation
+//             xKey->createKey( OUString( RTL_CONSTASCII_USTRINGPARAM(
+//                 "my_module.MyService1") ) );
+//             // implementation of MyService1B
+//             xKey = xRegistry->createKey( OUString( RTL_CONSTASCII_USTRINGPARAM(
+//                 "my_module.my_sc_implementation.MyService2/UNO/SERVICES") ) );
+//             // subkeys denote implemented services of implementation
+//             xKey->createKey( OUString( RTL_CONSTASCII_USTRINGPARAM(
+//                 "my_module.MyService2") ) );
+//             return sal_True; // success
+//         }
+//         catch (registry::InvalidRegistryException &)
+//         {
+//             // function fails if exception caught
+//         }
+//     }
+//     return sal_False;
+// }
+
+extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     sal_Char const * implName, lang::XMultiServiceFactory * xMgr, void * )
 {
     Reference< lang::XSingleComponentFactory > xFactory;

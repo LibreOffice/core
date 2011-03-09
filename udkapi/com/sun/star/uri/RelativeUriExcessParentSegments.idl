@@ -37,7 +37,7 @@ module com { module sun { module star { module uri {
    @see com::sun::star::uri::XUriReferenceFactory::makeAbsolute
    for a method that uses this enumeration.
 
-   @since OOo 2.0.0
+   @since OOo 2.0
  */
 published enum RelativeUriExcessParentSegments {
     /**

@@ -236,5 +236,22 @@ mkdir: %_DEST%\inc%_EXT%\mozilla\xpcom_obsolete
 ..\%__SRC%\inc\xpnet\* %_DEST%\inc%_EXT%\mozilla\xpnet
 ..\%__SRC%\inc\zlib\* %_DEST%\inc%_EXT%\mozilla\zlib
 ..\%__SRC%\inc\xpcom_obsolete\* %_DEST%\inc%_EXT%\mozilla\xpcom_obsolete
-..\%__SRC%\lib\* %_DEST%\lib%_EXT%
+
+..\%__SRC%\lib\libldap50.* %_DEST%\lib%_EXT%
+..\%__SRC%\lib\libmozjs.* %_DEST%\lib%_EXT%
+..\%__SRC%\lib\libmozz.* %_DEST%\lib%_EXT%
+..\%__SRC%\lib\libmsgbaseutil.* %_DEST%\lib%_EXT%
+..\%__SRC%\lib\libnssckbi.* %_DEST%\lib%_EXT%
+..\%__SRC%\lib\libnssdbm3.* %_DEST%\lib%_EXT%
+..\%__SRC%\lib\libnssutil3.* %_DEST%\lib%_EXT%
+..\%__SRC%\lib\libprldap50.* %_DEST%\lib%_EXT%
+..\%__SRC%\lib\libxpcom.* %_DEST%\lib%_EXT%
+..\%__SRC%\lib\libxpcom_compat.* %_DEST%\lib%_EXT%
+..\%__SRC%\lib\libxpcom_core.* %_DEST%\lib%_EXT%
+..\%__SRC%\lib\*.a   %_DEST%\lib%_EXT%
+..\%__SRC%\lib\*.lib %_DEST%\lib%_EXT%
+
+mkdir: %_DEST%\lib%_EXT%\sqlite
+..\%__SRC%\lib\libsqlite3.* %_DEST%\lib%_EXT%\sqlite
+
 ..\%__SRC%\bin\*.zip %_DEST%\bin%_EXT%

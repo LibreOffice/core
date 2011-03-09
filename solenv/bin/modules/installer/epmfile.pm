@@ -1060,7 +1060,7 @@ sub set_revision_in_pkginfo
     my $pkgversion = "SOLSPARCPKGVERSION";
     if ( $installer::globals::issolarisx86build ) { $pkgversion = "SOLIAPKGVERSION"; }
 
-    if (( $variables->{$pkgversion} ) &&  ( $variables->{$pkgversion} ne "" ))
+    if (( $variables->{$pkgversion} ) && ( $variables->{$pkgversion} ne "" ))
     {
         if ( $variables->{$pkgversion} ne "FINALVERSION" )
         {
@@ -1085,7 +1085,15 @@ sub set_revision_in_pkginfo
                 $version = "$finalmajor.$finalminor.$finalmicro";
             }
 
-            my $versionstring = "$version,$variables->{$pkgversion}";
+            my $datestring = $variables->{$pkgversion};
+
+            # Allowing some packages to have another date of creation.
+            # They can be defined in product definition using a key like "SOLSPARCPKGVERSION_$packagename"
+
+            my $additionalkey = $pkgversion . "_" . $packagename;
+            if (( $variables->{$additionalkey} ) && ( $variables->{$additionalkey} ne "" )) { $datestring = $variables->{$additionalkey}; }
+
+            my $versionstring = "$version,$datestring";
 
             for ( my $i = 0; $i <= $#{$file}; $i++ )
             {

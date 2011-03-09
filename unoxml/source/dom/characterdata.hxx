@@ -25,19 +25,21 @@
  *
  ************************************************************************/
 
-#ifndef _CHARACTERDATA_HXX
-#define _CHARACTERDATA_HXX
+#ifndef DOM_CHARACTERDATA_HXX
+#define DOM_CHARACTERDATA_HXX
+
+#include <libxml/tree.h>
 
 #include <sal/types.h>
+
 #include <cppuhelper/implbase1.hxx>
+
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XCharacterData.hpp>
-#include <com/sun/star/xml/dom/XElement.hpp>
-#include <com/sun/star/xml/dom/XDOMImplementation.hpp>
-#include <libxml/tree.h>
-#include "node.hxx"
+
+#include <node.hxx>
+
 
 using ::rtl::OUString;
 using namespace com::sun::star::uno;
@@ -45,14 +47,19 @@ using namespace com::sun::star::xml::dom;
 
 namespace DOM
 {
-    class CCharacterData : public cppu::ImplInheritanceHelper1< CNode, XCharacterData >
+    typedef ::cppu::ImplInheritanceHelper1< CNode, XCharacterData >
+        CCharacterData_Base;
+
+    class CCharacterData
+        : public CCharacterData_Base
     {
 
-
     protected:
-        CCharacterData();
-        void init_characterdata(const xmlNodePtr aNodePtr);
-        void _dispatchEvent(const OUString& prevValue, const OUString& newValue);
+        CCharacterData(CDocument const& rDocument, ::osl::Mutex const& rMutex,
+                NodeType const& reNodeType, xmlNodePtr const& rpNode);
+
+        void dispatchEvent_Impl(
+                OUString const& prevValue, OUString const& newValue);
 
     public:
         /**

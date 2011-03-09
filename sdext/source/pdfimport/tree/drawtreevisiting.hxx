@@ -101,7 +101,9 @@ namespace pdfi
 
         void fillFrameProps( DrawElement&       rElem,
                              PropertyMap&       rProps,
-                             const EmitContext& rEmitContext );
+                             const EmitContext& rEmitContext,
+                             bool               bWasTransformed = false
+                             );
 
     public:
     const ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator >& GetBreakIterator();

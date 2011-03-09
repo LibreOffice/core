@@ -372,7 +372,12 @@ bool SlideSorterController::Command (
 {
     bool bEventHasBeenHandled = false;
 
+    if (pWindow == NULL)
+        return false;
+
     ViewShell* pViewShell = mrSlideSorter.GetViewShell();
+    if (pViewShell == NULL)
+        return false;
 
     switch (rEvent.GetCommand())
     {

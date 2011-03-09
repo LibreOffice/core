@@ -941,7 +941,7 @@ testcase tFileSaveWithPassword
             if ( gPlatgroup = "unx" ) then
                 QAErrorlog "#i73968#Opening a password protected file looses focus after loading"
             else
-                Warnlog "#i36015#Checkbox 'Save with password' is not checked in file-dialog !"
+                Warnlog "Checkbox 'Save with password' is not checked in file-dialog !"
                 Passwort.Check
             end if
             SpeichernDlg.Cancel

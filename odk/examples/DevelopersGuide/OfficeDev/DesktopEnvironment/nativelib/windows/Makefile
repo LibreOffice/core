@@ -61,7 +61,7 @@ include $(SETTINGS)/stdtarget.mk
 
 $(OUT_SHL_SLO)/%.$(OBJ_EXT) : %.c
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(CC) $(CC_FLAGS) $(CC_INCLUDES) $(SDK_JAVA_INCLUDES) $(CC_DEFINES) $(CC_OUTPUT_SWITCH)$(subst /,$(PS),$@) $<
+	$(CC) $(CC_FLAGS_JNI) $(CC_INCLUDES) $(SDK_JAVA_INCLUDES) $(CC_DEFINES_JNI) $(CC_OUTPUT_SWITCH)$(subst /,$(PS),$@) $<
 
 $(SHAREDLIB_OUT)/$(SHAREDLIB_PRE)$(SHL_NAME).$(SHAREDLIB_EXT) : $(SLOFILES) $(SHL_NAME).def
 	-$(MKDIR) $(subst /,$(PS),$(@D))

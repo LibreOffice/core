@@ -90,7 +90,7 @@ interface XPolyPolygon2D;
     might be off by up to one device pixel from the transformed
     metrics.<p>
 
-    @since OOo 2.0.0
+    @since OOo 2.0
  */
 interface XTextLayout : ::com::sun::star::uno::XInterface
 {

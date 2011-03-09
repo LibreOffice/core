@@ -84,6 +84,7 @@ testcase tPlotOptions
 
     printlog "Close and reopen data series dialog - checkbox should be still activated"
     TabDataSeriesOptions.Ok
+    sleep (1)
     Kontext "DocumentChart"
     FormatSelection
     printlog "Select tab page Options"

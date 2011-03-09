@@ -171,7 +171,7 @@ void Cursor::ImplRestore()
 
 // -----------------------------------------------------------------------
 
-void Cursor::ImplShow( sal_Bool bDrawDirect )
+void Cursor::ImplShow( bool bDrawDirect, bool bRestore )
 {
     if ( mbVisible )
     {
@@ -199,10 +199,10 @@ void Cursor::ImplShow( sal_Bool bDrawDirect )
 
             mpData->mpWindow    = pWindow;
             mpData->mnStyle     = mnStyle;
-            if ( bDrawDirect )
+            if ( bDrawDirect || bRestore )
                 ImplDraw();
 
-            if ( !mpWindow )
+            if ( !mpWindow && ! ( ! bDrawDirect && mpData->maTimer.IsActive()) )
             {
                 mpData->maTimer.SetTimeout( pWindow->GetSettings().GetStyleSettings().GetCursorBlinkTime() );
                 if ( mpData->maTimer.GetTimeout() != STYLE_CURSOR_NOBLINKTIME )
@@ -216,16 +216,16 @@ void Cursor::ImplShow( sal_Bool bDrawDirect )
 
 // -----------------------------------------------------------------------
 
-void Cursor::ImplHide()
+bool Cursor::ImplHide()
 {
+    bool bWasCurVisible = false;
     if ( mpData && mpData->mpWindow )
     {
+        bWasCurVisible = mpData->mbCurVisible;
         if ( mpData->mbCurVisible )
             ImplRestore();
-
-        mpData->maTimer.Stop();
-        mpData->mpWindow = NULL;
     }
+    return bWasCurVisible;
 }
 
 // -----------------------------------------------------------------------
@@ -329,6 +329,12 @@ void Cursor::Hide()
     {
         mbVisible = sal_False;
         ImplHide();
+
+        if( mpData )
+        {
+            mpData->maTimer.Stop();
+            mpData->mpWindow = NULL;
+        }
     }
 }
 

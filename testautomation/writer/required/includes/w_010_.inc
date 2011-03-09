@@ -358,7 +358,7 @@ testcase tNumLevelUpDown
         if Hochstufen.IsEnabled then
             Hochstufen.Click
         else
-            if i = 1 then Warnlog "Level up is disabled! (#i28550)"
+            if i = 1 then Warnlog "Level up is disabled!"
         end if
         sleep (2)
     next i
@@ -394,7 +394,7 @@ testcase tNumSubpointsUpDown
     if HinunterstufenMitUnterpunkten.IsEnabled then
         HinunterstufenMitUnterpunkten.Click
     else
-        if i = 1 then Warnlog "Move up with subpoints is disabled! (#i28550)"
+        if i = 1 then Warnlog "Move up with subpoints is disabled!"
     end if
     Sleep (1)
 
@@ -767,7 +767,7 @@ testcase tUpLevelUpDown
         if Hochstufen.IsEnabled then
             Hochstufen.Click
         else
-            if i = 1 then Warnlog "Level up is disabled ! (#i28550)"
+            if i = 1 then Warnlog "Level up is disabled !"
         end if
         sleep (2)
     next i
@@ -825,7 +825,7 @@ testcase tUpSubpointsUpDown
         if HochstufenMitUnterpunkten.IsEnabled then
             HochstufenMitUnterpunkten.Click
         else
-            if i = 1 then Warnlog "Move with Subpoints up is disabled! (#i28550)"
+            if i = 1 then Warnlog "Move with Subpoints up is disabled!"
         end if
         Sleep 1
     next i

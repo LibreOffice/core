@@ -136,6 +136,9 @@ namespace cppcanvas
             /// Optionally forces the given font letter form (italics etc.) for all text actions
             ::boost::optional< sal_Int8 >                   maFontLetterForm;
 
+            /// Optionally forces the given font proportion (condensed, monospaced etc.) for all text actions
+            ::boost::optional< sal_Int8 >                   maFontProportion;
+
             /// Optionally forces underlining for all text actions
             ::boost::optional< bool >                       maFontUnderline;
         };

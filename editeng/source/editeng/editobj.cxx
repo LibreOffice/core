@@ -1472,7 +1472,7 @@ void __EXPORT BinTextObject::CreateData( SvStream& rIStream )
                 if ( hConv )
                 {
                     SvxFontItem aNewFontItem( rFontItem );
-                    aNewFontItem.GetFamilyName() = GetFontToSubsFontName( hConv );
+                    aNewFontItem.SetFamilyName( GetFontToSubsFontName( hConv ) );
 
                     pC->GetAttribs().Remove( nAttr );
                     XEditAttribute* pNewAttr = CreateAttrib( aNewFontItem, pAttr->GetStart(), pAttr->GetEnd() );
@@ -1503,7 +1503,7 @@ void __EXPORT BinTextObject::CreateData( SvStream& rIStream )
             if ( hConv )
             {
                 SvxFontItem aNewFontItem( rFontItem );
-                aNewFontItem.GetFamilyName() = GetFontToSubsFontName( hConv );
+                aNewFontItem.SetFamilyName( GetFontToSubsFontName( hConv ) );
                 pC->GetParaAttribs().Put( aNewFontItem );
 
                 for ( sal_uInt16 nChar = 0; nChar < pC->GetText().Len(); nChar++ )

@@ -64,7 +64,7 @@
     @see com::sun::star::frame::XDispatchProvider
     @see com::sun::star::frame::XStatusbarController
 
-    @since OOo 2.0.0
+    @since OOo 2.0
  */
 
 service StatusbarController

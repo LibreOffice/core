@@ -653,7 +653,7 @@ testcase tInsertGraphic_10
     Call wTypeKeys ( "<Shift F4>" )
     sleep(1)
     if fFormatGraphic("TabZusaetze") = false then
-        Warnlog "#i46300#linked JPEG pictures will disappear when doc is modified."
+        Warnlog "#linked JPEG pictures will disappear when doc is modified."
 
         kontext "TabZusatze"
         if ( TabZusaetze.exists() ) then TabZusaetze.close()

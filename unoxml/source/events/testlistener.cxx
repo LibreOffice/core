@@ -33,6 +33,10 @@
 #define U2S(s) OUStringToOString(s, RTL_TEXTENCODING_UTF8).getStr()
 
 
+using ::com::sun::star::lang::XMultiServiceFactory;
+using ::com::sun::star::lang::IllegalArgumentException;
+
+
 namespace DOM { namespace events
 {
 

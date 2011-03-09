@@ -45,7 +45,7 @@ interface XDatabaseDocumentUI;
 
     @see com::sun::star::sdb::Connection
 
-    @since OOo 2.2.0
+    @since OOo 2.2
  */
 interface XTableUIProvider
 {

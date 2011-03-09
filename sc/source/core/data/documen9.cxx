@@ -704,7 +704,7 @@ void ScDocument::UpdateFontCharSet()
             pItem = (SvxFontItem*)pPool->GetItem2(ATTR_FONT, i);
             if ( pItem && ( pItem->GetCharSet() == eSrcSet ||
                             ( bUpdateOld && pItem->GetCharSet() != RTL_TEXTENCODING_SYMBOL ) ) )
-                pItem->GetCharSet() = eSysSet;
+                pItem->SetCharSet(eSysSet);
         }
 
         if ( pDrawLayer )
@@ -716,7 +716,7 @@ void ScDocument::UpdateFontCharSet()
                 pItem = (SvxFontItem*)rDrawPool.GetItem2(EE_CHAR_FONTINFO, i);
                 if ( pItem && ( pItem->GetCharSet() == eSrcSet ||
                                 ( bUpdateOld && pItem->GetCharSet() != RTL_TEXTENCODING_SYMBOL ) ) )
-                    pItem->GetCharSet() = eSysSet;
+                    pItem->SetCharSet( eSysSet );
             }
         }
     }

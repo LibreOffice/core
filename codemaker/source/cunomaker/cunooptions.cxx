@@ -321,9 +321,8 @@ OString CunoOptions::prepareHelp()
 
 OString CunoOptions::prepareVersion()
 {
-    OString version("\nSun Microsystems (R) ");
-    version += m_program + " Version 1.0\n\n";
-
+    OString version(m_program);
+    version += " Version 1.0\n\n";
     return version;
 }
 

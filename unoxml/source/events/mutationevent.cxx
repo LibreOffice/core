@@ -1,33 +1,71 @@
-#include "mutationevent.hxx"
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include <mutationevent.hxx>
 
 namespace DOM { namespace events
 {
+    CMutationEvent::CMutationEvent()
+        : CMutationEvent_Base()
+        , m_attrChangeType(AttrChangeType_MODIFICATION)
+    {
+    }
+
     CMutationEvent::~CMutationEvent()
     {
     }
 
     Reference< XNode > SAL_CALL CMutationEvent::getRelatedNode() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_Mutex);
         return m_relatedNode;
     }
 
     OUString SAL_CALL CMutationEvent::getPrevValue() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_Mutex);
         return m_prevValue;
     }
 
     OUString SAL_CALL CMutationEvent::getNewValue() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_Mutex);
         return m_newValue;
     }
 
     OUString SAL_CALL CMutationEvent::getAttrName() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_Mutex);
         return m_attrName;
     }
 
     AttrChangeType SAL_CALL CMutationEvent::getAttrChange() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_Mutex);
         return m_attrChangeType;
     }
 
@@ -37,7 +75,9 @@ namespace DOM { namespace events
         const OUString& newValueArg, const OUString& attrNameArg,
         AttrChangeType attrChangeArg) throw (RuntimeException)
     {
-        initEvent(typeArg, canBubbleArg, cancelableArg);
+        ::osl::MutexGuard const g(m_Mutex);
+
+        CEvent::initEvent(typeArg, canBubbleArg, cancelableArg);
         m_relatedNode = relatedNodeArg;
         m_prevValue = prevValueArg;
         m_newValue = newValueArg;

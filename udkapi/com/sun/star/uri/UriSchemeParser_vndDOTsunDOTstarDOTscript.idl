@@ -48,7 +48,7 @@ published interface XUriSchemeParser;
    Rather, it should be used indirectly through the
    <type scope="com::sun::star::uri">UriReferenceFactory</type> service.</p>
 
-   @since OOo 2.0.0
+   @since OOo 2.0
  */
 published service UriSchemeParser_vndDOTsunDOTstarDOTscript: XUriSchemeParser
 {};

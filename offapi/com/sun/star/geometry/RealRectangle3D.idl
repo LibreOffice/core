@@ -32,7 +32,7 @@ module com {  module sun {  module star {  module geometry {
 /** This structure contains the necessary information for a
     three-dimensional cube.<p>
 
-    @since OOo 2.0.0
+    @since OOo 2.0
  */
 struct RealRectangle3D
 {

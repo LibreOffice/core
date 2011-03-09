@@ -41,7 +41,7 @@ module com {  module sun {  module star {  module sheet {
     @see com::sun::star::sheet::ExternalDocLink
     @see com::sun::star::sheet::XExternalSheetCache
 
-    @since OOo 3.1.0
+    @since OOo 3.1
  */
 service ExternalSheetCache : XExternalSheetCache
 {

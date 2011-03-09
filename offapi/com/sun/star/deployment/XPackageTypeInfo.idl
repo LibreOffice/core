@@ -35,7 +35,7 @@ module com { module sun { module star { module deployment {
 
 /** Objects of this interface provide information about a package's type.
 
-    @since OOo 2.0.0
+    @since OOo 2.0
 */
 interface XPackageTypeInfo
 {

@@ -134,7 +134,7 @@ testcase tFileSendOutlineToPresentation
     try
         FileSendOutlineToPresentation
     catch
-        Warnlog "#i38723#Unable to execute 'File -> Send -> Outline to Presentation'"
+        Warnlog "Unable to execute 'File -> Send -> Outline to Presentation'"
         Call hCloseDocument
         goto endsub
     endcatch
@@ -182,7 +182,7 @@ testcase tFileSendOutlineToClipboard
     try
         FileSendOutlineToClipboard
     catch
-        Warnlog "#i38723#Unable to execute 'File -> Send -> Outline to Clipboard'"
+        Warnlog "Unable to execute 'File -> Send -> Outline to Clipboard'"
         Call hCloseDocument
         goto endsub
     endcatch
@@ -233,7 +233,7 @@ testcase tFileSendCreateAutoabstract
     try
         FileSendCreateAutoabstract
     catch
-        Warnlog "#i38723#Unable to execute 'File -> Send -> Create Autoabstract'"
+        Warnlog "Unable to execute 'File -> Send -> Create Autoabstract'"
         Call hCloseDocument
         goto endsub
     endcatch
@@ -284,7 +284,7 @@ testcase tFileSendAutoabstractToPresentation
     try
         FileSendAutoabstractToPresentation
     catch
-        Warnlog "#i38723#Unable to execute 'File -> Send -> Autoabstract to Presentation'"
+        Warnlog "Unable to execute 'File -> Send -> Autoabstract to Presentation'"
         Call hCloseDocument
         goto endsub
     endcatch
@@ -666,7 +666,7 @@ testcase tMasterDocFileSendOutlineToPresentation
     try
         FileSendOutlineToPresentation
     catch
-        Warnlog "#i38723#Unable to execute 'File -> Send -> Outline to Presentation'"
+        Warnlog "Unable to execute 'File -> Send -> Outline to Presentation'"
         Call hCloseDocument
         goto endsub
     endcatch
@@ -705,7 +705,7 @@ testcase tMasterDocFileSendOutlineToClipboard
     try
         FileSendOutlineToClipboard
     catch
-        Warnlog "#i38723#Unable to execute 'File -> Send -> Outline to Clipboard'"
+        Warnlog "Unable to execute 'File -> Send -> Outline to Clipboard'"
         Call hCloseDocument
         goto endsub
     endcatch
@@ -749,7 +749,7 @@ testcase tMasterDocFileSendCreateAutoabstract
     try
         FileSendCreateAutoabstract
     catch
-        Warnlog "#i38723#Unable to execute 'File -> Send -> Create Autoabstract'"
+        Warnlog "Unable to execute 'File -> Send -> Create Autoabstract'"
         Call hCloseDocument
         goto endsub
     endcatch
@@ -799,7 +799,7 @@ testcase tMasterDocFileSendAutoabstractToPresentation
     try
         FileSendAutoabstractToPresentation
     catch
-        Warnlog "#i38723#Unable to execute 'File -> Send -> Autoabstract to Presentation'"
+        Warnlog "Unable to execute 'File -> Send -> Autoabstract to Presentation'"
         Call hCloseDocument
         goto endsub
     endcatch

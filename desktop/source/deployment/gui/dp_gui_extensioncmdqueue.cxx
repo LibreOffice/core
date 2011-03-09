@@ -165,7 +165,7 @@ public:
             m_bWarnUser( false )
     {}
 
-    Dialog * activeDialog() { return m_pDialogHelper->getWindow(); }
+    Dialog * activeDialog() { return m_pDialogHelper ? m_pDialogHelper->getWindow() : NULL; }
 
     void setTitle( const OUString& rNewTitle ) { m_sTitle = rNewTitle; }
     void startProgress();

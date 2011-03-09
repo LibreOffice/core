@@ -1111,12 +1111,18 @@ void   SwTableColumnPage::UpdateCols( sal_uInt16 nAktPos )
 
     if(!bModifyTable && !bProp )
     {
-//      Tabellenbreite bleibt, Differenz wird mit der/den
-//      naechsten Zellen ausgeglichen
+//      the table width is constant, the difference is balanced with the other columns
+        sal_uInt16 nLoopCount = 0;
         while( nDiff )
         {
             if( ++nAktPos == nNoOfVisibleCols)
+            {
                 nAktPos = 0;
+                ++nLoopCount;
+                //#i101353# in small tables it might not be possible to balance column width
+                if( nLoopCount > 1 )
+                    break;
+            }
             if( nDiff < 0 )
             {
                 SetVisibleWidth(nAktPos, GetVisibleWidth(nAktPos) -nDiff);

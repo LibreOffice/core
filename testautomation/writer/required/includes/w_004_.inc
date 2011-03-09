@@ -636,7 +636,6 @@ testcase tInsertIndexesIndex
     Kontext "TabVerzeichnisseVerzeichnis"
     For i= 1 to VerzeichnisTyp.GetItemCount
         Sleep 1
-        if i = 2 then printlog "Alphabetical index see bug #i33671 (ok in m54)"
         VerzeichnisTyp.Select i
         printlog "- " + VerzeichnisTyp.GetSelText
         Call DialogTest (TabVerzeichnisseVerzeichnis)
@@ -934,7 +933,7 @@ testcase tInsertFrame
         Call DialogTest (TabHintergrund, 2)
         Sleep 1
     catch
-        Warnlog "Maybe missing combobox! (#i29517)"
+        Warnlog "Maybe missing combobox!"
     endcatch
 
     if gApplication <> "HTML" then
