@@ -244,8 +244,10 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
         else
             bBreak = ((const SfxBoolItem&)pPattern->GetItem(ATTR_LINEBREAK)).GetValue();
 
-        if (pCell->HasValueData())
-            // Cell has a value.  Disable line break.
+        SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
+        sal_uLong nFormat = pPattern->GetNumberFormat( pFormatter, pCondSet );
+        // #i111387# #o11817313# disable automatic line breaks only for "General" number format
+        if ( bBreak && pCell->HasValueData() && ( nFormat % SV_COUNTRY_LANGUAGE_OFFSET ) == 0 )
             bBreak = false;
 
         //  get other attributes from pattern and conditional formatting
@@ -332,8 +334,6 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
         {
             String aValStr;
             Color* pColor;
-            SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
-            sal_uLong nFormat = pPattern->GetNumberFormat( pFormatter, pCondSet );
             ScCellFormat::GetString( pCell, nFormat, aValStr, &pColor,
                                         *pFormatter,
                                         sal_True, rOptions.bFormula, ftCheck );
@@ -493,8 +493,6 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
             else
             {
                 Color* pColor;
-                SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
-                sal_uLong nFormat = pPattern->GetNumberFormat( pFormatter, pCondSet );
                 String aString;
                 ScCellFormat::GetString( pCell, nFormat, aString, &pColor,
                                             *pFormatter,

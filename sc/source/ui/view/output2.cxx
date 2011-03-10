@@ -75,8 +75,6 @@
 #include "scmod.hxx"
 #include "fillinfo.hxx"
 
-#include <boost/ptr_container/ptr_vector.hpp>
-
 #include <math.h>
 
 //! Autofilter-Breite mit column.cxx zusammenfassen
@@ -1361,10 +1359,6 @@ void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
     const SfxItemSet* pOldCondSet = NULL;
     sal_uInt8 nOldScript = 0;
 
-    // alternative pattern instances in case we need to modify the pattern
-    // before processing the cell value.
-    ::boost::ptr_vector<ScPatternAttr> aAltPatterns;
-
     long nPosY = nScrY;
     for (SCSIZE nArrY=1; nArrY+1<nArrCount; nArrY++)
     {
@@ -1501,18 +1495,6 @@ void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
                         pCondSet = pDoc->GetCondResult( nCellX, nCellY, nTab );
                     }
 
-                    if (pCell->HasValueData() &&
-                        static_cast<const SfxBoolItem&>(
-                            pPattern->GetItem(ATTR_LINEBREAK, pCondSet)).GetValue())
-                    {
-                        // Disable line break when the cell content is numeric.
-                        aAltPatterns.push_back(new ScPatternAttr(*pPattern));
-                        ScPatternAttr* pAltPattern = &aAltPatterns.back();
-                        SfxBoolItem aLineBreak(ATTR_LINEBREAK, false);
-                        pAltPattern->GetItemSet().Put(aLineBreak);
-                        pPattern = pAltPattern;
-                    }
-
                     sal_uInt8 nScript = GetScriptType( pDoc, pCell, pPattern, pCondSet );
                     if (nScript == 0) nScript = ScGlobal::GetDefaultScriptType();
                     if ( pPattern != pOldPattern || pCondSet != pOldCondSet ||
@@ -1562,6 +1544,11 @@ void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
                         eOutHorJust = SVX_HOR_JUSTIFY_LEFT;     // repeat is not yet implemented
 
                     sal_Bool bBreak = ( aVars.GetLineBreak() || aVars.GetHorJust() == SVX_HOR_JUSTIFY_BLOCK );
+
+                    // #i111387# #o11817313# disable automatic line breaks only for "General" number format
+                    if ( bBreak && bCellIsValue && ( aVars.GetValueFormat() % SV_COUNTRY_LANGUAGE_OFFSET ) == 0 )
+                        bBreak = sal_False;
+
                     sal_Bool bRepeat = aVars.IsRepeat() && !bBreak;
                     sal_Bool bShrink = aVars.IsShrink() && !bBreak && !bRepeat;
 
