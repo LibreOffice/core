@@ -35,7 +35,6 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/imgmgr.hxx>
-#include <vcl/fixed.hxx>
 #include "IController.hxx"
 #include "UITools.hxx"
 #include <sfx2/sfx.hrc>
@@ -84,11 +83,12 @@ namespace dbaui
         :Window(pParent,nStyle)
         ,m_xServiceFactory(_rFactory)
         ,m_rController( _rController )
-        ,m_pSeparator( NULL )
+        ,m_aSeparator( this )
     {
         DBG_CTOR(ODataView,NULL);
         m_rController.acquire();
         m_pAccel.reset(::svt::AcceleratorExecute::createAcceleratorHelper());
+        m_aSeparator.Show();
     }
 
     // -------------------------------------------------------------------------
@@ -101,29 +101,9 @@ namespace dbaui
     {
         DBG_DTOR(ODataView,NULL);
 
-        enableSeparator( sal_False );
         m_rController.release();
     }
 
-    // -------------------------------------------------------------------------
-    void ODataView::enableSeparator( const sal_Bool _bEnable )
-    {
-        if ( _bEnable == isSeparatorEnabled() )
-            // nothing to do
-            return;
-
-        if ( _bEnable )
-        {
-            m_pSeparator = new FixedLine( this );
-            m_pSeparator->Show( );
-        }
-        else
-        {
-            ::std::auto_ptr<FixedLine> aTemp(m_pSeparator);
-            m_pSeparator = NULL;
-        }
-        Resize();
-    }
     // -------------------------------------------------------------------------
     void ODataView::resizeDocumentView( Rectangle& /*_rPlayground*/ )
     {
@@ -148,15 +128,10 @@ namespace dbaui
     {
         Rectangle aPlayground( _rPlayground );
 
-        // position thew separator
-        if ( m_pSeparator )
-        {
-            Size aSeparatorSize = Size( aPlayground.GetWidth(), 2 );
-
-            m_pSeparator->SetPosSizePixel( aPlayground.TopLeft(), aSeparatorSize );
-
-            aPlayground.Top() += aSeparatorSize.Height() + 1;
-        }
+        // position the separator
+        const Size aSeparatorSize = Size( aPlayground.GetWidth(), 2 );
+        m_aSeparator.SetPosSizePixel( aPlayground.TopLeft(), aSeparatorSize );
+        aPlayground.Top() += aSeparatorSize.Height() + 1;
 
         // position the controls of the document's view
         resizeDocumentView( aPlayground );

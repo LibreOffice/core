@@ -190,7 +190,7 @@ Menu RID_TABLEDESIGNROWPOPUPMENU
         MenuItem
         {
             Identifier = SID_TABLEDESIGN_INSERTROWS ;
-            HelpID = SID_TABLEDESIGN_INSERTROWS ;
+            HelpID = HID_TABLEDESIGN_INSERTROWS ;
             Text [ en-US ] = "Insert Rows" ;
         };
         MenuItem
@@ -200,7 +200,7 @@ Menu RID_TABLEDESIGNROWPOPUPMENU
         MenuItem
         {
             Identifier = SID_TABLEDESIGN_TABED_PRIMARYKEY ;
-            HelpID = SID_TABLEDESIGN_TABED_PRIMARYKEY ;
+            HelpID = HID_TABLEDESIGN_TABED_PRIMARYKEY ;
             Checkable = TRUE ;
             Text [ en-US ] = "Primary Key" ;
         };

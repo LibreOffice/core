@@ -35,6 +35,7 @@
 #include "dbaccess_helpid.hrc"
 #endif
 
+#include "dbaccess_slotid.hrc"
 
 #define WINDOW_SIZE_X   276
 #define WINDOW_SIZE_Y   185
@@ -67,6 +68,7 @@ String STR_WIZ_NAME_MATCHING_TITEL
 
 ModalDialog WIZ_RTFCOPYTABLE
 {
+    HelpID = "dbaccess:ModalDialog:WIZ_RTFCOPYTABLE";
 
     Text [ en-US ] = "Copy RTF Table" ;
 
@@ -90,12 +92,14 @@ ModalDialog WIZ_RTFCOPYTABLE
     };
     PushButton PB_PREV
     {
+        HelpID = "dbaccess:PushButton:WIZ_RTFCOPYTABLE:PB_PREV";
         TabStop             = TRUE ;
         Size                = MAP_APPFONT ( BUTTON_SIZE_X , BUTTON_SIZE_Y ) ;
         Text [ en-US ] = "< ~Back";
     };
     PushButton PB_NEXT
     {
+        HelpID = "dbaccess:PushButton:WIZ_RTFCOPYTABLE:PB_NEXT";
         TabStop             = TRUE ;
         Size                = MAP_APPFONT ( BUTTON_SIZE_X , BUTTON_SIZE_Y ) ;
         Text [ en-US ] = "~Next>";
@@ -128,6 +132,7 @@ TabPage TAB_WIZ_COLUMN_SELECT
     };
     MultiListBox LB_ORG_COLUMN_NAMES
     {
+        HelpID = "dbaccess:MultiListBox:TAB_WIZ_COLUMN_SELECT:LB_ORG_COLUMN_NAMES";
         Border              = TRUE ;
         Pos                 = MAP_APPFONT ( WINDOW_BORDER_X , WINDOW_BORDER_Y ) ;
         Size                = MAP_APPFONT ( 95 , WINDOW_SIZE_Y - 23 ) ;
@@ -140,6 +145,7 @@ TabPage TAB_WIZ_COLUMN_SELECT
     };
     ImageButton IB_COLUMN_RH
     {
+        HelpID = "dbaccess:ImageButton:TAB_WIZ_COLUMN_SELECT:IB_COLUMN_RH";
         Pos                 = MAP_APPFONT ( WINDOW_BORDER_X + 116 , WINDOW_BORDER_Y + 25 ) ;
         Size                = MAP_APPFONT ( 20 , 14 ) ;
         TabStop             = TRUE ;
@@ -159,6 +165,7 @@ TabPage TAB_WIZ_COLUMN_SELECT
     };
     ImageButton IB_COLUMNS_RH
     {
+        HelpID = "dbaccess:ImageButton:TAB_WIZ_COLUMN_SELECT:IB_COLUMNS_RH";
         Pos                 = MAP_APPFONT ( WINDOW_BORDER_X + 116 , WINDOW_BORDER_Y + 45 ) ;
         Size                = MAP_APPFONT ( 20 , 14 ) ;
         TabStop             = TRUE;
@@ -179,6 +186,7 @@ TabPage TAB_WIZ_COLUMN_SELECT
     };
     ImageButton IB_COLUMN_LH
     {
+        HelpID = "dbaccess:ImageButton:TAB_WIZ_COLUMN_SELECT:IB_COLUMN_LH";
         Pos                 = MAP_APPFONT ( WINDOW_BORDER_X + 116 , WINDOW_BORDER_Y + 65) ;
         Size                = MAP_APPFONT ( 20 , 14 ) ;
         TabStop             = TRUE ;
@@ -198,6 +206,7 @@ TabPage TAB_WIZ_COLUMN_SELECT
     };
     ImageButton IB_COLUMNS_LH
     {
+        HelpID = "dbaccess:ImageButton:TAB_WIZ_COLUMN_SELECT:IB_COLUMNS_LH";
         Pos                 = MAP_APPFONT ( WINDOW_BORDER_X + 116 , WINDOW_BORDER_Y + 85) ;
         Size                = MAP_APPFONT ( 20 , 14 ) ;
         TabStop             = TRUE ;
@@ -218,6 +227,7 @@ TabPage TAB_WIZ_COLUMN_SELECT
 
     MultiListBox LB_NEW_COLUMN_NAMES
     {
+        HelpID = "dbaccess:MultiListBox:TAB_WIZ_COLUMN_SELECT:LB_NEW_COLUMN_NAMES";
         Border              = TRUE ;
         Pos                 = MAP_APPFONT ( WINDOW_BORDER_X + 157, WINDOW_BORDER_Y) ;
         Size                = MAP_APPFONT ( 95 , WINDOW_SIZE_Y - 23 ) ;
@@ -243,6 +253,7 @@ TabPage TAB_WIZ_TYPE_SELECT
 
     MultiListBox LB_NEW_COLUMN_NAMES
     {
+        HelpID = "dbaccess:MultiListBox:TAB_WIZ_TYPE_SELECT:LB_NEW_COLUMN_NAMES";
         Border              = TRUE ;
         Pos                 = MAP_APPFONT ( 6 , 6 ) ;
         Size                = MAP_APPFONT ( 87 , WINDOW_SIZE_Y - 12 ) ;
@@ -262,6 +273,7 @@ TabPage TAB_WIZ_TYPE_SELECT
 
     TabPage CONTROL_CONTAINER
     {
+        HelpID = "dbaccess:TabPage:CONTROL_CONTAINER";
         Pos                 = MAP_APPFONT ( 102 , WINDOW_BORDER_Y  ) ;
         Size                = MAP_APPFONT ( WINDOW_SIZE_X -  111, WINDOW_SIZE_Y - WINDOW_BORDER_Y - 67 );
         SVLook              = TRUE;
@@ -284,6 +296,7 @@ TabPage TAB_WIZ_TYPE_SELECT
 
     NumericField ET_AUTO
     {
+        HelpID = "dbaccess:NumericField:TAB_WIZ_TYPE_SELECT:ET_AUTO";
         Border              = TRUE ;
         Pos                 = MAP_APPFONT ( 151 , WINDOW_SIZE_Y - WINDOW_BORDER_Y - 29) ;
         Size                = MAP_APPFONT ( 40 , 12 ) ;
@@ -292,6 +305,7 @@ TabPage TAB_WIZ_TYPE_SELECT
 
     PushButton PB_AUTO
     {
+        HelpID = "dbaccess:PushButton:TAB_WIZ_TYPE_SELECT:PB_AUTO";
         Pos                 = MAP_APPFONT ( WINDOW_SIZE_X - 62 , WINDOW_SIZE_Y - WINDOW_BORDER_Y - 30 ) ;
         Size                = MAP_APPFONT ( BUTTON_SIZE_X , BUTTON_SIZE_Y ) ;
         TabStop             = TRUE ;
@@ -306,7 +320,7 @@ Menu RID_SBA_RTF_PKEYPOPUP
         MenuItem
         {
             Identifier      = SID_TABLEDESIGN_TABED_PRIMARYKEY ;
-            HelpID          = SID_TABLEDESIGN_TABED_PRIMARYKEY ;
+            HelpID          = HID_TABLEDESIGN_TABED_PRIMARYKEY ;
             Checkable       = TRUE ;
             Text [ en-US ] = "Primary Key" ;
         };
@@ -318,6 +332,7 @@ Menu RID_SBA_RTF_PKEYPOPUP
  //==================================================================
 TabPage TAB_WIZ_NAME_MATCHING
 {
+    HelpID = "dbaccess:TabPage:TAB_WIZ_NAME_MATCHING";
     SVLook  = TRUE ;
     Size    = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
 
@@ -359,6 +374,7 @@ TabPage TAB_WIZ_NAME_MATCHING
 
     ImageButton IB_COLUMN_UP
     {
+        HelpID = "dbaccess:ImageButton:TAB_WIZ_NAME_MATCHING:IB_COLUMN_UP";
         Pos                 = MAP_APPFONT ( 19 ,  45 ) ;
         Size                = MAP_APPFONT ( 14 , 14 ) ;
         TabStop             = TRUE;
@@ -379,6 +395,7 @@ TabPage TAB_WIZ_NAME_MATCHING
     };
     ImageButton IB_COLUMN_DOWN
     {
+        HelpID = "dbaccess:ImageButton:TAB_WIZ_NAME_MATCHING:IB_COLUMN_DOWN";
         Pos                 = MAP_APPFONT ( 19 ,  63 ) ;
         Size                = MAP_APPFONT ( 14 , 14 ) ;
         TabStop             = TRUE;
@@ -398,6 +415,7 @@ TabPage TAB_WIZ_NAME_MATCHING
     };
     ImageButton IB_COLUMN_UP_RIGHT
     {
+        HelpID = "dbaccess:ImageButton:TAB_WIZ_NAME_MATCHING:IB_COLUMN_UP_RIGHT";
         Pos                 = MAP_APPFONT ( WINDOW_SIZE_X - 33, 45 ) ;
         Size                = MAP_APPFONT ( 14 , 14 ) ;
         TabStop             = TRUE;
@@ -418,6 +436,7 @@ TabPage TAB_WIZ_NAME_MATCHING
     };
     ImageButton IB_COLUMN_DOWN_RIGHT
     {
+        HelpID = "dbaccess:ImageButton:TAB_WIZ_NAME_MATCHING:IB_COLUMN_DOWN_RIGHT";
         Pos                 = MAP_APPFONT ( WINDOW_SIZE_X - 33, 63) ;
         Size                = MAP_APPFONT ( 14 , 14 ) ;
         TabStop             = TRUE ;
@@ -438,6 +457,7 @@ TabPage TAB_WIZ_NAME_MATCHING
 
     PushButton PB_ALL
     {
+        HelpID = "dbaccess:PushButton:TAB_WIZ_NAME_MATCHING:PB_ALL";
         Pos                 = MAP_APPFONT ( 6, 83) ;
         Size                = MAP_APPFONT ( 40 , 14 ) ;
         TabStop             = TRUE ;
@@ -446,6 +466,7 @@ TabPage TAB_WIZ_NAME_MATCHING
 
     PushButton PB_NONE
     {
+        HelpID = "dbaccess:PushButton:TAB_WIZ_NAME_MATCHING:PB_NONE";
         Pos                 = MAP_APPFONT ( 6, 103) ;
         Size                = MAP_APPFONT ( 40 , 14 ) ;
         TabStop             = TRUE ;
@@ -485,12 +506,14 @@ TabPage TAB_WIZ_COPYTABLE
     };
     RadioButton RB_DEFDATA
     {
+        HelpID = "dbaccess:RadioButton:TAB_WIZ_COPYTABLE:RB_DEFDATA";
         Pos                 = MAP_APPFONT ( 12 , 35 ) ;
         Size                = MAP_APPFONT ( 73 , 10 ) ;
         Text [ en-US ] = "De~finition and data" ;
     };
     RadioButton RB_DEF
     {
+        HelpID = "dbaccess:RadioButton:TAB_WIZ_COPYTABLE:RB_DEF";
         Pos                 = MAP_APPFONT ( 12, 49 ) ;
         Size                = MAP_APPFONT ( 73 , 10 ) ;
         Text [ en-US ] = "Def~inition" ;
@@ -498,6 +521,7 @@ TabPage TAB_WIZ_COPYTABLE
 
     RadioButton RB_VIEW
     {
+        HelpID = "dbaccess:RadioButton:TAB_WIZ_COPYTABLE:RB_VIEW";
         Pos                 = MAP_APPFONT ( 12, 63 ) ;
         Size                = MAP_APPFONT ( 73 , 10 ) ;
         Text [ en-US ] = "A~s table view";
@@ -505,6 +529,7 @@ TabPage TAB_WIZ_COPYTABLE
 
     RadioButton RB_APPENDDATA
     {
+        HelpID = "dbaccess:RadioButton:TAB_WIZ_COPYTABLE:RB_APPENDDATA";
         Pos                 = MAP_APPFONT ( 12, 77 ) ;
         Size                = MAP_APPFONT ( 73 , 10 ) ;
         Text [ en-US ] = "Append ~data" ;
@@ -512,6 +537,7 @@ TabPage TAB_WIZ_COPYTABLE
 
     CheckBox CB_USEHEADERLINE
     {
+        HelpID = "dbaccess:CheckBox:TAB_WIZ_COPYTABLE:CB_USEHEADERLINE";
         Pos                 = MAP_APPFONT ( 12, 93 ) ;
         Size                = MAP_APPFONT ( WINDOW_SIZE_X - 18, 10 ) ;
         Text [ en-US ] = "Use first ~line as column names" ;
@@ -519,6 +545,7 @@ TabPage TAB_WIZ_COPYTABLE
 
     CheckBox CB_PRIMARY_COLUMN
     {
+        HelpID = "dbaccess:CheckBox:TAB_WIZ_COPYTABLE:CB_PRIMARY_COLUMN";
         Pos                 = MAP_APPFONT ( 12, 107 ) ;
         Size                = MAP_APPFONT ( 90 , 10 ) ;
         Text [ en-US ] = "Crea~te primary key";
@@ -532,6 +559,7 @@ TabPage TAB_WIZ_COPYTABLE
 
     Edit ET_KEYNAME
     {
+        HelpID = "dbaccess:Edit:TAB_WIZ_COPYTABLE:ET_KEYNAME";
         Pos                 = MAP_APPFONT ( 80, 120 ) ;
         Size                = MAP_APPFONT ( 65 , 12 ) ;
         TabStop             = TRUE ;

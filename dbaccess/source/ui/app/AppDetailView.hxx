@@ -86,7 +86,7 @@ namespace dbaui
 
         // IMnemonicEntryList
         virtual void        SelectSearchEntry( const void* _pEntry );
-        virtual void        ExecuteSearchEntry( const void* _pEntry );
+        virtual void        ExecuteSearchEntry( const void* _pEntry ) const;
 
     private:
         void    onSelected( SvLBoxEntry* _pEntry ) const;
@@ -99,14 +99,14 @@ namespace dbaui
     struct TaskEntry
     {
         ::rtl::OUString sUNOCommand;
-        USHORT          nHelpID;
+        sal_uInt16          nHelpID;
         String          sTitle;
         bool            bHideWhenDisabled;
             // TODO: we should be consistent in the task pane and the menus/toolbars:
             // If an entry is disabled in the latter, it should also be disabled in the former.
             // If an entry is *hidden* in the former, it should also be hidden in the latter.
 
-        TaskEntry( const sal_Char* _pAsciiUNOCommand, USHORT _nHelpID, USHORT _nTitleResourceID, bool _bHideWhenDisabled = false );
+        TaskEntry( const sal_Char* _pAsciiUNOCommand, sal_uInt16 _nHelpID, sal_uInt16 _nTitleResourceID, bool _bHideWhenDisabled = false );
     };
     typedef ::std::vector< TaskEntry >  TaskEntryList;
 
@@ -115,7 +115,7 @@ namespace dbaui
         /// the tasks available in the pane
         TaskEntryList   aTasks;
         /// the resource ID for the title of the pane
-        USHORT          nTitleId;
+        sal_uInt16          nTitleId;
     };
 
     class OTasksWindow : public Window
@@ -127,7 +127,7 @@ namespace dbaui
         OApplicationDetailView*             m_pDetailView;
 
         DECL_LINK( OnEntrySelectHdl,        SvTreeListBox* );
-        void ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground );
+        void ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
     protected:
         virtual void DataChanged(const DataChangedEvent& rDCEvt);
     public:
@@ -148,7 +148,7 @@ namespace dbaui
         }
 
         void Clear();
-        void setHelpText(USHORT _nId);
+        void setHelpText(sal_uInt16 _nId);
     };
     //==================================================================
     class OApplicationDetailView : public OSplitterView
@@ -162,7 +162,7 @@ namespace dbaui
         ::std::vector< TaskPaneData >       m_aTaskPaneData;
         MnemonicGenerator                   m_aExternalMnemonics;
 
-        void ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground );
+        void ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
 
     protected:
         virtual void DataChanged(const DataChangedEvent& rDCEvt);

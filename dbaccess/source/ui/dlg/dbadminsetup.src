@@ -56,7 +56,6 @@ ModalDialog DLG_DATABASE_WIZARD
     {
         OutputSize = TRUE ;
         HelpId = HID_DSADMIN_TABCONTROL;
-        SingleLine=TRUE;
     };
 
     String STR_DBWIZARDTITLE
@@ -150,6 +149,7 @@ String STR_DATABASEDEFAULTNAME
 
 TabPage PAGE_DBWIZARD_MYSQL_INTRO
 {
+    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_MYSQL_INTRO";
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
@@ -195,6 +195,7 @@ TabPage PAGE_DBWIZARD_MYSQL_INTRO
     };
     RadioButton RB_CONNECTVIANATIVE
     {
+        HelpID = "dbaccess:RadioButton:PAGE_DBWIZARD_MYSQL_INTRO:RB_CONNECTVIANATIVE";
         Pos = MAP_APPFONT (START_X + 6 , 115 )  ;
         Size = MAP_APPFONT ( 205 , 9 ) ;
         Text[ en-US ] = "Connect directly" ;
@@ -206,6 +207,7 @@ TabPage PAGE_DBWIZARD_MYSQL_INTRO
 
 TabPage PAGE_DBWIZARD_AUTHENTIFICATION
 {
+    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_AUTHENTIFICATION";
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
@@ -262,6 +264,7 @@ TabPage PAGE_DBWIZARD_AUTHENTIFICATION
 
 TabPage PAGE_DBWIZARD_FINAL
 {
+    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_FINAL";
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
@@ -335,6 +338,7 @@ TabPage PAGE_DBWIZARD_FINAL
 
 TabPage PAGE_DBWIZARD_MYSQL_JDBC
 {
+    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_MYSQL_JDBC";
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
@@ -361,11 +365,12 @@ TabPage PAGE_DBWIZARD_MYSQL_JDBC
         Text[ en-US ] = "Default: 3306";
     };
 
-    AUTOHELP_JDBCCONTROLGROUP(HID_PAGE_DBWIZARD_JDBC_ET_MYSQLDBNAME)
+    AUTOHELP_JDBCCONTROLGROUP(HID_PAGE_DBWIZARD_JDBC_ET_MYSQLDBNAME,HID_PAGE_DBWIZARD_JDBC_ET_MYSQLHOSTSERVER,HID_PAGE_DBWIZARD_JDBC_ET_MYSQLPORT,HID_PAGE_DBWIZARD_JDBC_ET_MYSQLCLASS,HID_PAGE_DBWIZARD_JDBC_PB_TESTMYSQLCLASS)
 };
 
 TabPage PAGE_DBWIZARD_MYSQL_NATIVE
 {
+    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_MYSQL_NATIVE";
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0, 0 ) ;
     Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
@@ -391,6 +396,7 @@ TabPage PAGE_DBWIZARD_MYSQL_NATIVE
 
 TabPage PAGE_DBWIZARD_DBASE
 {
+    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_DBASE";
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
@@ -406,11 +412,12 @@ TabPage PAGE_DBWIZARD_DBASE
         Text[ en-US ]  = "Select the folder where the dBASE files are stored." ;
     };
 
-    AUTO_HELP_BROWSECONTROLGROUP( 3, HID_PAGE_DBWIZARD_DBASE_ET_DBASELOCATION)
+     AUTO_HELP_BROWSECONTROLGROUP( 3, HID_PAGE_DBWIZARD_DBASE_ET_DBASELOCATION,HID_PAGE_DBWIZARD_DBASE_PB_DBASELOCATION)
 };
 
 TabPage PAGE_DBWIZARD_TEXT
 {
+    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_TEXT";
     String STR_TEXT_HEADERTEXT
     {
         Text[ en-US ]   = "Set up a connection to text files" ;
@@ -425,12 +432,13 @@ TabPage PAGE_DBWIZARD_TEXT
         Text[ en-US ]  = "Path to text files";
     };
 
-    AUTO_HELP_BROWSECONTROLGROUP(3, HID_PAGE_DBWIZARD_TEXT_ET_LOCATIONTEXTFILE)
+    AUTO_HELP_BROWSECONTROLGROUP(3, HID_PAGE_DBWIZARD_TEXT_ET_LOCATIONTEXTFILE,HID_PAGE_DBWIZARD_TEXT_PB_LOCATIONTEXTFILE)
     AUTO_SEPARATORCONTROLGROUP(82, WIZARD_PAGE_X)
  };
 
 TabPage PAGE_DBWIZARD_MSACCESS
 {
+    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_MSACCESS";
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
@@ -446,11 +454,12 @@ TabPage PAGE_DBWIZARD_MSACCESS
         Text[ en-US ] = "Please select the Microsoft Access file you want to access.";
     };
 
-    AUTO_HELP_BROWSECONTROLGROUP(3, HID_PAGE_DBWIZARD_MSACCESS_ET_MSACCESSLOCATION)
+    AUTO_HELP_BROWSECONTROLGROUP(3, HID_PAGE_DBWIZARD_MSACCESS_ET_MSACCESSLOCATION, HID_PAGE_DBWIZARD_MSACCESS_PB_MSACCESSLOCATION)
 };
 
 TabPage PAGE_DBWIZARD_LDAP
 {
+    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_LDAP";
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
@@ -490,6 +499,7 @@ TabPage PAGE_DBWIZARD_LDAP
 
 TabPage PAGE_DBWIZARD_ADABAS
 {
+    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_ADABAS";
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
@@ -504,11 +514,12 @@ TabPage PAGE_DBWIZARD_ADABAS
         Text[ en-US ] = "Enter the name of the Adabas D database you want to connect to.\nClick 'Browse...' to select an Adabas D database that is already registered in %PRODUCTNAME." ;
     };
 
-    AUTO_HELP_BROWSECONTROLGROUP(4, HID_PAGE_DBWIZARD_ADABAS_ET_ADABASNAME)
+    AUTO_HELP_BROWSECONTROLGROUP(4, HID_PAGE_DBWIZARD_ADABAS_ET_ADABASNAME, HID_PAGE_DBWIZARD_ADABAS_PB_ADABASNAME)
 };
 
 TabPage PAGE_DBWIZARD_ADO
 {
+    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_ADO";
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
@@ -523,12 +534,13 @@ TabPage PAGE_DBWIZARD_ADO
         Text[ en-US ] = "Please enter the URL of the ADO data source you want to connect to.\nClick 'Browse' to configure provider-specific settings.\nPlease contact your system administrator if you are unsure about the following settings." ;
     };
 
-    AUTO_HELP_BROWSECONTROLGROUP(5, HID_PAGE_DBWIZARD_ADO_ET_ADOURL)
+    AUTO_HELP_BROWSECONTROLGROUP(5, HID_PAGE_DBWIZARD_ADO_ET_ADOURL, HID_PAGE_DBWIZARD_ADO_PB_ADOURL)
 };
 
 
 TabPage PAGE_DBWIZARD_ODBC
 {
+    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_ODBC";
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
@@ -543,21 +555,23 @@ TabPage PAGE_DBWIZARD_ODBC
         Text[ en-US ] = "Enter the name of the ODBC database you want to connect to.\nClick 'Browse...' to select an ODBC database that is already registered in %PRODUCTNAME.\nPlease contact your system administrator if you are unsure about the following settings." ;
     };
 
-    AUTO_HELP_BROWSECONTROLGROUP(6, HID_PAGE_DBWIZARD_ODBC_ET_NAMEOFODBCDATASOURCE)
+    AUTO_HELP_BROWSECONTROLGROUP(6, HID_PAGE_DBWIZARD_ODBC_ET_NAMEOFODBCDATASOURCE, HID_PAGE_DBWIZARD_ODBC_PB_NAMEOFODBCDATASOURCE)
 };
 
 TabPage PAGE_DBWIZARD_USERDEFINED
 {
+    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_USERDEFINED";
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
     Hide = TRUE ;
 
-    AUTO_HELP_BROWSECONTROLGROUP(6, HID_PAGE_DBWIZARD_USERDEFINED_ET_BROWSE)
+    AUTO_HELP_BROWSECONTROLGROUP(6, HID_PAGE_DBWIZARD_USERDEFINED_ET_BROWSE, HID_PAGE_DBWIZARD_USERDEFINED_BROWSE)
 };
 
 TabPage PAGE_DBWIZARD_JDBC
 {
+    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_JDBC";
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
@@ -572,14 +586,15 @@ TabPage PAGE_DBWIZARD_JDBC
         Text[ en-US ] = "Please enter the required information to connect to a JDBC database.\nPlease contact your system administrator if you are unsure about the following settings." ;
     };
 
-    AUTO_HELP_BROWSECONTROLGROUP(4, HID_PAGE_DBWIZARD_JDBC_ET_JDBCURL)
-    AUTO_JDBCDRIVERCLASSGROUP(119, HID_PAGE_DBWIZARD_JDBC_ET_JDBCCLASS)
+    AUTO_HELP_BROWSECONTROLGROUP(4, HID_PAGE_DBWIZARD_JDBC_ET_JDBCURL, HID_PAGE_DBWIZARD_JDBC_PB_JDBCURL)
+    AUTO_JDBCDRIVERCLASSGROUP(119, HID_PAGE_DBWIZARD_JDBC_ET_JDBCCLASS, HID_PAGE_DBWIZARD_JDBC_PB_TESTJDBCCLASS)
 };
 
 
 
 TabPage PAGE_DBWIZARD_ORACLE
 {
+    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_ORACLE";
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
@@ -603,12 +618,13 @@ TabPage PAGE_DBWIZARD_ORACLE
         Text[ en-US ] = "Please enter the required information to connect to an Oracle database.Note that a JDBC Driver Class must be installed on your system and registered with %PRODUCTNAME.\nPlease contact your system administrator if you are unsure about the following settings." ;
     };
 
-    AUTOHELP_JDBCCONTROLGROUP(HID_PAGE_DBWIZARD_ORACLE_ET_ORACLEDBNAME)
+    AUTOHELP_JDBCCONTROLGROUP(HID_PAGE_DBWIZARD_ORACLE_ET_ORACLEDBNAME,HID_PAGE_DBWIZARD_ORACLE_ET_ORACLEHOSTSERVER,HID_PAGE_DBWIZARD_ORACLE_ET_ORACLEPORT,HID_PAGE_DBWIZARD_ORACLE_ET_ORACLECLASS,HID_PAGE_DBWIZARD_ORACLE_PB_TESTORACLECLASS)
 };
 
 
 TabPage PAGE_DBWIZARD_SPREADSHEET
 {
+    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_SPREADSHEET";
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
@@ -623,7 +639,7 @@ TabPage PAGE_DBWIZARD_SPREADSHEET
         Text[ en-US ] = "Click 'Browse...' to select a %PRODUCTNAME spreadsheet or Microsoft Excel workbook.\n%PRODUCTNAME will open this file in read-only mode." ;
     };
 
-    AUTO_HELP_BROWSECONTROLGROUP(3, HID_PAGE_DBWIZARD_SPREADSHEET_ET_SPREADSHEETPATH )
+    AUTO_HELP_BROWSECONTROLGROUP(3, HID_PAGE_DBWIZARD_SPREADSHEET_ET_SPREADSHEETPATH,HID_PAGE_DBWIZARD_SPREADSHEET_PB_SPREADSHEETPATH )
 
     String STR_SPREADSHEETPATH{
         Text[ en-US ] = "~Location and file name" ;

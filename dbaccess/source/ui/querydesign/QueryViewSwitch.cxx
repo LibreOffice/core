@@ -280,7 +280,7 @@ bool OQueryViewSwitch::impl_postViewSwitch( const bool i_bGraphicalDesign, const
     if ( pContainer )
         pContainer->Resize();
 
-    m_pDesignView->getController().getUndoMgr()->Clear();
+    m_pDesignView->getController().ClearUndoManager();
     m_pDesignView->getController().InvalidateAll();
 
     return i_bSuccess;

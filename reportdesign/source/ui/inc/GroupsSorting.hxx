@@ -33,7 +33,7 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/field.hxx>
-#include <vcl/imagebtn.hxx>
+#include <vcl/button.hxx>
 #include <vcl/toolbox.hxx>
 #include <com/sun/star/report/XGroups.hpp>
 #include <com/sun/star/report/XGroup.hpp>
@@ -138,7 +138,7 @@ private:
     /** shows the text given by the id in the multiline edit
         @param  _nResId the string id
     */
-    void showHelpText(USHORT _nResId);
+    void showHelpText(sal_uInt16 _nResId);
     /** display the group props
         @param  _xGroup the group to display
     */

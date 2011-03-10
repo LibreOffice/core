@@ -73,8 +73,8 @@ OWizNameMatching::OWizNameMatching( Window* pParent)
     m_CTRL_RIGHT.SetSelectHdl(LINK(this,OWizNameMatching,TableListRightSelectHdl));
     m_CTRL_RIGHT.EnableCheckButton( NULL );
 
-    m_CTRL_LEFT.SetWindowBits( WB_FORCE_MAKEVISIBLE );
-    m_CTRL_RIGHT.SetWindowBits( WB_FORCE_MAKEVISIBLE );
+    m_CTRL_LEFT.SetStyle( m_CTRL_LEFT.GetStyle() | WB_FORCE_MAKEVISIBLE );
+    m_CTRL_RIGHT.SetStyle( m_CTRL_RIGHT.GetStyle() | WB_FORCE_MAKEVISIBLE );
 
     m_sSourceText   = m_FT_TABLE_LEFT.GetText();
     m_sSourceText.AppendAscii("\n");
@@ -258,7 +258,7 @@ IMPL_LINK( OWizNameMatching, TableListClickHdl, void*, /*NOTINTERESTEDIN*/ )
     SvLBoxEntry* pEntry = m_CTRL_LEFT.FirstSelected();
     if(pEntry)
     {
-        ULONG nPos          = m_CTRL_LEFT.GetModel()->GetAbsPos(pEntry);
+        sal_uLong nPos          = m_CTRL_LEFT.GetModel()->GetAbsPos(pEntry);
         SvLBoxEntry* pOldEntry = m_CTRL_RIGHT.FirstSelected();
         if(pOldEntry && nPos != m_CTRL_RIGHT.GetModel()->GetAbsPos(pOldEntry))
         {
@@ -267,7 +267,7 @@ IMPL_LINK( OWizNameMatching, TableListClickHdl, void*, /*NOTINTERESTEDIN*/ )
             pOldEntry = m_CTRL_RIGHT.GetEntry(nPos);
             if(pOldEntry)
             {
-                ULONG nNewPos = m_CTRL_LEFT.GetModel()->GetAbsPos(m_CTRL_LEFT.GetFirstEntryInView());
+                sal_uLong nNewPos = m_CTRL_LEFT.GetModel()->GetAbsPos(m_CTRL_LEFT.GetFirstEntryInView());
                 if ( nNewPos - nPos == 1 )
                     --nNewPos;
                 m_CTRL_RIGHT.MakeVisible(m_CTRL_RIGHT.GetEntry(nNewPos),sal_True);
@@ -292,7 +292,7 @@ IMPL_LINK( OWizNameMatching, TableListRightSelectHdl, void*, /*NOTINTERESTEDIN*/
     SvLBoxEntry* pEntry = m_CTRL_RIGHT.FirstSelected();
     if(pEntry)
     {
-        ULONG nPos          = m_CTRL_RIGHT.GetModel()->GetAbsPos(pEntry);
+        sal_uLong nPos          = m_CTRL_RIGHT.GetModel()->GetAbsPos(pEntry);
         SvLBoxEntry* pOldEntry = m_CTRL_LEFT.FirstSelected();
         if(pOldEntry && nPos != m_CTRL_LEFT.GetModel()->GetAbsPos(pOldEntry))
         {
@@ -301,7 +301,7 @@ IMPL_LINK( OWizNameMatching, TableListRightSelectHdl, void*, /*NOTINTERESTEDIN*/
             pOldEntry = m_CTRL_LEFT.GetEntry(nPos);
             if(pOldEntry)
             {
-                ULONG nNewPos = m_CTRL_RIGHT.GetModel()->GetAbsPos(m_CTRL_RIGHT.GetFirstEntryInView());
+                sal_uLong nNewPos = m_CTRL_RIGHT.GetModel()->GetAbsPos(m_CTRL_RIGHT.GetFirstEntryInView());
                 if ( nNewPos - nPos == 1 )
                     nNewPos--;
                 m_CTRL_LEFT.MakeVisible(m_CTRL_LEFT.GetEntry(nNewPos),sal_True);
@@ -366,7 +366,7 @@ OColumnTreeBox::OColumnTreeBox( Window* pParent, const ResId& rResId )
 {
     SetDragDropMode( 0 );
     EnableInplaceEditing( sal_False );
-    SetWindowBits(WB_BORDER | WB_HASBUTTONS | WB_HSCROLL);
+    SetStyle(GetStyle() | WB_BORDER | WB_HASBUTTONS | WB_HSCROLL);
     SetSelectionMode( SINGLE_SELECTION );
 }
 //------------------------------------------------------------------------

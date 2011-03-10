@@ -59,7 +59,7 @@ namespace dbaui
         SfxItemSet*                                         m_pItemSet;
 
     protected:
-        virtual void PageCreated(USHORT _nId, SfxTabPage& _rPage);
+        virtual void PageCreated(sal_uInt16 _nId, SfxTabPage& _rPage);
 
     public:
         AdvancedSettingsDialog( Window* _pParent

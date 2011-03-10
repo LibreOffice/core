@@ -62,7 +62,7 @@ private:
 
     sal_Bool                m_bApplied : 1;     /// sal_True if any changes have been applied while the dialog was executing
     sal_Bool                m_bUIEnabled : 1;   /// <TRUE/> if the UI is enabled, false otherwise. Cannot be switched back to <TRUE/>, once it is <FALSE/>
-    USHORT                  m_nMainPageID;
+    sal_uInt16                  m_nMainPageID;
 
 public:
     /** ctor. The itemset given should have been created by <method>createItemSet</method> and should be destroyed
@@ -104,9 +104,9 @@ public:
 
 protected:
     // adds a new detail page and remove all the old ones
-    void addDetailPage(USHORT _nPageId,USHORT _nTextId,CreateTabPage pCreateFunc);
+    void addDetailPage(sal_uInt16 _nPageId,sal_uInt16 _nTextId,CreateTabPage pCreateFunc);
 
-    virtual void PageCreated(USHORT _nId, SfxTabPage& _rPage);
+    virtual void PageCreated(sal_uInt16 _nId, SfxTabPage& _rPage);
     virtual short Ok();
 
 protected:

@@ -110,9 +110,6 @@ namespace dbaui
 
         virtual void impl_onModifyChanged();
 
-        //  const ::connectivity::OSQLParseNode* getParseTree() const { return m_aSqlIterator.getParseTree();}
-        // need for undo's and redo's
-        SfxUndoManager* getUndoMgr();
         inline ::std::vector< ::boost::shared_ptr<OTableRow> >* getRows() { return &m_vRowList; }
 
         /// returns the postion of the the first empty row

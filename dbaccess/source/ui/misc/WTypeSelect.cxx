@@ -43,6 +43,8 @@
 #include "sqlmessage.hxx"
 #include "FieldControls.hxx"
 
+#include "dbaccess_slotid.hrc"
+
 using namespace ::dbaui;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -128,8 +130,8 @@ void OWizTypeSelectControl::CellModified(long nRow, sal_uInt16 nColId )
                 if ( getMetaData().is() && !getMetaData()->supportsMixedCaseQuotedIdentifiers() )
                 {
                     bCase = sal_False;
-                    USHORT nCount = aListBox.GetEntryCount();
-                    for (USHORT i=0 ; !bDoubleName && i < nCount ; ++i)
+                    sal_uInt16 nCount = aListBox.GetEntryCount();
+                    for (sal_uInt16 i=0 ; !bDoubleName && i < nCount ; ++i)
                     {
                         ::rtl::OUString sEntry(aListBox.GetEntry(i));
                         bDoubleName = sNewName.equalsIgnoreAsciiCase(sEntry);
@@ -330,7 +332,7 @@ void OWizTypeSelect::ActivatePage( )
     Reset();
     m_bFirstTime = bOldFirstTime;
 
-    m_lbColumnNames.SelectEntryPos(static_cast<USHORT>(m_nDisplayRow));
+    m_lbColumnNames.SelectEntryPos(static_cast<sal_uInt16>(m_nDisplayRow));
     m_nDisplayRow = 0;
     m_lbColumnNames.GetSelectHdl().Call(&m_lbColumnNames);
 }

@@ -26,6 +26,8 @@
  ************************************************************************/
 package complex.dbaccess;
 
+import com.sun.star.lang.NotInitializedException;
+import com.sun.star.frame.DoubleInitializationException;
 import com.sun.star.awt.XTopWindow;
 import com.sun.star.beans.PropertyState;
 import com.sun.star.document.DocumentEvent;
@@ -33,7 +35,7 @@ import com.sun.star.lang.XEventListener;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.script.XStorageBasedLibraryContainer;
 import com.sun.star.task.XInteractionRequest;
-import com.sun.star.uno.Exception;
+
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.frame.XStorable;
@@ -45,7 +47,6 @@ import com.sun.star.document.XDocumentEventBroadcaster;
 import com.sun.star.document.XDocumentEventListener;
 import com.sun.star.document.XEmbeddedScripts;
 import com.sun.star.document.XEventsSupplier;
-import com.sun.star.frame.DoubleInitializationException;
 import com.sun.star.lang.XComponent;
 import com.sun.star.frame.XComponentLoader;
 import com.sun.star.frame.XDispatch;
@@ -56,13 +57,12 @@ import com.sun.star.frame.XModel;
 import com.sun.star.frame.XModel2;
 import com.sun.star.frame.XTitle;
 import com.sun.star.lang.EventObject;
-import com.sun.star.lang.NotInitializedException;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.XSingleComponentFactory;
 import com.sun.star.lang.XTypeProvider;
 import com.sun.star.script.provider.XScriptProviderSupplier;
 import com.sun.star.sdb.XDocumentDataSource;
-import com.sun.star.sdbc.XDataSource;
+
 import com.sun.star.sdb.XFormDocumentsSupplier;
 import com.sun.star.sdb.XOfficeDatabaseDocument;
 import com.sun.star.sdb.XReportDocumentsSupplier;
@@ -82,6 +82,13 @@ import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+// ---------- junit imports -----------------
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
+// ------------------------------------------
 
 public class DatabaseDocument extends TestCase implements com.sun.star.document.XDocumentEventListener
 {
@@ -145,12 +152,12 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
 
         private final ArrayList m_eventListeners = new ArrayList();
 
-        public Object createInstanceWithContext(XComponentContext _context) throws Exception
+        public Object createInstanceWithContext(XComponentContext _context) throws com.sun.star.uno.Exception
         {
             return new CallbackComponent();
         }
 
-        public Object createInstanceWithArgumentsAndContext(Object[] arg0, XComponentContext _context) throws Exception
+        public Object createInstanceWithArgumentsAndContext(Object[] arg0, XComponentContext _context) throws com.sun.star.uno.Exception
         {
             return createInstanceWithContext(_context);
         }
@@ -209,8 +216,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         {
             try
             {
-                m_defaultHandler = (XInteractionHandler) UnoRuntime.queryInterface(XInteractionHandler.class,
-                        _factory.createInstance("com.sun.star.task.InteractionHandler"));
+                m_defaultHandler = UnoRuntime.queryInterface(XInteractionHandler.class, _factory.createInstance("com.sun.star.task.InteractionHandler"));
             }
             catch (Exception ex)
             {
@@ -227,14 +233,13 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
                 return;
             }
 
-            assureEquals("interaction handleer called in wrong state", STATE_LOADING_DOC, m_loadDocState);
+            assertEquals("interaction handleer called in wrong state", STATE_LOADING_DOC, m_loadDocState);
 
             // auto-approve
             final XInteractionContinuation continuations[] = _request.getContinuations();
             for (int i = 0; i < continuations.length; ++i)
             {
-                final XInteractionApprove approve = (XInteractionApprove) UnoRuntime.queryInterface(XInteractionApprove.class,
-                        continuations[i]);
+                final XInteractionApprove approve = UnoRuntime.queryInterface(XInteractionApprove.class, continuations[i]);
                 if (approve != null)
                 {
                     approve.select();
@@ -247,24 +252,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
 
     // ========================================================================================================
     // --------------------------------------------------------------------------------------------------------
-    public String[] getTestMethodNames()
-    {
-        return new String[]
-                {
-                    "testLoadable",
-                    "testDocumentRevenants",
-                    "testDocumentEvents",
-                    "testGlobalEvents"
-                };
-    }
-
-    // --------------------------------------------------------------------------------------------------------
-    public String getTestObjectName()
-    {
-        return "DatabaseDocument";
-    }
-
-    // --------------------------------------------------------------------------------------------------------
+    @Before
     public void before() throws java.lang.Exception
     {
         super.before();
@@ -274,25 +262,24 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
             // at our service factory, insert a new factory for our CallbackComponent
             // this will allow the Basic code in our test documents to call back into this test case
             // here, by just instantiating this service
-            final XSet globalFactory = (XSet) UnoRuntime.queryInterface(
-                    XSet.class, getORB());
+            final XSet globalFactory = UnoRuntime.queryInterface(XSet.class, getMSF());
             m_callbackFactory = new CallbackComponentFactory();
             globalFactory.insert(m_callbackFactory);
 
             // register ourself as listener at the global event broadcaster
-            final XDocumentEventBroadcaster broadcaster = (XDocumentEventBroadcaster) UnoRuntime.queryInterface(
-                    XDocumentEventBroadcaster.class, getORB().createInstance("com.sun.star.frame.GlobalEventBroadcaster"));
+            final XDocumentEventBroadcaster broadcaster = UnoRuntime.queryInterface(XDocumentEventBroadcaster.class, getMSF().createInstance("com.sun.star.frame.GlobalEventBroadcaster"));
             broadcaster.addDocumentEventListener(this);
         }
         catch (Exception e)
         {
-            log.println("could not create the test case, error message:\n" + e.getMessage());
+            System.out.println("could not create the test case, error message:\n" + e.getMessage());
             e.printStackTrace(System.err);
-            failed("failed to create the test case");
+            fail("failed to create the test case");
         }
     }
 
     // --------------------------------------------------------------------------------------------------------
+    @After
     public void after() throws java.lang.Exception
     {
         try
@@ -302,15 +289,14 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
             m_callbackFactory.dispose();
 
             // revoke ourself as listener at the global event broadcaster
-            final XDocumentEventBroadcaster broadcaster = (XDocumentEventBroadcaster) UnoRuntime.queryInterface(
-                    XDocumentEventBroadcaster.class, getORB().createInstance("com.sun.star.frame.GlobalEventBroadcaster"));
+            final XDocumentEventBroadcaster broadcaster = UnoRuntime.queryInterface(XDocumentEventBroadcaster.class, getMSF().createInstance("com.sun.star.frame.GlobalEventBroadcaster"));
             broadcaster.removeDocumentEventListener(this);
         }
         catch (Exception e)
         {
-            log.println("could not create the test case, error message:\n" + e.getMessage());
+            System.out.println("could not create the test case, error message:\n" + e.getMessage());
             e.printStackTrace(System.err);
-            failed("failed to close the test case");
+            fail("failed to close the test case");
         }
 
         super.after();
@@ -323,7 +309,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         public Class unoInterfaceClass = null;
         public String methodName = null;
 
-        public UnoMethodDescriptor(Class _class, String _method)
+        UnoMethodDescriptor(Class _class, String _method)
         {
             unoInterfaceClass = _class;
             methodName = _method;
@@ -356,8 +342,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
     // --------------------------------------------------------------------------------------------------------
     private XModel impl_createDocument() throws Exception
     {
-        final XModel databaseDoc = (XModel) UnoRuntime.queryInterface(XModel.class,
-                getORB().createInstance("com.sun.star.sdb.OfficeDatabaseDocument"));
+        final XModel databaseDoc = UnoRuntime.queryInterface(XModel.class, getMSF().createInstance("com.sun.star.sdb.OfficeDatabaseDocument"));
 
         // should not be initialized here - we did neither initNew nor load nor storeAsURL it
         impl_checkDocumentInitState(databaseDoc, false);
@@ -368,17 +353,15 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
     // --------------------------------------------------------------------------------------------------------
     private void impl_closeDocument(XModel _databaseDoc) throws CloseVetoException, IOException, Exception
     {
-        final XCloseable closeDoc = (XCloseable) UnoRuntime.queryInterface(XCloseable.class,
-                _databaseDoc);
+        final XCloseable closeDoc = UnoRuntime.queryInterface(XCloseable.class, _databaseDoc);
         closeDoc.close(true);
     }
 
     // --------------------------------------------------------------------------------------------------------
     private XModel impl_createEmptyEmbeddedHSQLDocument() throws Exception, IOException
     {
-        final XModel databaseDoc = (XModel) UnoRuntime.queryInterface(XModel.class,
-                getORB().createInstance("com.sun.star.sdb.OfficeDatabaseDocument"));
-        final XStorable storeDoc = (XStorable) UnoRuntime.queryInterface(XStorable.class, databaseDoc);
+        final XModel databaseDoc = UnoRuntime.queryInterface(XModel.class, getMSF().createInstance("com.sun.star.sdb.OfficeDatabaseDocument"));
+        final XStorable storeDoc = UnoRuntime.queryInterface(XStorable.class, databaseDoc);
 
         // verify the document rejects API calls which require it to be initialized
         impl_checkDocumentInitState(databaseDoc, false);
@@ -388,15 +371,13 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         final String url = databaseDoc.getURL();
         final PropertyValue[] args = databaseDoc.getArgs();
         // they should be all empty at this time
-        assureEquals("location is expected to be empty here", "", location);
-        assureEquals("URL is expected to be empty here", "", url);
-        assureEquals("Args are expected to be empty here", 0, args.length);
+        assertEquals("location is expected to be empty here", "", location);
+        assertEquals("URL is expected to be empty here", "", url);
+        assertEquals("Args are expected to be empty here", 0, args.length);
 
         // and, you should be able to set properties at the data source
-        final XOfficeDatabaseDocument dataSourceAccess = (XOfficeDatabaseDocument) UnoRuntime.queryInterface(
-                XOfficeDatabaseDocument.class, databaseDoc);
-        final XPropertySet dsProperties = (XPropertySet) UnoRuntime.queryInterface(
-                XPropertySet.class, dataSourceAccess.getDataSource());
+        final XOfficeDatabaseDocument dataSourceAccess = UnoRuntime.queryInterface(XOfficeDatabaseDocument.class, databaseDoc);
+        final XPropertySet dsProperties = UnoRuntime.queryInterface(XPropertySet.class, dataSourceAccess.getDataSource());
         dsProperties.setPropertyValue("URL", "sdbc:embedded:hsqldb");
 
         final String documentURL = createTempFileURL();
@@ -404,7 +385,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
 
         // now that the document is stored, ...
         // ... its URL should be correct
-        assureEquals("wrong URL after storing the document", documentURL, databaseDoc.getURL());
+        assertEquals("wrong URL after storing the document", documentURL, databaseDoc.getURL());
         // ... it should be initialized
         impl_checkDocumentInitState(databaseDoc, true);
 
@@ -412,6 +393,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
     }
 
     // --------------------------------------------------------------------------------------------------------
+    @Test
     public void testLoadable() throws Exception, IOException
     {
         XModel databaseDoc = impl_createEmptyEmbeddedHSQLDocument();
@@ -426,18 +408,17 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
 
         // ....................................................................
         // 2. XLoadable::load
-        databaseDoc = (XModel) UnoRuntime.queryInterface(XModel.class,
-                getORB().createInstance("com.sun.star.sdb.OfficeDatabaseDocument"));
+        databaseDoc = UnoRuntime.queryInterface(XModel.class, getMSF().createInstance("com.sun.star.sdb.OfficeDatabaseDocument"));
         documentURL = copyToTempFile(documentURL);
         // load the doc, and verify it's initialized then, and has the proper URL
-        XLoadable loadDoc = (XLoadable) UnoRuntime.queryInterface(XLoadable.class, databaseDoc);
+        XLoadable loadDoc = UnoRuntime.queryInterface(XLoadable.class, databaseDoc);
         loadDoc.load(new PropertyValue[]
                 {
                     new PropertyValue("URL", 0, documentURL, PropertyState.DIRECT_VALUE)
                 });
         databaseDoc.attachResource(documentURL, new PropertyValue[0]);
 
-        assureEquals("wrong URL after loading the document", documentURL, databaseDoc.getURL());
+        assertEquals("wrong URL after loading the document", documentURL, databaseDoc.getURL());
         impl_checkDocumentInitState(databaseDoc, true);
 
         // and while we are here ... initilizing the same document again should not be possible
@@ -450,9 +431,9 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         // 3. XLoadable::initNew
         impl_closeDocument(databaseDoc);
         databaseDoc = impl_createDocument();
-        loadDoc = (XLoadable) UnoRuntime.queryInterface(XLoadable.class, databaseDoc);
+        loadDoc = UnoRuntime.queryInterface(XLoadable.class, databaseDoc);
         loadDoc.initNew();
-        assureEquals("wrong URL after initializing the document", "", databaseDoc.getURL());
+        assertEquals("wrong URL after initializing the document", "", databaseDoc.getURL());
         impl_checkDocumentInitState(databaseDoc, true);
 
         // same as above - initializing the document a second time must fail
@@ -478,7 +459,9 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         for ( int i=0; i<_args.length; ++i )
         {
             if ( _args[i].Name.equals( "TestCase_Marker" ) && _args[i].Value.equals( "Yes" ) )
+            {
                 return true;
+            }
         }
         return false;
     }
@@ -499,28 +482,25 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
                 {
                     new PropertyValue("PickListEntry", 0, false, PropertyState.DIRECT_VALUE),
                     new PropertyValue("MacroExecutionMode", 0, com.sun.star.document.MacroExecMode.USE_CONFIG, PropertyState.DIRECT_VALUE),
-                    new PropertyValue("InteractionHandler", 0, new MacroExecutionApprove(getORB()), PropertyState.DIRECT_VALUE)
+                    new PropertyValue("InteractionHandler", 0, new MacroExecutionApprove(getMSF()), PropertyState.DIRECT_VALUE)
                 };
     }
 
     // --------------------------------------------------------------------------------------------------------
     private int impl_setMacroSecurityLevel(int _level) throws Exception
     {
-        final XMultiServiceFactory configProvider = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class,
-                getORB().createInstance("com.sun.star.configuration.ConfigurationProvider"));
+        final XMultiServiceFactory configProvider = UnoRuntime.queryInterface(XMultiServiceFactory.class, getMSF().createInstance("com.sun.star.configuration.ConfigurationProvider"));
 
         final PropertyValue[] args = new PropertyValue[]
         {
             new PropertyValue("nodepath", 0, "/org.openoffice.Office.Common/Security/Scripting", PropertyState.DIRECT_VALUE)
         };
 
-        final XPropertySet securitySettings = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class,
-                configProvider.createInstanceWithArguments("com.sun.star.configuration.ConfigurationUpdateAccess", args));
+        final XPropertySet securitySettings = UnoRuntime.queryInterface(XPropertySet.class, configProvider.createInstanceWithArguments("com.sun.star.configuration.ConfigurationUpdateAccess", args));
         final int oldValue = ((Integer) securitySettings.getPropertyValue("MacroSecurityLevel")).intValue();
         securitySettings.setPropertyValue("MacroSecurityLevel", Integer.valueOf(_level));
 
-        final XChangesBatch committer = (XChangesBatch) UnoRuntime.queryInterface(XChangesBatch.class,
-                securitySettings);
+        final XChangesBatch committer = UnoRuntime.queryInterface(XChangesBatch.class, securitySettings);
         committer.commitChanges();
 
         return oldValue;
@@ -529,10 +509,8 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
     // --------------------------------------------------------------------------------------------------------
     private XModel impl_loadDocument( final String _documentURL, final PropertyValue[] _loadArgs ) throws Exception
     {
-        final XComponentLoader loader = (XComponentLoader) UnoRuntime.queryInterface( XComponentLoader.class,
-                getORB().createInstance("com.sun.star.frame.Desktop") );
-        return (XModel) UnoRuntime.queryInterface( XModel.class,
-                loader.loadComponentFromURL( _documentURL, _BLANK, 0, _loadArgs ) );
+        final XComponentLoader loader = UnoRuntime.queryInterface(XComponentLoader.class, getMSF().createInstance("com.sun.star.frame.Desktop"));
+        return UnoRuntime.queryInterface(XModel.class, loader.loadComponentFromURL(_documentURL, _BLANK, 0, _loadArgs));
     }
 
     // --------------------------------------------------------------------------------------------------------
@@ -540,8 +518,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
     {
         // store the document
         final String documentURL = FileHelper.getOOoCompatibleFileURL( _document.getURL() );
-        final XStorable storeDoc = (XStorable) UnoRuntime.queryInterface( XStorable.class,
-                _document );
+        final XStorable storeDoc = UnoRuntime.queryInterface(XStorable.class, _document);
         storeDoc.store();
 
     }
@@ -553,8 +530,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         XModel databaseDoc = impl_createEmptyEmbeddedHSQLDocument();
 
         // create Basic library/module therein
-        final XEmbeddedScripts embeddedScripts = (XEmbeddedScripts) UnoRuntime.queryInterface(XEmbeddedScripts.class,
-                databaseDoc);
+        final XEmbeddedScripts embeddedScripts = UnoRuntime.queryInterface(XEmbeddedScripts.class, databaseDoc);
         final XStorageBasedLibraryContainer basicLibs = embeddedScripts.getBasicLibraries();
         final XNameContainer newLib = basicLibs.createLibrary( _libName );
         newLib.insertByName( _moduleName, _code );
@@ -579,6 +555,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
      *  This method here tests some of those aspects of a document which should survive the death of one
      *  instance and re-creation as a revenant.
     */
+    @Test
     public void testDocumentRevenants() throws Exception, IOException
     {
         // create an empty document
@@ -592,42 +569,38 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
 
         // at this stage, the marker should not yet be present in the doc's args, else some of the below
         // tests become meaningless
-        assure( "A newly created doc should not have the test case marker", !impl_hasMarker( databaseDoc.getArgs() ) );
+        assertTrue( "A newly created doc should not have the test case marker", !impl_hasMarker( databaseDoc.getArgs() ) );
 
         // obtain the DataSource associated with the document. Keeping this alive
         // ensures that the "impl data" of the document is kept alive, too, so when closing
         // and re-opening it, this "impl data" must be re-used.
-        XDocumentDataSource dataSource = (XDocumentDataSource)UnoRuntime.queryInterface( XDocumentDataSource.class,
-            ((XOfficeDatabaseDocument)UnoRuntime.queryInterface(
-                XOfficeDatabaseDocument.class, databaseDoc )).getDataSource() );
+        XDocumentDataSource dataSource = UnoRuntime.queryInterface(XDocumentDataSource.class, (UnoRuntime.queryInterface(XOfficeDatabaseDocument.class, databaseDoc)).getDataSource());
 
         // close and reload the doc
         impl_closeDocument(databaseDoc);
         databaseDoc = impl_loadDocument( documentURL, impl_getMarkerLoadArgs() );
         // since we just put the marker into the load-call, it should be present at the doc
-        assure( "The test case marker got lost.", impl_hasMarker( databaseDoc.getArgs() ) );
+        assertTrue( "The test case marker got lost.", impl_hasMarker( databaseDoc.getArgs() ) );
 
         // The basic library should have survived
-        final XEmbeddedScripts embeddedScripts = (XEmbeddedScripts) UnoRuntime.queryInterface(XEmbeddedScripts.class,
-                databaseDoc);
+        final XEmbeddedScripts embeddedScripts = UnoRuntime.queryInterface(XEmbeddedScripts.class, databaseDoc);
         final XStorageBasedLibraryContainer basicLibs = embeddedScripts.getBasicLibraries();
-        assure( "Baisc lib did not survive reloading a closed document", basicLibs.hasByName( "Lib" ) );
-        final XNameContainer lib = (XNameContainer)UnoRuntime.queryInterface(
-            XNameContainer.class, basicLibs.getByName( "Lib" ) );
-        assure( "Basic module did not survive reloading a closed document", lib.hasByName( "Module" ) );
+        assertTrue( "Baisc lib did not survive reloading a closed document", basicLibs.hasByName( "Lib" ) );
+        final XNameContainer lib = UnoRuntime.queryInterface(XNameContainer.class, basicLibs.getByName("Lib"));
+        assertTrue( "Basic module did not survive reloading a closed document", lib.hasByName( "Module" ) );
 
         // now closing the doc, and obtaining it from the data source, should preserve the marker we put into the load
         // args
         impl_closeDocument( databaseDoc );
-        databaseDoc = (XModel)UnoRuntime.queryInterface( XModel.class, dataSource.getDatabaseDocument() );
-        assure( "The test case marker did not survive re-retrieval of the doc from the data source.",
+        databaseDoc = UnoRuntime.queryInterface(XModel.class, dataSource.getDatabaseDocument());
+        assertTrue( "The test case marker did not survive re-retrieval of the doc from the data source.",
             impl_hasMarker( databaseDoc.getArgs() ) );
 
         // on the other hand, closing and regurlarly re-loading the doc *without* the marker should indeed
         // lose it
         impl_closeDocument( databaseDoc );
         databaseDoc = impl_loadDocument( documentURL, impl_getDefaultLoadArgs() );
-        assure( "Reloading the document kept the old args, instead of the newly supplied ones.",
+        assertTrue( "Reloading the document kept the old args, instead of the newly supplied ones.",
             !impl_hasMarker( databaseDoc.getArgs() ) );
 
         // clean up
@@ -635,6 +608,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
     }
 
     // --------------------------------------------------------------------------------------------------------
+    @Test
     public void testDocumentEvents() throws Exception, IOException
     {
         // create an empty document
@@ -660,8 +634,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
 
         // bind the macro to the OnLoad event
         final String macroURI = "vnd.sun.star.script:" + libName + "." + moduleName + ".OnLoad?language=Basic&location=document";
-        final XEventsSupplier eventsSupplier = (XEventsSupplier) UnoRuntime.queryInterface(XEventsSupplier.class,
-                databaseDoc);
+        final XEventsSupplier eventsSupplier = UnoRuntime.queryInterface(XEventsSupplier.class, databaseDoc);
         eventsSupplier.getEvents().replaceByName("OnLoad", new PropertyValue[]
                 {
                     new PropertyValue("EventType", 0, "Script", PropertyState.DIRECT_VALUE),
@@ -694,7 +667,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
                     "OnLoad"
                 }, context);
 
-        assureEquals("our provided interaction handler was not called", STATE_ON_LOAD_RECEIVED, m_loadDocState);
+        assertEquals("our provided interaction handler was not called", STATE_ON_LOAD_RECEIVED, m_loadDocState);
 
         // restore macro security level
         impl_setMacroSecurityLevel(oldSecurityLevel);
@@ -704,11 +677,11 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
     }
 
     // --------------------------------------------------------------------------------------------------------
+    @Test
     public void testGlobalEvents() throws Exception, IOException
     {
         XModel databaseDoc = impl_createEmptyEmbeddedHSQLDocument();
-        final XStorable storeDoc = (XStorable) UnoRuntime.queryInterface(XStorable.class,
-                databaseDoc);
+        final XStorable storeDoc = UnoRuntime.queryInterface(XStorable.class, databaseDoc);
 
         String context, newURL;
 
@@ -717,7 +690,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         context = "store";
         impl_startObservingEvents(context);
         storeDoc.store();
-        assureEquals("store is not expected to change the document URL", databaseDoc.getURL(), oldURL);
+        assertEquals("store is not expected to change the document URL", databaseDoc.getURL(), oldURL);
         impl_stopObservingEvents(m_globalEvents, new String[]
                 {
                     "OnSave", "OnSaveDone"
@@ -727,7 +700,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         context = "storeToURL";
         impl_startObservingEvents(context);
         storeDoc.storeToURL(createTempFileURL(), new PropertyValue[0]);
-        assureEquals("storetoURL is not expected to change the document URL", databaseDoc.getURL(), oldURL);
+        assertEquals("storetoURL is not expected to change the document URL", databaseDoc.getURL(), oldURL);
         impl_stopObservingEvents(m_globalEvents, new String[]
                 {
                     "OnSaveTo", "OnSaveToDone"
@@ -738,19 +711,18 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         context = "storeAsURL";
         impl_startObservingEvents(context);
         storeDoc.storeAsURL(newURL, new PropertyValue[0]);
-        assureEquals("storeAsURL is expected to change the document URL", databaseDoc.getURL(), newURL);
+        assertEquals("storeAsURL is expected to change the document URL", databaseDoc.getURL(), newURL);
         impl_stopObservingEvents(m_globalEvents, new String[]
                 {
                     "OnSaveAs", "OnSaveAsDone"
                 }, context);
 
         // XModifiable.setModified
-        final XModifiable modifyDoc = (XModifiable) UnoRuntime.queryInterface(XModifiable.class,
-                databaseDoc);
+        final XModifiable modifyDoc = UnoRuntime.queryInterface(XModifiable.class, databaseDoc);
         context = "setModified";
         impl_startObservingEvents(context);
         modifyDoc.setModified(true);
-        assureEquals("setModified didn't work", modifyDoc.isModified(), true);
+        assertEquals("setModified didn't work", modifyDoc.isModified(), true);
         impl_stopObservingEvents(m_globalEvents, new String[]
                 {
                     "OnModifyChanged"
@@ -760,7 +732,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         context = "store (2)";
         impl_startObservingEvents(context);
         storeDoc.store();
-        assureEquals("'store' should implicitly reset the modified flag", modifyDoc.isModified(), false);
+        assertEquals("'store' should implicitly reset the modified flag", modifyDoc.isModified(), false);
         impl_stopObservingEvents(m_globalEvents, new String[]
                 {
                     "OnSave", "OnSaveDone", "OnModifyChanged"
@@ -768,12 +740,10 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
 
         // XComponentLoader.loadComponentFromURL
         newURL = copyToTempFile(databaseDoc.getURL());
-        final XComponentLoader loader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class,
-                getORB().createInstance("com.sun.star.frame.Desktop"));
+        final XComponentLoader loader = UnoRuntime.queryInterface(XComponentLoader.class, getMSF().createInstance("com.sun.star.frame.Desktop"));
         context = "loadComponentFromURL";
         impl_startObservingEvents(context);
-        databaseDoc = (XModel) UnoRuntime.queryInterface(XModel.class,
-                loader.loadComponentFromURL(newURL, _BLANK, 0, impl_getDefaultLoadArgs()));
+        databaseDoc = UnoRuntime.queryInterface(XModel.class, loader.loadComponentFromURL(newURL, _BLANK, 0, impl_getDefaultLoadArgs()));
         impl_stopObservingEvents(m_globalEvents,
                 new String[]
                 {
@@ -781,8 +751,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
                 }, context);
 
         // closing a document by API
-        final XCloseable closeDoc = (XCloseable) UnoRuntime.queryInterface(XCloseable.class,
-                databaseDoc);
+        final XCloseable closeDoc = UnoRuntime.queryInterface(XCloseable.class, databaseDoc);
         context = "close (API)";
         impl_startObservingEvents(context);
         closeDoc.close(true);
@@ -795,13 +764,11 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         // closing a document via UI
         context = "close (UI)";
         impl_startObservingEvents("prepare for '" + context + "'");
-        databaseDoc = (XModel) UnoRuntime.queryInterface(XModel.class,
-                loader.loadComponentFromURL(newURL, _BLANK, 0, impl_getDefaultLoadArgs()));
+        databaseDoc = UnoRuntime.queryInterface(XModel.class, loader.loadComponentFromURL(newURL, _BLANK, 0, impl_getDefaultLoadArgs()));
         impl_waitForEvent(m_globalEvents, "OnLoad", 5000);
         // wait for all events to arrive - OnLoad should be the last one
 
-        final XDispatchProvider dispatchProvider = (XDispatchProvider) UnoRuntime.queryInterface(XDispatchProvider.class,
-                databaseDoc.getCurrentController().getFrame());
+        final XDispatchProvider dispatchProvider = UnoRuntime.queryInterface(XDispatchProvider.class, databaseDoc.getCurrentController().getFrame());
         final URL url = impl_getURL(".uno:CloseDoc");
         final XDispatch dispatcher = dispatchProvider.queryDispatch(url, "", 0);
         impl_startObservingEvents(context);
@@ -814,8 +781,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
 
         // creating a new document
         databaseDoc = impl_createDocument();
-        final XLoadable loadDoc = (XLoadable) UnoRuntime.queryInterface(XLoadable.class,
-                databaseDoc);
+        final XLoadable loadDoc = UnoRuntime.queryInterface(XLoadable.class, databaseDoc);
         context = "initNew";
         impl_startObservingEvents(context);
         loadDoc.initNew();
@@ -832,13 +798,11 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         context = "activation";
         // for this, load a database document ...
         impl_startObservingEvents("prepare for '" + context + "'");
-        databaseDoc = (XModel) UnoRuntime.queryInterface(XModel.class,
-                loader.loadComponentFromURL(newURL, _BLANK, 0, impl_getDefaultLoadArgs()));
+        databaseDoc = UnoRuntime.queryInterface(XModel.class, loader.loadComponentFromURL(newURL, _BLANK, 0, impl_getDefaultLoadArgs()));
         final int previousOnLoadEventPos = impl_waitForEvent(m_globalEvents, "OnLoad", 5000);
         // ... and another document ...
         final String otherURL = copyToTempFile(databaseDoc.getURL());
-        final XModel otherDoc = (XModel) UnoRuntime.queryInterface(XModel.class,
-                loader.loadComponentFromURL(otherURL, _BLANK, 0, impl_getDefaultLoadArgs()));
+        final XModel otherDoc = UnoRuntime.queryInterface(XModel.class, loader.loadComponentFromURL(otherURL, _BLANK, 0, impl_getDefaultLoadArgs()));
         impl_raise(otherDoc);
         impl_waitForEvent(m_globalEvents, "OnLoad", 5000, previousOnLoadEventPos + 1);
 
@@ -864,8 +828,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
             new URL()
         };
         url[0].Complete = _completeURL;
-        final XURLTransformer urlTransformer = (XURLTransformer) UnoRuntime.queryInterface(XURLTransformer.class,
-                getORB().createInstance("com.sun.star.util.URLTransformer"));
+        final XURLTransformer urlTransformer = UnoRuntime.queryInterface(XURLTransformer.class, getMSF().createInstance("com.sun.star.util.URLTransformer"));
         urlTransformer.parseStrict(url);
         return url[0];
     }
@@ -874,15 +837,14 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
     private void impl_raise(XModel _document)
     {
         final XFrame frame = _document.getCurrentController().getFrame();
-        final XTopWindow topWindow = (XTopWindow) UnoRuntime.queryInterface(XTopWindow.class,
-                frame.getContainerWindow());
+        final XTopWindow topWindow = UnoRuntime.queryInterface(XTopWindow.class, frame.getContainerWindow());
         topWindow.toFront();
     }
 
     // --------------------------------------------------------------------------------------------------------
     private void impl_startObservingEvents(String _context)
     {
-        log.println(" " + _context + " {");
+        System.out.println(" " + _context + " {");
         synchronized (m_documentEvents)
         {
             m_documentEvents.clear();
@@ -923,19 +885,19 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
                     actualEventCount = _actualEvents.size();
                 }
 
-                assureEquals("wrong event count for '" + _context + "'",
+                assertEquals("wrong event count for '" + _context + "'",
                         _expectedEvents.length, _actualEvents.size());
 
                 for (int i = 0; i < _expectedEvents.length; ++i)
                 {
-                    assureEquals("wrong event at positon " + (i + 1) + " for '" + _context + "'",
+                    assertEquals("wrong event at positon " + (i + 1) + " for '" + _context + "'",
                             _expectedEvents[i], _actualEvents.get(i));
                 }
             }
         }
         finally
         {
-            log.println(" }");
+            System.out.println(" }");
         }
     }
 
@@ -975,7 +937,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
             }
         }
 
-        failed("expected event '" + _expectedEvent + "' did not arrive after " + _maxMilliseconds + " milliseconds");
+        fail("expected event '" + _expectedEvent + "' did not arrive after " + _maxMilliseconds + " milliseconds");
         return -1;
     }
 
@@ -994,7 +956,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
 
         if ((_Event.EventName.equals("OnLoad")) && (m_loadDocState != STATE_NOT_STARTED))
         {
-            assureEquals("OnLoad event must come *after* invocation of the interaction handler / user!",
+            assertEquals("OnLoad event must come *after* invocation of the interaction handler / user!",
                     m_loadDocState, STATE_MACRO_EXEC_APPROVED);
             m_loadDocState = STATE_ON_LOAD_RECEIVED;
         }
@@ -1005,7 +967,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
             m_documentEvents.notifyAll();
         }
 
-        log.println("  document event: " + _Event.EventName);
+        System.out.println("  document event: " + _Event.EventName);
     }
 
     // --------------------------------------------------------------------------------------------------------
@@ -1023,7 +985,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
             m_globalEvents.notifyAll();
         }
 
-        log.println("  global event: " + _Event.EventName);
+        System.out.println("  global event: " + _Event.EventName);
     }
 
     // --------------------------------------------------------------------------------------------------------

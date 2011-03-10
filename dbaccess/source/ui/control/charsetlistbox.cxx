@@ -99,7 +99,7 @@ namespace dbaui
     }
 
     //--------------------------------------------------------------------
-    bool CharSetListBox::StoreSelectedCharSet( SfxItemSet& _rSet, const USHORT _nItemId )
+    bool CharSetListBox::StoreSelectedCharSet( SfxItemSet& _rSet, const sal_uInt16 _nItemId )
     {
         bool bChangedSomething = false;
         if ( GetSelectEntryPos() != GetSavedValue() )

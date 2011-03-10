@@ -97,7 +97,7 @@ ORelationTableConnectionData::~ORelationTableConnectionData()
 }
 
 //------------------------------------------------------------------------
-BOOL ORelationTableConnectionData::DropRelation()
+sal_Bool ORelationTableConnectionData::DropRelation()
 {
     DBG_CHKTHIS(ORelationTableConnectionData,NULL);
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -126,7 +126,7 @@ BOOL ORelationTableConnectionData::DropRelation()
             }
         }
     }
-    return TRUE;
+    return sal_True;
 }
 
 //------------------------------------------------------------------------
@@ -175,10 +175,10 @@ void ORelationTableConnectionData::SetCardinality()
 
 }
 // -----------------------------------------------------------------------------
-BOOL ORelationTableConnectionData::checkPrimaryKey(const Reference< XPropertySet>& i_xTable,EConnectionSide _eEConnectionSide) const
+sal_Bool ORelationTableConnectionData::checkPrimaryKey(const Reference< XPropertySet>& i_xTable,EConnectionSide _eEConnectionSide) const
 {
     // check if Table has the primary key column dependig on _eEConnectionSide
-    USHORT  nPrimKeysCount      = 0,
+    sal_uInt16  nPrimKeysCount      = 0,
             nValidLinesCount    = 0;
     const Reference< XNameAccess> xKeyColumns = dbtools::getPrimaryKeyColumns_throw(i_xTable);
     if ( xKeyColumns.is() )
@@ -202,15 +202,15 @@ BOOL ORelationTableConnectionData::checkPrimaryKey(const Reference< XPropertySet
             }
         }
         if ( nPrimKeysCount != aKeyColumns.getLength() )
-            return FALSE;
+            return sal_False;
     }
     if ( !nPrimKeysCount || nPrimKeysCount != nValidLinesCount )
-        return FALSE;
+        return sal_False;
 
-    return TRUE;
+    return sal_True;
 }
 //------------------------------------------------------------------------
-BOOL ORelationTableConnectionData::IsConnectionPossible()
+sal_Bool ORelationTableConnectionData::IsConnectionPossible()
 {
     DBG_CHKTHIS(ORelationTableConnectionData,NULL);
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -220,7 +220,7 @@ BOOL ORelationTableConnectionData::IsConnectionPossible()
     if ( IsSourcePrimKey() && !IsDestPrimKey() )
         ChangeOrientation();
 
-    return TRUE;
+    return sal_True;
 }
 
 //------------------------------------------------------------------------
@@ -283,7 +283,7 @@ bool operator==(const ORelationTableConnectionData& lhs, const ORelationTableCon
 }
 }
 //------------------------------------------------------------------------
-BOOL ORelationTableConnectionData::Update()
+sal_Bool ORelationTableConnectionData::Update()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     ////////////////////////////////////////////////////////////
@@ -291,7 +291,7 @@ BOOL ORelationTableConnectionData::Update()
     {
         DropRelation();
         if( !IsConnectionPossible() )
-            return FALSE;
+            return sal_False;
     }
 
     // reassign the keys because the orientaion could be changed
@@ -299,7 +299,7 @@ BOOL ORelationTableConnectionData::Update()
     Reference< XIndexAccess> xKeys ( getReferencingTable()->getKeys());
 
     if ( !xKeys.is() )
-        return FALSE;
+        return sal_False;
     ////////////////////////////////////////////////////////////
     // Neue Relation erzeugen
     Reference<XDataDescriptorFactory> xKeyFactory(xKeys,UNO_QUERY);
@@ -459,7 +459,7 @@ xKey.clear();
     // Kardinalitaet bestimmen
     SetCardinality();
 
-    return TRUE;
+    return sal_True;
 }
 // -----------------------------------------------------------------------------
 

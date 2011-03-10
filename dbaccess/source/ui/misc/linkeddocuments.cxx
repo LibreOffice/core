@@ -46,7 +46,7 @@
 #include <com/sun/star/ucb/OpenCommandArgument.hpp>
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <com/sun/star/task/XJobExecutor.hpp>
-#include <cppuhelper/extract.hxx>
+#include <comphelper/extract.hxx>
 #include <comphelper/types.hxx>
 #include <vcl/msgbox.hxx>
 #include <ucbhelper/content.hxx>
@@ -60,7 +60,6 @@
 #include <sfx2/app.hxx>
 #include <basic/sbx.hxx>
 #include <basic/sbuno.hxx>
-#include <sfx2/macrconf.hxx>
 #include <svtools/ehdl.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <com/sun/star/container/XHierarchicalNameContainer.hpp>

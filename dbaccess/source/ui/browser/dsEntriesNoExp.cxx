@@ -243,8 +243,8 @@ void SbaTableQueryBrowser::notifyHiContrastChanged()
             }
 
             // find the proper item, and set its icons
-            USHORT nCount = pEntryLoop->ItemCount();
-            for (USHORT i=0;i<nCount;++i)
+            sal_uInt16 nCount = pEntryLoop->ItemCount();
+            for (sal_uInt16 i=0;i<nCount;++i)
             {
                 SvLBoxItem* pItem = pEntryLoop->GetItem(i);
                 if ( !pItem || ( pItem->IsA() != SV_ITEM_ID_LBOXCONTEXTBMP ) )

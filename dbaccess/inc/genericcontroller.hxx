@@ -281,7 +281,7 @@ namespace dbaui
             @param  _nHelpId
                 The help id to dispatch.
         */
-        void openHelpAgent(sal_Int32 _nHelpId);
+        void openHelpAgent( const rtl::OString& _sHelpId );
 
         /** open the help agent for the given help url.
             @param  _pHelpStringURL

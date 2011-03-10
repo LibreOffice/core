@@ -48,7 +48,7 @@ namespace rptui
 |*
 \************************************************************************/
 
-ORptPageDialog::ORptPageDialog( Window* pParent, const SfxItemSet* pAttr,USHORT _nPageId) :
+ORptPageDialog::ORptPageDialog( Window* pParent, const SfxItemSet* pAttr,sal_uInt16 _nPageId) :
 SfxTabDialog ( pParent, ModuleRes( _nPageId ), pAttr ),
         rOutAttrs           ( *pAttr )
 {

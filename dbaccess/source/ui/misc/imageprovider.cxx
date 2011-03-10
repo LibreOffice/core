@@ -97,7 +97,7 @@ namespace dbaui
 
         //................................................................
         static void lcl_getTableImageResourceID_nothrow( const ImageProvider_Data& _rData, const ::rtl::OUString& _rName,
-            USHORT& _out_rResourceID )
+            sal_uInt16& _out_rResourceID)
         {
             _out_rResourceID = 0;
             try
@@ -165,7 +165,7 @@ namespace dbaui
             if ( !_out_rImage )
             {
                 // no -> determine by type
-                USHORT nImageResourceID = 0;
+                sal_uInt16 nImageResourceID = 0;
                 lcl_getTableImageResourceID_nothrow( *m_pData, _rName, nImageResourceID );
 
                 if ( nImageResourceID && !_out_rImage )
@@ -178,16 +178,16 @@ namespace dbaui
     Image ImageProvider::getDefaultImage( sal_Int32 _nDatabaseObjectType )
     {
         Image aObjectImage;
-        USHORT nImageResourceID( getDefaultImageResourceID( _nDatabaseObjectType ) );
+        sal_uInt16 nImageResourceID( getDefaultImageResourceID( _nDatabaseObjectType) );
         if ( nImageResourceID )
             aObjectImage = Image( ModuleRes( nImageResourceID ) );
         return aObjectImage;
     }
 
     //--------------------------------------------------------------------
-    USHORT ImageProvider::getDefaultImageResourceID( sal_Int32 _nDatabaseObjectType )
+    sal_uInt16 ImageProvider::getDefaultImageResourceID( sal_Int32 _nDatabaseObjectType)
     {
-        USHORT nImageResourceID( 0 );
+        sal_uInt16 nImageResourceID( 0 );
         switch ( _nDatabaseObjectType )
         {
         case DatabaseObject::QUERY:
@@ -212,7 +212,7 @@ namespace dbaui
     //--------------------------------------------------------------------
     Image ImageProvider::getFolderImage( sal_Int32 _nDatabaseObjectType )
     {
-        USHORT nImageResourceID( 0 );
+        sal_uInt16 nImageResourceID( 0 );
         switch ( _nDatabaseObjectType )
         {
         case DatabaseObject::QUERY:

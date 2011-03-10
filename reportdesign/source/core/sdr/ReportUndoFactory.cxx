@@ -34,7 +34,7 @@ namespace rptui
 {
     using namespace ::com::sun::star;
 // -----------------------------------------------------------------------------
-SdrUndoAction* lcl_createUndo(SdrObject& rObject,Action _eAction,USHORT _nCommentId)
+SdrUndoAction* lcl_createUndo(SdrObject& rObject,Action _eAction,sal_uInt16 _nCommentId)
 {
     OObjectBase* pObj = dynamic_cast<OObjectBase*>(&rObject);
     if ( !pObj )
@@ -80,12 +80,12 @@ SdrUndoAction* OReportUndoFactory::CreateUndoGeoObject( SdrObject& rObject )
 
 SdrUndoAction* OReportUndoFactory::CreateUndoAttrObject( SdrObject& rObject, bool bStyleSheet1, bool bSaveText )
 {
-    return m_pUndoFactory->CreateUndoAttrObject( rObject, bStyleSheet1 ? TRUE : FALSE, bSaveText ? TRUE : FALSE );
+    return m_pUndoFactory->CreateUndoAttrObject( rObject, bStyleSheet1 ? sal_True : sal_False, bSaveText ? sal_True : sal_False );
 }
 
 SdrUndoAction* OReportUndoFactory::CreateUndoRemoveObject( SdrObject& rObject, bool bOrdNumDirect )
 {
-    return m_pUndoFactory->CreateUndoRemoveObject( rObject, bOrdNumDirect ? TRUE : FALSE );
+    return m_pUndoFactory->CreateUndoRemoveObject( rObject, bOrdNumDirect ? sal_True : sal_False );
 }
 
 SdrUndoAction* OReportUndoFactory::CreateUndoInsertObject( SdrObject& rObject, bool /*bOrdNumDirect*/ )
@@ -105,7 +105,7 @@ SdrUndoAction* OReportUndoFactory::CreateUndoNewObject( SdrObject& rObject, bool
 
 SdrUndoAction* OReportUndoFactory::CreateUndoCopyObject( SdrObject& rObject, bool bOrdNumDirect )
 {
-    return m_pUndoFactory->CreateUndoCopyObject( rObject, bOrdNumDirect ? TRUE : FALSE );
+    return m_pUndoFactory->CreateUndoCopyObject( rObject, bOrdNumDirect ? sal_True : sal_False );
 }
 
 SdrUndoAction* OReportUndoFactory::CreateUndoObjectOrdNum( SdrObject& rObject, sal_uInt32 nOldOrdNum1, sal_uInt32 nNewOrdNum1)
@@ -115,7 +115,7 @@ SdrUndoAction* OReportUndoFactory::CreateUndoObjectOrdNum( SdrObject& rObject, s
 
 SdrUndoAction* OReportUndoFactory::CreateUndoReplaceObject( SdrObject& rOldObject, SdrObject& rNewObject, bool bOrdNumDirect )
 {
-    return m_pUndoFactory->CreateUndoReplaceObject( rOldObject, rNewObject, bOrdNumDirect ? TRUE : FALSE );
+    return m_pUndoFactory->CreateUndoReplaceObject( rOldObject, rNewObject, bOrdNumDirect ? sal_True : sal_False );
 }
 
 SdrUndoAction* OReportUndoFactory::CreateUndoObjectLayerChange( SdrObject& rObject, SdrLayerID aOldLayer, SdrLayerID aNewLayer )

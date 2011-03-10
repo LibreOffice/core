@@ -84,14 +84,14 @@ namespace rptui
         Timer                               m_aMarkTimer;
         Point                               m_aScrollOffset;
         DlgEdMode                           m_eMode;
-        USHORT                              m_nCurrentPosition;
-        USHORT                              m_eActObj;
-        BOOL                                m_bFirstDraw;
+        sal_uInt16                              m_nCurrentPosition;
+        sal_uInt16                              m_eActObj;
+        sal_Bool                                m_bFirstDraw;
         Size                                m_aGridSizeCoarse;
         Size                                m_aGridSizeFine;
-        BOOL                                m_bGridVisible;
-        BOOL                                m_bGridSnap;
-        BOOL                                m_bDeleted;
+        sal_Bool                                m_bGridVisible;
+        sal_Bool                                m_bGridSnap;
+        sal_Bool                                m_bDeleted;
 
 
         DECL_LINK( MarkTimeout, Timer * );
@@ -126,8 +126,8 @@ namespace rptui
         inline OReportController&   getController() const { return m_rReportController; }
 
         void            SetMode( DlgEdMode m_eMode );
-        void            SetInsertObj( USHORT eObj,const ::rtl::OUString& _sShapeType = ::rtl::OUString());
-        USHORT          GetInsertObj() const;
+        void            SetInsertObj( sal_uInt16 eObj,const ::rtl::OUString& _sShapeType = ::rtl::OUString());
+        sal_uInt16          GetInsertObj() const;
         rtl::OUString   GetInsertObjString() const;
         DlgEdMode       GetMode() const { return m_eMode; }
 
@@ -143,7 +143,7 @@ namespace rptui
         *
         * \return <TRUE/> if paste is allowed
         */
-        BOOL IsPasteAllowed() const;
+        sal_Bool IsPasteAllowed() const;
 
         /** paste a new control in this section
         */
@@ -163,17 +163,17 @@ namespace rptui
         void            SelectAll(const sal_uInt16 _nObjectType);
 
         /// checks if a selection exists
-        BOOL            HasSelection() const;
+        sal_Bool            HasSelection() const;
 
         void            UpdatePropertyBrowserDelayed(OSectionView& _rView);
 
-        USHORT          getSectionCount() const;
+        sal_uInt16          getSectionCount() const;
 
         /** removes the section at the given position.
         *
         * \param _nPosition Zero based.
         */
-        void            removeSection(USHORT _nPosition);
+        void            removeSection(sal_uInt16 _nPosition);
 
         /** adds a new section at position _nPosition.
             If the section is <NULL/> nothing happens.
@@ -181,13 +181,13 @@ namespace rptui
         */
         void            addSection(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection
                                     ,const ::rtl::OUString& _sColorEntry
-                                    ,USHORT _nPosition = USHRT_MAX);
+                                    ,sal_uInt16 _nPosition = USHRT_MAX);
 
         inline Size     getGridSizeCoarse() const { return m_aGridSizeCoarse; }
         inline Size     getGridSizeFine() const { return m_aGridSizeFine; }
-        inline BOOL     isGridSnap() const { return m_bGridSnap; }
-        void            setGridSnap(BOOL bOn);
-        void            setDragStripes(BOOL bOn);
+        inline sal_Bool     isGridSnap() const { return m_bGridSnap; }
+        void            setGridSnap(sal_Bool bOn);
+        void            setDragStripes(sal_Bool bOn);
         /** turns the grid on or off
         *
         * \param _bGridVisible
@@ -196,10 +196,10 @@ namespace rptui
 
         void            togglePropertyBrowser(sal_Bool _bToogleOn);
 
-        BOOL            isAddFieldVisible() const;
+        sal_Bool            isAddFieldVisible() const;
         void            toggleAddField();
 
-        BOOL            isReportExplorerVisible() const;
+        sal_Bool            isReportExplorerVisible() const;
         void            toggleReportExplorer();
 
         /** shows or hides the ruler.

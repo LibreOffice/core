@@ -49,25 +49,25 @@ namespace dbaui
         long    m_nDataPos;             // derzeit benoetigte Zeile
         long    m_nCurrentPos;          // Aktuelle Position der ausgewaehlten Column
     private:
-        USHORT  m_nCurUndoActId;
+        sal_uInt16  m_nCurUndoActId;
     protected:
-        BOOL    m_bCurrentModified;
-        BOOL    m_bUpdatable;
-        BOOL    m_bClipboardFilled;
+        sal_Bool    m_bCurrentModified;
+        sal_Bool    m_bUpdatable;
+        sal_Bool    m_bClipboardFilled;
 
     public:
         OTableRowView(Window* pParent);
         virtual ~OTableRowView();
 
-        virtual void                SetCellData( long nRow, USHORT nColId, const TOTypeInfoSP& _pTypeInfo ) = 0;
-        virtual void                SetCellData( long nRow, USHORT nColId, const ::com::sun::star::uno::Any& _rNewData ) = 0;
-        virtual ::com::sun::star::uno::Any          GetCellData( long nRow, USHORT nColId ) = 0;
-        virtual void                SetControlText( long nRow, USHORT nColId, const String& rText ) = 0;
-        virtual String              GetControlText( long nRow, USHORT nColId ) = 0;
+        virtual void                SetCellData( long nRow, sal_uInt16 nColId, const TOTypeInfoSP& _pTypeInfo ) = 0;
+        virtual void                SetCellData( long nRow, sal_uInt16 nColId, const ::com::sun::star::uno::Any& _rNewData ) = 0;
+        virtual ::com::sun::star::uno::Any          GetCellData( long nRow, sal_uInt16 nColId ) = 0;
+        virtual void                SetControlText( long nRow, sal_uInt16 nColId, const String& rText ) = 0;
+        virtual String              GetControlText( long nRow, sal_uInt16 nColId ) = 0;
 
         virtual OTableDesignView* GetView() const = 0;
 
-        USHORT  GetCurUndoActId(){ return m_nCurUndoActId; }
+        sal_uInt16  GetCurUndoActId(){ return m_nCurUndoActId; }
 
         // IClipboardTest
         virtual void cut();
@@ -86,8 +86,8 @@ namespace dbaui
         virtual sal_Bool IsInsertNewAllowed( long nRow )    = 0;
         virtual sal_Bool IsDeleteAllowed( long nRow )       = 0;
 
-        virtual BOOL IsUpdatable() const {return m_bUpdatable;}
-        virtual void SetUpdatable( BOOL bUpdate=TRUE );
+        virtual sal_Bool IsUpdatable() const {return m_bUpdatable;}
+        virtual void SetUpdatable( sal_Bool bUpdate=sal_True );
 
         virtual RowStatus GetRowStatus(long nRow) const;
         virtual void KeyInput(const KeyEvent& rEvt);

@@ -25,54 +25,78 @@
 #
 #*************************************************************************
 
-PRJ = ..$/..$/..
-TARGET  = DbaComplexTests
-PRJNAME = $(TARGET)
-PACKAGE = complex$/dbaccess
+.IF "$(OOO_JUNIT_JAR)" == ""
+nothing .PHONY:
+    @echo -----------------------------------------------------
+    @echo - JUnit not available, not building anything
+    @echo -----------------------------------------------------
+.ELSE
+
+PRJ = ../../..
+PRJNAME = dbaccess
+TARGET = qa_complex_dbaccess
+PACKAGE = complex/dbaccess
 
 # --- Settings -----------------------------------------------------
 .INCLUDE: settings.mk
 
-.IF "$(SOLAR_JAVA)" == ""
-all:
-    @echo "Java not available. Build skipped"
-
-.INCLUDE :  target.mk
-.ELSE
-
 #----- compile .java files -----------------------------------------
 
-JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar ConnectivityTools.jar
-JAVAFILES       := $(shell @$(FIND) ./*.java)
-JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
+JARFILES        = OOoRunner.jar ridl.jar test.jar juh.jar unoil.jar ConnectivityTools.jar
+EXTRAJARFILES   = $(OOO_JUNIT_JAR)
 
-#----- make a jar from compiled files ------------------------------
+#----- create a jar from compiled files ----------------------------
 
-MAXLINELENGTH = 100000
-
-JARCLASSDIRS    = $(PACKAGE)
 JARTARGET       = $(TARGET).jar
-JARCOMPRESS 	= TRUE
 
-RUNNER_ARGS = -cp "$(CLASSPATH)$(PATH_SEPERATOR)$(SOLARBINDIR)$/OOoRunner.jar" org.openoffice.Runner -TestBase java_complex 
+#----- Java files --------------------------------------------------
 
-RUNNER_CALL = $(AUGMENT_LIBRARY_PATH) java
+# here store only Files which contain a @Test
+JAVATESTFILES = \
+    ApplicationController.java \
+    Beamer.java \
+    DataSource.java \
+    DatabaseDocument.java \
+    Parser.java \
+    PropertyBag.java \
+    Query.java \
+    QueryInQuery.java \
+    RowSet.java \
+    SingleSelectQueryComposer.java \
+    UISettings.java \
+    CopyTableWizard.java \
+
+# put here all other files
+JAVAFILES = $(JAVATESTFILES) \
+    CRMBasedTestCase.java \
+    CopyTableInterActionHandler.java \
+    DatabaseApplication.java \
+    FileHelper.java \
+    RowSetEventListener.java \
+    TestCase.java \
+
+
+# Sample how to debug
+# JAVAIFLAGS=-Xdebug  -Xrunjdwp:transport=dt_socket,server=y,address=9003,suspend=y
 
 # --- Targets ------------------------------------------------------
 
-.IF "$(depend)" == ""
+.INCLUDE: target.mk
+
 ALL :   ALLTAR
-.ELSE
-ALL: 	ALLDEP
-.ENDIF
 
-.INCLUDE :  target.mk
+# --- subsequent tests ---------------------------------------------
 
+.IF "$(OOO_SUBSEQUENT_TESTS)" != ""
 
-run: $(CLASSDIR)$/$(JARTARGET)
-    +$(RUNNER_CALL) $(RUNNER_ARGS) -sce dbaccess.sce
+.INCLUDE: installationtest.mk
 
-run_%: $(CLASSDIR)$/$(JARTARGET)
-    +$(RUNNER_CALL) $(RUNNER_ARGS) -o complex.dbaccess.$(@:s/run_//)
+ALLTAR : javatest
 
-.ENDIF # "$(SOLAR_JAVA)" == ""
+    # Sample how to debug
+    # JAVAIFLAGS=-Xdebug  -Xrunjdwp:transport=dt_socket,server=y,address=9003,suspend=y
+
+.END    # "$(OOO_SUBSEQUENT_TESTS)" == ""
+
+.END    # ELSE "$(OOO_JUNIT_JAR)" != ""
+

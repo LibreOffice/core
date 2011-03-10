@@ -180,7 +180,7 @@ namespace rptui
         if ( xSection.is() )
         {
             OReportPage *pPage = pModel->getPage(xSection);
-            ULONG nIndex = pPage->getIndexOf(_xComponent);
+            sal_uLong nIndex = pPage->getIndexOf(_xComponent);
             if (nIndex < pPage->GetObjCount() )
             {
                 SdrObject *pObject = pPage->GetObj(nIndex);

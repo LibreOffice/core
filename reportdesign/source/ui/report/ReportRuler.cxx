@@ -54,7 +54,7 @@ void OReportRuler::Resize()
     m_pSection->SetPosSizePixel(Point(0,0),GetOutputSize());
 }
 //------------------------------------------------------------------------------
-void OReportRuler::SetGridVisible(BOOL _bVisible)
+void OReportRuler::SetGridVisible(sal_Bool _bVisible)
 {
     m_pSection->SetGridVisible( _bVisible );
 }

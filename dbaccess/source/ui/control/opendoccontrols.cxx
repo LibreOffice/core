@@ -197,8 +197,8 @@ namespace dbaui
 
         // Place icon left of text and both centered in the button.
         SetModeImage( GetCommandIcon( ".uno:Open", m_sModule ) );
-        EnableImageDisplay( TRUE );
-        EnableTextDisplay( TRUE );
+        EnableImageDisplay( sal_True );
+        EnableTextDisplay( sal_True );
         SetImageAlign( IMAGEALIGN_LEFT );
         SetStyle( GetStyle() | WB_CENTER );
     }
@@ -257,7 +257,7 @@ namespace dbaui
 
                     String sDecodedURL = aURL.GetMainURL( INetURLObject::NO_DECODE );
 
-                    USHORT nPos = InsertEntry( sTitle );
+                    sal_uInt16 nPos = InsertEntry( sTitle );
                     m_aURLs.insert( MapIndexToStringPair::value_type( nPos, StringPair( sDecodedURL, sFilter ) ) );
                 }
             }
@@ -272,7 +272,7 @@ namespace dbaui
     String OpenDocumentListBox::GetSelectedDocumentURL() const
     {
         String sURL;
-        USHORT nSelected = GetSelectEntryPos();
+        sal_uInt16 nSelected = GetSelectEntryPos();
         if ( LISTBOX_ENTRY_NOTFOUND != GetSelectEntryPos() )
             sURL = impl_getDocumentAtIndex( nSelected ).first;
         return sURL;
@@ -282,14 +282,14 @@ namespace dbaui
     String OpenDocumentListBox::GetSelectedDocumentFilter() const
     {
         String sFilter;
-        USHORT nSelected = GetSelectEntryPos();
+        sal_uInt16 nSelected = GetSelectEntryPos();
         if ( LISTBOX_ENTRY_NOTFOUND != GetSelectEntryPos() )
             sFilter = impl_getDocumentAtIndex( nSelected ).second;
         return sFilter;
     }
 
     //--------------------------------------------------------------------
-    OpenDocumentListBox::StringPair OpenDocumentListBox::impl_getDocumentAtIndex( USHORT _nListIndex, bool _bSystemNotation ) const
+    OpenDocumentListBox::StringPair OpenDocumentListBox::impl_getDocumentAtIndex( sal_uInt16 _nListIndex, bool _bSystemNotation ) const
     {
         MapIndexToStringPair::const_iterator pos = m_aURLs.find( _nListIndex );
         OSL_ENSURE( pos != m_aURLs.end(), "OpenDocumentListBox::impl_getDocumentAtIndex: invalid index!" );
@@ -316,7 +316,7 @@ namespace dbaui
             return;
 
         Point aRequestPos( ScreenToOutputPixel( _rHEvt.GetMousePosPixel() ) );
-        USHORT nItemIndex = LISTBOX_ENTRY_NOTFOUND;
+        sal_uInt16 nItemIndex = LISTBOX_ENTRY_NOTFOUND;
         if ( GetIndexForPoint( aRequestPos, nItemIndex ) != -1 )
         {
             Rectangle aItemRect( GetBoundingRectangle( nItemIndex ) );

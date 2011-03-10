@@ -35,6 +35,7 @@
 
 ModalDialog DLG_REL_PROPERTIES
 {
+    HelpID = "dbaccess:ModalDialog:DLG_REL_PROPERTIES";
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 186 , 205 ) ;

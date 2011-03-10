@@ -61,8 +61,8 @@ namespace dbaui
         OWizColumnSelect*                       m_pPage2;
         OWizNormalExtend*                       m_pPage3;
 
-        BOOL                                    m_bPKeyAllowed;
-        BOOL                                    m_bUseHeaderAllowed;
+        sal_Bool                                    m_bPKeyAllowed;
+        sal_Bool                                    m_bUseHeaderAllowed;
 
 
         DECL_LINK( AppendDataClickHdl, Button* );
@@ -75,17 +75,17 @@ namespace dbaui
     public:
         virtual void            Reset();
         virtual void            ActivatePage();
-        virtual BOOL            LeavePage();
+        virtual sal_Bool            LeavePage();
         virtual String          GetTitle() const ;
 
         OCopyTable( Window * pParent );
         virtual ~OCopyTable();
 
-        inline BOOL IsOptionDefData()       const { return m_aRB_DefData.IsChecked(); }
-        inline BOOL IsOptionDef()           const { return m_aRB_Def.IsChecked(); }
-        inline BOOL IsOptionAppendData()    const { return m_aRB_AppendData.IsChecked(); }
-        inline BOOL IsOptionView()          const { return m_aRB_View.IsChecked(); }
-        inline BOOL UseHeaderLine()         const { return m_aCB_UseHeaderLine.IsChecked(); }
+        inline sal_Bool IsOptionDefData()       const { return m_aRB_DefData.IsChecked(); }
+        inline sal_Bool IsOptionDef()           const { return m_aRB_Def.IsChecked(); }
+        inline sal_Bool IsOptionAppendData()    const { return m_aRB_AppendData.IsChecked(); }
+        inline sal_Bool IsOptionView()          const { return m_aRB_View.IsChecked(); }
+        inline sal_Bool UseHeaderLine()         const { return m_aCB_UseHeaderLine.IsChecked(); }
         String      GetKeyName()            const { return m_edKeyName.GetText(); }
 
         void setCreateStyleAction();
@@ -95,7 +95,7 @@ namespace dbaui
         }
         inline void disallowUseHeaderLine()
         {
-            m_bUseHeaderAllowed = FALSE;
+            m_bUseHeaderAllowed = sal_False;
             m_aCB_UseHeaderLine.Disable();
         }
 

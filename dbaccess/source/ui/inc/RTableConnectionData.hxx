@@ -35,10 +35,10 @@
 
 namespace dbaui
 {
-    const UINT16 CARDINAL_UNDEFINED = 0x0000;
-    const UINT16 CARDINAL_ONE_MANY  = 0x0001;
-    const UINT16 CARDINAL_MANY_ONE  = 0x0002;
-    const UINT16 CARDINAL_ONE_ONE   = 0x0004;
+    const sal_uInt16 CARDINAL_UNDEFINED = 0x0000;
+    const sal_uInt16 CARDINAL_ONE_MANY  = 0x0001;
+    const sal_uInt16 CARDINAL_MANY_ONE  = 0x0002;
+    const sal_uInt16 CARDINAL_ONE_ONE   = 0x0004;
 
     class OConnectionLineData;
     //==================================================================
@@ -54,9 +54,9 @@ namespace dbaui
         sal_Int32 m_nDeleteRules;
         sal_Int32 m_nCardinality;
 
-        BOOL checkPrimaryKey(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& i_xTable,EConnectionSide _eEConnectionSide) const;
-        BOOL IsSourcePrimKey()  const { return checkPrimaryKey(getReferencingTable()->getTable(),JTCS_FROM);    }
-        BOOL IsDestPrimKey()    const { return checkPrimaryKey(getReferencedTable()->getTable(),JTCS_TO);       }
+        sal_Bool checkPrimaryKey(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& i_xTable,EConnectionSide _eEConnectionSide) const;
+        sal_Bool IsSourcePrimKey()  const { return checkPrimaryKey(getReferencingTable()->getTable(),JTCS_FROM);    }
+        sal_Bool IsDestPrimKey()    const { return checkPrimaryKey(getReferencedTable()->getTable(),JTCS_TO);       }
 
     protected:
         virtual OConnectionLineDataRef CreateLineDataObj();
@@ -78,7 +78,7 @@ namespace dbaui
 
             @return true if successful
         */
-        virtual BOOL Update();
+        virtual sal_Bool Update();
 
 
         void        SetCardinality();
@@ -89,9 +89,9 @@ namespace dbaui
         inline sal_Int32    GetDeleteRules() const { return m_nDeleteRules; }
         inline sal_Int32    GetCardinality() const { return m_nCardinality; }
 
-        BOOL        IsConnectionPossible();
+        sal_Bool        IsConnectionPossible();
         void        ChangeOrientation();
-        BOOL        DropRelation();
+        sal_Bool        DropRelation();
     };
 }
 

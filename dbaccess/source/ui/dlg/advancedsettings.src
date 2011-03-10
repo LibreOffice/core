@@ -249,10 +249,29 @@
         WORKAROUND                                                                  \
     };                                                                              \
 
+#define AUTO_MAXROWSCAN(AUTO_Y)                                              \
+    FixedText FT_MAXROWSCAN                                                  \
+    {                                                                               \
+        Pos     = MAP_APPFONT ( START_X , AUTO_Y + ( LISTBOX_HEIGHT - CHECKBOX_HEIGHT ) / 2 ) ;   \
+        Size    = MAP_APPFONT ( 100 , CHECKBOX_HEIGHT );                            \
+        Text [ en-US ] = "Rows to scan column types";                               \
+    };                                                                              \
+    NumericField NF_MAXROWSCAN                                                      \
+    {                                                                               \
+        Pos     = MAP_APPFONT ( START_X + 100, AUTO_Y ) ;                           \
+        Size    = MAP_APPFONT ( 60 , EDIT_HEIGHT ) ;                                \
+        TabStop = TRUE ;                                                            \
+        NoThousandSep = TRUE;                                                       \
+        Border = TRUE;                                                              \
+        HelpId = HID_DSADMIN_MAXROWSCAN;                                            \
+    };                                                                              \
+
+
 //-------------------------------------------------------------------------
 
 TabPage PAGE_GENERATED_VALUES
 {
+    HelpID = "dbaccess:TabPage:PAGE_GENERATED_VALUES";
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( ADVANCED_PAGE_X , ADVANCED_PAGE_Y ) ;
@@ -311,6 +330,7 @@ TabPage PAGE_GENERATED_VALUES
 
 TabPage PAGE_ADVANCED_SETTINGS_SPECIAL
 {
+    HelpID = "dbaccess:TabPage:PAGE_ADVANCED_SETTINGS_SPECIAL";
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( ADVANCED_PAGE_X , ADVANCED_PAGE_Y ) ;
@@ -332,6 +352,7 @@ TabPage PAGE_ADVANCED_SETTINGS_SPECIAL
     AUTO_ESCAPE_DATETIME(      14*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 14*CHECKBOX_HEIGHT + RELATED_CONTROLS )
     AUTO_PRIMARY_KEY_SUPPORT(  15*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 15*CHECKBOX_HEIGHT + RELATED_CONTROLS )
     AUTO_BOOLEANCOMPARISON(    16*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 14*CHECKBOX_HEIGHT + RELATED_CONTROLS + ( LISTBOX_HEIGHT - CHECKBOX_HEIGHT ) / 2 )
+    AUTO_MAXROWSCAN(           17*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 14*CHECKBOX_HEIGHT + RELATED_CONTROLS + ( LISTBOX_HEIGHT - CHECKBOX_HEIGHT ) / 2 )
 };
 
 //-------------------------------------------------------------------------
@@ -349,7 +370,6 @@ TabDialog DLG_DATABASE_ADVANCED
     {
         OutputSize = TRUE ;
         HelpId = HID_DSADMIN_TABCONTROL;
-        SingleLine=TRUE;
     };
 
     String STR_GENERATED_VALUE

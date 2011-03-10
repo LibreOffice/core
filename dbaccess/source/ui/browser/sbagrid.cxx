@@ -811,7 +811,7 @@ SbaGridControl::SbaGridControl(Reference< XMultiServiceFactory > _rM,
     :FmGridControl(_rM,pParent, _pPeer, nBits)
     ,m_pMasterListener(NULL)
     ,m_nAsyncDropEvent(0)
-    ,m_nCurrentActionColId((USHORT)-1)
+    ,m_nCurrentActionColId((sal_uInt16)-1)
     ,m_bActivatingForDrop(sal_False)
 {
     DBG_CTOR(SbaGridControl ,NULL);

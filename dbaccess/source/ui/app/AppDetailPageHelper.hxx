@@ -70,8 +70,8 @@ namespace dbaui
             @return
                 <TRUE/> when successfull
         */
-        BOOL ImplGetGraphicCenterRect( const Graphic& rGraphic, Rectangle& rResultRect ) const;
-        void ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground );
+        sal_Bool ImplGetGraphicCenterRect( const Graphic& rGraphic, Rectangle& rResultRect ) const;
+        void ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
     protected:
         virtual void DataChanged(const DataChangedEvent& rDCEvt);
     public:
@@ -119,7 +119,7 @@ namespace dbaui
 
         /** retrieves the resource ids of the images representing elements of the given type
         */
-        void getElementIcons( ElementType _eType, USHORT& _rImageId );
+        void getElementIcons( ElementType _eType, sal_uInt16& _rImageId);
 
         /** fills the names in the listbox
             @param  _xContainer
@@ -133,7 +133,7 @@ namespace dbaui
         */
         void fillNames( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xContainer,
                         const ElementType _eType,
-                        const USHORT _nImageId,
+                        const sal_uInt16 _nImageId,
                         SvLBoxEntry* _pParent );
 
         /** sets the detail page
@@ -160,7 +160,7 @@ namespace dbaui
             @return
                 The new tree.
         */
-        DBTreeListBox* createSimpleTree( ULONG _nHelpId, const Image& _rImage );
+        DBTreeListBox* createSimpleTree( const rtl::OString& _sHelpId, const Image& _rImage);
 
         DECL_LINK( OnEntryDoubleClick,          SvTreeListBox* );
         DECL_LINK( OnEntrySelChange,            void* );
@@ -344,7 +344,7 @@ namespace dbaui
             @param  _bForce
                 Force the preview to be resetted
         */
-        void switchPreview(PreviewMode _eMode,BOOL _bForce = FALSE);
+        void switchPreview(PreviewMode _eMode,sal_Bool _bForce = sal_False);
 
         /** shows the Preview of the content when it is enabled.
             @param  _xContent

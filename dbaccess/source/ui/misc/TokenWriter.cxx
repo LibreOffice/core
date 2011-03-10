@@ -362,24 +362,24 @@ void ODatabaseImportExport::initialize()
     m_bInInitialize = sal_False;
 }
 // -----------------------------------------------------------------------------
-BOOL ODatabaseImportExport::Write()
+sal_Bool ODatabaseImportExport::Write()
 {
     if ( m_bNeedToReInitialize )
     {
         if ( !m_bInInitialize )
             initialize();
     }
-    return TRUE;
+    return sal_True;
 }
 // -----------------------------------------------------------------------------
-BOOL ODatabaseImportExport::Read()
+sal_Bool ODatabaseImportExport::Read()
 {
     if ( m_bNeedToReInitialize )
     {
         if ( !m_bInInitialize )
             initialize();
     }
-    return TRUE;
+    return sal_True;
 }
 // -----------------------------------------------------------------------------
 void ODatabaseImportExport::impl_initializeRowMember_throw()
@@ -395,7 +395,7 @@ void ODatabaseImportExport::impl_initializeRowMember_throw()
     }
 }
 //======================================================================
-BOOL ORTFImportExport::Write()
+sal_Bool ORTFImportExport::Write()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ORTFImportExport::Write" );
     ODatabaseImportExport::Write();
@@ -403,10 +403,10 @@ BOOL ORTFImportExport::Write()
     (*m_pStream) << OOO_STRING_SVTOOLS_RTF_ANSI << ODatabaseImportExport::sNewLine;
     rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252;
 
-    BOOL bBold          = ( ::com::sun::star::awt::FontWeight::BOLD     == m_aFont.Weight );
-    BOOL bItalic        = ( ::com::sun::star::awt::FontSlant_ITALIC     == m_aFont.Slant );
-    BOOL bUnderline     = ( ::com::sun::star::awt::FontUnderline::NONE  != m_aFont.Underline );
-    BOOL bStrikeout     = ( ::com::sun::star::awt::FontStrikeout::NONE  != m_aFont.Strikeout );
+    sal_Bool bBold          = ( ::com::sun::star::awt::FontWeight::BOLD     == m_aFont.Weight );
+    sal_Bool bItalic        = ( ::com::sun::star::awt::FontSlant_ITALIC     == m_aFont.Slant );
+    sal_Bool bUnderline     = ( ::com::sun::star::awt::FontUnderline::NONE  != m_aFont.Underline );
+    sal_Bool bStrikeout     = ( ::com::sun::star::awt::FontStrikeout::NONE  != m_aFont.Strikeout );
 
     sal_Int32 nColor = 0;
     if(m_xObject.is())
@@ -570,7 +570,7 @@ BOOL ORTFImportExport::Write()
     }
 
     (*m_pStream) << '}' << ODatabaseImportExport::sNewLine;
-    (*m_pStream) << (BYTE) 0;
+    (*m_pStream) << (sal_uInt8) 0;
     return ((*m_pStream).GetError() == SVSTREAM_OK);
 }
 // -----------------------------------------------------------------------------
@@ -593,10 +593,10 @@ void ORTFImportExport::appendRow(::rtl::OString* pHorzChar,sal_Int32 _nColumnCou
             (*m_pStream) << ODatabaseImportExport::sNewLine;
         }
 
-        const BOOL bBold            = ( ::com::sun::star::awt::FontWeight::BOLD     == m_aFont.Weight );
-        const BOOL bItalic      = ( ::com::sun::star::awt::FontSlant_ITALIC     == m_aFont.Slant );
-        const BOOL bUnderline       = ( ::com::sun::star::awt::FontUnderline::NONE  != m_aFont.Underline );
-        const BOOL bStrikeout       = ( ::com::sun::star::awt::FontStrikeout::NONE  != m_aFont.Strikeout );
+        const sal_Bool bBold            = ( ::com::sun::star::awt::FontWeight::BOLD     == m_aFont.Weight );
+        const sal_Bool bItalic      = ( ::com::sun::star::awt::FontSlant_ITALIC     == m_aFont.Slant );
+        const sal_Bool bUnderline       = ( ::com::sun::star::awt::FontUnderline::NONE  != m_aFont.Underline );
+        const sal_Bool bStrikeout       = ( ::com::sun::star::awt::FontStrikeout::NONE  != m_aFont.Strikeout );
         static const ::rtl::OString aFS2("\\fs20\\f1\\cf0\\cb1");
         ::comphelper::ComponentContext aContext(m_xFactory);
         Reference< XRowSet > xRowSet(m_xRow,UNO_QUERY);
@@ -641,7 +641,7 @@ void ORTFImportExport::appendRow(::rtl::OString* pHorzChar,sal_Int32 _nColumnCou
     ++k;
 }
 //-------------------------------------------------------------------
-BOOL ORTFImportExport::Read()
+sal_Bool ORTFImportExport::Read()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ORTFImportExport::Read" );
     ODatabaseImportExport::Read();
@@ -677,7 +677,7 @@ const char OHTMLImportExport::sIndentSource[nIndentMax+1] = "\t\t\t\t\t\t\t\t\t\
 //========================================================================
 #define OUT_PROLOGUE()      ((*m_pStream) << sHTML30_Prologue << ODatabaseImportExport::sNewLine << ODatabaseImportExport::sNewLine)
 #define TAG_ON( tag )       HTMLOutFuncs::Out_AsciiTag( (*m_pStream), tag )
-#define TAG_OFF( tag )      HTMLOutFuncs::Out_AsciiTag( (*m_pStream), tag, FALSE )
+#define TAG_OFF( tag )      HTMLOutFuncs::Out_AsciiTag( (*m_pStream), tag, sal_False )
 #define OUT_STR( str )      HTMLOutFuncs::Out_String( (*m_pStream), str )
 #define OUT_LF()            (*m_pStream) << ODatabaseImportExport::sNewLine << GetIndentStr()
 #define lcl_OUT_LF()        (*m_pStream) << ODatabaseImportExport::sNewLine
@@ -695,7 +695,7 @@ OHTMLImportExport::OHTMLImportExport(const ::svx::ODataAccessDescriptor& _aDataD
         : ODatabaseImportExport(_aDataDescriptor,_rM,_rxNumberF,rExchange)
     ,m_nIndent(0)
 #if OSL_DEBUG_LEVEL > 0
-    ,m_bCheckFont(FALSE)
+    ,m_bCheckFont(sal_False)
 #endif
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLImportExport::OHTMLImportExport" );
@@ -706,7 +706,7 @@ OHTMLImportExport::OHTMLImportExport(const ::svx::ODataAccessDescriptor& _aDataD
     sIndent[0] = 0;
 }
 //-------------------------------------------------------------------
-BOOL OHTMLImportExport::Write()
+sal_Bool OHTMLImportExport::Write()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLImportExport::Write" );
     ODatabaseImportExport::Write();
@@ -725,7 +725,7 @@ BOOL OHTMLImportExport::Write()
     return sal_False;
 }
 //-------------------------------------------------------------------
-BOOL OHTMLImportExport::Read()
+sal_Bool OHTMLImportExport::Read()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLImportExport::Read" );
     ODatabaseImportExport::Read();
@@ -1015,12 +1015,12 @@ void OHTMLImportExport::WriteCell( sal_Int32 nFormat,sal_Int32 nWidthPixel,sal_I
         {
             fVal = m_xFormatter->convertStringToNumber(nFormat,rValue);
             ByteString aTmpString(aStrTD);
-            HTMLOutFuncs::CreateTableDataOptionsValNum( aTmpString, FALSE, fVal,nFormat, *pFormatter );
+            HTMLOutFuncs::CreateTableDataOptionsValNum( aTmpString, sal_False, fVal,nFormat, *pFormatter );
         }
         catch(Exception&)
         {
             ByteString aTmpString(aStrTD);
-            HTMLOutFuncs::CreateTableDataOptionsValNum( aTmpString, FALSE, fVal,nFormat, *pFormatter );
+            HTMLOutFuncs::CreateTableDataOptionsValNum( aTmpString, sal_False, fVal,nFormat, *pFormatter );
         }
     }
 
@@ -1028,10 +1028,10 @@ void OHTMLImportExport::WriteCell( sal_Int32 nFormat,sal_Int32 nWidthPixel,sal_I
 
     FontOn();
 
-    BOOL bBold          = ( ::com::sun::star::awt::FontWeight::BOLD     == m_aFont.Weight );
-    BOOL bItalic        = ( ::com::sun::star::awt::FontSlant_ITALIC     == m_aFont.Slant );
-    BOOL bUnderline     = ( ::com::sun::star::awt::FontUnderline::NONE  != m_aFont.Underline );
-    BOOL bStrikeout     = ( ::com::sun::star::awt::FontStrikeout::NONE  != m_aFont.Strikeout );
+    sal_Bool bBold          = ( ::com::sun::star::awt::FontWeight::BOLD     == m_aFont.Weight );
+    sal_Bool bItalic        = ( ::com::sun::star::awt::FontSlant_ITALIC     == m_aFont.Slant );
+    sal_Bool bUnderline     = ( ::com::sun::star::awt::FontUnderline::NONE  != m_aFont.Underline );
+    sal_Bool bStrikeout     = ( ::com::sun::star::awt::FontStrikeout::NONE  != m_aFont.Strikeout );
 
     if ( bBold )        TAG_ON( OOO_STRING_SVTOOLS_HTML_bold );
     if ( bItalic )      TAG_ON( OOO_STRING_SVTOOLS_HTML_italic );
@@ -1058,7 +1058,7 @@ void OHTMLImportExport::FontOn()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLImportExport::FontOn" );
 #if OSL_DEBUG_LEVEL > 0
-        m_bCheckFont = TRUE;
+        m_bCheckFont = sal_True;
 #endif
 
     // <FONT FACE="xxx">
@@ -1091,7 +1091,7 @@ inline void OHTMLImportExport::FontOff()
     OSL_ENSURE(m_bCheckFont,"Kein FontOn() gerufen");
     TAG_OFF( OOO_STRING_SVTOOLS_HTML_font );
 #if OSL_DEBUG_LEVEL > 0
-    m_bCheckFont = FALSE;
+    m_bCheckFont = sal_False;
 #endif
 }
 //-----------------------------------------------------------------------

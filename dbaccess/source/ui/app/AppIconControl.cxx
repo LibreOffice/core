@@ -53,9 +53,9 @@ OApplicationIconControl::OApplicationIconControl(Window* _pParent)
 
     struct CategoryDescriptor
     {
-        USHORT      nLabelResId;
+        sal_uInt16      nLabelResId;
         ElementType eType;
-        USHORT      nImageResId;
+        sal_uInt16      nImageResId;
     }   aCategories[] = {
         { RID_STR_TABLES_CONTAINER,     E_TABLE,    IMG_TABLEFOLDER_TREE_L  },
         { RID_STR_QUERIES_CONTAINER,    E_QUERY,    IMG_QUERYFOLDER_TREE_L  },
@@ -71,14 +71,14 @@ OApplicationIconControl::OApplicationIconControl(Window* _pParent)
             pEntry->SetUserData( new ElementType( aCategories[i].eType ) );
     }
 
-    SetChoiceWithCursor( TRUE );
+    SetChoiceWithCursor( sal_True );
     SetSelectionMode(SINGLE_SELECTION);
 }
 // -----------------------------------------------------------------------------
 OApplicationIconControl::~OApplicationIconControl()
 {
-    ULONG nCount = GetEntryCount();
-    for ( ULONG i = 0; i < nCount; ++i )
+    sal_uLong nCount = GetEntryCount();
+    for ( sal_uLong i = 0; i < nCount; ++i )
     {
         SvxIconChoiceCtrlEntry* pEntry = GetEntry( i );
         if ( pEntry )

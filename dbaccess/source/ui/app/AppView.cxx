@@ -83,7 +83,7 @@ OAppBorderWindow::OAppBorderWindow(OApplicationView* _pParent,PreviewMode _ePrev
 
     SetBorderStyle(WINDOW_BORDER_MONO);
 
-    m_pPanel = new OTitleWindow(this,STR_DATABASE,WB_BORDER | WB_DIALOGCONTROL ,FALSE);
+    m_pPanel = new OTitleWindow(this,STR_DATABASE,WB_BORDER | WB_DIALOGCONTROL ,sal_False);
     m_pPanel->SetBorderStyle(WINDOW_BORDER_MONO);
     OApplicationSwapWindow* pSwap = new OApplicationSwapWindow( m_pPanel, *this );
     pSwap->Show();

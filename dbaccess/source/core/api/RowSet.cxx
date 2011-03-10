@@ -348,7 +348,7 @@ void SAL_CALL ORowSet::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const 
         case PROPERTY_ID_FETCHSIZE:
             if(m_pCache)
             {
-                m_pCache->setMaxRowSize(m_nFetchSize);
+                m_pCache->setFetchSize(m_nFetchSize);
                 fireRowcount();
             }
             break;
@@ -1067,7 +1067,7 @@ void ORowSet::implCancelRowUpdates( sal_Bool _bNotifyModified ) SAL_THROW( ( SQL
     positionCache( MOVE_NONE_REFRESH_ONLY );
 
     ORowSetRow aOldValues;
-    if ( !m_aCurrentRow.isNull() )
+    if ( !m_bModified && _bNotifyModified && !m_aCurrentRow.isNull() )
         aOldValues = new ORowSetValueVector( *(*m_aCurrentRow) );
 
     m_pCache->cancelRowUpdates();
@@ -1077,11 +1077,13 @@ void ORowSet::implCancelRowUpdates( sal_Bool _bNotifyModified ) SAL_THROW( ( SQL
     m_aCurrentRow.setBookmark(m_aBookmark);
 
     // notification order
-    // - column values
-    ORowSetBase::firePropertyChange(aOldValues);
     // IsModified
     if( !m_bModified && _bNotifyModified )
+    {
+        // - column values
+        ORowSetBase::firePropertyChange(aOldValues);
         fireProperty(PROPERTY_ID_ISMODIFIED,sal_False,sal_True);
+    }
 }
 
 void SAL_CALL ORowSet::cancelRowUpdates(  ) throw(SQLException, RuntimeException)
@@ -1643,6 +1645,8 @@ Reference< XResultSet > ORowSet::impl_prepareAndExecute_throw()
         try
         {
             xStatementProps->setPropertyValue( PROPERTY_USEBOOKMARKS, makeAny( sal_True ) );
+            xStatementProps->setPropertyValue( PROPERTY_MAXROWS, makeAny( m_nMaxRows ) );
+
             setStatementResultSetType( xStatementProps, m_nResultSetType, m_nResultSetConcurrency );
         }
         catch ( const Exception& )
@@ -1797,13 +1801,13 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
 
         {
             RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "frank.schoenheit@sun.com", "ORowSet::execute_NoApprove_NoNewConn: creating cache" );
-            m_pCache = new ORowSetCache( xResultSet, m_xComposer.get(), m_aContext, aComposedUpdateTableName, m_bModified, m_bNew,m_aParameterValueForCache,m_aFilter );
+            m_pCache = new ORowSetCache( xResultSet, m_xComposer.get(), m_aContext, aComposedUpdateTableName, m_bModified, m_bNew,m_aParameterValueForCache,m_aFilter,m_nMaxRows );
             if ( m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY )
             {
                 m_nPrivileges = Privilege::SELECT;
                 m_pCache->m_nPrivileges = Privilege::SELECT;
             }
-            m_pCache->setMaxRowSize(m_nFetchSize);
+            m_pCache->setFetchSize(m_nFetchSize);
             m_aCurrentRow   = m_pCache->createIterator(this);
             m_aOldRow       = m_pCache->registerOldRow();
         }
@@ -2213,7 +2217,7 @@ Reference< XNameAccess > ORowSet::impl_getTables_throw()
         try
         {
             Reference<XDatabaseMetaData> xMeta = m_xActiveConnection->getMetaData();
-            bCase = xMeta.is() && xMeta->storesMixedCaseQuotedIdentifiers();
+            bCase = xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers();
         }
         catch(SQLException&)
         {
@@ -2700,9 +2704,9 @@ void SAL_CALL ORowSet::refreshRow(  ) throw(SQLException, RuntimeException)
 
     // notification order:
     if ( m_bModified && m_pCache )
-        // - column values
         implCancelRowUpdates( sal_False ); // do _not_ notify the IsModify - will do this ourself below
 
+    // - column values
     ORowSetBase::refreshRow();
 
     // - IsModified

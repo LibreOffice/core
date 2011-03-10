@@ -1,4 +1,4 @@
-ba      dbaccess        :       l10n BOOST:boost connectivity svx stoc qadevOOo xmlscript NULL
+ba      dbaccess        :       L10N:l10n BOOST:boost connectivity svx stoc qadevOOo xmlscript LIBXSLT:libxslt test NULL
 ba	dbaccess								usr1	-	all	ba_mkout NULL
 ba	dbaccess\inc							nmake	-	all	ba_inc NULL
 ba	dbaccess\source\ui\inc					nmake	-	all	ba_uiinc ba_inc NULL
@@ -8,7 +8,6 @@ ba	dbaccess\source\core\recovery           nmake	-	all	ba_crecovery ba_inc NULL
 ba	dbaccess\source\core\misc				nmake	-	all	ba_cmisc ba_inc NULL
 ba	dbaccess\source\core\resource			nmake	-	all	ba_cres ba_inc NULL
 ba	dbaccess\source\filter\xml				nmake	-	all	ba_ffilter ba_shared ba_util ba_inc NULL
-ba	dbaccess\source\filter\migration		nmake	-	all	ba_fmigration ba_shared ba_inc NULL
 ba	dbaccess\source\shared					nmake	-	all	ba_shared ba_cres ba_inc NULL
 ba  dbaccess\source\sdbtools\connection     nmake   -   all ba_conntools ba_inc NULL
 ba  dbaccess\source\sdbtools\misc           nmake   -   all ba_misctools ba_inc NULL
@@ -27,5 +26,8 @@ ba	dbaccess\source\ui\uno					nmake	-	all	ba_uiuno ba_inc NULL
 ba	dbaccess\source\ui\imagelists			nmake	-	all	ba_uiimglst ba_inc NULL
 ba  dbaccess\util                           nmake   -   all ba_util ba_uiimglst ba_capi ba_cdaccess ba_cmisc ba_crecovery ba_shared ba_uibrowser ba_uiapp ba_uicontrol ba_uidlg ba_uimisc ba_uiquery ba_uitabledesign ba_uirelationdesign ba_uiuno ba_conntools ba_misctools ba_miscres ba_ext_adabasui NULL
 ba  dbaccess\win32\source\odbcconfig        nmake   -   w ba_odbcconfig ba_inc NULL
-ba  dbaccess\qa\complex\dbaccess            nmake   -   all ba_complex_tests NULL
 ba dbaccess\qa\unoapi nmake - all ba_q_unoapi NULL
+
+# complex tests doesn't work
+# ba dbaccess\qa\complex\dbaccess           nmake   -   all ba_qa_complex NULL
+

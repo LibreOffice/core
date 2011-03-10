@@ -99,3 +99,11 @@ RESLIB1SRSFILES=$(RES1FILELIST)
 
 .INCLUDE : target.mk
 
+
+ALLTAR : $(MISC)/dbmm.component
+
+$(MISC)/dbmm.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        dbmm.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt dbmm.component

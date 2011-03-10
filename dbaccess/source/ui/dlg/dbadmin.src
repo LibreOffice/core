@@ -112,7 +112,6 @@ TabDialog DLG_DATABASE_ADMINISTRATION
     {
         OutputSize = TRUE ;
         HelpId = HID_DSADMIN_TABCONTROL;
-        SingleLine=TRUE;
     };
 
     //.........................................................................
@@ -146,7 +145,6 @@ ModalDialog DLG_DATABASE_TYPE_CHANGE
     {
         OutputSize = TRUE ;
         HelpId = HID_DSADMIN_TABCONTROL;
-        SingleLine=TRUE;
     };
     Text [ en-US ] = "Database properties" ;
 };
@@ -195,6 +193,7 @@ TabPage PAGE_GENERAL
 
     RadioButton RB_OPENEXISTINGDOC
     {
+        HelpID = "dbaccess:RadioButton:PAGE_GENERAL:RB_OPENEXISTINGDOC";
         Pos = MAP_APPFONT (START_X + 6 , 97 );
         Size = MAP_APPFONT ( 206 , 8 ) ;
         Text [ en-US ]  = "Open an existing database ~file" ;
@@ -209,6 +208,7 @@ TabPage PAGE_GENERAL
 
     ListBox LB_DOCUMENTLIST
     {
+        HelpID = "dbaccess:ListBox:PAGE_GENERAL:LB_DOCUMENTLIST";
         Pos = MAP_APPFONT( START_X + INDENTED_X + INDENT_BELOW_RADIO, 121 );
         Size = MAP_APPFONT( 120, 14 );
         DropDown = TRUE;
@@ -217,6 +217,7 @@ TabPage PAGE_GENERAL
 
     PushButton PB_OPENDOCUMENT
     {
+        HelpID = "dbaccess:PushButton:PAGE_GENERAL:PB_OPENDOCUMENT";
         Pos = MAP_APPFONT( START_X + INDENTED_X + INDENT_BELOW_RADIO, 139 );
         Size = MAP_APPFONT( 50, 16 );
         OutputSize = TRUE;
@@ -418,6 +419,7 @@ TabPage PAGE_ADABAS
     };
     Edit ET_HOSTNAME
     {
+        HelpID = "dbaccess:Edit:PAGE_ADABAS:ET_HOSTNAME";
         TabStop = TRUE ;
         Border = TRUE ;
 
@@ -433,6 +435,7 @@ TabPage PAGE_ADABAS
     };
     NumericField NF_CACHE_SIZE
     {
+        HelpID = "dbaccess:NumericField:PAGE_ADABAS:NF_CACHE_SIZE";
         Pos             = MAP_APPFONT ( EDIT_X , 2*UNRELATED_CONTROLS + RELATED_CONTROLS + 2*FIXEDTEXT_HEIGHT -1 ) ;
         Size            = MAP_APPFONT ( 40 , EDIT_HEIGHT ) ;
         Border          = TRUE ;
@@ -450,6 +453,7 @@ TabPage PAGE_ADABAS
     };
     NumericField NF_DATA_INCREMENT
     {
+        HelpID = "dbaccess:NumericField:PAGE_ADABAS:NF_DATA_INCREMENT";
         Pos             = MAP_APPFONT ( EDIT_X , 3*UNRELATED_CONTROLS + RELATED_CONTROLS + 3*FIXEDTEXT_HEIGHT -1 ) ;
         Size            = MAP_APPFONT ( 40 , EDIT_HEIGHT ) ;
         Border          = TRUE ;
@@ -472,6 +476,7 @@ TabPage PAGE_ADABAS
     };
     Edit ET_CTRLUSERNAME
     {
+        HelpID = "dbaccess:Edit:PAGE_ADABAS:ET_CTRLUSERNAME";
         Border = TRUE ;
         Pos = MAP_APPFONT ( EDIT_X , 4*UNRELATED_CONTROLS + 2*RELATED_CONTROLS + 5*FIXEDTEXT_HEIGHT-1 ) ;
         Size = MAP_APPFONT ( 105 , EDIT_HEIGHT ) ;
@@ -485,6 +490,7 @@ TabPage PAGE_ADABAS
     };
     Edit ET_CTRLPASSWORD
     {
+        HelpID = "dbaccess:Edit:PAGE_ADABAS:ET_CTRLPASSWORD";
         Border = TRUE ;
         Pos = MAP_APPFONT ( EDIT_X , 5*UNRELATED_CONTROLS + 2*RELATED_CONTROLS + 6*FIXEDTEXT_HEIGHT-1 ) ;
         Size = MAP_APPFONT ( 105 , EDIT_HEIGHT) ;
@@ -494,6 +500,7 @@ TabPage PAGE_ADABAS
 
     CheckBox CB_SHUTDB
     {
+        HelpID = "dbaccess:CheckBox:PAGE_ADABAS:CB_SHUTDB";
         Pos = MAP_APPFONT ( 6 , 6*UNRELATED_CONTROLS + 2*RELATED_CONTROLS + 7*FIXEDTEXT_HEIGHT ) ;
         Size = MAP_APPFONT ( 248 , CHECKBOX_HEIGHT ) ;
         Text[ en-US ] = "~Shut down service when closing %PRODUCTNAME";
@@ -501,6 +508,7 @@ TabPage PAGE_ADABAS
 
     PushButton PB_STAT
     {
+        HelpID = "dbaccess:PushButton:PAGE_ADABAS:PB_STAT";
         Pos                 = MAP_APPFONT ( PAGE_X  - BUTTON_WIDTH - UNRELATED_CONTROLS, PAGE_Y - BUTTON_HEIGHT - UNRELATED_CONTROLS ) ;
         Size                = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
         Text[ en-US ] = "E~xtended...";
@@ -516,6 +524,7 @@ TabPage PAGE_ADABAS
 
 TabPage PAGE_MYSQL_ODBC
 {
+    HelpID = "dbaccess:TabPage:PAGE_MYSQL_ODBC";
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( PAGE_X , PAGE_Y ) ;
@@ -526,6 +535,7 @@ TabPage PAGE_MYSQL_ODBC
 
 TabPage PAGE_MYSQL_JDBC
 {
+    HelpID = "dbaccess:TabPage:PAGE_MYSQL_JDBC";
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( PAGE_X , PAGE_Y ) ;
@@ -544,6 +554,7 @@ TabPage PAGE_MYSQL_JDBC
     };
     Edit ET_JDBCDRIVERCLASS
     {
+        HelpID = "dbaccess:Edit:PAGE_MYSQL_JDBC:ET_JDBCDRIVERCLASS";
         Pos = MAP_APPFONT ( EDIT_X,
                             4*UNRELATED_CONTROLS + RELATED_CONTROLS + 3*FIXEDTEXT_HEIGHT -1 + EDIT_HEIGHT) ;
         Size = MAP_APPFONT ( 97 , EDIT_HEIGHT ) ;
@@ -552,6 +563,7 @@ TabPage PAGE_MYSQL_JDBC
     };
     PushButton PB_TESTDRIVERCLASS
     {
+        HelpID = "dbaccess:PushButton:PAGE_MYSQL_JDBC:PB_TESTDRIVERCLASS";
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( PAGE_X  - BUTTON_WIDTH - UNRELATED_CONTROLS , 4*UNRELATED_CONTROLS + RELATED_CONTROLS + 3*FIXEDTEXT_HEIGHT -2 + EDIT_HEIGHT) ;
         Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
@@ -563,6 +575,7 @@ TabPage PAGE_MYSQL_JDBC
 
 TabPage PAGE_MYSQL_NATIVE
 {
+    HelpID = "dbaccess:TabPage:PAGE_MYSQL_NATIVE";
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( PAGE_X , PAGE_Y ) ;
@@ -584,6 +597,7 @@ TabPage PAGE_MYSQL_NATIVE
     };
     Edit ET_USERNAME
     {
+        HelpID = "dbaccess:Edit:PAGE_MYSQL_NATIVE:ET_USERNAME";
         Border = TRUE ;
         Pos = MAP_APPFONT ( EDIT_X, 4*UNRELATED_CONTROLS + 4*RELATED_CONTROLS + 4*FIXEDTEXT_HEIGHT + 3*EDIT_HEIGHT - 1 ) ;
         Size = MAP_APPFONT ( 105 , EDIT_HEIGHT ) ;
@@ -591,6 +605,7 @@ TabPage PAGE_MYSQL_NATIVE
     };
     CheckBox CB_PASSWORD_REQUIRED
     {
+        HelpID = "dbaccess:CheckBox:PAGE_MYSQL_NATIVE:CB_PASSWORD_REQUIRED";
         Pos = MAP_APPFONT ( EDIT_X, 4*UNRELATED_CONTROLS + 5*RELATED_CONTROLS + 4*FIXEDTEXT_HEIGHT + 4*EDIT_HEIGHT ) ;
         Size = MAP_APPFONT ( 105, CHECKBOX_HEIGHT ) ;
         Text [ en-US ] = "Password required";
@@ -601,6 +616,7 @@ TabPage PAGE_MYSQL_NATIVE
 
 TabPage PAGE_ORACLE_JDBC
 {
+    HelpID = "dbaccess:TabPage:PAGE_ORACLE_JDBC";
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( PAGE_X , PAGE_Y ) ;
@@ -620,6 +636,7 @@ TabPage PAGE_ORACLE_JDBC
     };
     Edit ET_JDBCDRIVERCLASS
     {
+        HelpID = "dbaccess:Edit:PAGE_ORACLE_JDBC:ET_JDBCDRIVERCLASS";
         Pos = MAP_APPFONT ( EDIT_X,
                             4*UNRELATED_CONTROLS + RELATED_CONTROLS + 3*FIXEDTEXT_HEIGHT + EDIT_HEIGHT + ( FIXEDTEXT_HEIGHT - EDIT_HEIGHT ) / 2 ) ;
         Size = MAP_APPFONT ( 97 , EDIT_HEIGHT ) ;
@@ -628,6 +645,7 @@ TabPage PAGE_ORACLE_JDBC
     };
     PushButton PB_TESTDRIVERCLASS
     {
+        HelpID = "dbaccess:PushButton:PAGE_ORACLE_JDBC:PB_TESTDRIVERCLASS";
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( PAGE_X  - BUTTON_WIDTH - UNRELATED_CONTROLS,
                             4*UNRELATED_CONTROLS + RELATED_CONTROLS + 3*FIXEDTEXT_HEIGHT + EDIT_HEIGHT + ( FIXEDTEXT_HEIGHT - BUTTON_HEIGHT ) / 2 ) ;
@@ -743,6 +761,7 @@ TabPage PAGE_USERDRIVER
     };
     Edit ET_HOSTNAME
     {
+        HelpID = "dbaccess:Edit:PAGE_USERDRIVER:ET_HOSTNAME";
         TabStop = TRUE ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( EDIT_X , UNRELATED_CONTROLS -1 ) ;
@@ -758,6 +777,7 @@ TabPage PAGE_USERDRIVER
 
     NumericField NF_PORTNUMBER
     {
+        HelpID = "dbaccess:NumericField:PAGE_USERDRIVER:NF_PORTNUMBER";
         TabStop = TRUE ;
         Border = TRUE ;
         NoThousandSep = TRUE;
@@ -774,6 +794,7 @@ TabPage PAGE_USERDRIVER
     };
     Edit ET_OPTIONS
     {
+        HelpID = "dbaccess:Edit:PAGE_USERDRIVER:ET_OPTIONS";
         Border = TRUE ;
         TabStop = TRUE ;
     };

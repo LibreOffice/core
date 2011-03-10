@@ -64,7 +64,7 @@ OTableWindowTitle::OTableWindowTitle( OTableWindow* pParent ) :
     SetTextColor(aSystemStyle.GetButtonTextColor());
 
     Font aFont( GetFont() );
-    aFont.SetTransparent( TRUE );
+    aFont.SetTransparent( sal_True );
     SetFont( aFont );
 }
 

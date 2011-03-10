@@ -118,7 +118,7 @@
 #define DLG_DATABASE_WIZARD             RID_DIALOG_START + 29
 #define RID_EXTENSION_NOT_PRESENT_DLG   RID_DIALOG_START + 30
 #define DLG_TEXT_CONNECTION_SETTINGS    RID_DIALOG_START + 31
-
+#define DLG_TABLE_FILTER                RID_DIALOG_START + 32
 //========================================================================
 // tab pages
 

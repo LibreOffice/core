@@ -102,7 +102,7 @@ DBG_NAME(OTableSubscriptionPage)
         m_aTablesList.SetSelectionMode( MULTIPLE_SELECTION );
         m_aTablesList.SetDragDropMode( 0 );
         m_aTablesList.EnableInplaceEditing( sal_False );
-        m_aTablesList.SetWindowBits(WB_BORDER | WB_HASLINES | WB_HASLINESATROOT | WB_SORT | WB_HASBUTTONS | WB_HSCROLL |WB_HASBUTTONSATROOT);
+        m_aTablesList.SetStyle(m_aTablesList.GetStyle() | WB_BORDER | WB_HASLINES | WB_HASLINESATROOT | WB_SORT | WB_HASBUTTONS | WB_HSCROLL |WB_HASBUTTONSATROOT);
 
         m_aTablesList.Clear();
 
@@ -583,7 +583,7 @@ DBG_NAME(OTableSubscriptionPage)
     }
 
     //------------------------------------------------------------------------
-    BOOL OTableSubscriptionPage::FillItemSet( SfxItemSet& _rCoreAttrs )
+    sal_Bool OTableSubscriptionPage::FillItemSet( SfxItemSet& _rCoreAttrs )
     {
         sal_Bool bValid, bReadonly;
         getFlags(_rCoreAttrs, bValid, bReadonly);

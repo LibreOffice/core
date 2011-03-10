@@ -1,4 +1,4 @@
-rd  reportdesign    :   l10n BOOST:boost comphelper dbaccess formula NULL
+rd  reportdesign    :   L10N:l10n BOOST:boost comphelper dbaccess formula LIBXSLT:libxslt NULL
 rd  reportdesign                                                        usr1    -   all rd_mkout NULL
 rd  reportdesign\inc                                                    nmake   -   all rd_inc NULL
 rd  reportdesign\source\core\api                                        nmake   -   all rd_api rd_inc NULL
@@ -12,4 +12,7 @@ rd  reportdesign\source\ui\report                                       nmake   
 rd  reportdesign\source\ui\inspection                                   nmake   -   all rd_uiinspection rd_inc NULL
 rd  reportdesign\source\filter\xml                                      nmake   -   all rd_filter_xml rd_inc NULL
 rd  reportdesign\util                                                   nmake   -   all rd_util rd_api rd_res rd_shared rd_uimisc rd_uidlg rd_uireport rd_uiinspection rd_sdr rd_misc rd_filter_xml NULL
+
+# has problems in m78, in m83 also
+# rd  reportdesign\qa\complex\reportdesign                                nmake   -   all rd_qa_complex NULL
 

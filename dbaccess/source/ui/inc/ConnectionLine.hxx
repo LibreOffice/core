@@ -67,13 +67,13 @@ namespace dbaui
         virtual OConnectionLine& operator=( const OConnectionLine& rLine );
 
         Rectangle           GetBoundingRect();
-        BOOL                RecalcLine();
+        sal_Bool                RecalcLine();
         void                Draw( OutputDevice* pOutDev );
         bool                CheckHit( const Point& rMousePos ) const;
         String              GetSourceFieldName() const { return m_pData->GetSourceFieldName(); }
         String              GetDestFieldName() const { return m_pData->GetDestFieldName(); }
 
-        BOOL                IsValid() const;
+        sal_Bool                IsValid() const;
 
         Rectangle           GetSourceTextPos() const;
         Rectangle           GetDestTextPos() const;

@@ -44,7 +44,7 @@ namespace dbaui
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xTables;
         ::std::auto_ptr<WaitObject> m_pWaitObject;
-        ULONG       m_nThreadEvent;
+        sal_uLong       m_nThreadEvent;
         sal_Bool    m_bRelationsPossible;
     protected:
         // all the features which should be handled by this class

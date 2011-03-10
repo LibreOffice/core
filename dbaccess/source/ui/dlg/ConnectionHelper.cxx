@@ -70,7 +70,7 @@
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
 #include <sfx2/docfilt.hxx>
-#if !defined(WINDOWS_VISTA_PSDK) && (defined(WIN) || defined(WNT))
+#if !defined(WINDOWS_VISTA_PSDK) && defined(WNT)
 #define _ADO_DATALINK_BROWSE_
 #endif
 
@@ -142,7 +142,7 @@ DBG_NAME(OConnectionHelper)
         m_aConnectionURL.Show();
         m_aConnectionURL.ShowPrefix( ::dbaccess::DST_JDBC == m_pCollection->determineType(m_eType) );
 
-        BOOL bEnableBrowseButton = m_pCollection->supportsBrowsing( m_eType );
+        sal_Bool bEnableBrowseButton = m_pCollection->supportsBrowsing( m_eType );
         m_aPB_Connection.Show( bEnableBrowseButton );
 
         SFX_ITEMSET_GET(_rSet, pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True);

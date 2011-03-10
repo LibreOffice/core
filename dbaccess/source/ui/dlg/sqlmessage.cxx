@@ -47,6 +47,8 @@
 #include "UITools.hxx"
 #include "moduledbu.hxx"
 
+#include <tools/urlobj.hxx>
+
 #define BUTTONID_MORE   BUTTONID_RETRY + 1
 
 #define DIALOG_WIDTH    220
@@ -89,12 +91,12 @@ namespace
     class ImageProvider : public IImageProvider
     {
     private:
-        USHORT  m_defaultImageID;
+        sal_uInt16  m_defaultImageID;
 
         mutable Image   m_defaultImage;
 
     public:
-        ImageProvider( USHORT _defaultImageID )
+        ImageProvider( sal_uInt16 _defaultImageID )
             :m_defaultImageID( _defaultImageID )
         {
         }
@@ -113,7 +115,7 @@ namespace
     private:
         String  m_label;
     public:
-        LabelProvider( USHORT _labelResourceID )
+        LabelProvider( sal_uInt16 _labelResourceID )
             :m_label( ModuleRes( _labelResourceID ) )
         {
         }
@@ -143,7 +145,7 @@ namespace
         ::boost::shared_ptr< IImageProvider >   getImageProvider( SQLExceptionInfo::TYPE _eType ) const
         {
             ::boost::shared_ptr< IImageProvider >* ppProvider( &m_pErrorImage );
-            USHORT nNormalImageID( BMP_EXCEPTION_ERROR );
+            sal_uInt16 nNormalImageID( BMP_EXCEPTION_ERROR );
 
             switch ( _eType )
             {
@@ -169,7 +171,7 @@ namespace
         ::boost::shared_ptr< ILabelProvider >   getLabelProvider( SQLExceptionInfo::TYPE _eType, bool _bSubLabel ) const
         {
             ::boost::shared_ptr< ILabelProvider >* ppProvider( &m_pErrorLabel );
-            USHORT nLabelID( STR_EXCEPTION_ERROR );
+            sal_uInt16 nLabelID( STR_EXCEPTION_ERROR );
 
             switch ( _eType )
             {
@@ -356,7 +358,7 @@ OExceptionChainDialog::OExceptionChainDialog( Window* pParent, const ExceptionDi
     m_aExceptionList.SetSelectionMode(SINGLE_SELECTION);
     m_aExceptionList.SetDragDropMode(0);
     m_aExceptionList.EnableInplaceEditing(sal_False);
-    m_aExceptionList.SetWindowBits(WB_HASLINES | WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HSCROLL);
+    m_aExceptionList.SetStyle(m_aExceptionList.GetStyle() | WB_HASLINES | WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HSCROLL);
 
     m_aExceptionList.SetSelectHdl(LINK(this, OExceptionChainDialog, OnExceptionSelected));
     m_aExceptionList.SetNodeDefaultImages( );
@@ -470,7 +472,7 @@ namespace
 
     void lcl_addButton( ButtonDialog& _rDialog, StandardButtonType _eType, bool _bDefault )
     {
-        USHORT nButtonID = 0;
+        sal_uInt16 nButtonID = 0;
         switch ( _eType )
         {
         case BUTTON_YES:    nButtonID = BUTTONID_YES; break;
@@ -645,11 +647,14 @@ void OSQLMessageBox::impl_createStandardButtons( WinBits _nStyle )
     {
         lcl_addButton( *this, BUTTON_HELP, false );
 
-        SmartId aHelpId( m_sHelpURL );
-        if ( m_sHelpURL.indexOfAsciiL( "HID:", 4 ) == 0 )
-            aHelpId = SmartId( m_sHelpURL.copy( 4 ).toInt32() );
+        rtl::OUString aTmp;
+        INetURLObject aHID( m_sHelpURL );
+        if ( aHID.GetProtocol() == INET_PROT_HID )
+              aTmp = aHID.GetURLPath();
+        else
+            aTmp = m_sHelpURL;
 
-        SetSmartHelpId( aHelpId );
+        SetHelpId( rtl::OUStringToOString( aTmp, RTL_TEXTENCODING_UTF8 ) );
     }
 }
 

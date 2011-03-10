@@ -63,19 +63,19 @@ namespace dbaui
 
          ::boost::shared_ptr<OTableRow> pActRow;
 
-        ULONG                       nIndexEvent;
-        ULONG                       nCutEvent;
-        ULONG                       nPasteEvent;
-        ULONG                       nDeleteEvent;
-        ULONG                       nInsNewRowsEvent;
-        ULONG                       nInvalidateTypeEvent;
-        ULONG                       nEntryNotFoundEvent;
+        sal_uLong                       nIndexEvent;
+        sal_uLong                       nCutEvent;
+        sal_uLong                       nPasteEvent;
+        sal_uLong                       nDeleteEvent;
+        sal_uLong                       nInsNewRowsEvent;
+        sal_uLong                       nInvalidateTypeEvent;
+        sal_uLong                       nEntryNotFoundEvent;
         ChildFocusState             m_eChildFocus;
 
         long nOldDataPos;
 
-        BOOL bSaveOnMove;
-        BOOL bReadOnly;
+        sal_Bool bSaveOnMove;
+        sal_Bool bReadOnly;
         //------------------------------------------------------------------
         // Hilfsklasse
         class ClipboardInvalidator
@@ -85,7 +85,7 @@ namespace dbaui
             OTableEditorCtrl* m_pOwner;
 
         public:
-            ClipboardInvalidator(ULONG nTimeout,OTableEditorCtrl*);
+            ClipboardInvalidator(sal_uLong nTimeout,OTableEditorCtrl*);
             ~ClipboardInvalidator();
 
         protected:
@@ -97,19 +97,19 @@ namespace dbaui
 
     protected:
         virtual void Command( const CommandEvent& rEvt );
-        virtual BOOL SeekRow(long nRow);
+        virtual sal_Bool SeekRow(long nRow);
         virtual void PaintCell(OutputDevice& rDev, const Rectangle& rRect,
-                               USHORT nColumnId ) const;
+                               sal_uInt16 nColumnId ) const;
 
         virtual void CursorMoved();
         virtual RowStatus GetRowStatus(long nRow) const;
 
-        virtual ::svt::CellController* GetController(long nRow, USHORT nCol);
-        virtual void InitController(::svt::CellControllerRef& rController, long nRow, USHORT nCol);
+        virtual ::svt::CellController* GetController(long nRow, sal_uInt16 nCol);
+        virtual void InitController(::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol);
 
         virtual void CellModified();
-        virtual BOOL SaveModified();    // wird aufgerufen vor einem Zellenwechsel
-                                        // return FALSE, verhindert Zellenwechsel
+        virtual sal_Bool SaveModified();    // wird aufgerufen vor einem Zellenwechsel
+                                        // return sal_False, verhindert Zellenwechsel
         virtual void Undo();
         virtual void Redo();
         virtual String GetCellText(long nRow, sal_uInt16 nColId) const;
@@ -126,8 +126,8 @@ namespace dbaui
 
         void         ClearModified();
 
-        void         SetPrimaryKey( BOOL bSet );
-        BOOL         IsPrimaryKey();
+        void         SetPrimaryKey( sal_Bool bSet );
+        sal_Bool         IsPrimaryKey();
 
         DECL_LINK(ControlPreNotifyHdl, NotifyEvent*);
 
@@ -135,15 +135,15 @@ namespace dbaui
         //  TYPEINFO();
         OTableEditorCtrl(Window* pParentWin);
         virtual         ~OTableEditorCtrl();
-        virtual BOOL    CursorMoving(long nNewRow, USHORT nNewCol);
+        virtual sal_Bool    CursorMoving(long nNewRow, sal_uInt16 nNewCol);
         virtual void    UpdateAll();
-        SfxUndoManager* GetUndoManager() const;
+        SfxUndoManager& GetUndoManager() const;
 
         void            SetDescrWin( OTableFieldDescWin* pWin ){ pDescrWin = pWin; if (pDescrWin && pActRow) pDescrWin->DisplayData(pActRow->GetActFieldDescr()); }
-        BOOL            SaveCurRow();
+        sal_Bool            SaveCurRow();
         void            SwitchType( const TOTypeInfoSP& _pType );
 
-        void            DisplayData( long nRow, BOOL bGrabFocus = TRUE );
+        void            DisplayData( long nRow, sal_Bool bGrabFocus = sal_True );
             // erzwingt das Anzeigen der genannten Zeile (selbst wenn es eigentlich schon die aktuelle ist)
 
         virtual void    SetCellData( long nRow, sal_uInt16 nColId, const TOTypeInfoSP& _pTypeInfo );
@@ -158,15 +158,15 @@ namespace dbaui
 
         ::boost::shared_ptr<OTableRow>         GetActRow(){ return pActRow; }
         void            CellModified( long nRow, sal_uInt16 nColId );
-        void            SetReadOnly( BOOL bRead=TRUE );
+        void            SetReadOnly( sal_Bool bRead=sal_True );
 
         virtual void Init();
         virtual void DeactivateCell(sal_Bool bUpdate = sal_True);
 
-        BOOL IsCutAllowed( long nRow = -1 );
-        BOOL IsCopyAllowed( long nRow = -1 );
-        BOOL IsPasteAllowed( long nRow = -1 );
-        BOOL IsReadOnly();
+        sal_Bool IsCutAllowed( long nRow = -1 );
+        sal_Bool IsCopyAllowed( long nRow = -1 );
+        sal_Bool IsPasteAllowed( long nRow = -1 );
+        sal_Bool IsReadOnly();
         OFieldDescription* GetFieldDescr( long nRow );
 
         // window overloads
@@ -191,11 +191,11 @@ namespace dbaui
         DECL_LINK( EntryNotFound, void* );
 
         void InitCellController();
-        INT32 HasFieldName( const String& rFieldName );
+        sal_Int32 HasFieldName( const String& rFieldName );
         String GenerateName( const String& rName );
-        BOOL SetDataPtr( long nRow );
+        sal_Bool SetDataPtr( long nRow );
 
-        BOOL SaveData(long nRow, USHORT nColumnId);
+        sal_Bool SaveData(long nRow, sal_uInt16 nColumnId);
         /** AdjustFieldDescription set the needed values for the description
             @param  _pFieldDesc     the field description where to set the values
             @param  _rMultiSel      contains the postions which changed for undo/redo

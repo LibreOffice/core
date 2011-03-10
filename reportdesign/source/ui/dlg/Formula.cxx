@@ -100,7 +100,7 @@ FormulaDialog::~FormulaDialog()
 {
     if ( m_pAddField )
     {
-        SvtViewOptions aDlgOpt( E_WINDOW, String::CreateFromInt32( HID_RPT_FIELD_SEL_WIN ) );
+        SvtViewOptions aDlgOpt( E_WINDOW, String::CreateFromAscii( HID_RPT_FIELD_SEL_WIN ) );
         aDlgOpt.SetWindowState( ::rtl::OUString::createFromAscii( m_pAddField->GetWindowState((WINDOWSTATE_MASK_X | WINDOWSTATE_MASK_Y | WINDOWSTATE_MASK_STATE | WINDOWSTATE_MASK_MINIMIZED)).GetBuffer() ) );
 
         ::std::auto_ptr<Window> aTemp2(m_pAddField);
@@ -116,7 +116,7 @@ bool FormulaDialog::calculateValue( const String& rStrExp, String& rStrResult )
     rStrResult = rStrExp;
     return false;
 }
-void FormulaDialog::doClose(BOOL _bOk)
+void FormulaDialog::doClose(sal_Bool _bOk)
 {
     EndDialog(_bOk ? RET_OK : RET_CANCEL);
 }
@@ -126,10 +126,10 @@ void FormulaDialog::insertEntryToLRUList(const IFunctionDescription*    /*_pDesc
 void FormulaDialog::showReference(const String& /*_sFormula*/)
 {
 }
-void FormulaDialog::dispatch(BOOL /*_bOK*/,BOOL /*_bMartixChecked*/)
+void FormulaDialog::dispatch(sal_Bool /*_bOK*/,sal_Bool /*_bMartixChecked*/)
 {
 }
-void FormulaDialog::setDispatcherLock( BOOL /*bLock*/ )
+void FormulaDialog::setDispatcherLock( sal_Bool /*bLock*/ )
 {
 }
 void FormulaDialog::setReferenceInput(const FormEditData* /*_pData*/)
@@ -189,7 +189,7 @@ void FormulaDialog::ShowReference(const String& /*_sRef*/)
 {
 }
 // -----------------------------------------------------------------------------
-void FormulaDialog::HideReference( BOOL /*bDoneRefMode*/)
+void FormulaDialog::HideReference( sal_Bool /*bDoneRefMode*/)
 {
 }
 // -----------------------------------------------------------------------------
@@ -210,7 +210,7 @@ void FormulaDialog::ToggleCollapsed( RefEdit* _pEdit, RefButton* _pButton)
     {
         m_pAddField = new OAddFieldWindow(this,m_xRowSet);
         m_pAddField->SetCreateHdl(LINK( this, FormulaDialog, OnClickHdl ) );
-        SvtViewOptions aDlgOpt( E_WINDOW, String::CreateFromInt32( HID_RPT_FIELD_SEL_WIN ) );
+        SvtViewOptions aDlgOpt( E_WINDOW, String::CreateFromAscii( HID_RPT_FIELD_SEL_WIN ) );
         if ( aDlgOpt.Exists() )
         {
             m_pAddField->SetWindowState( ByteString( aDlgOpt.GetWindowState().getStr(), RTL_TEXTENCODING_ASCII_US ) );
@@ -243,7 +243,7 @@ IMPL_LINK( FormulaDialog, OnClickHdl, OAddFieldWindow* ,_pAddFieldDlg)
     }
     m_pEdit = NULL;
     _pAddFieldDlg->Hide();
-    RefInputDoneAfter( TRUE );
+    RefInputDoneAfter( sal_True );
 
     return 0L;
 }

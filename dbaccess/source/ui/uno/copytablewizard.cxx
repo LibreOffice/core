@@ -1179,8 +1179,15 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
     aSourceColTypes.reserve( nCount + 1 );
     aSourceColTypes.push_back( -1 ); // just to avoid a everytime i-1 call
 
+    ::std::vector< sal_Int32 > aSourcePrec;
+    aSourcePrec.reserve( nCount + 1 );
+    aSourcePrec.push_back( -1 ); // just to avoid a everytime i-1 call
+
     for ( sal_Int32 k=1; k <= nCount; ++k )
+    {
         aSourceColTypes.push_back( xMeta->getColumnType( k ) );
+        aSourcePrec.push_back( xMeta->getPrecision( k ) );
+    }
 
     // now create, fill and execute the prepared statement
     Reference< XPreparedStatement > xStatement( ODatabaseExport::createPreparedStatment( xDestMetaData, _rxDestTable, aColumnMapping ), UNO_SET_THROW );
@@ -1292,7 +1299,6 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
                     case DataType::LONGVARBINARY:
                     case DataType::BINARY:
                     case DataType::VARBINARY:
-                    case DataType::BIT:
                         aTransfer.transferComplexValue( &XRow::getBytes, &XParameters::setBytes );
                         break;
 
@@ -1308,6 +1314,13 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
                         aTransfer.transferComplexValue( &XRow::getTimestamp, &XParameters::setTimestamp );
                         break;
 
+                    case DataType::BIT:
+                        if ( aSourcePrec[nSourceColumn] > 1 )
+                        {
+                            aTransfer.transferComplexValue( &XRow::getBytes, &XParameters::setBytes );
+                            break;
+                        }
+                        // run through
                     case DataType::BOOLEAN:
                         aTransfer.transferValue( &XRow::getBoolean, &XParameters::setBoolean );
                         break;

@@ -30,25 +30,36 @@
 #define REPORTDESIGN_API_REPORTDEFINITION_HXX
 
 #include "dllapi.h"
-#include <com/sun/star/report/XReportDefinition.hpp>
-#include <cppuhelper/compbase12.hxx>
-#include <cppuhelper/basemutex.hxx>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
+
+#include "ReportHelperDefines.hxx"
+
+/** === begin UNO includes === **/
+#include <com/sun/star/datatransfer/XTransferable.hpp>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/document/XUndoManagerSupplier.hpp>
+#include <com/sun/star/frame/XModule.hpp>
 #include <com/sun/star/frame/XTitle.hpp>
 #include <com/sun/star/frame/XTitleChangeBroadcaster.hpp>
 #include <com/sun/star/frame/XUntitledNumbers.hpp>
-#include <com/sun/star/frame/XModule.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XTypeProvider.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <com/sun/star/report/XReportDefinition.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
-#include <com/sun/star/datatransfer/XTransferable.hpp>
-#include <cppuhelper/propertysetmixin.hxx>
-#include <comphelper/uno3.hxx>
+/** === end UNO includes === **/
+
 #include <comphelper/embeddedobjectcontainer.hxx>
+#include <comphelper/uno3.hxx>
+#include <cppuhelper/basemutex.hxx>
+#include <cppuhelper/propertysetmixin.hxx>
 #include <svx/unomod.hxx>
 
-#include "ReportHelperDefines.hxx"
+#if !defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_13)
+#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_13
+#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 13
+#include <comphelper/implbase_var.hxx>
+#endif
+
 #include <boost/shared_ptr.hpp>
 
 
@@ -63,32 +74,37 @@ namespace comphelper
 namespace reportdesign
 {
     class OReportComponentProperties;
-    typedef ::cppu::WeakComponentImplHelper12<  com::sun::star::report::XReportDefinition
-                                 ,com::sun::star::document::XEventBroadcaster
-                                 ,com::sun::star::lang::XServiceInfo
-                                 ,com::sun::star::frame::XModule
-                                 ,com::sun::star::lang::XUnoTunnel
-                                 ,com::sun::star::util::XNumberFormatsSupplier
-                                 ,::com::sun::star::frame::XTitle
-                                 ,::com::sun::star::frame::XTitleChangeBroadcaster
-                                 ,::com::sun::star::frame::XUntitledNumbers
-                                 ,::com::sun::star::document::XDocumentPropertiesSupplier
-                                 ,::com::sun::star::datatransfer::XTransferable
-                                 ,SvxUnoDrawMSFactory> ReportDefinitionBase;
-    typedef ::cppu::PropertySetMixin<com::sun::star::report::XReportDefinition> ReportDefinitionPropertySet;
+    typedef ::comphelper::WeakComponentImplHelper13 <   ::com::sun::star::report::XReportDefinition
+                                                    ,   ::com::sun::star::document::XEventBroadcaster
+                                                    ,   ::com::sun::star::lang::XServiceInfo
+                                                    ,   ::com::sun::star::frame::XModule
+                                                    ,   ::com::sun::star::lang::XUnoTunnel
+                                                    ,   ::com::sun::star::util::XNumberFormatsSupplier
+                                                    ,   ::com::sun::star::frame::XTitle
+                                                    ,   ::com::sun::star::frame::XTitleChangeBroadcaster
+                                                    ,   ::com::sun::star::frame::XUntitledNumbers
+                                                    ,   ::com::sun::star::document::XDocumentPropertiesSupplier
+                                                    ,   ::com::sun::star::datatransfer::XTransferable
+                                                    ,   ::com::sun::star::document::XUndoManagerSupplier
+                                                    ,   SvxUnoDrawMSFactory
+                                                    >   ReportDefinitionBase;
+
+    typedef ::cppu::PropertySetMixin< ::com::sun::star::report::XReportDefinition > ReportDefinitionPropertySet;
 
     struct OReportDefinitionImpl;
     /** \class OReportDefinition Defines the implementation of a \interface com:::sun::star::report::XReportDefinition
      * \ingroup reportdesign_api
      *
      */
-    class REPORTDESIGN_DLLPUBLIC OReportDefinition :    public ::cppu::BaseMutex,
-                                public ReportDefinitionBase,
-                                public ReportDefinitionPropertySet,
-                                public ::comphelper::IEmbeddedHelper
+    class REPORTDESIGN_DLLPUBLIC OReportDefinition  :public ::cppu::BaseMutex
+                                                    ,public ReportDefinitionBase
+                                                    ,public ReportDefinitionPropertySet
+                                                    ,public ::comphelper::IEmbeddedHelper
     {
+    private:
         ::boost::shared_ptr<OReportComponentProperties>                             m_aProps;
         ::boost::shared_ptr<OReportDefinitionImpl>                                  m_pImpl;
+
     private:
         OReportDefinition(const OReportDefinition&);
         OReportDefinition& operator=(const OReportDefinition&);
@@ -380,6 +396,9 @@ namespace reportdesign
         virtual ::com::sun::star::uno::Any SAL_CALL getTransferData( const ::com::sun::star::datatransfer::DataFlavor& aFlavor ) throw (::com::sun::star::datatransfer::UnsupportedFlavorException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::sal_Bool SAL_CALL isDataFlavorSupported( const ::com::sun::star::datatransfer::DataFlavor& aFlavor ) throw (::com::sun::star::uno::RuntimeException);
+
+        // XUndoManagerSupplier
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManager > SAL_CALL getUndoManager(  ) throw (::com::sun::star::uno::RuntimeException);
 
         // comphelper::IEmbeddedHelper
         virtual com::sun::star::uno::Reference < com::sun::star::embed::XStorage > getStorage() const;

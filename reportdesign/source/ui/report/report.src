@@ -32,7 +32,7 @@
 #ifndef _SBASLTID_HRC
 #include <svx/svxids.hrc>
 #endif
-
+#include "helpids.hrc"
 
 // Dialog Controls ---------------------------------------------------------------
 
@@ -286,7 +286,6 @@ Menu RID_MENU_REPORT
         MenuItem
         {
             Identifier = SID_SORTINGANDGROUPING;
-            HelpId = SID_SORTINGANDGROUPING ;
             Command = ".uno:DbSortingAndGrouping";
             Text [ en-US ] = "Sorting and Grouping...";
         };
@@ -297,14 +296,12 @@ Menu RID_MENU_REPORT
         MenuItem
         {
             Identifier = SID_ATTR_CHAR_COLOR_BACKGROUND;
-            HelpId = SID_ATTR_CHAR_COLOR_BACKGROUND ;
             Command = ".uno:DBBackgroundColor";
             Text [ en-US ] = "Background Color...";
         };
         MenuItem
         {
             Identifier = SID_RULER;
-            HelpId = SID_RULER ;
             Command = ".uno:ShowRuler";
             Checkable = TRUE;
             Text [ en-US ] = "Ruler...";
@@ -312,7 +309,6 @@ Menu RID_MENU_REPORT
         MenuItem
         {
             Identifier = SID_GRID_VISIBLE;
-            HelpId = SID_GRID_VISIBLE ;
             Command = ".uno:GridVisible";
             Checkable = TRUE;
             Text [ en-US ] = "Grid...";
@@ -324,14 +320,12 @@ Menu RID_MENU_REPORT
         MenuItem
         {
             Identifier = SID_PAGEHEADERFOOTER;
-            HelpId = SID_PAGEHEADERFOOTER ;
             Command = ".uno:PageHeaderFooter";
             Checkable = TRUE;
         };
         MenuItem
         {
             Identifier = SID_REPORTHEADERFOOTER;
-            HelpId = SID_REPORTHEADERFOOTER ;
             Command = ".uno:ReportHeaderFooter";
             Checkable = TRUE;
         };
@@ -342,7 +336,6 @@ Menu RID_MENU_REPORT
         MenuItem
         {
             Identifier = SID_ARRANGEMENU ;
-            HelpID = SID_ARRANGEMENU ;
             Command = ".uno:ArrangeMenu" ;
             Text [ en-US ] = "~Arrange" ;
             SubMenu = Menu
@@ -356,13 +349,13 @@ Menu RID_MENU_REPORT
                     MenuItem
                     {
                         Identifier = SID_FRAME_UP ;
-                        HelpID = SID_FRAME_UP ;
+                        HelpId = ".uno:ObjectForwardOne";
                         Text [ en-US ] = "Bring ~Forward" ;
                     };
                     MenuItem
                     {
                         Identifier = SID_FRAME_DOWN ;
-                        HelpID = SID_FRAME_DOWN ;
+                        HelpId = ".uno:ObjectBackOne";
                         Text [ en-US ] = "Send Back~ward" ;
                     };
                     MenuItem
@@ -431,7 +424,6 @@ Menu RID_MENU_REPORT
         {
             Identifier = SID_OBJECT_RESIZING ;
             Command = ".uno:ObjectResize" ;
-            HelpID = SID_OBJECT_RESIZING ;
             Text [ en-US ] = "~Object Resizing" ;
             Text [ x-comment ] = " ";
             SubMenu = Menu
@@ -442,7 +434,6 @@ Menu RID_MENU_REPORT
                     {
                         Identifier = SID_OBJECT_SMALLESTWIDTH ;
                         Command = ".uno:SmallestWidth" ;
-                        HelpID = SID_OBJECT_SMALLESTWIDTH ;
                         Text [ en-US ] = "~Fit to smallest width" ;
                         Text [ x-comment ] = " ";
                     };
@@ -450,7 +441,6 @@ Menu RID_MENU_REPORT
                     {
                         Identifier = SID_OBJECT_GREATESTWIDTH ;
                         Command = ".uno:GreatestWidth" ;
-                        HelpID = SID_OBJECT_GREATESTWIDTH ;
                         Text [ en-US ] = "~Fit to greatest width" ;
                         Text [ x-comment ] = " ";
                     };
@@ -462,7 +452,6 @@ Menu RID_MENU_REPORT
                     {
                         Identifier = SID_OBJECT_SMALLESTHEIGHT ;
                         Command = ".uno:SmallestHeight" ;
-                        HelpID = SID_OBJECT_SMALLESTHEIGHT ;
                         Text [ en-US ] = "~Fit to smallest height" ;
                         Text [ x-comment ] = " ";
                     };
@@ -470,7 +459,6 @@ Menu RID_MENU_REPORT
                     {
                         Identifier = SID_OBJECT_GREATESTHEIGHT ;
                         Command = ".uno:GreatestHeight" ;
-                        HelpID = SID_OBJECT_GREATESTHEIGHT ;
                         Text [ en-US ] = "~Fit to greatest height" ;
                         Text [ x-comment ] = " ";
                     };
@@ -486,7 +474,6 @@ Menu RID_MENU_REPORT
         {
             Identifier = SID_SECTION_SHRINK_MENU ;
             Command = ".uno:SectionShrinkMenu" ;
-            HelpID = SID_SECTION_SHRINK_MENU ;
             Text [ en-US ] = "Section" ;
             Text [ x-comment ] = " ";
             SubMenu = Menu
@@ -497,7 +484,6 @@ Menu RID_MENU_REPORT
                     {
                         Identifier = SID_SECTION_SHRINK ;
                         Command = ".uno:SectionShrink" ;
-                        HelpID = SID_SECTION_SHRINK ;
                         Text [ en-US ] = "Shrink" ;
                         Text [ x-comment ] = " ";
                     };
@@ -505,7 +491,6 @@ Menu RID_MENU_REPORT
                     {
                         Identifier = SID_SECTION_SHRINK_TOP ;
                         Command = ".uno:SectionShrinkTop" ;
-                        HelpID = SID_SECTION_SHRINK_TOP ;
                         Text [ en-US ] = "Shrink from top" ;
                         Text [ x-comment ] = " ";
                     };
@@ -513,7 +498,6 @@ Menu RID_MENU_REPORT
                     {
                         Identifier = SID_SECTION_SHRINK_BOTTOM ;
                         Command = ".uno:SectionShrinkBottom" ;
-                        HelpID = SID_SECTION_SHRINK_BOTTOM ;
                         Text [ en-US ] = "Shrink from bottom" ;
                         Text [ x-comment ] = " ";
                     };
@@ -527,7 +511,6 @@ Menu RID_MENU_REPORT
         MenuItem
         {
             Identifier = SID_DISTRIBUTION;
-            HelpId = SID_DISTRIBUTION ;
             Command = ".uno:Distribution";
             Text [ en-US ] = "Distribution..." ;
         };
@@ -538,7 +521,6 @@ Menu RID_MENU_REPORT
         MenuItem
         {
             Identifier = SID_SHOW_PROPERTYBROWSER;
-            HelpId = SID_SHOW_PROPERTYBROWSER ;
             Command = ".uno:FormProperties";
             Text [ en-US ] = "Properties...";
         };

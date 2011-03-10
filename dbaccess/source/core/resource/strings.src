@@ -305,7 +305,7 @@ String RID_STR_ROW_ALREADY_DELETED
 
 String RID_STR_UPDATE_FAILED
 {
-    Text [ en-US ] = "Current row could be updated.";
+    Text [ en-US ] = "Current row could not be updated.";
 };
 
 //-------------------------------------------------------------------------

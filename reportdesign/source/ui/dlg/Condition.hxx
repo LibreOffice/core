@@ -147,7 +147,7 @@ namespace rptui
 
         /** forward to the parent class
         */
-        void    ApplyCommand(USHORT _nCommandId, const ::Color& _aColor );
+        void    ApplyCommand(sal_uInt16 _nCommandId, const ::Color& _aColor );
 
         inline ::rptui::OReportController& getController() const { return m_rController; }
 

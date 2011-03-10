@@ -95,28 +95,6 @@ extern "C" OOO_DLLPUBLIC_DBA void SAL_CALL component_getImplementationEnvironmen
 }
 
 //---------------------------------------------------------------------------------------
-extern "C" OOO_DLLPUBLIC_DBA sal_Bool SAL_CALL component_writeInfo(
-                void* pServiceManager,
-                void* pRegistryKey
-            )
-{
-    if (pRegistryKey)
-    try
-    {
-        return ::dba::DbaModule::getInstance().writeComponentInfos(
-            static_cast< XMultiServiceFactory* >( pServiceManager ),
-            static_cast< XRegistryKey* >( pRegistryKey ) )
-            && cppu::component_writeInfoHelper(pServiceManager, pRegistryKey, dba::entries);
-    }
-    catch (InvalidRegistryException& )
-    {
-        OSL_ENSURE( false, "DBA::component_writeInfo : could not create a registry key ! ## InvalidRegistryException !" );
-    }
-
-    return sal_False;
-}
-
-//---------------------------------------------------------------------------------------
 extern "C" OOO_DLLPUBLIC_DBA void* SAL_CALL component_getFactory(
                     const sal_Char* pImplementationName,
                     void* pServiceManager,

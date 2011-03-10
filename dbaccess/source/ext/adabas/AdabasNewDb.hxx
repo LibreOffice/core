@@ -111,8 +111,8 @@ namespace adabasui
         String              m_sDbConfig;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XCreateCatalog>      m_xCreateCatalog;
         com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >    m_xORB;
-        BOOL                m_bRestore;
-        INT8                m_nSetBitmap;
+        sal_Bool                m_bRestore;
+        sal_Int8                m_nSetBitmap;
 
         ::std::auto_ptr<WaitObject>         m_aCreatorWait;
         ::std::auto_ptr<ODatabaseCreator>   m_aCreatorThread;
@@ -135,7 +135,7 @@ namespace adabasui
         OAdabasNewDbDlg(Window* pParent,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XCreateCatalog>& _rxCreateCatalog,
                         const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& _rxORB,
-                        BOOL _bRestore=FALSE);
+                        sal_Bool _bRestore=sal_False);
         virtual ~OAdabasNewDbDlg();
 
         ::rtl::OUString GetDatabaseName()       const { return m_ET_DATABASENAME.GetText(); }

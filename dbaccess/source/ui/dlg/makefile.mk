@@ -137,7 +137,6 @@ SLOFILES+=		$(SLO)$/adodatalinks.obj
 .ENDIF
 
 # --- Targets ----------------------------------
-
 .INCLUDE : target.mk
 
 $(SLO)$/ConnectionHelper.obj : $(LOCALIZE_ME_DEST)

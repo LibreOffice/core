@@ -181,7 +181,7 @@ void OQuery::rebuildColumns()
             ::rtl::Reference< OSQLColumns > aParseColumns(
                 ::connectivity::parse::OParseColumn::createColumnsForResultSet( xResultSetMeta, xDBMeta,xColumnDefinitions ) );
             xColumns = OPrivateColumns::createWithIntrinsicNames(
-                aParseColumns, xDBMeta->storesMixedCaseQuotedIdentifiers(), *this, m_aMutex );
+                aParseColumns, xDBMeta->supportsMixedCaseQuotedIdentifiers(), *this, m_aMutex );
             if ( !xColumns.is() )
                 throw RuntimeException();
         }

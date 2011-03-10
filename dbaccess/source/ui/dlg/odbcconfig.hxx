@@ -31,11 +31,11 @@
 
 #include "commontypes.hxx"
 
-#if defined(WIN) || defined(WNT) || defined (UNX) || defined (OS2)
+#if defined(WNT) || defined (UNX) || defined (OS2)
 #define HAVE_ODBC_SUPPORT
 #endif
 
-#if ( defined(WIN) || defined(WNT) || defined (OS2) ) && defined(HAVE_ODBC_SUPPORT)
+#if ( defined(WNT) || defined (OS2) ) && defined(HAVE_ODBC_SUPPORT)
 #define HAVE_ODBC_ADMINISTRATION
 #endif
 

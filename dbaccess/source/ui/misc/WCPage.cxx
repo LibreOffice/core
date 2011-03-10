@@ -82,7 +82,7 @@ OCopyTable::OCopyTable( Window * pParent )
     ,m_edKeyName(           this, ModuleRes( ET_KEYNAME         ) )
     ,m_pPage2(NULL)
     ,m_pPage3(NULL)
-    ,m_bUseHeaderAllowed(TRUE)
+    ,m_bUseHeaderAllowed(sal_True)
 {
     DBG_CTOR(OCopyTable,NULL);
 
@@ -93,7 +93,7 @@ OCopyTable::OCopyTable( Window * pParent )
         if ( !m_pParent->supportsViews() )
             m_aRB_View.Disable();
 
-        m_aCB_UseHeaderLine.Check(TRUE);
+        m_aCB_UseHeaderLine.Check(sal_True);
         m_bPKeyAllowed = m_pParent->supportsPrimaryKey();
 
         m_aCB_PrimaryColumn.Enable(m_bPKeyAllowed);
@@ -263,7 +263,7 @@ sal_Bool OCopyTable::LeavePage()
 void OCopyTable::ActivatePage()
 {
     DBG_CHKTHIS(OCopyTable,NULL);
-    m_pParent->GetOKButton().Enable( TRUE );
+    m_pParent->GetOKButton().Enable( sal_True );
     m_nOldOperation = m_pParent->getOperation();
     m_edTableName.GrabFocus();
     m_aCB_UseHeaderLine.Check(m_pParent->UseHeaderLine());

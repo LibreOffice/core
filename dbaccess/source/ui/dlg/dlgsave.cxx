@@ -185,7 +185,7 @@ namespace
                     _rList.InsertEntry( sValue );
             }
 
-            USHORT nPos = _rList.GetEntryPos( String( _rCurrent ) );
+            sal_uInt16 nPos = _rList.GetEntryPos( String( _rCurrent ) );
             if ( nPos != COMBOBOX_ENTRY_NOTFOUND )
                 _rList.SelectEntryPos( nPos );
             else
@@ -269,7 +269,7 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
                                                         sTable,
                                                         ::dbtools::eInDataManipulation);
 
-                    USHORT nPos = m_pImpl->m_aCatalog.GetEntryPos(String(sCatalog));
+                    sal_uInt16 nPos = m_pImpl->m_aCatalog.GetEntryPos(String(sCatalog));
                     if ( nPos != COMBOBOX_ENTRY_NOTFOUND )
                         m_pImpl->m_aCatalog.SelectEntryPos(nPos);
 
@@ -289,7 +289,7 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
                 m_pImpl->m_aPB_CANCEL.SetPosPixel(Point(m_pImpl->m_aPB_CANCEL.GetPosPixel().X(),aPos.Y()));
                 m_pImpl->m_aPB_HELP.SetPosPixel(Point(m_pImpl->m_aPB_HELP.GetPosPixel().X(),aPos.Y()));
 
-                USHORT nLength =  m_pImpl->m_xMetaData.is() ? static_cast<USHORT>(m_pImpl->m_xMetaData->getMaxTableNameLength()) : 0;
+                sal_uInt16 nLength =  m_pImpl->m_xMetaData.is() ? static_cast<sal_uInt16>(m_pImpl->m_xMetaData->getMaxTableNameLength()) : 0;
                 nLength = nLength ? nLength : EDIT_NOLIMIT;
 
                 m_pImpl->m_aTitle.SetMaxTextLen(nLength);

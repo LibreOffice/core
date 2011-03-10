@@ -59,7 +59,7 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>          m_xConnection;
         sal_Bool    m_bOwnConnection;
     protected:
-        virtual void PageCreated(USHORT _nId, SfxTabPage& _rPage);
+        virtual void PageCreated(sal_uInt16 _nId, SfxTabPage& _rPage);
     public:
         OUserAdminDlg( Window* _pParent
                             ,SfxItemSet* _pItems

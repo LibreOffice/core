@@ -37,6 +37,7 @@
 
 ModalDialog DLG_PARAMETERS
 {
+    HelpID = "dbaccess:ModalDialog:DLG_PARAMETERS";
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 6 + LIST_WIDTH + 3 + 6 + BUTTON_WIDTH + 6, 98 ) ;
@@ -51,6 +52,7 @@ ModalDialog DLG_PARAMETERS
     };
     ListBox LB_ALLPARAMS
     {
+        HelpID = "dbaccess:ListBox:DLG_PARAMETERS:LB_ALLPARAMS";
         Pos = MAP_APPFONT ( 7 , 12 ) ;
         Size = MAP_APPFONT ( LIST_WIDTH , LIST_HEIGHT ) ;
         Border = TRUE;
@@ -64,6 +66,7 @@ ModalDialog DLG_PARAMETERS
     };
     Edit ET_PARAM
     {
+        HelpID = "dbaccess:Edit:DLG_PARAMETERS:ET_PARAM";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 7 , 12 + LIST_HEIGHT + 4 + 8 + 3 ) ;
         Size = MAP_APPFONT ( LIST_WIDTH , 12 ) ;
@@ -71,6 +74,7 @@ ModalDialog DLG_PARAMETERS
     };
     PushButton BT_TRAVELNEXT
     {
+        HelpID = "dbaccess:PushButton:DLG_PARAMETERS:BT_TRAVELNEXT";
         Pos = MAP_APPFONT ( 4 + 3 + LIST_WIDTH + 3 + 6 , 12 + LIST_HEIGHT + 4 + 8 + 3 + ( 12 - BUTTON_HEIGHT ) / 2) ;
         Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
         TabStop = TRUE ;

@@ -51,7 +51,7 @@ using namespace dbaui;
 
 DBG_NAME(SbaSbAttrDlg)
 //==================================================================
-SbaSbAttrDlg::SbaSbAttrDlg(Window* pParent, const SfxItemSet* pCellAttrs, SvNumberFormatter* pFormatter, USHORT nFlags, BOOL bRow)
+SbaSbAttrDlg::SbaSbAttrDlg(Window* pParent, const SfxItemSet* pCellAttrs, SvNumberFormatter* pFormatter, sal_uInt16 nFlags, sal_Bool bRow)
              : SfxTabDialog(pParent, ModuleRes( DLG_ATTR ), pCellAttrs )
              ,aTitle(ModuleRes(ST_ROW))
 {
@@ -88,7 +88,7 @@ void SbaSbAttrDlg::PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage )
     {
         case RID_SVXPAGE_NUMBERFORMAT:
         {
-            aSet.Put (SvxNumberInfoItem( pNumberInfoItem->GetNumberFormatter(), (const USHORT)SID_ATTR_NUMBERFORMAT_INFO));
+            aSet.Put (SvxNumberInfoItem( pNumberInfoItem->GetNumberFormatter(), (const sal_uInt16)SID_ATTR_NUMBERFORMAT_INFO));
             rTabPage.PageCreated(aSet);
         }
         break;

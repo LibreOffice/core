@@ -215,7 +215,7 @@ namespace dbaui
         return true;
     }
     // -----------------------------------------------------------------------
-    void OGenericAdministrationPage::fillBool( SfxItemSet& _rSet, CheckBox* _pCheckBox, USHORT _nID, sal_Bool& _bChangedSomething, bool _bRevertValue )
+    void OGenericAdministrationPage::fillBool( SfxItemSet& _rSet, CheckBox* _pCheckBox, sal_uInt16 _nID, sal_Bool& _bChangedSomething, bool _bRevertValue )
     {
         if ( (_pCheckBox != NULL ) && ( _pCheckBox->GetState() != _pCheckBox->GetSavedValue() ) )
         {
@@ -237,16 +237,16 @@ namespace dbaui
         }
     }
     // -----------------------------------------------------------------------
-    void OGenericAdministrationPage::fillInt32(SfxItemSet& _rSet,NumericField* _pEdit,USHORT _nID,sal_Bool& _bChangedSomething)
+    void OGenericAdministrationPage::fillInt32(SfxItemSet& _rSet,NumericField* _pEdit,sal_uInt16 _nID,sal_Bool& _bChangedSomething)
     {
         if( (_pEdit != NULL) && (_pEdit->GetValue() != _pEdit->GetSavedValue().ToInt32()) )
         {
-            _rSet.Put(SfxInt32Item(_nID, static_cast<INT32>(_pEdit->GetValue())));
+            _rSet.Put(SfxInt32Item(_nID, static_cast<sal_Int32>(_pEdit->GetValue())));
             _bChangedSomething = sal_True;
         }
     }
     // -----------------------------------------------------------------------
-    void OGenericAdministrationPage::fillString(SfxItemSet& _rSet,Edit* _pEdit,USHORT _nID,sal_Bool& _bChangedSomething)
+    void OGenericAdministrationPage::fillString(SfxItemSet& _rSet,Edit* _pEdit,sal_uInt16 _nID,sal_Bool& _bChangedSomething)
     {
         if( (_pEdit != NULL) && (_pEdit->GetText() != _pEdit->GetSavedValue()) )
         {
@@ -305,7 +305,7 @@ namespace dbaui
         return 0L;
     }
 
-    void OGenericAdministrationPage::SetHeaderText( USHORT _nFTResId, USHORT _StringResId)
+    void OGenericAdministrationPage::SetHeaderText( sal_uInt16 _nFTResId, sal_uInt16 _StringResId)
     {
         delete(m_pFT_HeaderText);
         m_pFT_HeaderText = new FixedText(this, ModuleRes(_nFTResId));
@@ -313,7 +313,6 @@ namespace dbaui
         m_pFT_HeaderText->SetText(sHeaderText);
         SetControlFontWeight(m_pFT_HeaderText);
     }
-
 
     //=========================================================================
     //= LayoutHelper
@@ -330,6 +329,24 @@ namespace dbaui
 
         Point aControlPos( aReference.X() + aOffset.Width(), aReference.Y() + aOffset.Height() );
         _rControl.SetPosPixel( aControlPos );
+    }
+
+    //-------------------------------------------------------------------------
+    void LayoutHelper::fitSizeRightAligned( PushButton& io_button )
+    {
+        const Point aOldPos = io_button.GetPosPixel();
+        const Size aOldSize = io_button.GetSizePixel();
+        const Size aMinSize( io_button.CalcMinimumSize() );
+        if ( aMinSize.Width() > aOldSize.Width() )
+        {
+            io_button.SetPosSizePixel(
+                aOldPos.X() + aOldSize.Width() - aMinSize.Width(),
+                0,
+                aMinSize.Width(),
+                0,
+                WINDOW_POSSIZE_X | WINDOW_POSSIZE_WIDTH
+            );
+        }
     }
 
 //.........................................................................

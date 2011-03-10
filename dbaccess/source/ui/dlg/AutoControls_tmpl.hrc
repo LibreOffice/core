@@ -126,7 +126,7 @@
 // -------------------------------------------------------------------------------------------------
 
 
-#define  AUTO_BROWSECONTROLGROUP( AUTO_X, AUTO_Y, AUTOPAGE_X, AUTO_HID)                                         \
+#define  AUTO_BROWSECONTROLGROUP( AUTO_X, AUTO_Y, AUTOPAGE_X, AUTO_HID, AUTO_HID2)                                      \
     FixedText FT_AUTOBROWSEURL {                                                                    \
         Pos = MAP_APPFONT ( AUTO_X , AUTO_Y ) ;                                                     \
         Size = MAP_APPFONT ( AUTOPAGE_X - AUTO_X - 6 , FIXEDTEXT_HEIGHT ) ;                     \
@@ -147,7 +147,7 @@
     {                                                                                               \
          Pos = MAP_APPFONT ( AUTOPAGE_X  - BUTTON_WIDTH - 6 , AUTO_Y + FIXEDTEXT_HEIGHT + 2 ) ; \
          Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;                                      \
-          HelpId = (AUTO_HID + 1);                                                                  \
+          HelpId = AUTO_HID2;                                                                   \
         TabStop = TRUE ;                                                                            \
          Text[ en-US ]  = "Browse";                                                                  \
     };
@@ -214,7 +214,9 @@
 
 // --------------------------------------------------------------------------------------------------
 
-
+// MBA: the HID set in the FixText can't make any sense; in case this macro was called from within the
+// AUTOHELP_JDBCCONTROLGROUP, the FixText would have got the same HID as an EditField from the
+// also called AUTO_JDBCDRIVERCLASSGROUP macro; thus I conclude that we can remove the HID from the FixedText
 #define AUTO_PORTCONTROLGROUP(AUTO_Y, AUTO_HID)                                                     \
     FixedText FT_AUTOPORTNUMBER                                                                     \
     {                                                                                               \
@@ -235,7 +237,6 @@
                                                                                                     \
     FixedText FT_AUTOPORTNUMBERDEFAULT                                                              \
     {                                                                                               \
-        HelpId = AUTO_HID + 1 ;                                                                     \
         Pos = MAP_APPFONT (EDIT_X + 22 + UNRELATED_CONTROLS, AUTO_Y +2)  ;                              \
         Size = MAP_APPFONT ( WIZARD_PAGE_X - EDIT_X - 22 - UNRELATED_CONTROLS , FIXEDTEXT_HEIGHT ) ; \
         Text[ en-US ]   = "" ;                                                                      \
@@ -445,9 +446,9 @@
 
 // --------------------------------------------------------------------------------------------------
 
-#define AUTO_HELP_BROWSECONTROLGROUP(AUTO_LINECOUNT, AUTO_HID)                          \
+#define AUTO_HELP_BROWSECONTROLGROUP(AUTO_LINECOUNT, AUTO_HID, AUTO_HID2)                           \
     AUTO_WIZARDHELPTEXT(AUTO_LINECOUNT)                                                 \
-    AUTO_BROWSECONTROLGROUP(START_X, INIT_Y + AUTO_LINECOUNT * FIXEDTEXT_HEIGHT + 2, WIZARD_PAGE_X, AUTO_HID)
+    AUTO_BROWSECONTROLGROUP(START_X, INIT_Y + AUTO_LINECOUNT * FIXEDTEXT_HEIGHT + 2, WIZARD_PAGE_X, AUTO_HID, AUTO_HID2)
 
 
 // --------------------------------------------------------------------------------------------------
@@ -455,7 +456,7 @@
 
 // --------------------------------------------------------------------------------------------------
 
-#define AUTO_JDBCDRIVERCLASSGROUP(AUTO_Y, AUTO_HID)                                   \
+#define AUTO_JDBCDRIVERCLASSGROUP(AUTO_Y, AUTO_HID, AUTO_HID2)                                   \
                                                                                       \
     FixedText FT_AUTOJDBCDRIVERCLASS                                                  \
      {                                                                                 \
@@ -479,7 +480,7 @@
         Pos = MAP_APPFONT ( WIZARD_PAGE_X  - BUTTON_WIDTH - UNRELATED_CONTROLS , AUTO_Y + FIXEDTEXT_HEIGHT + 2) ;   \
         Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;                                                       \
          Size = MAP_APPFONT (50, 14);                                                                               \
-         HelpId = AUTO_HID + 1;                                                                         \
+         HelpId = AUTO_HID2;                                                                            \
         Text[ en-US ]  = "Test class" ;                                                                             \
     };
 
@@ -502,13 +503,13 @@
     };
 
 
-#define AUTOHELP_JDBCCONTROLGROUP( AUTO_HID )                                           \
+#define AUTOHELP_JDBCCONTROLGROUP( AUTO_HID, AUTO_HID2, AUTO_HID3, AUTO_HID4, AUTO_HID5 )                                           \
     AUTO_WIZARDHELPTEXT( 6 )                                                            \
     AUTO_NAMECONTROLGROUP( INIT_Y + 6 * FIXEDTEXT_HEIGHT + 2, AUTO_HID )                \
-    AUTO_HOSTCONTROLGROUP(96, AUTO_HID + 1)                                             \
-    AUTO_PORTCONTROLGROUP(113, AUTO_HID + 2 )                                           \
+    AUTO_HOSTCONTROLGROUP(96, AUTO_HID2)                                                \
+    AUTO_PORTCONTROLGROUP(113, AUTO_HID3 )                                              \
     AUTO_SOCKETCONTROLGROUP(129)                                                        \
-    AUTO_JDBCDRIVERCLASSGROUP(146, AUTO_HID + 3)
+    AUTO_JDBCDRIVERCLASSGROUP(146, AUTO_HID4, AUTO_HID5)
 
 
 // --------------------------------------------------------------------------------------------------

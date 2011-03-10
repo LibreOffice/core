@@ -55,7 +55,7 @@ TYPEINIT1( OPrimKeyUndoAct,             OTableEditorUndoAct );
 // class OTableDesignUndoAct
 //==============================================================================
 DBG_NAME(OTableDesignUndoAct);
-OTableDesignUndoAct::OTableDesignUndoAct( OTableRowView* pOwner,USHORT nCommentID ) : OCommentUndoAction(nCommentID)
+OTableDesignUndoAct::OTableDesignUndoAct( OTableRowView* pOwner,sal_uInt16 nCommentID ) : OCommentUndoAction(nCommentID)
     ,m_pTabDgnCtrl(  pOwner )
 {
     DBG_CTOR(OTableDesignUndoAct,NULL);
@@ -99,7 +99,7 @@ void OTableDesignUndoAct::Redo()
 // class OTableDesignCellUndoAct
 //==============================================================================
 DBG_NAME(OTableDesignCellUndoAct);
-OTableDesignCellUndoAct::OTableDesignCellUndoAct( OTableRowView* pOwner, long nRowID, USHORT nColumn ) :
+OTableDesignCellUndoAct::OTableDesignCellUndoAct( OTableRowView* pOwner, long nRowID, sal_uInt16 nColumn ) :
      OTableDesignUndoAct( pOwner ,STR_TABED_UNDO_CELLMODIFIED)
     ,m_nCol( nColumn )
     ,m_nRow( nRowID )
@@ -153,7 +153,7 @@ void OTableDesignCellUndoAct::Redo()
 // class OTableEditorUndoAct
 //==============================================================================
 DBG_NAME(OTableEditorUndoAct);
-OTableEditorUndoAct::OTableEditorUndoAct( OTableEditorCtrl* pOwner,USHORT _nCommentID ) :
+OTableEditorUndoAct::OTableEditorUndoAct( OTableEditorCtrl* pOwner,sal_uInt16 _nCommentID ) :
      OTableDesignUndoAct(  pOwner ,_nCommentID)
     ,pTabEdCtrl(pOwner)
 {
@@ -170,7 +170,7 @@ OTableEditorUndoAct::~OTableEditorUndoAct()
 // class OTableEditorTypeSelUndoAct
 //==============================================================================
 DBG_NAME(OTableEditorTypeSelUndoAct);
-OTableEditorTypeSelUndoAct::OTableEditorTypeSelUndoAct( OTableEditorCtrl* pOwner, long nRowID, USHORT nColumn, const TOTypeInfoSP& _pOldType )
+OTableEditorTypeSelUndoAct::OTableEditorTypeSelUndoAct( OTableEditorCtrl* pOwner, long nRowID, sal_uInt16 nColumn, const TOTypeInfoSP& _pOldType )
     :OTableEditorUndoAct( pOwner ,STR_TABED_UNDO_TYPE_CHANGED)
     ,m_nCol( nColumn )
     ,m_nRow( nRowID )
@@ -249,7 +249,7 @@ void OTableEditorDelUndoAct::Undo()
 {
     //////////////////////////////////////////////////////////////////////
     // Geloeschte Zeilen wieder einfuegen
-    ULONG nPos;
+    sal_uLong nPos;
     ::std::vector< ::boost::shared_ptr<OTableRow> >::iterator aIter = m_aDeletedRows.begin();
     ::std::vector< ::boost::shared_ptr<OTableRow> >::iterator aEnd = m_aDeletedRows.end();
 
@@ -273,7 +273,7 @@ void OTableEditorDelUndoAct::Redo()
 {
     //////////////////////////////////////////////////////////////////////
     // Zeilen wieder loeschen
-    ULONG nPos;
+    sal_uLong nPos;
     ::std::vector< ::boost::shared_ptr<OTableRow> >::iterator aIter = m_aDeletedRows.begin();
     ::std::vector< ::boost::shared_ptr<OTableRow> >::iterator aEnd = m_aDeletedRows.end();
     ::std::vector< ::boost::shared_ptr<OTableRow> >* pOriginalRows = pTabEdCtrl->GetRowList();
@@ -322,7 +322,7 @@ void OTableEditorInsUndoAct::Undo()
         pOriginalRows->erase(pOriginalRows->begin()+i);
     }
 
-    pTabEdCtrl->RowRemoved( m_nInsPos, m_vInsertedRows.size(), TRUE );
+    pTabEdCtrl->RowRemoved( m_nInsPos, m_vInsertedRows.size(), sal_True );
     pTabEdCtrl->InvalidateHandleColumn();
 
     OTableEditorUndoAct::Undo();
@@ -345,7 +345,7 @@ void OTableEditorInsUndoAct::Redo()
         nInsertRow++;
     }
 
-    pTabEdCtrl->RowInserted( m_nInsPos, m_vInsertedRows.size(), TRUE );
+    pTabEdCtrl->RowInserted( m_nInsPos, m_vInsertedRows.size(), sal_True );
     pTabEdCtrl->InvalidateHandleColumn();
 
     OTableEditorUndoAct::Redo();
@@ -381,7 +381,7 @@ void OTableEditorInsNewUndoAct::Undo()
         pOriginalRows->erase(pOriginalRows->begin()+i);
     }
 
-    pTabEdCtrl->RowRemoved( m_nInsPos, m_nInsRows, TRUE );
+    pTabEdCtrl->RowRemoved( m_nInsPos, m_nInsRows, sal_True );
     pTabEdCtrl->InvalidateHandleColumn();
 
     OTableEditorUndoAct::Undo();
@@ -397,7 +397,7 @@ void OTableEditorInsNewUndoAct::Redo()
     for( long i=m_nInsPos; i<(m_nInsPos+m_nInsRows); i++ )
         pRowList->insert( pRowList->begin()+i,::boost::shared_ptr<OTableRow>(new OTableRow()) );
 
-    pTabEdCtrl->RowInserted( m_nInsPos, m_nInsRows, TRUE );
+    pTabEdCtrl->RowInserted( m_nInsPos, m_nInsRows, sal_True );
     pTabEdCtrl->InvalidateHandleColumn();
 
     OTableEditorUndoAct::Redo();
@@ -437,7 +437,7 @@ void OPrimKeyUndoAct::Undo()
     {
         OSL_ENSURE(nIndex <= static_cast<long>(pRowList->size()),"Index for undo isn't valid!");
         pRow = (*pRowList)[nIndex];
-        pRow->SetPrimaryKey( FALSE );
+        pRow->SetPrimaryKey( sal_False );
     }
 
     //////////////////////////////////////////////////////////////////////
@@ -446,7 +446,7 @@ void OPrimKeyUndoAct::Undo()
     {
         OSL_ENSURE(nIndex <= static_cast<long>(pRowList->size()),"Index for undo isn't valid!");
         pRow = (*pRowList)[nIndex];
-        pRow->SetPrimaryKey( TRUE );
+        pRow->SetPrimaryKey( sal_True );
     }
 
     m_pEditorCtrl->InvalidateHandleColumn();
@@ -462,12 +462,12 @@ void OPrimKeyUndoAct::Redo()
     //////////////////////////////////////////////////////////////////////
     // Die geloeschten Keys loeschen
     for( nIndex = m_aDelKeys.FirstSelected(); nIndex != (long)SFX_ENDOFSELECTION; nIndex=m_aDelKeys.NextSelected() )
-        (*pRowList)[nIndex]->SetPrimaryKey( FALSE );
+        (*pRowList)[nIndex]->SetPrimaryKey( sal_False );
 
     //////////////////////////////////////////////////////////////////////
     // Die eingefuegten Keys herstellen
     for( nIndex = m_aInsKeys.FirstSelected(); nIndex != (long)SFX_ENDOFSELECTION; nIndex=m_aInsKeys.NextSelected() )
-        (*pRowList)[nIndex]->SetPrimaryKey( TRUE );
+        (*pRowList)[nIndex]->SetPrimaryKey( sal_True );
 
     m_pEditorCtrl->InvalidateHandleColumn();
     OTableEditorUndoAct::Redo();

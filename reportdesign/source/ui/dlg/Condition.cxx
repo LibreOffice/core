@@ -72,7 +72,7 @@ ConditionField::ConditionField( Condition* _pParent, const ResId& _rResId ) : Ed
 {
     m_pSubEdit = new Edit(this,0);
     SetSubEdit(m_pSubEdit);
-    m_pSubEdit->EnableRTL( FALSE );
+    m_pSubEdit->EnableRTL( sal_False );
     m_pSubEdit->SetPosPixel( Point() );
 
     m_aFormula.SetText(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("...")));
@@ -130,7 +130,7 @@ class OColorPopup : public FloatingWindow
 {
     DECL_LINK( SelectHdl, void * );
     Condition* m_pCondition;
-    USHORT      m_nSlotId;
+    sal_uInt16      m_nSlotId;
 public:
     OColorPopup(Window* _pParent,Condition* _pCondition);
     ValueSet        m_aColorSet;
@@ -139,7 +139,7 @@ public:
     virtual void Resize();
 
     void StartSelection();
-    void SetSlotId(USHORT _nSlotId);
+    void SetSlotId(sal_uInt16 _nSlotId);
 };
 // -----------------------------------------------------------------------------
 OColorPopup::OColorPopup(Window* _pParent,Condition* _pCondition)
@@ -205,7 +205,7 @@ void OColorPopup::StartSelection()
     m_aColorSet.StartSelection();
 }
 // -----------------------------------------------------------------------------
-void OColorPopup::SetSlotId(USHORT _nSlotId)
+void OColorPopup::SetSlotId(sal_uInt16 _nSlotId)
 {
     m_nSlotId = _nSlotId;
     if ( SID_ATTR_CHAR_COLOR_BACKGROUND == _nSlotId || SID_BACKGROUND_COLOR == _nSlotId )
@@ -217,7 +217,7 @@ void OColorPopup::SetSlotId(USHORT _nSlotId)
 // -----------------------------------------------------------------------------
 IMPL_LINK( OColorPopup, SelectHdl, void *, EMPTYARG )
 {
-    USHORT nItemId = m_aColorSet.GetSelectItemId();
+    sal_uInt16 nItemId = m_aColorSet.GetSelectItemId();
     Color aColor( nItemId == 0 ? Color( COL_TRANSPARENT ) : m_aColorSet.GetItemColor( nItemId ) );
 
     /*  #i33380# Moved the following line above the Dispatch() calls.
@@ -328,11 +328,11 @@ Condition::~Condition()
 // -----------------------------------------------------------------------------
 IMPL_LINK( Condition, DropdownClick, ToolBox*, /*pToolBar*/ )
 {
-    USHORT nId( m_aActions.GetCurItemId() );
+    sal_uInt16 nId( m_aActions.GetCurItemId() );
     if ( !m_pColorFloat )
         m_pColorFloat = new OColorPopup(&m_aActions,this);
 
-    USHORT nTextId = 0;
+    sal_uInt16 nTextId = 0;
     switch(nId)
     {
         case SID_ATTR_CHAR_COLOR2:
@@ -376,7 +376,7 @@ IMPL_LINK( Condition, OnConditionAction, Button*, _pClickedButton )
 }
 
 //------------------------------------------------------------------------------
-void Condition::ApplyCommand( USHORT _nCommandId, const ::Color& _rColor)
+void Condition::ApplyCommand( sal_uInt16 _nCommandId, const ::Color& _rColor)
 {
     if ( _nCommandId == SID_ATTR_CHAR_COLOR2 )
         m_pBtnUpdaterFontColor->Update( _rColor );
@@ -623,8 +623,8 @@ void Condition::impl_setCondition( const ::rtl::OUString& _rConditionFormula )
     }
 
     // update UI
-    m_aConditionType.SelectEntryPos( (USHORT)eType );
-    m_aOperationList.SelectEntryPos( (USHORT)eOperation );
+    m_aConditionType.SelectEntryPos( (sal_uInt16)eType );
+    m_aOperationList.SelectEntryPos( (sal_uInt16)eOperation );
     m_aCondLHS.SetText( sLHS );
     m_aCondRHS.SetText( sRHS );
 
@@ -659,10 +659,10 @@ void Condition::updateToolbar(const uno::Reference< report::XReportControlFormat
     OSL_ENSURE(_xReportControlFormat.is(),"XReportControlFormat is NULL!");
     if ( _xReportControlFormat.is() )
     {
-        USHORT nItemCount = m_aActions.GetItemCount();
-        for (USHORT j = 0; j< nItemCount; ++j)
+        sal_uInt16 nItemCount = m_aActions.GetItemCount();
+        for (sal_uInt16 j = 0; j< nItemCount; ++j)
         {
-            USHORT nItemId = m_aActions.GetItemId(j);
+            sal_uInt16 nItemId = m_aActions.GetItemId(j);
             m_aActions.CheckItem( nItemId, m_rController.isFormatCommandEnabled( nItemId, _xReportControlFormat ) );
         }
 

@@ -147,7 +147,7 @@ void OWizColumnSelect::ActivatePage( )
     ODatabaseExport::TColumnVector::const_iterator aEnd = pDestColumns->end();
     for(;aIter != aEnd;++aIter)
     {
-        USHORT nPos = m_lbNewColumnNames.InsertEntry((*aIter)->first);
+        sal_uInt16 nPos = m_lbNewColumnNames.InsertEntry((*aIter)->first);
         m_lbNewColumnNames.SetEntryData(nPos,new OFieldDescription(*((*aIter)->second)));
         m_lbOrgColumnNames.RemoveEntry((*aIter)->first);
     }
@@ -355,7 +355,7 @@ void OWizColumnSelect::moveColumn(  ListBox* _pRight,
             OSL_ENSURE( aPos != pSrcVector->end(),"Invalid position for the iterator here!");
             ODatabaseExport::TColumnVector::size_type nPos = (aPos - pSrcVector->begin()) - adjustColumnPosition(_pLeft, _sColumnName, (aPos - pSrcVector->begin()), _aCase);
 
-            _pRight->SetEntryData( _pRight->InsertEntry( (*aIter).first, sal::static_int_cast< USHORT >(nPos)),aSrcIter->second );
+            _pRight->SetEntryData( _pRight->InsertEntry( (*aIter).first, sal::static_int_cast< sal_uInt16 >(nPos)),aSrcIter->second );
             _rRightColumns.push_back((*aIter).first);
             m_pParent->removeColumnNameFromNameMap(_sColumnName);
         }
@@ -366,12 +366,12 @@ void OWizColumnSelect::moveColumn(  ListBox* _pRight,
 // not enough. We need to take into acccount what fields have
 // been removed earlier and adjust accordingly. Based on the
 // algorithm employed in moveColumn().
-USHORT OWizColumnSelect::adjustColumnPosition( ListBox* _pLeft,
+sal_uInt16 OWizColumnSelect::adjustColumnPosition( ListBox* _pLeft,
                                                const ::rtl::OUString&   _sColumnName,
                                                ODatabaseExport::TColumnVector::size_type nCurrentPos,
                                                const ::comphelper::TStringMixEqualFunctor& _aCase)
 {
-    USHORT nAdjustedPos = 0;
+    sal_uInt16 nAdjustedPos = 0;
 
     // if returning all entries to their original position,
     // then there is no need to adjust the positions.

@@ -111,14 +111,12 @@ Menu RID_MENU_APP_NEW
         MenuItem
         {
             Identifier = SID_APP_NEW_FORM;
-            HelpId = SID_APP_NEW_FORM;
             Command = ".uno:DBNewForm";
             Text [ en-US ] = "Form..." ;
         };
         MenuItem
         {
             Identifier = SID_APP_NEW_REPORT;
-            HelpId = SID_APP_NEW_REPORT;
             Command = ".uno:DBNewReport";
             Text [ en-US ] = "Report..." ;
         };
@@ -154,7 +152,6 @@ Menu RID_MENU_APP_NEW
         MenuItem
         {
             Identifier = SID_DB_NEW_VIEW_SQL;
-            HelpId = SID_DB_NEW_VIEW_SQL;
             Command = ".uno:DBNewViewSQL";
             Text [ en-US ] = "View (Simple)..." ;
         };
@@ -177,7 +174,6 @@ Menu RID_MENU_APP_EDIT
         MenuItem
         {
             Identifier = SID_DB_APP_PASTE_SPECIAL;
-            HelpID = SID_DB_APP_PASTE_SPECIAL ;
             Text[ en-US ] = "Paste Special...";
             Command = ".uno:PasteSpecial";
         };
@@ -188,42 +184,36 @@ Menu RID_MENU_APP_EDIT
         MenuItem
         {
             Identifier = SID_DB_APP_DELETE;
-            HelpID = SID_DB_APP_DELETE ;
             Text[ en-US ] = "Delete";
             Command = ".uno:DBDelete";
         };
         MenuItem
         {
             Identifier = SID_DB_APP_RENAME;
-            HelpID = SID_DB_APP_RENAME ;
             Text[ en-US ] = "Rename";
             Command = ".uno:DBRename";
         };
         MenuItem
         {
             Identifier = SID_DB_APP_EDIT;
-            HelpID = SID_DB_APP_EDIT ;
             Text[ en-US ] = "Edit";
             Command = ".uno:DBEdit";
         };
         MenuItem
         {
             Identifier = SID_DB_APP_EDIT_SQL_VIEW;
-            HelpID = SID_DB_APP_EDIT_SQL_VIEW ;
             Text [ en-US ] = "Edit in SQL View...";
             Command = ".uno:DBEditSqlView";
         };
         MenuItem
         {
             Identifier = SID_DB_APP_OPEN;
-            HelpID = SID_DB_APP_OPEN ;
             Text[ en-US ] = "Open";
             Command = ".uno:DBOpen";
         };
         MenuItem
         {
             Identifier = SID_DB_APP_CONVERTTOVIEW;
-            HelpID = SID_DB_APP_CONVERTTOVIEW ;
             Text[ en-US ] = "Create as View";
             Command = ".uno:DBConvertToView";
         };
@@ -236,14 +226,12 @@ Menu RID_MENU_APP_EDIT
         MenuItem
         {
             Identifier = SID_APP_NEW_REPORT_PRE_SEL;
-            HelpId = SID_APP_NEW_REPORT_PRE_SEL;
             Command = ".uno:DBNewReportWithPreSelection";
             Text [ en-US ] = "Report..." ;
         };
         MenuItem
         {
             Identifier = SID_REPORT_CREATE_REPWIZ_PRE_SEL ;
-            HelpID = HID_DOCUMENT_CREATE_REPWIZ ;
             Text[ en-US ] = "Report Wizard...";
 
             Command = ".uno:DBNewReportAutoPilotWithPreSelection";
@@ -255,7 +243,6 @@ Menu RID_MENU_APP_EDIT
         MenuItem
         {
             Identifier = SID_SELECTALL;
-            HelpID = SID_SELECTALL ;
             Text[ en-US ] = "Select All";
             Command = ".uno:SelectAll";
         };
@@ -274,21 +261,18 @@ Menu RID_MENU_APP_EDIT
                     MenuItem
                     {
                         Identifier = SID_DB_APP_DSPROPS;
-                        HelpID = SID_DB_APP_DSPROPS ;
                         Text[ en-US ] = "Properties";
                         Command = ".uno:DBDSProperties";
                     };
                     MenuItem
                     {
                         Identifier = SID_DB_APP_DSCONNECTION_TYPE;
-                        HelpID = SID_DB_APP_DSCONNECTION_TYPE ;
                         Text[ en-US ] = "Connection Type";
                         Command = ".uno:DBDSConnectionType";
                     };
                     MenuItem
                     {
                         Identifier = SID_DB_APP_DSADVANCED_SETTINGS;
-                        HelpID = SID_DB_APP_DSADVANCED_SETTINGS ;
                         Text[ en-US ] = "Advanced Settings";
                         Command = ".uno:DBDSAdvancedSettings";
                     };
@@ -410,7 +394,6 @@ Menu RID_MENU_APP_PREVIEW
         MenuItem
         {
             Identifier = SID_DB_APP_DISABLE_PREVIEW;
-            HelpId = SID_DB_APP_DISABLE_PREVIEW;
             Text[ en-US ] = "None";
             Command = ".uno:DBDisablePreview";
             Checkable = TRUE;
@@ -420,7 +403,6 @@ Menu RID_MENU_APP_PREVIEW
         MenuItem
         {
             Identifier = SID_DB_APP_VIEW_DOCINFO_PREVIEW;
-            HelpId = SID_DB_APP_VIEW_DOCINFO_PREVIEW;
             Text[ en-US ] = "Document Information";
             Command = ".uno:DBShowDocInfoPreview";
             Checkable = TRUE;
@@ -430,7 +412,6 @@ Menu RID_MENU_APP_PREVIEW
         MenuItem
         {
             Identifier = SID_DB_APP_VIEW_DOC_PREVIEW;
-            HelpId = SID_DB_APP_VIEW_DOC_PREVIEW;
             Text[ en-US ] = "Document";
             Command = ".uno:DBShowDocPreview";
             Checkable = TRUE;

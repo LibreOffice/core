@@ -61,7 +61,7 @@ namespace rptui
     // -----------------------------------------------------------------------------
     sal_Bool OGroupExchange::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
     {
-        ULONG nFormat = SotExchange::GetFormat(rFlavor);
+        sal_uLong nFormat = SotExchange::GetFormat(rFlavor);
         if(nFormat == OGroupExchange::getReportGroupId() )
         {
             return SetAny(uno::makeAny(m_aGroupRow),rFlavor);

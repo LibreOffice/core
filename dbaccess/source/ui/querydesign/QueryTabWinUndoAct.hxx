@@ -49,14 +49,14 @@ namespace dbaui
     protected:
         ::std::vector<OTableConnection*> m_vTableConnection;
         OQueryTableWindow*               m_pTabWin;
-        BOOL                             m_bOwnerOfObjects;
+        sal_Bool                             m_bOwnerOfObjects;
             // bin ich alleiniger Eigentuemer der verwalteten Objekte ? (aendert sich mit jedem Redo oder Undo)
 
     public:
-        OQueryTabWinUndoAct(OQueryTableView* pOwner, USHORT nCommentID);
+        OQueryTabWinUndoAct(OQueryTableView* pOwner, sal_uInt16 nCommentID);
         virtual ~OQueryTabWinUndoAct();
 
-        void SetOwnership(BOOL bTakeIt) { m_bOwnerOfObjects = bTakeIt; }
+        void SetOwnership(sal_Bool bTakeIt) { m_bOwnerOfObjects = bTakeIt; }
 
 
         virtual void Undo() = 0;
@@ -67,7 +67,7 @@ namespace dbaui
             // anschliessend sollte das SetOwnership aufgerufen werden
 
         // Zugriff auf die verwalteten Connections
-        USHORT  ConnCount() { return (USHORT)m_vTableConnection.size(); }
+        sal_uInt16  ConnCount() { return (sal_uInt16)m_vTableConnection.size(); }
 
         ::std::vector<OTableConnection*>*       GetTabConnList() { return &m_vTableConnection; }
 

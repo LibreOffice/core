@@ -117,54 +117,6 @@ void OModuleRegistration::revokeComponent(const ::rtl::OUString& _rImplementatio
 }
 
 //--------------------------------------------------------------------------
-sal_Bool OModuleRegistration::writeComponentInfos(
-        const uno::Reference< lang::XMultiServiceFactory >& /*_rxServiceManager*/,
-        const uno::Reference< registry::XRegistryKey >& _rxRootKey)
-{
-    OSL_ENSURE(_rxRootKey.is(), "OModuleRegistration::writeComponentInfos : invalid argument !");
-
-    if (!s_pImplementationNames)
-    {
-        OSL_ENSURE(sal_False, "OModuleRegistration::writeComponentInfos : have no class infos ! Are you sure called this method at the right time ?");
-        return sal_True;
-    }
-    OSL_ENSURE(s_pImplementationNames && s_pSupportedServices && s_pCreationFunctionPointers && s_pFactoryFunctionPointers,
-        "OModuleRegistration::writeComponentInfos : inconsistent state (the pointers) !");
-    OSL_ENSURE( (s_pImplementationNames->getLength() == s_pSupportedServices->getLength())
-                &&  (s_pImplementationNames->getLength() == s_pCreationFunctionPointers->getLength())
-                &&  (s_pImplementationNames->getLength() == s_pFactoryFunctionPointers->getLength()),
-        "OModuleRegistration::writeComponentInfos : inconsistent state !");
-
-    sal_Int32 nLen = s_pImplementationNames->getLength();
-    const ::rtl::OUString* pImplName = s_pImplementationNames->getConstArray();
-    const uno::Sequence< ::rtl::OUString >* pServices = s_pSupportedServices->getConstArray();
-
-    ::rtl::OUString sRootKey("/", 1, RTL_TEXTENCODING_ASCII_US);
-    for (sal_Int32 i=0; i<nLen; ++i, ++pImplName, ++pServices)
-    {
-        ::rtl::OUString aMainKeyName(sRootKey);
-        aMainKeyName += *pImplName;
-        aMainKeyName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
-
-        try
-        {
-            uno::Reference< registry::XRegistryKey >  xNewKey( _rxRootKey->createKey(aMainKeyName) );
-
-            const ::rtl::OUString* pService = pServices->getConstArray();
-            for (sal_Int32 j=0; j<pServices->getLength(); ++j, ++pService)
-                xNewKey->createKey(*pService);
-        }
-        catch(uno::Exception const&)
-        {
-            OSL_ENSURE(sal_False, "OModuleRegistration::writeComponentInfos : something went wrong while creating the keys !");
-            return sal_False;
-        }
-    }
-
-    return sal_True;
-}
-
-//--------------------------------------------------------------------------
 uno::Reference< uno::XInterface > OModuleRegistration::getComponentFactory(
     const ::rtl::OUString& _rImplementationName,
     const uno::Reference< lang::XMultiServiceFactory >& _rxServiceManager)

@@ -1061,7 +1061,7 @@ sal_Bool OSingleSelectQueryComposer::setANDCriteria( OSQLParseNode * pCondition,
             }
             else if (SQL_ISRULE(pCondition,test_for_null))
             {
-                if (SQL_ISTOKEN(pCondition->getChild(1)->getChild(2),NOT) )
+                if (SQL_ISTOKEN(pCondition->getChild(1)->getChild(1),NOT) )
                     aItem.Handle = SQLFilterOperator::NOT_SQLNULL;
                 else
                     aItem.Handle = SQLFilterOperator::SQLNULL;

@@ -28,12 +28,14 @@
 #ifndef DBAUI_DATAVIEW_HXX
 #define DBAUI_DATAVIEW_HXX
 
-#include <vcl/window.hxx>
+#include "dbaccessdllapi.h"
+
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <svtools/acceleratorexecute.hxx>
 #include <sal/macros.h>
+#include <vcl/fixed.hxx>
+
 #include <memory>
-#include "dbaccessdllapi.h"
 
 class FixedLine;
 class SvtMiscOptions;
@@ -46,7 +48,7 @@ namespace dbaui
 
     protected:
         IController&        m_rController;  // the controller in where we resides in
-        FixedLine*          m_pSeparator;   // our separator above the toolbox (may be NULL)
+        FixedLine           m_aSeparator;
         ::std::auto_ptr< ::svt::AcceleratorExecute> m_pAccel;
 
     public:
@@ -70,9 +72,6 @@ namespace dbaui
         /** will be called when the controls need to be resized.
         */
         virtual void resizeControls(const Size& /*_rDiff*/) { Resize(); }
-
-        void        enableSeparator( const sal_Bool _bEnable = sal_True );
-        sal_Bool    isSeparatorEnabled() const { return NULL != m_pSeparator; }
 
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getORB() { return m_xServiceFactory;}
 

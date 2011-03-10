@@ -124,8 +124,8 @@ namespace dbaui
         //for set the tablename
         void setSTableName(const ::rtl::OUString &_sTableName){ m_sDefaultTableName = _sTableName; }
 
-        virtual BOOL Write(); // Export
-        virtual BOOL Read(); // Import
+        virtual sal_Bool Write(); // Export
+        virtual sal_Bool Read(); // Import
 
         void initialize(const ::svx::ODataAccessDescriptor& _aDataDescriptor);
         void dispose();
@@ -161,8 +161,8 @@ namespace dbaui
                         : ODatabaseImportExport(_rxConnection,_rxNumberF,_rM)
         {}
 
-        virtual BOOL Write();
-        virtual BOOL Read();
+        virtual sal_Bool Write();
+        virtual sal_Bool Read();
     };
     // =========================================================================
     // HTML Im- und Export
@@ -180,7 +180,7 @@ namespace dbaui
         char                    sIndent[nIndentMax+1];
         sal_Int16               m_nIndent;
     #if OSL_DEBUG_LEVEL > 0
-        BOOL                    m_bCheckFont;
+        sal_Bool                    m_bCheckFont;
     #endif
 
         void WriteHeader();
@@ -205,8 +205,8 @@ namespace dbaui
                         : ODatabaseImportExport(_rxConnection,_rxNumberF,_rM)
         {}
 
-        virtual BOOL Write();
-        virtual BOOL Read();
+        virtual sal_Bool Write();
+        virtual sal_Bool Read();
 
     };
     // =========================================================================
@@ -242,8 +242,8 @@ namespace dbaui
                         : ODatabaseImportExport(_rxConnection,NULL,_rM)
         {}
 
-        virtual BOOL Write();
-        virtual BOOL Read();
+        virtual sal_Bool Write();
+        virtual sal_Bool Read();
 
     private:
         using ODatabaseImportExport::initialize;
