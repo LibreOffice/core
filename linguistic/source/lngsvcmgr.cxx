@@ -254,7 +254,7 @@ void LngSvcMgr::SetAvailableCfgServiceLists( LinguDispatcher &rDispatcher,
                     size_t nAvailSvcs = rAvailSvcs.size();
                     for (size_t m = 0;  m < nAvailSvcs;  ++m)
                     {
-                        const SvcInfo &rSvcInfo = *rAvailSvcs[m];
+                        const SvcInfo &rSvcInfo = rAvailSvcs[m];
                         if (rSvcInfo.aSvcImplName == pImplNames[k]  &&
                             rSvcInfo.HasLanguage( nLang ))
                         {
@@ -1437,13 +1437,13 @@ uno::Sequence< OUString > SAL_CALL
 
         USHORT nCnt = 0;
         LanguageType nLanguage = LocaleToLanguage( rLocale );
-        for (size_t i = 0;  i < nMaxCnt;  ++i)
+        for (size_t i = 0;  i < nMaxCnt; ++i)
         {
-            const SvcInfo *pInfo = (*pInfoArray)[i];
+            const SvcInfo &rInfo = (*pInfoArray)[i];
             if (LANGUAGE_NONE == nLanguage
-                || (pInfo && pInfo->HasLanguage( nLanguage )))
+                || rInfo.HasLanguage( nLanguage ))
             {
-                pImplName[ nCnt++ ] = pInfo->aSvcImplName;
+                pImplName[ nCnt++ ] = rInfo.aSvcImplName;
             }
         }
 

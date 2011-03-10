@@ -41,6 +41,8 @@
 #include <com/sun/star/linguistic2/XAvailableLocales.hpp>
 #include <unotools/configitem.hxx>
 
+#include <boost/ptr_container/ptr_vector.hpp>
+
 #include "misc.hxx"
 #include "defs.hxx"
 
@@ -105,7 +107,7 @@ class LngSvcMgr :
 
     LngSvcMgrListenerHelper *                           pListenerHelper;
 
-    typedef std::vector< SvcInfo * >    SvcInfoArray;
+    typedef boost::ptr_vector< SvcInfo >    SvcInfoArray;
     SvcInfoArray *                                      pAvailSpellSvcs;
     SvcInfoArray *                                      pAvailGrammarSvcs;
     SvcInfoArray *                                      pAvailHyphSvcs;
