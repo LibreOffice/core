@@ -161,9 +161,9 @@ protected:
     ListBox                     aFilterLb;
     Size                        aSize;
 
-    USHORT                      nActFamily; // Id in der ToolBox = Position - 1
+    USHORT                      nActFamily;     // Id in the ToolBox = Position - 1
     USHORT                      nActFilter; // FilterIdx
-    USHORT                      nAppFilter; // Filter, den die Applikation gesetzt hat (fuer automatisch)
+    USHORT                      nAppFilter;     // Filter, which has set the application (for automatic)
 
     BOOL                        bDontUpdate             :1,
                                 bIsWater                :1,
@@ -174,7 +174,7 @@ protected:
                                 bCanDel                 :1,
                                 bCanNew                 :1,
                                 bWaterDisabled          :1,
-                                bNewByExampleDisabled   :1,
+                                bNewByExampleDisab§led   :1,
                                 bUpdateByExampleDisabled:1,
                                 bTreeDrag               :1,
                                 bHierarchical           :1,
@@ -223,8 +223,8 @@ protected:
     void                Update_Impl();
     void                UpdateFamily_Impl();
 
-    // In welchem FamilyState muss ich nachsehen, um die Info der i-ten
-    // Family in der pStyleFamilies zu bekommen.
+    // In which FamilyState do I have to look , in order to get the
+    // information of the ith Family in the pStyleFamilies.
     USHORT              StyleNrToInfoOffset( USHORT i );
     USHORT              InfoOffsetToStyleNr( USHORT i );
 
@@ -269,7 +269,7 @@ public:
     // normaly for derivates from SvTreeListBoxes, but in this case the dialog handles context menus
     virtual PopupMenu*  CreateContextMenu( void );
 
-    // Rechnet von den SFX_STYLE_FAMILY Ids auf 1-5 um
+    // converts from SFX_STYLE_FAMILY Ids to 1-5
     static USHORT       SfxFamilyIdToNId( SfxStyleFamily nFamily );
 
     void                SetAutomaticFilter();

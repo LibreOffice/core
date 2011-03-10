@@ -94,8 +94,8 @@ String GetThesaurusReplaceText_Impl( const ::rtl::OUString &rText )
 
 
 /*
-    Ctor; setzt Select-Handler am Menu und traegt Menu
-    in seinen Parent ein.
+    Constructor; sets the Select-Handler for the Menu and inserts it into
+    its Parent.
  */
 SfxThesSubMenuControl::SfxThesSubMenuControl( USHORT nSlotId, Menu &rMenu, SfxBindings &rBindings )
     : SfxMenuControl( nSlotId, rBindings ),
@@ -116,9 +116,9 @@ SfxThesSubMenuControl::~SfxThesSubMenuControl()
 
 
 /*
-    Statusbenachrichtigung;
-    Ist die Funktionalit"at disabled, wird der entsprechende
-    Menueeintrag im Parentmenu disabled, andernfalls wird er enabled.
+    Status notification:
+    If the functionality is disabled, the corresponding
+    menu entry in Parentmenu is disabled, otherwise it is enabled.
  */
 void SfxThesSubMenuControl::StateChanged(
     USHORT /*nSID*/,
@@ -130,8 +130,8 @@ void SfxThesSubMenuControl::StateChanged(
 
 
 /*
-    Select-Handler des Menus;
-    das selektierte Verb mit ausgef"uhrt,
+    Select-Handler for Menus;
+    run the selected Verb,
  */
 IMPL_LINK_INLINE_START( SfxThesSubMenuControl, MenuSelect, Menu *, pSelMenu )
 {

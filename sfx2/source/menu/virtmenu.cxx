@@ -155,9 +155,9 @@ static Image RetrieveAddOnImage( Reference< com::sun::star::frame::XFrame >& rFr
 
 //=========================================================================
 
-/*  Diese Hilfsfunktion pr"uft, ob eine Slot-Id im aktuellen Applikations-
-    Status sichtbar ist oder nicht. Dabei bezieht sich der Applikations-Status
-    darauf, ob die Applikation OLE-Server ist oder nicht.
+/*  This helper function checks whether a Slot-id in the current application
+    status is visible or not. This relates to the application status to see
+    if the OLE server application exist or not.
 */
 
 BOOL IsItemHidden_Impl( USHORT nItemId, int bOleServer, int bMac )
@@ -257,10 +257,9 @@ SfxVirtualMenu::SfxVirtualMenu( Menu *pStarViewMenu, BOOL bWithHelp,
 
 //--------------------------------------------------------------------
 
-/*  Der Destruktor der Klasse SfxVirtualMenu gib die gebundenen Items frei
-    und klinkt das zugeh"orige StarView-PopupMenu aus seinem Parent aus.
-    Falls es sich um das Pickmenu oder das MDI-Menu handelt, wird es
-    dort abgemeldet.
+/*  The destructor of the class SfxVirtualMenu releases bounded items and
+    the associated StarView-PopupMenu is released from its parent.
+    If it is related to the Pickmenu or the MDI-menu, it is unregistered here.
 */
 
 SfxVirtualMenu::~SfxVirtualMenu()
@@ -292,10 +291,10 @@ SfxVirtualMenu::~SfxVirtualMenu()
     delete pAppCtrl;
     pBindings = 0;
 
-    // Alle Menues, die von SV erzeugt wurden, werden auch dort wieder
-    // gel"oscht (also die beim Laden aus der Resource erzeugten).
-    // Das Top-Level-Menu wird nie von SV gel"oscht, da die Allocierung
-    // im SFX erfolgt
+    // All the menus, which were created by SV, will also be there deleted
+    // again (i.e. created by loading them from the resource)
+    // The top-level menu is never deleted by SV, since the allocation
+    // in done in the SFX
     if ( !bResCtor || !pParent)
     {
         if ( pParent )
@@ -362,9 +361,9 @@ void SfxVirtualMenu::CreateFromSVMenu()
     // get and store the number of items
     nCount = pSVMenu->GetItemCount();
 
-    // Achtung: nur zu diesem Zeitpunkt ist garantiert, da\s nCount und
-    // der ItemCount des SV-Menues "ubereinstimmen; sp"ater kann das SvMenue
-    // auch mehr Eintr"age haben (Pickliste!)
+    // Note: only this time it is guaranteed that nCount and the ItemCount
+    // the SV-menus match; later on the SvMenu can have more entries
+    // (Pick list!)
     if (nCount)
         pItems = new SfxMenuControl[nCount];
 
@@ -401,9 +400,8 @@ void SfxVirtualMenu::CreateFromSVMenu()
 
             if ( pMnuCtrl )
             {
-                // Das Popup war offensichtlich kein "echtes"; solche werden
-                // niemals aus der Resource geladen und m"ussen daher explizit
-                // gel"oscht werden
+                // The pop was obviously not "real" and such are never loaded
+                // from the resource and need thus to be explicitly deleted.
                 if ( pSVMenu->GetPopupMenu( nSlotId ) == pPopup )
                     pSVMenu->SetPopupMenu( nSlotId, NULL );
                 delete pPopup;
@@ -427,7 +425,7 @@ void SfxVirtualMenu::CreateFromSVMenu()
                 pSVMenu->SetHelpId( nSlotId, 0L );
                 pMnuCtrl = pItems+nPos;
 
-                // normalerweise jetzt erst im Activate-Handler
+                // Normally only now in Activate-Handler
                 if ( bOLE )
                 {
                     pMnuCtrl->Bind( this, nSlotId,
@@ -551,10 +549,10 @@ IMPL_LINK( SfxVirtualMenu, Highlight, Menu *, pMenu )
     DBG_MEMTEST();
     DBG_CHKTHIS(SfxVirtualMenu, 0);
 
-    // eigenes StarView-Menu
+    // own StarView-Menu
     if ( pMenu == pSVMenu )
     {
-        // AutoDeactivate ist jetzt nicht mehr n"otig
+        // AutoDeactivate is not necessary anymore
         if ( pAutoDeactivate )
             pAutoDeactivate->Stop();
     }
@@ -737,14 +735,14 @@ void SfxVirtualMenu::RemoveMenuImages( Menu* pMenu )
 
 bool SfxVirtualMenu::Bind_Impl( Menu *pMenu )
 {
-    // Selber suchen, da SV mit 'USHORT nSID = pSVMenu->GetCurItemId();' immer
-    // 0 liefert. Das ist so, weil die Event-Weiterleitung lt. TH nichts mit
-    // CurItem des Parent-Menus zu tun hat.
+    // Search , as SV with 'USHORT nSID = pSVMenu->GetCurItemId();' always
+    // returns 0. It is like this, since the Event-Forwarding has nothing to do
+    // with the Parent-Menus CurItem.
     sal_uInt32 nAddonsPopupPrefixLen = ADDONSPOPUPMENU_URL_PREFIX.getLength();
 
     for ( USHORT nPos = 0; nPos < nCount; ++nPos )
     {
-        // angesprochenes Sub-Menu gefunden?
+        // found the Sub-Menu in question?
         bool bFound = false;
         USHORT nSID = pSVMenu->GetItemId(nPos);
         SfxMenuControl &rCtrl = pItems[nPos];
@@ -753,11 +751,11 @@ bool SfxVirtualMenu::Bind_Impl( Menu *pMenu )
 
         if ( bFound )
         {
-            // Nur ein gebundener Menu-Controller hat schon seine Id!
+            // Only a binded Menu-Controller as already an Id!
             if ( !rCtrl.GetId() )
             {
                 bIsAddonPopupMenu = FALSE;
-                DBG_ASSERT( !pSubMenu, "Popup schon vorhanden!");
+                DBG_ASSERT( !pSubMenu, "Popup already exists!");
 
                 // Check if the popup is an Add-On popup menu
                 // Either the popup menu has a special ID  or a special command URL prefix!
@@ -768,31 +766,32 @@ bool SfxVirtualMenu::Bind_Impl( Menu *pMenu )
                       ( aCommand.indexOf( ADDONSPOPUPMENU_URL_PREFIX ) == 0 )) )
                     bIsAddonPopupMenu = TRUE;
 
-                // VirtualMenu f"ur Sub-Menu erzeugen
+                // Create VirtualMenu for Sub-Menu
                 BOOL bRes = bResCtor;
                 pSubMenu = new SfxVirtualMenu( nSID, this,
                         *pMenu, FALSE, *pBindings, bOLE, bRes, bIsAddonPopupMenu );
 
-                DBG_OUTF( ("Neues VirtualMenu %lx erzeugt", pSubMenu) );
+                DBG_OUTF( ("New VirtualMenu %lx created", pSubMenu) );
 
                 rCtrl.Bind( this, nSID, *pSubMenu, pSVMenu->GetItemText(nSID), *pBindings );
 
-                // Activate weiterleiten
+                // Forward Activate
                 pSubMenu->Bind_Impl( pMenu );
                 pSubMenu->Activate( pMenu );
             }
         }
 
-        // rekursiv weitersuchen (SV Activate nur am Menu selbst und Top-Menu)
+        // continue searching recursively (SV Activate only the menu itself
+        // and Top-Menu)
         if ( !bFound && pSubMenu )
             bFound = pSubMenu->Bind_Impl( pMenu );
 
-        // gefunden, dann abbrechen
+        // If found, break
         if ( bFound )
             return TRUE;
     }
 
-    // nicht in diesem Untermenu gefunden
+    // Not found in this submenu
     return FALSE;
 }
 
@@ -838,7 +837,7 @@ void SfxVirtualMenu::UnbindControllers()
     {
         SfxMenuControl* pCtrl = rCtrlArr[nPos];
         if ( pCtrl->IsBound() )
-            // UnoController sind nicht gebunden!
+            // UnoController is not binded!
             pCtrl->UnBind();
     }
 
@@ -895,8 +894,8 @@ IMPL_LINK( SfxVirtualMenu, Activate, Menu *, pMenu )
     DBG_CHKTHIS(SfxVirtualMenu, 0);
     DBG_OUTF( ("SfxVirtualMenu %lx activated %lx, own %lx", this, pMenu, pSVMenu));
 
-    // MI: wozu war der noch gut?
-    // MBA: scheint ein alter QAP-Hack gewesen zu sein ( in rev.1.41 eingecheckt ! )
+    // MI: for what was it still good for?
+    // MBA: seemes to be an old QAP-Hack( checked-in in rev.1.41  ! )
 
     if ( pMenu )
     {
@@ -909,10 +908,10 @@ IMPL_LINK( SfxVirtualMenu, Activate, Menu *, pMenu )
         pMenu->SetMenuFlags( nFlag );
     }
 
-    // eigenes StarView-Menu
+    // Own StarView-Menu
     if ( pMenu == pSVMenu )
     {
-        // doppelt-Activate verhindern
+        // Prevent Double Activate
         if ( bIsActive )
             return TRUE;
 
@@ -995,7 +994,7 @@ IMPL_LINK( SfxVirtualMenu, Activate, Menu *, pMenu )
             pAddonsMenu = pSVMenu->GetPopupMenu( SID_ADDONLIST );
         }
 
-        // f"ur konstistenten Status sorgen
+        // Provides consistency to the Status
         if ( bControllersUnBound )
             BindControllers();
 
@@ -1010,22 +1009,22 @@ IMPL_LINK( SfxVirtualMenu, Activate, Menu *, pMenu )
 
         pBindings->Update( SID_IMAGE_ORIENTATION );
 
-        // bis zum Deactivate die Statusupdates unterdr"ucken
+        // Supress the Status updates until Deactivate
         pBindings->ENTERREGISTRATIONS(); ++nLocks; bIsActive = TRUE;
 
         if ( pAutoDeactivate ) // QAP-Hack
             pAutoDeactivate->Start();
 
-        // erledigt
         return TRUE;
     }
     else
     {
-        // VirtualMenu fuer SubMenu finden und ggf. an VirtualMenu binden
+        // Find the VirtualMenu for the SubMenu and if possible, bind a
+        // VirtualMenu
         bool bRet = Bind_Impl( pMenu );
 #ifdef DBG_UTIL
         if ( !bRet)
-            DBG_WARNING( "W1: Virtual menu konnte nicht erzeugt werden!" );
+            DBG_WARNING( "W1: Virtual menu could not be created!" );
 #endif
         return bRet;
     }
@@ -1042,8 +1041,8 @@ IMPL_LINK( SfxVirtualMenu, Deactivate, Menu *, pMenu )
         if ( pAutoDeactivate )
             pAutoDeactivate->Stop();
 
-        // Bis auf die Menubar k"onnen alle Controller unbinded werden, wenn
-        // das Menue deaktiviert ( = zugeklappt ) wird
+        // All controllers can be unbinded all the way up to the Menubar,
+        // when the menu is disabled (= closed)
         if ( pParent )
             UnbindControllers();
         pBindings->LEAVEREGISTRATIONS(); --nLocks; bIsActive = FALSE;
@@ -1218,7 +1217,7 @@ void SfxVirtualMenu::SetPopupMenu( USHORT nItemId, PopupMenu *pMenu )
 
 //--------------------------------------------------------------------
 
-// Erzwingt die Initialisierung, die sonst nur im Activate kommt
+// Forces the initialization, which is otherwise only happens in Activate
 
 void SfxVirtualMenu::InitPopup( USHORT nPos, BOOL /*bOLE*/ )
 {
@@ -1228,17 +1227,17 @@ void SfxVirtualMenu::InitPopup( USHORT nPos, BOOL /*bOLE*/ )
     USHORT nSID = pSVMenu->GetItemId(nPos);
     PopupMenu *pMenu = pSVMenu->GetPopupMenu( nSID );
 
-    DBG_ASSERT( pMenu, "Hier gibt es kein Popup!");
+    DBG_ASSERT( pMenu, "No popup exist here!");
 
     SfxMenuControl &rCtrl = pItems[nPos];
     if ( !rCtrl.GetId() )
     {
-        // VirtualMenu f"ur Sub-Menu erzeugen
+        // Generate VirtualMenu for Sub-Menu
         BOOL bRes = bResCtor;
         SfxVirtualMenu *pSubMenu =
             new SfxVirtualMenu(nSID, this, *pMenu, FALSE, *pBindings, bOLE, bRes);
 
-        DBG_OUTF( ("Neues VirtualMenu %lx erzeugt", pSubMenu) );
+        DBG_OUTF( ("New VirtualMenu %lx created", pSubMenu) );
 
         rCtrl.Bind( this, nSID, *pSubMenu, pSVMenu->GetItemText(nSID), *pBindings );
     }

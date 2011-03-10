@@ -151,14 +151,14 @@ public:
     SfxViewFrame*               pViewFrame;
     SfxSlotPool*                pSlotPool;
     SfxResourceManager*         pResMgr;
-    SfxDispatcher*              pAppDispat;     // Dispatcher falls kein Doc
+    SfxDispatcher*              pAppDispat;     // Dispatcher if no document
     SfxInterface**              pInterfaces;
 
-    USHORT                      nDocNo;             // Laufende Doc-Nummer (AutoName)
+    USHORT                      nDocNo;         // current Doc-Number (AutoName)
     USHORT                      nInterfaces;
 
-    BOOL                        bDispatcherLocked:1;    // nichts ausf"uhren
-    BOOL                        bDowning:1;   // TRUE ab Exit und danach
+    BOOL                        bDispatcherLocked:1;    // do nothing
+    BOOL                        bDowning:1;   // TRUE on Exit and afterwards
     BOOL                        bInQuit : 1;
     BOOL                        bInvalidateOnUnlock : 1;
     BOOL                        bODFVersionWarningLater : 1;

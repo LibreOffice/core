@@ -176,7 +176,7 @@ void SfxMenuControl::Bind(
 
 //--------------------------------------------------------------------
 
-// ctor for explicit registration
+// Constructor for explicit registration
 
 SfxMenuControl::SfxMenuControl( BOOL bShowStrings )
 :   pOwnMenu(0),
@@ -188,6 +188,7 @@ SfxMenuControl::SfxMenuControl( BOOL bShowStrings )
 
 //--------------------------------------------------------------------
 
+// Constructor for array
 SfxMenuControl::SfxMenuControl():
     pOwnMenu(0),
     pSubMenu(0),
@@ -206,10 +207,10 @@ SfxMenuControl::SfxMenuControl(USHORT nSlotId, SfxBindings& rBindings):
 {
     DBG_MEMTEST();
 
-    // Dieser Ctor soll es erm"oglichen, w"ahrend der Konstruktion schon
-    // auf die Bindings zur"uckgreifen zu k"onnen, aber gebunden wird
-    // wie immer erst sp"ater. Anwendung z.B. wenn im ctor der abgeleiteten
-    // Klasse z.B. ein StatusForwarder erzeugt werden soll.
+    // This constructor should make it possible already during the design
+    // to fall back to the bindings, but can as always be bound later.
+    // The usefullness of this is for example if a StatusForwarder should
+    // be created in the constructor of a derived class.
     UnBind();
 }
 
@@ -247,7 +248,7 @@ void SfxMenuControl::StateChanged
     bool bIsObjMenu =
                 GetId() >= SID_OBJECTMENU0 && GetId() < SID_OBJECTMENU_LAST;
 
-    // enabled/disabled-Flag pauschal korrigieren
+    // Fix inclusion of enabled/disabled-Flag
 
 #ifdef UNIX
     if (nSID == SID_PASTE)
@@ -260,7 +261,7 @@ void SfxMenuControl::StateChanged
 
     if ( eState != SFX_ITEM_AVAILABLE )
     {
-        // checken nur bei nicht-Object-Menus
+        // check only for non-Object Menus
         if ( !bIsObjMenu )
             pOwnMenu->CheckItem( GetId(), FALSE );
 
@@ -274,7 +275,7 @@ void SfxMenuControl::StateChanged
     bool bCheck = false;
     if ( pState->ISA(SfxBoolItem) )
     {
-        // BoolItem fuer checken
+        // BoolItem for check
         DBG_ASSERT( GetId() < SID_OBJECTMENU0 || GetId() > SID_OBJECTMENU_LAST,
                     "SfxBoolItem not allowed for SID_OBJECTMENUx" );
         bCheck = ((const SfxBoolItem*)pState)->GetValue();
@@ -282,14 +283,14 @@ void SfxMenuControl::StateChanged
     else if ( pState->ISA(SfxEnumItemInterface) &&
               ((SfxEnumItemInterface *)pState)->HasBoolValue() )
     {
-        // EnumItem wie Bool behandeln
+        // Treat EnumItem as Bool
         DBG_ASSERT( GetId() < SID_OBJECTMENU0 || GetId() > SID_OBJECTMENU_LAST,
                     "SfxEnumItem not allowed for SID_OBJECTMENUx" );
         bCheck = ((SfxEnumItemInterface *)pState)->GetBoolValue();
     }
     else if ( ( b_ShowStrings || bIsObjMenu ) && pState->ISA(SfxStringItem) )
     {
-        // MenuText aus SfxStringItem holen
+        // Get MenuText from SfxStringItem
         String aStr( ((const SfxStringItem*)pState)->GetValue() );
         if ( aStr.CompareToAscii("($1)",4) == COMPARE_EQUAL )
         {

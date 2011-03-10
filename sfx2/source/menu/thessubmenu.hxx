@@ -75,7 +75,7 @@ class SfxThesSubMenuHelper
 
 private:
 
-    // don't use copy c-tor and assignment operator
+    // don't use copy constructor and assignment operator
     SfxThesSubMenuHelper( const SfxThesSubMenuHelper & );
     SfxThesSubMenuHelper & operator = ( const SfxThesSubMenuHelper & );
 

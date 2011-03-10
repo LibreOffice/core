@@ -160,13 +160,11 @@ void InsertVerbs_Impl( SfxBindings* pBindings, const com::sun::star::uno::Sequen
             if ( !(aVerbs[n].VerbAttributes & embed::VerbAttributes::MS_VERBATTR_ONCONTAINERMENU) )
                 continue;
 
-            // neue Id vergeben
             USHORT nId = SID_VERB_START + nr++;
-            DBG_ASSERT(nId <= SID_VERB_END, "Zuviele Verben!");
+            DBG_ASSERT(nId <= SID_VERB_END, "Too many verbs!");
             if ( nId > SID_VERB_END )
                 break;
 
-            // einf"ugen
             pMenu->InsertItem( nId, aVerbs[n].VerbName );
             pMenu->SetHelpId( nId, (ULONG) nId );
         }
@@ -363,7 +361,7 @@ void SfxMenuManager::Construct_Impl( Menu* pSVMenu, BOOL bWithHelp )
     SfxVirtualMenu *pOldVirtMenu=0;
     if ( pMenu )
     {
-        // Es wird umkonfiguriert
+        // It is reconfigured
         pOldVirtMenu = pMenu;
         pBindings->ENTERREGISTRATIONS();
     }

@@ -139,24 +139,26 @@ svt::StatusbarController* SAL_CALL SfxStatusBarControllerFactory(
 
 SfxStatusBarControl::SfxStatusBarControl
 (
-    USHORT      nSlotID,            /* Slot-Id, mit der diese Instanz
-                                       verbunden wird. Wurde bei der
-                                       Registrierung eine Slot-Id != 0
-                                       angegeben, ist dies immer die dort
-                                       angegebene. */
+    USHORT      nSlotID,            /* Slot-Id which is connected to this
+                                       instance. If a Slot-Id is set to != 0 at
+                                       registration it will always be set there.
+                                    */
+
+
     USHORT      nCtrlID,            /* ID of this controller in the status bar */
 
-    StatusBar&  rBar                /* Referenz auf die StatusBar, f"ur die
-                                       dieses Control erzeugt wurde. */
+    StatusBar&  rBar                /* Reference to the StatusBar,for which
+                                       this Control was created. */
 )
 
-/*  [Beschreibung]
 
-    Konstruktor der Klasse SfxStatusBarControl. Die Subclasses werden
-    bei Bedarf per Factory vom SFx erzeugt.
+/*  [Description]
 
-    Instanzen dieser Basisklasse werden f"ur alle StatusBar-Felder
-    erzeugt, f"ur die keine speziellen registriert wurden.
+    Constructor of the SfxStatusBarControl Class. The Subclasses are
+    created at the Factory if necessary.
+
+    Instances of this base class are created for all StatusBar-fields
+    for which no specific ones have been registered.
 */
 
 :   svt::StatusbarController(),
@@ -170,10 +172,10 @@ SfxStatusBarControl::SfxStatusBarControl
 
 SfxStatusBarControl::~SfxStatusBarControl()
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Destruktor der Klasse SfxStatusBarControl. Die Instanzen dieser
-    Klasse und deren Subklassen werden vom SFx zerst"ort.
+    Destructor of the SfxStatusBarControl Class. The Class and its Subclasses
+    are destroyed by SFx.
 */
 
 {}
@@ -433,20 +435,20 @@ void SfxStatusBarControl::StateChanged
 (
     USHORT              nSID,
     SfxItemState        eState,
-    const SfxPoolItem*  pState  /* Zeiger auf ein SfxPoolItem, welches nur
-                                   innerhalb dieses Methodenaufrufs g"ultig
-                                   ist. Es kann ein 0-Pointer, ein Pointer
-                                   auf ein SfxVoidItem oder auf den Typ, f"ur
-                                   den die Subclass von SfxStatusBarControl
-                                   registriert ist vorkommen. */
+    const SfxPoolItem*  pState  /* Pointer to SfxPoolItem, is only valid
+                                   withih this Method call. This can be a
+                                   Null-Pointer, a Pointer to SfxVoidItem
+                                   or of this Type found registered by the
+                                   Subclass of SfxStatusBarControl.
+                                */
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Die Basisimplementation versteht Items vom Type SfxStringItem, bei
-    denen der Text in das Status-Zeilen-Feld eingetragen wird und
-    SfxVoidItem, bei denen das Feld geleert wird. Die Basisimplementierng
-    sollte in "uberladenen Methoden nicht gerufen werden.
+    The base implementation includes items of type SfxStringItem
+    where the text is entered in the status row field and
+    SfxVoidItem, where the field is emptied. The base implementation
+    should not be called in overloaded methods.
 */
 
 {
@@ -468,25 +470,23 @@ void SfxStatusBarControl::StateChanged
 
 BOOL SfxStatusBarControl::MouseButtonDown( const MouseEvent & )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese virtuelle Methode ist eine Weiterleitung des Events
-    MouseButtonDown() der StatusBar, falls die Maus-Position innerhalb
-    des Bereichs des betreffenden Items ist, oder die Maus von diesem
-    Control mit <SfxStatusBarControl::CaptureMouse()> gecaptured wurde.
+    This virtual method forwards the Event MouseButtonDown() of the
+    StatusBar if the mouse position is within the range of the items,
+    or if the mouse was captured by <SfxStatusBarControl::CaptureMouse()>
 
-    Die Defaultimplementierung ist leer und gibt FALSE zur"uck.
+    The default implementation is empty and returns FALSE.
 
-
-    [Rueckgabewert]
+    [Return value]
 
     BOOL                TRUE
-                        das Event wurde bearbeitet und soll nicht an
-                        die StatusBar weitergeleitet werden
+           The event has been processed and is not intended to
+           be forwarded to StatusBar
 
                         FALSE
-                        das Event wurde nicht bearbeitet und soll an
-                        die StatusBar weitergeleitet werden
+           The event was not processed and is to be
+           be forwarded to StatusBar
 */
 
 {
@@ -497,25 +497,23 @@ BOOL SfxStatusBarControl::MouseButtonDown( const MouseEvent & )
 
 BOOL SfxStatusBarControl::MouseMove( const MouseEvent & )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese virtuelle Methode ist eine Weiterleitung des Events
-    MouseMove() der StatusBar, falls die Maus-Position innerhalb
-    des Bereichs des betreffenden Items ist, oder die Maus von diesem
-    Control mit <SfxStatusBarControl::CaptureMouse()> gecaptured wurde.
+    This virtual method forwards the Event MouseMove() of the
+    StatusBar if the mouse position is within the range of the items,
+    or if the mouse was captured by <SfxStatusBarControl::CaptureMouse()>
 
-    Die Defaultimplementierung ist leer und gibt FALSE zur"uck.
+    The default implementation is empty and returns FALSE.
 
-
-    [Rueckgabewert]
+    [Return value]
 
     BOOL                TRUE
-                        das Event wurde bearbeitet und soll nicht an
-                        die StatusBar weitergeleitet werden
+           The event has been processed and is not intended to
+           be forwarded to StatusBar
 
                         FALSE
-                        das Event wurde nicht bearbeitet und soll an
-                        die StatusBar weitergeleitet werden
+           The event was not processed and is to be
+           be forwarded to StatusBar
 */
 
 {
@@ -526,25 +524,23 @@ BOOL SfxStatusBarControl::MouseMove( const MouseEvent & )
 
 BOOL SfxStatusBarControl::MouseButtonUp( const MouseEvent & )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese virtuelle Methode ist eine Weiterleitung des Events
-    MouseButtonUp() der StatusBar, falls die Maus-Position innerhalb
-    des Bereichs des betreffenden Items ist, oder die Maus von diesem
-    Control mit <SfxStatusBarControl::CaptureMouse()> gecaptured wurde.
+    This virtual method forwards the Event MouseButtonUp() of the
+    StatusBar if the mouse position is within the range of the items,
+    or if the mouse was captured by <SfxStatusBarControl::CaptureMouse()>
 
-    Die Defaultimplementierung ist leer und gibt FALSE zur"uck.
+    The default implementation is empty and returns FALSE.
 
-
-    [Rueckgabewert]
+    [Return value]
 
     BOOL                TRUE
-                        das Event wurde bearbeitet und soll nicht an
-                        die StatusBar weitergeleitet werden
+           The event has been processed and is not intended to
+           be forwarded to StatusBar
 
                         FALSE
-                        das Event wurde nicht bearbeitet und soll an
-                        die StatusBar weitergeleitet werden
+           The event was not processed and is to be
+           be forwarded to StatusBar
 */
 
 {
@@ -555,12 +551,12 @@ BOOL SfxStatusBarControl::MouseButtonUp( const MouseEvent & )
 
 void SfxStatusBarControl::Command( const CommandEvent& )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese virtuelle Methode wird gerufen, wenn f"ur dieses SfxStatusBarControl
-    ein CommandEvent f"ur erkannt wurde.
+    This virtual method is called when a CommandEvent is recived by
+    SfxStatusBarControl.
 
-    Die Defaultimplementierung ist leer.
+    The default implementation is empty.
 */
 
 {
@@ -570,12 +566,12 @@ void SfxStatusBarControl::Command( const CommandEvent& )
 
 void SfxStatusBarControl::Click()
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese virtuelle Methode wird gerufen, wenn der Anwender mit der Maus
-    in das zu diesem Control geh"orige Feld der Statuszeile klickt.
+    This virtual method is called when the user clicks on the
+    field in the status row that belongs to this control.
 
-    Die Defaultimplementierung ist leer.
+    The default implementation is empty.
 */
 
 {
@@ -585,10 +581,10 @@ void SfxStatusBarControl::Click()
 
 void SfxStatusBarControl::DoubleClick()
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese virtuelle Methode wird gerufen, wenn der Anwender mit der Maus
-    in das zu diesem Control geh"orige Feld der Statuszeile doppel-klickt.
+    This virtual method is called when the user double-clicks on the
+    field in the status row that belongs to this control.
 */
 
 {
@@ -600,18 +596,17 @@ void SfxStatusBarControl::DoubleClick()
 
 void SfxStatusBarControl::Paint
 (
-    const UserDrawEvent& /* Referenz auf einen UserDrawEvent */
+    const UserDrawEvent& /* Reference to an UserDrawEvent */
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese virtuelle Methode wird gerufen, falls das betreffende Feld
-    mit SIB_USERDRAW gekennzeichnet ist, um den Inhalt zu zeichnen.
-    Die Ausgabe mu"s auf dem in durch rUDEvt.GetDevice() erh"altlichen
-    OutputDevice innerhalb des durch rUDEvt.GetRect() angegebenenen
-    Rechtecks erfolgen.
+    This virtual method is called to paint the contents if the field
+    at hand is marked with SIB_USERDRAW. The output must be obtained
+    within the Rectangle of rUDEvt.GetRect() by the OutputDevice
+    given by rUDEvt.GetDevice().
 
-    Die Defaultimplementierung ist leer.
+    The default implementation is empty.
 */
 
 {

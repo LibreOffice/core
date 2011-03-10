@@ -399,33 +399,31 @@ SfxToolBoxControl* SfxToolBoxControl::CreateControl( USHORT nSlotId, USHORT nTbx
 
 SfxItemState SfxToolBoxControl::GetItemState(
     const SfxPoolItem* pState )
-/*  [Beschreibung]
+/*  [Description]
 
-    Statische Methode zum Ermitteln des Status des SfxPoolItem-Pointers,
-    in der Methode <SfxControllerItem::StateChanged(const SfxPoolItem*)>
-    zu verwenden.
+    Static method for determining the status of the SfxPoolItem-pointer,
+    used in the method <SfxControllerItem::StateChanged(const SfxPoolItem*)>.
 
-    [R"uckgabewert]
+    [Return value]
 
     SfxItemState        SFX_ITEM_UNKNOWN
-                        Enabled, aber keine weitere Statusinformation
-                        verf"ugbar. Typisch f"ur <Slot>s, die allenfalls
-                        zeitweise disabled sind, aber ihre Darstellung sonst
-                        nicht "andern.
+                        Enabled, however no further status information is available.
+                        Typical for <Slot>s, which are temporarily disabled a
+                        anyway but other than that do not change their appearance.
 
                         SFX_ITEM_DISABLED
-                        Disabled und keine weiter Statusinformation
-                        verf"ugbar. Alle anderen ggf. angezeigten Werte sollten
-                        auf den Default zur"uckgesetzt werden.
+                        Disabled, no further status information is available.
+                        All other displayed values should be reset to the default
+                        if possible.
 
                         SFX_ITEM_DONTCARE
-                        Enabled aber es waren nur uneindeutige Werte
-                        verf"ugbar (also keine, die abgefragt werden k"onnen).
+                        Enabled but there were only ambiguous values available
+                        (i.e. none that could be queried).
 
                         SFX_ITEM_AVAILABLE
-                        Enabled und mit verf"ugbarem Wert, der von 'pState'
-                        erfragbar ist. Der Typ ist dabei im gesamten
-                        Programm eindeutig und durch den Slot festgelegt.
+                        Enabled and with available values which can be queried
+                        through'pState'. The type is thus by the Slot clearly
+                        defined in the entire Program.
 */
 
 {
@@ -964,7 +962,7 @@ void SfxToolBoxControl::StateChanged
     if ( GetId() >= SID_OBJECTMENU0 && GetId() <= SID_OBJECTMENU_LAST )
         return;
 
-    // enabled/disabled-Flag pauschal korrigieren
+    // enabled/disabled-Flag correcting the lump sum
     pImpl->pBox->EnableItem( GetId(), eState != SFX_ITEM_DISABLED );
 
     USHORT nItemBits = pImpl->pBox->GetItemBits( GetId() );
@@ -976,7 +974,7 @@ void SfxToolBoxControl::StateChanged
         {
             if ( pState->ISA(SfxBoolItem) )
             {
-                // BoolItem fuer checken
+                // BoolItem for checking
                 if ( ((const SfxBoolItem*)pState)->GetValue() )
                     eTri = STATE_CHECK;
                 nItemBits |= TIB_CHECKABLE;
@@ -984,7 +982,7 @@ void SfxToolBoxControl::StateChanged
             else if ( pState->ISA(SfxEnumItemInterface) &&
                 ((SfxEnumItemInterface *)pState)->HasBoolValue())
             {
-                // EnumItem wie Bool behandeln
+                // EnumItem is handled as Bool
                 if ( ((const SfxEnumItemInterface *)pState)->GetBoolValue() )
                     eTri = STATE_CHECK;
                 nItemBits |= TIB_CHECKABLE;
@@ -1390,7 +1388,7 @@ void SfxPopupWindow::PopupModeEnd()
 
     if ( IsVisible() )
     {
-        // wurde abgerissen
+        // was teared-off
         DeleteFloatingWindow();
         m_bFloating = TRUE;
     }
@@ -1417,7 +1415,7 @@ void SfxPopupWindow::MouseMove( const ::MouseEvent& rMEvt )
         FloatingWindow::MouseMove( rMEvt );
     else
     {
-        // MouseMove-Event an die Children forwarden
+        // Forward MouseMove-Event to Children
         ::Point       aPos = rMEvt.GetPosPixel();
         ::Point       aScrPos = OutputToScreenPixel( aPos );
         USHORT i = 0;
@@ -1451,14 +1449,14 @@ void SfxPopupWindow::EndCascading()
 
 SfxPopupWindow* SfxPopupWindow::Clone() const
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese Methode mu\s "uberladen werden, um dieses Popup auch im
-    Presentations-Modus anzuzeigen. Sie wird gerufen, wenn ein Show()
-    sinnlos w"are, da der Parent nicht das Presentations-Window ist.
-    Beim neu erzeugen wird automatisch das neue Top-Window verwendet, so
-    da\s der Parent das Presentations-Window ist und das neue Popup somit
-    sichtbar ist.
+    This method must be overloaded to show this Popup also in the
+    Presentation-mode. It is called when a Show() would be meaningless
+    since the parent is no presentation window.
+    When create a new window the bew Top-Window will be used automatically,
+    so that the Parent becomes the presentation window and and that the new
+    Popup therefore becomes visible.
 */
 
 {
@@ -1471,16 +1469,14 @@ void SfxPopupWindow::StateChanged(
     USHORT /*nSID*/,
     SfxItemState eState,
     const SfxPoolItem* /*pState*/ )
-/*  [Bescheibung]
+/*  [Description]
 
-    Siehe auch <SfxControllerItem::StateChanged()>. Au\serdem wird
-    bei eState==SFX_ITEM_DISABLED das Popup gehided und in allen anderen
-    F"allen, falls es floating ist, wieder angezeigt. Daher mu\s die
-    Basisklasse i.d.R. gerufen werden.
+    See also <SfxControllerItem::StateChanged()>. In addition the Popup
+    will become hidden when eState==SFX_ITEM_DISABLED and in all other
+    cases it will be shown again if it is floating. In general this requires
+    to call the Base class.
 
-    Es findet wegen des Parents eine Sonderbehandlung f"ur den
-    Presentationsmodus statt.
-
+    Due to the parent the presentation mode is handled in a special way.
 */
 
 {

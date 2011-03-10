@@ -55,12 +55,12 @@ class SfxSplitWindow;
 class SfxWorkWindow;
 
 //====================================================================
-// Dieser struct h"alt alle relevanten Informationen "uber Toolboxen bereit.
+// This struct makes all relevant Informationen available of Toolboxes
 
 struct SfxObjectBar_Impl
 {
-    USHORT        nId;   // Resource - und ConfigId der Toolbox
-    USHORT        nMode; // spezielle Sichtbarkeitsflags
+    USHORT        nId;   // Resource - and ConfigId of Toolbox
+    USHORT        nMode; // special visibility flags
     USHORT        nPos;
     USHORT        nIndex;
     sal_Bool      bDestroy;
@@ -76,7 +76,8 @@ struct SfxObjectBar_Impl
 };
 
 //------------------------------------------------------------------------------
-// Dieser struct h"alt alle relevanten Informationen "uber die Statuszeile bereit.
+// This struct makes all relevant Informationen available of the status bar
+
 struct SfxStatBar_Impl
 {
     USHORT                  nId;
@@ -93,9 +94,9 @@ struct SfxStatBar_Impl
 //------------------------------------------------------------------------------
 
 #define CHILD_NOT_VISIBLE   0
-#define CHILD_ACTIVE        1   // nicht durch HidePopups ausgeschaltet
-#define CHILD_NOT_HIDDEN    2   // nicht durch HideChildWindow ausgeschaltet
-#define CHILD_FITS_IN       4   // nicht zu gro\s f"ur OutputSize des parent
+#define CHILD_ACTIVE       1    // not disabled through HidePopups
+#define CHILD_NOT_HIDDEN   2    // not disabled through HideChildWindow
+#define CHILD_FITS_IN      4    // not too large for output size of the parent
 #define CHILD_VISIBLE       (CHILD_NOT_HIDDEN | CHILD_ACTIVE | CHILD_FITS_IN)
 #define CHILD_ISVISIBLE     (CHILD_NOT_HIDDEN | CHILD_ACTIVE)
 
@@ -131,13 +132,13 @@ class SfxChildWinController_Impl : public SfxControllerItem
 
 struct SfxChildWin_Impl
 {
-    USHORT                          nSaveId;        // die ChildWindow-Id
-    USHORT                          nInterfaceId;   // der aktuelle Context
-    USHORT                          nId;            // aktuelle Id
+    USHORT                         nSaveId;       // the ChildWindow-Id
+    USHORT                         nInterfaceId;  // the current context
+    USHORT                         nId;           // current Id
     SfxChildWindow*                 pWin;
     BOOL                            bCreate;
     SfxChildWinInfo                 aInfo;
-    SfxChild_Impl*                  pCli;           // != 0 bei direkten Children
+    SfxChild_Impl*                 pCli;          // != 0 at direct Children
     USHORT                          nVisibility;
     BOOL                            bEnable;
     BOOL                            bDisabled;
@@ -307,7 +308,7 @@ public:
                             { return pParent; }
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >          CreateDispatch( const String& );
 
-    // Methoden f"ur alle Child-Fenster
+    // Methods for all Child windows
     void                    DataChanged_Impl( const DataChangedEvent& rDCEvt );
     void                    ReleaseChild_Impl( Window& rWindow );
     SfxChild_Impl*          RegisterChild_Impl( Window& rWindow, SfxChildAlignment eAlign, BOOL bCanGetFocus=FALSE );
@@ -328,7 +329,7 @@ public:
     void                    SetFullScreen_Impl( BOOL bSet ) { bIsFullScreen = bSet; }
     BOOL                    IsFullScreen_Impl() const { return bIsFullScreen; }
 
-    // Methoden f"ur Objectbars
+    // Methods for Objectbars
     virtual void            UpdateObjectBars_Impl();
     void                    ResetObjectBars_Impl();
     void                    SetObjectBar_Impl( USHORT nPos, sal_uInt32 nResId,
@@ -344,7 +345,7 @@ public:
     USHORT                  HasNextObjectBar_Impl( USHORT nPos, String* pStr=0 );
     void                    SetObjectBarCustomizeMode_Impl( BOOL );
 
-    // Methoden f"ur ChildWindows
+    // Methods for ChildWindows
     void                    UpdateChildWindows_Impl();
     void                    ResetChildWindows_Impl();
     void                    SetChildWindowVisible_Impl( sal_uInt32, BOOL, USHORT );
@@ -366,7 +367,7 @@ public:
     virtual BOOL            ActivateNextChild_Impl( BOOL bForward = TRUE );
     bool                    AllowChildWindowCreation_Impl( const SfxChildWin_Impl& i_rCW ) const;
 
-    // Methoden f"ur StatusBar
+    // Methods for StatusBar
     void                    SetTempStatusBar_Impl( BOOL bSet );
     void                    ResetStatusBar_Impl();
     void                    SetStatusBar_Impl(sal_uInt32 nResId, SfxShell *pShell, SfxBindings& );

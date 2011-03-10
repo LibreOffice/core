@@ -54,7 +54,7 @@ private:
     PopupMenu*      pWindowMenu;
     PopupMenu*      pPickMenu;
     PopupMenu*      pAddonsMenu;
-    Timer*          pAutoDeactivate; // Hack fuer QAP-Bug
+    Timer*          pAutoDeactivate; // Hack for QAP-Bug
     USHORT          nVisibleItems;
     USHORT          nId;
     USHORT          nCount;

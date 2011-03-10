@@ -357,10 +357,10 @@
 
 #define ACT_SFX_HID_END HID_SECURITYTAB_PROTECTION
 
-// "Uberlaufpr"ufung --------------------------------------------------------
+// Overflow test  --------------------------------------------------------
 
 #if ACT_SFX_HID_END > HID_SFX_END
-#error Resource-Ueberlauf in #line, #file
+#error Resource overflow in #line, #file
 #endif
 
 #define HID_HELP_ONHELP                             68245

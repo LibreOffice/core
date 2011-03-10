@@ -61,8 +61,8 @@ class Timer;
 
 //------------------------------------------------------------------------
 
-// Macro fuer den Call-Profiler unter WinNT
-// mit S_CAP kann eine Messung gestarted, mit E_CAP wieder gestoppt werden
+// Macro for the Call-Profiler under WinNT
+// with S_CAP a measurement can be started, and stopped with E_CAP
 #if defined( WNT ) && defined( PROFILE )
 
 extern "C" {
