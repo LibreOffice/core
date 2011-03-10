@@ -31,10 +31,7 @@
          lookupSelectArray[lookupListIndex] |= featureMask;
          lookupOrderArray[store++] = lookupListIndex;
      }
-@@ -121,8 +128,8 @@
- LookupProcessor::LookupProcessor(const char *baseAddress,
-         Offset scriptListOffset, Offset featureListOffset, Offset lookupListOffset,
-         LETag scriptTag, LETag languageTag, const FeatureMap *featureMap, le_int32 featureMapCount, le_bool orderFeatures,
+@@ -124,5 +131,5 @@
          LEErrorCode& success)
 -    : lookupListTable(NULL), featureListTable(NULL), lookupSelectArray(NULL),
 +    : lookupListTable(NULL), featureListTable(NULL), lookupSelectArray(NULL), lookupSelectCount(0),
