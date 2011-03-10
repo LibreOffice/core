@@ -1738,6 +1738,7 @@ void CustomAnimationEffect::updatePathFromSdrPathObj( const SdrPathObj& rPathObj
     SdrObject* pObj = GetSdrObjectFromXShape( getTargetShape() );
     if( pObj )
     {
+        pObj->RecalcBoundRect(true);
         const Rectangle aBoundRect( pObj->GetCurrentBoundRect() );
         const Point aCenter( aBoundRect.Center() );
 
