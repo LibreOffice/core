@@ -2599,7 +2599,7 @@ void SwDrawVirtObj::SetBoundRectDirty()
     // do nothing to not lose model information in aOutRect
 }
 
-void SwDrawVirtObj::RecalcBoundRect()
+void SwDrawVirtObj::RecalcBoundRect(bool)
 {
     // OD 2004-04-05 #i26791# - switch order of calling <GetOffset()> and
     // <ReferencedObj().GetCurrentBoundRect()>, because <GetOffset()> calculates
