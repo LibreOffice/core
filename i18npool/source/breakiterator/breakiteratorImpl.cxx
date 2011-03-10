@@ -443,12 +443,6 @@ sal_Int16 SAL_CALL BreakIteratorImpl::getWordType( const OUString& /*Text*/,
         return 0;
 }
 
-typedef struct {
-    UBlockCode from;
-    UBlockCode to;
-    sal_Int16 script;
-} UBlock2Script;
-
 static sal_Int16 scriptTypes[] = {
     ScriptType::WEAK, ScriptType::WEAK, ScriptType::COMPLEX, ScriptType::LATIN, ScriptType::COMPLEX,
     ScriptType::ASIAN, ScriptType::LATIN, ScriptType::LATIN, ScriptType::LATIN, ScriptType::COMPLEX,
