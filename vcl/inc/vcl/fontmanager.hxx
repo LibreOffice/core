@@ -733,7 +733,7 @@ public:
     false else
      */
     bool matchFont( FastPrintFontInfo& rInfo, const com::sun::star::lang::Locale& rLocale );
-    bool getFontOptions( const FastPrintFontInfo&, int nSize, void (*subcallback)(void*), ImplFontOptions& rResult ) const;
+    ImplFontOptions* getFontOptions( const FastPrintFontInfo&, int nSize, void (*subcallback)(void*)) const;
 
     rtl::OUString Substitute( const rtl::OUString& rFontName, rtl::OUString& rMissingCodes,
         const rtl::OString& rLangAttrib, italic::type& rItalic, weight::type& rWeight,

@@ -632,22 +632,21 @@ bool X11SalGraphics::setFont( const ImplFontSelectData *pEntry, int nFallbackLev
     return false;
 }
 
+ImplFontOptions* GetFCFontOptions( const ImplFontAttributes& rFontAttributes, int nSize);
+
 void ImplServerFontEntry::HandleFontOptions( void )
 {
-    bool GetFCFontOptions( const ImplFontAttributes&, int nSize, ImplFontOptions& );
-
     if( !mpServerFont )
         return;
     if( !mbGotFontOptions )
     {
         // get and cache the font options
         mbGotFontOptions = true;
-        mbValidFontOptions = GetFCFontOptions( *maFontSelData.mpFontData,
-            maFontSelData.mnHeight, maFontOptions );
+        mpFontOptions = GetFCFontOptions( *maFontSelData.mpFontData,
+            maFontSelData.mnHeight );
     }
     // apply the font options
-    if( mbValidFontOptions )
-        mpServerFont->SetFontOptions( maFontOptions );
+    mpServerFont->SetFontOptions( mpFontOptions );
 }
 
 //--------------------------------------------------------------------------
@@ -1636,8 +1635,7 @@ void cairosubcallback( void* pPattern )
     rCairo.ft_font_options_substitute( pFontOptions, pPattern );
 }
 
-bool GetFCFontOptions( const ImplFontAttributes& rFontAttributes, int nSize,
-    ImplFontOptions& rFontOptions)
+ImplFontOptions* GetFCFontOptions( const ImplFontAttributes& rFontAttributes, int nSize)
 {
     // TODO: get rid of these insane enum-conversions
     // e.g. by using the classic vclenum values inside VCL
@@ -1734,8 +1732,7 @@ bool GetFCFontOptions( const ImplFontAttributes& rFontAttributes, int nSize,
     }
 
     const psp::PrintFontManager& rPFM = psp::PrintFontManager::get();
-    bool bOK = rPFM.getFontOptions( aInfo, nSize, cairosubcallback, rFontOptions);
-    return bOK;
+    return rPFM.getFontOptions(aInfo, nSize, cairosubcallback);
 }
 
 // ----------------------------------------------------------------------------

@@ -187,7 +187,7 @@ public:
     virtual bool                TestFont() const            { return true; }
     virtual void*               GetFtFace() const { return 0; }
     virtual int                 GetLoadFlags() const { return 0; }
-    virtual void                SetFontOptions( const ImplFontOptions&) {}
+    virtual void                SetFontOptions( const ImplFontOptions*) {}
     virtual bool                NeedsArtificialBold() const { return false; }
     virtual bool                NeedsArtificialItalic() const { return false; }
 
@@ -266,9 +266,8 @@ class VCL_DLLPUBLIC ImplServerFontEntry : public ImplFontEntry
 {
 private:
     ServerFont*    mpServerFont;
-    ImplFontOptions maFontOptions;
+    ImplFontOptions* mpFontOptions;
     bool           mbGotFontOptions;
-    bool           mbValidFontOptions;
 
 public:
                    ImplServerFontEntry( ImplFontSelectData& );

@@ -768,6 +768,7 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
     mpFontInfo( pFI ),
     maFaceFT( NULL ),
     maSizeFT( NULL ),
+    mpFontOptions( NULL ),
     mbFaceOk( false ),
     maRecodeConverter( NULL ),
     mpLayoutEngine( NULL )
@@ -913,9 +914,14 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
         mnLoadFlags |= FT_LOAD_NO_BITMAP;
 }
 
-void FreetypeServerFont::SetFontOptions( const ImplFontOptions& rFontOptions)
+void FreetypeServerFont::SetFontOptions( const ImplFontOptions* pFontOptions)
 {
-    FontAutoHint eHint = rFontOptions.GetUseAutoHint();
+    mpFontOptions = pFontOptions;
+
+    if (!mpFontOptions)
+        return;
+
+    FontAutoHint eHint = mpFontOptions->GetUseAutoHint();
     if( eHint == AUTOHINT_DONTKNOW )
         eHint = mbUseGamma ? AUTOHINT_TRUE : AUTOHINT_FALSE;
 
@@ -926,11 +932,11 @@ void FreetypeServerFont::SetFontOptions( const ImplFontOptions& rFontOptions)
         mnLoadFlags |= FT_LOAD_NO_HINTING;
     mnLoadFlags |= FT_LOAD_IGNORE_GLOBAL_ADVANCE_WIDTH; //#88334#
 
-    if( rFontOptions.DontUseAntiAlias() )
+    if( mpFontOptions->DontUseAntiAlias() )
       mnPrioAntiAlias = 0;
-    if( rFontOptions.DontUseEmbeddedBitmaps() )
+    if( mpFontOptions->DontUseEmbeddedBitmaps() )
       mnPrioEmbedded = 0;
-    if( rFontOptions.DontUseHinting() )
+    if( mpFontOptions->DontUseHinting() )
       mnPrioAutoHint = 0;
 
 #if (FTVERSION >= 2005) || defined(TT_CONFIG_OPTION_BYTECODE_INTERPRETER)
@@ -942,7 +948,7 @@ void FreetypeServerFont::SetFontOptions( const ImplFontOptions& rFontOptions)
     if( !(mnLoadFlags & FT_LOAD_NO_HINTING) && (nFTVERSION >= 2103))
     {
        mnLoadFlags |= FT_LOAD_TARGET_NORMAL;
-       switch( rFontOptions.GetHintStyle() )
+       switch( mpFontOptions->GetHintStyle() )
        {
            case HINT_NONE:
                 mnLoadFlags |= FT_LOAD_NO_HINTING;

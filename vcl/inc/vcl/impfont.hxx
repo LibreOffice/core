@@ -135,7 +135,7 @@ public:
 };
 
 // ------------------
-// - ImplFontHints -
+// - ImplFontOptions -
 // ------------------
 
 class ImplFontOptions
@@ -154,19 +154,18 @@ public:
         meHinting(HINTING_DONTKNOW),
         meHintStyle(HINT_SLIGHT)
     {}
-    ImplFontOptions( FontEmbeddedBitmap eEmbeddedBitmap, FontAntiAlias eAntiAlias,
-        FontAutoHint eAutoHint, FontHinting eHinting, FontHintStyle eHintStyle) :
-        meEmbeddedBitmap(eEmbeddedBitmap),
-        meAntiAlias(eAntiAlias),
-        meAutoHint(eAutoHint),
-        meHinting(eHinting),
-        meHintStyle(eHintStyle)
+    virtual ~ImplFontOptions()
     {}
-    FontAutoHint GetUseAutoHint() const { return meAutoHint; }
-    FontHintStyle GetHintStyle() const { return meHintStyle; }
-    bool DontUseEmbeddedBitmaps() const { return meEmbeddedBitmap == EMBEDDEDBITMAP_FALSE; }
-    bool DontUseAntiAlias() const { return meAntiAlias == ANTIALIAS_FALSE; }
-    bool DontUseHinting() const { return (meHinting == HINTING_FALSE) || (GetHintStyle() == HINT_NONE); }
+    FontAutoHint GetUseAutoHint() const
+        { return meAutoHint; }
+    FontHintStyle GetHintStyle() const
+        { return meHintStyle; }
+    bool DontUseEmbeddedBitmaps() const
+        { return meEmbeddedBitmap == EMBEDDEDBITMAP_FALSE; }
+    bool DontUseAntiAlias() const
+        { return meAntiAlias == ANTIALIAS_FALSE; }
+    bool DontUseHinting() const
+        { return (meHinting == HINTING_FALSE) || (GetHintStyle() == HINT_NONE); }
 };
 
 // -------------------
