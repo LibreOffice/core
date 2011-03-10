@@ -413,10 +413,7 @@ public class FactoryHelper {
                     _implementationId[2]= (byte)((hash >>> 16) & 0xff);
                     _implementationId[3]= (byte)((hash >>>24) & 0xff);
 
-                    for (int i= 0; i < nNameLength; i++)
-                    {
-                        _implementationId[4 + i]= arName[i];
-                    }
+                    System.arraycopy(arName, 0, _implementationId, 4, nNameLength);
                 }
             }
             return _implementationId;
@@ -453,7 +450,7 @@ public class FactoryHelper {
         XSingleServiceFactory xSingleServiceFactory = null;
 
         try {
-            Field serviceName = null;
+            Field serviceName  ;
 
             try {
                 serviceName = implClass.getField("__serviceName");

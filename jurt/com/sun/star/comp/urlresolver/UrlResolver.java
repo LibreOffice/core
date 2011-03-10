@@ -71,9 +71,9 @@ public class UrlResolver {
         }
 
         public Object resolve(/*IN*/String dcp) throws NoConnectException, ConnectionSetupException, IllegalArgumentException, com.sun.star.uno.RuntimeException {
-            String conDcp = null;
-            String protDcp = null;
-            String rootOid = null;
+            String conDcp  ;
+            String protDcp  ;
+            String rootOid  ;
 
             if(dcp.indexOf(';') == -1) {// use old style
                 conDcp = dcp;
@@ -96,8 +96,8 @@ public class UrlResolver {
                 rootOid = dcp.trim().trim();
             }
 
-            Object rootObject = null;
-            XBridgeFactory xBridgeFactory= null;
+            Object rootObject  ;
+            XBridgeFactory xBridgeFactory ;
             try {
                 xBridgeFactory = UnoRuntime.queryInterface(XBridgeFactory.class,
                                                                           _xMultiServiceFactory.createInstance("com.sun.star.bridge.BridgeFactory"));
@@ -107,7 +107,7 @@ public class UrlResolver {
             XBridge xBridge = xBridgeFactory.getBridge(conDcp + ";" + protDcp);
 
             if(xBridge == null) {
-                Object connector= null;
+                Object connector ;
                 try {
                     connector = _xMultiServiceFactory.createInstance("com.sun.star.connection.Connector");
                 } catch (com.sun.star.uno.Exception e) {

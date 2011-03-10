@@ -265,7 +265,7 @@ public class JavaLoader implements XImplementationLoader,
         locationUrl = expand_url( locationUrl );
 
         Object returnObject  = null;
-        Class clazz = null;
+        Class clazz  ;
 
         DEBUG("try to get factory for " + implementationName);
 
