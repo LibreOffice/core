@@ -162,7 +162,7 @@ public:
 
     void FcFini()
     {
-        //To-Do: get non-headless mode smoketest to pass
+        //To-Do: get gtk vclplug smoketest to pass
         //if (m_pFcFini) m_pFcFini();
     }
 

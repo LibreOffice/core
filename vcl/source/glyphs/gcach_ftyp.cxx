@@ -522,6 +522,7 @@ void* FreetypeServerFont::GetFtFace() const
 
 FreetypeManager::~FreetypeManager()
 {
+    ClearFontList();
 // This crashes on Solaris 10
 // TODO: check which versions have this problem
 //
