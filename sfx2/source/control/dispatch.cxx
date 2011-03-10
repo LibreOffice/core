@@ -469,8 +469,6 @@ void SfxDispatcher::Pop
     DBG_ASSERT( rShell.GetInterface(),
                 "pushing SfxShell without previous RegisterInterface()" );
     DBG_ASSERT( pImp->nActionLevel == 0, "Push or Pop within Action" );
-//      DBG_ASSERT( SFX_APP()->IsInAsynchronCall_Impl(),
-//                                "Dispatcher Push/Pop in synchron-call-stack" );
 
     bool bDelete = (nMode & SFX_SHELL_POP_DELETE) == SFX_SHELL_POP_DELETE;
     bool bUntil = (nMode & SFX_SHELL_POP_UNTIL) == SFX_SHELL_POP_UNTIL;
@@ -2693,7 +2691,7 @@ void SfxDispatcher::DebugOutput_Impl() const
     if (bFlushed)
         DBG_TRACE("Flushed");
     if (pImp->bUpdated)
-        DBG_TRACE("Updated");
+        DBG_TRACE("updated");
 
     for ( sal_uInt16 nShell = pImp->aStack.Count(); nShell > 0; --nShell )
     {

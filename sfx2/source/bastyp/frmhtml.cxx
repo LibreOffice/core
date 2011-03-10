@@ -72,7 +72,7 @@ void SfxFrameHTMLParser::ParseFrameOptions( SfxFrameDescriptor *pFrame, const HT
 
     // MIB 07/15/1997: Netscape seems to set marginwidth to 0 as soon as
     // marginheight is set, and vice versa. Due to bug #41665# let us also
-    // do like that for now. Netscape does however not aallow for a direct
+    // do like that for now. Netscape does however not allow for a direct
     // seting to 0, while IE4.0 does
     // We will not mimic that bug !
     BOOL bMarginWidth = FALSE, bMarginHeight = FALSE;

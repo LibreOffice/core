@@ -304,7 +304,7 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
             }
         }
 
-        // frame border (MS+Netscape-Erweiterung)
+        // frame border (MS+Netscape-Extension)
         aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsAutoBorder")) );
         if ( (aAny >>= bVal) && !bVal )
         {

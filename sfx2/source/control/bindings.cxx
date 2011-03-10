@@ -248,7 +248,7 @@ SfxBindings::~SfxBindings()
 /*  [Description]
 
     Destructor of the SfxBindings class. The one, for each <SfxApplication>
-    existing Instance is automaticaölly destroyed by the  <SfxApplication>
+    existing Instance is automatically destroyed by the <SfxApplication>
     after the execution of <SfxApplication::Exit()>.
 
     The still existing <SfxControllerItem> instances, which are registered
@@ -787,7 +787,7 @@ void SfxBindings::InvalidateShell
                               sal_False
                               the inherited and not overloaded Slot-Ids were
                               invalidiert */
-                             //! MI: for now alwayds bDeep
+                             // for now always bDeep
 )
 {
     DBG_ASSERT( !pImp->bInUpdate, "SfxBindings::Invalidate while in update" );
@@ -801,8 +801,8 @@ void SfxBindings::InvalidateShell
     DBG_PROFSTART(SfxBindingsInvalidateAll);
     DBG_MEMTEST();
 
-    // Jetzt schon flushen, wird in GetShellLevel(rSh) sowieso gemacht; wichtig,
-    // damit pImp->bAll(Msg)Dirty korrekt gesetzt ist
+    // flush now already, it is done in GetShellLevel (rsh) anyway,
+    // important so that is set correctly: pimp-> ball(Msg)Dirty
     pDispatcher->Flush();
 
     if ( !pDispatcher ||
@@ -1242,7 +1242,7 @@ void SfxBindings::Execute_Impl( SfxRequest& aReq, const SfxSlot* pSlot, SfxShell
     if ( SFX_KIND_ENUM == pSlot->GetKind() )
     {
         // for Enum-Slots, the Master has to be excecuted with the value
-        // of the enums Wert
+        // of the enums
         const SfxSlot *pRealSlot = pShell->GetInterface()->GetRealSlot(pSlot);
         const sal_uInt16 nSlotId = pRealSlot->GetSlotId();
         aReq.SetSlot( nSlotId );
@@ -1301,7 +1301,7 @@ void SfxBindings::Execute_Impl( SfxRequest& aReq, const SfxSlot* pSlot, SfxShell
             {
                 // Create one Status-Item for each Factory
                 SfxPoolItem *pNewItem = pSlot->GetType()->CreateItem();
-                DBG_ASSERT( pNewItem, "Toggle an Slot ohne ItemFactory" );
+                DBG_ASSERT( pNewItem, "Toggle to slot without ItemFactory" );
                 pNewItem->SetWhich( nWhich );
 
                 if ( pNewItem->ISA(SfxBoolItem) )
@@ -1399,7 +1399,7 @@ SfxItemSet* SfxBindings::CreateSet_Impl
     DBG_MEMTEST();
     DBG_ASSERT( pImp->pCaches != 0, "SfxBindings not initialized" );
 
-    DBG_ASSERT( !pImp->bMsgDirty, "CreateSet_Impl mit dirty MessageServer" );
+    DBG_ASSERT( !pImp->bMsgDirty, "CreateSet_Impl with dirty MessageServer" );
 
     const SfxSlotServer* pMsgSvr = pCache->GetSlotServer(*pDispatcher, pImp->xProv);
     if(!pMsgSvr || !pDispatcher)
@@ -1594,7 +1594,7 @@ void SfxBindings::UpdateControllers_Impl
         {
             DBG_ASSERT(pSlave, "Wrong SlaveSlot binding!");
             DBG_ASSERT(SFX_KIND_ENUM == pSlave->GetKind(),"non enum slaves aren't allowed");
-            DBG_ASSERT(pSlave->GetMasterSlotId() == pSlot->GetSlotId(),"falscher MasterSlot!");
+            DBG_ASSERT(pSlave->GetMasterSlotId() == pSlot->GetSlotId(),"Wrong MasterSlot!");
 
             // Binding exist for function ?
             SfxStateCache *pEnumCache = GetStateCache( pSlave->GetSlotId() );

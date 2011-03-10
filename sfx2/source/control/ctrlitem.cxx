@@ -197,7 +197,7 @@ void SfxControllerItem::UpdateSlot()
 {
     DBG_MEMTEST();
     DBG_CHKTHIS(SfxControllerItem, 0);
-    DBG_ASSERT(pBindings, "Keine Bindings");
+    DBG_ASSERT(pBindings, "No Bindings");
 
     pBindings->Update( GetId() );
 }

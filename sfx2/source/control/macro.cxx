@@ -73,14 +73,10 @@ SfxMacroStatement::SfxMacroStatement
 
 /*  [Description]
 
-    Dieser Konstruktor der Klasse SfxMacroStatement erzeugt ein Statement,
-    bei dem ein Objekt angesprochen wird, welches durch 'rShell' angegeben
-    ist. Dabei erfolgt die Addressierung je nach 'bAbsolute' absolut,
-    also z.B. als '[mydoc.sdc]' oder relativ, also z.B. 'ActiveDocument'.
-
-    This constructor of the SfxMacroStatement class generate a statement in
+    This constructor of the SfxMacroStatement class generates a statement in
     which an object is brought up, which is given by 'rShell'. Thus It is
-    addressing the ever after 'bAbsolute' absolute, for example, as '[mydoc.sdc]', or relative, that is 'active document'.
+    addressing the always after 'bAbsolute' absolute, for example, as
+    '[mydoc.sdc]', or relative, that is 'active document'.
 
     Depending on the subclass of 'rShell', the following terms:
 
@@ -90,14 +86,14 @@ SfxMacroStatement::SfxMacroStatement
     SfxViewFrame'         | '[mydoc.sdc:1]'         'ActiveWindow'
     SfxViewShell'         | '[mydoc.sdc:1]'         'AvtiveWindow'
     SfxObjectShell'       | '[mydoc.sdc]'           'ActiveDocument'
-    sonstige (Sub-Shells) | '[mydoc.sdc:1]'         'ActiveWindow'
+    Other (Sub-Shells)    | '[mydoc.sdc:1]'         'ActiveWindow'
 
-    Dabei sind 'StarCalc' stellvertretend fuer den Namen der Applikation
-    (Application::GetAppName()const). In der absoluten Fassung könnte
-    die Selektion auch deskriptiv z.B. als 'CellSelection("A5-D8")')
-    angesprochen werden, dazu mu\ jedoch vom Anwendungsprogrammierer der
-    Konstruktor <SfxMacroStatement::SfxMacroStatement(const String&,
-    const SfxSlot&,BOOL,SfxArguments*)> verwendet werden.
+    Thus 'StarCalc' is a proxy for the name of the application
+    (Application::GetAppName()const). In the absolute sense of the selection
+    could be addressed as descriptive as in 'cell selection ("A5-D8")'), to do this
+    the application programmer must however use the constructor
+    <SfxMacroStatement::SfxMacroStatement(const String&,
+    const SfxSlot&,BOOL,SfxArguments*)>.
 
     For the so-called object is then, depending on the type of slots,
     expressed as an assignment to one of its properties or calling its methods.

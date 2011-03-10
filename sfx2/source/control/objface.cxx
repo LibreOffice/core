@@ -383,7 +383,7 @@ const SfxSlot* SfxInterface::GetRealSlot( USHORT nSlotId ) const
     {
         if(pGenoType)
             return pGenoType->GetRealSlot(nSlotId);
-        OSL_FAIL("fremder Slot");
+        OSL_FAIL("unkonown Slot");
         return 0;
     }
 
@@ -622,7 +622,7 @@ sal_uInt32 SfxInterface::GetObjectBarFeature ( USHORT nNo ) const
 
 #ifdef DBG_UTIL
     USHORT nObjBarCount = pImpData->pObjectBars->Count();
-    DBG_ASSERT( nNo<nObjBarCount,"Objectbar ist unknown!" );
+    DBG_ASSERT( nNo<nObjBarCount,"Objectbar is unknown!" );
 #endif
     return (*pImpData->pObjectBars)[nNo]->nFeature;
 }

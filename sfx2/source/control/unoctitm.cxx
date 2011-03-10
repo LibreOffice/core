@@ -105,7 +105,7 @@ SfxUnoControllerItem::SfxUnoControllerItem( SfxControllerItem *pItem, SfxBinding
     : pCtrlItem( pItem )
     , pBindings( &rBind )
 {
-    DBG_ASSERT( !pCtrlItem || !pCtrlItem->IsBound(), "ControllerItem fehlerhaft!" );
+    DBG_ASSERT( !pCtrlItem || !pCtrlItem->IsBound(), "ControllerItem is incorrect!" );
 
     aCommand.Complete = rCmd;
     Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))), UNO_QUERY );
@@ -131,18 +131,17 @@ void SfxUnoControllerItem::UnBind()
 void SAL_CALL SfxUnoControllerItem::statusChanged(const ::com::sun::star::frame::FeatureStateEvent& rEvent) throw ( ::com::sun::star::uno::RuntimeException )
 {
     SolarMutexGuard aGuard;
-    DBG_ASSERT( pCtrlItem, "Dispatch hat den StatusListener nicht entfern!" );
+    DBG_ASSERT( pCtrlItem, "Dispatch has not removed the StatusListener!" );
 
     if ( rEvent.Requery )
     {
-        // Fehler kann nur passieren, wenn das alte Dispatch fehlerhaft implementiert
-        // ist, also removeStatusListener nicht gefunzt hat. Aber sowas soll
-        // ja vorkommen ...
-        // Also besser vor ReleaseDispatch gegen Abflug sch"utzen!
+        // Error can only happen if the old Dispatch is implemented incorrectly
+        // i.e. removeStatusListener did not work. But such things can happen...
+        // So protect before ReleaseDispatch from release!
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >  aRef( (::cppu::OWeakObject*)this, ::com::sun::star::uno::UNO_QUERY  );
         ReleaseDispatch();
         if ( pCtrlItem )
-            GetNewDispatch();       // asynchron ??
+            GetNewDispatch();           // asynchronous ??
     }
     else if ( pCtrlItem )
     {

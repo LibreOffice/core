@@ -218,7 +218,7 @@ const SfxFilter* SfxFilterContainer::GetDefaultFilter_Impl( const String& rName 
     const SfxFilter* pFilter = aMatcher.GetFilter4FilterName(sDefaultFilter);
 
     if (
-        (pFilter                                                                            ) &&
+        (pFilter) &&
         (pFilter->GetServiceName().CompareIgnoreCaseToAscii( sServiceName ) != COMPARE_EQUAL)
        )
     {
@@ -370,7 +370,6 @@ sal_uInt32  SfxFilterMatcher::GuessFilterIgnoringContent(
     ::rtl::OUString sTypeName;
     try
     {
-        //!MBA: nmust, ndont?
         sTypeName = xDetection->queryTypeByURL( rMedium.GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
     }
     catch( Exception& )

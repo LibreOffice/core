@@ -81,7 +81,7 @@ SfxHTMLParser::SfxHTMLParser( SvStream& rStream, BOOL bIsNewDoc,
     nMetaTags( 0 )
 {
     DBG_ASSERT( RTL_TEXTENCODING_DONTKNOW == GetSrcEncoding( ),
-                "SfxHTMLParser::SfxHTMLParser: Wo kommt der ZS her?" );
+                "SfxHTMLParser::SfxHTMLParser: From where comes ZS?" );
     DBG_ASSERT( !IsSwitchToUCS2(),
                 "SfxHTMLParser::SfxHTMLParser: Switch to UCS2?" );
 
@@ -291,7 +291,7 @@ BOOL SfxHTMLParser::FinishFileDownload( String& rStr )
     if( bOK )
     {
         SvStream* pStream = pDLMedium->GetInStream();
-        DBG_ASSERT( pStream, "Kein In-Stream vom Medium erhalten" );
+        DBG_ASSERT( pStream, "No In-Stream received from Medium" );
 
         SvMemoryStream aStream;
         if( pStream )
@@ -299,7 +299,7 @@ BOOL SfxHTMLParser::FinishFileDownload( String& rStr )
 
         aStream.Seek( STREAM_SEEK_TO_END );
         DBG_ASSERT( aStream.Tell() < STRING_MAXLEN,
-                    "File zu lang fuer einen String, Ende abgeschnitten" );
+                    "File too long for a string, cut off the end" );
         xub_StrLen nLen = aStream.Tell() < STRING_MAXLEN
                         ? (xub_StrLen)aStream.Tell()
                         : STRING_MAXLEN;
