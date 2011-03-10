@@ -263,6 +263,7 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
         aFieldLbArr[i]->SelectEntryPos( nFieldSelPos );
         aCondLbArr [i]->SelectEntryPos( nCondPos );
         aValueEdArr[i]->SetText( aValStr );
+        aValueEdArr[i]->EnableAutocomplete( FALSE );
         aValueEdArr[i]->SetModifyHdl( LINK( this, ScFilterDlg, ValModifyHdl ) );
         UpdateValueList( static_cast<USHORT>(i+1) );
     }
