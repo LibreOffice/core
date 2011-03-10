@@ -174,7 +174,7 @@ protected:
                                 bCanDel                 :1,
                                 bCanNew                 :1,
                                 bWaterDisabled          :1,
-                                bNewByExampleDisab§led   :1,
+                                bNewByExampleDisabled   :1,
                                 bUpdateByExampleDisabled:1,
                                 bTreeDrag               :1,
                                 bHierarchical           :1,
