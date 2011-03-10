@@ -480,8 +480,6 @@ static sal_Int16 scriptTypes[] = {
     ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::LATIN, ScriptType::LATIN,
     ScriptType::WEAK};
 
-#define scriptTypesCount sizeof(scriptTypes) / sizeof(sal_Int16)
-
 sal_Int16  BreakIteratorImpl::getScriptClass(sal_uInt32 currentChar)
 {
         static sal_uInt32 lastChar = 0;
@@ -494,7 +492,7 @@ sal_Int16  BreakIteratorImpl::getScriptClass(sal_uInt32 currentChar)
             script = u_getIntPropertyValue(currentChar, UCHAR_SCRIPT);
             if (script < 0)
                 nRet = ScriptType::WEAK;
-            else if (script >= scriptTypesCount)
+            else if (script >= SAL_N_ELEMENTS(scriptTypes))
                 nRet = ScriptType::COMPLEX;         // anything new is going to be pretty wild
             else
                 nRet = scriptTypes[script];
