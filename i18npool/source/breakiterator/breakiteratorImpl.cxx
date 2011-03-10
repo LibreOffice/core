@@ -484,15 +484,14 @@ sal_Int16  BreakIteratorImpl::getScriptClass(sal_uInt32 currentChar)
 {
         static sal_uInt32 lastChar = 0;
         static sal_Int16 nRet = 0;
-        sal_uInt32 script;
 
         if (currentChar != lastChar) {
             lastChar = currentChar;
 
-            script = u_getIntPropertyValue(currentChar, UCHAR_SCRIPT);
+            int32_t script = u_getIntPropertyValue(currentChar, UCHAR_SCRIPT);
             if (script < 0)
                 nRet = ScriptType::WEAK;
-            else if (script >= SAL_N_ELEMENTS(scriptTypes))
+            else if (static_cast<size_t>(script) >= SAL_N_ELEMENTS(scriptTypes))
                 nRet = ScriptType::COMPLEX;         // anything new is going to be pretty wild
             else
                 nRet = scriptTypes[script];
