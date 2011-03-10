@@ -298,31 +298,42 @@ RegistryValueType SAL_CALL RegistryKeyImpl::getValueType(  )
         throw InvalidRegistryException(
             OUString( RTL_CONSTASCII_USTRINGPARAM("InvalidRegistryException") ),
             (OWeakObject *)this );
-    } else
-    {
-        RegValueType    type;
-        sal_uInt32      size;
-
-        if (m_key.getValueInfo(OUString(), &type, &size))
-        {
-            return RegistryValueType_NOT_DEFINED;
-        } else
-        {
-            switch (type)
-            {
-                case RG_VALUETYPE_LONG:         return RegistryValueType_LONG;
-                case RG_VALUETYPE_STRING:       return RegistryValueType_ASCII;
-                case RG_VALUETYPE_UNICODE:      return RegistryValueType_STRING;
-                case RG_VALUETYPE_BINARY:       return RegistryValueType_BINARY;
-                case RG_VALUETYPE_LONGLIST:     return RegistryValueType_LONGLIST;
-                case RG_VALUETYPE_STRINGLIST:   return RegistryValueType_ASCIILIST;
-                case RG_VALUETYPE_UNICODELIST:  return RegistryValueType_STRINGLIST;
-                default:                        return RegistryValueType_NOT_DEFINED;
-            }
-        }
     }
 
-    return RegistryValueType_NOT_DEFINED;
+    RegValueType type;
+    sal_uInt32 size;
+    if (m_key.getValueInfo(OUString(), &type, &size))
+        return RegistryValueType_NOT_DEFINED;
+
+    RegistryValueType eRet = RegistryValueType_NOT_DEFINED;
+    switch (type)
+    {
+        case RG_VALUETYPE_LONG:
+            eRet = RegistryValueType_LONG;
+            break;
+        case RG_VALUETYPE_STRING:
+            eRet = RegistryValueType_ASCII;
+            break;
+        case RG_VALUETYPE_UNICODE:
+            eRet = RegistryValueType_STRING;
+            break;
+        case RG_VALUETYPE_BINARY:
+            eRet = RegistryValueType_BINARY;
+            break;
+        case RG_VALUETYPE_LONGLIST:
+            eRet = RegistryValueType_LONGLIST;
+            break;
+        case RG_VALUETYPE_STRINGLIST:
+            eRet = RegistryValueType_ASCIILIST;
+            break;
+        case RG_VALUETYPE_UNICODELIST:
+            eRet = RegistryValueType_STRINGLIST;
+            break;
+        default:
+            eRet = RegistryValueType_NOT_DEFINED;
+            break;
+    }
+    return eRet;
 }
 
 //*************************************************************************
