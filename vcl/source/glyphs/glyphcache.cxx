@@ -71,6 +71,12 @@ GlyphCache::GlyphCache( GlyphCachePeer& rPeer )
 GlyphCache::~GlyphCache()
 {
     InvalidateAllGlyphs();
+    for( FontList::iterator it = maFontList.begin(), end = maFontList.end(); it != end; ++it )
+    {
+        ServerFont* pServerFont = it->second;
+        mrPeer.RemovingFont(*pServerFont);
+        delete pServerFont;
+    }
     if( mpFtManager )
         delete mpFtManager;
 }
@@ -331,7 +337,7 @@ void GlyphCache::GarbageCollect()
         pServerFont->GarbageCollect( mnLruIndex+0x10000000 );
         if( pServerFont == mpCurrentGCFont )
             mpCurrentGCFont = NULL;
-    const ImplFontSelectData& rIFSD = pServerFont->GetFontSelData();
+        const ImplFontSelectData& rIFSD = pServerFont->GetFontSelData();
         maFontList.erase( rIFSD );
         mrPeer.RemovingFont( *pServerFont );
         mnBytesUsed -= pServerFont->GetByteCount();
