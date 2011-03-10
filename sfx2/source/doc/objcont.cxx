@@ -126,8 +126,8 @@ SfxObjectShell::GetPreviewMetaFile( sal_Bool bFullContent ) const
 ::boost::shared_ptr<GDIMetaFile>
 SfxObjectShell::CreatePreviewMetaFile_Impl( sal_Bool bFullContent ) const
 {
-    // Nur wenn gerade nicht gedruckt wird, darf DoDraw aufgerufen
-    // werden, sonst wird u.U. der Printer abgeschossen !
+    // DoDraw can only be called when no printing is done, otherwise
+    // the printer may be turned off
     SfxViewFrame *pFrame = SfxViewFrame::GetFirst( this );
     if ( pFrame && pFrame->GetViewShell() &&
          pFrame->GetViewShell()->GetPrinter() &&
@@ -233,7 +233,7 @@ lcl_add(util::Duration & rDur, Time const& rTime)
     rDur.Seconds += rTime.GetSec();
 }
 
-// Bearbeitungszeit aktualisieren
+// Update the processing time
 void SfxObjectShell::UpdateTime_Impl(
     const uno::Reference<document::XDocumentProperties> & i_xDocProps)
 {
@@ -484,8 +484,8 @@ BOOL SfxObjectShell::Insert(SfxObjectShell &rSource,
         if ( pHisPool && pHisPool->Count() > nSourceIdx2 )
             pHisSheet = (*pHisPool)[nSourceIdx2];
 
-        // Einfuegen ist nur dann noetig, wenn ein StyleSheet
-        // zwischen unterschiedlichen(!) Pools bewegt wird
+        // Pasting is only needed if a style sheet is moved between
+        // different (!) Pools
 
         if ( pHisSheet && pMyPool != pHisPool )
         {
@@ -494,12 +494,12 @@ BOOL SfxObjectShell::Insert(SfxObjectShell &rSource,
                 nIdx2 = pMyPool->Count();
             }
 
-            // wenn so eine Vorlage schon existiert: loeschen!
+            // if such a template already exists: delete!
             String aOldName(pHisSheet->GetName());
             SfxStyleFamily eOldFamily = pHisSheet->GetFamily();
 
             SfxStyleSheetBase* pExist = pMyPool->Find(aOldName, eOldFamily);
-            // USHORT nOldHelpId = pExist->GetHelpId(??? VB ueberlegt sich was);
+            // USHORT nOldHelpId = pExist->GetHelpId(???);
             BOOL bUsedOrUserDefined;
             if( pExist )
             {
@@ -522,10 +522,11 @@ BOOL SfxObjectShell::Insert(SfxObjectShell &rSource,
                 aOldName, eOldFamily,
                 pHisSheet->GetMask(), nIdx2);
 
-            // ItemSet der neuen Vorlage fuellen
+            // Fill the Itemset of the new template
             rNewSheet.GetItemSet().Set(pHisSheet->GetItemSet());
 
-            // wer bekommt den Neuen als Parent? wer benutzt den Neuen als Follow?
+            // Who gets the new one as a Parent?
+            // Who is using the new one as Follow?
             SfxStyleSheetBase* pTestSheet = pMyPool->First();
             while (pTestSheet)
             {
@@ -534,7 +535,7 @@ BOOL SfxObjectShell::Insert(SfxObjectShell &rSource,
                     pTestSheet->GetParent() == aOldName)
                 {
                     pTestSheet->SetParent(aOldName);
-                    // Verknuepfung neu aufbauen
+                    // Rebuild Link
                 }
 
                 if (pTestSheet->GetFamily() == eOldFamily &&
@@ -542,7 +543,7 @@ BOOL SfxObjectShell::Insert(SfxObjectShell &rSource,
                     pTestSheet->GetFollow() == aOldName)
                 {
                     pTestSheet->SetFollow(aOldName);
-                    // Verknuepfung neu aufbauen
+                    // Rebuild Link
                 }
 
                 pTestSheet = pMyPool->Next();
@@ -551,7 +552,7 @@ BOOL SfxObjectShell::Insert(SfxObjectShell &rSource,
                 rNewSheet.IsUsed() || rNewSheet.IsUserDefined();
 
 
-            // hat der Neue einen Parent? wenn ja, mit gleichem Namen bei uns suchen
+            // has a New Parent? if so, start search with the same name
             if (pHisSheet->HasParentSupport())
             {
                 const String& rParentName = pHisSheet->GetParent();
@@ -564,8 +565,8 @@ BOOL SfxObjectShell::Insert(SfxObjectShell &rSource,
                 }
             }
 
-            // hat der Neue einen Follow? wenn ja, mit gleichem
-            // Namen bei uns suchen
+            // Has the new got a Follow? if so start search
+            // with the same name.
             if (pHisSheet->HasFollowSupport())
             {
                 const String& rFollowName = pHisSheet->GetFollow();
@@ -621,14 +622,14 @@ BOOL SfxObjectShell::Remove
                 pTestSheet->HasParentSupport() &&
                 pTestSheet->GetParent() == aName)
             {
-                pTestSheet->SetParent(aEmpty); // Verknuepfung aufloesen
+                pTestSheet->SetParent(aEmpty); // Remove link
             }
 
             if (pTestSheet->GetFamily() == eFamily &&
                 pTestSheet->HasFollowSupport() &&
                 pTestSheet->GetFollow() == aName)
             {
-                pTestSheet->SetFollow(aEmpty); // Verknuepfung aufloesen
+                pTestSheet->SetFollow(aEmpty); // Remove link
             }
 
             pTestSheet = pMyPool->Next();
@@ -663,7 +664,7 @@ BOOL SfxObjectShell::Print
             if ( !pStyle )
                 return TRUE;
 
-            // pepare adaptor for old style StartPage/EndPage printing
+            // prepare adaptor for old style StartPage/EndPage printing
             boost::shared_ptr< Printer > pPrinter( new Printer( rPrt.GetJobSetup() ) );
             vcl::OldStylePrintAdaptor* pAdaptor = new vcl::OldStylePrintAdaptor( pPrinter );
             boost::shared_ptr< vcl::PrinterController > pController( pAdaptor );
@@ -778,18 +779,17 @@ BOOL SfxObjectShell::Print
 
 void SfxObjectShell::LoadStyles
 (
-    SfxObjectShell &rSource         /*  die Dokument-Vorlage, aus der
-                                            die Styles geladen werden sollen */
+    SfxObjectShell &rSource         /*  the document template from which
+                                        the styles are to be loaded * /
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese Methode wird vom SFx gerufen, wenn aus einer Dokument-Vorlage
-    Styles nachgeladen werden sollen. Bestehende Styles soll dabei
-    "uberschrieben werden. Das Dokument mu"s daher neu formatiert werden.
-    Daher werden die Applikationen in der Regel diese Methode "uberladen
-    und in ihrer Implementierung die Implementierung der Basisklasse
-    rufen.
+    This method is called by the SFx if template styles are to be loaded.
+    Existing styles are in this case overwritten. The document has then to be
+    newly formatted. Therefore, the application of this method is usually
+    overloaded and its implementation is calling the implementation in
+    the base class.
 */
 
 {
@@ -816,7 +816,7 @@ void SfxObjectShell::LoadStyles
         {
             pDest = &pMyPool->Make( pSource->GetName(),
                     pSource->GetFamily(), pSource->GetMask());
-            // Setzen des Parents, der Folgevorlage
+            // Setting of Parents, the next style
         }
         pFound[nFound].pSource = pSource;
         pFound[nFound].pDest = pDest;
@@ -839,13 +839,12 @@ void SfxObjectShell::LoadStyles
 
 void SfxObjectShell::UpdateFromTemplate_Impl(  )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese interne Methode pr"uft, ob das Dokument aus einem Template
-    erzeugt wurde, und ob dieses neuer ist als das Dokument. Ist dies
-    der Fall, wird der Benutzer gefragt, ob die Vorlagen (StyleSheets)
-    updated werden sollen. Wird dies positiv beantwortet, werden die
-    StyleSheets updated.
+    This internal method checks whether the document was created from a
+    template, and if this is newer than the document. If this is the case,
+    the user is asked if the Templates (StyleSheets) should be updated.
+    If this is answered positively, the StyleSheets are updated.
 */
 
 {
@@ -875,10 +874,10 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
 
     if ( aTemplName.getLength() || (aTemplURL.getLength() && !IsReadOnly()) )
     {
-        // try to locate template, first using filename
-        // this must be done because writer global document uses this "great" idea to manage the templates of all parts
-        // in the master document
-        // but it is NOT an error if the template filename points not to a valid file
+        // try to locate template, first using filename this must be done
+        // because writer global document uses this "great" idea to manage
+        // the templates of all parts in the master document but it is NOT
+        // an error if the template filename points not to a valid file
         SfxDocumentTemplates aTempl;
         aTempl.Construct();
         if ( aTemplURL.getLength() )
@@ -889,7 +888,8 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
         }
 
         if( !aFoundName.Len() && aTemplName.getLength() )
-            // if the template filename did not lead to success, try to get a file name for the logical template name
+            // if the template filename did not lead to success,
+            // try to get a file name for the logical template name
             aTempl.GetFull( String(), aTemplName, aFoundName );
     }
 

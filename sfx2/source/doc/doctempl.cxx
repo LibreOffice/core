@@ -314,15 +314,14 @@ static sal_Bool getTextProperty_Impl( Content& rContent,
 
 String SfxDocumentTemplates::GetFullRegionName
 (
-    USHORT nIdx                     // Index des Bereiches
+    USHORT nIdx                     // Region Index
 )   const
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Liefert den logischen Namen eines Bereiches Plus seinem  Pfad
+    Returns the logical name of a region and its path
 
-
-    [R"uckgabewert]                 Referenz auf diesen Namen
+    [Return value]                 Reference to the Region name
 
 */
 
@@ -351,17 +350,16 @@ String SfxDocumentTemplates::GetFullRegionName
 
 const String& SfxDocumentTemplates::GetRegionName
 (
-    USHORT nIdx                 // Index des Bereiches
+    USHORT nIdx                 // Region Index
 )   const
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Liefert den logischen Namen eines Bereiches
+    Returns the logical name of a region
 
+    [Return value]
 
-    [R"uckgabewert]
-
-    const String&                   Referenz auf diesen Namen
+    const String&                   Reference to the Region name
 
 */
 {
@@ -389,17 +387,16 @@ const String& SfxDocumentTemplates::GetRegionName
 
 USHORT SfxDocumentTemplates::GetRegionNo
 (
-    const String &rRegion       // Name der Region
+    const String &rRegion       // Region Name
 )   const
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Liefert den Index f"ur einen logischen Namen eines Bereiches.
+    Returns the Index for a logical Region Name.
 
+    [Return value]
 
-    [R"uckgabewert]
-
-    USHORT          Index von 'rRegion' oder USHRT_MAX falls unbekannt
+    USHORT          Index of 'rRegion' or USHRT_MAX if unknown
 
 */
 {
@@ -422,15 +419,13 @@ USHORT SfxDocumentTemplates::GetRegionNo
 
 USHORT SfxDocumentTemplates::GetRegionCount() const
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Liefert die Anzahl der Bereiche
+    Returns the number of Regions
 
+    [Return value]
 
-    [R"uckgabewert]
-
-    USHORT                  Anzahl der Bereiche
-
+    USHORT                  Number of Regions
 */
 {
     DocTemplLocker_Impl aLocker( *pImp );
@@ -464,20 +459,18 @@ sal_Bool SfxDocumentTemplates::IsRegionLoaded( USHORT nIdx ) const
 
 USHORT SfxDocumentTemplates::GetCount
 (
-    const String&   rName   /*  Name des Bereiches, dessen Eintrags-
-                                anzahl ermittelt werden soll */
+    const String&   rName   /*  Region Name, for which the entries
+                                should be counted */
 
 )   const
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Liefert die Anzahl der Eintr"age eines Bereiches
+    Number of entries in Region
 
+    [Return value]
 
-    [R"uckgabewert]
-
-    USHORT                      Anzahl der Eintr"age
-
+    USHORT                      Number of entries
 */
 
 {
@@ -499,18 +492,16 @@ USHORT SfxDocumentTemplates::GetCount
 
 USHORT SfxDocumentTemplates::GetCount
 (
-    USHORT nRegion              /*  Index des Bereiches, dessen Eintrags-
-                                    anzahl ermittelt werden soll */
+    USHORT nRegion              /* Region index whose number is
+                                   to be determined */
 
 )   const
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Liefert die Anzahl der Eintr"age eines Bereiches
+    Number of entries in Region
 
-
-    [R"uckgabewert]                 Anzahl der Eintr"age
-
+    [Return value]                 Number of entries
 */
 
 {
@@ -532,19 +523,17 @@ USHORT SfxDocumentTemplates::GetCount
 
 const String& SfxDocumentTemplates::GetName
 (
-    USHORT nRegion,     //  Index des Bereiches, in dem der Eintrag liegt
-    USHORT nIdx         //  Index des Eintrags
+    USHORT nRegion,     //  Region Index, in which the entry lies
+    USHORT nIdx         //  Index of the entry
 )   const
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Liefert den logischen Namen eines Eintrags eines Bereiches
+    Returns the logical name of an entry in Region
 
+    [Return value]
 
-    [R"uckgabewert]
-
-    const String&           Name des Eintrags
-
+    const String&           Entry Name
 */
 
 {
@@ -575,16 +564,15 @@ const String& SfxDocumentTemplates::GetName
 
 String SfxDocumentTemplates::GetFileName
 (
-    USHORT nRegion,     //  Index des Bereiches, in dem der Eintrag liegt
-    USHORT nIdx         //  Index des Eintrags
+    USHORT nRegion,     //  Region Index, in which the entry lies
+    USHORT nIdx         //  Index of the entry
 )   const
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Liefert den Dateinamen eines Eintrags eines Bereiches
+    Returns the file name of an entry in Region
 
-    [R"uckgabewert]                 Dateiname des Eintrags
-
+    [Return value]                 File name of the entry
 */
 {
     DocTemplLocker_Impl aLocker( *pImp );
@@ -612,20 +600,17 @@ String SfxDocumentTemplates::GetFileName
 
 String SfxDocumentTemplates::GetPath
 (
-    USHORT  nRegion,    //  Index des Bereiches, in dem der Eintrag liegt
-    USHORT  nIdx        //  Index des Eintrags
+    USHORT  nRegion,    //  Region Index, in which the entry lies
+    USHORT  nIdx        //  Index of the entry
 )   const
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Liefert den Dateinamen mit vollst"andigem Pfad zu der einem
-    Eintrag zugeordneten Datei
+    Returns the file name with full path to the file assigned to an entry
 
+    [Return value]
 
-    [R"uckgabewert]
-
-    String                  Dateiname mit vollst"andigem Pfad
-
+    String                  File name with full path
 */
 {
     DocTemplLocker_Impl aLocker( *pImp );
@@ -649,20 +634,17 @@ String SfxDocumentTemplates::GetPath
 
 String SfxDocumentTemplates::GetTemplatePath
 (
-    USHORT          nRegion,    //  Index des Bereiches, in dem der Eintrag liegt
-    const String&   rLongName   //  logischer Name des Eintrags
+    USHORT          nRegion,    //  Region Index, in which the entry lies
+    const String&   rLongName   //  logical Entry Name
 )   const
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Liefert den Dateinamen mit vollst"andigem Pfad zu der einem
-    Eintrag zugeordneten Datei
+    Returns the file name with full path to the file assigned to an entry
 
+    [Return value]
 
-    [R"uckgabewert]
-
-    String                          Dateiname mit vollst"andigem Pfad
-
+    String                          File name with full path
 */
 {
     DocTemplLocker_Impl aLocker( *pImp );
@@ -709,15 +691,13 @@ String SfxDocumentTemplates::GetDefaultTemplatePath
     const String& rLongName
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Liefert den Standardpfad zu Dokumentvorlagen
+    Returns the default location for templates
 
+    [Return value]
 
-    [R"uckgabewert]
-
-    String                  Standardpfad zu Dokumentvorlagen
-
+    String                  Default location for templates
 */
 {
     DocTemplLocker_Impl aLocker( *pImp );
@@ -793,22 +773,17 @@ String SfxDocumentTemplates::GetDefaultTemplatePath
 
 sal_Bool SfxDocumentTemplates::SaveDir
 (
-//  SfxTemplateDir& rDir        //  das zu speichernde Directory
+//  SfxTemplateDir& rDir        //  Save Directory
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Speichert das Directory rDir
+    Saves the Directory rDir
 
+    [Return value]
 
-    [R"uckgabewert]
-
-    sal_Bool                        sal_False,
-                                Schreibfehler
-
-                                sal_True
-                                gespeichert
-
+    sal_Bool               sal_False,   Write error
+                           sal_True,    Saved
 */
 
 {
@@ -819,19 +794,17 @@ sal_Bool SfxDocumentTemplates::SaveDir
 
 void SfxDocumentTemplates::NewTemplate
 (
-    USHORT          nRegion,    /*  Index des Bereiches, in dem die Vorlage
-                                    angelegt werden soll */
+    USHORT          nRegion,    /*  Region Index, in which the template
+                                    should be applied */
 
-    const String&   rLongName,  //  logischer Name der neuen Vorlage
-    const String&   rFileName   //  Dateiname der neuen Vorlage
+    const String&   rLongName,  //  logical name of the new template
+    const String&   rFileName   //  File name of the new template
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Eintragen einer neuen Dokumentvorlage in die Verwaltungsstrukturen
-    Das "Uberschreiben einer Vorlage gleichen Namens wird
-    verhindert (!! Fehlermeldung)
-
+    Submit a new template in the administrative structures
+    overwriting a template of the same name is prevented (! Error message)
 */
 
 {
@@ -863,26 +836,23 @@ void SfxDocumentTemplates::NewTemplate
 
 sal_Bool SfxDocumentTemplates::CopyOrMove
 (
-    USHORT  nTargetRegion,      //  Index des Zielbereiches
-    USHORT  nTargetIdx,         //  Index Zielposition
-    USHORT  nSourceRegion,      //  Index des Quellbereiches
-    USHORT  nSourceIdx,         /*  Index der zu kopierenden / zu verschiebenden
-                                    Dokumentvorlage */
-    sal_Bool    bMove               //  kopieren / verschieben
+    USHORT  nTargetRegion,      //  Target Region Index
+    USHORT  nTargetIdx,         //  Target position Index
+    USHORT  nSourceRegion,      //  Source Region Index
+    USHORT  nSourceIdx,         /*  Index to be copied / to moved template */
+    sal_Bool    bMove           //  Copy / Move
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Kopieren oder Verschieben einer Dokumentvorlage
+    Copy or move a document template
 
-    [R"uckgabewert]
+    [Return value]
 
-    sal_Bool                            sal_True
-                                    Aktion konnte ausgef"uhrt werden
+    sal_Bool            sal_True,   Action could be performed
+                        sal_False,  Action could not be performed
 
-                                    sal_False
-                                    Aktion konnte nicht ausgef2uhrt werden
-    [Querverweise]
+    [Cross-references]
 
     <SfxDocumentTemplates::Move(USHORT,USHORT,USHORT,USHORT)>
     <SfxDocumentTemplates::Copy(USHORT,USHORT,USHORT,USHORT)>
@@ -965,8 +935,8 @@ sal_Bool SfxDocumentTemplates::CopyOrMove
         return sal_True;
     }
 
-    // --**-- wenn aktuell das File geoeffnet ist,
-    // muss es hinterher wieder geoeffnet werden
+    // --**-- if the current file is opened,
+    // it must be re-opened afterwards.
 
     return sal_False;
 }
@@ -975,27 +945,22 @@ sal_Bool SfxDocumentTemplates::CopyOrMove
 
 sal_Bool SfxDocumentTemplates::Move
 (
-    USHORT nTargetRegion,       //  Index des Zielbereiches
-    USHORT nTargetIdx,          //  Index Zielposition
-    USHORT nSourceRegion,       //  Index des Quellbereiches
-    USHORT nSourceIdx           /*  Index der zu kopierenden / zu verschiebenden
-                                    Dokumentvorlage */
+    USHORT nTargetRegion,       //  Target Region Index
+    USHORT nTargetIdx,          //  Target position Index
+    USHORT nSourceRegion,       //  Source Region Index
+    USHORT nSourceIdx           /*  Index to be copied / to moved template */
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Verschieben einer Dokumentvorlage
+    Moving a template
 
+    [Return value]
 
-    [R"uckgabewert]
+    sal_Bool            sal_True,   Action could be performed
+                        sal_False,  Action could not be performed
 
-    sal_Bool                            sal_True
-                                    Aktion konnte ausgef"uhrt werden
-
-                                    sal_False
-                                    Aktion konnte nicht ausgef2uhrt werden
-
-    [Querverweise]
+    [Cross-references]
 
     <SfxDocumentTemplates::CopyOrMove(USHORT,USHORT,USHORT,USHORT,sal_Bool)>
 */
@@ -1010,27 +975,22 @@ sal_Bool SfxDocumentTemplates::Move
 
 sal_Bool SfxDocumentTemplates::Copy
 (
-    USHORT nTargetRegion,       //  Index des Zielbereiches
-    USHORT nTargetIdx,          //  Index Zielposition
-    USHORT nSourceRegion,       //  Index des Quellbereiches
-    USHORT nSourceIdx           /*  Index der zu kopierenden / zu verschiebenden
-                                    Dokumentvorlage */
+    USHORT nTargetRegion,       //  Target Region Index
+    USHORT nTargetIdx,          //  Target position Index
+    USHORT nSourceRegion,       //  Source Region Index
+    USHORT nSourceIdx           /*  Index to be copied / to moved template */
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Kopieren einer Dokumentvorlage
+    Copying a template
 
+    [Return value]
 
-    [R"uckgabewert]
+    sal_Bool            sal_True,   Action could be performed
+                        sal_False,  Action could not be performed
 
-    sal_Bool                            sal_True
-                                    Aktion konnte ausgef"uhrt werden
-
-                                    sal_False
-                                    Aktion konnte nicht ausgef"uhrt werden
-
-    [Querverweise]
+    [Cross-references]
 
     <SfxDocumentTemplates::CopyOrMove(USHORT,USHORT,USHORT,USHORT,sal_Bool)>
 */
@@ -1046,29 +1006,22 @@ sal_Bool SfxDocumentTemplates::Copy
 
 sal_Bool SfxDocumentTemplates::CopyTo
 (
-    USHORT          nRegion,    /*  Bereich der Vorlage, die exportiert werden
-                                    soll  */
-    USHORT          nIdx,       /*  Index der Vorlage, die exportiert werden
-                                    soll */
-    const String&   rName       /*  Dateiname, unter dem die Vorlage angelegt
-                                    werden soll */
+    USHORT          nRegion,    //  Region of the template to be exported
+    USHORT          nIdx,       //  Index of the template to be exported
+    const String&   rName       /*  File name under which the template is to
+                                    be created */
 )   const
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Exportieren einer Dokumentvorlage in das Dateisystem
+    Exporting a template into the file system
 
+    [Return value]
 
-    [R"uckgabewert]
+    sal_Bool            sal_True,   Action could be performed
+                        sal_False,  Action could not be performed
 
-    sal_Bool                            sal_True
-                                    Aktion konnte ausgef"uhrt werden
-
-                                    sal_False
-                                    Aktion konnte nicht ausgef"uhrt werden
-
-
-    [Querverweise]
+    [Cross-references]
 
     <SfxDocumentTemplates::CopyFrom(USHORT,USHORT,String&)>
 */
@@ -1125,29 +1078,25 @@ sal_Bool SfxDocumentTemplates::CopyTo
 
 sal_Bool SfxDocumentTemplates::CopyFrom
 (
-    USHORT      nRegion,        /*  Bereich, in den die Vorlage importiert
-                                    werden soll */
-    USHORT      nIdx,           //  Index der neuen Vorlage in diesem Bereich
-    String&     rName           /*  Dateiname der Vorlage, die importiert
-                                    werden soll, als out-Parameter der (auto-
-                                    matisch aus dem Dateinamen generierte)
-                                    logische Name der Vorlage */
+    USHORT      nRegion,        /*  Region in which the template is to be
+                                    imported */
+    USHORT      nIdx,           //  Index of the new template in this Region
+    String&     rName           /*  File name of the template to be imported
+                                    as an out parameter of the (automatically
+                                    generated from the file name) logical name
+                                    of the template * /
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Importieren einer Dokumentvorlage aus dem Dateisystem
+    Import a template from the file system
 
+    [Return value]                 Sucess (sal_True) or serfpTargetDirectory->GetContent());
 
-    [R"uckgabewert]                 Erfolg (sal_True) oder Mi"serfpTargetDirectory->GetContent());
+    sal_Bool            sal_True,   Action could be performed
+                        sal_False,  Action could not be performed
 
-    sal_Bool                            sal_True
-                                    Aktion konnte ausgef"uhrt werden
-
-                                    sal_False
-                                    Aktion konnte nicht ausgef"uhrt werden
-
-    [Querverweise]
+    [Cross-references]
 
     <SfxDocumentTemplates::CopyTo(USHORT,USHORT,const String&)>
 */
@@ -1276,26 +1225,21 @@ sal_Bool SfxDocumentTemplates::CopyFrom
 
 sal_Bool SfxDocumentTemplates::Delete
 (
-    USHORT nRegion,             //  Index des Bereiches
-    USHORT nIdx                 /*  Index des Eintrags oder USHRT_MAX,
-                                    wenn ein Verzeichnis gemeint ist. */
+    USHORT nRegion,             //  Region Index
+    USHORT nIdx                 /*  Index of the entry or USHRT_MAX,
+                                    if a directory is meant. */
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    "oschen eines Eintrags oder eines Verzeichnisses
+    Deleting an entry or a directory
 
+    [Return value]
 
-    [R"uckgabewert]
+    sal_Bool            sal_True,   Action could be performed
+                        sal_False,  Action could not be performed
 
-    sal_Bool                            sal_True
-                                    Aktion konnte ausgef"uhrt werden
-
-                                    sal_False
-                                    Aktion konnte nicht ausgef"uhrt werden
-
-
-    [Querverweise]
+    [Cross-references]
 
     <SfxDocumentTemplates::InsertDir(const String&,USHORT)>
     <SfxDocumentTemplates::KillDir(SfxTemplateDir&)>
@@ -1346,24 +1290,20 @@ sal_Bool SfxDocumentTemplates::Delete
 
 sal_Bool SfxDocumentTemplates::InsertDir
 (
-    const String&   rText,      //  der logische Name des neuen Bereiches
-    USHORT          nRegion     //  Index des Bereiches
+    const String&   rText,      //  the logical name of the new Region
+    USHORT          nRegion     //  Region Index
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Einf"ugen eines Verzeichnisses
+    Insert an index
 
+    [Return value]
 
-    [R"uckgabewert]
+    sal_Bool            sal_True,   Action could be performed
+                        sal_False,  Action could not be performed
 
-    sal_Bool                            sal_True
-                                    Aktion konnte ausgef"uhrt werden
-
-                                    sal_False
-                                    Aktion konnte nicht ausgef"uhrt werden
-
-    [Querverweise]
+    [Cross-references]
 
     <SfxDocumentTemplates::KillDir(SfxTemplateDir&)>
     <SfxDocumentTemplates::SaveDir(SfxTemplateDir&)>
@@ -1401,23 +1341,19 @@ sal_Bool SfxDocumentTemplates::InsertDir
 sal_Bool SfxDocumentTemplates::SetName
 (
     const String&   rName,      //  Der zu setzende Name
-    USHORT          nRegion,    //  Index des Bereiches
-    USHORT          nIdx        /*  Index des Eintrags oder USHRT_MAX,
-                                    wenn ein Verzeichnis gemeint ist. */
+    USHORT          nRegion,    //  Region Index
+    USHORT          nIdx        /*  Index of the entry oder USHRT_MAX,
+                                    if a directory is meant. */
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    "Andern des Namens eines Eintrags oder eines Verzeichnisses
+    Change the name of an entry or a directory
 
+    [Return value]
 
-    [R"uckgabewert]
-
-    sal_Bool                            sal_True
-                                    Aktion konnte ausgef"uhrt werden
-
-                                    sal_False
-                                    Aktion konnte nicht ausgef"uhrt werden
+    sal_Bool            sal_True,   Action could be performed
+                        sal_False,  Action could not be performed
 
 */
 
@@ -1478,24 +1414,18 @@ sal_Bool SfxDocumentTemplates::SetName
 
 sal_Bool SfxDocumentTemplates::Rescan()
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Abgleich des Verwaltungsdaten mit dem aktuellen Zustand auf der Platte.
-    Die logischen Namen, zu denen keine Datei mit existiert, werden aus
-    der Verwaltungsstruktur entfernt; Dateien, zu denen kein Eintrag
-    existiert, werden aufgenommen.
+    Comparison of administrative data with the current state on disk.
+    The logical name for which no file exists, will be removed from the
+    administrative structure. Files for which no record exists will be included.
 
+    [Return value]
 
-    [R"uckgabewert]
+    sal_Bool            sal_True,   Action could be performed
+                        sal_False,  Action could not be performed
 
-    sal_Bool                            sal_True
-                                    Aktion konnte ausgef"uhrt werden
-
-                                    sal_False
-                                    Aktion konnte nicht ausgef"uhrt werden
-
-
-    [Querverweise]
+    [Cross-references]
 
     <SfxTemplateDir::Scan(sal_Bool bDirectory, sal_Bool bSave)>
     <SfxTemplateDir::Freshen(const SfxTemplateDir &rNew)>
@@ -1513,21 +1443,19 @@ sal_Bool SfxDocumentTemplates::Rescan()
 
 SfxObjectShellRef SfxDocumentTemplates::CreateObjectShell
 (
-    USHORT nRegion,         //  Index des Bereiches
-    USHORT nIdx             //  Index des Eintrags
+    USHORT nRegion,         //  Region Index
+    USHORT nIdx             //  Index of the entry
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Zugriff auf die DokumentShell eines Eintrags
+    Access to the document shell of an entry
 
+    [Return value]
 
-    [R"uckgabewert]
+    SfxObjectShellRef         Referece to the ObjectShell
 
-    SfxObjectShellRef         Referenz auf die ObjectShell
-
-
-    [Querverweise]
+    [Cross-references]
 
     <SfxTemplateDirEntry::CreateObjectShell()>
     <SfxDocumentTemplates::DeleteObjectShell(USHORT, USHORT)>
@@ -1555,24 +1483,20 @@ SfxObjectShellRef SfxDocumentTemplates::CreateObjectShell
 
 sal_Bool SfxDocumentTemplates::DeleteObjectShell
 (
-    USHORT nRegion,         //  Index des Bereiches
-    USHORT nIdx             //  Index des Eintrags
+    USHORT nRegion,         //  Region Index
+    USHORT nIdx             //  Index of the entry
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Freigeben der ObjectShell eines Eintrags
+    Releasing the ObjectShell of an entry
 
+    [Return value]
 
-    [R"uckgabewert]
+    sal_Bool            sal_True,   Action could be performed
+                        sal_False,  Action could not be performed
 
-    sal_Bool                            sal_True
-                                    Aktion konnte ausgef"uhrt werden
-
-                                    sal_False
-                                    Aktion konnte nicht ausgef"uhrt werden
-
-    [Querverweise]
+    [Cross-references]
 
     <SfxTemplateDirEntry::DeleteObjectShell()>
     <SfxDocumentTemplates::CreateObjectShell(USHORT, USHORT)>
@@ -1600,27 +1524,21 @@ sal_Bool SfxDocumentTemplates::DeleteObjectShell
 
 sal_Bool SfxDocumentTemplates::GetFull
 (
-    const String &rRegion,      // Der Name des Bereiches
-    const String &rName,        // Der Name der Vorlage
-    String &rPath               // Out: Pfad + Dateiname
+    const String &rRegion,      // Region Name
+    const String &rName,        // Template Name
+    String &rPath               // Out: Path + File name
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Liefert Pfad + Dateiname zu der durch rRegion und rName bezeichneten
-    Vorlage
+    Returns Path + File name of the template specified by rRegion and rName.
 
+    [Return value]
 
-    [R"uckgabewert]
+    sal_Bool            sal_True,   Action could be performed
+                        sal_False,  Action could not be performed
 
-    sal_Bool                            sal_True
-                                    Aktion konnte ausgef"uhrt werden
-
-                                    sal_False
-                                    Aktion konnte nicht ausgef"uhrt werden
-
-
-    [Querverweise]
+    [Cross-references]
 
     <SfxDocumentTemplates::GetLogicNames(const String&,String&,String&)>
 */
@@ -1662,26 +1580,21 @@ sal_Bool SfxDocumentTemplates::GetFull
 
 sal_Bool SfxDocumentTemplates::GetLogicNames
 (
-    const String &rPath,            // vollst"andiger Pfad zu der Vorlage
-    String &rRegion,                // Out: der Bereichsname
-    String &rName                   // Out: der Vorlagenname
+    const String &rPath,            // Full Path to the template
+    String &rRegion,                // Out: Region name
+    String &rName                   // Out: Template name
 ) const
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Liefert Pfad und logischen Namen zu der durch rPath bezeichneten
-    Vorlage
+    Returns and logical path name to the template specified by rPath
 
-    [R"uckgabewert]
+    [Return value]
 
-    sal_Bool                            sal_True
-                                    Aktion konnte ausgef"uhrt werden
+    sal_Bool            sal_True,   Action could be performed
+                        sal_False,  Action could not be performed
 
-                                    sal_False
-                                    Aktion konnte nicht ausgef"uhrt werden
-
-
-    [Querverweise]
+    [Cross-references]
 
     <SfxDocumentTemplates::GetFull(const String&,const String&,DirEntry&)>
 */
@@ -1735,9 +1648,9 @@ sal_Bool SfxDocumentTemplates::GetLogicNames
 
 SfxDocumentTemplates::SfxDocumentTemplates()
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Konstruktor
+    Constructor
 */
 {
     if ( !gpTemplateData )
@@ -1750,7 +1663,7 @@ SfxDocumentTemplates::SfxDocumentTemplates()
 
 void SfxDocumentTemplates::Construct()
 
-//  verz"ogerter Aufbau der Verwaltungsdaten
+//  Delayed build-up of administrative data
 
 {
 }
@@ -1759,10 +1672,10 @@ void SfxDocumentTemplates::Construct()
 
 SfxDocumentTemplates::~SfxDocumentTemplates()
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Destruktor
-    Freigeben der Verwaltungsdaten
+    Destructor
+    Release of administrative data
 */
 
 {
@@ -1922,7 +1835,7 @@ BOOL DocTempl_EntryData_Impl::DeleteObjectShell()
     {
         if( mxObjShell->IsModified() )
         {
-            //Hier speichern wir auch, falls die Vorlage in Bearbeitung ist...
+            // Here we also save, if the Template is being processed ...
             bRet = sal_False;
 
             if ( mbIsOwner )

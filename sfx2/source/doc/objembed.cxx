@@ -212,15 +212,15 @@ void SfxObjectShell::DoDraw_Impl( OutputDevice* pDev,
     aMapMode.SetScaleX( rScaleX );
     aMapMode.SetScaleY( rScaleY );
 
-    // Ziel in Pixel
+    // Target in Pixels
     Point aOrg   = pDev->LogicToLogic( rViewPos, NULL, &aMapMode );
     Point aDelta = aOrg - aVisArea.TopLeft();
 
-    // Origin entsprechend zum sichtbaren Bereich verschieben
-    // Origin mit Scale setzen
+    // Origin moved according to the viewable area
+    // Origin set with Scale
     aMapMode.SetOrigin( aDelta );
 
-    // Deviceeinstellungen sichern
+    // Secure the Device settings
     pDev->Push();
 
     Region aRegion;
@@ -249,7 +249,7 @@ void SfxObjectShell::DoDraw_Impl( OutputDevice* pDev,
 
         Draw( pDev, rSetup, nAspect );
 
-    // Deviceeinstellungen wieder herstellen
+    // Restore Device settings
     pDev->Pop();
 
 }

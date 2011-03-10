@@ -296,7 +296,7 @@ String STR_FSET_FILTERNAME0
 };
 String STR_FSET_FILTERNAME1
 {
-    // nur 'Dokument' "ubersetzen - only translate 'Document'
+    // only translate 'Document'
     Text [ en-US ] = "%PRODUCTNAME Frame Document" ;
 };
 String STR_TEMPL_MOVED

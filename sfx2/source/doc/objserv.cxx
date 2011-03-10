@@ -453,7 +453,8 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 aSet.Put( SfxStringItem( SID_EXPLORER_PROPS_START, aTitle ) );
                 aSet.Put( SfxStringItem( SID_BASEURL, GetMedium()->GetBaseURL() ) );
 
-                // creating dialog is done via virtual method; application will add its own statistics page
+                // creating dialog is done via virtual method; application will
+                // add its own statistics page
                 SfxDocumentInfoDialog *pDlg = CreateDocumentInfoDialog(0, aSet);
                 if ( RET_OK == pDlg->Execute() )
                 {
@@ -497,7 +498,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 return;
             }
 
-            //!! detaillierte Auswertung eines Fehlercodes
+            //!! detailed analysis of an error code
             SfxObjectShellRef xLock( this );
 
             // the model can not be closed till the end of this method
@@ -722,9 +723,9 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             SfxViewFrame *pFrame = GetFrame();
             if ( pFrame && pFrame->GetFrame().GetParentFrame() )
             {
-                // Wenn SID_CLOSEDOC "uber Menue etc. ausgef"uhrt wird, das
-                // aktuelle Dokument aber in einem Frame liegt, soll eigentlich
-                // das FrameSetDocument geclosed werden
+                // If SID_CLOSEDOC is excecuted through menu and so on, but
+                // the current document is in a frame, then the
+                // FrameSetDocument should actually be closed.
                 pFrame->GetTopViewFrame()->GetObjectShell()->ExecuteSlot( rReq );
                 rReq.Done();
                 return;
@@ -737,9 +738,8 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             {
                 if ( pFrame->GetFrame().GetParentFrame() )
                 {
-                    // Auf dieses Dokument existiert noch eine Sicht, die
-                    // in einem FrameSet liegt; diese darf nat"urlich nicht
-                    // geclosed werden
+                    // In this document there still exists a view that is
+                    // in a FrameSet , which of course may not be closed
                     bInFrameSet = TRUE;
                 }
                 else
@@ -750,7 +750,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
             if ( bInFrameSet )
             {
-                // Alle Sichten, die nicht in einem FrameSet liegen, closen
+                // Close all views that are not in a FrameSet.
                 pFrame = SfxViewFrame::GetFirst( this );
                 while ( pFrame )
                 {
@@ -760,7 +760,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 }
             }
 
-            // Parameter auswerten
+            // Evaluate Parameter
             SFX_REQUEST_ARG(rReq, pSaveItem, SfxBoolItem, SID_CLOSEDOC_SAVE, FALSE);
             SFX_REQUEST_ARG(rReq, pNameItem, SfxStringItem, SID_CLOSEDOC_FILENAME, FALSE);
             if ( pSaveItem )
@@ -788,7 +788,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                     SetModified(FALSE);
             }
 
-            // Benutzer bricht ab?
+            // Cancelled by the user?
             if ( !PrepareClose( 2 ) )
             {
                 rReq.SetReturnValue( SfxBoolItem(0, FALSE) );
@@ -802,7 +802,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
             rReq.SetReturnValue( SfxBoolItem(0, TRUE) );
             rReq.Done();
-            rReq.ReleaseArgs(); // da der Pool in Close zerst"ort wird
+            rReq.ReleaseArgs(); // because the pool is destroyed in Close
             DoClose();
             return;
         }
@@ -810,7 +810,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         case SID_DOCTEMPLATE:
         {
-            // speichern als Dokumentvorlagen
+            // save as document templates
             SfxDocumentTemplateDlg *pDlg = 0;
             SfxErrorContext aEc(ERRCTX_SFX_DOCTEMPLATE,GetTitle());
             SfxDocumentTemplates *pTemplates =  new SfxDocumentTemplates;
@@ -874,7 +874,8 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             rReq.SetReturnValue( SfxBoolItem( 0, bOk ) );
             if ( bOk )
             {
-                // update the Organizer runtime cache from the template component if the cache has already been created
+                // update the Organizer runtime cache from the template
+                // component if the cache has already been created
                 // TODO/LATER: get rid of this cache duplication
                 SfxDocumentTemplates aTemplates;
                 aTemplates.ReInitFromComponent();
@@ -889,7 +890,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
         }
     }
 
-    // Picklisten-Eintrag verhindern
+    // Prevent entry in the Pick-lists
     if ( rReq.IsAPI() )
         GetMedium()->SetUpdatePickList( FALSE );
     else if ( rReq.GetArgs() )
@@ -899,7 +900,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             GetMedium()->SetUpdatePickList( pPicklistItem->GetValue() );
     }
 
-    // Ignore()-Zweige haben schon returnt
+    // Ignore()-branches have already returned
     rReq.Done();
 }
 
@@ -966,9 +967,10 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                 SfxViewFrame *pFrame = GetFrame();
                 if ( pFrame && pFrame->GetFrame().GetParentFrame() )
                 {
-                    // Wenn SID_CLOSEDOC "uber Menue etc. ausgef"uhrt wird, das
-                    // aktuelle Dokument aber in einem Frame liegt, soll eigentlich
-                    // das FrameSetDocument geclosed werden
+
+                    // If SID_CLOSEDOC is excecuted through menu and so on, but
+                    // the current document is in a frame, then the
+                    // FrameSetDocument should actually be closed.
                     pDoc = pFrame->GetTopViewFrame()->GetObjectShell();
                 }
 
@@ -1382,8 +1384,9 @@ void SfxObjectShell::ImplSign( sal_Bool bScriptingContent )
             }
             else
             {
-                //When the document is modified then we must not show the digital signatures dialog
-                //If we have come here then the user denied to save.
+                // When the document is modified then we must not show the
+                // digital signatures dialog
+                // If we have come here then the user denied to save.
                 if (!bHasSign)
                     bNoSig = true;
             }

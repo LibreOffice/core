@@ -1350,13 +1350,13 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( sal_Bool bCreateTempIf
     BOOL bResetStorage = FALSE;
     if ( pVersion && pVersion->GetValue() )
     {
-        // Alle verf"ugbaren Versionen einlesen
+        // Read all available versions
         if ( pImp->aVersions.getLength() )
         {
-            // Die zum Kommentar passende Version suchen
-            // Die Versionen sind von 1 an durchnumeriert, mit negativen
-            // Versionsnummern werden die Versionen von der aktuellen aus
-            // r"uckw"arts gez"ahlt
+            // Search for the version fits the comment
+            // The versions are numbered startign with 1, versions with
+            // negative versions numbers are counted backwards from the
+            // current version
             short nVersion = pVersion ? pVersion->GetValue() : 0;
             if ( nVersion<0 )
                 nVersion = ( (short) pImp->aVersions.getLength() ) + nVersion;
@@ -1365,18 +1365,18 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( sal_Bool bCreateTempIf
 
             util::RevisionTag& rTag = pImp->aVersions[nVersion];
             {
-                // SubStorage f"ur alle Versionen "offnen
+                // Open SubStorage for all versions
                 uno::Reference < embed::XStorage > xSub = pImp->xStorage->openStorageElement( DEFINE_CONST_UNICODE( "Versions" ),
                         embed::ElementModes::READ );
 
-                DBG_ASSERT( xSub.is(), "Versionsliste, aber keine Versionen!" );
+                DBG_ASSERT( xSub.is(), "Version list, but no Versions!" );
 
-                // Dort ist die Version als gepackter Stream gespeichert
+                // There the version is stored as packed Stream
                 uno::Reference < io::XStream > xStr = xSub->openStreamElement( rTag.Identifier, embed::ElementModes::READ );
                 SvStream* pStream = utl::UcbStreamHelper::CreateStream( xStr );
                 if ( pStream && pStream->GetError() == SVSTREAM_OK )
                 {
-                    // Stream ins TempDir auspacken
+                    // Unpack Stream  in TempDir
                     ::utl::TempFile aTempFile;
                     String          aTmpName = aTempFile.GetURL();
                     SvFileStream    aTmpStream( aTmpName, SFX_STREAM_READWRITE );
@@ -1384,7 +1384,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( sal_Bool bCreateTempIf
                     *pStream >> aTmpStream;
                     aTmpStream.Close();
 
-                    // Datei als Storage "offnen
+                    // Open data as Storage
                     nStorOpenMode = SFX_STREAM_READONLY;
                     pImp->xStorage = comphelper::OStorageHelper::GetStorageFromURL( aTmpName, embed::ElementModes::READ );
                     pImp->bStorageBasedOnInStream = sal_False;
@@ -2409,10 +2409,10 @@ void SfxMedium::DownLoad( const Link& aLink )
 
 //------------------------------------------------------------------
 void SfxMedium::Init_Impl()
-/*  [Beschreibung]
-    Setzt in den Logischen Namen eine gueltige ::com::sun::star::util::URL (Falls zuvor ein Filename
-    drin war) und setzt den physikalschen Namen auf den Filenamen, falls
-    vorhanden.
+/*  [Description]
+    Includes a valid:: sun:: com:: star:: util:: URL (If a file name was
+    previously in there) in the logical name and if available sets the
+    physical name as the file name.
  */
 
 {
@@ -2510,7 +2510,7 @@ SfxMedium::SfxMedium( const SfxMedium& rMedium, sal_Bool bTemporary )
         aName = rMedium.aName;
 
     pImp->bIsTemp = bTemporary;
-    DBG_ASSERT( ! rMedium.pImp->bIsTemp, "Temporaeres Medium darf nicht kopiert werden" );
+    DBG_ASSERT( ! rMedium.pImp->bIsTemp, "Temporary Medium may not be copied" );
     aLogicName = rMedium.aLogicName;
     pSet =  rMedium.GetItemSet() ? new SfxItemSet(*rMedium.GetItemSet()) : 0;
     pFilter = rMedium.pFilter;
@@ -2768,8 +2768,8 @@ void SfxMedium::SetIsRemote_Impl()
             break;
     }
 
-    // Da Dateien, die Remote geschrieben werden zur Uebertragung auch
-    // gelesen werden koennen muessen
+    // As files that are written to the remote transmission must also be able
+    // to be read.
     if( bRemote )
         nStorOpenMode |= STREAM_READ;
 }
@@ -3197,7 +3197,7 @@ sal_uInt16 SfxMedium::AddVersion_Impl( util::RevisionTag& rRevision )
 {
     if ( GetStorage().is() )
     {
-        // Einen eindeutigen Namen f"ur den Stream ermitteln
+        // To determine a unique name for the stream
         SvULongs aLongs;
         sal_Int32 nLength = pImp->aVersions.getLength();
         for ( sal_Int32 m=0; m<nLength; m++ )

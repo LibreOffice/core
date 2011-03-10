@@ -324,7 +324,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SfxPrintHelper::getPrinter() thro
 void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >& rPrinter,SfxPrinter*& pPrinter,sal_uInt16& nChangeFlags,SfxViewShell*& pViewSh)
 
 {
-    // alten Printer beschaffen
+    // Get old Printer
     SfxViewFrame *pViewFrm = m_pData->m_pObjectShell.Is() ?
                                 SfxViewFrame::GetFirst( m_pData->m_pObjectShell, sal_False ) : 0;
     if ( !pViewFrm )
@@ -437,13 +437,12 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
         }
     }
 
-    //die PaperSize darf nur gesetzt werden, wenn tatsaechlich
-    //PAPER_USER gilt, sonst koennte vom Treiber ein falsches Format gewaehlt werden
+    // The PaperSize may be set only when actually PAPER_USER
+    // applies, otherwise the driver could choose a invalid format.
     if(nPaperFormat == view::PaperFormat_USER && aSetPaperSize.Width())
     {
-        //MapMode von 100mm in die am
-        //          Device gesetzten umrechnen. Zusaetzlich nur dann
-        //          setzen, wenn sie wirklich veraendert wurden.
+        // Bug 56929 - MapMode of 100mm which recalculated when
+        // the device is set. Additionally only set if they were really changed.
         aSetPaperSize = pPrinter->LogicToPixel( aSetPaperSize, MAP_100TH_MM );
         if( aSetPaperSize != pPrinter->GetPaperSizePixel() )
         {

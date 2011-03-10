@@ -78,8 +78,8 @@ DBG_NAME(SfxObjectFactory)
 
 struct SfxObjectFactory_Impl
 {
-    SfxViewFactoryArr_Impl      aViewFactoryArr;// Liste von <SfxViewFactory>s
-    SfxFilterArr_Impl           aFilterArr;     // Liste von <SFxFilter>n
+    SfxViewFactoryArr_Impl      aViewFactoryArr;// List of <SfxViewFactory>s
+    SfxFilterArr_Impl           aFilterArr;     // List of <SFxFilter>n
     ResId*                      pNameResId;
     ::rtl::OUString             aServiceName;
     SfxFilterContainer*         pFilterContainer;
@@ -370,7 +370,7 @@ const SfxFilter* SfxObjectFactory::GetTemplateFilter() const
 
 void SfxObjectFactory::SetDocumentTypeNameResource( const ResId& rId )
 {
-    DBG_ASSERT( !pImpl->pNameResId, "UI-Namensresource mehrfach gesetzt!" );
+    DBG_ASSERT( !pImpl->pNameResId, "UI-Name resource set multiple times!" );
     pImpl->pNameResId = new ResId( rId );
 }
 

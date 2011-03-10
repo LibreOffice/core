@@ -426,25 +426,24 @@ sal_Bool SfxObjectShell::Load( SfxMedium& rMedium )
 }
 
 sal_Bool SfxObjectShell::DoInitNew( SfxMedium* pMed )
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese von SvPersist geerbte virtuelle Methode wird gerufen, um
-    die SfxObjectShell-Instanz aus einem Storage (pStor != 0) bzw.
-    (pStor == 0) ganz neu zu initialisieren.
+    This from SvPersist inherited virtual method is called to initialize
+    the SfxObjectShell instance from a storage (PStore! = 0) or (PStore == 0)
 
-    Wie alle Do...-Methoden liegt hier eine Steuerung vor, die eigentliche
-    Implementierung erfolgt, indem die ebenfalls virtuellen Methode
-    InitNew(SvStorate*) von der SfxObjectShell-Subclass implementiert wird.
+    Like with all Do...-methods there is a from a control, the actual
+    implementation is done by the virtual method in which also the
+    InitNew(SvStorate *) from the SfxObjectShell-Subclass is implemented.
 
-    F"ur pStor == 0 wird ein die SfxObjectShell-Instanz mit einem leeren
-    SfxMedium verbunden, sonst mit einem SfxMedium, welches auf den
-    als Parameter "ubergeben SvStorage verweist.
+    For pStore == 0 the SfxObjectShell-instance is connected to an empty
+    SfxMedium, otherwise a SfxMedium, which refers to the SvStorage
+    passed as a parameter.
 
-    Erst nach InitNew() oder Load() ist das Objekt korrekt initialisiert.
+    The object is only initialized correctly after InitNew() or Load().
 
-    [R"uckgabewert]
-    sal_True            Das Objekt wurde initialisiert.
-    sal_False           Das Objekt konnte nicht initialisiert werden
+    [Return value]
+    sal_True            The object has been initialized.
+    sal_False           The object could not be initialized
 */
 
 {
@@ -761,7 +760,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
         {
         }
 
-        // Falls nicht asynchron geladen wird selbst FinishedLoading aufrufen
+        // If not loaded asynchronously call FinishedLoading
         if ( !( pImp->nLoadedFlags & SFX_LOADED_MAINDOCUMENT ) &&
             ( !pMedium->GetFilter() || pMedium->GetFilter()->UsesStorage() )
             )
@@ -942,9 +941,9 @@ sal_Bool SfxObjectShell::IsPackageStorageFormat_Impl(const SfxMedium &rMedium) c
 //-------------------------------------------------------------------------
 
 sal_Bool SfxObjectShell::DoSave()
-// DoSave wird nur noch ueber OLE aufgerufen. Sichern eigener Dokumente im SFX
-// laeuft uber DoSave_Impl, um das Anlegen von Backups zu ermoeglichen.
-// Save in eigenes Format jetzt auch wieder Hierueber
+// DoSave is only invoked for OLE. Save your own documents in the SFX through
+// DoSave_Impl order to allow for the creation of backups.
+// Save in your own format again.
 {
     sal_Bool bOk = sal_False ;
     {
@@ -1036,18 +1035,17 @@ void Lock_Impl( SfxObjectShell* pDoc, BOOL bLock )
 
 sal_Bool SfxObjectShell::SaveTo_Impl
 (
-     SfxMedium &rMedium, // Medium, in das gespeichert werden soll
+     SfxMedium &rMedium, // Medium, in which it will be stored
      const SfxItemSet* pSet
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Schreibt den aktuellen Inhalt in das Medium rMedium.
-    Ist das Zielmedium kein Storage, so wird ueber ein temporaeres
-    Medium gespeichert, sonst direkt, da das Medium transacted
-    geschaltet ist, wenn wir es selbst geoeffnet haben und falls wir
-    Server sind entweder der Container einen transacted Storage zur
-    Verfuegung stellt oder selbst einen temporaeren Storage erzeugt hat.
+    Writes the current contents to the medium rMedium. If the target medium is
+    no storage, then saving to a temporary storage, or directly if the medium
+    is transacted, if we ourselves have opened it, and if we are a server
+    either the container a transacted storage provides or created a
+    temporary storage by one self.
 */
 
 {
@@ -1152,7 +1150,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
 
         if ( bCopyTo && GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
         {
-            // export to the same location is vorbidden
+            // export to the same location is forbidden
             SetError( ERRCODE_IO_CANTWRITE, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
         }
         else
@@ -1822,14 +1820,12 @@ sal_Bool SfxObjectShell::ConnectTmpStorage_Impl(
     const uno::Reference< embed::XStorage >& xStorage,
     SfxMedium* pMediumArg )
 
-/*   [Beschreibung]
+/*   [Description]
 
-     Arbeitet die Applikation auf einem temporaeren Storage,
-     so darf der temporaere Storage nicht aus dem SaveCompleted
-     genommen werden. Daher wird in diesem Fall schon hier an
-     den neuen Storage connected. SaveCompleted tut dann nichts.
-
-     */
+     If the application operates on a temporary storage, then it may not take
+     the temporary storage from the SaveCompleted. Therefore the new storage
+     is connected already here in this case and SaveCompleted then does nothing.
+*/
 
 {
     RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mv76033) SfxObjectShell::ConnectTmpStorage_Impl" );
@@ -1949,7 +1945,7 @@ sal_Bool SfxObjectShell::DoSaveObjectAs( SfxMedium& rMedium, BOOL bCommit )
 // TODO/LATER: may be the call must be removed completelly
 sal_Bool SfxObjectShell::DoSaveAs( SfxMedium& rMedium )
 {
-    // hier kommen nur Root-Storages rein, die via Temp-File gespeichert werden
+    // here only root storages are included, which are stored via temp file
     rMedium.CreateTempFileNoCopy();
     SetError(rMedium.GetErrorCode(), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
     if ( GetError() )
@@ -2014,7 +2010,8 @@ sal_Bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed )
                 } catch( uno::Exception& )
                 {
                     // the storage is disposed already
-                    // can happen during reload scenario when the medium has disposed it during the closing
+                    // can happen during reload scenario when the medium has
+                    // disposed it during the closing
                     // will be fixed in one of the next milestones
                 }
             }
@@ -2058,7 +2055,7 @@ sal_Bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed )
             else
                 bOk = SaveCompleted( NULL );
         }
-        // entweder Save oder ConvertTo
+        // either Save or ConvertTo
         else
             bOk = SaveCompleted( NULL );
     }
@@ -2092,14 +2089,15 @@ sal_Bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed )
             // TODO/LATER: in future the medium must control own signature state, not the document
             pNewMed->SetCachedSignatureState_Impl( SIGNATURESTATE_NOSIGNATURES ); // set the default value back
 
-            // Titel neu setzen
+            // Set new title
             if ( pNewMed->GetName().Len() && SFX_CREATE_MODE_EMBEDDED != eCreateMode )
                 InvalidateName();
-            SetModified(sal_False); // nur bei gesetztem Medium zur"ucksetzen
+            SetModified(sal_False); // reset only by set medium
             Broadcast( SfxSimpleHint(SFX_HINT_MODECHANGED) );
 
-            // this is the end of the saving process, it is possible that the file was changed
-            // between medium commit and this step ( attributes change and so on )
+            // this is the end of the saving process, it is possible that
+            // the file was changed
+            // between medium commit and this step (attributes change and so on)
             // so get the file date again
             if ( pNewMed->DocNeedsFileDateCheck() )
                 pNewMed->GetInitFileDate( sal_True );
@@ -2116,35 +2114,33 @@ sal_Bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed )
 
 sal_Bool SfxObjectShell::ConvertFrom
 (
-    SfxMedium&  /*rMedium*/     /*  <SfxMedium>, welches die Quell-Datei beschreibt
-                                (z.B. Dateiname, <SfxFilter>, Open-Modi etc.) */
+    SfxMedium&  /*rMedium*/     /*  <SfxMedium>, which describes the source file
+                                    (for example file name, <SfxFilter>,
+                                    Open-Modi and so on) */
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese Methode wird zum Laden von Dokumenten "uber alle Filter gerufen,
-    die nicht SFX_FILTER_OWN sind oder f"ur die kein Clipboard-Format
-    registriert wurde (also kein Storage-Format benutzen). Mit anderen Worten:
-    mit dieser Methode wird importiert.
+    This method is called for loading of documents over all filters which are
+    not SFX_FILTER_OWN or for which no clipboard format has been registered
+    (thus no storage format that is used). In other words, whith this method
+    it is imported.
 
-    Das hier zu "offende File sollte "uber 'rMedium' ge"offnet werden,
-    um die richtigen Open-Modi zu gew"ahrleisten. Insbesondere wenn das
-    Format beibehalten wird (nur m"oglich bei SFX_FILTER_SIMULATE oder
-    SFX_FILTER_ONW) mu\s die Datei STREAM_SHARE_DENYWRITE ge"offnet werden.
+    Files which are to be opened here should be opened through 'rMedium'
+    to guarantee the right open modes. Especially if the format is retained
+    (only possible with SFX_FILTER_SIMULATE or SFX_FILTER_ONW) file which must
+    be opened STREAM_SHARE_DENYWRITE.
 
-
-    [R"uckgabewert]
+    [Return value]
 
     sal_Bool                sal_True
-                        Das Dokument konnte geladen werden.
+                        The document could be loaded.
 
                         sal_False
-                        Das Dokument konnte nicht geladen werden, ein
-                        Fehlercode ist mit <SvMedium::GetError()const> zu
-                        erhalten.
+                        The document could not be loaded, an error code
+                        received through  <SvMedium::GetError()const>
 
-
-    [Beispiel]
+    [Example]
 
     sal_Bool DocSh::ConvertFrom( SfxMedium &rMedium )
     {
@@ -2154,15 +2150,14 @@ sal_Bool SfxObjectShell::ConvertFrom
             xStream->SetBufferSize(4096);
             *xStream >> ...;
 
-            // NICHT 'rMedium.CloseInStream()' rufen! File gelockt halten!
+            // Do not call 'rMedium.CloseInStream()'! Keep File locked!
             return SVSTREAM_OK == rMedium.GetError();
         }
 
         return sal_False;
     }
 
-
-    [Querverweise]
+    [Cross-references]
 
     <SfxObjectShell::ConvertTo(SfxMedium&)>
     <SFX_FILTER_REGISTRATION>
@@ -2466,36 +2461,34 @@ sal_Bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
 
 sal_Bool SfxObjectShell::ConvertTo
 (
-    SfxMedium&  /*rMedium*/     /*  <SfxMedium>, welches die Ziel-Datei beschreibt
-                                (z.B. Dateiname, <SfxFilter>, Open-Modi etc.) */
+    SfxMedium&  /*rMedium*/   /*  <SfxMedium>, which describes the target file
+                                    (for example file name, <SfxFilter>,
+                                    Open-Modi and so on) */
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese Methode wird zum Speichern von Dokumenten "uber alle Filter gerufen,
-    die nicht SFX_FILTER_OWN sind oder f"ur die kein Clipboard-Format
-    registriert wurde (also kein Storage-Format benutzen). Mit anderen Worten:
-    mit dieser Methode wird exportiert.
+    This method is called for saving of documents over all filters which are
+    not SFX_FILTER_OWN or for which no clipboard format has been registered
+    (thus no storage format that is used). In other words, with this method
+    it is exported.
 
-    Das hier zu "offende File sollte "uber 'rMedium' ge"offnet werden,
-    um die richtigen Open-Modi zu gew"ahrleisten. Insbesondere wenn das
-    Format beibehalten wird (nur m"oglich bei SFX_FILTER_SIMULATE oder
-    SFX_FILTER_ONW) mu\s die Datei auch nach dem Speichern im Modus
-    STREAM_SHARE_DENYWRITE ge"offnet bleiben.
+    Files which are to be opened here should be opened through 'rMedium'
+    to guarantee the right open modes. Especially if the format is retained
+    (only possible with SFX_FILTER_SIMULATE or SFX_FILTER_ONW) file which must
+    be opened STREAM_SHARE_DENYWRITE.
 
-
-    [R"uckgabewert]
+    [Return value]
 
     sal_Bool                sal_True
-                        Das Dokument konnte gespeichert werden.
+                        The document could be saved.
 
                         sal_False
-                        Das Dokument konnte nicht gespeichert werden, ein
-                        Fehlercode ist mit <SvMedium::GetError()const> zu
-                        erhalten.
+                        The document could not be saved, an error code is
+                        received by <SvMedium::GetError()const>
 
 
-    [Beispiel]
+    [Example]
 
     sal_Bool DocSh::ConvertTo( SfxMedium &rMedium )
     {
@@ -2505,14 +2498,13 @@ sal_Bool SfxObjectShell::ConvertTo
             xStream->SetBufferSize(4096);
             *xStream << ...;
 
-            rMedium.CloseOutStream(); // "offnet automatisch wieder den InStream
+            rMedium.CloseOutStream(); // opens the InStream automatically
             return SVSTREAM_OK == rMedium.GetError();
         }
         return sal_False ;
     }
 
-
-    [Querverweise]
+    [Cross-references]
 
     <SfxObjectShell::ConvertFrom(SfxMedium&)>
     <SFX_FILTER_REGISTRATION>
@@ -2535,8 +2527,9 @@ sal_Bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
     pSet->ClearItem( SID_VERSION );
     pSet->ClearItem( SID_DOC_BASEURL );
 
-    // create a medium as a copy; this medium is only for writingm, because it uses the same name as the original one
-    // writing is done through a copy, that will be transferred to the target ( of course after calling HandsOff )
+    // create a medium as a copy; this medium is only for writingm, because it
+    // uses the same name as the original one writing is done through a copy,
+    // that will be transferred to the target (of course after calling HandsOff)
     SfxMedium* pMediumTmp = new SfxMedium( pRetrMedium->GetName(), pRetrMedium->GetOpenMode(), pRetrMedium->IsDirect(), pFilter, pSet );
     pMediumTmp->SetLongName( pRetrMedium->GetLongName() );
     if ( pMediumTmp->GetErrorCode() != ERRCODE_NONE )
@@ -2571,7 +2564,8 @@ sal_Bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
 
         sal_Bool bOpen( sal_False );
         bOpen = DoSaveCompleted( pMediumTmp );
-        DBG_ASSERT(bOpen,"Fehlerbehandlung fuer DoSaveCompleted nicht implementiert");
+
+        DBG_ASSERT(bOpen,"Error handling for DoSaveCompleted not implemented");
         (void)bOpen;
     }
     else
@@ -2653,7 +2647,7 @@ sal_Bool SfxObjectShell::CommonSaveAs_Impl
 
     if ( aURL != INetURLObject( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:stream" ) ) ) )
     {
-        // gibt es schon ein Doc mit dem Namen?
+        // Is there already a Document with this name?
         SfxObjectShell* pDoc = 0;
         for ( SfxObjectShell* pTmp = SfxObjectShell::GetFirst();
                 pTmp && !pDoc;
@@ -2668,14 +2662,14 @@ sal_Bool SfxObjectShell::CommonSaveAs_Impl
         }
         if ( pDoc )
         {
-            // dann Fehlermeldeung: "schon offen"
+            // Then error message: "already opened"
             SetError(ERRCODE_SFX_ALREADYOPEN, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ));
             return sal_False;
         }
     }
 
     DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "Illegal URL!" );
-    DBG_ASSERT( aParams->Count() != 0, "fehlerhafte Parameter");
+    DBG_ASSERT( aParams->Count() != 0, "Incorrect Parameter");
 
     SFX_ITEMSET_ARG( aParams, pSaveToItem, SfxBoolItem, SID_SAVETO, sal_False );
     sal_Bool bSaveTo = pSaveToItem ? pSaveToItem->GetValue() : sal_False;
@@ -2722,7 +2716,7 @@ sal_Bool SfxObjectShell::CommonSaveAs_Impl
     {
         pImp->bWaitingForPicklist = sal_True;
 
-        // Daten am Medium updaten
+        // Update Data on media
         SfxItemSet *pSet = GetMedium()->GetItemSet();
         pSet->ClearItem( SID_INTERACTIONHANDLER );
         pSet->ClearItem( SID_PROGRESS_STATUSBAR_CONTROL );
@@ -2954,11 +2948,10 @@ sal_Bool SfxObjectShell::IsInformationLost()
 //-------------------------------------------------------------------------
 sal_Bool SfxObjectShell::CanReload_Impl()
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Interne Methode zum Feststellen, ob eine erneutes Laden des
-    Dokuments (auch als RevertToSaved oder LastVersion bekannt)
-    m"oglich ist.
+    Internal method for determining whether a reload of the document
+    (as RevertToSaved or last known version) is possible.
 */
 
 {
@@ -3288,7 +3281,8 @@ sal_Bool SfxObjectShell::SaveCompleted( const uno::Reference< embed::XStorage >&
     {
         if ( xStorage.is() && pImp->m_xDocStorage != xStorage )
         {
-            // make sure that until the storage is assigned the object container is not created by accident!
+            // make sure that until the storage is assigned the object
+            // container is not created by accident!
             DBG_ASSERT( bHasContainer == (pImp->mpObjectContainer != 0), "Wrong storage in object container!" );
             xOldStorageHolder = pImp->m_xDocStorage;
             pImp->m_xDocStorage = xStorage;

@@ -159,7 +159,7 @@ IMPL_LINK( SfxDocumentTemplateDlg, OrganizeHdl, Button *, pButton )
 IMPL_LINK( SfxDocumentTemplateDlg, OkHdl, Control *, pControl )
 {
     (void)pControl; //unused
-    // pruefen, ob eine Vorlage diesen Namens existiert
+    // Test whether a template with this name exists
     if(LISTBOX_ENTRY_NOTFOUND != aTemplateLb.GetEntryPos(
         GetTemplateName())) {
         QueryBox aQuery(this, SfxResId(MSG_CONFIRM_OVERWRITE_TEMPLATE));

@@ -276,8 +276,8 @@ public:
     SfxNewFileDialog_Impl( SfxNewFileDialog* pAntiImplP, USHORT nFlags );
     ~SfxNewFileDialog_Impl();
 
-        // Liefert FALSE, wenn '- Keine -' als Vorlage eingestellt ist
-        // Nur wenn IsTemplate() TRUE liefert, koennen Vorlagennamen
+        // Returns FALSE if '- No -' is set as a template
+        // Template name can only be obtained if IsTemplate() is TRUE
         // erfragt werden
     BOOL IsTemplate() const;
     String GetTemplateRegion() const;
@@ -436,12 +436,12 @@ IMPL_LINK( SfxNewFileDialog_Impl, PreviewClick, CheckBox *, pBox )
 
 IMPL_LINK( SfxNewFileDialog_Impl, TemplateSelect, ListBox *, EMPTYARG )
 {
-    // noch am Laden
+    // Still loading
     if ( xDocShell && xDocShell->GetProgress() )
         return 0;
 
     if ( !MORE_BTN(GetState()) )
-        // Dialog nicht aufgeklappt
+        // Dialog is not opened
         return 0;
 
     aPrevTimer.Start();
@@ -453,7 +453,7 @@ IMPL_LINK( SfxNewFileDialog_Impl, TemplateSelect, ListBox *, EMPTYARG )
 IMPL_LINK_INLINE_START( SfxNewFileDialog_Impl, DoubleClick, ListBox *, pListBox )
 {
     (void)pListBox;
-    // noch am Laden
+    // Still loadning
     if ( !xDocShell.Is() || !xDocShell->GetProgress() )
         pAntiImpl->EndDialog(RET_OK);
     return 0;

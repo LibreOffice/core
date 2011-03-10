@@ -162,7 +162,7 @@ SfxFrameDescriptor* SfxFrameDescriptor::Clone( BOOL bWithIds ) const
         pFrame->pImp->pWallpaper = new Wallpaper( *pImp->pWallpaper );
     if( pImp->pArgs )
     {
-        // Aktuell ist im Clone von SfxAllItemSets noch ein Bug...
+        // Currently in the clone of SfxAllItemSets there is still a bug ...
         pFrame->pImp->pArgs = new SfxAllItemSet( SFX_APP()->GetPool() );
         pFrame->pImp->pArgs->Put(*pImp->pArgs);
     }

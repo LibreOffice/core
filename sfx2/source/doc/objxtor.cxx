@@ -201,7 +201,7 @@ void SAL_CALL SfxModelListener_Impl::disposing( const com::sun::star::lang::Even
         mpDoc->OwnerLock(FALSE);
     }
     else if ( !mpDoc->Get_Impl()->bClosing )
-        // GCC stuerzt ab, wenn schon im dtor, also vorher Flag abfragen
+        // GCC crashes when already in the destructor, so first query the Flag
         mpDoc->DoClose();
 }
 
@@ -313,30 +313,28 @@ SfxObjectShell::SfxObjectShell( const sal_uInt64 i_nCreationFlags )
 
 SfxObjectShell::SfxObjectShell
 (
-    SfxObjectCreateMode eMode   /*  Zweck, zu dem die SfxObjectShell
-                                    erzeugt wird:
+    SfxObjectCreateMode eMode   /*  Purpose, io which the SfxObjectShell
+                                    is created:
 
                                     SFX_CREATE_MODE_EMBEDDED (default)
-                                        als SO-Server aus einem anderen
-                                        Dokument heraus
+                                        as SO-Server from within another
+                                        Document
 
                                     SFX_CREATE_MODE_STANDARD,
-                                        als normales, selbst"aendig ge"offnetes
-                                        Dokument
+                                        as a normal Document open stand-alone
 
                                     SFX_CREATE_MODE_PREVIEW
-                                        um ein Preview durchzuf"uhren,
-                                        ggf. werden weniger Daten ben"otigt
+                                        to enable a Preview, if possible are
+                                        only little information is needed
 
                                     SFX_CREATE_MODE_ORGANIZER
-                                        um im Organizer dargestellt zu
-                                        werden, hier werden keine Inhalte
-                                        ben"otigt */
+                                        to be displayed in the Organizer, here
+                                        notning of the contents is used  */
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Konstruktor der Klasse SfxObjectShell.
+    Constructor of the class SfxObjectShell.
 */
 
 :   pImp( new SfxObjectShell_Impl( *this ) ),
@@ -350,7 +348,7 @@ SfxObjectShell::SfxObjectShell
 
 //--------------------------------------------------------------------
 
-// virtual dtor of typical base-class SfxObjectShell
+// virtual destructor of typical base-class SfxObjectShell
 
 SfxObjectShell::~SfxObjectShell()
 {
@@ -359,9 +357,8 @@ SfxObjectShell::~SfxObjectShell()
     if ( IsEnableSetModified() )
         EnableSetModified( sal_False );
 
-    // Niemals GetInPlaceObject() aufrufen, der Zugriff auf den
-    // Ableitungszweig SfxInternObject ist wegen eines Compiler Bugs nicht
-    // erlaubt
+    // Never call GetInPlaceObject(), the access to the derivative branch
+    // SfxInternObject is not allowed because of a compiler bug
     SfxObjectShell::Close();
     pImp->pBaseModel.set( NULL );
 
@@ -371,7 +368,7 @@ SfxObjectShell::~SfxObjectShell()
     if ( USHRT_MAX != pImp->nVisualDocumentNumber )
         pSfxApp->ReleaseIndex(pImp->nVisualDocumentNumber);
 
-    // Basic-Manager zerst"oren
+    // Destroy Basic-Manager
     pImp->pBasicManager->reset( NULL );
 
     if ( pSfxApp->GetDdeService() )
@@ -431,9 +428,9 @@ sal_Bool SfxObjectShell::Stamp_GetPrintCancelState() const
 
 void SfxObjectShell::ViewAssigned()
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese Methode wird gerufen, wenn eine View zugewiesen wird.
+    This method is called when a view is assigned.
 */
 
 {
@@ -448,7 +445,7 @@ sal_Bool SfxObjectShell::Close()
     SfxObjectShellRef aRef(this);
     if ( !pImp->bClosing )
     {
-        // falls noch ein Progress l"auft, nicht schlie\sen
+        // Do not close if a progress is still running
         if ( !pImp->bDisposing && GetProgress() )
             return sal_False;
 
@@ -469,7 +466,7 @@ sal_Bool SfxObjectShell::Close()
 
         if ( pImp->bClosing )
         {
-            // aus Document-Liste austragen
+            // remove from Document list
             SfxApplication *pSfxApp = SFX_APP();
             SfxObjectShellArr_Impl &rDocs = pSfxApp->GetObjectShells_Impl();
             const SfxObjectShell *pThis = this;
@@ -570,7 +567,8 @@ struct BoolEnv_Impl
 
 sal_uInt16 SfxObjectShell::PrepareClose
 (
-    sal_Bool    bUI,        // sal_True: Dialoge etc. erlaubt, sal_False: silent-mode
+    sal_Bool    bUI,  // sal_True: Dialog and so on is allowed
+                      // sal_False: silent-mode
     sal_Bool    bForBrowsing
 )
 {
@@ -590,7 +588,7 @@ sal_uInt16 SfxObjectShell::PrepareClose
     for ( SfxViewFrame* pFrm = SfxViewFrame::GetFirst( this );
           pFrm; pFrm = SfxViewFrame::GetNext( *pFrm, this ) )
     {
-        DBG_ASSERT(pFrm->GetViewShell(),"KeineShell");
+        DBG_ASSERT(pFrm->GetViewShell(),"No Shell");
         if ( pFrm->GetViewShell() )
         {
             sal_uInt16 nRet = pFrm->GetViewShell()->PrepareClose( bUI, bForBrowsing );
@@ -608,19 +606,19 @@ sal_uInt16 SfxObjectShell::PrepareClose
         return sal_True;
     }
 
-    // ggf. nachfragen, ob gespeichert werden soll
-        // nur fuer in sichtbaren Fenstern dargestellte Dokumente fragen
+    // Ask if possible if it should be saved
+    // only ask for the Document in the visable window
     SfxViewFrame *pFrame = SfxObjectShell::Current() == this
         ? SfxViewFrame::Current() : SfxViewFrame::GetFirst( this );
 
     if ( bUI && IsModified() && pFrame )
     {
-        // minimierte restoren
+        // restore minimized
         SfxFrame& rTop = pFrame->GetTopFrame();
         SfxViewFrame::SetViewFrame( rTop.GetCurrentViewFrame() );
         pFrame->GetFrame().Appear();
 
-        // fragen, ob gespeichert werden soll
+        // Ask if to save
         short nRet = RET_YES;
         {
             //initiate help agent to inform about "print modifies the document"
@@ -638,7 +636,7 @@ sal_uInt16 SfxObjectShell::PrepareClose
 
         if ( RET_YES == nRet )
         {
-            // per Dispatcher speichern
+            // Save by each Dispatcher
             const SfxPoolItem *pPoolItem;
             if ( IsSaveVersionOnClose() )
             {
@@ -658,7 +656,7 @@ sal_uInt16 SfxObjectShell::PrepareClose
                 return sal_False;
         }
         else if ( RET_CANCEL == nRet )
-            // abgebrochen
+            // Cancelled
             return sal_False;
         else if ( RET_NEWTASK == nRet )
         {
@@ -805,20 +803,20 @@ StarBASIC* SfxObjectShell::GetBasic() const
 //--------------------------------------------------------------------
 
 void SfxObjectShell::InitBasicManager_Impl()
-/*  [Beschreibung]
+/*  [Description]
 
-    creates a document's BasicManager and loads it, if we are already based on
+    Creates a document's BasicManager and loads it, if we are already based on
     a storage.
 
-    [Anmerkung]
+    [Note]
 
-    Diese Methode mu"s aus den "Uberladungen von <SvPersist::Load()> (mit
-    dem pStor aus dem Parameter von Load()) sowie aus der "Uberladung
-    von <SvPersist::InitNew()> (mit pStor = 0) gerufen werden.
+    This method has to be called  through the overloading of
+    <SvPersist::Load()> (With the PStore from the parameters of load ())
+    and from the overloading of <SvPersist::InitNew()> (with PStore = 0).
 */
 
 {
-    DBG_ASSERT( !pImp->bBasicInitialized && !pImp->pBasicManager->isValid(), "Lokaler BasicManager bereits vorhanden");
+    DBG_ASSERT( !pImp->bBasicInitialized && !pImp->pBasicManager->isValid(), "Local BasicManager already exists");
     pImp->bBasicInitialized = TRUE;
 
     pImp->pBasicManager->reset( BasicManagerRepository::getDocumentBasicManager( GetModel() ) );

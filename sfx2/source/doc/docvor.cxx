@@ -231,8 +231,8 @@ SfxOrganizeDlg_Impl::SfxOrganizeDlg_Impl( SfxTemplateOrganizeDlg* pParent,
         const_cast< SfxDocumentTemplates* >( aMgr.GetTemplates() )->Update( sal_True /* be smart */ );
             // this const_cast is a hack - but the alternative would be to
             // * have a method which returns the templates non-const
-            // * use a new SfxDocumentTemplates instance for the update (knowing that they all share the same
-            //   implementation class)
+            // * use a new SfxDocumentTemplates instance for the update
+            //   (knowing that they all share the same implementation class)
             // * always work with an own instance, even if we get only NULL in this ctor
     }
 
@@ -325,12 +325,12 @@ void SfxOrganizeDlg_Impl::InitBitmaps( void )
 
 //=========================================================================
 
-BOOL QueryDelete_Impl(Window *pParent,      // Parent der QueryBox
+BOOL QueryDelete_Impl(Window *pParent,      // Parent to QueryBox
                              USHORT nId,            // Resource Id
-                             const String &rTemplateName)   // Name der zu l"oschenden Vorlage
-/*  [Beschreibung]
+                             const String &rTemplateName)   // Name of template to be deleted
+/*  [Description]
 
-    "oschabfrage
+    Delete Query
 
 */
 {
@@ -345,10 +345,9 @@ BOOL QueryDelete_Impl(Window *pParent,      // Parent der QueryBox
 
 void ErrorDelete_Impl(Window *pParent, const String &rName, sal_Bool bFolder = sal_False )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Benutzerinformation, da"s die Vorlage rName nicht gel"oscht werden konnte
-
+    User information that the template rName could not be deleted.
 */
 {
     if ( bFolder )
@@ -367,10 +366,9 @@ void ErrorDelete_Impl(Window *pParent, const String &rName, sal_Bool bFolder = s
 
 //=========================================================================
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Implementierungsklasse; Referenzklasse f"ur USHORT-Array
-
+    Implementation class, the benchmark for USHORT-Array
 */
 
 struct ImpPath_Impl
@@ -404,12 +402,11 @@ ImpPath_Impl::ImpPath_Impl( const ImpPath_Impl& rCopy ) :
 
 //==========================================================================
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Implementierungsklasse; Darstellung einer Position in der Outline-
-    Listbox als USHORT-Array; dieses beschreibt die Position jeweil
-    als relative Postion zum "ubergeordneten Eintrag
-
+    Implementation class, presentation of a position in the Outline-
+    Listbox ass USHORT-Array, this describes the position of each as
+    Postions relative to the parent entry
 */
 class Path
 {
@@ -468,25 +465,24 @@ SvLBoxEntry *GetIndices_Impl(SvLBox *pBox,
                                SvLBoxEntry *pEntry,
                                USHORT &rRegion,
                                USHORT &rOffset)
-/*  [Beschreibung]
+/*  [Description]
 
-    Bereich und Position innerhalb eines Bereiches f"ur eine
-    Dokumentvorlage wird ermittelt.
+    Region and position within a range for a template is determined.
 
     [Parameter]
 
-    SvLBox *pBox            Listbox, an der das Ereignis auftrat
-    SvLBoxEntry *pEntry     Eintrag, dessen Position ermittelt werden soll
-    USHORT &rRegion         der Bereich innerhalb der Bereiche der
-                            Dokumentvorlagen (Out-Parameter)
-    USHORT &rOffset         die Position innerhalb des Bereiches
-                            Dokumentvorlagen (Out-Parameter)
+    SvLBox *pBox            Listbox where the event occurred
+    SvLBoxEntry *pEntry     Entry whose position is to be determined
+    USHORT &rRegion         the region within the region of the
+                            document template (Out-Parameter)
+    USHORT &rOffset         the position within the region of the
+                            document template (Out-Parameter)
 
-    [Querverweise]
 
-    <class Path>    (unter Umst"anden kann auf diese Funktion zugunsten
-                     von Path verzichtet werden.)
+    [Cross-references]
 
+    <class Path>    (in certain circumstances this function can also be
+                     dispensed in favor of the Path)
 */
 
 {
@@ -531,24 +527,24 @@ BOOL SfxOrganizeListBox_Impl::MoveOrCopyTemplates(SvLBox *pSourceBox,
                                             SvLBoxEntry *&pNewParent,
                                             ULONG &rIdx,
                                             BOOL bCopy)
-/*  [Beschreibung]
+/*  [Description]
 
-    Verschieben oder Kopieren von Dokumentvorlagen
+    Move or copy a document templates
 
     [Parameter]
 
-    SvLBox *pSourceBox          Quell-Listbox, an der das Ereignis auftrat
-    SvLBoxEntry *pSource        Quell-Eintrag, der kopiert / verschoben werden soll
-    SvLBoxEntry* pTarget        Ziel-Eintrag, auf den verschoben werden soll
-    SvLBoxEntry *&pNewParent    der Parent der an der Zielposition erzeugten
-                                Eintrags (Out-Parameter)
-    ULONG &rIdx                 Index des Zieleintrags
-    BOOL bCopy                  Flag f"ur Kopieren / Verschieben
+    SvLBox *pSourceBox          Source Listbox, at which the event occurred
+    SvLBoxEntry* pTarget        Target entry, to where it will be moved
+    SvLBoxEntry *pSource        Source entry, to be copied / moved
+    SvLBoxEntry *&pNewParent    the parent of the target position generated
+                                at entry (out parameter)
+    ULONG &rIdx                 Index of the target entry
+    BOOL bCopy                  Flag for Copy / Move
 
 
-    [Returnwert]                BOOL: Erfolg oder Mi"serfolg
+    [Return value]              BOOL: Success or failure
 
-    [Querverweise]
+    [Cross-references]
 
     <SfxOrganizeListBox_Impl::MoveOrCopyContents(SvLBox *pSourceBox,
                                             SvLBoxEntry *pSource,
@@ -622,24 +618,24 @@ BOOL SfxOrganizeListBox_Impl::MoveOrCopyContents(SvLBox *pSourceBox,
                                             SvLBoxEntry *&pNewParent,
                                             ULONG &rIdx,
                                             BOOL bCopy)
-/*  [Beschreibung]
+/*  [Description]
 
-    Verschieben oder Kopieren von Dokumentinhalten
+    Move or copy document contents
 
     [Parameter]
 
-    SvLBox *pSourceBox          Quell-Listbox, an der das Ereignis auftrat
-    SvLBoxEntry *pSource        Quell-Eintrag, der kopiert / verschoben werden soll
-    SvLBoxEntry* pTarget        Ziel-Eintrag, auf den verschoben werden soll
-    SvLBoxEntry *&pNewParent    der Parent der an der Zielposition erzeugten
-                                Eintrags (Out-Parameter)
-    ULONG &rIdx                 Index des Zieleintrags
-    BOOL bCopy                  Flag f"ur Kopieren / Verschieben
+    SvLBox *pSourceBox          Source Listbox, at which the event occurred
+    SvLBoxEntry* pTarget        Target entry, to where it will be moved
+    SvLBoxEntry *pSource        Source entry, to be copied / moved
+    SvLBoxEntry *&pNewParent    the parent of the target position generated
+                                at entry (out parameter)
+    ULONG &rIdx                 Index of the target entry
+    BOOL bCopy                  Flag for Copy / Move
 
 
-    [Returnwert]                BOOL: Erfolg oder Mi"serfolg
+    [Return value]              BOOL: Success or failure
 
-    [Querverweise]
+    [Cross-references]
 
     <SfxOrganizeListBox_Impl::MoveOrCopyTemplates(SvLBox *pSourceBox,
                                             SvLBoxEntry *pSource,
@@ -691,16 +687,16 @@ BOOL SfxOrganizeListBox_Impl::MoveOrCopyContents(SvLBox *pSourceBox,
             *aSourceDoc, aSource[nSLevel+1],
             aSource[nSLevel+2], aSource[nSLevel+3],
             p[0], p[1], p[2],  nIdxDeleted);
-        // Positionskorrektur auswerten
-        // a = Dokumentinhalt
-        // b = Position Sub-Inhalt 1
-        // c = Position Sub-Inhalt 2
-        // doppelte Eintraege loeschen
+        // Evaluate Position correction
+        // a = Document content
+        // b = Position Sub-content 1
+        // c = Position Sub-content 2
+        // Delete duplicate entries
         if(bOk)
         {
             SvLBoxEntry *pParentIter = pTarget;
-            // bis auf die DokumentEbene nach oben als
-            // allgemeiner Bezugspunkt
+            // Up to the document level as
+            // the general reference point
             while(GetModel()->GetDepth(pParentIter) != nTLevel)
                 pParentIter = GetParent(pParentIter);
             if(pParentIter->HasChildsOnDemand() &&
@@ -712,10 +708,10 @@ BOOL SfxOrganizeListBox_Impl::MoveOrCopyContents(SvLBox *pSourceBox,
             while(i < 2 && p[i+1] != INDEX_IGNORE)
             {
                 pChildIter = FirstChild(pParentIter);
-                // bis zum Index der aktuellen Ebene
+                // To the index of the current level
                 for(USHORT j = 0; j < p[i]; ++j)
                     pChildIter = NextSibling(pChildIter);
-                // gfs Fuellen bei Items onDemand
+                // If possible, fill in Items onDemand
                 ++i;
                 if(p[i+1] != INDEX_IGNORE &&
                    pChildIter->HasChildsOnDemand() &&
@@ -733,8 +729,8 @@ BOOL SfxOrganizeListBox_Impl::MoveOrCopyContents(SvLBox *pSourceBox,
                 if(!bCopy)
                     pSourceBox->GetModel()->Remove(pSource);
             }
-            // Geloeschte Eintraege entfernen
-            // (kann durch Ueberschreiben geschehen)
+            // Remove deleted items
+            // (can be done by overwriting)
             if(nIdxDeleted != INDEX_IGNORE)
             {
                 pChildIter = FirstChild(pParentIter);
@@ -770,23 +766,23 @@ BOOL SfxOrganizeListBox_Impl::NotifyMoving(SvLBoxEntry *pTarget,
                                         SvLBoxEntry *&pNewParent,
                                         ULONG &rIdx)
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Benachrichtigung, da"s ein Eintrag verschoben werden soll
+    Notification that an item will be moved.
     (SV-Handler)
 
     [Parameter]
 
-    SvLBoxEntry* pTarget        Ziel-Eintrag, auf den verschoben werden soll
-    SvLBoxEntry *pSource        Quell-Eintrag, der verschoben werden soll
-    SvLBoxEntry *&pNewParent    der Parent der an der Zielposition erzeugten
-                                Eintrags (Out-Parameter)
-    ULONG &rIdx                 Index des Zieleintrags
+    SvLBoxEntry* pTarget        Target entry, to where it will be moved
+    SvLBoxEntry *pSource        Source entry, to be moved
+    SvLBoxEntry *&pNewParent    the parent of the target position generated
+                                at entry (out parameter)
+    ULONG &rIdx                 Index of the target entry
 
 
-    [Returnwert]                BOOL: Erfolg oder Mi"serfolg
+    [Return value]              BOOL: Sucess or failure
 
-    [Querverweise]
+    [Cross-references]
 
     <SfxOrganizeListBox_Impl::MoveOrCopyTemplates(SvLBox *pSourceBox,
                                             SvLBoxEntry *pSource,
@@ -830,23 +826,22 @@ BOOL SfxOrganizeListBox_Impl::NotifyCopying(SvLBoxEntry *pTarget,
                                         SvLBoxEntry* pSource,
                                         SvLBoxEntry *&pNewParent,
                                         ULONG &rIdx)
-/*  [Beschreibung]
+/*  [Description]
 
-    Benachrichtigung, da"s ein Eintrag kopiert werden soll
+    Notification that an item will be moved.
     (SV-Handler)
 
     [Parameter]
 
-    SvLBoxEntry* pTarget        Ziel-Eintrag, auf den kopiert werden soll
-    SvLBoxEntry *pSource        Quell-Eintrag, der kopiert werden soll
-    SvLBoxEntry *&pNewParent    der Parent der an der Zielposition erzeugten
-                                Eintrags (Out-Parameter)
-    ULONG &rIdx                 Index des Zieleintrags
+    SvLBoxEntry* pTarget        Target entry, to where it will be copied
+    SvLBoxEntry *pSource        Source entry, to be copied
+    SvLBoxEntry *&pNewParent    the parent of the target position generated
+                                at entry (out parameter)
+    ULONG &rIdx                 Index of the target entry
 
+    [Return value]              BOOL: Sucess or failure
 
-    [Returnwert]                BOOL: Erfolg oder Mi"serfolg
-
-    [Querverweise]
+    [Cross-references]
 
     <SfxOrganizeListBox_Impl::MoveOrCopyTemplates(SvLBox *pSourceBox,
                                             SvLBoxEntry *pSource,
@@ -886,12 +881,12 @@ BOOL SfxOrganizeListBox_Impl::NotifyCopying(SvLBoxEntry *pTarget,
 
 BOOL SfxOrganizeListBox_Impl::EditingEntry( SvLBoxEntry* pEntry, Selection&  )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Nachfrage, ob ein Eintrag editierbar ist
+    Check whether an item can be edited
     (SV-Handler)
 
-    [Querverweise]
+    [Cross-references]
     <SfxOrganizeListBox_Impl::EditedEntry(SvLBoxEntry* pEntry, const String& rText)>
 */
 
@@ -909,23 +904,23 @@ BOOL SfxOrganizeListBox_Impl::EditingEntry( SvLBoxEntry* pEntry, Selection&  )
 
 BOOL SfxOrganizeListBox_Impl::EditedEntry(SvLBoxEntry* pEntry, const String& rText)
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Der Name eines Eintrags wurde bearbeitet; ist der eingegebene Name
-    ein g"ultiger Name ("ange > 0), wird das Model aktualisiert.
+    The name of an entry has been processed, if the name you entered is a
+    valid name (length> 0) then the model is updated.
     (SV-Handler)
 
-    [Returnwert]
+    [Return value]
 
-    BOOL                TRUE: der Name soll in der Anzeige ge"andert werden
-                        FALSE:der Name soll nicht ge"andert werden
+    BOOL                TRUE:  The name in the display should be changed
+                        FALSE: The name should not be changed
 
-    [Querverweise]
+    [Cross-references]
     <SfxOrganizeListBox_Impl::EditingEntry(SvLBoxEntry* pEntry, const String& rText)>
 */
 
 {
-    DBG_ASSERT(pEntry, "kein Entry selektiert");
+    DBG_ASSERT(pEntry, "No Entry selected");
     delete pDlg->pSuspend;
     pDlg->pSuspend = NULL;
     SvLBoxEntry* pParent = GetParent(pEntry);
@@ -1082,14 +1077,14 @@ void SfxOrganizeListBox_Impl::DragFinished( sal_Int8 nDropAction )
 
 inline USHORT SfxOrganizeListBox_Impl::GetDocLevel() const
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Ermittelt, auf welche Ebene sich Dokumente befinden (unterschiedlich
-    in der Dokumentvorlagensicht und der Dokumentensicht)
+    Determines on which level there are documents (in the template view or
+    the document view)
 
-    [Returnwert]
+    [Return value]
 
-    USHORT              Die Ebene der Dokumente
+    USHORT             Document level
 
 */
 
@@ -1101,20 +1096,19 @@ inline USHORT SfxOrganizeListBox_Impl::GetDocLevel() const
 
 SfxObjectShellRef SfxOrganizeListBox_Impl::GetObjectShell(const Path &rPath)
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Zugriff auf die ObjectShell, die dem aktuellen Eintrag zugeordnet
-    ist.
+    Access to the ObjectShell to which the current entry is connected.
 
     [Parameter]
 
-    const Path &rPath       Beschreibung des aktuellen Eintrags
+    const Path &rPath       Description of the current entry
 
-    [Returnwert]
+    [Return value]
 
-    SfxObjectShellRef     Referenz auf die ObjectShell
+    SfxObjectShellRef       Reference to the ObjectShell
 
-    [Querverweise]
+    [Cross-references]
 
     <class Path>
 
@@ -1133,17 +1127,14 @@ SfxObjectShellRef SfxOrganizeListBox_Impl::GetObjectShell(const Path &rPath)
 
 void SfxOrganizeListBox_Impl::RequestingChilds( SvLBoxEntry* pEntry )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Aufforderung, der Childs eines Eintrags einzuf"ugen
-    ist.
+    Sent to the Childs of an entry that is going to be inserted.
     (SV-Handler)
 
     [Parameter]
 
-    SvLBoxEntry* pEntry     der Eintrag, dessen Childs erfragt werden
-
-
+    SvLBoxEntry* pEntry     the entry whose Childs is requested
 */
 
 {
@@ -1151,9 +1142,11 @@ void SfxOrganizeListBox_Impl::RequestingChilds( SvLBoxEntry* pEntry )
     {
         WaitObject aWaitCursor( this );
 
+        // Choose the correct mask color dependent from eColorMode. This
+        // must be adopted if we change the mask color for normal images, too!
         Color aMaskColor( COL_LIGHTMAGENTA );
 
-        // hier sind alle initial eingefuegt
+        // Here are all the initial inserted
         SfxErrorContext aEc(ERRCTX_SFX_CREATEOBJSH, pDlg->pDialog);
         if(VIEW_TEMPLATES == GetViewType() && 0 == GetModel()->GetDepth(pEntry))
         {
@@ -1200,14 +1193,11 @@ void SfxOrganizeListBox_Impl::RequestingChilds( SvLBoxEntry* pEntry )
 
 long SfxOrganizeListBox_Impl::ExpandingHdl()
 
-/*  [Beschreibung]
+/*  [Description]
 
-    SV-Handler, der nach dem und vor dem Aufklappen eines Eintrags
-    gerufen wird.
-    Wird verwendet, um gfs. die ObjectShell wieder zu schlie"sen;
-    die Eintr"age mit den Inhalten dieser Shell werden ebenfalls
-    entfernt.
-
+    SV-handler, before and after the unfolding of an entry is called.
+    Used if possibly to close the ObjectShell again, the entries with the
+    contents of this shell are also removed.
 */
 
 {
@@ -1219,12 +1209,12 @@ long SfxOrganizeListBox_Impl::ExpandingHdl()
            (eViewType == VIEW_TEMPLATES && nLevel == 1))
         {
             Path aPath(this, pEntry);
-            // Beim Schliessen des Files die ObjectShell freigeben
+            // Release ObjectShell when closing the files
             if(eViewType == VIEW_FILES && nLevel == 0)
                 pMgr->DeleteObjectShell(aPath[0]);
             else
                 pMgr->DeleteObjectShell(aPath[0], aPath[1]);
-            // alle SubEntries loeschen
+            // Delete all SubEntries
             SvLBoxEntry *pToDel = SvLBox::GetEntry(pEntry, 0);
             while(pToDel)
             {
@@ -1241,18 +1231,18 @@ long SfxOrganizeListBox_Impl::ExpandingHdl()
 BOOL SfxOrganizeListBox_Impl::IsUniqName_Impl(const String &rText,
                                          SvLBoxEntry* pParent, SvLBoxEntry *pEntry) const
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Pr"uft, ob eine Name auf seiner Ebene eindeutig ist.
+    Checks whether a name is unique at its level.
 
     [Parameter]
 
-    const String &         Name des zu suchenden Eintrags
-    SvLBoxEntry* pSibling  Geschwister (bezeichnet die Ebene)
+    const String &         Name of the search entry
+    SvLBoxEntry* pSibling  Siblings (referred to the level)
 
-    [Returnwert]
+    [Return value]
 
-    BOOL                     TRUE, wenn der Name eindeutig ist, sonst FALSE
+    BOOL                     TRUE, if the name is unique, otherwise FALSE
 */
 
 {
@@ -1331,9 +1321,9 @@ SfxOrganizeListBox_Impl::SfxOrganizeListBox_Impl
     pDlg        ( pArgDlg ),
     eViewType   ( eType )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Konstruktor SfxOrganizeListBox
+    Constructor SfxOrganizeListBox
 
 */
 
@@ -1380,15 +1370,14 @@ IMPL_LINK( SfxOrganizeListBox_Impl, OnAsyncExecuteDrop, ExecuteDropEvent*, pEven
 
 void SfxOrganizeListBox_Impl::Reset()
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Einf"ugen der Elemente in die ListBox
-
+    Paste the items in the ListBox
 */
 
 {
-    DBG_ASSERT( pMgr != 0, "kein Manager" );
-    // Inhalte l"oschen
+    DBG_ASSERT( pMgr != 0, "No Manager" );
+    // Delete contents
     SetUpdateMode(FALSE);
     Clear();
     if ( VIEW_TEMPLATES == eViewType )
@@ -1414,19 +1403,17 @@ void SfxOrganizeListBox_Impl::Reset()
 
 const Image &SfxOrganizeListBox_Impl::GetClosedBmp(USHORT nLevel) const
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Zugriff auf die Bitmap f"ur einen geschlossenen Eintrag
-    der jeweiligen Ebene
+    Access to the bitmap for a closed entry at each level
 
     [Parameter]
 
-    USHORT nLevel       Angabe der Ebene, 2 Ebenen sind erlaubt
+    USHORT nLevel       Indicator of the level, 2 levels are allowed
 
-    [Returnwert]
+    [Return value]
 
-    const Image &       das Image auf der Ebenen nLevel
-
+    const Image &       The Image on level nLevel
 */
 
 {
@@ -1434,7 +1421,7 @@ const Image &SfxOrganizeListBox_Impl::GetClosedBmp(USHORT nLevel) const
 
     switch( nLevel )
     {
-        default:    OSL_FAIL( "Bitmaps ueberindiziert" );
+        default:    OSL_FAIL( "Bitmap index overflow" );
 
         case 0:     pRet = &aClosedFolderBmp;
             break;
@@ -1449,18 +1436,17 @@ const Image &SfxOrganizeListBox_Impl::GetClosedBmp(USHORT nLevel) const
 
 const Image &SfxOrganizeListBox_Impl::GetOpenedBmp(USHORT nLevel) const
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Zugriff auf die Bitmap f"ur einen ge"offneten Eintrag
-    der jeweiligen Ebene
+    Access to the bitmap for an open entry at each level
 
     [Parameter]
 
-    USHORT nLevel       Angabe der Ebene, 2 Ebenen sind erlaubt
+    USHORT nLevel       Indicator of the level, 2 levels are allowed
 
-    [Returnwert]
+    [Return value]
 
-    const Image &       das Image auf der Ebenen nLevel
+    const Image &       the image on the level nLevel
 
 */
 
@@ -1491,18 +1477,17 @@ PopupMenu* SfxOrganizeListBox_Impl::CreateContextMenu()
 
 String SfxOrganizeDlg_Impl::GetPath_Impl( BOOL bOpen, const String& rFileName )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Pfad per FileDialog erfragen, f"ur Import / Export von
-    Dokumentvorlagen
+    Get path from FileDialog, for Import / Export of Templates
 
     [Parameter]
 
-    BOOL bOpen                      Flag: "Offnen / Speichern
-    const String& rFileName         aktueller Dateiname als Vorschlag
+    BOOL bOpen                     Flag: Open / Save
+    const String& rFileName        Current file name as default
 
-    [R"uckgabewert]                 Dateiname mit Pfad oder Leerstring, wenn
-                                    der Benutzer 'Abbrechen' gedr"uckt hat
+    [Return value]                 File name with path or empty string if
+                                   users has pressed 'Cancel'
 */
 
 {
@@ -1686,12 +1671,12 @@ BOOL SfxOrganizeDlg_Impl::DontDelete_Impl( SvLBoxEntry* pEntry )
        pFocusBox->GetViewType())
         nDepth++;
     if( (nDepth > 2 && !pEntry->GetUserData()) ||
-       //Delete ueber GetContent verboten
-       nDepth==2 || //Vorlage / Konfigurtionsrubrik nicht loeshcen
+       //Delete using GetContent forbidden
+       nDepth==2 || // Template / Not deleting config header
        (nDepth==1 && SfxOrganizeListBox_Impl::VIEW_FILES ==
-        pFocusBox->GetViewType()) || //Files nicht loeschen
+        pFocusBox->GetViewType()) || //Not deleting Files
        (0 == nDepth && pFocusBox->GetLevelCount_Impl(0) < 2))
-        //Mindestens eine Vorlage behalten
+        //At least keep one template
     {
         return TRUE;
     }
@@ -1758,17 +1743,16 @@ sal_Bool SfxOrganizeDlg_Impl::GetServiceName_Impl( String& rName, String& rFileU
 
 long SfxOrganizeDlg_Impl::Dispatch_Impl( USHORT nId, Menu* _pMenu )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Verarbeiten der Events aus MenuButton oder Accelerator
+    Processing the events from MenuButton or Accelerator
 
     [Parameter]
 
-    USHORT nId                      ID des Events
+    USHORT nId                      Event ID
 
-    [R"uckgabewert]                 1: Event wurde verarbeitet,
-                                    0: Event wurde nicht verarbeitet (SV-Menu)
-
+    [Return value]                  1: Event has been processed,
+                                    0: Event has not been processed (SV-Menu)
 */
 
 {
@@ -1834,7 +1818,7 @@ long SfxOrganizeDlg_Impl::Dispatch_Impl( USHORT nId, Menu* _pMenu )
                             ( nDeleteInd == USHRT_MAX && pFocusBox->GetChildCount(pEntry) ) );
                 }
             }
-            // Inhaltsformen
+            //Content Format
             else if(nDepth + pFocusBox->GetDocLevel() >= 2)
             {
                 if(!QueryDelete_Impl(pDialog, STR_DELETE_TEMPLATE, pFocusBox->GetEntryText(pEntry)))
@@ -1964,17 +1948,16 @@ long SfxOrganizeDlg_Impl::Dispatch_Impl( USHORT nId, Menu* _pMenu )
 
 IMPL_LINK_INLINE_START( SfxOrganizeDlg_Impl, MenuSelect_Impl, Menu *, pMenu )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    SelectHandler des Men"us des Men"ubuttons (SV)
+    SelectHandler of Menu and Menubuttons (SV)
 
     [Parameter]
 
-    MenuButton *pBtn                der das Event ausl"osende Button
+    MenuButton *pBtn                Button triggering the event
 
-    [R"uckgabewert]                 1: Event wurde verarbeitet,
-                                    0: Event wurde nicht verarbeitet (SV-Menu)
-
+    [Return value]                  1: Event has been processed,
+                                    0: Event has not been processed (SV-Menu)
 */
 {
     return Dispatch_Impl( pMenu->GetCurItemId(), pMenu );
@@ -1985,17 +1968,16 @@ IMPL_LINK_INLINE_END( SfxOrganizeDlg_Impl, MenuSelect_Impl, Menu *, pMenu )
 
 IMPL_LINK( SfxOrganizeDlg_Impl, AccelSelect_Impl, Accelerator *, pAccel )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    SelectHandler des Accelerators (SV)
+    SelectHandler of Accelerators (SV)
 
     [Parameter]
 
-    Accelerator *pAccel             der das Event ausl"osende Accelerator
+    Accelerator *pAccel            Accelerator triggering the event
 
-    [R"uckgabewert]                 1: Event wurde verarbeitet,
-                                    0: Event wurde nicht verarbeitet (SV)
-
+    [Return value]                  1: Event has been processed,
+                                    0: Event has not been processed (SV)
 */
 
 {
@@ -2018,17 +2000,16 @@ void SfxOrganizeDlg_Impl::OkHdl(Button *pButton)
 
 IMPL_LINK( SfxOrganizeDlg_Impl, MenuActivate_Impl, Menu *, pMenu )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    ActivateHandler des Men"us des Men"ubuttons (SV)
+    ActivateHandler of Menu and Menubuttons (SV)
 
     [Parameter]
 
-    Menu *pMenu                     das das Event ausl"osende Men"u
+    Menu *pMenu                     Event triggering the Menu
 
-    [R"uckgabewert]                 1: Event wurde verarbeitet,
-                                    0: Event wurde nicht verarbeitet (SV-Menu)
-
+    [Return value]                  1: Event has been processed,
+                                    0: Event has not been processed (SV-Menu)
 */
 {
     if ( pFocusBox && pFocusBox->IsEditingActive() )
@@ -2039,11 +2020,11 @@ IMPL_LINK( SfxOrganizeDlg_Impl, MenuActivate_Impl, Menu *, pMenu )
         ( bEnable && pFocusBox->GetSelectionCount() ) ? pFocusBox->GetModel()->GetDepth( pEntry ) : 0;
     const USHORT nDocLevel = bEnable ? pFocusBox->GetDocLevel() : 0;
     int eVT = pFocusBox ? pFocusBox->GetViewType() : 0;
-        // nur Vorlagen anlegen
+        // Create only Template
     pMenu->EnableItem( ID_NEW, bEnable && 0 == nDepth && SfxOrganizeListBox_Impl::VIEW_TEMPLATES == eVT );
-    // Vorlagen: Loeschen Ebene 0,1,3ff
-    //           ein Bereich mu"s mindestens erhalten bleiben
-    // Dateien : Loeschen Ebene > 2
+    // Template: Delete level 0,1,3ff
+    //           At least one region must be retained
+    // Files:    Delete level> 2
 
     pMenu->EnableItem( ID_DELETE, bEnable && !DontDelete_Impl( pEntry ) );
     pMenu->EnableItem( ID_EDIT,
@@ -2111,17 +2092,14 @@ IMPL_LINK( SfxOrganizeDlg_Impl, MenuActivate_Impl, Menu *, pMenu )
 
 IMPL_LINK( SfxOrganizeDlg_Impl, GetFocus_Impl, SfxOrganizeListBox_Impl *, pBox )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    GetFocus-Handler, wird aus den Select-Handler der Listboxen
-    gerufen.
-    Wird verwendet, im die Listbox, die den Focus besitzt sowie
-    deren Zustand zu ermitteln.
+    GetFocus-Handler, is called from the Select-Handler of ListBox
+    Used in the listBox that has the focus and to determine its condition.
 
     [Parameter]
 
-    SfxOrganizeListBox *pBox        die rufende Box
-
+    SfxOrganizeListBox *pBox        The calling Box
 */
 
 {
@@ -2137,17 +2115,15 @@ IMPL_LINK( SfxOrganizeDlg_Impl, GetFocus_Impl, SfxOrganizeListBox_Impl *, pBox )
 
 IMPL_LINK( SfxOrganizeDlg_Impl, LeftListBoxSelect_Impl, ListBox *, pBox )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Select-Handler, wird aus den Select-Handler der Listboxen
-    gerufen.
-    Wenn sich der Modus der Boxen (Dokumentsicht, Dokumentvorlagensicht)
-    unterscheiden, werden die Models getrennt; andernfalls zusammengefa"st.
+    Select-Handler, is called from the Select-Handler of ListBox.
+    If the mode of the Boxes are different (Document view or Template view)
+    then the models are separated, otherwise joined together.
 
     [Parameter]
 
-    ListBox *pBox               die rufende Box
-
+    ListBox *pBox               The calling Box
 */
 {
     const SfxOrganizeListBox_Impl::DataEnum
@@ -2171,17 +2147,15 @@ IMPL_LINK( SfxOrganizeDlg_Impl, LeftListBoxSelect_Impl, ListBox *, pBox )
 
 IMPL_LINK( SfxOrganizeDlg_Impl, RightListBoxSelect_Impl, ListBox *, pBox )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Select-Handler, wird aus den Select-Handler der Listboxen
-    gerufen.
-    Wenn sich der Modus der Boxen (Dokumentsicht, Dokumentvorlagensicht)
-    unterscheiden, werden die Models getrennt; andernfalls zusammengefa"st.
+    Select-Handler, will be called by Select-Handler of the ListBox.
+    If the mode of the Boxes are different (Document view or Template view)
+    then the models are separated, otherwise joined together.
 
     [Parameter]
 
-    ListBox *pBox               die rufende Box
-
+    ListBox *pBox               The calling Box
 */
 {
     const SfxOrganizeListBox_Impl::DataEnum eViewType =
@@ -2194,7 +2168,7 @@ IMPL_LINK( SfxOrganizeDlg_Impl, RightListBoxSelect_Impl, ListBox *, pBox )
             aRightLb.SetModel(aLeftLb.GetModel());
         else
         {
-            // Models trennen
+            // Separate models
             aRightLb.DisconnectFromModel();
             aRightLb.Reset();
         }
@@ -2218,13 +2192,13 @@ IMPL_LINK( SfxOrganizeDlg_Impl, OnAddressTemplateClicked, Button *, pButton )
 
 IMPL_LINK( SfxOrganizeDlg_Impl, AddFiles_Impl, Button *, pButton )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Handler des Buttons f"ur das Hinzuf"ugen von Dateien per Dialog.
+    Handler of the button for adding files through Dialog.
 
     [Parameter]
 
-    Button *                der Button, der dieses Events ausgel"ost hat.
+    Button *                Button, triggering this Event
 
 */
 {
@@ -2371,10 +2345,9 @@ IMPL_LINK( SfxOrganizeDlg_Impl, AddFilesHdl, sfx2::FileDialogHelper *, EMPTYARG 
 
 short SfxTemplateOrganizeDlg::Execute()
 
-/*  [Beschreibung]
+/*  [Description]
 
-    "Uberladene Execute- Methode; speichert gfs. "Anderungen an den
-    Dokumentvorlagen
+    Overloaded Execute method; stores changes to the document templates
     (SV-Methode)
 
 */
@@ -2399,10 +2372,9 @@ SfxTemplateOrganizeDlg::SfxTemplateOrganizeDlg(Window * pParent,
 :   ModalDialog( pParent, SfxResId(DLG_ORGANIZE)),
     pImp( new SfxOrganizeDlg_Impl(this, pTempl) )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Konstruktor
-
+    Constructor
 */
 {
     FreeResource();
