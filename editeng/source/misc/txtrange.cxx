@@ -418,7 +418,7 @@ void SvxBoundArgs::Calc( const PolyPolygon& rPoly )
     }
     if( !bMultiple )
     {
-        DBG_ASSERT( pLongArr->Count() == 0, "I said: Simple!" );
+        DBG_ASSERT( pLongArr->size() == 0, "I said: Simple!" );
         if( nAct )
         {
             if( bInner )
@@ -477,7 +477,7 @@ void SvxBoundArgs::Add()
             bDelete = nBoolIdx < nCount && aBoolArr[ nBoolIdx ];
             nLongIdx += 2;
             DBG_ASSERT( nLongIdx == 2*nBoolIdx+1, "BoundArgs: Array-Idx Confusion" );
-            DBG_ASSERT( aBoolArr.size()*2 == pLongArr->Count(),
+            DBG_ASSERT( aBoolArr.size()*2 == pLongArr->size(),
                         "BoundArgs: Array-Count: Confusion" );
         }
     }

@@ -870,7 +870,7 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
                 // Den breitesten Bereich verwenden...
                 // Der breiteste Bereich koennte etwas verwirren, also
                 // generell den ersten. Am besten mal richtig mit Luecken.
-//              for ( sal_uInt16 n = 0; n < pTextRanges->Count(); )
+//              for ( sal_uInt16 n = 0; n < pTextRanges->size(); )
                 if ( pTextRanges->size() )
                 {
                     sal_uInt16 n = 0;
