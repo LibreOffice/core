@@ -599,6 +599,8 @@ private:
 
     sal_Bool    mbStartIdleTimer                 ;    // idle timer mode start/stop
 
+    bool        mbSetDrawDefaults;               ;    // set draw pool defaults for freshly created documents
+
     static SwAutoCompleteWord *pACmpltWords;    // Liste aller Worte fuers AutoComplete
 
     //---------------- private Methoden ------------------------------
@@ -2092,6 +2094,13 @@ public:
     ::sw::UndoManager      & GetUndoManager();
     ::sw::UndoManager const& GetUndoManager() const;
     SfxObjectShell* CreateCopy(bool bCallInitNew) const;
+
+    /// must be called only in SwDocShell::InitNew, causes UpdateDrawDefaults to be called when drawing layer is created
+    void SetDrawDefaults();
+
+private:
+    /// method to set new graphics pool defaults, must only be called by SetDrawDefaults!
+    void UpdateDrawDefaults();
 };
 
 
