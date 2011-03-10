@@ -81,11 +81,11 @@ public abstract class WWD_Events extends WWD_Startup
     {
         super(xmsf);
         Create c = new Create();
-        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, chkFTP);
+        XWindow xWindow = UnoRuntime.queryInterface(XWindow.class, chkFTP);
         xWindow.addKeyListener(c);
-        xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, chkLocalDir);
+        xWindow = UnoRuntime.queryInterface(XWindow.class, chkLocalDir);
         xWindow.addKeyListener(c);
-        xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, chkZip);
+        xWindow = UnoRuntime.queryInterface(XWindow.class, chkZip);
         xWindow.addKeyListener(c);
     }
 
@@ -310,7 +310,7 @@ public abstract class WWD_Events extends WWD_Startup
         {
             fillExportList(settings.getExporters(doc.appType));
         }
-        else; // do nothing
+
 
         selectedDoc = s;
 
@@ -1204,7 +1204,7 @@ public abstract class WWD_Events extends WWD_Startup
             //if (xCloseable != null)
             //    xCloseable.close(false);
 
-            XCloseable xCloseable = (XCloseable) UnoRuntime.queryInterface(XCloseable.class, myFrame);
+            XCloseable xCloseable = UnoRuntime.queryInterface(XCloseable.class, myFrame);
             if (xCloseable != null)
             {
                 xCloseable.close(false);
@@ -1301,6 +1301,6 @@ public abstract class WWD_Events extends WWD_Startup
                 task.advance(false);
             }
         }
-    };
+    }
 }
 

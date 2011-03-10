@@ -154,8 +154,7 @@ public class CommandMetaData extends DBMetaData
             String CurCommandName = CurFieldColumn.getCommandName();
             CommandObject oCommand = getTableByName(CurCommandName);
             Object oColumn = oCommand.getColumns().getByName(CurFieldColumn.getFieldName());
-            XPropertySet xColumn = UnoRuntime.queryInterface(XPropertySet.class, oColumn);
-            return xColumn;
+            return UnoRuntime.queryInterface(XPropertySet.class, oColumn);
         }
         catch (Exception exception)
         {
@@ -335,19 +334,16 @@ public class CommandMetaData extends DBMetaData
     public String[] getOrderableColumns(String[] _fieldnames)
     {
         ArrayList<String> aOrderableColumns = new ArrayList<String>();
-        int ncount = 0;
         for (int i = 0; i < _fieldnames.length; i++)
         {
             FieldColumn ofieldcolumn = getFieldColumnByFieldName(_fieldnames[i]);
             if (getDBDataTypeInspector().isColumnOrderable(ofieldcolumn.getXColumnPropertySet()))
             {
                 aOrderableColumns.add(_fieldnames[i]);
-                ncount++;
             }
         }
-        String[] sretfieldnames = new String[ncount];
-        aOrderableColumns.toArray(sretfieldnames);
-        return sretfieldnames;
+        String[] sretfieldnames = new String[aOrderableColumns.size()];
+        return aOrderableColumns.toArray(sretfieldnames);
     }
 
     /**

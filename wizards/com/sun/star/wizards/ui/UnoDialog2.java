@@ -134,7 +134,7 @@ public class UnoDialog2 extends UnoDialog implements EventNames
         }
         if (textChanged != null)
         {
-            XTextComponent xTextComponent = (XTextComponent) UnoRuntime.queryInterface(XTextComponent.class, xComboBox);
+            XTextComponent xTextComponent = UnoRuntime.queryInterface(XTextComponent.class, xComboBox);
             xTextComponent.addTextListener((XTextListener) guiEventListener);
             guiEventListener.add(sName, EVENT_TEXT_CHANGED, textChanged, eventTarget);
         }
@@ -186,7 +186,7 @@ public class UnoDialog2 extends UnoDialog implements EventNames
     public XControl insertTitledBox(String sName, String[] sPropNames, Object[] oPropValues)
     {
         Object oTitledBox = insertControlModel2("com.sun.star.awt.UnoControlGroupBoxModel", sName, sPropNames, oPropValues);
-        return (XControl) UnoRuntime.queryInterface(XControl.class, oTitledBox);
+        return UnoRuntime.queryInterface(XControl.class, oTitledBox);
     }
 
     public XTextComponent insertTextField(String sName, String sTextChanged, Object eventTarget, String[] sPropNames, Object[] oPropValues)
@@ -307,25 +307,25 @@ public class UnoDialog2 extends UnoDialog implements EventNames
     public XControl insertFixedLine(String sName, String[] sPropNames, Object[] oPropValues)
     {
         Object oLine = insertControlModel2("com.sun.star.awt.UnoControlFixedLineModel", sName, sPropNames, oPropValues);
-        return (XControl) UnoRuntime.queryInterface(XControl.class, oLine);
+        return UnoRuntime.queryInterface(XControl.class, oLine);
     }
 
     public XScrollBar insertScrollBar(String sName, String[] sPropNames, Object[] oPropValues)
     {
         Object oScrollBar = insertControlModel2("com.sun.star.awt.UnoControlScrollBarModel", sName, sPropNames, oPropValues);
-        return (XScrollBar) UnoRuntime.queryInterface(XScrollBar.class, oScrollBar);
+        return UnoRuntime.queryInterface(XScrollBar.class, oScrollBar);
     }
 
     public XProgressBar insertProgressBar(String sName, String[] sPropNames, Object[] oPropValues)
     {
         Object oProgressBar = insertControlModel2("com.sun.star.awt.UnoControlProgressBarModel", sName, sPropNames, oPropValues);
-        return (XProgressBar) UnoRuntime.queryInterface(XProgressBar.class, oProgressBar);
+        return UnoRuntime.queryInterface(XProgressBar.class, oProgressBar);
     }
 
     public XControl insertGroupBox(String sName, String[] sPropNames, Object[] oPropValues)
     {
         Object oGroupBox = insertControlModel2("com.sun.star.awt.UnoControlGroupBoxModel", sName, sPropNames, oPropValues);
-        return (XControl) UnoRuntime.queryInterface(XControl.class, oGroupBox);
+        return UnoRuntime.queryInterface(XControl.class, oGroupBox);
     }
 
     public Object insertControlModel2(String serviceName, String componentName, String[] sPropNames, Object[] oPropValues)
@@ -347,8 +347,7 @@ public class UnoDialog2 extends UnoDialog implements EventNames
         {
             ex.printStackTrace();
         }
-        final Object aObj = xDlgContainer.getControl(componentName);
-        return aObj;
+        return xDlgContainer.getControl(componentName);
     }
 
     private void setControlPropertiesDebug(Object model, String[] names, Object[] values)
@@ -374,8 +373,7 @@ public class UnoDialog2 extends UnoDialog implements EventNames
 
     public static Object getControlModel(Object unoControl)
     {
-        Object obj = ((XControl) UnoRuntime.queryInterface(XControl.class, unoControl)).getModel();
-        return obj;
+        return UnoRuntime.queryInterface(XControl.class, unoControl).getModel();
     }
 
     public int showMessageBox(String windowServiceName, int windowAttribute, String MessageText)

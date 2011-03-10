@@ -460,7 +460,7 @@ public class DataAwareFields
         }
         else if (value instanceof String)
         {
-            return ((String) value).equals(TRUE);
+            return value.equals(TRUE);
         }
         else if (value instanceof short[])
         {

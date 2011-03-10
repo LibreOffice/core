@@ -53,8 +53,7 @@ public class ColumnarSingleColumn extends ReportBuilderLayouter
 
     public String getLocalizedName()
     {
-        final String sLocalizedName = getResource().getResText(UIConsts.RID_REPORT + 81);
-        return sLocalizedName;
+        return getResource().getResText(UIConsts.RID_REPORT + 81);
     }
 
     protected void insertDetailFields()

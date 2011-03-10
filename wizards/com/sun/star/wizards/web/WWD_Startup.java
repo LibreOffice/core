@@ -254,7 +254,7 @@ public abstract class WWD_Startup extends WWD_General
         this.buildStep7(proxies, exclamationURL);
         buildStepX();
 
-        this.xMSF = xMSF;
+        this.xMSF = xmsf;
         XDesktop xDesktop = Desktop.getDesktop(xMSF);
         myFrame = OfficeDocument.createNewFrame(xMSF, this);
         Object doc = OfficeDocument.createNewDocument(myFrame, "swriter", false, true);
@@ -388,7 +388,7 @@ public abstract class WWD_Startup extends WWD_General
 
     private XFrame getFrame(Object model)
     {
-        XModel xmodel = (XModel) UnoRuntime.queryInterface(XModel.class, model);
+        XModel xmodel = UnoRuntime.queryInterface(XModel.class, model);
         return xmodel.getCurrentController().getFrame();
     }
 
@@ -412,7 +412,7 @@ public abstract class WWD_Startup extends WWD_General
             //XWindow xContainerWindow = myFrame.getContainerWindow();
 
             XWindow xContainerWindow = myFrame.getComponentWindow();
-            XWindowPeer xWindowPeer = (XWindowPeer) UnoRuntime.queryInterface(XWindowPeer.class, xContainerWindow);
+            XWindowPeer xWindowPeer = UnoRuntime.queryInterface(XWindowPeer.class, xContainerWindow);
 
             createWindowPeer(xWindowPeer);
 
@@ -595,7 +595,7 @@ public abstract class WWD_Startup extends WWD_General
 
         //page 2 : document properties
 
-        docListDA = (UnoDataAware) UnoDataAware.attachListBox(this, "SelectedDoc", lstDocuments, null, false);
+        docListDA = UnoDataAware.attachListBox(this, "SelectedDoc", lstDocuments, null, false);
         docListDA.disableControls(new Object[]
                 {
                     /*btnDocDown, btnDocUp, */

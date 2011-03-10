@@ -347,7 +347,7 @@ public abstract class DataAware {
          */
         public void set(Object value, Object target) {
             try {
-                setMethod.invoke(target, new Object[] {value});
+                setMethod.invoke(target, value);
             } catch (IllegalAccessException ex1) {
                 ex1.printStackTrace();
             } catch (InvocationTargetException ex2) {

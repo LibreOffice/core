@@ -1,5 +1,4 @@
-/*
- ************************************************************************
+/************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -210,7 +209,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
             try
             {
                 final Object aObj = _xSectionToClear.getByIndex(0);
-                final XShape aShape = (XShape) UnoRuntime.queryInterface(XShape.class, aObj);
+                final XShape aShape = UnoRuntime.queryInterface(XShape.class, aObj);
                 _xSectionToClear.remove(aShape);
             }
             catch (com.sun.star.uno.Exception ex)
@@ -295,7 +294,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
 
             // get all Page Styles
             final Object aPageStylesObj = xNameAccess.getByName(_sStyleName);
-            final XNameAccess xContainer = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, aPageStylesObj);
+            final XNameAccess xContainer = UnoRuntime.queryInterface(XNameAccess.class, aPageStylesObj);
 
             // step over all Page Styles, search the one which is in use
             final String[] aElementNames = xContainer.getElementNames();
@@ -303,7 +302,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
             {
                 final String sName = aElementNames[i];
                 final Object aObj = xContainer.getByName(sName);
-                final XStyle xStyle = (XStyle) UnoRuntime.queryInterface(XStyle.class, aObj);
+                final XStyle xStyle = UnoRuntime.queryInterface(XStyle.class, aObj);
                 if (xStyle.isInUse())
                 {
                     aUsedStyle = xStyle;
@@ -386,7 +385,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
                     {
                         final XGroups xGroups = getReportDefinition().getGroups();
                         Object aGroup = xGroups.getByIndex(_nGroup);
-                        XGroup xGroup = (XGroup) UnoRuntime.queryInterface(XGroup.class, aGroup);
+                        XGroup xGroup = UnoRuntime.queryInterface(XGroup.class, aGroup);
                         XSection xGroupSection = xGroup.getHeader();
 
                         // copy Properties
@@ -560,7 +559,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         for (int i = 0; i < _aList.length; i++)
         {
             final String sField = _aList[i];
-            if (listContains(m_aGroupNames, sField) == true)
+            if (listContains(m_aGroupNames, sField))
             {
                 continue;
             }
@@ -662,7 +661,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
             try
             {
                 final Object aFixedText = getMSFofReportDefinition().createInstance("com.sun.star.report.FixedText");
-                final XFixedText xFixedText = (XFixedText) UnoRuntime.queryInterface(XFixedText.class, aFixedText);
+                final XFixedText xFixedText = UnoRuntime.queryInterface(XFixedText.class, aFixedText);
 
 
                 int nHeight = LayoutConstants.LabelHeight;        // default height of label is fixed.
@@ -722,8 +721,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         if (_sName.startsWith("field:["))
         {
             int nCloseBrace = _sName.lastIndexOf("]");
-            final String sName = _sName.substring(7, nCloseBrace).trim();
-            return sName;
+            return _sName.substring(7, nCloseBrace).trim();
         }
         return _sName;
     }
@@ -775,7 +773,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
                 }
                 _aRect.Height = nHeight;
 
-                final XReportControlModel xReportControlModel = (XReportControlModel) UnoRuntime.queryInterface(XReportControlModel.class, aField);
+                final XReportControlModel xReportControlModel = UnoRuntime.queryInterface(XReportControlModel.class, aField);
                 if (xReportControlModel != null)
                 {
                     // #i86907# not documented right in idl description.
@@ -802,7 +800,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
                             || nType == DataType.LONGVARBINARY)
                     {
                         // aField = getMSFofReportDefinition().createInstance("com.sun.star.report.ImageControl");
-                        final XImageControl xImageControl = (XImageControl) UnoRuntime.queryInterface(XImageControl.class, xReportControlModel);
+                        final XImageControl xImageControl = UnoRuntime.queryInterface(XImageControl.class, xReportControlModel);
                         if (xImageControl != null)
                         {
                             // xImageControl.setScaleImage(true);
@@ -828,11 +826,11 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
                     // spezial case rpt:now() (default date format)
                     if (_sFormattedfield.equals("rpt:now()"))
                     {
-                        final XFormattedField xFormattedField = (XFormattedField) UnoRuntime.queryInterface(XFormattedField.class, xReportControlModel);
+                        final XFormattedField xFormattedField = UnoRuntime.queryInterface(XFormattedField.class, xReportControlModel);
 
                         XNumberFormatsSupplier x = xFormattedField.getFormatsSupplier();
                         XNumberFormats xFormats = x.getNumberFormats();
-                        XNumberFormatTypes x3 = (XNumberFormatTypes) UnoRuntime.queryInterface(XNumberFormatTypes.class, xFormats);
+                        XNumberFormatTypes x3 = UnoRuntime.queryInterface(XNumberFormatTypes.class, xFormats);
                         Locale.getDefault();
                         com.sun.star.lang.Locale aLocale = new com.sun.star.lang.Locale();
                         aLocale.Country = Locale.getDefault().getCountry();
@@ -869,8 +867,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
     {
         if (m_xMSF == null)
         {
-            final XMultiServiceFactory xMSF = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, getReportDefinition());
-            m_xMSF = xMSF;
+            m_xMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class, getReportDefinition());
         }
         return m_xMSF;
     }
@@ -893,7 +890,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
             try
             {
                 final Object aFixedLine = getMSFofReportDefinition().createInstance("com.sun.star.report.FixedLine");
-                final XFixedLine xFixedLine = (XFixedLine) UnoRuntime.queryInterface(XFixedLine.class, aFixedLine);
+                final XFixedLine xFixedLine = UnoRuntime.queryInterface(XFixedLine.class, aFixedLine);
 
                 xFixedLine.setOrientation(_nOrientation);
                 // TODO: line width is fixed
@@ -1135,7 +1132,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
             // XControlContainer xControlContainer = (XControlContainer)UnoRuntime.queryInterface(XControlContainer.class, aControlContainer);
 
             final Object aFixedTextModel = getGlobalMSF().createInstance("com.sun.star.awt.UnoControlFixedTextModel");
-            final XControlModel xFixedTextModel = (XControlModel) UnoRuntime.queryInterface(XControlModel.class, aFixedTextModel);
+            final XControlModel xFixedTextModel = UnoRuntime.queryInterface(XControlModel.class, aFixedTextModel);
 
             final PropertySetHelper aPropertySetHelper = new PropertySetHelper(xFixedTextModel);
 //          aPropertySetHelper.showProperties();
@@ -1145,34 +1142,34 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
 //            XServiceInfo xServiceInfo2 = (XServiceInfo)UnoRuntime.queryInterface(XServiceInfo.class, aUnoCtrlFixedText);
 //            String[] sServices2 = xServiceInfo2.getSupportedServiceNames();
 
-            final XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, aUnoCtrlFixedText);
+            final XWindow xWindow = UnoRuntime.queryInterface(XWindow.class, aUnoCtrlFixedText);
             xWindow.setVisible(false);
 
-            final XControl xControl = (XControl) UnoRuntime.queryInterface(XControl.class, aUnoCtrlFixedText);
+            final XControl xControl = UnoRuntime.queryInterface(XControl.class, aUnoCtrlFixedText);
             xControl.setModel(xFixedTextModel);
 
-            final com.sun.star.awt.XFixedText xFixedText = (com.sun.star.awt.XFixedText) UnoRuntime.queryInterface(com.sun.star.awt.XFixedText.class, aUnoCtrlFixedText);
+            final com.sun.star.awt.XFixedText xFixedText = UnoRuntime.queryInterface(com.sun.star.awt.XFixedText.class, aUnoCtrlFixedText);
             xFixedText.setText(_sText);
 
-            final XLayoutConstrains xLayoutConstraints = (XLayoutConstrains) UnoRuntime.queryInterface(XLayoutConstrains.class, aUnoCtrlFixedText);
+            final XLayoutConstrains xLayoutConstraints = UnoRuntime.queryInterface(XLayoutConstrains.class, aUnoCtrlFixedText);
             final Size aSizeInPixel = xLayoutConstraints.getPreferredSize();
 
-            final XWindowPeer xPeerOfReportDefinition = (XWindowPeer) UnoRuntime.queryInterface(XWindowPeer.class, getReportDefinition().getCurrentController().getFrame().getComponentWindow());
+            final XWindowPeer xPeerOfReportDefinition = UnoRuntime.queryInterface(XWindowPeer.class, getReportDefinition().getCurrentController().getFrame().getComponentWindow());
             xControl.createPeer(null, xPeerOfReportDefinition);
 
             final XWindowPeer x = xControl.getPeer();
 
-            final XUnitConversion xConversion = (XUnitConversion) UnoRuntime.queryInterface(XUnitConversion.class, x);
+            final XUnitConversion xConversion = UnoRuntime.queryInterface(XUnitConversion.class, x);
             aSizeMM_100TH = xConversion.convertSizeToLogic(aSizeInPixel, com.sun.star.util.MeasureUnit.MM_100TH);
             // xToolkit.createScreenCompatibleDevice(_nWidth, _nWidth).
             // XWindow x = getReportDefinition().getCurrentController().getFrame().getContainerWindow();
             // Object aObj = _xSection.getParent();
 
             // we don't need the created objects any longer
-            final XComponent xFixedTextDeleter = (XComponent) UnoRuntime.queryInterface(XComponent.class, xFixedText);
+            final XComponent xFixedTextDeleter = UnoRuntime.queryInterface(XComponent.class, xFixedText);
             xFixedTextDeleter.dispose();
 
-            final XComponent xFixedTextModelDeleter = (XComponent) UnoRuntime.queryInterface(XComponent.class, aFixedTextModel);
+            final XComponent xFixedTextModelDeleter = UnoRuntime.queryInterface(XComponent.class, aFixedTextModel);
             xFixedTextModelDeleter.dispose();
         }
         catch (Exception e)
@@ -1215,8 +1212,8 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
      */
     private void copyProperties(Object _aFrom, Object _aTo)
     {
-        XPropertySet xFrom = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, _aFrom);
-        XPropertySet xTo = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, _aTo);
+        XPropertySet xFrom = UnoRuntime.queryInterface(XPropertySet.class, _aFrom);
+        XPropertySet xTo = UnoRuntime.queryInterface(XPropertySet.class, _aTo);
 
 
         XPropertySetInfo xForeignPropInfo = xFrom.getPropertySetInfo();
@@ -1258,7 +1255,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
             while (xEnum.hasMoreElements())
             {
                 Object aEnumObj = xEnum.nextElement();
-                XReportComponent aComponent = (XReportComponent) UnoRuntime.queryInterface(XReportComponent.class, aEnumObj);
+                XReportComponent aComponent = UnoRuntime.queryInterface(XReportComponent.class, aEnumObj);
 
                 // XCloneable aClone = (XCloneable)UnoRuntime.queryInterface(XCloneable.class, aEnumObj);
                 if (aComponent != null)
@@ -1266,7 +1263,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
                     Object aClone = aComponent.createClone();
                     if (aClone != null)
                     {
-                        XShape aShape = (XShape) UnoRuntime.queryInterface(XShape.class, aClone);
+                        XShape aShape = UnoRuntime.queryInterface(XShape.class, aClone);
 
                         // normally 'createClone' will create a real clone of the component,
                         // but there seems some problems, we have to controll.
@@ -1311,8 +1308,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
                 {
                     Logger.getLogger(ReportBuilderLayouter.class.getName()).log(Level.SEVERE, null, e);
                 }
-                return;
-            }
+                }
             else
             {
                 // we won't a page header
@@ -1469,10 +1465,9 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
                 aRect.Y += nLineHeight;
                 aRect.Y += LayoutConstants.LabelHeight;
 
-                final int nWidth = nUsablePageWidth;
                 aRect.X = getLeftPageIndent();
 
-                aRect = insertFormattedField(xSection, "rpt:" + sNoFirstUnusedQuotes, aRect, nWidth, null, (short) com.sun.star.awt.TextAlign.CENTER);
+                aRect = insertFormattedField(xSection, "rpt:" + sNoFirstUnusedQuotes, aRect, nUsablePageWidth, null, (short) com.sun.star.awt.TextAlign.CENTER);
 
                 aRect.Y += LayoutConstants.FormattedFieldHeight + LayoutConstants.LineHeight;
                 xSection.setHeight(aRect.Y);
@@ -1598,7 +1593,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
                 if (m_aFixedTextHelper == null)
                 {
                     final Object aFixedText = getMSFofReportDefinition().createInstance("com.sun.star.report.FixedText");
-                    m_aFixedTextHelper = (XFixedText) UnoRuntime.queryInterface(XFixedText.class, aFixedText);
+                    m_aFixedTextHelper = UnoRuntime.queryInterface(XFixedText.class, aFixedText);
                 }
 
                 m_aFixedTextHelper.setLabel(_sLabel);

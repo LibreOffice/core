@@ -90,7 +90,7 @@ public class DatabaseControl extends Control
             {
                 bHidden = true;
             }
-            xPropColumn.setPropertyValue("Hidden", new Boolean(bHidden));
+            xPropColumn.setPropertyValue("Hidden", Boolean.valueOf(bHidden));
             xPropColumn.setPropertyValue("DataField", sFieldName);
             xPropColumn.setPropertyValue(PropertyNames.PROPERTY_LABEL, _columntitle);
             xPropColumn.setPropertyValue(PropertyNames.PROPERTY_WIDTH, 0);  // Width of column is adjusted to Columname
@@ -160,16 +160,14 @@ public class DatabaseControl extends Control
         if (getControlType() == FormHandler.SOIMAGECONTROL)
         {
             // return oFormHandler.getImageControlHeight();
-            final int nMemofieldheight = oFormHandler.getControlReferenceHeight() * 4;
-            return nMemofieldheight;
+            return oFormHandler.getControlReferenceHeight() * 4;
         }
         else
         {
             if (getFieldType() == DataType.LONGVARCHAR)
             {
                 // Helper.setUnoPropertyValue(xControlModel, PropertyNames.PROPERTY_MULTILINE, Boolean.TRUE);
-                final int nMemofieldheight = oFormHandler.getControlReferenceHeight() * 4;
-                return nMemofieldheight;
+                return oFormHandler.getControlReferenceHeight() * 4;
             }
             else if (getControlType() == FormHandler.SOCHECKBOX)
             {

@@ -66,9 +66,9 @@ public class NumberFormatter
         Object oNumberFormatter = _xMSF.createInstance("com.sun.star.util.NumberFormatter");
         xNumberFormats = _xNumberFormatsSupplier.getNumberFormats();
         xNumberFormatSettings = _xNumberFormatsSupplier.getNumberFormatSettings();
-        xNumberFormatter = (XNumberFormatter) UnoRuntime.queryInterface(XNumberFormatter.class, oNumberFormatter);
+        xNumberFormatter = UnoRuntime.queryInterface(XNumberFormatter.class, oNumberFormatter);
         xNumberFormatter.attachNumberFormatsSupplier(_xNumberFormatsSupplier);
-        xNumberFormatTypes = (XNumberFormatTypes) UnoRuntime.queryInterface(XNumberFormatTypes.class, xNumberFormats);
+        xNumberFormatTypes = UnoRuntime.queryInterface(XNumberFormatTypes.class, xNumberFormats);
 
     }
 
@@ -77,7 +77,7 @@ public class NumberFormatter
         aLocale = _aLocale;
         xNumberFormats = _xNumberFormatsSupplier.getNumberFormats();
         xNumberFormatSettings = _xNumberFormatsSupplier.getNumberFormatSettings();
-        xNumberFormatTypes = (XNumberFormatTypes) UnoRuntime.queryInterface(XNumberFormatTypes.class, xNumberFormats);
+        xNumberFormatTypes = UnoRuntime.queryInterface(XNumberFormatTypes.class, xNumberFormats);
     }
 
 
@@ -92,7 +92,7 @@ public class NumberFormatter
     public static XNumberFormatter createNumberFormatter(XMultiServiceFactory _xMSF, XNumberFormatsSupplier _xNumberFormatsSupplier) throws Exception
     {
         Object oNumberFormatter = _xMSF.createInstance("com.sun.star.util.NumberFormatter");
-        XNumberFormatter xNumberFormatter = (XNumberFormatter) UnoRuntime.queryInterface(XNumberFormatter.class, oNumberFormatter);
+        XNumberFormatter xNumberFormatter = UnoRuntime.queryInterface(XNumberFormatter.class, oNumberFormatter);
         xNumberFormatter.attachNumberFormatsSupplier(_xNumberFormatsSupplier);
         return xNumberFormatter;
     }
@@ -114,9 +114,9 @@ public class NumberFormatter
      */
     public static int getNumberFormatterKey( Object numberFormatsSupplier, short type)
     {
-        Object numberFormatTypes = ((XNumberFormatsSupplier)UnoRuntime.queryInterface(XNumberFormatsSupplier.class,numberFormatsSupplier)).getNumberFormats();
+        Object numberFormatTypes = UnoRuntime.queryInterface(XNumberFormatsSupplier.class,numberFormatsSupplier).getNumberFormats();
         Locale l = new Locale();
-        return ((XNumberFormatTypes)UnoRuntime.queryInterface(XNumberFormatTypes.class,numberFormatTypes)).getFormatIndex(type, l);
+        return UnoRuntime.queryInterface(XNumberFormatTypes.class,numberFormatTypes).getFormatIndex(type, l);
     }
 
 
@@ -200,7 +200,7 @@ public class NumberFormatter
             String FormatString = AnyConverter.toString(Helper.getUnoPropertyValue(xNumberFormat, "FormatString"));
             Locale oLocale = (Locale) Helper.getUnoPropertyValue(xNumberFormat, "Locale");
             int NewFormatKey = defineNumberFormat(FormatString, oLocale);
-            XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, _xFormatObject);
+            XPropertySet xPSet = UnoRuntime.queryInterface(XPropertySet.class, _xFormatObject);
             xPSet.setPropertyValue("FormatsSupplier", _oNumberFormatter.xNumberFormatter.getNumberFormatsSupplier());
             if (xPSet.getPropertySetInfo().hasPropertyByName("NumberFormat"))
             {

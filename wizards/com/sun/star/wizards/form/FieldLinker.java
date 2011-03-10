@@ -48,18 +48,9 @@ public class FieldLinker extends DBLimitedFieldSelection
     private XFixedText[] lblMasterFields;
     private XListBox[] lstSlaveFields;
     private XListBox[] lstMasterFields;
-    private final int SOMASTERINDEX = 1;
-    private final int SOSLAVEINDEX = 0;
-    private int SOFIRSTLINKLST = 0;
-    private int SOSECLINKLST = 1;
-    private int SOTHIRDLINKLST = 2;
-    private int SOFOURTHLINKLST = 3;
     private int[] SOLINKLST = null;
     private String[] sSlaveListHeader;
     private String[] sMasterListHeader; //CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 40);
-    private String sSlaveHidString;
-    private String sMasterHidString;
-    private Integer IListBoxPosX;
 
     public FieldLinker(WizardDialog _CurUnoDialog, int iStep, int iCompPosX, int iCompPosY, int iCompWidth, int _firsthelpid)
     {
@@ -76,31 +67,31 @@ public class FieldLinker extends DBLimitedFieldSelection
                 lblMasterFields = new XFixedText[rowcount];
                 lstSlaveFields = new XListBox[rowcount];
                 lstMasterFields = new XListBox[rowcount];
-                SOFIRSTLINKLST = 0;
-                SOSECLINKLST = 1;
-                SOTHIRDLINKLST = 2;
-                SOFOURTHLINKLST = 3;
-                IListBoxPosX = new Integer(iCompPosX + 6);
+                int SOFIRSTLINKLST = 0;
+                int SOSECLINKLST = 1;
+                int SOTHIRDLINKLST = 2;
+                int SOFOURTHLINKLST = 3;
+                Integer IListBoxPosX = new Integer(iCompPosX + 6);
                 sSlaveListHeader = CurUnoDialog.m_oResource.getResArray(UIConsts.RID_FORM + 20, 4); //new String[rowcount];PropertyNames.EMPTY_STRING; //CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 40);
                 sMasterListHeader = CurUnoDialog.m_oResource.getResArray(UIConsts.RID_FORM + 24, 4);// new String[rowcount];PropertyNames.EMPTY_STRING; //CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 40);
                 SOLINKLST = new int[]
                         {
-                            SOFIRSTLINKLST, SOSECLINKLST, SOTHIRDLINKLST, SOFOURTHLINKLST
+                                SOFIRSTLINKLST, SOSECLINKLST, SOTHIRDLINKLST, SOFOURTHLINKLST
                         };
             }
-            sSlaveHidString = HelpIds.getHelpIdString(FirstHelpIndex + (i * 2));
-            sMasterHidString = HelpIds.getHelpIdString(FirstHelpIndex + (i * 2) + 1);
+            String sSlaveHidString = HelpIds.getHelpIdString(FirstHelpIndex + (i * 2));
+            String sMasterHidString = HelpIds.getHelpIdString(FirstHelpIndex + (i * 2) + 1);
             boolean bDoEnable = (i < 2);
-            lblSlaveFields[i] = CurUnoDialog.insertLabel("lblSlaveFieldLink" + new Integer(i + 1).toString(),
+            lblSlaveFields[i] = CurUnoDialog.insertLabel("lblSlaveFieldLink" + Integer.toString(i + 1),
                     new String[]
                     {
                         PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                     },
                     new Object[]
                     {
-                        new Boolean(bDoEnable), 8, sSlaveListHeader[i], 97, new Integer(iCurPosY), IStep, new Short(curtabindex++), 97
+                            Boolean.valueOf(bDoEnable), 8, sSlaveListHeader[i], 97, new Integer(iCurPosY), IStep, new Short(curtabindex++), 97
                     });
-            lstSlaveFields[i] = CurUnoDialog.insertListBox("lstSlaveFieldLink" + new Integer(i + 1).toString(), SOLINKLST[i], null, new ItemListenerImpl(),
+            lstSlaveFields[i] = CurUnoDialog.insertListBox("lstSlaveFieldLink" + (i + 1), SOLINKLST[i], null, new ItemListenerImpl(),
                     new String[]
                     {
                         "Dropdown",
@@ -117,9 +108,9 @@ public class FieldLinker extends DBLimitedFieldSelection
                     new Object[]
                     {
                         Boolean.TRUE,
-                        new Boolean(bDoEnable),
+                            Boolean.valueOf(bDoEnable),
                         UIConsts.INTEGER_12,
-                        sSlaveHidString,
+                            sSlaveHidString,
                         Short.valueOf(UnoDialog.getListBoxLineCount()),
                         97,
                         new Integer(iCurPosY + 10),
@@ -128,17 +119,17 @@ public class FieldLinker extends DBLimitedFieldSelection
                         97
                     });
 
-            lblMasterFields[i] = CurUnoDialog.insertLabel("lblMasterFieldLink" + new Integer(i + 1).toString(),
+            lblMasterFields[i] = CurUnoDialog.insertLabel("lblMasterFieldLink" + Integer.toString(i + 1),
                     new String[]
                     {
                         PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                     },
                     new Object[]
                     {
-                        new Boolean(bDoEnable), 8, sMasterListHeader[i], 206, new Integer(iCurPosY), IStep, new Short(curtabindex++), 97
+                            Boolean.valueOf(bDoEnable), 8, sMasterListHeader[i], 206, new Integer(iCurPosY), IStep, new Short(curtabindex++), 97
                     });
 
-            lstMasterFields[i] = CurUnoDialog.insertListBox("lstMasterFieldLink" + new Integer(i + 1).toString(), SOLINKLST[i], null, new ItemListenerImpl(),
+            lstMasterFields[i] = CurUnoDialog.insertListBox("lstMasterFieldLink" + Integer.toString(i + 1), SOLINKLST[i], null, new ItemListenerImpl(),
                     new String[]
                     {
                         "Dropdown",
@@ -155,9 +146,9 @@ public class FieldLinker extends DBLimitedFieldSelection
                     new Object[]
                     {
                         Boolean.TRUE,
-                        new Boolean(bDoEnable),
+                            Boolean.valueOf(bDoEnable),
                         UIConsts.INTEGER_12,
-                        sMasterHidString,
+                            sMasterHidString,
                         Short.valueOf(UnoDialog.getListBoxLineCount()),
                         206,
                         new Integer(iCurPosY + 10),
@@ -206,11 +197,11 @@ public class FieldLinker extends DBLimitedFieldSelection
     {
         if (i < rowcount)
         {
-            Helper.setUnoPropertyValue(UnoDialog.getModel(lblSlaveFields[i]), PropertyNames.PROPERTY_ENABLED, new Boolean(bDoEnable));
-            Helper.setUnoPropertyValue(UnoDialog.getModel(lstSlaveFields[i]), PropertyNames.PROPERTY_ENABLED, new Boolean(bDoEnable));
-            Helper.setUnoPropertyValue(UnoDialog.getModel(lblMasterFields[i]), PropertyNames.PROPERTY_ENABLED, new Boolean(bDoEnable));
-            Helper.setUnoPropertyValue(UnoDialog.getModel(lstMasterFields[i]), PropertyNames.PROPERTY_ENABLED, new Boolean(bDoEnable));
-            if (bDoEnable == false)
+            Helper.setUnoPropertyValue(UnoDialog.getModel(lblSlaveFields[i]), PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bDoEnable));
+            Helper.setUnoPropertyValue(UnoDialog.getModel(lstSlaveFields[i]), PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bDoEnable));
+            Helper.setUnoPropertyValue(UnoDialog.getModel(lblMasterFields[i]), PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bDoEnable));
+            Helper.setUnoPropertyValue(UnoDialog.getModel(lstMasterFields[i]), PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bDoEnable));
+            if (!bDoEnable)
             {
                 Helper.setUnoPropertyValue(UnoDialog.getModel(lstSlaveFields[i]), PropertyNames.SELECTED_ITEMS, new short[] { 0 });
                 Helper.setUnoPropertyValue(UnoDialog.getModel(lstMasterFields[i]), PropertyNames.SELECTED_ITEMS, new short[] { 0 });
@@ -238,7 +229,9 @@ public class FieldLinker extends DBLimitedFieldSelection
     {
         // short[] MasterSelList = null;
         // short[] SlaveSelList = null;
+        int SOMASTERINDEX = 1;
         String[] MasterLinkNames = JavaTools.ArrayOutOfMultiDimArray(_LinkFieldNames, SOMASTERINDEX);
+        int SOSLAVEINDEX = 0;
         String[] SlaveLinkNames = JavaTools.ArrayOutOfMultiDimArray(_LinkFieldNames, SOSLAVEINDEX);
         String[] ViewMasterFieldNames = addNoneFieldItemToList(_AllMasterFieldNames); // add '-undefiened-'
         String[] ViewSlaveFieldNames = addNoneFieldItemToList(_AllSlaveFieldNames);

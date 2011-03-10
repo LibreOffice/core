@@ -149,7 +149,7 @@ public class UCB
         throws com.sun.star.ucb.CommandAbortedException,
             com.sun.star.uno.Exception
     {
-        XCommandProcessor xCmdProcessor = (XCommandProcessor)UnoRuntime.queryInterface(
+        XCommandProcessor xCmdProcessor = UnoRuntime.queryInterface(
             XCommandProcessor.class, xContent);
         Command aCommand  = new Command();
         aCommand.Name     = aCommandName;
@@ -174,7 +174,7 @@ public class UCB
 
         XDynamicResultSet xSet;
 
-        xSet = (XDynamicResultSet)UnoRuntime.queryInterface(
+        xSet = UnoRuntime.queryInterface(
           XDynamicResultSet.class,executeCommand(xContent, "open", aArg));
 
         XResultSet xResultSet = xSet.getStaticResultSet();
@@ -184,9 +184,9 @@ public class UCB
         if (xResultSet.first())
         {
             // obtain XContentAccess interface for child content access and XRow for properties
-            XContentAccess xContentAccess = (XContentAccess)UnoRuntime.queryInterface(
+            XContentAccess xContentAccess = UnoRuntime.queryInterface(
                 XContentAccess.class, xResultSet);
-            XRow xRow = (XRow)UnoRuntime.queryInterface(XRow.class, xResultSet);
+            XRow xRow = UnoRuntime.queryInterface(XRow.class, xResultSet);
             do
             {
                 // Obtain URL of child.
@@ -195,7 +195,7 @@ public class UCB
                 String aTitle = xRow.getString(1);
                 if (aTitle.length() == 0 && xRow.wasNull())
                 {
-                    ; //ignore
+                    //ignore
                 }
                 else
                 {
@@ -228,7 +228,7 @@ public class UCB
         pv[0].Handle = -1;
 
         Object row = executeCommand(content,"getPropertyValues",pv);
-        XRow xrow = (XRow)UnoRuntime.queryInterface(XRow.class,row);
+        XRow xrow = UnoRuntime.queryInterface(XRow.class,row);
         if (type.equals(String.class))
         {
            return xrow.getString(1);
@@ -255,10 +255,10 @@ public class UCB
     public Object getContent(String path) throws Exception
     {
         //System.out.println("Getting Content for : " + path);
-        XContentIdentifier id = ((XContentIdentifierFactory) UnoRuntime.queryInterface(XContentIdentifierFactory.class, ucb)).createContentIdentifier(path);
+        XContentIdentifier id = UnoRuntime.queryInterface(XContentIdentifierFactory.class, ucb).createContentIdentifier(path);
 
-        return ((XContentProvider)UnoRuntime.queryInterface(
-          XContentProvider.class,ucb)).queryContent(id);
+        return UnoRuntime.queryInterface(
+          XContentProvider.class,ucb).queryContent(id);
     }
 
     public static interface Verifier

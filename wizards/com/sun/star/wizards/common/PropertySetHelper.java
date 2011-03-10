@@ -49,7 +49,7 @@ public class PropertySetHelper
         {
             return;
         }
-        m_xPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, _aObj);
+        m_xPropertySet = UnoRuntime.queryInterface(XPropertySet.class, _aObj);
     }
 
     private HashMap<String, Object> getHashMap()
@@ -375,7 +375,7 @@ public class PropertySetHelper
 
         if (m_xPropertySet != null)
         {
-            XServiceInfo xServiceInfo = (XServiceInfo) UnoRuntime.queryInterface(XServiceInfo.class, m_xPropertySet);
+            XServiceInfo xServiceInfo = UnoRuntime.queryInterface(XServiceInfo.class, m_xPropertySet);
             if (xServiceInfo != null)
             {
                 sName = xServiceInfo.getImplementationName();

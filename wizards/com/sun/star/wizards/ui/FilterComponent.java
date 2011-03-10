@@ -137,7 +137,7 @@ public class FilterComponent
                 case SO_FOURTHFIELDNAME:
                     sControlName = getControlName(EventObject.Source);
                     String sControlNameSuffix = sIncSuffix + "_" + getIndexNumber(sControlName);
-                    XListBox xCurFieldListBox = (XListBox) UnoRuntime.queryInterface(XListBox.class, CurUnoDialog.xDlgContainer.getControl(sControlName));
+                    XListBox xCurFieldListBox = UnoRuntime.queryInterface(XListBox.class, CurUnoDialog.xDlgContainer.getControl(sControlName));
                     String CurDisplayFieldName = xCurFieldListBox.getSelectedItem();
                     FieldColumn CurFieldColumn = new FieldColumn(oQueryMetaData, CurDisplayFieldName);
 
@@ -198,8 +198,7 @@ public class FilterComponent
 
     public static String getIndexNumber(String _sStr)
     {
-        String sLastNumber = _sStr.substring(_sStr.length() - 1, _sStr.length());
-        return sLastNumber;
+        return _sStr.substring(_sStr.length() - 1, _sStr.length());
     }
 
     /**
@@ -223,10 +222,9 @@ public class FilterComponent
     {
         try
         {
-            XControl xControl = (XControl) UnoRuntime.queryInterface(XControl.class, _oSourceevent);
-            XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xControl.getModel());
-            final String sName = AnyConverter.toString(xPSet.getPropertyValue(PropertyNames.PROPERTY_NAME));
-            return sName;
+            XControl xControl = UnoRuntime.queryInterface(XControl.class, _oSourceevent);
+            XPropertySet xPSet = UnoRuntime.queryInterface(XPropertySet.class, xControl.getModel());
+            return AnyConverter.toString(xPSet.getPropertyValue(PropertyNames.PROPERTY_NAME));
         }
         catch (Exception e)
         {
@@ -246,7 +244,7 @@ public class FilterComponent
             try
             {
                 final String serviceName = "com.sun.star.beans.PropertyBag";
-                final XPropertyContainer column = (XPropertyContainer) UnoRuntime.queryInterface(XPropertyContainer.class, oQueryMetaData.xMSF.createInstance(serviceName));
+                final XPropertyContainer column = UnoRuntime.queryInterface(XPropertyContainer.class, oQueryMetaData.xMSF.createInstance(serviceName));
 
                 column.addProperty("Type", PropertyAttribute.BOUND, DataType.VARCHAR);
                 column.addProperty(PropertyNames.PROPERTY_NAME, PropertyAttribute.BOUND, PropertyNames.EMPTY_STRING);
@@ -288,7 +286,7 @@ public class FilterComponent
                                 || (operator == SQLFilterOperator.NOT_SQLNULL)
                                 || AnyConverter.isVoid(value))
                         {
-                            column.addProperty("Value", (short) (PropertyAttribute.MAYBEVOID | PropertyAttribute.REMOVABLE), new String());
+                            column.addProperty("Value", (short) (PropertyAttribute.MAYBEVOID | PropertyAttribute.REMOVABLE), "");
                             value = new Any(new Type(TypeClass.VOID), null);
                         }
                         else
@@ -362,7 +360,7 @@ public class FilterComponent
     {
         boolean bisany = true;
         int ifilterstate = SOI_MATCHALL;
-        bisany = (this.optMatchAny.getState()) == true;
+        bisany = (this.optMatchAny.getState());
         if (bisany)
         {
             ifilterstate = SOI_MATCHANY;
@@ -563,7 +561,7 @@ public class FilterComponent
                 m_bEnabled = _bEnabled;
 
                 // Label Field
-                ControlElements[0] = (XInterface) CurUnoDialog.insertLabel("lblFieldNames" + sCompSuffix,
+                ControlElements[0] = CurUnoDialog.insertLabel("lblFieldNames" + sCompSuffix,
                         new String[]
                         {
                             PropertyNames.PROPERTY_ENABLED,
@@ -588,7 +586,7 @@ public class FilterComponent
                         });
 
                 // Label Operator
-                ControlElements[1] = (XInterface) CurUnoDialog.insertLabel("lblOperators" + sCompSuffix,
+                ControlElements[1] = CurUnoDialog.insertLabel("lblOperators" + sCompSuffix,
                         new String[]
                         {
                             PropertyNames.PROPERTY_ENABLED,
@@ -613,7 +611,7 @@ public class FilterComponent
                         });
 
                 // Label Value
-                ControlElements[2] = (XInterface) CurUnoDialog.insertLabel("lblValue" + sCompSuffix,
+                ControlElements[2] = CurUnoDialog.insertLabel("lblValue" + sCompSuffix,
                         new String[]
                         {
                             PropertyNames.PROPERTY_ENABLED,
@@ -638,7 +636,7 @@ public class FilterComponent
                         });
 
                 // Listbox Fields
-                ControlElements[SOLSTFIELDNAME] = (XInterface) CurUnoDialog.insertListBox("lstFieldName" + sCompSuffix, SO_FIELDNAMELIST[Index], null, new ItemListenerImpl(),
+                ControlElements[SOLSTFIELDNAME] = CurUnoDialog.insertListBox("lstFieldName" + sCompSuffix, SO_FIELDNAMELIST[Index], null, new ItemListenerImpl(),
                         new String[]
                         {
                             PropertyNames.PROPERTY_ENABLED,
@@ -667,7 +665,7 @@ public class FilterComponent
                         });
 
                 // Listbox Operators
-                ControlElements[SOLSTOPERATOR] = (XInterface) CurUnoDialog.insertListBox("lstOperator" + sCompSuffix, SO_CONDITIONLIST[Index], null, new ItemListenerImpl(),
+                ControlElements[SOLSTOPERATOR] = CurUnoDialog.insertListBox("lstOperator" + sCompSuffix, SO_CONDITIONLIST[Index], null, new ItemListenerImpl(),
                         new String[]
                         {
                             PropertyNames.PROPERTY_ENABLED,
@@ -696,7 +694,7 @@ public class FilterComponent
                             Short.valueOf(curtabindex++),
                             Integer.valueOf(nOperatorWidth)
                         });
-                ControlElements[SOTXTVALUE] = (XInterface) CurUnoDialog.insertFormattedField("txtValue" + sCompSuffix, SO_TEXTFIELDLIST[Index], new TextListenerImpl(),
+                ControlElements[SOTXTVALUE] = CurUnoDialog.insertFormattedField("txtValue" + sCompSuffix, SO_TEXTFIELDLIST[Index], new TextListenerImpl(),
                         new String[]
                         {
                             PropertyNames.PROPERTY_ENABLED,
@@ -778,9 +776,9 @@ public class FilterComponent
         {
             try
             {
-                XListBox xFieldsListBox = (XListBox) UnoRuntime.queryInterface(XListBox.class, ControlElements[SOLSTFIELDNAME]);
+                XListBox xFieldsListBox = UnoRuntime.queryInterface(XListBox.class, ControlElements[SOLSTFIELDNAME]);
                 xFieldsListBox.selectItem(_filtercondition.Name, true);
-                XListBox xOperatorListBox = (XListBox) UnoRuntime.queryInterface(XListBox.class, ControlElements[SOLSTOPERATOR]);
+                XListBox xOperatorListBox = UnoRuntime.queryInterface(XListBox.class, ControlElements[SOLSTOPERATOR]);
                 xOperatorListBox.selectItemPos((short) (_filtercondition.Handle - 1), true);
 
                 if (AnyConverter.isString(_filtercondition.Value))

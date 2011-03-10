@@ -223,8 +223,7 @@ public class FormDocument extends TextDocument
                 nMainFormHeight = (int) (((double) getMainFieldCount() / (double) nTotalFieldCount) * ((double) (nFormHeight - SOFORMGAP) / 2));
             }
         }
-        Size aMainFormSize = new Size(nFormWidth, nMainFormHeight);
-        return aMainFormSize;
+        return new Size(nFormWidth, nMainFormHeight);
     }
 
     private Size getSubFormSize()
@@ -233,8 +232,7 @@ public class FormDocument extends TextDocument
 //      int nSubFormFieldCount = this.oSubFormDBMetaData.FieldNames.length;
 //      int totfieldcount = oMainFormDBMetaData.FieldNames.length + nSubFormFieldCount;
         int nMainFormHeight = ((ControlForm) oControlForms.get(0)).getActualFormHeight();
-        Size aSubFormSize = new Size(nFormWidth, nFormHeight - nMainFormHeight - SOFORMGAP);
-        return aSubFormSize;
+        return new Size(nFormWidth, nFormHeight - nMainFormHeight - SOFORMGAP);
     }
 
     private Point getSubFormPoint()
@@ -265,7 +263,7 @@ public class FormDocument extends TextDocument
     {
         ControlForm oMainControlForm = (ControlForm) oControlForms.get(0);
         ControlForm oSubControlForm = (ControlForm) oControlForms.get(1);
-        oSubControlForm.setFormSize(new Size(nFormWidth, (int) nFormHeight - oMainControlForm.getFormSize().Height));
+        oSubControlForm.setFormSize(new Size(nFormWidth, nFormHeight - oMainControlForm.getFormSize().Height));
         if (oSubControlForm.curArrangement == FormWizard.AS_GRID)
         {
             Point aPoint = oSubControlForm.oGridControl.getPosition();
@@ -378,7 +376,7 @@ public class FormDocument extends TextDocument
             {
                 xFormContainer = oFormHandler.insertFormbyName(_sname);
             }
-            xPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xFormContainer);
+            xPropertySet = UnoRuntime.queryInterface(XPropertySet.class, xFormContainer);
             if (_sname.equals(SOMAINFORM))
             {
                 oDBMetaData = oFormDocument.oMainFormDBMetaData;

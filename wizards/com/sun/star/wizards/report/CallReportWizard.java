@@ -118,7 +118,7 @@ public class CallReportWizard
             {
                 if (sEvent.compareTo(PropertyNames.START) == 0)
                 {
-                    if (bWizardstartedalready != true)
+                    if (!bWizardstartedalready)
                     {
                         ReportWizard CurReportWizard = new ReportWizard( xmultiservicefactory, m_wizardContext );
                         CurReportWizard.startReportWizard();

@@ -167,7 +167,7 @@ public class CallTableWizard
 
             try
             {
-                byteReturn = new String(PropertyNames.EMPTY_STRING + this.hashCode()).getBytes();
+                byteReturn = (PropertyNames.EMPTY_STRING + this.hashCode()).getBytes();
             }
             catch (Exception exception)
             {

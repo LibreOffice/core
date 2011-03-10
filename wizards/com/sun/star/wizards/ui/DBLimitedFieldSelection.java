@@ -91,7 +91,7 @@ public abstract class DBLimitedFieldSelection
     protected void moveupSelectedItems(int CurIndex, boolean bDoEnable)
     {
         // short iNextItemPos;
-        if ((bDoEnable == false) && (MAXSELINDEX > CurIndex))
+        if ((!bDoEnable) && (MAXSELINDEX > CurIndex))
         {
             for (int i = CurIndex; i < MAXSELINDEX; i++)
             {
@@ -113,10 +113,7 @@ public abstract class DBLimitedFieldSelection
         int FieldCount = _FieldNames.length;
         String[] ViewFieldNames = new String[FieldCount + 1];
         ViewFieldNames[0] = sNoField;
-        for (int i = 0; i < FieldCount; i++)
-        {
-            ViewFieldNames[i + 1] = _FieldNames[i];
-        }
+        System.arraycopy(_FieldNames, 0, ViewFieldNames, 1, FieldCount);
         return ViewFieldNames;
     }
 

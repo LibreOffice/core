@@ -210,7 +210,7 @@ public class FieldSelection
             SelListBoxPosX = new Integer(cmdShiftButtonPosX.intValue() + cmdButtonWidth + cmdButtonHoriDist);
 
             IStep = new Integer(_iStep);
-            if (bshowFourButtons == true)
+            if (bshowFourButtons)
             {
                 ShiftButtonCount = 4;
             }
@@ -254,7 +254,7 @@ public class FieldSelection
                         Boolean.FALSE, 14, HelpIds.getHelpIdString(_FirstHelpIndex + 1), ">", cmdShiftButtonPosX, ShiftButtonPosY[a++], IStep, new Short(curtabindex++), CmdButtonWidth
                     });
 
-            if (bshowFourButtons == true)
+            if (bshowFourButtons)
             {
                 btnmoveall = CurUnoDialog.insertButton("cmdMoveAll" + sIncSuffix, SOCMDMOVEALL, new ActionListenerImpl(),
                         new String[]
@@ -276,7 +276,7 @@ public class FieldSelection
                         Boolean.FALSE, 14, HelpIds.getHelpIdString(_FirstHelpIndex + 3), "<", cmdShiftButtonPosX, ShiftButtonPosY[a++], IStep, new Short(curtabindex++), CmdButtonWidth
                     });
 
-            if (bshowFourButtons == true)
+            if (bshowFourButtons)
             {
                 btnremoveall = CurUnoDialog.insertButton("cmdRemoveAll" + sIncSuffix, SOCMDREMOVEALL, new ActionListenerImpl(),
                         new String[]
@@ -427,7 +427,7 @@ public class FieldSelection
             CurUnoDialog.setControlProperty("lstFields" + sIncSuffix, PropertyNames.PROPERTY_ENABLED, BDoEnable);
             CurUnoDialog.setControlProperty("lstSelFields" + sIncSuffix, PropertyNames.PROPERTY_ENABLED, BDoEnable);
 
-            if (BDoEnable.booleanValue() == true)
+            if (BDoEnable.booleanValue())
             {
                 toggleListboxButtons((short) - 1, (short) - 1);
             }
@@ -466,11 +466,11 @@ public class FieldSelection
                 bmoveUpenabled = ((iSelIndices[0] > 0) && (iSelIndices.length == 1));
                 bmoveDownenabled = (((iSelIndices[SelListBoxSelLength - 1]) < (short) (SelectCount - 1)) && (iSelIndices.length == 1));
             }
-            CurUnoDialog.setControlProperty("cmdRemoveAll" + sIncSuffix, PropertyNames.PROPERTY_ENABLED, new Boolean(SelectCount >= 1));
-            CurUnoDialog.setControlProperty("cmdRemoveSelected" + sIncSuffix, PropertyNames.PROPERTY_ENABLED, new Boolean(bSelectSelected));
+            CurUnoDialog.setControlProperty("cmdRemoveAll" + sIncSuffix, PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(SelectCount >= 1));
+            CurUnoDialog.setControlProperty("cmdRemoveSelected" + sIncSuffix, PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bSelectSelected));
             toggleMoveButtons((FieldCount >= 1), bIsFieldSelected);
-            CurUnoDialog.setControlProperty("cmdMoveUp" + sIncSuffix, PropertyNames.PROPERTY_ENABLED, new Boolean(bmoveUpenabled));
-            CurUnoDialog.setControlProperty("cmdMoveDown" + sIncSuffix, PropertyNames.PROPERTY_ENABLED, new Boolean(bmoveDownenabled));
+            CurUnoDialog.setControlProperty("cmdMoveUp" + sIncSuffix, PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bmoveUpenabled));
+            CurUnoDialog.setControlProperty("cmdMoveDown" + sIncSuffix, PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bmoveDownenabled));
         }
         catch (Exception exception)
         {
@@ -482,8 +482,8 @@ public class FieldSelection
     {
         boolean btoggleMoveAll = (((xFieldsListBox.getItemCount() + xSelectedFieldsListBox.getItemCount()) < maxfieldcount) && (_btoggleMoveAll));
         boolean btoggleMoveSelected = (((xFieldsListBox.getSelectedItems().length + xSelectedFieldsListBox.getItemCount()) < maxfieldcount) && (_btoggleMoveSelected));
-        CurUnoDialog.setControlProperty("cmdMoveAll" + sIncSuffix, PropertyNames.PROPERTY_ENABLED, new Boolean(btoggleMoveAll));
-        CurUnoDialog.setControlProperty("cmdMoveSelected" + sIncSuffix, PropertyNames.PROPERTY_ENABLED, new Boolean(btoggleMoveSelected));
+        CurUnoDialog.setControlProperty("cmdMoveAll" + sIncSuffix, PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(btoggleMoveAll));
+        CurUnoDialog.setControlProperty("cmdMoveSelected" + sIncSuffix, PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(btoggleMoveSelected));
     }
 
     public void setMultipleMode(boolean _bisMultiple)

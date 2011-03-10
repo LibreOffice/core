@@ -64,7 +64,7 @@ public class ListModelBinder implements ListDataListener
 
     public ListModelBinder(Object unoListBox, ListModel listModel_)
     {
-        unoList = (XListBox) UnoRuntime.queryInterface(XListBox.class, unoListBox);
+        unoList = UnoRuntime.queryInterface(XListBox.class, unoListBox);
         unoListModel = UnoDataAware.getModel(unoListBox);
         setListModel(listModel_);
     }
@@ -100,7 +100,7 @@ public class ListModelBinder implements ListDataListener
 
     protected void remove(short i1, short i2)
     {
-        unoList.removeItems((short) i1, (short) (i2 - i1 + 1));
+        unoList.removeItems(i1, (short) (i2 - i1 + 1));
     }
 
     protected void insert(short i)
@@ -180,7 +180,7 @@ public class ListModelBinder implements ListDataListener
 
     public static void fillList(Object list, Object[] items, Renderer renderer)
     {
-        XListBox xlist = (XListBox) UnoRuntime.queryInterface(XListBox.class, list);
+        XListBox xlist = UnoRuntime.queryInterface(XListBox.class, list);
         Helper.setUnoPropertyValue(UnoDataAware.getModel(list), PropertyNames.STRING_ITEM_LIST, new String[]
                 {
                 });
@@ -195,7 +195,7 @@ public class ListModelBinder implements ListDataListener
 
     public static void fillComboBox(Object list, Object[] items, Renderer renderer)
     {
-        XComboBox xComboBox = (XComboBox) UnoRuntime.queryInterface(XComboBox.class, list);
+        XComboBox xComboBox = UnoRuntime.queryInterface(XComboBox.class, list);
         Helper.setUnoPropertyValue(UnoDataAware.getModel(list), PropertyNames.STRING_ITEM_LIST, new String[]
                 {
                 });

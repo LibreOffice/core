@@ -76,7 +76,7 @@ public class Desktop
             try
             {
                 xInterface = (com.sun.star.uno.XInterface) xMSF.createInstance("com.sun.star.frame.Desktop");
-                xDesktop = (XDesktop) UnoRuntime.queryInterface(XDesktop.class, xInterface);
+                xDesktop = UnoRuntime.queryInterface(XDesktop.class, xInterface);
             }
             catch (Exception exception)
             {
@@ -93,27 +93,26 @@ public class Desktop
     public static XFrame getActiveFrame(XMultiServiceFactory xMSF)
     {
         XDesktop xDesktop = getDesktop(xMSF);
-        XFramesSupplier xFrameSuppl = (XFramesSupplier) UnoRuntime.queryInterface(XFramesSupplier.class, xDesktop);
-        XFrame xFrame = xFrameSuppl.getActiveFrame();
-        return xFrame;
+        XFramesSupplier xFrameSuppl = UnoRuntime.queryInterface(XFramesSupplier.class, xDesktop);
+        return xFrameSuppl.getActiveFrame();
     }
 
     public static XComponent getActiveComponent(XMultiServiceFactory _xMSF)
     {
         XFrame xFrame = getActiveFrame(_xMSF);
-        return (XComponent) UnoRuntime.queryInterface(XComponent.class, xFrame.getController().getModel());
+        return UnoRuntime.queryInterface(XComponent.class, xFrame.getController().getModel());
     }
 
     public static XTextDocument getActiveTextDocument(XMultiServiceFactory _xMSF)
     {
         XComponent xComponent = getActiveComponent(_xMSF);
-        return (XTextDocument) UnoRuntime.queryInterface(XTextDocument.class, xComponent);
+        return UnoRuntime.queryInterface(XTextDocument.class, xComponent);
     }
 
     public static XSpreadsheetDocument getActiveSpreadsheetDocument(XMultiServiceFactory _xMSF)
     {
         XComponent xComponent = getActiveComponent(_xMSF);
-        return (XSpreadsheetDocument) UnoRuntime.queryInterface(XSpreadsheetDocument.class, xComponent);
+        return UnoRuntime.queryInterface(XSpreadsheetDocument.class, xComponent);
     }
 
     public static XDispatch getDispatcher(XMultiServiceFactory xMSF, XFrame xFrame, String _stargetframe, com.sun.star.util.URL oURL)
@@ -122,9 +121,8 @@ public class Desktop
         {
             com.sun.star.util.URL[] oURLArray = new com.sun.star.util.URL[1];
             oURLArray[0] = oURL;
-            XDispatchProvider xDispatchProvider = (XDispatchProvider) UnoRuntime.queryInterface(XDispatchProvider.class, xFrame);
-            XDispatch xDispatch = xDispatchProvider.queryDispatch(oURLArray[0], _stargetframe, FrameSearchFlag.ALL); // "_self"
-            return xDispatch;
+            XDispatchProvider xDispatchProvider = UnoRuntime.queryInterface(XDispatchProvider.class, xFrame);
+            return xDispatchProvider.queryDispatch(oURLArray[0], _stargetframe, FrameSearchFlag.ALL); // "_self"
         }
         catch (Exception e)
         {
@@ -138,7 +136,7 @@ public class Desktop
         try
         {
             Object oTransformer = xMSF.createInstance("com.sun.star.util.URLTransformer");
-            XURLTransformer xTransformer = (XURLTransformer) UnoRuntime.queryInterface(XURLTransformer.class, oTransformer);
+            XURLTransformer xTransformer = UnoRuntime.queryInterface(XURLTransformer.class, oTransformer);
             com.sun.star.util.URL[] oURL = new com.sun.star.util.URL[1];
             oURL[0] = new com.sun.star.util.URL();
             oURL[0].Complete = _sURL;
@@ -182,8 +180,7 @@ public class Desktop
         XMultiComponentFactory componentFactory = getMultiComponentFactory();
         Object xUrlResolver = componentFactory.createInstanceWithContext( "com.sun.star.bridge.UnoUrlResolver", null );
         XUnoUrlResolver urlResolver = UnoRuntime.queryInterface(XUnoUrlResolver.class, xUrlResolver);
-        XMultiServiceFactory orb = UnoRuntime.queryInterface(XMultiServiceFactory.class, urlResolver.resolve( connectStr ) );
-        return orb;
+        return UnoRuntime.queryInterface(XMultiServiceFactory.class, urlResolver.resolve( connectStr ) );
     }
 
     public static String getIncrementSuffix(XNameAccess xElementContainer, String ElementName)
@@ -192,10 +189,10 @@ public class Desktop
         int i = 1;
         String sIncSuffix = PropertyNames.EMPTY_STRING;
         String BaseName = ElementName;
-        while (bElementexists == true)
+        while (bElementexists)
         {
             bElementexists = xElementContainer.hasByName(ElementName);
-            if (bElementexists == true)
+            if (bElementexists)
             {
                 i += 1;
                 ElementName = BaseName + Integer.toString(i);
@@ -214,10 +211,10 @@ public class Desktop
         int i = 1;
         String sIncSuffix = PropertyNames.EMPTY_STRING;
         String BaseName = ElementName;
-        while (bElementexists == true)
+        while (bElementexists)
         {
             bElementexists = xElementContainer.hasByHierarchicalName(ElementName);
-            if (bElementexists == true)
+            if (bElementexists)
             {
                 i += 1;
                 ElementName = BaseName + Integer.toString(i);
@@ -235,10 +232,9 @@ public class Desktop
         try
         {
             int nStartFlags = com.sun.star.i18n.KParseTokens.ANY_LETTER_OR_NUMBER + com.sun.star.i18n.KParseTokens.ASC_UNDERSCORE;
-            int nContFlags = nStartFlags;
             Object ocharservice = _xMSF.createInstance("com.sun.star.i18n.CharacterClassification");
-            XCharacterClassification xCharacterClassification = (XCharacterClassification) UnoRuntime.queryInterface(XCharacterClassification.class, ocharservice);
-            ParseResult aResult = xCharacterClassification.parsePredefinedToken(KParseType.IDENTNAME, _sString, 0, _aLocale, nStartFlags, PropertyNames.EMPTY_STRING, nContFlags, PropertyNames.SPACE);
+            XCharacterClassification xCharacterClassification = UnoRuntime.queryInterface(XCharacterClassification.class, ocharservice);
+            ParseResult aResult = xCharacterClassification.parsePredefinedToken(KParseType.IDENTNAME, _sString, 0, _aLocale, nStartFlags, PropertyNames.EMPTY_STRING, nStartFlags, PropertyNames.SPACE);
             return aResult.EndPos;
         }
         catch (Exception e)
@@ -311,7 +307,7 @@ public class Desktop
         {
             return _sElementName;
         }
-        while (bElementexists == true)
+        while (bElementexists)
         {
             for (int i = 0; i < _slist.length; i++)
             {
@@ -342,8 +338,8 @@ public class Desktop
             aNodePath[0] = new PropertyValue();
             aNodePath[0].Name = "nodepath";
             aNodePath[0].Value = KeyName;
-            XMultiServiceFactory xMSFConfig = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, oConfigProvider);
-            if (bForUpdate == true)
+            XMultiServiceFactory xMSFConfig = UnoRuntime.queryInterface(XMultiServiceFactory.class, oConfigProvider);
+            if (bForUpdate)
             {
                 return (XInterface) xMSFConfig.createInstanceWithArguments("com.sun.star.configuration.ConfigurationUpdateAccess", aNodePath);
             }
@@ -391,8 +387,7 @@ public class Desktop
     {
         try
         {
-            String sTemplatePath = FileAccess.getOfficePath(_xMSF, "Template", "share", "/wizard");
-            return sTemplatePath;
+            return FileAccess.getOfficePath(_xMSF, "Template", "share", "/wizard");
         }
         catch (NoValidPathException nopathexception)
         {
@@ -404,8 +399,7 @@ public class Desktop
     {
         try
         {
-            String sUserTemplatePath = FileAccess.getOfficePath(_xMSF, "Template", "user", PropertyNames.EMPTY_STRING);
-            return sUserTemplatePath;
+            return FileAccess.getOfficePath(_xMSF, "Template", "user", PropertyNames.EMPTY_STRING);
         }
         catch (NoValidPathException nopathexception)
         {
@@ -417,8 +411,7 @@ public class Desktop
     {
         try
         {
-            String sBitmapPath = FileAccess.combinePaths(_xMSF, getTemplatePath(_xMSF), "/../wizard/bitmap");
-            return sBitmapPath;
+            return FileAccess.combinePaths(_xMSF, getTemplatePath(_xMSF), "/../wizard/bitmap");
         }
         catch (NoValidPathException nopathexception)
         {
@@ -430,8 +423,7 @@ public class Desktop
     {
         try
         {
-            String sWorkPath = FileAccess.getOfficePath(_xMSF, "Work", PropertyNames.EMPTY_STRING, PropertyNames.EMPTY_STRING);
-            return sWorkPath;
+            return FileAccess.getOfficePath(_xMSF, "Work", PropertyNames.EMPTY_STRING, PropertyNames.EMPTY_STRING);
         }
         catch (NoValidPathException nopathexception)
         {
@@ -452,7 +444,7 @@ public class Desktop
         }
         if (xPathSubst != null)
         {
-            return (XStringSubstitution) UnoRuntime.queryInterface(XStringSubstitution.class, xPathSubst);
+            return UnoRuntime.queryInterface(XStringSubstitution.class, xPathSubst);
         }
         else
         {
@@ -495,7 +487,7 @@ public class Desktop
             {
 
                 Object comp = ((Any) e.nextElement()).getObject();
-                XModel xModel = (XModel) UnoRuntime.queryInterface(XModel.class, comp);
+                XModel xModel = UnoRuntime.queryInterface(XModel.class, comp);
                 XFrame xFrame = xModel.getCurrentController().getFrame();
 
                 if (xFrame != null && xFrame.getComponentWindow() != null)

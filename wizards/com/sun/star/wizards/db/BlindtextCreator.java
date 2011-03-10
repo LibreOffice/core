@@ -71,7 +71,6 @@ public class BlindtextCreator
         String PartBlindText = BlindTextArray[0];
         String NewPartBlindText;
         int MaxHeaderWidth;
-        int iWidth = FieldWidth;
         int Titlelength = (int) 1.1 * FieldTitle.length(); // We assume that the TableHeading is bold
 
         if (Titlelength > PartBlindText.length())
@@ -102,7 +101,7 @@ public class BlindtextCreator
 
     private static int getMaxFieldCount(boolean bIsCurLandscape)
     {
-        if (bIsCurLandscape == true)
+        if (bIsCurLandscape)
         {
             return 5;
         }

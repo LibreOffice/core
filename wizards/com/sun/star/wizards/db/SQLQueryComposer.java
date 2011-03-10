@@ -69,10 +69,10 @@ public class SQLQueryComposer
         try
         {
             this.CurDBMetaData = _CurDBMetaData;
-            xMSF = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, CurDBMetaData.DBConnection);
+            xMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class, CurDBMetaData.DBConnection);
             final Object oQueryComposer = xMSF.createInstance("com.sun.star.sdb.SingleSelectQueryComposer");
-            m_xQueryAnalyzer = (XSingleSelectQueryAnalyzer) UnoRuntime.queryInterface(XSingleSelectQueryAnalyzer.class, oQueryComposer);
-            m_queryComposer = (XSingleSelectQueryComposer) UnoRuntime.queryInterface(XSingleSelectQueryComposer.class, m_xQueryAnalyzer);
+            m_xQueryAnalyzer = UnoRuntime.queryInterface(XSingleSelectQueryAnalyzer.class, oQueryComposer);
+            m_queryComposer = UnoRuntime.queryInterface(XSingleSelectQueryComposer.class, m_xQueryAnalyzer);
         }
         catch (Exception exception)
         {
@@ -82,12 +82,8 @@ public class SQLQueryComposer
 
     private boolean addtoSelectClause(String DisplayFieldName) throws SQLException
     {
-        if (bincludeGrouping && CurDBMetaData.xDBMetaData.supportsGroupByUnrelated() && CurDBMetaData.GroupFieldNames != null && JavaTools.FieldInList(CurDBMetaData.GroupFieldNames, DisplayFieldName) > -1)
-        {
-            return false;
+        return !(bincludeGrouping && CurDBMetaData.xDBMetaData.supportsGroupByUnrelated() && CurDBMetaData.GroupFieldNames != null && JavaTools.FieldInList(CurDBMetaData.GroupFieldNames, DisplayFieldName) > -1);
         }
-        return true;
-    }
 
     public String getSelectClause(boolean _baddAliasFieldNames) throws SQLException
     {
@@ -169,7 +165,7 @@ public class SQLQueryComposer
         {
             try
             {
-                XPropertySet xColumnPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xColumnIndexAccess.getByIndex(i));
+                XPropertySet xColumnPropertySet = UnoRuntime.queryInterface(XPropertySet.class, xColumnIndexAccess.getByIndex(i));
                 String sName = (String) xColumnPropertySet.getPropertyValue(PropertyNames.PROPERTY_NAME);
                 if (JavaTools.FieldInTable(CurDBMetaData.getSortFieldNames(), sName) == -1)
                 {
@@ -364,7 +360,7 @@ public class SQLQueryComposer
         String AliasName = "";
         boolean bAliasNameexists = true;
         String locAliasName = _TableName;
-        while (bAliasNameexists == true)
+        while (bAliasNameexists)
         {
             bAliasNameexists = (getComposedCommandByAliasName(locAliasName) != null);
             if (bAliasNameexists)
@@ -390,8 +386,8 @@ public class SQLQueryComposer
         try
         {
             Object oErrorDialog = CurDBMetaData.xMSF.createInstance("com.sun.star.sdb.ErrorMessageDialog");
-            XInitialization xInitialize = (XInitialization) UnoRuntime.queryInterface(XInitialization.class, oErrorDialog);
-            XExecutableDialog xExecute = (XExecutableDialog) UnoRuntime.queryInterface(XExecutableDialog.class, oErrorDialog);
+            XInitialization xInitialize = UnoRuntime.queryInterface(XInitialization.class, oErrorDialog);
+            XExecutableDialog xExecute = UnoRuntime.queryInterface(XExecutableDialog.class, oErrorDialog);
             PropertyValue[] rDispatchArguments = new PropertyValue[3];
             rDispatchArguments[0] = Properties.createProperty(PropertyNames.PROPERTY_TITLE, Configuration.getProductName(CurDBMetaData.xMSF) + " Base");
             rDispatchArguments[1] = Properties.createProperty("ParentWindow", _xParentWindow);

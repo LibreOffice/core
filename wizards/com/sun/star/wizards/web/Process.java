@@ -164,13 +164,12 @@ public class Process implements WebWizardConst, ProcessErrors
         {
         }
         int publish = countPublish();
-        int taskSteps =
+        return
                 TASKS_IN_PREPARE +
                 TASKS_IN_EXPORT + docs * TASKS_PER_DOC +
                 TASKS_IN_GENERATE + xsl * TASKS_PER_XSL +
                 TASKS_IN_PUBLISH + publish * TASKS_PER_PUBLISH +
                 TASKS_IN_FINISHUP;
-        return taskSteps;
     }
 
     /**
@@ -241,8 +240,7 @@ public class Process implements WebWizardConst, ProcessErrors
     {
         try
         {
-            String s = FileAccess.getOfficePath(xmsf, "Temp", PropertyNames.EMPTY_STRING, PropertyNames.EMPTY_STRING);
-            return s;
+            return FileAccess.getOfficePath(xmsf, "Temp", PropertyNames.EMPTY_STRING, PropertyNames.EMPTY_STRING);
         }
         catch (Exception e)
         {

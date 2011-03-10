@@ -86,10 +86,8 @@ public class MethodInvocation
     {
         if (mWithParam)
         {
-            return mMethod.invoke(mObject, new Object[]
-                    {
-                        (Object) param
-                    });
+            return mMethod.invoke(mObject, (Object) param
+                    );
         }
         else
         {

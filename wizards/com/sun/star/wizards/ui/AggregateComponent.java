@@ -26,6 +26,7 @@
  ************************************************************************/
 package com.sun.star.wizards.ui;
 
+import java.util.ArrayList;
 import java.util.Vector;
 import com.sun.star.wizards.common.*;
 import com.sun.star.wizards.db.*;
@@ -44,7 +45,6 @@ public class AggregateComponent extends ControlScroller
     {
         "SUM", "AVG", "MIN", "MAX"
     };
-    ;
     QueryMetaData CurDBMetaData;
     XButton optDetailQuery;
     XButton optSummaryQuery;
@@ -79,7 +79,6 @@ public class AggregateComponent extends ControlScroller
         {
             curHelpID = _firstHelpID;
             this.CurDBMetaData = _CurDBMetaData;
-            ;
             Count = 1;
             optDetailQuery = CurUnoDialog.insertRadioButton("optDetailQuery", 0, new ActionListenerImpl(),
                     new String[]
@@ -280,14 +279,14 @@ public class AggregateComponent extends ControlScroller
         ControlRow curcontrolrow = null;
         boolean biscomplete = true;
         CurDBMetaData.Type = getQueryType();
-        CurUnoDialog.setControlProperty("btnminus", PropertyNames.PROPERTY_ENABLED, new Boolean((super.getTotalFieldCount() > 0) && (CurDBMetaData.Type == QueryMetaData.QueryType.SOSUMMARYQUERY)));
+        CurUnoDialog.setControlProperty("btnminus", PropertyNames.PROPERTY_ENABLED, Boolean.valueOf((super.getTotalFieldCount() > 0) && (CurDBMetaData.Type == QueryMetaData.QueryType.SOSUMMARYQUERY)));
         int fieldcount = super.getCurFieldCount();
         if (fieldcount > 0)
         {
             curcontrolrow = (ControlRow) ControlRowVector.elementAt(super.getCurFieldCount() - 1);
             biscomplete = curcontrolrow.isComplete();
         }
-        CurUnoDialog.setControlProperty("btnplus", PropertyNames.PROPERTY_ENABLED, new Boolean(biscomplete && (CurDBMetaData.Type == QueryMetaData.QueryType.SOSUMMARYQUERY)));
+        CurUnoDialog.setControlProperty("btnplus", PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(biscomplete && (CurDBMetaData.Type == QueryMetaData.QueryType.SOSUMMARYQUERY)));
         togglefollowingDialogSteps();
     }
 
@@ -295,8 +294,8 @@ public class AggregateComponent extends ControlScroller
     {
         CurDBMetaData.Type = getQueryType();
         boolean benableComponent = isAggregateComponentEnabled();
-        CurUnoDialog.setControlProperty("lblAggregate", PropertyNames.PROPERTY_ENABLED, new Boolean(benableComponent));
-        CurUnoDialog.setControlProperty("lblFieldnames", PropertyNames.PROPERTY_ENABLED, new Boolean(benableComponent));
+        CurUnoDialog.setControlProperty("lblAggregate", PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(benableComponent));
+        CurUnoDialog.setControlProperty("lblFieldnames", PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(benableComponent));
         toggleButtons();
         super.toggleComponent(benableComponent);
         super.toggleControls(benableComponent);
@@ -370,11 +369,10 @@ public class AggregateComponent extends ControlScroller
             CurDBMetaData.Type = getQueryType();
             if (CurDBMetaData.Type == QueryMetaData.QueryType.SOSUMMARYQUERY)
             {
-                Vector aggregatevector = new Vector();
+                ArrayList<String[]> aggregatevector = new ArrayList<String[]>();
                 PropertyValue[][] aggregatelist = this.getScrollFieldValues();
                 PropertyValue[] currowproperties;
                 PropertyValue curaggregateproperty;
-                int a = 0;
                 if (CurDBMetaData.AggregateFieldNames != null)
                 {
                     for (int i = 0; i < aggregatelist.length; i++)
@@ -390,12 +388,11 @@ public class AggregateComponent extends ControlScroller
                                 curaggregatename[0] = CurDBMetaData.NumericFieldNames[iselfield[0]];
                                 curaggregatename[1] = this.sFunctionOperators[iselfunction[0]];
                                 aggregatevector.add(curaggregatename);
-                                a++;
                             }
                         }
                     }
                 }
-                CurDBMetaData.AggregateFieldNames = new String[a][2];
+                CurDBMetaData.AggregateFieldNames = new String[aggregatevector.size()][2];
                 aggregatevector.toArray(CurDBMetaData.AggregateFieldNames);
             }
 

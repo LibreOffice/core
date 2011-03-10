@@ -107,8 +107,7 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
 
     public XWindowPeer getWizardParent()
     {
-        final XWindowPeer aWindowPeer = UnoRuntime.queryInterface(XWindowPeer.class, getFrame().getComponentWindow());
-        return aWindowPeer;
+        return UnoRuntime.queryInterface(XWindowPeer.class, getFrame().getComponentWindow());
     }
     private XFrame m_xFrame = null;
     // private ReportBuilderLayouter m_aReportBuilderLayouter = null;
@@ -121,8 +120,7 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
      */
     private IReportBuilderLayouter getReportBuilderLayouter()
     {
-        final IReportBuilderLayouter aReportBuilderLayouter = (IReportBuilderLayouter) getLayoutMap().get(m_sReportBuilderLayoutName);
-        return aReportBuilderLayouter;
+        return (IReportBuilderLayouter) getLayoutMap().get(m_sReportBuilderLayoutName);
     }
     private Object m_aReportDocument;
     private XPropertySet m_documentDefinition;
@@ -168,8 +166,7 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
     private XModeSelector getModeSelector()
     {
         final XController xController = getReportDefinition().getCurrentController();
-        final XModeSelector xModeSelector = UnoRuntime.queryInterface(XModeSelector.class, xController);
-        return xModeSelector;
+        return UnoRuntime.queryInterface(XModeSelector.class, xController);
     }
 
     private void switchOffAddFieldWindow()
@@ -586,8 +583,7 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
             Object[] aParams = new Object[2];
             aParams[0] = this;
             aParams[1] = m_resource;
-            final IReportBuilderLayouter aReportBuilderLayouter = (IReportBuilderLayouter) cTor.newInstance(aParams);
-            return aReportBuilderLayouter;
+            return (IReportBuilderLayouter) cTor.newInstance(aParams);
         }
         catch (Exception e)
         {
