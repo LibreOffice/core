@@ -78,7 +78,7 @@ ScAttrArray::ScAttrArray( SCCOL nNewCol, SCTAB nNewTab, ScDocument* pDoc ) :
 
 ScAttrArray::~ScAttrArray()
 {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     TestData();
 #endif
 
@@ -93,7 +93,7 @@ ScAttrArray::~ScAttrArray()
 }
 
 //------------------------------------------------------------------------
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 void ScAttrArray::TestData() const
 {
 
@@ -494,7 +494,7 @@ void ScAttrArray::SetPatternArea(SCROW nStartRow, SCROW nEndRow, const ScPattern
         }
     }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     TestData();
 #endif
 }
@@ -569,7 +569,7 @@ void ScAttrArray::ApplyStyleArea( SCROW nStartRow, SCROW nEndRow, ScStyleSheet* 
             pDocument->SetStreamValid(nTab, FALSE);
     }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     TestData();
 #endif
 }
@@ -723,7 +723,7 @@ void ScAttrArray::ApplyLineStyleArea( SCROW nStartRow, SCROW nEndRow,
 
 void ScAttrArray::ApplyCacheArea( SCROW nStartRow, SCROW nEndRow, SfxItemPoolCache* pCache, ScEditDataArray* pDataArray )
 {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     TestData();
 #endif
 
@@ -805,7 +805,7 @@ void ScAttrArray::ApplyCacheArea( SCROW nStartRow, SCROW nEndRow, SfxItemPoolCac
             pDocument->SetStreamValid(nTab, FALSE);
     }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     TestData();
 #endif
 }
