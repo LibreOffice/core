@@ -2828,6 +2828,36 @@ void ScXMLExport::WriteTable(sal_Int32 nTable, const Reference<sheet::XSpreadshe
 
     CloseRow(pSharedData->GetLastRow(nTable));
     nEqualCells = 0;
+
+    if (pDoc)
+    {
+        // Export sheet-local named ranges.
+        ScRangeName* pRN = pDoc->GetRangeName(nTable);
+        if (pRN && !pRN->empty())
+        {
+            SvXMLElementExport aElemNEs(*this, XML_NAMESPACE_TABLE, XML_NAMED_EXPRESSIONS, sal_True, sal_True);
+            ScRangeName::const_iterator itr = pRN->begin(), itrEnd = pRN->end();
+            for (; itr != itrEnd; ++itr)
+            {
+                CheckAttrList();
+
+                // name
+                OUString aStr = itr->GetName();
+                AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, aStr);
+
+                // base cell
+                ScAddress aPos = itr->GetPos();
+                aPos.Format(aStr, SCA_ABS_3D, pDoc, FormulaGrammar::CONV_OOO);
+                AddAttribute(XML_NAMESPACE_TABLE, XML_BASE_CELL_ADDRESS, aStr);
+
+                // expression
+                itr->GetSymbol(aStr, pDoc->GetStorageGrammar());
+                AddAttribute(XML_NAMESPACE_TABLE, XML_EXPRESSION, aStr);
+
+                SvXMLElementExport aElemNR(*this, XML_NAMESPACE_TABLE, XML_NAMED_EXPRESSION, sal_True, sal_True);
+            }
+        }
+    }
 }
 
 void ScXMLExport::WriteCell (ScMyCell& aCell)

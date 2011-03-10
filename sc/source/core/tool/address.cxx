@@ -1627,6 +1627,14 @@ getFileNameFromDoc( const ScDocument* pDoc )
     return sFileName;
 }
 
+void ScAddress::Format( OUString& r, USHORT nFlags, ScDocument* pDoc,
+                        const Details& rDetails) const
+{
+    String aStr;
+    Format(aStr, nFlags, pDoc, rDetails);
+    r = aStr;
+}
+
 void ScAddress::Format( String& r, USHORT nFlags, ScDocument* pDoc,
                         const Details& rDetails) const
 {

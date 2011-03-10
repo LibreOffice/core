@@ -329,6 +329,8 @@ public:
                   const ::com::sun::star::uno::Sequence<
                     const ::com::sun::star::sheet::ExternalLinkInfo > * pExternalLinks = NULL );
 
+    SC_DLLPUBLIC void Format( rtl::OUString&, USHORT = 0, ScDocument* = NULL,
+                 const Details& rDetails = detailsOOOa1) const;
     SC_DLLPUBLIC void Format( String&, USHORT = 0, ScDocument* = NULL,
                  const Details& rDetails = detailsOOOa1) const;
 
