@@ -34,6 +34,7 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <rtl/math.hxx>
 
 #include "dptabdat.hxx"
@@ -2882,7 +2883,7 @@ void ScDPResultDimension::LateInitFrom( LateInitParams& rParams/* const vector<S
     {
         ResultMembers* pMembers = pResultData->GetDimResultMembers(nDimSource, pThisDim, pThisLevel);
         bLateInitAllMembers = pMembers->IsHasHideDetailsMembers();
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     OSL_TRACE( "%s", aDimensionName.GetBuffer() );
     if ( pMembers->IsHasHideDetailsMembers() )
         OSL_TRACE( "HasHideDetailsMembers" );
@@ -2981,7 +2982,7 @@ bool ScDPResultDimension::IsValidEntry( const vector< SCROW >& aMembers ) const
     const ScDPResultMember* pMember = FindMember( aMembers[0] );
     if ( NULL != pMember )
         return pMember->IsValidEntry( aMembers );
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     ByteString strTemp ("IsValidEntry: Member not found, DimName = " );
     strTemp += ByteString( GetName(), RTL_TEXTENCODING_UTF8 );
     OSL_TRACE( strTemp.GetBuffer() );
