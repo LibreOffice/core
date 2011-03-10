@@ -67,11 +67,11 @@ ScMessagePool::ScMessagePool()
     aGlobalQueryItem        ( ScQueryItem           ( SCITEM_QUERYDATA, NULL, NULL ) ),
     aGlobalSubTotalItem     ( ScSubTotalItem        ( SCITEM_SUBTDATA, NULL, NULL ) ),
     aGlobalConsolidateItem  ( ScConsolidateItem     ( SCITEM_CONSOLIDATEDATA, NULL ) ),
-    aGlobalPivotItem        ( ScPivotItem           ( SCITEM_PIVOTDATA, NULL, NULL, FALSE ) ),
+    aGlobalPivotItem        ( ScPivotItem           ( SCITEM_PIVOTDATA, NULL, NULL, false ) ),
     aGlobalSolveItem        ( ScSolveItem           ( SCITEM_SOLVEDATA, NULL ) ),
     aGlobalUserListItem     ( ScUserListItem        ( SCITEM_USERLIST ) ),
     //
-    aPrintWarnItem          ( SfxBoolItem           ( SCITEM_PRINTWARN, FALSE ) )
+    aPrintWarnItem          ( SfxBoolItem           ( SCITEM_PRINTWARN, false ) )
 {
     ppPoolDefaults = new SfxPoolItem*[MSGPOOL_END - MSGPOOL_START + 1];
 
@@ -99,7 +99,7 @@ ScMessagePool::~ScMessagePool()
     Delete();
     SetSecondaryPool( NULL );       // before deleting defaults (accesses defaults)
 
-    for ( USHORT i=0; i <= MSGPOOL_END-MSGPOOL_START; i++ )
+    for ( sal_uInt16 i=0; i <= MSGPOOL_END-MSGPOOL_START; i++ )
         SetRefCount( *ppPoolDefaults[i], 0 );
 
     delete[] ppPoolDefaults;
@@ -108,7 +108,7 @@ ScMessagePool::~ScMessagePool()
 }
 
 
-SfxMapUnit ScMessagePool::GetMetric( USHORT nWhich ) const
+SfxMapUnit ScMessagePool::GetMetric( sal_uInt16 nWhich ) const
 {
     //  eigene Attribute: Twips, alles andere 1/100 mm
 

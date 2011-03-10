@@ -121,11 +121,6 @@ private: //member
     ::cppu::OInterfaceContainerHelper           m_aEventListenerContainer;
 
     rtl::OUString       m_aPropertySetName;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySetInfo >
-                        m_xInfo;//outer PropertySetInfo
-    ::boost::shared_ptr< ::cppu::OPropertyArrayHelper > m_pPropertyArrayHelper;
-
 };
 
 } //  namespace wrapper

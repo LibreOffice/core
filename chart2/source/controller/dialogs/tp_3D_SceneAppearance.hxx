@@ -81,9 +81,9 @@ private:
 
     FixedLine       m_aFL_Seperator;
 
-    CheckBox        m_aCB_RoundedEdge;
     CheckBox        m_aCB_Shading;
     CheckBox        m_aCB_ObjectLines;
+    CheckBox        m_aCB_RoundedEdge;
 
     bool            m_bUpdateOtherControls;
     bool            m_bCommitToModel;

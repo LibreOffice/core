@@ -43,21 +43,21 @@ class ScPrintSaverTab
     ScRangeVec  maPrintRanges;      // Array
     ScRange*    mpRepeatCol;        // einzeln
     ScRange*    mpRepeatRow;        // einzeln
-    BOOL        mbEntireSheet;
+    sal_Bool        mbEntireSheet;
 
 public:
             ScPrintSaverTab();
             ~ScPrintSaverTab();
 
-    void            SetAreas( const ScRangeVec& rRanges, BOOL bEntireSheet );
+    void            SetAreas( const ScRangeVec& rRanges, sal_Bool bEntireSheet );
     void            SetRepeat( const ScRange* pCol, const ScRange* pRow );
 
     const ScRangeVec&   GetPrintRanges() const  { return maPrintRanges; }
-    BOOL                IsEntireSheet() const   { return mbEntireSheet; }
+    sal_Bool                IsEntireSheet() const   { return mbEntireSheet; }
     const ScRange*      GetRepeatCol() const    { return mpRepeatCol; }
     const ScRange*      GetRepeatRow() const    { return mpRepeatRow; }
 
-    BOOL    operator==( const ScPrintSaverTab& rCmp ) const;
+    sal_Bool    operator==( const ScPrintSaverTab& rCmp ) const;
 };
 
 class ScPrintRangeSaver
@@ -73,7 +73,7 @@ public:
     ScPrintSaverTab&        GetTabData(SCTAB nTab);
     const ScPrintSaverTab&  GetTabData(SCTAB nTab) const;
 
-    BOOL    operator==( const ScPrintRangeSaver& rCmp ) const;
+    sal_Bool    operator==( const ScPrintRangeSaver& rCmp ) const;
 };
 
 

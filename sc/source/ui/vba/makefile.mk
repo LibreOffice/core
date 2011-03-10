@@ -123,15 +123,3 @@ SLOFILES= \
 
 .INCLUDE :	target.mk
 
-.IF "$(L10N_framework)"==""
-
-ALLTAR : \
-        $(MISC)$/$(TARGET).don \
-
-$(SLOFILES) : $(MISC)$/$(TARGET).don
-
-$(MISC)$/$(TARGET).don : $(SOLARBINDIR)$/oovbaapi.rdb
-        +$(CPPUMAKER) -O$(INCCOM)$/$(TARGET) -BUCR $(SOLARBINDIR)$/oovbaapi.rdb -X$(SOLARBINDIR)$/types.rdb && echo > $@
-        echo $@
-
-.ENDIF

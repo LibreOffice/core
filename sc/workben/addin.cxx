@@ -93,10 +93,10 @@ sal_Bool SAL_CALL component_writeInfo(
         }
         catch (registry::InvalidRegistryException&)
         {
-            OSL_ENSHURE( sal_False, "### InvalidRegistryException!" );
+            OSL_ENSHURE( false, "### InvalidRegistryException!" );
         }
     }
-    return sal_False;
+    return false;
 }
 
 void * SAL_CALL component_getFactory(
@@ -401,7 +401,7 @@ sal_Int32 SAL_CALL ScTestAddIn::getColorValue( const ::com::sun::star::uno::Refe
     {
         long nRet = -1;
         uno::Any aTrans = xProp->getPropertyValue( L"IsCellBackgroundTransparent" );
-        BOOL bIsTrans;
+        sal_Bool bIsTrans;
         aTrans >>= bIsTrans;        //! dont use >>= for BOOL
         if (!bIsTrans)
         {

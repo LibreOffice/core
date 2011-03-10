@@ -101,7 +101,7 @@ void ScAccessiblePreviewTable::Notify( SfxBroadcaster& rBC, const SfxHint& rHint
     if (rHint.ISA( SfxSimpleHint ))
     {
         const SfxSimpleHint& rRef = (const SfxSimpleHint&)rHint;
-        ULONG nId = rRef.GetId();
+        sal_uLong nId = rRef.GetId();
         if ( nId == SFX_HINT_DATACHANGED )
         {
             //  column / row layout may change with any document change,
@@ -293,7 +293,7 @@ sal_Bool SAL_CALL ScAccessiblePreviewTable::isAccessibleRowSelected( sal_Int32 n
     if ( nRow < 0 || (mpTableInfo && nRow >= mpTableInfo->GetRows()) )
         throw lang::IndexOutOfBoundsException();
 
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL ScAccessiblePreviewTable::isAccessibleColumnSelected( sal_Int32 nColumn )
@@ -306,7 +306,7 @@ sal_Bool SAL_CALL ScAccessiblePreviewTable::isAccessibleColumnSelected( sal_Int3
     if ( nColumn < 0 || (mpTableInfo && nColumn >= mpTableInfo->GetCols()) )
         throw lang::IndexOutOfBoundsException();
 
-    return sal_False;
+    return false;
 }
 
 uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewTable::getAccessibleCellAt( sal_Int32 nRow, sal_Int32 nColumn )
@@ -376,7 +376,7 @@ sal_Bool SAL_CALL ScAccessiblePreviewTable::isAccessibleSelected( sal_Int32 nRow
     else
         throw lang::IndexOutOfBoundsException();
 
-    return sal_False;
+    return false;
 }
 
 sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleIndex( sal_Int32 nRow, sal_Int32 nColumn )

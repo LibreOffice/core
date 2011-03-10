@@ -48,7 +48,7 @@ struct ScSolveParam
     ~ScSolveParam();
 
     ScSolveParam&   operator=   ( const ScSolveParam& r );
-    BOOL            operator==  ( const ScSolveParam& r ) const;
+    sal_Bool            operator==  ( const ScSolveParam& r ) const;
 };
 
 //-----------------------------------------------------------------------
@@ -59,7 +59,7 @@ struct ScTabOpParam
     ScRefAddress    aRefFormulaEnd;
     ScRefAddress    aRefRowCell;
     ScRefAddress    aRefColCell;
-    BYTE            nMode;
+    sal_uInt8           nMode;
 
     ScTabOpParam() {};
     ScTabOpParam( const ScTabOpParam& r );
@@ -67,11 +67,11 @@ struct ScTabOpParam
                   const ScRefAddress& rFormulaEnd,
                   const ScRefAddress& rRowCell,
                   const ScRefAddress& rColCell,
-                        BYTE         nMd);
+                        sal_uInt8        nMd);
     ~ScTabOpParam() {};
 
     ScTabOpParam&   operator=       ( const ScTabOpParam& r );
-    BOOL            operator==      ( const ScTabOpParam& r ) const;
+    sal_Bool            operator==      ( const ScTabOpParam& r ) const;
 };
 
 #endif // SC_PARAMISC_HXX

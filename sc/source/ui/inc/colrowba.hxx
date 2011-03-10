@@ -51,24 +51,24 @@ public:
                 ~ScColBar();
 
     virtual SCCOLROW    GetPos();
-    virtual USHORT      GetEntrySize( SCCOLROW nEntryNo );
+    virtual sal_uInt16      GetEntrySize( SCCOLROW nEntryNo );
     virtual String      GetEntryText( SCCOLROW nEntryNo );
 
-    virtual BOOL        IsLayoutRTL();                      // only for columns
+    virtual sal_Bool        IsLayoutRTL();                      // only for columns
 
-    virtual void        SetEntrySize( SCCOLROW nPos, USHORT nNewSize );
+    virtual void        SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewSize );
     virtual void        HideEntries( SCCOLROW nStart, SCCOLROW nEnd );
 
-    virtual void        SetMarking( BOOL bSet );
+    virtual void        SetMarking( sal_Bool bSet );
     virtual void        SelectWindow();
-    virtual BOOL        IsDisabled();
-    virtual BOOL        ResizeAllowed();
+    virtual sal_Bool        IsDisabled();
+    virtual sal_Bool        ResizeAllowed();
 
     virtual void        DrawInvert( long nDragPos );
 
     virtual String      GetDragHelp( long nVal );
 
-            BOOL        UseNumericHeader() const;
+            sal_Bool        UseNumericHeader() const;
 };
 
 
@@ -85,19 +85,19 @@ public:
                 ~ScRowBar();
 
     virtual SCCOLROW    GetPos();
-    virtual USHORT      GetEntrySize( SCCOLROW nEntryNo );
+    virtual sal_uInt16      GetEntrySize( SCCOLROW nEntryNo );
     virtual String      GetEntryText( SCCOLROW nEntryNo );
 
-    virtual BOOL        IsMirrored();                       // only for columns
+    virtual sal_Bool        IsMirrored();                       // only for columns
     virtual SCROW       GetHiddenCount( SCROW nEntryNo );   // only for columns
 
-    virtual void        SetEntrySize( SCCOLROW nPos, USHORT nNewSize );
+    virtual void        SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewSize );
     virtual void        HideEntries( SCCOLROW nStart, SCCOLROW nEnd );
 
-    virtual void        SetMarking( BOOL bSet );
+    virtual void        SetMarking( sal_Bool bSet );
     virtual void        SelectWindow();
-    virtual BOOL        IsDisabled();
-    virtual BOOL        ResizeAllowed();
+    virtual sal_Bool        IsDisabled();
+    virtual sal_Bool        ResizeAllowed();
 
     virtual void        DrawInvert( long nDragPos );
 

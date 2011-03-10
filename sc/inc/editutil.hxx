@@ -77,7 +77,7 @@ public:
                     aScrPos(rScrPosPixel),pDev(pDevice),
                     nPPTX(nScaleX),nPPTY(nScaleY),aZoomX(rX),aZoomY(rY) {}
 
-    Rectangle   GetEditArea( const ScPatternAttr* pPattern, BOOL bForceToTop );
+    Rectangle   GetEditArea( const ScPatternAttr* pPattern, sal_Bool bForceToTop );
 };
 
 
@@ -85,15 +85,15 @@ class ScEditAttrTester
 {
     ScEditEngineDefaulter* pEngine;
     SfxItemSet* pEditAttrs;
-    BOOL        bNeedsObject;
-    BOOL        bNeedsCellAttr;
+    sal_Bool        bNeedsObject;
+    sal_Bool        bNeedsCellAttr;
 
 public:
                 ScEditAttrTester( ScEditEngineDefaulter* pEng );
                 ~ScEditAttrTester();
 
-    BOOL                NeedsObject() const     { return bNeedsObject; }
-    BOOL                NeedsCellAttr() const   { return bNeedsCellAttr; }
+    sal_Bool                NeedsObject() const     { return bNeedsObject; }
+    sal_Bool                NeedsCellAttr() const   { return bNeedsCellAttr; }
     const SfxItemSet&   GetAttribs() const      { return *pEditAttrs; }
 };
 
@@ -104,11 +104,11 @@ class ScEnginePoolHelper
 protected:
     SfxItemPool*    pEnginePool;
     SfxItemSet*     pDefaults;
-    BOOL            bDeleteEnginePool;
-    BOOL            bDeleteDefaults;
+    sal_Bool            bDeleteEnginePool;
+    sal_Bool            bDeleteDefaults;
 
                     ScEnginePoolHelper( SfxItemPool* pEnginePool,
-                        BOOL bDeleteEnginePool = FALSE );
+                        sal_Bool bDeleteEnginePool = false );
                     ScEnginePoolHelper( const ScEnginePoolHelper& rOrg );
     virtual         ~ScEnginePoolHelper();
 };
@@ -123,17 +123,17 @@ public:
                     /// bDeleteEnginePool: Engine becomes the owner of the pool
                     /// and deletes it on destruction
                     ScEditEngineDefaulter( SfxItemPool* pEnginePool,
-                        BOOL bDeleteEnginePool = FALSE );
+                        sal_Bool bDeleteEnginePool = false );
                     /// If rOrg.bDeleteEnginePool: pool gets cloned and will be
                     /// deleted on destruction. Defaults are not set.
                     ScEditEngineDefaulter( const ScEditEngineDefaulter& rOrg );
     virtual         ~ScEditEngineDefaulter();
 
                     /// Creates a copy of SfxItemSet if bRememberCopy set
-    void            SetDefaults( const SfxItemSet& rDefaults, BOOL bRememberCopy = TRUE );
+    void            SetDefaults( const SfxItemSet& rDefaults, sal_Bool bRememberCopy = sal_True );
 
                     /// Becomes the owner of the SfxItemSet if bTakeOwnership set
-    void            SetDefaults( SfxItemSet* pDefaults, BOOL bTakeOwnership = TRUE );
+    void            SetDefaults( SfxItemSet* pDefaults, sal_Bool bTakeOwnership = sal_True );
 
                     /// Set the item in the default ItemSet which is created
                     /// if it doesn't exist yet.
@@ -147,19 +147,19 @@ public:
     void            SetText( const EditTextObject& rTextObject );
                     /// Current defaults are not applied, new defaults are applied
     void            SetTextNewDefaults( const EditTextObject& rTextObject,
-                        const SfxItemSet& rDefaults, BOOL bRememberCopy = TRUE );
+                        const SfxItemSet& rDefaults, sal_Bool bRememberCopy = sal_True );
                     /// Current defaults are not applied, new defaults are applied
     void            SetTextNewDefaults( const EditTextObject& rTextObject,
-                        SfxItemSet* pDefaults, BOOL bTakeOwnership = TRUE );
+                        SfxItemSet* pDefaults, sal_Bool bTakeOwnership = sal_True );
 
                     /// Overwritten method to be able to apply defaults already set
     void            SetText( const String& rText );
                     /// Current defaults are not applied, new defaults are applied
     void            SetTextNewDefaults( const String& rText,
-                        const SfxItemSet& rDefaults, BOOL bRememberCopy = TRUE );
+                        const SfxItemSet& rDefaults, sal_Bool bRememberCopy = sal_True );
                     /// Current defaults are not applied, new defaults are applied
     void            SetTextNewDefaults( const String& rText,
-                        SfxItemSet* pDefaults, BOOL bTakeOwnership = TRUE );
+                        SfxItemSet* pDefaults, sal_Bool bTakeOwnership = sal_True );
 
                     /// Paragraph attributes that are not defaults are copied to
                     /// character attributes and all paragraph attributes reset
@@ -204,17 +204,17 @@ struct ScHeaderFieldData
 class SC_DLLPUBLIC ScFieldEditEngine : public ScEditEngineDefaulter
 {
 private:
-    BOOL    bExecuteURL;
+    sal_Bool    bExecuteURL;
 
 public:
     ScFieldEditEngine( SfxItemPool* pEnginePool,
                         SfxItemPool* pTextObjectPool = NULL,
-                        BOOL bDeleteEnginePool = FALSE );
+                        sal_Bool bDeleteEnginePool = false );
 
-    void    SetExecuteURL(BOOL bSet)    { bExecuteURL = bSet; }
+    void    SetExecuteURL(sal_Bool bSet)    { bExecuteURL = bSet; }
 
-    virtual void    FieldClicked( const SvxFieldItem& rField, USHORT, USHORT );
-    virtual String  CalcFieldValue( const SvxFieldItem& rField, USHORT nPara, USHORT nPos, Color*& rTxtColor, Color*& rFldColor );
+    virtual void    FieldClicked( const SvxFieldItem& rField, sal_uInt16, sal_uInt16 );
+    virtual String  CalcFieldValue( const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos, Color*& rTxtColor, Color*& rFldColor );
 };
 
 
@@ -225,8 +225,8 @@ private:
     ScHeaderFieldData   aData;
 
 public:
-    ScHeaderEditEngine( SfxItemPool* pEnginePool, BOOL bDeleteEnginePool = FALSE );
-    virtual String CalcFieldValue( const SvxFieldItem& rField, USHORT nPara, USHORT nPos, Color*& rTxtColor, Color*& rFldColor );
+    ScHeaderEditEngine( SfxItemPool* pEnginePool, sal_Bool bDeleteEnginePool = false );
+    virtual String CalcFieldValue( const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos, Color*& rTxtColor, Color*& rFldColor );
 
     void SetTitle(const String& rNew)               { aData.aTitle = rNew; }
     void SetLongDocName(const String& rNew)         { aData.aLongDocName = rNew; }
@@ -247,7 +247,7 @@ class ScNoteEditEngine : public ScEditEngineDefaulter
 public:
     ScNoteEditEngine( SfxItemPool* pEnginePool,
                 SfxItemPool* pTextObjectPool = NULL,
-                BOOL bDeleteEnginePool = FALSE );
+                sal_Bool bDeleteEnginePool = false );
 
 };
 

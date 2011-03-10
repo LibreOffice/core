@@ -133,12 +133,6 @@ const SCROW SCROWS64K = 65536;
 
 // === old stuff defines =====================================================
 
-#ifdef WIN
-// Under 16bit Windows rows still had to be limited to 8192.
-// (define manually for testing)
-#define SC_LIMIT_ROWS
-#endif
-
 #define MAXROW_30   8191
 #define MAXROW_40   31999
 
@@ -323,13 +317,13 @@ public:
     inline void GetVars( SCCOL& nColP, SCROW& nRowP, SCTAB& nTabP ) const
     { nColP = nCol; nRowP = nRow; nTabP = nTab; }
 
-    SC_DLLPUBLIC USHORT Parse( const String&, ScDocument* = NULL,
+    SC_DLLPUBLIC sal_uInt16 Parse( const String&, ScDocument* = NULL,
                   const Details& rDetails = detailsOOOa1,
                   ExternalInfo* pExtInfo = NULL,
                   const ::com::sun::star::uno::Sequence<
                     const ::com::sun::star::sheet::ExternalLinkInfo > * pExternalLinks = NULL );
 
-    SC_DLLPUBLIC void Format( String&, USHORT = 0, ScDocument* = NULL,
+    SC_DLLPUBLIC void Format( String&, sal_uInt16 = 0, ScDocument* = NULL,
                  const Details& rDetails = detailsOOOa1) const;
 
     // The document for the maximum defined sheet number
@@ -344,7 +338,7 @@ public:
     inline size_t hash() const;
 
     /// "A1" or "$A$1" or R1C1 or R[1]C[1]
-    String GetColRowString( bool bAbsolute = FALSE,
+    String GetColRowString( bool bAbsolute = false,
                             const Details& rDetails = detailsOOOa1) const;
 };
 
@@ -397,7 +391,7 @@ inline bool ScAddress::operator!=( const ScAddress& r ) const
 
 inline bool ScAddress::operator<( const ScAddress& r ) const
 {
-    // Same behavior as the old UINT32 nAddress < r.nAddress with encoded
+    // Same behavior as the old sal_uInt32 nAddress < r.nAddress with encoded
     // tab|col|row bit fields.
     if (nTab == r.nTab)
     {
@@ -485,17 +479,17 @@ public:
     inline bool In( const ScAddress& ) const;   // is Address& in Range?
     inline bool In( const ScRange& ) const;     // is Range& in Range?
 
-    USHORT Parse( const String&, ScDocument* = NULL,
+    sal_uInt16 Parse( const String&, ScDocument* = NULL,
                   const ScAddress::Details& rDetails = ScAddress::detailsOOOa1,
                   ScAddress::ExternalInfo* pExtInfo = NULL,
                   const ::com::sun::star::uno::Sequence<
                     const ::com::sun::star::sheet::ExternalLinkInfo > * pExternalLinks = NULL );
 
-    USHORT ParseAny( const String&, ScDocument* = NULL,
+    sal_uInt16 ParseAny( const String&, ScDocument* = NULL,
                      const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
-    SC_DLLPUBLIC USHORT ParseCols( const String&, ScDocument* = NULL,
+    SC_DLLPUBLIC sal_uInt16 ParseCols( const String&, ScDocument* = NULL,
                      const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
-    SC_DLLPUBLIC USHORT ParseRows( const String&, ScDocument* = NULL,
+    SC_DLLPUBLIC sal_uInt16 ParseRows( const String&, ScDocument* = NULL,
                      const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
 
     /** Parse an Excel style reference up to and including the sheet name
@@ -519,15 +513,15 @@ public:
             bOnlyAcceptSingle==true was given.
      */
     const sal_Unicode* Parse_XL_Header( const sal_Unicode* pString, const ScDocument* pDoc,
-            String& rExternDocName, String& rStartTabName, String& rEndTabName, USHORT& nFlags,
+            String& rExternDocName, String& rStartTabName, String& rEndTabName, sal_uInt16& nFlags,
             bool bOnlyAcceptSingle,
             const ::com::sun::star::uno::Sequence<
                 const ::com::sun::star::sheet::ExternalLinkInfo > * pExternalLinks = NULL );
 
-    SC_DLLPUBLIC void Format( String&, USHORT = 0, ScDocument* = NULL,
+    SC_DLLPUBLIC void Format( String&, sal_uInt16 = 0, ScDocument* = NULL,
                  const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 ) const;
 
-    SC_DLLPUBLIC void Format( rtl::OUString&, USHORT = 0, ScDocument* = NULL,
+    SC_DLLPUBLIC void Format( rtl::OUString&, sal_uInt16 = 0, ScDocument* = NULL,
                  const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 ) const;
 
     inline void GetVars( SCCOL& nCol1, SCROW& nRow1, SCTAB& nTab1,
@@ -666,8 +660,8 @@ public:
         {  aRange[0] = r1; aRange[1] = r2; }
 
     inline ScRangePair& operator= ( const ScRangePair& r );
-    const ScRange&      GetRange( USHORT n ) const { return aRange[n]; }
-    ScRange&            GetRange( USHORT n ) { return aRange[n]; }
+    const ScRange&      GetRange( sal_uInt16 n ) const { return aRange[n]; }
+    ScRange&            GetRange( sal_uInt16 n ) { return aRange[n]; }
     inline int operator==( const ScRangePair& ) const;
     inline int operator!=( const ScRangePair& ) const;
 };

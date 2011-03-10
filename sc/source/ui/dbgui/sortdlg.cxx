@@ -47,8 +47,8 @@ ScSortDlg::ScSortDlg( Window*           pParent,
         SfxTabDialog( pParent,
                       ScResId( RID_SCDLG_SORT ),
                       pArgSet ),
-        bIsHeaders  ( FALSE ),
-        bIsByRows   ( FALSE )
+        bIsHeaders  ( false ),
+        bIsByRows   ( false )
 
 {
 #if LAYOUT_SFX_TABDIALOG_BROKEN
@@ -56,9 +56,9 @@ ScSortDlg::ScSortDlg( Window*           pParent,
     AddTabPage( TP_OPTIONS, ScTabPageSortOptions::Create, 0 );
 #else
     String fields = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("fields"));
-    AddTabPage( TP_FIELDS, fields, ScTabPageSortFields::Create, 0, FALSE, TAB_APPEND);
+    AddTabPage( TP_FIELDS, fields, ScTabPageSortFields::Create, 0, false, TAB_APPEND);
     String options = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("options"));
-    AddTabPage( TP_OPTIONS, options, ScTabPageSortOptions::Create, 0, FALSE, TAB_APPEND);
+    AddTabPage( TP_OPTIONS, options, ScTabPageSortOptions::Create, 0, false, TAB_APPEND);
 #endif
     FreeResource();
 }

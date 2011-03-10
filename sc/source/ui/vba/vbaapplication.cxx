@@ -82,6 +82,7 @@
 #include "appoptio.hxx"
 
 #include <osl/file.hxx>
+#include <rtl/instance.hxx>
 
 #include <map>
 
@@ -149,11 +150,32 @@ public:
     ActiveWorkbook( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext) : ScVbaWorkbook(  xParent, xContext ){}
 };
 
+// ============================================================================
+
+/** Global application settings shared by all open workbooks. */
+struct ScVbaAppSettings
+{
+    sal_Int32 mnCalculation;
+    sal_Bool mbDisplayAlerts;
+    sal_Bool mbEnableEvents;
+
+    explicit ScVbaAppSettings();
+};
+
+ScVbaAppSettings::ScVbaAppSettings() :
+    mnCalculation( excel::XlCalculation::xlCalculationAutomatic ),
+    mbDisplayAlerts( sal_True ),
+    mbEnableEvents( sal_True )
+{
+}
+
+struct ScVbaStaticAppSettings : public ::rtl::Static< ScVbaAppSettings, ScVbaStaticAppSettings > {};
+
+// ============================================================================
+
 ScVbaApplication::ScVbaApplication( const uno::Reference<uno::XComponentContext >& xContext ) :
     ScVbaApplication_BASE( xContext ),
-    m_xCalculation( excel::XlCalculation::xlCalculationAutomatic ),
-    m_bDisplayAlerts( sal_True ),
-    m_bEnableEvents( sal_True )
+    mrAppSettings( ScVbaStaticAppSettings::get() )
 {
 }
 
@@ -301,7 +323,7 @@ ScVbaApplication::getSelection() throw (uno::RuntimeException)
     OUString aPropName( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_FILTERED_RANGE_SELECTION ) );
     uno::Any aOldVal = xPropSet->getPropertyValue( aPropName );
     uno::Any any;
-    any <<= sal_False;
+    any <<= false;
     xPropSet->setPropertyValue( aPropName, any );
     uno::Reference< uno::XInterface > aSelection = ScUnoHelpFunctions::AnyToInterface(
         xSelSupp->getSelection() );
@@ -457,7 +479,7 @@ ScVbaApplication::getCutCopyMode() throw (uno::RuntimeException)
     }
     else
     {
-        result <<= sal_False;
+        result <<= false;
     }
     return result;
 }
@@ -466,7 +488,7 @@ void SAL_CALL
 ScVbaApplication::setCutCopyMode( const uno::Any& _cutcopymode ) throw (uno::RuntimeException)
 {
     // According to Excel's behavior, no matter what is the value of _cutcopymode, always releases the clip object.
-    sal_Bool bCutCopyMode = sal_False;
+    sal_Bool bCutCopyMode = false;
     if ( ( _cutcopymode >>= bCutCopyMode ) )
     {
         ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard( NULL );
@@ -514,19 +536,21 @@ void SAL_CALL
 ScVbaApplication::setStatusBar( const uno::Any& _statusbar ) throw (uno::RuntimeException)
 {
     rtl::OUString sText;
-    sal_Bool bDefault = sal_False;
+    sal_Bool bDefault = false;
     uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_QUERY_THROW );
     uno::Reference< task::XStatusIndicatorSupplier > xStatusIndicatorSupplier( xModel->getCurrentController(), uno::UNO_QUERY_THROW );
     uno::Reference< task::XStatusIndicator > xStatusIndicator( xStatusIndicatorSupplier->getStatusIndicator(), uno::UNO_QUERY_THROW );
     if( _statusbar >>= sText )
     {
         setDisplayStatusBar( sal_True );
-        xStatusIndicator->start( sText, 100 );
-        //xStatusIndicator->setText( sText );
+        if ( sText.getLength() )
+            xStatusIndicator->start( sText, 100 );
+        else
+            xStatusIndicator->end();        // restore normal state for empty text
     }
     else if( _statusbar >>= bDefault )
     {
-        if( bDefault == sal_False )
+        if( bDefault == false )
         {
             xStatusIndicator->end();
             setDisplayStatusBar( sal_True );
@@ -540,6 +564,7 @@ ScVbaApplication::setStatusBar( const uno::Any& _statusbar ) throw (uno::Runtime
 ::sal_Int32 SAL_CALL
 ScVbaApplication::getCalculation() throw (uno::RuntimeException)
 {
+    // TODO: in Excel, this is an application-wide setting
     uno::Reference<sheet::XCalculatable> xCalc(getCurrentDocument(), uno::UNO_QUERY_THROW);
     if(xCalc->isAutomaticCalculationEnabled())
         return excel::XlCalculation::xlCalculationAutomatic;
@@ -550,11 +575,12 @@ ScVbaApplication::getCalculation() throw (uno::RuntimeException)
 void SAL_CALL
 ScVbaApplication::setCalculation( ::sal_Int32 _calculation ) throw (uno::RuntimeException)
 {
+    // TODO: in Excel, this is an application-wide setting
     uno::Reference< sheet::XCalculatable > xCalc(getCurrentDocument(), uno::UNO_QUERY_THROW);
     switch(_calculation)
     {
         case excel::XlCalculation::xlCalculationManual:
-            xCalc->enableAutomaticCalculation(sal_False);
+            xCalc->enableAutomaticCalculation(false);
             break;
         case excel::XlCalculation::xlCalculationAutomatic:
         case excel::XlCalculation::xlCalculationSemiautomatic:
@@ -575,7 +601,6 @@ void SAL_CALL
 ScVbaApplication::wait( double time ) throw (uno::RuntimeException)
 {
     StarBASIC* pBasic = SFX_APP()->GetBasic();
-    SFX_APP()->EnterBasicCall();
     SbxArrayRef aArgs = new SbxArray;
     SbxVariableRef aRef = new SbxVariable;
     aRef->PutDouble( time );
@@ -589,8 +614,6 @@ ScVbaApplication::wait( double time ) throw (uno::RuntimeException)
         // forces a broadcast
         SbxVariableRef pNew = new  SbxMethod( *((SbxMethod*)pMeth));
     }
-    SFX_APP()->LeaveBasicCall();
-
 }
 
 uno::Any SAL_CALL
@@ -656,12 +679,12 @@ void SAL_CALL
 ScVbaApplication::GoTo( const uno::Any& Reference, const uno::Any& Scroll ) throw (uno::RuntimeException)
 {
     //test Scroll is a boolean
-    sal_Bool bScroll = sal_False;
+    sal_Bool bScroll = false;
     //R1C1-style string or a string of procedure name.
 
     if( Scroll.hasValue() )
     {
-        sal_Bool aScroll = sal_False;
+        sal_Bool aScroll = false;
         if( Scroll >>= aScroll )
         {
             bScroll = aScroll;
@@ -783,7 +806,7 @@ ScVbaApplication::setCursor( sal_Int32 _cursor ) throw (uno::RuntimeException)
             case excel::XlMousePointer::xlNorthwestArrow:
             {
                 const Pointer& rPointer( POINTER_ARROW );
-                setCursorHelper( xModel, rPointer, sal_False );
+                setCursorHelper( xModel, rPointer, false );
                 break;
             }
             case excel::XlMousePointer::xlWait:
@@ -797,7 +820,7 @@ ScVbaApplication::setCursor( sal_Int32 _cursor ) throw (uno::RuntimeException)
             case excel::XlMousePointer::xlDefault:
             {
                 const Pointer& rPointer( POINTER_NULL );
-                setCursorHelper( xModel, rPointer, sal_False );
+                setCursorHelper( xModel, rPointer, false );
                 break;
             }
             default:
@@ -831,25 +854,25 @@ ScVbaApplication::getName() throw (uno::RuntimeException)
 void SAL_CALL
 ScVbaApplication::setDisplayAlerts(sal_Bool displayAlerts) throw (uno::RuntimeException)
 {
-    m_bDisplayAlerts = displayAlerts;
+    mrAppSettings.mbDisplayAlerts = displayAlerts;
 }
 
 sal_Bool SAL_CALL
 ScVbaApplication::getDisplayAlerts() throw (uno::RuntimeException)
 {
-    return m_bDisplayAlerts;
+    return mrAppSettings.mbDisplayAlerts;
 }
 
 void SAL_CALL
 ScVbaApplication::setEnableEvents(sal_Bool bEnable) throw (uno::RuntimeException)
 {
-    m_bEnableEvents = bEnable;
+    mrAppSettings.mbEnableEvents = bEnable;
 }
 
 sal_Bool SAL_CALL
 ScVbaApplication::getEnableEvents() throw (uno::RuntimeException)
 {
-    return m_bEnableEvents;
+    return mrAppSettings.mbEnableEvents;
 }
 
 sal_Bool SAL_CALL
@@ -1317,7 +1340,7 @@ ScVbaApplication::Volatile( const uno::Any& aVolatile )  throw ( uno::RuntimeExc
 ::sal_Bool SAL_CALL
 ScVbaApplication::getDisplayFormulaBar() throw ( css::uno::RuntimeException )
 {
-    sal_Bool bRes = sal_False;
+    sal_Bool bRes = false;
     ScTabViewShell* pViewShell = excel::getCurrentBestViewShell( mxContext );
     if ( pViewShell )
     {
@@ -1327,7 +1350,7 @@ ScVbaApplication::getDisplayFormulaBar() throw ( css::uno::RuntimeException )
 
         pViewShell->GetState( reqList );
         const SfxPoolItem *pItem=0;
-        if ( reqList.GetItemState( FID_TOGGLEINPUTLINE, sal_False, &pItem ) == SFX_ITEM_SET )
+        if ( reqList.GetItemState( FID_TOGGLEINPUTLINE, false, &pItem ) == SFX_ITEM_SET )
             bRes =   ((SfxBoolItem*)pItem)->GetValue();
     }
     return bRes;
@@ -1350,7 +1373,6 @@ uno::Any SAL_CALL
 ScVbaApplication::Caller( const uno::Any& /*aIndex*/ ) throw ( uno::RuntimeException )
 {
     StarBASIC* pBasic = SFX_APP()->GetBasic();
-    SFX_APP()->EnterBasicCall();
     SbMethod* pMeth = (SbMethod*)pBasic->GetRtl()->Find( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("FuncCaller") ), SbxCLASS_METHOD );
     uno::Any aRet;
     if ( pMeth )
@@ -1361,14 +1383,13 @@ ScVbaApplication::Caller( const uno::Any& /*aIndex*/ ) throw ( uno::RuntimeExcep
                 OSL_TRACE("pNew has type %d and string value %s", pNew->GetType(), rtl::OUStringToOString( pNew->GetString(), RTL_TEXTENCODING_UTF8 ).getStr() );
         aRet = sbxToUnoValue( pNew );
     }
-    SFX_APP()->LeaveBasicCall();
     return aRet;
 }
 
 uno::Any SAL_CALL
 ScVbaApplication::GetOpenFilename(const uno::Any& FileFilter, const uno::Any& FilterIndex, const uno::Any& Title, const uno::Any& ButtonText, const uno::Any& MultiSelect)  throw (uno::RuntimeException)
 {
-    uno::Any aRet = uno::makeAny( sal_False );
+    uno::Any aRet = uno::makeAny( false );
     try
     {
         const rtl::OUString sServiceName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FilePicker" ));
@@ -1426,7 +1447,7 @@ ScVbaApplication::GetOpenFilename(const uno::Any& FileFilter, const uno::Any& Fi
             ButtonText >>= sButtonText;
             xPickerControlAccess->setLabel( ui::dialogs::CommonFilePickerElementIds::PUSHBUTTON_OK, sButtonText );
         }
-        sal_Bool bMultiSelect = sal_False;
+        sal_Bool bMultiSelect = false;
         if ( xFilePicker.is() && MultiSelect.hasValue() )
         {
             MultiSelect >>= bMultiSelect;
@@ -1435,7 +1456,7 @@ ScVbaApplication::GetOpenFilename(const uno::Any& FileFilter, const uno::Any& Fi
 
         if ( xFilePicker.is() && xFilePicker->execute() )
         {
-            sal_Bool bUseXFilePicker2 = sal_False;
+            sal_Bool bUseXFilePicker2 = false;
             uno::Reference< lang::XServiceInfo > xServiceInfo( xFilePicker, UNO_QUERY );
             if ( xServiceInfo.is() )
             {
@@ -1604,7 +1625,7 @@ ScVbaApplication::GetSaveAsFilename( const ::com::sun::star::uno::Any& InitialFi
             sal_Int16 nRet = xFilePicker->execute();
             if (nRet == 0)
             {
-                strRet <<= sal_False;
+                strRet <<= false;
             }
             else
             {
@@ -1636,7 +1657,7 @@ ScVbaApplication::GetSaveAsFilename( const ::com::sun::star::uno::Any& InitialFi
                         }
                         else
                         {
-                            sal_Bool bValidFilter = sal_False;
+                            sal_Bool bValidFilter = false;
                             FileFilterMap::const_iterator aIt = mFilterNameMap.begin();
                             while ( aIt != mFilterNameMap.end() )
                             {

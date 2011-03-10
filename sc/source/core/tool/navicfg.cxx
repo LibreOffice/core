@@ -51,7 +51,7 @@ ScNavipiCfg::ScNavipiCfg() :
 
 //------------------------------------------------------------------------
 
-void ScNavipiCfg::SetListMode(USHORT nNew)
+void ScNavipiCfg::SetListMode(sal_uInt16 nNew)
 {
     if ( nListMode != nNew )
     {
@@ -60,7 +60,7 @@ void ScNavipiCfg::SetListMode(USHORT nNew)
     }
 }
 
-void ScNavipiCfg::SetDragMode(USHORT nNew)
+void ScNavipiCfg::SetDragMode(sal_uInt16 nNew)
 {
     if ( nDragMode != nNew )
     {
@@ -69,7 +69,7 @@ void ScNavipiCfg::SetDragMode(USHORT nNew)
     }
 }
 
-void ScNavipiCfg::SetRootType(USHORT nNew)
+void ScNavipiCfg::SetRootType(sal_uInt16 nNew)
 {
     if ( nRootType != nNew )
     {

@@ -50,7 +50,6 @@
 
 class ScEditEngineDefaulter;
 class FontList;
-class PrintDialog;
 class SfxStyleSheetBasePool;
 class SfxStyleSheetHint;
 struct ChartSelectionInfo;
@@ -79,7 +78,7 @@ struct ScColWidthParam;
 namespace sfx2 { class FileDialogHelper; }
 struct DocShell_Impl;
 
-typedef ::boost::unordered_map< ULONG, ULONG > ScChangeActionMergeMap;
+typedef ::boost::unordered_map< sal_uLong, sal_uLong > ScChangeActionMergeMap;
 
 //==================================================================
 
@@ -107,16 +106,16 @@ class SC_DLLPUBLIC ScDocShell: public SfxObjectShell, public SfxListener
 
     //SfxObjectCreateMode   eShellMode;
 
-    BOOL                bIsInplace;         // wird von der View gesetzt
-    BOOL                bHeaderOn;
-    BOOL                bFooterOn;
-    BOOL                bNoInformLost;
-    BOOL                bIsEmpty;
-    BOOL                bIsInUndo;
-    BOOL                bDocumentModifiedPending;
-    USHORT              nDocumentLock;
+    sal_Bool                bIsInplace;         // wird von der View gesetzt
+    sal_Bool                bHeaderOn;
+    sal_Bool                bFooterOn;
+    sal_Bool                bNoInformLost;
+    sal_Bool                bIsEmpty;
+    sal_Bool                bIsInUndo;
+    sal_Bool                bDocumentModifiedPending;
+    sal_uInt16              nDocumentLock;
     sal_Int16           nCanUpdate;  // stores the UpdateDocMode from loading a document till update links
-    BOOL                bUpdateEnabled;
+    sal_Bool                bUpdateEnabled;
 
     ScDBData*           pOldAutoDBRange;
 
@@ -150,23 +149,23 @@ class SC_DLLPUBLIC ScDocShell: public SfxObjectShell, public SfxListener
                         ScDocShell & mrDocShell;
     };
 
-    SC_DLLPRIVATE BOOL            LoadXML( SfxMedium* pMedium, const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& );
-    SC_DLLPRIVATE BOOL            SaveXML( SfxMedium* pMedium, const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& );
+    SC_DLLPRIVATE sal_Bool            LoadXML( SfxMedium* pMedium, const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& );
+    SC_DLLPRIVATE sal_Bool            SaveXML( SfxMedium* pMedium, const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& );
     SC_DLLPRIVATE SCTAB         GetSaveTab();
 
-    SC_DLLPRIVATE ULONG         DBaseImport( const String& rFullFileName, CharSet eCharSet,
+    SC_DLLPRIVATE sal_uLong         DBaseImport( const String& rFullFileName, CharSet eCharSet,
                                              ScColWidthParam aColWidthParam[MAXCOLCOUNT], ScFlatBoolRowSegments& rRowHeightsRecalc );
-    SC_DLLPRIVATE ULONG         DBaseExport( const String& rFullFileName, CharSet eCharSet,
-                                 BOOL& bHasMemo );
+    SC_DLLPRIVATE sal_uLong         DBaseExport( const String& rFullFileName, CharSet eCharSet,
+                                 sal_Bool& bHasMemo );
 
-    SC_DLLPRIVATE static BOOL       MoveFile( const INetURLObject& rSource, const INetURLObject& rDest );
-    SC_DLLPRIVATE static BOOL       KillFile( const INetURLObject& rURL );
-    SC_DLLPRIVATE static BOOL       IsDocument( const INetURLObject& rURL );
+    SC_DLLPRIVATE static sal_Bool       MoveFile( const INetURLObject& rSource, const INetURLObject& rDest );
+    SC_DLLPRIVATE static sal_Bool       KillFile( const INetURLObject& rURL );
+    SC_DLLPRIVATE static sal_Bool       IsDocument( const INetURLObject& rURL );
 
-    SC_DLLPRIVATE void          LockPaint_Impl(BOOL bDoc);
-    SC_DLLPRIVATE void          UnlockPaint_Impl(BOOL bDoc);
-    SC_DLLPRIVATE void          LockDocument_Impl(USHORT nNew);
-    SC_DLLPRIVATE void          UnlockDocument_Impl(USHORT nNew);
+    SC_DLLPRIVATE void          LockPaint_Impl(sal_Bool bDoc);
+    SC_DLLPRIVATE void          UnlockPaint_Impl(sal_Bool bDoc);
+    SC_DLLPRIVATE void          LockDocument_Impl(sal_uInt16 nNew);
+    SC_DLLPRIVATE void          UnlockDocument_Impl(sal_uInt16 nNew);
 
     SC_DLLPRIVATE void          EnableSharedSettings( bool bEnable );
     SC_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > LoadSharedDocument();
@@ -188,14 +187,15 @@ public:
                     ~ScDocShell();
 
     using SotObject::GetInterface;
-    using SfxShell::Activate;           // with BOOL bMDI
-    using SfxShell::Deactivate;         // with BOOL bMDI
+    using SfxShell::Activate;           // with sal_Bool bMDI
+    using SfxShell::Deactivate;         // with sal_Bool bMDI
     using SfxObjectShell::Print;        // print styles
 
     virtual void    Activate();
     virtual void    Deactivate();
 
-    virtual SfxUndoManager*     GetUndoManager();
+    virtual ::svl::IUndoManager*
+                    GetUndoManager();
 
     virtual void    FillClass( SvGlobalName * pClassName,
                                sal_uInt32 * pFormat,
@@ -203,40 +203,40 @@ public:
                                String * pFullTypeName,
                                String * pShortTypeName,
                                sal_Int32 nFileFormat,
-                               sal_Bool bTemplate = sal_False ) const;
+                               sal_Bool bTemplate = false ) const;
 
-    virtual BOOL    InitNew( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& );
-    virtual BOOL    Load( SfxMedium& rMedium );
-    virtual BOOL    LoadFrom( SfxMedium& rMedium );
-    virtual BOOL    ConvertFrom( SfxMedium &rMedium );
-    virtual BOOL    Save();
-    virtual BOOL    SaveAs( SfxMedium& rMedium );
-    virtual BOOL    ConvertTo( SfxMedium &rMedium );
-    virtual USHORT  PrepareClose( BOOL bUI = TRUE, BOOL bForBrowsing = FALSE );
+    virtual sal_Bool    InitNew( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& );
+    virtual sal_Bool    Load( SfxMedium& rMedium );
+    virtual sal_Bool    LoadFrom( SfxMedium& rMedium );
+    virtual sal_Bool    ConvertFrom( SfxMedium &rMedium );
+    virtual sal_Bool    Save();
+    virtual sal_Bool    SaveAs( SfxMedium& rMedium );
+    virtual sal_Bool    ConvertTo( SfxMedium &rMedium );
+    virtual sal_uInt16  PrepareClose( sal_Bool bUI = sal_True, sal_Bool bForBrowsing = false );
     virtual void    PrepareReload();
-    virtual BOOL    IsInformationLost();
+    virtual sal_Bool    IsInformationLost();
     virtual void    LoadStyles( SfxObjectShell &rSource );
-    virtual BOOL    Insert( SfxObjectShell &rSource,
-                                USHORT nSourceIdx1, USHORT nSourceIdx2, USHORT nSourceIdx3,
-                                USHORT &nIdx1, USHORT &nIdx2, USHORT &nIdx3, USHORT &rIdxDeleted );
+    virtual sal_Bool    Insert( SfxObjectShell &rSource,
+                                sal_uInt16 nSourceIdx1, sal_uInt16 nSourceIdx2, sal_uInt16 nSourceIdx3,
+                                sal_uInt16 &nIdx1, sal_uInt16 &nIdx2, sal_uInt16 &nIdx3, sal_uInt16 &rIdxDeleted );
 
-    virtual BOOL    SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& );      // SfxInPlaceObject
-    virtual BOOL    DoSaveCompleted( SfxMedium * pNewStor);     // SfxObjectShell
-    virtual sal_Bool QuerySlotExecutable( USHORT nSlotId );
+    virtual sal_Bool    SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& );      // SfxInPlaceObject
+    virtual sal_Bool    DoSaveCompleted( SfxMedium * pNewStor);     // SfxObjectShell
+    virtual sal_Bool QuerySlotExecutable( sal_uInt16 nSlotId );
 
     virtual void    Draw( OutputDevice *, const JobSetup & rSetup,
-                                USHORT nAspect = ASPECT_CONTENT );
+                                sal_uInt16 nAspect = ASPECT_CONTENT );
 
     virtual void    SetVisArea( const Rectangle & rVisArea );
 
     using SfxObjectShell::GetVisArea;
-    virtual Rectangle GetVisArea( USHORT nAspect ) const;
+    virtual Rectangle GetVisArea( sal_uInt16 nAspect ) const;
 
     virtual Printer* GetDocumentPrinter();
 
-    virtual void    SetModified( BOOL = TRUE );
+    virtual void    SetModified( sal_Bool = sal_True );
 
-    void            SetVisAreaOrSize( const Rectangle& rVisArea, BOOL bModifyStart );
+    void            SetVisAreaOrSize( const Rectangle& rVisArea, sal_Bool bModifyStart );
 
     virtual SfxDocumentInfoDialog*  CreateDocumentInfoDialog( Window *pParent,
                                                               const SfxItemSet &rSet );
@@ -246,8 +246,8 @@ public:
     ScDocument*     GetDocument()   { return &aDocument; }
     ScDocFunc&      GetDocFunc()    { return *pDocFunc; }
 
-    SfxPrinter*     GetPrinter( BOOL bCreateIfNotExist = TRUE );
-    USHORT          SetPrinter( SfxPrinter* pNewPrinter, USHORT nDiffFlags = SFX_PRINTER_ALL );
+    SfxPrinter*     GetPrinter( sal_Bool bCreateIfNotExist = sal_True );
+    sal_uInt16          SetPrinter( SfxPrinter* pNewPrinter, sal_uInt16 nDiffFlags = SFX_PRINTER_ALL );
 
     void            UpdateFontList();
 
@@ -266,63 +266,56 @@ public:
     void            GetStatePageStyle( SfxViewShell& rCaller, SfxItemSet& rSet, SCTAB nCurTab );
 
     void            CompareDocument( ScDocument& rOtherDoc );
-    void            MergeDocument( ScDocument& rOtherDoc, bool bShared = false, bool bCheckDuplicates = false, ULONG nOffset = 0, ScChangeActionMergeMap* pMergeMap = NULL, bool bInverseMap = false );
+    void            MergeDocument( ScDocument& rOtherDoc, bool bShared = false, bool bCheckDuplicates = false, sal_uLong nOffset = 0, ScChangeActionMergeMap* pMergeMap = NULL, bool bInverseMap = false );
     bool            MergeSharedDocument( ScDocShell* pSharedDocShell );
 
     ScChangeAction* GetChangeAction( const ScAddress& rPos );
     void            SetChangeComment( ScChangeAction* pAction, const String& rComment );
-    void            ExecuteChangeCommentDialog( ScChangeAction* pAction, Window* pParent,BOOL bPrevNext=TRUE );
+    void            ExecuteChangeCommentDialog( ScChangeAction* pAction, Window* pParent,sal_Bool bPrevNext=sal_True );
                     /// Protect/unprotect ChangeTrack and return <TRUE/> if
                     /// protection was successfully changed.
-                    /// If bJustQueryIfProtected==TRUE protection is not
+                    /// If bJustQueryIfProtected==sal_True protection is not
                     /// changed and <TRUE/> is returned if not protected or
                     /// password was entered correctly.
-    BOOL            ExecuteChangeProtectionDialog( Window* _pParent, BOOL bJustQueryIfProtected = FALSE );
+    sal_Bool            ExecuteChangeProtectionDialog( Window* _pParent, sal_Bool bJustQueryIfProtected = false );
 
-    void            SetPrintZoom( SCTAB nTab, USHORT nScale, USHORT nPages );
-    BOOL            AdjustPrintZoom( const ScRange& rRange );
+    void            SetPrintZoom( SCTAB nTab, sal_uInt16 nScale, sal_uInt16 nPages );
+    sal_Bool            AdjustPrintZoom( const ScRange& rRange );
 
-    void            LoadStylesArgs( ScDocShell& rSource, BOOL bReplace, BOOL bCellStyles, BOOL bPageStyles );
+    void            LoadStylesArgs( ScDocShell& rSource, sal_Bool bReplace, sal_Bool bCellStyles, sal_Bool bPageStyles );
 
-    void            PageStyleModified( const String& rStyleName, BOOL bApi );
+    void            PageStyleModified( const String& rStyleName, sal_Bool bApi );
 
     void            NotifyStyle( const SfxStyleSheetHint& rHint );
     void            DoAutoStyle( const ScRange& rRange, const String& rStyle );
 
     Window*         GetActiveDialogParent();
-    void            ErrorMessage( USHORT nGlobStrId );
-    BOOL            IsEditable() const;
+    void            ErrorMessage( sal_uInt16 nGlobStrId );
+    sal_Bool            IsEditable() const;
 
-    BOOL            AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab );
+    sal_Bool            AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab );
     void            UpdateAllRowHeights( const ScMarkData* pTabMark = NULL );
     void            UpdatePendingRowHeights( SCTAB nUpdateTab, bool bBefore = false );
 
     void            RefreshPivotTables( const ScRange& rSource );
-    void            DoConsolidate( const ScConsolidateParam& rParam, BOOL bRecord = TRUE );
-    void            UseScenario( SCTAB nTab, const String& rName, BOOL bRecord = TRUE );
+    void            DoConsolidate( const ScConsolidateParam& rParam, sal_Bool bRecord = sal_True );
+    void            UseScenario( SCTAB nTab, const String& rName, sal_Bool bRecord = sal_True );
     SCTAB           MakeScenario( SCTAB nTab, const String& rName, const String& rComment,
-                                    const Color& rColor, USHORT nFlags,
-                                    ScMarkData& rMark, BOOL bRecord = TRUE );
+                                    const Color& rColor, sal_uInt16 nFlags,
+                                    ScMarkData& rMark, sal_Bool bRecord = sal_True );
     void            ModifyScenario( SCTAB nTab, const String& rName, const String& rComment,
-                                    const Color& rColor, USHORT nFlags );
-    ULONG TransferTab( ScDocShell& rSrcDocShell, SCTAB nSrcPos,
-                                SCTAB nDestPos, BOOL bInsertNew,
-                                BOOL bNotifyAndPaint );
+                                    const Color& rColor, sal_uInt16 nFlags );
+    sal_uLong TransferTab( ScDocShell& rSrcDocShell, SCTAB nSrcPos,
+                                SCTAB nDestPos, sal_Bool bInsertNew,
+                                sal_Bool bNotifyAndPaint );
 
-    BOOL            MoveTable( SCTAB nSrcTab, SCTAB nDestTab, BOOL bCopy, BOOL bRecord );
+    sal_Bool            MoveTable( SCTAB nSrcTab, SCTAB nDestTab, sal_Bool bCopy, sal_Bool bRecord );
 
-    void            DoRecalc( BOOL bApi );
-    void            DoHardRecalc( BOOL bApi );
+    void            DoRecalc( sal_Bool bApi );
+    void            DoHardRecalc( sal_Bool bApi );
 
-    bool            CheckPrint( PrintDialog* pPrintDialog, ScMarkData* pMarkData,
-                                bool bForceSelected, bool bIsAPI );
-    void            PreparePrint( PrintDialog* pPrintDialog, ScMarkData* pMarkData );
-    void            Print( SfxProgress& rProgress, PrintDialog* pPrintDialog,
-                            ScMarkData* pMarkData, Window* pDialogParent,
-                            BOOL bForceSelected, BOOL bIsAPI );
-
-    void            UpdateOle( const ScViewData* pViewData, BOOL bSnapSize = FALSE );
-    BOOL            IsOle();
+    void            UpdateOle( const ScViewData* pViewData, sal_Bool bSnapSize = false);
+    sal_Bool        IsOle();
 
     void            DBAreaDeleted( SCTAB nTab, SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2 );
     ScDBData*       GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGetDBSelection eSel );
@@ -331,35 +324,37 @@ public:
 
     virtual void    ReconnectDdeLink(SfxObjectShell& rServer);
     void            UpdateLinks();          // Link-Eintraege aktuallisieren
-    BOOL            ReloadTabLinks();       // Links ausfuehren (Inhalt aktualisieren)
+    sal_Bool            ReloadTabLinks();       // Links ausfuehren (Inhalt aktualisieren)
 
     virtual void    CheckConfigOptions();
 
     void            PostEditView( ScEditEngineDefaulter* pEditEngine, const ScAddress& rCursorPos );
 
     void            PostPaint( SCCOL nStartCol, SCROW nStartRow, SCTAB nStartTab,
-                            SCCOL nEndCol, SCROW nEndRow, SCTAB nEndTab, USHORT nPart,
-                            USHORT nExtFlags = 0 );
-    void            PostPaint( const ScRange& rRange, USHORT nPart, USHORT nExtFlags = 0 );
+                            SCCOL nEndCol, SCROW nEndRow, SCTAB nEndTab, sal_uInt16 nPart,
+                            sal_uInt16 nExtFlags = 0 );
+    void            PostPaint( const ScRange& rRange, sal_uInt16 nPart, sal_uInt16 nExtFlags = 0 );
 
     void            PostPaintCell( SCCOL nCol, SCROW nRow, SCTAB nTab );
     void            PostPaintCell( const ScAddress& rPos );
     void            PostPaintGridAll();
     void            PostPaintExtras();
 
+    bool            IsPaintLocked() const { return pPaintLockData != NULL; }
+
     void            PostDataChanged();
 
-    void            UpdatePaintExt( USHORT& rExtFlags, SCCOL nStartCol, SCROW nStartRow, SCTAB nStartTab,
+    void            UpdatePaintExt( sal_uInt16& rExtFlags, SCCOL nStartCol, SCROW nStartRow, SCTAB nStartTab,
                                                        SCCOL nEndCol, SCROW nEndRow, SCTAB nEndTab );
-    void            UpdatePaintExt( USHORT& rExtFlags, const ScRange& rRange );
+    void            UpdatePaintExt( sal_uInt16& rExtFlags, const ScRange& rRange );
 
-    void            SetDocumentModified( BOOL bIsModified = TRUE );
-    void            SetDrawModified( BOOL bIsModified = TRUE );
+    void            SetDocumentModified( sal_Bool bIsModified = sal_True );
+    void            SetDrawModified( sal_Bool bIsModified = sal_True );
 
     void            LockPaint();
     void            UnlockPaint();
-    USHORT          GetLockCount() const;
-    void            SetLockCount(USHORT nNew);
+    sal_uInt16          GetLockCount() const;
+    void            SetLockCount(sal_uInt16 nNew);
 
     void            LockDocument();
     void            UnlockDocument();
@@ -368,19 +363,19 @@ public:
 
     virtual SfxStyleSheetBasePool*  GetStyleSheetPool();
 
-    void            SetInplace( BOOL bInplace );
-    BOOL            IsEmpty() const;
-    void            SetEmpty(BOOL bSet);
+    void            SetInplace( sal_Bool bInplace );
+    sal_Bool            IsEmpty() const;
+    void            SetEmpty(sal_Bool bSet);
 
-    BOOL            IsInUndo() const                { return bIsInUndo; }
-    void            SetInUndo(BOOL bSet);
+    sal_Bool            IsInUndo() const                { return bIsInUndo; }
+    void            SetInUndo(sal_Bool bSet);
 
     void            CalcOutputFactor();
     double          GetOutputFactor() const;
     void            GetPageOnFromPageStyleSet( const SfxItemSet* pStyleSet,
                                                SCTAB             nCurTab,
-                                               BOOL&             rbHeader,
-                                               BOOL&             rbFooter );
+                                               sal_Bool&             rbHeader,
+                                               sal_Bool&             rbFooter );
 
     virtual long DdeGetData( const String& rItem, const String& rMimeType,
                                 ::com::sun::star::uno::Any & rValue );
@@ -392,17 +387,17 @@ public:
 
     SfxBindings*    GetViewBindings();
 
-    ScTabViewShell* GetBestViewShell( BOOL bOnlyVisible = TRUE );
+    ScTabViewShell* GetBestViewShell( sal_Bool bOnlyVisible = sal_True );
     ScSbxDocHelper* GetDocHelperObject() { return pDocHelper; }
 
-    void            SetDocumentModifiedPending( BOOL bVal )
+    void            SetDocumentModifiedPending( sal_Bool bVal )
                         { bDocumentModifiedPending = bVal; }
-    BOOL            IsDocumentModifiedPending() const
+    sal_Bool            IsDocumentModifiedPending() const
                         { return bDocumentModifiedPending; }
 
-    BOOL            IsUpdateEnabled() const
+    sal_Bool            IsUpdateEnabled() const
                         { return bUpdateEnabled; }
-    void            SetUpdateEnabled(BOOL bValue)
+    void            SetUpdateEnabled(sal_Bool bValue)
                         { bUpdateEnabled = bValue; }
 
     OutputDevice*   GetRefDevice(); // WYSIWYG: Printer, otherwise VirtualDevice...
@@ -410,7 +405,7 @@ public:
     static ScViewData* GetViewData();
     static SCTAB       GetCurTab();
 
-    static ScDocShell* GetShellByNum( USHORT nDocNo );
+    static ScDocShell* GetShellByNum( sal_uInt16 nDocNo );
     static String   GetOwnFilterName();
         static String   GetHtmlFilterName();
     static String   GetWebQueryFilterName();
@@ -418,7 +413,7 @@ public:
     static String   GetLotusFilterName();
     static String   GetDBaseFilterName();
     static String   GetDifFilterName();
-    static BOOL     HasAutomaticTableName( const String& rFilter );
+    static sal_Bool     HasAutomaticTableName( const String& rFilter );
 
     DECL_LINK( RefreshDBDataHdl, ScRefreshTimer* );
 
@@ -462,8 +457,8 @@ class SC_DLLPUBLIC ScDocShellModificator
 {
             ScDocShell&     rDocShell;
     ScRefreshTimerProtector aProtector;
-            BOOL            bAutoCalcShellDisabled;
-            BOOL            bIdleDisabled;
+            sal_Bool            bAutoCalcShellDisabled;
+            sal_Bool            bIdleDisabled;
 
                             // not implemented
                             ScDocShellModificator( const ScDocShellModificator& );

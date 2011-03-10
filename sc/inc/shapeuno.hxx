@@ -72,14 +72,14 @@ class ScShapeObj    :public ScShapeObj_Base
                     ,public ScShapeObj_TextBase
 {
 private:
-friend  ScMacroInfo* lcl_getShapeHyperMacroInfo( ScShapeObj* pShape, BOOL bCreate );
+friend  ScMacroInfo* lcl_getShapeHyperMacroInfo( ScShapeObj* pShape, sal_Bool bCreate );
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation > mxShapeAgg;
     // cached pointers to avoid repeated queryAggregation calls:
     ::com::sun::star::beans::XPropertySet*                                  pShapePropertySet;
     ::com::sun::star::beans::XPropertyState*                                pShapePropertyState;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > mxPropSetInfo;
     com::sun::star::uno::Sequence< sal_Int8 >*                              pImplementationId;
-    BOOL                                                                    bIsTextShape;
+    sal_Bool                                                                    bIsTextShape;
     bool                                                                    bInitializedNotifier;
 
     SdrObject* GetSdrObject() const throw();

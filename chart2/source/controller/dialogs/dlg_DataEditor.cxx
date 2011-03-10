@@ -186,13 +186,13 @@ void DataEditor::SetReadOnly( bool bReadOnly )
     m_bReadOnly = bReadOnly;
     if( m_bReadOnly )
     {
-        m_aTbxData.EnableItem( TBI_DATA_INSERT_ROW, FALSE );
-        m_aTbxData.EnableItem( TBI_DATA_INSERT_COL, FALSE );
-        m_aTbxData.EnableItem( TBI_DATA_INSERT_TEXT_COL, FALSE );
-        m_aTbxData.EnableItem( TBI_DATA_DELETE_ROW, FALSE );
-        m_aTbxData.EnableItem( TBI_DATA_DELETE_COL, FALSE );
-        m_aTbxData.EnableItem( TBI_DATA_SWAP_COL, FALSE );
-        m_aTbxData.EnableItem( TBI_DATA_SWAP_ROW, FALSE );
+        m_aTbxData.EnableItem( TBI_DATA_INSERT_ROW, sal_False );
+        m_aTbxData.EnableItem( TBI_DATA_INSERT_COL, sal_False );
+        m_aTbxData.EnableItem( TBI_DATA_INSERT_TEXT_COL, sal_False );
+        m_aTbxData.EnableItem( TBI_DATA_DELETE_ROW, sal_False );
+        m_aTbxData.EnableItem( TBI_DATA_DELETE_COL, sal_False );
+        m_aTbxData.EnableItem( TBI_DATA_SWAP_COL, sal_False );
+        m_aTbxData.EnableItem( TBI_DATA_SWAP_ROW, sal_False );
     }
 
     m_apBrwData->SetReadOnly( m_bReadOnly );
@@ -235,12 +235,12 @@ void DataEditor::Resize()
     AdaptBrowseBoxSize();
 }
 
-BOOL DataEditor::Close()
+sal_Bool DataEditor::Close()
 {
     if( ApplyChangesToModel() )
         return ModalDialog::Close();
     else
-        return TRUE;
+        return sal_True;
 }
 
 bool DataEditor::ApplyChangesToModel()

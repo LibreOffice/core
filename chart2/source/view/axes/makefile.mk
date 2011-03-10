@@ -43,7 +43,11 @@ ENABLE_EXCEPTIONS=	TRUE
 SLOFILES = \
     $(SLO)$/VAxisOrGridBase.obj \
     $(SLO)$/VAxisBase.obj \
-    $(SLO)$/TickmarkHelper.obj \
+    $(SLO)$/DateHelper.obj \
+    $(SLO)$/DateScaling.obj \
+    $(SLO)$/Tickmarks.obj \
+    $(SLO)$/Tickmarks_Equidistant.obj \
+    $(SLO)$/Tickmarks_Dates.obj \
     $(SLO)$/MinimumAndMaximumSupplier.obj \
     $(SLO)$/ScaleAutomatism.obj \
     $(SLO)$/VAxisProperties.obj \

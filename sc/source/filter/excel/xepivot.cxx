@@ -52,7 +52,7 @@
 #include "xestring.hxx"
 #include "xelink.hxx"
 
-#include <oox/core/tokens.hxx>
+using namespace ::oox;
 
 using ::com::sun::star::sheet::DataPilotFieldOrientation;
 using ::com::sun::star::sheet::DataPilotFieldOrientation_HIDDEN;
@@ -938,7 +938,7 @@ String lclGetDataFieldCaption( const String& rFieldName, GeneralFunction eFunc )
 {
     String aCaption;
 
-    USHORT nResIdx = 0;
+    sal_uInt16 nResIdx = 0;
     using namespace ::com::sun::star::sheet;
     switch( eFunc )
     {

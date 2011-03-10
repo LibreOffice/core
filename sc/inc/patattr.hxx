@@ -71,20 +71,20 @@ public:
                             ~ScPatternAttr();
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*    Create(SvStream& rStream, USHORT nVersion) const;
-    virtual SvStream&       Store(SvStream& rStream, USHORT nItemVersion) const;
+    virtual SfxPoolItem*    Create(SvStream& rStream, sal_uInt16 nVersion) const;
+    virtual SvStream&       Store(SvStream& rStream, sal_uInt16 nItemVersion) const;
 
     virtual int             operator==(const SfxPoolItem& rCmp) const;
 
-    const SfxPoolItem&      GetItem( USHORT nWhichP ) const
+    const SfxPoolItem&      GetItem( sal_uInt16 nWhichP ) const
                                         { return GetItemSet().Get(nWhichP); }
 
-    static const SfxPoolItem& GetItem( USHORT nWhich, const SfxItemSet& rItemSet, const SfxItemSet* pCondSet );
-    const SfxPoolItem&      GetItem( USHORT nWhich, const SfxItemSet* pCondSet ) const;
+    static const SfxPoolItem& GetItem( sal_uInt16 nWhich, const SfxItemSet& rItemSet, const SfxItemSet* pCondSet );
+    const SfxPoolItem&      GetItem( sal_uInt16 nWhich, const SfxItemSet* pCondSet ) const;
 
                             // pWhich are no ranges, but single IDs, 0-terminated
-    BOOL                    HasItemsSet( const USHORT* pWhich ) const;
-    void                    ClearItems( const USHORT* pWhich );
+    sal_Bool                    HasItemsSet( const sal_uInt16* pWhich ) const;
+    void                    ClearItems( const sal_uInt16* pWhich );
 
     void                    DeleteUnchanged( const ScPatternAttr* pOldAttrs );
 
@@ -97,14 +97,14 @@ public:
                                         OutputDevice* pOutDev = NULL,
                                         const Fraction* pScale = NULL,
                                         const SfxItemSet* pCondSet = NULL,
-                                        BYTE nScript = 0, const Color* pBackConfigColor = NULL,
+                                        sal_uInt8 nScript = 0, const Color* pBackConfigColor = NULL,
                                         const Color* pTextConfigColor = NULL );
     /** Fills a font object from the own item set. */
     void                    GetFont( Font& rFont, ScAutoFontColorMode eAutoMode,
                                         OutputDevice* pOutDev = NULL,
                                         const Fraction* pScale = NULL,
                                         const SfxItemSet* pCondSet = NULL,
-                                        BYTE nScript = 0, const Color* pBackConfigColor = NULL,
+                                        sal_uInt8 nScript = 0, const Color* pBackConfigColor = NULL,
                                         const Color* pTextConfigColor = NULL ) const;
 
     /** Converts all Calc items contained in rSrcSet to edit engine items and puts them into rEditSet. */
@@ -127,19 +127,19 @@ public:
     void                    UpdateStyleSheet();
     void                    StyleToName();
 
-    BOOL                    IsVisible() const;
-    BOOL                    IsVisibleEqual( const ScPatternAttr& rOther ) const;
+    sal_Bool                    IsVisible() const;
+    sal_Bool                    IsVisibleEqual( const ScPatternAttr& rOther ) const;
 
                             /** If font is an old symbol font StarBats/StarMath
                                 with text encoding RTL_TEXTENC_SYMBOL */
-    BOOL                    IsSymbolFont() const;
+    sal_Bool                    IsSymbolFont() const;
 
-    ULONG                   GetNumberFormat( SvNumberFormatter* ) const;
-    ULONG                   GetNumberFormat( SvNumberFormatter* pFormatter,
+    sal_uLong                   GetNumberFormat( SvNumberFormatter* ) const;
+    sal_uLong                   GetNumberFormat( SvNumberFormatter* pFormatter,
                                                 const SfxItemSet* pCondSet ) const;
 
     long                    GetRotateVal( const SfxItemSet* pCondSet ) const;
-    BYTE                    GetRotateDir( const SfxItemSet* pCondSet ) const;
+    sal_uInt8                   GetRotateDir( const SfxItemSet* pCondSet ) const;
 };
 
 

@@ -77,7 +77,7 @@ TYPEINIT1(ScAreaLink,::sfx2::SvBaseLink);
 ScAreaLink::ScAreaLink( SfxObjectShell* pShell, const String& rFile,
                         const String& rFilter, const String& rOpt,
                         const String& rArea, const ScRange& rDest,
-                        ULONG nRefresh ) :
+                        sal_uLong nRefresh ) :
     ::sfx2::SvBaseLink(sfx2::LINKUPDATE_ONCALL,FORMAT_FILE),
     ScRefreshTimer  ( nRefresh ),
     pImpl           ( new AreaLink_Impl() ),
@@ -86,9 +86,9 @@ ScAreaLink::ScAreaLink( SfxObjectShell* pShell, const String& rFile,
     aOptions        (rOpt),
     aSourceArea     (rArea),
     aDestArea       (rDest),
-    bAddUndo        (TRUE),
-    bInCreate       (FALSE),
-    bDoInsert       (TRUE)
+    bAddUndo        (sal_True),
+    bInCreate       (false),
+    bDoInsert       (sal_True)
 {
     DBG_ASSERT(pShell->ISA(ScDocShell), "ScAreaLink mit falscher ObjectShell");
     pImpl->m_pDocSh = static_cast< ScDocShell* >( pShell );
@@ -159,19 +159,19 @@ void ScAreaLink::Closed()
     // Verknuepfung loeschen: Undo
 
     ScDocument* pDoc = pImpl->m_pDocSh->GetDocument();
-    BOOL bUndo (pDoc->IsUndoEnabled());
+    sal_Bool bUndo (pDoc->IsUndoEnabled());
     if (bAddUndo && bUndo)
     {
         pImpl->m_pDocSh->GetUndoManager()->AddUndoAction( new ScUndoRemoveAreaLink( pImpl->m_pDocSh,
                                                         aFileName, aFilterName, aOptions,
                                                         aSourceArea, aDestArea, GetRefreshDelay() ) );
 
-        bAddUndo = FALSE;   // nur einmal
+        bAddUndo = false;   // nur einmal
     }
 
     SCTAB nDestTab = aDestArea.aStart.Tab();
     if (pDoc->IsStreamValid(nDestTab))
-        pDoc->SetStreamValid(nDestTab, FALSE);
+        pDoc->SetStreamValid(nDestTab, false);
 
     SvBaseLink::Closed();
 }
@@ -195,7 +195,7 @@ void ScAreaLink::SetSource(const String& rDoc, const String& rFlt, const String&
     SetName( aNewLinkName );
 }
 
-BOOL ScAreaLink::IsEqual( const String& rFile, const String& rFilter, const String& rOpt,
+sal_Bool ScAreaLink::IsEqual( const String& rFile, const String& rFilter, const String& rOpt,
                             const String& rSource, const ScRange& rDest ) const
 {
     return aFileName == rFile && aFilterName == rFilter && aOptions == rOpt &&
@@ -203,11 +203,11 @@ BOOL ScAreaLink::IsEqual( const String& rFile, const String& rFilter, const Stri
 }
 
 // find a range with name >rAreaName< in >pSrcDoc<, return it in >rRange<
-BOOL ScAreaLink::FindExtRange( ScRange& rRange, ScDocument* pSrcDoc, const String& rAreaName )
+sal_Bool ScAreaLink::FindExtRange( ScRange& rRange, ScDocument* pSrcDoc, const String& rAreaName )
 {
     bool bFound = false;
     ScRangeName* pNames = pSrcDoc->GetRangeName();
-    USHORT nPos;
+    sal_uInt16 nPos;
     if (pNames)         // benannte Bereiche
     {
         const ScRangeData* p = pNames->findByName(rAreaName);
@@ -239,25 +239,25 @@ BOOL ScAreaLink::FindExtRange( ScRange& rRange, ScDocument* pSrcDoc, const Strin
 
 //  ausfuehren:
 
-BOOL ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
-                            const String& rNewArea, ULONG nNewRefresh )
+sal_Bool ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
+                            const String& rNewArea, sal_uLong nNewRefresh )
 {
     //  Dokument laden - wie TabLink
 
     if (!rNewFile.Len() || !rNewFilter.Len())
-        return FALSE;
+        return false;
 
     String aNewUrl( ScGlobal::GetAbsDocName( rNewFile, pImpl->m_pDocSh ) );
-    BOOL bNewUrlName = (aNewUrl != aFileName);
+    sal_Bool bNewUrlName = (aNewUrl != aFileName);
 
     const SfxFilter* pFilter = pImpl->m_pDocSh->GetFactory().GetFilterContainer()->GetFilter4FilterName(rNewFilter);
     if (!pFilter)
-        return FALSE;
+        return false;
 
     ScDocument* pDoc = pImpl->m_pDocSh->GetDocument();
 
-    BOOL bUndo (pDoc->IsUndoEnabled());
-    pDoc->SetInLinkUpdate( TRUE );
+    sal_Bool bUndo (pDoc->IsUndoEnabled());
+    pDoc->SetInLinkUpdate( sal_True );
 
     //  wenn neuer Filter ausgewaehlt wurde, Optionen vergessen
     if ( rNewFilter != aFilterName )
@@ -268,8 +268,9 @@ BOOL ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
     if ( aOptions.Len() )
         pSet->Put( SfxStringItem( SID_FILE_FILTEROPTIONS, aOptions ) );
 
-    SfxMedium* pMed = new SfxMedium(aNewUrl, STREAM_STD_READ, FALSE, pFilter);
+    SfxMedium* pMed = new SfxMedium(aNewUrl, STREAM_STD_READ, false, pFilter);
 
+    // aRef->DoClose() will be closed explicitly, but it is still more safe to use SfxObjectShellLock here
     ScDocShell* pSrcShell = new ScDocShell(SFX_CREATE_MODE_INTERNAL);
     SfxObjectShellRef aRef = pSrcShell;
     pSrcShell->DoLoad(pMed);
@@ -325,7 +326,7 @@ BOOL ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
     }
 
     //! check CanFitBlock only if bDoInsert is set?
-    BOOL bCanDo = ValidColRow( aNewRange.aEnd.Col(), aNewRange.aEnd.Row() ) &&
+    sal_Bool bCanDo = ValidColRow( aNewRange.aEnd.Col(), aNewRange.aEnd.Row() ) &&
                   pDoc->CanFitBlock( aOldRange, aNewRange );
     if (bCanDo)
     {
@@ -351,16 +352,16 @@ BOOL ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
                 {
                     pUndoDoc->InitUndo( pDoc, 0, pDoc->GetTableCount()-1 );
                     pDoc->CopyToDocument( 0,0,0,MAXCOL,MAXROW,MAXTAB,
-                                            IDF_FORMULA, FALSE, pUndoDoc );     // alle Formeln
+                                            IDF_FORMULA, false, pUndoDoc );     // alle Formeln
                 }
                 else
                     pUndoDoc->InitUndo( pDoc, nDestTab, nDestTab );             // nur Zieltabelle
-                pDoc->CopyToDocument( aOldRange, IDF_ALL & ~IDF_NOTE, FALSE, pUndoDoc );
+                pDoc->CopyToDocument( aOldRange, IDF_ALL & ~IDF_NOTE, false, pUndoDoc );
             }
             else        // ohne Einfuegen
             {
                 pUndoDoc->InitUndo( pDoc, nDestTab, nDestTab );             // nur Zieltabelle
-                pDoc->CopyToDocument( aMaxRange, IDF_ALL & ~IDF_NOTE, FALSE, pUndoDoc );
+                pDoc->CopyToDocument( aMaxRange, IDF_ALL & ~IDF_NOTE, false, pUndoDoc );
             }
         }
 
@@ -409,7 +410,7 @@ BOOL ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
                     ScMarkData aDestMark;
                     aDestMark.SelectOneTable( nDestTab );
                     aDestMark.SetMarkArea( aNewTokenRange );
-                    pDoc->CopyFromClip( aNewTokenRange, aDestMark, IDF_ALL, NULL, &aClipDoc, FALSE );
+                    pDoc->CopyFromClip( aNewTokenRange, aDestMark, IDF_ALL, NULL, &aClipDoc, false );
                     aNewTokenRange.aStart.SetRow( aNewTokenRange.aEnd.Row() + 2 );
                 }
             }
@@ -426,7 +427,7 @@ BOOL ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
         {
             pRedoDoc = new ScDocument( SCDOCMODE_UNDO );
             pRedoDoc->InitUndo( pDoc, nDestTab, nDestTab );
-            pDoc->CopyToDocument( aNewRange, IDF_ALL & ~IDF_NOTE, FALSE, pRedoDoc );
+            pDoc->CopyToDocument( aNewRange, IDF_ALL & ~IDF_NOTE, false, pRedoDoc );
 
             pImpl->m_pDocSh->GetUndoManager()->AddUndoAction(
                 new ScUndoUpdateAreaLink( pImpl->m_pDocSh,
@@ -469,7 +470,7 @@ BOOL ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
     }
     else
     {
-        //  CanFitBlock FALSE -> Probleme mit zusammengefassten Zellen
+        //  CanFitBlock sal_False -> Probleme mit zusammengefassten Zellen
         //                       oder Tabellengrenze erreicht!
         //! Zellschutz ???
 
@@ -484,7 +485,7 @@ BOOL ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
 
     aRef->DoClose();
 
-    pDoc->SetInLinkUpdate( FALSE );
+    pDoc->SetInLinkUpdate( false );
 
     if (bCanDo)
     {

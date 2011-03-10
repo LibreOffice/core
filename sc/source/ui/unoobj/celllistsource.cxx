@@ -81,7 +81,7 @@ namespace calc
         ,OCellListSource_PBase( OCellListSource_Base::rBHelper )
         ,m_xDocument( _rxDocument )
         ,m_aListEntryListeners( m_aMutex )
-        ,m_bInitialized( sal_False )
+        ,m_bInitialized( false )
     {
         DBG_CTOR( OCellListSource, checkConsistency_static );
 
@@ -200,7 +200,7 @@ namespace calc
             if ( *pLookup++ == _rServiceName )
                 return sal_True;
 
-        return sal_False;
+        return false;
     }
 
     //--------------------------------------------------------------------
@@ -365,7 +365,7 @@ namespace calc
 
         // get the cell address
         CellRangeAddress aRangeAddress;
-        sal_Bool bFoundAddress = sal_False;
+        sal_Bool bFoundAddress = false;
 
         const Any* pLoop = _rArguments.getConstArray();
         const Any* pLoopEnd = _rArguments.getConstArray() + _rArguments.getLength();

@@ -81,7 +81,7 @@ private:
     SCROW           nStartRow;
     SCROW           nEndRow;
     SCTAB           nTab;
-    BOOL            bNoSelection;
+    sal_Bool            bNoSelection;
 
     FixedText** pFixedTexts;
     Edit** pEdits;

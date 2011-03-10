@@ -34,10 +34,12 @@
 #include "ItemPropertyMap.hxx"
 #include "GraphicPropertyItemConverter.hxx"
 #include "CharacterPropertyItemConverter.hxx"
-#include <svx/chrtitem.hxx>
 #include <com/sun/star/chart2/XLegend.hpp>
 #include <com/sun/star/chart2/LegendPosition.hpp>
-#include <com/sun/star/chart2/LegendExpansion.hpp>
+#include <com/sun/star/chart/ChartLegendExpansion.hpp>
+
+#include <svl/intitem.hxx>
+#include <svl/eitem.hxx>
 
 #include <functional>
 #include <algorithm>
@@ -92,7 +94,7 @@ bool LegendItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
     return ItemConverter::ApplyItemSet( rItemSet ) || bResult;
 }
 
-const USHORT * LegendItemConverter::GetWhichPairs() const
+const sal_uInt16 * LegendItemConverter::GetWhichPairs() const
 {
     // must span all used items!
     return nLegendWhichPairs;
@@ -105,52 +107,19 @@ bool LegendItemConverter::GetItemProperty( tWhichIdType /*nWhichId*/, tPropertyN
 }
 
 
-bool LegendItemConverter::ApplySpecialItem(
-    USHORT nWhichId, const SfxItemSet & rItemSet )
+bool LegendItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet& rInItemSet )
     throw( uno::Exception )
 {
     bool bChanged = false;
 
     switch( nWhichId )
     {
-        case SCHATTR_LEGEND_POS:
+        case SCHATTR_LEGEND_SHOW:
         {
-            chart2::LegendPosition eNewPos = chart2::LegendPosition_LINE_END;
-            chart2::LegendPosition eOldPos;
-            bool bIsWide = false;
-            sal_Bool bShow = sal_True;
-
-            SvxChartLegendPos eItemPos =
-                static_cast< const SvxChartLegendPosItem & >(
-                    rItemSet.Get( nWhichId )).GetValue();
-            switch( eItemPos )
+            const SfxPoolItem* pPoolItem = NULL;
+            if( rInItemSet.GetItemState( SCHATTR_LEGEND_SHOW, sal_True, &pPoolItem ) == SFX_ITEM_SET )
             {
-                case CHLEGEND_LEFT:
-                    eNewPos = chart2::LegendPosition_LINE_START;
-                    break;
-                case CHLEGEND_RIGHT:
-                    eNewPos = chart2::LegendPosition_LINE_END;
-                    break;
-                case CHLEGEND_TOP:
-                    eNewPos = chart2::LegendPosition_PAGE_START;
-                    bIsWide = true;
-                    break;
-                case CHLEGEND_BOTTOM:
-                    eNewPos = chart2::LegendPosition_PAGE_END;
-                    bIsWide = true;
-                    break;
-
-                case CHLEGEND_NONE:
-                case CHLEGEND_NONE_LEFT:
-                case CHLEGEND_NONE_RIGHT:
-                case CHLEGEND_NONE_TOP:
-                case CHLEGEND_NONE_BOTTOM:
-                    bShow = sal_False;
-                    break;
-            }
-
-            try
-            {
+                sal_Bool bShow = static_cast< const SfxBoolItem * >( pPoolItem )->GetValue();
                 sal_Bool bWasShown = sal_True;
                 if( ! (GetPropertySet()->getPropertyValue( C2U("Show")) >>= bWasShown) ||
                     ( bWasShown != bShow ))
@@ -158,25 +127,48 @@ bool LegendItemConverter::ApplySpecialItem(
                     GetPropertySet()->setPropertyValue( C2U("Show"), uno::makeAny( bShow ));
                     bChanged = true;
                 }
+            }
 
-                if( bShow )
+        }
+        break;
+        case SCHATTR_LEGEND_POS:
+        {
+            const SfxPoolItem* pPoolItem = NULL;
+            if( rInItemSet.GetItemState( SCHATTR_LEGEND_POS, sal_True, &pPoolItem ) == SFX_ITEM_SET )
+            {
+                chart2::LegendPosition eNewPos = static_cast<chart2::LegendPosition>(((const SfxInt32Item*)pPoolItem)->GetValue());
+
+                ::com::sun::star::chart::ChartLegendExpansion eExpansion = ::com::sun::star::chart::ChartLegendExpansion_HIGH;
+                switch( eNewPos )
                 {
+                    case chart2::LegendPosition_LINE_START:
+                    case chart2::LegendPosition_LINE_END:
+                        eExpansion = ::com::sun::star::chart::ChartLegendExpansion_HIGH;
+                        break;
+                    case chart2::LegendPosition_PAGE_START:
+                    case chart2::LegendPosition_PAGE_END:
+                        eExpansion = ::com::sun::star::chart::ChartLegendExpansion_WIDE;
+                        break;
+                    default:
+                        break;
+                }
+
+                try
+                {
+                    chart2::LegendPosition eOldPos;
                     if( ! ( GetPropertySet()->getPropertyValue( C2U( "AnchorPosition" )) >>= eOldPos ) ||
                         ( eOldPos != eNewPos ))
                     {
                         GetPropertySet()->setPropertyValue( C2U( "AnchorPosition" ), uno::makeAny( eNewPos ));
-                        chart2::LegendExpansion eExp = bIsWide
-                            ? chart2::LegendExpansion_WIDE
-                            : chart2::LegendExpansion_HIGH;
-                        GetPropertySet()->setPropertyValue( C2U( "Expansion" ), uno::makeAny( eExp ));
+                        GetPropertySet()->setPropertyValue( C2U( "Expansion" ), uno::makeAny( eExpansion ));
                         GetPropertySet()->setPropertyValue( C2U( "RelativePosition" ), uno::Any());
                         bChanged = true;
                     }
                 }
-            }
-            catch( uno::Exception & ex )
-            {
-                ASSERT_EXCEPTION( ex );
+                catch( uno::Exception & ex )
+                {
+                    ASSERT_EXCEPTION( ex );
+                }
             }
         }
         break;
@@ -186,48 +178,23 @@ bool LegendItemConverter::ApplySpecialItem(
 }
 
 void LegendItemConverter::FillSpecialItem(
-    USHORT nWhichId, SfxItemSet & rOutItemSet ) const
+    sal_uInt16 nWhichId, SfxItemSet & rOutItemSet ) const
     throw( uno::Exception )
 {
     switch( nWhichId )
     {
-        case SCHATTR_LEGEND_POS:
+        case SCHATTR_LEGEND_SHOW:
         {
-            SvxChartLegendPos eItemPos( CHLEGEND_RIGHT );
-            chart2::LegendPosition ePos;
-
             sal_Bool bShow = sal_True;
             GetPropertySet()->getPropertyValue( C2U( "Show" )) >>= bShow;
-
-            if( ! bShow )
-            {
-                eItemPos = CHLEGEND_NONE;
-            }
-            else if( GetPropertySet()->getPropertyValue( C2U( "AnchorPosition" )) >>= ePos )
-            {
-                switch( ePos )
-                {
-                    case chart2::LegendPosition_LINE_START:
-                        eItemPos = CHLEGEND_LEFT;
-                        break;
-                    case chart2::LegendPosition_LINE_END:
-                        eItemPos = CHLEGEND_RIGHT;
-                        break;
-                    case chart2::LegendPosition_PAGE_START:
-                        eItemPos = CHLEGEND_TOP;
-                        break;
-                    case chart2::LegendPosition_PAGE_END:
-                        eItemPos = CHLEGEND_BOTTOM;
-                        break;
-
-                    case chart2::LegendPosition_CUSTOM:
-                    default:
-                        eItemPos = CHLEGEND_RIGHT;
-                        break;
-                }
-            }
-
-            rOutItemSet.Put( SvxChartLegendPosItem( eItemPos, SCHATTR_LEGEND_POS ) );
+            rOutItemSet.Put( SfxBoolItem(SCHATTR_LEGEND_SHOW, bShow) );
+        }
+        break;
+        case SCHATTR_LEGEND_POS:
+        {
+            chart2::LegendPosition eLegendPos( chart2::LegendPosition_LINE_END );
+            GetPropertySet()->getPropertyValue( C2U( "AnchorPosition" )) >>= eLegendPos;
+            rOutItemSet.Put( SfxInt32Item(SCHATTR_LEGEND_POS, eLegendPos ) );
         }
         break;
    }

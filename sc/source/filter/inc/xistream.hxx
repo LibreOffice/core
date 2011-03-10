@@ -66,10 +66,9 @@ public:
     /** Creates a (ref-counted) copy of this decrypter object. */
     XclImpDecrypterRef  Clone() const;
 
-    /** Implementation of the ::comphelper::IDocPasswordVerifier interface,
-        calls the new virtual function implVerify(). */
-    virtual ::comphelper::DocPasswordVerifierResult
-                        verifyPassword( const ::rtl::OUString& rPassword );
+    /** Implementation of the ::comphelper::IDocPasswordVerifier interface */
+    virtual ::comphelper::DocPasswordVerifierResult verifyPassword( const ::rtl::OUString& rPassword, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& o_rEncryptionData );
+    virtual ::comphelper::DocPasswordVerifierResult verifyEncryptionData( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& rEncryptionData );
 
     /** Updates the decrypter on start of a new record or after seeking stream. */
     void                Update( SvStream& rStrm, sal_uInt16 nRecSize );
@@ -86,7 +85,10 @@ private:
     virtual XclImpDecrypter* OnClone() const = 0;
     /** Derived classes implement password verification and initialization of
         the decoder. */
-    virtual bool        OnVerify( const ::rtl::OUString& rPassword ) = 0;
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >
+        OnVerifyPassword( const ::rtl::OUString& rPassword ) = 0;
+    virtual bool OnVerifyEncryptionData( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& rEncryptionData ) = 0;
+
     /** Implementation of updating the decrypter. */
     virtual void        OnUpdate( sal_Size nOldStrmPos, sal_Size nNewStrmPos, sal_uInt16 nRecSize ) = 0;
     /** Implementation of the decryption. */
@@ -113,7 +115,9 @@ private:
     /** Implementation of cloning this object. */
     virtual XclImpBiff5Decrypter* OnClone() const;
     /** Implements password verification and initialization of the decoder. */
-    virtual bool        OnVerify( const ::rtl::OUString& rPassword );
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >
+        OnVerifyPassword( const ::rtl::OUString& rPassword );
+    virtual bool OnVerifyEncryptionData( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& rEncryptionData );
     /** Implementation of updating the decrypter. */
     virtual void        OnUpdate( sal_Size nOldStrmPos, sal_Size nNewStrmPos, sal_uInt16 nRecSize );
     /** Implementation of the decryption. */
@@ -121,7 +125,7 @@ private:
 
 private:
     ::msfilter::MSCodec_XorXLS95 maCodec;       /// Crypto algorithm implementation.
-    ::std::vector< sal_uInt8 > maPassword;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > maEncryptionData;
     sal_uInt16          mnKey;
     sal_uInt16          mnHash;
 };
@@ -142,7 +146,9 @@ private:
     /** Implementation of cloning this object. */
     virtual XclImpBiff8Decrypter* OnClone() const;
     /** Implements password verification and initialization of the decoder. */
-    virtual bool        OnVerify( const ::rtl::OUString& rPassword );
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >
+        OnVerifyPassword( const ::rtl::OUString& rPassword );
+    virtual bool OnVerifyEncryptionData( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& rEncryptionData );
     /** Implementation of updating the decrypter. */
     virtual void        OnUpdate( sal_Size nOldStrmPos, sal_Size nNewStrmPos, sal_uInt16 nRecSize );
     /** Implementation of the decryption. */
@@ -155,7 +161,7 @@ private:
 
 private:
     ::msfilter::MSCodec_Std97 maCodec;       /// Crypto algorithm implementation.
-    ::std::vector< sal_uInt16 > maPassword;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > maEncryptionData;
     ::std::vector< sal_uInt8 > maSalt;
     ::std::vector< sal_uInt8 > maVerifier;
     ::std::vector< sal_uInt8 > maVerifierHash;

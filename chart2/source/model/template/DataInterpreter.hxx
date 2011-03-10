@@ -74,6 +74,10 @@ public:
             ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::data::XLabeledDataSequence > > & rData );
 
+    static bool UseCategoriesAsX(
+        const ::com::sun::star::uno::Sequence<
+            ::com::sun::star::beans::PropertyValue > & rArguments );
+
 protected:
     // ____ XDataInterpreter ____
     virtual ::com::sun::star::chart2::InterpretedData SAL_CALL interpretDataSource(

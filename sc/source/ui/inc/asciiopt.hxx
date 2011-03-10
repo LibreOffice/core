@@ -48,19 +48,19 @@
 class SC_DLLPUBLIC ScAsciiOptions
 {
 private:
-    BOOL        bFixedLen;
+    sal_Bool        bFixedLen;
     String      aFieldSeps;
-    BOOL        bMergeFieldSeps;
+    sal_Bool        bMergeFieldSeps;
     bool        bQuotedFieldAsText;
     bool        bDetectSpecialNumber;
     sal_Unicode cTextSep;
     CharSet     eCharSet;
     LanguageType eLang;
-    BOOL        bCharSetSystem;
+    sal_Bool        bCharSetSystem;
     long        nStartRow;
-    USHORT      nInfoCount;
+    sal_uInt16      nInfoCount;
     xub_StrLen* pColStart;  //! TODO replace with vector
-    BYTE*       pColFormat; //! TODO replace with vector
+    sal_uInt8*       pColFormat; //! TODO replace with vector
 
 public:
                     ScAsciiOptions();
@@ -71,7 +71,7 @@ public:
 
     ScAsciiOptions& operator=( const ScAsciiOptions& rCpy );
 
-    BOOL            operator==( const ScAsciiOptions& rCmp ) const;
+    sal_Bool            operator==( const ScAsciiOptions& rCmp ) const;
 
     void            ReadFromString( const String& rString );
     String          WriteToString() const;
@@ -79,31 +79,31 @@ public:
     void            InterpretColumnList( const String& rString );
 
     CharSet             GetCharSet() const      { return eCharSet; }
-    BOOL                GetCharSetSystem() const    { return bCharSetSystem; }
+    sal_Bool                GetCharSetSystem() const    { return bCharSetSystem; }
     const String&       GetFieldSeps() const    { return aFieldSeps; }
-    BOOL                IsMergeSeps() const     { return bMergeFieldSeps; }
+    sal_Bool                IsMergeSeps() const     { return bMergeFieldSeps; }
     bool                IsQuotedAsText() const  { return bQuotedFieldAsText; }
     bool                IsDetectSpecialNumber() const { return bDetectSpecialNumber; }
     sal_Unicode         GetTextSep() const      { return cTextSep; }
-    BOOL                IsFixedLen() const      { return bFixedLen; }
-    USHORT              GetInfoCount() const    { return nInfoCount; }
+    sal_Bool                IsFixedLen() const      { return bFixedLen; }
+    sal_uInt16              GetInfoCount() const    { return nInfoCount; }
     const xub_StrLen*   GetColStart() const     { return pColStart; }
-    const BYTE*         GetColFormat() const    { return pColFormat; }
+    const sal_uInt8*            GetColFormat() const    { return pColFormat; }
     long                GetStartRow() const     { return nStartRow; }
     LanguageType        GetLanguage() const     { return eLang; }
 
     void    SetCharSet( CharSet eNew )          { eCharSet = eNew; }
-    void    SetCharSetSystem( BOOL bSet )       { bCharSetSystem = bSet; }
-    void    SetFixedLen( BOOL bSet )            { bFixedLen = bSet; }
+    void    SetCharSetSystem( sal_Bool bSet )       { bCharSetSystem = bSet; }
+    void    SetFixedLen( sal_Bool bSet )            { bFixedLen = bSet; }
     void    SetFieldSeps( const String& rStr )  { aFieldSeps = rStr; }
-    void    SetMergeSeps( BOOL bSet )           { bMergeFieldSeps = bSet; }
+    void    SetMergeSeps( sal_Bool bSet )           { bMergeFieldSeps = bSet; }
     void    SetQuotedAsText(bool bSet)          { bQuotedFieldAsText = bSet; }
     void    SetDetectSpecialNumber(bool bSet)   { bDetectSpecialNumber = bSet; }
     void    SetTextSep( sal_Unicode c )         { cTextSep = c; }
     void    SetStartRow( long nRow)             { nStartRow= nRow; }
     void    SetLanguage(LanguageType e)         { eLang = e; }
 
-    void    SetColInfo( USHORT nCount, const xub_StrLen* pStart, const BYTE* pFormat );
+    void    SetColInfo( sal_uInt16 nCount, const xub_StrLen* pStart, const sal_uInt8* pFormat );
     void    SetColumnInfo( const ScCsvExpDataVec& rDataVec );
 };
 

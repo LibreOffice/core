@@ -41,7 +41,7 @@
 #include "AxisIndexDefines.hxx"
 #include "ExplicitCategoriesProvider.hxx"
 #include "CommonConverters.hxx"
-#include "chartview/NumberFormatterWrapper.hxx"
+#include "NumberFormatterWrapper.hxx"
 #include "RegressionCurveHelper.hxx"
 #include <rtl/math.hxx>
 #include <tools/debug.hxx>
@@ -192,14 +192,7 @@ OUString lcl_getDataPointValueText( const Reference< XDataSeries >& xSeries, sal
 
     if( aX.getLength() == 0 )
     {
-        rtl::OUString aCategory = ::rtl::OUString( String(SchResId(STR_TIP_CATEGORY_VALUE)));
-
-        replaceParamterInString( aCategory
-            , C2U("%CATEGORYVALUE")
-            , ExplicitCategoriesProvider::getCategoryByIndex( xCooSys, xChartModel, nPointIndex )
-            );
-
-        aRet = aCategory;
+        aRet = ExplicitCategoriesProvider::getCategoryByIndex( xCooSys, xChartModel, nPointIndex );
     }
     else
     {

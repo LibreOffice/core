@@ -53,7 +53,7 @@
 
 
 
-SV_IMPL_VARARR_SORT( ScRTFColTwips, ULONG );
+SV_IMPL_VARARR_SORT( ScRTFColTwips, sal_uLong );
 
 
 
@@ -63,9 +63,9 @@ ScRTFParser::ScRTFParser( EditEngine* pEditP ) :
         pColTwips( new ScRTFColTwips ),
         pActDefault( NULL ),
         pDefMerge( NULL ),
-        nStartAdjust( (ULONG)~0 ),
+        nStartAdjust( (sal_uLong)~0 ),
         nLastWidth(0),
-        bNewDef( FALSE )
+        bNewDef( false )
 {
     // RTF default FontSize 12Pt
     long nMM = OutputDevice::LogicToLogic( 12, MAP_POINT, MAP_100TH_MM );
@@ -84,11 +84,11 @@ ScRTFParser::~ScRTFParser()
 }
 
 
-ULONG ScRTFParser::Read( SvStream& rStream, const String& rBaseURL )
+sal_uLong ScRTFParser::Read( SvStream& rStream, const String& rBaseURL )
 {
     Link aOldLink = pEdit->GetImportHdl();
     pEdit->SetImportHdl( LINK( this, ScRTFParser, RTFImportHdl ) );
-    ULONG nErr = pEdit->Read( rStream, rBaseURL, EE_FORMAT_RTF );
+    sal_uLong nErr = pEdit->Read( rStream, rBaseURL, EE_FORMAT_RTF );
     if ( nLastToken == RTF_PAR )
     {
         if ( !maList.empty() )
@@ -132,33 +132,33 @@ inline void ScRTFParser::NextRow()
 }
 
 
-BOOL ScRTFParser::SeekTwips( USHORT nTwips, SCCOL* pCol )
+sal_Bool ScRTFParser::SeekTwips( sal_uInt16 nTwips, SCCOL* pCol )
 {
-    USHORT nPos;
-    BOOL bFound = pColTwips->Seek_Entry( nTwips, &nPos );
+    sal_uInt16 nPos;
+    sal_Bool bFound = pColTwips->Seek_Entry( nTwips, &nPos );
     *pCol = static_cast<SCCOL>(nPos);
     if ( bFound )
-        return TRUE;
-    USHORT nCount = pColTwips->Count();
+        return sal_True;
+    sal_uInt16 nCount = pColTwips->Count();
     if ( !nCount )
-        return FALSE;
+        return false;
     SCCOL nCol = *pCol;
     // nCol ist Einfuegeposition, da liegt der Naechsthoehere (oder auch nicht)
     if ( nCol < static_cast<SCCOL>(nCount) && (((*pColTwips)[nCol] - SC_RTFTWIPTOL) <= nTwips) )
-        return TRUE;
+        return sal_True;
     // nicht kleiner als alles andere? dann mit Naechstniedrigerem vergleichen
     else if ( nCol != 0 && (((*pColTwips)[nCol-1] + SC_RTFTWIPTOL) >= nTwips) )
     {
         (*pCol)--;
-        return TRUE;
+        return sal_True;
     }
-    return FALSE;
+    return false;
 }
 
 
 void ScRTFParser::ColAdjust()
 {
-    if ( nStartAdjust != (ULONG)~0 )
+    if ( nStartAdjust != (sal_uLong)~0 )
     {
         SCCOL nCol = 0;
         ScEEParseEntry* pE;
@@ -180,8 +180,8 @@ void ScRTFParser::ColAdjust()
             if ( nCol > nColMax )
                 nColMax = nCol;
         }
-        nStartAdjust = (ULONG)~0;
-        pColTwips->Remove( (USHORT)0, pColTwips->Count() );
+        nStartAdjust = (sal_uLong)~0;
+        pColTwips->Remove( (sal_uInt16)0, pColTwips->Count() );
     }
 }
 
@@ -237,7 +237,7 @@ void ScRTFParser::NewCellRow( ImportInfo* /*pInfo*/ )
     if ( bNewDef )
     {
         ScRTFCellDefault* pD;
-        bNewDef = FALSE;
+        bNewDef = false;
         // rechts nicht buendig? => neue Tabelle
         if (  nLastWidth
            && ( (pD = &(pDefaultList->back())) != 0 )
@@ -328,7 +328,7 @@ void ScRTFParser::ProcToken( ImportInfo* pInfo )
         break;
         case RTF_CELLX:         // closes cell default
         {
-            bNewDef = TRUE;
+            bNewDef = sal_True;
             pInsDefault->nCol = nColCnt;
             pInsDefault->nTwips = pInfo->nTokenValue;   // rechter Zellenrand
             pDefaultList->push_back( pInsDefault );
@@ -367,7 +367,7 @@ void ScRTFParser::ProcToken( ImportInfo* pInfo )
                 pActEntry->aItemSet.Set( pActDefault->aItemSet );
                 EntryEnd( pActEntry, pInfo->aSelection );
 
-                if ( nStartAdjust == (ULONG)~0 )
+                if ( nStartAdjust == (sal_uLong)~0 )
                     nStartAdjust = maList.size();
                 maList.push_back( pActEntry );
                 NewActEntry( pActEntry );   // neuer freifliegender pActEntry
@@ -417,11 +417,11 @@ void ScRTFParser::ProcToken( ImportInfo* pInfo )
             {
                 case RTF_SHADINGDEF:
                     ((SvxRTFParser*)pInfo->pParser)->ReadBackgroundAttr(
-                        pInfo->nToken, pInsDefault->aItemSet, TRUE );
+                        pInfo->nToken, pInsDefault->aItemSet, sal_True );
                 break;
                 case RTF_BRDRDEF:
                     ((SvxRTFParser*)pInfo->pParser)->ReadBorderAttr(
-                        pInfo->nToken, pInsDefault->aItemSet, TRUE );
+                        pInfo->nToken, pInsDefault->aItemSet, sal_True );
                 break;
             }
         }

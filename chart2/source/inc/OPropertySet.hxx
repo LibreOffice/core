@@ -88,41 +88,13 @@ protected:
      */
     virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() = 0;
 
-    // ____ XPropertySet ____
-    /** sample implementation using the InfoHelper:
-
-        <pre>
-        uno::Reference&lt; beans::XPropertySetInfo &gt; SAL_CALL
-            OPropertySet::getPropertySetInfo()
-                throw (uno::RuntimeException)
-        {
-            static uno::Reference&lt; beans::XPropertySetInfo &gt; xInfo;
-
-            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-            if( !xInfo.is())
-            {
-                xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo(
-                    getInfoHelper());
-            }
-
-            return xInfo;
-        }
-        </pre>
-
-        <p>(The reason why this isn't implemented here is, that the static
-        object is only valid per concrete PropertySet.  Otherwise all
-        PropertySets derived from this base calss would have the same
-        properties.)</p>
-
-        @see ::cppu::OPropertySetHelper
-    */
 
     /** Try to convert the value <code>rValue</code> to the type required by the
         property associated with <code>nHandle</code>.
 
         Overload this method to take influence in modification of properties.
 
-        If the conversion changed , </TRUE> is returned and the converted value
+        If the conversion changed , </sal_True> is returned and the converted value
         is in <code>rConvertedValue</code>.  The former value is contained in
         <code>rOldValue</code>.
 

@@ -121,9 +121,9 @@ public:
     static sal_uInt8    GetXclOrientFromRot( sal_uInt16 nXclRot );
 
     /** Converts a Calc error code to an Excel error code. */
-    static sal_uInt8    GetXclErrorCode( USHORT nScError );
+    static sal_uInt8    GetXclErrorCode( sal_uInt16 nScError );
     /** Converts an Excel error code to a Calc error code. */
-    static USHORT       GetScErrorCode( sal_uInt8 nXclError );
+    static sal_uInt16       GetScErrorCode( sal_uInt8 nXclError );
 
     /** Converts the passed BIFF error to a double containing the respective Calc error code. */
     static double       ErrorToDouble( sal_uInt8 nXclError );
@@ -150,10 +150,10 @@ public:
 
     /** Returns the Calc column width (twips) for the passed Excel width.
         @param nScCharWidth  Width of the '0' character in Calc (twips). */
-    static USHORT       GetScColumnWidth( sal_uInt16 nXclWidth, long nScCharWidth );
+    static sal_uInt16       GetScColumnWidth( sal_uInt16 nXclWidth, long nScCharWidth );
     /** Returns the Excel column width for the passed Calc width (twips).
         @param nScCharWidth  Width of the '0' character in Calc (twips). */
-    static sal_uInt16   GetXclColumnWidth( USHORT nScWidth, long nScCharWidth );
+    static sal_uInt16   GetXclColumnWidth( sal_uInt16 nScWidth, long nScCharWidth );
 
     /** Returns a correction value to convert column widths from/to default column widths.
         @param nXclDefFontHeight  Excel height of application default font. */

@@ -35,7 +35,7 @@
 
 //------------------------------------------------------------------------
 
-ScTemplateDlg::ScTemplateDlg(Window * pParent, USHORT nAppResource) :
+ScTemplateDlg::ScTemplateDlg(Window * pParent, sal_uInt16 nAppResource) :
 //  SfxTemplateDlg( pParent, nAppResource )
     SfxTemplateDialog( pParent )
 {
@@ -49,9 +49,9 @@ ScTemplateDlg::~ScTemplateDlg()
 
 //------------------------------------------------------------------------
 
-BOOL ScTemplateDlg::New(String &rNewName)
+sal_Bool ScTemplateDlg::New(String &rNewName)
 {
-    return TRUE;
+    return sal_True;
 }
 
 
@@ -60,9 +60,9 @@ void ScTemplateDlg::Edit(const String &)
 }
 
 
-BOOL ScTemplateDlg::Delete(const String &)
+sal_Bool ScTemplateDlg::Delete(const String &)
 {
-    return TRUE;
+    return sal_True;
 }
 
 

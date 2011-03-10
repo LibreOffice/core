@@ -109,7 +109,7 @@ uno::Reference<drawing::XDrawPage> ScMySharedData::GetDrawPage(const sal_Int32 n
 
 sal_Bool ScMySharedData::HasForm(const sal_Int32 nTable, uno::Reference<drawing::XDrawPage>& xDrawPage)
 {
-    sal_Bool bResult(sal_False);
+    sal_Bool bResult(false);
     if (pDrawPages)
     {
         if ((*pDrawPages)[nTable].bHasForms)

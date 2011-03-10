@@ -107,7 +107,7 @@ void ScTransferObj::GetAreaSize( ScDocument* pDoc, SCTAB nTab1, SCTAB nTab2, SCR
 }
 
 void ScTransferObj::PaintToDev( OutputDevice* pDev, ScDocument* pDoc, double nPrintFactor,
-                                const ScRange& rBlock, BOOL bMetaFile )
+                                const ScRange& rBlock, sal_Bool bMetaFile )
 {
     if (!pDoc)
         return;
@@ -133,8 +133,9 @@ ScTransferObj::ScTransferObj( ScDocument* pClipDoc, const TransferableObjectDesc
     nDragHandleX( 0 ),
     nDragHandleY( 0 ),
     nDragSourceFlags( 0 ),
-    bDragWasInternal( FALSE ),
-    bUsedForLink( FALSE )
+    bDragWasInternal( false ),
+    bUsedForLink( false ),
+    bUseInApi( false )
 {
     DBG_ASSERT(pDoc->IsClipboard(), "wrong document");
 
@@ -147,25 +148,25 @@ ScTransferObj::ScTransferObj( ScDocument* pClipDoc, const TransferableObjectDesc
     SCCOL nCol2;
     SCROW nRow2;
     pDoc->GetClipStart( nCol1, nRow1 );
-    pDoc->GetClipArea( nCol2, nRow2, TRUE );    // real source area - include filtered rows
+    pDoc->GetClipArea( nCol2, nRow2, sal_True );    // real source area - include filtered rows
     nCol2 = sal::static_int_cast<SCCOL>( nCol2 + nCol1 );
     nRow2 = sal::static_int_cast<SCROW>( nRow2 + nRow1 );
 
     SCCOL nDummy;
-    pDoc->GetClipArea( nDummy, nNonFiltered, FALSE );
+    pDoc->GetClipArea( nDummy, nNonFiltered, false );
     bHasFiltered = (nNonFiltered < (nRow2 - nRow1));
     ++nNonFiltered;     // to get count instead of diff
 
     SCTAB nTab1=0;
     SCTAB nTab2=0;
-    BOOL bFirst = TRUE;
+    sal_Bool bFirst = sal_True;
     for (SCTAB i=0; i<=MAXTAB; i++)
         if (pDoc->HasTable(i))
         {
             if (bFirst)
                 nTab1 = i;
             nTab2 = i;
-            bFirst = FALSE;
+            bFirst = false;
         }
     DBG_ASSERT(!bFirst, "no sheet selected");
 
@@ -257,7 +258,7 @@ void ScTransferObj::AddSupportedFormats()
 sal_Bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor )
 {
     sal_uInt32  nFormat = SotExchange::GetFormat( rFlavor );
-    sal_Bool    bOK = sal_False;
+    sal_Bool    bOK = false;
 
     if( HasFormat( nFormat ) )
     {
@@ -303,9 +304,9 @@ sal_Bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor )
             //  if this transfer object was used to create a DDE link, filtered rows
             //  have to be included for subsequent calls (to be consistent with link data)
             if ( nFormat == SOT_FORMATSTR_ID_LINK )
-                bUsedForLink = TRUE;
+                bUsedForLink = sal_True;
 
-            BOOL bIncludeFiltered = pDoc->IsCutMode() || bUsedForLink;
+            sal_Bool bIncludeFiltered = pDoc->IsCutMode() || bUsedForLink;
 
             ScImportExport aObj( pDoc, aBlock );
             ScExportTextOptions aTextOptions(ScExportTextOptions::None, 0, true);
@@ -346,7 +347,7 @@ sal_Bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor )
             VirtualDevice aVirtDev;
             aVirtDev.SetOutputSizePixel( aVirtDev.LogicToPixel( aMMRect.GetSize(), MAP_100TH_MM ) );
 
-            PaintToDev( &aVirtDev, pDoc, 1.0, aBlock, FALSE );
+            PaintToDev( &aVirtDev, pDoc, 1.0, aBlock, false );
 
             aVirtDev.SetMapMode( MapMode( MAP_PIXEL ) );
             Bitmap aBmp = aVirtDev.GetBitmap( Point(), aVirtDev.GetOutputSize() );
@@ -364,7 +365,7 @@ sal_Bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor )
             MapMode         aMapMode( pEmbObj->GetMapUnit() );
             Rectangle       aVisArea( pEmbObj->GetVisArea( ASPECT_CONTENT ) );
 
-            aVDev.EnableOutput( FALSE );
+            aVDev.EnableOutput( false );
             aVDev.SetMapMode( aMapMode );
             aMtf.SetPrefSize( aVisArea.GetSize() );
             aMtf.SetPrefMapMode( aMapMode );
@@ -394,7 +395,7 @@ sal_Bool ScTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObj
 {
     // called from SetObject, put data into stream
 
-    sal_Bool bRet = sal_False;
+    sal_Bool bRet = false;
     switch (nUserObjectId)
     {
         case SCTRANS_TYPE_IMPEX:
@@ -423,7 +424,7 @@ sal_Bool ScTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObj
                     //  write old format without support for unicode characters.
                     //  Get the data from the EditEngine's transferable instead.
 
-                    USHORT nParCnt = pEngine->GetParagraphCount();
+                    sal_uInt16 nParCnt = pEngine->GetParagraphCount();
                     if ( nParCnt == 0 )
                         nParCnt = 1;
                     ESelection aSel( 0, 0, nParCnt-1, pEngine->GetTextLen(nParCnt-1) );
@@ -446,11 +447,11 @@ sal_Bool ScTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObj
                     ::comphelper::OStorageHelper::GetStorageFromURL( aTempFile.GetURL(), embed::ElementModes::READWRITE );
 
                 // write document storage
-                pEmbObj->SetupStorage( xWorkStore, SOFFICE_FILEFORMAT_CURRENT, sal_False );
+                pEmbObj->SetupStorage( xWorkStore, SOFFICE_FILEFORMAT_CURRENT, false );
 
                 // mba: no relative ULRs for clipboard!
                 SfxMedium aMedium( xWorkStore, String() );
-                bRet = pEmbObj->DoSaveObjectAs( aMedium, FALSE );
+                bRet = pEmbObj->DoSaveObjectAs( aMedium, false );
                 pEmbObj->DoSaveCompleted();
 
                 uno::Reference< embed::XTransactedObject > xTransact( xWorkStore, uno::UNO_QUERY );
@@ -465,7 +466,7 @@ sal_Bool ScTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObj
                     delete pSrcStm;
                 }
 
-                bRet = TRUE;
+                bRet = sal_True;
 
                 xWorkStore->dispose();
                 xWorkStore = uno::Reference < embed::XStorage >();
@@ -499,7 +500,7 @@ void ScTransferObj::DragFinished( sal_Int8 nDropAction )
             ScMarkData aMarkData = GetSourceMarkData();
             //  external drag&drop doesn't copy objects, so they also aren't deleted:
             //  bApi=TRUE, don't show error messages from drag&drop
-            pSourceSh->GetDocFunc().DeleteContents( aMarkData, IDF_ALL & ~IDF_OBJECTS, TRUE, TRUE );
+            pSourceSh->GetDocFunc().DeleteContents( aMarkData, IDF_ALL & ~IDF_OBJECTS, true, true );
         }
     }
 
@@ -531,18 +532,23 @@ void ScTransferObj::SetDrawPersist( const SfxObjectShellRef& rRef )
 void ScTransferObj::SetDragSource( ScDocShell* pSourceShell, const ScMarkData& rMark )
 {
     ScRangeList aRanges;
-    rMark.FillRangeListWithMarks( &aRanges, FALSE );
+    rMark.FillRangeListWithMarks( &aRanges, false );
     xDragSourceRanges = new ScCellRangesObj( pSourceShell, aRanges );
 }
 
-void ScTransferObj::SetDragSourceFlags( USHORT nFlags )
+void ScTransferObj::SetDragSourceFlags( sal_uInt16 nFlags )
 {
     nDragSourceFlags = nFlags;
 }
 
 void ScTransferObj::SetDragWasInternal()
 {
-    bDragWasInternal = TRUE;
+    bDragWasInternal = sal_True;
+}
+
+void ScTransferObj::SetUseInApi( bool bSet )
+{
+    bUseInApi = bSet;
 }
 
 ScDocument* ScTransferObj::GetSourceDocument()
@@ -569,7 +575,7 @@ ScMarkData ScTransferObj::GetSourceMarkData()
     if (pRangesObj)
     {
         const ScRangeList& rRanges = pRangesObj->GetRangeList();
-        aMarkData.MarkFromRangeList( rRanges, FALSE );
+        aMarkData.MarkFromRangeList( rRanges, false );
     }
     return aMarkData;
 }
@@ -589,13 +595,13 @@ void ScTransferObj::InitDocShell()
 
         ScDocument* pDestDoc = pDocSh->GetDocument();
         ScMarkData aDestMark;
-        aDestMark.SelectTable( 0, TRUE );
+        aDestMark.SelectTable( 0, sal_True );
 
         pDestDoc->SetDocOptions( pDoc->GetDocOptions() );   // #i42666#
 
         String aTabName;
         pDoc->GetName( aBlock.aStart.Tab(), aTabName );
-        pDestDoc->RenameTab( 0, aTabName, FALSE );          // no UpdateRef (empty)
+        pDestDoc->RenameTab( 0, aTabName, false );          // no UpdateRef (empty)
 
         pDestDoc->CopyStdStylesFrom( pDoc );
 
@@ -612,18 +618,18 @@ void ScTransferObj::InitDocShell()
         pDestDoc->SetLayoutRTL(0, pDoc->IsLayoutRTL(nSrcTab));
         for (nCol=nStartX; nCol<=nEndX; nCol++)
             if ( pDoc->ColHidden(nCol, nSrcTab) )
-                pDestDoc->ShowCol( nCol, 0, FALSE );
+                pDestDoc->ShowCol( nCol, 0, false );
             else
                 pDestDoc->SetColWidth( nCol, 0, pDoc->GetColWidth( nCol, nSrcTab ) );
 
-        ScBitMaskCompressedArray< SCROW, BYTE> & rDestRowFlags =
+        ScBitMaskCompressedArray< SCROW, sal_uInt8> & rDestRowFlags =
             pDestDoc->GetRowFlagsArrayModifiable(0);
 
         for (SCROW nRow = nStartY; nRow <= nEndY; ++nRow)
         {
-            BYTE nSourceFlags = pDoc->GetRowFlags(nRow, nSrcTab);
+            sal_uInt8 nSourceFlags = pDoc->GetRowFlags(nRow, nSrcTab);
             if ( pDoc->RowHidden(nRow, nSrcTab) )
-                pDestDoc->ShowRow( nRow, 0, FALSE );
+                pDestDoc->ShowRow( nRow, 0, false );
             else
             {
                 pDestDoc->SetRowHeight( nRow, 0, pDoc->GetOriginalHeight( nRow, nSrcTab ) );
@@ -642,16 +648,16 @@ void ScTransferObj::InitDocShell()
         //  pDoc is always a Clipboard-document
 
         ScRange aDestRange( nStartX,nStartY,0, nEndX,nEndY,0 );
-        BOOL bWasCut = pDoc->IsCutMode();
+        sal_Bool bWasCut = pDoc->IsCutMode();
         if (!bWasCut)
-            pDoc->SetClipArea( aDestRange, TRUE );          // Cut
-        pDestDoc->CopyFromClip( aDestRange, aDestMark, IDF_ALL, NULL, pDoc, FALSE );
+            pDoc->SetClipArea( aDestRange, sal_True );          // Cut
+        pDestDoc->CopyFromClip( aDestRange, aDestMark, IDF_ALL, NULL, pDoc, false );
         pDoc->SetClipArea( aDestRange, bWasCut );
 
         StripRefs( pDoc, nStartX,nStartY, nEndX,nEndY, pDestDoc, 0,0 );
 
         ScRange aMergeRange = aDestRange;
-        pDestDoc->ExtendMerge( aMergeRange, TRUE );
+        pDestDoc->ExtendMerge( aMergeRange, sal_True );
 
         pDoc->CopyDdeLinks( pDestDoc );         // copy values of DDE Links
 
@@ -720,7 +726,7 @@ void ScTransferObj::InitDocShell()
         //pDocSh->SvInPlaceObject::SetVisArea( aNewArea );
         pDocSh->SetVisArea( aNewArea );
 
-        pDocSh->UpdateOle(&aViewData, TRUE);
+        pDocSh->UpdateOle(&aViewData, sal_True);
 
         //! SetDocumentModified?
         if ( pDestDoc->IsChartListenerCollectionNeedsUpdate() )
@@ -728,7 +734,7 @@ void ScTransferObj::InitDocShell()
     }
 }
 
-SfxObjectShell* ScTransferObj::SetDrawClipDoc( BOOL bAnyOle )
+SfxObjectShell* ScTransferObj::SetDrawClipDoc( sal_Bool bAnyOle )
 {
     // update ScGlobal::pDrawClipDocShellRef
 
@@ -782,14 +788,14 @@ void ScTransferObj::StripRefs( ScDocument* pDoc,
         if (pCell->GetCellType() == CELLTYPE_FORMULA)
         {
             ScFormulaCell* pFCell = (ScFormulaCell*) pCell;
-            BOOL bOut = FALSE;
+            sal_Bool bOut = false;
             ScDetectiveRefIter aRefIter( pFCell );
             while ( !bOut && aRefIter.GetNextRef( aRef ) )
             {
                 if ( aRef.aStart.Tab() != nSrcTab || aRef.aEnd.Tab() != nSrcTab ||
                         aRef.aStart.Col() < nStartX || aRef.aEnd.Col() > nEndX ||
                         aRef.aStart.Row() < nStartY || aRef.aEnd.Row() > nEndY )
-                    bOut = TRUE;
+                    bOut = sal_True;
             }
             if (bOut)
             {
@@ -797,7 +803,7 @@ void ScTransferObj::StripRefs( ScDocument* pDoc,
                 SCROW nRow = aIter.GetRow() - nSubY;
 
                 ScBaseCell* pNew = 0;
-                USHORT nErrCode = pFCell->GetErrCode();
+                sal_uInt16 nErrCode = pFCell->GetErrCode();
                 if (nErrCode)
                 {
                     pNew = new ScStringCell( ScGlobal::GetErrorString(nErrCode) );
@@ -825,11 +831,11 @@ void ScTransferObj::StripRefs( ScDocument* pDoc,
 
                 //  number formats
 
-                ULONG nOldFormat = ((const SfxUInt32Item*)
+                sal_uLong nOldFormat = ((const SfxUInt32Item*)
                                 pDestDoc->GetAttr(nCol,nRow,nDestTab, ATTR_VALUE_FORMAT))->GetValue();
                 if ( (nOldFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0 )
                 {
-                    ULONG nNewFormat = pFCell->GetStandardFormat( *pFormatter,
+                    sal_uLong nNewFormat = pFCell->GetStandardFormat( *pFormatter,
                         nOldFormat );
                     pDestDoc->ApplyAttr( nCol,nRow,nDestTab,
                                 SfxUInt32Item(ATTR_VALUE_FORMAT, nNewFormat) );

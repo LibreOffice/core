@@ -127,10 +127,10 @@ void ShapeToolbarController::initialize( const Sequence< uno::Any >& rArguments 
     ToolBox* pToolBox = static_cast< ToolBox* >( VCLUnoHelper::GetWindow( getParent() ) );
     if ( pToolBox )
     {
-        const USHORT nCount = pToolBox->GetItemCount();
-        for ( USHORT nPos = 0; nPos < nCount; ++nPos )
+        const sal_uInt16 nCount = pToolBox->GetItemCount();
+        for ( sal_uInt16 nPos = 0; nPos < nCount; ++nPos )
         {
-            const USHORT nItemId = pToolBox->GetItemId( nPos );
+            const sal_uInt16 nItemId = pToolBox->GetItemId( nPos );
             if ( pToolBox->GetItemCommand( nItemId ) == String( m_aCommandURL ) )
             {
                 m_nToolBoxId = nItemId;
@@ -202,9 +202,9 @@ void ShapeToolbarController::statusChanged( const frame::FeatureStateEvent& Even
             sal_Bool bCheckmark = sal_False;
             ToolBox& rTb = m_pToolbarController->GetToolBox();
 
-            for ( USHORT i = 0; i < rTb.GetItemCount(); ++i )
+            for ( sal_uInt16 i = 0; i < rTb.GetItemCount(); ++i )
             {
-                USHORT nId = rTb.GetItemId( i );
+                sal_uInt16 nId = rTb.GetItemId( i );
                 if ( nId == 0 )
                 {
                     continue;

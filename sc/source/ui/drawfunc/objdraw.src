@@ -35,7 +35,7 @@
     MenuItem\
     {\
         Identifier = SID_TEXT_STANDARD ; \
-        HelpID = SID_TEXT_STANDARD ; \
+        HelpID = CMD_SID_TEXT_STANDARD ; \
         Text [ en-US ] = "~Default" ; \
         Text [ x-comment ] = " ";\
     };
@@ -46,7 +46,7 @@
     MenuItem\
     {\
         Identifier = RID_MN_FORMAT_STYLE ; \
-        HelpID = RID_MN_FORMAT_STYLE ; \
+        HelpID = HID_MN_FORMAT_STYLE ; \
         Text [ en-US ] = "~Style" ; \
         SubMenu = Menu\
         {\
@@ -87,14 +87,14 @@
                 MenuItem\
                 {\
                     Identifier = SID_SET_SUPER_SCRIPT ; \
-                    HelpID = SID_SET_SUPER_SCRIPT ; \
+                    HelpID = CMD_SID_SET_SUPER_SCRIPT ; \
                     Text [ en-US ] = "~Superscript" ; \
                     Text [ x-comment ] = " ";\
                 };\
                 MenuItem\
                 {\
                     Identifier = SID_SET_SUB_SCRIPT ; \
-                    HelpID = SID_SET_SUB_SCRIPT ; \
+                    HelpID = CMD_SID_SET_SUB_SCRIPT ; \
                     Text [ en-US ] = "S~ubscript" ; \
                     Text [ x-comment ] = " ";\
                 };\
@@ -105,7 +105,7 @@
     MenuItem\
     {\
         Identifier = RID_MN_FORMAT_ALGN ; \
-        HelpID = RID_MN_FORMAT_ALGN ; \
+        HelpID = HID_MN_FORMAT_ALGN ; \
         Text [ en-US ] = "~Alignment" ; \
         RadioCheck = TRUE ; \
         SubMenu = Menu\
@@ -115,7 +115,7 @@
                 MenuItem\
                 {\
                     Identifier = SID_ALIGNLEFT ; \
-                    HelpID = SID_ATTR_PARA_ADJUST_LEFT ; \
+                    HelpID = CMD_SID_ATTR_PARA_ADJUST_LEFT ; \
                     RadioCheck = TRUE ; \
                     Text [ en-US ] = "~Left" ;\
                     Text [ x-comment ] = " ";   \
@@ -123,21 +123,21 @@
                 MenuItem\
                 {\
                     Identifier = SID_ALIGNRIGHT ; \
-                    HelpID = SID_ATTR_PARA_ADJUST_RIGHT ; \
+                    HelpID = CMD_SID_ATTR_PARA_ADJUST_RIGHT ; \
                     RadioCheck = TRUE ; \
                     Text [ en-US ] = "~Right" ;\
                 };\
                 MenuItem\
                 {\
                     Identifier = SID_ALIGNCENTERHOR ; \
-                    HelpID = SID_ATTR_PARA_ADJUST_CENTER ; \
+                    HelpID = CMD_SID_ATTR_PARA_ADJUST_CENTER ; \
                     RadioCheck = TRUE ; \
                     Text [ en-US ] = "~Centered" ;\
                 };\
                 MenuItem\
                 {\
                     Identifier = SID_ALIGNBLOCK ; \
-                    HelpID = SID_ATTR_PARA_ADJUST_BLOCK ; \
+                    HelpID = CMD_SID_ATTR_PARA_ADJUST_BLOCK ; \
                     RadioCheck = TRUE ; \
                     Text [ en-US ] = "~Justified" ; \
                     Text [ x-comment ] = " ";\
@@ -149,7 +149,7 @@
     MenuItem\
     {\
         Identifier = RID_MN_FORMAT_LINESPACE ; \
-        HelpID = RID_MN_FORMAT_LINESPACE ; \
+        HelpID = HID_MN_FORMAT_LINESPACE ; \
         Text [ en-US ] = "~Line Spacing" ; \
         _MenuItemFlags = MIB_RADIOCHECK ; \
         SubMenu = Menu\
@@ -190,7 +190,7 @@
     MenuItem\
     {\
         Identifier = SID_DRAW_HLINK_EDIT ; \
-        HelpID = SID_DRAW_HLINK_EDIT ; \
+        HelpID = CMD_SID_DRAW_HLINK_EDIT ; \
         Text [ en-US ] = "~Hyperlink..." ; \
     };
 
@@ -198,7 +198,7 @@
     MenuItem\
     {\
         Identifier = SID_DRAW_HLINK_DELETE ; \
-        HelpID = SID_DRAW_HLINK_DELETE ; \
+        HelpID = CMD_SID_DRAW_HLINK_DELETE ; \
         Text [ en-US ] = "~Remove Hyperlink" ; \
     };
 
@@ -206,7 +206,7 @@
     MenuItem\
     {\
         Identifier = SID_DRAWTEXT_ATTR_DLG ; \
-        HelpID = SID_DRAWTEXT_ATTR_DLG ; \
+        HelpID = CMD_SID_DRAWTEXT_ATTR_DLG ; \
         Text [ en-US ] = "Te~xt..." ; \
         Text [ x-comment ] = " ";\
     };
@@ -215,7 +215,7 @@
      MenuItem\
      {\
          Identifier = SID_ASSIGNMACRO ; \
-         HelpID = SID_ASSIGNMACRO ; \
+         HelpID = CMD_SID_ASSIGNMACRO ; \
          Text [ en-US ] = "Assig~n Macro..." ; \
          Text [ x-comment ] = " ";\
      };
@@ -233,7 +233,7 @@
     MenuItem\
     {\
         Identifier = SID_RENAME_OBJECT ; \
-        HelpId = SID_RENAME_OBJECT ; \
+        HelpId = CMD_SID_RENAME_OBJECT ; \
         Text [ en-US ] = "Name...";\
     };
 
@@ -242,7 +242,7 @@
     MenuItem\
     {\
         Identifier = SID_TITLE_DESCRIPTION_OBJECT; \
-        HelpId = SID_TITLE_DESCRIPTION_OBJECT; \
+        HelpId = CMD_SID_TITLE_DESCRIPTION_OBJECT; \
         Text [ en-US ] = "Description...";\
     };
 
@@ -259,14 +259,14 @@
                 MenuItem\
                 {\
                     Identifier = SID_MIRROR_VERTICAL ; \
-                    HelpId = SID_MIRROR_VERTICAL ; \
+                    HelpId = CMD_SID_MIRROR_VERTICAL ; \
                     Text [ en-US ] = "~Vertically" ; \
                     Text [ x-comment ] = " ";\
                 };\
                 MenuItem\
                 {\
                     Identifier = SID_MIRROR_HORIZONTAL ; \
-                    HelpId = SID_MIRROR_HORIZONTAL ; \
+                    HelpId = CMD_SID_MIRROR_HORIZONTAL ; \
                     Text [ en-US ] = "~Horizontal" ; \
                     Text [ x-comment ] = " ";\
                 };\
@@ -335,7 +335,7 @@
                 {\
                     RadioCheck = TRUE ; \
                     Identifier = SID_ANCHOR_PAGE ; \
-                    HelpId = SID_ANCHOR_PAGE ; \
+                    HelpId = CMD_SID_ANCHOR_PAGE ; \
                     Text [ en-US ] = "To P~age" ; \
                     Text [ x-comment ] = " ";\
                 };\
@@ -343,7 +343,7 @@
                 {\
                     RadioCheck = TRUE ; \
                     Identifier = SID_ANCHOR_CELL ; \
-                    HelpId = SID_ANCHOR_CELL ; \
+                    HelpId = CMD_SID_ANCHOR_CELL ; \
                     Text [ en-US ] = "To ~Cell" ; \
                     Text [ x-comment ] = " ";\
                 };\
@@ -356,7 +356,7 @@
     MenuItem\
     {\
         Identifier = SID_OBJECT_ALIGN ; \
-        HelpId = SID_OBJECT_ALIGN ; \
+        HelpId = CMD_SID_OBJECT_ALIGN ; \
         Text [ en-US ] = "A~lignment" ; \
         SubMenu = Menu\
         {\
@@ -406,150 +406,6 @@ String RID_DRAW_OBJECTBAR
     Text [ en-US ] = "Drawing Object Bar" ;
     Text [ x-comment ] = " ";
 };
-ToolBox RID_DRAW_OBJECTBAR
-{
-    HelpId = HID_SC_TOOLBOX_DRAW ;
-    Dockable = TRUE ;
-    Moveable = TRUE ;
-    Sizeable = TRUE ;
-    Closeable = TRUE ;
-    Zoomable = TRUE ;
-    Customize = TRUE ;
-    HideWhenDeactivate = TRUE ;
-    LineSpacing = TRUE ;
-    Border = TRUE ;
-    SVLook = TRUE ;
-    MenuStrings = TRUE ;
-    ItemList =
-    {
-        ToolBoxItem
-        {
-            Identifier = SID_BEZIER_EDIT ;
-            HelpID = SID_BEZIER_EDIT ;
-
-        };
-         //---------------------------------------------
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-         //---------------------------------------------
-         // Linien
-        ToolBoxItem
-        {
-            Identifier = SID_ATTRIBUTES_LINE ;
-            HelpId = SID_ATTRIBUTES_LINE ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_ATTR_LINEEND_STYLE ;
-            HelpID = SID_ATTR_LINEEND_STYLE ;
-        };
-         //---------------------------------------------
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-         //---------------------------------------------
-        ToolBoxItem
-        {
-            Identifier = SID_ATTR_LINE_STYLE ;
-            HelpId = SID_ATTR_LINE_STYLE ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_ATTR_LINE_WIDTH ;
-            HelpId = SID_ATTR_LINE_WIDTH ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_ATTR_LINE_COLOR ;
-            HelpId = SID_ATTR_LINE_COLOR ;
-        };
-         //---------------------------------------------
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-         //---------------------------------------------
-        ToolBoxItem
-        {
-            Identifier = SID_ATTRIBUTES_AREA ;
-            HelpId = SID_ATTRIBUTES_AREA ;
-        };
-         //---------------------------------------------
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-         //---------------------------------------------
-        ToolBoxItem
-        {
-            Identifier = SID_ATTR_FILL_STYLE ;
-            HelpId = SID_ATTR_FILL_STYLE ;
-        };
-         //---------------------------------------------
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-         //---------------------------------------------
-         // Rest
-        ToolBoxItem
-        {
-            Identifier = SID_OBJECT_ROTATE ;
-            HelpId = SID_OBJECT_ROTATE ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_ANCHOR_TOGGLE ;
-            HelpId = SID_ANCHOR_TOGGLE ;
-        };
-         //---------------------------------------------
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-         //---------------------------------------------
-        ToolBoxItem
-        {
-            Identifier = SID_FRAME_TO_TOP ;
-            HelpId = SID_FRAME_TO_TOP ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_FRAME_TO_BOTTOM ;
-            HelpId = SID_FRAME_TO_BOTTOM ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_OBJECT_HEAVEN ;
-            HelpID = SID_OBJECT_HEAVEN ;
-
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_OBJECT_HELL ;
-            HelpID = SID_OBJECT_HELL ;
-
-        };
-
-         //---------------------------------------------
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-         //---------------------------------------------
-
-        ToolBoxItem
-        {
-            Identifier = SID_GRID_VISIBLE;
-            HelpID = SID_GRID_VISIBLE;
-            Hide = TRUE;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_GRID_USE;
-            HelpID = SID_GRID_USE;
-            Hide = TRUE;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_HELPLINES_MOVE;
-            HelpID = SID_HELPLINES_MOVE;
-            Hide = TRUE;
-        };
-
-         //---------------------------------------------
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-         //---------------------------------------------
-        ToolBoxItem
-        {
-            Identifier = SID_OBJECT_ALIGN ;
-            HelpId = SID_OBJECT_ALIGN ;
-        };
-    };
-    Scroll = TRUE ;
-};
  //
  // Text-Toolbox
  //
@@ -558,686 +414,12 @@ String RID_TEXT_TOOLBOX
     Text [ en-US ] = "Text Object Bar" ;
     Text [ x-comment ] = " ";
 };
-ToolBox RID_TEXT_TOOLBOX
-{
-    HelpId = HID_SC_TOOLBOX_DRTEXT ;
-    LineSpacing = TRUE ;
-    Dockable = TRUE ;
-    Moveable = TRUE ;
-    Sizeable = TRUE ;
-    Closeable = TRUE ;
-    Zoomable = TRUE ;
-    Scroll = TRUE ;
-    Customize = TRUE ;
-    HideWhenDeactivate = TRUE ;
-    Border = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 0 , 0 ) ;
-    Align = BOXALIGN_TOP ;
-    MenuStrings = TRUE ;
-    ItemList =
-    {
-        ToolBoxItem
-        {
-            Identifier = SID_ATTR_CHAR_FONT ;
-            HelpId = SID_ATTR_CHAR_FONT ;
-        };
-         //---------------------------------------------
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-         //---------------------------------------------
-        ToolBoxItem
-        {
-            Identifier = SID_ATTR_CHAR_FONTHEIGHT ;
-            HelpId = SID_ATTR_CHAR_FONTHEIGHT ;
-        };
-         //---------------------------------------------
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-         //---------------------------------------------
-        ToolBoxItem
-        {
-            Identifier = SID_ATTR_CHAR_WEIGHT ;
-            HelpId = SID_ATTR_CHAR_WEIGHT ;
-            AutoCheck = TRUE ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_ATTR_CHAR_POSTURE ;
-            HelpId = SID_ATTR_CHAR_POSTURE ;
-            AutoCheck = TRUE ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_ATTR_CHAR_UNDERLINE ;
-            HelpId = SID_ATTR_CHAR_UNDERLINE ;
-            AutoCheck = TRUE ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_ULINE_VAL_DOUBLE;
-            HelpId = SID_ULINE_VAL_DOUBLE;
-            AutoCheck = TRUE ;
-            Hide=TRUE;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_ATTR_CHAR_COLOR ;
-            HelpId = SID_ATTR_CHAR_COLOR ;
-        };
-         //---------------------------------------------
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-         //---------------------------------------------
-        ToolBoxItem
-        {
-            Identifier = SID_ATTR_PARA_LINESPACE_10 ;
-            HelpId = SID_ATTR_PARA_LINESPACE_10 ;
-            RadioCheck = TRUE ;
-            AutoCheck = TRUE ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_ATTR_PARA_LINESPACE_15 ;
-            HelpId = SID_ATTR_PARA_LINESPACE_15 ;
-            RadioCheck = TRUE ;
-            AutoCheck = TRUE ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_ATTR_PARA_LINESPACE_20 ;
-            HelpId = SID_ATTR_PARA_LINESPACE_20 ;
-            RadioCheck = TRUE ;
-            AutoCheck = TRUE ;
-        };
-         //---------------------------------------------
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-         //---------------------------------------------
-        ToolBoxItem
-        {
-            Identifier = SID_ALIGNLEFT ;
-            HelpId = SID_ATTR_PARA_ADJUST_LEFT ;
-            RadioCheck = TRUE ;
-            AutoCheck = TRUE ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_ALIGNCENTERHOR ;
-            HelpId = SID_ATTR_PARA_ADJUST_CENTER ;
-            RadioCheck = TRUE ;
-            AutoCheck = TRUE ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_ALIGNRIGHT ;
-            HelpId = SID_ATTR_PARA_ADJUST_RIGHT ;
-            RadioCheck = TRUE ;
-            AutoCheck = TRUE ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_ALIGNBLOCK ;
-            HelpId = SID_ATTR_PARA_ADJUST_BLOCK ;
-            RadioCheck = TRUE ;
-            AutoCheck = TRUE ;
-        };
-         //---------------------------------------------
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-         //---------------------------------------------
-        ToolBoxItem
-        {
-            Identifier = SID_ATTR_PARA_LEFT_TO_RIGHT;
-            HelpID = SID_ATTR_PARA_LEFT_TO_RIGHT;
-            RadioCheck = TRUE;
-            Hide = TRUE;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_ATTR_PARA_RIGHT_TO_LEFT;
-            HelpID = SID_ATTR_PARA_RIGHT_TO_LEFT;
-            RadioCheck = TRUE;
-            Hide = TRUE;
-        };
-         //---------------------------------------------
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-         //---------------------------------------------
-        ToolBoxItem
-        {
-            Identifier = SID_SET_SUPER_SCRIPT ;
-            HelpID = SID_SET_SUPER_SCRIPT ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_SET_SUB_SCRIPT ;
-            HelpID = SID_SET_SUB_SCRIPT ;
-        };
-         //---------------------------------------------
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-         //---------------------------------------------
-        ToolBoxItem
-        {
-            Identifier = SID_TEXTDIRECTION_LEFT_TO_RIGHT ;
-            HelpID = SID_TEXTDIRECTION_LEFT_TO_RIGHT ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_TEXTDIRECTION_TOP_TO_BOTTOM ;
-            HelpID = SID_TEXTDIRECTION_TOP_TO_BOTTOM ;
-        };
-         //---------------------------------------------
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-         //---------------------------------------------
-        ToolBoxItem
-        {
-            Identifier = SID_CHAR_DLG ;
-            HelpID = SID_CHAR_DLG ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_PARA_DLG ;
-            HelpID = SID_PARA_DLG ;
-        };
-    };
-    ItemList[ ar ] =
-    {
-        ToolBoxItem
-        {
-            Identifier = SID_ATTR_CHAR_FONT ;
-            HelpId = SID_ATTR_CHAR_FONT ;
-        };
-         //---------------------------------------------
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-         //---------------------------------------------
-        ToolBoxItem
-        {
-            Identifier = SID_ATTR_CHAR_FONTHEIGHT ;
-            HelpId = SID_ATTR_CHAR_FONTHEIGHT ;
-        };
-         //---------------------------------------------
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-         //---------------------------------------------
-        ToolBoxItem
-        {
-            Identifier = SID_ATTR_CHAR_WEIGHT ;
-            HelpId = SID_ATTR_CHAR_WEIGHT ;
-            AutoCheck = TRUE ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_ATTR_CHAR_POSTURE ;
-            HelpId = SID_ATTR_CHAR_POSTURE ;
-            AutoCheck = TRUE ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_ATTR_CHAR_UNDERLINE ;
-            HelpId = SID_ATTR_CHAR_UNDERLINE ;
-            AutoCheck = TRUE ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_ULINE_VAL_DOUBLE;
-            HelpId = SID_ULINE_VAL_DOUBLE;
-            AutoCheck = TRUE ;
-            Hide=TRUE;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_ATTR_CHAR_COLOR ;
-            HelpId = SID_ATTR_CHAR_COLOR ;
-        };
-         //---------------------------------------------
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-         //---------------------------------------------
-        ToolBoxItem
-        {
-            Identifier = SID_ATTR_PARA_LINESPACE_10 ;
-            HelpId = SID_ATTR_PARA_LINESPACE_10 ;
-            RadioCheck = TRUE ;
-            AutoCheck = TRUE ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_ATTR_PARA_LINESPACE_15 ;
-            HelpId = SID_ATTR_PARA_LINESPACE_15 ;
-            RadioCheck = TRUE ;
-            AutoCheck = TRUE ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_ATTR_PARA_LINESPACE_20 ;
-            HelpId = SID_ATTR_PARA_LINESPACE_20 ;
-            RadioCheck = TRUE ;
-            AutoCheck = TRUE ;
-        };
-         //---------------------------------------------
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-         //---------------------------------------------
-        ToolBoxItem
-        {
-            Identifier = SID_ALIGNRIGHT ;
-            HelpId = SID_ATTR_PARA_ADJUST_RIGHT ;
-            RadioCheck = TRUE ;
-            AutoCheck = TRUE ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_ALIGNCENTERHOR ;
-            HelpId = SID_ATTR_PARA_ADJUST_CENTER ;
-            RadioCheck = TRUE ;
-            AutoCheck = TRUE ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_ALIGNLEFT ;
-            HelpId = SID_ATTR_PARA_ADJUST_LEFT ;
-            RadioCheck = TRUE ;
-            AutoCheck = TRUE ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_ALIGNBLOCK ;
-            HelpId = SID_ATTR_PARA_ADJUST_BLOCK ;
-            RadioCheck = TRUE ;
-            AutoCheck = TRUE ;
-        };
-         //---------------------------------------------
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-         //---------------------------------------------
-        ToolBoxItem
-        {
-            Identifier = SID_ATTR_PARA_RIGHT_TO_LEFT;
-            HelpID = SID_ATTR_PARA_RIGHT_TO_LEFT;
-            RadioCheck = TRUE;
-            Hide = TRUE;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_ATTR_PARA_LEFT_TO_RIGHT;
-            HelpID = SID_ATTR_PARA_LEFT_TO_RIGHT;
-            RadioCheck = TRUE;
-            Hide = TRUE;
-        };
-         //---------------------------------------------
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-         //---------------------------------------------
-        ToolBoxItem
-        {
-            Identifier = SID_SET_SUPER_SCRIPT ;
-            HelpID = SID_SET_SUPER_SCRIPT ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_SET_SUB_SCRIPT ;
-            HelpID = SID_SET_SUB_SCRIPT ;
-        };
-         //---------------------------------------------
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-         //---------------------------------------------
-        ToolBoxItem
-        {
-            Identifier = SID_TEXTDIRECTION_LEFT_TO_RIGHT ;
-            HelpID = SID_TEXTDIRECTION_LEFT_TO_RIGHT ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_TEXTDIRECTION_TOP_TO_BOTTOM ;
-            HelpID = SID_TEXTDIRECTION_TOP_TO_BOTTOM ;
-        };
-         //---------------------------------------------
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-         //---------------------------------------------
-        ToolBoxItem
-        {
-            Identifier = SID_CHAR_DLG ;
-            HelpID = SID_CHAR_DLG ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_PARA_DLG ;
-            HelpID = SID_PARA_DLG ;
-        };
-    };
-    ItemList[ he ] =
-    {
-        ToolBoxItem
-        {
-            Identifier = SID_ATTR_CHAR_FONT ;
-            HelpId = SID_ATTR_CHAR_FONT ;
-        };
-         //---------------------------------------------
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-         //---------------------------------------------
-        ToolBoxItem
-        {
-            Identifier = SID_ATTR_CHAR_FONTHEIGHT ;
-            HelpId = SID_ATTR_CHAR_FONTHEIGHT ;
-        };
-         //---------------------------------------------
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-         //---------------------------------------------
-        ToolBoxItem
-        {
-            Identifier = SID_ATTR_CHAR_WEIGHT ;
-            HelpId = SID_ATTR_CHAR_WEIGHT ;
-            AutoCheck = TRUE ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_ATTR_CHAR_POSTURE ;
-            HelpId = SID_ATTR_CHAR_POSTURE ;
-            AutoCheck = TRUE ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_ATTR_CHAR_UNDERLINE ;
-            HelpId = SID_ATTR_CHAR_UNDERLINE ;
-            AutoCheck = TRUE ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_ULINE_VAL_DOUBLE;
-            HelpId = SID_ULINE_VAL_DOUBLE;
-            AutoCheck = TRUE ;
-            Hide=TRUE;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_ATTR_CHAR_COLOR ;
-            HelpId = SID_ATTR_CHAR_COLOR ;
-        };
-         //---------------------------------------------
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-         //---------------------------------------------
-        ToolBoxItem
-        {
-            Identifier = SID_ATTR_PARA_LINESPACE_10 ;
-            HelpId = SID_ATTR_PARA_LINESPACE_10 ;
-            RadioCheck = TRUE ;
-            AutoCheck = TRUE ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_ATTR_PARA_LINESPACE_15 ;
-            HelpId = SID_ATTR_PARA_LINESPACE_15 ;
-            RadioCheck = TRUE ;
-            AutoCheck = TRUE ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_ATTR_PARA_LINESPACE_20 ;
-            HelpId = SID_ATTR_PARA_LINESPACE_20 ;
-            RadioCheck = TRUE ;
-            AutoCheck = TRUE ;
-        };
-         //---------------------------------------------
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-         //---------------------------------------------
-        ToolBoxItem
-        {
-            Identifier = SID_ALIGNRIGHT ;
-            HelpId = SID_ATTR_PARA_ADJUST_RIGHT ;
-            RadioCheck = TRUE ;
-            AutoCheck = TRUE ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_ALIGNCENTERHOR ;
-            HelpId = SID_ATTR_PARA_ADJUST_CENTER ;
-            RadioCheck = TRUE ;
-            AutoCheck = TRUE ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_ALIGNLEFT ;
-            HelpId = SID_ATTR_PARA_ADJUST_LEFT ;
-            RadioCheck = TRUE ;
-            AutoCheck = TRUE ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_ALIGNBLOCK ;
-            HelpId = SID_ATTR_PARA_ADJUST_BLOCK ;
-            RadioCheck = TRUE ;
-            AutoCheck = TRUE ;
-        };
-         //---------------------------------------------
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-         //---------------------------------------------
-        ToolBoxItem
-        {
-            Identifier = SID_ATTR_PARA_RIGHT_TO_LEFT;
-            HelpID = SID_ATTR_PARA_RIGHT_TO_LEFT;
-            RadioCheck = TRUE;
-            Hide = TRUE;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_ATTR_PARA_LEFT_TO_RIGHT;
-            HelpID = SID_ATTR_PARA_LEFT_TO_RIGHT;
-            RadioCheck = TRUE;
-            Hide = TRUE;
-        };
-         //---------------------------------------------
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-         //---------------------------------------------
-        ToolBoxItem
-        {
-            Identifier = SID_SET_SUPER_SCRIPT ;
-            HelpID = SID_SET_SUPER_SCRIPT ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_SET_SUB_SCRIPT ;
-            HelpID = SID_SET_SUB_SCRIPT ;
-        };
-         //---------------------------------------------
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-         //---------------------------------------------
-        ToolBoxItem
-        {
-            Identifier = SID_TEXTDIRECTION_LEFT_TO_RIGHT ;
-            HelpID = SID_TEXTDIRECTION_LEFT_TO_RIGHT ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_TEXTDIRECTION_TOP_TO_BOTTOM ;
-            HelpID = SID_TEXTDIRECTION_TOP_TO_BOTTOM ;
-        };
-         //---------------------------------------------
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-         //---------------------------------------------
-        ToolBoxItem
-        {
-            Identifier = SID_CHAR_DLG ;
-            HelpID = SID_CHAR_DLG ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_PARA_DLG ;
-            HelpID = SID_PARA_DLG ;
-        };
-    };
-};
  //
  // Graphics toolbox
  //
 String RID_GRAPHIC_OBJECTBAR
 {
     Text [ en-US ] = "Graphics Object Bar";
-};
-ToolBox RID_GRAPHIC_OBJECTBAR
-{
-    HelpId = HID_SC_TOOLBOX_GRAPHIC ;
-    LineSpacing = TRUE ;
-    Dockable = TRUE ;
-    Moveable = TRUE ;
-    Sizeable = TRUE ;
-    Closeable = TRUE ;
-    Zoomable = TRUE ;
-    Scroll = TRUE ;
-    Customize = TRUE ;
-    HideWhenDeactivate = TRUE ;
-    Border = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 0 , 0 ) ;
-    Align = BOXALIGN_TOP ;
-    MenuStrings = TRUE ;
-    ItemList =
-    {
-        ToolBoxItem
-        {
-            Identifier = SID_GRFFILTER;
-            HelpID = SID_GRFFILTER;
-            DropDown = TRUE ;
-            Checkable = FALSE ;
-            RadioCheck = FALSE ;
-        };
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-        ToolBoxItem
-        {
-            Identifier = SID_ATTR_GRAF_MODE;
-            HelpID = SID_ATTR_GRAF_MODE;
-        };
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-
-        ToolBoxItem
-        {
-            Identifier = SID_ATTR_GRAF_RED;
-            HelpID = SID_ATTR_GRAF_RED;
-        };
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-        ToolBoxItem
-        {
-            Identifier = SID_ATTR_GRAF_GREEN;
-            HelpID = SID_ATTR_GRAF_GREEN;
-        };
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-        ToolBoxItem
-        {
-            Identifier = SID_ATTR_GRAF_BLUE;
-            HelpID = SID_ATTR_GRAF_BLUE;
-        };
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-
-        ToolBoxItem
-        {
-            Identifier = SID_ATTR_GRAF_LUMINANCE;
-            HelpID = SID_ATTR_GRAF_LUMINANCE;
-        };
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-
-        ToolBoxItem
-        {
-            Identifier = SID_ATTR_GRAF_CONTRAST;
-            HelpID = SID_ATTR_GRAF_CONTRAST;
-        };
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-        ToolBoxItem
-        {
-            Identifier = SID_ATTR_GRAF_GAMMA;
-            HelpID = SID_ATTR_GRAF_GAMMA;
-        };
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-        ToolBoxItem
-        {
-            Identifier = SID_ATTR_GRAF_TRANSPARENCE;
-            HelpID = SID_ATTR_GRAF_TRANSPARENCE;
-        };
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-
-        // #i25616#
-        ToolBoxItem
-        {
-            Identifier = SID_ATTRIBUTES_LINE;
-            HelpID = SID_ATTRIBUTES_LINE;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_ATTRIBUTES_AREA;
-            HelpID = SID_ATTRIBUTES_AREA;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_ATTR_FILL_SHADOW;
-            HelpID = SID_ATTR_FILL_SHADOW;
-        };
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-
-        ToolBoxItem
-        {
-            Identifier = SID_ATTR_GRAF_CROP;
-            HelpID = SID_ATTR_GRAF_CROP;
-        };
-
-        // copied from the "normal" drawing toolbar:
-
-         //---------------------------------------------
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-         //---------------------------------------------
-        ToolBoxItem
-        {
-            Identifier = SID_ANCHOR_TOGGLE ;
-            HelpId = SID_ANCHOR_TOGGLE ;
-        };
-         //---------------------------------------------
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-         //---------------------------------------------
-        ToolBoxItem
-        {
-            Identifier = SID_FRAME_TO_TOP ;
-            HelpId = SID_FRAME_TO_TOP ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_FRAME_TO_BOTTOM ;
-            HelpId = SID_FRAME_TO_BOTTOM ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_OBJECT_HEAVEN ;
-            HelpID = SID_OBJECT_HEAVEN ;
-
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_OBJECT_HELL ;
-            HelpID = SID_OBJECT_HELL ;
-
-        };
-
-         //---------------------------------------------
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-         //---------------------------------------------
-
-        ToolBoxItem
-        {
-            Identifier = SID_GRID_VISIBLE;
-            HelpID = SID_GRID_VISIBLE;
-            Hide = TRUE;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_GRID_USE;
-            HelpID = SID_GRID_USE;
-            Hide = TRUE;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_HELPLINES_MOVE;
-            HelpID = SID_HELPLINES_MOVE;
-            Hide = TRUE;
-        };
-
-         //---------------------------------------------
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-         //---------------------------------------------
-        ToolBoxItem
-        {
-            Identifier = SID_OBJECT_ALIGN ;
-            HelpId = SID_OBJECT_ALIGN ;
-        };
-    };
 };
  //
  // Popup-Menues ---------------------------------------------------------------------
@@ -1402,36 +584,6 @@ Menu RID_POPUP_MEDIA
          //------------------------------
         ITEM_GROUP_MENU
        };
-};
-
-ToolBox RID_MEDIA_OBJECTBAR
-{
-    //HelpId = HID_SC_TOOLBOX_MEDIA ;
-    LineSpacing = TRUE ;
-    Dockable = TRUE ;
-    Moveable = TRUE ;
-    Sizeable = TRUE ;
-    Closeable = TRUE ;
-    Zoomable = TRUE ;
-    Scroll = TRUE ;
-    Customize = TRUE ;
-    HideWhenDeactivate = TRUE ;
-    Border = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 0 , 0 ) ;
-    Align = BOXALIGN_TOP ;
-    MenuStrings = TRUE ;
-    ItemList =
-    {
-        ToolBoxItem
-        {
-            Identifier = SID_AVMEDIA_TOOLBOX;
-            HelpID = SID_AVMEDIA_TOOLBOX;
-            DropDown = FALSE ;
-            Checkable = FALSE ;
-            RadioCheck = FALSE ;
-        };
-    };
 };
 
  //

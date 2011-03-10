@@ -132,13 +132,13 @@ FuText::~FuText()
 |*
 \************************************************************************/
 
-BOOL FuText::MouseButtonDown(const MouseEvent& rMEvt)
+sal_Bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
 {
     // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
     if ( pView->MouseButtonDown(rMEvt, pWindow) )
-        return (TRUE);                 // Event von der SdrView ausgewertet
+        return (sal_True);                 // Event von der SdrView ausgewertet
 
     if ( pView->IsTextEdit() )
     {
@@ -153,13 +153,13 @@ BOOL FuText::MouseButtonDown(const MouseEvent& rMEvt)
     {
         SdrHdl* pHdl = pView->PickHandle(aMDPos);
 
-        ULONG nHdlNum = pView->GetHdlNum(pHdl);
+        sal_uLong nHdlNum = pView->GetHdlNum(pHdl);
 
         if (pHdl != NULL)
         {
             if (pView->HasMarkablePoints() && pView->IsPointMarkable(*pHdl))
             {
-                BOOL bPointMarked=pView->IsPointMarked(*pHdl);
+                sal_Bool bPointMarked=pView->IsPointMarked(*pHdl);
 
                 if ( rMEvt.IsShift() )
                 {
@@ -199,8 +199,8 @@ BOOL FuText::MouseButtonDown(const MouseEvent& rMEvt)
                 //  vertical flag:
                 //  deduced from slot ids only if text object has no content
 
-                USHORT nSlotID = aSfxRequest.GetSlot();
-                BOOL bVertical = ( nSlotID == SID_DRAW_TEXT_VERTICAL );
+                sal_uInt16 nSlotID = aSfxRequest.GetSlot();
+                sal_Bool bVertical = ( nSlotID == SID_DRAW_TEXT_VERTICAL );
                 OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
                 if ( pOPO )
                     bVertical = pOPO->IsVertical();     // content wins
@@ -214,7 +214,7 @@ BOOL FuText::MouseButtonDown(const MouseEvent& rMEvt)
 
                     OutlinerView* pOLV = pView->GetTextEditOutlinerView();
                     if ( pOLV->MouseButtonDown(rMEvt) )
-                        return (TRUE); // Event an den Outliner
+                        return (sal_True); // Event an den Outliner
                 }
             }
             else
@@ -245,7 +245,7 @@ BOOL FuText::MouseButtonDown(const MouseEvent& rMEvt)
         }
         else
         {
-            BOOL bMacro = FALSE;
+            sal_Bool bMacro = false;
 
 //          if (bMacro && pView->TakeMacroObject(aMDPos,pObj,pPV))
             if (bMacro && pView->PickObj(aMDPos, pView->getHitTolLog(), pObj, pPV, SDRSEARCH_PICKMACRO) )
@@ -257,7 +257,7 @@ BOOL FuText::MouseButtonDown(const MouseEvent& rMEvt)
             {
                 if (pView->IsEditMode())
                 {
-                    BOOL bPointMode=pView->HasMarkablePoints();
+                    sal_Bool bPointMode=pView->HasMarkablePoints();
 
                     if (!rMEvt.IsShift())
                     {
@@ -277,7 +277,7 @@ BOOL FuText::MouseButtonDown(const MouseEvent& rMEvt)
                         pHdl=pView->GetHdl(nHdlNum);
                     }
 
-                    if ( pView->MarkObj(aMDPos, -2, FALSE, rMEvt.IsMod1()) )
+                    if ( pView->MarkObj(aMDPos, -2, false, rMEvt.IsMod1()) )
                     {
                         aDragTimer.Start();
 
@@ -334,7 +334,7 @@ BOOL FuText::MouseButtonDown(const MouseEvent& rMEvt)
                     pWindow->PixelToLogic(rMEvt.GetPosPixel()), pWindow ));
 
 //  return (bReturn);
-    return TRUE;
+    return sal_True;
 }
 
 /*************************************************************************
@@ -343,9 +343,9 @@ BOOL FuText::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BOOL FuText::MouseMove(const MouseEvent& rMEvt)
+sal_Bool FuText::MouseMove(const MouseEvent& rMEvt)
 {
-    BOOL bReturn = FALSE;
+    sal_Bool bReturn = false;
 
 //  pViewShell->SetActivePointer(aNewPointer);
 
@@ -362,7 +362,7 @@ BOOL FuText::MouseMove(const MouseEvent& rMEvt)
     }
 
     if ( pView->MouseMove(rMEvt, pWindow) )
-        return (TRUE); // Event von der SdrView ausgewertet
+        return (sal_True); // Event von der SdrView ausgewertet
 
     if ( pView->IsAction() )
     {
@@ -382,12 +382,12 @@ BOOL FuText::MouseMove(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BOOL FuText::MouseButtonUp(const MouseEvent& rMEvt)
+sal_Bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
 {
     // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
-    BOOL bReturn = FALSE;
+    sal_Bool bReturn = false;
 
     if (aDragTimer.IsActive() )
     {
@@ -399,7 +399,7 @@ BOOL FuText::MouseButtonUp(const MouseEvent& rMEvt)
     Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
 
     if ( pView->MouseButtonUp(rMEvt, pWindow) )
-        return (TRUE); // Event von der SdrView ausgewertet
+        return (sal_True); // Event von der SdrView ausgewertet
 
     if ( pView->IsDragObj() )
     {
@@ -433,20 +433,20 @@ BOOL FuText::MouseButtonUp(const MouseEvent& rMEvt)
                     SfxItemSet aItemSet( pDrDoc->GetItemPool(),
                                             SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST);
 
-                    aItemSet.Put( SdrTextAutoGrowWidthItem( FALSE ) );
-                    aItemSet.Put( SdrTextAutoGrowHeightItem( FALSE ) );
+                    aItemSet.Put( SdrTextAutoGrowWidthItem( false ) );
+                    aItemSet.Put( SdrTextAutoGrowHeightItem( false ) );
                     aItemSet.Put( SdrTextAniKindItem( SDRTEXTANI_SLIDE ) );
                     aItemSet.Put( SdrTextAniDirectionItem( SDRTEXTANI_LEFT ) );
                     aItemSet.Put( SdrTextAniCountItem( 1 ) );
                     aItemSet.Put( SdrTextAniAmountItem(
-                                    (INT16)pWindow->PixelToLogic(Size(2,1)).Width()) );
+                                    (sal_Int16)pWindow->PixelToLogic(Size(2,1)).Width()) );
                     pObj->SetMergedItemSetAndBroadcast(aItemSet);
                 }
             }
 
             // init object different when vertical writing
             sal_uInt16 nSlotID(aSfxRequest.GetSlot());
-            BOOL bVertical = (SID_DRAW_TEXT_VERTICAL == nSlotID);
+            sal_Bool bVertical = (SID_DRAW_TEXT_VERTICAL == nSlotID);
             if(bVertical)
             {
                 const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
@@ -458,10 +458,10 @@ BOOL FuText::MouseButtonUp(const MouseEvent& rMEvt)
                         SdrTextObj* pText = (SdrTextObj*)pObj;
                         SfxItemSet aSet(pDrDoc->GetItemPool());
 
-                        pText->SetVerticalWriting(TRUE);
+                        pText->SetVerticalWriting(sal_True);
 
-                        aSet.Put(SdrTextAutoGrowWidthItem(TRUE));
-                        aSet.Put(SdrTextAutoGrowHeightItem(FALSE));
+                        aSet.Put(SdrTextAutoGrowWidthItem(sal_True));
+                        aSet.Put(SdrTextAutoGrowHeightItem(false));
                         aSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP));
                         aSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT));
 
@@ -477,7 +477,7 @@ BOOL FuText::MouseButtonUp(const MouseEvent& rMEvt)
 
             if ( !pView->AreObjectsMarked() )
             {
-                pView->MarkObj(aPnt, -2, FALSE, rMEvt.IsMod1());
+                pView->MarkObj(aPnt, -2, false, rMEvt.IsMod1());
 
                 SfxDispatcher& rDisp = pViewShell->GetViewData()->GetDispatcher();
                 if ( pView->AreObjectsMarked() )
@@ -497,7 +497,7 @@ BOOL FuText::MouseButtonUp(const MouseEvent& rMEvt)
 
         if ( !pView->AreObjectsMarked() && rMEvt.GetClicks() < 2 )
         {
-            pView->MarkObj(aPnt, -2, FALSE, rMEvt.IsMod1());
+            pView->MarkObj(aPnt, -2, false, rMEvt.IsMod1());
 
             SfxDispatcher& rDisp = pViewShell->GetViewData()->GetDispatcher();
             if ( pView->AreObjectsMarked() )
@@ -527,18 +527,18 @@ void FuText::ForcePointer(const MouseEvent* /* pMEvt */)
 |*
 |* Tastaturereignisse bearbeiten
 |*
-|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert TRUE, andernfalls
+|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert sal_True, andernfalls
 |* FALSE.
 |*
 \************************************************************************/
 
-BOOL FuText::KeyInput(const KeyEvent& rKEvt)
+sal_Bool FuText::KeyInput(const KeyEvent& rKEvt)
 {
-    BOOL bReturn = FALSE;
+    sal_Bool bReturn = false;
 
     if ( pView->KeyInput(rKEvt, pWindow) )
     {
-        bReturn = TRUE;
+        bReturn = sal_True;
         lcl_InvalidateAttribs( pViewShell->GetViewFrame()->GetBindings() );
     }
     else
@@ -572,7 +572,7 @@ void FuText::Activate()
         /**********************************************************************
         * Kein Textobjekt im EditMode, daher CreateMode setzen
         **********************************************************************/
-        USHORT nObj = OBJ_TEXT;
+        sal_uInt16 nObj = OBJ_TEXT;
 
         pView->SetCurrentObj(nObj);
 
@@ -626,7 +626,7 @@ void FuText::SelectionHasChanged()
             SdrMark* pMark = rMarkList.GetMark(0);
             SdrObject* pObj = pMark->GetMarkedSdrObj();
 
-            UINT16 nSdrObjKind = pObj->GetObjIdentifier();
+            sal_uInt16 nSdrObjKind = pObj->GetObjIdentifier();
 
             if (nSdrObjKind == OBJ_TEXT ||
                 nSdrObjKind == OBJ_TITLETEXT ||
@@ -643,9 +643,9 @@ void FuText::SelectionHasChanged()
         /**********************************************************************
         * Kein Textobjekt im EditMode, daher CreateMode setzen
         **********************************************************************/
-        USHORT nObj = OBJ_TEXT;
-        UINT16 nIdent;
-        UINT32 nInvent;
+        sal_uInt16 nObj = OBJ_TEXT;
+        sal_uInt16 nIdent;
+        sal_uInt32 nInvent;
         pView->TakeCurrentObj(nIdent, nInvent);
 
         pView->SetCurrentObj(nObj);
@@ -661,7 +661,7 @@ void FuText::SelectionHasChanged()
 \************************************************************************/
 
 void FuText::SetInEditMode(SdrObject* pObj, const Point* pMousePixel,
-                            BOOL bCursorToEnd, const KeyEvent* pInitialKey)
+                            sal_Bool bCursorToEnd, const KeyEvent* pInitialKey)
 {
     /*  It is possible to pass a special (unselected) object in pObj, e.g. the
         caption object of a cell note. If pObj is 0, then the selected object
@@ -683,7 +683,7 @@ void FuText::SetInEditMode(SdrObject* pObj, const Point* pMousePixel,
 
     if ( pObj )
     {
-        UINT16 nSdrObjKind = pObj->GetObjIdentifier();
+        sal_uInt16 nSdrObjKind = pObj->GetObjIdentifier();
 
         if (nSdrObjKind == OBJ_TEXT ||
             nSdrObjKind == OBJ_TITLETEXT ||
@@ -700,8 +700,8 @@ void FuText::SetInEditMode(SdrObject* pObj, const Point* pMousePixel,
                 //  vertical flag:
                 //  deduced from slot ids only if text object has no content
 
-                USHORT nSlotID = aSfxRequest.GetSlot();
-                BOOL bVertical = ( nSlotID == SID_DRAW_TEXT_VERTICAL );
+                sal_uInt16 nSlotID = aSfxRequest.GetSlot();
+                sal_Bool bVertical = ( nSlotID == SID_DRAW_TEXT_VERTICAL );
                 OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
                 if ( pOPO )
                     bVertical = pOPO->IsVertical();     // content wins
@@ -777,8 +777,8 @@ SdrObject* FuText::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rR
             {
                 SfxItemSet aSet(pDrDoc->GetItemPool());
 
-                aSet.Put(SdrTextAutoGrowWidthItem(TRUE));
-                aSet.Put(SdrTextAutoGrowHeightItem(FALSE));
+                aSet.Put(SdrTextAutoGrowWidthItem(sal_True));
+                aSet.Put(SdrTextAutoGrowHeightItem(false));
                 aSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP));
                 aSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT));
 
@@ -789,12 +789,12 @@ SdrObject* FuText::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rR
             {
                 SfxItemSet aSet(pDrDoc->GetItemPool(), SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST);
 
-                aSet.Put( SdrTextAutoGrowWidthItem( FALSE ) );
-                aSet.Put( SdrTextAutoGrowHeightItem( FALSE ) );
+                aSet.Put( SdrTextAutoGrowWidthItem( false ) );
+                aSet.Put( SdrTextAutoGrowHeightItem( false ) );
                 aSet.Put( SdrTextAniKindItem( SDRTEXTANI_SLIDE ) );
                 aSet.Put( SdrTextAniDirectionItem( SDRTEXTANI_LEFT ) );
                 aSet.Put( SdrTextAniCountItem( 1 ) );
-                aSet.Put( SdrTextAniAmountItem( (INT16)pWindow->PixelToLogic(Size(2,1)).Width()) );
+                aSet.Put( SdrTextAniAmountItem( (sal_Int16)pWindow->PixelToLogic(Size(2,1)).Width()) );
 
                 pObj->SetMergedItemSetAndBroadcast(aSet);
             }

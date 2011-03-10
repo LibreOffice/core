@@ -64,7 +64,7 @@ ScPrivatSplit::ScPrivatSplit( Window* pParent, const ResId& rResId,
 
     aWinPointer=GetPointer();
 
-    aMovingFlag=FALSE;
+    aMovingFlag=false;
     if(eScSplit==SC_SPLIT_HORZ)
     {
         aWinPointer=Pointer(POINTER_HSPLIT);
@@ -350,7 +350,7 @@ void ScPrivatSplit::MoveSplitTo(Point aPos)
 }
 
 
-void ScPrivatSplit::ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground )
+void ScPrivatSplit::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
@@ -389,17 +389,17 @@ void ScPrivatSplit::StateChanged( StateChangedType nType )
     if ( (nType == STATE_CHANGE_ZOOM) ||
          (nType == STATE_CHANGE_CONTROLFONT) )
     {
-        ImplInitSettings( TRUE, FALSE, FALSE );
+        ImplInitSettings( sal_True, false, false );
         Invalidate();
     }
     if ( nType == STATE_CHANGE_CONTROLFOREGROUND )
     {
-        ImplInitSettings( FALSE, TRUE, FALSE );
+        ImplInitSettings( false, sal_True, false );
         Invalidate();
     }
     else if ( nType == STATE_CHANGE_CONTROLBACKGROUND )
     {
-        ImplInitSettings( FALSE, FALSE, TRUE );
+        ImplInitSettings( false, false, sal_True );
         Invalidate();
     }
 
@@ -413,7 +413,7 @@ void ScPrivatSplit::DataChanged( const DataChangedEvent& rDCEvt )
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
-        ImplInitSettings( TRUE, TRUE, TRUE );
+        ImplInitSettings( sal_True, sal_True, sal_True );
         Invalidate();
     }
     else

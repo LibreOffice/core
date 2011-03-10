@@ -150,7 +150,7 @@ public:
 
     virtual void                UpdateData() {  }
     virtual void                SetDoUpdate(sal_Bool /* bValue */) {  }
-    virtual sal_Bool            IsDirty() const { return sal_False; }
+    virtual sal_Bool            IsDirty() const { return false; }
 
     DECL_LINK( NotifyHdl, EENotify* );
 protected:
@@ -267,7 +267,7 @@ public:
 
     virtual void                UpdateData() {  }
     virtual void                SetDoUpdate(sal_Bool /* bValue */) {  }
-    virtual sal_Bool            IsDirty() const { return sal_False; }
+    virtual sal_Bool            IsDirty() const { return false; }
 private:
     ScPreviewViewForwarder* mpViewForwarder;
     ScPreviewShell*         mpViewShell;
@@ -300,7 +300,7 @@ public:
 
     virtual void                UpdateData() {  }
     virtual void                SetDoUpdate(sal_Bool /* bValue */) {  }
-    virtual sal_Bool            IsDirty() const { return sal_False; }
+    virtual sal_Bool            IsDirty() const { return false; }
 private:
     ScPreviewViewForwarder* mpViewForwarder;
     ScPreviewShell*         mpViewShell;
@@ -349,7 +349,7 @@ public:
 
     virtual void                UpdateData() {}
     virtual void                SetDoUpdate( sal_Bool /* bValue */ ) {}
-    virtual sal_Bool            IsDirty() const { return sal_False; }
+    virtual sal_Bool            IsDirty() const { return false; }
 };
 
 

@@ -174,7 +174,7 @@ Rectangle ScAccessibleCell::GetBoundingBox(void) const
         mpViewShell->GetViewData()->GetMergeSizePixel(
             maCellAddress.Col(), maCellAddress.Row(), nSizeX, nSizeY);
         aCellRect.SetSize(Size(nSizeX, nSizeY));
-        aCellRect.SetPos(mpViewShell->GetViewData()->GetScrPos(maCellAddress.Col(), maCellAddress.Row(), meSplitPos, TRUE));
+        aCellRect.SetPos(mpViewShell->GetViewData()->GetScrPos(maCellAddress.Col(), maCellAddress.Row(), meSplitPos, sal_True));
 
         Window* pWindow = mpViewShell->GetWindowByPos(meSplitPos);
         if (pWindow)
@@ -343,7 +343,7 @@ sal_Bool ScAccessibleCell::IsOpaque(
 
 sal_Bool ScAccessibleCell::IsSelected()
 {
-    sal_Bool bResult(sal_False);
+    sal_Bool bResult(false);
     if (mpViewShell && mpViewShell->GetViewData())
     {
         const ScMarkData& rMarkdata = mpViewShell->GetViewData()->GetMarkData();
@@ -379,7 +379,7 @@ void ScAccessibleCell::FillDependends(utl::AccessibleRelationSetHelper* pRelatio
         {
             if (pCell->GetCellType() == CELLTYPE_FORMULA)
             {
-                sal_Bool bFound(sal_False);
+                sal_Bool bFound(false);
                 ScDetectiveRefIter aIter( (ScFormulaCell*) pCell );
                 ScRange aRef;
                 while ( !bFound && aIter.GetNextRef( aRef ) )

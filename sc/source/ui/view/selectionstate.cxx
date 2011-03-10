@@ -58,7 +58,7 @@ ScSelectionState::ScSelectionState( ScViewData& rViewData ) :
         if( rMarkData.IsMultiMarked() )
         {
             meType = SC_SELECTTYPE_SHEET;
-            rMarkData.FillRangeListWithMarks( &maSheetSel, FALSE );
+            rMarkData.FillRangeListWithMarks( &maSheetSel, false );
         }
         // else type is SC_SELECTTYPE_NONE - already initialized
     }
@@ -70,10 +70,10 @@ bool operator==( const ScSelectionState& rL, const ScSelectionState& rR )
     if( bEqual ) switch( rL.GetSelectionType() )
     {
         case SC_SELECTTYPE_EDITCELL:
-            bEqual &= ( rL.GetEditSelection().IsEqual( rR.GetEditSelection() ) != FALSE );
+            bEqual &= ( rL.GetEditSelection().IsEqual( rR.GetEditSelection() ) != false );
         // run through!
         case SC_SELECTTYPE_SHEET:
-            bEqual &= (rL.GetSheetSelection() == rR.GetSheetSelection()) == TRUE;
+            bEqual &= (rL.GetSheetSelection() == rR.GetSheetSelection()) == sal_True;
         // run through!
         case SC_SELECTTYPE_NONE:
             bEqual &= rL.GetCellCursor() == rR.GetCellCursor();

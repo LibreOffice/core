@@ -62,7 +62,7 @@ SFX_IMPL_TOOLBOX_CONTROL( ScTbxInsertCtrl, SfxUInt16Item);
 //
 //------------------------------------------------------------------
 
-ScTbxInsertCtrl::ScTbxInsertCtrl( USHORT nSlotId, USHORT nId, ToolBox& rTbx  ) :
+ScTbxInsertCtrl::ScTbxInsertCtrl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx  ) :
         SfxToolBoxControl( nSlotId, nId, rTbx ),
         nLastSlotId(0)
 {
@@ -73,7 +73,7 @@ ScTbxInsertCtrl::~ScTbxInsertCtrl()
 {
 }
 
-void ScTbxInsertCtrl::StateChanged( USHORT /* nSID */, SfxItemState eState,
+void ScTbxInsertCtrl::StateChanged( sal_uInt16 /* nSID */, SfxItemState eState,
                                               const SfxPoolItem* pState )
 {
     GetToolBox().EnableItem( GetId(), (GetItemState(pState) != SFX_ITEM_DISABLED) );
@@ -85,7 +85,7 @@ void ScTbxInsertCtrl::StateChanged( USHORT /* nSID */, SfxItemState eState,
         if(pItem)
         {
             nLastSlotId = pItem->GetValue();
-            USHORT nImageId = nLastSlotId ? nLastSlotId : GetSlotId();
+            sal_uInt16 nImageId = nLastSlotId ? nLastSlotId : GetSlotId();
             rtl::OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
             aSlotURL += rtl::OUString::valueOf( sal_Int32( nImageId ));
             Image aImage = GetImage( m_xFrame,
@@ -99,7 +99,7 @@ void ScTbxInsertCtrl::StateChanged( USHORT /* nSID */, SfxItemState eState,
 
 SfxPopupWindow* ScTbxInsertCtrl::CreatePopupWindow()
 {
-    USHORT nSlotId = GetSlotId();
+    sal_uInt16 nSlotId = GetSlotId();
     if (nSlotId == SID_TBXCTL_INSERT)
     {
         rtl::OUString aInsertBarResStr( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/insertbar" ));
@@ -123,7 +123,7 @@ SfxPopupWindowType ScTbxInsertCtrl::GetPopupWindowType() const
     return nLastSlotId ? SFX_POPUPWINDOW_ONTIMEOUT : SFX_POPUPWINDOW_ONCLICK;
 }
 
-void ScTbxInsertCtrl::Select( BOOL /* bMod1 */ )
+void ScTbxInsertCtrl::Select( sal_Bool /* bMod1 */ )
 {
     SfxViewShell*   pCurSh( SfxViewShell::Current() );
     SfxDispatcher*  pDispatch( 0 );

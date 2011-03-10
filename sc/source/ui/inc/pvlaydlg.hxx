@@ -29,9 +29,8 @@
 #ifndef SC_PVLAYDLG_HXX
 #define SC_PVLAYDLG_HXX
 
-#include <vector>
 #include <memory>
-#include <boost/shared_ptr.hpp>
+#include <vector>
 
 #include <vcl/lstbox.hxx>
 #include <vcl/scrbar.hxx>
@@ -40,35 +39,12 @@
 #include "pivot.hxx"
 #include "anyrefdg.hxx"
 #include "fieldwnd.hxx"
-#include "formula/funcutl.hxx"
 
-/*==========================================================================*\
-
-    Eine Instanz der Klasse ScPivotLayoutDlg ist ein (semi-)modaler
-    Dialog, in dem mit der Maus Felder mit Spaltenueberschriften den
-    drei Pivot-Kategorien "Spalte", "Zeile" und "Daten" zugeordnet
-    werden koennen.
-
-    Der Dialog erhaelt in der Struktur LabelData Informationen ueber
-    diese Ueberschriften (Name, Art (Zahl/String) und Funktionsmaske).
-    Weiterhin werden drei PivotFeld-Arrays uebergeben, mit denen die
-    drei Kategorie-Fenster initialisiert werden. Ein Kategorie-Fenster
-    wird durch eine Instanz der Klasse FieldWindow dargestellt. Ein
-    solches Fenster ist fuer die Darstellung der Datenstrukturen am
-    Schirm zustaendig. Es meldet Mausaktionen an den Dialog weiter und
-    bietet entsprechende Methoden zur Veraenderung der Darstellung.
-    Der Dialog sorgt fuer den Abgleich der interenen Datenstrukturen mit
-    der Bildschirmdarstellung. Ein weiteres FieldWindow (Select) bietet
-    alle Tabellenueberschriften zur Auswahl an, ist also "read-only".
-
-\*==========================================================================*/
-
-//============================================================================
+// ============================================================================
 
 class ScViewData;
 class ScDocument;
 class ScRangeData;
-struct ScDPFuncData;
 class ScDPObject;
 
 //============================================================================
@@ -91,21 +67,25 @@ public:
     virtual                 ~ScDPLayoutDlg();
 
     virtual void            SetReference( const ScRange& rRef, ScDocument* pDoc );
-    virtual BOOL            IsRefInputMode() const { return bRefInputMode; }
+    virtual sal_Bool            IsRefInputMode() const { return bRefInputMode; }
     virtual void            SetActive();
-    virtual BOOL            Close();
+    virtual sal_Bool            Close();
     virtual void            StateChanged( StateChangedType nStateChange );
 
     void                    NotifyDoubleClick    ( ScDPFieldType eType, size_t nFieldIndex );
     PointerStyle            NotifyMouseButtonDown( ScDPFieldType eType, size_t nFieldIndex );
     void                    NotifyMouseButtonUp  ( const Point& rAt );
     PointerStyle            NotifyMouseMove      ( const Point& rAt );
-    void                    NotifyFieldFocus     ( ScDPFieldType eType, BOOL bGotFocus );
+    void                    NotifyFieldFocus     ( ScDPFieldType eType, sal_Bool bGotFocus );
     void                    NotifyMoveFieldToEnd      ( ScDPFieldType eToType );
     void                    NotifyRemoveField    ( ScDPFieldType eType, size_t nFieldIndex );
 
 protected:
-    virtual void            Deactivate();
+    virtual void        Tracking( const TrackingEvent& rTEvt );
+    virtual void        SetReference( const ScRange& rRef, ScDocument* pDoc );
+    virtual sal_Bool    IsRefInputMode() const;
+    virtual void        SetActive();
+    virtual sal_Bool    Close();
 
 private:
     typedef boost::shared_ptr< ScDPFuncData >   ScDPFuncDataRef;
@@ -157,7 +137,7 @@ private:
 
     ScDPFieldType           eDnDFromType;
     size_t                  nDnDFromIndex;
-    BOOL                    bIsDrag;
+    sal_Bool                    bIsDrag;
 
     ::formula::RefEdit*     pEditActive;
 
@@ -198,8 +178,8 @@ private:
     ScDPLabelData*          GetLabelData    ( SCsCOL nCol, size_t* pPos = NULL );
     String                  GetLabelString  ( SCsCOL nCol );
     bool                    IsOrientationAllowed( SCsCOL nCol, ScDPFieldType eType );
-    String                  GetFuncString   ( USHORT& rFuncMask, BOOL bIsValue = TRUE );
-    BOOL                    Contains        ( ScDPFuncDataVec* pArr, SCsCOL nCol, size_t& nAt );
+    String                  GetFuncString   ( sal_uInt16& rFuncMask, sal_Bool bIsValue = true );
+    sal_Bool                    Contains        ( ScDPFuncDataVec* pArr, SCsCOL nCol, size_t& nAt );
     void                    Remove          ( ScDPFuncDataVec* pArr, size_t nAt );
     void                    Insert          ( ScDPFuncDataVec* pArr, const ScDPFuncData& rFData, size_t nAt );
 

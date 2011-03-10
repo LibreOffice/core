@@ -31,11 +31,14 @@
 #ifndef SC_XESTREAM_HXX
 #define SC_XESTREAM_HXX
 
+#include <com/sun/star/beans/NamedValue.hpp>
+
 #include <map>
 #include <stack>
 #include <string>
 
 #include <oox/core/xmlfilterbase.hxx>
+#include <oox/token/tokens.hxx>
 #include <sax/fshelper.hxx>
 
 #include "xlstream.hxx"
@@ -209,13 +212,14 @@ private:
 class XclExpBiff8Encrypter
 {
 public:
-    explicit XclExpBiff8Encrypter( const XclExpRoot& rRoot, const sal_uInt8 nDocId[16],
-                                   const sal_uInt8 nSalt[16] );
+    explicit XclExpBiff8Encrypter( const XclExpRoot& rRoot );
     ~XclExpBiff8Encrypter();
 
     bool IsValid() const;
 
-    void GetSaltDigest( sal_uInt8 nSaltDigest[16] ) const;
+    void GetSaltDigest( sal_uInt8 pnSaltDigest[16] ) const;
+    void GetSalt( sal_uInt8 pnSalt[16] ) const;
+    void GetDocId( sal_uInt8 pnDocId[16] ) const;
 
     void Encrypt( SvStream& rStrm, sal_uInt8  nData );
     void Encrypt( SvStream& rStrm, sal_uInt16 nData );
@@ -231,17 +235,16 @@ public:
     void EncryptBytes( SvStream& rStrm, ::std::vector<sal_uInt8>& aBytes );
 
 private:
-    void Init( const String& aPass, const sal_uInt8 nDocId[16],
-               const sal_uInt8 nSalt[16] );
+    void Init( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aEncryptionData );
 
     sal_uInt32 GetBlockPos( sal_Size nStrmPos ) const;
     sal_uInt16 GetOffsetInBlock( sal_Size nStrmPos ) const;
 
 private:
     ::msfilter::MSCodec_Std97 maCodec;      /// Crypto algorithm implementation.
-    sal_uInt16          mnPassw[16];   /// Cached password data for copy construction.
-    sal_uInt8           mnDocId[16];   /// Cached document ID for copy construction.
-    sal_uInt8           mnSaltDigest[16];
+    sal_uInt8           mpnDocId[16];
+    sal_uInt8           mpnSalt[16];
+    sal_uInt8           mpnSaltDigest[16];
 
     const XclExpRoot&   mrRoot;
     sal_Size            mnOldPos;      /// Last known stream position
@@ -340,6 +343,7 @@ public:
     virtual oox::drawingml::chart::ChartConverter& getChartConverter();
 
 private:
+    virtual ::oox::ole::VbaProject* implCreateVbaProject() const;
     virtual ::rtl::OUString implGetImplementationName() const;
     ScDocShell *getDocShell();
 

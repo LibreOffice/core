@@ -40,8 +40,8 @@ class ScRange;
 
 class ScEditableTester
 {
-    BOOL    bIsEditable;
-    BOOL    bOnlyMatrix;
+    sal_Bool    bIsEditable;
+    sal_Bool    bOnlyMatrix;
 
 public:
             // no test in ctor
@@ -78,9 +78,9 @@ public:
     void    TestSelection( ScDocument* pDoc, const ScMarkData& rMark );
     void    TestView( ScViewFunc* pView );
 
-    BOOL    IsEditable() const          { return bIsEditable; }
-    BOOL    IsFormatEditable() const    { return bIsEditable || bOnlyMatrix; }
-    USHORT  GetMessageId() const;
+    sal_Bool    IsEditable() const          { return bIsEditable; }
+    sal_Bool    IsFormatEditable() const    { return bIsEditable || bOnlyMatrix; }
+    sal_uInt16  GetMessageId() const;
 };
 
 #endif

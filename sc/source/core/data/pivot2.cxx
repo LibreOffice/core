@@ -29,8 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
 #ifdef _MSC_VER
 #pragma optimize("",off)
 #endif
@@ -61,7 +59,6 @@
 using ::com::sun::star::sheet::DataPilotFieldReference;
 using ::rtl::OUString;
 
-// STATIC DATA -----------------------------------------------------------
 // ============================================================================
 
 ScDPName::ScDPName(const OUString& rName, const OUString& rLayoutName) :
@@ -83,7 +80,7 @@ OUString ScDPLabelData::Member::getDisplayName() const
     return maName;
 }
 
-ScDPLabelData::ScDPLabelData( const String& rName, short nCol, bool bIsValue ) :
+ScDPLabelData::ScDPLabelData( const String& rName, SCCOL nCol, bool bIsValue ) :
     maName( rName ),
     mnCol( nCol ),
     mnFuncMask( PIVOT_FUNC_NONE ),
@@ -104,13 +101,59 @@ OUString ScDPLabelData::getDisplayName() const
 
 // ============================================================================
 
-ScDPFuncData::ScDPFuncData( short nCol, USHORT nFuncMask ) :
+ScPivotField::ScPivotField( SCCOL nNewCol, sal_uInt16 nNewFuncMask ) :
+    nCol( nNewCol ),
+    nFuncMask( nNewFuncMask ),
+    nFuncCount( 0 )
+{
+}
+
+bool ScPivotField::operator==( const ScPivotField& r ) const
+{
+    return (nCol                            == r.nCol)
+        && (nFuncMask                       == r.nFuncMask)
+        && (nFuncCount                      == r.nFuncCount)
+        && (maFieldRef.ReferenceType        == r.maFieldRef.ReferenceType)
+        && (maFieldRef.ReferenceField       == r.maFieldRef.ReferenceField)
+        && (maFieldRef.ReferenceItemType    == r.maFieldRef.ReferenceItemType)
+        && (maFieldRef.ReferenceItemName    == r.maFieldRef.ReferenceItemName);
+}
+
+// ============================================================================
+
+ScPivotParam::ScPivotParam()
+    :   nCol( 0 ), nRow( 0 ), nTab( 0 ),
+        bIgnoreEmptyRows( false ), bDetectCategories( false ),
+        bMakeTotalCol( true ), bMakeTotalRow( true )
+{
+}
+
+bool ScPivotParam::operator==( const ScPivotParam& r ) const
+{
+    return
+        (nCol == r.nCol)
+     && (nRow == r.nRow)
+     && (nTab == r.nTab)
+     && (bIgnoreEmptyRows  == r.bIgnoreEmptyRows)
+     && (bDetectCategories == r.bDetectCategories)
+     && (bMakeTotalCol == r.bMakeTotalCol)
+     && (bMakeTotalRow == r.bMakeTotalRow)
+     && (maLabelArray.size() == r.maLabelArray.size())  // ! only size??
+     && (maPageArr == r.maPageArr)
+     && (maColArr == r.maColArr)
+     && (maRowArr == r.maRowArr)
+     && (maDataArr == r.maDataArr);
+}
+
+// ============================================================================
+
+ScPivotFuncData::ScPivotFuncData( SCCOL nCol, sal_uInt16 nFuncMask ) :
     mnCol( nCol ),
     mnFuncMask( nFuncMask )
 {
 }
 
-ScDPFuncData::ScDPFuncData( short nCol, USHORT nFuncMask, const DataPilotFieldReference& rFieldRef ) :
+ScPivotFuncData::ScPivotFuncData( SCCOL nCol, sal_uInt16 nFuncMask, const DataPilotFieldReference& rFieldRef ) :
     mnCol( nCol ),
     mnFuncMask( nFuncMask ),
     maFieldRef( rFieldRef )

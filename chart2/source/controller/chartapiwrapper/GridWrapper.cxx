@@ -60,28 +60,30 @@ namespace
 static const OUString lcl_aServiceName(
     RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart.Grid" ));
 
-const Sequence< Property > & lcl_GetPropertySequence()
+struct StaticGridWrapperPropertyArray_Initializer
 {
-    static Sequence< Property > aPropSeq;
-
-    MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( 0 == aPropSeq.getLength() )
+    Sequence< Property >* operator()()
     {
-        // get properties
+        static Sequence< Property > aPropSeq( lcl_GetPropertySequence() );
+        return &aPropSeq;
+    }
+private:
+    Sequence< Property > lcl_GetPropertySequence()
+    {
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
         ::chart::LineProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
-        // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
 
-        // transfer result to static Sequence
-        aPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
+        return ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
+};
 
-    return aPropSeq;
-}
+struct StaticGridWrapperPropertyArray : public rtl::StaticAggregate< Sequence< Property >, StaticGridWrapperPropertyArray_Initializer >
+{
+};
 
 } // anonymous namespace
 
@@ -110,17 +112,17 @@ void GridWrapper::getDimensionAndSubGridBool( tGridType eType, sal_Int32& rnDime
 
     switch( eType )
     {
-        case X_MAIN_GRID:
+        case X_MAJOR_GRID:
             rnDimensionIndex = 0; rbSubGrid = false; break;
-        case Y_MAIN_GRID:
+        case Y_MAJOR_GRID:
             rnDimensionIndex = 1; rbSubGrid = false; break;
-        case Z_MAIN_GRID:
+        case Z_MAJOR_GRID:
             rnDimensionIndex = 2; rbSubGrid = false; break;
-        case X_SUB_GRID:
+        case X_MINOR_GRID:
             rnDimensionIndex = 0; rbSubGrid = true;  break;
-        case Y_SUB_GRID:
+        case Y_MINOR_GRID:
             rnDimensionIndex = 1; rbSubGrid = true;  break;
-        case Z_SUB_GRID:
+        case Z_MINOR_GRID:
             rnDimensionIndex = 2; rbSubGrid = true;  break;
     }
 }
@@ -177,7 +179,7 @@ Reference< beans::XPropertySet > GridWrapper::getInnerPropertySet()
 
 const Sequence< beans::Property >& GridWrapper::getPropertySequence()
 {
-    return lcl_GetPropertySequence();
+    return *StaticGridWrapperPropertyArray::get();
 }
 
 const std::vector< WrappedProperty* > GridWrapper::createWrappedProperties()

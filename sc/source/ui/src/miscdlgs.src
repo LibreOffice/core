@@ -30,7 +30,7 @@
 ModalDialog RID_SCDLG_DELCELL
 {
     OutputSize = TRUE ;
-    HelpId = FID_DELETE_CELL ;
+    HelpId = CMD_FID_DELETE_CELL ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 191 , 70 ) ;
     Text [ en-US ] = "Delete Cells" ;
@@ -57,6 +57,7 @@ ModalDialog RID_SCDLG_DELCELL
     };
     RadioButton BTN_DELCOLS
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_DELCELL:BTN_DELCOLS";
         Pos = MAP_APPFONT ( 12 , 56 ) ;
         Size = MAP_APPFONT ( 114 , 10 ) ;
         Text [ en-US ] = "Delete entire ~column(s)" ;
@@ -64,6 +65,7 @@ ModalDialog RID_SCDLG_DELCELL
     };
     RadioButton BTN_DELROWS
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_DELCELL:BTN_DELROWS";
         Pos = MAP_APPFONT ( 12 , 42 ) ;
         Size = MAP_APPFONT ( 114 , 10 ) ;
         Text [ en-US ] = "Delete entire ~row(s)" ;
@@ -71,6 +73,7 @@ ModalDialog RID_SCDLG_DELCELL
     };
     RadioButton BTN_CELLSLEFT
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_DELCELL:BTN_CELLSLEFT";
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 114 , 10 ) ;
         Text [ en-US ] = "Shift cells ~left" ;
@@ -78,6 +81,7 @@ ModalDialog RID_SCDLG_DELCELL
     };
     RadioButton BTN_CELLSUP
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_DELCELL:BTN_CELLSUP";
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 114 , 10 ) ;
         Text [ en-US ] = "Shift cells ~up" ;
@@ -94,7 +98,7 @@ ModalDialog RID_SCDLG_DELCELL
 ModalDialog RID_SCDLG_INSCELL
 {
     OutputSize = TRUE ;
-    HelpId = FID_INS_CELL ;
+    HelpId = CMD_FID_INS_CELL ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 191 , 70 ) ;
     Text [ en-US ] = "Insert Cells" ;
@@ -121,6 +125,7 @@ ModalDialog RID_SCDLG_INSCELL
     };
     RadioButton BTN_INSCOLS
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_INSCELL:BTN_INSCOLS";
         Pos = MAP_APPFONT ( 12 , 56 ) ;
         Size = MAP_APPFONT ( 114 , 10 ) ;
         Text [ en-US ] = "Entire ~column" ;
@@ -128,6 +133,7 @@ ModalDialog RID_SCDLG_INSCELL
     };
     RadioButton BTN_INSROWS
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_INSCELL:BTN_INSROWS";
         Pos = MAP_APPFONT ( 12 , 42 ) ;
         Size = MAP_APPFONT ( 114 , 10 ) ;
         Text [ en-US ] = "Entire ro~w" ;
@@ -135,6 +141,7 @@ ModalDialog RID_SCDLG_INSCELL
     };
     RadioButton BTN_CELLSRIGHT
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_INSCELL:BTN_CELLSRIGHT";
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 114 , 10 ) ;
         Text [ en-US ] = "Shift cells ~right" ;
@@ -142,6 +149,7 @@ ModalDialog RID_SCDLG_INSCELL
     };
     RadioButton BTN_CELLSDOWN
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_INSCELL:BTN_CELLSDOWN";
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 114 , 10 ) ;
         Text [ en-US ] = "Shift cells ~down" ;
@@ -158,7 +166,7 @@ ModalDialog RID_SCDLG_INSCELL
 ModalDialog RID_SCDLG_DELCONT
 {
     OutputSize = TRUE ;
-    HelpId = SID_DELETE ;
+    HelpId = CMD_SID_DELETE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 161 , 130 ) ;
     Text [ en-US ] = "Delete Contents" ;
@@ -185,6 +193,7 @@ ModalDialog RID_SCDLG_DELCONT
     };
     CheckBox BTN_DELALL
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_DELCONT:BTN_DELALL";
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 83 , 10 ) ;
         Text [ en-US ] = "Delete ~all" ;
@@ -192,6 +201,7 @@ ModalDialog RID_SCDLG_DELCONT
     };
     CheckBox BTN_DELSTRINGS
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_DELCONT:BTN_DELSTRINGS";
         Pos = MAP_APPFONT ( 12 , 30 ) ;
         Size = MAP_APPFONT ( 83 , 10 ) ;
         Text [ en-US ] = "~Text" ;
@@ -199,6 +209,7 @@ ModalDialog RID_SCDLG_DELCONT
     };
     CheckBox BTN_DELNUMBERS
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_DELCONT:BTN_DELNUMBERS";
         Pos = MAP_APPFONT ( 12 , 44 ) ;
         Size = MAP_APPFONT ( 83 , 10 ) ;
         Text [ en-US ] = "~Numbers" ;
@@ -206,6 +217,7 @@ ModalDialog RID_SCDLG_DELCONT
     };
     CheckBox BTN_DELDATETIME
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_DELCONT:BTN_DELDATETIME";
         Pos = MAP_APPFONT ( 12 , 58 ) ;
         Size = MAP_APPFONT ( 83 , 10 ) ;
         Text [ en-US ] = "~Date & time" ;
@@ -213,6 +225,7 @@ ModalDialog RID_SCDLG_DELCONT
     };
     CheckBox BTN_DELFORMULAS
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_DELCONT:BTN_DELFORMULAS";
         Pos = MAP_APPFONT ( 12 , 72 ) ;
         Size = MAP_APPFONT ( 83 , 10 ) ;
         Text [ en-US ] = "~Formulas" ;
@@ -220,6 +233,7 @@ ModalDialog RID_SCDLG_DELCONT
     };
     CheckBox BTN_DELATTRS
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_DELCONT:BTN_DELATTRS";
         Pos = MAP_APPFONT ( 12 , 100 ) ;
         Size = MAP_APPFONT ( 83 , 10 ) ;
         Text [ en-US ] = "For~mats" ;
@@ -227,6 +241,7 @@ ModalDialog RID_SCDLG_DELCONT
     };
     CheckBox BTN_DELNOTES
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_DELCONT:BTN_DELNOTES";
         Pos = MAP_APPFONT ( 12 , 86 ) ;
         Size = MAP_APPFONT ( 83 , 10 ) ;
         Text [ en-US ] = "~Comments" ;
@@ -234,6 +249,7 @@ ModalDialog RID_SCDLG_DELCONT
     };
     CheckBox BTN_DELOBJECTS
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_DELCONT:BTN_DELOBJECTS";
         Pos = MAP_APPFONT ( 12 , 114 ) ;
         Size = MAP_APPFONT ( 83 , 10 ) ;
         Text [ en-US ] = "~Objects" ;
@@ -251,7 +267,7 @@ ModalDialog RID_SCDLG_DELCONT
 ModalDialog RID_SCDLG_INSCONT
 {
     OutputSize = TRUE ;
-    HelpId = FID_INS_CELL_CONTENTS ;
+    HelpId = CMD_FID_INS_CELL_CONTENTS ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 260 , 187 ) ;
     Text [ en-US ] = "Paste Special" ;
@@ -278,6 +294,7 @@ ModalDialog RID_SCDLG_INSCONT
     };
     CheckBox BTN_INSALL
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_INSCONT:BTN_INSALL";
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 84 , 10 ) ;
         Text [ en-US ] = "~Paste all" ;
@@ -285,6 +302,7 @@ ModalDialog RID_SCDLG_INSCONT
     };
     CheckBox BTN_INSSTRINGS
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_INSCONT:BTN_INSSTRINGS";
         Pos = MAP_APPFONT ( 12 , 30 ) ;
         Size = MAP_APPFONT ( 84 , 10 ) ;
         Text [ en-US ] = "Te~xt" ;
@@ -292,6 +310,7 @@ ModalDialog RID_SCDLG_INSCONT
     };
     CheckBox BTN_INSNUMBERS
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_INSCONT:BTN_INSNUMBERS";
         Pos = MAP_APPFONT ( 12 , 44 ) ;
         Size = MAP_APPFONT ( 84 , 10 ) ;
         Text [ en-US ] = "~Numbers" ;
@@ -299,6 +318,7 @@ ModalDialog RID_SCDLG_INSCONT
     };
     CheckBox BTN_INSDATETIME
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_INSCONT:BTN_INSDATETIME";
         Pos = MAP_APPFONT ( 12 , 58 ) ;
         Size = MAP_APPFONT ( 84 , 10 ) ;
         Text [ en-US ] = "~Date & time" ;
@@ -306,6 +326,7 @@ ModalDialog RID_SCDLG_INSCONT
     };
     CheckBox BTN_INSFORMULAS
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_INSCONT:BTN_INSFORMULAS";
         Pos = MAP_APPFONT ( 12 , 72 ) ;
         Size = MAP_APPFONT ( 84 , 10 ) ;
         Text [ en-US ] = "~Formulas" ;
@@ -313,6 +334,7 @@ ModalDialog RID_SCDLG_INSCONT
     };
     CheckBox BTN_INSATTRS
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_INSCONT:BTN_INSATTRS";
         Pos = MAP_APPFONT ( 12 , 100 ) ;
         Size = MAP_APPFONT ( 84 , 10 ) ;
         Text [ en-US ] = "For~mats" ;
@@ -320,6 +342,7 @@ ModalDialog RID_SCDLG_INSCONT
     };
     CheckBox BTN_INSOBJECTS
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_INSCONT:BTN_INSOBJECTS";
         Pos = MAP_APPFONT ( 12 , 114 ) ;
         Size = MAP_APPFONT ( 84 , 10 ) ;
         Text [ en-US ] = "~Objects" ;
@@ -327,6 +350,7 @@ ModalDialog RID_SCDLG_INSCONT
     };
     CheckBox BTN_INSNOTES
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_INSCONT:BTN_INSNOTES";
         Pos = MAP_APPFONT ( 12 , 86 ) ;
         Size = MAP_APPFONT ( 84 , 10 ) ;
         Text [ en-US ] = "~Comments" ;
@@ -340,30 +364,35 @@ ModalDialog RID_SCDLG_INSCONT
     };
     RadioButton BTN_OP_NOOP
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_INSCONT:BTN_OP_NOOP";
         Pos = MAP_APPFONT ( 111 , 14 ) ;
         Size = MAP_APPFONT ( 83 , 10 ) ;
         Text [ en-US ] = "Non~e" ;
     };
     RadioButton BTN_OP_ADD
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_INSCONT:BTN_OP_ADD";
         Pos = MAP_APPFONT ( 111 , 30 ) ;
         Size = MAP_APPFONT ( 83 , 10 ) ;
         Text [ en-US ] = "~Add" ;
     };
     RadioButton BTN_OP_SUB
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_INSCONT:BTN_OP_SUB";
         Pos = MAP_APPFONT ( 111 , 44 ) ;
         Size = MAP_APPFONT ( 83 , 10 ) ;
         Text [ en-US ] = "~Subtract" ;
     };
     RadioButton BTN_OP_MUL
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_INSCONT:BTN_OP_MUL";
         Pos = MAP_APPFONT ( 111 , 58 ) ;
         Size = MAP_APPFONT ( 83 , 10 ) ;
         Text [ en-US ] = "Multipl~y" ;
     };
     RadioButton BTN_OP_DIV
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_INSCONT:BTN_OP_DIV";
         Pos = MAP_APPFONT ( 111 , 72 ) ;
         Size = MAP_APPFONT ( 83 , 10 ) ;
         Text [ en-US ] = "Di~vide" ;
@@ -376,18 +405,21 @@ ModalDialog RID_SCDLG_INSCONT
     };
     CheckBox BTN_SKIP_EMPTY
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_INSCONT:BTN_SKIP_EMPTY";
         Pos = MAP_APPFONT ( 12 , 141 ) ;
         Size = MAP_APPFONT ( 84 , 10 ) ;
         Text [ en-US ] = "S~kip empty cells" ;
     };
     CheckBox BTN_TRANSPOSE
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_INSCONT:BTN_TRANSPOSE";
         Pos = MAP_APPFONT ( 12 , 155 ) ;
         Size = MAP_APPFONT ( 84 , 10 ) ;
         Text [ en-US ] = "~Transpose" ;
     };
     CheckBox BTN_LINK
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_INSCONT:BTN_LINK";
         Pos = MAP_APPFONT ( 12 , 169 ) ;
         Size = MAP_APPFONT ( 84 , 10 ) ;
         Text [ en-US ] = "~Link" ;
@@ -400,18 +432,21 @@ ModalDialog RID_SCDLG_INSCONT
     };
     RadioButton BTN_MV_NONE
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_INSCONT:BTN_MV_NONE";
         Pos = MAP_APPFONT ( 111 , 141 ) ;
         Size = MAP_APPFONT ( 83 , 10 ) ;
         Text [ en-US ] = "Don't sh~ift" ;
     };
     RadioButton BTN_MV_DOWN
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_INSCONT:BTN_MV_DOWN";
         Pos = MAP_APPFONT ( 111 , 155 ) ;
         Size = MAP_APPFONT ( 83 , 10 ) ;
         Text [ en-US ] = "Do~wn" ;
     };
     RadioButton BTN_MV_RIGHT
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_INSCONT:BTN_MV_RIGHT";
         Pos = MAP_APPFONT ( 111 , 169 ) ;
         Size = MAP_APPFONT ( 83 , 10 ) ;
         Text [ en-US ] = "~Right" ;
@@ -437,7 +472,7 @@ ModalDialog RID_SCDLG_INSCONT
 ModalDialog RID_SCDLG_MOVETAB
 {
     OutputSize = TRUE ;
-    HelpId = FID_TAB_MOVE ;
+    HelpId = CMD_FID_TAB_MOVE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 158 , 236 ) ;
     Text [ en-US ] = "Move/Copy Sheet" ;
@@ -501,6 +536,7 @@ ModalDialog RID_SCDLG_MOVETAB
     };
     ListBox LB_DEST
     {
+        HelpID = "sc:ListBox:RID_SCDLG_MOVETAB:LB_DEST";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 65 ) ;
         Size = MAP_APPFONT ( 134 , 60 ) ;
@@ -515,6 +551,7 @@ ModalDialog RID_SCDLG_MOVETAB
     };
     ListBox LB_INSERT
     {
+        HelpID = "sc:ListBox:RID_SCDLG_MOVETAB:LB_INSERT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 93 ) ;
         Size = MAP_APPFONT ( 134 , 62 ) ;
@@ -569,6 +606,7 @@ ModalDialog RID_SCDLG_MOVETAB
 
 ModalDialog RID_SCDLG_STRINPUT
 {
+    HelpID = "sc:ModalDialog:RID_SCDLG_STRINPUT";
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 178 , 63 ) ;
@@ -595,6 +633,7 @@ ModalDialog RID_SCDLG_STRINPUT
     };
     Edit ED_INPUT
     {
+        HelpID = "sc:Edit:RID_SCDLG_STRINPUT:ED_INPUT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 17 ) ;
         Size = MAP_APPFONT ( 110 , 12 ) ;
@@ -609,6 +648,7 @@ ModalDialog RID_SCDLG_STRINPUT
 
 ModalDialog RID_SCDLG_TAB_BG_COLOR
 {
+    HelpID = "sc:ModalDialog:RID_SCDLG_TAB_BG_COLOR";
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 118 , 167 ) ;
@@ -656,7 +696,7 @@ ModalDialog RID_SCDLG_COL_MAN
 {
     Text [ en-US ] = "Column Width" ;
 
-    HelpId = FID_COL_WIDTH ;
+    HelpId = CMD_FID_COL_WIDTH ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 190 , 63 ) ;
@@ -689,6 +729,7 @@ ModalDialog RID_SCDLG_COL_MAN
     };
     MetricField ED_VALUE
     {
+        HelpID = "sc:MetricField:RID_SCDLG_COL_MAN:ED_VALUE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 70 , 6 ) ;
         Size = MAP_APPFONT ( 70 , 12 ) ;
@@ -698,6 +739,7 @@ ModalDialog RID_SCDLG_COL_MAN
     };
     CheckBox BTN_DEFVAL
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_COL_MAN:BTN_DEFVAL";
          // HelpID, weil die generierten aus den Ableitungen nicht in die hid.lst kommen
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 70 , 24 ) ;
@@ -710,7 +752,7 @@ ModalDialog RID_SCDLG_COL_OPT
 {
     Text [ en-US ] = "Optimal Column Width" ;
 
-    HelpId = FID_COL_OPT_WIDTH ;
+    HelpId = CMD_FID_COL_OPT_WIDTH ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 190 , 63 ) ;
@@ -743,6 +785,7 @@ ModalDialog RID_SCDLG_COL_OPT
     };
     MetricField ED_VALUE
     {
+        HelpID = "sc:MetricField:RID_SCDLG_COL_OPT:ED_VALUE";
          // HelpID, weil die generierten aus den Ableitungen nicht in die hid.lst kommen
         Border = TRUE ;
         Pos = MAP_APPFONT ( 70 , 6 ) ;
@@ -753,6 +796,7 @@ ModalDialog RID_SCDLG_COL_OPT
     };
     CheckBox BTN_DEFVAL
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_COL_OPT:BTN_DEFVAL";
          // HelpID, weil die generierten aus den Ableitungen nicht in die hid.lst kommen
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 70 , 24 ) ;
@@ -765,7 +809,7 @@ ModalDialog RID_SCDLG_ROW_MAN
 {
     Text [ en-US ] = "Row Height" ;
 
-    HelpId = FID_ROW_HEIGHT ;
+    HelpId = CMD_FID_ROW_HEIGHT ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 190 , 63 ) ;
@@ -798,6 +842,7 @@ ModalDialog RID_SCDLG_ROW_MAN
     };
     MetricField ED_VALUE
     {
+        HelpID = "sc:MetricField:RID_SCDLG_ROW_MAN:ED_VALUE";
          // HelpID, weil die generierten aus den Ableitungen nicht in die hid.lst kommen
         Border = TRUE ;
         Pos = MAP_APPFONT ( 70 , 6 ) ;
@@ -808,6 +853,7 @@ ModalDialog RID_SCDLG_ROW_MAN
     };
     CheckBox BTN_DEFVAL
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_ROW_MAN:BTN_DEFVAL";
          // HelpID, weil die generierten aus den Ableitungen nicht in die hid.lst kommen
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 70 , 24 ) ;
@@ -820,7 +866,7 @@ ModalDialog RID_SCDLG_ROW_OPT
 {
     Text [ en-US ] = "Optimal Row Height" ;
 
-    HelpId = FID_ROW_OPT_HEIGHT ;
+    HelpId = CMD_FID_ROW_OPT_HEIGHT ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 190 , 63 ) ;
@@ -853,6 +899,7 @@ ModalDialog RID_SCDLG_ROW_OPT
     };
     MetricField ED_VALUE
     {
+        HelpID = "sc:MetricField:RID_SCDLG_ROW_OPT:ED_VALUE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 70 , 6 ) ;
         Size = MAP_APPFONT ( 70 , 12 ) ;
@@ -862,6 +909,7 @@ ModalDialog RID_SCDLG_ROW_OPT
     };
     CheckBox BTN_DEFVAL
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_ROW_OPT:BTN_DEFVAL";
          // HelpID, weil die generierten aus den Ableitungen nicht in die hid.lst kommen
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 70 , 24 ) ;
@@ -876,7 +924,7 @@ ModalDialog RID_SCDLG_ROW_OPT
 
 ModalDialog RID_SCDLG_SELECTDB
 {
-    HelpId = SID_SELECT_DB ;
+    HelpId = CMD_SID_SELECT_DB ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 168 , 100 ) ;
@@ -921,7 +969,7 @@ ModalDialog RID_SCDLG_SELECTDB
 
 ModalDialog RID_SCDLG_SHOW_TAB
 {
-    HelpId = FID_TABLE_SHOW ;
+    HelpId = CMD_FID_TABLE_SHOW ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 168 , 100 ) ;
@@ -949,6 +997,7 @@ ModalDialog RID_SCDLG_SHOW_TAB
     };
     MultiListBox LB_ENTRYLIST
     {
+        HelpID = "sc:MultiListBox:RID_SCDLG_SHOW_TAB:LB_ENTRYLIST";
         SimpleMode = TRUE ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 19 ) ;
@@ -968,7 +1017,7 @@ ModalDialog RID_SCDLG_SHOW_TAB
 ModalDialog RID_SCDLG_FILLSERIES
 {
     OutputSize = TRUE ;
-    HelpId = FID_FILL_SERIES ;
+    HelpId = CMD_FID_FILL_SERIES ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 290 , 122 ) ;
     Text [ en-US ] = "Fill Series" ;
@@ -976,6 +1025,7 @@ ModalDialog RID_SCDLG_FILLSERIES
     Closeable = FALSE ;
     RadioButton BTN_DAY
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_FILLSERIES:BTN_DAY";
         Pos = MAP_APPFONT ( 159 , 14 ) ;
         Size = MAP_APPFONT ( 66 , 10 ) ;
         Text [ en-US ] = "Da~y" ;
@@ -983,6 +1033,7 @@ ModalDialog RID_SCDLG_FILLSERIES
     };
     RadioButton BTN_DAY_OF_WEEK
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_FILLSERIES:BTN_DAY_OF_WEEK";
         Pos = MAP_APPFONT ( 159 , 28 ) ;
         Size = MAP_APPFONT ( 66 , 10 ) ;
         Text [ en-US ] = "~Weekday" ;
@@ -990,6 +1041,7 @@ ModalDialog RID_SCDLG_FILLSERIES
     };
     RadioButton BTN_MONTH
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_FILLSERIES:BTN_MONTH";
         Pos = MAP_APPFONT ( 159 , 42 ) ;
         Size = MAP_APPFONT ( 66 , 10 ) ;
         Text [ en-US ] = "~Month" ;
@@ -997,6 +1049,7 @@ ModalDialog RID_SCDLG_FILLSERIES
     };
     RadioButton BTN_YEAR
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_FILLSERIES:BTN_YEAR";
         Pos = MAP_APPFONT ( 159 , 56 ) ;
         Size = MAP_APPFONT ( 66 , 10 ) ;
         Text [ en-US ] = "Y~ear" ;
@@ -1010,6 +1063,7 @@ ModalDialog RID_SCDLG_FILLSERIES
     };
     RadioButton BTN_RIGHT
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_FILLSERIES:BTN_RIGHT";
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 51 , 10 ) ;
         Text [ en-US ] = "~Right" ;
@@ -1017,6 +1071,7 @@ ModalDialog RID_SCDLG_FILLSERIES
     };
     RadioButton BTN_LEFT
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_FILLSERIES:BTN_LEFT";
         Pos = MAP_APPFONT ( 12 , 56 ) ;
         Size = MAP_APPFONT ( 51 , 10 ) ;
         Text [ en-US ] = "~Left" ;
@@ -1024,6 +1079,7 @@ ModalDialog RID_SCDLG_FILLSERIES
     };
     RadioButton BTN_TOP
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_FILLSERIES:BTN_TOP";
         Pos = MAP_APPFONT ( 12 , 42 ) ;
         Size = MAP_APPFONT ( 51 , 10 ) ;
         Text [ en-US ] = "~Up" ;
@@ -1031,6 +1087,7 @@ ModalDialog RID_SCDLG_FILLSERIES
     };
     RadioButton BTN_BOTTOM
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_FILLSERIES:BTN_BOTTOM";
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 51 , 10 ) ;
         Text [ en-US ] = "~Down" ;
@@ -1044,6 +1101,7 @@ ModalDialog RID_SCDLG_FILLSERIES
     };
     RadioButton BTN_ARITHMETIC
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_FILLSERIES:BTN_ARITHMETIC";
         Pos = MAP_APPFONT ( 78 , 14 ) ;
         Size = MAP_APPFONT ( 69 , 10 ) ;
         Text [ en-US ] = "Li~near" ;
@@ -1051,6 +1109,7 @@ ModalDialog RID_SCDLG_FILLSERIES
     };
     RadioButton BTN_GEOMETRIC
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_FILLSERIES:BTN_GEOMETRIC";
         Pos = MAP_APPFONT ( 78 , 28 ) ;
         Size = MAP_APPFONT ( 69 , 10 ) ;
         Text [ en-US ] = "~Growth" ;
@@ -1058,6 +1117,7 @@ ModalDialog RID_SCDLG_FILLSERIES
     };
     RadioButton BTN_DATE
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_FILLSERIES:BTN_DATE";
         Pos = MAP_APPFONT ( 78 , 42 ) ;
         Size = MAP_APPFONT ( 69 , 10 ) ;
         Text [ en-US ] = "Da~te" ;
@@ -1065,6 +1125,7 @@ ModalDialog RID_SCDLG_FILLSERIES
     };
     RadioButton BTN_AUTOFILL
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_FILLSERIES:BTN_AUTOFILL";
         Pos = MAP_APPFONT ( 78 , 56 ) ;
         Size = MAP_APPFONT ( 69 , 10 ) ;
         Text [ en-US ] = "~AutoFill" ;
@@ -1094,6 +1155,7 @@ ModalDialog RID_SCDLG_FILLSERIES
     };
     Edit ED_START_VALUES
     {
+        HelpID = "sc:Edit:RID_SCDLG_FILLSERIES:ED_START_VALUES";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 55 , 72 ) ;
         Size = MAP_APPFONT ( 58 , 12 ) ;
@@ -1107,6 +1169,7 @@ ModalDialog RID_SCDLG_FILLSERIES
     };
     Edit ED_END_VALUES
     {
+        HelpID = "sc:Edit:RID_SCDLG_FILLSERIES:ED_END_VALUES";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 55 , 88 ) ;
         Size = MAP_APPFONT ( 58 , 12 ) ;
@@ -1120,6 +1183,7 @@ ModalDialog RID_SCDLG_FILLSERIES
     };
     Edit ED_INCREMENT
     {
+        HelpID = "sc:Edit:RID_SCDLG_FILLSERIES:ED_INCREMENT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 55 , 104 ) ;
         Size = MAP_APPFONT ( 58 , 12 ) ;
@@ -1160,6 +1224,7 @@ ModalDialog RID_SCDLG_FILLSERIES
 
 ModalDialog RID_SCDLG_GROUP
 {
+    HelpID = "sc:ModalDialog:RID_SCDLG_GROUP";
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 148 , 63 ) ;
@@ -1220,13 +1285,14 @@ ModalDialog RID_SCDLG_GROUP
 };
 
  // Ableitungen
-ModalDialog RID_SCDLG_GRP_MAKE < RID_SCDLG_GROUP { HelpId = SID_OUTLINE_MAKE ; };
-ModalDialog RID_SCDLG_GRP_KILL < RID_SCDLG_GROUP { HelpId = SID_OUTLINE_REMOVE ; };
+ModalDialog RID_SCDLG_GRP_MAKE < RID_SCDLG_GROUP { HelpId = CMD_SID_OUTLINE_MAKE ; };
+ModalDialog RID_SCDLG_GRP_KILL < RID_SCDLG_GROUP { HelpId = CMD_SID_OUTLINE_REMOVE ; };
 
  // RID_SCDLG_COLORROW wird nur in der Optionen-Sortierlisten-Seite benutzt
 
 ModalDialog RID_SCDLG_COLORROW
 {
+    HelpID = "sc:ModalDialog:RID_SCDLG_COLORROW";
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 148 , 63 ) ;
@@ -1253,6 +1319,7 @@ ModalDialog RID_SCDLG_COLORROW
     };
     RadioButton BTN_GROUP_ROWS
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_COLORROW:BTN_GROUP_ROWS";
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 71 , 10 ) ;
         TXT_ROWS
@@ -1260,6 +1327,7 @@ ModalDialog RID_SCDLG_COLORROW
     };
     RadioButton BTN_GROUP_COLS
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_COLORROW:BTN_GROUP_COLS";
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 71 , 10 ) ;
         TXT_COLS
@@ -1276,11 +1344,12 @@ ModalDialog RID_SCDLG_NAMES_CREATE
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    HelpID = FID_USE_NAME ;
+    HelpID = CMD_FID_USE_NAME ;
     Size = MAP_APPFONT ( 174 , 72 ) ;
     Moveable = TRUE ;
     CheckBox BTN_TOP
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_NAMES_CREATE:BTN_TOP";
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 93 , 10 ) ;
         TabStop = TRUE ;
@@ -1288,6 +1357,7 @@ ModalDialog RID_SCDLG_NAMES_CREATE
     };
     CheckBox BTN_LEFT
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_NAMES_CREATE:BTN_LEFT";
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 93 , 10 ) ;
         TabStop = TRUE ;
@@ -1295,6 +1365,7 @@ ModalDialog RID_SCDLG_NAMES_CREATE
     };
     CheckBox BTN_BOTTOM
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_NAMES_CREATE:BTN_BOTTOM";
         Pos = MAP_APPFONT ( 12 , 42 ) ;
         Size = MAP_APPFONT ( 93 , 10 ) ;
         TabStop = TRUE ;
@@ -1302,6 +1373,7 @@ ModalDialog RID_SCDLG_NAMES_CREATE
     };
     CheckBox BTN_RIGHT
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_NAMES_CREATE:BTN_RIGHT";
         Pos = MAP_APPFONT ( 12 , 56 ) ;
         Size = MAP_APPFONT ( 93 , 10 ) ;
         TabStop = TRUE ;
@@ -1338,7 +1410,7 @@ ModalDialog RID_SCDLG_NAMES_CREATE
 ModalDialog RID_SCDLG_NAMES_PASTE
 {
     OutputSize = TRUE ;
-    HelpId = FID_INSERT_NAME ;
+    HelpId = CMD_FID_INSERT_NAME ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 228 , 85 ) ;
     Moveable = TRUE ;
@@ -1350,6 +1422,7 @@ ModalDialog RID_SCDLG_NAMES_PASTE
     };
     ListBox LB_ENTRYLIST
     {
+        HelpID = "sc:ListBox:RID_SCDLG_NAMES_PASTE:LB_ENTRYLIST";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 14 ) ;
         Size = MAP_APPFONT ( 160 , 65 ) ;
@@ -1378,6 +1451,7 @@ ModalDialog RID_SCDLG_NAMES_PASTE
     };
     PushButton BTN_ADD
     {
+        HelpID = "sc:PushButton:RID_SCDLG_NAMES_PASTE:BTN_ADD";
         Pos = MAP_APPFONT ( 172 , 66 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -1388,18 +1462,21 @@ ModalDialog RID_SCDLG_NAMES_PASTE
 
 ModalDialog RID_SCDLG_CHARTCOLROW
 {
+    HelpID = "sc:ModalDialog:RID_SCDLG_CHARTCOLROW";
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 191 , 63 ) ;
     Moveable = TRUE ;
     CheckBox 1
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_CHARTCOLROW:1";
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 114 , 10 ) ;
         Text [ en-US ] = "First ~column as label" ;
     };
     CheckBox 2
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_CHARTCOLROW:2";
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 114 , 10 ) ;
         Text [ en-US ] = "First ~row as label" ;

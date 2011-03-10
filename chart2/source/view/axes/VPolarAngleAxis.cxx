@@ -34,7 +34,7 @@
 #include "VPolarGrid.hxx"
 #include "ShapeFactory.hxx"
 #include "macros.hxx"
-#include "chartview/NumberFormatterWrapper.hxx"
+#include "NumberFormatterWrapper.hxx"
 #include "PolarLabelPositionHelper.hxx"
 #include <tools/color.hxx>
 
@@ -121,17 +121,17 @@ bool VPolarAngleAxis::createTextShapes_ForAngleAxis(
             rtl::OUString aLabel;
             if(pLabels)
             {
-                sal_Int32 nIndex = static_cast< sal_Int32 >(pTickInfo->fUnscaledTickValue) - 1; //first category (index 0) matches with real number 1.0
+                sal_Int32 nIndex = static_cast< sal_Int32 >(pTickInfo->getUnscaledTickValue()) - 1; //first category (index 0) matches with real number 1.0
                 if( nIndex>=0 && nIndex<pLabels->getLength() )
                     aLabel = (*pLabels)[nIndex];
             }
             else
-                aLabel = aFixedNumberFormatter.getFormattedString( pTickInfo->fUnscaledTickValue, nExtraColor, bHasExtraColor );
+                aLabel = aFixedNumberFormatter.getFormattedString( pTickInfo->getUnscaledTickValue(), nExtraColor, bHasExtraColor );
 
             if(pColorAny)
                 *pColorAny = uno::makeAny(bHasExtraColor?nExtraColor:nColor);
 
-            double fLogicAngle = pTickInfo->fUnscaledTickValue;
+            double fLogicAngle = pTickInfo->getUnscaledTickValue();
 
             LabelAlignment eLabelAlignment(LABEL_ALIGN_CENTER);
             PolarLabelPositionHelper aPolarLabelPositionHelper(m_pPosHelper,nDimensionCount,xTarget,&aShapeFactory);
@@ -155,7 +155,7 @@ bool VPolarAngleAxis::createTextShapes_ForAngleAxis(
     return true;
 }
 
-void SAL_CALL VPolarAngleAxis::createMaximumLabels()
+void VPolarAngleAxis::createMaximumLabels()
 {
     if( !prepareShapeCreation() )
         return;
@@ -163,7 +163,7 @@ void SAL_CALL VPolarAngleAxis::createMaximumLabels()
     createLabels();
 }
 
-void SAL_CALL VPolarAngleAxis::updatePositions()
+void VPolarAngleAxis::updatePositions()
 {
     //todo: really only update the positions
 
@@ -173,18 +173,19 @@ void SAL_CALL VPolarAngleAxis::updatePositions()
     createLabels();
 }
 
-void SAL_CALL VPolarAngleAxis::createLabels()
+void VPolarAngleAxis::createLabels()
 {
     if( !prepareShapeCreation() )
         return;
 
     double fLogicRadius = m_pPosHelper->getOuterLogicRadius();
+    double fLogicZ      = 1.0;//as defined
 
     if( m_aAxisProperties.m_bDisplayLabels )
     {
         //-----------------------------------------
         //get the transformed screen values for all tickmarks in aAllTickInfos
-        std::auto_ptr< TickmarkHelper > apTickmarkHelper( this->createTickmarkHelper() );
+        std::auto_ptr< TickFactory > apTickFactory( this->createTickFactory() );
 
         //create tick mark text shapes
         //@todo: iterate through all tick depth wich should be labeled
@@ -208,13 +209,13 @@ void SAL_CALL VPolarAngleAxis::createLabels()
     }
 }
 
-void SAL_CALL VPolarAngleAxis::createShapes()
+void VPolarAngleAxis::createShapes()
 {
     if( !prepareShapeCreation() )
         return;
 
     double fLogicRadius = m_pPosHelper->getOuterLogicRadius();
-    double fLogicZ      = -0.5;//as defined
+    double fLogicZ      = 1.0;//as defined
 
     //-----------------------------------------
     //create axis main lines

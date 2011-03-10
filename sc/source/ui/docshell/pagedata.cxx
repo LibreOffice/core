@@ -43,7 +43,7 @@ ScPrintRangeData::ScPrintRangeData()
     nPagesX = nPagesY = 0;
     pPageEndX = NULL;
     pPageEndY = NULL;
-    bTopDown = bAutomatic = TRUE;
+    bTopDown = bAutomatic = sal_True;
     nFirstPage = 1;
 }
 
@@ -109,18 +109,18 @@ ScPrintRangeData& ScPageBreakData::GetData(size_t nPos)
     return pData[nPos];
 }
 
-BOOL ScPageBreakData::IsEqual( const ScPageBreakData& rOther ) const
+sal_Bool ScPageBreakData::IsEqual( const ScPageBreakData& rOther ) const
 {
     if ( nUsed != rOther.nUsed )
-        return FALSE;
+        return false;
 
-    for (USHORT i=0; i<nUsed; i++)
+    for (sal_uInt16 i=0; i<nUsed; i++)
         if ( pData[i].GetPrintRange() != rOther.pData[i].GetPrintRange() )
-            return FALSE;
+            return false;
 
     //! ScPrintRangeData komplett vergleichen ??
 
-    return TRUE;
+    return sal_True;
 }
 
 void ScPageBreakData::AddPages()
@@ -128,7 +128,7 @@ void ScPageBreakData::AddPages()
     if ( nUsed > 1 )
     {
         long nPage = pData[0].GetFirstPage();
-        for (USHORT i=0; sal::static_int_cast<size_t>(i+1)<nUsed; i++)
+        for (sal_uInt16 i=0; sal::static_int_cast<size_t>(i+1)<nUsed; i++)
         {
             nPage += ((long)pData[i].GetPagesX())*pData[i].GetPagesY();
             pData[i+1].SetFirstPage( nPage );

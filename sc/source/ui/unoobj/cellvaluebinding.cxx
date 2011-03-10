@@ -88,7 +88,7 @@ namespace calc
         ,OCellValueBinding_PBase( OCellValueBinding_Base::rBHelper )
         ,m_xDocument( _rxDocument )
         ,m_aModifyListeners( m_aMutex )
-        ,m_bInitialized( sal_False )
+        ,m_bInitialized( false )
         ,m_bListPos( _bListPos )
     {
         DBG_CTOR( OCellValueBinding, checkConsistency_static );
@@ -224,7 +224,7 @@ namespace calc
             if ( aType.equals( *pTypes++ ) )
                 return sal_True;
 
-        return sal_False;
+        return false;
     }
 
     //--------------------------------------------------------------------
@@ -252,7 +252,7 @@ namespace calc
             {
                 // check if the cell has a numeric value (this might go into a helper function):
 
-                sal_Bool bHasValue = sal_False;
+                sal_Bool bHasValue = false;
                 CellContentType eCellType = m_xCell->getType();
                 if ( eCellType == CellContentType_VALUE )
                     bHasValue = sal_True;
@@ -343,7 +343,7 @@ namespace calc
                 // boolean is stored as values 0 or 1
                 // TODO: set the number format to boolean if no format is set?
 
-                sal_Bool bValue( sal_False );
+                sal_Bool bValue( false );
                 aValue >>= bValue;
                 double nCellValue = bValue ? 1.0 : 0.0;
 
@@ -413,7 +413,7 @@ namespace calc
             if ( xTypes.is() )
             {
                 Locale aLocale;
-                sal_Bool bWasBoolean = sal_False;
+                sal_Bool bWasBoolean = false;
 
                 sal_Int32 nOldIndex = ::comphelper::getINT32( xCellProp->getPropertyValue( sPropName ) );
                 Reference<XPropertySet> xOldFormat;
@@ -497,7 +497,7 @@ namespace calc
             if ( *pLookup++ == _rServiceName )
                 return sal_True;
 
-        return sal_False;
+        return false;
     }
 
     //--------------------------------------------------------------------
@@ -582,7 +582,7 @@ namespace calc
 
         // get the cell address
         CellAddress aAddress;
-        sal_Bool bFoundAddress = sal_False;
+        sal_Bool bFoundAddress = false;
 
         const Any* pLoop = _rArguments.getConstArray();
         const Any* pLoopEnd = _rArguments.getConstArray() + _rArguments.getLength();

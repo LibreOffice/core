@@ -80,7 +80,7 @@ private:
     struct ENTRY
     {
         ScPatternAttr*  pPattAttr;
-        UINT32          nHash0;
+        sal_uInt32          nHash0;
 
         ENTRY (const ScPatternAttr &r);
 
@@ -90,10 +90,10 @@ private:
 
         inline bool operator == (const ENTRY &r) const { return nHash0 == r.nHash0; }
 
-        inline bool operator == (const UINT32 &r) const { return nHash0 == r; }
+        inline bool operator == (const sal_uInt32 &r) const { return nHash0 == r; }
     };
 
-    inline static void  MakeHash( const LotAttrWK3& rAttr, UINT32& rOut )
+    inline static void  MakeHash( const LotAttrWK3& rAttr, sal_uInt32& rOut )
     {
         ( ( UINT8* ) &rOut )[ 0 ] = rAttr.nFont & 0x7F;
         ( ( UINT8* ) &rOut )[ 1 ] = rAttr.nLineStyle;
@@ -122,7 +122,7 @@ public:
 
     void SetAttr (const SCROW nRow, const ScPatternAttr&);
 
-    void Apply (const SCCOL nCol, const SCTAB nTab, const BOOL bClear = TRUE);
+    void Apply (const SCCOL nCol, const SCTAB nTab, const sal_Bool bClear = true);
 
     void Clear ();
 

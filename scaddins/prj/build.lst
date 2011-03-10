@@ -1,4 +1,4 @@
-ca	scaddins	:    l10n vcl NULL
+ca	scaddins	: LIBXSLT:libxslt L10N:l10n vcl NULL
 ca	scaddins								usr1	-	all	sc_mkout NULL
 ca	scaddins\source\datefunc				nmake	-	all	sc_dfunc NULL
 ca	scaddins\source\analysis				nmake	-	all	sc_analysis NULL

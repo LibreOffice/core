@@ -95,7 +95,7 @@ private:
 
 protected:
 
-    virtual void    RefInputDone( BOOL bForced = FALSE );
+    virtual void    RefInputDone( sal_Bool bForced = false );
 
 public:
                     ScHighlightChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
@@ -105,8 +105,8 @@ public:
 
     virtual void    SetActive();
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc );
-    virtual BOOL    Close();
-    virtual BOOL    IsRefInputMode() const;
+    virtual sal_Bool    Close();
+    virtual sal_Bool    IsRefInputMode() const;
 
 };
 

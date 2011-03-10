@@ -29,7 +29,7 @@
 ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
 {
     OutputSize = TRUE ;
-    HelpId = FID_CHG_ACCEPT ;
+    HelpId = CMD_FID_CHG_ACCEPT ;
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 318 , 148 ) ;
@@ -38,6 +38,7 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
      // Dieser Dialog hat einen Cancel-Button !
     CheckBox CB_HIGHLIGHT
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_HIGHLIGHT_CHANGES:CB_HIGHLIGHT";
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 150 , 10 ) ;
         TabStop = TRUE ;
@@ -51,6 +52,7 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
     };
     CheckBox CB_HIGHLIGHT_ACCEPT
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_HIGHLIGHT_CHANGES:CB_HIGHLIGHT_ACCEPT";
         Pos = MAP_APPFONT ( 12 , 118 ) ;
         Size = MAP_APPFONT ( 246 , 10 ) ;
         TabStop = TRUE ;
@@ -58,6 +60,7 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
     };
     CheckBox CB_HIGHLIGHT_REJECT
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_HIGHLIGHT_CHANGES:CB_HIGHLIGHT_REJECT";
         Pos = MAP_APPFONT ( 12 , 132 ) ;
         Size = MAP_APPFONT ( 246 , 10 ) ;
         TabStop = TRUE ;
@@ -84,6 +87,7 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
     };
     Edit ED_ASSIGN
     {
+        HelpID = "sc:Edit:RID_SCDLG_HIGHLIGHT_CHANGES:ED_ASSIGN";
         Hide = TRUE ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 119 ) ;
@@ -92,10 +96,11 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
     };
     ImageButton RB_ASSIGN
     {
+        HelpID = "sc:ImageButton:RID_SCDLG_HIGHLIGHT_CHANGES:RB_ASSIGN";
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 142 , 118 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
-        TabStop = FALSE ;
+        TabStop = TRUE;
         QuickHelpText [ en-US ] = "Minimize/Maximize" ;
     };
     Text [ en-US ] = "Show Changes" ;

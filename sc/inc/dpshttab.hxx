@@ -88,7 +88,7 @@ public:
      * @return 0 if the source range is sane, otherwise an error message ID is
      *         returned.
      */
-    ULONG CheckSourceRange() const;
+    sal_uLong CheckSourceRange() const;
     long GetCacheId() const;
 
 private:
@@ -118,11 +118,11 @@ public:
 
     virtual long                    GetColumnCount();
     virtual String                  getDimensionName(long nColumn);
-    virtual BOOL                    getIsDataLayoutDimension(long nColumn);
-    virtual BOOL                    IsDateDimension(long nDim);
-    virtual ULONG                   GetNumberFormat(long nDim);
+    virtual sal_Bool                    getIsDataLayoutDimension(long nColumn);
+    virtual sal_Bool                    IsDateDimension(long nDim);
+    virtual sal_uLong                   GetNumberFormat(long nDim);
     virtual void                    DisposeData();
-    virtual void                    SetEmptyFlags( BOOL bIgnoreEmptyRows, BOOL bRepeatIfEmpty );
+    virtual void                    SetEmptyFlags( sal_Bool bIgnoreEmptyRows, sal_Bool bRepeatIfEmpty );
 
     virtual bool                    IsRepeatIfEmpty();
 

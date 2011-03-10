@@ -56,7 +56,7 @@ using namespace xmloff::token;
 //------------------------------------------------------------------
 
 ScXMLTableColContext::ScXMLTableColContext( ScXMLImport& rImport,
-                                      USHORT nPrfx,
+                                      sal_uInt16 nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) :
@@ -105,7 +105,7 @@ ScXMLTableColContext::~ScXMLTableColContext()
 {
 }
 
-SvXMLImportContext *ScXMLTableColContext::CreateChildContext( USHORT nPrefix,
+SvXMLImportContext *ScXMLTableColContext::CreateChildContext( sal_uInt16 nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )
@@ -160,7 +160,7 @@ void ScXMLTableColContext::EndElement()
                 rtl::OUString sVisible(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CELLVIS));
                 sal_Bool bValue(sal_True);
                 if (!IsXMLToken(sVisibility, XML_VISIBLE))
-                    bValue = sal_False;
+                    bValue = false;
                 xColumnProperties->setPropertyValue(sVisible, uno::makeAny(bValue));
             }
         }
@@ -176,7 +176,7 @@ void ScXMLTableColContext::EndElement()
 }
 
 ScXMLTableColsContext::ScXMLTableColsContext( ScXMLImport& rImport,
-                                      USHORT nPrfx,
+                                      sal_uInt16 nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -208,7 +208,7 @@ ScXMLTableColsContext::ScXMLTableColsContext( ScXMLImport& rImport,
             if (nPrefix == XML_NAMESPACE_TABLE && IsXMLToken(aLocalName, XML_DISPLAY))
             {
                 if (IsXMLToken(sValue, XML_FALSE))
-                    bGroupDisplay = sal_False;
+                    bGroupDisplay = false;
             }
         }
     }
@@ -218,7 +218,7 @@ ScXMLTableColsContext::~ScXMLTableColsContext()
 {
 }
 
-SvXMLImportContext *ScXMLTableColsContext::CreateChildContext( USHORT nPrefix,
+SvXMLImportContext *ScXMLTableColsContext::CreateChildContext( sal_uInt16 nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
@@ -231,17 +231,17 @@ SvXMLImportContext *ScXMLTableColsContext::CreateChildContext( USHORT nPrefix,
     case XML_TOK_TABLE_COLS_COL_GROUP:
         pContext = new ScXMLTableColsContext( GetScImport(), nPrefix,
                                                    rLName, xAttrList,
-                                                   sal_False, sal_True );
+                                                   false, sal_True );
         break;
     case XML_TOK_TABLE_COLS_HEADER_COLS:
         pContext = new ScXMLTableColsContext( GetScImport(), nPrefix,
                                                    rLName, xAttrList,
-                                                   sal_True, sal_False );
+                                                   sal_True, false );
         break;
     case XML_TOK_TABLE_COLS_COLS:
         pContext = new ScXMLTableColsContext( GetScImport(), nPrefix,
                                                    rLName, xAttrList,
-                                                   sal_False, sal_False );
+                                                   false, false );
         break;
     case XML_TOK_TABLE_COLS_COL:
             pContext = new ScXMLTableColContext( GetScImport(), nPrefix,

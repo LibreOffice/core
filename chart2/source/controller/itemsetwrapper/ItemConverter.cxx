@@ -101,7 +101,7 @@ void ItemConverter::_disposing( const lang::EventObject& rSource )
 
 void ItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
 {
-    const USHORT * pRanges = rOutItemSet.GetRanges();
+    const sal_uInt16 * pRanges = rOutItemSet.GetRanges();
     tPropertyNameWithMemberId aProperty;
     SfxItemPool & rPool = GetItemPool();
 
@@ -111,13 +111,13 @@ void ItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
 
     while( (*pRanges) != 0)
     {
-        USHORT nBeg = (*pRanges);
+        sal_uInt16 nBeg = (*pRanges);
         ++pRanges;
-        USHORT nEnd = (*pRanges);
+        sal_uInt16 nEnd = (*pRanges);
         ++pRanges;
 
         OSL_ASSERT( nBeg <= nEnd );
-        for( USHORT nWhich = nBeg; nWhich <= nEnd; ++nWhich )
+        for( sal_uInt16 nWhich = nBeg; nWhich <= nEnd; ++nWhich )
         {
             if( GetItemProperty( nWhich, aProperty ))
             {
@@ -172,14 +172,14 @@ void ItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
 }
 
 void ItemConverter::FillSpecialItem(
-    USHORT /*nWhichId*/, SfxItemSet & /*rOutItemSet*/ ) const
+    sal_uInt16 /*nWhichId*/, SfxItemSet & /*rOutItemSet*/ ) const
     throw( uno::Exception )
 {
     OSL_ENSURE( false, "ItemConverter: Unhandled special item found!" );
 }
 
 bool ItemConverter::ApplySpecialItem(
-    USHORT /*nWhichId*/, const SfxItemSet & /*rItemSet*/ )
+    sal_uInt16 /*nWhichId*/, const SfxItemSet & /*rItemSet*/ )
     throw( uno::Exception )
 {
     OSL_ENSURE( false, "ItemConverter: Unhandled special item found!" );
@@ -198,7 +198,7 @@ bool ItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
 
     while( pItem )
     {
-        if( rItemSet.GetItemState( pItem->Which(), FALSE ) == SFX_ITEM_SET )
+        if( rItemSet.GetItemState( pItem->Which(), sal_False ) == SFX_ITEM_SET )
         {
             if( GetItemProperty( pItem->Which(), aProperty ))
             {
@@ -242,13 +242,13 @@ bool ItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
 void ItemConverter::InvalidateUnequalItems( SfxItemSet  &rDestSet, const SfxItemSet &rSourceSet )
 {
     SfxWhichIter      aIter (rSourceSet);
-    USHORT            nWhich     = aIter.FirstWhich ();
+    sal_uInt16            nWhich     = aIter.FirstWhich ();
     const SfxPoolItem *pPoolItem = NULL;
 
     while (nWhich)
     {
-        if ((rSourceSet.GetItemState(nWhich, TRUE, &pPoolItem) == SFX_ITEM_SET) &&
-            (rDestSet.GetItemState(nWhich, TRUE, &pPoolItem) == SFX_ITEM_SET))
+        if ((rSourceSet.GetItemState(nWhich, sal_True, &pPoolItem) == SFX_ITEM_SET) &&
+            (rDestSet.GetItemState(nWhich, sal_True, &pPoolItem) == SFX_ITEM_SET))
         {
             if (rSourceSet.Get(nWhich) != rDestSet.Get(nWhich))
             {
@@ -258,7 +258,7 @@ void ItemConverter::InvalidateUnequalItems( SfxItemSet  &rDestSet, const SfxItem
                 }
             }
         }
-        else if( rSourceSet.GetItemState(nWhich, TRUE, &pPoolItem) == SFX_ITEM_DONTCARE )
+        else if( rSourceSet.GetItemState(nWhich, sal_True, &pPoolItem) == SFX_ITEM_DONTCARE )
             rDestSet.InvalidateItem(nWhich);
 
         nWhich = aIter.NextWhich ();

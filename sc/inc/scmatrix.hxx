@@ -42,7 +42,7 @@ class ScInterpreter;
 class SvNumberFormatter;
 class ScMatrixImpl;
 
-typedef BYTE ScMatValType;
+typedef sal_uInt8 ScMatValType;
 const ScMatValType SC_MATVAL_VALUE     = 0x00;
 const ScMatValType SC_MATVAL_BOOLEAN   = 0x01;
 const ScMatValType SC_MATVAL_STRING    = 0x02;
@@ -62,7 +62,7 @@ struct ScMatrixValue
     const String& GetString() const { return pS ? *pS : EMPTY_STRING; }
 
     /// Only valid if ScMatrix methods indicate that this is no string!
-    USHORT GetError() const         { return GetDoubleErrorValue( fVal); }
+    sal_uInt16 GetError() const         { return GetDoubleErrorValue( fVal); }
 
     /// Only valid if ScMatrix methods indicate that this is a boolean
     bool GetBoolean() const         { return fVal != 0.0; }
@@ -289,7 +289,7 @@ public:
     void PutEmpty( SCSIZE nC, SCSIZE nR);
     /// Jump FALSE without path
     void PutEmptyPath( SCSIZE nC, SCSIZE nR);
-    void PutError( USHORT nErrorCode, SCSIZE nC, SCSIZE nR );
+    void PutError( sal_uInt16 nErrorCode, SCSIZE nC, SCSIZE nR );
     void PutBoolean( bool bVal, SCSIZE nC, SCSIZE nR);
 
     void FillDouble( double fVal,
@@ -300,11 +300,11 @@ public:
         @ATTENTION: MUST NOT be used if the element is a string!
                     Use GetErrorIfNotString() instead if not sure.
         @returns 0 if no error, else one of err... constants */
-    USHORT GetError( SCSIZE nC, SCSIZE nR) const;
+    sal_uInt16 GetError( SCSIZE nC, SCSIZE nR) const;
 
     /** Use in ScInterpreter to obtain the error code, if any.
         @returns 0 if no error or string element, else one of err... constants */
-    USHORT GetErrorIfNotString( SCSIZE nC, SCSIZE nR) const
+    sal_uInt16 GetErrorIfNotString( SCSIZE nC, SCSIZE nR) const
         { return IsValue( nC, nR) ? GetError( nC, nR) : 0; }
 
     /// @return 0.0 if empty or empty path, else value or DoubleError.
@@ -328,31 +328,31 @@ public:
     ScMatrixValue Get( SCSIZE nC, SCSIZE nR) const;
 
     /// @return <TRUE/> if string or empty or empty path, in fact non-value.
-    BOOL IsString( SCSIZE nIndex ) const;
+    sal_Bool IsString( SCSIZE nIndex ) const;
 
     /// @return <TRUE/> if string or empty or empty path, in fact non-value.
-    BOOL IsString( SCSIZE nC, SCSIZE nR ) const;
+    sal_Bool IsString( SCSIZE nC, SCSIZE nR ) const;
 
     /// @return <TRUE/> if empty or empty path.
-    BOOL IsEmpty( SCSIZE nC, SCSIZE nR ) const;
+    sal_Bool IsEmpty( SCSIZE nC, SCSIZE nR ) const;
 
     /// @return <TRUE/> if empty path.
-    BOOL IsEmptyPath( SCSIZE nC, SCSIZE nR ) const;
+    sal_Bool IsEmptyPath( SCSIZE nC, SCSIZE nR ) const;
 
     /// @return <TRUE/> if value or boolean.
-    BOOL IsValue( SCSIZE nIndex ) const;
+    sal_Bool IsValue( SCSIZE nIndex ) const;
 
     /// @return <TRUE/> if value or boolean.
-    BOOL IsValue( SCSIZE nC, SCSIZE nR ) const;
+    sal_Bool IsValue( SCSIZE nC, SCSIZE nR ) const;
 
     /// @return <TRUE/> if value or boolean or empty or empty path.
-    BOOL IsValueOrEmpty( SCSIZE nC, SCSIZE nR ) const;
+    sal_Bool IsValueOrEmpty( SCSIZE nC, SCSIZE nR ) const;
 
     /// @return <TRUE/> if boolean.
-    BOOL IsBoolean( SCSIZE nC, SCSIZE nR ) const;
+    sal_Bool IsBoolean( SCSIZE nC, SCSIZE nR ) const;
 
     /// @return <TRUE/> if entire matrix is numeric, including booleans, with no strings or empties
-    BOOL IsNumeric() const;
+    sal_Bool IsNumeric() const;
 
     void MatTrans( ScMatrix& mRes) const;
     void MatCopy ( ScMatrix& mRes) const;

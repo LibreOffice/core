@@ -394,7 +394,7 @@ static const XclFunctionInfo saFuncTable_Odf[] =
     EXC_FUNCENTRY_ODF( ocVariationen2,  2,  2,  0,  "PERMUTATIONA" ),
     EXC_FUNCENTRY_ODF( ocPhi,           1,  1,  0,  "PHI" ),
     EXC_FUNCENTRY_ODF( ocZGZ,           3,  3,  0,  "RRI" ),
-    EXC_FUNCENTRY_ODF( ocTable,         1,  1,  0,  "SHEET" ),
+    EXC_FUNCENTRY_ODF( ocTable,         0,  1,  0,  "SHEET" ),
     EXC_FUNCENTRY_ODF( ocTables,        0,  1,  0,  "SHEETS" ),
     EXC_FUNCENTRY_ODF( ocNoName,        1,  MX, 0,  "SKEWP" ),
     EXC_FUNCENTRY_ODF( ocUnichar,       1,  1,  0,  "UNICHAR" ),
@@ -601,7 +601,7 @@ void XclTokenArrayIterator::Init()
 
 void XclTokenArrayIterator::Init( const ScTokenArray& rScTokArr, bool bSkipSpaces )
 {
-    USHORT nTokArrLen = rScTokArr.GetLen();
+    sal_uInt16 nTokArrLen = rScTokArr.GetLen();
     mppScTokenBeg = static_cast< const FormulaToken* const* >( nTokArrLen ? rScTokArr.GetArray() : 0 );
     mppScTokenEnd = mppScTokenBeg ? (mppScTokenBeg + nTokArrLen) : 0;
     mppScToken = (mppScTokenBeg != mppScTokenEnd) ? mppScTokenBeg : 0;

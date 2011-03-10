@@ -43,7 +43,7 @@
 
 //==================================================================
 
-ScNamePasteDlg::ScNamePasteDlg( Window * pParent, const ScRangeName* pList, BOOL bInsList )
+ScNamePasteDlg::ScNamePasteDlg( Window * pParent, const ScRangeName* pList, sal_Bool bInsList )
     : ModalDialog( pParent, ScResId( RID_SCDLG_NAMES_PASTE ) ),
     aLabelText      ( this, ScResId( FT_LABEL ) ),
     aNameList       ( this, ScResId( LB_ENTRYLIST ) ),

@@ -28,6 +28,7 @@
 #include "instbdlg.hrc"
 ModalDialog RID_SCDLG_INSERT_TABLE
 {
+    HelpID = "sc:ModalDialog:RID_SCDLG_INSERT_TABLE";
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 274 , 190 ) ;
@@ -58,6 +59,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
     };
     RadioButton RB_BEFORE
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_INSERT_TABLE:RB_BEFORE";
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 197 , 10 ) ;
         TabStop = TRUE ;
@@ -65,6 +67,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
     };
     RadioButton RB_BEHIND
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_INSERT_TABLE:RB_BEHIND";
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 197 , 10 ) ;
         TabStop = TRUE ;
@@ -78,6 +81,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
     };
     RadioButton RB_NEW
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_INSERT_TABLE:RB_NEW";
         Pos = MAP_APPFONT ( 12 , 55 ) ;
         Size = MAP_APPFONT ( 197 , 10 ) ;
         Text [ en-US ] = "~New sheet" ;
@@ -90,6 +94,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
     };
     NumericField NF_COUNT
     {
+        HelpID = "sc:NumericField:RID_SCDLG_INSERT_TABLE:NF_COUNT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 72 , 66 ) ;
         Size = MAP_APPFONT ( 30 , 12 ) ;
@@ -108,18 +113,21 @@ ModalDialog RID_SCDLG_INSERT_TABLE
     };
     Edit ED_TABNAME
     {
+        HelpID = "sc:Edit:RID_SCDLG_INSERT_TABLE:ED_TABNAME";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 72 , 82 ) ;
         Size = MAP_APPFONT ( 137 , 12 ) ;
     };
     RadioButton RB_FROMFILE
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_INSERT_TABLE:RB_FROMFILE";
         Pos = MAP_APPFONT ( 12 , 100 ) ;
         Size = MAP_APPFONT ( 197 , 10 ) ;
         Text [ en-US ] = "~From file" ;
     };
     MultiListBox LB_TABLES
     {
+        HelpID = "sc:MultiListBox:RID_SCDLG_INSERT_TABLE:LB_TABLES";
         SimpleMode = TRUE ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 20 , 113 ) ;
@@ -128,12 +136,14 @@ ModalDialog RID_SCDLG_INSERT_TABLE
     };
     PushButton BTN_BROWSE
     {
+        HelpID = "sc:PushButton:RID_SCDLG_INSERT_TABLE:BTN_BROWSE";
         Pos = MAP_APPFONT ( 149 , 113 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Text [ en-US ] = "~Browse..." ;
     };
     CheckBox CB_LINK
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_INSERT_TABLE:CB_LINK";
         Pos = MAP_APPFONT ( 149 , 131 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
         Text [ en-US ] = "Lin~k" ;

@@ -183,39 +183,39 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         nVisibleTab( 0 ),
         eLinkMode(LM_UNKNOWN),
         bAutoCalc( eMode == SCDOCMODE_DOCUMENT ),
-        bAutoCalcShellDisabled( FALSE ),
-        bForcedFormulaPending( FALSE ),
-        bCalculatingFormulaTree( FALSE ),
+        bAutoCalcShellDisabled( false ),
+        bForcedFormulaPending( false ),
+        bCalculatingFormulaTree( false ),
         bIsClip( eMode == SCDOCMODE_CLIP ),
         bIsUndo( eMode == SCDOCMODE_UNDO ),
-        bIsVisible( FALSE ),
-        bIsEmbedded( FALSE ),
-        bNoSetDirty( FALSE ),
-        bInsertingFromOtherDoc( FALSE ),
+        bIsVisible( false ),
+        bIsEmbedded( false ),
+        bNoSetDirty( false ),
+        bInsertingFromOtherDoc( false ),
         bLoadingMedium( false ),
         bImportingXML( false ),
-        bXMLFromWrapper( FALSE ),
-        bCalcingAfterLoad( FALSE ),
-        bNoListening( FALSE ),
-        bIdleDisabled( FALSE ),
-        bInLinkUpdate( FALSE ),
-        bChartListenerCollectionNeedsUpdate( FALSE ),
-        bHasForcedFormulas( FALSE ),
-        bInDtorClear( FALSE ),
-        bExpandRefs( FALSE ),
-        bDetectiveDirty( FALSE ),
+        bXMLFromWrapper( false ),
+        bCalcingAfterLoad( false ),
+        bNoListening( false ),
+        bIdleDisabled( false ),
+        bInLinkUpdate( false ),
+        bChartListenerCollectionNeedsUpdate( false ),
+        bHasForcedFormulas( false ),
+        bInDtorClear( false ),
+        bExpandRefs( false ),
+        bDetectiveDirty( false ),
         nMacroCallMode( SC_MACROCALL_ALLOWED ),
-        bHasMacroFunc( FALSE ),
+        bHasMacroFunc( false ),
         nVisSpellState( 0 ),
         nAsianCompression(SC_ASIANCOMPRESSION_INVALID),
         nAsianKerning(SC_ASIANKERNING_INVALID),
-        bSetDrawDefaults( FALSE ),
-        bPastingDrawFromOtherDoc( FALSE ),
+        bSetDrawDefaults( false ),
+        bPastingDrawFromOtherDoc( false ),
         nInDdeLinkUpdate( 0 ),
-        bInUnoBroadcast( FALSE ),
-        bInUnoListenerCall( FALSE ),
+        bInUnoBroadcast( false ),
+        bInUnoListenerCall( false ),
         eGrammar( formula::FormulaGrammar::GRAM_NATIVE ),
-        bStyleSheetUsageInvalid( TRUE ),
+        bStyleSheetUsageInvalid( sal_True ),
         mbUndoEnabled( true ),
         mbAdjustHeightEnabled( true ),
         mbExecuteLinkEnabled( true ),
@@ -251,7 +251,7 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         pTab[i] = NULL;
 
     pRangeName = new ScRangeName(this);
-    pDBCollection = new ScDBCollection( 4, 4, FALSE, this );
+    pDBCollection = new ScDBCollection( 4, 4, false, this );
     pSelectionAttr = NULL;
     pChartCollection = new ScChartCollection;
     apTemporaryChartLock = std::auto_ptr< ScTemporaryChartLock >( new ScTemporaryChartLock(this) );
@@ -293,7 +293,7 @@ void ScDocument::SetStorageGrammar( formula::FormulaGrammar::Grammar eGram )
 }
 
 
-void ScDocument::SetDocVisible( BOOL bSet )
+void ScDocument::SetDocVisible( sal_Bool bSet )
 {
     //  called from view ctor - only for a visible document,
     //  each new sheet's RTL flag is initialized from the locale
@@ -349,7 +349,7 @@ IMPL_LINK( ScDocument, TrackTimeHdl, Timer*, EMPTYARG )
 
         if (!pShell->IsModified())
         {
-            pShell->SetModified( TRUE );
+            pShell->SetModified( sal_True );
             SfxBindings* pBindings = GetViewBindings();
             if (pBindings)
             {
@@ -372,7 +372,7 @@ ScDocument::~ScDocument()
 {
     DBG_ASSERT( !bInLinkUpdate, "bInLinkUpdate in dtor" );
 
-    bInDtorClear = TRUE;
+    bInDtorClear = sal_True;
 
     // first of all disable all refresh timers by deleting the control
     if ( pRefreshTimerControl )
@@ -387,7 +387,7 @@ ScDocument::~ScDocument()
     if ( GetLinkManager() )
     {
         // BaseLinks freigeben
-        for ( USHORT n = pLinkManager->GetServers().Count(); n; )
+        for ( sal_uInt16 n = pLinkManager->GetServers().Count(); n; )
             pLinkManager->GetServers()[ --n ]->Closed();
 
         if ( pLinkManager->GetLinks().Count() )
@@ -417,7 +417,7 @@ ScDocument::~ScDocument()
     delete pUnoRefUndoList;
     delete pUnoListenerCalls;
 
-    Clear( sal_True );              // TRUE = from destructor (needed for SdrModel::ClearModel)
+    Clear( sal_True );              // sal_True = from destructor (needed for SdrModel::ClearModel)
 
     if (pCondFormList)
     {
@@ -530,8 +530,8 @@ ScFieldEditEngine& ScDocument::GetEditEngine()
     if ( !pEditEngine )
     {
         pEditEngine = new ScFieldEditEngine( GetEnginePool(), GetEditPool() );
-        pEditEngine->SetUpdateMode( FALSE );
-        pEditEngine->EnableUndo( FALSE );
+        pEditEngine->SetUpdateMode( false );
+        pEditEngine->EnableUndo( false );
         pEditEngine->SetRefMapMode( MAP_100TH_MM );
         pEditEngine->SetForbiddenCharsTable( xForbiddenCharacters );
     }
@@ -543,8 +543,8 @@ ScNoteEditEngine& ScDocument::GetNoteEngine()
     if ( !pNoteEngine )
     {
         pNoteEngine = new ScNoteEditEngine( GetEnginePool(), GetEditPool() );
-        pNoteEngine->SetUpdateMode( FALSE );
-        pNoteEngine->EnableUndo( FALSE );
+        pNoteEngine->SetUpdateMode( false );
+        pNoteEngine->EnableUndo( false );
         pNoteEngine->SetRefMapMode( MAP_100TH_MM );
         pNoteEngine->SetForbiddenCharsTable( xForbiddenCharacters );
                 const SfxItemSet& rItemSet = GetDefPattern()->GetItemSet();
@@ -600,19 +600,19 @@ void ScDocument::ResetClip( ScDocument* pSourceDoc, SCTAB nTab )
 void ScDocument::DeleteNumberFormat( const sal_uInt32* /* pDelKeys */, sal_uInt32 /* nCount */ )
 {
 /*
-    for (ULONG i = 0; i < nCount; i++)
+    for (sal_uLong i = 0; i < nCount; i++)
         xPoolHelper->GetFormTable()->DeleteEntry(pDelKeys[i]);
 */
 }
 
 void ScDocument::PutCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
-                          ScBaseCell* pCell, ULONG nFormatIndex, BOOL bForceTab )
+                          ScBaseCell* pCell, sal_uLong nFormatIndex, sal_Bool bForceTab )
 {
     if (VALIDTAB(nTab))
     {
         if ( bForceTab && !pTab[nTab] )
         {
-            BOOL bExtras = !bIsUndo;        // Spaltenbreiten, Zeilenhoehen, Flags
+            sal_Bool bExtras = !bIsUndo;        // Spaltenbreiten, Zeilenhoehen, Flags
 
             pTab[nTab] = new ScTable(this, nTab,
                                 String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("temp")),
@@ -625,20 +625,20 @@ void ScDocument::PutCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
 }
 
 
-BOOL ScDocument::GetPrintArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow,
-                                BOOL bNotes ) const
+sal_Bool ScDocument::GetPrintArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow,
+                                sal_Bool bNotes ) const
 {
     if (ValidTab(nTab) && pTab[nTab])
     {
-        BOOL bAny = pTab[nTab]->GetPrintArea( rEndCol, rEndRow, bNotes );
+        sal_Bool bAny = pTab[nTab]->GetPrintArea( rEndCol, rEndRow, bNotes );
         if (pDrawLayer)
         {
             ScRange aDrawRange(0,0,nTab, MAXCOL,MAXROW,nTab);
-            if (DrawGetPrintArea( aDrawRange, TRUE, TRUE ))
+            if (DrawGetPrintArea( aDrawRange, sal_True, sal_True ))
             {
                 if (aDrawRange.aEnd.Col()>rEndCol) rEndCol=aDrawRange.aEnd.Col();
                 if (aDrawRange.aEnd.Row()>rEndRow) rEndRow=aDrawRange.aEnd.Row();
-                bAny = TRUE;
+                bAny = sal_True;
             }
         }
         return bAny;
@@ -646,66 +646,66 @@ BOOL ScDocument::GetPrintArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow,
 
     rEndCol = 0;
     rEndRow = 0;
-    return FALSE;
+    return false;
 }
 
-BOOL ScDocument::GetPrintAreaHor( SCTAB nTab, SCROW nStartRow, SCROW nEndRow,
-                                        SCCOL& rEndCol, BOOL bNotes ) const
+sal_Bool ScDocument::GetPrintAreaHor( SCTAB nTab, SCROW nStartRow, SCROW nEndRow,
+                                        SCCOL& rEndCol, sal_Bool bNotes ) const
 {
     if (ValidTab(nTab) && pTab[nTab])
     {
-        BOOL bAny = pTab[nTab]->GetPrintAreaHor( nStartRow, nEndRow, rEndCol, bNotes );
+        sal_Bool bAny = pTab[nTab]->GetPrintAreaHor( nStartRow, nEndRow, rEndCol, bNotes );
         if (pDrawLayer)
         {
             ScRange aDrawRange(0,nStartRow,nTab, MAXCOL,nEndRow,nTab);
-            if (DrawGetPrintArea( aDrawRange, TRUE, FALSE ))
+            if (DrawGetPrintArea( aDrawRange, sal_True, false ))
             {
                 if (aDrawRange.aEnd.Col()>rEndCol) rEndCol=aDrawRange.aEnd.Col();
-                bAny = TRUE;
+                bAny = sal_True;
             }
         }
         return bAny;
     }
 
     rEndCol = 0;
-    return FALSE;
+    return false;
 }
 
-BOOL ScDocument::GetPrintAreaVer( SCTAB nTab, SCCOL nStartCol, SCCOL nEndCol,
-                                        SCROW& rEndRow, BOOL bNotes ) const
+sal_Bool ScDocument::GetPrintAreaVer( SCTAB nTab, SCCOL nStartCol, SCCOL nEndCol,
+                                        SCROW& rEndRow, sal_Bool bNotes ) const
 {
     if (ValidTab(nTab) && pTab[nTab])
     {
-        BOOL bAny = pTab[nTab]->GetPrintAreaVer( nStartCol, nEndCol, rEndRow, bNotes );
+        sal_Bool bAny = pTab[nTab]->GetPrintAreaVer( nStartCol, nEndCol, rEndRow, bNotes );
         if (pDrawLayer)
         {
             ScRange aDrawRange(nStartCol,0,nTab, nEndCol,MAXROW,nTab);
-            if (DrawGetPrintArea( aDrawRange, FALSE, TRUE ))
+            if (DrawGetPrintArea( aDrawRange, false, sal_True ))
             {
                 if (aDrawRange.aEnd.Row()>rEndRow) rEndRow=aDrawRange.aEnd.Row();
-                bAny = TRUE;
+                bAny = sal_True;
             }
         }
         return bAny;
     }
 
     rEndRow = 0;
-    return FALSE;
+    return false;
 }
 
-BOOL ScDocument::GetDataStart( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow ) const
+sal_Bool ScDocument::GetDataStart( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow ) const
 {
     if (ValidTab(nTab) && pTab[nTab])
     {
-        BOOL bAny = pTab[nTab]->GetDataStart( rStartCol, rStartRow );
+        sal_Bool bAny = pTab[nTab]->GetDataStart( rStartCol, rStartRow );
         if (pDrawLayer)
         {
             ScRange aDrawRange(0,0,nTab, MAXCOL,MAXROW,nTab);
-            if (DrawGetPrintArea( aDrawRange, TRUE, TRUE ))
+            if (DrawGetPrintArea( aDrawRange, sal_True, sal_True ))
             {
                 if (aDrawRange.aStart.Col()<rStartCol) rStartCol=aDrawRange.aStart.Col();
                 if (aDrawRange.aStart.Row()<rStartRow) rStartRow=aDrawRange.aStart.Row();
-                bAny = TRUE;
+                bAny = sal_True;
             }
         }
         return bAny;
@@ -713,13 +713,13 @@ BOOL ScDocument::GetDataStart( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow ) 
 
     rStartCol = 0;
     rStartRow = 0;
-    return FALSE;
+    return false;
 }
 
-BOOL ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos )
+sal_Bool ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos )
 {
-    if (nOldPos == nNewPos) return FALSE;
-    BOOL bValid = FALSE;
+    if (nOldPos == nNewPos) return false;
+    sal_Bool bValid = false;
     if (VALIDTAB(nOldPos))
     {
         if (pTab[nOldPos])
@@ -727,9 +727,9 @@ BOOL ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos )
             SCTAB nTabCount = GetTableCount();
             if (nTabCount > 1)
             {
-                BOOL bOldAutoCalc = GetAutoCalc();
-                SetAutoCalc( FALSE );   // Mehrfachberechnungen vermeiden
-                SetNoListening( TRUE );
+                sal_Bool bOldAutoCalc = GetAutoCalc();
+                SetAutoCalc( false );   // Mehrfachberechnungen vermeiden
+                SetNoListening( sal_True );
                 ScProgress* pProgress = new ScProgress( GetDocumentShell(),
                     ScGlobal::GetRscString(STR_UNDO_MOVE_TAB), GetCodeCount() );
                 if (nNewPos == SC_TAB_APPEND)
@@ -774,7 +774,7 @@ BOOL ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos )
                 for (i = 0; i <= MAXTAB; i++)
                     if (pTab[i])
                         pTab[i]->UpdateCompile();
-                SetNoListening( FALSE );
+                SetNoListening( false );
                 for (i = 0; i <= MAXTAB; i++)
                     if (pTab[i])
                         pTab[i]->StartAllListeners();
@@ -786,14 +786,14 @@ BOOL ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos )
                 if (pDrawLayer)
                     DrawMovePage( static_cast<sal_uInt16>(nOldPos), static_cast<sal_uInt16>(nNewPos) );
 
-                bValid = TRUE;
+                bValid = sal_True;
             }
         }
     }
     return bValid;
 }
 
-BOOL ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyMarked )
+sal_Bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyMarked )
 {
     if (SC_TAB_APPEND == nNewPos ) nNewPos = nMaxTableNumber;
     String aName;
@@ -801,20 +801,20 @@ BOOL ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
 
     //  vorneweg testen, ob der Prefix als gueltig erkannt wird
     //  wenn nicht, nur doppelte vermeiden
-    BOOL bPrefix = ValidTabName( aName );
+    sal_Bool bPrefix = ValidTabName( aName );
     DBG_ASSERT(bPrefix, "ungueltiger Tabellenname");
     SCTAB nDummy;
 
     CreateValidTabName(aName);
 
-    BOOL bValid;
+    sal_Bool bValid;
     if (bPrefix)
         bValid = ( ValidNewTabName(aName) && (nMaxTableNumber <= MAXTAB) );
     else
         bValid = ( !GetTable( aName, nDummy ) && (nMaxTableNumber <= MAXTAB) );
 
-    BOOL bOldAutoCalc = GetAutoCalc();
-    SetAutoCalc( FALSE );   // Mehrfachberechnungen vermeiden
+    sal_Bool bOldAutoCalc = GetAutoCalc();
+    SetAutoCalc( false );   // Mehrfachberechnungen vermeiden
     if (bValid)
     {
         if (nNewPos == nMaxTableNumber)
@@ -826,7 +826,7 @@ BOOL ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
         {
             if (VALIDTAB(nNewPos) && (nNewPos < nMaxTableNumber))
             {
-                SetNoListening( TRUE );
+                SetNoListening( sal_True );
 
                 ScRange aRange( 0,0,nNewPos, MAXCOL,MAXROW,MAXTAB );
                 xColNameRanges->UpdateReference( URM_INSDEL, this, aRange, 0,0,1 );
@@ -853,11 +853,11 @@ BOOL ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
                     nOldPos++;
                 pTab[nNewPos] = new ScTable(this, nNewPos, aName);
                 ++nMaxTableNumber;
-                bValid = TRUE;
+                bValid = sal_True;
                 for (i = 0; i <= MAXTAB; i++)
                     if (pTab[i] && i != nOldPos && i != nNewPos)
                         pTab[i]->UpdateCompile();
-                SetNoListening( FALSE );
+                SetNoListening( false );
                 for (i = 0; i <= MAXTAB; i++)
                     if (pTab[i] && i != nOldPos && i != nNewPos)
                         pTab[i]->StartAllListeners();
@@ -871,12 +871,12 @@ BOOL ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
                 pChartListenerCollection->UpdateScheduledSeriesRanges();
             }
             else
-                bValid = FALSE;
+                bValid = false;
         }
     }
     if (bValid)
     {
-        SetNoListening( TRUE );     // noch nicht bei CopyToTable/Insert
+        SetNoListening( sal_True );     // noch nicht bei CopyToTable/Insert
         pTab[nOldPos]->CopyToTable(0, 0, MAXCOL, MAXROW, IDF_ALL, (pOnlyMarked != NULL),
                                         pTab[nNewPos], pOnlyMarked );
         pTab[nNewPos]->SetTabBgColor(pTab[nOldPos]->GetTabBgColor());
@@ -890,8 +890,8 @@ BOOL ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
         pTab[nOldPos]->UpdateInsertTab(nNewPos);
 
         pTab[nOldPos]->UpdateCompile();
-        pTab[nNewPos]->UpdateCompile( TRUE );   //  maybe already compiled in Clone, but used names need recompilation
-        SetNoListening( FALSE );
+        pTab[nNewPos]->UpdateCompile( true );   //  maybe already compiled in Clone, but used names need recompilation
+        SetNoListening( false );
         pTab[nOldPos]->StartAllListeners();
         pTab[nNewPos]->StartAllListeners();
         SetDirty();
@@ -910,14 +910,14 @@ BOOL ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
 
 void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, String& sModuleName, String& sModuleSource );
 
-ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
-                                SCTAB nDestPos, BOOL bInsertNew,
-                                BOOL bResultsOnly )
+sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
+                                SCTAB nDestPos, sal_Bool bInsertNew,
+                                sal_Bool bResultsOnly )
 {
-    ULONG nRetVal = 1;                      // 0 => Fehler 1 = ok
+    sal_uLong nRetVal = 1;                      // 0 => Fehler 1 = ok
                                             // 2 => RefBox, 3 => NameBox
                                             // 4 => beides
-    BOOL bValid = TRUE;
+    sal_Bool bValid = sal_True;
     if (bInsertNew)             // neu einfuegen
     {
         String aName;
@@ -932,19 +932,19 @@ ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
             pTab[nDestPos]->DeleteArea( 0,0, MAXCOL,MAXROW, IDF_ALL );
         }
         else
-            bValid = FALSE;
+            bValid = false;
     }
 
     if (bValid)
     {
-        BOOL bOldAutoCalcSrc = FALSE;
-        BOOL bOldAutoCalc = GetAutoCalc();
-        SetAutoCalc( FALSE );   // Mehrfachberechnungen vermeiden
-        SetNoListening( TRUE );
+        sal_Bool bOldAutoCalcSrc = false;
+        sal_Bool bOldAutoCalc = GetAutoCalc();
+        SetAutoCalc( false );   // Mehrfachberechnungen vermeiden
+        SetNoListening( sal_True );
         if ( bResultsOnly )
         {
             bOldAutoCalcSrc = pSrcDoc->GetAutoCalc();
-            pSrcDoc->SetAutoCalc( TRUE );   // falls was berechnet werden muss
+            pSrcDoc->SetAutoCalc( sal_True );   // falls was berechnet werden muss
         }
 
         {
@@ -955,14 +955,14 @@ ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
                 ScBulkBroadcast aBulkBroadcast( pBASM);
                 pSrcDoc->pTab[nSrcPos]->CopyToTable(0, 0, MAXCOL, MAXROW,
                         ( bResultsOnly ? IDF_ALL & ~IDF_FORMULA : IDF_ALL),
-                        FALSE, pTab[nDestPos] );
+                        false, pTab[nDestPos] );
             }
         }
         pTab[nDestPos]->SetTabNo(nDestPos);
 
         if ( !bResultsOnly )
         {
-            BOOL bNamesLost = FALSE;
+            BOOL bNamesLost = false;
             // array containing range names which might need update of indices.
             // The instances inserted into this vector are managed by the
             // range name container of this document, so no need to delete
@@ -971,10 +971,10 @@ ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
 
             // the index mapping thereof
             ScRangeData::IndexMap aSrcRangeMap;
-            BOOL bRangeNameReplace = FALSE;
+            sal_Bool bRangeNameReplace = false;
 
             // find named ranges that are used in the source sheet
-            std::set<USHORT> aUsedNames;
+            std::set<sal_uInt16> aUsedNames;
             pSrcDoc->pTab[nSrcPos]->FindRangeNamesInUse( 0, 0, MAXCOL, MAXROW, aUsedNames );
 
             ScRangeName::const_iterator itr = pSrcDoc->pRangeName->begin(), itrEnd = pSrcDoc->pRangeName->end();
@@ -996,8 +996,8 @@ ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
                         // don't modify the named range
                         aSrcRangeMap.insert(
                             ScRangeData::IndexMap::value_type(nOldIndex, nExistingIndex));
-                        bRangeNameReplace = TRUE;
-                        bNamesLost = TRUE;
+                        bRangeNameReplace = sal_True;
+                        bNamesLost = sal_True;
                     }
                     else
                     {
@@ -1039,7 +1039,7 @@ ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
                                                      MAXCOL, MAXROW, nDestPos,
                                                      0, 0, nDz, NULL);
             // Test for outside absolute references for info box
-            BOOL bIsAbsRef = pSrcDoc->pTab[nSrcPos]->TestTabRefAbs(nSrcPos);
+            sal_Bool bIsAbsRef = pSrcDoc->pTab[nSrcPos]->TestTabRefAbs(nSrcPos);
             // Readjust self-contained absolute references to this sheet
             pTab[nDestPos]->TestTabRefAbs(nSrcPos);
             if (bIsAbsRef)
@@ -1055,7 +1055,7 @@ ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
             pTab[nDestPos]->CompileAll();
         }
 
-        SetNoListening( FALSE );
+        SetNoListening( false );
         if ( !bResultsOnly )
             pTab[nDestPos]->StartAllListeners();
         SetDirty( ScRange( 0, 0, nDestPos, MAXCOL, MAXROW, nDestPos));
@@ -1073,7 +1073,7 @@ ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
     }
     if (!bValid)
         nRetVal = 0;
-    BOOL bVbaEnabled = IsInVBAMode();
+    sal_Bool bVbaEnabled = IsInVBAMode();
 
     if ( bVbaEnabled  )
     {
@@ -1115,7 +1115,7 @@ ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
 
 //  ----------------------------------------------------------------------------
 
-void ScDocument::SetError( SCCOL nCol, SCROW nRow, SCTAB nTab, const USHORT nError)
+void ScDocument::SetError( SCCOL nCol, SCROW nRow, SCTAB nTab, const sal_uInt16 nError)
 {
     if (VALIDTAB(nTab))
         if (pTab[nTab])
@@ -1194,16 +1194,16 @@ ScFieldEditEngine* ScDocument::CreateFieldEditEngine()
     if (!pCacheFieldEditEngine)
     {
         pNewEditEngine = new ScFieldEditEngine( GetEnginePool(),
-            GetEditPool(), FALSE );
+            GetEditPool(), false );
     }
     else
     {
         if ( !bImportingXML )
         {
             // #i66209# previous use might not have restored update mode,
-            // ensure same state as for a new EditEngine (UpdateMode = TRUE)
+            // ensure same state as for a new EditEngine (UpdateMode = sal_True)
             if ( !pCacheFieldEditEngine->GetUpdateMode() )
-                pCacheFieldEditEngine->SetUpdateMode(TRUE);
+                pCacheFieldEditEngine->SetUpdateMode(sal_True);
         }
 
         pNewEditEngine = pCacheFieldEditEngine;

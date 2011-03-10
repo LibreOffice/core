@@ -30,8 +30,8 @@
 // this includes no link dependency
 #include <svl/solar.hrc>
 
-//next free is 291
-//single free is: 134
+//next free is 293
+//single free: 139
 
 //-----------------------------------------------------------------------------
 //chart types
@@ -100,6 +100,7 @@
 #define STR_REGRESSION_LOG                  (RID_APP_START + 136)
 #define STR_REGRESSION_EXP                  (RID_APP_START + 137)
 #define STR_REGRESSION_POWER                (RID_APP_START + 138)
+#define STR_REGRESSION_MEAN                 (RID_APP_START + 180)
 
 //-----------------------------------------------------------------------------
 //for scale tab page
@@ -109,6 +110,8 @@
 #define STR_STEP_GT_ZERO                    (RID_APP_START + 102)
 #define STR_BAD_LOGARITHM                   (RID_APP_START + 111)
 #define STR_MIN_GREATER_MAX                 (RID_APP_START + 101)
+#define STR_INVALID_INTERVALS               (RID_APP_START + 291)
+#define STR_INVALID_TIME_UNIT               (RID_APP_START + 292)
 
 //-----------------------------------------------------------------------------
 //for range didalog
@@ -206,8 +209,6 @@
 #define STR_OBJECT_AVERAGE_LINE_WITH_PARAMETERS (RID_APP_START + 265)
 
 #define STR_OBJECT_CURVE_EQUATION           (RID_APP_START + 268)
-#define STR_STATISTICS_IN_LEGEND            (RID_APP_START + 180)
-
 #define STR_OBJECT_SHAPE                    (RID_APP_START + 290)
 
 //-----------------------------------------------------------------------------
@@ -254,6 +255,7 @@
 #define STR_ACTION_TOGGLE_GRID_HORZ         (RID_APP_START + 86)
 #define STR_ACTION_SCALE_TEXT               (RID_APP_START + 93)
 #define STR_ACTION_REARRANGE_CHART          (RID_APP_START + 94)
+#define STR_ACTION_EDIT_TEXT                (RID_APP_START + 95)
 
 #define STR_TIP_CHOOSECOLOR                 (RID_APP_START + 233)
 #define STR_TIP_LIGHTSOURCE_X               (RID_APP_START + 234)
@@ -268,7 +270,6 @@
 #define STR_TIP_DATAPOINT                   (RID_APP_START + 140)
 #define STR_TIP_DATAPOINT_INDEX             (RID_APP_START + 141)
 #define STR_TIP_DATAPOINT_VALUES            (RID_APP_START + 142)
-#define STR_TIP_CATEGORY_VALUE              (RID_APP_START + 139)
 
 //-----------------------------------------------------------------------------
 //warning and info boxes
@@ -285,6 +286,10 @@
 #define STR_TEXT_DIRECTION_RTL              (RID_APP_START + 279)
 #define STR_TEXT_DIRECTION_SUPER            (RID_APP_START + 280)
 
+//IAccessibility2 Implementation 2009-----
+#define STR_BUTTON_UP                       (RID_APP_START + 500)
+#define STR_BUTTON_DOWN                     (RID_APP_START + 501)
+//-----IAccessibility2 Implementation 2009
 //-----------------------------------------------------------------------------
 
 // ids must not exceed RID_APP_START + 499

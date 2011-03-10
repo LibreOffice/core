@@ -43,7 +43,7 @@ class ScMatrix;
 class SC_DLLPUBLIC ScTokenArray : public formula::FormulaTokenArray
 {
     friend class ScCompiler;
-    BOOL                    ImplGetReference( ScRange& rRange, BOOL bValidOnly ) const;
+    sal_Bool                    ImplGetReference( ScRange& rRange, sal_Bool bValidOnly ) const;
 
 public:
     ScTokenArray();
@@ -53,15 +53,15 @@ public:
     ScTokenArray* Clone() const;    /// True copy!
 
     /// Exactly and only one range (valid or deleted)
-    BOOL    IsReference( ScRange& rRange ) const;
+    sal_Bool    IsReference( ScRange& rRange ) const;
     /// Exactly and only one valid range (no #REF!s)
-    BOOL    IsValidReference( ScRange& rRange ) const;
+    sal_Bool    IsValidReference( ScRange& rRange ) const;
 
 
                             /** Determines the extent of direct adjacent
                                 references. Only use with real functions, e.g.
                                 GetOuterFuncOpCode() == ocSum ! */
-    BOOL                    GetAdjacentExtendOfOuterFuncRefs( SCCOLROW& nExtend,
+    sal_Bool                    GetAdjacentExtendOfOuterFuncRefs( SCCOLROW& nExtend,
                                 const ScAddress& rPos, ScDirection );
 
     formula::FormulaToken* AddRawToken( const ScRawToken& );

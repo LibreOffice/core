@@ -150,7 +150,7 @@ ScXMLExternalTabData::ScXMLExternalTabData() :
 //------------------------------------------------------------------
 
 ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
-                                      USHORT nPrfx,
+                                      sal_uInt16 nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -159,7 +159,7 @@ ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
     SvXMLImportContext( rImport, nPrfx, rLName ),
     pExternalRefInfo(NULL),
     nStartOffset(-1),
-    bStartFormPage(sal_False),
+    bStartFormPage(false),
     bPrintEntireSheet(sal_True)
 {
     // get start offset in file (if available)
@@ -176,7 +176,7 @@ ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
         {
             const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
             rtl::OUString aLocalName;
-            USHORT nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
+            sal_uInt16 nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                                 sAttrName, &aLocalName ));
             const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
 
@@ -206,7 +206,7 @@ ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
                 case XML_TOK_TABLE_PRINT:
                     {
                         if (IsXMLToken(sValue, XML_FALSE))
-                            bPrintEntireSheet = sal_False;
+                            bPrintEntireSheet = false;
                     }
                     break;
             }
@@ -243,7 +243,7 @@ ScXMLTableContext::~ScXMLTableContext()
 {
 }
 
-SvXMLImportContext *ScXMLTableContext::CreateChildContext( USHORT nPrefix,
+SvXMLImportContext *ScXMLTableContext::CreateChildContext( sal_uInt16 nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
@@ -282,17 +282,17 @@ SvXMLImportContext *ScXMLTableContext::CreateChildContext( USHORT nPrefix,
     case XML_TOK_TABLE_COL_GROUP:
         pContext = new ScXMLTableColsContext( GetScImport(), nPrefix,
                                                    rLName, xAttrList,
-                                                   sal_False, sal_True );
+                                                   false, sal_True );
         break;
     case XML_TOK_TABLE_HEADER_COLS:
         pContext = new ScXMLTableColsContext( GetScImport(), nPrefix,
                                                    rLName, xAttrList,
-                                                   sal_True, sal_False );
+                                                   sal_True, false );
         break;
     case XML_TOK_TABLE_COLS:
         pContext = new ScXMLTableColsContext( GetScImport(), nPrefix,
                                                    rLName, xAttrList,
-                                                   sal_False, sal_False );
+                                                   false, false );
         break;
     case XML_TOK_TABLE_COL:
             pContext = new ScXMLTableColContext( GetScImport(), nPrefix,
@@ -304,17 +304,17 @@ SvXMLImportContext *ScXMLTableContext::CreateChildContext( USHORT nPrefix,
     case XML_TOK_TABLE_ROW_GROUP:
         pContext = new ScXMLTableRowsContext( GetScImport(), nPrefix,
                                                    rLName, xAttrList,
-                                                   sal_False, sal_True );
+                                                   false, sal_True );
         break;
     case XML_TOK_TABLE_HEADER_ROWS:
         pContext = new ScXMLTableRowsContext( GetScImport(), nPrefix,
                                                    rLName, xAttrList,
-                                                   sal_True, sal_False );
+                                                   sal_True, false );
         break;
     case XML_TOK_TABLE_ROWS:
         pContext = new ScXMLTableRowsContext( GetScImport(), nPrefix,
                                                    rLName, xAttrList,
-                                                   sal_False, sal_False );
+                                                   false, false );
         break;
     case XML_TOK_TABLE_ROW:
             pContext = new ScXMLTableRowContext( GetScImport(), nPrefix,
@@ -381,7 +381,7 @@ void ScXMLTableContext::EndElement()
         // Sheet has "print entire sheet" option by default.  Remove it.
         pDoc->ClearPrintRanges(nCurTab);
 
-    ScOutlineTable* pOutlineTable(pDoc->GetOutlineTable(nCurTab, sal_False));
+    ScOutlineTable* pOutlineTable(pDoc->GetOutlineTable(nCurTab, false));
     if (pOutlineTable)
     {
         ScOutlineArray* pColArray(pOutlineTable->GetColArray());
@@ -389,24 +389,24 @@ void ScXMLTableContext::EndElement()
         sal_Int32 i;
         for (i = 0; i < nDepth; ++i)
         {
-            sal_Int32 nCount(pColArray->GetCount(static_cast<USHORT>(i)));
+            sal_Int32 nCount(pColArray->GetCount(static_cast<sal_uInt16>(i)));
             for (sal_Int32 j = 0; j < nCount; ++j)
             {
-                ScOutlineEntry* pEntry(pColArray->GetEntry(static_cast<USHORT>(i), static_cast<USHORT>(j)));
+                ScOutlineEntry* pEntry(pColArray->GetEntry(static_cast<sal_uInt16>(i), static_cast<sal_uInt16>(j)));
                 if (pEntry->IsHidden())
-                    pColArray->SetVisibleBelow(static_cast<USHORT>(i), static_cast<USHORT>(j), sal_False);
+                    pColArray->SetVisibleBelow(static_cast<sal_uInt16>(i), static_cast<sal_uInt16>(j), false);
             }
         }
         ScOutlineArray* pRowArray(pOutlineTable->GetRowArray());
         nDepth = pRowArray->GetDepth();
         for (i = 0; i < nDepth; ++i)
         {
-            sal_Int32 nCount(pRowArray->GetCount(static_cast<USHORT>(i)));
+            sal_Int32 nCount(pRowArray->GetCount(static_cast<sal_uInt16>(i)));
             for (sal_Int32 j = 0; j < nCount; ++j)
             {
-                ScOutlineEntry* pEntry(pRowArray->GetEntry(static_cast<USHORT>(i), static_cast<USHORT>(j)));
+                ScOutlineEntry* pEntry(pRowArray->GetEntry(static_cast<sal_uInt16>(i), static_cast<sal_uInt16>(j)));
                 if (pEntry->IsHidden())
-                    pRowArray->SetVisibleBelow(static_cast<USHORT>(i), static_cast<USHORT>(j), sal_False);
+                    pRowArray->SetVisibleBelow(static_cast<sal_uInt16>(i), static_cast<sal_uInt16>(j), false);
             }
         }
     }
@@ -423,7 +423,7 @@ void ScXMLTableContext::EndElement()
     }
 
     GetScImport().GetTables().DeleteTable();
-    GetScImport().ProgressBarIncrement(sal_False);
+    GetScImport().ProgressBarIncrement(false);
 
     // store stream positions
     if (!pExternalRefInfo.get() && nStartOffset >= 0 /* && nEndOffset >= 0 */)
@@ -443,7 +443,7 @@ ScXMLImport& ScXMLTableProtectionContext::GetScImport()
 }
 
 ScXMLTableProtectionContext::ScXMLTableProtectionContext(
-    ScXMLImport& rImport, USHORT nPrefix, const OUString& rLName,
+    ScXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLName,
     const Reference<XAttributeList>& xAttrList ) :
     SvXMLImportContext( rImport, nPrefix, rLName )
 {
@@ -459,7 +459,7 @@ ScXMLTableProtectionContext::ScXMLTableProtectionContext(
         const OUString aValue = xAttrList->getValueByIndex(i);
 
         OUString aLocalName;
-        USHORT nLocalPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
+        sal_uInt16 nLocalPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
             aAttrName, &aLocalName);
 
         switch (rAttrTokenMap.Get(nLocalPrefix, aLocalName))
@@ -485,7 +485,7 @@ ScXMLTableProtectionContext::~ScXMLTableProtectionContext()
 }
 
 SvXMLImportContext* ScXMLTableProtectionContext::CreateChildContext(
-    USHORT /*nPrefix*/, const OUString& /*rLocalName*/, const Reference<XAttributeList>& /*xAttrList*/ )
+    sal_uInt16 /*nPrefix*/, const OUString& /*rLocalName*/, const Reference<XAttributeList>& /*xAttrList*/ )
 {
     return NULL;
 }

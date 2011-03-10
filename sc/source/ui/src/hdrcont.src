@@ -32,7 +32,7 @@
     MenuItem\
     {\
         Identifier = FID_CELL_FORMAT ; \
-        HelpId = FID_CELL_FORMAT ; \
+        HelpId = CMD_FID_CELL_FORMAT ; \
         Text [ en-US ] = "~Format Cells..." ; \
     };
 
@@ -41,13 +41,13 @@
     MenuItem\
     {\
         Identifier = SID_CUT ; \
-        HelpId = SID_CUT ; \
+        HelpId = CMD_SID_CUT ; \
         Text [ en-US ] = "Cu~t" ; \
     };\
     MenuItem\
     {\
         Identifier = SID_COPY ; \
-        HelpId = SID_COPY ; \
+        HelpId = CMD_SID_COPY ; \
         Text [ en-US ] = "~Copy" ; \
     };\
     MenuItem\
@@ -106,13 +106,13 @@ Menu RID_POPUP_ROWHEADER
         MenuItem
         {
             Identifier = FID_ROW_HIDE ;
-            HelpId = FID_ROW_HIDE ;
+            HelpId = CMD_FID_ROW_HIDE ;
             Text [ en-US ] = "~Hide" ;
         };
         MenuItem
         {
             Identifier = FID_ROW_SHOW ;
-            HelpId = FID_ROW_SHOW ;
+            HelpId = CMD_FID_ROW_SHOW ;
             Text [ en-US ] = "~Show" ;
         };
          //------------------------------
@@ -122,7 +122,7 @@ Menu RID_POPUP_ROWHEADER
         MenuItem
         {
             Identifier = SID_PASTE_SPECIAL ;
-            HelpId = SID_PASTE_SPECIAL ;
+            HelpId = CMD_SID_PASTE_SPECIAL ;
             Text [ en-US ] = "P~aste Special..." ;
         };
     };
@@ -141,13 +141,13 @@ Menu RID_POPUP_COLHEADER
         MenuItem
         {
             Identifier = FID_COL_WIDTH ;
-            HelpId = FID_COL_WIDTH ;
+            HelpId = CMD_FID_COL_WIDTH ;
             Text [ en-US ] = "Col~umn Width..." ;
         };
         MenuItem
         {
             Identifier = FID_COL_OPT_WIDTH ;
-            HelpId = FID_COL_OPT_WIDTH ;
+            HelpId = CMD_FID_COL_OPT_WIDTH ;
             Text [ en-US ] = "O~ptimal Column Width..." ;
         };
          //------------------------------
@@ -177,13 +177,13 @@ Menu RID_POPUP_COLHEADER
         MenuItem
         {
             Identifier = FID_COL_HIDE ;
-            HelpId = FID_COL_HIDE ;
+            HelpId = CMD_FID_COL_HIDE ;
             Text [ en-US ] = "~Hide" ;
         };
         MenuItem
         {
             Identifier = FID_COL_SHOW ;
-            HelpId = FID_COL_SHOW ;
+            HelpId = CMD_FID_COL_SHOW ;
             Text [ en-US ] = "~Show" ;
         };
          //------------------------------
@@ -193,7 +193,7 @@ Menu RID_POPUP_COLHEADER
         MenuItem
         {
             Identifier = SID_PASTE_SPECIAL ;
-            HelpId = SID_PASTE_SPECIAL ;
+            HelpId = CMD_SID_PASTE_SPECIAL ;
             Text [ en-US ] = "Paste ~Special..." ;
         };
     };

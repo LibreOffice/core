@@ -70,7 +70,7 @@ FuConstruct::~FuConstruct()
 {
 }
 
-BYTE FuConstruct::Command(const CommandEvent& rCEvt)
+sal_uInt8 FuConstruct::Command(const CommandEvent& rCEvt)
 {
     //  special code for non-VCL OS2/UNX removed
 
@@ -83,18 +83,18 @@ BYTE FuConstruct::Command(const CommandEvent& rCEvt)
 |*
 \************************************************************************/
 
-BOOL FuConstruct::MouseButtonDown(const MouseEvent& rMEvt)
+sal_Bool FuConstruct::MouseButtonDown(const MouseEvent& rMEvt)
 {
     // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
-    BOOL bReturn = FuDraw::MouseButtonDown(rMEvt);
+    sal_Bool bReturn = FuDraw::MouseButtonDown(rMEvt);
 
     if ( pView->IsAction() )
     {
         if ( rMEvt.IsRight() )
             pView->BckAction();
-        return TRUE;
+        return sal_True;
     }
 
     aDragTimer.Start();
@@ -110,16 +110,16 @@ BOOL FuConstruct::MouseButtonDown(const MouseEvent& rMEvt)
         if ( pHdl != NULL || pView->IsMarkedHit(aMDPos) )
         {
             pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl, 1);
-            bReturn = TRUE;
+            bReturn = sal_True;
         }
         else if ( pView->AreObjectsMarked() )
         {
             pView->UnmarkAll();
-            bReturn = TRUE;
+            bReturn = sal_True;
         }
     }
 
-    bIsInDragMode = FALSE;
+    bIsInDragMode = false;
 
     return bReturn;
 }
@@ -130,7 +130,7 @@ BOOL FuConstruct::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BOOL FuConstruct::MouseMove(const MouseEvent& rMEvt)
+sal_Bool FuConstruct::MouseMove(const MouseEvent& rMEvt)
 {
     FuDraw::MouseMove(rMEvt);
 
@@ -168,7 +168,7 @@ BOOL FuConstruct::MouseMove(const MouseEvent& rMEvt)
             pViewShell->SetActivePointer( aNewPointer );
         }
     }
-    return TRUE;
+    return sal_True;
 }
 
 /*************************************************************************
@@ -177,16 +177,16 @@ BOOL FuConstruct::MouseMove(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BOOL FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
+sal_Bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
 {
     // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
-    BOOL bReturn = SimpleMouseButtonUp( rMEvt );
+    sal_Bool bReturn = SimpleMouseButtonUp( rMEvt );
 
     //      Doppelklick auf Textobjekt? (->fusel)
 
-    USHORT nClicks = rMEvt.GetClicks();
+    sal_uInt16 nClicks = rMEvt.GetClicks();
     if ( nClicks == 2 && rMEvt.IsLeft() )
     {
         if ( pView->AreObjectsMarked() )
@@ -201,8 +201,8 @@ BOOL FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
                 if ( pObj->ISA(SdrTextObj) && !pObj->ISA(SdrUnoObj) )
                 {
                     OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
-                    BOOL bVertical = ( pOPO && pOPO->IsVertical() );
-                    USHORT nTextSlotId = bVertical ? SID_DRAW_TEXT_VERTICAL : SID_DRAW_TEXT;
+                    sal_Bool bVertical = ( pOPO && pOPO->IsVertical() );
+                    sal_uInt16 nTextSlotId = bVertical ? SID_DRAW_TEXT_VERTICAL : SID_DRAW_TEXT;
 
                     pViewShell->GetViewData()->GetDispatcher().
                         Execute(nTextSlotId, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
@@ -215,7 +215,7 @@ BOOL FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
                         Point aMousePixel = rMEvt.GetPosPixel();
                         pText->SetInEditMode( pObj, &aMousePixel );
                     }
-                    bReturn = TRUE;
+                    bReturn = sal_True;
                 }
             }
         }
@@ -228,9 +228,9 @@ BOOL FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
 
 //      SimpleMouseButtonUp - ohne Test auf Doppelklick
 
-BOOL FuConstruct::SimpleMouseButtonUp(const MouseEvent& rMEvt)
+sal_Bool FuConstruct::SimpleMouseButtonUp(const MouseEvent& rMEvt)
 {
-    BOOL    bReturn = TRUE;
+    sal_Bool    bReturn = sal_True;
 
     if (aDragTimer.IsActive() )
     {
@@ -245,7 +245,7 @@ BOOL FuConstruct::SimpleMouseButtonUp(const MouseEvent& rMEvt)
     else if ( pView->IsMarkObj() )
         pView->EndMarkObj();
 
-    else bReturn = FALSE;
+    else bReturn = false;
 
     if ( !pView->IsAction() )
     {
@@ -253,7 +253,7 @@ BOOL FuConstruct::SimpleMouseButtonUp(const MouseEvent& rMEvt)
 
         if ( !pView->AreObjectsMarked() && rMEvt.GetClicks() < 2 )
         {
-            pView->MarkObj(aPnt, -2, FALSE, rMEvt.IsMod1());
+            pView->MarkObj(aPnt, -2, false, rMEvt.IsMod1());
 
             SfxDispatcher& rDisp = pViewShell->GetViewData()->GetDispatcher();
             if ( pView->AreObjectsMarked() )
@@ -270,14 +270,14 @@ BOOL FuConstruct::SimpleMouseButtonUp(const MouseEvent& rMEvt)
 |*
 |* Tastaturereignisse bearbeiten
 |*
-|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert TRUE, andernfalls
+|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert sal_True, andernfalls
 |* FALSE.
 |*
 \************************************************************************/
 
-BOOL FuConstruct::KeyInput(const KeyEvent& rKEvt)
+sal_Bool FuConstruct::KeyInput(const KeyEvent& rKEvt)
 {
-    BOOL bReturn = FALSE;
+    sal_Bool bReturn = false;
 
     switch ( rKEvt.GetKeyCode().GetCode() )
     {
@@ -286,7 +286,7 @@ BOOL FuConstruct::KeyInput(const KeyEvent& rKEvt)
             {
                 pView->BrkAction();
                 pWindow->ReleaseMouse();
-                bReturn = TRUE;
+                bReturn = sal_True;
             }
             else                            // Zeichenmodus beenden
             {
@@ -297,7 +297,7 @@ BOOL FuConstruct::KeyInput(const KeyEvent& rKEvt)
 
         case KEY_DELETE:
             pView->DeleteMarked();
-            bReturn = TRUE;
+            bReturn = sal_True;
             break;
     }
 

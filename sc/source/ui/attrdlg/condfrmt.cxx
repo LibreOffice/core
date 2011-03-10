@@ -72,7 +72,6 @@ ScConditionalFormatDlg::ScConditionalFormatDlg(
         aFtCond1Template    ( this, ScResId( FT_COND1_TEMPLATE ) ),
         aLbCond1Template    ( this, ScResId( LB_COND1_TEMPLATE ) ),
         aBtnNew1            ( this, ScResId( BTN_COND1_NEW ) ),
-        aFlSep1             ( this, ScResId( FL_SEP1 ) ),
 
         aCbxCond2           ( this, ScResId( CBX_COND2 ) ),
         aLbCond21           ( this, ScResId( LB_COND2_1 ) ),
@@ -85,7 +84,6 @@ ScConditionalFormatDlg::ScConditionalFormatDlg(
         aFtCond2Template    ( this, ScResId( FT_COND2_TEMPLATE ) ),
         aLbCond2Template    ( this, ScResId( LB_COND2_TEMPLATE ) ),
         aBtnNew2            ( this, ScResId( BTN_COND2_NEW ) ),
-        aFlSep2             ( this, ScResId( FL_SEP2 ) ),
 
         aCbxCond3           ( this, ScResId( CBX_COND3 ) ),
         aLbCond31           ( this, ScResId( LB_COND3_1 ) ),
@@ -102,8 +100,10 @@ ScConditionalFormatDlg::ScConditionalFormatDlg(
         aBtnOk              ( this, ScResId( BTN_OK ) ),
         aBtnCancel          ( this, ScResId( BTN_CANCEL ) ),
         aBtnHelp            ( this, ScResId( BTN_HELP ) ),
+        aFlSep2             ( this, ScResId( FL_SEP2 ) ),
+        aFlSep1             ( this, ScResId( FL_SEP1 ) ),
         pEdActive           ( NULL ),
-        bDlgLostFocus       ( FALSE ),
+        bDlgLostFocus       ( false ),
 
         pDoc                ( pCurDoc )
 {
@@ -188,7 +188,7 @@ ScConditionalFormatDlg::ScConditionalFormatDlg(
     aCond2Size2 = Size( aPos.X() - aCond2Pos2.X(), aCond2Size3.Height() );
     aCond2Size1 = Size( aPos.X() - aCond2Pos1.X(), aCond2Size3.Height() );
 
-    aCbxCond2.Check( FALSE );
+    aCbxCond2.Check( false );
     aLbCond21.SelectEntryPos( 0 );
     aLbCond22.SelectEntryPos( 0 );
 
@@ -203,7 +203,7 @@ ScConditionalFormatDlg::ScConditionalFormatDlg(
     aCond3Size2 = Size( aPos.X() - aCond3Pos2.X(), aCond3Size3.Height() );
     aCond3Size1 = Size( aPos.X() - aCond3Pos1.X(), aCond3Size3.Height() );
 
-    aCbxCond3.Check( FALSE );
+    aCbxCond3.Check( false );
     aLbCond31.SelectEntryPos( 0 );
     aLbCond32.SelectEntryPos( 0 );
 
@@ -256,7 +256,7 @@ ScConditionalFormatDlg::ScConditionalFormatDlg(
                 ;
             else                                    // via Werte
             {
-                aLbCond12.SelectEntryPos( sal::static_int_cast<USHORT>( eMode ) );
+                aLbCond12.SelectEntryPos( sal::static_int_cast<sal_uInt16>( eMode ) );
                 if ( ( eMode == SC_COND_BETWEEN ) || ( eMode == SC_COND_NOTBETWEEN ) )
                     aEdtCond12.SetText( pEntry->GetExpression( aCurPos, 1 ) );
             }
@@ -264,7 +264,7 @@ ScConditionalFormatDlg::ScConditionalFormatDlg(
 
         if ( pCurrentFormat->Count() > 1 )
         {
-            aCbxCond2.Check( TRUE );
+            aCbxCond2.Check( sal_True );
             pEntry= pCurrentFormat->GetEntry( 1 );
             aEdtCond21.SetText( pEntry->GetExpression( aCurPos, 0 ) );
             aLbCond2Template.SelectEntry( pEntry->GetStyle() );
@@ -279,7 +279,7 @@ ScConditionalFormatDlg::ScConditionalFormatDlg(
                 ;
             else                                    // via Werte
             {
-                aLbCond22.SelectEntryPos( sal::static_int_cast<USHORT>( eMode ) );
+                aLbCond22.SelectEntryPos( sal::static_int_cast<sal_uInt16>( eMode ) );
                 if ( ( eMode == SC_COND_BETWEEN ) || ( eMode == SC_COND_NOTBETWEEN ) )
                     aEdtCond22.SetText( pEntry->GetExpression( aCurPos, 1 ) );
             }
@@ -287,7 +287,7 @@ ScConditionalFormatDlg::ScConditionalFormatDlg(
 
         if ( pCurrentFormat->Count() > 2 )
         {
-            aCbxCond3.Check( TRUE );
+            aCbxCond3.Check( sal_True );
             pEntry= pCurrentFormat->GetEntry( 2 );
             aEdtCond31.SetText( pEntry->GetExpression( aCurPos, 0 ) );
             aLbCond3Template.SelectEntry( pEntry->GetStyle() );
@@ -302,7 +302,7 @@ ScConditionalFormatDlg::ScConditionalFormatDlg(
                 ;
             else                                    // via Werte
             {
-                aLbCond32.SelectEntryPos( sal::static_int_cast<USHORT>( eMode ) );
+                aLbCond32.SelectEntryPos( sal::static_int_cast<sal_uInt16>( eMode ) );
                 if ( ( eMode == SC_COND_BETWEEN ) || ( eMode == SC_COND_NOTBETWEEN ) )
                     aEdtCond32.SetText( pEntry->GetExpression( aCurPos, 1 ) );
             }
@@ -322,6 +322,32 @@ ScConditionalFormatDlg::ScConditionalFormatDlg(
     //@BugID 54702 Enablen/Disablen nur noch in Basisklasse
     //SFX_APPWINDOW->Enable();      // Ref-Feld hat Focus
 //  SFX_APPWINDOW->Disable();
+
+    aLbCond11.SetAccessibleRelationLabeledBy( &aCbxCond1 );
+    aLbCond12.SetAccessibleRelationLabeledBy( &aCbxCond1 );
+    aEdtCond11.SetAccessibleRelationLabeledBy( &aCbxCond1 );
+    aRbCond11.SetAccessibleRelationLabeledBy( &aCbxCond1 );
+
+    aLbCond21.SetAccessibleRelationLabeledBy( &aCbxCond2 );
+    aLbCond22.SetAccessibleRelationLabeledBy( &aCbxCond2 );
+    aEdtCond21.SetAccessibleRelationLabeledBy( &aCbxCond2 );
+    aRbCond21.SetAccessibleRelationLabeledBy( &aCbxCond2 );
+
+    aLbCond31.SetAccessibleRelationLabeledBy( &aCbxCond3 );
+    aLbCond32.SetAccessibleRelationLabeledBy( &aCbxCond3 );
+    aEdtCond31.SetAccessibleRelationLabeledBy( &aCbxCond3 );
+    aRbCond31.SetAccessibleRelationLabeledBy( &aCbxCond3 );
+    aLbCond11.SetAccessibleName( ScResId(LABEL_FORMARTTING_CONDITIONS) );
+    aLbCond12.SetAccessibleName( ScResId(LABEL_CONDITIONS) );
+    aEdtCond11.SetAccessibleName( ScResId(LABEL_CONDITION_VALUE) );
+
+    aLbCond21.SetAccessibleName( ScResId(LABEL_FORMARTTING_CONDITIONS) );
+    aLbCond22.SetAccessibleName( ScResId(LABEL_CONDITIONS) );
+    aEdtCond21.SetAccessibleName( ScResId(LABEL_CONDITION_VALUE) );
+
+    aLbCond31.SetAccessibleName( ScResId(LABEL_FORMARTTING_CONDITIONS) );
+    aLbCond32.SetAccessibleName( ScResId(LABEL_CONDITIONS) );
+    aEdtCond31.SetAccessibleName( ScResId(LABEL_CONDITION_VALUE) );
 }
 
 //----------------------------------------------------------------------------
@@ -372,7 +398,7 @@ void ScConditionalFormatDlg::AddRefEntry()
 
 //----------------------------------------------------------------------------
 
-BOOL ScConditionalFormatDlg::IsRefInputMode() const
+sal_Bool ScConditionalFormatDlg::IsRefInputMode() const
 {
     return (pEdActive != NULL);
 }
@@ -383,7 +409,7 @@ void ScConditionalFormatDlg::SetActive()
 {
     if ( bDlgLostFocus )
     {
-        bDlgLostFocus = FALSE;
+        bDlgLostFocus = false;
         if( pEdActive )
             pEdActive->GrabFocus();
     }
@@ -457,7 +483,7 @@ void ScConditionalFormatDlg::GetConditionalFormat( ScConditionalFormat& rCndFmt 
 //----------------------------------------------------------------------------
 // Zerstoert den Dialog
 
-BOOL ScConditionalFormatDlg::Close()
+sal_Bool ScConditionalFormatDlg::Close()
 {
     return DoClose( ScCondFormatDlgWrapper::GetChildWindowId() );
 }
@@ -470,7 +496,7 @@ BOOL ScConditionalFormatDlg::Close()
 
 IMPL_LINK( ScConditionalFormatDlg, ClickCond1Hdl, void *, EMPTYARG )
 {
-    BOOL bChecked = aCbxCond1.IsChecked();
+    sal_Bool bChecked = aCbxCond1.IsChecked();
 
     aLbCond11.Enable( bChecked );
     aLbCond12.Enable( bChecked );
@@ -491,7 +517,7 @@ IMPL_LINK( ScConditionalFormatDlg, ClickCond1Hdl, void *, EMPTYARG )
 
 IMPL_LINK( ScConditionalFormatDlg, ChangeCond11Hdl, void *, EMPTYARG )
 {
-    USHORT nPos = aLbCond11.GetSelectEntryPos();
+    sal_uInt16 nPos = aLbCond11.GetSelectEntryPos();
 
     if( nPos == 0 ) // Zellwert
     {
@@ -520,7 +546,7 @@ IMPL_LINK( ScConditionalFormatDlg, ChangeCond12Hdl, void *, EMPTYARG )
 {
     if( aLbCond12.IsVisible() )
     {
-        USHORT nPos = aLbCond12.GetSelectEntryPos();
+        sal_uInt16 nPos = aLbCond12.GetSelectEntryPos();
 
         aEdtCond11.Show();
         aRbCond11.Show();
@@ -558,7 +584,7 @@ IMPL_LINK( ScConditionalFormatDlg, ChangeCond12Hdl, void *, EMPTYARG )
 
 IMPL_LINK( ScConditionalFormatDlg, ClickCond2Hdl, void *, EMPTYARG )
 {
-    BOOL bChecked = aCbxCond2.IsChecked();
+    sal_Bool bChecked = aCbxCond2.IsChecked();
 
     aLbCond21.Enable( bChecked );
     aLbCond22.Enable( bChecked );
@@ -579,7 +605,7 @@ IMPL_LINK( ScConditionalFormatDlg, ClickCond2Hdl, void *, EMPTYARG )
 
 IMPL_LINK( ScConditionalFormatDlg, ChangeCond21Hdl, void *, EMPTYARG )
 {
-    USHORT nPos = aLbCond21.GetSelectEntryPos();
+    sal_uInt16 nPos = aLbCond21.GetSelectEntryPos();
 
     if( nPos == 0 ) // Zellwert
     {
@@ -608,7 +634,7 @@ IMPL_LINK( ScConditionalFormatDlg, ChangeCond22Hdl, void *, EMPTYARG )
 {
     if( aLbCond22.IsVisible() )
     {
-        USHORT nPos = aLbCond22.GetSelectEntryPos();
+        sal_uInt16 nPos = aLbCond22.GetSelectEntryPos();
 
         aEdtCond21.Show();
         aRbCond21.Show();
@@ -646,7 +672,7 @@ IMPL_LINK( ScConditionalFormatDlg, ChangeCond22Hdl, void *, EMPTYARG )
 
 IMPL_LINK( ScConditionalFormatDlg, ClickCond3Hdl, void *, EMPTYARG )
 {
-    BOOL bChecked = aCbxCond3.IsChecked();
+    sal_Bool bChecked = aCbxCond3.IsChecked();
 
     aLbCond31.Enable( bChecked );
     aLbCond32.Enable( bChecked );
@@ -667,7 +693,7 @@ IMPL_LINK( ScConditionalFormatDlg, ClickCond3Hdl, void *, EMPTYARG )
 
 IMPL_LINK( ScConditionalFormatDlg, ChangeCond31Hdl, void *, EMPTYARG )
 {
-    USHORT nPos = aLbCond31.GetSelectEntryPos();
+    sal_uInt16 nPos = aLbCond31.GetSelectEntryPos();
 
     if( nPos == 0 ) // Zellwert
     {
@@ -696,7 +722,7 @@ IMPL_LINK( ScConditionalFormatDlg, ChangeCond32Hdl, void *, EMPTYARG )
 {
     if( aLbCond32.IsVisible() )
     {
-        USHORT nPos = aLbCond32.GetSelectEntryPos();
+        sal_uInt16 nPos = aLbCond32.GetSelectEntryPos();
 
         aEdtCond31.Show();
         aRbCond31.Show();
@@ -773,7 +799,7 @@ IMPL_LINK( ScConditionalFormatDlg, BtnHdl, PushButton*, pBtn )
         GetConditionalFormat( aCondFrmt );
         ScCondFrmtItem aOutItem( FID_CONDITIONAL_FORMAT, aCondFrmt );
 
-        SetDispatcherLock( FALSE );
+        SetDispatcherLock( false );
         SwitchToDocument();
         GetBindings().GetDispatcher()->Execute( FID_CONDITIONAL_FORMAT,
                                   SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,
@@ -796,9 +822,9 @@ IMPL_LINK( ScConditionalFormatDlg, NewBtnHdl, PushButton*, pBtn )
     // unlock the dispatcher so SID_STYLE_NEW can be executed
     // (SetDispatcherLock would affect all Calc documents)
     SfxDispatcher* pDisp = GetBindings().GetDispatcher();
-    BOOL bLocked = pDisp->IsLocked();
+    sal_Bool bLocked = pDisp->IsLocked();
     if (bLocked)
-        pDisp->Lock(sal_False);
+        pDisp->Lock(false);
 
     // Execute the "new style" slot, complete with undo and all necessary updates.
     // The return value (SfxUInt16Item) is ignored, look for new styles instead.

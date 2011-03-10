@@ -64,7 +64,7 @@ private:
     PushButton      aBtnAdd;
     PushButton      aBtnRemove;
     MoreButton      aBtnMore;
-    BOOL            bSaved;
+    sal_Bool            bSaved;
 
     const String    aStrAdd;    // "Hinzufuegen"
     const String    aStrModify; // "Aendern"
@@ -95,7 +95,7 @@ private:
 
 protected:
 
-    virtual void    RefInputDone( BOOL bForced = FALSE );
+    virtual void    RefInputDone( sal_Bool bForced = false );
 
 
 public:
@@ -105,10 +105,10 @@ public:
                     ~ScNameDlg();
 
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc );
-    virtual BOOL    IsRefInputMode() const;
+    virtual sal_Bool    IsRefInputMode() const;
 
     virtual void    SetActive();
-    virtual BOOL    Close();
+    virtual sal_Bool    Close();
 
 };
 

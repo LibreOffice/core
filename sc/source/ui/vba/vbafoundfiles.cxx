@@ -83,7 +83,7 @@ sal_Bool SAL_CALL VbaFoundFilesEnum::hasMoreElements() throw (css::uno::RuntimeE
     {
         return sal_True;
     }
-    return sal_False;
+    return false;
 }
 
 css::uno::Any SAL_CALL VbaFoundFilesEnum::nextElement() throw (css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException)

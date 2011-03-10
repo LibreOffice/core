@@ -64,36 +64,63 @@ static const OUString lcl_aImplementationName_Potential(
 static const OUString lcl_aServiceName(
     RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.RegressionCurve" ));
 
-const uno::Sequence< Property > & lcl_GetPropertySequence()
+struct StaticXXXDefaults_Initializer
 {
-    static uno::Sequence< Property > aPropSeq;
-
-    MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( 0 == aPropSeq.getLength() )
+    ::chart::tPropertyValueMap* operator()()
     {
-        // get properties
+        static ::chart::tPropertyValueMap aStaticDefaults;
+        lcl_AddDefaultsToMap( aStaticDefaults );
+        return &aStaticDefaults;
+    }
+private:
+    void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
+    {
+        ::chart::LineProperties::AddDefaultsToMap( rOutMap );
+    }
+};
+
+struct StaticXXXDefaults : public rtl::StaticAggregate< ::chart::tPropertyValueMap, StaticXXXDefaults_Initializer >
+{
+};
+
+struct StaticRegressionCurveInfoHelper_Initializer
+{
+    ::cppu::OPropertyArrayHelper* operator()()
+    {
+        static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
+        return &aPropHelper;
+    }
+
+private:
+    uno::Sequence< Property > lcl_GetPropertySequence()
+    {
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
         ::chart::LineProperties::AddPropertiesToVector( aProperties );
 
-        // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
 
-        // transfer result to static Sequence
-        aPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
+        return ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
+};
 
-    return aPropSeq;
-}
-
-::cppu::IPropertyArrayHelper & lcl_getInfoHelper()
+struct StaticRegressionCurveInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticRegressionCurveInfoHelper_Initializer >
 {
-    static ::cppu::OPropertyArrayHelper aArrayHelper(
-        lcl_GetPropertySequence(),
-        /* bSorted = */ sal_True );
+};
 
-    return aArrayHelper;
-}
+struct StaticRegressionCurveInfo_Initializer
+{
+    uno::Reference< beans::XPropertySetInfo >* operator()()
+    {
+        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticRegressionCurveInfoHelper::get() ) );
+        return &xPropertySetInfo;
+    }
+};
+
+struct StaticRegressionCurveInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticRegressionCurveInfo_Initializer >
+{
+};
 
 } // anonymous namespace
 
@@ -240,45 +267,23 @@ void RegressionCurveModel::fireModifyEvent()
 uno::Any RegressionCurveModel::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
-    static tPropertyValueMap aStaticDefaults;
-
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( 0 == aStaticDefaults.size() )
-    {
-        // initialize defaults
-        LineProperties::AddDefaultsToMap( aStaticDefaults );
-    }
-
-    tPropertyValueMap::const_iterator aFound(
-        aStaticDefaults.find( nHandle ));
-
-    if( aFound == aStaticDefaults.end())
+    const tPropertyValueMap& rStaticDefaults = *StaticXXXDefaults::get();
+    tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
+    if( aFound == rStaticDefaults.end() )
         return uno::Any();
-
     return (*aFound).second;
 }
 
 ::cppu::IPropertyArrayHelper & SAL_CALL RegressionCurveModel::getInfoHelper()
 {
-    return lcl_getInfoHelper();
+    return *StaticRegressionCurveInfoHelper::get();
 }
 
-
 // ____ XPropertySet ____
-uno::Reference< beans::XPropertySetInfo > SAL_CALL
-    RegressionCurveModel::getPropertySetInfo()
+uno::Reference< beans::XPropertySetInfo > SAL_CALL RegressionCurveModel::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
-    static uno::Reference< beans::XPropertySetInfo > xInfo;
-
-    MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( !xInfo.is())
-    {
-        xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo(
-            getInfoHelper());
-    }
-
-    return xInfo;
+    return *StaticRegressionCurveInfo::get();
 }
 
 // ================================================================================

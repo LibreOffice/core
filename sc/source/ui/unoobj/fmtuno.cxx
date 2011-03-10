@@ -184,7 +184,7 @@ ScCondFormatEntryItem::ScCondFormatEntryItem() :
 //------------------------------------------------------------------------
 
 ScTableConditionalFormat::ScTableConditionalFormat(
-        ScDocument* pDoc, ULONG nKey, FormulaGrammar::Grammar eGrammar)
+        ScDocument* pDoc, sal_uLong nKey, FormulaGrammar::Grammar eGrammar)
 {
     //  Eintrag aus dem Dokument lesen...
 
@@ -200,8 +200,8 @@ ScTableConditionalFormat::ScTableConditionalFormat(
                 if (pDoc->IsInExternalReferenceMarking())
                     pFormat->MarkUsedExternalReferences();
 
-                USHORT nEntryCount = pFormat->Count();
-                for (USHORT i=0; i<nEntryCount; i++)
+                sal_uInt16 nEntryCount = pFormat->Count();
+                for (sal_uInt16 i=0; i<nEntryCount; i++)
                 {
                     ScCondFormatEntryItem aItem;
                     const ScCondFormatEntry* pFormatEntry = pFormat->GetEntry(i);
@@ -277,19 +277,14 @@ ScTableConditionalFormat::~ScTableConditionalFormat()
 
 void ScTableConditionalFormat::AddEntry_Impl(const ScCondFormatEntryItem& aEntry)
 {
-    ScTableConditionalEntry* pNew = new ScTableConditionalEntry(this, aEntry);
+    ScTableConditionalEntry* pNew = new ScTableConditionalEntry(aEntry);
     pNew->acquire();
     aEntries.push_back(pNew);
 }
 
-void ScTableConditionalFormat::DataChanged()
-{
-    //  wenn's mal das "lebende Objekt" ist, muss hier was passieren...
-}
-
 // XSheetConditionalFormat
 
-ScTableConditionalEntry* ScTableConditionalFormat::GetObjectByIndex_Impl(USHORT nIndex) const
+ScTableConditionalEntry* ScTableConditionalFormat::GetObjectByIndex_Impl(sal_uInt16 nIndex) const
 {
     return aEntries[nIndex];
 }
@@ -388,7 +383,6 @@ void SAL_CALL ScTableConditionalFormat::addNew(
     }
 
     AddEntry_Impl(aEntry);
-    DataChanged();
 }
 
 void SAL_CALL ScTableConditionalFormat::removeByIndex( sal_Int32 nIndex )
@@ -439,7 +433,7 @@ uno::Any SAL_CALL ScTableConditionalFormat::getByIndex( sal_Int32 nIndex )
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    uno::Reference<sheet::XSheetConditionalEntry> xEntry(GetObjectByIndex_Impl((USHORT)nIndex));
+    uno::Reference<sheet::XSheetConditionalEntry> xEntry(GetObjectByIndex_Impl((sal_uInt16)nIndex));
     if (xEntry.is())
         return uno::makeAny(xEntry);
     else
@@ -479,7 +473,7 @@ uno::Any SAL_CALL ScTableConditionalFormat::getByName( const rtl::OUString& aNam
     for (long i=0; i<nCount; i++)
         if ( aName == lcl_GetEntryNameFromIndex(i) )
         {
-            xEntry.set(GetObjectByIndex_Impl((USHORT)i));
+            xEntry.set(GetObjectByIndex_Impl((sal_uInt16)i));
             break;
         }
 
@@ -511,9 +505,9 @@ sal_Bool SAL_CALL ScTableConditionalFormat::hasByName( const rtl::OUString& aNam
     long nCount = aEntries.size();
     for (long i=0; i<nCount; i++)
         if ( aName == lcl_GetEntryNameFromIndex(i) )
-            return TRUE;
+            return sal_True;
 
-    return FALSE;
+    return false;
 }
 
 // XUnoTunnel
@@ -563,14 +557,11 @@ ScTableConditionalEntry::ScTableConditionalEntry(ScTableConditionalFormat* pPar,
     pParent( pPar ),
     aData( aItem )
 {
-    if (pParent)
-        pParent->acquire();
+    // #i113668# only store the settings, keep no reference to parent object
 }
 
 ScTableConditionalEntry::~ScTableConditionalEntry()
 {
-    if (pParent)
-        pParent->release();
 }
 
 void ScTableConditionalEntry::GetData(ScCondFormatEntryItem& rData) const
@@ -592,8 +583,6 @@ void SAL_CALL ScTableConditionalEntry::setOperator( sheet::ConditionOperator nOp
 {
     SolarMutexGuard aGuard;
     aData.meMode = lcl_ConditionOperatorToMode( nOperator );
-    if (pParent)
-        pParent->DataChanged();
 }
 
 sal_Int32 SAL_CALL ScTableConditionalEntry::getConditionOperator()
@@ -623,8 +612,6 @@ void SAL_CALL ScTableConditionalEntry::setFormula1( const rtl::OUString& aFormul
 {
     SolarMutexGuard aGuard;
     aData.maExpr1 = String( aFormula1 );
-    if (pParent)
-        pParent->DataChanged();
 }
 
 rtl::OUString SAL_CALL ScTableConditionalEntry::getFormula2() throw(uno::RuntimeException)
@@ -638,8 +625,6 @@ void SAL_CALL ScTableConditionalEntry::setFormula2( const rtl::OUString& aFormul
 {
     SolarMutexGuard aGuard;
     aData.maExpr2 = String( aFormula2 );
-    if (pParent)
-        pParent->DataChanged();
 }
 
 table::CellAddress SAL_CALL ScTableConditionalEntry::getSourcePosition() throw(uno::RuntimeException)
@@ -657,8 +642,6 @@ void SAL_CALL ScTableConditionalEntry::setSourcePosition( const table::CellAddre
 {
     SolarMutexGuard aGuard;
     aData.maPos.Set( (SCCOL)aSourcePosition.Column, (SCROW)aSourcePosition.Row, aSourcePosition.Sheet );
-    if (pParent)
-        pParent->DataChanged();
 }
 
 // XSheetConditionalEntry
@@ -674,36 +657,34 @@ void SAL_CALL ScTableConditionalEntry::setStyleName( const rtl::OUString& aStyle
 {
     SolarMutexGuard aGuard;
     aData.maStyle = ScStyleNameConversion::ProgrammaticToDisplayName( aStyleName, SFX_STYLE_FAMILY_PARA );
-    if (pParent)
-        pParent->DataChanged();
 }
 
 //------------------------------------------------------------------------
 
-ScTableValidationObj::ScTableValidationObj(ScDocument* pDoc, ULONG nKey,
+ScTableValidationObj::ScTableValidationObj(ScDocument* pDoc, sal_uLong nKey,
                                             const formula::FormulaGrammar::Grammar eGrammar) :
     aPropSet( lcl_GetValidatePropertyMap() )
 {
     //  Eintrag aus dem Dokument lesen...
 
-    BOOL bFound = FALSE;
+    sal_Bool bFound = false;
     if ( pDoc && nKey )
     {
         const ScValidationData* pData = pDoc->GetValidationEntry( nKey );
         if (pData)
         {
-            nMode = sal::static_int_cast<USHORT>( pData->GetOperation() );
+            nMode = sal::static_int_cast<sal_uInt16>( pData->GetOperation() );
             aSrcPos = pData->GetValidSrcPos();  // valid pos for expressions
             aExpr1 = pData->GetExpression( aSrcPos, 0, 0, eGrammar );
             aExpr2 = pData->GetExpression( aSrcPos, 1, 0, eGrammar );
             meGrammar1 = meGrammar2 = eGrammar;
-            nValMode = sal::static_int_cast<USHORT>( pData->GetDataMode() );
+            nValMode = sal::static_int_cast<sal_uInt16>( pData->GetDataMode() );
             bIgnoreBlank = pData->IsIgnoreBlank();
             nShowList = pData->GetListType();
             bShowInput = pData->GetInput( aInputTitle, aInputMessage );
             ScValidErrorStyle eStyle;
             bShowError = pData->GetErrMsg( aErrorTitle, aErrorMessage, eStyle );
-            nErrorStyle = sal::static_int_cast<USHORT>( eStyle );
+            nErrorStyle = sal::static_int_cast<sal_uInt16>( eStyle );
 
             // During save to XML, sheet::ValidationType_ANY formulas are not
             // saved, even if in the list, see
@@ -712,7 +693,7 @@ ScTableValidationObj::ScTableValidationObj(ScDocument* pDoc, ULONG nKey,
             if (nValMode != SC_VALID_ANY && pDoc->IsInExternalReferenceMarking())
                 pData->MarkUsedExternalReferences();
 
-            bFound = TRUE;
+            bFound = sal_True;
         }
     }
     if (!bFound)
@@ -767,10 +748,10 @@ void ScTableValidationObj::ClearData_Impl()
 {
     nMode        = SC_COND_NONE;
     nValMode     = SC_VALID_ANY;
-    bIgnoreBlank = TRUE;
+    bIgnoreBlank = sal_True;
     nShowList    = sheet::TableValidationVisibility::UNSORTED;
-    bShowInput   = FALSE;
-    bShowError   = FALSE;
+    bShowInput   = false;
+    bShowError   = false;
     nErrorStyle  = SC_VALERR_STOP;
     aSrcPos.Set(0,0,0);
     aExpr1.Erase();
@@ -788,11 +769,6 @@ ScTableValidationObj::~ScTableValidationObj()
 {
 }
 
-void ScTableValidationObj::DataChanged()
-{
-    //  wenn's mal das "lebende Objekt" ist, muss hier was passieren...
-}
-
 // XSheetCondition
 
 sheet::ConditionOperator SAL_CALL ScTableValidationObj::getOperator()
@@ -806,7 +782,7 @@ void SAL_CALL ScTableValidationObj::setOperator( sheet::ConditionOperator nOpera
                                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    nMode = sal::static_int_cast<USHORT>( lcl_ConditionOperatorToMode( nOperator ) );
+    nMode = sal::static_int_cast<sal_uInt16>( lcl_ConditionOperatorToMode( nOperator ) );
     DataChanged();
 }
 
@@ -821,7 +797,7 @@ void SAL_CALL ScTableValidationObj::setConditionOperator( sal_Int32 nOperator )
                                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    nMode = sal::static_int_cast<USHORT>( lcl_ConditionOperatorToModeNew( nOperator ) );
+    nMode = sal::static_int_cast<sal_uInt16>( lcl_ConditionOperatorToModeNew( nOperator ) );
     DataChanged();
 }
 
@@ -836,7 +812,6 @@ void SAL_CALL ScTableValidationObj::setFormula1( const rtl::OUString& aFormula1 
 {
     SolarMutexGuard aGuard;
     aExpr1 = String( aFormula1 );
-    DataChanged();
 }
 
 rtl::OUString SAL_CALL ScTableValidationObj::getFormula2() throw(uno::RuntimeException)
@@ -850,7 +825,6 @@ void SAL_CALL ScTableValidationObj::setFormula2( const rtl::OUString& aFormula2 
 {
     SolarMutexGuard aGuard;
     aExpr2 = String( aFormula2 );
-    DataChanged();
 }
 
 table::CellAddress SAL_CALL ScTableValidationObj::getSourcePosition() throw(uno::RuntimeException)
@@ -868,7 +842,6 @@ void SAL_CALL ScTableValidationObj::setSourcePosition( const table::CellAddress&
 {
     SolarMutexGuard aGuard;
     aSrcPos.Set( (SCCOL)aSourcePosition.Column, (SCROW)aSourcePosition.Row, aSourcePosition.Sheet );
-    DataChanged();
 }
 
 uno::Sequence<sheet::FormulaToken> SAL_CALL ScTableValidationObj::getTokens( sal_Int32 nIndex )
@@ -1027,8 +1000,6 @@ void SAL_CALL ScTableValidationObj::setPropertyValue(
         if ( aValue >>= nVal )
             meGrammar2 = static_cast< FormulaGrammar::Grammar >(nVal);
     }
-
-    DataChanged();
 }
 
 uno::Any SAL_CALL ScTableValidationObj::getPropertyValue( const rtl::OUString& aPropertyName )

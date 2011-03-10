@@ -50,6 +50,10 @@ namespace com { namespace sun { namespace star {
     {
         class XModel;
     }
+    namespace chart
+    {
+        class XAxis;
+    }
     namespace chart2
     {
         struct ScaleData;
@@ -376,6 +380,8 @@ public:
 
     /** Converts frame formatting properties from the passed property set. */
     void                Convert( const ScfPropertySet& rPropSet );
+    /** Sets the specified automatic flags. */
+    void                SetAutoFlags( bool bAutoPos, bool bAutoSize );
 
     /** Returns true, if the frame object contains default formats. */
     bool                IsDefault() const;
@@ -1011,18 +1017,21 @@ public:
     explicit            XclExpChLabelRange( const XclExpChRoot& rRoot );
 
     /** Converts category axis scaling settings. */
-    void                Convert( const ::com::sun::star::chart2::ScaleData& rScaleData, bool bMirrorOrient );
+    void                Convert( const ::com::sun::star::chart2::ScaleData& rScaleData,
+                            const ScfPropertySet& rChart1Axis, bool bMirrorOrient );
     /** Converts position settings of a crossing axis at this axis. */
     void                ConvertAxisPosition( const ScfPropertySet& rPropSet );
     /** Sets flag for tickmark position between categories or on categories. */
     inline void         SetTicksBetweenCateg( bool bTicksBetween )
-                            { ::set_flag( maData.mnFlags, EXC_CHLABELRANGE_BETWEEN, bTicksBetween ); }
+                            { ::set_flag( maLabelData.mnFlags, EXC_CHLABELRANGE_BETWEEN, bTicksBetween ); }
 
 private:
+    virtual void        Save( XclExpStream& rStrm );
     virtual void        WriteBody( XclExpStream& rStrm );
 
 private:
-    XclChLabelRange     maData;             /// Contents of the CHLABELRANGE record.
+    XclChLabelRange     maLabelData;        /// Contents of the CHLABELRANGE record.
+    XclChDateRange      maDateData;         /// Contents of the CHDATERANGE record.
 };
 
 typedef boost::shared_ptr< XclExpChLabelRange > XclExpChLabelRangeRef;
@@ -1085,6 +1094,7 @@ class XclExpChAxis : public XclExpChGroupBase, public XclExpChFontBase
 public:
     typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >  XDiagramRef;
     typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis >     XAxisRef;
+    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart::XAxis >      XChart1AxisRef;
 
 public:
     explicit            XclExpChAxis( const XclExpChRoot& rRoot, sal_uInt16 nAxisType );
@@ -1095,7 +1105,8 @@ public:
     virtual void        SetRotation( sal_uInt16 nRotation );
 
     /** Converts formatting and scaling settings from the passed axis. */
-    void                Convert( XAxisRef xAxis, XAxisRef xCrossingAxis, const XclChExtTypeInfo& rTypeInfo );
+    void                Convert( XAxisRef xAxis, XAxisRef xCrossingAxis,
+                            XChart1AxisRef xChart1Axis, const XclChExtTypeInfo& rTypeInfo );
     /** Converts and writes 3D wall/floor properties from the passed diagram. */
     void                ConvertWall( XDiagramRef xDiagram );
 

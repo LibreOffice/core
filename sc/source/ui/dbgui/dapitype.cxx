@@ -45,7 +45,7 @@ using ::rtl::OUString;
 
 //-------------------------------------------------------------------------
 
-ScDataPilotSourceTypeDlg::ScDataPilotSourceTypeDlg( Window* pParent, BOOL bEnableExternal ) :
+ScDataPilotSourceTypeDlg::ScDataPilotSourceTypeDlg( Window* pParent, sal_Bool bEnableExternal ) :
     ModalDialog     ( pParent, ScResId( RID_SCDLG_DAPITYPE ) ),
     //
     aFlFrame        ( this, ScResId( FL_FRAME ) ),
@@ -96,7 +96,7 @@ bool ScDataPilotSourceTypeDlg::IsNamedRange() const
 
 OUString ScDataPilotSourceTypeDlg::GetSelectedNamedRange() const
 {
-    USHORT nPos = aLbNamedRange.GetSelectEntryPos();
+    sal_uInt16 nPos = aLbNamedRange.GetSelectEntryPos();
     return aLbNamedRange.GetEntry(nPos);
 }
 

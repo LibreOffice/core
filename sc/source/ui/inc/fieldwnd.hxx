@@ -29,6 +29,7 @@
 #ifndef SC_FIELDWND_HXX
 #define SC_FIELDWND_HXX
 
+#include <utility>
 #include <vector>
 #include "address.hxx"
 #include "dpglobal.hxx"
@@ -40,19 +41,33 @@
 class ScDPLayoutDlg;
 class ScAccessibleDataPilotControl;
 
-//===================================================================
+const size_t PIVOTFIELD_INVALID = static_cast< size_t >( -1 );
 
-/** Type of content area. */
-enum ScDPFieldType
+// ============================================================================
+
+/** Type of the pivot table field window. */
+enum ScPivotFieldType
 {
-    TYPE_PAGE,              /// Area for all page fields.
-    TYPE_ROW,               /// Area for all row fields.
-    TYPE_COL,               /// Area for all column fields.
-    TYPE_DATA,              /// Area for all data fields.
-    TYPE_SELECT             /// Selection area with all fields.
+    PIVOTFIELDTYPE_PAGE,            /// Window for all page fields.
+    PIVOTFIELDTYPE_COL,             /// Window for all column fields.
+    PIVOTFIELDTYPE_ROW,             /// Window for all row fields.
+    PIVOTFIELDTYPE_DATA,            /// Window for all data fields.
+    PIVOTFIELDTYPE_SELECT           /// Selection window with all fields.
 };
 
-//-------------------------------------------------------------------
+/** Type of an end tracking event. */
+enum ScPivotFieldEndTracking
+{
+    ENDTRACKING_SUSPEND,            /// Stop tracking in this window, but tracking still active (in another window).
+    ENDTRACKING_CANCEL,             /// Tracking has been cancelled.
+    ENDTRACKING_DROP                /// Tracking has ended, a field has been dropped.
+};
+
+// ============================================================================
+
+typedef ::std::pair< const ScPivotFuncData*, size_t > ScPivotFuncDataEntry;
+
+// ============================================================================
 
 /**
  * Represents a field area in the DataPilot layout dialog.  This base class

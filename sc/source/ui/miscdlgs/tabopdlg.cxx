@@ -77,7 +77,7 @@ ScTabOpDlg::ScTabOpDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
         pDoc                ( pDocument ),
         nCurTab             ( theFormulaCell.Tab() ),
         pEdActive           ( NULL ),
-        bDlgLostFocus       ( FALSE ),
+        bDlgLostFocus       ( false ),
         errMsgNoFormula     ( ScResId( STR_NOFORMULA ) ),
         errMsgNoColRow      ( ScResId( STR_NOCOLROW ) ),
         errMsgWrongFormula  ( ScResId( STR_WRONGFORMULA ) ),
@@ -128,7 +128,7 @@ void ScTabOpDlg::Init()
 
 //----------------------------------------------------------------------------
 
-BOOL ScTabOpDlg::Close()
+sal_Bool ScTabOpDlg::Close()
 {
     return DoClose( ScTabOpDlgWrapper::GetChildWindowId() );
 }
@@ -139,7 +139,7 @@ void ScTabOpDlg::SetActive()
 {
     if ( bDlgLostFocus )
     {
-        bDlgLostFocus = FALSE;
+        bDlgLostFocus = false;
         if( pEdActive )
             pEdActive->GrabFocus();
     }
@@ -161,7 +161,7 @@ void ScTabOpDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
             RefInputStart(pEdActive);
 
         String      aStr;
-        USHORT      nFmt = ( rRef.aStart.Tab() == nCurTab )
+        sal_uInt16      nFmt = ( rRef.aStart.Tab() == nCurTab )
                                 ? SCR_ABS
                                 : SCR_ABS_3D;
 
@@ -237,10 +237,10 @@ void ScTabOpDlg::RaiseError( ScTabOpErr eError )
 
 //----------------------------------------------------------------------------
 
-BOOL lcl_Parse( const String& rString, ScDocument* pDoc, SCTAB nCurTab,
+sal_Bool lcl_Parse( const String& rString, ScDocument* pDoc, SCTAB nCurTab,
                 ScRefAddress& rStart, ScRefAddress& rEnd )
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = false;
     const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
     if ( rString.Search(':') != STRING_NOTFOUND )
         bRet = ConvertDoubleRef( pDoc, rString, nCurTab, rStart, rEnd, eConv );
@@ -259,8 +259,8 @@ IMPL_LINK( ScTabOpDlg, BtnHdl, PushButton*, pBtn )
 {
     if ( pBtn == &aBtnOk )
     {
-        BYTE nMode = 3;
-        USHORT nError = 0;
+        sal_uInt8 nMode = 3;
+        sal_uInt16 nError = 0;
 
         // Zu ueberpruefen:
         // 1. enthalten die Strings korrekte Tabellenkoordinaten/def.Namen?
@@ -325,7 +325,7 @@ IMPL_LINK( ScTabOpDlg, BtnHdl, PushButton*, pBtn )
                                     nMode );
             ScTabOpItem  aOutItem( SID_TABOP, &aOutParam );
 
-            SetDispatcherLock( FALSE );
+            SetDispatcherLock( false );
             SwitchToDocument();
             GetBindings().GetDispatcher()->Execute( SID_TABOP,
                                       SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,

@@ -60,10 +60,6 @@
 #define _COLDLG_HXX
 #define _SOUND_HXX
 
-#if defined  WIN
-#define _MENUBTN_HXX
-#endif
-
 //svtools
 #define _SCRWIN_HXX
 #define _RULER_HXX

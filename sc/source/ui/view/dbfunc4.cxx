@@ -53,16 +53,16 @@ using namespace com::sun::star;
 
 //==================================================================
 
-USHORT ScDBFunc::DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc, BOOL bAllCharts )
+sal_uInt16 ScDBFunc::DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc, sal_Bool bAllCharts )
 {
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
     if (!pModel)
         return 0;
 
-    USHORT nFound = 0;
+    sal_uInt16 nFound = 0;
 
-    USHORT nPageCount = pModel->GetPageCount();
-    for (USHORT nPageNo=0; nPageNo<nPageCount; nPageNo++)
+    sal_uInt16 nPageCount = pModel->GetPageCount();
+    for (sal_uInt16 nPageNo=0; nPageNo<nPageCount; nPageNo++)
     {
         SdrPage* pPage = pModel->GetPage(nPageNo);
         DBG_ASSERT(pPage,"Page ?");
@@ -74,12 +74,12 @@ USHORT ScDBFunc::DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc, BOOL b
             if ( pObject->GetObjIdentifier() == OBJ_OLE2 && pDoc->IsChart( pObject ) )
             {
                 String aName = ((SdrOle2Obj*)pObject)->GetPersistName();
-                BOOL bHit = TRUE;
+                sal_Bool bHit = sal_True;
                 if ( !bAllCharts )
                 {
                     ScRangeList aRanges;
-                    BOOL bColHeaders = FALSE;
-                    BOOL bRowHeaders = FALSE;
+                    sal_Bool bColHeaders = false;
+                    sal_Bool bRowHeaders = false;
                     pDoc->GetOldChartParameters( aName, aRanges, bColHeaders, bRowHeaders );
                     bHit = aRanges.In( rPos );
                 }

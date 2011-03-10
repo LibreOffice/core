@@ -40,15 +40,15 @@ class ScStyleDlg : public SfxStyleDialog
 public:
                 ScStyleDlg( Window*             pParent,
                             SfxStyleSheetBase&  rStyleBase,
-                            USHORT              nRscId );
+                            sal_uInt16              nRscId );
                 ~ScStyleDlg();
 
 protected:
-    virtual void                PageCreated( USHORT nPageId, SfxTabPage& rTabPage );
+    virtual void                PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage );
     virtual const SfxItemSet*   GetRefreshedSet();
 
 private:
-    USHORT nDlgRsc;
+    sal_uInt16 nDlgRsc;
 };
 
 

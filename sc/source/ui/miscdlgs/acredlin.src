@@ -30,7 +30,7 @@
 ModelessDialog RID_SCDLG_CHANGES
 {
     OutputSize = TRUE ;
-    HelpId = FID_CHG_ACCEPT ;
+    HelpId = CMD_FID_CHG_ACCEPT ;
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 282 , 142 ) ;
@@ -61,6 +61,7 @@ ModelessDialog RID_SCDLG_CHANGES
     };
     Edit ED_ASSIGN
     {
+        HelpID = "sc:Edit:RID_SCDLG_CHANGES:ED_ASSIGN";
         Hide = TRUE ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 119 ) ;
@@ -69,6 +70,7 @@ ModelessDialog RID_SCDLG_CHANGES
     };
     ImageButton RB_ASSIGN
     {
+        HelpID = "sc:ImageButton:RID_SCDLG_CHANGES:RB_ASSIGN";
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 142 , 118 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;

@@ -1,4 +1,4 @@
-ch	chart2	:    l10n comphelper cppu cppuhelper sal svtools svx tools vcl toolkit unotools sfx2 NULL
+ch	chart2	:    offapi offuh L10N:l10n comphelper cppu cppuhelper sal svtools svx tools vcl toolkit unotools sfx2 LIBXSLT:libxslt NULL
 ch	chart2										usr1	-	all	ch_mkout NULL
 ch	chart2\inc									nmake	-	all	ch_inc NULL
 ch	chart2\source\inc							get		-	all	ch_source_inc NULL
@@ -24,4 +24,4 @@ ch  chart2\source\controller\chartapiwrapper	nmake   -   all ch_source_controlle
 ch	chart2\source\controller\main				nmake	-	all	ch_source_controller_main ch_inc NULL
 ch	chart2\source\controller\menus				nmake	-	all	ch_source_controller_menus ch_inc NULL
 ch	chart2\prj									get		-	all	ch_prj NULL
-ch  chart2\qa\unoapi                            nmake   -   all ch_qa_unoapi NULL
+ch	chart2\qa\unoapi                            nmake   -   all ch_qa_unoapi NULL

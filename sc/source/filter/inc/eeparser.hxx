@@ -85,14 +85,14 @@ struct ScEEParseEntry
                             pNumStr( NULL ), pName( NULL ),
                             nCol(SCCOL_MAX), nRow(SCROW_MAX), nTab(0),
                             nColOverlap(1), nRowOverlap(1),
-                            nOffset(0), nWidth(0), bHasGraphic(FALSE), bEntirePara(true)
+                            nOffset(0), nWidth(0), bHasGraphic(false), bEntirePara(true)
                             {}
                         ScEEParseEntry( const SfxItemSet& rItemSet ) :
                             aItemSet( rItemSet ), pValStr( NULL ),
                             pNumStr( NULL ), pName( NULL ),
                             nCol(SCCOL_MAX), nRow(SCROW_MAX), nTab(0),
                             nColOverlap(1), nRowOverlap(1),
-                            nOffset(0), nWidth(0), bHasGraphic(FALSE), bEntirePara(true)
+                            nOffset(0), nWidth(0), bHasGraphic(false), bEntirePara(true)
                             {}
                         ~ScEEParseEntry()
                             {
@@ -131,7 +131,7 @@ public:
                         ScEEParser( EditEngine* );
     virtual             ~ScEEParser();
 
-    virtual ULONG           Read( SvStream&, const String& rBaseURL ) = 0;
+    virtual sal_uLong           Read( SvStream&, const String& rBaseURL ) = 0;
 
     Table*                  GetColWidths() const { return pColWidths; }
     void                    GetDimensions( SCCOL& nCols, SCROW& nRows ) const

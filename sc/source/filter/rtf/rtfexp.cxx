@@ -70,7 +70,7 @@ FltError ScFormatFilterPluginImpl::ScExportRTF( SvStream& rStrm, ScDocument* pDo
 ScRTFExport::ScRTFExport( SvStream& rStrmP, ScDocument* pDocP, const ScRange& rRangeP )
             :
             ScExportBase( rStrmP, pDocP, rRangeP ),
-            pCellX( new ULONG[ MAXCOL+2 ] )
+            pCellX( new sal_uLong[ MAXCOL+2 ] )
 {
 }
 
@@ -81,7 +81,7 @@ ScRTFExport::~ScRTFExport()
 }
 
 
-ULONG ScRTFExport::Write()
+sal_uLong ScRTFExport::Write()
 {
     rStrm << '{' << OOO_STRING_SVTOOLS_RTF_RTF;
     rStrm << OOO_STRING_SVTOOLS_RTF_ANSI << sNewLine;
@@ -104,7 +104,7 @@ void ScRTFExport::WriteTab( SCTAB nTab )
     rStrm << '{' << sNewLine;
     if ( pDoc->HasTable( nTab ) )
     {
-        memset( &pCellX[0], 0, (MAXCOL+2) * sizeof(ULONG) );
+        memset( &pCellX[0], 0, (MAXCOL+2) * sizeof(sal_uLong) );
         SCCOL nCol;
         SCCOL nEndCol = aRange.aEnd.Col();
         for ( nCol = aRange.aStart.Col(); nCol <= nEndCol; nCol++ )
@@ -162,7 +162,7 @@ void ScRTFExport::WriteRow( SCTAB nTab, SCROW nRow )
     }
     rStrm << OOO_STRING_SVTOOLS_RTF_PARD << OOO_STRING_SVTOOLS_RTF_PLAIN << OOO_STRING_SVTOOLS_RTF_INTBL << sNewLine;
 
-    ULONG nStrmPos = rStrm.Tell();
+    sal_uLong nStrmPos = rStrm.Tell();
     for ( nCol = aRange.aStart.Col(); nCol <= nEndCol; nCol++ )
     {
         WriteCell( nTab, nRow, nCol );
@@ -189,18 +189,18 @@ void ScRTFExport::WriteCell( SCTAB nTab, SCROW nRow, SCCOL nCol )
 
     ScBaseCell* pCell;
     pDoc->GetCell( nCol, nRow, nTab, pCell );
-    BOOL bValueData;
+    sal_Bool bValueData;
     String aContent;
     if ( pCell )
     {
         switch ( pCell->GetCellType() )
         {
             case CELLTYPE_NOTE :
-                bValueData = FALSE;
+                bValueData = false;
             break;      // nix
             case CELLTYPE_EDIT :
             {
-                bValueData = FALSE;
+                bValueData = false;
                 EditEngine& rEngine = GetEditEngine();
                 const EditTextObject* pObj;
                 ((const ScEditCell*)pCell)->GetData( pObj );
@@ -214,17 +214,17 @@ void ScRTFExport::WriteCell( SCTAB nTab, SCROW nRow, SCCOL nCol )
             default:
             {
                 bValueData = pCell->HasValueData();
-                ULONG nFormat = pAttr->GetNumberFormat( pFormatter );
+                sal_uLong nFormat = pAttr->GetNumberFormat( pFormatter );
                 Color* pColor;
                 ScCellFormat::GetString( pCell, nFormat, aContent, &pColor, *pFormatter );
             }
         }
     }
     else
-        bValueData = FALSE;
+        bValueData = false;
 
-    BOOL bResetPar, bResetAttr;
-    bResetPar = bResetAttr = FALSE;
+    sal_Bool bResetPar, bResetAttr;
+    bResetPar = bResetAttr = false;
 
     const SvxHorJustifyItem&    rHorJustifyItem = (const SvxHorJustifyItem&)pAttr->GetItem( ATTR_HOR_JUSTIFY );
     const SvxWeightItem&        rWeightItem     = (const SvxWeightItem&)    pAttr->GetItem( ATTR_FONT_WEIGHT );
@@ -249,17 +249,17 @@ void ScRTFExport::WriteCell( SCTAB nTab, SCROW nRow, SCCOL nCol )
 
     if ( rWeightItem.GetWeight() >= WEIGHT_BOLD )
     {   // bold
-        bResetAttr = TRUE;
+        bResetAttr = sal_True;
         rStrm << OOO_STRING_SVTOOLS_RTF_B;
     }
     if ( rPostureItem.GetPosture() != ITALIC_NONE )
     {   // italic
-        bResetAttr = TRUE;
+        bResetAttr = sal_True;
         rStrm << OOO_STRING_SVTOOLS_RTF_I;
     }
     if ( rUnderlineItem.GetLineStyle() != UNDERLINE_NONE )
     {   // underline
-        bResetAttr = TRUE;
+        bResetAttr = sal_True;
         rStrm << OOO_STRING_SVTOOLS_RTF_UL;
     }
 

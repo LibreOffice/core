@@ -85,7 +85,7 @@ public:
 
     void            InitFromOldLink( const String& rFile, const String& rFilter,
                                         const String& rOptions, const String& rSource,
-                                        ULONG nRefresh );
+                                        sal_uLong nRefresh );
 
     virtual short   Execute();          // overwritten to set dialog parent
 
@@ -93,7 +93,7 @@ public:
     String          GetFilter();        // may be empty
     String          GetOptions();       // filter options
     String          GetSource();        // separated by ";"
-    ULONG           GetRefresh();       // 0 if disabled
+    sal_uLong           GetRefresh();       // 0 if disabled
 };
 
 #endif

@@ -40,9 +40,9 @@
 class ScImportAsciiDlg : public ModalDialog
 {
     SvStream*                   mpDatStream;
-    ULONG                       mnStreamPos;
-    ULONG*                      mpRowPosArray;
-    ULONG                       mnRowPosCount;
+    sal_uLong                       mnStreamPos;
+    sal_uLong*                      mpRowPosArray;
+    sal_uLong                       mnRowPosCount;
 
     String                      maPreviewLine[ CSV_PREVIEW_LINES ];
 
@@ -117,9 +117,9 @@ private:
     void                        SetupSeparatorCtrls();
 
 
-    bool                        GetLine( ULONG nLine, String &rText );
+    bool                        GetLine( sal_uLong nLine, String &rText );
     void                        UpdateVertical();
-    inline bool                 Seek( ULONG nPos ); // synced to and from mnStreamPos
+    inline bool                 Seek( sal_uLong nPos ); // synced to and from mnStreamPos
 
                                 DECL_LINK( CharSetHdl, SvxTextEncodingBox* );
                                 DECL_LINK( FirstRowHdl, NumericField* );
@@ -131,7 +131,7 @@ private:
 };
 
 
-inline bool ScImportAsciiDlg::Seek(ULONG nPos)
+inline bool ScImportAsciiDlg::Seek(sal_uLong nPos)
 {
     bool bSuccess = true;
     if (nPos != mnStreamPos && mpDatStream)

@@ -67,7 +67,6 @@ class SvStream;
 class ScDocument;
 class ScUserListData;
 class ScProgress;
-struct ScDPLabelData;
 
 typedef ::boost::shared_ptr<ScDPLabelData> ScDPLabelDataRef;
 
@@ -76,11 +75,11 @@ typedef ::boost::shared_ptr<ScDPLabelData> ScDPLabelDataRef;
 struct PivotField
 {
     SCsCOL              nCol;
-    USHORT              nFuncMask;
-    USHORT              nFuncCount;
+    sal_uInt16              nFuncMask;
+    sal_uInt16              nFuncCount;
     ::com::sun::star::sheet::DataPilotFieldReference maFieldRef;
 
-    explicit            PivotField( SCsCOL nNewCol = 0, USHORT nNewFuncMask = PIVOT_FUNC_NONE );
+    explicit            PivotField( SCsCOL nNewCol = 0, sal_uInt16 nNewFuncMask = PIVOT_FUNC_NONE );
     PivotField( const PivotField& r );
 
     bool                operator==( const PivotField& r ) const;
@@ -99,17 +98,17 @@ struct ScPivotParam
     ::std::vector<PivotField> maColFields;
     ::std::vector<PivotField> maRowFields;
     ::std::vector<PivotField> maDataFields;
-    BOOL            bIgnoreEmptyRows;
-    BOOL            bDetectCategories;
-    BOOL            bMakeTotalCol;
-    BOOL            bMakeTotalRow;
+    sal_Bool            bIgnoreEmptyRows;
+    sal_Bool            bDetectCategories;
+    sal_Bool            bMakeTotalCol;
+    sal_Bool            bMakeTotalRow;
 
     ScPivotParam();
     ScPivotParam( const ScPivotParam& r );
     ~ScPivotParam();
 
     ScPivotParam&   operator=       ( const ScPivotParam& r );
-    BOOL            operator==      ( const ScPivotParam& r ) const;
+    sal_Bool            operator==      ( const ScPivotParam& r ) const;
     void            ClearPivotArrays();
     void            SetLabelData    (const ::std::vector<ScDPLabelDataRef>& r);
 };
@@ -135,8 +134,8 @@ struct ScDPLabelData
 {
     ::rtl::OUString     maName;         /// Original name of the dimension.
     ::rtl::OUString     maLayoutName;   /// Layout name (display name)
-    SCsCOL              mnCol;
-    USHORT              mnFuncMask;     /// Page/Column/Row subtotal function.
+    SCCOL               mnCol;
+    sal_uInt16          mnFuncMask;     /// Page/Column/Row subtotal function.
     sal_Int32           mnUsedHier;     /// Used hierarchy.
     sal_Int32           mnFlags;        /// Flags from the DataPilotSource dimension
     bool                mbShowAll;      /// true = Show all (also empty) results.
@@ -164,7 +163,7 @@ struct ScDPLabelData
     ::com::sun::star::sheet::DataPilotFieldLayoutInfo   maLayoutInfo;   /// Layout info.
     ::com::sun::star::sheet::DataPilotFieldAutoShowInfo maShowInfo;     /// AutoShow info.
 
-    explicit            ScDPLabelData( const String& rName, short nCol, bool bIsValue );
+    explicit            ScDPLabelData( const String& rName, SCCOL nCol, bool bIsValue );
 
     /**
      * return the name that should be displayed in the dp dialogs i.e. when
@@ -173,18 +172,60 @@ struct ScDPLabelData
     ::rtl::OUString SC_DLLPUBLIC getDisplayName() const;
 };
 
+typedef std::vector< ScDPLabelData > ScDPLabelDataVector;
+
 // ============================================================================
 
-struct ScDPFuncData
+struct ScPivotField
 {
-    short               mnCol;
-    USHORT              mnFuncMask;
+    SCCOL               nCol;
+    sal_uInt16          nFuncMask;
+    sal_uInt16          nFuncCount;
     ::com::sun::star::sheet::DataPilotFieldReference maFieldRef;
 
-    explicit            ScDPFuncData( short nNewCol, USHORT nNewFuncMask );
-    explicit            ScDPFuncData( short nNewCol, USHORT nNewFuncMask,
+    explicit            ScPivotField( SCCOL nNewCol = 0, sal_uInt16 nNewFuncMask = PIVOT_FUNC_NONE );
+
+    bool                operator==( const ScPivotField& r ) const;
+};
+
+typedef ::std::vector< ScPivotField > ScPivotFieldVector;
+
+// ============================================================================
+
+struct ScPivotParam
+{
+    SCCOL           nCol;           // Cursor Position /
+    SCROW           nRow;           // bzw. Anfang des Zielbereiches
+    SCTAB           nTab;
+    ScDPLabelDataVector maLabelArray;
+    ScPivotFieldVector maPageArr;
+    ScPivotFieldVector maColArr;
+    ScPivotFieldVector maRowArr;
+    ScPivotFieldVector maDataArr;
+    bool            bIgnoreEmptyRows;
+    bool            bDetectCategories;
+    bool            bMakeTotalCol;
+    bool            bMakeTotalRow;
+
+    ScPivotParam();
+
+    bool            operator==( const ScPivotParam& r ) const;
+};
+
+// ============================================================================
+
+struct ScPivotFuncData
+{
+    SCCOL               mnCol;
+    sal_uInt16          mnFuncMask;
+    ::com::sun::star::sheet::DataPilotFieldReference maFieldRef;
+
+    explicit            ScPivotFuncData( SCCOL nCol, sal_uInt16 nFuncMask );
+    explicit            ScPivotFuncData( SCCOL nCol, sal_uInt16 nFuncMask,
                             const ::com::sun::star::sheet::DataPilotFieldReference& rFieldRef );
 };
+
+typedef ::std::vector< ScPivotFuncData > ScPivotFuncDataVector;
 
 // ============================================================================
 

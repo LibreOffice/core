@@ -47,8 +47,8 @@ ScVbaCharacters::ScVbaCharacters( const uno::Reference< XHelperInterface >& xPar
     {
         if ( ( nStart + 1 ) > m_xSimpleText->getString().getLength() )
             //nStart = m_xSimpleText->getString().getLength();
-            xTextCursor->gotoEnd( sal_False );
-        xTextCursor->goRight( nStart, sal_False );
+            xTextCursor->gotoEnd( false );
+        xTextCursor->goRight( nStart, false );
     }
     if ( nLength < 0 ) // expand to end
         xTextCursor->gotoEnd( sal_True );

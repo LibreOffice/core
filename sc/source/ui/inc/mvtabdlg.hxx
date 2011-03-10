@@ -32,7 +32,7 @@
 
 #include "address.hxx"
 #include <vcl/dialog.hxx>
-#include <vcl/imagebtn.hxx>
+#include <vcl/button.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/edit.hxx>
@@ -48,14 +48,14 @@ public:
                     ScMoveTableDlg( Window* pParent, const String& rDefault );
                     ~ScMoveTableDlg();
 
-    USHORT  GetSelectedDocument     () const;
+    sal_uInt16  GetSelectedDocument     () const;
     SCTAB   GetSelectedTable        () const;
     bool    GetCopyTable            () const;
     bool    GetRenameTable          () const;
     void    GetTabNameString( String& rString ) const;
     void    SetForceCopyTable       ();
-    void    EnableCopyTable         (BOOL bFlag=TRUE);
-    void    EnableRenameTable       (BOOL bFlag=TRUE);
+    void    EnableCopyTable         (sal_Bool bFlag=true);
+    void    EnableRenameTable       (sal_Bool bFlag=true);
 
 private:
     void ResetRenameInput();
@@ -85,7 +85,7 @@ private:
 
     const String&   mrDefaultName;
 
-    USHORT          nDocument;
+    sal_uInt16          nDocument;
     SCTAB           nTable;
     bool            bCopyTable:1;
     bool            bRenameTable:1;

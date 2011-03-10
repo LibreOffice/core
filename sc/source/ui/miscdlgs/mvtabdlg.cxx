@@ -104,7 +104,7 @@ ScMoveTableDlg::~ScMoveTableDlg()
 
 //------------------------------------------------------------------------
 
-USHORT ScMoveTableDlg::GetSelectedDocument () const { return nDocument;  }
+sal_uInt16 ScMoveTableDlg::GetSelectedDocument () const { return nDocument;  }
 
 SCTAB ScMoveTableDlg::GetSelectedTable    () const { return nTable;     }
 
@@ -124,7 +124,7 @@ void ScMoveTableDlg::SetForceCopyTable()
     aBtnCopy.Disable();
 }
 
-void ScMoveTableDlg::EnableCopyTable(BOOL bFlag)
+void ScMoveTableDlg::EnableCopyTable(sal_Bool bFlag)
 {
     if(bFlag)
         aBtnCopy.Enable();
@@ -132,7 +132,7 @@ void ScMoveTableDlg::EnableCopyTable(BOOL bFlag)
         aBtnCopy.Disable();
 }
 
-void ScMoveTableDlg::EnableRenameTable(BOOL bFlag)
+void ScMoveTableDlg::EnableRenameTable(sal_Bool bFlag)
 {
     bRenameTable = bFlag;
     aEdTabName.Enable(bFlag);
@@ -195,8 +195,8 @@ void ScMoveTableDlg::CheckNewTabName()
     }
 
     bool   bFound = false;
-    USHORT nLast  = aLbTable.GetEntryCount() - 1;
-    for ( USHORT i=0; i<=nLast; ++i )
+    sal_uInt16 nLast  = aLbTable.GetEntryCount() - 1;
+    for ( sal_uInt16 i=0; i<=nLast; ++i )
     {
         if ( rNewName == aLbTable.GetEntry( i ) )
         {
@@ -226,7 +226,7 @@ void ScMoveTableDlg::CheckNewTabName()
 
 ScDocument* ScMoveTableDlg::GetSelectedDoc()
 {
-    USHORT nPos = aLbDoc.GetSelectEntryPos();
+    sal_uInt16 nPos = aLbDoc.GetSelectEntryPos();
     return static_cast<ScDocument*>(aLbDoc.GetEntryData(nPos));
 }
 
@@ -238,8 +238,8 @@ void ScMoveTableDlg::Init()
     aLbDoc.SetSelectHdl  ( LINK( this, ScMoveTableDlg, SelHdl ) );
     aBtnCopy.SetToggleHdl( LINK( this, ScMoveTableDlg, CheckBtnHdl ) );
     aEdTabName.SetModifyHdl( LINK( this, ScMoveTableDlg, CheckNameHdl ) );
-    aBtnMove.Check( TRUE );
-    aBtnCopy.Check( FALSE );
+    aBtnMove.Check( true );
+    aBtnCopy.Check( false );
     aEdTabName.Enable(false);
     aFtWarn.SetControlBackground( Color( COL_YELLOW ) );
     aFtWarn.Hide();
@@ -253,12 +253,12 @@ void ScMoveTableDlg::InitDocListBox()
 {
     SfxObjectShell* pSh     = SfxObjectShell::GetFirst();
     ScDocShell*     pScSh   = NULL;
-    USHORT          nSelPos = 0;
-    USHORT          i       = 0;
+    sal_uInt16          nSelPos = 0;
+    sal_uInt16          i       = 0;
     String          aEntryName;
 
     aLbDoc.Clear();
-    aLbDoc.SetUpdateMode( FALSE );
+    aLbDoc.SetUpdateMode( false );
 
     while ( pSh )
     {
@@ -283,7 +283,7 @@ void ScMoveTableDlg::InitDocListBox()
         pSh = SfxObjectShell::GetNext( *pSh );
     }
 
-    aLbDoc.SetUpdateMode( TRUE );
+    aLbDoc.SetUpdateMode( sal_True );
     aLbDoc.InsertEntry( String( ScResId( STR_NEWDOC ) ) );
     aLbDoc.SelectEntryPos( nSelPos );
 }
@@ -301,10 +301,10 @@ IMPL_LINK( ScMoveTableDlg, CheckBtnHdl, void *, pBtn )
 
 IMPL_LINK( ScMoveTableDlg, OkHdl, void *, EMPTYARG )
 {
-    USHORT  nDocSel     = aLbDoc.GetSelectEntryPos();
-    USHORT  nDocLast    = aLbDoc.GetEntryCount()-1;
-    USHORT  nTabSel     = aLbTable.GetSelectEntryPos();
-    USHORT  nTabLast    = aLbTable.GetEntryCount()-1;
+    sal_uInt16  nDocSel     = aLbDoc.GetSelectEntryPos();
+    sal_uInt16  nDocLast    = aLbDoc.GetEntryCount()-1;
+    sal_uInt16  nTabSel     = aLbTable.GetSelectEntryPos();
+    sal_uInt16  nTabLast    = aLbTable.GetEntryCount()-1;
 
     nDocument   = (nDocSel != nDocLast) ? nDocSel : SC_DOC_NEW;
     nTable      = (nTabSel != nTabLast) ? static_cast<SCTAB>(nTabSel) : SC_TAB_APPEND;
@@ -342,7 +342,7 @@ IMPL_LINK( ScMoveTableDlg, SelHdl, ListBox *, pLb )
         String      aName;
 
         aLbTable.Clear();
-        aLbTable.SetUpdateMode( FALSE );
+        aLbTable.SetUpdateMode( false );
         if ( pDoc )
         {
             SCTAB nLast = pDoc->GetTableCount()-1;
@@ -353,7 +353,7 @@ IMPL_LINK( ScMoveTableDlg, SelHdl, ListBox *, pLb )
             }
         }
         aLbTable.InsertEntry( ScGlobal::GetRscString(STR_MOVE_TO_END) );
-        aLbTable.SetUpdateMode( TRUE );
+        aLbTable.SetUpdateMode( sal_True );
         aLbTable.SelectEntryPos( 0 );
         ResetRenameInput();
     }

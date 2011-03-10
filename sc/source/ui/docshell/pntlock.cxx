@@ -35,12 +35,12 @@
 
 //------------------------------------------------------------------------
 
-ScPaintLockData::ScPaintLockData(USHORT nNewMode) :
+ScPaintLockData::ScPaintLockData(sal_uInt16 nNewMode) :
     nMode( nNewMode ),
     nLevel( 0 ),
     nDocLevel( 0 ),
     nParts( 0 ),
-    bModified( FALSE )
+    bModified( false )
 {
 }
 
@@ -48,7 +48,7 @@ ScPaintLockData::~ScPaintLockData()
 {
 }
 
-void ScPaintLockData::AddRange( const ScRange& rRange, USHORT nP )
+void ScPaintLockData::AddRange( const ScRange& rRange, sal_uInt16 nP )
 {
     if (!xRangeList.Is())
         xRangeList = new ScRangeList;

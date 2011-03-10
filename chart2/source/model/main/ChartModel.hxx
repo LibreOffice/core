@@ -36,9 +36,11 @@
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/document/XUndoManagerSupplier.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/embed/XVisualObject.hpp>
@@ -46,7 +48,6 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/container/XChild.hpp>
-#include <com/sun/star/chart2/XUndoSupplier.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
 #include <com/sun/star/chart2/XChartTypeTemplate.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -63,21 +64,22 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 
-#if ! defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_20)
-#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_20
-#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 20
+#if ! defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_21)
+#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_21
+#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 21
 #include "comphelper/implbase_var.hxx"
 #endif
 #include <osl/mutex.hxx>
+#include <rtl/ref.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <svtools/grfmgr.hxx>
 
 // for auto_ptr
 #include <memory>
 
+class SvNumberFormatter;
+
 //=============================================================================
-/** this is an example implementation for the service ::com::sun::star::document::OfficeDocument
-*/
 
 namespace chart
 {
@@ -86,11 +88,13 @@ namespace impl
 {
 
 // Note: needed for queryInterface (if it calls the base-class implementation)
-typedef ::comphelper::WeakImplHelper20<
+typedef ::comphelper::WeakImplHelper21<
+//       ::com::sun::star::frame::XModel        //comprehends XComponent (required interface), base of XChartDocument
          ::com::sun::star::util::XCloseable     //comprehends XCloseBroadcaster
         ,::com::sun::star::frame::XStorable2    //(extension of XStorable)
         ,::com::sun::star::util::XModifiable    //comprehends XModifyBroadcaster (required interface)
         ,::com::sun::star::lang::XServiceInfo
+        ,::com::sun::star::lang::XInitialization
         ,::com::sun::star::chart2::XChartDocument  // derived from XModel
         ,::com::sun::star::chart2::data::XDataReceiver   // public API
         ,::com::sun::star::chart2::XTitled
@@ -104,12 +108,14 @@ typedef ::comphelper::WeakImplHelper20<
         ,::com::sun::star::container::XChild
         ,::com::sun::star::util::XModifyListener
         ,::com::sun::star::datatransfer::XTransferable
-        ,::com::sun::star::chart2::XUndoSupplier
         ,::com::sun::star::document::XDocumentPropertiesSupplier
         ,::com::sun::star::chart2::data::XDataSource
+        ,::com::sun::star::document::XUndoManagerSupplier
         >
     ChartModel_Base;
 }
+
+class UndoManager;
 
 class ChartModel : public impl::ChartModel_Base
 {
@@ -126,6 +132,7 @@ private:
     ::rtl::OUString                                                             m_aResource;
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >   m_aMediaDescriptor;
     ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentProperties > m_xDocumentProperties;
+    ::rtl::Reference< UndoManager >                                             m_pUndoManager;
 
     ::cppu::OInterfaceContainerHelper                                           m_aControllers;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >    m_xCurrentController;
@@ -151,6 +158,7 @@ private:
                                 m_xOwnNumberFormatsSupplier;
     ::com::sun::star::uno::Reference< com::sun::star::util::XNumberFormatsSupplier >
                                 m_xNumberFormatsSupplier;
+    std::auto_ptr< SvNumberFormatter > m_apSvNumberFormatter; // #i113784# avoid memory leak
 
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartTypeManager >
         m_xChartTypeManager;
@@ -165,8 +173,6 @@ private:
     bool                                  m_bIsDisposed;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                                           m_xPageBackground;
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XUndoManager >
-                                          m_xUndoManager;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>     m_xXMLNamespaceMap;
 
@@ -197,7 +203,6 @@ private:
 
     void impl_killInternalData() throw( com::sun::star::util::CloseVetoException );
 
-    void impl_createOldModelAgg();
     void impl_store(
         const ::com::sun::star::uno::Sequence<
             ::com::sun::star::beans::PropertyValue >& rMediaDescriptor,
@@ -238,6 +243,12 @@ public:
 
     APPHELPER_XSERVICEINFO_DECL()
     APPHELPER_SERVICE_FACTORY_HELPER(ChartModel)
+
+    //-----------------------------------------------------------------
+    // ::com::sun::star::lang::XInitialization
+    //-----------------------------------------------------------------
+    virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
+                throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
     //-----------------------------------------------------------------
     // ::com::sun::star::frame::XModel (required interface)
@@ -422,6 +433,10 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentProperties > SAL_CALL
         getDocumentProperties(  ) throw (::com::sun::star::uno::RuntimeException);
 
+    // ____ document::XUndoManagerSupplier ____
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManager > SAL_CALL
+        getUndoManager(  ) throw (::com::sun::star::uno::RuntimeException);
+
     //-----------------------------------------------------------------
     // ::com::sun::star::chart2::XChartDocument
     //-----------------------------------------------------------------
@@ -588,10 +603,6 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& Parent )
         throw (::com::sun::star::lang::NoSupportException,
                ::com::sun::star::uno::RuntimeException);
-
-    // ____ XUndoSupplier ____
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XUndoManager > SAL_CALL getUndoManager()
-        throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XDataSource ____ allows access to the curently used data and data ranges
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XLabeledDataSequence > > SAL_CALL getDataSequences()

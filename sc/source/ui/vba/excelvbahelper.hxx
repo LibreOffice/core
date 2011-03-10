@@ -34,12 +34,42 @@
 #include <com/sun/star/sheet/XDatabaseRange.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/sheet/XSheetCellRangeContainer.hpp>
+#include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <ooo/vba/XHelperInterface.hpp>
 #include <formula/grammar.hxx>
 
 class ScCellRangesBase;
 
-namespace ooo
+namespace ooo {
+namespace vba {
+namespace excel {
+
+// ============================================================================
+
+// nTabs empty means apply zoom to all sheets
+void implSetZoom( const css::uno::Reference< css::frame::XModel >& xModel, sal_Int16 nZoom, std::vector< SCTAB >& nTabs );
+void implnCopy( const css::uno::Reference< css::frame::XModel>& xModel );
+void implnPaste ( const css::uno::Reference< css::frame::XModel>& xModel );
+void implnCut( const css::uno::Reference< css::frame::XModel>& xModel );
+void implnPasteSpecial( const css::uno::Reference< css::frame::XModel>& xModel, sal_uInt16 nFlags,sal_uInt16 nFunction,sal_Bool bSkipEmpty, sal_Bool bTranspose);
+ScTabViewShell* getBestViewShell( const css::uno::Reference< css::frame::XModel>& xModel ) ;
+ScDocShell* getDocShell( const css::uno::Reference< css::frame::XModel>& xModel ) ;
+ScTabViewShell* getCurrentBestViewShell( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+SfxViewFrame* getViewFrame( const css::uno::Reference< css::frame::XModel >& xModel );
+
+css::uno::Reference< ooo::vba::XHelperInterface > getUnoSheetModuleObj( const css::uno::Reference< css::sheet::XSpreadsheet >& xSheet ) throw ( css::uno::RuntimeException );
+css::uno::Reference< ooo::vba::XHelperInterface > getUnoSheetModuleObj( const css::uno::Reference< css::sheet::XSheetCellRangeContainer >& xRanges ) throw ( css::uno::RuntimeException );
+css::uno::Reference< ooo::vba::XHelperInterface > getUnoSheetModuleObj( const css::uno::Reference< css::table::XCellRange >& xRange ) throw ( css::uno::RuntimeException );
+css::uno::Reference< ooo::vba::XHelperInterface > getUnoSheetModuleObj( const css::uno::Reference< css::table::XCell >& xCell ) throw ( css::uno::RuntimeException );
+css::uno::Reference< ooo::vba::XHelperInterface > getUnoSheetModuleObj( const css::uno::Reference< css::frame::XModel >& xModel, SCTAB nTab ) throw ( css::uno::RuntimeException );
+
+ScDocShell* GetDocShellFromRange( const css::uno::Reference< css::uno::XInterface >& xRange ) throw ( css::uno::RuntimeException );
+ScDocument* GetDocumentFromRange( const css::uno::Reference< css::uno::XInterface >& xRange ) throw ( css::uno::RuntimeException );
+css::uno::Reference< css::frame::XModel > GetModelFromRange( const css::uno::Reference< css::uno::XInterface >& xRange ) throw ( css::uno::RuntimeException );
+
+// ============================================================================
+
+class ScVbaCellRangeAccess
 {
     namespace vba
     {

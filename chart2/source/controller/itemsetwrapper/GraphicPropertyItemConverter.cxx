@@ -140,7 +140,7 @@ bool lcl_supportsLineProperties( ::chart::wrapper::GraphicPropertyItemConverter:
 bool lcl_SetContentForNamedProperty(
     const uno::Reference< lang::XMultiServiceFactory > & xFactory,
     const ::rtl::OUString & rTableName,
-    NameOrIndex & rItem, BYTE nMemberId )
+    NameOrIndex & rItem, sal_uInt8 nMemberId )
 {
     bool bResult = false;
     if( xFactory.is())
@@ -184,9 +184,9 @@ GraphicPropertyItemConverter::GraphicPropertyItemConverter(
 GraphicPropertyItemConverter::~GraphicPropertyItemConverter()
 {}
 
-const USHORT * GraphicPropertyItemConverter::GetWhichPairs() const
+const sal_uInt16 * GraphicPropertyItemConverter::GetWhichPairs() const
 {
-    const USHORT * pResult = NULL;
+    const sal_uInt16 * pResult = NULL;
 
     switch( m_eGraphicObjectType )
     {
@@ -251,7 +251,7 @@ bool GraphicPropertyItemConverter::GetItemProperty( tWhichIdType nWhichId, tProp
 }
 
 void GraphicPropertyItemConverter::FillSpecialItem(
-    USHORT nWhichId, SfxItemSet & rOutItemSet ) const
+    sal_uInt16 nWhichId, SfxItemSet & rOutItemSet ) const
     throw( uno::Exception )
 {
     switch( nWhichId )
@@ -294,7 +294,7 @@ void GraphicPropertyItemConverter::FillSpecialItem(
                         if( (aValue >>= aName) &&
                             aName.getLength())
                         {
-                            aItem.SetEnabled( TRUE );
+                            aItem.SetEnabled( sal_True );
                             rOutItemSet.Put( aItem );
                         }
                     }
@@ -453,7 +453,7 @@ void GraphicPropertyItemConverter::FillSpecialItem(
 }
 
 bool GraphicPropertyItemConverter::ApplySpecialItem(
-    USHORT nWhichId, const SfxItemSet & rItemSet )
+    sal_uInt16 nWhichId, const SfxItemSet & rItemSet )
     throw( uno::Exception )
 {
     bool bChanged = false;

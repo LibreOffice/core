@@ -683,14 +683,14 @@ double SAL_CALL
 ScVbaWindow::getSplitVertical() throw (uno::RuntimeException)
 {
     double fSplitVertical = m_xViewSplitable->getSplitVertical();
-    double fVertiPoints = PixelsToPoints( m_xDevice, fSplitVertical, sal_False );
+    double fVertiPoints = PixelsToPoints( m_xDevice, fSplitVertical, false );
     return fVertiPoints;
 }
 
 void SAL_CALL
 ScVbaWindow::setSplitVertical(double _splitvertical ) throw (uno::RuntimeException)
 {
-    double fVertiPixels = PointsToPixels( m_xDevice, _splitvertical, sal_False );
+    double fVertiPixels = PointsToPixels( m_xDevice, _splitvertical, false );
     m_xViewSplitable->splitAtPosition( 0, static_cast<sal_Int32>( fVertiPixels ) );
 }
 
@@ -761,7 +761,7 @@ ScVbaWindow::setView( const uno::Any& _view) throw (uno::RuntimeException)
 {
     sal_Int32 nWindowView = excel::XlWindowView::xlNormalView;
     _view >>= nWindowView;
-    USHORT nSlot = FID_NORMALVIEWMODE;
+    sal_uInt16 nSlot = FID_NORMALVIEWMODE;
     switch ( nWindowView )
     {
         case excel::XlWindowView::xlNormalView:

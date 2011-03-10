@@ -45,7 +45,7 @@
 ScColOrRowDlg::ScColOrRowDlg( Window*       pParent,
                               const String& rStrTitle,
                               const String& rStrLabel,
-                              BOOL          bColDefault )
+                              sal_Bool          bColDefault )
 
     :   ModalDialog     ( pParent, ScResId( RID_SCDLG_COLORROW ) ),
         //

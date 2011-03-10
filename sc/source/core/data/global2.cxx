@@ -44,7 +44,6 @@
 
 #include "global.hxx"
 #include "rangeutl.hxx"
-#include "pivot.hxx"
 #include "rechead.hxx"
 #include "compiler.hxx"
 #include "paramisc.hxx"
@@ -65,9 +64,9 @@ ScImportParam::ScImportParam() :
     nRow1(0),
     nCol2(0),
     nRow2(0),
-    bImport(FALSE),
-    bNative(FALSE),
-    bSql(TRUE),
+    bImport(false),
+    bNative(false),
+    bSql(sal_True),
     nType(ScDbTable)
 {
 }
@@ -106,7 +105,7 @@ ScImportParam& ScImportParam::operator=( const ScImportParam& r )
     return *this;
 }
 
-BOOL ScImportParam::operator==( const ScImportParam& rOther ) const
+sal_Bool ScImportParam::operator==( const ScImportParam& rOther ) const
 {
     return( nCol1       == rOther.nCol1 &&
             nRow1       == rOther.nRow1 &&
@@ -126,8 +125,8 @@ BOOL ScImportParam::operator==( const ScImportParam& rOther ) const
 // struct ScQueryParam:
 
 ScQueryEntry::ScQueryEntry() :
-    bDoQuery(FALSE),
-    bQueryByString(FALSE),
+    bDoQuery(false),
+    bQueryByString(false),
     bQueryByDate(false),
     nField(0),
     eOp(SC_EQUAL),
@@ -186,8 +185,8 @@ ScQueryEntry& ScQueryEntry::operator=( const ScQueryEntry& r )
 
 void ScQueryEntry::Clear()
 {
-    bDoQuery        = FALSE;
-    bQueryByString  = FALSE;
+    bDoQuery        = false;
+    bQueryByString  = false;
     bQueryByDate    = false;
     eOp             = SC_EQUAL;
     eConnect        = SC_AND;
@@ -203,7 +202,7 @@ void ScQueryEntry::Clear()
     pSearchText     = NULL;
 }
 
-BOOL ScQueryEntry::operator==( const ScQueryEntry& r ) const
+sal_Bool ScQueryEntry::operator==( const ScQueryEntry& r ) const
 {
     return bDoQuery         == r.bDoQuery
         && bQueryByString   == r.bQueryByString
@@ -216,12 +215,12 @@ BOOL ScQueryEntry::operator==( const ScQueryEntry& r ) const
     //! pSearchParam und pSearchText nicht vergleichen
 }
 
-utl::TextSearch* ScQueryEntry::GetSearchTextPtr( BOOL bCaseSens )
+utl::TextSearch* ScQueryEntry::GetSearchTextPtr( sal_Bool bCaseSens )
 {
     if ( !pSearchParam )
     {
         pSearchParam = new utl::SearchParam( *pStr, utl::SearchParam::SRCH_REGEXP,
-            bCaseSens, FALSE, FALSE );
+            bCaseSens, false, false );
         pSearchText = new utl::TextSearch( *pSearchParam, *ScGlobal::pCharClass );
     }
     return pSearchText;
@@ -232,7 +231,7 @@ utl::TextSearch* ScQueryEntry::GetSearchTextPtr( BOOL bCaseSens )
 
 ScSubTotalParam::ScSubTotalParam()
 {
-    for ( USHORT i=0; i<MAXSUBTOTAL; i++ )
+    for ( sal_uInt16 i=0; i<MAXSUBTOTAL; i++ )
     {
         nSubTotals[i] = 0;
         pSubTotals[i] = NULL;
@@ -250,7 +249,7 @@ ScSubTotalParam::ScSubTotalParam( const ScSubTotalParam& r ) :
         bDoSort(r.bDoSort),bAscending(r.bAscending),bUserDef(r.bUserDef),nUserIndex(r.nUserIndex),
         bIncludePattern(r.bIncludePattern)
 {
-    for (USHORT i=0; i<MAXSUBTOTAL; i++)
+    for (sal_uInt16 i=0; i<MAXSUBTOTAL; i++)
     {
         bGroupActive[i] = r.bGroupActive[i];
         nField[i]       = r.nField[i];
@@ -283,12 +282,12 @@ void ScSubTotalParam::Clear()
     nCol1=nCol2= 0;
     nRow1=nRow2 = 0;
     nUserIndex = 0;
-    bPagebreak=bCaseSens=bUserDef=bIncludePattern=bRemoveOnly = FALSE;
-    bAscending=bReplace=bDoSort = TRUE;
+    bPagebreak=bCaseSens=bUserDef=bIncludePattern=bRemoveOnly = false;
+    bAscending=bReplace=bDoSort = sal_True;
 
-    for (USHORT i=0; i<MAXSUBTOTAL; i++)
+    for (sal_uInt16 i=0; i<MAXSUBTOTAL; i++)
     {
-        bGroupActive[i] = FALSE;
+        bGroupActive[i] = false;
         nField[i]       = 0;
 
         if ( (nSubTotals[i] > 0) && pSubTotals[i] && pFunctions[i] )
@@ -319,7 +318,7 @@ ScSubTotalParam& ScSubTotalParam::operator=( const ScSubTotalParam& r )
     nUserIndex      = r.nUserIndex;
     bIncludePattern = r.bIncludePattern;
 
-    for (USHORT i=0; i<MAXSUBTOTAL; i++)
+    for (sal_uInt16 i=0; i<MAXSUBTOTAL; i++)
     {
         bGroupActive[i] = r.bGroupActive[i];
         nField[i]       = r.nField[i];
@@ -352,9 +351,9 @@ ScSubTotalParam& ScSubTotalParam::operator=( const ScSubTotalParam& r )
 
 //------------------------------------------------------------------------
 
-BOOL ScSubTotalParam::operator==( const ScSubTotalParam& rOther ) const
+sal_Bool ScSubTotalParam::operator==( const ScSubTotalParam& rOther ) const
 {
-    BOOL bEqual =   (nCol1          == rOther.nCol1)
+    sal_Bool bEqual =   (nCol1          == rOther.nCol1)
                  && (nRow1          == rOther.nRow1)
                  && (nCol2          == rOther.nCol2)
                  && (nRow2          == rOther.nRow2)
@@ -370,8 +369,8 @@ BOOL ScSubTotalParam::operator==( const ScSubTotalParam& rOther ) const
 
     if ( bEqual )
     {
-        bEqual = TRUE;
-        for ( USHORT i=0; i<MAXSUBTOTAL && bEqual; i++ )
+        bEqual = sal_True;
+        for ( sal_uInt16 i=0; i<MAXSUBTOTAL && bEqual; i++ )
         {
             bEqual =   (bGroupActive[i] == rOther.bGroupActive[i])
                     && (nField[i]       == rOther.nField[i])
@@ -396,10 +395,10 @@ BOOL ScSubTotalParam::operator==( const ScSubTotalParam& rOther ) const
 
 //------------------------------------------------------------------------
 
-void ScSubTotalParam::SetSubTotals( USHORT                  nGroup,
+void ScSubTotalParam::SetSubTotals( sal_uInt16                  nGroup,
                                     const SCCOL*            ptrSubTotals,
                                     const ScSubTotalFunc*   ptrFunctions,
-                                    USHORT                  nCount )
+                                    sal_uInt16                  nCount )
 {
     DBG_ASSERT( (nGroup <= MAXSUBTOTAL),
                 "ScSubTotalParam::SetSubTotals(): nGroup > MAXSUBTOTAL!" );
@@ -423,7 +422,7 @@ void ScSubTotalParam::SetSubTotals( USHORT                  nGroup,
         pFunctions[nGroup] = new ScSubTotalFunc [nCount];
         nSubTotals[nGroup] = static_cast<SCCOL>(nCount);
 
-        for ( USHORT i=0; i<nCount; i++ )
+        for ( sal_uInt16 i=0; i<nCount; i++ )
         {
             pSubTotals[nGroup][i] = ptrSubTotals[i];
             pFunctions[nGroup][i] = ptrFunctions[i];
@@ -452,7 +451,7 @@ ScConsolidateParam::ScConsolidateParam( const ScConsolidateParam& r ) :
     {
         nDataAreaCount = r.nDataAreaCount;
         ppDataAreas = new ScArea*[nDataAreaCount];
-        for ( USHORT i=0; i<nDataAreaCount; i++ )
+        for ( sal_uInt16 i=0; i<nDataAreaCount; i++ )
             ppDataAreas[i] = new ScArea( *(r.ppDataAreas[i]) );
     }
 }
@@ -470,7 +469,7 @@ void ScConsolidateParam::ClearDataAreas()
 {
     if ( ppDataAreas )
     {
-        for ( USHORT i=0; i<nDataAreaCount; i++ )
+        for ( sal_uInt16 i=0; i<nDataAreaCount; i++ )
             delete ppDataAreas[i];
         delete [] ppDataAreas;
         ppDataAreas = NULL;
@@ -487,7 +486,7 @@ void ScConsolidateParam::Clear()
     nCol = 0;
     nRow = 0;
     nTab = 0;
-    bByCol = bByRow = bReferenceData    = FALSE;
+    bByCol = bByRow = bReferenceData    = false;
     eFunction                           = SUBTOTAL_FUNC_SUM;
 }
 
@@ -509,9 +508,9 @@ ScConsolidateParam& ScConsolidateParam::operator=( const ScConsolidateParam& r )
 
 //------------------------------------------------------------------------
 
-BOOL ScConsolidateParam::operator==( const ScConsolidateParam& r ) const
+sal_Bool ScConsolidateParam::operator==( const ScConsolidateParam& r ) const
 {
-    BOOL bEqual =   (nCol           == r.nCol)
+    sal_Bool bEqual =   (nCol           == r.nCol)
                  && (nRow           == r.nRow)
                  && (nTab           == r.nTab)
                  && (bByCol         == r.bByCol)
@@ -526,7 +525,7 @@ BOOL ScConsolidateParam::operator==( const ScConsolidateParam& r ) const
         bEqual = bEqual && (ppDataAreas != NULL) && (r.ppDataAreas != NULL);
 
     if ( bEqual && (nDataAreaCount > 0) )
-        for ( USHORT i=0; i<nDataAreaCount && bEqual; i++ )
+        for ( sal_uInt16 i=0; i<nDataAreaCount && bEqual; i++ )
             bEqual = *(ppDataAreas[i]) == *(r.ppDataAreas[i]);
 
     return bEqual;
@@ -534,13 +533,13 @@ BOOL ScConsolidateParam::operator==( const ScConsolidateParam& r ) const
 
 //------------------------------------------------------------------------
 
-void ScConsolidateParam::SetAreas( ScArea* const* ppAreas, USHORT nCount )
+void ScConsolidateParam::SetAreas( ScArea* const* ppAreas, sal_uInt16 nCount )
 {
     ClearDataAreas();
     if ( ppAreas && nCount > 0 )
     {
         ppDataAreas = new ScArea*[nCount];
-        for ( USHORT i=0; i<nCount; i++ )
+        for ( sal_uInt16 i=0; i<nCount; i++ )
             ppDataAreas[i] = new ScArea( *(ppAreas[i]) );
         nDataAreaCount = nCount;
     }
@@ -548,7 +547,7 @@ void ScConsolidateParam::SetAreas( ScArea* const* ppAreas, USHORT nCount )
 
 // -----------------------------------------------------------------------
 
-PivotField::PivotField( SCsCOL nNewCol, USHORT nNewFuncMask ) :
+PivotField::PivotField( SCsCOL nNewCol, sal_uInt16 nNewFuncMask ) :
     nCol( nNewCol ),
     nFuncMask( nNewFuncMask ),
     nFuncCount( 0 )
@@ -576,8 +575,8 @@ bool PivotField::operator==( const PivotField& r ) const
 
 ScPivotParam::ScPivotParam()
     :   nCol(0), nRow(0), nTab(0),
-        bIgnoreEmptyRows(FALSE), bDetectCategories(FALSE),
-        bMakeTotalCol(TRUE), bMakeTotalRow(TRUE)
+        bIgnoreEmptyRows(false), bDetectCategories(false),
+        bMakeTotalCol(true), bMakeTotalRow(true)
 {
 }
 
@@ -648,9 +647,9 @@ ScPivotParam& ScPivotParam::operator=( const ScPivotParam& r )
 
 //------------------------------------------------------------------------
 
-BOOL ScPivotParam::operator==( const ScPivotParam& r ) const
+sal_Bool ScPivotParam::operator==( const ScPivotParam& r ) const
 {
-    BOOL bEqual =   (nCol       == r.nCol)
+    sal_Bool bEqual =   (nCol       == r.nCol)
                  && (nRow       == r.nRow)
                  && (nTab       == r.nTab)
                  && (bIgnoreEmptyRows  == r.bIgnoreEmptyRows)
@@ -719,17 +718,17 @@ ScSolveParam& ScSolveParam::operator=( const ScSolveParam& r )
 
 //------------------------------------------------------------------------
 
-BOOL ScSolveParam::operator==( const ScSolveParam& r ) const
+sal_Bool ScSolveParam::operator==( const ScSolveParam& r ) const
 {
-    BOOL bEqual =   (aRefFormulaCell  == r.aRefFormulaCell)
+    sal_Bool bEqual =   (aRefFormulaCell  == r.aRefFormulaCell)
                  && (aRefVariableCell == r.aRefVariableCell);
 
     if ( bEqual )
     {
         if ( !pStrTargetVal && !r.pStrTargetVal )
-            bEqual = TRUE;
+            bEqual = sal_True;
         else if ( !pStrTargetVal || !r.pStrTargetVal )
-            bEqual = FALSE;
+            bEqual = false;
         else if ( pStrTargetVal && r.pStrTargetVal )
             bEqual = ( *pStrTargetVal == *(r.pStrTargetVal) );
     }
@@ -755,7 +754,7 @@ ScTabOpParam::ScTabOpParam( const ScRefAddress& rFormulaCell,
                             const ScRefAddress& rFormulaEnd,
                             const ScRefAddress& rRowCell,
                             const ScRefAddress& rColCell,
-                                  BYTE       nMd)
+                                  sal_uInt8      nMd)
     :   aRefFormulaCell ( rFormulaCell ),
         aRefFormulaEnd  ( rFormulaEnd ),
         aRefRowCell     ( rRowCell ),
@@ -778,7 +777,7 @@ ScTabOpParam& ScTabOpParam::operator=( const ScTabOpParam& r )
 
 //------------------------------------------------------------------------
 
-BOOL ScTabOpParam::operator==( const ScTabOpParam& r ) const
+sal_Bool ScTabOpParam::operator==( const ScTabOpParam& r ) const
 {
     return (        (aRefFormulaCell == r.aRefFormulaCell)
                  && (aRefFormulaEnd  == r.aRefFormulaEnd)

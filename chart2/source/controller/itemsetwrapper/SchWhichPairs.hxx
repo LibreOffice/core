@@ -42,10 +42,9 @@ namespace
     EE_ITEMS_START, EE_ITEMS_END,  \
     SID_CHAR_DLG_PREVIEW_STRING, SID_CHAR_DLG_PREVIEW_STRING
 
-const USHORT nTitleWhichPairs[] =
+const sal_uInt16 nTitleWhichPairs[] =
 {
-    SCHATTR_TEXT_STACKED, SCHATTR_TEXT_STACKED,       //     4          sch/schattr.hxx
-    SCHATTR_TEXT_DEGREES,SCHATTR_TEXT_DEGREES,      //    53          sch/schattr.hxx
+    SCHATTR_TEXT_START, SCHATTR_TEXT_END,
     XATTR_LINE_FIRST, XATTR_LINE_LAST,              //  1000 -  1016  svx/xdef.hxx
     XATTR_FILL_FIRST, XATTR_FILL_LAST,              //  1018 -  1046  svx/xdef.hxx
     SDRATTR_SHADOW_FIRST, SDRATTR_SHADOW_LAST,      //  1067 -  1078  svx/svddef.hxx
@@ -53,40 +52,33 @@ const USHORT nTitleWhichPairs[] =
     0
 };
 
-const USHORT nAxisWhichPairs[] =
+const sal_uInt16 nAxisWhichPairs[] =
 {
     XATTR_LINE_FIRST, XATTR_LINE_LAST,                          //  1000 -  1016  svx/xdef.hxx
     CHARACTER_WHICHPAIRS,
     SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_VALUE,   // 10585 - 10585  svx/svxids.hrc
     SID_ATTR_NUMBERFORMAT_SOURCE, SID_ATTR_NUMBERFORMAT_SOURCE, // 11432          svx/svxids.hrc
-    SCHATTR_AXISTYPE, SCHATTR_AXISTYPE,                         //    39          sch/schattr.hxx
-    SCHATTR_TEXT_START, SCHATTR_TEXT_END,                       //     4 -     6  sch/schattr.hxx
-    SCHATTR_TEXT_DEGREES,SCHATTR_TEXT_DEGREES,                  //    53          sch/schattr.hxx
-    SCHATTR_TEXT_OVERLAP, SCHATTR_TEXT_OVERLAP,                 //    54          sch/schattr.hxx
-    SCHATTR_AXIS_START, SCHATTR_AXIS_END,                       //    70 -    95  sch/schattr.hxx
-    SCHATTR_TEXTBREAK, SCHATTR_TEXTBREAK,                       // 30587          sch/schattr.hxx
+    SCHATTR_AXIS_START, SCHATTR_AXIS_END,
+    SCHATTR_TEXT_START, SCHATTR_TEXT_END,
     0
 };
 
-const USHORT nAllAxisWhichPairs[] =
+const sal_uInt16 nAllAxisWhichPairs[] =
 {
-    XATTR_LINE_FIRST, XATTR_LINE_LAST,              //  1000 -  1016  svx/xdef.hxx
+    XATTR_LINE_FIRST, XATTR_LINE_LAST,
     CHARACTER_WHICHPAIRS,
-    SCHATTR_TEXT_START, SCHATTR_TEXT_END,           //     4 -     6  sch/schattr.hxx
-    SCHATTR_TEXT_DEGREES,SCHATTR_TEXT_DEGREES,      //    53          sch/schattr.hxx
-    SCHATTR_TEXT_OVERLAP, SCHATTR_TEXT_OVERLAP,     //    54          sch/schattr.hxx
-    SCHATTR_AXIS_SHOWDESCR, SCHATTR_AXIS_SHOWDESCR, //    85          sch/schattr.hxx
-    SCHATTR_TEXTBREAK, SCHATTR_TEXTBREAK,           // 30587          sch/schattr.hxx
+    SCHATTR_AXIS_LABEL_START, SCHATTR_AXIS_LABEL_END,
+    SCHATTR_TEXT_START, SCHATTR_TEXT_END,
     0
 };
 
-const USHORT nGridWhichPairs[] =
+const sal_uInt16 nGridWhichPairs[] =
 {
     XATTR_LINE_FIRST, XATTR_LINE_LAST,              //  1000 -  1016  svx/xdef.hxx
     0
 };
 
-const USHORT nLegendWhichPairs[] =
+const sal_uInt16 nLegendWhichPairs[] =
 {
     XATTR_LINE_FIRST, XATTR_LINE_LAST,              //  1000 -  1016  svx/xdef.hxx
     XATTR_FILL_FIRST, XATTR_FILL_LAST,              //  1018 -  1046  svx/xdef.hxx
@@ -96,13 +88,11 @@ const USHORT nLegendWhichPairs[] =
     0
 };
 
-const USHORT nDataLabelWhichPairs[] =
+const sal_uInt16 nDataLabelWhichPairs[] =
 {
     SCHATTR_DATADESCR_START, SCHATTR_DATADESCR_END,
     SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_INFO,    /* 10585 - 10585  svx/svxids.hrc */ \
     SID_ATTR_NUMBERFORMAT_SOURCE, SID_ATTR_NUMBERFORMAT_SOURCE, /* 11432          svx/svxids.hrc */ \
-    SCHATTR_PERCENT_NUMBERFORMAT_VALUE, SCHATTR_PERCENT_NUMBERFORMAT_VALUE,   /*      40          sch/schattr.hxx*/ \
-    SCHATTR_PERCENT_NUMBERFORMAT_SOURCE, SCHATTR_PERCENT_NUMBERFORMAT_SOURCE, /*      41          sch/schattr.hxx*/ \
     SCHATTR_TEXT_DEGREES,SCHATTR_TEXT_DEGREES,
     EE_PARA_WRITINGDIR,EE_PARA_WRITINGDIR,
     0
@@ -116,15 +106,13 @@ const USHORT nDataLabelWhichPairs[] =
     SCHATTR_DATADESCR_START, SCHATTR_DATADESCR_END, /*     1 -     2  sch/schattr.hxx*/ \
     SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_INFO,    /* 10585 - 10585  svx/svxids.hrc */ \
     SID_ATTR_NUMBERFORMAT_SOURCE, SID_ATTR_NUMBERFORMAT_SOURCE, /* 11432          svx/svxids.hrc */ \
-    SCHATTR_PERCENT_NUMBERFORMAT_VALUE, SCHATTR_PERCENT_NUMBERFORMAT_VALUE,   /*      40          sch/schattr.hxx*/ \
-    SCHATTR_PERCENT_NUMBERFORMAT_SOURCE, SCHATTR_PERCENT_NUMBERFORMAT_SOURCE, /*      41          sch/schattr.hxx*/ \
     SCHATTR_TEXT_DEGREES, SCHATTR_TEXT_DEGREES, \
     SCHATTR_STYLE_START,SCHATTR_STYLE_END,          /*    59 -    68  sch/schattr.hxx*/ \
     SCHATTR_SYMBOL_BRUSH,SCHATTR_SYMBOL_BRUSH,      /*    94          sch/schattr.hxx*/ \
     SCHATTR_SYMBOL_SIZE,SCHATTR_SYMBOL_SIZE,        /*    97          sch/schattr.hxx*/ \
     SDRATTR_3D_FIRST, SDRATTR_3D_LAST               /*  1244 -  1334  svx/svddef.hxx */
 
-const USHORT nDataPointWhichPairs[] =
+const sal_uInt16 nDataPointWhichPairs[] =
 {
     CHART_POINT_WHICHPAIRS,
     0
@@ -140,20 +128,20 @@ const USHORT nDataPointWhichPairs[] =
     SCHATTR_AVAILABLE_MISSING_VALUE_TREATMENTS,SCHATTR_AVAILABLE_MISSING_VALUE_TREATMENTS, \
     SCHATTR_INCLUDE_HIDDEN_CELLS,SCHATTR_INCLUDE_HIDDEN_CELLS
 
-const USHORT nSeriesOptionsWhichPairs[] =
+const sal_uInt16 nSeriesOptionsWhichPairs[] =
 {
     CHART_SERIES_OPTIONS_WHICHPAIRS,
     0
 };
 
-const USHORT nRowWhichPairs[] =
+const sal_uInt16 nRowWhichPairs[] =
 {
     CHART_POINT_WHICHPAIRS,
     CHART_SERIES_OPTIONS_WHICHPAIRS,
     0
 };
 
-const USHORT nAreaWhichPairs[] =
+const sal_uInt16 nAreaWhichPairs[] =
 {
     XATTR_LINE_FIRST, XATTR_LINE_LAST,              //  1000 -  1016  svx/xdef.hxx
     XATTR_FILL_FIRST, XATTR_FILL_LAST,              //  1000 -  1016  svx/xdef.hxx
@@ -161,30 +149,28 @@ const USHORT nAreaWhichPairs[] =
     0
 };
 
-const USHORT nTextWhichPairs[] =
+const sal_uInt16 nTextWhichPairs[] =
 {
     CHARACTER_WHICHPAIRS,
-    SCHATTR_TEXT_STACKED, SCHATTR_TEXT_STACKED,       //     4          sch/schattr.hxx
-    SCHATTR_TEXT_DEGREES,SCHATTR_TEXT_DEGREES,      //    53          sch/schattr.hxx
+    SCHATTR_TEXT_START, SCHATTR_TEXT_END,
     0
 };
 
-const USHORT nTextOrientWhichPairs[] =
+const sal_uInt16 nTextOrientWhichPairs[] =
 {
     CHARACTER_WHICHPAIRS,
-    SCHATTR_TEXT_STACKED, SCHATTR_TEXT_STACKED,       //     4          sch/schattr.hxx
-    SCHATTR_TEXT_DEGREES,SCHATTR_TEXT_DEGREES,      //    53          sch/schattr.hxx
+    SCHATTR_TEXT_START, SCHATTR_TEXT_END,
     0
 };
 
-const USHORT nStatWhichPairs[]=
+const sal_uInt16 nStatWhichPairs[]=
 {
     SCHATTR_STAT_START, SCHATTR_STAT_END,           //    45 -    52  sch/schattr.hxx
     SCHATTR_REGRESSION_START, SCHATTR_REGRESSION_END, // 108 -   109
     0
 };
 
-const USHORT nErrorBarWhichPairs[]=
+const sal_uInt16 nErrorBarWhichPairs[]=
 {
     SCHATTR_STAT_START, SCHATTR_STAT_END,           //    45 -    52  sch/schattr.hxx
     XATTR_LINE_FIRST, XATTR_LINE_LAST,              //  1000 -  1016  svx/xdef.hxx
@@ -193,26 +179,26 @@ const USHORT nErrorBarWhichPairs[]=
 
 // for CharacterProperties
 
-const USHORT nCharacterPropertyWhichPairs[] =
+const sal_uInt16 nCharacterPropertyWhichPairs[] =
 {
     CHARACTER_WHICHPAIRS,
     0
 };
 
-const USHORT nLinePropertyWhichPairs[] =
+const sal_uInt16 nLinePropertyWhichPairs[] =
 {
     XATTR_LINE_FIRST, XATTR_LINE_LAST,              //  1000 -  1016  svx/xdef.hxx
     0
 };
 
-const USHORT nFillPropertyWhichPairs[] =
+const sal_uInt16 nFillPropertyWhichPairs[] =
 {
     XATTR_FILL_FIRST, XATTR_FILL_LAST,              //  1000 -  1016  svx/xdef.hxx
     SDRATTR_SHADOW_FIRST, SDRATTR_SHADOW_LAST,      //  1067 -  1078  svx/svddef.hxx
     0
 };
 
-const USHORT nLineAndFillPropertyWhichPairs[] =
+const sal_uInt16 nLineAndFillPropertyWhichPairs[] =
 {
     XATTR_LINE_FIRST, XATTR_LINE_LAST,              //  1000 -  1016  svx/xdef.hxx
     XATTR_FILL_FIRST, XATTR_FILL_LAST,              //  1000 -  1016  svx/xdef.hxx
@@ -220,7 +206,7 @@ const USHORT nLineAndFillPropertyWhichPairs[] =
     0
 };
 
-const USHORT nChartStyleWhichPairs[] =
+const sal_uInt16 nChartStyleWhichPairs[] =
 {
     SCHATTR_DIAGRAM_STYLE,                SCHATTR_DIAGRAM_STYLE,
     SCHATTR_STYLE_SHAPE,                  SCHATTR_STYLE_SHAPE,
@@ -230,14 +216,14 @@ const USHORT nChartStyleWhichPairs[] =
     0
 };
 
-const USHORT nRegressionCurveWhichPairs[] =
+const sal_uInt16 nRegressionCurveWhichPairs[] =
 {
     SCHATTR_REGRESSION_START, SCHATTR_REGRESSION_END, // 108 -   109
     XATTR_LINE_FIRST, XATTR_LINE_LAST,              //  1000 -  1016  svx/xdef.hxx
     0
 };
 
-const USHORT nRegEquationWhichPairs[] =
+const sal_uInt16 nRegEquationWhichPairs[] =
 {
     XATTR_LINE_FIRST, XATTR_LINE_LAST,              //  1000 -  1016  svx/xdef.hxx
     XATTR_FILL_FIRST, XATTR_FILL_LAST,              //  1018 -  1046  svx/xdef.hxx

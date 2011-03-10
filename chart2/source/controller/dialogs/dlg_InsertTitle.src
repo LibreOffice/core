@@ -32,7 +32,7 @@
 
 ModalDialog DLG_TITLE
 {
-    HelpID = SID_INSERT_TITLE ;
+    HelpID = HID_INSERT_TITLE ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 220 , 156 ) ;

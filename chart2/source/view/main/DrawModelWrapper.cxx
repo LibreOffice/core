@@ -136,7 +136,7 @@ DrawModelWrapper::DrawModelWrapper(
 
     SfxItemPool* pMasterPool = &GetItemPool();
     pMasterPool->SetDefaultMetric(SFX_MAPUNIT_100TH_MM);
-    pMasterPool->SetPoolDefaultItem(SfxBoolItem(EE_PARA_HYPHENATE, TRUE) );
+    pMasterPool->SetPoolDefaultItem(SfxBoolItem(EE_PARA_HYPHENATE, sal_True) );
     pMasterPool->SetPoolDefaultItem(Svx3DPercentDiagonalItem (5));
 
     SfxItemPool* pPool = pMasterPool;
@@ -375,8 +375,8 @@ SdrObject* DrawModelWrapper::getNamedSdrObject( const String& rObjectCID, SdrObj
 {
     if(!pSearchList || rObjectCID.Len()==0)
         return 0;
-    ULONG nCount = pSearchList->GetObjCount();
-    for( ULONG nN=0; nN<nCount; nN++  )
+    sal_uLong nCount = pSearchList->GetObjCount();
+    for( sal_uLong nN=0; nN<nCount; nN++  )
     {
         SdrObject* pObj = pSearchList->GetObj(nN);
         if(!pObj)

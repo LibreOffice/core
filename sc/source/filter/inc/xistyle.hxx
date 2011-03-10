@@ -69,6 +69,9 @@ public:
         @return  The color from current or default palette or COL_AUTO, if nothing else found. */
     inline Color        GetColor( sal_uInt16 nXclIndex ) const
                             { return Color( GetColorData( nXclIndex ) ); }
+    /** Returns the palette colors as UNO sequence. */
+    ::com::sun::star::uno::Sequence< sal_Int32 >
+                        CreateColorSequence() const;
 
     /** Reads a PALETTE record. */
     void                ReadPalette( XclImpStream& rStrm );
@@ -232,7 +235,7 @@ public:
     void                CreateScFormats();
 
     /** Returns the format key with the passed Excel index or NUMBERFORMAT_ENTRY_NOT_FOUND on error. */
-    ULONG               GetScFormat( sal_uInt16 nXclNumFmt ) const;
+    sal_uLong               GetScFormat( sal_uInt16 nXclNumFmt ) const;
 
     /** Fills an Excel number format to the passed item set.
         @param rItemSet  The destination item set.
@@ -246,11 +249,11 @@ public:
         @param nScNumFmt  The Calc number formatter index of the format.
         @param bSkipPoolDefs  true = Do not put items equal to pool default; false = Put all items. */
     void                FillScFmtToItemSet(
-                            SfxItemSet& rItemSet, ULONG nScNumFmt,
+                            SfxItemSet& rItemSet, sal_uLong nScNumFmt,
                             bool bSkipPoolDefs = false ) const;
 
 private:
-    typedef ::std::map< sal_uInt16, ULONG > XclImpIndexMap;
+    typedef ::std::map< sal_uInt16, sal_uLong > XclImpIndexMap;
 
     XclImpIndexMap      maIndexMap;     /// Maps Excel format indexes to Calc formats.
     sal_uInt16          mnNextXclIdx;   /// Index counter for BIFF2-BIFF4.
@@ -592,16 +595,16 @@ private:
     void                Find(
                             XclImpXFRange*& rpPrevRange,
                             XclImpXFRange*& rpNextRange,
-                            ULONG& rnNextIndex,
+                            sal_uLong& rnNextIndex,
                             SCROW nScRow );
 
     /** Tries to concatenate a range with its predecessor.
         @descr  The ranges must have the same XF index and must not have a gap.
         The resulting range has the index nIndex-1. */
-    void                TryConcatPrev( ULONG nIndex );
+    void                TryConcatPrev( sal_uLong nIndex );
 
     /** Insert a range into the list at the specified index. */
-    void                Insert(XclImpXFRange* pXFRange, ULONG nIndex);
+    void                Insert(XclImpXFRange* pXFRange, sal_uLong nIndex);
 
 private:
     IndexList maIndexList;    /// The list of XF index range.
@@ -660,7 +663,7 @@ private:
         @param nLine
         BOX_LINE_RIGHT = copy most-right border of top row;
         BOX_LINE_BOTTOM = copy most-bottom border of first column. */
-    void                SetBorderLine( const ScRange& rRange, SCTAB nScTab, USHORT nLine );
+    void                SetBorderLine( const ScRange& rRange, SCTAB nScTab, sal_uInt16 nLine );
 
 private:
     typedef boost::shared_ptr< XclImpXFRangeColumn > XclImpXFRangeColumnRef;

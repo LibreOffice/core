@@ -44,6 +44,7 @@
 #include "ExplicitCategoriesProvider.hxx"
 
 #include <com/sun/star/container/XIndexReplace.hpp>
+#include <com/sun/star/chart2/XAxis.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart2/XInternalDataProvider.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
@@ -589,7 +590,7 @@ Reference< chart2::XDataSeries >
     return 0;
 }
 
-DataBrowserModel::eCellType DataBrowserModel::getCellType( sal_Int32 nAtColumn, sal_Int32 /* nAtRow */ )
+DataBrowserModel::eCellType DataBrowserModel::getCellType( sal_Int32 nAtColumn, sal_Int32 /* nAtRow */ ) const
 {
     eCellType eResult = TEXT;
     tDataColumnVector::size_type nIndex( nAtColumn );
@@ -617,6 +618,26 @@ double DataBrowserModel::getCellNumber( sal_Int32 nAtColumn, sal_Int32 nAtRow )
         }
     }
     return fResult;
+}
+
+uno::Any DataBrowserModel::getCellAny( sal_Int32 nAtColumn, sal_Int32 nAtRow )
+{
+    uno::Any aResult;
+
+    tDataColumnVector::size_type nIndex( nAtColumn );
+    if( nIndex < m_aColumns.size() &&
+        m_aColumns[ nIndex ].m_xLabeledDataSequence.is())
+    {
+        Reference< chart2::data::XDataSequence > xData(
+            m_aColumns[ nIndex ].m_xLabeledDataSequence->getValues() );
+        if( xData.is() )
+        {
+            Sequence< uno::Any > aValues( xData->getData());
+            if( nAtRow < aValues.getLength())
+                aResult = aValues[nAtRow];
+        }
+    }
+    return aResult;
 }
 
 OUString DataBrowserModel::getCellText( sal_Int32 nAtColumn, sal_Int32 nAtRow )
@@ -800,7 +821,7 @@ void DataBrowserModel::updateFromModel()
                 aCategories.m_aUIRoleName = DialogModel::GetRoleDataLabel();
             else
                 aCategories.m_aUIRoleName = lcl_getUIRoleName( xCategories );
-            aCategories.m_eCellType = TEXT;
+            aCategories.m_eCellType = TEXTORDATE;
             m_aColumns.push_back( aCategories );
             ++nHeaderStart;
         }

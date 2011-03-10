@@ -55,7 +55,7 @@
 
 // -----------------------------------------------------------------------
 
-const USHORT ROWINFO_MAX = 1024;
+const sal_uInt16 ROWINFO_MAX = 1024;
 
 
 enum FillInfoLinePos
@@ -95,8 +95,8 @@ void lcl_GetMergeRange( SCsCOL nX, SCsROW nY, SCSIZE nArrY,
 
     rStartX = nX;
     rStartY = nY;
-    BOOL bHOver = pInfo->bHOverlapped;
-    BOOL bVOver = pInfo->bVOverlapped;
+    sal_Bool bHOver = pInfo->bHOverlapped;
+    sal_Bool bVOver = pInfo->bVOverlapped;
     SCCOL nLastCol;
     SCROW nLastRow;
 
@@ -110,7 +110,7 @@ void lcl_GetMergeRange( SCsCOL nX, SCsROW nY, SCSIZE nArrY,
         }
         else
         {
-            USHORT nOverlap = ((ScMergeFlagAttr*)pDoc->GetAttr(
+            sal_uInt16 nOverlap = ((ScMergeFlagAttr*)pDoc->GetAttr(
                                 rStartX, rStartY, nTab, ATTR_MERGE_FLAG ))->GetValue();
             bHOver = ((nOverlap & SC_MF_HOR) != 0);
             bVOver = ((nOverlap & SC_MF_VER) != 0);
@@ -134,7 +134,7 @@ void lcl_GetMergeRange( SCsCOL nX, SCsROW nY, SCSIZE nArrY,
         }
         else
         {
-            USHORT nOverlap = ((ScMergeFlagAttr*)pDoc->GetAttr(
+            sal_uInt16 nOverlap = ((ScMergeFlagAttr*)pDoc->GetAttr(
                                 rStartX, rStartY, nTab, ATTR_MERGE_FLAG ))->GetValue();
             bHOver = ((nOverlap & SC_MF_HOR) != 0);
             bVOver = ((nOverlap & SC_MF_VER) != 0);
@@ -161,11 +161,11 @@ void lcl_GetMergeRange( SCsCOL nX, SCsROW nY, SCSIZE nArrY,
 
 void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
                             SCTAB nTab, double nScaleX, double nScaleY,
-                            BOOL bPageMode, BOOL bFormulaMode, const ScMarkData* pMarkData )
+                            sal_Bool bPageMode, sal_Bool bFormulaMode, const ScMarkData* pMarkData )
 {
     DBG_ASSERT( pTab[nTab], "Tabelle existiert nicht" );
 
-    BOOL bLayoutRTL = IsLayoutRTL( nTab );
+    sal_Bool bLayoutRTL = IsLayoutRTL( nTab );
 
     ScDocumentPool* pPool = xPoolHelper->GetDocPool();
     ScStyleSheetPool* pStlPool = xPoolHelper->GetStylePool();
@@ -186,16 +186,16 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
     SCCOL nArrX;
     SCSIZE nArrY;
     SCSIZE nArrCount;
-    BOOL bAnyMerged = FALSE;
-    BOOL bAnyShadow = FALSE;
-    BOOL bAnyCondition = FALSE;
+    sal_Bool bAnyMerged = false;
+    sal_Bool bAnyShadow = false;
+    sal_Bool bAnyCondition = false;
 
-    BOOL bTabProtect = IsTabProtected(nTab);
+    sal_Bool bTabProtect = IsTabProtected(nTab);
 
                                                 // fuer Blockmarken von zusammengefassten Zellen mit
                                                 // versteckter erster Zeile / Spalte
-    BOOL bPaintMarks = FALSE;
-    BOOL bSkipMarks = FALSE;
+    sal_Bool bPaintMarks = false;
+    sal_Bool bSkipMarks = false;
     SCCOL nBlockStartX = 0, nBlockEndX = 0;
     SCROW nBlockEndY = 0, nBlockStartY = 0;
     if (pMarkData && pMarkData->IsMarked())
@@ -210,9 +210,9 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
             nBlockEndY = aTmpRange.aEnd.Row();
             ExtendHidden( nBlockStartX, nBlockStartY, nBlockEndX, nBlockEndY, nTab );   //? noetig ?
             if (pMarkData->IsMarkNegative())
-                bSkipMarks = TRUE;
+                bSkipMarks = sal_True;
             else
-                bPaintMarks = TRUE;
+                bPaintMarks = sal_True;
         }
     }
 
@@ -220,7 +220,7 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
 
     nArrY=0;
     SCROW nYExtra = nY2+1;
-    USHORT nDocHeight = ScGlobal::nStdRowHeight;
+    sal_uInt16 nDocHeight = ScGlobal::nStdRowHeight;
     SCROW nDocHeightEndRow = -1;
     for (nSignedY=((SCsROW)nY1)-1; nSignedY<=(SCsROW)nYExtra; nSignedY++)
     {
@@ -242,17 +242,17 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
             RowInfo* pThisRowInfo = &pRowInfo[nArrY];
             pThisRowInfo->pCellInfo = NULL;                 // wird unten belegt
 
-            USHORT nHeight = (USHORT) ( nDocHeight * nScaleY );
+            sal_uInt16 nHeight = (sal_uInt16) ( nDocHeight * nScaleY );
             if (!nHeight)
                 nHeight = 1;
 
             pThisRowInfo->nRowNo        = nY;               //! Fall < 0 ?
             pThisRowInfo->nHeight       = nHeight;
-            pThisRowInfo->bEmptyBack    = TRUE;
-            pThisRowInfo->bEmptyText    = TRUE;
-            pThisRowInfo->bChanged      = TRUE;
-            pThisRowInfo->bAutoFilter   = FALSE;
-            pThisRowInfo->bPushButton   = FALSE;
+            pThisRowInfo->bEmptyBack    = sal_True;
+            pThisRowInfo->bEmptyText    = sal_True;
+            pThisRowInfo->bChanged      = sal_True;
+            pThisRowInfo->bAutoFilter   = false;
+            pThisRowInfo->bPushButton   = false;
             pThisRowInfo->nRotMaxCol    = SC_ROTMAX_NONE;
 
             ++nArrY;
@@ -272,12 +272,12 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
     //  rotierter Text...
 
     //  Attribut im Dokument ueberhaupt verwendet?
-    BOOL bAnyItem = FALSE;
-    USHORT nRotCount = pPool->GetItemCount( ATTR_ROTATE_VALUE );
-    for (USHORT nItem=0; nItem<nRotCount; nItem++)
-        if (pPool->GetItem( ATTR_ROTATE_VALUE, nItem ))
+    sal_Bool bAnyItem = false;
+    sal_uInt32 nRotCount = pPool->GetItemCount2( ATTR_ROTATE_VALUE );
+    for (sal_uInt32 nItem=0; nItem<nRotCount; nItem++)
+        if (pPool->GetItem2( ATTR_ROTATE_VALUE, nItem ))
         {
-            bAnyItem = TRUE;
+            bAnyItem = sal_True;
             break;
         }
 
@@ -314,28 +314,28 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                 nX = MAXCOL+1;      // ungueltig
 
             CellInfo* pInfo = &pThisRowInfo->pCellInfo[nArrX];
-            pInfo->bEmptyCellText = TRUE;
+            pInfo->bEmptyCellText = sal_True;
             pInfo->pCell = NULL;
             if (bPaintMarks)
                 pInfo->bMarked = ( nX >= nBlockStartX && nX <= nBlockEndX
                                 && nY >= nBlockStartY && nY <= nBlockEndY );
             else
-                pInfo->bMarked = FALSE;
+                pInfo->bMarked = false;
             pInfo->nWidth = 0;
 
             pInfo->nClipMark    = SC_CLIPMARK_NONE;
-            pInfo->bMerged      = FALSE;
-            pInfo->bHOverlapped = FALSE;
-            pInfo->bVOverlapped = FALSE;
-            pInfo->bAutoFilter  = FALSE;
-            pInfo->bPushButton  = FALSE;
+            pInfo->bMerged      = false;
+            pInfo->bHOverlapped = false;
+            pInfo->bVOverlapped = false;
+            pInfo->bAutoFilter  = false;
+            pInfo->bPushButton  = false;
             pInfo->bPopupButton = false;
             pInfo->bFilterActive = false;
             pInfo->nRotateDir   = SC_ROTDIR_NONE;
 
-            pInfo->bPrinted     = FALSE;                    //  view-intern
-            pInfo->bHideGrid    = FALSE;                    //  view-intern
-            pInfo->bEditEngine  = FALSE;                    //  view-intern
+            pInfo->bPrinted     = false;                    //  view-intern
+            pInfo->bHideGrid    = false;                    //  view-intern
+            pInfo->bEditEngine  = false;                    //  view-intern
 
             pInfo->pBackground  = NULL;                     //! weglassen?
             pInfo->pPatternAttr = NULL;
@@ -358,7 +358,7 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
         {
             if (!ColHidden(nX, nTab))
             {
-                USHORT nThisWidth = (USHORT) (GetColWidth( nX, nTab ) * nScaleX);
+                sal_uInt16 nThisWidth = (sal_uInt16) (GetColWidth( nX, nTab ) * nScaleX);
                 if (!nThisWidth)
                     nThisWidth = 1;
 
@@ -379,7 +379,7 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
             // TODO: Optimize this loop.
             if (!ColHidden(nX, nTab))
             {
-                USHORT nThisWidth = (USHORT) (GetColWidth( nX, nTab ) * nScaleX);
+                sal_uInt16 nThisWidth = (sal_uInt16) (GetColWidth( nX, nTab ) * nScaleX);
                 if (!nThisWidth)
                     nThisWidth = 1;
 
@@ -408,8 +408,8 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                         pInfo->pCell = pThisCol->pItems[nUIndex].pCell;
                         if (pInfo->pCell->GetCellType() != CELLTYPE_NOTE)
                         {
-                            pThisRowInfo->bEmptyText = FALSE;                   // Zeile nicht leer
-                            pInfo->bEmptyCellText = FALSE;                      // Zelle nicht leer
+                            pThisRowInfo->bEmptyText = false;                   // Zeile nicht leer
+                            pInfo->bEmptyCellText = false;                      // Zelle nicht leer
                         }
                         ++nArrY;
                     }
@@ -450,24 +450,24 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                         const SvxShadowItem* pShadowAttr = (const SvxShadowItem*)
                                                         &pPattern->GetItem(ATTR_SHADOW);
                         if (pShadowAttr != pDefShadow)
-                            bAnyShadow = TRUE;
+                            bAnyShadow = sal_True;
 
                         const ScMergeAttr* pMergeAttr = (const ScMergeAttr*)
                                                 &pPattern->GetItem(ATTR_MERGE);
-                        BOOL bMerged = ( pMergeAttr != pDefMerge && *pMergeAttr != *pDefMerge );
-                        USHORT nOverlap = ((const ScMergeFlagAttr*) &pPattern->GetItemSet().
+                        sal_Bool bMerged = ( pMergeAttr != pDefMerge && *pMergeAttr != *pDefMerge );
+                        sal_uInt16 nOverlap = ((const ScMergeFlagAttr*) &pPattern->GetItemSet().
                                                         Get(ATTR_MERGE_FLAG))->GetValue();
-                        BOOL bHOverlapped = ((nOverlap & SC_MF_HOR) != 0);
-                        BOOL bVOverlapped = ((nOverlap & SC_MF_VER) != 0);
-                        BOOL bAutoFilter  = ((nOverlap & SC_MF_AUTO) != 0);
-                        BOOL bPushButton  = ((nOverlap & SC_MF_BUTTON) != 0);
-                        BOOL bScenario    = ((nOverlap & SC_MF_SCENARIO) != 0);
+                        sal_Bool bHOverlapped = ((nOverlap & SC_MF_HOR) != 0);
+                        sal_Bool bVOverlapped = ((nOverlap & SC_MF_VER) != 0);
+                        sal_Bool bAutoFilter  = ((nOverlap & SC_MF_AUTO) != 0);
+                        sal_Bool bPushButton  = ((nOverlap & SC_MF_BUTTON) != 0);
+                        sal_Bool bScenario    = ((nOverlap & SC_MF_SCENARIO) != 0);
                         bool bPopupButton = ((nOverlap & SC_MF_BUTTON_POPUP) != 0);
                         bool bFilterActive = ((nOverlap & SC_MF_HIDDEN_MEMBER) != 0);
                         if (bMerged||bHOverlapped||bVOverlapped)
-                            bAnyMerged = TRUE;                              // intern
+                            bAnyMerged = sal_True;                              // intern
 
-                        BOOL bHidden, bHideFormula;
+                        sal_Bool bHidden, bHideFormula;
                         if (bTabProtect)
                         {
                             const ScProtectionAttr& rProtAttr = (const ScProtectionAttr&)
@@ -476,9 +476,9 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                             bHideFormula = rProtAttr.GetHideFormula();
                         }
                         else
-                            bHidden = bHideFormula = FALSE;
+                            bHidden = bHideFormula = false;
 
-                        ULONG nConditional = ((const SfxUInt32Item&)pPattern->
+                        sal_uLong nConditional = ((const SfxUInt32Item&)pPattern->
                                                 GetItem(ATTR_CONDITIONAL)).GetValue();
                         const ScConditionalFormat* pCondForm = NULL;
                         if ( nConditional && pCondFormList )
@@ -492,11 +492,11 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                             {
                                 RowInfo* pThisRowInfo = &pRowInfo[nArrY];
                                 if (pBackground != pDefBackground)          // Spalten-HG == Standard ?
-                                    pThisRowInfo->bEmptyBack = FALSE;
+                                    pThisRowInfo->bEmptyBack = false;
                                 if (bAutoFilter)
-                                    pThisRowInfo->bAutoFilter = TRUE;
+                                    pThisRowInfo->bAutoFilter = sal_True;
                                 if (bPushButton)
-                                    pThisRowInfo->bPushButton = TRUE;
+                                    pThisRowInfo->bPushButton = sal_True;
 
                                 CellInfo* pInfo = &pThisRowInfo->pCellInfo[nArrX];
                                 pInfo->pBackground  = pBackground;
@@ -514,7 +514,7 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                                 pInfo->pShadowAttr  = pShadowAttr;
                                 //  nWidth wird nicht mehr einzeln gesetzt
 
-                                BOOL bEmbed = FALSE; //bIsEmbedded &&
+                                sal_Bool bEmbed = false; //bIsEmbedded &&
                                         nTab    >= aEmbedRange.aStart.Tab() &&
                                         nTab    <= aEmbedRange.aEnd.Tab()   &&
                                         nX      >= aEmbedRange.aStart.Col() &&
@@ -525,18 +525,18 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                                 if (bScenario)
                                 {
                                     pInfo->pBackground = ScGlobal::GetButtonBrushItem();
-                                    pThisRowInfo->bEmptyBack = FALSE;
+                                    pThisRowInfo->bEmptyBack = false;
                                 }
                                 else if (bEmbed)
                                 {
                                     pInfo->pBackground = ScGlobal::GetEmbeddedBrushItem();
-                                    pThisRowInfo->bEmptyBack = FALSE;
+                                    pThisRowInfo->bEmptyBack = false;
                                 }
 
                                 if (bHidden || ( bFormulaMode && bHideFormula && pInfo->pCell
                                                     && pInfo->pCell->GetCellType()
                                                         == CELLTYPE_FORMULA ))
-                                    pInfo->bEmptyCellText = TRUE;
+                                    pInfo->bEmptyCellText = sal_True;
 
                                 if ( pCondForm )
                                 {
@@ -550,7 +550,7 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                                         {
                                             //! Style-Sets cachen !!!
                                             pInfo->pConditionSet = &pStyleSheet->GetItemSet();
-                                            bAnyCondition = TRUE;
+                                            bAnyCondition = sal_True;
                                         }
                                         // if style is not there, treat like no condition
                                     }
@@ -576,7 +576,7 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                     {
                         //  Blockmarken
                         const ScMarkArray* pThisMarkArr = pMarkData->GetArray()+nX;
-                        BOOL bThisMarked;
+                        sal_Bool bThisMarked;
                         nArrY = 1;
                         nCurRow = nY1;                                      // einzelne Zeile
                         nThisRow = nY1;                                     // Ende des Bereichs
@@ -594,7 +594,7 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                                     {
                                         if ( bThisMarked )
                                         {
-                                            BOOL bSkip = bSkipMarks &&
+                                            sal_Bool bSkip = bSkipMarks &&
                                                         nX      >= nBlockStartX &&
                                                         nX      <= nBlockEndX   &&
                                                         nCurRow >= nBlockStartY &&
@@ -603,7 +603,7 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                                             {
                                                 RowInfo* pThisRowInfo = &pRowInfo[nArrY];
                                                 CellInfo* pInfo = &pThisRowInfo->pCellInfo[nArrX];
-                                                pInfo->bMarked = TRUE;
+                                                pInfo->bMarked = sal_True;
                                             }
                                         }
                                         ++nArrY;
@@ -650,26 +650,26 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                     const SfxPoolItem* pItem;
 
                             //  Hintergrund
-                    if ( pCondSet->GetItemState( ATTR_BACKGROUND, TRUE, &pItem ) == SFX_ITEM_SET )
+                    if ( pCondSet->GetItemState( ATTR_BACKGROUND, sal_True, &pItem ) == SFX_ITEM_SET )
                     {
                         pInfo->pBackground = (const SvxBrushItem*) pItem;
-                        pRowInfo[nArrY].bEmptyBack = FALSE;
+                        pRowInfo[nArrY].bEmptyBack = false;
                     }
 
                             //  Umrandung
-                    if ( pCondSet->GetItemState( ATTR_BORDER, TRUE, &pItem ) == SFX_ITEM_SET )
+                    if ( pCondSet->GetItemState( ATTR_BORDER, sal_True, &pItem ) == SFX_ITEM_SET )
                         pInfo->pLinesAttr = (const SvxBoxItem*) pItem;
 
-                    if ( pCondSet->GetItemState( ATTR_BORDER_TLBR, TRUE, &pItem ) == SFX_ITEM_SET )
+                    if ( pCondSet->GetItemState( ATTR_BORDER_TLBR, sal_True, &pItem ) == SFX_ITEM_SET )
                         pInfo->mpTLBRLine = static_cast< const SvxLineItem* >( pItem );
-                    if ( pCondSet->GetItemState( ATTR_BORDER_BLTR, TRUE, &pItem ) == SFX_ITEM_SET )
+                    if ( pCondSet->GetItemState( ATTR_BORDER_BLTR, sal_True, &pItem ) == SFX_ITEM_SET )
                         pInfo->mpBLTRLine = static_cast< const SvxLineItem* >( pItem );
 
                             //  Schatten
-                    if ( pCondSet->GetItemState( ATTR_SHADOW, TRUE, &pItem ) == SFX_ITEM_SET )
+                    if ( pCondSet->GetItemState( ATTR_SHADOW, sal_True, &pItem ) == SFX_ITEM_SET )
                     {
                         pInfo->pShadowAttr = (const SvxShadowItem*) pItem;
-                        bAnyShadow = TRUE;
+                        bAnyShadow = sal_True;
                     }
                 }
             }
@@ -710,23 +710,23 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                     // Hintergrund kopieren (oder in output.cxx)
 
                     if ( !pStartCond || pStartCond->
-                                    GetItemState(ATTR_BACKGROUND,TRUE,&pItem) != SFX_ITEM_SET )
+                                    GetItemState(ATTR_BACKGROUND,sal_True,&pItem) != SFX_ITEM_SET )
                         pItem = &pStartPattern->GetItem(ATTR_BACKGROUND);
                     pInfo->pBackground = (const SvxBrushItem*) pItem;
-                    pRowInfo[nArrY].bEmptyBack = FALSE;
+                    pRowInfo[nArrY].bEmptyBack = false;
 
                     // Schatten
 
                     if ( !pStartCond || pStartCond->
-                                    GetItemState(ATTR_SHADOW,TRUE,&pItem) != SFX_ITEM_SET )
+                                    GetItemState(ATTR_SHADOW,sal_True,&pItem) != SFX_ITEM_SET )
                         pItem = &pStartPattern->GetItem(ATTR_SHADOW);
                     pInfo->pShadowAttr = (const SvxShadowItem*) pItem;
                     if (pInfo->pShadowAttr != pDefShadow)
-                        bAnyShadow = TRUE;
+                        bAnyShadow = sal_True;
 
                     // Blockmarken - wieder mit Original-Merge-Werten
 
-                    BOOL bCellMarked = FALSE;
+                    sal_Bool bCellMarked = false;
                     if (bPaintMarks)
                         bCellMarked = ( nStartX >= (SCsCOL) nBlockStartX
                                     && nStartX <= (SCsCOL) nBlockEndX
@@ -750,13 +750,13 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
     {
         for (nArrY=0; nArrY<nArrCount; nArrY++)
         {
-            BOOL bTop = ( nArrY == 0 );
-            BOOL bBottom = ( nArrY+1 == nArrCount );
+            sal_Bool bTop = ( nArrY == 0 );
+            sal_Bool bBottom = ( nArrY+1 == nArrCount );
 
             for (nArrX=nX1; nArrX<=nX2+2; nArrX++)                  // links und rechts einer mehr
             {
-                BOOL bLeft = ( nArrX == nX1 );
-                BOOL bRight = ( nArrX == nX2+2 );
+                sal_Bool bLeft = ( nArrX == nX1 );
+                sal_Bool bRight = ( nArrX == nX2+2 );
 
                 CellInfo* pInfo = &pRowInfo[nArrY].pCellInfo[nArrX];
                 const SvxShadowItem* pThisAttr = pInfo->pShadowAttr;
@@ -773,13 +773,13 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                     while ( nArrX+nDxNeg > nX1 && pRowInfo[0].pCellInfo[nArrX+nDxNeg].nWidth == 0 )
                         --nDxNeg;
 
-                    BOOL bLeftDiff = !bLeft &&
+                    sal_Bool bLeftDiff = !bLeft &&
                             CELLINFO(nDxNeg,0).pShadowAttr->GetLocation() == SVX_SHADOW_NONE;
-                    BOOL bRightDiff = !bRight &&
+                    sal_Bool bRightDiff = !bRight &&
                             CELLINFO(nDxPos,0).pShadowAttr->GetLocation() == SVX_SHADOW_NONE;
-                    BOOL bTopDiff = !bTop &&
+                    sal_Bool bTopDiff = !bTop &&
                             CELLINFO(0,-1).pShadowAttr->GetLocation() == SVX_SHADOW_NONE;
-                    BOOL bBottomDiff = !bBottom &&
+                    sal_Bool bBottomDiff = !bBottom &&
                             CELLINFO(0,1).pShadowAttr->GetLocation() == SVX_SHADOW_NONE;
 
                     if ( bLayoutRTL )
@@ -887,7 +887,7 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
         }
     }
 
-    rTabInfo.mnArrCount = sal::static_int_cast<USHORT>(nArrCount);
+    rTabInfo.mnArrCount = sal::static_int_cast<sal_uInt16>(nArrCount);
     rTabInfo.mbPageMode = bPageMode;
 
     // ========================================================================
@@ -905,12 +905,12 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
 
     for( size_t nRow = 0; nRow < nRowCount; ++nRow )
     {
-        USHORT nCellInfoY = static_cast< USHORT >( nRow );
+        sal_uInt16 nCellInfoY = static_cast< sal_uInt16 >( nRow );
         RowInfo& rThisRowInfo = pRowInfo[ nCellInfoY ];
 
         for( size_t nCol = 0; nCol < nColCount; ++nCol )
         {
-            USHORT nCellInfoX = static_cast< USHORT >( nCol + nX1 );
+            sal_uInt16 nCellInfoX = static_cast< sal_uInt16 >( nCol + nX1 );
             const CellInfo& rInfo = rThisRowInfo.pCellInfo[ nCellInfoX ];
 
             const SvxBoxItem* pBox = rInfo.pLinesAttr;
@@ -953,16 +953,16 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
 
                 // first visible column (nX1-1 is first processed document column)
                 SCCOL nFirstDocCol = (nX1 > 0) ? ::std::max< SCCOL >( nFirstRealDocCol, nX1 - 1 ) : nFirstRealDocCol;
-                USHORT nFirstCellInfoX = static_cast< USHORT >( nFirstDocCol + 1 );
+                sal_uInt16 nFirstCellInfoX = static_cast< sal_uInt16 >( nFirstDocCol + 1 );
                 nFirstCol = static_cast< size_t >( nFirstCellInfoX - nX1 );
 
                 // last visible column (nX2+1 is last processed document column)
                 SCCOL nLastDocCol = (nX2 < MAXCOL) ? ::std::min< SCCOL >( nLastRealDocCol, nX2 + 1 ) : nLastRealDocCol;
-                USHORT nLastCellInfoX = static_cast< USHORT >( nLastDocCol + 1 );
+                sal_uInt16 nLastCellInfoX = static_cast< sal_uInt16 >( nLastDocCol + 1 );
                 size_t nLastCol = static_cast< size_t >( nLastCellInfoX - nX1 );
 
                 // first visible row
-                USHORT nFirstCellInfoY = nCellInfoY;
+                sal_uInt16 nFirstCellInfoY = nCellInfoY;
                 while( ((nFirstCellInfoY > 1) && (pRowInfo[ nFirstCellInfoY - 1 ].nRowNo >= nFirstRealDocRow)) ||
                        ((nFirstCellInfoY == 1) && (static_cast< SCROW >( nY1 - 1 ) >= nFirstRealDocRow)) )
                     --nFirstCellInfoY;
@@ -970,7 +970,7 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                 nFirstRow = static_cast< size_t >( nFirstCellInfoY );
 
                 // last visible row
-                USHORT nLastCellInfoY = nCellInfoY;
+                sal_uInt16 nLastCellInfoY = nCellInfoY;
                 while( (sal::static_int_cast<SCSIZE>(nLastCellInfoY + 1) < nArrCount) &&
                             (pRowInfo[ nLastCellInfoY + 1 ].nRowNo <= nLastRealDocRow) )
                     ++nLastCellInfoY;
@@ -1065,13 +1065,13 @@ ScTableInfo::ScTableInfo() :
     mpRowInfo( new RowInfo[ ROWINFO_MAX ] ),
     mbPageMode( false )
 {
-    for( USHORT nIdx = 0; nIdx < ROWINFO_MAX; ++nIdx )
+    for( sal_uInt16 nIdx = 0; nIdx < ROWINFO_MAX; ++nIdx )
         mpRowInfo[ nIdx ].pCellInfo = 0;
 }
 
 ScTableInfo::~ScTableInfo()
 {
-    for( USHORT nIdx = 0; nIdx < ROWINFO_MAX; ++nIdx )
+    for( sal_uInt16 nIdx = 0; nIdx < ROWINFO_MAX; ++nIdx )
         delete [] mpRowInfo[ nIdx ].pCellInfo;
     delete [] mpRowInfo;
 }

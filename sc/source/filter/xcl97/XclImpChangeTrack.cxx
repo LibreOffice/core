@@ -50,7 +50,7 @@ XclImpChangeTrack::XclImpChangeTrack( const XclImpRoot& rRoot, const XclImpStrea
     pChangeTrack( NULL ),
     pStrm( NULL ),
     nTabIdCount( 0 ),
-    bGlobExit( sal_False ),
+    bGlobExit( false ),
     eNestedMode( nmBase )
 {
     // Verify that the User Names stream exists before going any further. Excel adds both
@@ -64,7 +64,7 @@ XclImpChangeTrack::XclImpChangeTrack( const XclImpRoot& rRoot, const XclImpStrea
     if( xInStrm.Is() )
     {
         xInStrm->Seek( STREAM_SEEK_TO_END );
-        ULONG nStreamLen = xInStrm->Tell();
+        sal_uLong nStreamLen = xInStrm->Tell();
         if( (xInStrm->GetErrorCode() == ERRCODE_NONE) && (nStreamLen != STREAM_SEEK_TO_END) )
         {
             xInStrm->Seek( STREAM_SEEK_TO_BEGIN );
@@ -73,7 +73,7 @@ XclImpChangeTrack::XclImpChangeTrack( const XclImpRoot& rRoot, const XclImpStrea
             pChangeTrack = new ScChangeTrack( GetDocPtr() );
 
             sOldUsername = pChangeTrack->GetUser();
-            pChangeTrack->SetUseFixDateTime( TRUE );
+            pChangeTrack->SetUseFixDateTime( sal_True );
 
             ReadRecords();
         }
@@ -115,7 +115,7 @@ void XclImpChangeTrack::DoInsertRange( const ScRange& rRange )
 
 void XclImpChangeTrack::DoDeleteRange( const ScRange& rRange )
 {
-    ULONG nFirst, nLast;
+    sal_uLong nFirst, nLast;
     pChangeTrack->AppendDeleteRange( rRange, NULL, nFirst, nLast );
     DoAcceptRejectAction( nFirst, nLast );
 }
@@ -147,7 +147,7 @@ sal_Bool XclImpChangeTrack::CheckRecord( sal_uInt16 nOpCode )
     if( (nOpCode != EXC_CHTR_OP_UNKNOWN) && (aRecHeader.nOpCode != nOpCode) )
     {
         OSL_FAIL( "XclImpChangeTrack::CheckRecord - unknown action" );
-        return sal_False;
+        return false;
     }
     return aRecHeader.nIndex != 0;
 }
@@ -208,7 +208,7 @@ void XclImpChangeTrack::ReadFormula( ScTokenArray*& rpTokenArray, const ScAddres
     // read the formula, 3D tab refs from extended data
     const ScTokenArray* pArray = NULL;
     aFmlConv.Reset( rPosition );
-    BOOL bOK = (aFmlConv.Convert( pArray, aFmlaStrm, nFmlSize, false, FT_CellFormula) == ConvOK);   // JEG : Check This
+    sal_Bool bOK = (aFmlConv.Convert( pArray, aFmlaStrm, nFmlSize, false, FT_CellFormula) == ConvOK);   // JEG : Check This
     rpTokenArray = (bOK && pArray) ? new ScTokenArray( *pArray ) : NULL;
     pStrm->Ignore( 1 );
 }
@@ -295,7 +295,7 @@ void XclImpChangeTrack::ReadChTrInsert()
         else
             aRange.aEnd.SetCol( MAXCOL );
 
-        BOOL bValid = pStrm->IsValid();
+        sal_Bool bValid = pStrm->IsValid();
         if( FoundNestedMode() )
             ReadNestedRecords();
 
@@ -397,7 +397,7 @@ void XclImpChangeTrack::ReadChTrMoveRange()
         aSourceRange.aStart.SetTab( ReadTabNum() );
         aSourceRange.aEnd.SetTab( aSourceRange.aStart.Tab() );
 
-        BOOL bValid = pStrm->IsValid();
+        sal_Bool bValid = pStrm->IsValid();
         if( FoundNestedMode() )
             ReadNestedRecords();
 
@@ -450,7 +450,7 @@ sal_Bool XclImpChangeTrack::EndNestedMode()
 
 void XclImpChangeTrack::ReadRecords()
 {
-    sal_Bool bExitLoop = sal_False;
+    sal_Bool bExitLoop = false;
 
     while( !bExitLoop && !bGlobExit && pStrm->StartNextRecord() )
     {
@@ -476,13 +476,13 @@ void XclImpChangeTrack::Apply()
     if( pChangeTrack )
     {
         pChangeTrack->SetUser( sOldUsername );
-        pChangeTrack->SetUseFixDateTime( FALSE );
+        pChangeTrack->SetUseFixDateTime( false );
 
         GetDoc().SetChangeTrack( pChangeTrack );
         pChangeTrack = NULL;
 
         ScChangeViewSettings aSettings;
-        aSettings.SetShowChanges( TRUE );
+        aSettings.SetShowChanges( sal_True );
         GetDoc().SetChangeViewSettings( aSettings );
     }
 }
@@ -495,7 +495,7 @@ XclImpChTrFmlConverter::~XclImpChTrFmlConverter()
 }
 
 // virtual, called from ExcToSc8::Convert()
-bool XclImpChTrFmlConverter::Read3DTabReference( UINT16 /*nIxti*/, SCTAB& rFirstTab, SCTAB& rLastTab,
+bool XclImpChTrFmlConverter::Read3DTabReference( sal_uInt16 /*nIxti*/, SCTAB& rFirstTab, SCTAB& rLastTab,
                                                  ExternalTabInfo& rExtInfo )
 {
     return rChangeTrack.Read3DTabRefInfo( rFirstTab, rLastTab, rExtInfo );

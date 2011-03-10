@@ -29,8 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
 #include <tools/debug.hxx>
 #include <sal/macros.h>
 #include <svtools/unoimap.hxx>
@@ -63,6 +61,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
+#include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 #include <com/sun/star/document/XCodeNameQuery.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/form/XFormsSupplier.hpp>
@@ -387,7 +386,7 @@ sal_uInt16 ScServiceProvider::GetProviderType(const String& rServiceName)
             }
         }
 
-        USHORT i;
+        sal_uInt16 i;
         for (i=0; i<SC_SERVICE_COUNT; i++)
         {
             DBG_ASSERT( aOldNames[i], "ScServiceProvider::GetProviderType: no oldname => crash");
@@ -588,6 +587,11 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
                     BasicManager* pAppMgr = SFX_APP()->GetBasicManager();
                     if ( pAppMgr )
                         pAppMgr->SetGlobalUNOConstant( "ThisExcelDoc", aArgs[ 0 ] );
+
+                    // create the VBA document event processor
+                    uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents(
+                        ::ooo::vba::createVBAUnoAPIServiceWithArgs( pDocShell, "com.sun.star.script.vba.VBASpreadsheetEventProcessor", aArgs ), uno::UNO_QUERY );
+                    pDocShell->GetDocument()->SetVbaEventProcessor( xVbaEvents );
                 }
             }
         break;

@@ -62,11 +62,11 @@ using namespace formula;
 // -----------------------------------------------------------------------
 
 // Nach der Regula Falsi Methode
-BOOL ScDocument::Solver(SCCOL nFCol, SCROW nFRow, SCTAB nFTab,
+sal_Bool ScDocument::Solver(SCCOL nFCol, SCROW nFRow, SCTAB nFTab,
                         SCCOL nVCol, SCROW nVRow, SCTAB nVTab,
                         const String& sValStr, double& nX)
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = false;
     nX = 0.0;
     if (ValidColRow(nFCol, nFRow) && ValidColRow(nVCol, nVRow) &&
         VALIDTAB(nFTab) && VALIDTAB(nVTab) && pTab[nFTab] && pTab[nVTab])
@@ -111,10 +111,10 @@ BOOL ScDocument::Solver(SCCOL nFCol, SCROW nFRow, SCTAB nFTab,
                 // FIXME FIXME FIXME this might need to be reworked now that we have formula::FormulaErrorToken and ScFormulaResult, double check !!!
                 DBG_ERRORFILE("ScDocument::Solver: -> ScFormulaCell::GetValueAlways might need reimplementation");
                 pCell->Interpret();
-                USHORT nErrCode = pCell->GetErrCode();
+                sal_uInt16 nErrCode = pCell->GetErrCode();
                 nX = pCell->GetValueAlways();
                 if (nErrCode == 0)                  // kein fehler beim Rechnen
-                    bRet = TRUE;
+                    bRet = sal_True;
                 delete pCell;
             }
         }
@@ -135,11 +135,11 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
     SCCOL j;
     SCROW k;
     i = 0;
-    BOOL bStop = FALSE;
+    sal_Bool bStop = false;
     while (i <= MAXTAB && !bStop)               // erste markierte Tabelle finden
     {
         if (pTab[i] && rMark.GetTableSelect(i))
-            bStop = TRUE;
+            bStop = sal_True;
         else
             i++;
     }
@@ -174,9 +174,9 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
     aRefData.nCol = nCol1;
     aRefData.nRow = nRow1;
     aRefData.nTab = nTab1;
-    aRefData.SetColRel( TRUE );
-    aRefData.SetRowRel( TRUE );
-    aRefData.SetTabRel( TRUE );
+    aRefData.SetColRel( sal_True );
+    aRefData.SetRowRel( sal_True );
+    aRefData.SetTabRel( sal_True );
     aRefData.CalcRelFromAbs( ScAddress( nCol1, nRow1, nTab1 ) );
 
     ScTokenArray aArr;
@@ -222,11 +222,11 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,      // Mehrfachopera
     SCCOL j;
     SCROW k;
     i = 0;
-    BOOL bStop = FALSE;
+    sal_Bool bStop = false;
     while (i <= MAXTAB && !bStop)               // erste markierte Tabelle finden
     {
         if (pTab[i] && rMark.GetTableSelect(i))
-            bStop = TRUE;
+            bStop = sal_True;
         else
             i++;
     }
@@ -246,12 +246,12 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,      // Mehrfachopera
     const String& sSep = ScCompiler::GetNativeSymbol( ocSep);
     if (rParam.nMode == 0)                          // nur Spalte
     {
-        aRef.Set( rParam.aRefFormulaCell.GetAddress(), TRUE, FALSE, FALSE );
+        aRef.Set( rParam.aRefFormulaCell.GetAddress(), sal_True, false, false );
         aForString += aRef.GetRefString(this, nTab1);
         aForString += sSep;
         aForString += rParam.aRefColCell.GetRefString(this, nTab1);
         aForString += sSep;
-        aRef.Set( nCol1, nRow1, nTab1, FALSE, TRUE, TRUE );
+        aRef.Set( nCol1, nRow1, nTab1, false, sal_True, sal_True );
         aForString += aRef.GetRefString(this, nTab1);
         nCol1++;
         nCol2 = Min( nCol2, (SCCOL)(rParam.aRefFormulaEnd.Col() -
@@ -259,12 +259,12 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,      // Mehrfachopera
     }
     else if (rParam.nMode == 1)                 // nur zeilenweise
     {
-        aRef.Set( rParam.aRefFormulaCell.GetAddress(), FALSE, TRUE, FALSE );
+        aRef.Set( rParam.aRefFormulaCell.GetAddress(), false, sal_True, false );
         aForString += aRef.GetRefString(this, nTab1);
         aForString += sSep;
         aForString += rParam.aRefRowCell.GetRefString(this, nTab1);
         aForString += sSep;
-        aRef.Set( nCol1, nRow1, nTab1, TRUE, FALSE, TRUE );
+        aRef.Set( nCol1, nRow1, nTab1, sal_True, false, sal_True );
         aForString += aRef.GetRefString(this, nTab1);
         nRow1++;
         nRow2 = Min( nRow2, (SCROW)(rParam.aRefFormulaEnd.Row() -
@@ -276,12 +276,12 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,      // Mehrfachopera
         aForString += sSep;
         aForString += rParam.aRefColCell.GetRefString(this, nTab1);
         aForString += sSep;
-        aRef.Set( nCol1, nRow1 + 1, nTab1, FALSE, TRUE, TRUE );
+        aRef.Set( nCol1, nRow1 + 1, nTab1, false, sal_True, sal_True );
         aForString += aRef.GetRefString(this, nTab1);
         aForString += sSep;
         aForString += rParam.aRefRowCell.GetRefString(this, nTab1);
         aForString += sSep;
-        aRef.Set( nCol1 + 1, nRow1, nTab1, TRUE, FALSE, TRUE );
+        aRef.Set( nCol1 + 1, nRow1, nTab1, sal_True, false, sal_True );
         aForString += aRef.GetRefString(this, nTab1);
         nCol1++; nRow1++;
     }
@@ -338,33 +338,33 @@ bool ScDocument::MarkUsedExternalReferences( ScTokenArray & rArr )
     return bAllMarked;
 }
 
-BOOL ScDocument::GetNextSpellingCell(SCCOL& nCol, SCROW& nRow, SCTAB nTab,
-                        BOOL bInSel, const ScMarkData& rMark) const
+sal_Bool ScDocument::GetNextSpellingCell(SCCOL& nCol, SCROW& nRow, SCTAB nTab,
+                        sal_Bool bInSel, const ScMarkData& rMark) const
 {
     if (ValidTab(nTab) && pTab[nTab])
         return pTab[nTab]->GetNextSpellingCell( nCol, nRow, bInSel, rMark );
     else
-        return FALSE;
+        return false;
 }
 
-BOOL ScDocument::GetNextMarkedCell( SCCOL& rCol, SCROW& rRow, SCTAB nTab,
+sal_Bool ScDocument::GetNextMarkedCell( SCCOL& rCol, SCROW& rRow, SCTAB nTab,
                                         const ScMarkData& rMark )
 {
     if (ValidTab(nTab) && pTab[nTab])
         return pTab[nTab]->GetNextMarkedCell( rCol, rRow, rMark );
     else
-        return FALSE;
+        return false;
 }
 
-BOOL ScDocument::ReplaceStyle(const SvxSearchItem& rSearchItem,
+sal_Bool ScDocument::ReplaceStyle(const SvxSearchItem& rSearchItem,
                               SCCOL nCol, SCROW nRow, SCTAB nTab,
                               ScMarkData& rMark,
-                              BOOL bIsUndoP)
+                              sal_Bool bIsUndoP)
 {
     if (pTab[nTab])
         return pTab[nTab]->ReplaceStyle(rSearchItem, nCol, nRow, rMark, bIsUndoP);
     else
-        return FALSE;
+        return false;
 }
 
 void ScDocument::CompileDBFormula()
@@ -375,7 +375,7 @@ void ScDocument::CompileDBFormula()
     }
 }
 
-void ScDocument::CompileDBFormula( BOOL bCreateFormulaString )
+void ScDocument::CompileDBFormula( sal_Bool bCreateFormulaString )
 {
     for (SCTAB i=0; i<=MAXTAB; i++)
     {
@@ -383,7 +383,7 @@ void ScDocument::CompileDBFormula( BOOL bCreateFormulaString )
     }
 }
 
-void ScDocument::CompileNameFormula( BOOL bCreateFormulaString )
+void ScDocument::CompileNameFormula( sal_Bool bCreateFormulaString )
 {
     if ( pCondFormList )
         pCondFormList->CompileAll();    // nach ScNameDlg noetig
@@ -442,7 +442,7 @@ xub_StrLen ScDocument::GetMaxNumberStringLen( sal_uInt16& nPrecision, SCTAB nTab
         return 0;
 }
 
-BOOL ScDocument::GetSelectionFunction( ScSubTotalFunc eFunc,
+sal_Bool ScDocument::GetSelectionFunction( ScSubTotalFunc eFunc,
                                         const ScAddress& rCursor, const ScMarkData& rMark,
                                         double& rResult )
 {
@@ -478,14 +478,14 @@ BOOL ScDocument::GetSelectionFunction( ScSubTotalFunc eFunc,
                 if (aData.nCount)
                     rResult = aData.nVal / (double) aData.nCount;
                 else
-                    aData.bError = TRUE;
+                    aData.bError = sal_True;
                 break;
             case SUBTOTAL_FUNC_MAX:
             case SUBTOTAL_FUNC_MIN:
                 if (aData.nCount)
                     rResult = aData.nVal;
                 else
-                    aData.bError = TRUE;
+                    aData.bError = sal_True;
                 break;
             default:
             {
@@ -499,7 +499,7 @@ BOOL ScDocument::GetSelectionFunction( ScSubTotalFunc eFunc,
     return !aData.bError;
 }
 
-double ScDocument::RoundValueAsShown( double fVal, ULONG nFormat )
+double ScDocument::RoundValueAsShown( double fVal, sal_uLong nFormat )
 {
     short nType;
     if ( (nType = GetFormatTable()->GetType( nFormat )) != NUMBERFORMAT_DATE
@@ -545,7 +545,7 @@ double ScDocument::RoundValueAsShown( double fVal, ULONG nFormat )
 //          bedingte Formate und Gueltigkeitsbereiche
 //
 
-ULONG ScDocument::AddCondFormat( const ScConditionalFormat& rNew )
+sal_uLong ScDocument::AddCondFormat( const ScConditionalFormat& rNew )
 {
     if (rNew.IsEmpty())
         return 0;                   // leer ist immer 0
@@ -553,12 +553,12 @@ ULONG ScDocument::AddCondFormat( const ScConditionalFormat& rNew )
     if (!pCondFormList)
         pCondFormList = new ScConditionalFormatList;
 
-    ULONG nMax = 0;
-    USHORT nCount = pCondFormList->Count();
-    for (USHORT i=0; i<nCount; i++)
+    sal_uLong nMax = 0;
+    sal_uInt16 nCount = pCondFormList->Count();
+    for (sal_uInt16 i=0; i<nCount; i++)
     {
         const ScConditionalFormat* pForm = (*pCondFormList)[i];
-        ULONG nKey = pForm->GetKey();
+        sal_uLong nKey = pForm->GetKey();
         if ( pForm->EqualEntries( rNew ) )
             return nKey;
         if ( nKey > nMax )
@@ -567,14 +567,14 @@ ULONG ScDocument::AddCondFormat( const ScConditionalFormat& rNew )
 
     // Der Aufruf kann aus ScPatternAttr::PutInPool kommen, darum Clone (echte Kopie)
 
-    ULONG nNewKey = nMax + 1;
+    sal_uLong nNewKey = nMax + 1;
     ScConditionalFormat* pInsert = rNew.Clone(this);
     pInsert->SetKey( nNewKey );
     pCondFormList->InsertNew( pInsert );
     return nNewKey;
 }
 
-ULONG ScDocument::AddValidationEntry( const ScValidationData& rNew )
+sal_uLong ScDocument::AddValidationEntry( const ScValidationData& rNew )
 {
     if (rNew.IsEmpty())
         return 0;                   // leer ist immer 0
@@ -582,12 +582,12 @@ ULONG ScDocument::AddValidationEntry( const ScValidationData& rNew )
     if (!pValidationList)
         pValidationList = new ScValidationDataList;
 
-    ULONG nMax = 0;
-    USHORT nCount = pValidationList->Count();
-    for (USHORT i=0; i<nCount; i++)
+    sal_uLong nMax = 0;
+    sal_uInt16 nCount = pValidationList->Count();
+    for (sal_uInt16 i=0; i<nCount; i++)
     {
         const ScValidationData* pData = (*pValidationList)[i];
-        ULONG nKey = pData->GetKey();
+        sal_uLong nKey = pData->GetKey();
         if ( pData->EqualEntries( rNew ) )
             return nKey;
         if ( nKey > nMax )
@@ -596,7 +596,7 @@ ULONG ScDocument::AddValidationEntry( const ScValidationData& rNew )
 
     // Der Aufruf kann aus ScPatternAttr::PutInPool kommen, darum Clone (echte Kopie)
 
-    ULONG nNewKey = nMax + 1;
+    sal_uLong nNewKey = nMax + 1;
     ScValidationData* pInsert = rNew.Clone(this);
     pInsert->SetKey( nNewKey );
     pValidationList->InsertNew( pInsert );
@@ -604,16 +604,16 @@ ULONG ScDocument::AddValidationEntry( const ScValidationData& rNew )
 }
 
 const SfxPoolItem* ScDocument::GetEffItem(
-                        SCCOL nCol, SCROW nRow, SCTAB nTab, USHORT nWhich ) const
+                        SCCOL nCol, SCROW nRow, SCTAB nTab, sal_uInt16 nWhich ) const
 {
     const ScPatternAttr* pPattern = GetPattern( nCol, nRow, nTab );
     if ( pPattern )
     {
         const SfxItemSet& rSet = pPattern->GetItemSet();
         const SfxPoolItem* pItem;
-        if ( rSet.GetItemState( ATTR_CONDITIONAL, TRUE, &pItem ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( ATTR_CONDITIONAL, sal_True, &pItem ) == SFX_ITEM_SET )
         {
-            ULONG nIndex = ((const SfxUInt32Item*)pItem)->GetValue();
+            sal_uLong nIndex = ((const SfxUInt32Item*)pItem)->GetValue();
             if (nIndex && pCondFormList)
             {
                 const ScConditionalFormat* pForm = pCondFormList->GetFormat( nIndex );
@@ -626,7 +626,7 @@ const SfxPoolItem* ScDocument::GetEffItem(
                         SfxStyleSheetBase* pStyleSheet = xPoolHelper->GetStylePool()->Find(
                                                                 aStyle, SFX_STYLE_FAMILY_PARA );
                         if ( pStyleSheet && pStyleSheet->GetItemSet().GetItemState(
-                                                nWhich, TRUE, &pItem ) == SFX_ITEM_SET )
+                                                nWhich, sal_True, &pItem ) == SFX_ITEM_SET )
                             return pItem;
                     }
                 }
@@ -659,7 +659,7 @@ const SfxItemSet* ScDocument::GetCondResult( SCCOL nCol, SCROW nRow, SCTAB nTab 
 const ScConditionalFormat* ScDocument::GetCondFormat(
                             SCCOL nCol, SCROW nRow, SCTAB nTab ) const
 {
-    ULONG nIndex = ((const SfxUInt32Item*)GetAttr(nCol,nRow,nTab,ATTR_CONDITIONAL))->GetValue();
+    sal_uLong nIndex = ((const SfxUInt32Item*)GetAttr(nCol,nRow,nTab,ATTR_CONDITIONAL))->GetValue();
     if (nIndex)
     {
         if (pCondFormList)
@@ -673,7 +673,7 @@ const ScConditionalFormat* ScDocument::GetCondFormat(
     return NULL;
 }
 
-const ScValidationData* ScDocument::GetValidationEntry( ULONG nIndex ) const
+const ScValidationData* ScDocument::GetValidationEntry( sal_uLong nIndex ) const
 {
     if ( pValidationList )
         return pValidationList->GetData( nIndex );
@@ -681,19 +681,19 @@ const ScValidationData* ScDocument::GetValidationEntry( ULONG nIndex ) const
         return NULL;
 }
 
-void ScDocument::FindConditionalFormat( ULONG nKey, ScRangeList& rRanges )
+void ScDocument::FindConditionalFormat( sal_uLong nKey, ScRangeList& rRanges )
 {
     for (SCTAB i=0; i<=MAXTAB && pTab[i]; i++)
         pTab[i]->FindConditionalFormat( nKey, rRanges );
 }
 
-void ScDocument::FindConditionalFormat( ULONG nKey, ScRangeList& rRanges, SCTAB nTab )
+void ScDocument::FindConditionalFormat( sal_uLong nKey, ScRangeList& rRanges, SCTAB nTab )
 {
     if(VALIDTAB(nTab) && pTab[nTab])
         pTab[nTab]->FindConditionalFormat( nKey, rRanges );
 }
 
-void ScDocument::ConditionalChanged( ULONG nKey )
+void ScDocument::ConditionalChanged( sal_uLong nKey )
 {
     if ( nKey && pCondFormList && !bIsClip && !bIsUndo )        // nKey==0 -> noop
     {
@@ -716,7 +716,7 @@ void ScDocument::SetCondFormList(ScConditionalFormatList* pNew)
 
 //------------------------------------------------------------------------
 
-BOOL ScDocument::HasDetectiveOperations() const
+sal_Bool ScDocument::HasDetectiveOperations() const
 {
     return pDetOpList && pDetOpList->Count();
 }
@@ -754,12 +754,12 @@ void ScDocument::SetDetOpList(ScDetOpList* pNew)
 #define SC_DOCCOMP_ROWS     100
 
 
-USHORT ScDocument::RowDifferences( SCROW nThisRow, SCTAB nThisTab,
+sal_uInt16 ScDocument::RowDifferences( SCROW nThisRow, SCTAB nThisTab,
                                     ScDocument& rOtherDoc, SCROW nOtherRow, SCTAB nOtherTab,
                                     SCCOL nMaxCol, SCCOLROW* pOtherCols )
 {
-    ULONG nDif = 0;
-    ULONG nUsed = 0;
+    sal_uLong nDif = 0;
+    sal_uLong nUsed = 0;
     for (SCCOL nThisCol=0; nThisCol<=nMaxCol; nThisCol++)
     {
         SCCOL nOtherCol;
@@ -787,20 +787,20 @@ USHORT ScDocument::RowDifferences( SCROW nThisRow, SCTAB nThisTab,
     }
 
     if (nUsed > 0)
-        return static_cast<USHORT>((nDif*64)/nUsed);            // max.256 (SC_DOCCOMP_MAXDIFF)
+        return static_cast<sal_uInt16>((nDif*64)/nUsed);            // max.256 (SC_DOCCOMP_MAXDIFF)
 
     DBG_ASSERT(!nDif,"Diff ohne Used");
     return 0;
 }
 
-USHORT ScDocument::ColDifferences( SCCOL nThisCol, SCTAB nThisTab,
+sal_uInt16 ScDocument::ColDifferences( SCCOL nThisCol, SCTAB nThisTab,
                                     ScDocument& rOtherDoc, SCCOL nOtherCol, SCTAB nOtherTab,
                                     SCROW nMaxRow, SCCOLROW* pOtherRows )
 {
     //! optimieren mit Iterator oder so
 
-    ULONG nDif = 0;
-    ULONG nUsed = 0;
+    sal_uLong nDif = 0;
+    sal_uLong nUsed = 0;
     for (SCROW nThisRow=0; nThisRow<=nMaxRow; nThisRow++)
     {
         SCROW nOtherRow;
@@ -828,17 +828,17 @@ USHORT ScDocument::ColDifferences( SCCOL nThisCol, SCTAB nThisTab,
     }
 
     if (nUsed > 0)
-        return static_cast<USHORT>((nDif*64)/nUsed);    // max.256
+        return static_cast<sal_uInt16>((nDif*64)/nUsed);    // max.256
 
     DBG_ASSERT(!nDif,"Diff ohne Used");
     return 0;
 }
 
 void ScDocument::FindOrder( SCCOLROW* pOtherRows, SCCOLROW nThisEndRow, SCCOLROW nOtherEndRow,
-                            BOOL bColumns, ScDocument& rOtherDoc, SCTAB nThisTab, SCTAB nOtherTab,
-                            SCCOLROW nEndCol, SCCOLROW* pTranslate, ScProgress* pProgress, ULONG nProAdd )
+                            sal_Bool bColumns, ScDocument& rOtherDoc, SCTAB nThisTab, SCTAB nOtherTab,
+                            SCCOLROW nEndCol, SCCOLROW* pTranslate, ScProgress* pProgress, sal_uLong nProAdd )
 {
-    //  bColumns=TRUE: Zeilen sind Spalten und umgekehrt
+    //  bColumns=sal_True: Zeilen sind Spalten und umgekehrt
 
     SCCOLROW nMaxCont;                      // wieviel weiter
     SCCOLROW nMinGood;                      // was ist ein Treffer (incl.)
@@ -853,19 +853,19 @@ void ScDocument::FindOrder( SCCOLROW* pOtherRows, SCCOLROW nThisEndRow, SCCOLROW
         nMaxCont = SC_DOCCOMP_ROWS;         // 100 Zeilen
         nMinGood = SC_DOCCOMP_MINGOOD;
     }
-    BOOL bUseTotal = bColumns && !pTranslate;       // nur beim ersten Durchgang
+    sal_Bool bUseTotal = bColumns && !pTranslate;       // nur beim ersten Durchgang
 
 
     SCCOLROW nOtherRow = 0;
-    USHORT nComp;
+    sal_uInt16 nComp;
     SCCOLROW nThisRow;
-    BOOL bTotal = FALSE;        // ueber verschiedene nThisRow beibehalten
+    sal_Bool bTotal = false;        // ueber verschiedene nThisRow beibehalten
     SCCOLROW nUnknown = 0;
     for (nThisRow = 0; nThisRow <= nThisEndRow; nThisRow++)
     {
         SCCOLROW nTempOther = nOtherRow;
-        BOOL bFound = FALSE;
-        USHORT nBest = SC_DOCCOMP_MAXDIFF;
+        sal_Bool bFound = false;
+        sal_uInt16 nBest = SC_DOCCOMP_MAXDIFF;
         SCCOLROW nMax = Min( nOtherEndRow, static_cast<SCCOLROW>(( nTempOther + nMaxCont + nUnknown )) );
         for (SCCOLROW i=nTempOther; i<=nMax && nBest>0; i++)    // bei 0 abbrechen
         {
@@ -877,12 +877,12 @@ void ScDocument::FindOrder( SCCOLROW* pOtherRows, SCCOLROW nThisEndRow, SCCOLROW
             {
                 nTempOther = i;
                 nBest = nComp;
-                bFound = TRUE;
+                bFound = sal_True;
             }
             if ( nComp < SC_DOCCOMP_MAXDIFF || bFound )
-                bTotal = FALSE;
+                bTotal = false;
             else if ( i == nTempOther && bUseTotal )
-                bTotal = TRUE;                          // nur ganz oben
+                bTotal = sal_True;                          // nur ganz oben
         }
         if ( bFound )
         {
@@ -897,14 +897,14 @@ void ScDocument::FindOrder( SCCOLROW* pOtherRows, SCCOLROW nThisEndRow, SCCOLROW
         }
 
         if (pProgress)
-            pProgress->SetStateOnPercent(nProAdd+static_cast<ULONG>(nThisRow));
+            pProgress->SetStateOnPercent(nProAdd+static_cast<sal_uLong>(nThisRow));
     }
 
     //  Bloecke ohne Uebereinstimmung ausfuellen
 
     SCROW nFillStart = 0;
     SCROW nFillPos = 0;
-    BOOL bInFill = FALSE;
+    sal_Bool bInFill = false;
     for (nThisRow = 0; nThisRow <= nThisEndRow+1; nThisRow++)
     {
         SCROW nThisOther = ( nThisRow <= nThisEndRow ) ? pOtherRows[nThisRow] : (nOtherEndRow+1);
@@ -921,13 +921,13 @@ void ScDocument::FindOrder( SCCOLROW* pOtherRows, SCCOLROW nThisEndRow, SCCOLROW
                         pOtherRows[nFillPos+i] = nFillStart+i;
                 }
 
-                bInFill = FALSE;
+                bInFill = false;
             }
             nFillStart = nThisOther + 1;
             nFillPos = nThisRow + 1;
         }
         else
-            bInFill = TRUE;
+            bInFill = sal_True;
     }
 }
 
@@ -963,7 +963,7 @@ void ScDocument::CompareDocument( ScDocument& rOtherDoc )
     //  auffuellen, damit einzeln umbenannte Tabellen nicht wegfallen
     SCTAB nFillStart = 0;
     SCTAB nFillPos = 0;
-    BOOL bInFill = FALSE;
+    sal_Bool bInFill = false;
     for (nThisTab = 0; nThisTab <= nThisCount; nThisTab++)
     {
         SCTAB nThisOther = ( nThisTab < nThisCount ) ? pOtherTabs[nThisTab] : nOtherCount;
@@ -981,13 +981,13 @@ void ScDocument::CompareDocument( ScDocument& rOtherDoc )
                             pOtherTabs[nFillPos+i] = nFillStart+i;
                 }
 
-                bInFill = FALSE;
+                bInFill = false;
             }
             nFillStart = nThisOther + 1;
             nFillPos = nThisTab + 1;
         }
         else
-            bInFill = TRUE;
+            bInFill = sal_True;
     }
 
     //
@@ -1009,7 +1009,7 @@ void ScDocument::CompareDocument( ScDocument& rOtherDoc )
             SCROW nEndRow = Max(nThisEndRow, nOtherEndRow);
             SCCOL nThisCol;
             SCROW nThisRow;
-            ULONG n1,n2;    // fuer AppendDeleteRange
+            sal_uLong n1,n2;    // fuer AppendDeleteRange
 
             //! ein Progress ueber alle Tabellen ???
             String aTabName;
@@ -1035,23 +1035,23 @@ void ScDocument::CompareDocument( ScDocument& rOtherDoc )
             //! Spalten vergleichen zweimal mit unterschiedlichem nMinGood ???
 
             // 1
-            FindOrder( pTempRows, nThisEndRow, nOtherEndRow, FALSE,
+            FindOrder( pTempRows, nThisEndRow, nOtherEndRow, false,
                         rOtherDoc, nThisTab, nOtherTab, nEndCol, NULL, &aProgress, 0 );
             // 2
-            FindOrder( pOtherCols, nThisEndCol, nOtherEndCol, TRUE,
+            FindOrder( pOtherCols, nThisEndCol, nOtherEndCol, sal_True,
                         rOtherDoc, nThisTab, nOtherTab, nEndRow, NULL, NULL, 0 );
-            FindOrder( pOtherRows, nThisEndRow, nOtherEndRow, FALSE,
+            FindOrder( pOtherRows, nThisEndRow, nOtherEndRow, false,
                         rOtherDoc, nThisTab, nOtherTab, nThisEndCol,
                         pOtherCols, &aProgress, nThisEndRow );
 
-            ULONG nMatch1 = 0;  // pTempRows, keine Spalten
+            sal_uLong nMatch1 = 0;  // pTempRows, keine Spalten
             for (nThisRow = 0; nThisRow<=nThisEndRow; nThisRow++)
                 if (ValidRow(pTempRows[nThisRow]))
                     nMatch1 += SC_DOCCOMP_MAXDIFF -
                                RowDifferences( nThisRow, nThisTab, rOtherDoc, pTempRows[nThisRow],
                                                 nOtherTab, nEndCol, NULL );
 
-            ULONG nMatch2 = 0;  // pOtherRows, pOtherCols
+            sal_uLong nMatch2 = 0;  // pOtherRows, pOtherCols
             for (nThisRow = 0; nThisRow<=nThisEndRow; nThisRow++)
                 if (ValidRow(pOtherRows[nThisRow]))
                     nMatch2 += SC_DOCCOMP_MAXDIFF -

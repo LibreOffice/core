@@ -103,8 +103,8 @@ void ScUnitConverterData::BuildIndexString( String& rStr,
 #define CFGSTR_UNIT_TO      "ToUnit"
 #define CFGSTR_UNIT_FACTOR  "Factor"
 
-ScUnitConverter::ScUnitConverter( USHORT nInit, USHORT nDeltaP ) :
-        ScStrCollection( nInit, nDeltaP, FALSE )
+ScUnitConverter::ScUnitConverter( sal_uInt16 nInit, sal_uInt16 nDeltaP ) :
+        ScStrCollection( nInit, nDeltaP, false )
 {
     //  read from configuration - "convert.ini" is no longer used
     //! config item as member to allow change of values
@@ -162,18 +162,18 @@ ScUnitConverter::ScUnitConverter( USHORT nInit, USHORT nDeltaP ) :
     }
 }
 
-BOOL ScUnitConverter::GetValue( double& fValue, const String& rFromUnit,
+sal_Bool ScUnitConverter::GetValue( double& fValue, const String& rFromUnit,
                 const String& rToUnit ) const
 {
     ScUnitConverterData aSearch( rFromUnit, rToUnit );
-    USHORT nIndex;
+    sal_uInt16 nIndex;
     if ( Search( &aSearch, nIndex ) )
     {
         fValue = ((const ScUnitConverterData*)(At( nIndex )))->GetValue();
-        return TRUE;
+        return sal_True;
     }
     fValue = 1.0;
-    return FALSE;
+    return false;
 }
 
 

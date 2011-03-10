@@ -102,10 +102,10 @@ void ScPoolHelper::UseDocOptions() const
 {
     if (pFormTable)
     {
-        USHORT d,m,y;
+        sal_uInt16 d,m,y;
         aOpt.GetDate( d,m,y );
         pFormTable->ChangeNullDate( d,m,y );
-        pFormTable->ChangeStandardPrec( (USHORT)aOpt.GetStdPrecision() );
+        pFormTable->ChangeStandardPrec( (sal_uInt16)aOpt.GetStdPrecision() );
         pFormTable->SetYear2000( aOpt.GetYear2000() );
     }
 }

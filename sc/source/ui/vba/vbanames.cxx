@@ -229,7 +229,7 @@ uno::Reference< container::XEnumeration >
 ScVbaNames::createEnumeration() throw (uno::RuntimeException)
 {
     uno::Reference< container::XEnumerationAccess > xEnumAccess( mxNames, uno::UNO_QUERY_THROW );
-    return new NamesEnumeration( this, mxContext, xEnumAccess->createEnumeration(), mxModel , mxNames );
+    return new NamesEnumeration( getParent(), mxContext, xEnumAccess->createEnumeration(), mxModel , mxNames );
 }
 
 uno::Any

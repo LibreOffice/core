@@ -53,21 +53,21 @@ enum ScUpdateMode { SC_UPDATE_ALL, SC_UPDATE_CHANGED, SC_UPDATE_MARKS };
 class ScViewUtil                                // static Methoden
 {
 public:
-    static BOOL ExecuteCharMap( const SvxFontItem&  rOldFont,
+    static sal_Bool ExecuteCharMap( const SvxFontItem&  rOldFont,
                                 SfxViewFrame&       rFrame,
                                 SvxFontItem&        rNewFont,
                                 String&             rString );
 
-    static BOOL IsActionShown( const ScChangeAction& rAction,
+    static sal_Bool IsActionShown( const ScChangeAction& rAction,
                                 const ScChangeViewSettings& rSettings,
                                 ScDocument& rDocument );
 
     static void PutItemScript( SfxItemSet& rShellSet, const SfxItemSet& rCoreSet,
-                                USHORT nWhichId, USHORT nScript );
+                                sal_uInt16 nWhichId, sal_uInt16 nScript );
 
-    static USHORT GetEffLanguage( ScDocument* pDoc, const ScAddress& rPos );
+    static sal_uInt16 GetEffLanguage( ScDocument* pDoc, const ScAddress& rPos );
 
-    static sal_Int32 GetTransliterationType( USHORT nSlotID );
+    static sal_Int32 GetTransliterationType( sal_uInt16 nSlotID );
 
     static bool HasFiltered( const ScRange& rRange, ScDocument* pDoc );
     /** Fit a range to cover nRows number of unfiltered rows.
@@ -75,7 +75,7 @@ public:
     static bool FitToUnfilteredRows( ScRange & rRange, ScDocument * pDoc, size_t nRows );
     static void UnmarkFiltered( ScMarkData& rMark, ScDocument* pDoc );
 
-    static void HideDisabledSlot( SfxItemSet& rSet, SfxBindings& rBindings, USHORT nSlotId );
+    static void HideDisabledSlot( SfxItemSet& rSet, SfxBindings& rBindings, sal_uInt16 nSlotId );
 
     /** Returns true, if the passed view shell is in full screen mode. */
     static bool IsFullScreen( SfxViewShell& rViewShell );
@@ -103,7 +103,7 @@ private:
 public:
             ScUpdateRect( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2 );
     void    SetNew( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2 );
-    BOOL    GetDiff( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2 );
+    sal_Bool    GetDiff( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2 );
 };
 
 

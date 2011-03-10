@@ -70,7 +70,7 @@ ShapeParagraphDialog::~ShapeParagraphDialog()
 {
 }
 
-void ShapeParagraphDialog::PageCreated( USHORT nId, SfxTabPage& rPage )
+void ShapeParagraphDialog::PageCreated( sal_uInt16 nId, SfxTabPage& rPage )
 {
     SfxAllItemSet aSet( *( GetInputSetImpl()->GetPool() ) );
     switch ( nId )

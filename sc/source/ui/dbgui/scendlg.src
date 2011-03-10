@@ -29,6 +29,7 @@
 #include "scendlg.hrc"
 ModalDialog RID_SCDLG_NEWSCENARIO
 {
+    HelpID = "sc:ModalDialog:RID_SCDLG_NEWSCENARIO";
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 260 , 165 ) ;
@@ -55,6 +56,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
     };
     MultiLineEdit ED_COMMENT
     {
+        HelpID = "sc:MultiLineEdit:RID_SCDLG_NEWSCENARIO:ED_COMMENT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 43 ) ;
         Size = MAP_APPFONT ( 183 , 46 ) ;
@@ -65,6 +67,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
     };
     Edit ED_NAME
     {
+        HelpID = "sc:Edit:RID_SCDLG_NEWSCENARIO:ED_NAME";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 183 , 12 ) ;
@@ -72,12 +75,14 @@ ModalDialog RID_SCDLG_NEWSCENARIO
     };
     CheckBox CB_SHOWFRAME
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_NEWSCENARIO:CB_SHOWFRAME";
         Pos = MAP_APPFONT ( 12 , 107 ) ;
         Size = MAP_APPFONT ( 109 , 10 ) ;
         Text [ en-US ] = "~Display border";
     };
     ListBox LB_COLOR
     {
+        HelpID = "sc:ListBox:RID_SCDLG_NEWSCENARIO:LB_COLOR";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 125 , 105 ) ;
         Size = MAP_APPFONT ( 70 , 86 ) ;
@@ -86,6 +91,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
     };
     CheckBox CB_PRINTFRAME
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_NEWSCENARIO:CB_PRINTFRAME";
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 121 , 243 ) ;
         Size = MAP_APPFONT ( 83 , 10 ) ;
@@ -93,12 +99,14 @@ ModalDialog RID_SCDLG_NEWSCENARIO
     };
     CheckBox CB_TWOWAY
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_NEWSCENARIO:CB_TWOWAY";
         Pos = MAP_APPFONT ( 12 , 121 ) ;
         Size = MAP_APPFONT ( 183 , 10 ) ;
         Text [ en-US ] = "Copy ~back" ;
     };
     CheckBox CB_ATTRIB
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_NEWSCENARIO:CB_ATTRIB";
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 20 , 243 ) ;
         Size = MAP_APPFONT ( 83 , 10 ) ;
@@ -106,6 +114,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
     };
     CheckBox CB_VALUE
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_NEWSCENARIO:CB_VALUE";
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 230 , 243 ) ;
         Size = MAP_APPFONT ( 83 , 10 ) ;
@@ -113,12 +122,14 @@ ModalDialog RID_SCDLG_NEWSCENARIO
     };
     CheckBox CB_COPYALL
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_NEWSCENARIO:CB_COPYALL";
         Pos = MAP_APPFONT ( 12 , 135 ) ;
         Size = MAP_APPFONT ( 183 , 10 ) ;
         Text [ en-US ] = "Copy ~entire sheet" ;
     };
     CheckBox CB_PROTECT
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_NEWSCENARIO:CB_PROTECT";
         Pos = MAP_APPFONT ( 12 , 149 ) ;
         Size = MAP_APPFONT ( 183 , 10 ) ;
         Text [ en-US ] = "~Prevent changes" ;
@@ -134,6 +145,10 @@ ModalDialog RID_SCDLG_NEWSCENARIO
     String STR_ON
     {
         Text [ en-US ] = "on" ;
+    };
+    String STR_COLOR
+    {
+        Text [ en-US ] = "Display border in" ;
     };
     FixedLine FL_NAME
     {

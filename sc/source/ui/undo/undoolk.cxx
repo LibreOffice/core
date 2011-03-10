@@ -92,7 +92,7 @@ void DeleteSdrUndoAction( SdrUndoAction* pUndoAction )
     delete pUndoAction;
 }
 
-void EnableDrawAdjust( ScDocument* pDoc, BOOL bEnable )
+void EnableDrawAdjust( ScDocument* pDoc, sal_Bool bEnable )
 {
     ScDrawLayer* pLayer = pDoc->GetDrawLayer();
     if (pLayer)

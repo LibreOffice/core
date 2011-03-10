@@ -218,7 +218,7 @@
 #include <vcl/dndhelp.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/field.hxx>
-#include <vcl/fldunit.hxx>
+#include <tools/fldunit.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/inputctx.hxx>
 #include <vcl/jobset.hxx>

@@ -74,7 +74,7 @@ class SC_DLLPUBLIC ScChartArray : public ScDataObject               // nur noch 
     String      aName;
     ScDocument* pDocument;
     ScChartPositioner aPositioner;
-    BOOL        bValid;             // fuer Erzeugung aus SchMemChart
+    sal_Bool        bValid;             // fuer Erzeugung aus SchMemChart
 
 private:
     ScMemChart* CreateMemChartSingle();
@@ -96,14 +96,14 @@ public:
     void    SetRangeList( const ScRange& rNew ) { aPositioner.SetRangeList(rNew); }
     const   ScChartPositionMap* GetPositionMap() { return aPositioner.GetPositionMap(); }
 
-    void    SetHeaders(BOOL bCol, BOOL bRow) { aPositioner.SetHeaders(bCol, bRow); }
-    BOOL    HasColHeaders() const            { return aPositioner.HasColHeaders(); }
-    BOOL    HasRowHeaders() const            { return aPositioner.HasRowHeaders(); }
-    BOOL    IsValid() const                  { return bValid; }
+    void    SetHeaders(sal_Bool bCol, sal_Bool bRow) { aPositioner.SetHeaders(bCol, bRow); }
+    sal_Bool    HasColHeaders() const            { return aPositioner.HasColHeaders(); }
+    sal_Bool    HasRowHeaders() const            { return aPositioner.HasRowHeaders(); }
+    sal_Bool    IsValid() const                  { return bValid; }
     void    SetName(const String& rNew)      { aName = rNew; }
     const String& GetName() const            { return aName; }
 
-    BOOL    operator==(const ScChartArray& rCmp) const;
+    sal_Bool    operator==(const ScChartArray& rCmp) const;
 
     ScMemChart* CreateMemChart();
 };
@@ -116,10 +116,10 @@ public:
             ScCollection( rColl ) {}
 
     virtual ScDataObject*   Clone() const;
-    ScChartArray*       operator[](USHORT nIndex) const
+    ScChartArray*       operator[](sal_uInt16 nIndex) const
                         { return (ScChartArray*)At(nIndex); }
 
-    BOOL    operator==(const ScChartCollection& rCmp) const;
+    sal_Bool    operator==(const ScChartCollection& rCmp) const;
 };
 
 

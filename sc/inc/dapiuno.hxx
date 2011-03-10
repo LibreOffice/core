@@ -86,8 +86,8 @@ class ScDataPilotItemObj;
 class ScDataPilotConversion
 {
 public:
-    static com::sun::star::sheet::GeneralFunction   FirstFunc( USHORT nBits );
-    static USHORT           FunctionBit( com::sun::star::sheet::GeneralFunction eFunc );
+    static com::sun::star::sheet::GeneralFunction   FirstFunc( sal_uInt16 nBits );
+    static sal_uInt16           FunctionBit( com::sun::star::sheet::GeneralFunction eFunc );
 
     static void         FillGroupInfo(
                             ::com::sun::star::sheet::DataPilotFieldGroupInfo& rInfo,

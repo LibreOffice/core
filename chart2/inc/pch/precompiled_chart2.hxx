@@ -269,7 +269,7 @@
 #include "unotools/configitem.hxx"
 #include "unotools/eventlisteneradapter.hxx"
 
-#include "vcl/fldunit.hxx"
+#include "tools/fldunit.hxx"
 
 #include "osl/mutex.hxx"
 //---MARKER---

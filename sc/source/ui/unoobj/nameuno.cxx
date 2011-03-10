@@ -558,7 +558,7 @@ void SAL_CALL ScNamedRangesObj::addNewByName( const rtl::OUString& aName,
     if ( nUnoType & sheet::NamedRangeFlag::COLUMN_HEADER )      nNewType |= RT_COLHEADER;
     if ( nUnoType & sheet::NamedRangeFlag::ROW_HEADER )         nNewType |= RT_ROWHEADER;
 
-    BOOL bDone = FALSE;
+    sal_Bool bDone = false;
     if (pDocShell)
     {
         ScDocument* pDoc = pDocShell->GetDocument();
@@ -573,7 +573,7 @@ void SAL_CALL ScNamedRangesObj::addNewByName( const rtl::OUString& aName,
             {
                 ScDocFunc aFunc(*pDocShell);
                 aFunc.SetNewRangeNames(pNewRanges, mbModifyAndBroadcast);
-                bDone = TRUE;
+                bDone = true;
             }
             else
             {
@@ -791,19 +791,19 @@ sal_Bool SAL_CALL ScNamedRangesObj::hasByName( const rtl::OUString& aName )
                 return sal_True;
         }
     }
-    return sal_False;
+    return false;
 }
 
 /** called from the XActionLockable interface methods on initial locking */
 void ScNamedRangesObj::lock()
 {
-    pDocShell->GetDocument()->CompileNameFormula( TRUE ); // CreateFormulaString
+    pDocShell->GetDocument()->CompileNameFormula( sal_True ); // CreateFormulaString
 }
 
 /** called from the XActionLockable interface methods on final unlock */
 void ScNamedRangesObj::unlock()
 {
-    pDocShell->GetDocument()->CompileNameFormula( FALSE ); // CompileFormulaString
+    pDocShell->GetDocument()->CompileNameFormula( false ); // CompileFormulaString
 }
 
 // document::XActionLockable
@@ -1077,7 +1077,7 @@ void SAL_CALL ScLabelRangesObj::removeByIndex( sal_Int32 nIndex )
                                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    BOOL bDone = FALSE;
+    sal_Bool bDone = false;
     if (pDocShell)
     {
         ScDocument* pDoc = pDocShell->GetDocument();
@@ -1101,7 +1101,7 @@ void SAL_CALL ScLabelRangesObj::removeByIndex( sal_Int32 nIndex )
                 pDoc->CompileColRowNameFormula();
                 pDocShell->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_GRID );
                 pDocShell->SetDocumentModified();
-                bDone = TRUE;
+                bDone = sal_True;
 
                 //! Undo ?!?! (hier und aus Dialog)
             }

@@ -64,8 +64,8 @@ ScSheetDPData::ScSheetDPData(ScDocument* pD, const ScSheetSourceDesc& rDesc) :
     ScDPTableData(pD),
     aQuery ( rDesc.GetQueryParam() ),
     pSpecial(NULL),
-    bIgnoreEmptyRows( FALSE ),
-    bRepeatIfEmpty(FALSE),
+    bIgnoreEmptyRows( false ),
+    bRepeatIfEmpty(false),
     mrDesc(rDesc),
     aCacheTable(rDesc.CreateCache())
 {
@@ -130,18 +130,18 @@ String ScSheetDPData::getDimensionName(long nColumn)
     }
 }
 
-BOOL ScSheetDPData::IsDateDimension(long nDim)
+sal_Bool ScSheetDPData::IsDateDimension(long nDim)
 {
     CreateCacheTable();
     long nColCount = aCacheTable.getColSize();
     if (getIsDataLayoutDimension(nDim))
     {
-        return FALSE;
+        return false;
     }
     else if (nDim >= nColCount)
     {
         OSL_FAIL("IsDateDimension: invalid dimension");
-        return FALSE;
+        return false;
     }
     else
     {
@@ -149,7 +149,7 @@ BOOL ScSheetDPData::IsDateDimension(long nDim)
     }
 }
 
-ULONG ScSheetDPData::GetNumberFormat(long nDim)
+sal_uLong ScSheetDPData::GetNumberFormat(long nDim)
 {
     CreateCacheTable();
     if (getIsDataLayoutDimension(nDim))
@@ -166,7 +166,7 @@ ULONG ScSheetDPData::GetNumberFormat(long nDim)
         return GetCacheTable().getCache()->GetNumberFormat( nDim );
     }
 }
-UINT32  ScDPTableData::GetNumberFormatByIdx( NfIndexTableOffset eIdx )
+sal_uInt32  ScDPTableData::GetNumberFormatByIdx( NfIndexTableOffset eIdx )
 {
     if( !mpDoc )
         return 0;
@@ -177,13 +177,13 @@ UINT32  ScDPTableData::GetNumberFormatByIdx( NfIndexTableOffset eIdx )
     return 0;
 }
 
-BOOL ScSheetDPData::getIsDataLayoutDimension(long nColumn)
+sal_Bool ScSheetDPData::getIsDataLayoutDimension(long nColumn)
 {
     CreateCacheTable();
     return (nColumn ==(long)( aCacheTable.getColSize()));
 }
 
-void ScSheetDPData::SetEmptyFlags( BOOL bIgnoreEmptyRowsP, BOOL bRepeatIfEmptyP )
+void ScSheetDPData::SetEmptyFlags( sal_Bool bIgnoreEmptyRowsP, sal_Bool bRepeatIfEmptyP )
 {
     bIgnoreEmptyRows = bIgnoreEmptyRowsP;
     bRepeatIfEmpty   = bRepeatIfEmptyP;
@@ -312,7 +312,7 @@ ScDPCache* ScSheetSourceDesc::CreateCache() const
     if (!mpDoc)
         return NULL;
 
-    ULONG nErrId = CheckSourceRange();
+    sal_uLong nErrId = CheckSourceRange();
     if (nErrId)
     {
         OSL_FAIL( "Error Create Cache\n" );
@@ -329,7 +329,7 @@ long ScSheetSourceDesc::GetCacheId() const
     return -1;
 }
 
-ULONG ScSheetSourceDesc::CheckSourceRange() const
+sal_uLong ScSheetSourceDesc::CheckSourceRange() const
 {
     if (!mpDoc)
         return STR_ERR_DATAPILOTSOURCE;

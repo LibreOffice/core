@@ -30,7 +30,7 @@
 #define SC_XLESCHER_HXX
 
 #include <tools/gen.hxx>
-#include <vcl/mapunit.hxx>
+#include <tools/mapunit.hxx>
 #include "fapihelper.hxx"
 #include "xladdress.hxx"
 #include "xlstyle.hxx"

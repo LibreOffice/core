@@ -29,6 +29,7 @@
 
 TabPage TP_OPTIONS
 {
+    HelpID = "chart2:TabPage:TP_OPTIONS";
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
@@ -42,6 +43,7 @@ TabPage TP_OPTIONS
 
     RadioButton RBT_OPT_AXIS_1
     {
+        HelpID = "chart2:RadioButton:TP_OPTIONS:RBT_OPT_AXIS_1";
         Pos = MAP_APPFONT ( 12 , 20  ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         TabStop = TRUE ;
@@ -50,6 +52,7 @@ TabPage TP_OPTIONS
 
     RadioButton RBT_OPT_AXIS_2
     {
+        HelpID = "chart2:RadioButton:TP_OPTIONS:RBT_OPT_AXIS_2";
         Pos = MAP_APPFONT ( 12 , 34  ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         TabStop = TRUE ;
@@ -72,6 +75,7 @@ TabPage TP_OPTIONS
 
     MetricField MT_OVERLAP
     {
+        HelpID = "chart2:MetricField:TP_OPTIONS:MT_OVERLAP";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 63 , 78 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -98,6 +102,7 @@ TabPage TP_OPTIONS
 
     MetricField MT_GAP
     {
+        HelpID = "chart2:MetricField:TP_OPTIONS:MT_GAP";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 63 , 62 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -117,6 +122,7 @@ TabPage TP_OPTIONS
 
     CheckBox CB_CONNECTOR
     {
+        HelpID = "chart2:CheckBox:TP_OPTIONS:CB_CONNECTOR";
         Pos = MAP_APPFONT ( 12 , 97 ) ;
         Size = MAP_APPFONT ( 200 , 10 ) ;
         TabStop = TRUE ;
@@ -125,6 +131,7 @@ TabPage TP_OPTIONS
 
     CheckBox CB_BARS_SIDE_BY_SIDE
     {
+        HelpID = "chart2:CheckBox:TP_OPTIONS:CB_BARS_SIDE_BY_SIDE";
         Pos = MAP_APPFONT ( 12 , 97 ) ;
         Size = MAP_APPFONT ( 200 , 10 ) ;
         TabStop = TRUE ;
@@ -147,6 +154,7 @@ TabPage TP_OPTIONS
 
     RadioButton RB_DONT_PAINT
     {
+        HelpID = "chart2:RadioButton:TP_OPTIONS:RB_DONT_PAINT";
         Pos = MAP_APPFONT ( 82 , 127  ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         TabStop = TRUE ;
@@ -155,6 +163,7 @@ TabPage TP_OPTIONS
 
     RadioButton RB_ASSUME_ZERO
     {
+        HelpID = "chart2:RadioButton:TP_OPTIONS:RB_ASSUME_ZERO";
         Pos = MAP_APPFONT ( 82 , 141  ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         TabStop = TRUE ;
@@ -163,6 +172,7 @@ TabPage TP_OPTIONS
 
     RadioButton RB_CONTINUE_LINE
     {
+        HelpID = "chart2:RadioButton:TP_OPTIONS:RB_CONTINUE_LINE";
         Pos = MAP_APPFONT ( 82 , 155  ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         TabStop = TRUE ;
@@ -171,6 +181,7 @@ TabPage TP_OPTIONS
 
     CheckBox CB_INCLUDE_HIDDEN_CELLS
     {
+        HelpID = "chart2:CheckBox:TP_OPTIONS:CB_INCLUDE_HIDDEN_CELLS";
         Pos = MAP_APPFONT ( 12 , 172 ) ;
         Size = MAP_APPFONT ( 200 , 10 ) ;
         TabStop = TRUE ;

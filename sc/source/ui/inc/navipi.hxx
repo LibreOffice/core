@@ -94,7 +94,7 @@ private:
 private:
     const ScenarioEntry* GetSelectedEntry() const;
 
-    void                ExecuteScenarioSlot( USHORT nSlotId );
+    void                ExecuteScenarioSlot( sal_uInt16 nSlotId );
     void                SelectScenario();
     void                EditScenario();
     void                DeleteScenario( bool bQueryBox );
@@ -151,7 +151,7 @@ protected:
 private:
     ScNavigatorDlg& rDlg;
     SCCOL           nCol;
-    USHORT          nKeyGroup;
+    sal_uInt16          nKeyGroup;
 
     void    EvalText        ();
     void    ExecuteCol      ();
@@ -210,7 +210,7 @@ public:
             CommandToolBox( ScNavigatorDlg* pParent, const ResId& rResId );
             ~CommandToolBox();
 
-    void Select( USHORT nId );
+    void Select( sal_uInt16 nId );
     void UpdateButtons();
     void InitImageList();
 
@@ -272,11 +272,11 @@ private:
     long            nListModeHeight;
     long            nInitListHeight;
     NavListMode     eListMode;
-    USHORT          nDropMode;
+    sal_uInt16          nDropMode;
     SCCOL           nCurCol;
     SCROW           nCurRow;
     SCTAB           nCurTab;
-    BOOL            bFirstBig;
+    sal_Bool            bFirstBig;
 
     ScNavigatorControllerItem** ppBoundItems;
 
@@ -296,7 +296,7 @@ private:
 
     ScTabViewShell*         GetTabViewShell() const;
     ScNavigatorSettings*    GetNavigatorSettings();
-    BOOL                    GetViewData();
+    sal_Bool                    GetViewData();
 
     void    UpdateColumn    ( const SCCOL* pCol = NULL );
     void    UpdateRow       ( const SCROW* pRow = NULL );
@@ -305,12 +305,12 @@ private:
 
     void    GetDocNames(const String* pSelEntry = NULL);
 
-    void    SetListMode     ( NavListMode eMode, BOOL bSetSize = TRUE );
-    void    ShowList        ( BOOL bShow, BOOL bSetSize );
-    void    ShowScenarios   ( BOOL bShow, BOOL bSetSize );
+    void    SetListMode     ( NavListMode eMode, sal_Bool bSetSize = sal_True );
+    void    ShowList        ( sal_Bool bShow, sal_Bool bSetSize );
+    void    ShowScenarios   ( sal_Bool bShow, sal_Bool bSetSize );
 
-    void    SetDropMode(USHORT nNew);
-    USHORT  GetDropMode() const         { return nDropMode; }
+    void    SetDropMode(sal_uInt16 nNew);
+    sal_uInt16  GetDropMode() const         { return nDropMode; }
 
     const String& GetStrDragMode() const    { return aStrDragMode; }
     const String& GetStrDisplay() const     { return aStrDisplay; }
@@ -348,7 +348,7 @@ class ScNavigatorDialogWrapper: public SfxChildWindowContext
 {
 public:
             ScNavigatorDialogWrapper( Window*           pParent,
-                                      USHORT            nId,
+                                      sal_uInt16            nId,
                                       SfxBindings*      pBindings,
                                       SfxChildWinInfo*  pInfo );
 

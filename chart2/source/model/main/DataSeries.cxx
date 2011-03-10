@@ -56,29 +56,73 @@ using ::osl::MutexGuard;
 
 namespace
 {
-const uno::Sequence< Property > & lcl_GetPropertySequence()
-{
-    static uno::Sequence< Property > aPropSeq;
 
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( 0 == aPropSeq.getLength() )
+struct StaticDataSeriesDefaults_Initializer
+{
+    ::chart::tPropertyValueMap* operator()()
     {
-        // get properties
+        static ::chart::tPropertyValueMap aStaticDefaults;
+        lcl_AddDefaultsToMap( aStaticDefaults );
+        return &aStaticDefaults;
+    }
+private:
+    void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
+    {
+        ::chart::DataSeriesProperties::AddDefaultsToMap( rOutMap );
+        ::chart::CharacterProperties::AddDefaultsToMap( rOutMap );
+
+        float fDefaultCharHeight = 10.0;
+        ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::CharacterProperties::PROP_CHAR_CHAR_HEIGHT, fDefaultCharHeight );
+        ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::CharacterProperties::PROP_CHAR_ASIAN_CHAR_HEIGHT, fDefaultCharHeight );
+        ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::CharacterProperties::PROP_CHAR_COMPLEX_CHAR_HEIGHT, fDefaultCharHeight );
+    }
+};
+
+struct StaticDataSeriesDefaults : public rtl::StaticAggregate< ::chart::tPropertyValueMap, StaticDataSeriesDefaults_Initializer >
+{
+};
+
+struct StaticDataSeriesInfoHelper_Initializer
+{
+    ::cppu::OPropertyArrayHelper* operator()()
+    {
+        static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
+        return &aPropHelper;
+    }
+
+private:
+    uno::Sequence< Property > lcl_GetPropertySequence()
+    {
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
         ::chart::DataSeriesProperties::AddPropertiesToVector( aProperties );
         ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
-        // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
 
-        // transfer result to static Sequence
-        aPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
+        return ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
 
-    return aPropSeq;
-}
+};
+
+struct StaticDataSeriesInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticDataSeriesInfoHelper_Initializer >
+{
+};
+
+struct StaticDataSeriesInfo_Initializer
+{
+    uno::Reference< beans::XPropertySetInfo >* operator()()
+    {
+        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticDataSeriesInfoHelper::get() ) );
+        return &xPropertySetInfo;
+    }
+};
+
+struct StaticDataSeriesInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticDataSeriesInfo_Initializer >
+{
+};
 
 void lcl_SetParent(
     const uno::Reference< uno::XInterface > & xChildInterface,
@@ -245,56 +289,24 @@ Sequence< OUString > DataSeries::getSupportedServiceNames_Static()
 uno::Any DataSeries::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
-    static tPropertyValueMap aStaticDefaults;
-
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( 0 == aStaticDefaults.size() )
-    {
-        // initialize defaults
-        DataSeriesProperties::AddDefaultsToMap( aStaticDefaults );
-        CharacterProperties::AddDefaultsToMap( aStaticDefaults );
-
-        float fDefaultCharHeight = 10.0;
-        ::chart::PropertyHelper::setPropertyValue( aStaticDefaults, ::chart::CharacterProperties::PROP_CHAR_CHAR_HEIGHT, fDefaultCharHeight );
-        ::chart::PropertyHelper::setPropertyValue( aStaticDefaults, ::chart::CharacterProperties::PROP_CHAR_ASIAN_CHAR_HEIGHT, fDefaultCharHeight );
-        ::chart::PropertyHelper::setPropertyValue( aStaticDefaults, ::chart::CharacterProperties::PROP_CHAR_COMPLEX_CHAR_HEIGHT, fDefaultCharHeight );
-    }
-
-    tPropertyValueMap::const_iterator aFound(
-        aStaticDefaults.find( nHandle ));
-
-    if( aFound == aStaticDefaults.end())
-        throw beans::UnknownPropertyException();
-
+    const tPropertyValueMap& rStaticDefaults = *StaticDataSeriesDefaults::get();
+    tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
+    if( aFound == rStaticDefaults.end() )
+        return uno::Any();
     return (*aFound).second;
 }
 
 // ____ OPropertySet ____
 ::cppu::IPropertyArrayHelper & SAL_CALL DataSeries::getInfoHelper()
 {
-    static ::cppu::OPropertyArrayHelper aArrayHelper(
-        lcl_GetPropertySequence(),
-        /* bSorted = */ sal_True );
-
-    return aArrayHelper;
+    return *StaticDataSeriesInfoHelper::get();
 }
 
-
 // ____ XPropertySet ____
-uno::Reference< beans::XPropertySetInfo > SAL_CALL
-    DataSeries::getPropertySetInfo()
+uno::Reference< beans::XPropertySetInfo > SAL_CALL DataSeries::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
-    static uno::Reference< beans::XPropertySetInfo > xInfo;
-
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( !xInfo.is())
-    {
-        xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo(
-            getInfoHelper());
-    }
-
-    return xInfo;
+    return *StaticDataSeriesInfo::get();
 }
 
 void SAL_CALL DataSeries::getFastPropertyValue

@@ -263,6 +263,7 @@ IMPL_LINK( ShapeController, CheckNameHdl, AbstractSvxNameDialog*, pDialog )
 
 void ShapeController::executeDispatch_FormatLine()
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( m_pChartController )
     {
         Window* pParent = dynamic_cast< Window* >( m_pChartController->m_pChartWindow );
@@ -272,12 +273,11 @@ void ShapeController::executeDispatch_FormatLine()
         {
             SdrObject* pSelectedObj = pDrawViewWrapper->getSelectedObject();
             SfxItemSet aAttr( pDrawViewWrapper->GetDefaultAttr() );
-            BOOL bHasMarked = pDrawViewWrapper->AreObjectsMarked();
+            sal_Bool bHasMarked = pDrawViewWrapper->AreObjectsMarked();
             if ( bHasMarked )
             {
-                pDrawViewWrapper->MergeAttrFromMarked( aAttr, FALSE );
+                pDrawViewWrapper->MergeAttrFromMarked( aAttr, sal_False );
             }
-            SolarMutexGuard aGuard;
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             if ( pFact )
             {
@@ -289,11 +289,11 @@ void ShapeController::executeDispatch_FormatLine()
                     const SfxItemSet* pOutAttr = pDlg->GetOutputItemSet();
                     if ( bHasMarked )
                     {
-                        pDrawViewWrapper->SetAttrToMarked( *pOutAttr, FALSE );
+                        pDrawViewWrapper->SetAttrToMarked( *pOutAttr, sal_False );
                     }
                     else
                     {
-                        pDrawViewWrapper->SetDefaultAttr( *pOutAttr, FALSE );
+                        pDrawViewWrapper->SetDefaultAttr( *pOutAttr, sal_False );
                     }
                 }
             }
@@ -303,6 +303,7 @@ void ShapeController::executeDispatch_FormatLine()
 
 void ShapeController::executeDispatch_FormatArea()
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( m_pChartController )
     {
         Window* pParent = dynamic_cast< Window* >( m_pChartController->m_pChartWindow );
@@ -311,12 +312,11 @@ void ShapeController::executeDispatch_FormatArea()
         if ( pParent && pDrawModelWrapper && pDrawViewWrapper )
         {
             SfxItemSet aAttr( pDrawViewWrapper->GetDefaultAttr() );
-            BOOL bHasMarked = pDrawViewWrapper->AreObjectsMarked();
+            sal_Bool bHasMarked = pDrawViewWrapper->AreObjectsMarked();
             if ( bHasMarked )
             {
-                pDrawViewWrapper->MergeAttrFromMarked( aAttr, FALSE );
+                pDrawViewWrapper->MergeAttrFromMarked( aAttr, sal_False );
             }
-            SolarMutexGuard aGuard;
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             if ( pFact )
             {
@@ -337,11 +337,11 @@ void ShapeController::executeDispatch_FormatArea()
                         const SfxItemSet* pOutAttr = pDlg->GetOutputItemSet();
                         if ( bHasMarked )
                         {
-                            pDrawViewWrapper->SetAttrToMarked( *pOutAttr, FALSE );
+                            pDrawViewWrapper->SetAttrToMarked( *pOutAttr, sal_False );
                         }
                         else
                         {
-                            pDrawViewWrapper->SetDefaultAttr( *pOutAttr, FALSE );
+                            pDrawViewWrapper->SetDefaultAttr( *pOutAttr, sal_False );
                         }
                     }
                 }
@@ -352,6 +352,7 @@ void ShapeController::executeDispatch_FormatArea()
 
 void ShapeController::executeDispatch_TextAttributes()
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( m_pChartController )
     {
         Window* pParent = dynamic_cast< Window* >( m_pChartController->m_pChartWindow );
@@ -359,12 +360,11 @@ void ShapeController::executeDispatch_TextAttributes()
         if ( pParent && pDrawViewWrapper )
         {
             SfxItemSet aAttr( pDrawViewWrapper->GetDefaultAttr() );
-            BOOL bHasMarked = pDrawViewWrapper->AreObjectsMarked();
+            sal_Bool bHasMarked = pDrawViewWrapper->AreObjectsMarked();
             if ( bHasMarked )
             {
-                pDrawViewWrapper->MergeAttrFromMarked( aAttr, FALSE );
+                pDrawViewWrapper->MergeAttrFromMarked( aAttr, sal_False );
             }
-            SolarMutexGuard aGuard;
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             if ( pFact )
             {
@@ -379,7 +379,7 @@ void ShapeController::executeDispatch_TextAttributes()
                     }
                     else
                     {
-                        pDrawViewWrapper->SetDefaultAttr( *pOutAttr, FALSE );
+                        pDrawViewWrapper->SetDefaultAttr( *pOutAttr, sal_False );
                     }
                 }
             }
@@ -389,6 +389,7 @@ void ShapeController::executeDispatch_TextAttributes()
 
 void ShapeController::executeDispatch_TransformDialog()
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( m_pChartController )
     {
         Window* pParent = dynamic_cast< Window* >( m_pChartController->m_pChartWindow );
@@ -403,7 +404,6 @@ void ShapeController::executeDispatch_TransformDialog()
                 pDrawViewWrapper->GetAttributes( aAttr );
                 // item set for position and size
                 SfxItemSet aGeoAttr( pDrawViewWrapper->GetGeoAttrFromMarked() );
-                SolarMutexGuard aGuard;
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 if ( pFact )
                 {
@@ -411,7 +411,7 @@ void ShapeController::executeDispatch_TransformDialog()
                         pFact->CreateCaptionDialog( pParent, pDrawViewWrapper ) );
                     if ( pDlg.get() )
                     {
-                        const USHORT* pRange = pDlg->GetInputRanges( *aAttr.GetPool() );
+                        const sal_uInt16* pRange = pDlg->GetInputRanges( *aAttr.GetPool() );
                         SfxItemSet aCombAttr( *aAttr.GetPool(), pRange );
                         aCombAttr.Put( aAttr );
                         aCombAttr.Put( aGeoAttr );
@@ -428,7 +428,6 @@ void ShapeController::executeDispatch_TransformDialog()
             else
             {
                 SfxItemSet aGeoAttr( pDrawViewWrapper->GetGeoAttrFromMarked() );
-                SolarMutexGuard aGuard;
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 if ( pFact )
                 {
@@ -447,6 +446,7 @@ void ShapeController::executeDispatch_TransformDialog()
 
 void ShapeController::executeDispatch_ObjectTitleDescription()
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( m_pChartController )
     {
         DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
@@ -457,7 +457,6 @@ void ShapeController::executeDispatch_ObjectTitleDescription()
             {
                 String aTitle( pSelectedObj->GetTitle() );
                 String aDescription( pSelectedObj->GetDescription() );
-                SolarMutexGuard aGuard;
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 if ( pFact )
                 {
@@ -478,6 +477,7 @@ void ShapeController::executeDispatch_ObjectTitleDescription()
 
 void ShapeController::executeDispatch_RenameObject()
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( m_pChartController )
     {
         DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
@@ -487,7 +487,6 @@ void ShapeController::executeDispatch_RenameObject()
             if ( pSelectedObj )
             {
                 String aName( pSelectedObj->GetName() );
-                SolarMutexGuard aGuard;
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 if ( pFact )
                 {
@@ -510,10 +509,10 @@ void ShapeController::executeDispatch_RenameObject()
 
 void ShapeController::executeDispatch_ChangeZOrder( sal_uInt16 nId )
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     DrawViewWrapper* pDrawViewWrapper = ( m_pChartController ? m_pChartController->GetDrawViewWrapper() : NULL );
     if ( pDrawViewWrapper )
     {
-        SolarMutexGuard aGuard;
         switch ( nId )
         {
             case COMMAND_ID_BRING_TO_FRONT:
@@ -559,6 +558,7 @@ void ShapeController::executeDispatch_ChangeZOrder( sal_uInt16 nId )
 
 void ShapeController::executeDispatch_FontDialog()
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( m_pChartController )
     {
         Window* pParent = dynamic_cast< Window* >( m_pChartController->m_pChartWindow );
@@ -569,7 +569,6 @@ void ShapeController::executeDispatch_FontDialog()
             SfxItemSet aAttr( pDrawViewWrapper->GetModel()->GetItemPool() );
             pDrawViewWrapper->GetAttributes( aAttr );
             ViewElementListProvider aViewElementListProvider( pDrawModelWrapper );
-            SolarMutexGuard aGuard;
             ::boost::scoped_ptr< ShapeFontDialog > pDlg( new ShapeFontDialog( pParent, &aAttr, &aViewElementListProvider ) );
             if ( pDlg.get() && ( pDlg->Execute() == RET_OK ) )
             {
@@ -582,6 +581,7 @@ void ShapeController::executeDispatch_FontDialog()
 
 void ShapeController::executeDispatch_ParagraphDialog()
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( m_pChartController )
     {
         Window* pParent = dynamic_cast< Window* >( m_pChartController->m_pChartWindow );
@@ -607,7 +607,6 @@ void ShapeController::executeDispatch_ParagraphDialog()
             aNewAttr.Put( SvxWidowsItem( 0, SID_ATTR_PARA_WIDOWS) );
             aNewAttr.Put( SvxOrphansItem( 0, SID_ATTR_PARA_ORPHANS) );
 
-            SolarMutexGuard aGuard;
             ::boost::scoped_ptr< ShapeParagraphDialog > pDlg( new ShapeParagraphDialog( pParent, &aNewAttr ) );
             if ( pDlg.get() && ( pDlg->Execute() == RET_OK ) )
             {
@@ -702,6 +701,7 @@ bool ShapeController::isBackwardPossible()
 {
     if ( m_pChartController && m_pChartController->m_aSelection.isAdditionalShapeSelected() )
     {
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
         DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
         if ( pDrawViewWrapper )
         {
@@ -720,6 +720,7 @@ bool ShapeController::isForwardPossible()
 {
     if ( m_pChartController && m_pChartController->m_aSelection.isAdditionalShapeSelected() )
     {
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
         DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
         if ( pDrawViewWrapper )
         {

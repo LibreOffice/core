@@ -63,6 +63,12 @@
 #define FL_SEP1             41
 #define FL_SEP2             42
 
+//IAccessibility2 Implementation 2009-----
+#define LABEL_FORMARTTING_CONDITIONS    5043
+#define LABEL_CONDITIONS                5044
+#define LABEL_CONDITION_VALUE           5045
+//-----IAccessibility2 Implementation 2009
+
 #define BTN_OK              31
 #define BTN_CANCEL          32
 #define BTN_HELP            33

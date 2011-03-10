@@ -81,22 +81,22 @@ ScSimpleRefDlg::ScSimpleRefDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pP
         //
         pViewData       ( ptrViewData ),
         pDoc            ( ptrViewData->GetDocument() ),
-        bRefInputMode   ( FALSE ),
-        bAutoReOpen     ( TRUE ),
-        bCloseOnButtonUp( FALSE ),
-        bSingleCell     ( FALSE ),
-        bMultiSelection ( FALSE )
+        bRefInputMode   ( false ),
+        bAutoReOpen     ( sal_True ),
+        bCloseOnButtonUp( false ),
+        bSingleCell     ( false ),
+        bMultiSelection ( false )
 {
     //  damit die Strings in der Resource bei den FixedTexten bleiben koennen:
     Init();
     FreeResource();
-    SetDispatcherLock( TRUE ); // Modal-Modus einschalten
+    SetDispatcherLock( sal_True ); // Modal-Modus einschalten
 }
 
 //----------------------------------------------------------------------------
 ScSimpleRefDlg::~ScSimpleRefDlg()
 {
-    SetDispatcherLock( FALSE ); // Modal-Modus einschalten
+    SetDispatcherLock( false ); // Modal-Modus einschalten
 }
 
 //----------------------------------------------------------------------------
@@ -117,7 +117,7 @@ void ScSimpleRefDlg::Init()
 {
     aBtnOk.SetClickHdl      ( LINK( this, ScSimpleRefDlg, OkBtnHdl ) );
     aBtnCancel.SetClickHdl  ( LINK( this, ScSimpleRefDlg, CancelBtnHdl ) );
-    bCloseFlag=FALSE;
+    bCloseFlag=false;
 }
 
 //----------------------------------------------------------------------------
@@ -160,10 +160,10 @@ void ScSimpleRefDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 
 
 //----------------------------------------------------------------------------
-BOOL ScSimpleRefDlg::Close()
+sal_Bool ScSimpleRefDlg::Close()
 {
     CancelBtnHdl(&aBtnCancel);
-    return TRUE;
+    return sal_True;
 }
 
 //------------------------------------------------------------------------
@@ -178,9 +178,9 @@ void ScSimpleRefDlg::SetActive()
     RefInputDone();
 }
 //------------------------------------------------------------------------
-BOOL ScSimpleRefDlg::IsRefInputMode() const
+sal_Bool ScSimpleRefDlg::IsRefInputMode() const
 {
-    return TRUE;
+    return sal_True;
 }
 
 String ScSimpleRefDlg::GetRefString() const
@@ -201,7 +201,7 @@ void ScSimpleRefDlg::SetUnoLinks( const Link& rDone, const Link& rAbort,
     aChangeHdl  = rChange;
 }
 
-void ScSimpleRefDlg::SetFlags( BOOL bSetCloseOnButtonUp, BOOL bSetSingleCell, BOOL bSetMultiSelection )
+void ScSimpleRefDlg::SetFlags( sal_Bool bSetCloseOnButtonUp, sal_Bool bSetSingleCell, sal_Bool bSetMultiSelection )
 {
     bCloseOnButtonUp = bSetCloseOnButtonUp;
     bSingleCell = bSetSingleCell;
@@ -217,10 +217,10 @@ void ScSimpleRefDlg::StartRefInput()
     }
 
     aRbAssign.DoRef();
-    bCloseFlag=TRUE;
+    bCloseFlag=sal_True;
 }
 
-void ScSimpleRefDlg::RefInputDone( BOOL bForced)
+void ScSimpleRefDlg::RefInputDone( sal_Bool bForced)
 {
     ScAnyRefDlg::RefInputDone(bForced);
     if ( (bForced || bCloseOnButtonUp) && bCloseFlag )
@@ -231,7 +231,7 @@ void ScSimpleRefDlg::RefInputDone( BOOL bForced)
 // ========
 IMPL_LINK( ScSimpleRefDlg, OkBtnHdl, void *, EMPTYARG )
 {
-    bAutoReOpen=FALSE;
+    bAutoReOpen=false;
     String aResult=aEdAssign.GetText();
     aCloseHdl.Call(&aResult);
     Link aUnoLink = aDoneHdl;       // stack var because this is deleted in DoClose
@@ -243,7 +243,7 @@ IMPL_LINK( ScSimpleRefDlg, OkBtnHdl, void *, EMPTYARG )
 //------------------------------------------------------------------------
 IMPL_LINK( ScSimpleRefDlg, CancelBtnHdl, void *, EMPTYARG )
 {
-    bAutoReOpen=FALSE;
+    bAutoReOpen=false;
     String aResult=aEdAssign.GetText();
     aCloseHdl.Call(NULL);
     Link aUnoLink = aAbortedHdl;    // stack var because this is deleted in DoClose

@@ -267,7 +267,7 @@ ScVbaWorksheets::Add( const uno::Any& Before, const uno::Any& After,
             aStringSheet = xBeforeAfterSheet->getName();
         else
             After >>= aStringSheet;
-        bBefore = sal_False;
+        bBefore = false;
     }
     if (!aStringSheet.getLength())
     {
@@ -339,8 +339,8 @@ ScVbaWorksheets::PrintOut( const uno::Any& From, const uno::Any& To, const uno::
     sal_Int32 nTo = 0;
     sal_Int32 nFrom = 0;
     sal_Int16 nCopies = 1;
-    sal_Bool bCollate = sal_False;
-    sal_Bool bSelection = sal_False;
+    sal_Bool bCollate = false;
+    sal_Bool bSelection = false;
     From >>= nFrom;
     To >>= nTo;
     Copies >>= nCopies;
@@ -362,9 +362,9 @@ ScVbaWorksheets::getVisible() throw (uno::RuntimeException)
     while ( xEnum->hasMoreElements() )
     {
         uno::Reference< excel::XWorksheet > xSheet( xEnum->nextElement(), uno::UNO_QUERY_THROW );
-        if ( xSheet->getVisible() == sal_False )
+        if ( xSheet->getVisible() == false )
         {
-                bVisible = sal_False;
+                bVisible = false;
                 break;
         }
     }
@@ -374,7 +374,7 @@ ScVbaWorksheets::getVisible() throw (uno::RuntimeException)
 void SAL_CALL
 ScVbaWorksheets::setVisible( const uno::Any& _visible ) throw (uno::RuntimeException)
 {
-    sal_Bool bState = sal_False;
+    sal_Bool bState = false;
     if ( _visible >>= bState )
     {
         uno::Reference< container::XEnumeration > xEnum( createEnumeration(), uno::UNO_QUERY_THROW );
@@ -416,7 +416,7 @@ ScVbaWorksheets::Select( const uno::Any& Replace ) throw (uno::RuntimeException)
                 bSelectSingle = false;
             }
             else
-                rMarkData.SelectTable( static_cast< SCTAB >( pSheet->getSheetID() ), TRUE );
+                rMarkData.SelectTable( static_cast< SCTAB >( pSheet->getSheetID() ), sal_True );
 
         }
     }

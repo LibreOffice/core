@@ -30,7 +30,7 @@
 #define SC_ADDINHELPID_HXX
 
 #include <rtl/ustring.hxx>
-
+#include <rtl/string.hxx>
 
 // ============================================================================
 
@@ -51,7 +51,7 @@ public:
     void                        SetServiceName( const ::rtl::OUString& rServiceName );
 
     /** @return  The help ID of the function with given built-in name or 0 if not found. */
-    sal_uInt16                  GetHelpId( const ::rtl::OUString& rFuncName ) const;
+    rtl::OString                GetHelpId( const ::rtl::OUString& rFuncName ) const;
 };
 
 

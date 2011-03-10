@@ -131,7 +131,7 @@ String ScUndoDraw::GetRepeatComment(SfxRepeatTarget& rTarget) const
         return String();
 }
 
-USHORT ScUndoDraw::GetId() const
+sal_uInt16 ScUndoDraw::GetId() const
 {
     if (pDrawUndo)
         return pDrawUndo->GetId();
@@ -139,26 +139,26 @@ USHORT ScUndoDraw::GetId() const
         return 0;
 }
 
-BOOL ScUndoDraw::IsLinked()
+sal_Bool ScUndoDraw::IsLinked()
 {
     if (pDrawUndo)
         return pDrawUndo->IsLinked();
     else
-        return FALSE;
+        return false;
 }
 
-void ScUndoDraw::SetLinked( BOOL bIsLinked )
+void ScUndoDraw::SetLinked( sal_Bool bIsLinked )
 {
     if (pDrawUndo)
         pDrawUndo->SetLinked(bIsLinked);
 }
 
-BOOL  ScUndoDraw::Merge( SfxUndoAction* pNextAction )
+sal_Bool  ScUndoDraw::Merge( SfxUndoAction* pNextAction )
 {
     if (pDrawUndo)
         return pDrawUndo->Merge(pNextAction);
     else
-        return FALSE;
+        return false;
 }
 
 void ScUndoDraw::Undo()
@@ -185,12 +185,12 @@ void ScUndoDraw::Repeat(SfxRepeatTarget& rTarget)
         pDrawUndo->Repeat(rTarget);
 }
 
-BOOL ScUndoDraw::CanRepeat(SfxRepeatTarget& rTarget) const
+sal_Bool ScUndoDraw::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     if (pDrawUndo)
         return pDrawUndo->CanRepeat(rTarget);
     else
-        return FALSE;
+        return false;
 }
 
 

@@ -57,7 +57,7 @@ public: //methods
                 , sal_Int32 nDimension=3, sal_Bool bPolar=sal_False );
     virtual ~VDiagram();
 
-    void SAL_CALL init( const ::com::sun::star::uno::Reference<
+    void init( const ::com::sun::star::uno::Reference<
                      ::com::sun::star::drawing::XShapes >& xLogicTarget
              , const ::com::sun::star::uno::Reference<
                      ::com::sun::star::drawing::XShapes >& xFinalTarget

@@ -62,7 +62,7 @@ ScAccessibleEditObject::ScAccessibleEditObject(
     mpEditView(pEditView),
     mpWindow(pWin),
     meObjectType(eObjectType),
-    mbHasFocus(sal_False)
+    mbHasFocus(false)
 {
     CreateTextHelper();
     SetName(rName);
@@ -91,9 +91,9 @@ void SAL_CALL ScAccessibleEditObject::disposing()
 
 void ScAccessibleEditObject::LostFocus()
 {
-    mbHasFocus = sal_False;
+    mbHasFocus = false;
     if (mpTextHelper)
-        mpTextHelper->SetFocus(sal_False);
+        mpTextHelper->SetFocus(false);
     CommitFocusLost();
 }
 

@@ -30,6 +30,8 @@
 #include "precompiled_chart2.hxx"
 #include "ChartController.hxx"
 
+#include "ResId.hxx"
+#include "UndoGuard.hxx"
 #include "DrawViewWrapper.hxx"
 #include "ChartWindow.hxx"
 #include "TitleHelper.hxx"
@@ -37,6 +39,7 @@
 #include "macros.hxx"
 #include "ControllerLockGuard.hxx"
 #include "AccessibleTextHelper.hxx"
+#include "Strings.hrc"
 #include "chartview/DrawModelWrapper.hxx"
 
 #include <svx/svdotext.hxx>
@@ -74,11 +77,14 @@ void ChartController::StartTextEdit( const Point* pMousePixel )
 {
     //the first marked object will be edited
 
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     SdrObject* pTextObj = m_pDrawViewWrapper->getTextEditObject();
     if(!pTextObj)
         return;
 
-    m_xUndoManager->preAction( getModel());
+    OSL_PRECOND( !m_pTextActionUndoGuard.get(), "ChartController::StartTextEdit: already have a TextUndoGuard!?" );
+    m_pTextActionUndoGuard.reset( new UndoGuard(
+        String( SchResId( STR_ACTION_EDIT_TEXT ) ), m_xUndoManager ) );
     SdrOutliner* pOutliner = m_pDrawViewWrapper->getOutliner();
 
     //#i77362 change notification for changes on additional shapes are missing
@@ -152,26 +158,11 @@ bool ChartController::EndTextEdit()
             TitleHelper::setCompleteString( aString, uno::Reference<
                 ::com::sun::star::chart2::XTitle >::query( xPropSet ), m_xCC );
 
-            try
-            {
-                m_xUndoManager->postAction( C2U("Edit Text") );
-            }
-            catch( uno::RuntimeException& e)
-            {
-                ASSERT_EXCEPTION( e );
-            }
+            OSL_ENSURE( m_pTextActionUndoGuard.get(), "ChartController::EndTextEdit: no TextUndoGuard!" );
+            if ( m_pTextActionUndoGuard.get() )
+                m_pTextActionUndoGuard->commit();
         }
-        else
-        {
-            try
-            {
-                m_xUndoManager->cancelAction();
-            }
-            catch ( uno::RuntimeException& e )
-            {
-                ASSERT_EXCEPTION( e );
-            }
-        }
+        m_pTextActionUndoGuard.reset();
     }
     return true;
 }
@@ -190,10 +181,10 @@ void SAL_CALL ChartController::executeDispatch_InsertSpecialCharacter()
     DBG_ASSERT( pFact, "No dialog factory" );
 
     SfxAllItemSet aSet( m_pDrawModelWrapper->GetItemPool() );
-    aSet.Put( SfxBoolItem( FN_PARAM_1, FALSE ) );
+    aSet.Put( SfxBoolItem( FN_PARAM_1, sal_False ) );
 
     //set fixed current font
-    aSet.Put( SfxBoolItem( FN_PARAM_2, TRUE ) ); //maybe not necessary in future
+    aSet.Put( SfxBoolItem( FN_PARAM_2, sal_True ) ); //maybe not necessary in future
 
     Font aCurFont = m_pDrawViewWrapper->getOutliner()->GetRefDevice()->GetFont();
     aSet.Put( SvxFontItem( aCurFont.GetFamily(), aCurFont.GetName(), aCurFont.GetStyleName(), aCurFont.GetPitch(), aCurFont.GetCharSet(), SID_ATTR_CHAR_FONT ) );
@@ -205,7 +196,7 @@ void SAL_CALL ChartController::executeDispatch_InsertSpecialCharacter()
         const SfxItemSet* pSet = pDlg->GetOutputItemSet();
         const SfxPoolItem* pItem=0;
         String aString;
-        if ( pSet && pSet->GetItemState( SID_CHARMAP, TRUE, &pItem) == SFX_ITEM_SET &&
+        if ( pSet && pSet->GetItemState( SID_CHARMAP, sal_True, &pItem) == SFX_ITEM_SET &&
              pItem->ISA(SfxStringItem) )
                 aString = dynamic_cast<const SfxStringItem*>(pItem)->GetValue();
 
@@ -219,13 +210,13 @@ void SAL_CALL ChartController::executeDispatch_InsertSpecialCharacter()
 
         // prevent flicker
         pOutlinerView->HideCursor();
-        pOutliner->SetUpdateMode(FALSE);
+        pOutliner->SetUpdateMode(sal_False);
 
         // delete current selection by inserting empty String, so current
         // attributes become unique (sel. has to be erased anyway)
         pOutlinerView->InsertText(String());
 
-        pOutlinerView->InsertText(aString, TRUE);
+        pOutlinerView->InsertText(aString, true);
 
         ESelection aSel = pOutlinerView->GetSelection();
         aSel.nStartPara = aSel.nEndPara;
@@ -233,7 +224,7 @@ void SAL_CALL ChartController::executeDispatch_InsertSpecialCharacter()
         pOutlinerView->SetSelection(aSel);
 
         // show changes
-        pOutliner->SetUpdateMode(TRUE);
+        pOutliner->SetUpdateMode(sal_True);
         pOutlinerView->ShowCursor();
     }
 

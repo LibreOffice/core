@@ -60,7 +60,7 @@ using ::std::vector;
 
 namespace {
 
-bool lcl_isDate( ULONG nNumType )
+bool lcl_isDate( sal_uLong nNumType )
 {
     return ((nNumType & NUMBERFORMAT_DATE) != 0) ? 1 : 0;
 }
@@ -171,13 +171,13 @@ ScDPItemData* lcl_GetItemValue(
 
 }
 
-ScDPItemData::ScDPItemData(const String& rS, double fV, bool bHV, const ULONG nNumFormatP, bool bData) :
+ScDPItemData::ScDPItemData(const String& rS, double fV, bool bHV, const sal_uLong nNumFormatP, bool bData) :
     nNumFormat( nNumFormatP ), aString(rS), fValue(fV),
     mbFlag( (MK_VAL*!!bHV) | (MK_DATA*!!bData) | (MK_ERR*!!false) | (MK_DATE*!!lcl_isDate( nNumFormat ) ) )
 {
 }
 
-ScDPItemData::ScDPItemData(ScDocument* pDoc, SCROW nRow, USHORT nCol, USHORT nDocTab) :
+ScDPItemData::ScDPItemData(ScDocument* pDoc, SCROW nRow, sal_uInt16 nCol, sal_uInt16 nDocTab) :
     nNumFormat( 0 ), fValue(0.0), mbFlag( 0 )
 {
     String aDocStr;
@@ -196,7 +196,7 @@ ScDPItemData::ScDPItemData(ScDocument* pDoc, SCROW nRow, USHORT nCol, USHORT nDo
     else if ( pDoc->HasValueData( nCol, nRow, nDocTab ) )
     {
         double fVal = pDoc->GetValue(ScAddress(nCol, nRow, nDocTab));
-        ULONG nFormat = NUMBERFORMAT_NUMBER;
+        sal_uLong nFormat = NUMBERFORMAT_NUMBER;
         if ( pFormatter )
             nFormat = pFormatter->GetType( pDoc->GetNumberFormat( ScAddress( nCol, nRow, nDocTab ) ) );
         aString = aDocStr;
@@ -331,7 +331,7 @@ double ScDPItemData::GetValue() const
 {
     return fValue;
 }
-ULONG  ScDPItemData::GetNumFormat() const
+sal_uLong  ScDPItemData::GetNumFormat() const
 {
     return nNumFormat;
 }
@@ -447,9 +447,9 @@ bool ScDPCache::InitFromDoc(ScDocument* pDoc, const ScRange& rRange)
 
     SCROW nStartRow = rRange.aStart.Row();  // start of data
     SCROW nEndRow = rRange.aEnd.Row();
-    USHORT nStartCol = rRange.aStart.Col();
-    USHORT nEndCol = rRange.aEnd.Col();
-    USHORT nDocTab = rRange.aStart.Tab();
+    sal_uInt16 nStartCol = rRange.aStart.Col();
+    sal_uInt16 nEndCol = rRange.aEnd.Col();
+    sal_uInt16 nDocTab = rRange.aStart.Tab();
 
     mnColumnCount = nEndCol - nStartCol + 1;
     if ( IsValid() )
@@ -475,7 +475,7 @@ bool ScDPCache::InitFromDoc(ScDocument* pDoc, const ScRange& rRange)
     //check valid
     for ( SCROW nRow = nStartRow; nRow <= nEndRow; nRow ++ )
     {
-        for ( USHORT nCol = nStartCol; nCol <= nEndCol; nCol++ )
+        for ( sal_uInt16 nCol = nStartCol; nCol <= nEndCol; nCol++ )
         {
             if ( nRow == nStartRow )
                 AddLabel( new ScDPItemData( pDoc, nRow, nCol, nDocTab  ) );
@@ -555,7 +555,7 @@ bool ScDPCache::InitFromDataBase (const Reference<sdbc::XRowSet>& xRowSet, const
     }
 }
 
-ULONG ScDPCache::GetDimNumType( SCCOL nDim) const
+sal_uLong ScDPCache::GetDimNumType( SCCOL nDim) const
 {
     DBG_ASSERT( IsValid(), "  IsValid() == false " );
     DBG_ASSERT( nDim < mnColumnCount && nDim >=0, " dimention out of bound " );
@@ -598,7 +598,7 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam, bool *pSpeci
         if ( nQueryCol > rParam.nCol2 )
             nQueryCol = rParam.nCol2;
         SCCOL nSourceField = nQueryCol - rParam.nCol1;
-        SCROW nId = GetItemDataId( nSourceField, nRow, FALSE );
+        SCROW nId = GetItemDataId( nSourceField, nRow, false );
         const ScDPItemData* pCellData = GetItemDataById( nSourceField, nId );
 
         bool bOk = false;
@@ -673,7 +673,7 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam, bool *pSpeci
                     {
                         bOk = pTransliteration->isEqual( aCellStr, *rEntry.pStr );
                         String aStr = *rEntry.pStr;
-                        sal_Bool bHasStar = sal_False;
+                        sal_Bool bHasStar = false;
                         xub_StrLen nIndex;
                         if (( nIndex = aStr.Search('*') ) != STRING_NOTFOUND)
                             bHasStar = sal_True;
@@ -681,7 +681,7 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam, bool *pSpeci
                         {
                             for (i=0;(i<nIndex) && (i< aCellStr.Len()) ; i++)
                             {
-                                if (aCellStr.GetChar( (USHORT)i ) == aStr.GetChar((USHORT) i ))
+                                if (aCellStr.GetChar( (sal_uInt16)i ) == aStr.GetChar((sal_uInt16) i ))
                                 {
                                     bOk=1;
                                 }
@@ -782,7 +782,7 @@ bool ScDPCache::IsRowEmpty( SCROW nRow ) const
     return mbEmptyRow[ nRow ];
 }
 
-bool ScDPCache::IsEmptyMember( SCROW nRow, USHORT nColumn ) const
+bool ScDPCache::IsEmptyMember( SCROW nRow, sal_uInt16 nColumn ) const
 {
     return !GetItemDataById( nColumn, GetItemDataId( nColumn, nRow, false ) )->IsHasData();
 }
@@ -823,10 +823,10 @@ bool ScDPCache::AddData(long nDim, ScDPItemData* pitemData)
 }
 
 
-String ScDPCache::GetDimensionName( USHORT nColumn ) const
+String ScDPCache::GetDimensionName( sal_uInt16 nColumn ) const
 {
     DBG_ASSERT(nColumn < maLabelNames.size()-1 , "ScDPTableDataCache::GetDimensionName");
-    DBG_ASSERT(maLabelNames.size() == static_cast <USHORT> (mnColumnCount+1), "ScDPTableDataCache::GetDimensionName");
+    DBG_ASSERT(maLabelNames.size() == static_cast <sal_uInt16> (mnColumnCount+1), "ScDPTableDataCache::GetDimensionName");
 
     if ( static_cast<size_t>(nColumn+1) < maLabelNames.size() )
     {
@@ -867,7 +867,7 @@ void ScDPCache::AddLabel(ScDPItemData *pData)
     maLabelNames.push_back( pData );
 }
 
-SCROW ScDPCache::GetItemDataId(USHORT nDim, SCROW nRow, bool bRepeatIfEmpty) const
+SCROW ScDPCache::GetItemDataId(sal_uInt16 nDim, SCROW nRow, bool bRepeatIfEmpty) const
 {
     DBG_ASSERT( IsValid(), "  IsValid() == false " );
     DBG_ASSERT( /* nDim >= 0 && */ nDim < mnColumnCount, "ScDPTableDataCache::GetItemDataId " );
@@ -915,16 +915,16 @@ SCROW ScDPCache::GetSortedItemDataId(SCCOL nDim, SCROW nOrder) const
     return maGlobalOrder[nDim][nOrder];
 }
 
-ULONG ScDPCache::GetNumType(ULONG nFormat) const
+sal_uLong ScDPCache::GetNumType(sal_uLong nFormat) const
 {
     SvNumberFormatter* pFormatter = mpDoc->GetFormatTable();
-    ULONG nType = NUMBERFORMAT_NUMBER;
+    sal_uLong nType = NUMBERFORMAT_NUMBER;
     if ( pFormatter )
         nType = pFormatter->GetType( nFormat );
     return nType;
 }
 
-ULONG ScDPCache::GetNumberFormat( long nDim ) const
+sal_uLong ScDPCache::GetNumberFormat( long nDim ) const
 {
     if ( nDim >= mnColumnCount )
         return 0;

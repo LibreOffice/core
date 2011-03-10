@@ -29,9 +29,10 @@
 #define _CHART2_PLOTTINGPOSITIONHELPER_HXX
 
 #include "LabelAlignment.hxx"
+#include "chartview/ExplicitScaleValues.hxx"
+
 #include <basegfx/range/b2drectangle.hxx>
 #include <rtl/math.hxx>
-#include <com/sun/star/chart2/ExplicitScaleData.hpp>
 #include <com/sun/star/chart2/XTransformation.hpp>
 #include <com/sun/star/drawing/Direction3D.hpp>
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
@@ -63,23 +64,22 @@ public:
     virtual ~PlottingPositionHelper();
 
     virtual PlottingPositionHelper* clone() const;
-    virtual PlottingPositionHelper* createSecondaryPosHelper( const ::com::sun::star::chart2::ExplicitScaleData& rSecondaryScale );
+    virtual PlottingPositionHelper* createSecondaryPosHelper( const ExplicitScaleData& rSecondaryScale );
 
     virtual void setTransformationSceneToScreen( const ::com::sun::star::drawing::HomogenMatrix& rMatrix);
 
-    virtual void setScales( const ::com::sun::star::uno::Sequence<
-            ::com::sun::star::chart2::ExplicitScaleData >& rScales
-            , sal_Bool bSwapXAndYAxis );
-    const ::com::sun::star::uno::Sequence<
-            ::com::sun::star::chart2::ExplicitScaleData >& getScales() const;
+    virtual void setScales( const ::std::vector< ExplicitScaleData >& rScales, bool bSwapXAndYAxis );
+    const ::std::vector< ExplicitScaleData >& getScales() const;
 
     //better performance for big data
     inline void   setCoordinateSystemResolution( const ::com::sun::star::uno::Sequence< sal_Int32 >& rCoordinateSystemResolution );
     inline bool   isSameForGivenResolution( double fX, double fY, double fZ
                                 , double fX2, double fY2, double fZ2 );
 
+    inline bool   isStrongLowerRequested( sal_Int32 nDimensionIndex ) const;
     inline bool   isLogicVisible( double fX, double fY, double fZ ) const;
     inline void   doLogicScaling( double* pX, double* pY, double* pZ, bool bClip=false ) const;
+    inline void   doUnshiftedLogicScaling( double* pX, double* pY, double* pZ, bool bClip=false ) const;
     inline void   clipLogicValues( double* pX, double* pY, double* pZ ) const;
            void   clipScaledLogicValues( double* pX, double* pY, double* pZ ) const;
     inline bool   clipYRange( double& rMin, double& rMax ) const;
@@ -124,10 +124,14 @@ public:
 
     inline bool maySkipPointsInRegressionCalculation() const;
 
+    void setTimeResolution( long nTimeResolution, const Date& rNullDate );
+    virtual void setScaledCategoryWidth( double fScaledCategoryWidth );
+    void AllowShiftXAxisPos( bool bAllowShift );
+    void AllowShiftZAxisPos( bool bAllowShift );
+
 protected: //member
-    ::com::sun::star::uno::Sequence<
-            ::com::sun::star::chart2::ExplicitScaleData >   m_aScales;
-    ::basegfx::B3DHomMatrix                                 m_aMatrixScreenToScene;
+    ::std::vector< ExplicitScaleData >  m_aScales;
+    ::basegfx::B3DHomMatrix             m_aMatrixScreenToScene;
 
     //this is calculated based on m_aScales and m_aMatrixScreenToScene
     mutable ::com::sun::star::uno::Reference<
@@ -140,6 +144,14 @@ protected: //member
     sal_Int32 m_nZResolution;
 
     bool m_bMaySkipPointsInRegressionCalculation;
+
+    bool m_bDateAxis;
+    long m_nTimeResolution;
+    Date m_aNullDate;
+
+    double m_fScaledCategoryWidth;
+    bool   m_bAllowShiftXAxisPos;
+    bool   m_bAllowShiftZAxisPos;
 };
 
 //describes wich axis of the drawinglayer scene or sreen axis are the normal axis
@@ -160,9 +172,7 @@ public:
     virtual PlottingPositionHelper* clone() const;
 
     virtual void setTransformationSceneToScreen( const ::com::sun::star::drawing::HomogenMatrix& rMatrix);
-    virtual void setScales( const ::com::sun::star::uno::Sequence<
-            ::com::sun::star::chart2::ExplicitScaleData >& rScales
-            , sal_Bool bSwapXAndYAxis );
+    virtual void setScales( const std::vector< ExplicitScaleData >& rScales, bool bSwapXAndYAxis );
 
     ::basegfx::B3DHomMatrix getUnitCartesianToScene() const;
 
@@ -206,14 +216,14 @@ private:
 
 bool PolarPlottingPositionHelper::isMathematicalOrientationAngle() const
 {
-    const ::com::sun::star::chart2::ExplicitScaleData& rScale = m_bSwapXAndY ? m_aScales[1] : m_aScales[2];
+    const ExplicitScaleData& rScale = m_bSwapXAndY ? m_aScales[1] : m_aScales[2];
     if( ::com::sun::star::chart2::AxisOrientation_MATHEMATICAL==rScale.Orientation )
         return true;
     return false;
 }
 bool PolarPlottingPositionHelper::isMathematicalOrientationRadius() const
 {
-    const ::com::sun::star::chart2::ExplicitScaleData& rScale = m_bSwapXAndY ? m_aScales[0] : m_aScales[1];
+    const ExplicitScaleData& rScale = m_bSwapXAndY ? m_aScales[0] : m_aScales[1];
     if( ::com::sun::star::chart2::AxisOrientation_MATHEMATICAL==rScale.Orientation )
         return true;
     return false;
@@ -262,15 +272,49 @@ bool PlottingPositionHelper::isSameForGivenResolution( double fX, double fY, dou
     return (bSameX && bSameY && bSameZ);
 }
 
+bool PlottingPositionHelper::isStrongLowerRequested( sal_Int32 nDimensionIndex ) const
+{
+    if( m_aScales.empty() )
+        return false;
+    if( 0==nDimensionIndex )
+        return m_bAllowShiftXAxisPos && m_aScales[nDimensionIndex].ShiftedCategoryPosition;
+    else if( 2==nDimensionIndex )
+        return m_bAllowShiftZAxisPos && m_aScales[nDimensionIndex].ShiftedCategoryPosition;
+    return false;
+}
+
 bool PlottingPositionHelper::isLogicVisible(
     double fX, double fY, double fZ ) const
 {
-    return fX >= m_aScales[0].Minimum && fX <= m_aScales[0].Maximum
+    return fX >= m_aScales[0].Minimum && ( isStrongLowerRequested(0) ? fX < m_aScales[0].Maximum : fX <= m_aScales[0].Maximum )
         && fY >= m_aScales[1].Minimum && fY <= m_aScales[1].Maximum
-        && fZ >= m_aScales[2].Minimum && fZ <= m_aScales[2].Maximum;
+        && fZ >= m_aScales[2].Minimum && ( isStrongLowerRequested(2) ? fZ < m_aScales[2].Maximum : fZ <= m_aScales[2].Maximum );
 }
 
 void PlottingPositionHelper::doLogicScaling( double* pX, double* pY, double* pZ, bool bClip ) const
+{
+    if(bClip)
+        this->clipLogicValues( pX,pY,pZ );
+
+    if(pX)
+    {
+        if( m_aScales[0].Scaling.is())
+            *pX = m_aScales[0].Scaling->doScaling(*pX);
+        if( m_bAllowShiftXAxisPos && m_aScales[0].ShiftedCategoryPosition )
+            (*pX) += m_fScaledCategoryWidth/2.0;
+    }
+    if(pY && m_aScales[1].Scaling.is())
+        *pY = m_aScales[1].Scaling->doScaling(*pY);
+    if(pZ)
+    {
+        if( m_aScales[2].Scaling.is())
+            *pZ = m_aScales[2].Scaling->doScaling(*pZ);
+        if( m_bAllowShiftZAxisPos && m_aScales[2].ShiftedCategoryPosition)
+            (*pZ) += 0.5;
+    }
+}
+
+void PlottingPositionHelper::doUnshiftedLogicScaling( double* pX, double* pY, double* pZ, bool bClip ) const
 {
     if(bClip)
         this->clipLogicValues( pX,pY,pZ );

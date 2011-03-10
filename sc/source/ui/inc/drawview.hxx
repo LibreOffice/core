@@ -49,7 +49,7 @@ class ScDrawView: public FmFormView
     Fraction                aScaleY;
     SdrDropMarkerOverlay*   pDropMarker;
     SdrObject*              pDropMarkObj;
-    BOOL                    bInConstruct;
+    sal_Bool                    bInConstruct;
 
     void            Construct();
     void            UpdateBrowser();
@@ -77,12 +77,12 @@ public:
 
     void            MarkDropObj( SdrObject* pObj );
 
-    void            SetMarkedToLayer( BYTE nLayerNo );
+    void            SetMarkedToLayer( sal_uInt8 nLayerNo );
 
     void            InvalidateAttribs();
     void            InvalidateDrawTextAttrs();
 
-    BOOL            BeginDrag( Window* pWindow, const Point& rStartPos );
+    sal_Bool            BeginDrag( Window* pWindow, const Point& rStartPos );
     void            DoCut();
     void            DoCopy();
 
@@ -102,16 +102,16 @@ public:
 
     void            UpdateIMap( SdrObject* pObj );
 
-    USHORT          GetPopupMenuId();
+    sal_uInt16          GetPopupMenuId();
     void            UpdateUserViewOptions();
 
     void            SetMarkedOriginalSize();
 
-    BOOL            SelectObject( const String& rName );
+    sal_Bool            SelectObject( const String& rName );
     bool            HasMarkedControl() const;
     bool            HasMarkedInternal() const;
 
-    bool            InsertObjectSafe(SdrObject* pObj, SdrPageView& rPV, ULONG nOptions=0);
+    bool            InsertObjectSafe(SdrObject* pObj, SdrPageView& rPV, sal_uLong nOptions=0);
 
     /** Returns the selected object, if it is the caption object of a cell note.
         @param ppCaptData  (out-param) If not null, returns the pointer to the caption object data. */

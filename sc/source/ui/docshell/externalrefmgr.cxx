@@ -1288,7 +1288,7 @@ static FormulaToken* lcl_convertToToken(ScBaseCell* pCell)
         case CELLTYPE_FORMULA:
         {
             ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pCell);
-            USHORT nError = pFCell->GetErrCode();
+            sal_uInt16 nError = pFCell->GetErrCode();
             if (nError)
                 return new FormulaErrorToken( nError);
             else if (pFCell->IsValue())
@@ -1391,7 +1391,7 @@ static ScTokenArray* lcl_convertToTokenArray(const ScDocument* pSrcDoc, ScRange&
                         case CELLTYPE_FORMULA:
                         {
                             ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pCell);
-                            USHORT nError = pFCell->GetErrCode();
+                            sal_uInt16 nError = pFCell->GetErrCode();
                             if (nError)
                                 xMat->PutDouble( CreateDoubleError( nError), nC, nR);
                             else if (pFCell->IsValue())
@@ -2162,7 +2162,7 @@ SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, Stri
         pSet->Put(SfxStringItem(SID_FILE_FILTEROPTIONS, aOptions));
 
     // make medium hidden to prevent assertion from progress bar
-    pSet->Put( SfxBoolItem( SID_HIDDEN, TRUE ) );
+    pSet->Put( SfxBoolItem( SID_HIDDEN, sal_True ) );
 
     auto_ptr<SfxMedium> pMedium(new SfxMedium(aFile, STREAM_STD_READ, false, pFilter, pSet));
     if (pMedium->GetError() != ERRCODE_NONE)

@@ -49,7 +49,7 @@
 
 void ScIMapDlgSet( const Graphic& rGraphic, const ImageMap* pImageMap,
                     const TargetList* pTargetList, void* pEditingObj );     // imapwrap
-USHORT ScIMapChildWindowId();
+sal_uInt16 ScIMapChildWindowId();
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -61,7 +61,7 @@ ScDrawView::ScDrawView( OutputDevice* pOut, ScViewData* pData ) :
     nTab( pData->GetTabNo() ),
     pDropMarker( NULL ),
     pDropMarkObj( NULL ),
-    bInConstruct( TRUE )
+    bInConstruct( true )
 {
     // #i73602# Use default from the configuration
     SetBufferedOverlayAllowed(getOptionsDrawinglayer().IsOverlayBuffer_Calc());
@@ -80,8 +80,8 @@ void ScDrawView::SetPageAnchored()
     if( AreObjectsMarked() )
     {
         const SdrMarkList* pMark = &GetMarkedObjectList();
-        ULONG nCount = pMark->GetMarkCount();
-        for( ULONG i=0; i<nCount; i++ )
+        sal_uLong nCount = pMark->GetMarkCount();
+        for( sal_uLong i=0; i<nCount; i++ )
         {
             pObj = pMark->GetMark(i)->GetMarkedSdrObj();
             ScDrawLayer::SetPageAnchored( *pObj );
@@ -101,8 +101,8 @@ void ScDrawView::SetCellAnchored()
     if( AreObjectsMarked() )
     {
         const SdrMarkList* pMark = &GetMarkedObjectList();
-        ULONG nCount = pMark->GetMarkCount();
-        for( ULONG i=0; i<nCount; i++ )
+        sal_uLong nCount = pMark->GetMarkCount();
+        for( sal_uLong i=0; i<nCount; i++ )
         {
             pObj = pMark->GetMark(i)->GetMarkedSdrObj();
             ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *pDoc, nTab);
@@ -115,21 +115,21 @@ void ScDrawView::SetCellAnchored()
 
 ScAnchorType ScDrawView::GetAnchorType() const
 {
-    BOOL bPage = FALSE;
-    BOOL bCell = FALSE;
+    sal_Bool bPage = false;
+    sal_Bool bCell = false;
     const SdrObject* pObj = NULL;
     if( AreObjectsMarked() )
     {
         const SdrMarkList* pMark = &GetMarkedObjectList();
-        ULONG nCount = pMark->GetMarkCount();
+        sal_uLong nCount = pMark->GetMarkCount();
         Point p0;
-        for( ULONG i=0; i<nCount; i++ )
+        for( sal_uLong i=0; i<nCount; i++ )
         {
             pObj = pMark->GetMark(i)->GetMarkedSdrObj();
             if( ScDrawLayer::GetAnchorType( *pObj ) == SCA_CELL )
-                bCell =TRUE;
+                bCell =true;
             else
-                bPage = TRUE;
+                bPage = sal_True;
         }
     }
     if( bPage && !bCell )

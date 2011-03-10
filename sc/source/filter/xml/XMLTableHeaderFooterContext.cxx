@@ -64,9 +64,9 @@ XMLTableHeaderFooterContext::XMLTableHeaderFooterContext( SvXMLImport& rImport, 
     bDisplay( sal_True ),
     bInsertContent( sal_True ),
     bLeft( bLft ),
-    bContainsLeft(sal_False),
-    bContainsRight(sal_False),
-    bContainsCenter(sal_False)
+    bContainsLeft(false),
+    bContainsRight(false),
+    bContainsCenter(false)
 {
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
     for( sal_Int16 i=0; i < nAttrCount; ++i )
@@ -91,7 +91,7 @@ XMLTableHeaderFooterContext::XMLTableHeaderFooterContext( SvXMLImport& rImport, 
         {
             if( ::cppu::any2bool(xPropSet->getPropertyValue( sShareContent )) )
                 // Don't share headers any longer
-                xPropSet->setPropertyValue( sShareContent, uno::makeAny(sal_False) );
+                xPropSet->setPropertyValue( sShareContent, uno::makeAny(false) );
         }
         else
         {

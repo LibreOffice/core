@@ -30,6 +30,12 @@
 #include "precompiled_chart2.hxx"
 
 #include "UndoGuard.hxx"
+#include "ChartModelClone.hxx"
+#include "UndoActions.hxx"
+
+#include <com/sun/star/container/XChild.hpp>
+
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 
@@ -40,105 +46,154 @@ using ::rtl::OUString;
 namespace chart
 {
 
-UndoGuard_Base::UndoGuard_Base( const OUString& rUndoString
-        , const uno::Reference< chart2::XUndoManager > & xUndoManager
-        , const uno::Reference< frame::XModel > & xModel )
-        : m_xModel( xModel )
-        , m_xUndoManager( xUndoManager )
-        , m_aUndoString( rUndoString )
-        , m_bActionPosted( false )
+//-----------------------------------------------------------------------------
+
+UndoGuard::UndoGuard( const OUString& i_undoString, const uno::Reference< document::XUndoManager > & i_undoManager,
+                               const ModelFacet i_facet )
+    :m_xChartModel( i_undoManager->getParent(), uno::UNO_QUERY_THROW )
+    ,m_xUndoManager( i_undoManager )
+    ,m_pDocumentSnapshot()
+    ,m_aUndoString( i_undoString )
+    ,m_bActionPosted( false )
 {
+    m_pDocumentSnapshot.reset( new ChartModelClone( m_xChartModel, i_facet ) );
 }
 
-UndoGuard_Base::~UndoGuard_Base()
+//-----------------------------------------------------------------------------
+
+UndoGuard::~UndoGuard()
 {
+    if ( !!m_pDocumentSnapshot )
+        discardSnapshot();
 }
 
-void UndoGuard_Base::commitAction()
+//-----------------------------------------------------------------------------
+
+void UndoGuard::commit()
 {
-    if( !m_bActionPosted && m_xUndoManager.is() )
-        m_xUndoManager->postAction( m_aUndoString );
+    if ( !m_bActionPosted && !!m_pDocumentSnapshot )
+    {
+        try
+        {
+            const Reference< document::XUndoAction > xAction( new impl::UndoElement( m_aUndoString, m_xChartModel, m_pDocumentSnapshot ) );
+            m_pDocumentSnapshot.reset();    // don't dispose, it's data went over to the UndoElement
+            m_xUndoManager->addUndoAction( xAction );
+        }
+        catch( const uno::Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+    }
     m_bActionPosted = true;
 }
 
 //-----------------------------------------------------------------------------
 
-UndoGuard::UndoGuard( const OUString& rUndoString
-        , const uno::Reference< chart2::XUndoManager > & xUndoManager
-        , const uno::Reference< frame::XModel > & xModel )
-        : UndoGuard_Base( rUndoString, xUndoManager, xModel )
+void UndoGuard::rollback()
 {
-    if( m_xUndoManager.is() )
-        m_xUndoManager->preAction( m_xModel );
+    ENSURE_OR_RETURN_VOID( !!m_pDocumentSnapshot, "no snapshot!" );
+    m_pDocumentSnapshot->applyToModel( m_xChartModel );
+    discardSnapshot();
 }
 
-UndoGuard::~UndoGuard()
+//-----------------------------------------------------------------------------
+void UndoGuard::discardSnapshot()
 {
-    if( !m_bActionPosted && m_xUndoManager.is() )
-        m_xUndoManager->cancelAction();
+    ENSURE_OR_RETURN_VOID( !!m_pDocumentSnapshot, "no snapshot!" );
+    m_pDocumentSnapshot->dispose();
+    m_pDocumentSnapshot.reset();
 }
 
 //-----------------------------------------------------------------------------
 
-UndoLiveUpdateGuard::UndoLiveUpdateGuard( const OUString& rUndoString
-        , const uno::Reference< chart2::XUndoManager > & xUndoManager
-        , const uno::Reference< frame::XModel > & xModel )
-        : UndoGuard_Base( rUndoString, xUndoManager, xModel )
+UndoLiveUpdateGuard::UndoLiveUpdateGuard( const OUString& i_undoString, const uno::Reference< document::XUndoManager >& i_undoManager )
+    :UndoGuard( i_undoString, i_undoManager, E_MODEL )
 {
-    if( m_xUndoManager.is() )
-        m_xUndoManager->preAction( m_xModel );
 }
 
 UndoLiveUpdateGuard::~UndoLiveUpdateGuard()
 {
-    if( !m_bActionPosted && m_xUndoManager.is() )
-        m_xUndoManager->cancelActionWithUndo( m_xModel );
+    if ( !isActionPosted() )
+        rollback();
 }
 
 //-----------------------------------------------------------------------------
 
-UndoLiveUpdateGuardWithData::UndoLiveUpdateGuardWithData( const OUString& rUndoString
-        , const uno::Reference< chart2::XUndoManager > & xUndoManager
-        , const uno::Reference< frame::XModel > & xModel )
-        : UndoGuard_Base( rUndoString, xUndoManager, xModel )
+UndoLiveUpdateGuardWithData::UndoLiveUpdateGuardWithData(
+        const OUString& i_undoString, const uno::Reference< document::XUndoManager >& i_undoManager )
+    :UndoGuard( i_undoString, i_undoManager, E_MODEL_WITH_DATA )
 {
-    if( m_xUndoManager.is() )
-    {
-        Sequence< beans::PropertyValue > aArgs(1);
-        aArgs[0] = beans::PropertyValue(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("WithData")), -1, uno::Any(),
-            beans::PropertyState_DIRECT_VALUE );
-        m_xUndoManager->preActionWithArguments( m_xModel, aArgs );
-    }
 }
 
 UndoLiveUpdateGuardWithData::~UndoLiveUpdateGuardWithData()
 {
-    if( !m_bActionPosted && m_xUndoManager.is() )
-        m_xUndoManager->cancelActionWithUndo( m_xModel );
+    if ( !isActionPosted() )
+        rollback();
 }
 
 //-----------------------------------------------------------------------------
 
-UndoGuardWithSelection::UndoGuardWithSelection( const rtl::OUString& rUndoString
-        , const uno::Reference< chart2::XUndoManager > & xUndoManager
-        , const uno::Reference< frame::XModel > & xModel )
-        : UndoGuard_Base( rUndoString, xUndoManager, xModel )
+UndoGuardWithSelection::UndoGuardWithSelection(
+        const OUString& i_undoString, const uno::Reference< document::XUndoManager >& i_undoManager )
+    :UndoGuard( i_undoString, i_undoManager, E_MODEL_WITH_SELECTION )
 {
-    if( m_xUndoManager.is() )
-    {
-        Sequence< beans::PropertyValue > aArgs(1);
-        aArgs[0] = beans::PropertyValue(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("WithSelection")), -1, uno::Any(),
-            beans::PropertyState_DIRECT_VALUE );
-        m_xUndoManager->preActionWithArguments( m_xModel, aArgs );
-    }
 }
+
+//-----------------------------------------------------------------------------
 
 UndoGuardWithSelection::~UndoGuardWithSelection()
 {
-    if( !m_bActionPosted && m_xUndoManager.is() )
-        m_xUndoManager->cancelAction();
+    if ( !isActionPosted() )
+        rollback();
+}
+
+//-----------------------------------------------------------------------------
+
+UndoContext::UndoContext( const Reference< document::XUndoManager > & i_undoManager, const ::rtl::OUString& i_undoTitle )
+    :m_xUndoManager( i_undoManager )
+{
+    ENSURE_OR_THROW( m_xUndoManager.is(), "invalid undo manager!" );
+    m_xUndoManager->enterUndoContext( i_undoTitle );
+}
+
+//-----------------------------------------------------------------------------
+
+UndoContext::~UndoContext()
+{
+    m_xUndoManager->leaveUndoContext();
+}
+
+//-----------------------------------------------------------------------------
+
+HiddenUndoContext::HiddenUndoContext( const Reference< document::XUndoManager > & i_undoManager )
+    :m_xUndoManager( i_undoManager )
+{
+    ENSURE_OR_THROW( m_xUndoManager.is(), "invalid undo manager!" );
+    try
+    {
+        m_xUndoManager->enterHiddenUndoContext();
+    }
+    catch( const uno::Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+        m_xUndoManager.clear();
+            // prevents the leaveUndoContext in the dtor
+    }
+}
+
+//-----------------------------------------------------------------------------
+
+HiddenUndoContext::~HiddenUndoContext()
+{
+    try
+    {
+        if ( m_xUndoManager.is() )
+            m_xUndoManager->leaveUndoContext();
+    }
+    catch( const uno::Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
 }
 
 } //  namespace chart

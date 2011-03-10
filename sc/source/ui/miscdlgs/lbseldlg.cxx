@@ -45,7 +45,7 @@
 //==================================================================
 
 ScSelEntryDlg::ScSelEntryDlg(      Window*  pParent,
-                                   USHORT   nResId,
+                                   sal_uInt16   nResId,
                              const String&  aTitle,
                              const String&  aLbTitle,
                                    List&    aEntryList ) :

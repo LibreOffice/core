@@ -205,7 +205,7 @@ public:
 ScVbaHPageBreaks::ScVbaHPageBreaks( const uno::Reference< XHelperInterface >& xParent,
                                     const uno::Reference< uno::XComponentContext >& xContext,
                                     uno::Reference< sheet::XSheetPageBreak >& xSheetPageBreak) throw (uno::RuntimeException):
-                          ScVbaHPageBreaks_BASE( xParent,xContext, new RangePageBreaks( xParent, xContext, xSheetPageBreak, sal_False )),
+                          ScVbaHPageBreaks_BASE( xParent,xContext, new RangePageBreaks( xParent, xContext, xSheetPageBreak, false )),
                           mxSheetPageBreak( xSheetPageBreak )
 {
 }

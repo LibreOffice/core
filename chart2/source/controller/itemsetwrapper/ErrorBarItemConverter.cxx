@@ -134,7 +134,7 @@ bool ErrorBarItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
     return ItemConverter::ApplyItemSet( rItemSet ) || bResult;
 }
 
-const USHORT * ErrorBarItemConverter::GetWhichPairs() const
+const sal_uInt16 * ErrorBarItemConverter::GetWhichPairs() const
 {
     // must span all used items!
     return nErrorBarWhichPairs;
@@ -148,7 +148,7 @@ bool ErrorBarItemConverter::GetItemProperty(
 }
 
 bool ErrorBarItemConverter::ApplySpecialItem(
-    USHORT nWhichId, const SfxItemSet & rItemSet )
+    sal_uInt16 nWhichId, const SfxItemSet & rItemSet )
     throw( uno::Exception )
 {
     bool bChanged = false;
@@ -343,7 +343,7 @@ bool ErrorBarItemConverter::ApplySpecialItem(
 }
 
 void ErrorBarItemConverter::FillSpecialItem(
-    USHORT nWhichId, SfxItemSet & rOutItemSet ) const
+    sal_uInt16 nWhichId, SfxItemSet & rOutItemSet ) const
     throw( uno::Exception )
 {
     switch( nWhichId )

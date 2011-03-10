@@ -63,7 +63,7 @@ public:
     const String*       GetForceStdName() const { return pForceStdName; }
 
     virtual SfxStyleSheetBase& Make( const String&, SfxStyleFamily eFam,
-                                     USHORT nMask = 0xffff, USHORT nPos = 0xffff );
+                                     sal_uInt16 nMask = 0xffff, sal_uInt16 nPos = 0xffff );
 
 protected:
     virtual             ~ScStyleSheetPool();
@@ -72,7 +72,7 @@ protected:
 
     virtual SfxStyleSheetBase* Create( const String&    rName,
                                        SfxStyleFamily   eFamily,
-                                       USHORT           nMask);
+                                       sal_uInt16           nMask);
     virtual SfxStyleSheetBase* Create( const SfxStyleSheetBase& rStyle );
 
 private:

@@ -58,11 +58,11 @@ ScPageTableParam::~ScPageTableParam()
 
 void ScPageTableParam::Reset()
 {
-    bCellContent = TRUE;
+    bCellContent = sal_True;
     bNotes=bGrid=bHeaders=bDrawings=
     bLeftRight=bScaleAll=bScaleTo=bScalePageNum=
-    bFormulas=bNullVals=bSkipEmpty          = FALSE;
-    bTopDown=bScaleNone=bCharts=bObjects    = TRUE;
+    bFormulas=bNullVals=bSkipEmpty          = false;
+    bTopDown=bScaleNone=bCharts=bObjects    = sal_True;
     nScaleAll = 100;
     nScalePageNum = nScaleWidth = nScaleHeight = 0;
     nFirstPageNo = 1;
@@ -70,7 +70,7 @@ void ScPageTableParam::Reset()
 
 //------------------------------------------------------------------------
 
-BOOL ScPageTableParam::operator==( const ScPageTableParam& r ) const
+sal_Bool ScPageTableParam::operator==( const ScPageTableParam& r ) const
 {
     return ( memcmp( this, &r, sizeof(ScPageTableParam) ) == 0 );
 }
@@ -93,7 +93,7 @@ ScPageAreaParam::~ScPageAreaParam()
 
 void ScPageAreaParam::Reset()
 {
-    bPrintArea = bRepeatRow = bRepeatCol = FALSE;
+    bPrintArea = bRepeatRow = bRepeatCol = false;
 
     memset( &aPrintArea, 0, sizeof(ScRange) );
     memset( &aRepeatRow, 0, sizeof(ScRange) );
@@ -102,9 +102,9 @@ void ScPageAreaParam::Reset()
 
 //------------------------------------------------------------------------
 
-BOOL ScPageAreaParam::operator==( const ScPageAreaParam& r ) const
+sal_Bool ScPageAreaParam::operator==( const ScPageAreaParam& r ) const
 {
-    BOOL bEqual =
+    sal_Bool bEqual =
             bPrintArea  == r.bPrintArea
         &&  bRepeatRow  == r.bRepeatRow
         &&  bRepeatCol  == r.bRepeatCol;

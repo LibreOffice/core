@@ -54,7 +54,7 @@ using ::rtl::OUString;
 
 TYPEINIT1(ScTpViewItem, SfxPoolItem);
 
-#define SC_VERSION ((USHORT)302)
+#define SC_VERSION ((sal_uInt16)302)
 
 
 //========================================================================
@@ -153,7 +153,7 @@ void ScViewOptions::SetDefaults()
     aOptArr[ VOPT_FORMULAS    ] =
     aOptArr[ VOPT_SYNTAX      ] =
     aOptArr[ VOPT_HELPLINES   ] =
-    aOptArr[ VOPT_BIGHANDLES  ] = FALSE;
+    aOptArr[ VOPT_BIGHANDLES  ] = false;
     aOptArr[ VOPT_NOTES       ] =
     aOptArr[ VOPT_NULLVALS    ] =
     aOptArr[ VOPT_VSCROLL     ] =
@@ -165,7 +165,7 @@ void ScViewOptions::SetDefaults()
     aOptArr[ VOPT_ANCHOR      ] =
     aOptArr[ VOPT_PAGEBREAKS  ] =
     aOptArr[ VOPT_SOLIDHANDLES] =
-    aOptArr[ VOPT_CLIPMARKS   ] = TRUE;
+    aOptArr[ VOPT_CLIPMARKS   ] = sal_True;
 
     aModeArr[VOBJ_TYPE_OLE ]  =
     aModeArr[VOBJ_TYPE_CHART] =
@@ -191,7 +191,7 @@ Color ScViewOptions::GetGridColor( String* pStrName ) const
 
 const ScViewOptions& ScViewOptions::operator=( const ScViewOptions& rCpy )
 {
-    USHORT i;
+    sal_uInt16 i;
 
     for ( i=0; i<MAX_OPT; i++ )  aOptArr [i] = rCpy.aOptArr[i];
     for ( i=0; i<MAX_TYPE; i++ ) aModeArr[i] = rCpy.aModeArr[i];
@@ -207,8 +207,8 @@ const ScViewOptions& ScViewOptions::operator=( const ScViewOptions& rCpy )
 
 int ScViewOptions::operator==( const ScViewOptions& rOpt ) const
 {
-    BOOL    bEqual = TRUE;
-    USHORT  i;
+    sal_Bool    bEqual = sal_True;
+    sal_uInt16  i;
 
     for ( i=0; i<MAX_OPT && bEqual; i++ )  bEqual = (aOptArr [i] == rOpt.aOptArr[i]);
     for ( i=0; i<MAX_TYPE && bEqual; i++ ) bEqual = (aModeArr[i] == rOpt.aModeArr[i]);
@@ -222,7 +222,7 @@ int ScViewOptions::operator==( const ScViewOptions& rOpt ) const
 
 //------------------------------------------------------------------------
 
-SvxGridItem* ScViewOptions::CreateGridItem( USHORT nId /* = SID_ATTR_GRID_OPTIONS */ ) const
+SvxGridItem* ScViewOptions::CreateGridItem( sal_uInt16 nId /* = SID_ATTR_GRID_OPTIONS */ ) const
 {
     SvxGridItem* pItem = new SvxGridItem( nId );
 
@@ -246,7 +246,7 @@ SvxGridItem* ScViewOptions::CreateGridItem( USHORT nId /* = SID_ATTR_GRID_OPTION
 
 //------------------------------------------------------------------------
 
-ScTpViewItem::ScTpViewItem( USHORT nWhichP, const ScViewOptions& rOpt )
+ScTpViewItem::ScTpViewItem( sal_uInt16 nWhichP, const ScViewOptions& rOpt )
     :   SfxPoolItem ( nWhichP ),
         theOptions  ( rOpt )
 {

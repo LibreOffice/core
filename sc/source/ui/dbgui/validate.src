@@ -66,6 +66,7 @@ TabDialog TAB_DLG_VALIDATION
 
 TabPage TP_VALIDATION_VALUES
 {
+    HelpID = "sc:TabPage:TP_VALIDATION_VALUES";
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
@@ -78,6 +79,7 @@ TabPage TP_VALIDATION_VALUES
     };
     ListBox LB_ALLOW
     {
+        HelpID = "sc:ListBox:TP_VALIDATION_VALUES:LB_ALLOW";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 80 - OFFSET_X , 14 ) ;
         Size = MAP_APPFONT ( 90 , 80 ) ;
@@ -103,6 +105,7 @@ TabPage TP_VALIDATION_VALUES
     };
     ListBox LB_VALUE
     {
+        HelpID = "sc:ListBox:TP_VALIDATION_VALUES:LB_VALUE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 80 - OFFSET_X , 56 ) ;
         Size = MAP_APPFONT ( 90 , 90 ) ;
@@ -129,6 +132,7 @@ TabPage TP_VALIDATION_VALUES
     };
     Edit EDT_MIN
     {
+        HelpID = "sc:Edit:TP_VALIDATION_VALUES:EDT_MIN";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 80 - OFFSET_X , 74 ) ;
         Size = MAP_APPFONT ( 90 , 12 ) ;
@@ -136,6 +140,7 @@ TabPage TP_VALIDATION_VALUES
     };
     MultiLineEdit EDT_LIST
     {
+        HelpID = "sc:MultiLineEdit:TP_VALIDATION_VALUES:EDT_LIST";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 80 - OFFSET_X , 74 ) ;
         Size = MAP_APPFONT ( 174 + OFFSET_X , 105 ) ;
@@ -150,6 +155,7 @@ TabPage TP_VALIDATION_VALUES
     };
     Edit EDT_MAX
     {
+        HelpID = "sc:Edit:TP_VALIDATION_VALUES:EDT_MAX";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 80 - OFFSET_X , 90 ) ;
         Size = MAP_APPFONT ( 90 , 12 ) ;
@@ -185,6 +191,7 @@ TabPage TP_VALIDATION_VALUES
     };
     ImageButton RB_VALIDITY_REF
     {
+        HelpID = "sc:ImageButton:TP_VALIDATION_VALUES:RB_VALIDITY_REF";
         Pos = MAP_APPFONT ( 142 , 73 ) ;
         Size = MAP_APPFONT ( 13 , 14 ) ;
         TabStop = TRUE ;
@@ -194,12 +201,14 @@ TabPage TP_VALIDATION_VALUES
 
 TabPage TP_VALIDATION_INPUTHELP
 {
+    HelpID = "sc:TabPage:TP_VALIDATION_INPUTHELP";
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
     Text = "Eingabehilfe" ;
     TriStateBox TSB_HELP
     {
+        HelpID = "sc:TriStateBox:TP_VALIDATION_INPUTHELP:TSB_HELP";
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 248 , 10 ) ;
         TabStop = TRUE ;
@@ -225,6 +234,7 @@ TabPage TP_VALIDATION_INPUTHELP
     };
     Edit EDT_TITLE
     {
+        HelpID = "sc:Edit:TP_VALIDATION_INPUTHELP:EDT_TITLE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 80 , 33 ) ;
         Size = MAP_APPFONT ( 171 , 12 ) ;
@@ -232,6 +242,7 @@ TabPage TP_VALIDATION_INPUTHELP
     };
     MultiLineEdit EDT_INPUTHELP
     {
+        HelpID = "sc:MultiLineEdit:TP_VALIDATION_INPUTHELP:EDT_INPUTHELP";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 80 , 51 ) ;
         Size = MAP_APPFONT ( 171 , 128 ) ;
@@ -243,6 +254,7 @@ TabPage TP_VALIDATION_INPUTHELP
 
 TabPage TP_VALIDATION_ERROR
 {
+    HelpID = "sc:TabPage:TP_VALIDATION_ERROR";
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
@@ -254,6 +266,7 @@ TabPage TP_VALIDATION_ERROR
     };
     TriStateBox TSB_SHOW
     {
+        HelpID = "sc:TriStateBox:TP_VALIDATION_ERROR:TSB_SHOW";
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 248 , 10 ) ;
         TabStop = TRUE ;
@@ -261,6 +274,7 @@ TabPage TP_VALIDATION_ERROR
     };
     MultiLineEdit EDT_ERROR
     {
+        HelpID = "sc:MultiLineEdit:TP_VALIDATION_ERROR:EDT_ERROR";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 80 , 69 ) ;
         Size = MAP_APPFONT ( 171 , 110 ) ;
@@ -270,6 +284,7 @@ TabPage TP_VALIDATION_ERROR
     };
     Edit EDT_TITLE
     {
+        HelpID = "sc:Edit:TP_VALIDATION_ERROR:EDT_TITLE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 80 , 51 ) ;
         Size = MAP_APPFONT ( 171 , 12 ) ;
@@ -295,6 +310,7 @@ TabPage TP_VALIDATION_ERROR
     };
     ListBox LB_ACTION
     {
+        HelpID = "sc:ListBox:TP_VALIDATION_ERROR:LB_ACTION";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 80 , 33 ) ;
         Size = MAP_APPFONT ( 107 , 76 ) ;
@@ -311,6 +327,7 @@ TabPage TP_VALIDATION_ERROR
     };
     PushButton BTN_SEARCH
     {
+        HelpID = "sc:PushButton:TP_VALIDATION_ERROR:BTN_SEARCH";
         Pos = MAP_APPFONT ( 191 , 32 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         TabStop = TRUE ;

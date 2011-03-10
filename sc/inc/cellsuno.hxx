@@ -189,16 +189,16 @@ private:
     ScMarkData*             pMarkData;
     ScRangeList             aRanges;
     sal_Int64               nObjectId;
-    BOOL                    bChartColAsHdr;
-    BOOL                    bChartRowAsHdr;
-    BOOL                    bCursorOnly;
-    BOOL                    bGotDataChangedHint;
+    sal_Bool                    bChartColAsHdr;
+    sal_Bool                    bChartRowAsHdr;
+    sal_Bool                    bCursorOnly;
+    sal_Bool                    bGotDataChangedHint;
     XModifyListenerArr_Impl aValueListeners;
 
     DECL_LINK( ValueListenerHdl, SfxHint* );
 
 private:
-    void            PaintRanges_Impl( USHORT nPart );
+    void            PaintRanges_Impl( sal_uInt16 nPart );
     ScRangeListRef  GetLimitedChartRanges_Impl( long nDataColumns, long nDataRows ) const;
     void            ForceChartListener_Impl();
     ScMemChart*     CreateMemChart_Impl() const;
@@ -206,23 +206,24 @@ private:
     const ScPatternAttr*    GetCurrentAttrsFlat();
     const ScPatternAttr*    GetCurrentAttrsDeep();
     SfxItemSet*             GetCurrentDataSet(bool bNoDflt = false);
-    const ScMarkData*       GetMarkData();
     void                    ForgetMarkData();
     void                    ForgetCurrentAttrs();
 
     com::sun::star::uno::Reference<com::sun::star::sheet::XSheetCellRanges>
                             QueryDifferences_Impl(const com::sun::star::table::CellAddress& aCompare,
-                                                    BOOL bColumnDiff);
+                                                    sal_Bool bColumnDiff);
     com::sun::star::uno::Reference<com::sun::star::uno::XInterface>
                             Find_Impl(const com::sun::star::uno::Reference<
                                         com::sun::star::util::XSearchDescriptor>& xDesc,
                                     const ScAddress* pLastPos);
 
 protected:
+    const ScMarkData*       GetMarkData();
+
     // GetItemPropertyMap for derived classes must contain all entries, including base class
     virtual const SfxItemPropertyMap* GetItemPropertyMap();
     virtual ::com::sun::star::beans::PropertyState GetOnePropertyState(
-                                USHORT nItemWhich, const SfxItemPropertySimpleEntry* pEntry );
+                                sal_uInt16 nItemWhich, const SfxItemPropertySimpleEntry* pEntry );
     virtual void            GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry,
                                 ::com::sun::star::uno::Any& )
                                 throw(::com::sun::star::uno::RuntimeException);
@@ -257,8 +258,8 @@ public:
     void                    SetNewRange(const ScRange& rNew);   // for cursor
     void                    SetNewRanges(const ScRangeList& rNew);
 
-    void                    SetCursorOnly(BOOL bSet);
-    BOOL                    IsCursorOnly() const            { return bCursorOnly; }
+    void                    SetCursorOnly(sal_Bool bSet);
+    sal_Bool                    IsCursorOnly() const            { return bCursorOnly; }
 
                             // XSheetOperation
     virtual double SAL_CALL computeFunction( ::com::sun::star::sheet::GeneralFunction nFunction )
@@ -812,7 +813,7 @@ public:
 
 //! really derive cell from range?
 
-class ScCellObj : public ScCellRangeObj,
+class SC_DLLPUBLIC ScCellObj : public ScCellRangeObj,
                   public com::sun::star::text::XText,
                   public com::sun::star::container::XEnumerationAccess,
                   public com::sun::star::table::XCell,
@@ -829,9 +830,9 @@ private:
     sal_Int16               nActionLockCount;
 
 private:
-    String      GetInputString_Impl(BOOL bEnglish) const;
+    String      GetInputString_Impl(sal_Bool bEnglish) const;
     String      GetOutputString_Impl() const;
-    void        SetString_Impl(const String& rString, BOOL bInterpret, BOOL bEnglish);
+    void        SetString_Impl(const String& rString, sal_Bool bInterpret, sal_Bool bEnglish);
     double      GetValue_Impl() const;
     void        SetValue_Impl(double fValue);
     com::sun::star::table::CellContentType GetResultType_Impl();
@@ -870,6 +871,8 @@ public:
     void                    SetFormulaWithGrammar( const ::rtl::OUString& rFormula,
                                 const ::rtl::OUString& rFormulaNmsp, const formula::FormulaGrammar::Grammar );
     const ScAddress&        GetPosition() const { return aCellPos; }
+
+    void                    InputEnglishString( const ::rtl::OUString& rText );
 
                             // XText
     virtual void SAL_CALL   insertTextContent( const ::com::sun::star::uno::Reference<
@@ -1370,7 +1373,7 @@ private:
     ScRangeList             aRanges;
     ScAddress               aPos;
     ScMarkData*             pMark;
-    BOOL                    bAtEnd;
+    sal_Bool                    bAtEnd;
 
 private:
     void                    Advance_Impl();
@@ -1453,8 +1456,8 @@ private:
     SCTAB                   nTab;
     ScAttrRectIterator*     pIter;
     ScRange                 aNext;
-    BOOL                    bAtEnd;
-    BOOL                    bDirty;
+    sal_Bool                    bAtEnd;
+    sal_Bool                    bDirty;
 
 private:
     void                    Advance_Impl();

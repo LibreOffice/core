@@ -161,7 +161,7 @@ void XclImpOutlineBuffer::MakeScOutline()
                 else if (nFirstPos > 0)
                     bCollapsed = maCollapsedPosSet.count(nFirstPos-1) > 0;
 
-                BOOL bDummy;
+                sal_Bool bDummy;
                 mpOutlineArray->Insert(nFirstPos, nPos-1, bDummy, bCollapsed);
             }
         }
@@ -193,8 +193,8 @@ ExcScenarioCell::ExcScenarioCell( const UINT16 nC, const UINT16 nR )
 ExcScenario::ExcScenario( XclImpStream& rIn, const RootData& rR )
     : nTab( rR.pIR->GetCurrScTab() )
 {
-    UINT16          nCref;
-    UINT8           nName, nComment;
+    sal_uInt16          nCref;
+    sal_uInt8           nName, nComment;
 
     rIn >> nCref;
     rIn >> nProtected;
@@ -217,8 +217,8 @@ ExcScenario::ExcScenario( XclImpStream& rIn, const RootData& rR )
     else
         pComment = new String;
 
-    UINT16          n = nCref;
-    UINT16          nC, nR;
+    sal_uInt16          n = nCref;
+    sal_uInt16          nC, nR;
     while( n )
     {
         rIn >> nR >> nC;
@@ -245,16 +245,16 @@ ExcScenario::~ExcScenario()
         delete pUserName;
 }
 
-void ExcScenario::Apply( const XclImpRoot& rRoot, const BOOL bLast )
+void ExcScenario::Apply( const XclImpRoot& rRoot, const sal_Bool bLast )
 {
     ScDocument&         r = rRoot.GetDoc();
     String              aSzenName( *pName );
-    UINT16              nNewTab = nTab + 1;
+    sal_uInt16              nNewTab = nTab + 1;
 
     if( !r.InsertTab( nNewTab, aSzenName ) )
         return;
 
-    r.SetScenario( nNewTab, TRUE );
+    r.SetScenario( nNewTab, true );
     // do not show scenario frames
     r.SetScenarioData( nNewTab, *pComment, COL_LIGHTGRAY, /*SC_SCENARIO_SHOWFRAME|*/SC_SCENARIO_COPYALL|(nProtected ? SC_SCENARIO_PROTECT : 0) );
 
@@ -271,7 +271,7 @@ void ExcScenario::Apply( const XclImpRoot& rRoot, const BOOL bLast )
     }
 
     if( bLast )
-        r.SetActiveScenario( nNewTab, TRUE );
+        r.SetActiveScenario( nNewTab, sal_True );
 
     // modify what the Active tab is set to if the new
     // scenario tab occurs before the active tab.

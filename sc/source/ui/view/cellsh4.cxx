@@ -55,7 +55,7 @@
 //------------------------------------------------------------------
 
 #define IS_AVAILABLE(WhichId,ppItem) \
-    (pReqArgs->GetItemState((WhichId), TRUE, ppItem ) == SFX_ITEM_SET)
+    (pReqArgs->GetItemState((WhichId), sal_True, ppItem ) == SFX_ITEM_SET)
 
 
 void ScCellShell::ExecuteCursor( SfxRequest& rReq )
@@ -63,10 +63,10 @@ void ScCellShell::ExecuteCursor( SfxRequest& rReq )
     ScViewData* pData = GetViewData();
     ScTabViewShell* pTabViewShell   = pData->GetViewShell();
     const SfxItemSet*   pReqArgs = rReq.GetArgs();
-    USHORT              nSlotId  = rReq.GetSlot();
+    sal_uInt16              nSlotId  = rReq.GetSlot();
     SCsCOLROW           nRepeat = 1;
-    BOOL                bSel = FALSE;
-    BOOL                bKeep = FALSE;
+    sal_Bool                bSel = false;
+    sal_Bool                bKeep = false;
 
     if ( pReqArgs != NULL )
     {
@@ -80,13 +80,13 @@ void ScCellShell::ExecuteCursor( SfxRequest& rReq )
     {
         //  evaluate locked selection mode
 
-        USHORT nLocked = pTabViewShell->GetLockedModifiers();
+        sal_uInt16 nLocked = pTabViewShell->GetLockedModifiers();
         if ( nLocked & KEY_SHIFT )
-            bSel = TRUE;                // EXT
+            bSel = sal_True;                // EXT
         else if ( nLocked & KEY_MOD1 )
         {
             // ADD mode: keep the selection, start a new block when marking with shift again
-            bKeep = TRUE;
+            bKeep = true;
         }
     }
 
@@ -280,7 +280,7 @@ void ScCellShell::ExecuteCursorSel( SfxRequest& rReq )
 void ScCellShell::ExecuteMove( SfxRequest& rReq )
 {
     ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
-    USHORT nSlotId  = rReq.GetSlot();
+    sal_uInt16 nSlotId  = rReq.GetSlot();
 
     if(nSlotId != SID_CURSORTOPOFSCREEN && nSlotId != SID_CURSORENDOFSCREEN)
         pTabViewShell->ExecuteInputDirect();
@@ -300,25 +300,25 @@ void ScCellShell::ExecuteMove( SfxRequest& rReq )
         //  weil das ScSbxRange-Objekt bei Eingaben die Markierung veraendert
 
         case SID_NEXT_UNPROTECT:
-            pTabViewShell->FindNextUnprot( FALSE, !rReq.IsAPI() );
+            pTabViewShell->FindNextUnprot( false, !rReq.IsAPI() );
             break;
 
         case SID_PREV_UNPROTECT:
-            pTabViewShell->FindNextUnprot( TRUE, !rReq.IsAPI() );
+            pTabViewShell->FindNextUnprot( sal_True, !rReq.IsAPI() );
             break;
 
         case SID_CURSORENTERUP:
             if (rReq.IsAPI())
-                pTabViewShell->MoveCursorRel( 0, -1, SC_FOLLOW_LINE, FALSE );
+                pTabViewShell->MoveCursorRel( 0, -1, SC_FOLLOW_LINE, false );
             else
-                pTabViewShell->MoveCursorEnter( TRUE );
+                pTabViewShell->MoveCursorEnter( sal_True );
             break;
 
         case SID_CURSORENTERDOWN:
             if (rReq.IsAPI())
-                pTabViewShell->MoveCursorRel( 0, 1, SC_FOLLOW_LINE, FALSE );
+                pTabViewShell->MoveCursorRel( 0, 1, SC_FOLLOW_LINE, false );
             else
-                pTabViewShell->MoveCursorEnter( FALSE );
+                pTabViewShell->MoveCursorEnter( false );
             break;
 
         case SID_SELECT_COL:
@@ -362,11 +362,11 @@ void ScCellShell::ExecuteMove( SfxRequest& rReq )
             break;
 
         case SID_CURSORTOPOFSCREEN:
-            pTabViewShell->MoveCursorScreen( 0, -1, SC_FOLLOW_LINE, FALSE );
+            pTabViewShell->MoveCursorScreen( 0, -1, SC_FOLLOW_LINE, false );
             break;
 
         case SID_CURSORENDOFSCREEN:
-            pTabViewShell->MoveCursorScreen( 0, 1, SC_FOLLOW_LINE, FALSE );
+            pTabViewShell->MoveCursorScreen( 0, 1, SC_FOLLOW_LINE, false );
             break;
 
         default:
@@ -379,7 +379,7 @@ void ScCellShell::ExecuteMove( SfxRequest& rReq )
 
 void ScCellShell::ExecutePageSel( SfxRequest& rReq )
 {
-    USHORT              nSlotId  = rReq.GetSlot();
+    sal_uInt16              nSlotId  = rReq.GetSlot();
     switch ( nSlotId )
     {
         case SID_CURSORHOME_SEL:        rReq.SetSlot( SID_CURSORHOME );  break;
@@ -390,7 +390,7 @@ void ScCellShell::ExecutePageSel( SfxRequest& rReq )
             OSL_FAIL("Unbekannte Message bei ViewShell (ExecutePageSel)");
             return;
     }
-    rReq.AppendItem( SfxBoolItem(FN_PARAM_2, TRUE) );
+    rReq.AppendItem( SfxBoolItem(FN_PARAM_2, sal_True) );
     ExecuteSlot( rReq, GetInterface() );
 }
 
@@ -398,9 +398,9 @@ void ScCellShell::ExecutePage( SfxRequest& rReq )
 {
     ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
     const SfxItemSet*   pReqArgs = rReq.GetArgs();
-    USHORT              nSlotId  = rReq.GetSlot();
-    BOOL                bSel = FALSE;
-    BOOL                bKeep = FALSE;
+    sal_uInt16              nSlotId  = rReq.GetSlot();
+    sal_Bool                bSel = false;
+    sal_Bool                bKeep = false;
 
     if ( pReqArgs != NULL )
     {
@@ -412,13 +412,13 @@ void ScCellShell::ExecutePage( SfxRequest& rReq )
     {
         //  evaluate locked selection mode
 
-        USHORT nLocked = pTabViewShell->GetLockedModifiers();
+        sal_uInt16 nLocked = pTabViewShell->GetLockedModifiers();
         if ( nLocked & KEY_SHIFT )
-            bSel = TRUE;                // EXT
+            bSel = sal_True;                // EXT
         else if ( nLocked & KEY_MOD1 )
         {
             // ADD mode: keep the selection, start a new block when marking with shift again
-            bKeep = TRUE;
+            bKeep = true;
         }
     }
 

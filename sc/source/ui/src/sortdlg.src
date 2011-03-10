@@ -34,6 +34,7 @@ TabPage RID_SCPAGE_SORT_FIELDS
     Size = MAP_APPFONT ( 260 , 185 ) ;
     ListBox LB_SORT1
     {
+        HelpID = "sc:ListBox:RID_SCPAGE_SORT_FIELDS:LB_SORT1";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 19 ) ;
         Size = MAP_APPFONT ( 154 , 90 ) ;
@@ -42,6 +43,7 @@ TabPage RID_SCPAGE_SORT_FIELDS
     };
     RadioButton BTN_UP1
     {
+        HelpID = "sc:RadioButton:RID_SCPAGE_SORT_FIELDS:BTN_UP1";
         Pos = MAP_APPFONT ( 172 , 14 ) ;
         Size = MAP_APPFONT ( 79 , 10 ) ;
         Text [ en-US ] = "~Ascending" ;
@@ -49,6 +51,7 @@ TabPage RID_SCPAGE_SORT_FIELDS
     };
     RadioButton BTN_DOWN1
     {
+        HelpID = "sc:RadioButton:RID_SCPAGE_SORT_FIELDS:BTN_DOWN1";
         Pos = MAP_APPFONT ( 172 , 28 ) ;
         Size = MAP_APPFONT ( 79 , 10 ) ;
         Text [ en-US ] = "~Descending" ;
@@ -62,6 +65,7 @@ TabPage RID_SCPAGE_SORT_FIELDS
     };
     ListBox LB_SORT2
     {
+        HelpID = "sc:ListBox:RID_SCPAGE_SORT_FIELDS:LB_SORT2";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 60 ) ;
         Size = MAP_APPFONT ( 154 , 90 ) ;
@@ -70,6 +74,7 @@ TabPage RID_SCPAGE_SORT_FIELDS
     };
     RadioButton BTN_UP2
     {
+        HelpID = "sc:RadioButton:RID_SCPAGE_SORT_FIELDS:BTN_UP2";
         Pos = MAP_APPFONT ( 172 , 55 ) ;
         Size = MAP_APPFONT ( 79 , 10 ) ;
         Text [ en-US ] = "A~scending" ;
@@ -77,6 +82,7 @@ TabPage RID_SCPAGE_SORT_FIELDS
     };
     RadioButton BTN_DOWN2
     {
+        HelpID = "sc:RadioButton:RID_SCPAGE_SORT_FIELDS:BTN_DOWN2";
         Pos = MAP_APPFONT ( 172 , 69 ) ;
         Size = MAP_APPFONT ( 79 , 10 ) ;
         Text [ en-US ] = "D~escending" ;
@@ -90,6 +96,7 @@ TabPage RID_SCPAGE_SORT_FIELDS
     };
     ListBox LB_SORT3
     {
+        HelpID = "sc:ListBox:RID_SCPAGE_SORT_FIELDS:LB_SORT3";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 101 ) ;
         Size = MAP_APPFONT ( 154 , 90 ) ;
@@ -98,6 +105,7 @@ TabPage RID_SCPAGE_SORT_FIELDS
     };
     RadioButton BTN_UP3
     {
+        HelpID = "sc:RadioButton:RID_SCPAGE_SORT_FIELDS:BTN_UP3";
         Pos = MAP_APPFONT ( 172 , 96 ) ;
         Size = MAP_APPFONT ( 79 , 10 ) ;
         Text [ en-US ] = "As~cending" ;
@@ -105,6 +113,7 @@ TabPage RID_SCPAGE_SORT_FIELDS
     };
     RadioButton BTN_DOWN3
     {
+        HelpID = "sc:RadioButton:RID_SCPAGE_SORT_FIELDS:BTN_DOWN3";
         Pos = MAP_APPFONT ( 172 , 110 ) ;
         Size = MAP_APPFONT ( 79 , 10 ) ;
         Text [ en-US ] = "Desce~nding" ;
@@ -127,6 +136,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
     Size = MAP_APPFONT ( 260 , 185 ) ;
     CheckBox BTN_CASESENSITIVE
     {
+        HelpID = "sc:CheckBox:RID_SCPAGE_SORT_OPTIONS:BTN_CASESENSITIVE";
         Pos = MAP_APPFONT ( 12 , 6 ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
         Text [ en-US ] = "Case ~sensitive" ;
@@ -134,6 +144,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
     };
     CheckBox BTN_LABEL
     {
+        HelpID = "sc:CheckBox:RID_SCPAGE_SORT_OPTIONS:BTN_LABEL";
         Pos = MAP_APPFONT ( 12 , 20 ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
         TabStop = TRUE ;
@@ -148,6 +159,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
     };
     CheckBox BTN_FORMATS
     {
+        HelpID = "sc:CheckBox:RID_SCPAGE_SORT_OPTIONS:BTN_FORMATS";
         Pos = MAP_APPFONT ( 12 , 34 ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
         Text [ en-US ] = "Include ~formats" ;
@@ -155,6 +167,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
     };
     CheckBox BTN_NATURALSORT
     {
+        HelpID = "sc:CheckBox:RID_SCPAGE_SORT_OPTIONS:BTN_COPYRESULT";
         Pos = MAP_APPFONT ( 12 , 48 ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
         Text [ de ] = "Enable ~natural sort" ;
@@ -173,6 +186,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
     };
     ListBox LB_OUTAREA
     {
+        HelpID = "sc:ListBox:RID_SCPAGE_SORT_OPTIONS:LB_OUTAREA";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 20 , 73 ) ;
         Size = MAP_APPFONT ( 93 , 90 ) ;
@@ -181,6 +195,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
     };
     Edit ED_OUTAREA
     {
+        HelpID = "sc:Edit:RID_SCPAGE_SORT_OPTIONS:ED_OUTAREA";
         Disable = TRUE ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 119 , 73 ) ;
@@ -196,6 +211,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
     };
     ListBox LB_SORT_USER
     {
+        HelpID = "sc:ListBox:RID_SCPAGE_SORT_OPTIONS:LB_SORT_USER";
         Disable = TRUE ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 20 , 100 ) ;
@@ -211,6 +227,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
     };
     ListBox LB_LANGUAGE
     {
+        HelpID = "sc:ListBox:RID_SCPAGE_SORT_OPTIONS:LB_LANGUAGE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 129 ) ;
         Size = MAP_APPFONT ( 101 , 90 ) ;
@@ -226,6 +243,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
     };
     ListBox LB_ALGORITHM
     {
+        HelpID = "sc:ListBox:RID_SCPAGE_SORT_OPTIONS:LB_ALGORITHM";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 119 , 129 ) ;
         Size = MAP_APPFONT ( 132 , 90 ) ;
@@ -311,6 +329,7 @@ TabDialog RID_SCDLG_SORT
 
 ModalDialog RID_SCDLG_SORT_WARNING
 {
+    HelpID = "sc:ModalDialog:RID_SCDLG_SORT_WARNING";
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 180 , 91 ) ;
@@ -333,6 +352,7 @@ ModalDialog RID_SCDLG_SORT_WARNING
     };
     PushButton BTN_EXTSORT
     {
+        HelpID = "sc:PushButton:RID_SCDLG_SORT_WARNING:BTN_EXTSORT";
         Pos = MAP_APPFONT ( 6 , 39 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         TabStop = TRUE ;
@@ -341,6 +361,7 @@ ModalDialog RID_SCDLG_SORT_WARNING
     };
     PushButton BTN_CURSORT
     {
+        HelpID = "sc:PushButton:RID_SCDLG_SORT_WARNING:BTN_CURSORT";
         Pos = MAP_APPFONT ( 70 , 39 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         TabStop = TRUE ;

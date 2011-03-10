@@ -34,8 +34,12 @@
 #define BTN_OPTIONS             6
 
 #define FL_LAYOUT               10
+#define FL_SELECT               90
+#define SCROLL_COL              91
 #define WND_COL                 11
+#define SCROLL_ROW              92
 #define WND_ROW                 12
+#define SCROLL_DATA             93
 #define WND_DATA                13
 #define WND_SELECT              14
 #define WND_PAGE                18

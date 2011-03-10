@@ -42,8 +42,8 @@
 const sal_uInt32 SC_HTML_FONTSIZES = 7;        // wie Export, HTML-Options
 
 // Pixel tolerance for SeekOffset and related.
-const USHORT SC_HTML_OFFSET_TOLERANCE_SMALL = 1;    // single table
-const USHORT SC_HTML_OFFSET_TOLERANCE_LARGE = 10;   // nested
+const sal_uInt16 SC_HTML_OFFSET_TOLERANCE_SMALL = 1;    // single table
+const sal_uInt16 SC_HTML_OFFSET_TOLERANCE_LARGE = 10;   // nested
 
 // ============================================================================
 // BASE class for HTML parser classes
@@ -62,7 +62,7 @@ public:
     explicit                    ScHTMLParser( EditEngine* pEditEngine, ScDocument* pDoc );
     virtual                     ~ScHTMLParser();
 
-    virtual ULONG               Read( SvStream& rStrm, const String& rBaseURL  ) = 0;
+    virtual sal_uLong               Read( SvStream& rStrm, const String& rBaseURL  ) = 0;
 
     /** Returns the "global table" which contains the entire HTML document. */
     virtual const ScHTMLTable*  GetGlobalTable() const = 0;
@@ -71,30 +71,30 @@ public:
 
 // ============================================================================
 
-SV_DECL_VARARR_SORT( ScHTMLColOffset, ULONG, 16, 4)
+SV_DECL_VARARR_SORT( ScHTMLColOffset, sal_uLong, 16, 4)
 
 struct ScHTMLTableStackEntry
 {
     ScRangeListRef      xLockedList;
     ScEEParseEntry*     pCellEntry;
     ScHTMLColOffset*    pLocalColOffset;
-    ULONG               nFirstTableCell;
+    sal_uLong               nFirstTableCell;
     SCCOL               nColCnt;
     SCROW               nRowCnt;
     SCCOL               nColCntStart;
     SCCOL               nMaxCol;
-    USHORT              nTable;
-    USHORT              nTableWidth;
-    USHORT              nColOffset;
-    USHORT              nColOffsetStart;
-    BOOL                bFirstRow;
+    sal_uInt16              nTable;
+    sal_uInt16              nTableWidth;
+    sal_uInt16              nColOffset;
+    sal_uInt16              nColOffsetStart;
+    sal_Bool                bFirstRow;
                         ScHTMLTableStackEntry( ScEEParseEntry* pE,
                                 const ScRangeListRef& rL, ScHTMLColOffset* pTO,
-                                ULONG nFTC,
+                                sal_uLong nFTC,
                                 SCCOL nCol, SCROW nRow,
-                                SCCOL nStart, SCCOL nMax, USHORT nTab,
-                                USHORT nTW, USHORT nCO, USHORT nCOS,
-                                BOOL bFR )
+                                SCCOL nStart, SCCOL nMax, sal_uInt16 nTab,
+                                sal_uInt16 nTW, sal_uInt16 nCO, sal_uInt16 nCOS,
+                                sal_Bool bFR )
                             : xLockedList( rL ), pCellEntry( pE ),
                             pLocalColOffset( pTO ),
                             nFirstTableCell( nFTC ),
@@ -139,23 +139,23 @@ private:
     Table*              pTables;
     ScHTMLColOffset*    pColOffset;
     ScHTMLColOffset*    pLocalColOffset;    // je Table
-    ULONG               nFirstTableCell;    // je Table
+    sal_uLong               nFirstTableCell;    // je Table
     short               nTableLevel;
-    USHORT              nTable;
-    USHORT              nMaxTable;
+    sal_uInt16              nTable;
+    sal_uInt16              nMaxTable;
     SCCOL               nColCntStart;       // erste Col je Table
     SCCOL               nMaxCol;            // je Table
-    USHORT              nTableWidth;        // je Table
-    USHORT              nColOffset;         // aktuell, Pixel
-    USHORT              nColOffsetStart;    // Startwert je Table, in Pixel
-    USHORT              nMetaCnt;           // fuer ParseMetaOptions
-    USHORT              nOffsetTolerance;   // for use with SeekOffset and related
-    BOOL                bCalcWidthHeight;   // TRUE: calculate real column width
+    sal_uInt16              nTableWidth;        // je Table
+    sal_uInt16              nColOffset;         // aktuell, Pixel
+    sal_uInt16              nColOffsetStart;    // Startwert je Table, in Pixel
+    sal_uInt16              nMetaCnt;           // fuer ParseMetaOptions
+    sal_uInt16              nOffsetTolerance;   // for use with SeekOffset and related
+    sal_Bool                bCalcWidthHeight;   // TRUE: calculate real column width
                                             // FALSE: 1 html-col = 1 sc-col
-    BOOL                bTabInTabCell;
-    BOOL                bFirstRow;          // je Table, ob in erster Zeile
-    BOOL                bInCell;
-    BOOL                bInTitle;
+    sal_Bool                bTabInTabCell;
+    sal_Bool                bFirstRow;          // je Table, ob in erster Zeile
+    sal_Bool                bInCell;
+    sal_Bool                bInTitle;
 
     DECL_LINK( HTMLImportHdl, ImportInfo* );
     void                NewActEntry( ScEEParseEntry* );
@@ -163,24 +163,24 @@ private:
     void                ProcToken( ImportInfo* );
     void                CloseEntry( ImportInfo* );
     void                NextRow(  ImportInfo*  );
-    void                SkipLocked( ScEEParseEntry*, BOOL bJoin = TRUE );
-    static BOOL         SeekOffset( ScHTMLColOffset*, USHORT nOffset,
-                                    SCCOL* pCol, USHORT nOffsetTol );
-    static void         MakeCol( ScHTMLColOffset*, USHORT& nOffset,
-                                USHORT& nWidth, USHORT nOffsetTol,
-                                USHORT nWidthTol );
-    static void         MakeColNoRef( ScHTMLColOffset*, USHORT nOffset,
-                                USHORT nWidth, USHORT nOffsetTol,
-                                USHORT nWidthTol );
-    static void         ModifyOffset( ScHTMLColOffset*, USHORT& nOldOffset,
-                                    USHORT& nNewOffset, USHORT nOffsetTol );
+    void                SkipLocked( ScEEParseEntry*, sal_Bool bJoin = sal_True );
+    static sal_Bool         SeekOffset( ScHTMLColOffset*, sal_uInt16 nOffset,
+                                    SCCOL* pCol, sal_uInt16 nOffsetTol );
+    static void         MakeCol( ScHTMLColOffset*, sal_uInt16& nOffset,
+                                sal_uInt16& nWidth, sal_uInt16 nOffsetTol,
+                                sal_uInt16 nWidthTol );
+    static void         MakeColNoRef( ScHTMLColOffset*, sal_uInt16 nOffset,
+                                sal_uInt16 nWidth, sal_uInt16 nOffsetTol,
+                                sal_uInt16 nWidthTol );
+    static void         ModifyOffset( ScHTMLColOffset*, sal_uInt16& nOldOffset,
+                                    sal_uInt16& nNewOffset, sal_uInt16 nOffsetTol );
     void                Colonize( ScEEParseEntry* );
-    USHORT              GetWidth( ScEEParseEntry* );
+    sal_uInt16              GetWidth( ScEEParseEntry* );
     void                SetWidths();
     void                Adjust();
 
-    USHORT              GetWidthPixel( const HTMLOption* );
-    BOOL                IsAtBeginningOfText( ImportInfo* );
+    sal_uInt16              GetWidthPixel( const HTMLOption* );
+    sal_Bool                IsAtBeginningOfText( ImportInfo* );
 
     void                TableOn( ImportInfo* );
     void                ColOn( ImportInfo* );
@@ -196,7 +196,7 @@ private:
 public:
                         ScHTMLLayoutParser( EditEngine*, const String& rBaseURL, const Size& aPageSize, ScDocument* );
     virtual             ~ScHTMLLayoutParser();
-    virtual ULONG       Read( SvStream&, const String& rBaseURL  );
+    virtual sal_uLong       Read( SvStream&, const String& rBaseURL  );
     virtual const ScHTMLTable*  GetGlobalTable() const;
 };
 
@@ -588,7 +588,7 @@ public:
     explicit            ScHTMLQueryParser( EditEngine* pEditEngine, ScDocument* pDoc );
     virtual             ~ScHTMLQueryParser();
 
-    virtual ULONG       Read( SvStream& rStrm, const String& rBaseURL  );
+    virtual sal_uLong       Read( SvStream& rStrm, const String& rBaseURL  );
 
     /** Returns the "global table" which contains the entire HTML document. */
     virtual const ScHTMLTable* GetGlobalTable() const;

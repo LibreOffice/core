@@ -82,7 +82,7 @@ struct ScDPServiceDesc
         aServiceName( rServ ), aParSource( rSrc ), aParName( rNam ),
         aParUser( rUser ), aParPass( rPass ) {  }
 
-    BOOL operator== ( const ScDPServiceDesc& rOther ) const
+    sal_Bool operator== ( const ScDPServiceDesc& rOther ) const
         { return aServiceName == rOther.aServiceName &&
                  aParSource   == rOther.aParSource &&
                  aParName     == rOther.aParName &&
@@ -107,18 +107,18 @@ private:
                                             // cached data
     com::sun::star::uno::Reference<com::sun::star::sheet::XDimensionsSupplier> xSource;
     ScDPOutput*             pOutput;
-    BOOL                    bSettingsChanged;
-    BOOL                    bAlive;         // FALSE if only used to hold settings
+    sal_Bool                    bSettingsChanged;
+    sal_Bool                    bAlive;         // sal_False if only used to hold settings
     sal_uInt16              mnAutoFormatIndex;
-    BOOL                    bAllowMove;
+    sal_Bool                    bAllowMove;
     long                    nHeaderRows;    // page fields plus filter button
-    bool                    mbHeaderLayout;  // TRUE : grid, FALSE : standard
+    bool                    mbHeaderLayout;  // sal_True : grid, sal_False : standard
 
 
     SC_DLLPRIVATE ScDPTableData*    GetTableData();
     SC_DLLPRIVATE void              CreateObjects();
     SC_DLLPRIVATE void              CreateOutput();
-    BOOL                    bRefresh;
+    sal_Bool                    bRefresh;
     long                        mnCacheId;
 
 public:
@@ -131,8 +131,8 @@ public:
      * doesn't really change the behavior of the object, but is used only for
      * testing purposes.
      */
-    void                SetAlive(BOOL bSet);
-    void                SetAllowMove(BOOL bSet);
+    void                SetAlive(sal_Bool bSet);
+    void                SetAllowMove(sal_Bool bSet);
 
     void                InvalidateData();
     void                ClearSource();
@@ -164,9 +164,9 @@ public:
 
     com::sun::star::uno::Reference<com::sun::star::sheet::XDimensionsSupplier> GetSource();
 
-    BOOL                IsSheetData() const;
-    BOOL                IsImportData() const { return(pImpDesc != NULL); }
-    BOOL                IsServiceData() const { return(pServDesc != NULL); }
+    sal_Bool                IsSheetData() const;
+    sal_Bool                IsImportData() const { return(pImpDesc != NULL); }
+    sal_Bool                IsServiceData() const { return(pServDesc != NULL); }
 
     void                SetName(const String& rNew);
     const String&       GetName() const                 { return aTableName; }
@@ -181,19 +181,19 @@ public:
     bool                IsDataDescriptionCell(const ScAddress& rPos);
 
     bool                IsDimNameInUse(const ::rtl::OUString& rName) const;
-    String              GetDimName( long nDim, BOOL& rIsDataLayout, sal_Int32* pFlags = NULL );
-    BOOL                IsDuplicated( long nDim );
+    String              GetDimName( long nDim, sal_Bool& rIsDataLayout, sal_Int32* pFlags = NULL );
+    sal_Bool                IsDuplicated( long nDim );
     long                GetDimCount();
     void                GetHeaderPositionData(const ScAddress& rPos, ::com::sun::star::sheet::DataPilotTableHeaderData& rData);
-    long                GetHeaderDim( const ScAddress& rPos, USHORT& rOrient );
-    BOOL                GetHeaderDrag( const ScAddress& rPos, BOOL bMouseLeft, BOOL bMouseTop,
+    long                GetHeaderDim( const ScAddress& rPos, sal_uInt16& rOrient );
+    sal_Bool                GetHeaderDrag( const ScAddress& rPos, sal_Bool bMouseLeft, sal_Bool bMouseTop,
                                         long nDragDim,
-                                        Rectangle& rPosRect, USHORT& rOrient, long& rDimPos );
-    BOOL                IsFilterButton( const ScAddress& rPos );
+                                        Rectangle& rPosRect, sal_uInt16& rOrient, long& rDimPos );
+    sal_Bool                IsFilterButton( const ScAddress& rPos );
 
-    BOOL                GetPivotData( ScDPGetPivotDataField& rTarget, /* returns result */
+    sal_Bool                GetPivotData( ScDPGetPivotDataField& rTarget, /* returns result */
                                       const std::vector< ScDPGetPivotDataField >& rFilters );
-    BOOL                ParseFilters( ScDPGetPivotDataField& rTarget,
+    sal_Bool                ParseFilters( ScDPGetPivotDataField& rTarget,
                                       std::vector< ScDPGetPivotDataField >& rFilters,
                                       const String& rFilterList );
 
@@ -203,24 +203,24 @@ public:
 
     void                ToggleDetails(const ::com::sun::star::sheet::DataPilotTableHeaderData& rElemDesc, ScDPObject* pDestObj);
 
-    BOOL                FillOldParam(ScPivotParam& rParam, BOOL bForFile) const;
-    BOOL                FillLabelData(ScPivotParam& rParam);
-    void                InitFromOldPivot(const ScPivot& rOld, ScDocument* pDoc, BOOL bSetSource);
+    sal_Bool                FillOldParam(ScPivotParam& rParam) const;
+    sal_Bool                FillLabelData(ScPivotParam& rParam);
+    void                InitFromOldPivot(const ScPivot& rOld, ScDocument* pDoc, sal_Bool bSetSource);
 
-    BOOL                GetHierarchiesNA( sal_Int32 nDim, com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >& xHiers );
-    BOOL                GetHierarchies( sal_Int32 nDim, com::sun::star::uno::Sequence< rtl::OUString >& rHiers );
+    sal_Bool                GetHierarchiesNA( sal_Int32 nDim, com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >& xHiers );
+    sal_Bool                GetHierarchies( sal_Int32 nDim, com::sun::star::uno::Sequence< rtl::OUString >& rHiers );
 
     sal_Int32           GetUsedHierarchy( sal_Int32 nDim );
 
-    BOOL                GetMembersNA( sal_Int32 nDim, com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >& xMembers );
-    BOOL                GetMembersNA( sal_Int32 nDim, sal_Int32 nHier, com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >& xMembers );
+    sal_Bool                GetMembersNA( sal_Int32 nDim, com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >& xMembers );
+    sal_Bool                GetMembersNA( sal_Int32 nDim, sal_Int32 nHier, com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >& xMembers );
 
     bool                GetMemberNames( sal_Int32 nDim, ::com::sun::star::uno::Sequence< ::rtl::OUString >& rNames );
     bool                GetMembers( sal_Int32 nDim, sal_Int32 nHier, ::std::vector<ScDPLabelData::Member>& rMembers );
 
     void                UpdateReference( UpdateRefMode eUpdateRefMode,
                                          const ScRange& r, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
-    BOOL                RefsEqual( const ScDPObject& r ) const;
+    sal_Bool                RefsEqual( const ScDPObject& r ) const;
     void                WriteRefsTo( ScDPObject& r ) const;
 
     void                GetPositionData(const ScAddress& rPos, ::com::sun::star::sheet::DataPilotTablePositionData& rPosData);
@@ -240,20 +240,20 @@ public:
 
     void                BuildAllDimensionMembers();
 
-    static BOOL         HasRegisteredSources();
+    static sal_Bool         HasRegisteredSources();
     static com::sun::star::uno::Sequence<rtl::OUString> GetRegisteredSources();
     static com::sun::star::uno::Reference<com::sun::star::sheet::XDimensionsSupplier>
                         CreateSource( const ScDPServiceDesc& rDesc );
 
     static void         ConvertOrientation( ScDPSaveData& rSaveData,
-                            const ::std::vector<PivotField>& rFields, USHORT nOrient,
+                            const ::std::vector<PivotField>& rFields, sal_uInt16 nOrient,
                             const com::sun::star::uno::Reference<
                                 com::sun::star::sheet::XDimensionsSupplier>& xSource,
                             ::std::vector<PivotField>* pRefColFields = NULL,
                             ::std::vector<PivotField>* pRefRowFields = NULL,
                             ::std::vector<PivotField>* pRefPageFields = NULL );
 
-    static bool         IsOrientationAllowed( USHORT nOrient, sal_Int32 nDimFlags );
+    static bool         IsOrientationAllowed( sal_uInt16 nOrient, sal_Int32 nDimFlags );
 };
 
 
@@ -294,7 +294,7 @@ public:
      *
      * @return new name for data pilot object.
      */
-    String CreateNewName( USHORT nMin = 1 ) const;
+    String CreateNewName( sal_uInt16 nMin = 1 ) const;
 
     void FreeTable(ScDPObject* pDPObj);
     SC_DLLPUBLIC bool InsertNewTable(ScDPObject* pDPObj);

@@ -719,7 +719,7 @@ FltError ImportExcel::Read( void )
                             break;
                             case Biff5V:
                             default:
-                                pD->SetVisible( GetCurrScTab(), FALSE );
+                                pD->SetVisible( GetCurrScTab(), false );
                                 ePrev = eAkt;
                                 eAkt = Z_Biffn0;
                         }
@@ -779,7 +779,7 @@ FltError ImportExcel8::Read( void )
 {
 #if EXC_INCL_DUMPER
     {
-        Biff8RecDumper aDumper( GetRoot(), TRUE );
+        Biff8RecDumper aDumper( GetRoot(), sal_True );
         if( aDumper.Dump( aIn ) )
             return ERRCODE_ABORT;
     }
@@ -1058,7 +1058,7 @@ FltError ImportExcel8::Read( void )
                             case Biff8V:    // VB module
                             default:
                                 // TODO: do not create a sheet in the Calc document
-                                pD->SetVisible( GetCurrScTab(), FALSE );
+                                pD->SetVisible( GetCurrScTab(), false );
                                 XclTools::SkipSubStream( maStrm );
                                 IncCurrScTab();
                         }

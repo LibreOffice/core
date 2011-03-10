@@ -51,9 +51,9 @@ public:
     void                Initialize();
 
     /** Inserts the Calc name with the passed index and returns the Excel NAME index. */
-    sal_uInt16          InsertName( USHORT nScNameIdx );
+    sal_uInt16          InsertName( sal_uInt16 nScNameIdx );
     /** Inserts the Calc database range with the passed index and returns the Excel NAME index. */
-    sal_uInt16          InsertDBRange( USHORT nScDBRangeIdx );
+    sal_uInt16          InsertDBRange( sal_uInt16 nScDBRangeIdx );
 
     /** Inserts a new built-in defined name, referring to the passed sheet range. */
     sal_uInt16          InsertBuiltInName( sal_Unicode cBuiltIn, const ScRange& rRange );

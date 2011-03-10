@@ -73,7 +73,7 @@ Sequence<OUString> ScFilterOptions::GetPropertyNames()
 
 ScFilterOptions::ScFilterOptions() :
     ConfigItem( OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_FILTER )) ),
-    bWK3Flag( FALSE ),
+    bWK3Flag( false ),
     fExcelColScale( 0 ),
     fExcelRowScale( 0 )
 {

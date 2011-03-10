@@ -56,7 +56,7 @@
 
 TYPEINIT1( ScHeaderFooterChangedHint, SfxHint );
 
-ScHeaderFooterChangedHint::ScHeaderFooterChangedHint(USHORT nP) :
+ScHeaderFooterChangedHint::ScHeaderFooterChangedHint(sal_uInt16 nP) :
     nPart( nP )
 {
 }
@@ -104,13 +104,13 @@ ScEditEngineDefaulter* ScSharedHeaderFooterEditSource::GetEditEngine()
 //  each ScHeaderFooterEditSource object has its own ScHeaderFooterTextData
 
 ScHeaderFooterEditSource::ScHeaderFooterEditSource( ScHeaderFooterContentObj* pContent,
-                                                    USHORT nP ) :
+                                                    sal_uInt16 nP ) :
     ScSharedHeaderFooterEditSource( new ScHeaderFooterTextData( *pContent, nP ) )
 {
 }
 
 ScHeaderFooterEditSource::ScHeaderFooterEditSource( ScHeaderFooterContentObj& rContent,
-                                                    USHORT nP ) :
+                                                    sal_uInt16 nP ) :
     ScSharedHeaderFooterEditSource( new ScHeaderFooterTextData( rContent, nP ) )
 {
 }
@@ -197,7 +197,7 @@ ScAnnotationEditSource::ScAnnotationEditSource(ScDocShell* pDocSh, const ScAddre
     aCellPos( rP ),
     pEditEngine( NULL ),
     pForwarder( NULL ),
-    bDataValid( FALSE )
+    bDataValid( false )
 {
     if (pDocShell)
         pDocShell->GetDocument()->AddUnoObject(*this);
@@ -238,7 +238,7 @@ SvxTextForwarder* ScAnnotationEditSource::GetTextForwarder()
         {
             SfxItemPool* pEnginePool = EditEngine::CreatePool();
             pEnginePool->FreezeIdRanges();
-            pEditEngine = new ScEditEngineDefaulter( pEnginePool, TRUE );
+            pEditEngine = new ScEditEngineDefaulter( pEnginePool, sal_True );
         }
         pForwarder = new SvxEditEngineForwarder(*pEditEngine);
     }
@@ -251,7 +251,7 @@ SvxTextForwarder* ScAnnotationEditSource::GetTextForwarder()
             if ( const EditTextObject* pEditObj = pNote->GetEditTextObject() )
                 pEditEngine->SetText( *pEditObj );      // incl. Umbrueche
 
-    bDataValid = TRUE;
+    bDataValid = sal_True;
     return pForwarder;
 }
 
@@ -287,7 +287,7 @@ void ScAnnotationEditSource::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
     else if ( rHint.ISA( SfxSimpleHint ) )
     {
-        ULONG nId = ((const SfxSimpleHint&)rHint).GetId();
+        sal_uLong nId = ((const SfxSimpleHint&)rHint).GetId();
         if ( nId == SFX_HINT_DYING )
         {
             pDocShell = NULL;                       // ungueltig geworden
@@ -296,7 +296,7 @@ void ScAnnotationEditSource::Notify( SfxBroadcaster&, const SfxHint& rHint )
             DELETEZ( pEditEngine );     // EditEngine uses document's pool
         }
         else if ( nId == SFX_HINT_DATACHANGED )
-            bDataValid = FALSE;                     // Text muss neu geholt werden
+            bDataValid = false;                     // Text muss neu geholt werden
     }
 }
 

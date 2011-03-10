@@ -30,12 +30,13 @@
 #include "precompiled_chart2.hxx"
 #include "VPolarGrid.hxx"
 #include "VCartesianGrid.hxx"
-#include "TickmarkHelper.hxx"
+#include "Tickmarks.hxx"
 #include "PlottingPositionHelper.hxx"
 #include "ShapeFactory.hxx"
 #include "ObjectIdentifier.hxx"
 #include "macros.hxx"
 #include "CommonConverters.hxx"
+#include "Tickmarks_Equidistant.hxx"
 #include <com/sun/star/drawing/LineStyle.hpp>
 
 #include <vector>
@@ -65,16 +66,16 @@ VPolarGrid::~VPolarGrid()
     m_pPosHelper = NULL;
 }
 
-void VPolarGrid::setIncrements( const uno::Sequence< ExplicitIncrementData >& rIncrements )
+void VPolarGrid::setIncrements( const std::vector< ExplicitIncrementData >& rIncrements )
 {
     m_aIncrements = rIncrements;
 }
 
 void VPolarGrid::getAllTickInfos( sal_Int32 nDimensionIndex, ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos ) const
 {
-    TickmarkHelper aTickmarkHelper(
+    TickFactory aTickFactory(
             m_pPosHelper->getScales()[nDimensionIndex], m_aIncrements[nDimensionIndex] );
-    aTickmarkHelper.getAllTicks( rAllTickInfos );
+    aTickFactory.getAllTicks( rAllTickInfos );
 }
 
 void VPolarGrid::createLinePointSequence_ForAngleAxis(
@@ -98,8 +99,8 @@ void VPolarGrid::createLinePointSequence_ForAngleAxis(
         if(nTick>=rPoints[0].getLength())
             rPoints[0].realloc(rPoints[0].getLength()+30);
 
-        pTickInfo->updateUnscaledValue( xInverseScaling );
-        double fLogicAngle = pTickInfo->fUnscaledTickValue;
+        //xxxxx pTickInfo->updateUnscaledValue( xInverseScaling );
+        double fLogicAngle = pTickInfo->getUnscaledTickValue();
 
         drawing::Position3D aScenePosition3D( pPosHelper->transformAngleRadiusToScene( fLogicAngle, fLogicRadius, fLogicZ ) );
         rPoints[0][nTick].X = static_cast<sal_Int32>(aScenePosition3D.PositionX);
@@ -114,6 +115,66 @@ void VPolarGrid::createLinePointSequence_ForAngleAxis(
     else
         rPoints[0].realloc(0);
 }
+#ifdef NOTYET
+void VPolarGrid::create2DAngleGrid( const Reference< drawing::XShapes >& xLogicTarget
+        , ::std::vector< ::std::vector< TickInfo > >& /* rRadiusTickInfos */
+        , ::std::vector< ::std::vector< TickInfo > >& rAngleTickInfos
+        , const ::std::vector<VLineProperties>& rLinePropertiesList )
+{
+    Reference< drawing::XShapes > xMainTarget(
+        this->createGroupShape( xLogicTarget, m_aCID ) );
+
+    const ExplicitScaleData&     rAngleScale = m_pPosHelper->getScales()[0];
+    Reference< XScaling > xInverseScaling( NULL );
+    if( rAngleScale.Scaling.is() )
+        xInverseScaling = rAngleScale.Scaling->getInverseScaling();
+
+    double fLogicInnerRadius = m_pPosHelper->getInnerLogicRadius();
+    double fLogicOuterRadius = m_pPosHelper->getOuterLogicRadius();
+    double fLogicZ      = 1.0;//as defined
+
+    sal_Int32 nLinePropertiesCount = rLinePropertiesList.size();
+    ::std::vector< ::std::vector< TickInfo > >::iterator aDepthIter             = rAngleTickInfos.begin();
+    sal_Int32 nDepth=0;
+    /*
+    //no subgrids so far for polar angle grid (need different radii)
+    const ::std::vector< ::std::vector< TickInfo > >::const_iterator aDepthEnd  = rAngleTickInfos.end();
+    for( ; aDepthIter != aDepthEnd && nDepth < nLinePropertiesCount
+         ; aDepthIter++, nDepth++ )
+    */
+    if(nLinePropertiesCount)
+    {
+        //create axis main lines
+        drawing::PointSequenceSequence aAllPoints;
+        ::std::vector< TickInfo >::iterator             aTickIter = (*aDepthIter).begin();
+        const ::std::vector< TickInfo >::const_iterator aTickEnd  = (*aDepthIter).end();
+        for( ; aTickIter != aTickEnd; aTickIter++ )
+        {
+            TickInfo& rTickInfo = *aTickIter;
+            if( !rTickInfo.bPaintIt )
+                continue;
+
+            //xxxxx rTickInfo.updateUnscaledValue( xInverseScaling );
+            double fLogicAngle = rTickInfo.getUnscaledTickValue();
+
+            drawing::PointSequenceSequence aPoints(1);
+            aPoints[0].realloc(2);
+            drawing::Position3D aScenePositionStart( m_pPosHelper->transformAngleRadiusToScene( fLogicAngle, fLogicInnerRadius, fLogicZ ) );
+            drawing::Position3D aScenePositionEnd(   m_pPosHelper->transformAngleRadiusToScene( fLogicAngle, fLogicOuterRadius, fLogicZ ) );
+            aPoints[0][0].X = static_cast<sal_Int32>(aScenePositionStart.PositionX);
+            aPoints[0][0].Y = static_cast<sal_Int32>(aScenePositionStart.PositionY);
+            aPoints[0][1].X = static_cast<sal_Int32>(aScenePositionEnd.PositionX);
+            aPoints[0][1].Y = static_cast<sal_Int32>(aScenePositionEnd.PositionY);
+            appendPointSequence( aAllPoints, aPoints );
+        }
+
+        Reference< drawing::XShape > xShape = m_pShapeFactory->createLine2D(
+                xMainTarget, aAllPoints, &rLinePropertiesList[nDepth] );
+        //because of this name this line will be used for marking
+        m_pShapeFactory->setShapeName( xShape, C2U("MarkHandles") );
+    }
+}
+#endif
 
 void VPolarGrid::create2DRadiusGrid( const Reference< drawing::XShapes >& xLogicTarget
         , ::std::vector< ::std::vector< TickInfo > >& rRadiusTickInfos
@@ -160,9 +221,9 @@ void VPolarGrid::create2DRadiusGrid( const Reference< drawing::XShapes >& xLogic
             if( !rTickInfo.bPaintIt )
                 continue;
 
-            rTickInfo.updateUnscaledValue( xInverseRadiusScaling );
-            double fLogicRadius = rTickInfo.fUnscaledTickValue;
-            double fLogicZ      = -0.5;//as defined
+            //xxxxx rTickInfo.updateUnscaledValue( xInverseRadiusScaling );
+            double fLogicRadius = rTickInfo.getUnscaledTickValue();
+            double fLogicZ      = 1.0;//as defined
 
             drawing::PointSequenceSequence aPoints(1);
             VPolarGrid::createLinePointSequence_ForAngleAxis( aPoints, rAngleTickInfos
@@ -178,7 +239,7 @@ void VPolarGrid::create2DRadiusGrid( const Reference< drawing::XShapes >& xLogic
     }
 }
 
-void SAL_CALL VPolarGrid::createShapes()
+void VPolarGrid::createShapes()
 {
     DBG_ASSERT(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is(),"Axis is not proper initialized");
     if(!(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is()))

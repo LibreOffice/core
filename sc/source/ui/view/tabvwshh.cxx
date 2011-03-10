@@ -73,7 +73,7 @@ void ScTabViewShell::GetSbxState( SfxItemSet& /* rSet */ )
 
 void ScTabViewShell::ExecuteObject( SfxRequest& rReq )
 {
-    USHORT nSlotId = rReq.GetSlot();
+    sal_uInt16 nSlotId = rReq.GetSlot();
     const SfxItemSet* pReqArgs = rReq.GetArgs();
 
         //  Objekte aktivieren/deaktivieren immer auf der sichtbaren View
@@ -116,9 +116,9 @@ void ScTabViewShell::ExecuteObject( SfxRequest& rReq )
         case SID_OBJECT_WIDTH:
         case SID_OBJECT_HEIGHT:
             {
-                BOOL bDone = FALSE;
+                sal_Bool bDone = false;
                 const SfxPoolItem* pItem;
-                if ( pReqArgs && pReqArgs->GetItemState( nSlotId, TRUE, &pItem ) == SFX_ITEM_SET )
+                if ( pReqArgs && pReqArgs->GetItemState( nSlotId, sal_True, &pItem ) == SFX_ITEM_SET )
                 {
                     long nNewVal = ((const SfxInt32Item*)pItem)->GetValue();
                     if ( nNewVal < 0 )
@@ -147,7 +147,7 @@ void ScTabViewShell::ExecuteObject( SfxRequest& rReq )
                                 pDrView->ResizeMarkedObj( aRect.TopLeft(),
                                                 Fraction( 1, 1 ),
                                                 Fraction( nNewVal, aRect.GetHeight() ) );
-                            bDone = TRUE;
+                            bDone = sal_True;
                         }
                     }
                 }
@@ -184,7 +184,7 @@ void ScTabViewShell::GetObjectState( SfxItemSet& rSet )
     //  SID_OLE_OBJECT - removed (old Basic)
 
     SfxWhichIter aIter(rSet);
-    USHORT nWhich = aIter.FirstWhich();
+    sal_uInt16 nWhich = aIter.FirstWhich();
     while ( nWhich )
     {
         switch (nWhich)
@@ -268,7 +268,7 @@ void ScTabViewShell::BroadcastAccessibility( const SfxHint &rHint )
         pAccessibilityBroadcaster->Broadcast( rHint );
 }
 
-BOOL ScTabViewShell::HasAccessibilityObjects()
+sal_Bool ScTabViewShell::HasAccessibilityObjects()
 {
     return pAccessibilityBroadcaster != NULL;
 }

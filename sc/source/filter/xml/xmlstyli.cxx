@@ -276,7 +276,7 @@ void ScXMLRowImportPropertyMapper::finished(::std::vector< XMLPropertyState >& r
     }
     else if (pHeight)
     {
-        rProperties.push_back(XMLPropertyState(maPropMapper->FindEntryIndex(CTF_SC_ROWOPTIMALHEIGHT), ::cppu::bool2any( sal_False )));
+        rProperties.push_back(XMLPropertyState(maPropMapper->FindEntryIndex(CTF_SC_ROWOPTIMALHEIGHT), ::cppu::bool2any( false )));
     }
     // don't access pointers to rProperties elements after push_back!
 }
@@ -477,8 +477,8 @@ XMLTableStyleContext::XMLTableStyleContext( ScXMLImport& rImport,
     pStyles(&rStyles),
     nNumberFormat(-1),
     nLastSheet(-1),
-    bConditionalFormatCreated(sal_False),
-    bParentSet(sal_False)
+    bConditionalFormatCreated(false),
+    bParentSet(false)
 {
 }
 
@@ -969,8 +969,8 @@ ScMasterPageContext::ScMasterPageContext( SvXMLImport& rImport,
         const uno::Reference< XAttributeList > & xAttrList,
         sal_Bool bOverwrite ) :
     XMLTextMasterPageContext( rImport, nPrfx, rLName, xAttrList, bOverwrite ),
-    bContainsRightHeader(sal_False),
-    bContainsRightFooter(sal_False)
+    bContainsRightHeader(false),
+    bContainsRightFooter(false)
 {
 }
 

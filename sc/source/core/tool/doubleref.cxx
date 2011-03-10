@@ -66,7 +66,7 @@ bool lcl_createStarQuery(ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef, 
     if (pQueryRef->getColSize() < 4)
         return false;
 
-    BOOL bValid;
+    sal_Bool bValid;
     OUString aCellStr;
     SCSIZE nIndex = 0;
     SCROW nRow = 0;
@@ -78,7 +78,7 @@ bool lcl_createStarQuery(ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef, 
     {
         ScQueryEntry& rEntry = pParam->GetEntry(nIndex);
 
-        bValid = FALSE;
+        bValid = false;
 
         if (nIndex > 0)
         {
@@ -88,12 +88,12 @@ bool lcl_createStarQuery(ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef, 
             if ( aCellStr.equals(ScGlobal::GetRscString(STR_TABLE_UND)) )
             {
                 rEntry.eConnect = SC_AND;
-                bValid = TRUE;
+                bValid = sal_True;
             }
             else if ( aCellStr.equals(ScGlobal::GetRscString(STR_TABLE_ODER)) )
             {
                 rEntry.eConnect = SC_OR;
-                bValid = TRUE;
+                bValid = sal_True;
             }
         }
 
@@ -142,7 +142,7 @@ bool lcl_createStarQuery(ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef, 
         {
             // Finally, the right-hand-side value in the 4th column.
             *rEntry.pStr = pQueryRef->getString(3, nRow);
-            rEntry.bDoQuery = TRUE;
+            rEntry.bDoQuery = sal_True;
         }
         nIndex++;
         nRow++;
@@ -205,7 +205,7 @@ bool lcl_createExcelQuery(
                             pParam->GetEntry(nIndex).eConnect = SC_AND;
                     }
                     else
-                        bValid = FALSE;
+                        bValid = false;
                 }
                 nCol++;
             }
@@ -369,7 +369,7 @@ sal_uInt16 ScDBInternalRange::getCellString(OUString& rStr, ScBaseCell* pCell) c
                 if (pFCell->IsValue())
                 {
                     double fVal = pFCell->GetValue();
-                    ULONG nIndex = pFormatter->GetStandardFormat(
+                    sal_uLong nIndex = pFormatter->GetStandardFormat(
                                         NUMBERFORMAT_NUMBER,
                                         ScGlobal::eLnge);
                     pFormatter->GetInputLineString(fVal, nIndex, aStr);
@@ -381,7 +381,7 @@ sal_uInt16 ScDBInternalRange::getCellString(OUString& rStr, ScBaseCell* pCell) c
             case CELLTYPE_VALUE:
             {
                 double fVal = ((ScValueCell*) pCell)->GetValue();
-                ULONG nIndex = pFormatter->GetStandardFormat(
+                sal_uLong nIndex = pFormatter->GetStandardFormat(
                                         NUMBERFORMAT_NUMBER,
                                         ScGlobal::eLnge);
                 pFormatter->GetInputLineString(fVal, nIndex, aStr);
@@ -408,9 +408,9 @@ SCCOL ScDBInternalRange::findFieldColumn(const OUString& rStr, sal_uInt16* pErr)
     SCCOL nDBCol2 = e.Col();
 
     SCCOL   nField = nDBCol1;
-    BOOL    bFound = TRUE;
+    sal_Bool    bFound = sal_True;
 
-    bFound = FALSE;
+    bFound = false;
     OUString aCellStr;
     ScAddress aLook( nDBCol1, nDBRow1, nDBTab1 );
     while (!bFound && (aLook.Col() <= nDBCol2))

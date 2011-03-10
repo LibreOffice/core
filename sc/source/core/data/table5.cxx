@@ -107,7 +107,7 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
     }
     else
     {
-        USHORT nAreaCount = GetPrintRangeCount();
+        sal_uInt16 nAreaCount = GetPrintRangeCount();
         if ( nAreaCount > 1 )
         {
             //  bei mehreren Bereichen nichts anzeigen:
@@ -138,13 +138,13 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
     bool bSkipRowBreaks = false;
     bool bSkipBreaks = false;
 
-    if ( pStyleSet->GetItemState( ATTR_PAGE_SCALETOPAGES, FALSE, &pItem ) == SFX_ITEM_SET )
+    if ( pStyleSet->GetItemState( ATTR_PAGE_SCALETOPAGES, false, &pItem ) == SFX_ITEM_SET )
     {
         DBG_ASSERT( pItem->ISA(SfxUInt16Item), "falsches Item" );
         bSkipColBreaks = bSkipRowBreaks = ( ((const SfxUInt16Item*)pItem)->GetValue() > 0 );
     }
 
-    if ( !bSkipColBreaks && pStyleSet->GetItemState(ATTR_PAGE_SCALETO, FALSE, &pItem) == SFX_ITEM_SET )
+    if ( !bSkipColBreaks && pStyleSet->GetItemState(ATTR_PAGE_SCALETO, false, &pItem) == SFX_ITEM_SET )
     {
         // #i54993# when fitting to width or height, ignore only manual breaks in that direction
         const ScPageScaleToItem* pScaleToItem = static_cast<const ScPageScaleToItem*>(pItem);
@@ -181,24 +181,24 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
 
         //  Mittelteil: Breaks verteilen
 
-    BOOL bRepeatCol = ( nRepeatStartX != SCCOL_REPEAT_NONE );
-    BOOL bColFound = FALSE;
+    sal_Bool bRepeatCol = ( nRepeatStartX != SCCOL_REPEAT_NONE );
+    sal_Bool bColFound = false;
     long nSizeX = 0;
     for (nX=nStartCol; nX<=nEndCol; nX++)
     {
-        BOOL bStartOfPage = FALSE;
+        sal_Bool bStartOfPage = false;
         long nThisX = ColHidden(nX) ? 0 : pColWidth[nX];
         bool bManualBreak = HasColManualBreak(nX);
         if ( (nSizeX+nThisX > nPageSizeX) || (bManualBreak && !bSkipColBreaks) )
         {
             SetColBreak(nX, true, false);
             nSizeX = 0;
-            bStartOfPage = TRUE;
+            bStartOfPage = sal_True;
         }
         else if (nX != nStartCol)
             RemoveColBreak(nX, true, false);
         else
-            bStartOfPage = TRUE;
+            bStartOfPage = sal_True;
 
         if ( bStartOfPage && bRepeatCol && nX>nRepeatStartX && !bColFound )
         {
@@ -207,7 +207,7 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
                 nPageSizeX -= ColHidden(i) ? 0 : pColWidth[i];
             while (nX<=nRepeatEndX)
                 RemoveColBreak(++nX, true, false);
-            bColFound = TRUE;
+            bColFound = sal_True;
         }
 
         nSizeX += nThisX;
@@ -217,15 +217,15 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
     RemoveRowPageBreaks(nStartRow+1, nEndRow);
 
     // And set new page breaks.
-    BOOL bRepeatRow = ( nRepeatStartY != SCROW_REPEAT_NONE );
-    BOOL bRowFound = FALSE;
+    sal_Bool bRepeatRow = ( nRepeatStartY != SCROW_REPEAT_NONE );
+    sal_Bool bRowFound = false;
     long nSizeY = 0;
     ScFlatBoolRowSegments::ForwardIterator aIterHidden(*mpHiddenRows);
     ScFlatUInt16RowSegments::ForwardIterator aIterHeights(*mpRowHeights);
     SCROW nNextManualBreak = GetNextManualBreak(nStartRow); // -1 => no more manual breaks
     for (SCROW nY = nStartRow; nY <= nEndRow; ++nY)
     {
-        BOOL bStartOfPage = FALSE;
+        sal_Bool bStartOfPage = false;
         bool bThisRowHidden = false;
         aIterHidden.getValue(nY, bThisRowHidden);
         long nThisY = 0;
@@ -249,12 +249,12 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
         {
             SetRowBreak(nY, true, false);
             nSizeY = 0;
-            bStartOfPage = TRUE;
+            bStartOfPage = sal_True;
         }
         else if (nY != nStartRow)
             ; // page break already removed
         else
-            bStartOfPage = TRUE;
+            bStartOfPage = sal_True;
 
         if ( bStartOfPage && bRepeatRow && nY>nRepeatStartY && !bRowFound )
         {
@@ -267,7 +267,7 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
             nPageSizeY -= nHeights;
             if (nY <= nRepeatEndY)
                 RemoveRowPageBreaks(nY, nRepeatEndY);
-            bRowFound = TRUE;
+            bRowFound = sal_True;
         }
 
         if (bThisRowHidden)
@@ -329,10 +329,10 @@ void ScTable::RemoveManualBreaks()
     InvalidatePageBreaks();
 
     if (IsStreamValid())
-        SetStreamValid(FALSE);
+        SetStreamValid(false);
 }
 
-BOOL ScTable::HasManualBreaks() const
+sal_Bool ScTable::HasManualBreaks() const
 {
     return !maRowManualBreaks.empty() || !maColManualBreaks.empty();
 }
@@ -342,7 +342,7 @@ void ScTable::SetRowManualBreaks( const ::std::set<SCROW>& rBreaks )
     maRowManualBreaks = rBreaks;
     InvalidatePageBreaks();
     if (IsStreamValid())
-        SetStreamValid(FALSE);
+        SetStreamValid(false);
 }
 
 void ScTable::SetColManualBreaks( const ::std::set<SCCOL>& rBreaks )
@@ -350,7 +350,7 @@ void ScTable::SetColManualBreaks( const ::std::set<SCCOL>& rBreaks )
     maColManualBreaks = rBreaks;
     InvalidatePageBreaks();
     if (IsStreamValid())
-        SetStreamValid(FALSE);
+        SetStreamValid(false);
 }
 
 void ScTable::GetAllRowBreaks(set<SCROW>& rBreaks, bool bPage, bool bManual) const
@@ -964,13 +964,13 @@ SCROW ScTable::CountNonFilteredRows(SCROW nStartRow, SCROW nEndRow) const
 namespace {
 
 void lcl_syncFlags(ScFlatBoolColSegments& rColSegments, ScFlatBoolRowSegments& rRowSegments,
-    BYTE* pColFlags, ScBitMaskCompressedArray< SCROW, BYTE>* pRowFlags, const BYTE nFlagMask)
+    sal_uInt8* pColFlags, ScBitMaskCompressedArray< SCROW, sal_uInt8>* pRowFlags, const sal_uInt8 nFlagMask)
 {
     using ::sal::static_int_cast;
 
-    pRowFlags->AndValue(0, MAXROW, static_int_cast<BYTE>(~nFlagMask));
+    pRowFlags->AndValue(0, MAXROW, static_int_cast<sal_uInt8>(~nFlagMask));
     for (SCCOL i = 0; i <= MAXCOL; ++i)
-        pColFlags[i] &= static_int_cast<BYTE>(~nFlagMask);
+        pColFlags[i] &= static_int_cast<sal_uInt8>(~nFlagMask);
 
     {
         // row hidden flags.
@@ -983,7 +983,7 @@ void lcl_syncFlags(ScFlatBoolColSegments& rColSegments, ScFlatBoolRowSegments& r
                 break;
 
             if (aData.mbValue)
-                pRowFlags->OrValue(nRow, aData.mnRow2, static_int_cast<BYTE>(nFlagMask));
+                pRowFlags->OrValue(nRow, aData.mnRow2, static_int_cast<sal_uInt8>(nFlagMask));
 
             nRow = aData.mnRow2 + 1;
         }
@@ -1017,15 +1017,15 @@ void ScTable::SyncColRowFlags()
     using ::sal::static_int_cast;
 
     // Manual breaks.
-    pRowFlags->AndValue(0, MAXROW, static_int_cast<BYTE>(~CR_MANUALBREAK));
+    pRowFlags->AndValue(0, MAXROW, static_int_cast<sal_uInt8>(~CR_MANUALBREAK));
     for (SCCOL i = 0; i <= MAXCOL; ++i)
-        pColFlags[i] &= static_int_cast<BYTE>(~CR_MANUALBREAK);
+        pColFlags[i] &= static_int_cast<sal_uInt8>(~CR_MANUALBREAK);
 
     if (!maRowManualBreaks.empty())
     {
         for (set<SCROW>::const_iterator itr = maRowManualBreaks.begin(), itrEnd = maRowManualBreaks.end();
               itr != itrEnd; ++itr)
-            pRowFlags->OrValue(*itr, static_int_cast<BYTE>(CR_MANUALBREAK));
+            pRowFlags->OrValue(*itr, static_int_cast<sal_uInt8>(CR_MANUALBREAK));
     }
 
     if (!maColManualBreaks.empty())
@@ -1047,14 +1047,14 @@ void ScTable::SetPageSize( const Size& rSize )
         if (aPageSizeTwips != rSize)
             InvalidatePageBreaks();
 
-        bPageSizeValid = TRUE;
+        bPageSizeValid = sal_True;
         aPageSizeTwips = rSize;
     }
     else
-        bPageSizeValid = FALSE;
+        bPageSizeValid = false;
 }
 
-BOOL ScTable::IsProtected() const
+sal_Bool ScTable::IsProtected() const
 {
     return pTabProtection.get() && pTabProtection->isProtected();
 }
@@ -1067,7 +1067,7 @@ void ScTable::SetProtection(const ScTableProtection* pProtect)
         pTabProtection.reset(NULL);
 
     if (IsStreamValid())
-        SetStreamValid(FALSE);
+        SetStreamValid(false);
 }
 
 ScTableProtection* ScTable::GetProtection()
@@ -1123,20 +1123,20 @@ void ScTable::SetPageStyle( const String& rName )
             {
                 SfxItemSet&  rOldSet          = pOldStyle->GetItemSet();
                 SfxItemSet&  rNewSet          = pNewStyle->GetItemSet();
-                const USHORT nOldScale        = GET_SCALEVALUE(rOldSet,ATTR_PAGE_SCALE);
-                const USHORT nOldScaleToPages = GET_SCALEVALUE(rOldSet,ATTR_PAGE_SCALETOPAGES);
-                const USHORT nNewScale        = GET_SCALEVALUE(rNewSet,ATTR_PAGE_SCALE);
-                const USHORT nNewScaleToPages = GET_SCALEVALUE(rNewSet,ATTR_PAGE_SCALETOPAGES);
+                const sal_uInt16 nOldScale        = GET_SCALEVALUE(rOldSet,ATTR_PAGE_SCALE);
+                const sal_uInt16 nOldScaleToPages = GET_SCALEVALUE(rOldSet,ATTR_PAGE_SCALETOPAGES);
+                const sal_uInt16 nNewScale        = GET_SCALEVALUE(rNewSet,ATTR_PAGE_SCALE);
+                const sal_uInt16 nNewScaleToPages = GET_SCALEVALUE(rNewSet,ATTR_PAGE_SCALETOPAGES);
 
                 if ( (nOldScale != nNewScale) || (nOldScaleToPages != nNewScaleToPages) )
-                    InvalidateTextWidth(NULL, NULL, FALSE, FALSE);
+                    InvalidateTextWidth(NULL, NULL, false, false);
             }
 
             if ( pNewStyle )            // auch ohne den alten (fuer UpdateStdNames)
                 aPageStyle = aStrNew;
 
             if (IsStreamValid())
-                SetStreamValid(FALSE);
+                SetStreamValid(false);
         }
     }
 }
@@ -1144,11 +1144,11 @@ void ScTable::SetPageStyle( const String& rName )
 void ScTable::PageStyleModified( const String& rNewName )
 {
     aPageStyle = rNewName;
-    InvalidateTextWidth(NULL, NULL, FALSE, FALSE);      // don't know what was in the style before
+    InvalidateTextWidth(NULL, NULL, false, false);      // don't know what was in the style before
 }
 
 void ScTable::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress* pAdrTo,
-                                   BOOL bNumFormatChanged, BOOL bBroadcast )
+                                   sal_Bool bNumFormatChanged, sal_Bool bBroadcast )
 {
     if ( pAdrFrom && !pAdrTo )
     {

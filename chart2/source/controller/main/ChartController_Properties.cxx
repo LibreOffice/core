@@ -715,11 +715,11 @@ void SAL_CALL ChartController::executeDlg_ObjectProperties( const ::rtl::OUStrin
     UndoGuard aUndoGuard( ActionDescriptionProvider::createDescription(
                 ActionDescriptionProvider::FORMAT,
                 ObjectNameProvider::getName( ObjectIdentifier::getObjectType( aObjectCID ))),
-            m_xUndoManager, getModel() );
+            m_xUndoManager );
 
     bool bSuccess = ChartController::executeDlg_ObjectProperties_withoutUndoGuard( aObjectCID, false );
     if( bSuccess )
-        aUndoGuard.commitAction();
+        aUndoGuard.commit();
 }
 
 bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard( const ::rtl::OUString& rObjectCID, bool bOkClickOnUnchangedDialogSouldBeRatedAsSuccessAlso )
@@ -831,14 +831,14 @@ void SAL_CALL ChartController::executeDispatch_View3D()
     {
         // using assignment for broken gcc 3.3
         UndoLiveUpdateGuard aUndoGuard = UndoLiveUpdateGuard(
-            ::rtl::OUString( String( SchResId( STR_ACTION_EDIT_3D_VIEW ))),
-            m_xUndoManager, getModel());
+            String( SchResId( STR_ACTION_EDIT_3D_VIEW )),
+            m_xUndoManager );
 
         //open dialog
         SolarMutexGuard aSolarGuard;
         View3DDialog aDlg( m_pChartWindow, getModel(), m_pDrawModelWrapper->GetColorTable() );
         if( aDlg.Execute() == RET_OK )
-            aUndoGuard.commitAction();
+            aUndoGuard.commit();
     }
     catch( uno::RuntimeException& e)
     {

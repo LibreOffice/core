@@ -43,7 +43,7 @@ class SdrOutliner;
 class FuText : public FuConstruct
 {
 protected:
-//  USHORT          nOldObjectBar;
+//  sal_uInt16          nOldObjectBar;
     SdrTextObj*     pTextObj;
 
 public:
@@ -52,10 +52,10 @@ public:
 
     virtual ~FuText();
 
-    virtual BOOL KeyInput(const KeyEvent& rKEvt);
-    virtual BOOL MouseMove(const MouseEvent& rMEvt);
-    virtual BOOL MouseButtonUp(const MouseEvent& rMEvt);
-    virtual BOOL MouseButtonDown(const MouseEvent& rMEvt);
+    virtual sal_Bool KeyInput(const KeyEvent& rKEvt);
+    virtual sal_Bool MouseMove(const MouseEvent& rMEvt);
+    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt);
+    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt);
 
     virtual void Activate();           // Function aktivieren
     virtual void Deactivate();         // Function deaktivieren
@@ -65,8 +65,8 @@ public:
     virtual void SelectionHasChanged();
 
     void    SetInEditMode( SdrObject* pObj = NULL, const Point* pMousePixel = NULL,
-                            BOOL bCursorToEnd = FALSE, const KeyEvent* pInitialKey = NULL );
-    void    StopEditMode(BOOL bTextDirection = FALSE);
+                            sal_Bool bCursorToEnd = false, const KeyEvent* pInitialKey = NULL );
+    void    StopEditMode(sal_Bool bTextDirection = false);
     void    StopDragMode(SdrObject* pObject);
 
     // Create default drawing objects via keyboard

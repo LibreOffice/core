@@ -99,8 +99,8 @@ ScFilterOptionsMgr::ScFilterOptionsMgr(
 
 ScFilterOptionsMgr::~ScFilterOptionsMgr()
 {
-    USHORT nEntries = rLbCopyPos.GetEntryCount();
-    USHORT i;
+    sal_uInt16 nEntries = rLbCopyPos.GetEntryCount();
+    sal_uInt16 i;
 
     for ( i=2; i<nEntries; i++ )
         delete (String*)rLbCopyPos.GetEntryData( i );
@@ -162,13 +162,13 @@ void ScFilterOptionsMgr::Init()
         String aRefStr;
         while ( aIter.Next( aName, aRange ) )
         {
-            USHORT nInsert = rLbCopyPos.InsertEntry( aName );
+            sal_uInt16 nInsert = rLbCopyPos.InsertEntry( aName );
 
             aRange.aStart.Format( aRefStr, SCA_ABS_3D, pDoc, eConv );
             rLbCopyPos.SetEntryData( nInsert, new String( aRefStr ) );
         }
 
-        rBtnDestPers.Check( TRUE );         // beim Aufruf immer an
+        rBtnDestPers.Check( sal_True );         // beim Aufruf immer an
         rLbCopyPos.SelectEntryPos( 0 );
         rEdCopyPos.SetText( EMPTY_STRING );
 
@@ -215,7 +215,7 @@ void ScFilterOptionsMgr::Init()
                        rQueryData.nDestTab
                      ).Format( aString, SCA_ABS_3D, pDoc, eConv );
 
-            rBtnCopyResult.Check( TRUE );
+            rBtnCopyResult.Check( sal_True );
             rEdCopyPos.SetText( aString );
             EdPosModifyHdl( &rEdCopyPos );
             rLbCopyPos.Enable();
@@ -225,7 +225,7 @@ void ScFilterOptionsMgr::Init()
         }
         else
         {
-            rBtnCopyResult.Check( FALSE );
+            rBtnCopyResult.Check( false );
             rEdCopyPos.SetText( EMPTY_STRING );
             rLbCopyPos.Disable();
             rEdCopyPos.Disable();
@@ -240,7 +240,7 @@ void ScFilterOptionsMgr::Init()
 
 //----------------------------------------------------------------------------
 
-BOOL ScFilterOptionsMgr::VerifyPosStr( const String& rPosStr ) const
+sal_Bool ScFilterOptionsMgr::VerifyPosStr( const String& rPosStr ) const
 {
     String aPosStr( rPosStr );
     xub_StrLen nColonPos = aPosStr.Search( ':' );
@@ -248,7 +248,7 @@ BOOL ScFilterOptionsMgr::VerifyPosStr( const String& rPosStr ) const
     if ( STRING_NOTFOUND != nColonPos )
         aPosStr.Erase( nColonPos );
 
-    USHORT nResult = ScAddress().Parse( aPosStr, pDoc, pDoc->GetAddressConvention() );
+    sal_uInt16 nResult = ScAddress().Parse( aPosStr, pDoc, pDoc->GetAddressConvention() );
 
     return ( SCA_VALID == (nResult & SCA_VALID) );
 }
@@ -264,7 +264,7 @@ IMPL_LINK( ScFilterOptionsMgr, LbPosSelHdl, ListBox*, pLb )
     if ( pLb == &rLbCopyPos )
     {
         String aString;
-        USHORT nSelPos = rLbCopyPos.GetSelectEntryPos();
+        sal_uInt16 nSelPos = rLbCopyPos.GetSelectEntryPos();
 
         if ( nSelPos > 0 )
             aString = *(String*)rLbCopyPos.GetEntryData( nSelPos );
@@ -283,14 +283,14 @@ IMPL_LINK( ScFilterOptionsMgr, EdPosModifyHdl, Edit*, pEd )
     if ( pEd == &rEdCopyPos )
     {
         String  theCurPosStr = pEd->GetText();
-        USHORT  nResult = ScAddress().Parse( theCurPosStr, pDoc, pDoc->GetAddressConvention() );
+        sal_uInt16  nResult = ScAddress().Parse( theCurPosStr, pDoc, pDoc->GetAddressConvention() );
 
         if ( SCA_VALID == (nResult & SCA_VALID) )
         {
             String* pStr    = NULL;
-            BOOL    bFound  = FALSE;
-            USHORT  i       = 0;
-            USHORT  nCount  = rLbCopyPos.GetEntryCount();
+            sal_Bool    bFound  = false;
+            sal_uInt16  i       = 0;
+            sal_uInt16  nCount  = rLbCopyPos.GetEntryCount();
 
             for ( i=2; i<nCount && !bFound; i++ )
             {

@@ -82,7 +82,7 @@ struct ScQueryParamTable
 
 struct SC_DLLPUBLIC ScQueryParam : public ScQueryParamBase, public ScQueryParamTable
 {
-    BOOL            bDestPers;          // nicht gespeichert
+    sal_Bool            bDestPers;          // nicht gespeichert
     SCTAB           nDestTab;
     SCCOL           nDestCol;
     SCROW           nDestRow;
@@ -95,7 +95,7 @@ struct SC_DLLPUBLIC ScQueryParam : public ScQueryParamBase, public ScQueryParamT
     virtual ~ScQueryParam();
 
     ScQueryParam&   operator=   ( const ScQueryParam& r );
-    BOOL            operator==  ( const ScQueryParam& rOther ) const;
+    sal_Bool            operator==  ( const ScQueryParam& rOther ) const;
     void            Clear();
     void            ClearDestParams();
     void            MoveToDest();

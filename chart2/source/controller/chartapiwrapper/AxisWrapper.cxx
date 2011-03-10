@@ -30,10 +30,15 @@
 #include "precompiled_chart2.hxx"
 #include "AxisWrapper.hxx"
 #include "AxisHelper.hxx"
+#include "TitleHelper.hxx"
 #include "Chart2ModelContact.hxx"
 #include "ContainerHelper.hxx"
 #include "macros.hxx"
 #include "WrappedDirectStateProperty.hxx"
+#include "GridWrapper.hxx"
+#include "TitleWrapper.hxx"
+#include "DisposeHelper.hxx"
+
 #include <comphelper/InlineContainer.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart/ChartAxisArrangeOrderType.hpp>
@@ -83,6 +88,9 @@ enum
     PROP_AXIS_AUTO_MIN,
     PROP_AXIS_AUTO_STEPMAIN,
     PROP_AXIS_AUTO_STEPHELP,
+    PROP_AXIS_TYPE,
+    PROP_AXIS_TIME_INCREMENT,
+    PROP_AXIS_EXPLICIT_TIME_INCREMENT,
     PROP_AXIS_LOGARITHMIC,
     PROP_AXIS_REVERSEDIRECTION,
     PROP_AXIS_VISIBLE,
@@ -173,6 +181,27 @@ void lcl_AddPropertiesToVector(
                   ::getBooleanCppuType(),
                   //#i111967# no PropertyChangeEvent is fired on change so far
                   beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( C2U( "AxisType" ),
+                  PROP_AXIS_TYPE,
+                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)), //type com::sun::star::chart::ChartAxisType
+                  //#i111967# no PropertyChangeEvent is fired on change so far
+                  beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( C2U( "TimeIncrement" ),
+                  PROP_AXIS_TIME_INCREMENT,
+                  ::getCppuType( reinterpret_cast< const ::com::sun::star::chart::TimeIncrement * >(0)),
+                  //#i111967# no PropertyChangeEvent is fired on change so far
+                  beans::PropertyAttribute::MAYBEVOID ));
+
+    rOutProperties.push_back(
+        Property( C2U( "ExplicitTimeIncrement" ),
+                  PROP_AXIS_EXPLICIT_TIME_INCREMENT,
+                  ::getCppuType( reinterpret_cast< const ::com::sun::star::chart::TimeIncrement * >(0)),
+                  beans::PropertyAttribute::READONLY |
+                  beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
         Property( C2U( "Logarithmic" ),
@@ -324,14 +353,17 @@ void lcl_AddPropertiesToVector(
                   beans::PropertyAttribute::MAYBEDEFAULT ));
 }
 
-const Sequence< Property > & lcl_GetPropertySequence()
+struct StaticAxisWrapperPropertyArray_Initializer
 {
-    static Sequence< Property > aPropSeq;
-
-    MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( 0 == aPropSeq.getLength() )
+    Sequence< Property >* operator()()
     {
-        // get properties
+        static Sequence< Property > aPropSeq( lcl_GetPropertySequence() );
+        return &aPropSeq;
+    }
+
+private:
+    Sequence< Property > lcl_GetPropertySequence()
+    {
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );
         ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
@@ -339,16 +371,16 @@ const Sequence< Property > & lcl_GetPropertySequence()
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
         ::chart::wrapper::WrappedScaleTextProperties::addProperties( aProperties );
 
-        // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
 
-        // transfer result to static Sequence
-        aPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
+        return ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
+};
 
-    return aPropSeq;
-}
+struct StaticAxisWrapperPropertyArray : public rtl::StaticAggregate< Sequence< Property >, StaticAxisWrapperPropertyArray_Initializer >
+{
+};
 
 } // anonymous namespace
 
@@ -369,6 +401,83 @@ AxisWrapper::AxisWrapper(
 
 AxisWrapper::~AxisWrapper()
 {
+}
+
+// ____ chart::XAxis ____
+Reference< beans::XPropertySet > SAL_CALL AxisWrapper::getAxisTitle() throw (uno::RuntimeException)
+{
+    if( !m_xAxisTitle.is() )
+    {
+        TitleHelper::eTitleType eTitleType( TitleHelper::X_AXIS_TITLE    );
+        switch( m_eType )
+        {
+            case X_AXIS:
+                eTitleType = TitleHelper::X_AXIS_TITLE;
+                break;
+            case Y_AXIS:
+                eTitleType = TitleHelper::Y_AXIS_TITLE;
+                break;
+            case Z_AXIS:
+                eTitleType = TitleHelper::Z_AXIS_TITLE;
+                break;
+            case SECOND_X_AXIS:
+                eTitleType = TitleHelper::SECONDARY_X_AXIS_TITLE;
+                break;
+            case SECOND_Y_AXIS:
+                eTitleType = TitleHelper::SECONDARY_Y_AXIS_TITLE;
+                break;
+            default:
+                return 0;
+        }
+        m_xAxisTitle = new TitleWrapper( eTitleType, m_spChart2ModelContact );
+    }
+    return m_xAxisTitle;
+}
+Reference< beans::XPropertySet > SAL_CALL AxisWrapper::getMajorGrid() throw (uno::RuntimeException)
+{
+    if( !m_xMajorGrid.is() )
+    {
+        GridWrapper::tGridType eGridType( GridWrapper::X_MAJOR_GRID );
+        switch( m_eType )
+        {
+            case X_AXIS:
+                eGridType = GridWrapper::X_MAJOR_GRID;
+                break;
+            case Y_AXIS:
+                eGridType = GridWrapper::Y_MAJOR_GRID;
+                break;
+            case Z_AXIS:
+                eGridType = GridWrapper::Z_MAJOR_GRID;
+                break;
+            default:
+                return 0;
+        }
+        m_xMajorGrid = new GridWrapper( eGridType, m_spChart2ModelContact );
+    }
+    return m_xMajorGrid;
+}
+Reference< beans::XPropertySet > SAL_CALL AxisWrapper::getMinorGrid() throw (uno::RuntimeException)
+{
+    if( !m_xMinorGrid.is() )
+    {
+        GridWrapper::tGridType eGridType( GridWrapper::X_MAJOR_GRID );
+        switch( m_eType )
+        {
+            case X_AXIS:
+                eGridType = GridWrapper::X_MINOR_GRID;
+                break;
+            case Y_AXIS:
+                eGridType = GridWrapper::Y_MINOR_GRID;
+                break;
+            case Z_AXIS:
+                eGridType = GridWrapper::Z_MINOR_GRID;
+                break;
+            default:
+                return 0;
+        }
+        m_xMinorGrid = new GridWrapper( eGridType, m_spChart2ModelContact );
+    }
+    return m_xMinorGrid;
 }
 
 // ____ XShape ____
@@ -451,6 +560,10 @@ void SAL_CALL AxisWrapper::dispose()
     Reference< uno::XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
     m_aEventListenerContainer.disposeAndClear( lang::EventObject( xSource ) );
 
+    DisposeHelper::DisposeAndClear( m_xAxisTitle );
+    DisposeHelper::DisposeAndClear( m_xMajorGrid );
+    DisposeHelper::DisposeAndClear( m_xMinorGrid );
+
     clearWrappedPropertySet();
 }
 
@@ -530,7 +643,7 @@ Reference< beans::XPropertySet > AxisWrapper::getInnerPropertySet()
 
 const Sequence< beans::Property >& AxisWrapper::getPropertySequence()
 {
-    return lcl_GetPropertySequence();
+    return *StaticAxisWrapperPropertyArray::get();
 }
 
 const std::vector< WrappedProperty* > AxisWrapper::createWrappedProperties()

@@ -32,7 +32,7 @@
 
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
-#include <vcl/imagebtn.hxx>
+#include <vcl/button.hxx>
 #include <vcl/edit.hxx>
 
 #include <layout/layout.hxx>
@@ -47,7 +47,7 @@ public:
                             const String& rTitle,
                             const String& rEditTitle,
                             const String& rDefault,
-                            ULONG nHelpId );
+                            const rtl::OString& sHelpId, const rtl::OString& sEditHelpId );
             ~ScStringInputDlg();
 
     void GetInputString( String& rString ) const;

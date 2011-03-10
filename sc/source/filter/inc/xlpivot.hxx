@@ -599,7 +599,7 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclPTItemInfo& rInfo );
 
 // General field settings =====================================================
 
-typedef ::std::vector< USHORT > XclPTSubtotalVec;
+typedef ::std::vector< sal_uInt16 > XclPTSubtotalVec;
 
 /** Contains data for a pivot table field (SXVD record). */
 struct XclPTFieldInfo : public XclPTVisNameInfo

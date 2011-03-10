@@ -54,29 +54,48 @@ using ::rtl::OUString;
 
 namespace
 {
-const Sequence< Property > & lcl_GetPropertySequence()
-{
-    static Sequence< Property > aPropSeq;
 
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( 0 == aPropSeq.getLength() )
+struct StaticDataPointInfoHelper_Initializer
+{
+    ::cppu::OPropertyArrayHelper* operator()()
     {
-        // get properties
+        static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
+        return &aPropHelper;
+    }
+
+private:
+    Sequence< Property > lcl_GetPropertySequence()
+    {
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
         ::chart::DataPointProperties::AddPropertiesToVector( aProperties );
         ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
-        // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
 
-        // transfer result to static Sequence
-        aPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
+        return ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
+};
 
-    return aPropSeq;
-}
+struct StaticDataPointInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticDataPointInfoHelper_Initializer >
+{
+};
+
+struct StaticDataPointInfo_Initializer
+{
+    uno::Reference< beans::XPropertySetInfo >* operator()()
+    {
+        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticDataPointInfoHelper::get() ) );
+        return &xPropertySetInfo;
+    }
+};
+
+struct StaticDataPointInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticDataPointInfo_Initializer >
+{
+};
+
 } // anonymous namespace
 
 // ____________________________________________________________
@@ -157,7 +176,7 @@ uno::Reference< util::XCloneable > SAL_CALL DataPoint::createClone()
 Reference< uno::XInterface > SAL_CALL DataPoint::getParent()
     throw (uno::RuntimeException)
 {
-    return Reference< uno::XInterface >( m_xParentProperties, uno::UNO_QUERY );
+    return Reference< uno::XInterface >( m_xParentProperties.get(), uno::UNO_QUERY );
 }
 
 void SAL_CALL DataPoint::setParent(
@@ -165,7 +184,7 @@ void SAL_CALL DataPoint::setParent(
     throw (lang::NoSupportException,
            uno::RuntimeException)
 {
-    m_xParentProperties.set( Parent, uno::UNO_QUERY );
+    m_xParentProperties = Reference< beans::XPropertySet >( Parent, uno::UNO_QUERY );
 }
 
 // ____ OPropertySet ____
@@ -173,7 +192,7 @@ uno::Any DataPoint::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
     // the value set at the data series is the default
-    uno::Reference< beans::XFastPropertySet > xFast( m_xParentProperties, uno::UNO_QUERY );
+    uno::Reference< beans::XFastPropertySet > xFast( m_xParentProperties.get(), uno::UNO_QUERY );
     if( !xFast.is())
     {
         OSL_ENSURE( m_bNoParentPropAllowed, "data point needs a parent property set to provide values correctly" );
@@ -214,33 +233,14 @@ void SAL_CALL DataPoint::setFastPropertyValue_NoBroadcast(
 
 ::cppu::IPropertyArrayHelper & SAL_CALL DataPoint::getInfoHelper()
 {
-    return getInfoHelperConst();
-}
-
-::cppu::IPropertyArrayHelper & SAL_CALL DataPoint::getInfoHelperConst() const
-{
-    static ::cppu::OPropertyArrayHelper aArrayHelper(
-        lcl_GetPropertySequence(),
-        /* bSorted = */ sal_True );
-
-    return aArrayHelper;
+    return *StaticDataPointInfoHelper::get();
 }
 
 // ____ XPropertySet ____
-Reference< beans::XPropertySetInfo > SAL_CALL
-    DataPoint::getPropertySetInfo()
+Reference< beans::XPropertySetInfo > SAL_CALL DataPoint::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
-    static Reference< beans::XPropertySetInfo > xInfo;
-
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( !xInfo.is())
-    {
-        xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo(
-            getInfoHelper());
-    }
-
-    return xInfo;
+    return *StaticDataPointInfo::get();
 }
 
 // ____ XModifyBroadcaster ____

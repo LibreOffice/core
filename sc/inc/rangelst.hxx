@@ -49,12 +49,12 @@ public:
                         maRanges.push_back( pR );
                     }
 
-    USHORT          Parse( const String&, ScDocument* = NULL,
-                           USHORT nMask = SCA_VALID,
+    sal_uInt16          Parse( const String&, ScDocument* = NULL,
+                           sal_uInt16 nMask = SCA_VALID,
                            formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO,
                            sal_Unicode cDelimiter = 0 );
 
-    void            Format( String&, USHORT nFlags = 0, ScDocument* = NULL,
+    void            Format( String&, sal_uInt16 nFlags = 0, ScDocument* = NULL,
                             formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO,
                             sal_Unicode cDelimiter = 0 ) const;
 

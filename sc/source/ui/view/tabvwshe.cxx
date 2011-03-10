@@ -57,7 +57,7 @@
 
 //==================================================================
 
-String ScTabViewShell::GetSelectionText( BOOL bWholeWord )
+String ScTabViewShell::GetSelectionText( sal_Bool bWholeWord )
 {
     String aStrSelection;
 
@@ -141,10 +141,10 @@ String ScTabViewShell::GetSelectionText( BOOL bWholeWord )
 //------------------------------------------------------------------------
 
 void ScTabViewShell::InsertURL( const String& rName, const String& rURL, const String& rTarget,
-                                USHORT nMode )
+                                sal_uInt16 nMode )
 {
     SvxLinkInsertMode eMode = (SvxLinkInsertMode) nMode;
-    BOOL bAsText = ( eMode != HLINK_BUTTON );       // Default ist jetzt Text
+    sal_Bool bAsText = ( eMode != HLINK_BUTTON );       // Default ist jetzt Text
 
     if ( bAsText )
     {
@@ -159,11 +159,11 @@ void ScTabViewShell::InsertURL( const String& rName, const String& rURL, const S
         {
             //  if the view is not active, InsertURLField doesn't work
             //  -> use InsertBookmark to directly manipulate cell content
-            //  bTryReplace=TRUE -> if cell contains only one URL, replace it
+            //  bTryReplace=sal_True -> if cell contains only one URL, replace it
 
             SCCOL nPosX = GetViewData()->GetCurX();
             SCROW nPosY = GetViewData()->GetCurY();
-            InsertBookmark( rName, rURL, nPosX, nPosY, &rTarget, TRUE );
+            InsertBookmark( rName, rURL, nPosX, nPosY, &rTarget, sal_True );
         }
     }
     else
@@ -199,7 +199,7 @@ void ScTabViewShell::InsertURLField( const String& rName, const String& rURL, co
     ScModule*       pScMod      = SC_MOD();
     ScInputHandler* pHdl        = pScMod->GetInputHdl( pViewData->GetViewShell() );
 
-    BOOL bSelectFirst = FALSE;
+    sal_Bool bSelectFirst = false;
     if ( !pScMod->IsEditMode() )
     {
         if ( !SelectionEditable() )
@@ -245,7 +245,7 @@ void ScTabViewShell::InsertURLField( const String& rName, const String& rURL, co
 void ScTabViewShell::ExecSearch( SfxRequest& rReq )
 {
     const SfxItemSet*   pReqArgs    = rReq.GetArgs();
-    USHORT              nSlot       = rReq.GetSlot();
+    sal_uInt16              nSlot       = rReq.GetSlot();
     const SfxPoolItem*  pItem;
 
     switch ( nSlot )
@@ -253,13 +253,13 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
         case FID_SEARCH_NOW:
             {
                 if ( pReqArgs &&
-                     SFX_ITEM_SET == pReqArgs->GetItemState(SID_SEARCH_ITEM, FALSE, &pItem) )
+                     SFX_ITEM_SET == pReqArgs->GetItemState(SID_SEARCH_ITEM, false, &pItem) )
                 {
                     DBG_ASSERT( pItem->ISA(SvxSearchItem), "falsches Item" );
                     const SvxSearchItem* pSearchItem = (const SvxSearchItem*) pItem;
 
                     ScGlobal::SetSearchItem( *pSearchItem );
-                    SearchAndReplace( pSearchItem, TRUE, rReq.IsAPI() );
+                    SearchAndReplace( pSearchItem, sal_True, rReq.IsAPI() );
                     rReq.Done();
                 }
             }
@@ -267,7 +267,7 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
 
         case SID_SEARCH_ITEM:
             if (pReqArgs && SFX_ITEM_SET ==
-                            pReqArgs->GetItemState(SID_SEARCH_ITEM, FALSE, &pItem))
+                            pReqArgs->GetItemState(SID_SEARCH_ITEM, false, &pItem))
             {
                 //  Search-Item merken
                 DBG_ASSERT( pItem->ISA(SvxSearchItem), "falsches Item" );
@@ -283,7 +283,7 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
         case FID_REPLACE_ALL:
         case FID_SEARCH_ALL:
             {
-                if (pReqArgs && SFX_ITEM_SET == pReqArgs->GetItemState(nSlot, FALSE, &pItem))
+                if (pReqArgs && SFX_ITEM_SET == pReqArgs->GetItemState(nSlot, false, &pItem))
                 {
                     //  SearchItem holen
 
@@ -292,7 +292,7 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
                     //  SearchItem fuellen
 
                     aSearchItem.SetSearchString(((SfxStringItem*)pItem)->GetValue());
-                    if(SFX_ITEM_SET == pReqArgs->GetItemState(FN_PARAM_1, FALSE, &pItem))
+                    if(SFX_ITEM_SET == pReqArgs->GetItemState(FN_PARAM_1, false, &pItem))
                         aSearchItem.SetReplaceString(((SfxStringItem*)pItem)->GetValue());
 
                     if (nSlot == FID_SEARCH)

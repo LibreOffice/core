@@ -193,11 +193,11 @@ public:
 
     /** Returns true, if the passed item set contains the item.
         @param bDeep  true = Searches in parent item sets too. */
-    static bool         CheckItem( const SfxItemSet& rItemSet, USHORT nWhichId, bool bDeep );
+    static bool         CheckItem( const SfxItemSet& rItemSet, sal_uInt16 nWhichId, bool bDeep );
     /** Returns true, if the passed item set contains at least one of the items.
         @param pnWhichIds  Zero-terminated array of Which-IDs.
         @param bDeep  true = Searches in parent item sets too. */
-    static bool         CheckItems( const SfxItemSet& rItemSet, const USHORT* pnWhichIds, bool bDeep );
+    static bool         CheckItems( const SfxItemSet& rItemSet, const sal_uInt16* pnWhichIds, bool bDeep );
 
     /** Puts the item into the passed item set.
         @descr  The item will be put into the item set, if bSkipPoolDef is false,
@@ -208,7 +208,7 @@ public:
         @param bSkipPoolDef  true = Do not put item if it is equal to pool default; false = Always put the item. */
     static void         PutItem(
                             SfxItemSet& rItemSet, const SfxPoolItem& rItem,
-                            USHORT nWhichId, bool bSkipPoolDef );
+                            sal_uInt16 nWhichId, bool bSkipPoolDef );
 
     /** Puts the item into the passed item set.
         @descr  The item will be put into the item set, if bSkipPoolDef is false,
@@ -310,14 +310,14 @@ class ScFormatFilterPluginImpl : public ScFormatFilterPlugin {
         // eFormat == EIF_BIFF_LE4 -> nur Nicht-Storage-Dateien _koennen_ zum Erfolg fuehren
     virtual FltError ScImportStarCalc10( SvStream&, ScDocument* );
     virtual FltError ScImportDif( SvStream&, ScDocument*, const ScAddress& rInsPos,
-                 const CharSet eSrc = RTL_TEXTENCODING_DONTKNOW, UINT32 nDifOption = SC_DIFOPT_EXCEL );
+                 const CharSet eSrc = RTL_TEXTENCODING_DONTKNOW, sal_uInt32 nDifOption = SC_DIFOPT_EXCEL );
     virtual FltError ScImportRTF( SvStream&, const String& rBaseURL, ScDocument*, ScRange& rRange );
     virtual FltError ScImportHTML( SvStream&, const String& rBaseURL, ScDocument*, ScRange& rRange,
-                                   double nOutputFactor = 1.0, BOOL bCalcWidthHeight = TRUE,
+                                   double nOutputFactor = 1.0, sal_Bool bCalcWidthHeight = true,
                                    SvNumberFormatter* pFormatter = NULL, bool bConvertDate = true );
 
     virtual ScEEAbsImport *CreateRTFImport( ScDocument* pDoc, const ScRange& rRange );
-    virtual ScEEAbsImport *CreateHTMLImport( ScDocument* pDocP, const String& rBaseURL, const ScRange& rRange, BOOL bCalcWidthHeight );
+    virtual ScEEAbsImport *CreateHTMLImport( ScDocument* pDocP, const String& rBaseURL, const ScRange& rRange, sal_Bool bCalcWidthHeight );
     virtual String         GetHTMLRangeNameList( ScDocument* pDoc, const String& rOrigName );
 
     // various export filters
@@ -326,10 +326,10 @@ class ScFormatFilterPluginImpl : public ScFormatFilterPlugin {
 #endif
     virtual FltError ScExportExcel5( SfxMedium&, ScDocument*, ExportFormatExcel eFormat, CharSet eDest );
     virtual FltError ScExportDif( SvStream&, ScDocument*, const ScAddress& rOutPos, const CharSet eDest,
-                                 UINT32 nDifOption = SC_DIFOPT_EXCEL );
+                                 sal_uInt32 nDifOption = SC_DIFOPT_EXCEL );
     virtual FltError ScExportDif( SvStream&, ScDocument*, const ScRange& rRange, const CharSet eDest,
-                 UINT32 nDifOption = SC_DIFOPT_EXCEL );
-    virtual FltError ScExportHTML( SvStream&, const String& rBaseURL, ScDocument*, const ScRange& rRange, const CharSet eDest, BOOL bAll,
+                 sal_uInt32 nDifOption = SC_DIFOPT_EXCEL );
+    virtual FltError ScExportHTML( SvStream&, const String& rBaseURL, ScDocument*, const ScRange& rRange, const CharSet eDest, sal_Bool bAll,
                   const String& rStreamPath, String& rNonConvertibleChars );
     virtual FltError ScExportRTF( SvStream&, ScDocument*, const ScRange& rRange, const CharSet eDest );
 };

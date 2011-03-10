@@ -30,7 +30,7 @@
 #include <svtools/libcall.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/window.hxx>
-#include <vcl/imagebtn.hxx>
+#include <vcl/button.hxx>
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/help.hxx>
@@ -157,7 +157,7 @@ void ScTestListener::disposing(const EventObject& Source)
 
 void ScTestListener::selectionChanged(const EventObject& aEvent)
 {
-    static USHORT nBla = 0;
+    static sal_uInt16 nBla = 0;
     pFixedText->SetText(++nBla);
 
     XInterfaceRef xInt = aEvent.Source;
@@ -274,10 +274,10 @@ XSpreadsheetDocumentRef lcl_GetDocument()
 
     XModelCollectionRef aCollRef = (XModelCollection*)
                         xSSI->newInstance()->queryInterface( XModelCollection::getSmartUik() );
-    USHORT nCount = aCollRef->getCount();
+    sal_uInt16 nCount = aCollRef->getCount();
 
     XSpreadsheetDocumentRef xModel;                         // Calc-Model
-    for (USHORT nMod=0; nMod<nCount && !xModel; nMod++)     // Calc-Doc suchen
+    for (sal_uInt16 nMod=0; nMod<nCount && !xModel; nMod++)     // Calc-Doc suchen
     {
         XModelRef aRef = aCollRef->getItemByIndex( nMod );
         if ( aRef )
@@ -304,7 +304,7 @@ XInterfaceRef lcl_GetView()
 
 void lcl_OutputNames( const XInterfaceRef& xSource,     // XNameAccess
                         const XSpreadsheetDocumentRef& xDoc,
-                        USHORT nCol, USHORT nRow, USHORT nTab )
+                        sal_uInt16 nCol, sal_uInt16 nRow, sal_uInt16 nTab )
 {
     CellAddress aAdr;
     aAdr.Sheet  = nTab;
@@ -315,7 +315,7 @@ void lcl_OutputNames( const XInterfaceRef& xSource,     // XNameAccess
     if (!xNames) return;
     Sequence<UString> aSeq = xNames->getElementNames();
 
-    USHORT nLen = (USHORT)aSeq.getLen();
+    sal_uInt16 nLen = (sal_uInt16)aSeq.getLen();
 
     XCellRef xCell = xDoc->getCell(aAdr);
     if (!xCell) return;
@@ -323,7 +323,7 @@ void lcl_OutputNames( const XInterfaceRef& xSource,     // XNameAccess
     ++aAdr.Row;
 
     UString* pAry = aSeq.getArray();
-    for (USHORT i=0; i<nLen; i++)
+    for (sal_uInt16 i=0; i<nLen; i++)
     {
         xCell = xDoc->getCell(aAdr);
         if (!xCell) return;
@@ -351,16 +351,16 @@ void lcl_SetText( const XTextRef& xText )
     if (!xPos.is() || !xControl.is() || !xPara.is()) return;    // PropertySet kann fehlen
 
     xText->setText(L"bla fasel");
-    xCursor->gotoEnd(FALSE);
+    xCursor->gotoEnd(false);
     xControl->insertControlCharacter( TEXTCONTROLCHAR_PARAGRAPH_BREAK );
     xPos->collapseToEnd();
     xPos->setText(L"s\xFClz");      // zweiter Absatz
 
-    xCursor->gotoStart(FALSE);
-    xPara->gotoEndOfParagraph(FALSE);
-    xCursor->goLeft(5, TRUE);               // letzte 5 Zeichen im 1. Absatz
+    xCursor->gotoStart(false);
+    xPara->gotoEndOfParagraph(false);
+    xCursor->goLeft(5, true);               // letzte 5 Zeichen im 1. Absatz
     if (xProp.is())
-        xProp->setPropertyValue(L"Bold", UsrAny((BOOL)TRUE));
+        xProp->setPropertyValue(L"Bold", UsrAny((sal_Bool)true));
 }
 
 //-----------------------------------------------------------------------
@@ -377,15 +377,15 @@ void lcl_DoCount()
         if (xLock)
             xLock->addActionLock();                         // nicht zwischendurch painten
         if (xCalc)
-            xCalc->setAutomaticCalculation(FALSE);
+            xCalc->setAutomaticCalculation(false);
 
         CellAddress aPos;
         aPos.Sheet  = 0;
 
-        for (USHORT nRow = 0; nRow < 20; nRow++)
+        for (sal_uInt16 nRow = 0; nRow < 20; nRow++)
         {
             aPos.Row = nRow;
-            for (USHORT nCol = 0; nCol < 10; nCol++)
+            for (sal_uInt16 nCol = 0; nCol < 10; nCol++)
             {
                 aPos.Column = nCol;
                 XCellRef xCell = xDoc->getCell(aPos);
@@ -401,7 +401,7 @@ void lcl_DoCount()
         }
 
         if (xCalc)
-            xCalc->setAutomaticCalculation(TRUE);
+            xCalc->setAutomaticCalculation(true);
         if (xLock)
             xLock->removeActionLock();
     }
@@ -457,13 +457,13 @@ void lcl_Annotations( FixedText& aTimeText )
 
                             if (xPos && xControl)
                             {
-                                ULONG nStart = Time::GetSystemTicks();
+                                sal_uLong nStart = Time::GetSystemTicks();
 
                                 xAnnotationText->setText(L"bla");
-                                xCursor->gotoEnd(FALSE);
-                                xCursor->goLeft(1,TRUE);
+                                xCursor->gotoEnd(false);
+                                xCursor->goLeft(1,true);
                                 xPos->setText(L"ubb");
-                                for (USHORT i=0; i<10; i++)
+                                for (sal_uInt16 i=0; i<10; i++)
                                 {
                                     xPos->collapseToEnd();
                                     xControl->insertControlCharacter( TEXTCONTROLCHAR_PARAGRAPH_BREAK );
@@ -471,7 +471,7 @@ void lcl_Annotations( FixedText& aTimeText )
                                     xPos->setText(L"dumdi");
                                 }
 
-                                ULONG nEnd = Time::GetSystemTicks();
+                                sal_uLong nEnd = Time::GetSystemTicks();
                                 aTimeText.SetText(String(nEnd-nStart)+String(" ms"));
                             }
                         }
@@ -515,7 +515,7 @@ void lcl_Cursor( FixedText& aTimeText )
 
                     if ( xCC && xRC )
                     {
-                        xCursor->goDown( 1, FALSE );
+                        xCursor->goDown( 1, false );
 
                         xColl = xCC->getRanges();
                         if ( xColl )
@@ -553,7 +553,7 @@ void lcl_Cursor( FixedText& aTimeText )
                                     ShadowFormat aNew;
                                     aNew.Location       = SHADOWLOCATION_BOTTOMRIGHT;
                                     aNew.ShadowWidth    = 100;
-                                    aNew.IsTransparent  = FALSE;
+                                    aNew.IsTransparent  = false;
                                     aNew.Color          = 0xff0000L;
                                     aAny.set( &aNew, aAny.getReflection() );
                                     xProp->setPropertyValue(L"ShadowFormat", aAny);
@@ -568,7 +568,7 @@ void lcl_Cursor( FixedText& aTimeText )
                                 xProp->setPropertyValue(L"FontHeight", aAny);
 
                                 aAny = xProp->getPropertyValue(L"TransparentBackground");
-                                aAny.setBOOL(FALSE);
+                                aAny.setBOOL(false);
                                 xProp->setPropertyValue(L"TransparentBackground", aAny);
 
                                 aAny = xProp->getPropertyValue(L"BackgroundColor");
@@ -581,10 +581,10 @@ void lcl_Cursor( FixedText& aTimeText )
                                 {
                                     //CellProtection* pOld = (CellProtection*)aAny.get();
                                     CellProtection aNew;
-                                    aNew.Locked         = FALSE;
-                                    aNew.FormulaHidden  = FALSE;
-                                    aNew.Hidden         = FALSE;
-                                    aNew.PrintHidden    = FALSE;
+                                    aNew.Locked         = false;
+                                    aNew.FormulaHidden  = false;
+                                    aNew.Hidden         = false;
+                                    aNew.PrintHidden    = false;
                                     aAny.set( &aNew, aAny.getReflection() );
                                     xProp->setPropertyValue(L"CellProtection", aAny);
                                 }
@@ -595,7 +595,7 @@ void lcl_Cursor( FixedText& aTimeText )
                                                 xColl->queryInterface(XIndexAccess::getSmartUik());
                             if ( xIndex )
                             {
-                                USHORT nCount = (USHORT)xIndex->getCount();
+                                sal_uInt16 nCount = (sal_uInt16)xIndex->getCount();
                                 aTimeText.SetText( String(nCount) );
                             }
                         }
@@ -617,7 +617,7 @@ void lcl_Cells( FixedText& aTimeText )
     if (xDoc)
     {
         long nCount = 0;
-        ULONG nStart = Time::GetSystemTicks();
+        sal_uLong nStart = Time::GetSystemTicks();
 
         XActionLockableRef xLock = (XActionLockable*)
                             xDoc->queryInterface(XActionLockable::getSmartUik());
@@ -656,7 +656,7 @@ void lcl_Cells( FixedText& aTimeText )
             }
         }
 
-        ULONG nEnd = Time::GetSystemTicks();
+        sal_uLong nEnd = Time::GetSystemTicks();
         aTimeText.SetText(String(nCount)+String(" ")+String(nEnd-nStart)+String(" ms"));
 
 
@@ -703,8 +703,8 @@ void lcl_Sheet( FixedText& aTimeText )
 //  UINT16 nNewWidth = nWidth + 100;
 //  xCol->setPropertyValue(L"Width", UsrAny(nNewWidth));
 
-    xCol->setPropertyValue(L"OptimalWidth", UsrAny((BOOL)TRUE));
-    xCol->setPropertyValue(L"NewPage", UsrAny((BOOL)FALSE));
+    xCol->setPropertyValue(L"OptimalWidth", UsrAny((sal_Bool)true));
+    xCol->setPropertyValue(L"NewPage", UsrAny((sal_Bool)false));
 
     UsrAny aAny = xCol->getPropertyValue(L"ShadowFormat");
     if ( aAny.getReflection()->getName() ==
@@ -714,7 +714,7 @@ void lcl_Sheet( FixedText& aTimeText )
         ShadowFormat aNew;
         aNew.Location       = SHADOWLOCATION_BOTTOMRIGHT;
         aNew.ShadowWidth    = 100;
-        aNew.IsTransparent  = FALSE;
+        aNew.IsTransparent  = false;
         aNew.Color          = 0xff0000L;
         aAny.set( &aNew, aAny.getReflection() );
         xCol->setPropertyValue(L"ShadowFormat", aAny);
@@ -728,13 +728,13 @@ void lcl_Sheet( FixedText& aTimeText )
     xRows->removeRowsByIndex( 2, 1 );
 
     UINT16 nHeight = TypeConversion::toUINT16(xRow->getPropertyValue(L"Height"));
-    BOOL bOptH = TypeConversion::toBOOL(xRow->getPropertyValue(L"OptimalHeight"));
+    sal_Bool bOptH = TypeConversion::toBOOL(xRow->getPropertyValue(L"OptimalHeight"));
 
     UINT16 nNewHeight = nHeight + 100;
     xRow->setPropertyValue(L"Height", UsrAny(nNewHeight));
 
     aTimeText.SetText(String("W:")+String(nWidth)+String(" H:")+String(nHeight)+
-                        String(" ")+String((USHORT)bOptH));
+                        String(" ")+String((sal_uInt16)bOptH));
 }
 
 void lcl_Names( FixedText& aTimeText )
@@ -769,8 +769,8 @@ void lcl_Sheets( FixedText& aTimeText )
     XSpreadsheetsRef xSheets = xDoc->getSheets();
     if (!xSheets) return;
 
-    xSheets->moveSheet(0, 1, TRUE);
-    xSheets->moveSheet(0, 2, FALSE);
+    xSheets->moveSheet(0, 1, true);
+    xSheets->moveSheet(0, 2, false);
 }
 
 void lcl_Goal( FixedText& aTimeText )
@@ -789,7 +789,7 @@ void lcl_Goal( FixedText& aTimeText )
     aVar.Sheet  = 0;
     aVar.Column = 0;
     aVar.Row    = 1;
-    BOOL bFound = xGoal->doGoalSeek(fResult, aFormula, aVar, L"42");
+    sal_Bool bFound = xGoal->doGoalSeek(fResult, aFormula, aVar, L"42");
 
     if (bFound)
     {
@@ -936,7 +936,7 @@ void lcl_Consoli( FixedText& aTimeText )
     if (!xDoc) return;
     XConsolidationRef xCons = (XConsolidation*)xDoc->queryInterface(XConsolidation::getSmartUik());
     if (!xCons) return;
-    XConsolidationDescriptorRef xDesc = xCons->createConsolidationDescriptor(FALSE);
+    XConsolidationDescriptorRef xDesc = xCons->createConsolidationDescriptor(false);
     if (!xDesc) return;
     xDesc->setFunction(SUMMARY_COUNTNUMS);
     xCons->consolidate(xDesc);
@@ -952,7 +952,7 @@ void lcl_Sort( FixedText& aTimeText )
     if (!xSelInt) return;
     XSortableRef xSort = (XSortable*)xSelInt->queryInterface(XSortable::getSmartUik());
     if (!xSort) return;
-    XSortDescriptorRef xDesc = xSort->createSortDescriptor(FALSE);
+    XSortDescriptorRef xDesc = xSort->createSortDescriptor(false);
     if (!xDesc) return;
     Sequence<SortField> aFields = xDesc->getSortFields();
     if (aFields.getLen())
@@ -968,7 +968,7 @@ void lcl_Sort( FixedText& aTimeText )
         SortField* pAry = aFields.getArray();
         if (!pAry) return;
         pAry[0].Field     = 0;
-        pAry[0].Ascending = TRUE;
+        pAry[0].Ascending = true;
         pAry[0].Type      = SORT_FIELD_AUTOMATIC;
     }
     xDesc->setSortFields(aFields);
@@ -980,13 +980,13 @@ void lcl_Sort( FixedText& aTimeText )
     aOutPos.Sheet  = 2;
     aOutPos.Column = 0;
     aOutPos.Row    = 0;
-    xTableSort->setUseOutputPosition(TRUE);
+    xTableSort->setUseOutputPosition(true);
     xTableSort->setOutputPosition(aOutPos);
 
     XPropertySetRef xPropSet = (XPropertySet*)
                             xDesc->queryInterface(XPropertySet::getSmartUik());
     if (!xPropSet) return;
-    xPropSet->setPropertyValue(L"IncludeFormats", UsrAny((BOOL)FALSE));
+    xPropSet->setPropertyValue(L"IncludeFormats", UsrAny((sal_Bool)false));
 
     xSort->sort(xDesc);
 }
@@ -1039,13 +1039,13 @@ void lcl_AutoFilter( FixedText& aTimeText )
     XFilterableRef xFilter = (XFilterable*)xSelInt->queryInterface(XFilterable::getSmartUik());
     if (!xFilter) return;
 
-    BOOL bAuto = xFilter->getAutoFilter();
+    sal_Bool bAuto = xFilter->getAutoFilter();
     xFilter->setAutoFilter(!bAuto);
 }
 
 void lcl_Merge( FixedText& aTimeText )
 {
-    static BOOL bMerged = FALSE;
+    static sal_Bool bMerged = false;
 
     XInterfaceRef xInt = lcl_GetView();
     if (!xInt) return;
@@ -1065,7 +1065,7 @@ void lcl_Merge( FixedText& aTimeText )
 
 void lcl_Outline( FixedText& aTimeText )
 {
-    static BOOL bOutline = FALSE;
+    static sal_Bool bOutline = false;
 
     XSpreadsheetDocumentRef xDoc = lcl_GetDocument();           // Calc-Model
     if (!xDoc) return;
@@ -1105,7 +1105,7 @@ void lcl_Bla( FixedText& aTimeText )
     if (!xLock) return;
     xLock->addActionLock();
     xLock->addActionLock();
-    USHORT nCount = xLock->resetActionLocks();      // sollte 2 sein
+    sal_uInt16 nCount = xLock->resetActionLocks();      // sollte 2 sein
     String aBla = nCount;
     xLock->setActionLocks(nCount);
     xLock->removeActionLock();
@@ -1150,16 +1150,16 @@ void lcl_CellCursor( FixedText& aTimeText )
     switch (nCursorCount++)
     {
         case 0:
-            xFC->gotoDependents(FALSE);
+            xFC->gotoDependents(false);
             break;
         case 1:
-            xFC->gotoDependents(TRUE);
+            xFC->gotoDependents(true);
             break;
         case 2:
-            xFC->gotoPrecedents(FALSE);
+            xFC->gotoPrecedents(false);
             break;
         case 3:
-            xFC->gotoPrecedents(TRUE);
+            xFC->gotoPrecedents(true);
 
             nCursorCount = 0;
             break;
@@ -1191,8 +1191,8 @@ void lcl_Notes( FixedText& aTimeText )
     aPos.Sheet  = 0;
     xNotes->addAnnotation( L"neu", aPos );
 
-    ULONG nCount = xNIndex->getCount();
-    for (ULONG i=0; i<nCount; i++)
+    sal_uLong nCount = xNIndex->getCount();
+    for (sal_uLong i=0; i<nCount; i++)
     {
         XSheetAnnotationRef xAnn = xNotes->getAnnotationByIndex((UINT16)i);
         XTextRef xText = (XText*)xAnn->queryInterface(XText::getSmartUik());
@@ -1236,7 +1236,7 @@ void lcl_Scenario( FixedText& aTimeText )
 
     XIndexAccessRef xIndex = (XIndexAccess*)xColl->queryInterface(XIndexAccess::getSmartUik());
     if (!xIndex) return;
-    ULONG nCount = xIndex->getCount();
+    sal_uLong nCount = xIndex->getCount();
     aTimeText.SetText( nCount );
 
     XScenarioRef xScen = xColl->getScenarioByIndex(0);
@@ -1256,8 +1256,8 @@ void lcl_Scenario( FixedText& aTimeText )
     XTableSheetRef xSh2 = xSheets->getSheetByIndex(1);
     if (!xSh2) return;
 
-    xSh2->setVisible( TRUE );
-    xSh2->setVisible( FALSE );
+    xSh2->setVisible( true );
+    xSh2->setVisible( false );
 }
 
 void lcl_Formula( FixedText& aTimeText )
@@ -1330,7 +1330,7 @@ void lcl_FillTab( FixedText& aTimeText )    // 24
     XIndexAccessRef xIndex = (XIndexAccess*)xSelInt->queryInterface(XIndexAccess::getSmartUik());
     if (!xRanges || !xIndex) return;
 
-    ULONG nCount = xIndex->getCount();
+    sal_uLong nCount = xIndex->getCount();
     aTimeText.SetText(nCount);
 }
 
@@ -1362,26 +1362,26 @@ void lcl_CellAttrib( FixedText& aTimeText ) // 26
     XParagraphCursorRef xPar = (XParagraphCursor*)xCursor->queryInterface(XParagraphCursor::getSmartUik());
     if (!xPos || !xProp || !xPar) return;
 
-    xCursor->gotoStart(FALSE);
-    xCursor->goRight(1,FALSE);
-    xCursor->goRight(1,TRUE);
+    xCursor->gotoStart(false);
+    xCursor->goRight(1,false);
+    xCursor->goRight(1,true);
 
     UsrAny aAny = xProp->getPropertyValue(L"FontHeight");
-    UINT32 nOld = aAny.getUINT32();
+    sal_uInt32 nOld = aAny.getUINT32();
     aAny.setUINT32(nOld*11/10);
     xProp->setPropertyValue(L"FontHeight", aAny);
 
     xPos->collapseToEnd();
-    xCursor->goRight(1,TRUE);
+    xCursor->goRight(1,true);
 
-    xProp->setPropertyValue(L"Bold", UsrAny((BOOL)TRUE));
+    xProp->setPropertyValue(L"Bold", UsrAny((sal_Bool)true));
 
     xPos->setText(L"x");
 
     xPos->collapseToEnd();
-    xPar->gotoNextParagraph(FALSE,TRUE);
-    xProp->setPropertyValue(L"Italic", UsrAny((BOOL)TRUE));
-    xProp->setPropertyValue(L"Underlined", UsrAny((BOOL)TRUE));
+    xPar->gotoNextParagraph(false,true);
+    xProp->setPropertyValue(L"Italic", UsrAny((sal_Bool)true));
+    xProp->setPropertyValue(L"Underlined", UsrAny((sal_Bool)true));
 }
 
 void lcl_Styles( FixedText& aTimeText ) // 27
@@ -1409,7 +1409,7 @@ void lcl_Styles( FixedText& aTimeText ) // 27
 
     UsrAny aAny;
     aAny = xProp->getPropertyValue(L"TransparentBackground");
-    aAny.setBOOL(FALSE);
+    aAny.setBOOL(false);
     xProp->setPropertyValue(L"TransparentBackground", aAny);
     aAny = xProp->getPropertyValue(L"BackgroundColor");
     aAny.setUINT32(0xffff00);
@@ -1467,8 +1467,8 @@ void lcl_AutoForm( FixedText& aTimeText )   // 29
     XPropertySetRef xProp = (XPropertySet*)xFormat->queryInterface(XPropertySet::getSmartUik());
     if (!xProp) return;
 
-    BOOL bVal = TypeConversion::toBOOL(xProp->getPropertyValue(L"IncludeBackground"));
-    xProp->setPropertyValue(L"IncludeBackground", UsrAny(BOOL(!bVal)));
+    sal_Bool bVal = TypeConversion::toBOOL(xProp->getPropertyValue(L"IncludeBackground"));
+    xProp->setPropertyValue(L"IncludeBackground", UsrAny(sal_Bool(!bVal)));
 
     XNamedRef xNamed = (XNamed*)xFormat->queryInterface(XNamed::getSmartUik());
     if (!xNamed) return;
@@ -1478,13 +1478,13 @@ void lcl_AutoForm( FixedText& aTimeText )   // 29
     XTableAutoFormatRef xNew = xFormats->getAutoFormatByName(L"gaga");
     if (!xNew) return;
 
-    for (USHORT i=0; i<16; i++)
+    for (sal_uInt16 i=0; i<16; i++)
     {
         XPropertySetRef xNewProp = xNew->getFieldByIndex(i);
         if (!xNewProp) return;
 
-        xNewProp->setPropertyValue(L"TransparentBackground", UsrAny(BOOL(FALSE)));
-        UINT32 nColor = 0x111100 * i;
+        xNewProp->setPropertyValue(L"TransparentBackground", UsrAny(sal_Bool(false)));
+        sal_uInt32 nColor = 0x111100 * i;
         xNewProp->setPropertyValue(L"BackgroundColor", UsrAny(nColor));
     }
 }
@@ -1498,9 +1498,9 @@ void lcl_Pivot( FixedText& aTimeText )  // 30
     if (!xSheets) return;
     XIndexAccessRef xInd = (XIndexAccess*)xSheets->queryInterface(XIndexAccess::getSmartUik());
     if (!xInd) return;
-    USHORT nCount = (USHORT)xInd->getCount();
+    sal_uInt16 nCount = (sal_uInt16)xInd->getCount();
 
-    for (USHORT nTab=0; nTab<nCount; nTab++)
+    for (sal_uInt16 nTab=0; nTab<nCount; nTab++)
     {
         XTableSheetRef xSheet = xSheets->getSheetByIndex(nTab);
         if (!xSheet) return;
@@ -1509,8 +1509,8 @@ void lcl_Pivot( FixedText& aTimeText )  // 30
         lcl_OutputNames( xPivots, xDoc, nTab,0,0 );
         XIndexAccessRef xPInd = (XIndexAccess*)xPivots->queryInterface(XIndexAccess::getSmartUik());
         if (!xPInd) return;
-        USHORT nPCount = (USHORT)xPInd->getCount();
-        for (USHORT nP=0; nP<nPCount; nP++)
+        sal_uInt16 nPCount = (sal_uInt16)xPInd->getCount();
+        for (sal_uInt16 nP=0; nP<nPCount; nP++)
         {
             XDataPilotTableRef xTable = xPivots->getTableByIndex(nP);
             if (!xTable) return;
@@ -1529,8 +1529,8 @@ void lcl_Pivot( FixedText& aTimeText )  // 30
             if (!xRange) return;
             XPropertySetRef xProp = (XPropertySet*)xRange->queryInterface(XPropertySet::getSmartUik());
             if (!xProp) return;
-            xProp->setPropertyValue(L"TransparentBackground", UsrAny(BOOL(FALSE)));
-            xProp->setPropertyValue(L"BackgroundColor", UsrAny((UINT32)0x00FF00));
+            xProp->setPropertyValue(L"TransparentBackground", UsrAny(sal_Bool(false)));
+            xProp->setPropertyValue(L"BackgroundColor", UsrAny((sal_uInt32)0x00FF00));
         }
     }
 }
@@ -1543,9 +1543,9 @@ IMPL_LINK(MyWindow, CountHdl, PushButton*, EMPTYARG)
     {
         case 0:
             {
-                ULONG nStart = Time::GetSystemTicks();
+                sal_uLong nStart = Time::GetSystemTicks();
                 lcl_DoCount();
-                ULONG nEnd = Time::GetSystemTicks();
+                sal_uLong nEnd = Time::GetSystemTicks();
                 aTimeText.SetText(String("Count: ")+String(nEnd-nStart)+String(" ms"));
             }
             break;
@@ -1648,10 +1648,10 @@ IMPL_LINK(MyWindow, CountHdl, PushButton*, EMPTYARG)
 
 IMPL_LINK(MyWindow, TextHdl, PushButton*, EMPTYARG)
 {
-    USHORT nCol = (USHORT)aColField.GetValue();
-    USHORT nRow = (USHORT)aRowField.GetValue();
-    USHORT nPos = (USHORT)aPosField.GetValue();
-    USHORT nLen = (USHORT)aLenField.GetValue();
+    sal_uInt16 nCol = (sal_uInt16)aColField.GetValue();
+    sal_uInt16 nRow = (sal_uInt16)aRowField.GetValue();
+    sal_uInt16 nPos = (sal_uInt16)aPosField.GetValue();
+    sal_uInt16 nLen = (sal_uInt16)aLenField.GetValue();
     String aStr = aTextEdit.GetText();
 
     aTimeText.SetText("...");
@@ -1659,7 +1659,7 @@ IMPL_LINK(MyWindow, TextHdl, PushButton*, EMPTYARG)
     XSpreadsheetDocumentRef xDoc = lcl_GetDocument();           // Calc-Model
     if (xDoc)
     {
-        USHORT nTab = 0;
+        sal_uInt16 nTab = 0;
         CellAddress aPos;
         aPos.Sheet  = 0;
         aPos.Column = nCol;
@@ -1680,8 +1680,8 @@ IMPL_LINK(MyWindow, TextHdl, PushButton*, EMPTYARG)
 
                     if (xPos && xControl)
                     {
-                        xCursor->gotoStart(FALSE);
-                        xCursor->goRight(11,TRUE);
+                        xCursor->gotoStart(false);
+                        xCursor->goRight(11,true);
                         String aVal = OUStringToString( xPos->getText(), CHARSET_SYSTEM );
                         aTimeText.SetText(aVal);
                     }
@@ -1729,8 +1729,8 @@ IMPL_LINK(MyWindow, BlaHdl, PushButton*, EMPTYARG)
                         if (xIndex)
                         {
                             String aBla;
-                            ULONG nCount = xIndex->getCount();
-                            for (ULONG i=0; i<nCount; i++)
+                            sal_uLong nCount = xIndex->getCount();
+                            for (sal_uLong i=0; i<nCount; i++)
                             {
                                 XInterfaceRef xInt = xIndex->getElementByIndex(i);
                                 if (xInt)
@@ -1782,8 +1782,8 @@ IMPL_LINK(MyWindow, TabHdl, PushButton*, EMPTYARG)
             XIndexAccessRef xIndex = (XIndexAccess*)xSheets->queryInterface(XIndexAccess::getSmartUik());
             if (xIndex)
             {
-                USHORT nCount = (USHORT) xIndex->getCount();
-                for (USHORT nTab=0; nTab<nCount; nTab++)
+                sal_uInt16 nCount = (sal_uInt16) xIndex->getCount();
+                for (sal_uInt16 nTab=0; nTab<nCount; nTab++)
                 {
                     XInterfaceRef xInt = xIndex->getElementByIndex(nTab);
                     if (xInt)

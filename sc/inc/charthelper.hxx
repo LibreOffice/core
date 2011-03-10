@@ -32,23 +32,34 @@
 #include <tools/solar.h>
 #include "address.hxx"
 #include "global.hxx"
+#include "rangelst.hxx"
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
 
 class SdrObject;
+class SdrPage;
+class ScModelObj;
+
+typedef ::std::vector< ScRangeList > ScRangeListVector;
 
 /** Use this to handle charts in a calc document
 */
 class ScChartHelper
 {
 public:
-    static USHORT DoUpdateAllCharts( ScDocument* pDoc );
+    static sal_uInt16 DoUpdateAllCharts( ScDocument* pDoc );
     static void AdjustRangesOfChartsOnDestinationPage( ScDocument* pSrcDoc, ScDocument* pDestDoc, const SCTAB nSrcTab, const SCTAB nDestTab );
     static ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument > GetChartFromSdrObject( SdrObject* pObject );
     static void GetChartRanges( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& xChartDoc,
             ::com::sun::star::uno::Sequence< rtl::OUString >& rRanges );
     static void SetChartRanges( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& xChartDoc,
             const ::com::sun::star::uno::Sequence< rtl::OUString >& rRanges );
+
+    static void AddRangesIfProtectedChart( ScRangeListVector& rRangesVector, ScDocument* pDocument, SdrObject* pObject );
+    static void FillProtectedChartRangesVector( ScRangeListVector& rRangesVector, ScDocument* pDocument, SdrPage* pPage );
+    static void GetChartNames( ::std::vector< ::rtl::OUString >& rChartNames, SdrPage* pPage );
+    static void CreateProtectedChartListenersAndNotify( ScDocument* pDoc, SdrPage* pPage, ScModelObj* pModelObj, SCTAB nTab,
+        const ScRangeListVector& rRangesVector, const ::std::vector< ::rtl::OUString >& rExcludedChartNames, bool bSameDoc = true );
 };
 
 #endif

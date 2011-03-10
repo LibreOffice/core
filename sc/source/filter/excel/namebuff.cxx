@@ -45,16 +45,16 @@
 #include "xiroot.hxx"
 
 
-UINT32 StringHashEntry::MakeHashCode( const String& r )
+sal_uInt32 StringHashEntry::MakeHashCode( const String& r )
 {
-    register UINT32                 n = 0;
+    register sal_uInt32                 n = 0;
     const sal_Unicode*              pAkt = r.GetBuffer();
     register sal_Unicode            cAkt = *pAkt;
 
     while( cAkt )
     {
         n *= 70;
-        n += ( UINT32 ) cAkt;
+        n += ( sal_uInt32 ) cAkt;
         pAkt++;
         cAkt = *pAkt;
     }
@@ -87,14 +87,14 @@ void NameBuffer::operator <<( const String &rNewString )
 
 
 #ifdef DBG_UTIL
-UINT16  nShrCnt;
+sal_uInt16  nShrCnt;
 #endif
 
 
 size_t ShrfmlaBuffer::ScAddressHashFunc::operator() (const ScAddress &addr) const
 {
     // Use something simple, it is just a hash.
-    return static_cast< UINT16 >( addr.Row() ) | (static_cast< UINT8 >( addr.Col() ) << 16);
+    return static_cast< sal_uInt16 >( addr.Row() ) | (static_cast< sal_uInt8 >( addr.Col() ) << 16);
 }
 
 const size_t nBase = 16384; // Range~ und Shared~ Dingens mit jeweils der Haelfte Ids
@@ -128,15 +128,15 @@ void ShrfmlaBuffer::Store( const ScRange& rRange, const ScTokenArray& rToken )
     const ScAddress& rMaxPos = pExcRoot->pIR->GetMaxPos();
     pData->SetMaxCol(rMaxPos.Col());
     pData->SetMaxRow(rMaxPos.Row());
-    pData->SetIndex( static_cast< USHORT >( mnCurrIdx ) );
+    pData->SetIndex( static_cast< sal_uInt16 >( mnCurrIdx ) );
     pExcRoot->pIR->GetNamedRanges().insert( pData );
-    index_hash[rRange.aStart] = static_cast< USHORT >( mnCurrIdx );
+    index_hash[rRange.aStart] = static_cast< sal_uInt16 >( mnCurrIdx );
     index_list.push_front (rRange);
     ++mnCurrIdx;
 }
 
 
-USHORT ShrfmlaBuffer::Find( const ScAddress & aAddr ) const
+sal_uInt16 ShrfmlaBuffer::Find( const ScAddress & aAddr ) const
 {
     ShrfmlaHash::const_iterator hash = index_hash.find (aAddr);
     if (hash != index_hash.end())
@@ -146,8 +146,8 @@ USHORT ShrfmlaBuffer::Find( const ScAddress & aAddr ) const
     unsigned int ind = nBase;
     for (ShrfmlaList::const_iterator ptr = index_list.end(); ptr != index_list.begin() ; ind++)
         if ((--ptr)->In (aAddr))
-            return static_cast< USHORT >( ind );
-    return static_cast< USHORT >( mnCurrIdx );
+            return static_cast< sal_uInt16 >( ind );
+    return static_cast< sal_uInt16 >( mnCurrIdx );
 }
 
 
@@ -181,7 +181,7 @@ ExtSheetBuffer::~ExtSheetBuffer()
 }
 
 
-sal_Int16 ExtSheetBuffer::Add( const String& rFPAN, const String& rTN, const BOOL bSWB )
+sal_Int16 ExtSheetBuffer::Add( const String& rFPAN, const String& rTN, const sal_Bool bSWB )
 {
     List::Insert( new Cont( rFPAN, rTN, bSWB ), LIST_APPEND );
     // return 1-based index of EXTERNSHEET
@@ -189,21 +189,21 @@ sal_Int16 ExtSheetBuffer::Add( const String& rFPAN, const String& rTN, const BOO
 }
 
 
-BOOL ExtSheetBuffer::GetScTabIndex( UINT16 nExcIndex, UINT16& rScIndex )
+sal_Bool ExtSheetBuffer::GetScTabIndex( sal_uInt16 nExcIndex, sal_uInt16& rScIndex )
 {
     DBG_ASSERT( nExcIndex,
         "*ExtSheetBuffer::GetScTabIndex(): Sheet-Index == 0!" );
 
     nExcIndex--;
     Cont*       pCur = ( Cont * ) List::GetObject( nExcIndex );
-    UINT16&     rTabNum = pCur->nTabNum;
+    sal_uInt16&     rTabNum = pCur->nTabNum;
 
     if( pCur )
     {
         if( rTabNum < 0xFFFD )
         {
             rScIndex = rTabNum;
-            return TRUE;
+            return sal_True;
         }
 
         if( rTabNum == 0xFFFF )
@@ -213,8 +213,8 @@ BOOL ExtSheetBuffer::GetScTabIndex( UINT16 nExcIndex, UINT16& rScIndex )
             {// Tabelle ist im selben Workbook!
                 if( pExcRoot->pIR->GetDoc().GetTable( pCur->aTab, nNewTabNum ) )
                 {
-                    rScIndex = rTabNum = static_cast<UINT16>(nNewTabNum);
-                    return TRUE;
+                    rScIndex = rTabNum = static_cast<sal_uInt16>(nNewTabNum);
+                    return sal_True;
                 }
                 else
                     rTabNum = 0xFFFD;
@@ -228,8 +228,8 @@ BOOL ExtSheetBuffer::GetScTabIndex( UINT16 nExcIndex, UINT16& rScIndex )
                     String      aTabName( ScGlobal::GetDocTabName( aURL, pCur->aTab ) );
                     if( pExcRoot->pIR->GetDoc().LinkExternalTab( nNewTabNum, aTabName, aURL, pCur->aTab ) )
                     {
-                        rScIndex = rTabNum = static_cast<UINT16>(nNewTabNum);
-                        return TRUE;
+                        rScIndex = rTabNum = static_cast<sal_uInt16>(nNewTabNum);
+                        return sal_True;
                     }
                     else
                         rTabNum = 0xFFFE;       // Tabelle einmal nicht angelegt -> wird
@@ -242,11 +242,11 @@ BOOL ExtSheetBuffer::GetScTabIndex( UINT16 nExcIndex, UINT16& rScIndex )
         }
     }
 
-    return FALSE;
+    return false;
 }
 
 
-BOOL ExtSheetBuffer::IsLink( const UINT16 nExcIndex ) const
+sal_Bool ExtSheetBuffer::IsLink( const sal_uInt16 nExcIndex ) const
 {
     DBG_ASSERT( nExcIndex > 0, "*ExtSheetBuffer::IsLink(): Index muss >0 sein!" );
     Cont*   pRet = ( Cont * ) List::GetObject( nExcIndex - 1 );
@@ -254,11 +254,11 @@ BOOL ExtSheetBuffer::IsLink( const UINT16 nExcIndex ) const
     if( pRet )
         return pRet->bLink;
     else
-        return FALSE;
+        return false;
 }
 
 
-BOOL ExtSheetBuffer::GetLink( const UINT16 nExcIndex, String& rAppl, String& rDoc ) const
+sal_Bool ExtSheetBuffer::GetLink( const sal_uInt16 nExcIndex, String& rAppl, String& rDoc ) const
 {
     DBG_ASSERT( nExcIndex > 0, "*ExtSheetBuffer::GetLink(): Index muss >0 sein!" );
     Cont*   pRet = ( Cont * ) List::GetObject( nExcIndex - 1 );
@@ -267,10 +267,10 @@ BOOL ExtSheetBuffer::GetLink( const UINT16 nExcIndex, String& rAppl, String& rDo
     {
         rAppl = pRet->aFile;
         rDoc = pRet->aTab;
-        return TRUE;
+        return sal_True;
     }
     else
-        return FALSE;
+        return false;
 }
 
 
@@ -289,13 +289,13 @@ void ExtSheetBuffer::Reset( void )
 
 
 
-BOOL ExtName::IsDDE( void ) const
+sal_Bool ExtName::IsDDE( void ) const
 {
     return ( nFlags & 0x0001 ) != 0;
 }
 
 
-BOOL ExtName::IsOLE( void ) const
+sal_Bool ExtName::IsOLE( void ) const
 {
     return ( nFlags & 0x0002 ) != 0;
 }
@@ -314,7 +314,7 @@ void ExtNameBuff::AddDDE( const String& rName, sal_Int16 nRefIdx )
 }
 
 
-void ExtNameBuff::AddOLE( const String& rName, sal_Int16 nRefIdx, UINT32 nStorageId )
+void ExtNameBuff::AddOLE( const String& rName, sal_Int16 nRefIdx, sal_uInt32 nStorageId )
 {
     ExtName aNew( rName, 0x0002 );
     aNew.nStorageId = nStorageId;

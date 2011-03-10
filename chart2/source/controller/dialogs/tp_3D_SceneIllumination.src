@@ -59,6 +59,7 @@
 
 TabPage TP_3D_SCENEILLUMINATION
 {
+    HelpID = "chart2:TabPage:TP_3D_SCENEILLUMINATION";
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Hide = TRUE ;
@@ -72,46 +73,55 @@ TabPage TP_3D_SCENEILLUMINATION
     };
     ImageButton BTN_LIGHT_1
     {
+        HelpID = "chart2:ImageButton:TP_3D_SCENEILLUMINATION:BTN_LIGHT_1";
         Pos = MAP_APPFONT ( POS_X_0 , POS_Y_LIGHTSOURCE_BUTTONS ) ;
         Size = MAP_APPFONT ( WIDTH_IB , HEIGHT_IB ) ;
     };
     ImageButton BTN_LIGHT_2
     {
+        HelpID = "chart2:ImageButton:TP_3D_SCENEILLUMINATION:BTN_LIGHT_2";
         Pos = MAP_APPFONT ( POS_X_0+BUTTON_DISTANCE , POS_Y_LIGHTSOURCE_BUTTONS ) ;
         Size = MAP_APPFONT ( WIDTH_IB , HEIGHT_IB ) ;
     };
     ImageButton BTN_LIGHT_3
     {
+        HelpID = "chart2:ImageButton:TP_3D_SCENEILLUMINATION:BTN_LIGHT_3";
         Pos = MAP_APPFONT ( POS_X_0+2*BUTTON_DISTANCE , POS_Y_LIGHTSOURCE_BUTTONS ) ;
         Size = MAP_APPFONT ( WIDTH_IB , HEIGHT_IB ) ;
     };
     ImageButton BTN_LIGHT_4
     {
+        HelpID = "chart2:ImageButton:TP_3D_SCENEILLUMINATION:BTN_LIGHT_4";
         Pos = MAP_APPFONT ( POS_X_0+3*BUTTON_DISTANCE , POS_Y_LIGHTSOURCE_BUTTONS ) ;
         Size = MAP_APPFONT ( WIDTH_IB , HEIGHT_IB ) ;
     };
     ImageButton BTN_LIGHT_5
     {
+        HelpID = "chart2:ImageButton:TP_3D_SCENEILLUMINATION:BTN_LIGHT_5";
         Pos = MAP_APPFONT ( POS_X_0 , POS_Y_LIGHTSOURCE_BUTTONS_2 ) ;
         Size = MAP_APPFONT ( WIDTH_IB , HEIGHT_IB ) ;
     };
     ImageButton BTN_LIGHT_6
     {
+        HelpID = "chart2:ImageButton:TP_3D_SCENEILLUMINATION:BTN_LIGHT_6";
         Pos = MAP_APPFONT ( POS_X_0+1*BUTTON_DISTANCE , POS_Y_LIGHTSOURCE_BUTTONS_2 ) ;
         Size = MAP_APPFONT ( WIDTH_IB , HEIGHT_IB ) ;
     };
     ImageButton BTN_LIGHT_7
     {
+        HelpID = "chart2:ImageButton:TP_3D_SCENEILLUMINATION:BTN_LIGHT_7";
         Pos = MAP_APPFONT ( POS_X_0+2*BUTTON_DISTANCE , POS_Y_LIGHTSOURCE_BUTTONS_2 ) ;
         Size = MAP_APPFONT ( WIDTH_IB , HEIGHT_IB ) ;
     };
     ImageButton BTN_LIGHT_8
     {
+        HelpID = "chart2:ImageButton:TP_3D_SCENEILLUMINATION:BTN_LIGHT_8";
         Pos = MAP_APPFONT ( POS_X_0+3*BUTTON_DISTANCE , POS_Y_LIGHTSOURCE_BUTTONS_2 ) ;
         Size = MAP_APPFONT ( WIDTH_IB , HEIGHT_IB ) ;
     };
     ListBox LB_LIGHTSOURCE
     {
+        HelpID = "chart2:ListBox:TP_3D_SCENEILLUMINATION:LB_LIGHTSOURCE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( POS_X_0 , POS_Y_LIGHTSOURCE ) ;
         Size = MAP_APPFONT ( WIDTH_LB , HEIGHT_LB ) ;
@@ -120,6 +130,7 @@ TabPage TP_3D_SCENEILLUMINATION
     };
     ImageButton BTN_LIGHTSOURCE_COLOR
     {
+        HelpID = "chart2:ImageButton:TP_3D_SCENEILLUMINATION:BTN_LIGHTSOURCE_COLOR";
         Pos = MAP_APPFONT ( POS_X_1 , POS_Y_LIGHTSOURCE ) ;
         Size = MAP_APPFONT ( WIDTH_IB , HEIGHT_IB ) ;
         TabStop = TRUE ;
@@ -136,6 +147,7 @@ TabPage TP_3D_SCENEILLUMINATION
     };
     ListBox LB_AMBIENTLIGHT
     {
+        HelpID = "chart2:ListBox:TP_3D_SCENEILLUMINATION:LB_AMBIENTLIGHT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( POS_X_0 , POS_Y_AMBIENT ) ;
         Size = MAP_APPFONT ( WIDTH_LB , HEIGHT_LB ) ;
@@ -144,6 +156,7 @@ TabPage TP_3D_SCENEILLUMINATION
     };
     ImageButton BTN_AMBIENT_COLOR
     {
+        HelpID = "chart2:ImageButton:TP_3D_SCENEILLUMINATION:BTN_AMBIENT_COLOR";
         Pos = MAP_APPFONT ( POS_X_1 , POS_Y_AMBIENT ) ;
         Size = MAP_APPFONT ( WIDTH_IB , HEIGHT_IB ) ;
         TabStop = TRUE ;
@@ -158,5 +171,10 @@ TabPage TP_3D_SCENEILLUMINATION
         Size = MAP_APPFONT ( WIDTH_PREVIEW , HEIGHT_PREVIEW ) ;
         TabStop = TRUE ;
     };
+};
+
+String STR_LIGHT_PREVIEW
+{
+    Text [ en-US ] = "Light Preview" ;
 };
 

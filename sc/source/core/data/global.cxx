@@ -139,19 +139,19 @@ SvNumberFormatter* ScGlobal::pEnglishFormatter = NULL;
 double          ScGlobal::nScreenPPTX           = 96.0;
 double          ScGlobal::nScreenPPTY           = 96.0;
 
-USHORT          ScGlobal::nDefFontHeight        = 240;
-USHORT          ScGlobal::nStdRowHeight         = 257;
+sal_uInt16          ScGlobal::nDefFontHeight        = 240;
+sal_uInt16          ScGlobal::nStdRowHeight         = 257;
 
 long            ScGlobal::nLastRowHeightExtra   = 0;
 long            ScGlobal::nLastColWidthExtra    = STD_EXTRA_WIDTH;
 
-static USHORT nPPTZoom = 0;     // ScreenZoom used to determine nScreenPPTX/Y
+static sal_uInt16 nPPTZoom = 0;     // ScreenZoom used to determine nScreenPPTX/Y
 
 
 class SfxViewShell;
 SfxViewShell* pScActiveViewShell = NULL;            //! als Member !!!!!
-USHORT nScClickMouseModifier = 0;                   //! dito
-USHORT nScFillModeMouseModifier = 0;                //! dito
+sal_uInt16 nScClickMouseModifier = 0;                   //! dito
+sal_uInt16 nScFillModeMouseModifier = 0;                //! dito
 
 // Hack: ScGlobal::GetUserList() muss InitAppOptions in der UI aufrufen,
 //       damit UserList aus Cfg geladen wird
@@ -164,11 +164,11 @@ void global_InitAppOptions();
 //
 //========================================================================
 
-BOOL ScGlobal::HasAttrChanged( const SfxItemSet&  rNewAttrs,
+sal_Bool ScGlobal::HasAttrChanged( const SfxItemSet&  rNewAttrs,
                                const SfxItemSet&  rOldAttrs,
-                               const USHORT       nWhich )
+                               const sal_uInt16       nWhich )
 {
-    BOOL                bInvalidate = FALSE;
+    sal_Bool                bInvalidate = false;
     const SfxItemState  eNewState   = rNewAttrs.GetItemState( nWhich );
     const SfxItemState  eOldState   = rOldAttrs.GetItemState( nWhich );
 
@@ -194,14 +194,14 @@ BOOL ScGlobal::HasAttrChanged( const SfxItemSet&  rNewAttrs,
                     ? rNewAttrs.Get( nWhich )
                     : rNewAttrs.GetPool()->GetDefaultItem( nWhich );
 
-        bInvalidate = sal::static_int_cast<BOOL>(rNewItem != rOldItem);
+        bInvalidate = sal::static_int_cast<sal_Bool>(rNewItem != rOldItem);
     }
 
     return bInvalidate;
 }
 
-ULONG ScGlobal::GetStandardFormat( SvNumberFormatter& rFormatter,
-        ULONG nFormat, short nType )
+sal_uLong ScGlobal::GetStandardFormat( SvNumberFormatter& rFormatter,
+        sal_uLong nFormat, short nType )
 {
     const SvNumberformat* pFormat = rFormatter.GetEntry( nFormat );
     if ( pFormat )
@@ -209,8 +209,8 @@ ULONG ScGlobal::GetStandardFormat( SvNumberFormatter& rFormatter,
     return rFormatter.GetStandardFormat( nType, eLnge );
 }
 
-ULONG ScGlobal::GetStandardFormat( double fNumber, SvNumberFormatter& rFormatter,
-        ULONG nFormat, short nType )
+sal_uLong ScGlobal::GetStandardFormat( double fNumber, SvNumberFormatter& rFormatter,
+        sal_uLong nFormat, short nType )
 {
     const SvNumberformat* pFormat = rFormatter.GetEntry( nFormat );
     if ( pFormat )
@@ -234,7 +234,7 @@ SvNumberFormatter* ScGlobal::GetEnglishFormatter()
 
 //------------------------------------------------------------------------
 
-BOOL ScGlobal::CheckWidthInvalidate( BOOL& bNumFormatChanged,
+sal_Bool ScGlobal::CheckWidthInvalidate( sal_Bool& bNumFormatChanged,
                                      const SfxItemSet& rNewAttrs,
                                      const SfxItemSet& rOldAttrs )
 {
@@ -350,7 +350,7 @@ void ScGlobal::SetUserList( const ScUserList* pNewList )
     }
 }
 
-const String& ScGlobal::GetRscString( USHORT nIndex )
+const String& ScGlobal::GetRscString( sal_uInt16 nIndex )
 {
     DBG_ASSERT( nIndex < STR_COUNT, "ScGlobal::GetRscString - invalid string index");
     if( !ppRscString[ nIndex ] )
@@ -393,7 +393,7 @@ const String& ScGlobal::GetRscString( USHORT nIndex )
     return *ppRscString[ nIndex ];
 }
 
-String ScGlobal::GetErrorString(USHORT nErrNumber)
+String ScGlobal::GetErrorString(sal_uInt16 nErrNumber)
 {
     String sResStr;
     switch (nErrNumber)
@@ -419,7 +419,7 @@ String ScGlobal::GetErrorString(USHORT nErrNumber)
     return sResStr;
 }
 
-String ScGlobal::GetLongErrorString(USHORT nErrNumber)
+String ScGlobal::GetLongErrorString(sal_uInt16 nErrNumber)
 {
     switch (nErrNumber)
     {
@@ -549,7 +549,7 @@ void ScGlobal::Init()
     pLocaleData = pSysLocale->GetLocaleDataPtr();
 
     ppRscString = new String *[ STR_COUNT ];
-    for( USHORT nC = 0 ; nC < STR_COUNT ; nC++ ) ppRscString[ nC ] = NULL;
+    for( sal_uInt16 nC = 0 ; nC < STR_COUNT ; nC++ ) ppRscString[ nC ] = NULL;
 
     pEmptyBrushItem = new SvxBrushItem( Color( COL_TRANSPARENT ), ATTR_BACKGROUND );
     pButtonBrushItem = new SvxBrushItem( Color(), ATTR_BACKGROUND );
@@ -574,7 +574,7 @@ void ScGlobal::Init()
 
 void ScGlobal::UpdatePPT( OutputDevice* pDev )
 {
-    USHORT nCurrentZoom = Application::GetSettings().GetStyleSettings().GetScreenZoom();
+    sal_uInt16 nCurrentZoom = Application::GetSettings().GetStyleSettings().GetScreenZoom();
     if ( nCurrentZoom != nPPTZoom )
     {
         //  Screen PPT values must be updated when ScreenZoom has changed.
@@ -623,12 +623,12 @@ void ScGlobal::InitTextHeight(SfxItemPool* pPool)
     Font aDefFont;
     pPattern->GetFont(aDefFont, SC_AUTOCOL_BLACK, &aVirtWindow);        // font color doesn't matter here
     aVirtWindow.SetFont(aDefFont);
-    nDefFontHeight = (USHORT) aVirtWindow.PixelToLogic(Size(0, aVirtWindow.GetTextHeight()),
+    nDefFontHeight = (sal_uInt16) aVirtWindow.PixelToLogic(Size(0, aVirtWindow.GetTextHeight()),
                                 MAP_TWIP).Height();
 
     const SvxMarginItem* pMargin = (const SvxMarginItem*)&pPattern->GetItem(ATTR_MARGIN);
 
-    nStdRowHeight = (USHORT) ( nDefFontHeight +
+    nStdRowHeight = (sal_uInt16) ( nDefFontHeight +
                                 pMargin->GetTopMargin() + pMargin->GetBottomMargin()
                                 - STD_ROWHEIGHT_DIFF );
 }
@@ -644,7 +644,7 @@ void ScGlobal::Clear()
     DELETEZ(pAddInCollection);
     DELETEZ(pUserList);
 
-    for( USHORT nC = 0 ; nC < STR_COUNT ; nC++ )
+    for( sal_uInt16 nC = 0 ; nC < STR_COUNT ; nC++ )
         if( ppRscString ) delete ppRscString[ nC ];
     delete[] ppRscString;
     ppRscString = NULL;
@@ -883,33 +883,33 @@ const sal_Unicode* ScGlobal::FindUnquoted( const sal_Unicode* pString, sal_Unico
 
 //------------------------------------------------------------------------
 
-BOOL ScGlobal::EETextObjEqual( const EditTextObject* pObj1,
+sal_Bool ScGlobal::EETextObjEqual( const EditTextObject* pObj1,
                                const EditTextObject* pObj2 )
 {
     if ( pObj1 == pObj2 )               // both empty or the same object
-        return TRUE;
+        return sal_True;
 
     if ( pObj1 && pObj2 )
     {
         //  first test for equal text content
-        USHORT nParCount = pObj1->GetParagraphCount();
+        sal_uInt16 nParCount = pObj1->GetParagraphCount();
         if ( nParCount != pObj2->GetParagraphCount() )
-            return FALSE;
-        for (USHORT nPar=0; nPar<nParCount; nPar++)
+            return false;
+        for (sal_uInt16 nPar=0; nPar<nParCount; nPar++)
             if ( pObj1->GetText(nPar) != pObj2->GetText(nPar) )
-                return FALSE;
+                return false;
 
         SvMemoryStream  aStream1;
         SvMemoryStream  aStream2;
         pObj1->Store( aStream1 );
         pObj2->Store( aStream2 );
-        ULONG nSize = aStream1.Tell();
+        sal_uLong nSize = aStream1.Tell();
         if ( aStream2.Tell() == nSize )
-            if ( !memcmp( aStream1.GetData(), aStream2.GetData(), (USHORT) nSize ) )
-                return TRUE;
+            if ( !memcmp( aStream1.GetData(), aStream2.GetData(), (sal_uInt16) nSize ) )
+                return sal_True;
     }
 
-    return FALSE;
+    return false;
 }
 
 void ScGlobal::OpenURL( const String& rURL, const String& rTarget )
@@ -937,8 +937,8 @@ void ScGlobal::OpenURL( const String& rURL, const String& rTarget )
     SfxFrameItem aFrm( SID_DOCFRAME, pFrame );
     SfxStringItem aReferer( SID_REFERER, aReferName );
 
-    SfxBoolItem aNewView( SID_OPEN_NEW_VIEW, FALSE );
-    SfxBoolItem aBrowsing( SID_BROWSE, TRUE );
+    SfxBoolItem aNewView( SID_OPEN_NEW_VIEW, false );
+    SfxBoolItem aBrowsing( SID_BROWSE, sal_True );
 
     //  kein SID_SILENT mehr
 
@@ -954,19 +954,19 @@ void ScGlobal::OpenURL( const String& rURL, const String& rTarget )
 
 //------------------------------------------------------------------------
 
-BOOL ScGlobal::IsSystemRTL()
+sal_Bool ScGlobal::IsSystemRTL()
 {
     return MsLangId::isRightToLeft( Application::GetSettings().GetLanguage() );
 }
 
-BYTE ScGlobal::GetDefaultScriptType()
+sal_uInt8 ScGlobal::GetDefaultScriptType()
 {
     //  Used when text contains only WEAK characters.
     //  Script type of office language is used then (same as GetEditDefaultLanguage,
     //  to get consistent behavior of text in simple cells and EditEngine,
     //  also same as GetAppLanguage() in Writer)
 
-    return (BYTE) SvtLanguageOptions::GetScriptTypeOfLanguage( Application::GetSettings().GetLanguage() );
+    return (sal_uInt8) SvtLanguageOptions::GetScriptTypeOfLanguage( Application::GetSettings().GetLanguage() );
 }
 
 LanguageType ScGlobal::GetEditDefaultLanguage()
@@ -976,7 +976,7 @@ LanguageType ScGlobal::GetEditDefaultLanguage()
     return Application::GetSettings().GetLanguage();
 }
 
-USHORT ScGlobal::GetScriptedWhichID( BYTE nScriptType, USHORT nWhich )
+sal_uInt16 ScGlobal::GetScriptedWhichID( sal_uInt8 nScriptType, sal_uInt16 nWhich )
 {
     switch ( nScriptType )
     {
@@ -1068,16 +1068,16 @@ USHORT ScGlobal::GetScriptedWhichID( BYTE nScriptType, USHORT nWhich )
 
 void ScGlobal::AddLanguage( SfxItemSet& rSet, SvNumberFormatter& rFormatter )
 {
-    DBG_ASSERT( rSet.GetItemState( ATTR_LANGUAGE_FORMAT, FALSE ) == SFX_ITEM_DEFAULT,
+    DBG_ASSERT( rSet.GetItemState( ATTR_LANGUAGE_FORMAT, false ) == SFX_ITEM_DEFAULT,
         "ScGlobal::AddLanguage - language already added");
 
     const SfxPoolItem* pHardItem;
-    if ( rSet.GetItemState( ATTR_VALUE_FORMAT, FALSE, &pHardItem ) == SFX_ITEM_SET )
+    if ( rSet.GetItemState( ATTR_VALUE_FORMAT, false, &pHardItem ) == SFX_ITEM_SET )
     {
         const SvNumberformat* pHardFormat = rFormatter.GetEntry(
             ((const SfxUInt32Item*)pHardItem)->GetValue() );
 
-        ULONG nParentFmt = 0;   // pool default
+        sal_uLong nParentFmt = 0;   // pool default
         const SfxItemSet* pParent = rSet.GetParent();
         if ( pParent )
             nParentFmt = ((const SfxUInt32Item&)pParent->Get( ATTR_VALUE_FORMAT )).GetValue();

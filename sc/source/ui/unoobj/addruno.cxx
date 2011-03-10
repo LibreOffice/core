@@ -73,13 +73,13 @@ void ScAddressConversionObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 sal_Bool ScAddressConversionObj::ParseUIString( const String& rUIString, ::formula::FormulaGrammar::AddressConvention eConv )
 {
     if (!pDocShell)
-        return sal_False;
+        return false;
 
     ScDocument* pDoc = pDocShell->GetDocument();
-    sal_Bool bSuccess = sal_False;
+    sal_Bool bSuccess = false;
     if ( bIsRange )
     {
-        USHORT nResult = aRange.ParseAny( rUIString, pDoc, eConv );
+        sal_uInt16 nResult = aRange.ParseAny( rUIString, pDoc, eConv );
         if ( nResult & SCA_VALID )
         {
             if ( ( nResult & SCA_TAB_3D ) == 0 )
@@ -93,7 +93,7 @@ sal_Bool ScAddressConversionObj::ParseUIString( const String& rUIString, ::formu
     }
     else
     {
-        USHORT nResult = aRange.aStart.Parse( rUIString, pDoc, eConv );
+        sal_uInt16 nResult = aRange.aStart.Parse( rUIString, pDoc, eConv );
         if ( nResult & SCA_VALID )
         {
             if ( ( nResult & SCA_TAB_3D ) == 0 )
@@ -120,6 +120,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScAddressConversionObj::getProp
             {MAP_CHAR_LEN(SC_UNONAME_XLA1REPR), 0,  &getCppuType((rtl::OUString*)0),    0, 0 },
             {MAP_CHAR_LEN(SC_UNONAME_REFSHEET), 0,  &getCppuType((sal_Int32*)0),        0, 0 },
             {MAP_CHAR_LEN(SC_UNONAME_UIREPR),   0,  &getCppuType((rtl::OUString*)0),    0, 0 },
+            {MAP_CHAR_LEN(SC_UNONAME_XLA1REPR), 0,  &getCppuType((rtl::OUString*)0),    0, 0 },
             {0,0,0,0,0,0}
         };
         static uno::Reference<beans::XPropertySetInfo> aRef(new SfxItemPropertySetInfo( aPropertyMap ));
@@ -134,6 +135,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScAddressConversionObj::getProp
             {MAP_CHAR_LEN(SC_UNONAME_XLA1REPR), 0,  &getCppuType((rtl::OUString*)0),    0, 0 },
             {MAP_CHAR_LEN(SC_UNONAME_REFSHEET), 0,  &getCppuType((sal_Int32*)0),        0, 0 },
             {MAP_CHAR_LEN(SC_UNONAME_UIREPR),   0,  &getCppuType((rtl::OUString*)0),    0, 0 },
+            {MAP_CHAR_LEN(SC_UNONAME_XLA1REPR), 0,  &getCppuType((rtl::OUString*)0),    0, 0 },
             {0,0,0,0,0,0}
         };
         static uno::Reference<beans::XPropertySetInfo> aRef(new SfxItemPropertySetInfo( aPropertyMap ));
@@ -149,7 +151,7 @@ void SAL_CALL ScAddressConversionObj::setPropertyValue( const rtl::OUString& aPr
     if ( !pDocShell )
         throw uno::RuntimeException();
 
-    sal_Bool bSuccess = sal_False;
+    sal_Bool bSuccess = false;
     String aNameStr(aPropertyName);
     if ( aNameStr.EqualsAscii( SC_UNONAME_ADDRESS ) )
     {
@@ -262,7 +264,7 @@ uno::Any SAL_CALL ScAddressConversionObj::getPropertyValue( const rtl::OUString&
     {
         //  generate UI representation string - include sheet only if different from ref sheet
         String aFormatStr;
-        USHORT nFlags = SCA_VALID;
+        sal_uInt16 nFlags = SCA_VALID;
         if ( aRange.aStart.Tab() != nRefSheet )
             nFlags |= SCA_TAB_3D;
         if ( bIsRange )
@@ -284,7 +286,7 @@ uno::Any SAL_CALL ScAddressConversionObj::getPropertyValue( const rtl::OUString&
             //  manually concatenate range so both parts always have the sheet name
             aFormatStr.Append( (sal_Unicode) ':' );
             String aSecond;
-            USHORT nFlags = SCA_VALID;
+            sal_uInt16 nFlags = SCA_VALID;
             if( eConv != ::formula::FormulaGrammar::CONV_XL_A1 )
                 nFlags |= SCA_TAB_3D;
             aRange.aEnd.Format( aSecond, SCA_VALID | SCA_TAB_3D, pDoc, eConv );

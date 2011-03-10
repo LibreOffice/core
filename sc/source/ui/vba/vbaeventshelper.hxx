@@ -34,8 +34,6 @@
 #include "excelvbahelper.hxx"
 #include "rangelst.hxx"
 
-namespace ooo { namespace vba { namespace excel { class XApplication; } } }
-
 class ScVbaEventsListener;
 
 // ============================================================================
@@ -52,16 +50,12 @@ public:
     virtual void SAL_CALL disposing( const css::lang::EventObject& rSource ) throw (css::uno::RuntimeException);
 
 protected:
-    virtual bool implEventsEnabled() throw (css::uno::RuntimeException);
     virtual bool implPrepareEvent( EventQueue& rEventQueue, const EventHandlerInfo& rInfo, const css::uno::Sequence< css::uno::Any >& rArgs ) throw (css::uno::RuntimeException);
     virtual css::uno::Sequence< css::uno::Any > implBuildArgumentList( const EventHandlerInfo& rInfo, const css::uno::Sequence< css::uno::Any >& rArgs ) throw (css::lang::IllegalArgumentException);
     virtual void implPostProcessEvent( EventQueue& rEventQueue, const EventHandlerInfo& rInfo, bool bSuccess, bool bCancel ) throw (css::uno::RuntimeException);
     virtual ::rtl::OUString implGetDocumentModuleName( const EventHandlerInfo& rInfo, const css::uno::Sequence< css::uno::Any >& rArgs ) const throw (css::lang::IllegalArgumentException);
 
 private:
-    /** Extracts a sheet index from the first element of the passed sequence. The
-        element may be an integer, or a Calc range or ranges object. */
-    static SCTAB getTabFromArgs( const css::uno::Sequence< css::uno::Any >& rArgs, sal_Int32 nIndex ) throw (css::lang::IllegalArgumentException);
     /** Checks if selection has been changed compared to selection of last call.
         @return true, if the selection has been changed. */
     bool isSelectionChanged( const css::uno::Sequence< css::uno::Any >& rArgs, sal_Int32 nIndex ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
@@ -76,11 +70,10 @@ private:
     css::uno::Any createWindow() const throw (css::uno::RuntimeException);
 
 private:
-    mutable css::uno::WeakReference< ov::excel::XApplication > mxApplication;
     ::rtl::Reference< ScVbaEventsListener > mxListener;
+    css::uno::Any maOldSelection;
     ScDocShell* mpDocShell;
     ScDocument* mpDoc;
-    ScRangeList maOldSelection;
     bool mbOpened;
 };
 

@@ -84,7 +84,7 @@ private:
     ScAddress   aOldEnd;
     ScAddress   aNewStt;
     ScAddress   aNewEnd;
-    BOOL        bHasNew;
+    sal_Bool        bHasNew;
 public:
                 ScUndoObjData( SdrObject* pObj, const ScAddress& rOS, const ScAddress& rOE,
                                                 const ScAddress& rNS, const ScAddress& rNE );
@@ -102,9 +102,9 @@ private:
     String          aName;
     ScDocument*     pDoc;
     SdrUndoGroup*   pUndoGroup;
-    BOOL            bRecording;
-    BOOL            bAdjustEnabled;
-    BOOL            bHyphenatorSet;
+    sal_Bool            bRecording;
+    sal_Bool            bAdjustEnabled;
+    sal_Bool            bHyphenatorSet;
 
 private:
     void            MoveCells( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SCROW nRow2,
@@ -125,35 +125,35 @@ public:
 
     virtual SdrLayerID GetControlExportLayerId( const SdrObject & ) const;
 
-    BOOL            HasObjects() const;
+    sal_Bool            HasObjects() const;
 
-    BOOL            ScAddPage( SCTAB nTab );
+    sal_Bool            ScAddPage( SCTAB nTab );
     void            ScRemovePage( SCTAB nTab );
     void            ScRenamePage( SCTAB nTab, const String& rNewName );
-    void            ScMovePage( USHORT nOldPos, USHORT nNewPos );
+    void            ScMovePage( sal_uInt16 nOldPos, sal_uInt16 nNewPos );
                     // incl. content, bAlloc=FALSE -> only content
-    void            ScCopyPage( USHORT nOldPos, USHORT nNewPos, BOOL bAlloc );
+    void            ScCopyPage( sal_uInt16 nOldPos, sal_uInt16 nNewPos, sal_Bool bAlloc );
 
     ScDocument*     GetDocument() const { return pDoc; }
 
     void            UpdateBasic();              // set DocShell Basic in DrawPages
     void            UseHyphenator();
 
-    BOOL            GetPrintArea( ScRange& rRange, BOOL bSetHor, BOOL bSetVer ) const;
+    sal_Bool            GetPrintArea( ScRange& rRange, sal_Bool bSetHor, sal_Bool bSetVer ) const;
 
                     //      automatic adjustments
 
-    void            EnableAdjust( BOOL bSet = TRUE )    { bAdjustEnabled = bSet; }
+    void            EnableAdjust( sal_Bool bSet = sal_True )    { bAdjustEnabled = bSet; }
 
     void            BeginCalcUndo();
     SdrUndoGroup*   GetCalcUndo();
-    BOOL            IsRecording() const         { return bRecording; }
+    sal_Bool            IsRecording() const         { return bRecording; }
     void            AddCalcUndo( SdrUndoAction* pUndo );
 
     void            MoveArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SCROW nRow2,
-                                SCsCOL nDx,SCsROW nDy, BOOL bInsDel, bool bUpdateNoteCaptionPos = true );
+                                SCsCOL nDx,SCsROW nDy, sal_Bool bInsDel, bool bUpdateNoteCaptionPos = true );
 
-    BOOL            HasObjectsInRows( SCTAB nTab, SCROW nStartRow, SCROW nEndRow );
+    sal_Bool            HasObjectsInRows( SCTAB nTab, SCROW nStartRow, SCROW nEndRow );
 
     void            DeleteObjectsInArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1,
                                             SCCOL nCol2,SCROW nRow2 );
@@ -164,7 +164,7 @@ public:
                                     SCTAB nSourceTab, const Rectangle& rSourceRange,
                                     const ScAddress& rDestPos, const Rectangle& rDestRange );
 
-    void            SetPageSize( USHORT nPageNo, const Size& rSize, bool bUpdateNoteCaptionPos = true );
+    void            SetPageSize( sal_uInt16 nPageNo, const Size& rSize, bool bUpdateNoteCaptionPos = true );
 
                     //  mirror or move between positive and negative positions for RTL
     void            MirrorRTL( SdrObject* pObj );
@@ -178,7 +178,7 @@ public:
                     //  (ChartListenerCollection etc. must use GetPersistName directly)
     static String   GetVisibleName( SdrObject* pObj );
 
-    SdrObject*      GetNamedObject( const String& rName, USHORT nId, SCTAB& rFoundTab ) const;
+    SdrObject*      GetNamedObject( const String& rName, sal_uInt16 nId, SCTAB& rFoundTab ) const;
                     // if pnCounter != NULL, the search for a name starts with this index + 1,
                     // and the index really used is returned.
     String          GetNewGraphicName( long* pnCounter = NULL ) const;
@@ -191,7 +191,7 @@ public:
     static ScAnchorType     GetAnchorType( const SdrObject& );
 
     // positions for detektive lines
-    static ScDrawObjData* GetObjData( SdrObject* pObj, BOOL bCreate=FALSE );
+    static ScDrawObjData* GetObjData( SdrObject* pObj, sal_Bool bCreate=false );
 
     // The sheet information in ScDrawObjData isn't updated when sheets are inserted/deleted.
     // Use this method to get an object with positions on the specified sheet (should be the
@@ -210,7 +210,7 @@ public:
     static IMapObject* GetHitIMapObject( SdrObject* pObject,
                             const Point& rWinPoint, const Window& rCmpWnd );
 
-    static ScMacroInfo* GetMacroInfo( SdrObject* pObj, BOOL bCreate = FALSE );
+    static ScMacroInfo* GetMacroInfo( SdrObject* pObj, sal_Bool bCreate = false );
 
 private:
     static SfxObjectShell* pGlobalDrawPersist;          // for AllocModel

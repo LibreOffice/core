@@ -44,8 +44,8 @@ class ExcScenarioCell
 private:
     String                      aValue;
 public:
-    const UINT16                nCol;
-    const UINT16                nRow;
+    const sal_uInt16                nCol;
+    const sal_uInt16                nRow;
 
     ExcScenarioCell( const UINT16 nC, const UINT16 nR );
 
@@ -62,7 +62,7 @@ public:
 
     ~ExcScenario();
 
-    void Apply( const XclImpRoot& rRoot, const BOOL bLast = FALSE );
+    void Apply( const XclImpRoot& rRoot, const sal_Bool bLast = false );
 
 protected:
 

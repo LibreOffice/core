@@ -122,7 +122,7 @@
 #include <tools/fract.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/mapmod.hxx>
-#include <vcl/mapunit.hxx>
+#include <tools/mapunit.hxx>
 #include <vcl/region.hxx>
 #include <svl/lstner.hxx>
 #include <patattr.hxx>
@@ -174,7 +174,7 @@
 #include <vcl/window.hxx>
 #include <vcl/pointr.hxx>
 #include <vcl/ptrstyle.hxx>
-#include <vcl/wintypes.hxx>
+#include <tools/wintypes.hxx>
 #include <vcl/inputctx.hxx>
 #include <vcl/event.hxx>
 #include <tools/ownlist.hxx>
@@ -244,7 +244,7 @@
 #include <vcl/menu.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/combobox.h>
-#include <vcl/fldunit.hxx>
+#include <tools/fldunit.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XFrame.hdl>
 #include <com/sun/star/awt/XWindow.hpp>

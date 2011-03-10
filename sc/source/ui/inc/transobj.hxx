@@ -59,10 +59,11 @@ private:
     SCCOL                           nDragHandleX;
     SCROW                           nDragHandleY;
     SCTAB                           nVisibleTab;
-    USHORT                          nDragSourceFlags;
-    BOOL                            bDragWasInternal;
-    BOOL                            bUsedForLink;
+    sal_uInt16                          nDragSourceFlags;
+    sal_Bool                            bDragWasInternal;
+    sal_Bool                            bUsedForLink;
     bool                            bHasFiltered;       // if has filtered rows
+    bool                            bUseInApi;          // to recognize clipboard content copied from API
 
     void        InitDocShell();
     static void StripRefs( ScDocument* pDoc, SCCOL nStartX, SCROW nStartY,
@@ -70,7 +71,7 @@ private:
                             ScDocument* pDestDoc=0,
                             SCCOL nSubX=0, SCROW nSubY=0 );
     static void PaintToDev( OutputDevice* pDev, ScDocument* pDoc, double nPrintFactor,
-                            const ScRange& rBlock, BOOL bMetaFile );
+                            const ScRange& rBlock, sal_Bool bMetaFile );
     static void GetAreaSize( ScDocument* pDoc, SCTAB nTab1, SCTAB nTab2, SCROW& nRow, SCCOL& nCol );
 
 public:
@@ -90,8 +91,9 @@ public:
     SCCOL               GetDragHandleX() const  { return nDragHandleX; }
     SCROW               GetDragHandleY() const  { return nDragHandleY; }
     SCTAB               GetVisibleTab() const   { return nVisibleTab; }
-    USHORT              GetDragSourceFlags() const  { return nDragSourceFlags; }
+    sal_uInt16              GetDragSourceFlags() const  { return nDragSourceFlags; }
     bool                HasFilteredRows() const { return bHasFiltered; }
+    bool                GetUseInApi() const     { return bUseInApi; }
     ScDocShell*         GetSourceDocShell();
     ScDocument*         GetSourceDocument();
     ScMarkData          GetSourceMarkData();
@@ -100,12 +102,13 @@ public:
     void                SetDragHandlePos( SCCOL nX, SCROW nY );
     void                SetVisibleTab( SCTAB nNew );
     void                SetDragSource( ScDocShell* pSourceShell, const ScMarkData& rMark );
-    void                SetDragSourceFlags( USHORT nFlags );
+    void                SetDragSourceFlags( sal_uInt16 nFlags );
     void                SetDragWasInternal();
+    SC_DLLPUBLIC void   SetUseInApi( bool bSet );
 
     static SC_DLLPUBLIC ScTransferObj* GetOwnClipboard( Window* pUIWin );
 
-    static SfxObjectShell*  SetDrawClipDoc( BOOL bAnyOle );     // update ScGlobal::pDrawClipDocShellRef
+    static SfxObjectShell*  SetDrawClipDoc( sal_Bool bAnyOle );     // update ScGlobal::pDrawClipDocShellRef
     virtual sal_Int64 SAL_CALL getSomething( const com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw( com::sun::star::uno::RuntimeException );
     static const com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId();
 };

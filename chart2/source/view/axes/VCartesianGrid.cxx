@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_chart2.hxx"
 #include "VCartesianGrid.hxx"
-#include "TickmarkHelper.hxx"
+#include "Tickmarks.hxx"
 #include "PlottingPositionHelper.hxx"
 #include "ShapeFactory.hxx"
 #include "ObjectIdentifier.hxx"
@@ -211,7 +211,7 @@ void VCartesianGrid::fillLinePropertiesFromGridModel( ::std::vector<VLinePropert
     }
 };
 
-void SAL_CALL VCartesianGrid::createShapes()
+void VCartesianGrid::createShapes()
 {
     if(!m_aGridPropertiesList.getLength())
         return;
@@ -231,13 +231,10 @@ void SAL_CALL VCartesianGrid::createShapes()
 
     //-----------------------------------------
     //create all scaled tickmark values
-    std::auto_ptr< TickmarkHelper > apTickmarkHelper( this->createTickmarkHelper() );
-    TickmarkHelper& aTickmarkHelper = *apTickmarkHelper.get();
+    std::auto_ptr< TickFactory > apTickFactory( this->createTickFactory() );
+    TickFactory& aTickFactory = *apTickFactory.get();
     ::std::vector< ::std::vector< TickInfo > > aAllTickInfos;
-    if( m_aIncrement.ShiftedPosition )
-        aTickmarkHelper.getAllTicksShifted( aAllTickInfos );
-    else
-        aTickmarkHelper.getAllTicks( aAllTickInfos );
+    aTickFactory.getAllTicks( aAllTickInfos );
 
     //-----------------------------------------
     //create tick mark line shapes

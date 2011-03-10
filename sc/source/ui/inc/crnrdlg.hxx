@@ -51,9 +51,9 @@ public:
 
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc );
 
-    virtual BOOL    IsRefInputMode() const;
+    virtual sal_Bool    IsRefInputMode() const;
     virtual void    SetActive();
-    virtual BOOL    Close();
+    virtual sal_Bool    Close();
 
 private:
     FixedLine       aFlAssign;
@@ -84,15 +84,15 @@ private:
     ScViewData*     pViewData;
     ScDocument*     pDoc;
     formula::RefEdit*       pEdActive;
-    BOOL            bDlgLostFocus;
+    sal_Bool            bDlgLostFocus;
 
 #ifdef _CRNRDLG_CXX
 private:
     void Init               ();
     void UpdateNames        ();
-    void UpdateRangeData    ( const ScRange& rRange, BOOL bColName );
-    void SetColRowData( const ScRange& rLabelRange,BOOL bRef=FALSE);
-    void AdjustColRowData( const ScRange& rDataRange,BOOL bRef=FALSE);
+    void UpdateRangeData    ( const ScRange& rRange, sal_Bool bColName );
+    void SetColRowData( const ScRange& rLabelRange,sal_Bool bRef=false);
+    void AdjustColRowData( const ScRange& rDataRange,sal_Bool bRef=false);
     DECL_LINK( CancelBtnHdl, void * );
     DECL_LINK( OkBtnHdl, void * );
     DECL_LINK( AddBtnHdl, void * );

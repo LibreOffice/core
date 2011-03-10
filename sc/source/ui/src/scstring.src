@@ -146,7 +146,7 @@ String SCSTR_PREVIEWSHELL
 
 String SCSTR_PIVOTSHELL
 {
-    Text [ en-US ] = "Data Pilot Tables" ;
+    Text [ en-US ] = "Pivot Tables" ;
 };
 
 String SCSTR_AUDITSHELL
@@ -626,11 +626,6 @@ String STR_REPLCELLSWARN
     Text [ en-US ] = "You are pasting data into cells that already contain data.\nDo you really want to overwrite the existing data?";
 };
 
-String STR_PRINT_NOTHING
-{
-    Text [ en-US ] = "There is nothing to print. The selected print range or sheet is empty.";
-};
-
 String SCSTR_ALLFILTER
 {
     Text [ en-US ] = "All";
@@ -778,17 +773,17 @@ String STR_ACC_EDITCELL_DESCR
 
 String STR_ACC_DATAPILOT_ROW_DESCR
 {
-    Text [ en-US ] = "Fields that you drop here will be displayed as rows in the final DataPilot table.";
+    Text [ en-US ] = "Fields that you drop here will be displayed as rows in the final pivot table.";
 };
 
 String STR_ACC_DATAPILOT_COL_DESCR
 {
-    Text [ en-US ] = "Fields that you drop here will be displayed as columns in the final DataPilot table.";
+    Text [ en-US ] = "Fields that you drop here will be displayed as columns in the final pivot table.";
 };
 
 String STR_ACC_DATAPILOT_DATA_DESCR
 {
-    Text [ en-US ] = "Fields that you drop here will be used for calculations in the final DataPilot table.";
+    Text [ en-US ] = "Fields that you drop here will be used for calculations in the final pivot table.";
 };
 
 String STR_ACC_DATAPILOT_SEL_DESCR
@@ -811,6 +806,23 @@ String RID_SCSTR_ONCLICK
     Text [ en-US ] = "Mouse button pressed";
 };
 
+String STR_ACC_TOOLBAR_FORMULA
+{
+    Text [ en-US ] = "Formula Tool Bar";
+};
+String STR_ACC_DOC_SPREADSHEET
+{
+    Text [ en-US ] = "%PRODUCTNAME Spreadsheets";
+};
+String STR_ACC_DOC_SPREADSHEET_READONLY
+{
+    Text [ en-US ] = "(read-only)";
+};
+String STR_ACC_DOC_PREVIEW_SUFFIX
+{
+    Text [ en-US ] = "(Preview mode)";
+};
+
 String SCSTR_MOREBTN_MOREOPTIONS
 {
     Text [ en-US ] = "More ~Options";
@@ -827,22 +839,13 @@ StringArray SCSTR_PRINT_OPTIONS
     {
         < "Pages"; >;
         < "~Include output of empty pages"; >;
-        < "If checked empty pages that have no cell contents or draw objects are not printed."; >;
-        < "Sheets"; >;
-        < "Print ~only selected sheets"; >;
-        < "If checked only contents from selected sheets are printed, even if you specify a wider range in the Format - Print Ranges dialog. Content from sheets that are not selected will not be printed."; >;
         < "Print content"; >;
         < "~All sheets"; >;
-        < "The printout will be created from all sheets in the document."; >;
         < "~Selected sheets"; >;
-        < "The printout will be created only from the currently selected sheets."; >;
         < "Selected cells"; >;
-        < "The printout will be created only from the currently selected cells."; >;
         < "Thereof print"; >;
         < "All ~pages"; >;
-        < "Print all pages of the printable content."; >;
         < "Pa~ges"; >;
-        < "Print only some pages of the printable content."; >;
         < "%PRODUCTNAME %s"; >;
     };
 };

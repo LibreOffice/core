@@ -158,11 +158,9 @@ PieChart::~PieChart()
 
 //-----------------------------------------------------------------
 
-void SAL_CALL PieChart::setScales( const uno::Sequence< ExplicitScaleData >& rScales
-                                     , sal_Bool /* bSwapXAndYAxis */ )
-                            throw (uno::RuntimeException)
+void PieChart::setScales( const std::vector< ExplicitScaleData >& rScales, bool /* bSwapXAndYAxis */ )
 {
-    DBG_ASSERT(m_nDimension<=rScales.getLength(),"Dimension of Plotter does not fit two dimension of given scale sequence");
+    DBG_ASSERT(m_nDimension<=static_cast<sal_Int32>(rScales.size()),"Dimension of Plotter does not fit two dimension of given scale sequence");
     m_pPosHelper->setScales( rScales, true );
 }
 
@@ -395,6 +393,7 @@ void PieChart::createShapes()
             if( !bIsVisible )
                 continue;
 
+            double fLogicZ = -1.0;//as defined
             double fDepth  = this->getTransformedDepth();
 
             uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShape(pSeries, xSeriesTarget);
@@ -478,11 +477,11 @@ void PieChart::createShapes()
                     awt::Point aScreenPosition2D(
                         aPolarPosHelper.getLabelScreenPositionAndAlignmentForUnitCircleValues(eAlignment, nLabelPlacement
                         , fUnitCircleStartAngleDegree, fUnitCircleWidthAngleDegree
-                        , fUnitCircleInnerRadius, fUnitCircleOuterRadius, 0.0, 0 ));
+                        , fUnitCircleInnerRadius, fUnitCircleOuterRadius, fLogicZ+0.5, 0 ));
 
                     PieLabelInfo aPieLabelInfo;
                     aPieLabelInfo.aFirstPosition = basegfx::B2IVector( aScreenPosition2D.X, aScreenPosition2D.Y );
-                    awt::Point aOrigin( aPolarPosHelper.transformSceneToScreenPosition( m_pPosHelper->transformUnitCircleToScene( 0.0, 0.0, 0.5 ) ) );
+                    awt::Point aOrigin( aPolarPosHelper.transformSceneToScreenPosition( m_pPosHelper->transformUnitCircleToScene( 0.0, 0.0, fLogicZ+1.0 ) ) );
                     aPieLabelInfo.aOrigin = basegfx::B2IVector( aOrigin.X, aOrigin.Y );
 
                     //add a scaling independent Offset if requested

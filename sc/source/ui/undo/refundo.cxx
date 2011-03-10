@@ -167,7 +167,7 @@ void ScRefUndoData::DeleteUnchanged( const ScDocument* pDoc )
     }
 }
 
-void ScRefUndoData::DoUndo( ScDocument* pDoc, BOOL bUndoRefFirst )
+void ScRefUndoData::DoUndo( ScDocument* pDoc, sal_Bool bUndoRefFirst )
 {
     if (pDBCollection)
         pDoc->SetDBCollection( new ScDBCollection(*pDBCollection) );
@@ -196,8 +196,8 @@ void ScRefUndoData::DoUndo( ScDocument* pDoc, BOOL bUndoRefFirst )
 
     if (pDBCollection || pRangeName)
     {
-        BOOL bOldAutoCalc = pDoc->GetAutoCalc();
-        pDoc->SetAutoCalc( FALSE ); // Mehrfachberechnungen vermeiden
+        sal_Bool bOldAutoCalc = pDoc->GetAutoCalc();
+        pDoc->SetAutoCalc( false ); // Mehrfachberechnungen vermeiden
         pDoc->CompileAll();
         pDoc->SetDirty();
         pDoc->SetAutoCalc( bOldAutoCalc );

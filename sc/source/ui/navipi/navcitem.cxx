@@ -46,7 +46,7 @@
 
 //------------------------------------------------------------------------
 
-ScNavigatorControllerItem::ScNavigatorControllerItem( USHORT          nIdP,
+ScNavigatorControllerItem::ScNavigatorControllerItem( sal_uInt16          nIdP,
                                                       ScNavigatorDlg& rDlg,
                                                       SfxBindings&    rBindings )
     :   SfxControllerItem   ( nIdP, rBindings ),
@@ -56,7 +56,7 @@ ScNavigatorControllerItem::ScNavigatorControllerItem( USHORT          nIdP,
 
 //------------------------------------------------------------------------
 
-void ScNavigatorControllerItem::StateChanged( USHORT /* nSID */, SfxItemState /* eState */,
+void ScNavigatorControllerItem::StateChanged( sal_uInt16 /* nSID */, SfxItemState /* eState */,
                                                           const SfxPoolItem* pItem )
 {
     switch( GetId() )

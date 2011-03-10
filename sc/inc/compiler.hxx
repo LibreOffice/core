@@ -102,15 +102,15 @@ class ScTokenArray;
 /*
     OpCode   eOp;           // OpCode
     formula::StackVar eType;         // type of data
-    USHORT   nRefCnt;       // reference count
-    BOOL     bRaw;          // not cloned yet and trimmed to real size
+    sal_uInt16   nRefCnt;       // reference count
+    sal_Bool     bRaw;          // not cloned yet and trimmed to real size
  */
 
 #define SC_TOKEN_FIX_MEMBERS    \
     OpCode   eOp;               \
     formula::StackVar eType;    \
-    mutable USHORT   nRefCnt;   \
-    BOOL     bRaw;
+    mutable sal_uInt16   nRefCnt;   \
+    sal_Bool     bRaw;
 
 struct ScDoubleRawToken
 {
@@ -121,7 +121,7 @@ public:
     {   // union only to assure alignment identical to ScRawToken
         double      nValue;
         struct {
-            BYTE        cByte;
+            sal_uInt8        cByte;
             bool        bHasForceArray;
         } sbyte;
     };
@@ -134,14 +134,14 @@ struct ScRawToken
     // Friends that use a temporary ScRawToken on the stack (and therefor need
     // the private dtor) and know what they're doing..
     friend class ScTokenArray;
-    friend USHORT lcl_ScRawTokenOffset();
+    friend sal_uInt16 lcl_ScRawTokenOffset();
 private:
     SC_TOKEN_FIX_MEMBERS
 public:
     union {
         double       nValue;
         struct {
-            BYTE        cByte;
+            sal_uInt8        cByte;
             bool        bHasForceArray;
         } sbyte;
         ScComplexRefData aRef;
@@ -155,13 +155,13 @@ public:
             sal_Unicode cName[MAXSTRLEN+1];
         } extname;
         ScMatrix*    pMat;
-        USHORT       nIndex;                // index into name collection
+        sal_uInt16       nIndex;                // index into name collection
         sal_Unicode  cStr[ MAXSTRLEN+1 ];   // string (up to 255 characters + 0)
         short        nJump[MAXJUMPCOUNT+1]; // If/Chose token
     };
 
                 //! other members not initialized
-                ScRawToken() : bRaw( TRUE ) {}
+                ScRawToken() : bRaw( sal_True ) {}
 private:
                 ~ScRawToken() {}                //! only delete via Delete()
 public:
@@ -171,7 +171,7 @@ public:
     void        NewOpCode( OpCode e )   { eOp = e; }
     void        IncRef()                { nRefCnt++;       }
     void        DecRef()                { if( !--nRefCnt ) Delete(); }
-    USHORT      GetRef() const          { return nRefCnt; }
+    sal_uInt16      GetRef() const          { return nRefCnt; }
     SC_DLLPUBLIC void       Delete();
 
     // Use these methods only on tokens that are not part of a token array,
@@ -183,7 +183,7 @@ public:
     void SetDouble( double fVal );
 
     // These methods are ok to use, reference count not cleared.
-    void SetName( USHORT n );
+    void SetName( sal_uInt16 n );
     void SetExternalSingleRef( sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& rRef );
     void SetExternalDoubleRef( sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& rRef );
     void SetExternalName( sal_uInt16 nFileId, const String& rName );
@@ -192,7 +192,7 @@ public:
 
     ScRawToken* Clone() const;      // real copy!
     formula::FormulaToken* CreateToken() const;   // create typified token
-    void Load( SvStream&, USHORT nVer );
+    void Load( SvStream&, sal_uInt16 nVer );
 
     static xub_StrLen GetStrLen( const sal_Unicode* pStr ); // as long as a "string" is an array
     static size_t GetStrLenBytes( xub_StrLen nLen )
@@ -234,7 +234,7 @@ public:
         virtual void MakeRefStr( rtl::OUStringBuffer&   rBuffer,
                                  const ScCompiler&      rCompiler,
                                  const ScComplexRefData&    rRef,
-                                 BOOL bSingleRef ) const = 0;
+                                 sal_Bool bSingleRef ) const = 0;
         virtual ::com::sun::star::i18n::ParseResult
                     parseAnyToken( const String& rFormula,
                                    xub_StrLen nSrcPos,
@@ -277,10 +277,10 @@ public:
         };
         virtual sal_Unicode getSpecialSymbol( SpecialSymbolType eSymType ) const = 0;
 
-        virtual ULONG getCharTableFlags( sal_Unicode c, sal_Unicode cLast ) const = 0;
+        virtual sal_uLong getCharTableFlags( sal_Unicode c, sal_Unicode cLast ) const = 0;
 
     protected:
-        const ULONG* mpCharTable;
+        const sal_uLong* mpCharTable;
     };
     friend struct Convention;
 
@@ -319,7 +319,7 @@ private:
     ScRawTokenRef   pRawToken;
 
     const CharClass*    pCharClass;         // which character classification is used for parseAnyToken
-    USHORT      mnPredetectedReference;     // reference when reading ODF, 0 (none), 1 (single) or 2 (double)
+    sal_uInt16      mnPredetectedReference;     // reference when reading ODF, 0 (none), 1 (single) or 2 (double)
     SCsTAB      nMaxTab;                    // last sheet in document
     sal_Int32   mnRangeOpPosInSymbol;       // if and where a range operator is in symbol
     const Convention *pConv;
@@ -328,24 +328,24 @@ private:
     bool        mbExtendedErrorDetection;
     bool        mbRewind;                   // whether symbol is to be rewound to some step during lexical analysis
 
-    BOOL   NextNewToken(bool bInArray = false);
+    sal_Bool   NextNewToken(bool bInArray = false);
 
-    virtual void SetError(USHORT nError);
+    virtual void SetError(sal_uInt16 nError);
     xub_StrLen NextSymbol(bool bInArray);
-    BOOL IsValue( const String& );
-    BOOL IsOpCode( const String&, bool bInArray );
-    BOOL IsOpCode2( const String& );
-    BOOL IsString();
-    BOOL IsReference( const String& );
-    BOOL IsSingleReference( const String& );
-    BOOL IsPredetectedReference( const String& );
-    BOOL IsDoubleReference( const String& );
-    BOOL IsMacro( const String& );
-    BOOL IsNamedRange( const String& );
+    sal_Bool IsValue( const String& );
+    sal_Bool IsOpCode( const String&, bool bInArray );
+    sal_Bool IsOpCode2( const String& );
+    sal_Bool IsString();
+    sal_Bool IsReference( const String& );
+    sal_Bool IsSingleReference( const String& );
+    sal_Bool IsPredetectedReference( const String& );
+    sal_Bool IsDoubleReference( const String& );
+    sal_Bool IsMacro( const String& );
+    sal_Bool IsNamedRange( const String& );
     bool IsExternalNamedRange( const String& rSymbol );
-    BOOL IsDBRange( const String& );
-    BOOL IsColRowName( const String& );
-    BOOL IsBoolean( const String& );
+    sal_Bool IsDBRange( const String& );
+    sal_Bool IsColRowName( const String& );
+    sal_Bool IsBoolean( const String& );
     void AutoCorrectParsedSymbol();
 
     void SetRelNameReference();
@@ -364,7 +364,7 @@ public:
     static void CheckTabQuotes( String& aTabName,
                                 const formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO );
 
-    static BOOL EnQuote( String& rStr );
+    static sal_Bool EnQuote( String& rStr );
     sal_Unicode GetNativeAddressSymbol( Convention::SpecialSymbolType eType ) const;
 
 
@@ -373,7 +373,7 @@ public:
 
     //! _either_ CompileForFAP _or_ AutoCorrection, _not_ both
     // #i101512# SetCompileForFAP is in formula::FormulaCompiler
-    void            SetAutoCorrection( BOOL bVal )
+    void            SetAutoCorrection( sal_Bool bVal )
                         { bAutoCorrect = bVal; bIgnoreErrors = bVal; }
     void            SetCloseBrackets( bool bVal ) { mbCloseBrackets = bVal; }
     void            SetRefConvention( const Convention *pConvP );
@@ -412,7 +412,7 @@ public:
 
     void            SetExtendedErrorDetection( bool bVal ) { mbExtendedErrorDetection = bVal; }
 
-    BOOL            IsCorrected() { return bCorrected; }
+    sal_Bool            IsCorrected() { return bCorrected; }
     const String&   GetCorrectedFormula() { return aCorrectedFormula; }
 
     // Use convention from this->aPos by default
@@ -425,10 +425,10 @@ public:
     static void MoveRelWrap( ScTokenArray& rArr, ScDocument* pDoc, const ScAddress& rPos,
                              SCCOL nMaxCol, SCROW nMaxRow );
 
-    BOOL UpdateNameReference( UpdateRefMode eUpdateRefMode,
+    sal_Bool UpdateNameReference( UpdateRefMode eUpdateRefMode,
                               const ScRange&,
                               SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
-                              BOOL& rChanged, BOOL bSharedFormula = FALSE);
+                              sal_Bool& rChanged, sal_Bool bSharedFormula = false);
 
     ScRangeData* UpdateReference( UpdateRefMode eUpdateRefMode,
                                   const ScAddress& rOldPos, const ScRange&,
@@ -441,15 +441,15 @@ public:
                                   const ScAddress& rOldPos, const ScRange&,
                                   SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
 
-    ScRangeData* UpdateInsertTab(SCTAB nTable, BOOL bIsName );
-    ScRangeData* UpdateDeleteTab(SCTAB nTable, BOOL bIsMove, BOOL bIsName, BOOL& bCompile);
-    ScRangeData* UpdateMoveTab(SCTAB nOldPos, SCTAB nNewPos, BOOL bIsName );
+    ScRangeData* UpdateInsertTab(SCTAB nTable, sal_Bool bIsName );
+    ScRangeData* UpdateDeleteTab(SCTAB nTable, sal_Bool bIsMove, sal_Bool bIsName, sal_Bool& bCompile);
+    ScRangeData* UpdateMoveTab(SCTAB nOldPos, SCTAB nNewPos, sal_Bool bIsName );
 
-    BOOL HasModifiedRange();
+    sal_Bool HasModifiedRange();
 
     /** If the character is allowed as first character in sheet names or
         references, includes '$' and '?'. */
-    static inline BOOL IsCharWordChar( String const & rStr,
+    static inline sal_Bool IsCharWordChar( String const & rStr,
                                        xub_StrLen nPos,
                                        const formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO )
         {
@@ -457,9 +457,9 @@ public:
             sal_Unicode cLast = nPos > 0 ? rStr.GetChar(nPos-1) : 0;
             if (c < 128)
             {
-                return pConventions[eConv] ? static_cast<BOOL>(
+                return pConventions[eConv] ? static_cast<sal_Bool>(
                         (pConventions[eConv]->getCharTableFlags(c, cLast) & SC_COMPILER_C_CHAR_WORD) == SC_COMPILER_C_CHAR_WORD) :
-                    FALSE;   // no convention => assume invalid
+                    false;   // no convention => assume invalid
             }
             else
                 return ScGlobal::pCharClass->isLetterNumeric( rStr, nPos );
@@ -467,7 +467,7 @@ public:
 
     /** If the character is allowed in sheet names, thus may be part of a
         reference, includes '$' and '?' and such. */
-    static inline BOOL IsWordChar( String const & rStr,
+    static inline sal_Bool IsWordChar( String const & rStr,
                                    xub_StrLen nPos,
                                    const formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO )
         {
@@ -475,9 +475,9 @@ public:
             sal_Unicode cLast = nPos > 0 ? rStr.GetChar(nPos-1) : 0;
             if (c < 128)
             {
-                return pConventions[eConv] ? static_cast<BOOL>(
+                return pConventions[eConv] ? static_cast<sal_Bool>(
                         (pConventions[eConv]->getCharTableFlags(c, cLast) & SC_COMPILER_C_WORD) == SC_COMPILER_C_WORD) :
-                    FALSE;   // convention not known => assume invalid
+                    false;   // convention not known => assume invalid
             }
             else
                 return ScGlobal::pCharClass->isLetterNumeric( rStr, nPos );
@@ -485,11 +485,11 @@ public:
 
     /** If the character is allowed as tested by nFlags (SC_COMPILER_C_...
         bits) for all known address conventions. If more than one bit is given
-        in nFlags, all bits must match. If bTestLetterNumeric is FALSE and
-        char>=128, no LetterNumeric test is done and FALSE is returned. */
+        in nFlags, all bits must match. If bTestLetterNumeric is sal_False and
+        char>=128, no LetterNumeric test is done and sal_False is returned. */
     static inline bool IsCharFlagAllConventions( String const & rStr,
                                                  xub_StrLen nPos,
-                                                 ULONG nFlags,
+                                                 sal_uLong nFlags,
                                                  bool bTestLetterNumeric = true )
         {
             sal_Unicode c = rStr.GetChar( nPos );
@@ -514,16 +514,16 @@ public:
 
 private:
     // FormulaCompiler
-    virtual String FindAddInFunction( const String& rUpperName, BOOL bLocalFirst ) const;
+    virtual String FindAddInFunction( const String& rUpperName, sal_Bool bLocalFirst ) const;
     virtual void fillFromAddInCollectionUpperName( NonConstOpCodeMapPtr xMap ) const;
     virtual void fillFromAddInCollectionEnglishName( NonConstOpCodeMapPtr xMap ) const;
     virtual void fillFromAddInMap( NonConstOpCodeMapPtr xMap, formula::FormulaGrammar::Grammar _eGrammar ) const;
     virtual void fillAddInToken(::std::vector< ::com::sun::star::sheet::FormulaOpCodeMapEntry >& _rVec,bool _bIsEnglish) const;
 
-    virtual BOOL HandleExternalReference(const formula::FormulaToken& _aToken);
-    virtual BOOL HandleRange();
-    virtual BOOL HandleSingleRef();
-    virtual BOOL HandleDbData();
+    virtual sal_Bool HandleExternalReference(const formula::FormulaToken& _aToken);
+    virtual sal_Bool HandleRange();
+    virtual sal_Bool HandleSingleRef();
+    virtual sal_Bool HandleDbData();
 
     virtual formula::FormulaTokenRef ExtendRangeReference( formula::FormulaToken & rTok1, formula::FormulaToken & rTok2, bool bReuseDoubleRef );
     virtual void CreateStringFromExternal(rtl::OUStringBuffer& rBuffer, formula::FormulaToken* pTokenP);
@@ -532,10 +532,10 @@ private:
     virtual void CreateStringFromMatrix( rtl::OUStringBuffer& rBuffer, formula::FormulaToken* _pTokenP);
     virtual void CreateStringFromIndex(rtl::OUStringBuffer& rBuffer,formula::FormulaToken* _pTokenP);
     virtual void LocalizeString( String& rName );   // modify rName - input: exact name
-    virtual BOOL IsImportingXML() const;
+    virtual sal_Bool IsImportingXML() const;
 
     /// Access the CharTable flags
-    inline ULONG GetCharTableFlags( sal_Unicode c, sal_Unicode cLast )
+    inline sal_uLong GetCharTableFlags( sal_Unicode c, sal_Unicode cLast )
         { return c < 128 ? pConv->getCharTableFlags(c, cLast) : 0; }
 };
 

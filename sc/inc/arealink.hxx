@@ -49,16 +49,16 @@ private:
     String          aOptions;
     String          aSourceArea;
     ScRange         aDestArea;
-    BOOL            bAddUndo;
-    BOOL            bInCreate;
-    BOOL            bDoInsert;      // is set to FALSE for first update
-    BOOL        FindExtRange( ScRange& rRange, ScDocument* pSrcDoc, const String& rAreaName );
+    sal_Bool            bAddUndo;
+    sal_Bool            bInCreate;
+    sal_Bool            bDoInsert;      // is set to FALSE for first update
+    sal_Bool        FindExtRange( ScRange& rRange, ScDocument* pSrcDoc, const String& rAreaName );
 
 public:
     TYPEINFO();
     ScAreaLink( SfxObjectShell* pShell, const String& rFile,
                     const String& rFilter, const String& rOpt,
-                    const String& rArea, const ScRange& rDest, ULONG nRefresh );
+                    const String& rArea, const ScRange& rDest, sal_uLong nRefresh );
     virtual ~ScAreaLink();
 
     virtual void Closed();
@@ -67,16 +67,16 @@ public:
 
     virtual void    Edit( Window*, const Link& rEndEditHdl );
 
-    BOOL    Refresh( const String& rNewFile, const String& rNewFilter,
-                    const String& rNewArea, ULONG nNewRefresh );
+    sal_Bool    Refresh( const String& rNewFile, const String& rNewFilter,
+                    const String& rNewArea, sal_uLong nNewRefresh );
 
-    void    SetInCreate(BOOL bSet)                  { bInCreate = bSet; }
-    void    SetDoInsert(BOOL bSet)                  { bDoInsert = bSet; }
+    void    SetInCreate(sal_Bool bSet)                  { bInCreate = bSet; }
+    void    SetDoInsert(sal_Bool bSet)                  { bDoInsert = bSet; }
     void    SetDestArea(const ScRange& rNew);
     void    SetSource(const String& rDoc, const String& rFlt, const String& rOpt,
                         const String& rArea);
 
-    BOOL    IsEqual( const String& rFile, const String& rFilter, const String& rOpt,
+    sal_Bool    IsEqual( const String& rFile, const String& rFilter, const String& rOpt,
                         const String& rSource, const ScRange& rDest ) const;
 
     const String&   GetFile() const         { return aFileName;     }

@@ -293,13 +293,13 @@ sal_Bool ScMyTables::IsMerged (const uno::Reference <table::XCellRange>& xCellRa
                 aCellAddress = xMergeCellAddress->getRangeAddress();
                 if (aCellAddress.StartColumn == nCol && aCellAddress.EndColumn == nCol &&
                     aCellAddress.StartRow == nRow && aCellAddress.EndRow == nRow)
-                    return sal_False;
+                    return false;
                 else
                     return sal_True;
             }
         }
     }
-    return sal_False;
+    return false;
 }
 
 void ScMyTables::UnMerge()
@@ -313,7 +313,7 @@ void ScMyTables::UnMerge()
             uno::Reference <util::XMergeable> xMergeable (xCurrentCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
                                                     aCellAddress.EndColumn, aCellAddress.EndRow), uno::UNO_QUERY);
             if (xMergeable.is())
-                xMergeable->merge(sal_False);
+                xMergeable->merge(false);
         }
     }
 }
@@ -329,7 +329,7 @@ void ScMyTables::DoMerge(sal_Int32 nCount)
             uno::Reference <util::XMergeable> xMergeable (xCurrentCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
                                                     aCellAddress.EndColumn, aCellAddress.EndRow), uno::UNO_QUERY);
             if (xMergeable.is())
-                xMergeable->merge(sal_False);
+                xMergeable->merge(false);
         }
 
         //merge
@@ -371,7 +371,7 @@ void ScMyTables::InsertRow()
                 uno::Reference <util::XMergeable> xMergeable (xCurrentCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
                                                         aCellAddress.EndColumn, aCellAddress.EndRow), uno::UNO_QUERY);
                 if (xMergeable.is())
-                    xMergeable->merge(sal_False);
+                    xMergeable->merge(false);
             }
 
             //merge
@@ -445,7 +445,7 @@ void ScMyTables::InsertColumn()
                 uno::Reference <util::XMergeable> xMergeable (xCurrentCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
                                                         aCellAddress.EndColumn, aCellAddress.EndRow), uno::UNO_QUERY);
                 if (xMergeable.is())
-                    xMergeable->merge(sal_False);
+                    xMergeable->merge(false);
                 aTempCellAddress = aCellAddress;
                 aTempCellAddress.StartColumn = aTempCellAddress.EndColumn + 1;
                 aTempCellAddress.EndColumn = aTempCellAddress.StartColumn;
@@ -615,9 +615,9 @@ void ScMyTables::UpdateRowHeights()
             {
                 const SdrPage* pPage = pDrawLayer ? pDrawLayer->GetPage(nTab) : NULL;
                 if ( nTab == nVisible || ( pPage && pPage->GetObjCount() != 0 ) )
-                    aUpdateSheets.SelectTable( nTab, TRUE );
+                    aUpdateSheets.SelectTable( nTab, sal_True );
                 else
-                    pDoc->SetPendingRowHeights( nTab, TRUE );
+                    pDoc->SetPendingRowHeights( nTab, sal_True );
             }
 
             if (aUpdateSheets.GetSelectCount())
@@ -680,7 +680,7 @@ void ScMyTables::DeleteTable()
         if (sCurrentName != sCurrentSheetName && rImport.GetDocument())
         {
             rImport.GetDocument()->RenameTab( static_cast<SCTAB>(nCurrentSheet),
-                sCurrentSheetName, sal_False, sal_True);
+                sCurrentSheetName, false, sal_True);
         }
     }
 }
@@ -776,12 +776,12 @@ void ScMyTables::AddMatrixRange(
 
 sal_Bool ScMyTables::IsPartOfMatrix(sal_Int32 nColumn, sal_Int32 nRow)
 {
-    sal_Bool bResult(sal_False);
+    sal_Bool bResult(false);
     if (!aMatrixRangeList.empty())
     {
         ScMyMatrixRangeList::iterator aItr(aMatrixRangeList.begin());
         ScMyMatrixRangeList::iterator aEndItr(aMatrixRangeList.end());
-        sal_Bool bReady(sal_False);
+        sal_Bool bReady(false);
         while(!bReady && aItr != aEndItr)
         {
             if (nCurrentSheet > aItr->aRange.Sheet)

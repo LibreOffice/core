@@ -65,7 +65,7 @@ ScHFEditDlg::ScHFEditDlg( SfxViewFrame*     pFrameP,
                           Window*           pParent,
                           const SfxItemSet& rCoreSet,
                           const String&     rPageStyle,
-                          USHORT            nResIdP )
+                          sal_uInt16            nResIdP )
     :   SfxTabDialog( pFrameP, pParent, ScResId( nResIdP ), &rCoreSet )
 {
     eNumType = ((const SvxPageItem&)rCoreSet.Get(ATTR_PAGE)).GetNumType();
@@ -135,7 +135,7 @@ ScHFEditDlg::ScHFEditDlg( SfxViewFrame*     pFrameP,
                             rCoreSet.Get(
                                 rCoreSet.GetPool()->GetWhich(SID_ATTR_PAGE) );
 
-                BOOL bRightPage = ( SVX_PAGE_LEFT !=
+                sal_Bool bRightPage = ( SVX_PAGE_LEFT !=
                                     SvxPageUsage(rPageItem.GetPageUsage()) );
 
                 if ( bRightPage )
@@ -147,13 +147,13 @@ ScHFEditDlg::ScHFEditDlg( SfxViewFrame*     pFrameP,
                 {
                     //  #69193a# respect "shared" setting
 
-                    BOOL bShareHeader = IS_SHARE_HEADER(rCoreSet);
+                    sal_Bool bShareHeader = IS_SHARE_HEADER(rCoreSet);
                     if ( bShareHeader )
                         AddTabPage( 1, ScRightHeaderEditPage::Create, NULL );
                     else
                         AddTabPage( 1, ScLeftHeaderEditPage::Create, NULL );
 
-                    BOOL bShareFooter = IS_SHARE_FOOTER(rCoreSet);
+                    sal_Bool bShareFooter = IS_SHARE_FOOTER(rCoreSet);
                     if ( bShareFooter )
                         AddTabPage( 2, ScRightFooterEditPage::Create, NULL );
                     else
@@ -174,7 +174,7 @@ ScHFEditDlg::~ScHFEditDlg()
 
 // -----------------------------------------------------------------------
 
-void ScHFEditDlg::PageCreated( USHORT /* nId */, SfxTabPage& rPage )
+void ScHFEditDlg::PageCreated( sal_uInt16 /* nId */, SfxTabPage& rPage )
 {
     // kann ja nur ne ScHFEditPage sein...
 

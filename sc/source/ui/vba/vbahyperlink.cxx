@@ -100,7 +100,7 @@ ScVbaHyperlink::ScVbaHyperlink( const uno::Reference< XHelperInterface >& rxAnch
         // insert the text field into the document
         xText->setString( OUString() );
         uno::Reference< text::XTextRange > xRange( xText->createTextCursor(), uno::UNO_QUERY_THROW );
-        xText->insertTextContent( xRange, xUrlField, sal_False );
+        xText->insertTextContent( xRange, xUrlField, false );
     }
     else
     {

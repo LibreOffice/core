@@ -61,7 +61,7 @@ public:
                 ~ScRefUndoData();
 
     void        DeleteUnchanged( const ScDocument* pDoc );
-    void        DoUndo( ScDocument* pDoc, BOOL bUndoRefFirst );
+    void        DoUndo( ScDocument* pDoc, sal_Bool bUndoRefFirst );
 };
 
 

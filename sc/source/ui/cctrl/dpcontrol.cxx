@@ -36,7 +36,7 @@
 
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/wintypes.hxx>
+#include <tools/wintypes.hxx>
 #include <vcl/decoview.hxx>
 #include "strload.hxx"
 #include "global.hxx"
@@ -307,7 +307,7 @@ IMPL_LINK( ScMenuFloatingWindow::SubMenuItemData, TimeoutHdl, void*, EMPTYARG )
 
 size_t ScMenuFloatingWindow::MENU_NOT_SELECTED = 999;
 
-ScMenuFloatingWindow::ScMenuFloatingWindow(Window* pParent, ScDocument* pDoc, USHORT nMenuStackLevel) :
+ScMenuFloatingWindow::ScMenuFloatingWindow(Window* pParent, ScDocument* pDoc, sal_uInt16 nMenuStackLevel) :
     PopupMenuFloatingWindow(pParent),
     maOpenTimer(this),
     maCloseTimer(this),
@@ -1160,7 +1160,7 @@ void ScDPFieldPopupWindow::setAllMemberState(bool bSet)
 {
     size_t n = maMembers.size();
     for (size_t i = 0; i < n; ++i)
-        maChecks.CheckEntryPos(static_cast< USHORT >( i ), bSet);
+        maChecks.CheckEntryPos(static_cast< sal_uInt16 >( i ), bSet);
 }
 
 void ScDPFieldPopupWindow::selectCurrentMemberOnly(bool bSet)
@@ -1356,7 +1356,7 @@ void ScDPFieldPopupWindow::initMembers()
     for (size_t i = 0; i < n; ++i)
     {
         maChecks.InsertEntry(maMembers[i].maName);
-        maChecks.CheckEntryPos(static_cast< USHORT >( i ), maMembers[i].mbVisible);
+        maChecks.CheckEntryPos(static_cast< sal_uInt16 >( i ), maMembers[i].mbVisible);
         if (maMembers[i].mbVisible)
             ++nVisMemCount;
     }
@@ -1391,7 +1391,7 @@ void ScDPFieldPopupWindow::getResult(boost::unordered_map<OUString, bool, OUStri
     size_t n = maMembers.size();
     for (size_t i = 0; i < n; ++i)
     {
-        bool bState = maChecks.IsChecked(static_cast< USHORT >( i ));
+        bool bState = maChecks.IsChecked(static_cast< sal_uInt16 >( i ));
         aResult.insert(ResultMap::value_type(maMembers[i].maName, bState));
     }
     rResult.swap(aResult);

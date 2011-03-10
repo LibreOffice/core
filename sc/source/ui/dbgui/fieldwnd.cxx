@@ -29,14 +29,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-#include <vcl/virdev.hxx>
-#include <vcl/decoview.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/mnemonic.hxx>
-#include <vcl/help.hxx>
-#include <tools/debug.hxx>
-
 #include "fieldwnd.hxx"
+
+#include <tools/debug.hxx>
+#include <vcl/decoview.hxx>
+#include <vcl/help.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/virdev.hxx>
+
 #include "pvlaydlg.hxx"
 #include "dpuiglobal.hxx"
 #include "AccessibleDataPilotControl.hxx"
@@ -231,6 +231,7 @@ void ScDPFieldControlBase::SetFieldText( const String& rText, size_t nIndex )
                 pAccessible = NULL;
         }
     }
+    return PIVOTFIELD_INVALID;
 }
 
 const String& ScDPFieldControlBase::GetFieldText( size_t nIndex ) const
@@ -304,10 +305,9 @@ void ScDPFieldControlBase::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if( rMEvt.IsLeft() )
     {
-        size_t nIndex = 0;
-        if( GetFieldIndex( rMEvt.GetPosPixel(), nIndex ) && IsExistingIndex( nIndex ) )
-        {
-            GrabFocusWithSel( nIndex );
+        --mnAutoScrollDelay;
+        return;
+    }
 
             if( rMEvt.GetClicks() == 1 )
             {
@@ -323,7 +323,9 @@ void ScDPFieldControlBase::MouseButtonDown( const MouseEvent& rMEvt )
 
 void ScDPFieldControlBase::MouseButtonUp( const MouseEvent& rMEvt )
 {
-    if( rMEvt.IsLeft() )
+    if( eEndType != ENDTRACKING_DROP )
+        mnFirstVisIndex = mnOldFirstVisIndex;
+    if( eEndType != ENDTRACKING_SUSPEND )
     {
         if( rMEvt.GetClicks() == 1 )
         {
@@ -334,29 +336,60 @@ void ScDPFieldControlBase::MouseButtonUp( const MouseEvent& rMEvt )
         if( IsMouseCaptured() )
             ReleaseMouse();
     }
+    mnInsCursorIndex = PIVOTFIELD_INVALID;
+    Invalidate();
 }
 
 void ScDPFieldControlBase::MouseMove( const MouseEvent& rMEvt )
 {
-    if( IsMouseCaptured() )
+    // prepare a virtual device for buffered painting
+    VirtualDevice aVirDev;
+    // #i97623# VirtualDevice is always LTR on construction while other windows derive direction from parent
+    aVirDev.EnableRTL( IsRTLEnabled() );
+    aVirDev.SetMapMode( MAP_PIXEL );
+    aVirDev.SetOutputSizePixel( GetSizePixel() );
+    Font aFont = GetFont();
+    aFont.SetTransparent( true );
+    aVirDev.SetFont( aFont );
+
+    // draw the background and all fields
+    DrawBackground( aVirDev );
+    for( size_t nFieldIndex = mnFirstVisIndex, nEndIndex = mnFirstVisIndex + mnPageSize; nFieldIndex < nEndIndex; ++nFieldIndex )
+        DrawField( aVirDev, nFieldIndex );
+    DrawInsertionCursor( aVirDev );
+    DrawBitmap( Point( 0, 0 ), aVirDev.GetBitmap( Point( 0, 0 ), GetSizePixel() ) );
+
+    // draw field text focus
+    if( HasFocus() && (mnSelectIndex < maFields.size()) && (mnFirstVisIndex <= mnSelectIndex) && (mnSelectIndex < mnFirstVisIndex + mnPageSize) )
     {
         PointerStyle ePtr = mpDlg->NotifyMouseMove( OutputToScreenPixel( rMEvt.GetPosPixel() ) );
         SetPointer( Pointer( ePtr ) );
     }
-    size_t nIndex = 0;
-    if( GetFieldIndex( rMEvt.GetPosPixel(), nIndex ) && IsShortenedText( nIndex ) )
+
+    // update scrollbar
+    size_t nFieldCount = maFields.size();
+    /*  Already show the scrollbar if window is full but no fields are hidden
+        (yet). This gives the user the hint that it is now possible to add more
+        fields to the window. */
+    mrScrollBar.Show( nFieldCount >= mnPageSize );
+    mrScrollBar.Enable( nFieldCount > mnPageSize );
+    if( mrScrollBar.IsVisible() )
     {
-        Point aPos = OutputToScreenPixel( rMEvt.GetPosPixel() );
-        Rectangle   aRect( aPos, GetSizePixel() );
-        String aHelpText = GetFieldText(nIndex);
-        Help::ShowQuickHelp( this, aRect, aHelpText );
+        mrScrollBar.SetRange( Range( 0, static_cast< long >( (nFieldCount - 1) / mnLineSize + 1 ) ) );
+        mrScrollBar.SetThumbPos( static_cast< long >( mnFirstVisIndex / mnLineSize ) );
     }
+
+    /*  Exclude empty fields from tab chain, but do not disable them. They need
+        to be enabled because they still act as target for field movement via
+        keyboard shortcuts. */
+    WinBits nMask = ~(WB_TABSTOP | WB_NOTABSTOP);
+    SetStyle( (GetStyle() & nMask) | (IsEmpty() ? WB_NOTABSTOP : WB_TABSTOP) );
 }
 
 void ScDPFieldControlBase::KeyInput( const KeyEvent& rKEvt )
 {
     const KeyCode& rKeyCode = rKEvt.GetKeyCode();
-    USHORT nCode = rKeyCode.GetCode();
+    sal_uInt16 nCode = rKeyCode.GetCode();
     bool bKeyEvaluated = false;
 
     const FieldNames& rFields = GetFieldNames();
@@ -415,7 +448,7 @@ void ScDPFieldControlBase::GetFocus()
             ScrollToEnd();
     }
     else                                            // else change focus
-        mpDlg->NotifyFieldFocus( GetFieldType(), TRUE );
+        mpDlg->NotifyFieldFocus( GetFieldType(), true );
 
     AccessibleSetFocus(true);
 }
@@ -424,7 +457,7 @@ void ScDPFieldControlBase::LoseFocus()
 {
     Control::LoseFocus();
     Redraw();
-    mpDlg->NotifyFieldFocus( GetFieldType(), FALSE );
+    mpDlg->NotifyFieldFocus( GetFieldType(), false );
 
     AccessibleSetFocus(false);
 }
@@ -779,7 +812,7 @@ void ScDPHorFieldControl::Redraw()
     Point           aPos0;
     Size            aSize( GetSizePixel() );
     Font            aFont( GetFont() );         // Font vom Window
-    aFont.SetTransparent( TRUE );
+    aFont.SetTransparent( true );
     aVirDev.SetFont( aFont );
     aVirDev.SetOutputSizePixel( aSize );
 
@@ -1095,6 +1128,11 @@ void ScDPRowFieldControl::Redraw()
             bool bFocus = HasFocus() && (nField == GetSelectedField());
             DrawField(aVirDev, Rectangle(aFldPt, aFldSize), *itr, bFocus);
         }
+
+        // draw the button text
+        Point aLabelOffset( (maFieldSize.Width() - nLabelWidth) / 2, ::std::max< long >( (maFieldSize.Height() - rDev.GetTextHeight()) / 2, 3 ) );
+        rDev.SetTextColor( GetSettings().GetStyleSettings().GetButtonTextColor() );
+        rDev.DrawText( aFieldPos + aLabelOffset, aClippedText );
     }
 
     // Create a bitmap from the virtual device, and place that bitmap onto

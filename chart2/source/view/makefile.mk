@@ -115,3 +115,11 @@ DEF1DES=		Viewable Component Chart View
 $(MISC)$/$(SHL1TARGET).flt: makefile.mk \
                             exports.flt
     $(TYPE) exports.flt > $@
+
+ALLTAR : $(MISC)/chartview.component
+
+$(MISC)/chartview.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        chartview.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt chartview.component

@@ -67,7 +67,7 @@ Reference< beans::XPropertyState > WrappedPropertySet::getInnerPropertyState()
 
 void WrappedPropertySet::clearWrappedPropertySet()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );//do not use different mutex than is already used for static property sequence
 
     //delete all wrapped properties
     if(m_pWrappedPropertyMap)
@@ -90,13 +90,21 @@ void WrappedPropertySet::clearWrappedPropertySet()
 Reference< beans::XPropertySetInfo > SAL_CALL WrappedPropertySet::getPropertySetInfo(  )
                                     throw (uno::RuntimeException)
 {
-    if( !m_xInfo.is() )
+    Reference< beans::XPropertySetInfo > xInfo = m_xInfo;
+    if( !xInfo.is() )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
-        if( !m_xInfo.is() )
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );//do not use different mutex than is already used for static property sequence
+        xInfo = m_xInfo;
+        if( !xInfo.is() )
         {
-            m_xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo( getInfoHelper() );
+            xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo( getInfoHelper() );
+            OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
+            m_xInfo = xInfo;
         }
+    }
+    else
+    {
+        OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
     }
     return m_xInfo;
 }
@@ -433,14 +441,21 @@ Sequence< Any > SAL_CALL WrappedPropertySet::getPropertyDefaults( const Sequence
 
 ::cppu::IPropertyArrayHelper& WrappedPropertySet::getInfoHelper()
 {
-    if(!m_pPropertyArrayHelper)
+    ::cppu::OPropertyArrayHelper* p = m_pPropertyArrayHelper;
+    if(!p)
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
-        if(!m_pPropertyArrayHelper)
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );//do not use different mutex than is already used for static property sequence
+        p = m_pPropertyArrayHelper;
+        if(!p)
         {
-            sal_Bool bSorted = sal_True;
-            m_pPropertyArrayHelper = new ::cppu::OPropertyArrayHelper( getPropertySequence(), bSorted );
+            p = new ::cppu::OPropertyArrayHelper( getPropertySequence(), sal_True );
+            OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
+            m_pPropertyArrayHelper = p;
         }
+    }
+    else
+    {
+        OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
     }
     return *m_pPropertyArrayHelper;
 }
@@ -449,13 +464,15 @@ Sequence< Any > SAL_CALL WrappedPropertySet::getPropertyDefaults( const Sequence
 
 tWrappedPropertyMap& WrappedPropertySet::getWrappedPropertyMap()
 {
-    if(!m_pWrappedPropertyMap)
+    tWrappedPropertyMap* p = m_pWrappedPropertyMap;
+    if(!p)
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
-        if(!m_pWrappedPropertyMap)
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );//do not use different mutex than is already used for static property sequence
+        p = m_pWrappedPropertyMap;
+        if(!p)
         {
             std::vector< WrappedProperty* > aPropList( createWrappedProperties() );
-            m_pWrappedPropertyMap = new tWrappedPropertyMap();
+            p = new tWrappedPropertyMap();
 
             for( std::vector< WrappedProperty* >::const_iterator aIt = aPropList.begin(); aIt!=aPropList.end(); ++aIt )
             {
@@ -469,17 +486,24 @@ tWrappedPropertyMap& WrappedPropertySet::getWrappedPropertyMap()
                         OSL_ENSURE( false, "missing property in property list" );
                         delete pProperty;//we are owner or the created WrappedProperties
                     }
-                    else if( m_pWrappedPropertyMap->find( nHandle ) != m_pWrappedPropertyMap->end() )
+                    else if( p->find( nHandle ) != p->end() )
                     {
                         //duplicate Wrapped property
                         OSL_ENSURE( false, "duplicate Wrapped property" );
                         delete pProperty;//we are owner or the created WrappedProperties
                     }
                     else
-                        (*m_pWrappedPropertyMap)[ nHandle ] = pProperty;
+                        (*p)[ nHandle ] = pProperty;
                 }
             }
+
+            OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
+            m_pWrappedPropertyMap = p;
         }
+    }
+    else
+    {
+        OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
     }
     return *m_pWrappedPropertyMap;
 }

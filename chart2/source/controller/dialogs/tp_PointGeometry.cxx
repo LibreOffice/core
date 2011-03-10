@@ -67,7 +67,7 @@ SfxTabPage* SchLayoutTabPage::Create(Window* pWindow,
     return new SchLayoutTabPage(pWindow, rOutAttrs);
 }
 
-BOOL SchLayoutTabPage::FillItemSet(SfxItemSet& rOutAttrs)
+sal_Bool SchLayoutTabPage::FillItemSet(SfxItemSet& rOutAttrs)
 {
 
     if(m_pGeometryResources && m_pGeometryResources->GetSelectEntryCount())
@@ -82,19 +82,19 @@ BOOL SchLayoutTabPage::FillItemSet(SfxItemSet& rOutAttrs)
         rOutAttrs.Put(SfxInt32Item(SCHATTR_STYLE_SHAPE,nShape));
         rOutAttrs.Put(Svx3DHorizontalSegmentsItem(nSegs));
     }
-    return TRUE;
+    return sal_True;
 }
 
 void SchLayoutTabPage::Reset(const SfxItemSet& rInAttrs)
 {
     const SfxPoolItem *pPoolItem = NULL;
 
-    if (rInAttrs.GetItemState(SCHATTR_STYLE_SHAPE,TRUE, &pPoolItem) == SFX_ITEM_SET)
+    if (rInAttrs.GetItemState(SCHATTR_STYLE_SHAPE,sal_True, &pPoolItem) == SFX_ITEM_SET)
     {
         long nVal=((const SfxInt32Item*)pPoolItem)->GetValue();
         if(m_pGeometryResources)
         {
-            m_pGeometryResources->SelectEntryPos(static_cast<USHORT>(nVal));
+            m_pGeometryResources->SelectEntryPos(static_cast<sal_uInt16>(nVal));
             m_pGeometryResources->Show( true );
         }
     }

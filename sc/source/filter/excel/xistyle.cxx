@@ -157,6 +157,19 @@ ColorData XclImpPalette::GetColorData( sal_uInt16 nXclIndex ) const
     return GetDefColorData( nXclIndex );
 }
 
+::com::sun::star::uno::Sequence< sal_Int32 > XclImpPalette::CreateColorSequence() const
+{
+    sal_Int32 nCount = static_cast< sal_Int32 >( maColorTable.size() );
+    ::com::sun::star::uno::Sequence< sal_Int32 > aSeq( nCount );
+    if( nCount > 0 )
+    {
+        sal_Int32* pnSeqColor = aSeq.getArray();
+        for( ColorDataVec::const_iterator aIt = maColorTable.begin(), aEnd = maColorTable.end(); aIt != aEnd; ++aIt, ++pnSeqColor )
+            *pnSeqColor = static_cast< sal_Int32 >( *aIt );
+    }
+    return aSeq;
+}
+
 void XclImpPalette::ReadPalette( XclImpStream& rStrm )
 {
     sal_uInt16 nCount;
@@ -674,7 +687,7 @@ void XclImpNumFmtBuffer::CreateScFormats()
     }
 }
 
-ULONG XclImpNumFmtBuffer::GetScFormat( sal_uInt16 nXclNumFmt ) const
+sal_uLong XclImpNumFmtBuffer::GetScFormat( sal_uInt16 nXclNumFmt ) const
 {
     XclImpIndexMap::const_iterator aIt = maIndexMap.find( nXclNumFmt );
     return (aIt != maIndexMap.end()) ? aIt->second : NUMBERFORMAT_ENTRY_NOT_FOUND;
@@ -682,17 +695,17 @@ ULONG XclImpNumFmtBuffer::GetScFormat( sal_uInt16 nXclNumFmt ) const
 
 void XclImpNumFmtBuffer::FillToItemSet( SfxItemSet& rItemSet, sal_uInt16 nXclNumFmt, bool bSkipPoolDefs ) const
 {
-    ULONG nScNumFmt = GetScFormat( nXclNumFmt );
+    sal_uLong nScNumFmt = GetScFormat( nXclNumFmt );
     if( nScNumFmt == NUMBERFORMAT_ENTRY_NOT_FOUND )
         nScNumFmt = GetStdScNumFmt();
     FillScFmtToItemSet( rItemSet, nScNumFmt, bSkipPoolDefs );
 }
 
-void XclImpNumFmtBuffer::FillScFmtToItemSet( SfxItemSet& rItemSet, ULONG nScNumFmt, bool bSkipPoolDefs ) const
+void XclImpNumFmtBuffer::FillScFmtToItemSet( SfxItemSet& rItemSet, sal_uLong nScNumFmt, bool bSkipPoolDefs ) const
 {
     DBG_ASSERT( nScNumFmt != NUMBERFORMAT_ENTRY_NOT_FOUND, "XclImpNumFmtBuffer::FillScFmtToItemSet - invalid number format" );
     ScfTools::PutItem( rItemSet, SfxUInt32Item( ATTR_VALUE_FORMAT, nScNumFmt ), bSkipPoolDefs );
-    if( rItemSet.GetItemState( ATTR_VALUE_FORMAT, FALSE ) == SFX_ITEM_SET )
+    if( rItemSet.GetItemState( ATTR_VALUE_FORMAT, false ) == SFX_ITEM_SET )
         ScGlobal::AddLanguage( rItemSet, GetFormatter() );
 }
 
@@ -1632,7 +1645,7 @@ void XclImpXFRangeColumn::SetXF( SCROW nScRow, const XclImpXFIndex& rXFIndex )
 {
     XclImpXFRange* pPrevRange;
     XclImpXFRange* pNextRange;
-    ULONG nNextIndex;
+    sal_uLong nNextIndex;
 
     Find( pPrevRange, pNextRange, nNextIndex, nScRow );
 
@@ -1647,7 +1660,7 @@ void XclImpXFRangeColumn::SetXF( SCROW nScRow, const XclImpXFIndex& rXFIndex )
 
             SCROW nFirstScRow = pPrevRange->mnScRow1;
             SCROW nLastScRow = pPrevRange->mnScRow2;
-            ULONG nIndex = nNextIndex - 1;
+            sal_uLong nIndex = nNextIndex - 1;
             XclImpXFRange* pThisRange = pPrevRange;
             pPrevRange = (nIndex > 0 && nIndex <= maIndexList.size()) ? &(maIndexList[ nIndex - 1 ]) : 0;
 
@@ -1694,14 +1707,14 @@ void XclImpXFRangeColumn::SetXF( SCROW nScRow, const XclImpXFIndex& rXFIndex )
     Insert( new XclImpXFRange( nScRow, rXFIndex ), nNextIndex );
 }
 
-void XclImpXFRangeColumn::Insert(XclImpXFRange* pXFRange, ULONG nIndex)
+void XclImpXFRangeColumn::Insert(XclImpXFRange* pXFRange, sal_uLong nIndex)
 {
     maIndexList.insert( maIndexList.begin() + nIndex, pXFRange );
 }
 
 void XclImpXFRangeColumn::Find(
         XclImpXFRange*& rpPrevRange, XclImpXFRange*& rpNextRange,
-        ULONG& rnNextIndex, SCROW nScRow )
+        sal_uLong& rnNextIndex, SCROW nScRow )
 {
 
     // test whether list is empty
@@ -1737,8 +1750,8 @@ void XclImpXFRangeColumn::Find(
     // loop: find range entries before and after new row
     // break the loop if there is no more range between first and last -or-
     // if rpPrevRange contains nScRow (rpNextRange will never contain nScRow)
-    ULONG nPrevIndex = 0;
-    ULONG nMidIndex;
+    sal_uLong nPrevIndex = 0;
+    sal_uLong nMidIndex;
     rnNextIndex = maIndexList.size() - 1;
     XclImpXFRange* pMidRange;
     while( ((rnNextIndex - nPrevIndex) > 1) && (rpPrevRange->mnScRow2 < nScRow) )
@@ -1766,7 +1779,7 @@ void XclImpXFRangeColumn::Find(
     }
 }
 
-void XclImpXFRangeColumn::TryConcatPrev( ULONG nIndex )
+void XclImpXFRangeColumn::TryConcatPrev( sal_uLong nIndex )
 {
     if( !nIndex || nIndex >= maIndexList.size() )
         return;
@@ -1865,7 +1878,7 @@ void XclImpXFRangeBuffer::SetColumnDefXF( SCCOL nScCol, sal_uInt16 nXFIndex )
     maColumns[ nIndex ]->SetDefaultXF( XclImpXFIndex( nXFIndex ) );
 }
 
-void XclImpXFRangeBuffer::SetBorderLine( const ScRange& rRange, SCTAB nScTab, USHORT nLine )
+void XclImpXFRangeBuffer::SetBorderLine( const ScRange& rRange, SCTAB nScTab, sal_uInt16 nLine )
 {
     SCCOL nFromScCol = (nLine == BOX_LINE_RIGHT) ? rRange.aEnd.Col() : rRange.aStart.Col();
     SCROW nFromScRow = (nLine == BOX_LINE_BOTTOM) ? rRange.aEnd.Row() : rRange.aStart.Row();

@@ -86,9 +86,9 @@ ScDocStatPage::~ScDocStatPage()
 
 //------------------------------------------------------------------------
 
-BOOL ScDocStatPage::FillItemSet( SfxItemSet& /* rSet */ )
+sal_Bool ScDocStatPage::FillItemSet( SfxItemSet& /* rSet */ )
 {
-    return FALSE;
+    return false;
 }
 
 //------------------------------------------------------------------------

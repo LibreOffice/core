@@ -68,14 +68,14 @@ using namespace formula;
 // Datum und Zeit
 //-----------------------------------------------------------------------------
 
-double ScInterpreter::GetDateSerial( INT16 nYear, INT16 nMonth, INT16 nDay, bool bStrict )
+double ScInterpreter::GetDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay, bool bStrict )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::GetDateSerial" );
     if ( nYear < 100 && !bStrict )
         nYear = pFormatter->ExpandTwoDigitYear( nYear );
     // Do not use a default Date ctor here because it asks system time with a
     // performance penalty.
-    INT16 nY, nM, nD;
+    sal_Int16 nY, nM, nD;
     if (bStrict)
         nY = nYear, nM = nMonth, nD = nDay;
     else
@@ -203,7 +203,7 @@ void ScInterpreter::ScGetDateValue()
 void ScInterpreter::ScGetDayOfWeek()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScGetDayOfWeek" );
-    BYTE nParamCount = GetByte();
+    sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 1, 2 ) )
     {
         short nFlag;
@@ -247,8 +247,8 @@ void ScInterpreter::ScEasterSunday()
     nFuncFmtType = NUMBERFORMAT_DATE;
     if ( MustHaveParamCount( GetByte(), 1 ) )
     {
-        INT16 nDay, nMonth, nYear;
-        nYear = (INT16) ::rtl::math::approxFloor( GetDouble() );
+        sal_Int16 nDay, nMonth, nYear;
+        nYear = (sal_Int16) ::rtl::math::approxFloor( GetDouble() );
         if ( nYear < 100 )
             nYear = pFormatter->ExpandTwoDigitYear( nYear );
         // don't worry, be happy :)
@@ -266,8 +266,8 @@ void ScInterpreter::ScEasterSunday()
         L = (32 + 2 * E + 2 * I - H - K) % 7;
         M = int((N + 11 * H + 22 * L) / 451);
         O = H + L - 7 * M + 114;
-        nDay = sal::static_int_cast<INT16>( O % 31 + 1 );
-        nMonth = sal::static_int_cast<INT16>( int(O / 31) );
+        nDay = sal::static_int_cast<sal_Int16>( O % 31 + 1 );
+        nMonth = sal::static_int_cast<sal_Int16>( int(O / 31) );
         PushDouble( GetDateSerial( nYear, nMonth, nDay, true ) );
     }
 }
@@ -278,9 +278,9 @@ void ScInterpreter::ScGetDate()
     nFuncFmtType = NUMBERFORMAT_DATE;
     if ( MustHaveParamCount( GetByte(), 3 ) )
     {
-        INT16 nDay   = (INT16) ::rtl::math::approxFloor(GetDouble());
-        INT16 nMonth = (INT16) ::rtl::math::approxFloor(GetDouble());
-        INT16 nYear  = (INT16) ::rtl::math::approxFloor(GetDouble());
+        sal_Int16 nDay   = (sal_Int16) ::rtl::math::approxFloor(GetDouble());
+        sal_Int16 nMonth = (sal_Int16) ::rtl::math::approxFloor(GetDouble());
+        sal_Int16 nYear  = (sal_Int16) ::rtl::math::approxFloor(GetDouble());
         if (nYear < 0)
             PushIllegalArgument();
         else
@@ -342,14 +342,14 @@ void ScInterpreter::ScGetDiffDate360()
      * In Calc the result is 419 respectively -419. I consider the -418 a bug in Excel.
      */
 
-    BYTE nParamCount = GetByte();
+    sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 2, 3 ) )
     {
-        BOOL bFlag;
+        sal_Bool bFlag;
         if (nParamCount == 3)
             bFlag = GetBool();
         else
-            bFlag = FALSE;
+            bFlag = false;
         double nDate2 = GetDouble();
         double nDate1 = GetDouble();
         if (nGlobalError)
@@ -373,7 +373,7 @@ void ScInterpreter::ScGetDiffDate360()
             Date aDate2 = *(pFormatter->GetNullDate());
             aDate2 += (long) ::rtl::math::approxFloor(nDate2);
             if (aDate1.GetDay() == 31)
-                aDate1 -= (ULONG) 1;
+                aDate1 -= (sal_uLong) 1;
             else if (!bFlag)
             {
                 if (aDate1.GetMonth() == 2)
@@ -395,7 +395,7 @@ void ScInterpreter::ScGetDiffDate360()
                 if (!bFlag )
                 {
                     if (aDate1.GetDay() == 30)
-                        aDate2 -= (ULONG) 1;
+                        aDate2 -= (sal_uLong) 1;
                 }
                 else
                     aDate2.SetDay(30);
@@ -459,7 +459,7 @@ void ScInterpreter::ScInt()
 void ScInterpreter::RoundNumber( rtl_math_RoundingMode eMode )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::RoundNumber" );
-    BYTE nParamCount = GetByte();
+    sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 1, 2 ) )
     {
         double fVal = 0.0;
@@ -467,7 +467,7 @@ void ScInterpreter::RoundNumber( rtl_math_RoundingMode eMode )
             fVal = ::rtl::math::round( GetDouble(), 0, eMode );
         else
         {
-            INT32 nDec = (INT32) ::rtl::math::approxFloor(GetDouble());
+            sal_Int32 nDec = (sal_Int32) ::rtl::math::approxFloor(GetDouble());
             if( nDec < -20 || nDec > 20 )
                 PushIllegalArgument();
             else
@@ -498,10 +498,10 @@ void ScInterpreter::ScRoundUp()
 void ScInterpreter::ScCeil()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScCeil" );
-    BYTE nParamCount = GetByte();
+    sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 2, 3 ) )
     {
-        BOOL bAbs = ( nParamCount == 3 ? GetBool() : FALSE );
+        sal_Bool bAbs = ( nParamCount == 3 ? GetBool() : false );
         double fDec = GetDouble();
         double fVal = GetDouble();
         if ( fDec == 0.0 )
@@ -521,10 +521,10 @@ void ScInterpreter::ScCeil()
 void ScInterpreter::ScFloor()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScFloor" );
-    BYTE nParamCount = GetByte();
+    sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 2, 3 ) )
     {
-        BOOL bAbs = ( nParamCount == 3 ? GetBool() : FALSE );
+        sal_Bool bAbs = ( nParamCount == 3 ? GetBool() : false );
         double fDec = GetDouble();
         double fVal = GetDouble();
         if ( fDec == 0.0 )
@@ -584,7 +584,7 @@ void ScInterpreter::ScArcTan2()
 void ScInterpreter::ScLog()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScLog" );
-    BYTE nParamCount = GetByte();
+    sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 1, 2 ) )
     {
         double nBase;
@@ -659,7 +659,7 @@ void ScInterpreter::ScNPV()
                     case svDoubleRef :
                     case svRefList :
                     {
-                        USHORT nErr = 0;
+                        sal_uInt16 nErr = 0;
                         double nCellVal;
                         PopDoubleRef( aRange, nParamCount, nRefInList);
                         ScValueIterator aValIter(pDok, aRange, glSubTotal);
@@ -684,23 +684,19 @@ void ScInterpreter::ScNPV()
     }
 }
 
-#if defined(WIN) && defined(MSC)
-#pragma optimize("",off)
-#endif
-
 void ScInterpreter::ScIRR()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScIRR" );
     double fSchaetzwert;
     nFuncFmtType = NUMBERFORMAT_PERCENT;
-    BYTE nParamCount = GetByte();
+    sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 1, 2 ) )
         return;
     if (nParamCount == 2)
         fSchaetzwert = GetDouble();
     else
         fSchaetzwert = 0.1;
-    USHORT sPos = sp;                       // Stack-Position merken
+    sal_uInt16 sPos = sp;                       // Stack-Position merken
     double fEps = 1.0;
     double x, xNeu, fWert, fZaehler, fNenner, nCount;
     if (fSchaetzwert == -1.0)
@@ -717,8 +713,8 @@ void ScInterpreter::ScIRR()
             return;
         }
     }
-    const USHORT nIterationsMax = 20;
-    USHORT nItCount = 0;
+    const sal_uInt16 nIterationsMax = 20;
+    sal_uInt16 nItCount = 0;
     ScRange aRange;
     while (fEps > SCdEpsilon && nItCount < nIterationsMax)
     {                                       // Newton-Verfahren:
@@ -726,7 +722,7 @@ void ScInterpreter::ScIRR()
         nCount = 0.0;
         fZaehler = 0.0;
         fNenner = 0.0;
-        USHORT nErr = 0;
+        sal_uInt16 nErr = 0;
         PopDoubleRef( aRange );
         ScValueIterator aValIter(pDok, aRange, glSubTotal);
         if (aValIter.GetFirst(fWert, nErr))
@@ -754,10 +750,6 @@ void ScInterpreter::ScIRR()
     else
         PushError( errNoConvergence);
 }
-#if defined(WIN) && defined(MSC)
-#pragma optimize("",on)
-#endif
-
 
 void ScInterpreter::ScMIRR()
 {   // range_of_values ; rate_invest ; rate_reinvest
@@ -780,10 +772,10 @@ void ScInterpreter::ScMIRR()
             double fPow_invest = 1.0;
             ScValueIterator aValIter( pDok, aRange, glSubTotal );
             double fCellValue;
-            ULONG nCount = 0;
-            USHORT nIterError = 0;
+            sal_uLong nCount = 0;
+            sal_uInt16 nIterError = 0;
 
-            BOOL bLoop = aValIter.GetFirst( fCellValue, nIterError );
+            sal_Bool bLoop = aValIter.GetFirst( fCellValue, nIterError );
             while( bLoop )
             {
                 if( fCellValue > 0.0 )          // reinvestments
@@ -851,7 +843,7 @@ void ScInterpreter::ScBW()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScBW" );
     nFuncFmtType = NUMBERFORMAT_CURRENCY;
     double nRmz, nZzr, nZins, nZw = 0, nFlag = 0;
-    BYTE nParamCount = GetByte();
+    sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 3, 5 ) )
         return;
     if (nParamCount == 5)
@@ -911,7 +903,7 @@ void ScInterpreter::ScGDA()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScGDA" );
     nFuncFmtType = NUMBERFORMAT_CURRENCY;
-    BYTE nParamCount = GetByte();
+    sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 4, 5 ) )
     {
         double nFaktor;
@@ -935,7 +927,7 @@ void ScInterpreter::ScGDA2()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScGDA2" );
     nFuncFmtType = NUMBERFORMAT_CURRENCY;
-    BYTE nParamCount = GetByte();
+    sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 4, 5 ) )
         return ;
     double nMonate;
@@ -964,8 +956,8 @@ void ScInterpreter::ScGDA2()
         double nSummAbRate = nErsteAbRate;
         double nMin = nDauer;
         if (nMin > nPeriode) nMin = nPeriode;
-        USHORT iMax = (USHORT)::rtl::math::approxFloor(nMin);
-        for (USHORT i = 2; i <= iMax; i++)
+        sal_uInt16 iMax = (sal_uInt16)::rtl::math::approxFloor(nMin);
+        for (sal_uInt16 i = 2; i <= iMax; i++)
         {
             nGda2 = (nWert - nSummAbRate) * nAbRate;
             nSummAbRate += nGda2;
@@ -983,14 +975,14 @@ double ScInterpreter::ScInterVDB(double fWert,double fRest,double fDauer,
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScInterVDB" );
     double fVdb=0;
     double fIntEnd   = ::rtl::math::approxCeil(fPeriode);
-    ULONG nLoopEnd   = (ULONG) fIntEnd;
+    sal_uLong nLoopEnd   = (sal_uLong) fIntEnd;
 
     double fTerm, fLia;
     double fRestwert = fWert - fRest;
-    BOOL bNowLia = FALSE;
+    sal_Bool bNowLia = false;
 
     double fGda;
-    ULONG i;
+    sal_uLong i;
     fLia=0;
     for ( i = 1; i <= nLoopEnd; i++)
     {
@@ -1002,7 +994,7 @@ double ScInterpreter::ScInterVDB(double fWert,double fRest,double fDauer,
             if (fLia > fGda)
             {
                 fTerm = fLia;
-                bNowLia = TRUE;
+                bNowLia = sal_True;
             }
             else
             {
@@ -1033,15 +1025,15 @@ void ScInterpreter::ScVDB()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScVDB" );
     nFuncFmtType = NUMBERFORMAT_CURRENCY;
-    BYTE nParamCount = GetByte();
+    sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 5, 7 ) )
     {
         double fWert, fRest, fDauer, fAnfang, fEnde, fFaktor, fVdb = 0.0;
-        BOOL bFlag;
+        sal_Bool bFlag;
         if (nParamCount == 7)
             bFlag = GetBool();
         else
-            bFlag = FALSE;
+            bFlag = false;
         if (nParamCount >= 6)
             fFaktor = GetDouble();
         else
@@ -1058,13 +1050,13 @@ void ScInterpreter::ScVDB()
         {
             double fIntStart = ::rtl::math::approxFloor(fAnfang);
             double fIntEnd   = ::rtl::math::approxCeil(fEnde);
-            ULONG nLoopStart = (ULONG) fIntStart;
-            ULONG nLoopEnd   = (ULONG) fIntEnd;
+            sal_uLong nLoopStart = (sal_uLong) fIntStart;
+            sal_uLong nLoopEnd   = (sal_uLong) fIntEnd;
 
             fVdb = 0.0;
             if (bFlag)
             {
-                for (ULONG i = nLoopStart + 1; i <= nLoopEnd; i++)
+                for (sal_uLong i = nLoopStart + 1; i <= nLoopEnd; i++)
                 {
                     double fTerm = ScGetGDA(fWert, fRest, fDauer, (double) i, fFaktor);
 
@@ -1155,7 +1147,7 @@ void ScInterpreter::ScRMZ()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScRMZ" );
     double nZins, nZzr, nBw, nZw = 0, nFlag = 0;
     nFuncFmtType = NUMBERFORMAT_CURRENCY;
-    BYTE nParamCount = GetByte();
+    sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 3, 5 ) )
         return;
     if (nParamCount == 5)
@@ -1204,7 +1196,7 @@ void ScInterpreter::ScZW()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScZW" );
     double nZins, nZzr, nRmz, nBw = 0, nFlag = 0;
     nFuncFmtType = NUMBERFORMAT_CURRENCY;
-    BYTE nParamCount = GetByte();
+    sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 3, 5 ) )
         return;
     if (nParamCount == 5)
@@ -1221,7 +1213,7 @@ void ScInterpreter::ScZZR()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScZZR" );
     double nZins, nRmz, nBw, nZw = 0, nFlag = 0;
-    BYTE nParamCount = GetByte();
+    sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 3, 5 ) )
         return;
     if (nParamCount == 5)
@@ -1252,8 +1244,8 @@ bool ScInterpreter::RateIteration( double fNper, double fPayment, double fPv,
     bool bValid = true, bFound = false;
     double fX, fXnew, fTerm, fTermDerivation;
     double fGeoSeries, fGeoSeriesDerivation;
-    const USHORT nIterationsMax = 150;
-    USHORT nCount = 0;
+    const sal_uInt16 nIterationsMax = 150;
+    sal_uInt16 nCount = 0;
     const double fEpsilonSmall = 1.0E-14;
     // convert any fPayType situation to fPayType == zero situation
     fFv = fFv - fPayment * fPayType;
@@ -1343,7 +1335,7 @@ void ScInterpreter::ScZins()
     double fFv = 0, fPayType = 0, fGuess = 0.1;
     bool bValid = true;
     nFuncFmtType = NUMBERFORMAT_PERCENT;
-    BYTE nParamCount = GetByte();
+    sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 3, 6 ) )
         return;
     if (nParamCount == 6)
@@ -1398,7 +1390,7 @@ void ScInterpreter::ScZinsZ()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScZinsZ" );
     double nZins, nZr, nZzr, nBw, nZw = 0, nFlag = 0;
     nFuncFmtType = NUMBERFORMAT_CURRENCY;
-    BYTE nParamCount = GetByte();
+    sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 4, 6 ) )
         return;
     if (nParamCount == 6)
@@ -1423,7 +1415,7 @@ void ScInterpreter::ScKapz()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScKapz" );
     double nZins, nZr, nZzr, nBw, nZw = 0, nFlag = 0;
     nFuncFmtType = NUMBERFORMAT_CURRENCY;
-    BYTE nParamCount = GetByte();
+    sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 4, 6 ) )
         return;
     if (nParamCount == 6)
@@ -1462,8 +1454,8 @@ void ScInterpreter::ScKumZinsZ()
             PushIllegalArgument();
         else
         {
-            ULONG nAnfang = (ULONG) fAnfang;
-            ULONG nEnde = (ULONG) fEnde ;
+            sal_uLong nAnfang = (sal_uLong) fAnfang;
+            sal_uLong nEnde = (sal_uLong) fEnde ;
             double fRmz = ScGetRmz(fZins, fZzr, fBw, 0.0, fF);
             double fZinsZ = 0.0;
             if (nAnfang == 1)
@@ -1472,7 +1464,7 @@ void ScInterpreter::ScKumZinsZ()
                     fZinsZ = -fBw;
                 nAnfang++;
             }
-            for (ULONG i = nAnfang; i <= nEnde; i++)
+            for (sal_uLong i = nAnfang; i <= nEnde; i++)
             {
                 if (fF > 0.0)
                     fZinsZ += ScGetZw(fZins, (double)(i-2), fRmz, fBw, 1.0) - fRmz;
@@ -1505,8 +1497,8 @@ void ScInterpreter::ScKumKapZ()
         {
             double fRmz = ScGetRmz(fZins, fZzr, fBw, 0.0, fF);
             double fKapZ = 0.0;
-            ULONG nAnfang = (ULONG) fAnfang;
-            ULONG nEnde = (ULONG) fEnde;
+            sal_uLong nAnfang = (sal_uLong) fAnfang;
+            sal_uLong nEnde = (sal_uLong) fEnde;
             if (nAnfang == 1)
             {
                 if (fF <= 0.0)
@@ -1515,7 +1507,7 @@ void ScInterpreter::ScKumKapZ()
                     fKapZ = fRmz;
                 nAnfang++;
             }
-            for (ULONG i = nAnfang; i <= nEnde; i++)
+            for (sal_uLong i = nAnfang; i <= nEnde; i++)
             {
                 if (fF > 0.0)
                     fKapZ += fRmz - (ScGetZw(fZins, (double)(i-2), fRmz, fBw, 1.0) - fRmz) * fZins;
@@ -1606,7 +1598,7 @@ void ScInterpreter::ScBackSolver()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScBackSolver" );
     if ( MustHaveParamCount( GetByte(), 3 ) )
     {
-        BOOL bDoneIteration = FALSE;
+        sal_Bool bDoneIteration = false;
         ScAddress aValueAdr, aFormulaAdr;
         double fTargetVal = GetDouble();
         PopSingleRef( aFormulaAdr );
@@ -1616,7 +1608,7 @@ void ScInterpreter::ScBackSolver()
         {
             ScBaseCell* pVCell = GetCell( aValueAdr );
             // CELLTYPE_NOTE: kein Value aber von Formel referiert
-            BOOL bTempCell = (!pVCell || pVCell->GetCellType() == CELLTYPE_NOTE);
+            sal_Bool bTempCell = (!pVCell || pVCell->GetCellType() == CELLTYPE_NOTE);
             ScBaseCell* pFCell = GetCell( aFormulaAdr );
 
             if ( ((pVCell && pVCell->GetCellType() == CELLTYPE_VALUE) || bTempCell)
@@ -1636,7 +1628,7 @@ void ScInterpreter::ScBackSolver()
                 else
                     fSaveVal = GetCellValue( aValueAdr, pVCell );
 
-                const USHORT nMaxIter = 100;
+                const sal_uInt16 nMaxIter = 100;
                 const double fEps = 1E-10;
                 const double fDelta = 1E-6;
 
@@ -1648,22 +1640,22 @@ void ScInterpreter::ScBackSolver()
                 ScValueCell* pValue = (ScValueCell*) pVCell;
 
                 pFormula->Interpret();
-                BOOL bError = ( pFormula->GetErrCode() != 0 );
+                sal_Bool bError = ( pFormula->GetErrCode() != 0 );
                 // bError always corresponds with fF
 
                 fFPrev = pFormula->GetValue() - fTargetVal;
 
                 fBestF = fabs( fFPrev );
                 if ( fBestF < fDelta )
-                    bDoneIteration = TRUE;
+                    bDoneIteration = sal_True;
 
                 double fX = fXPrev + fEps;
                 double fF = fFPrev;
                 double fSlope;
 
-                USHORT nIter = 0;
+                sal_uInt16 nIter = 0;
 
-                BOOL bHorMoveError = FALSE;
+                sal_Bool bHorMoveError = false;
                                                 // Nach der Regula Falsi Methode
                 while ( !bDoneIteration && ( nIter++ < nMaxIter ) )
                 {
@@ -1681,18 +1673,18 @@ void ScInterpreter::ScBackSolver()
                         // may become zero which ultimately causes the goal seek operation
                         // to fail. #i28955#
 
-                        USHORT nHorIter = 0;
+                        sal_uInt16 nHorIter = 0;
                         const double fHorStepAngle = 5.0;
                         const double fHorMaxAngle = 80.0;
                         int nHorMaxIter = static_cast<int>( fHorMaxAngle / fHorStepAngle );
-                        BOOL bDoneHorMove = FALSE;
+                        sal_Bool bDoneHorMove = false;
 
                         while ( !bDoneHorMove && !bHorMoveError && nHorIter++ < nHorMaxIter )
                         {
                             double fHorAngle = fHorStepAngle * static_cast<double>( nHorIter );
                             double fHorTangent = ::rtl::math::tan( fHorAngle * F_PI / 180 );
 
-                            USHORT nIdx = 0;
+                            sal_uInt16 nIdx = 0;
                             while( nIdx++ < 2 && !bDoneHorMove )
                             {
                                 double fHorX;
@@ -1712,12 +1704,12 @@ void ScInterpreter::ScBackSolver()
                                 if ( fF != fFPrev )
                                 {
                                     fX = fHorX;
-                                    bDoneHorMove = TRUE;
+                                    bDoneHorMove = sal_True;
                                 }
                             }
                         }
                         if ( !bDoneHorMove )
-                            bHorMoveError = TRUE;
+                            bHorMoveError = sal_True;
                     }
 
                     if ( bError )
@@ -1734,7 +1726,7 @@ void ScInterpreter::ScBackSolver()
                     {
                         // converged to root
                         fBestX = fX;
-                        bDoneIteration = TRUE;
+                        bDoneIteration = sal_True;
                     }
                     else
                     {
@@ -2065,7 +2057,7 @@ void ScInterpreter::ScCurrent()
 void ScInterpreter::ScStyle()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScStyle" );
-    BYTE nParamCount = GetByte();
+    sal_uInt8 nParamCount = GetByte();
     if (nParamCount >= 1 && nParamCount <= 3)
     {
         String aStyle2;                             // Vorlage nach Timer
@@ -2103,10 +2095,10 @@ void ScInterpreter::ScStyle()
 }
 
 ScDdeLink* lcl_GetDdeLink( sfx2::LinkManager* pLinkMgr,
-                                const String& rA, const String& rT, const String& rI, BYTE nM )
+                                const String& rA, const String& rT, const String& rI, sal_uInt8 nM )
 {
-    USHORT nCount = pLinkMgr->GetLinks().Count();
-    for (USHORT i=0; i<nCount; i++ )
+    sal_uInt16 nCount = pLinkMgr->GetLinks().Count();
+    for (sal_uInt16 i=0; i<nCount; i++ )
     {
         ::sfx2::SvBaseLink* pBase = *pLinkMgr->GetLinks()[i];
         if (pBase->ISA(ScDdeLink))
@@ -2129,12 +2121,12 @@ void ScInterpreter::ScDde()
     //  Applikation, Datei, Bereich
     //  Application, Topic, Item
 
-    BYTE nParamCount = GetByte();
+    sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 3, 4 ) )
     {
-        BYTE nMode = SC_DDE_DEFAULT;
+        sal_uInt8 nMode = SC_DDE_DEFAULT;
         if (nParamCount == 4)
-            nMode = (BYTE) ::rtl::math::approxFloor(GetDouble());
+            nMode = (sal_uInt8) ::rtl::math::approxFloor(GetDouble());
         String aItem  = GetString();
         String aTopic = GetString();
         String aAppl  = GetString();
@@ -2160,8 +2152,8 @@ void ScInterpreter::ScDde()
             //  solange der Link nicht ausgewertet ist, Idle abklemmen
             //  (um zirkulaere Referenzen zu vermeiden)
 
-        BOOL bOldDis = pDok->IsIdleDisabled();
-        pDok->DisableIdle( TRUE );
+        sal_Bool bOldDis = pDok->IsIdleDisabled();
+        pDok->DisableIdle( sal_True );
 
             //  Link-Objekt holen / anlegen
 
@@ -2170,7 +2162,7 @@ void ScInterpreter::ScDde()
         //! Dde-Links (zusaetzlich) effizienter am Dokument speichern !!!!!
         //      ScDdeLink* pLink = pDok->GetDdeLink( aAppl, aTopic, aItem );
 
-        BOOL bWasError = ( pMyFormulaCell->GetRawError() != 0 );
+        sal_Bool bWasError = ( pMyFormulaCell->GetRawError() != 0 );
 
         if (!pLink)
         {
@@ -2227,7 +2219,7 @@ void ScInterpreter::ScDde()
 
 void ScInterpreter::ScBase()
 {   // Value, Base [, MinLen]
-    BYTE nParamCount = GetByte();
+    sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 2, 3 ) )
     {
         static const sal_Unicode pDigits[] = {
@@ -2270,10 +2262,10 @@ void ScInterpreter::ScBase()
             }
             sal_Unicode* p = pBuf + nBuf - 1;
             *p = 0;
-            if ( fVal <= (ULONG)(~0) )
+            if ( fVal <= (sal_uLong)(~0) )
             {
-                ULONG nVal = (ULONG) fVal;
-                ULONG nBase = (ULONG) fBase;
+                sal_uLong nVal = (sal_uLong) fVal;
+                sal_uLong nBase = (sal_uLong) fBase;
                 while ( nVal && p > pBuf )
                 {
                     *--p = pDigits[ nVal % nBase ];
@@ -2283,7 +2275,7 @@ void ScInterpreter::ScBase()
             }
             else
             {
-                BOOL bDirt = FALSE;
+                sal_Bool bDirt = false;
                 while ( fVal && p > pBuf )
                 {
 //! mit fmod Rundungsfehler ab 2**48
@@ -2313,7 +2305,7 @@ void ScInterpreter::ScBase()
                     size_t nDig;
                     if ( fVal < fMult )
                     {   // da ist was gekippt
-                        bDirt = TRUE;
+                        bDirt = sal_True;
                         nDig = 0;
                     }
                     else
@@ -2321,7 +2313,7 @@ void ScInterpreter::ScBase()
                         double fDig = ::rtl::math::approxFloor( ::rtl::math::approxSub( fVal, fMult ) );
                         if ( bDirt )
                         {
-                            bDirt = FALSE;
+                            bDirt = false;
                             --fDig;
                         }
                         if ( fDig <= 0.0 )
@@ -2434,7 +2426,7 @@ void ScInterpreter::ScConvert()
 
 void ScInterpreter::ScRoman()
 {   // Value [Mode]
-    BYTE nParamCount = GetByte();
+    sal_uInt8 nParamCount = GetByte();
     if( MustHaveParamCount( nParamCount, 1, 2 ) )
     {
         double fMode = (nParamCount == 2) ? ::rtl::math::approxFloor( GetDouble() ) : 0.0;
@@ -2444,22 +2436,22 @@ void ScInterpreter::ScRoman()
         else if( (fMode >= 0.0) && (fMode < 5.0) && (fVal >= 0.0) && (fVal < 4000.0) )
         {
             static const sal_Unicode pChars[] = { 'M', 'D', 'C', 'L', 'X', 'V', 'I' };
-            static const USHORT pValues[] = { 1000, 500, 100, 50, 10, 5, 1 };
-            static const USHORT nMaxIndex = (USHORT)(SAL_N_ELEMENTS(pValues) - 1);
+            static const sal_uInt16 pValues[] = { 1000, 500, 100, 50, 10, 5, 1 };
+            static const sal_uInt16 nMaxIndex = (sal_uInt16)(SAL_N_ELEMENTS(pValues) - 1);
 
             String aRoman;
-            USHORT nVal = (USHORT) fVal;
-            USHORT nMode = (USHORT) fMode;
+            sal_uInt16 nVal = (sal_uInt16) fVal;
+            sal_uInt16 nMode = (sal_uInt16) fMode;
 
-            for( UINT16 i = 0; i <= nMaxIndex / 2; i++ )
+            for( sal_uInt16 i = 0; i <= nMaxIndex / 2; i++ )
             {
-                USHORT nIndex = 2 * i;
-                USHORT nDigit = nVal / pValues[ nIndex ];
+                sal_uInt16 nIndex = 2 * i;
+                sal_uInt16 nDigit = nVal / pValues[ nIndex ];
 
                 if( (nDigit % 5) == 4 )
                 {
-                    USHORT nIndex2 = (nDigit == 4) ? nIndex - 1 : nIndex - 2;
-                    USHORT nSteps = 0;
+                    sal_uInt16 nIndex2 = (nDigit == 4) ? nIndex - 1 : nIndex - 2;
+                    sal_uInt16 nSteps = 0;
                     while( (nSteps < nMode) && (nIndex < nMaxIndex) )
                     {
                         nSteps++;
@@ -2470,8 +2462,8 @@ void ScInterpreter::ScRoman()
                     }
                     aRoman += pChars[ nIndex ];
                     aRoman += pChars[ nIndex2 ];
-                    nVal = sal::static_int_cast<USHORT>( nVal + pValues[ nIndex ] );
-                    nVal = sal::static_int_cast<USHORT>( nVal - pValues[ nIndex2 ] );
+                    nVal = sal::static_int_cast<sal_uInt16>( nVal + pValues[ nIndex ] );
+                    nVal = sal::static_int_cast<sal_uInt16>( nVal - pValues[ nIndex2 ] );
                 }
                 else
                 {
@@ -2490,21 +2482,21 @@ void ScInterpreter::ScRoman()
 }
 
 
-BOOL lcl_GetArabicValue( sal_Unicode cChar, USHORT& rnValue, BOOL& rbIsDec )
+sal_Bool lcl_GetArabicValue( sal_Unicode cChar, sal_uInt16& rnValue, sal_Bool& rbIsDec )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScBase" );
     switch( cChar )
     {
-        case 'M':   rnValue = 1000; rbIsDec = TRUE;     break;
-        case 'D':   rnValue = 500;  rbIsDec = FALSE;    break;
-        case 'C':   rnValue = 100;  rbIsDec = TRUE;     break;
-        case 'L':   rnValue = 50;   rbIsDec = FALSE;    break;
-        case 'X':   rnValue = 10;   rbIsDec = TRUE;     break;
-        case 'V':   rnValue = 5;    rbIsDec = FALSE;    break;
-        case 'I':   rnValue = 1;    rbIsDec = TRUE;     break;
-        default:    return FALSE;
+        case 'M':   rnValue = 1000; rbIsDec = sal_True;     break;
+        case 'D':   rnValue = 500;  rbIsDec = false;    break;
+        case 'C':   rnValue = 100;  rbIsDec = sal_True;     break;
+        case 'L':   rnValue = 50;   rbIsDec = false;    break;
+        case 'X':   rnValue = 10;   rbIsDec = sal_True;     break;
+        case 'V':   rnValue = 5;    rbIsDec = false;    break;
+        case 'I':   rnValue = 1;    rbIsDec = sal_True;     break;
+        default:    return false;
     }
-    return TRUE;
+    return sal_True;
 }
 
 
@@ -2518,18 +2510,18 @@ void ScInterpreter::ScArabic()
     {
         aRoman.ToUpperAscii();
 
-        USHORT nValue = 0;
-        USHORT nValidRest = 3999;
-        USHORT nCharIndex = 0;
-        USHORT nCharCount = aRoman.Len();
-        BOOL bValid = TRUE;
+        sal_uInt16 nValue = 0;
+        sal_uInt16 nValidRest = 3999;
+        sal_uInt16 nCharIndex = 0;
+        sal_uInt16 nCharCount = aRoman.Len();
+        sal_Bool bValid = sal_True;
 
         while( bValid && (nCharIndex < nCharCount) )
         {
-            USHORT nDigit1 = 0;
-            USHORT nDigit2 = 0;
-            BOOL bIsDec1 = FALSE;
-            BOOL bIsDec2 = FALSE;
+            sal_uInt16 nDigit1 = 0;
+            sal_uInt16 nDigit2 = 0;
+            sal_Bool bIsDec1 = false;
+            sal_Bool bIsDec2 = false;
             bValid = lcl_GetArabicValue( aRoman.GetChar( nCharIndex ), nDigit1, bIsDec1 );
             if( bValid && (nCharIndex + 1 < nCharCount) )
                 bValid = lcl_GetArabicValue( aRoman.GetChar( nCharIndex + 1 ), nDigit2, bIsDec2 );
@@ -2537,24 +2529,24 @@ void ScInterpreter::ScArabic()
             {
                 if( nDigit1 >= nDigit2 )
                 {
-                    nValue = sal::static_int_cast<USHORT>( nValue + nDigit1 );
+                    nValue = sal::static_int_cast<sal_uInt16>( nValue + nDigit1 );
                     nValidRest %= (nDigit1 * (bIsDec1 ? 5 : 2));
                     bValid = (nValidRest >= nDigit1);
                     if( bValid )
-                        nValidRest = sal::static_int_cast<USHORT>( nValidRest - nDigit1 );
+                        nValidRest = sal::static_int_cast<sal_uInt16>( nValidRest - nDigit1 );
                     nCharIndex++;
                 }
                 else if( nDigit1 * 2 != nDigit2 )
                 {
-                    USHORT nDiff = nDigit2 - nDigit1;
-                    nValue = sal::static_int_cast<USHORT>( nValue + nDiff );
+                    sal_uInt16 nDiff = nDigit2 - nDigit1;
+                    nValue = sal::static_int_cast<sal_uInt16>( nValue + nDiff );
                     bValid = (nValidRest >= nDiff);
                     if( bValid )
                         nValidRest = nDigit1 - 1;
                     nCharIndex += 2;
                 }
                 else
-                    bValid = FALSE;
+                    bValid = false;
             }
         }
         if( bValid )
@@ -2568,7 +2560,7 @@ void ScInterpreter::ScArabic()
 void ScInterpreter::ScHyperLink()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScHyperLink" );
-    BYTE nParamCount = GetByte();
+    sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 1, 2 ) )
     {
         double fVal = 0.0;
@@ -2597,7 +2589,7 @@ void ScInterpreter::ScHyperLink()
                         nResultType = SC_MATVAL_EMPTY;
                     else
                     {
-                        USHORT nErr = GetCellErrCode( pCell );
+                        sal_uInt16 nErr = GetCellErrCode( pCell );
                         if (nErr)
                             SetError( nErr);
                         else if (HasCellValueData( pCell))
@@ -2650,7 +2642,7 @@ void ScInterpreter::ScHyperLink()
 }
 
 
-BOOL lclConvertMoney( const String& aSearchUnit, double& rfRate, int& rnDec )
+sal_Bool lclConvertMoney( const String& aSearchUnit, double& rfRate, int& rnDec )
 {
     struct ConvertInfo
     {
@@ -2684,14 +2676,14 @@ BOOL lclConvertMoney( const String& aSearchUnit, double& rfRate, int& rnDec )
         {
             rfRate = aConvertTable[i].fRate;
             rnDec  = aConvertTable[i].nDec;
-            return TRUE;
+            return sal_True;
         }
-    return FALSE;
+    return false;
 }
 
 void ScInterpreter::ScEuroConvert()
 {   //Value, FromUnit, ToUnit[, FullPrecision, [TriangulationPrecision]]
-    BYTE nParamCount = GetByte();
+    sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 3, 5 ) )
     {
         double nPrecision = 0.0;
@@ -2704,7 +2696,7 @@ void ScInterpreter::ScEuroConvert()
                 return;
             }
         }
-        BOOL bFullPrecision = FALSE;
+        sal_Bool bFullPrecision = false;
         if ( nParamCount >= 4 )
             bFullPrecision = GetBool();
         String aToUnit( GetString() );
@@ -2875,7 +2867,7 @@ void lclAppendBlock( ByteString& rText, sal_Int32 nValue )
 void ScInterpreter::ScBahtText()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScBahtText" );
-    BYTE nParamCount = GetByte();
+    sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 1 ) )
     {
         double fValue = GetDouble();
@@ -2944,7 +2936,7 @@ void ScInterpreter::ScBahtText()
 void ScInterpreter::ScGetPivotData()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScGetPivotData" );
-    BYTE nParamCount = GetByte();
+    sal_uInt8 nParamCount = GetByte();
 
     if ( MustHaveParamCount( nParamCount, 2, 30 ) )
     {
@@ -2971,14 +2963,14 @@ void ScInterpreter::ScGetPivotData()
         {
             // new syntax: separate name/value pairs
 
-            USHORT nFilterCount = nParamCount / 2 - 1;
+            sal_uInt16 nFilterCount = nParamCount / 2 - 1;
             aFilters.resize( nFilterCount );
 
-            USHORT i = nFilterCount;
+            sal_uInt16 i = nFilterCount;
             while( i-- > 0 )
             {
                 //! should allow numeric constraint values
-                aFilters[i].mbValIsStr = TRUE;
+                aFilters[i].mbValIsStr = sal_True;
                 aFilters[i].maValStr = GetString();
 
                 aFilters[i].maFieldName = GetString();

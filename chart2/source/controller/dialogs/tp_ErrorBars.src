@@ -30,6 +30,7 @@
 
 TabPage TP_YERRORBAR
 {
+    HelpID = "chart2:TabPage:TP_YERRORBAR";
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;

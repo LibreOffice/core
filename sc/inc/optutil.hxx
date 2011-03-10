@@ -40,7 +40,7 @@ public:
     // values must correspond with integer values stored in the configuration
     enum KeyBindingType { KEY_DEFAULT = 0, KEY_OOO_LEGACY = 1 };
 
-    static BOOL     IsMetricSystem();
+    static sal_Bool     IsMetricSystem();
 };
 
 

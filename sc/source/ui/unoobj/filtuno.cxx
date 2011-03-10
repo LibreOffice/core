@@ -71,7 +71,7 @@ SC_SIMPLE_SERVICE_INFO( ScFilterOptionsObj, SCFILTEROPTIONSOBJ_IMPLNAME, SCFILTE
 //------------------------------------------------------------------------
 
 ScFilterOptionsObj::ScFilterOptionsObj() :
-    bExport( sal_False )
+    bExport( false )
 {
 }
 
@@ -209,8 +209,8 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException)
     else
     {
         sal_Bool bMultiByte = sal_True;
-        sal_Bool bDBEnc     = sal_False;
-        sal_Bool bAscii     = sal_False;
+        sal_Bool bDBEnc     = false;
+        sal_Bool bAscii     = false;
 
         sal_Unicode cStrDel = '"';
         sal_Unicode cAsciiDel = ';';
@@ -300,7 +300,7 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException)
 void SAL_CALL ScFilterOptionsObj::setTargetDocument( const uno::Reference<lang::XComponent>& /* xDoc */ )
                             throw(lang::IllegalArgumentException, uno::RuntimeException)
 {
-    bExport = sal_False;
+    bExport = false;
 }
 
 // XExporter

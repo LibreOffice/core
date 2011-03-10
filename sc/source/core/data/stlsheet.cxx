@@ -68,7 +68,7 @@ TYPEINIT1(ScStyleSheet, SfxStyleSheet);
 ScStyleSheet::ScStyleSheet( const String&       rName,
                             ScStyleSheetPool&   rPoolP,
                             SfxStyleFamily      eFamily,
-                            USHORT              nMaskP )
+                            sal_uInt16              nMaskP )
 
     :   SfxStyleSheet   ( rName, rPoolP, eFamily, nMaskP )
     , eUsage( UNKNOWN )
@@ -91,21 +91,21 @@ ScStyleSheet::~ScStyleSheet()
 
 //------------------------------------------------------------------------
 
-BOOL ScStyleSheet::HasFollowSupport() const
+sal_Bool ScStyleSheet::HasFollowSupport() const
 {
-    return FALSE;
+    return false;
 }
 
 //------------------------------------------------------------------------
 
-BOOL ScStyleSheet::HasParentSupport () const
+sal_Bool ScStyleSheet::HasParentSupport () const
 {
-    BOOL bHasParentSupport = FALSE;
+    sal_Bool bHasParentSupport = false;
 
     switch ( GetFamily() )
     {
-        case SFX_STYLE_FAMILY_PARA: bHasParentSupport = TRUE;   break;
-        case SFX_STYLE_FAMILY_PAGE: bHasParentSupport = FALSE;  break;
+        case SFX_STYLE_FAMILY_PARA: bHasParentSupport = sal_True;   break;
+        case SFX_STYLE_FAMILY_PAGE: bHasParentSupport = false;  break;
         default:
         {
             // added to avoid warnings
@@ -117,9 +117,9 @@ BOOL ScStyleSheet::HasParentSupport () const
 
 //------------------------------------------------------------------------
 
-BOOL ScStyleSheet::SetParent( const String& rParentName )
+sal_Bool ScStyleSheet::SetParent( const String& rParentName )
 {
-    BOOL bResult = FALSE;
+    sal_Bool bResult = false;
     String aEffName = rParentName;
     SfxStyleSheetBase* pStyle = rPool.Find( aEffName, nFamily );
     if (!pStyle)
@@ -137,6 +137,13 @@ BOOL ScStyleSheet::SetParent( const String& rParentName )
         {
             SfxItemSet& rParentSet = pStyle->GetItemSet();
             GetItemSet().SetParent( &rParentSet );
+
+            // #i113491# Drag&Drop in the stylist's hierarchical view doesn't execute a slot,
+            // so the repaint has to come from here (after modifying the ItemSet).
+            // RepaintRange checks the document's IsVisible flag and locked repaints.
+            ScDocument* pDoc = static_cast<ScStyleSheetPool&>(GetPool()).GetDocument();
+            if (pDoc)
+                pDoc->RepaintRange( ScRange( 0,0,0, MAXCOL,MAXROW,MAXTAB ) );
         }
     }
 
@@ -201,11 +208,11 @@ SfxItemSet& ScStyleSheet::GetItemSet()
                                                       ATTR_ULSPACE );
                         SvxBoxInfoItem  aBoxInfoItem( ATTR_BORDER_INNER );
 
-                        aBoxInfoItem.SetTable( FALSE );
-                        aBoxInfoItem.SetDist( TRUE );
-                        aBoxInfoItem.SetValid( VALID_DISTANCE, TRUE );
+                        aBoxInfoItem.SetTable( false );
+                        aBoxInfoItem.SetDist( sal_True );
+                        aBoxInfoItem.SetValid( VALID_DISTANCE, sal_True );
 
-                        aPageItem.SetLandscape( FALSE );
+                        aPageItem.SetLandscape( false );
 
                         rHFSet.Put( aBoxInfoItem );
                         rHFSet.Put( aHFSizeItem );
@@ -244,7 +251,7 @@ SfxItemSet& ScStyleSheet::GetItemSet()
                                        0 );
                 break;
         }
-        bMySet = TRUE;
+        bMySet = true;
     }
     if ( nHelpId == HID_SC_SHEET_CELL_ERG1 )
     {
@@ -253,7 +260,7 @@ SfxItemSet& ScStyleSheet::GetItemSet()
             ScDocument* pDoc = ((ScStyleSheetPool&)GetPool()).GetDocument();
             if ( pDoc )
             {
-                ULONG nNumFmt = pDoc->GetFormatTable()->GetStandardFormat( NUMBERFORMAT_CURRENCY,ScGlobal::eLnge );
+                sal_uLong nNumFmt = pDoc->GetFormatTable()->GetStandardFormat( NUMBERFORMAT_CURRENCY,ScGlobal::eLnge );
                 pSet->Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nNumFmt ) );
             }
         }
@@ -264,21 +271,21 @@ SfxItemSet& ScStyleSheet::GetItemSet()
 
 //------------------------------------------------------------------------
 
-BOOL ScStyleSheet::IsUsed() const
+sal_Bool ScStyleSheet::IsUsed() const
 {
     if ( GetFamily() == SFX_STYLE_FAMILY_PARA )
     {
         // Always query the document to let it decide if a rescan is necessary,
         // and store the state.
         ScDocument* pDoc = ((ScStyleSheetPool&)rPool).GetDocument();
-        if ( pDoc && pDoc->IsStyleSheetUsed( *this, TRUE ) )
+        if ( pDoc && pDoc->IsStyleSheetUsed( *this, sal_True ) )
             eUsage = USED;
         else
             eUsage = NOTUSED;
         return eUsage == USED;
     }
     else
-        return TRUE;
+        return sal_True;
 }
 
 //------------------------------------------------------------------------
@@ -333,11 +340,11 @@ const String& ScStyleSheet::GetFollow() const
 //! Flag gesetzt und abgefragt werden.
 //! Die ganze Abfrage muss raus, wenn fuer eine neue Datei-Version die Namens-Umsetzung wegfaellt.
 
-BOOL ScStyleSheet::SetName( const String& rNew )
+sal_Bool ScStyleSheet::SetName( const String& rNew )
 {
     String aFileStdName = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(STRING_STANDARD));
     if ( rNew == aFileStdName && aFileStdName != ScGlobal::GetRscString(STR_STYLENAME_STANDARD) )
-        return FALSE;
+        return false;
     else
         return SfxStyleSheet::SetName( rNew );
 }

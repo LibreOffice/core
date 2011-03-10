@@ -34,6 +34,7 @@
 #include "Wall.hxx"
 #include "UserDefinedProperties.hxx"
 #include "ConfigColorScheme.hxx"
+#include "DiagramHelper.hxx"
 #include "ContainerHelper.hxx"
 #include "ThreeDHelper.hxx"
 #include "CloneHelper.hxx"
@@ -42,6 +43,7 @@
 #include "DisposeHelper.hxx"
 #include "BaseGFXHelper.hxx"
 #include <basegfx/numeric/ftools.hxx>
+#include <rtl/instance.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/RelativeSize.hpp>
@@ -177,41 +179,71 @@ void lcl_AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEVOID ));
 }
 
-void lcl_AddDefaultsToMap(
-    ::chart::tPropertyValueMap & rOutMap )
+struct StaticDiagramDefaults_Initializer
 {
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_POSSIZE_EXCLUDE_LABELS, true );
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_SORT_BY_X_VALUES, false );
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_CONNECT_BARS, false );
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_GROUP_BARS_PER_AXIS, true );
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_INCLUDE_HIDDEN_CELLS, true );
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_RIGHT_ANGLED_AXES, false );
-    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_DIAGRAM_STARTING_ANGLE, 90 );
-}
-
-const Sequence< Property > & lcl_GetPropertySequence()
-{
-    static Sequence< Property > aPropSeq;
-
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( 0 == aPropSeq.getLength() )
+    ::chart::tPropertyValueMap* operator()()
     {
-        // get properties
+        static ::chart::tPropertyValueMap aStaticDefaults;
+        lcl_AddDefaultsToMap( aStaticDefaults );
+        return &aStaticDefaults;
+    }
+private:
+    void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
+    {
+        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_POSSIZE_EXCLUDE_LABELS, true );
+        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_SORT_BY_X_VALUES, false );
+        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_CONNECT_BARS, false );
+        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_GROUP_BARS_PER_AXIS, true );
+        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_INCLUDE_HIDDEN_CELLS, true );
+        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_RIGHT_ANGLED_AXES, false );
+        ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_DIAGRAM_STARTING_ANGLE, 90 );
+    }
+};
+
+struct StaticDiagramDefaults : public rtl::StaticAggregate< ::chart::tPropertyValueMap, StaticDiagramDefaults_Initializer >
+{
+};
+
+struct StaticDiagramInfoHelper_Initializer
+{
+    ::cppu::OPropertyArrayHelper* operator()()
+    {
+        static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
+        return &aPropHelper;
+    }
+
+private:
+    Sequence< Property > lcl_GetPropertySequence()
+    {
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );
         ::chart::SceneProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
-        // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
 
-        // transfer result to static Sequence
-        aPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
+        return ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
+};
 
-    return aPropSeq;
-}
+struct StaticDiagramInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticDiagramInfoHelper_Initializer >
+{
+};
+
+struct StaticDiagramInfo_Initializer
+{
+    uno::Reference< beans::XPropertySetInfo >* operator()()
+    {
+        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticDiagramInfoHelper::get() ) );
+        return &xPropertySetInfo;
+    }
+};
+
+struct StaticDiagramInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticDiagramInfo_Initializer >
+{
+};
 
 /// clones a UNO-sequence of UNO-References
 typedef Reference< chart2::XCoordinateSystem > lcl_tCooSysRef;
@@ -395,6 +427,22 @@ void SAL_CALL Diagram::setDefaultColorScheme( const Reference< chart2::XColorSch
         m_xColorScheme.set( xColorScheme );
     }
     fireModifyEvent();
+}
+
+void SAL_CALL Diagram::setDiagramData(
+    const Reference< chart2::data::XDataSource >& xDataSource,
+    const Sequence< beans::PropertyValue >& aArguments )
+        throw (uno::RuntimeException)
+{
+    uno::Reference< lang::XMultiServiceFactory > xChartTypeManager( m_xContext->getServiceManager()->createInstanceWithContext(
+            C2U( "com.sun.star.chart2.ChartTypeManager" ), m_xContext ), uno::UNO_QUERY );
+    DiagramHelper::tTemplateWithServiceName aTemplateAndService = DiagramHelper::getTemplateForDiagram( this, xChartTypeManager );
+    uno::Reference< chart2::XChartTypeTemplate > xTemplate( aTemplateAndService.first );
+    if( !xTemplate.is() )
+        xTemplate.set( xChartTypeManager->createInstance( C2U("com.sun.star.chart2.template.Column") ), uno::UNO_QUERY );
+    if(!xTemplate.is())
+        return;
+    xTemplate->changeDiagramData( this, xDataSource, aArguments );
 }
 
 // ____ XTitled ____
@@ -591,50 +639,24 @@ Sequence< OUString > Diagram::getSupportedServiceNames_Static()
 uno::Any Diagram::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
-    static tPropertyValueMap aStaticDefaults;
-
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( 0 == aStaticDefaults.size() )
-    {
-        // initialize defaults
-        lcl_AddDefaultsToMap( aStaticDefaults );
-        ::chart::SceneProperties::AddDefaultsToMap( aStaticDefaults );
-    }
-
-    tPropertyValueMap::const_iterator aFound(
-        aStaticDefaults.find( nHandle ));
-
-    if( aFound == aStaticDefaults.end())
+    const tPropertyValueMap& rStaticDefaults = *StaticDiagramDefaults::get();
+    tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
+    if( aFound == rStaticDefaults.end() )
         return uno::Any();
-
     return (*aFound).second;
 }
 
 // ____ OPropertySet ____
 ::cppu::IPropertyArrayHelper & SAL_CALL Diagram::getInfoHelper()
 {
-    static ::cppu::OPropertyArrayHelper aArrayHelper( lcl_GetPropertySequence(),
-                                                      /* bSorted = */ sal_True );
-
-    return aArrayHelper;
+    return *StaticDiagramInfoHelper::get();
 }
 
-
 // ____ XPropertySet ____
-uno::Reference< beans::XPropertySetInfo > SAL_CALL
-    Diagram::getPropertySetInfo()
+uno::Reference< beans::XPropertySetInfo > SAL_CALL Diagram::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
-    static uno::Reference< beans::XPropertySetInfo > xInfo;
-
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( !xInfo.is())
-    {
-        xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo(
-            getInfoHelper());
-    }
-
-    return xInfo;
+    return *StaticDiagramInfo::get();
 }
 
 // ____ XFastPropertySet ____

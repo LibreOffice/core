@@ -35,10 +35,10 @@ _ScRangeListTabs::_ScRangeListTabs()
 {
     ppTabLists = new _ScRangeList*[ MAXTAB + 1 ];
 
-    for( UINT16 n = 0 ; n <= MAXTAB ; n++ )
+    for( sal_uInt16 n = 0 ; n <= MAXTAB ; n++ )
         ppTabLists[ n ] = NULL;
 
-    bHasRanges = FALSE;
+    bHasRanges = false;
     pAct = NULL;
     nAct = 0;
 }
@@ -47,7 +47,7 @@ _ScRangeListTabs::~_ScRangeListTabs()
 {
     if( bHasRanges )
     {
-        for( UINT16 n = 0 ; n <= MAXTAB ; n++ )
+        for( sal_uInt16 n = 0 ; n <= MAXTAB ; n++ )
         {
             if( ppTabLists[ n ] )
                 delete ppTabLists[ n ];
@@ -58,7 +58,7 @@ _ScRangeListTabs::~_ScRangeListTabs()
 }
 
 
-void _ScRangeListTabs::Append( ScSingleRefData a, SCsTAB nTab, const BOOL b )
+void _ScRangeListTabs::Append( ScSingleRefData a, SCsTAB nTab, const sal_Bool b )
 {
     if( b )
     {
@@ -76,7 +76,7 @@ void _ScRangeListTabs::Append( ScSingleRefData a, SCsTAB nTab, const BOOL b )
         DBG_ASSERT( ValidTab(a.nTab), "-_ScRangeListTabs::Append(): Luegen haben kurze Abstuerze!" );
     }
 
-    bHasRanges = TRUE;
+    bHasRanges = sal_True;
 
     if( nTab == SCTAB_MAX)
         return;
@@ -94,7 +94,7 @@ void _ScRangeListTabs::Append( ScSingleRefData a, SCsTAB nTab, const BOOL b )
     }
 }
 
-void _ScRangeListTabs::Append( ScComplexRefData a, SCsTAB nTab, const BOOL b )
+void _ScRangeListTabs::Append( ScComplexRefData a, SCsTAB nTab, const sal_Bool b )
 {
     if( b )
     {
@@ -140,7 +140,7 @@ void _ScRangeListTabs::Append( ScComplexRefData a, SCsTAB nTab, const BOOL b )
             "+_ScRangeListTabs::Append(): 3D-Ranges werden in SC nicht unterstuetzt!" );
     }
 
-    bHasRanges = TRUE;
+    bHasRanges = sal_True;
 
     if( nTab == SCTAB_MAX)
         return;
@@ -188,7 +188,7 @@ const ScRange* _ScRangeListTabs::Next ()
     return NULL;
 }
 
-ConverterBase::ConverterBase( UINT16 nNewBuffer ) :
+ConverterBase::ConverterBase( sal_uInt16 nNewBuffer ) :
     aEingPos( 0, 0, 0 ),
     eStatus( ConvOK ),
     nBufferSize( nNewBuffer )
@@ -212,7 +212,7 @@ void ConverterBase::Reset()
 
 
 
-ExcelConverterBase::ExcelConverterBase( UINT16 nNewBuffer ) :
+ExcelConverterBase::ExcelConverterBase( sal_uInt16 nNewBuffer ) :
     ConverterBase( nNewBuffer )
 {
 }
@@ -236,7 +236,7 @@ void ExcelConverterBase::Reset()
 
 
 
-LotusConverterBase::LotusConverterBase( SvStream &rStr, UINT16 nNewBuffer ) :
+LotusConverterBase::LotusConverterBase( SvStream &rStr, sal_uInt16 nNewBuffer ) :
     ConverterBase( nNewBuffer ),
     aIn( rStr ),
     nBytesLeft( 0 )

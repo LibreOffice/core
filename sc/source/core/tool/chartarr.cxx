@@ -85,7 +85,7 @@ ScChartArray::ScChartArray( ScDocument* pDoc, SCTAB nTab,
         aName( rChartName ),
         pDocument( pDoc ),
         aPositioner(pDoc, nTab, nStartColP, nStartRowP, nEndColP, nEndRowP),
-        bValid( TRUE )
+        bValid( sal_True )
 {
 }
 
@@ -94,7 +94,7 @@ ScChartArray::ScChartArray( ScDocument* pDoc, const ScRangeListRef& rRangeList,
         aName( rChartName ),
         pDocument( pDoc ),
         aPositioner(pDoc, rRangeList),
-        bValid( TRUE )
+        bValid( sal_True )
 {
 }
 
@@ -116,7 +116,7 @@ ScDataObject* ScChartArray::Clone() const
     return new ScChartArray(*this);
 }
 
-BOOL ScChartArray::operator==(const ScChartArray& rCmp) const
+sal_Bool ScChartArray::operator==(const ScChartArray& rCmp) const
 {
     return aPositioner == rCmp.aPositioner
         && aName == rCmp.aName;
@@ -226,16 +226,16 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
         nRowCount = 0;
     }
 
-    BOOL bValidData = TRUE;
+    sal_Bool bValidData = sal_True;
     if ( !nColCount )
     {
-        bValidData = FALSE;
+        bValidData = false;
         nColCount = 1;
         aCols.push_back(nStrCol);
     }
     if ( !nRowCount )
     {
-        bValidData = FALSE;
+        bValidData = false;
         nRowCount = 1;
         aRows.push_back(nStrRow);
     }
@@ -250,7 +250,7 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
     {
         if ( bValidData )
         {
-            BOOL bCalcAsShown = pDocument->GetDocOptions().IsCalcAsShown();
+            sal_Bool bCalcAsShown = pDocument->GetDocOptions().IsCalcAsShown();
             ScBaseCell* pCell;
             for (nCol=0; nCol<nColCount; nCol++)
             {
@@ -350,15 +350,15 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
         nRowCount = 0;
     }
 
-    BOOL bValidData = TRUE;
+    sal_Bool bValidData = sal_True;
     if ( !nColCount )
     {
-        bValidData = FALSE;
+        bValidData = false;
         nColCount = 1;
     }
     if ( !nRowCount )
     {
-        bValidData = FALSE;
+        bValidData = false;
         nRowCount = 1;
     }
 
@@ -372,8 +372,8 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
     {
         SCSIZE nCol = 0;
         SCSIZE nRow = 0;
-        BOOL bCalcAsShown = pDocument->GetDocOptions().IsCalcAsShown();
-        ULONG nIndex = 0;
+        sal_Bool bCalcAsShown = pDocument->GetDocOptions().IsCalcAsShown();
+        sal_uLong nIndex = 0;
         if (bValidData)
         {
             for ( nCol = 0; nCol < nColCount; nCol++ )
@@ -393,7 +393,7 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
                                 nVal = ((ScValueCell*)pCell)->GetValue();
                                 if ( bCalcAsShown && nVal != 0.0 )
                                 {
-                                    ULONG nFormat = pDocument->GetNumberFormat( *pPos );
+                                    sal_uLong nFormat = pDocument->GetNumberFormat( *pPos );
                                     nVal = pDocument->RoundValueAsShown( nVal, nFormat );
                                 }
                             }
@@ -426,7 +426,7 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
                             nVal = ((ScValueCell*)pCell)->GetValue();
                             if ( bCalcAsShown && nVal != 0.0 )
                             {
-                                ULONG nFormat = pDocument->GetNumberFormat( *pPos );
+                                sal_uLong nFormat = pDocument->GetNumberFormat( *pPos );
                                 nVal = pDocument->RoundValueAsShown( nVal, nFormat );
                             }
                         }
@@ -516,16 +516,16 @@ ScDataObject*   ScChartCollection::Clone() const
     return new ScChartCollection(*this);
 }
 
-BOOL ScChartCollection::operator==(const ScChartCollection& rCmp) const
+sal_Bool ScChartCollection::operator==(const ScChartCollection& rCmp) const
 {
     if (nCount != rCmp.nCount)
-        return FALSE;
+        return false;
 
-    for (USHORT i=0; i<nCount; i++)
+    for (sal_uInt16 i=0; i<nCount; i++)
         if (!((*(const ScChartArray*)pItems[i]) == (*(const ScChartArray*)rCmp.pItems[i])))
-            return FALSE;
+            return false;
 
-    return TRUE;
+    return sal_True;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

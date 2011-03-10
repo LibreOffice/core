@@ -95,7 +95,7 @@ void ScStyleSheetPool::SetDocument( ScDocument* pDocument )
 //------------------------------------------------------------------------
 
 SfxStyleSheetBase& ScStyleSheetPool::Make( const String& rName,
-                            SfxStyleFamily eFam, USHORT mask, USHORT nPos )
+                            SfxStyleFamily eFam, sal_uInt16 mask, sal_uInt16 nPos )
 {
     //  When updating styles from a template, Office 5.1 sometimes created
     //  files with multiple default styles.
@@ -124,7 +124,7 @@ SfxStyleSheetBase& ScStyleSheetPool::Make( const String& rName,
 SfxStyleSheetBase* ScStyleSheetPool::Create(
                                             const String&   rName,
                                             SfxStyleFamily  eFamily,
-                                            USHORT          nMaskP )
+                                            sal_uInt16          nMaskP )
 {
     ScStyleSheet* pSheet = new ScStyleSheet( rName, *this, eFamily, nMaskP );
     if ( eFamily == SFX_STYLE_FAMILY_PARA && ScGlobal::GetRscString(STR_STYLENAME_STANDARD) != rName )
@@ -177,14 +177,14 @@ void ScStyleSheetPool::CopyStyleFrom( ScStyleSheetPool* pSrcPool,
         {
             //  Set-Items
 
-            if ( rSourceSet.GetItemState( ATTR_PAGE_HEADERSET, FALSE, &pItem ) == SFX_ITEM_SET )
+            if ( rSourceSet.GetItemState( ATTR_PAGE_HEADERSET, false, &pItem ) == SFX_ITEM_SET )
             {
                 const SfxItemSet& rSrcSub = ((const SvxSetItem*) pItem)->GetItemSet();
                 SfxItemSet aDestSub( *rDestSet.GetPool(), rSrcSub.GetRanges() );
                 aDestSub.PutExtended( rSrcSub, SFX_ITEM_DONTCARE, SFX_ITEM_DEFAULT );
                 rDestSet.Put( SvxSetItem( ATTR_PAGE_HEADERSET, aDestSub ) );
             }
-            if ( rSourceSet.GetItemState( ATTR_PAGE_FOOTERSET, FALSE, &pItem ) == SFX_ITEM_SET )
+            if ( rSourceSet.GetItemState( ATTR_PAGE_FOOTERSET, false, &pItem ) == SFX_ITEM_SET )
             {
                 const SfxItemSet& rSrcSub = ((const SvxSetItem*) pItem)->GetItemSet();
                 SfxItemSet aDestSub( *rDestSet.GetPool(), rSrcSub.GetRanges() );
@@ -197,9 +197,9 @@ void ScStyleSheetPool::CopyStyleFrom( ScStyleSheetPool* pSrcPool,
             // number format exchange list has to be handled here, too
 
             if ( pDoc && pDoc->GetFormatExchangeList() &&
-                 rSourceSet.GetItemState( ATTR_VALUE_FORMAT, FALSE, &pItem ) == SFX_ITEM_SET )
+                 rSourceSet.GetItemState( ATTR_VALUE_FORMAT, false, &pItem ) == SFX_ITEM_SET )
             {
-                ULONG nOldFormat = static_cast<const SfxUInt32Item*>(pItem)->GetValue();
+                sal_uLong nOldFormat = static_cast<const SfxUInt32Item*>(pItem)->GetValue();
                 sal_uInt32* pNewFormat = static_cast<sal_uInt32*>(pDoc->GetFormatExchangeList()->Get( nOldFormat ));
                 if (pNewFormat)
                     rDestSet.Put( SfxUInt32Item( ATTR_VALUE_FORMAT, *pNewFormat ) );
@@ -231,7 +231,7 @@ void ScStyleSheetPool::CopyStdStylesFrom( ScStyleSheetPool* pSrcPool )
 
 //------------------------------------------------------------------------
 
-void lcl_CheckFont( SfxItemSet& rSet, LanguageType eLang, USHORT nFontType, USHORT nItemId )
+void lcl_CheckFont( SfxItemSet& rSet, LanguageType eLang, sal_uInt16 nFontType, sal_uInt16 nItemId )
 {
     if ( eLang != LANGUAGE_NONE && eLang != LANGUAGE_DONTKNOW && eLang != LANGUAGE_SYSTEM )
     {
@@ -258,8 +258,8 @@ void ScStyleSheetPool::CreateStandardStyles()
     SfxItemSet*     pSet            = NULL;
     SfxItemSet*     pHFSet          = NULL;
     SvxSetItem*     pHFSetItem      = NULL;
-    ScEditEngineDefaulter*  pEdEngine   = new ScEditEngineDefaulter( EditEngine::CreatePool(), TRUE );
-    pEdEngine->SetUpdateMode( FALSE );
+    ScEditEngineDefaulter*  pEdEngine   = new ScEditEngineDefaulter( EditEngine::CreatePool(), sal_True );
+    pEdEngine->SetUpdateMode( false );
     EditTextObject* pEmptyTxtObj    = pEdEngine->CreateTextObject();
     EditTextObject* pTxtObj         = NULL;
     ScPageHFItem*   pHeaderItem     = new ScPageHFItem( ATTR_PAGE_HEADERRIGHT );
@@ -431,13 +431,13 @@ void ScStyleSheetPool::CreateStandardStyles()
     aBoxItem.SetLine( &aBorderLine, BOX_LINE_LEFT );
     aBoxItem.SetLine( &aBorderLine, BOX_LINE_RIGHT );
     aBoxItem.SetDistance( 10 ); // 0.2mm
-    aBoxInfoItem.SetValid( VALID_TOP, TRUE );
-    aBoxInfoItem.SetValid( VALID_BOTTOM, TRUE );
-    aBoxInfoItem.SetValid( VALID_LEFT, TRUE );
-    aBoxInfoItem.SetValid( VALID_RIGHT, TRUE );
-    aBoxInfoItem.SetValid( VALID_DISTANCE, TRUE );
-    aBoxInfoItem.SetTable( FALSE );
-    aBoxInfoItem.SetDist ( TRUE );
+    aBoxInfoItem.SetValid( VALID_TOP, sal_True );
+    aBoxInfoItem.SetValid( VALID_BOTTOM, sal_True );
+    aBoxInfoItem.SetValid( VALID_LEFT, sal_True );
+    aBoxInfoItem.SetValid( VALID_RIGHT, sal_True );
+    aBoxInfoItem.SetValid( VALID_DISTANCE, sal_True );
+    aBoxInfoItem.SetTable( false );
+    aBoxInfoItem.SetDist ( sal_True );
 
     pHFSetItem = new SvxSetItem( ((SvxSetItem&)pSet->Get( ATTR_PAGE_HEADERSET ) ) );
     pHFSet = &(pHFSetItem->GetItemSet());

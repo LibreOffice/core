@@ -57,7 +57,7 @@ public:
                  ::com::sun::star::uno::XComponentContext > & xContext,
              const std::vector< LegendEntryProvider* >& rLegendEntryProviderList );
 
-    void SAL_CALL init( const ::com::sun::star::uno::Reference<
+    void init( const ::com::sun::star::uno::Reference<
                             ::com::sun::star::drawing::XShapes >& xTargetPage,
                         const ::com::sun::star::uno::Reference<
                             ::com::sun::star::lang::XMultiServiceFactory >& xFactory,

@@ -72,7 +72,7 @@ SV_IMPL_PTRARR( ScDPDataMembers, ScDPDataMemberPtr );
 
 // -----------------------------------------------------------------------
 
-static USHORT nFuncStrIds[12] =     // passend zum enum ScSubTotalFunc
+static sal_uInt16 nFuncStrIds[12] =     // passend zum enum ScSubTotalFunc
 {
     0,                              // SUBTOTAL_FUNC_NONE
     STR_FUN_TEXT_AVG,               // SUBTOTAL_FUNC_AVE
@@ -99,10 +99,10 @@ namespace {
         }
         vec.resize( nSize, NULL );
     }
-    BOOL lcl_SearchMember( const std::vector <ScDPResultMember *>& list, SCROW nOrder, SCROW& rIndex)
+    sal_Bool lcl_SearchMember( const std::vector <ScDPResultMember *>& list, SCROW nOrder, SCROW& rIndex)
     {
         rIndex = list.size();
-        BOOL bFound = FALSE;
+        sal_Bool bFound = false;
         SCROW  nLo = 0;
         SCROW nHi = list.size() - 1;
         SCROW nIndex;
@@ -116,7 +116,7 @@ namespace {
                 nHi = nIndex - 1;
                 if ( list[nIndex]->GetOrder() == nOrder )
                 {
-                    bFound = TRUE;
+                    bFound = sal_True;
                     nLo = nIndex;
                 }
             }
@@ -135,37 +135,37 @@ class ScDPRowMembersOrder
 {
     ScDPResultDimension& rDimension;
     long                 nMeasure;
-    BOOL                 bAscending;
+    sal_Bool                 bAscending;
 
 public:
-            ScDPRowMembersOrder( ScDPResultDimension& rDim, long nM, BOOL bAsc ) :
+            ScDPRowMembersOrder( ScDPResultDimension& rDim, long nM, sal_Bool bAsc ) :
                 rDimension(rDim),
                 nMeasure(nM),
                 bAscending(bAsc)
             {}
             ~ScDPRowMembersOrder() {}
 
-    BOOL operator()( sal_Int32 nIndex1, sal_Int32 nIndex2 ) const;
+    sal_Bool operator()( sal_Int32 nIndex1, sal_Int32 nIndex2 ) const;
 };
 
 class ScDPColMembersOrder
 {
     ScDPDataDimension& rDimension;
     long               nMeasure;
-    BOOL               bAscending;
+    sal_Bool               bAscending;
 
 public:
-            ScDPColMembersOrder( ScDPDataDimension& rDim, long nM, BOOL bAsc ) :
+            ScDPColMembersOrder( ScDPDataDimension& rDim, long nM, sal_Bool bAsc ) :
                 rDimension(rDim),
                 nMeasure(nM),
                 bAscending(bAsc)
             {}
             ~ScDPColMembersOrder() {}
 
-    BOOL operator()( sal_Int32 nIndex1, sal_Int32 nIndex2 ) const;
+    sal_Bool operator()( sal_Int32 nIndex1, sal_Int32 nIndex2 ) const;
 };
 
-static BOOL lcl_IsLess( const ScDPDataMember* pDataMember1, const ScDPDataMember* pDataMember2, long nMeasure, BOOL bAscending )
+static sal_Bool lcl_IsLess( const ScDPDataMember* pDataMember1, const ScDPDataMember* pDataMember2, long nMeasure, sal_Bool bAscending )
 {
     // members can be NULL if used for rows
 
@@ -173,17 +173,17 @@ static BOOL lcl_IsLess( const ScDPDataMember* pDataMember1, const ScDPDataMember
     const ScDPAggData* pAgg1 = pDataMember1 ? pDataMember1->GetConstAggData( nMeasure, aEmptyState ) : NULL;
     const ScDPAggData* pAgg2 = pDataMember2 ? pDataMember2->GetConstAggData( nMeasure, aEmptyState ) : NULL;
 
-    BOOL bError1 = pAgg1 && pAgg1->HasError();
-    BOOL bError2 = pAgg2 && pAgg2->HasError();
+    sal_Bool bError1 = pAgg1 && pAgg1->HasError();
+    sal_Bool bError2 = pAgg2 && pAgg2->HasError();
     if ( bError1 )
     {
         if ( bError2 )
-            return FALSE;       // equal
+            return false;       // equal
         else
-            return FALSE;       // errors are always sorted at the end
+            return false;       // errors are always sorted at the end
     }
     else if ( bError2 )
-        return TRUE;            // errors are always sorted at the end
+        return sal_True;            // errors are always sorted at the end
     else
     {
         double fVal1 = ( pAgg1 && pAgg1->HasData() ) ? pAgg1->GetResult() : 0.0;    // no data is sorted as 0
@@ -196,7 +196,7 @@ static BOOL lcl_IsLess( const ScDPDataMember* pDataMember1, const ScDPDataMember
     }
 }
 
-static BOOL lcl_IsEqual( const ScDPDataMember* pDataMember1, const ScDPDataMember* pDataMember2, long nMeasure )
+static sal_Bool lcl_IsEqual( const ScDPDataMember* pDataMember1, const ScDPDataMember* pDataMember2, long nMeasure )
 {
     // members can be NULL if used for rows
 
@@ -204,17 +204,17 @@ static BOOL lcl_IsEqual( const ScDPDataMember* pDataMember1, const ScDPDataMembe
     const ScDPAggData* pAgg1 = pDataMember1 ? pDataMember1->GetConstAggData( nMeasure, aEmptyState ) : NULL;
     const ScDPAggData* pAgg2 = pDataMember2 ? pDataMember2->GetConstAggData( nMeasure, aEmptyState ) : NULL;
 
-    BOOL bError1 = pAgg1 && pAgg1->HasError();
-    BOOL bError2 = pAgg2 && pAgg2->HasError();
+    sal_Bool bError1 = pAgg1 && pAgg1->HasError();
+    sal_Bool bError2 = pAgg2 && pAgg2->HasError();
     if ( bError1 )
     {
         if ( bError2 )
-            return TRUE;        // equal
+            return sal_True;        // equal
         else
-            return FALSE;
+            return false;
     }
     else if ( bError2 )
-        return FALSE;
+        return false;
     else
     {
         double fVal1 = ( pAgg1 && pAgg1->HasData() ) ? pAgg1->GetResult() : 0.0;    // no data is sorted as 0
@@ -227,7 +227,7 @@ static BOOL lcl_IsEqual( const ScDPDataMember* pDataMember1, const ScDPDataMembe
     }
 }
 
-BOOL ScDPRowMembersOrder::operator()( sal_Int32 nIndex1, sal_Int32 nIndex2 ) const
+sal_Bool ScDPRowMembersOrder::operator()( sal_Int32 nIndex1, sal_Int32 nIndex2 ) const
 {
     const ScDPResultMember* pMember1 = rDimension.GetMember(nIndex1);
     const ScDPResultMember* pMember2 = rDimension.GetMember(nIndex2);
@@ -238,16 +238,16 @@ BOOL ScDPRowMembersOrder::operator()( sal_Int32 nIndex1, sal_Int32 nIndex2 ) con
     const ScDPDataMember* pDataMember1 =  pMember1->GetDataRoot() ;
     const ScDPDataMember* pDataMember2 =  pMember2->GetDataRoot();
     //  GetDataRoot can be NULL if there was no data.
-    //  IsVisible == FALSE can happen after AutoShow.
+    //  IsVisible == sal_False can happen after AutoShow.
     return lcl_IsLess( pDataMember1, pDataMember2, nMeasure, bAscending );
 }
 
-BOOL ScDPColMembersOrder::operator()( sal_Int32 nIndex1, sal_Int32 nIndex2 ) const
+sal_Bool ScDPColMembersOrder::operator()( sal_Int32 nIndex1, sal_Int32 nIndex2 ) const
 {
     ScDPDataMember* pDataMember1 = rDimension.GetMember(nIndex1);
     ScDPDataMember* pDataMember2 = rDimension.GetMember(nIndex2);
-        BOOL bHide1 = pDataMember1 && !pDataMember1->IsVisible();
-        BOOL bHide2 =  pDataMember2 && !pDataMember2->IsVisible();
+        sal_Bool bHide1 = pDataMember1 && !pDataMember1->IsVisible();
+        sal_Bool bHide2 =  pDataMember2 && !pDataMember2->IsVisible();
         if ( bHide1 || bHide2 )
             return !bHide1;
     return lcl_IsLess( pDataMember1, pDataMember2, nMeasure, bAscending );
@@ -506,7 +506,7 @@ void ScDPAggData::Calculate( ScSubTotalFunc eFunc, const ScDPSubTotalState& rSub
 
     //  check the error conditions for the selected function
 
-    BOOL bError = FALSE;
+    sal_Bool bError = false;
     switch (eFunc)
     {
         case SUBTOTAL_FUNC_SUM:
@@ -581,7 +581,7 @@ void ScDPAggData::Calculate( ScSubTotalFunc eFunc, const ScDPSubTotalState& rSub
         }
     }
 
-    BOOL bEmpty = ( nCount == 0 );          // no data
+    sal_Bool bEmpty = ( nCount == 0 );          // no data
 
     //  store the result
     //  Empty is checked first, so empty results are shown empty even for "average" etc.
@@ -603,7 +603,7 @@ void ScDPAggData::Calculate( ScSubTotalFunc eFunc, const ScDPSubTotalState& rSub
     fAux = 0.0;             // used for running total or original result of reference value
 }
 
-BOOL ScDPAggData::IsCalculated() const
+sal_Bool ScDPAggData::IsCalculated() const
 {
     return ( nCount <= SC_DPAGG_RESULT_EMPTY );
 }
@@ -615,14 +615,14 @@ double ScDPAggData::GetResult() const
     return fVal;        // use calculated value
 }
 
-BOOL ScDPAggData::HasError() const
+sal_Bool ScDPAggData::HasError() const
 {
     DBG_ASSERT( IsCalculated(), "ScDPAggData not calculated" );
 
     return ( nCount == SC_DPAGG_RESULT_ERROR );
 }
 
-BOOL ScDPAggData::HasData() const
+sal_Bool ScDPAggData::HasData() const
 {
     DBG_ASSERT( IsCalculated(), "ScDPAggData not calculated" );
 
@@ -643,7 +643,7 @@ void ScDPAggData::SetError()
     nCount = SC_DPAGG_RESULT_ERROR;
 }
 
-void ScDPAggData::SetEmpty( BOOL bSet )
+void ScDPAggData::SetEmpty( sal_Bool bSet )
 {
     DBG_ASSERT( IsCalculated(), "ScDPAggData not calculated" );
 
@@ -688,7 +688,7 @@ void ScDPAggData::Reset()
 // -----------------------------------------------------------------------
 
 ScDPRowTotals::ScDPRowTotals() :
-    bIsInColRoot( FALSE )
+    bIsInColRoot( false )
 {
 }
 
@@ -767,9 +767,9 @@ ScDPResultData::ScDPResultData( ScDPSource* pSrc ) :        //! Ref
     pMeasRefs( NULL ),
     pMeasRefOrient( NULL ),
     pMeasNames( NULL ),
-    bLateInit( FALSE ),
-    bDataAtCol( FALSE ),
-    bDataAtRow( FALSE )
+    bLateInit( false ),
+    bDataAtCol( false ),
+    bDataAtRow( false )
 {
 
     lcl_ResizePointVector( mpDimMembers , SC_DAPI_MAXFIELDS );
@@ -786,7 +786,7 @@ ScDPResultData::~ScDPResultData()
 }
 
 void ScDPResultData::SetMeasureData( long nCount, const ScSubTotalFunc* pFunctions,
-                                    const sheet::DataPilotFieldReference* pRefs, const USHORT* pRefOrient,
+                                    const sheet::DataPilotFieldReference* pRefs, const sal_uInt16* pRefOrient,
                                     const String* pNames )
 {
     delete[] pMeasFuncs;
@@ -798,7 +798,7 @@ void ScDPResultData::SetMeasureData( long nCount, const ScSubTotalFunc* pFunctio
         nMeasCount = nCount;
         pMeasFuncs = new ScSubTotalFunc[nCount];
         pMeasRefs  = new sheet::DataPilotFieldReference[nCount];
-        pMeasRefOrient = new USHORT[nCount];
+        pMeasRefOrient = new sal_uInt16[nCount];
         pMeasNames = new String[nCount];
         for (long i=0; i<nCount; i++)
         {
@@ -815,20 +815,20 @@ void ScDPResultData::SetMeasureData( long nCount, const ScSubTotalFunc* pFunctio
         pMeasFuncs = new ScSubTotalFunc[1];
         pMeasFuncs[0] = SUBTOTAL_FUNC_NONE;
         pMeasRefs  = new sheet::DataPilotFieldReference[1]; // default ctor is ok
-        pMeasRefOrient = new USHORT[1];
+        pMeasRefOrient = new sal_uInt16[1];
         pMeasRefOrient[0] = sheet::DataPilotFieldOrientation_HIDDEN;
         pMeasNames = new String[1];
         pMeasNames[0] = ScGlobal::GetRscString( STR_EMPTYDATA );
     }
 }
 
-void ScDPResultData::SetDataLayoutOrientation( USHORT nOrient )
+void ScDPResultData::SetDataLayoutOrientation( sal_uInt16 nOrient )
 {
     bDataAtCol = ( nOrient == sheet::DataPilotFieldOrientation_COLUMN );
     bDataAtRow = ( nOrient == sheet::DataPilotFieldOrientation_ROW );
 }
 
-void ScDPResultData::SetLateInit( BOOL bSet )
+void ScDPResultData::SetLateInit( sal_Bool bSet )
 {
     bLateInit = bSet;
 }
@@ -857,15 +857,15 @@ const sheet::DataPilotFieldReference& ScDPResultData::GetMeasureRefVal(long nMea
     return pMeasRefs[nMeasure];
 }
 
-USHORT ScDPResultData::GetMeasureRefOrient(long nMeasure) const
+sal_uInt16 ScDPResultData::GetMeasureRefOrient(long nMeasure) const
 {
     DBG_ASSERT( pMeasRefOrient && nMeasure < nMeasCount, "bumm" );
     return pMeasRefOrient[nMeasure];
 }
 
-String ScDPResultData::GetMeasureString(long nMeasure, BOOL bForce, ScSubTotalFunc eForceFunc, bool& rbTotalResult) const
+String ScDPResultData::GetMeasureString(long nMeasure, sal_Bool bForce, ScSubTotalFunc eForceFunc, bool& rbTotalResult) const
 {
-    //  with bForce==TRUE, return function instead of "result" for single measure
+    //  with bForce==sal_True, return function instead of "result" for single measure
     //  with eForceFunc != SUBTOTAL_FUNC_NONE, always use eForceFunc
     rbTotalResult = false;
     if ( nMeasure < 0 || ( nMeasCount == 1 && !bForce && eForceFunc == SUBTOTAL_FUNC_NONE ) )
@@ -891,7 +891,7 @@ String ScDPResultData::GetMeasureString(long nMeasure, BOOL bForce, ScSubTotalFu
         String aRet;
         ScSubTotalFunc eFunc = ( eForceFunc == SUBTOTAL_FUNC_NONE ) ?
                                     GetMeasureFunction(nMeasure) : eForceFunc;
-        USHORT nId = nFuncStrIds[eFunc];
+        sal_uInt16 nId = nFuncStrIds[eFunc];
         if (nId)
         {
             aRet += ScGlobal::GetRscString(nId);        // function name
@@ -914,7 +914,7 @@ String ScDPResultData::GetMeasureDimensionName(long nMeasure) const
     return pSource->GetDataDimName( nMeasure );
 }
 
-BOOL ScDPResultData::IsBaseForGroup( long nDim ) const
+sal_Bool ScDPResultData::IsBaseForGroup( long nDim ) const
 {
     return pSource->GetData()->IsBaseForGroup( nDim );
 }
@@ -924,38 +924,38 @@ long ScDPResultData::GetGroupBase( long nGroupDim ) const
     return pSource->GetData()->GetGroupBase( nGroupDim );
 }
 
-BOOL ScDPResultData::IsNumOrDateGroup( long nDim ) const
+sal_Bool ScDPResultData::IsNumOrDateGroup( long nDim ) const
 {
     return pSource->GetData()->IsNumOrDateGroup( nDim );
 }
 
-BOOL ScDPResultData::IsInGroup( const ScDPItemData& rGroupData, long nGroupIndex,
+sal_Bool ScDPResultData::IsInGroup( const ScDPItemData& rGroupData, long nGroupIndex,
                                 long nBaseDataId, long nBaseIndex ) const
 {
     const ScDPItemData* pData = pSource->GetItemDataById( nGroupIndex , nBaseDataId);
     if ( pData )
          return pSource->GetData()->IsInGroup( rGroupData, nGroupIndex, *pData , nBaseIndex );
     else
-        return FALSE;
+        return false;
 }
-BOOL ScDPResultData::IsInGroup( SCROW nGroupDataId, long nGroupIndex,
+sal_Bool ScDPResultData::IsInGroup( SCROW nGroupDataId, long nGroupIndex,
                                                                const ScDPItemData& rBaseData, long nBaseIndex ) const
 {
     const ScDPItemData* pGroupData = pSource->GetItemDataById( nGroupIndex , nGroupDataId);
     if ( pGroupData )
         return pSource->GetData()->IsInGroup( *pGroupData, nGroupIndex, rBaseData , nBaseIndex );
     else
-        return FALSE;
+        return false;
 }
 
-BOOL ScDPResultData::HasCommonElement(/* const ScDPItemData& rFirstData*/SCROW nFirstDataId, long nFirstIndex,
+sal_Bool ScDPResultData::HasCommonElement(/* const ScDPItemData& rFirstData*/SCROW nFirstDataId, long nFirstIndex,
                                        const ScDPItemData& rSecondData, long nSecondIndex ) const
 {
     const ScDPItemData* pFirstData = pSource->GetItemDataById( nFirstIndex , nFirstDataId);
     if ( pFirstData )
         return pSource->GetData()->HasCommonElement( *pFirstData, nFirstIndex, rSecondData, nSecondIndex );
     else
-        return FALSE;
+        return false;
 }
 
 const ScDPSource* ScDPResultData::GetSource() const
@@ -997,31 +997,31 @@ ResultMembers* ScDPResultData::GetDimResultMembers( long nDim ,  ScDPDimension* 
 
 
 ScDPResultMember::ScDPResultMember(  const ScDPResultData* pData, const ScDPParentDimData& rParentDimData ,
-                                    BOOL bForceSub ) :
+                                    sal_Bool bForceSub ) :
     pResultData( pData ),
        aParentDimData( rParentDimData ),
     pChildDimension( NULL ),
     pDataRoot( NULL ),
-    bHasElements( FALSE ),
+    bHasElements( false ),
     bForceSubTotal( bForceSub ),
-    bHasHiddenDetails( FALSE ),
-    bInitialized( FALSE ),
-    bAutoHidden( FALSE ),
+    bHasHiddenDetails( false ),
+    bInitialized( false ),
+    bAutoHidden( false ),
     nMemberStep( 1 )
 {
     // pParentLevel/pMemberDesc is 0 for root members
 }
 
 ScDPResultMember::ScDPResultMember(  const ScDPResultData* pData,
-                                    BOOL bForceSub ) :
+                                    sal_Bool bForceSub ) :
     pResultData( pData ),
         pChildDimension( NULL ),
     pDataRoot( NULL ),
-    bHasElements( FALSE ),
+    bHasElements( false ),
     bForceSubTotal( bForceSub ),
-    bHasHiddenDetails( FALSE ),
-    bInitialized( FALSE ),
-    bAutoHidden( FALSE ),
+    bHasHiddenDetails( false ),
+    bInitialized( false ),
+    bAutoHidden( false ),
     nMemberStep( 1 )
 {
 }
@@ -1049,13 +1049,13 @@ void ScDPResultMember::FillItemData( ScDPItemData& rData ) const
         rData.SetString( ScGlobal::GetRscString(STR_PIVOT_TOTAL) );     // root member
 }
 
-BOOL ScDPResultMember::IsNamedItem( SCROW nIndex ) const
+sal_Bool ScDPResultMember::IsNamedItem( SCROW nIndex ) const
 {
     //! store ScDPMember pointer instead of ScDPMember ???
   const ScDPMember*   pMemberDesc = GetDPMember();
     if (pMemberDesc)
         return ((ScDPMember*)pMemberDesc)->IsNamedItem( nIndex  );
-    return FALSE;
+    return false;
 }
 
 bool ScDPResultMember::IsValidEntry( const vector< SCROW >& aMembers ) const
@@ -1079,13 +1079,13 @@ bool ScDPResultMember::IsValidEntry( const vector< SCROW >& aMembers ) const
 
 void ScDPResultMember::InitFrom( const vector<ScDPDimension*>& ppDim, const vector<ScDPLevel*>& ppLev,
                                  size_t nPos, ScDPInitState& rInitState ,
-                                 BOOL bInitChild /*= TRUE */)
+                                 sal_Bool bInitChild /*= sal_True */)
 {
     //  with LateInit, initialize only those members that have data
     if ( pResultData->IsLateInit() )
         return;
 
-    bInitialized = TRUE;
+    bInitialized = sal_True;
 
     if (nPos >= ppDim.size())
         return;
@@ -1101,7 +1101,7 @@ void ScDPResultMember::InitFrom( const vector<ScDPDimension*>& ppDim, const vect
             {
                  if ( !pChildDimension )
                         pChildDimension = new ScDPResultDimension( pResultData );
-                    pChildDimension->InitFrom( ppDim, ppLev, nPos, rInitState , FALSE );
+                    pChildDimension->InitFrom( ppDim, ppLev, nPos, rInitState , false );
                     return;
             }
             else
@@ -1110,14 +1110,14 @@ void ScDPResultMember::InitFrom( const vector<ScDPDimension*>& ppDim, const vect
                 nMemberStep ++;
             }
         }
-        bHasHiddenDetails = TRUE;   // only if there is a next dimension
+        bHasHiddenDetails = true;   // only if there is a next dimension
         return;
     }
 
     if ( bInitChild )
     {
         pChildDimension = new ScDPResultDimension( pResultData );
-        pChildDimension->InitFrom( ppDim, ppLev, nPos, rInitState, TRUE  );
+        pChildDimension->InitFrom( ppDim, ppLev, nPos, rInitState, sal_True  );
     }
 }
 
@@ -1129,7 +1129,7 @@ void ScDPResultMember::LateInitFrom( LateInitParams& rParams/*const vector<ScDPD
     if ( !pResultData->IsLateInit() )
         return;
 
-    bInitialized = TRUE;
+    bInitialized = sal_True;
 
     if ( rParams.IsEnd( nPos )  /*nPos >= ppDim.size()*/)
         // No next dimension.  Bail out.
@@ -1149,8 +1149,8 @@ void ScDPResultMember::LateInitFrom( LateInitParams& rParams/*const vector<ScDPD
 
                 // #i111462# reset InitChild flag only for this child dimension's LateInitFrom call,
                 // not for following members of parent dimensions
-                BOOL bWasInitChild = rParams.GetInitChild();
-                rParams.SetInitChild( FALSE );
+                sal_Bool bWasInitChild = rParams.GetInitChild();
+                rParams.SetInitChild( false );
                 pChildDimension->LateInitFrom( rParams, pItemData, nPos, rInitState );
                 rParams.SetInitChild( bWasInitChild );
                 return;
@@ -1161,7 +1161,7 @@ void ScDPResultMember::LateInitFrom( LateInitParams& rParams/*const vector<ScDPD
                 nMemberStep ++;
             }
         }
-        bHasHiddenDetails = TRUE;   // only if there is a next dimension
+        bHasHiddenDetails = true;   // only if there is a next dimension
         return;
     }
 
@@ -1174,9 +1174,9 @@ void ScDPResultMember::LateInitFrom( LateInitParams& rParams/*const vector<ScDPD
     }
 }
 
-BOOL ScDPResultMember::IsSubTotalInTitle(long nMeasure) const
+sal_Bool ScDPResultMember::IsSubTotalInTitle(long nMeasure) const
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = false;
     if ( pChildDimension && /*pParentLevel*/GetParentLevel() &&
          /*pParentLevel*/GetParentLevel()->IsOutlineLayout() && /*pParentLevel*/GetParentLevel()->IsSubtotalsAtTop() )
     {
@@ -1190,7 +1190,7 @@ BOOL ScDPResultMember::IsSubTotalInTitle(long nMeasure) const
 
             // only a single subtotal row will be shown in the outline title row
             if ( nSubTotals == 1 )
-                bRet = TRUE;
+                bRet = sal_True;
         }
     }
     return bRet;
@@ -1233,7 +1233,7 @@ long ScDPResultMember::GetSize(long nMeasure) const
     }
 }
 
-BOOL ScDPResultMember::IsVisible() const
+sal_Bool ScDPResultMember::IsVisible() const
 {
     //  not initialized -> shouldn't be there at all
     //  (allocated only to preserve ordering)
@@ -1241,22 +1241,22 @@ BOOL ScDPResultMember::IsVisible() const
     return ( bHasElements || ( pParentLevel && pParentLevel->getShowEmpty() ) ) && IsValid() && bInitialized;
 }
 
-BOOL ScDPResultMember::IsValid() const
+sal_Bool ScDPResultMember::IsValid() const
 {
     //  non-Valid members are left out of calculation
 
     //  was member set no invisible at the DataPilotSource?
   const ScDPMember*     pMemberDesc =GetDPMember();
     if ( pMemberDesc && !pMemberDesc->getIsVisible() )
-        return FALSE;
+        return false;
 
     if ( bAutoHidden )
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return sal_True;
 }
 
-BOOL ScDPResultMember::HasHiddenDetails() const
+sal_Bool ScDPResultMember::HasHiddenDetails() const
 {
     // bHasHiddenDetails is set only if the "show details" flag is off,
     // and there was a child dimension to skip
@@ -1361,7 +1361,7 @@ static String lcl_parseSubtotalName(const String& rSubStr, const String& rCaptio
 }
 
 void ScDPResultMember::FillMemberResults( uno::Sequence<sheet::MemberResult>* pSequences,
-                                            long& rPos, long nMeasure, BOOL bRoot,
+                                            long& rPos, long nMeasure, sal_Bool bRoot,
                                             const String* pMemberName,
                                             const String* pMemberCaption )
 {
@@ -1372,7 +1372,7 @@ void ScDPResultMember::FillMemberResults( uno::Sequence<sheet::MemberResult>* pS
     sheet::MemberResult* pArray = pSequences->getArray();
     DBG_ASSERT( rPos+nSize <= pSequences->getLength(), "bumm" );
 
-    BOOL bIsNumeric = FALSE;
+    sal_Bool bIsNumeric = false;
     String aName;
     if ( pMemberName )          // if pMemberName != NULL, use instead of real member name
         aName = *pMemberName;
@@ -1388,7 +1388,7 @@ void ScDPResultMember::FillMemberResults( uno::Sequence<sheet::MemberResult>* pS
     {
         // Numeric group dimensions use numeric entries for proper sorting,
         // but the group titles must be output as text.
-        bIsNumeric = FALSE;
+        bIsNumeric = false;
     }
 
     String aCaption = aName;
@@ -1429,15 +1429,15 @@ void ScDPResultMember::FillMemberResults( uno::Sequence<sheet::MemberResult>* pS
     if ( pParentLevel && pParentLevel->IsAddEmpty() )
         ++nExtraSpace;
 
-    BOOL bTitleLine = FALSE;
+    sal_Bool bTitleLine = false;
     if ( pParentLevel && pParentLevel->IsOutlineLayout() )
-        bTitleLine = TRUE;
+        bTitleLine = sal_True;
 
     // if the subtotals are shown at the top (title row) in outline layout,
     // no extra row for the subtotals is needed
-    BOOL bSubTotalInTitle = IsSubTotalInTitle( nMeasure );
+    sal_Bool bSubTotalInTitle = IsSubTotalInTitle( nMeasure );
 
-    BOOL bHasChild = ( pChildDimension != NULL );
+    sal_Bool bHasChild = ( pChildDimension != NULL );
     if (bHasChild)
     {
         if ( bTitleLine )           // in tabular layout the title is on a separate row
@@ -1478,7 +1478,7 @@ void ScDPResultMember::FillMemberResults( uno::Sequence<sheet::MemberResult>* pS
                 bool bTotalResult = false;
                 String aSubStr = aCaption;
                 aSubStr += ' ';
-                aSubStr += pResultData->GetMeasureString(nMemberMeasure, FALSE, eForce, bTotalResult);
+                aSubStr += pResultData->GetMeasureString(nMemberMeasure, false, eForce, bTotalResult);
 
                 if (bTotalResult)
                 {
@@ -1549,13 +1549,13 @@ void ScDPResultMember::FillDataResults( const ScDPResultMember* pRefMember,
     if ( pParentLevel && pParentLevel->IsAddEmpty() )
         ++nExtraSpace;
 
-    BOOL bTitleLine = FALSE;
+    sal_Bool bTitleLine = false;
     if ( pParentLevel && pParentLevel->IsOutlineLayout() )
-        bTitleLine = TRUE;
+        bTitleLine = sal_True;
 
-    BOOL bSubTotalInTitle = IsSubTotalInTitle( nMeasure );
+    sal_Bool bSubTotalInTitle = IsSubTotalInTitle( nMeasure );
 
-    BOOL bHasChild = ( pChildDimension != NULL );
+    sal_Bool bHasChild = ( pChildDimension != NULL );
     if (bHasChild)
     {
         if ( bTitleLine )           // in tabular layout the title is on a separate row
@@ -1639,7 +1639,7 @@ void ScDPResultMember::UpdateDataResults( const ScDPResultMember* pRefMember, lo
     //  IsVisible() test is in ScDPResultDimension::FillDataResults
     //  (not on data layout dimension)
 
-    BOOL bHasChild = ( pChildDimension != NULL );
+    sal_Bool bHasChild = ( pChildDimension != NULL );
 
     long nUserSubCount = GetSubTotalCount();
     // process subtotals even if not shown
@@ -1686,7 +1686,7 @@ void ScDPResultMember::UpdateDataResults( const ScDPResultMember* pRefMember, lo
 
 void ScDPResultMember::SortMembers( ScDPResultMember* pRefMember )
 {
-    BOOL bHasChild = ( pChildDimension != NULL );
+    sal_Bool bHasChild = ( pChildDimension != NULL );
     if (bHasChild)
         pChildDimension->SortMembers( pRefMember );     // sorting is done at the dimension
 
@@ -1701,7 +1701,7 @@ void ScDPResultMember::SortMembers( ScDPResultMember* pRefMember )
 
 void ScDPResultMember::DoAutoShow( ScDPResultMember* pRefMember )
 {
-    BOOL bHasChild = ( pChildDimension != NULL );
+    sal_Bool bHasChild = ( pChildDimension != NULL );
     if (bHasChild)
         pChildDimension->DoAutoShow( pRefMember );     // sorting is done at the dimension
 
@@ -1714,7 +1714,7 @@ void ScDPResultMember::DoAutoShow( ScDPResultMember* pRefMember )
     }
 }
 
-void ScDPResultMember::ResetResults( BOOL /*bRoot*/ )
+void ScDPResultMember::ResetResults( sal_Bool /*bRoot*/ )
 {
     if (pDataRoot)
         pDataRoot->ResetResults();
@@ -1723,7 +1723,7 @@ void ScDPResultMember::ResetResults( BOOL /*bRoot*/ )
         pChildDimension->ResetResults();
 
  //   if (!bRoot)
- //       bHasElements = FALSE;
+ //       bHasElements = sal_False;
 }
 
 void ScDPResultMember::UpdateRunningTotals( const ScDPResultMember* pRefMember, long nMeasure,
@@ -1734,7 +1734,7 @@ void ScDPResultMember::UpdateRunningTotals( const ScDPResultMember* pRefMember, 
 
     rTotals.SetInColRoot( IsRoot() );
 
-    BOOL bHasChild = ( pChildDimension != NULL );
+    sal_Bool bHasChild = ( pChildDimension != NULL );
 
     long nUserSubCount = GetSubTotalCount();
     //if ( nUserSubCount || !bHasChild )
@@ -1827,28 +1827,28 @@ String ScDPDataMember::GetName() const
         return EMPTY_STRING;
 }
 
-BOOL ScDPDataMember::IsVisible() const
+sal_Bool ScDPDataMember::IsVisible() const
 {
     if (pResultMember)
         return pResultMember->IsVisible();
     else
-        return FALSE;
+        return false;
 }
 
-BOOL ScDPDataMember::IsNamedItem( /*const ScDPItemData& r*/SCROW r ) const
+sal_Bool ScDPDataMember::IsNamedItem( /*const ScDPItemData& r*/SCROW r ) const
 {
     if (pResultMember)
         return pResultMember->IsNamedItem(r);
     else
-        return FALSE;
+        return false;
 }
 
-BOOL ScDPDataMember::HasHiddenDetails() const
+sal_Bool ScDPDataMember::HasHiddenDetails() const
 {
     if (pResultMember)
         return pResultMember->HasHiddenDetails();
     else
-        return FALSE;
+        return false;
 }
 
 void ScDPDataMember::InitFrom( const ScDPResultDimension* pDim )
@@ -1938,26 +1938,26 @@ void ScDPDataMember::ProcessData( const vector< SCROW >& aChildMembers, const ve
         pChildDimension->ProcessData( aChildMembers, aValues, rSubState );      // with unmodified subtotal state
 }
 
-BOOL ScDPDataMember::HasData( long nMeasure, const ScDPSubTotalState& rSubState ) const
+sal_Bool ScDPDataMember::HasData( long nMeasure, const ScDPSubTotalState& rSubState ) const
 {
     if ( rSubState.eColForce != SUBTOTAL_FUNC_NONE && rSubState.eRowForce != SUBTOTAL_FUNC_NONE &&
                                                         rSubState.eColForce != rSubState.eRowForce )
-        return FALSE;
+        return false;
 
     //  HasData can be different between measures!
 
     const ScDPAggData* pAgg = GetConstAggData( nMeasure, rSubState );
     if (!pAgg)
-        return FALSE;           //! error?
+        return false;           //! error?
 
     return pAgg->HasData();
 }
 
-BOOL ScDPDataMember::HasError( long nMeasure, const ScDPSubTotalState& rSubState ) const
+sal_Bool ScDPDataMember::HasError( long nMeasure, const ScDPSubTotalState& rSubState ) const
 {
     const ScDPAggData* pAgg = GetConstAggData( nMeasure, rSubState );
     if (!pAgg)
-        return TRUE;
+        return sal_True;
 
     return pAgg->HasError();
 }
@@ -2013,7 +2013,7 @@ const ScDPAggData* ScDPDataMember::GetConstAggData( long nMeasure, const ScDPSub
 
 void ScDPDataMember::FillDataRow( const ScDPResultMember* pRefMember,
                                     uno::Sequence<sheet::DataResult>& rSequence,
-                                    long& rCol, long nMeasure, BOOL bIsSubTotalRow,
+                                    long& rCol, long nMeasure, sal_Bool bIsSubTotalRow,
                                     const ScDPSubTotalState& rSubState ) const
 {
     DBG_ASSERT( pRefMember == pResultMember || !pResultMember, "bla" );
@@ -2031,15 +2031,15 @@ void ScDPDataMember::FillDataRow( const ScDPResultMember* pRefMember,
         if ( pRefParentLevel && pRefParentLevel->IsAddEmpty() )
             ++nExtraSpace;
 
-        BOOL bTitleLine = FALSE;
+        sal_Bool bTitleLine = false;
         if ( pRefParentLevel && pRefParentLevel->IsOutlineLayout() )
-            bTitleLine = TRUE;
+            bTitleLine = sal_True;
 
-        BOOL bSubTotalInTitle = pRefMember->IsSubTotalInTitle( nMeasure );
+        sal_Bool bSubTotalInTitle = pRefMember->IsSubTotalInTitle( nMeasure );
 
         //  leave space for children even if the DataMember hasn't been initialized
         //  (pDataChild is null then, this happens when no values for it are in this row)
-        BOOL bHasChild = ( pRefChild != NULL );
+        sal_Bool bHasChild = ( pRefChild != NULL );
 
         if ( bHasChild )
         {
@@ -2048,7 +2048,7 @@ void ScDPDataMember::FillDataRow( const ScDPResultMember* pRefMember,
 
             if ( pDataChild )
                 pDataChild->FillDataRow( pRefChild, rSequence, rCol, nMeasure, bIsSubTotalRow, rSubState );
-            rCol += (USHORT)pRefMember->GetSize( nMeasure );
+            rCol += (sal_uInt16)pRefMember->GetSize( nMeasure );
 
             if ( bTitleLine )           // title column is included in GetSize, so the following
                 --rCol;                 // positions are calculated with the normal values
@@ -2131,7 +2131,7 @@ void ScDPDataMember::FillDataRow( const ScDPResultMember* pRefMember,
 }
 
 void ScDPDataMember::UpdateDataRow( const ScDPResultMember* pRefMember,
-                                long nMeasure, BOOL bIsSubTotalRow,
+                                long nMeasure, sal_Bool bIsSubTotalRow,
                                 const ScDPSubTotalState& rSubState )
 {
     DBG_ASSERT( pRefMember == pResultMember || !pResultMember, "bla" );
@@ -2142,7 +2142,7 @@ void ScDPDataMember::UpdateDataRow( const ScDPResultMember* pRefMember,
 
     //  leave space for children even if the DataMember hasn't been initialized
     //  (pDataChild is null then, this happens when no values for it are in this row)
-    BOOL bHasChild = ( pRefChild != NULL );
+    sal_Bool bHasChild = ( pRefChild != NULL );
 
     // process subtotals even if not shown
     long nUserSubCount = pRefMember->GetSubTotalCount();
@@ -2239,7 +2239,7 @@ void ScDPDataMember::ResetResults()
 }
 
 void ScDPDataMember::UpdateRunningTotals( const ScDPResultMember* pRefMember,
-                                long nMeasure, BOOL bIsSubTotalRow,
+                                long nMeasure, sal_Bool bIsSubTotalRow,
                                 const ScDPSubTotalState& rSubState, ScDPRunningTotalState& rRunning,
                                 ScDPRowTotals& rTotals, const ScDPResultMember& rRowParent )
 {
@@ -2250,11 +2250,11 @@ void ScDPDataMember::UpdateRunningTotals( const ScDPResultMember* pRefMember,
         const ScDPDataDimension* pDataChild = GetChildDimension();
         const ScDPResultDimension* pRefChild = pRefMember->GetChildDimension();
 
-        BOOL bIsRoot = ( pResultMember == NULL || pResultMember->GetParentLevel() == NULL );
+        sal_Bool bIsRoot = ( pResultMember == NULL || pResultMember->GetParentLevel() == NULL );
 
         //  leave space for children even if the DataMember hasn't been initialized
         //  (pDataChild is null then, this happens when no values for it are in this row)
-        BOOL bHasChild = ( pRefChild != NULL );
+        sal_Bool bHasChild = ( pRefChild != NULL );
 
         long nUserSubCount = pRefMember->GetSubTotalCount();
         {
@@ -2295,8 +2295,8 @@ void ScDPDataMember::UpdateRunningTotals( const ScDPResultMember* pRefMember,
                              eRefType == sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE ||
                              eRefType == sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE_DIFFERENCE )
                         {
-                            BOOL bRunningTotal = ( eRefType == sheet::DataPilotFieldReferenceType::RUNNING_TOTAL );
-                            BOOL bRelative =
+                            sal_Bool bRunningTotal = ( eRefType == sheet::DataPilotFieldReferenceType::RUNNING_TOTAL );
+                            sal_Bool bRelative =
                                 ( aReferenceValue.ReferenceItemType != sheet::DataPilotFieldReferenceItemType::NAMED && !bRunningTotal );
                             long nRelativeDir = bRelative ?
                                 ( ( aReferenceValue.ReferenceItemType == sheet::DataPilotFieldReferenceItemType::PREVIOUS ) ? -1 : 1 ) : 0;
@@ -2309,9 +2309,9 @@ void ScDPDataMember::UpdateRunningTotals( const ScDPResultMember* pRefMember,
                             String aRefFieldName = aReferenceValue.ReferenceField;
 
                             //! aLocalSubState?
-                            USHORT nRefOrient = pResultData->GetMeasureRefOrient( nMemberMeasure );
-                            BOOL bRefDimInCol = ( nRefOrient == sheet::DataPilotFieldOrientation_COLUMN );
-                            BOOL bRefDimInRow = ( nRefOrient == sheet::DataPilotFieldOrientation_ROW );
+                            sal_uInt16 nRefOrient = pResultData->GetMeasureRefOrient( nMemberMeasure );
+                            sal_Bool bRefDimInCol = ( nRefOrient == sheet::DataPilotFieldOrientation_COLUMN );
+                            sal_Bool bRefDimInRow = ( nRefOrient == sheet::DataPilotFieldOrientation_ROW );
 
                             const ScDPResultDimension* pSelectDim = NULL;
                             long nRowPos = 0;
@@ -2355,7 +2355,7 @@ void ScDPDataMember::UpdateRunningTotals( const ScDPResultMember* pRefMember,
                                     pSelectDim = NULL;
                             }
 
-                            BOOL bNoDetailsInRef = FALSE;
+                            sal_Bool bNoDetailsInRef = false;
                             if ( pSelectDim && bRunningTotal )
                             {
                                 //  Running totals:
@@ -2370,7 +2370,7 @@ void ScDPDataMember::UpdateRunningTotals( const ScDPResultMember* pRefMember,
                                     if ( pMyRefMember && pMyRefMember->HasHiddenDetails() )
                                     {
                                         pSelectDim = NULL;          // don't calculate
-                                        bNoDetailsInRef = TRUE;     // show error, not empty
+                                        bNoDetailsInRef = sal_True;     // show error, not empty
                                     }
                                 }
                             }
@@ -2389,17 +2389,17 @@ void ScDPDataMember::UpdateRunningTotals( const ScDPResultMember* pRefMember,
                                 //  - Otherwise, the error isn't strictly necessary, but shown for
                                 //    consistency.
 
-                                BOOL bInnerNoDetails = bRefDimInCol ? HasHiddenDetails() :
-                                                     ( bRefDimInRow ? rRowParent.HasHiddenDetails() : TRUE );
+                                sal_Bool bInnerNoDetails = bRefDimInCol ? HasHiddenDetails() :
+                                                     ( bRefDimInRow ? rRowParent.HasHiddenDetails() : sal_True );
                                 if ( bInnerNoDetails )
                                 {
                                     pSelectDim = NULL;
-                                    bNoDetailsInRef = TRUE;         // show error, not empty
+                                    bNoDetailsInRef = sal_True;         // show error, not empty
                                 }
                             }
 
                             if ( !bRefDimInCol && !bRefDimInRow )   // invalid dimension specified
-                                bNoDetailsInRef = TRUE;             // pSelectDim is then already NULL
+                                bNoDetailsInRef = sal_True;             // pSelectDim is then already NULL
 
                             //
                             //  get the member for the reference item and do the calculation
@@ -2437,7 +2437,7 @@ void ScDPDataMember::UpdateRunningTotals( const ScDPResultMember* pRefMember,
                                             fTotal += pAggData->GetResult();
                                             pSelectData->SetAuxiliary( fTotal );
                                             pAggData->SetResult( fTotal );
-                                            pAggData->SetEmpty(FALSE);              // always display
+                                            pAggData->SetEmpty(false);              // always display
                                         }
                                     }
                                     else
@@ -2446,7 +2446,7 @@ void ScDPDataMember::UpdateRunningTotals( const ScDPResultMember* pRefMember,
                                 else if (bNoDetailsInRef)
                                     pAggData->SetError();
                                 else
-                                    pAggData->SetEmpty(TRUE);                       // empty (dim set to 0 above)
+                                    pAggData->SetEmpty(sal_True);                       // empty (dim set to 0 above)
                             }
                             else
                             {
@@ -2483,7 +2483,7 @@ void ScDPDataMember::UpdateRunningTotals( const ScDPResultMember* pRefMember,
                                     if ( pSelectMember == this &&
                                          eRefType != sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE )
                                     {
-                                        pAggData->SetEmpty(TRUE);
+                                        pAggData->SetEmpty(sal_True);
                                     }
                                     else if ( pSelectMember )
                                     {
@@ -2497,7 +2497,7 @@ void ScDPDataMember::UpdateRunningTotals( const ScDPResultMember* pRefMember,
 
                                             double fOtherResult = pOtherAggData->GetAuxiliary();
                                             double fThisResult = pAggData->GetResult();
-                                            BOOL bError = FALSE;
+                                            sal_Bool bError = false;
                                             switch ( eRefType )
                                             {
                                                 case sheet::DataPilotFieldReferenceType::ITEM_DIFFERENCE:
@@ -2505,13 +2505,13 @@ void ScDPDataMember::UpdateRunningTotals( const ScDPResultMember* pRefMember,
                                                     break;
                                                 case sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE:
                                                     if ( fOtherResult == 0.0 )
-                                                        bError = TRUE;
+                                                        bError = sal_True;
                                                     else
                                                         fThisResult = fThisResult / fOtherResult;
                                                     break;
                                                 case sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE_DIFFERENCE:
                                                     if ( fOtherResult == 0.0 )
-                                                        bError = TRUE;
+                                                        bError = sal_True;
                                                     else
                                                         fThisResult = ( fThisResult - fOtherResult ) / fOtherResult;
                                                     break;
@@ -2525,20 +2525,20 @@ void ScDPDataMember::UpdateRunningTotals( const ScDPResultMember* pRefMember,
                                             else
                                             {
                                                 pAggData->SetResult(fThisResult);
-                                                pAggData->SetEmpty(FALSE);              // always display
+                                                pAggData->SetEmpty(false);              // always display
                                             }
                                             //! errors in data?
                                         }
                                     }
                                     else if (bRelative && !bNoDetailsInRef)
-                                        pAggData->SetEmpty(TRUE);                   // empty
+                                        pAggData->SetEmpty(sal_True);                   // empty
                                     else
                                         pAggData->SetError();                       // error
                                 }
                                 else if (bNoDetailsInRef)
                                     pAggData->SetError();                           // error
                                 else
-                                    pAggData->SetEmpty(TRUE);                       // empty
+                                    pAggData->SetEmpty(sal_True);                       // empty
                             }
                         }
                         else if ( eRefType == sheet::DataPilotFieldReferenceType::ROW_PERCENTAGE ||
@@ -2642,16 +2642,16 @@ private:
     const ScDPResultData* pResultData;
     const ScDPInitState& rInitState;
     long                 nDimSource;
-    BOOL                 bIncludeAll;
-    BOOL                 bIsBase;
+    sal_Bool                 bIncludeAll;
+    sal_Bool                 bIsBase;
     long                 nGroupBase;
     SCROW          nBaseDataId;
 public:
             ScDPGroupCompare( const ScDPResultData* pData, const ScDPInitState& rState, long nDimension );
             ~ScDPGroupCompare() {}
 
-    BOOL    IsIncluded( const ScDPMember& rMember )     { return bIncludeAll || TestIncluded( rMember ); }
-    BOOL    TestIncluded( const ScDPMember& rMember );
+    sal_Bool    IsIncluded( const ScDPMember& rMember )     { return bIncludeAll || TestIncluded( rMember ); }
+    sal_Bool    TestIncluded( const ScDPMember& rMember );
 };
 
 ScDPGroupCompare::ScDPGroupCompare( const ScDPResultData* pData, const ScDPInitState& rState, long nDimension ) :
@@ -2669,9 +2669,9 @@ ScDPGroupCompare::ScDPGroupCompare( const ScDPResultData* pData, const ScDPInitS
     bIncludeAll = !( bIsBase || nGroupBase >= 0 );
 }
 
-BOOL ScDPGroupCompare::TestIncluded( const ScDPMember& rMember )
+sal_Bool ScDPGroupCompare::TestIncluded( const ScDPMember& rMember )
 {
-    BOOL bInclude = TRUE;
+    sal_Bool bInclude = sal_True;
     if ( nBaseDataId >=0 )
     {
         ScDPItemData aMemberData;
@@ -2723,13 +2723,13 @@ BOOL ScDPGroupCompare::TestIncluded( const ScDPMember& rMember )
 
 ScDPResultDimension::ScDPResultDimension( const ScDPResultData* pData ) :
     pResultData( pData ),
-    bInitialized( FALSE ),
-    bIsDataLayout( FALSE ),
-    bSortByData( FALSE ),
-    bSortAscending( FALSE ),
+    bInitialized( false ),
+    bIsDataLayout( false ),
+    bSortByData( false ),
+    bSortAscending( false ),
     nSortMeasure( 0 ),
-    bAutoShow( FALSE ),
-    bAutoTopItems( FALSE ),
+    bAutoShow( false ),
+    bAutoTopItems( false ),
     nAutoMeasure( 0 ),
     nAutoCount( 0 )
 {
@@ -2766,7 +2766,7 @@ ScDPResultMember *ScDPResultDimension::FindMember(  SCROW  iData ) const
 }
 
 void ScDPResultDimension::InitFrom( const vector<ScDPDimension*>& ppDim, const vector<ScDPLevel*>& ppLev,
-                                    size_t nPos, ScDPInitState& rInitState,  BOOL bInitChild /*= TRUE */ )
+                                    size_t nPos, ScDPInitState& rInitState,  sal_Bool bInitChild /*= sal_True */ )
 {
     if (nPos >= ppDim.size() || nPos >= ppLev.size())
     {
@@ -2790,7 +2790,7 @@ void ScDPResultDimension::InitFrom( const vector<ScDPDimension*>& ppDim, const v
     const sheet::DataPilotFieldAutoShowInfo& rAutoInfo = pThisLevel->GetAutoShow();
     if ( rAutoInfo.IsEnabled )
     {
-        bAutoShow     = TRUE;
+        bAutoShow     = sal_True;
         bAutoTopItems = ( rAutoInfo.ShowItemsMode == sheet::DataPilotFieldShowItemsMode::FROM_TOP );
         nAutoMeasure  = pThisLevel->GetAutoMeasure();
         nAutoCount    = rAutoInfo.ItemCount;
@@ -2800,7 +2800,7 @@ void ScDPResultDimension::InitFrom( const vector<ScDPDimension*>& ppDim, const v
     const sheet::DataPilotFieldSortInfo& rSortInfo = pThisLevel->GetSortInfo();
     if ( rSortInfo.Mode == sheet::DataPilotFieldSortMode::DATA )
     {
-        bSortByData = TRUE;
+        bSortByData = sal_True;
         bSortAscending = rSortInfo.IsAscending;
         nSortMeasure = pThisLevel->GetSortMeasure();
     }
@@ -2829,7 +2829,7 @@ void ScDPResultDimension::InitFrom( const vector<ScDPDimension*>& ppDim, const v
             rInitState.RemoveMember();
         }
     }
-    bInitialized = TRUE;
+    bInitialized = sal_True;
 }
 
 void ScDPResultDimension::LateInitFrom( LateInitParams& rParams/* const vector<ScDPDimension*>& ppDim, const vector<ScDPLevel*>& ppLev*/,
@@ -2850,7 +2850,7 @@ void ScDPResultDimension::LateInitFrom( LateInitParams& rParams/* const vector<S
 
     long nDimSource = pThisDim->GetDimension();     //! check GetSourceDim?
 
-    BOOL bShowEmpty = pThisLevel->getShowEmpty();
+    sal_Bool bShowEmpty = pThisLevel->getShowEmpty();
 
     if ( !bInitialized )
     { // init some values
@@ -2861,7 +2861,7 @@ void ScDPResultDimension::LateInitFrom( LateInitParams& rParams/* const vector<S
         const sheet::DataPilotFieldAutoShowInfo& rAutoInfo = pThisLevel->GetAutoShow();
         if ( rAutoInfo.IsEnabled )
         {
-            bAutoShow     = TRUE;
+            bAutoShow     = sal_True;
             bAutoTopItems = ( rAutoInfo.ShowItemsMode == sheet::DataPilotFieldShowItemsMode::FROM_TOP );
             nAutoMeasure  = pThisLevel->GetAutoMeasure();
             nAutoCount    = rAutoInfo.ItemCount;
@@ -2870,7 +2870,7 @@ void ScDPResultDimension::LateInitFrom( LateInitParams& rParams/* const vector<S
         const sheet::DataPilotFieldSortInfo& rSortInfo = pThisLevel->GetSortInfo();
         if ( rSortInfo.Mode == sheet::DataPilotFieldSortMode::DATA )
         {
-            bSortByData = TRUE;
+            bSortByData = sal_True;
             bSortAscending = rSortInfo.IsAscending;
             nSortMeasure = pThisLevel->GetSortMeasure();
         }
@@ -2887,7 +2887,7 @@ void ScDPResultDimension::LateInitFrom( LateInitParams& rParams/* const vector<S
     if ( pMembers->IsHasHideDetailsMembers() )
         DBG_TRACE ( "HasHideDetailsMembers" );
 #endif
-     pMembers->SetHasHideDetailsMembers( FALSE );
+     pMembers->SetHasHideDetailsMembers( false );
     }
 
     bool bNewAllMembers =(!rParams.IsRow()) ||  nPos == 0 || bLateInitAllMembers ;
@@ -2913,7 +2913,7 @@ void ScDPResultDimension::LateInitFrom( LateInitParams& rParams/* const vector<S
                     AddMember( aData );
                 }
             }
-            bInitialized = TRUE;    // don't call again, even if no members were included
+            bInitialized = sal_True;    // don't call again, even if no members were included
         }
         //  initialize only specific member (or all if "show empty" flag is set)
         if ( bLateInitAllMembers  )
@@ -2924,13 +2924,13 @@ void ScDPResultDimension::LateInitFrom( LateInitParams& rParams/* const vector<S
                 ScDPResultMember* pResultMember = maMemberArray[i];
 
                 // check show empty
-                BOOL bAllChildren = FALSE;
+                sal_Bool bAllChildren = false;
                 if( bShowEmpty )
                 {
                     if (  pResultMember->IsNamedItem( rThisData ) )
-                        bAllChildren = FALSE;
+                        bAllChildren = false;
                     else
-                        bAllChildren = TRUE;
+                        bAllChildren = sal_True;
                 }
                 rParams.SetInitAllChildren( bAllChildren );
                 rInitState.AddMember( nDimSource,  pResultMember->GetDataId() );
@@ -3029,11 +3029,11 @@ void ScDPResultDimension::FillMemberResults( uno::Sequence<sheet::MemberResult>*
         {
             bool bTotalResult = false;
             String aMbrName = pResultData->GetMeasureDimensionName( nSorted );
-            String aMbrCapt = pResultData->GetMeasureString( nSorted, FALSE, SUBTOTAL_FUNC_NONE, bTotalResult );
-            maMemberArray[0]->FillMemberResults( pSequences, nPos, nSorted, FALSE, &aMbrName, &aMbrCapt );
+            String aMbrCapt = pResultData->GetMeasureString( nSorted, false, SUBTOTAL_FUNC_NONE, bTotalResult );
+            maMemberArray[0]->FillMemberResults( pSequences, nPos, nSorted, false, &aMbrName, &aMbrCapt );
         }
         else if ( pMember->IsVisible() )
-            pMember->FillMemberResults( pSequences, nPos, nMeasure, FALSE, NULL, NULL );
+            pMember->FillMemberResults( pSequences, nPos, nMeasure, false, NULL, NULL );
         // nPos is modified
     }
 }
@@ -3150,10 +3150,10 @@ void ScDPResultDimension::DoAutoShow( ScDPResultMember* pRefMember )
         long nIncluded = nAutoCount;
         const ScDPResultMember* pMember1 = maMemberArray[aAutoOrder[nIncluded - 1]];
         const ScDPDataMember* pDataMember1 = pMember1->IsVisible() ? pMember1->GetDataRoot() : NULL;
-        BOOL bContinue = TRUE;
+        sal_Bool bContinue = sal_True;
         while ( bContinue )
         {
-            bContinue = FALSE;
+            bContinue = false;
             if ( nIncluded < nCount )
             {
                 const ScDPResultMember* pMember2 = maMemberArray[aAutoOrder[nIncluded]];
@@ -3162,7 +3162,7 @@ void ScDPResultDimension::DoAutoShow( ScDPResultMember* pRefMember )
                 if ( lcl_IsEqual( pDataMember1, pDataMember2, nAutoMeasure ) )
                 {
                     ++nIncluded;                // include more members if values are equal
-                    bContinue = TRUE;
+                    bContinue = sal_True;
                 }
             }
         }
@@ -3184,7 +3184,7 @@ void ScDPResultDimension::ResetResults()
     {
         // sort order doesn't matter
         ScDPResultMember* pMember = maMemberArray[bIsDataLayout ? 0 : i];
-        pMember->ResetResults( FALSE );
+        pMember->ResetResults( false );
     }
 }
 
@@ -3234,7 +3234,7 @@ ScDPDataMember* ScDPResultDimension::GetRowReferenceMember( const ScDPRelativePo
 
     ScDPDataMember* pColMember = NULL;
 
-    BOOL bFirstExisting = ( pRelativePos == NULL && pName == NULL );
+    sal_Bool bFirstExisting = ( pRelativePos == NULL && pName == NULL );
     long nMemberCount = maMemberArray.size();
     long nMemberIndex = 0;      // unsorted
     long nDirection = 1;        // forward if no relative position is used
@@ -3262,7 +3262,7 @@ ScDPDataMember* ScDPResultDimension::GetRowReferenceMember( const ScDPRelativePo
         }
     }
 
-    BOOL bContinue = TRUE;
+    sal_Bool bContinue = sal_True;
     while ( bContinue && nMemberIndex >= 0 && nMemberIndex < nMemberCount )
     {
         const ScDPResultMember* pRowMember = maMemberArray[GetSortedIndex(nMemberIndex)];
@@ -3368,7 +3368,7 @@ ScDPDataMember* ScDPResultDimension::GetColReferenceMember( const ScDPRelativePo
         {
             long nReferenceCount = pReferenceDim->GetMemberCount();
 
-            BOOL bFirstExisting = ( pRelativePos == NULL && pName == NULL );
+            sal_Bool bFirstExisting = ( pRelativePos == NULL && pName == NULL );
             long nMemberIndex = 0;      // unsorted
             long nDirection = 1;        // forward if no relative position is used
             pColMember = NULL;          // don't use parent dimension's member if none found
@@ -3394,7 +3394,7 @@ ScDPDataMember* ScDPResultDimension::GetColReferenceMember( const ScDPRelativePo
                 }
             }
 
-            BOOL bContinue = TRUE;
+            sal_Bool bContinue = sal_True;
             while ( bContinue && nMemberIndex >= 0 && nMemberIndex < nReferenceCount )
             {
                 pColMember = pReferenceDim->GetMember( pReferenceDim->GetSortedIndex( nMemberIndex ) );
@@ -3498,7 +3498,7 @@ void ScDPResultDimension::FillVisibilityData(ScDPResultVisibilityData& rData) co
 ScDPDataDimension::ScDPDataDimension( const ScDPResultData* pData ) :
     pResultData( pData ),
     pResultDimension( NULL ),
-    bIsDataLayout( FALSE )
+    bIsDataLayout( false )
 {
 }
 
@@ -3544,7 +3544,7 @@ void ScDPDataDimension::ProcessData( const vector< SCROW >& aDataMembers, const 
     long nCount = aMembers.Count();
     for (long i=0; i<nCount; i++)
     {
-        ScDPDataMember* pMember = aMembers[(USHORT)i];
+        ScDPDataMember* pMember = aMembers[(sal_uInt16)i];
 
         // always first member for data layout dim
         if ( bIsDataLayout || ( !aDataMembers.empty() && pMember->IsNamedItem(aDataMembers[0]) ) )
@@ -3565,7 +3565,7 @@ void ScDPDataDimension::ProcessData( const vector< SCROW >& aDataMembers, const 
 
 void ScDPDataDimension::FillDataRow( const ScDPResultDimension* pRefDim,
                                     uno::Sequence<sheet::DataResult>& rSequence,
-                                    long nCol, long nMeasure, BOOL bIsSubTotalRow,
+                                    long nCol, long nMeasure, sal_Bool bIsSubTotalRow,
                                     const ScDPSubTotalState& rSubState ) const
 {
     DBG_ASSERT( pRefDim && pRefDim->GetMemberCount() == aMembers.Count(), "dimensions don't match" );
@@ -3592,7 +3592,7 @@ void ScDPDataDimension::FillDataRow( const ScDPResultDimension* pRefDim,
         const ScDPResultMember* pRefMember = pRefDim->GetMember(nMemberPos);
         if ( pRefMember->IsVisible() )  //! here or in ScDPDataMember::FillDataRow ???
         {
-            const ScDPDataMember* pDataMember = aMembers[(USHORT)nMemberPos];
+            const ScDPDataMember* pDataMember = aMembers[(sal_uInt16)nMemberPos];
             pDataMember->FillDataRow( pRefMember, rSequence, nMemberCol, nMemberMeasure, bIsSubTotalRow, rSubState );
             // nMemberCol is modified
         }
@@ -3600,7 +3600,7 @@ void ScDPDataDimension::FillDataRow( const ScDPResultDimension* pRefDim,
 }
 
 void ScDPDataDimension::UpdateDataRow( const ScDPResultDimension* pRefDim,
-                                    long nMeasure, BOOL bIsSubTotalRow,
+                                    long nMeasure, sal_Bool bIsSubTotalRow,
                                     const ScDPSubTotalState& rSubState ) const
 {
     DBG_ASSERT( pRefDim && pRefDim->GetMemberCount() == aMembers.Count(), "dimensions don't match" );
@@ -3621,7 +3621,7 @@ void ScDPDataDimension::UpdateDataRow( const ScDPResultDimension* pRefDim,
 
         // Calculate must be called even if the member is not visible (for use as reference value)
         const ScDPResultMember* pRefMember = pRefDim->GetMember(nMemberPos);
-        ScDPDataMember* pDataMember = aMembers[(USHORT)nMemberPos];
+        ScDPDataMember* pDataMember = aMembers[(sal_uInt16)nMemberPos];
         pDataMember->UpdateDataRow( pRefMember, nMemberMeasure, bIsSubTotalRow, rSubState );
     }
 }
@@ -3656,7 +3656,7 @@ void ScDPDataDimension::SortMembers( ScDPResultDimension* pRefDim )
         ScDPResultMember* pRefMember = pRefDim->GetMember(i);
         if ( pRefMember->IsVisible() )  //! here or in ScDPDataMember ???
         {
-            ScDPDataMember* pDataMember = aMembers[(USHORT)i];
+            ScDPDataMember* pDataMember = aMembers[(sal_uInt16)i];
             pDataMember->SortMembers( pRefMember );
         }
     }
@@ -3678,7 +3678,7 @@ void ScDPDataDimension::DoAutoShow( ScDPResultDimension* pRefDim )
         ScDPResultMember* pRefMember = pRefDim->GetMember(i);
         if ( pRefMember->IsVisible() )  //! here or in ScDPDataMember ???
         {
-            ScDPDataMember* pDataMember = aMembers[(USHORT)i];
+            ScDPDataMember* pDataMember = aMembers[(sal_uInt16)i];
             pDataMember->DoAutoShow( pRefMember );
         }
     }
@@ -3699,23 +3699,23 @@ void ScDPDataDimension::DoAutoShow( ScDPResultDimension* pRefDim )
         // look for equal values to the last included one
 
         long nIncluded = pRefDim->GetAutoCount();
-        ScDPDataMember* pDataMember1 = aMembers[(USHORT)aAutoOrder[nIncluded - 1]];
+        ScDPDataMember* pDataMember1 = aMembers[(sal_uInt16)aAutoOrder[nIncluded - 1]];
         if ( !pDataMember1->IsVisible() )
             pDataMember1 = NULL;
-        BOOL bContinue = TRUE;
+        sal_Bool bContinue = sal_True;
         while ( bContinue )
         {
-            bContinue = FALSE;
+            bContinue = false;
             if ( nIncluded < nCount )
             {
-                ScDPDataMember* pDataMember2 = aMembers[(USHORT)aAutoOrder[nIncluded]];
+                ScDPDataMember* pDataMember2 = aMembers[(sal_uInt16)aAutoOrder[nIncluded]];
                 if ( !pDataMember2->IsVisible() )
                     pDataMember2 = NULL;
 
                 if ( lcl_IsEqual( pDataMember1, pDataMember2, pRefDim->GetAutoMeasure() ) )
                 {
                     ++nIncluded;                // include more members if values are equal
-                    bContinue = TRUE;
+                    bContinue = sal_True;
                 }
             }
         }
@@ -3738,7 +3738,7 @@ void ScDPDataDimension::ResetResults()
         //  sort order doesn't matter
 
         long nMemberPos = bIsDataLayout ? 0 : i;
-        ScDPDataMember* pDataMember = aMembers[(USHORT)nMemberPos];
+        ScDPDataMember* pDataMember = aMembers[(sal_uInt16)nMemberPos];
         pDataMember->ResetResults();
     }
 }
@@ -3753,7 +3753,7 @@ long ScDPDataDimension::GetSortedIndex( long nUnsorted ) const
 }
 
 void ScDPDataDimension::UpdateRunningTotals( const ScDPResultDimension* pRefDim,
-                                    long nMeasure, BOOL bIsSubTotalRow,
+                                    long nMeasure, sal_Bool bIsSubTotalRow,
                                     const ScDPSubTotalState& rSubState, ScDPRunningTotalState& rRunning,
                                     ScDPRowTotals& rTotals, const ScDPResultMember& rRowParent ) const
 {
@@ -3784,7 +3784,7 @@ void ScDPDataDimension::UpdateRunningTotals( const ScDPResultDimension* pRefDim,
             else
                 rRunning.AddColIndex( i, nSorted );
 
-            ScDPDataMember* pDataMember = aMembers[(USHORT)nMemberPos];
+            ScDPDataMember* pDataMember = aMembers[(sal_uInt16)nMemberPos];
             pDataMember->UpdateRunningTotals( pRefMember, nMemberMeasure,
                                             bIsSubTotalRow, rSubState, rRunning, rTotals, rRowParent );
 
@@ -3804,7 +3804,7 @@ void ScDPDataDimension::DumpState( const ScDPResultDimension* pRefDim, ScDocumen
     for (long i=0; i<nCount; i++)
     {
         const ScDPResultMember* pRefMember = pRefDim->GetMember(i);
-        const ScDPDataMember* pDataMember = aMembers[(USHORT)i];
+        const ScDPDataMember* pDataMember = aMembers[(sal_uInt16)i];
         pDataMember->DumpState( pRefMember, pDoc, rPos );
     }
 
@@ -3818,7 +3818,7 @@ long ScDPDataDimension::GetMemberCount() const
 
 ScDPDataMember* ScDPDataDimension::GetMember(long n) const
 {
-    return aMembers[(USHORT)n];
+    return aMembers[(sal_uInt16)n];
 }
 
 // ----------------------------------------------------------------------------
@@ -3916,7 +3916,7 @@ SCROW ScDPResultMember::GetDataId( ) const
 
 ScDPResultMember* ScDPResultDimension::AddMember(const ScDPParentDimData &aData )
 {
-    ScDPResultMember* pMember = new ScDPResultMember( pResultData, aData, FALSE );
+    ScDPResultMember* pMember = new ScDPResultMember( pResultData, aData, false );
     SCROW   nDataIndex = pMember->GetDataId();
     maMemberArray.push_back( pMember );
 
@@ -3930,7 +3930,7 @@ ScDPResultMember* ScDPResultDimension::InsertMember(ScDPParentDimData *pMemberDa
     SCROW  nInsert = 0;
     if ( !lcl_SearchMember( maMemberArray, pMemberData->mnOrder , nInsert ) )
     { //Member not exist
-        ScDPResultMember* pNew = new ScDPResultMember( pResultData, *pMemberData, FALSE );
+        ScDPResultMember* pNew = new ScDPResultMember( pResultData, *pMemberData, false );
         maMemberArray.insert( maMemberArray.begin()+nInsert, pNew );
 
         SCROW   nDataIndex = pMemberData->mpMemberDesc->GetItemDataId();
@@ -3964,7 +3964,7 @@ void ScDPResultDimension::  InitWithMembers(  LateInitParams& rParams,
         if ( bInitialized  )
             pResultMember = FindMember( nDataID );
         else
-            bInitialized = TRUE;
+            bInitialized = sal_True;
 
         if ( pResultMember == NULL )
         { //only insert found item
@@ -3993,12 +3993,12 @@ ScDPParentDimData* ResultMembers::FindMember( const SCROW& nIndex ) const
 void  ResultMembers::InsertMember(  ScDPParentDimData* pNew )
 {
     if ( !pNew->mpMemberDesc->getShowDetails() )
-        mbHasHideDetailsMember = TRUE;
+        mbHasHideDetailsMember = sal_True;
     maMemberHash.insert( std::pair< const SCROW, ScDPParentDimData *>( pNew->mpMemberDesc->GetItemDataId(), pNew ) );
 }
 
 ResultMembers::ResultMembers():
-    mbHasHideDetailsMember( FALSE )
+    mbHasHideDetailsMember( false )
 {
 }
 ResultMembers::~ResultMembers()
@@ -4007,7 +4007,7 @@ ResultMembers::~ResultMembers()
         delete iter->second;
 }
 // -----------------------------------------------------------------------
-LateInitParams::LateInitParams( const vector<ScDPDimension*>& ppDim, const vector<ScDPLevel*>& ppLev, BOOL bRow, BOOL bInitChild, BOOL bAllChildren ):
+LateInitParams::LateInitParams( const vector<ScDPDimension*>& ppDim, const vector<ScDPLevel*>& ppLev, sal_Bool bRow, sal_Bool bInitChild, sal_Bool bAllChildren ):
     mppDim( ppDim ),
     mppLev( ppLev ),
     mbRow( bRow ),
@@ -4020,12 +4020,12 @@ LateInitParams::~LateInitParams()
 {
 }
 
-BOOL LateInitParams::IsEnd( size_t nPos ) const
+sal_Bool LateInitParams::IsEnd( size_t nPos ) const
 {
     return nPos >= mppDim.size();
 }
 
-void ScDPResultDimension::CheckShowEmpty( BOOL bShow )
+void ScDPResultDimension::CheckShowEmpty( sal_Bool bShow )
 {
         long nCount = maMemberArray.size();
 
@@ -4038,7 +4038,7 @@ void ScDPResultDimension::CheckShowEmpty( BOOL bShow )
 
 }
 
-void ScDPResultMember::CheckShowEmpty( BOOL bShow )
+void ScDPResultMember::CheckShowEmpty( sal_Bool bShow )
 {
         if ( bHasElements )
         {
@@ -4054,7 +4054,7 @@ void ScDPResultMember::CheckShowEmpty( BOOL bShow )
                                             SetHasElements();
                                                         ScDPResultDimension* pChildDim = GetChildDimension();
                                                                     if (pChildDim )
-                                                                                        pChildDim->CheckShowEmpty( TRUE );
+                                                                                        pChildDim->CheckShowEmpty( sal_True );
                             }
         }
 }

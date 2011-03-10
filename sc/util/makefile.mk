@@ -51,7 +51,7 @@ RESLIB1LIST=\
     $(SRS)$/pagedlg.srs	\
     $(SRS)$/navipi.srs	\
     $(SRS)$/cctrl.srs	\
-    $(SOLARCOMMONRESDIR)$/sfx.srs
+
 
 RESLIB1NAME=sc
 RESLIB1IMAGES=\
@@ -85,6 +85,7 @@ SHL1STDLIBS=       \
     $(CPPUHELPERLIB)	\
     $(COMPHELPERLIB)	\
     $(UCBHELPERLIB)	\
+    $(VBAHELPERLIB)	\
     $(TKLIB)		\
     $(SALLIB)		\
     $(SALHELPERLIB)		\
@@ -282,8 +283,6 @@ LIB8OBJFILES = \
         $(SLO)$/dpgroupdlg.obj	\
         $(SLO)$/editfield.obj
 
-.IF "$(ENABLE_VBA)"=="YES"
-
 TARGET_VBA=vbaobj
 SHL9TARGET=$(TARGET_VBA)$(DLLPOSTFIX).uno
 SHL9IMPLIB=	i$(TARGET_VBA)
@@ -291,11 +290,7 @@ SHL9IMPLIB=	i$(TARGET_VBA)
 SHL9VERSIONMAP=$(SOLARENV)/src/component.map
 SHL9DEF=$(MISC)$/$(SHL9TARGET).def
 DEF9NAME=$(SHL9TARGET)
-.IF "$(VBA_EXTENSION)"=="YES"
-SHL9RPATH=OXT
-.ELSE
 SHL9RPATH=OOO
-.ENDIF
 
 SHL9STDLIBS= \
         $(VBAHELPERLIB) \
@@ -335,11 +330,24 @@ SHL9LIBS=$(SLB)$/$(TARGET_VBA).lib
 
 .INCLUDE :  target.mk
 
-.IF "$(VBA_EXTENSION)"=="YES"
-    COMP=build_extn
-.ENDIF
-
 ALLTAR:	$(MISC)$/linkinc.ls  $(COMP)
 
-build_extn : $(SHL9TARGETN)
-    $(PERL) createExtPackage.pl $(COMMONBIN)$/vbaapi.oxt  $(SOLARBINDIR)$/oovbaapi.rdb $(LIBCOMPNAME)
+ALLTAR : $(MISC)/sc.component $(MISC)/scd.component $(MISC)/vbaobj.component
+
+$(MISC)/sc.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        sc.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt sc.component
+
+$(MISC)/scd.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        scd.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL2TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt scd.component
+
+$(MISC)/vbaobj.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        vbaobj.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL9TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt vbaobj.component

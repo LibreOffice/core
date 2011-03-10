@@ -110,11 +110,11 @@ struct ScCopyBlockFromClipParams
 {
     ScDocument* pRefUndoDoc;
     ScDocument* pClipDoc;
-    USHORT      nInsFlag;
+    sal_uInt16      nInsFlag;
     SCTAB       nTabStart;
     SCTAB       nTabEnd;
-    BOOL        bAsLink;
-    BOOL        bSkipAttrForEmpty;
+    sal_Bool        bAsLink;
+    sal_Bool        bSkipAttrForEmpty;
 };
 
 struct ScDefaultAttr
@@ -151,52 +151,52 @@ void ScDocument::MakeTable( SCTAB nTab,bool _bNeedsNameCheck )
 }
 
 
-BOOL ScDocument::HasTable( SCTAB nTab ) const
+sal_Bool ScDocument::HasTable( SCTAB nTab ) const
 {
     if (VALIDTAB(nTab))
         if (pTab[nTab])
-            return TRUE;
+            return sal_True;
 
-    return FALSE;
+    return false;
 }
 
 
-BOOL ScDocument::GetName( SCTAB nTab, String& rName ) const
+sal_Bool ScDocument::GetName( SCTAB nTab, String& rName ) const
 {
     if (VALIDTAB(nTab))
         if (pTab[nTab])
         {
             pTab[nTab]->GetName( rName );
-            return TRUE;
+            return sal_True;
         }
     rName.Erase();
-    return FALSE;
+    return false;
 }
 
-BOOL ScDocument::SetCodeName( SCTAB nTab, const String& rName )
+sal_Bool ScDocument::SetCodeName( SCTAB nTab, const String& rName )
 {
     if (VALIDTAB(nTab))
     {
         if (pTab[nTab])
         {
             pTab[nTab]->SetCodeName( rName );
-            return TRUE;
+            return sal_True;
         }
     }
     OSL_TRACE( "**** can't set code name %s", rtl::OUStringToOString( rName, RTL_TEXTENCODING_UTF8 ).getStr() );
-    return FALSE;
+    return false;
 }
 
-BOOL ScDocument::GetCodeName( SCTAB nTab, String& rName ) const
+sal_Bool ScDocument::GetCodeName( SCTAB nTab, String& rName ) const
 {
     if (VALIDTAB(nTab))
         if (pTab[nTab])
         {
             pTab[nTab]->GetCodeName( rName );
-            return TRUE;
+            return sal_True;
         }
     rName.Erase();
-    return FALSE;
+    return false;
 }
 
 NameToNameMap*
@@ -207,7 +207,7 @@ ScDocument::GetLocalNameMap( SCTAB& rTab )
     return &pTab[rTab]->localNameToGlobalName;
 }
 
-BOOL ScDocument::GetTable( const String& rName, SCTAB& rTab ) const
+sal_Bool ScDocument::GetTable( const String& rName, SCTAB& rTab ) const
 {
     String aUpperName = rName;
     ScGlobal::pCharClass->toUpper(aUpperName);
@@ -218,11 +218,11 @@ BOOL ScDocument::GetTable( const String& rName, SCTAB& rTab ) const
             if ( pTab[i]->GetUpperName() == aUpperName )
             {
                 rTab = i;
-                return TRUE;
+                return sal_True;
             }
         }
     rTab = 0;
-    return FALSE;
+    return false;
 }
 
 
@@ -266,9 +266,9 @@ bool ScDocument::ValidTabName( const String& rName )
 }
 
 
-BOOL ScDocument::ValidNewTabName( const String& rName ) const
+sal_Bool ScDocument::ValidNewTabName( const String& rName ) const
 {
-    BOOL bValid = ValidTabName(rName);
+    sal_Bool bValid = ValidTabName(rName);
     for (SCTAB i=0; (i<=MAXTAB) && bValid; i++)
         if (pTab[i])
         {
@@ -287,10 +287,10 @@ void ScDocument::CreateValidTabName(String& rName) const
         // Find new one
 
         const String aStrTable( ScResId(SCSTR_TABLE) );
-        BOOL         bOk   = FALSE;
+        sal_Bool         bOk   = false;
 
         // First test if the prefix is valid, if so only avoid doubles
-        BOOL bPrefix = ValidTabName( aStrTable );
+        sal_Bool bPrefix = ValidTabName( aStrTable );
         OSL_ENSURE(bPrefix, "Invalid Table Name");
         SCTAB nDummy;
 
@@ -332,11 +332,11 @@ void ScDocument::CreateValidTabName(String& rName) const
 }
 
 
-BOOL ScDocument::InsertTab( SCTAB nPos, const String& rName,
-            BOOL bExternalDocument )
+sal_Bool ScDocument::InsertTab( SCTAB nPos, const String& rName,
+            sal_Bool bExternalDocument )
 {
     SCTAB   nTabCount = GetTableCount();
-    BOOL    bValid = ValidTab(nTabCount);
+    sal_Bool    bValid = ValidTab(nTabCount);
     if ( !bExternalDocument )   // else test rName == "'Doc'!Tab" first
         bValid = (bValid && ValidNewTabName(rName));
     if (bValid)
@@ -347,7 +347,7 @@ BOOL ScDocument::InsertTab( SCTAB nPos, const String& rName,
             pTab[nTabCount]->SetCodeName( rName );
             ++nMaxTableNumber;
             if ( bExternalDocument )
-                pTab[nTabCount]->SetVisible( FALSE );
+                pTab[nTabCount]->SetVisible( false );
         }
         else
         {
@@ -403,19 +403,19 @@ BOOL ScDocument::InsertTab( SCTAB nPos, const String& rName,
                     pChartListenerCollection->UpdateScheduledSeriesRanges();
 
                 SetDirty();
-                bValid = TRUE;
+                bValid = sal_True;
             }
             else
-                bValid = FALSE;
+                bValid = false;
         }
     }
     return bValid;
 }
 
 
-BOOL ScDocument::DeleteTab( SCTAB nTab, ScDocument* pRefUndoDoc )
+sal_Bool ScDocument::DeleteTab( SCTAB nTab, ScDocument* pRefUndoDoc )
 {
-    BOOL bValid = FALSE;
+    sal_Bool bValid = false;
     if (VALIDTAB(nTab))
     {
         if (pTab[nTab])
@@ -423,8 +423,8 @@ BOOL ScDocument::DeleteTab( SCTAB nTab, ScDocument* pRefUndoDoc )
             SCTAB nTabCount = GetTableCount();
             if (nTabCount > 1)
             {
-                BOOL bOldAutoCalc = GetAutoCalc();
-                SetAutoCalc( FALSE );   // avoid multiple calculations
+                sal_Bool bOldAutoCalc = GetAutoCalc();
+                SetAutoCalc( false );   // avoid multiple calculations
                 ScRange aRange( 0, 0, nTab, MAXCOL, MAXROW, nTab );
                 DelBroadcastAreasInRange( aRange );
 
@@ -464,7 +464,7 @@ BOOL ScDocument::DeleteTab( SCTAB nTab, ScDocument* pRefUndoDoc )
                 SCTAB i;
                 for (i=0; i<=MAXTAB; i++)
                     if (pTab[i])
-                        pTab[i]->UpdateDeleteTab(nTab,FALSE,
+                        pTab[i]->UpdateDeleteTab(nTab,false,
                                     pRefUndoDoc ? pRefUndoDoc->pTab[i] : 0);
                 delete pTab[nTab];
                 for (i=nTab + 1; i < nTabCount; i++)
@@ -492,7 +492,7 @@ BOOL ScDocument::DeleteTab( SCTAB nTab, ScDocument* pRefUndoDoc )
                 pChartListenerCollection->UpdateScheduledSeriesRanges();
 
                 SetAutoCalc( bOldAutoCalc );
-                bValid = TRUE;
+                bValid = sal_True;
             }
         }
     }
@@ -500,16 +500,16 @@ BOOL ScDocument::DeleteTab( SCTAB nTab, ScDocument* pRefUndoDoc )
 }
 
 
-BOOL ScDocument::RenameTab( SCTAB nTab, const String& rName, BOOL /* bUpdateRef */,
-        BOOL bExternalDocument )
+sal_Bool ScDocument::RenameTab( SCTAB nTab, const String& rName, sal_Bool /* bUpdateRef */,
+        sal_Bool bExternalDocument )
 {
-    BOOL    bValid = FALSE;
+    sal_Bool    bValid = false;
     SCTAB   i;
     if VALIDTAB(nTab)
         if (pTab[nTab])
         {
             if ( bExternalDocument )
-                bValid = TRUE;      // composed name
+                bValid = true;      // composed name
             else
                 bValid = ValidTabName(rName);
             for (i=0; (i<=MAXTAB) && bValid; i++)
@@ -531,14 +531,14 @@ BOOL ScDocument::RenameTab( SCTAB nTab, const String& rName, BOOL /* bUpdateRef 
                 // but the XML stream must be re-generated.
                 for (i=0; i<=MAXTAB; ++i)
                     if (pTab[i] && pTab[i]->IsStreamValid())
-                        pTab[i]->SetStreamValid( FALSE );
+                        pTab[i]->SetStreamValid( false );
             }
         }
     return bValid;
 }
 
 
-void ScDocument::SetVisible( SCTAB nTab, BOOL bVisible )
+void ScDocument::SetVisible( SCTAB nTab, sal_Bool bVisible )
 {
     if (VALIDTAB(nTab))
         if (pTab[nTab])
@@ -546,26 +546,26 @@ void ScDocument::SetVisible( SCTAB nTab, BOOL bVisible )
 }
 
 
-BOOL ScDocument::IsVisible( SCTAB nTab ) const
+sal_Bool ScDocument::IsVisible( SCTAB nTab ) const
 {
     if (VALIDTAB(nTab))
         if (pTab[nTab])
             return pTab[nTab]->IsVisible();
 
-    return FALSE;
+    return false;
 }
 
 
-BOOL ScDocument::IsStreamValid( SCTAB nTab ) const
+sal_Bool ScDocument::IsStreamValid( SCTAB nTab ) const
 {
     if ( ValidTab(nTab) && pTab[nTab] )
         return pTab[nTab]->IsStreamValid();
 
-    return FALSE;
+    return false;
 }
 
 
-void ScDocument::SetStreamValid( SCTAB nTab, BOOL bSet, BOOL bIgnoreLock )
+void ScDocument::SetStreamValid( SCTAB nTab, sal_Bool bSet, sal_Bool bIgnoreLock )
 {
     if ( ValidTab(nTab) && pTab[nTab] )
         pTab[nTab]->SetStreamValid( bSet, bIgnoreLock );
@@ -578,30 +578,30 @@ void ScDocument::LockStreamValid( bool bLock )
 }
 
 
-BOOL ScDocument::IsPendingRowHeights( SCTAB nTab ) const
+sal_Bool ScDocument::IsPendingRowHeights( SCTAB nTab ) const
 {
     if ( ValidTab(nTab) && pTab[nTab] )
         return pTab[nTab]->IsPendingRowHeights();
 
-    return FALSE;
+    return false;
 }
 
 
-void ScDocument::SetPendingRowHeights( SCTAB nTab, BOOL bSet )
+void ScDocument::SetPendingRowHeights( SCTAB nTab, sal_Bool bSet )
 {
     if ( ValidTab(nTab) && pTab[nTab] )
         pTab[nTab]->SetPendingRowHeights( bSet );
 }
 
 
-void ScDocument::SetLayoutRTL( SCTAB nTab, BOOL bRTL )
+void ScDocument::SetLayoutRTL( SCTAB nTab, sal_Bool bRTL )
 {
     if ( ValidTab(nTab)  && pTab[nTab] )
     {
         if ( bImportingXML )
         {
             // #i57869# only set the LoadingRTL flag, the real setting (including mirroring)
-            // is applied in SetImportingXML(FALSE). This is so the shapes can be loaded in
+            // is applied in SetImportingXML(sal_False). This is so the shapes can be loaded in
             // normal LTR mode.
 
             pTab[nTab]->SetLoadingRTL( bRTL );
@@ -639,16 +639,16 @@ void ScDocument::SetLayoutRTL( SCTAB nTab, BOOL bRTL )
 }
 
 
-BOOL ScDocument::IsLayoutRTL( SCTAB nTab ) const
+sal_Bool ScDocument::IsLayoutRTL( SCTAB nTab ) const
 {
     if ( ValidTab(nTab)  && pTab[nTab] )
         return pTab[nTab]->IsLayoutRTL();
 
-    return FALSE;
+    return false;
 }
 
 
-BOOL ScDocument::IsNegativePage( SCTAB nTab ) const
+sal_Bool ScDocument::IsNegativePage( SCTAB nTab ) const
 {
     //  Negative page area is always used for RTL layout.
     //  The separate method is used to find all RTL handling of drawing objects.
@@ -666,7 +666,7 @@ BOOL ScDocument::IsNegativePage( SCTAB nTab ) const
 ---------------------------------------------------------------------------- */
 
 
-BOOL ScDocument::GetCellArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow ) const
+sal_Bool ScDocument::GetCellArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow ) const
 {
     if (VALIDTAB(nTab))
         if (pTab[nTab])
@@ -674,11 +674,11 @@ BOOL ScDocument::GetCellArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow ) const
 
     rEndCol = 0;
     rEndRow = 0;
-    return FALSE;
+    return false;
 }
 
 
-BOOL ScDocument::GetTableArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow ) const
+sal_Bool ScDocument::GetTableArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow ) const
 {
     if (VALIDTAB(nTab))
         if (pTab[nTab])
@@ -686,7 +686,7 @@ BOOL ScDocument::GetTableArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow ) cons
 
     rEndCol = 0;
     rEndRow = 0;
-    return FALSE;
+    return false;
 }
 
 bool ScDocument::ShrinkToDataArea(SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, SCROW& rEndRow) const
@@ -734,7 +734,7 @@ bool ScDocument::ShrinkToUsedDataArea( bool& o_bShrunk, SCTAB nTab, SCCOL& rStar
 // connected area
 
 void ScDocument::GetDataArea( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow,
-                              SCCOL& rEndCol, SCROW& rEndRow, BOOL bIncludeOld, bool bOnlyDown ) const
+                              SCCOL& rEndCol, SCROW& rEndRow, sal_Bool bIncludeOld, bool bOnlyDown ) const
 {
     if (ValidTab(nTab) && pTab[nTab])
         pTab[nTab]->GetDataArea( rStartCol, rStartRow, rEndCol, rEndRow, bIncludeOld, bOnlyDown );
@@ -821,7 +821,7 @@ bool lcl_GetNextTabRange( SCTAB& rTabRangeStart, SCTAB& rTabRangeEnd, const ScMa
 }
 
 
-BOOL ScDocument::CanInsertRow( const ScRange& rRange ) const
+sal_Bool ScDocument::CanInsertRow( const ScRange& rRange ) const
 {
     SCCOL nStartCol = rRange.aStart.Col();
     SCROW nStartRow = rRange.aStart.Row();
@@ -834,7 +834,7 @@ BOOL ScDocument::CanInsertRow( const ScRange& rRange ) const
     PutInOrder( nStartTab, nEndTab );
     SCSIZE nSize = static_cast<SCSIZE>(nEndRow - nStartRow + 1);
 
-    BOOL bTest = TRUE;
+    sal_Bool bTest = sal_True;
     for (SCTAB i=nStartTab; i<=nEndTab && bTest; i++)
         if (pTab[i])
             bTest &= pTab[i]->TestInsertRow( nStartCol, nEndCol, nSize );
@@ -843,7 +843,7 @@ BOOL ScDocument::CanInsertRow( const ScRange& rRange ) const
 }
 
 
-BOOL ScDocument::InsertRow( SCCOL nStartCol, SCTAB nStartTab,
+sal_Bool ScDocument::InsertRow( SCCOL nStartCol, SCTAB nStartTab,
                             SCCOL nEndCol,   SCTAB nEndTab,
                             SCROW nStartRow, SCSIZE nSize, ScDocument* pRefUndoDoc,
                             const ScMarkData* pTabMark )
@@ -858,10 +858,10 @@ BOOL ScDocument::InsertRow( SCCOL nStartCol, SCTAB nStartTab,
         nEndTab = MAXTAB;
     }
 
-    BOOL bTest = TRUE;
-    BOOL bRet = FALSE;
-    BOOL bOldAutoCalc = GetAutoCalc();
-    SetAutoCalc( FALSE );   // avoid mulitple calculations
+    sal_Bool bTest = true;
+    sal_Bool bRet = false;
+    sal_Bool bOldAutoCalc = GetAutoCalc();
+    SetAutoCalc( false );   // avoid mulitple calculations
     for ( i = nStartTab; i <= nEndTab && bTest; i++)
         if (pTab[i] && (!pTabMark || pTabMark->GetTableSelect(i)))
             bTest &= pTab[i]->TestInsertRow( nStartCol, nEndCol, nSize );
@@ -887,7 +887,7 @@ BOOL ScDocument::InsertRow( SCCOL nStartCol, SCTAB nStartTab,
         {
             UpdateReference( URM_INSDEL, nStartCol, nStartRow, nTabRangeStart,
                              nEndCol, MAXROW, nTabRangeEnd,
-                             0, static_cast<SCsROW>(nSize), 0, pRefUndoDoc, FALSE );        // without drawing objects
+                             0, static_cast<SCsROW>(nSize), 0, pRefUndoDoc, false );        // without drawing objects
         }
         while ( lcl_GetNextTabRange( nTabRangeStart, nTabRangeEnd, pTabMark ) );
 
@@ -920,7 +920,7 @@ BOOL ScDocument::InsertRow( SCCOL nStartCol, SCTAB nStartTab,
                 if (pTab[i])
                     pTab[i]->SetRelNameDirty();
         }
-        bRet = TRUE;
+        bRet = sal_True;
     }
     SetAutoCalc( bOldAutoCalc );
     if ( bRet )
@@ -929,7 +929,7 @@ BOOL ScDocument::InsertRow( SCCOL nStartCol, SCTAB nStartTab,
 }
 
 
-BOOL ScDocument::InsertRow( const ScRange& rRange, ScDocument* pRefUndoDoc )
+sal_Bool ScDocument::InsertRow( const ScRange& rRange, ScDocument* pRefUndoDoc )
 {
     return InsertRow( rRange.aStart.Col(), rRange.aStart.Tab(),
                       rRange.aEnd.Col(),   rRange.aEnd.Tab(),
@@ -941,7 +941,7 @@ BOOL ScDocument::InsertRow( const ScRange& rRange, ScDocument* pRefUndoDoc )
 void ScDocument::DeleteRow( SCCOL nStartCol, SCTAB nStartTab,
                             SCCOL nEndCol,   SCTAB nEndTab,
                             SCROW nStartRow, SCSIZE nSize,
-                            ScDocument* pRefUndoDoc, BOOL* pUndoOutline,
+                            ScDocument* pRefUndoDoc, sal_Bool* pUndoOutline,
                             const ScMarkData* pTabMark )
 {
     SCTAB i;
@@ -954,8 +954,8 @@ void ScDocument::DeleteRow( SCCOL nStartCol, SCTAB nStartTab,
         nEndTab = MAXTAB;
     }
 
-    BOOL bOldAutoCalc = GetAutoCalc();
-    SetAutoCalc( FALSE );   // avoid multiple calculations
+    sal_Bool bOldAutoCalc = GetAutoCalc();
+    SetAutoCalc( false );   // avoid multiple calculations
 
     // handle chunks of consecutive selected sheets together
     SCTAB nTabRangeStart = nStartTab;
@@ -986,13 +986,13 @@ void ScDocument::DeleteRow( SCCOL nStartCol, SCTAB nStartTab,
         {
             UpdateReference( URM_INSDEL, nStartCol, nStartRow+nSize, nTabRangeStart,
                              nEndCol, MAXROW, nTabRangeEnd,
-                             0, -(static_cast<SCsROW>(nSize)), 0, pRefUndoDoc, TRUE, false );
+                             0, -(static_cast<SCsROW>(nSize)), 0, pRefUndoDoc, sal_True, false );
         }
         while ( lcl_GetNextTabRange( nTabRangeStart, nTabRangeEnd, pTabMark ) );
     }
 
     if (pUndoOutline)
-        *pUndoOutline = FALSE;
+        *pUndoOutline = false;
 
     for ( i = nStartTab; i <= nEndTab; i++)
         if (pTab[i] && (!pTabMark || pTabMark->GetTableSelect(i)))
@@ -1015,7 +1015,7 @@ void ScDocument::DeleteRow( SCCOL nStartCol, SCTAB nStartTab,
 }
 
 
-void ScDocument::DeleteRow( const ScRange& rRange, ScDocument* pRefUndoDoc, BOOL* pUndoOutline )
+void ScDocument::DeleteRow( const ScRange& rRange, ScDocument* pRefUndoDoc, sal_Bool* pUndoOutline )
 {
     DeleteRow( rRange.aStart.Col(), rRange.aStart.Tab(),
                rRange.aEnd.Col(),   rRange.aEnd.Tab(),
@@ -1024,7 +1024,7 @@ void ScDocument::DeleteRow( const ScRange& rRange, ScDocument* pRefUndoDoc, BOOL
 }
 
 
-BOOL ScDocument::CanInsertCol( const ScRange& rRange ) const
+sal_Bool ScDocument::CanInsertCol( const ScRange& rRange ) const
 {
     SCCOL nStartCol = rRange.aStart.Col();
     SCROW nStartRow = rRange.aStart.Row();
@@ -1037,7 +1037,7 @@ BOOL ScDocument::CanInsertCol( const ScRange& rRange ) const
     PutInOrder( nStartTab, nEndTab );
     SCSIZE nSize = static_cast<SCSIZE>(nEndCol - nStartCol + 1);
 
-    BOOL bTest = TRUE;
+    sal_Bool bTest = sal_True;
     for (SCTAB i=nStartTab; i<=nEndTab && bTest; i++)
         if (pTab[i])
             bTest &= pTab[i]->TestInsertCol( nStartRow, nEndRow, nSize );
@@ -1046,7 +1046,7 @@ BOOL ScDocument::CanInsertCol( const ScRange& rRange ) const
 }
 
 
-BOOL ScDocument::InsertCol( SCROW nStartRow, SCTAB nStartTab,
+sal_Bool ScDocument::InsertCol( SCROW nStartRow, SCTAB nStartTab,
                             SCROW nEndRow,   SCTAB nEndTab,
                             SCCOL nStartCol, SCSIZE nSize, ScDocument* pRefUndoDoc,
                             const ScMarkData* pTabMark )
@@ -1061,10 +1061,10 @@ BOOL ScDocument::InsertCol( SCROW nStartRow, SCTAB nStartTab,
         nEndTab = MAXTAB;
     }
 
-    BOOL bTest = TRUE;
-    BOOL bRet = FALSE;
-    BOOL bOldAutoCalc = GetAutoCalc();
-    SetAutoCalc( FALSE );   // avoid multiple calculations
+    sal_Bool bTest = true;
+    sal_Bool bRet = false;
+    sal_Bool bOldAutoCalc = GetAutoCalc();
+    SetAutoCalc( false );   // avoid multiple calculations
     for ( i = nStartTab; i <= nEndTab && bTest; i++)
         if (pTab[i] && (!pTabMark || pTabMark->GetTableSelect(i)))
             bTest &= pTab[i]->TestInsertCol( nStartRow, nEndRow, nSize );
@@ -1087,7 +1087,7 @@ BOOL ScDocument::InsertCol( SCROW nStartRow, SCTAB nStartTab,
         {
             UpdateReference( URM_INSDEL, nStartCol, nStartRow, nTabRangeStart,
                              MAXCOL, nEndRow, nTabRangeEnd,
-                             static_cast<SCsCOL>(nSize), 0, 0, pRefUndoDoc, TRUE, false );
+                             static_cast<SCsCOL>(nSize), 0, 0, pRefUndoDoc, sal_True, false );
         }
         while ( lcl_GetNextTabRange( nTabRangeStart, nTabRangeEnd, pTabMark ) );
 
@@ -1112,7 +1112,7 @@ BOOL ScDocument::InsertCol( SCROW nStartRow, SCTAB nStartTab,
                 if (pTab[i])
                     pTab[i]->SetRelNameDirty();
         }
-        bRet = TRUE;
+        bRet = sal_True;
     }
     SetAutoCalc( bOldAutoCalc );
     if ( bRet )
@@ -1121,7 +1121,7 @@ BOOL ScDocument::InsertCol( SCROW nStartRow, SCTAB nStartTab,
 }
 
 
-BOOL ScDocument::InsertCol( const ScRange& rRange, ScDocument* pRefUndoDoc )
+sal_Bool ScDocument::InsertCol( const ScRange& rRange, ScDocument* pRefUndoDoc )
 {
     return InsertCol( rRange.aStart.Row(), rRange.aStart.Tab(),
                       rRange.aEnd.Row(),   rRange.aEnd.Tab(),
@@ -1132,7 +1132,7 @@ BOOL ScDocument::InsertCol( const ScRange& rRange, ScDocument* pRefUndoDoc )
 
 void ScDocument::DeleteCol(SCROW nStartRow, SCTAB nStartTab, SCROW nEndRow, SCTAB nEndTab,
                                 SCCOL nStartCol, SCSIZE nSize, ScDocument* pRefUndoDoc,
-                                BOOL* pUndoOutline, const ScMarkData* pTabMark )
+                                sal_Bool* pUndoOutline, const ScMarkData* pTabMark )
 {
     SCTAB i;
 
@@ -1144,8 +1144,8 @@ void ScDocument::DeleteCol(SCROW nStartRow, SCTAB nStartTab, SCROW nEndRow, SCTA
         nEndTab = MAXTAB;
     }
 
-    BOOL bOldAutoCalc = GetAutoCalc();
-    SetAutoCalc( FALSE );   // avoid multiple calculations
+    sal_Bool bOldAutoCalc = GetAutoCalc();
+    SetAutoCalc( false );   // avoid multiple calculations
 
     // handle chunks of consecutive selected sheets together
     SCTAB nTabRangeStart = nStartTab;
@@ -1176,13 +1176,13 @@ void ScDocument::DeleteCol(SCROW nStartRow, SCTAB nStartTab, SCROW nEndRow, SCTA
         {
             UpdateReference( URM_INSDEL, sal::static_int_cast<SCCOL>(nStartCol+nSize), nStartRow, nTabRangeStart,
                              MAXCOL, nEndRow, nTabRangeEnd,
-                             -static_cast<SCsCOL>(nSize), 0, 0, pRefUndoDoc, TRUE, false );
+                             -static_cast<SCsCOL>(nSize), 0, 0, pRefUndoDoc, sal_True, false );
         }
         while ( lcl_GetNextTabRange( nTabRangeStart, nTabRangeEnd, pTabMark ) );
     }
 
     if (pUndoOutline)
-        *pUndoOutline = FALSE;
+        *pUndoOutline = false;
 
     for ( i = nStartTab; i <= nEndTab; i++)
         if (pTab[i] && (!pTabMark || pTabMark->GetTableSelect(i)))
@@ -1205,7 +1205,7 @@ void ScDocument::DeleteCol(SCROW nStartRow, SCTAB nStartTab, SCROW nEndRow, SCTA
 }
 
 
-void ScDocument::DeleteCol( const ScRange& rRange, ScDocument* pRefUndoDoc, BOOL* pUndoOutline )
+void ScDocument::DeleteCol( const ScRange& rRange, ScDocument* pRefUndoDoc, sal_Bool* pUndoOutline )
 {
     DeleteCol( rRange.aStart.Row(), rRange.aStart.Tab(),
                rRange.aEnd.Row(),   rRange.aEnd.Tab(),
@@ -1219,12 +1219,12 @@ void ScDocument::DeleteCol( const ScRange& rRange, ScDocument* pRefUndoDoc, BOOL
 
 
 void lcl_GetInsDelRanges( const ScRange& rOld, const ScRange& rNew,
-                            ScRange& rColRange, BOOL& rInsCol, BOOL& rDelCol,
-                            ScRange& rRowRange, BOOL& rInsRow, BOOL& rDelRow )
+                            ScRange& rColRange, sal_Bool& rInsCol, sal_Bool& rDelCol,
+                            ScRange& rRowRange, sal_Bool& rInsRow, sal_Bool& rDelRow )
 {
     OSL_ENSURE( rOld.aStart == rNew.aStart, "FitBlock: Beginning is different" );
 
-    rInsCol = rDelCol = rInsRow = rDelRow = FALSE;
+    rInsCol = rDelCol = rInsRow = rDelRow = false;
 
     SCCOL nStartX = rOld.aStart.Col();
     SCROW nStartY = rOld.aStart.Row();
@@ -1235,7 +1235,7 @@ void lcl_GetInsDelRanges( const ScRange& rOld, const ScRange& rNew,
     SCTAB nTab = rOld.aStart.Tab();
 
     //  wenn es mehr Zeilen werden, werden Spalten auf der alten Hoehe eingefuegt/geloescht
-    BOOL bGrowY = ( nNewEndY > nOldEndY );
+    sal_Bool bGrowY = ( nNewEndY > nOldEndY );
     SCROW nColEndY = bGrowY ? nOldEndY : nNewEndY;
     SCCOL nRowEndX = bGrowY ? nNewEndX : nOldEndX;
 
@@ -1244,12 +1244,12 @@ void lcl_GetInsDelRanges( const ScRange& rOld, const ScRange& rNew,
     if ( nNewEndX > nOldEndX )          // Spalten einfuegen
     {
         rColRange = ScRange( nOldEndX+1, nStartY, nTab, nNewEndX, nColEndY, nTab );
-        rInsCol = TRUE;
+        rInsCol = sal_True;
     }
     else if ( nNewEndX < nOldEndX )     // Spalten loeschen
     {
         rColRange = ScRange( nNewEndX+1, nStartY, nTab, nOldEndX, nColEndY, nTab );
-        rDelCol = TRUE;
+        rDelCol = sal_True;
     }
 
     //  Zeilen
@@ -1257,19 +1257,19 @@ void lcl_GetInsDelRanges( const ScRange& rOld, const ScRange& rNew,
     if ( nNewEndY > nOldEndY )          // Zeilen einfuegen
     {
         rRowRange = ScRange( nStartX, nOldEndY+1, nTab, nRowEndX, nNewEndY, nTab );
-        rInsRow = TRUE;
+        rInsRow = sal_True;
     }
     else if ( nNewEndY < nOldEndY )     // Zeilen loeschen
     {
         rRowRange = ScRange( nStartX, nNewEndY+1, nTab, nRowEndX, nOldEndY, nTab );
-        rDelRow = TRUE;
+        rDelRow = sal_True;
     }
 }
 
 
-BOOL ScDocument::HasPartOfMerged( const ScRange& rRange )
+sal_Bool ScDocument::HasPartOfMerged( const ScRange& rRange )
 {
-    BOOL bPart = FALSE;
+    sal_Bool bPart = false;
     SCTAB nTab = rRange.aStart.Tab();
 
     SCCOL nStartX = rRange.aStart.Col();
@@ -1290,44 +1290,44 @@ BOOL ScDocument::HasPartOfMerged( const ScRange& rRange )
 }
 
 
-BOOL ScDocument::CanFitBlock( const ScRange& rOld, const ScRange& rNew )
+sal_Bool ScDocument::CanFitBlock( const ScRange& rOld, const ScRange& rNew )
 {
     if ( rOld == rNew )
-        return TRUE;
+        return sal_True;
 
-    BOOL bOk = TRUE;
-    BOOL bInsCol,bDelCol,bInsRow,bDelRow;
+    sal_Bool bOk = sal_True;
+    sal_Bool bInsCol,bDelCol,bInsRow,bDelRow;
     ScRange aColRange,aRowRange;
     lcl_GetInsDelRanges( rOld, rNew, aColRange,bInsCol,bDelCol, aRowRange,bInsRow,bDelRow );
 
     if ( bInsCol && !CanInsertCol( aColRange ) )            // Zellen am Rand ?
-        bOk = FALSE;
+        bOk = false;
     if ( bInsRow && !CanInsertRow( aRowRange ) )            // Zellen am Rand ?
-        bOk = FALSE;
+        bOk = false;
 
     if ( bInsCol || bDelCol )
     {
         aColRange.aEnd.SetCol(MAXCOL);
         if ( HasPartOfMerged(aColRange) )
-            bOk = FALSE;
+            bOk = false;
     }
     if ( bInsRow || bDelRow )
     {
         aRowRange.aEnd.SetRow(MAXROW);
         if ( HasPartOfMerged(aRowRange) )
-            bOk = FALSE;
+            bOk = false;
     }
 
     return bOk;
 }
 
 
-void ScDocument::FitBlock( const ScRange& rOld, const ScRange& rNew, BOOL bClear )
+void ScDocument::FitBlock( const ScRange& rOld, const ScRange& rNew, sal_Bool bClear )
 {
     if (bClear)
         DeleteAreaTab( rOld, IDF_ALL );
 
-    BOOL bInsCol,bDelCol,bInsRow,bDelRow;
+    sal_Bool bInsCol,bDelCol,bInsRow,bDelRow;
     ScRange aColRange,aRowRange;
     lcl_GetInsDelRanges( rOld, rNew, aColRange,bInsCol,bDelCol, aRowRange,bInsRow,bDelRow );
 
@@ -1357,12 +1357,12 @@ void ScDocument::FitBlock( const ScRange& rOld, const ScRange& rNew, BOOL bClear
 
 void ScDocument::DeleteArea(SCCOL nCol1, SCROW nRow1,
                             SCCOL nCol2, SCROW nRow2,
-                            const ScMarkData& rMark, USHORT nDelFlag)
+                            const ScMarkData& rMark, sal_uInt16 nDelFlag)
 {
     PutInOrder( nCol1, nCol2 );
     PutInOrder( nRow1, nRow2 );
-    BOOL bOldAutoCalc = GetAutoCalc();
-    SetAutoCalc( FALSE );   // avoid multiple calculations
+    sal_Bool bOldAutoCalc = GetAutoCalc();
+    SetAutoCalc( false );   // avoid multiple calculations
     for (SCTAB i = 0; i <= MAXTAB; i++)
         if (pTab[i])
             if ( rMark.GetTableSelect(i) || bIsUndo )
@@ -1373,21 +1373,21 @@ void ScDocument::DeleteArea(SCCOL nCol1, SCROW nRow1,
 
 void ScDocument::DeleteAreaTab(SCCOL nCol1, SCROW nRow1,
                                 SCCOL nCol2, SCROW nRow2,
-                                SCTAB nTab, USHORT nDelFlag)
+                                SCTAB nTab, sal_uInt16 nDelFlag)
 {
     PutInOrder( nCol1, nCol2 );
     PutInOrder( nRow1, nRow2 );
     if ( VALIDTAB(nTab) && pTab[nTab] )
     {
-        BOOL bOldAutoCalc = GetAutoCalc();
-        SetAutoCalc( FALSE );   // avoid multiple calculations
+        sal_Bool bOldAutoCalc = GetAutoCalc();
+        SetAutoCalc( false );   // avoid multiple calculations
         pTab[nTab]->DeleteArea(nCol1, nRow1, nCol2, nRow2, nDelFlag);
         SetAutoCalc( bOldAutoCalc );
     }
 }
 
 
-void ScDocument::DeleteAreaTab( const ScRange& rRange, USHORT nDelFlag )
+void ScDocument::DeleteAreaTab( const ScRange& rRange, sal_uInt16 nDelFlag )
 {
     for ( SCTAB nTab = rRange.aStart.Tab(); nTab <= rRange.aEnd.Tab(); nTab++ )
         DeleteAreaTab( rRange.aStart.Col(), rRange.aStart.Row(),
@@ -1397,7 +1397,7 @@ void ScDocument::DeleteAreaTab( const ScRange& rRange, USHORT nDelFlag )
 
 
 void ScDocument::InitUndoSelected( ScDocument* pSrcDoc, const ScMarkData& rTabSelection,
-                                BOOL bColInfo, BOOL bRowInfo )
+                                sal_Bool bColInfo, sal_Bool bRowInfo )
 {
     if (bIsUndo)
     {
@@ -1421,7 +1421,7 @@ void ScDocument::InitUndoSelected( ScDocument* pSrcDoc, const ScMarkData& rTabSe
 
 
 void ScDocument::InitUndo( ScDocument* pSrcDoc, SCTAB nTab1, SCTAB nTab2,
-                                BOOL bColInfo, BOOL bRowInfo )
+                                sal_Bool bColInfo, sal_Bool bRowInfo )
 {
     if (bIsUndo)
     {
@@ -1442,7 +1442,7 @@ void ScDocument::InitUndo( ScDocument* pSrcDoc, SCTAB nTab1, SCTAB nTab2,
 }
 
 
-void ScDocument::AddUndoTab( SCTAB nTab1, SCTAB nTab2, BOOL bColInfo, BOOL bRowInfo )
+void ScDocument::AddUndoTab( SCTAB nTab1, SCTAB nTab2, sal_Bool bColInfo, sal_Bool bRowInfo )
 {
     if (bIsUndo)
     {
@@ -1461,7 +1461,7 @@ void ScDocument::AddUndoTab( SCTAB nTab1, SCTAB nTab2, BOOL bColInfo, BOOL bRowI
 }
 
 
-void ScDocument::SetCutMode( BOOL bVal )
+void ScDocument::SetCutMode( sal_Bool bVal )
 {
     if (bIsClip)
         GetClipParam().mbCutMode = bVal;
@@ -1472,22 +1472,22 @@ void ScDocument::SetCutMode( BOOL bVal )
 }
 
 
-BOOL ScDocument::IsCutMode()
+sal_Bool ScDocument::IsCutMode()
 {
     if (bIsClip)
         return GetClipParam().mbCutMode;
     else
     {
         OSL_FAIL("IsCutMode ohne bIsClip");
-        return FALSE;
+        return false;
     }
 }
 
 
 void ScDocument::CopyToDocument(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                             SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
-                            USHORT nFlags, BOOL bOnlyMarked, ScDocument* pDestDoc,
-                            const ScMarkData* pMarks, BOOL bColRowFlags )
+                            sal_uInt16 nFlags, sal_Bool bOnlyMarked, ScDocument* pDestDoc,
+                            const ScMarkData* pMarks, sal_Bool bColRowFlags )
 {
     PutInOrder( nCol1, nCol2 );
     PutInOrder( nRow1, nRow2 );
@@ -1496,14 +1496,14 @@ void ScDocument::CopyToDocument(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
         pDestDoc->aDocName = aDocName;
     if (VALIDTAB(nTab1) && VALIDTAB(nTab2))
     {
-        BOOL bOldAutoCalc = pDestDoc->GetAutoCalc();
-        pDestDoc->SetAutoCalc( FALSE );     // avoid multiple calculations
+        sal_Bool bOldAutoCalc = pDestDoc->GetAutoCalc();
+        pDestDoc->SetAutoCalc( false );     // avoid multiple calculations
         for (SCTAB i = nTab1; i <= nTab2; i++)
         {
             if (pTab[i] && pDestDoc->pTab[i])
                 pTab[i]->CopyToTable( nCol1, nRow1, nCol2, nRow2, nFlags,
                                       bOnlyMarked, pDestDoc->pTab[i], pMarks,
-                                      FALSE, bColRowFlags );
+                                      false, bColRowFlags );
         }
         pDestDoc->SetAutoCalc( bOldAutoCalc );
     }
@@ -1512,7 +1512,7 @@ void ScDocument::CopyToDocument(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
 
 void ScDocument::UndoToDocument(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                             SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
-                            USHORT nFlags, BOOL bOnlyMarked, ScDocument* pDestDoc,
+                            sal_uInt16 nFlags, sal_Bool bOnlyMarked, ScDocument* pDestDoc,
                             const ScMarkData* pMarks)
 {
     PutInOrder( nCol1, nCol2 );
@@ -1520,10 +1520,10 @@ void ScDocument::UndoToDocument(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
     PutInOrder( nTab1, nTab2 );
     if (VALIDTAB(nTab1) && VALIDTAB(nTab2))
     {
-        BOOL bOldAutoCalc = pDestDoc->GetAutoCalc();
-        pDestDoc->SetAutoCalc( FALSE );     // avoid multiple calculations
+        sal_Bool bOldAutoCalc = pDestDoc->GetAutoCalc();
+        pDestDoc->SetAutoCalc( false );     // avoid multiple calculations
         if (nTab1 > 0)
-            CopyToDocument( 0,0,0, MAXCOL,MAXROW,nTab1-1, IDF_FORMULA, FALSE, pDestDoc, pMarks );
+            CopyToDocument( 0,0,0, MAXCOL,MAXROW,nTab1-1, IDF_FORMULA, false, pDestDoc, pMarks );
 
         for (SCTAB i = nTab1; i <= nTab2; i++)
         {
@@ -1533,35 +1533,35 @@ void ScDocument::UndoToDocument(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
         }
 
         if (nTab2 < MAXTAB)
-            CopyToDocument( 0,0,nTab2+1, MAXCOL,MAXROW,MAXTAB, IDF_FORMULA, FALSE, pDestDoc, pMarks );
+            CopyToDocument( 0,0,nTab2+1, MAXCOL,MAXROW,MAXTAB, IDF_FORMULA, false, pDestDoc, pMarks );
         pDestDoc->SetAutoCalc( bOldAutoCalc );
     }
 }
 
 
 void ScDocument::CopyToDocument(const ScRange& rRange,
-                            USHORT nFlags, BOOL bOnlyMarked, ScDocument* pDestDoc,
-                            const ScMarkData* pMarks, BOOL bColRowFlags)
+                            sal_uInt16 nFlags, sal_Bool bOnlyMarked, ScDocument* pDestDoc,
+                            const ScMarkData* pMarks, sal_Bool bColRowFlags)
 {
     ScRange aNewRange = rRange;
     aNewRange.Justify();
 
     if( !pDestDoc->aDocName.Len() )
         pDestDoc->aDocName = aDocName;
-    BOOL bOldAutoCalc = pDestDoc->GetAutoCalc();
-    pDestDoc->SetAutoCalc( FALSE );     // avoid multiple calculations
+    sal_Bool bOldAutoCalc = pDestDoc->GetAutoCalc();
+    pDestDoc->SetAutoCalc( false );     // avoid multiple calculations
     for (SCTAB i = aNewRange.aStart.Tab(); i <= aNewRange.aEnd.Tab(); i++)
         if (pTab[i] && pDestDoc->pTab[i])
             pTab[i]->CopyToTable(aNewRange.aStart.Col(), aNewRange.aStart.Row(),
                                  aNewRange.aEnd.Col(), aNewRange.aEnd.Row(),
                                  nFlags, bOnlyMarked, pDestDoc->pTab[i],
-                                 pMarks, FALSE, bColRowFlags);
+                                 pMarks, false, bColRowFlags);
     pDestDoc->SetAutoCalc( bOldAutoCalc );
 }
 
 
 void ScDocument::UndoToDocument(const ScRange& rRange,
-                            USHORT nFlags, BOOL bOnlyMarked, ScDocument* pDestDoc,
+                            sal_uInt16 nFlags, sal_Bool bOnlyMarked, ScDocument* pDestDoc,
                             const ScMarkData* pMarks)
 {
     ScRange aNewRange = rRange;
@@ -1569,10 +1569,10 @@ void ScDocument::UndoToDocument(const ScRange& rRange,
     SCTAB nTab1 = aNewRange.aStart.Tab();
     SCTAB nTab2 = aNewRange.aEnd.Tab();
 
-    BOOL bOldAutoCalc = pDestDoc->GetAutoCalc();
-    pDestDoc->SetAutoCalc( FALSE );     // avoid multiple calculations
+    sal_Bool bOldAutoCalc = pDestDoc->GetAutoCalc();
+    pDestDoc->SetAutoCalc( false );     // avoid multiple calculations
     if (nTab1 > 0)
-        CopyToDocument( 0,0,0, MAXCOL,MAXROW,nTab1-1, IDF_FORMULA, FALSE, pDestDoc, pMarks );
+        CopyToDocument( 0,0,0, MAXCOL,MAXROW,nTab1-1, IDF_FORMULA, false, pDestDoc, pMarks );
 
     for (SCTAB i = nTab1; i <= nTab2; i++)
     {
@@ -1583,7 +1583,7 @@ void ScDocument::UndoToDocument(const ScRange& rRange,
     }
 
     if (nTab2 < MAXTAB)
-        CopyToDocument( 0,0,nTab2+1, MAXCOL,MAXROW,MAXTAB, IDF_FORMULA, FALSE, pDestDoc, pMarks );
+        CopyToDocument( 0,0,nTab2+1, MAXCOL,MAXROW,MAXTAB, IDF_FORMULA, false, pDestDoc, pMarks );
     pDestDoc->SetAutoCalc( bOldAutoCalc );
 }
 
@@ -1687,14 +1687,14 @@ void ScDocument::CopyTabToClip(SCCOL nCol1, SCROW nRow1,
         pClipDoc->ResetClip( this, nTab );
 
         if (pTab[nTab] && pClipDoc->pTab[nTab])
-            pTab[nTab]->CopyToClip(nCol1, nRow1, nCol2, nRow2, pClipDoc->pTab[nTab], FALSE, TRUE);
+            pTab[nTab]->CopyToClip(nCol1, nRow1, nCol2, nRow2, pClipDoc->pTab[nTab], false, sal_True);
 
         pClipDoc->GetClipParam().mbCutMode = false;
     }
 }
 
 
-void ScDocument::TransposeClip( ScDocument* pTransClip, USHORT nFlags, BOOL bAsLink )
+void ScDocument::TransposeClip( ScDocument* pTransClip, sal_uInt16 nFlags, sal_Bool bAsLink )
 {
     OSL_ENSURE( bIsClip && pTransClip && pTransClip->bIsClip,
                     "TransposeClip with wrong Document" );
@@ -1710,7 +1710,7 @@ void ScDocument::TransposeClip( ScDocument* pTransClip, USHORT nFlags, BOOL bAsL
     ScRangeName::const_iterator itr = pRangeName->begin(), itrEnd = pRangeName->end();
     for (; itr != itrEnd; ++itr)
     {
-        USHORT nIndex = itr->GetIndex();
+        sal_uInt16 nIndex = itr->GetIndex();
         ScRangeData* pData = new ScRangeData(*itr);
         if (!pTransClip->pRangeName->insert(pData))
             delete pData;
@@ -1764,13 +1764,13 @@ void ScDocument::TransposeClip( ScDocument* pTransClip, USHORT nFlags, BOOL bAsL
 
 namespace {
 
-void copyUsedNamesToClip(ScRangeName* pClipRangeName, ScRangeName* pRangeName, const std::set<USHORT>& rUsedNames)
+void copyUsedNamesToClip(ScRangeName* pClipRangeName, ScRangeName* pRangeName, const std::set<sal_uInt16>& rUsedNames)
 {
     pClipRangeName->clear();
     ScRangeName::const_iterator itr = pRangeName->begin(), itrEnd = pRangeName->end();
     for (; itr != itrEnd; ++itr)        //! DB-Bereiche Pivot-Bereiche auch !!!
     {
-        USHORT nIndex = itr->GetIndex();
+        sal_uInt16 nIndex = itr->GetIndex();
         bool bInUse = (rUsedNames.count(nIndex) > 0);
         if (!bInUse)
             continue;
@@ -1787,7 +1787,7 @@ void copyUsedNamesToClip(ScRangeName* pClipRangeName, ScRangeName* pRangeName, c
 
 void ScDocument::CopyRangeNamesToClip(ScDocument* pClipDoc, const ScRange& rClipRange, const ScMarkData* pMarks, bool bAllTabs)
 {
-    std::set<USHORT> aUsedNames;        // indexes of named ranges that are used in the copied cells
+    std::set<sal_uInt16> aUsedNames;        // indexes of named ranges that are used in the copied cells
     for (SCTAB i = 0; i <= MAXTAB; ++i)
         if (pTab[i] && pClipDoc->pTab[i])
             if ( bAllTabs || !pMarks || pMarks->GetTableSelect(i) )
@@ -1801,7 +1801,7 @@ void ScDocument::CopyRangeNamesToClip(ScDocument* pClipDoc, const ScRange& rClip
 void ScDocument::CopyRangeNamesToClip(ScDocument* pClipDoc, const ScRange& rClipRange, SCTAB nTab)
 {
     // Indexes of named ranges that are used in the copied cells
-    std::set<USHORT> aUsedNames;
+    std::set<sal_uInt16> aUsedNames;
     if ( pTab[nTab] && pClipDoc->pTab[nTab] )
     {
         pTab[nTab]->FindRangeNamesInUse(
@@ -1854,8 +1854,8 @@ void ScDocument::CopyRangeNamesFromClip(ScDocument* pClipDoc, ScClipRangeNameDat
         const ScRangeData* pExistingData = pRangeName->findByName(itr->GetName());
         if (pExistingData)
         {
-            USHORT nOldIndex = itr->GetIndex();
-            USHORT nNewIndex = pExistingData->GetIndex();
+            sal_uInt16 nOldIndex = itr->GetIndex();
+            sal_uInt16 nNewIndex = pExistingData->GetIndex();
             aClipRangeNames.insert(nOldIndex, nNewIndex);
             if ( !aClipRangeNames.mbReplace )
                 aClipRangeNames.mbReplace = ( nOldIndex != nNewIndex );
@@ -1869,8 +1869,8 @@ void ScDocument::CopyRangeNamesFromClip(ScDocument* pClipDoc, ScClipRangeNameDat
             if ( pRangeName->insert(pData) )
             {
                 aClipRangeNames.mpRangeNames.push_back(pData);
-                USHORT nOldIndex = itr->GetIndex();
-                USHORT nNewIndex = pData->GetIndex();
+                sal_uInt16 nOldIndex = itr->GetIndex();
+                sal_uInt16 nNewIndex = pData->GetIndex();
                 aClipRangeNames.insert(nOldIndex, nNewIndex);
                 if ( !aClipRangeNames.mbReplace )
                     aClipRangeNames.mbReplace = ( nOldIndex != nNewIndex );
@@ -1955,7 +1955,7 @@ void ScDocument::SetClipParam(const ScClipParam& rParam)
     mpClipParam.reset(new ScClipParam(rParam));
 }
 
-BOOL ScDocument::IsClipboardSource() const
+sal_Bool ScDocument::IsClipboardSource() const
 {
     ScDocument* pClipDoc = SC_MOD()->GetClipDoc();
     return pClipDoc && pClipDoc->xPoolHelper.is() &&
@@ -1965,7 +1965,7 @@ BOOL ScDocument::IsClipboardSource() const
 
 void ScDocument::StartListeningFromClip( SCCOL nCol1, SCROW nRow1,
                                         SCCOL nCol2, SCROW nRow2,
-                                        const ScMarkData& rMark, USHORT nInsFlag )
+                                        const ScMarkData& rMark, sal_uInt16 nInsFlag )
 {
     if (nInsFlag & IDF_CONTENTS)
     {
@@ -1979,7 +1979,7 @@ void ScDocument::StartListeningFromClip( SCCOL nCol1, SCROW nRow1,
 
 void ScDocument::BroadcastFromClip( SCCOL nCol1, SCROW nRow1,
                                     SCCOL nCol2, SCROW nRow2,
-                                    const ScMarkData& rMark, USHORT nInsFlag )
+                                    const ScMarkData& rMark, sal_uInt16 nInsFlag )
 {
     if (nInsFlag & IDF_CONTENTS)
     {
@@ -2054,17 +2054,17 @@ void ScDocument::CopyBlockFromClip( SCCOL nCol1, SCROW nRow1,
 
                 if ( pCBFCP->pClipDoc->GetClipParam().mbCutMode )
                 {
-                    BOOL bOldInserting = IsInsertingFromOtherDoc();
-                    SetInsertingFromOtherDoc( TRUE);
+                    sal_Bool bOldInserting = IsInsertingFromOtherDoc();
+                    SetInsertingFromOtherDoc( sal_True);
                     UpdateReference( URM_MOVE,
                         nCol1, nRow1, i, nCol2, nRow2, i+nFollow,
-                        nDx, nDy, nDz, pCBFCP->pRefUndoDoc );
+                        nDx, nDy, nDz, pCBFCP->pRefUndoDoc, false );
                     SetInsertingFromOtherDoc( bOldInserting);
                 }
                 else
                     UpdateReference( URM_COPY,
                         nCol1, nRow1, i, nCol2, nRow2, i+nFollow,
-                        nDx, nDy, nDz, pCBFCP->pRefUndoDoc, FALSE );
+                        nDx, nDy, nDz, pCBFCP->pRefUndoDoc, false );
 
                 nClipTab = (nClipTab+nFollow+1) % (MAXTAB+1);
                 i = sal::static_int_cast<SCTAB>( i + nFollow );
@@ -2125,9 +2125,9 @@ void ScDocument::CopyNonFilteredFromClip( SCCOL nCol1, SCROW nRow1,
 
 
 void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMark,
-                                USHORT nInsFlag,
-                                ScDocument* pRefUndoDoc, ScDocument* pClipDoc, BOOL bResetCut,
-                                BOOL bAsLink, BOOL bIncludeFiltered, BOOL bSkipAttrForEmpty,
+                                sal_uInt16 nInsFlag,
+                                ScDocument* pRefUndoDoc, ScDocument* pClipDoc, sal_Bool bResetCut,
+                                sal_Bool bAsLink, sal_Bool bIncludeFiltered, sal_Bool bSkipAttrForEmpty,
                                 const ScRangeList * pDestRanges )
 {
     if (!bIsClip)
@@ -2139,8 +2139,8 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
         }
         if (pClipDoc->bIsClip && pClipDoc->GetTableCount())
         {
-            BOOL bOldAutoCalc = GetAutoCalc();
-            SetAutoCalc( FALSE );   // avoid multiple recalculations
+            sal_Bool bOldAutoCalc = GetAutoCalc();
+            SetAutoCalc( false );   // avoid multiple recalculations
 
             NumFmtMergeHandler aNumFmtMergeHdl(this, pClipDoc);
 
@@ -2185,7 +2185,7 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
                 overwrite/delete existing cells but to insert the notes into
                 these cells. In this case, just delete old notes from the
                 destination area. */
-            USHORT nDelFlag = IDF_NONE;
+            sal_uInt16 nDelFlag = IDF_NONE;
             if ( (nInsFlag & (IDF_CONTENTS | IDF_ADDNOTES)) == (IDF_NOTE | IDF_ADDNOTES) )
                 nDelFlag |= IDF_NOTE;
             else if ( nInsFlag & IDF_CONTENTS )
@@ -2224,13 +2224,13 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
                 pDestRanges = &aLocalRangeList;
             }
 
-            bInsertingFromOtherDoc = TRUE;  // kein Broadcast/Listener aufbauen bei Insert
+            bInsertingFromOtherDoc = sal_True;  // kein Broadcast/Listener aufbauen bei Insert
 
             // bei mindestens 64 Zeilen wird in ScColumn::CopyFromClip voralloziert
-            BOOL bDoDouble = ( nYw < 64 && nAllRow2 - nAllRow1 > 64);
-            BOOL bOldDouble = ScColumn::bDoubleAlloc;
+            sal_Bool bDoDouble = ( nYw < 64 && nAllRow2 - nAllRow1 > 64);
+            sal_Bool bOldDouble = ScColumn::bDoubleAlloc;
             if (bDoDouble)
-                ScColumn::bDoubleAlloc = TRUE;
+                ScColumn::bDoubleAlloc = sal_True;
 
             SCCOL nClipStartCol = aClipRange.aStart.Col();
             SCROW nClipStartRow = aClipRange.aStart.Row();
@@ -2298,7 +2298,7 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
                 if (pTab[k] && rMark.GetTableSelect(k))
                     pTab[k]->DecRecalcLevel();
 
-            bInsertingFromOtherDoc = FALSE;
+            bInsertingFromOtherDoc = false;
 
             UpdateRangeNamesInFormulas(aClipRangeNames, *pDestRanges, rMark, nXw, nYw);
 
@@ -2314,7 +2314,7 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
 }
 
 static SCROW lcl_getLastNonFilteredRow(
-    const ScBitMaskCompressedArray<SCROW, BYTE>& rFlags, SCROW nBegRow, SCROW nEndRow,
+    const ScBitMaskCompressedArray<SCROW, sal_uInt8>& rFlags, SCROW nBegRow, SCROW nEndRow,
     SCROW nRowCount)
 {
     SCROW nFilteredRow = rFlags.GetFirstForCondition(
@@ -2339,8 +2339,8 @@ void ScDocument::CopyMultiRangeFromClip(
         // There is nothing in the clip doc to copy.
         return;
 
-    BOOL bOldAutoCalc = GetAutoCalc();
-    SetAutoCalc( FALSE );   // avoid multiple recalculations
+    sal_Bool bOldAutoCalc = GetAutoCalc();
+    SetAutoCalc( false );   // avoid multiple recalculations
 
     NumFmtMergeHandler aNumFmtMergeHdl(this, pClipDoc);
 
@@ -2375,11 +2375,11 @@ void ScDocument::CopyMultiRangeFromClip(
     rMark.GetMarkArea(aDestRange);
     SCROW nLastMarkedRow = aDestRange.aEnd.Row();
 
-    bInsertingFromOtherDoc = TRUE;  // kein Broadcast/Listener aufbauen bei Insert
+    bInsertingFromOtherDoc = sal_True;  // kein Broadcast/Listener aufbauen bei Insert
 
     SCROW nBegRow = nRow1;
     sal_uInt16 nDelFlag = IDF_CONTENTS;
-    const ScBitMaskCompressedArray<SCROW, BYTE>& rFlags = GetRowFlagsArray(aCBFCP.nTabStart);
+    const ScBitMaskCompressedArray<SCROW, sal_uInt8>& rFlags = GetRowFlagsArray(aCBFCP.nTabStart);
 
     for ( size_t i = 0, n = rClipParam.maRanges.size(); i < n; ++i )
     {
@@ -2434,7 +2434,7 @@ void ScDocument::CopyMultiRangeFromClip(
         if (pTab[i] && rMark.GetTableSelect(i))
             pTab[i]->DecRecalcLevel();
 
-    bInsertingFromOtherDoc = FALSE;
+    bInsertingFromOtherDoc = false;
 
     ScRangeList aRanges;
     aRanges.Append(aDestRange);
@@ -2454,7 +2454,7 @@ void ScDocument::CopyMultiRangeFromClip(
     SetAutoCalc( bOldAutoCalc );
 }
 
-void ScDocument::SetClipArea( const ScRange& rArea, BOOL bCut )
+void ScDocument::SetClipArea( const ScRange& rArea, sal_Bool bCut )
 {
     if (bIsClip)
     {
@@ -2470,7 +2470,7 @@ void ScDocument::SetClipArea( const ScRange& rArea, BOOL bCut )
 }
 
 
-void ScDocument::GetClipArea(SCCOL& nClipX, SCROW& nClipY, BOOL bIncludeFiltered)
+void ScDocument::GetClipArea(SCCOL& nClipX, SCROW& nClipY, sal_Bool bIncludeFiltered)
 {
     if (!bIsClip)
     {
@@ -2541,7 +2541,7 @@ void ScDocument::GetClipStart(SCCOL& nClipX, SCROW& nClipY)
 }
 
 
-BOOL ScDocument::HasClipFilteredRows()
+sal_Bool ScDocument::HasClipFilteredRows()
 {
     //  count on first used table in clipboard
     SCTAB nCountTab = 0;
@@ -2563,7 +2563,7 @@ BOOL ScDocument::HasClipFilteredRows()
 }
 
 
-void ScDocument::MixDocument( const ScRange& rRange, USHORT nFunction, BOOL bSkipEmpty,
+void ScDocument::MixDocument( const ScRange& rRange, sal_uInt16 nFunction, sal_Bool bSkipEmpty,
                                     ScDocument* pSrcDoc )
 {
     SCTAB nTab1 = rRange.aStart.Tab();
@@ -2577,10 +2577,10 @@ void ScDocument::MixDocument( const ScRange& rRange, USHORT nFunction, BOOL bSki
 
 
 void ScDocument::FillTab( const ScRange& rSrcArea, const ScMarkData& rMark,
-                                USHORT nFlags, USHORT nFunction,
-                                BOOL bSkipEmpty, BOOL bAsLink )
+                                sal_uInt16 nFlags, sal_uInt16 nFunction,
+                                sal_Bool bSkipEmpty, sal_Bool bAsLink )
 {
-    USHORT nDelFlags = nFlags;
+    sal_uInt16 nDelFlags = nFlags;
     if (nDelFlags & IDF_CONTENTS)
         nDelFlags |= IDF_CONTENTS;          // immer alle Inhalte oder keine loeschen!
 
@@ -2593,10 +2593,10 @@ void ScDocument::FillTab( const ScRange& rSrcArea, const ScMarkData& rMark,
         SCCOL nEndCol = rSrcArea.aEnd.Col();
         SCROW nEndRow = rSrcArea.aEnd.Row();
         ScDocument* pMixDoc = NULL;
-        BOOL bDoMix = ( bSkipEmpty || nFunction ) && ( nFlags & IDF_CONTENTS );
+        sal_Bool bDoMix = ( bSkipEmpty || nFunction ) && ( nFlags & IDF_CONTENTS );
 
-        BOOL bOldAutoCalc = GetAutoCalc();
-        SetAutoCalc( FALSE );                   // avoid multiple calculations
+        sal_Bool bOldAutoCalc = GetAutoCalc();
+        SetAutoCalc( false );                   // avoid multiple calculations
 
         SCTAB nCount = GetTableCount();
         for (SCTAB i=0; i<nCount; i++)
@@ -2612,11 +2612,11 @@ void ScDocument::FillTab( const ScRange& rSrcArea, const ScMarkData& rMark,
                     else
                         pMixDoc->AddUndoTab( i, i );
                     pTab[i]->CopyToTable( nStartCol,nStartRow, nEndCol,nEndRow,
-                                            IDF_CONTENTS, FALSE, pMixDoc->pTab[i] );
+                                            IDF_CONTENTS, false, pMixDoc->pTab[i] );
                 }
                 pTab[i]->DeleteArea( nStartCol,nStartRow, nEndCol,nEndRow, nDelFlags);
                 pTab[nSrcTab]->CopyToTable( nStartCol,nStartRow, nEndCol,nEndRow,
-                                                 nFlags, FALSE, pTab[i], NULL, bAsLink );
+                                                 nFlags, false, pTab[i], NULL, bAsLink );
 
                 if (bDoMix)
                     pTab[i]->MixData( nStartCol,nStartRow, nEndCol,nEndRow,
@@ -2635,20 +2635,20 @@ void ScDocument::FillTab( const ScRange& rSrcArea, const ScMarkData& rMark,
 
 
 void ScDocument::FillTabMarked( SCTAB nSrcTab, const ScMarkData& rMark,
-                                USHORT nFlags, USHORT nFunction,
-                                BOOL bSkipEmpty, BOOL bAsLink )
+                                sal_uInt16 nFlags, sal_uInt16 nFunction,
+                                sal_Bool bSkipEmpty, sal_Bool bAsLink )
 {
-    USHORT nDelFlags = nFlags;
+    sal_uInt16 nDelFlags = nFlags;
     if (nDelFlags & IDF_CONTENTS)
         nDelFlags |= IDF_CONTENTS;          // immer alle Inhalte oder keine loeschen!
 
     if (ValidTab(nSrcTab)  && pTab[nSrcTab])
     {
         ScDocument* pMixDoc = NULL;
-        BOOL bDoMix = ( bSkipEmpty || nFunction ) && ( nFlags & IDF_CONTENTS );
+        sal_Bool bDoMix = ( bSkipEmpty || nFunction ) && ( nFlags & IDF_CONTENTS );
 
-        BOOL bOldAutoCalc = GetAutoCalc();
-        SetAutoCalc( FALSE );                   // avoid multiple calculations
+        sal_Bool bOldAutoCalc = GetAutoCalc();
+        SetAutoCalc( false );                   // avoid multiple calculations
 
         ScRange aArea;
         rMark.GetMultiMarkArea( aArea );
@@ -2671,12 +2671,12 @@ void ScDocument::FillTabMarked( SCTAB nSrcTab, const ScMarkData& rMark,
                     else
                         pMixDoc->AddUndoTab( i, i );
                     pTab[i]->CopyToTable( nStartCol,nStartRow, nEndCol,nEndRow,
-                                            IDF_CONTENTS, TRUE, pMixDoc->pTab[i], &rMark );
+                                            IDF_CONTENTS, sal_True, pMixDoc->pTab[i], &rMark );
                 }
 
                 pTab[i]->DeleteSelection( nDelFlags, rMark );
                 pTab[nSrcTab]->CopyToTable( nStartCol,nStartRow, nEndCol,nEndRow,
-                                             nFlags, TRUE, pTab[i], &rMark, bAsLink );
+                                             nFlags, sal_True, pTab[i], &rMark, bAsLink );
 
                 if (bDoMix)
                     pTab[i]->MixMarked( rMark, nFunction, bSkipEmpty, pMixDoc->pTab[i] );
@@ -2693,13 +2693,13 @@ void ScDocument::FillTabMarked( SCTAB nSrcTab, const ScMarkData& rMark,
 }
 
 
-void ScDocument::PutCell( SCCOL nCol, SCROW nRow, SCTAB nTab, ScBaseCell* pCell, BOOL bForceTab )
+void ScDocument::PutCell( SCCOL nCol, SCROW nRow, SCTAB nTab, ScBaseCell* pCell, sal_Bool bForceTab )
 {
     if (VALIDTAB(nTab))
     {
         if ( bForceTab && !pTab[nTab] )
         {
-            BOOL bExtras = !bIsUndo;        // Spaltenbreiten, Zeilenhoehen, Flags
+            sal_Bool bExtras = !bIsUndo;        // Spaltenbreiten, Zeilenhoehen, Flags
 
             pTab[nTab] = new ScTable(this, nTab,
                             String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("temp")),
@@ -2713,12 +2713,12 @@ void ScDocument::PutCell( SCCOL nCol, SCROW nRow, SCTAB nTab, ScBaseCell* pCell,
 }
 
 
-void ScDocument::PutCell( const ScAddress& rPos, ScBaseCell* pCell, BOOL bForceTab )
+void ScDocument::PutCell( const ScAddress& rPos, ScBaseCell* pCell, sal_Bool bForceTab )
 {
     SCTAB nTab = rPos.Tab();
     if ( bForceTab && !pTab[nTab] )
     {
-        BOOL bExtras = !bIsUndo;        // Spaltenbreiten, Zeilenhoehen, Flags
+        sal_Bool bExtras = !bIsUndo;        // Spaltenbreiten, Zeilenhoehen, Flags
 
         pTab[nTab] = new ScTable(this, nTab,
                         String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("temp")),
@@ -2731,13 +2731,13 @@ void ScDocument::PutCell( const ScAddress& rPos, ScBaseCell* pCell, BOOL bForceT
 }
 
 
-BOOL ScDocument::SetString( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rString,
+sal_Bool ScDocument::SetString( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rString,
                             ScSetStringParam* pParam )
 {
     if ( ValidTab(nTab) && pTab[nTab] )
         return pTab[nTab]->SetString( nCol, nRow, nTab, rString, pParam );
     else
-        return FALSE;
+        return false;
 }
 
 
@@ -2839,7 +2839,7 @@ sal_uInt32 ScDocument::GetNumberFormat( const ScAddress& rPos ) const
 }
 
 
-void ScDocument::GetNumberFormatInfo( short& nType, ULONG& nIndex,
+void ScDocument::GetNumberFormatInfo( short& nType, sal_uLong& nIndex,
             const ScAddress& rPos, const ScBaseCell* pCell ) const
 {
     SCTAB nTab = rPos.Tab();
@@ -2912,27 +2912,27 @@ ScBaseCell* ScDocument::GetCell( const ScAddress& rPos ) const
 }
 
 
-BOOL ScDocument::HasStringData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
+sal_Bool ScDocument::HasStringData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
 {
     if ( VALIDTAB(nTab) && pTab[nTab] )
             return pTab[nTab]->HasStringData( nCol, nRow );
     else
-        return FALSE;
+        return false;
 }
 
 
-BOOL ScDocument::HasValueData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
+sal_Bool ScDocument::HasValueData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
 {
     if ( VALIDTAB(nTab) && pTab[nTab] )
             return pTab[nTab]->HasValueData( nCol, nRow );
     else
-        return FALSE;
+        return false;
 }
 
 
-BOOL ScDocument::HasStringCells( const ScRange& rRange ) const
+sal_Bool ScDocument::HasStringCells( const ScRange& rRange ) const
 {
-    //  TRUE, wenn String- oder Editzellen im Bereich
+    //  sal_True, wenn String- oder Editzellen im Bereich
 
     SCCOL nStartCol = rRange.aStart.Col();
     SCROW nStartRow = rRange.aStart.Row();
@@ -2943,20 +2943,20 @@ BOOL ScDocument::HasStringCells( const ScRange& rRange ) const
 
     for ( SCTAB nTab=nStartTab; nTab<=nEndTab; nTab++ )
         if ( pTab[nTab] && pTab[nTab]->HasStringCells( nStartCol, nStartRow, nEndCol, nEndRow ) )
-            return TRUE;
+            return sal_True;
 
-    return FALSE;
+    return false;
 }
 
 
-BOOL ScDocument::HasSelectionData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
+sal_Bool ScDocument::HasSelectionData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
 {
     sal_uInt32 nValidation = static_cast< const SfxUInt32Item* >( GetAttr( nCol, nRow, nTab, ATTR_VALIDDATA ) )->GetValue();
     if( nValidation )
     {
         const ScValidationData* pData = GetValidationEntry( nValidation );
         if( pData && pData->HasSelectionList() )
-            return TRUE;
+            return sal_True;
     }
     return HasStringCells( ScRange( nCol, 0, nTab, nCol, MAXROW, nTab ) );
 }
@@ -3018,8 +3018,8 @@ void ScDocument::InitializeAllNoteCaptions( bool bForced )
 
 void ScDocument::SetDirty()
 {
-    BOOL bOldAutoCalc = GetAutoCalc();
-    bAutoCalc = FALSE;      // keine Mehrfachberechnung
+    sal_Bool bOldAutoCalc = GetAutoCalc();
+    bAutoCalc = false;      // keine Mehrfachberechnung
     {   // scope for bulk broadcast
         ScBulkBroadcast aBulkBroadcast( GetBASM());
         for (SCTAB i=0; i<=MAXTAB; i++)
@@ -3038,8 +3038,8 @@ void ScDocument::SetDirty()
 
 void ScDocument::SetDirty( const ScRange& rRange )
 {
-    BOOL bOldAutoCalc = GetAutoCalc();
-    bAutoCalc = FALSE;      // keine Mehrfachberechnung
+    sal_Bool bOldAutoCalc = GetAutoCalc();
+    bAutoCalc = false;      // keine Mehrfachberechnung
     {   // scope for bulk broadcast
         ScBulkBroadcast aBulkBroadcast( GetBASM());
         SCTAB nTab2 = rRange.aEnd.Tab();
@@ -3052,8 +3052,8 @@ void ScDocument::SetDirty( const ScRange& rRange )
 
 void ScDocument::SetTableOpDirty( const ScRange& rRange )
 {
-    BOOL bOldAutoCalc = GetAutoCalc();
-    bAutoCalc = FALSE;      // no multiple recalculation
+    sal_Bool bOldAutoCalc = GetAutoCalc();
+    bAutoCalc = false;      // no multiple recalculation
     SCTAB nTab2 = rRange.aEnd.Tab();
     for (SCTAB i=rRange.aStart.Tab(); i<=nTab2; i++)
         if (pTab[i]) pTab[i]->SetTableOpDirty( rRange );
@@ -3104,8 +3104,8 @@ void ScDocument::AddTableOpFormulaCell( ScFormulaCell* pCell )
 void ScDocument::CalcAll()
 {
     ClearLookupCaches();    // Ensure we don't deliver zombie data.
-    BOOL bOldAutoCalc = GetAutoCalc();
-    SetAutoCalc( TRUE );
+    sal_Bool bOldAutoCalc = GetAutoCalc();
+    SetAutoCalc( sal_True );
     SCTAB i;
     for (i=0; i<=MAXTAB; i++)
         if (pTab[i]) pTab[i]->SetDirtyVar();
@@ -3129,8 +3129,8 @@ void ScDocument::CompileAll()
 
 void ScDocument::CompileXML()
 {
-    BOOL bOldAutoCalc = GetAutoCalc();
-    SetAutoCalc( FALSE );
+    sal_Bool bOldAutoCalc = GetAutoCalc();
+    SetAutoCalc( false );
     ScProgress aProgress( GetDocumentShell(), ScGlobal::GetRscString(
                 STR_PROGRESS_CALCULATING ), GetXMLImportedFormulaCount() );
 
@@ -3160,14 +3160,14 @@ void ScDocument::CalcAfterLoad()
     if (bIsClip)    // Excel-Dateien werden aus dem Clipboard in ein Clip-Doc geladen
         return;     // dann wird erst beim Einfuegen in das richtige Doc berechnet
 
-    bCalcingAfterLoad = TRUE;
+    bCalcingAfterLoad = sal_True;
     for ( i = 0; i <= MAXTAB; i++)
         if (pTab[i]) pTab[i]->CalcAfterLoad();
     for (i=0; i<=MAXTAB; i++)
         if (pTab[i]) pTab[i]->SetDirtyAfterLoad();
-    bCalcingAfterLoad = FALSE;
+    bCalcingAfterLoad = false;
 
-    SetDetectiveDirty(FALSE);   // noch keine wirklichen Aenderungen
+    SetDetectiveDirty(false);   // noch keine wirklichen Aenderungen
 
     // #i112436# If formula cells are already dirty, they don't broadcast further changes.
     // So the source ranges of charts must be interpreted even if they are not visible,
@@ -3184,7 +3184,7 @@ void ScDocument::CalcAfterLoad()
 }
 
 
-USHORT ScDocument::GetErrCode( const ScAddress& rPos ) const
+sal_uInt16 ScDocument::GetErrCode( const ScAddress& rPos ) const
 {
     SCTAB nTab = rPos.Tab();
     if ( pTab[nTab] )
@@ -3207,46 +3207,46 @@ void ScDocument::ResetChanged( const ScRange& rRange )
 //
 
 
-void ScDocument::SetColWidth( SCCOL nCol, SCTAB nTab, USHORT nNewWidth )
+void ScDocument::SetColWidth( SCCOL nCol, SCTAB nTab, sal_uInt16 nNewWidth )
 {
     if ( ValidTab(nTab) && pTab[nTab] )
         pTab[nTab]->SetColWidth( nCol, nNewWidth );
 }
 
-void ScDocument::SetColWidthOnly( SCCOL nCol, SCTAB nTab, USHORT nNewWidth )
+void ScDocument::SetColWidthOnly( SCCOL nCol, SCTAB nTab, sal_uInt16 nNewWidth )
 {
     if ( ValidTab(nTab) && pTab[nTab] )
         pTab[nTab]->SetColWidthOnly( nCol, nNewWidth );
 }
 
-void ScDocument::SetRowHeight( SCROW nRow, SCTAB nTab, USHORT nNewHeight )
+void ScDocument::SetRowHeight( SCROW nRow, SCTAB nTab, sal_uInt16 nNewHeight )
 {
     if ( ValidTab(nTab) && pTab[nTab] )
         pTab[nTab]->SetRowHeight( nRow, nNewHeight );
 }
 
 
-void ScDocument::SetRowHeightRange( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, USHORT nNewHeight )
+void ScDocument::SetRowHeightRange( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, sal_uInt16 nNewHeight )
 {
     if ( ValidTab(nTab) && pTab[nTab] )
         pTab[nTab]->SetRowHeightRange
             ( nStartRow, nEndRow, nNewHeight, 1.0, 1.0 );
 }
 
-void ScDocument::SetRowHeightOnly( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, USHORT nNewHeight )
+void ScDocument::SetRowHeightOnly( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, sal_uInt16 nNewHeight )
 {
     if ( ValidTab(nTab) && pTab[nTab] )
         pTab[nTab]->SetRowHeightOnly( nStartRow, nEndRow, nNewHeight );
 }
 
-void ScDocument::SetManualHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, BOOL bManual )
+void ScDocument::SetManualHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, sal_Bool bManual )
 {
     if ( ValidTab(nTab) && pTab[nTab] )
         pTab[nTab]->SetManualHeight( nStartRow, nEndRow, bManual );
 }
 
 
-USHORT ScDocument::GetColWidth( SCCOL nCol, SCTAB nTab ) const
+sal_uInt16 ScDocument::GetColWidth( SCCOL nCol, SCTAB nTab ) const
 {
     if ( ValidTab(nTab) && pTab[nTab] )
         return pTab[nTab]->GetColWidth( nCol );
@@ -3255,7 +3255,7 @@ USHORT ScDocument::GetColWidth( SCCOL nCol, SCTAB nTab ) const
 }
 
 
-USHORT ScDocument::GetOriginalWidth( SCCOL nCol, SCTAB nTab ) const
+sal_uInt16 ScDocument::GetOriginalWidth( SCCOL nCol, SCTAB nTab ) const
 {
     if ( ValidTab(nTab) && pTab[nTab] )
         return pTab[nTab]->GetOriginalWidth( nCol );
@@ -3264,7 +3264,7 @@ USHORT ScDocument::GetOriginalWidth( SCCOL nCol, SCTAB nTab ) const
 }
 
 
-USHORT ScDocument::GetCommonWidth( SCCOL nEndCol, SCTAB nTab ) const
+sal_uInt16 ScDocument::GetCommonWidth( SCCOL nEndCol, SCTAB nTab ) const
 {
     if ( ValidTab(nTab) && pTab[nTab] )
         return pTab[nTab]->GetCommonWidth( nEndCol );
@@ -3273,7 +3273,7 @@ USHORT ScDocument::GetCommonWidth( SCCOL nEndCol, SCTAB nTab ) const
 }
 
 
-USHORT ScDocument::GetOriginalHeight( SCROW nRow, SCTAB nTab ) const
+sal_uInt16 ScDocument::GetOriginalHeight( SCROW nRow, SCTAB nTab ) const
 {
     if ( ValidTab(nTab) && pTab[nTab] )
         return pTab[nTab]->GetOriginalHeight( nRow );
@@ -3282,7 +3282,7 @@ USHORT ScDocument::GetOriginalHeight( SCROW nRow, SCTAB nTab ) const
 }
 
 
-USHORT ScDocument::GetRowHeight( SCROW nRow, SCTAB nTab, bool bHiddenAsZero ) const
+sal_uInt16 ScDocument::GetRowHeight( SCROW nRow, SCTAB nTab, bool bHiddenAsZero ) const
 {
     if ( ValidTab(nTab) && pTab[nTab] )
         return pTab[nTab]->GetRowHeight( nRow, NULL, NULL, bHiddenAsZero );
@@ -3291,7 +3291,7 @@ USHORT ScDocument::GetRowHeight( SCROW nRow, SCTAB nTab, bool bHiddenAsZero ) co
 }
 
 
-USHORT ScDocument::GetRowHeight( SCROW nRow, SCTAB nTab, SCROW* pStartRow, SCROW* pEndRow, bool bHiddenAsZero ) const
+sal_uInt16 ScDocument::GetRowHeight( SCROW nRow, SCTAB nTab, SCROW* pStartRow, SCROW* pEndRow, bool bHiddenAsZero ) const
 {
     if ( ValidTab(nTab) && pTab[nTab] )
         return pTab[nTab]->GetRowHeight( nRow, pStartRow, pEndRow, bHiddenAsZero );
@@ -3300,7 +3300,7 @@ USHORT ScDocument::GetRowHeight( SCROW nRow, SCTAB nTab, SCROW* pStartRow, SCROW
 }
 
 
-ULONG ScDocument::GetRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab ) const
+sal_uLong ScDocument::GetRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab ) const
 {
     if (nStartRow == nEndRow)
         return GetRowHeight( nStartRow, nTab);  // faster for a single row
@@ -3316,17 +3316,17 @@ ULONG ScDocument::GetRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab ) con
     return 0;
 }
 
-SCROW ScDocument::GetRowForHeight( SCTAB nTab, ULONG nHeight ) const
+SCROW ScDocument::GetRowForHeight( SCTAB nTab, sal_uLong nHeight ) const
 {
     return pTab[nTab]->GetRowForHeight(nHeight);
 }
 
-ULONG ScDocument::GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow,
+sal_uLong ScDocument::GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow,
         SCTAB nTab, double fScale ) const
 {
     // faster for a single row
     if (nStartRow == nEndRow)
-        return (ULONG) (GetRowHeight( nStartRow, nTab) * fScale);
+        return (sal_uLong) (GetRowHeight( nStartRow, nTab) * fScale);
 
     // check bounds because this method replaces former for(i=start;i<=end;++i) loops
     if (nStartRow > nEndRow)
@@ -3348,7 +3348,7 @@ SCROW ScDocument::GetHiddenRowCount( SCROW nRow, SCTAB nTab ) const
 }
 
 
-ULONG ScDocument::GetColOffset( SCCOL nCol, SCTAB nTab ) const
+sal_uLong ScDocument::GetColOffset( SCCOL nCol, SCTAB nTab ) const
 {
     if ( ValidTab(nTab) && pTab[nTab] )
         return pTab[nTab]->GetColOffset( nCol );
@@ -3357,7 +3357,7 @@ ULONG ScDocument::GetColOffset( SCCOL nCol, SCTAB nTab ) const
 }
 
 
-ULONG ScDocument::GetRowOffset( SCROW nRow, SCTAB nTab ) const
+sal_uLong ScDocument::GetRowOffset( SCROW nRow, SCTAB nTab ) const
 {
     if ( ValidTab(nTab) && pTab[nTab] )
         return pTab[nTab]->GetRowOffset( nRow );
@@ -3366,10 +3366,10 @@ ULONG ScDocument::GetRowOffset( SCROW nRow, SCTAB nTab ) const
 }
 
 
-USHORT ScDocument::GetOptimalColWidth( SCCOL nCol, SCTAB nTab, OutputDevice* pDev,
+sal_uInt16 ScDocument::GetOptimalColWidth( SCCOL nCol, SCTAB nTab, OutputDevice* pDev,
                                        double nPPTX, double nPPTY,
                                        const Fraction& rZoomX, const Fraction& rZoomY,
-                                       BOOL bFormula, const ScMarkData* pMarkData,
+                                       sal_Bool bFormula, const ScMarkData* pMarkData,
                                        const ScColWidthParam* pParam )
 {
     if ( ValidTab(nTab) && pTab[nTab] )
@@ -3384,7 +3384,7 @@ long ScDocument::GetNeededSize( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                     OutputDevice* pDev,
                                     double nPPTX, double nPPTY,
                                     const Fraction& rZoomX, const Fraction& rZoomY,
-                                    BOOL bWidth, BOOL bTotalSize )
+                                    sal_Bool bWidth, sal_Bool bTotalSize )
 {
     if ( ValidTab(nTab) && pTab[nTab] )
         return pTab[nTab]->GetNeededSize
@@ -3394,18 +3394,18 @@ long ScDocument::GetNeededSize( SCCOL nCol, SCROW nRow, SCTAB nTab,
 }
 
 
-BOOL ScDocument::SetOptimalHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, USHORT nExtra,
+sal_Bool ScDocument::SetOptimalHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, sal_uInt16 nExtra,
                                     OutputDevice* pDev,
                                     double nPPTX, double nPPTY,
                                     const Fraction& rZoomX, const Fraction& rZoomY,
-                                    BOOL bShrink )
+                                    sal_Bool bShrink )
 {
 //! MarkToMulti();
     if ( ValidTab(nTab) && pTab[nTab] )
         return pTab[nTab]->SetOptimalHeight( nStartRow, nEndRow, nExtra,
                                                 pDev, nPPTX, nPPTY, rZoomX, rZoomY, bShrink );
     OSL_FAIL("Falsche Tabellennummer");
-    return FALSE;
+    return false;
 }
 
 
@@ -3414,19 +3414,19 @@ void ScDocument::UpdateAllRowHeights( OutputDevice* pDev, double nPPTX, double n
 {
     // one progress across all (selected) sheets
 
-    ULONG nCellCount = 0;
+    sal_uLong nCellCount = 0;
     for ( SCTAB nTab=0; nTab<=MAXTAB; nTab++ )
         if ( pTab[nTab] && ( !pTabMark || pTabMark->GetTableSelect(nTab) ) )
             nCellCount += pTab[nTab]->GetWeightedCount();
 
     ScProgress aProgress( GetDocumentShell(), ScGlobal::GetRscString(STR_PROGRESS_HEIGHTING), nCellCount );
 
-    ULONG nProgressStart = 0;
+    sal_uLong nProgressStart = 0;
     for ( SCTAB nTab=0; nTab<=MAXTAB; nTab++ )
         if ( pTab[nTab] && ( !pTabMark || pTabMark->GetTableSelect(nTab) ) )
         {
             pTab[nTab]->SetOptimalHeightOnly( 0, MAXROW, 0,
-                        pDev, nPPTX, nPPTY, rZoomX, rZoomY, FALSE, &aProgress, nProgressStart );
+                        pDev, nPPTX, nPPTY, rZoomX, rZoomY, false, &aProgress, nProgressStart );
             pTab[nTab]->SetDrawPageSize(true, true);
             nProgressStart += pTab[nTab]->GetWeightedCount();
         }
@@ -3437,42 +3437,42 @@ void ScDocument::UpdateAllRowHeights( OutputDevice* pDev, double nPPTX, double n
 //  Spalten-/Zeilen-Flags   ----------------------------------------------
 //
 
-void ScDocument::ShowCol(SCCOL nCol, SCTAB nTab, BOOL bShow)
+void ScDocument::ShowCol(SCCOL nCol, SCTAB nTab, sal_Bool bShow)
 {
     if ( ValidTab(nTab) && pTab[nTab] )
         pTab[nTab]->ShowCol( nCol, bShow );
 }
 
 
-void ScDocument::ShowRow(SCROW nRow, SCTAB nTab, BOOL bShow)
+void ScDocument::ShowRow(SCROW nRow, SCTAB nTab, sal_Bool bShow)
 {
     if ( ValidTab(nTab) && pTab[nTab] )
         pTab[nTab]->ShowRow( nRow, bShow );
 }
 
 
-void ScDocument::ShowRows(SCROW nRow1, SCROW nRow2, SCTAB nTab, BOOL bShow)
+void ScDocument::ShowRows(SCROW nRow1, SCROW nRow2, SCTAB nTab, sal_Bool bShow)
 {
     if ( ValidTab(nTab) && pTab[nTab] )
         pTab[nTab]->ShowRows( nRow1, nRow2, bShow );
 }
 
 
-void ScDocument::SetRowFlags( SCROW nRow, SCTAB nTab, BYTE nNewFlags )
+void ScDocument::SetRowFlags( SCROW nRow, SCTAB nTab, sal_uInt8 nNewFlags )
 {
     if ( ValidTab(nTab) && pTab[nTab] )
         pTab[nTab]->SetRowFlags( nRow, nNewFlags );
 }
 
 
-void ScDocument::SetRowFlags( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, BYTE nNewFlags )
+void ScDocument::SetRowFlags( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, sal_uInt8 nNewFlags )
 {
     if ( ValidTab(nTab) && pTab[nTab] )
         pTab[nTab]->SetRowFlags( nStartRow, nEndRow, nNewFlags );
 }
 
 
-BYTE ScDocument::GetColFlags( SCCOL nCol, SCTAB nTab ) const
+sal_uInt8 ScDocument::GetColFlags( SCCOL nCol, SCTAB nTab ) const
 {
     if ( ValidTab(nTab) && pTab[nTab] )
         return pTab[nTab]->GetColFlags( nCol );
@@ -3480,7 +3480,7 @@ BYTE ScDocument::GetColFlags( SCCOL nCol, SCTAB nTab ) const
     return 0;
 }
 
-BYTE ScDocument::GetRowFlags( SCROW nRow, SCTAB nTab ) const
+sal_uInt8 ScDocument::GetRowFlags( SCROW nRow, SCTAB nTab ) const
 {
     if ( ValidTab(nTab) && pTab[nTab] )
         return pTab[nTab]->GetRowFlags( nRow );
@@ -3488,17 +3488,17 @@ BYTE ScDocument::GetRowFlags( SCROW nRow, SCTAB nTab ) const
     return 0;
 }
 
-ScBitMaskCompressedArray< SCROW, BYTE> & ScDocument::GetRowFlagsArrayModifiable(
+ScBitMaskCompressedArray< SCROW, sal_uInt8> & ScDocument::GetRowFlagsArrayModifiable(
         SCTAB nTab )
 {
-    return const_cast< ScBitMaskCompressedArray< SCROW, BYTE> & >(
+    return const_cast< ScBitMaskCompressedArray< SCROW, sal_uInt8> & >(
             GetRowFlagsArray( nTab));
 }
 
-const ScBitMaskCompressedArray< SCROW, BYTE> & ScDocument::GetRowFlagsArray(
+const ScBitMaskCompressedArray< SCROW, sal_uInt8> & ScDocument::GetRowFlagsArray(
         SCTAB nTab ) const
 {
-    const ScBitMaskCompressedArray< SCROW, BYTE> * pFlags;
+    const ScBitMaskCompressedArray< SCROW, sal_uInt8> * pFlags;
     if ( ValidTab(nTab) && pTab[nTab] )
         pFlags = pTab[nTab]->GetRowFlagsArray();
     else
@@ -3509,7 +3509,7 @@ const ScBitMaskCompressedArray< SCROW, BYTE> & ScDocument::GetRowFlagsArray(
     if (!pFlags)
     {
         OSL_FAIL("no row flags at sheet");
-        static ScBitMaskCompressedArray< SCROW, BYTE> aDummy( MAXROW, 0);
+        static ScBitMaskCompressedArray< SCROW, sal_uInt8> aDummy( MAXROW, 0);
         pFlags = &aDummy;
     }
     return *pFlags;
@@ -3766,8 +3766,8 @@ SCCOL ScDocument::GetNextDifferentChangedCol( SCTAB nTab, SCCOL nStart) const
 {
     if ( ValidTab(nTab) && pTab[nTab] )
     {
-        BYTE nStartFlags = pTab[nTab]->GetColFlags(nStart);
-        USHORT nStartWidth = pTab[nTab]->GetOriginalWidth(nStart);
+        sal_uInt8 nStartFlags = pTab[nTab]->GetColFlags(nStart);
+        sal_uInt16 nStartWidth = pTab[nTab]->GetOriginalWidth(nStart);
         for (SCCOL nCol = nStart + 1; nCol <= MAXCOL; nCol++)
         {
             if (((nStartFlags & CR_MANUALBREAK) != (pTab[nTab]->GetColFlags(nCol) & CR_MANUALBREAK)) ||
@@ -3785,7 +3785,7 @@ SCROW ScDocument::GetNextDifferentChangedRow( SCTAB nTab, SCROW nStart, bool bCa
     if (!ValidTab(nTab) || !pTab[nTab])
         return 0;
 
-    const ScBitMaskCompressedArray<SCROW, BYTE>* pRowFlagsArray = pTab[nTab]->GetRowFlagsArray();
+    const ScBitMaskCompressedArray<SCROW, sal_uInt8>* pRowFlagsArray = pTab[nTab]->GetRowFlagsArray();
     if (!pRowFlagsArray)
         return 0;
 
@@ -3796,12 +3796,12 @@ SCROW ScDocument::GetNextDifferentChangedRow( SCTAB nTab, SCROW nStart, bool bCa
     SCROW nFlagsEndRow;
     SCROW nHiddenEndRow;
     SCROW nHeightEndRow;
-    BYTE nFlags;
+    sal_uInt8 nFlags;
     bool bHidden;
-    USHORT nHeight;
-    BYTE nStartFlags = nFlags = pRowFlagsArray->GetValue( nStart, nIndex, nFlagsEndRow);
+    sal_uInt16 nHeight;
+    sal_uInt8 nStartFlags = nFlags = pRowFlagsArray->GetValue( nStart, nIndex, nFlagsEndRow);
     bool bStartHidden = bHidden = pTab[nTab]->RowHidden( nStart, NULL, &nHiddenEndRow);
-    USHORT nStartHeight = nHeight = pTab[nTab]->GetRowHeight( nStart, NULL, &nHeightEndRow, false);
+    sal_uInt16 nStartHeight = nHeight = pTab[nTab]->GetRowHeight( nStart, NULL, &nHeightEndRow, false);
     SCROW nRow;
     while ((nRow = std::min( nHiddenEndRow, std::min( nFlagsEndRow, nHeightEndRow)) + 1) <= MAXROW)
     {
@@ -3823,9 +3823,9 @@ SCROW ScDocument::GetNextDifferentChangedRow( SCTAB nTab, SCROW nStart, bool bCa
     return MAXROW+1;
 }
 
-BOOL ScDocument::GetColDefault( SCTAB nTab, SCCOL nCol, SCROW nLastRow, SCROW& nDefault)
+sal_Bool ScDocument::GetColDefault( SCTAB nTab, SCCOL nCol, SCROW nLastRow, SCROW& nDefault)
 {
-    BOOL bRet(FALSE);
+    sal_Bool bRet(false);
     nDefault = 0;
     ScDocAttrIterator aDocAttrItr(this, nTab, nCol, 0, nCol, nLastRow);
     SCCOL nColumn;
@@ -3868,16 +3868,16 @@ BOOL ScDocument::GetColDefault( SCTAB nTab, SCCOL nCol, SCROW nLastRow, SCROW& n
             ++aItr;
         }
         nDefault = aDefaultItr->nFirst;
-        bRet = TRUE;
+        bRet = sal_True;
     }
     else
-        bRet = TRUE;
+        bRet = sal_True;
     return bRet;
 }
 
-BOOL ScDocument::GetRowDefault( SCTAB /* nTab */, SCROW /* nRow */, SCCOL /* nLastCol */, SCCOL& /* nDefault */ )
+sal_Bool ScDocument::GetRowDefault( SCTAB /* nTab */, SCROW /* nRow */, SCCOL /* nLastCol */, SCCOL& /* nDefault */ )
 {
-    BOOL bRet(FALSE);
+    sal_Bool bRet(false);
     return bRet;
 }
 
@@ -3898,7 +3898,7 @@ void ScDocument::ExtendHidden( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2, S
 //  Attribute   ----------------------------------------------------------
 //
 
-const SfxPoolItem* ScDocument::GetAttr( SCCOL nCol, SCROW nRow, SCTAB nTab, USHORT nWhich ) const
+const SfxPoolItem* ScDocument::GetAttr( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_uInt16 nWhich ) const
 {
     if ( ValidTab(nTab)  && pTab[nTab] )
     {
@@ -4032,7 +4032,7 @@ void ScDocument::ApplySelectionStyle(const ScStyleSheet& rStyle, const ScMarkDat
 
 
 void ScDocument::ApplySelectionLineStyle( const ScMarkData& rMark,
-                    const SvxBorderLine* pLine, BOOL bColorOnly )
+                    const SvxBorderLine* pLine, sal_Bool bColorOnly )
 {
     if ( bColorOnly && !pLine )
         return;
@@ -4055,8 +4055,8 @@ const ScStyleSheet* ScDocument::GetStyle( SCCOL nCol, SCROW nRow, SCTAB nTab ) c
 
 const ScStyleSheet* ScDocument::GetSelectionStyle( const ScMarkData& rMark ) const
 {
-    BOOL    bEqual = TRUE;
-    BOOL    bFound;
+    sal_Bool    bEqual = sal_True;
+    sal_Bool    bFound;
 
     const ScStyleSheet* pStyle = NULL;
     const ScStyleSheet* pNewStyle;
@@ -4069,7 +4069,7 @@ const ScStyleSheet* ScDocument::GetSelectionStyle( const ScMarkData& rMark ) con
                 if (bFound)
                 {
                     if ( !pNewStyle || ( pStyle && pNewStyle != pStyle ) )
-                        bEqual = FALSE;                                             // unterschiedliche
+                        bEqual = false;                                             // unterschiedliche
                     pStyle = pNewStyle;
                 }
             }
@@ -4086,7 +4086,7 @@ const ScStyleSheet* ScDocument::GetSelectionStyle( const ScMarkData& rMark ) con
                 if (bFound)
                 {
                     if ( !pNewStyle || ( pStyle && pNewStyle != pStyle ) )
-                        bEqual = FALSE;                                             // unterschiedliche
+                        bEqual = false;                                             // unterschiedliche
                     pStyle = pNewStyle;
                 }
             }
@@ -4096,7 +4096,7 @@ const ScStyleSheet* ScDocument::GetSelectionStyle( const ScMarkData& rMark ) con
 }
 
 
-void ScDocument::StyleSheetChanged( const SfxStyleSheetBase* pStyleSheet, BOOL bRemoved,
+void ScDocument::StyleSheetChanged( const SfxStyleSheetBase* pStyleSheet, sal_Bool bRemoved,
                                     OutputDevice* pDev,
                                     double nPPTX, double nPPTY,
                                     const Fraction& rZoomX, const Fraction& rZoomY )
@@ -4114,7 +4114,7 @@ void ScDocument::StyleSheetChanged( const SfxStyleSheetBase* pStyleSheet, BOOL b
 }
 
 
-BOOL ScDocument::IsStyleSheetUsed( const ScStyleSheet& rStyle, BOOL bGatherAllStyles ) const
+sal_Bool ScDocument::IsStyleSheetUsed( const ScStyleSheet& rStyle, sal_Bool bGatherAllStyles ) const
 {
     if ( bStyleSheetUsageInvalid || rStyle.GetUsage() == ScStyleSheet::UNKNOWN )
     {
@@ -4131,7 +4131,7 @@ BOOL ScDocument::IsStyleSheetUsed( const ScStyleSheet& rStyle, BOOL bGatherAllSt
             }
         }
 
-        BOOL bIsUsed = FALSE;
+        sal_Bool bIsUsed = false;
 
         for ( SCTAB i=0; i<=MAXTAB; i++ )
         {
@@ -4140,14 +4140,14 @@ BOOL ScDocument::IsStyleSheetUsed( const ScStyleSheet& rStyle, BOOL bGatherAllSt
                 if ( pTab[i]->IsStyleSheetUsed( rStyle, bGatherAllStyles ) )
                 {
                     if ( !bGatherAllStyles )
-                        return TRUE;
-                    bIsUsed = TRUE;
+                        return sal_True;
+                    bIsUsed = sal_True;
                 }
             }
         }
 
         if ( bGatherAllStyles )
-            bStyleSheetUsageInvalid = FALSE;
+            bStyleSheetUsageInvalid = false;
 
         return bIsUsed;
     }
@@ -4156,32 +4156,32 @@ BOOL ScDocument::IsStyleSheetUsed( const ScStyleSheet& rStyle, BOOL bGatherAllSt
 }
 
 
-BOOL ScDocument::ApplyFlagsTab( SCCOL nStartCol, SCROW nStartRow,
-                        SCCOL nEndCol, SCROW nEndRow, SCTAB nTab, INT16 nFlags )
+sal_Bool ScDocument::ApplyFlagsTab( SCCOL nStartCol, SCROW nStartRow,
+                        SCCOL nEndCol, SCROW nEndRow, SCTAB nTab, sal_Int16 nFlags )
 {
     if (VALIDTAB(nTab))
         if (pTab[nTab])
             return pTab[nTab]->ApplyFlags( nStartCol, nStartRow, nEndCol, nEndRow, nFlags );
 
     OSL_FAIL("ApplyFlags: falsche Tabelle");
-    return FALSE;
+    return false;
 }
 
 
-BOOL ScDocument::RemoveFlagsTab( SCCOL nStartCol, SCROW nStartRow,
-                        SCCOL nEndCol, SCROW nEndRow, SCTAB nTab, INT16 nFlags )
+sal_Bool ScDocument::RemoveFlagsTab( SCCOL nStartCol, SCROW nStartRow,
+                        SCCOL nEndCol, SCROW nEndRow, SCTAB nTab, sal_Int16 nFlags )
 {
     if (VALIDTAB(nTab))
         if (pTab[nTab])
             return pTab[nTab]->RemoveFlags( nStartCol, nStartRow, nEndCol, nEndRow, nFlags );
 
     OSL_FAIL("RemoveFlags: falsche Tabelle");
-    return FALSE;
+    return false;
 }
 
 
 void ScDocument::SetPattern( SCCOL nCol, SCROW nRow, SCTAB nTab, const ScPatternAttr& rAttr,
-                                BOOL bPutToPool )
+                                sal_Bool bPutToPool )
 {
     if (VALIDTAB(nTab))
         if (pTab[nTab])
@@ -4190,7 +4190,7 @@ void ScDocument::SetPattern( SCCOL nCol, SCROW nRow, SCTAB nTab, const ScPattern
 
 
 void ScDocument::SetPattern( const ScAddress& rPos, const ScPatternAttr& rAttr,
-                                BOOL bPutToPool )
+                                sal_Bool bPutToPool )
 {
     SCTAB nTab = rPos.Tab();
     if (pTab[nTab])
@@ -4198,7 +4198,7 @@ void ScDocument::SetPattern( const ScAddress& rPos, const ScPatternAttr& rAttr,
 }
 
 
-ScPatternAttr* ScDocument::CreateSelectionPattern( const ScMarkData& rMark, BOOL bDeep )
+ScPatternAttr* ScDocument::CreateSelectionPattern( const ScMarkData& rMark, sal_Bool bDeep )
 {
     ScMergePatternState aState;
 
@@ -4227,7 +4227,7 @@ ScPatternAttr* ScDocument::CreateSelectionPattern( const ScMarkData& rMark, BOOL
 }
 
 
-const ScPatternAttr* ScDocument::GetSelectionPattern( const ScMarkData& rMark, BOOL bDeep )
+const ScPatternAttr* ScDocument::GetSelectionPattern( const ScMarkData& rMark, sal_Bool bDeep )
 {
     delete pSelectionAttr;
     pSelectionAttr = CreateSelectionPattern( rMark, bDeep );
@@ -4247,9 +4247,9 @@ void ScDocument::GetSelectionFrame( const ScMarkData& rMark,
 
     rLineInner.SetLine(NULL, BOXINFO_LINE_HORI);
     rLineInner.SetLine(NULL, BOXINFO_LINE_VERT);
-    rLineInner.SetTable(TRUE);
-    rLineInner.SetDist(TRUE);
-    rLineInner.SetMinDist(FALSE);
+    rLineInner.SetTable(sal_True);
+    rLineInner.SetDist(sal_True);
+    rLineInner.SetMinDist(false);
 
     ScLineFlags aFlags;
 
@@ -4278,7 +4278,7 @@ void ScDocument::GetSelectionFrame( const ScMarkData& rMark,
 
 
 bool ScDocument::HasAttrib( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
-                            SCCOL nCol2, SCROW nRow2, SCTAB nTab2, USHORT nMask )
+                            SCCOL nCol2, SCROW nRow2, SCTAB nTab2, sal_uInt16 nMask )
 {
     if ( nMask & HASATTR_ROTATE )
     {
@@ -4287,19 +4287,19 @@ bool ScDocument::HasAttrib( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
 
         ScDocumentPool* pPool = xPoolHelper->GetDocPool();
 
-        BOOL bAnyItem = FALSE;
-        USHORT nRotCount = pPool->GetItemCount( ATTR_ROTATE_VALUE );
-        for (USHORT nItem=0; nItem<nRotCount; nItem++)
+        sal_Bool bAnyItem = false;
+        sal_uInt32 nRotCount = pPool->GetItemCount2( ATTR_ROTATE_VALUE );
+        for (sal_uInt32 nItem=0; nItem<nRotCount; nItem++)
         {
-            const SfxPoolItem* pItem = pPool->GetItem( ATTR_ROTATE_VALUE, nItem );
+            const SfxPoolItem* pItem = pPool->GetItem2( ATTR_ROTATE_VALUE, nItem );
             if ( pItem )
             {
                 // 90 or 270 degrees is former SvxOrientationItem - only look for other values
                 // (see ScPatternAttr::GetCellOrientation)
-                INT32 nAngle = static_cast<const SfxInt32Item*>(pItem)->GetValue();
+                sal_Int32 nAngle = static_cast<const SfxInt32Item*>(pItem)->GetValue();
                 if ( nAngle != 0 && nAngle != 9000 && nAngle != 27000 )
                 {
-                    bAnyItem = TRUE;
+                    bAnyItem = sal_True;
                     break;
                 }
             }
@@ -4315,14 +4315,14 @@ bool ScDocument::HasAttrib( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
 
         ScDocumentPool* pPool = xPoolHelper->GetDocPool();
 
-        BOOL bHasRtl = FALSE;
-        USHORT nDirCount = pPool->GetItemCount( ATTR_WRITINGDIR );
-        for (USHORT nItem=0; nItem<nDirCount; nItem++)
+        sal_Bool bHasRtl = false;
+        sal_uInt32 nDirCount = pPool->GetItemCount2( ATTR_WRITINGDIR );
+        for (sal_uInt32 nItem=0; nItem<nDirCount; nItem++)
         {
-            const SfxPoolItem* pItem = pPool->GetItem( ATTR_WRITINGDIR, nItem );
+            const SfxPoolItem* pItem = pPool->GetItem2( ATTR_WRITINGDIR, nItem );
             if ( pItem && ((const SvxFrameDirectionItem*)pItem)->GetValue() == FRMDIR_HORI_RIGHT_TOP )
             {
-                bHasRtl = TRUE;
+                bHasRtl = sal_True;
                 break;
             }
         }
@@ -4345,7 +4345,7 @@ bool ScDocument::HasAttrib( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
             if ( nMask & HASATTR_RIGHTORCENTER )
             {
                 //  On a RTL sheet, don't start to look for the default left value
-                //  (which is then logically right), instead always assume TRUE.
+                //  (which is then logically right), instead always assume sal_True.
                 //  That way, ScAttrArray::HasAttrib doesn't have to handle RTL sheets.
 
                 if ( IsLayoutRTL(i) )
@@ -4359,7 +4359,7 @@ bool ScDocument::HasAttrib( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
     return bFound;
 }
 
-bool ScDocument::HasAttrib( const ScRange& rRange, USHORT nMask )
+bool ScDocument::HasAttrib( const ScRange& rRange, sal_uInt16 nMask )
 {
     return HasAttrib( rRange.aStart.Col(), rRange.aStart.Row(), rRange.aStart.Tab(),
                       rRange.aEnd.Col(),   rRange.aEnd.Row(),   rRange.aEnd.Tab(),
@@ -4430,7 +4430,7 @@ void ScDocument::GetBorderLines( SCCOL nCol, SCROW nRow, SCTAB nTab,
         *ppBottom = pBottomLine;
 }
 
-BOOL ScDocument::IsBlockEmpty( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
+sal_Bool ScDocument::IsBlockEmpty( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
                                         SCCOL nEndCol, SCROW nEndRow, bool bIgnoreNotes ) const
 {
     if (VALIDTAB(nTab))
@@ -4438,7 +4438,7 @@ BOOL ScDocument::IsBlockEmpty( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
             return pTab[nTab]->IsBlockEmpty( nStartCol, nStartRow, nEndCol, nEndRow, bIgnoreNotes );
 
     OSL_FAIL("Falsche Tabellennummer");
-    return FALSE;
+    return false;
 }
 
 
@@ -4464,16 +4464,16 @@ void ScDocument::UnlockTable(SCTAB nTab)
 }
 
 
-BOOL ScDocument::IsBlockEditable( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
+sal_Bool ScDocument::IsBlockEditable( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
                                         SCCOL nEndCol, SCROW nEndRow,
-                                        BOOL* pOnlyNotBecauseOfMatrix /* = NULL */ ) const
+                                        sal_Bool* pOnlyNotBecauseOfMatrix /* = NULL */ ) const
 {
     // import into read-only document is possible
     if ( !bImportingXML && !mbChangeReadOnlyEnabled && pShell && pShell->IsReadOnly() )
     {
         if ( pOnlyNotBecauseOfMatrix )
-            *pOnlyNotBecauseOfMatrix = FALSE;
-        return FALSE;
+            *pOnlyNotBecauseOfMatrix = false;
+        return false;
     }
 
     if (VALIDTAB(nTab))
@@ -4483,27 +4483,27 @@ BOOL ScDocument::IsBlockEditable( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
 
     OSL_FAIL("Falsche Tabellennummer");
     if ( pOnlyNotBecauseOfMatrix )
-        *pOnlyNotBecauseOfMatrix = FALSE;
-    return FALSE;
+        *pOnlyNotBecauseOfMatrix = false;
+    return false;
 }
 
 
-BOOL ScDocument::IsSelectionEditable( const ScMarkData& rMark,
-            BOOL* pOnlyNotBecauseOfMatrix /* = NULL */ ) const
+sal_Bool ScDocument::IsSelectionEditable( const ScMarkData& rMark,
+            sal_Bool* pOnlyNotBecauseOfMatrix /* = NULL */ ) const
 {
     // import into read-only document is possible
     if ( !bImportingXML && !mbChangeReadOnlyEnabled && pShell && pShell->IsReadOnly() )
     {
         if ( pOnlyNotBecauseOfMatrix )
-            *pOnlyNotBecauseOfMatrix = FALSE;
-        return FALSE;
+            *pOnlyNotBecauseOfMatrix = false;
+        return false;
     }
 
     ScRange aRange;
     rMark.GetMarkArea(aRange);
 
-    BOOL bOk = TRUE;
-    BOOL bMatrix = ( pOnlyNotBecauseOfMatrix != NULL );
+    sal_Bool bOk = sal_True;
+    sal_Bool bMatrix = ( pOnlyNotBecauseOfMatrix != NULL );
     for ( SCTAB i=0; i<=MAXTAB && (bOk || bMatrix); i++ )
     {
         if ( pTab[i] && rMark.GetTableSelect(i) )
@@ -4514,7 +4514,7 @@ BOOL ScDocument::IsSelectionEditable( const ScMarkData& rMark,
                         aRange.aStart.Row(), aRange.aEnd.Col(),
                         aRange.aEnd.Row(), pOnlyNotBecauseOfMatrix ) )
                 {
-                    bOk = FALSE;
+                    bOk = false;
                     if ( pOnlyNotBecauseOfMatrix )
                         bMatrix = *pOnlyNotBecauseOfMatrix;
                 }
@@ -4523,7 +4523,7 @@ BOOL ScDocument::IsSelectionEditable( const ScMarkData& rMark,
             {
                 if ( !pTab[i]->IsSelectionEditable( rMark, pOnlyNotBecauseOfMatrix ) )
                 {
-                    bOk = FALSE;
+                    bOk = false;
                     if ( pOnlyNotBecauseOfMatrix )
                         bMatrix = *pOnlyNotBecauseOfMatrix;
                 }
@@ -4538,35 +4538,35 @@ BOOL ScDocument::IsSelectionEditable( const ScMarkData& rMark,
 }
 
 
-BOOL ScDocument::HasSelectedBlockMatrixFragment( SCCOL nStartCol, SCROW nStartRow,
+sal_Bool ScDocument::HasSelectedBlockMatrixFragment( SCCOL nStartCol, SCROW nStartRow,
                                 SCCOL nEndCol, SCROW nEndRow,
                                 const ScMarkData& rMark ) const
 {
-    BOOL bOk = TRUE;
+    sal_Bool bOk = sal_True;
     for (SCTAB i=0; i<=MAXTAB && bOk; i++)
         if (pTab[i])
             if (rMark.GetTableSelect(i))
                 if (pTab[i]->HasBlockMatrixFragment( nStartCol, nStartRow, nEndCol, nEndRow ))
-                    bOk = FALSE;
+                    bOk = false;
 
     return !bOk;
 }
 
-BOOL ScDocument::HasSelectedBlockMatrixFragment( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, SCTAB nTab ) const
+sal_Bool ScDocument::HasSelectedBlockMatrixFragment( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, SCTAB nTab ) const
 {
-    BOOL bOk = TRUE;
+    sal_Bool bOk = true;
     if ( pTab[nTab] && pTab[nTab]->HasBlockMatrixFragment( nStartCol, nStartRow, nEndCol, nEndRow ) )
     {
-        bOk = FALSE;
+        bOk = false;
     }
     return !bOk;
 }
 
-BOOL ScDocument::GetMatrixFormulaRange( const ScAddress& rCellPos, ScRange& rMatrix )
+sal_Bool ScDocument::GetMatrixFormulaRange( const ScAddress& rCellPos, ScRange& rMatrix )
 {
     //  if rCell is part of a matrix formula, return its complete range
 
-    BOOL bRet = FALSE;
+    sal_Bool bRet = false;
     ScBaseCell* pCell = GetCell( rCellPos );
     if (pCell && pCell->GetCellType() == CELLTYPE_FORMULA)
     {
@@ -4598,7 +4598,7 @@ BOOL ScDocument::GetMatrixFormulaRange( const ScAddress& rCellPos, ScRange& rMat
 
                     rMatrix.aStart = aOrigin;
                     rMatrix.aEnd = aEnd;
-                    bRet = TRUE;
+                    bRet = sal_True;
                 }
             }
         }
@@ -4607,10 +4607,10 @@ BOOL ScDocument::GetMatrixFormulaRange( const ScAddress& rCellPos, ScRange& rMat
 }
 
 
-BOOL ScDocument::ExtendOverlapped( SCCOL& rStartCol, SCROW& rStartRow,
+sal_Bool ScDocument::ExtendOverlapped( SCCOL& rStartCol, SCROW& rStartRow,
                                 SCCOL nEndCol, SCROW nEndRow, SCTAB nTab )
 {
-    BOOL bFound = FALSE;
+    sal_Bool bFound = false;
     if ( ValidColRow(rStartCol,rStartRow) && ValidColRow(nEndCol,nEndRow) && ValidTab(nTab) )
     {
         if (pTab[nTab])
@@ -4662,13 +4662,13 @@ BOOL ScDocument::ExtendOverlapped( SCCOL& rStartCol, SCROW& rStartRow,
 }
 
 
-BOOL ScDocument::ExtendMergeSel( SCCOL nStartCol, SCROW nStartRow,
+sal_Bool ScDocument::ExtendMergeSel( SCCOL nStartCol, SCROW nStartRow,
                               SCCOL& rEndCol, SCROW& rEndRow,
-                              const ScMarkData& rMark, BOOL bRefresh, BOOL bAttrs )
+                              const ScMarkData& rMark, sal_Bool bRefresh, sal_Bool bAttrs )
 {
     // use all selected sheets from rMark
 
-    BOOL bFound = FALSE;
+    sal_Bool bFound = false;
     SCCOL nOldEndCol = rEndCol;
     SCROW nOldEndRow = rEndRow;
 
@@ -4678,7 +4678,7 @@ BOOL ScDocument::ExtendMergeSel( SCCOL nStartCol, SCROW nStartRow,
             SCCOL nThisEndCol = nOldEndCol;
             SCROW nThisEndRow = nOldEndRow;
             if ( ExtendMerge( nStartCol, nStartRow, nThisEndCol, nThisEndRow, nTab, bRefresh, bAttrs ) )
-                bFound = TRUE;
+                bFound = sal_True;
             if ( nThisEndCol > rEndCol )
                 rEndCol = nThisEndCol;
             if ( nThisEndRow > rEndRow )
@@ -4689,11 +4689,11 @@ BOOL ScDocument::ExtendMergeSel( SCCOL nStartCol, SCROW nStartRow,
 }
 
 
-BOOL ScDocument::ExtendMerge( SCCOL nStartCol, SCROW nStartRow,
+sal_Bool ScDocument::ExtendMerge( SCCOL nStartCol, SCROW nStartRow,
                               SCCOL& rEndCol,  SCROW& rEndRow,
-                              SCTAB nTab, BOOL bRefresh, BOOL bAttrs )
+                              SCTAB nTab, sal_Bool bRefresh, sal_Bool bAttrs )
 {
-    BOOL bFound = FALSE;
+    sal_Bool bFound = false;
     if ( ValidColRow(nStartCol,nStartRow) && ValidColRow(rEndCol,rEndRow) && ValidTab(nTab) )
     {
         if (pTab[nTab])
@@ -4711,9 +4711,9 @@ BOOL ScDocument::ExtendMerge( SCCOL nStartCol, SCROW nStartRow,
 }
 
 
-BOOL ScDocument::ExtendMerge( ScRange& rRange, BOOL bRefresh, BOOL bAttrs )
+sal_Bool ScDocument::ExtendMerge( ScRange& rRange, sal_Bool bRefresh, sal_Bool bAttrs )
 {
-    BOOL bFound = FALSE;
+    sal_Bool bFound = false;
     SCTAB nStartTab = rRange.aStart.Tab();
     SCTAB nEndTab   = rRange.aEnd.Tab();
     SCCOL nEndCol   = rRange.aEnd.Col();
@@ -4728,7 +4728,7 @@ BOOL ScDocument::ExtendMerge( ScRange& rRange, BOOL bRefresh, BOOL bAttrs )
                          nExtendCol,          nExtendRow,
                          nTab, bRefresh, bAttrs ) )
         {
-            bFound = TRUE;
+            bFound = sal_True;
             if (nExtendCol > nEndCol) nEndCol = nExtendCol;
             if (nExtendRow > nEndRow) nEndRow = nExtendRow;
         }
@@ -4740,12 +4740,12 @@ BOOL ScDocument::ExtendMerge( ScRange& rRange, BOOL bRefresh, BOOL bAttrs )
     return bFound;
 }
 
-BOOL ScDocument::ExtendTotalMerge( ScRange& rRange )
+sal_Bool ScDocument::ExtendTotalMerge( ScRange& rRange )
 {
     //  Bereich genau dann auf zusammengefasste Zellen erweitern, wenn
     //  dadurch keine neuen nicht-ueberdeckten Zellen getroffen werden
 
-    BOOL bRet = FALSE;
+    sal_Bool bRet = false;
     ScRange aExt = rRange;
     if (ExtendMerge(aExt))
     {
@@ -4770,9 +4770,9 @@ BOOL ScDocument::ExtendTotalMerge( ScRange& rRange )
     return bRet;
 }
 
-BOOL ScDocument::ExtendOverlapped( ScRange& rRange )
+sal_Bool ScDocument::ExtendOverlapped( ScRange& rRange )
 {
-    BOOL bFound = FALSE;
+    sal_Bool bFound = false;
     SCTAB nStartTab = rRange.aStart.Tab();
     SCTAB nEndTab   = rRange.aEnd.Tab();
     SCCOL nStartCol = rRange.aStart.Col();
@@ -4788,12 +4788,12 @@ BOOL ScDocument::ExtendOverlapped( ScRange& rRange )
         if (nExtendCol < nStartCol)
         {
             nStartCol = nExtendCol;
-            bFound = TRUE;
+            bFound = sal_True;
         }
         if (nExtendRow < nStartRow)
         {
             nStartRow = nExtendRow;
-            bFound = TRUE;
+            bFound = sal_True;
         }
     }
 
@@ -4803,11 +4803,11 @@ BOOL ScDocument::ExtendOverlapped( ScRange& rRange )
     return bFound;
 }
 
-BOOL ScDocument::RefreshAutoFilter( SCCOL nStartCol, SCROW nStartRow,
+sal_Bool ScDocument::RefreshAutoFilter( SCCOL nStartCol, SCROW nStartRow,
                                     SCCOL nEndCol, SCROW nEndRow, SCTAB nTab )
 {
-    USHORT nCount = pDBCollection->GetCount();
-    USHORT i;
+    sal_uInt16 nCount = pDBCollection->GetCount();
+    sal_uInt16 i;
     ScDBData* pData;
     SCTAB nDBTab;
     SCCOL nDBStartCol;
@@ -4817,7 +4817,7 @@ BOOL ScDocument::RefreshAutoFilter( SCCOL nStartCol, SCROW nStartRow,
 
     //      Autofilter loeschen
 
-    BOOL bChange = RemoveFlagsTab( nStartCol,nStartRow, nEndCol,nEndRow, nTab, SC_MF_AUTO );
+    sal_Bool bChange = RemoveFlagsTab( nStartCol,nStartRow, nEndCol,nEndRow, nTab, SC_MF_AUTO );
 
     //      Autofilter setzen
 
@@ -4832,7 +4832,7 @@ BOOL ScDocument::RefreshAutoFilter( SCCOL nStartCol, SCROW nStartRow,
             {
                 if (ApplyFlagsTab( nDBStartCol,nDBStartRow, nDBEndCol,nDBStartRow,
                                     nDBTab, SC_MF_AUTO ))
-                    bChange = TRUE;
+                    bChange = sal_True;
             }
         }
     }
@@ -4847,7 +4847,7 @@ void ScDocument::SkipOverlapped( SCCOL& rCol, SCROW& rRow, SCTAB nTab ) const
         --rRow;
 }
 
-BOOL ScDocument::IsHorOverlapped( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
+sal_Bool ScDocument::IsHorOverlapped( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
 {
     const ScMergeFlagAttr* pAttr = (const ScMergeFlagAttr*)
                                         GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG );
@@ -4856,12 +4856,12 @@ BOOL ScDocument::IsHorOverlapped( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
     else
     {
         OSL_FAIL("Overlapped: Attr==0");
-        return FALSE;
+        return false;
     }
 }
 
 
-BOOL ScDocument::IsVerOverlapped( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
+sal_Bool ScDocument::IsVerOverlapped( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
 {
     const ScMergeFlagAttr* pAttr = (const ScMergeFlagAttr*)
                                         GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG );
@@ -4870,7 +4870,7 @@ BOOL ScDocument::IsVerOverlapped( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
     else
     {
         OSL_FAIL("Overlapped: Attr==0");
-        return FALSE;
+        return false;
     }
 }
 
@@ -4880,7 +4880,7 @@ void ScDocument::ApplySelectionFrame( const ScMarkData& rMark,
                                       const SvxBoxInfoItem* pLineInner )
 {
     ScRangeList aRangeList;
-    rMark.FillRangeListWithMarks( &aRangeList, FALSE );
+    rMark.FillRangeListWithMarks( &aRangeList, false );
     size_t nRangeCount = aRangeList.size();
     for (SCTAB i=0; i<=MAXTAB; i++)
     {
@@ -4915,11 +4915,11 @@ void ScDocument::ApplyFrameAreaTab( const ScRange& rRange,
 void ScDocument::ApplySelectionPattern( const ScPatternAttr& rAttr, const ScMarkData& rMark, ScEditDataArray* pDataArray )
 {
     const SfxItemSet* pSet = &rAttr.GetItemSet();
-    BOOL bSet = FALSE;
-    USHORT i;
+    sal_Bool bSet = false;
+    sal_uInt16 i;
     for (i=ATTR_PATTERN_START; i<=ATTR_PATTERN_END && !bSet; i++)
         if (pSet->GetItemState(i) == SFX_ITEM_SET)
-            bSet = TRUE;
+            bSet = sal_True;
 
     if (bSet)
     {
@@ -4943,7 +4943,7 @@ void ScDocument::ApplySelectionPattern( const ScPatternAttr& rAttr, const ScMark
 }
 
 
-void ScDocument::ChangeSelectionIndent( BOOL bIncrement, const ScMarkData& rMark )
+void ScDocument::ChangeSelectionIndent( sal_Bool bIncrement, const ScMarkData& rMark )
 {
     for (SCTAB i=0; i<=MAXTAB; i++)
         if (pTab[i] && rMark.GetTableSelect(i))
@@ -4951,7 +4951,7 @@ void ScDocument::ChangeSelectionIndent( BOOL bIncrement, const ScMarkData& rMark
 }
 
 
-void ScDocument::ClearSelectionItems( const USHORT* pWhich, const ScMarkData& rMark )
+void ScDocument::ClearSelectionItems( const sal_uInt16* pWhich, const ScMarkData& rMark )
 {
     for (SCTAB i=0; i<=MAXTAB; i++)
         if (pTab[i] && rMark.GetTableSelect(i))
@@ -4959,7 +4959,7 @@ void ScDocument::ClearSelectionItems( const USHORT* pWhich, const ScMarkData& rM
 }
 
 
-void ScDocument::DeleteSelection( USHORT nDelFlag, const ScMarkData& rMark )
+void ScDocument::DeleteSelection( sal_uInt16 nDelFlag, const ScMarkData& rMark )
 {
     for (SCTAB i=0; i<=MAXTAB; i++)
         if (pTab[i] && rMark.GetTableSelect(i))
@@ -4967,7 +4967,7 @@ void ScDocument::DeleteSelection( USHORT nDelFlag, const ScMarkData& rMark )
 }
 
 
-void ScDocument::DeleteSelectionTab( SCTAB nTab, USHORT nDelFlag, const ScMarkData& rMark )
+void ScDocument::DeleteSelectionTab( SCTAB nTab, sal_uInt16 nDelFlag, const ScMarkData& rMark )
 {
     if (ValidTab(nTab)  && pTab[nTab])
         pTab[nTab]->DeleteSelection( nDelFlag, rMark );
@@ -5023,12 +5023,12 @@ void ScDocument::FindAreaPos( SCCOL& rCol, SCROW& rRow, SCTAB nTab, SCsCOL nMovX
 
 
 void ScDocument::GetNextPos( SCCOL& rCol, SCROW& rRow, SCTAB nTab, SCsCOL nMovX, SCsROW nMovY,
-                                BOOL bMarked, BOOL bUnprotected, const ScMarkData& rMark )
+                                sal_Bool bMarked, sal_Bool bUnprotected, const ScMarkData& rMark )
 {
     DBG_ASSERT( !nMovX || !nMovY, "GetNextPos: nur X oder Y" );
 
     ScMarkData aCopyMark = rMark;
-    aCopyMark.SetMarking(FALSE);
+    aCopyMark.SetMarking(false);
     aCopyMark.MarkToMulti();
 
     if (ValidTab(nTab) && pTab[nTab])
@@ -5046,11 +5046,11 @@ void ScDocument::UpdStlShtPtrsFrmNms()
 
     ScDocumentPool* pPool = xPoolHelper->GetDocPool();
 
-    USHORT nCount = pPool->GetItemCount(ATTR_PATTERN);
+    sal_uInt32 nCount = pPool->GetItemCount2(ATTR_PATTERN);
     ScPatternAttr* pPattern;
-    for (USHORT i=0; i<nCount; i++)
+    for (sal_uInt32 i=0; i<nCount; i++)
     {
-        pPattern = (ScPatternAttr*)pPool->GetItem(ATTR_PATTERN, i);
+        pPattern = (ScPatternAttr*)pPool->GetItem2(ATTR_PATTERN, i);
         if (pPattern)
             pPattern->UpdateStyleSheet();
     }
@@ -5064,11 +5064,11 @@ void ScDocument::StylesToNames()
 
     ScDocumentPool* pPool = xPoolHelper->GetDocPool();
 
-    USHORT nCount = pPool->GetItemCount(ATTR_PATTERN);
+    sal_uInt32 nCount = pPool->GetItemCount2(ATTR_PATTERN);
     ScPatternAttr* pPattern;
-    for (USHORT i=0; i<nCount; i++)
+    for (sal_uInt32 i=0; i<nCount; i++)
     {
-        pPattern = (ScPatternAttr*)pPool->GetItem(ATTR_PATTERN, i);
+        pPattern = (ScPatternAttr*)pPool->GetItem2(ATTR_PATTERN, i);
         if (pPattern)
             pPattern->StyleToName();
     }
@@ -5076,9 +5076,9 @@ void ScDocument::StylesToNames()
 }
 
 
-ULONG ScDocument::GetCellCount() const
+sal_uLong ScDocument::GetCellCount() const
 {
-    ULONG nCellCount = 0L;
+    sal_uLong nCellCount = 0L;
 
     for ( SCTAB nTab=0; nTab<=MAXTAB; nTab++ )
         if ( pTab[nTab] )
@@ -5095,9 +5095,9 @@ SCSIZE ScDocument::GetCellCount(SCTAB nTab, SCCOL nCol) const
     return pTab[nTab]->GetCellCount(nCol);
 }
 
-ULONG ScDocument::GetCodeCount() const
+sal_uLong ScDocument::GetCodeCount() const
 {
-    ULONG nCodeCount = 0;
+    sal_uLong nCodeCount = 0;
 
     for ( SCTAB nTab=0; nTab<=MAXTAB; nTab++ )
         if ( pTab[nTab] )
@@ -5170,13 +5170,13 @@ void ScDocument::RemoveManualBreaks( SCTAB nTab )
         pTab[nTab]->RemoveManualBreaks();
 }
 
-BOOL ScDocument::HasManualBreaks( SCTAB nTab ) const
+sal_Bool ScDocument::HasManualBreaks( SCTAB nTab ) const
 {
     if ( ValidTab(nTab)  && pTab[nTab] )
         return pTab[nTab]->HasManualBreaks();
 
     OSL_FAIL("falsche Tab");
-    return FALSE;
+    return false;
 }
 
 
@@ -5188,9 +5188,9 @@ void ScDocument::GetDocStat( ScDocStat& rDocStat )
 }
 
 
-BOOL ScDocument::HasPrintRange()
+sal_Bool ScDocument::HasPrintRange()
 {
-    BOOL bResult = FALSE;
+    sal_Bool bResult = false;
 
     for ( SCTAB i=0; !bResult && i<nMaxTableNumber; i++ )
         if ( pTab[i] )
@@ -5200,13 +5200,13 @@ BOOL ScDocument::HasPrintRange()
 }
 
 
-BOOL ScDocument::IsPrintEntireSheet( SCTAB nTab ) const
+sal_Bool ScDocument::IsPrintEntireSheet( SCTAB nTab ) const
 {
     return (ValidTab(nTab) ) && pTab[nTab] && pTab[nTab]->IsPrintEntireSheet();
 }
 
 
-USHORT ScDocument::GetPrintRangeCount( SCTAB nTab )
+sal_uInt16 ScDocument::GetPrintRangeCount( SCTAB nTab )
 {
     if (ValidTab(nTab) && pTab[nTab])
         return pTab[nTab]->GetPrintRangeCount();
@@ -5215,7 +5215,7 @@ USHORT ScDocument::GetPrintRangeCount( SCTAB nTab )
 }
 
 
-const ScRange* ScDocument::GetPrintRange( SCTAB nTab, USHORT nPos )
+const ScRange* ScDocument::GetPrintRange( SCTAB nTab, sal_uInt16 nPos )
 {
     if (ValidTab(nTab) && pTab[nTab])
         return pTab[nTab]->GetPrintRange(nPos);
@@ -5297,7 +5297,7 @@ void ScDocument::RestorePrintRanges( const ScPrintRangeSaver& rSaver )
 }
 
 
-BOOL ScDocument::NeedPageResetAfterTab( SCTAB nTab ) const
+sal_Bool ScDocument::NeedPageResetAfterTab( SCTAB nTab ) const
 {
     //  Die Seitennummern-Zaehlung faengt bei einer Tabelle neu an, wenn eine
     //  andere Vorlage als bei der vorherigen gesetzt ist (nur Namen vergleichen)
@@ -5312,14 +5312,14 @@ BOOL ScDocument::NeedPageResetAfterTab( SCTAB nTab ) const
             if ( pStyle )
             {
                 const SfxItemSet& rSet = pStyle->GetItemSet();
-                USHORT nFirst = ((const SfxUInt16Item&)rSet.Get(ATTR_PAGE_FIRSTPAGENO)).GetValue();
+                sal_uInt16 nFirst = ((const SfxUInt16Item&)rSet.Get(ATTR_PAGE_FIRSTPAGENO)).GetValue();
                 if ( nFirst != 0 )
-                    return TRUE;        // Seitennummer in neuer Vorlage angegeben
+                    return sal_True;        // Seitennummer in neuer Vorlage angegeben
             }
         }
     }
 
-    return FALSE;       // sonst nicht
+    return false;       // sonst nicht
 }
 
 SfxUndoManager* ScDocument::GetUndoManager()

@@ -39,6 +39,7 @@
 #include "macros.hxx"
 #include "AxisIndexDefines.hxx"
 #include "Clipping.hxx"
+#include "DateHelper.hxx"
 
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 
@@ -86,7 +87,6 @@ BarChart::~BarChart()
 PlottingPositionHelper& BarChart::getPlottingPositionHelper( sal_Int32 nAxisIndex ) const
 {
     PlottingPositionHelper& rPosHelper = VSeriesPlotter::getPlottingPositionHelper( nAxisIndex );
-
     BarPositionHelper* pBarPosHelper = dynamic_cast<BarPositionHelper*>(&rPosHelper);
     if( pBarPosHelper && nAxisIndex >= 0 )
     {
@@ -95,7 +95,6 @@ PlottingPositionHelper& BarChart::getPlottingPositionHelper( sal_Int32 nAxisInde
         if( nAxisIndex < m_aGapwidthSequence.getLength() )
             pBarPosHelper->setOuterDistance( m_aGapwidthSequence[nAxisIndex]/100.0 );
     }
-
     return rPosHelper;
 }
 
@@ -113,7 +112,7 @@ drawing::Direction3D BarChart::getPreferredDiagramAspectRatio() const
             if(!m_aZSlots.empty())
                 fXSlotCount = m_aZSlots.begin()->size();
 
-            aRet.DirectionZ = aScale.DirectionZ/(aScale.DirectionX + aScale.DirectionX*(fXSlotCount-1.0)*pPosHelper->getSlotWidth());
+            aRet.DirectionZ = aScale.DirectionZ/(aScale.DirectionX + aScale.DirectionX*(fXSlotCount-1.0)*pPosHelper->getScaledSlotWidth());
         }
         else
             return VSeriesPlotter::getPreferredDiagramAspectRatio();
@@ -139,27 +138,6 @@ bool BarChart::keepAspectRatio() const
     if( m_nDimension == 3 )
         return true;
     return true;
-}
-
-//-------------------------------------------------------------------------
-// MinimumAndMaximumSupplier
-//-------------------------------------------------------------------------
-
-double BarChart::getMinimumX()
-{
-    if( m_bCategoryXAxis )
-        return 0.5;//first category (index 0) matches with real number 1.0
-    return VSeriesPlotter::getMinimumX();
-}
-double BarChart::getMaximumX()
-{
-    if( m_bCategoryXAxis )
-    {
-        //return category count
-        sal_Int32 nPointCount = getPointCount();
-        return nPointCount+0.5;//first category (index 0) matches with real number 1.0
-    }
-    return VSeriesPlotter::getMaximumX();
 }
 
 awt::Point BarChart::getLabelScreenPositionAndAlignment(
@@ -467,7 +445,7 @@ void BarChart::createShapes()
         m_pShapeFactory->createGroup2D( m_xFinalTarget,rtl::OUString() ));
     //check necessary here that different Y axis can not be stacked in the same group? ... hm?
 
-    double fLogicZ        = 0.0;//as defined
+    double fLogicZ        = 1.0;//as defined
 
     bool bDrawConnectionLines = false;
     bool bDrawConnectionLinesInited = false;
@@ -482,12 +460,11 @@ void BarChart::createShapes()
     sal_Int32 nCreatedPoints = 0;
     //
 
-    //(@todo maybe different iteration for breaks in axis ?)
-    sal_Int32 nStartCategoryIndex = m_pMainPosHelper->getStartCategoryIndex(); // inclusive
-    sal_Int32 nEndCategoryIndex   = m_pMainPosHelper->getEndCategoryIndex(); //inclusive
+    sal_Int32 nStartIndex = 0;
+    sal_Int32 nEndIndex = VSeriesPlotter::getPointCount();
 //=============================================================================
-    //iterate through all shown categories
-    for( sal_Int32 nCatIndex = nStartCategoryIndex; nCatIndex < nEndCategoryIndex; nCatIndex++ )
+    //iterate through all x values per indices
+    for( sal_Int32 nPointIndex = nStartIndex; nPointIndex < nEndIndex; nPointIndex++ )
     {
         ::std::vector< ::std::vector< VDataSeriesGroup > >::iterator             aZSlotIter = m_aZSlots.begin();
         const ::std::vector< ::std::vector< VDataSeriesGroup > >::const_iterator  aZSlotEnd = m_aZSlots.end();
@@ -506,7 +483,7 @@ void BarChart::createShapes()
                     aLogicYSumMap[nAttachedAxisIndex]=0.0;
 
                 double fMinimumY = 0.0, fMaximumY = 0.0;
-                aXSlotIter->calculateYMinAndMaxForCategory( nCatIndex
+                aXSlotIter->calculateYMinAndMaxForCategory( nPointIndex
                     , isSeperateStackingForDifferentSigns( 1 ), fMinimumY, fMaximumY, nAttachedAxisIndex );
 
                 if( !::rtl::math::isNan( fMaximumY ) && fMaximumY > 0)
@@ -542,14 +519,14 @@ void BarChart::createShapes()
 
                 //update/create information for current group
                 pPosHelper->updateSeriesCount( aZSlotIter->size() );
-                double fLogicBaseWidth = pPosHelper->getSlotWidth();
+                double fLogicBaseWidth = pPosHelper->getScaledSlotWidth();
 
                 ::std::vector< VDataSeries* >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
 
                 // get distance from base value to maximum and minimum
 
                 double fMinimumY = 0.0, fMaximumY = 0.0;
-                aXSlotIter->calculateYMinAndMaxForCategory( nCatIndex
+                aXSlotIter->calculateYMinAndMaxForCategory( nPointIndex
                     , isSeperateStackingForDifferentSigns( 1 ), fMinimumY, fMaximumY, nAttachedAxisIndex );
 
                 double fLogicPositiveYSum = 0.0;
@@ -601,7 +578,7 @@ void BarChart::createShapes()
 
                     bOnlyConnectionLinesForThisPoint = false;
 
-                    if(nCatIndex==nStartCategoryIndex)//do not create a regression line for each point
+                    if(nPointIndex==nStartIndex)//do not create a regression line for each point
                         createRegressionCurvesShapes( **aSeriesIter, xRegressionCurveTarget, xRegressionCurveEquationTarget,
                                                       m_pPosHelper->maySkipPointsInRegressionCalculation());
 
@@ -626,8 +603,17 @@ void BarChart::createShapes()
                         getSeriesGroupShape(*aSeriesIter, xSeriesTarget) );
 
                     //collect data point information (logic coordinates, style ):
-                    double fLogicX = pPosHelper->getSlotPos( (*aSeriesIter)->getXValue( nCatIndex ), fSlotX );
-                    double fLogicBarHeight = (*aSeriesIter)->getYValue( nCatIndex );
+                    double fUnscaledLogicX = (*aSeriesIter)->getXValue( nPointIndex );
+                    fUnscaledLogicX = DateHelper::RasterizeDateValue( fUnscaledLogicX, m_aNullDate, m_nTimeResolution );
+                    if(fUnscaledLogicX<pPosHelper->getLogicMinX())
+                        continue;//point not visible
+                    if(fUnscaledLogicX>pPosHelper->getLogicMaxX())
+                        continue;//point not visible
+                    if(pPosHelper->isStrongLowerRequested(0) && fUnscaledLogicX==pPosHelper->getLogicMaxX())
+                        continue;//point not visible
+                    double fLogicX = pPosHelper->getScaledSlotPos( fUnscaledLogicX, fSlotX );
+
+                    double fLogicBarHeight = (*aSeriesIter)->getYValue( nPointIndex );
                     if( ::rtl::math::isNan( fLogicBarHeight )) //no value at this category
                         continue;
 
@@ -652,9 +638,9 @@ void BarChart::createShapes()
                         fNegativeLogicYForNextSeries += fLogicBarHeight;
 
                     if(m_nDimension==3)
-                        fLogicZ = nZ;
+                        fLogicZ = nZ+0.5;
 
-                    drawing::Position3D aUnscaledLogicPosition( fLogicX, fUpperYValue, fLogicZ );
+                    drawing::Position3D aUnscaledLogicPosition( fUnscaledLogicX, fUpperYValue, fLogicZ );
 
                     //@todo ... start an iteration over the different breaks of the axis
                     //each subsystem may add an additional shape to form the whole point
@@ -664,7 +650,7 @@ void BarChart::createShapes()
     //                      uno::Reference<drawing::XShape>( xPointGroupShape_Shapes, uno::UNO_QUERY );
                     //as long as we do not iterate we do not need to create an additional group for each point
                     uno::Reference< drawing::XShapes > xPointGroupShape_Shapes = xSeriesGroupShape_Shapes;
-                    uno::Reference< beans::XPropertySet > xDataPointProperties( (*aSeriesIter)->getPropertiesOfPoint( nCatIndex ) );
+                    uno::Reference< beans::XPropertySet > xDataPointProperties( (*aSeriesIter)->getPropertiesOfPoint( nPointIndex ) );
                     sal_Int32 nGeometry3D = DataPointGeometry3D::CUBOID;
                     if(m_nDimension==3) try
                     {
@@ -731,7 +717,7 @@ void BarChart::createShapes()
                         //better performance for big data
                         FormerBarPoint aFormerPoint( aSeriesFormerPointMap[pSeries] );
                         pPosHelper->setCoordinateSystemResolution( m_aCoordinateSystemResolution );
-                        if( !pSeries->isAttributedDataPoint(nCatIndex)
+                        if( !pSeries->isAttributedDataPoint(nPointIndex)
                             &&
                             pPosHelper->isSameForGivenResolution( aFormerPoint.m_fX, aFormerPoint.m_fUpperY, aFormerPoint.m_fZ
                                                             , fLogicX, fUpperYValue, fLogicZ )
@@ -830,20 +816,20 @@ void BarChart::createShapes()
                             //set name/classified ObjectID (CID)
                             ShapeFactory::setShapeName(xShape
                                 , ObjectIdentifier::createPointCID(
-                                    (*aSeriesIter)->getPointCID_Stub(),nCatIndex) );
+                                    (*aSeriesIter)->getPointCID_Stub(),nPointIndex) );
                         }
 
                         //create error bar
-                        createErrorBar_Y( aUnscaledLogicPosition, **aSeriesIter, nCatIndex, m_xLogicTarget );
+                        createErrorBar_Y( aUnscaledLogicPosition, **aSeriesIter, nPointIndex, m_xLogicTarget, &fLogicX );
 
                         //------------
                         //create data point label
-                        if( (**aSeriesIter).getDataPointLabelIfLabel(nCatIndex) )
+                        if( (**aSeriesIter).getDataPointLabelIfLabel(nPointIndex) )
                         {
                             double fLogicSum = aLogicYSumMap[nAttachedAxisIndex];
 
                             LabelAlignment eAlignment(LABEL_ALIGN_CENTER);
-                            sal_Int32 nLabelPlacement = pSeries->getLabelPlacement( nCatIndex, m_xChartTypeModel, m_nDimension, pPosHelper->isSwapXAndY() );
+                            sal_Int32 nLabelPlacement = pSeries->getLabelPlacement( nPointIndex, m_xChartTypeModel, m_nDimension, pPosHelper->isSwapXAndY() );
 
                             double fLowerBarDepth = fLogicBarDepth;
                             double fUpperBarDepth = fLogicBarDepth;
@@ -868,7 +854,7 @@ void BarChart::createShapes()
                                 if( m_nDimension == 3 )
                                     nOffset = 260;
                             }
-                            this->createDataLabel( xTextTarget, **aSeriesIter, nCatIndex
+                            this->createDataLabel( xTextTarget, **aSeriesIter, nPointIndex
                                             , fLogicValueForLabeDisplay, fLogicSum, aScreenPosition2D, eAlignment, nOffset );
                         }
 

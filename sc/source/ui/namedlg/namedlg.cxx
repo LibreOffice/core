@@ -67,24 +67,24 @@
 struct SaveData
 {
     SaveData()
-        : bCriteria(FALSE),bPrintArea(FALSE),
-          bColHeader(FALSE),bRowHeader(FALSE),
-          bDirty(FALSE) {}
+        : bCriteria(false),bPrintArea(false),
+          bColHeader(false),bRowHeader(false),
+          bDirty(false) {}
 
     void Clear()
         {
             aStrSymbol.Erase();
             bCriteria  = bPrintArea =
-            bColHeader = bRowHeader = FALSE;
-            bDirty = TRUE;
+            bColHeader = bRowHeader = false;
+            bDirty = sal_True;
         }
 
     String  aStrSymbol;
-    BOOL    bCriteria:1;
-    BOOL    bPrintArea:1;
-    BOOL    bColHeader:1;
-    BOOL    bRowHeader:1;
-    BOOL    bDirty:1;
+    sal_Bool    bCriteria:1;
+    sal_Bool    bPrintArea:1;
+    sal_Bool    bColHeader:1;
+    sal_Bool    bRowHeader:1;
+    sal_Bool    bDirty:1;
 };
 
 static SaveData* pSaveObj = NULL;
@@ -95,7 +95,7 @@ static SaveData* pSaveObj = NULL;
     pSaveObj->bPrintArea = aBtnPrintArea.IsChecked();   \
     pSaveObj->bColHeader = aBtnColHeader.IsChecked();   \
     pSaveObj->bRowHeader = aBtnRowHeader.IsChecked();   \
-    pSaveObj->bDirty     = TRUE;
+    pSaveObj->bDirty     = sal_True;
 
 #define RESTORE_DATA() \
     if ( pSaveObj->bDirty )                             \
@@ -105,7 +105,7 @@ static SaveData* pSaveObj = NULL;
         aBtnPrintArea.Check( pSaveObj->bPrintArea );    \
         aBtnColHeader.Check( pSaveObj->bColHeader );    \
         aBtnRowHeader.Check( pSaveObj->bRowHeader );    \
-        pSaveObj->bDirty = FALSE;                       \
+        pSaveObj->bDirty = false;                       \
     }
 
 #define ERRORBOX(s) ErrorBox(this,WinBits(WB_OK|WB_DEF_OK),s).Execute();
@@ -142,7 +142,7 @@ ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
         aBtnRemove      ( this, ScResId( BTN_REMOVE ) ),
         aBtnMore        ( this, ScResId( BTN_MORE ) ),
         //
-        bSaved          (FALSE),
+        bSaved          (false),
         aStrAdd         ( ScResId( STR_ADD ) ),
         aStrModify      ( ScResId( STR_MODIFY ) ),
         errMsgInvalidSym( ScResId( STR_INVALIDSYMBOL ) ),
@@ -155,6 +155,8 @@ ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
     pSaveObj = new SaveData;
     Init();
     FreeResource();
+
+    aRbAssign.SetAccessibleRelationMemberOf(&aFlAssign);
 }
 
 
@@ -214,20 +216,20 @@ void ScNameDlg::Init()
     UpdateChecks();
     EdModifyHdl( 0 );
 
-    bSaved=TRUE;
+    bSaved=sal_True;
     SAVE_DATA()
 
     //@BugID 54702
-    //SFX_APPWINDOW->Disable(FALSE);        //! allgemeine Methode im ScAnyRefDlg
+    //SFX_APPWINDOW->Disable(sal_False);        //! allgemeine Methode im ScAnyRefDlg
 }
 
 //----------------------------------------------------------------------------
-BOOL ScNameDlg::IsRefInputMode() const
+sal_Bool ScNameDlg::IsRefInputMode() const
 {
     return aEdAssign.IsEnabled();
 }
 
-void ScNameDlg::RefInputDone( BOOL bForced)
+void ScNameDlg::RefInputDone( sal_Bool bForced)
 {
     ScAnyRefDlg::RefInputDone(bForced);
     EdModifyHdl(&aEdAssign);
@@ -252,7 +254,7 @@ void ScNameDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 
 
 //----------------------------------------------------------------------------
-BOOL ScNameDlg::Close()
+sal_Bool ScNameDlg::Close()
 {
     return DoClose( ScNameDlgWrapper::GetChildWindowId() );
 }
@@ -314,8 +316,8 @@ void ScNameDlg::UpdateChecks()
 
 void ScNameDlg::UpdateNames()
 {
-    aEdName.SetUpdateMode( FALSE );
-    USHORT  nNamePos = aEdName.GetTopEntry();
+    aEdName.SetUpdateMode( false );
+    sal_uInt16  nNamePos = aEdName.GetTopEntry();
     aEdName.Clear();
 
     aEdAssign.SetText( EMPTY_STRING );
@@ -336,7 +338,7 @@ void ScNameDlg::UpdateNames()
         }
     }
 
-    aEdName.SetUpdateMode( TRUE );
+    aEdName.SetUpdateMode( true );
     aEdName.SetTopEntry(nNamePos);
     aEdName.Invalidate();
 }
@@ -393,9 +395,9 @@ IMPL_LINK_INLINE_END( ScNameDlg, CancelBtnHdl, void *, EMPTYARG )
 
 IMPL_LINK( ScNameDlg, AddBtnHdl, void *, EMPTYARG )
 {
-    BOOL    bAdded    = FALSE;
+    sal_Bool    bAdded    = false;
     String  aNewEntry = aEdName.GetText();
-    USHORT  nNamePos = aEdName.GetTopEntry();
+    sal_uInt16  nNamePos = aEdName.GetTopEntry();
     aNewEntry.EraseLeadingChars( ' ' );
     aNewEntry.EraseTrailingChars( ' ' );
 
@@ -444,7 +446,7 @@ IMPL_LINK( ScNameDlg, AddBtnHdl, void *, EMPTYARG )
                         delete pNewEntry;
 
                     UpdateNames();
-                    bSaved=FALSE;
+                    bSaved=false;
                     RESTORE_DATA()
                     aEdName.SetText(EMPTY_STRING);
                     aEdName.GrabFocus();
@@ -454,9 +456,9 @@ IMPL_LINK( ScNameDlg, AddBtnHdl, void *, EMPTYARG )
                     aBtnRemove.Disable();
 
                     //@BugID 54702 raus mit dem Sch.
-                    //SFX_APPWINDOW->Disable(FALSE);        //! allgemeine Methode im ScAnyRefDlg
+                    //SFX_APPWINDOW->Disable(sal_False);        //! allgemeine Methode im ScAnyRefDlg
 
-                    bAdded = TRUE;
+                    bAdded = sal_True;
                 }
                 else // theSymbol ungueltig
                 {
@@ -500,7 +502,7 @@ IMPL_LINK( ScNameDlg, RemoveBtnHdl, void *, EMPTYARG )
             aLocalRangeName.erase(*pData);
             UpdateNames();
             UpdateChecks();
-            bSaved=FALSE;
+            bSaved=false;
             RESTORE_DATA()
             theCurSel = Selection( 0, SELECTION_MAX );
             aBtnAdd.SetText( aStrAdd );
@@ -537,7 +539,7 @@ IMPL_LINK( ScNameDlg, EdModifyHdl, Edit *, pEd )
 {
     String  theName     = aEdName.GetText();
     String  theSymbol   = aEdAssign.GetText();
-    BOOL    bNameFound  = (COMBOBOX_ENTRY_NOTFOUND
+    sal_Bool    bNameFound  = (COMBOBOX_ENTRY_NOTFOUND
                            != aEdName.GetEntryPos( theName ));
 
     if ( pEd == &aEdName )
@@ -552,7 +554,7 @@ IMPL_LINK( ScNameDlg, EdModifyHdl, Edit *, pEd )
             aEdAssign.Disable();
             aRbAssign.Disable();
             //@BugID 54702 raus mit dem Sch.
-            //SFX_APPWINDOW->Disable(FALSE);        //! allgemeine Methode im ScAnyRefDlg
+            //SFX_APPWINDOW->Disable(sal_False);        //! allgemeine Methode im ScAnyRefDlg
         }
         else
         {
@@ -565,7 +567,7 @@ IMPL_LINK( ScNameDlg, EdModifyHdl, Edit *, pEd )
 
                 if(!bSaved)
                 {
-                    bSaved=TRUE;
+                    bSaved=sal_True;
                     SAVE_DATA()
                 }
                 NameSelectHdl( 0 );
@@ -576,7 +578,7 @@ IMPL_LINK( ScNameDlg, EdModifyHdl, Edit *, pEd )
                     aBtnAdd.SetText( aStrAdd );
                 aBtnRemove.Disable();
 
-                bSaved=FALSE;
+                bSaved=false;
                 RESTORE_DATA()
             }
             theSymbol = aEdAssign.GetText();

@@ -63,9 +63,9 @@ ScMyValidation::ScMyValidation()
     sImputTitle(),
     sFormula1(),
     sFormula2(),
-    bShowErrorMessage(sal_False),
-    bShowImputMessage(sal_False),
-    bIgnoreBlanks(sal_False)
+    bShowErrorMessage(false),
+    bShowImputMessage(false),
+    bIgnoreBlanks(false)
 {
 }
 
@@ -92,7 +92,7 @@ sal_Bool ScMyValidation::IsEqual(const ScMyValidation& aVal) const
         aVal.sFormula2 == sFormula2)
         return sal_True;
     else
-        return sal_False;
+        return false;
 }
 
 ScMyValidationsContainer::ScMyValidationsContainer()
@@ -124,7 +124,7 @@ ScMyValidationsContainer::~ScMyValidationsContainer()
 sal_Bool ScMyValidationsContainer::AddValidation(const uno::Any& aTempAny,
     sal_Int32& nValidationIndex)
 {
-    sal_Bool bAdded(sal_False);
+    sal_Bool bAdded(false);
     uno::Reference<beans::XPropertySet> xPropertySet(aTempAny, uno::UNO_QUERY);
     if (xPropertySet.is())
     {
@@ -163,7 +163,7 @@ sal_Bool ScMyValidationsContainer::AddValidation(const uno::Any& aTempAny,
                 aValidation.aBaseCell = xCondition->getSourcePosition();
             }
             //ScMyValidationRange aValidationRange;
-            sal_Bool bEqualFound(sal_False);
+            sal_Bool bEqualFound(false);
             sal_Int32 i(0);
             sal_Int32 nCount(aValidationVec.size());
             while (i < nCount && !bEqualFound)
@@ -299,7 +299,7 @@ rtl::OUString ScMyValidationsContainer::GetCondition(ScXMLExport& rExport, const
     {
         const formula::FormulaGrammar::Grammar eGrammar = rExport.GetDocument()->GetStorageGrammar();
         sal_uInt16 nNamespacePrefix = (eGrammar == formula::FormulaGrammar::GRAM_ODFF ? XML_NAMESPACE_OF : XML_NAMESPACE_OOOC);
-        sCondition = rExport.GetNamespaceMap().GetQNameByKey( nNamespacePrefix, sCondition, sal_False );
+        sCondition = rExport.GetNamespaceMap().GetQNameByKey( nNamespacePrefix, sCondition, false );
     }
 
     return sCondition;
@@ -338,7 +338,7 @@ void ScMyValidationsContainer::WriteMessage(ScXMLExport& rExport,
         {
             if ((sText[i] == '\n'))
             {
-                SvXMLElementExport aElemP(rExport, XML_NAMESPACE_TEXT, XML_P, sal_True, sal_False);
+                SvXMLElementExport aElemP(rExport, XML_NAMESPACE_TEXT, XML_P, sal_True, false);
                 rExport.GetTextParagraphExport()->exportText(sTemp.makeStringAndClear(), bPrevCharWasSpace);
             }
             else
@@ -347,7 +347,7 @@ void ScMyValidationsContainer::WriteMessage(ScXMLExport& rExport,
         }
         if (sTemp.getLength())
         {
-            SvXMLElementExport aElemP(rExport, XML_NAMESPACE_TEXT, XML_P, sal_True, sal_False);
+            SvXMLElementExport aElemP(rExport, XML_NAMESPACE_TEXT, XML_P, sal_True, false);
             rExport.GetTextParagraphExport()->exportText(sTemp.makeStringAndClear(), bPrevCharWasSpace);
         }
     }
@@ -404,19 +404,19 @@ void ScMyValidationsContainer::WriteValidations(ScXMLExport& rExport)
                     case sheet::ValidationAlertStyle_INFO :
                     {
                         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_MESSAGE_TYPE, XML_INFORMATION);
-                        WriteMessage(rExport, aItr->sErrorTitle, aItr->sErrorMessage, aItr->bShowErrorMessage, sal_False);
+                        WriteMessage(rExport, aItr->sErrorTitle, aItr->sErrorMessage, aItr->bShowErrorMessage, false);
                     }
                     break;
                     case sheet::ValidationAlertStyle_WARNING :
                     {
                         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_MESSAGE_TYPE, XML_WARNING);
-                        WriteMessage(rExport, aItr->sErrorTitle, aItr->sErrorMessage, aItr->bShowErrorMessage, sal_False);
+                        WriteMessage(rExport, aItr->sErrorTitle, aItr->sErrorMessage, aItr->bShowErrorMessage, false);
                     }
                     break;
                     case sheet::ValidationAlertStyle_STOP :
                     {
                         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_MESSAGE_TYPE, XML_STOP);
-                        WriteMessage(rExport, aItr->sErrorTitle, aItr->sErrorMessage, aItr->bShowErrorMessage, sal_False);
+                        WriteMessage(rExport, aItr->sErrorTitle, aItr->sErrorMessage, aItr->bShowErrorMessage, false);
                     }
                     break;
                     case sheet::ValidationAlertStyle_MACRO :
@@ -501,7 +501,7 @@ void ScMyDefaultStyles::FillDefaultStyles(const sal_Int32 nTable,
             pDefaults = pColDefaults;
             nLast = nLastCol;
         }
-        sal_Bool bPrevAutoStyle(sal_False);
+        sal_Bool bPrevAutoStyle(false);
         sal_Bool bIsAutoStyle;
         sal_Bool bResult;
         sal_Int32 nPrevIndex(0);
@@ -584,7 +584,7 @@ void ScMyDefaultStyles::FillDefaultStyles(const sal_Int32 nTable,
     if (pColDefaults)
         delete pColDefaults;
     pColDefaults = new ScMyDefaultStyleList(nLastCol + 1);
-     FillDefaultStyles(nTable, nLastRow, nLastCol, pCellStyles, pDoc, sal_False);
+     FillDefaultStyles(nTable, nLastRow, nLastCol, pCellStyles, pDoc, false);
 }
 
 ScMyDefaultStyles::~ScMyDefaultStyles()
@@ -644,7 +644,7 @@ void ScRowFormatRanges::AddRange(const sal_Int32 nPrevStartCol, const sal_Int32 
         (bPrevAutoStyle != rFormatRange.bIsAutoStyle))
         nIndex = rFormatRange.nIndex;
 
-    sal_Bool bInserted(sal_False);
+    sal_Bool bInserted(false);
     if (!aRowFormatRanges.empty())
     {
         ScMyRowFormatRange* pRange(&aRowFormatRanges.back());
@@ -685,7 +685,7 @@ void ScRowFormatRanges::AddRange(ScMyRowFormatRange& rFormatRange,
     sal_Int32 nPrevIndex((*pRowDefaults)[nRow].nIndex);
     sal_Bool bPrevAutoStyle((*pRowDefaults)[nRow].bIsAutoStyle);
     sal_uInt32 i(nRow + 1);
-    sal_Bool bReady(sal_False);
+    sal_Bool bReady(false);
     while ((i < nEnd) && !bReady && (i < pRowDefaults->size()))
     {
         if ((nPrevIndex != (*pRowDefaults)[i].nIndex) ||
@@ -743,7 +743,7 @@ sal_Bool ScRowFormatRanges::GetNext(ScMyRowFormatRange& aFormatRange)
         --nSize;
         return sal_True;
     }
-    return sal_False;
+    return false;
 }
 
 sal_Int32 ScRowFormatRanges::GetMaxRows() const
@@ -793,7 +793,7 @@ sal_Bool ScMyFormatRange::operator<(const ScMyFormatRange& rRange) const
         if (aRangeAddress.StartRow == rRange.aRangeAddress.StartRow)
             return (aRangeAddress.StartColumn < rRange.aRangeAddress.StartColumn);
         else
-            return sal_False;
+            return false;
 }
 
 ScFormatRangeStyles::ScFormatRangeStyles()
@@ -850,7 +850,7 @@ sal_Bool ScFormatRangeStyles::AddStyleName(rtl::OUString* rpString, sal_Int32& r
     else
     {
         sal_Int32 nCount(aStyleNames.size());
-        sal_Bool bFound(sal_False);
+        sal_Bool bFound(false);
         sal_Int32 i(nCount - 1);
         while ((i >= 0) && (!bFound))
         {
@@ -862,7 +862,7 @@ sal_Bool ScFormatRangeStyles::AddStyleName(rtl::OUString* rpString, sal_Int32& r
         if (bFound)
         {
             rIndex = i;
-            return sal_False;
+            return false;
         }
         else
         {
@@ -886,7 +886,7 @@ sal_Int32 ScFormatRangeStyles::GetIndexOfStyleName(const rtl::OUString& rString,
     else
     {
         sal_Int32 i(0);
-        sal_Bool bFound(sal_False);
+        sal_Bool bFound(false);
         while (!bFound && static_cast<size_t>(i) < aStyleNames.size())
         {
             if (aStyleNames[i]->equals(rString))
@@ -896,7 +896,7 @@ sal_Int32 ScFormatRangeStyles::GetIndexOfStyleName(const rtl::OUString& rString,
         }
         if (bFound)
         {
-            bIsAutoStyle = sal_False;
+            bIsAutoStyle = false;
             return i;
         }
         else
@@ -1116,7 +1116,7 @@ sal_Int32 ScColumnRowStylesBase::GetIndexOfStyleName(const rtl::OUString& rStrin
     else
     {
         sal_Int32 i(0);
-        sal_Bool bFound(sal_False);
+        sal_Bool bFound(false);
         while (!bFound && static_cast<size_t>(i) < aStyleNames.size())
         {
             if (aStyleNames.at(i)->equals(rString))

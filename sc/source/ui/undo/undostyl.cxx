@@ -119,13 +119,13 @@ ScUndoModifyStyle::~ScUndoModifyStyle()
 
 String ScUndoModifyStyle::GetComment() const
 {
-    USHORT nId = (eFamily == SFX_STYLE_FAMILY_PARA) ?
+    sal_uInt16 nId = (eFamily == SFX_STYLE_FAMILY_PARA) ?
                                 STR_UNDO_EDITCELLSTYLE :
                                 STR_UNDO_EDITPAGESTYLE;
     return ScGlobal::GetRscString( nId );
 }
 
-void lcl_DocStyleChanged( ScDocument* pDoc, SfxStyleSheetBase* pStyle, BOOL bRemoved )
+void lcl_DocStyleChanged( ScDocument* pDoc, SfxStyleSheetBase* pStyle, sal_Bool bRemoved )
 {
     //! move to document or docshell
 
@@ -147,8 +147,8 @@ void ScUndoModifyStyle::DoChange( ScDocShell* pDocSh, const String& rName,
     ScDocument* pDoc = pDocSh->GetDocument();
     ScStyleSheetPool* pStlPool = pDoc->GetStyleSheetPool();
     String aNewName = rData.GetName();
-    BOOL bDelete = ( aNewName.Len() == 0 );         // no new name -> delete style
-    BOOL bNew = ( rName.Len() == 0 && !bDelete );   // creating new style
+    sal_Bool bDelete = ( aNewName.Len() == 0 );         // no new name -> delete style
+    sal_Bool bNew = ( rName.Len() == 0 && !bDelete );   // creating new style
 
     SfxStyleSheetBase* pStyle = NULL;
     if ( rName.Len() )
@@ -177,7 +177,7 @@ void ScUndoModifyStyle::DoChange( ScDocShell* pDocSh, const String& rName,
         if ( bDelete )
         {
             if ( eStyleFamily == SFX_STYLE_FAMILY_PARA )
-                lcl_DocStyleChanged( pDoc, pStyle, TRUE );      // TRUE: remove usage of style
+                lcl_DocStyleChanged( pDoc, pStyle, sal_True );      // TRUE: remove usage of style
             else
                 pDoc->RemovePageStyleInUse( rName );
 
@@ -196,11 +196,11 @@ void ScUndoModifyStyle::DoChange( ScDocShell* pDocSh, const String& rName,
             const SfxItemSet* pNewSet = rData.GetItems();
             DBG_ASSERT( pNewSet, "no ItemSet for style" );
             if (pNewSet)
-                rStyleSet.Set( *pNewSet, FALSE );
+                rStyleSet.Set( *pNewSet, false );
 
             if ( eStyleFamily == SFX_STYLE_FAMILY_PARA )
             {
-                lcl_DocStyleChanged( pDoc, pStyle, FALSE );     // cell styles: row heights
+                lcl_DocStyleChanged( pDoc, pStyle, false );     // cell styles: row heights
             }
             else
             {
@@ -212,7 +212,7 @@ void ScUndoModifyStyle::DoChange( ScDocShell* pDocSh, const String& rName,
                 if (pNewSet)
                     pDoc->ModifyStyleSheet( *pStyle, *pNewSet );
 
-                pDocSh->PageStyleModified( aNewName, TRUE );
+                pDocSh->PageStyleModified( aNewName, sal_True );
             }
         }
     }
@@ -241,9 +241,9 @@ void ScUndoModifyStyle::Repeat(SfxRepeatTarget& /* rTarget */)
 {
 }
 
-BOOL ScUndoModifyStyle::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+sal_Bool ScUndoModifyStyle::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
-    return FALSE;       // no repeat possible
+    return false;       // no repeat possible
 }
 
 // -----------------------------------------------------------------------
@@ -303,9 +303,9 @@ void ScUndoApplyPageStyle::Repeat(SfxRepeatTarget& /* rTarget */)
     //! set same page style to current tab
 }
 
-BOOL ScUndoApplyPageStyle::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+sal_Bool ScUndoApplyPageStyle::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
-    return FALSE;
+    return false;
 }
 
 

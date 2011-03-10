@@ -48,7 +48,7 @@ using namespace com::sun::star;
 //------------------------------------------------------------------
 
 ScXMLNamedExpressionsContext::ScXMLNamedExpressionsContext( ScXMLImport& rImport,
-                                      USHORT nPrfx,
+                                      sal_uInt16 nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ ) :
@@ -62,7 +62,7 @@ ScXMLNamedExpressionsContext::~ScXMLNamedExpressionsContext()
     GetScImport().UnlockSolarMutex();
 }
 
-SvXMLImportContext *ScXMLNamedExpressionsContext::CreateChildContext( USHORT nPrefix,
+SvXMLImportContext *ScXMLNamedExpressionsContext::CreateChildContext( sal_uInt16 nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
@@ -99,7 +99,7 @@ void ScXMLNamedExpressionsContext::EndElement()
 }
 
 ScXMLNamedRangeContext::ScXMLNamedRangeContext( ScXMLImport& rImport,
-                                      USHORT nPrfx,
+                                      sal_uInt16 nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList) :
@@ -117,7 +117,7 @@ ScXMLNamedRangeContext::ScXMLNamedRangeContext( ScXMLImport& rImport,
     {
         const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
         rtl::OUString aLocalName;
-        USHORT nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
+        sal_uInt16 nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName ));
         const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
 
@@ -145,7 +145,7 @@ ScXMLNamedRangeContext::ScXMLNamedRangeContext( ScXMLImport& rImport,
             break;
         }
     }
-    pNamedExpression->bIsExpression = sal_False;
+    pNamedExpression->bIsExpression = false;
     GetScImport().AddNamedExpression(pNamedExpression);
 }
 
@@ -153,7 +153,7 @@ ScXMLNamedRangeContext::~ScXMLNamedRangeContext()
 {
 }
 
-SvXMLImportContext *ScXMLNamedRangeContext::CreateChildContext( USHORT nPrefix,
+SvXMLImportContext *ScXMLNamedRangeContext::CreateChildContext( sal_uInt16 nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )
@@ -166,7 +166,7 @@ void ScXMLNamedRangeContext::EndElement()
 }
 
 ScXMLNamedExpressionContext::ScXMLNamedExpressionContext( ScXMLImport& rImport,
-                                      USHORT nPrfx,
+                                      sal_uInt16 nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList) :
@@ -179,7 +179,7 @@ ScXMLNamedExpressionContext::ScXMLNamedExpressionContext( ScXMLImport& rImport,
     {
         const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
         rtl::OUString aLocalName;
-        USHORT nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
+        sal_uInt16 nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName ));
         const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
 
@@ -212,7 +212,7 @@ ScXMLNamedExpressionContext::~ScXMLNamedExpressionContext()
 {
 }
 
-SvXMLImportContext *ScXMLNamedExpressionContext::CreateChildContext( USHORT nPrefix,
+SvXMLImportContext *ScXMLNamedExpressionContext::CreateChildContext( sal_uInt16 nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )

@@ -60,7 +60,7 @@ public:
                 ScRangeUtil()  {}
                 ~ScRangeUtil() {}
 
-    BOOL    MakeArea            ( const String&     rAreaStr,
+    sal_Bool    MakeArea            ( const String&     rAreaStr,
                                   ScArea&           rArea,
                                   ScDocument*       pDoc,
                                   SCTAB         nTab,
@@ -69,14 +69,14 @@ public:
     void    CutPosString        ( const String&     theAreaStr,
                                   String&           thePosStr ) const;
 
-    BOOL    IsAbsTabArea        ( const String&     rAreaStr,
+    sal_Bool    IsAbsTabArea        ( const String&     rAreaStr,
                                   ScDocument*       pDoc,
                                   ScArea***         pppAreas    = 0,
-                                  USHORT*           pAreaCount  = 0,
-                                  BOOL              bAcceptCellRef = FALSE,
+                                  sal_uInt16*           pAreaCount  = 0,
+                                  sal_Bool              bAcceptCellRef = false,
                                   ScAddress::Details const & rDetails = ScAddress::detailsOOOa1 ) const;
 
-    BOOL    IsAbsArea           ( const String& rAreaStr,
+    sal_Bool    IsAbsArea           ( const String& rAreaStr,
                                   ScDocument*   pDoc,
                                   SCTAB     nTab,
                                   String*       pCompleteStr = 0,
@@ -84,21 +84,21 @@ public:
                                   ScRefAddress* pEndPos      = 0,
                                   ScAddress::Details const & rDetails = ScAddress::detailsOOOa1 ) const;
 
-    BOOL    IsRefArea           ( const String&,
+    sal_Bool    IsRefArea           ( const String&,
                                   ScDocument*,
                                   SCTAB,
                                   String* = 0,
                                   ScRefAddress* = 0 ) const
-                                      { return FALSE; }
+                                      { return false; }
 
-    BOOL    IsAbsPos            ( const String& rPosStr,
+    sal_Bool    IsAbsPos            ( const String& rPosStr,
                                   ScDocument*   pDoc,
                                   SCTAB     nTab,
                                   String*       pCompleteStr = 0,
                                   ScRefAddress* pPosTripel   = 0,
                                   ScAddress::Details const & rDetails = ScAddress::detailsOOOa1 ) const;
 
-    BOOL    MakeRangeFromName   ( const String& rName,
+    sal_Bool    MakeRangeFromName   ( const String& rName,
                                     ScDocument*     pDoc,
                                     SCTAB           nCurTab,
                                     ScRange&        rRange,
@@ -213,7 +213,7 @@ public:
                             const ScDocument* pDocument,
                             formula::FormulaGrammar::AddressConvention eConv,
                             sal_Unicode cSeperator = ' ',
-                            sal_Bool bAppendStr = sal_False,
+                            sal_Bool bAppendStr = false,
                             sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
     static void         GetStringFromRange(
                             ::rtl::OUString& rString,
@@ -221,7 +221,7 @@ public:
                             const ScDocument* pDocument,
                             formula::FormulaGrammar::AddressConvention eConv,
                             sal_Unicode cSeperator = ' ',
-                            sal_Bool bAppendStr = sal_False,
+                            sal_Bool bAppendStr = false,
                             sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
     static void         GetStringFromRangeList(
                             ::rtl::OUString& rString,
@@ -237,7 +237,7 @@ public:
                             const ScDocument* pDocument,
                             formula::FormulaGrammar::AddressConvention eConv,
                             sal_Unicode cSeperator = ' ',
-                            sal_Bool bAppendStr = sal_False,
+                            sal_Bool bAppendStr = false,
                             sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
 
 // Range to String API
@@ -247,7 +247,7 @@ public:
                             const ScDocument* pDocument,
                             formula::FormulaGrammar::AddressConvention eConv,
                             sal_Unicode cSeperator = ' ',
-                            sal_Bool bAppendStr = sal_False,
+                            sal_Bool bAppendStr = false,
                             sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
     static void         GetStringFromRange(
                             ::rtl::OUString& rString,
@@ -255,7 +255,7 @@ public:
                             const ScDocument* pDocument,
                             formula::FormulaGrammar::AddressConvention eConv,
                             sal_Unicode cSeperator = ' ',
-                            sal_Bool bAppendStr = sal_False,
+                            sal_Bool bAppendStr = false,
                             sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
     static void         GetStringFromRangeList(
                             ::rtl::OUString& rString,
@@ -286,8 +286,8 @@ public:
             ScArea( const ScArea& r );
 
     ScArea& operator=   ( const ScArea& r );
-    BOOL    operator==  ( const ScArea& r ) const;
-    BOOL    operator!=  ( const ScArea& r ) const  { return !( operator==(r) ); }
+    sal_Bool    operator==  ( const ScArea& r ) const;
+    sal_Bool    operator!=  ( const ScArea& r ) const  { return !( operator==(r) ); }
 
 public:
     SCTAB nTab;
@@ -318,8 +318,8 @@ public:
             ScAreaNameIterator( ScDocument* pDoc );
             ~ScAreaNameIterator() {}
 
-    BOOL    Next( String& rName, ScRange& rRange );
-    BOOL    WasDBName() const   { return !bFirstPass; }
+    sal_Bool    Next( String& rName, ScRange& rRange );
+    sal_Bool    WasDBName() const   { return !bFirstPass; }
 };
 
 

@@ -49,17 +49,17 @@ ScDataObject::~ScDataObject()
 // Collection
 //------------------------------------------------------------------------
 
-void lcl_DeleteScDataObjects( ScDataObject** p, USHORT nCount )
+void lcl_DeleteScDataObjects( ScDataObject** p, sal_uInt16 nCount )
 {
     if ( p )
     {
-        for (USHORT i = 0; i < nCount; i++) delete p[i];
+        for (sal_uInt16 i = 0; i < nCount; i++) delete p[i];
         delete[] p;
         p = NULL;
     }
 }
 
-ScCollection::ScCollection(USHORT nLim, USHORT nDel) :
+ScCollection::ScCollection(sal_uInt16 nLim, sal_uInt16 nDel) :
     nCount ( 0 ),
     nLimit ( nLim ),
     nDelta ( nDel ),
@@ -94,8 +94,8 @@ ScCollection::~ScCollection()
 }
 
 //------------------------------------------------------------------------
-USHORT ScCollection::GetCount() const { return nCount; }
-void ScCollection::AtFree(USHORT nIndex)
+sal_uInt16 ScCollection::GetCount() const { return nCount; }
+void ScCollection::AtFree(sal_uInt16 nIndex)
 {
     if ((pItems) && (nIndex < nCount))
     {
@@ -124,7 +124,7 @@ void ScCollection::FreeAll()
 
 //------------------------------------------------------------------------
 
-BOOL ScCollection::AtInsert(USHORT nIndex, ScDataObject* pScDataObject)
+sal_Bool ScCollection::AtInsert(sal_uInt16 nIndex, ScDataObject* pScDataObject)
 {
     if ((nCount < MAXCOLLECTIONSIZE) && (nIndex <= nCount) && pItems)
     {
@@ -132,8 +132,8 @@ BOOL ScCollection::AtInsert(USHORT nIndex, ScDataObject* pScDataObject)
         {
             ScDataObject** pNewItems = new ScDataObject*[nLimit + nDelta];
             if (!pNewItems)
-                return FALSE;
-            nLimit = sal::static_int_cast<USHORT>( nLimit + nDelta );
+                return false;
+            nLimit = sal::static_int_cast<sal_uInt16>( nLimit + nDelta );
             memmove(pNewItems, pItems, nCount * sizeof(ScDataObject*));
             delete[] pItems;
             pItems = pNewItems;
@@ -142,21 +142,21 @@ BOOL ScCollection::AtInsert(USHORT nIndex, ScDataObject* pScDataObject)
             memmove(&pItems[nIndex + 1], &pItems[nIndex], (nCount - nIndex) * sizeof(ScDataObject*));
         pItems[nIndex] = pScDataObject;
         nCount++;
-        return TRUE;
+        return sal_True;
     }
-    return FALSE;
+    return false;
 }
 
 //------------------------------------------------------------------------
 
-BOOL ScCollection::Insert(ScDataObject* pScDataObject)
+sal_Bool ScCollection::Insert(ScDataObject* pScDataObject)
 {
     return AtInsert(nCount, pScDataObject);
 }
 
 //------------------------------------------------------------------------
 
-ScDataObject* ScCollection::At(USHORT nIndex) const
+ScDataObject* ScCollection::At(sal_uInt16 nIndex) const
 {
     if (nIndex < nCount)
         return pItems[nIndex];
@@ -166,10 +166,10 @@ ScDataObject* ScCollection::At(USHORT nIndex) const
 
 //------------------------------------------------------------------------
 
-USHORT ScCollection::IndexOf(ScDataObject* pScDataObject) const
+sal_uInt16 ScCollection::IndexOf(ScDataObject* pScDataObject) const
 {
-    USHORT nIndex = 0xffff;
-    for (USHORT i = 0; ((i < nCount) && (nIndex == 0xffff)); i++)
+    sal_uInt16 nIndex = 0xffff;
+    for (sal_uInt16 i = 0; ((i < nCount) && (nIndex == 0xffff)); i++)
     {
         if (pItems[i] == pScDataObject) nIndex = i;
     }
@@ -186,7 +186,7 @@ ScCollection& ScCollection::operator=( const ScCollection& r )
     nLimit = r.nLimit;
     nDelta = r.nDelta;
     pItems = new ScDataObject*[nLimit];
-    for ( USHORT i=0; i<nCount; i++ )
+    for ( sal_uInt16 i=0; i<nCount; i++ )
         pItems[i] = r.pItems[i]->Clone();
 
     return *this;
@@ -203,7 +203,7 @@ ScDataObject*   ScCollection::Clone() const
 // ScSortedCollection
 //------------------------------------------------------------------------
 
-ScSortedCollection::ScSortedCollection(USHORT nLim, USHORT nDel, BOOL bDup) :
+ScSortedCollection::ScSortedCollection(sal_uInt16 nLim, sal_uInt16 nDel, sal_Bool bDup) :
     ScCollection (nLim, nDel),
     bDuplicates ( bDup)
 {
@@ -211,9 +211,9 @@ ScSortedCollection::ScSortedCollection(USHORT nLim, USHORT nDel, BOOL bDup) :
 
 //------------------------------------------------------------------------
 
-USHORT ScSortedCollection::IndexOf(ScDataObject* pScDataObject) const
+sal_uInt16 ScSortedCollection::IndexOf(ScDataObject* pScDataObject) const
 {
-    USHORT nIndex;
+    sal_uInt16 nIndex;
     if (Search(pScDataObject, nIndex))
         return nIndex;
     else
@@ -222,10 +222,10 @@ USHORT ScSortedCollection::IndexOf(ScDataObject* pScDataObject) const
 
 //------------------------------------------------------------------------
 
-BOOL ScSortedCollection::Search(ScDataObject* pScDataObject, USHORT& rIndex) const
+sal_Bool ScSortedCollection::Search(ScDataObject* pScDataObject, sal_uInt16& rIndex) const
 {
     rIndex = nCount;
-    BOOL bFound = FALSE;
+    sal_Bool bFound = false;
     short nLo = 0;
     short nHi = nCount - 1;
     short nIndex;
@@ -241,7 +241,7 @@ BOOL ScSortedCollection::Search(ScDataObject* pScDataObject, USHORT& rIndex) con
             nHi = nIndex - 1;
             if (nCompare == 0)
             {
-                bFound = TRUE;
+                bFound = sal_True;
                 nLo = nIndex;
             }
         }
@@ -252,16 +252,16 @@ BOOL ScSortedCollection::Search(ScDataObject* pScDataObject, USHORT& rIndex) con
 
 //------------------------------------------------------------------------
 
-BOOL ScSortedCollection::Insert(ScDataObject* pScDataObject)
+sal_Bool ScSortedCollection::Insert(ScDataObject* pScDataObject)
 {
-    USHORT nIndex;
-    BOOL bFound = Search(pScDataObject, nIndex);
+    sal_uInt16 nIndex;
+    sal_Bool bFound = Search(pScDataObject, nIndex);
     if (bFound)
     {
         if (bDuplicates)
             return AtInsert(nIndex, pScDataObject);
         else
-            return FALSE;
+            return false;
     }
     else
         return AtInsert(nIndex, pScDataObject);
@@ -269,15 +269,15 @@ BOOL ScSortedCollection::Insert(ScDataObject* pScDataObject)
 
 //------------------------------------------------------------------------
 
-BOOL ScSortedCollection::InsertPos(ScDataObject* pScDataObject, USHORT& nIndex)
+sal_Bool ScSortedCollection::InsertPos(ScDataObject* pScDataObject, sal_uInt16& nIndex)
 {
-    BOOL bFound = Search(pScDataObject, nIndex);
+    sal_Bool bFound = Search(pScDataObject, nIndex);
     if (bFound)
     {
         if (bDuplicates)
             return AtInsert(nIndex, pScDataObject);
         else
-            return FALSE;
+            return false;
     }
     else
         return AtInsert(nIndex, pScDataObject);
@@ -285,21 +285,21 @@ BOOL ScSortedCollection::InsertPos(ScDataObject* pScDataObject, USHORT& nIndex)
 
 //------------------------------------------------------------------------
 
-BOOL ScSortedCollection::operator==(const ScSortedCollection& rCmp) const
+sal_Bool ScSortedCollection::operator==(const ScSortedCollection& rCmp) const
 {
     if ( nCount != rCmp.nCount )
-        return FALSE;
-    for (USHORT i=0; i<nCount; i++)
+        return false;
+    for (sal_uInt16 i=0; i<nCount; i++)
         if ( !IsEqual(pItems[i],rCmp.pItems[i]) )
-            return FALSE;
-    return TRUE;
+            return false;
+    return sal_True;
 }
 
 //------------------------------------------------------------------------
 
 //  IsEqual - komplette Inhalte vergleichen
 
-BOOL ScSortedCollection::IsEqual(ScDataObject* pKey1, ScDataObject* pKey2) const
+sal_Bool ScSortedCollection::IsEqual(ScDataObject* pKey1, ScDataObject* pKey2) const
 {
     return ( Compare(pKey1, pKey2) == 0 );      // Default: nur Index vergleichen
 }
@@ -341,10 +341,10 @@ ScDataObject*   TypedStrData::Clone() const
     return new TypedStrData(*this);
 }
 
-TypedScStrCollection::TypedScStrCollection( USHORT nLim , USHORT nDel , BOOL bDup  )
+TypedScStrCollection::TypedScStrCollection( sal_uInt16 nLim , sal_uInt16 nDel , sal_Bool bDup  )
     : ScSortedCollection( nLim, nDel, bDup )
 {
-    bCaseSensitive = FALSE;
+    bCaseSensitive = false;
 }
 
 TypedScStrCollection::~TypedScStrCollection()
@@ -354,12 +354,12 @@ ScDataObject* TypedScStrCollection::Clone() const
     return new TypedScStrCollection(*this);
 }
 
-TypedStrData*    TypedScStrCollection::operator[]( const USHORT nIndex) const
+TypedStrData*    TypedScStrCollection::operator[]( const sal_uInt16 nIndex) const
 {
     return (TypedStrData*)At(nIndex);
 }
 
-void    TypedScStrCollection::SetCaseSensitive( BOOL bSet )
+void    TypedScStrCollection::SetCaseSensitive( sal_Bool bSet )
 {
     bCaseSensitive = bSet;
 }
@@ -406,13 +406,13 @@ short TypedScStrCollection::Compare( ScDataObject* pKey1, ScDataObject* pKey2 ) 
     return nResult;
 }
 
-BOOL TypedScStrCollection::FindText( const String& rStart, String& rResult,
-                                    USHORT& rPos, BOOL bBack ) const
+sal_Bool TypedScStrCollection::FindText( const String& rStart, String& rResult,
+                                    sal_uInt16& rPos, sal_Bool bBack ) const
 {
     //  Die Collection ist nach String-Vergleichen sortiert, darum muss hier
     //  alles durchsucht werden
 
-    BOOL bFound = FALSE;
+    sal_Bool bFound = false;
 
     String aOldResult;
     if ( rPos != SCPOS_INVALID && rPos < nCount )
@@ -424,11 +424,11 @@ BOOL TypedScStrCollection::FindText( const String& rStart, String& rResult,
 
     if ( bBack )                                    // rueckwaerts
     {
-        USHORT nStartPos = nCount;
+        sal_uInt16 nStartPos = nCount;
         if ( rPos != SCPOS_INVALID )
             nStartPos = rPos;                       // weitersuchen...
 
-        for ( USHORT i=nStartPos; i>0; )
+        for ( sal_uInt16 i=nStartPos; i>0; )
         {
             --i;
             TypedStrData* pData = (TypedStrData*) pItems[i];
@@ -444,7 +444,7 @@ BOOL TypedScStrCollection::FindText( const String& rStart, String& rResult,
                     {
                         rResult = pData->aStrValue;
                         rPos = i;
-                        bFound = TRUE;
+                        bFound = sal_True;
                         break;
                     }
                 }
@@ -453,11 +453,11 @@ BOOL TypedScStrCollection::FindText( const String& rStart, String& rResult,
     }
     else                                            // vorwaerts
     {
-        USHORT nStartPos = 0;
+        sal_uInt16 nStartPos = 0;
         if ( rPos != SCPOS_INVALID )
             nStartPos = rPos + 1;                   // weitersuchen...
 
-        for ( USHORT i=nStartPos; i<nCount; i++ )
+        for ( sal_uInt16 i=nStartPos; i<nCount; i++ )
         {
             TypedStrData* pData = (TypedStrData*) pItems[i];
             if (pData->nStrType)
@@ -472,7 +472,7 @@ BOOL TypedScStrCollection::FindText( const String& rStart, String& rResult,
                     {
                         rResult = pData->aStrValue;
                         rPos = i;
-                        bFound = TRUE;
+                        bFound = sal_True;
                         break;
                     }
                 }
@@ -485,20 +485,20 @@ BOOL TypedScStrCollection::FindText( const String& rStart, String& rResult,
 
         // Gross-/Kleinschreibung anpassen
 
-BOOL TypedScStrCollection::GetExactMatch( String& rString ) const
+sal_Bool TypedScStrCollection::GetExactMatch( String& rString ) const
 {
-    for (USHORT i=0; i<nCount; i++)
+    for (sal_uInt16 i=0; i<nCount; i++)
     {
         TypedStrData* pData = (TypedStrData*) pItems[i];
         if ( pData->nStrType && ScGlobal::GetpTransliteration()->isEqual(
                 pData->aStrValue, rString ) )
         {
             rString = pData->aStrValue;                         // String anpassen
-            return TRUE;
+            return sal_True;
         }
     }
 
-    return FALSE;
+    return false;
 }
 
 

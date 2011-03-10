@@ -91,12 +91,12 @@ void FuDraw::DoModifiers(const MouseEvent& rMEvt)
     //  Control = Snap (Toggle)
     //  Alt     = zentrisch
 
-    BOOL bShift = rMEvt.IsShift();
-    BOOL bAlt   = rMEvt.IsMod2();
+    sal_Bool bShift = rMEvt.IsShift();
+    sal_Bool bAlt   = rMEvt.IsMod2();
 
     bool bOrtho     = bShift;
-    BOOL bAngleSnap = bShift;
-    BOOL bCenter    = bAlt;
+    sal_Bool bAngleSnap = bShift;
+    sal_Bool bCenter    = bAlt;
 
     // #i33136#
     if(doConstructOrthogonal())
@@ -121,12 +121,12 @@ void FuDraw::ResetModifiers()
     ScViewData* pViewData = pViewShell->GetViewData();
     const ScViewOptions& rOpt = pViewData->GetOptions();
     const ScGridOptions& rGrid = rOpt.GetGridOptions();
-    BOOL bGridOpt = rGrid.GetUseGridSnap();
+    sal_Bool bGridOpt = rGrid.GetUseGridSnap();
 
     if (pView->IsOrtho())
-        pView->SetOrtho(FALSE);
+        pView->SetOrtho(false);
     if (pView->IsAngleSnapEnabled())
-        pView->SetAngleSnapEnabled(FALSE);
+        pView->SetAngleSnapEnabled(false);
 
     if (pView->IsGridSnap() != bGridOpt)
         pView->SetGridSnap(bGridOpt);
@@ -134,9 +134,9 @@ void FuDraw::ResetModifiers()
         pView->SetSnapEnabled(bGridOpt);
 
     if (pView->IsCreate1stPointAsCenter())
-        pView->SetCreate1stPointAsCenter(FALSE);
+        pView->SetCreate1stPointAsCenter(false);
     if (pView->IsResizeAtCenter())
-        pView->SetResizeAtCenter(FALSE);
+        pView->SetResizeAtCenter(false);
 }
 
 /*************************************************************************
@@ -145,13 +145,13 @@ void FuDraw::ResetModifiers()
 |*
 \************************************************************************/
 
-BOOL FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
+sal_Bool FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
 {
     // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
     DoModifiers( rMEvt );
-    return FALSE;
+    return false;
 }
 
 /*************************************************************************
@@ -160,14 +160,14 @@ BOOL FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BOOL FuDraw::MouseMove(const MouseEvent& rMEvt)
+sal_Bool FuDraw::MouseMove(const MouseEvent& rMEvt)
 {
     //  evaluate modifiers only if in a drawing layer action
     //  (don't interfere with keyboard shortcut handling)
     if (pView->IsAction())
         DoModifiers( rMEvt );
 
-    return FALSE;
+    return false;
 }
 
 /*************************************************************************
@@ -176,35 +176,35 @@ BOOL FuDraw::MouseMove(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BOOL FuDraw::MouseButtonUp(const MouseEvent& rMEvt)
+sal_Bool FuDraw::MouseButtonUp(const MouseEvent& rMEvt)
 {
     // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
     ResetModifiers();
-    return FALSE;
+    return false;
 }
 
 /*************************************************************************
 |*
 |* Tastaturereignisse bearbeiten
 |*
-|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert TRUE, andernfalls
+|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert sal_True, andernfalls
 |* FALSE.
 |*
 \************************************************************************/
 
-BOOL lcl_KeyEditMode( SdrObject* pObj, ScTabViewShell* pViewShell, const KeyEvent* pInitialKey )
+sal_Bool lcl_KeyEditMode( SdrObject* pObj, ScTabViewShell* pViewShell, const KeyEvent* pInitialKey )
 {
-    BOOL bReturn = FALSE;
+    sal_Bool bReturn = false;
     if ( pObj && pObj->ISA(SdrTextObj) && !pObj->ISA(SdrUnoObj) )
     {
         // start text edit - like FuSelection::MouseButtonUp,
         // but with bCursorToEnd instead of mouse position
 
         OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
-        BOOL bVertical = ( pOPO && pOPO->IsVertical() );
-        USHORT nTextSlotId = bVertical ? SID_DRAW_TEXT_VERTICAL : SID_DRAW_TEXT;
+        sal_Bool bVertical = ( pOPO && pOPO->IsVertical() );
+        sal_uInt16 nTextSlotId = bVertical ? SID_DRAW_TEXT_VERTICAL : SID_DRAW_TEXT;
 
         // don't switch shells if text shell is already active
         FuPoor* pPoor = pViewShell->GetViewData()->GetView()->GetDrawFuncPtr();
@@ -219,17 +219,17 @@ BOOL lcl_KeyEditMode( SdrObject* pObj, ScTabViewShell* pViewShell, const KeyEven
         if ( pPoor && pPoor->GetSlotID() == nTextSlotId )    // no RTTI
         {
             FuText* pText = (FuText*)pPoor;
-            pText->SetInEditMode( pObj, NULL, TRUE, pInitialKey );
+            pText->SetInEditMode( pObj, NULL, sal_True, pInitialKey );
             //! set cursor to end of text
         }
-        bReturn = TRUE;
+        bReturn = sal_True;
     }
     return bReturn;
 }
 
-BOOL FuDraw::KeyInput(const KeyEvent& rKEvt)
+sal_Bool FuDraw::KeyInput(const KeyEvent& rKEvt)
 {
-    BOOL bReturn = FALSE;
+    sal_Bool bReturn = false;
     ScViewData& rViewData = *pViewShell->GetViewData();
 
     switch ( rKEvt.GetKeyCode().GetCode() )
@@ -239,13 +239,13 @@ BOOL FuDraw::KeyInput(const KeyEvent& rKEvt)
             {
                 // in normale Draw-Shell, wenn Objekt selektiert, sonst Zeichnen aus
                 rViewData.GetDispatcher().Execute(aSfxRequest.GetSlot(), SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
-                bReturn = TRUE;
+                bReturn = sal_True;
             }
             else if ( pViewShell->IsDrawSelMode() )
             {
                 pView->UnmarkAll();
                 rViewData.GetDispatcher().Execute(SID_OBJECT_SELECT, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
-                bReturn = TRUE;
+                bReturn = sal_True;
             }
             else if ( pView->AreObjectsMarked() )
             {
@@ -258,15 +258,15 @@ BOOL FuDraw::KeyInput(const KeyEvent& rKEvt)
 
                 //  Beim Bezier-Editieren ist jetzt wieder das Objekt selektiert
                 if (!pView->AreObjectsMarked())
-                    pViewShell->SetDrawShell( FALSE );
+                    pViewShell->SetDrawShell( false );
 
-                bReturn = TRUE;
+                bReturn = sal_True;
             }
             break;
 
         case KEY_DELETE:                    //! ueber Accelerator
             pView->DeleteMarked();
-            bReturn = TRUE;
+            bReturn = sal_True;
         break;
 
         case KEY_RETURN:
@@ -278,17 +278,17 @@ BOOL FuDraw::KeyInput(const KeyEvent& rKEvt)
                 const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
                 if( !pView->IsTextEdit() && 1 == rMarkList.GetMarkCount() )
                 {
-                    BOOL bOle = pViewShell->GetViewFrame()->GetFrame().IsInPlace();
+                    sal_Bool bOle = pViewShell->GetViewFrame()->GetFrame().IsInPlace();
                     SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
                     if( pObj && pObj->ISA( SdrOle2Obj ) && !bOle )
                     {
                         pViewShell->ActivateObject( static_cast< SdrOle2Obj* >( pObj ), 0 );
 
                         // consumed
-                        bReturn = TRUE;
+                        bReturn = sal_True;
                     }
                     else if ( lcl_KeyEditMode( pObj, pViewShell, NULL ) )       // start text edit for suitable object
-                        bReturn = TRUE;
+                        bReturn = sal_True;
                 }
             }
         }
@@ -305,7 +305,7 @@ BOOL FuDraw::KeyInput(const KeyEvent& rKEvt)
                 {
                     SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
                     if ( lcl_KeyEditMode( pObj, pViewShell, NULL ) )            // start text edit for suitable object
-                        bReturn = TRUE;
+                        bReturn = sal_True;
                 }
             }
         }
@@ -335,7 +335,7 @@ BOOL FuDraw::KeyInput(const KeyEvent& rKEvt)
                     if(pView->AreObjectsMarked())
                         pView->MakeVisible(pView->GetAllMarkedRect(), *pWindow);
 
-                    bReturn = TRUE;
+                    bReturn = sal_True;
                 }
 
                 // handle Mod1 and Mod2 to get travelling running on different systems
@@ -358,7 +358,7 @@ BOOL FuDraw::KeyInput(const KeyEvent& rKEvt)
                     }
 
                     // consumed
-                    bReturn = TRUE;
+                    bReturn = sal_True;
                 }
             }
         }
@@ -377,13 +377,13 @@ BOOL FuDraw::KeyInput(const KeyEvent& rKEvt)
                 {
                     // mark last object
                     pView->UnmarkAllObj();
-                    pView->MarkNextObj(FALSE);
+                    pView->MarkNextObj(false);
 
                     // II
                     if(pView->AreObjectsMarked())
                         pView->MakeVisible(pView->GetAllMarkedRect(), *pWindow);
 
-                    bReturn = TRUE;
+                    bReturn = sal_True;
                 }
             }
         }
@@ -402,13 +402,13 @@ BOOL FuDraw::KeyInput(const KeyEvent& rKEvt)
                 {
                     // mark first object
                     pView->UnmarkAllObj();
-                    pView->MarkNextObj(TRUE);
+                    pView->MarkNextObj(sal_True);
 
                     // II
                     if(pView->AreObjectsMarked())
                         pView->MakeVisible(pView->GetAllMarkedRect(), *pWindow);
 
-                    bReturn = TRUE;
+                    bReturn = sal_True;
                 }
             }
         }
@@ -437,7 +437,7 @@ BOOL FuDraw::KeyInput(const KeyEvent& rKEvt)
 
                 long nX = 0;
                 long nY = 0;
-                USHORT nCode = rKEvt.GetKeyCode().GetCode();
+                sal_uInt16 nCode = rKEvt.GetKeyCode().GetCode();
 
                 if (nCode == KEY_UP)
                 {
@@ -464,7 +464,7 @@ BOOL FuDraw::KeyInput(const KeyEvent& rKEvt)
                     nY = 0;
                 }
 
-                BOOL bReadOnly = rViewData.GetDocShell()->IsReadOnly();
+                sal_Bool bReadOnly = rViewData.GetDocShell()->IsReadOnly();
 
                 if(!rKEvt.GetKeyCode().IsMod1() && !bReadOnly)
                 {
@@ -532,7 +532,7 @@ BOOL FuDraw::KeyInput(const KeyEvent& rKEvt)
                                 // II
                                 pView->MakeVisible(pView->GetAllMarkedRect(), *pWindow);
 
-                                bReturn = TRUE;
+                                bReturn = sal_True;
                             }
                         }
                         else
@@ -551,13 +551,13 @@ BOOL FuDraw::KeyInput(const KeyEvent& rKEvt)
                                 if(pView->IsDragObj())
                                 {
                                     bool bWasNoSnap = rDragStat.IsNoSnap();
-                                    BOOL bWasSnapEnabled = pView->IsSnapEnabled();
+                                    sal_Bool bWasSnapEnabled = pView->IsSnapEnabled();
 
                                     // switch snapping off
                                     if(!bWasNoSnap)
-                                        ((SdrDragStat&)rDragStat).SetNoSnap(TRUE);
+                                        ((SdrDragStat&)rDragStat).SetNoSnap(sal_True);
                                     if(bWasSnapEnabled)
-                                        pView->SetSnapEnabled(FALSE);
+                                        pView->SetSnapEnabled(false);
 
                                     pView->MovAction(aEndPoint);
                                     pView->EndDragObj();
@@ -573,7 +573,7 @@ BOOL FuDraw::KeyInput(const KeyEvent& rKEvt)
                                 Rectangle aVisRect(aEndPoint - Point(100, 100), Size(200, 200));
                                 pView->MakeVisible(aVisRect, *pWindow);
 
-                                bReturn = TRUE;
+                                bReturn = sal_True;
                             }
                         }
                     }
@@ -640,7 +640,7 @@ BOOL FuDraw::KeyInput(const KeyEvent& rKEvt)
                             }
                         }
 
-                        bReturn = TRUE;
+                        bReturn = sal_True;
                     }
                 }
             }
@@ -664,7 +664,7 @@ BOOL FuDraw::KeyInput(const KeyEvent& rKEvt)
 
             // start text edit for suitable object, pass key event to OutlinerView
             if ( lcl_KeyEditMode( pObj, pViewShell, &rKEvt ) )
-                bReturn = TRUE;
+                bReturn = sal_True;
         }
     }
 
@@ -728,7 +728,7 @@ void FuDraw::Deactivate()
 |*
 \************************************************************************/
 
-BOOL lcl_UrlHit( SdrView* pView, const Point& rPosPixel, Window* pWindow )
+sal_Bool lcl_UrlHit( SdrView* pView, const Point& rPosPixel, Window* pWindow )
 {
     SdrViewEvent aVEvt;
     MouseEvent aMEvt( rPosPixel, 1, 0, MOUSE_LEFT );
@@ -738,13 +738,13 @@ BOOL lcl_UrlHit( SdrView* pView, const Point& rPosPixel, Window* pWindow )
     {
         if ( ScDrawLayer::GetIMapInfo( aVEvt.pObj ) && ScDrawLayer::GetHitIMapObject(
                                 aVEvt.pObj, pWindow->PixelToLogic(rPosPixel), *pWindow ) )
-            return TRUE;
+            return sal_True;
 
         if ( aVEvt.eEvent == SDREVENT_EXECUTEURL )
-            return TRUE;
+            return sal_True;
     }
 
-    return FALSE;
+    return false;
 }
 
 void FuDraw::ForcePointer(const MouseEvent* pMEvt)
@@ -752,7 +752,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
     if ( !pView->IsAction() )
     {
         Point aPosPixel = pWindow->GetPointerPosPixel();
-        BOOL bAlt       = pMEvt && pMEvt->IsMod2();
+        sal_Bool bAlt       = pMEvt && pMEvt->IsMod2();
         Point aPnt      = pWindow->PixelToLogic( aPosPixel );
         SdrHdl* pHdl    = pView->PickHandle(aPnt);
         SdrObject* pObj;
@@ -804,9 +804,9 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
     }
 }
 
-BOOL FuDraw::IsSizingOrMovingNote( const MouseEvent& rMEvt ) const
+sal_Bool FuDraw::IsSizingOrMovingNote( const MouseEvent& rMEvt ) const
 {
-    BOOL bIsSizingOrMoving = FALSE;
+    sal_Bool bIsSizingOrMoving = false;
     if ( rMEvt.IsLeft() )
     {
         const SdrMarkList& rNoteMarkList = pView->GetMarkedObjectList();

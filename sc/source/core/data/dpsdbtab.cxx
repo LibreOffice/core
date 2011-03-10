@@ -192,18 +192,18 @@ String ScDatabaseDPData::getDimensionName(long nColumn)
     return aCacheTable.getFieldName((SCCOL)nColumn);
 }
 
-BOOL ScDatabaseDPData::getIsDataLayoutDimension(long nColumn)
+sal_Bool ScDatabaseDPData::getIsDataLayoutDimension(long nColumn)
 {
     return ( nColumn == GetCacheTable().getColSize());
 }
 
-BOOL ScDatabaseDPData::IsDateDimension(long /* nDim */)
+sal_Bool ScDatabaseDPData::IsDateDimension(long /* nDim */)
 {
     //! later...
-    return FALSE;
+    return false;
 }
 
-void ScDatabaseDPData::SetEmptyFlags( BOOL /* bIgnoreEmptyRows */, BOOL /* bRepeatIfEmpty */ )
+void ScDatabaseDPData::SetEmptyFlags( sal_Bool /* bIgnoreEmptyRows */, sal_Bool /* bRepeatIfEmpty */ )
 {
     //  not used for database data
     //! disable flags

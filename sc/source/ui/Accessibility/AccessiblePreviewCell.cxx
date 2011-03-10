@@ -277,7 +277,7 @@ sal_Bool ScAccessiblePreviewCell::IsDefunc(
 sal_Bool ScAccessiblePreviewCell::IsEditable(
     const uno::Reference<XAccessibleStateSet>& /* rxParentStates */)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool ScAccessiblePreviewCell::IsOpaque(

@@ -63,33 +63,33 @@ class SC_DLLPUBLIC ScImportExport
     ScRange     aRange;
     String      aStreamPath;
     String      aNonConvertibleChars;
-    ULONG       nSizeLimit;
+    sal_uLong       nSizeLimit;
     sal_Unicode cSep;                   // Separator
     sal_Unicode cStr;                   // String Delimiter
-    BOOL        bFormulas;              // Formeln im Text?
-    BOOL        bIncludeFiltered;       // include filtered rows? (default true)
-    BOOL        bAll;                   // keine Selektion
-    BOOL        bSingle;                // Einfachselektion
-    BOOL        bUndo;                  // Mit Undo?
-    BOOL        bOverflow;              // zuviele Zeilen/Spalten
+    sal_Bool        bFormulas;              // Formeln im Text?
+    sal_Bool        bIncludeFiltered;       // include filtered rows? (default true)
+    sal_Bool        bAll;                   // keine Selektion
+    sal_Bool        bSingle;                // Einfachselektion
+    sal_Bool        bUndo;                  // Mit Undo?
+    sal_Bool        bOverflow;              // zuviele Zeilen/Spalten
     bool        mbApi;
     ScExportTextOptions mExportTextOptions;
 
     ScAsciiOptions* pExtOptions;        // erweiterte Optionen
 
-    BOOL StartPaste();                  // Protect-Check, Undo einrichten
+    sal_Bool StartPaste();                  // Protect-Check, Undo einrichten
     void EndPaste();                    // Undo/Redo-Aktionen, Repaint
-    BOOL Doc2Text( SvStream& );
-    BOOL Text2Doc( SvStream& );
-    BOOL Doc2Sylk( SvStream& );
-    BOOL Sylk2Doc( SvStream& );
-    BOOL Doc2HTML( SvStream&, const String& );
-    BOOL Doc2RTF( SvStream& );
-    BOOL Doc2Dif( SvStream& );
-    BOOL Dif2Doc( SvStream& );
-    BOOL ExtText2Doc( SvStream& );      // mit pExtOptions
-    BOOL RTF2Doc( SvStream&, const String& rBaseURL );
-    BOOL HTML2Doc( SvStream&, const String& rBaseURL );
+    sal_Bool Doc2Text( SvStream& );
+    sal_Bool Text2Doc( SvStream& );
+    sal_Bool Doc2Sylk( SvStream& );
+    sal_Bool Sylk2Doc( SvStream& );
+    sal_Bool Doc2HTML( SvStream&, const String& );
+    sal_Bool Doc2RTF( SvStream& );
+    sal_Bool Doc2Dif( SvStream& );
+    sal_Bool Dif2Doc( SvStream& );
+    sal_Bool ExtText2Doc( SvStream& );      // mit pExtOptions
+    sal_Bool RTF2Doc( SvStream&, const String& rBaseURL );
+    sal_Bool HTML2Doc( SvStream&, const String& rBaseURL );
 
 public:
     ScImportExport( ScDocument* );                  // Gesamtdokument
@@ -100,22 +100,22 @@ public:
 
     void SetExtOptions( const ScAsciiOptions& rOpt );
 
-    BOOL IsDoubleRef() const { return BOOL( !( bAll || bSingle ) ); }
-    BOOL IsSingleRef() const { return bSingle; }
-    BOOL IsNoRef() const     { return bAll;    }
-    BOOL IsRef() const       { return BOOL( !bAll ); }
+    sal_Bool IsDoubleRef() const { return sal_Bool( !( bAll || bSingle ) ); }
+    sal_Bool IsSingleRef() const { return bSingle; }
+    sal_Bool IsNoRef() const     { return bAll;    }
+    sal_Bool IsRef() const       { return sal_Bool( !bAll ); }
 
     const ScRange& GetRange() const { return aRange; }
 
-    BOOL IsUndo() const      { return bUndo; }
-    void SetUndo( BOOL b )   { bUndo = b;    }
+    sal_Bool IsUndo() const      { return bUndo; }
+    void SetUndo( sal_Bool b )   { bUndo = b;    }
 
-    static BOOL  IsFormatSupported( ULONG nFormat );
+    static sal_Bool  IsFormatSupported( sal_uLong nFormat );
     static const sal_Unicode* ScanNextFieldFromString( const sal_Unicode* p,
             String& rField, sal_Unicode cStr, const sal_Unicode* pSeps, bool bMergeSeps, bool& rbIsQuoted );
-    static  void    WriteUnicodeOrByteString( SvStream& rStrm, const String& rString, BOOL bZero = FALSE );
+    static  void    WriteUnicodeOrByteString( SvStream& rStrm, const String& rString, sal_Bool bZero = false );
     static  void    WriteUnicodeOrByteEndl( SvStream& rStrm );
-    static  inline  BOOL    IsEndianSwap( const SvStream& rStrm );
+    static  inline  sal_Bool    IsEndianSwap( const SvStream& rStrm );
 
     //! only if stream is only used in own (!) memory
     static  inline  void    SetNoEndianSwap( SvStream& rStrm );
@@ -124,29 +124,29 @@ public:
     void SetSeparator( sal_Unicode c ) { cSep = c; }
     sal_Unicode GetDelimiter() const { return cStr; }
     void SetDelimiter( sal_Unicode c ) { cStr = c; }
-    BOOL IsFormulas() const { return bFormulas; }
-    void SetFormulas( BOOL b ) { bFormulas = b; }
-    BOOL IsIncludeFiltered() const { return bIncludeFiltered; }
-    void SetIncludeFiltered( BOOL b ) { bIncludeFiltered = b; }
+    sal_Bool IsFormulas() const { return bFormulas; }
+    void SetFormulas( sal_Bool b ) { bFormulas = b; }
+    sal_Bool IsIncludeFiltered() const { return bIncludeFiltered; }
+    void SetIncludeFiltered( sal_Bool b ) { bIncludeFiltered = b; }
 
-    void SetSizeLimit( ULONG nNew ) { nSizeLimit = nNew; }  // momentan nur fuer Ascii
+    void SetSizeLimit( sal_uLong nNew ) { nSizeLimit = nNew; }  // momentan nur fuer Ascii
 
     void            SetStreamPath( const String& rPath ) { aStreamPath = rPath; }
     const String&   GetStreamPath() const { return aStreamPath; }
 
-    BOOL ImportString( const ::rtl::OUString&, ULONG=FORMAT_STRING );
-    BOOL ExportString( ::rtl::OUString&, ULONG=FORMAT_STRING );
-    BOOL ExportByteString( ByteString&, rtl_TextEncoding, ULONG=FORMAT_STRING );
+    sal_Bool ImportString( const ::rtl::OUString&, sal_uLong=FORMAT_STRING );
+    sal_Bool ExportString( ::rtl::OUString&, sal_uLong=FORMAT_STRING );
+    sal_Bool ExportByteString( ByteString&, rtl_TextEncoding, sal_uLong=FORMAT_STRING );
 
-    BOOL ImportStream( SvStream&, const String& rBaseURL, ULONG=FORMAT_STRING );
-    BOOL ExportStream( SvStream&, const String& rBaseURL, ULONG=FORMAT_STRING );
+    sal_Bool ImportStream( SvStream&, const String& rBaseURL, sal_uLong=FORMAT_STRING );
+    sal_Bool ExportStream( SvStream&, const String& rBaseURL, sal_uLong=FORMAT_STRING );
 
-    BOOL ImportData( const String& rMimeType,
+    sal_Bool ImportData( const String& rMimeType,
                      const ::com::sun::star::uno::Any & rValue );
-    BOOL ExportData( const String& rMimeType,
+    sal_Bool ExportData( const String& rMimeType,
                      ::com::sun::star::uno::Any & rValue  );
 
-    BOOL IsOverflow() const { return bOverflow; }       // nach dem Importieren
+    sal_Bool IsOverflow() const { return bOverflow; }       // nach dem Importieren
 
     const String& GetNonConvertibleChars() const { return aNonConvertibleChars; }
 
@@ -157,7 +157,7 @@ public:
 };
 
 
-inline BOOL ScImportExport::IsEndianSwap( const SvStream& rStrm )
+inline sal_Bool ScImportExport::IsEndianSwap( const SvStream& rStrm )
 {
 #ifdef OSL_BIGENDIAN
     return rStrm.GetNumberFormatInt() != NUMBERFORMAT_INT_BIGENDIAN;
@@ -185,7 +185,7 @@ public:
                 rStr.getLength() * sizeof(sal_Unicode), STREAM_READ)
     {
         SetStreamCharSet( RTL_TEXTENCODING_UNICODE );
-        SetEndianSwap( FALSE );
+        SetEndianSwap( false );
     }
 };
 

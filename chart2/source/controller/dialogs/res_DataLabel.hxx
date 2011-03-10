@@ -50,7 +50,7 @@ public:
     DataLabelResources( Window* pParent, const SfxItemSet& rInAttrs );
     virtual ~DataLabelResources();
 
-    BOOL FillItemSet(SfxItemSet& rOutAttrs) const;
+    sal_Bool FillItemSet(SfxItemSet& rOutAttrs) const;
     void Reset(const SfxItemSet& rInAttrs);
 
     void SetNumberFormatter( SvNumberFormatter* pFormatter );
@@ -76,14 +76,14 @@ private:
     FixedText               m_aFT_TextDirection;
     TextDirectionListBox    m_aLB_TextDirection;
 
-    ::std::map< sal_Int32, USHORT > m_aPlacementToListBoxMap;
-    ::std::map< USHORT, sal_Int32 > m_aListBoxToPlacementMap;
+    ::std::map< sal_Int32, sal_uInt16 > m_aPlacementToListBoxMap;
+    ::std::map< sal_uInt16, sal_Int32 > m_aListBoxToPlacementMap;
 
     SvNumberFormatter*  m_pNumberFormatter;
     bool                m_bNumberFormatMixedState;
     bool                m_bPercentFormatMixedState;
-    ULONG               m_nNumberFormatForValue;
-    ULONG               m_nNumberFormatForPercent;
+    sal_uLong               m_nNumberFormatForValue;
+    sal_uLong               m_nNumberFormatForPercent;
 
     bool                m_bSourceFormatMixedState;
     bool                m_bPercentSourceMixedState;

@@ -115,7 +115,7 @@ public:
         virtual void execute() = 0;
     };
 
-    explicit ScMenuFloatingWindow(Window* pParent, ScDocument* pDoc, USHORT nMenuStackLevel = 0);
+    explicit ScMenuFloatingWindow(Window* pParent, ScDocument* pDoc, sal_uInt16 nMenuStackLevel = 0);
     virtual ~ScMenuFloatingWindow();
 
     virtual void MouseMove(const MouseEvent& rMEvt);
