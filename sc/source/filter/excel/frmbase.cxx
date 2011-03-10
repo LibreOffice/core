@@ -40,7 +40,7 @@ _ScRangeListTabs::~_ScRangeListTabs()
 }
 
 
-void _ScRangeListTabs::Append( ScSingleRefData a, SCsTAB nTab, const BOOL b )
+void _ScRangeListTabs::Append( ScSingleRefData a, SCTAB nTab, bool b )
 {
     if( b )
     {
@@ -82,7 +82,7 @@ void _ScRangeListTabs::Append( ScSingleRefData a, SCsTAB nTab, const BOOL b )
     itr->second->push_back(ScRange(a.nCol,a.nRow,a.nTab));
 }
 
-void _ScRangeListTabs::Append( ScComplexRefData a, SCsTAB nTab, const BOOL b )
+void _ScRangeListTabs::Append( ScComplexRefData a, SCTAB nTab, bool b )
 {
     if( b )
     {
@@ -155,11 +155,11 @@ void _ScRangeListTabs::Append( ScComplexRefData a, SCsTAB nTab, const BOOL b )
                 a.Ref2.nCol,a.Ref2.nRow,a.Ref2.nTab));
 }
 
-const ScRange* _ScRangeListTabs::First( const UINT16 n )
+const ScRange* _ScRangeListTabs::First( SCTAB n )
 {
     DBG_ASSERT( ValidTab(n), "-_ScRangeListTabs::First(): Und tschuessssssss!" );
 
-    TabRangeType::iterator itr = maTabRanges.find(static_cast<SCsTAB>(n));
+    TabRangeType::iterator itr = maTabRanges.find(n);
     if (itr == maTabRanges.end())
         // No range list exists for this table.
         return NULL;

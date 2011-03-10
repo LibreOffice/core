@@ -1259,12 +1259,9 @@ void ImportExcel::PostDocLoad( void )
     {
         for( SCTAB n = 0 ; n < nLast ; n++ )
         {
-            p = pExcRoot->pPrintRanges->First( static_cast<UINT16>(n) );
+            p = pExcRoot->pPrintRanges->First(n);
             if( p )
             {
-                DBG_ASSERT( pExcRoot->pPrintRanges->HasActList(),
-                            "-ImportExcel::PostDocLoad(): Imaginaere Tabelle gefunden!" );
-
                 pD->ClearPrintRanges( n );
                 while( p )
                 {
@@ -1285,12 +1282,9 @@ void ImportExcel::PostDocLoad( void )
     {
         for( SCTAB n = 0 ; n < nLast ; n++ )
         {
-            p = pExcRoot->pPrintTitles->First( static_cast<UINT16>(n) );
+            p = pExcRoot->pPrintTitles->First(n);
             if( p )
             {
-                DBG_ASSERT( pExcRoot->pPrintTitles->HasActList(),
-                    "-ImportExcel::PostDocLoad(): Imaginaere Tabelle gefunden!" );
-
                 BOOL    bRowVirgin = TRUE;
                 BOOL    bColVirgin = TRUE;
 

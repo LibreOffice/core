@@ -66,7 +66,7 @@ enum FORMULA_TYPE
 class _ScRangeListTabs
 {
     typedef ::std::vector<ScRange> RangeListType;
-    typedef ::boost::ptr_map<SCsTAB, RangeListType> TabRangeType;
+    typedef ::boost::ptr_map<SCTAB, RangeListType> TabRangeType;
     TabRangeType maTabRanges;
     RangeListType::const_iterator maItrCur;
     RangeListType::const_iterator maItrCurEnd;
@@ -75,10 +75,10 @@ public:
     _ScRangeListTabs ();
     ~_ScRangeListTabs();
 
-    void Append( ScSingleRefData aSRD, SCsTAB nTab, const BOOL bLimit = TRUE );
-    void Append( ScComplexRefData aCRD, SCsTAB nTab, const BOOL bLimit = TRUE );
+    void Append( ScSingleRefData aSRD, SCTAB nTab, bool bLimit = true );
+    void Append( ScComplexRefData aCRD, SCTAB nTab, bool bLimit = true );
 
-    const ScRange* First ( const UINT16 nTab = 0 );
+    const ScRange* First ( SCTAB nTab = 0 );
     const ScRange* Next ();
 
     bool HasRanges () const { return !maTabRanges.empty(); }
