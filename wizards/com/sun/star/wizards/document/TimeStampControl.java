@@ -75,7 +75,7 @@ public class TimeStampControl extends DatabaseControl
         xShapes.add(oDateControl.xShape);
         xShapes.add(oTimeControl.xShape);
         xShapeGroup = _oFormHandler.xShapeGrouper.group(xShapes);
-        xShapeGroup = (XShape) UnoRuntime.queryInterface(XShape.class, xShapeGroup);
+        xShapeGroup = UnoRuntime.queryInterface(XShape.class, xShapeGroup);
         nreldatewidth = 1.0 / ((double) getSize().Width / (double) nDateWidth);
         nreltimewidth = 1.0 - nreldatewidth;
     }
@@ -87,9 +87,8 @@ public class TimeStampControl extends DatabaseControl
             if (_i < xShapes.getCount())
             {
                 Object oControl = xShapes.getByIndex(_i);
-                XControlShape xControlShape = (XControlShape) UnoRuntime.queryInterface(XControlShape.class, oControl);
-                XPropertySet xPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xControlShape.getControl());
-                return xPropertySet;
+                XControlShape xControlShape = UnoRuntime.queryInterface(XControlShape.class, oControl);
+                return UnoRuntime.queryInterface(XPropertySet.class, xControlShape.getControl());
             }
         }
         catch (Exception e)

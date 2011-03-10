@@ -181,7 +181,7 @@ public class DesignTemplate
                 // is aObj a textfield
                 // m_aDetailLabel_FD
                 // m_aDetailTextField_FD
-                XFixedText aFixedText = (XFixedText) UnoRuntime.queryInterface(XFixedText.class, aObj);
+                XFixedText aFixedText = UnoRuntime.queryInterface(XFixedText.class, aObj);
                 if (aFixedText != null &&
                         m_aDetailLabel == null)
                 {
@@ -189,7 +189,7 @@ public class DesignTemplate
                 }
                 else
                 {
-                    XFormattedField aFormattedField = (XFormattedField) UnoRuntime.queryInterface(XFormattedField.class, aObj);
+                    XFormattedField aFormattedField = UnoRuntime.queryInterface(XFormattedField.class, aObj);
                     if (aFormattedField != null &&
                             m_aDetailTextField == null)
                     {
@@ -218,7 +218,7 @@ public class DesignTemplate
             try
             {
                 Object aGroup = xGroups.getByIndex(nGroup);
-                XGroup xGroup = (XGroup) UnoRuntime.queryInterface(XGroup.class, aGroup);
+                XGroup xGroup = UnoRuntime.queryInterface(XGroup.class, aGroup);
                 XSection xGroupSection = xGroup.getHeader();
 
                 final int nCount = xGroupSection.getCount();
@@ -227,7 +227,7 @@ public class DesignTemplate
                     try
                     {
                         Object aObj = xGroupSection.getByIndex(i);
-                        XFixedText aFixedText = (XFixedText) UnoRuntime.queryInterface(XFixedText.class, aObj);
+                        XFixedText aFixedText = UnoRuntime.queryInterface(XFixedText.class, aObj);
                         // is aObj a label
                         // is aObj a textfield
                         if (aFixedText != null &&
@@ -237,7 +237,7 @@ public class DesignTemplate
                         }
                         else
                         {
-                            XFormattedField aFormattedField = (XFormattedField) UnoRuntime.queryInterface(XFormattedField.class, aObj);
+                            XFormattedField aFormattedField = UnoRuntime.queryInterface(XFormattedField.class, aObj);
                             if (aFormattedField != null &&
                                     m_aGroupTextField[nGroup] == null)
                             {
@@ -317,7 +317,7 @@ public class DesignTemplate
         m_xGlobalMSF = _xMSF;
         m_sFilename = _sPath;
         final Object aObj = _xMSF.createInstance("com.sun.star.report.ReportDefinition");
-        m_xReportDefinition = (XReportDefinition) UnoRuntime.queryInterface(XReportDefinition.class, aObj);
+        m_xReportDefinition = UnoRuntime.queryInterface(XReportDefinition.class, aObj);
 
         PropertyValue[] aLoadProps = new PropertyValue[2];
         aLoadProps[0] = Properties.createProperty(PropertyNames.URL, _sPath);

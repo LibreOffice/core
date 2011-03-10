@@ -126,7 +126,7 @@ public class DBColumn
         try
         {
             XCell xCell = CurRecordTable.xCellRange.getCellByPosition(_nColumn, 0);
-            XTextRange xTextCell = (XTextRange) UnoRuntime.queryInterface(XTextRange.class, xCell);
+            XTextRange xTextCell = UnoRuntime.queryInterface(XTextRange.class, xCell);
             String CompString = "Column";
             XTextCursor xLocCellCursor = TextDocument.createTextCursor(xCell);
             if (isNameCell(xLocCellCursor, CurDBField.getFieldName(), CompString) || (_bforce))
@@ -134,7 +134,7 @@ public class DBColumn
                 xNameCell = xCell;
                 xNameTextCell = xTextCell;
                 xValCell = CurRecordTable.xCellRange.getCellByPosition(_nColumn, 1);
-                xValTextCell = (XTextRange) UnoRuntime.queryInterface(XTextRange.class, xValCell);
+                xValTextCell = UnoRuntime.queryInterface(XTextRange.class, xValCell);
                 xValCellCursor = TextDocument.createTextCursor(xValCell);
                 ValColumn = _nColumn;
                 return true;
@@ -190,7 +190,7 @@ public class DBColumn
             for (int m = 0; m < xRows.getCount(); m++)
             {
                 xCell = xCellRange.getCellByPosition(n, m);
-                xTextCell = (XTextRange) UnoRuntime.queryInterface(XTextRange.class, xCell);
+                xTextCell = UnoRuntime.queryInterface(XTextRange.class, xCell);
                 String CompString = TableName.substring(4);
                 XTextCursor xLocCellCursor = TextDocument.createTextCursor(xCell);
                 if (isNameCell(xLocCellCursor, CurDBField.getFieldName(), CompString))
@@ -216,12 +216,12 @@ public class DBColumn
         try
         {
             XNameAccess xAllTextTables = oTextTableHandler.xTextTablesSupplier.getTextTables();
-            if (xAllTextTables.hasByName(TableName) == true)
+            if (xAllTextTables.hasByName(TableName))
             {
                 Object oTextTable = xAllTextTables.getByName(TableName);
-                xCellRange = (XCellRange) UnoRuntime.queryInterface(XCellRange.class, oTextTable);
-                xTextTable = (XTextTable) UnoRuntime.queryInterface(XTextTable.class, oTextTable);
-                xTableName = (XNamed) UnoRuntime.queryInterface(XNamed.class, oTextTable);
+                xCellRange = UnoRuntime.queryInterface(XCellRange.class, oTextTable);
+                xTextTable = UnoRuntime.queryInterface(XTextTable.class, oTextTable);
+                xTableName = UnoRuntime.queryInterface(XNamed.class, oTextTable);
                 xTableColumns = xTextTable.getColumns();
             }
         }
@@ -290,7 +290,7 @@ public class DBColumn
         try
         {
             xValCell = xCellRange.getCellByPosition(ValColumn, ValRow);
-            xValTextCell = (XTextRange) UnoRuntime.queryInterface(XTextRange.class, xValCell);
+            xValTextCell = UnoRuntime.queryInterface(XTextRange.class, xValCell);
             modifyCellContent(CurGroupValue);
             if (bAlignLeft)
             {
@@ -361,7 +361,7 @@ public class DBColumn
         try
         {
             Object CurGroupValue;
-            if (bIsGroupColumn == false && CurDBField.isNumberFormat() == false)
+            if (!bIsGroupColumn && !CurDBField.isNumberFormat())
             {
                 CurGroupValue = BlindtextCreator.adjustBlindTextlength(CurDBField.getFieldTitle(), CurDBField.getFieldWidth(), _bIsLandscape, bIsGroupColumn, CurDBMetaData.getRecordFieldNames());
             }
@@ -381,7 +381,7 @@ public class DBColumn
             {
                 CharFontName = "StarSymbol";
                 Helper.setUnoPropertyValue(xValCellCursor, "CharFontName", CharFontName);
-                if (bIsGroupColumn == false)
+                if (!bIsGroupColumn)
                 {
                     Helper.setUnoPropertyValue(xValCellCursor, "ParaAdjust", new Integer(ParagraphAdjust.CENTER_value));
                 }
@@ -390,7 +390,7 @@ public class DBColumn
             {
                 if (PropertyState == com.sun.star.beans.PropertyState.DEFAULT_VALUE)
                 {
-                    XPropertyState xPropState = (XPropertyState) UnoRuntime.queryInterface(XPropertyState.class, xValCellCursor);
+                    XPropertyState xPropState = UnoRuntime.queryInterface(XPropertyState.class, xValCellCursor);
                     xPropState.setPropertyToDefault("CharFontName");
                 }
                 else
@@ -425,7 +425,7 @@ public class DBColumn
             }
             else
             {
-                xPropertyState = (XPropertyState) UnoRuntime.queryInterface(XPropertyState.class, xValCellCursor);
+                xPropertyState = UnoRuntime.queryInterface(XPropertyState.class, xValCellCursor);
                 PropertyState = xPropertyState.getPropertyState("CharFontName");
                 CharFontName = AnyConverter.toString(Helper.getUnoPropertyValue(xValCellCursor, "CharFontName"));
             }
@@ -449,7 +449,7 @@ public class DBColumn
             }
             else
             {
-                XDependentTextField xDependent = (XDependentTextField) UnoRuntime.queryInterface(XDependentTextField.class, oTextField);
+                XDependentTextField xDependent = UnoRuntime.queryInterface(XDependentTextField.class, oTextField);
                 XPropertySet xMaster = xDependent.getTextFieldMaster();
                 String UserFieldName = (String) xMaster.getPropertyValue(PropertyNames.PROPERTY_NAME);
                 boolean bIsNameCell = false;

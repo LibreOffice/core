@@ -47,7 +47,7 @@ public class RadioDataAware extends DataAware
         radioButtons = new XRadioButton[radioButs.length];
         for (int i = 0; i < radioButs.length; i++)
         {
-            radioButtons[i] = (XRadioButton) UnoRuntime.queryInterface(XRadioButton.class, radioButs[i]);
+            radioButtons[i] = UnoRuntime.queryInterface(XRadioButton.class, radioButs[i]);
         }
     }
 

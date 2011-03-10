@@ -103,7 +103,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener,
     {
         super(i_serviceFactory, 34320, i_wizardContext);
         super.addResourceHandler("Report Wizard", "dbw");
-        if (getReportResources(false) == true)
+        if (getReportResources(false))
         {
             Helper.setUnoPropertyValues(xDialogModel,
                     new String[]
@@ -245,7 +245,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener,
     private void dialogFinish()
     {
         this.xComponent.dispose();
-        if (bCloseDocument == true)
+        if (bCloseDocument)
         {
             m_reportDocument.dispose();
             return;
@@ -406,12 +406,8 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener,
         {
             return false;
         }
-        if (e.hasMoreElements())
-        {
-            return true;
+        return e.hasMoreElements();
         }
-        return false;
-    }
 
     /**
      * Return the path to the "com.sun.reportdesigner" extension
@@ -424,8 +420,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener,
         final XComponentContext xComponentContext = Helper.getComponentContext(_xMSF);
         final Object aSingleton = xComponentContext.getValueByName("/singletons/com.sun.star.deployment.PackageInformationProvider");
         XPackageInformationProvider xProvider = UnoRuntime.queryInterface(XPackageInformationProvider.class, aSingleton);
-        final String sLocation = xProvider.getPackageLocation("com.sun.reportdesigner");
-        return sLocation;
+        return xProvider.getPackageLocation("com.sun.reportdesigner");
     }
     private static XLogger m_xLogger;
 
@@ -471,10 +466,8 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener,
                             {
                                 XMultiServiceFactory.class
                             });
-                    m_reportDocument = (IReportDocument) aMethod.invoke(a, new Object[]
-                            {
-                                xMSF
-                            });
+                    m_reportDocument = (IReportDocument) aMethod.invoke(a, xMSF
+                            );
                 }
                 catch (Exception e)
                 {
@@ -577,7 +570,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener,
     public boolean getReportResources(boolean bgetProgressResourcesOnly)
     {
         sMsgWizardName = super.m_oResource.getResText(UIConsts.RID_REPORT);
-        if (bgetProgressResourcesOnly == false)
+        if (!bgetProgressResourcesOnly)
         {
             sShowBinaryFields = m_oResource.getResText(UIConsts.RID_REPORT + 60);
             slblTables = m_oResource.getResText(UIConsts.RID_FORM + 6);
@@ -627,7 +620,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener,
                     bEnabled = true;
                 }
 
-                Helper.setUnoPropertyValue(oRoadmapItem, PropertyNames.PROPERTY_ENABLED, new Boolean(bEnabled));
+                Helper.setUnoPropertyValue(oRoadmapItem, PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bEnabled));
             }
         }
         catch (com.sun.star.uno.Exception exception)
@@ -639,8 +632,8 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener,
     private void enableWizardSteps(String[] NewItems)
     {
         boolean bEnabled = NewItems.length > 0;
-        setControlProperty("btnWizardNext", PropertyNames.PROPERTY_ENABLED, new Boolean(bEnabled));
-        setControlProperty("btnWizardFinish", PropertyNames.PROPERTY_ENABLED, new Boolean(bEnabled));
+        setControlProperty("btnWizardNext", PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bEnabled));
+        setControlProperty("btnWizardFinish", PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bEnabled));
         enableRoadmapItems(bEnabled);   // Note: Performancewise this could be improved
     }
 

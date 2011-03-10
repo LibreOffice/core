@@ -326,7 +326,7 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
                 },
                 new Object[]
                 {
-                    new Boolean(false), INTEGER_12, HelpIds.getHelpIdString(HID_FTP_TXT_PATH), "txtDir", INTEGER_12, 113, new Short((short) 11), resources.restxtDir_value, 184
+                        Boolean.FALSE, INTEGER_12, HelpIds.getHelpIdString(HID_FTP_TXT_PATH), "txtDir", INTEGER_12, 113, new Short((short) 11), resources.restxtDir_value, 184
                 });
         btnDir = insertButton("btnDir", "chooseDirectory",
                 PROPNAMES_BUTTON,
@@ -708,10 +708,7 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
 
     private String imageUrl(String s)
     {
-        String t = imagesDirectory + s;
-        //System.out.println(t);
-        return t;
-
+        return imagesDirectory + s;
     }
 
     /**

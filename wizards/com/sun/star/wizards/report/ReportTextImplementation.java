@@ -189,8 +189,8 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
             Helper.setUnoPropertyValue(xTextSection, "LinkRegion", sLinkRegion);
             if (CurDBColumn != null)
             {
-                boolean bIsGroupTable = (sLinkRegion.equals(ReportTextDocument.RECORDSECTION) != true);
-                if (bIsGroupTable == true)
+                boolean bIsGroupTable = (!sLinkRegion.equals(ReportTextDocument.RECORDSECTION));
+                if (bIsGroupTable)
                 {
                     XTextTable xTextTable = getDoc().oTextTableHandler.getlastTextTable();
                     XCellRange xCellRange = UnoRuntime.queryInterface( XCellRange.class, xTextTable );
@@ -347,7 +347,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
             XTextCursor xTextCursor = ReportTextDocument.createTextCursor(getDoc().xTextDocument.getText());
             xTextDocument.lockControllers();
 
-            if (getRecordParser().ResultSet.next() == true)
+            if (getRecordParser().ResultSet.next())
             {
                 replaceUserFields();
                 Helper.setUnoPropertyValue(xTextCursor, "PageDescName", "First Page");
@@ -361,18 +361,18 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
                     CurDBColumn = (DBColumn) getDoc().DBColumnsVector.elementAt(ColIndex);
                     addLinkedTextSection(xTextCursor, ReportTextDocument.GROUPSECTION + Integer.toString(ColIndex + 1), CurDBColumn, CurGroupValue); //COPYOF!!!!
                 }
-                if (getRecordParser().getcurrentRecordData(DataVector) == true)
+                if (getRecordParser().getcurrentRecordData(DataVector))
                 {
                     // int RowIndex = 1;
                     m_bStopProcess = false;
-                    while ((getRecordParser().ResultSet.next() == true) && (m_bStopProcess == false))
+                    while ((getRecordParser().ResultSet.next()) && (!m_bStopProcess))
                     {
                         // RowIndex += 1;
                         breset = false;
                         for (ColIndex = 0; ColIndex < GroupFieldCount; ColIndex++)
                         {
                             CurGroupValue = getRecordParser().getGroupColumnValue(ColIndex);
-                            if ((CurGroupValue.equals(OldGroupFieldValues[ColIndex]) == false) || (breset))
+                            if ((!CurGroupValue.equals(OldGroupFieldValues[ColIndex])) || (breset))
                             {
                                 breset = true;
                                 insertDataToRecordTable(xTextCursor, DataVector, RecordFieldCount);

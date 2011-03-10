@@ -128,7 +128,7 @@ public class Finalizer
 
     public boolean getOpenForEditing()
     {
-        return optModifyForm.getState() ? true : false;
+        return optModifyForm.getState();
     }
 
     public boolean finish()

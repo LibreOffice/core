@@ -735,31 +735,31 @@ public class NumericalHelper
         switch (aTypeObject.iType)
         {
             case BYTE_TYPE:
-                retValue = ((Byte) aTypeObject.aValue).toString();
+                retValue = aTypeObject.aValue.toString();
                 break;
             case CHAR_TYPE:
-                retValue = ((Character) aTypeObject.aValue).toString();
+                retValue = aTypeObject.aValue.toString();
                 break;
             case SHORT_TYPE:
-                retValue = ((Short) aTypeObject.aValue).toString();
+                retValue = aTypeObject.aValue.toString();
                 break;
             case INT_TYPE:
-                retValue = ((Integer) aTypeObject.aValue).toString();
+                retValue = aTypeObject.aValue.toString();
                 break;
             case LONG_TYPE:
-                retValue = ((Long) aTypeObject.aValue).toString();
+                retValue = aTypeObject.aValue.toString();
                 break;
             case FLOAT_TYPE:
-                retValue = ((Float) aTypeObject.aValue).toString();
+                retValue = aTypeObject.aValue.toString();
                 break;
             case DOUBLE_TYPE:
-                retValue = ((Double) aTypeObject.aValue).toString();
+                retValue = aTypeObject.aValue.toString();
                 break;
             case STRING_TYPE:
                 retValue = (String) aTypeObject.aValue;
                 break;
             case BOOLEAN_TYPE:
-                retValue = ((Boolean) aTypeObject.aValue).toString();
+                retValue = aTypeObject.aValue.toString();
                 break;
             case ARRAY_TYPE:
                 retValue = new String(toByteArray((aValue)));
@@ -1619,7 +1619,6 @@ public class NumericalHelper
     public static double roundDouble(double _dblvalue, int _ndecimals)
     {
         double dblfactor = java.lang.Math.pow(10.0, (double) _ndecimals);
-        double dblretvalue = ((double) ((int) (_dblvalue * dblfactor))) / dblfactor;
-        return dblretvalue;
+        return ((double) ((int) (_dblvalue * dblfactor))) / dblfactor;
     }
 }

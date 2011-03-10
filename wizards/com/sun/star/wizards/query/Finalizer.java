@@ -164,8 +164,7 @@ public class Finalizer
 
     private String getTitle()
     {
-        final String sTitle = (String) Helper.getUnoPropertyValue(UnoDialog.getModel(m_aTxtTitle), "Text");
-        return sTitle;
+        return (String) Helper.getUnoPropertyValue(UnoDialog.getModel(m_aTxtTitle), "Text");
     }
 
     public String finish()

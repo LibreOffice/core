@@ -177,8 +177,8 @@ public class CGDocument extends ConfigSetItem implements XMLProvider
             props[0] = Properties.createProperty("Hidden", Boolean.TRUE);
             props[1] = Properties.createProperty("MacroExecutionMode", new Short(MacroExecMode.NEVER_EXECUTE));
             props[2] = Properties.createProperty("UpdateDocMode", new Short(UpdateDocMode.NO_UPDATE));
-            XComponent component = ((XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, desktop)).loadComponentFromURL(cp_URL, "_default", 0, props);
-            xProps = ((XDocumentPropertiesSupplier) UnoRuntime.queryInterface(XDocumentPropertiesSupplier.class, component)).getDocumentProperties();
+            XComponent component = UnoRuntime.queryInterface(XComponentLoader.class, desktop).loadComponentFromURL(cp_URL, "_default", 0, props);
+            xProps = UnoRuntime.queryInterface(XDocumentPropertiesSupplier.class, component).getDocumentProperties();
         }
 
         task.advance(true); //4
@@ -243,13 +243,13 @@ public class CGDocument extends ConfigSetItem implements XMLProvider
         //System.out.println(appType);
 
         isSOOpenable =
-                (appType == TypeDetection.WRITER_DOC || appType == TypeDetection.CALC_DOC || appType == TypeDetection.IMPRESS_DOC || appType == TypeDetection.DRAW_DOC) || appType == TypeDetection.HTML_DOC;
+                (appType.equals(TypeDetection.WRITER_DOC) || appType.equals(TypeDetection.CALC_DOC) || appType.equals(TypeDetection.IMPRESS_DOC) || appType.equals(TypeDetection.DRAW_DOC)) || appType.equals(TypeDetection.HTML_DOC);
 
 //        String[] parts = media.split("_");    // line removed because of compatibility to JDK13
         String[] parts = JavaTools.ArrayoutofString(media, "_");
 
 
-        isSODocument = parts.length < 2 ? false : isSOOpenable && (parts[1].startsWith("Star"));
+        isSODocument = parts.length >= 2 && isSOOpenable && (parts[1].startsWith("Star"));
 
     }
 

@@ -115,7 +115,7 @@ public class PeerConfig implements XWindowListener
             for (int i = 0; i < this.m_aPeerTasks.size(); i++)
             {
                 PeerTask aPeerTask = (PeerTask) m_aPeerTasks.elementAt(i);
-                XVclWindowPeer xVclWindowPeer = (XVclWindowPeer) UnoRuntime.queryInterface(XVclWindowPeer.class, aPeerTask.xControl.getPeer());
+                XVclWindowPeer xVclWindowPeer = UnoRuntime.queryInterface(XVclWindowPeer.class, aPeerTask.xControl.getPeer());
                 for (int n = 0; n < aPeerTask.propnames.length; n++)
                 {
                     xVclWindowPeer.setProperty(aPeerTask.propnames[n], aPeerTask.propvalues[n]);
@@ -167,7 +167,7 @@ public class PeerConfig implements XWindowListener
      */
     public void setAccessibleName(Object oAPIControl, String _saccessname)
     {
-        XControl xControl = (XControl) UnoRuntime.queryInterface(XControl.class, oAPIControl);
+        XControl xControl = UnoRuntime.queryInterface(XControl.class, oAPIControl);
         setPeerProperties(xControl, new String[]
                 {
                     "AccessibleName"
@@ -196,7 +196,7 @@ public class PeerConfig implements XWindowListener
      */
     public void setPeerProperties(Object oAPIControl, String[] _propnames, Object[] _propvalues)
     {
-        XControl xControl = (XControl) UnoRuntime.queryInterface(XControl.class, oAPIControl);
+        XControl xControl = UnoRuntime.queryInterface(XControl.class, oAPIControl);
         setPeerProperties(xControl, _propnames, _propvalues);
     }
 

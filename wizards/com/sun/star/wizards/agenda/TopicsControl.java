@@ -190,7 +190,7 @@ public class TopicsControl extends ControlScroller implements XFocusListener
      */
     static void addKeyListener(Object control, XKeyListener listener)
     {
-        XWindow xlastControl = (XWindow) UnoRuntime.queryInterface(XWindow.class,
+        XWindow xlastControl = UnoRuntime.queryInterface(XWindow.class,
                 control);
         xlastControl.addKeyListener(listener);
     }
@@ -200,7 +200,7 @@ public class TopicsControl extends ControlScroller implements XFocusListener
      */
     static void addFocusListener(Object control, XFocusListener listener)
     {
-        XWindow xlastControl = (XWindow) UnoRuntime.queryInterface(XWindow.class,
+        XWindow xlastControl = UnoRuntime.queryInterface(XWindow.class,
                 control);
         xlastControl.addFocusListener(listener);
     }
@@ -311,7 +311,7 @@ public class TopicsControl extends ControlScroller implements XFocusListener
      */
     public void focusGained(FocusEvent fe)
     {
-        XControl xc = (XControl) UnoRuntime.queryInterface(XControl.class, fe.Source);
+        XControl xc = UnoRuntime.queryInterface(XControl.class, fe.Source);
         focusGained(xc);
     }
 
@@ -698,11 +698,11 @@ public class TopicsControl extends ControlScroller implements XFocusListener
      */
     private void focus(Object textControl)
     {
-        ((XWindow) UnoRuntime.queryInterface(XWindow.class, textControl)).setFocus();
-        XTextComponent xTextComponent = (XTextComponent) UnoRuntime.queryInterface(XTextComponent.class, textControl);
+        UnoRuntime.queryInterface(XWindow.class, textControl).setFocus();
+        XTextComponent xTextComponent = UnoRuntime.queryInterface(XTextComponent.class, textControl);
         String text = xTextComponent.getText();
         xTextComponent.setSelection(new Selection(0, text.length()));
-        XControl xc = (XControl) UnoRuntime.queryInterface(XControl.class, textControl);
+        XControl xc = UnoRuntime.queryInterface(XControl.class, textControl);
         focusGained(xc);
     }
 
@@ -876,7 +876,7 @@ public class TopicsControl extends ControlScroller implements XFocusListener
      */
     private Selection getSelection(Object control)
     {
-        return ((XTextComponent) UnoRuntime.queryInterface(XTextComponent.class, control)).getSelection();
+        return UnoRuntime.queryInterface(XTextComponent.class, control).getSelection();
     }
 
     /**
@@ -897,8 +897,8 @@ public class TopicsControl extends ControlScroller implements XFocusListener
     {
         ControlRow cr = (ControlRow) ControlGroupVector.get(guiRow);
         Object control = getControl(cr, eventSource);
-        ((XWindow) UnoRuntime.queryInterface(XWindow.class, control)).setFocus();
-        ((XTextComponent) UnoRuntime.queryInterface(XTextComponent.class, control)).setSelection(s);
+        UnoRuntime.queryInterface(XWindow.class, control).setFocus();
+        UnoRuntime.queryInterface(XTextComponent.class, control).setSelection(s);
     }
 
     /**

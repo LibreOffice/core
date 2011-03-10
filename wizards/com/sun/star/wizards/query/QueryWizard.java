@@ -77,7 +77,6 @@ public class QueryWizard extends DatabaseObjectWizard
     private String reslblFields;
     private String reslblSelFields;
     private String reslblTables;
-    private String resQueryWizard;
     private String reslblGroupBy;
     private String resmsgNonNumericAsGroupBy;
     private String m_createdQuery;
@@ -194,7 +193,7 @@ public class QueryWizard extends DatabaseObjectWizard
                 reslblSelFields = m_oResource.getResText(UIConsts.RID_QUERY + 50);
                 reslblTables = m_oResource.getResText(UIConsts.RID_QUERY + 3);
                 reslblGroupBy = m_oResource.getResText(UIConsts.RID_QUERY + 18);
-                resQueryWizard = m_oResource.getResText(UIConsts.RID_QUERY + 2);
+                String resQueryWizard = m_oResource.getResText(UIConsts.RID_QUERY + 2);
                 resmsgNonNumericAsGroupBy = m_oResource.getResText(UIConsts.RID_QUERY + 88);
                 Helper.setUnoPropertyValues(xDialogModel, new String[]
                         {
@@ -249,7 +248,7 @@ public class QueryWizard extends DatabaseObjectWizard
                 switch (CurItemID)
                 {
                     case SOAGGREGATE_PAGE:
-                        if (_bEnabled == true)
+                        if (_bEnabled)
                         {
                             bEnabled = ((m_DBMetaData.hasNumericalFields()) && (m_DBMetaData.xDBMetaData.supportsCoreSQLGrammar()));
                         }
@@ -259,7 +258,7 @@ public class QueryWizard extends DatabaseObjectWizard
                         break;
                     case SOGROUPFILTER_PAGE:
                         bEnabled = false;
-                        if (_bEnabled == true)
+                        if (_bEnabled)
                         {
                             bEnabled = (m_DBMetaData.GroupByFilterConditions.length > 0);
                         }

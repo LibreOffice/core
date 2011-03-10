@@ -1042,6 +1042,6 @@ public class HelpIds
         else if ( nHelpId >= 40769 && nHelpId <= 41245 )
             return array2[ nHelpId - 40769 ];
         else
-            return new String();
+            return "";
     }
 }

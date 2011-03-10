@@ -56,8 +56,7 @@ public class FaxDocument extends TextDocument
 
     public XWindowPeer getWindowPeer()
     {
-        XWindowPeer xWindowPeer = (XWindowPeer) UnoRuntime.queryInterface(XWindowPeer.class, xTextDocument);
-        return xWindowPeer;
+        return UnoRuntime.queryInterface(XWindowPeer.class, xTextDocument);
     }
 
     public void switchElement(String sElement, boolean bState)
@@ -66,7 +65,7 @@ public class FaxDocument extends TextDocument
         {
             TextSectionHandler mySectionHandler = new TextSectionHandler(xMSF, xTextDocument);
             Object oSection = mySectionHandler.xTextSectionsSupplier.getTextSections().getByName(sElement);
-            Helper.setUnoPropertyValue(oSection, "IsVisible", new Boolean(bState));
+            Helper.setUnoPropertyValue(oSection, "IsVisible", Boolean.valueOf(bState));
 
         }
         catch (Exception exception)
@@ -88,20 +87,20 @@ public class FaxDocument extends TextDocument
             xTextDocument.lockControllers();
             try
             {
-                XStyleFamiliesSupplier xStyleFamiliesSupplier = (XStyleFamiliesSupplier) com.sun.star.uno.UnoRuntime.queryInterface(XStyleFamiliesSupplier.class, xTextDocument);
+                XStyleFamiliesSupplier xStyleFamiliesSupplier = UnoRuntime.queryInterface(XStyleFamiliesSupplier.class, xTextDocument);
                 com.sun.star.container.XNameAccess xNameAccess = null;
                 xNameAccess = xStyleFamiliesSupplier.getStyleFamilies();
 
                 com.sun.star.container.XNameContainer xPageStyleCollection = null;
-                xPageStyleCollection = (com.sun.star.container.XNameContainer) UnoRuntime.queryInterface(com.sun.star.container.XNameContainer.class, xNameAccess.getByName("PageStyles"));
+                xPageStyleCollection = UnoRuntime.queryInterface(com.sun.star.container.XNameContainer.class, xNameAccess.getByName("PageStyles"));
 
                 XText xFooterText;
-                XStyle xPageStyle = (XStyle) UnoRuntime.queryInterface(XStyle.class, xPageStyleCollection.getByName(sPageStyle));
+                XStyle xPageStyle = UnoRuntime.queryInterface(XStyle.class, xPageStyleCollection.getByName(sPageStyle));
 
                 if (bState)
                 {
-                    Helper.setUnoPropertyValue(xPageStyle, "FooterIsOn", new Boolean(true));
-                    xFooterText = (XText) UnoRuntime.queryInterface(XText.class, Helper.getUnoPropertyValue(xPageStyle, "FooterText"));
+                    Helper.setUnoPropertyValue(xPageStyle, "FooterIsOn", Boolean.TRUE);
+                    xFooterText = UnoRuntime.queryInterface(XText.class, Helper.getUnoPropertyValue(xPageStyle, "FooterText"));
                     xFooterText.setString(sText);
                     if (bPageNumber)
                     {
@@ -109,10 +108,10 @@ public class FaxDocument extends TextDocument
                         XTextCursor myCursor = xFooterText.createTextCursor();
                         myCursor.gotoEnd(false);
                         xFooterText.insertControlCharacter(myCursor, ControlCharacter.PARAGRAPH_BREAK, false);
-                        XPropertySet xCursorPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, myCursor);
+                        XPropertySet xCursorPSet = UnoRuntime.queryInterface(XPropertySet.class, myCursor);
                         xCursorPSet.setPropertyValue("ParaAdjust", ParagraphAdjust.CENTER);
-                        XTextField xPageNumberField = (XTextField) UnoRuntime.queryInterface(XTextField.class, xMSFDoc.createInstance("com.sun.star.text.TextField.PageNumber"));
-                        XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xPageNumberField);
+                        XTextField xPageNumberField = UnoRuntime.queryInterface(XTextField.class, xMSFDoc.createInstance("com.sun.star.text.TextField.PageNumber"));
+                        XPropertySet xPSet = UnoRuntime.queryInterface(XPropertySet.class, xPageNumberField);
                         xPSet.setPropertyValue("SubType", PageNumberType.CURRENT);
                         xPSet.setPropertyValue("NumberingType", new Short(NumberingType.ARABIC));
                         xFooterText.insertTextContent(xFooterText.getEnd(), xPageNumberField, false);
@@ -120,7 +119,7 @@ public class FaxDocument extends TextDocument
                 }
                 else
                 {
-                    Helper.setUnoPropertyValue(xPageStyle, "FooterIsOn", new Boolean(false));
+                    Helper.setUnoPropertyValue(xPageStyle, "FooterIsOn", Boolean.FALSE);
                 }
                 xTextDocument.unlockControllers();
             }

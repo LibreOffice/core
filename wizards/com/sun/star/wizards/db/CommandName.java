@@ -95,12 +95,12 @@ public class CommandName
             {
                 this.DisplayName = _DisplayName;
                 int iIndex;
-                if (oCommandMetaData.xDBMetaData.supportsCatalogsInDataManipulation() == true)
+                if (oCommandMetaData.xDBMetaData.supportsCatalogsInDataManipulation())
                 { // ...dann Catalog mit in TableName
                     iIndex = _DisplayName.indexOf(sCatalogSep);
                     if (iIndex >= 0)
                     {
-                        if (bCatalogAtStart == true)
+                        if (bCatalogAtStart)
                         {
                             CatalogName = _DisplayName.substring(0, iIndex);
                             _DisplayName = _DisplayName.substring(iIndex + 1, _DisplayName.length());
@@ -112,7 +112,7 @@ public class CommandName
                         }
                     }
                 }
-                if (oCommandMetaData.xDBMetaData.supportsSchemasInDataManipulation() == true)
+                if (oCommandMetaData.xDBMetaData.supportsSchemasInDataManipulation())
                 {
                     String[] NameList;
                     NameList = new String[0];
@@ -141,7 +141,7 @@ public class CommandName
             {
                 if (!CatalogName.equals(PropertyNames.EMPTY_STRING))
                 {
-                    if (bCatalogAtStart == true)
+                    if (bCatalogAtStart)
                     {
                         ComposedName = quoteName(CatalogName) + sCatalogSep;
                     }
@@ -162,7 +162,7 @@ public class CommandName
             {
                 ComposedName += quoteName(TableName);
             }
-            if ((bCatalogAtStart == false) && (CatalogName != null))
+            if ((!bCatalogAtStart) && (CatalogName != null))
             {
                 if (!CatalogName.equals(PropertyNames.EMPTY_STRING))
                 {

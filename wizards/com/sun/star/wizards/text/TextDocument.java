@@ -112,7 +112,7 @@ public class TextDocument
 
         xFrame = OfficeDocument.createNewFrame(xMSF, listener);
         xTextDocument = loadAsPreview(_sPreviewURL, true);
-        xComponent = (XComponent) UnoRuntime.queryInterface(XComponent.class, xTextDocument);
+        xComponent = UnoRuntime.queryInterface(XComponent.class, xTextDocument);
 
         if (bShowStatusIndicator)
         {
@@ -127,10 +127,10 @@ public class TextDocument
         this.xMSF = xMSF;
 
         XDesktop xDesktop = Desktop.getDesktop(xMSF);
-        XFramesSupplier xFrameSupplier = (XFramesSupplier) UnoRuntime.queryInterface(XFramesSupplier.class, xDesktop);
+        XFramesSupplier xFrameSupplier = UnoRuntime.queryInterface(XFramesSupplier.class, xDesktop);
         xFrame = xFrameSupplier.getActiveFrame();
-        xComponent = (XComponent) UnoRuntime.queryInterface(XComponent.class, xFrame.getController().getModel());
-        xTextDocument = (XTextDocument) UnoRuntime.queryInterface(XTextDocument.class, xComponent);
+        xComponent = UnoRuntime.queryInterface(XComponent.class, xFrame.getController().getModel());
+        xTextDocument = UnoRuntime.queryInterface(XTextDocument.class, xComponent);
 
         if (bShowStatusIndicator)
         {
@@ -153,7 +153,7 @@ public class TextDocument
         {
             m_identifier = _identifier;
         }
-    };
+    }
 
     // creates an instance of TextDocument containing a blank text document
     public TextDocument(XMultiServiceFactory xMSF, ModuleIdentifier _moduleIdentifier, boolean bShowStatusIndicator)
@@ -163,19 +163,19 @@ public class TextDocument
         try
         {
             // create the empty document, and set its module identifier
-            xTextDocument = (XTextDocument) UnoRuntime.queryInterface(XTextDocument.class,
+            xTextDocument = UnoRuntime.queryInterface(XTextDocument.class,
                     xMSF.createInstance("com.sun.star.text.TextDocument"));
 
-            XLoadable xLoadable = (XLoadable) UnoRuntime.queryInterface(XLoadable.class, xTextDocument);
+            XLoadable xLoadable = UnoRuntime.queryInterface(XLoadable.class, xTextDocument);
             xLoadable.initNew();
 
-            XModule xModule = (XModule) UnoRuntime.queryInterface(XModule.class,
+            XModule xModule = UnoRuntime.queryInterface(XModule.class,
                     xTextDocument);
             xModule.setIdentifier(_moduleIdentifier.getIdentifier());
 
             // load the document into a blank frame
             XDesktop xDesktop = Desktop.getDesktop(xMSF);
-            XComponentLoader xLoader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, xDesktop);
+            XComponentLoader xLoader = UnoRuntime.queryInterface(XComponentLoader.class, xDesktop);
             PropertyValue[] loadArgs = new PropertyValue[]
             {
                 new PropertyValue("Model", -1, xTextDocument, com.sun.star.beans.PropertyState.DIRECT_VALUE)
@@ -184,7 +184,7 @@ public class TextDocument
 
             // remember some things for later usage
             xFrame = xTextDocument.getCurrentController().getFrame();
-            xComponent = (XComponent) UnoRuntime.queryInterface(XComponent.class, xTextDocument);
+            xComponent = UnoRuntime.queryInterface(XComponent.class, xTextDocument);
         }
         catch (Exception e)
         {
@@ -204,21 +204,21 @@ public class TextDocument
     {
         this.xMSF = xMSF;
         xFrame = _textDocument.getCurrentController().getFrame();
-        xComponent = (XComponent) UnoRuntime.queryInterface(XComponent.class, _textDocument);
-        xTextDocument = (XTextDocument) UnoRuntime.queryInterface(XTextDocument.class, xComponent);
+        xComponent = UnoRuntime.queryInterface(XComponent.class, _textDocument);
+        xTextDocument = UnoRuntime.queryInterface(XTextDocument.class, xComponent);
         //PosSize = xFrame.getComponentWindow().getPosSize();
         if (bshowStatusIndicator)
         {
-            XStatusIndicatorFactory xStatusIndicatorFactory = (XStatusIndicatorFactory) UnoRuntime.queryInterface(XStatusIndicatorFactory.class, xFrame);
+            XStatusIndicatorFactory xStatusIndicatorFactory = UnoRuntime.queryInterface(XStatusIndicatorFactory.class, xFrame);
             xProgressBar = xStatusIndicatorFactory.createStatusIndicator();
             xProgressBar.start(PropertyNames.EMPTY_STRING, 100);
             xProgressBar.setValue(5);
         }
-        xWindowPeer = (XWindowPeer) UnoRuntime.queryInterface(XWindowPeer.class, xFrame.getComponentWindow());
-        xMSFDoc = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDocument);
-        xNumberFormatsSupplier = (XNumberFormatsSupplier) UnoRuntime.queryInterface(XNumberFormatsSupplier.class, xTextDocument);
+        xWindowPeer = UnoRuntime.queryInterface(XWindowPeer.class, xFrame.getComponentWindow());
+        xMSFDoc = UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDocument);
+        xNumberFormatsSupplier = UnoRuntime.queryInterface(XNumberFormatsSupplier.class, xTextDocument);
 
-        XDocumentPropertiesSupplier xDocPropsSuppl = (XDocumentPropertiesSupplier) UnoRuntime.queryInterface(XDocumentPropertiesSupplier.class, xTextDocument);
+        XDocumentPropertiesSupplier xDocPropsSuppl = UnoRuntime.queryInterface(XDocumentPropertiesSupplier.class, xTextDocument);
         m_xDocProps = xDocPropsSuppl.getDocumentProperties();
         CharLocale = (Locale) Helper.getUnoStructValue((Object) xComponent, "CharLocale");
         xText = xTextDocument.getText();
@@ -226,19 +226,19 @@ public class TextDocument
 
     private void init()
     {
-        xWindowPeer = (XWindowPeer) UnoRuntime.queryInterface(XWindowPeer.class, xFrame.getComponentWindow());
-        xMSFDoc = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDocument);
-        xNumberFormatsSupplier = (XNumberFormatsSupplier) UnoRuntime.queryInterface(XNumberFormatsSupplier.class, xTextDocument);
-        XDocumentPropertiesSupplier xDocPropsSuppl = (XDocumentPropertiesSupplier) UnoRuntime.queryInterface(XDocumentPropertiesSupplier.class, xTextDocument);
+        xWindowPeer = UnoRuntime.queryInterface(XWindowPeer.class, xFrame.getComponentWindow());
+        xMSFDoc = UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDocument);
+        xNumberFormatsSupplier = UnoRuntime.queryInterface(XNumberFormatsSupplier.class, xTextDocument);
+        XDocumentPropertiesSupplier xDocPropsSuppl = UnoRuntime.queryInterface(XDocumentPropertiesSupplier.class, xTextDocument);
         m_xDocProps = xDocPropsSuppl.getDocumentProperties();
         CharLocale = (Locale) Helper.getUnoStructValue((Object) xComponent, "CharLocale");
-        xStorable = (XStorable) UnoRuntime.queryInterface(XStorable.class, xTextDocument);
+        xStorable = UnoRuntime.queryInterface(XStorable.class, xTextDocument);
         xText = xTextDocument.getText();
     }
 
     private void showStatusIndicator()
     {
-        XStatusIndicatorFactory xStatusIndicatorFactory = (XStatusIndicatorFactory) UnoRuntime.queryInterface(XStatusIndicatorFactory.class, xFrame);
+        XStatusIndicatorFactory xStatusIndicatorFactory = UnoRuntime.queryInterface(XStatusIndicatorFactory.class, xFrame);
         xProgressBar = xStatusIndicatorFactory.createStatusIndicator();
         xProgressBar.start(PropertyNames.EMPTY_STRING, 100);
         xProgressBar.setValue(5);
@@ -263,7 +263,7 @@ public class TextDocument
         {
             try
             {
-                XModifiable xModi = (XModifiable) UnoRuntime.queryInterface(XModifiable.class, xTextDocument);
+                XModifiable xModi = UnoRuntime.queryInterface(XModifiable.class, xTextDocument);
                 xModi.setModified(false);
             }
             catch (PropertyVetoException e1)
@@ -274,7 +274,7 @@ public class TextDocument
         Object oDoc = OfficeDocument.load(xFrame, sDefaultTemplate, "_self", loadValues);
         xTextDocument = (com.sun.star.text.XTextDocument) oDoc;
         DocSize = getPageSize();
-        xMSFDoc = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDocument);
+        xMSFDoc = UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDocument);
 
         ViewHandler myViewHandler = new ViewHandler(xMSFDoc, xTextDocument);
         try
@@ -297,12 +297,12 @@ public class TextDocument
     {
         try
         {
-            XStyleFamiliesSupplier xStyleFamiliesSupplier = (XStyleFamiliesSupplier) com.sun.star.uno.UnoRuntime.queryInterface(XStyleFamiliesSupplier.class, xTextDocument);
+            XStyleFamiliesSupplier xStyleFamiliesSupplier = UnoRuntime.queryInterface(XStyleFamiliesSupplier.class, xTextDocument);
             com.sun.star.container.XNameAccess xNameAccess = null;
             xNameAccess = xStyleFamiliesSupplier.getStyleFamilies();
             com.sun.star.container.XNameContainer xPageStyleCollection = null;
-            xPageStyleCollection = (com.sun.star.container.XNameContainer) UnoRuntime.queryInterface(com.sun.star.container.XNameContainer.class, xNameAccess.getByName("PageStyles"));
-            XStyle xPageStyle = (XStyle) UnoRuntime.queryInterface(XStyle.class, xPageStyleCollection.getByName("First Page"));
+            xPageStyleCollection = UnoRuntime.queryInterface(com.sun.star.container.XNameContainer.class, xNameAccess.getByName("PageStyles"));
+            XStyle xPageStyle = UnoRuntime.queryInterface(XStyle.class, xPageStyleCollection.getByName("First Page"));
             return (Size) Helper.getUnoPropertyValue(xPageStyle, "Size");
 
         }
@@ -322,23 +322,22 @@ public class TextDocument
         xFrame = OfficeDocument.createNewFrame(xMSF, listener);
         Object oDoc = OfficeDocument.load(xFrame, URL, "_self", xArgs);
         xTextDocument = (XTextDocument) oDoc;
-        xComponent = (XComponent) UnoRuntime.queryInterface(XComponent.class, xTextDocument);
+        xComponent = UnoRuntime.queryInterface(XComponent.class, xTextDocument);
         XWindow xWindow = xFrame.getComponentWindow();
 
-        xWindowPeer = (XWindowPeer) UnoRuntime.queryInterface(XWindowPeer.class, xFrame.getComponentWindow());
-        xMSFDoc = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDocument);
-        xNumberFormatsSupplier = (XNumberFormatsSupplier) UnoRuntime.queryInterface(XNumberFormatsSupplier.class, xTextDocument);
+        xWindowPeer = UnoRuntime.queryInterface(XWindowPeer.class, xFrame.getComponentWindow());
+        xMSFDoc = UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDocument);
+        xNumberFormatsSupplier = UnoRuntime.queryInterface(XNumberFormatsSupplier.class, xTextDocument);
 
-        XDocumentPropertiesSupplier xDocPropsSuppl = (XDocumentPropertiesSupplier) UnoRuntime.queryInterface(XDocumentPropertiesSupplier.class, xTextDocument);
+        XDocumentPropertiesSupplier xDocPropsSuppl = UnoRuntime.queryInterface(XDocumentPropertiesSupplier.class, xTextDocument);
         m_xDocProps = xDocPropsSuppl.getDocumentProperties();
         CharLocale = (Locale) Helper.getUnoStructValue((Object) xComponent, "CharLocale");
     }
 
     public static XTextCursor createTextCursor(Object oCursorContainer)
     {
-        XSimpleText xText = (XSimpleText) UnoRuntime.queryInterface(XSimpleText.class, oCursorContainer);
-        XTextCursor xTextCursor = xText.createTextCursor();
-        return xTextCursor;
+        XSimpleText xText = UnoRuntime.queryInterface(XSimpleText.class, oCursorContainer);
+        return xText.createTextCursor();
     }
 
     // Todo: This method is  unsecure because the last index is not necessarily the last section
@@ -357,7 +356,7 @@ public class TextDocument
         xTextCursor.gotoStart(false);
         com.sun.star.wizards.common.Helper.setUnoPropertyValue(xTextCursor, "PageDescName", "First Page");
         xTextCursor.setString(ScaleString);
-        XTextViewCursorSupplier xViewCursor = (XTextViewCursorSupplier) UnoRuntime.queryInterface(XTextViewCursorSupplier.class, xTextDocument.getCurrentController());
+        XTextViewCursorSupplier xViewCursor = UnoRuntime.queryInterface(XTextViewCursorSupplier.class, xTextDocument.getCurrentController());
         XTextViewCursor xTextViewCursor = xViewCursor.getViewCursor();
         xTextViewCursor.gotoStart(false);
         int iFirstPos = xTextViewCursor.getPosition().X;
@@ -373,7 +372,7 @@ public class TextDocument
 
     public void unlockallControllers()
     {
-        while (xTextDocument.hasControllersLocked() == true)
+        while (xTextDocument.hasControllersLocked())
         {
             xTextDocument.unlockControllers();
         }
@@ -381,7 +380,7 @@ public class TextDocument
 
     public void refresh()
     {
-        XRefreshable xRefreshable = (XRefreshable) UnoRuntime.queryInterface(XRefreshable.class, xTextDocument);
+        XRefreshable xRefreshable = UnoRuntime.queryInterface(XRefreshable.class, xTextDocument);
         xRefreshable.refresh();
     }
 
@@ -397,10 +396,10 @@ public class TextDocument
         try
         {
             Object uD = Configuration.getConfigurationRoot(xMSF, "/org.openoffice.UserProfile/Data", false);
-            XNameAccess xNA = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, uD);
+            XNameAccess xNA = UnoRuntime.queryInterface(XNameAccess.class, uD);
             Object gn = xNA.getByName("givenname");
             Object sn = xNA.getByName("sn");
-            String fullname = (String) gn + PropertyNames.SPACE + (String) sn;
+            String fullname = gn + PropertyNames.SPACE + sn;
 
             Calendar cal = new GregorianCalendar();
             int year = cal.get(Calendar.YEAR);
@@ -414,7 +413,7 @@ public class TextDocument
             int ff = du.getFormat(NumberFormatIndex.DATE_SYS_DDMMYY);
             String myDate = du.format(ff, currentDate);
 
-            XDocumentPropertiesSupplier xDocPropsSuppl = (XDocumentPropertiesSupplier) UnoRuntime.queryInterface(XDocumentPropertiesSupplier.class, xTextDocument);
+            XDocumentPropertiesSupplier xDocPropsSuppl = UnoRuntime.queryInterface(XDocumentPropertiesSupplier.class, xTextDocument);
             XDocumentProperties xDocProps2 = xDocPropsSuppl.getDocumentProperties();
             xDocProps2.setAuthor(fullname);
             xDocProps2.setModifiedBy(fullname);
@@ -450,7 +449,7 @@ public class TextDocument
     {
         try
         {
-            XTextContent xTextContent = (XTextContent) UnoRuntime.queryInterface(XTextContent.class, oTextContent);
+            XTextContent xTextContent = UnoRuntime.queryInterface(XTextContent.class, oTextContent);
             xText.removeTextContent(xTextContent);
             return true;
         }
@@ -470,11 +469,11 @@ public class TextDocument
      */
     public static int getPageCount(Object model)
     {
-        XModel xModel = (XModel) UnoRuntime.queryInterface(XModel.class, model);
+        XModel xModel = UnoRuntime.queryInterface(XModel.class, model);
         XController xController = xModel.getCurrentController();
-        XTextViewCursorSupplier xTextVCS = (XTextViewCursorSupplier) UnoRuntime.queryInterface(XTextViewCursorSupplier.class, xController);
+        XTextViewCursorSupplier xTextVCS = UnoRuntime.queryInterface(XTextViewCursorSupplier.class, xController);
         XTextViewCursor xTextVC = xTextVCS.getViewCursor();
-        XPageCursor xPC = (XPageCursor) UnoRuntime.queryInterface(XPageCursor.class, xTextVC);
+        XPageCursor xPC = UnoRuntime.queryInterface(XPageCursor.class, xTextVC);
         xPC.jumpToLastPage();
         return xPC.getPage();
     }

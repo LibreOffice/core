@@ -55,8 +55,7 @@ public class Tabular extends ReportBuilderLayouter
 
     public String getLocalizedName()
     {
-        String sLocalizedName = getResource().getResText(UIConsts.RID_REPORT + 80);
-        return sLocalizedName;
+        return getResource().getResText(UIConsts.RID_REPORT + 80);
     }
 
     protected void insertDetailFields()

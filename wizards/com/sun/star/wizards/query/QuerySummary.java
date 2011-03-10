@@ -122,8 +122,7 @@ public class QuerySummary extends QueryMetaData
                     sconditions = appendClauseSeparator(sconditions, PropertyNames.SPACE + sOr + PropertyNames.SPACE, i, _filterconditions.length);
                 }
             }
-            String sreturn = sStart + sconditions;
-            return sreturn;
+            return sStart + sconditions;
         }
         return oResource.getResText(_AlternativeResID);
     }

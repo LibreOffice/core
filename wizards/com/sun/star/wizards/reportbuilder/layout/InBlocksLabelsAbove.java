@@ -54,8 +54,7 @@ public class InBlocksLabelsAbove extends ColumnarTwoColumns
 
     public String getLocalizedName()
     {
-        final String sLocalizedName = getResource().getResText(UIConsts.RID_REPORT + 85);
-        return sLocalizedName;
+        return getResource().getResText(UIConsts.RID_REPORT + 85);
     }
 
     protected void insertDetailFields()

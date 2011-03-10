@@ -65,12 +65,12 @@ public class TextFieldHandler
     public TextFieldHandler(XMultiServiceFactory xMSF, XTextDocument xTextDocument)
     {
         this.xMSFDoc = xMSF;
-        xTextFieldsSupplier = (XTextFieldsSupplier) UnoRuntime.queryInterface(XTextFieldsSupplier.class, xTextDocument);
+        xTextFieldsSupplier = UnoRuntime.queryInterface(XTextFieldsSupplier.class, xTextDocument);
     }
 
     public void refreshTextFields()
     {
-        XRefreshable xUp = (XRefreshable) UnoRuntime.queryInterface(XRefreshable.class, xTextFieldsSupplier.getTextFields());
+        XRefreshable xUp = UnoRuntime.queryInterface(XRefreshable.class, xTextFieldsSupplier.getTextFields());
         xUp.refresh();
     }
 
@@ -86,10 +86,9 @@ public class TextFieldHandler
             }
             else
             {
-                XDependentTextField xDependent = (XDependentTextField) UnoRuntime.queryInterface(XDependentTextField.class, oTextField);
+                XDependentTextField xDependent = UnoRuntime.queryInterface(XDependentTextField.class, oTextField);
                 XPropertySet xMaster = xDependent.getTextFieldMaster();
-                String UserFieldContent = (String) xMaster.getPropertyValue("Content");
-                return UserFieldContent;
+                return (String) xMaster.getPropertyValue("Content");
             }
         }
         catch (com.sun.star.uno.Exception exception)
@@ -104,12 +103,12 @@ public class TextFieldHandler
         try
         {
             XInterface xField = (XInterface) xMSFDoc.createInstance("com.sun.star.text.TextField.User");
-            XDependentTextField xDepField = (XDependentTextField) UnoRuntime.queryInterface(XDependentTextField.class, xField);
-            XTextContent xFieldContent = (XTextContent) UnoRuntime.queryInterface(XTextContent.class, xField);
+            XDependentTextField xDepField = UnoRuntime.queryInterface(XDependentTextField.class, xField);
+            XTextContent xFieldContent = UnoRuntime.queryInterface(XTextContent.class, xField);
             if (xTextFieldsSupplier.getTextFieldMasters().hasByName("com.sun.star.text.FieldMaster.User." + FieldName))
             {
                 Object oMaster = xTextFieldsSupplier.getTextFieldMasters().getByName("com.sun.star.text.FieldMaster.User." + FieldName);
-                XComponent xComponent = (XComponent) UnoRuntime.queryInterface(XComponent.class, oMaster);
+                XComponent xComponent = UnoRuntime.queryInterface(XComponent.class, oMaster);
                 xComponent.dispose();
             }
             XPropertySet xPSet = createUserField(FieldName, FieldTitle);
@@ -138,7 +137,7 @@ public class TextFieldHandler
     public XPropertySet createUserField(String FieldName, String FieldTitle) throws com.sun.star.uno.Exception
     {
         Object oMaster = xMSFDoc.createInstance("com.sun.star.text.FieldMaster.User");
-        XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oMaster);
+        XPropertySet xPSet = UnoRuntime.queryInterface(XPropertySet.class, oMaster);
         xPSet.setPropertyValue(PropertyNames.PROPERTY_NAME, FieldName);
         xPSet.setPropertyValue("Content", FieldTitle);
 
@@ -160,7 +159,7 @@ public class TextFieldHandler
                 while (xEnum.hasMoreElements())
                 {
                     Object oTextField = xEnum.nextElement();
-                    XDependentTextField xDependent = (XDependentTextField) UnoRuntime.queryInterface(XDependentTextField.class, oTextField);
+                    XDependentTextField xDependent = UnoRuntime.queryInterface(XDependentTextField.class, oTextField);
                     XPropertySet xPropertySet = xDependent.getTextFieldMaster();
                     if (xPropertySet.getPropertySetInfo().hasPropertyByName(_PropertyName))
                     {
@@ -235,16 +234,16 @@ public class TextFieldHandler
             while (xEnum.hasMoreElements())
             {
                 Object oTextField = xEnum.nextElement();
-                XServiceInfo xSI = (XServiceInfo) UnoRuntime.queryInterface(XServiceInfo.class, oTextField);
+                XServiceInfo xSI = UnoRuntime.queryInterface(XServiceInfo.class, oTextField);
 
                 if (xSI.supportsService("com.sun.star.text.TextField.ExtendedUser"))
                 {
-                    XUpdatable xUp = (XUpdatable) UnoRuntime.queryInterface(XUpdatable.class, oTextField);
+                    XUpdatable xUp = UnoRuntime.queryInterface(XUpdatable.class, oTextField);
                     xUp.update();
                 }
                 if (xSI.supportsService("com.sun.star.text.TextField.User"))
                 {
-                    XUpdatable xUp = (XUpdatable) UnoRuntime.queryInterface(XUpdatable.class, oTextField);
+                    XUpdatable xUp = UnoRuntime.queryInterface(XUpdatable.class, oTextField);
                     xUp.update();
                 }
             }
@@ -270,11 +269,11 @@ public class TextFieldHandler
             while (xEnum.hasMoreElements())
             {
                 Object oTextField = xEnum.nextElement();
-                XServiceInfo xSI = (XServiceInfo) UnoRuntime.queryInterface(XServiceInfo.class, oTextField);
+                XServiceInfo xSI = UnoRuntime.queryInterface(XServiceInfo.class, oTextField);
 
                 if (xSI.supportsService("com.sun.star.text.TextField.DateTime"))
                 {
-                    XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oTextField);
+                    XPropertySet xPSet = UnoRuntime.queryInterface(XPropertySet.class, oTextField);
                     xPSet.setPropertyValue("IsFixed", Boolean.FALSE);
                     xPSet.setPropertyValue("DateTimeValue", dt);
                 }
@@ -294,11 +293,11 @@ public class TextFieldHandler
             while (xEnum.hasMoreElements())
             {
                 Object oTextField = xEnum.nextElement();
-                XServiceInfo xSI = (XServiceInfo) UnoRuntime.queryInterface(XServiceInfo.class, oTextField);
+                XServiceInfo xSI = UnoRuntime.queryInterface(XServiceInfo.class, oTextField);
                 if (xSI.supportsService("com.sun.star.text.TextField.DateTime"))
                 {
-                    XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oTextField);
-                    xPSet.setPropertyValue("IsFixed", new Boolean(_bSetFixed));
+                    XPropertySet xPSet = UnoRuntime.queryInterface(XPropertySet.class, oTextField);
+                    xPSet.setPropertyValue("IsFixed", Boolean.valueOf(_bSetFixed));
                 }
             }
         }

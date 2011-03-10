@@ -233,9 +233,9 @@ public class FieldFormatter implements XItemListener
             benableShiftUpButton = (iselpos != 0);
             benableShiftDownButton = (iselpos != ilistcount - 1);
         }
-        Helper.setUnoPropertyValue(UnoDialog.getModel(btnShiftUp), PropertyNames.PROPERTY_ENABLED, new Boolean(benableShiftUpButton));
-        Helper.setUnoPropertyValue(UnoDialog.getModel(btnShiftDown), PropertyNames.PROPERTY_ENABLED, new Boolean(benableShiftDownButton));
-        Helper.setUnoPropertyValue(UnoDialog.getModel(btnminus), PropertyNames.PROPERTY_ENABLED, new Boolean(blistispopulated));
+        Helper.setUnoPropertyValue(UnoDialog.getModel(btnShiftUp), PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(benableShiftUpButton));
+        Helper.setUnoPropertyValue(UnoDialog.getModel(btnShiftDown), PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(benableShiftDownButton));
+        Helper.setUnoPropertyValue(UnoDialog.getModel(btnminus), PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(blistispopulated));
         CurUnoDialog.setcompleted(TableWizard.SOFIELDSFORMATPAGE, blistispopulated);
     }
 
@@ -298,10 +298,10 @@ public class FieldFormatter implements XItemListener
         else
         {
             Helper.setUnoPropertyValue(UnoDialog.getModel(txtfieldname), "Text", PropertyNames.EMPTY_STRING);
-            Helper.setUnoPropertyValue(UnoDialog.getModel(btnminus), PropertyNames.PROPERTY_ENABLED, new Boolean(benable));
+            Helper.setUnoPropertyValue(UnoDialog.getModel(btnminus), PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(benable));
             CurUnoDialog.setcompleted(TableWizard.SOFIELDSFORMATPAGE, benable);
         }
-        Helper.setUnoPropertyValue(UnoDialog.getModel(btnminus), PropertyNames.PROPERTY_ENABLED, new Boolean(benable));
+        Helper.setUnoPropertyValue(UnoDialog.getModel(btnminus), PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(benable));
         CurUnoDialog.setControlVisible("oColumnDescriptor", benable);
         CurUnoDialog.repaintDialogStep();
     }
@@ -379,7 +379,7 @@ public class FieldFormatter implements XItemListener
     public boolean updateColumnofColumnDescriptor()
     {
         Object oColumn = Helper.getUnoPropertyValue(oColumnDescriptorModel, "Column");
-        XPropertySet xColPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oColumn);
+        XPropertySet xColPropertySet = UnoRuntime.queryInterface(XPropertySet.class, oColumn);
         if (xColPropertySet != null)
         {
             curTableDescriptor.modifyColumn(txtfieldname.getText(), xColPropertySet);
@@ -401,8 +401,7 @@ public class FieldFormatter implements XItemListener
 
     public XPropertySet clonePropertySet(XPropertySet _xPropertySet)
     {
-        XPropertySet xlocpropertyset = null;
-        return xlocpropertyset;
+        return null;
     }
 
     public void itemStateChanged(ItemEvent arg0)

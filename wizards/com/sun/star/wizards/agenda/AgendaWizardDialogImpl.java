@@ -159,7 +159,7 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
 
             // create the peer
             XWindow xw = agendaTemplate.xFrame.getContainerWindow();
-            XWindowPeer xWindowPeer = (XWindowPeer) UnoRuntime.queryInterface(XWindowPeer.class, xw);
+            XWindowPeer xWindowPeer = UnoRuntime.queryInterface(XWindowPeer.class, xw);
             this.createWindowPeer( xWindowPeer );
 
             // initialize roadmap
@@ -185,8 +185,7 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
             removeTerminateListener();
             ex.printStackTrace();
             running=false;
-            return;
-        }
+            }
 
 
     }
@@ -483,7 +482,7 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
 
             agendaTemplate.xTextDocument.lockControllers();
 
-            xTextDocument = (XTextDocument)UnoRuntime.queryInterface(XTextDocument.class,agendaTemplate.document);
+            xTextDocument = UnoRuntime.queryInterface(XTextDocument.class,agendaTemplate.document);
 
             bSaveSuccess = OfficeDocument.store(xMSF, xTextDocument, sPath , "writer8_template", false );
         } catch (Exception e) {
@@ -504,7 +503,7 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
 
             agendaTemplate.finish( topicsControl.getTopicsData());
             try {
-                XStorable xStoreable = (XStorable) UnoRuntime.queryInterface(XStorable.class, agendaTemplate.document);
+                XStorable xStoreable = UnoRuntime.queryInterface(XStorable.class, agendaTemplate.document);
                 xStoreable.store();
             }
             catch (Exception ex) {
@@ -529,8 +528,7 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
             loadValues[1] = new PropertyValue();
             loadValues[1].Name = "InteractionHandler";
             try {
-                XInteractionHandler xIH = (XInteractionHandler) UnoRuntime.queryInterface(XInteractionHandler.class, xMSF.createInstance("com.sun.star.comp.uui.UUIInteractionHandler"));
-                loadValues[1].Value = xIH;
+                loadValues[1].Value = UnoRuntime.queryInterface(XInteractionHandler.class, xMSF.createInstance("com.sun.star.comp.uui.UUIInteractionHandler"));
             } catch (Exception e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -538,7 +536,7 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
             //Object oDoc = OfficeDocument.load(Desktop.getDesktop(xMSF), agenda.cp_TemplatePath, "_default", new PropertyValue[0]);
             Object oDoc = OfficeDocument.load(Desktop.getDesktop(xMSF), sPath, "_default", new PropertyValue[0]);
                         xTextDocument = (com.sun.star.text.XTextDocument) oDoc;
-            XMultiServiceFactory xDocMSF = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDocument);
+            XMultiServiceFactory xDocMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDocument);
             ViewHandler myViewHandler = new ViewHandler(xDocMSF, xTextDocument);
             try {
                 myViewHandler.setViewSetting("ZoomType", new Short(com.sun.star.view.DocumentZoomType.OPTIMAL));
@@ -558,7 +556,7 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
     private void closeDocument() {
         try {
             //xComponent.dispose();
-            XCloseable xCloseable = (XCloseable) UnoRuntime.queryInterface(XCloseable.class, agendaTemplate.xFrame);
+            XCloseable xCloseable = UnoRuntime.queryInterface(XCloseable.class, agendaTemplate.xFrame);
             xCloseable.close(false);
         } catch (CloseVetoException e) {
             e.printStackTrace();

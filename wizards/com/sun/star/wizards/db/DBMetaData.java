@@ -142,7 +142,6 @@ public class DBMetaData
 
     private int iMaxColumnsInSelect;
     private int iMaxColumnsInGroupBy;
-    private int iMaxColumnsInTable;
     private int iMaxColumnNameLength = -1;
     private int iMaxTableNameLength = -1;
     private boolean bPasswordIsRequired;
@@ -372,8 +371,7 @@ public class DBMetaData
     public XNameAccess getTableNamesAsNameAccess()
     {
         XTablesSupplier xDBTables = UnoRuntime.queryInterface( XTablesSupplier.class, DBConnection );
-        XNameAccess xTableNames = xDBTables.getTables();
-        return xTableNames;
+        return xDBTables.getTables();
     }
 
     public String[] getQueryNames()
@@ -488,7 +486,7 @@ public class DBMetaData
 
     public int getMaxColumnsInTable() throws SQLException
     {
-        iMaxColumnsInTable = xDBMetaData.getMaxColumnsInTable();
+        int iMaxColumnsInTable = xDBMetaData.getMaxColumnsInTable();
         if (iMaxColumnsInTable == 0)
         {
             iMaxColumnsInTable = DBMetaData.NOLIMIT;
@@ -645,11 +643,6 @@ public class DBMetaData
                 String sDataSourceName = AnyConverter.toString(Properties.getPropertyValue(curproperties, "DatabaseLocation"));
                 return getConnection(sDataSourceName);
             }
-            else if (xConnection != null)
-            {
-                bdisposeConnection = false;
-                return getConnection(xConnection);
-            }
         }
         catch (IllegalArgumentException e)
         {
@@ -701,7 +694,7 @@ public class DBMetaData
                 xConnectionComponent.dispose();
             }
             getDataSourceInterfaces();
-            if (bPasswordIsRequired == false)
+            if (!bPasswordIsRequired)
             {
                 DBConnection = _dataSource.getConnection(PropertyNames.EMPTY_STRING, PropertyNames.EMPTY_STRING);
                 bgetConnection = true;
@@ -717,7 +710,7 @@ public class DBMetaData
                     {
                         DBConnection = xCompleted2.connectWithCompletion( xInteractionHandler );
                         bgetConnection = DBConnection != null;
-                        if (bgetConnection == false)
+                        if (!bgetConnection)
                         {
                             bExitLoop = true;
                         }
@@ -731,9 +724,9 @@ public class DBMetaData
                         bgetConnection = false;
                     }
                 }
-                while (bExitLoop == false);
+                while (!bExitLoop);
             }
-            if (bgetConnection == false)
+            if (!bgetConnection)
             {
                 String sMsgConnectionImpossible = oResource.getResText(RID_DB_COMMON + 35);
                 showMessageBox("ErrorBox", VclWindowPeerAttribute.OK, sMsgConnectionImpossible);
@@ -900,15 +893,13 @@ public class DBMetaData
     {
         XReportDocumentsSupplier xReportDocumentSuppl = UnoRuntime.queryInterface( XReportDocumentsSupplier.class, this.xModel );
         xReportDocumentSuppl.getReportDocuments();
-        XHierarchicalNameAccess xReportHier = UnoRuntime.queryInterface( XHierarchicalNameAccess.class, xReportDocumentSuppl.getReportDocuments() );
-        return xReportHier;
+        return UnoRuntime.queryInterface( XHierarchicalNameAccess.class, xReportDocumentSuppl.getReportDocuments() );
     }
 
     public XHierarchicalNameAccess getFormDocuments()
     {
         XFormDocumentsSupplier xFormDocumentSuppl = UnoRuntime.queryInterface( XFormDocumentsSupplier.class, xModel );
-        XHierarchicalNameAccess xFormHier = UnoRuntime.queryInterface( XHierarchicalNameAccess.class, xFormDocumentSuppl.getFormDocuments() );
-        return xFormHier;
+        return UnoRuntime.queryInterface( XHierarchicalNameAccess.class, xFormDocumentSuppl.getFormDocuments() );
     }
 
     public boolean hasFormDocumentByName(String _sFormName)

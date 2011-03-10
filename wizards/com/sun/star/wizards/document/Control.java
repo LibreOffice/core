@@ -131,7 +131,7 @@ public class Control extends Shape
         {
             if (xFormName != null)
             {
-                XNameAccess xNameAccess = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, xFormName);
+                XNameAccess xNameAccess = UnoRuntime.queryInterface(XNameAccess.class, xFormName);
                 String sControlName = Desktop.getUniqueName(xNameAccess, getControlName(_fieldname));
                 xPropertySet.setPropertyValue(PropertyNames.PROPERTY_NAME, sControlName);
                 xFormName.insertByName(sControlName, xControlModel);
@@ -280,7 +280,7 @@ public class Control extends Shape
      */
     public XLayoutConstrains getPeer()
     {
-        return (XLayoutConstrains) UnoRuntime.queryInterface(XLayoutConstrains.class, xControl.getPeer());
+        return UnoRuntime.queryInterface(XLayoutConstrains.class, xControl.getPeer());
     }
 
     public Size getPeerSize()

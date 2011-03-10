@@ -186,8 +186,7 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
             calculateDialogPosition(CurReportDocument.getFrame().getComponentWindow().getPosSize());
             xWindow.setVisible(true);
             super.xReschedule.reschedule();
-            return;
-        }
+            }
         catch (Exception e)
         {
             Logger.getLogger(Dataimport.class.getName()).log(Level.SEVERE, null, e);

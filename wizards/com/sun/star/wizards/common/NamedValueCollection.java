@@ -38,7 +38,7 @@ public class NamedValueCollection
     }
 
     @SuppressWarnings("unchecked")
-    public final < T extends Object > T getOrDefault( final String i_key, final T i_default )
+    public final < T  > T getOrDefault( final String i_key, final T i_default )
     {
         if ( m_values.containsKey( i_key ) )
         {

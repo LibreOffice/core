@@ -211,7 +211,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
             }
 
             XWindow xContainerWindow = myLetterDoc.xFrame.getContainerWindow();
-            XWindowPeer xWindowPeer = (XWindowPeer) UnoRuntime.queryInterface(XWindowPeer.class, xContainerWindow);
+            XWindowPeer xWindowPeer = UnoRuntime.queryInterface(XWindowPeer.class, xContainerWindow);
             createWindowPeer(xWindowPeer);
 
             //add the Roadmap to the dialog:
@@ -240,8 +240,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
             removeTerminateListener();
             exception.printStackTrace(System.out);
             running = false;
-            return;
-        }
+            }
     }
 
     public void cancelWizard()
@@ -311,7 +310,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
             if (bSaveSuccess)
             {
                 saveConfiguration();
-                XInteractionHandler xIH = (XInteractionHandler) UnoRuntime.queryInterface(XInteractionHandler.class, xMSF.createInstance("com.sun.star.comp.uui.UUIInteractionHandler"));
+                XInteractionHandler xIH = UnoRuntime.queryInterface(XInteractionHandler.class, xMSF.createInstance("com.sun.star.comp.uui.UUIInteractionHandler"));
                 PropertyValue loadValues[] = new PropertyValue[4];
                 loadValues[0] = new PropertyValue();
                 loadValues[0].Name = "AsTemplate";
@@ -335,7 +334,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
                 }
                 Object oDoc = OfficeDocument.load(Desktop.getDesktop(xMSF), sPath, "_default", loadValues);
                 XTextDocument xTextDocument = (com.sun.star.text.XTextDocument) oDoc;
-                XMultiServiceFactory xDocMSF = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDocument);
+                XMultiServiceFactory xDocMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDocument);
                 ViewHandler myViewHandler = new ViewHandler(xDocMSF, xTextDocument);
                 myViewHandler.setViewSetting("ZoomType", new Short(com.sun.star.view.DocumentZoomType.OPTIMAL));
             }
@@ -361,7 +360,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
         try
         {
             //xComponent.dispose();
-            XCloseable xCloseable = (XCloseable) UnoRuntime.queryInterface(XCloseable.class, myLetterDoc.xFrame);
+            XCloseable xCloseable = UnoRuntime.queryInterface(XCloseable.class, myLetterDoc.xFrame);
             xCloseable.close(false);
         }
         catch (CloseVetoException e)
@@ -734,7 +733,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
             {
                 numFooterHeight.setValue(0.1);
             }
-            BusFooter = myLetterDoc.new BusinessPaperObject("Footer", (int) myLetterDoc.DocSize.Width, (int) (numFooterHeight.getValue() * 1000), (int) 0, (int) (myLetterDoc.DocSize.Height - (numFooterHeight.getValue() * 1000)));
+            BusFooter = myLetterDoc.new BusinessPaperObject("Footer", myLetterDoc.DocSize.Width, (int) (numFooterHeight.getValue() * 1000), 0, (int) (myLetterDoc.DocSize.Height - (numFooterHeight.getValue() * 1000)));
             this.setControlProperty("numFooterHeight", PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
             this.setControlProperty("lblFooterHeight", PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
             setPossibleFooter(false);
@@ -827,7 +826,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
 
             //enable/disable roadmap item for footer page
             XInterface BPaperItem = getRoadmapItemByID(RM_FOOTER);
-            Helper.setUnoPropertyValue(BPaperItem, PropertyNames.PROPERTY_ENABLED, new Boolean(bFooterPossible));
+            Helper.setUnoPropertyValue(BPaperItem, PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bFooterPossible));
 
         }
         catch (Exception exception)
@@ -848,7 +847,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
 
     private void setPossibleFooter(boolean bState)
     {
-        setControlProperty("chkUseFooter", PropertyNames.PROPERTY_ENABLED, new Boolean(bState));
+        setControlProperty("chkUseFooter", PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bState));
         chkUseFooterItemChanged();
     }
 
@@ -856,7 +855,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
     {
         if (myLetterDoc.hasElement("Sender Address Repeated"))
         {
-            setControlProperty("chkUseAddressReceiver", PropertyNames.PROPERTY_ENABLED, new Boolean(bState));
+            setControlProperty("chkUseAddressReceiver", PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bState));
             chkUseAddressReceiverItemChanged();
         }
     }
@@ -865,7 +864,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
     {
         if (myLetterDoc.hasElement("Company Logo"))
         {
-            setControlProperty("chkUseLogo", PropertyNames.PROPERTY_ENABLED, new Boolean(bState));
+            setControlProperty("chkUseLogo", PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bState));
             chkUseLogoItemChanged();
         }
     }
@@ -907,7 +906,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
 
     public void txtTemplateNameTextChanged()
     {
-        XDocumentPropertiesSupplier xDocPropsSuppl = (XDocumentPropertiesSupplier) UnoRuntime.queryInterface(XDocumentPropertiesSupplier.class, xTextDocument);
+        XDocumentPropertiesSupplier xDocPropsSuppl = UnoRuntime.queryInterface(XDocumentPropertiesSupplier.class, xTextDocument);
         XDocumentProperties xDocProps = xDocPropsSuppl.getDocumentProperties();
         String TitleName = txtTemplateName.getText();
         xDocProps.setTitle(TitleName);
@@ -915,14 +914,14 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
 
     public void chkUseSalutationItemChanged()
     {
-        XTextComponent xTextComponent = (XTextComponent) UnoRuntime.queryInterface(XTextComponent.class, lstSalutation);
+        XTextComponent xTextComponent = UnoRuntime.queryInterface(XTextComponent.class, lstSalutation);
         myLetterDoc.switchUserField("Salutation", xTextComponent.getText(), (chkUseSalutation.getState() != 0));
-        setControlProperty("lstSalutation", PropertyNames.PROPERTY_ENABLED, new Boolean(chkUseSalutation.getState() != 0));
+        setControlProperty("lstSalutation", PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(chkUseSalutation.getState() != 0));
     }
 
     public void lstSalutationItemChanged()
     {
-        XTextComponent xTextComponent = (XTextComponent) UnoRuntime.queryInterface(XTextComponent.class, lstSalutation);
+        XTextComponent xTextComponent = UnoRuntime.queryInterface(XTextComponent.class, lstSalutation);
         myLetterDoc.switchUserField("Salutation", xTextComponent.getText(), (chkUseSalutation.getState() != 0));
     }
 
@@ -932,20 +931,20 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
 
     public void chkUseGreetingItemChanged()
     {
-        XTextComponent xTextComponent = (XTextComponent) UnoRuntime.queryInterface(XTextComponent.class, lstGreeting);
+        XTextComponent xTextComponent = UnoRuntime.queryInterface(XTextComponent.class, lstGreeting);
         myLetterDoc.switchUserField("Greeting", xTextComponent.getText(), (chkUseGreeting.getState() != 0));
-        setControlProperty("lstGreeting", PropertyNames.PROPERTY_ENABLED, new Boolean(chkUseGreeting.getState() != 0));
+        setControlProperty("lstGreeting", PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(chkUseGreeting.getState() != 0));
     }
 
     private void setDefaultForGreetingAndSalutation()
     {
         XTextComponent xTextComponent;
-        xTextComponent = (XTextComponent) UnoRuntime.queryInterface(XTextComponent.class, lstSalutation);
+        xTextComponent = UnoRuntime.queryInterface(XTextComponent.class, lstSalutation);
         if (xTextComponent.getText().equals(PropertyNames.EMPTY_STRING))
         {
             xTextComponent.setText(resources.SalutationLabels[0]);
         }
-        xTextComponent = (XTextComponent) UnoRuntime.queryInterface(XTextComponent.class, lstGreeting);
+        xTextComponent = UnoRuntime.queryInterface(XTextComponent.class, lstGreeting);
         if (xTextComponent.getText().equals(PropertyNames.EMPTY_STRING))
         {
             xTextComponent.setText(resources.GreetingLabels[0]);
@@ -954,7 +953,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
 
     public void lstGreetingItemChanged()
     {
-        XTextComponent xTextComponent = (XTextComponent) UnoRuntime.queryInterface(XTextComponent.class, lstGreeting);
+        XTextComponent xTextComponent = UnoRuntime.queryInterface(XTextComponent.class, lstGreeting);
         myLetterDoc.switchUserField("Greeting", xTextComponent.getText(), (chkUseGreeting.getState() != 0));
     }
 
@@ -1009,20 +1008,20 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
 
     private void setPossibleSenderData(boolean bState)
     {
-        setControlProperty("optSenderDefine", PropertyNames.PROPERTY_ENABLED, new Boolean(bState));
-        setControlProperty("optSenderPlaceholder", PropertyNames.PROPERTY_ENABLED, new Boolean(bState));
-        setControlProperty("lblSenderAddress", PropertyNames.PROPERTY_ENABLED, new Boolean(bState));
+        setControlProperty("optSenderDefine", PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bState));
+        setControlProperty("optSenderPlaceholder", PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bState));
+        setControlProperty("lblSenderAddress", PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bState));
         if (!bState)
         {
-            setControlProperty("txtSenderCity", PropertyNames.PROPERTY_ENABLED, new Boolean(bState));
-            setControlProperty("txtSenderName", PropertyNames.PROPERTY_ENABLED, new Boolean(bState));
-            setControlProperty("txtSenderPostCode", PropertyNames.PROPERTY_ENABLED, new Boolean(bState));
-            setControlProperty("txtSenderStreet", PropertyNames.PROPERTY_ENABLED, new Boolean(bState));
-            setControlProperty("txtSenderCity", PropertyNames.PROPERTY_ENABLED, new Boolean(bState));
-            setControlProperty("txtSenderState", PropertyNames.PROPERTY_ENABLED, new Boolean(bState));
-            setControlProperty("lblSenderName", PropertyNames.PROPERTY_ENABLED, new Boolean(bState));
-            setControlProperty("lblSenderStreet", PropertyNames.PROPERTY_ENABLED, new Boolean(bState));
-            setControlProperty("lblPostCodeCity", PropertyNames.PROPERTY_ENABLED, new Boolean(bState));
+            setControlProperty("txtSenderCity", PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bState));
+            setControlProperty("txtSenderName", PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bState));
+            setControlProperty("txtSenderPostCode", PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bState));
+            setControlProperty("txtSenderStreet", PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bState));
+            setControlProperty("txtSenderCity", PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bState));
+            setControlProperty("txtSenderState", PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bState));
+            setControlProperty("lblSenderName", PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bState));
+            setControlProperty("lblSenderStreet", PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bState));
+            setControlProperty("lblPostCodeCity", PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bState));
         }
     }
 
@@ -1149,7 +1148,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
             //sLetterLangPackPath = FileAccess.combinePaths(xMSF, sTemplatePath, sLetterSubPath);
 
             XInterface xInterface = (XInterface) xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess");
-            com.sun.star.ucb.XSimpleFileAccess xSimpleFileAccess = (com.sun.star.ucb.XSimpleFileAccess) UnoRuntime.queryInterface(com.sun.star.ucb.XSimpleFileAccess.class, xInterface);
+            com.sun.star.ucb.XSimpleFileAccess xSimpleFileAccess = UnoRuntime.queryInterface(com.sun.star.ucb.XSimpleFileAccess.class, xInterface);
             nameList1 = xSimpleFileAccess.getFolderContents(sMainPath, true);
             nameList2 = xSimpleFileAccess.getFolderContents(sLetterPath, true);
             for (int i = 0; i < nameList1.length; i++)
@@ -1246,7 +1245,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
             if (found)
             {
                 NormsVector.add(cIsoCode);
-                NormsPathVector.add((String) nameList[i]);
+                NormsPathVector.add(nameList[i]);
                 LanguageLabelsVector.add(lc.getLanguageString(MSID));
             /*
             Norms[z] = cIsoCode;
@@ -1341,11 +1340,11 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
 
     public void initializeElements()
     {
-        setControlProperty("chkUseLogo", PropertyNames.PROPERTY_ENABLED, new Boolean(myLetterDoc.hasElement("Company Logo")));
-        setControlProperty("chkUseBendMarks", PropertyNames.PROPERTY_ENABLED, new Boolean(myLetterDoc.hasElement("Bend Marks")));
-        setControlProperty("chkUseAddressReceiver", PropertyNames.PROPERTY_ENABLED, new Boolean(myLetterDoc.hasElement("Sender Address Repeated")));
-        setControlProperty("chkUseSubject", PropertyNames.PROPERTY_ENABLED, new Boolean(myLetterDoc.hasElement("Subject Line")));
-        setControlProperty("chkUseSigns", PropertyNames.PROPERTY_ENABLED, new Boolean(myLetterDoc.hasElement("Letter Signs")));
+        setControlProperty("chkUseLogo", PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(myLetterDoc.hasElement("Company Logo")));
+        setControlProperty("chkUseBendMarks", PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(myLetterDoc.hasElement("Bend Marks")));
+        setControlProperty("chkUseAddressReceiver", PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(myLetterDoc.hasElement("Sender Address Repeated")));
+        setControlProperty("chkUseSubject", PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(myLetterDoc.hasElement("Subject Line")));
+        setControlProperty("chkUseSigns", PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(myLetterDoc.hasElement("Letter Signs")));
         myLetterDoc.updateDateFields();
     }
 

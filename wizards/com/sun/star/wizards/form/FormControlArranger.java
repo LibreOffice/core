@@ -126,7 +126,7 @@ public class FormControlArranger
     {
         if (LastIndex < DBControlList.length && DBControlList[LastIndex].getControlType() == FormHandler.SOCHECKBOX)
         {
-            return (int) ((oFormHandler.getControlReferenceHeight() - DBControlList[LastIndex].getControlHeight()) / 2);
+            return (oFormHandler.getControlReferenceHeight() - DBControlList[LastIndex].getControlHeight()) / 2;
         }
         return 0;
     }

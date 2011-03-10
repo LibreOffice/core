@@ -125,14 +125,14 @@ public class DataEntrySetter
             boolean bAllowUpdates = (((Short) Helper.getUnoPropertyValue(UnoDialog.getModel(chknomodification), PropertyNames.PROPERTY_STATE)).shortValue()) != 1;
             boolean bAllowDeletes = (((Short) Helper.getUnoPropertyValue(UnoDialog.getModel(chknodeletion), PropertyNames.PROPERTY_STATE)).shortValue()) != 1;
             boolean bAllowInserts = (((Short) Helper.getUnoPropertyValue(UnoDialog.getModel(chknoaddition), PropertyNames.PROPERTY_STATE)).shortValue()) != 1;
-            retProperties[0] = Properties.createProperty("AllowUpdates", new Boolean(bAllowUpdates));
-            retProperties[1] = Properties.createProperty("AllowDeletes", new Boolean(bAllowDeletes));
-            retProperties[2] = Properties.createProperty("AllowInserts", new Boolean(bAllowInserts));
+            retProperties[0] = Properties.createProperty("AllowUpdates", Boolean.valueOf(bAllowUpdates));
+            retProperties[1] = Properties.createProperty("AllowDeletes", Boolean.valueOf(bAllowDeletes));
+            retProperties[2] = Properties.createProperty("AllowInserts", Boolean.valueOf(bAllowInserts));
         }
         else
         {
             retProperties = new PropertyValue[1];
-            retProperties[0] = Properties.createProperty("IgnoreResult", new Boolean(true));
+            retProperties[0] = Properties.createProperty("IgnoreResult", Boolean.TRUE);
         }
         return retProperties;
 
@@ -141,8 +141,8 @@ public class DataEntrySetter
     public void toggleCheckBoxes()
     {
         boolean bdisplayalldata = optDisplayAllData.getState();
-        Helper.setUnoPropertyValue(UnoDialog.getModel(chknomodification), PropertyNames.PROPERTY_ENABLED, new Boolean(bdisplayalldata));
-        Helper.setUnoPropertyValue(UnoDialog.getModel(chknodeletion), PropertyNames.PROPERTY_ENABLED, new Boolean(bdisplayalldata));
-        Helper.setUnoPropertyValue(UnoDialog.getModel(chknoaddition), PropertyNames.PROPERTY_ENABLED, new Boolean(bdisplayalldata));
+        Helper.setUnoPropertyValue(UnoDialog.getModel(chknomodification), PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bdisplayalldata));
+        Helper.setUnoPropertyValue(UnoDialog.getModel(chknodeletion), PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bdisplayalldata));
+        Helper.setUnoPropertyValue(UnoDialog.getModel(chknoaddition), PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bdisplayalldata));
     }
 }

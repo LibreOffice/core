@@ -187,7 +187,7 @@ public class StyleApplier
         try
         {
             Object oRootNode = Configuration.getConfigurationRoot(xMSF, "org.openoffice.Office.FormWizard/FormWizard/Styles", false);
-            XNameAccess xNameAccess = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, oRootNode);
+            XNameAccess xNameAccess = UnoRuntime.queryInterface(XNameAccess.class, oRootNode);
             StyleNodeNames = xNameAccess.getElementNames();
             StyleNames = new String[StyleNodeNames.length];
             FileNames = new String[StyleNodeNames.length];

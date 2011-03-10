@@ -88,15 +88,15 @@ public class TypeInspector
             Vector<Integer> aSearchableVector = new Vector<Integer>();
             // Integer[] aIntegerDataTypes = null;
 //      XResultSet xResultSet = xDBMetaDagetTypeInfo();
-            XRow xRow = (XRow) UnoRuntime.queryInterface(XRow.class, xResultSet);
+            XRow xRow = UnoRuntime.queryInterface(XRow.class, xResultSet);
             while (xResultSet.next())
             {
-                aTypeNameVector.addElement(new String(xRow.getString(1)));
+                aTypeNameVector.addElement(xRow.getString(1));
                 aTypeVector.addElement(new Integer(xRow.getShort(2)));
                 aPrecisionVector.addElement(new Integer(xRow.getInt(3)));
                 aNullableVector.addElement(new Integer(xRow.getShort(7)));
                 aSearchableVector.addElement(new Integer(xRow.getShort(9)));
-                aAutoIncrementVector.addElement(new Boolean(xRow.getBoolean(12)));
+                aAutoIncrementVector.addElement(Boolean.valueOf(xRow.getBoolean(12)));
                 aMinScaleVector.addElement(new Integer(xRow.getShort(14)));
                 aMaxScaleVector.addElement(new Integer(xRow.getShort(15)));
 
@@ -154,12 +154,11 @@ public class TypeInspector
         {
             return ColumnValue.NO_NULLS;
         }
-        int nNullable = _nNullable;
-        if (nNullable == ColumnValue.NULLABLE)
+        if (_nNullable == ColumnValue.NULLABLE)
         {
             return nNullableInfos[i];           //probably nullability is not allowed
         }
-        return nNullable;
+        return _nNullable;
     }
 
     public int getNullability(XPropertySet _xColPropertySet)
@@ -231,24 +230,18 @@ public class TypeInspector
                 int i = JavaTools.FieldInIntTable(nDataTypeInfos, nDataType, startindex);
                 startindex = i + 1;
                 bleaveloop = (i < 0);
-                if (!bleaveloop)
+                if (!bleaveloop && sTypeName.equals(sDataTypeNames[i]))
                 {
-                    if (sTypeName.equals(sDataTypeNames[i]))
+                    if (_bCheckNumericAttributes)
                     {
-                        if (_bCheckNumericAttributes)
-                        {
-                            if (nPrecision <= nPrecisionInfos[i])
-                            {
-                                if ((nScale >= nMinScaleInfos[i]) && (nScale <= nMinScaleInfos[i]))
-                                {
-                                    return i;
-                                }
-                            }
-                        }
-                        else
+                        if (nPrecision <= nPrecisionInfos[i] && (nScale >= nMinScaleInfos[i]) && (nScale <= nMinScaleInfos[i]) )
                         {
                             return i;
                         }
+                    }
+                    else
+                    {
+                        return i;
                     }
                 }
             }

@@ -200,7 +200,7 @@ public class ReportFinalizer
     {
         String FirstCommandName = (_CurDBMetaData.getIncludedCommandNames())[0];
         DefaultName = Desktop.getUniqueName(_CurDBMetaData.getReportDocuments(), FirstCommandName);
-        if (DefaultName.equals(OldDefaultName) == false)
+        if (!DefaultName.equals(OldDefaultName))
         {
             OldDefaultName = DefaultName;
         }
@@ -227,7 +227,7 @@ public class ReportFinalizer
             StoreName = getStoreName();
             String StorePath;
             XInterface xInterface = (XInterface) m_xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess");
-            XSimpleFileAccess xSimpleFileAccess = (XSimpleFileAccess) UnoRuntime.queryInterface(XSimpleFileAccess.class, xInterface);
+            XSimpleFileAccess xSimpleFileAccess = UnoRuntime.queryInterface(XSimpleFileAccess.class, xInterface);
             StorePath = FileAccess.getOfficePath(m_xMSF, "Temp", xSimpleFileAccess) + "/" + StoreName;
             return StorePath;
         }

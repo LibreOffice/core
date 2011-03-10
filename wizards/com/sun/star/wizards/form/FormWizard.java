@@ -89,7 +89,7 @@ public class FormWizard extends DatabaseObjectWizard
                     210, Boolean.TRUE, "DialogForm", 102, 41, 1, new Short((short) 0), m_oResource.getResText(UIConsts.RID_FORM), 310
                 });
         drawNaviBar();
-        if (getFormResources() == true)
+        if (getFormResources())
         {
             setRightPaneHeaders(m_oResource, UIConsts.RID_FORM + 90, 8);
         }
@@ -461,7 +461,7 @@ public class FormWizard extends DatabaseObjectWizard
             curDBCommandFieldSelection.setModified(true);
             boolean benable = curDBCommandFieldSelection.getSelectedFieldNames().length > 0;
             enablefromStep(SOSUBFORM_PAGE, benable);
-            setControlProperty("btnWizardNext", PropertyNames.PROPERTY_ENABLED, new Boolean(benable));
+            setControlProperty("btnWizardNext", PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(benable));
             if (benable)
             {
                 if (curFormConfiguration.hasSubForm())
@@ -474,7 +474,7 @@ public class FormWizard extends DatabaseObjectWizard
                     setStepEnabled(SOFIELDLINKER_PAGE, false);
                 }
             }
-            setControlProperty("btnWizardFinish", PropertyNames.PROPERTY_ENABLED, new Boolean(benable));
+            setControlProperty("btnWizardFinish", PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(benable));
         }
     }
 }

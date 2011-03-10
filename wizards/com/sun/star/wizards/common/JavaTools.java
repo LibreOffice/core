@@ -79,10 +79,7 @@ public class JavaTools
         if (FirstArray != null)
         {
             String[] SecondArray = new String[FirstArray.length];
-            for (int i = 0; i < FirstArray.length; i++)
-            {
-                SecondArray[i] = FirstArray[i];
-            }
+            System.arraycopy(FirstArray, 0, SecondArray, 0, FirstArray.length);
             return SecondArray;
         }
         else
@@ -377,7 +374,7 @@ public class JavaTools
     public static String[] ArrayoutofString(String MainString, String Token)
     {
         String[] StringArray;
-        if (MainString.equals(PropertyNames.EMPTY_STRING) == false)
+        if (!MainString.equals(PropertyNames.EMPTY_STRING))
         {
             Vector StringVector = new Vector();
             String LocString = null;
@@ -565,38 +562,32 @@ public class JavaTools
 
     public static PropertyValue[][] removeOutdatedFields(PropertyValue[][] baselist, String[] _complist)
     {
-        PropertyValue[][] retarray = new PropertyValue[][]
-        {
-        };
         if ((baselist != null) && (_complist != null))
         {
-            Vector firstdimvector = new Vector();
-            int b = 0;
+            ArrayList<PropertyValue[]> firstdimvector = new ArrayList<PropertyValue[]>();
             for (int n = 0; n < baselist.length; n++)
             {
-                Vector secdimvector = new Vector();
-                PropertyValue[] internalArray;
-                int a = 0;
+                ArrayList<PropertyValue> secdimvector = new ArrayList<PropertyValue>();
                 for (int m = 0; m < baselist[n].length; m++)
                 {
                     if (FieldInList(_complist, baselist[n][m].Name) > -1)
                     {
                         secdimvector.add(baselist[n][m]);
-                        a++;
                     }
                 }
-                if (a > 0)
+                if (!secdimvector.isEmpty())
                 {
-                    internalArray = new PropertyValue[a];
+                    PropertyValue[] internalArray = new PropertyValue[secdimvector.size()];
                     secdimvector.toArray(internalArray);
                     firstdimvector.add(internalArray);
-                    b++;
                 }
             }
-            retarray = new PropertyValue[b][];
-            firstdimvector.toArray(retarray);
+            PropertyValue[][] retarray = new PropertyValue[firstdimvector.size()][];
+            return firstdimvector.toArray(retarray);
         }
-        return (retarray);
+        return new PropertyValue[][]
+        {
+        };
     }
 
     /**
@@ -621,7 +612,7 @@ public class JavaTools
                 {
                     if (n == 0)
                     {
-                        sDescList[m] = new String();
+                        sDescList[m] = "";
                     }
                     sDescList[m] += _scomplist[n][m];
                 }
@@ -766,7 +757,7 @@ public class JavaTools
             }
             else
             {
-                bissame = (sSecondString == null);
+                bissame = true;
             }
         }
         else

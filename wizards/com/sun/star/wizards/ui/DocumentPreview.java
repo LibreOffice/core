@@ -76,7 +76,7 @@ public class DocumentPreview
     {
 
         //((XWindow)UnoRuntime.queryInterface(XWindow.class,control)).addPaintListener(this);
-        xControl = (XControl) UnoRuntime.queryInterface(XControl.class, control);
+        xControl = UnoRuntime.queryInterface(XControl.class, control);
         //register this object as a listener, to close the frame when disposing.
         //((XComponent) UnoRuntime.queryInterface(XComponent.class, control)).addEventListener(this);
 
@@ -99,7 +99,7 @@ public class DocumentPreview
     protected XComponent setDocument(String url, PropertyValue[] lArgs) throws com.sun.star.lang.IllegalArgumentException, IOException, CloseVetoException
     {
         loadArgs = lArgs;
-        XComponentLoader xCompLoader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, xFrame);
+        XComponentLoader xCompLoader = UnoRuntime.queryInterface(XComponentLoader.class, xFrame);
         xFrame.activate();
         return xComponent = xCompLoader.loadComponentFromURL(url, "_self", 0, loadArgs);
     }
@@ -116,7 +116,7 @@ public class DocumentPreview
     {
         if (xFrame != null)
         {
-            ((XCloseable) UnoRuntime.queryInterface(XCloseable.class, xFrame)).close(false);
+            UnoRuntime.queryInterface(XCloseable.class, xFrame).close(false);
         }
     }
 
@@ -149,11 +149,11 @@ public class DocumentPreview
     public void createPreviewFrame(XMultiServiceFactory xmsf, XControl xControl) throws com.sun.star.uno.Exception, com.sun.star.lang.IllegalArgumentException
     {
         XWindowPeer controlPeer = xControl.getPeer();
-        XWindow controlWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, xControl);
+        XWindow controlWindow = UnoRuntime.queryInterface(XWindow.class, xControl);
         Rectangle r = controlWindow.getPosSize();
 
         Object toolkit = xmsf.createInstance("com.sun.star.awt.Toolkit");
-        XToolkit xToolkit = (XToolkit) UnoRuntime.queryInterface(XToolkit.class, toolkit);
+        XToolkit xToolkit = UnoRuntime.queryInterface(XToolkit.class, toolkit);
 
         WindowDescriptor aDescriptor = new WindowDescriptor();
         aDescriptor.Type = WindowClass.SIMPLE;
@@ -164,9 +164,9 @@ public class DocumentPreview
         aDescriptor.WindowAttributes = VclWindowPeerAttribute.CLIPCHILDREN | WindowAttribute.SHOW;
 
         XWindowPeer xPeer = xToolkit.createWindow(aDescriptor);
-        xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, xPeer);
+        xWindow = UnoRuntime.queryInterface(XWindow.class, xPeer);
         Object frame = xmsf.createInstance("com.sun.star.frame.Frame");
-        xFrame = (XFrame) UnoRuntime.queryInterface(XFrame.class, frame);
+        xFrame = UnoRuntime.queryInterface(XFrame.class, frame);
 //      XFrame xF = (XFrame) UnoRuntime.queryInterface(XFrame.class, Desktop.getDesktop(xmsf));
 //      xFrame = xF.findFrame("_blank", 0);
         xFrame.initialize(xWindow);

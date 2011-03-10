@@ -124,7 +124,7 @@ public class CGSettings extends ConfigGroup
                 }
             }
         }
-        return (CGExporter[]) v.toArray(EMPTY_ARRAY_1);
+        return (CGExporter[]) v.toArray(new CGExporter[v.size()]);
     }
 
     /**
@@ -141,7 +141,7 @@ public class CGSettings extends ConfigGroup
     private void calcExportersTargetTypeNames(XMultiServiceFactory xmsf) throws Exception
     {
         Object typeDetect = xmsf.createInstance("com.sun.star.document.TypeDetection");
-        XNameAccess xNameAccess = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, typeDetect);
+        XNameAccess xNameAccess = UnoRuntime.queryInterface(XNameAccess.class, typeDetect);
         for (int i = 0; i < cp_Exporters.getSize(); i++)
         {
             calcExporterTargetTypeName(xNameAccess, (CGExporter) cp_Exporters.getElementAt(i));

@@ -320,7 +320,7 @@ public class CommandFieldSelection extends FieldSelection implements Comparator
         else
         {
             emptyFieldsListBoxes();
-            iSelArray = new short[] { (short) iSelPos };
+            iSelArray = new short[] {iSelPos};
         }
         Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), PropertyNames.SELECTED_ITEMS, iSelArray);
         toggleCommandListBox(true);
@@ -366,8 +366,8 @@ public class CommandFieldSelection extends FieldSelection implements Comparator
 
     public void toggleCommandListBox(boolean _bdoenable)
     {
-        Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), PropertyNames.PROPERTY_ENABLED, new Boolean(_bdoenable));
-        Helper.setUnoPropertyValue(UnoDialog.getModel(xlblTable), PropertyNames.PROPERTY_ENABLED, new Boolean(_bdoenable));
+        Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(_bdoenable));
+        Helper.setUnoPropertyValue(UnoDialog.getModel(xlblTable), PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(_bdoenable));
     }
 
     public String getSelectedCommandName()
@@ -444,7 +444,7 @@ public class CommandFieldSelection extends FieldSelection implements Comparator
         }
         if (_bReadOnly)
         {
-            Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), PropertyNames.READ_ONLY, new Boolean(_selitem.length() > 0));
+            Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), PropertyNames.READ_ONLY, Boolean.valueOf(_selitem.length() > 0));
         }
     }
 
@@ -467,7 +467,7 @@ public class CommandFieldSelection extends FieldSelection implements Comparator
         }
         if (_bReadOnly)
         {
-            Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), PropertyNames.READ_ONLY, new Boolean(_selitem.length() > 0));
+            Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), PropertyNames.READ_ONLY, Boolean.valueOf(_selitem.length() > 0));
         }
         toggleListboxButtons((short)-1,(short)-1);
     }

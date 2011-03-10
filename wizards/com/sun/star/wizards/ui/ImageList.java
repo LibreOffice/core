@@ -222,7 +222,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
                     new Integer(selectionWidth)
                 });
 
-        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, grbxSelectedImage);
+        XWindow xWindow = UnoRuntime.queryInterface(XWindow.class, grbxSelectedImage);
         xWindow.addMouseListener(new OMouseListener());
 
         final String[] pNames1 = new String[]
@@ -366,7 +366,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
                     m_imageWidth
                 });
 
-        XWindow win = (XWindow) UnoRuntime.queryInterface(XWindow.class, image);
+        XWindow win = UnoRuntime.queryInterface(XWindow.class, image);
         win.addMouseListener(uiEventListener);
         win.addKeyListener(imageKeyListener);
         //uiEventListener.add(imageName,EventNames.EVENT_MOUSE_ENTERED,METHOD_MOUSE_ENTER_IMAGE);
@@ -408,7 +408,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
             {
                 if (oResources.length == 1)
                 {
-                    Helper.setUnoPropertyValue(m_aImages[i].getModel(), PropertyNames.PROPERTY_IMAGEURL, (String) oResources[0]);
+                    Helper.setUnoPropertyValue(m_aImages[i].getModel(), PropertyNames.PROPERTY_IMAGEURL, oResources[0]);
                 }
                 else if (oResources.length == 2)
                 {
@@ -500,7 +500,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
 
     private void setVisible(Object control, boolean visible)
     {
-        ((XWindow) UnoRuntime.queryInterface(XWindow.class, control)).setVisible(visible);
+        UnoRuntime.queryInterface(XWindow.class, control).setVisible(visible);
     }
 
     /**
@@ -861,8 +861,8 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
 
     private void enableButtons()
     {
-        enable(btnNext, new Boolean(pageStart + rows * cols < listModel.getSize()));
-        enable(btnBack, new Boolean(pageStart > 0));
+        enable(btnNext, Boolean.valueOf(pageStart + rows * cols < listModel.getSize()));
+        enable(btnBack, Boolean.valueOf(pageStart > 0));
     }
 
     private void enable(Object control, Boolean enable)
@@ -872,7 +872,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
 
     private Object getModel(Object control)
     {
-        return ((XControl) UnoRuntime.queryInterface(XControl.class, control)).getModel();
+        return UnoRuntime.queryInterface(XControl.class, control).getModel();
     }
 
     /*
@@ -1081,7 +1081,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
     {
         Helper.setUnoPropertyValue(m_aImages[image].getModel(), "Tabstop",
                 Boolean.TRUE);
-        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, m_aImages[image]);
+        XWindow xWindow = UnoRuntime.queryInterface(XWindow.class, m_aImages[image]);
         xWindow.setFocus();
     }
 
