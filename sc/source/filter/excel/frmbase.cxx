@@ -33,28 +33,10 @@
 
 _ScRangeListTabs::_ScRangeListTabs()
 {
-    ppTabLists = new _ScRangeList*[ MAXTAB + 1 ];
-
-    for( UINT16 n = 0 ; n <= MAXTAB ; n++ )
-        ppTabLists[ n ] = NULL;
-
-    bHasRanges = FALSE;
-    pAct = NULL;
-    nAct = 0;
 }
 
 _ScRangeListTabs::~_ScRangeListTabs()
 {
-    if( bHasRanges )
-    {
-        for( UINT16 n = 0 ; n <= MAXTAB ; n++ )
-        {
-            if( ppTabLists[ n ] )
-                delete ppTabLists[ n ];
-        }
-    }
-
-    delete[] ppTabLists;
 }
 
 
@@ -76,22 +58,28 @@ void _ScRangeListTabs::Append( ScSingleRefData a, SCsTAB nTab, const BOOL b )
         DBG_ASSERT( ValidTab(a.nTab), "-_ScRangeListTabs::Append(): Luegen haben kurze Abstuerze!" );
     }
 
-    bHasRanges = TRUE;
-
     if( nTab == SCTAB_MAX)
         return;
     if( nTab < 0)
         nTab = a.nTab;
 
-    if( nTab >= 0 && nTab <= MAXTAB)
+    if (nTab < 0 || MAXTAB < nTab)
+        return;
+
+    TabRangeType::iterator itr = maTabRanges.find(nTab);
+    if (itr == maTabRanges.end())
     {
-        _ScRangeList*   p = ppTabLists[ nTab ];
+        // No entry for this table yet.  Insert a new one.
+        std::pair<TabRangeType::iterator, bool> r =
+            maTabRanges.insert(nTab, new RangeListType);
 
-        if( !p )
-            p = ppTabLists[ nTab ] = new _ScRangeList;
+        if (!r.second)
+            // Insertion failed.
+            return;
 
-        p->push_back(new ScRange(a.nCol,a.nRow,a.nTab));
+        itr = r.first;
     }
+    itr->second->push_back(ScRange(a.nCol,a.nRow,a.nTab));
 }
 
 void _ScRangeListTabs::Append( ScComplexRefData a, SCsTAB nTab, const BOOL b )
@@ -140,52 +128,55 @@ void _ScRangeListTabs::Append( ScComplexRefData a, SCsTAB nTab, const BOOL b )
             "+_ScRangeListTabs::Append(): 3D-Ranges werden in SC nicht unterstuetzt!" );
     }
 
-    bHasRanges = TRUE;
-
     if( nTab == SCTAB_MAX)
         return;
 
     if( nTab < -1)
         nTab = a.Ref1.nTab;
 
-    if( nTab >= 0 && nTab <= MAXTAB)
+    if (nTab < 0 || MAXTAB < nTab)
+        return;
+
+    TabRangeType::iterator itr = maTabRanges.find(nTab);
+    if (itr == maTabRanges.end())
     {
-        _ScRangeList*   p = ppTabLists[ nTab ];
+        // No entry for this table yet.  Insert a new one.
+        std::pair<TabRangeType::iterator, bool> r =
+            maTabRanges.insert(nTab, new RangeListType);
 
-        if( !p )
-            p = ppTabLists[ nTab ] = new _ScRangeList;
+        if (!r.second)
+            // Insertion failed.
+            return;
 
-        p->push_back(new ScRange(a.Ref1.nCol,a.Ref1.nRow,a.Ref1.nTab,
-                                 a.Ref2.nCol,a.Ref2.nRow,a.Ref2.nTab));
+        itr = r.first;
     }
+    itr->second->push_back(
+        ScRange(a.Ref1.nCol,a.Ref1.nRow,a.Ref1.nTab,
+                a.Ref2.nCol,a.Ref2.nRow,a.Ref2.nTab));
 }
 
 const ScRange* _ScRangeListTabs::First( const UINT16 n )
 {
     DBG_ASSERT( ValidTab(n), "-_ScRangeListTabs::First(): Und tschuessssssss!" );
 
-    if( ppTabLists[ n ] )
-    {
-        pAct = ppTabLists[ n ];
-        nAct = n;
-        pAct->iterCur = pAct->begin();
-        return &(*(pAct->iterCur));
-    }
+    TabRangeType::iterator itr = maTabRanges.find(static_cast<SCsTAB>(n));
+    if (itr == maTabRanges.end())
+        // No range list exists for this table.
+        return NULL;
 
-    pAct = NULL;
-    nAct = 0;
-    return NULL;
+    const RangeListType& rList = *itr->second;
+    maItrCur = rList.begin();
+    maItrCurEnd = rList.end();
+    return rList.empty() ? NULL : &(*maItrCur);
 }
 
 const ScRange* _ScRangeListTabs::Next ()
 {
-    if( pAct )
-    {
-        ++pAct->iterCur;
-        return &(*(pAct->iterCur));
-    }
+    ++maItrCur;
+    if (maItrCur == maItrCurEnd)
+        return NULL;
 
-    return NULL;
+    return &(*maItrCur);
 }
 
 ConverterBase::ConverterBase( UINT16 nNewBuffer ) :

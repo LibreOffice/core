@@ -29,8 +29,6 @@
 #ifndef SC_FORMEL_HXX
 #define SC_FORMEL_HXX
 
-#include <boost/ptr_container/ptr_vector.hpp>
-
 #include <tools/solar.h>
 #include <tools/string.hxx>
 
@@ -39,6 +37,9 @@
 
 #include "root.hxx"
 #include "tokstack.hxx"
+
+#include <boost/ptr_container/ptr_map.hpp>
+#include <vector>
 
 class XclImpStream;
 class ScTokenArray;
@@ -64,20 +65,14 @@ enum FORMULA_TYPE
 
 class _ScRangeListTabs
 {
-    struct _ScRangeList : public boost::ptr_vector<ScRange>
-    {
-        iterator iterCur;
-    };
-
-    BOOL                        bHasRanges;
-    _ScRangeList**              ppTabLists;
-    _ScRangeList*               pAct;
-    UINT16                      nAct;
+    typedef ::std::vector<ScRange> RangeListType;
+    typedef ::boost::ptr_map<SCsTAB, RangeListType> TabRangeType;
+    TabRangeType maTabRanges;
+    RangeListType::const_iterator maItrCur;
+    RangeListType::const_iterator maItrCurEnd;
 
 public:
-
     _ScRangeListTabs ();
-
     ~_ScRangeListTabs();
 
     void Append( ScSingleRefData aSRD, SCsTAB nTab, const BOOL bLimit = TRUE );
@@ -86,9 +81,7 @@ public:
     const ScRange* First ( const UINT16 nTab = 0 );
     const ScRange* Next ();
 
-    inline bool HasRanges () const { return bHasRanges; }
-
-    inline bool HasActList () const { return pAct != NULL; }
+    bool HasRanges () const { return !maTabRanges.empty(); }
 };
 
 class ConverterBase
