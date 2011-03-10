@@ -2002,7 +2002,7 @@ sal_Bool OCX_OptionButton::Import(com::sun::star::uno::Reference<
 
     if (pValue)
     {
-        INT16 nTmp = pValue[0]-0x30;
+        sal_Int16 nTmp = pValue[0]-0x30;
         aTmp <<= nTmp;
         if (!bSetInDialog)
             rPropSet->setPropertyValue( WW8_ASCII2STR("DefaultState"), aTmp);
@@ -2693,7 +2693,7 @@ sal_Bool OCX_ToggleButton::Import(com::sun::star::uno::Reference<
 
     if (pValue)
     {
-        INT16 nTmp=pValue[0]-0x30;
+        sal_Int16 nTmp=pValue[0]-0x30;
         //aTmp <<= nTmp == 1;
         aTmp <<= nTmp;
         rPropSet->setPropertyValue( WW8_ASCII2STR("State"), aTmp);
@@ -3808,7 +3808,7 @@ OCX_MultiPage::OCX_MultiPage( SotStorageRef& parent,
     mnForeColor = 0x80000012L,
     mnBackColor = 0x8000000FL;
     bSetInDialog = true;// UserForm control only
-    aFontData.SetHasAlign(TRUE);
+    aFontData.SetHasAlign(sal_True);
     nActiveTab = 0;
     // open up the 'x' stream
     mXStream = mContainerStorage->OpenSotStream(
@@ -3939,7 +3939,7 @@ OCX_Page::OCX_Page( SotStorageRef& parent,
     mnForeColor = 0x80000012,
     mnBackColor = 0x8000000F,
     bSetInDialog = true;// UserForm control only
-    aFontData.SetHasAlign(TRUE);
+    aFontData.SetHasAlign(sal_True);
 }
 
 
@@ -3977,7 +3977,7 @@ OCX_Frame::OCX_Frame( SotStorageRef& parent,
     mnForeColor = 0x80000012;
     mnBackColor = 0x8000000F;
     bSetInDialog = true;// UserForm control only
-    aFontData.SetHasAlign(TRUE);
+    aFontData.SetHasAlign(sal_True);
 }
 
 
@@ -4370,7 +4370,7 @@ OCX_Control * SvxMSConvertOCXControls::OCX_Factory(
 
 
 sal_Bool SvxMSConvertOCXControls::ReadOCXStream( SvStorageRef& rSrc1,
-        uno::Reference < drawing::XShape > *pShapeRef,BOOL bFloatingCtrl)
+        uno::Reference < drawing::XShape > *pShapeRef,sal_Bool bFloatingCtrl)
 {
 
     SvStorageStreamRef xCrash = rSrc1->OpenSotStream( WW8_ASCII2STR("contents") );
@@ -4422,7 +4422,7 @@ sal_Bool SvxMSConvertOCXControls::ReadOCXStream( SvStorageRef& rSrc1,
 
 sal_Bool SvxMSConvertOCXControls::ReadOCXExcelKludgeStream(
     SvStorageStreamRef& rSrc1, uno::Reference < drawing::XShape > *
-    pShapeRef,BOOL bFloatingCtrl)
+    pShapeRef,sal_Bool bFloatingCtrl)
 {
     sal_Bool bRet=sal_False;
     /*Get Class Id of this object, see if it is one of the types
@@ -4586,7 +4586,7 @@ sal_Bool OCX_CheckBox::Import(com::sun::star::uno::Reference<
 
     if (pValue)
     {
-        INT16 nTmp=pValue[0]-0x30;
+        sal_Int16 nTmp=pValue[0]-0x30;
         aTmp <<= nTmp;
         if ( !bSetInDialog )
             rPropSet->setPropertyValue( WW8_ASCII2STR("DefaultState"), aTmp);
@@ -4829,7 +4829,7 @@ sal_Bool OCX_FontData::Read(SvStorageStream *pS)
         lclReadCharArray( *pS, pFontName, nFontNameLen, pS->Tell() - nStart);
 
     ReadAlign(pS, pS->Tell() - nStart, 4);
-    return(TRUE);
+    return(sal_True);
 }
 
 void OCX_FontData::Import(uno::Reference< beans::XPropertySet > &rPropSet)
@@ -5290,7 +5290,7 @@ sal_Bool OCX_TabStrip::ReadFontData(SotStorageStream* /* pS */)
 
 sal_Bool OCX_Image::Read(SotStorageStream *pS)
 {
-    ULONG nStart = pS->Tell();
+    sal_uLong nStart = pS->Tell();
     *pS >> nIdentifier;
     DBG_ASSERT(nStandardId==nIdentifier,
         "A control that has a different identifier");
@@ -5804,7 +5804,7 @@ void OCX_SpinButton::GetBoolProperty(
 sal_Bool OCX_SpinButton::WriteData( SvStream& rStrm ) const
 {
     sal_Bool bRet = sal_True;
-    ULONG nStartPos = rStrm.Tell();
+    sal_uLong nStartPos = rStrm.Tell();
 
     rStrm << sal_Int32( 0 ) << mnBlockFlags;
 

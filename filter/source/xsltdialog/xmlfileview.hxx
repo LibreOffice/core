@@ -84,7 +84,7 @@ private:
                     *pVScrollbar;
 
     long            nCurTextWidth;
-    USHORT          nStartLine;
+    sal_uInt16          nStartLine;
     rtl_TextEncoding eSourceEncoding;
 
     Timer           aSyntaxIdleTimer;
@@ -93,7 +93,7 @@ private:
     bool            bHighlighting;
 protected:
     DECL_LINK( SyntaxTimerHdl, Timer * );
-    void            ImpDoHighlight( const String& rSource, USHORT nLineOff );
+    void            ImpDoHighlight( const String& rSource, sal_uInt16 nLineOff );
 
     virtual void    Resize();
     virtual void    DataChanged( const DataChangedEvent& );
@@ -105,9 +105,9 @@ protected:
 
     DECL_LINK(ScrollHdl, ScrollBar*);
 
-    void            DoDelayedSyntaxHighlight( USHORT nPara );
+    void            DoDelayedSyntaxHighlight( sal_uInt16 nPara );
 
-    void            DoSyntaxHighlight( USHORT nPara );
+    void            DoSyntaxHighlight( sal_uInt16 nPara );
 
 public:
                     XMLFileWindow( Window* pParent );
@@ -115,7 +115,7 @@ public:
 
     void            SetScrollBarRanges();
     void            InitScrollBars();
-    ULONG           Read( SvStream& rInput)     { return pTextEngine->Read(rInput); }
+    sal_uLong           Read( SvStream& rInput)     { return pTextEngine->Read(rInput); }
 
     void            ShowWindow( const rtl::OUString& rFileName );
 
@@ -127,7 +127,7 @@ public:
 
     void            CreateScrollbars();
 
-    void            SetStartLine(USHORT nLine)  {nStartLine = nLine;}
+    void            SetStartLine(sal_uInt16 nLine)  {nStartLine = nLine;}
 
     virtual void    Command( const CommandEvent& rCEvt );
     void            HandleWheelCommand( const CommandEvent& rCEvt );

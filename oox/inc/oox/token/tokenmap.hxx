@@ -67,7 +67,6 @@ private:
     typedef ::std::vector< TokenName > TokenNameVector;
 
     TokenNameVector     maTokenNames;
-
 };
 
 // ============================================================================

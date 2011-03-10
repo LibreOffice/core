@@ -27,9 +27,8 @@
  ************************************************************************/
 
 #include "oox/xls/formulabase.hxx"
+
 #include <map>
-#include <rtl/strbuf.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/sheet/AddressConvention.hpp>
@@ -42,37 +41,28 @@
 #include <com/sun/star/sheet/XFormulaOpCodeMapper.hpp>
 #include <com/sun/star/sheet/XFormulaParser.hpp>
 #include <com/sun/star/sheet/XFormulaTokens.hpp>
-#include "properties.hxx"
-#include "oox/helper/recordinputstream.hxx"
+#include <rtl/strbuf.hxx>
+#include <rtl/ustrbuf.hxx>
 #include "oox/core/filterbase.hxx"
+#include "oox/helper/containerhelper.hxx"
 #include "oox/xls/biffinputstream.hxx"
-
-using ::rtl::OString;
-using ::rtl::OStringBuffer;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
-using ::rtl::OStringToOUString;
-using ::rtl::OUStringToOString;
-using ::com::sun::star::lang::XMultiServiceFactory;
-using ::com::sun::star::uno::Any;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::table::CellAddress;
-using ::com::sun::star::table::CellRangeAddress;
-using ::com::sun::star::table::XCellRange;
-using ::com::sun::star::sheet::SingleReference;
-using ::com::sun::star::sheet::ComplexReference;
-using ::com::sun::star::sheet::FormulaToken;
-using ::com::sun::star::sheet::FormulaOpCodeMapEntry;
-using ::com::sun::star::sheet::XSpreadsheetDocument;
-using ::com::sun::star::sheet::XFormulaOpCodeMapper;
-using ::com::sun::star::sheet::XFormulaTokens;
 
 namespace oox {
 namespace xls {
+
+// ============================================================================
+
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::sheet;
+using namespace ::com::sun::star::table;
+using namespace ::com::sun::star::uno;
+
+using ::rtl::OString;
+using ::rtl::OStringBuffer;
+using ::rtl::OStringToOUString;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+using ::rtl::OUStringToOString;
 
 // reference helpers ==========================================================
 
@@ -84,16 +74,16 @@ BinSingleRef2d::BinSingleRef2d() :
 {
 }
 
-void BinSingleRef2d::setOobData( sal_uInt16 nCol, sal_Int32 nRow, bool bRelativeAsOffset )
+void BinSingleRef2d::setBiff12Data( sal_uInt16 nCol, sal_Int32 nRow, bool bRelativeAsOffset )
 {
-    mnCol = nCol & OOBIN_TOK_REF_COLMASK;
-    mnRow = nRow & OOBIN_TOK_REF_ROWMASK;
-    mbColRel = getFlag( nCol, OOBIN_TOK_REF_COLREL );
-    mbRowRel = getFlag( nCol, OOBIN_TOK_REF_ROWREL );
-    if( bRelativeAsOffset && mbColRel && (mnCol > (OOBIN_TOK_REF_COLMASK >> 1)) )
-        mnCol -= (OOBIN_TOK_REF_COLMASK + 1);
-    if( bRelativeAsOffset && mbRowRel && (mnRow > (OOBIN_TOK_REF_ROWMASK >> 1)) )
-        mnRow -= (OOBIN_TOK_REF_ROWMASK + 1);
+    mnCol = nCol & BIFF12_TOK_REF_COLMASK;
+    mnRow = nRow & BIFF12_TOK_REF_ROWMASK;
+    mbColRel = getFlag( nCol, BIFF12_TOK_REF_COLREL );
+    mbRowRel = getFlag( nCol, BIFF12_TOK_REF_ROWREL );
+    if( bRelativeAsOffset && mbColRel && (mnCol > (BIFF12_TOK_REF_COLMASK >> 1)) )
+        mnCol -= (BIFF12_TOK_REF_COLMASK + 1);
+    if( bRelativeAsOffset && mbRowRel && (mnRow > (BIFF12_TOK_REF_ROWMASK >> 1)) )
+        mnRow -= (BIFF12_TOK_REF_ROWMASK + 1);
 }
 
 void BinSingleRef2d::setBiff2Data( sal_uInt8 nCol, sal_uInt16 nRow, bool bRelativeAsOffset )
@@ -120,12 +110,12 @@ void BinSingleRef2d::setBiff8Data( sal_uInt16 nCol, sal_uInt16 nRow, bool bRelat
         mnRow -= 0x10000;
 }
 
-void BinSingleRef2d::readOobData( RecordInputStream& rStrm, bool bRelativeAsOffset )
+void BinSingleRef2d::readBiff12Data( SequenceInputStream& rStrm, bool bRelativeAsOffset )
 {
     sal_Int32 nRow;
     sal_uInt16 nCol;
     rStrm >> nRow >> nCol;
-    setOobData( nCol, nRow, bRelativeAsOffset );
+    setBiff12Data( nCol, nRow, bRelativeAsOffset );
 }
 
 void BinSingleRef2d::readBiff2Data( BiffInputStream& rStrm, bool bRelativeAsOffset )
@@ -145,13 +135,13 @@ void BinSingleRef2d::readBiff8Data( BiffInputStream& rStrm, bool bRelativeAsOffs
 
 // ----------------------------------------------------------------------------
 
-void BinComplexRef2d::readOobData( RecordInputStream& rStrm, bool bRelativeAsOffset )
+void BinComplexRef2d::readBiff12Data( SequenceInputStream& rStrm, bool bRelativeAsOffset )
 {
     sal_Int32 nRow1, nRow2;
     sal_uInt16 nCol1, nCol2;
     rStrm >> nRow1 >> nRow2 >> nCol1 >> nCol2;
-    maRef1.setOobData( nCol1, nRow1, bRelativeAsOffset );
-    maRef2.setOobData( nCol2, nRow2, bRelativeAsOffset );
+    maRef1.setBiff12Data( nCol1, nRow1, bRelativeAsOffset );
+    maRef2.setBiff12Data( nCol2, nRow2, bRelativeAsOffset );
 }
 
 void BinComplexRef2d::readBiff2Data( BiffInputStream& rStrm, bool bRelativeAsOffset )
@@ -247,8 +237,8 @@ struct FunctionData
 {
     const sal_Char*     mpcOdfFuncName;     /// ODF function name.
     const sal_Char*     mpcOoxFuncName;     /// OOXML function name.
-    sal_uInt16          mnOobFuncId;        /// OOBIN function identifier.
-    sal_uInt16          mnBiffFuncId;       /// BIFF function identifier.
+    sal_uInt16          mnBiff12FuncId;     /// BIFF12 function identifier.
+    sal_uInt16          mnBiffFuncId;       /// BIFF2-BIFF8 function identifier.
     sal_uInt8           mnMinParamCount;    /// Minimum number of parameters.
     sal_uInt8           mnMaxParamCount;    /// Maximum number of parameters.
     sal_uInt8           mnRetClass;         /// BIFF token class of the return value.
@@ -265,7 +255,7 @@ inline bool FunctionData::isSupported( bool bImportFilter ) const
     return !getFlag( mnFlags, bImportFilter ? FUNCFLAG_EXPORTONLY : FUNCFLAG_IMPORTONLY );
 }
 
-const sal_uInt16 NOID = SAL_MAX_UINT16;     /// No BIFF/OOBIN function identifier available.
+const sal_uInt16 NOID = SAL_MAX_UINT16;     /// No BIFF function identifier available.
 const sal_uInt8 MX    = SAL_MAX_UINT8;      /// Maximum parameter count.
 
 // abbreviations for function return token class
@@ -679,8 +669,8 @@ static const FunctionData saFuncTableBiff5[] =
     { "COUNTBLANK",             "COUNTBLANK",           347,    347,    1,  1,  V, { RO }, 0 },
     { "ISPMT",                  "ISPMT",                350,    350,    4,  4,  V, { VR }, 0 },
     { 0,                        "DATEDIF",              351,    351,    3,  3,  V, { VR }, FUNCFLAG_IMPORTONLY },   // not supported in Calc
-    { 0,                        "DATESTRING",           352,    352,    1,  1,  V, { VR }, FUNCFLAG_IMPORTONLY },   // not supported in Calc, missing in OOX spec
-    { 0,                        "NUMBERSTRING",         353,    353,    2,  2,  V, { VR }, FUNCFLAG_IMPORTONLY },   // not supported in Calc, missing in OOX spec
+    { 0,                        "DATESTRING",           352,    352,    1,  1,  V, { VR }, FUNCFLAG_IMPORTONLY },   // not supported in Calc, missing in OOXML spec
+    { 0,                        "NUMBERSTRING",         353,    353,    2,  2,  V, { VR }, FUNCFLAG_IMPORTONLY },   // not supported in Calc, missing in OOXML spec
     { "ROMAN",                  "ROMAN",                354,    354,    1,  2,  V, { VR }, 0 },
 
     // *** EuroTool add-in ***
@@ -723,7 +713,7 @@ static const FunctionData saFuncTableBiff8[] =
     { 0,                        "RTD",                  379,    379,    3,  3,  A, { VR, VR, RO }, 0 }
 };
 
-/** Functions new in OOX. */
+/** Functions new in OOXML. */
 static const FunctionData saFuncTableOox[] =
 {
     { 0,                        "CUBEVALUE",            380,    NOID,   1,  MX, V, { VR, RX }, 0 },
@@ -770,7 +760,7 @@ static const FunctionData saFuncTableOdf[] =
     { "PERMUTATIONA",           0,                      NOID,   NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALLODF },
     { "PHI",                    0,                      NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALLODF },
     { "RRI",                    0,                      NOID,   NOID,   3,  3,  V, { VR }, FUNCFLAG_MACROCALLODF },
-    { "SHEET",                  0,                      NOID,   NOID,   1,  1,  V, { RO }, FUNCFLAG_MACROCALLODF },
+    { "SHEET",                  0,                      NOID,   NOID,   0,  1,  V, { RO }, FUNCFLAG_MACROCALLODF },
     { "SHEETS",                 0,                      NOID,   NOID,   0,  1,  V, { RO }, FUNCFLAG_MACROCALLODF },
     { "SKEWP",                  0,                      NOID,   NOID,   1,  MX, V, { RX }, FUNCFLAG_MACROCALLODF },
     { "UNICHAR",                0,                      NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALLODF },
@@ -846,8 +836,8 @@ struct FunctionProviderImpl
     FunctionInfoVector  maFuncs;            /// All function infos in one list.
     FuncNameMap         maOdfFuncs;         /// Maps ODF function names to function data.
     FuncNameMap         maOoxFuncs;         /// Maps OOXML function names to function data.
-    FuncIdMap           maOobFuncs;         /// Maps OOBIN function indexes to function data.
-    FuncIdMap           maBiffFuncs;        /// Maps BIFF function indexes to function data.
+    FuncIdMap           maBiff12Funcs;      /// Maps BIFF12 function indexes to function data.
+    FuncIdMap           maBiffFuncs;        /// Maps BIFF2-BIFF8 function indexes to function data.
     FuncNameMap         maMacroFuncs;       /// Maps macro function names to function data.
 
     explicit            FunctionProviderImpl( FilterType eFilter, BiffType eBiff, bool bImportFilter );
@@ -870,9 +860,9 @@ FunctionProviderImpl::FunctionProviderImpl( FilterType eFilter, BiffType eBiff, 
     sal_uInt8 nMaxParam = 0;
     switch( eFilter )
     {
-        case FILTER_OOX:
+        case FILTER_OOXML:
             nMaxParam = OOX_MAX_PARAMCOUNT;
-            eBiff = BIFF8;  // insert all BIFF function tables, then the OOX table
+            eBiff = BIFF8;  // insert all BIFF function tables, then the OOXML table
         break;
         case FILTER_BIFF:
             nMaxParam = BIFF_MAX_PARAMCOUNT;
@@ -896,7 +886,7 @@ FunctionProviderImpl::FunctionProviderImpl( FilterType eFilter, BiffType eBiff, 
         initFuncs( saFuncTableBiff5, STATIC_ARRAY_END( saFuncTableBiff5 ), nMaxParam, bImportFilter );
     if( eBiff >= BIFF8 )
         initFuncs( saFuncTableBiff8, STATIC_ARRAY_END( saFuncTableBiff8 ), nMaxParam, bImportFilter );
-    if( eFilter == FILTER_OOX )
+    if( eFilter == FILTER_OOXML )
         initFuncs( saFuncTableOox, STATIC_ARRAY_END( saFuncTableOox ), nMaxParam, bImportFilter );
     initFuncs( saFuncTableOdf, STATIC_ARRAY_END( saFuncTableOdf ), nMaxParam, bImportFilter );
 }
@@ -929,7 +919,7 @@ void FunctionProviderImpl::initFunc( const FunctionData& rFuncData, sal_uInt8 nM
     }
 
     xFuncInfo->mnApiOpCode = -1;
-    xFuncInfo->mnOobFuncId = rFuncData.mnOobFuncId;
+    xFuncInfo->mnBiff12FuncId = rFuncData.mnBiff12FuncId;
     xFuncInfo->mnBiffFuncId = rFuncData.mnBiffFuncId;
     xFuncInfo->mnMinParamCount = rFuncData.mnMinParamCount;
     xFuncInfo->mnMaxParamCount = (rFuncData.mnMaxParamCount == MX) ? nMaxParam : rFuncData.mnMaxParamCount;
@@ -942,7 +932,7 @@ void FunctionProviderImpl::initFunc( const FunctionData& rFuncData, sal_uInt8 nM
     xFuncInfo->mbMacroFunc = bMacroCmd || getFlag( rFuncData.mnFlags, FUNCFLAG_MACROFUNC );
     xFuncInfo->mbVarParam = bMacroCmd || (rFuncData.mnMinParamCount != rFuncData.mnMaxParamCount) || getFlag( rFuncData.mnFlags, FUNCFLAG_ALWAYSVAR );
 
-    setFlag( xFuncInfo->mnOobFuncId, BIFF_TOK_FUNCVAR_CMD, bMacroCmd );
+    setFlag( xFuncInfo->mnBiff12FuncId, BIFF_TOK_FUNCVAR_CMD, bMacroCmd );
     setFlag( xFuncInfo->mnBiffFuncId, BIFF_TOK_FUNCVAR_CMD, bMacroCmd );
 
     // insert the function info into the member maps
@@ -951,8 +941,8 @@ void FunctionProviderImpl::initFunc( const FunctionData& rFuncData, sal_uInt8 nM
         maOdfFuncs[ xFuncInfo->maOdfFuncName ] = xFuncInfo;
     if( xFuncInfo->maOoxFuncName.getLength() > 0 )
         maOoxFuncs[ xFuncInfo->maOoxFuncName ] = xFuncInfo;
-    if( xFuncInfo->mnOobFuncId != NOID )
-        maOobFuncs[ xFuncInfo->mnOobFuncId ] = xFuncInfo;
+    if( xFuncInfo->mnBiff12FuncId != NOID )
+        maBiff12Funcs[ xFuncInfo->mnBiff12FuncId ] = xFuncInfo;
     if( xFuncInfo->mnBiffFuncId != NOID )
         maBiffFuncs[ xFuncInfo->mnBiffFuncId ] = xFuncInfo;
     if( xFuncInfo->maBiffMacroName.getLength() > 0 )
@@ -987,9 +977,9 @@ const FunctionInfo* FunctionProvider::getFuncInfoFromOoxFuncName( const OUString
     return mxFuncImpl->maOoxFuncs.get( rFuncName ).get();
 }
 
-const FunctionInfo* FunctionProvider::getFuncInfoFromOobFuncId( sal_uInt16 nFuncId ) const
+const FunctionInfo* FunctionProvider::getFuncInfoFromBiff12FuncId( sal_uInt16 nFuncId ) const
 {
-    return mxFuncImpl->maOobFuncs.get( nFuncId ).get();
+    return mxFuncImpl->maBiff12Funcs.get( nFuncId ).get();
 }
 
 const FunctionInfo* FunctionProvider::getFuncInfoFromBiffFuncId( sal_uInt16 nFuncId ) const
@@ -1253,7 +1243,7 @@ bool OpCodeProviderImpl::initFuncOpCode( FunctionInfo& orFuncInfo, const ApiToke
                     append( '"' ).getStr() );
             }
 
-            // add to parser map, if OOX function name exists
+            // add to parser map, if OOXML function name exists
             if( bIsValid && (orFuncInfo.maOoxFuncName.getLength() > 0) )
             {
                 // create the parser map entry

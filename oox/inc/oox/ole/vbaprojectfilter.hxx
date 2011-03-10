@@ -40,12 +40,16 @@ class VbaProjectFilterBase : public ::oox::core::BinaryFilterBase
 {
 public:
     explicit            VbaProjectFilterBase(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxGlobalFactory,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
                             const ::rtl::OUString& rAppName,
-                            const ::rtl::OUString& rStorageName );
+                            const ::rtl::OUString& rStorageName )
+                            throw( ::com::sun::star::uno::RuntimeException );
 
     virtual bool        importDocument() throw();
     virtual bool        exportDocument() throw();
+
+private:
+    virtual VbaProject* implCreateVbaProject() const;
 
 private:
     ::rtl::OUString     maAppName;
@@ -58,7 +62,8 @@ class WordVbaProjectFilter : public VbaProjectFilterBase
 {
 public:
     explicit            WordVbaProjectFilter(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxGlobalFactory );
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext )
+                            throw( ::com::sun::star::uno::RuntimeException );
 
 private:
     virtual ::rtl::OUString implGetImplementationName() const;

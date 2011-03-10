@@ -27,128 +27,121 @@
  ************************************************************************/
 
 #include "oox/xls/viewsettings.hxx"
+
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>
-#include <com/sun/star/text/WritingMode2.hpp>
 #include <comphelper/mediadescriptor.hxx>
-#include "properties.hxx"
+#include "oox/core/filterbase.hxx"
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/containerhelper.hxx"
 #include "oox/helper/propertymap.hxx"
 #include "oox/helper/propertyset.hxx"
-#include "oox/helper/recordinputstream.hxx"
-#include "oox/core/filterbase.hxx"
 #include "oox/xls/addressconverter.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/unitconverter.hxx"
 #include "oox/xls/workbooksettings.hxx"
 #include "oox/xls/worksheetbuffer.hxx"
 
-using ::rtl::OUString;
-using ::com::sun::star::awt::Point;
-using ::com::sun::star::awt::Size;
-using ::com::sun::star::container::XNameContainer;
-using ::com::sun::star::container::XIndexContainer;
-using ::com::sun::star::container::XIndexAccess;
-using ::com::sun::star::document::XViewDataSupplier;
-using ::com::sun::star::table::CellAddress;
-using ::com::sun::star::table::CellRangeAddress;
-using ::com::sun::star::uno::Any;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::oox::core::FilterBase;
-
 namespace oox {
 namespace xls {
 
 // ============================================================================
 
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::document;
+using namespace ::com::sun::star::table;
+using namespace ::com::sun::star::uno;
+
+using ::oox::core::FilterBase;
+using ::rtl::OUString;
+
+// ============================================================================
+
 namespace {
 
-const sal_Int32 OOX_BOOKVIEW_TABBARRATIO_DEF    = 600;      /// Default tabbar ratio.
-const sal_Int32 OOX_SHEETVIEW_NORMALZOOM_DEF    = 100;      /// Default zoom for normal view.
-const sal_Int32 OOX_SHEETVIEW_SHEETLAYZOOM_DEF  = 60;       /// Default zoom for pagebreak preview.
-const sal_Int32 OOX_SHEETVIEW_PAGELAYZOOM_DEF   = 100;      /// Default zoom for page layout view.
+const sal_Int32 OOX_BOOKVIEW_TABBARRATIO_DEF        = 600;      /// Default tabbar ratio.
+const sal_Int32 OOX_SHEETVIEW_NORMALZOOM_DEF        = 100;      /// Default zoom for normal view.
+const sal_Int32 OOX_SHEETVIEW_SHEETLAYZOOM_DEF      = 60;       /// Default zoom for pagebreak preview.
+const sal_Int32 OOX_SHEETVIEW_PAGELAYZOOM_DEF       = 100;      /// Default zoom for page layout view.
 
-const sal_uInt8 OOBIN_PANE_FROZEN               = 0x01;
-const sal_uInt8 OOBIN_PANE_FROZENNOSPLIT        = 0x02;
+const sal_uInt8 BIFF12_PANE_FROZEN                  = 0x01;
+const sal_uInt8 BIFF12_PANE_FROZENNOSPLIT           = 0x02;
 
-const sal_uInt16 OOBIN_SHEETVIEW_WINPROTECTED   = 0x0001;
-const sal_uInt16 OOBIN_SHEETVIEW_SHOWFORMULAS   = 0x0002;
-const sal_uInt16 OOBIN_SHEETVIEW_SHOWGRID       = 0x0004;
-const sal_uInt16 OOBIN_SHEETVIEW_SHOWHEADINGS   = 0x0008;
-const sal_uInt16 OOBIN_SHEETVIEW_SHOWZEROS      = 0x0010;
-const sal_uInt16 OOBIN_SHEETVIEW_RIGHTTOLEFT    = 0x0020;
-const sal_uInt16 OOBIN_SHEETVIEW_SELECTED       = 0x0040;
-const sal_uInt16 OOBIN_SHEETVIEW_SHOWRULER      = 0x0080;
-const sal_uInt16 OOBIN_SHEETVIEW_SHOWOUTLINE    = 0x0100;
-const sal_uInt16 OOBIN_SHEETVIEW_DEFGRIDCOLOR   = 0x0200;
-const sal_uInt16 OOBIN_SHEETVIEW_SHOWWHITESPACE = 0x0400;
+const sal_uInt16 BIFF12_SHEETVIEW_WINPROTECTED      = 0x0001;
+const sal_uInt16 BIFF12_SHEETVIEW_SHOWFORMULAS      = 0x0002;
+const sal_uInt16 BIFF12_SHEETVIEW_SHOWGRID          = 0x0004;
+const sal_uInt16 BIFF12_SHEETVIEW_SHOWHEADINGS      = 0x0008;
+const sal_uInt16 BIFF12_SHEETVIEW_SHOWZEROS         = 0x0010;
+const sal_uInt16 BIFF12_SHEETVIEW_RIGHTTOLEFT       = 0x0020;
+const sal_uInt16 BIFF12_SHEETVIEW_SELECTED          = 0x0040;
+const sal_uInt16 BIFF12_SHEETVIEW_SHOWRULER         = 0x0080;
+const sal_uInt16 BIFF12_SHEETVIEW_SHOWOUTLINE       = 0x0100;
+const sal_uInt16 BIFF12_SHEETVIEW_DEFGRIDCOLOR      = 0x0200;
+const sal_uInt16 BIFF12_SHEETVIEW_SHOWWHITESPACE    = 0x0400;
 
-const sal_uInt16 OOBIN_CHARTSHEETVIEW_SELECTED  = 0x0001;
-const sal_uInt16 OOBIN_CHARTSHEETVIEW_ZOOMTOFIT = 0x0002;
+const sal_uInt16 BIFF12_CHARTSHEETVIEW_SELECTED     = 0x0001;
+const sal_uInt16 BIFF12_CHARTSHEETVIEW_ZOOMTOFIT    = 0x0002;
 
-const sal_uInt8 OOBIN_WBVIEW_HIDDEN             = 0x01;
-const sal_uInt8 OOBIN_WBVIEW_MINIMIZED          = 0x02;
-const sal_uInt8 OOBIN_WBVIEW_SHOWHORSCROLL      = 0x08;
-const sal_uInt8 OOBIN_WBVIEW_SHOWVERSCROLL      = 0x10;
-const sal_uInt8 OOBIN_WBVIEW_SHOWTABBAR         = 0x20;
-const sal_uInt8 OOBIN_WBVIEW_AUTOFILTERGROUP    = 0x40;
+const sal_uInt8 BIFF12_WBVIEW_HIDDEN                = 0x01;
+const sal_uInt8 BIFF12_WBVIEW_MINIMIZED             = 0x02;
+const sal_uInt8 BIFF12_WBVIEW_SHOWHORSCROLL         = 0x08;
+const sal_uInt8 BIFF12_WBVIEW_SHOWVERSCROLL         = 0x10;
+const sal_uInt8 BIFF12_WBVIEW_SHOWTABBAR            = 0x20;
+const sal_uInt8 BIFF12_WBVIEW_AUTOFILTERGROUP       = 0x40;
 
-const sal_uInt8 BIFF_PANE_BOTTOMRIGHT           = 0;        /// Bottom-right pane.
-const sal_uInt8 BIFF_PANE_TOPRIGHT              = 1;        /// Right, or top-right pane.
-const sal_uInt8 BIFF_PANE_BOTTOMLEFT            = 2;        /// Bottom, or bottom-left pane.
-const sal_uInt8 BIFF_PANE_TOPLEFT               = 3;        /// Single, top, left, or top-left pane.
+const sal_uInt8 BIFF_PANE_BOTTOMRIGHT               = 0;        /// Bottom-right pane.
+const sal_uInt8 BIFF_PANE_TOPRIGHT                  = 1;        /// Right, or top-right pane.
+const sal_uInt8 BIFF_PANE_BOTTOMLEFT                = 2;        /// Bottom, or bottom-left pane.
+const sal_uInt8 BIFF_PANE_TOPLEFT                   = 3;        /// Single, top, left, or top-left pane.
 
-const sal_uInt16 BIFF_WINDOW1_HIDDEN            = 0x0001;
-const sal_uInt16 BIFF_WINDOW1_MINIMIZED         = 0x0002;
-const sal_uInt16 BIFF_WINDOW1_SHOWHORSCROLL     = 0x0008;
-const sal_uInt16 BIFF_WINDOW1_SHOWVERSCROLL     = 0x0010;
-const sal_uInt16 BIFF_WINDOW1_SHOWTABBAR        = 0x0020;
+const sal_uInt16 BIFF_WINDOW1_HIDDEN                = 0x0001;
+const sal_uInt16 BIFF_WINDOW1_MINIMIZED             = 0x0002;
+const sal_uInt16 BIFF_WINDOW1_SHOWHORSCROLL         = 0x0008;
+const sal_uInt16 BIFF_WINDOW1_SHOWVERSCROLL         = 0x0010;
+const sal_uInt16 BIFF_WINDOW1_SHOWTABBAR            = 0x0020;
 
-const sal_uInt16 BIFF_WINDOW2_SHOWFORMULAS      = 0x0001;
-const sal_uInt16 BIFF_WINDOW2_SHOWGRID          = 0x0002;
-const sal_uInt16 BIFF_WINDOW2_SHOWHEADINGS      = 0x0004;
-const sal_uInt16 BIFF_WINDOW2_FROZEN            = 0x0008;
-const sal_uInt16 BIFF_WINDOW2_SHOWZEROS         = 0x0010;
-const sal_uInt16 BIFF_WINDOW2_DEFGRIDCOLOR      = 0x0020;
-const sal_uInt16 BIFF_WINDOW2_RIGHTTOLEFT       = 0x0040;
-const sal_uInt16 BIFF_WINDOW2_SHOWOUTLINE       = 0x0080;
-const sal_uInt16 BIFF_WINDOW2_FROZENNOSPLIT     = 0x0100;
-const sal_uInt16 BIFF_WINDOW2_SELECTED          = 0x0200;
-const sal_uInt16 BIFF_WINDOW2_DISPLAYED         = 0x0400;
-const sal_uInt16 BIFF_WINDOW2_PAGEBREAKMODE     = 0x0800;
+const sal_uInt16 BIFF_WINDOW2_SHOWFORMULAS          = 0x0001;
+const sal_uInt16 BIFF_WINDOW2_SHOWGRID              = 0x0002;
+const sal_uInt16 BIFF_WINDOW2_SHOWHEADINGS          = 0x0004;
+const sal_uInt16 BIFF_WINDOW2_FROZEN                = 0x0008;
+const sal_uInt16 BIFF_WINDOW2_SHOWZEROS             = 0x0010;
+const sal_uInt16 BIFF_WINDOW2_DEFGRIDCOLOR          = 0x0020;
+const sal_uInt16 BIFF_WINDOW2_RIGHTTOLEFT           = 0x0040;
+const sal_uInt16 BIFF_WINDOW2_SHOWOUTLINE           = 0x0080;
+const sal_uInt16 BIFF_WINDOW2_FROZENNOSPLIT         = 0x0100;
+const sal_uInt16 BIFF_WINDOW2_SELECTED              = 0x0200;
+const sal_uInt16 BIFF_WINDOW2_DISPLAYED             = 0x0400;
+const sal_uInt16 BIFF_WINDOW2_PAGEBREAKMODE         = 0x0800;
 
 // Attention: view settings in Calc do not use com.sun.star.view.DocumentZoomType!
-const sal_Int16 API_ZOOMTYPE_PERCENT            = 0;        /// Zoom value in percent.
+const sal_Int16 API_ZOOMTYPE_PERCENT                = 0;        /// Zoom value in percent.
 
-const sal_Int32 API_ZOOMVALUE_MIN               = 20;       /// Minimum zoom in Calc.
-const sal_Int32 API_ZOOMVALUE_MAX               = 400;      /// Maximum zoom in Calc.
+const sal_Int32 API_ZOOMVALUE_MIN                   = 20;       /// Minimum zoom in Calc.
+const sal_Int32 API_ZOOMVALUE_MAX                   = 400;      /// Maximum zoom in Calc.
 
 // no predefined constants for split mode
-const sal_Int16 API_SPLITMODE_NONE              = 0;        /// No splits in window.
-const sal_Int16 API_SPLITMODE_SPLIT             = 1;        /// Window is split.
-const sal_Int16 API_SPLITMODE_FREEZE            = 2;        /// Window has frozen panes.
+const sal_Int16 API_SPLITMODE_NONE                  = 0;        /// No splits in window.
+const sal_Int16 API_SPLITMODE_SPLIT                 = 1;        /// Window is split.
+const sal_Int16 API_SPLITMODE_FREEZE                = 2;        /// Window has frozen panes.
 
 // no predefined constants for pane idetifiers
-const sal_Int16 API_SPLITPANE_TOPLEFT           = 0;        /// Top-left, or top pane.
-const sal_Int16 API_SPLITPANE_TOPRIGHT          = 1;        /// Top-right pane.
-const sal_Int16 API_SPLITPANE_BOTTOMLEFT        = 2;        /// Bottom-left, bottom, left, or single pane.
-const sal_Int16 API_SPLITPANE_BOTTOMRIGHT       = 3;        /// Bottom-right, or right pane.
+const sal_Int16 API_SPLITPANE_TOPLEFT               = 0;        /// Top-left, or top pane.
+const sal_Int16 API_SPLITPANE_TOPRIGHT              = 1;        /// Top-right pane.
+const sal_Int16 API_SPLITPANE_BOTTOMLEFT            = 2;        /// Bottom-left, bottom, left, or single pane.
+const sal_Int16 API_SPLITPANE_BOTTOMRIGHT           = 3;        /// Bottom-right, or right pane.
 
 // ----------------------------------------------------------------------------
 
-/** Returns the OOXML pane identifier from the passed OOBIN or BIFF pane id. */
-sal_Int32 lclGetOoxPaneId( sal_Int32 nBinPaneId, sal_Int32 nDefaultPaneId )
+/** Returns the OOXML pane identifier from the passed BIFF pane id. */
+sal_Int32 lclGetOoxPaneId( sal_Int32 nBiffPaneId, sal_Int32 nDefaultPaneId )
 {
     static const sal_Int32 spnPaneIds[] = { XML_bottomRight, XML_topRight, XML_bottomLeft, XML_topLeft };
-    return STATIC_ARRAY_SELECT( spnPaneIds, nBinPaneId, nDefaultPaneId );
+    return STATIC_ARRAY_SELECT( spnPaneIds, nBiffPaneId, nDefaultPaneId );
 }
 
 } // namespace
@@ -296,7 +289,7 @@ void SheetViewSettings::importChartSheetView( const AttributeList& rAttribs )
     rModel.mbZoomToFit      = rAttribs.getBool( XML_zoomToFit, false );
 }
 
-void SheetViewSettings::importSheetView( RecordInputStream& rStrm )
+void SheetViewSettings::importSheetView( SequenceInputStream& rStrm )
 {
     SheetViewModel& rModel = *createSheetView();
     sal_uInt16 nFlags;
@@ -313,17 +306,17 @@ void SheetViewSettings::importSheetView( RecordInputStream& rStrm )
     rModel.maFirstPos = getAddressConverter().createValidCellAddress( aFirstPos, getSheetIndex(), false );
     static const sal_Int32 spnViewTypes[] = { XML_normal, XML_pageBreakPreview, XML_pageLayout };
     rModel.mnViewType = STATIC_ARRAY_SELECT( spnViewTypes, nViewType, XML_normal );
-    rModel.mbSelected     = getFlag( nFlags, OOBIN_SHEETVIEW_SELECTED );
-    rModel.mbRightToLeft  = getFlag( nFlags, OOBIN_SHEETVIEW_RIGHTTOLEFT );
-    rModel.mbDefGridColor = getFlag( nFlags, OOBIN_SHEETVIEW_DEFGRIDCOLOR );
-    rModel.mbShowFormulas = getFlag( nFlags, OOBIN_SHEETVIEW_SHOWFORMULAS );
-    rModel.mbShowGrid     = getFlag( nFlags, OOBIN_SHEETVIEW_SHOWGRID );
-    rModel.mbShowHeadings = getFlag( nFlags, OOBIN_SHEETVIEW_SHOWHEADINGS );
-    rModel.mbShowZeros    = getFlag( nFlags, OOBIN_SHEETVIEW_SHOWZEROS );
-    rModel.mbShowOutline  = getFlag( nFlags, OOBIN_SHEETVIEW_SHOWOUTLINE );
+    rModel.mbSelected     = getFlag( nFlags, BIFF12_SHEETVIEW_SELECTED );
+    rModel.mbRightToLeft  = getFlag( nFlags, BIFF12_SHEETVIEW_RIGHTTOLEFT );
+    rModel.mbDefGridColor = getFlag( nFlags, BIFF12_SHEETVIEW_DEFGRIDCOLOR );
+    rModel.mbShowFormulas = getFlag( nFlags, BIFF12_SHEETVIEW_SHOWFORMULAS );
+    rModel.mbShowGrid     = getFlag( nFlags, BIFF12_SHEETVIEW_SHOWGRID );
+    rModel.mbShowHeadings = getFlag( nFlags, BIFF12_SHEETVIEW_SHOWHEADINGS );
+    rModel.mbShowZeros    = getFlag( nFlags, BIFF12_SHEETVIEW_SHOWZEROS );
+    rModel.mbShowOutline  = getFlag( nFlags, BIFF12_SHEETVIEW_SHOWOUTLINE );
 }
 
-void SheetViewSettings::importPane( RecordInputStream& rStrm )
+void SheetViewSettings::importPane( SequenceInputStream& rStrm )
 {
     OSL_ENSURE( !maSheetViews.empty(), "SheetViewSettings::importPane - missing sheet view model" );
     if( !maSheetViews.empty() )
@@ -337,11 +330,11 @@ void SheetViewSettings::importPane( RecordInputStream& rStrm )
 
         rModel.maSecondPos    = getAddressConverter().createValidCellAddress( aSecondPos, getSheetIndex(), false );
         rModel.mnActivePaneId = lclGetOoxPaneId( nActivePaneId, XML_topLeft );
-        rModel.mnPaneState    = getFlagValue( nFlags, OOBIN_PANE_FROZEN, getFlagValue( nFlags, OOBIN_PANE_FROZENNOSPLIT, XML_frozen, XML_frozenSplit ), XML_split );
+        rModel.mnPaneState    = getFlagValue( nFlags, BIFF12_PANE_FROZEN, getFlagValue( nFlags, BIFF12_PANE_FROZENNOSPLIT, XML_frozen, XML_frozenSplit ), XML_split );
     }
 }
 
-void SheetViewSettings::importSelection( RecordInputStream& rStrm )
+void SheetViewSettings::importSelection( SequenceInputStream& rStrm )
 {
     OSL_ENSURE( !maSheetViews.empty(), "SheetViewSettings::importSelection - missing sheet view model" );
     if( !maSheetViews.empty() )
@@ -361,14 +354,14 @@ void SheetViewSettings::importSelection( RecordInputStream& rStrm )
     }
 }
 
-void SheetViewSettings::importChartSheetView( RecordInputStream& rStrm )
+void SheetViewSettings::importChartSheetView( SequenceInputStream& rStrm )
 {
     SheetViewModel& rModel = *createSheetView();
     sal_uInt16 nFlags;
     rStrm >> nFlags >> rModel.mnCurrentZoom >> rModel.mnWorkbookViewId;
 
-    rModel.mbSelected  = getFlag( nFlags, OOBIN_CHARTSHEETVIEW_SELECTED );
-    rModel.mbZoomToFit = getFlag( nFlags, OOBIN_CHARTSHEETVIEW_ZOOMTOFIT );
+    rModel.mbSelected  = getFlag( nFlags, BIFF12_CHARTSHEETVIEW_SELECTED );
+    rModel.mbZoomToFit = getFlag( nFlags, BIFF12_CHARTSHEETVIEW_ZOOMTOFIT );
 }
 
 void SheetViewSettings::importWindow2( BiffInputStream& rStrm )
@@ -503,13 +496,6 @@ void SheetViewSettings::finalizeImport()
         xModel->mbShowOutline = true;
     }
 
-    // mirrored sheet (this is not a view setting in Calc)
-    if( xModel->mbRightToLeft )
-    {
-        PropertySet aPropSet( getSheet() );
-        aPropSet.setProperty( PROP_TableLayout, ::com::sun::star::text::WritingMode2::RL_TB );
-    }
-
     // sheet selected (active sheet must be selected)
     bool bSelected = xModel->mbSelected || (getSheetIndex() == getViewSettings().getActiveCalcSheet());
 
@@ -600,6 +586,11 @@ void SheetViewSettings::finalizeImport()
     getViewSettings().setSheetViewSettings( getSheetIndex(), xModel, Any( aPropMap.makePropertyValueSequence() ) );
 }
 
+bool SheetViewSettings::isSheetRightToLeft() const
+{
+    return !maSheetViews.empty() && maSheetViews.front()->mbRightToLeft;
+}
+
 // private --------------------------------------------------------------------
 
 SheetViewModelRef SheetViewSettings::createSheetView()
@@ -658,19 +649,19 @@ void ViewSettings::importOleSize( const AttributeList& rAttribs )
     mbValidOleSize = getAddressConverter().convertToCellRange( maOleSize, aRange, 0, true, false );
 }
 
-void ViewSettings::importWorkbookView( RecordInputStream& rStrm )
+void ViewSettings::importWorkbookView( SequenceInputStream& rStrm )
 {
     WorkbookViewModel& rModel = createWorkbookView();
     sal_uInt8 nFlags;
     rStrm >> rModel.mnWinX >> rModel.mnWinY >> rModel.mnWinWidth >> rModel.mnWinHeight >> rModel.mnTabBarWidth >> rModel.mnFirstVisSheet >> rModel.mnActiveSheet >> nFlags;
-    rModel.mnVisibility    = getFlagValue( nFlags, OOBIN_WBVIEW_HIDDEN, XML_hidden, XML_visible );
-    rModel.mbShowTabBar    = getFlag( nFlags, OOBIN_WBVIEW_SHOWTABBAR );
-    rModel.mbShowHorScroll = getFlag( nFlags, OOBIN_WBVIEW_SHOWHORSCROLL );
-    rModel.mbShowVerScroll = getFlag( nFlags, OOBIN_WBVIEW_SHOWVERSCROLL );
-    rModel.mbMinimized     = getFlag( nFlags, OOBIN_WBVIEW_MINIMIZED );
+    rModel.mnVisibility    = getFlagValue( nFlags, BIFF12_WBVIEW_HIDDEN, XML_hidden, XML_visible );
+    rModel.mbShowTabBar    = getFlag( nFlags, BIFF12_WBVIEW_SHOWTABBAR );
+    rModel.mbShowHorScroll = getFlag( nFlags, BIFF12_WBVIEW_SHOWHORSCROLL );
+    rModel.mbShowVerScroll = getFlag( nFlags, BIFF12_WBVIEW_SHOWVERSCROLL );
+    rModel.mbMinimized     = getFlag( nFlags, BIFF12_WBVIEW_MINIMIZED );
 }
 
-void ViewSettings::importOleSize( RecordInputStream& rStrm )
+void ViewSettings::importOleSize( SequenceInputStream& rStrm )
 {
     BinRange aBinRange;
     rStrm >> aBinRange;

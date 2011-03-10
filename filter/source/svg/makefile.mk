@@ -92,13 +92,13 @@ DEF1NAME=$(SHL1TARGET)
 
 .INCLUDE : target.mk
 
-# Generate gperf files - from oox/source/token
-$(INCCOM)$/tokens.hxx $(MISC)$/tokens.gperf : tokens.txt gentoken.pl
-        $(PERL) gentoken.pl tokens.txt $(INCCOM)$/tokens.hxx $(MISC)$/tokens.gperf
+ALLTAR : $(MISC)/svgfilter.component
 
-$(INCCOM)$/tokens.cxx : $(MISC)$/tokens.gperf makefile.mk
-        $(GPERF) --compare-strncmp -C -m 20 $(MISC)$/tokens.gperf | $(SED) -e "s/(char\*)0/(char\*)0, 0/g" >$(INCCOM)$/tokens.cxx
-
+$(MISC)/svgfilter.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        svgfilter.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt svgfilter.component
 $(SLO)$/tokenmap.obj : $(INCCOM)$/tokens.cxx $(INCCOM)$/tokens.hxx
 
 $(SLO)$/parserfragments.obj : $(INCCOM)$/tokens.cxx $(INCCOM)$/tokens.hxx

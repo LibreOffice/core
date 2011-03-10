@@ -41,32 +41,32 @@ private:
 
     SvStream&           mrPBM;          // Die einzulesende PBM-Datei
 
-    BOOL                mbStatus;
-    BOOL                mbRemark;       // FALSE wenn sich stream in einem Kommentar befindet
-    BOOL                mbRaw;          // RAW/ASCII MODE
-    ULONG               mnMode;         // 0->PBM, 1->PGM, 2->PPM
+    sal_Bool                mbStatus;
+    sal_Bool                mbRemark;       // sal_False wenn sich stream in einem Kommentar befindet
+    sal_Bool                mbRaw;          // RAW/ASCII MODE
+    sal_uLong               mnMode;         // 0->PBM, 1->PGM, 2->PPM
     Bitmap              maBmp;
     BitmapWriteAccess*  mpAcc;
-    ULONG               mnWidth, mnHeight;  // Bildausmass in Pixeln
-    ULONG               mnCol;
-    ULONG               mnMaxVal;           // maximaler wert in den
-    BOOL                ImplCallback( USHORT nPercent );
-    BOOL                ImplReadBody();
-    BOOL                ImplReadHeader();
+    sal_uLong               mnWidth, mnHeight;  // Bildausmass in Pixeln
+    sal_uLong               mnCol;
+    sal_uLong               mnMaxVal;           // maximaler wert in den
+    sal_Bool                ImplCallback( sal_uInt16 nPercent );
+    sal_Bool                ImplReadBody();
+    sal_Bool                ImplReadHeader();
 
 public:
                         PBMReader(SvStream & rPBM);
                         ~PBMReader();
-    BOOL                ReadPBM(Graphic & rGraphic );
+    sal_Bool                ReadPBM(Graphic & rGraphic );
 };
 
 //=================== Methoden von PBMReader ==============================
 
 PBMReader::PBMReader(SvStream & rPBM)
     : mrPBM( rPBM )
-    , mbStatus( TRUE )
-    , mbRemark( FALSE )
-    , mbRaw( TRUE )
+    , mbStatus( sal_True )
+    , mbRemark( sal_False )
+    , mbRaw( sal_True )
     , mpAcc( NULL )
 {
 }
@@ -75,45 +75,45 @@ PBMReader::~PBMReader()
 {
 }
 
-BOOL PBMReader::ImplCallback( USHORT /*nPercent*/ )
+sal_Bool PBMReader::ImplCallback( sal_uInt16 /*nPercent*/ )
 {
 /*
     if ( pCallback != NULL )
     {
-        if ( ( (*pCallback)( pCallerData, nPercent ) ) == TRUE )
+        if ( ( (*pCallback)( pCallerData, nPercent ) ) == sal_True )
         {
             mrPBM.SetError( SVSTREAM_FILEFORMAT_ERROR );
-            return TRUE;
+            return sal_True;
         }
     }
 */
-    return FALSE;
+    return sal_False;
 }
 
-BOOL PBMReader::ReadPBM(Graphic & rGraphic )
+sal_Bool PBMReader::ReadPBM(Graphic & rGraphic )
 {
-    USHORT i;
+    sal_uInt16 i;
 
     if ( mrPBM.GetError() )
-        return FALSE;
+        return sal_False;
 
     mrPBM.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 
     // Kopf einlesen:
 
-    if ( ( mbStatus = ImplReadHeader() ) == FALSE )
-        return FALSE;
+    if ( ( mbStatus = ImplReadHeader() ) == sal_False )
+        return sal_False;
 
     if ( ( mnMaxVal == 0 ) || ( mnWidth == 0 ) || ( mnHeight == 0 ) )
-        return FALSE;
+        return sal_False;
 
     // 0->PBM, 1->PGM, 2->PPM
     switch ( mnMode )
     {
         case 0 :
             maBmp = Bitmap( Size( mnWidth, mnHeight ), 1 );
-            if ( ( mpAcc = maBmp.AcquireWriteAccess() ) == FALSE )
-                return FALSE;
+            if ( ( mpAcc = maBmp.AcquireWriteAccess() ) == sal_False )
+                return sal_False;
             mpAcc->SetPaletteEntryCount( 2 );
             mpAcc->SetPaletteColor( 0, BitmapColor( 0xff, 0xff, 0xff ) );
             mpAcc->SetPaletteColor( 1, BitmapColor( 0x00, 0x00, 0x00 ) );
@@ -127,23 +127,23 @@ BOOL PBMReader::ReadPBM(Graphic & rGraphic )
             else
                 maBmp = Bitmap( Size( mnWidth, mnHeight ), 8);
 
-            if ( ( mpAcc = maBmp.AcquireWriteAccess() ) == FALSE )
-                return FALSE;
-            mnCol = (USHORT)mnMaxVal + 1;
+            if ( ( mpAcc = maBmp.AcquireWriteAccess() ) == sal_False )
+                return sal_False;
+            mnCol = (sal_uInt16)mnMaxVal + 1;
             if ( mnCol > 256 )
                 mnCol = 256;
 
             mpAcc->SetPaletteEntryCount( 256 );
             for ( i = 0; i < mnCol; i++ )
             {
-                ULONG nCount = 255 * i / mnCol;
-                mpAcc->SetPaletteColor( i, BitmapColor( (BYTE)nCount, (BYTE)nCount, (BYTE)nCount ) );
+                sal_uLong nCount = 255 * i / mnCol;
+                mpAcc->SetPaletteColor( i, BitmapColor( (sal_uInt8)nCount, (sal_uInt8)nCount, (sal_uInt8)nCount ) );
             }
             break;
         case 2 :
             maBmp = Bitmap( Size( mnWidth, mnHeight ), 24 );
-            if ( ( mpAcc = maBmp.AcquireWriteAccess() ) == FALSE )
-                return FALSE;
+            if ( ( mpAcc = maBmp.AcquireWriteAccess() ) == sal_False )
+                return sal_False;
             break;
     }
 
@@ -160,56 +160,56 @@ BOOL PBMReader::ReadPBM(Graphic & rGraphic )
     return mbStatus;
 }
 
-BOOL PBMReader::ImplReadHeader()
+sal_Bool PBMReader::ImplReadHeader()
 {
-    BYTE    nID[ 2 ];
-    BYTE    nDat;
-    BYTE    nMax, nCount = 0;
-    BOOL    bFinished = FALSE;
+    sal_uInt8   nID[ 2 ];
+    sal_uInt8   nDat;
+    sal_uInt8   nMax, nCount = 0;
+    sal_Bool    bFinished = sal_False;
 
     mrPBM >> nID[ 0 ] >> nID[ 1 ];
     if ( nID[ 0 ] != 'P' )
-        return FALSE;
+        return sal_False;
     mnMaxVal = mnWidth = mnHeight = 0;
     switch ( nID[ 1 ] )
     {
         case '1' :
-            mbRaw = FALSE;
+            mbRaw = sal_False;
         case '4' :
             mnMode = 0;
             nMax = 2;               // number of parameters in Header
             mnMaxVal = 1;
             break;
         case '2' :
-            mbRaw = FALSE;
+            mbRaw = sal_False;
         case '5' :
             mnMode = 1;
             nMax = 3;
             break;
         case '3' :
-            mbRaw = FALSE;
+            mbRaw = sal_False;
         case '6' :
             mnMode = 2;
             nMax = 3;
             break;
         default:
-            return FALSE;
+            return sal_False;
     }
-    while ( bFinished == FALSE )
+    while ( bFinished == sal_False )
     {
         if ( mrPBM.GetError() )
-            return FALSE;
+            return sal_False;
 
         mrPBM >> nDat;
 
         if ( nDat == '#' )
         {
-            mbRemark = TRUE;
+            mbRemark = sal_True;
             continue;
         }
         else if ( ( nDat == 0x0d ) || ( nDat == 0x0a ) )
         {
-            mbRemark = FALSE;
+            mbRemark = sal_False;
             nDat = 0x20;
         }
         if ( mbRemark )
@@ -222,11 +222,11 @@ BOOL PBMReader::ImplReadHeader()
             else if ( ( nCount == 1 ) && mnHeight )
             {
                 if ( ++nCount == nMax )
-                    bFinished = TRUE;
+                    bFinished = sal_True;
             }
             else if ( ( nCount == 2 ) && mnMaxVal )
             {
-                bFinished = TRUE;
+                bFinished = sal_True;
             }
             continue;
         }
@@ -250,18 +250,18 @@ BOOL PBMReader::ImplReadHeader()
             }
         }
         else
-            return FALSE;
+            return sal_False;
     }
     return mbStatus;
 }
 
-BOOL PBMReader::ImplReadBody()
+sal_Bool PBMReader::ImplReadBody()
 {
-    BOOL    bPara, bFinished = FALSE;
-    BYTE    nDat = 0, nCount;
-    ULONG   nGrey, nRGB[3];
-    ULONG   nWidth = 0;
-    ULONG   nHeight = 0;
+    sal_Bool    bPara, bFinished = sal_False;
+    sal_uInt8   nDat = 0, nCount;
+    sal_uLong   nGrey, nRGB[3];
+    sal_uLong   nWidth = 0;
+    sal_uLong   nHeight = 0;
 
     if ( mbRaw )
     {
@@ -274,7 +274,7 @@ BOOL PBMReader::ImplReadBody()
                 while ( nHeight != mnHeight )
                 {
                     if ( mrPBM.IsEof() || mrPBM.GetError() )
-                        return FALSE;
+                        return sal_False;
 
                     if ( --nShift < 0 )
                     {
@@ -287,7 +287,7 @@ BOOL PBMReader::ImplReadBody()
                         nShift = 0;
                         nWidth = 0;
                         nHeight++;
-                        ImplCallback( (USHORT)( ( 100 * nHeight ) / mnHeight ) );   // processing output in percent
+                        ImplCallback( (sal_uInt16)( ( 100 * nHeight ) / mnHeight ) );   // processing output in percent
                     }
                 }
                 break;
@@ -297,7 +297,7 @@ BOOL PBMReader::ImplReadBody()
                 while ( nHeight != mnHeight )
                 {
                     if ( mrPBM.IsEof() || mrPBM.GetError() )
-                        return FALSE;
+                        return sal_False;
 
                     mrPBM >> nDat;
                     mpAcc->SetPixel( nHeight, nWidth++, nDat);
@@ -306,7 +306,7 @@ BOOL PBMReader::ImplReadBody()
                     {
                         nWidth = 0;
                         nHeight++;
-                        ImplCallback( (USHORT)( ( 100 * nHeight ) / mnHeight ) );   // processing output in percent
+                        ImplCallback( (sal_uInt16)( ( 100 * nHeight ) / mnHeight ) );   // processing output in percent
                     }
                 }
                 break;
@@ -316,20 +316,20 @@ BOOL PBMReader::ImplReadBody()
                 while ( nHeight != mnHeight )
                 {
                     if ( mrPBM.IsEof() || mrPBM.GetError() )
-                        return FALSE;
+                        return sal_False;
 
-                    BYTE    nR, nG, nB;
-                    ULONG   nRed, nGreen, nBlue;
+                    sal_uInt8   nR, nG, nB;
+                    sal_uLong   nRed, nGreen, nBlue;
                     mrPBM >> nR >> nG >> nB;
                     nRed = 255 * nR / mnMaxVal;
                     nGreen = 255 * nG / mnMaxVal;
                     nBlue = 255 * nB / mnMaxVal;
-                    mpAcc->SetPixel( nHeight, nWidth++, BitmapColor( (BYTE)nRed, (BYTE)nGreen, (BYTE)nBlue ) );
+                    mpAcc->SetPixel( nHeight, nWidth++, BitmapColor( (sal_uInt8)nRed, (sal_uInt8)nGreen, (sal_uInt8)nBlue ) );
                     if ( nWidth == mnWidth )
                     {
                         nWidth = 0;
                         nHeight++;
-                        ImplCallback( (USHORT) ( ( 100 * nHeight ) / mnHeight ) );  // processing output in percent
+                        ImplCallback( (sal_uInt16) ( ( 100 * nHeight ) / mnHeight ) );  // processing output in percent
                     }
                 }
                 break;
@@ -339,21 +339,21 @@ BOOL PBMReader::ImplReadBody()
     {
         // PBM
         case 0 :
-            while ( bFinished == FALSE )
+            while ( bFinished == sal_False )
             {
                 if ( mrPBM.IsEof() || mrPBM.GetError() )
-                    return FALSE;
+                    return sal_False;
 
                 mrPBM >> nDat;
 
                 if ( nDat == '#' )
                 {
-                    mbRemark = TRUE;
+                    mbRemark = sal_True;
                     continue;
                 }
                 else if ( ( nDat == 0x0d ) || ( nDat == 0x0a ) )
                 {
-                    mbRemark = FALSE;
+                    mbRemark = sal_False;
                     continue;
                 }
                 if ( mbRemark || nDat == 0x20 || nDat == 0x09 )
@@ -361,68 +361,68 @@ BOOL PBMReader::ImplReadBody()
 
                 if ( nDat == '0' || nDat == '1' )
                 {
-                    mpAcc->SetPixel( nHeight, nWidth, (BYTE)nDat-'0' );
+                    mpAcc->SetPixel( nHeight, nWidth, (sal_uInt8)nDat-'0' );
                     nWidth++;
                     if ( nWidth == mnWidth )
                     {
                         nWidth = 0;
                         if ( ++nHeight == mnHeight )
-                            bFinished = TRUE;
-                        ImplCallback( (USHORT) ( ( 100 * nHeight ) / mnHeight ) );  // processing output in percent
+                            bFinished = sal_True;
+                        ImplCallback( (sal_uInt16) ( ( 100 * nHeight ) / mnHeight ) );  // processing output in percent
                     }
                 }
                 else
-                    return FALSE;
+                    return sal_False;
             }
             break;
 
         // PGM
         case 1 :
 
-            bPara = FALSE;
+            bPara = sal_False;
             nCount = 0;
             nGrey = 0;
 
-            while ( bFinished == FALSE )
+            while ( bFinished == sal_False )
             {
                 if ( nCount )
                 {
                     nCount--;
                     if ( nGrey <= mnMaxVal )
                         nGrey = 255 * nGrey / mnMaxVal;
-                        mpAcc->SetPixel( nHeight, nWidth++, (BYTE)nGrey );
+                        mpAcc->SetPixel( nHeight, nWidth++, (sal_uInt8)nGrey );
                     nGrey = 0;
                     if ( nWidth == mnWidth )
                     {
                         nWidth = 0;
                         if ( ++nHeight == mnHeight )
-                            bFinished = TRUE;
-                        ImplCallback( (USHORT) ( ( 100 * nHeight ) / mnHeight ) );  // processing output in percent
+                            bFinished = sal_True;
+                        ImplCallback( (sal_uInt16) ( ( 100 * nHeight ) / mnHeight ) );  // processing output in percent
                     }
                     continue;
                 }
 
                 if ( mrPBM.IsEof() || mrPBM.GetError() )
-                    return FALSE;
+                    return sal_False;
 
                 mrPBM >> nDat;
 
                 if ( nDat == '#' )
                 {
-                    mbRemark = TRUE;
+                    mbRemark = sal_True;
                     if ( bPara )
                     {
-                        bPara = FALSE;
+                        bPara = sal_False;
                         nCount++;
                     }
                     continue;
                 }
                 else if ( ( nDat == 0x0d ) || ( nDat == 0x0a ) )
                 {
-                    mbRemark = FALSE;
+                    mbRemark = sal_False;
                     if ( bPara )
                     {
-                        bPara = FALSE;
+                        bPara = sal_False;
                         nCount++;
                     }
                     continue;
@@ -432,20 +432,20 @@ BOOL PBMReader::ImplReadBody()
                 {
                     if ( bPara )
                     {
-                        bPara = FALSE;
+                        bPara = sal_False;
                         nCount++;
                     }
                     continue;
                 }
                 if ( nDat >= '0' && nDat <= '9' )
                 {
-                    bPara = TRUE;
+                    bPara = sal_True;
                     nGrey *= 10;
                     nGrey += nDat-'0';
                     continue;
                 }
                 else
-                    return FALSE;
+                    return sal_False;
             }
             break;
 
@@ -454,51 +454,51 @@ BOOL PBMReader::ImplReadBody()
         // PPM
         case 2 :
 
-            bPara = FALSE;
+            bPara = sal_False;
             nCount = 0;
             nRGB[ 0 ] = nRGB[ 1 ] = nRGB[ 2 ] = 0;
 
-            while ( bFinished == FALSE )
+            while ( bFinished == sal_False )
             {
                 if ( nCount == 3 )
                 {
                     nCount = 0;
-                    mpAcc->SetPixel( nHeight, nWidth++, BitmapColor( static_cast< BYTE >( ( nRGB[ 0 ] * 255 ) / mnMaxVal ),
-                                                                     static_cast< BYTE >( ( nRGB[ 1 ] * 255 ) / mnMaxVal ),
-                                                                     static_cast< BYTE >( ( nRGB[ 2 ] * 255 ) / mnMaxVal ) ) );
+                    mpAcc->SetPixel( nHeight, nWidth++, BitmapColor( static_cast< sal_uInt8 >( ( nRGB[ 0 ] * 255 ) / mnMaxVal ),
+                                                                     static_cast< sal_uInt8 >( ( nRGB[ 1 ] * 255 ) / mnMaxVal ),
+                                                                     static_cast< sal_uInt8 >( ( nRGB[ 2 ] * 255 ) / mnMaxVal ) ) );
                     nCount = 0;
                     nRGB[ 0 ] = nRGB[ 1 ] = nRGB[ 2 ] = 0;
                     if ( nWidth == mnWidth )
                     {
                         nWidth = 0;
                         if ( ++nHeight == mnHeight )
-                            bFinished = TRUE;
-                        ImplCallback( (USHORT) ( ( 100 * nHeight ) / mnHeight ) );  // processing output in percent
+                            bFinished = sal_True;
+                        ImplCallback( (sal_uInt16) ( ( 100 * nHeight ) / mnHeight ) );  // processing output in percent
                     }
                     continue;
                 }
 
                 if ( mrPBM.IsEof() || mrPBM.GetError() )
-                    return FALSE;
+                    return sal_False;
 
                 mrPBM >> nDat;
 
                 if ( nDat == '#' )
                 {
-                    mbRemark = TRUE;
+                    mbRemark = sal_True;
                     if ( bPara )
                     {
-                        bPara = FALSE;
+                        bPara = sal_False;
                         nCount++;
                     }
                     continue;
                 }
                 else if ( ( nDat == 0x0d ) || ( nDat == 0x0a ) )
                 {
-                    mbRemark = FALSE;
+                    mbRemark = sal_False;
                     if ( bPara )
                     {
-                        bPara = FALSE;
+                        bPara = sal_False;
                         nCount++;
                     }
                     continue;
@@ -508,20 +508,20 @@ BOOL PBMReader::ImplReadBody()
                 {
                     if ( bPara )
                     {
-                        bPara = FALSE;
+                        bPara = sal_False;
                         nCount++;
                     }
                     continue;
                 }
                 if ( nDat >= '0' && nDat <= '9' )
                 {
-                    bPara = TRUE;
+                    bPara = sal_True;
                     nRGB[ nCount ] *= 10;
                     nRGB[ nCount ] += nDat-'0';
                     continue;
                 }
                 else
-                    return FALSE;
+                    return sal_False;
             }
             break;
     }
@@ -530,36 +530,11 @@ BOOL PBMReader::ImplReadBody()
 
 //================== GraphicImport - die exportierte Funktion ================
 
-extern "C" BOOL __LOADONCALLAPI GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, BOOL )
+extern "C" sal_Bool __LOADONCALLAPI GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, sal_Bool )
 {
     PBMReader aPBMReader(rStream);
 
     return aPBMReader.ReadPBM(rGraphic );
 }
-
-//================== ein bischen Muell fuer Windows ==========================
-
-#ifdef WIN
-
-static HINSTANCE hDLLInst = 0;      // HANDLE der DLL
-
-extern "C" int CALLBACK LibMain( HINSTANCE hDLL, WORD, WORD nHeap, LPSTR )
-{
-#ifndef WNT
-    if ( nHeap )
-        UnlockData( 0 );
-#endif
-
-    hDLLInst = hDLL;
-
-    return TRUE;
-}
-
-extern "C" int CALLBACK WEP( int )
-{
-    return 1;
-}
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

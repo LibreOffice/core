@@ -111,9 +111,42 @@ uno::Sequence< beans::PropertyValue > PropertyMap::GetPropertyValues()
     return m_aValues;
 }
 
+void lcl_AnyToTag(XMLTag::Pointer_t pTag, const uno::Any & rAny)
+{
+    try {
+        sal_Int32 aInt = 0;
+        rAny >>= aInt;
+        pTag->addAttr("value", aInt);
+
+        sal_uInt32 auInt = 0;
+        rAny >>= auInt;
+        pTag->addAttr("unsignedValue", auInt);
+
+        float aFloat = 0.0f;
+        rAny >>= aFloat;
+        pTag->addAttr("floatValue", aFloat);
+
+        ::rtl::OUString aStr;
+        rAny >>= aStr;
+        pTag->addAttr("stringValue", aStr);
+    }
+    catch (...) {
+    }
+}
 
 void PropertyMap::Insert( PropertyIds eId, bool bIsTextProperty, const uno::Any& rAny, bool bOverwrite )
 {
+#ifdef DEBUG_DMAPPER_PROPERTY_MAP
+    const ::rtl::OUString& rInsert = PropertyNameSupplier::
+        GetPropertyNameSupplier().GetName(eId);
+
+    XMLTag::Pointer_t pTag(new XMLTag("propertyMap.insert"));
+    pTag->addAttr("name", rInsert);
+    lcl_AnyToTag(pTag, rAny);
+
+    dmapper_logger->addTag(pTag);
+#endif
+
     PropertyMap::iterator aElement = find(PropertyDefinition( eId, bIsTextProperty ) );
     if( aElement != end())
     {
@@ -148,15 +181,15 @@ void PropertyMap::dumpXml( const TagLogger::Pointer_t pLogger ) const
             default:
             {
                 try {
-                    sal_Int32 aInt;
+                    sal_Int32 aInt = 0;
                     aMapIter->second >>= aInt;
                     pLogger->attribute("value", aInt);
 
-                    sal_uInt32 auInt;
+                    sal_uInt32 auInt = 0;
                     aMapIter->second >>= auInt;
                     pLogger->attribute("unsignedValue", auInt);
 
-                    float aFloat;
+                    float aFloat = 0.0;
                     aMapIter->second >>= aFloat;
                     pLogger->attribute("floatValue", aFloat);
 

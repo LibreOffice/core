@@ -66,17 +66,17 @@ class MSFILTER_DLLPUBLIC DffRecordHeader
 {
 
 public:
-    BYTE    nRecVer; // may be DFF_PSFLAG_CONTAINER
-    UINT16  nRecInstance;
-    UINT16  nImpVerInst;
-    UINT16  nRecType;
-    UINT32  nRecLen;
-    ULONG   nFilePos;
+    sal_uInt8    nRecVer; // may be DFF_PSFLAG_CONTAINER
+    sal_uInt16  nRecInstance;
+    sal_uInt16  nImpVerInst;
+    sal_uInt16  nRecType;
+    sal_uInt32  nRecLen;
+    sal_uLong   nFilePos;
 public:
     DffRecordHeader() : nRecVer(0), nRecInstance(0), nImpVerInst(0), nRecType(0), nRecLen(0), nFilePos(0) {}
     bool IsContainer() const { return nRecVer == DFF_PSFLAG_CONTAINER; }
-    ULONG    GetRecBegFilePos() const { return nFilePos; }
-    ULONG    GetRecEndFilePos() const { return nFilePos + DFF_COMMON_RECORD_HEADER_SIZE + nRecLen; }
+    sal_uLong    GetRecBegFilePos() const { return nFilePos; }
+    sal_uLong    GetRecEndFilePos() const { return nFilePos + DFF_COMMON_RECORD_HEADER_SIZE + nRecLen; }
     void SeekToEndOfRecord(SvStream& rIn) const { rIn.Seek(nFilePos + DFF_COMMON_RECORD_HEADER_SIZE + nRecLen ); }
     void SeekToContent(    SvStream& rIn) const { rIn.Seek(nFilePos + DFF_COMMON_RECORD_HEADER_SIZE ); }
     void SeekToBegOfRecord(SvStream& rIn) const { rIn.Seek( nFilePos ); }
@@ -87,10 +87,10 @@ public:
 
 struct DffPropFlags
 {
-    BYTE    bSet        : 1;
-    BYTE    bComplex    : 1;
-    BYTE    bBlip       : 1;
-    BYTE    bSoftAttr   : 1;
+    sal_uInt8   bSet        : 1;
+    sal_uInt8   bComplex    : 1;
+    sal_uInt8   bBlip       : 1;
+    sal_uInt8   bSoftAttr   : 1;
 };
 
 class SvxMSDffManager;
@@ -99,23 +99,23 @@ class MSFILTER_DLLPUBLIC DffPropSet : public Table
 {
     protected :
 
-        UINT32          mpContents[ 1024 ];
+        sal_uInt32          mpContents[ 1024 ];
         DffPropFlags    mpFlags[ 1024 ];
 
     public :
 
-        DffPropSet( BOOL bInitialize = FALSE ){ if ( bInitialize )
+        DffPropSet( sal_Bool bInitialize = sal_False ){ if ( bInitialize )
                                                 memset( mpFlags, 0, 0x400 * sizeof( DffPropFlags ) ); };
 
-        inline BOOL IsProperty( UINT32 nRecType ) const { return ( mpFlags[ nRecType & 0x3ff ].bSet ); };
-        BOOL        IsHardAttribute( UINT32 nId ) const;
-        UINT32      GetPropertyValue( UINT32 nId, UINT32 nDefault = 0 ) const;
+        inline sal_Bool IsProperty( sal_uInt32 nRecType ) const { return ( mpFlags[ nRecType & 0x3ff ].bSet ); };
+        sal_Bool        IsHardAttribute( sal_uInt32 nId ) const;
+        sal_uInt32      GetPropertyValue( sal_uInt32 nId, sal_uInt32 nDefault = 0 ) const;
         /** Returns a boolean property by its real identifier. */
-        bool        GetPropertyBool( UINT32 nId, bool bDefault = false ) const;
+        bool        GetPropertyBool( sal_uInt32 nId, bool bDefault = false ) const;
         /** Returns a string property. */
-        ::rtl::OUString GetPropertyString( UINT32 nId, SvStream& rStrm ) const;
-        void        SetPropertyValue( UINT32 nId, UINT32 nValue ) const;
-        BOOL        SeekToContent( UINT32 nRecType, SvStream& rSt ) const;
+        ::rtl::OUString GetPropertyString( sal_uInt32 nId, SvStream& rStrm ) const;
+        void        SetPropertyValue( sal_uInt32 nId, sal_uInt32 nValue ) const;
+        sal_Bool        SeekToContent( sal_uInt32 nRecType, SvStream& rSt ) const;
         void        Merge( DffPropSet& rMasterPropSet ) const;
         void        InitializePropSet() const;
         friend SvStream& operator>>( SvStream& rIn, DffPropSet& rPropSet );
@@ -138,19 +138,19 @@ class MSFILTER_DLLPUBLIC DffPropertyReader : public DffPropSet
 
 public:
 
-    INT32                   mnFix16Angle;
+    sal_Int32                   mnFix16Angle;
 
     DffPropertyReader( const SvxMSDffManager& rManager );
     ~DffPropertyReader();
-    INT32       Fix16ToAngle( INT32 nAngle ) const;
+    sal_Int32       Fix16ToAngle( sal_Int32 nAngle ) const;
 
 #ifdef DBG_CUSTOMSHAPE
-    void        ReadPropSet( SvStream& rIn, void* pClientData, UINT32 nShapeType = 0 ) const;
+    void        ReadPropSet( SvStream& rIn, void* pClientData, sal_uInt32 nShapeType = 0 ) const;
 #else
     void        ReadPropSet( SvStream& rIn, void* pClientData ) const;
 #endif
 
-    void        SetDefaultPropSet( SvStream& rIn, UINT32 nOffDgg ) const;
+    void        SetDefaultPropSet( SvStream& rIn, sal_uInt32 nOffDgg ) const;
     void        ApplyAttributes( SvStream& rIn, SfxItemSet& rSet ) const;
     void        ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, const DffObjData& rObjData ) const;
 };
@@ -237,8 +237,8 @@ struct MSFILTER_DLLPUBLIC SvxMSDffSolverContainer
 
 struct FIDCL
 {
-    UINT32  dgid;       // DG owning the SPIDs in this cluster
-    UINT32  cspidCur;   // number of SPIDs used so far
+    sal_uInt32  dgid;       // DG owning the SPIDs in this cluster
+    sal_uInt32  cspidCur;   // number of SPIDs used so far
 };
 
 //---------------------------------------------------------------------------
@@ -246,9 +246,9 @@ struct FIDCL
 //---------------------------------------------------------------------------
 struct MSDffTxId
 {
-    USHORT nTxBxS;
-    USHORT nSequence;
-    MSDffTxId(USHORT nTxBxS_, USHORT nSequence_ )
+    sal_uInt16 nTxBxS;
+    sal_uInt16 nSequence;
+    MSDffTxId(sal_uInt16 nTxBxS_, sal_uInt16 nSequence_ )
             : nTxBxS(             nTxBxS_       ),
               nSequence(          nSequence_    ){}
     MSDffTxId(const MSDffTxId& rCopy)
@@ -263,15 +263,15 @@ struct MSFILTER_DLLPUBLIC SvxMSDffImportRec
     SdrObject*  pObj;
     Polygon*    pWrapPolygon;
     char*       pClientAnchorBuffer;
-    UINT32      nClientAnchorLen;
+    sal_uInt32      nClientAnchorLen;
     char*       pClientDataBuffer;
-    UINT32      nClientDataLen;
-    UINT32      nXAlign;
-    UINT32      *pXRelTo;
-    UINT32      nYAlign;
-    UINT32      *pYRelTo;
-    UINT32      nLayoutInTableCell;
-    UINT32      nFlags;
+    sal_uInt32      nClientDataLen;
+    sal_uInt32      nXAlign;
+    sal_uInt32      *pXRelTo;
+    sal_uInt32      nYAlign;
+    sal_uInt32      *pYRelTo;
+    sal_uInt32      nLayoutInTableCell;
+    sal_uInt32      nFlags;
     long        nTextRotationAngle;
     long        nDxTextLeft;    // Abstand der Textbox vom umgebenden Shape
     long        nDyTextTop;
@@ -286,26 +286,26 @@ struct MSFILTER_DLLPUBLIC SvxMSDffImportRec
     long        nCropFromLeft;
     long        nCropFromRight;
     MSDffTxId   aTextId;        // Kennungen fuer Textboxen
-    ULONG       nNextShapeId;   // fuer verlinkte Textboxen
-    ULONG       nShapeId;
+    sal_uLong       nNextShapeId;   // fuer verlinkte Textboxen
+    sal_uLong       nShapeId;
     MSO_SPT     eShapeType;
     MSO_LineStyle eLineStyle;   // Umrandungs-Arten
     MSO_LineDashing eLineDashing;
-    BOOL        bDrawHell       :1;
-    BOOL        bHidden         :1;
-    BOOL        bReplaceByFly   :1;
-    BOOL        bLastBoxInChain :1;
-    BOOL        bHasUDefProp    :1;
-    BOOL        bVFlip :1;
-    BOOL        bHFlip :1;
-    BOOL        bAutoWidth      :1;
+    sal_Bool        bDrawHell       :1;
+    sal_Bool        bHidden         :1;
+    sal_Bool        bReplaceByFly   :1;
+    sal_Bool        bLastBoxInChain :1;
+    sal_Bool        bHasUDefProp    :1;
+    sal_Bool        bVFlip :1;
+    sal_Bool        bHFlip :1;
+    sal_Bool        bAutoWidth      :1;
 
     SvxMSDffImportRec();
     SvxMSDffImportRec(const SvxMSDffImportRec& rCopy);
     ~SvxMSDffImportRec();
-    BOOL operator==( const SvxMSDffImportRec& rEntry ) const
+    sal_Bool operator==( const SvxMSDffImportRec& rEntry ) const
     {   return nShapeId == rEntry.nShapeId; }
-    BOOL operator<( const SvxMSDffImportRec& rEntry ) const
+    sal_Bool operator<( const SvxMSDffImportRec& rEntry ) const
     {   return nShapeId < rEntry.nShapeId;  }
 private:
     SvxMSDffImportRec &operator=(const SvxMSDffImportRec&);
@@ -330,13 +330,13 @@ struct SvxMSDffImportData
     SvxMSDffImportData(const Rectangle& rParentRect)
         :aParentRect( rParentRect )
         {}
-    void SetNewRect(INT32 l, INT32 o,
-                    INT32 r, INT32 u ){ aNewRect = Rectangle(l,o, r,u); }
-    BOOL HasParRect() const { return aParentRect.IsEmpty(); }
-    BOOL HasNewRect() const { return aNewRect.IsEmpty()   ; }
-    BOOL HasRecords() const { return 0 != aRecords.Count(); }
-    USHORT              GetRecCount() const { return aRecords.Count();  }
-    SvxMSDffImportRec*  GetRecord(USHORT iRecord) const
+    void SetNewRect(sal_Int32 l, sal_Int32 o,
+                    sal_Int32 r, sal_Int32 u ){ aNewRect = Rectangle(l,o, r,u); }
+    sal_Bool HasParRect() const { return aParentRect.IsEmpty(); }
+    sal_Bool HasNewRect() const { return aNewRect.IsEmpty()   ; }
+    sal_Bool HasRecords() const { return 0 != aRecords.Count(); }
+    sal_uInt16              GetRecCount() const { return aRecords.Count();  }
+    SvxMSDffImportRec*  GetRecord(sal_uInt16 iRecord) const
                             {  return aRecords.GetObject( iRecord ); }
 };
 
@@ -347,16 +347,16 @@ struct DffObjData
     Rectangle   aBoundRect;
     Rectangle   aChildAnchor;
 
-    UINT32      nShapeId;
-    UINT32      nSpFlags;
+    sal_uInt32      nShapeId;
+    sal_uInt32      nSpFlags;
     MSO_SPT     eShapeType;
 
-    BOOL bShapeType     : 1;
-    BOOL bClientAnchor  : 1;
-    BOOL bClientData    : 1;
-    BOOL bChildAnchor   : 1;
-    BOOL bOpt           : 1;
-    BOOL bIsAutoText    : 1;
+    sal_Bool bShapeType     : 1;
+    sal_Bool bClientAnchor  : 1;
+    sal_Bool bClientData    : 1;
+    sal_Bool bChildAnchor   : 1;
+    sal_Bool bOpt           : 1;
+    sal_Bool bIsAutoText    : 1;
 
     int nCalledByGroup;
 
@@ -368,12 +368,12 @@ struct DffObjData
         nShapeId( 0 ),
         nSpFlags( 0 ),
         eShapeType( mso_sptNil ),
-        bShapeType( FALSE ),
-        bClientAnchor( FALSE ),
-        bClientData( FALSE ),
-        bChildAnchor( FALSE ),
-        bOpt( FALSE ),
-        bIsAutoText( FALSE ),
+        bShapeType( sal_False ),
+        bClientAnchor( sal_False ),
+        bClientData( sal_False ),
+        bChildAnchor( sal_False ),
+        bOpt( sal_False ),
+        bIsAutoText( sal_False ),
         nCalledByGroup( nClByGroup ){}
 };
 
@@ -381,8 +381,8 @@ struct DffObjData
 
 struct DffRecordList
 {
-        UINT32              nCount;
-        UINT32              nCurrent;
+        sal_uInt32              nCount;
+        sal_uInt32              nCurrent;
         DffRecordList*      pPrev;
         DffRecordList*      pNext;
 
@@ -406,10 +406,10 @@ class MSFILTER_DLLPUBLIC DffRecordManager : public DffRecordList
         DffRecordList*      pCList;
 
         void                Clear();
-        void                Consume( SvStream& rIn, BOOL bAppend = FALSE, UINT32 nStOfs = 0 );
+        void                Consume( SvStream& rIn, sal_Bool bAppend = sal_False, sal_uInt32 nStOfs = 0 );
 
-        BOOL                SeekToContent( SvStream& rIn, UINT16 nRecType, DffSeekToContentMode eMode = SEEK_FROM_BEGINNING );
-        DffRecordHeader*    GetRecordHeader( UINT16 nRecType,  DffSeekToContentMode eMode = SEEK_FROM_BEGINNING );
+        sal_Bool                SeekToContent( SvStream& rIn, sal_uInt16 nRecType, DffSeekToContentMode eMode = SEEK_FROM_BEGINNING );
+        DffRecordHeader*    GetRecordHeader( sal_uInt16 nRecType,  DffSeekToContentMode eMode = SEEK_FROM_BEGINNING );
 
                             DffRecordManager();
                             DffRecordManager( SvStream& rIn );
@@ -439,10 +439,10 @@ class MSFILTER_DLLPUBLIC SvxMSDffManager : public DffPropertyReader
     SvxMSDffBLIPInfos*      pBLIPInfos;
     SvxMSDffShapeInfos*     pShapeInfos;
     SvxMSDffShapeOrders*    pShapeOrders;
-    ULONG                   nDefaultFontHeight;
+    sal_uLong                   nDefaultFontHeight;
     long                    nOffsDgg;
-    USHORT                  nBLIPCount;
-    USHORT                  nShapeCount;
+    sal_uInt16                  nBLIPCount;
+    sal_uInt16                  nShapeCount;
     sal_uInt32              nGroupShapeFlags;
 
     void CheckTxBxStoryChain();
@@ -451,9 +451,9 @@ class MSFILTER_DLLPUBLIC SvxMSDffManager : public DffPropertyReader
 protected :
 
     String                  maBaseURL;
-    UINT32                  mnCurMaxShapeId;    // we need this information to
-    UINT32                  mnDrawingsSaved;    // access the right drawing
-    UINT32                  mnIdClusters;       // while only knowing the shapeid
+    sal_uInt32                  mnCurMaxShapeId;    // we need this information to
+    sal_uInt32                  mnDrawingsSaved;    // access the right drawing
+    sal_uInt32                  mnIdClusters;       // while only knowing the shapeid
     FIDCL*                  mpFidcls;
     Table                   maDgOffsetTable;    // array of fileoffsets
 
@@ -473,8 +473,8 @@ protected :
     long            nPntMul;
     long            nPntDiv;
     bool        bNeedMap;
-    UINT32          nSvxMSDffSettings;
-    UINT32          nSvxMSDffOLEConvFlags;
+    sal_uInt32          nSvxMSDffSettings;
+    sal_uInt32          nSvxMSDffOLEConvFlags;
 
     /** stores a reference to an imported SdrObject with its shape id if
         it has one
@@ -483,25 +483,25 @@ protected :
 
     void GetCtrlData( long nOffsDgg );
     void GetDrawingGroupContainerData( SvStream& rSt,
-                                       ULONG nLenDgg );
+                                       sal_uLong nLenDgg );
     // #156763#
     // Add internal drawing container id as parameter to the sub methods of
     // reading the control information about the drawing objects.
     // The drawing container id is used to distinguish the text ids of drawing
     // objects in different drawing containers.
     void GetDrawingContainerData( SvStream& rSt,
-                                  ULONG nLenDg,
+                                  sal_uLong nLenDg,
                                   const unsigned long nDrawingContainerId );
-    BOOL GetShapeGroupContainerData( SvStream& rSt,
-                                     ULONG nLenShapeGroupCont,
-                                     BOOL bPatriarch,
+    sal_Bool GetShapeGroupContainerData( SvStream& rSt,
+                                     sal_uLong nLenShapeGroupCont,
+                                     sal_Bool bPatriarch,
                                      const unsigned long nDrawingContainerId );
-    BOOL GetShapeContainerData( SvStream& rSt,
-                                ULONG nLenShapeCont,
-                                ULONG nPosGroup,
+    sal_Bool GetShapeContainerData( SvStream& rSt,
+                                sal_uLong nLenShapeCont,
+                                sal_uLong nPosGroup,
                                 const unsigned long nDrawingContainerId );
 
-    bool ReadGraphic( SvStream& rSt, ULONG nIndex, Graphic& rGraphic ) const;
+    bool ReadGraphic( SvStream& rSt, sal_uLong nIndex, Graphic& rGraphic ) const;
     SdrObject* ImportFontWork( SvStream&, SfxItemSet&, Rectangle& rBoundRect ) const;
     SdrObject* ImportGraphic( SvStream&, SfxItemSet&, const DffObjData& ) const;
     // #i32596# - pass <nCalledByGroup> to method
@@ -517,7 +517,7 @@ protected :
     static const GDIMetaFile* lcl_GetMetaFileFromGrf_Impl( const Graphic& rGrf, GDIMetaFile& rMtf );
 #ifndef SVX_LIGHT
     static com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > CheckForConvertToSOObj(
-                UINT32 nConvertFlags, SotStorage& rSrcStg,
+                sal_uInt32 nConvertFlags, SotStorage& rSrcStg,
                 const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xDestStg,
                 const Graphic& rGrf,
                 const Rectangle& rVisArea );
@@ -526,12 +526,12 @@ protected :
 /*
         folgende Methoden sind zum Excel-Import zu ueberschreiben:
 */
-    virtual BOOL ProcessClientAnchor(SvStream& rStData, ULONG nDatLen, char*& rpBuff, UINT32& rBuffLen ) const;
+    virtual sal_Bool ProcessClientAnchor(SvStream& rStData, sal_uLong nDatLen, char*& rpBuff, sal_uInt32& rBuffLen ) const;
     virtual void ProcessClientAnchor2( SvStream& rStData, DffRecordHeader& rHd, void* pData, DffObjData& );
-    virtual BOOL ProcessClientData(  SvStream& rStData, ULONG nDatLen, char*& rpBuff, UINT32& rBuffLen ) const;
+    virtual sal_Bool ProcessClientData(  SvStream& rStData, sal_uLong nDatLen, char*& rpBuff, sal_uInt32& rBuffLen ) const;
     virtual SdrObject* ProcessObj( SvStream& rSt, DffObjData& rData, void* pData, Rectangle& rTextRect, SdrObject* pObj = NULL);
-    virtual ULONG Calc_nBLIPPos( ULONG nOrgVal, ULONG nStreamPos ) const;
-    virtual bool GetColorFromPalette(USHORT nNum, Color& rColor) const;
+    virtual sal_uLong Calc_nBLIPPos( sal_uLong nOrgVal, sal_uLong nStreamPos ) const;
+    virtual bool GetColorFromPalette(sal_uInt16 nNum, Color& rColor) const;
 
     bool ReadDffString(SvStream& rSt, String& rTxt) const;
     bool ReadObjText(SvStream& rSt, SdrObject* pObj) const;
@@ -544,7 +544,7 @@ protected :
         folgende Methode ist von allen zu ueberschreiben, die OLE-Objecte
         importieren moechten:
     */
-    virtual BOOL GetOLEStorageName( long nOLEId, String& rStorageName,
+    virtual sal_Bool GetOLEStorageName( long nOLEId, String& rStorageName,
                                     SotStorageRef& rSrcStorage,
                 com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xDestStg
                                     ) const;
@@ -553,9 +553,9 @@ protected :
         folgende Methode ist von allen zu ueberschreiben, die verhindern
         moechten, dass (abgerundete) Rechtecke mit umgebrochenem Text
         immer in SdrRectObj( OBJ_TEXT ) umgewandelt werden:
-        TRUE bedeutet umwandeln.
+        sal_True bedeutet umwandeln.
     */
-    virtual BOOL ShapeHasText(ULONG nShapeId, ULONG nFilePos) const;
+    virtual sal_Bool ShapeHasText(sal_uLong nShapeId, sal_uLong nFilePos) const;
 
 public:
 
@@ -572,18 +572,18 @@ public:
 
     Color MSO_TEXT_CLR_ToColor( sal_uInt32 nColorCode ) const;
     Color MSO_CLR_ToColor( sal_uInt32 nColorCode, sal_uInt16 nContextProperty = DFF_Prop_lineColor ) const;
-    virtual BOOL SeekToShape( SvStream& rSt, void* pClientData, UINT32 nId ) const;
-    bool SeekToRec( SvStream& rSt, USHORT nRecId, ULONG nMaxFilePos, DffRecordHeader* pRecHd = NULL, ULONG nSkipCount = 0 ) const;
-    bool SeekToRec2( USHORT nRecId1, USHORT nRecId2, ULONG nMaxFilePos, DffRecordHeader* pRecHd = NULL, ULONG nSkipCount = 0 ) const;
+    virtual sal_Bool SeekToShape( SvStream& rSt, void* pClientData, sal_uInt32 nId ) const;
+    bool SeekToRec( SvStream& rSt, sal_uInt16 nRecId, sal_uLong nMaxFilePos, DffRecordHeader* pRecHd = NULL, sal_uLong nSkipCount = 0 ) const;
+    bool SeekToRec2( sal_uInt16 nRecId1, sal_uInt16 nRecId2, sal_uLong nMaxFilePos, DffRecordHeader* pRecHd = NULL, sal_uLong nSkipCount = 0 ) const;
 
-    static void MSDFFReadZString( SvStream& rIn, String& rStr, ULONG nMaxLen, bool bUniCode = FALSE );
+    static void MSDFFReadZString( SvStream& rIn, String& rStr, sal_uLong nMaxLen, bool bUniCode = FALSE );
 
-    static BOOL ReadCommonRecordHeader( DffRecordHeader& rRec, SvStream& rIn );
-    static BOOL ReadCommonRecordHeader( SvStream& rSt,
-                                        BYTE&     rVer,
-                                        USHORT&   rInst,
-                                        USHORT&   rFbt,
-                                        UINT32&    rLength );
+    static sal_Bool ReadCommonRecordHeader( DffRecordHeader& rRec, SvStream& rIn );
+    static sal_Bool ReadCommonRecordHeader( SvStream& rSt,
+                                        sal_uInt8&     rVer,
+                                        sal_uInt16&   rInst,
+                                        sal_uInt16&   rFbt,
+                                        sal_uInt32&    rLength );
 /*
     Konstruktor
     ===========
@@ -610,7 +610,7 @@ public:
                      SdrModel* pSdrModel_           =  0,
                      long      nApplicationScale    =  0,
                      ColorData mnDefaultColor_      =  COL_DEFAULT,
-                     ULONG     nDefaultFontHeight_  = 24,
+                     sal_uLong     nDefaultFontHeight_  = 24,
                      SvStream* pStData2_            =  0,
                      MSFilterTracer* pTracer        = NULL );
 
@@ -622,11 +622,11 @@ public:
 
     virtual ~SvxMSDffManager();
 
-    UINT32  GetSvxMSDffSettings() const { return nSvxMSDffSettings; };
-    void    SetSvxMSDffSettings( UINT32 nSettings ) { nSvxMSDffSettings = nSettings; };
+    sal_uInt32  GetSvxMSDffSettings() const { return nSvxMSDffSettings; };
+    void    SetSvxMSDffSettings( sal_uInt32 nSettings ) { nSvxMSDffSettings = nSettings; };
 
-    static BOOL     MakeContentStream( SotStorage * pStor, const GDIMetaFile & );
-    static BOOL     ConvertToOle2( SvStream& rStm, UINT32 nLen, const GDIMetaFile*,
+    static sal_Bool     MakeContentStream( SotStorage * pStor, const GDIMetaFile & );
+    static sal_Bool     ConvertToOle2( SvStream& rStm, sal_uInt32 nLen, const GDIMetaFile*,
                                 const SotStorageRef & rDest );
 
     void SetModel(SdrModel* pModel, long nApplicationScale);
@@ -638,8 +638,8 @@ public:
     void Scale(Polygon& rPoly) const;
     void Scale(PolyPolygon& rPoly) const;
     void ScaleEmu(sal_Int32& rVal) const;
-    UINT32 ScalePt( UINT32 nPt ) const;
-    INT32 ScalePoint( INT32 nVal ) const;
+    sal_uInt32 ScalePt( sal_uInt32 nPt ) const;
+    sal_Int32 ScalePoint( sal_Int32 nVal ) const;
 
 /*
     GetBLIP()           - Anforderung eines bestimmten BLIP
@@ -650,9 +650,9 @@ public:
     Output: rData       - bereits fertig konvertierte Daten
                           ( direkt als Grafik in unsere Dokumente einzusetzen )
 
-    Rueckgabewert: TRUE, im Erfolgsfalls, FALSE bei Fehler
+    Rueckgabewert: sal_True, im Erfolgsfalls, sal_False bei Fehler
 */
-    BOOL GetBLIP( ULONG nIdx, Graphic& rData, Rectangle* pVisArea = NULL ) const;
+    sal_Bool GetBLIP( sal_uLong nIdx, Graphic& rData, Rectangle* pVisArea = NULL ) const;
 
 /*
     GetBLIPDirect()     -Einlesen eines BLIP aus schon positioniertem Stream
@@ -663,11 +663,11 @@ public:
     Output: rData       -bereits fertig konvertierte Daten
                           ( direkt als Grafik in unsere Dokumente einzusetzen )
 
-    Rueckgabewert: TRUE, im Erfolgsfalls, FALSE bei Fehler
+    Rueckgabewert: sal_True, im Erfolgsfalls, sal_False bei Fehler
 */
-    BOOL GetBLIPDirect(SvStream& rBLIPStream, Graphic& rData, Rectangle* pVisArea = NULL ) const;
+    sal_Bool GetBLIPDirect(SvStream& rBLIPStream, Graphic& rData, Rectangle* pVisArea = NULL ) const;
 
-    BOOL GetShape(ULONG nId,
+    sal_Bool GetShape(sal_uLong nId,
                   SdrObject*& rpData, SvxMSDffImportData& rData);
 
 /*
@@ -682,7 +682,7 @@ public:
                                 1.. - Anzahl der BLIPs
                         USHRT_MAX   - Fehler: kein korrektes Drawing File Format
 */
-    USHORT GetBLIPCount() const{ return nBLIPCount; }
+    sal_uInt16 GetBLIPCount() const{ return nBLIPCount; }
 
 /*
     ZCodecDecompressed()  - Dekomprimierung eines komp. WMF oder Enhanced WMF
@@ -692,9 +692,9 @@ public:
             rOut    -bereits korrekt positionierter Ausgabe-Stream,
 
         bLookForEnd -Flag, ob das komp. Bild bis zum Stream-Ende reicht.
-                     Falls TRUE, wird jeweils geprueft, ob das gelesene noch
+                     Falls sal_True, wird jeweils geprueft, ob das gelesene noch
                                                         zum Bild gehoert.
-                     Falls FALSE, wird bis zum Stream-Ende gelesen.
+                     Falls sal_False, wird bis zum Stream-Ende gelesen.
 
     Output: rIn     -Der Stream steht hinter dem Ende des komp. Bildes.
                      (es kann aber noch eine Ende-Kennung und CRC-Sum folgen)
@@ -702,12 +702,12 @@ public:
                      Der Stream wird auf den Anfang des Bildes positioniert.
                      (also dorthin, wo der Stream vor der Verarbeitung stand)
 
-    Rueckgabewert:  TRUE, im Erfolgsfall
-                    FALSE bei Fehler oder Null Bytes geschrieben
+    Rueckgabewert:  sal_True, im Erfolgsfall
+                    sal_False bei Fehler oder Null Bytes geschrieben
 */
-//  static BOOL ZCodecDecompressed( SvStream& rIn,
+//  static sal_Bool ZCodecDecompressed( SvStream& rIn,
 //                                  SvStream& rOut,
-//                                  BOOL bLookForEnd );
+//                                  sal_Bool bLookForEnd );
 //
     SdrObject* ImportObj(SvStream& rSt, void* pData,
         Rectangle& rClientRect, const Rectangle& rGlobalChildRect, int nCalledByGroup = 0, sal_Int32* pShapeId = NULL);
@@ -733,20 +733,20 @@ public:
             return pShapeOrders;
         }
 
-    void StoreShapeOrder(ULONG          nId,
-                         ULONG          nTxBx,
+    void StoreShapeOrder(sal_uLong          nId,
+                         sal_uLong          nTxBx,
                          SdrObject*     pObject,
                          SwFlyFrmFmt*   pFly = 0,
                          short          nHdFtSection = 0) const;
 
     void ExchangeInShapeOrder(SdrObject* pOldObject,
-                              ULONG nTxBx,
+                              sal_uLong nTxBx,
                               SwFlyFrmFmt* pFly,
                               SdrObject*   pObject) const;
 
     void RemoveFromShapeOrder( SdrObject* pObject ) const;
 
-    UINT32  GetConvertFlags() const { return nSvxMSDffOLEConvFlags; }
+    sal_uInt32  GetConvertFlags() const { return nSvxMSDffOLEConvFlags; }
 
     static SdrOle2Obj* CreateSdrOLEFromStorage( const String& rStorageName,
                                                 SotStorageRef& rSrcStorage,
@@ -756,7 +756,7 @@ public:
                                                 const Rectangle& rVisArea,
                                                 SvStream* pDataStrrm,
                                                 ErrCode& rError,
-                                                UINT32 nConvertFlags,
+                                                sal_uInt32 nConvertFlags,
                                                 sal_Int64 nAspect );
 
     /* the method SolveSolver will create connections between shapes, it should be called after a page is imported.
@@ -777,33 +777,33 @@ public:
 
 struct SvxMSDffBLIPInfo
 {
-    USHORT nBLIPType;   // Art des BLIP: z.B. 6 fuer PNG
-    ULONG  nFilePos;    // Offset des BLIP im Daten-Stream
-    ULONG  nBLIPSize;   // Anzahl Bytes, die der BLIP im Stream einnimmt
-    SvxMSDffBLIPInfo(USHORT nBType, ULONG nFPos, ULONG nBSize):
+    sal_uInt16 nBLIPType;   // Art des BLIP: z.B. 6 fuer PNG
+    sal_uLong  nFilePos;    // Offset des BLIP im Daten-Stream
+    sal_uLong  nBLIPSize;   // Anzahl Bytes, die der BLIP im Stream einnimmt
+    SvxMSDffBLIPInfo(sal_uInt16 nBType, sal_uLong nFPos, sal_uLong nBSize):
         nBLIPType( nBType ), nFilePos( nFPos ), nBLIPSize( nBSize ){}
 };
 
 struct SvxMSDffShapeInfo
 {
     sal_uInt32 nShapeId;     // Shape Id, verwendet im PLCF SPA und im mso_fbtSp (FSP)
-    ULONG nFilePos;  // Offset des Shape im Kontroll-Stream fuer eventuelle
+    sal_uLong nFilePos;  // Offset des Shape im Kontroll-Stream fuer eventuelle
                      // erneute Zugriffe auf dieses Shape
     sal_uInt32 nTxBxComp;
 
-    BOOL bReplaceByFly  :1; // Shape darf im Writer durch Rahmen ersetzt werden.
-    BOOL bSortByShapeId :1;
-    BOOL bLastBoxInChain:1;
+    sal_Bool bReplaceByFly  :1; // Shape darf im Writer durch Rahmen ersetzt werden.
+    sal_Bool bSortByShapeId :1;
+    sal_Bool bLastBoxInChain:1;
 
-    SvxMSDffShapeInfo(ULONG nFPos, sal_uInt32 nId=0, // ULONG nBIdx=0,
-                      USHORT nSeqId=0, USHORT nBoxId=0):
+    SvxMSDffShapeInfo(sal_uLong nFPos, sal_uInt32 nId=0, // sal_uLong nBIdx=0,
+                      sal_uInt16 nSeqId=0, sal_uInt16 nBoxId=0):
         nShapeId( nId ),
         nFilePos( nFPos ),
         nTxBxComp( (nSeqId << 16) + nBoxId )
         {
-            bReplaceByFly   = FALSE;
-            bSortByShapeId  = FALSE;
-            bLastBoxInChain = TRUE;
+            bReplaceByFly   = sal_False;
+            bSortByShapeId  = sal_False;
+            bLastBoxInChain = sal_True;
         }
     SvxMSDffShapeInfo(SvxMSDffShapeInfo& rInfo):
         nShapeId( rInfo.nShapeId ),
@@ -814,12 +814,12 @@ struct SvxMSDffShapeInfo
             bSortByShapeId  = rInfo.bSortByShapeId;
             bLastBoxInChain = rInfo.bLastBoxInChain;
         }
-    BOOL operator==( const SvxMSDffShapeInfo& rEntry ) const
+    sal_Bool operator==( const SvxMSDffShapeInfo& rEntry ) const
     {
         return bSortByShapeId ? (nShapeId  == rEntry.nShapeId)
                               : (nTxBxComp == rEntry.nTxBxComp && this == &rEntry);
     }
-    BOOL operator<( const SvxMSDffShapeInfo& rEntry ) const
+    sal_Bool operator<( const SvxMSDffShapeInfo& rEntry ) const
     {
         return bSortByShapeId ? (nShapeId  < rEntry.nShapeId)
                               : (nTxBxComp < rEntry.nTxBxComp);
@@ -828,9 +828,9 @@ struct SvxMSDffShapeInfo
 
 struct SvxMSDffShapeOrder
 {
-    ULONG nShapeId;     // Shape Id, verwendet im PLCF SPA und im mso_fbtSp (FSP)
+    sal_uLong nShapeId;     // Shape Id, verwendet im PLCF SPA und im mso_fbtSp (FSP)
 
-    ULONG nTxBxComp;    // Ketten- und Boxnummer in der Text-Box-Story (bzw. Null)
+    sal_uLong nTxBxComp;    // Ketten- und Boxnummer in der Text-Box-Story (bzw. Null)
 
     SwFlyFrmFmt* pFly;  // Frame-Format eines statt des Sdr-Text-Objektes im
                         // Writer eingefuegten Rahmens: zur Verkettung benoetigt!
@@ -844,14 +844,14 @@ struct SvxMSDffShapeOrder
     //                  nur die Shape-Ids vermerkt,
     //                  Text-Box-Nummer und der Objekt-Pointer werden nur dann
     //                  gespeichert, wenn das Shape tatsaechlich importiert wird!
-    SvxMSDffShapeOrder( ULONG nId ):
+    SvxMSDffShapeOrder( sal_uLong nId ):
         nShapeId( nId ), nTxBxComp( 0 ), pFly( 0 ), nHdFtSection( 0 ), pObj( 0 ){}
 
-    BOOL operator==( const SvxMSDffShapeOrder& rEntry ) const
+    sal_Bool operator==( const SvxMSDffShapeOrder& rEntry ) const
     {
         return (nTxBxComp == rEntry.nTxBxComp);
     }
-    BOOL operator<( const SvxMSDffShapeOrder& rEntry ) const
+    sal_Bool operator<( const SvxMSDffShapeOrder& rEntry ) const
     {
         return (nTxBxComp < rEntry.nTxBxComp);
     }

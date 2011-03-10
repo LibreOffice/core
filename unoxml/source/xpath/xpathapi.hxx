@@ -70,7 +70,7 @@ namespace XPath
 
     private:
         nsmap_t m_nsmap;
-        const Reference < XMultiServiceFactory > m_aFactory;
+        const Reference< XMultiServiceFactory > m_aFactory;
         extensions_t m_extensions;
 
     public:

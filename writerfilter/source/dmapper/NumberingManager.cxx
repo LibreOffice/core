@@ -20,6 +20,8 @@
 #include <stdio.h>
 #endif
 
+#include "dmapperLoggers.hxx"
+
 using namespace com::sun::star;
 
 using ::rtl::OUString;
@@ -618,10 +620,12 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
 //-------------------------------------  NumberingManager implementation
 
 
-ListsManager::ListsManager( DomainMapper& rDMapper,
-        const uno::Reference< lang::XMultiServiceFactory > xFactory ) :
-    m_rDMapper( rDMapper ),
-    m_xFactory( xFactory )
+ListsManager::ListsManager(DomainMapper& rDMapper,
+                           const uno::Reference< lang::XMultiServiceFactory > xFactory) :
+LoggedProperties(dmapper_logger, "ListsManager"),
+LoggedTable(dmapper_logger, "ListsManager"),
+m_rDMapper( rDMapper ),
+m_xFactory( xFactory )
 {
 }
 
@@ -629,7 +633,7 @@ ListsManager::~ListsManager( )
 {
 }
 
-void ListsManager::attribute( Id nName, Value& rVal )
+void ListsManager::lcl_attribute( Id nName, Value& rVal )
 {
     OSL_ENSURE( m_pCurrentDefinition.get(), "current entry has to be set here");
     if(!m_pCurrentDefinition.get())
@@ -750,7 +754,7 @@ void ListsManager::attribute( Id nName, Value& rVal )
     }
 }
 
-void ListsManager::sprm( Sprm& rSprm )
+void ListsManager::lcl_sprm( Sprm& rSprm )
 {
     //fill the attributes of the style sheet
     sal_uInt32 nSprmId = rSprm.getId();
@@ -909,8 +913,8 @@ void ListsManager::sprm( Sprm& rSprm )
     }
 }
 
-void ListsManager::entry( int /* pos */,
-        writerfilter::Reference<Properties>::Pointer_t ref )
+void ListsManager::lcl_entry( int /* pos */,
+                          writerfilter::Reference<Properties>::Pointer_t ref )
 {
     if( m_rDMapper.IsOOXMLImport() )
     {

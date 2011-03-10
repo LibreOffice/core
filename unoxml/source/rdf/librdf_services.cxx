@@ -73,13 +73,6 @@ extern "C" void * SAL_CALL component_getFactory(
         implName, serviceManager, registryKey, entries);
 }
 
-extern "C" sal_Bool SAL_CALL component_writeInfo(
-    void * serviceManager, void * registryKey)
-{
-    return ::cppu::component_writeInfoHelper(serviceManager, registryKey,
-        entries);
-}
-
 } // extern "C"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

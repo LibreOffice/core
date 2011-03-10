@@ -34,9 +34,7 @@
 
 #include <osl/time.h>
 
-#include "tokens.hxx"
 #include "oox/helper/attributelist.hxx"
-#include "oox/core/namespaces.hxx"
 
 using namespace ::com::sun::star;
 
@@ -227,19 +225,19 @@ void OOXMLDocPropHandler::UpdateDocStatistic( const ::rtl::OUString& aChars )
 
     switch( m_nBlock )
     {
-        case XML_Characters|NMSP_EXTPR:
+        case EXTPR_TOKEN( Characters ):
             aName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharacterCount" ) );
             break;
 
-        case XML_Pages|NMSP_EXTPR:
+        case EXTPR_TOKEN( Pages ):
             aName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PageCount" ) );
             break;
 
-        case XML_Words|NMSP_EXTPR:
+        case EXTPR_TOKEN( Words ):
             aName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "WordCount" ) );
             break;
 
-        case XML_Paragraphs|NMSP_EXTPR:
+        case EXTPR_TOKEN( Paragraphs ):
             aName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ParagraphCount" ) );
             break;
 
@@ -300,9 +298,9 @@ void SAL_CALL OOXMLDocPropHandler::startFastElement( ::sal_Int32 nElement, const
 {
     if ( !m_nInBlock && !m_nState )
     {
-        if ( nElement == ( XML_coreProperties|NMSP_COREPR )
-          || nElement == ( XML_Properties|NMSP_EXTPR )
-          || nElement == ( XML_Properties|NMSP_CUSTPR ) )
+        if ( nElement == COREPR_TOKEN( coreProperties )
+          || nElement == EXTPR_TOKEN( Properties )
+          || nElement == CUSTPR_TOKEN( Properties ) )
         {
             m_nState = nElement;
         }
@@ -321,7 +319,7 @@ void SAL_CALL OOXMLDocPropHandler::startFastElement( ::sal_Int32 nElement, const
         if ( xAttribs.is() && xAttribs->hasAttribute( XML_name ) )
             m_aCustomPropertyName = xAttribs->getValue( XML_name );
     }
-    else if ( m_nState && m_nInBlock && m_nInBlock == 2 && ( nElement >> 16 ) == ( NMSP_VT >> 16 ) )
+    else if ( m_nState && m_nInBlock && m_nInBlock == 2 && getNamespace( nElement ) == NMSP_officeDocPropsVT )
     {
         m_nType = nElement;
     }
@@ -403,72 +401,72 @@ void SAL_CALL OOXMLDocPropHandler::characters( const ::rtl::OUString& aChars )
     {
         if ( (m_nInBlock == 2) || ((m_nInBlock == 3) && m_nType) )
         {
-            if ( m_nState == ( XML_coreProperties|NMSP_COREPR ) )
+            if ( m_nState == COREPR_TOKEN( coreProperties ) )
             {
                 switch( m_nBlock )
                 {
-                    case XML_category|NMSP_COREPR:
+                    case COREPR_TOKEN( category ):
                         m_aCustomPropertyName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "category" ) );
                         AddCustomProperty( uno::makeAny( aChars ) ); // the property has string type
                         break;
 
-                    case XML_contentStatus|NMSP_COREPR:
+                    case COREPR_TOKEN( contentStatus ):
                         m_aCustomPropertyName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "contentStatus" ) );
                         AddCustomProperty( uno::makeAny( aChars ) ); // the property has string type
                         break;
 
-                    case XML_contentType|NMSP_COREPR:
+                    case COREPR_TOKEN( contentType ):
                         m_aCustomPropertyName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "contentType" ) );
                         AddCustomProperty( uno::makeAny( aChars ) ); // the property has string type
                         break;
 
-                    case XML_identifier|NMSP_COREPR:
+                    case COREPR_TOKEN( identifier ):
                         m_aCustomPropertyName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "identifier" ) );
                         AddCustomProperty( uno::makeAny( aChars ) ); // the property has string type
                         break;
 
-                    case XML_version|NMSP_COREPR:
+                    case COREPR_TOKEN( version ):
                         m_aCustomPropertyName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "version" ) );
                         AddCustomProperty( uno::makeAny( aChars ) ); // the property has string type
                         break;
 
-                    case XML_created|NMSP_DCTERMS:
+                    case DCT_TOKEN( created ):
                         if ( aChars.getLength() >= 4 )
                             m_xDocProp->setCreationDate( GetDateTimeFromW3CDTF( aChars ) );
                         break;
 
-                    case XML_creator|NMSP_DC:
+                    case DC_TOKEN( creator ):
                         m_xDocProp->setAuthor( aChars );
                         break;
 
-                    case XML_description|NMSP_DC:
+                    case DC_TOKEN( description ):
                         m_xDocProp->setDescription( aChars );
                         break;
 
-                    case XML_keywords|NMSP_COREPR:
+                    case COREPR_TOKEN( keywords ):
                         m_xDocProp->setKeywords( GetKeywordsSet( aChars ) );
                         break;
 
-                    case XML_language|NMSP_DC:
+                    case DC_TOKEN( language ):
                         if ( aChars.getLength() >= 2 )
                             m_xDocProp->setLanguage( GetLanguage( aChars ) );
                         break;
 
-                    case XML_lastModifiedBy|NMSP_COREPR:
+                    case COREPR_TOKEN( lastModifiedBy ):
                         m_xDocProp->setModifiedBy( aChars );
                         break;
 
-                    case XML_lastPrinted|NMSP_COREPR:
+                    case COREPR_TOKEN( lastPrinted ):
                         if ( aChars.getLength() >= 4 )
                             m_xDocProp->setPrintDate( GetDateTimeFromW3CDTF( aChars ) );
                         break;
 
-                    case XML_modified|NMSP_DCTERMS:
+                    case DCT_TOKEN( modified ):
                         if ( aChars.getLength() >= 4 )
                             m_xDocProp->setModificationDate( GetDateTimeFromW3CDTF( aChars ) );
                         break;
 
-                    case XML_revision|NMSP_COREPR:
+                    case COREPR_TOKEN( revision ):
                         try
                         {
                             m_xDocProp->setEditingCycles(
@@ -480,11 +478,11 @@ void SAL_CALL OOXMLDocPropHandler::characters( const ::rtl::OUString& aChars )
                         }
                         break;
 
-                    case XML_subject|NMSP_DC:
+                    case DC_TOKEN( subject ):
                         m_xDocProp->setSubject( aChars );
                         break;
 
-                    case XML_title|NMSP_DC:
+                    case DC_TOKEN( title ):
                         m_xDocProp->setTitle( aChars );
                         break;
 
@@ -492,19 +490,19 @@ void SAL_CALL OOXMLDocPropHandler::characters( const ::rtl::OUString& aChars )
                         OSL_FAIL( "Unexpected core property!" );
                 }
             }
-            else if ( m_nState == ( XML_Properties|NMSP_EXTPR ) )
+            else if ( m_nState == EXTPR_TOKEN( Properties ) )
             {
                 switch( m_nBlock )
                 {
-                    case XML_Application|NMSP_EXTPR:
+                    case EXTPR_TOKEN( Application ):
                         m_xDocProp->setGenerator( aChars );
                         break;
 
-                    case XML_Template|NMSP_EXTPR:
+                    case EXTPR_TOKEN( Template ):
                         m_xDocProp->setTemplateName( aChars );
                         break;
 
-                    case XML_TotalTime|NMSP_EXTPR:
+                    case EXTPR_TOKEN( TotalTime ):
                         try
                         {
                             m_xDocProp->setEditingDuration( aChars.toInt32() );
@@ -515,89 +513,89 @@ void SAL_CALL OOXMLDocPropHandler::characters( const ::rtl::OUString& aChars )
                         }
                         break;
 
-                    case XML_Characters|NMSP_EXTPR:
-                    case XML_Pages|NMSP_EXTPR:
-                    case XML_Words|NMSP_EXTPR:
-                    case XML_Paragraphs|NMSP_EXTPR:
+                    case EXTPR_TOKEN( Characters ):
+                    case EXTPR_TOKEN( Pages ):
+                    case EXTPR_TOKEN( Words ):
+                    case EXTPR_TOKEN( Paragraphs ):
                         UpdateDocStatistic( aChars );
                         break;
 
-                    case XML_HyperlinksChanged|NMSP_EXTPR:
+                    case EXTPR_TOKEN( HyperlinksChanged ):
                         m_aCustomPropertyName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HyperlinksChanged" ) );
                         AddCustomProperty( uno::makeAny( aChars.toBoolean() ) ); // the property has boolean type
                         break;
 
-                    case XML_LinksUpToDate|NMSP_EXTPR:
+                    case EXTPR_TOKEN( LinksUpToDate ):
                         m_aCustomPropertyName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LinksUpToDate" ) );
                         AddCustomProperty( uno::makeAny( aChars.toBoolean() ) ); // the property has boolean type
                         break;
 
-                    case XML_ScaleCrop|NMSP_EXTPR:
+                    case EXTPR_TOKEN( ScaleCrop ):
                         m_aCustomPropertyName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ScaleCrop" ) );
                         AddCustomProperty( uno::makeAny( aChars.toBoolean() ) ); // the property has boolean type
                         break;
 
-                    case XML_SharedDoc|NMSP_EXTPR:
+                    case EXTPR_TOKEN( SharedDoc ):
                         m_aCustomPropertyName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ShareDoc" ) );
                         AddCustomProperty( uno::makeAny( aChars.toBoolean() ) ); // the property has boolean type
                         break;
 
-                    case XML_DocSecurity|NMSP_EXTPR:
+                    case EXTPR_TOKEN( DocSecurity ):
                         m_aCustomPropertyName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DocSecurity" ) );
                         AddCustomProperty( uno::makeAny( aChars.toInt32() ) ); // the property has sal_Int32 type
                         break;
 
-                    case XML_HiddenSlides|NMSP_EXTPR:
+                    case EXTPR_TOKEN( HiddenSlides ):
                         m_aCustomPropertyName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HiddenSlides" ) );
                         AddCustomProperty( uno::makeAny( aChars.toInt32() ) ); // the property has sal_Int32 type
                         break;
 
-                    case XML_MMClips|NMSP_EXTPR:
+                    case EXTPR_TOKEN( MMClips ):
                         m_aCustomPropertyName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MMClips" ) );
                         AddCustomProperty( uno::makeAny( aChars.toInt32() ) ); // the property has sal_Int32 type
                         break;
 
-                    case XML_Notes|NMSP_EXTPR:
+                    case EXTPR_TOKEN( Notes ):
                         m_aCustomPropertyName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Notes" ) );
                         AddCustomProperty( uno::makeAny( aChars.toInt32() ) ); // the property has sal_Int32 type
                         break;
 
-                    case XML_Slides|NMSP_EXTPR:
+                    case EXTPR_TOKEN( Slides ):
                         m_aCustomPropertyName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Slides" ) );
                         AddCustomProperty( uno::makeAny( aChars.toInt32() ) ); // the property has sal_Int32 type
                         break;
 
-                    case XML_AppVersion|NMSP_EXTPR:
+                    case EXTPR_TOKEN( AppVersion ):
                         m_aCustomPropertyName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AppVersion" ) );
                         AddCustomProperty( uno::makeAny( aChars ) ); // the property has string type
                         break;
 
-                    case XML_Company|NMSP_EXTPR:
+                    case EXTPR_TOKEN( Company ):
                         m_aCustomPropertyName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Company" ) );
                         AddCustomProperty( uno::makeAny( aChars ) ); // the property has string type
                         break;
 
-                    case XML_HyperlinkBase|NMSP_EXTPR:
+                    case EXTPR_TOKEN( HyperlinkBase ):
                         m_aCustomPropertyName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HyperlinkBase" ) );
                         AddCustomProperty( uno::makeAny( aChars ) ); // the property has string type
                         break;
 
-                    case XML_Manager|NMSP_EXTPR:
+                    case EXTPR_TOKEN( Manager ):
                         m_aCustomPropertyName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Manager" ) );
                         AddCustomProperty( uno::makeAny( aChars ) ); // the property has string type
                         break;
 
-                    case XML_PresentationFormat|NMSP_EXTPR:
+                    case EXTPR_TOKEN( PresentationFormat ):
                         m_aCustomPropertyName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PresentationFormat" ) );
                         AddCustomProperty( uno::makeAny( aChars ) ); // the property has string type
                         break;
 
-                    case XML_CharactersWithSpaces|NMSP_EXTPR:
-                    case XML_Lines|NMSP_EXTPR:
-                    case XML_DigSig|NMSP_EXTPR:
-                    case XML_HeadingPairs|NMSP_EXTPR:
-                    case XML_HLinks|NMSP_EXTPR:
-                    case XML_TitlesOfParts|NMSP_EXTPR:
+                    case EXTPR_TOKEN( CharactersWithSpaces ):
+                    case EXTPR_TOKEN( Lines ):
+                    case EXTPR_TOKEN( DigSig ):
+                    case EXTPR_TOKEN( HeadingPairs ):
+                    case EXTPR_TOKEN( HLinks ):
+                    case EXTPR_TOKEN( TitlesOfParts ):
                         // ignored during the import currently
                         break;
 
@@ -605,46 +603,46 @@ void SAL_CALL OOXMLDocPropHandler::characters( const ::rtl::OUString& aChars )
                         OSL_FAIL( "Unexpected extended property!" );
                 }
             }
-            else if ( m_nState == ( XML_Properties|NMSP_CUSTPR ) )
+            else if ( m_nState == CUSTPR_TOKEN( Properties ) )
             {
-                if ( m_nBlock == ( XML_property|NMSP_CUSTPR ) )
+                if ( m_nBlock == CUSTPR_TOKEN( property ) )
                 {
                     // this is a custom property
                     switch( m_nType )
                     {
-                        case XML_bool|NMSP_VT:
+                        case VT_TOKEN( bool ):
                             AddCustomProperty( uno::makeAny( aChars.toBoolean() ) );
                             break;
 
-                        case XML_bstr|NMSP_VT:
-                        case XML_lpstr|NMSP_VT:
-                        case XML_lpwstr|NMSP_VT:
+                        case VT_TOKEN( bstr ):
+                        case VT_TOKEN( lpstr ):
+                        case VT_TOKEN( lpwstr ):
                             AddCustomProperty( uno::makeAny( AttributeConversion::decodeXString( aChars ) ) ); // the property has string type
                             break;
 
-                        case XML_date|NMSP_VT:
-                        case XML_filetime|NMSP_VT:
+                        case VT_TOKEN( date ):
+                        case VT_TOKEN( filetime ):
                             AddCustomProperty( uno::makeAny( GetDateTimeFromW3CDTF( aChars ) ) );
 
-                        case XML_i1|NMSP_VT:
-                        case XML_i2|NMSP_VT:
+                        case VT_TOKEN( i1 ):
+                        case VT_TOKEN( i2 ):
                             AddCustomProperty( uno::makeAny( (sal_Int16)aChars.toInt32() ) );
                             break;
 
-                        case XML_i4|NMSP_VT:
-                        case XML_int|NMSP_VT:
+                        case VT_TOKEN( i4 ):
+                        case VT_TOKEN( int ):
                             AddCustomProperty( uno::makeAny( aChars.toInt32() ) );
                             break;
 
-                        case XML_i8|NMSP_VT:
+                        case VT_TOKEN( i8 ):
                             AddCustomProperty( uno::makeAny( aChars.toInt64() ) );
                             break;
 
-                        case XML_r4|NMSP_VT:
+                        case VT_TOKEN( r4 ):
                             AddCustomProperty( uno::makeAny( aChars.toFloat() ) );
                             break;
 
-                        case XML_r8|NMSP_VT:
+                        case VT_TOKEN( r8 ):
                             AddCustomProperty( uno::makeAny( aChars.toDouble() ) );
                             break;
 

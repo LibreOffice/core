@@ -29,8 +29,8 @@
 #ifndef OOX_OLE_VBAMODULE_HXX
 #define OOX_OLE_VBAMODULE_HXX
 
-#include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Reference.hxx>
+#include <rtl/ustring.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace container { class XNameAccess; }

@@ -35,27 +35,27 @@
 
 namespace writerfilter
 {
-    struct eqstr
+struct eqstr
+{
+    bool operator()(const char* s1, const char* s2) const
     {
-        bool operator()(const char* s1, const char* s2) const
-        {
-            return strcmp(s1, s2) == 0;
-        }
-    };
+        return strcmp(s1, s2) == 0;
+    }
+};
 
     typedef boost::unordered_map<const char *, TagLogger::Pointer_t, hash<const char *>, eqstr> TagLoggerHashMap_t;
-    static TagLoggerHashMap_t * tagLoggers = NULL;
+static TagLoggerHashMap_t * tagLoggers = NULL;
 
     TagLogger::TagLogger(const char* name)
     : pWriter( NULL ), pName( name )
-    {
-    }
+{
+}
 
-    TagLogger::~TagLogger()
-    {
+TagLogger::~TagLogger()
+{
         pWriter = NULL;
         pName = NULL;
-    }
+}
 
     void TagLogger::setFileName( const string & filename )
     {
@@ -205,7 +205,7 @@ namespace writerfilter
 
 
     class PropertySetDumpHandler : public Properties
-    {
+{
         IdToString::Pointer_t mpIdToString;
         TagLogger::Pointer_t m_pLogger;
 
@@ -316,6 +316,5 @@ namespace writerfilter
     }
 
 }
-#endif // DEBUG
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

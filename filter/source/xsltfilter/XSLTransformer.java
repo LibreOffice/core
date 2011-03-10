@@ -81,9 +81,8 @@ import com.sun.star.lib.uno.adapter.XOutputStreamToOutputStreamAdapter;
 import net.sf.saxon.FeatureKeys;
 
 /** This outer class provides an inner class to implement the service
- * description, a method to instantiate the
- * component on demand (__getServiceFactory()), and a method to give
- * information about the component (__writeRegistryServiceInfo()).
+ * description and a method to instantiate the
+ * component on demand (__getServiceFactory()).
  */
 public class XSLTransformer
         implements XTypeProvider, XServiceName, XServiceInfo, XActiveDataSink,
@@ -475,10 +474,5 @@ public class XSLTransformer
                     _serviceName, multiFactory, regKey);
         }
         return xSingleServiceFactory;
-    }
-
-    public static boolean __writeRegistryServiceInfo(XRegistryKey regKey) {
-        return FactoryHelper.writeRegistryServiceInfo(XSLTransformer.class.getName(),
-                _serviceName, regKey);
     }
 }

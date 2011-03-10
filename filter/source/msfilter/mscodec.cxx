@@ -35,12 +35,16 @@
 #include <string.h>
 #include <tools/solar.h>
 
+#include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/docpasswordhelper.hxx>
+
 #define DEBUG_MSO_ENCRYPTION_STD97 0
 
 #if DEBUG_MSO_ENCRYPTION_STD97
 #include <stdio.h>
 #endif
 
+using namespace ::com::sun::star;
 
 namespace msfilter {
 
@@ -170,6 +174,37 @@ void MSCodec_Xor95::InitKey( const sal_uInt8 pnPassData[ 16 ] )
     }
 }
 
+sal_Bool MSCodec_Xor95::InitCodec( const uno::Sequence< beans::NamedValue >& aData )
+{
+    sal_Bool bResult = sal_False;
+
+    ::comphelper::SequenceAsHashMap aHashData( aData );
+    uno::Sequence< sal_Int8 > aKey = aHashData.getUnpackedValueOrDefault( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "XOR95EncryptionKey" ) ), uno::Sequence< sal_Int8 >() );
+
+    if ( aKey.getLength() == 16 )
+    {
+        (void)memcpy( mpnKey, aKey.getConstArray(), 16 );
+        bResult = sal_True;
+
+        mnKey = (sal_uInt16)aHashData.getUnpackedValueOrDefault( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "XOR95BaseKey" ) ), (sal_Int16)0 );
+        mnHash = (sal_uInt16)aHashData.getUnpackedValueOrDefault( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "XOR95PasswordHash" ) ), (sal_Int16)0 );
+    }
+    else
+        OSL_ENSURE( sal_False, "Unexpected key size!\n" );
+
+    return bResult;
+}
+
+uno::Sequence< beans::NamedValue > MSCodec_Xor95::GetEncryptionData()
+{
+    ::comphelper::SequenceAsHashMap aHashData;
+    aHashData[ ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "XOR95EncryptionKey" ) ) ] <<= uno::Sequence<sal_Int8>( (sal_Int8*)mpnKey, 16 );
+    aHashData[ ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "XOR95BaseKey" ) ) ] <<= (sal_Int16)mnKey;
+    aHashData[ ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "XOR95PasswordHash" ) ) ] <<= (sal_Int16)mnHash;
+
+    return aHashData.getAsConstNamedValueList();
+}
+
 bool MSCodec_Xor95::VerifyKey( sal_uInt16 nKey, sal_uInt16 nHash ) const
 {
     return (nKey == mnKey) && (nHash == mnHash);
@@ -219,11 +254,6 @@ void MSCodec_Xor95::Skip( sal_Size nBytes )
     mnOffset = (mnOffset + nBytes) & 0x0F;
 }
 
-sal_uInt16 MSCodec_Xor95::GetHash( const sal_uInt8* pnPassData, sal_Size nSize )
-{
-    return lclGetHash( pnPassData, nSize );
-}
-
 // ============================================================================
 
 MSCodec_Std97::MSCodec_Std97 ()
@@ -237,15 +267,18 @@ MSCodec_Std97::MSCodec_Std97 ()
     OSL_ASSERT(m_hDigest != 0);
 
     (void)memset (m_pDigestValue, 0, sizeof(m_pDigestValue));
+    (void)memset (m_pDocId, 0, sizeof(m_pDocId));
 }
 
 MSCodec_Std97::~MSCodec_Std97 ()
 {
     (void)memset (m_pDigestValue, 0, sizeof(m_pDigestValue));
+    (void)memset (m_pDocId, 0, sizeof(m_pDocId));
     rtl_digest_destroy (m_hDigest);
     rtl_cipher_destroy (m_hCipher);
 }
 
+#if 0
 #if DEBUG_MSO_ENCRYPTION_STD97
 static void lcl_PrintKeyData(const sal_uInt8* pKeyData, const char* msg)
 {
@@ -262,6 +295,7 @@ static void lcl_PrintKeyData(const sal_uInt8* /*pKeyData*/, const char* /*msg*/)
 {
 }
 #endif
+#endif
 
 #if DEBUG_MSO_ENCRYPTION_STD97
 static void lcl_PrintDigest(const sal_uInt8* pDigest, const char* msg)
@@ -277,65 +311,65 @@ static void lcl_PrintDigest(const sal_uInt8* /*pDigest*/, const char* /*msg*/)
 }
 #endif
 
+sal_Bool MSCodec_Std97::InitCodec( const uno::Sequence< beans::NamedValue >& aData )
+{
+#if DEBUG_MSO_ENCRYPTION_STD97
+    fprintf(stdout, "MSCodec_Std97::InitCodec: --begin\n");fflush(stdout);
+#endif
+    sal_Bool bResult = sal_False;
+
+    ::comphelper::SequenceAsHashMap aHashData( aData );
+    uno::Sequence< sal_Int8 > aKey = aHashData.getUnpackedValueOrDefault( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "STD97EncryptionKey" ) ), uno::Sequence< sal_Int8 >() );
+
+    if ( aKey.getLength() == RTL_DIGEST_LENGTH_MD5 )
+    {
+        (void)memcpy( m_pDigestValue, aKey.getConstArray(), RTL_DIGEST_LENGTH_MD5 );
+        uno::Sequence< sal_Int8 > aUniqueID = aHashData.getUnpackedValueOrDefault( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "STD97UniqueID" ) ), uno::Sequence< sal_Int8 >() );
+        if ( aUniqueID.getLength() == 16 )
+        {
+            (void)memcpy( m_pDocId, aUniqueID.getConstArray(), 16 );
+            bResult = sal_True;
+            lcl_PrintDigest(m_pDigestValue, "digest value");
+            lcl_PrintDigest(m_pDocId, "DocId value");
+        }
+        else
+            OSL_ENSURE( sal_False, "Unexpected document ID!\n" );
+    }
+    else
+        OSL_ENSURE( sal_False, "Unexpected key size!\n" );
+
+    return bResult;
+}
+
+uno::Sequence< beans::NamedValue > MSCodec_Std97::GetEncryptionData()
+{
+    ::comphelper::SequenceAsHashMap aHashData;
+    aHashData[ ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "STD97EncryptionKey" ) ) ] <<= uno::Sequence< sal_Int8 >( (sal_Int8*)m_pDigestValue, RTL_DIGEST_LENGTH_MD5 );
+    aHashData[ ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "STD97UniqueID" ) ) ] <<= uno::Sequence< sal_Int8 >( (sal_Int8*)m_pDocId, 16 );
+
+    return aHashData.getAsConstNamedValueList();
+}
+
 void MSCodec_Std97::InitKey (
     const sal_uInt16 pPassData[16],
-    const sal_uInt8  pUnique[16])
+    const sal_uInt8  pDocId[16])
 {
 #if DEBUG_MSO_ENCRYPTION_STD97
     fprintf(stdout, "MSCodec_Std97::InitKey: --begin\n");fflush(stdout);
 #endif
-    sal_uInt8 pKeyData[64];
-    int       i, n;
-
-    // Fill PassData into KeyData.
-    (void)memset (pKeyData, 0, sizeof(pKeyData));
-    lcl_PrintKeyData(pKeyData, "initial");
-    for (i = 0, n = 16; (i < n) && pPassData[i]; i++)
-    {
-        pKeyData[2*i    ] = sal::static_int_cast< sal_uInt8 >(
-            (pPassData[i] >> 0) & 0xff);
-        pKeyData[2*i + 1] = sal::static_int_cast< sal_uInt8 >(
-            (pPassData[i] >> 8) & 0xff);
-    }
-    pKeyData[2*i] = 0x80;
-    pKeyData[ 56] = sal::static_int_cast< sal_uInt8 >(i << 4);
-
-    lcl_PrintKeyData(pKeyData, "password data");
-
-    // Fill raw digest of KeyData into KeyData.
-    (void)rtl_digest_updateMD5 (
-        m_hDigest, pKeyData, sizeof(pKeyData));
-    (void)rtl_digest_rawMD5 (
-        m_hDigest, pKeyData, RTL_DIGEST_LENGTH_MD5);
-
-    lcl_PrintKeyData(pKeyData, "raw digest of key data");
-
-    // Update digest with KeyData and Unique.
-    for (i = 0; i < 16; i++)
-    {
-        rtl_digest_updateMD5 (m_hDigest, pKeyData, 5);
-        rtl_digest_updateMD5 (m_hDigest, pUnique, 16);
-    }
-
-    // Update digest with padding.
-    pKeyData[16] = 0x80;
-    (void)memset (pKeyData + 17, 0, sizeof(pKeyData) - 17);
-    pKeyData[56] = 0x80;
-    pKeyData[57] = 0x0a;
-
-    lcl_PrintKeyData(pKeyData, "update digest with padding");
-
-    rtl_digest_updateMD5 (
-        m_hDigest, &(pKeyData[16]), sizeof(pKeyData) - 16);
-
+    uno::Sequence< sal_Int8 > aKey = ::comphelper::DocPasswordHelper::GenerateStd97Key( pPassData, uno::Sequence< sal_Int8 >( (sal_Int8*)pDocId, 16 ) );
     // Fill raw digest of above updates into DigestValue.
-    rtl_digest_rawMD5 (
-        m_hDigest, m_pDigestValue, sizeof(m_pDigestValue));
+
+    if ( aKey.getLength() == sizeof(m_pDigestValue) )
+        (void)memcpy ( m_pDigestValue, aKey.getConstArray(), sizeof(m_pDigestValue) );
+    else
+        memset( m_pDigestValue, 0, sizeof(m_pDigestValue) );
 
     lcl_PrintDigest(m_pDigestValue, "digest value");
 
-    // Erase KeyData array and leave.
-    (void)memset (pKeyData, 0, sizeof(pKeyData));
+    (void)memcpy (m_pDocId, pDocId, 16);
+
+    lcl_PrintDigest(m_pDocId, "DocId value");
 }
 
 bool MSCodec_Std97::VerifyKey (
@@ -412,7 +446,7 @@ bool MSCodec_Std97::InitCipher (sal_uInt32 nCounter)
 bool MSCodec_Std97::CreateSaltDigest( const sal_uInt8 nSaltData[16], sal_uInt8 nSaltDigest[16] )
 {
 #if DEBUG_MSO_ENCRYPTION_STD97
-    lcl_PrintDigest(pSaltData, "salt data");
+    lcl_PrintDigest(nSaltData, "salt data");
 #endif
     bool result = false;
 
@@ -527,6 +561,12 @@ void MSCodec_Std97::GetEncryptKey (
         (void)memset (pBuffer, 0, sizeof(pBuffer));
         (void)memset (pDigest, 0, sizeof(pDigest));
     }
+}
+
+void MSCodec_Std97::GetDocId( sal_uInt8 pDocId[16] )
+{
+    if ( sizeof( m_pDocId ) == 16 )
+        (void)memcpy( pDocId, m_pDocId, 16 );
 }
 
 // ============================================================================

@@ -31,8 +31,7 @@
 #include "oox/drawingml/table/tablestylecontext.hxx"
 #include "oox/drawingml/table/tablebackgroundstylecontext.hxx"
 #include "oox/drawingml/table/tablepartstylecontext.hxx"
-#include "oox/core/namespaces.hxx"
-#include "tokens.hxx"
+
 using namespace ::oox::core;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -62,49 +61,49 @@ TableStyleContext::createFastChildContext( ::sal_Int32 aElementToken, const uno:
 
     switch( aElementToken )
     {
-        case NMSP_DRAWINGML|XML_tblBg:      // CT_TableBackgroundStyle
+        case A_TOKEN( tblBg ):      // CT_TableBackgroundStyle
             xRet = new TableBackgroundStyleContext( *this, mrTableStyle );
             break;
-        case NMSP_DRAWINGML|XML_wholeTbl:   // CT_TablePartStyle
+        case A_TOKEN( wholeTbl ):   // CT_TablePartStyle
             xRet = new TablePartStyleContext( *this, mrTableStyle.getWholeTbl() );
             break;
-        case NMSP_DRAWINGML|XML_band1H:     // CT_TablePartStyle
+        case A_TOKEN( band1H ):     // CT_TablePartStyle
             xRet = new TablePartStyleContext( *this, mrTableStyle.getBand1H() );
             break;
-        case NMSP_DRAWINGML|XML_band2H:     // CT_TablePartStyle
+        case A_TOKEN( band2H ):     // CT_TablePartStyle
             xRet = new TablePartStyleContext( *this, mrTableStyle.getBand2H() );
             break;
-        case NMSP_DRAWINGML|XML_band1V:     // CT_TablePartStyle
+        case A_TOKEN( band1V ):     // CT_TablePartStyle
             xRet = new TablePartStyleContext( *this, mrTableStyle.getBand1V() );
             break;
-        case NMSP_DRAWINGML|XML_band2V:     // CT_TablePartStyle
+        case A_TOKEN( band2V ):     // CT_TablePartStyle
             xRet = new TablePartStyleContext( *this, mrTableStyle.getBand2V() );
             break;
-        case NMSP_DRAWINGML|XML_lastCol:    // CT_TablePartStyle
+        case A_TOKEN( lastCol ):    // CT_TablePartStyle
             xRet = new TablePartStyleContext( *this, mrTableStyle.getLastCol() );
             break;
-        case NMSP_DRAWINGML|XML_firstCol:   // CT_TablePartStyle
+        case A_TOKEN( firstCol ):   // CT_TablePartStyle
             xRet = new TablePartStyleContext( *this, mrTableStyle.getFirstCol() );
             break;
-        case NMSP_DRAWINGML|XML_lastRow:    // CT_TablePartStyle
+        case A_TOKEN( lastRow ):    // CT_TablePartStyle
             xRet = new TablePartStyleContext( *this, mrTableStyle.getLastRow() );
             break;
-        case NMSP_DRAWINGML|XML_seCell:     // CT_TablePartStyle
+        case A_TOKEN( seCell ):     // CT_TablePartStyle
             xRet = new TablePartStyleContext( *this, mrTableStyle.getSeCell() );
             break;
-        case NMSP_DRAWINGML|XML_swCell:     // CT_TablePartStyle
+        case A_TOKEN( swCell ):     // CT_TablePartStyle
             xRet = new TablePartStyleContext( *this, mrTableStyle.getSwCell() );
             break;
-        case NMSP_DRAWINGML|XML_firstRow:   // CT_TablePartStyle
+        case A_TOKEN( firstRow ):   // CT_TablePartStyle
             xRet = new TablePartStyleContext( *this, mrTableStyle.getFirstRow() );
             break;
-        case NMSP_DRAWINGML|XML_neCell:     // CT_TablePartStyle
+        case A_TOKEN( neCell ):     // CT_TablePartStyle
             xRet = new TablePartStyleContext( *this, mrTableStyle.getNeCell() );
             break;
-        case NMSP_DRAWINGML|XML_nwCell:     // CT_TablePartStyle
+        case A_TOKEN( nwCell ):     // CT_TablePartStyle
             xRet = new TablePartStyleContext( *this, mrTableStyle.getNwCell() );
             break;
-        case NMSP_DRAWINGML|XML_extLst:     // CT_OfficeArtExtensionList
+        case A_TOKEN( extLst ):     // CT_OfficeArtExtensionList
             break;
     }
     if( !xRet.is() )

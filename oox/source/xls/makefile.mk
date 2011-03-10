@@ -42,6 +42,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 SLOFILES =										\
         $(SLO)$/addressconverter.obj			\
+        $(SLO)$/autofilterbuffer.obj			\
         $(SLO)$/autofiltercontext.obj			\
         $(SLO)$/biffcodec.obj					\
         $(SLO)$/biffdetector.obj				\
@@ -53,12 +54,14 @@ SLOFILES =										\
         $(SLO)$/commentsfragment.obj			\
         $(SLO)$/condformatbuffer.obj			\
         $(SLO)$/condformatcontext.obj			\
+        $(SLO)$/connectionsbuffer.obj			\
         $(SLO)$/connectionsfragment.obj			\
         $(SLO)$/defnamesbuffer.obj				\
         $(SLO)$/drawingfragment.obj				\
         $(SLO)$/excelchartconverter.obj			\
         $(SLO)$/excelfilter.obj					\
         $(SLO)$/excelhandlers.obj				\
+        $(SLO)$/excelvbaproject.obj				\
         $(SLO)$/externallinkbuffer.obj			\
         $(SLO)$/externallinkfragment.obj		\
         $(SLO)$/formulabase.obj					\
@@ -70,6 +73,7 @@ SLOFILES =										\
         $(SLO)$/pivotcachefragment.obj			\
         $(SLO)$/pivottablebuffer.obj			\
         $(SLO)$/pivottablefragment.obj			\
+        $(SLO)$/querytablebuffer.obj			\
         $(SLO)$/querytablefragment.obj			\
         $(SLO)$/richstring.obj					\
         $(SLO)$/richstringcontext.obj			\
@@ -86,13 +90,12 @@ SLOFILES =										\
         $(SLO)$/themebuffer.obj					\
         $(SLO)$/unitconverter.obj				\
         $(SLO)$/viewsettings.obj				\
-        $(SLO)$/webquerybuffer.obj				\
         $(SLO)$/workbookfragment.obj			\
         $(SLO)$/workbookhelper.obj				\
         $(SLO)$/workbooksettings.obj			\
         $(SLO)$/worksheetbuffer.obj				\
         $(SLO)$/worksheetfragment.obj			\
-        $(SLO)$/worksheethelper.obj             \
+        $(SLO)$/worksheethelper.obj				\
         $(SLO)$/worksheetsettings.obj
 
 # --- Targets -------------------------------------------------------

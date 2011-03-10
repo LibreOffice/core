@@ -30,7 +30,6 @@
 #define OOX_XLS_CONDFORMATBUFFER_HXX
 
 #include <com/sun/star/sheet/ConditionOperator2.hpp>
-#include "oox/helper/containerhelper.hxx"
 #include "oox/xls/formulaparser.hxx"
 #include "oox/xls/worksheethelper.hxx"
 
@@ -65,11 +64,11 @@ struct CondFormatRuleModel
 
     explicit            CondFormatRuleModel();
 
-    /** Sets the passed OOBIN or BIFF operator for condition type cellIs. */
-    void                setBinOperator( sal_Int32 nOperator );
+    /** Sets the passed BIFF operator for condition type cellIs. */
+    void                setBiffOperator( sal_Int32 nOperator );
 
-    /** Sets the passed OOBIN text comparison type and operator. */
-    void                setOobTextType( sal_Int32 nOperator );
+    /** Sets the passed BIFF12 text comparison type and operator. */
+    void                setBiff12TextType( sal_Int32 nOperator );
 };
 
 // ============================================================================
@@ -88,7 +87,7 @@ public:
     void                appendFormula( const ::rtl::OUString& rFormula );
 
     /** Imports rule settings from a CFRULE record. */
-    void                importCfRule( RecordInputStream& rStrm );
+    void                importCfRule( SequenceInputStream& rStrm );
 
     /** Imports rule settings from a CFRULE record. */
     void                importCfRule( BiffInputStream& rStrm, sal_Int32 nPriority );
@@ -132,9 +131,9 @@ public:
     CondFormatRuleRef   importCfRule( const AttributeList& rAttribs );
 
     /** Imports settings from the CONDFORMATTING record. */
-    void                importCondFormatting( RecordInputStream& rStrm );
+    void                importCondFormatting( SequenceInputStream& rStrm );
     /** Imports a conditional formatting rule from the CFRULE record. */
-    void                importCfRule( RecordInputStream& rStrm );
+    void                importCfRule( SequenceInputStream& rStrm );
 
     /** Imports settings from the CFHEADER record. */
     void                importCfHeader( BiffInputStream& rStrm );
@@ -168,7 +167,7 @@ public:
     /** Imports settings from the conditionalFormatting element. */
     CondFormatRef       importConditionalFormatting( const AttributeList& rAttribs );
     /** Imports settings from the CONDFORMATTING record. */
-    CondFormatRef       importCondFormatting( RecordInputStream& rStrm );
+    CondFormatRef       importCondFormatting( SequenceInputStream& rStrm );
     /** Imports settings from the CFHEADER record. */
     void                importCfHeader( BiffInputStream& rStrm );
 

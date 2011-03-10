@@ -27,21 +27,21 @@
  ************************************************************************/
 
 #include "oox/helper/propertyset.hxx"
-#include <rtl/strbuf.hxx>
+
 #include <osl/diagnose.h>
+#include <rtl/strbuf.hxx>
 #include "oox/helper/propertymap.hxx"
 
-using ::rtl::OUString;
-using ::rtl::OStringBuffer;
-using ::rtl::OUStringToOString;
-using ::com::sun::star::uno::Any;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::beans::XPropertySet;
-
 namespace oox {
+
+// ============================================================================
+
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::uno;
+
+using ::rtl::OStringBuffer;
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
 
 // ============================================================================
 
@@ -172,13 +172,6 @@ void PropertySet::setAnyProperty( const OUString& rPropName, const Any& rValue )
             append( OUStringToOString( rPropName, RTL_TEXTENCODING_ASCII_US ) ).append( '"' ).getStr() );
     }
 }
-
-#if OSL_DEBUG_LEVEL > 0
-void PropertySet::dump()
-{
-    PropertyMap::dump( Reference< XPropertySet >( getXPropertySet(), UNO_QUERY ) );
-}
-#endif
 
 // ============================================================================
 

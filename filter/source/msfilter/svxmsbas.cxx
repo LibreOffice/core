@@ -87,8 +87,8 @@ void SvxImportMSVBasic::extractAttribute( const String& rAttribute, const String
 }
 
 int SvxImportMSVBasic::Import( const String& rStorageName,
-                                const String &rSubStorageName,
-                                BOOL bAsComment, BOOL bStripped )
+                               const String &rSubStorageName,
+                               sal_Bool bAsComment, sal_Bool bStripped )
 {
     std::vector< String > codeNames;
     return Import(  rStorageName, rSubStorageName, codeNames, bAsComment, bStripped );
@@ -96,7 +96,7 @@ int SvxImportMSVBasic::Import( const String& rStorageName,
 int SvxImportMSVBasic::Import( const String& rStorageName,
                                 const String &rSubStorageName,
                                 const std::vector< String >& codeNames,
-                                BOOL bAsComment, BOOL bStripped )
+                                sal_Bool bAsComment, sal_Bool bStripped )
 {
         msProjectName = rtl::OUString();
     int nRet = 0;
@@ -159,7 +159,7 @@ bool SvxImportMSVBasic::ImportForms_Impl( VBA_Impl& rVBA, const String& rStorage
     std::vector<String> aUserForms;
     SvStorageInfoList aContents;
     xVBAStg->FillInfoList(&aContents);
-    for (USHORT nI = 0; nI < aContents.Count(); ++nI)
+    for (sal_uInt16 nI = 0; nI < aContents.Count(); ++nI)
     {
           SvStorageInfo& rInfo = aContents.GetObject(nI);
           if (!rInfo.IsStream() && rInfo.GetName() != rSubStorageName)
@@ -170,7 +170,6 @@ bool SvxImportMSVBasic::ImportForms_Impl( VBA_Impl& rVBA, const String& rStorage
         return false;
 
     bool bRet = true;
-    SFX_APP()->EnterBasicCall();
     try
     {
         Reference<XMultiServiceFactory> xSF(comphelper::getProcessServiceFactory());
@@ -251,15 +250,14 @@ bool SvxImportMSVBasic::ImportForms_Impl( VBA_Impl& rVBA, const String& rStorage
         DBG_ERRORFILE( "SvxImportMSVBasic::ImportForms_Impl - any exception caught" );
         //bRet = false;
     }
-    SFX_APP()->LeaveBasicCall();
     return bRet;
 }
 
 
-BOOL SvxImportMSVBasic::CopyStorage_Impl( const String& rStorageName,
+sal_Bool SvxImportMSVBasic::CopyStorage_Impl( const String& rStorageName,
                                          const String& rSubStorageName)
 {
-    BOOL bValidStg = FALSE;
+    sal_Bool bValidStg = sal_False;
     {
         SvStorageRef xVBAStg( xRoot->OpenSotStorage( rStorageName,
                                     STREAM_READWRITE | STREAM_NOCREATE |
@@ -272,7 +270,7 @@ BOOL SvxImportMSVBasic::CopyStorage_Impl( const String& rStorageName,
             if( xVBASubStg.Is() && !xVBASubStg->GetError() )
             {
                 // then we will copy these storages into the (temporary) storage of the document
-                bValidStg = TRUE;
+                bValidStg = sal_True;
             }
         }
     }
@@ -292,18 +290,18 @@ BOOL SvxImportMSVBasic::CopyStorage_Impl( const String& rStorageName,
         if ( nError != ERRCODE_NONE )
             xRoot->SetError( nError );
         else
-            bValidStg = TRUE;
+            bValidStg = sal_True;
     }
 
     return bValidStg;
 }
 
-BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
+sal_Bool SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
                                         const String &rSubStorageName,
                                         const std::vector< String >& codeNames,
-                                        BOOL bAsComment, BOOL bStripped )
+                                        sal_Bool bAsComment, sal_Bool bStripped )
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     VBA_Impl aVBA( *xRoot, bAsComment );
 
     if( aVBA.Open(rStorageName,rSubStorageName) )
@@ -333,24 +331,21 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
 BOOL SvxImportMSVBasic::ImportCode_Impl( VBA_Impl& aVBA, const std::vector< String >& codeNames, BOOL bAsComment, BOOL bStripped )
 {
     BOOL bRet = FALSE;
-        SFX_APP()->EnterBasicCall();
         Reference<XLibraryContainer> xLibContainer = rDocSh.GetBasicContainer();
         DBG_ASSERT( xLibContainer.is(), "No BasicContainer!" );
 
+        /*  Set library container to VBA compatibility mode. This will create
+            the VBA Globals object and store it in the Basic manager of the
+            document. */
         if( !bAsComment ) try
         {
-            Reference< vba::XVBACompatibility > xVBACompat( xLibContainer, UNO_QUERY_THROW );
-            xVBACompat->setVBACompatibilityMode( sal_True );
-            /*  Force creation of the VBAGlobals object, each application will
-                create the right one and store it at the Basic manager. */
-            Reference< XMultiServiceFactory > xFactory( rDocSh.GetModel(), UNO_QUERY_THROW );
-            xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAGlobals" ) ) );
+            Reference< vba::XVBACompatibility >( xLibContainer, UNO_QUERY_THROW )->setVBACompatibilityMode( sal_True );
         }
         catch( Exception& )
         {
         }
 
-        UINT16 nStreamCount = aVBA.GetNoStreams();
+        sal_uInt16 nStreamCount = aVBA.GetNoStreams();
         Reference<XNameContainer> xLib;
         String aLibName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
         if ( aVBA.ProjectName().getLength() )
@@ -387,7 +382,7 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( VBA_Impl& aVBA, const std::vector< Stri
             NameModuleDataHash moduleData;
             NameModuleInfoHash moduleInfos;
 
-            for( UINT16 i=0; i<nStreamCount;i++)
+            for( sal_uInt16 i=0; i<nStreamCount;i++)
             {
                 StringArray aDecompressed = aVBA.Decompress(i);
 #if 0
@@ -475,7 +470,7 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( VBA_Impl& aVBA, const std::vector< Stri
                 };
                 ::rtl::OUString aSource(sTemp);
 
-                for(ULONG j=0;j<aDecompressed.GetSize();j++)
+                for(sal_uLong j=0;j<aDecompressed.GetSize();j++)
                 {
                     if (bStripped)
                     {
@@ -585,7 +580,6 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( VBA_Impl& aVBA, const std::vector< Stri
             }
             bRet = true;
         }
-        SFX_APP()->LeaveBasicCall();
     return bRet;
 }
 

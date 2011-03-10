@@ -316,6 +316,11 @@ void OOXMLParserState::dumpXml( const TagLogger::Pointer_t& pLogger )
 
     pLogger->endElement();
  }
+
+XPathLogger & OOXMLParserState::getXPathLogger()
+{
+    return m_xPathLogger;
+}
 #endif
 
 }}

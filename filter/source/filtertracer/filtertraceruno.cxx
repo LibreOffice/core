@@ -52,37 +52,6 @@ extern "C" void SAL_CALL component_getImplementationEnvironment( const sal_Char 
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-// -----------------------
-// - component_writeInfo -
-// -----------------------
-
-extern "C" sal_Bool SAL_CALL component_writeInfo( void* /* pServiceManager */, void* pRegistryKey )
-{
-    sal_Bool bRet = sal_False;
-
-    if( pRegistryKey )
-    {
-        try
-        {
-            NMSP_UNO::Reference< com::sun::star::registry::XRegistryKey > xNewKey(
-                reinterpret_cast< com::sun::star::registry::XRegistryKey * >( pRegistryKey )->createKey(
-                    FilterTracer_getImplementationName() ) );
-            xNewKey = xNewKey->createKey( B2UCONST( "/UNO/SERVICES" ) );
-            const SEQ( rtl::OUString )& rSNL = FilterTracer_getSupportedServiceNames();
-            const rtl::OUString * pArray = rSNL.getConstArray();
-            for ( sal_Int32 nPos = rSNL.getLength(); nPos--; )
-                xNewKey->createKey( pArray[nPos] );
-            bRet = sal_True;
-        }
-        catch( com::sun::star::registry::InvalidRegistryException& )
-        {
-            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
-        }
-    }
-
-    return bRet;
-}
-
 // ------------------------
 // - component_getFactory -
 // ------------------------

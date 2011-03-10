@@ -29,8 +29,8 @@
 #ifndef OOX_XLS_WORKSHEETSETTINGS_HXX
 #define OOX_XLS_WORKSHEETSETTINGS_HXX
 
-#include "oox/xls/worksheethelper.hxx"
 #include "oox/xls/richstring.hxx"
+#include "oox/xls/worksheethelper.hxx"
 
 namespace oox {
 namespace xls {
@@ -99,16 +99,18 @@ public:
     void                importPhoneticPr( const AttributeList& rAttribs );
 
     /** Imports sheet properties from the SHEETPR record. */
-    void                importSheetPr( RecordInputStream& rStrm );
+    void                importSheetPr( SequenceInputStream& rStrm );
     /** Imports sheet properties from the CHARTSHEETPR record. */
-    void                importChartSheetPr( RecordInputStream& rStrm );
+    void                importChartSheetPr( SequenceInputStream& rStrm );
     /** Imports sheet protection settings from the SHEETPROTECTION record. */
-    void                importSheetProtection( RecordInputStream& rStrm );
+    void                importSheetProtection( SequenceInputStream& rStrm );
     /** Imports chart sheet protection settings from the CHARTPROTECTION record. */
-    void                importChartProtection( RecordInputStream& rStrm );
+    void                importChartProtection( SequenceInputStream& rStrm );
     /** Imports phonetic settings from the PHONETICPR record. */
-    void                importPhoneticPr( RecordInputStream& rStrm );
+    void                importPhoneticPr( SequenceInputStream& rStrm );
 
+    /** Imports sheet properties from a SHEETEXT record. */
+    void                importSheetExt( BiffInputStream& rStrm );
     /** Imports sheet properties from a SHEETPR record. */
     void                importSheetPr( BiffInputStream& rStrm );
     /** Imports protection status from the PROTECT record. */

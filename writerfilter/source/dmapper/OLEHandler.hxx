@@ -29,7 +29,7 @@
 #define INCLUDED_OLEHANDLER_HXX
 
 #include <WriterFilterDllApi.hxx>
-#include <resourcemodel/WW8ResourceModel.hxx>
+#include <resourcemodel/LoggedResources.hxx>
 #include <boost/shared_ptr.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/Point.hpp>
@@ -59,7 +59,7 @@ namespace dmapper
 //class PropertyMap;
 /** Handler for OLE objects
  */
-class WRITERFILTER_DLLPRIVATE OLEHandler : public Properties
+class WRITERFILTER_DLLPRIVATE OLEHandler : public LoggedProperties
 {
     ::rtl::OUString     m_sObjectType;
     ::rtl::OUString     m_sProgId;
@@ -80,13 +80,14 @@ class WRITERFILTER_DLLPRIVATE OLEHandler : public Properties
     ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > m_xReplacement;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > m_xInputStream;
+
+    // Properties
+    virtual void lcl_attribute(Id Name, Value & val);
+    virtual void lcl_sprm(Sprm & sprm);
+
 public:
     OLEHandler();
     virtual ~OLEHandler();
-
-    // Properties
-    virtual void attribute(Id Name, Value & val);
-    virtual void sprm(Sprm & sprm);
 
     inline ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > getShape( ) { return m_xShape; };
 

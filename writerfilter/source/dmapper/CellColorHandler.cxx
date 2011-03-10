@@ -31,6 +31,7 @@
 #include <ConversionHelper.hxx>
 #include <ooxml/resourceids.hxx>
 #include <sal/macros.h>
+#include "dmapperLoggers.hxx"
 
 #define OOXML_COLOR_AUTO 0x0a //todo: AutoColor needs symbol
 
@@ -42,9 +43,10 @@ using namespace ::writerfilter;
 
 
 CellColorHandler::CellColorHandler() :
-    m_nShadowType( 0 ),
-    m_nColor( 0xffffffff ),
-    m_nFillColor( 0xffffffff ),
+LoggedProperties(dmapper_logger, "CellColorHandler"),
+m_nShadowType( 0 ),
+m_nColor( 0xffffffff ),
+m_nFillColor( 0xffffffff ),
     m_OutputFormat( Form )
 {
 }
@@ -53,7 +55,7 @@ CellColorHandler::~CellColorHandler()
 {
 }
 
-void CellColorHandler::attribute(Id rName, Value & rVal)
+void CellColorHandler::lcl_attribute(Id rName, Value & rVal)
 {
     sal_Int32 nIntValue = rVal.getInt();
     switch( rName )
@@ -92,7 +94,7 @@ void CellColorHandler::attribute(Id rName, Value & rVal)
     }
 }
 
-void CellColorHandler::sprm(Sprm & rSprm)
+void CellColorHandler::lcl_sprm(Sprm & rSprm)
 {
     (void)rSprm;
 }

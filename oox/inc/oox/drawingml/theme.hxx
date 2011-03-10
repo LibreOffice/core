@@ -29,7 +29,6 @@
 #ifndef OOX_DRAWINGML_THEME_HXX
 #define OOX_DRAWINGML_THEME_HXX
 
-#include "oox/helper/containerhelper.hxx"
 #include "oox/drawingml/clrscheme.hxx"
 #include "oox/drawingml/shape.hxx"
 #include "oox/drawingml/textfont.hxx"

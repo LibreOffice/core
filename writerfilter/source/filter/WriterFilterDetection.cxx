@@ -91,7 +91,7 @@ OUString WriterFilterDetection::detect( uno::Sequence< beans::PropertyValue >& r
             if ( pStream && SotStorage::IsStorageFile(pStream) )
 
             {
-                SotStorageRef xStg = new SotStorage( pStream, FALSE );
+                SotStorageRef xStg = new SotStorage( pStream, sal_False );
 
                 bool bTable2 = xStg->IsContained( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("1Table")));
                 SotStorageStreamRef xRef =

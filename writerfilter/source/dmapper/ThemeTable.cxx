@@ -31,11 +31,7 @@
 #include <doctok/resourceids.hxx>
 #include <ooxml/resourceids.hxx>
 #endif
-#include <stdio.h>
-#ifdef DEBUG_DOMAINMAPPER
 #include "dmapperLoggers.hxx"
-#include <resourcemodel/QNameToString.hxx>
-#endif
 
 namespace writerfilter {
 namespace dmapper
@@ -51,8 +47,10 @@ struct ThemeTable_Impl
     std::map<sal_uInt32, ::rtl::OUString> m_currentFontThemeEntry;
 };
 
-ThemeTable::ThemeTable() :
-    m_pImpl( new ThemeTable_Impl )
+ThemeTable::ThemeTable()
+: LoggedProperties(dmapper_logger, "ThemeTable")
+, LoggedTable(dmapper_logger, "ThemeTable")
+, m_pImpl( new ThemeTable_Impl )
 {
 
 }
@@ -62,7 +60,7 @@ ThemeTable::~ThemeTable()
     delete m_pImpl;
 }
 
-void ThemeTable::attribute(Id Name, Value & val)
+void ThemeTable::lcl_attribute(Id Name, Value & val)
 {
 #ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->startElement("ThemeTable.attribute");
@@ -88,7 +86,7 @@ void ThemeTable::attribute(Id Name, Value & val)
 #endif
 }
 
-void ThemeTable::sprm(Sprm& rSprm)
+void ThemeTable::lcl_sprm(Sprm& rSprm)
 {
 #ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->startElement("ThemeTable.sprm");
@@ -144,7 +142,7 @@ void ThemeTable::sprm(Sprm& rSprm)
 #endif
 }
 
-void ThemeTable::entry(int /*pos*/, writerfilter::Reference<Properties>::Pointer_t ref)
+void ThemeTable::lcl_entry(int /*pos*/, writerfilter::Reference<Properties>::Pointer_t ref)
 {
 #ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->startElement("ThemeTable.entry");

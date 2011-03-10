@@ -46,7 +46,6 @@ namespace com { namespace sun { namespace star {
     namespace graphic { class XGraphic; }
     namespace graphic { class XGraphicObject; }
     namespace graphic { class XGraphicProvider; }
-    namespace lang { class XMultiServiceFactory; }
     namespace uno { class XComponentContext; }
 } } }
 
@@ -69,7 +68,7 @@ class OOX_DLLPUBLIC GraphicHelper
 {
 public:
     explicit            GraphicHelper(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxGlobalFactory,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxTargetFrame,
                             const StorageRef& rxStorage );
     virtual             ~GraphicHelper();
@@ -148,6 +147,10 @@ public:
     /** Imports a graphic object from the storage stream with the passed path and name.
         @return  The URL of the created and internally cached graphic object. */
     ::rtl::OUString     importEmbeddedGraphicObject( const ::rtl::OUString& rStreamName ) const;
+
+    /** calculates the orignal size of a graphic which is necessary to be able to calculate cropping values
+        @return The original Graphic size in 100thmm */
+    ::com::sun::star::awt::Size getOriginalSize( const ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >& rxGraphic ) const;
 
     // ------------------------------------------------------------------------
 private:

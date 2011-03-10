@@ -73,3 +73,11 @@ $(JARMANIFEST) : $(CLASSDIR)
   
 $(CLASSDIR) :
     $(MKDIR) $(CLASSDIR)
+
+ALLTAR : $(MISC)/XSLTValidate.component
+
+$(MISC)/XSLTValidate.component .ERRREMOVE : \
+        $(SOLARENV)/bin/createcomponent.xslt XSLTValidate.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_JAVA)$(JARTARGET)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt XSLTValidate.component

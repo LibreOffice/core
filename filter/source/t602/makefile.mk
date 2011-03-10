@@ -59,3 +59,11 @@ SHL1STDLIBS= \
 
 # --- Targets ------------------------------------------------------
 .INCLUDE :  target.mk
+
+ALLTAR : $(MISC)/t602filter.component
+
+$(MISC)/t602filter.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        t602filter.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt t602filter.component

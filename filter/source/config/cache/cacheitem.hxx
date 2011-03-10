@@ -115,8 +115,8 @@ class CacheItem : public ::comphelper::SequenceAsHashMap
             @param  lProps
                     contains all properties, which must exist at this item.
 
-            @return TRUE if all given properties exists
-                    at this item; FALSE otherwhise.
+            @return sal_True if all given properties exists
+                    at this item; sal_False otherwhise.
          */
         sal_Bool haveProps(const CacheItem& lProps) const;
 
@@ -132,8 +132,8 @@ class CacheItem : public ::comphelper::SequenceAsHashMap
             @param  lProps
                     contains all properties, which should not exists at this item.
 
-            @return FALSE if at least on property exists at this item(!);
-                    TRUE otherwhise.
+            @return sal_False if at least on property exists at this item(!);
+                    sal_True otherwhise.
          */
         sal_Bool dontHaveProps(const CacheItem& lProps) const;
 
@@ -149,8 +149,8 @@ class CacheItem : public ::comphelper::SequenceAsHashMap
             @param  lProps
                     contains all properties, which should be checked.
 
-            @return TRUE if all given properties dont exists
-                    at this item; FALSE otherwhise.
+            @return sal_True if all given properties dont exists
+                    at this item; sal_False otherwhise.
          */
         sal_Bool excludeProps(const CacheItem& lProps) const;
 

@@ -57,6 +57,7 @@ private:
     Reference< XComponent > mxSrcDoc;
     Reference< lang::XMultiServiceFactory > mxMSF;
     Reference< task::XStatusIndicator > mxStatusIndicator;
+    Reference< task::XInteractionHandler > mxIH;
 
     sal_Bool                mbUseTaggedPDF;
     sal_Int32               mnPDFTypeSelection;
@@ -99,9 +100,7 @@ private:
     sal_Bool                mbFirstPageLeft;
 
     sal_Bool                mbEncrypt;
-    rtl::OUString           msOpenPassword;
     sal_Bool                mbRestrictPermissions;
-    rtl::OUString           msPermissionPassword;
     sal_Int32               mnPrintAllowed;
     sal_Int32               mnChangesAllowed;
     sal_Bool                mbCanCopyOrExtract;
@@ -118,17 +117,13 @@ private:
 //<---
     sal_Bool                ImplExportPage( ::vcl::PDFWriter& rWriter, ::vcl::PDFExtOutDevData& rPDFExtOutDevData,
                                                 const GDIMetaFile& rMtf );
-    sal_Bool                ImplWriteActions( ::vcl::PDFWriter& rWriter, ::vcl::PDFExtOutDevData* pPDFExtOutDevData,
-                                                const GDIMetaFile& rMtf, VirtualDevice& rDummyVDev );
-    void                    ImplWriteGradient( ::vcl::PDFWriter& rWriter, const PolyPolygon& rPolyPoly,
-                                                const Gradient& rGradient, VirtualDevice& rDummyVDev );
-    void                    ImplWriteBitmapEx( ::vcl::PDFWriter& rWriter, VirtualDevice& rDummyVDev,
-                                                const Point& rPoint, const Size& rSize, const BitmapEx& rBitmap );
-
     void                    ImplWriteWatermark( ::vcl::PDFWriter& rWriter, const Size& rPageSize );
 public:
 
-                            PDFExport( const Reference< XComponent >& rxSrcDoc, Reference< task::XStatusIndicator >& xStatusIndicator, const Reference< lang::XMultiServiceFactory >& xFact );
+                            PDFExport( const Reference< XComponent >& rxSrcDoc,
+                                       const Reference< task::XStatusIndicator >& xStatusIndicator,
+                                      const Reference< task::XInteractionHandler >& xIH,
+                                       const Reference< lang::XMultiServiceFactory >& xFact );
                             ~PDFExport();
 
     sal_Bool                ExportSelection( vcl::PDFWriter& rPDFWriter, Reference< com::sun::star::view::XRenderable >& rRenderable, Any& rSelection,

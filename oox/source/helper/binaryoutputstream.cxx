@@ -27,18 +27,22 @@
  ************************************************************************/
 
 #include "oox/helper/binaryoutputstream.hxx"
+
 #include <osl/diagnose.h>
 #include <string.h>
 
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::io::XOutputStream;
-using ::com::sun::star::io::XSeekable;
-
 namespace oox {
 
+// ============================================================================
+
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::uno;
+
+namespace {
+
 const sal_Int32 OUTPUTSTREAM_BUFFERSIZE     = 0x8000;
+
+} // namespace
 
 // ============================================================================
 

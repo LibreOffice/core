@@ -27,43 +27,37 @@
  ************************************************************************/
 
 #include "oox/xls/numberformatsbuffer.hxx"
+
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#include <com/sun/star/util/XNumberFormats.hpp>
-#include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/i18n/NumberFormatIndex.hpp>
-#include <osl/thread.h>
-#include <rtl/string.hxx>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/util/XNumberFormatTypes.hpp>
+#include <com/sun/star/util/XNumberFormats.hpp>
+#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <rtl/strbuf.hxx>
+#include <rtl/string.hxx>
+#include <osl/thread.h>
 #include <rtl/ustrbuf.hxx>
-#include "properties.hxx"
+#include "oox/core/filterbase.hxx"
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/propertymap.hxx"
-#include "oox/helper/recordinputstream.hxx"
-#include "oox/core/filterbase.hxx"
 #include "oox/xls/biffinputstream.hxx"
-
-using ::rtl::OString;
-using ::rtl::OStringBuffer;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
-using ::rtl::OStringToOUString;
-using ::com::sun::star::uno::Any;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::container::XNameAccess;
-using ::com::sun::star::lang::Locale;
-using ::com::sun::star::lang::XMultiServiceFactory;
-using ::com::sun::star::util::XNumberFormatsSupplier;
-using ::com::sun::star::util::XNumberFormats;
-using ::com::sun::star::util::XNumberFormatTypes;
 
 namespace oox {
 namespace xls {
+
+// ============================================================================
+
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::util;
+
+using ::rtl::OString;
+using ::rtl::OStringBuffer;
+using ::rtl::OStringToOUString;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 // ============================================================================
 
@@ -2004,10 +1998,10 @@ NumberFormatRef NumberFormatsBuffer::importNumFmt( const AttributeList& rAttribs
     return createNumFmt( nNumFmtId, aFmtCode );
 }
 
-void NumberFormatsBuffer::importNumFmt( RecordInputStream& rStrm )
+void NumberFormatsBuffer::importNumFmt( SequenceInputStream& rStrm )
 {
     sal_Int32 nNumFmtId = rStrm.readuInt16();
-    OUString aFmtCode = rStrm.readString();
+    OUString aFmtCode = BiffHelper::readString( rStrm );
     createNumFmt( nNumFmtId, aFmtCode );
 }
 

@@ -90,3 +90,17 @@ $(JAVACLASSFILES) : $(CLASSDIR)
 $(CLASSDIR) :
     $(MKDIR) $(CLASSDIR)
 .ENDIF
+
+ALLTAR : $(MISC)/XSLTFilter.jar.component $(MISC)/xsltfilter.component
+
+$(MISC)/XSLTFilter.jar.component .ERRREMOVE : \
+        $(SOLARENV)/bin/createcomponent.xslt XSLTFilter.jar.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_JAVA)$(JARTARGET)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt XSLTFilter.jar.component
+
+$(MISC)/xsltfilter.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        xsltfilter.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt xsltfilter.component

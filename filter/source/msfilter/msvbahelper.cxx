@@ -38,13 +38,15 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentInfoSupplier.hpp>
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <tools/urlobj.hxx>
 #include <osl/file.hxx>
 #include <unotools/pathoptions.hxx>
 
 using namespace ::com::sun::star;
 
-namespace ooo { namespace vba {
+namespace ooo {
+namespace vba {
 
 const static rtl::OUString sUrlPart0( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.script:" ));
 const static rtl::OUString sUrlPart1( RTL_CONSTASCII_USTRINGPARAM( "?language=Basic&location=document" ));
@@ -63,6 +65,16 @@ String makeMacroURL( const String& sMacroName )
         return rMacroUrl.copy( sUrlPart0.getLength(), rMacroUrl.getLength() - sUrlPart0.getLength() - sUrlPart1.getLength() );
     }
     return ::rtl::OUString();
+}
+
+::rtl::OUString trimMacroName( const ::rtl::OUString& rMacroName )
+{
+    // the name may contain whitespaces and may be enclosed in apostrophs
+    ::rtl::OUString aMacroName = rMacroName.trim();
+    sal_Int32 nMacroLen = aMacroName.getLength();
+    if( (nMacroLen >= 2) && (aMacroName[ 0 ] == '\'') && (aMacroName[ nMacroLen - 1 ] == '\'') )
+        aMacroName = aMacroName.copy( 1, nMacroLen - 2 ).trim();
+    return aMacroName;
 }
 
 SfxObjectShell* findShellForUrl( const rtl::OUString& sMacroURLOrPath )
@@ -94,6 +106,24 @@ SfxObjectShell* findShellForUrl( const rtl::OUString& sMacroURLOrPath )
                 , rtl::OUStringToOString( xModel->getURL(), RTL_TEXTENCODING_UTF8 ).getStr()
                 , rtl::OUStringToOString( aURL, RTL_TEXTENCODING_UTF8 ).getStr()
             );
+            ::rtl::OUString aName = xModel->getURL() ;
+            if (0 == aName.getLength())
+                {
+
+                    const static rtl::OUString sTitle( RTL_CONSTASCII_USTRINGPARAM("Title" ) );
+                    uno::Reference< frame::XFrame > xFrame( xModel->getCurrentController()->getFrame(), uno::UNO_QUERY_THROW );
+                    uno::Reference< beans::XPropertySet > xProps( xFrame, uno::UNO_QUERY_THROW );
+                    xProps->getPropertyValue(sTitle) >>= aName;
+                    sal_Int32 pos = 0;
+                    aName = aName.getToken(0,'-',pos);
+                    aName = aName.trim();
+                    if( sMacroURLOrPath.lastIndexOf( aName ) >= 0 )
+                    {
+                        pFoundShell = pShell;
+                        break;
+                    }
+                }
+
             if ( sMacroURLOrPath.endsWithIgnoreAsciiCaseAsciiL( ".dot", 4 ) )
             {
                 uno::Reference< document::XDocumentInfoSupplier > xDocInfoSupp( xModel, uno::UNO_QUERY );
@@ -157,7 +187,7 @@ bool hasMacro( SfxObjectShell* pShell, const String& sLibrary, String& sMod, con
             StarBASIC* pBasic = pBasicMgr->GetLib( sLibrary );
             if ( !pBasic )
             {
-                USHORT nId = pBasicMgr->GetLibId( sLibrary );
+                sal_uInt16 nId = pBasicMgr->GetLibId( sLibrary );
                 pBasicMgr->LoadLib( nId );
                 pBasic = pBasicMgr->GetLib( sLibrary );
             }
@@ -211,26 +241,16 @@ void parseMacro( const rtl::OUString& sMacro, String& sContainer, String& sModul
        sProcedure = sMacro;
 }
 
-VBAMacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const rtl::OUString& MacroName, bool bSearchGlobalTemplates )
+MacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const rtl::OUString& MacroName, bool bSearchGlobalTemplates )
 {
-    VBAMacroResolvedInfo aRes;
-    if ( !pShell )
-        return aRes;
-    aRes.SetMacroDocContext( pShell );
+    if( !pShell )
+        return MacroResolvedInfo();
 
     // the name may be enclosed in apostrophs
-    ::rtl::OUString sMacroUrl = MacroName;
-    sal_Int32 nMacroLen = MacroName.getLength();
-    if( (nMacroLen >= 2) && (MacroName[0] == '\'') && (MacroName[nMacroLen-1] == '\'') )
-        sMacroUrl = MacroName.copy( 1, nMacroLen - 2 );
+    ::rtl::OUString aMacroName = trimMacroName( MacroName );
 
     // parse the macro name
-    sal_Int32 nDocSepIndex = sMacroUrl.indexOf( '!' );
-
-    String sContainer;
-    String sModule;
-    String sProcedure;
-
+    sal_Int32 nDocSepIndex = aMacroName.indexOf( '!' );
     if( nDocSepIndex > 0 )
     {
         // macro specified by document name
@@ -238,10 +258,10 @@ VBAMacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const rtl::OUStrin
         // recursively
 
         // assume for now that the document name is *this* document
-        String sDocUrlOrPath = sMacroUrl.copy( 0, nDocSepIndex );
-        sMacroUrl = sMacroUrl.copy( nDocSepIndex + 1 );
+        String sDocUrlOrPath = aMacroName.copy( 0, nDocSepIndex );
+        aMacroName = aMacroName.copy( nDocSepIndex + 1 );
         OSL_TRACE("doc search, current shell is 0x%x", pShell );
-        SfxObjectShell* pFoundShell = NULL;
+        SfxObjectShell* pFoundShell = 0;
         if( bSearchGlobalTemplates )
         {
             SvtPathOptions aPathOpt;
@@ -249,45 +269,49 @@ VBAMacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const rtl::OUStrin
             if( rtl::OUString( sDocUrlOrPath ).indexOf( aAddinPath ) == 0 )
                 pFoundShell = pShell;
         }
-        if( pFoundShell == NULL )
+        if( !pFoundShell )
             pFoundShell = findShellForUrl( sDocUrlOrPath );
         OSL_TRACE("doc search, after find, found shell is 0x%x", pFoundShell );
-        aRes = resolveVBAMacro( pFoundShell, sMacroUrl, bSearchGlobalTemplates );
-        return aRes;
+        return resolveVBAMacro( pFoundShell, aMacroName );
+    }
+
+    // macro is contained in 'this' document ( or code imported from a template
+    // where that template is a global template or perhaps the template this
+    // document is created from )
+
+    MacroResolvedInfo aRes( pShell );
+
+    // macro format = Container.Module.Procedure
+    String sContainer, sModule, sProcedure;
+    parseMacro( aMacroName, sContainer, sModule, sProcedure );
+    uno::Reference< container::XNameContainer > xPrjNameCache;
+
+    // As long as service VBAProjectNameProvider isn't supported in the model, disable the createInstance call
+    // (the ServiceNotRegisteredException is wrongly caught in ScModelObj::createInstance)
+    //uno::Reference< lang::XMultiServiceFactory> xSF( pShell->GetModel(), uno::UNO_QUERY);
+    //if ( xSF.is() )
+    //    xPrjNameCache.set( xSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAProjectNameProvider" ) ) ), uno::UNO_QUERY );
+
+    std::vector< rtl::OUString > sSearchList;
+
+    if ( sContainer.Len() > 0 )
+    {
+        // get the Project associated with the Container
+        if ( xPrjNameCache.is() )
+        {
+            if ( xPrjNameCache->hasByName( sContainer ) )
+            {
+                rtl::OUString sProject;
+                xPrjNameCache->getByName( sContainer ) >>= sProject;
+                sContainer = sProject;
+            }
+        }
+        sSearchList.push_back( sContainer ); // First Lib to search
     }
     else
     {
-        // macro is contained in 'this' document ( or code imported from a template
-        // where that template is a global template or perhaps the template this
-        // document is created from )
-
-        // macro format = Container.Module.Procedure
-        parseMacro( sMacroUrl, sContainer, sModule, sProcedure );
-        uno::Reference< lang::XMultiServiceFactory> xSF( pShell->GetModel(), uno::UNO_QUERY);
-        uno::Reference< container::XNameContainer > xPrjNameCache;
-        if ( xSF.is() )
-            xPrjNameCache.set( xSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAProjectNameProvider" ) ) ), uno::UNO_QUERY );
-
-        std::vector< rtl::OUString > sSearchList;
-
-        if ( sContainer.Len() > 0 )
-        {
-            // get the Project associated with the Container
-            if ( xPrjNameCache.is() )
-            {
-                if ( xPrjNameCache->hasByName( sContainer ) )
-                {
-                    rtl::OUString sProject;
-                    xPrjNameCache->getByName( sContainer ) >>= sProject;
-                    sContainer = sProject;
-                }
-            }
-            sSearchList.push_back( sContainer ); // First Lib to search
-        }
-        else
-        {
-            // Ok, if we have no Container specified then we need to search them in order, this document, template this document created from, global templates,
-            // get the name of Project/Library for 'this' document
+        // Ok, if we have no Container specified then we need to search them in order, this document, template this document created from, global templates,
+        // get the name of Project/Library for 'this' document
             rtl::OUString sThisProject = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Standard") );
             try
             {
@@ -297,78 +321,72 @@ VBAMacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const rtl::OUStrin
             }
             catch( uno::Exception& /*e*/) {}
 
-            sSearchList.push_back( sThisProject ); // First Lib to search
-            if ( xPrjNameCache.is() )
-            {
-                // is this document created from a template?
-                uno::Reference< document::XDocumentInfoSupplier > xDocInfoSupp( pShell->GetModel(), uno::UNO_QUERY_THROW );
-                uno::Reference< document::XDocumentPropertiesSupplier > xDocPropSupp( xDocInfoSupp->getDocumentInfo(), uno::UNO_QUERY_THROW );
-                uno::Reference< document::XDocumentProperties > xDocProps( xDocPropSupp->getDocumentProperties(), uno::UNO_QUERY_THROW );
-
-                rtl::OUString sCreatedFrom = xDocProps->getTemplateURL();
-                if ( sCreatedFrom.getLength() )
-                {
-                    INetURLObject aObj;
-                    aObj.SetURL( sCreatedFrom );
-                    bool bIsURL = aObj.GetProtocol() != INET_PROT_NOT_VALID;
-                    rtl::OUString aURL;
-                    if ( bIsURL )
-                        aURL = sCreatedFrom;
-                    else
-                    {
-                        osl::FileBase::getFileURLFromSystemPath( sCreatedFrom, aURL );
-                        aObj.SetURL( aURL );
-                    }
-                    sCreatedFrom =  aObj.GetLastName();
-                }
-
-                sal_Int32 nIndex =  sCreatedFrom.lastIndexOf( '.' );
-                if ( nIndex != -1 )
-                    sCreatedFrom = sCreatedFrom.copy( 0, nIndex );
-
-                rtl::OUString sPrj;
-                if ( sCreatedFrom.getLength() && xPrjNameCache->hasByName( sCreatedFrom ) )
-                {
-                    xPrjNameCache->getByName( sCreatedFrom ) >>= sPrj;
-                    // Make sure we don't double up with this project
-                    if ( !sPrj.equals( sThisProject ) )
-                        sSearchList.push_back( sPrj );
-                }
-
-                // get list of global template Names
-                uno::Sequence< rtl::OUString > sTemplateNames = xPrjNameCache->getElementNames();
-                sal_Int32 nLen = sTemplateNames.getLength();
-                for ( sal_Int32 index = 0; ( bSearchGlobalTemplates && index < nLen ); ++index )
-                {
-
-                    if ( !sCreatedFrom.equals( sTemplateNames[ index ] ) )
-                    {
-                        if ( xPrjNameCache->hasByName( sTemplateNames[ index ] ) )
-                        {
-                            xPrjNameCache->getByName( sTemplateNames[ index ] ) >>= sPrj;
-                            // Make sure we don't double up with this project
-                            if ( !sPrj.equals( sThisProject ) )
-                                sSearchList.push_back( sPrj );
-                        }
-                    }
-
-                }
-            }
-        }
-        std::vector< rtl::OUString >::iterator it_end = sSearchList.end();
-        for ( std::vector< rtl::OUString >::iterator it = sSearchList.begin(); it != it_end; ++it )
+        sSearchList.push_back( sThisProject ); // First Lib to search
+        if ( xPrjNameCache.is() )
         {
-            bool bRes = hasMacro( pShell, *it, sModule, sProcedure );
-            if ( bRes )
+            // is this document created from a template?
+            uno::Reference< document::XDocumentInfoSupplier > xDocInfoSupp( pShell->GetModel(), uno::UNO_QUERY_THROW );
+            uno::Reference< document::XDocumentPropertiesSupplier > xDocPropSupp( xDocInfoSupp->getDocumentInfo(), uno::UNO_QUERY_THROW );
+            uno::Reference< document::XDocumentProperties > xDocProps( xDocPropSupp->getDocumentProperties(), uno::UNO_QUERY_THROW );
+
+            rtl::OUString sCreatedFrom = xDocProps->getTemplateURL();
+            if ( sCreatedFrom.getLength() )
             {
-                aRes.SetResolved( true );
-                aRes.SetMacroDocContext( pShell );
-                sContainer = *it;
-                break;
+                INetURLObject aObj;
+                aObj.SetURL( sCreatedFrom );
+                bool bIsURL = aObj.GetProtocol() != INET_PROT_NOT_VALID;
+                rtl::OUString aURL;
+                if ( bIsURL )
+                    aURL = sCreatedFrom;
+                else
+                {
+                    osl::FileBase::getFileURLFromSystemPath( sCreatedFrom, aURL );
+                    aObj.SetURL( aURL );
+                }
+                sCreatedFrom =  aObj.GetLastName();
+            }
+
+            sal_Int32 nIndex =  sCreatedFrom.lastIndexOf( '.' );
+            if ( nIndex != -1 )
+                sCreatedFrom = sCreatedFrom.copy( 0, nIndex );
+
+            rtl::OUString sPrj;
+            if ( sCreatedFrom.getLength() && xPrjNameCache->hasByName( sCreatedFrom ) )
+            {
+                xPrjNameCache->getByName( sCreatedFrom ) >>= sPrj;
+                // Make sure we don't double up with this project
+                if ( !sPrj.equals( sThisProject ) )
+                    sSearchList.push_back( sPrj );
+            }
+
+            // get list of global template Names
+            uno::Sequence< rtl::OUString > sTemplateNames = xPrjNameCache->getElementNames();
+            sal_Int32 nLen = sTemplateNames.getLength();
+            for ( sal_Int32 index = 0; ( bSearchGlobalTemplates && index < nLen ); ++index )
+            {
+
+                if ( !sCreatedFrom.equals( sTemplateNames[ index ] ) )
+                {
+                    if ( xPrjNameCache->hasByName( sTemplateNames[ index ] ) )
+                    {
+                        xPrjNameCache->getByName( sTemplateNames[ index ] ) >>= sPrj;
+                        // Make sure we don't double up with this project
+                        if ( !sPrj.equals( sThisProject ) )
+                            sSearchList.push_back( sPrj );
+                    }
+                }
+
             }
         }
-        aRes.SetResolvedMacro( sProcedure.Insert( '.', 0 ).Insert( sModule, 0).Insert( '.', 0 ).Insert( sContainer, 0 ) );
     }
+    std::vector< rtl::OUString >::iterator it_end = sSearchList.end();
+    for ( std::vector< rtl::OUString >::iterator it = sSearchList.begin(); !aRes.mbFound && (it != it_end); ++it )
+    {
+        aRes.mbFound = hasMacro( pShell, *it, sModule, sProcedure );
+        if ( aRes.mbFound )
+            sContainer = *it;
+    }
+    aRes.msResolvedMacro = sProcedure.Insert( '.', 0 ).Insert( sModule, 0).Insert( '.', 0 ).Insert( sContainer, 0 );
 
     return aRes;
 }
@@ -409,6 +427,119 @@ sal_Bool executeMacro( SfxObjectShell* pShell, const String& sMacroName, uno::Se
     }
     return bRes;
 }
-} } // vba // ooo
 
+// ============================================================================
+
+uno::Sequence< ::rtl::OUString > VBAMacroResolver_getSupportedServiceNames()
+{
+    uno::Sequence< ::rtl::OUString > aServiceNames( 1 );
+    aServiceNames[ 0 ] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.vba.VBAMacroResolver" ) );
+    return aServiceNames;
+}
+
+::rtl::OUString VBAMacroResolver_getImplementationName()
+{
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.vba.VBAMacroResolver" ) );
+}
+
+uno::Reference< uno::XInterface > SAL_CALL VBAMacroResolver_createInstance( const uno::Reference< uno::XComponentContext >& ) throw (uno::Exception)
+{
+    return static_cast< ::cppu::OWeakObject* >( new VBAMacroResolver );
+}
+
+// ============================================================================
+
+VBAMacroResolver::VBAMacroResolver() :
+    mpObjShell( 0 )
+{
+}
+
+VBAMacroResolver::~VBAMacroResolver()
+{
+}
+
+// com.sun.star.lang.XServiceInfo interface -----------------------------------
+
+::rtl::OUString SAL_CALL VBAMacroResolver::getImplementationName() throw (uno::RuntimeException)
+{
+    return VBAMacroResolver_getImplementationName();
+}
+
+sal_Bool SAL_CALL VBAMacroResolver::supportsService( const ::rtl::OUString& rService ) throw (uno::RuntimeException)
+{
+    uno::Sequence< ::rtl::OUString > aServices = VBAMacroResolver_getSupportedServiceNames();
+    const ::rtl::OUString* pArray = aServices.getConstArray();
+    const ::rtl::OUString* pArrayEnd = pArray + aServices.getLength();
+    return ::std::find( pArray, pArrayEnd, rService ) != pArrayEnd;
+}
+
+uno::Sequence< ::rtl::OUString > SAL_CALL VBAMacroResolver::getSupportedServiceNames() throw (uno::RuntimeException)
+{
+    return VBAMacroResolver_getSupportedServiceNames();
+}
+
+// com.sun.star.lang.XInitialization interface --------------------------------
+
+void SAL_CALL VBAMacroResolver::initialize( const uno::Sequence< uno::Any >& rArgs ) throw (uno::Exception, uno::RuntimeException)
+{
+    OSL_ENSURE( rArgs.getLength() < 2, "VBAMacroResolver::initialize - missing arguments" );
+    if( rArgs.getLength() < 2 )
+        throw uno::RuntimeException();
+
+    // first argument: document model
+    mxModel.set( rArgs[ 0 ], uno::UNO_QUERY_THROW );
+    uno::Reference< lang::XUnoTunnel > xUnoTunnel( mxModel, uno::UNO_QUERY_THROW );
+    mpObjShell = reinterpret_cast< SfxObjectShell* >( xUnoTunnel->getSomething( SfxObjectShell::getUnoTunnelId() ) );
+    if( !mpObjShell )
+        throw uno::RuntimeException();
+
+    // second argument: VBA project name
+    if( !(rArgs[ 1 ] >>= maProjectName) || (maProjectName.getLength() == 0) )
+        throw uno::RuntimeException();
+}
+
+// com.sun.star.script.vba.XVBAMacroResolver interface ------------------------
+
+::rtl::OUString SAL_CALL VBAMacroResolver::resolveVBAMacroToScriptURL( const ::rtl::OUString& rVBAMacroName ) throw (lang::IllegalArgumentException, uno::RuntimeException)
+{
+    if( !mpObjShell )
+        throw uno::RuntimeException();
+
+    // the name may be enclosed in apostrophs
+    ::rtl::OUString aMacroName = trimMacroName( rVBAMacroName );
+    if( aMacroName.getLength() == 0 )
+        throw lang::IllegalArgumentException();
+
+    // external references not supported here (syntax is "url!macroname" or "[url]!macroname" or "[url]macroname")
+    if( (aMacroName[ 0 ] == '[') || (aMacroName.indexOf( '!' ) >= 0) )
+        throw lang::IllegalArgumentException();
+
+    // check if macro name starts with project name, replace with "Standard"
+    // TODO: adjust this when custom VBA project name is supported
+    sal_Int32 nDotPos = aMacroName.indexOf( '.' );
+    if( (nDotPos == 0) || (nDotPos + 1 == aMacroName.getLength()) )
+        throw lang::IllegalArgumentException();
+    if( (nDotPos > 0) && aMacroName.matchIgnoreAsciiCase( maProjectName ) )
+        aMacroName = aMacroName.copy( nDotPos + 1 );
+
+    // try to find the macro
+    MacroResolvedInfo aInfo = resolveVBAMacro( mpObjShell, aMacroName, false );
+    if( !aInfo.mbFound )
+        throw lang::IllegalArgumentException();
+
+    // build and return the script URL
+    return makeMacroURL( aInfo.msResolvedMacro );
+}
+
+::rtl::OUString SAL_CALL VBAMacroResolver::resolveScriptURLtoVBAMacro( const ::rtl::OUString& /*rScriptURL*/ ) throw (lang::IllegalArgumentException, uno::RuntimeException)
+{
+    OSL_ENSURE( false, "VBAMacroResolver::resolveScriptURLtoVBAMacro - not implemented" );
+    throw uno::RuntimeException();
+}
+
+// ============================================================================
+
+} // namespace vba
+} // namespace ooo
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+

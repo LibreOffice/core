@@ -29,9 +29,6 @@
 #include "oox/core/xmlfilterbase.hxx"
 
 #include <cstdio>
-
-#include <rtl/strbuf.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/embed/XRelationshipAccess.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
@@ -39,48 +36,38 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <comphelper/mediadescriptor.hxx>
 #include <sax/fshelper.hxx>
-#include "properties.hxx"
-#include "tokens.hxx"
+#include <rtl/strbuf.hxx>
+#include <rtl/ustrbuf.hxx>
+#include "oox/core/fastparser.hxx"
+#include "oox/core/filterdetect.hxx"
+#include "oox/core/fragmenthandler.hxx"
+#include "oox/core/recordparser.hxx"
+#include "oox/core/relationshandler.hxx"
 #include "oox/helper/containerhelper.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/helper/zipstorage.hxx"
-#include "oox/core/fasttokenhandler.hxx"
-#include "oox/core/filterdetect.hxx"
-#include "oox/core/fragmenthandler.hxx"
-#include "oox/core/namespaces.hxx"
-#include "oox/core/recordparser.hxx"
-#include "oox/core/relationshandler.hxx"
 
+namespace oox {
+namespace core {
+
+// ============================================================================
+
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::document;
+using namespace ::com::sun::star::embed;
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::xml::sax;
+
+using ::comphelper::MediaDescriptor;
 using ::rtl::OStringBuffer;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
-using ::com::sun::star::beans::StringPair;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::RuntimeException;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::uno::UNO_SET_THROW;
-using ::com::sun::star::lang::Locale;
-using ::com::sun::star::lang::XMultiServiceFactory;
-using ::com::sun::star::embed::XRelationshipAccess;
-using ::com::sun::star::embed::XStorage;
-using ::com::sun::star::io::XInputStream;
-using ::com::sun::star::io::XOutputStream;
-using ::com::sun::star::io::XStream;
-using ::com::sun::star::container::XNameContainer;
-using ::com::sun::star::xml::sax::XFastParser;
-using ::com::sun::star::xml::sax::XFastTokenHandler;
-using ::com::sun::star::xml::sax::XFastDocumentHandler;
-using ::com::sun::star::xml::sax::InputSource;
-using ::com::sun::star::xml::sax::SAXException;
-using ::com::sun::star::document::XDocumentProperties;
-using ::com::sun::star::util::DateTime;
-using ::comphelper::MediaDescriptor;
-using ::sax_fastparser::FastSerializerHelper;
 using ::sax_fastparser::FSHelperPtr;
-
+using ::sax_fastparser::FastSerializerHelper;
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XOOXMLDocumentPropertiesImporter.hpp>
@@ -97,8 +84,6 @@ using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::lang::XComponent;
 
 
-namespace oox {
-namespace core {
 
 // ============================================================================
 
@@ -118,23 +103,22 @@ struct XmlFilterBaseImpl
 {
     typedef RefMap< OUString, Relations > RelationsMap;
 
-    Reference< XFastParser > mxFastParser;
-    OUString            maBinSuffix;
-    OUString            maVmlSuffix;
+    FastParser          maFastParser;
+    const OUString      maBinSuffix;
+    const OUString      maVmlSuffix;
     RelationsMap        maRelationsMap;
     TextFieldStack      maTextFieldStack;
-    explicit            XmlFilterBaseImpl();
+
+    explicit            XmlFilterBaseImpl( const Reference< XComponentContext >& rxContext ) throw( RuntimeException );
 };
 
 // ----------------------------------------------------------------------------
 
-XmlFilterBaseImpl::XmlFilterBaseImpl() :
+XmlFilterBaseImpl::XmlFilterBaseImpl( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
+    maFastParser( rxContext ),
     maBinSuffix( CREATE_OUSTRING( ".bin" ) ),
     maVmlSuffix( CREATE_OUSTRING( ".vml" ) )
 {
-}
-
-// ============================================================================
 static Reference< XComponentContext > lcl_getComponentContext(Reference< XMultiServiceFactory > aFactory)
 {
     Reference< XComponentContext > xContext;
@@ -151,45 +135,38 @@ static Reference< XComponentContext > lcl_getComponentContext(Reference< XMultiS
 }
 
 // ============================================================================
+    // register XML namespaces
+    maFastParser.registerNamespace( NMSP_xml );
+    maFastParser.registerNamespace( NMSP_packageRel );
+    maFastParser.registerNamespace( NMSP_officeRel );
 
-XmlFilterBase::XmlFilterBase( const Reference< XMultiServiceFactory >& rxGlobalFactory ) :
-    FilterBase( rxGlobalFactory ),
-    mxImpl( new XmlFilterBaseImpl ),
+    maFastParser.registerNamespace( NMSP_dml );
+    maFastParser.registerNamespace( NMSP_dmlDiagram );
+    maFastParser.registerNamespace( NMSP_dmlChart );
+    maFastParser.registerNamespace( NMSP_dmlChartDr );
+    maFastParser.registerNamespace( NMSP_dmlSpreadDr );
+
+    maFastParser.registerNamespace( NMSP_vml );
+    maFastParser.registerNamespace( NMSP_vmlOffice );
+    maFastParser.registerNamespace( NMSP_vmlWord );
+    maFastParser.registerNamespace( NMSP_vmlExcel );
+    maFastParser.registerNamespace( NMSP_vmlPowerpoint );
+
+    maFastParser.registerNamespace( NMSP_xls );
+    maFastParser.registerNamespace( NMSP_ppt );
+
+    maFastParser.registerNamespace( NMSP_ax );
+    maFastParser.registerNamespace( NMSP_xm );
+}
+
+// ============================================================================
+
+XmlFilterBase::XmlFilterBase( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
+    FilterBase( rxContext ),
+    mxImpl( new XmlFilterBaseImpl( rxContext ) ),
     mnRelId( 1 ),
     mnMaxDocId( 0 )
 {
-    try
-    {
-        // create the fast parser
-        mxImpl->mxFastParser.set( rxGlobalFactory->createInstance( CREATE_OUSTRING( "com.sun.star.xml.sax.FastParser" ) ), UNO_QUERY_THROW );
-        mxImpl->mxFastParser->setTokenHandler( new FastTokenHandler );
-
-        // register XML namespaces
-        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "http://www.w3.org/XML/1998/namespace" ), NMSP_XML );
-        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/package/2006/relationships" ), NMSP_PACKAGE_RELATIONSHIPS );
-        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/officeDocument/2006/relationships" ), NMSP_RELATIONSHIPS );
-
-        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/drawingml/2006/main" ), NMSP_DRAWINGML );
-        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/drawingml/2006/diagram" ), NMSP_DIAGRAM );
-        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/drawingml/2006/chart" ), NMSP_CHART );
-        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/drawingml/2006/chartDrawing" ), NMSP_CDR );
-
-        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "urn:schemas-microsoft-com:vml" ), NMSP_VML );
-        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "urn:schemas-microsoft-com:office:office" ), NMSP_OFFICE );
-        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "urn:schemas-microsoft-com:office:word" ), NMSP_VML_DOC );
-        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "urn:schemas-microsoft-com:office:excel" ), NMSP_VML_XLS );
-        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "urn:schemas-microsoft-com:office:powerpoint" ), NMSP_VML_PPT );
-        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "http://schemas.microsoft.com/office/2006/activeX" ), NMSP_AX );
-
-        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/spreadsheetml/2006/main"), NMSP_XLS );
-        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing" ), NMSP_XDR );
-        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "http://schemas.microsoft.com/office/excel/2006/main" ), NMSP_XM );
-
-        mxImpl->mxFastParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/presentationml/2006/main"), NMSP_PPT );
-    }
-    catch( Exception& )
-    {
-    }
 }
 
 XmlFilterBase::~XmlFilterBase()
@@ -265,25 +242,20 @@ bool XmlFilterBase::importFragment( const ::rtl::Reference< FragmentHandler >& r
     if( !xDocHandler.is() )
         return false;
 
-    // check that the fast parser exists
-    if( !mxImpl->mxFastParser.is() )
-        return false;
-
     // try to import XML stream
     try
     {
-        // try to open the fragment stream (this may fail - do not assert)
-        Reference< XInputStream > xInStrm( rxHandler->openFragmentStream(), UNO_SET_THROW );
+        /*  Try to open the fragment stream (may fail, do not throw/assert).
+            Using the virtual function openFragmentStream() allows a document
+            handler to create specialized input streams, e.g. VML streams that
+            have to preprocess the raw input data. */
+        Reference< XInputStream > xInStrm = rxHandler->openFragmentStream();
 
-        // create the input source and parse the stream
-        InputSource aSource;
-        aSource.aInputStream = xInStrm;
-        aSource.sSystemId = aFragmentPath;
         // own try/catch block for showing parser failure assertion with fragment path
-        try
+        if( xInStrm.is() ) try
         {
-            mxImpl->mxFastParser->setFastDocumentHandler( xDocHandler );
-            mxImpl->mxFastParser->parseStream( aSource );
+            mxImpl->maFastParser.setDocumentHandler( xDocHandler );
+            mxImpl->maFastParser.parseStream( xInStrm, aFragmentPath );
             return true;
         }
         catch( Exception& )
@@ -576,7 +548,7 @@ Reference< XInputStream > XmlFilterBase::implGetInputStream( MediaDescriptor& rM
     /*  Get the input stream directly from the media descriptor, or decrypt the
         package again. The latter is needed e.g. when the document is reloaded.
         All this is implemented in the detector service. */
-    FilterDetect aDetector( getGlobalFactory() );
+    FilterDetect aDetector( getComponentContext() );
     return aDetector.extractUnencryptedPackage( rMediaDesc );
 }
 
@@ -584,12 +556,12 @@ Reference< XInputStream > XmlFilterBase::implGetInputStream( MediaDescriptor& rM
 
 StorageRef XmlFilterBase::implCreateStorage( const Reference< XInputStream >& rxInStream ) const
 {
-    return StorageRef( new ZipStorage( getGlobalFactory(), rxInStream ) );
+    return StorageRef( new ZipStorage( getServiceFactory(), rxInStream ) );
 }
 
 StorageRef XmlFilterBase::implCreateStorage( const Reference< XStream >& rxOutStream ) const
 {
-    return StorageRef( new ZipStorage( getGlobalFactory(), rxOutStream ) );
+    return StorageRef( new ZipStorage( getServiceFactory(), rxOutStream ) );
 }
 
 // ============================================================================

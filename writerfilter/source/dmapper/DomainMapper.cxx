@@ -87,15 +87,11 @@
 #include <vector>
 #include <iostream>
 
-#ifdef DEBUG_DOMAINMAPPER
-#include <resourcemodel/QNameToString.hxx>
-#include <resourcemodel/util.hxx>
-#include <resourcemodel/TagLogger.hxx>
-#endif
 #if OSL_DEBUG_LEVEL > 0
 #include <resourcemodel/QNameToString.hxx>
 #endif
 
+#include <resourcemodel/TagLogger.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
@@ -107,9 +103,7 @@ using resourcemodel::resolveAttributeProperties;
 
 namespace dmapper{
 
-#ifdef DEBUG_DOMAINMAPPER
 TagLogger::Pointer_t dmapper_logger(TagLogger::getInstance("DOMAINMAPPER"));
-#endif
 
 struct _PageSz
 {
@@ -124,6 +118,9 @@ DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xCon
                             uno::Reference< io::XInputStream > xInputStream,
                             uno::Reference< lang::XComponent > xModel,
                             SourceDocumentType eDocumentType) :
+LoggedProperties(dmapper_logger, "DomainMapper"),
+LoggedTable(dmapper_logger, "DomainMapper"),
+LoggedStream(dmapper_logger, "DomainMapper"),
     m_pImpl( new DomainMapper_Impl( *this, xContext, xModel, eDocumentType )),
     mnBackgroundColor(0), mbIsHighlightSet(false)
 {
@@ -184,14 +181,8 @@ DomainMapper::~DomainMapper()
     delete m_pImpl;
 }
 
-void DomainMapper::attribute(Id nName, Value & val)
+void DomainMapper::lcl_attribute(Id nName, Value & val)
 {
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->startElement("attribute");
-    dmapper_logger->attribute("name", (*QNameToString::Instance())(nName));
-    dmapper_logger->attribute("value", val.toString());
-    dmapper_logger->endElement();
-#endif
     static ::rtl::OUString sLocalBookmarkName;
     sal_Int32 nIntValue = val.getInt();
     rtl::OUString sStringValue = val.getString();
@@ -1419,18 +1410,14 @@ void DomainMapper::attribute(Id nName, Value & val)
     }
 }
 
-void DomainMapper::sprm(Sprm & rSprm)
+void DomainMapper::lcl_sprm(Sprm & rSprm)
 {
     if( !m_pImpl->getTableManager().sprm(rSprm))
-        DomainMapper::sprm( rSprm, m_pImpl->GetTopContext() );
+        sprmWithProps( rSprm, m_pImpl->GetTopContext() );
 }
 
-void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmType )
+void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmType )
 {
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->startElement("DomainMapper.sprm");
-    dmapper_logger->chars(rSprm.toString());
-#endif
     OSL_ENSURE(rContext.get(), "PropertyMap has to be valid!");
     if(!rContext.get())
         return ;
@@ -1959,12 +1946,6 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
                     case NS_sprm::LN_CFBoldBi: // sprmCFBoldBi
                     {
                         uno::Any aBold( uno::makeAny( nIntValue ? awt::FontWeight::BOLD : awt::FontWeight::NORMAL ) );
-
-#ifdef DEBUG_DOMAINMAPPER
-                        dmapper_logger->startElement("charWeight");
-                        dmapper_logger->attribute("weight", nIntValue ? awt::FontWeight::BOLD : awt::FontWeight::NORMAL);
-                        dmapper_logger->endElement();
-#endif
 
                         rContext->Insert(ePropertyId, true, aBold );
                         if( nSprmId != NS_sprm::LN_CFBoldBi ) // sprmCFBoldBi
@@ -3136,26 +3117,13 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
 #endif
         }
     }
-
-#ifdef DEBUG_DOMAINMAPPER
-    rContext->dumpXml(dmapper_logger);
-    dmapper_logger->endElement();
-#endif
 }
 
 
-void DomainMapper::entry(int /*pos*/,
+void DomainMapper::lcl_entry(int /*pos*/,
                          writerfilter::Reference<Properties>::Pointer_t ref)
 {
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->startElement("DomainMapper.entry");
-#endif
-
     ref->resolve(*this);
-
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement();
-#endif
 }
 
 void DomainMapper::data(const sal_uInt8* /*buf*/, size_t /*len*/,
@@ -3163,15 +3131,12 @@ void DomainMapper::data(const sal_uInt8* /*buf*/, size_t /*len*/,
 {
 }
 
-void DomainMapper::startSectionGroup()
+void DomainMapper::lcl_startSectionGroup()
 {
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->startElement("section");
-#endif
     m_pImpl->PushProperties(CONTEXT_SECTION);
 }
 
-void DomainMapper::endSectionGroup()
+void DomainMapper::lcl_endSectionGroup()
 {
     PropertyMapPtr pContext = m_pImpl->GetTopContextOfType(CONTEXT_SECTION);
     SectionPropertyMap* pSectionContext = dynamic_cast< SectionPropertyMap* >( pContext.get() );
@@ -3179,18 +3144,10 @@ void DomainMapper::endSectionGroup()
     if(pSectionContext)
         pSectionContext->CloseSectionGroup( *m_pImpl );
     m_pImpl->PopProperties(CONTEXT_SECTION);
-
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement();
-#endif
 }
 
-void DomainMapper::startParagraphGroup()
+void DomainMapper::lcl_startParagraphGroup()
 {
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->startElement("paragraph");
-#endif
-
     m_pImpl->getTableManager().startParagraphGroup();
     m_pImpl->PushProperties(CONTEXT_PARAGRAPH);
     static ::rtl::OUString sDefault(RTL_CONSTASCII_USTRINGPARAM("Standard") );
@@ -3205,40 +3162,27 @@ void DomainMapper::startParagraphGroup()
     m_pImpl->clearDeferredBreaks();
 }
 
-void DomainMapper::endParagraphGroup()
+void DomainMapper::lcl_endParagraphGroup()
 {
     m_pImpl->PopProperties(CONTEXT_PARAGRAPH);
     m_pImpl->getTableManager().endParagraphGroup();
     //frame conversion has to be executed after table conversion
     m_pImpl->ExecuteFrameConversion();
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement();
-#endif
 }
 
 void DomainMapper::markLastParagraphInSection( )
 {
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->element( "markLastParagraphInSection" );
-#endif
     m_pImpl->SetIsLastParagraphInSection( true );
 }
 
-void DomainMapper::startShape( uno::Reference< drawing::XShape > xShape )
+void DomainMapper::lcl_startShape( uno::Reference< drawing::XShape > xShape )
 {
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->startElement("shape");
-#endif
     m_pImpl->PushShapeContext( xShape );
 }
 
-void DomainMapper::endShape( )
+void DomainMapper::lcl_endShape( )
 {
     m_pImpl->PopShapeContext( );
-
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement();
-#endif
 }
 
 void DomainMapper::PushStyleSheetProperties( PropertyMapPtr pStyleProperties, bool bAffectTableMngr )
@@ -3268,12 +3212,8 @@ void DomainMapper::PopListProperties()
     m_pImpl->PopProperties( CONTEXT_LIST );
 }
 
-void DomainMapper::startCharacterGroup()
+void DomainMapper::lcl_startCharacterGroup()
 {
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->startElement("charactergroup");
-#endif
-
     m_pImpl->PushProperties(CONTEXT_CHARACTER);
     DomainMapperTableManager& rTableManager = m_pImpl->getTableManager();
     if( rTableManager.getTableStyleName().getLength() )
@@ -3283,16 +3223,12 @@ void DomainMapper::startCharacterGroup()
     }
 }
 
-void DomainMapper::endCharacterGroup()
+void DomainMapper::lcl_endCharacterGroup()
 {
     m_pImpl->PopProperties(CONTEXT_CHARACTER);
-
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement();
-#endif
 }
 
-void DomainMapper::text(const sal_uInt8 * data_, size_t len)
+void DomainMapper::lcl_text(const sal_uInt8 * data_, size_t len)
 {
     //TODO: Determine the right text encoding (FIB?)
     ::rtl::OUString sText( (const sal_Char*) data_, len, RTL_TEXTENCODING_MS_1252 );
@@ -3372,18 +3308,12 @@ void DomainMapper::text(const sal_uInt8 * data_, size_t len)
     }
 }
 
-void DomainMapper::utext(const sal_uInt8 * data_, size_t len)
+void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
 {
     OUString sText;
     OUStringBuffer aBuffer = OUStringBuffer(len);
     aBuffer.append( (const sal_Unicode *) data_, len);
     sText = aBuffer.makeStringAndClear();
-
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->startElement("utext");
-    dmapper_logger->chars(sText);
-    dmapper_logger->endElement();
-#endif
 
     try
     {
@@ -3431,12 +3361,8 @@ void DomainMapper::utext(const sal_uInt8 * data_, size_t len)
     }
 }
 
-void DomainMapper::props(writerfilter::Reference<Properties>::Pointer_t ref)
+void DomainMapper::lcl_props(writerfilter::Reference<Properties>::Pointer_t ref)
 {
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->startElement("props");
-#endif
-
     string sType = ref->getType();
     if( sType == "PICF" )
     {
@@ -3448,18 +3374,10 @@ void DomainMapper::props(writerfilter::Reference<Properties>::Pointer_t ref)
     }
     else
         ref->resolve(*this);
-
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement();
-#endif
 }
 
-void DomainMapper::table(Id name, writerfilter::Reference<Table>::Pointer_t ref)
+void DomainMapper::lcl_table(Id name, writerfilter::Reference<Table>::Pointer_t ref)
 {
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->startElement("table");
-    dmapper_logger->attribute("id", (*QNameToString::Instance())(name));
-#endif
     m_pImpl->SetAnyTableImport(true);
     switch(name)
     {
@@ -3504,18 +3422,10 @@ void DomainMapper::table(Id name, writerfilter::Reference<Table>::Pointer_t ref)
         OSL_ENSURE( false, "which table is to be filled here?");
     }
     m_pImpl->SetAnyTableImport(false);
-
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement();
-#endif
 }
 
-void DomainMapper::substream(Id rName, ::writerfilter::Reference<Stream>::Pointer_t ref)
+void DomainMapper::lcl_substream(Id rName, ::writerfilter::Reference<Stream>::Pointer_t ref)
 {
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->startElement("substream");
-#endif
-
     m_pImpl->appendTableManager( );
     m_pImpl->getTableManager().startLevel();
 
@@ -3577,13 +3487,9 @@ void DomainMapper::substream(Id rName, ::writerfilter::Reference<Stream>::Pointe
 
     m_pImpl->getTableManager().endLevel();
     m_pImpl->popTableManager( );
-
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement();
-#endif
 }
 
-void DomainMapper::info(const string & /*info_*/)
+void DomainMapper::lcl_info(const string & /*info_*/)
 {
 }
 

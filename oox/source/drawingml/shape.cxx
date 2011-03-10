@@ -33,11 +33,15 @@
 #include "oox/drawingml/lineproperties.hxx"
 #include "oox/drawingml/textbody.hxx"
 #include "oox/drawingml/table/tableproperties.hxx"
-#include "oox/core/namespaces.hxx"
+#include "oox/drawingml/chart/chartconverter.hxx"
+#include "oox/drawingml/chart/chartspacefragment.hxx"
+#include "oox/drawingml/chart/chartspacemodel.hxx"
+#include "oox/vml/vmldrawing.hxx"
+#include "oox/vml/vmlshape.hxx"
+#include "oox/vml/vmlshapecontainer.hxx"
 #include "oox/core/xmlfilterbase.hxx"
+#include "oox/helper/graphichelper.hxx"
 #include "oox/helper/propertyset.hxx"
-#include "properties.hxx"
-#include "tokens.hxx"
 
 #include <tools/solar.h>        // for the F_PI180 define
 #include <com/sun/star/graphic/XGraphic.hpp>
@@ -47,6 +51,7 @@
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -68,26 +73,6 @@ namespace oox { namespace drawingml {
 
 // ============================================================================
 
-CreateShapeCallback::CreateShapeCallback( XmlFilterBase& rFilter ) :
-    mrFilter( rFilter )
-{
-}
-
-CreateShapeCallback::~CreateShapeCallback()
-{
-}
-
-OUString CreateShapeCallback::onCreateXShape( const OUString& rServiceName, const Rectangle& )
-{
-    return rServiceName;
-}
-
-void CreateShapeCallback::onXShapeCreated( const Reference< XShape >&, const Reference< XShapes >& ) const
-{
-}
-
-// ============================================================================
-
 Shape::Shape( const sal_Char* pServiceName )
 : mbIsChild( false )
 , mpLinePropertiesPtr( new LineProperties )
@@ -97,6 +82,7 @@ Shape::Shape( const sal_Char* pServiceName )
 , mpMasterTextListStyle( new TextListStyle )
 , mnSubType( 0 )
 , mnSubTypeIndex( -1 )
+, meFrameType( FRAMETYPE_GENERIC )
 , mnRotation( 0 )
 , mbFlipH( false )
 , mbFlipV( false )
@@ -106,6 +92,7 @@ Shape::Shape( const sal_Char* pServiceName )
         msServiceName = OUString::createFromAscii( pServiceName );
     setDefaults();
 }
+
 Shape::~Shape()
 {
 }
@@ -130,6 +117,39 @@ void Shape::setDefaults()
     maDefaultShapeProperties[ PROP_ParaAdjust ] <<= static_cast< sal_Int16 >( ParagraphAdjust_LEFT ); // check for RTL?
 }
 
+::oox::vml::OleObjectInfo& Shape::setOleObjectType()
+{
+    OSL_ENSURE( meFrameType == FRAMETYPE_GENERIC, "Shape::setOleObjectType - multiple frame types" );
+    meFrameType = FRAMETYPE_OLEOBJECT;
+    mxOleObjectInfo.reset( new ::oox::vml::OleObjectInfo( true ) );
+    return *mxOleObjectInfo;
+}
+
+ChartShapeInfo& Shape::setChartType( bool bEmbedShapes )
+{
+    OSL_ENSURE( meFrameType == FRAMETYPE_GENERIC, "Shape::setChartType - multiple frame types" );
+    meFrameType = FRAMETYPE_CHART;
+    msServiceName = CREATE_OUSTRING( "com.sun.star.drawing.OLE2Shape" );
+    mxChartShapeInfo.reset( new ChartShapeInfo( bEmbedShapes ) );
+    return *mxChartShapeInfo;
+}
+
+void Shape::setDiagramType()
+{
+    OSL_ENSURE( meFrameType == FRAMETYPE_GENERIC, "Shape::setDiagramType - multiple frame types" );
+    meFrameType = FRAMETYPE_DIAGRAM;
+    msServiceName = CREATE_OUSTRING( "com.sun.star.drawing.GroupShape" );
+    mnSubType = 0;
+}
+
+void Shape::setTableType()
+{
+    OSL_ENSURE( meFrameType == FRAMETYPE_GENERIC, "Shape::setTableType - multiple frame types" );
+    meFrameType = FRAMETYPE_TABLE;
+    msServiceName = CREATE_OUSTRING( "com.sun.star.drawing.TableShape" );
+    mnSubType = 0;
+}
+
 void Shape::setServiceName( const sal_Char* pServiceName )
 {
     if ( pServiceName )
@@ -144,7 +164,7 @@ const ShapeStyleRef* Shape::getShapeStyleRef( sal_Int32 nRefType ) const
 }
 
 void Shape::addShape(
-        const ::oox::core::XmlFilterBase& rFilterBase,
+        ::oox::core::XmlFilterBase& rFilterBase,
         const Theme* pTheme,
         const Reference< XShapes >& rxShapes,
         const awt::Rectangle* pShapeRect,
@@ -196,7 +216,7 @@ void Shape::applyShapeReference( const Shape& rReferencedShape )
 
 // for group shapes, the following method is also adding each child
 void Shape::addChildren(
-        const ::oox::core::XmlFilterBase& rFilterBase,
+        XmlFilterBase& rFilterBase,
         Shape& rMaster,
         const Theme* pTheme,
         const Reference< XShapes >& rxShapes,
@@ -233,7 +253,7 @@ void Shape::addChildren(
 }
 
 Reference< XShape > Shape::createAndInsert(
-        const ::oox::core::XmlFilterBase& rFilterBase,
+        ::oox::core::XmlFilterBase& rFilterBase,
         const rtl::OUString& rServiceName,
         const Theme* pTheme,
         const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
@@ -242,11 +262,10 @@ Reference< XShape > Shape::createAndInsert(
 {
     awt::Size aSize( pShapeRect ? awt::Size( pShapeRect->Width, pShapeRect->Height ) : maSize );
     awt::Point aPosition( pShapeRect ? awt::Point( pShapeRect->X, pShapeRect->Y ) : maPosition );
+    awt::Rectangle aShapeRectHmm( aPosition.X / 360, aPosition.Y / 360, aSize.Width / 360, aSize.Height / 360 );
 
-    OUString aServiceName = rServiceName;
-    if( mxCreateCallback.get() )
-        aServiceName = mxCreateCallback->onCreateXShape( aServiceName, awt::Rectangle( aPosition.X / 360, aPosition.Y / 360, aSize.Width / 360, aSize.Height / 360 ) );
-    sal_Bool bIsCustomShape = aServiceName == OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.CustomShape"));
+    OUString aServiceName = finalizeServiceName( rFilterBase, rServiceName, aShapeRectHmm );
+    sal_Bool bIsCustomShape = aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.CustomShape" ) );
 
     basegfx::B2DHomMatrix aTransformation;
     if( aSize.Width != 1 || aSize.Height != 1)
@@ -418,13 +437,6 @@ Reference< XShape > Shape::createAndInsert(
         PropertyMap aShapeProperties;
         PropertyMap::const_iterator aShapePropIter;
 
-        if( mxCreateCallback.get() )
-        {
-            for ( aShapePropIter = mxCreateCallback->getShapeProperties().begin();
-                aShapePropIter != mxCreateCallback->getShapeProperties().end(); ++aShapePropIter )
-                aShapeProperties[ (*aShapePropIter).first ] = (*aShapePropIter).second;
-        }
-
         // add properties from textbody to shape properties
         if( mpTextBody.get() )
         {
@@ -490,9 +502,8 @@ Reference< XShape > Shape::createAndInsert(
             xLockable->removeActionLock();
     }
 
-    // use a callback for further processing on the XShape (e.g. charts)
-    if( mxShape.is() && mxCreateCallback.get() )
-        mxCreateCallback->onXShapeCreated( mxShape, rxShapes );
+    if( mxShape.is() )
+        finalizeXShape( rFilterBase, rxShapes );
 
     return mxShape;
 }
@@ -525,6 +536,78 @@ void Shape::setMasterTextListStyle( const TextListStylePtr& pMasterTextListStyle
     mpMasterTextListStyle = pMasterTextListStyle;
 }
 
+OUString Shape::finalizeServiceName( XmlFilterBase& rFilter, const OUString& rServiceName, const Rectangle& rShapeRect )
+{
+    OUString aServiceName = rServiceName;
+    switch( meFrameType )
+    {
+        case FRAMETYPE_OLEOBJECT:
+        {
+            Size aOleSize( rShapeRect.Width, rShapeRect.Height );
+            if( rFilter.getOleObjectHelper().importOleObject( maShapeProperties, *mxOleObjectInfo, aOleSize ) )
+                aServiceName = CREATE_OUSTRING( "com.sun.star.drawing.OLE2Shape" );
+
+            // get the path to the representation graphic
+            OUString aGraphicPath;
+            if( mxOleObjectInfo->maShapeId.getLength() > 0 )
+                if( ::oox::vml::Drawing* pVmlDrawing = rFilter.getVmlDrawing() )
+                    if( const ::oox::vml::ShapeBase* pVmlShape = pVmlDrawing->getShapes().getShapeById( mxOleObjectInfo->maShapeId, true ) )
+                        aGraphicPath = pVmlShape->getGraphicPath();
+
+            // import and store the graphic
+            if( aGraphicPath.getLength() > 0 )
+            {
+                Reference< graphic::XGraphic > xGraphic = rFilter.getGraphicHelper().importEmbeddedGraphic( aGraphicPath );
+                if( xGraphic.is() )
+                    maShapeProperties[ PROP_Graphic ] <<= xGraphic;
+            }
+        }
+        break;
+
+        default:;
+    }
+    return aServiceName;
+}
+
+void Shape::finalizeXShape( XmlFilterBase& rFilter, const Reference< XShapes >& rxShapes )
+{
+    switch( meFrameType )
+    {
+        case FRAMETYPE_CHART:
+        {
+            OSL_ENSURE( mxChartShapeInfo->maFragmentPath.getLength() > 0, "Shape::finalizeXShape - missing chart fragment" );
+            if( mxShape.is() && (mxChartShapeInfo->maFragmentPath.getLength() > 0) ) try
+            {
+                // set the chart2 OLE class ID at the OLE shape
+                PropertySet aShapeProp( mxShape );
+                aShapeProp.setProperty( PROP_CLSID, CREATE_OUSTRING( "12dcae26-281f-416f-a234-c3086127382e" ) );
+
+                // get the XModel interface of the embedded object from the OLE shape
+                Reference< frame::XModel > xDocModel;
+                aShapeProp.getProperty( xDocModel, PROP_Model );
+                Reference< chart2::XChartDocument > xChartDoc( xDocModel, UNO_QUERY_THROW );
+
+                // load the chart data from the XML fragment
+                chart::ChartSpaceModel aModel;
+                rFilter.importFragment( new chart::ChartSpaceFragment( rFilter, mxChartShapeInfo->maFragmentPath, aModel ) );
+
+                // convert imported chart model to chart document
+                Reference< drawing::XShapes > xExternalPage;
+                if( !mxChartShapeInfo->mbEmbedShapes )
+                    xExternalPage = rxShapes;
+                rFilter.getChartConverter().convertFromModel( rFilter, aModel, xChartDoc, xExternalPage, mxShape->getPosition(), mxShape->getSize() );
+            }
+            catch( Exception& )
+            {
+            }
+        }
+        break;
+
+        default:;
+    }
+}
+
+// ============================================================================
 
 } }
 

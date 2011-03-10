@@ -29,7 +29,6 @@
 #include "layoutnodecontext.hxx"
 
 #include "oox/helper/attributelist.hxx"
-#include "oox/core/namespaces.hxx"
 #include "oox/drawingml/diagram/diagram.hxx"
 #include "oox/drawingml/shapecontext.hxx"
 #include "diagramdefinitioncontext.hxx"
@@ -179,7 +178,7 @@ public:
         {
             Reference< XFastContextHandler > xRet;
 
-            sal_Int32 nIdx =  LayoutNodeContext::tagToVarIdx( getToken( aElement ) );
+            sal_Int32 nIdx =  LayoutNodeContext::tagToVarIdx( getBaseToken( aElement ) );
             if( nIdx != -1 )
             {
                 mVariables[ nIdx ] = makeAny( xAttribs->getOptionalValue( XML_val ) );
@@ -230,31 +229,31 @@ sal_Int32 LayoutNodeContext::tagToVarIdx( sal_Int32 aTag )
     sal_Int32 nIdx = -1;
     switch( aTag )
     {
-    case NMSP_DIAGRAM|XML_animLvl:
+    case DGM_TOKEN( animLvl ):
         nIdx = LayoutNode::VAR_animLvl;
         break;
-    case NMSP_DIAGRAM|XML_animOne:
+    case DGM_TOKEN( animOne ):
         nIdx = LayoutNode::VAR_animOne;
         break;
-    case NMSP_DIAGRAM|XML_bulletEnabled:
+    case DGM_TOKEN( bulletEnabled ):
         nIdx = LayoutNode::VAR_bulletEnabled;
         break;
-    case NMSP_DIAGRAM|XML_chMax:
+    case DGM_TOKEN( chMax ):
         nIdx = LayoutNode::VAR_chMax;
         break;
-    case NMSP_DIAGRAM|XML_chPref:
+    case DGM_TOKEN( chPref ):
         nIdx = LayoutNode::VAR_chPref;
         break;
-    case NMSP_DIAGRAM|XML_dir:
+    case DGM_TOKEN( dir ):
         nIdx = LayoutNode::VAR_dir;
         break;
-    case NMSP_DIAGRAM|XML_hierBranch:
+    case DGM_TOKEN( hierBranch ):
         nIdx = LayoutNode::VAR_hierBranch;
         break;
-    case NMSP_DIAGRAM|XML_orgChart:
+    case DGM_TOKEN( orgChart ):
         nIdx = LayoutNode::VAR_orgChart;
         break;
-    case NMSP_DIAGRAM|XML_resizeHandles:
+    case DGM_TOKEN( resizeHandles ):
         nIdx = LayoutNode::VAR_resizeHandles;
         break;
     default:
@@ -273,22 +272,22 @@ LayoutNodeContext::createFastChildContext( ::sal_Int32 aElement,
 
     switch( aElement )
     {
-    case NMSP_DIAGRAM|XML_layoutNode:
+    case DGM_TOKEN( layoutNode ):
     {
         LayoutNodePtr pNode( new LayoutNode() );
         mpNode->addChild( pNode );
         xRet.set( new LayoutNodeContext( *this, xAttribs, pNode ) );
         break;
     }
-    case NMSP_DIAGRAM|XML_shape:
+    case DGM_TOKEN( shape ):
     {
         ShapePtr pShape( new Shape() );
         xRet.set( new ShapeContext( *this, ShapePtr(), pShape ) );
         break;
     }
-    case NMSP_DIAGRAM|XML_extLst:
+    case DGM_TOKEN( extLst ):
         return xRet;
-    case NMSP_DIAGRAM|XML_alg:
+    case DGM_TOKEN( alg ):
     {
         // CT_Algorithm
         LayoutAtomPtr pAtom( new AlgAtom );
@@ -296,7 +295,7 @@ LayoutNodeContext::createFastChildContext( ::sal_Int32 aElement,
         xRet.set( new AlgorithmContext( *this, xAttribs, pAtom ) );
         break;
     }
-    case NMSP_DIAGRAM|XML_choose:
+    case DGM_TOKEN( choose ):
     {
         // CT_Choose
         LayoutAtomPtr pAtom( new ChooseAtom );
@@ -304,7 +303,7 @@ LayoutNodeContext::createFastChildContext( ::sal_Int32 aElement,
         xRet.set( new ChooseContext( *this, xAttribs, pAtom ) );
          break;
     }
-    case NMSP_DIAGRAM|XML_forEach:
+    case DGM_TOKEN( forEach ):
     {
         // CT_ForEach
         LayoutAtomPtr pAtom( new ForEachAtom );
@@ -312,11 +311,11 @@ LayoutNodeContext::createFastChildContext( ::sal_Int32 aElement,
         xRet.set( new ForEachContext( *this, xAttribs, pAtom ) );
         break;
     }
-    case NMSP_DIAGRAM|XML_constrLst:
+    case DGM_TOKEN( constrLst ):
         // CT_Constraints
         // TODO
         break;
-    case NMSP_DIAGRAM|XML_presOf:
+    case DGM_TOKEN( presOf ):
     {
         // CT_PresentationOf
         // TODO
@@ -328,11 +327,11 @@ LayoutNodeContext::createFastChildContext( ::sal_Int32 aElement,
         xAttribs->getOptionalValue( XML_step );
         break;
     }
-    case NMSP_DIAGRAM|XML_ruleLst:
+    case DGM_TOKEN( ruleLst ):
         // CT_Rules
         // TODO
         break;
-    case NMSP_DIAGRAM|XML_varLst:
+    case DGM_TOKEN( varLst ):
     {
         LayoutNodePtr pNode( boost::dynamic_pointer_cast< LayoutNode >( mpNode ) );
         if( pNode )

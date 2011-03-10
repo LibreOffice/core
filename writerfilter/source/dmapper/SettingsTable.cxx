@@ -26,20 +26,17 @@
  *
  ************************************************************************/
 
+#include <stdio.h>
+#include <rtl/ustring.hxx>
 #include <resourcemodel/ResourceModelHelper.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
-
 #include <SettingsTable.hxx>
+#include <resourcemodel/ResourceModelHelper.hxx>
 #include <doctok/resourceids.hxx>
 #include <ooxml/resourceids.hxx>
-#include <stdio.h>
 #include <ConversionHelper.hxx>
-#include <rtl/ustring.hxx>
 
-#ifdef DEBUG_DOMAINMAPPER
-#include <resourcemodel/QNameToString.hxx>
 #include "dmapperLoggers.hxx"
-#endif
 
 namespace writerfilter {
 
@@ -95,10 +92,13 @@ struct SettingsTable_Impl
     , m_nCryptAlgorithmType(NS_ooxml::LN_Value_wordprocessingml_ST_AlgType_typeAny)
     , m_nCryptSpinCount(0)
     {}
+
 };
 
-SettingsTable::SettingsTable(DomainMapper& rDMapper, const uno::Reference< lang::XMultiServiceFactory > xTextFactory) :
-m_pImpl( new SettingsTable_Impl(rDMapper, xTextFactory) )
+SettingsTable::SettingsTable(DomainMapper& rDMapper, const uno::Reference< lang::XMultiServiceFactory > xTextFactory)
+: LoggedProperties(dmapper_logger, "SettingsTable")
+, LoggedTable(dmapper_logger, "SettingsTable")
+, m_pImpl( new SettingsTable_Impl(rDMapper, xTextFactory) )
 {
 
 }
@@ -108,14 +108,8 @@ SettingsTable::~SettingsTable()
     delete m_pImpl;
 }
 
-void SettingsTable::attribute(Id nName, Value & val)
+void SettingsTable::lcl_attribute(Id nName, Value & val)
 {
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->startElement("SettingsTable.attribute");
-    dmapper_logger->attribute("name", (*QNameToString::Instance())(nName));
-    dmapper_logger->attribute("value", val.toString());
-#endif
-
     (void) nName;
     int nIntValue = val.getInt();
     (void)nIntValue;
@@ -133,18 +127,10 @@ void SettingsTable::attribute(Id nName, Value & val)
     }
     }
 #endif
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement();
-#endif
 }
 
-void SettingsTable::sprm(Sprm& rSprm)
+void SettingsTable::lcl_sprm(Sprm& rSprm)
 {
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->startElement("SettingsTable.sprm");
-    dmapper_logger->chars(rSprm.toString());
-#endif
-
     sal_uInt32 nSprmId = rSprm.getId();
 
     Value::Pointer_t pValue = rSprm.getValue();
@@ -211,16 +197,14 @@ void SettingsTable::sprm(Sprm& rSprm)
         break;
     default:
     {
-        OSL_ENSURE( false, "unknown sprmid in SettingsTable::sprm()");
-    }
-    }
-
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement();
+#ifdef DEBUG_DMAPPER_SETTINGS_TABLE
+        dmapper_logger->element("unhandled");
 #endif
+    }
+    }
 }
 
-void SettingsTable::entry(int /*pos*/, writerfilter::Reference<Properties>::Pointer_t ref)
+void SettingsTable::lcl_entry(int /*pos*/, writerfilter::Reference<Properties>::Pointer_t ref)
 {
     ref->resolve(*this);
 }

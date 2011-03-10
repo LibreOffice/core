@@ -30,7 +30,6 @@
 #define INCLUDED_TAG_LOGGER_HXX
 
 #if OSL_DEBUG_LEVEL > 1
-
 #include <rtl/ustring.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <WriterFilterDllApi.hxx>

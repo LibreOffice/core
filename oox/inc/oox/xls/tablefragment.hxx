@@ -30,32 +30,29 @@
 #define OOX_XLS_TABLEFRAGMENT_HXX
 
 #include "oox/xls/excelhandlers.hxx"
-#include "oox/xls/tablebuffer.hxx"
 
 namespace oox {
 namespace xls {
 
+class Table;
+
 // ============================================================================
 
-class OoxTableFragment : public OoxWorksheetFragmentBase
+class TableFragment : public WorksheetFragmentBase
 {
 public:
-    explicit            OoxTableFragment(
+    explicit            TableFragment(
                             const WorksheetHelper& rHelper,
                             const ::rtl::OUString& rFragmentPath );
 
 protected:
-    // oox.core.ContextHandler2Helper interface -------------------------------
-
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
-    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
-
-    // oox.core.FragmentHandler2 interface ------------------------------------
+    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );
 
     virtual const ::oox::core::RecordInfo* getRecordInfos() const;
 
 private:
-    TableRef            mxTable;        /// Current table.
+    Table&              mrTable;
 };
 
 // ============================================================================

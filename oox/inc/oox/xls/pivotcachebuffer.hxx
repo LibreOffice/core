@@ -29,10 +29,10 @@
 #ifndef OOX_XLS_PIVOTCACHEBUFFER_HXX
 #define OOX_XLS_PIVOTCACHEBUFFER_HXX
 
-#include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
-#include "oox/helper/containerhelper.hxx"
+#include <com/sun/star/util/DateTime.hpp>
+#include "oox/helper/refvector.hxx"
 #include "oox/xls/workbookhelper.hxx"
 
 namespace com { namespace sun { namespace star {
@@ -67,17 +67,17 @@ public:
     void                readIndex( const AttributeList& rAttribs );
 
     /** Reads the string value from a pivot cache item. */
-    void                readString( RecordInputStream& rStrm );
+    void                readString( SequenceInputStream& rStrm );
     /** Reads the double value from a pivot cache item. */
-    void                readDouble( RecordInputStream& rStrm );
+    void                readDouble( SequenceInputStream& rStrm );
     /** Reads the date/time value from a pivot cache item. */
-    void                readDate( RecordInputStream& rStrm );
+    void                readDate( SequenceInputStream& rStrm );
     /** Reads the boolean value from a pivot cache item. */
-    void                readBool( RecordInputStream& rStrm );
+    void                readBool( SequenceInputStream& rStrm );
     /** Reads the error code value from a pivot cache item. */
-    void                readError( RecordInputStream& rStrm );
+    void                readError( SequenceInputStream& rStrm );
     /** Reads the index of a shared item. */
-    void                readIndex( RecordInputStream& rStrm );
+    void                readIndex( SequenceInputStream& rStrm );
 
     /** Reads the string value from a pivot cache item. */
     void                readString( BiffInputStream& rStrm, const WorkbookHelper& rHelper );
@@ -101,7 +101,7 @@ public:
 
 private:
     ::com::sun::star::uno::Any maValue;     /// Value of the item.
-    sal_Int32           mnType;             /// Value type (OOX token identifier).
+    sal_Int32           mnType;             /// Value type (OOXML token identifier).
 };
 
 // ----------------------------------------------------------------------------
@@ -114,7 +114,7 @@ public:
     /** Imports the item from the passed attribute list. */
     void                importItem( sal_Int32 nElement, const AttributeList& rAttribs );
     /** Imports the item from the passed stream and record. */
-    void                importItem( sal_Int32 nRecId, RecordInputStream& rStrm );
+    void                importItem( sal_Int32 nRecId, SequenceInputStream& rStrm );
     /** Imports a complete item list from the passed stream. */
     void                importItemList( BiffInputStream& rStrm, sal_uInt16 nCount );
 
@@ -132,7 +132,7 @@ private:
     /** Creates and returns a new item at the end of the items list. */
     PivotCacheItem&     createItem();
     /** Imports an array of items from the PCITEM_ARRAY record */
-    void                importArray( RecordInputStream& rStrm );
+    void                importArray( SequenceInputStream& rStrm );
 
 private:
     typedef ::std::vector< PivotCacheItem > CacheItemVector;
@@ -197,8 +197,8 @@ struct PCFieldGroupModel
 
     explicit            PCFieldGroupModel();
 
-    /** Sets the group-by value for BIFF/OOBIN import. */
-    void                setBinGroupBy( sal_uInt8 nGroupBy );
+    /** Sets the group-by value for BIFF import. */
+    void                setBiffGroupBy( sal_uInt8 nGroupBy );
 };
 
 // ----------------------------------------------------------------------------
@@ -238,19 +238,19 @@ public:
     void                importGroupItem( sal_Int32 nElement, const AttributeList& rAttribs );
 
     /** Imports pivot cache field settings from the PCDFIELD record. */
-    void                importPCDField( RecordInputStream& rStrm );
+    void                importPCDField( SequenceInputStream& rStrm );
     /** Imports shared items settings from the PCDFSHAREDITEMS record. */
-    void                importPCDFSharedItems( RecordInputStream& rStrm );
+    void                importPCDFSharedItems( SequenceInputStream& rStrm );
     /** Imports one or more shared items from the passed record. */
-    void                importPCDFSharedItem( sal_Int32 nRecId, RecordInputStream& rStrm );
+    void                importPCDFSharedItem( sal_Int32 nRecId, SequenceInputStream& rStrm );
     /** Imports grouping settings from the PCDFIELDGROUP record. */
-    void                importPCDFieldGroup( RecordInputStream& rStrm );
+    void                importPCDFieldGroup( SequenceInputStream& rStrm );
     /** Imports numeric grouping settings from the PCDFRANGEPR record. */
-    void                importPCDFRangePr( RecordInputStream& rStrm );
+    void                importPCDFRangePr( SequenceInputStream& rStrm );
     /** Imports an item of the mapping between group items and base items from the passed record. */
-    void                importPCDFDiscretePrItem( sal_Int32 nRecId, RecordInputStream& rStrm );
+    void                importPCDFDiscretePrItem( sal_Int32 nRecId, SequenceInputStream& rStrm );
     /** Imports one or more group items from the passed record. */
-    void                importPCDFGroupItem( sal_Int32 nRecId, RecordInputStream& rStrm );
+    void                importPCDFGroupItem( sal_Int32 nRecId, SequenceInputStream& rStrm );
 
     /** Imports pivot cache field settings from the PCDFIELD record. */
     void                importPCDField( BiffInputStream& rStrm );
@@ -305,7 +305,7 @@ public:
                             const PivotCacheItem& rItem ) const;
 
     /** Reads an item from the PCRECORD record and writes it to the passed sheet. */
-    void                importPCRecordItem( RecordInputStream& rStrm,
+    void                importPCRecordItem( SequenceInputStream& rStrm,
                             WorksheetHelper& rSheetHelper, sal_Int32 nCol, sal_Int32 nRow ) const;
     /** Reads an item index from the PCITEM_INDEXLIST record and writes the item to the passed sheet. */
     void                importPCItemIndex( BiffInputStream& rStrm,
@@ -393,11 +393,11 @@ public:
     void                importWorksheetSource( const AttributeList& rAttribs, const ::oox::core::Relations& rRelations );
 
     /** Reads pivot cache global settings from the PCDEFINITION record. */
-    void                importPCDefinition( RecordInputStream& rStrm );
+    void                importPCDefinition( SequenceInputStream& rStrm );
     /** Reads cache source settings from the PCDSOURCE record. */
-    void                importPCDSource( RecordInputStream& rStrm );
+    void                importPCDSource( SequenceInputStream& rStrm );
     /** Reads sheet source settings from the PCDSHEETSOURCE record. */
-    void                importPCDSheetSource( RecordInputStream& rStrm, const ::oox::core::Relations& rRelations );
+    void                importPCDSheetSource( SequenceInputStream& rStrm, const ::oox::core::Relations& rRelations );
 
     /** Reads cache source settings from the PCDSOURCE record. */
     void                importPCDSource( BiffInputStream& rStrm );
@@ -435,7 +435,7 @@ public:
                             const PivotCacheItem& rItem ) const;
 
     /** Reads a PCRECORD record and writes all item values to the passed sheet. */
-    void                importPCRecord( RecordInputStream& rStrm,
+    void                importPCRecord( SequenceInputStream& rStrm,
                             WorksheetHelper& rSheetHelper, sal_Int32 nRow ) const;
     /** Reads a PCITEM_INDEXLIST record and writes all item values to the passed sheet. */
     void                importPCItemIndexList( BiffInputStream& rStrm,
@@ -480,9 +480,9 @@ class PivotCacheBuffer : public WorkbookHelper
 public:
     explicit            PivotCacheBuffer( const WorkbookHelper& rHelper );
 
-    /** Registers a pivot cache definition fragment. The fragment will be loaded on demand (OOX/OOBIN only). */
+    /** Registers a pivot cache definition fragment. The fragment will be loaded on demand (OOXML/BIFF12 only). */
     void                registerPivotCacheFragment( sal_Int32 nCacheId, const ::rtl::OUString& rFragmentPath );
-    /** Reads the reference to a pivot cache stream. The stream will be loaded on demand (BIFF only). */
+    /** Reads the reference to a pivot cache stream. The stream will be loaded on demand (BIFF2-BIFF8 only). */
     void                importPivotCacheRef( BiffInputStream& rStrm );
 
     /** Imports and stores a pivot cache definition fragment on first call,

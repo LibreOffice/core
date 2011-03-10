@@ -85,19 +85,19 @@ public:
     void                importOleItem( const AttributeList& rAttribs );
 
     /** Imports the EXTERNALNAME record containing the name (only). */
-    void                importExternalName( RecordInputStream& rStrm );
+    void                importExternalName( SequenceInputStream& rStrm );
     /** Imports the EXTERNALNAMEFLAGS record containing the settings of an external name. */
-    void                importExternalNameFlags( RecordInputStream& rStrm );
+    void                importExternalNameFlags( SequenceInputStream& rStrm );
     /** Imports the DDEITEMVALUES record containing the size of the DDE result matrix. */
-    void                importDdeItemValues( RecordInputStream& rStrm );
+    void                importDdeItemValues( SequenceInputStream& rStrm );
     /** Imports the DDEITEM_BOOL record containing a boolean value in a link result. */
-    void                importDdeItemBool( RecordInputStream& rStrm );
+    void                importDdeItemBool( SequenceInputStream& rStrm );
     /** Imports the DDEITEM_DOUBLE record containing a double value in a link result. */
-    void                importDdeItemDouble( RecordInputStream& rStrm );
+    void                importDdeItemDouble( SequenceInputStream& rStrm );
     /** Imports the DDEITEM_ERROR record containing an error code in a link result. */
-    void                importDdeItemError( RecordInputStream& rStrm );
+    void                importDdeItemError( SequenceInputStream& rStrm );
     /** Imports the DDEITEM_STRING record containing a string in a link result. */
-    void                importDdeItemString( RecordInputStream& rStrm );
+    void                importDdeItemString( SequenceInputStream& rStrm );
 
     /** Imports the EXTERNALNAME record from the passed stream. */
     void                importExternalName( BiffInputStream& rStrm );
@@ -228,19 +228,19 @@ public:
     ExternalNameRef     importOleItem( const AttributeList& rAttribs );
 
     /** Imports the EXTERNALBOOK record describing an externally linked document, DDE link, or OLE link. */
-    void                importExternalBook( const ::oox::core::Relations& rRelations, RecordInputStream& rStrm );
+    void                importExternalBook( const ::oox::core::Relations& rRelations, SequenceInputStream& rStrm );
     /** Imports the EXTSHEETNAMES record containing the sheet names in an externally linked document. */
-    void                importExtSheetNames( RecordInputStream& rStrm );
+    void                importExtSheetNames( SequenceInputStream& rStrm );
     /** Imports the EXTERNALNAME record describing an external name. */
-    ExternalNameRef     importExternalName( RecordInputStream& rStrm );
+    ExternalNameRef     importExternalName( SequenceInputStream& rStrm );
     /** Imports the EXTERNALREF record from the passed stream. */
-    void                importExternalRef( RecordInputStream& rStrm );
+    void                importExternalRef( SequenceInputStream& rStrm );
     /** Imports the EXTERNALSELF record from the passed stream. */
-    void                importExternalSelf( RecordInputStream& rStrm );
+    void                importExternalSelf( SequenceInputStream& rStrm );
     /** Imports the EXTERNALSAME record from the passed stream. */
-    void                importExternalSame( RecordInputStream& rStrm );
+    void                importExternalSame( SequenceInputStream& rStrm );
     /** Imports the EXTERNALADDIN record from the passed stream. */
-    void                importExternalAddin( RecordInputStream& rStrm );
+    void                importExternalAddin( SequenceInputStream& rStrm );
 
     /** Imports the EXTERNSHEET record from the passed stream. */
     void                importExternSheet( BiffInputStream& rStrm );
@@ -248,6 +248,9 @@ public:
     void                importExternalBook( BiffInputStream& rStrm );
     /** Imports the EXTERNALNAME record from the passed stream. */
     void                importExternalName( BiffInputStream& rStrm );
+
+    /** Sets the link type to 'self reference'. */
+    inline void         setSelfLinkType() { meLinkType = LINKTYPE_SELF; }
 
     /** Returns the type of this external link. */
     inline ExternalLinkType getLinkType() const { return meLinkType; }
@@ -315,10 +318,10 @@ typedef ::boost::shared_ptr< ExternalLink > ExternalLinkRef;
 
 // ============================================================================
 
-/** Represents a REF entry in the OOBIN EXTERNALSHEETS or in the BIFF8
+/** Represents a REF entry in the BIFF12 EXTERNALSHEETS or in the BIFF8
     EXTERNSHEET record.
 
-    This struct is used to map ref identifiers to external books (OOBIN:
+    This struct is used to map ref identifiers to external books (BIFF12:
     EXTERNALREF records, BIFF8: EXTERNALBOOK records), and provides sheet
     indexes into the sheet list of the external document.
  */
@@ -330,7 +333,7 @@ struct RefSheetsModel
 
     explicit            RefSheetsModel();
 
-    void                readOobData( RecordInputStream& rStrm );
+    void                readBiff12Data( SequenceInputStream& rStrm );
     void                readBiff8Data( BiffInputStream& rStrm );
 };
 
@@ -345,15 +348,15 @@ public:
     ExternalLinkRef     importExternalReference( const AttributeList& rAttribs );
 
     /** Imports the EXTERNALREF record from the passed stream. */
-    ExternalLinkRef     importExternalRef( RecordInputStream& rStrm );
+    ExternalLinkRef     importExternalRef( SequenceInputStream& rStrm );
     /** Imports the EXTERNALSELF record from the passed stream. */
-    void                importExternalSelf( RecordInputStream& rStrm );
+    void                importExternalSelf( SequenceInputStream& rStrm );
     /** Imports the EXTERNALSAME record from the passed stream. */
-    void                importExternalSame( RecordInputStream& rStrm );
+    void                importExternalSame( SequenceInputStream& rStrm );
     /** Imports the EXTERNALADDIN record from the passed stream. */
-    void                importExternalAddin( RecordInputStream& rStrm );
+    void                importExternalAddin( SequenceInputStream& rStrm );
     /** Imports the EXTERNALSHEETS record from the passed stream. */
-    void                importExternalSheets( RecordInputStream& rStrm );
+    void                importExternalSheets( SequenceInputStream& rStrm );
 
     /** Imports the EXTERNSHEET record from the passed stream. */
     ExternalLinkRef     importExternSheet( BiffInputStream& rStrm );
@@ -369,7 +372,7 @@ public:
                         getLinkInfos() const;
 
     /** Returns the external link for the passed reference identifier. */
-    ExternalLinkRef     getExternalLink( sal_Int32 nRefId ) const;
+    ExternalLinkRef     getExternalLink( sal_Int32 nRefId, bool bUseRefSheets = true ) const;
 
     /** Returns the sheet range for the specified reference (BIFF2-BIFF5 only). */
     LinkSheetRange      getSheetRange( sal_Int32 nRefId, sal_Int16 nTabId1, sal_Int16 nTabId2 ) const;
@@ -387,10 +390,11 @@ private:
     typedef RefVector< ExternalLink >       ExternalLinkVec;
     typedef ::std::vector< RefSheetsModel > RefSheetsModelVec;
 
+    ExternalLinkRef     mxSelfRef;          /// Implicit self reference at index 0.
     ExternalLinkVec     maLinks;            /// List of link structures for all kinds of links.
     ExternalLinkVec     maExtLinks;         /// Real external links needed for formula parser.
     RefSheetsModelVec   maRefSheets;        /// Sheet indexes for reference ids.
-    bool                mbUseRefSheets;     /// True = use maRefSheets list (OOBIN only).
+    bool                mbUseRefSheets;     /// True = use maRefSheets list (BIFF12 only).
 };
 
 // ============================================================================

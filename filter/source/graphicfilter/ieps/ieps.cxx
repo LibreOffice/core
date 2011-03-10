@@ -64,11 +64,11 @@
 |*
 *************************************************************************/
 
-static BYTE* ImplSearchEntry( BYTE* pSource, BYTE* pDest, ULONG nComp, ULONG nSize )
+static sal_uInt8* ImplSearchEntry( sal_uInt8* pSource, sal_uInt8* pDest, sal_uLong nComp, sal_uLong nSize )
 {
     while ( nComp-- >= nSize )
     {
-        ULONG i;
+        sal_uLong i;
         for ( i = 0; i < nSize; i++ )
         {
             if ( ( pSource[i]&~0x20 ) != ( pDest[i]&~0x20 ) )
@@ -83,24 +83,24 @@ static BYTE* ImplSearchEntry( BYTE* pSource, BYTE* pDest, ULONG nComp, ULONG nSi
 
 //--------------------------------------------------------------------------
 // SecurityCount is the buffersize of the buffer in which we will parse for a number
-static long ImplGetNumber( BYTE **pBuf, int& nSecurityCount )
+static long ImplGetNumber( sal_uInt8 **pBuf, int& nSecurityCount )
 {
-    BOOL    bValid = TRUE;
-    BOOL    bNegative = FALSE;
+    sal_Bool    bValid = sal_True;
+    sal_Bool    bNegative = sal_False;
     long    nRetValue = 0;
     while ( ( --nSecurityCount ) && ( ( **pBuf == ' ' ) || ( **pBuf == 0x9 ) ) )
         (*pBuf)++;
-    BYTE nByte = **pBuf;
+    sal_uInt8 nByte = **pBuf;
     while ( nSecurityCount && ( nByte != ' ' ) && ( nByte != 0x9 ) && ( nByte != 0xd ) && ( nByte != 0xa ) )
     {
         switch ( nByte )
         {
             case '.' :
                 // we'll only use the integer format
-                bValid = FALSE;
+                bValid = sal_False;
                 break;
             case '-' :
-                bNegative = TRUE;
+                bNegative = sal_True;
                 break;
             default :
                 if ( ( nByte < '0' ) || ( nByte > '9' ) )
@@ -122,12 +122,12 @@ static long ImplGetNumber( BYTE **pBuf, int& nSecurityCount )
 
 //--------------------------------------------------------------------------
 
-static int ImplGetLen( BYTE* pBuf, int nMax )
+static int ImplGetLen( sal_uInt8* pBuf, int nMax )
 {
     int nLen = 0;
     while( nLen != nMax )
     {
-        BYTE nDat = *pBuf++;
+        sal_uInt8 nDat = *pBuf++;
         if ( nDat == 0x0a || nDat == 0x25 )
             break;
         nLen++;
@@ -149,7 +149,7 @@ static void MakeAsMeta(Graphic &rGraphic)
         aSize = Application::GetDefaultDevice()->LogicToLogic( aSize,
             aBmp.GetPrefMapMode(), MAP_100TH_MM );
 
-    aVDev.EnableOutput( FALSE );
+    aVDev.EnableOutput( sal_False );
     aMtf.Record( &aVDev );
     aVDev.DrawBitmap( Point(), aSize, rGraphic.GetBitmap() );
     aMtf.Stop();
@@ -408,7 +408,7 @@ void CreateMtfReplacementAction( GDIMetaFile& rMtf, SvStream& rStrm, sal_uInt32 
             aReplacement.Write( pBuf, nSizeTIFF );
             delete[] pBuf;
         }
-        rMtf.AddAction( (MetaAction*)( new MetaCommentAction( aComment, 0, (const BYTE*)aReplacement.GetData(), aReplacement.Tell() ) ) );
+        rMtf.AddAction( (MetaAction*)( new MetaCommentAction( aComment, 0, (const sal_uInt8*)aReplacement.GetData(), aReplacement.Tell() ) ) );
     }
     else
         rMtf.AddAction( (MetaAction*)( new MetaCommentAction( aComment, 0, NULL, 0 ) ) );
@@ -422,7 +422,7 @@ void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
     VirtualDevice   aVDev;
     Font            aFont;
 
-    aVDev.EnableOutput( FALSE );
+    aVDev.EnableOutput( sal_False );
     aMtf.Record( &aVDev );
     aVDev.SetLineColor( Color( COL_RED ) );
     aVDev.SetFillColor();
@@ -438,14 +438,14 @@ void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
 
     String aString;
     int nLen;
-    BYTE* pDest = ImplSearchEntry( pBuf, (BYTE*)"%%Title:", nBytesRead - 32, 8 );
+    sal_uInt8* pDest = ImplSearchEntry( pBuf, (sal_uInt8*)"%%Title:", nBytesRead - 32, 8 );
     if ( pDest )
     {
         pDest += 8;
         if ( *pDest == ' ' )
             pDest++;
         nLen = ImplGetLen( pDest, 32 );
-        BYTE aOldValue(pDest[ nLen ]); pDest[ nLen ] = 0;
+        sal_uInt8 aOldValue(pDest[ nLen ]); pDest[ nLen ] = 0;
         if ( strcmp( (const char*)pDest, "none" ) != 0 )
         {
             aString.AppendAscii( " Title:" );
@@ -454,27 +454,27 @@ void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
         }
         pDest[ nLen ] = aOldValue;
     }
-    pDest = ImplSearchEntry( pBuf, (BYTE*)"%%Creator:", nBytesRead - 32, 10 );
+    pDest = ImplSearchEntry( pBuf, (sal_uInt8*)"%%Creator:", nBytesRead - 32, 10 );
     if ( pDest )
     {
         pDest += 10;
         if ( *pDest == ' ' )
             pDest++;
         nLen = ImplGetLen( pDest, 32 );
-        BYTE aOldValue(pDest[ nLen ]); pDest[ nLen ] = 0;
+        sal_uInt8 aOldValue(pDest[ nLen ]); pDest[ nLen ] = 0;
         aString.AppendAscii( " Creator:" );
         aString.AppendAscii( (char*)pDest );
         aString.AppendAscii( "\n" );
         pDest[ nLen ] = aOldValue;
     }
-    pDest = ImplSearchEntry( pBuf, (BYTE*)"%%CreationDate:", nBytesRead - 32, 15 );
+    pDest = ImplSearchEntry( pBuf, (sal_uInt8*)"%%CreationDate:", nBytesRead - 32, 15 );
     if ( pDest )
     {
         pDest += 15;
         if ( *pDest == ' ' )
             pDest++;
         nLen = ImplGetLen( pDest, 32 );
-        BYTE aOldValue(pDest[ nLen ]); pDest[ nLen ] = 0;
+        sal_uInt8 aOldValue(pDest[ nLen ]); pDest[ nLen ] = 0;
         if ( strcmp( (const char*)pDest, "none" ) != 0 )
         {
             aString.AppendAscii( " CreationDate:" );
@@ -483,13 +483,13 @@ void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
         }
         pDest[ nLen ] = aOldValue;
     }
-    pDest = ImplSearchEntry( pBuf, (BYTE*)"%%LanguageLevel:", nBytesRead - 4, 16 );
+    pDest = ImplSearchEntry( pBuf, (sal_uInt8*)"%%LanguageLevel:", nBytesRead - 4, 16 );
     if ( pDest )
     {
         pDest += 16;
         int nCount = 4;
         long nNumber = ImplGetNumber( &pDest, nCount );
-        if ( nCount && ( (UINT32)nNumber < 10 ) )
+        if ( nCount && ( (sal_uInt32)nNumber < 10 ) )
         {
             aString.AppendAscii( " LanguageLevel:" );
             aString.Append( UniString::CreateFromInt32( nNumber ) );
@@ -508,13 +508,13 @@ void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
 //================== GraphicImport - die exportierte Funktion ================
 
 #ifdef WNT
-extern "C" BOOL _cdecl GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, BOOL)
+extern "C" sal_Bool _cdecl GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, sal_Bool)
 #else
-extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, BOOL)
+extern "C" sal_Bool GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, sal_Bool)
 #endif
 {
     if ( rStream.GetError() )
-        return FALSE;
+        return sal_False;
 
     Graphic     aGraphic;
     sal_Bool    bRetValue = sal_False;
@@ -541,7 +541,7 @@ extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConf
             {
                 rStream.Seek( nOrigPos + nPosWMF );
                 if ( GraphicConverter::Import( rStream, aGraphic, CVT_WMF ) == ERRCODE_NONE )
-                    bHasPreview = bRetValue = TRUE;
+                    bHasPreview = bRetValue = sal_True;
             }
         }
         else
@@ -557,7 +557,7 @@ extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConf
                 {
                     MakeAsMeta(aGraphic);
                     rStream.Seek( nOrigPos + nPosTIFF );
-                    bHasPreview = bRetValue = TRUE;
+                    bHasPreview = bRetValue = sal_True;
                 }
             }
         }
@@ -570,8 +570,8 @@ extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConf
     sal_uInt8* pHeader = new sal_uInt8[ 22 ];
     rStream.Seek( nPSStreamPos );
     rStream.Read( pHeader, 22 );    // check PostScript header
-    if ( ImplSearchEntry( pHeader, (BYTE*)"%!PS-Adobe", 10, 10 ) &&
-        ImplSearchEntry( &pHeader[ 15 ], (BYTE*)"EPS", 3, 3 ) )
+    if ( ImplSearchEntry( pHeader, (sal_uInt8*)"%!PS-Adobe", 10, 10 ) &&
+        ImplSearchEntry( &pHeader[ 15 ], (sal_uInt8*)"EPS", 3, 3 ) )
     {
         rStream.Seek( nPSStreamPos );
         sal_uInt8* pBuf = new sal_uInt8[ nPSSize ];
@@ -584,7 +584,7 @@ extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConf
                 int nSecurityCount = 32;
                 if ( !bHasPreview )     // if there is no tiff/wmf preview, we will parse for an preview in the eps prolog
                 {
-                    BYTE* pDest = ImplSearchEntry( pBuf, (BYTE*)"%%BeginPreview:", nBytesRead - 32, 15 );
+                    sal_uInt8* pDest = ImplSearchEntry( pBuf, (sal_uInt8*)"%%BeginPreview:", nBytesRead - 32, 15 );
                     if ( pDest  )
                     {
                         pDest += 15;
@@ -592,7 +592,7 @@ extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConf
                         long nHeight = ImplGetNumber( &pDest, nSecurityCount );
                         long nBitDepth = ImplGetNumber( &pDest, nSecurityCount );
                         long nScanLines = ImplGetNumber( &pDest, nSecurityCount );
-                        pDest = ImplSearchEntry( pDest, (BYTE*)"%", 16, 1 );        // go to the first Scanline
+                        pDest = ImplSearchEntry( pDest, (sal_uInt8*)"%", 16, 1 );       // go to the first Scanline
                         if ( nSecurityCount && pDest && nWidth && nHeight && ( ( nBitDepth == 1 ) || ( nBitDepth == 8 ) ) && nScanLines )
                         {
                             rStream.Seek( nBufStartPos + ( pDest - pBuf ) );
@@ -602,8 +602,8 @@ extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConf
                             if ( pAcc )
                             {
                                 int  nBitsLeft;
-                                BOOL bIsValid = TRUE;
-                                BYTE nDat = 0;
+                                sal_Bool bIsValid = sal_True;
+                                sal_uInt8 nDat = 0;
                                 char nByte;
                                 for ( long y = 0; bIsValid && ( y < nHeight ); y++ )
                                 {
@@ -619,7 +619,7 @@ extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConf
                                                 {
                                                     case 0x0a :
                                                         if ( --nScanLines < 0 )
-                                                            bIsValid = FALSE;
+                                                            bIsValid = sal_False;
                                                     case 0x09 :
                                                     case 0x0d :
                                                     case 0x20 :
@@ -634,7 +634,7 @@ extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConf
                                                                 nByte &=~0x20;  // case none sensitive for hexadezimal values
                                                                 nByte -= ( 'A' - 10 );
                                                                 if ( nByte > 15 )
-                                                                    bIsValid = FALSE;
+                                                                    bIsValid = sal_False;
                                                             }
                                                             else
                                                                 nByte -= '0';
@@ -643,14 +643,14 @@ extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConf
                                                             nDat |= ( nByte ^ 0xf ); // in epsi a zero bit represents white color
                                                         }
                                                         else
-                                                            bIsValid = FALSE;
+                                                            bIsValid = sal_False;
                                                     }
                                                     break;
                                                 }
                                             }
                                         }
                                         if ( nBitDepth == 1 )
-                                            pAcc->SetPixel( y, x, sal::static_int_cast< BYTE >(( nDat >> nBitsLeft ) & 1) );
+                                            pAcc->SetPixel( y, x, sal::static_int_cast< sal_uInt8 >(( nDat >> nBitsLeft ) & 1) );
                                         else
                                         {
                                             pAcc->SetPixel( y, x, ( nDat ) ? 1 : 0 );   // nBitDepth == 8
@@ -663,7 +663,7 @@ extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConf
                                     VirtualDevice   aVDev;
                                     GDIMetaFile     aMtf;
                                     Size            aSize;
-                                    aVDev.EnableOutput( FALSE );
+                                    aVDev.EnableOutput( sal_False );
                                     aMtf.Record( &aVDev );
                                     aSize = aBitmap.GetPrefSize();
                                     if( !aSize.Width() || !aSize.Height() )
@@ -676,7 +676,7 @@ extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConf
                                     aMtf.SetPrefMapMode( MAP_100TH_MM );
                                     aMtf.SetPrefSize( aSize );
                                     aGraphic = aMtf;
-                                    bHasPreview = bRetValue = TRUE;
+                                    bHasPreview = bRetValue = sal_True;
                                 }
                                 aBitmap.ReleaseAccess( pAcc );
                             }
@@ -684,7 +684,7 @@ extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConf
                     }
                 }
 
-                BYTE* pDest = ImplSearchEntry( pBuf, (BYTE*)"%%BoundingBox:", nBytesRead, 14 );
+                sal_uInt8* pDest = ImplSearchEntry( pBuf, (sal_uInt8*)"%%BoundingBox:", nBytesRead, 14 );
                 if ( pDest )
                 {
                     nSecurityCount = 100;
@@ -698,7 +698,7 @@ extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConf
                     if ( nSecurityCount)
                     {
                         bGraphicLinkCreated = sal_True;
-                        GfxLink     aGfxLink( pBuf, nPSSize, GFX_LINK_TYPE_EPS_BUFFER, TRUE ) ;
+                        GfxLink     aGfxLink( pBuf, nPSSize, GFX_LINK_TYPE_EPS_BUFFER, sal_True ) ;
                         GDIMetaFile aMtf;
 
                         long nWidth =  nNumb[2] - nNumb[0] + 1;
@@ -739,30 +739,5 @@ extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConf
     rStream.Seek( nOrigPos );
     return ( bRetValue );
 }
-
-//================== ein bischen Muell fuer Windows ==========================
-
-#ifdef WIN
-
-static HINSTANCE hDLLInst = 0;      // HANDLE der DLL
-
-extern "C" int CALLBACK LibMain( HINSTANCE hDLL, WORD, WORD nHeap, LPSTR )
-{
-#ifndef WNT
-    if ( nHeap )
-        UnlockData( 0 );
-#endif
-
-    hDLLInst = hDLL;
-
-    return TRUE;
-}
-
-extern "C" int CALLBACK WEP( int )
-{
-    return 1;
-}
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

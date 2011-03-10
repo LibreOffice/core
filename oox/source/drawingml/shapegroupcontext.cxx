@@ -38,8 +38,6 @@
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/drawingml/customshapegeometry.hxx"
 #include "oox/drawingml/textbodycontext.hxx"
-#include "oox/core/namespaces.hxx"
-#include "tokens.hxx"
 
 using rtl::OUString;
 using namespace oox::core;
@@ -69,7 +67,7 @@ Reference< XFastContextHandler > ShapeGroupContext::createFastChildContext( sal_
 {
     Reference< XFastContextHandler > xRet;
 
-    switch( getToken( aElementToken ) )
+    switch( getBaseToken( aElementToken ) )
     {
     case XML_cNvPr:
     {
@@ -110,7 +108,7 @@ Reference< XFastContextHandler > ShapeGroupContext::createFastChildContext( sal_
         xRet.set( new GraphicShapeContext( *this, mpGroupShapePtr, ShapePtr( new Shape( "com.sun.star.drawing.GraphicObjectShape" ) ) ) );
         break;
     case XML_graphicFrame:  // CT_GraphicalObjectFrame
-        xRet.set( new GraphicalObjectFrameContext( *this, mpGroupShapePtr, ShapePtr( new Shape( "com.sun.star.drawing.OLE2Shape" ) ), true ) );
+        xRet.set( new GraphicalObjectFrameContext( *this, mpGroupShapePtr, ShapePtr( new Shape( "com.sun.star.drawing.GraphicObjectShape" ) ), true ) );
         break;
     }
     if( !xRet.is() )

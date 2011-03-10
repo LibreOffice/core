@@ -30,8 +30,6 @@
 #include "oox/drawingml/textparagraphpropertiescontext.hxx"
 #include "oox/drawingml/textcharacterpropertiescontext.hxx"
 #include "oox/drawingml/textfield.hxx"
-#include "oox/core/namespaces.hxx"
-#include "tokens.hxx"
 
 using ::rtl::OUString;
 using namespace ::oox::core;
@@ -53,7 +51,7 @@ TextFieldContext::TextFieldContext( ContextHandler& rParent,
 
 void TextFieldContext::endFastElement( sal_Int32 aElementToken ) throw (SAXException, RuntimeException)
 {
-    if( aElementToken == (NMSP_DRAWINGML|XML_t) )
+    if( aElementToken == (A_TOKEN( t )) )
     {
         mbIsInText = false;
     }
@@ -73,13 +71,13 @@ Reference< XFastContextHandler > TextFieldContext::createFastChildContext( sal_I
     Reference< XFastContextHandler > xRet;
     switch( aElementToken )
     {
-    case NMSP_DRAWINGML|XML_rPr:
+    case A_TOKEN( rPr ):
         xRet.set( new TextCharacterPropertiesContext( *this, xAttribs, mrTextField.getTextCharacterProperties() ) );
         break;
-    case NMSP_DRAWINGML|XML_pPr:
+    case A_TOKEN( pPr ):
         xRet.set( new TextParagraphPropertiesContext( *this, xAttribs, mrTextField.getTextParagraphProperties() ) );
         break;
-    case NMSP_DRAWINGML|XML_t:
+    case A_TOKEN( t ):
         mbIsInText = true;
         break;
     }

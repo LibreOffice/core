@@ -76,8 +76,7 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
         try
         {
             // use the oox.core.FilterDetect implementation to extract the decrypted ZIP package
-            uno::Reference< lang::XMultiServiceFactory > xFactory( m_xContext->getServiceManager(), uno::UNO_QUERY_THROW );
-            ::oox::core::FilterDetect aDetector( xFactory );
+            ::oox::core::FilterDetect aDetector( m_xContext );
             xInputStream = aDetector.extractUnencryptedPackage( aMediaDesc );
         }
         catch( uno::Exception& )
@@ -89,7 +88,7 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
             return sal_False;
         }
 
-#ifdef DEBUG_ELEMENT
+#ifdef DEBUG_IMPORT
         OUString sURL = aMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_URL(), OUString() );
         ::std::string sURLc = OUStringToOString(sURL, RTL_TEXTENCODING_ASCII_US).getStr();
 
@@ -154,8 +153,8 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
     }
 
     pStream.reset();
+#ifdef DEBUG_IMPORT
 
-#ifdef DEBUG_ELEMENT
     dmapperLogger->endDocument();
     debugLogger->endDocument();
 #endif

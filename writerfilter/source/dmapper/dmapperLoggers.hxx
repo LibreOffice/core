@@ -37,6 +37,7 @@ namespace writerfilter {
         extern TagLogger::Pointer_t dmapper_logger;
     }
 }
+
 #endif // DEBUG
 #endif // INCLUDED_DMAPPER_LOGGERS_HXX
 

@@ -54,6 +54,8 @@
 #include "xmlfileview.hrc"
 #include "xmlfilterhelpids.hrc"
 
+#include <deque>
+
 using namespace osl;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
@@ -72,13 +74,12 @@ using ::rtl::OUString;
 
 struct SwTextPortion
 {
-    USHORT nLine;
-    USHORT nStart, nEnd;
+    sal_uInt16 nLine;
+    sal_uInt16 nStart, nEnd;
     svtools::ColorConfigEntry eType;
 };
 
-SV_DECL_VARARR(SwTextPortions, SwTextPortion,16,16)
-SV_IMPL_VARARR(SwTextPortions, SwTextPortion);
+typedef std::deque<SwTextPortion> SwTextPortions;
 
 class XMLErrorHandler : public ::cppu::WeakImplHelper1< XErrorHandler >
 {
@@ -112,7 +113,7 @@ void SAL_CALL XMLErrorHandler::error( const Any& aSAXParseException ) throw (SAX
         String sErr( String::CreateFromInt32( e.LineNumber ) );
         sErr += String( RTL_CONSTASCII_USTRINGPARAM( " : " ) );
         sErr += String( e.Message );
-        USHORT nEntry = mrListBox.InsertEntry( sErr );
+        sal_uInt16 nEntry = mrListBox.InsertEntry( sErr );
         mrListBox.SetEntryData( nEntry, (void*)(sal_IntPtr)e.LineNumber );
     }
 }
@@ -127,7 +128,7 @@ void SAL_CALL XMLErrorHandler::fatalError( const Any& aSAXParseException ) throw
         String sErr( String::CreateFromInt32( e.LineNumber ) );
         sErr += String( RTL_CONSTASCII_USTRINGPARAM( " : " ) );
         sErr += String( e.Message );
-        USHORT nEntry = mrListBox.InsertEntry( sErr );
+        sal_uInt16 nEntry = mrListBox.InsertEntry( sErr );
         mrListBox.SetEntryData( nEntry, (void*)(sal_IntPtr)e.LineNumber );
     }
 }
@@ -141,7 +142,7 @@ void SAL_CALL XMLErrorHandler::warning( const Any& /* aSAXParseException */ ) th
         String sErr( String::CreateFromInt32( e.LineNumber ) );
         sErr += String( RTL_CONSTASCII_USTRINGPARAM( " : " ) );
         sErr += String( e.Message );
-        USHORT nEntry = mrListBox.InsertEntry( sErr );
+        sal_uInt16 nEntry = mrListBox.InsertEntry( sErr );
         mrListBox.SetEntryData( nEntry, (void*)e.LineNumber );
     }
 */
@@ -343,14 +344,14 @@ void XMLFileWindow::CreateTextEngine()
 
     pTextEngine = new TextEngine;
     pTextView = new TextView( pTextEngine, pOutWin );
-    pTextView->SetAutoIndentMode(TRUE);
+    pTextView->SetAutoIndentMode(sal_True);
     pOutWin->SetTextView(pTextView);
 
-    pTextEngine->SetUpdateMode( FALSE );
+    pTextEngine->SetUpdateMode( sal_False );
     pTextEngine->InsertView( pTextView );
 
     Font aFont;
-    aFont.SetTransparent( FALSE );
+    aFont.SetTransparent( sal_False );
     aFont.SetFillColor( rCol );
     SetPointFont( aFont );
     aFont = GetFont();
@@ -361,10 +362,10 @@ void XMLFileWindow::CreateTextEngine()
     aSyntaxIdleTimer.SetTimeout( SYNTAX_HIGHLIGHT_TIMEOUT );
     aSyntaxIdleTimer.SetTimeoutHdl( LINK( this, XMLFileWindow, SyntaxTimerHdl ) );
 
-    pTextEngine->EnableUndo( FALSE );
-    pTextEngine->SetUpdateMode( TRUE );
+    pTextEngine->EnableUndo( sal_False );
+    pTextEngine->SetUpdateMode( sal_True );
 
-//  pTextView->ShowCursor( TRUE, TRUE );
+//  pTextView->ShowCursor( sal_True, sal_True );
     pTextView->HideCursor();
 
     InitScrollBars();
@@ -399,14 +400,14 @@ IMPL_LINK(XMLFileWindow, ScrollHdl, ScrollBar*, pScroll)
     {
         long nDiff = pTextView->GetStartDocPos().Y() - pScroll->GetThumbPos();
         GetTextView()->Scroll( 0, nDiff );
-        pTextView->ShowCursor( FALSE, TRUE );
+        pTextView->ShowCursor( sal_False, sal_True );
         pScroll->SetThumbPos( pTextView->GetStartDocPos().Y() );
     }
     else
     {
         long nDiff = pTextView->GetStartDocPos().X() - pScroll->GetThumbPos();
         GetTextView()->Scroll( nDiff, 0 );
-        pTextView->ShowCursor( FALSE, TRUE );
+        pTextView->ShowCursor( sal_False, sal_True );
         pScroll->SetThumbPos( pTextView->GetStartDocPos().X() );
     }
     return 0;
@@ -431,7 +432,7 @@ void XMLFileWindow::Notify( SfxBroadcaster& /* rBC */, const SfxHint& rHint )
         }
         else if( rTextHint.GetId() == TEXT_HINT_FORMATPARA )
         {
-            DoDelayedSyntaxHighlight( (USHORT)rTextHint.GetValue() );
+            DoDelayedSyntaxHighlight( (sal_uInt16)rTextHint.GetValue() );
         }
     }
 }
@@ -548,7 +549,7 @@ void XMLSourceFileDialog::ShowWindow( const rtl::OUString& rFileName, const filt
         mpTextWindow = new XMLFileWindow( this );
         maLBOutput.Hide();
         maLBOutput.Clear();
-        maPBValidate.Enable(TRUE);
+        maPBValidate.Enable(sal_True);
         Resize();
     }
 
@@ -588,7 +589,7 @@ void XMLSourceFileDialog::Resize()
 
 IMPL_LINK(XMLSourceFileDialog, SelectHdl_Impl, ListBox *, pListBox )
 {
-    USHORT nEntry = pListBox->GetSelectEntryPos();
+    sal_uInt16 nEntry = pListBox->GetSelectEntryPos();
     if( LISTBOX_ENTRY_NOTFOUND != nEntry )
     {
         int nLine = (int)(sal_IntPtr)pListBox->GetEntryData(nEntry);
@@ -614,7 +615,7 @@ void XMLSourceFileDialog::onValidate()
     EnterWait();
 
     maLBOutput.Show();
-    maPBValidate.Enable(FALSE);
+    maPBValidate.Enable(sal_False);
     Resize();
 
     try
@@ -650,14 +651,14 @@ void XMLSourceFileDialog::onValidate()
     catch(Exception& e)
     {
         String sErr( e.Message );
-        USHORT nEntry = maLBOutput.InsertEntry( sErr );
+        sal_uInt16 nEntry = maLBOutput.InsertEntry( sErr );
         maLBOutput.SetEntryData( nEntry, (void*)-1 );
     }
 
     if( 0 == maLBOutput.GetEntryCount() )
     {
         String sErr( RESID( STR_NO_ERRORS_FOUND ) );
-        USHORT nEntry = maLBOutput.InsertEntry( sErr );
+        sal_uInt16 nEntry = maLBOutput.InsertEntry( sErr );
         maLBOutput.SetEntryData( nEntry, (void*)-1 );
     }
 
@@ -687,12 +688,12 @@ void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
     const sal_Unicode cCR          = 0x0d;
 
 
-    const USHORT nStrLen = rSource.Len();
-    USHORT nInsert = 0;         // Anzahl der eingefuegten Portions
-    USHORT nActPos = 0;         //Position, an der '<' gefunden wurde
-    USHORT nOffset = 0;         //Offset von nActPos zur '<'
-    USHORT nPortStart = USHRT_MAX;  // fuer die TextPortion
-    USHORT nPortEnd  =  0;  //
+    const sal_uInt16 nStrLen = rSource.Len();
+    sal_uInt16 nInsert = 0;         // Number of inserted Portions
+    sal_uInt16 nActPos = 0;         // Position, at the '<' was found
+    sal_uInt16 nOffset = 0;         // Offset of nActPos for '<'
+    sal_uInt16 nPortStart = USHRT_MAX;  // For the TextPortion
+    sal_uInt16 nPortEnd  =  0;  //
     SwTextPortion aText;
     while(nActPos < nStrLen)
     {
@@ -709,7 +710,8 @@ void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
                     aText.nStart += 1;
                 aText.nEnd = nActPos - 1;
                 aText.eType = svtools::HTMLUNKNOWN;
-                aPortionList.Insert(aText, nInsert++);
+                aPortionList.push_back( aText );
+                nInsert++;
             }
             sal_Unicode cFollowFirst = rSource.GetChar((xub_StrLen)(nActPos + 1));
             sal_Unicode cFollowNext = rSource.GetChar((xub_StrLen)(nActPos + 2));
@@ -736,7 +738,7 @@ void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
             if(svtools::HTMLUNKNOWN == eFoundType)
             {
                 //jetzt koennte hier ein keyword folgen
-                USHORT nSrchPos = nActPos;
+                sal_uInt16 nSrchPos = nActPos;
                 while(++nSrchPos < nStrLen - 1)
                 {
                     sal_Unicode cNext = rSource.GetChar(nSrchPos);
@@ -779,18 +781,18 @@ void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
             // jetzt muss noch '>' gesucht werden
             if(svtools::HTMLUNKNOWN != eFoundType)
             {
-                BOOL bFound = FALSE;
-                for(USHORT i = nPortEnd; i < nStrLen; i++)
+                sal_Bool bFound = sal_False;
+                for(sal_uInt16 i = nPortEnd; i < nStrLen; i++)
                     if(cCloseBracket == rSource.GetChar(i))
                     {
-                        bFound = TRUE;
+                        bFound = sal_True;
                         nPortEnd = i;
                         break;
                     }
                 if(!bFound && (eFoundType == svtools::HTMLCOMMENT))
                 {
                     // Kommentar ohne Ende in dieser Zeile
-                    bFound  = TRUE;
+                    bFound  = sal_True;
                     nPortEnd = nStrLen - 1;
                 }
 
@@ -801,7 +803,8 @@ void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
                     aText2.nStart = nPortStart + 1;
                     aText2.nEnd = nPortEnd;
                     aText2.eType = eFoundType;
-                    aPortionList.Insert(aText2, nInsert++);
+                    aPortionList.push_back( aText2 );
+                    nInsert++;
                     eFoundType = svtools::HTMLUNKNOWN;
                 }
 
@@ -815,25 +818,26 @@ void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
         aText.nStart = nPortEnd + 1;
         aText.nEnd = nActPos - 1;
         aText.eType = svtools::HTMLUNKNOWN;
-        aPortionList.Insert(aText, nInsert++);
+        aPortionList.push_back( aText );
+        nInsert++;
     }
 }
 
-void XMLFileWindow::DoDelayedSyntaxHighlight( USHORT nPara )
+void XMLFileWindow::DoDelayedSyntaxHighlight( sal_uInt16 nPara )
 {
     if ( !bHighlighting )
     {
-        aSyntaxLineTable.Insert( nPara, (void*)(USHORT)1 );
+        aSyntaxLineTable.Insert( nPara, (void*)(sal_uInt16)1 );
         aSyntaxIdleTimer.Start();
     }
 }
 
-void XMLFileWindow::ImpDoHighlight( const String& rSource, USHORT nLineOff )
+void XMLFileWindow::ImpDoHighlight( const String& rSource, sal_uInt16 nLineOff )
 {
     SwTextPortions aPortionList;
     lcl_Highlight(rSource, aPortionList);
 
-    USHORT nCount = aPortionList.Count();
+    size_t nCount = aPortionList.size();
     if ( !nCount )
         return;
 
@@ -841,7 +845,7 @@ void XMLFileWindow::ImpDoHighlight( const String& rSource, USHORT nLineOff )
     if ( rLast.nStart > rLast.nEnd )    // Nur bis Bug von MD behoeben
     {
         nCount--;
-        aPortionList.Remove( nCount);
+        aPortionList.pop_back();
         if ( !nCount )
             return;
     }
@@ -850,14 +854,14 @@ void XMLFileWindow::ImpDoHighlight( const String& rSource, USHORT nLineOff )
     // Wenn haufig gleiche Farbe, dazwischen Blank ohne Farbe,
     // ggf. zusammenfassen, oder zumindest das Blank,
     // damit weniger Attribute
-    BOOL bOptimizeHighlight = TRUE; // war in der BasicIDE static
+    sal_Bool bOptimizeHighlight = sal_True; // war in der BasicIDE static
     if ( bOptimizeHighlight )
     {
         // Es muessen nur die Blanks und Tabs mit attributiert werden.
         // Wenn zwei gleiche Attribute hintereinander eingestellt werden,
         // optimiert das die TextEngine.
-        USHORT nLastEnd = 0;
-        for ( USHORT i = 0; i < nCount; i++ )
+        sal_uInt16 nLastEnd = 0;
+        for ( size_t i = 0; i < nCount; i++ )
         {
             SwTextPortion& r = aPortionList[i];
             DBG_ASSERT( r.nLine == aPortionList[0].nLine, "doch mehrere Zeilen ?" );
@@ -877,19 +881,19 @@ void XMLFileWindow::ImpDoHighlight( const String& rSource, USHORT nLineOff )
     }
 
     svtools::ColorConfig aConfig;
-    for ( USHORT i = 0; i < aPortionList.Count(); i++ )
+    for ( size_t i = 0; i < aPortionList.size(); i++ )
     {
         SwTextPortion& r = aPortionList[i];
         if ( r.nStart > r.nEnd )    // Nur bis Bug von MD behoeben
             continue;
-//      USHORT nCol = r.eType;
+//      sal_uInt16 nCol = r.eType;
         if(r.eType !=  svtools::HTMLSGML    &&
             r.eType != svtools::HTMLCOMMENT &&
             r.eType != svtools::HTMLKEYWORD &&
             r.eType != svtools::HTMLUNKNOWN)
                 r.eType = (svtools::ColorConfigEntry)svtools::HTMLUNKNOWN;
         Color aColor((ColorData)aConfig.GetColorValue((svtools::ColorConfigEntry)r.eType).nColor);
-        USHORT nLine = nLineOff+r.nLine; //
+        sal_uInt16 nLine = nLineOff+r.nLine; //
         pTextEngine->SetAttrib( TextAttribFontColor( aColor ), nLine, r.nStart, r.nEnd+1 );
     }
 }
@@ -898,20 +902,20 @@ IMPL_LINK( XMLFileWindow, SyntaxTimerHdl, Timer *, pTimer )
 {
     Time aSyntaxCheckStart;
     DBG_ASSERT( pTextView, "Noch keine View, aber Syntax-Highlight ?!" );
-    pTextEngine->SetUpdateMode( FALSE );
+    pTextEngine->SetUpdateMode( sal_False );
 
-    bHighlighting = TRUE;
-    USHORT nLine;
-    USHORT nCount  = 0;
+    bHighlighting = sal_True;
+    sal_uInt16 nLine;
+    sal_uInt16 nCount  = 0;
     // zuerst wird der Bereich um dem Cursor bearbeitet
     TextSelection aSel = pTextView->GetSelection();
-    USHORT nCur = (USHORT)aSel.GetStart().GetPara();
+    sal_uInt16 nCur = (sal_uInt16)aSel.GetStart().GetPara();
     if(nCur > 40)
         nCur -= 40;
     else
         nCur = 0;
     if(aSyntaxLineTable.Count())
-        for(USHORT i = 0; i < 80 && nCount < 40; i++, nCur++)
+        for(sal_uInt16 i = 0; i < 80 && nCount < 40; i++, nCur++)
         {
             void * p = aSyntaxLineTable.Get(nCur);
             if(p)
@@ -933,9 +937,9 @@ IMPL_LINK( XMLFileWindow, SyntaxTimerHdl, Timer *, pTimer )
     void* p = aSyntaxLineTable.First();
     while ( p && nCount < MAX_SYNTAX_HIGHLIGHT)
     {
-        nLine = (USHORT)aSyntaxLineTable.GetCurKey();
+        nLine = (sal_uInt16)aSyntaxLineTable.GetCurKey();
         DoSyntaxHighlight( nLine );
-        USHORT nC = (USHORT)aSyntaxLineTable.GetCurKey();
+        sal_uInt16 nC = (sal_uInt16)aSyntaxLineTable.GetCurKey();
         p = aSyntaxLineTable.Next();
         aSyntaxLineTable.Remove(nC);
         nCount ++;
@@ -949,9 +953,9 @@ IMPL_LINK( XMLFileWindow, SyntaxTimerHdl, Timer *, pTimer )
     // waehrend des Highlightings funktionierte das Scrolling nicht
     TextView* pTmp = pTextEngine->GetActiveView();
     pTextEngine->SetActiveView(0);
-    pTextEngine->SetUpdateMode( TRUE );
+    pTextEngine->SetUpdateMode( sal_True );
     pTextEngine->SetActiveView(pTmp);
-    pTextView->ShowCursor(FALSE, FALSE);
+    pTextView->ShowCursor(sal_False, sal_False);
 
     if(aSyntaxLineTable.Count() && !pTimer->IsActive())
         pTimer->Start();
@@ -961,12 +965,12 @@ IMPL_LINK( XMLFileWindow, SyntaxTimerHdl, Timer *, pTimer )
     nCurTextWidth = pTextEngine->CalcTextWidth() + 25;  // kleine Toleranz
     if ( nCurTextWidth != nPrevTextWidth )
         SetScrollBarRanges();
-    bHighlighting = FALSE;
+    bHighlighting = sal_False;
 
     return 0;
 }
 
-void XMLFileWindow::DoSyntaxHighlight( USHORT nPara )
+void XMLFileWindow::DoSyntaxHighlight( sal_uInt16 nPara )
 {
     // Durch das DelayedSyntaxHighlight kann es passieren,
     // dass die Zeile nicht mehr existiert!
@@ -974,18 +978,18 @@ void XMLFileWindow::DoSyntaxHighlight( USHORT nPara )
     {
         pTextEngine->RemoveAttribs( nPara );
         String aSource( pTextEngine->GetText( nPara ) );
-        pTextEngine->SetUpdateMode( FALSE );
+        pTextEngine->SetUpdateMode( sal_False );
         ImpDoHighlight( aSource, nPara );
         // os: #43050# hier wird ein TextView-Problem umpopelt:
         // waehrend des Highlightings funktionierte das Scrolling nicht
         TextView* pTmp = pTextEngine->GetActiveView();
-        pTmp->SetAutoScroll(FALSE);
+        pTmp->SetAutoScroll(sal_False);
         pTextEngine->SetActiveView(0);
-        pTextEngine->SetUpdateMode( TRUE );
+        pTextEngine->SetUpdateMode( sal_True );
         pTextEngine->SetActiveView(pTmp);
         // Bug 72887 show the cursor
-        pTmp->SetAutoScroll(TRUE);
-        pTmp->ShowCursor( FALSE/*pTmp->IsAutoScroll()*/ );
+        pTmp->SetAutoScroll(sal_True);
+        pTmp->ShowCursor( sal_False/*pTmp->IsAutoScroll()*/ );
     }
 }
 

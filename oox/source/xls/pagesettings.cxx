@@ -27,10 +27,9 @@
  ************************************************************************/
 
 #include "oox/xls/pagesettings.hxx"
-#include <set>
+
 #include <algorithm>
-#include <rtl/strbuf.hxx>
-#include <rtl/ustrbuf.hxx>
+#include <set>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/sheet/XHeaderFooterContent.hpp>
@@ -39,13 +38,13 @@
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
-#include "properties.hxx"
+#include <rtl/strbuf.hxx>
+#include <rtl/ustrbuf.hxx>
+#include "oox/core/xmlfilterbase.hxx"
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/graphichelper.hxx"
 #include "oox/helper/propertymap.hxx"
 #include "oox/helper/propertyset.hxx"
-#include "oox/helper/recordinputstream.hxx"
-#include "oox/core/xmlfilterbase.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/excelhandlers.hxx"
 #include "oox/xls/stylesbuffer.hxx"
@@ -53,27 +52,24 @@
 #include "tools/mapunit.hxx"
 #include "xmloff/xmluconv.hxx"
 
+namespace oox {
+namespace xls {
+
+// ============================================================================
+
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::sheet;
+using namespace ::com::sun::star::style;
+using namespace ::com::sun::star::text;
+using namespace ::com::sun::star::uno;
+
+using ::oox::core::Relations;
 using ::rtl::OString;
 using ::rtl::OStringBuffer;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::container::XNamed;
-using ::com::sun::star::lang::XMultiServiceFactory;
-using ::com::sun::star::awt::Size;
-using ::com::sun::star::sheet::XHeaderFooterContent;
-using ::com::sun::star::style::XStyle;
-using ::com::sun::star::text::XText;
-using ::com::sun::star::text::XTextCursor;
-using ::com::sun::star::text::XTextContent;
-using ::com::sun::star::text::XTextRange;
-using ::oox::core::Relations;
-
-namespace oox {
-namespace xls {
 
 // ============================================================================
 
@@ -83,32 +79,32 @@ const double OOX_MARGIN_DEFAULT_LR                  = 0.748;    /// Left/right d
 const double OOX_MARGIN_DEFAULT_TB                  = 0.984;    /// Top/bottom default margin in inches.
 const double OOX_MARGIN_DEFAULT_HF                  = 0.512;    /// Header/footer default margin in inches.
 
-const sal_uInt16 OOBIN_PRINTOPT_HORCENTER           = 0x0001;
-const sal_uInt16 OOBIN_PRINTOPT_VERCENTER           = 0x0002;
-const sal_uInt16 OOBIN_PRINTOPT_PRINTHEADING        = 0x0004;
-const sal_uInt16 OOBIN_PRINTOPT_PRINTGRID           = 0x0008;
+const sal_uInt16 BIFF12_PRINTOPT_HORCENTER          = 0x0001;
+const sal_uInt16 BIFF12_PRINTOPT_VERCENTER          = 0x0002;
+const sal_uInt16 BIFF12_PRINTOPT_PRINTHEADING       = 0x0004;
+const sal_uInt16 BIFF12_PRINTOPT_PRINTGRID          = 0x0008;
 
-const sal_uInt16 OOBIN_HEADERFOOTER_DIFFEVEN        = 0x0001;
-const sal_uInt16 OOBIN_HEADERFOOTER_DIFFFIRST       = 0x0002;
-const sal_uInt16 OOBIN_HEADERFOOTER_SCALEDOC        = 0x0004;
-const sal_uInt16 OOBIN_HEADERFOOTER_ALIGNMARGIN     = 0x0008;
+const sal_uInt16 BIFF12_HEADERFOOTER_DIFFEVEN       = 0x0001;
+const sal_uInt16 BIFF12_HEADERFOOTER_DIFFFIRST      = 0x0002;
+const sal_uInt16 BIFF12_HEADERFOOTER_SCALEDOC       = 0x0004;
+const sal_uInt16 BIFF12_HEADERFOOTER_ALIGNMARGIN    = 0x0008;
 
-const sal_uInt16 OOBIN_PAGESETUP_INROWS             = 0x0001;
-const sal_uInt16 OOBIN_PAGESETUP_LANDSCAPE          = 0x0002;
-const sal_uInt16 OOBIN_PAGESETUP_INVALID            = 0x0004;
-const sal_uInt16 OOBIN_PAGESETUP_BLACKWHITE         = 0x0008;
-const sal_uInt16 OOBIN_PAGESETUP_DRAFTQUALITY       = 0x0010;
-const sal_uInt16 OOBIN_PAGESETUP_PRINTNOTES         = 0x0020;
-const sal_uInt16 OOBIN_PAGESETUP_DEFAULTORIENT      = 0x0040;
-const sal_uInt16 OOBIN_PAGESETUP_USEFIRSTPAGE       = 0x0080;
-const sal_uInt16 OOBIN_PAGESETUP_NOTES_END          = 0x0100;   // different to BIFF flag
+const sal_uInt16 BIFF12_PAGESETUP_INROWS            = 0x0001;
+const sal_uInt16 BIFF12_PAGESETUP_LANDSCAPE         = 0x0002;
+const sal_uInt16 BIFF12_PAGESETUP_INVALID           = 0x0004;
+const sal_uInt16 BIFF12_PAGESETUP_BLACKWHITE        = 0x0008;
+const sal_uInt16 BIFF12_PAGESETUP_DRAFTQUALITY      = 0x0010;
+const sal_uInt16 BIFF12_PAGESETUP_PRINTNOTES        = 0x0020;
+const sal_uInt16 BIFF12_PAGESETUP_DEFAULTORIENT     = 0x0040;
+const sal_uInt16 BIFF12_PAGESETUP_USEFIRSTPAGE      = 0x0080;
+const sal_uInt16 BIFF12_PAGESETUP_NOTES_END         = 0x0100;   // different to BIFF flag
 
-const sal_uInt16 OOBIN_CHARTPAGESETUP_LANDSCAPE     = 0x0001;
-const sal_uInt16 OOBIN_CHARTPAGESETUP_INVALID       = 0x0002;
-const sal_uInt16 OOBIN_CHARTPAGESETUP_BLACKWHITE    = 0x0004;
-const sal_uInt16 OOBIN_CHARTPAGESETUP_DEFAULTORIENT = 0x0008;
-const sal_uInt16 OOBIN_CHARTPAGESETUP_USEFIRSTPAGE  = 0x0010;
-const sal_uInt16 OOBIN_CHARTPAGESETUP_DRAFTQUALITY  = 0x0020;
+const sal_uInt16 BIFF12_CHARTPAGESETUP_LANDSCAPE    = 0x0001;
+const sal_uInt16 BIFF12_CHARTPAGESETUP_INVALID      = 0x0002;
+const sal_uInt16 BIFF12_CHARTPAGESETUP_BLACKWHITE   = 0x0004;
+const sal_uInt16 BIFF12_CHARTPAGESETUP_DEFAULTORIENT= 0x0008;
+const sal_uInt16 BIFF12_CHARTPAGESETUP_USEFIRSTPAGE = 0x0010;
+const sal_uInt16 BIFF12_CHARTPAGESETUP_DRAFTQUALITY = 0x0020;
 
 const sal_uInt16 BIFF_PAGESETUP_INROWS              = 0x0001;
 const sal_uInt16 BIFF_PAGESETUP_PORTRAIT            = 0x0002;
@@ -159,7 +155,7 @@ PageSettingsModel::PageSettingsModel() :
 {
 }
 
-void PageSettingsModel::setBinPrintErrors( sal_uInt8 nPrintErrors )
+void PageSettingsModel::setBiffPrintErrors( sal_uInt8 nPrintErrors )
 {
     static const sal_Int32 spnErrorIds[] = { XML_displayed, XML_none, XML_dash, XML_NA };
     mnPrintErrors = STATIC_ARRAY_SELECT( spnErrorIds, nPrintErrors, XML_none );
@@ -260,24 +256,24 @@ void PageSettings::importPicture( const Relations& rRelations, const AttributeLi
     importPictureData( rRelations, rAttribs.getString( R_TOKEN( id ), OUString() ) );
 }
 
-void PageSettings::importPageMargins( RecordInputStream& rStrm )
+void PageSettings::importPageMargins( SequenceInputStream& rStrm )
 {
     rStrm   >> maModel.mfLeftMargin   >> maModel.mfRightMargin
             >> maModel.mfTopMargin    >> maModel.mfBottomMargin
             >> maModel.mfHeaderMargin >> maModel.mfFooterMargin;
 }
 
-void PageSettings::importPrintOptions( RecordInputStream& rStrm )
+void PageSettings::importPrintOptions( SequenceInputStream& rStrm )
 {
     sal_uInt16 nFlags;
     rStrm >> nFlags;
-    maModel.mbHorCenter     = getFlag( nFlags, OOBIN_PRINTOPT_HORCENTER );
-    maModel.mbVerCenter     = getFlag( nFlags, OOBIN_PRINTOPT_VERCENTER );
-    maModel.mbPrintGrid     = getFlag( nFlags, OOBIN_PRINTOPT_PRINTGRID );
-    maModel.mbPrintHeadings = getFlag( nFlags, OOBIN_PRINTOPT_PRINTHEADING );
+    maModel.mbHorCenter     = getFlag( nFlags, BIFF12_PRINTOPT_HORCENTER );
+    maModel.mbVerCenter     = getFlag( nFlags, BIFF12_PRINTOPT_VERCENTER );
+    maModel.mbPrintGrid     = getFlag( nFlags, BIFF12_PRINTOPT_PRINTGRID );
+    maModel.mbPrintHeadings = getFlag( nFlags, BIFF12_PRINTOPT_PRINTHEADING );
 }
 
-void PageSettings::importPageSetup( const Relations& rRelations, RecordInputStream& rStrm )
+void PageSettings::importPageSetup( const Relations& rRelations, SequenceInputStream& rStrm )
 {
     OUString aRelId;
     sal_uInt16 nFlags;
@@ -286,18 +282,18 @@ void PageSettings::importPageSetup( const Relations& rRelations, RecordInputStre
             >> maModel.mnCopies >> maModel.mnFirstPage
             >> maModel.mnFitToWidth >> maModel.mnFitToHeight
             >> nFlags >> aRelId;
-    maModel.setBinPrintErrors( extractValue< sal_uInt8 >( nFlags, 9, 2 ) );
+    maModel.setBiffPrintErrors( extractValue< sal_uInt8 >( nFlags, 9, 2 ) );
     maModel.maBinSettPath   = rRelations.getFragmentPathFromRelId( aRelId );
-    maModel.mnOrientation   = getFlagValue( nFlags, OOBIN_PAGESETUP_DEFAULTORIENT, XML_default, getFlagValue( nFlags, OOBIN_PAGESETUP_LANDSCAPE, XML_landscape, XML_portrait ) );
-    maModel.mnPageOrder     = getFlagValue( nFlags, OOBIN_PAGESETUP_INROWS, XML_overThenDown, XML_downThenOver );
-    maModel.mnCellComments  = getFlagValue( nFlags, OOBIN_PAGESETUP_PRINTNOTES, getFlagValue( nFlags, OOBIN_PAGESETUP_NOTES_END, XML_atEnd, XML_asDisplayed ), XML_none );
-    maModel.mbValidSettings = !getFlag( nFlags, OOBIN_PAGESETUP_INVALID );
-    maModel.mbUseFirstPage  = getFlag( nFlags, OOBIN_PAGESETUP_USEFIRSTPAGE );
-    maModel.mbBlackWhite    = getFlag( nFlags, OOBIN_PAGESETUP_BLACKWHITE );
-    maModel.mbDraftQuality  = getFlag( nFlags, OOBIN_PAGESETUP_DRAFTQUALITY );
+    maModel.mnOrientation   = getFlagValue( nFlags, BIFF12_PAGESETUP_DEFAULTORIENT, XML_default, getFlagValue( nFlags, BIFF12_PAGESETUP_LANDSCAPE, XML_landscape, XML_portrait ) );
+    maModel.mnPageOrder     = getFlagValue( nFlags, BIFF12_PAGESETUP_INROWS, XML_overThenDown, XML_downThenOver );
+    maModel.mnCellComments  = getFlagValue( nFlags, BIFF12_PAGESETUP_PRINTNOTES, getFlagValue( nFlags, BIFF12_PAGESETUP_NOTES_END, XML_atEnd, XML_asDisplayed ), XML_none );
+    maModel.mbValidSettings = !getFlag( nFlags, BIFF12_PAGESETUP_INVALID );
+    maModel.mbUseFirstPage  = getFlag( nFlags, BIFF12_PAGESETUP_USEFIRSTPAGE );
+    maModel.mbBlackWhite    = getFlag( nFlags, BIFF12_PAGESETUP_BLACKWHITE );
+    maModel.mbDraftQuality  = getFlag( nFlags, BIFF12_PAGESETUP_DRAFTQUALITY );
 }
 
-void PageSettings::importChartPageSetup( const Relations& rRelations, RecordInputStream& rStrm )
+void PageSettings::importChartPageSetup( const Relations& rRelations, SequenceInputStream& rStrm )
 {
     OUString aRelId;
     sal_uInt16 nFirstPage, nFlags;
@@ -305,27 +301,27 @@ void PageSettings::importChartPageSetup( const Relations& rRelations, RecordInpu
             >> maModel.mnCopies >> nFirstPage >> nFlags >> aRelId;
     maModel.maBinSettPath   = rRelations.getFragmentPathFromRelId( aRelId );
     maModel.mnFirstPage     = nFirstPage; // 16-bit in CHARTPAGESETUP
-    maModel.mnOrientation   = getFlagValue( nFlags, OOBIN_CHARTPAGESETUP_DEFAULTORIENT, XML_default, getFlagValue( nFlags, OOBIN_CHARTPAGESETUP_LANDSCAPE, XML_landscape, XML_portrait ) );
-    maModel.mbValidSettings = !getFlag( nFlags, OOBIN_CHARTPAGESETUP_INVALID );
-    maModel.mbUseFirstPage  = getFlag( nFlags, OOBIN_CHARTPAGESETUP_USEFIRSTPAGE );
-    maModel.mbBlackWhite    = getFlag( nFlags, OOBIN_CHARTPAGESETUP_BLACKWHITE );
-    maModel.mbDraftQuality  = getFlag( nFlags, OOBIN_CHARTPAGESETUP_DRAFTQUALITY );
+    maModel.mnOrientation   = getFlagValue( nFlags, BIFF12_CHARTPAGESETUP_DEFAULTORIENT, XML_default, getFlagValue( nFlags, BIFF12_CHARTPAGESETUP_LANDSCAPE, XML_landscape, XML_portrait ) );
+    maModel.mbValidSettings = !getFlag( nFlags, BIFF12_CHARTPAGESETUP_INVALID );
+    maModel.mbUseFirstPage  = getFlag( nFlags, BIFF12_CHARTPAGESETUP_USEFIRSTPAGE );
+    maModel.mbBlackWhite    = getFlag( nFlags, BIFF12_CHARTPAGESETUP_BLACKWHITE );
+    maModel.mbDraftQuality  = getFlag( nFlags, BIFF12_CHARTPAGESETUP_DRAFTQUALITY );
 }
 
-void PageSettings::importHeaderFooter( RecordInputStream& rStrm )
+void PageSettings::importHeaderFooter( SequenceInputStream& rStrm )
 {
     sal_uInt16 nFlags;
     rStrm   >> nFlags
             >> maModel.maOddHeader   >> maModel.maOddFooter
             >> maModel.maEvenHeader  >> maModel.maEvenFooter
             >> maModel.maFirstHeader >> maModel.maFirstFooter;
-    maModel.mbUseEvenHF  = getFlag( nFlags, OOBIN_HEADERFOOTER_DIFFEVEN );
-    maModel.mbUseFirstHF = getFlag( nFlags, OOBIN_HEADERFOOTER_DIFFFIRST );
+    maModel.mbUseEvenHF  = getFlag( nFlags, BIFF12_HEADERFOOTER_DIFFEVEN );
+    maModel.mbUseFirstHF = getFlag( nFlags, BIFF12_HEADERFOOTER_DIFFFIRST );
 }
 
-void PageSettings::importPicture( const Relations& rRelations, RecordInputStream& rStrm )
+void PageSettings::importPicture( const Relations& rRelations, SequenceInputStream& rStrm )
 {
-    importPictureData( rRelations, rStrm.readString() );
+    importPictureData( rRelations, BiffHelper::readString( rStrm ) );
 }
 
 void PageSettings::importLeftMargin( BiffInputStream& rStrm )
@@ -379,7 +375,7 @@ void PageSettings::importPageSetup( BiffInputStream& rStrm )
 
         if( getBiff() == BIFF8 )
         {
-            maModel.setBinPrintErrors( extractValue< sal_uInt8 >( nFlags, 10, 2 ) );
+            maModel.setBiffPrintErrors( extractValue< sal_uInt8 >( nFlags, 10, 2 ) );
             maModel.mnCellComments = getFlagValue( nFlags, BIFF_PAGESETUP_PRINTNOTES, getFlagValue( nFlags, BIFF_PAGESETUP_NOTES_END, XML_atEnd, XML_asDisplayed ), XML_none );
         }
     }
@@ -695,8 +691,8 @@ double HeaderFooterParser::parse( const Reference< XHeaderFooterContent >& rxCon
                         appendField( xContent );
                     }
                     break;
-                    case 'Z':   // file path (without file name), BIFF8 and OOX only
-                        if( (getFilterType() == FILTER_OOX) || ((getFilterType() == FILTER_BIFF) && (getBiff() == BIFF8)) )
+                    case 'Z':   // file path (without file name), OOXML, BIFF12, and BIFF8 only
+                        if( (getFilterType() == FILTER_OOXML) || ((getFilterType() == FILTER_BIFF) && (getBiff() == BIFF8)) )
                         {
                             Reference< XTextContent > xContent = createField( maFileNameService );
                             PropertySet aPropSet( xContent );
@@ -764,7 +760,7 @@ double HeaderFooterParser::parse( const Reference< XHeaderFooterContent >& rxCon
                     break;
 
                     case 'K':   // text color (not in BIFF)
-                        if( (getFilterType() == FILTER_OOX) && (pcChar + 6 < pcEnd) )
+                        if( (getFilterType() == FILTER_OOXML) && (pcChar + 6 < pcEnd) )
                         {
                             setAttributes();
                             // eat the following 6 characters
@@ -1268,8 +1264,8 @@ sal_Int32 PageSettingsConverter::writeHeaderFooter(
     sal_Int32 nHeight = 0;
     if( rContent.getLength() > 0 )
     {
-        Reference< XHeaderFooterContent > xHFContent;
-        if( rPropSet.getProperty( xHFContent, nPropId ) && xHFContent.is() )
+        Reference< XHeaderFooterContent > xHFContent( rPropSet.getAnyProperty( nPropId ), UNO_QUERY );
+        if( xHFContent.is() )
         {
             double fTotalHeight = mxHFParser->parse( xHFContent, rContent );
             rPropSet.setProperty( nPropId, xHFContent );

@@ -35,7 +35,6 @@
 #include <oox/drawingml/theme.hxx>
 #include "oox/ppt/presentationfragmenthandler.hxx"
 #include "oox/ppt/slidepersist.hxx"
-#include "tokens.hxx"
 #include <vector>
 #include <map>
 
@@ -47,7 +46,8 @@ class PowerPointImport : public oox::core::XmlFilterBase
 {
 public:
 
-    PowerPointImport( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > & rSMgr  );
+    PowerPointImport( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext )
+        throw( ::com::sun::star::uno::RuntimeException );
     virtual ~PowerPointImport();
 
     // from FilterBase
@@ -76,6 +76,7 @@ public:
 
 private:
     virtual GraphicHelper* implCreateGraphicHelper() const;
+    virtual ::oox::ole::VbaProject* implCreateVbaProject() const;
     virtual ::rtl::OUString implGetImplementationName() const;
 
 private:

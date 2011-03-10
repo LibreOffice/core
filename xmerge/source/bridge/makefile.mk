@@ -33,3 +33,11 @@ PRJNAME=xmerge
 .IF "$(L10N_framework)"==""
 ALLTAR: ANTBUILD
 .ENDIF
+
+ALLTAR : $(MISC)/XMergeBridge.component
+
+$(MISC)/XMergeBridge.component .ERRREMOVE : \
+        $(SOLARENV)/bin/createcomponent.xslt XMergeBridge.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_JAVA)XMergeBridge.jar' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt XMergeBridge.component

@@ -66,17 +66,6 @@ void TextListStyle::apply( const TextListStyle& rTextListStyle )
     applyStyleList( rTextListStyle.getListStyle(), getListStyle() );
 }
 
-#if OSL_DEBUG_LEVEL > 0
-void TextListStyle::dump( int nLevels ) const
-{
-    for ( int i = 0; i < nLevels; i++ )
-    {
-    OSL_TRACE("level: %d", i);
-        maListStyle[ i ]->dump();
-    }
-}
-#endif
-
 } }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

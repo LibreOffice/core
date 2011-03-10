@@ -27,13 +27,15 @@
  ************************************************************************/
 
 #include "oox/helper/binarystreambase.hxx"
+
 #include <osl/diagnose.h>
 
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::io::XSeekable;
-
 namespace oox {
+
+// ============================================================================
+
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::uno;
 
 // ============================================================================
 

@@ -364,7 +364,7 @@ void SVGAttributeWriter::SetFontAttr( const Font& rFont )
         delete mpElemPaint, mpElemPaint = NULL;
         delete mpElemFont;
         mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrStyle, GetFontStyle( maCurFont = rFont ) );
-        mpElemFont = new SvXMLElementExport( mrExport, XML_NAMESPACE_NONE, aXMLElemG, TRUE, TRUE );
+        mpElemFont = new SvXMLElementExport( mrExport, XML_NAMESPACE_NONE, aXMLElemG, sal_True, sal_True );
     }
 }
 
@@ -376,7 +376,7 @@ void SVGAttributeWriter::SetPaintAttr( const Color& rLineColor, const Color& rFi
     {
         delete mpElemPaint;
         mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrStyle, GetPaintStyle( maCurLineColor = rLineColor, maCurFillColor = rFillColor, pLineInfo ) );
-        mpElemPaint = new SvXMLElementExport( mrExport, XML_NAMESPACE_NONE, aXMLElemG, TRUE, TRUE );
+        mpElemPaint = new SvXMLElementExport( mrExport, XML_NAMESPACE_NONE, aXMLElemG, sal_True, sal_True );
     }
 }
 
@@ -488,8 +488,8 @@ NMSP_RTL::OUString  SVGActionWriter::GetPathString( const PolyPolygon& rPolyPoly
 
     for( long i = 0, nCount = rPolyPoly.Count(); i < nCount; i++ )
     {
-        const Polygon&  rPoly = rPolyPoly[ (USHORT) i ];
-        USHORT          n = 1, nSize = rPoly.GetSize();
+        const Polygon&  rPoly = rPolyPoly[ (sal_uInt16) i ];
+        sal_uInt16          n = 1, nSize = rPoly.GetSize();
 
         if( nSize > 1 )
         {
@@ -566,7 +566,7 @@ void SVGActionWriter::ImplWriteLine( const Point& rPt1, const Point& rPt2, const
     }
 
     {
-        SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemLine, TRUE, TRUE );
+        SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemLine, sal_True, sal_True );
     }
 }
 
@@ -593,7 +593,7 @@ void SVGActionWriter::ImplWriteRect( const Rectangle& rRect, long nRadX, long nR
         mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrStyle, *pStyle );
 
     {
-        SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemRect, TRUE, TRUE );
+        SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemRect, sal_True, sal_True );
     }
 }
 
@@ -614,7 +614,7 @@ void SVGActionWriter::ImplWriteEllipse( const Point& rCenter, long nRadX, long n
         mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrStyle, *pStyle );
 
     {
-        SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemEllipse, TRUE, TRUE );
+        SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemEllipse, sal_True, sal_True );
     }
 }
 
@@ -628,10 +628,10 @@ void SVGActionWriter::ImplWritePolyPolygon( const PolyPolygon& rPolyPoly, sal_Bo
         PolyPolygon aMappedPolyPoly;
         FastString  aStyle;
 
-        for( USHORT i = 0, nCount = rPolyPoly.Count(); i < nCount; i++ )
+        for( sal_uInt16 i = 0, nCount = rPolyPoly.Count(); i < nCount; i++ )
         {
             const Polygon&  rPoly = rPolyPoly[ i ];
-            const USHORT    nSize = rPoly.GetSize();
+            const sal_uInt16    nSize = rPoly.GetSize();
 
             // #i102224# congratulations, this throws away the curve flags
             // and makes ANY curved polygon look bad. The Flags HAVE to be
@@ -642,7 +642,7 @@ void SVGActionWriter::ImplWritePolyPolygon( const PolyPolygon& rPolyPoly, sal_Bo
             // new:
             Polygon aMappedPoly(rPoly);
 
-            for( USHORT n = 0; n < nSize; n++ )
+            for( sal_uInt16 n = 0; n < nSize; n++ )
                 aMappedPoly[ n ] = ImplMap( rPoly[ n ] );
 
             aMappedPolyPoly.Insert( aMappedPoly );
@@ -665,7 +665,7 @@ void SVGActionWriter::ImplWritePolyPolygon( const PolyPolygon& rPolyPoly, sal_Bo
         mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrD, GetPathString( aMappedPolyPoly, bLineOnly ) );
         {
             // write polyline/polygon element
-            SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemPath, TRUE, TRUE );
+            SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemPath, sal_True, sal_True );
         }
     }
 }
@@ -758,14 +758,14 @@ void SVGActionWriter::ImplWriteGradientLinear( const PolyPolygon& rPolyPoly,
 {
     if( rPolyPoly.Count() )
     {
-        SvXMLElementExport aElemG( mrExport, XML_NAMESPACE_NONE, aXMLElemG, TRUE, TRUE );
+        SvXMLElementExport aElemG( mrExport, XML_NAMESPACE_NONE, aXMLElemG, sal_True, sal_True );
 
         FastString aGradientId;
         aGradientId += B2UCONST( "gradient" );
         aGradientId += GetValueString( ImplGetNextGradientId() );
 
         {
-            SvXMLElementExport aElemDefs( mrExport, XML_NAMESPACE_NONE, aXMLElemDefs, TRUE, TRUE );
+            SvXMLElementExport aElemDefs( mrExport, XML_NAMESPACE_NONE, aXMLElemDefs, sal_True, sal_True );
 
             mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrId, aGradientId.GetString() );
             {
@@ -795,7 +795,7 @@ void SVGActionWriter::ImplWriteGradientLinear( const PolyPolygon& rPolyPoly,
             }
 
             {
-                SvXMLElementExport aElemLinearGradient( mrExport, XML_NAMESPACE_NONE, aXMLElemLinearGradient, TRUE, TRUE );
+                SvXMLElementExport aElemLinearGradient( mrExport, XML_NAMESPACE_NONE, aXMLElemLinearGradient, sal_True, sal_True );
 
                 const Color aStartColor = ImplGetColorWithIntensity( rGradient.GetStartColor(), rGradient.GetStartIntensity() );
                 const Color aEndColor = ImplGetColorWithIntensity( rGradient.GetEndColor(), rGradient.GetEndIntensity() );
@@ -1096,7 +1096,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
 
         if( nLen > 1 )
         {
-            aNormSize.Width() = pDX[ nLen - 2 ] + mpVDev->GetTextWidth( rText.GetChar( sal::static_int_cast<USHORT>( nLen - 1 ) ) );
+            aNormSize.Width() = pDX[ nLen - 2 ] + mpVDev->GetTextWidth( rText.GetChar( sal::static_int_cast<sal_uInt16>( nLen - 1 ) ) );
 
             if( nWidth && aNormSize.Width() && ( nWidth != aNormSize.Width() ) )
             {
@@ -1177,7 +1177,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
         // write text element
         {
 #ifdef _SVG_USE_TSPANS
-            SvXMLElementExport          aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemText, TRUE, TRUE );
+            SvXMLElementExport          aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemText, sal_True, sal_True );
             FastString                  aTSpanX;
             const NMSP_RTL::OUString    aSpace( ' ' );
             String                      aOutputText( rText );
@@ -1186,25 +1186,25 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
 
             for( long j = 0, nX = aPt.X(); j < nLen; ++j )
             {
-                const sal_Unicode cCode = rText.GetChar( sal::static_int_cast<USHORT>( j ) );
+                const sal_Unicode cCode = rText.GetChar( sal::static_int_cast<sal_uInt16>( j ) );
 
                 // don't take more than one whitespace into account
                 if( !bIgnoreWhitespace || ( ' ' != cCode ) )
                 {
-                    aOutputText.SetChar( sal::static_int_cast<USHORT>( nCurPos++ ), cCode );
+                    aOutputText.SetChar( sal::static_int_cast<sal_uInt16>( nCurPos++ ), cCode );
                     ( aTSpanX += GetValueString( nX + ( ( j > 0 ) ? pDX[ j - 1 ] : 0 ) ) ) += aSpace;
                     bIgnoreWhitespace = ( ' ' == cCode );
                 }
             }
 
             if( nCurPos < nLen )
-                aOutputText.Erase( sal::static_int_cast<USHORT>( nCurPos ) );
+                aOutputText.Erase( sal::static_int_cast<sal_uInt16>( nCurPos ) );
 
             mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX, aTSpanX.GetString() );
             mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY, GetValueString( aPt.Y() ) );
 
             {
-                SvXMLElementExport aElem2( mrExport, XML_NAMESPACE_NONE, aXMLElemTSpan, TRUE, TRUE );
+                SvXMLElementExport aElem2( mrExport, XML_NAMESPACE_NONE, aXMLElemTSpan, sal_True, sal_True );
                 mrExport.GetDocHandler()->characters( aOutputText );
             }
 #else
@@ -1212,7 +1212,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
             mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY, GetValueString( aPt.Y() ) );
 
             {
-                SvXMLElementExport aElem2( mrExport, XML_NAMESPACE_NONE, aXMLElemText, TRUE, TRUE );
+                SvXMLElementExport aElem2( mrExport, XML_NAMESPACE_NONE, aXMLElemText, sal_True, sal_True );
                 mrExport.GetDocHandler()->characters( rText );
             }
 #endif
@@ -1307,10 +1307,10 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
 {
     ImplAcquireContext();
 
-    for( ULONG i = 0, nCount = rMtf.GetActionCount(); i < nCount; i++ )
+    for( sal_uLong i = 0, nCount = rMtf.GetActionCount(); i < nCount; i++ )
     {
         const MetaAction*   pAction = rMtf.GetAction( i );
-        const USHORT        nType = pAction->GetType();
+        const sal_uInt16        nType = pAction->GetType();
 
         switch( nType )
         {
@@ -1560,8 +1560,8 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         const Color aOldLineColor( mpVDev->GetLineColor() ), aOldFillColor( mpVDev->GetFillColor() );
                         Color       aNewLineColor( aOldLineColor ), aNewFillColor( aOldFillColor );
 
-                        aNewLineColor.SetTransparency( sal::static_int_cast<UINT8>( FRound( pA->GetTransparence() * 2.55 ) ) );
-                        aNewFillColor.SetTransparency( sal::static_int_cast<UINT8>( FRound( pA->GetTransparence() * 2.55 ) ) );
+                        aNewLineColor.SetTransparency( sal::static_int_cast<sal_uInt8>( FRound( pA->GetTransparence() * 2.55 ) ) );
+                        aNewFillColor.SetTransparency( sal::static_int_cast<sal_uInt8>( FRound( pA->GetTransparence() * 2.55 ) ) );
 
                         mpContext->SetPaintAttr( aNewLineColor, aNewFillColor );
                         ImplWritePolyPolygon( rPolyPoly, sal_False, pStyle );
@@ -1591,7 +1591,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                     const GDIMetaFile       aGDIMetaFile( pA->GetSubstitute() );
                     sal_Bool                bFound = sal_False;
 
-                    for( ULONG j = 0, nC = aGDIMetaFile.GetActionCount(); ( j < nC ) && !bFound; j++ )
+                    for( sal_uLong j = 0, nC = aGDIMetaFile.GetActionCount(); ( j < nC ) && !bFound; j++ )
                     {
                         const MetaAction* pSubstAct = aGDIMetaFile.GetAction( j );
 

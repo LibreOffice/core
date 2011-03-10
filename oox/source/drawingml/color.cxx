@@ -29,11 +29,11 @@
 #include "oox/drawingml/color.hxx"
 #include <algorithm>
 #include <math.h>
-#include "tokens.hxx"
 #include "oox/helper/containerhelper.hxx"
 #include "oox/helper/graphichelper.hxx"
-#include "oox/core/namespaces.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
+#include "oox/token/namespaces.hxx"
+#include "oox/token/tokens.hxx"
 
 using ::rtl::OUString;
 
@@ -315,7 +315,7 @@ void Color::addTransformation( sal_Int32 nElement, sal_Int32 nValue )
     /*  Execute alpha transformations directly, store other transformations in
         a vector, they may depend on a scheme base color which will be resolved
         in Color::getColor(). */
-    sal_Int32 nToken = getToken( nElement );
+    sal_Int32 nToken = getBaseToken( nElement );
     switch( nToken )
     {
         case XML_alpha:     lclSetValue( mnAlpha, nValue ); break;
@@ -337,7 +337,7 @@ void Color::addChartTintTransformation( double fTint )
 void Color::addExcelTintTransformation( double fTint )
 {
     sal_Int32 nValue = getLimitedValue< sal_Int32, double >( fTint * MAX_PERCENT + 0.5, -MAX_PERCENT, MAX_PERCENT );
-    maTransforms.push_back( Transformation( NMSP_XLS | XML_tint, nValue ) );
+    maTransforms.push_back( Transformation( XLS_TOKEN( tint ), nValue ) );
 }
 
 void Color::clearTransformations()

@@ -27,25 +27,23 @@
  ************************************************************************/
 
 #include "oox/helper/containerhelper.hxx"
-#include <rtl/ustrbuf.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <rtl/ustrbuf.hxx>
 #include "oox/helper/helper.hxx"
+
+namespace oox {
+
+// ============================================================================
+
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::uno;
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
-using ::com::sun::star::uno::Any;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::lang::XMultiServiceFactory;
-using ::com::sun::star::container::XIndexContainer;
-using ::com::sun::star::container::XNameAccess;
-using ::com::sun::star::container::XNameContainer;
-
-namespace oox {
 
 // ============================================================================
 
@@ -159,64 +157,6 @@ OUString ContainerHelper::insertByUnusedName(
     // insert the new object and return its resulting name
     insertByName( rxNameContainer, aNewName, rObject );
     return aNewName;
-}
-
-// ============================================================================
-
-ObjectContainer::ObjectContainer( const Reference< XMultiServiceFactory >& rxFactory, const OUString& rServiceName ) :
-    mxFactory( rxFactory ),
-    maServiceName( rServiceName ),
-    mnIndex( 0 )
-{
-    OSL_ENSURE( mxFactory.is(), "ObjectContainer::ObjectContainer - missing service factory" );
-}
-
-ObjectContainer::~ObjectContainer()
-{
-}
-
-bool ObjectContainer::hasObject( const OUString& rObjName ) const
-{
-    createContainer();
-    return mxContainer.is() && mxContainer->hasByName( rObjName );
-}
-
-Any ObjectContainer::getObject( const OUString& rObjName ) const
-{
-    createContainer();
-    if( mxContainer.is() ) try
-    {
-        return mxContainer->getByName( rObjName );
-    }
-    catch( Exception& )
-    {
-    }
-    return Any();
-}
-
-OUString ObjectContainer::insertObject( const OUString& rObjName, const Any& rObj, bool bInsertByUnusedName )
-{
-    createContainer();
-    if( mxContainer.is() )
-    {
-        if( bInsertByUnusedName )
-            return ContainerHelper::insertByUnusedName( mxContainer, rObjName + OUString::valueOf( ++mnIndex ), ' ', rObj );
-        if( ContainerHelper::insertByName( mxContainer, rObjName, rObj ) )
-            return rObjName;
-    }
-    return OUString();
-}
-
-void ObjectContainer::createContainer() const
-{
-    if( !mxContainer.is() && mxFactory.is() ) try
-    {
-        mxContainer.set( mxFactory->createInstance( maServiceName ), UNO_QUERY_THROW );
-    }
-    catch( Exception& )
-    {
-    }
-    OSL_ENSURE( mxContainer.is(), "ObjectContainer::createContainer - container not found" );
 }
 
 // ============================================================================

@@ -29,7 +29,7 @@
 #define INCLUDED_TDEFTABLEHANDLER_HXX
 
 #include <WriterFilterDllApi.hxx>
-#include <resourcemodel/WW8ResourceModel.hxx>
+#include <resourcemodel/LoggedResources.hxx>
 #include <boost/shared_ptr.hpp>
 #include <vector>
 namespace com{ namespace sun{ namespace star{namespace table {
@@ -41,7 +41,7 @@ namespace dmapper
 {
 class PropertyMap;
 class TablePropertyMap;
-class WRITERFILTER_DLLPRIVATE TDefTableHandler : public Properties
+class WRITERFILTER_DLLPRIVATE TDefTableHandler : public LoggedProperties
 {
 public:
 
@@ -67,13 +67,14 @@ private:
     bool                                                m_bOOXML;
 
     void localResolve(Id Name, writerfilter::Reference<Properties>::Pointer_t pProperties);
+
+    // Properties
+    virtual void lcl_attribute(Id Name, Value & val);
+    virtual void lcl_sprm(Sprm & sprm);
+
 public:
     TDefTableHandler( bool bOOXML );
     virtual ~TDefTableHandler();
-
-    // Properties
-    virtual void attribute(Id Name, Value & val);
-    virtual void sprm(Sprm & sprm);
 
     size_t                                      getCellCount() const;
     void                                        fillCellProperties( size_t nCell, ::boost::shared_ptr< TablePropertyMap > pCellProperties) const;

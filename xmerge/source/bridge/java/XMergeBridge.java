@@ -74,9 +74,8 @@ import java.net.URI;
 
 
 /** This outer class provides an inner class to implement the service
- * description, a method to instantiate the
- * component on demand (__getServiceFactory()), and a method to give
- * information about the component (__writeRegistryServiceInfo()).
+ * description and a method to instantiate the
+ * component on demand (__getServiceFactory()).
  */
 public class XMergeBridge {
 
@@ -639,21 +638,4 @@ public class XMergeBridge {
 
         return xSingleServiceFactory;
     }
-
-    /**
-     * Writes the service information into the given registry key.
-     * This method is called by the <code>JavaLoader</code>
-     * <p>
-     * @return  returns true if the operation succeeded
-     * @param   regKey       the registryKey
-     * @see                  com.sun.star.comp.loader.JavaLoader
-     */
-    public static boolean __writeRegistryServiceInfo(XRegistryKey regKey) {
-
-        return FactoryHelper.writeRegistryServiceInfo(_XMergeBridge.class.getName(),
-        _XMergeBridge.__serviceName, regKey);
-    }
 }
-
-
-

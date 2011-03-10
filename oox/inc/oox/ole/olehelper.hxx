@@ -101,6 +101,10 @@ public:
                             sal_uInt32 nOleColor,
                             bool bDefaultColorBgr = true );
 
+    /** Returns the OLE color from the passed UNO RGB color.
+     */
+    static sal_uInt32   encodeOleColor( sal_Int32 nRgbColor );
+
     /** Imports a GUID from the passed binary stream and returns its string
         representation (in uppercase characters).
      */

@@ -27,37 +27,32 @@
  ************************************************************************/
 
 #include "oox/xls/excelfilter.hxx"
-#include <com/sun/star/container/XNameContainer.hpp>
+
+#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include "oox/dump/biffdumper.hxx"
 #include "oox/dump/xlsbdumper.hxx"
 #include "oox/helper/binaryinputstream.hxx"
 #include "oox/xls/biffdetector.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/excelchartconverter.hxx"
-#include "oox/ole/vbaproject.hxx"
+#include "oox/xls/excelvbaproject.hxx"
 #include "oox/xls/stylesbuffer.hxx"
 #include "oox/xls/themebuffer.hxx"
 #include "oox/xls/workbookfragment.hxx"
-#include "oox/dump/biffdumper.hxx"
-#include "oox/dump/xlsbdumper.hxx"
 
 namespace oox {
 namespace xls {
 
 // ============================================================================
 
-using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::xml::sax;
+using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::xml::sax;
+using namespace ::oox::core;
 
-using ::oox::core::BinaryFilterBase;
-using ::oox::core::FragmentHandlerRef;
-using ::oox::core::Relation;
-using ::oox::core::Relations;
-using ::oox::core::XmlFilterBase;
-using ::oox::drawingml::table::TableStyleListPtr;
 using ::rtl::OUString;
+using ::oox::drawingml::table::TableStyleListPtr;
 
 // ============================================================================
 
@@ -91,26 +86,27 @@ void ExcelFilterBase::unregisterWorkbookData()
 
 OUString SAL_CALL ExcelFilter_getImplementationName() throw()
 {
-    return CREATE_OUSTRING( "com.sun.star.comp.oox.ExcelFilter" );
+    return CREATE_OUSTRING( "com.sun.star.comp.oox.xls.ExcelFilter" );
 }
 
 Sequence< OUString > SAL_CALL ExcelFilter_getSupportedServiceNames() throw()
 {
-    Sequence< OUString > aSeq( 1 );
-    aSeq[ 0 ] = CREATE_OUSTRING( "com.sun.star.comp.oox.ExcelFilter" );
+    Sequence< OUString > aSeq( 2 );
+    aSeq[ 0 ] = CREATE_OUSTRING( "com.sun.star.document.ImportFilter" );
+    aSeq[ 1 ] = CREATE_OUSTRING( "com.sun.star.document.ExportFilter" );
     return aSeq;
 }
 
 Reference< XInterface > SAL_CALL ExcelFilter_createInstance(
-        const Reference< XMultiServiceFactory >& rxGlobalFactory ) throw( Exception )
+        const Reference< XComponentContext >& rxContext ) throw( Exception )
 {
-    return static_cast< ::cppu::OWeakObject* >( new ExcelFilter( rxGlobalFactory ) );
+    return static_cast< ::cppu::OWeakObject* >( new ExcelFilter( rxContext ) );
 }
 
 // ----------------------------------------------------------------------------
 
-ExcelFilter::ExcelFilter( const Reference< XMultiServiceFactory >& rxGlobalFactory ) :
-    XmlFilterBase( rxGlobalFactory )
+ExcelFilter::ExcelFilter( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
+    XmlFilterBase( rxContext )
 {
 }
 
@@ -126,17 +122,12 @@ bool ExcelFilter::importDocument() throw()
         this variable (nonpro only). */
     OOX_DUMP_FILE( ::oox::dump::xlsb::Dumper );
 
-    OUString aWorkbookPath = getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATIONSTYPE( "officeDocument" ) );
+    OUString aWorkbookPath = getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "officeDocument" ) );
     if( aWorkbookPath.getLength() == 0 )
         return false;
 
     WorkbookHelperRoot aHelper( *this );
-    if( aHelper.isValid() && importFragment( new OoxWorkbookFragment( aHelper, aWorkbookPath ) ) )
-    {
-        importDocumentProperties();
-        return true;
-    }
-    return false;
+    return aHelper.isValid() && importFragment( new WorkbookFragment( aHelper, aWorkbookPath ) );
 }
 
 bool ExcelFilter::exportDocument() throw()
@@ -169,6 +160,12 @@ GraphicHelper* ExcelFilter::implCreateGraphicHelper() const
     return new ExcelGraphicHelper( getWorkbookData() );
 }
 
+::oox::ole::VbaProject* ExcelFilter::implCreateVbaProject() const
+{
+    return new ExcelVbaProject( getComponentContext(), Reference< XSpreadsheetDocument >( getModel(), UNO_QUERY ) );
+}
+
+
 sal_Bool SAL_CALL ExcelFilter::filter( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rDescriptor ) throw( ::com::sun::star::uno::RuntimeException )
 {
     if ( XmlFilterBase::filter( rDescriptor ) )
@@ -176,7 +173,7 @@ sal_Bool SAL_CALL ExcelFilter::filter( const ::com::sun::star::uno::Sequence< ::
 
     if ( isExportFilter() )
     {
-        Reference< XExporter > xExporter( getGlobalFactory()->createInstance( CREATE_OUSTRING( "com.sun.star.comp.oox.ExcelFilterExport" ) ), UNO_QUERY );
+        Reference< XExporter > xExporter( getServiceFactory()->createInstance( CREATE_OUSTRING( "com.sun.star.comp.oox.ExcelFilterExport" ) ), UNO_QUERY );
 
         if ( xExporter.is() )
         {
@@ -204,26 +201,27 @@ OUString ExcelFilter::implGetImplementationName() const
 
 OUString SAL_CALL ExcelBiffFilter_getImplementationName() throw()
 {
-    return CREATE_OUSTRING( "com.sun.star.comp.oox.ExcelBiffFilter" );
+    return CREATE_OUSTRING( "com.sun.star.comp.oox.xls.ExcelBiffFilter" );
 }
 
 Sequence< OUString > SAL_CALL ExcelBiffFilter_getSupportedServiceNames() throw()
 {
-    Sequence< OUString > aSeq( 1 );
-    aSeq[ 0 ] = CREATE_OUSTRING( "com.sun.star.comp.oox.ExcelBiffFilter" );
+    Sequence< OUString > aSeq( 2 );
+    aSeq[ 0 ] = CREATE_OUSTRING( "com.sun.star.document.ImportFilter" );
+    aSeq[ 1 ] = CREATE_OUSTRING( "com.sun.star.document.ExportFilter" );
     return aSeq;
 }
 
 Reference< XInterface > SAL_CALL ExcelBiffFilter_createInstance(
-        const Reference< XMultiServiceFactory >& rxGlobalFactory ) throw( Exception )
+        const Reference< XComponentContext >& rxContext ) throw( Exception )
 {
-    return static_cast< ::cppu::OWeakObject* >( new ExcelBiffFilter( rxGlobalFactory ) );
+    return static_cast< ::cppu::OWeakObject* >( new ExcelBiffFilter( rxContext ) );
 }
 
 // ----------------------------------------------------------------------------
 
-ExcelBiffFilter::ExcelBiffFilter( const Reference< XMultiServiceFactory >& rxGlobalFactory ) :
-    BinaryFilterBase( rxGlobalFactory )
+ExcelBiffFilter::ExcelBiffFilter( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
+    BinaryFilterBase( rxContext )
 {
 }
 
@@ -269,6 +267,11 @@ GraphicHelper* ExcelBiffFilter::implCreateGraphicHelper() const
     return new ExcelGraphicHelper( getWorkbookData() );
 }
 
+::oox::ole::VbaProject* ExcelBiffFilter::implCreateVbaProject() const
+{
+    return new ExcelVbaProject( getComponentContext(), Reference< XSpreadsheetDocument >( getModel(), UNO_QUERY ) );
+}
+
 OUString ExcelBiffFilter::implGetImplementationName() const
 {
     return ExcelBiffFilter_getImplementationName();
@@ -278,58 +281,61 @@ OUString ExcelBiffFilter::implGetImplementationName() const
 
 OUString SAL_CALL ExcelVbaProjectFilter_getImplementationName() throw()
 {
-    return CREATE_OUSTRING( "com.sun.star.comp.oox.ExcelVbaProjectFilter" );
+    return CREATE_OUSTRING( "com.sun.star.comp.oox.xls.ExcelVbaProjectFilter" );
 }
 
 Sequence< OUString > SAL_CALL ExcelVbaProjectFilter_getSupportedServiceNames() throw()
 {
     Sequence< OUString > aSeq( 1 );
-    aSeq[ 0 ] = CREATE_OUSTRING( "com.sun.star.comp.oox.ExcelVBAProjectFilter" );
+    aSeq[ 0 ] = CREATE_OUSTRING( "com.sun.star.document.ImportFilter" );
     return aSeq;
 }
 
 Reference< XInterface > SAL_CALL ExcelVbaProjectFilter_createInstance(
-        const Reference< XMultiServiceFactory >& rxGlobalFactory ) throw( Exception )
+        const Reference< XComponentContext >& rxContext ) throw( Exception )
 {
-    return static_cast< ::cppu::OWeakObject* >( new ExcelVbaProjectFilter( rxGlobalFactory ) );
+    return static_cast< ::cppu::OWeakObject* >( new ExcelVbaProjectFilter( rxContext ) );
 }
 
 // ----------------------------------------------------------------------------
 
-ExcelVbaProjectFilter::ExcelVbaProjectFilter( const Reference< XMultiServiceFactory >& rxGlobalFactory ) :
-    ExcelBiffFilter( rxGlobalFactory )
+ExcelVbaProjectFilter::ExcelVbaProjectFilter( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
+    ExcelBiffFilter( rxContext )
 {
 }
 
 bool ExcelVbaProjectFilter::importDocument() throw()
 {
-    bool bRet = false;
-
     // detect BIFF version and workbook stream name
     OUString aWorkbookName;
     BiffType eBiff = BiffDetector::detectStorageBiffVersion( aWorkbookName, getStorage() );
     OSL_ENSURE( eBiff == BIFF8, "ExcelVbaProjectFilter::ExcelVbaProjectFilter - invalid file format" );
-    if( eBiff == BIFF8 )
-    {
-        Reference< XNameContainer > xOleNameOverrideSink;
-        getArgument( CREATE_OUSTRING( "OleNameOverrideInfo" ) ) >>= xOleNameOverrideSink;
-        WorkbookHelperRoot aHelper( *this, eBiff );
-        StorageRef xVbaPrjStrg = openSubStorage( CREATE_OUSTRING( "_VBA_PROJECT_CUR" ), false );
-        if( xVbaPrjStrg.get() && xVbaPrjStrg->isStorage() )
-        {
-            ole::VbaProject aVbaProject(  getGlobalFactory(), Reference< com::sun::star::frame::XModel >( aHelper.getDocument(), UNO_QUERY ), CREATE_OUSTRING( "Calc" ) );
-            aVbaProject.setOleOverridesSink( xOleNameOverrideSink );
-            aVbaProject.importVbaProject( *xVbaPrjStrg, getGraphicHelper() );
-            bRet = true;
-        }
-    }
-    return bRet;
+    if( eBiff != BIFF8 )
+        return false;
+
+    StorageRef xVbaPrjStrg = openSubStorage( CREATE_OUSTRING( "_VBA_PROJECT_CUR" ), false );
+    if( !xVbaPrjStrg || !xVbaPrjStrg->isStorage() )
+        return false;
+
+    WorkbookHelperRoot aHelper( *this, eBiff );
+    // set palette colors passed in service constructor
+    Any aPalette = getArgument( CREATE_OUSTRING( "ColorPalette" ) );
+    aHelper.getStyles().importPalette( aPalette );
+    // import the VBA project
+    getVbaProject().importVbaProject( *xVbaPrjStrg, getGraphicHelper() );
+    return true;
+}
+
+bool ExcelVbaProjectFilter::exportDocument() throw()
+{
+    return false;
 }
 
 OUString ExcelVbaProjectFilter::implGetImplementationName() const
 {
     return ExcelVbaProjectFilter_getImplementationName();
 }
+
 // ============================================================================
 
 } // namespace xls

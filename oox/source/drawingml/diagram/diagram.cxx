@@ -34,8 +34,6 @@
 #include <com/sun/star/awt/Size.hpp>
 #include "oox/drawingml/diagram/diagram.hxx"
 #include "oox/drawingml/fillproperties.hxx"
-#include "oox/core/namespaces.hxx"
-#include "tokens.hxx"
 
 using rtl::OUString;
 using namespace ::com::sun::star;

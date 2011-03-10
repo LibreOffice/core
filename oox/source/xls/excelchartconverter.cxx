@@ -27,27 +27,27 @@
  ************************************************************************/
 
 #include "oox/xls/excelchartconverter.hxx"
+
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include "oox/drawingml/chart/datasourcemodel.hxx"
+#include "oox/helper/containerhelper.hxx"
 #include "oox/xls/formulaparser.hxx"
-
-using ::rtl::OUString;
-using ::com::sun::star::uno::Any;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::lang::XMultiServiceFactory;
-using ::com::sun::star::table::CellAddress;
-using ::com::sun::star::chart2::XChartDocument;
-using ::com::sun::star::chart2::data::XDataProvider;
-using ::com::sun::star::chart2::data::XDataReceiver;
-using ::com::sun::star::chart2::data::XDataSequence;
-using ::oox::drawingml::chart::DataSequenceModel;
 
 namespace oox {
 namespace xls {
+
+// ============================================================================
+
+using namespace ::com::sun::star::chart2;
+using namespace ::com::sun::star::chart2::data;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::table;
+using namespace ::com::sun::star::uno;
+
+using ::oox::drawingml::chart::DataSequenceModel;
+using ::rtl::OUString;
 
 // ============================================================================
 

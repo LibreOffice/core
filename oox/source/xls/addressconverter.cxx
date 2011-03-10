@@ -27,37 +27,37 @@
  ************************************************************************/
 
 #include "oox/xls/addressconverter.hxx"
-#include <osl/diagnose.h>
-#include <rtl/ustrbuf.hxx>
-#include <rtl/strbuf.hxx>
+
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#include "oox/helper/recordinputstream.hxx"
+#include <osl/diagnose.h>
+#include <rtl/strbuf.hxx>
+#include <rtl/ustrbuf.hxx>
 #include "oox/core/filterbase.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/biffoutputstream.hxx"
-
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
-using ::rtl::OStringBuffer;
-using ::rtl::OUStringToOString;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::container::XIndexAccess;
-using ::com::sun::star::table::CellAddress;
-using ::com::sun::star::table::CellRangeAddress;
-using ::com::sun::star::sheet::XCellRangeAddressable;
 
 namespace oox {
 namespace xls {
 
 // ============================================================================
 
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::sheet;
+using namespace ::com::sun::star::table;
+using namespace ::com::sun::star::uno;
+
+using ::rtl::OStringBuffer;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+using ::rtl::OUStringToOString;
+
+// ============================================================================
+
 namespace {
 
-//! TODO: this limit may be changed
+//! TODO: this limit may change, is there a way to obtain it via API?
 const sal_Int16 API_MAXTAB          = 255;
 
 const sal_Int32 OOX_MAXCOL          = static_cast< sal_Int32 >( (1 << 14) - 1 );
@@ -123,7 +123,7 @@ CellAddress ApiCellRangeList::getBaseAddress() const
 
 // ============================================================================
 
-void BinAddress::read( RecordInputStream& rStrm )
+void BinAddress::read( SequenceInputStream& rStrm )
 {
     rStrm >> mnRow >> mnCol;
 }
@@ -154,7 +154,7 @@ bool BinRange::contains( const BinAddress& rAddr ) const
             (maFirst.mnRow <= rAddr.mnRow) && (rAddr.mnRow <= maLast.mnRow);
 }
 
-void BinRange::read( RecordInputStream& rStrm )
+void BinRange::read( SequenceInputStream& rStrm )
 {
     rStrm >> maFirst.mnRow >> maLast.mnRow >> maFirst.mnCol >> maLast.mnCol;
 }
@@ -199,7 +199,7 @@ BinRange BinRangeList::getEnclosingRange() const
     return aRange;
 }
 
-void BinRangeList::read( RecordInputStream& rStrm )
+void BinRangeList::read( SequenceInputStream& rStrm )
 {
     sal_Int32 nCount = rStrm.readInt32();
     resize( getLimitedValue< size_t, sal_Int64 >( nCount, 0, rStrm.getRemaining() / 16 ) );
@@ -243,7 +243,7 @@ AddressConverter::AddressConverter( const WorkbookHelper& rHelper ) :
     maDConChars.set( 0xFFFF, '\x01', 0xFFFF, '\x02', 0xFFFF );
     switch( getFilterType() )
     {
-        case FILTER_OOX:
+        case FILTER_OOXML:
             initializeMaxPos( OOX_MAXTAB, OOX_MAXCOL, OOX_MAXROW );
         break;
         case FILTER_BIFF: switch( getBiff() )

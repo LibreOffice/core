@@ -41,6 +41,10 @@
 #include <vector>
 #include <map>
 
+namespace oox { namespace vml {
+    struct OleObjectInfo;
+} }
+
 namespace oox { namespace drawingml {
 
 class CustomShapeProperties;
@@ -58,36 +62,14 @@ typedef ::std::map< sal_Int32, ShapeStyleRef > ShapeStyleRefMap;
 
 // ============================================================================
 
-/** A callback that will be called before and after the API shape is created
-    from the imported shape.
-
-    An instance of a derived class of this callback can be set at every
-    ::oox::drawingml::Shape instance to implement anything that needs a created
-    and inserted XShape.
- */
-class CreateShapeCallback
+/** Additional information for a chart embedded in a drawing shape. */
+struct ChartShapeInfo
 {
-public:
-    virtual ::rtl::OUString onCreateXShape(
-                            const ::rtl::OUString& rServiceName,
-                            const ::com::sun::star::awt::Rectangle& rShapeRect );
+    ::rtl::OUString     maFragmentPath;     /// Path to related XML stream, e.g. for charts.
+    bool                mbEmbedShapes;      /// True = load chart shapes into chart, false = load into parent drawpage.
 
-    virtual void        onXShapeCreated(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxShape,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes ) const;
-
-    inline const PropertyMap& getShapeProperties() const { return maShapeProps; }
-
-protected:
-    explicit            CreateShapeCallback( ::oox::core::XmlFilterBase& rFilter );
-    virtual             ~CreateShapeCallback();
-
-protected:
-    ::oox::core::XmlFilterBase& mrFilter;
-    PropertyMap         maShapeProps;
+    inline explicit     ChartShapeInfo( bool bEmbedShapes ) : mbEmbedShapes( bEmbedShapes ) {}
 };
-
-typedef ::boost::shared_ptr< CreateShapeCallback > CreateShapeCallbackRef;
 
 // ============================================================================
 
@@ -96,7 +78,7 @@ class Shape
 {
 public:
 
-    Shape( const sal_Char* pServiceType = NULL );
+    explicit Shape( const sal_Char* pServiceType = 0 );
     virtual ~Shape();
 
     rtl::OUString&                  getServiceName(){ return msServiceName; }
@@ -141,6 +123,11 @@ public:
     // setDefaults has to be called if styles are imported (OfficeXML is not storing properties having the default value)
     void                            setDefaults();
 
+    ::oox::vml::OleObjectInfo&      setOleObjectType();
+    ChartShapeInfo&                 setChartType( bool bEmbedShapes );
+    void                            setDiagramType();
+    void                            setTableType();
+
     void                setTextBody(const TextBodyPtr & pTextBody);
     TextBodyPtr         getTextBody();
     void                setMasterTextListStyle( const TextListStylePtr& pMasterTextListStyle );
@@ -150,11 +137,9 @@ public:
     inline const ShapeStyleRefMap&  getShapeStyleRefs() const { return maShapeStyleRefs; }
     const ShapeStyleRef*            getShapeStyleRef( sal_Int32 nRefType ) const;
 
-    inline void         setCreateShapeCallback( CreateShapeCallbackRef xCallback ) { mxCreateCallback = xCallback; }
-
     // addShape is creating and inserting the corresponding XShape.
     void                addShape(
-                            const oox::core::XmlFilterBase& rFilterBase,
+                            ::oox::core::XmlFilterBase& rFilterBase,
                             const Theme* pTheme,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
                             const ::com::sun::star::awt::Rectangle* pShapeRect = 0,
@@ -171,7 +156,7 @@ protected:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
                         createAndInsert(
-                            const ::oox::core::XmlFilterBase& rFilterBase,
+                            ::oox::core::XmlFilterBase& rFilterBase,
                             const ::rtl::OUString& rServiceName,
                             const Theme* pTheme,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
@@ -179,12 +164,21 @@ protected:
                             sal_Bool bClearText );
 
     void                addChildren(
-                            const ::oox::core::XmlFilterBase& rFilterBase,
+                            ::oox::core::XmlFilterBase& rFilterBase,
                             Shape& rMaster,
                             const Theme* pTheme,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
                             const ::com::sun::star::awt::Rectangle& rClientRect,
                             ShapeIdMap* pShapeMap );
+
+    virtual ::rtl::OUString finalizeServiceName(
+                            ::oox::core::XmlFilterBase& rFilter,
+                            const ::rtl::OUString& rServiceName,
+                            const ::com::sun::star::awt::Rectangle& rShapeRect );
+
+    virtual void        finalizeXShape(
+                            ::oox::core::XmlFilterBase& rFilter,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes );
 
     std::vector< ShapePtr >     maChildren;               // only used for group shapes
     com::sun::star::awt::Size   maChSize;                 // only used for group shapes
@@ -216,7 +210,22 @@ protected:
     com::sun::star::awt::Point      maPosition;
 
 private:
-    CreateShapeCallbackRef          mxCreateCallback;
+    enum FrameType
+    {
+        FRAMETYPE_GENERIC,          /// Generic shape, no special type.
+        FRAMETYPE_OLEOBJECT,        /// OLE object embedded in a shape.
+        FRAMETYPE_CHART,            /// Chart embedded in a shape.
+        FRAMETYPE_DIAGRAM,          /// Complex diagram drawing shape.
+        FRAMETYPE_TABLE             /// A table embedded in a shape.
+    };
+
+    typedef ::boost::shared_ptr< ::oox::vml::OleObjectInfo >    OleObjectInfoRef;
+    typedef ::boost::shared_ptr< ChartShapeInfo >               ChartShapeInfoRef;
+
+    FrameType           meFrameType;        /// Type for graphic frame shapes.
+    OleObjectInfoRef    mxOleObjectInfo;    /// Additional data for OLE objects.
+    ChartShapeInfoRef   mxChartShapeInfo;   /// Additional data for chart shapes.
+
     sal_Int32                       mnRotation;
     sal_Bool                        mbFlipH;
     sal_Bool                        mbFlipV;
@@ -224,6 +233,8 @@ private:
 };
 
 ::rtl::OUString GetShapeType( sal_Int32 nType );
+
+// ============================================================================
 
 } }
 

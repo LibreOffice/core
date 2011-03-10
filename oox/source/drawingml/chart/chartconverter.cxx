@@ -27,27 +27,28 @@
  ************************************************************************/
 
 #include "oox/drawingml/chart/chartconverter.hxx"
+
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include "oox/drawingml/chart/chartspaceconverter.hxx"
 #include "oox/drawingml/chart/chartspacemodel.hxx"
 
-using ::rtl::OUString;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::awt::Point;
-using ::com::sun::star::awt::Size;
-using ::com::sun::star::drawing::XShapes;
-using ::com::sun::star::chart2::XChartDocument;
-using ::com::sun::star::chart2::data::XDataProvider;
-using ::com::sun::star::chart2::data::XDataSequence;
-using ::oox::core::XmlFilterBase;
 using ::oox::drawingml::chart::DataSequenceModel;
 using ::com::sun::star::uno::Any;
 using ::rtl::OUStringBuffer;
-
 namespace oox {
 namespace drawingml {
 namespace chart {
+
+// ============================================================================
+
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::chart2;
+using namespace ::com::sun::star::chart2::data;
+using namespace ::com::sun::star::drawing;
+using namespace ::com::sun::star::uno;
+
+using ::oox::core::XmlFilterBase;
+using ::rtl::OUString;
 
 // ============================================================================
 
