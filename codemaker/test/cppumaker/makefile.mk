@@ -70,4 +70,4 @@ $(MISC)$/$(TARGET)$/types.urd: types.idl
     $(IDLC) -O$(MISC)$/$(TARGET) -I$(SOLARIDLDIR) -cid -we $<
 
 test .PHONY: $(SHL1TARGETN)
-    $(AUGMENT_LIBRARY_PATH) testshl2 $<
+    $(CPPUNITTESTER) $<
