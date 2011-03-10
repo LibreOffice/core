@@ -1741,7 +1741,7 @@ void ScXMLExport::_ExportContent()
                             AddAttribute(XML_NAMESPACE_TABLE, XML_PROTECTED, XML_TRUE);
                             if (pDoc)
                             {
-                                pProtect = pDoc->GetTabProtection(static_cast<SCTAB>(nTable));
+                                pProtect = pDoc->GetTabProtection(nTable);
                                 if (pProtect)
                                 {
                                     rtl::OUStringBuffer aBuffer;
