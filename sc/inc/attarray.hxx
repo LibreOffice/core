@@ -92,7 +92,7 @@ private:
     SCSIZE          nLimit;
     ScAttrEntry*    pData;
 
-friend class ScDocument;                // fuer FillInfo
+friend class ScDocument;                // for FillInfo
 friend class ScDocumentIterator;
 friend class ScAttrIterator;
 friend class ScHorizontalAttrIterator;
@@ -195,7 +195,7 @@ public:
 
 
 //  ------------------------------------------------------------------------------
-//                              Iterator fuer Attribute
+//                              Iterator for attributes
 //  ------------------------------------------------------------------------------
 
 class ScAttrIterator

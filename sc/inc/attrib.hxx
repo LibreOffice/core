@@ -112,10 +112,10 @@ public:
 //------------------------------------------------------------------------
 class SC_DLLPUBLIC ScProtectionAttr: public SfxPoolItem
 {
-    BOOL        bProtection;    // Zelle schuetzen
-    BOOL        bHideFormula;   // Formel nicht Anzeigen
-    BOOL        bHideCell;      // Zelle nicht Anzeigen
-    BOOL        bHidePrint;     // Zelle nicht Ausdrucken
+    BOOL        bProtection;    // protect cell
+    BOOL        bHideFormula;   // hide formula
+    BOOL        bHideCell;      // hide cell
+    BOOL        bHidePrint;     // don't print cell
 public:
                             TYPEINFO();
                             ScProtectionAttr();

@@ -210,9 +210,9 @@ public:
                     { return ScRange( aStart.MakeAddress(),
                         aEnd.MakeAddress() ); }
 
-    inline BOOL In( const ScBigAddress& ) const;    // ist Address& in Range?
-    inline BOOL In( const ScBigRange& ) const;      // ist Range& in Range?
-    inline BOOL Intersects( const ScBigRange& ) const;  // ueberschneiden sich zwei Ranges?
+    inline BOOL In( const ScBigAddress& ) const;    // is Address& in range?
+    inline BOOL In( const ScBigRange& ) const;      // is Range& in range?
+    inline BOOL Intersects( const ScBigRange& ) const;  // do two ranges overlap?
 
     ScBigRange&     operator=( const ScBigRange& r )
                         { aStart = r.aStart; aEnd = r.aEnd; return *this; }
