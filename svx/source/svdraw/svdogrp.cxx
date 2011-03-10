@@ -282,6 +282,17 @@ const Rectangle& SdrObjGroup::GetCurrentBoundRect() const
     // <--
 }
 
+void SdrObjGroup::RecalcBoundRect(bool bForced)
+{
+    if( bForced )
+    {
+        sal_uIntPtr nAnz=pSub->GetObjCount();
+        for( sal_uIntPtr i=0; i<nAnz; i++)
+            pSub->GetObj(i)->RecalcBoundRect(true);
+    }
+
+    SdrObject::RecalcBoundRect(bForced);
+}
 
 const Rectangle& SdrObjGroup::GetSnapRect() const
 {

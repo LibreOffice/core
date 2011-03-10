@@ -926,14 +926,14 @@ const Rectangle& SdrObject::GetLastBoundRect() const
     return aOutRect;
 }
 
-void SdrObject::RecalcBoundRect()
+void SdrObject::RecalcBoundRect(bool bForced)
 {
     // #i101680# suppress BoundRect calculations on import(s)
-    if(pModel && pModel->isLocked() )
+    if(pModel && pModel->isLocked() && !bForced )
         return;
 
     // central new method which will calculate the BoundRect using primitive geometry
-    if(aOutRect.IsEmpty())
+    if(aOutRect.IsEmpty() || bForced)
     {
         const drawinglayer::primitive2d::Primitive2DSequence xPrimitives(GetViewContact().getViewIndependentPrimitive2DSequence());
 

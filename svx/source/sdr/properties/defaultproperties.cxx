@@ -204,8 +204,10 @@ namespace sdr
         {
         }
 
-        void DefaultProperties::PostItemChange(const sal_uInt16 /*nWhich*/)
+        void DefaultProperties::PostItemChange(const sal_uInt16 nWhich )
         {
+            if( (nWhich == XATTR_FILLSTYLE) && (mpItemSet != NULL) )
+                CleanupFillProperties(*mpItemSet);
         }
 
         void DefaultProperties::SetStyleSheet(SfxStyleSheet* /*pNewStyleSheet*/, sal_Bool /*bDontRemoveHardAttr*/)
