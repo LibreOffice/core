@@ -48,8 +48,9 @@ TARFILE_NAME=$(PRJNAME)-$(LIBCROCOVERSION)
 TARFILE_MD5=0611e099e807210cf738dcb41425d104
 
 PATCH_FILES=
-
 CONFIGURE_DIR=
+
+.IF "$(OS)"=="MACOSX"
 CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) \
                  .$/configure \
                  --prefix=$(SRC_ROOT)$/$(PRJNAME)$/$(MISC) \
@@ -66,7 +67,6 @@ BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) \
              $(GNUMAKE)
 BUILD_DIR=$(CONFIGURE_DIR)
 
-.IF "$(OS)"=="MACOSX"
 EXTRPATH=LOADER
 OUT2LIB+=src$/.libs$/libcroco-0.6.3.0.1.dylib
 
@@ -99,7 +99,43 @@ OUT2INC+=src$/cr-pseudo.h
 OUT2INC+=src$/cr-style.h
 OUT2INC+=src$/libcroco.h
 .ELIF "$(OS)"=="WNT"
+
+BUILD_ACTION=dmake
+BUILD_DIR=$(CONFIGURE_DIR)$/src
+PATCH_FILES=libcroco-0.6.2.patch
+ADDITIONAL_FILES=\
+    src$/makefile.mk
+
+OUT2INC+=src$/cr-additional-sel.h
+OUT2INC+=src$/cr-input.h
+OUT2INC+=src$/cr-rgb.h
+OUT2INC+=src$/cr-stylesheet.h
+OUT2INC+=src$/cr-attr-sel.h
+OUT2INC+=src$/cr-num.h
+OUT2INC+=src$/cr-sel-eng.h
+OUT2INC+=src$/cr-term.h
+OUT2INC+=src$/cr-cascade.h
+OUT2INC+=src$/cr-om-parser.h
+OUT2INC+=src$/cr-selector.h
+OUT2INC+=src$/cr-tknzr.h
+OUT2INC+=src$/cr-declaration.h
+OUT2INC+=src$/cr-parser.h
+OUT2INC+=src$/cr-simple-sel.h
+OUT2INC+=src$/cr-token.h
+OUT2INC+=src$/cr-doc-handler.h
+OUT2INC+=src$/cr-parsing-location.h
+OUT2INC+=src$/cr-statement.h
+OUT2INC+=src$/cr-utils.h
+OUT2INC+=src$/cr-enc-handler.h
+OUT2INC+=src$/cr-prop-list.h
+OUT2INC+=src$/cr-string.h
+OUT2INC+=src$/libcroco-config.h
+OUT2INC+=src$/cr-fonts.h
+OUT2INC+=src$/cr-pseudo.h
+OUT2INC+=src$/cr-style.h
+OUT2INC+=src$/libcroco.h
 .ELSE
+
 .ENDIF
 
 # --- Targets ------------------------------------------------------

@@ -49,6 +49,8 @@ TARFILE_MD5=3dd55b952826d2b32f51308f2f91aa89
 
 PATCH_FILES=
 
+
+.IF "$(OS)"=="MACOSX"
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure --prefix=$(SRC_ROOT)$/$(PRJNAME)$/$(MISC) CFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS)"
 CONFIGURE_FLAGS=$(eq,$(OS),MACOSX CPPFLAGS="$(EXTRA_CDEFS)" $(NULL)) --disable-curses --without-emacs --without-git --disable-java
@@ -56,7 +58,6 @@ CONFIGURE_FLAGS=$(eq,$(OS),MACOSX CPPFLAGS="$(EXTRA_CDEFS)" $(NULL)) --disable-c
 BUILD_ACTION=$(GNUMAKE)
 BUILD_DIR=$(CONFIGURE_DIR)
 
-.IF "$(OS)"=="MACOSX"
 EXTRPATH=LOADER
 OUT2LIB+=gettext-tools$/intl$/.libs$/libintl.*.dylib
 OUT2LIB+=gettext-runtime$/libasprintf$/.libs$/libasprintf.*.dylib
@@ -85,6 +86,14 @@ OUT2BIN+=gettext-tools$/src$/.libs$/msguniq
 OUT2BIN+=gettext-tools$/src$/.libs$/urlget
 OUT2BIN+=gettext-tools$/src$/.libs$/xgettext
 .ELIF "$(OS)"=="WNT"
+BUILD_DIR=gettext-runtime$/intl
+PATCH_FILES=gettext-0.18.1.1.patch
+ADDITIONAL_FILES=\
+    gettext-runtime/intl/makefile.mk \
+    gettext-runtime/intl/libgnuintl.h \
+    gettext-runtime/intl/libintl.h \
+    gettext-runtime/config.h
+OUT2INC+=gettext-runtime$/intl$/libintl.h
 .ELSE
 .ENDIF
 
