@@ -137,7 +137,7 @@ static bool bEnableSizeFT = false;
 
 struct EqStr{ bool operator()(const char* a, const char* b) const { return !strcmp(a,b); } };
 struct HashStr { size_t operator()( const char* s ) const { return rtl_str_hashCode(s); } };
-typedef ::boost::unordered_map<const char*,FtFontFile*,HashStr, EqStr> FontFileList;
+typedef ::boost::unordered_map<const char*,boost::shared_ptr<FtFontFile>,HashStr, EqStr> FontFileList;
 namespace { struct vclFontFileList : public rtl::Static< FontFileList, vclFontFileList > {}; }
 
 // -----------------------------------------------------------------------
@@ -212,12 +212,12 @@ FtFontFile* FtFontFile::FindFontFile( const ::rtl::OString& rNativeFileName )
     FontFileList &rFontFileList = vclFontFileList::get();
     FontFileList::const_iterator it = rFontFileList.find( pFileName );
     if( it != rFontFileList.end() )
-        return (*it).second;
+        return it->second.get();
 
     // no => create new one
     FtFontFile* pFontFile = new FtFontFile( rNativeFileName );
     pFileName = pFontFile->maNativeFileName.getStr();
-    rFontFileList[ pFileName ] = pFontFile;
+    rFontFileList[pFileName].reset(pFontFile);
     return pFontFile;
 }
 
