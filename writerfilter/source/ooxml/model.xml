@@ -6535,9 +6535,6 @@
           <xs:documentation>Absolute Position Offset Value</xs:documentation>
         </data>
       </define>
-      <define name="CT_AlignH">
-        <ref name="ST_AlignH"/>
-      </define>
       <define name="ST_AlignH">
         <list>
           <xs:documentation>Relative Horizontal Alignment Positions</xs:documentation>
@@ -6581,7 +6578,7 @@
       <define name="CT_PosH">
         <choice>
           <element name="align">
-            <ref name="CT_AlignH"/>
+            <ref name="ST_AlignH"/>
           </element>
           <element name="posOffset">
             <ref name="ST_PositionOffset"/>
@@ -6591,9 +6588,6 @@
           <ref name="ST_RelFromH"/>
           <xs:documentation>Horizontal Position Relative Base</xs:documentation>
         </attribute>
-      </define>
-      <define name="CT_AlignV">
-        <ref name="ST_AlignV"/>
       </define>
       <define name="ST_AlignV">
         <list>
@@ -6638,7 +6632,7 @@
       <define name="CT_PosV">
         <choice>
           <element name="align">
-            <ref name="CT_AlignV"/>
+            <ref name="ST_AlignV"/>
           </element>
           <element name="posOffset">
             <ref name="ST_PositionOffset"/>
@@ -6824,7 +6818,6 @@
       <element name="wrapTopAndBottom" tokenid="ooxml:EG_WrapType_wrapTopAndBottom"/>
     </resource>
     <resource name="ST_PositionOffset" resource="Integer" generated="yes"/>
-    <resource name="CT_AlignH" resource="Value"/>
     <resource name="ST_AlignH" resource="List" generated="yes">
       <value name="left" tokenid="ooxml:Value_wordprocessingDrawing_ST_AlignH_left">left</value>
       <value name="right" tokenid="ooxml:Value_wordprocessingDrawing_ST_AlignH_right">right</value>
@@ -6847,7 +6840,6 @@
       <element name="posOffset" tokenid="ooxml:CT_PosH_posOffset"/>
       <attribute name="relativeFrom" tokenid="ooxml:CT_PosH_relativeFrom"/>
     </resource>
-    <resource name="CT_AlignV" resource="Value"/>
     <resource name="ST_AlignV" resource="List" generated="yes">
       <value name="top" tokenid="ooxml:Value_wordprocessingDrawing_ST_AlignV_top">top</value>
       <value name="bottom" tokenid="ooxml:Value_wordprocessingDrawing_ST_AlignV_bottom">bottom</value>
