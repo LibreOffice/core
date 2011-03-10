@@ -173,7 +173,7 @@ SvStringsDtor* SfxVersionTableDtor::GetVersions() const
     return pList;
 }
 
-// Achtung im Code wird dieses Array direkt (0, 1, ...) indiziert
+// Caution in the code this array si indexed directly (0, 1, ...)
 static long nTabs_Impl[] =
 {
     3, // Number of Tabs
@@ -239,7 +239,7 @@ SfxVersionDialog::SfxVersionDialog ( SfxViewFrame* pVwFrame, BOOL bIsSaveVersion
     aVersionBox.SetWindowBits( WB_HSCROLL | WB_CLIPCHILDREN );
     aVersionBox.SetSelectionMode( SINGLE_SELECTION );
     aVersionBox.SetTabs( &nTabs_Impl[0], MAP_APPFONT );
-    aVersionBox.Resize();   // OS: Hack fuer richtige Selektion
+    aVersionBox.Resize();       // OS: Hack for correct selection
     RecalcDateColumn();
 
     // set dialog title (filename or docinfo title)

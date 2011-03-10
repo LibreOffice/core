@@ -906,17 +906,16 @@ SfxMailModel::SendMailResult SfxMailModel::SaveAndSend( const css::uno::Referenc
 
 BOOL CreateFromAddress_Impl( String& rFrom )
 
-/*  [Beschreibung]
+/* [Description]
 
-    Diese Funktion versucht mit Hilfe des IniManagers eine From-Adresse
-    zu erzeugen. daf"ur werden die Felder 'Vorname', 'Name' und 'EMail'
-    aus der Applikations-Ini-Datei ausgelesen. Sollten diese Felder
-    nicht gesetzt sein, wird FALSE zur"uckgegeben.
+    This function tries to create a From-address with the help of IniManagers.
+    For this the fields 'first name', 'Name' and 'Email' are read from the
+    application-ini-data. If these fields are not set, FALSE is returned.
 
-    [R"uckgabewert]
+    [Return value]
 
-    TRUE:   Adresse konnte erzeugt werden.
-    FALSE:  Adresse konnte nicht erzeugt werden.
+    TRUE:       Address could be created.
+    FALSE:      Address could not be created.
 */
 
 {
@@ -933,14 +932,14 @@ BOOL CreateFromAddress_Impl( String& rFrom )
                 rFrom += ' ';
         }
         rFrom += TRIM( aName );
-        // unerlaubte Zeichen entfernen
+        // remove illegal characters
         rFrom.EraseAllChars( '<' );
         rFrom.EraseAllChars( '>' );
         rFrom.EraseAllChars( '@' );
     }
     String aEmailName = aUserCFG.GetEmail();
 
-    // unerlaubte Zeichen entfernen
+    // remove illegal characters
     aEmailName.EraseAllChars( '<' );
     aEmailName.EraseAllChars( '>' );
 

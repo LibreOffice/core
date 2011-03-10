@@ -671,7 +671,7 @@ SfxTabPage *SfxDocumentDescPage::Create(Window *pParent, const SfxItemSet &rItem
 
 BOOL SfxDocumentDescPage::FillItemSet(SfxItemSet &rSet)
 {
-    // Pruefung, ob eine Aenderung vorliegt
+    // Test whether a change is present
     const BOOL bTitleMod = aTitleEd.IsModified();
     const BOOL bThemeMod = aThemaEd.IsModified();
     const BOOL bKeywordsMod = aKeywordsEd.IsModified();
@@ -681,7 +681,7 @@ BOOL SfxDocumentDescPage::FillItemSet(SfxItemSet &rSet)
         return FALSE;
     }
 
-    // Erzeugung der Ausgabedaten
+    // Generating the output data
     const SfxPoolItem* pItem = NULL;
     SfxDocumentInfoItem* pInfo = NULL;
     SfxTabDialog* pDlg = GetTabDialog();
@@ -1022,7 +1022,7 @@ BOOL SfxDocumentPage::FillItemSet( SfxItemSet& rSet )
 
 void SfxDocumentPage::Reset( const SfxItemSet& rSet )
 {
-    // Bestimmung der Dokumentinformationen
+    // Determine the document information
     const SfxDocumentInfoItem *pInfoItem =
         &(const SfxDocumentInfoItem &)rSet.Get(SID_DOCINFO);
 
@@ -1060,7 +1060,7 @@ void SfxDocumentPage::Reset( const SfxItemSet& rSet )
     }
     else
     {
-        DBG_ASSERT( pItem->IsA( TYPE( SfxStringItem ) ), "SfxDocumentPage:<SfxStringItem> erwartet" );
+        DBG_ASSERT( pItem->IsA( TYPE( SfxStringItem ) ), "SfxDocumentPage:<SfxStringItem> expected" );
         aName = ( ( SfxStringItem* ) pItem )->GetValue();
     }
     aNameED.SetText( aName );
@@ -1500,13 +1500,13 @@ SfxDocumentInfoDialog::SfxDocumentInfoDialog( Window* pParent,
     DBG_ASSERT( pURLItem, "No BaseURL provided for InternetTabPage!" );
 #endif
 
-     // Bestimmung des Titels
+     // Determine the Titels
     const SfxPoolItem* pItem = 0;
     String aTitle( GetText() );
     if ( SFX_ITEM_SET !=
          rItemSet.GetItemState( SID_EXPLORER_PROPS_START, FALSE, &pItem ) )
     {
-        // Dateiname
+        // File name
         String aFile( pInfoItem->GetValue() );
 #ifdef WIN
         if ( aFile.Len() <= 8 )
@@ -1539,12 +1539,12 @@ SfxDocumentInfoDialog::SfxDocumentInfoDialog( Window* pParent,
     else
     {
         DBG_ASSERT( pItem->IsA( TYPE( SfxStringItem ) ),
-                    "SfxDocumentInfoDialog:<SfxStringItem> erwartet" );
+                    "SfxDocumentInfoDialog:<SfxStringItem> expected" );
         aTitle += ( ( SfxStringItem* ) pItem )->GetValue();
     }
     SetText( aTitle );
 
-    // Eigenschaftenseiten
+    // Property Pages
     AddTabPage(TP_DOCINFODESC, SfxDocumentDescPage::Create, 0);
     AddTabPage(TP_DOCINFODOC, SfxDocumentPage::Create, 0);
     AddTabPage(TP_CUSTOMPROPERTIES, SfxCustomPropertiesPage::Create, 0);

@@ -71,7 +71,7 @@ SfxPartChildWnd_Impl::SfxPartChildWnd_Impl
 )
     : SfxChildWindow( pParentWnd, nId )
 {
-    // Window erzeugen
+    // Create Window
     pWindow = new SfxPartDockWnd_Impl( pBindings, this, pParentWnd, WB_STDDOCKWIN | WB_CLIPCHILDREN | WB_SIZEABLE | WB_3DLOOK );
     eChildAlignment = SFX_ALIGN_TOP;
     if ( pInfo )
@@ -173,8 +173,9 @@ Rectangle impl_Rectangle_Struct2Object( const ::com::sun::star::awt::Rectangle& 
 
 void SfxPartDockWnd_Impl::Resize()
 
-/*  [Beschreibung]
-    Anpassung der Gr"osse der Controls an die neue Windowgr"osse
+/*  [Description]
+
+    Adjusting the size of the controls wrt the new window size
 */
 
 {

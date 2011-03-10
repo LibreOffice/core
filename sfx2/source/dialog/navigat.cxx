@@ -81,7 +81,7 @@ void SfxNavigator::Resizing( Size &rSize )
     SfxDockingWindow::Resizing( rSize );
 
     SfxChildWindowContext *pCon = GetChildWindow_Impl()->GetContext_Impl();
-    DBG_ASSERT( pCon, "Kein Context!" );
+    DBG_ASSERT( pCon, "No Context!" );
     if ( pCon )
         pCon->Resizing( rSize );
 }
@@ -89,7 +89,7 @@ void SfxNavigator::Resizing( Size &rSize )
 BOOL SfxNavigator::Close()
 {
     SfxChildWindowContext *pCon = GetChildWindow_Impl()->GetContext_Impl();
-    DBG_ASSERT( pCon, "Kein Context!" );
+    DBG_ASSERT( pCon, "No Context!" );
     if ( !pCon || pCon->Close() )
         return SfxDockingWindow::Close();
     else

@@ -49,8 +49,8 @@ SfxTemplateItem::SfxTemplateItem() :
 SfxTemplateItem::SfxTemplateItem
 (
     USHORT nWhichId,      // Slot-ID
-    const String& rStyle, // Name des aktuellen Styles
-    USHORT nValue         // Flags f"ur das Filtern bei automatischer Anzeige
+    const String& rStyle, // Name of the current Styles
+    USHORT nValue         // Flags for the filters of the automatic display
 ) : SfxFlagItem( nWhichId, nValue ),
     aStyle( rStyle )
 {
@@ -58,7 +58,7 @@ SfxTemplateItem::SfxTemplateItem
 
 //-------------------------------------------------------------------------
 
-// copy ctor
+// copy constuctor
 SfxTemplateItem::SfxTemplateItem( const SfxTemplateItem& rCopy ) :
 
     SfxFlagItem( rCopy ),

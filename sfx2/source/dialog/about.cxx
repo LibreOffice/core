@@ -102,7 +102,7 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
     // load image from module path
     aAppLogo = SfxApplication::GetApplicationLogo();
 
-    // Transparenter Font
+    // Transparent Font
     Font aFont = GetFont();
     aFont.SetTransparent( TRUE );
     SetFont( aFont );
@@ -119,7 +119,7 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
 #endif
     aVersionText.SetText( sVersion );
 
-    // Initialisierung fuer Aufruf Entwickler
+    // Initialization call for developers
     if ( aAccelStr.Len() && ByteString(U2S(aAccelStr)).IsAlphaAscii() )
     {
         Accelerator *pAccel = 0, *pPrevAccel = 0, *pFirstAccel = 0;
@@ -229,7 +229,7 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
 
     FreeResource();
 
-    // explizite Help-Id
+    // explicit Help-Id
     SetHelpId( SID_ABOUT );
 }
 
@@ -237,7 +237,7 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
 
 AboutDialog::~AboutDialog()
 {
-    // L"oschen des Entwickleraufrufs
+    // Clearing the developers call
     if ( !aAccelList.empty() )
     {
         GetpApp()->RemoveAccel( aAccelList.front() );

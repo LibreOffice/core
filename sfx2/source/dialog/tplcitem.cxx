@@ -45,11 +45,12 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-// Konstruktor
+// Constructor
 
 SfxTemplateControllerItem::SfxTemplateControllerItem(
         USHORT nSlotId,                 // ID
-        SfxCommonTemplateDialog_Impl &rDlg, // Controller-Instanz, dem dieses Item zugeordnet ist.
+        SfxCommonTemplateDialog_Impl &rDlg,  // Controller-Instance,
+                                             // which is assigned to this item.
         SfxBindings &rBindings):
     SfxControllerItem(nSlotId, rBindings),
     rTemplateDlg(rDlg),
@@ -65,9 +66,8 @@ SfxTemplateControllerItem::~SfxTemplateControllerItem()
 }
 
 // -----------------------------------------------------------------------
-
-// Benachrichtigung "uber Status"anderung; wird an den
-// im Konstruktor "ubergebenen Controller propagiert
+// Notice about change of status, is  propagated through the Controller
+// passed on by the constructor
 
 void SfxTemplateControllerItem::StateChanged( USHORT nSID, SfxItemState eState,
                                               const SfxPoolItem* pItem )
@@ -86,11 +86,11 @@ void SfxTemplateControllerItem::StateChanged( USHORT nSID, SfxItemState eState,
             else {
                 const SfxTemplateItem *pStateItem = PTR_CAST(
                     SfxTemplateItem, pItem);
-                DBG_ASSERT(pStateItem != 0, "SfxTemplateItem erwartet");
+                DBG_ASSERT(pStateItem != 0, "SfxTemplateItem expected");
                 rTemplateDlg.SetFamilyState( GetId(), pStateItem );
             }
             BOOL bDisable = eState == SFX_ITEM_DISABLED;
-            // Familie Disablen
+            // Disable Familly
             USHORT nFamily = 0;
             switch( GetId())
             {
@@ -104,7 +104,8 @@ void SfxTemplateControllerItem::StateChanged( USHORT nSID, SfxItemState eState,
                     nFamily = 4; break;
                 case SID_STYLE_FAMILY5:
                     nFamily = 5; break;
-                default: OSL_FAIL("unbekannte StyleFamily"); break;
+
+                default: OSL_FAIL("unknown StyleFamily"); break;
             }
             rTemplateDlg.EnableFamilyItem( nFamily, !bDisable );
             break;
@@ -116,7 +117,7 @@ void SfxTemplateControllerItem::StateChanged( USHORT nSID, SfxItemState eState,
             else if( eState == SFX_ITEM_AVAILABLE )
             {
                 const SfxBoolItem *pStateItem = PTR_CAST(SfxBoolItem, pItem);
-                DBG_ASSERT(pStateItem != 0, "BoolItem erwartet");
+                DBG_ASSERT(pStateItem != 0, "BoolItem expected");
                 nWaterCanState = pStateItem->GetValue() ? 1 : 0;
             }
             //not necessary if the last event is still on the way

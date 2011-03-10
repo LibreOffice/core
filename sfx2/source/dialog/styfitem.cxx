@@ -96,7 +96,7 @@ SfxStyleFamilyItem::SfxStyleFamilyItem( const ResId &rResId ) :
 
 // -----------------------------------------------------------------------
 
-// Destruktor; gibt interne Daten frei
+// Destructor; releases the internal data
 
 SfxStyleFamilyItem::~SfxStyleFamilyItem()
 {
@@ -107,7 +107,7 @@ SfxStyleFamilyItem::~SfxStyleFamilyItem()
 
 // -----------------------------------------------------------------------
 
-// Implementierung des Resource-Konstruktors
+// Implementation of the resource constructor
 
 SfxStyleFamilies::SfxStyleFamilies( const ResId& rResId ) :
     Resource( rResId.SetRT( RSC_SFX_STYLE_FAMILIES ).SetAutoRelease( FALSE ) )
@@ -128,7 +128,7 @@ SfxStyleFamilies::SfxStyleFamilies( const ResId& rResId ) :
 
 // -----------------------------------------------------------------------
 
-// Destruktor; gibt interne Daten frei
+// Destructor; releases the internal data
 
 SfxStyleFamilies::~SfxStyleFamilies()
 {
