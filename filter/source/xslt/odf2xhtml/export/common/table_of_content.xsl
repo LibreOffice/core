@@ -2,23 +2,23 @@
 <!--
 
   DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-  
+
   Copyright 2000, 2010 Oracle and/or its affiliates.
- 
+
   OpenOffice.org - a multi-platform office productivity suite
- 
+
   This file is part of OpenOffice.org.
- 
+
   OpenOffice.org is free software: you can redistribute it and/or modify
   it under the terms of the GNU Lesser General Public License version 3
   only, as published by the Free Software Foundation.
- 
+
   OpenOffice.org is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU Lesser General Public License version 3 for more details
   (a copy is included in the LICENSE file that accompanied this code).
- 
+
   You should have received a copy of the GNU Lesser General Public License
   version 3 along with OpenOffice.org.  If not, see
   <http://www.openoffice.org/license.html>
@@ -50,7 +50,7 @@
 		<xsl:param name="globalData"/>
 
 		<xsl:choose>
-			<xsl:when test="*/text:tab[1] or */*/text:tab[1]">
+			<xsl:when test="parent::table-of-content and */text:tab[1] or */*/text:tab[1]">
 				<xsl:call-template name="createIndexBodyTable">
 					<xsl:with-param name="globalData" select="$globalData"/>
 				</xsl:call-template>
@@ -93,18 +93,18 @@
 			<xsl:attribute name="border">0</xsl:attribute>
 			<xsl:attribute name="cellspacing">0</xsl:attribute>
 			<xsl:attribute name="cellpadding">0</xsl:attribute>
-            <xsl:if test="parent::*/@text:style-name">
+			<xsl:if test="parent::*/@text:style-name">
 				<!-- parent as index:body has no style -->
-                <xsl:variable name="value" select="$globalData/all-doc-styles/style[@style:name = current()/parent::*/@text:style-name]/*/@style:rel-width"/>
-                <xsl:if test="$value">
-                    <xsl:attribute name="width">
-                        <xsl:value-of select="$value"/>
-                    </xsl:attribute>
-                </xsl:if>
-                <xsl:attribute name="class">
-                    <xsl:value-of select="translate(parent::*/@text:style-name, '.,;: %()[]/\+', '_____________')"/>
-                </xsl:attribute>
-            </xsl:if>
+				<xsl:variable name="value" select="$globalData/all-doc-styles/style[@style:name = current()/parent::*/@text:style-name]/*/@style:rel-width"/>
+				<xsl:if test="$value">
+					<xsl:attribute name="width">
+						<xsl:value-of select="$value"/>
+					</xsl:attribute>
+				</xsl:if>
+				<xsl:attribute name="class">
+					<xsl:value-of select="translate(parent::*/@text:style-name, '.,;: %()[]/\+', '_____________')"/>
+				</xsl:attribute>
+			</xsl:if>
 
 			<xsl:element namespace="{$namespace}" name="colgroup">
 				<xsl:choose>
@@ -489,32 +489,66 @@ Scenarios unmatched:
 	<!--    CREATION OF A CONTENT TABLE LINK    -->
 	<!-- ************************************** -->
 
+	<xsl:key name="bookmark" match="text:bookmark | text:bookmark-start" use="@text:name"/>
 
 	 <!-- content table link  -->
 	<xsl:template match="text:a" mode="content-table">
 		<xsl:param name="globalData"/>
 
-      <xsl:variable name="text">
-            <xsl:choose>
-                <!-- heuristic assumption that first in a content table row, there is numbering (if at all) and than the text, 
-                furthermore that a tab will separate the to be neglected page number -->
-                <xsl:when test="text:tab">    
-                    <xsl:value-of select="text()[1]"/>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:value-of select="text()"/>
-                </xsl:otherwise>
-            </xsl:choose>        
-        </xsl:variable>
-        
-        <!-- REFERENCE HANDLING - HREF -->
-        <xsl:element namespace="{$namespace}" name="a">
-            <xsl:attribute name="href">
-                <xsl:text>#</xsl:text>				
-                <xsl:value-of select='concat("a_",  translate(normalize-space($text), "&#xA;&amp;&lt;&gt;.,;: %()[]/\+", "_______________________________"))'/>
-            </xsl:attribute>
-            <xsl:value-of select="$text"/>
-        </xsl:element>
+		<xsl:variable name="name" select="substring(@xlink:href,2)"/>
+
+		<xsl:variable name="text">
+			<xsl:choose>
+			<!-- heuristic assumption that first in a content table row, there is numbering (if at all) and than the text,
+			furthermore that a tab will separate the to be neglected page number -->
+				<xsl:when test="text:tab">
+					<xsl:call-template name="write-text-without-line-numbers">
+						<xsl:with-param name="textCount" select="count(text())"/>
+					</xsl:call-template>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="text()"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+
+		<!-- REFERENCE HANDLING - HREF -->
+		<xsl:element namespace="{$namespace}" name="a">
+			<xsl:attribute name="href">
+				<xsl:text>#</xsl:text>
+				<xsl:choose>
+					<xsl:when test="key('bookmark',$name)">
+						<xsl:value-of select="$name"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select='concat("a_",  translate(normalize-space($text), "&#xA;&amp;&lt;&gt;.,;: %()[]/\+", "_______________________________"))'/>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:attribute>
+			<xsl:value-of select="$text"/>
+		</xsl:element>
+	</xsl:template>
+
+	<!-- Heuristic: write out text separated by elements, leaving the last number out (mostly text number) -->
+	<xsl:template name="write-text-without-line-numbers">
+		<xsl:param name="textCount"/>
+		<xsl:param name="textNodeNumber" select="1"/>
+
+		<xsl:choose>
+			<xsl:when test="$textCount &gt; $textNodeNumber">
+				<xsl:value-of select="text()[$textNodeNumber]"/>
+				<xsl:call-template name="write-text-without-line-numbers">
+					<xsl:with-param name="textCount" select="$textCount"/>
+					<xsl:with-param name="textNodeNumber" select="$textNodeNumber + 1"/>
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:if test="not(number(text()[$textNodeNumber]) &gt; -1)">
+					<xsl:value-of select="text()[$textNodeNumber]"/>
+				</xsl:if>
+			</xsl:otherwise>
+		</xsl:choose>
+
 	</xsl:template>
 
 	<xsl:template match="text:s" mode="content-table">
@@ -542,13 +576,13 @@ Scenarios unmatched:
 			</xsl:element>
 		</xsl:if>
 	</xsl:template>
-	
+
 	<xsl:template match="text()" mode="content-table">
-		<!-- Heuristic to remove page numbers (useless in HTML) in the content table 
+		<!-- Heuristic to remove page numbers (useless in HTML) in the content table
 			usually after a tab  -->
 		<xsl:if test="name(preceding-sibling::*[1]) != 'text:tab' and not(number() &gt; -1)">
 			<xsl:value-of select="."/>
 		</xsl:if>
 	</xsl:template>
-	
+
 </xsl:stylesheet>

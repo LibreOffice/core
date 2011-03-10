@@ -79,7 +79,7 @@
 				indent               = "no"
 				omit-xml-declaration = "no"
 				doctype-public       = "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN"
-				doctype-system       = "http://www.w3.org/TR/MathML2/dtd/xhtml-math11-f.dtd" />
+				doctype-system       = "http://www.w3.org/Math/DTD/mathml2/xhtml-math11-f.dtd" />
 
 
 
