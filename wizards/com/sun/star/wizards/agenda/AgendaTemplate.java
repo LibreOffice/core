@@ -235,7 +235,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
         {
             try
             {
-                itemsTables[i].write("");
+                itemsTables[i].write(PropertyNames.EMPTY_STRING);
             }
             catch (Exception ex)
             {
@@ -665,16 +665,16 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
 
     private void writeTitle(TextElement te, XTextRange tr, String text)
     {
-        te.text = (text == null ? "" : text);
+        te.text = (text == null ? PropertyNames.EMPTY_STRING : text);
         te.write(tr);
     }
     private static long DAY_IN_MILLIS = (24 * 60 * 60 * 1000);
 
     private String getDateString(String d)
     {
-        if (d == null || d.equals(""))
+        if (d == null || d.equals(PropertyNames.EMPTY_STRING))
         {
-            return "";
+            return PropertyNames.EMPTY_STRING;
         }
         int date = new Integer(d).intValue();
         calendar.clear();
@@ -694,9 +694,9 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
 
     private String getTimeString(String s)
     {
-        if (s == null || s.equals(""))
+        if (s == null || s.equals(PropertyNames.EMPTY_STRING))
         {
-            return "";
+            return PropertyNames.EMPTY_STRING;
         }
         int time = new Integer(s).intValue();
 
@@ -733,7 +733,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
                 boolean visible = ((Boolean) Helper.getUnoPropertyValue(section, "IsVisible")).booleanValue();
                 if (!visible)
                 {
-                    ((XTextContent) UnoRuntime.queryInterface(XTextContent.class, section)).getAnchor().setString("");
+                    ((XTextContent) UnoRuntime.queryInterface(XTextContent.class, section)).getAnchor().setString(PropertyNames.EMPTY_STRING);
                 }
             }
         }
@@ -760,7 +760,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
             {
                 Object minutesAllSection = getSection(SECTION_MINUTES_ALL);
                 XTextSection xTextSection = (XTextSection) UnoRuntime.queryInterface(XTextSection.class, minutesAllSection);
-                xTextSection.getAnchor().setString("");
+                xTextSection.getAnchor().setString(PropertyNames.EMPTY_STRING);
             }
             catch (Exception ex)
             {
@@ -831,15 +831,15 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
 
                         if (itemText.equals(FILLIN_MINUTE_NUM))
                         {
-                            fillMinutesItem(item, topic[0].Value, "");
+                            fillMinutesItem(item, topic[0].Value, PropertyNames.EMPTY_STRING);
                         }
                         else if (itemText.equals(FILLIN_MINUTE_TOPIC))
                         {
-                            fillMinutesItem(item, topic[1].Value, "");
+                            fillMinutesItem(item, topic[1].Value, PropertyNames.EMPTY_STRING);
                         }
                         else if (itemText.equals(FILLIN_MINUTE_RESPONSIBLE))
                         {
-                            fillMinutesItem(item, topic[2].Value, "");
+                            fillMinutesItem(item, topic[2].Value, PropertyNames.EMPTY_STRING);
                         }
                         else if (itemText.equals(FILLIN_MINUTE_TIME))
                         {
@@ -863,7 +863,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
                                 topicStartTime += topicTime * 1000;
                                 time += getTimeString(String.valueOf(topicStartTime));
                             }
-                            fillMinutesItem(item, time, "");
+                            fillMinutesItem(item, time, PropertyNames.EMPTY_STRING);
                         }
                     }
 
@@ -889,16 +889,16 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
      * If the given text is empty, uses a placeholder with the giveb placeholder text.
      * @param range text range to fill
      * @param text the text to fill to the text range object.
-     * @param placeholder the placeholder text to use, if the text argument is empty (null or "")
+     * @param placeholder the placeholder text to use, if the text argument is empty (null or PropertyNames.EMPTY_STRING)
      */
     private void fillMinutesItem(XTextRange range, Object text, String placeholder)
     {
         String paraStyle = (String) Helper.getUnoPropertyValue(range, "ParaStyleName");
         range.setString((String) text);
         Helper.setUnoPropertyValue(range, "ParaStyleName", paraStyle);
-        if (text == null || text.equals(""))
+        if (text == null || text.equals(PropertyNames.EMPTY_STRING))
         {
-            if (placeholder != null && !placeholder.equals(""))
+            if (placeholder != null && !placeholder.equals(PropertyNames.EMPTY_STRING))
             {
                 XTextContent placeHolder = createPlaceHolder(docMSF, placeholder, resources.resPlaceHolderHint);
                 try
@@ -1024,7 +1024,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
 
                 // write items
                 // ===========
-                String cellName = "";
+                String cellName = PropertyNames.EMPTY_STRING;
 
                 /* now go through all items that belong to this
                  * table. Check each one agains the model. If it should
@@ -1072,7 +1072,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
                 while ((!cellName.equals(cursor.getRangeName()) && (!cursor.getRangeName().startsWith("A"))))
                 {
                     cell = xTextTable.getCellByName(cursor.getRangeName());
-                    ((XTextRange) UnoRuntime.queryInterface(XTextRange.class, cell)).setString("");
+                    ((XTextRange) UnoRuntime.queryInterface(XTextRange.class, cell)).setString(PropertyNames.EMPTY_STRING);
                     cellName = cursor.getRangeName();
                     cursor.goRight((short) 1, false);
                 }
@@ -1316,7 +1316,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
             {
                 writtenTopics.add(null);
             }
-            writtenTopics.set(topic, "");
+            writtenTopics.set(topic, PropertyNames.EMPTY_STRING);
 
             // make sure threr are enough rows for me...
             int rows = getRowCount(table);
@@ -1764,7 +1764,7 @@ class TextElement extends ParaStyled
     public void write(Object textRange)
     {
         ((XTextRange) UnoRuntime.queryInterface(XTextRange.class, textRange)).setString(text);
-        if (!text.equals(""))
+        if (!text.equals(PropertyNames.EMPTY_STRING))
         {
             super.write(textRange);
         }
@@ -1772,7 +1772,7 @@ class TextElement extends ParaStyled
 }
 
 /**
- * A Text element which, if the text to write is empty (null or "")
+ * A Text element which, if the text to write is empty (null or PropertyNames.EMPTY_STRING)
  * inserts a placeholder instead.
  * @author rp143992
  *
@@ -1805,7 +1805,7 @@ class PlaceholderTextElement extends TextElement
     public void write(Object textRange)
     {
         super.write(textRange);
-        if (text == null || text.equals(""))
+        if (text == null || text.equals(PropertyNames.EMPTY_STRING))
         {
             XTextRange xTextRange = (XTextRange) UnoRuntime.queryInterface(XTextRange.class, textRange);
             try

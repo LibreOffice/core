@@ -257,7 +257,7 @@ public class DBColumn
         XTextCursor xTextCursor = TextDocument.createTextCursor(xNameCell);
         xTextCursor.gotoStart(false);
         xTextCursor.gotoEnd(true);
-        xTextCursor.setString("");
+        xTextCursor.setString(PropertyNames.EMPTY_STRING);
         oTextFieldHandler.insertUserField(xTextCursor, CurDBField.getFieldName(), CurDBField.getFieldTitle());
     }
 
@@ -266,7 +266,7 @@ public class DBColumn
         XTextCursor xTextCursor = TextDocument.createTextCursor(xCell);
         xTextCursor.gotoStart(false);
         xTextCursor.gotoEnd(true);
-        xTextCursor.setString("");
+        xTextCursor.setString(PropertyNames.EMPTY_STRING);
         oTextFieldHandler.insertUserField(xTextCursor, CurDBField.getFieldName(), CurDBField.getFieldTitle());
     }
 

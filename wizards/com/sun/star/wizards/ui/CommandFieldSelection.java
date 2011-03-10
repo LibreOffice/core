@@ -63,7 +63,7 @@ public class CommandFieldSelection extends FieldSelection implements Comparator
 
         public void itemStateChanged(com.sun.star.awt.ItemEvent EventObject)
         {
-            short[] SelItems = (short[]) CurUnoDialog.getControlProperty(sTableListBoxName, "SelectedItems");
+            short[] SelItems = (short[]) CurUnoDialog.getControlProperty(sTableListBoxName, PropertyNames.SELECTED_ITEMS);
             if (SelItems.length > 0)
             {
                 iOldSelPos = m_iSelPos;
@@ -187,7 +187,7 @@ public class CommandFieldSelection extends FieldSelection implements Comparator
         }
         else
         {
-            return "";
+            return PropertyNames.EMPTY_STRING;
         }
     }
 
@@ -205,7 +205,7 @@ public class CommandFieldSelection extends FieldSelection implements Comparator
 
     private short getselectedItemPos()
     {
-        short[] iSelPoses = ((short[]) Helper.getUnoPropertyValue(UnoDialog.getModel(xTableListBox), "SelectedItems"));
+        short[] iSelPoses = ((short[]) Helper.getUnoPropertyValue(UnoDialog.getModel(xTableListBox), PropertyNames.SELECTED_ITEMS));
         if (iSelPoses.length > 0)
         {
             return iSelPoses[0];
@@ -214,7 +214,7 @@ public class CommandFieldSelection extends FieldSelection implements Comparator
         {
             if (this.bpreselectCommand)
             {
-                String[] sItemList = ((String[]) Helper.getUnoPropertyValue(UnoDialog.getModel(xTableListBox), "StringItemList"));
+                String[] sItemList = ((String[]) Helper.getUnoPropertyValue(UnoDialog.getModel(xTableListBox), PropertyNames.STRING_ITEM_LIST));
                 if (sItemList.length > 0)
                 {
                     return (short) 0;
@@ -229,10 +229,10 @@ public class CommandFieldSelection extends FieldSelection implements Comparator
         try
         {
             boolean binitialize = false;
-            String curCommandName = "";
+            String curCommandName = PropertyNames.EMPTY_STRING;
             //As the peer of the control might not yet exist we have to query the model for the SelectedItems
             short iSelPos = getselectedItemPos();
-            // String[] sLocList = (String[]) CurUnoDialog.getControlProperty(sTableListBoxName, "StringItemList");
+            // String[] sLocList = (String[]) CurUnoDialog.getControlProperty(sTableListBoxName, PropertyNames.STRING_ITEM_LIST);
             final String sSelectedTableName = xTableListBox.getItem(iSelPos);
             if (!bgetQueries)
             {
@@ -245,14 +245,14 @@ public class CommandFieldSelection extends FieldSelection implements Comparator
                 if (sSelectedTableName.startsWith(sTablePrefix))
                 {
                     CurDBMetaData.setCommandType(CommandType.TABLE);
-                    curCommandName = JavaTools.replaceSubString(sSelectedTableName, "", sTablePrefix);
+                    curCommandName = JavaTools.replaceSubString(sSelectedTableName, PropertyNames.EMPTY_STRING, sTablePrefix);
                     CurDBMetaData.setTableByName(curCommandName);
                     binitialize = CurDBMetaData.getFieldNamesOfCommand(curCommandName, CommandType.TABLE, AppendMode);
                 }
                 else
                 {
                     CurDBMetaData.setCommandType(CommandType.QUERY);
-                    curCommandName = JavaTools.replaceSubString(sSelectedTableName, "", sQueryPrefix);
+                    curCommandName = JavaTools.replaceSubString(sSelectedTableName, PropertyNames.EMPTY_STRING, sQueryPrefix);
                     CurDBMetaData.setQueryByName(curCommandName);
                     binitialize = CurDBMetaData.getFieldNamesOfCommand(curCommandName, CommandType.QUERY, AppendMode);
                 }
@@ -304,7 +304,7 @@ public class CommandFieldSelection extends FieldSelection implements Comparator
             ContentList = setPrefixinArray(ContentList, sTablePrefix, 0, CurDBMetaData.getTableNames().length);
         }
         java.util.Arrays.sort(ContentList, this);
-        Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), "StringItemList", ContentList);
+        Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), PropertyNames.STRING_ITEM_LIST, ContentList);
         short iSelPos = getselectedItemPos();
         if (bpreselectCommand)
         {
@@ -322,7 +322,7 @@ public class CommandFieldSelection extends FieldSelection implements Comparator
             emptyFieldsListBoxes();
             iSelArray = new short[] { (short) iSelPos };
         }
-        Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), "SelectedItems", iSelArray);
+        Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), PropertyNames.SELECTED_ITEMS, iSelArray);
         toggleCommandListBox(true);
         if (bgetFields)
         {
@@ -404,10 +404,10 @@ public class CommandFieldSelection extends FieldSelection implements Comparator
     {
         try
         {
-            if (Properties.hasPropertyValue(_aPropertyValue, "CommandType"))
+            if (Properties.hasPropertyValue(_aPropertyValue, PropertyNames.COMMAND_TYPE))
             {
-                int nCommandType = AnyConverter.toInt(Properties.getPropertyValue(_aPropertyValue, "CommandType"));
-                String sCommand = AnyConverter.toString(Properties.getPropertyValue(_aPropertyValue, "Command"));
+                int nCommandType = AnyConverter.toInt(Properties.getPropertyValue(_aPropertyValue, PropertyNames.COMMAND_TYPE));
+                String sCommand = AnyConverter.toString(Properties.getPropertyValue(_aPropertyValue, PropertyNames.COMMAND));
                 if (sCommand != null)
                 {
                     preselectCommand(sCommand, nCommandType, _bReadOnly);
@@ -424,12 +424,12 @@ public class CommandFieldSelection extends FieldSelection implements Comparator
     {
         if (_selitem.length() > 0)
         {
-            String[] sitems = (String[]) Helper.getUnoPropertyValue(UnoDialog.getModel(xTableListBox), "StringItemList");
+            String[] sitems = (String[]) Helper.getUnoPropertyValue(UnoDialog.getModel(xTableListBox), PropertyNames.STRING_ITEM_LIST);
             String sPrefix = getCommandPrefix(_nCommandType);
             short iselpos = (short) JavaTools.FieldInList(sitems, sPrefix + _selitem);
             if (iselpos > -1)
             {
-                Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), "SelectedItems", new short[]
+                Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), PropertyNames.SELECTED_ITEMS, new short[]
                         {
                             iselpos
                         });
@@ -438,13 +438,13 @@ public class CommandFieldSelection extends FieldSelection implements Comparator
         }
         else
         {
-            Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), "SelectedItems", new short[]
+            Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), PropertyNames.SELECTED_ITEMS, new short[]
                     {
                     });
         }
         if (_bReadOnly)
         {
-            Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), "ReadOnly", new Boolean(_selitem.length() > 0));
+            Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), PropertyNames.READ_ONLY, new Boolean(_selitem.length() > 0));
         }
     }
 
@@ -452,22 +452,22 @@ public class CommandFieldSelection extends FieldSelection implements Comparator
     {
         if (_selitem.length() > 0)
         {
-            String[] sitems = (String[]) Helper.getUnoPropertyValue(UnoDialog.getModel(xTableListBox), "StringItemList");
+            String[] sitems = (String[]) Helper.getUnoPropertyValue(UnoDialog.getModel(xTableListBox), PropertyNames.STRING_ITEM_LIST);
             short iselpos = (short) JavaTools.FieldInList(sitems, getTablePrefix() + _selitem);
             if (iselpos > -1)
             {
-                Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), "SelectedItems", new short[] { iselpos });
+                Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), PropertyNames.SELECTED_ITEMS, new short[] { iselpos });
             }
             this.fillUpFieldsListbox();
         }
         else
         {
-            Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), "SelectedItems", new short[] {} );
+            Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), PropertyNames.SELECTED_ITEMS, new short[] {} );
             this.fillUpFieldsListbox();
         }
         if (_bReadOnly)
         {
-            Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), "ReadOnly", new Boolean(_selitem.length() > 0));
+            Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), PropertyNames.READ_ONLY, new Boolean(_selitem.length() > 0));
         }
         toggleListboxButtons((short)-1,(short)-1);
     }

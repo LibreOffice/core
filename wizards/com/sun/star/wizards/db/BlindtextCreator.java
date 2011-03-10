@@ -27,6 +27,7 @@
 package com.sun.star.wizards.db;
 
 import com.sun.star.wizards.common.JavaTools;
+import com.sun.star.wizards.common.PropertyNames;
 
 /**
  *
@@ -40,7 +41,7 @@ public class BlindtextCreator
 
     public static String adjustBlindTextlength(String FieldTitle, int FieldWidth, boolean bIsCurLandscape, boolean bIsGroupTable, String[] _RecordFieldNames)
     {
-        String BlindTextString = "";
+        String BlindTextString = PropertyNames.EMPTY_STRING;
         if (bIsGroupTable)
         {
             return getBlindTextString(FieldTitle, FieldWidth, FieldWidth);
@@ -66,7 +67,7 @@ public class BlindtextCreator
 
     public static String getBlindTextString(String FieldTitle, int FieldWidth, int MaxWidth)
     {
-        String[] BlindTextArray = JavaTools.ArrayoutofString(BlindText, " ");
+        String[] BlindTextArray = JavaTools.ArrayoutofString(BlindText, PropertyNames.SPACE);
         String PartBlindText = BlindTextArray[0];
         String NewPartBlindText;
         int MaxHeaderWidth;
@@ -88,7 +89,7 @@ public class BlindtextCreator
         int i = 1;
         do
         {
-            NewPartBlindText = PartBlindText + " " + BlindTextArray[i];
+            NewPartBlindText = PartBlindText + PropertyNames.SPACE + BlindTextArray[i];
             if (NewPartBlindText.length() < MaxWidth)
             {
                 PartBlindText = NewPartBlindText;

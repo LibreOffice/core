@@ -33,6 +33,7 @@ import com.sun.star.sdbc.XResultSet;
 import com.sun.star.sdbc.XRow;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.wizards.common.JavaTools;
+import com.sun.star.wizards.common.PropertyNames;
 
 /**
  * @author bc93774
@@ -94,7 +95,7 @@ public class RelationController extends CommandName
     private Object getCatalogName(CommandName _oCommandName)
     {
         String sLocCatalog = _oCommandName.getCatalogName();
-        if (sLocCatalog.equals(""))
+        if (sLocCatalog.equals(PropertyNames.EMPTY_STRING))
         {
             return null;
         }

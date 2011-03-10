@@ -28,6 +28,7 @@ package com.sun.star.wizards.web;
 
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.wizards.common.FileAccess;
+import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.web.data.CGStyle;
 
 /**
@@ -98,7 +99,7 @@ public class StylePreview
 
         String css = FileAccess.connectURLs(wwRoot, "styles/" + style.cp_CssHref);
 
-        if (background == null || background.equals(""))
+        if (background == null || background.equals(PropertyNames.EMPTY_STRING))
         {
             //delete the background image
             if (fileAccess.exists(backgroundFilename, false))
@@ -137,7 +138,7 @@ public class StylePreview
      */
     private String createTempDir(XMultiServiceFactory xmsf) throws Exception
     {
-        String tempPath = FileAccess.getOfficePath(xmsf, "Temp", "", "");
+        String tempPath = FileAccess.getOfficePath(xmsf, "Temp", PropertyNames.EMPTY_STRING, PropertyNames.EMPTY_STRING);
         String s = fileAccess.createNewDir(tempPath, "wwiz");
         fileAccess.createNewDir(s, "images");
         return s;

@@ -35,6 +35,7 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.util.URL;
 import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.FileAccess;
+import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.common.UCB;
 import com.sun.star.wizards.ui.event.Task;
 import com.sun.star.wizards.web.data.CGLayout;
@@ -101,7 +102,7 @@ public class TOCPreview
     {
         Document doc = (Document) settings.cp_DefaultSession.createDOM();
         CGLayout layout = settings.cp_DefaultSession.getLayout();
-        Task task = new Task("", "", 10000);
+        Task task = new Task(PropertyNames.EMPTY_STRING, PropertyNames.EMPTY_STRING, 10000);
         Process.generate(xmsf, layout, doc, fileAccess, tempDir, task);
         Process.copyLayoutFiles(ucb, fileAccess, settings, layout, tempDir);
         xDispatch.dispatch(openHyperlink, loadArgs); //Dispatch.dispatch(openHyperlink, loadArgs);
@@ -110,7 +111,7 @@ public class TOCPreview
     private PropertyValue[] loadArgs(String url)
     {
         PropertyValue pv = new PropertyValue();
-        pv.Name = "URL";
+        pv.Name = PropertyNames.URL;
         pv.Value = url;
         return new PropertyValue[]
                 {

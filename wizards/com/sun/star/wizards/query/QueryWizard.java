@@ -501,7 +501,7 @@ public class QueryWizard extends DatabaseObjectWizard
             ID = 1;
             if (sIncSuffix != null)
             {
-                if ((!sIncSuffix.equals("")) && (!sIncSuffix.equals("_")))
+                if ((!sIncSuffix.equals(PropertyNames.EMPTY_STRING)) && (!sIncSuffix.equals("_")))
                 {
                     String sID = JavaTools.ArrayoutofString(sIncSuffix, "_")[1];
                     ID = Integer.parseInt(sID);
