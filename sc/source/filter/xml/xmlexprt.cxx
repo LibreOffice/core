@@ -3690,85 +3690,85 @@ void ScXMLExport::WriteLabelRanges( const uno::Reference< container::XIndexAcces
 void ScXMLExport::WriteNamedExpressions(const com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheetDocument>& xSpreadDoc)
 {
     uno::Reference <beans::XPropertySet> xPropertySet (xSpreadDoc, uno::UNO_QUERY);
-    if (xPropertySet.is())
+    if (!xPropertySet.is())
+        return;
+
+    uno::Reference <sheet::XNamedRanges> xNamedRanges(xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_NAMEDRANGES))), uno::UNO_QUERY);
+    CheckAttrList();
+    if (!xNamedRanges.is())
+        return;
+
+    uno::Sequence <rtl::OUString> aRangesNames(xNamedRanges->getElementNames());
+    sal_Int32 nNamedRangesCount = aRangesNames.getLength();
+    if (nNamedRangesCount <= 0)
+        return;
+
+    if (!pDoc)
+        return;
+
+    ScRangeName* pNamedRanges = pDoc->GetRangeName();
+    SvXMLElementExport aElemNEs(*this, XML_NAMESPACE_TABLE, XML_NAMED_EXPRESSIONS, sal_True, sal_True);
+    for (sal_Int32 i = 0; i < nNamedRangesCount; ++i)
     {
-        uno::Reference <sheet::XNamedRanges> xNamedRanges(xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_NAMEDRANGES))), uno::UNO_QUERY);
         CheckAttrList();
-        if (xNamedRanges.is())
+        rtl::OUString sNamedRange(aRangesNames[i]);
+        uno::Reference <sheet::XNamedRange> xNamedRange(xNamedRanges->getByName(sNamedRange), uno::UNO_QUERY);
+        if (!xNamedRange.is())
+            continue;
+
+        uno::Reference <container::XNamed> xNamed (xNamedRange, uno::UNO_QUERY);
+        uno::Reference <sheet::XCellRangeReferrer> xCellRangeReferrer (xNamedRange, uno::UNO_QUERY);
+        if (!xNamed.is() || !xCellRangeReferrer.is())
+            continue;
+
+        rtl::OUString sOUName(xNamed->getName());
+        AddAttribute(sAttrName, sOUName);
+
+        OUString sOUBaseCellAddress;
+        ScRangeStringConverter::GetStringFromAddress( sOUBaseCellAddress,
+            xNamedRange->getReferencePosition(), pDoc, FormulaGrammar::CONV_OOO, ' ', sal_False, SCA_ABS_3D );
+        AddAttribute(XML_NAMESPACE_TABLE, XML_BASE_CELL_ADDRESS, sOUBaseCellAddress);
+
+        const ScRangeData* pNamedRange = pNamedRanges->findByName(sOUName);
+        String sContent;
+        pNamedRange->GetSymbol(sContent, pDoc->GetStorageGrammar());
+        rtl::OUString sOUTempContent(sContent);
+        uno::Reference <table::XCellRange> xCellRange(xCellRangeReferrer->getReferredCells());
+        if(xCellRange.is())
         {
-            uno::Sequence <rtl::OUString> aRangesNames(xNamedRanges->getElementNames());
-            sal_Int32 nNamedRangesCount(aRangesNames.getLength());
-            if (nNamedRangesCount > 0)
+            rtl::OUString sOUContent(sOUTempContent.copy(1, sOUTempContent.getLength() - 2));
+            AddAttribute(XML_NAMESPACE_TABLE, XML_CELL_RANGE_ADDRESS, sOUContent);
+            sal_Int32 nRangeType(xNamedRange->getType());
+            rtl::OUStringBuffer sBufferRangeType;
+            if ((nRangeType & sheet::NamedRangeFlag::COLUMN_HEADER) == sheet::NamedRangeFlag::COLUMN_HEADER)
+                sBufferRangeType.append(GetXMLToken(XML_REPEAT_COLUMN));
+            if ((nRangeType & sheet::NamedRangeFlag::ROW_HEADER) == sheet::NamedRangeFlag::ROW_HEADER)
             {
-                if (pDoc)
-                {
-                    ScRangeName* pNamedRanges(pDoc->GetRangeName());
-                    SvXMLElementExport aElemNEs(*this, XML_NAMESPACE_TABLE, XML_NAMED_EXPRESSIONS, sal_True, sal_True);
-                    for (sal_Int32 i = 0; i < nNamedRangesCount; ++i)
-                    {
-                        CheckAttrList();
-                        rtl::OUString sNamedRange(aRangesNames[i]);
-                        uno::Reference <sheet::XNamedRange> xNamedRange(xNamedRanges->getByName(sNamedRange), uno::UNO_QUERY);
-                        if (xNamedRange.is())
-                        {
-                            uno::Reference <container::XNamed> xNamed (xNamedRange, uno::UNO_QUERY);
-                            uno::Reference <sheet::XCellRangeReferrer> xCellRangeReferrer (xNamedRange, uno::UNO_QUERY);
-                            if (xNamed.is() && xCellRangeReferrer.is())
-                            {
-                                rtl::OUString sOUName(xNamed->getName());
-                                AddAttribute(sAttrName, sOUName);
-
-                                OUString sOUBaseCellAddress;
-                                ScRangeStringConverter::GetStringFromAddress( sOUBaseCellAddress,
-                                    xNamedRange->getReferencePosition(), pDoc, FormulaGrammar::CONV_OOO, ' ', sal_False, SCA_ABS_3D );
-                                AddAttribute(XML_NAMESPACE_TABLE, XML_BASE_CELL_ADDRESS, sOUBaseCellAddress);
-
-                                const ScRangeData* pNamedRange = pNamedRanges->findByName(sOUName);
-                                String sContent;
-                                pNamedRange->GetSymbol(sContent, pDoc->GetStorageGrammar());
-                                rtl::OUString sOUTempContent(sContent);
-                                uno::Reference <table::XCellRange> xCellRange(xCellRangeReferrer->getReferredCells());
-                                if(xCellRange.is())
-                                {
-                                    rtl::OUString sOUContent(sOUTempContent.copy(1, sOUTempContent.getLength() - 2));
-                                    AddAttribute(XML_NAMESPACE_TABLE, XML_CELL_RANGE_ADDRESS, sOUContent);
-                                    sal_Int32 nRangeType(xNamedRange->getType());
-                                    rtl::OUStringBuffer sBufferRangeType;
-                                    if ((nRangeType & sheet::NamedRangeFlag::COLUMN_HEADER) == sheet::NamedRangeFlag::COLUMN_HEADER)
-                                        sBufferRangeType.append(GetXMLToken(XML_REPEAT_COLUMN));
-                                    if ((nRangeType & sheet::NamedRangeFlag::ROW_HEADER) == sheet::NamedRangeFlag::ROW_HEADER)
-                                    {
-                                        if (sBufferRangeType.getLength() > 0)
-                                            sBufferRangeType.appendAscii(" ");
-                                        sBufferRangeType.append(GetXMLToken(XML_REPEAT_ROW));
-                                    }
-                                    if ((nRangeType & sheet::NamedRangeFlag::FILTER_CRITERIA) == sheet::NamedRangeFlag::FILTER_CRITERIA)
-                                    {
-                                        if (sBufferRangeType.getLength() > 0)
-                                            sBufferRangeType.appendAscii(" ");
-                                        sBufferRangeType.append(GetXMLToken(XML_FILTER));
-                                    }
-                                    if ((nRangeType & sheet::NamedRangeFlag::PRINT_AREA) == sheet::NamedRangeFlag::PRINT_AREA)
-                                    {
-                                        if (sBufferRangeType.getLength() > 0)
-                                            sBufferRangeType.appendAscii(" ");
-                                        sBufferRangeType.append(GetXMLToken(XML_PRINT_RANGE));
-                                    }
-                                    rtl::OUString sRangeType = sBufferRangeType.makeStringAndClear();
-                                    if (sRangeType.getLength())
-                                        AddAttribute(XML_NAMESPACE_TABLE, XML_RANGE_USABLE_AS, sRangeType);
-                                    SvXMLElementExport aElemNR(*this, XML_NAMESPACE_TABLE, XML_NAMED_RANGE, sal_True, sal_True);
-                                }
-                                else
-                                {
-                                    AddAttribute(XML_NAMESPACE_TABLE, XML_EXPRESSION, sOUTempContent);
-                                    SvXMLElementExport aElemNE(*this, XML_NAMESPACE_TABLE, XML_NAMED_EXPRESSION, sal_True, sal_True);
-                                }
-                            }
-                        }
-                    }
-                }
+                if (sBufferRangeType.getLength() > 0)
+                    sBufferRangeType.appendAscii(" ");
+                sBufferRangeType.append(GetXMLToken(XML_REPEAT_ROW));
             }
+            if ((nRangeType & sheet::NamedRangeFlag::FILTER_CRITERIA) == sheet::NamedRangeFlag::FILTER_CRITERIA)
+            {
+                if (sBufferRangeType.getLength() > 0)
+                    sBufferRangeType.appendAscii(" ");
+                sBufferRangeType.append(GetXMLToken(XML_FILTER));
+            }
+            if ((nRangeType & sheet::NamedRangeFlag::PRINT_AREA) == sheet::NamedRangeFlag::PRINT_AREA)
+            {
+                if (sBufferRangeType.getLength() > 0)
+                    sBufferRangeType.appendAscii(" ");
+                sBufferRangeType.append(GetXMLToken(XML_PRINT_RANGE));
+            }
+            rtl::OUString sRangeType = sBufferRangeType.makeStringAndClear();
+            if (sRangeType.getLength())
+                AddAttribute(XML_NAMESPACE_TABLE, XML_RANGE_USABLE_AS, sRangeType);
+            SvXMLElementExport aElemNR(*this, XML_NAMESPACE_TABLE, XML_NAMED_RANGE, sal_True, sal_True);
+        }
+        else
+        {
+            AddAttribute(XML_NAMESPACE_TABLE, XML_EXPRESSION, sOUTempContent);
+            SvXMLElementExport aElemNE(*this, XML_NAMESPACE_TABLE, XML_NAMED_EXPRESSION, sal_True, sal_True);
         }
     }
 }
