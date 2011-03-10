@@ -187,7 +187,7 @@ public class ServiceManager implements XMultiServiceFactory,
                     Class clazz = Class.forName( newImpls[i] );
 
                     Class[] methodClassParam = { String.class, XMultiServiceFactory.class, XRegistryKey.class };
-                    java.lang.reflect.Method getFactoryMeth = null;
+                    java.lang.reflect.Method getFactoryMeth  ;
                     try {
                         getFactoryMeth = clazz.getMethod("__getServiceFactory", methodClassParam);
                     }
@@ -233,7 +233,7 @@ public class ServiceManager implements XMultiServiceFactory,
     public void initialize( Object args[] )
                 throws  com.sun.star.uno.Exception,
                         com.sun.star.uno.RuntimeException {
-        XSimpleRegistry xSimpleRegistry = null;
+        XSimpleRegistry xSimpleRegistry  ;
         try {
             xSimpleRegistry = (XSimpleRegistry) args[0];
             if (xSimpleRegistry != null)
@@ -462,9 +462,9 @@ public class ServiceManager implements XMultiServiceFactory,
                 XEventListener listener = (XEventListener) enumer.nextElement();
                 listener.disposing(new com.sun.star.lang.EventObject(this));
             }
+            eventListener.removeAllElements();
         }
 
-        eventListener.removeAllElements();
         factoriesByServiceNames.clear();
         factoriesByImplNames.clear();
     }
@@ -527,12 +527,9 @@ public class ServiceManager implements XMultiServiceFactory,
 
             XServiceInfo xServiceInfo = UnoRuntime.queryInterface(XServiceInfo.class, object);
 
-            if (xServiceInfo != null) {
-                return UnoRuntime.areSame(factoriesByImplNames.get(xServiceInfo.getImplementationName()), object);
-            }
+        return xServiceInfo != null && UnoRuntime.areSame(factoriesByImplNames.get(xServiceInfo.getImplementationName()), object);
 
-        return false;
-    }
+        }
 
     /**
      * Adds a <code>SingleServiceFactory</code> to the <code>ServiceManager</code>.
@@ -567,7 +564,7 @@ public class ServiceManager implements XMultiServiceFactory,
 
 
         String[] serviceNames = xServiceInfo.getSupportedServiceNames();
-        java.util.Vector vec = null;
+        java.util.Vector vec  ;
 
         for (int i=0; i<serviceNames.length; i++) {
             if ( !factoriesByServiceNames.containsKey( serviceNames[i] ) ) {
@@ -688,7 +685,7 @@ public class ServiceManager implements XMultiServiceFactory,
     public XEnumeration createContentEnumeration( String serviceName )
                 throws com.sun.star.uno.RuntimeException
     {
-        XEnumeration enumer = null;
+        XEnumeration enumer  ;
 
         java.util.Vector serviceList = (java.util.Vector) factoriesByServiceNames.get(serviceName);
 
@@ -725,10 +722,9 @@ public class ServiceManager implements XMultiServiceFactory,
         for (int i=0; i<supportedServiceNames.length; i++)
             if (supportedServiceNames[i].equals( serviceName )) return true;
 
-        if (getImplementationName().equals( serviceName )) return true;
+        return getImplementationName().equals(serviceName);
 
-        return false;
-    }
+        }
 
     /**
      * Supplies list of all supported services.
@@ -781,11 +777,9 @@ public class ServiceManager implements XMultiServiceFactory,
         public boolean hasMoreElements()
                 throws com.sun.star.uno.RuntimeException
         {
-            if (enumeration != null)
-                return enumeration.hasMoreElements();
+            return enumeration != null && enumeration.hasMoreElements();
 
-            return false;
-        }
+            }
 
         /**
          * Returns the next element of the enumeration. If no further elements
@@ -859,10 +853,9 @@ class ServiceManagerFactory implements  XServiceInfo, XSingleComponentFactory, X
         for ( int i=0; i<ServiceManager.supportedServiceNames.length; i++ )
             if ( ServiceManager.supportedServiceNames[i].equals(serviceName) ) return true;
 
-        if ( getImplementationName().equals(serviceName) ) return true;
+        return getImplementationName().equals(serviceName);
 
-        return false;
-    }
+        }
 
     /**
      * Returns all service names which are supported by <code>ServiceManager</code>.

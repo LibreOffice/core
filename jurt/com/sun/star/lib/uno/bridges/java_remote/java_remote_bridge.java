@@ -620,8 +620,6 @@ public class java_remote_bridge
 
         checkDisposed();
 
-        boolean goThroughThreadPool = false;
-
         ThreadId threadId = _iThreadPool.getThreadId();
         Object handle = _iThreadPool.attach(threadId);
         try {
