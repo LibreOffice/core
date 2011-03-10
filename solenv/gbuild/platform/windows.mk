@@ -397,16 +397,20 @@ gb_LinkTarget_INCLUDE_STL := $(filter %/stl, $(subst -I. , ,$(SOLARINC)))
 
 gb_LinkTarget_get_pdbfile = $(call gb_LinkTarget_get_target,)pdb/$(1).pdb
 
+define hacknative
+$(patsubst $(WORKDIR)%,$(gb_Helper_WORKDIR_NATIVE)%,$(1))
+endef
+
 define gb_LinkTarget__command
 $(call gb_Output_announce,$(2),$(true),LNK,4)
 $(call gb_Helper_abbreviate_dirs_native,\
     mkdir -p $(dir $(1)) && \
     rm -f $(1) && \
-    RESPONSEFILE=`$(gb_MKTEMP)` && \
-    echo "$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
+    RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),100, \
+        $(call hacknative,$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
         $(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
         $(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
-        $(PCHOBJS)" > $${RESPONSEFILE} && \
+        $(PCHOBJS))) && \
     $(gb_LINK) \
         $(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
         $(if $(filter StaticLibrary,$(TARGETTYPE)),$(gb_StaticLibrary_TARGETTYPEFLAGS)) \
