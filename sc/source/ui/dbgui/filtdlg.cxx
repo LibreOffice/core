@@ -129,9 +129,9 @@ ScFilterDlg::ScFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
     Init( rArgSet );
     FreeResource();
 
-    // Hack: RefInput-Kontrolle
+    // Hack: RefInput control
     pTimer = new Timer;
-    pTimer->SetTimeout( 50 ); // 50ms warten
+    pTimer->SetTimeout( 50 ); // Wait 50ms
     pTimer->SetTimeoutHdl( LINK( this, ScFilterDlg, TimeOutHdl ) );
 }
 
@@ -146,7 +146,7 @@ ScFilterDlg::~ScFilterDlg()
     delete pOptionsMgr;
     delete pOutItem;
 
-    // Hack: RefInput-Kontrolle
+    // Hack: RefInput control
     pTimer->Stop();
     delete pTimer;
 }
@@ -183,7 +183,7 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
     pDoc        = pViewData ? pViewData->GetDocument() : NULL;
     nSrcTab     = pViewData ? pViewData->GetTabNo() : static_cast<SCTAB>(0);
 
-    // fuer leichteren Zugriff:
+    // for easier access:
     aFieldLbArr  [0] = &aLbField1;
     aFieldLbArr  [1] = &aLbField2;
     aFieldLbArr  [2] = &aLbField3;
@@ -201,7 +201,7 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
     aConnLbArr   [2] = &aLbConnect3;
     aConnLbArr   [3] = &aLbConnect4;
 
-    // Optionen initialisieren lassen:
+    // Option initialization:
 
     pOptionsMgr  = new ScFilterOptionsMgr(
                             this,
@@ -223,7 +223,7 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
                             aStrNoName,
                             aStrUndefined );
 
-    // Feldlisten einlesen und Eintraege selektieren:
+    // Read in field lists and select entries
 
     FillFieldLists();
 
@@ -274,7 +274,7 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
     aScrollBar.SetRange( Range( 0, 4 ) );
     aScrollBar.SetLineSize( 1 );
     aLbConnect1.Hide();
-    // Disable/Enable Logik:
+    // Disable/Enable Logic:
 
        (aLbField1.GetSelectEntryPos() != 0)
     && (aLbField2.GetSelectEntryPos() != 0)
@@ -333,10 +333,10 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
 
     if(pDoc!=NULL &&
         pDoc->GetChangeTrack()!=NULL) aBtnCopyResult.Disable();
-    // Modal-Modus einschalten
+    // Switch on modal mode
 //  SetDispatcherLock( TRUE );
-    //@BugID 54702 Enablen/Disablen nur noch in Basisklasse
-//  SFX_APPWINDOW->Disable(FALSE);      //! allgemeine Methode im ScAnyRefDlg
+    //@BugID 54702 Enable/disable only in Basic class
+//  SFX_APPWINDOW->Disable(FALSE);      //! general method in ScAnyRefDlg
 }
 
 
@@ -352,12 +352,12 @@ BOOL ScFilterDlg::Close()
 
 
 //----------------------------------------------------------------------------
-// Uebergabe eines mit der Maus selektierten Tabellenbereiches, der dann als
-// neue Selektion im Referenz-Edit angezeigt wird.
+// Mouse-selected cell area becomes the new selection and is shown in the
+// reference text box
 
 void ScFilterDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 {
-    if ( bRefInputMode )    // Nur moeglich, wenn im Referenz-Editmodus
+    if ( bRefInputMode )    // Only possible if in reference edit mode
     {
         if ( rRef.aStart != rRef.aEnd )
             RefInputStart( &aEdCopyArea );
@@ -445,7 +445,7 @@ void ScFilterDlg::UpdateValueList( USHORT nList )
 
         if ( nFieldSelPos )
         {
-            WaitObject aWaiter( this );     // auch wenn nur die ListBox gefuellt wird
+            WaitObject aWaiter( this );     // even if only the list box has content
 
             SCCOL nColumn = theQueryData.nCol1 + static_cast<SCCOL>(nFieldSelPos) - 1;
             if (!pEntryLists[nColumn])
@@ -456,15 +456,15 @@ void ScFilterDlg::UpdateValueList( USHORT nList )
                 SCROW nLastRow   = theQueryData.bUseDynamicRange ? theQueryData.nDynamicEndRow : theQueryData.nRow2;
                 mbHasDates[nOffset+nList-1] = false;
 
-                //  erstmal ohne die erste Zeile
+                // first without the first line
 
                 pEntryLists[nColumn] = new TypedScStrCollection( 128, 128 );
                 pEntryLists[nColumn]->SetCaseSensitive( aBtnCase.IsChecked() );
                 pDoc->GetFilterEntriesArea( nColumn, nFirstRow+1, nLastRow,
                                             nTab, *pEntryLists[nColumn], mbHasDates[nOffset+nList-1] );
 
-                //  Eintrag fuer die erste Zeile
-                //! Eintrag (pHdrEntry) ohne Collection erzeugen?
+                // Entry for the first line
+                //! Entry (pHdrEntry) doesn't generate collection?
 
                 nHeaderPos[nColumn] = USHRT_MAX;
                 TypedScStrCollection aHdrColl( 1, 1 );
@@ -482,7 +482,7 @@ void ScFilterDlg::UpdateValueList( USHORT nList )
                                     "Header-Eintrag nicht wiedergefunden" );
                     }
                     else
-                        delete pNewEntry;           // war schon drin
+                        delete pNewEntry;           // was already there
                 }
             }
 
@@ -520,7 +520,7 @@ void ScFilterDlg::UpdateHdrInValueList( USHORT nList )
                 if ( nPos != USHRT_MAX )
                 {
                     ComboBox* pValList = aValueEdArr[nList-1];
-                    USHORT nListPos = nPos + 2;                 // nach "leer" und "nicht leer"
+                    USHORT nListPos = nPos + 2;                 // for "empty" and "non-empty"
 
                     TypedStrData* pHdrEntry = (*pEntryLists[nColumn])[nPos];
                     if ( pHdrEntry )
@@ -529,12 +529,12 @@ void ScFilterDlg::UpdateHdrInValueList( USHORT nList )
                         BOOL bWasThere = ( pValList->GetEntry(nListPos) == aHdrStr );
                         BOOL bInclude = !aBtnHeader.IsChecked();
 
-                        if (bInclude)           // Eintrag aufnehmen
+                        if (bInclude)           // Include entry
                         {
                             if (!bWasThere)
                                 pValList->InsertEntry(aHdrStr, nListPos);
                         }
-                        else                    // Eintrag weglassen
+                        else                    // Omit entry
                         {
                             if (bWasThere)
                                 pValList->RemoveEntry(nListPos);
@@ -621,7 +621,7 @@ ScQueryItem* ScFilterDlg::GetOutputItem()
     theParam.bRegExp        = aBtnRegExp.IsChecked();
     theParam.bDestPers      = aBtnDestPers.IsChecked();
 
-    //  nur die drei eingestellten - alles andere zuruecksetzen
+    // only set the three - reset everything else
 
     DELETEZ( pOutItem );
     pOutItem = new ScQueryItem( nWhichQuery, &theParam );
@@ -690,8 +690,8 @@ IMPL_LINK( ScFilterDlg, MoreClickHdl, MoreButton*, EMPTYARG )
     {
         pTimer->Stop();
         bRefInputMode = FALSE;
-        //@BugID 54702 Enablen/Disablen nur noch in Basisklasse
-        //SFX_APPWINDOW->Disable(FALSE);        //! allgemeine Methode im ScAnyRefDlg
+        //@BugID 54702 Enable/disable only in Basic class
+        //SFX_APPWINDOW->Disable(FALSE);        //! general method in ScAnyRefDlg
     }
     return 0;
 }
@@ -701,7 +701,7 @@ IMPL_LINK( ScFilterDlg, MoreClickHdl, MoreButton*, EMPTYARG )
 
 IMPL_LINK( ScFilterDlg, TimeOutHdl, Timer*, _pTimer )
 {
-    // alle 50ms nachschauen, ob RefInputMode noch stimmt
+    // Check if RefInputMode is still true every 50ms
 
     if( _pTimer == pTimer && IsActive() )
         bRefInputMode = (aEdCopyArea.HasFocus() || aRbCopyArea.HasFocus());
@@ -718,8 +718,7 @@ IMPL_LINK( ScFilterDlg, TimeOutHdl, Timer*, _pTimer )
 IMPL_LINK( ScFilterDlg, LbSelectHdl, ListBox*, pLb )
 {
     /*
-     * Behandlung der Enable/Disable-Logik,
-     * abhaengig davon, welche ListBox angefasst wurde:
+     * Handle enable/disable logic depending on which ListBox was selected
      */
     USHORT nOffset = GetSliderPos();
 
@@ -956,13 +955,13 @@ IMPL_LINK( ScFilterDlg, LbSelectHdl, ListBox*, pLb )
 
 IMPL_LINK( ScFilterDlg, CheckBoxHdl, CheckBox*, pBox )
 {
-    //  Spaltenkoepfe:
-    //      FeldListen: Spaltexx <-> Spaltenkopf-String
-    //      WertListen: Spaltenkopf-Wert entfaellt.
-    //  Gross-/Kleinschreibung:
-    //      WertListen: komplett neu
+    //  Column headers:
+    //      Field list: Columnxx <-> column header string
+    //      Value list: Column header value not applicable.
+    //  Upper/lower case:
+    //      Value list: completely new
 
-    if ( pBox == &aBtnHeader )              // Feldlisten und Wertlisten
+    if ( pBox == &aBtnHeader )              // Field list and value list
     {
         USHORT nCurSel1 = aLbField1.GetSelectEntryPos();
         USHORT nCurSel2 = aLbField2.GetSelectEntryPos();
@@ -980,12 +979,12 @@ IMPL_LINK( ScFilterDlg, CheckBoxHdl, CheckBox*, pBox )
         UpdateHdrInValueList( 4 );
     }
 
-    if ( pBox == &aBtnCase )            // Wertlisten komplett
+    if ( pBox == &aBtnCase )            // Complete value list
     {
         for (USHORT i=0; i<=MAXCOL; i++)
             DELETEZ( pEntryLists[i] );
 
-        UpdateValueList( 1 );       // aktueller Text wird gemerkt
+        UpdateValueList( 1 );       // current text is recorded
         UpdateValueList( 2 );
         UpdateValueList( 3 );
         UpdateValueList( 4 );

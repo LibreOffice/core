@@ -48,7 +48,7 @@ class ScQueryItem;
 class TypedScStrCollection;
 
 //==================================================================
-// Gemeinsame Resource-Objekte:
+// Shared resource objects:
 
 #define _COMMON_FILTER_RSCOBJS \
     CheckBox        aBtnCase; \
@@ -167,7 +167,7 @@ private:
     TypedScStrCollection*   pEntryLists[MAXCOLCOUNT];
     USHORT              nHeaderPos[MAXCOLCOUNT];
 
-    // Hack: RefInput-Kontrolle
+    // Hack: RefInput control
     Timer*  pTimer;
 
 #ifdef _FILTDLG_CXX
@@ -189,7 +189,7 @@ private:
     DECL_LINK( MoreClickHdl, MoreButton* );
     DECL_LINK( ScrollHdl, ScrollBar* );
 
-    // Hack: RefInput-Kontrolle
+    // Hack: RefInput control
     DECL_LINK( TimeOutHdl,   Timer* );
 #endif
 };
@@ -236,7 +236,7 @@ private:
     formula::RefEdit*           pRefInputEdit;
     BOOL                bRefInputMode;
 
-    // Hack: RefInput-Kontrolle
+    // Hack: RefInput control
     Timer*  pTimer;
 
 #ifdef _SFILTDLG_CXX
@@ -251,7 +251,7 @@ private:
     DECL_LINK( EndDlgHdl,        Button* );
     DECL_LINK( ScrollHdl, ScrollBar* );
 
-    // Hack: RefInput-Kontrolle
+    // Hack: RefInput control
     DECL_LINK( TimeOutHdl,       Timer* );
 #endif
 };
