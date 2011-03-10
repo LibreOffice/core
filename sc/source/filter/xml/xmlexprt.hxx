@@ -181,6 +181,7 @@ class ScXMLExport : public SvXMLExport
 
     sal_Bool GetCellText (ScMyCell& rMyCell, const ScAddress& aPos) const;
 
+    void WriteTable(sal_Int32 nTable, const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheet>& xTable);
     void WriteCell (ScMyCell& aCell);
     void WriteAreaLink(const ScMyCell& rMyCell);
     void WriteAnnotation(ScMyCell& rMyCell);
