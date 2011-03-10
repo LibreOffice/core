@@ -6530,9 +6530,6 @@
           </element>
         </choice>
       </define>
-      <define name="CT_PositionOffset">
-        <ref name="ST_PositionOffset"/>
-      </define>
       <define name="ST_PositionOffset">
         <data type="int">
           <xs:documentation>Absolute Position Offset Value</xs:documentation>
@@ -6587,7 +6584,7 @@
             <ref name="CT_AlignH"/>
           </element>
           <element name="posOffset">
-            <ref name="CT_PositionOffset"/>
+            <ref name="ST_PositionOffset"/>
           </element>
         </choice>
         <attribute name="relativeFrom">
@@ -6644,7 +6641,7 @@
             <ref name="CT_AlignV"/>
           </element>
           <element name="posOffset">
-            <ref name="CT_PositionOffset"/>
+            <ref name="ST_PositionOffset"/>
           </element>
         </choice>
         <attribute name="relativeFrom">
@@ -6826,7 +6823,6 @@
       <element name="wrapThrough" tokenid="ooxml:EG_WrapType_wrapThrough"/>
       <element name="wrapTopAndBottom" tokenid="ooxml:EG_WrapType_wrapTopAndBottom"/>
     </resource>
-    <resource name="CT_PositionOffset" resource="Value"/>
     <resource name="ST_PositionOffset" resource="Integer" generated="yes"/>
     <resource name="CT_AlignH" resource="Value"/>
     <resource name="ST_AlignH" resource="List" generated="yes">
