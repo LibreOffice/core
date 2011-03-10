@@ -422,6 +422,7 @@ HWPDODefaultFunc(int , HWPDrawingObject * , int cmd, void *, int)
 static int
 HWPDOLineFunc(int type, HWPDrawingObject * hdo, int cmd, void *argp, int argv)
 {
+    int ret = true;
     switch (cmd)
     {
         case OBJFUNC_LOAD:
@@ -432,11 +433,13 @@ HWPDOLineFunc(int type, HWPDrawingObject * hdo, int cmd, void *argp, int argv)
                 return OBJRET_FILE_ERROR;
             if (!SkipUnusedField())
                 return OBJRET_FILE_ERROR;
-            return OBJRET_FILE_NO_PRIVATE_BLOCK_2;
+            ret = OBJRET_FILE_NO_PRIVATE_BLOCK_2;
+            break;
         default:
-            return HWPDODefaultFunc(type, hdo, cmd, argp, argv);
+            ret = HWPDODefaultFunc(type, hdo, cmd, argp, argv);
+            break;
     }
-    return true;
+    return ret;
 }
 
 
@@ -509,14 +512,17 @@ HWPDOArcFunc(int type, HWPDrawingObject * hdo, int cmd, void *argp, int argv)
 static int
 HWPDOArc2Func(int type, HWPDrawingObject * hdo, int cmd, void *argp, int argv)
 {
+    int ret = true;
     switch (cmd)
     {
         case OBJFUNC_LOAD:
-            return OBJRET_FILE_NO_PRIVATE_BLOCK;
+            ret = OBJRET_FILE_NO_PRIVATE_BLOCK;
+            break;
         default:
-            return HWPDODefaultFunc(type, hdo, cmd, argp, argv);
+            ret = HWPDODefaultFunc(type, hdo, cmd, argp, argv);
+            break;
     }
-    return true;
+    return ret;
 }
 
 
