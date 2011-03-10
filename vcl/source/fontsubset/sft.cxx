@@ -1777,8 +1777,6 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
 
 void CloseTTFont(TrueTypeFont *ttf) /*FOLD01*/
 {
-    if (ttf->tag != TTFontClassTag) return;
-
 #if !defined(WIN32) && !defined(OS2)
     if( ttf->fname )
         munmap((char *) ttf->ptr, ttf->fsize);
