@@ -1084,7 +1084,7 @@ sal_Bool SfxDocumentTemplates::CopyFrom
     String&     rName           /*  File name of the template to be imported
                                     as an out parameter of the (automatically
                                     generated from the file name) logical name
-                                    of the template * /
+                                    of the template */
 )
 
 /*  [Description]

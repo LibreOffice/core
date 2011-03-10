@@ -780,7 +780,7 @@ BOOL SfxObjectShell::Print
 void SfxObjectShell::LoadStyles
 (
     SfxObjectShell &rSource         /*  the document template from which
-                                        the styles are to be loaded * /
+                                        the styles are to be loaded */
 )
 
 /*  [Description]
