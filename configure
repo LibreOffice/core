@@ -12963,10 +12963,8 @@ echo "${ECHO_T}yes" >&6
          if ! test -x "`echo $WITH_MINGWIN | $SED -e s/g++/strip/ | $SED -e s/c++/strip/`"; then MINGSTRIP=false; else MINGWSTRIP=$(basename $(echo $WITH_MINGWIN | $SED -e s/g++/strip/ | $SED -e s/c++/strip/)); fi
       else
          if test -n "$ac_tool_prefix"; then
-  # Extract the first word of "${ac_tool_prefix}`echo $WITH_MINGWIN | $SED -e s/g++/strip/ |
-$SED -e s/c++/strip/`", so it can be a program name with args.
-set dummy ${ac_tool_prefix}`echo $WITH_MINGWIN | $SED -e s/g++/strip/ |
-$SED -e s/c++/strip/`; ac_word=$2
+  # Extract the first word of "${ac_tool_prefix}`echo $WITH_MINGWIN | $SED -e s/g++/strip/ | $SED -e s/c++/strip/`", so it can be a program name with args.
+set dummy ${ac_tool_prefix}`echo $WITH_MINGWIN | $SED -e s/g++/strip/ | $SED -e s/c++/strip/`; ac_word=$2
 echo "$as_me:$LINENO: checking for $ac_word" >&5
 echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
 if test "${ac_cv_prog_MINGWSTRIP+set}" = set; then
@@ -12982,8 +12980,7 @@ do
   test -z "$as_dir" && as_dir=.
   for ac_exec_ext in '' $ac_executable_extensions; do
   if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_prog_MINGWSTRIP="${ac_tool_prefix}`echo $WITH_MINGWIN | $SED -e s/g++/strip/ |
-$SED -e s/c++/strip/`"
+    ac_cv_prog_MINGWSTRIP="${ac_tool_prefix}`echo $WITH_MINGWIN | $SED -e s/g++/strip/ | $SED -e s/c++/strip/`"
     echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
     break 2
   fi
@@ -13004,10 +13001,8 @@ fi
 fi
 if test -z "$ac_cv_prog_MINGWSTRIP"; then
   ac_ct_MINGWSTRIP=$MINGWSTRIP
-  # Extract the first word of "`echo $WITH_MINGWIN | $SED -e s/g++/strip/ |
-$SED -e s/c++/strip/`", so it can be a program name with args.
-set dummy `echo $WITH_MINGWIN | $SED -e s/g++/strip/ |
-$SED -e s/c++/strip/`; ac_word=$2
+  # Extract the first word of "`echo $WITH_MINGWIN | $SED -e s/g++/strip/ | $SED -e s/c++/strip/`", so it can be a program name with args.
+set dummy `echo $WITH_MINGWIN | $SED -e s/g++/strip/ | $SED -e s/c++/strip/`; ac_word=$2
 echo "$as_me:$LINENO: checking for $ac_word" >&5
 echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
 if test "${ac_cv_prog_ac_ct_MINGWSTRIP+set}" = set; then
@@ -13023,8 +13018,7 @@ do
   test -z "$as_dir" && as_dir=.
   for ac_exec_ext in '' $ac_executable_extensions; do
   if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_prog_ac_ct_MINGWSTRIP="`echo $WITH_MINGWIN | $SED -e s/g++/strip/ |
-$SED -e s/c++/strip/`"
+    ac_cv_prog_ac_ct_MINGWSTRIP="`echo $WITH_MINGWIN | $SED -e s/g++/strip/ | $SED -e s/c++/strip/`"
     echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
     break 2
   fi
