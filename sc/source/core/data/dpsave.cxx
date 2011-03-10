@@ -1082,7 +1082,7 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
         {
             rtl::OUString aName = iter->GetName();
 
-            OSL_TRACE( iter->GetName().getStr() );
+            OSL_TRACE( "%s", aName.getStr() );
 
             bool bData = iter->IsDataLayout();
 
@@ -1272,7 +1272,7 @@ void ScDPSaveData::Refresh( const uno::Reference<sheet::XDimensionsSupplier>& xS
                     deletedDims.push_back( aName );
                     iter = aDimList.erase(iter);
                     OSL_TRACE( "\n Remove dim: \t" );
-                    OSL_TRACE( aName.getStr() );
+                    OSL_TRACE( "%s", aName.getStr() );
                 }
 
             }
@@ -1313,7 +1313,7 @@ void ScDPSaveDimension::Refresh( const com::sun::star::uno::Reference<
             return;
         if ( pSelectedPage )
         {//check pSelected page
-            OSL_TRACE( *pSelectedPage.getStr() );
+            OSL_TRACE( "%s", ::rtl::OUString(*pSelectedPage).getStr() );
             if ( pCache->GetIdByItemData( nSrcDim, *pSelectedPage ) == -1 )
             {
                 delete pSelectedPage;
@@ -1351,7 +1351,7 @@ void ScDPSaveDimension::Refresh( const com::sun::star::uno::Reference<
                     if( pReferenceValue->ReferenceItemType == DataPilotFieldReferenceItemType::NAMED )
                     {
                         const ::rtl::OUString& sReferenceFieldName = pReferenceValue->ReferenceField;
-                        OSL_TRACE( sReferenceFieldName.getStr() );
+                        OSL_TRACE( "%s", sReferenceFieldName.getStr() );
                         SCCOL nRefDim = pCache->GetDimensionIndex( sReferenceFieldName );
                         bool bValid = true;
                         if ( nRefDim == -1 )
@@ -1359,7 +1359,7 @@ void ScDPSaveDimension::Refresh( const com::sun::star::uno::Reference<
                         else if ( pReferenceValue->ReferenceType != sheet::DataPilotFieldReferenceType::RUNNING_TOTAL )
                         { //running total has not reference item
                             const ::rtl::OUString& sReferenceItemName = pReferenceValue->ReferenceItemName;
-                            OSL_TRACE( sReferenceItemName.getStr() );
+                            OSL_TRACE( "%s", sReferenceItemName.getStr() );
                             if ( pCache->GetIdByItemData( nRefDim, sReferenceItemName ) == -1 )
                                 bValid = false;
                         }

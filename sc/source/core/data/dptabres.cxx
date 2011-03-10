@@ -2883,7 +2883,7 @@ void ScDPResultDimension::LateInitFrom( LateInitParams& rParams/* const vector<S
         ResultMembers* pMembers = pResultData->GetDimResultMembers(nDimSource, pThisDim, pThisLevel);
         bLateInitAllMembers = pMembers->IsHasHideDetailsMembers();
 #ifdef DBG_UTIL
-    OSL_TRACE( aDimensionName.GetBuffer() )
+    OSL_TRACE( "%s", aDimensionName.GetBuffer() );
     if ( pMembers->IsHasHideDetailsMembers() )
         OSL_TRACE( "HasHideDetailsMembers" );
 #endif
