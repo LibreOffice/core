@@ -170,6 +170,7 @@ my_components = \
     updchk.uno \
     utl \
     uui \
+    vbaevents \
     vbaobj \
     vbaevents \
     vcl \
