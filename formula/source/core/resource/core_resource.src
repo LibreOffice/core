@@ -840,19 +840,19 @@ Resource RID_STRLIST_FUNCTION_NAMES
     };
     String SC_OPCODE_COSECANT
     {
-        Text [ en-US ] = "CSC" ;
+        Text  = "CSC" ;
     };
     String SC_OPCODE_SECANT
     {
-        Text [ en-US ] = "SEC" ;
+        Text  = "SEC" ;
     };
     String SC_OPCODE_COSECANT_HYP
     {
-        Text [ en-US ] = "CSCH" ;
+        Text  = "CSCH" ;
     };
     String SC_OPCODE_SECANT_HYP
     {
-        Text [ en-US ] = "SECH" ;
+        Text  = "SECH" ;
     };
     String SC_OPCODE_EXP
     {
