@@ -187,10 +187,10 @@ sub prepare_path_in_nopatchfilehash
         if ( $found ) { last; }
     }
 
+    if ( ! $found ) { installer::exiter::exit_program("ERROR: Could not determine flexible destination path for msp patch creation!", "prepare_path_in_nopatchfilehash"); }
+
     $infoline = "Setting flexible path for msp creation: $flexiblepath\n";
     push( @installer::globals::logfileinfo, $infoline);
-
-    if ( ! $found ) { installer::exiter::exit_program("ERROR: Could not determine flexible destination path for msp patch creation!", "prepare_path_in_nopatchfilehash"); }
 
     foreach my $onedestination ( keys %{$nopatchfiledestinations} )
     {
@@ -230,10 +230,6 @@ sub synchronize_installation_sets
         $infoline = "\tPATCH file: $localfile\n";
         push( @installer::globals::logfileinfo, $infoline);
     }
-
-    my @oldfiles = ();
-    my @newfiles = ();
-    my $pathstring = "";
 
     my $oldpath = $olddatabase;
     if ( $^O =~ /cygwin/i ) { $oldpath =~ s/\\/\//g; }
