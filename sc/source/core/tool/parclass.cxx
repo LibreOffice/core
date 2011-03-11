@@ -38,6 +38,7 @@
 #include "funcdesc.hxx"
 #include <unotools/charclass.hxx>
 #include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <sal/macros.h>
 #include <string.h>
 

@@ -39,6 +39,7 @@
 #include <string.h>
 #include <tools/mempool.hxx>
 #include <tools/debug.hxx>
+#include <osl/diagnose.h>
 
 #include "token.hxx"
 #include "tokenarray.hxx"
