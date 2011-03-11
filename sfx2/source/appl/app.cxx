@@ -285,15 +285,16 @@ SfxApplication* SfxApplication::GetOrCreate()
         SfxApplication *pNew = new SfxApplication;
 
         //TODO/CLEANUP
-        //ist das Mutex-Handling OK?
+        // Is the Mutex-Handling OK?
         static ::osl::Mutex aProtector;
         ::osl::MutexGuard aGuard2( aProtector );
 
         RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mb93783) ::SfxApplication::SetApp" );
         pApp = pNew;
 
-        // at the moment a bug may occur when Initialize_Impl returns FALSE, but this is only temporary because all code that may cause such a
-        // fault will be moved outside the SFX
+        // at the moment a bug may occur when Initialize_Impl returns FALSE,
+        // but this is only temporary because all code that may cause such
+        // a fault will be moved outside the SFX
         pApp->Initialize_Impl();
 
         ::framework::SetImageProducer( GetImage );
@@ -341,7 +342,7 @@ SfxApplication::SfxApplication()
 #else
     if( !InitializeDde() )
     {
-        ByteString aStr( "Kein DDE-Service moeglich. Fehler: " );
+        ByteString aStr( "No DDE-Service possible. Error: " );
         if( GetDdeService() )
             aStr += ByteString::CreateFromInt32(GetDdeService()->GetError());
         else
@@ -384,16 +385,15 @@ SfxApplication::~SfxApplication()
 
 const String& SfxApplication::GetLastDir_Impl() const
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Interne Methode, mit der im SFx das zuletzt mit der Methode
-    <SfxApplication::SetLastDir_Impl()> gesetzte Verzeichnis
-    zurueckgegeben wird.
+    Internal method by which the last set directory with the method
+    <SfxApplication::SetLastDir_Impl()> in SFX is returned.
 
-    Dieses ist i.d.R. das zuletzt durch den SfxFileDialog
-    angesprochene Verzeichnis.
+    This is usually the most recently addressed by the
+    SfxFileDialog directory.
 
-    [Querverweis]
+    [Cross-reference]
     <SfxApplication::SetLastDir_Impl()>
 */
 
@@ -403,11 +403,11 @@ const String& SfxApplication::GetLastDir_Impl() const
 
 const String& SfxApplication::GetLastSaveDirectory() const
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Wie <SfxApplication::GetLastDir_Impl()>, nur extern
+    As <SfxApplication::GetLastDir_Impl()>, only external
 
-    [Querverweis]
+    [Cross-reference]
     <SfxApplication::GetLastDir_Impl()>
 */
 
@@ -419,15 +419,15 @@ const String& SfxApplication::GetLastSaveDirectory() const
 
 void SfxApplication::SetLastDir_Impl
 (
-    const String&   rNewDir     /*  kompletter Verzeichnis-Pfad als String */
+    const String&   rNewDir     /* Complete directory path as a string * /
     )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Interne Methode, mit der ein Verzeichnis-Pfad gesetzt wird, der
-    zuletzt (z.B. durch den SfxFileDialog) angesprochen wurde.
+    Internal Method, by which a directory path is set that was last addressed
+    (eg by the SfxFileDialog).
 
-    [Querverweis]
+    [Cross-reference]
     <SfxApplication::GetLastDir_Impl()>
 */
 

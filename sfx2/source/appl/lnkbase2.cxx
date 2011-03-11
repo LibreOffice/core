@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
 
-
 #include <sfx2/lnkbase.hxx>
 #include <sot/exchange.hxx>
 #include <com/sun/star/uno/Any.hxx>
@@ -131,12 +130,7 @@ public:
     BOOL IsInDTOR() const { return bIsInDTOR; }
 };
 
-
-/************************************************************************
-|*        SvBaseLink::SvBaseLink()
-|*
-|*        Description
-*************************************************************************/
+//--------------------------------------------------------------------------
 
 SvBaseLink::SvBaseLink()
 {
@@ -147,11 +141,7 @@ SvBaseLink::SvBaseLink()
     bWasLastEditOK = FALSE;
 }
 
-/************************************************************************
-|*        SvBaseLink::SvBaseLink()
-|*
-|*        Description
-*************************************************************************/
+//--------------------------------------------------------------------------
 
 SvBaseLink::SvBaseLink( USHORT nUpdateMode, ULONG nContentType )
 {
@@ -167,11 +157,7 @@ SvBaseLink::SvBaseLink( USHORT nUpdateMode, ULONG nContentType )
     pImplData->ClientType.bIntrnlLnk = FALSE;
 }
 
-/************************************************************************
-|*        SvBaseLink::SvBaseLink()
-|*
-|*        Description
-*************************************************************************/
+//--------------------------------------------------------------------------
 
 SvBaseLink::SvBaseLink( const String& rLinkName, USHORT nObjectType, SvLinkSource* pObj )
 {
@@ -208,11 +194,7 @@ SvBaseLink::SvBaseLink( const String& rLinkName, USHORT nObjectType, SvLinkSourc
         xObj = pObj;
 }
 
-/************************************************************************
-|*        SvBaseLink::~SvBaseLink()
-|*
-|*        Description
-*************************************************************************/
+//--------------------------------------------------------------------------
 
 SvBaseLink::~SvBaseLink()
 {
@@ -242,11 +224,7 @@ IMPL_LINK( SvBaseLink, EndEditHdl, String*, _pNewName )
     return 0;
 }
 
-/************************************************************************
-|*        SvBaseLink::SetObjType()
-|*
-|*        Description
-*************************************************************************/
+//--------------------------------------------------------------------------
 
 void SvBaseLink::SetObjType( USHORT nObjTypeP )
 {
@@ -256,33 +234,21 @@ void SvBaseLink::SetObjType( USHORT nObjTypeP )
     nObjType = nObjTypeP;
 }
 
-/************************************************************************
-|*        SvBaseLink::SetName()
-|*
-|*        Description
-*************************************************************************/
+//--------------------------------------------------------------------------
 
 void SvBaseLink::SetName( const String & rNm )
 {
     aLinkName = rNm;
 }
 
-/************************************************************************
-|*        SvBaseLink::GetName()
-|*
-|*        Description
-*************************************************************************/
+//--------------------------------------------------------------------------
 
 String SvBaseLink::GetName() const
 {
     return aLinkName;
 }
 
-/************************************************************************
-|*        SvBaseLink::SetObj()
-|*
-|*        Description
-*************************************************************************/
+//--------------------------------------------------------------------------
 
 void SvBaseLink::SetObj( SvLinkSource * pObj )
 {
@@ -293,11 +259,7 @@ void SvBaseLink::SetObj( SvLinkSource * pObj )
     xObj = pObj;
 }
 
-/************************************************************************
-|*        SvBaseLink::SetLinkSourceName()
-|*
-|*        Description
-*************************************************************************/
+//--------------------------------------------------------------------------
 
 void SvBaseLink::SetLinkSourceName( const String & rLnkNm )
 {
@@ -315,23 +277,14 @@ void SvBaseLink::SetLinkSourceName( const String & rLnkNm )
     ReleaseRef(); // should be superfluous
 }
 
-/************************************************************************
-|*        SvBaseLink::GetLinkSourceName()
-|*
-|*        Description
-*************************************************************************/
+//--------------------------------------------------------------------------
 
 String  SvBaseLink::GetLinkSourceName() const
 {
     return aLinkName;
 }
 
-
-/************************************************************************
-|*        SvBaseLink::SetUpdateMode()
-|*
-|*        Description
-*************************************************************************/
+//--------------------------------------------------------------------------
 
 void SvBaseLink::SetUpdateMode( USHORT nMode )
 {

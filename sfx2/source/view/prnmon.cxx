@@ -213,7 +213,7 @@ SfxPrintProgress_Impl::~SfxPrintProgress_Impl()
 
 BOOL SfxPrintProgress_Impl::SetPage( USHORT nPage, const String &rPage )
 {
-    // wurde der Druckauftrag abgebrochen?
+    // Was the print job canceled?
     if ( bCancel || !pMonitor )
         return FALSE;
 
@@ -291,10 +291,10 @@ SfxPrintProgress::SfxPrintProgress( SfxViewShell* pViewSh, bool bShow )
 
 SfxPrintProgress::~SfxPrintProgress()
 {
-    // k"onnte auch schon weg sein (in EndPrintNotify)
+    // Can already have been deleted (in EndPrintNotify)
     DELETEZ(pImp->pMonitor);
 
-    // ggf. Callbacks entfermen
+    // If possible remove Callbacks
     if ( pImp->bCallbacks )
     {
         // pImp->pPrinter->SetEndPrintHdl( Link() );
@@ -302,11 +302,11 @@ SfxPrintProgress::~SfxPrintProgress()
         pImp->bCallbacks = FALSE;
     }
 
-    // ggf. vorherigen Drucker wieder einsetzen
+    // If possible use the previously used printer
     if ( pImp->pOldPrinter )
         pImp->pViewShell->SetPrinter( pImp->pOldPrinter, SFX_PRINTER_PRINTER );
     else
-        // ggf. vorherigen Print-To-File-Status zuruecksetzen
+        // If possible reset Print-To-File-Status
         pImp->pViewShell->GetPrinter()->EnablePrintFile( pImp->bOldEnablePrintFile );
 
     // EndPrint-Notification an Frame
@@ -395,29 +395,16 @@ IMPL_LINK( SfxPrintProgress, EndPrintNotify, void *, EMPTYARG )
     pViewShell->Invalidate( SID_PRINTDOCDIRECT );
     pViewShell->Invalidate( SID_SETUPPRINTER );
 
-    // . . . falls der Printer im System umgestellt wurde, hier Aenderung
-    // nachziehen.
-    //! if( pMDI->IsPrinterChanged() ) pMDI->Changed( 0L );
-
-    // Callbacks rausnehmen
-    // pImp->pPrinter->SetEndPrintHdl( Link() );
+    // Check out Callbacks
     pImp->pPrinter->SetErrorHdl( Link() );
     pImp->bCallbacks = FALSE;
 
-    // ggf. alten Printer wieder einsetzen
+    // If possible insert the old Printer again.
     if ( pImp->pOldPrinter )
     {
-        // Fix #59613#: niemals den aktuellen Printer synchron abschiessen !
-        // Da sowieso immer bDeleteOnEndPrint gesetzt wird, wird der der Drucker im
-        // dtor vom Printprogress ( dann aber asynchron !! ) zur"uckgesetzt.
-/*
-        pImp->pViewShell->SetPrinter( pImp->pOldPrinter, SFX_PRINTER_PRINTER );
-        pImp->pOldPrinter = 0;
-        pImp->pPrinter = 0;
- */
     }
     else
-        // ggf. vorherigen Print-To-File-Status zuruecksetzen
+        // If possible reset previous Print-To-File-Status.
         pViewShell->GetPrinter()->EnablePrintFile( pImp->bOldEnablePrintFile );
 
     // it is possible that after printing the document or view is deleted (because the VieShell got the ownership)
@@ -444,11 +431,11 @@ IMPL_LINK( SfxPrintProgress, EndPrintNotify, void *, EMPTYARG )
 
 void SfxPrintProgress::DeleteOnEndPrint()
 {
-    UnLock(); // jetzt schon, wg. Drucken im Thread
+    UnLock(); // Already now because printer in Thread.
 #ifndef WNT
-    // da das Drucken im 'Thread' unter Windows zu undefiniert ist bleibt der
-    // Print-Monitor dort stehen, auf den anderen Plattformen kann man dann
-    // weiterarbeiten, also kommt das Teil weg
+    // As the print in the 'Thread' is undefined on Windows, the Print-Monitor
+    // will get stuck here, on the other platforms the work can continue,
+    // thus this part is removed.
     DELETEZ( pImp->pMonitor );
 #endif
 

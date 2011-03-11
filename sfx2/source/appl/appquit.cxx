@@ -75,10 +75,10 @@ BOOL SfxApplication::QueryExit_Impl()
 {
     BOOL bQuit = TRUE;
 
-    // will trotzdem noch jemand, den man nicht abschiessen kann, die App haben?
+    // Does some instance, that can not be shut down, still require the app?
     if ( !bQuit )
     {
-        // nicht wirklich beenden, nur minimieren
+        // Not really exit, only minimize
         InfoBox aInfoBox( NULL, SfxResId(MSG_CANT_QUIT) );
         aInfoBox.Execute();
         DBG_TRACE( "QueryExit => FALSE (in use)" );
@@ -97,14 +97,14 @@ void SfxApplication::Deinitialize()
 
     StarBASIC::Stop();
 
-    // ggf. BASIC speichern
+    // Save BASIC if possible
     BasicManager* pBasMgr = BasicManagerRepository::getApplicationBasicManager( false );
     if ( pBasMgr && pBasMgr->IsModified() )
         SaveBasicManager();
 
     SaveBasicAndDialogContainer();
 
-    pAppData_Impl->bDowning = TRUE; // wegen Timer aus DecAliveCount und QueryExit
+    pAppData_Impl->bDowning = TRUE; // due to Timer from DecAliveCount and QueryExit
 
     DELETEZ( pAppData_Impl->pTemplates );
 
@@ -125,8 +125,8 @@ void SfxApplication::Deinitialize()
     // call derived application-exit
     Exit();
 
-    // Controller u."a. freigeben
-    // dabei sollten auch restliche Komponenten ( Beamer! ) verschwinden
+    // Release Controller and others
+    // then the remaining components should alse disapear ( Beamer! )
     BasicManagerRepository::resetApplicationBasicManager();
     pAppData_Impl->pBasicManager->reset( NULL );
         // this will also delete pBasMgr
@@ -140,7 +140,7 @@ void SfxApplication::Deinitialize()
     SfxResId::DeleteResMgr();
     DELETEZ(pAppData_Impl->pOfaResMgr);
 
-    // ab hier d"urfen keine SvObjects mehr existieren
+    // from here no SvObjects have to exists
     DELETEZ(pAppData_Impl->pMatcher);
 
     delete pAppData_Impl->pLabelResMgr;

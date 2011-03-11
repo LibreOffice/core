@@ -357,10 +357,10 @@ void SfxPrinterController::jobFinished( com::sun::star::view::PrintableState nSt
 
 void DisableRanges( PrintDialog& rDlg, SfxPrinter* pPrinter )
 
-/*      [Beschreibung]
+/*  [Description]
 
-    Mit dieser Funktion werden die nicht verf"ugbaren Ranges
-    vom Printer zum PrintDialog geforwarded.
+    This function forwards the non-available ranges from the printer
+    to the print dialog.
 */
 
 {
@@ -381,13 +381,12 @@ void DisableRanges( PrintDialog& rDlg, SfxPrinter* pPrinter )
 
 class SfxDialogExecutor_Impl
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Eine Instanz dieser Klasse wird f"ur die Laufzeit des Printer-Dialogs
-    erzeugt, um im dessen Click-Handler f"ur die Zus"atze den per
-    virtueller Methode von der abgeleiteten SfxViewShell erzeugten
-    Print-Options-Dialog zu erzeugen und die dort eingestellten Optionen
-    als SfxItemSet zu zwischenzuspeichern.
+    An instance of this class is created for the life span of the
+    printer dialogue, to create in its click handler for the additions by the
+    virtual method of the derived SfxViewShell generated print options dialogue
+    and to cache the options set there as SfxItemSet.
 */
 
 {
@@ -441,7 +440,7 @@ SfxDialogExecutor_Impl::SfxDialogExecutor_Impl( SfxViewShell* pViewSh, PrinterSe
 
 IMPL_LINK( SfxDialogExecutor_Impl, Execute, void *, EMPTYARG )
 {
-    // Options lokal merken
+    // Options noted locally
     if ( !_pOptions )
     {
         DBG_ASSERT( _pPrintParent || _pSetupParent, "no dialog parent" );
@@ -462,7 +461,7 @@ IMPL_LINK( SfxDialogExecutor_Impl, Execute, void *, EMPTYARG )
         }
     }
 
-    // Dialog ausf"uhren
+    // Create Dialog
     SfxPrintOptionsDialog* pDlg = new SfxPrintOptionsDialog( _pPrintParent ? static_cast<Window*>(_pPrintParent)
                                                                            : static_cast<Window*>(_pSetupParent),
                                                              _pViewSh, _pOptions );
@@ -492,15 +491,16 @@ IMPL_LINK( SfxDialogExecutor_Impl, Execute, void *, EMPTYARG )
 
 SfxPrinter* SfxViewShell::SetPrinter_Impl( SfxPrinter *pNewPrinter )
 
-/*  Interne Methode zum Setzen der Unterschiede von 'pNewPrinter' zum
-    aktuellen Printer. pNewPrinter wird entweder "ubernommen oder gel"oscht.
+
+/* Internal method for setting the differences between 'pNewPrinter' to the
+   current printer. pNewPrinter is either taken over or deleted.
 */
 
 {
-    // aktuellen Printer holen
+    // get current Printer
     SfxPrinter *pDocPrinter = GetPrinter();
 
-    // Printer-Options auswerten
+    // Evaluate Printer Options
     bool bOriToDoc = false;
     bool bSizeToDoc = false;
     if ( &pDocPrinter->GetOptions() )
@@ -512,15 +512,15 @@ SfxPrinter* SfxViewShell::SetPrinter_Impl( SfxPrinter *pNewPrinter )
         bSizeToDoc = pFlagItem ? (pFlagItem->GetValue() & SFX_PRINTER_CHG_SIZE) : FALSE;
     }
 
-    // vorheriges Format und Size feststellen
+    // Determine the previous format and size
     Orientation eOldOri = pDocPrinter->GetOrientation();
     Size aOldPgSz = pDocPrinter->GetPaperSizePixel();
 
-    // neues Format und Size feststellen
+    // Determine the new format and size
     Orientation eNewOri = pNewPrinter->GetOrientation();
     Size aNewPgSz = pNewPrinter->GetPaperSizePixel();
 
-    // "Anderungen am Seitenformat feststellen
+    // Determine the changes in page format
     BOOL bOriChg = (eOldOri != eNewOri) && bOriToDoc;
     BOOL bPgSzChg = ( aOldPgSz.Height() !=
             ( bOriChg ? aNewPgSz.Width() : aNewPgSz.Height() ) ||
@@ -528,7 +528,7 @@ SfxPrinter* SfxViewShell::SetPrinter_Impl( SfxPrinter *pNewPrinter )
             ( bOriChg ? aNewPgSz.Height() : aNewPgSz.Width() ) ) &&
             bSizeToDoc;
 
-    // Message und Flags f"ur Seitenformat-"Anderung zusammenstellen
+    // Message and Flags for page format, summaries changes
     String aMsg;
     USHORT nNewOpt=0;
     if( bOriChg && bPgSzChg )
@@ -547,49 +547,49 @@ SfxPrinter* SfxViewShell::SetPrinter_Impl( SfxPrinter *pNewPrinter )
         nNewOpt = SFX_PRINTER_CHG_SIZE;
     }
 
-    // in dieser Variable sammeln, was sich so ge"aendert hat
+    // Summaries in this variable what has been changed.
     USHORT nChangedFlags = 0;
 
-    // ggf. Nachfrage, ob Seitenformat vom Drucker "ubernommen werden soll
+    // Ask if possible, if page format should be taken over from printer.
     if ( ( bOriChg  || bPgSzChg ) &&
         RET_YES == QueryBox(0, WB_YES_NO | WB_DEF_OK, aMsg).Execute() )
-    // Flags mit "Anderungen f"ur <SetPrinter(SfxPrinter*)> mitpflegen
+    // Flags wich changes for  <SetPrinter(SfxPrinter*)> are maintained
     nChangedFlags |= nNewOpt;
 
-    // fuer den MAC sein "temporary of class String" im naechsten if()
+    // For the MAC to have its "temporary of class String" in next if()
     String aTempPrtName = pNewPrinter->GetName();
     String aDocPrtName = pDocPrinter->GetName();
 
-    // Wurde der Drucker gewechselt oder von Default auf Specific
-    // oder umgekehrt geaendert?
+    // Was the printer selection changed from Default to Specific
+    // or the other way around?
     if ( (aTempPrtName != aDocPrtName) || (pDocPrinter->IsDefPrinter() != pNewPrinter->IsDefPrinter()) )
     {
-        // neuen Printer "ubernehmen
+        // Get the new printer
         // pNewPrinter->SetOrigJobSetup( pNewPrinter->GetJobSetup() );
         nChangedFlags |= SFX_PRINTER_PRINTER|SFX_PRINTER_JOBSETUP;
         pDocPrinter = pNewPrinter;
     }
     else
     {
-        // Extra-Optionen vergleichen
+        // Compare extra options
         if ( ! (pNewPrinter->GetOptions() == pDocPrinter->GetOptions()) )
         {
-            // Options haben sich geaendert
+            // Option have changed
             pDocPrinter->SetOptions( pNewPrinter->GetOptions() );
             nChangedFlags |= SFX_PRINTER_OPTIONS;
         }
 
-        // JobSetups vergleichen
+        // Compare JobSetups
         JobSetup aNewJobSetup = pNewPrinter->GetJobSetup();
         JobSetup aOldJobSetup = pDocPrinter->GetJobSetup();
         if ( aNewJobSetup != aOldJobSetup )
         {
-            // JobSetup hat sich geaendert (=> App mu\s neu formatieren)
+            // JobSetup has chaged => App must be formatted again)
             // pDocPrinter->SetOrigJobSetup( aNewJobSetup );
             nChangedFlags |= SFX_PRINTER_JOBSETUP;
         }
 
-        // alten, ver"anderten Printer behalten
+        // Keep old changed Printer.
         pDocPrinter->SetPrinterProps( pNewPrinter );
         delete pNewPrinter;
     }
@@ -601,10 +601,9 @@ SfxPrinter* SfxViewShell::SetPrinter_Impl( SfxPrinter *pNewPrinter )
 }
 
 //-------------------------------------------------------------------------
-// Unter WIN32 tritt leider das Problem auf, dass nichts gedruckt
-// wird, wenn SID_PRINTDOCDIRECT auflaueft; bisher bekannte,
-// einzige Abhilfe ist in diesem Fall das Abschalten der Optimierungen
-// (KA 17.12.95)
+// Sadly enough the problem arises with WIN32 that nothing is printed when
+// SID_PRINTDOCDIRECT auflaueft. At the moment the only known solution in this
+// case is to turn off the optimazation.
 #ifdef _MSC_VER
 #pragma optimize ( "", off )
 #endif
@@ -673,7 +672,8 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
     //FIXME: how to transport "bPrintOnHelp"?
 
     // no help button in dialogs if called from the help window
-    // (pressing help button would exchange the current page inside the help document that is going to be printed!)
+    // (pressing help button would exchange the current page inside the help
+    // document that is going to be printed!)
     String aHelpFilterName( DEFINE_CONST_UNICODE("writer_web_HTML_help") );
     SfxMedium* pMedium = GetViewFrame()->GetObjectShell()->GetMedium();
     const SfxFilter* pFilter = pMedium ? pMedium->GetFilter() : NULL;
@@ -890,7 +890,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
     }
 }
 
-// Optimierungen wieder einschalten
+// Turn on optimazation again.
 #ifdef _MSC_VER
 #pragma optimize ( "", on )
 #endif
@@ -899,11 +899,11 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
 
 PrintDialog* SfxViewShell::CreatePrintDialog( Window* /*pParent*/ )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese Methode kann "uberladen werden, um einen speziellen PrintDialog
-    zu erzeugen. Dies ist z.B. notwendig wenn spezielle <StarView> Features
-    wie drucken von Seitenbereichen.
+    This Method can be overloaded to create a tailored PrintDialog.
+    This is for example necessary when using special <StarView> Features
+    as printing of page breaks.
 */
 
 {

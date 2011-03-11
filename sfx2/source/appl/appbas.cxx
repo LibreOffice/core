@@ -148,7 +148,7 @@ SbxVariable* MakeVariable( StarBASIC *pBas, SbxObject *pObject,
 BasicManager* SfxApplication::GetBasicManager()
 {
     if ( pAppData_Impl->nBasicCallLevel == 0 )
-        // sicherheitshalber
+        // precaution
         EnterBasicCall();
 
     return BasicManagerRepository::getApplicationBasicManager( true );
@@ -194,7 +194,7 @@ void SfxApplication::EnterBasicCall()
     {
         DBG_TRACE( "SfxShellObject: BASIC-on-demand" );
 
-        // zuerst das BASIC laden
+        // First load the BASIC
         GetBasic();
     }
 }
@@ -336,8 +336,8 @@ void SfxApplication::MacroExec_Impl( SfxRequest& rReq )
     DBG_MEMTEST();
     if ( SfxMacroConfig::IsMacroSlot( rReq.GetSlot() ) )
     {
-        // SlotId referenzieren, damit nicht im Execute der Slot abgeschossen
-        // werden kann
+      // Create reference to SlotId, so that the excecute in the slot
+      // is not cancelled.
         GetMacroConfig()->RegisterSlotId(rReq.GetSlot());
         SFX_REQUEST_ARG(rReq, pArgs, SfxStringItem,
                         rReq.GetSlot(), sal_False);
@@ -362,29 +362,29 @@ void SfxApplication::PlayMacro_Impl( SfxRequest &rReq, StarBASIC *pBasic )
     EnterBasicCall();
     sal_Bool bOK = sal_False;
 
-    // Makro und asynch-Flag
+    // Makro and asynch-Flag
     SFX_REQUEST_ARG(rReq,pMacro,SfxStringItem,SID_STATEMENT,sal_False);
     SFX_REQUEST_ARG(rReq,pAsynch,SfxBoolItem,SID_ASYNCHRON,sal_False);
 
     if ( pAsynch && pAsynch->GetValue() )
     {
-        // asynchron ausf"uhren
+        // run asynchronously
         GetDispatcher_Impl()->Execute( SID_PLAYMACRO, SFX_CALLMODE_ASYNCHRON, pMacro, 0L );
         rReq.Done();
     }
     else if ( pMacro )
     {
-        // Statement aufbereiten
+        // Process statement
         DBG_ASSERT( pBasic, "no BASIC found" ) ;
         String aStatement( '[' );
         aStatement += pMacro->GetValue();
         aStatement += ']';
 
-        // P"aventiv den Request abschlie\sen, da er ggf. zerst"ort wird
+        // Finish the request preventatively because it maybe destroyed
         rReq.Done();
         rReq.ReleaseArgs();
 
-        // Statement ausf"uhren
+        // Process statement
         pBasic->Execute( aStatement );
         bOK = 0 == SbxBase::GetError();
         SbxBase::ResetError();

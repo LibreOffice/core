@@ -267,7 +267,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 // if terminate() was successful, SfxApplication is now dead!
                 pAppData_Impl->bInQuit = FALSE;
 
-            // Returnwert setzten, ggf. terminieren
+            // Set return value, terminate if possible
             rReq.SetReturnValue( SfxBoolItem( rReq.GetSlot(), bTerminated ) );
             return;
         }
@@ -440,13 +440,12 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         case SID_HELPTIPS:
         {
-            // Parameter aus werten
+            // Evaluate Parameter
             SFX_REQUEST_ARG(rReq, pOnItem, SfxBoolItem, SID_HELPTIPS, FALSE);
             bool bOn = pOnItem
                             ? ((SfxBoolItem*)pOnItem)->GetValue()
                             : !Help::IsQuickHelpEnabled();
 
-            // ausf"uhren
             if ( bOn )
                 Help::EnableQuickHelp();
             else
@@ -455,7 +454,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             Invalidate(SID_HELPTIPS);
             bDone = true;
 
-            // ggf. recorden
+            // Record if possible
             if ( !rReq.IsAPI() )
                 rReq.AppendItem( SfxBoolItem( SID_HELPTIPS, bOn) );
             break;
@@ -468,13 +467,12 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         }
         case SID_HELPBALLOONS:
         {
-            // Parameter auswerten
+            // Evaluate Parameter
             SFX_REQUEST_ARG(rReq, pOnItem, SfxBoolItem, SID_HELPBALLOONS, FALSE);
             bool bOn = pOnItem
                             ? ((SfxBoolItem*)pOnItem)->GetValue()
                             : !Help::IsBalloonHelpEnabled();
 
-            // ausf"uhren
             if ( bOn )
                 Help::EnableBalloonHelp();
             else
@@ -483,7 +481,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             Invalidate(SID_HELPBALLOONS);
             bDone = true;
 
-            // ggf. recorden
+            // Record if possible
             if ( !rReq.IsAPI() )
                 rReq.AppendItem( SfxBoolItem( SID_HELPBALLOONS, bOn) );
             break;
@@ -676,7 +674,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                     rtl::OUStringBuffer aBuf( aToolbarResName );
                     aBuf.append( pToolbarName->GetValue() );
 
-                    // Parameter auswerten
+                    // Evaluate Parameter
                     rtl::OUString aToolbarName( aBuf.makeStringAndClear() );
                     BOOL bShow( !xLayoutManager->isElementVisible( aToolbarName ));
 
@@ -710,7 +708,7 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
 
     LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
     const USHORT *pRanges = rSet.GetRanges();
-    DBG_ASSERT(pRanges && *pRanges, "Set ohne Bereich");
+    DBG_ASSERT(pRanges && *pRanges, "Set without range");
     while ( *pRanges )
     {
         for(USHORT nWhich = *pRanges++; nWhich <= *pRanges; ++nWhich)
@@ -1413,7 +1411,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
 void SfxApplication::OfaState_Impl(SfxItemSet &rSet)
 {
     const USHORT *pRanges = rSet.GetRanges();
-    DBG_ASSERT(pRanges && *pRanges, "Set ohne Bereich");
+    DBG_ASSERT(pRanges && *pRanges, "Set without Region");
     while ( *pRanges )
     {
         for(USHORT nWhich = *pRanges++; nWhich <= *pRanges; ++nWhich)

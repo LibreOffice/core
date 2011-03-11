@@ -256,8 +256,8 @@ bool SfxApplication::Initialize_Impl()
 
 
 #ifdef DBG_UTIL
-    // Der SimplerErrorHandler dient Debugzwecken. In der Product werden
-    // nichtgehandelte Fehler durch Errorcode 1 an SFX gegeben.
+    // The SimplerErrorHandler is for debugging. In the Product errors
+    // not processed are given to SFX as Errorcode 1.
     new SimpleErrorHandler;
 #endif
     new SfxErrorHandler(RID_ERRHDL, ERRCODE_AREA_TOOLS, ERRCODE_AREA_LIB1);

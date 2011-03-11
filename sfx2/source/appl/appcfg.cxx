@@ -515,7 +515,7 @@ BOOL SfxApplication::IsSecureURL( const INetURLObject& rURL, const String* pRefe
     return SvtSecurityOptions().IsSecureURL( rURL.GetMainURL( INetURLObject::NO_DECODE ), *pReferer );
 }
 //--------------------------------------------------------------------
-// TODO/CLEANUP: wieso zwei SetOptions Methoden?
+// TODO/CLEANUP: Why two SetOptions Methods?
 void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
 {
     const SfxPoolItem *pItem = 0;
@@ -603,14 +603,14 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
         aSaveOptions.SetDocInfoSave(((const SfxBoolItem *)pItem)->GetValue());
     }
 
-    // offende Dokumente merken
+    // Mark open Documents
     if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_WORKINGSET), TRUE, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
         aSaveOptions.SetSaveWorkingSet(((const SfxBoolItem *)pItem)->GetValue());
     }
 
-    // Fenster-Einstellung speichern
+    // Save window settings
     if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_SAVEDOCVIEW), TRUE, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
@@ -695,16 +695,16 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
         USHORT nUndoCount = ((const SfxUInt16Item*)pItem)->GetValue();
         aUndoOptions.SetUndoCount( nUndoCount );
 
-        // um alle Undo-Manager zu erwischen: "uber alle Frames iterieren
+        // To catch all Undo-Managers: Iterate over all Frames
         for ( SfxViewFrame *pFrame = SfxViewFrame::GetFirst();
               pFrame;
               pFrame = SfxViewFrame::GetNext(*pFrame) )
         {
-            // den Dispatcher des Frames rausholen
+            // Get the Dispatcher of the Frames
             SfxDispatcher *pDispat = pFrame->GetDispatcher();
             pDispat->Flush();
 
-            // "uber alle SfxShells auf dem Stack des Dispatchers iterieren
+            // Iterate over all SfxShells on the Dispatchers Stack
             USHORT nIdx = 0;
             for ( SfxShell *pSh = pDispat->GetShell(nIdx);
                   pSh;
@@ -812,12 +812,12 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
 #endif
     }
 
-    // INet Session neu aufsetzen
+    // Set up INet Session again
     if ( bResetSession )
     {
     }
 
-    // geaenderte Daten speichern
+    // Store changed data
     aInetOptions.flush();
 }
 
@@ -826,7 +826,7 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
 {
     SvtPathOptions aPathOptions;
 
-    // Daten werden in DocInfo und IniManager gespeichert
+    // Data is saved in DocInfo and IniManager
     const SfxPoolItem *pItem = 0;
     SfxItemPool &rPool = GetPool();
 
@@ -925,7 +925,7 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
 
 //--------------------------------------------------------------------
 
-// alle Dokumente speichern
+// Save all Documents
 
 BOOL SfxApplication::SaveAll_Impl(BOOL bPrompt, BOOL bAutoSave)
 {
@@ -996,7 +996,6 @@ SfxEventConfiguration* SfxApplication::GetEventConfig() const
 //--------------------------------------------------------------------
 void SfxApplication::NotifyEvent( const SfxEventHint& rEventHint, bool bSynchron )
 {
-
     SfxObjectShell *pDoc = rEventHint.GetObjShell();
     if ( pDoc && ( pDoc->IsPreview() || !pDoc->Get_Impl()->bInitialized ) )
         return;

@@ -83,8 +83,7 @@ public:
     virtual BOOL    Connect( sfx2::SvBaseLink* );
     virtual void    Edit( Window *, sfx2::SvBaseLink *, const Link& rEndEditHdl );
 
-    // erfrage ob das man direkt auf die Daten zugreifen kann oder ob das
-    // erst angestossen werden muss
+    // Ask whether you can access data directly or whether it has to be triggered
     virtual BOOL IsPending() const;
     virtual BOOL IsDataComplete() const;
 

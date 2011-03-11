@@ -692,15 +692,15 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
         {
             SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, nId, FALSE);
             BOOL bActive = pShowItem ? pShowItem->GetValue() : !pImp->bPlugInsActive;
-            // ggf. recorden
+            // Record if possible
             if ( !rReq.IsAPI() )
                 rReq.AppendItem( SfxBoolItem( nId, bActive ) );
 
-            // Jetzt schon DONE aufrufen, da die Argumente evtl. einen Pool
-            // benutzen, der demn"achst weg ist
+            // Call DONE here already since there might be arguments that
+            // are using Pool, which can be gone.
             rReq.Done(TRUE);
 
-            // ausfuehren
+            // Execute
             if ( !pShowItem || bActive != pImp->bPlugInsActive )
             {
                 SfxFrame* pTopFrame = &GetFrame()->GetTopFrame();
@@ -769,7 +769,7 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
                 break;
             }
 
-            // Printer-Funktionen
+            // Printer functions
             case SID_PRINTDOC:
             case SID_PRINTDOCDIRECT:
             case SID_SETUPPRINTER:
@@ -815,7 +815,7 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
                 break;
             }
 
-            // Mail-Funktionen
+            // Mail functions
             case SID_MAIL_SENDDOCASPDF:
             case SID_MAIL_SENDDOC:
             case SID_MAIL_SENDDOCASFORMAT:
@@ -871,12 +871,11 @@ void SfxViewShell::SetZoomFactor( const Fraction &rZoomX,
 //--------------------------------------------------------------------
 ErrCode SfxViewShell::DoVerb(long /*nVerb*/)
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Virtuelle Methode, um am selektierten Objekt ein Verb auszuf"uhren.
-    Da dieses Objekt nur den abgeleiteten Klassen bekannt ist, muss DoVerb
-    dort "uberschrieben werden.
-
+    Virtual Method used to perform a Verb on a selected Object.
+    Since this Object is just known by the derived classes, DoVerb
+    must be overloaded.
 */
 
 {
@@ -1026,8 +1025,8 @@ void SfxViewShell::Deactivate(BOOL /*bMDI*/)
 
 void SfxViewShell::AdjustPosSizePixel
 (
-    const Point&    /*rToolOffset*/,// linke obere Ecke der Tools im Frame-Window
-    const Size&     /*rSize*/       // gesamte zur Verf"ugung stehende Gr"o\se
+    const Point&    /*rToolOffset*/,// Upper left corner Tools in Frame-Window
+    const Size&     /*rSize*/       // All available sizes.
 )
 
 {
@@ -1038,20 +1037,19 @@ void SfxViewShell::AdjustPosSizePixel
 
 void SfxViewShell::Move()
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese virtuelle Methode wird gerufen, wenn das Fenster, in dem die
-    SfxViewShell dargestellt wird eine StarView-Move() Nachricht erh"alt.
+    This virtual Method is called when the window displayed in the
+    SfxViewShell gets a StarView-Move() notification.
 
-    Die Basisimplementierung braucht nicht gerufen zu werden.
+    This base implementation does not have to be called.     .
 
+    [Note]
 
-    [Anmerkung]
+    This Method can be used to cancel a selection, in order to catch the
+    mouse movement which is due to moving a window.
 
-    Diese Methode kann dazu verwendet werden, eine Selektion abzubrechen,
-    um durch das Moven des Fensters erzeugte Maus-Bewegungen anzufangen.
-
-    Zur Zeit funktioniert die Benachrichtigung nicht In-Place.
+    For now the notification does not work In-Place.
 */
 
 {
@@ -1061,48 +1059,45 @@ void SfxViewShell::Move()
 
 void SfxViewShell::OuterResizePixel
 (
-    const Point&    /*rToolOffset*/,// linke obere Ecke der Tools im Frame-Window
-    const Size&     /*rSize*/       // gesamte zur Verf"ugung stehende Gr"o\se
+    const Point&    /*rToolOffset*/,// Upper left corner Tools in Frame-Window
+    const Size&     /*rSize*/       // All available sizes.
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese Methode muss ueberladen werden, um auf "Anderungen der Groesse
-    der View zu reagieren. Dabei definieren wir die View als das Edit-Window
-    zuz"uglich der um das Edit-Window angeordnenten Tools (z.B. Lineale).
+    This Method has to be overloaded to be able to react to the size-change of
+    the View. Thus the View is defined as the Edit window and also the
+    attached Tools are defined (for example the ruler).
 
-    Das Edit-Window darf weder in Gr"o\se noch Position ver"andert werden.
+    The Edit window must not be changed either in size or position.
 
-    Die Vis-Area der SfxObjectShell, dessen Skalierung und Position
-    d"urfen hier ver"andert werden. Der Hauptanwendungsfall ist dabei,
-    das Ver"andern der Gr"o\se der Vis-Area.
+    The Vis-Area of SfxObjectShell, its scale and position can be changed
+    here. The mainuse is to change the size of the Vis-Area.
 
-    "Andert sich durch die neue Berechnung der Border, so mu\s dieser
-    mit <SfxViewShell::SetBorderPixel(const SvBorder&)> gesetzt werden.
-    Erst nach Aufruf von 'SetBorderPixel' ist das Positionieren von
-    Tools erlaubt.
+    If the Border is changed due to the new calculation then this has to be set
+    by <SfxViewShell::SetBorderPixel(const SvBorder&)>. The Postioning of Tools
+    is only allowed after the calling of 'SetBorderPixel'.
 
-
-    [Beispiel]
+    [Example]
 
     void AppViewSh::OuterViewResizePixel( const Point &rOfs, const Size &rSz )
-    {
-        // Tool-Positionen und Gr"o\sen von au\sen berechnen, NICHT setzen!
-        // (wegen folgender Border-Berechnung)
+
+{
+        // Calculate Tool position and size externally, do not set!
+        // (due to the following Border calculation)
         Point aHLinPos...; Size aHLinSz...;
         ...
 
-        // Border f"ur Tools passend zu rSize berechnen und setzen
+        // Calculate and Set a Border of Tools which matches rSize.
         SvBorder aBorder...
-        SetBorderPixel( aBorder ); // ab jetzt sind Positionierungen erlaubt
+        SetBorderPixel( aBorder ); // Allow Positioning from here on.
 
-        // Tools anordnen
+        // Arrange Tools
         pHLin->SetPosSizePixel( aHLinPos, aHLinSz );
         ...
     }
 
-
-    [Querverweise]
+    [Cross-reference]
 
     <SfxViewShell::InnerResizePixel(const Point&,const Size& rSize)>
 */
@@ -1116,45 +1111,44 @@ void SfxViewShell::OuterResizePixel
 
 void SfxViewShell::InnerResizePixel
 (
-    const Point&    /*rToolOffset*/,// linke obere Ecke der Tools im Frame-Window
-    const Size&     /*rSize*/       // dem Edit-Win zur Verf"ugung stehende Gr"o\se
+    const Point&    /*rToolOffset*/,// Upper left corner Tools in Frame-Window
+    const Size&     /*rSize*/       // All available sizes.
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese Methode muss ueberladen werden, um auf "Anderungen der Groesse
-    des Edit-Windows zu reagieren.
+    This Method has to be overloaded to be able to react to the size-change of
+    the Edit window.
 
-    Das Edit-Window darf weder in Gr"o\se noch Position ver"andert werden.
-    Weder die Vis-Area der SfxObjectShell noch dessen Skalierung oder
-    Position d"urfen ver"andert werden.
+    The Edit window must not be changed either in size or position.
+    Neither the Vis-Area of SfxObjectShell nor its scale or position are
+    allowed to be changed
 
-    "Andert sich durch die neue Berechnung der Border, so mu\s dieser
-    mit <SfxViewShell::SetBorderPixel(const SvBorder&)> gesetzt werden.
-    Erst nach Aufruf von 'SetBorderPixel' ist das Positionieren von
-    Tools erlaubt.
+    If the Border is changed due to the new calculation then is has to be set
+    by <SfxViewShell::SetBorderPixel(const SvBorder&)>.
+    The Postioning of Tools is only allowed after the calling of
+    'SetBorderPixel'.
 
 
-    [Beispiel]
+    [Note]
 
     void AppViewSh::InnerViewResizePixel( const Point &rOfs, const Size &rSz )
     {
-        // Tool-Positionen und Gr"o\sen von innen berechnen, NICHT setzen!
-        // (wegen folgender Border-Berechnung)
+        // Calculate Tool position and size internally, do not set!
+        // (due to the following Border calculation)
         Point aHLinPos...; Size aHLinSz...;
         ...
 
-        // Border f"ur Tools passend zu rSz berechnen und setzen
+        // Calculate and Set a Border of Tools which matches rSize.
         SvBorder aBorder...
-        SetBorderPixel( aBorder ); // ab jetzt sind Positionierungen erlaubt
+        SetBorderPixel( aBorder ); // Allow Positioning from here on.
 
-        // Tools anordnen
+        // Arrange Tools
         pHLin->SetPosSizePixel( aHLinPos, aHLinSz );
         ...
     }
 
-
-    [Querverweise]
+    [Cross-reference]
 
     <SfxViewShell::OuterResizePixel(const Point&,const Size& rSize)>
 */
@@ -1207,29 +1201,28 @@ const SvBorder& SfxViewShell::GetBorderPixel() const
 
 void SfxViewShell::SetWindow
 (
-    Window*     pViewPort   // Pointer auf das Datenfenster bzw. 0 im Destruktor
+    Window*     pViewPort   // For example Null pointer in the Destructor.
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Mit dieser Methode wird der SfxViewShell das Datenfenster mitgeteilt.
-    Dieses wird f"ur den In-Place-Container und f"ur das korrekte
-    Wiederherstellen des Focus ben"otigt.
+    With this method the SfxViewShell is set in the data window. This is
+    needed for the in-place container and for restoring the proper focus.
 
-    Selbst In-Place-aktiv ist das Umsetzen des ViewPort-Windows verboten.
+    Even in-place-active the conversion of the ViewPort Windows is forbidden.
 */
 
 {
     if( pWindow == pViewPort )
         return;
 
-    // ggf. vorhandene IP-Clients disconnecten
+    // Disconnect existing IP-Clients if possible
     DisconnectAllClients();
 
     //TODO: should we have a "ReconnectAllClients" method?
     DiscardClients_Impl();
 
-    // View-Port austauschen
+    // Switch View-Port
     BOOL bHadFocus = pWindow ? pWindow->HasChildPathFocus( TRUE ) : FALSE;
     pWindow = pViewPort;
 
@@ -1242,7 +1235,7 @@ void SfxViewShell::SetWindow
     if ( bHadFocus && pWindow )
         pWindow->GrabFocus();
         //TODO/CLEANUP
-        //brauchen wir die Methode doch noch?!
+        //Do we still need this Method?!
         //SFX_APP()->GrabFocus( pWindow );
 }
 
@@ -1258,9 +1251,9 @@ Size SfxViewShell::GetOptimalSizePixel() const
 
 SfxViewShell::SfxViewShell
 (
-    SfxViewFrame*   pViewFrame,     /*  <SfxViewFrame>, in dem diese View
-                                        dargestellt wird */
-    USHORT          nFlags          /*  siehe <SfxViewShell-Flags> */
+    SfxViewFrame*   pViewFrame,     /*  <SfxViewFrame>, which will be
+                                        displayed in this View */
+    USHORT          nFlags          /*  See <SfxViewShell-Flags> */
 )
 
 :   SfxShell(this)
@@ -1295,8 +1288,8 @@ SfxViewShell::SfxViewShell
     SetPool( &pViewFrame->GetObjectShell()->GetPool() );
     StartListening(*pViewFrame->GetObjectShell());
 
-    // in Liste eintragen
-    const SfxViewShell *pThis = this; // wegen der kranken Array-Syntax
+    // Insert into list
+    const SfxViewShell *pThis = this; // due to the sick Array syntax
     SfxViewShellArr_Impl &rViewArr = SFX_APP()->GetViewShells_Impl();
     rViewArr.Insert(pThis, rViewArr.Count() );
 }
@@ -1307,7 +1300,7 @@ SfxViewShell::~SfxViewShell()
 {
     DBG_DTOR(SfxViewShell, 0);
 
-    // aus Liste austragen
+    // Remove from list
     const SfxViewShell *pThis = this;
     SfxViewShellArr_Impl &rViewArr = SFX_APP()->GetViewShells_Impl();
     rViewArr.Remove( rViewArr.GetPos(pThis) );
@@ -1339,7 +1332,7 @@ SfxViewShell::~SfxViewShell()
 
 USHORT SfxViewShell::PrepareClose
 (
-    BOOL bUI,     // TRUE: Dialoge etc. erlaubt, FALSE: silent-mode
+    BOOL bUI,     // TRUE: Allow Dialog and so on, FALSE: silent-mode
     BOOL /*bForBrowsing*/
 )
 {
@@ -1394,12 +1387,12 @@ SfxViewShell* SfxViewShell::Get( const Reference< XController>& i_rController )
 
 SdrView* SfxViewShell::GetDrawView() const
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese virtuelle Methode mu\s von den Subklassen "uberladen werden, wenn
-    der Property-Editor zur Verf"ugung stehen soll.
+    This virtual Method has to be overloded by the sub classes, to be able
+    make the Property-Editor available.
 
-    Die Default-Implementierung liefert immer 0.
+    The default implementation does always return zero.
 */
 
 {
@@ -1411,26 +1404,25 @@ SdrView* SfxViewShell::GetDrawView() const
 String SfxViewShell::GetSelectionText
 (
     BOOL /*bCompleteWords*/     /*  FALSE (default)
-                                Nur der tats"achlich selektierte Text wird
-                                zur"uckgegeben.
+                                Only the actual selected text is returned.
 
                                 TRUE
-                                Der selektierte Text wird soweit erweitert,
-                                da\s nur ganze W"orter zur"uckgegeben werden.
-                                Als Worttrenner gelten White-Spaces und die
-                                Satzzeichen ".,;" sowie einfache und doppelte
-                                Anf"uhrungszeichen.
+                                The selected text is expanded so that only
+                                whole words are returned. As word separators
+                                these are used: white spaces and punctuation
+                                ".,;" and single and double quotes.
                             */
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese Methode kann von Anwendungsprogrammierer "uberladen werden,
-    um einen Text zur"uckzuliefern, der in der aktuellen Selektion
-    steht. Dieser wird z.B. beim Versenden (email) verwendet.
+    This Method can be overloaded by the programmers to return a text that
+    is included in the current selection. This is for example used when
+    sending emails.
 
-    Mit "CompleteWords == TRUE" ger"ufen, reicht z.B. auch der Cursor,
-    der in einer URL steht, um die gesamte URL zu liefern.
+    When called with "CompleteWords == TRUE", it is for example sufficent
+    with having the Cursor positioned somewhere within an URL in-order
+    to have the entire URL returned.
 */
 
 {
@@ -1441,11 +1433,11 @@ String SfxViewShell::GetSelectionText
 
 BOOL SfxViewShell::HasSelection( BOOL ) const
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Mit dieser virtuellen Methode kann z.B. ein Dialog abfragen, ob in der
-    aktuellen View etwas selektiert ist. Wenn der Parameter <BOOL> TRUE ist,
-    wird abgefragt, ob Text selektiert ist.
+    With this virtual Method can a for example a Dialog be queried, to
+    check if something is selected in the current view. If the Parameter
+    is <BOOL> TRUE then it is checked wether some text is selected.
 */
 
 {
@@ -1456,26 +1448,25 @@ BOOL SfxViewShell::HasSelection( BOOL ) const
 
 void SfxViewShell::SetSubShell( SfxShell *pShell )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Mit dieser Methode kann eine Selektions- oder Cursor-Shell angemeldet
-    werden, die automatisch unmittelbar nach der SfxViewShell auf den
-    SfxDispatcher gepusht wird, und automatisch umittelbar vor ihr
-    gepoppt wird.
+    With this method a selection or cursor Shell can be registered, which are
+    automatically pushed to SfxDispatcher immediately after SfxViewShell, and
+    and automatically popped immediately before SfxViewShell.
 
-    Ist die SfxViewShell-Instanz bereits gepusht, dann wird pShell
-    sofort ebenfalls gepusht. Wird mit SetSubShell eine andere SfxShell
-    Instanz angemeldet, als vorher angemeldet war, wird die zuvor angemeldete
-    ggf. automatisch gepoppt. Mit pShell==0 kann daher die aktuelle
-    Sub-Shell abgemeldet werden.
+    If the SfxViewShell instance is already pushed, then pShell will be
+    immediately pushed as well. Is another SfxShell instance registered by
+    using SetSubShell, which was previously registered, the previously
+    registered shell is popped automatically if possible. With pShell==0
+    the current sub-shell be can thus be unregistered.
 */
 
 {
-    // ist diese ViewShell "uberhaupt aktiv?
+    // Is this ViewShell even active?
     SfxDispatcher *pDisp = pFrame->GetDispatcher();
     if ( pDisp->IsActive(*this) )
     {
-        // Dispatcher updaten
+        // Update Dispatcher
         if ( pSubShell )
             pDisp->Pop(*pSubShell);
         if ( pShell )
@@ -1709,25 +1700,24 @@ BOOL SfxViewShell::ExecKey_Impl(const KeyEvent& aKey)
 
 bool SfxViewShell::KeyInput( const KeyEvent &rKeyEvent )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese Methode f"uhrt das KeyEvent 'rKeyEvent' "uber die an dieser
-    SfxViewShell direkt oder indirekt (z.B. via Applikation) konfigurierten
-    Tasten (Accelerator) aus.
+    This Method executes the KeyEvent 'rKeyEvent' of the Keys (Accelerator)
+    configured either direct or indirect (for example by the Application)
+    in the SfxViewShell.
 
-
-    [R"uckgabewert]
+    [Return value]
 
     bool                    TRUE
-                            die Taste ist konfiguriert, der betreffende
-                            Handler wurde gerufen
+                            The Key (Accelerator) is configured and the
+                            the associated Handler was called
 
                             FALSE
-                            die Taste ist nicht konfiguriert, es konnte
-                            also kein Handler gerufen werden
+                            The Key (Accelerator) is not configured and
+                            subsequently no Handler was called
 
+    [Cross-reference]
 
-    [Querverweise]
     <SfxApplication::KeyInput(const KeyEvent&)>
 */
 {
@@ -1743,11 +1733,11 @@ bool SfxViewShell::GlobalKeyInput_Impl( const KeyEvent &rKeyEvent )
 
 void SfxViewShell::ShowCursor( bool /*bOn*/ )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese Methode mu\s von Subklassen "uberladen werden, damit vom SFx
-    aus der Cursor ein- und ausgeschaltet werden kann. Dies geschieht
-    z.B. bei laufendem <SfxProgress>.
+    This Method has to be overloaded by the subclasses so that SFx from
+    the Cursor can be switched on and off. This happes for example with
+    with the running <SfxProgress>.
 */
 
 {
@@ -1757,17 +1747,16 @@ void SfxViewShell::ShowCursor( bool /*bOn*/ )
 
 void SfxViewShell::GotFocus() const
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese Methode mu\s vom Applikationsentwickler gerufen werden, wenn
-    das Edit-Window den Focus erhalten hat. Der SFx hat so z.B. die
-    M"oglichkeit, den Accelerator einzuschalten.
+    This Method has to be called by the programmer, when the
+    Edit window has received the focus. This gives for example the SFx
+    the power to turn on the accelerator.
 
+    [Note]
 
-    [Anmerkung]
-
-    <StarView> liefert leider keine M"oglichkeit, solche Events
-    'von der Seite' einzuh"angen.
+    <StarView> does sadly enough not provide the possibillity to attach
+    such "side-way" events.
 */
 
 {
@@ -1812,7 +1801,7 @@ void SfxViewShell::QueryObjAreaPixel( Rectangle& ) const
 
 void SfxViewShell::AdjustVisArea(const Rectangle& rRect)
 {
-    DBG_ASSERT (pFrame, "Kein Frame?");
+    DBG_ASSERT (pFrame, "No Frame?");
     GetObjectShell()->SetVisArea( rRect );
 }
 
@@ -1881,11 +1870,10 @@ BOOL SfxViewShell::PlugInsActive() const
 //--------------------------------------------------------------------
 void SfxViewShell::DiscardClients_Impl()
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese Methode dient dazu, vor dem Schlie\sen eines Dokuments das
-    Speichern der Objekte zu verhindern, wenn der Benutzer Schlie\en ohne
-    Speichern gew"ahlt hatte.
+    The purpose of this Method is to prevent the saving of Objects when closing
+    the Document, if the user has chosen to close without saving.
 */
 
 {
@@ -1951,7 +1939,7 @@ const Size& SfxViewShell::GetMargin() const
 
 void SfxViewShell::SetMargin( const Size& rSize )
 {
-    // Der default-Margin wurde "geeicht" mit www.apple.com !!
+    // the default margin was verified using www.apple.com !!
     Size aMargin = rSize;
     if ( aMargin.Width() == -1 )
         aMargin.Width() = DEFAULT_MARGIN_WIDTH;

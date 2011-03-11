@@ -438,7 +438,6 @@ void SfxFrame::PositionWindow_Impl( const Rectangle& rWinArea ) const
 {
     Window *pWin = pImp->pExternalContainerWindow;
 
-    // Groesse setzen
     const Size aAppWindow( pImp->pExternalContainerWindow->GetDesktopRectPixel().GetSize() );
     Point aPos( rWinArea.TopLeft() );
     Size aSz( rWinArea.GetSize() );

@@ -197,7 +197,7 @@ SfxSlotPool* SfxModule::GetSlotPool() const
 
 void SfxModule::RegisterChildWindow(SfxChildWinFactory *pFact)
 {
-    DBG_ASSERT( pImpl, "No real Modul!" );
+    DBG_ASSERT( pImpl, "No real Module!" );
 
     if (!pImpl->pFactArr)
         pImpl->pFactArr = new SfxChildWinFactArr_Impl;
@@ -221,7 +221,7 @@ void SfxModule::RegisterChildWindow(SfxChildWinFactory *pFact)
 void SfxModule::RegisterChildWindowContext( USHORT nId,
         SfxChildWinContextFactory *pFact)
 {
-    DBG_ASSERT( pImpl, "No real Modul!" );
+    DBG_ASSERT( pImpl, "No real Module!" );
 
     USHORT nCount = pImpl->pFactArr->Count();
     for (USHORT nFactory=0; nFactory<nCount; ++nFactory)

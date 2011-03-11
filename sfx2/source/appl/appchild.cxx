@@ -78,7 +78,7 @@ void SfxApplication::RegisterChildWindowContext_Impl( SfxModule *pMod, USHORT nI
     SfxChildWinFactory *pF = NULL;
     if ( pMod )
     {
-        // Modul "ubergeben, ChildwindowFactory dort suchen
+        // Abandon Module, search there for ChildwindowFactory
         pFactories = pMod->GetChildWinFactories_Impl();
         if ( pFactories )
         {
@@ -88,7 +88,7 @@ void SfxApplication::RegisterChildWindowContext_Impl( SfxModule *pMod, USHORT nI
                 SfxChildWinFactory *pFac = (*pFactories)[nFactory];
                 if ( nId == pFac->nId )
                 {
-                    // Factory gefunden, Context dort registrieren
+                    // Factory found, registrer Context here.
                     pF = pFac;
                     break;
                 }
@@ -98,9 +98,9 @@ void SfxApplication::RegisterChildWindowContext_Impl( SfxModule *pMod, USHORT nI
 
     if ( !pF )
     {
-        // Factory an der Application suchen
-        DBG_ASSERT( pAppData_Impl, "Keine AppDaten!" );
-        DBG_ASSERT( pAppData_Impl->pFactArr, "Keine Factories!" );
+        // Search for Factory in the Application
+        DBG_ASSERT( pAppData_Impl, "No AppData!" );
+        DBG_ASSERT( pAppData_Impl->pFactArr, "No Factories!" );
 
         pFactories = pAppData_Impl->pFactArr;
         USHORT nCount = pFactories->Count();
@@ -111,10 +111,10 @@ void SfxApplication::RegisterChildWindowContext_Impl( SfxModule *pMod, USHORT nI
             {
                 if ( pMod )
                 {
-                    // Wenn der Context von einem Modul registriert wurde,
-                    // mu\s die ChildwindowFactory auch dort zur Verf"ugung
-                    // stehen, sonst m"u\ste sich die Contextfactory im DLL-Exit
-                    // wieder abmelden !
+                    // If the context of a module has been registered, then the
+                    // ChildWindowFactory must also be available there,
+                    // else the ContextFactory would have be unsubscribed on
+                    // DLL-exit
                     pF = new SfxChildWinFactory( pFac->pCtor, pFac->nId,
                             pFac->nPos );
                     pMod->RegisterChildWindow( pF );
@@ -134,7 +134,7 @@ void SfxApplication::RegisterChildWindowContext_Impl( SfxModule *pMod, USHORT nI
         return;
     }
 
-    OSL_FAIL( "Kein ChildWindow fuer diesen Context!" );
+    OSL_FAIL( "No ChildWindow for this Context!" );
 }
 
 //--------------------------------------------------------------------

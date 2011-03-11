@@ -186,13 +186,12 @@ void SfxApplication::InitializeDisplayName_Impl()
 //--------------------------------------------------------------------
 SfxProgress* SfxApplication::GetProgress() const
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Liefert den f"ur die gesamte Applikation laufenden SfxProgress
-    oder 0, falls keiner f"ur die gesamte Applikation l"auft.
+    Returns the running SfxProgress for the entire application or 0 if
+    none is running for the entire application.
 
-
-    [Querverweise]
+    [Cross-reference]
 
     <SfxProgress::GetActiveProgress(SfxViewFrame*)>
     <SfxViewFrame::GetProgress()const>
@@ -210,7 +209,7 @@ SvUShorts* SfxApplication::GetDisabledSlotList_Impl()
     SvUShorts* pList = pAppData_Impl->pDisabledSlotList;
     if ( !pList )
     {
-        // Gibt es eine Slotdatei ?
+        // Is there a slot file?
         INetURLObject aUserObj( SvtPathOptions().GetUserConfigPath() );
         aUserObj.insertName( DEFINE_CONST_UNICODE( "slots.cfg" ) );
         SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( aUserObj.GetMainURL( INetURLObject::NO_DECODE ), STREAM_STD_READ );
@@ -226,7 +225,7 @@ SvUShorts* SfxApplication::GetDisabledSlotList_Impl()
         BOOL bSlots = ( pStream && !pStream->GetError() );
         if( bSlots && bSlotsEnabled )
         {
-            // SlotDatei einlesen
+            // Read Slot file
             String aTitle;
             pStream->ReadByteString(aTitle);
             if ( aTitle.CompareToAscii("SfxSlotFile" ) == COMPARE_EQUAL )
@@ -246,21 +245,20 @@ SvUShorts* SfxApplication::GetDisabledSlotList_Impl()
                 pStream->ReadByteString(aTitle);
                 if ( aTitle.CompareToAscii("END" ) != COMPARE_EQUAL || pStream->GetError() )
                 {
-                    // Lesen schief gegangen
+                    // Read failed
                     DELETEZ( pList );
                     bError = sal_True;
                 }
             }
             else
             {
-                // Streamerkennung  fehlgeschlagen
+                // Stream detection failure
                 bError = sal_True;
             }
         }
         else if ( bSlots != bSlotsEnabled )
         {
-            // Wenn kein Slotlist-Eintrag, dann darf auch keine SlotDatei
-            // vorhanden sein
+            // If no slot list entry, then no slot file shall exist
             bError = sal_True;
         }
 
@@ -276,9 +274,9 @@ SvUShorts* SfxApplication::GetDisabledSlotList_Impl()
 
     if ( bError )
     {
-        // Wenn ein Sloteintrag vorhanden ist, aber keine oder eine fehlerhafte
-        // SlotDatei, oder aber eine Slotdatei, aber kein Sloteintrag, dann
-        // gilt dies als fehlerhafte Konfiguration
+        // If an entry slot is present, but no or faulty slot file, or a slot
+        // file, but no slot entry, then this is considered to be a
+        // misconfiguration
         new SfxSpecialConfigError_Impl( String( SfxResId( RID_SPECIALCONFIG_ERROR ) ) );
     }
 

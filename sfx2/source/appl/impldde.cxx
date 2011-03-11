@@ -237,8 +237,6 @@ BOOL SvDDEObject::Connect( SvBaseLink * pSvLink )
     pConnection = new DdeConnection( sServer, sTopic );
     if( pConnection->GetError() )
     {
-        // kann man denn das System-Topic ansprechen ?
-        // dann ist der Server oben, kennt nur nicht das Topic!
        // Is it possible to address the system-Topic?
        // then the server is up, it just does not know the topic!
         if( sTopic.EqualsIgnoreCaseAscii( "SYSTEM" ) )

@@ -119,11 +119,7 @@ void LinkManager::CloseCachedComps()
     maCachedComps.clear();
 }
 
-/************************************************************************
-|*    LinkManager::Remove()
-|*
-|*    Description
-*************************************************************************/
+//--------------------------------------------------------------------------
 
 void LinkManager::Remove( SvBaseLink *pLink )
 {
@@ -343,7 +339,7 @@ void LinkManager::UpdateAllLinks(
         if( USHRT_MAX == nFndPos )
             continue;  // was not available!
 
-        // Graphic-Links not to update jet
+        // Graphic-Links not to update yet
         if( !pLink->IsVisible() ||
             ( !bUpdateGrfLinks && OBJECT_CLIENT_GRF == pLink->GetObjType() ))
             continue;
@@ -361,11 +357,7 @@ void LinkManager::UpdateAllLinks(
     CloseCachedComps();
 }
 
-/************************************************************************
-|*    SvBaseLink::CreateObject()
-|*
-|*    Description
-*************************************************************************/
+//--------------------------------------------------------------------------
 
 SvLinkSourceRef LinkManager::CreateObj( SvBaseLink * pLink )
 {
@@ -522,7 +514,7 @@ ULONG LinkManager::RegisterStatusInfoId()
 //              nFormat = Exchange::RegisterFormatName( "StatusInfo vom SvxInternalLink" );
         nFormat = SotExchange::RegisterFormatName(
                     String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM(
-                                "StatusInfo vom SvxInternalLink" )));
+                                "StatusInfo from SvxInternalLink" )));
     }
     return nFormat;
 }

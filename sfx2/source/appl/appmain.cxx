@@ -98,18 +98,19 @@ void SfxApplication::Init
 (
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese virtuelle Methode wird vom SFx aus Application:a:Main() gerufen,
-    bevor Execute() ausgef"uhrt wird und
-    - das Intro bereits angezeigt ist,
-    - das Applikationsfenster exisitiert, aber noch hidden ist,
-    - die Bindings bereits existieren (Controller sind anmeldbar),
-    - der Ini- und Config-Manager bereits existiert,
-    - die Standard-Controller bereits exisitieren,
-    - die SFx-Shells ihre Interfaces bereits registriert haben.
+    This virtual method is called from SFx through Application::Main(),
+    before Execute() is called and:
+    - the Intro is already displayed,
+    - the Applications window exists, but it is still hidden,
+    - the Bindings already exist (Controller can be registered),
+    - the Init and Config-Manager already exists,
+    - the Standard-Controller already exists,
+    - the SFx-Shells have alredy registered their Interfaces.
 
-    [Querverweise]
+    [Cross-reference]
+
     <SfxApplication::Exit()>
     <SfxApplication::OpenClients()>
 */
@@ -120,7 +121,7 @@ void SfxApplication::Init
 #else
     if( !InitializeDde() )
     {
-        ByteString aStr( "Kein DDE-Service moeglich. Fehler: " );
+        ByteString aStr( "No DDE-Service possible. Error: " );
         if( GetDdeService() )
             aStr += GetDdeService()->GetError();
         else
@@ -135,17 +136,17 @@ void SfxApplication::Init
 
 void SfxApplication::Exit()
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese virtuelle Methode wird vom SFx aus Application::Main() gerufen,
-    nachdem Execute() beendet ist und
-    - die Konfiguration (SfxConfigManager) bereits gespeichert wurde,
-    - die Fensterpostionen etc. in den SfxIniManager geschrieben wurden,
-    - das Applikationsfenster noch existiert, aber hidden ist
-    - s"amtliche Dokumente und deren Views bereits geschlossen sind.
-    - Dispatcher, Bindings etc. bereits zerst"ort sind
+    This virtual method is called from SFx through Application::Main(),
+    after Execute() has finished and
+    - the configuration (SfxConfigManager) was already saved,
+    - the window postions etc. in the SfxIniManager were written,
+    - the Application widow still exists, but is hidden
+    - all Documents and their Views already are closed.
+    - Dispatcher, Bindings etc. already destroyed.
 
-    [Querverweise]
+    [Cross-reference]
     <SfxApplication::Init(int,char*[])>
 */
 
@@ -162,14 +163,14 @@ void SfxApplication::PreInit( )
 bool SfxApplication::InitLabelResMgr( const char* _pLabelPrefix, bool _bException )
 {
     bool bRet = false;
-    // Label-DLL mit diversen Resourcen fuer OEM-Ver. etc. (Intro, Titel, About)
+    // Label-DLL with various resources for OEM-Ver. etc. (Intro, Titel, About)
     DBG_ASSERT( _pLabelPrefix, "Wrong initialisation!" );
     if ( _pLabelPrefix )
     {
-        // versuchen, die Label-DLL zu erzeugen
+        // try to create the Label-DLL
         pAppData_Impl->pLabelResMgr = CreateResManager( _pLabelPrefix );
 
-        // keine separate Label-DLL vorhanden?
+        // no separate label-DLL available?
         if ( !pAppData_Impl->pLabelResMgr )
         {
             if ( _bException )

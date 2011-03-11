@@ -46,7 +46,7 @@
 #include "view.hrc"
 
 #ifdef MSC
-// der ist buggy
+// this one is buggy
 #define NEW_OBJECTS(Class, nCount) ((Class*) new char[ sizeof(Class) * (nCount) ])
 #else
 #define NEW_OBJECTS(Class, nCount) (new Class[nCount])
@@ -121,7 +121,7 @@ SfxFontSizeInfo::SfxFontSizeInfo( const SfxFont &rFont,
         aFont.SetPitch(rFont.GetPitch());
         aFont.SetCharSet(rFont.GetCharSet());
 
-        // verfuegbare Groessen in die Liste eintragen, Groesse in 10tel Punkt
+        // Add available sizes to the list, size in tenths of a point
         int nSizeCount = rDev.GetDevFontSizeCount(aFont);
         pSizes = NEW_OBJECTS(Size, nSizeCount);
         const MapMode aOldMapMode = rDev.GetMapMode();
@@ -132,8 +132,8 @@ SfxFontSizeInfo::SfxFontSizeInfo( const SfxFont &rFont,
         aMap.SetScaleY(aTen);
         rDev.SetMapMode(aMap);
 
-        // Es gibt Fonts mit Bitmaps und skalierbaren Groessen
-        // In diesem Fall wird der Fonts als skalierbar behandelt.
+        // There are fonts with bitmaps and scalable sizes
+        // In this case the fonts arehandled as scalable
         BOOL bFoundScalable = FALSE;
         for ( int i = 0; i < nSizeCount; ++i )
         {
@@ -147,7 +147,7 @@ SfxFontSizeInfo::SfxFontSizeInfo( const SfxFont &rFont,
             bScalable = FALSE;
         else
         {
-            // statische Font-Sizes verwenden
+            // Static Font-Sizes are used
             delete [] pSizes;
             nSizes = 0;
         }
@@ -197,23 +197,23 @@ SfxFont::SfxFont( const FontFamily eFontFamily, const String& aFontName,
 
 SfxPrinter* SfxPrinter::Create( SvStream& rStream, SfxItemSet* pOptions )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Erzeugt einen <SfxPrinter> aus dem Stream. Geladen wird genaugenommen
-    nur ein JobSetup. Falls ein solcher Drucker auf dem System nicht
-    verf"augbar ist, wird das Original als Orig-JobSetup gemerkt und
-    ein "anhlicher exisitierender Drucker genommen.
+    Creates a <SfxPrinter> from the stream. Loading is really only a jobsetup.
+    If such a printer is not available on the system, then the original is
+    marked as the original Job-setup and a comparable printer is selected from
+    existing ones.
 
-    Die 'pOptions' werden in den erzeugten SfxPrinter "ubernommen,
-    der Returnwert geh"ort dem Caller.
+    The 'pOptions' are taken over in the generated SfxPrinter, the return
+    value belongs to the caller.
 */
 
 {
-    // JobSetup laden
+    // Load JobSetup
     JobSetup aFileJobSetup;
     rStream >> aFileJobSetup;
 
-    // Drucker erzeugen
+    // Get printers
     SfxPrinter *pPrinter = new SfxPrinter( pOptions, aFileJobSetup );
     return pPrinter;
 }
@@ -222,9 +222,9 @@ SfxPrinter* SfxPrinter::Create( SvStream& rStream, SfxItemSet* pOptions )
 
 SvStream& SfxPrinter::Store( SvStream& rStream ) const
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Speichert das verwendete JobSetup des <SfxPrinter>s.
+    Saves the used JobSetup of <SfxPrinter>s.
 */
 
 {
@@ -235,9 +235,9 @@ SvStream& SfxPrinter::Store( SvStream& rStream ) const
 
 SfxPrinter::SfxPrinter( SfxItemSet* pTheOptions ) :
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Dieser Ctor erzeugt einen Standard-Drucker.
+    This constructor creates a default printer.
 */
 
     pOptions( pTheOptions ),
@@ -408,8 +408,8 @@ void SfxPrinter::UpdateFonts_Impl()
     VirtualDevice *pVirDev = 0;
     const OutputDevice *pOut = this;
 
-        // falls kein Drucker gefunden werden konnte, ein
-        // temp. Device erzeugen fuer das Erfragen der Fonts
+    // If no printer was found, a temporay device is created
+    // for queries about fonts
     if( !IsValid() )
         pOut = pVirDev = new VirtualDevice;
 
@@ -430,7 +430,7 @@ void SfxPrinter::UpdateFonts_Impl()
         else if ( FONTS()->Count() == 0 ||
              (*FONTS())[FONTS()->Count()-1]->GetName() != aFont.GetName() )
         {
-            DBG_ASSERT(0 == SfxFindFont_Impl(*FONTS(), aFont.GetName()), "Doppelte Fonts vom SV-Device!");
+            DBG_ASSERT(0 == SfxFindFont_Impl(*FONTS(), aFont.GetName()), "Double Fonts from SV-Device!");
             SfxFont* pTmp = new SfxFont( aFont.GetFamily(), aFont.GetName(),
                                          aFont.GetPitch(), aFont.GetCharSet() );
             FONTS()->C40_INSERT(SfxFont, pTmp, FONTS()->Count());
@@ -465,7 +465,7 @@ USHORT SfxPrinter::GetFontCount()
 
 const SfxFont* SfxPrinter::GetFont( USHORT nNo ) const
 {
-    DBG_ASSERT( FONTS(), "bitte erst GetFontCount() abfragen!" );
+    DBG_ASSERT( FONTS(), "First, please check GetFontCount()!" );
     return (*FONTS())[ nNo ];
 }
 
@@ -538,7 +538,7 @@ SfxPrintOptionsDialog::SfxPrintOptionsDialog( Window *pParent,
 {
     SetText( SfxResId( STR_PRINT_OPTIONS_TITLE ) );
 
-    // TabPage einh"angen
+    // Insert TabPage
     pPage = pViewSh->CreatePrintOptionsPage( this, *pOptions );
     DBG_ASSERT( pPage, "CreatePrintOptions != SFX_VIEW_HAS_PRINTOPTIONS" );
     if( pPage )
@@ -548,7 +548,7 @@ SfxPrintOptionsDialog::SfxPrintOptionsDialog( Window *pParent,
         pPage->Show();
     }
 
-    // Dialoggr"o\se bestimmen
+    // Set dialog size
     Size a6Sz = LogicToPixel( Size( 6, 6 ), MAP_APPFONT );
     Size aBtnSz = LogicToPixel( Size( 50, 14 ), MAP_APPFONT );
     Size aOutSz( pPage ? pPage->GetSizePixel() : Size() );
@@ -557,7 +557,7 @@ SfxPrintOptionsDialog::SfxPrintOptionsDialog( Window *pParent,
     nWidth += a6Sz.Width();
     aOutSz.Width() += nWidth;
     if ( aOutSz.Height() < 90 )
-        // mindestens die H"ohe der 3 Buttons
+        // at least the height of the 3 buttons
         aOutSz.Height() = 90;
     SetOutputSizePixel( aOutSz );
 

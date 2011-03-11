@@ -597,7 +597,7 @@ SfxWorkWindow::SfxWorkWindow( Window *pWin, SfxBindings& rB, SfxWorkWindow* pPar
     m_aProgressBarResName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/progressbar/progressbar" ))
 {
     DBG_CTOR(SfxWorkWindow, 0);
-    DBG_ASSERT (pBindings, "Keine Bindings!");
+    DBG_ASSERT (pBindings, "No Bindings!");
 
     pBindings->SetWorkWindow_Impl( this );
 
@@ -1028,7 +1028,7 @@ SfxChild_Impl* SfxWorkWindow::RegisterChild_Impl( Window& rWindow,
                     SfxChildAlignment eAlign, BOOL bCanGetFocus )
 {
     DBG_CHKTHIS(SfxWorkWindow, 0);
-    DBG_ASSERT( pChilds->Count() < 255, "too many childs" );
+    DBG_ASSERT( pChilds->Count() < 255, "too many children" );
     DBG_ASSERT( SfxChildAlignValid(eAlign), "invalid align" );
     DBG_ASSERT( !FindChild_Impl(rWindow), "child registered more than once" );
 
@@ -2531,7 +2531,6 @@ SfxChildWindow* SfxWorkWindow::GetChildWindow_Impl(USHORT nId)
 
 void SfxWorkWindow::ResetChildWindows_Impl()
 {
-
     for ( USHORT n = 0; n < pChildWins->Count(); ++n )
     {
         (*pChildWins)[n]->nId = 0;

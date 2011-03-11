@@ -692,7 +692,7 @@ sal_Bool SAL_CALL SfxBaseController::suspend( sal_Bool bSuspend ) throw( ::com::
             getFrame()->removeFrameActionListener( m_pData->m_xListener ) ;
         SfxViewFrame* pActFrame = m_pData->m_pViewShell->GetFrame() ;
 
-        // weitere View auf dasselbe Doc?
+        // More Views on the same document?
         SfxObjectShell* pDocShell   =   m_pData->m_pViewShell->GetObjectShell() ;
         sal_Bool        bOther      =   sal_False                               ;
 
@@ -1209,7 +1209,7 @@ throw (::com::sun::star::uno::RuntimeException)
     SfxSlotPool* pSlotPool = pPool ? pPool : &SFX_SLOTPOOL();
     const ULONG nMode( SFX_SLOT_TOOLBOXCONFIG|SFX_SLOT_ACCELCONFIG|SFX_SLOT_MENUCONFIG );
 
-    // Gruppe anw"ahlen ( Gruppe 0 ist intern )
+    // Select Group ( Group 0 is internal )
     for ( USHORT i=0; i<pSlotPool->GetGroupCount(); i++ )
     {
         String aName = pSlotPool->SeekGroup( i );
@@ -1400,7 +1400,7 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
                 rFrame.GetWindow().Show();
             }
 
-            // Jetzt UpdateTitle, hidden TopFrames haben sonst keinen Namen!
+            // UpdateTitle now, hidden TopFrames have otherwise no Name!
             pViewFrame->UpdateTitle();
 
             if ( !rFrame.IsInPlace() )

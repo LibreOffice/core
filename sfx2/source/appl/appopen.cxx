@@ -153,45 +153,45 @@ void SAL_CALL SfxOpenDocStatusListener_Impl::disposing( const EventObject& ) thr
 
 SfxObjectShellRef SfxApplication::DocAlreadyLoaded
 (
-    const String&   rName,      // Name des Dokuments mit Pfad
-    BOOL            bSilent,    // TRUE: nicht nach neuer Sicht fragen
-    BOOL            bActivate,   // soll bestehende Sicht aktiviert werden
+    const String&   rName,      // Name of Documents including path
+    BOOL            bSilent,    // TRUE: do not ask for a new view
+    BOOL            bActivate,  // existing view to be activated
     BOOL            bForbidVisible,
     const String*   pPostStr
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Stellt fest, ob ein Dokument mit dem Namen 'rName' bereits geladen
-    ist und liefert einen Pointer darauf zu"uck.
+    Determines whether a document with the name 'rName' already is loaded and
+    returns a pointer to this document.
 
-    Ist das Dokument noch nicht geladen, wird ein 0-Pointer zur"uckgeliefert.
+    If the document is not loaded, a 0-pointer is returned.
 */
 
 {
-    // zu suchenden Namen als URL aufbereiten
+    // prepare to search for names as URL
     INetURLObject aUrlToFind( rName );
     DBG_ASSERT( aUrlToFind.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL" );
     String aPostString;
     if (  pPostStr )
         aPostString = *pPostStr;
 
-    // noch offen?
+    // still open?
     SfxObjectShellRef xDoc;
 
     if ( !aUrlToFind.HasError() )
     {
-        // dann bei den normal geoeffneten Docs
+        // then with the normally open Documents
         if ( !xDoc.Is() )
         {
-            xDoc = SfxObjectShell::GetFirst( 0, FALSE ); // auch hidden Docs
+            xDoc = SfxObjectShell::GetFirst( 0, FALSE ); // also hidden Documents
             while( xDoc.Is() )
             {
                 if ( xDoc->GetMedium() &&
                      xDoc->GetCreateMode() == SFX_CREATE_MODE_STANDARD &&
                      !xDoc->IsAbortingImport() && !xDoc->IsLoading() )
                 {
-                    // Vergleiche anhand der URLs
+                    // Comparisons between URLs
                     INetURLObject aUrl( xDoc->GetMedium()->GetName() );
                     if ( !aUrl.HasError() && aUrl == aUrlToFind &&
                          (!bForbidVisible || !SfxViewFrame::GetFirst( xDoc, TRUE )) &&
@@ -205,11 +205,10 @@ SfxObjectShellRef SfxApplication::DocAlreadyLoaded
         }
     }
 
-    // gefunden?
+    // Found?
     if ( xDoc.Is() && bActivate )
     {
-        DBG_ASSERT(
-            !bForbidVisible, "Unsichtbares kann nicht aktiviert werden" );
+        DBG_ASSERT(!bForbidVisible, "Invisible can not be enabled" );
 
         SfxViewFrame* pFrame;
         for( pFrame = SfxViewFrame::GetFirst( xDoc );
@@ -289,17 +288,16 @@ private:
 sal_uInt32 CheckPasswd_Impl
 (
     SfxObjectShell*  pDoc,
-    SfxItemPool&     /*rPool*/, // Pool, falls ein Set erzeugt werden mus
-    SfxMedium*       pFile      // das Medium, dessen Passwort gfs. erfragt werden soll
+    SfxItemPool&     /*rPool*/, // Pool, if a Set has to be created
+    SfxMedium*       pFile      // the Medium and its Password shold be obtained
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Zu einem Medium das Passwort erfragen; funktioniert nur, wenn es sich
-    um einen Storage handelt.
-    Wenn in der Documentinfo das Passwort-Flag gesetzt ist, wird
-    das Passwort vom Benutzer per Dialog erfragt und an dem Set
-    des Mediums gesetzt; das Set wird, wenn nicht vorhanden, erzeugt.
+    Ask for the password for a medium, only works if it concerns storage.
+    If the password flag is set in the Document Info, then the password is
+    requested through a user dialogue and the set at the Set of the medium.
+    If the set does not exist the it is created.
 */
 {
     ULONG nRet = ERRCODE_NONE;
@@ -542,7 +540,7 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
 {
     DBG_MEMTEST();
 
-    // keine Parameter vom BASIC nur Factory angegeben?
+    // No Parameter from BASIC only Factory given?
     SFX_REQUEST_ARG(rReq, pTemplNameItem, SfxStringItem, SID_TEMPLATE_NAME, FALSE);
     SFX_REQUEST_ARG(rReq, pTemplFileNameItem, SfxStringItem, SID_FILE_NAME, FALSE);
     SFX_REQUEST_ARG(rReq, pTemplRegionNameItem, SfxStringItem, SID_TEMPLATE_REGIONNAME, FALSE);
@@ -550,7 +548,7 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
     SfxObjectShellLock xDoc;
 
     String  aTemplateRegion, aTemplateName, aTemplateFileName;
-    BOOL    bDirect = FALSE; // "uber FileName anstelle Region/Template
+    BOOL    bDirect = FALSE; // through FileName instead of Region/Template
     SfxErrorContext aEc(ERRCTX_SFX_NEWDOC);
     if ( !pTemplNameItem && !pTemplFileNameItem )
     {
@@ -786,8 +784,8 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                 rReq.RemoveItem( SID_FILE_NAME );
                 rReq.AppendItem( SfxStringItem( SID_FILE_NAME, aURL ) );
 
-                // synchron ausf"uhren, damit beim Reschedulen nicht schon das n"achste Dokument
-                // geladen wird
+                // Run synchronous, so that not the next document is loaded
+                // when rescheduling
                 // TODO/LATER: use URLList argument and always remove one document after another, each step in asychronous execution, until finished
                 // but only if reschedule is a problem
                 GetDispatcher_Impl()->Execute( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, *rReq.GetArgs() );

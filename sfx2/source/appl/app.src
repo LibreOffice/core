@@ -122,8 +122,8 @@ Resource BMP_SFX_COLOR
         SID_PASTE;              // 060
         SID_DELETE;             // 061
         SID_SELECTALL;          // 062
-        SID_SAVEDOC;            // 063 vormals 046
-        SID_EXITANDRETURN;      // 064 vormals 054
+        SID_SAVEDOC;            // 063 was 046
+        SID_EXITANDRETURN;      // 064 was 054
         SID_RECORDMACRO;        // 095
         SID_EDITMACRO;          // 096
         SID_HELPMENU;           // 098
@@ -155,8 +155,8 @@ Resource BMP_SFX_MONO
         SID_PASTE;              // 060
         SID_DELETE;             // 061
         SID_SELECTALL;          // 062
-        SID_SAVEDOC;            // 063 vormals 046
-        SID_EXITANDRETURN;      // 064 vormals 054
+        SID_SAVEDOC;            // 063 was 046
+        SID_EXITANDRETURN;      // 064 was 054
         SID_RECORDMACRO;        // 095
         SID_EDITMACRO;          // 096
         SID_HELPMENU;           // 098
