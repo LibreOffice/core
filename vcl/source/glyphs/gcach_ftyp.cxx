@@ -329,14 +329,12 @@ FtFontInfo::FtFontInfo( const ImplDevFontAttributes& rDevFontAttributes,
 :
     maFaceFT( NULL ),
     mpFontFile( FtFontFile::FindFontFile( rNativeFileName ) ),
-#ifdef ENABLE_GRAPHITE
-    mpGraphiteFace(NULL),
-#endif
     mnFaceNum( nFaceNum ),
     mnRefCount( 0 ),
     mnSynthetic( nSynthetic ),
 #ifdef ENABLE_GRAPHITE
     mbCheckedGraphite(false),
+    mpGraphiteFace(NULL),
 #endif
     mnFontId( nFontId ),
     maDevFontAttributes( rDevFontAttributes ),
