@@ -207,26 +207,27 @@ void SdStartPresentationDlg::InitMonitorSettings()
         else
         {
             sal_Bool bMultiscreen = false;
-            sal_Int32 nPrimaryIndex = 0;
+            sal_Int32 nDefaultDisplay (0);
             Reference< XPropertySet > xMonProps( xMultiMon, UNO_QUERY );
             if( xMonProps.is() ) try
             {
                 const OUString sPropName1( RTL_CONSTASCII_USTRINGPARAM( "MultiDisplay" ) );
                 xMonProps->getPropertyValue( sPropName1 ) >>= bMultiscreen;
                 const OUString sPropName2( RTL_CONSTASCII_USTRINGPARAM( "DefaultDisplay" ) );
-                xMonProps->getPropertyValue( sPropName2 ) >>= nPrimaryIndex;
+                xMonProps->getPropertyValue( sPropName2 ) >>= nDefaultDisplay;
             }
             catch( Exception& )
             {
             }
 
-            sal_Int32 nSelected (nPrimaryIndex);
-            const sal_Int32 nDefaultValue (
+            sal_Int32 nSelectedIndex (-1);
+            sal_Int32 nDefaultDisplayIndex (-1);
+            const sal_Int32 nDefaultSelectedDisplay (
                 ( ( const SfxInt32Item& ) rOutAttrs.Get( ATTR_PRESENT_DISPLAY ) ).GetValue());
             const String sPlaceHolder( RTL_CONSTASCII_USTRINGPARAM( "%1" ) );
             for( sal_Int32 nDisplay = 0; nDisplay < mnMonitors; nDisplay++ )
             {
-                String aName( nDisplay == nPrimaryIndex ? msPrimaryMonitor : msMonitor );
+                String aName( nDisplay == nDefaultDisplay ? msPrimaryMonitor : msMonitor );
                 const String aNumber( String::CreateFromInt32( nDisplay + 1 ) );
                 aName.SearchAndReplace( sPlaceHolder, aNumber );
                 maLBMonitor.InsertEntry( aName );
@@ -235,9 +236,13 @@ void SdStartPresentationDlg::InitMonitorSettings()
                 const sal_uInt32 nEntryIndex (maLBMonitor.GetEntryCount()-1);
                 maLBMonitor.SetEntryData(nEntryIndex, (void*)nDisplay);
 
-                // Remember to select the default display.
-                if (nDefaultValue == nDisplay)
-                    nSelected = nEntryIndex;
+                // Remember the index of the default selection.
+                if (nDefaultSelectedDisplay == nDisplay)
+                    nSelectedIndex = nEntryIndex;
+
+                // Remember index of the default display.
+                if (nDisplay == nDefaultDisplay)
+                    nDefaultDisplayIndex = nEntryIndex;
             }
 
             if( !bMultiscreen )
@@ -245,14 +250,17 @@ void SdStartPresentationDlg::InitMonitorSettings()
                 maLBMonitor.InsertEntry( msAllMonitors );
                 const sal_uInt32 nEntryIndex (maLBMonitor.GetEntryCount()-1);
                 maLBMonitor.SetEntryData(nEntryIndex, (void*)-1);
-                if (nDefaultValue == -1)
-                    nSelected = nEntryIndex;
+                if (nDefaultSelectedDisplay == -1)
+                    nSelectedIndex = nEntryIndex;
             }
 
-            if( nSelected <= 0 )
-                nSelected = nPrimaryIndex;
+            if (nSelectedIndex < 0)
+                if (nDefaultSelectedDisplay < 0)
+                    nSelectedIndex = 0;
+                else
+                    nSelectedIndex = nDefaultDisplayIndex;
 
-            maLBMonitor.SelectEntryPos( (sal_uInt16)nSelected );
+            maLBMonitor.SelectEntryPos((sal_uInt16)nSelectedIndex);
         }
     }
     catch( Exception& )

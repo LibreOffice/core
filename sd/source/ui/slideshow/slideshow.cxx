@@ -109,6 +109,26 @@ namespace {
     private:
         ::boost::shared_ptr<SlideShowRestarter> mpRestarter;
     };
+
+    /** Return the default display id (or -1 when that can not be
+        determined.)
+    */
+    sal_Int32 GetDefaultDisplay (void)
+    {
+        try
+        {
+            Reference< XMultiServiceFactory > xFactory(::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
+            Reference< XPropertySet > xMonProps(xFactory->createInstance(OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.DisplayAccess" ) ) ), UNO_QUERY_THROW );
+            const OUString sPropertyName( RTL_CONSTASCII_USTRINGPARAM( "DefaultDisplay" ) );
+            sal_Int32 nPrimaryIndex (-1);
+            if (xMonProps->getPropertyValue( sPropertyName ) >>= nPrimaryIndex)
+                return nPrimaryIndex;
+        }
+        catch( Exception& )
+        {
+        }
+        return -1;
+    }
 }
 
 
@@ -553,6 +573,14 @@ void SAL_CALL SlideShow::setPropertyValue( const OUString& aPropertyName, const 
         sal_Int32 nDisplay = 0;
         if( aValue >>= nDisplay )
         {
+            // Convert value to true display id.
+            if (nDisplay == 0)
+                nDisplay = GetDefaultDisplay();
+            else if (nDisplay < 0)
+                nDisplay = -1;
+            else
+                --nDisplay;
+
             bIllegalArgument = false;
 
             SdOptions* pOptions = SD_MOD()->GetSdOptions(DOCUMENT_TYPE_IMPRESS);
@@ -632,7 +660,14 @@ Any SAL_CALL SlideShow::getPropertyValue( const OUString& PropertyName ) throw(U
     case ATTR_PRESENT_DISPLAY:
     {
         SdOptions* pOptions = SD_MOD()->GetSdOptions(DOCUMENT_TYPE_IMPRESS);
-        return Any( pOptions->GetDisplay() );
+        const sal_Int32 nDisplay (pOptions->GetDisplay());
+        // Convert true display id to the previously used schema.
+        if (nDisplay == GetDefaultDisplay())
+            return Any(sal_Int32(0));
+        else if (nDisplay < 0)
+            return Any(sal_Int32(-1));
+        else
+            return Any(nDisplay+1);
     }
 
     default:
