@@ -419,8 +419,8 @@ const String& SfxApplication::GetLastSaveDirectory() const
 
 void SfxApplication::SetLastDir_Impl
 (
-    const String&   rNewDir     /* Complete directory path as a string * /
-    )
+    const String&   rNewDir     /* Complete directory path as a string */
+)
 
 /*  [Description]
 

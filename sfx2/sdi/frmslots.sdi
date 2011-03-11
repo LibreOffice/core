@@ -276,12 +276,12 @@ interface Window
         ExecMethod = ExecView_Impl;
     ]
 
-    // Nur f"ur Gestalter: Slot mu\s vorhanden sein
+    // Only for Designers: Slot must be present
     SID_STYLE_NEW
     [
     ]
 
-    // Nur f"ur Gestalter: Slot mu\s vorhanden sein
+    // Only for Designers: Slot must be present
     SID_STYLE_DRAGHIERARCHIE
     [
     ]
@@ -328,7 +328,7 @@ interface BrowseWindow : Window
 {
     SID_ACTIVATE // ole(no) api(final/play/rec)
     [
-        // Implementierung in Subklassen
+        // Implementations in Subclasses
     ]
     SID_NEWWINDOW // ole(no) api(play/rec)
     [
