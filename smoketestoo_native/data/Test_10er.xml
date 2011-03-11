@@ -42,8 +42,6 @@ const cMessageSaveOpenXMLDoc = &quot;Save/Open Document XML (6/7)&quot;
 const cMessageOpen50Doc = &quot;Open Document 5.0&quot;
 const cMessageNewDoc = &quot;New Document&quot;
 const cMessageCloseDoc = &quot;Close Document&quot;
-const cMessageCutObj = &quot;Cut Object&quot;
-const cMessagePasteObj = &quot;Paste Object&quot;
 
 Global sWorkPath$
 Global sWorkPathURL$
@@ -89,22 +87,6 @@ Sub DeleteAllSavedFiles()
         Kill (sFileName)
     End If
     sFileName = sWorkPath+cTempFileName+&quot;.&quot;+GetDocEndings(frmDraw or cFltXML)
-    If FileExists (sFileName) then
-        Kill (sFileName)
-    End If
-    sFileName = sWorkPath+cTempFileName+&quot;.&quot;+GetDocEndings(frmWriter or cFlt50)
-    If FileExists (sFileName) then
-        Kill (sFileName)
-    End If
-    sFileName = sWorkPath+cTempFileName+&quot;.&quot;+GetDocEndings(frmCalc or cFlt50)
-    If FileExists (sFileName) then
-        Kill (sFileName)
-    End If
-    sFileName = sWorkPath+cTempFileName+&quot;.&quot;+GetDocEndings(frmImpress or cFlt50)
-    If FileExists (sFileName) then
-        Kill (sFileName)
-    End If
-    sFileName = sWorkPath+cTempFileName+&quot;.&quot;+GetDocEndings(frmDraw or cFlt50)
     If FileExists (sFileName) then
         Kill (sFileName)
     End If
@@ -294,12 +276,6 @@ Sub WriteTests (sText as string, bTestAll as boolean, nFileChannel as integer)
     sWriteStr = sText
     sWriteStr = sWriteStr + &quot;new&quot;
     if bTestAll then
-    if bMakeCutTest then
-        sWriteStr = sWriteStr + &quot;, cut&quot;
-    end if
-    if bMakePasteTest then
-        sWriteStr = sWriteStr + &quot;, paste&quot;
-    end if
     if bMakeSaveOpen8Test then
         sWriteStr = sWriteStr + &quot;, save 8.0&quot;
     end if
@@ -348,7 +324,7 @@ end Sub
 
 Sub MakeDocTest (FilterType as Integer)
     Dim oDoc as Object
-    Dim sFileNameXML$, sFileName50$, sFileName8$
+    Dim sFileNameXML$, sFileName8$
     Dim bError as Boolean
     Dim nCurrentAction as Integer
 
@@ -361,9 +337,6 @@ Sub MakeDocTest (FilterType as Integer)
     LogState (not IsNull (oDoc), GetDocFilter(FilterType or cFltNewDoc)+&quot; &quot;+ cMessageNewDoc, MainFileChannel)
     SetStatus (FilterType, cDocNew, not IsNull (oDoc))
     if not IsNull (oDoc) then
-        nCurrentAction = cDocCut
-        call CutAndPaste(FilterType, oDoc)
-&apos;      bError = oDoc.CurrentController.frame.close
         nCurrentAction = cDocSaveOpen8
         if bMakeSaveOpen8Test and IsFilterAvailable (FilterType or cFlt8) then
             sFileName8 = sWorkPathURL+cTempFileName+&quot;.&quot;+GetDocEndings(FilterType or cFlt8)
@@ -551,16 +524,8 @@ Function GetDocEndings (DocType as Integer) as String
             GetDocEndings = &quot;odp&quot; &apos;PrÕsentation
         case frmDraw or cFlt8
             GetDocEndings = &quot;odg&quot; &apos;Zeichen
-        case frmHyperText, frmHyperText or cFlt50, frmHyperText or cFltXML
+        case frmHyperText, frmHyperText or cFltXML
             GetDocEndings = &quot;html&quot; &apos;Hypertext-Dokument
-        case frmWriter or cFlt50
-            GetDocEndings = &quot;sdw&quot; &apos; Textdokument 5.0
-        case frmCalc or cFlt50
-            GetDocEndings = &quot;sdc&quot; &apos;Tabellendokument 5.0
-        case frmImpress or cFlt50
-            GetDocEndings = &quot;sdd&quot; &apos;PrÕsentation 5.0
-        case frmDraw or cFlt50
-            GetDocEndings = &quot;sda&quot; &apos;Zeichen 5.0
         case frmWriter or cFltXML
             GetDocEndings = &quot;sxw&quot; &apos; Textdokument
         case frmCalc or cFltXML
@@ -598,18 +563,8 @@ Function GetDocFilter (DocType as Integer) as String
         case frmMath or cFltXML
             GetDocFilter = &quot;StarOffice XML (Math)&quot; &apos;Formel
 
-        case frmHyperText, frmHyperText or cFlt50, frmHyperText or cFltXML
+        case frmHyperText, frmHyperText or cFltXML
             GetDocFilter = &quot;HTML&quot; &apos;Hypertext-Dokument
-        case frmWriter or cFlt50
-            GetDocFilter = &quot;StarWriter 5.0&quot; &apos; Textdokument 5.0
-        case frmCalc or cFlt50
-            GetDocFilter = &quot;StarCalc 5.0&quot; &apos;Tabellendokument 5.0
-        case frmImpress or cFlt50
-            GetDocFilter = &quot;StarImpress 5.0&quot; &apos;Präsentation 5.0
-        case frmDraw or cFlt50
-            GetDocFilter = &quot;StarDraw 5.0&quot; &apos;Zeichen 5.0
-        case frmMath or cFlt50
-            GetDocFilter = &quot;StarMath 5.0&quot; &apos;Formel 5.0
 
         case frmWriter or cFltNewDoc
             GetDocFilter = &quot;swriter&quot; &apos; Textdokument
@@ -669,10 +624,6 @@ Function GetErrorMessageOnAction (nAction as Integer) as String
     Select Case ( nAction )
         case cDocNew
             GetErrorMessageOnAction = cMessageNewDoc
-        case cDocCut
-            GetErrorMessageOnAction = cMessageCutObj
-        case cDocPaste
-            GetErrorMessageOnAction = cMessagePasteObj
         case cDocSaveOpen8
             GetErrorMessageOnAction = cMessageSaveOpen8Doc
         case cDocSaveOpenXML
@@ -688,7 +639,7 @@ end Function
 
 Function IsFilterAvailable (FilterType as Integer) as boolean
     IsFilterAvailable = true
-    if ((FilterType = (frmHyperText or cFlt50)) or (FilterType = (frmHyperText or cFltXML))) then
+    if ((FilterType = (frmHyperText or cFltXML))) then
         IsFilterAvailable = false
     end if
 End Function
@@ -706,152 +657,6 @@ Function TestJava (FilterType as Integer) as boolean
 
     TestJava = not IsNull (oObj)
 End Function
-
-Sub CutAndPaste (DocType as Integer, oDoc as Object)
-    Dim sText as String
-    Dim oWin as Object
-    Dim oText as Object
-    Dim oView as Object
-    Dim bCutState as boolean, bPasteState as boolean
-    Select Case ( DocType )
-        case frmWriter
-            Dim oCursor as Object
-
-            sText = &quot;AutomaticText&quot;
-            oText = oDoc.GetText
-            oCursor = oText.CreateTextCursor
-            oText.InsertString(oCursor, sText, true) &apos; Cursor selektiert den Text
-            oView = oDoc.getCurrentController
-            oView.Select(oCursor)
-
-            if bMakeCutTest then
-            call CutText (oDoc)
-
-            if oText.GetString = &quot;&quot; Then
-                bCutState = True
-            else
-                bCutState = False
-            end If
-            SetStatus (DocType, cDocCut, bCutState)
-            LogState (bCutState, GetDocFilter(DocType or cFltNewDoc)+&quot; &quot;+ cMessageCutObj, FileChannel)
-            LogState (bCutState, GetDocFilter(DocType or cFltNewDoc)+&quot; &quot;+ cMessageCutObj, MainFileChannel)
-            end if
-
-            if bMakePasteTest and bMakeCutTest then
-            call PasteText (oDoc)
-
-            if oText.GetString = sText Then
-                bPasteState = True
-            else
-                bPasteState = False
-            end If
-            SetStatus (DocType, cDocPaste, bPasteState)
-            LogState (bPasteState, GetDocFilter(DocType or cFltNewDoc)+&quot; &quot;+ cMessagePasteObj, FileChannel)
-            LogState (bPasteState, GetDocFilter(DocType or cFltNewDoc)+&quot; &quot;+ cMessagePasteObj, MainFileChannel)
-            end if
-
-        case frmCalc
-            DIM oCell as Object
-
-            sText = &quot;AutomaticText&quot;
-            oCell = oDoc.Sheets(0).GetCellByPosition(0, 0)
-            oCell.String = sText
-            oView = oDoc.getCurrentController
-            oView.Select(oCell)
-
-            if bMakeCutTest then
-            call CutText (oDoc)
-
-            if oCell.String = &quot;&quot; Then
-                bCutState = True
-            else
-                bCutState = False
-            end If
-            SetStatus (DocType, cDocCut, bCutState)
-            LogState (bCutState, GetDocFilter(DocType or cFltNewDoc)+&quot; &quot;+ cMessageCutObj, FileChannel)
-            LogState (bCutState, GetDocFilter(DocType or cFltNewDoc)+&quot; &quot;+ cMessageCutObj, MainFileChannel)
-            end if
-
-            if bMakePasteTest and bMakeCutTest then
-            call PasteText (oDoc)
-
-            if oCell.String = sText Then
-                bPasteState = True
-            else
-                bPasteState = False
-            end If
-            SetStatus (DocType, cDocPaste, bPasteState)
-            LogState (bPasteState, GetDocFilter(DocType or cFltNewDoc)+&quot; &quot;+ cMessagePasteObj, FileChannel)
-            LogState (bPasteState, GetDocFilter(DocType or cFltNewDoc)+&quot; &quot;+ cMessagePasteObj, MainFileChannel)
-            end if
-        case frmMessage
-        case frmImpress, frmDraw
-            Dim oPage as Object
-            Dim oRect as Object
-            Dim xSize as Object
-            Dim xPoint as Object
-            Dim bObjState as Boolean
-
-            xSize = CreateUnoStruct (&quot;com.sun.star.awt.Size&quot;)
-            xPoint = CreateUnoStruct (&quot;com.sun.star.awt.Point&quot;)
-            xSize.Width = 2000
-            xSize.Height = 2000
-            xPoint.x = 10000
-            xPoint.y = 10000
-            oPage = oDoc.DrawPages(0)
-
-            if DocType = frmImpress Then
-                oPage.Layout = 20 &apos; set page layot to none
-            end If
-
-            oRect = oDoc.CreateInstance(&quot;com.sun.star.drawing.RectangleShape&quot;)
-            oRect.Size = xSize
-            oRect.Position = xPoint
-            oPage.add(oRect)
-
-            oView = oDoc.getCurrentController
-            oView.Select(oRect)
-
-            &apos; Prüft ob überhaupt ein Object angelegt wurde
-            if oPage.count = 1 Then
-                bObjState = True
-            else
-                bObjState = False
-            end If
-
-            if bMakeCutTest then
-            call CutText (oDoc)
-
-            if (oPage.count = 0) and bObjState Then
-                bCutState = True
-            else
-                bCutState = False
-            end If
-            SetStatus (DocType, cDocCut, bCutState)
-            LogState (bCutState, GetDocFilter(DocType or cFltNewDoc)+&quot; &quot;+ cMessageCutObj, FileChannel)
-            LogState (bCutState, GetDocFilter(DocType or cFltNewDoc)+&quot; &quot;+ cMessageCutObj, MainFileChannel)
-            end if
-
-            wait (1000) &apos;wait after cut
-
-            if bMakePasteTest and bMakeCutTest then
-            call PasteText (oDoc)
-
-            if (oPage.count = 1) and bObjState Then
-                bPasteState = True
-            else
-                bPasteState = False
-            end If
-            SetStatus (DocType, cDocPaste, bPasteState)
-            LogState (bPasteState, GetDocFilter(DocType or cFltNewDoc)+&quot; &quot;+ cMessagePasteObj, FileChannel)
-            LogState (bPasteState, GetDocFilter(DocType or cFltNewDoc)+&quot; &quot;+ cMessagePasteObj, MainFileChannel)
-            end if
-        case frmMath
-        case frmImage
-        case frmHyperText
-        case frmChart
-    end Select
-end Sub
 
 Sub LoadLibrary( LibName as String )
 

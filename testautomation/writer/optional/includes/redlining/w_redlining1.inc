@@ -1104,8 +1104,8 @@ testcase tRedlining_16
    '/// + Redlining test => OK_2  <--  Numbering style : list 2
    '/// + Redlining test => OK_3  <--  Numbering style : list 3
 
-   Call hFileOpen ( gTesttoolPath + "writer\optional\input\redlining\tRedlining_15.sxw" )
-   Call sMakeReadOnlyDocumentEditable
+   hFileOpenLocally(  gTesttoolPath + "writer\optional\input\redlining\tRedlining_15.sxw" )
+   
 
    Call wTypeKeys "<Up>" , 3
 

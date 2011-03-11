@@ -130,7 +130,9 @@ testcase tiViewPanes
     hMenuSelectNr (4)
 
 endcase 'tiViewPanes
+
 '---------------------------------------------------------
+
 testcase tiViewMasterView
     printlog "open application"
     Call hNewDocument
@@ -150,7 +152,9 @@ testcase tiViewMasterView
     printlog "close application "
     Call hCloseDocument
 endcase 'tiViewMasterView
+
 '---------------------------------------------------------
+
 testcase tiViewSlideMaster
 
     printlog "open application with : File->Autopilot->Presentation; OK; OK "
@@ -161,68 +165,57 @@ testcase tiViewSlideMaster
     else
         warnlog( "Dialog <AutopilotPraesentation1> did not open" )
     endif
-    Kontext "Seitenlayout"  ' aka: Modify Slide
-
-    if ( Seitenlayout.exists( 5 ) ) then
-        warnlog "Slidelayout has to vanish; moved to sidebar"
-        hCloseDialog( Seitenlayout, "ok" )
-    endif
-
     kontext "DocumentImpress"
-    printlog "View->Slide "
+    
+    printlog "View->Slide"
     hUseAsyncSlot( "ViewSlide" )
     
-    printlog "View->Master->Drawing "
+    printlog "View->Master->Drawing"
     hUseAsyncSlot( "ViewDrawing" )
 
-    printlog "View->Slide "
+    printlog "View->Slide"
     hUseAsyncSlot( "ViewSlide" )
 
-    printlog "View->Master->Title "
-    try
-        ViewTitle
-        Errorlog "View - Master - Title Slide Master should NOT be accessable"
-    catch
-        printlog "View - Master - Title Slide Master not accessable - good"
-    endcatch
-
-    printlog "View->Slide "
-    hUseAsyncSlot( "ViewSlide" )
-
-    printlog "View->Master->Handout "
+    printlog "View->Master->Handout"
     hUseAsyncSlot( "ViewHandout" )
 
-    printlog "View->Master->Notes "
+    printlog "View->Master->Notes"
     hUseAsyncSlot( "ViewNotes" )
     kontext "DocumentImpress"
 
-    printlog "View->Slide "
+    printlog "View->Slide"
     hUseAsyncSlot( "ViewSlide" )
+    sleep 1
 
     printlog "close application "
     Call  hCloseDocument
 
 endcase 'tiViewSlideMaster
+
 '--------------------------------------------------------
+
 testcase tiViewToolbar_1
 
     const DEFAULT_DELAY = 3
 
     Dim NumberOfGraphicModes as integer
     Dim iCurrentGraphicsMode as integer
-
     dim TestFile as string
+    dim i as integer
+    
     TestFile = ConvertPath (gTesttoolPath + "global\input\graf_inp\desp.bmp")
-
     printlog "open application "
     Call hNewDocument
-    
-    printlog "use the empty layout"
-    call sSelectEmptyLayout
 
+    printlog "use the empty layout"
+    Call sSelectEmptyLayout
+
+    printlog "delete default content"
+    hUseAsyncSlot( "EditSelectAll" )
+    Kontext "DocumentImpress"
+    DocumentImpress.typeKeys("<DELETE>",true)
     printlog "Insert->Graphic... : global\input\graf_inp\desp.bmp "
     hUseAsyncSlot( "InsertGraphicsFromFile" )
-
     Kontext "GrafikEinfuegenDlg"
     if ( GrafikEinfuegenDlg.exists( DEFAULT_DELAY ) ) then
         Dateiname.SetText( TestFile )
@@ -238,8 +231,17 @@ testcase tiViewToolbar_1
         printlog "select graphic "
         hUseAsyncSlot( "EditSelectAll" )
 
-        Kontext "GraphicObjectbar"
         printlog "The Graphics Toolbar has to be visible now; If not -> ERROR "
+        ' workaround for i113609; there should have been a style selected without elements on creating the document - what failed; the elements should have been deleted before inserting the grafik in this test - which failed; so the workaround is to use <tab> to travel to the graphic selection here:
+        for i=1 to 3
+        Kontext "GraphicObjectbar"
+        if ( not GraphicObjectbar.Exists( DEFAULT_DELAY ) ) Then
+            hTypeKeys("<tab>")
+            qaerrorlog "delete default content failed"
+        end if
+        next i
+
+        Kontext "GraphicObjectbar"
         if ( GraphicObjectbar.Exists( DEFAULT_DELAY ) ) Then
 
             Printlog "- graphic object toolbar exists"

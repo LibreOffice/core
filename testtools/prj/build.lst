@@ -1,6 +1,6 @@
-tt testtools : cpputools io remotebridges stoc javaunohelper pyuno cli_ure offapi NULL
+tt testtools : cpputools io remotebridges stoc javaunohelper pyuno cli_ure offapi ure LIBXSLT:libxslt NULL
 tt testtools\inc nmake - all tt_inc NULL
-tt testtools\source\bridgetest nmake - all tt_bridgetest tt_bridgetest_idl tt_javaTestObjs tt_inc NULL
+tt testtools\source\bridgetest nmake - all tt_bridgetest tt_bridgetest_idl tt_inc NULL
 tt testtools\source\bridgetest\cli nmake - w,vc7 tt_cli tt_bridgetest tt_bridgetest_idl tt_inc NULL
 tt testtools\source\bridgetest\idl nmake - all tt_bridgetest_idl tt_inc NULL
 tt testtools\com\sun\star\comp\bridge nmake - all tt_javaTestObjs tt_bridgetest_idl tt_inc NULL

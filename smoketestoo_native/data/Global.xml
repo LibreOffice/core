@@ -35,7 +35,7 @@ const cParagraphBreak = 0
 
 global const cExtensionFileName = &quot;TestExtension.oxt&quot;
 
-global const cDocNew = 0, cDocCut = 1, cDocPaste = 2, cDocSaveOpen8 = 3, cDocSaveOpenXML = 4, cDocOpen50 = 5, cDocClose = 6, cDocWrite = 7
+global const cDocNew = 0, cDocSaveOpen8 = 1, cDocSaveOpenXML = 2, cDocOpen50 = 3, cDocClose = 4, cDocWrite = 5
 global const cDBService = 0, cDBOpen = 1, cDBInsert = 2, cDBDelete = 3, cDBSeek = 4, cDBClose = 5
 global const cEXTService = 0, cEXTInstall = 1, cEXTUninstall = 2
 global const cLogfileFailed = 255
@@ -83,8 +83,8 @@ Global const cUserFieldTestWriter = &quot;Writer&quot;, cUserFieldTestCalc = &qu
 Global const cUserFieldTestDraw = &quot;Draw&quot;, cUserFieldTestMath = &quot;Math&quot;, cUserFieldTestChart = &quot;Chart&quot;
 Global const cUserFieldTestHTML = &quot;HTML&quot;, cUserFieldTestJava = &quot;Java&quot;, cUserFieldTestDatabase = &quot;Database&quot;
 Global const cUserFieldTestExtension = &quot;Extension&quot;
-Global const cUserFieldTestOpenSaveXML = &quot;SaveOpenXML&quot;, cUserFieldTestOpen50 = &quot;Open50&quot;, cUserFieldTestCut = &quot;Cut&quot;
-Global const cUserFieldTestPaste = &quot;Paste&quot;, cUserFieldTestTerminateAfterTest = &quot;Terminate&quot;, cUserFieldTestOpenSave8 = &quot;SaveOpen8&quot;
+Global const cUserFieldTestOpenSaveXML = &quot;SaveOpenXML&quot;, cUserFieldTestOpen50 = &quot;Open50&quot;
+Global const cUserFieldTestTerminateAfterTest = &quot;Terminate&quot;, cUserFieldTestOpenSave8 = &quot;SaveOpen8&quot;
 
 Global const cOptionsDialogName = &quot;OptionsDlg&quot;, cTest10Modul = &quot;Standard&quot;
 
@@ -100,8 +100,8 @@ Global bMakeWriterTest as boolean, bMakeCalcTest as  boolean, bMakeImpressTest a
 Global bMakeDrawTest as Boolean, bMakeMathTest as boolean, bMakeChartTest as boolean
 Global bMakeHTMLTest as boolean, bMakeJavaTest as boolean, bMakeDBTest as boolean
 Global bMakeExtensionTest as boolean
-Global bMakeSaveOpenXMLTest as boolean, bMakeOpen50Test as boolean, bMakeCutTest as boolean
-Global bMakePasteTest as boolean, bMakeTerminateAfterTest as boolean, bShowTable as boolean
+Global bMakeSaveOpenXMLTest as boolean, bMakeOpen50Test as boolean
+Global bMakeTerminateAfterTest as boolean, bShowTable as boolean
 Global bMakeSaveOpen8Test as boolean
 
 global sExtensionURL as string
@@ -156,10 +156,8 @@ Sub CreateStatusTable
     tableHeaders(cStHTML) = &quot;HTML&quot;
     tableHeaders(cStJava) = &quot;Java&quot;
 
-    dim tableColums(5) as string
+    dim tableColums(3) as string
     tableColums(cDocNew) = &quot;new&quot;
-    tableColums(cDocCut) = &quot;cut&quot;
-    tableColums(cDocPaste) = &quot;paste&quot;
     tableColums(cDocSaveOpen8) = &quot;V8.0&quot;
     tableColums(cDocSaveOpenXML) = &quot;XML&quot;
     tableColums(cDocOpen50) = &quot;V5.0&quot;
@@ -211,7 +209,7 @@ Sub CreateStatusTable
       xCell.BackTransparent = False
       xCell.BackColor = cCoGrey
 
-    for i% = 0 to 5
+    for i% = 0 to 3
         tableCursor.goDown(1,FALSE)
          cName = tableCursor.getRangeName()
           xCell = table.getCellByName(cName)
@@ -509,8 +507,6 @@ Sub SetOptions
     SetUserFieldState (cUserFieldTestOpenSaveXML, -(gOptionsDialog.getControl(&quot;cbSaveOpenXMLTest&quot;).getState), gOutPutDoc)
     SetUserFieldState (cUserFieldTestOpen50, -(gOptionsDialog.getControl(&quot;cbOpen50Test&quot;).getState), gOutPutDoc)
     SetUserFieldState (cUserFieldTestOpenSave8, -(gOptionsDialog.getControl(&quot;cbSaveOpen8Test&quot;).getState), gOutPutDoc)
-    SetUserFieldState (cUserFieldTestCut, -(gOptionsDialog.getControl(&quot;cbCutTest&quot;).getState), gOutPutDoc)
-    SetUserFieldState (cUserFieldTestPaste, -(gOptionsDialog.getControl(&quot;cbPasteTest&quot;).getState), gOutPutDoc)
     SetUserFieldState (cUserFieldTestTerminateAfterTest, -(gOptionsDialog.getControl(&quot;cbTerminateAfterTest&quot;).getState), gOutPutDoc)
 end Sub
 
@@ -529,8 +525,6 @@ Sub GetOptions
     gOptionsDialog.getControl(&quot;cbSaveOpenXMLTest&quot;).setState( -( GetUserFieldState (cUserFieldTestOpenSaveXML, gOutPutDoc)))
     gOptionsDialog.getControl(&quot;cbOpen50Test&quot;).setState( -( GetUserFieldState (cUserFieldTestOpen50, gOutPutDoc)))
     gOptionsDialog.getControl(&quot;cbSaveOpen8Test&quot;).setState( -( GetUserFieldState (cUserFieldTestOpenSave8, gOutPutDoc)))
-    gOptionsDialog.getControl(&quot;cbCutTest&quot;).setState( -( GetUserFieldState (cUserFieldTestCut, gOutPutDoc)))
-    gOptionsDialog.getControl(&quot;cbPasteTest&quot;).setState( -( GetUserFieldState (cUserFieldTestPaste, gOutPutDoc)))
     gOptionsDialog.getControl(&quot;cbTerminateAfterTest&quot;).setState( -( GetUserFieldState (cUserFieldTestTerminateAfterTest, gOutPutDoc)))
 End Sub
 
@@ -549,8 +543,6 @@ Sub ReadOptions
     bMakeSaveOpenXMLTest = GetUserFieldState (cUserFieldTestOpenSaveXML, gOutPutDoc)
     bMakeOpen50Test = GetUserFieldState (cUserFieldTestOpen50, gOutPutDoc)
     bMakeSaveOpen8Test = GetUserFieldState (cUserFieldTestOpenSave8, gOutPutDoc)
-    bMakeCutTest = GetUserFieldState (cUserFieldTestCut, gOutPutDoc)
-    bMakePasteTest = GetUserFieldState (cUserFieldTestPaste, gOutPutDoc)
     bMakeTerminateAfterTest = GetUserFieldState (cUserFieldTestTerminateAfterTest, gOutPutDoc)
 end Sub
 
@@ -579,8 +571,6 @@ Sub SetDefaultOptions
         bMakeOpen50Test = true
     End If
     bMakeSaveOpen8Test = true
-    bMakeCutTest = true
-    bMakePasteTest = true
     bMakeTerminateAfterTest = false
 end Sub
 
@@ -614,10 +604,8 @@ Function StartTestWithDefaultOptions
     component(cStJava) = &quot;Java&quot;
     component(cStDataBase) = &quot;Base&quot;
     component(cStExtension) = &quot;Extensions&quot;
-    dim action(5) as string
+    dim action(3) as string
     action(cDocNew) = &quot;new&quot;
-    action(cDocCut) = &quot;cut&quot;
-    action(cDocPaste) = &quot;paste&quot;
     action(cDocSaveOpen8) = &quot;V8.0&quot;
     action(cDocSaveOpenXML) = &quot;XML&quot;
     action(cDocOpen50) = &quot;V5.0&quot;
@@ -698,14 +686,6 @@ Sub ExecuteSlot( SlotNr As String, oDoc as Object )
     disp = oDoc.CurrentController.Frame.queryDispatch( url, &quot;&quot;, 0 )
     disp.dispatch( url, args() )
 
-End Sub
-
-Sub CutText (oDoc as Object)
-    ExecuteSlot (&quot;5710&quot;, oDoc)
-End Sub
-
-Sub PasteText (oDoc as Object)
-    ExecuteSlot (&quot;5712&quot;, oDoc)
 End Sub
 
 Sub DelAllUserFields (aDoc as Object)

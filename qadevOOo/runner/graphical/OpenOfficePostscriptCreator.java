@@ -102,6 +102,7 @@ public class OpenOfficePostscriptCreator implements IOffice
         {
             String sDocumentName = FileHelper.appendPath(m_sOutputURL, m_sBasename);
             if (m_aParameterHelper.getReferenceType().toLowerCase().equals("ooo") ||
+                m_aParameterHelper.getReferenceType().toLowerCase().equals("o3") ||
                 m_aParameterHelper.getReferenceType().toLowerCase().equals("ps") )
             {
                 String sPrintURL = sDocumentName + ".ps";
@@ -1380,9 +1381,9 @@ public class OpenOfficePostscriptCreator implements IOffice
         // Watcher Object is need in log object to give a simple way to say if a running office is alive.
         // As long as a log comes, it pings the Watcher and says the office is alive, if not an
         // internal counter increase and at a given point (300 seconds) the office is killed.
-        GlobalLogWriter.println("Set office watcher");
         if (GlobalLogWriter.get().getWatcher() == null)
         {
+            GlobalLogWriter.println("Set office watcher");
             OfficeWatcher aWatcher = (OfficeWatcher)m_aParameterHelper.getTestParameters().get("Watcher");
             GlobalLogWriter.get().setWatcher(aWatcher);
         }

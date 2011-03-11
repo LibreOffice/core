@@ -104,10 +104,10 @@ function LiberalMeasurement ( sShould$, sActual$) as Boolean
             printlog "took units from http://gsl.openoffice.org/source/browse/gsl/vcl/source/src/units.src"
             select case GetMeasUnit(sShould$)
             case "mm", "ミリ", "公厘" : iTolerance = 2.0             '01, 81,     88
-            case "cm","センチ","厘米","公分"  : iTolerance = 0.5       '01, 81, 86, 88
+            case "cm","セン�?","厘米","公分"  : iTolerance = 0.5       '01, 81, 86, 88
             case chr$(34) : iTolerance = 2.5
             case "pi","ピクセル" : iTolerance = 2.5                 '01, 81
-            case "pt",  "ポイント" : iTolerance = 2.5                '01, 81
+            case "pt",  "�?イント" : iTolerance = 2.5                '01, 81
             case "" : iTolerance = 1.5 ' cm is presubposition in old functions
             case else
                 iTolerance = 2.5
@@ -264,51 +264,51 @@ function fMakeDocumentWritable() as boolean
         printlog "Document is already writable."
         fMakeDocumentWritable = true
     endif
-
+    sleep(1)
 end function
 
 '-------------------------------------------------------------------------------
-
-function fGetSizeXY (sX as string, sY as string, bRetrieveOnly as boolean) as Boolean
-
-    const RC_FAILURE = -1
-
+function fGetSizeXY (sX as string, sY as string, bGet as boolean) as Boolean
     dim sTx as string
     dim sTy as string
+    dim bReturn as boolean
 
-    fGetSizeXY() = True
-
-    if ( hUseAsyncSlot( "ContextPositionAndSize" ) <> RC_FAILURE ) then
-
-        kontext
-        active.SetPage TabPositionAndSize
-
-        kontext "TabPositionAndSize"
-        if ( TabPositionAndSize.exists( 2 ) ) then
-            sTx = Width.GetText()
-            sTy = Height.GetText()
-            hCloseDialog( TabPositionAndSize, "ok" )
-        else
-            warnlog "Couldn't switch tab page :-( "
-        endif
-
-        if ( bRetrieveOnly ) then  ' Get the Values only
-            sY = sTy
-            sX = sTx
-        else          ' Get the Values and compare them
-            if ( not LiberalMeasurement (sX,sTx) ) then
-                warnlog "width is different :-( should: '"+sX+"' is: '"+sTx+"'" + "eventually a result of i35519"
-                fGetSizeXY() = False
-            endif
-            if (not LiberalMeasurement (sY,sTy) ) then
-                warnlog "hight is different :-( should: '"+sY+"' is: '"+sTy+"'" + "eventually a result of i35519"
-                fGetSizeXY() = False
-            endif
-        endif
+    bReturn = True
+    try
+        printlog "Trying to open Position and size Dialog.."
+        ContextPositionAndSize
+    catch
+        warnlog "couldn't call 'ContextPositionAndSize' no object selected ?"
+    endcatch
+    kontext
+    active.SetPage TabPositionAndSize
+    kontext "TabPositionAndSize"
+    printlog "Getting some sizes from Position and Size dialog."
+    if TabPositionAndSize.exists (5) then
+        sTx = Width.GetText
+        printlog "Width, sTx=" & sTx
+        sTy = Height.GetText
+        printlog "Height, sTy=" & sTy
+        TabPositionAndSize.OK
     else
-        warnlog( "Failed to open <Position And Size> dialog" )
+        warnlog "Couldn't switch tab page :-( "
     endif
-
+    if bGet then  ' Get the Values only
+        sY = sTy
+        printlog "sY=" & sY
+        sX = sTx
+        printlog "sX=" & sX
+    else          ' Get the Values and COMPARE them
+        if (LiberalMeasurement (sX,sTx) <> TRUE) then
+            warnlog "width is different :-( XXXXXXXXXXXXX should: '"+sX+"' is: '"+sTx+"'" + "eventually a result of i35519"
+            bReturn = False
+        endif
+        if (LiberalMeasurement (sY,sTy) <> TRUE) then
+            warnlog "hight is different :-( xxxxxxxxxxxx should: '"+sY+"' is: '"+sTy+"'" + "eventually a result of i35519"
+            bReturn = False
+        endif
+        bGet = bReturn
+    endif
 end function
 
 '-------------------------------------------------------------------------

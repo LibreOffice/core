@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'*  owner : joerg.skottke@oracle.com
+'*  owner : gregor.hartmann@oracle.com
 '*  
 '*  short description : Test VBA compatibility switches
 '*
@@ -58,11 +58,11 @@ testcase tBasicVBACompatApplicationUnion()
         macro_identifier( 5 ) = "5: False"
         macro_identifier( 6 ) = "6: True"
     else
-        macro_identifier( 1 ) = "1: True"
-        macro_identifier( 2 ) = "2: True"
+        macro_identifier( 1 ) = "1: False"
+        macro_identifier( 2 ) = "2: False"
         macro_identifier( 3 ) = "3: True"
-        macro_identifier( 4 ) = "4: True"
-        macro_identifier( 5 ) = "5: True"
+        macro_identifier( 1 ) = "4: False"
+        macro_identifier( 2 ) = "5: False"
         macro_identifier( 6 ) = "6: True"
     endif
 

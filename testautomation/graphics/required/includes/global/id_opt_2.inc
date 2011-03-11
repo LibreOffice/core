@@ -37,15 +37,15 @@ testcase tToolsOptionsMeasurementUnit (sApplication as string)
     dim iCount2 as integer
     dim sUnitOptions as string
     dim sUnitDialog as string
-   
+
     hNewDocument
-	sleep 1
+    sleep 1
     ToolsOptions
     hToolsOptions (sApplication,"General")
     iCount2 = Masseinheit.GetSelIndex
     printlog "current measurement unit is: " & iCount2
     iCount = Masseinheit.GetItemCount
-   
+
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
     printlog "----------------------"
@@ -56,47 +56,11 @@ testcase tToolsOptionsMeasurementUnit (sApplication as string)
     for i=1 to iCount
         ToolsOptions
         hToolsOptions (sApplication,"General")
-
         Masseinheit.select i
         sUnitOptions = GetMeasUnit(Tabulatorabstand.getText)  ' (1)
         printlog "(" + i + "/" + iCount + "): '" + Masseinheit.getSelText + "' - " + sUnitOptions + "      (1)"
-
         Kontext "ExtrasOptionenDlg"
         ExtrasOptionenDlg.OK
-
-        FileExport
-        Kontext "ExportierenDlg"
-        Dateiname.SetText "adagio"
-        Dateityp.Select "BMP - Windows Bitmap (.bmp)"
-        if AutomatischeDateinamenserweiterung.Exists then
-            AutomatischeDateinamenserweiterung.Check
-        else
-            warnlog( "Automatic Filename Extension checkbox is mising" )
-        endif
-        Speichern.Click
-        kontext "AlienWarning"
-        if AlienWarning.exists(5) then
-            warnlog "#i41983# Alien Warning on export not allowed"
-            AlienWarning.OK
-        endif
-        Kontext "Messagebox"
-        if Messagebox.Exists(2) then
-           Messagebox.Yes
-        endif
-        Sleep 3
-        Kontext "BMPOptionen"
-            Groesse.Check
-                sUnitDialog = getMeasUnit(Breite.getText)   ' (2)
-                if (getMeasUnit(Hoehe.getText) <> sUnitDialog) then
-                    warnlog " Measurement Unit is different for Width:'" + sUnitDialog + "' and Hight:'" + getMeasUnit(Hoehe.getText) + "'"
-                else
-                    printlog "Measurement Unit is same for Width:'" + sUnitDialog + "' and Hight:'" + getMeasUnit(Hoehe.getText) + "'"
-                endif
-                if (sUnitOptions <> sUnitDialog) then
-                    printlog "#109705# Measurement Unit is different for Options:'" + sUnitOptions + "' and BMP Dialog:'" + sUnitDialog + "' (1) <> (2)"
-                endif
-        BMPOptionen.Cancel
-
         Format3D_Effects
         Kontext "Drei_D_Effekte"
         Geometrie.Click
@@ -107,7 +71,6 @@ testcase tToolsOptionsMeasurementUnit (sApplication as string)
              printlog "Measurement Unit is same for Options:'" + sUnitOptions + "' and Depth:'" + getMeasUnit(Tiefe.getText) + "'      (3)"
         endif
         Drei_D_Effekte.close
-
         FormatParagraph
         Kontext
         Messagebox.SetPage TabEinzuegeUndAbstaende
@@ -119,9 +82,8 @@ testcase tToolsOptionsMeasurementUnit (sApplication as string)
              printlog "Measurement Unit is same for Options:'" + sUnitOptions + "' and Vonlinks:'" + getMeasUnit(Vonlinks.getText) + "' Paragraph"
         endif
         TabEinzuegeUndAbstaende.cancel
-
     next i
-    
+
     printlog "Setting back measurement to " & iCount2
     ToolsOptions
     hToolsOptions (sApplication,"General")

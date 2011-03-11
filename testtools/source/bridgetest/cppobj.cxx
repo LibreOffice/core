@@ -43,7 +43,6 @@
 #include "cppuhelper/compbase_ex.hxx"
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
 #include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
@@ -163,7 +162,7 @@ public:
         {}
     virtual ~Test_Impl()
         {
-            OSL_TRACE( "> scalar Test_Impl dtor <\n" );
+            OSL_TRACE( "> scalar Test_Impl dtor <" );
         }
 
     void SAL_CALL acquire() throw ()
@@ -1189,27 +1188,6 @@ void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-//==================================================================================================
-sal_Bool SAL_CALL component_writeInfo( void *, void * pRegistryKey )
-{
-    if (pRegistryKey)
-    {
-        try
-        {
-            Reference< XRegistryKey > xNewKey(
-                reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("/" IMPLNAME "/UNO/SERVICES") ) ) );
-            xNewKey->createKey( OUString( RTL_CONSTASCII_USTRINGPARAM(SERVICENAME) ) );
-
-            return sal_True;
-        }
-        catch (InvalidRegistryException &)
-        {
-            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
-        }
-    }
-    return sal_False;
 }
 //==================================================================================================
 void * SAL_CALL component_getFactory(

@@ -31,9 +31,9 @@
 '*
 '\******************************************************************
 
-'/// run this script, if you are testing a new language. ///'
-'/// it will add all relevant strings to the file qatesttool/graphics/tools/locale_1.txt ///'
-'/// you just have to make sure, that every language only appears once in the file! ///'
+printlog "Run this script, if you are testing a new language."
+printlog "it will add all relevant strings to the file qatesttool/graphics/tools/locale_1.txt "
+printlog "you just have to make sure, that every language only appears once in the file! "
 
 public glLocale (15*20) as string
 public S1 as string
@@ -54,13 +54,6 @@ sub main
         warnlog "Locales file doesn't exist: '" + gTesttoolPath + "graphics\tools\locale_1.txt'"
     endif
 
-    'Handouts
-    'Slide
-    'Default
-    'English (USA)
-    'Background
-    'German (Germany)
-
     printlog "Current saved strings are: "
     printlog "O 1: " + glLocale (1) 'Handouts        ' im_103.inc::tViewWorkspaceHandoutView
     printlog "O 2: " + glLocale (2) 'Slide           ' impress/slideshow.inc::
@@ -69,7 +62,7 @@ sub main
     printlog "O 5: " + glLocale (5) 'Background
     printlog "O 6: " + glLocale (6) 'German (Germany)
 
-    '/// LOCALE Slide - 2 ///'
+    printlog "LOCALE Slide - 2 "
     S1 = glLocale (2) + " 1"
     S2 = glLocale (2) + " 2"
     S3 = glLocale (2) + " 3"
@@ -83,14 +76,15 @@ sub main
     '   hMenuSelectNr(3)
     '   hMenuSelectNr(11)
     '   printlog hMenuItemGetText (4)
-    '  ViewWorkspaceHandoutView						'/// view background handout ///'
+    '   printlog "view background handout"
+    '  ViewWorkspaceHandoutView						
     '   sleep 2
     '  FormatPage
     sleep 2
     glLocale (1) = "Dummy" 'Seitenname.GetText
     Printlog "L1: '" + glLocale (1) + "'"
     '3  Seitenlayout.Close
-    '  ViewWorkspaceDrawingView						'/// back to view background drawing ///'
+    '  ViewWorkspaceDrawingView
 
     '(2)tSlideShowInteraction/fGetSlideName
     Kontext "Navigator"

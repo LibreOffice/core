@@ -41,17 +41,22 @@ DLLPRE = # no leading "lib" on .so files
 BATCH_SUFFIX=.bat
 GIVE_EXEC_RIGHTS=@echo
 MY_URE_INTERNAL_JAVA_DIR=$(strip $(subst,\,/ file:///$(shell @$(WRAPCMD) echo $(SOLARBINDIR))))
-MY_LOCAL_CLASSDIR=$(strip $(subst,\,/ file:///$(shell $(WRAPCMD) echo $(PWD)$/$(CLASSDIR))))
+MY_LOCAL_CLASSDIR=$(strip $(subst,\,/ file:///$(shell $(WRAPCMD) echo $(PWD)/$(CLASSDIR)/)))
 .ELIF "$(GUI)"=="OS2"
 BATCH_SUFFIX=.cmd
 GIVE_EXEC_RIGHTS=@echo
 MY_URE_INTERNAL_JAVA_DIR=$(strip $(subst,\,/ file:///$(shell @$(WRAPCMD) echo $(SOLARBINDIR))))
-MY_LOCAL_CLASSDIR=$(strip $(subst,\,/ file:///$(shell $(WRAPCMD) echo $(PWD)$/$(CLASSDIR))))
+MY_LOCAL_CLASSDIR=$(strip $(subst,\,/ file:///$(shell $(WRAPCMD) echo $(PWD)/$(CLASSDIR)/)))
 .ELSE
 GIVE_EXEC_RIGHTS=chmod +x 
 MY_URE_INTERNAL_JAVA_DIR=file://$(SOLARBINDIR)
-MY_LOCAL_CLASSDIR=file://$(PWD)$/$(CLASSDIR)
+MY_LOCAL_CLASSDIR=file://$(PWD)/$(CLASSDIR)/
 .ENDIF
+
+my_components = bridgetest constructors cppobj
+.IF "$(SOLAR_JAVA)" != ""
+my_components += testComponent
+.END
 
 .IF "$(GUI)"=="WNT"
 .IF "$(compcheck)" != ""
@@ -122,6 +127,7 @@ JAVATARGETS=\
 .IF "$(L10N_framework)"==""
 ALLTAR: \
         runtest \
+        $(DLLDEST)/services.rdb \
         $(DLLDEST)$/uno_types.rdb \
         $(DLLDEST)$/uno_services.rdb \
         $(DLLDEST)$/bridgetest_server$(BATCH_SUFFIX) \
@@ -130,7 +136,8 @@ ALLTAR: \
 
 #################################################################
 
-runtest : $(DLLDEST)$/uno_types.rdb $(DLLDEST)$/uno_services.rdb makefile.mk
+runtest : $(DLLDEST)$/uno_types.rdb $(DLLDEST)$/uno_services.rdb makefile.mk \
+        $(SHL1TARGETN) $(SHL2TARGETN) $(SHL3TARGETN)
 .IF "$(COM)$(OS)$(CPU)" == "GCCMACOSXP"
     @echo "Mac OSX PPC GCC fails this test!, likely broken UNO bridge. Fix me."
 .ELSE
@@ -139,14 +146,18 @@ runtest : $(DLLDEST)$/uno_types.rdb $(DLLDEST)$/uno_services.rdb makefile.mk
         -s com.sun.star.test.bridge.BridgeTest -- \
         com.sun.star.test.bridge.CppTestObject
 .ENDIF
-    
-$(DLLDEST)$/uno_types.rdb : $(SOLARBINDIR)$/udkapi.rdb $(BIN)$/bridgetest.rdb
+
+$(DLLDEST)/services.rdb :
+    $(COPY) $(SOLARXMLDIR)/ure/services.rdb $@
+
+$(DLLDEST)$/uno_types.rdb : $(SOLARBINDIR)$/udkapi.rdb
     echo $(DLLDEST)
     $(GNUCOPY) $(SOLARBINDIR)$/udkapi.rdb $@
     $(REGMERGE) $@ / $(BIN)$/bridgetest.rdb
 
 $(DLLDEST)$/bridgetest_client$(BATCH_SUFFIX) .ERRREMOVE: makefile.mk
-    echo '$(AUGMENT_LIBRARY_PATH)' '$(SOLARBINDIR)'/uno -ro uno_services.rdb -ro uno_types.rdb \
+    echo '$(AUGMENT_LIBRARY_PATH)' '$(SOLARBINDIR)'/uno -ro services.rdb \
+        -ro uno_services.rdb -ro uno_types.rdb \
         -s com.sun.star.test.bridge.BridgeTest -- \
         -u \''uno:socket,host=127.0.0.1,port=2002;urp;test'\' > $@
     $(GIVE_EXEC_RIGHTS) $@
@@ -175,44 +186,44 @@ $(DLLDEST)$/bridgetest_javaserver$(BATCH_SUFFIX) : makefile.mk
     $(GIVE_EXEC_RIGHTS) $@
 
 $(DLLDEST)$/bridgetest_inprocess_java$(BATCH_SUFFIX) .ERRREMOVE: makefile.mk
-    echo '$(AUGMENT_LIBRARY_PATH)' '$(SOLARBINDIR)'/uno -ro uno_services.rdb -ro uno_types.rdb \
+    echo '$(AUGMENT_LIBRARY_PATH)' '$(SOLARBINDIR)'/uno -ro services.rdb \
+        -ro uno_services.rdb -ro uno_types.rdb \
         -s com.sun.star.test.bridge.BridgeTest \
         -env:URE_INTERNAL_JAVA_DIR=$(MY_URE_INTERNAL_JAVA_DIR) \
+        -env:MY_CLASSDIR_URL=$(MY_LOCAL_CLASSDIR) \
         -- com.sun.star.test.bridge.JavaTestObject noCurrentContext > $@
     $(GIVE_EXEC_RIGHTS) $@
 .ENDIF
 
-$(DLLDEST)$/uno_services.rdb .ERRREMOVE: $(DLLDEST)$/uno_types.rdb \
-        $(DLLDEST)$/bridgetest.uno$(DLLPOST) $(DLLDEST)$/cppobj.uno$(DLLPOST) \
-        $(MISC)$/$(TARGET)$/bootstrap.rdb $(SHL3TARGETN)
-    - $(MKDIR) $(@:d)
-    $(REGCOMP) -register -br $(DLLDEST)$/uno_types.rdb \
-        -r $(DLLDEST)$/uno_services.rdb -wop \
-        -c acceptor.uno$(DLLPOST) \
-        -c bridgefac.uno$(DLLPOST) \
-        -c connector.uno$(DLLPOST) \
-        -c remotebridge.uno$(DLLPOST) \
-        -c uuresolver.uno$(DLLPOST) \
-        -c stocservices.uno$(DLLPOST)
-    cd $(DLLDEST) && $(REGCOMP) -register -br uno_types.rdb \
-        -r uno_services.rdb -wop=./ \
-        -c .$/bridgetest.uno$(DLLPOST) \
-        -c .$/cppobj.uno$(DLLPOST) \
-        -c .$/$(SHL3TARGETN:f)
-.IF "$(SOLAR_JAVA)" != ""
-    $(REGCOMP) -register -br $(DLLDEST)$/uno_types.rdb -r $@ \
-        -c javaloader.uno$(DLLPOST) -c javavm.uno$(DLLPOST)
-    $(REGCOMP) -register  -br $(MISC)$/$(TARGET)$/bootstrap.rdb -r $@ -c \
-        $(MY_LOCAL_CLASSDIR)/testComponent.jar \
-        -env:URE_INTERNAL_JAVA_DIR=$(MY_URE_INTERNAL_JAVA_DIR)
-.ENDIF
+$(DLLDEST)$/uno_services.rdb .ERRREMOVE : $(SOLARENV)/bin/packcomponents.xslt \
+        $(MISC)/uno_services.input $(my_components:^"$(MISC)/":+".component")
+    $(XSLTPROC) --nonet --stringparam prefix $(PWD)/$(MISC)/ -o $@ \
+        $(SOLARENV)/bin/packcomponents.xslt $(MISC)/uno_services.input
 
-$(MISC)$/$(TARGET)$/bootstrap.rdb .ERRREMOVE:
-    - $(MKDIR) $(@:d)
-     $(COPY) $(SOLARBINDIR)$/types.rdb $@
-.IF "$(SOLAR_JAVA)" != ""
-    $(REGCOMP) -register -r $@ -c javaloader.uno$(DLLPOST) \
-        -c javavm.uno$(DLLPOST) -c stocservices.uno$(DLLPOST)
-.ENDIF
+$(MISC)/uno_services.input :
+    echo \
+        '<list>$(my_components:^"<filename>":+".component</filename>")</list>' \
+        > $@
+
+$(MISC)/bridgetest.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        bridgetest.component
+    $(XSLTPROC) --nonet --stringparam uri './$(SHL2TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt bridgetest.component
+
+$(MISC)/constructors.component .ERRREMOVE : \
+        $(SOLARENV)/bin/createcomponent.xslt constructors.component
+    $(XSLTPROC) --nonet --stringparam uri './$(SHL3TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt constructors.component
+
+$(MISC)/cppobj.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        cppobj.component
+    $(XSLTPROC) --nonet --stringparam uri './$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt cppobj.component
+
+$(MISC)/testComponent.component .ERRREMOVE : \
+        $(SOLARENV)/bin/createcomponent.xslt testComponent.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        'vnd.sun.star.expand:$${{MY_CLASSDIR_URL}}testComponent.jar' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt testComponent.component
+
 .ENDIF # L10N_framework
-

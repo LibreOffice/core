@@ -67,6 +67,17 @@ testcase tToolsCatalog
          '/// Click Button 'Modify' ///'
          Modify.Click
          sleep 1
+      '/// cancel dialog 'Edit Symbols' ///'
+      EditSymbols.Cancel
+      ' since cws tl82 - dev300m88 we need to go into dialog again to get the others buttons
+      Kontext "SymboleMath"
+      printlog "count of 'Symbol set' :" + Symbolset.GetItemCount
+      '/// click button 'Edit...' ///'
+      Bearbeiten.Click
+         Kontext "EditSymbols"
+         '/// select last item in listbox 'Font' ///'
+         Font.Select (Font.GetItemCount)
+         sleep 1
          '/// Click Button 'Delete' ///'
          Delete.Click
          sleep 1
@@ -287,7 +298,8 @@ testcase tToolsExtensionManager
                             ExtensionSoftwareLicenseAgreement.CANCEL
                     kontext
                     if active.exists(5) then
-                    	qaerrorlog "#i73307# Alzheimer feature extension licensing '" + active.getText + "'"
+                        '#i73307# 
+                    	warnlog "Alzheimer feature extension licensing '" + active.getText + "'"
                     	active.ok
                     endif
                 endif

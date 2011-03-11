@@ -217,7 +217,7 @@ testcase tToolsOptionsWriterOther
 
 '   load file in this environment
     '///use "output\\writer\\w95\\tab25cm.odt" ///
-    Call hFileOpen (gOfficePath + "user\work\tab25cm.odt")
+    hFileOpen( gOfficePath & "user\work\tab25cm.odt")
     sleep (2)
 '   check TabStops, have to be the ones this file was saved with
     ToolsOptions
@@ -857,9 +857,6 @@ endcase
 '------------------------------------------------------------------------------
 
 testcase tToolsOptionsWriterMailMerge
-
-    warnlog( "#i111914# - Test excluded, needs review" )
-    goto endsub
 
     Call hNewDocument
     printlog ("- Tools/Options/Writer: Mail Merge ")

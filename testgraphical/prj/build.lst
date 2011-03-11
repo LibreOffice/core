@@ -1,7 +1,7 @@
-gfxcmp    testgraphical     :       instsetoo_native NULL
+gfxcmp    testgraphical     :       instsetoo_native qadevOOo NULL
 gfxcmp    testgraphical                             usr1     -  all    gfxcmp_mkout NULL
 #gfxcmp    testgraphical\prechecks                   nmake    -  all    gfxcmp_pre NULL
 gfxcmp    testgraphical\ui\java\ConvwatchGUIProject nmake    -  all    gfxcmp_java_ui NULL
 gfxcmp    testgraphical\ui\java                     nmake    -  all    gfxcmp_java gfxcmp_java_ui NULL
 # gfxcmp    testgraphical\source                    nmake    -  all    gfxcmp_src gfxcmp_java NULL
-gfxcmp    testgraphical\qa\graphical                nmake    -  all    gfxcmp_qa gfxcmp_java NULL
+#i112751 gfxcmp    testgraphical\qa\graphical                nmake    -  all    gfxcmp_qa gfxcmp_java NULL

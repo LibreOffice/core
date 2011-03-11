@@ -51,8 +51,8 @@ namespace {
 
 namespace css = ::com::sun::star;
 
-static char const key[] = "testtools.bridgetest.Key";
-static char const value[] = "good";
+static char const KEY[] = "testtools.bridgetest.Key";
+static char const VALUE[] = "good";
 
 class CurrentContext:
     public ::osl::DebugBase< CurrentContext >,
@@ -78,8 +78,8 @@ CurrentContext::~CurrentContext() {}
 css::uno::Any CurrentContext::getValueByName(::rtl::OUString const & Name)
     throw (css::uno::RuntimeException)
 {
-    return Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(key))
-        ? css::uno::makeAny(::rtl::OUString::createFromAscii(value))
+    return Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(KEY))
+        ? css::uno::makeAny(::rtl::OUString::createFromAscii(VALUE))
         : css::uno::Any();
 }
 
@@ -116,13 +116,13 @@ bool testtools::bridgetest::CurrentContextChecker::performCheck(
             return false;
         }
         css::uno::Any a(
-            context->getValueByName(::rtl::OUString::createFromAscii(key)));
+            context->getValueByName(::rtl::OUString::createFromAscii(KEY)));
         if (a.getValueType() != ::cppu::UnoType< ::rtl::OUString >::get()) {
             return false;
         }
         ::rtl::OUString s;
         OSL_VERIFY(a >>= s);
-        return s.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(value));
+        return s.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(VALUE));
     } else {
         return other->perform(
             this, setSteps >= 0 ? setSteps - 1 : -1, checkSteps - 1);

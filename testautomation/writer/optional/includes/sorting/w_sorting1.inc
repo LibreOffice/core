@@ -28,15 +28,6 @@
 '*
 '* short description : Sorting functions in Writer
 '*
-'************************************************************************
-'*
-' #1 tToolsSort1                         ' Text in one Column and 1 Key
-' #1 tToolsSort2                         ' Numbers in 1 Column and 1 Key
-' #1 tToolsSort3                         ' Text in several Columns and 3 Keys
-' #1 tToolsSort4                         ' Table with Header ( Text and Numbers mixed )
-' #1 tToolsSort5                         ' Table without Header ( Text and Numbers mixed )
-' #1 tToolsSort6                         ' Copy sorted table in another table
-'*
 '\***********************************************************************
 
 sub w_sorting
@@ -236,18 +227,16 @@ testcase tToolsSort3
     PrintLog "- Tools / Sorting text in several lines"
     for i=1 to 3
         select case i
-            case 1: Printlog "  - Seperator is a tabulator"
-            case 2: Printlog "  - Seperator is a semicolon"
+            case 1: Printlog "  - Separator is a tabulator"
+            case 2: Printlog "  - Separator is a semicolon"
                     Trennzeichen = ";"
-            case 3: Printlog "  - Seperator is a '|'"
+            case 3: Printlog "  - Separator is a '|'"
                      Trennzeichen = "|"
         end select
         if gApplication = "WRITER" then
-            Call hFileOpen ( gTesttoolPath + "writer\optional\input\sorting\sort2.odt" )
-            Call sMakeReadOnlyDocumentEditable
+            hFileOpenLocally(  gTesttoolPath + "writer\optional\input\sorting\sort2.odt" )
         else
-            Call hFileOpen ( gTesttoolPath + "writer\optional\input\sorting\sort2.odm" )
-            Call sMakeReadOnlyDocumentEditable
+            hFileOpenLocally(  gTesttoolPath + "writer\optional\input\sorting\sort2.odm" )
         end if
 
         if i <> 1 then TrennzeichenSetzen ( Trennzeichen )
@@ -319,11 +308,9 @@ endcase
 testcase tToolsSort4
     PrintLog "- Tools / Sorting in table with header"
     if gApplication = "WRITER" then
-        Call hFileOpen ( gTesttoolPath + "writer\optional\input\sorting\sort1.odt" )
-        Call sMakeReadOnlyDocumentEditable
+        hFileOpenLocally(  gTesttoolPath + "writer\optional\input\sorting\sort1.odt" )
     else
-        Call hFileOpen ( gTesttoolPath + "writer\optional\input\sorting\sort1.odm" )
-        Call sMakeReadOnlyDocumentEditable
+        hFileOpenLocally(  gTesttoolPath + "writer\optional\input\sorting\sort1.odm" )
     end if
     Call wTypeKeys "<Mod1 a>", 2
 
@@ -444,11 +431,9 @@ endcase
 testcase tToolsSort5
     PrintLog "- Tools / Sorting in table without header"
     if gApplication = "WRITER" then
-        Call hFileOpen ( gTesttoolPath + "writer\optional\input\sorting\sort1.odt" )
-        Call sMakeReadOnlyDocumentEditable
+        hFileOpenLocally(  gTesttoolPath + "writer\optional\input\sorting\sort1.odt" )
     else
-        Call hFileOpen ( gTesttoolPath + "writer\optional\input\sorting\sort1.odm" )
-        Call sMakeReadOnlyDocumentEditable
+        hFileOpenLocally(  gTesttoolPath + "writer\optional\input\sorting\sort1.odm" )
     end if
 
     Call wNavigatorAuswahl (2, 2)
@@ -574,11 +559,9 @@ testcase tToolsSort6
     PrintLog "- Tools / Sort a sorted table and copy in another one"
 
     if gApplication = "WRITER" then
-        Call hFileOpen ( gTesttoolPath + "writer\optional\input\sorting\sort3.odt" )
-        Call sMakeReadOnlyDocumentEditable
+        hFileOpenLocally(  gTesttoolPath + "writer\optional\input\sorting\sort3.odt" )
     else
-        Call hFileOpen ( gTesttoolPath + "writer\optional\input\sorting\sort3.odm" )
-        Call sMakeReadOnlyDocumentEditable
+        hFileOpenLocally(  gTesttoolPath + "writer\optional\input\sorting\sort3.odm" )
     end if
     Call wTypeKeys "<Mod1 a>", 2
 

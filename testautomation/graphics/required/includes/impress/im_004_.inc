@@ -41,25 +41,30 @@ end sub
 
 testcase tiInsertSlideExpandSummary
 
-    printlog "open application "
+    printlog "open application"
     Call hNewDocument
-    printlog "View->Master View->Outline View "
+    printlog "View->Master View->Outline View"
     ViewWorkspaceOutlineView
-    WaitSlot()
+    Sleep 1
     Kontext "DocumentImpressOutlineView"
-    printlog "Type 2 rows "
+    printlog "Type 2 rows"
     DocumentImpressOutlineView.TypeKeys "Herbert<Return>Rudi"
-    sleep(1)
-    printlog "View->Master View->Drawing View "
+    printlog "View->Master View->Drawing View"
     ViewWorkspaceDrawingView
-    WaitSlot()
-    printlog "Insert->Summery Slide "
+    Sleep 1
+    printlog "Insert->Summery Slide"
     InsertSummerySlide
-    WaitSlot()
-    printlog "Insert->Expand Slide "
+    Sleep 1
+    printlog "Making sure we are on the 3rd slide.."
+    kontext "slides"
+    SlidesControl.TypeKeys "<PAGEDOWN>", 2
+    sleep 1
+    kontext "DocumentImpress"
+    printlog "Insert->Expand Slide"
     InsertExpandSlide
-    WaitSlot( 3000 )
-    printlog "close application "
+    Sleep 2
+    printlog "close application"
     Call  hCloseDocument
-endcase
+
+endcase 'tiInsertSlideExpandSummary
 

@@ -79,7 +79,7 @@ testcase WriterToDrawText
         Call hCloseDocument
         printlog " + Close saved document "
         wait 500
-        Call hFileOpen (gOfficepath + "user\work\writer_to_draw_text.odg",false)
+        hFileOpen( gOfficepath + "user\work\writer_to_draw_text.odg",false)
         printlog " + Reopen saved document "
         Wait 500
         Call hCloseDocument
@@ -133,7 +133,7 @@ testcase WriterToDrawField
             Call hCloseDocument
             printlog " + Close saved document "
             wait 500
-            Call hFileOpen (gOfficepath + "user\work\writer_to_draw_field.odg",false)
+            hFileOpen( gOfficepath + "user\work\writer_to_draw_field.odg",false)
             printlog " + Reopen saved document "
             Wait 500
             Call hCloseDocument
@@ -187,7 +187,7 @@ testcase WriterToDrawTable
             Call hCloseDocument
             printlog " + Close saved document "
             wait 500
-            Call hFileOpen (gOfficepath + "user\work\writer_to_draw_table.odg",false)
+            hFileOpen( gOfficepath + "user\work\writer_to_draw_table.odg",false)
             printlog " + Reopen saved document "
             Wait 500
             Call hCloseDocument
@@ -241,7 +241,7 @@ testcase WriterToDrawFrame
             Call hCloseDocument
             printlog " + Close saved document "
             wait 500
-            Call hFileOpen (gOfficepath + "user\work\writer_to_draw_frame.odg",false)
+            hFileOpen( gOfficepath + "user\work\writer_to_draw_frame.odg",false)
             printlog " + Reopen saved document "
             Wait 500
             Call hCloseDocument
@@ -295,7 +295,7 @@ testcase WriterToDrawDrawingObject
             Call hCloseDocument
             printlog " + Close saved document "
             wait 500
-            Call hFileOpen (gOfficepath + "user\work\writer_to_draw_draw.odg",false)
+            hFileOpen( gOfficepath + "user\work\writer_to_draw_draw.odg",false)
             printlog " + Reopen saved document "
             Wait 500
             Call hCloseDocument
@@ -350,7 +350,7 @@ testcase WriterToDrawGraphicLinked
          Call hCloseDocument
          printlog " + Close saved document "
          wait 500
-         Call hFileOpen (gOfficepath + "user\work\writer_to_draw_graphic1.odg",false)
+         hFileOpen( gOfficepath + "user\work\writer_to_draw_graphic1.odg",false)
          printlog " + Reopen saved document "
          Wait 500
          Call hCloseDocument
@@ -405,7 +405,7 @@ testcase WriterToDrawGraphicEmbedded
      Call hCloseDocument
      printlog " + Close saved document "
      wait 500
-     Call hFileOpen (gOfficepath + "user\work\writer_to_draw_graphic2.odg",false)
+     hFileOpen( gOfficepath + "user\work\writer_to_draw_graphic2.odg",false)
      printlog " + Reopen saved document "
      Wait 500
      Call hCloseDocument
@@ -459,7 +459,7 @@ testcase WriterToDrawOLEObject
      Call hCloseDocument
      printlog " + Close saved document "
      wait 500
-     Call hFileOpen (gOfficepath + "user\work\writer_to_draw_ole.odg",false)
+     hFileOpen( gOfficepath + "user\work\writer_to_draw_ole.odg",false)
      printlog " + Reopen saved document "
      Wait 500
      Call hCloseDocument
@@ -513,7 +513,7 @@ testcase WriterToDrawControl
      Call hCloseDocument
      printlog " + Close saved document "
      wait 500
-     Call hFileOpen (gOfficepath + "user\work\writer_to_draw_control.odg",false)
+     hFileOpen( gOfficepath + "user\work\writer_to_draw_control.odg",false)
      printlog " + Reopen saved document "
      Wait 500
      Call hCloseDocument

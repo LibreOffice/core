@@ -74,10 +74,10 @@ testcase tToolsNumbering12
             end select
 
             printlog( "Open file: " & DocFileList( iCurrentDocument ) )
-			Call hFileOpen ( DocFileList( iCurrentDocument ) )
+			hFileOpenLocally(  DocFileList( iCurrentDocument ) )
 
             printlog( "Make a copy if the file is write protected" )
-            Call sMakeReadOnlyDocumentEditable
+            
 
             printlog( "Test for unexpected dialog: Filter Selection" )
 			Kontext "Filterauswahl"
@@ -106,12 +106,15 @@ testcase tToolsNumbering12
 				                 "." & sCurrentFilterExt )
 				hDeleteFile( ExportFileName ) ' There should never be a reason to overwrite 
 
-				printlog "  - export as: " & ExportFileName
-				Call hFileSaveAsWithFilter( ExportFileName, sCurrentFilter )
-				Call hCloseDocument
+                ' Binary export filter was removed
+                if iDocumentType < 3 then
+                    printlog "  - export as: " & ExportFileName
+                    Call hFileSaveAsWithFilter( ExportFileName, sCurrentFilter )
+                    Call hCloseDocument
 
-				printlog "  - load previous saved document"
-				Call hFileOpen ( ExportFileName )
+                    printlog "  - load previous saved document"
+                    hFileOpen(  ExportFileName )
+                endif
 
 				printlog "  - close document"
 				hFileCloseAll()
@@ -132,8 +135,8 @@ testcase tToolsNumbering13
     '/// This testcase loads a Worddocument that lost all formattings
     printlog "#i73790 regression testing"
     '/// Load document 'writer\\optional\\input\\number\\regression\\73790.doc'
-    Call hFileOpen ( gTesttoolPath + "writer\optional\input\number\regression\73790.doc" )
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally(  gTesttoolPath + "writer\optional\input\number\regression\73790.doc" )
+    
     '/// Document has Heading1-Heading3 formatted, be sure it is
     call wTypeKeys ("<Mod1 Home>")
     '/// Point cursor to top of document with <STRG HOME>

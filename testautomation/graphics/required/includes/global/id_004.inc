@@ -30,6 +30,34 @@
 '* short description :
 '*
 '\******************************************************************************
+sub id_004
+
+    printLog Chr(13) + "---------    id_004    ----------"
+
+    call tiInsertSlide
+    call tiInsertDuplicateSlide
+    ' v expand slide
+    '  v summary slide
+    call tiInsertField
+    call tiInsertSpecialCharacter
+    call tiInsertHyperlink
+    call tiInsertScan
+    call tiInsertGraphic
+    call tiInsertObjectSound
+    call tiInsertObjectVideo
+    call tiInsertObjectSound
+    call tiInsertObjectVideo
+    call tiInsertChart
+    call tiInsertObjectOLEObjects
+    call tiInsertSpreadsheet
+    call tiInsertFormula
+    call tiInsertFloatingFrame
+    call tiInsertFile
+    call tiInsertPlugin
+    call tiInsertSnappointLine
+    call tdInsertLayer ' IMPRESS: Edit->Layer->Insert
+end sub
+'------------------------------------------------------------------------------
 testcase tiInsertSlide
 
     printlog "Dateiname.settext Convertpath (gTesttoolPath + global\input\graf_inp\stabler.tif) "
@@ -221,7 +249,7 @@ testcase tiInsertGraphic
     catch
         Warnlog "Insert graphic doesn't work :-("
     endcatch
-
+    WaitSlot (2000)
     printlog "close application "
     Call hCloseDocument
     
@@ -279,11 +307,11 @@ testcase tiInsertChart
     InsertChart
     WaitSlot (2000)
     Kontext "Messagebox"
-        if Messagebox.Exists then
-            Warnlog Messagebox.GetText
-            Messagebox.OK
-            sleep 1
-        end if
+    if Messagebox.Exists then
+        Warnlog Messagebox.GetText
+        Messagebox.OK
+        sleep 1
+    end if
     gMouseClick 1,1
     sleep 2
     printlog "close application "
@@ -332,17 +360,17 @@ testcase tiInsertSpreadsheet
     InsertSpreadsheetDraw
     WaitSlot (2000)
     Kontext "Messagebox"
-        if Messagebox.Exists (5) then
-            Warnlog Messagebox.GetText
-            Messagebox.OK
-        end if
-        sleep 2
-        printlog "click somewhere out of the object, to deselect it "
-        gMouseClick 1,1
-        sleep 1
-        printlog "select and delete object with keys: <Tab><Delete> "
-        hTypekeys "<Tab><Delete>"
-        sleep 2
+    if Messagebox.Exists (5) then
+        Warnlog Messagebox.GetText
+        Messagebox.OK
+    end if
+    sleep 2
+    printlog "click somewhere out of the object, to deselect it "
+    gMouseClick 1,1
+    sleep 1
+    printlog "select and delete object with keys: <Tab><Delete> "
+    hTypekeys "<Tab><Delete>"
+    sleep 2
     printlog "close application "
     Call hCloseDocument
     

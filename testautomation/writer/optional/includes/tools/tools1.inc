@@ -66,8 +66,8 @@ end function
 function fFormatGraphic(Options as string) as boolean
     Dim j as integer, sSlotOK as boolean
 
+    fFormatGraphic = true
     if ( hUseAsyncSlot( "FormatGraphics" ) <> -1 ) then
-
         Kontext
         if ( Active.exists( 2 ) ) then
             Select case Options
@@ -99,9 +99,11 @@ function fFormatGraphic(Options as string) as boolean
             end select
         else
             warnlog( "Failed to access <Format Graphics> Tabpage" )
+            fFormatGraphic = false
         endif
     else
         warnlog( "Failed to execute <FormatGraphics>" )
+        fFormatGraphic = false
     endif
 
     Kontext Options

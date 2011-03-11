@@ -10,17 +10,17 @@
 ' ***  Nicht mehr aktuelle Slots,  ***
 ' ** die aber noch verwendet werden **
 ' **
-DateiNeu SID_NEWDOC
-DateiLetzteVersion SID_RELOAD SID_LASTVERSIONDOC
-DateiVersenden SID_MAIL_SENDDOC
-DateiScannenQuelleAuswaehlen SID_TWAIN_SELECT
-DateiScannenAnfordern SID_TWAIN_SELECT
-BearbeitenAllesMarkieren SID_SELECT
-EinfuegenObjekt SID_INSERT_OBJECT
-EinfuegenObjektObjekte SID_INSERT_OBJECT
-EinfuegenObjektWriter FN_INSERT_OBJECT_DLG
-EinfuegenRahmenfenster SID_INSERT_FLOATINGFRAME
-ExtrasNumerierungAufzaehlung FN_NUMBER_BULLETS
+DateiNeu .uno:NewDoc
+DateiLetzteVersion SID_RELOAD
+DateiVersenden .uno:SendMail
+DateiScannenQuelleAuswaehlen .uno:TwainSelect
+DateiScannenAnfordern .uno:TwainSelect
+BearbeitenAllesMarkieren .uno:Select
+EinfuegenObjekt .uno:InsertObject
+EinfuegenObjektObjekte .uno:InsertObject
+EinfuegenObjektWriter .uno:InsertObjectDialog
+EinfuegenRahmenfenster .uno:InsertObjectFloatingFrame
+ExtrasNumerierungAufzaehlung .uno:BulletsAndNumberingDialog
 
 
 ' ***************************************************
@@ -28,620 +28,620 @@ ExtrasNumerierungAufzaehlung FN_NUMBER_BULLETS
 ' ********* DateiMen� *********
 ' ****
 ' **** Alle
-DateiNeuAusVorlage SID_NEWDOC
-DateiOeffnen SID_OPENDOC
+DateiNeuAusVorlage .uno:NewDoc
+DateiOeffnen .uno:Open
 DateiAutopilotBrief service:com.sun.star.wizards.letter.CallWizard?start
 DateiAutopilotFax service:com.sun.star.wizards.fax.CallWizard?start
 DateiAutopilotAgenda service:com.sun.star.wizards.agenda.CallWizard?start
-DateiAutopilotPraesentation SID_SD_AUTOPILOT
-DateiSchliessenUndZurueck SID_CLOSEDOC
-DateiKopieAktualisieren SID_SAVEDOC
-DateiKopieSpeichern SID_SAVEASDOC
-DateiSchliessen SID_CLOSEDOC
-DateiSpeichern SID_SAVEDOC
-DateiSpeichernUnter SID_SAVEASDOC
-DateiAllesSpeichern SID_SAVEDOCS
-DateiExportieren SID_EXPORTDOC
-DateiSendenDokumentAlseMail SID_MAIL_SENDDOC
-DateiVersionen SID_VERSION
-DateiNeuLaden SID_RELOAD SID_LASTVERSIONDOC
-DateiEigenschaften SID_DOCINFO
-DateiDokumentvorlageSpeichern SID_DOCTEMPLATE
-DateiDokumentvorlageVerwalten SID_ORGANIZER
-DateiDokumentvorlageBearbeiten SID_OPENTEMPLATE
-DateiSeitenansicht SID_PRINTPREVIEW
-DateiDrucken SID_PRINTDOC
-DateiDruckereinstellung SID_SETUPPRINTER
+DateiAutopilotPraesentation .uno:AutoPilotPresentations
+DateiSchliessenUndZurueck .uno:CloseDoc
+DateiKopieAktualisieren .uno:Save
+DateiKopieSpeichern .uno:SaveAs
+DateiSchliessen .uno:CloseDoc
+DateiSpeichern .uno:Save
+DateiSpeichernUnter .uno:SaveAs
+DateiAllesSpeichern .uno:SaveAll
+DateiExportieren .uno:ExportTo
+DateiSendenDokumentAlseMail .uno:SendMail
+DateiVersionen .uno:VersionDialog
+DateiNeuLaden SID_RELOAD
+DateiEigenschaften .uno:SetDocumentProperties
+DateiDokumentvorlageSpeichern .uno:SaveAsTemplate
+DateiDokumentvorlageVerwalten .uno:Organizer
+DateiDokumentvorlageBearbeiten .uno:OpenTemplate
+DateiSeitenansicht .uno:PrintPreview
+DateiDrucken .uno:Print
+DateiDruckereinstellung .uno:PrinterSetup
 DateiBeenden SID_QUITAPP
 
 ' **** Writer
-DateiSendenGliederungAnPraesentation FN_OUTLINE_TO_IMPRESS
-DateiSendenGliederungZumClipboard FN_OUTLINE_TO_CLIPBOARD
-DateiSendenAutoabstractErzeugen FN_ABSTRACT_NEWDOC
-DateiSendenAutoabstractAnPraesentation FN_ABSTRACT_STARIMPRESS
-DateiSendenGlobaldokumentErzeugen FN_NEW_GLOBAL_DOC
-DateiSendenHTMLDokumentErzeugen FN_NEW_HTML_DOC
-DateiSerienbrief FN_QRY_MERGE
+DateiSendenGliederungAnPraesentation .uno:SendOutlineToStarImpress
+DateiSendenGliederungZumClipboard .uno:SendOutlineToClipboard
+DateiSendenAutoabstractErzeugen .uno:CreateAbstract
+DateiSendenAutoabstractAnPraesentation .uno:SendAbstractToStarImpress
+DateiSendenGlobaldokumentErzeugen .uno:NewGlobalDoc
+DateiSendenHTMLDokumentErzeugen .uno:NewHtmlDoc
+DateiSerienbrief .uno:MergeDialog
 
 ' **** Impress / Draw
-DateiSeiteEinrichten SID_PAGESETUP
-Dateieinpacken SID_PACKNGO
+DateiSeiteEinrichten .uno:PageSetup
+Dateieinpacken .uno:PackAndGo
 
 
 ' **** Image / Chart / Math
-DateiDokumentAlsEMail SID_MAIL_SENDDOC
+DateiDokumentAlsEMail .uno:SendMail
 
 
 ' ***********************************
 ' ********* Bearbeitenmenue *********
 ' ****
 ' **** Alle
-BearbeitenRueckgaengig SID_UNDO
-BearbeitenWiederholen SID_REDO
-BearbeitenLetzterBefehl SID_REPEAT
-BearbeitenAusschneiden SID_CUT
-BearbeitenKopieren SID_COPY
-BearbeitenEinfuegen SID_PASTE
-BearbeitenLoeschen SID_DELETE
-BearbeitenAllesAuswaehlen SID_SELECTALL
-BearbeitenSuchenErsetzen SID_SEARCH_DLG
-BearbeitenNavigator SID_NAVIGATOR
-BearbeitenAutoText FN_GLOSSARY_DLG
-BearbeitenPlugIn SID_PLUGINS_ACTIVE
-BearbeitenImageMap SID_IMAP
-BearbeitenLiteraturdatenbank SID_COMP_BIBLIOGRAPHY
+BearbeitenRueckgaengig .uno:Undo
+BearbeitenWiederholen .uno:Redo
+BearbeitenLetzterBefehl .uno:Repeat
+BearbeitenAusschneiden .uno:Cut
+BearbeitenKopieren .uno:Copy
+BearbeitenEinfuegen .uno:Paste
+BearbeitenLoeschen .uno:Delete
+BearbeitenAllesAuswaehlen .uno:SelectAll
+BearbeitenSuchenErsetzen .uno:SearchDialog
+BearbeitenNavigator .uno:Navigator
+BearbeitenAutoText .uno:EditGlossary
+BearbeitenPlugIn .uno:PlugInsActive
+BearbeitenImageMap .uno:ImageMapDialog
+BearbeitenLiteraturdatenbank .uno:BibliographyComponent
 
 ' **** Writer
 BearbeitenInhalteEinfuegenWriter .uno:PasteSpecial
-BearbeitenAenderungenAufzeichnen FN_REDLINE_ON
-BearbeitenAenderungenAnzeigen FN_REDLINE_SHOW
-BearbeitenAenderungenAkzeptierenOderVerwerfen FN_REDLINE_ACCEPT
-BearbeitenAenderungenKommentar FN_REDLINE_COMMENT
-BearbeitenAenderungenDokumentZusammenfuehren SID_DOCUMENT_MERGE
-BearbeitenDokumentVergleichen SID_DOCUMENT_COMPARE
-BearbeitenVerknuepfungenWriter FN_EDIT_LINK_DLG
-BearbeitenDatenbankAustauschen FN_CHANGE_DBFIELD
-BearbeitenFeldbefehl FN_EDIT_FIELD
-BearbeitenFussnote FN_EDIT_FOOTNOTE
-BearbeitenVerzeichniseintrag FN_EDIT_IDX_ENTRY_DLG
-BearbeitenHyperlink FN_EDIT_HYPERLINK
+BearbeitenAenderungenAufzeichnen .uno:TrackChanges
+BearbeitenAenderungenAnzeigen .uno:ShowTrackedChanges
+BearbeitenAenderungenAkzeptierenOderVerwerfen .uno:AcceptTrackedChanges
+BearbeitenAenderungenKommentar .uno:CommentChangeTracking
+BearbeitenAenderungenDokumentZusammenfuehren .uno:MergeDocuments
+BearbeitenDokumentVergleichen .uno:CompareDocuments
+BearbeitenVerknuepfungenWriter .uno:LinkDialog
+BearbeitenDatenbankAustauschen .uno:ChangeDatabaseField
+BearbeitenFeldbefehl .uno:FieldDialog
+BearbeitenFussnote .uno:EditFootnote
+BearbeitenVerzeichniseintrag .uno:IndexEntryDialog
+BearbeitenHyperlink .uno:EditHyperlink
 
 ' **** Calc
 BearbeitenInhalteEinfuegenCalc .uno:PasteSpecial
-BearbeitenAenderungenAufzeichnenCalc FID_CHG_RECORD
-BearbeitenAenderungenSchuetzen SID_CHG_PROTECT
-BearbeitenAenderungenKommentarCalc FID_CHG_COMMENT
-BearbeitenAenderungenAnzeigenCalc FID_CHG_SHOW
-BearbeitenAenderungenAkzeptierenOderVerwerfenCalc FID_CHG_ACCEPT
-BearbeitenAenderungenDokumentZusammenfuehrenCalc SID_DOCUMENT_MERGE
-BearbeitenDokumentVergleichenCalc SID_DOCUMENT_COMPARE
-BearbeitenVerknuepfungenCalc SID_LINKS
-BearbeitenKopfUndFusszeilen SID_HFEDIT
-BearbeitenAusfuellenLinks FID_FILL_TO_LEFT
-BearbeitenAusfuellenOben FID_FILL_TO_TOP
-BearbeitenAusfuellenRechts FID_FILL_TO_RIGHT
-BearbeitenAusfuellenReihe FID_FILL_SERIES
-BearbeitenAusfuellenTabelle FID_FILL_TAB
-BearbeitenAusfuellenUnten FID_FILL_TO_BOTTOM
-BearbeitenInhalteLoeschen SID_DELETE
-BearbeitenZellenLoeschen FID_DELETE_CELL
-BearbeitenTabelleLoeschen FID_DELETE_TABLE
-BearbeitenTabelleVerschiebenKopieren FID_TAB_MOVE
-BearbeitenManuellenUmbruchLoeschenSpaltenumbruch FID_DEL_COLBRK
-BearbeitenManuellenUmbruchLoeschenZeilenumbruch FID_DEL_ROWBRK
+BearbeitenAenderungenAufzeichnenCalc .uno:TraceChangeMode
+BearbeitenAenderungenSchuetzen .uno:ProtectTraceChangeMode
+BearbeitenAenderungenKommentarCalc .uno:CommentChange
+BearbeitenAenderungenAnzeigenCalc .uno:ShowChanges
+BearbeitenAenderungenAkzeptierenOderVerwerfenCalc .uno:AcceptChanges
+BearbeitenAenderungenDokumentZusammenfuehrenCalc .uno:MergeDocuments
+BearbeitenDokumentVergleichenCalc .uno:CompareDocuments
+BearbeitenVerknuepfungenCalc .uno:EditLinks
+BearbeitenKopfUndFusszeilen .uno:EditHeaderAndFooter
+BearbeitenAusfuellenLinks .uno:FillLeft
+BearbeitenAusfuellenOben .uno:FillUp
+BearbeitenAusfuellenRechts .uno:FillRight
+BearbeitenAusfuellenReihe .uno:FillSeries
+BearbeitenAusfuellenTabelle .uno:FillTable
+BearbeitenAusfuellenUnten .uno:FillDown
+BearbeitenInhalteLoeschen .uno:Delete
+BearbeitenZellenLoeschen .uno:DeleteCell
+BearbeitenTabelleLoeschen .uno:Remove
+BearbeitenTabelleVerschiebenKopieren .uno:Move
+BearbeitenManuellenUmbruchLoeschenSpaltenumbruch .uno:DeleteColumnbreak
+BearbeitenManuellenUmbruchLoeschenZeilenumbruch .uno:DeleteRowbreak
 
 ' **** Draw / Impress
 BearbeitenInhalteEinfuegenDraw .uno:PasteSpecial
-BearbeitenVerknuepfungenDraw SID_MANAGE_LINKS
-BearbeitenDuplizieren SID_COPYOBJECTS
-BearbeitenUeberblenden SID_POLYGON_MORPHING
-BearbeitenSeiteLoeschen SID_DELETE_PAGE
-BearbeitenEbeneLoeschen SID_DELETE_LAYER
-BearbeitenFeldbefehlDraw SID_MODIFY_FIELD
+BearbeitenVerknuepfungenDraw .uno:ManageLinks
+BearbeitenDuplizieren .uno:CopyObjects
+BearbeitenUeberblenden .uno:Morphing
+BearbeitenSeiteLoeschen .uno:DeletePage
+BearbeitenEbeneLoeschen .uno:DeleteLayer
+BearbeitenFeldbefehlDraw .uno:ModifyField
 
 ' **** Image / Chart / Math
-BearbeitenAllesAuswaehlenMath SID_SELECT
-BearbeitenNaechsterMarker SID_NEXTMARK
-BearbeitenVorherigerMarker SID_PREVMARK
-BearbeitenNaechsterFehler SID_NEXTERR
-BearbeitenVorherigerFehler SID_PREVERR
-BearbeitenDiagrammdaten SID_DIAGRAM_DATA
+BearbeitenAllesAuswaehlenMath .uno:Select
+BearbeitenNaechsterMarker .uno:NextMark
+BearbeitenVorherigerMarker .uno:PrevMark
+BearbeitenNaechsterFehler .uno:NextError
+BearbeitenVorherigerFehler .uno:PrevError
+BearbeitenDiagrammdaten sym:CHART2_HID_DIAGRAM_DATA
 
 
 ' ***********************************
 ' ********* Ansichtmenue *********
 ' ****
 ' **** Alle
-AnsichtMassstab SID_ATTR_ZOOM
-AnsichtBrowser SID_BROWSER
-AnsichtStatusleiste SID_TOGGLESTATUSBAR SID_TOGGLESTATUSBAR
-AnsichtGanzerBildschirm SID_WIN_FULLSCREEN SID_FULLSCREEN
+AnsichtMassstab .uno:Zoom
+AnsichtBrowser .uno:Beamer
+AnsichtHyperlinkleiste .uno:InsertHyperlink
+AnsichtStatusleiste .uno:StatusBarVisible .uno:StatusBarVisible
+AnsichtGanzerBildschirm .uno:FullScreen SID_FULLSCREEN
 
 ' **** Writer
-AnsichtLineal FN_RULER
-AnsichtAktuelleDatenbank SID_IMPORT_DATA
-AnsichtTextbegrenzungen FN_VIEW_BOUNDS
-AnsichtMarkierungen FN_VIEW_MARKS
-AnsichtFeldbefehle FN_VIEW_FIELDNAME
-AnsichtSteuerzeichen FN_VIEW_META_CHARS
-AnsichtOnlineLayout SID_BROWSER_MODE
-AnsichtVersteckteAbsaetze FN_VIEW_HIDDEN_PARA
-AnsichtHTMLBearbeitung SID_HTML_MODE
-AnsichtHTMLQuelltextWriter HID_SOURCEVIEW
+AnsichtLineal .uno:Ruler
+AnsichtAktuelleDatenbank .uno:DataImport
+AnsichtTextbegrenzungen .uno:ViewBounds
+AnsichtMarkierungen .uno:Marks
+AnsichtFeldbefehle .uno:Fieldnames
+AnsichtSteuerzeichen .uno:ControlCodes
+AnsichtOnlineLayout .uno:BrowseView
+AnsichtVersteckteAbsaetze .uno:ShowHiddenParagraphs
+AnsichtHTMLBearbeitung .uno:HtmlMode
+AnsichtHTMLQuelltextWriter sym:SW_HID_SOURCEVIEW
 
 ' **** Calc
-AnsichtRechenleiste FID_TOGGLEINPUTLINE
-AnsichtSpaltenZeilenkoepfe FID_TOGGLEHEADERS
-AnsichtWerteHervorheben FID_TOGGLESYNTAX
-AnsichtSeitenumbruchVorschau FID_PAGEBREAKMODE
+AnsichtRechenleiste .uno:InputLineVisible
+AnsichtSpaltenZeilenkoepfe .uno:ViewRowColumnHeaders
+AnsichtWerteHervorheben .uno:ViewValueHighlighting
+AnsichtSeitenumbruchVorschau .uno:PagebreakMode
 
 ' ****  Draw / Impress
-AnsichtFarbleiste SID_COLOR_CONTROL
-AnsichtLineale SID_RULER
-AnsichtZeichnung SID_DRAWINGMODE
-AnsichtGliederung SID_OUTLINEMODE
-AnsichtDiasortierung SID_DIAMODE
-AnsichtNotizen SID_NOTESMODE
-AnsichtHandzettel SID_HANDOUTMODE
-AnsichtBildschirmpraesentation SID_PRESENTATION
-AnsichtVorschau SID_PREVIEW_WIN
-AnsichtSeite SID_PAGEMODE
-AnsichtHintergrund SID_MASTERPAGE
-AnsichtHintergrundZeichnung SID_SLIDE_MASTERPAGE
-AnsichtHintergrundTitel SID_TITLE_MASTERPAGE
-AnsichtHintergrundNotizen SID_NOTES_MASTERPAGE
-AnsichtHintergrundHandzettel SID_HANDOUT_MASTERPAGE
-AnsichtEbene SID_LAYERMODE
+AnsichtFarbleiste .uno:ColorControl
+AnsichtLineale .uno:ShowRuler
+AnsichtZeichnung .uno:DrawingMode
+AnsichtGliederung .uno:OutlineMode
+AnsichtDiasortierung .uno:DiaMode
+AnsichtNotizen .uno:NotesMode
+AnsichtHandzettel .uno:HandoutMode
+AnsichtBildschirmpraesentation .uno:Presentation
+AnsichtVorschau .uno:PreviewWindow
+AnsichtSeite .uno:PageMode
+AnsichtHintergrund .uno:MasterPage
+AnsichtHintergrundZeichnung .uno:SlideMasterPage
+AnsichtHintergrundTitel .uno:TitleMasterPage
+AnsichtHintergrundNotizen .uno:NotesMasterPage
+AnsichtHintergrundHandzettel .uno:HandoutMasterPage
+AnsichtEbene .uno:LayerMode
 
 ' **** Image
-AnsichtFuenfzig SID_VIEW050
-AnsichtEinhundert SID_VIEW100
-AnsichtZweihundert SID_VIEW200
-AnsichtVergroessern SID_ZOOMIN
-AnsichtVerkleinern SID_ZOOMOUT
-AnsichtAllesAnzeigen SID_ADJUST
-AnsichtAktualisieren SID_DRAW
-AnsichtOperatoren SID_TOOLBOX
+AnsichtFuenfzig .uno:View50
+AnsichtEinhundert .uno:View100
+AnsichtZweihundert .uno:View200
+AnsichtVergroessern .uno:ZoomIn
+AnsichtVerkleinern .uno:ZoomOut
+AnsichtAllesAnzeigen .uno:Adjust
+AnsichtAktualisieren .uno:Draw
+AnsichtOperatoren .uno:ToolBox
 
 ' **** Math
-AnsichtAutomatischesNeuzeichnen SID_AUTO_REDRAW
+AnsichtAutomatischesNeuzeichnen .uno:RedrawAutomatic
 
 ' **** Frameset
-AnsichtHTMLQuelltextFrame SID_SOURCEVIEW
+AnsichtHTMLQuelltextFrame .uno:SourceView
 
 ' **** WriterWeb
-AnsichtDruckLayout FN_PRINT_LAYOUT
-AnsichtHTMLQuelltext SID_SOURCEVIEW
+AnsichtDruckLayout .uno:PrintLayout
+AnsichtHTMLQuelltext .uno:SourceView
 
 
 ' ***********************************
 ' ********* Einfuegenmenue **********
 ' ****
 ' **** Alle
-EinfuegenGrafikAusDatei SID_INSERT_GRAPHIC
-EinfuegenGrafikDiagramm SID_INSERT_DIAGRAM
-EinfuegenObjektOLEObjekt SID_INSERT_OBJECT
-EinfuegenObjektPlugIn SID_INSERT_PLUGIN
-EinfuegenObjektApplet SID_INSERT_APPLET
-EinfuegenObjektKlang SID_INSERT_SOUND
-EinfuegenObjektVideo SID_INSERT_VIDEO
-EinfuegenFrame SID_INSERT_FLOATINGFRAME
+EinfuegenGrafikAusDatei .uno:InsertGraphic
+EinfuegenGrafikDiagramm .uno:InsertObjectChart
+EinfuegenObjektOLEObjekt .uno:InsertObject
+EinfuegenObjektPlugIn .uno:InsertPlugin
+EinfuegenObjektKlang .uno:InsertSound
+EinfuegenObjektVideo .uno:InsertVideo
+EinfuegenFrame .uno:InsertObjectFloatingFrame
 
 ' **** Writer
 EinfuegenSonderzeichenWriter .uno:InsertSymbol
-EinfuegenFormelWriter FN_INSERT_SMA
-EinfuegenTabelleWriter FN_INSERT_TABLE
-EinfuegenDateiWriter SID_INSERTDOC
-EinfuegenManuellerUmbruch FN_INSERT_BREAK_DLG
-EinfuegenFeldbefehlDatum FN_INSERT_FLD_DATE
-EinfuegenFeldbefehlUhrzeit FN_INSERT_FLD_TIME
-EinfuegenFeldbefehlSeitennummer FN_INSERT_FLD_PGNUMBER
-EinfuegenFeldbefehlSeitenanzahl FN_INSERT_FLD_PGCOUNT
-EinfuegenFeldbefehlThema FN_INSERT_FLD_TOPIC
-EinfuegenFeldbefehlTitel FN_INSERT_FLD_TITLE
-EinfuegenFeldbefehlAutor FN_INSERT_FLD_AUTHOR
-EinfuegenFeldbefehlAndere FN_INSERT_FIELD
-EinfuegenBereich FN_INSERT_REGION
-EinfuegenHyperlink SID_HYPERLINK_DIALOG
-EinfuegenFussnote FN_INSERT_FOOTNOTE_DLG
-EinfuegenBeschriftung FN_INSERT_CAPTION
-EinfuegenTextmarke FN_INSERT_BOOKMARK
-EinfuegenQuerverweis FN_INSERT_REF_FIELD
-EinfuegenNotizWriter FN_POSTIT
-EinfuegenScript FN_JAVAEDIT
-EinfuegenVerzeichnis FN_INSERT_MULTI_TOX
-EinfuegenVerzeichnisseEintrag FN_INSERT_IDX_ENTRY_DLG
-EinfuegenVerzeichnisLiteraturverzeichnis FN_INSERT_AUTH_ENTRY_DLG
-EinfuegenBriefumschlag FN_ENVELOP
-EinfuegenEtiketten FN_LABEL
-EinfuegenVisitenkarten FN_BUSINESS_CARD
-EinfuegenHorizontaleLinie FN_INSERT_HRULER
-EinfuegenRahmen FN_INSERT_FRAME
-EinfuegenGrafikScannenQuelleAuswaehlen SID_TWAIN_SELECT
-EinfuegenGrafikScannenAnfordern SID_TWAIN_TRANSFER
+EinfuegenFormelWriter .uno:InsertObjectStarMath
+EinfuegenTabelleWriter .uno:InsertTable
+EinfuegenDateiWriter .uno:InsertDoc
+EinfuegenManuellerUmbruch .uno:InsertBreak
+EinfuegenFeldbefehlDatum .uno:InsertDateField
+EinfuegenFeldbefehlUhrzeit .uno:InsertTimeField
+EinfuegenFeldbefehlSeitennummer .uno:InsertPageNumberField
+EinfuegenFeldbefehlSeitenanzahl .uno:InsertPageCountField
+EinfuegenFeldbefehlThema .uno:InsertTopicField
+EinfuegenFeldbefehlTitel .uno:InsertTitleField
+EinfuegenFeldbefehlAutor .uno:InsertAuthorField
+EinfuegenFeldbefehlAndere .uno:InsertField
+EinfuegenBereich .uno:InsertSection
+EinfuegenHyperlink .uno:HyperlinkDialog
+EinfuegenFussnote .uno:InsertFootnoteDialog
+EinfuegenBeschriftung .uno:InsertCaptionDialog
+EinfuegenTextmarke .uno:InsertBookmark
+EinfuegenQuerverweis .uno:InsertReferenceField
+EinfuegenNotizWriter .uno:InsertAnnotation
+EinfuegenScript .uno:InsertScript
+EinfuegenVerzeichnis .uno:InsertMultiIndex
+EinfuegenVerzeichnisseEintrag .uno:InsertIndexesEntry
+EinfuegenVerzeichnisLiteraturverzeichnis .uno:InsertAuthoritiesEntry
+EinfuegenBriefumschlag .uno:InsertEnvelope
+EinfuegenEtiketten .uno:InsertLabels
+EinfuegenVisitenkarten .uno:InsertBusinessCard
+EinfuegenHorizontaleLinie .uno:InsertGraphicRuler
+EinfuegenRahmen .uno:InsertFrame
+EinfuegenGrafikScannenQuelleAuswaehlen .uno:TwainSelect
+EinfuegenGrafikScannenAnfordern .uno:TwainTransfer
 
 ' **** Calc
-EinfuegenSonderzeichenCalc SID_CHARMAP
-EinfuegenGrafikAusBildbearbeitungCalc SID_INSERT_SIMAGE
-EinfuegenFormelCalc SID_INSERT_SMATH
-EinfuegenTabelleCalc FID_INS_TABLE
-EinfuegenManuellerUmbruchSpaltenumbruch FID_INS_COLBRK
-EinfuegenManuellerUmbruchZeilenumbruch FID_INS_ROWBRK
-EinfuegenZellen FID_INS_CELL
-EinfuegenZeilenCalc FID_INS_ROW
-EinfuegenSpaltenCalc FID_INS_COLUMN
-EinfuegenFunktion SID_OPENDLG_FUNCTION
-EinfuegenNamenEinfuegen FID_INSERT_NAME
-EinfuegenNamenFestlegen FID_DEFINE_NAME
-EinfuegenNamenUebernehmen FID_USE_NAME
-EinfuegenNamenBeschriftungen SID_DEFINE_COLROWNAMERANGES
-EinfuegenNotizCalc SID_INSERT_POSTIT
-EinfuegenExterneDatenQuelle SID_EXTERNAL_SOURCE
+EinfuegenSonderzeichenCalc .uno:InsertSymbol
+EinfuegenGrafikAusBildbearbeitungCalc .uno:InsertObjectStarImage
+EinfuegenFormelCalc .uno:InsertObjectStarMath
+EinfuegenTabelleCalc .uno:Insert
+EinfuegenManuellerUmbruchSpaltenumbruch .uno:InsertColumnBreak
+EinfuegenManuellerUmbruchZeilenumbruch .uno:InsertRowBreak
+EinfuegenZellen .uno:InsertCell
+EinfuegenZeilenCalc .uno:InsertRows
+EinfuegenSpaltenCalc .uno:InsertColumns
+EinfuegenFunktion .uno:FunctionDialog
+EinfuegenNamenEinfuegen .uno:InsertName
+EinfuegenNamenFestlegen .uno:DefineName
+EinfuegenNamenUebernehmen .uno:CreateNames
+EinfuegenNamenBeschriftungen .uno:DefineLabelRange
+EinfuegenNotizCalc .uno:InsertAnnotation
+EinfuegenExterneDatenQuelle .uno:InsertExternalDataSource
 
 ' **** Einfuegenmenue : Draw
 EinfuegenSonderzeichenDraw .uno:InsertSymbol
-EinfuegenGrafikAusBildbearbeitungDraw SID_INSERT_IMAGE
-EinfuegenFormelDraw SID_INSERT_MATH
-EinfuegenTabelleDraw SID_ATTR_TABLE
-EinfuegenDateiDraw SID_INSERTFILE
-EinfuegenSeite SID_INSERTPAGE
-EinfuegenSeiteDuplizieren SID_DUPLICATE_PAGE
-EinfuegenSeitenAusGliederung SID_EXPAND_PAGE
-EinfuegenUebersichtsseite SID_SUMMARY_PAGE
-EinfuegenEbene SID_INSERTLAYER
-EinfuegenFangliniePunkt SID_CAPTUREPOINT
-EinfuegenFeldbefehlDatumFix SID_INSERT_FLD_DATE_FIX
-EinfuegenFeldbefehlDatumVariabel SID_INSERT_FLD_DATE_VAR
-EinfuegenFeldbefehlUhrzeitFix SID_INSERT_FLD_TIME_FIX
-EinfuegenFeldbefehlUhrzeitVariabel SID_INSERT_FLD_TIME_VAR
-EinfuegenFeldbefehlAutorDraw SID_INSERT_FLD_AUTHOR
-EinfuegenFeldbefehlSeitennummerDraw SID_INSERT_FLD_PAGE
-EinfuegenFeldbefehlDateiname SID_INSERT_FLD_FILE
-EinfuegenQuelleAuswaehlen SID_TWAIN_SELECT
-EinfuegenAnfordern SID_TWAIN_TRANSFER
-EinfuegenSymbol SID_CHOOSE_POLYGON
+EinfuegenGrafikAusBildbearbeitungDraw .uno:InsertImage
+EinfuegenFormelDraw .uno:InsertMath
+EinfuegenTabelleDraw .uno:InsertSpreadsheet
+EinfuegenDateiDraw .uno:ImportFromFile
+EinfuegenSeite .uno:InsertPage
+EinfuegenSeiteDuplizieren .uno:DuplicatePage
+EinfuegenSeitenAusGliederung .uno:ExpandPage
+EinfuegenUebersichtsseite .uno:SummaryPage
+EinfuegenEbene .uno:InsertLayer
+EinfuegenFangliniePunkt .uno:CapturePoint
+EinfuegenFeldbefehlDatumFix .uno:InsertDateFieldFix
+EinfuegenFeldbefehlDatumVariabel .uno:InsertDateFieldVar
+EinfuegenFeldbefehlUhrzeitFix .uno:InsertTimeFieldFix
+EinfuegenFeldbefehlUhrzeitVariabel .uno:InsertTimeFieldVar
+EinfuegenFeldbefehlAutorDraw .uno:InsertAuthorField
+EinfuegenFeldbefehlSeitennummerDraw .uno:InsertPageField
+EinfuegenFeldbefehlDateiname .uno:InsertFileField
+EinfuegenQuelleAuswaehlen .uno:TwainSelect
+EinfuegenAnfordern .uno:TwainTransfer
+EinfuegenSymbol .uno:ChoosePolygon
 
 
 ' ***********************************
 ' *********** Formatmenue ***********
 ' ****
 ' **** Alle
-FormatZeichen SID_CHAR_DLG
+FormatZeichen .uno:FontDialog
 FormatLinie .uno:FormatLine
 FormatFlaeche .uno:FormatArea
-FormatAbsatz SID_PARA_DLG
-FormatVorlagenkatalog SID_STYLE_CATALOG
-FormatVorlagenLaden SID_TEMPLATE_LOAD
-FormatGestalter SID_STYLE_DESIGNER
-'FormatStylist SID_STYLE_DESIGNER
-FormatKontrollfeld SID_FM_CTL_PROPERTIES
-FormatFormularEigenschaften SID_FM_PROPERTIES
-FormatGrossBuchstaben SID_TRANSLITERATE_UPPER
-FormatKleinBuchstaben SID_TRANSLITERATE_LOWER
+FormatAbsatz .uno:ParagraphDialog
+FormatVorlagenkatalog .uno:StyleCatalog
+FormatVorlagenLaden .uno:LoadStyles
+FormatGestalter .uno:DesignerDialog
+'FormatStylist .uno:DesignerDialog
+FormatKontrollfeld .uno:ControlProperties
+FormatFormularEigenschaften .uno:FormProperties
+FormatGrossBuchstaben .uno:ChangeCaseToUpper
+FormatKleinBuchstaben .uno:ChangeCaseToLower
 
 ' **** Writer
-FormatStandardWriter FN_FORMAT_RESET
-FormatSeiteWriter FN_FORMAT_PAGE_DLG
-FormatBereiche FN_EDIT_REGION
-FormatNumerierungAufzaehlung FN_NUMBER_BULLETS
-FormatAutoformatWaehrendDerEingabe FN_AUTOFORMAT_AUTO
-FormatAutoFormatAutomatisch FN_AUTOFORMAT_AUTO
-FormatAutoformatDokumentFormatieren FN_AUTOFORMAT_APPLY
-FormatAutoFormatAutoFormat SID_AUTOFORMAT
-FormatAutoFormatEinstellungen SID_AUTOFORMAT
-FormatTabelle FN_FORMAT_TABLE_DLG
-FormatTabelleAuftrennen FN_TABLE_SPLIT_TABLE
-FormatTabellenVerbinden FN_TABLE_MERGE_TABLE
-FormatZahlenformat FN_NUM_FORMAT_TABLE_DLG
-FormatZelleVerbinden FN_TABLE_MERGE_CELLS
-FormatZelleTeilen FN_TABLE_SPLIT_CELLS
-FormatZelleOben FN_TABLE_VERT_NONE
-FormatZelleMitte FN_TABLE_VERT_CENTER
-FormatZelleUnten FN_TABLE_VERT_BOTTOM
-FormatZelleSchuetzen FN_TABLE_SET_READ_ONLY_CELLS
-FormatZelleSchutzAufheben FN_TABLE_UNSET_READ_ONLY_CELLS
-FormatZeileHoehe FN_TABLE_SET_ROW_HEIGHT
-FormatZeileOptimaleHoehe FN_TABLE_OPTIMAL_HEIGHT
-FormatZeileZeilenGleichmaessigVerteilen FN_TABLE_BALANCE_ROWS
-FormatZeileSelektieren FN_TABLE_SELECT_ROW
-FormatZeileEinfuegen FN_TABLE_INSERT_ROW_DLG
-FormatZeileLoeschen FN_TABLE_DELETE_ROW
-FormatSpalteBreiteWriter FN_TABLE_SET_COL_WIDTH
-FormatSpalteOptimaleBreiteWriter FN_TABLE_ADJUST_CELLS
-FormatSpalteSpaltenGleichmaessigVerteilen FN_TABLE_BALANCE_CELLS
-FormatSpalteSelektieren FN_TABLE_SELECT_COL
-FormatSpalteEinfuegen FN_TABLE_INSERT_COL_DLG
-FormatSpalteLoeschen FN_TABLE_DELETE_COL
-FormatGrafik FN_FORMAT_GRAFIC_DLG
-FormatRahmen FN_FORMAT_FRAME_DLG
-FormatObjekt FN_FORMAT_FRAME_DLG
-FormatAnordnungGanzNachVorn SID_FRAME_TO_TOP
-FormatAnordnungWeiterNachVorn FN_FRAME_UP
-FormatAnordnungWeiterNachHinten FN_FRAME_DOWN
-FormatAnordnungGanzNachHinten SID_FRAME_TO_BOTTOM
-FormatAnordnungInDenVordergrund SID_OBJECT_HEAVEN
-FormatAnordnungInDenHintergrund SID_OBJECT_HELL
-FormatAusrichtungLinks FN_FRAME_ALIGN_HORZ_LEFT
-FormatAusrichtungZentriert FN_FRAME_ALIGN_HORZ_CENTER
-FormatAusrichtungRechts FN_FRAME_ALIGN_HORZ_RIGHT
-FormatAusrichtungOben FN_FRAME_ALIGN_VERT_TOP
-FormatAusrichtungMitte FN_FRAME_ALIGN_VERT_CENTER
-FormatAusrichtungUnten FN_FRAME_ALIGN_VERT_BOTTOM
-FormatVerankerungAnDerSeite FN_TOOL_ANKER_PAGE
-FormatVerankerungAmAbsatz FN_TOOL_ANKER_PARAGRAPH
-FormatVerankerungAmZeichen FN_TOOL_ANKER_CHAR
-FormatUmlaufKeinUmlauf FN_FRAME_NOWRAP
-FormatUmlaufSeitenumlauf FN_FRAME_WRAP
-FormatUmlaufIdealerSeitenumlauf FN_FRAME_WRAP_IDEAL
-FormatUmlaufDurchlauf FN_FRAME_WRAPTHRU
-FormatUmlaufImHintergrund FN_FRAME_WRAPTHRU_TRANSP
-FormatUmlaufKontur FN_FRAME_WRAP_CONTOUR
-FormatUmlaufKonturBearbeiten SID_CONTOUR_DLG
-FormatUmlaufErsterAbsatz FN_WRAP_ANCHOR_ONLY
-FormatUmlaufBearbeiten FN_DRAW_WRAP_DLG
-FormatPositionUndGroesse SID_ATTR_TRANSFORM
-FormatSpiegelnVertikal FN_FLIP_VERT_GRAFIC
-FormatSpiegelnHorizontal FN_FLIP_HORZ_GRAFIC
-FormatObjektAusrichtungLinks SID_OBJECT_ALIGN_LEFT
-FormatObjektAusrichtungZentriert SID_OBJECT_ALIGN_CENTER
-FormatObjektAusrichtungRechts SID_OBJECT_ALIGN_RIGHT
-FormatObjektAusrichtungOben SID_OBJECT_ALIGN_UP
-FormatObjektAusrichtungMitte SID_OBJECT_ALIGN_MIDDLE
-FormatObjektAusrichtungUnten SID_OBJECT_ALIGN_DOWN
-FormatPunkteBearbeiten SID_BEZIER_EDIT
-FormatGruppeGruppieren SID_GROUP
-FormatGruppeAufheben SID_UNGROUP
-FormatGruppeBetreten SID_ENTER_GROUP
-FormatGruppeVerlassen SID_LEAVE_GROUP
-FormatStilFett SID_ATTR_CHAR_WEIGHT
-FormatStilKursiv SID_ATTR_CHAR_POSTURE
-FormatStilUnterstreichen SID_ATTR_CHAR_UNDERLINE
-FormatStilDurchstreichen SID_ATTR_CHAR_STRIKEOUT
-FormatStilSchatten SID_ATTR_CHAR_SHADOWED
-FormatStilKontur SID_ATTR_CHAR_CONTOUR
-FormatStilHochstellen FN_SET_SUPER_SCRIPT
-FormatStilTiefstellen FN_SET_SUB_SCRIPT
-FormatZeilenabstandEinzeilig SID_ATTR_PARA_LINESPACE_10
-FormatZeilenabstand15Zeilig SID_ATTR_PARA_LINESPACE_15
-FormatZeilenabstandZweizeilig SID_ATTR_PARA_LINESPACE_20
-FormatAusrichtungLinksText SID_ATTR_PARA_ADJUST_LEFT
-FormatAusrichtungRechtsText SID_ATTR_PARA_ADJUST_RIGHT
-FormatAusrichtungZentriertText SID_ATTR_PARA_ADJUST_CENTER
-FormatAusrichtungBlocksatzText SID_ATTR_PARA_ADJUST_BLOCK
+FormatStandardWriter .uno:ResetAttributes
+FormatSeiteWriter .uno:PageDialog
+FormatBereiche .uno:EditRegion
+FormatNumerierungAufzaehlung .uno:BulletsAndNumberingDialog
+FormatAutoformatWaehrendDerEingabe .uno:OnlineAutoFormat
+FormatAutoFormatAutomatisch .uno:OnlineAutoFormat
+FormatAutoformatDokumentFormatieren .uno:AutoFormatApply
+FormatAutoFormatAutoFormat .uno:AutoFormat
+FormatAutoFormatEinstellungen .uno:AutoFormat
+FormatTabelle .uno:TableDialog
+FormatTabelleAuftrennen .uno:SplitTable
+FormatTabellenVerbinden .uno:MergeTable
+FormatZahlenformat .uno:TableNumberFormatDialog
+FormatZelleVerbinden .uno:MergeCells
+FormatZelleTeilen .uno:SplitCell
+FormatZelleOben .uno:CellVertTop
+FormatZelleMitte .uno:CellVertCenter
+FormatZelleUnten .uno:CellVertBottom
+FormatZelleSchuetzen .uno:Protect
+FormatZelleSchutzAufheben .uno:UnsetCellsReadOnly
+FormatZeileHoehe .uno:SetRowHeight
+FormatZeileOptimaleHoehe .uno:SetOptimalRowHeight
+FormatZeileZeilenGleichmaessigVerteilen .uno:DistributeRows
+FormatZeileSelektieren .uno:EntireRow
+FormatZeileEinfuegen .uno:InsertRowDialog
+FormatZeileLoeschen .uno:DeleteRows
+FormatSpalteBreiteWriter .uno:SetColumnWidth
+FormatSpalteOptimaleBreiteWriter .uno:SetOptimalColumnWidth
+FormatSpalteSpaltenGleichmaessigVerteilen .uno:DistributeColumns
+FormatSpalteSelektieren .uno:EntireColumn
+FormatSpalteEinfuegen .uno:InsertColumnDialog
+FormatSpalteLoeschen .uno:DeleteColumns
+FormatGrafik .uno:GraphicDialog
+FormatRahmen .uno:FrameDialog
+FormatObjekt .uno:FrameDialog
+FormatAnordnungGanzNachVorn .uno:BringToFront
+FormatAnordnungWeiterNachVorn .uno:ObjectForwardOne
+FormatAnordnungWeiterNachHinten .uno:ObjectBackOne
+FormatAnordnungGanzNachHinten .uno:SendToBack
+FormatAnordnungInDenVordergrund .uno:SetObjectToForeground
+FormatAnordnungInDenHintergrund .uno:SetObjectToBackground
+FormatAusrichtungLinks .uno:AlignLeft
+FormatAusrichtungZentriert .uno:AlignHorizontalCenter
+FormatAusrichtungRechts .uno:AlignRight
+FormatAusrichtungOben .uno:AlignTop
+FormatAusrichtungMitte .uno:AlignVerticalCenter
+FormatAusrichtungUnten .uno:AlignBottom
+FormatVerankerungAnDerSeite .uno:SetAnchorToPage
+FormatVerankerungAmAbsatz .uno:SetAnchorToPara
+FormatVerankerungAmZeichen .uno:SetAnchorToChar
+FormatUmlaufKeinUmlauf .uno:WrapOff
+FormatUmlaufSeitenumlauf .uno:WrapOn
+FormatUmlaufIdealerSeitenumlauf .uno:WrapIdeal
+FormatUmlaufDurchlauf .uno:WrapThrough
+FormatUmlaufImHintergrund .uno:WrapThroughTransparent
+FormatUmlaufKontur .uno:WrapContour
+FormatUmlaufKonturBearbeiten .uno:ContourDialog
+FormatUmlaufErsterAbsatz .uno:WrapAnchorOnly
+FormatUmlaufBearbeiten .uno:TextWrap
+FormatPositionUndGroesse .uno:TransformDialog
+FormatSpiegelnVertikal .uno:FlipVertical
+FormatSpiegelnHorizontal .uno:FlipHorizontal
+FormatObjektAusrichtungLinks .uno:ObjectAlignLeft
+FormatObjektAusrichtungZentriert .uno:AlignCenter
+FormatObjektAusrichtungRechts .uno:ObjectAlignRight
+FormatObjektAusrichtungOben .uno:AlignUp
+FormatObjektAusrichtungMitte .uno:AlignMiddle
+FormatObjektAusrichtungUnten .uno:AlignDown
+FormatPunkteBearbeiten .uno:ToggleObjectBezierMode
+FormatGruppeGruppieren .uno:FormatGroup
+FormatGruppeAufheben .uno:FormatUngroup
+FormatGruppeBetreten .uno:EnterGroup
+FormatGruppeVerlassen .uno:LeaveGroup
+FormatStilFett .uno:Bold
+FormatStilKursiv .uno:Italic
+FormatStilUnterstreichen .uno:Underline
+FormatStilDurchstreichen .uno:Strikeout
+FormatStilSchatten .uno:Shadowed
+FormatStilKontur .uno:OutlineFont
+FormatStilHochstellen .uno:SuperScript
+FormatStilTiefstellen .uno:SubScript
+FormatZeilenabstandEinzeilig .uno:SpacePara1
+FormatZeilenabstand15Zeilig .uno:SpacePara15
+FormatZeilenabstandZweizeilig .uno:SpacePara2
+FormatAusrichtungLinksText .uno:LeftPara
+FormatAusrichtungRechtsText .uno:RightPara
+FormatAusrichtungZentriertText .uno:CenterPara
+FormatAusrichtungBlocksatzText .uno:JustifyPara
 
 ' alt
-FormatGruppierung SID_GROUP
-FormatGruppierungAufheben SID_UNGROUP
+FormatGruppierung .uno:FormatGroup
+FormatGruppierungAufheben .uno:FormatUngroup
 
 ' Formatmenue : Calc
-FormatStandardCalc SID_CELL_FORMAT_RESET
-FormatTextZeichnung SID_DRAWTEXT_ATTR_DLG
-FormatSeiteCalc SID_FORMATPAGE
-FormatZelle FID_CELL_FORMAT
-FormatZeileAusblenden FID_ROW_HIDE
-FormatZeileEinblenden FID_ROW_SHOW
-FormatZeileHoeheCalc FID_ROW_HEIGHT
-FormatZeileOptimaleHoeheCalc FID_ROW_OPT_HEIGHT
-FormatSpalteAusblenden FID_COL_HIDE
-FormatSpalteBreiteCalc FID_COL_WIDTH
-FormatSpalteEinblenden FID_COL_SHOW
-FormatSpalteOptimaleBreiteCalc FID_COL_OPT_WIDTH
-FormatTabelleAusblenden FID_TABLE_HIDE
-FormatTabelleEinblenden FID_TABLE_SHOW
-FormatTabelleUmbenennen FID_TAB_MENU_RENAME FID_TAB_RENAME
-FormatZellenZusammenfassenAufheben FID_MERGE_OFF
-FormatZellenZusammenfassenFestlegen FID_MERGE_ON
-FormatDruckbereicheAufheben SID_DELETE_PRINTAREA
-FormatDruckbereicheBearbeiten SID_OPENDLG_EDIT_PRINTAREA
-FormatDruckbereicheFestlegen SID_DEFINE_PRINTAREA
-FormatBedingteFormatierung SID_OPENDLG_CONDFRMT
-FormatVerankerungSeite SID_ANCHOR_PAGE
-FormatVerankerungZelle SID_ANCHOR_CELL
-FormatSpiegelnVertikalCalc SID_MIRROR_VERTICAL
-FormatSpiegelnHorizontalCalc SID_MIRROR_HORIZONTAL
-FormatAnordnungGanzNachVornCalc SID_FRAME_TO_TOP
-FormatAnordnungWeiterNachVornCalc SID_FRAME_UP
-FormatAnordnungWeiterNachHintenCalc SID_FRAME_DOWN
-FormatAnordnungGanzNachHintenCalc SID_FRAME_TO_BOTTOM
-FormatAnordnungInDenHintergrundCalc SID_OBJECT_HELL
-FormatAnordnungInDenVordergrundCalc SID_OBJECT_HEAVEN
-FormatAusrichtungLinksCalc SID_OBJECT_ALIGN_LEFT
-FormatAusrichtungZentriertCalc SID_OBJECT_ALIGN_CENTER
-FormatAusrichtungRechtsCalc SID_OBJECT_ALIGN_RIGHT
-FormatAusrichtungObenCalc SID_OBJECT_ALIGN_UP
-FormatAusrichtungMitteCalc SID_OBJECT_ALIGN_MIDDLE
-FormatAusrichtungUntenCalc SID_OBJECT_ALIGN_DOWN
-FormatGruppeGruppierenCalc SID_GROUP
-FormatGruppeAufhebenCalc SID_UNGROUP
-FormatGruppeBetretenCalc SID_ENTER_GROUP
-FormatGruppeVerlassenCalc SID_LEAVE_GROUP
+FormatStandardCalc .uno:ResetAttributes
+FormatTextZeichnung .uno:TextAttributes
+FormatSeiteCalc .uno:PageFormatDialog
+FormatZelle .uno:FormatCellDialog
+FormatZeileAusblenden .uno:HideRow
+FormatZeileEinblenden .uno:ShowRow
+FormatZeileHoeheCalc .uno:RowHeight
+FormatZeileOptimaleHoeheCalc .uno:SetOptimalRowHeight
+FormatSpalteAusblenden .uno:HideColumn
+FormatSpalteBreiteCalc .uno:ColumnWidth
+FormatSpalteEinblenden .uno:ShowColumn
+FormatSpalteOptimaleBreiteCalc .uno:SetOptimalColumnWidth
+FormatTabelleAusblenden .uno:Hide
+FormatTabelleEinblenden .uno:Show
+FormatTabelleUmbenennen .uno:RenameTable .uno:Name
+FormatZellenZusammenfassenAufheben .uno:SplitCell
+FormatZellenZusammenfassenFestlegen .uno:MergeCells
+FormatDruckbereicheAufheben .uno:DeletePrintArea
+FormatDruckbereicheBearbeiten .uno:EditPrintArea
+FormatDruckbereicheFestlegen .uno:DefinePrintArea
+FormatBedingteFormatierung .uno:ConditionalFormatDialog
+FormatVerankerungSeite .uno:SetAnchorToPage
+FormatVerankerungZelle .uno:SetAnchorToCell
+FormatSpiegelnVertikalCalc .uno:ObjectMirrorVertical
+FormatSpiegelnHorizontalCalc .uno:ObjectMirrorHorizontal
+FormatAnordnungGanzNachVornCalc .uno:BringToFront
+FormatAnordnungWeiterNachVornCalc .uno:ObjectForwardOne
+FormatAnordnungWeiterNachHintenCalc .uno:ObjectBackOne
+FormatAnordnungGanzNachHintenCalc .uno:SendToBack
+FormatAnordnungInDenHintergrundCalc .uno:SetObjectToBackground
+FormatAnordnungInDenVordergrundCalc .uno:SetObjectToForeground
+FormatAusrichtungLinksCalc .uno:ObjectAlignLeft
+FormatAusrichtungZentriertCalc .uno:AlignCenter
+FormatAusrichtungRechtsCalc .uno:ObjectAlignRight
+FormatAusrichtungObenCalc .uno:AlignUp
+FormatAusrichtungMitteCalc .uno:AlignMiddle
+FormatAusrichtungUntenCalc .uno:AlignDown
+FormatGruppeGruppierenCalc .uno:FormatGroup
+FormatGruppeAufhebenCalc .uno:FormatUngroup
+FormatGruppeBetretenCalc .uno:EnterGroup
+FormatGruppeVerlassenCalc .uno:LeaveGroup
 
 ' **** Draw / Impress
-FormatSeiteDraw SID_PAGESETUP
-FormatBemassung SID_MEASURE_DLG
-Format3D_Effekte SID_3D_WIN
-FormatVerbinder SID_CONNECTION_DLG
-FormatAufzaehlungszeichen SID_OUTLINE_BULLET
-FormatSeitenlayout SID_MODIFYPAGE
-FormatEbene SID_MODIFYLAYER
-FormatDesign SID_PRESENTATION_LAYOUT
+FormatSeiteDraw .uno:PageSetup
+FormatBemassung .uno:MeasureAttributes
+Format3D_Effekte .uno:Window3D
+FormatVerbinder .uno:ConnectorAttributes
+FormatAufzaehlungszeichen .uno:OutlineBullet
+FormatSeitenlayout .uno:ModifyPage
+FormatEbene .uno:ModifyLayer
+FormatDesign .uno:PresentationLayout
 
 ' **** Math
-FormatSchriftarten SID_FONT
-FormatSchriftgroessen SID_FONTSIZE
-FormatAbstaende SID_DISTANCE
-FormatAusrichtung SID_ALIGN
+FormatSchriftarten .uno:ChangeFont
+FormatSchriftgroessen .uno:ChangeFontSize
+FormatAbstaende .uno:ChangeDistance
+FormatAusrichtung .uno:ChangeAlignment
 
 
 ' ***********************************
 ' *********** Extrasmenue ***********
 ' ****
 ' **** Alle
-ExtrasRechtschreibungAutomatisch SID_AUTOSPELL_CHECK
-ExtrasAutoKorrektur SID_AUTO_CORRECT_DLG
-ExtrasMakro SID_BASICCHOOSER
-ExtrasAnpassen SID_CONFIG
-ExtrasOptionen SID_OPTIONS_TREEDIALOG
+ExtrasRechtschreibungAutomatisch .uno:SpellOnline
+ExtrasAutoKorrektur .uno:AutoCorrectDlg
+ExtrasMakro .uno:MacroDialog
+ExtrasAnpassen .uno:ConfigureDialog
+ExtrasOptionen .uno:OptionsTreeDialog
 
 ' **** Writer
-ExtrasKapitelnumerierung FN_NUMBERING_OUTLINE_DLG
-ExtrasZeilennumerierung FN_LINE_NUMBERING_DLG
-ExtrasSeitennummer FN_CHANGE_PAGENUM
-ExtrasFussnoten FN_FORMAT_FOOTNOTE_DLG
-ExtrasTextInTabelle FN_CONVERT_TEXT_TABLE
-ExtrasSortieren FN_SORTING_DLG
-ExtrasBerechnen FN_CALCULATE
-ExtrasAktualisierenAllesAktualisieren FN_UPDATE_ALL
-ExtrasAktualisierenFelder FN_UPDATE_FIELDS
-ExtrasAktualisierenVerknuepfungen FN_UPDATE_ALL_LINKS
-ExtrasAktualisierenAktuellesVerzeichnis FN_UPDATE_CUR_TOX
-ExtrasAktualisierenAlleVerzeichnisse FN_UPDATE_TOX
-ExtrasAktualisierenSeitenformatierung FN_REPAGINATE
+ExtrasKapitelnumerierung .uno:ChapterNumberingDialog
+ExtrasZeilennumerierung .uno:LineNumberingDialog
+ExtrasSeitennummer .uno:PageOffset
+ExtrasFussnoten .uno:FootnoteDialog
+ExtrasTextInTabelle .uno:ConvertTableText
+ExtrasSortieren .uno:SortDialog
+ExtrasBerechnen .uno:CalculateSel
+ExtrasAktualisierenAllesAktualisieren .uno:UpdateAll
+ExtrasAktualisierenFelder .uno:UpdateFields
+ExtrasAktualisierenVerknuepfungen .uno:UpdateAllLinks
+ExtrasAktualisierenAktuellesVerzeichnis .uno:UpdateCurIndex
+ExtrasAktualisierenAlleVerzeichnisse .uno:UpdateAllIndexes
+ExtrasAktualisierenSeitenformatierung .uno:Repaginate
 
 ' **** WriterWeb
-ExtrasSeitenformatierung FN_REPAGINATE
+ExtrasSeitenformatierung .uno:Repaginate
 
 ' **** Calc
-ExtrasDetektivAlleSpurenEntfernen SID_DETECTIVE_DEL_ALL
-ExtrasDetektivFuellModus SID_DETECTIVE_FILLMODE
-ExtrasDetektivSpurZumFehler SID_DETECTIVE_ADD_ERR
-ExtrasDetektivSpurZumNachfolger SID_DETECTIVE_ADD_SUCC
-ExtrasDetektivSpurZumNachfolgerEntfernen SID_DETECTIVE_DEL_SUCC
-ExtrasDetektivSpurZumVorgaenger SID_DETECTIVE_ADD_PRED
-ExtrasDetektivSpurZumVorgaengerEntfernen SID_DETECTIVE_DEL_PRED
-ExtrasDetektivUngueltigeDatenEinkreisen SID_DETECTIVE_INVALID SID_FILL_SELECT
-ExtrasDetektivAutomatischAktuakisieren SID_DETECTIVE_AUTO
-ExtrasZielwertsuche SID_OPENDLG_SOLVE
-ExtrasSzenarien SID_SCENARIOS
-ExtrasDokumentSchuetzenDokument FID_PROTECT_DOC
-ExtrasDokumentSchuetzenTabelle FID_PROTECT_TABLE
-ExtrasNeuBerechnen FID_RECALC
-ExtrasAutomatischBerechnen FID_AUTO_CALC
-ExtrasAutoEingabe FID_AUTOCOMPLETE
+ExtrasDetektivAlleSpurenEntfernen .uno:ClearArrows
+ExtrasDetektivFuellModus .uno:AuditingFillMode
+ExtrasDetektivSpurZumFehler .uno:ShowErrors
+ExtrasDetektivSpurZumNachfolger .uno:ShowDependents
+ExtrasDetektivSpurZumNachfolgerEntfernen .uno:ClearArrowDependents
+ExtrasDetektivSpurZumVorgaenger .uno:ShowPrecedents
+ExtrasDetektivSpurZumVorgaengerEntfernen .uno:ClearArrowPrecedents
+ExtrasDetektivUngueltigeDatenEinkreisen .uno:ShowInvalid .uno:FillModeSelect
+ExtrasDetektivAutomatischAktuakisieren .uno:AutoRefreshArrows
+ExtrasZielwertsuche .uno:GoalSeekDialog
+ExtrasSzenarien .uno:ScenarioManager
+ExtrasDokumentSchuetzenDokument .uno:ToolProtectionDocument
+ExtrasDokumentSchuetzenTabelle .uno:Protect
+ExtrasNeuBerechnen .uno:Calculate
+ExtrasAutomatischBerechnen .uno:AutomaticCalculation
+ExtrasAutoEingabe .uno:AutoComplete
 
 ' **** Draw / Impress
-ExtrasThesaurusDraw SID_THESAURUS
-ExtrasPipette SID_BMPMASK
+ExtrasThesaurusDraw .uno:ThesaurusDialog
+ExtrasPipette .uno:BmpMask
 ExtrasDiawechsel .uno:SlideChangeWindow
-ExtrasAnimation SID_ANIMATION_OBJECTS
+ExtrasAnimation .uno:AnimationObjects
 ExtrasEffekt .uno:AnimationEffects
-ExtrasInteraktion SID_ANIMATION_EFFECTS
-ExtrasPraesentationseinstellung SID_PRESENTATION_DLG
-ExtrasIndividuellePraesentation SID_CUSTOMSHOW_DLG
+ExtrasInteraktion .uno:AnimationEffects
+ExtrasPraesentationseinstellung .uno:PresentationDialog
+ExtrasIndividuellePraesentation .uno:CustomShowDialog
 
 ' **** Math
-' ExtrasSymbole SID_SYMBOLS
-ExtrasSymboleKatalog SID_SYMBOLS_CATALOGUE
+' ExtrasSymbole .uno:Symbols
+ExtrasSymboleKatalog .uno:SymbolCatalogue
 ' ExtrasSymboleLaden SID_SYMBOLS_LOAD
-ExtrasFormelImportieren SID_INSERT_FORMULA
+ExtrasFormelImportieren .uno:ImportFormula
 
 ' ***********************************
 ' *********** Praesentationmenue ************
 ' ****
-PraesentationBildschirmpraesentation SID_PRESENTATION
-PraesentationPraesentationmitZeitnahme SID_REHEARSE_TIMINGS
-PraesentationPraesentationseinstellungen SID_PRESENTATION_DLG
-PraesentationIndividuellePraesentation SID_CUSTOMSHOW_DLG
+PraesentationBildschirmpraesentation .uno:Presentation
+PraesentationPraesentationmitZeitnahme .uno:RehearseTimings
+PraesentationPraesentationseinstellungen .uno:PresentationDialog
+PraesentationIndividuellePraesentation .uno:CustomShowDialog
 PraesentationDiawechsel .uno:SlideChangeWindow
-PraesentationDiaAnzeigen SID_HIDE_SLIDE
-PraesentationAnimation SID_ANIMATION_OBJECTS
+PraesentationDiaAnzeigen .uno:HideSlide
+PraesentationAnimation .uno:AnimationObjects
 PraesentationEffekt .uno:AnimationEffects
-PraesentationInteraktion SID_ANIMATION_EFFECTS
+PraesentationInteraktion .uno:AnimationEffects
 
 ' ***********************************
 ' *********** Datenmenue ************
 ' ****
 ' **** Calc
-DatenBereichAuswaehlen SID_SELECT_DB
-DatenBereichFestlegen SID_DEFINE_DBNAME
-DatenSortieren SID_SORT
-DatenFilterAutoFilter SID_AUTO_FILTER
-DatenFilterAutoFilterAusblenden SID_AUTOFILTER_HIDE
-DatenFilterFilterEntfernen SID_UNFILTER
-DatenFilterSpezialfilter SID_SPECIAL_FILTER
-DatenFilterStandardfilter SID_FILTER
-DatenTeilergebnisse SID_SUBTOTALS
-DatenGueltigkeit FID_VALIDATION
-DatenDatenpilotAufrufen SID_OPENDLG_PIVOTTABLE
-DatenMehrfachoperationen SID_OPENDLG_TABOP
-DatenKonsolidieren SID_OPENDLG_CONSOLIDATE
-DatenGliederungAutoGliederung SID_AUTO_OUTLINE
-DatenGliederungDetailAusblenden SID_OUTLINE_HIDE
-DatenGliederungDetailEinblenden SID_OUTLINE_SHOW
-DatenGliederungEntfernen SID_OUTLINE_DELETEALL
-DatenGliederungGruppierung SID_OUTLINE_MAKE
-DatenGliederungGruppierungAufheben SID_OUTLINE_REMOVE
-DatenDatenpilotAktualisieren SID_PIVOT_RECALC
-DatenDatenpilotLoeschen SID_PIVOT_KILL
-DatenBereichAktualisieren SID_REFRESH_DBAREA
+DatenBereichAuswaehlen .uno:SelectDB
+DatenBereichFestlegen .uno:DefineDBName
+DatenSortieren .uno:DataSort
+DatenFilterAutoFilter .uno:DataFilterAutoFilter
+DatenFilterAutoFilterAusblenden .uno:DataFilterHideAutoFilter
+DatenFilterFilterEntfernen .uno:DataFilterRemoveFilter
+DatenFilterSpezialfilter .uno:DataFilterSpecialFilter
+DatenFilterStandardfilter .uno:DataFilterStandardFilter
+DatenTeilergebnisse .uno:DataSubTotals
+DatenGueltigkeit .uno:Validation
+DatenDatenpilotAufrufen .uno:DataDataPilotRun
+DatenMehrfachoperationen .uno:TableOperationDialog
+DatenKonsolidieren .uno:DataConsolidate
+DatenGliederungAutoGliederung .uno:AutoOutline
+DatenGliederungDetailAusblenden .uno:HideDetail
+DatenGliederungDetailEinblenden .uno:ShowDetail
+DatenGliederungEntfernen .uno:ClearOutline
+DatenGliederungGruppierung .uno:Group
+DatenGliederungGruppierungAufheben .uno:Ungroup
+DatenDatenpilotAktualisieren .uno:RecalcPivotTable
+DatenDatenpilotLoeschen .uno:DeletePivotTable
+DatenBereichAktualisieren .uno:DataAreaRefresh
 
 
 ' ***********************************
 ' ********** Fenstermenue ***********
 ' ****
 ' **** Alle
-FensterNeuesFenster SID_NEWWINDOW
+FensterNeuesFenster .uno:NewWindow
 'FensterUeberlappend SID_CASCADEWINS
 'FensterNebeneinander SID_TILEWINS
 'FensterHorizontal SID_HORIZONTALWINS
 'FensterVertikal SID_VERTICALWINS
-FensterAlleSchliessen SID_CLOSEWINS
-FensterTeilen SID_WINDOW_SPLIT
-FensterFixieren SID_WINDOW_FIX
+FensterAlleSchliessen .uno:CloseWins
+FensterTeilen .uno:SplitWindow
+FensterFixieren .uno:FreezePanes
 
 ' ***********************************
 ' *********** Hilfemenue ************
 ' ****
 ' **** Alle
-HilfeInhalt SID_HELPINDEX
-HilfeHelferlein SID_HELP_PI
-HilfeTip SID_HELPTIPS
-HilfeAktiveHilfe SID_HELPBALLOONS
-HilfeOnlineregistrierung SID_ONLINE_REGISTRATION
-HilfeInfoUeber SID_ABOUT
+HilfeInhalt .uno:HelpIndex
+HilfeHelferlein .uno:HelperDialog
+HilfeTip .uno:HelpTip
+HilfeAktiveHilfe .uno:ActiveHelp
+HilfeOnlineregistrierung .uno:OnlineRegistrationDlg
+HilfeInfoUeber .uno:About
 
 
 ' ***********************************
 ' ********** Aendernmenue ***********
 ' ****
 ' **** Draw / Impress
-AendernPositionGroesse SID_ATTR_TRANSFORM
-AendernSpiegelnVertikalDraw SID_VERTICAL
-AendernSpiegelnHorizontalDraw SID_HORIZONTAL
-AendernUmwandelnInKurve SID_CHANGEBEZIER
-AendernUmwandelnInPolygon SID_CHANGEPOLYGON
-AendernUmwandelnIn3D SID_CONVERT_TO_3D
-AendernUmwandelnIn3DRotationskoerper SID_CONVERT_TO_3D_LATHE_FAST
-AendernUmwandelnInMetafile SID_CONVERT_TO_METAFILE
-AendernUmwandelnInBitmap SID_CONVERT_TO_BITMAP
-AendernAnordnungGanznachVorn SID_FRAME_TO_TOP
-AendernAnordnungWeiterNachVorn SID_MOREFRONT
-AendernAnordnungWeiterNachHinten SID_MOREBACK
-AendernAnordnungGanznachHinten SID_FRAME_TO_BOTTOM
-AendernAnordnungVorDasObjekt SID_BEFORE_OBJ
-AendernAnordnungHinterDasObjekt SID_BEHIND_OBJ
-AendernAnordnungVertauschen SID_REVERSE_ORDER
-AendernVerteilen SID_DISTRIBUTE_DLG
-AendernAusrichtungLinks SID_OBJECT_ALIGN_LEFT
-AendernAusrichtungZentriert SID_OBJECT_ALIGN_CENTER
-AendernAusrichtungRechts SID_OBJECT_ALIGN_RIGHT
-AendernAusrichtungOben SID_OBJECT_ALIGN_UP
-AendernAusrichtungMitte SID_OBJECT_ALIGN_MIDDLE
-AendernAusrichtungUnten SID_OBJECT_ALIGN_DOWN
-AendernObjektBenennen SID_NAME_GROUP
-AendernFontWork SID_FONTWORK
-AendernPipette SID_BMPMASK
-AendernGruppierung SID_GROUP
-AendernGruppierungAufheben SID_UNGROUP
-AendernGruppierungBetreten SID_ENTER_GROUP
-AendernGruppierungVerlassen SID_LEAVE_GROUP
-AendernKombination SID_COMBINE
-AendernKombinationAufheben SID_DISMANTLE
-AendernVerbinden SID_CONNECT
-AendernAufbrechen SID_BREAK
-AendernShapeMerge SID_POLY_MERGE
-AendernShapeSubstract SID_POLY_SUBSTRACT
-AendernShapeIntersect SID_POLY_INTERSECT
+AendernPositionGroesse .uno:TransformDialog
+AendernSpiegelnVertikalDraw .uno:MirrorVert
+AendernSpiegelnHorizontalDraw .uno:MirrorHorz
+AendernUmwandelnInKurve .uno:ChangeBezier
+AendernUmwandelnInPolygon .uno:ChangePolygon
+AendernUmwandelnIn3D .uno:ConvertInto3D
+AendernUmwandelnIn3DRotationskoerper .uno:ConvertInto3DLatheFast
+AendernUmwandelnInMetafile .uno:ConvertIntoMetaFile
+AendernUmwandelnInBitmap .uno:ConvertIntoBitmap
+AendernAnordnungGanznachVorn .uno:BringToFront
+AendernAnordnungWeiterNachVorn .uno:Forward
+AendernAnordnungWeiterNachHinten .uno:Backward
+AendernAnordnungGanznachHinten .uno:SendToBack
+AendernAnordnungVorDasObjekt .uno:BeforeObject
+AendernAnordnungHinterDasObjekt .uno:BehindObject
+AendernAnordnungVertauschen .uno:ReverseOrder
+AendernVerteilen .uno:DistributeSelection
+AendernAusrichtungLinks .uno:ObjectAlignLeft
+AendernAusrichtungZentriert .uno:AlignCenter
+AendernAusrichtungRechts .uno:ObjectAlignRight
+AendernAusrichtungOben .uno:AlignUp
+AendernAusrichtungMitte .uno:AlignMiddle
+AendernAusrichtungUnten .uno:AlignDown
+AendernObjektBenennen .uno:NameGroup
+AendernFontWork .uno:FontWork
+AendernPipette .uno:BmpMask
+AendernGruppierung .uno:FormatGroup
+AendernGruppierungAufheben .uno:FormatUngroup
+AendernGruppierungBetreten .uno:EnterGroup
+AendernGruppierungVerlassen .uno:LeaveGroup
+AendernKombination .uno:Combine
+AendernKombinationAufheben .uno:Dismantle
+AendernVerbinden .uno:Connect
+AendernAufbrechen .uno:Break
+AendernShapeMerge .uno:Merge
+AendernShapeSubstract .uno:Substract
+AendernShapeIntersect .uno:Intersect
 
 
 
