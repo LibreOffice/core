@@ -319,6 +319,10 @@ DockingWindow FLT_WIN_ANIMATION
         Size = MAP_APPFONT ( 147 , 8 ) ;
         Text [ en-US ] = "Animation group" ;
     };
+    String STR_DISPLAY
+    {
+        Text [ en-US ] = "Preview";
+    };
 };
 
 

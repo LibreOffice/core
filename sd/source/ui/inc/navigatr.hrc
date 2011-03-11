@@ -25,6 +25,9 @@
  *
  ************************************************************************/
 #define FLT_NAVIGATOR 575
+//IAccessibility2 Implementation 2009-----
+#define  STR_OBJECTS_TREE (FLT_NAVIGATOR+1)
+//-----IAccessibility2 Implementation 2009
 #define TLB_OBJECTS 1
 #define TBI_PEN 2
 #define TBI_FIRST 3
@@ -41,3 +44,7 @@
 
 #define IL_NAVIGATR 333
 #define ILH_NAVIGATR 444
+//IAccessibility2 Implementation 2009-----
+#define STR_DRAGMODE 1
+//-----IAccessibility2 Implementation 2009
+
