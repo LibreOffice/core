@@ -67,6 +67,10 @@ void ScXMLNamedExpressionsContext::SheetLocalInserter::insert(ScMyNamedExpressio
 
     ::boost::scoped_ptr<ScMyNamedExpression> p(pExp);
 
+    if (p->sRangeType.getLength() > 0)
+        // For now, we only accept normal named expressions.
+        return;
+
     if (mpDoc && !mrRangeName.findByName(p->sName))
     {
         // Insert a new name.
