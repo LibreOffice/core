@@ -187,7 +187,6 @@ private:
     Color           aTabBgColor;
     USHORT          nScenarioFlags;
     BOOL            bActiveScenario;
-    NameToNameMap       localNameToGlobalName;
     mutable ScRangeName* mpRangeName;
     bool            mbPageBreaksValid;
 

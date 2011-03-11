@@ -1122,19 +1122,19 @@ bool getScRangeListForAddress( const rtl::OUString& sName, ScDocShell* pDocSh, S
         rtl::OUString sAddress = (*it).trim();
         // if a local name ( on the active sheet ) exists this will
         // take precedence over a global with the same name
+        bool bLocalName = false;
         if ( !xNameAccess->hasByName( sAddress ) && pDocSh )
         {
             // try a local name
             ScDocument* pDoc = pDocSh->GetDocument();
-            SCTAB nCurTab = pDocSh->GetCurTab();
             if ( pDoc )
             {
-                NameToNameMap* pMap = pDoc->GetLocalNameMap( nCurTab );
-                if ( pMap )
+                SCTAB nCurTab = pDocSh->GetCurTab();
+                ScRangeName* pRangeName = pDoc->GetRangeName(nCurTab);
+                if (pRangeName)
                 {
-                    NameToNameMap::iterator itTmp = pMap->find( sAddress );
-                    if ( itTmp != pMap->end() ) // found a mapping
-                        sAddress = itTmp->second;
+                    bLocalName = pRangeName->findByName(sAddress) != NULL;
+                    // TODO: Handle local names correctly.
                 }
             }
         }

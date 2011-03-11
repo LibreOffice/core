@@ -199,14 +199,6 @@ BOOL ScDocument::GetCodeName( SCTAB nTab, String& rName ) const
     return FALSE;
 }
 
-NameToNameMap*
-ScDocument::GetLocalNameMap( SCTAB& rTab )
-{
-    if ( !HasTable( rTab ) )
-        return NULL;
-    return &pTab[rTab]->localNameToGlobalName;
-}
-
 BOOL ScDocument::GetTable( const String& rName, SCTAB& rTab ) const
 {
     String aUpperName = rName;

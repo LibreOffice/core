@@ -429,8 +429,6 @@ public:
     const String&   GetCodeName() const { return aDocCodeName; }
     void                SetCodeName( const String& r ) { aDocCodeName = r; }
 
-    SC_DLLPUBLIC NameToNameMap*              GetLocalNameMap( SCTAB& rTab );
-
     void            GetDocStat( ScDocStat& rDocStat );
 
     SC_DLLPUBLIC void           InitDrawLayer( SfxObjectShell* pDocShell = NULL );

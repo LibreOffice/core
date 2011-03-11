@@ -142,14 +142,6 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
         mnScTab = static_cast< SCTAB >( nUsedTab - 1 );
     }
 
-#if 0
-    // find an unused name
-    String aOrigName( maScName );
-    sal_Int32 nCounter = 0;
-    while( rRangeNames.findByName(maScName) )
-        maScName.Assign( aOrigName ).Append( ' ' ).Append( String::CreateFromInt32( ++nCounter ) );
-#endif
-
     // 3) *** convert the name definition formula *** -------------------------
 
     rFmlaConv.Reset();
@@ -238,13 +230,6 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
                 if ( pData->IsValidReference( aRange ) )
                 {
                     GetExtDocOptions().GetOrCreateTabSettings( nXclTab );
-                    // create a mapping between the unmodified localname to
-                    // the name in the global name container for named ranges
-                    OSL_TRACE(" mapping local name to global name for tab %d which exists? %s", nXclTab, GetDoc().HasTable( mnScTab ) ? "true" : "false" );
-                    SCTAB nTab( static_cast< SCTAB >( mnScTab ) );
-                    NameToNameMap* pMap = GetDoc().GetLocalNameMap( nTab );
-                    if ( pMap )
-                       (*pMap)[ aRealOrigName ] = maScName;
                 }
             }
         }
