@@ -949,17 +949,18 @@ double ScInterpreter::GetBetaDistPDF(double fX, double fA, double fB)
     const double fLogDblMin = log( ::std::numeric_limits<double>::min());
     double fLogY = (fX < 0.1) ? ::rtl::math::log1p(-fX) : log(0.5-fX+0.5);
     double fLogX = log(fX);
-    double fAm1 = fA-1.0;
-    double fBm1 = fB-1.0;
+    double fAm1LogX = (fA-1.0) * fLogX;
+    double fBm1LogY = (fB-1.0) * fLogY;
     double fLogBeta = GetLogBeta(fA,fB);
     // check whether parts over- or underflow
-    if (   fAm1 * fLogX < fLogDblMax  && fAm1 * fLogX > fLogDblMin
-        && fBm1 * fLogY < fLogDblMax  && fBm1* fLogY > fLogDblMin
-        && fLogBeta < fLogDblMax      && fLogBeta > fLogDblMin )
+    if (   fAm1LogX < fLogDblMax  && fAm1LogX > fLogDblMin
+        && fBm1LogY < fLogDblMax  && fBm1LogY > fLogDblMin
+        && fLogBeta < fLogDblMax  && fLogBeta > fLogDblMin
+        && fAm1LogX + fBm1LogY < fLogDblMax && fAm1LogX + fBm1LogY > fLogDblMin)
         return pow(fX,fA-1.0) * pow(0.5-fX+0.5,fB-1.0) / GetBeta(fA,fB);
     else // need logarithm;
         // might overflow as a whole, but seldom, not worth to pre-detect it
-        return exp((fA-1.0)*fLogX + (fB-1.0)* fLogY - fLogBeta);
+        return exp( fAm1LogX + fBm1LogY - fLogBeta);
 }
 
 
@@ -1226,13 +1227,62 @@ void ScInterpreter::ScVariationen2()
     }
 }
 
+
+double ScInterpreter::GetBinomDistPMF(double x, double n, double p)
+// used in ScB and ScBinomDist
+// preconditions: 0.0 <= x <= n, 0.0 < p < 1.0;  x,n integral although double
+        {
+    double q = (0.5 - p) + 0.5;
+            double fFactor = pow(q, n);
+    if (fFactor <=::std::numeric_limits<double>::min())
+            {
+                fFactor = pow(p, n);
+        if (fFactor <= ::std::numeric_limits<double>::min())
+            return GetBetaDistPDF(p, x+1.0, n-x+1.0)/(n+1.0);
+                else
+                {
+            sal_uInt32 max = static_cast<sal_uInt32>(n - x);
+            for (sal_uInt32 i = 0; i < max && fFactor > 0.0; i++)
+                        fFactor *= (n-i)/(i+1)*q/p;
+            return fFactor;
+                }
+            }
+            else
+            {
+        sal_uInt32 max = static_cast<sal_uInt32>(x);
+        for (sal_uInt32 i = 0; i < max && fFactor > 0.0; i++)
+                    fFactor *= (n-i)/(i+1)*p/q;
+        return fFactor;
+        }
+    }
+
+double lcl_GetBinomDistRange(double n, double xs,double xe,
+            double fFactor /* q^n */, double p, double q)
+//preconditions: 0.0 <= xs < xe <= n; xs,xe,n integral although double
+                {
+    sal_uInt32 i;
+    double fSum;
+    // skip summands index 0 to xs-1, start sum with index xs
+    sal_uInt32 nXs = static_cast<sal_uInt32>( xs );
+    for (i = 1; i <= nXs && fFactor > 0.0; i++)
+        fFactor *= (n-i+1)/i * p/q;
+    fSum = fFactor; // Summand xs
+    sal_uInt32 nXe = static_cast<sal_uInt32>(xe);
+    for (i = nXs+1; i <= nXe && fFactor > 0.0; i++)
+                    {
+        fFactor *= (n-i+1)/i * p/q;
+                        fSum += fFactor;
+                    }
+    return (fSum>1.0) ? 1.0 : fSum;
+                }
+
 void ScInterpreter::ScB()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScB" );
     sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 3, 4 ) )
         return ;
-    if (nParamCount == 3)
+    if (nParamCount == 3)   // mass function
     {
         double x = ::rtl::math::approxFloor(GetDouble());
         double p = GetDouble();
@@ -1240,107 +1290,43 @@ void ScInterpreter::ScB()
         if (n < 0.0 || x < 0.0 || x > n || p < 0.0 || p > 1.0)
             PushIllegalArgument();
         else
-        {
-            double q = 1.0 - p;
-            double fFactor = pow(q, n);
-            if (fFactor == 0.0)
-            {
-                fFactor = pow(p, n);
-                if (fFactor == 0.0)
-                    PushNoValue();
+            if (p == 0.0)
+                PushDouble( (x == 0.0) ? 1.0 : 0.0 );
+            else
+                if ( p == 1.0)
+                    PushDouble( (x == n) ? 1.0 : 0.0);
                 else
-                {
-                    sal_uLong max = (sal_uLong) (n - x);
-                    for (sal_uLong i = 0; i < max && fFactor > 0.0; i++)
-                        fFactor *= (n-i)/(i+1)*q/p;
-                    PushDouble(fFactor);
-                }
+                    PushDouble(GetBinomDistPMF(x,n,p));
             }
             else
-            {
-                sal_uLong max = (sal_uLong) x;
-                for (sal_uLong i = 0; i < max && fFactor > 0.0; i++)
-                    fFactor *= (n-i)/(i+1)*p/q;
-                PushDouble(fFactor);
-            }
-        }
-    }
-    else if (nParamCount == 4)
-    {
-        double xe = GetDouble();
-        double xs = GetDouble();
+    {   // nParamCount == 4
+        double xe = ::rtl::math::approxFloor(GetDouble());
+        double xs = ::rtl::math::approxFloor(GetDouble());
         double p = GetDouble();
-        double n = GetDouble();
-//                                          alter Stand 300-SC
-//      if ((xs < n) && (xe < n) && (p < 1.0))
-//      {
-//          double Varianz = sqrt(n * p * (1.0 - p));
-//          xs = fabs(xs - (n * p /* / 2.0 STE */ ));
-//          xe = fabs(xe - (n * p /* / 2.0 STE */ ));
-//// STE        double nVal = gauss((xs + 0.5) / Varianz) + gauss((xe + 0.5) / Varianz);
-//          double nVal = fabs(gauss(xs / Varianz) - gauss(xe / Varianz));
-//          PushDouble(nVal);
-//      }
+        double n = ::rtl::math::approxFloor(GetDouble());
+        double q = (0.5 - p) + 0.5;
         bool bIsValidX = ( 0.0 <= xs && xs <= xe && xe <= n);
-        if ( bIsValidX && 0.0 < p && p < 1.0 )
-        {
-            double q = 1.0 - p;
-            double fFactor = pow(q, n);
-            if (fFactor == 0.0)
+        if ( bIsValidX && 0.0 < p && p < 1.0)
             {
-                fFactor = pow(p, n);
-                if (fFactor == 0.0)
-                    PushNoValue();
-                else
-                {
-                    double fSum = 0.0;
-                    sal_uLong max;
-                    if (xe < (sal_uLong) n)
-                        max = (sal_uLong) (n-xe)-1;
-                    else
-                        max = 0;
-                    sal_uLong i;
-                    for (i = 0; i < max && fFactor > 0.0; i++)
-                        fFactor *= (n-i)/(i+1)*q/p;
-                    if (xs < (sal_uLong) n)
-                        max = (sal_uLong) (n-xs);
-                    else
-                        fSum = fFactor;
-                    for (; i < max && fFactor > 0.0; i++)
-                    {
-                        fFactor *= (n-i)/(i+1)*q/p;
-                        fSum += fFactor;
-                    }
-                    PushDouble(fSum);
-                }
-            }
+            if (xs == xe)       // mass function
+                PushDouble(GetBinomDistPMF(xs,n,p));
             else
-            {
-                sal_uLong max;
-                double fSum;
-                if ( (sal_uLong) xs == 0)
                 {
-                    fSum = fFactor;
-                    max = 0;
-                }
+                double fFactor = pow(q, n);
+                if (fFactor > ::std::numeric_limits<double>::min())
+                    PushDouble(lcl_GetBinomDistRange(n,xs,xe,fFactor,p,q));
                 else
                 {
-                    max = (sal_uLong) xs-1;
-                    fSum = 0.0;
+                    fFactor = pow(p, n);
+                    if (fFactor > ::std::numeric_limits<double>::min())
+                    {
+                    // sum from j=xs to xe {(n choose j) * p^j * q^(n-j)}
+                    // = sum from i = n-xe to n-xs { (n choose i) * q^i * p^(n-i)}
+                        PushDouble(lcl_GetBinomDistRange(n,n-xe,n-xs,fFactor,q,p));
                 }
-                sal_uLong i;
-                for (i = 0; i < max && fFactor > 0.0; i++)
-                    fFactor *= (n-i)/(i+1)*p/q;
-                if ((sal_uLong)xe == 0)                     // beide 0
-                    fSum = fFactor;
                 else
-                    max = (sal_uLong) xe;
-                for (; i < max && fFactor > 0.0; i++)
-                {
-                    fFactor *= (n-i)/(i+1)*p/q;
-                    fSum += fFactor;
+                        PushDouble(GetBetaDist(q,n-xe,xe+1.0)-GetBetaDist(q,n-xs+1,xs) );
                 }
-                PushDouble(fSum);
             }
         }
         else
@@ -1365,77 +1351,63 @@ void ScInterpreter::ScBinomDist()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScBinomDist" );
     if ( MustHaveParamCount( GetByte(), 4 ) )
     {
-        double kum    = GetDouble();                    // 0 oder 1
-        double p      = GetDouble();                    // p
-        double n      = ::rtl::math::approxFloor(GetDouble());              // n
-        double x      = ::rtl::math::approxFloor(GetDouble());              // x
-        double fFactor, q, fSum;
+        bool bIsCum   = GetBool();     // false=mass function; true=cumulative
+        double p      = GetDouble();
+        double n      = ::rtl::math::approxFloor(GetDouble());
+        double x      = ::rtl::math::approxFloor(GetDouble());
+        double q = (0.5 - p) + 0.5;           // get one bit more for p near 1.0
+        double fFactor, fSum;
         if (n < 0.0 || x < 0.0 || x > n || p < 0.0 || p > 1.0)
+        {
             PushIllegalArgument();
-        else if (kum == 0.0)                        // Dichte
+            return;
+            }
+        if ( p == 0.0)
+            {
+            PushDouble( (x==0.0 || bIsCum) ? 1.0 : 0.0 );
+            return;
+            }
+        if ( p == 1.0)
         {
-            q = 1.0 - p;
-            fFactor = pow(q, n);
-            if (fFactor == 0.0)
-            {
-                fFactor = pow(p, n);
-                if (fFactor == 0.0)
-                    PushNoValue();
-                else
-                {
-                    sal_uLong max = (sal_uLong) (n - x);
-                    for (sal_uLong i = 0; i < max && fFactor > 0.0; i++)
-                        fFactor *= (n-i)/(i+1)*q/p;
-                    PushDouble(fFactor);
-                }
-            }
-            else
-            {
-                sal_uLong max = (sal_uLong) x;
-                for (sal_uLong i = 0; i < max && fFactor > 0.0; i++)
-                    fFactor *= (n-i)/(i+1)*p/q;
-                PushDouble(fFactor);
-            }
+            PushDouble( (x==n) ? 1.0 : 0.0);
+            return;
         }
-        else                                        // Verteilung
+        if (!bIsCum)
+            PushDouble( GetBinomDistPMF(x,n,p));
+        else
         {
-            if (n == x)
+            if (x == n)
                 PushDouble(1.0);
             else
             {
-                q = 1.0 - p;
                 fFactor = pow(q, n);
-                if (fFactor == 0.0)
+                if (x == 0.0)
+                    PushDouble(fFactor);
+                else
+                    if (fFactor <= ::std::numeric_limits<double>::min())
                 {
                     fFactor = pow(p, n);
-                    if (fFactor == 0.0)
-                        PushNoValue();
+                        if (fFactor <= ::std::numeric_limits<double>::min())
+                            PushDouble(GetBetaDist(q,n-x,x+1.0));
                     else
                     {
+                            if (fFactor > fMachEps)
+                            {
                         fSum = 1.0 - fFactor;
-                        sal_uLong max = (sal_uLong) (n - x) - 1;
-                        for (sal_uLong i = 0; i < max && fFactor > 0.0; i++)
+                                sal_uInt32 max = static_cast<sal_uInt32> (n - x) - 1;
+                                for (sal_uInt32 i = 0; i < max && fFactor > 0.0; i++)
                         {
                             fFactor *= (n-i)/(i+1)*q/p;
                             fSum -= fFactor;
                         }
-                        if (fSum < 0.0)
-                            PushDouble(0.0);
-                        else
-                            PushDouble(fSum);
-                    }
+                                PushDouble( (fSum < 0.0) ? 0.0 : fSum );
                 }
                 else
-                {
-                    fSum = fFactor;
-                    sal_uLong max = (sal_uLong) x;
-                    for (sal_uLong i = 0; i < max && fFactor > 0.0; i++)
-                    {
-                        fFactor *= (n-i)/(i+1)*p/q;
-                        fSum += fFactor;
+                                PushDouble(lcl_GetBinomDistRange(n,n-x,n,fFactor,q,p));
                     }
-                    PushDouble(fSum);
                 }
+                    else
+                        PushDouble( lcl_GetBinomDistRange(n,0.0,x,fFactor,p,q)) ;
             }
         }
     }
