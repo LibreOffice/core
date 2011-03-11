@@ -1,3 +1,2 @@
 tl tools : cppu external offuh ZLIB:zlib EXPAT:expat basegfx comphelper i18npool NULL
 tl tools\prj nmake - all tl_prj NULL
-tl	tools\qa					nmake	-	all	tl_qa tl_utl NULL
