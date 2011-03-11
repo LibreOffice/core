@@ -98,7 +98,7 @@
 +#SH# # We can't depend on MIDDLE_SO_TARGET being set.
 +#SH# LD_SONAME=
 @@ -68,29 +44,8 @@
- 
+  
  ## Shared object suffix
 -SOBJ=   so
 -# without the -brtl option, the library names use .a. AIX is funny that way.
