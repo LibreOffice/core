@@ -178,8 +178,10 @@ private:
      */
     sal_uInt16          FindNamedExpIndex( SCTAB nTab, sal_uInt16 nScIdx );
 
-    /** Finds the index of a NAME record from the passed Calc index in the specified map. */
-    sal_uInt16          FindNameIdx( const XclExpIndexMap& rMap, USHORT nScIdx ) const;
+    /**
+     * Find the index of a NAME record from Calc's database range index.
+     */
+    sal_uInt16          FindDBNameIdx( USHORT nScIdx ) const;
     /** Returns the index of an existing built-in NAME record with the passed definition, otherwise 0. */
     sal_uInt16          FindBuiltInNameIdx( const String& rName,
                             const XclTokenArray& rTokArr, bool bDBRange ) const;
@@ -412,7 +414,7 @@ sal_uInt16 XclExpNameManagerImpl::InsertName( SCTAB nTab, USHORT nScNameIdx )
 
 sal_uInt16 XclExpNameManagerImpl::InsertDBRange( USHORT nScDBRangeIdx )
 {
-    sal_uInt16 nNameIdx = FindNameIdx( maDBRangeMap, nScDBRangeIdx );
+    sal_uInt16 nNameIdx = FindDBNameIdx( nScDBRangeIdx );
     if( nNameIdx == 0 )
         if( const ScDBData* pDBData = GetDatabaseRanges().FindIndex( nScDBRangeIdx ) )
             nNameIdx = CreateName( *pDBData );
@@ -512,10 +514,10 @@ sal_uInt16 XclExpNameManagerImpl::FindNamedExpIndex( SCTAB nTab, sal_uInt16 nScI
     return (itr == maNamedExpMap.end()) ? 0 : itr->second;
 }
 
-sal_uInt16 XclExpNameManagerImpl::FindNameIdx( const XclExpIndexMap& rMap, USHORT nScIdx ) const
+sal_uInt16 XclExpNameManagerImpl::FindDBNameIdx( USHORT nScIdx ) const
 {
-    XclExpIndexMap::const_iterator aIt = rMap.find( nScIdx );
-    return (aIt == rMap.end()) ? 0 : aIt->second;
+    XclExpIndexMap::const_iterator aIt = maDBRangeMap.find( nScIdx );
+    return (aIt == maDBRangeMap.end()) ? 0 : aIt->second;
 }
 
 sal_uInt16 XclExpNameManagerImpl::FindBuiltInNameIdx(
@@ -723,7 +725,7 @@ void XclExpNameManagerImpl::CreateDatabaseNames()
         const ScDBData* pDBData = rDBRanges[ nDBIdx ];
         DBG_ASSERT( pDBData, "XclExpNameManagerImpl::CreateDatabaseNames - missing database range" );
         // skip hidden "unnamed" range
-        if( pDBData && (pDBData->GetName() != maUnnamedDBName) && !FindNameIdx( maDBRangeMap, pDBData->GetIndex() ) )
+        if( pDBData && (pDBData->GetName() != maUnnamedDBName) && !FindDBNameIdx( pDBData->GetIndex() ) )
             CreateName( *pDBData );
     }
 }
