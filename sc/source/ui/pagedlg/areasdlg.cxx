@@ -112,18 +112,18 @@ static void printAddressFlags(sal_uInt16 nFlag)
 ScPrintAreasDlg::ScPrintAreasDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent )
     :   ScAnyRefDlg     ( pB, pCW, pParent, RID_SCDLG_AREAS),
         //
-        aLbPrintArea    ( this, ScResId( LB_PRINTAREA ) ),
         aFlPrintArea    ( this, ScResId( FL_PRINTAREA ) ),
+        aLbPrintArea    ( this, ScResId( LB_PRINTAREA ) ),
         aEdPrintArea    ( this, this, ScResId( ED_PRINTAREA ) ),
         aRbPrintArea    ( this, ScResId( RB_PRINTAREA ), &aEdPrintArea, this ),
         //
-        aLbRepeatRow    ( this, ScResId( LB_REPEATROW ) ),
         aFlRepeatRow    ( this, ScResId( FL_REPEATROW ) ),
+        aLbRepeatRow    ( this, ScResId( LB_REPEATROW ) ),
         aEdRepeatRow    ( this, this, ScResId( ED_REPEATROW ) ),
         aRbRepeatRow    ( this, ScResId( RB_REPEATROW ), &aEdRepeatRow, this ),
         //
-        aLbRepeatCol    ( this, ScResId( LB_REPEATCOL ) ),
         aFlRepeatCol    ( this, ScResId( FL_REPEATCOL ) ),
+        aLbRepeatCol    ( this, ScResId( LB_REPEATCOL ) ),
         aEdRepeatCol    ( this, this, ScResId( ED_REPEATCOL ) ),
         aRbRepeatCol    ( this, ScResId( RB_REPEATCOL ), &aEdRepeatCol, this ),
         //

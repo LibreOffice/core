@@ -59,6 +59,9 @@ TextSeparatorResources::TextSeparatorResources( Window* pWindow )
     m_aEntryMap[ C2U( ", " ) ] = 1;
     m_aEntryMap[ C2U( "; " ) ] = 2;
     m_aEntryMap[ C2U( "\n" ) ] = 3;
+
+    m_aLB_Separator.SetAccessibleName(m_aFT_Separator.GetText());
+    m_aLB_Separator.SetAccessibleRelationLabeledBy(&m_aFT_Separator);
 }
 TextSeparatorResources::~TextSeparatorResources()
 {

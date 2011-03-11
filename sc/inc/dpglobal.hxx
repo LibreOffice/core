@@ -62,8 +62,6 @@
 // moved from fieldwnd.hxx, see also SC_DAPI_MAXFIELDS
 #define MAX_LABELS  256
 
-#define MAX_PAGEFIELDS 10   // maximum count of fields for page area
-
 #define     PIVOT_MAXFUNC           11
 #define     PIVOT_FUNC_NONE         0x0000
 #define     PIVOT_FUNC_SUM          0x0001

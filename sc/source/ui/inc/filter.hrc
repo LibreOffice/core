@@ -80,3 +80,10 @@
 #define ED_CRITERIA_AREA    52
 #define RB_CRITERIA_AREA    53
 
+//IAccessibility2 Implementation 2009-----
+#define STR_COPY_AREA_TO 5054
+#define RID_FILTER_OPERATOR 5055
+#define RID_FILTER_FIELDNAME 5056
+#define RID_FILTER_CONDITION 5057
+#define RID_FILTER_VALUE 5058
+//-----IAccessibility2 Implementation 2009
