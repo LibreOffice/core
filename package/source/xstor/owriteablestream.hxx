@@ -204,6 +204,7 @@ public:
     sal_Bool HasCachedEncryptionData() { return m_bHasCachedEncryptionData; }
     ::comphelper::SequenceAsHashMap& GetCachedEncryptionData() { return m_aEncryptionData; }
 
+    sal_Bool IsModified() { return m_bHasDataToFlush || m_bFlushed; }
 
     sal_Bool IsEncrypted();
     void SetDecrypted();
