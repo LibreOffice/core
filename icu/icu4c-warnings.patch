@@ -1,0 +1,21 @@
+--- misc/icu/source/common/unicode/stringpiece.h
++++ misc/build/icu/source/common/unicode/stringpiece.h
+@@ -140,7 +140,7 @@
+    * @param len the length of the new data
+    * @internal
+    */
+-  void set(const char* data, int32_t len) { ptr_ = data; length_ = len; }
++  void set(const char* data_, int32_t len) { ptr_ = data_; length_ = len; }
+ 
+   /**
+    * Reset the stringpiece to refer to new data.
+--- misc/icu/source/common/unicode/
++++ misc/build/icu/source/common/unicode/utf16.h
+@@ -316,6 +316,7 @@
+         (s)[(i)++]=(uint16_t)(((c)&0x3ff)|0xdc00); \
+     } else /* c>0x10ffff or not enough space */ { \
+         (isError)=TRUE; \
++        (void)(isError); \
+     } \
+ }
+ 
