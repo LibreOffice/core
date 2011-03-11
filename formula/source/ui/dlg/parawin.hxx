@@ -68,25 +68,25 @@ private:
         FixedText       aFtArgName;
         FixedInfo       aFtArgDesc;
 
-        FixedText       aFtArg1;
-        FixedText       aFtArg2;
-        FixedText       aFtArg3;
-        FixedText       aFtArg4;
-
         ImageButton     aBtnFx1;
-        ImageButton     aBtnFx2;
-        ImageButton     aBtnFx3;
-        ImageButton     aBtnFx4;
-
+        FixedText       aFtArg1;
         ArgEdit         aEdArg1;
-        ArgEdit         aEdArg2;
-        ArgEdit         aEdArg3;
-        ArgEdit         aEdArg4;
+        RefButton       aRefBtn1;
 
-        RefButton   aRefBtn1;
-        RefButton   aRefBtn2;
-        RefButton   aRefBtn3;
-        RefButton   aRefBtn4;
+        ImageButton     aBtnFx2;
+        FixedText       aFtArg2;
+        ArgEdit         aEdArg2;
+        RefButton       aRefBtn2;
+
+        ImageButton     aBtnFx3;
+        FixedText       aFtArg3;
+        ArgEdit         aEdArg3;
+        RefButton       aRefBtn3;
+
+        ImageButton     aBtnFx4;
+        FixedText       aFtArg4;
+        ArgEdit         aEdArg4;
+        RefButton       aRefBtn4;
 
         ScrollBar       aSlider;
         String          m_sOptional;
