@@ -244,7 +244,11 @@ GraphiteLayout::fillFrom(gr_segment * pSegment, ImplLayoutArgs &rArgs, float fSc
             float leftBoundary = gr_slot_origin_X(clusterFirst);
             float rightBoundary = (clusterAfter)?
                 gr_slot_origin_X(clusterAfter) : gr_seg_advance_X(pSegment);
-            if (lastChar < iChar && gr_cinfo_after(gr_seg_cinfo(pSegment, iChar)) > gr_slot_index(clusterAfter))
+            if (
+                lastChar < iChar &&
+                 (gr_cinfo_after(gr_seg_cinfo(pSegment, iChar)) >
+                 static_cast<int>(gr_slot_index(clusterAfter)))
+               )
             {
                 reordered = true;
             }
@@ -315,7 +319,11 @@ GraphiteLayout::fillFrom(gr_segment * pSegment, ImplLayoutArgs &rArgs, float fSc
                 nFirstCharInCluster = minimum<int>(firstChar, nFirstCharInCluster);
                 nLastCharInCluster = maximum<int>(lastChar, nLastCharInCluster);
             }
-            if (firstChar > iChar && gr_cinfo_before(gr_seg_cinfo(pSegment, iChar)) > gr_slot_index(clusterFirst))
+            if (
+                firstChar > iChar &&
+                 (gr_cinfo_before(gr_seg_cinfo(pSegment, iChar)) >
+                 static_cast<int>(gr_slot_index(clusterFirst)))
+               )
             {
                 reordered = true;
             }
