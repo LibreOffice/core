@@ -956,17 +956,17 @@ void SwHTMLParser::DocumentDetected()
     }
 }
 
-// wird fuer jedes Token gerufen, das in CallParser erkannt wird
+// is called for every token that is recognised in CallParser
 void SwHTMLParser::NextToken( int nToken )
 {
     if( ( pDoc->GetDocShell() && pDoc->GetDocShell()->IsAbortingImport() )
         || 1 == pDoc->getReferenceCount() )
     {
-        // wurde der Import vom SFX abgebrochen? Wenn ein Pending-Stack
-        // existiert den noch aufraumen
+        // Was the import cancelled by SFX? If a pending stack
+        // exists, clean it.
         eState = SVPAR_ERROR;
         OSL_ENSURE( !pPendStack || pPendStack->nToken,
-                "SwHTMLParser::NextToken: Pending-Stack ohne Token" );
+                "SwHTMLParser::NextToken: Pending-Stack without token" );
         if( 1 == pDoc->getReferenceCount() || !pPendStack )
             return ;
     }
@@ -976,12 +976,12 @@ void SwHTMLParser::NextToken( int nToken )
     {
         switch( nToken )
         {
-            // Tabellen werden ueber rekusive Methodenaufrufe gelesen
+            // tables are read by recursive method calls
         case HTML_TABLE_ON:
-            // Bei CSS-Deklarationen muss evtl. noch auf das
-            // Ende eines File-Downloads gewartet werden.
+            // For CSS declarations we might have to wait
+            // for a file download to finish
         case HTML_LINK:
-            // Bei Controls muss evtl. noch die Groesse gesetzt werden.
+            // For controls we might have to set the size.
         case HTML_INPUT:
         case HTML_TEXTAREA_ON:
         case HTML_SELECT_ON:
@@ -994,9 +994,9 @@ void SwHTMLParser::NextToken( int nToken )
     }
 #endif
 
-    // Die folgeneden Spezialfaelle muessen vor der Filter-Detection behandelt
-    // werden, denn der Inhalt des Titels, etc. wird auch in Netcape nicht
-    // zur Filter-Detection herangezogen.
+    // The following special cases have to be treated before the
+    // filter detection, because Netscape doesn't reference the content
+    // of the title for filter detection either.
     if( !pPendStack )
     {
         if( bInTitle )
@@ -1054,10 +1054,9 @@ void SwHTMLParser::NextToken( int nToken )
         }
     }
 
-    // Wenn wir noch nicht wissen, was fuer ein Dokument wir vor uns haben,
-    // versuchen wir das erstmal rauszufinden. Das muss fuer Controls in
-    // Fall vor dem Einfuegen des Controls passieren, weil beim Einfuegen
-    // bereits eine View benoetigt wird.
+    // Find out what type of document it is if we don't know already.
+    // For Controls this has to be finished before the control is inserted
+    // because for inserting a View is needed.
     if( !bDocInitalized )
         DocumentDetected();
 
@@ -1065,14 +1064,14 @@ void SwHTMLParser::NextToken( int nToken )
     BOOL bUpperSpaceSave = bUpperSpace;
     bUpperSpace = FALSE;
 
-    // Die folgenden Speziallfaelle muessen oder koennen nach der
-    // Filter-Detection erfolgen.
+    // The following special cases may or have to be treated after the
+    // filter detection
     if( !pPendStack )
     {
         if( bInFloatingFrame )
         {
-            // <SCRIPT> wird hier (von uns) ignoriert, weil es auch in
-            // Applets ignoriert wird!
+            // <SCRIPT> is ignored here (from us), because it is ignored in
+            // Applets as well
             if( HTML_IFRAME_OFF == nToken )
             {
                 bCallNextToken = FALSE;
@@ -1098,7 +1097,7 @@ void SwHTMLParser::NextToken( int nToken )
                 break;
 
             default:
-                OSL_ENSURE( !this, "SwHTMLParser::NextToken: ungueltiges Tag" );
+                OSL_ENSURE( !this, "SwHTMLParser::NextToken: invalid tag" );
                 break;
             }
 
@@ -1106,9 +1105,9 @@ void SwHTMLParser::NextToken( int nToken )
         }
         else if( pAppletImpl )
         {
-            // in einem Applet interessieren uns (erstmal) nur <PARAM>-Tags
-            // und das </APPLET>.
-            // <SCRIPT> wird hier (von Netscape) ignoriert!
+            // in an applet only <PARAM> tags and the </APPLET> tag
+            // are of interest for us (for the moment)
+            // <SCRIPT> is ignored here (from Netscape)!
 
             switch( nToken )
             {
@@ -1130,9 +1129,8 @@ void SwHTMLParser::NextToken( int nToken )
         }
         else if( bTextArea )
         {
-            // in einer TextArea wird alles bis zum </TEXTAREA> als Text
-            // eingefuegt
-            // <SCRIPT> wird hier (von Netscape) ignoriert!
+            // in a TextArea everything up to </TEXTAREA> is inserted as text.
+            // <SCRIPT> is ignored here (from Netscape)!
 
             switch( nToken )
             {
@@ -1150,7 +1148,7 @@ void SwHTMLParser::NextToken( int nToken )
         }
         else if( bSelect )
         {
-            // MUSS nach bNoScript kommen!
+            // HAS to be treated after bNoScript!
             switch( nToken )
             {
             case HTML_SELECT_OFF:
@@ -1172,20 +1170,19 @@ void SwHTMLParser::NextToken( int nToken )
             case HTML_NOSCRIPT_ON:
             case HTML_NOSCRIPT_OFF:
             case HTML_RAWDATA:
-                // im normalen switch bahandeln
+                // treat in normal switch
                 break;
 
             default:
-                // ignorieren
+                // ignore
                 return;
             }
         }
         else if( pMarquee )
         {
-            // in einer TextArea wird alles bis zum </TEXTAREA> als Text
-            // eingefuegt
-            // Die <SCRIPT>-Tags werden vom MS-IE ignoriert, von uns das
-            // geasmte Script
+            // in a TextArea everything up to </TEXTAREA> is inserted as text.
+            // The <SCRIPT> tags are ignored from MS-IE, we ignore the whole
+            // script.
             switch( nToken )
             {
             case HTML_MARQUEE_OFF:
@@ -1240,17 +1237,17 @@ void SwHTMLParser::NextToken( int nToken )
                     DocumentDetected();
                 pDoc->InsertString( *pPam, aToken );
 
-                // wenn es noch vorlaefige Absatz-Attribute gibt, der Absatz aber
-                // nicht leer ist, dann sind die Absatz-Attribute entgueltig.
+                // if there are temporary paragraph attributes and the
+                // paragraph isn't empty then the paragraph attributes
+                // are final.
                 if( aParaAttrs.Count() )
                     aParaAttrs.Remove( 0, aParaAttrs.Count() );
 
                 SetAttr();
             }
 
-            // Unbekannte Token im Header werden nur durch ein passendes
-            // End-Token, </HEAD> oder <BODY> wieder beendet. Darin wird Text
-            // ignoriert.
+            // Unknown token in the header are only closed by a matching
+            // end-token, </HEAD> or <BODY>. Text inside is ignored.
             switch( nToken )
             {
             case HTML_UNKNOWNCONTROL_OFF:
@@ -1259,7 +1256,7 @@ void SwHTMLParser::NextToken( int nToken )
             case HTML_FRAMESET_ON:
             case HTML_HEAD_OFF:
             case HTML_BODY_ON:
-            case HTML_IMAGE:        // Warum auch immer Netscape das tut.
+            case HTML_IMAGE:        // Don't know why Netscape acts this way.
                 aUnknownToken.Erase();
                 break;
             case HTML_TEXTTOKEN:
@@ -1282,8 +1279,8 @@ void SwHTMLParser::NextToken( int nToken )
         if( IsNewDoc() )
         {
             InsertBodyOptions();
-            // Falls es eine Vorlage fuer die erste oder rechte Seite gibt,
-            // setzen wir die hier.
+            // If there is a template for the first or the right page,
+            // it is set here.
             const SwPageDesc *pPageDesc = 0;
             if( pCSS1Parser->IsSetFirstPageDesc() )
                 pPageDesc = pCSS1Parser->GetFirstPageDesc();
@@ -1429,7 +1426,7 @@ void SwHTMLParser::NextToken( int nToken )
         }
         else
             bGetIDOption = TRUE;
-            // <BR>s in <PRE> aehneln echten LFs, deshalb kein break
+            // <BR>s in <PRE> resemble true LFs, hence no break
 
     case HTML_NEWPARA:
         // CR in PRE/LISTING/XMP
@@ -1437,10 +1434,11 @@ void SwHTMLParser::NextToken( int nToken )
             if( HTML_NEWPARA==nToken ||
                 pPam->GetPoint()->nContent.GetIndex() )
             {
-                AppendTxtNode(); // lf gibts hier nicht, deshalb unkritisch
+                AppendTxtNode(); // there is no LF at this place
+                                 // therefore it will cause no problems
                 SetTxtCollAttrs();
             }
-            // Laufbalkenanzeige
+            // progress bar
             if( !GetMedium() || !GetMedium()->IsRemote() )
                 ::SetProgressState( rInput.Tell(), pDoc->GetDocShell() );
         }
@@ -1465,8 +1463,7 @@ void SwHTMLParser::NextToken( int nToken )
         break;
 
     case HTML_TEXTTOKEN:
-        // dann fuege den String ein, ohne das Attribute am Ende
-        // aufgespannt werden.
+        // insert string without spanning attributes at the end.
         if( aToken.Len() && ' '==aToken.GetChar(0) && !IsReadPRE() )
         {
             xub_StrLen nPos = pPam->GetPoint()->nContent.GetIndex();
@@ -1495,8 +1492,9 @@ void SwHTMLParser::NextToken( int nToken )
                 DocumentDetected();
             pDoc->InsertString( *pPam, aToken );
 
-            // wenn es noch vorlaefige Absatz-Attribute gibt, der Absatz aber
-            // nicht leer ist, dann sind die Absatz-Attribute entgueltig.
+            // if there are temporary paragraph attributes and the
+            // paragraph isn't empty then the paragraph attributes
+            // are final.
             if( aParaAttrs.Count() )
                 aParaAttrs.Remove( 0, aParaAttrs.Count() );
 
@@ -1510,8 +1508,8 @@ void SwHTMLParser::NextToken( int nToken )
 
     case HTML_IMAGE:
         InsertImage();
-        // sollte der Parser der Letzte sein, der das Doc haelt, dann kann
-        // man hier abbrechen und einen Fehler setzen.
+        // if only the parser references the doc, we can break and set
+        // an error code
         if( 1 == pDoc->getReferenceCount() )
         {
             eState = SVPAR_ERROR;
@@ -1548,20 +1546,19 @@ void SwHTMLParser::NextToken( int nToken )
     case HTML_DT_ON:
         if( nOpenParaToken )
             EndPara();
-        EndDefListItem( 0, FALSE );// <DD>/<DT> beenden und keine Vorl. setzen
+        EndDefListItem( 0, FALSE );// close <DD>/<DT> and set no template
         NewDefListItem( nToken );
         break;
 
     case HTML_DD_OFF:
     case HTML_DT_OFF:
-        // siehe HTML_LI_OFF
-        // eigentlich muesste man ein DD/DT jetzt beenden. Da aber sowhl
-        // Netscape als auch Microsoft das nicht tun, machen wir das eben
-        // auch nicht.
+        // c.f. HTML_LI_OFF
+        // Actually we should close a DD/DT now.
+        // But neither Netscape nor Microsoft do this and so don't we.
         EndDefListItem( nToken, FALSE );
         break;
 
-    // Bereiche
+    // divisions
     case HTML_DIVISION_ON:
     case HTML_CENTER_ON:
         if( nOpenParaToken )
@@ -1610,7 +1607,7 @@ void SwHTMLParser::NextToken( int nToken )
         EndForm();
         break;
 
-    // Vorlagen:
+    // templates
     case HTML_PARABREAK_ON:
         if( nOpenParaToken )
             EndPara( TRUE );
@@ -1656,7 +1653,7 @@ void SwHTMLParser::NextToken( int nToken )
         break;
 
     case HTML_PREFORMTXT_OFF:
-        bNoParSpace = TRUE; // der letzte PRE-Absatz muss einen Zeilenabstand bekommen
+        bNoParSpace = TRUE; // the last PRE-paragraph gets a spacing
         EndTxtFmtColl( HTML_PREFORMTXT_OFF );
         break;
 
@@ -1697,14 +1694,14 @@ void SwHTMLParser::NextToken( int nToken )
         {
             if( nOpenParaToken )
                 EndPara();
-            OSL_ENSURE( !pTable, "Tabelle in Tabelle darf hier nicht vorkommen" );
+            OSL_ENSURE( !pTable, "table in table not allowed here" );
             if( !pTable && (IsNewDoc() || !pPam->GetNode()->FindTableNode()) &&
                 (pPam->GetPoint()->nNode.GetIndex() >
                             pDoc->GetNodes().GetEndOfExtras().GetIndex() ||
                 !pPam->GetNode()->FindFootnoteStartNode() ) )
             {
                 if ( nParaCnt < 5 )
-                    Show();     // bis hierhin schon mal anzeigen
+                    Show();     // show what we have up to here
 
                 SvxAdjust eAdjust = aAttrTab.pAdjust
                     ? ((const SvxAdjustItem&)aAttrTab.pAdjust->GetItem()).
@@ -1717,7 +1714,7 @@ void SwHTMLParser::NextToken( int nToken )
         }
         break;
 
-    // Listen
+    // lists
     case HTML_DIRLIST_ON:
     case HTML_MENULIST_ON:
     case HTML_ORDERLIST_ON:
@@ -1743,11 +1740,11 @@ void SwHTMLParser::NextToken( int nToken )
             (pPam->GetPoint()->nContent.GetIndex()
             || HTML_PARABREAK_ON==nOpenParaToken) )
         {
-            // nure bei <P><LI> den Absatz beenden, aber nicht bei <DD><LI>
+            // only finish paragraph for <P><LI>, not for <DD><LI>
             EndPara();
         }
 
-        EndNumBulListItem( 0, FALSE );// <LI>/<LH> beenden und keine Vorl. setzen
+        EndNumBulListItem( 0, FALSE );// close <LI>/<LH> and don't set a template
         NewNumBulListItem( nToken );
         break;
 
@@ -1915,7 +1912,7 @@ void SwHTMLParser::NextToken( int nToken )
     case HTML_HTML_OFF:
     case HTML_HEAD_ON:
     case HTML_TITLE_OFF:
-        break;      // nicht weiter auswerten, oder???
+        break;      // don't evaluate further???
     case HTML_HTML_ON:
         {
             const HTMLOptions *pHTMLOptions = GetOptions();
@@ -1964,7 +1961,7 @@ void SwHTMLParser::NextToken( int nToken )
     case HTML_COMMENT:
         if( ( aToken.Len() > 5 ) && ( ! bIgnoreHTMLComments ) )
         {
-            // als Post-It einfuegen
+            // insert as Post-It
             // If there are no space characters right behind
             // the <!-- and on front of the -->, leave the comment untouched.
             if( ' ' == aToken.GetChar( 3 ) &&
@@ -1984,10 +1981,10 @@ void SwHTMLParser::NextToken( int nToken )
         break;
 
     case HTML_MAP_ON:
-        // Image Maps werden asynchron gelesen: Zunaechst wird nur eine
-        // ImageMap angelegt. Die Bereiche kommen spaeter. Trozdem wird
-        // die ImageMap schon in das IMap-Array eingetragen, denn sie
-        // koennte ja schon verwendet werden.
+        // Image Maps are read asynchronously: At first only an image map is created
+        // Areas are processed later. Nevertheless the
+        // ImageMap is inserted into the IMap-Array, because it might be used
+        // already.
         pImageMap = new ImageMap;
         if( ParseMapOptions( pImageMap) )
         {
@@ -2003,8 +2000,8 @@ void SwHTMLParser::NextToken( int nToken )
         break;
 
     case HTML_MAP_OFF:
-        // jetzt gibt es keine ImageMap mehr (IMap nicht Loeschen, denn
-        // die stckt ja schon in dem Array!)
+        // there is no ImageMap anymore (don't delete IMap, because it's
+        // already contained in the array!)
         pImageMap = 0;
         break;
 
@@ -2025,13 +2022,13 @@ void SwHTMLParser::NextToken( int nToken )
         break;
 
     case HTML_UNKNOWNCONTROL_ON:
-        // Im Header muss der Inhalt von unbekannten Token ignoriert werden,
-        // es sei denn, das Token faengt mit einem '!' an.
+        // Ignore content of unknown token in the header, if the token
+        // does not start with a '!'.
         if( IsInHeader() && !IsReadPRE() && !aUnknownToken.Len() &&
             sSaveToken.Len() && '!' != sSaveToken.GetChar(0) &&
             '%' != sSaveToken.GetChar(0) )
             aUnknownToken = sSaveToken;
-        // kein break
+        // no break
 
     default:
         bInsertUnknown = bKeepUnknown;
@@ -2057,13 +2054,12 @@ void SwHTMLParser::NextToken( int nToken )
         InsertComment( aComment );
     }
 
-    // wenn es noch vorlaefige Absatz-Attribute gibt, der Absatz aber
-    // nicht leer ist, dann sind die Absatz-Attribute entgueltig.
+    // if there are temporary paragraph attributes and the
+    // paragraph isn't empty then the paragraph attributes are final.
     if( aParaAttrs.Count() && pPam->GetPoint()->nContent.GetIndex() )
         aParaAttrs.Remove( 0, aParaAttrs.Count() );
 }
 
-/*  */
 
 extern BOOL lcl_css1atr_equalFontItems( const SfxPoolItem& r1, const SfxPoolItem& r2 );
 
