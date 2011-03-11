@@ -39,9 +39,9 @@ class SvNumberFormatter;
 class Color;
 
 enum ScForceTextFmt {
-    ftDontForce,            // Zahlen als Zahlen
-    ftForce,                // Zahlen als Text
-    ftCheck                 // ist das Zahlenformat ein Textformat?
+    ftDontForce,            // numbers as numbers
+    ftForce,                // numbers as text
+    ftCheck                 // is the numberformat a textformat?
 };
 
 //------------------------------------------------------------------------

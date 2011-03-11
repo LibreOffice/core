@@ -90,7 +90,7 @@ class SC_DLLPUBLIC  ScSortedCollection : public ScCollection
 private:
     BOOL    bDuplicates;
 protected:
-                        // fuer ScStrCollection Load/Store
+                        // for ScStrCollection load/store
             void        SetDups( BOOL bVal ) { bDuplicates = bVal; }
             BOOL        IsDups() const { return bDuplicates; }
 public:
@@ -121,12 +121,10 @@ public:
                         StrData(const StrData& rData) : ScDataObject(), aStr(rData.aStr) {}
     virtual ScDataObject*   Clone() const;
     const String&       GetString() const { return aStr; }
-    // SetString nur, wenn StrData nicht in ScStrCollection ist! !!!
-    // z.B. fuer Searcher
+    // SetString only, if StrData is not in ScStrCollection! for example
+    // for Searcher
     void                SetString( const String& rNew ) { aStr = rNew; }
 };
-
-//------------------------------------------------------------------------
 
 class SvStream;
 

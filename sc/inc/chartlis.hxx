@@ -76,7 +76,7 @@ private:
 
     ScChartUnoData* pUnoData;
     ScDocument*     pDoc;
-    BOOL            bUsed;  // fuer ScChartListenerCollection::FreeUnused
+    BOOL            bUsed;  // for ScChartListenerCollection::FreeUnused
     BOOL            bDirty;
     BOOL            bSeriesRangesScheduled;
 
@@ -172,13 +172,13 @@ public:
 
     virtual         ~ScChartListenerCollection();
 
-                    // nur nach copy-ctor noetig, wenn neu ins Dok gehaengt
+                    // only needed after copy-ctor, if newly added to doc
     void            StartAllListeners();
 
     void            ChangeListening( const String& rName,
                                     const ScRangeListRef& rRangeListRef,
                                     BOOL bDirty = FALSE );
-    // FreeUnused nur wie in ScDocument::UpdateChartListenerCollection verwenden!
+    // use FreeUnused only the way it's used in ScDocument::UpdateChartListenerCollection
     void            FreeUnused();
     void            FreeUno( const com::sun::star::uno::Reference< com::sun::star::chart::XChartDataChangeEventListener >& rListener,
                              const com::sun::star::uno::Reference< com::sun::star::chart::XChartData >& rSource );
@@ -188,7 +188,7 @@ public:
     void            SetDiffDirty( const ScChartListenerCollection&,
                         BOOL bSetChartRangeLists = FALSE );
 
-    void            SetRangeDirty( const ScRange& rRange );     // z.B. Zeilen/Spalten
+    void            SetRangeDirty( const ScRange& rRange );     // for example rows/columns
 
     void            UpdateScheduledSeriesRanges();
     void            UpdateChartsContainingTab( SCTAB nTab );

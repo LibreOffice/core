@@ -33,11 +33,9 @@
 
 #include <rtl/ustring.hxx>
 
-//------------------------------------------------------------------------
 #define MAXFUNCPARAM    16
 #define MAXARRSIZE      0xfffe
 
-//------------------------------------------------------------------------
 #ifndef WIN
 #ifndef WNT
 #define CALLTYPE
@@ -54,7 +52,6 @@ extern "C" {
 typedef void (CALLTYPE* AdvData)( double& nHandle, void* pData );
 }
 
-//------------------------------------------------------------------------
 enum ParamType
 {
     PTR_DOUBLE,
@@ -65,7 +62,6 @@ enum ParamType
     NONE
 };
 
-//------------------------------------------------------------------------
 class ModuleData;
 class FuncData : public ScDataObject
 {
@@ -108,7 +104,6 @@ public:
 };
 
 
-//------------------------------------------------------------------------
 class FuncCollection : public ScSortedCollection
 {
 public:

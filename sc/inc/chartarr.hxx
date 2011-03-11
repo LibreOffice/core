@@ -69,12 +69,12 @@ public:
 };
 
 
-class SC_DLLPUBLIC ScChartArray : public ScDataObject               // nur noch Parameter-Struct
+class SC_DLLPUBLIC ScChartArray : public ScDataObject               // only parameter-struct
 {
     String      aName;
     ScDocument* pDocument;
     ScChartPositioner aPositioner;
-    BOOL        bValid;             // fuer Erzeugung aus SchMemChart
+    BOOL        bValid;             // for creation out of SchMemChart
 
 private:
     ScMemChart* CreateMemChartSingle();

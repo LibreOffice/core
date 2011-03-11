@@ -114,7 +114,7 @@ public:
         Returns false for formula cells returning nothing, use HasEmptyData() for that. */
     bool            IsBlank( bool bIgnoreNotes = false ) const;
 
-// fuer Idle-Berechnung
+// for idle-calculations
     inline USHORT   GetTextWidth() const { return nTextWidth; }
     inline void     SetTextWidth( USHORT nNew ) { nTextWidth = nNew; }
 
@@ -161,7 +161,7 @@ public:
     BOOL            HasEmptyData() const;
     BOOL            HasValueData() const;
     BOOL            HasStringData() const;
-    String          GetStringData() const;          // nur echte Strings
+    String          GetStringData() const;          // only real strings
 
     static BOOL     CellEqual( const ScBaseCell* pCell1, const ScBaseCell* pCell2 );
 
@@ -200,8 +200,6 @@ private:
                     ScNoteCell( const ScNoteCell& );
 };
 
-// ============================================================================
-
 class SC_DLLPUBLIC ScValueCell : public ScBaseCell
 {
 public:
@@ -221,8 +219,6 @@ public:
 private:
     double          mfValue;
 };
-
-// ============================================================================
 
 class SC_DLLPUBLIC ScStringCell : public ScBaseCell
 {
@@ -245,8 +241,6 @@ public:
 private:
     String          maString;
 };
-
-// ============================================================================
 
 class SC_DLLPUBLIC ScEditCell : public ScBaseCell
 {
@@ -285,8 +279,6 @@ public:
     /** Removes character attribute based on new pattern attributes. */
     void            RemoveCharAttribs( const ScPatternAttr& rAttr );
 };
-
-// ============================================================================
 
 class ScEditDataArray
 {
@@ -329,8 +321,6 @@ private:
     ::std::vector<Item>::const_iterator maIter;
     ::std::vector<Item> maArray;
 };
-
-// ============================================================================
 
 enum ScMatrixMode {
     MM_NONE      = 0,                   // No matrix formula
@@ -553,8 +543,6 @@ public:
     BOOL        GetNextRef( ScRange& rRange );
     ScToken*    GetNextRefToken();
 };
-
-// ============================================================================
 
 #endif
 

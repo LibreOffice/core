@@ -619,7 +619,7 @@ class ScChangeActionMove : public ScChangeAction
             ScBigRange          aFromRange;
             ScChangeTrack*      pTrack;
             ScChangeActionCellListEntry* pFirstCell;
-            ULONG               nStartLastCut;  // fuer PasteCut Undo
+            ULONG               nStartLastCut;  // for PasteCut undo
             ULONG               nEndLastCut;
 
                                 ScChangeActionMove( const ScRange& rFromRange,
