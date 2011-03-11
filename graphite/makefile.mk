@@ -50,6 +50,9 @@ TARFILE_MD5=0625a7d661f899a8ce263fc8a9879108
 PATCH_FILES= graphite2-0.9.2.patch \
         graphite_make.patch
 
+ADDITIONAL_FILES= \
+    src/makefile.mk
+
 # convert line-endings to avoid problems when patching
 CONVERTFILES=
 

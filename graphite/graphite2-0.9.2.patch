@@ -380,3 +380,14 @@ diff current src/List.h
      iterator            begin()         { return m_first; }
      const_iterator      begin() const   { return m_first; }
 
+--- misc/graphite2-0.9.2/src/Code.cpp	2011-02-12 16:54:16.000000000 +0100
++++ misc/build/graphite2-0.9.2/src/Code.cpp	2011-03-11 11:28:11.700215286 +0100
+@@ -168,7 +168,7 @@
+         face.getGlyphFaceCache()->numAttrs(),
+         face.numFeatures(), 
+         {1,1,1,1,1,1,1,1, 
+-         1,1,1,1,1,1,1,-1, 
++         1,1,1,1,1,1,1,(uint8)-1, 
+          1,1,1,1,1,1,1,1, 
+          1,1,1,1,1,1,0,0, 
+          0,0,0,0,0,0,0,0, 
