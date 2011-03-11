@@ -26,7 +26,7 @@
 #*************************************************************************
 PRJ	= ..$/..
 PRJNAME = filter
-#PACKAGE = com$/sun$/star$/documentconversion$/XSLTFilter
+PACKAGE = com/sun/star/comp/xsltfilter
 TARGET  =XSLTFilter
 ENABLE_EXCEPTIONS=TRUE
 LIBTARGET=NO
@@ -62,7 +62,7 @@ JAVAFILES		= $(subst,$(CLASSDIR)$/, $(subst,.class,.java $(JAVACLASSFILES)))
 CUSTOMMANIFESTFILE = Manifest
 
 JARCOMPRESS		= TRUE
-JARCLASSDIRS	= XSLTransformer*.class XSLTFilterOLEExtracter*.class
+JARCLASSDIRS	= com/sun/star/comp/xsltfilter
 JARTARGET		= $(TARGET).jar
 
 .IF "$(SYSTEM_SAXON)" == "YES"
@@ -72,7 +72,11 @@ JARFILES += saxon9.jar
 .ENDIF
 
 # --- Files --------------------------------------------------------
-JAVACLASSFILES=$(CLASSDIR)$/XSLTransformer.class  $(CLASSDIR)$/XSLTFilterOLEExtracter.class
+JAVACLASSFILES= \
+ $(CLASSDIR)/com/sun/star/comp/xsltfilter/XSLTransformer.class \
+ $(CLASSDIR)/com/sun/star/comp/xsltfilter/XSLTFilterOLEExtracter.class \
+ $(CLASSDIR)/com/sun/star/comp/xsltfilter/Base64.class \
+
 .ENDIF
 
 # --- Targets ------------------------------------------------------
