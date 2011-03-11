@@ -48,7 +48,7 @@ protected:
     ::vcl::ImplControlData* mpControlData;
 
 private:
-    BOOL                    mbHasFocus;
+    sal_Bool                    mbHasFocus;
     Link                    maGetFocusHdl;
     Link                    maLoseFocusHdl;
 
@@ -87,8 +87,8 @@ protected:
         @return
             if the Control instance has been destroyed in any of the call
     */
-    BOOL        ImplCallEventListenersAndHandler(
-                    ULONG nEvent, const Link& rHandler, void* pCaller
+    sal_Bool        ImplCallEventListenersAndHandler(
+                    sal_uLong nEvent, const Link& rHandler, void* pCaller
                 );
 
     /** draws the given text onto the given device
@@ -100,7 +100,7 @@ protected:
         directly at the target device, or taking the reference device into account) when returning.
     */
     void        DrawControlText( OutputDevice& _rTargetDevice, Rectangle& _io_rRect,
-                                 const XubString& _rStr, USHORT _nStyle,
+                                 const XubString& _rStr, sal_uInt16 _nStyle,
                                  MetricVector* _pVector, String* _pDisplayText ) const;
 
     virtual const Font&
@@ -108,7 +108,7 @@ protected:
     virtual const Color&
                 GetCanonicalTextColor( const StyleSettings& _rStyle ) const;
 
-    void ImplInitSettings( const BOOL _bFont, const BOOL _bForeground );
+    void ImplInitSettings( const sal_Bool _bFont, const sal_Bool _bForeground );
 
 public:
     SAL_DLLPRIVATE void ImplClearLayoutData() const;

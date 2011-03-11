@@ -97,6 +97,7 @@ Bitmap TT_SHOW2 {
 };
 
 WorkWindow TT_INLINE_TRANSLATION {
+    HelpID = "svtools:WorkWindow:TT_INLINE_TRANSLATION";
     SVLook = TRUE;
     Size = MAP_APPFONT( 2*Control_Border + 4*ButtonWidth + 3*Button_Button, 120 );
     Moveable = TRUE;
@@ -109,6 +110,7 @@ WorkWindow TT_INLINE_TRANSLATION {
         Text[ en-US ] = "Translation";
     };
     Edit TT_E_NEW {
+        HelpID = "svtools:Edit:TT_INLINE_TRANSLATION:TT_E_NEW";
         Disable = TRUE;
         Border = TRUE;
         Pos = MAP_APPFONT( 7, 16 );
@@ -127,6 +129,7 @@ WorkWindow TT_INLINE_TRANSLATION {
         Text[ en-US ] = "Comment";
     };
     Edit TT_E_COMMENT {
+        HelpID = "svtools:Edit:TT_INLINE_TRANSLATION:TT_E_COMMENT";
         Disable = TRUE;
         Border = TRUE;
         Pos = MAP_APPFONT( 7, 64 );
@@ -135,12 +138,14 @@ WorkWindow TT_INLINE_TRANSLATION {
         Text[ en-US ] = "~Comment";
     };
     PushButton TT_PB_SELECT {
+        HelpID = "svtools:PushButton:TT_INLINE_TRANSLATION:TT_PB_SELECT";
         Pos = MAP_APPFONT( Control_Border, 89 );
         Size = MAP_APPFONT( ButtonWidth, 12 );
         TabStop = TRUE;
         Text[ en-US ] = "~Select";
     };
     PushButton TT_PB_RESTORE {
+        HelpID = "svtools:PushButton:TT_INLINE_TRANSLATION:TT_PB_RESTORE";
         Disable = TRUE;
         Pos = MAP_APPFONT( Control_Border + ButtonWidth + Button_Button, 89 );
         Size = MAP_APPFONT( ButtonWidth, 12 );
@@ -148,6 +153,7 @@ WorkWindow TT_INLINE_TRANSLATION {
         Text[ en-US ] = "~Restore";
     };
     PushButton TT_PB_ACCEPT {
+        HelpID = "svtools:PushButton:TT_INLINE_TRANSLATION:TT_PB_ACCEPT";
         Disable = TRUE;
         Pos = MAP_APPFONT( Control_Border + 2*(ButtonWidth + Button_Button), 89 );
         Size = MAP_APPFONT( ButtonWidth, 12 );
@@ -155,6 +161,7 @@ WorkWindow TT_INLINE_TRANSLATION {
         Text[ en-US ] = "~Accept";
     };
     PushButton TT_PB_NEXT {
+        HelpID = "svtools:PushButton:TT_INLINE_TRANSLATION:TT_PB_NEXT";
         Pos = MAP_APPFONT( Control_Border + 3*(ButtonWidth + Button_Button), 89 );
         Size = MAP_APPFONT( ButtonWidth, 12 );
         TabStop = TRUE;

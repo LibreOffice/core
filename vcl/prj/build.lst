@@ -1,4 +1,4 @@
-vc	vcl	:	l10n apple_remote BOOST:boost rsc sot ucbhelper unotools ICU:icu GRAPHITE:graphite i18npool i18nutil unoil ridljar X11_EXTENSIONS:x11_extensions offuh basegfx basebmp tools l10ntools icc cpputools shell svl NULL
+vc	vcl	:	L10N:l10n apple_remote BOOST:boost rsc sot ucbhelper unotools ICU:icu GRAPHITE:graphite i18npool i18nutil unoil ridljar X11_EXTENSIONS:x11_extensions offuh basegfx basebmp tools l10ntools icc cpputools shell svl LIBXSLT:libxslt NULL
 vc	vcl										usr1	-	all	vc_mkout NULL
 vc	vcl\inc									nmake	-	all	vc_inc NULL
 vc	vcl\source\glyphs						nmake	-	all	vc_glyphs vc_inc NULL
@@ -48,3 +48,10 @@ vc	vcl\mac\source\src						nmake	-	m	vc__srcm vc_inc NULL
 vc	vcl\util								nmake	-	all	vc_util vc__plug.u vc__desk.u vc__aquy.u vc__appa.u vc__dtra.u vc__appm.m vc__appu.u vc__dtru.u vc__appw.w vc__appp.p vc__gdia.u vc__gdim.m vc__gdiu.u vc__gdiw.w vc__gdip.p vc__srcm.m vc__srcw.w vc__srcp.p vc__wina.u vc__winm.m vc__winu.u vc__winw.w vc__winp.p vc__gtka.u vc__gtky.u vc__gtkw.u vc__gtkg.u vc__kde.u vc__kde4.u vc__hl.u vc__ftmu.u vc__prgu.u vc__prnu.u vc_app vc_ctrl vc_gdi vc_hlp vc_src vc_win vc_glyphs vc_fts vc_components NULL
 vc  vcl\util\linksvp                        nmake   -   u   vc_lsvp vc_util NULL
 vc	vcl\workben								nmake	-	all	vc_wrkb vc_util vc_salmain NULL
+
+# memCheck works only within unix
+# memCheck is not right yet
+# vc      vcl\qa\complex\memCheck                  nmake - u   vc_qa_complex vc_util NULL
+# GPF
+# vc      vcl\qa\complex\persistent_window_states  nmake - all vc_qa_complex vc_util NULL
+

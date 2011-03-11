@@ -303,6 +303,7 @@ FtFontInfo::FtFontInfo( const ImplDevFontAttributes& rDevFontAttributes,
     mnSynthetic( nSynthetic ),
     mnFontId( nFontId ),
     maDevFontAttributes( rDevFontAttributes ),
+    mpFontCharMap( NULL ),
     mpChar2Glyph( NULL ),
     mpGlyph2Char( NULL ),
     mpExtraKernInfo( pExtraKernInfo )
@@ -320,6 +321,8 @@ FtFontInfo::FtFontInfo( const ImplDevFontAttributes& rDevFontAttributes,
 
 FtFontInfo::~FtFontInfo()
 {
+    if( mpFontCharMap )
+        mpFontCharMap->DeReference();
     delete mpExtraKernInfo;
     delete mpChar2Glyph;
     delete mpGlyph2Char;
@@ -406,7 +409,7 @@ static unsigned GetUShort( const unsigned char* p ){ return((p[0]<<8)+p[1]);}
 
 // -----------------------------------------------------------------------
 
-const unsigned char* FtFontInfo::GetTable( const char* pTag, ULONG* pLength ) const
+const unsigned char* FtFontInfo::GetTable( const char* pTag, sal_uLong* pLength ) const
 {
     const unsigned char* pBuffer = mpFontFile->GetBuffer();
     int nFileSize = mpFontFile->GetFileSize();
@@ -429,7 +432,7 @@ const unsigned char* FtFontInfo::GetTable( const char* pTag, ULONG* pLength ) co
     {
         if( p[0]==pTag[0] && p[1]==pTag[1] && p[2]==pTag[2] && p[3]==pTag[3] )
         {
-            ULONG nLength = GetUInt( p + 12 );
+            sal_uLong nLength = GetUInt( p + 12 );
             if( pLength != NULL )
                 *pLength = nLength;
             const unsigned char* pTable = pBuffer + GetUInt( p + 8 );
@@ -522,10 +525,25 @@ void* FreetypeServerFont::GetFtFace() const
 
 FreetypeManager::~FreetypeManager()
 {
-// This crashes on Solaris 10
-// TODO: check which versions have this problem
-//
-// FT_Error rcFT = FT_Done_FreeType( aLibFT );
+    // an application about to exit can omit garbage collecting the heap
+    // since it makes things slower and introduces risks if the heap was not perfect
+    // for debugging, for memory grinding or leak checking the env allows to force GC
+    const char* pEnv = getenv( "SAL_FORCE_GC_ON_EXIT" );
+    if( pEnv && (*pEnv != '0') )
+    {
+        // cleanup container of fontinfos
+        for( FontList::const_iterator it = maFontList.begin(); it != maFontList.end(); ++it )
+        {
+            FtFontInfo* pInfo = (*it).second;
+            delete pInfo;
+        }
+        maFontList.clear();
+
+#if 0   // FT_Done_FreeType crashes on Solaris 10
+    // TODO: check which versions have this problem
+    FT_Error rcFT = FT_Done_FreeType( aLibFT );
+#endif
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -1022,7 +1040,7 @@ void FreetypeServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor
         // Check for CJK capabilities of the current font
         // #107888# workaround for Asian...
         // TODO: remove when ExtLeading fully implemented
-        BOOL bCJKCapable = ((pOS2->ulUnicodeRange2 & 0x2DF00000) != 0);
+        sal_Bool bCJKCapable = ((pOS2->ulUnicodeRange2 & 0x2DF00000) != 0);
 
         if ( bCJKCapable && (pOS2->usWinAscent || pOS2->usWinDescent) )
         {
@@ -1449,7 +1467,7 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
         // #i15743# freetype API 2.1.3 changed the FT_RENDER_MODE_MONO constant
         FT_Render_Mode nRenderMode = (FT_Render_Mode)((nFTVERSION<2103) ? 1 : FT_RENDER_MODE_MONO);
 
-        rc = FT_Glyph_To_Bitmap( &pGlyphFT, nRenderMode, NULL, TRUE );
+        rc = FT_Glyph_To_Bitmap( &pGlyphFT, nRenderMode, NULL, sal_True );
         if( rc != FT_Err_Ok )
         {
             FT_Done_Glyph( pGlyphFT );
@@ -1477,7 +1495,7 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
         rRawBitmap.mnScanlineSize   = rBitmapFT.pitch;
     }
 
-    const ULONG nNeededSize = rRawBitmap.mnScanlineSize * rRawBitmap.mnHeight;
+    const sal_uLong nNeededSize = rRawBitmap.mnScanlineSize * rRawBitmap.mnHeight;
 
     if( rRawBitmap.mnAllocated < nNeededSize )
     {
@@ -1503,10 +1521,10 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
         }
 
         unsigned char* p = rRawBitmap.mpBits;
-        for( ULONG y=0; y < rRawBitmap.mnHeight; y++ )
+        for( sal_uLong y=0; y < rRawBitmap.mnHeight; y++ )
         {
             unsigned char nLastByte = 0;
-            for( ULONG x=0; x < rRawBitmap.mnScanlineSize; x++ )
+            for( sal_uLong x=0; x < rRawBitmap.mnScanlineSize; x++ )
             {
             unsigned char nTmp = p[x] << 7;
             p[x] |= (p[x] >> 1) | nLastByte;
@@ -1604,7 +1622,7 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
     bool bEmbedded = (pGlyphFT->format == FT_GLYPH_FORMAT_BITMAP);
     if( !bEmbedded )
     {
-        rc = FT_Glyph_To_Bitmap( &pGlyphFT, FT_RENDER_MODE_NORMAL, NULL, TRUE );
+        rc = FT_Glyph_To_Bitmap( &pGlyphFT, FT_RENDER_MODE_NORMAL, NULL, sal_True );
         if( rc != FT_Err_Ok )
         {
             FT_Done_Glyph( pGlyphFT );
@@ -1628,7 +1646,7 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
     }
     rRawBitmap.mnScanlineSize = (rRawBitmap.mnScanlineSize + 3) & -4;
 
-    const ULONG nNeededSize = rRawBitmap.mnScanlineSize * rRawBitmap.mnHeight;
+    const sal_uLong nNeededSize = rRawBitmap.mnScanlineSize * rRawBitmap.mnHeight;
     if( rRawBitmap.mnAllocated < nNeededSize )
     {
         delete[] rRawBitmap.mpBits;
@@ -1668,10 +1686,10 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
     {
         // overlay with glyph image shifted by one left pixel
         unsigned char* p = rRawBitmap.mpBits;
-        for( ULONG y=0; y < rRawBitmap.mnHeight; y++ )
+        for( sal_uLong y=0; y < rRawBitmap.mnHeight; y++ )
         {
             unsigned char nLastByte = 0;
-            for( ULONG x=0; x < rRawBitmap.mnWidth; x++ )
+            for( sal_uLong x=0; x < rRawBitmap.mnWidth; x++ )
             {
                 unsigned char nTmp = p[x];
                 p[x] |= p[x] | nLastByte;
@@ -1684,9 +1702,9 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
     if( !bEmbedded && mbUseGamma )
     {
         unsigned char* p = rRawBitmap.mpBits;
-        for( ULONG y=0; y < rRawBitmap.mnHeight; y++ )
+        for( sal_uLong y=0; y < rRawBitmap.mnHeight; y++ )
         {
-            for( ULONG x=0; x < rRawBitmap.mnWidth; x++ )
+            for( sal_uLong x=0; x < rRawBitmap.mnWidth; x++ )
             {
                 p[x] = aGammaTable[ p[x] ];
             }
@@ -1714,16 +1732,39 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
 // determine unicode ranges in font
 // -----------------------------------------------------------------------
 
-// TODO: replace with GetFontCharMap()
-bool FreetypeServerFont::GetFontCodeRanges( CmapResult& rResult ) const
+const ImplFontCharMap* FreetypeServerFont::GetImplFontCharMap( void ) const
 {
-    rResult.mbSymbolic = mpFontInfo->IsSymbolFont();
+    const ImplFontCharMap* pIFCMap = mpFontInfo->GetImplFontCharMap();
+    return pIFCMap;
+}
+
+const ImplFontCharMap* FtFontInfo::GetImplFontCharMap( void )
+{
+    // check if the charmap is already cached
+    if( mpFontCharMap )
+        return mpFontCharMap;
+
+    // get the charmap and cache it
+    CmapResult aCmapResult;
+    bool bOK = GetFontCodeRanges( aCmapResult );
+    if( bOK )
+        mpFontCharMap = new ImplFontCharMap( aCmapResult );
+    else
+               mpFontCharMap = ImplFontCharMap::GetDefaultMap();
+    mpFontCharMap->AddReference();
+    return mpFontCharMap;
+}
+
+// TODO: merge into method GetFontCharMap()
+bool FtFontInfo::GetFontCodeRanges( CmapResult& rResult ) const
+{
+    rResult.mbSymbolic = IsSymbolFont();
 
     // TODO: is the full CmapResult needed on platforms calling this?
     if( FT_IS_SFNT( maFaceFT ) )
     {
-        ULONG nLength = 0;
-        const unsigned char* pCmap = mpFontInfo->GetTable( "cmap", &nLength );
+        sal_uLong nLength = 0;
+        const unsigned char* pCmap = GetTable( "cmap", &nLength );
         if( pCmap && (nLength > 0) )
             if( ParseCMAP( pCmap, nLength, rResult ) )
                 return true;
@@ -1768,7 +1809,7 @@ bool FreetypeServerFont::GetFontCapabilities(vcl::FontCapabilities &rFontCapabil
 {
     bool bRet = false;
 
-    ULONG nLength = 0;
+    sal_uLong nLength = 0;
     // load GSUB table
     const FT_Byte* pGSUB = mpFontInfo->GetTable("GSUB", &nLength);
     if (pGSUB)
@@ -1821,7 +1862,7 @@ int FreetypeServerFont::GetGlyphKernValue( int nGlyphLeft, int nGlyphRight ) con
 
 // -----------------------------------------------------------------------
 
-ULONG FreetypeServerFont::GetKernPairs( ImplKernPairData** ppKernPairs ) const
+sal_uLong FreetypeServerFont::GetKernPairs( ImplKernPairData** ppKernPairs ) const
 {
     // if no kerning info is available in the font file
     *ppKernPairs = NULL;
@@ -1847,7 +1888,7 @@ ULONG FreetypeServerFont::GetKernPairs( ImplKernPairData** ppKernPairs ) const
         pFTActivateSize( maSizeFT );
 
     // first figure out which glyph pairs are involved in kerning
-    ULONG nKernLength = 0;
+    sal_uLong nKernLength = 0;
     const FT_Byte* const pKern = mpFontInfo->GetTable( "kern", &nKernLength );
     if( !pKern )
         return 0;
@@ -1865,19 +1906,19 @@ ULONG FreetypeServerFont::GetKernPairs( ImplKernPairData** ppKernPairs ) const
     aKernPair.mnKern = 0; // To prevent "is used uninitialized" warning...
 
     const FT_Byte* pBuffer = pKern;
-    ULONG nVersion = GetUShort( pBuffer+0 );
-    USHORT nTableCnt = GetUShort( pBuffer+2 );
+    sal_uLong nVersion = GetUShort( pBuffer+0 );
+    sal_uInt16 nTableCnt = GetUShort( pBuffer+2 );
 
     // Microsoft/Old TrueType style kern table
     if ( nVersion == 0 )
     {
         pBuffer += 4;
 
-        for( USHORT nTableIdx = 0; nTableIdx < nTableCnt; ++nTableIdx )
+        for( sal_uInt16 nTableIdx = 0; nTableIdx < nTableCnt; ++nTableIdx )
         {
-            // USHORT nSubVersion  = GetUShort( pBuffer+0 );
-            // USHORT nSubLength   = GetUShort( pBuffer+2 );
-            USHORT nSubCoverage = GetUShort( pBuffer+4 );
+            // sal_uInt16 nSubVersion  = GetUShort( pBuffer+0 );
+            // sal_uInt16 nSubLength   = GetUShort( pBuffer+2 );
+            sal_uInt16 nSubCoverage = GetUShort( pBuffer+4 );
             pBuffer += 6;
             if( (nSubCoverage&0x03) != 0x01 )   // no interest in minimum info here
                 continue;
@@ -1885,7 +1926,7 @@ ULONG FreetypeServerFont::GetKernPairs( ImplKernPairData** ppKernPairs ) const
             {
                 case 0: // version 0, kerning format 0
                 {
-                    USHORT nPairs = GetUShort( pBuffer );
+                    sal_uInt16 nPairs = GetUShort( pBuffer );
                     pBuffer += 8;   // skip search hints
                     aKernGlyphVector.reserve( aKernGlyphVector.size() + nPairs );
                     for( int i = 0; i < nPairs; ++i )
@@ -1902,21 +1943,21 @@ ULONG FreetypeServerFont::GetKernPairs( ImplKernPairData** ppKernPairs ) const
                 case 2: // version 0, kerning format 2
                 {
                     const FT_Byte* pSubTable = pBuffer;
-                    //USHORT nRowWidth  = GetUShort( pBuffer+0 );
-                    USHORT nOfsLeft     = GetUShort( pBuffer+2 );
-                    USHORT nOfsRight    = GetUShort( pBuffer+4 );
-                    USHORT nOfsArray    = GetUShort( pBuffer+6 );
+                    //sal_uInt16 nRowWidth  = GetUShort( pBuffer+0 );
+                    sal_uInt16 nOfsLeft     = GetUShort( pBuffer+2 );
+                    sal_uInt16 nOfsRight    = GetUShort( pBuffer+4 );
+                    sal_uInt16 nOfsArray    = GetUShort( pBuffer+6 );
                     pBuffer += 8;
 
                     const FT_Byte* pTmp = pSubTable + nOfsLeft;
-                    USHORT nFirstLeft   = GetUShort( pTmp+0 );
-                    USHORT nLastLeft    = GetUShort( pTmp+2 ) + nFirstLeft - 1;
+                    sal_uInt16 nFirstLeft   = GetUShort( pTmp+0 );
+                    sal_uInt16 nLastLeft    = GetUShort( pTmp+2 ) + nFirstLeft - 1;
 
                     pTmp = pSubTable + nOfsRight;
-                    USHORT nFirstRight  = GetUShort( pTmp+0 );
-                    USHORT nLastRight   = GetUShort( pTmp+2 ) + nFirstRight - 1;
+                    sal_uInt16 nFirstRight  = GetUShort( pTmp+0 );
+                    sal_uInt16 nLastRight   = GetUShort( pTmp+2 ) + nFirstRight - 1;
 
-                    ULONG nPairs = (ULONG)(nLastLeft - nFirstLeft + 1) * (nLastRight - nFirstRight + 1);
+                    sal_uLong nPairs = (sal_uLong)(nLastLeft - nFirstLeft + 1) * (nLastRight - nFirstRight + 1);
                     aKernGlyphVector.reserve( aKernGlyphVector.size() + nPairs );
 
                     pTmp = pSubTable + nOfsArray;
@@ -1945,11 +1986,11 @@ ULONG FreetypeServerFont::GetKernPairs( ImplKernPairData** ppKernPairs ) const
     nTableCnt = NEXT_U32( pBuffer );
     if ( nVersion == 0x00010000 )
     {
-        for( USHORT nTableIdx = 0; nTableIdx < nTableCnt; ++nTableIdx )
+        for( sal_uInt16 nTableIdx = 0; nTableIdx < nTableCnt; ++nTableIdx )
         {
-            /*ULONG  nLength  =*/ NEXT_U32( pBuffer );
-            USHORT nCoverage   = NEXT_U16( pBuffer );
-            /*USHORT nTupleIndex =*/ NEXT_U16( pBuffer );
+            /*sal_uLong  nLength  =*/ NEXT_U32( pBuffer );
+            sal_uInt16 nCoverage   = NEXT_U16( pBuffer );
+            /*sal_uInt16 nTupleIndex =*/ NEXT_U16( pBuffer );
 
             // Kerning sub-table format, 0 through 3
             sal_uInt8 nSubTableFormat  = nCoverage & 0x00FF;
@@ -1958,7 +1999,7 @@ ULONG FreetypeServerFont::GetKernPairs( ImplKernPairData** ppKernPairs ) const
             {
                 case 0: // version 0, kerning format 0
                 {
-                    USHORT nPairs = NEXT_U16( pBuffer );
+                    sal_uInt16 nPairs = NEXT_U16( pBuffer );
                     pBuffer += 6;   // skip search hints
                     aKernGlyphVector.reserve( aKernGlyphVector.size() + nPairs );
                     for( int i = 0; i < nPairs; ++i )
@@ -1974,20 +2015,20 @@ ULONG FreetypeServerFont::GetKernPairs( ImplKernPairData** ppKernPairs ) const
                 case 2: // version 0, kerning format 2
                 {
                     const FT_Byte* pSubTable = pBuffer;
-                    /*USHORT nRowWidth  =*/ NEXT_U16( pBuffer );
-                    USHORT nOfsLeft     = NEXT_U16( pBuffer );
-                    USHORT nOfsRight    = NEXT_U16( pBuffer );
-                    USHORT nOfsArray    = NEXT_U16( pBuffer );
+                    /*sal_uInt16 nRowWidth  =*/ NEXT_U16( pBuffer );
+                    sal_uInt16 nOfsLeft     = NEXT_U16( pBuffer );
+                    sal_uInt16 nOfsRight    = NEXT_U16( pBuffer );
+                    sal_uInt16 nOfsArray    = NEXT_U16( pBuffer );
 
                     const FT_Byte* pTmp = pSubTable + nOfsLeft;
-                    USHORT nFirstLeft   = NEXT_U16( pTmp );
-                    USHORT nLastLeft    = NEXT_U16( pTmp ) + nFirstLeft - 1;
+                    sal_uInt16 nFirstLeft   = NEXT_U16( pTmp );
+                    sal_uInt16 nLastLeft    = NEXT_U16( pTmp ) + nFirstLeft - 1;
 
                     pTmp = pSubTable + nOfsRight;
-                    USHORT nFirstRight  = NEXT_U16( pTmp );
-                    USHORT nLastRight   = NEXT_U16( pTmp ) + nFirstRight - 1;
+                    sal_uInt16 nFirstRight  = NEXT_U16( pTmp );
+                    sal_uInt16 nLastRight   = NEXT_U16( pTmp ) + nFirstRight - 1;
 
-                    ULONG nPairs = (ULONG)(nLastLeft - nFirstLeft + 1) * (nLastRight - nFirstRight + 1);
+                    sal_uLong nPairs = (sal_uLong)(nLastLeft - nFirstLeft + 1) * (nLastRight - nFirstRight + 1);
                     aKernGlyphVector.reserve( aKernGlyphVector.size() + nPairs );
 
                     pTmp = pSubTable + nOfsArray;
@@ -2014,17 +2055,17 @@ ULONG FreetypeServerFont::GetKernPairs( ImplKernPairData** ppKernPairs ) const
     }
 
     // now create VCL's ImplKernPairData[] format for all glyph pairs
-    ULONG nKernCount = aKernGlyphVector.size();
+    sal_uLong nKernCount = aKernGlyphVector.size();
     if( nKernCount )
     {
         // prepare glyphindex to character mapping
         // TODO: this is needed to support VCL's existing kerning infrastructure,
         // eliminate it up by redesigning kerning infrastructure to work with glyph indizes
-        typedef boost::unordered_multimap<USHORT,sal_Unicode> Cmap;
+        typedef boost::unordered_multimap<sal_uInt16,sal_Unicode> Cmap;
         Cmap aCmap;
         for( sal_Unicode aChar = 0x0020; aChar < 0xFFFE; ++aChar )
         {
-            USHORT nGlyphIndex = GetGlyphIndex( aChar );
+            sal_uInt16 nGlyphIndex = GetGlyphIndex( aChar );
             if( nGlyphIndex )
                 aCmap.insert( Cmap::value_type( nGlyphIndex, aChar ) );
         }
@@ -2079,7 +2120,7 @@ ULONG FreetypeServerFont::GetKernPairs( ImplKernPairData** ppKernPairs ) const
 class PolyArgs
 {
 public:
-                PolyArgs( PolyPolygon& rPolyPoly, USHORT nMaxPoints );
+                PolyArgs( PolyPolygon& rPolyPoly, sal_uInt16 nMaxPoints );
                 ~PolyArgs();
 
     void        AddPoint( long nX, long nY, PolyFlags);
@@ -2092,19 +2133,19 @@ private:
     PolyPolygon& mrPolyPoly;
 
     Point*      mpPointAry;
-    BYTE*       mpFlagAry;
+    sal_uInt8*       mpFlagAry;
 
     FT_Vector   maPosition;
-    USHORT      mnMaxPoints;
-    USHORT      mnPoints;
-    USHORT      mnPoly;
+    sal_uInt16      mnMaxPoints;
+    sal_uInt16      mnPoints;
+    sal_uInt16      mnPoly;
     long        mnHeight;
     bool        bHasOffline;
 };
 
 // -----------------------------------------------------------------------
 
-PolyArgs::PolyArgs( PolyPolygon& rPolyPoly, USHORT nMaxPoints )
+PolyArgs::PolyArgs( PolyPolygon& rPolyPoly, sal_uInt16 nMaxPoints )
 :   mrPolyPoly(rPolyPoly),
     mnMaxPoints(nMaxPoints),
     mnPoints(0),
@@ -2113,7 +2154,7 @@ PolyArgs::PolyArgs( PolyPolygon& rPolyPoly, USHORT nMaxPoints )
     bHasOffline(false)
 {
     mpPointAry  = new Point[ mnMaxPoints ];
-    mpFlagAry   = new BYTE [ mnMaxPoints ];
+    mpFlagAry   = new sal_uInt8 [ mnMaxPoints ];
 }
 
 // -----------------------------------------------------------------------
@@ -2321,56 +2362,56 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
 {
 #define MKTAG(s) ((((((s[0]<<8)+s[1])<<8)+s[2])<<8)+s[3])
 
-    typedef std::vector<ULONG> ReqFeatureTagList;
+    typedef std::vector<sal_uLong> ReqFeatureTagList;
     ReqFeatureTagList aReqFeatureTagList;
     if( rFSD.mbVertical )
         aReqFeatureTagList.push_back( MKTAG("vert") );
-    ULONG nRequestedScript = 0;     //MKTAG("hani");//### TODO: where to get script?
-    ULONG nRequestedLangsys = 0;    //MKTAG("ZHT"); //### TODO: where to get langsys?
+    sal_uLong nRequestedScript = 0;     //MKTAG("hani");//### TODO: where to get script?
+    sal_uLong nRequestedLangsys = 0;    //MKTAG("ZHT"); //### TODO: where to get langsys?
     // TODO: request more features depending on script and language system
 
     if( aReqFeatureTagList.size() == 0) // nothing to do
         return true;
 
     // load GSUB table into memory
-    ULONG nLength = 0;
+    sal_uLong nLength = 0;
     const FT_Byte* const pGsubBase = mpFontInfo->GetTable( "GSUB", &nLength );
     if( !pGsubBase )
         return false;
 
     // parse GSUB header
     const FT_Byte* pGsubHeader = pGsubBase;
-    const USHORT nOfsScriptList     = GetUShort( pGsubHeader+4 );
-    const USHORT nOfsFeatureTable   = GetUShort( pGsubHeader+6 );
-    const USHORT nOfsLookupList     = GetUShort( pGsubHeader+8 );
+    const sal_uInt16 nOfsScriptList     = GetUShort( pGsubHeader+4 );
+    const sal_uInt16 nOfsFeatureTable   = GetUShort( pGsubHeader+6 );
+    const sal_uInt16 nOfsLookupList     = GetUShort( pGsubHeader+8 );
     pGsubHeader += 10;
 
-    typedef std::vector<USHORT> UshortList;
+    typedef std::vector<sal_uInt16> UshortList;
     UshortList aFeatureIndexList;
     UshortList aFeatureOffsetList;
 
     // parse Script Table
     const FT_Byte* pScriptHeader = pGsubBase + nOfsScriptList;
-    const USHORT nCntScript = GetUShort( pScriptHeader+0 );
+    const sal_uInt16 nCntScript = GetUShort( pScriptHeader+0 );
     pScriptHeader += 2;
-    for( USHORT nScriptIndex = 0; nScriptIndex < nCntScript; ++nScriptIndex )
+    for( sal_uInt16 nScriptIndex = 0; nScriptIndex < nCntScript; ++nScriptIndex )
     {
-        const ULONG nScriptTag      = GetUInt( pScriptHeader+0 ); // e.g. hani/arab/kana/hang
-        const USHORT nOfsScriptTable= GetUShort( pScriptHeader+4 );
+        const sal_uLong nScriptTag      = GetUInt( pScriptHeader+0 ); // e.g. hani/arab/kana/hang
+        const sal_uInt16 nOfsScriptTable= GetUShort( pScriptHeader+4 );
         pScriptHeader += 6; //###
         if( (nScriptTag != nRequestedScript) && (nRequestedScript != 0) )
             continue;
 
         const FT_Byte* pScriptTable     = pGsubBase + nOfsScriptList + nOfsScriptTable;
-        const USHORT nDefaultLangsysOfs = GetUShort( pScriptTable+0 );
-        const USHORT nCntLangSystem     = GetUShort( pScriptTable+2 );
+        const sal_uInt16 nDefaultLangsysOfs = GetUShort( pScriptTable+0 );
+        const sal_uInt16 nCntLangSystem     = GetUShort( pScriptTable+2 );
         pScriptTable += 4;
-        USHORT nLangsysOffset = 0;
+        sal_uInt16 nLangsysOffset = 0;
 
-        for( USHORT nLangsysIndex = 0; nLangsysIndex < nCntLangSystem; ++nLangsysIndex )
+        for( sal_uInt16 nLangsysIndex = 0; nLangsysIndex < nCntLangSystem; ++nLangsysIndex )
         {
-            const ULONG nTag    = GetUInt( pScriptTable+0 );    // e.g. KOR/ZHS/ZHT/JAN
-            const USHORT nOffset= GetUShort( pScriptTable+4 );
+            const sal_uLong nTag    = GetUInt( pScriptTable+0 );    // e.g. KOR/ZHS/ZHT/JAN
+            const sal_uInt16 nOffset= GetUShort( pScriptTable+4 );
             pScriptTable += 6;
             if( (nTag != nRequestedLangsys) && (nRequestedLangsys != 0) )
                 continue;
@@ -2381,13 +2422,13 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
         if( (nDefaultLangsysOfs != 0) && (nDefaultLangsysOfs != nLangsysOffset) )
         {
             const FT_Byte* pLangSys = pGsubBase + nOfsScriptList + nOfsScriptTable + nDefaultLangsysOfs;
-            const USHORT nReqFeatureIdx = GetUShort( pLangSys+2 );
-            const USHORT nCntFeature    = GetUShort( pLangSys+4 );
+            const sal_uInt16 nReqFeatureIdx = GetUShort( pLangSys+2 );
+            const sal_uInt16 nCntFeature    = GetUShort( pLangSys+4 );
             pLangSys += 6;
             aFeatureIndexList.push_back( nReqFeatureIdx );
-            for( USHORT i = 0; i < nCntFeature; ++i )
+            for( sal_uInt16 i = 0; i < nCntFeature; ++i )
             {
-                const USHORT nFeatureIndex = GetUShort( pLangSys );
+                const sal_uInt16 nFeatureIndex = GetUShort( pLangSys );
                 pLangSys += 2;
                 aFeatureIndexList.push_back( nFeatureIndex );
             }
@@ -2396,13 +2437,13 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
         if( nLangsysOffset != 0 )
         {
             const FT_Byte* pLangSys = pGsubBase + nOfsScriptList + nOfsScriptTable + nLangsysOffset;
-            const USHORT nReqFeatureIdx = GetUShort( pLangSys+2 );
-            const USHORT nCntFeature    = GetUShort( pLangSys+4 );
+            const sal_uInt16 nReqFeatureIdx = GetUShort( pLangSys+2 );
+            const sal_uInt16 nCntFeature    = GetUShort( pLangSys+4 );
             pLangSys += 6;
             aFeatureIndexList.push_back( nReqFeatureIdx );
-            for( USHORT i = 0; i < nCntFeature; ++i )
+            for( sal_uInt16 i = 0; i < nCntFeature; ++i )
             {
-                const USHORT nFeatureIndex = GetUShort( pLangSys );
+                const sal_uInt16 nFeatureIndex = GetUShort( pLangSys );
                 pLangSys += 2;
                 aFeatureIndexList.push_back( nFeatureIndex );
             }
@@ -2417,12 +2458,12 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
 
     // parse Feature Table
     const FT_Byte* pFeatureHeader = pGsubBase + nOfsFeatureTable;
-    const USHORT nCntFeature = GetUShort( pFeatureHeader );
+    const sal_uInt16 nCntFeature = GetUShort( pFeatureHeader );
     pFeatureHeader += 2;
-    for( USHORT nFeatureIndex = 0; nFeatureIndex < nCntFeature; ++nFeatureIndex )
+    for( sal_uInt16 nFeatureIndex = 0; nFeatureIndex < nCntFeature; ++nFeatureIndex )
     {
-        const ULONG nTag    = GetUInt( pFeatureHeader+0 ); // e.g. locl/vert/trad/smpl/liga/fina/...
-        const USHORT nOffset= GetUShort( pFeatureHeader+4 );
+        const sal_uLong nTag    = GetUInt( pFeatureHeader+0 ); // e.g. locl/vert/trad/smpl/liga/fina/...
+        const sal_uInt16 nOffset= GetUShort( pFeatureHeader+4 );
         pFeatureHeader += 6;
 
         // short circuit some feature lookups
@@ -2437,11 +2478,11 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
         }
 
         const FT_Byte* pFeatureTable = pGsubBase + nOfsFeatureTable + nOffset;
-        const USHORT nCntLookups = GetUShort( pFeatureTable+0 );
+        const sal_uInt16 nCntLookups = GetUShort( pFeatureTable+0 );
         pFeatureTable += 2;
-        for( USHORT i = 0; i < nCntLookups; ++i )
+        for( sal_uInt16 i = 0; i < nCntLookups; ++i )
         {
-            const USHORT nLookupIndex = GetUShort( pFeatureTable );
+            const sal_uInt16 nLookupIndex = GetUShort( pFeatureTable );
             pFeatureTable += 2;
             aLookupIndexList.push_back( nLookupIndex );
         }
@@ -2451,11 +2492,11 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
 
     // parse Lookup List
     const FT_Byte* pLookupHeader = pGsubBase + nOfsLookupList;
-    const USHORT nCntLookupTable = GetUShort( pLookupHeader );
+    const sal_uInt16 nCntLookupTable = GetUShort( pLookupHeader );
     pLookupHeader += 2;
-    for( USHORT nLookupIdx = 0; nLookupIdx < nCntLookupTable; ++nLookupIdx )
+    for( sal_uInt16 nLookupIdx = 0; nLookupIdx < nCntLookupTable; ++nLookupIdx )
     {
-        const USHORT nOffset = GetUShort( pLookupHeader );
+        const sal_uInt16 nOffset = GetUShort( pLookupHeader );
         pLookupHeader += 2;
         if( std::count( aLookupIndexList.begin(), aLookupIndexList.end(), nLookupIdx ) )
             aLookupOffsetList.push_back( nOffset );
@@ -2464,43 +2505,43 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
     UshortList::const_iterator lookup_it = aLookupOffsetList.begin();
     for(; lookup_it != aLookupOffsetList.end(); ++lookup_it )
     {
-        const USHORT nOfsLookupTable = *lookup_it;
+        const sal_uInt16 nOfsLookupTable = *lookup_it;
         const FT_Byte* pLookupTable = pGsubBase + nOfsLookupList + nOfsLookupTable;
-        const USHORT eLookupType        = GetUShort( pLookupTable+0 );
-        const USHORT nCntLookupSubtable = GetUShort( pLookupTable+4 );
+        const sal_uInt16 eLookupType        = GetUShort( pLookupTable+0 );
+        const sal_uInt16 nCntLookupSubtable = GetUShort( pLookupTable+4 );
         pLookupTable += 6;
 
         // TODO: switch( eLookupType )
         if( eLookupType != 1 )  // TODO: once we go beyond SingleSubst
             continue;
 
-        for( USHORT nSubTableIdx = 0; nSubTableIdx < nCntLookupSubtable; ++nSubTableIdx )
+        for( sal_uInt16 nSubTableIdx = 0; nSubTableIdx < nCntLookupSubtable; ++nSubTableIdx )
         {
-            const USHORT nOfsSubLookupTable = GetUShort( pLookupTable );
+            const sal_uInt16 nOfsSubLookupTable = GetUShort( pLookupTable );
             pLookupTable += 2;
             const FT_Byte* pSubLookup = pGsubBase + nOfsLookupList + nOfsLookupTable + nOfsSubLookupTable;
 
-            const USHORT nFmtSubstitution   = GetUShort( pSubLookup+0 );
-            const USHORT nOfsCoverage       = GetUShort( pSubLookup+2 );
+            const sal_uInt16 nFmtSubstitution   = GetUShort( pSubLookup+0 );
+            const sal_uInt16 nOfsCoverage       = GetUShort( pSubLookup+2 );
             pSubLookup += 4;
 
-            typedef std::pair<USHORT,USHORT> GlyphSubst;
+            typedef std::pair<sal_uInt16,sal_uInt16> GlyphSubst;
             typedef std::vector<GlyphSubst> SubstVector;
             SubstVector aSubstVector;
 
             const FT_Byte* pCoverage    = pGsubBase + nOfsLookupList + nOfsLookupTable + nOfsSubLookupTable + nOfsCoverage;
-            const USHORT nFmtCoverage   = GetUShort( pCoverage+0 );
+            const sal_uInt16 nFmtCoverage   = GetUShort( pCoverage+0 );
             pCoverage += 2;
             switch( nFmtCoverage )
             {
                 case 1:         // Coverage Format 1
                     {
-                        const USHORT nCntGlyph = GetUShort( pCoverage );
+                        const sal_uInt16 nCntGlyph = GetUShort( pCoverage );
                         pCoverage += 2;
                         aSubstVector.reserve( nCntGlyph );
-                        for( USHORT i = 0; i < nCntGlyph; ++i )
+                        for( sal_uInt16 i = 0; i < nCntGlyph; ++i )
                         {
-                            const USHORT nGlyphId = GetUShort( pCoverage );
+                            const sal_uInt16 nGlyphId = GetUShort( pCoverage );
                             pCoverage += 2;
                             aSubstVector.push_back( GlyphSubst( nGlyphId, 0 ) );
                         }
@@ -2509,16 +2550,16 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
 
                 case 2:         // Coverage Format 2
                     {
-                        const USHORT nCntRange = GetUShort( pCoverage );
+                        const sal_uInt16 nCntRange = GetUShort( pCoverage );
                         pCoverage += 2;
                         for( int i = nCntRange; --i >= 0; )
                         {
-                            const UINT32 nGlyph0 = GetUShort( pCoverage+0 );
-                            const UINT32 nGlyph1 = GetUShort( pCoverage+2 );
-                            const USHORT nCovIdx = GetUShort( pCoverage+4 );
+                            const sal_uInt32 nGlyph0 = GetUShort( pCoverage+0 );
+                            const sal_uInt32 nGlyph1 = GetUShort( pCoverage+2 );
+                            const sal_uInt16 nCovIdx = GetUShort( pCoverage+4 );
                             pCoverage += 6;
-                            for( UINT32 j = nGlyph0; j <= nGlyph1; ++j )
-                                aSubstVector.push_back( GlyphSubst( static_cast<USHORT>(j + nCovIdx), 0 ) );
+                            for( sal_uInt32 j = nGlyph0; j <= nGlyph1; ++j )
+                                aSubstVector.push_back( GlyphSubst( static_cast<sal_uInt16>(j + nCovIdx), 0 ) );
                         }
                     }
                     break;
@@ -2530,7 +2571,7 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
             {
                 case 1:     // Single Substitution Format 1
                     {
-                        const USHORT nDeltaGlyphId = GetUShort( pSubLookup );
+                        const sal_uInt16 nDeltaGlyphId = GetUShort( pSubLookup );
                         pSubLookup += 2;
                         for(; it != aSubstVector.end(); ++it )
                             (*it).second = (*it).first + nDeltaGlyphId;
@@ -2539,11 +2580,11 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
 
                 case 2:     // Single Substitution Format 2
                     {
-                        const USHORT nCntGlyph = GetUShort( pSubLookup );
+                        const sal_uInt16 nCntGlyph = GetUShort( pSubLookup );
                         pSubLookup += 2;
                         for( int i = nCntGlyph; (it != aSubstVector.end()) && (--i>=0); ++it )
                         {
-                            const USHORT nGlyphId = GetUShort( pSubLookup );
+                            const sal_uInt16 nGlyphId = GetUShort( pSubLookup );
                             pSubLookup += 2;
                             (*it).second = nGlyphId;
                         }

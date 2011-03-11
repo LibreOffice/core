@@ -60,7 +60,7 @@ public:
     RscInst&    operator =  ( const RscInst& rRscInst );
                 ~RscInst();
     void        OverWrite( RscInstCopy & rInst );
-    BOOL        IsInst() const { return( aInst.IsInst() ); }
+    sal_Bool        IsInst() const { return( aInst.IsInst() ); }
 
                 // Listen Methoden
     ERRTYPE     SetElement( const RscId & rName, RscInstCopy & rInst );
@@ -76,17 +76,17 @@ public:
 
     ERRTYPE     SetVar( Atom nVarName, RscInstCopy & rInst );
     ERRTYPE     SetConst( Atom nVarName, Atom nConstId );
-    ERRTYPE     SetBool( Atom nVarName, BOOL );
+    ERRTYPE     SetBool( Atom nVarName, sal_Bool );
 
     // Hack fuer X, Y, Width, Height
     static ERRTYPE SetCorrectValues( RSCINST & rInst, RSCINST & rVarInst,
-                                    INT32 lValue, sal_uInt32 nTupelIdx );
-    ERRTYPE     SetNumber( Atom nVarName, INT32 );
+                                    sal_Int32 lValue, sal_uInt32 nTupelIdx );
+    ERRTYPE     SetNumber( Atom nVarName, sal_Int32 );
 
     ERRTYPE     SetString( Atom nVarName, const char * );
     ERRTYPE     SetConst( Atom nConstId );
-    ERRTYPE     SetBool( BOOL );
-    ERRTYPE     SetNumber( INT32 );
+    ERRTYPE     SetBool( sal_Bool );
+    ERRTYPE     SetNumber( sal_Int32 );
     ERRTYPE     SetString( const char * );
     ERRTYPE     SetRef( const RscId & rRscId );
     ERRTYPE     SetDefault( Atom nVarName );
@@ -94,17 +94,17 @@ public:
     RscInst     GetVar( Atom nVarName );
     Atom        GetConst( Atom nVarName = InvalidAtom );
     sal_uInt32      GetConstPos( Atom nVarName = InvalidAtom );
-    BOOL        GetBool( Atom nVarName = InvalidAtom );
+    sal_Bool        GetBool( Atom nVarName = InvalidAtom );
 
     // Hack fuer X, Y, Width, Height
-    static INT32 GetCorrectValues( RSCINST & rInst, RSCINST & rVarInst,
+    static sal_Int32 GetCorrectValues( RSCINST & rInst, RSCINST & rVarInst,
                                     sal_uInt32 nTupelIdx );
-    INT32       GetNumber( Atom nVarName = InvalidAtom );
+    sal_Int32       GetNumber( Atom nVarName = InvalidAtom );
 
     const char *GetString( Atom nVarName = InvalidAtom );
     RscId       GetRef();
-    BOOL        IsDefault( Atom nVarName );
-    BOOL        IsConsistent( RscInconsList * pList );
+    sal_Bool        IsDefault( Atom nVarName );
+    sal_Bool        IsConsistent( RscInconsList * pList );
 
     Atom        GetClassEnum( Atom nVarName, sal_uInt32 nPos );
     Atom        GetClassEnum( sal_uInt32 nPos );
@@ -149,62 +149,62 @@ public:
                 // Konvertiert einen Namen in einen Typ
     RscTop*     GetClassType( Atom nClassName );
                 // Instanz einer Klasse erzeugen
-    BOOL        MakeConsistent( RscInconsList * pList );
+    sal_Bool        MakeConsistent( RscInconsList * pList );
                 // Array mit Dateinamen
     RscFileTab* GetFileTab();
                 // Eine Dateinamen-Instanz holen
-    RscFile *   GetFileStruct( ULONG lKey );
+    RscFile *   GetFileStruct( sal_uLong lKey );
 
-    ULONG       AddSrcFile( const ByteString & rFileName );
-    ULONG       AddHrcFile( const ByteString & rFileName );
+    sal_uLong       AddSrcFile( const ByteString & rFileName );
+    sal_uLong       AddHrcFile( const ByteString & rFileName );
                 // Traegt die Include-Dateien in die Abhaengigkeitsliste
                 // von lFileKey ein
-    void        ScanForIncFiles( ULONG lFileKey );
-    void        RemoveFile( ULONG lKey );
+    void        ScanForIncFiles( sal_uLong lFileKey );
+    void        RemoveFile( sal_uLong lKey );
 
                 // Suche ueber alle DEFINES
     RscDefine * FindDef( const ByteString & rName );
-    ULONG       GetFileKey( const ByteString & rFileName );
+    sal_uLong       GetFileKey( const ByteString & rFileName );
 };
 
 class RscHrc
 {
 protected:
-    ULONG         lFileKey; // Index der Instanz
+    sal_uLong         lFileKey; // Index der Instanz
     RscDataBase * pDataBase;// Datenbasis
 public:
 
                 // Kompilerinstanz erzeugen
-                RscHrc( RscDataBase * pDBase, ULONG lKey );
+                RscHrc( RscDataBase * pDBase, sal_uLong lKey );
                 ~RscHrc();
 
                 // Daten von Datei uebernehmen
     ERRTYPE     ReadFile();
 
-    ULONG       GetFileKey() const { return lFileKey; }
+    sal_uLong       GetFileKey() const { return lFileKey; }
 
-    void        SetDirty( BOOL bSet );
-    BOOL        IsDirty();
+    void        SetDirty( sal_Bool bSet );
+    sal_Bool        IsDirty();
     void        SetPathName( const ByteString & );
     ByteString  GetPathName();
     void        SetFileName( const ByteString & );
     ByteString  GetFileName();
 
                 //Depend-Datei anhaengen
-    void        InsertDepend( ULONG lKey, ULONG lPos );
+    void        InsertDepend( sal_uLong lKey, sal_uLong lPos );
 
                 // DefineList holen
     RscDefineList * GetDefineList();
                 // Suche ueber all DEFINES im Zugriff
     RscDefine * FindDef( const ByteString & rName );
-    ERRTYPE     NewDef( const ByteString & rMacroName, INT32 lValue,
-                        ULONG lPos );
+    ERRTYPE     NewDef( const ByteString & rMacroName, sal_Int32 lValue,
+                        sal_uLong lPos );
     ERRTYPE     NewDef( const ByteString & rMacroName, const ByteString & rMacro,
-                        ULONG lPos );
-    ERRTYPE     ChangeDef( const ByteString & rMacroName, INT32 lValue );
+                        sal_uLong lPos );
+    ERRTYPE     ChangeDef( const ByteString & rMacroName, sal_Int32 lValue );
     ERRTYPE     ChangeDef( const ByteString & rMacroName,
                            const ByteString & rMacro );
-    BOOL        IsDefUsed( const ByteString & );
+    sal_Bool        IsDefUsed( const ByteString & );
     void        DeleteDef( const ByteString & rMacroName );
     ERRTYPE     ChangeDefName( const ByteString & rMacroName,
                                const ByteString & rNewName );
@@ -221,7 +221,7 @@ public:
 class RscSrc : public RscHrc {
 public:
             // Kompilerinstanz erzeugen
-            RscSrc( RscDataBase * pDBase, ULONG lKey );
+            RscSrc( RscDataBase * pDBase, sal_uLong lKey );
             ~RscSrc();
 
 

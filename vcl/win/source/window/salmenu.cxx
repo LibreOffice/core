@@ -48,7 +48,7 @@ static DWORD myerr=0;
 
 // =======================================================================
 
-BOOL SalData::IsKnownMenuHandle( HMENU hMenu )
+sal_Bool SalData::IsKnownMenuHandle( HMENU hMenu )
 {
     if( mhMenuSet.find( hMenu ) == mhMenuSet.end() )
         return FALSE;
@@ -60,7 +60,7 @@ BOOL SalData::IsKnownMenuHandle( HMENU hMenu )
 
 // WinSalInst factory methods
 
-SalMenu* WinSalInstance::CreateMenu( BOOL bMenuBar )
+SalMenu* WinSalInstance::CreateMenu( sal_Bool bMenuBar, Menu* )
 {
     WinSalMenu *pSalMenu = new WinSalMenu();
 
@@ -169,7 +169,7 @@ WinSalMenu::~WinSalMenu()
     ::DestroyMenu( mhMenu );
 }
 
-BOOL WinSalMenu::VisibleMenuBar()
+sal_Bool WinSalMenu::VisibleMenuBar()
 {
     // The Win32 implementation never shows a native
     // menubar. Thus, native menues are only visible
@@ -295,13 +295,13 @@ void WinSalMenu::SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsig
     }
 }
 
-void WinSalMenu::CheckItem( unsigned nPos, BOOL bCheck )
+void WinSalMenu::CheckItem( unsigned nPos, sal_Bool bCheck )
 {
     if( -1 != ::CheckMenuItem( mhMenu, nPos, MF_BYPOSITION|(bCheck ? MF_CHECKED : MF_UNCHECKED) ) )
         ImplDrawMenuBar( this );
 }
 
-void WinSalMenu::EnableItem( unsigned nPos, BOOL bEnable )
+void WinSalMenu::EnableItem( unsigned nPos, sal_Bool bEnable )
 {
     if( -1 != ::EnableMenuItem( mhMenu, nPos, MF_BYPOSITION|(bEnable ? MF_ENABLED : (MF_DISABLED|MF_GRAYED) ) ) )
         ImplDrawMenuBar( this );

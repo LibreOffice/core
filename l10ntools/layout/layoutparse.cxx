@@ -121,7 +121,7 @@ void LayoutXMLFile::InsertL10NElement( ByteString const& id, XMLElement* element
     (*languageMap)[ language ] = element;
 }
 
-BOOL LayoutXMLFile::Write( ByteString &aFilename )
+sal_Bool LayoutXMLFile::Write( ByteString &aFilename )
 {
 
     if ( aFilename.Len() )

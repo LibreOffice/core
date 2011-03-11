@@ -51,6 +51,7 @@ typedef short RSWND_STYLE;
 #define WINDOW_EXTRALONG                0x0800
 #define WINDOW_UNIQUEID                 0x1000
 #define WINDOW_BORDER_STYLE             0x2000
+#define WINDOW_HELPID                   0x4000
 
 // Definition der Struktur die alle "WorkWindow"-Resourcen haben
 #define WORKWIN_SHOWNORMAL              0

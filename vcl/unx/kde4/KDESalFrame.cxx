@@ -57,7 +57,7 @@
 #include <stdio.h>
 #endif
 
-KDESalFrame::KDESalFrame( SalFrame* pParent, ULONG nState ) :
+KDESalFrame::KDESalFrame( SalFrame* pParent, sal_uLong nState ) :
     X11SalFrame( pParent, nState )
 {
 }
@@ -275,9 +275,9 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     {
         Color aColor2 = style.GetLightColor();
         style.
-            SetCheckedColor( Color( (BYTE)(((USHORT)aBack.GetRed()+(USHORT)aColor2.GetRed())/2),
-                        (BYTE)(((USHORT)aBack.GetGreen()+(USHORT)aColor2.GetGreen())/2),
-                        (BYTE)(((USHORT)aBack.GetBlue()+(USHORT)aColor2.GetBlue())/2)
+            SetCheckedColor( Color( (BYTE)(((sal_uInt16)aBack.GetRed()+(sal_uInt16)aColor2.GetRed())/2),
+                        (BYTE)(((sal_uInt16)aBack.GetGreen()+(sal_uInt16)aColor2.GetGreen())/2),
+                        (BYTE)(((sal_uInt16)aBack.GetBlue()+(sal_uInt16)aColor2.GetBlue())/2)
                         ) );
     }
 

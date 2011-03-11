@@ -89,7 +89,7 @@ class SvtSysLocaleOptions_Impl : public utl::ConfigItem
         OUString                m_aLocaleString;    // en-US or de-DE or empty for SYSTEM
         OUString                m_aUILocaleString;    // en-US or de-DE or empty for SYSTEM
         OUString                m_aCurrencyString;  // USD-en-US or EUR-de-DE
-        ULONG                   m_nBlockedHint;     // pending hints
+        sal_uLong                   m_nBlockedHint;     // pending hints
         sal_Bool                m_bDecimalSeparator; //use decimal separator same as locale
 
         sal_Bool                m_bROLocale;
@@ -387,7 +387,7 @@ void SvtSysLocaleOptions_Impl::SetLocaleString( const OUString& rStr )
         MakeRealLocale();
         MsLangId::setConfiguredSystemLanguage( m_eRealLanguage );
         SetModified();
-        ULONG nHint = SYSLOCALEOPTIONS_HINT_LOCALE;
+        sal_uLong nHint = SYSLOCALEOPTIONS_HINT_LOCALE;
         if ( !m_aCurrencyString.getLength() )
             nHint |= SYSLOCALEOPTIONS_HINT_CURRENCY;
         NotifyListeners( nHint );
@@ -431,7 +431,7 @@ void SvtSysLocaleOptions_Impl::SetDecimalSeparatorAsLocale( sal_Bool bSet)
 
 void SvtSysLocaleOptions_Impl::Notify( const Sequence< rtl::OUString >& seqPropertyNames )
 {
-    ULONG nHint = 0;
+    sal_uLong nHint = 0;
     Sequence< Any > seqValues = GetProperties( seqPropertyNames );
     Sequence< sal_Bool > seqROStates = GetReadOnlyStates( seqPropertyNames );
     sal_Int32 nCount = seqPropertyNames.getLength();

@@ -30,9 +30,8 @@
 #include "precompiled_toolkit.hxx"
 #include "toolkit/awt/xsimpleanimation.hxx"
 #include "toolkit/helper/property.hxx"
-#include "toolkit/helper/throbberimpl.hxx"
 #include <tools/debug.hxx>
-
+#include <vcl/throbber.hxx>
 #include <vcl/svapp.hxx>
 
 //........................................................................
@@ -51,53 +50,40 @@ namespace toolkit
     XSimpleAnimation::XSimpleAnimation()
     {
         DBG_CTOR( XSimpleAnimation, NULL );
-        mbRepeat = sal_True;
-        mnStepTime = 100;
-        mpThrobber = new Throbber_Impl( this, mnStepTime, mbRepeat );
     }
 
     //--------------------------------------------------------------------
     XSimpleAnimation::~XSimpleAnimation()
     {
         DBG_DTOR( XSimpleAnimation, NULL );
-        delete mpThrobber;
     }
-
-    //--------------------------------------------------------------------
-    IMPLEMENT_FORWARD_XINTERFACE2( XSimpleAnimation, VCLXWindow, XSimpleAnimation_Base )
-
-    //--------------------------------------------------------------------
-    IMPLEMENT_FORWARD_XTYPEPROVIDER2( XSimpleAnimation, VCLXWindow, XSimpleAnimation_Base )
 
     //--------------------------------------------------------------------
     void SAL_CALL XSimpleAnimation::start() throw ( uno::RuntimeException )
     {
-        mpThrobber->start();
+        ::osl::MutexGuard aGuard( GetMutex() );
+        Throbber* pThrobber( dynamic_cast< Throbber* >( GetWindow() ) );
+        if ( pThrobber != NULL)
+            pThrobber->start();
     }
 
     //--------------------------------------------------------------------
     void SAL_CALL XSimpleAnimation::stop() throw ( uno::RuntimeException )
     {
-        mpThrobber->stop();
+        ::osl::MutexGuard aGuard( GetMutex() );
+        Throbber* pThrobber( dynamic_cast< Throbber* >( GetWindow() ) );
+        if ( pThrobber != NULL)
+            pThrobber->stop();
     }
 
     //--------------------------------------------------------------------
     void SAL_CALL XSimpleAnimation::setImageList( const uno::Sequence< uno::Reference< graphic::XGraphic > >& rImageList )
         throw ( uno::RuntimeException )
     {
-        mpThrobber->setImageList( rImageList );
-    }
-
-    //--------------------------------------------------------------------
-    void XSimpleAnimation::ProcessWindowEvent( const VclWindowEvent& _rVclWindowEvent )
-    {
-        // TODO: XSimpleAnimation::ProcessWindowEvent
-        //Reference< XSimpleAnimation > xKeepAlive( this );
-        //SpinButton* pSpinButton = static_cast< SpinButton* >( GetWindow() );
-        //if ( !pSpinButton )
-        //    return;
-
-        VCLXWindow::ProcessWindowEvent( _rVclWindowEvent );
+        ::osl::MutexGuard aGuard( GetMutex() );
+        Throbber* pThrobber( dynamic_cast< Throbber* >( GetWindow() ) );
+        if ( pThrobber != NULL)
+            pThrobber->setImageList( rImageList );
     }
 
     //--------------------------------------------------------------------
@@ -106,33 +92,31 @@ namespace toolkit
     {
         SolarMutexGuard aGuard;
 
-        if ( GetWindow() )
+        Throbber* pThrobber( dynamic_cast< Throbber* >( GetWindow() ) );
+        if ( pThrobber == NULL )
         {
-            sal_uInt16 nPropertyId = GetPropertyId( PropertyName );
-            switch ( nPropertyId )
-            {
-                case BASEPROPERTY_STEP_TIME: {
-                    sal_Int32   nStepTime( 0 );
-                    if ( Value >>= nStepTime )
-                    {
-                        mnStepTime = nStepTime;
-                        mpThrobber->setStepTime( mnStepTime );
-                    }
+            VCLXWindow::setProperty( PropertyName, Value );
+            return;
+        }
 
-                    break;
-                }
-                case BASEPROPERTY_REPEAT: {
-                    sal_Bool bRepeat( sal_True );
-                    if ( Value >>= bRepeat )
-                    {
-                        mbRepeat = bRepeat;
-                        mpThrobber->setRepeat( mbRepeat );
-                    }
-                    break;
-                }
-                default:
-                    VCLXWindow::setProperty( PropertyName, Value );
+        sal_uInt16 nPropertyId = GetPropertyId( PropertyName );
+        switch ( nPropertyId )
+        {
+            case BASEPROPERTY_STEP_TIME: {
+                sal_Int32   nStepTime( 0 );
+                if ( Value >>= nStepTime )
+                    pThrobber->setStepTime( nStepTime );
+
+                break;
             }
+            case BASEPROPERTY_REPEAT: {
+                sal_Bool bRepeat( sal_True );
+                if ( Value >>= bRepeat )
+                    pThrobber->setRepeat( bRepeat );
+                break;
+            }
+            default:
+                VCLXWindow::setProperty( PropertyName, Value );
         }
     }
 
@@ -142,22 +126,22 @@ namespace toolkit
     {
         SolarMutexGuard aGuard;
 
-        uno::Any aReturn;
+        Throbber* pThrobber( dynamic_cast< Throbber* >( GetWindow() ) );
+        if ( pThrobber == NULL )
+            return VCLXWindow::getProperty( PropertyName );
 
-        if ( GetWindow() )
+        uno::Any aReturn;
+        sal_uInt16 nPropertyId = GetPropertyId( PropertyName );
+        switch ( nPropertyId )
         {
-            sal_uInt16 nPropertyId = GetPropertyId( PropertyName );
-            switch ( nPropertyId )
-            {
-            case BASEPROPERTY_STEP_TIME:
-                aReturn <<= mnStepTime;
-                break;
-            case BASEPROPERTY_REPEAT:
-                aReturn <<= mbRepeat;
-                break;
-            default:
-                aReturn = VCLXWindow::getProperty( PropertyName );
-            }
+        case BASEPROPERTY_STEP_TIME:
+            aReturn <<= pThrobber->getStepTime();
+            break;
+        case BASEPROPERTY_REPEAT:
+            aReturn <<= pThrobber->getRepeat();
+            break;
+        default:
+            aReturn = VCLXWindow::getProperty( PropertyName );
         }
         return aReturn;
     }

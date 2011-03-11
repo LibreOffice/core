@@ -155,7 +155,7 @@ void VCLXRegion::xOrRegion( const ::com::sun::star::uno::Reference< ::com::sun::
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    ULONG nRects = maRegion.GetRectCount();
+    sal_uLong nRects = maRegion.GetRectCount();
     ::com::sun::star::uno::Sequence< ::com::sun::star::awt::Rectangle > aRects( nRects );
 
     Rectangle aRect;

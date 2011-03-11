@@ -42,11 +42,11 @@ class SvStream;
 
 struct ImplHatch
 {
-    ULONG               mnRefCount;
+    sal_uLong               mnRefCount;
     Color               maColor;
     HatchStyle          meStyle;
     long                mnDistance;
-    USHORT              mnAngle;
+    sal_uInt16              mnAngle;
 
                         ImplHatch();
                         ImplHatch( const ImplHatch& rImplHatch );
@@ -70,13 +70,13 @@ public:
 
                     Hatch();
                     Hatch( const Hatch& rHatch );
-                    Hatch( HatchStyle eStyle, const Color& rHatchColor, long nDistance, USHORT nAngle10 = 0 );
+                    Hatch( HatchStyle eStyle, const Color& rHatchColor, long nDistance, sal_uInt16 nAngle10 = 0 );
                     ~Hatch();
 
     Hatch&          operator=( const Hatch& rHatch );
-    BOOL            operator==( const Hatch& rHatch ) const;
-    BOOL            operator!=( const Hatch& rHatch ) const { return !(Hatch::operator==( rHatch ) ); }
-    BOOL            IsSameInstance( const Hatch& rHatch ) const { return( mpImplHatch == rHatch.mpImplHatch ); }
+    sal_Bool            operator==( const Hatch& rHatch ) const;
+    sal_Bool            operator!=( const Hatch& rHatch ) const { return !(Hatch::operator==( rHatch ) ); }
+    sal_Bool            IsSameInstance( const Hatch& rHatch ) const { return( mpImplHatch == rHatch.mpImplHatch ); }
 
     void            SetStyle( HatchStyle eStyle );
     HatchStyle      GetStyle() const { return mpImplHatch->meStyle; }
@@ -87,8 +87,8 @@ public:
     void            SetDistance( long nDistance  );
     long            GetDistance() const { return mpImplHatch->mnDistance; }
 
-    void            SetAngle( USHORT nAngle10 );
-    USHORT          GetAngle() const { return mpImplHatch->mnAngle; }
+    void            SetAngle( sal_uInt16 nAngle10 );
+    sal_uInt16          GetAngle() const { return mpImplHatch->mnAngle; }
 
     friend VCL_DLLPUBLIC SvStream& operator>>( SvStream& rIStm, Hatch& rHatch );
     friend VCL_DLLPUBLIC SvStream& operator<<( SvStream& rOStm, const Hatch& rHatch );

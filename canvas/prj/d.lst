@@ -15,6 +15,7 @@
 ..\%__SRC%\lib\canvasfactory.uno.so %_DEST%\lib%_EXT%\canvasfactory.uno.so
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
 ..\%__SRC%\class\javacanvas.uno.jar %_DEST%\bin%_EXT%\javacanvas.uno.jar
+..\%__SRC%\misc\cairocanvas.component %_DEST%\xml%_EXT%\cairocanvas.component
 
 mkdir: %_DEST%\inc%_EXT%\canvas\base
 ..\inc\canvas\base\*.hxx %_DEST%\inc%_EXT%\canvas\base\*.hxx
@@ -24,3 +25,9 @@ mkdir: %_DEST%\inc%_EXT%\canvas\rendering
 
 mkdir: %_DEST%\inc%_EXT%\canvas
 ..\inc\canvas\*.hxx %_DEST%\inc%_EXT%\canvas\*.hxx
+..\%__SRC%\misc\canvasfactory.component %_DEST%\xml%_EXT%\canvasfactory.component
+..\%__SRC%\misc\directx5canvas.component %_DEST%\xml%_EXT%\directx5canvas.component
+..\%__SRC%\misc\directx9canvas.component %_DEST%\xml%_EXT%\directx9canvas.component
+..\%__SRC%\misc\gdipluscanvas.component %_DEST%\xml%_EXT%\gdipluscanvas.component
+..\%__SRC%\misc\simplecanvas.component %_DEST%\xml%_EXT%\simplecanvas.component
+..\%__SRC%\misc\vclcanvas.component %_DEST%\xml%_EXT%\vclcanvas.component

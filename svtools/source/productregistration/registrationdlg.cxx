@@ -109,7 +109,7 @@ namespace svt
 
         FreeResource();
 
-        m_aNow.Check( TRUE );
+        m_aNow.Check( sal_True );
     }
 
     //--------------------------------------------------------------------

@@ -57,10 +57,6 @@ public:
     Bool        FilterEvent( XEvent *pEvent, XLIB_Window window );
     Bool        AddConnectionWatch (Display *pDisplay, void *pConnectionHandler);
 
-    #ifdef _USE_PRINT_EXTENSION_
-    void            Invalidate()                    { mbUseable = False; }
-    #endif
-
     SalI18N_InputMethod();
     ~SalI18N_InputMethod();
 };

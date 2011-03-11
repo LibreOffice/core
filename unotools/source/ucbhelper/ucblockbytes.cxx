@@ -1248,7 +1248,7 @@ UcbLockBytes::UcbLockBytes( UcbLockBytesHandler* pHandler )
     , m_bDontClose( sal_False )
     , m_bStreamValid  (sal_False)
 {
-    SetSynchronMode( TRUE );
+    SetSynchronMode( sal_True );
 }
 
 //----------------------------------------------------------------------------
@@ -1386,13 +1386,13 @@ void UcbLockBytes::terminate_Impl()
 }
 
 //----------------------------------------------------------------------------
-void UcbLockBytes::SetSynchronMode (BOOL bSynchron)
+void UcbLockBytes::SetSynchronMode (sal_Bool bSynchron)
 {
     SvLockBytes::SetSynchronMode (bSynchron);
 }
 
 //----------------------------------------------------------------------------
-ErrCode UcbLockBytes::ReadAt ( ULONG nPos, void *pBuffer, ULONG nCount, ULONG *pRead) const
+ErrCode UcbLockBytes::ReadAt ( sal_uLong nPos, void *pBuffer, sal_uLong nCount, sal_uLong *pRead) const
 {
     if ( IsSynchronMode() )
     {
@@ -1451,13 +1451,13 @@ ErrCode UcbLockBytes::ReadAt ( ULONG nPos, void *pBuffer, ULONG nCount, ULONG *p
 
     rtl_copyMemory (pBuffer, aData.getConstArray(), nSize);
     if (pRead)
-        *pRead = ULONG(nSize);
+        *pRead = sal_uLong(nSize);
 
     return ERRCODE_NONE;
 }
 
 //----------------------------------------------------------------------------
-ErrCode UcbLockBytes::WriteAt ( ULONG nPos, const void *pBuffer, ULONG nCount, ULONG *pWritten)
+ErrCode UcbLockBytes::WriteAt ( sal_uLong nPos, const void *pBuffer, sal_uLong nCount, sal_uLong *pWritten)
 {
     if ( pWritten )
         *pWritten = 0;
@@ -1501,16 +1501,25 @@ ErrCode UcbLockBytes::Flush() const
     Reference <XOutputStream > xOutputStream = getOutputStream_Impl();
     if ( !xOutputStream.is() )
         return ERRCODE_IO_CANTWRITE;
-    xOutputStream->flush();
+
+    try
+    {
+        xOutputStream->flush();
+    }
+    catch( Exception )
+    {
+        return ERRCODE_IO_CANTWRITE;
+    }
+
     return ERRCODE_NONE;
 }
 
 //----------------------------------------------------------------------------
-ErrCode UcbLockBytes::SetSize (ULONG nNewSize)
+ErrCode UcbLockBytes::SetSize (sal_uLong nNewSize)
 {
     SvLockBytesStat aStat;
     Stat( &aStat, (SvLockBytesStatFlag) 0 );
-    ULONG nSize = aStat.nSize;
+    sal_uLong nSize = aStat.nSize;
 
     if ( nSize > nNewSize )
     {
@@ -1527,8 +1536,8 @@ ErrCode UcbLockBytes::SetSize (ULONG nNewSize)
 
     if ( nSize < nNewSize )
     {
-        ULONG nDiff = nNewSize-nSize, nCount=0;
-        BYTE* pBuffer = new BYTE[ nDiff ];
+        sal_uLong nDiff = nNewSize-nSize, nCount=0;
+        sal_uInt8* pBuffer = new sal_uInt8[ nDiff ];
         memset(pBuffer, 0, nDiff); // initialize for enhanced security
         WriteAt( nSize, pBuffer, nDiff, &nCount );
         delete[] pBuffer;
@@ -1566,7 +1575,7 @@ ErrCode UcbLockBytes::Stat( SvLockBytesStat *pStat, SvLockBytesStatFlag) const
 
     try
     {
-        pStat->nSize = ULONG(xSeekable->getLength());
+        pStat->nSize = sal_uLong(xSeekable->getLength());
     }
     catch (IOException)
     {

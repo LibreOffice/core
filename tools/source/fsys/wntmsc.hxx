@@ -52,7 +52,7 @@
 
 //--------------------------------------------------------------------
 
-#define FSYS_UNIX FALSE
+#define FSYS_UNIX sal_False
 
 #define DOS_DIRECT      _A_SUBDIR
 #define DOS_VOLUMEID    0x08
@@ -80,7 +80,7 @@ typedef struct
 
 #define START_DRV 'a'
 
-inline BOOL DRIVE_EXISTS(char c)
+inline sal_Bool DRIVE_EXISTS(char c)
 {
     ByteString aDriveRoot( c );
     aDriveRoot += ":\\";

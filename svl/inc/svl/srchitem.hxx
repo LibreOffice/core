@@ -91,8 +91,8 @@ public:
     SvxSearchItem( const SvxSearchItem& rItem );
     virtual ~SvxSearchItem();
 
-    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
     virtual int              operator == ( const SfxPoolItem& ) const;
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -239,7 +239,7 @@ sal_Bool SvxSearchItem::IsLEVRelaxed() const
 
 sal_uInt16 SvxSearchItem::GetLEVOther() const
 {
-    return (INT16) aSearchOpt.changedChars;
+    return (sal_Int16) aSearchOpt.changedChars;
 }
 
 void SvxSearchItem::SetLEVOther( sal_uInt16 nVal )
@@ -249,7 +249,7 @@ void SvxSearchItem::SetLEVOther( sal_uInt16 nVal )
 
 sal_uInt16 SvxSearchItem::GetLEVShorter() const
 {
-    return (INT16) aSearchOpt.insertedChars;
+    return (sal_Int16) aSearchOpt.insertedChars;
 }
 
 void SvxSearchItem::SetLEVShorter( sal_uInt16 nVal )
@@ -259,7 +259,7 @@ void SvxSearchItem::SetLEVShorter( sal_uInt16 nVal )
 
 sal_uInt16 SvxSearchItem::GetLEVLonger() const
 {
-    return (INT16) aSearchOpt.deletedChars;
+    return (sal_Int16) aSearchOpt.deletedChars;
 }
 
 void SvxSearchItem::SetLEVLonger( sal_uInt16 nVal )

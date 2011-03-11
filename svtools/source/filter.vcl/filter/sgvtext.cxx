@@ -38,10 +38,6 @@
 
 extern SgfFontLst* pSgfFonts;
 
-#if defined( WIN ) && defined( MSC )
-#pragma code_seg( "SVTOOLS_FILTER1", "SVTOOLS_CODE" )
-#endif
-
 #ifndef abs
 #define abs(x) ((x)<0 ? -(x) : (x))
 #endif
@@ -217,9 +213,9 @@ extern SgfFontLst* pSgfFonts;
 /////////////////////////////////////////////////////////////////////////////////
 
 
-BOOL CheckTextOutl(ObjAreaType& F, ObjLineType& L);
+sal_Bool CheckTextOutl(ObjAreaType& F, ObjLineType& L);
 
-BOOL CheckTextOutl(ObjAreaType& F, ObjLineType& L)
+sal_Bool CheckTextOutl(ObjAreaType& F, ObjLineType& L)
 {
     return (F.FIntens!=L.LIntens) ||
            ((F.FFarbe!=L.LFarbe)   && (F.FIntens>0)) ||
@@ -265,11 +261,11 @@ short Sgf2hPoint(short a)
 // Unterkante berechnen. Alles in SGF-Units.
 // ======================================================================
 
-USHORT GetTopToBaseLine(USHORT MaxGrad)
+sal_uInt16 GetTopToBaseLine(sal_uInt16 MaxGrad)
 {
     long ret;
     ret=long(MaxGrad)*long(CharTopToBase) /long(100);
-    return USHORT(ret);
+    return sal_uInt16(ret);
 }
 
 // ======================================================================
@@ -310,9 +306,9 @@ UCHAR ConvertTextChar(UCHAR c)
 
 
 
-USHORT GetSchnittBit(UCHAR c)
+sal_uInt16 GetSchnittBit(UCHAR c)
 {
-    USHORT r=0;
+    sal_uInt16 r=0;
     switch (c) {
         case EscBold : r=TextBoldBit; break;
         case EscRSlnt: r=TextRSlnBit; break;
@@ -353,10 +349,10 @@ long ChgValue(long Def, long Min, long Max, UCHAR FlgVal, long NumVal)
 
 
 
-void ChgSchnittBit(USHORT Bit, USHORT Radio1, USHORT Radio2, USHORT Radio3,
-                   UCHAR FlgVal, USHORT Schnitt0, USHORT& Schnitt)
+void ChgSchnittBit(sal_uInt16 Bit, sal_uInt16 Radio1, sal_uInt16 Radio2, sal_uInt16 Radio3,
+                   UCHAR FlgVal, sal_uInt16 Schnitt0, sal_uInt16& Schnitt)
 {
-    USHORT All,Rad;
+    sal_uInt16 All,Rad;
 
     Rad=Radio1 | Radio2 | Radio3;
     All=Bit | Rad;
@@ -371,9 +367,9 @@ void ChgSchnittBit(USHORT Bit, USHORT Radio1, USHORT Radio2, USHORT Radio3,
 
 
 
-UCHAR GetNextChar(UCHAR* TBuf, USHORT Index)
+UCHAR GetNextChar(UCHAR* TBuf, sal_uInt16 Index)
 {
-    USHORT Cnt;
+    sal_uInt16 Cnt;
     while (TBuf[Index]==Escape) {
         Index++;
         Cnt=0;
@@ -386,24 +382,24 @@ UCHAR GetNextChar(UCHAR* TBuf, USHORT Index)
 
 
 
-UCHAR ProcessOne(UCHAR* TBuf, USHORT& Index,
+UCHAR ProcessOne(UCHAR* TBuf, sal_uInt16& Index,
                  ObjTextType& Atr0, ObjTextType& AktAtr,
-                 BOOL ScanEsc)
+                 sal_Bool ScanEsc)
 {
     UCHAR c;
     UCHAR Ident;
-    BOOL  Ende;
-    BOOL  q;
+    sal_Bool  Ende;
+    sal_Bool  q;
     UCHAR FlgVal;
     long  NumVal;
     long  Sgn;
     short i;
-    BOOL  EoVal;
+    sal_Bool  EoVal;
 
     do {
         c=TBuf[Index]; Index++;
         Ende=(c!=Escape);
-        if (Ende==FALSE) {
+        if (Ende==sal_False) {
             c=TBuf[Index]; Index++;
             Ident=c;                          // Identifer merken
             FlgVal=EscNoFlg;
@@ -417,36 +413,36 @@ UCHAR ProcessOne(UCHAR* TBuf, USHORT& Index,
                 do {
                     NumVal=10*NumVal+c-'0';
                     EoVal=(TBuf[Index]<'0' || TBuf[Index]>'9');
-                    if (EoVal==FALSE) { c=TBuf[Index]; Index++; }
+                    if (EoVal==sal_False) { c=TBuf[Index]; Index++; }
                     i--;
-                } while (i>0 && EoVal==FALSE);
+                } while (i>0 && EoVal==sal_False);
                 NumVal=Sgn*NumVal;
             }
             q=!CheckTextOutl(AktAtr.F,AktAtr.L);
 
             switch (Ident) {
-                case EscFont : AktAtr.SetFont(ULONG (ChgValue(Atr0.GetFont(),0,0          ,FlgVal,NumVal)));break;
-                case EscGrad : AktAtr.Grad   =USHORT(ChgValue(Atr0.Grad,   2,2000         ,FlgVal,NumVal)); break;
-                case EscBreit: AktAtr.Breite =USHORT(ChgValue(Atr0.Breite, 1,1000         ,FlgVal,NumVal)); break;
-                case EscKaptS: AktAtr.Kapit  =(BYTE)(ChgValue(Atr0.Kapit,  1,255          ,FlgVal,NumVal)); break;
-                case EscLFeed: AktAtr.LnFeed =USHORT(ChgValue(Atr0.LnFeed, 1,65535        ,FlgVal,NumVal)); break;
-                case EscSlant: AktAtr.Slant  =USHORT(ChgValue(Atr0.Slant,  1,MaxCharSlant ,FlgVal,NumVal)); break;
+                case EscFont : AktAtr.SetFont(sal_uLong (ChgValue(Atr0.GetFont(),0,0          ,FlgVal,NumVal)));break;
+                case EscGrad : AktAtr.Grad   =sal_uInt16(ChgValue(Atr0.Grad,   2,2000         ,FlgVal,NumVal)); break;
+                case EscBreit: AktAtr.Breite =sal_uInt16(ChgValue(Atr0.Breite, 1,1000         ,FlgVal,NumVal)); break;
+                case EscKaptS: AktAtr.Kapit  =(sal_uInt8)(ChgValue(Atr0.Kapit,  1,255          ,FlgVal,NumVal)); break;
+                case EscLFeed: AktAtr.LnFeed =sal_uInt16(ChgValue(Atr0.LnFeed, 1,65535        ,FlgVal,NumVal)); break;
+                case EscSlant: AktAtr.Slant  =sal_uInt16(ChgValue(Atr0.Slant,  1,MaxCharSlant ,FlgVal,NumVal)); break;
                 case EscVPos : AktAtr.ChrVPos=char  (ChgValue(Atr0.ChrVPos,-128,127       ,FlgVal,NumVal)); break;
-                case EscZAbst: AktAtr.ZAbst  =(BYTE)(ChgValue(Atr0.ZAbst,  1,255          ,FlgVal,NumVal)); break;
-                case EscHJust: AktAtr.Justify=(BYTE)(ChgValue(Atr0.Justify & 0x0F,0,5     ,FlgVal,NumVal)); break;
-                case EscFarbe: { AktAtr.L.LFarbe =(BYTE)(ChgValue(Atr0.L.LFarbe,0,7   ,FlgVal,NumVal)); if (q) AktAtr.F.FFarbe =AktAtr.L.LFarbe;  } break;
-                case EscBFarb: { AktAtr.L.LBFarbe=(BYTE)(ChgValue(Atr0.L.LBFarbe,0,255,FlgVal,NumVal)); if (q) AktAtr.F.FBFarbe=AktAtr.L.LBFarbe; } break;
-                case EscInts : { AktAtr.L.LIntens=(BYTE)(ChgValue(Atr0.L.LIntens,0,100,FlgVal,NumVal)); if (q) AktAtr.F.FIntens=AktAtr.L.LIntens; } break;
+                case EscZAbst: AktAtr.ZAbst  =(sal_uInt8)(ChgValue(Atr0.ZAbst,  1,255          ,FlgVal,NumVal)); break;
+                case EscHJust: AktAtr.Justify=(sal_uInt8)(ChgValue(Atr0.Justify & 0x0F,0,5     ,FlgVal,NumVal)); break;
+                case EscFarbe: { AktAtr.L.LFarbe =(sal_uInt8)(ChgValue(Atr0.L.LFarbe,0,7   ,FlgVal,NumVal)); if (q) AktAtr.F.FFarbe =AktAtr.L.LFarbe;  } break;
+                case EscBFarb: { AktAtr.L.LBFarbe=(sal_uInt8)(ChgValue(Atr0.L.LBFarbe,0,255,FlgVal,NumVal)); if (q) AktAtr.F.FBFarbe=AktAtr.L.LBFarbe; } break;
+                case EscInts : { AktAtr.L.LIntens=(sal_uInt8)(ChgValue(Atr0.L.LIntens,0,100,FlgVal,NumVal)); if (q) AktAtr.F.FIntens=AktAtr.L.LIntens; } break;
 
-                case EscMustr: { AktAtr.F.FMuster=USHORT(ChgValue(Atr0.F.FMuster,0,65535,FlgVal,NumVal)); } break;
-                case EscMFarb: { AktAtr.F.FFarbe =(BYTE)(ChgValue(Atr0.F.FFarbe,0,7   ,FlgVal,NumVal));   } break;
-                case EscMBFrb: { AktAtr.F.FBFarbe=(BYTE)(ChgValue(Atr0.F.FBFarbe,0,255,FlgVal,NumVal));   } break;
-                case EscMInts: { AktAtr.F.FIntens=(BYTE)(ChgValue(Atr0.F.FIntens,0,100,FlgVal,NumVal));   } break;
+                case EscMustr: { AktAtr.F.FMuster=sal_uInt16(ChgValue(Atr0.F.FMuster,0,65535,FlgVal,NumVal)); } break;
+                case EscMFarb: { AktAtr.F.FFarbe =(sal_uInt8)(ChgValue(Atr0.F.FFarbe,0,7   ,FlgVal,NumVal));   } break;
+                case EscMBFrb: { AktAtr.F.FBFarbe=(sal_uInt8)(ChgValue(Atr0.F.FBFarbe,0,255,FlgVal,NumVal));   } break;
+                case EscMInts: { AktAtr.F.FIntens=(sal_uInt8)(ChgValue(Atr0.F.FIntens,0,100,FlgVal,NumVal));   } break;
 
-                case EscSMstr: { AktAtr.ShdF.FMuster=USHORT(ChgValue(Atr0.ShdF.FMuster,0,65535,FlgVal,NumVal)); } break;
-                case EscSFarb: { AktAtr.ShdL.LFarbe =(BYTE)(ChgValue(Atr0.ShdL.LFarbe,0,7   ,FlgVal,NumVal)); AktAtr.ShdF.FFarbe =AktAtr.ShdL.LFarbe;  } break;
-                case EscSBFrb: { AktAtr.ShdL.LBFarbe=(BYTE)(ChgValue(Atr0.ShdL.LBFarbe,0,255,FlgVal,NumVal)); AktAtr.ShdF.FBFarbe=AktAtr.ShdL.LBFarbe; } break;
-                case EscSInts: { AktAtr.ShdL.LIntens=(BYTE)(ChgValue(Atr0.ShdL.LIntens,0,100,FlgVal,NumVal)); AktAtr.ShdF.FIntens=AktAtr.ShdL.LIntens; } break;
+                case EscSMstr: { AktAtr.ShdF.FMuster=sal_uInt16(ChgValue(Atr0.ShdF.FMuster,0,65535,FlgVal,NumVal)); } break;
+                case EscSFarb: { AktAtr.ShdL.LFarbe =(sal_uInt8)(ChgValue(Atr0.ShdL.LFarbe,0,7   ,FlgVal,NumVal)); AktAtr.ShdF.FFarbe =AktAtr.ShdL.LFarbe;  } break;
+                case EscSBFrb: { AktAtr.ShdL.LBFarbe=(sal_uInt8)(ChgValue(Atr0.ShdL.LBFarbe,0,255,FlgVal,NumVal)); AktAtr.ShdF.FBFarbe=AktAtr.ShdL.LBFarbe; } break;
+                case EscSInts: { AktAtr.ShdL.LIntens=(sal_uInt8)(ChgValue(Atr0.ShdL.LIntens,0,100,FlgVal,NumVal)); AktAtr.ShdF.FIntens=AktAtr.ShdL.LIntens; } break;
                 case EscSDist: { AktAtr.ShdVers.x=(short)ChgValue(Atr0.ShdVers.x,0,30000,FlgVal,NumVal); AktAtr.ShdVers.y=AktAtr.ShdVers.x; }            break;
                 case EscSXDst: { AktAtr.ShdVers.x=(short)ChgValue(Atr0.ShdVers.x,0,30000,FlgVal,NumVal); }  break;
                 case EscSYDst: { AktAtr.ShdVers.y=(short)ChgValue(Atr0.ShdVers.y,0,30000,FlgVal,NumVal); }  break;
@@ -467,21 +463,21 @@ UCHAR ProcessOne(UCHAR* TBuf, USHORT& Index,
                 case EscEbShd: ChgSchnittBit(TextShEbBit,TextSh2DBit,TextSh3DBit,TextSh4DBit,FlgVal,Atr0.Schnitt,AktAtr.Schnitt); break;
             } //endcase
             if (TBuf[Index]==Escape) Index++;         // zweites Esc weglesen }
-        } // if Ende==FALSE
-    } while (Ende==FALSE && ScanEsc==FALSE);
-    if (Ende==FALSE) c=Escape;
+        } // if Ende==sal_False
+    } while (Ende==sal_False && ScanEsc==sal_False);
+    if (Ende==sal_False) c=Escape;
     return c;
 } // end of ProcessOne
 
 
-UCHAR GetTextChar(UCHAR* TBuf, USHORT& Index,
+UCHAR GetTextChar(UCHAR* TBuf, sal_uInt16& Index,
                   ObjTextType& Atr0, ObjTextType& AktAtr,
-                  USHORT Rest, BOOL ScanEsc)
+                  sal_uInt16 Rest, sal_Bool ScanEsc)
 {
     UCHAR c,c0,nc;
 
     c=ProcessOne(TBuf,Index,Atr0,AktAtr,ScanEsc);
-    if (ScanEsc==FALSE) {
+    if (ScanEsc==sal_False) {
         if (c==SoftTrennAdd || c==SoftTrennK || c==SoftTrenn) {
             nc=GetNextChar(TBuf,Index);
             c0=c;
@@ -511,9 +507,9 @@ UCHAR GetTextChar(UCHAR* TBuf, USHORT& Index,
 
 
 
-UCHAR GetTextCharConv(UCHAR* TBuf, USHORT& Index,
+UCHAR GetTextCharConv(UCHAR* TBuf, sal_uInt16& Index,
                       ObjTextType& Atr0, ObjTextType& AktAtr,
-                      USHORT Rest, BOOL ScanEsc)
+                      sal_uInt16 Rest, sal_Bool ScanEsc)
 {
     UCHAR c;
 
@@ -534,23 +530,23 @@ UCHAR GetTextCharConv(UCHAR* TBuf, USHORT& Index,
 //
 // Benoetigter Zeilenabstand in SGF-Units. ChrVPos wird beruecksichtigt.
 // ======================================================================
-USHORT GetLineFeed(UCHAR* TBuf, USHORT Index, ObjTextType Atr0, ObjTextType AktAtr,
-                   USHORT nChar, USHORT& LF, USHORT& MaxGrad)
+sal_uInt16 GetLineFeed(UCHAR* TBuf, sal_uInt16 Index, ObjTextType Atr0, ObjTextType AktAtr,
+                   sal_uInt16 nChar, sal_uInt16& LF, sal_uInt16& MaxGrad)
 {
     UCHAR  c=0;
-    BOOL   AbsEnd=FALSE;
-    ULONG  LF100=0;
-    ULONG  MaxLF100=0;
-    BOOL   LFauto=0;
-    BOOL   First=TRUE;
-    USHORT Grad;
-    USHORT i=0;
-    USHORT r=1;
+    sal_Bool   AbsEnd=sal_False;
+    sal_uLong  LF100=0;
+    sal_uLong  MaxLF100=0;
+    sal_Bool   LFauto=0;
+    sal_Bool   First=sal_True;
+    sal_uInt16 Grad;
+    sal_uInt16 i=0;
+    sal_uInt16 r=1;
 
     MaxGrad=0;
     while (!AbsEnd && nChar>0) {
         nChar--;
-        c=GetTextChar(TBuf,Index,Atr0,AktAtr,nChar,FALSE);
+        c=GetTextChar(TBuf,Index,Atr0,AktAtr,nChar,sal_False);
         i++;
         AbsEnd=(c==TextEnd || c==AbsatzEnd);
         if (First || (!AbsEnd && c!=' ' && c!=HardTrenn)) {
@@ -562,15 +558,15 @@ USHORT GetLineFeed(UCHAR* TBuf, USHORT Index, ObjTextType Atr0, ObjTextType AktA
             Grad=AktAtr.Grad;
             if (AktAtr.ChrVPos>0) Grad=Grad-AktAtr.ChrVPos;
             if (Grad>MaxGrad) MaxGrad=Grad;
-            First=FALSE;
+            First=sal_False;
         }
         if (!AbsEnd && c!=' ') r=i;
     }
     MaxGrad=hPoint2Sgf(MaxGrad);
     if (MaxLF100<=4000) {  // sonst Overflowgefahr
-        LF=USHORT(hPoint2Sgf(short(MaxLF100)) /100);
+        LF=sal_uInt16(hPoint2Sgf(short(MaxLF100)) /100);
     } else {
-        LF=USHORT(hPoint2Sgf(short(MaxLF100) /100));
+        LF=sal_uInt16(hPoint2Sgf(short(MaxLF100) /100));
     }
 
     return r;
@@ -592,17 +588,17 @@ USHORT GetLineFeed(UCHAR* TBuf, USHORT Index, ObjTextType Atr0, ObjTextType AktA
 #define SuperSubFact 60     /* SuperScript/SubScript: 60% vom Schriftgrad */
 #define DefaultSpace 40     /* Default: Space ist 40% vom SchriftGrad     */
 
-USHORT SetTextContext(OutputDevice& rOut, ObjTextType& Atr, BOOL Kapt, USHORT Dreh,
-                      USHORT FitXMul, USHORT FitXDiv, USHORT FitYMul, USHORT FitYDiv)
+sal_uInt16 SetTextContext(OutputDevice& rOut, ObjTextType& Atr, sal_Bool Kapt, sal_uInt16 Dreh,
+                      sal_uInt16 FitXMul, sal_uInt16 FitXDiv, sal_uInt16 FitYMul, sal_uInt16 FitYDiv)
 {
     SgfFontOne* pSgfFont; // Font aus dem IniFile
     Font   aFont;
     Color  aColor;
-    ULONG  Grad;
-    ULONG  Brei;
+    sal_uLong  Grad;
+    sal_uLong  Brei;
     String FNam;
-    USHORT StdBrei=50;    // Durchschnittliche Zeichenbreite in % von Schriftgrad
-    BOOL   bFit=(FitXMul!=1 || FitXDiv!=1 || FitYMul!=1 || FitYDiv!=1);
+    sal_uInt16 StdBrei=50;    // Durchschnittliche Zeichenbreite in % von Schriftgrad
+    sal_Bool   bFit=(FitXMul!=1 || FitXDiv!=1 || FitYMul!=1 || FitYDiv!=1);
 
     pSgfFont = pSgfFonts->GetFontDesc(Atr.GetFont());
 
@@ -621,7 +617,7 @@ USHORT SetTextContext(OutputDevice& rOut, ObjTextType& Atr, BOOL Kapt, USHORT Dr
         switch (Atr.GetFont()) {
           case 92500: case 92501: case 92504: case 92505:
           {
-#if defined(WIN) || defined(WNT) || defined(PM2)
+#if defined(WNT) || defined(PM2)
               FNam=String::CreateFromAscii( "Times New Roman" );  // CG Times ist unter Windows und OS/2 Times New Roman
 #else
               FNam=String::CreateFromAscii( "Times" );            // ansonsten ist das einfach Times
@@ -630,7 +626,7 @@ USHORT SetTextContext(OutputDevice& rOut, ObjTextType& Atr, BOOL Kapt, USHORT Dr
               aFont.SetFamily(FAMILY_ROMAN);
           } break;
           case 94021: case 94022: case 94023: case 94024: {
-#if defined(WIN) || defined(WNT)
+#if defined(WNT)
               FNam=String::CreateFromAscii( "Arial", 5 );            // Univers ist unter Windows Arial
 #else
               FNam=String::CreateFromAscii( "Helvetica" );        // und ansonsten Helvetica
@@ -639,7 +635,7 @@ USHORT SetTextContext(OutputDevice& rOut, ObjTextType& Atr, BOOL Kapt, USHORT Dr
               StdBrei=47;
           } break;
           case 93950: case 93951: case 93952: case 93953: {
-#if defined(WIN) || defined(WNT)
+#if defined(WNT)
               FNam=String::CreateFromAscii( "Courier New" );      // Der Vector-Courierfont unter Windows heisst Courier New
 #else
               FNam=String::CreateFromAscii( "Courier" );          // ansonsten ist und bleibt Courier immer Courier
@@ -653,25 +649,25 @@ USHORT SetTextContext(OutputDevice& rOut, ObjTextType& Atr, BOOL Kapt, USHORT Dr
         //aFont.SetCharSet(CHARSET_SYSTEM);
     }
 
-    Grad=ULONG(Atr.Grad);
-    if ((Atr.Schnitt & TextKaptBit) !=0 && Kapt) Grad=Grad*ULONG(Atr.Kapit)/100;
+    Grad=sal_uLong(Atr.Grad);
+    if ((Atr.Schnitt & TextKaptBit) !=0 && Kapt) Grad=Grad*sal_uLong(Atr.Kapit)/100;
     if ((Atr.Schnitt & TextSupSBit) !=0 || (Atr.Schnitt & TextSubSBit) !=0) Grad=Grad*SuperSubFact/100;
     Brei=Grad;
     if (Atr.Breite!=100 || bFit) {
         if (bFit) {
-            Grad=Grad*ULONG(FitYMul)/ULONG(FitYDiv);
-            Brei=Brei*ULONG(FitXMul)/ULONG(FitXDiv);
+            Grad=Grad*sal_uLong(FitYMul)/sal_uLong(FitYDiv);
+            Brei=Brei*sal_uLong(FitXMul)/sal_uLong(FitXDiv);
         }
-        Brei=Brei*ULONG(Atr.Breite)/100;
-        Brei=Brei*ULONG(StdBrei)/100;
-        aFont.SetSize(Size(hPoint2Sgf(USHORT(Brei)),hPoint2Sgf(USHORT(Grad))));
+        Brei=Brei*sal_uLong(Atr.Breite)/100;
+        Brei=Brei*sal_uLong(StdBrei)/100;
+        aFont.SetSize(Size(hPoint2Sgf(sal_uInt16(Brei)),hPoint2Sgf(sal_uInt16(Grad))));
     } else {
-        aFont.SetSize(Size(0,hPoint2Sgf(USHORT(Grad))));
+        aFont.SetSize(Size(0,hPoint2Sgf(sal_uInt16(Grad))));
     }
 
     aColor=Sgv2SvFarbe(Atr.L.LFarbe,Atr.L.LBFarbe,Atr.L.LIntens); aFont.SetColor(aColor);
     aColor=Sgv2SvFarbe(Atr.F.FFarbe,Atr.F.FBFarbe,Atr.F.FIntens); aFont.SetFillColor(aColor);
-    aFont.SetTransparent(TRUE);
+    aFont.SetTransparent(sal_True);
     aFont.SetAlign(ALIGN_BASELINE);
 
     Dreh/=10; Dreh=3600-Dreh; if (Dreh==3600) Dreh=0;
@@ -683,11 +679,11 @@ USHORT SetTextContext(OutputDevice& rOut, ObjTextType& Atr, BOOL Kapt, USHORT Dr
     if ((Atr.Schnitt & TextDbUnBit) !=0) aFont.SetUnderline(UNDERLINE_DOUBLE);
     if ((Atr.Schnitt & TextStrkBit) !=0) aFont.SetStrikeout(STRIKEOUT_SINGLE);
     if ((Atr.Schnitt & TextDbStBit) !=0) aFont.SetStrikeout(STRIKEOUT_DOUBLE);
-    if ((Atr.Schnitt & TextSh2DBit) !=0) aFont.SetShadow(TRUE);
-    if ((Atr.Schnitt & TextSh3DBit) !=0) aFont.SetShadow(TRUE);
-    if ((Atr.Schnitt & TextSh4DBit) !=0) aFont.SetShadow(TRUE);
-    if ((Atr.Schnitt & TextShEbBit) !=0) aFont.SetShadow(TRUE);
-    if (CheckTextOutl(Atr.F,Atr.L)) aFont.SetOutline(TRUE);
+    if ((Atr.Schnitt & TextSh2DBit) !=0) aFont.SetShadow(sal_True);
+    if ((Atr.Schnitt & TextSh3DBit) !=0) aFont.SetShadow(sal_True);
+    if ((Atr.Schnitt & TextSh4DBit) !=0) aFont.SetShadow(sal_True);
+    if ((Atr.Schnitt & TextShEbBit) !=0) aFont.SetShadow(sal_True);
+    if (CheckTextOutl(Atr.F,Atr.L)) aFont.SetOutline(sal_True);
 
     if (aFont!=rOut.GetFont()) rOut.SetFont(aFont);
 
@@ -706,26 +702,26 @@ USHORT SetTextContext(OutputDevice& rOut, ObjTextType& Atr, BOOL Kapt, USHORT Dr
 // Absatz.Pas
 
 struct ProcChrSta {
-    USHORT Index;
-    USHORT ChrXP;
+    sal_uInt16 Index;
+    sal_uInt16 ChrXP;
     UCHAR  OutCh;
-    BOOL   Kapt;
+    sal_Bool   Kapt;
     ObjTextType Attrib;
 };
 
-void InitProcessCharState(ProcChrSta& State, ObjTextType& AktAtr, USHORT IndexA)
+void InitProcessCharState(ProcChrSta& State, ObjTextType& AktAtr, sal_uInt16 IndexA)
 {
     State.Attrib=AktAtr;
     State.OutCh=0;
     State.Index=IndexA;
     State.ChrXP=0;
-    State.Kapt=FALSE;
+    State.Kapt=sal_False;
 }
 
-BOOL UpcasePossible(UCHAR c)
+sal_Bool UpcasePossible(UCHAR c)
 {
-    if ((c>='a' && c<='z') || c == 0xe4 || c == 0xf6 || c == 0xfc ) return TRUE;
-    else return FALSE;
+    if ((c>='a' && c<='z') || c == 0xe4 || c == 0xf6 || c == 0xfc ) return sal_True;
+    else return sal_False;
 }
 
 UCHAR Upcase(UCHAR c)
@@ -737,15 +733,15 @@ UCHAR Upcase(UCHAR c)
     return c;
 }
 
-USHORT GetCharWidth(OutputDevice& rOut, UCHAR c)
+sal_uInt16 GetCharWidth(OutputDevice& rOut, UCHAR c)
 {
     UCHAR  c1;
-    USHORT ChrWidth;
+    sal_uInt16 ChrWidth;
 
     c1 = ByteString::Convert((char)c,RTL_TEXTENCODING_IBM_437, gsl_getSystemTextEncoding() );
     if (c==' ')
     {
-        ChrWidth=(USHORT)rOut.GetTextWidth( String('A') );
+        ChrWidth=(sal_uInt16)rOut.GetTextWidth( String('A') );
         if (rOut.GetFont().GetPitch()!=PITCH_FIXED) {
             ChrWidth=MulDiv(ChrWidth,DefaultSpace,100);
         }
@@ -755,30 +751,30 @@ USHORT GetCharWidth(OutputDevice& rOut, UCHAR c)
         OSL_ENSURE( MaxChar == 255, "MaxChar not 255" );
         if (c>=MinChar /*&& c<=MaxChar*/)
         {
-            ChrWidth=(USHORT)rOut.GetTextWidth(String((char)c1));
+            ChrWidth=(sal_uInt16)rOut.GetTextWidth(String((char)c1));
         }
         else
         {
-            ChrWidth=(USHORT)rOut.GetTextWidth(String('A'));
+            ChrWidth=(sal_uInt16)rOut.GetTextWidth(String('A'));
         }
     }
     return ChrWidth;
 }
 
 UCHAR ProcessChar(OutputDevice& rOut, UCHAR* TBuf, ProcChrSta& R, ObjTextType& Atr0,
-                  USHORT& nChars, USHORT Rest,
+                  sal_uInt16& nChars, sal_uInt16 Rest,
                   short* Line, UCHAR* cLine)
 {
-    USHORT       KernDist=0;       // Wert fuer Kerning
-    USHORT       ChrWidth;
+    sal_uInt16       KernDist=0;       // Wert fuer Kerning
+    sal_uInt16       ChrWidth;
     UCHAR        c;
     UCHAR        c1;
-    BOOL         AbsEnd;
+    sal_Bool         AbsEnd;
 
-    c=GetTextChar(TBuf,R.Index,Atr0,R.Attrib,Rest,FALSE); // versucht evtl. zu trennen, wenn Rest entsprechenden Wert besitzt
+    c=GetTextChar(TBuf,R.Index,Atr0,R.Attrib,Rest,sal_False); // versucht evtl. zu trennen, wenn Rest entsprechenden Wert besitzt
 
     AbsEnd=(c==AbsatzEnd || c==TextEnd);
-    if (AbsEnd==FALSE) {
+    if (AbsEnd==sal_False) {
         R.OutCh=ConvertTextChar(c); // von HardTrenn nach '-', ...
         R.Kapt=(R.Attrib.Schnitt & TextKaptBit) !=0 && UpcasePossible(R.OutCh);
         if (R.Kapt) R.OutCh=Upcase(R.OutCh);
@@ -788,9 +784,9 @@ UCHAR ProcessChar(OutputDevice& rOut, UCHAR* TBuf, ProcChrSta& R, ObjTextType& A
         ChrWidth=GetCharWidth(rOut,c1);
 
         if (R.Attrib.ZAbst!=100) { // Spezial-Zeichenabstand ?
-            ULONG Temp;
-            Temp=ULONG(ChrWidth)*ULONG(R.Attrib.ZAbst)/100;
-            ChrWidth=USHORT(Temp);
+            sal_uLong Temp;
+            Temp=sal_uLong(ChrWidth)*sal_uLong(R.Attrib.ZAbst)/100;
+            ChrWidth=sal_uInt16(Temp);
         }
         nChars++;
         if (R.ChrXP>32000) R.ChrXP=32000;
@@ -801,44 +797,44 @@ UCHAR ProcessChar(OutputDevice& rOut, UCHAR* TBuf, ProcChrSta& R, ObjTextType& A
     return c;
 }
 
-void FormatLine(UCHAR* TBuf, USHORT& Index, ObjTextType& Atr0, ObjTextType& AktAtr,
-                USHORT UmbWdt, USHORT AdjWdt,
-                short* Line, USHORT& nChars,
+void FormatLine(UCHAR* TBuf, sal_uInt16& Index, ObjTextType& Atr0, ObjTextType& AktAtr,
+                sal_uInt16 UmbWdt, sal_uInt16 AdjWdt,
+                short* Line, sal_uInt16& nChars,
                 double, double,
-                UCHAR* cLine, BOOL TextFit)
+                UCHAR* cLine, sal_Bool TextFit)
 {
     VirtualDevice vOut;
     UCHAR        c,c0;
     UCHAR        ct;
-    BOOL         First;               // erster Char ?
-    BYTE         Just = 0;                // Absatzformatierung
-    BOOL         Border;              // Rand der Box erreicht ?
-    BOOL         Border0;
-    BOOL         AbsEnd;              // Ende des Absatzes erreicht ?
+    sal_Bool         First;               // erster Char ?
+    sal_uInt8         Just = 0;                // Absatzformatierung
+    sal_Bool         Border;              // Rand der Box erreicht ?
+    sal_Bool         Border0;
+    sal_Bool         AbsEnd;              // Ende des Absatzes erreicht ?
     ProcChrSta*  R=new ProcChrSta;
     ProcChrSta*  R0=new ProcChrSta;
     ProcChrSta*  WErec=new ProcChrSta;
-    USHORT       WEnChar;
+    sal_uInt16       WEnChar;
     ProcChrSta*  WErec0=new ProcChrSta;
-    USHORT       WEnChar0;
+    sal_uInt16       WEnChar0;
     ProcChrSta*  TRrec=new ProcChrSta;
-    USHORT       TRnChar;
+    sal_uInt16       TRnChar;
 
-    USHORT       WordEndCnt;          // Justieren und Trennen
-    BOOL         WordEnd;
-    BOOL         Trenn;
+    sal_uInt16       WordEndCnt;          // Justieren und Trennen
+    sal_Bool         WordEnd;
+    sal_Bool         Trenn;
 
     short        BoxRest;             // zum Quetschen und formatieren
-    USHORT       i,j,k,h;
-    USHORT       re,li;
+    sal_uInt16       i,j,k,h;
+    sal_uInt16       re,li;
 
     vOut.SetMapMode(MapMode(MAP_10TH_MM,Point(),Fraction(1,4),Fraction(1,4)));
 
     nChars=0;
-    SetTextContext(vOut,AktAtr,FALSE,0,1,1,1,1);
+    SetTextContext(vOut,AktAtr,sal_False,0,1,1,1,1);
     InitProcessCharState(*R,AktAtr,Index);
-    (*R0)=(*R); (*WErec)=(*R); WEnChar=0; c0=0; Border0=FALSE;
-    Border=FALSE; First=TRUE;
+    (*R0)=(*R); (*WErec)=(*R); WEnChar=0; c0=0; Border0=sal_False;
+    Border=sal_False; First=sal_True;
     WordEndCnt=0;
 
     do {               // mal schauen, wieviele Worte so in die Zeile passen
@@ -866,16 +862,16 @@ void FormatLine(UCHAR* TBuf, USHORT& Index, ObjTextType& Atr0, ObjTextType& AktA
         }
         (*R0)=(*R); c0=c;
         Border0=Border;
-        First=FALSE;
+        First=sal_False;
         AbsEnd=AbsEnd || (nChars>=MaxLineChars);
     } while (!(AbsEnd || (Border && ((WordEndCnt>0) || WordEnd || Trenn))));
 
     if (Border) { // Trennen und Quetschen
         (*WErec0)=(*WErec); WEnChar0=WEnChar;
-        AbsEnd=FALSE; c0=0;
+        AbsEnd=sal_False; c0=0;
         (*R)=(*WErec); nChars=WEnChar;
         (*TRrec)=(*R); TRnChar=nChars;
-        Border0=FALSE; Border=FALSE;
+        Border0=sal_False; Border=sal_False;
         do {                // erst mal gucken wieviele Silben noch reinpassen
             ct=ProcessChar(vOut,TBuf,*TRrec,Atr0,TRnChar,DoTrenn,Line,cLine);
             c=ProcessChar(vOut,TBuf,*R,Atr0,nChars,NoTrenn,Line,cLine);
@@ -922,7 +918,7 @@ void FormatLine(UCHAR* TBuf, USHORT& Index, ObjTextType& Atr0, ObjTextType& AktA
     if (!AbsEnd) {
         do {                                         // Leerzeichen weglesen
             (*WErec)=(*R);
-            c=GetTextChar(TBuf,R->Index,Atr0,R->Attrib,NoTrenn,FALSE);
+            c=GetTextChar(TBuf,R->Index,Atr0,R->Attrib,NoTrenn,sal_False);
             nChars++;
             Line[nChars]=R->ChrXP;
             cLine[nChars]=c;
@@ -938,7 +934,7 @@ void FormatLine(UCHAR* TBuf, USHORT& Index, ObjTextType& Atr0, ObjTextType& AktA
         nChars++; Line[nChars]=R->ChrXP; // Damit AbsatzEnde auch weggelesen wird
         Line[nChars+1]=R->ChrXP;         // denn die Breite von CR oder #0 ist nun mal sehr klein
         if (TBuf[R->Index-1]!=AbsatzEnd &&  TBuf[R->Index-1]!=TextEnd) {
-            c=GetTextChar(TBuf,R->Index,Atr0,R->Attrib,NoTrenn,FALSE); // Kleine Korrektur. Notig, wenn nur 1 Wort in
+            c=GetTextChar(TBuf,R->Index,Atr0,R->Attrib,NoTrenn,sal_False); // Kleine Korrektur. Notig, wenn nur 1 Wort in
         }
     }
 
@@ -1022,8 +1018,8 @@ void FormatLine(UCHAR* TBuf, USHORT& Index, ObjTextType& Atr0, ObjTextType& AktA
 /////////////////////////////////////////////////////////////////////////////////
 // DrawText.Pas
 
-void DrawChar(OutputDevice& rOut, UCHAR c, ObjTextType T, PointType Pos, USHORT DrehWink,
-              USHORT FitXMul, USHORT FitXDiv, USHORT FitYMul, USHORT FitYDiv)
+void DrawChar(OutputDevice& rOut, UCHAR c, ObjTextType T, PointType Pos, sal_uInt16 DrehWink,
+              sal_uInt16 FitXMul, sal_uInt16 FitXDiv, sal_uInt16 FitYMul, sal_uInt16 FitYDiv)
 {
     SetTextContext(rOut,T,UpcasePossible(c),DrehWink,FitXMul,FitXDiv,FitYMul,FitYDiv);
     if ((T.Schnitt & TextKaptBit)!=0 && UpcasePossible(c)) c=Upcase(c);
@@ -1041,32 +1037,32 @@ void TextType::Draw(OutputDevice& rOut)
     if ((Flags & TextOutlBit)!=0) return;   // Sourcetext fuer Outliner !!
 
     ObjTextType T1,T2;
-    USHORT Index1;
-    USHORT Index2;
+    sal_uInt16 Index1;
+    sal_uInt16 Index2;
     UCHAR  c = TextEnd;
-    USHORT l;                // Anzahl der Zeichen in der Zeile
-    USHORT i;
+    sal_uInt16 l;                // Anzahl der Zeichen in der Zeile
+    sal_uInt16 i;
     short  yPos0;
     short  xPos;
     short  yPos;
-    USHORT LF;
-    USHORT MaxGrad;
+    sal_uInt16 LF;
+    sal_uInt16 MaxGrad;
     short  xSize;
     short  xSAdj;
     short  ySize;
     double sn,cs;
-    USHORT TopToBase;
-    BOOL   Ende = 0;
-    USHORT lc;
-    BOOL   LineFit; // FitSize.x=0? oder Flags -> jede Zeile stretchen
-    BOOL   TextFit;
+    sal_uInt16 TopToBase;
+    sal_Bool   Ende = 0;
+    sal_uInt16 lc;
+    sal_Bool   LineFit; // FitSize.x=0? oder Flags -> jede Zeile stretchen
+    sal_Bool   TextFit;
     short* xLine;
     UCHAR* cLine;   // Buffer fuer FormatLine
-    USHORT FitXMul;
-    USHORT FitXDiv;
-    USHORT FitYMul;
-    USHORT FitYDiv;
-    BOOL   Fehler;
+    sal_uInt16 FitXMul;
+    sal_uInt16 FitXDiv;
+    sal_uInt16 FitYMul;
+    sal_uInt16 FitYDiv;
+    sal_Bool   Fehler;
     UCHAR* Buf=Buffer; // Zeiger auf die Buchstaben
 
     pSgfFonts->ReadList();
@@ -1074,9 +1070,9 @@ void TextType::Draw(OutputDevice& rOut)
     cLine=new UCHAR[CharLineSize];
 
     TextFit=(Flags & TextFitBits)!=0;
-    LineFit=FALSE;
+    LineFit=sal_False;
     LineFit=((Flags & TextFitZBit)!=0);
-    if (TextFit && FitSize.x==0) LineFit=TRUE;
+    if (TextFit && FitSize.x==0) LineFit=sal_True;
 
     if (DrehWink==0) {
         sn=0.0;
@@ -1091,9 +1087,9 @@ void TextType::Draw(OutputDevice& rOut)
         ySize=Pos2.y-Pos1.y;
         xSize=32000 /2;      // Umbruch
         xSAdj=Pos2.x-Pos1.x; // zum Ausrichten bei Zentriert/Blocksatz
-        //if (xSize<=0) { xSize=32000 /2; LineFit=TRUE; }
-        FitXMul=sal::static_int_cast< USHORT >(abs(Pos2.x-Pos1.x)); FitXDiv=FitSize.x; if (FitXDiv==0) FitXDiv=1;
-        FitYMul=sal::static_int_cast< USHORT >(abs(Pos2.y-Pos1.y)); FitYDiv=FitSize.y; if (FitYDiv==0) FitYDiv=1;
+        //if (xSize<=0) { xSize=32000 /2; LineFit=sal_True; }
+        FitXMul=sal::static_int_cast< sal_uInt16 >(abs(Pos2.x-Pos1.x)); FitXDiv=FitSize.x; if (FitXDiv==0) FitXDiv=1;
+        FitYMul=sal::static_int_cast< sal_uInt16 >(abs(Pos2.y-Pos1.y)); FitYDiv=FitSize.y; if (FitYDiv==0) FitYDiv=1;
     } else {
         xSize=Pos2.x-Pos1.x;
         xSAdj=xSize;
@@ -1132,7 +1128,7 @@ void TextType::Draw(OutputDevice& rOut)
                 T2=T1; Index2=Index1;
                 i=1;
                 while (i<=l) {
-                    c=GetTextCharConv(Buf,Index2,T,T2,l-i,FALSE);
+                    c=GetTextCharConv(Buf,Index2,T,T2,l-i,sal_False);
                     long xp1,yp1;       // wegen Overflowgefahr
                     PointType Pos;
                     xp1=long(Pos1.x)+xPos+long(xLine[i]);
@@ -1164,27 +1160,27 @@ void TextType::Draw(OutputDevice& rOut)
 // (DEC Alpha hat naemlich 64Bit-Pointer!)
 //UCHAR* TextType::GetBufPtr()
 //{
-//    ULONG Temp;
-//    Temp=ULONG(BufLo)+0x00010000*ULONG(BufHi);
+//    sal_uLong Temp;
+//    Temp=sal_uLong(BufLo)+0x00010000*sal_uLong(BufHi);
 //    return (UCHAR*)Temp;
 //}
 //
 //void TextType::SetBufPtr(UCHAR* Ptr)
 //{
-//    ULONG Temp=(ULONG)Ptr;
-//    BufLo=USHORT(Temp & 0x0000FFFF);
-//    BufHi=USHORT((Temp & 0xFFFF0000)>>16);
+//    sal_uLong Temp=(sal_uLong)Ptr;
+//    BufLo=sal_uInt16(Temp & 0x0000FFFF);
+//    BufHi=sal_uInt16((Temp & 0xFFFF0000)>>16);
 //}
 
-UINT32 ObjTextType::GetFont()
+sal_uInt32 ObjTextType::GetFont()
 {
-    return ULONG(FontLo)+0x00010000*ULONG(FontHi);
+    return sal_uLong(FontLo)+0x00010000*sal_uLong(FontHi);
 }
 
-void ObjTextType::SetFont(UINT32 FontID)
+void ObjTextType::SetFont(sal_uInt32 FontID)
 {
-    FontLo=USHORT(FontID & 0x0000FFFF);
-    FontHi=USHORT((FontID & 0xFFFF0000)>>16);
+    FontLo=sal_uInt16(FontID & 0x0000FFFF);
+    FontHi=sal_uInt16((FontID & 0xFFFF0000)>>16);
 }
 
 
@@ -1195,11 +1191,11 @@ SgfFontOne::SgfFontOne()
 {
     Next=NULL;
     IFID=0;
-    Bold=FALSE;
-    Ital=FALSE;
-    Sans=FALSE;
-    Serf=FALSE;
-    Fixd=FALSE;
+    Bold=sal_False;
+    Ital=sal_False;
+    Sans=sal_False;
+    Serf=sal_False;
+    Fixd=sal_False;
     SVFamil=FAMILY_DONTKNOW;
     SVChSet=RTL_TEXTENCODING_DONTKNOW;
     SVWidth=40;
@@ -1207,7 +1203,7 @@ SgfFontOne::SgfFontOne()
 
 void SgfFontOne::ReadOne( ByteString& ID, ByteString& Dsc )
 {
-    USHORT i,j,n;
+    sal_uInt16 i,j,n;
     ByteString s;
 
     if ( Dsc.Len() < 4 || ( Dsc.GetChar( 0 ) != '(' ) )
@@ -1229,7 +1225,7 @@ void SgfFontOne::ReadOne( ByteString& ID, ByteString& Dsc )
     SVFName=String(Dsc,i+1,j);                       // SV-Fontname rausholen
     Dsc.Erase(i,j);
 
-    IFID = (UINT32)ID.ToInt32();
+    IFID = (sal_uInt32)ID.ToInt32();
     n=Dsc.GetTokenCount(' ');
     for (i=0;i<n;i++)
     {
@@ -1237,11 +1233,11 @@ void SgfFontOne::ReadOne( ByteString& ID, ByteString& Dsc )
         if ( s.Len() )
         {
             s.ToUpperAscii();
-            if      ( s.CompareTo( "BOLD", 4 ) == COMPARE_EQUAL ) Bold=TRUE;
-            else if ( s.CompareTo( "ITAL", 4 ) == COMPARE_EQUAL ) Ital=TRUE;
-            else if ( s.CompareTo( "SERF", 4 ) == COMPARE_EQUAL ) Serf=TRUE;
-            else if ( s.CompareTo( "SANS", 4 ) == COMPARE_EQUAL ) Sans=TRUE;
-            else if ( s.CompareTo( "FIXD", 4 ) == COMPARE_EQUAL ) Fixd=TRUE;
+            if      ( s.CompareTo( "BOLD", 4 ) == COMPARE_EQUAL ) Bold=sal_True;
+            else if ( s.CompareTo( "ITAL", 4 ) == COMPARE_EQUAL ) Ital=sal_True;
+            else if ( s.CompareTo( "SERF", 4 ) == COMPARE_EQUAL ) Serf=sal_True;
+            else if ( s.CompareTo( "SANS", 4 ) == COMPARE_EQUAL ) Sans=sal_True;
+            else if ( s.CompareTo( "FIXD", 4 ) == COMPARE_EQUAL ) Fixd=sal_True;
             else if ( s.CompareTo( "ROMAN", 5 ) == COMPARE_EQUAL ) SVFamil=FAMILY_ROMAN;
             else if ( s.CompareTo( "SWISS", 5 ) == COMPARE_EQUAL ) SVFamil=FAMILY_SWISS;
             else if ( s.CompareTo( "MODERN", 6 ) == COMPARE_EQUAL ) SVFamil=FAMILY_MODERN;
@@ -1252,7 +1248,7 @@ void SgfFontOne::ReadOne( ByteString& ID, ByteString& Dsc )
             else if ( s.CompareTo( "MAC", 3 ) == COMPARE_EQUAL ) SVChSet=RTL_TEXTENCODING_APPLE_ROMAN;
             else if ( s.CompareTo( "SYMBOL", 6 ) == COMPARE_EQUAL ) SVChSet=RTL_TEXTENCODING_SYMBOL;
             else if ( s.CompareTo( "SYSTEM", 6 ) == COMPARE_EQUAL ) SVChSet = gsl_getSystemTextEncoding();
-            else if ( s.IsNumericAscii() ) SVWidth=sal::static_int_cast< USHORT >(s.ToInt32());
+            else if ( s.IsNumericAscii() ) SVWidth=sal::static_int_cast< sal_uInt16 >(s.ToInt32());
         }
     }
 }
@@ -1265,7 +1261,7 @@ SgfFontLst::SgfFontLst()
     Last=NULL;
     LastID=0;
     LastLn=NULL;
-    Tried=FALSE;
+    Tried=sal_False;
 }
 
 SgfFontLst::~SgfFontLst()
@@ -1285,7 +1281,7 @@ void SgfFontLst::RausList()
     }
     pList=NULL;
     Last=NULL;
-    Tried=FALSE;
+    Tried=sal_False;
     LastID=0;
     LastLn=NULL;
 }
@@ -1296,14 +1292,14 @@ void SgfFontLst::AssignFN(const String& rFName)
 void SgfFontLst::ReadList()
 {
     if (!Tried) {
-        Tried=TRUE;
+        Tried=sal_True;
         LastID=0;
         LastLn=NULL;
         SgfFontOne* P,P1;
         Config aCfg(FNam);
         aCfg.SetGroup("SGV Fonts fuer StarView");
-        USHORT Anz=aCfg.GetKeyCount();
-        USHORT i;
+        sal_uInt16 Anz=aCfg.GetKeyCount();
+        sal_uInt16 i;
         ByteString FID,Dsc;
 
         for (i=0;i<Anz;i++)
@@ -1321,7 +1317,7 @@ void SgfFontLst::ReadList()
     }
 }
 
-SgfFontOne* SgfFontLst::GetFontDesc(UINT32 ID)
+SgfFontOne* SgfFontLst::GetFontDesc(sal_uInt32 ID)
 {
     if (ID!=LastID) {
         SgfFontOne* P;

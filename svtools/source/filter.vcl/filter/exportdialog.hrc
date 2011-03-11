@@ -1,0 +1,99 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#include <svtools/svtools.hrc>
+
+#define BTN_OK                  1
+#define BTN_CANCEL              1
+#define BTN_HELP                1
+
+#define FL_EXPORT_SIZE          1
+#define FL_COLOR_DEPTH          2
+#define FL_JPG_QUALITY          3
+#define FL_COMPRESSION          4
+#define FL_MODE                 5
+#define FL_GIF_DRAWING_OBJECTS  6
+#define FL_PBM_OPTIONS          7
+#define FL_EPS_PREVIEW          8
+#define FL_EPS_VERSION          9
+#define FL_EPS_COLOR_FORMAT     10
+#define FL_ESTIMATED_SIZE       11
+#define FL_BUTTONS              12
+
+#define FT_SIZEX                1
+#define FT_SIZEY                2
+#define FT_RESOLUTION           3
+#define FT_JPG_MIN              4
+#define FT_JPG_MAX              5
+#define FT_PNG_MIN              6
+#define FT_PNG_MAX              7
+#define FT_ESTIMATED_SIZE       8
+
+#define NF_RESOLUTION           1
+#define NF_COMPRESSION          2
+#define NF_ZOOM                 3
+
+#define MF_SIZEX                1
+#define MF_SIZEY                2
+
+#define LB_SIZEX                1
+#define LB_SIZEY                2
+#define LB_RESOLUTION           3
+#define LB_COLOR_DEPTH          4
+
+#define RB_BINARY               1
+#define RB_TEXT                 2
+#define RB_EPS_LEVEL1           3
+#define RB_EPS_LEVEL2           4
+#define RB_EPS_COLOR_FORMAT1    5
+#define RB_EPS_COLOR_FORMAT2    6
+#define RB_EPS_COMPRESSION_LZW  7
+#define RB_EPS_COMPRESSION_NONE 8
+
+#define CB_JPG_PREVIEW          1
+#define CB_INTERLACED           2
+#define CB_RLE_ENCODING         3
+#define CB_SAVE_TRANSPARENCY    4
+#define CB_EPS_PREVIEW_TIFF     5
+#define CB_EPS_PREVIEW_EPSI     6
+
+#define FB_JPG_PREVIEW          1
+
+#define SB_COMPRESSION          1
+#define SB_JPG_PREVIEW_HORZ     2
+#define SB_JPG_PREVIEW_VERT     3
+#define SB_ZOOM                 4
+
+#define STR_1BIT_THRESHOLD      1
+#define STR_1BIT_DITHERED       2
+#define STR_4BIT_GRAYSCALE      3
+#define STR_4BIT_COLOR_PALETTE  4
+#define STR_8BIT_GRAYSCALE      5
+#define STR_8BIT_COLOR_PALETTE  6
+#define STR_24BIT_TRUE_COLOR    7
+#define STR_ESTIMATED_SIZE_PIX_1 8
+#define STR_ESTIMATED_SIZE_PIX_2 9
+#define STR_ESTIMATED_SIZE_VEC   10

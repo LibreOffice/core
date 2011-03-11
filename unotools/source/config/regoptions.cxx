@@ -79,9 +79,9 @@ namespace utl
             if ( bValid )
             {
                 Date aDate;
-                aDate.SetDay    ( (USHORT)_rStringRep.copy( 0, 2 ).toInt32( ) );
-                aDate.SetMonth  ( (USHORT)_rStringRep.copy( 3, 2 ).toInt32( ) );
-                aDate.SetYear   ( (USHORT)_rStringRep.copy( 6, 4 ).toInt32( ) );
+                aDate.SetDay    ( (sal_uInt16)_rStringRep.copy( 0, 2 ).toInt32( ) );
+                aDate.SetMonth  ( (sal_uInt16)_rStringRep.copy( 3, 2 ).toInt32( ) );
+                aDate.SetYear   ( (sal_uInt16)_rStringRep.copy( 6, 4 ).toInt32( ) );
                 nDateIntRep = aDate.GetDate();
             }
         }

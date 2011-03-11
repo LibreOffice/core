@@ -81,9 +81,9 @@ public:
                         pTypeClass = pClass;
                     }
     virtual RscTop *    GetTypeClass() const;
-    RSCINST         Create( RSCINST * pInst, const RSCINST & rDflt, BOOL );
+    RSCINST         Create( RSCINST * pInst, const RSCINST & rDflt, sal_Bool );
     void            Destroy( const RSCINST & rInst );
-    virtual ERRTYPE GetValueEle( const RSCINST & rInst, INT32 lValue,
+    virtual ERRTYPE GetValueEle( const RSCINST & rInst, sal_Int32 lValue,
                                 RscTop * pCreateClass,
                                 RSCINST * pGetInst );
     virtual ERRTYPE GetArrayEle( const RSCINST & rInst, Atom nId,
@@ -93,10 +93,10 @@ public:
                     // Gibt die Groesse der Klasse in Bytes
     sal_uInt32          Size(){ return( nSize ); };
 
-    BOOL            IsConsistent( const RSCINST & rInst );
+    sal_Bool            IsConsistent( const RSCINST & rInst );
     virtual void    SetToDefault( const RSCINST & rInst );
-    BOOL            IsDefault( const RSCINST & rInst );
-    BOOL            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef );
+    sal_Bool            IsDefault( const RSCINST & rInst );
+    sal_Bool            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef );
 
     virtual void    WriteSrcHeader( const RSCINST & rInst, FILE * fOutput,
                                     RscTypCont * pTC, sal_uInt32 nTab,
@@ -104,7 +104,7 @@ public:
     void            WriteSrc( const RSCINST & rInst, FILE * fOutput,
                               RscTypCont * pTC, sal_uInt32 nTab, const char * );
     ERRTYPE         WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
-                             RscTypCont * pTC, sal_uInt32, BOOL bExtra );
+                             RscTypCont * pTC, sal_uInt32, sal_Bool bExtra );
     virtual void    WriteRcAccess( FILE * fOutput, RscTypCont * pTC,
                                     const char * );
 };
@@ -122,7 +122,7 @@ public:
                               RscTypCont * pTC, sal_uInt32 nTab, const char * );
     virtual ERRTYPE WriteRcHeader( const RSCINST & rInst, RscWriteRc & aMem,
                                    RscTypCont * pTC, const RscId & aId,
-                                    sal_uInt32 nDeep, BOOL bExtra );
+                                    sal_uInt32 nDeep, sal_Bool bExtra );
 };
 
 

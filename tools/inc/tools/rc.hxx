@@ -43,7 +43,7 @@ class TOOLS_DLLPUBLIC Resource
     ResMgr* m_pResMgr;
 
     // check availability of Resource
-    BOOL                IsAvailableRes( const ResId& rId ) const
+    sal_Bool                IsAvailableRes( const ResId& rId ) const
     { return m_pResMgr->IsAvailable( rId, this ); }
 
     // Load a Resource
@@ -57,7 +57,7 @@ class TOOLS_DLLPUBLIC Resource
     { return m_pResMgr->GetClass(); }
 
     // read a string from the resource
-    static sal_uInt32   GetStringRes( UniString& rStr, const BYTE* pStr )
+    static sal_uInt32   GetStringRes( UniString& rStr, const sal_uInt8* pStr )
     { return ResMgr::GetString( rStr, pStr ); }
 
     // increase the memory pointer gotten by GetClassRes()
@@ -88,6 +88,9 @@ class TOOLS_DLLPUBLIC Resource
     // read a string from resource data and increment pointer
     UniString ReadStringRes()
     { return m_pResMgr->ReadString(); }
+    // read a byte string from resource data and increment pointer
+    rtl::OString ReadByteStringRes()
+    { return m_pResMgr->ReadByteString(); }
 
     // Gibt die Resource frei (this-Zeiger fuer Fehlerueberpruefung)
     // free the resource from m_pResMgr's stack (pass this ptr for validation)

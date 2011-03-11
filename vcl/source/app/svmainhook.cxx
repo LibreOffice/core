@@ -32,9 +32,9 @@
 
 #ifndef MACOSX
 
-BOOL ImplSVMainHook( int * )
+sal_Bool ImplSVMainHook( int * )
 {
-    return FALSE;   // indicate that ImplSVMainHook is not implemented
+    return sal_False;   // indicate that ImplSVMainHook is not implemented
 }
 
 #else
@@ -46,7 +46,7 @@ BOOL ImplSVMainHook( int * )
 #include <postmac.h>
 #include <unistd.h>
 
-extern BOOL ImplSVMain();
+extern sal_Bool ImplSVMain();
 
 // ============================================================================
 
@@ -76,7 +76,7 @@ static void RunSVMain(void *pData)
     _exit( 0 );
 }
 
-BOOL ImplSVMainHook( int *pnInit )
+sal_Bool ImplSVMainHook( int *pnInit )
 {
     // Mac OS X requires that any Cocoa code have a CFRunLoop started in the
     // primordial thread. Since all of the AWT classes in Java 1.4 and higher
@@ -110,7 +110,7 @@ BOOL ImplSVMainHook( int *pnInit )
     osl_joinWithThread( hThreadID );
     osl_destroyThread( hThreadID );
 
-    return TRUE;    // indicate that ImplSVMainHook is implemented
+    return sal_True;    // indicate that ImplSVMainHook is implemented
 }
 
 #endif // MACOSX

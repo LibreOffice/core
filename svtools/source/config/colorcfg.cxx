@@ -514,7 +514,7 @@ ColorConfigValue ColorConfig::GetColorValue(ColorConfigEntry eEntry, sal_Bool bS
         if(COL_AUTO == sal::static_int_cast<ColorData>(aRet.nColor))
             aRet.nColor = ColorConfig::GetDefaultColor(eEntry).GetColor();
         //#103495# don't allow grey between 40% and 60% as application background
-        const UINT8 nRed = COLORDATA_RED( aRet.nColor);
+        const sal_uInt8 nRed = COLORDATA_RED( aRet.nColor);
         if(eEntry == APPBACKGROUND &&
                 (nRed == COLORDATA_GREEN( aRet.nColor)) &&
                     (nRed == COLORDATA_BLUE( aRet.nColor)) &&
@@ -531,12 +531,12 @@ EditableColorConfig::EditableColorConfig() :
     m_pImpl(new ColorConfig_Impl),
     m_bModified(sal_False)
 {
-    m_pImpl->BlockBroadcasts(TRUE);
+    m_pImpl->BlockBroadcasts(sal_True);
 }
 
 EditableColorConfig::~EditableColorConfig()
 {
-    m_pImpl->BlockBroadcasts(FALSE);
+    m_pImpl->BlockBroadcasts(sal_False);
     if(m_bModified)
         m_pImpl->SetModified();
     if(m_pImpl->IsModified())
@@ -614,12 +614,12 @@ void EditableColorConfig::Commit()
 // -----------------------------------------------------------------------------
 void EditableColorConfig::DisableBroadcast()
 {
-    m_pImpl->BlockBroadcasts(TRUE);
+    m_pImpl->BlockBroadcasts(sal_True);
 }
 // -----------------------------------------------------------------------------
 void EditableColorConfig::EnableBroadcast()
 {
-    m_pImpl->BlockBroadcasts(FALSE);
+    m_pImpl->BlockBroadcasts(sal_False);
 }
 // -----------------------------------------------------------------------------
 

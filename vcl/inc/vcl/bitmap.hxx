@@ -157,27 +157,27 @@ class VCL_DLLPUBLIC BmpFilterParam
 
 private:
     BmpFilter   meFilter;
-    ULONG       mnProgressStart;
-    ULONG       mnProgressEnd;
+    sal_uLong       mnProgressStart;
+    sal_uLong       mnProgressEnd;
 
 public:
     struct MosaicTileSize
     {
-        ULONG mnTileWidth;
-        ULONG mnTileHeight;
+        sal_uLong mnTileWidth;
+        sal_uLong mnTileHeight;
     };
 
     struct EmbossAngles
     {
-        USHORT mnAzimuthAngle100;
-        USHORT mnElevationAngle100;
+        sal_uInt16 mnAzimuthAngle100;
+        sal_uInt16 mnElevationAngle100;
     };
 
 private:
     union
     {
-        USHORT  mnSepiaPercent;
-        BYTE    mcSolarGreyThreshold;
+        sal_uInt16  mnSepiaPercent;
+        sal_uInt8   mcSolarGreyThreshold;
 
         MosaicTileSize maMosaicTileSize;
         EmbossAngles maEmbossAngles;
@@ -185,25 +185,25 @@ private:
 
 public:
 
-    BmpFilterParam( ULONG nProgressStart = 0, ULONG nProgressEnd = 0 ) :
+    BmpFilterParam( sal_uLong nProgressStart = 0, sal_uLong nProgressEnd = 0 ) :
         meFilter( BMP_FILTER_UNKNOWN ), mnProgressStart( nProgressStart ), mnProgressEnd( nProgressEnd ) {}
 
-    BmpFilterParam( BYTE cSolarGreyThreshold, ULONG nProgressStart = 0, ULONG nProgressEnd = 0 ) :
+    BmpFilterParam( sal_uInt8 cSolarGreyThreshold, sal_uLong nProgressStart = 0, sal_uLong nProgressEnd = 0 ) :
         meFilter( BMP_FILTER_SOLARIZE ), mnProgressStart( nProgressStart ), mnProgressEnd( nProgressEnd ),
         mcSolarGreyThreshold( cSolarGreyThreshold ) {}
 
-    BmpFilterParam( USHORT nSepiaPercent, ULONG nProgressStart = 0, ULONG nProgressEnd = 0 ) :
+    BmpFilterParam( sal_uInt16 nSepiaPercent, sal_uLong nProgressStart = 0, sal_uLong nProgressEnd = 0 ) :
         meFilter( BMP_FILTER_SEPIA ), mnProgressStart( nProgressStart ), mnProgressEnd( nProgressEnd ),
         mnSepiaPercent( nSepiaPercent ) {}
 
-    BmpFilterParam( const Size& rMosaicTileSize, ULONG nProgressStart = 0, ULONG nProgressEnd = 0 ) :
+    BmpFilterParam( const Size& rMosaicTileSize, sal_uLong nProgressStart = 0, sal_uLong nProgressEnd = 0 ) :
         meFilter( BMP_FILTER_MOSAIC ), mnProgressStart( nProgressStart ), mnProgressEnd( nProgressEnd )
         {
             maMosaicTileSize.mnTileWidth = rMosaicTileSize.Width();
             maMosaicTileSize.mnTileHeight= rMosaicTileSize.Height();
         }
-    BmpFilterParam( USHORT nEmbossAzimuthAngle100, USHORT nEmbossElevationAngle100,
-                    ULONG nProgressStart = 0, ULONG nProgressEnd = 0 ) :
+    BmpFilterParam( sal_uInt16 nEmbossAzimuthAngle100, sal_uInt16 nEmbossElevationAngle100,
+                    sal_uLong nProgressStart = 0, sal_uLong nProgressEnd = 0 ) :
         meFilter( BMP_FILTER_EMBOSS_GREY ), mnProgressStart( nProgressStart ), mnProgressEnd( nProgressEnd )
         {
             maEmbossAngles.mnAzimuthAngle100 = nEmbossAzimuthAngle100;
@@ -259,65 +259,65 @@ public:
     SAL_DLLPRIVATE void                 ImplSetImpBitmap( ImpBitmap* pImpBmp );
     SAL_DLLPRIVATE void                 ImplAssignWithSize( const Bitmap& rBitmap );
 
-    SAL_DLLPRIVATE static BOOL          ImplReadDIB( SvStream& rIStm, Bitmap& rBmp, ULONG nOffset, BOOL bMSOFormat=FALSE );
-    SAL_DLLPRIVATE static BOOL          ImplReadDIBFileHeader( SvStream& rIStm, ULONG& rOffset );
-    SAL_DLLPRIVATE static BOOL          ImplReadDIBInfoHeader( SvStream& rIStm, DIBInfoHeader& rHeader, sal_Bool& bTopDown, BOOL bMSOFormat = FALSE );
-    SAL_DLLPRIVATE static BOOL          ImplReadDIBPalette( SvStream& rIStm, BitmapWriteAccess& rAcc, BOOL bQuad );
-    SAL_DLLPRIVATE static BOOL          ImplReadDIBBits( SvStream& rIStm, DIBInfoHeader& rHeader, BitmapWriteAccess& rAcc, sal_Bool bTopDown );
-    SAL_DLLPRIVATE BOOL                 ImplWriteDIB( SvStream& rOStm, BitmapReadAccess& rAcc, BOOL bCompressed ) const;
-    SAL_DLLPRIVATE static BOOL          ImplWriteDIBFileHeader( SvStream& rOStm, BitmapReadAccess& rAcc );
-    SAL_DLLPRIVATE static BOOL          ImplWriteDIBPalette( SvStream& rOStm, BitmapReadAccess& rAcc );
-    SAL_DLLPRIVATE static BOOL          ImplWriteDIBBits( SvStream& rOStm, BitmapReadAccess& rAcc,
-                                                             ULONG nCompression, sal_uInt32& rImageSize );
-    SAL_DLLPRIVATE static void          ImplDecodeRLE( BYTE* pBuffer, DIBInfoHeader& rHeader,
-                                           BitmapWriteAccess& rAcc, BOOL bRLE4 );
-    SAL_DLLPRIVATE static BOOL          ImplWriteRLE( SvStream& rOStm, BitmapReadAccess& rAcc, BOOL bRLE4 );
+    SAL_DLLPRIVATE static sal_Bool          ImplReadDIB( SvStream& rIStm, Bitmap& rBmp, sal_uLong nOffset, sal_Bool bMSOFormat = sal_False );
+    SAL_DLLPRIVATE static sal_Bool          ImplReadDIBFileHeader( SvStream& rIStm, sal_uLong& rOffset );
+    SAL_DLLPRIVATE static sal_Bool          ImplReadDIBInfoHeader( SvStream& rIStm, DIBInfoHeader& rHeader, sal_Bool& bTopDown, sal_Bool bMSOFormat = sal_False );
+    SAL_DLLPRIVATE static sal_Bool          ImplReadDIBPalette( SvStream& rIStm, BitmapWriteAccess& rAcc, sal_Bool bQuad );
+    SAL_DLLPRIVATE static sal_Bool          ImplReadDIBBits( SvStream& rIStm, DIBInfoHeader& rHeader, BitmapWriteAccess& rAcc, sal_Bool bTopDown );
+    SAL_DLLPRIVATE sal_Bool                 ImplWriteDIB( SvStream& rOStm, BitmapReadAccess& rAcc, sal_Bool bCompressed ) const;
+    SAL_DLLPRIVATE static sal_Bool          ImplWriteDIBFileHeader( SvStream& rOStm, BitmapReadAccess& rAcc );
+    SAL_DLLPRIVATE static sal_Bool          ImplWriteDIBPalette( SvStream& rOStm, BitmapReadAccess& rAcc );
+    SAL_DLLPRIVATE static sal_Bool          ImplWriteDIBBits( SvStream& rOStm, BitmapReadAccess& rAcc,
+                                                             sal_uLong nCompression, sal_uInt32& rImageSize );
+    SAL_DLLPRIVATE static void          ImplDecodeRLE( sal_uInt8* pBuffer, DIBInfoHeader& rHeader,
+                                           BitmapWriteAccess& rAcc, sal_Bool bRLE4 );
+    SAL_DLLPRIVATE static sal_Bool          ImplWriteRLE( SvStream& rOStm, BitmapReadAccess& rAcc, sal_Bool bRLE4 );
 
-    SAL_DLLPRIVATE BOOL                 ImplScaleFast( const double& rScaleX, const double& rScaleY );
-    SAL_DLLPRIVATE BOOL                 ImplScaleInterpolate( const double& rScaleX, const double& rScaleY );
-    SAL_DLLPRIVATE BOOL                 ImplMakeMono( BYTE cThreshold );
-    SAL_DLLPRIVATE BOOL                 ImplMakeMonoDither();
-    SAL_DLLPRIVATE BOOL                 ImplMakeGreyscales( USHORT nGreyscales );
-    SAL_DLLPRIVATE BOOL                 ImplConvertUp( USHORT nBitCount, Color* pExtColor = NULL );
-    SAL_DLLPRIVATE BOOL                 ImplConvertDown( USHORT nBitCount, Color* pExtColor = NULL );
-    SAL_DLLPRIVATE BOOL                 ImplConvertGhosted();
-    SAL_DLLPRIVATE BOOL                 ImplDitherMatrix();
-    SAL_DLLPRIVATE BOOL                 ImplDitherFloyd();
-    SAL_DLLPRIVATE BOOL                 ImplDitherFloyd16();
-    SAL_DLLPRIVATE BOOL                 ImplReduceSimple( USHORT nColorCount );
-    SAL_DLLPRIVATE BOOL                 ImplReducePopular( USHORT nColorCount );
-    SAL_DLLPRIVATE BOOL                 ImplReduceMedian( USHORT nColorCount );
-    SAL_DLLPRIVATE void                 ImplMedianCut( ULONG* pColBuf, BitmapPalette& rPal,
+    SAL_DLLPRIVATE sal_Bool                 ImplScaleFast( const double& rScaleX, const double& rScaleY );
+    SAL_DLLPRIVATE sal_Bool                 ImplScaleInterpolate( const double& rScaleX, const double& rScaleY );
+    SAL_DLLPRIVATE sal_Bool                 ImplMakeMono( sal_uInt8 cThreshold );
+    SAL_DLLPRIVATE sal_Bool                 ImplMakeMonoDither();
+    SAL_DLLPRIVATE sal_Bool                 ImplMakeGreyscales( sal_uInt16 nGreyscales );
+    SAL_DLLPRIVATE sal_Bool                 ImplConvertUp( sal_uInt16 nBitCount, Color* pExtColor = NULL );
+    SAL_DLLPRIVATE sal_Bool                 ImplConvertDown( sal_uInt16 nBitCount, Color* pExtColor = NULL );
+    SAL_DLLPRIVATE sal_Bool                 ImplConvertGhosted();
+    SAL_DLLPRIVATE sal_Bool                 ImplDitherMatrix();
+    SAL_DLLPRIVATE sal_Bool                 ImplDitherFloyd();
+    SAL_DLLPRIVATE sal_Bool                 ImplDitherFloyd16();
+    SAL_DLLPRIVATE sal_Bool                 ImplReduceSimple( sal_uInt16 nColorCount );
+    SAL_DLLPRIVATE sal_Bool                 ImplReducePopular( sal_uInt16 nColorCount );
+    SAL_DLLPRIVATE sal_Bool                 ImplReduceMedian( sal_uInt16 nColorCount );
+    SAL_DLLPRIVATE void                 ImplMedianCut( sal_uLong* pColBuf, BitmapPalette& rPal,
                                            long nR1, long nR2, long nG1, long nG2, long nB1, long nB2,
                                            long nColors, long nPixels, long& rIndex );
-    SAL_DLLPRIVATE BOOL                 ImplConvolute3( const long* pMatrix, long nDivisor,
+    SAL_DLLPRIVATE sal_Bool                 ImplConvolute3( const long* pMatrix, long nDivisor,
                                             const BmpFilterParam* pFilterParam, const Link* pProgress );
-    SAL_DLLPRIVATE BOOL                 ImplMedianFilter( const BmpFilterParam* pFilterParam, const Link* pProgress );
-    SAL_DLLPRIVATE BOOL                 ImplSobelGrey( const BmpFilterParam* pFilterParam, const Link* pProgress );
-    SAL_DLLPRIVATE BOOL                 ImplEmbossGrey( const BmpFilterParam* pFilterParam, const Link* pProgress );
-    SAL_DLLPRIVATE BOOL                 ImplSolarize( const BmpFilterParam* pFilterParam, const Link* pProgress );
-    SAL_DLLPRIVATE BOOL                 ImplSepia( const BmpFilterParam* pFilterParam, const Link* pProgress );
-    SAL_DLLPRIVATE BOOL                 ImplMosaic( const BmpFilterParam* pFilterParam, const Link* pProgress );
-    SAL_DLLPRIVATE BOOL                 ImplPopArt( const BmpFilterParam* pFilterParam, const Link* pProgress );
+    SAL_DLLPRIVATE sal_Bool                 ImplMedianFilter( const BmpFilterParam* pFilterParam, const Link* pProgress );
+    SAL_DLLPRIVATE sal_Bool                 ImplSobelGrey( const BmpFilterParam* pFilterParam, const Link* pProgress );
+    SAL_DLLPRIVATE sal_Bool                 ImplEmbossGrey( const BmpFilterParam* pFilterParam, const Link* pProgress );
+    SAL_DLLPRIVATE sal_Bool                 ImplSolarize( const BmpFilterParam* pFilterParam, const Link* pProgress );
+    SAL_DLLPRIVATE sal_Bool                 ImplSepia( const BmpFilterParam* pFilterParam, const Link* pProgress );
+    SAL_DLLPRIVATE sal_Bool                 ImplMosaic( const BmpFilterParam* pFilterParam, const Link* pProgress );
+    SAL_DLLPRIVATE sal_Bool                 ImplPopArt( const BmpFilterParam* pFilterParam, const Link* pProgress );
 
 public:
 
                             Bitmap();
                             Bitmap( const Bitmap& rBitmap );
-                            Bitmap( const Size& rSizePixel, USHORT nBitCount, const BitmapPalette* pPal = NULL );
+                            Bitmap( const Size& rSizePixel, sal_uInt16 nBitCount, const BitmapPalette* pPal = NULL );
                             Bitmap( const ResId& rResId );
                             Bitmap( SalBitmap* pSalBitmap );
                             ~Bitmap();
 
     Bitmap&                 operator=( const Bitmap& rBitmap );
-    inline BOOL             operator!() const;
-    inline BOOL             operator==( const Bitmap& rBitmap ) const;
-    inline BOOL             operator!=( const Bitmap& rBitmap ) const;
+    inline sal_Bool             operator!() const;
+    inline sal_Bool             operator==( const Bitmap& rBitmap ) const;
+    inline sal_Bool             operator!=( const Bitmap& rBitmap ) const;
 
-    inline BOOL             IsSameInstance( const Bitmap& rBmp ) const;
-    BOOL                    IsEqual( const Bitmap& rBmp ) const;
+    inline sal_Bool             IsSameInstance( const Bitmap& rBmp ) const;
+    sal_Bool                    IsEqual( const Bitmap& rBmp ) const;
 
-    inline BOOL             IsEmpty() const;
+    inline sal_Bool             IsEmpty() const;
     void                    SetEmpty();
 
     inline const MapMode&   GetPrefMapMode() const;
@@ -338,20 +338,20 @@ public:
     void                    SetSourceSizePixel( const Size& );
 
 
-    USHORT                  GetBitCount() const;
-    inline ULONG            GetColorCount() const;
-    inline ULONG            GetSizeBytes() const;
-    BOOL                    HasGreyPalette() const;
+    sal_uInt16                  GetBitCount() const;
+    inline sal_uLong            GetColorCount() const;
+    inline sal_uLong            GetSizeBytes() const;
+    sal_Bool                    HasGreyPalette() const;
     /** get system dependent bitmap data
 
         @param rData
         The system dependent BitmapSystemData structure to be filled
 
-        @return TRUE if the bitmap has a valid system object (e.g. not empty)
+        @return sal_True if the bitmap has a valid system object (e.g. not empty)
     */
     bool                    GetSystemData( BitmapSystemData& rData ) const;
 
-    ULONG                   GetChecksum() const;
+    sal_uLong                   GetChecksum() const;
 
     Bitmap                  CreateDisplayBitmap( OutputDevice* pDisplay );
     Bitmap                  GetColorTransformedBitmap() const;
@@ -360,7 +360,7 @@ public:
 
 public:
 
-    BOOL MakeMono( BYTE cThreshold );
+    sal_Bool MakeMono( sal_uInt8 cThreshold );
 
 
     /** Convert bitmap format
@@ -368,9 +368,9 @@ public:
         @param eConversion
         The format this bitmap should be converted to.
 
-        @return TRUE, if the conversion was completed successfully.
+        @return sal_True, if the conversion was completed successfully.
      */
-    BOOL                    Convert( BmpConversion eConversion );
+    sal_Bool                    Convert( BmpConversion eConversion );
 
     /** Reduce number of colors for the bitmap
 
@@ -380,9 +380,9 @@ public:
         @param eReduce
         Algorithm to use for color reduction
 
-        @return TRUE, if the color reduction operation was completed successfully.
+        @return sal_True, if the color reduction operation was completed successfully.
      */
-    BOOL                    ReduceColors( USHORT nNewColorCount,
+    sal_Bool                    ReduceColors( sal_uInt16 nNewColorCount,
                                           BmpReduce eReduce = BMP_REDUCE_SIMPLE );
 
     /** Apply a dither algorithm to the bitmap
@@ -397,7 +397,7 @@ public:
         @param pDitherPal
         A custom palette to be used when dithering (not yet implemented, leave NULL)
      */
-    BOOL                    Dither( ULONG nDitherFlags = BMP_DITHER_MATRIX );
+    sal_Bool                    Dither( sal_uLong nDitherFlags = BMP_DITHER_MATRIX );
 
     /** Crop the bitmap
 
@@ -409,11 +409,11 @@ public:
         dimension, i.e. negative left,top rectangle coordinates or
         exceeding width or height is ignored.
 
-        @return TRUE, if cropping was performed successfully. If
+        @return sal_True, if cropping was performed successfully. If
         nothing had to be cropped, because e.g. the crop rectangle
-        included the bitmap, FALSE is returned, too!
+        included the bitmap, sal_False is returned, too!
      */
-    BOOL                    Crop( const Rectangle& rRectPixel );
+    sal_Bool                    Crop( const Rectangle& rRectPixel );
 
     /** Expand the bitmap by pixel padding
 
@@ -426,11 +426,11 @@ public:
         @param pInitColor
         Color to use for padded pixel
 
-        @return TRUE, if padding was performed successfully. FALSE is
+        @return sal_True, if padding was performed successfully. sal_False is
         not only returned when the operation failed, but also if
         nothing had to be done, e.g. because nDX and nDY were zero.
      */
-    BOOL                    Expand( ULONG nDX, ULONG nDY,
+    sal_Bool                    Expand( sal_uLong nDX, sal_uLong nDY,
                                     const Color* pInitColor = NULL );
 
     /** Copy a rectangular area from another bitmap
@@ -450,12 +450,12 @@ public:
         equal to the object this method is called on, copying takes
         place within the same bitmap.
 
-        @return TRUE, if the operation completed successfully. FALSE
+        @return sal_True, if the operation completed successfully. sal_False
         is not only returned when the operation failed, but also if
         nothing had to be done, e.g. because one of the rectangles are
         empty.
      */
-    BOOL                    CopyPixel( const Rectangle& rRectDst,
+    sal_Bool                    CopyPixel( const Rectangle& rRectDst,
                                        const Rectangle& rRectSrc,
                                        const Bitmap* pBmpSrc = NULL );
 
@@ -467,9 +467,9 @@ public:
         @param eCombine
         The combine operation to perform on the bitmap
 
-        @return TRUE, if the operation was completed successfully.
+        @return sal_True, if the operation was completed successfully.
      */
-    BOOL                    CombineSimple( const Bitmap& rMask,
+    sal_Bool                    CombineSimple( const Bitmap& rMask,
                                            BmpCombine eCombine );
 
     /** Alpha-blend the given bitmap against a specified uniform
@@ -486,9 +486,9 @@ public:
         @param rBackgroundColor
         Background color to use for every pixel during alpha blending
 
-        @return TRUE, if blending was successful, FALSE otherwise
+        @return sal_True, if blending was successful, sal_False otherwise
      */
-    BOOL                    Blend( const AlphaMask& rAlpha,
+    sal_Bool                    Blend( const AlphaMask& rAlpha,
                                    const Color&     rBackgroundColor );
 
     /** Fill the entire bitmap with the given color
@@ -496,24 +496,24 @@ public:
         @param rFillColor
         Color value to use for filling
 
-        @return TRUE, if the operation was completed successfully.
+        @return sal_True, if the operation was completed successfully.
      */
-    BOOL                    Erase( const Color& rFillColor );
+    sal_Bool                    Erase( const Color& rFillColor );
 
     /** Perform the Invert operation on every pixel
 
-        @return TRUE, if the operation was completed successfully.
+        @return sal_True, if the operation was completed successfully.
      */
-    BOOL                    Invert();
+    sal_Bool                    Invert();
 
     /** Mirror the bitmap
 
         @param nMirrorFlags
         About which axis (horizontal, vertical, or both) to mirror
 
-        @return TRUE, if the operation was completed successfully.
+        @return sal_True, if the operation was completed successfully.
      */
-    BOOL                    Mirror( ULONG nMirrorFlags );
+    sal_Bool                    Mirror( sal_uLong nMirrorFlags );
 
     /** Scale the bitmap
 
@@ -523,10 +523,10 @@ public:
         @param nScaleFlag
         The algorithm to be used for scaling
 
-        @return TRUE, if the operation was completed successfully.
+        @return sal_True, if the operation was completed successfully.
      */
-    BOOL                    Scale( const Size& rNewSize,
-                                   ULONG nScaleFlag = BMP_SCALE_FAST );
+    sal_Bool                    Scale( const Size& rNewSize,
+                                   sal_uLong nScaleFlag = BMP_SCALE_FAST );
 
     /** Scale the bitmap
 
@@ -536,10 +536,10 @@ public:
         @param rScaleY
         The scale factor in y direction.
 
-        @return TRUE, if the operation was completed successfully.
+        @return sal_True, if the operation was completed successfully.
      */
-    BOOL                    Scale( const double& rScaleX, const double& rScaleY,
-                                   ULONG nScaleFlag = BMP_SCALE_FAST );
+    sal_Bool                    Scale( const double& rScaleX, const double& rScaleY,
+                                   sal_uLong nScaleFlag = BMP_SCALE_FAST );
 
     /** Rotate bitmap by the specified angle
 
@@ -552,9 +552,9 @@ public:
         in. The empty spaces around that rotated original bitmap are
         then filled with this color.
 
-        @return TRUE, if the operation was completed successfully.
+        @return sal_True, if the operation was completed successfully.
      */
-    BOOL                    Rotate( long nAngle10, const Color& rFillColor );
+    sal_Bool                    Rotate( long nAngle10, const Color& rFillColor );
 
     /** Create on-off mask from bitmap
 
@@ -572,7 +572,7 @@ public:
 
         @return the resulting bitmask.
      */
-    Bitmap                  CreateMask( const Color& rTransColor, ULONG nTol = 0UL ) const;
+    Bitmap                  CreateMask( const Color& rTransColor, sal_uLong nTol = 0UL ) const;
 
     /** Create region of similar colors in a given rectangle
 
@@ -595,9 +595,9 @@ public:
         @param rReplaceColor
         Color to be placed in all changed pixel
 
-        @return TRUE, if the operation was completed successfully.
+        @return sal_True, if the operation was completed successfully.
      */
-    BOOL                    Replace( const Bitmap& rMask, const Color& rReplaceColor );
+    sal_Bool                    Replace( const Bitmap& rMask, const Color& rReplaceColor );
 
     /** Merge bitmap with given background color according to specified alpha mask
 
@@ -607,9 +607,9 @@ public:
         @param rMergeColor
         Background color to be used for merging
 
-        @return TRUE, if the operation was completed successfully.
+        @return sal_True, if the operation was completed successfully.
      */
-    BOOL                    Replace( const AlphaMask& rAlpha, const Color& rMergeColor );
+    sal_Bool                    Replace( const AlphaMask& rAlpha, const Color& rMergeColor );
 
     /** Replace all pixel having the search color with the specified color
 
@@ -624,9 +624,9 @@ public:
         rSearchColor and the individual pixel values, such that the
         corresponding pixel is still regarded a match.
 
-        @return TRUE, if the operation was completed successfully.
+        @return sal_True, if the operation was completed successfully.
      */
-    BOOL                    Replace( const Color& rSearchColor, const Color& rReplaceColor, ULONG nTol = 0 );
+    sal_Bool                    Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol = 0 );
 
     /** Replace all pixel having one the search colors with the corresponding replace color
 
@@ -644,10 +644,10 @@ public:
         pSearchColor colors and the individual pixel values, such that
         the corresponding pixel is still regarded a match.
 
-        @return TRUE, if the operation was completed successfully.
+        @return sal_True, if the operation was completed successfully.
      */
-    BOOL                    Replace( const Color* pSearchColors, const Color* rReplaceColors,
-                                     ULONG nColorCount, ULONG* pTols = NULL );
+    sal_Bool                    Replace( const Color* pSearchColors, const Color* rReplaceColors,
+                                     sal_uLong nColorCount, sal_uLong* pTols = NULL );
 
     /** Convert the bitmap to a PolyPolygon
 
@@ -664,10 +664,10 @@ public:
         @param pProgress
         A callback for showing the progress of the vectorization
 
-        @return TRUE, if the operation was completed successfully.
+        @return sal_True, if the operation was completed successfully.
      */
-    BOOL                    Vectorize( PolyPolygon& rPolyPoly,
-                                       ULONG nFlags = BMP_VECTORIZE_OUTER,
+    sal_Bool                    Vectorize( PolyPolygon& rPolyPoly,
+                                       sal_uLong nFlags = BMP_VECTORIZE_OUTER,
                                        const Link* pProgress = NULL );
 
     /** Convert the bitmap to a meta file
@@ -689,10 +689,10 @@ public:
         @param pProgress
         A callback for showing the progress of the vectorization
 
-        @return TRUE, if the operation was completed successfully.
+        @return sal_True, if the operation was completed successfully.
      */
-    BOOL                    Vectorize( GDIMetaFile& rMtf, BYTE cReduce = 0,
-                                       ULONG nFlags = BMP_VECTORIZE_INNER,
+    sal_Bool                    Vectorize( GDIMetaFile& rMtf, sal_uInt8 cReduce = 0,
+                                       sal_uLong nFlags = BMP_VECTORIZE_INNER,
                                        const Link* pProgress = NULL );
 
     /** Change various global color characteristics
@@ -718,17 +718,17 @@ public:
         (0.0,10.0]. Values outside this range are regarded as 1.0.
 
         @param bInvert
-        If TRUE, invert the channel values with the logical 'not' operator
+        If sal_True, invert the channel values with the logical 'not' operator
 
-        @return TRUE, if the operation was completed successfully.
+        @return sal_True, if the operation was completed successfully.
      */
-    BOOL                    Adjust( short nLuminancePercent = 0,
+    sal_Bool                    Adjust( short nLuminancePercent = 0,
                                     short nContrastPercent = 0,
                                     short nChannelRPercent = 0,
                                     short nChannelGPercent = 0,
                                     short nChannelBPercent = 0,
                                     double fGamma = 1.0,
-                                    BOOL bInvert = FALSE );
+                                    sal_Bool bInvert = sal_False );
 
     /** Apply specified filter to the bitmap
 
@@ -741,9 +741,9 @@ public:
         @param pProgress
         A callback for showing the progress of the vectorization
 
-        @return TRUE, if the operation was completed successfully.
+        @return sal_True, if the operation was completed successfully.
      */
-    BOOL                    Filter( BmpFilter eFilter,
+    sal_Bool                    Filter( BmpFilter eFilter,
                                     const BmpFilterParam* pFilterParam = NULL,
                                     const Link* pProgress = NULL );
 
@@ -754,8 +754,8 @@ public:
 
 public:
 
-    BOOL                    Read( SvStream& rIStm, BOOL bFileHeader = TRUE, BOOL bMSOFormat = FALSE );
-    BOOL                    Write( SvStream& rOStm, BOOL bCompressed = TRUE, BOOL bFileHeader = TRUE ) const;
+    sal_Bool                    Read( SvStream& rIStm, sal_Bool bFileHeader = sal_True, sal_Bool bMSOFormat = sal_False );
+    sal_Bool                    Write( SvStream& rOStm, sal_Bool bCompressed = sal_True, sal_Bool bFileHeader = sal_True ) const;
 
     friend VCL_DLLPUBLIC SvStream&        operator>>( SvStream& rIStm, Bitmap& rBitmap );
     friend VCL_DLLPUBLIC SvStream&        operator<<( SvStream& rOStm, const Bitmap& rBitmap );
@@ -765,35 +765,35 @@ public:
 // - Inlines -
 // -----------
 
-inline BOOL Bitmap::operator!() const
+inline sal_Bool Bitmap::operator!() const
 {
     return( mpImpBmp == NULL );
 }
 
 // ------------------------------------------------------------------
 
-inline BOOL Bitmap::operator==( const Bitmap& rBitmap ) const
+inline sal_Bool Bitmap::operator==( const Bitmap& rBitmap ) const
 {
     return( rBitmap.mpImpBmp == mpImpBmp );
 }
 
 // ------------------------------------------------------------------
 
-inline BOOL Bitmap::operator!=( const Bitmap& rBitmap ) const
+inline sal_Bool Bitmap::operator!=( const Bitmap& rBitmap ) const
 {
     return( rBitmap.mpImpBmp != mpImpBmp );
 }
 
 // ------------------------------------------------------------------
 
-inline BOOL Bitmap::IsSameInstance( const Bitmap& rBitmap ) const
+inline sal_Bool Bitmap::IsSameInstance( const Bitmap& rBitmap ) const
 {
     return( rBitmap.mpImpBmp == mpImpBmp );
 }
 
 // ------------------------------------------------------------------
 
-inline BOOL Bitmap::IsEmpty() const
+inline sal_Bool Bitmap::IsEmpty() const
 {
     return( mpImpBmp == NULL );
 }
@@ -828,17 +828,17 @@ inline void Bitmap::SetPrefSize( const Size& rSize )
 
 // ------------------------------------------------------------------
 
-inline ULONG Bitmap::GetColorCount() const
+inline sal_uLong Bitmap::GetColorCount() const
 {
-    return( 1UL << (ULONG) GetBitCount() );
+    return( 1UL << (sal_uLong) GetBitCount() );
 }
 
 // ------------------------------------------------------------------
 
-inline ULONG Bitmap::GetSizeBytes() const
+inline sal_uLong Bitmap::GetSizeBytes() const
 {
     const Size aSizePix( GetSizePixel() );
-    return( ( (ULONG) aSizePix.Width() * aSizePix.Height() * GetBitCount() ) >> 3UL );
+    return( ( (sal_uLong) aSizePix.Width() * aSizePix.Height() * GetBitCount() ) >> 3UL );
 }
 
 #endif // _SV_BITMAP_HXX

@@ -62,8 +62,8 @@ struct CntHTTPCookie
     String   m_aDomain;
     String   m_aPath;
     DateTime m_aExpires;
-    USHORT   m_nFlags;
-    USHORT   m_nPolicy;
+    sal_uInt16   m_nFlags;
+    sal_uInt16   m_nPolicy;
 
     CntHTTPCookie (void)
         : m_aExpires (Date(0), Time(0)),
@@ -71,14 +71,14 @@ struct CntHTTPCookie
           m_nPolicy  (CNTHTTP_COOKIE_POLICY_INTERACTIVE)
     {}
 
-    BOOL replaces (const CntHTTPCookie& rOther) const
+    sal_Bool replaces (const CntHTTPCookie& rOther) const
     {
         return ((m_aDomain == rOther.m_aDomain) &&
                 (m_aPath   == rOther.m_aPath  ) &&
                 (m_aName   == rOther.m_aName  )    );
     }
 
-    BOOL operator== (const CntHTTPCookie& rOther) const
+    sal_Bool operator== (const CntHTTPCookie& rOther) const
     {
         return ((m_aName    == rOther.m_aName   ) &&
                 (m_aValue   == rOther.m_aValue  ) &&
@@ -137,7 +137,7 @@ struct CntHTTPCookieRequest
     const String&            m_rURL;
     List&                    m_rCookieList;
     CntHTTPCookieRequestType m_eType;
-    USHORT                   m_nRet;
+    sal_uInt16                   m_nRet;
 
     CntHTTPCookieRequest (
         const String& rURL,

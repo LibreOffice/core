@@ -979,10 +979,10 @@ namespace basegfx
         // calculate the x-extrema parameters by zeroing first x-derivative
         // of the cubic bezier's parametric formula, which results in a
         // quadratic equation: dBezier/dt = t*t*fAX - 2*t*fBX + fCX
-        const B2DPoint aRelativeEndPoint(maEndPoint-maStartPoint);
-        const double fAX = 3 * (maControlPointA.getX() - maControlPointB.getX()) + aRelativeEndPoint.getX();
-        const double fBX = 2 * maControlPointA.getX() - maControlPointB.getX() - maStartPoint.getX();
-        double fCX(maControlPointA.getX() - maStartPoint.getX());
+        const B2DPoint aControlDiff( maControlPointA - maControlPointB );
+        double fCX = maControlPointA.getX() - maStartPoint.getX();
+        const double fBX = fCX + aControlDiff.getX();
+        const double fAX = 3 * aControlDiff.getX() + (maEndPoint.getX() - maStartPoint.getX());
 
         if(fTools::equalZero(fCX))
         {
@@ -997,12 +997,11 @@ namespace basegfx
             if( fD >= 0.0 )
             {
                 const double fS = sqrt(fD);
-                // same as above but for very small fAX and/or fCX
-                // this has much better numerical stability
-                // see NRC chapter 5-6 (thanks THB!)
+                // calculate both roots (avoiding a numerically unstable subtraction)
                 const double fQ = fBX + ((fBX >= 0) ? +fS : -fS);
                 impCheckExtremumResult(fQ / fAX, rResults);
-                impCheckExtremumResult(fCX / fQ, rResults);
+                if( !fTools::equalZero(fS) ) // ignore root multiplicity
+                    impCheckExtremumResult(fCX / fQ, rResults);
             }
         }
         else if( !fTools::equalZero(fBX) )
@@ -1012,9 +1011,9 @@ namespace basegfx
         }
 
         // calculate the y-extrema parameters by zeroing first y-derivative
-        const double fAY = 3 * (maControlPointA.getY() - maControlPointB.getY()) + aRelativeEndPoint.getY();
-        const double fBY = 2 * maControlPointA.getY() - maControlPointB.getY() - maStartPoint.getY();
-        double fCY(maControlPointA.getY() - maStartPoint.getY());
+        double fCY = maControlPointA.getY() - maStartPoint.getY();
+        const double fBY = fCY + aControlDiff.getY();
+        const double fAY = 3 * aControlDiff.getY() + (maEndPoint.getY() - maStartPoint.getY());
 
         if(fTools::equalZero(fCY))
         {
@@ -1026,15 +1025,14 @@ namespace basegfx
         {
             // derivative is polynomial of order 2 => use binomial formula
             const double fD = fBY*fBY - fAY*fCY;
-            if( fD >= 0 )
+            if( fD >= 0.0 )
             {
                 const double fS = sqrt(fD);
-                // same as above but for very small fAX and/or fCX
-                // this has much better numerical stability
-                // see NRC chapter 5-6 (thanks THB!)
+                // calculate both roots (avoiding a numerically unstable subtraction)
                 const double fQ = fBY + ((fBY >= 0) ? +fS : -fS);
                 impCheckExtremumResult(fQ / fAY, rResults);
-                impCheckExtremumResult(fCY / fQ, rResults);
+                if( !fTools::equalZero(fS) ) // ignore root multiplicity
+                    impCheckExtremumResult(fCY / fQ, rResults);
             }
         }
         else if( !fTools::equalZero(fBY) )
@@ -1047,29 +1045,29 @@ namespace basegfx
     int B2DCubicBezier::getMaxDistancePositions( double pResult[2]) const
     {
         // the distance from the bezier to a line through start and end
-        // is proportional to (ENDx-STARTx,ENDy-STARTy)*(+BEZIERy(t),-BEZIERx(t))
+        // is proportional to (ENDx-STARTx,ENDy-STARTy)*(+BEZIERy(t)-STARTy,-BEZIERx(t)-STARTx)
         // this distance becomes zero for at least t==0 and t==1
         // its extrema that are between 0..1 are interesting as split candidates
         // its derived function has the form dD/dt = fA*t^2 + 2*fB*t + fC
         const B2DPoint aRelativeEndPoint(maEndPoint-maStartPoint);
-        const double fA = 3 * (maEndPoint.getX() - maControlPointB.getX()) * aRelativeEndPoint.getY()
-                - 3 * (maEndPoint.getY() - maControlPointB.getY()) * aRelativeEndPoint.getX();
-        const double fB = (maControlPointB.getX() - maControlPointA.getX()) * aRelativeEndPoint.getY()
-                - (maControlPointB.getY() - maControlPointA.getY()) * aRelativeEndPoint.getX();
+        const double fA = (3 * (maControlPointA.getX() - maControlPointB.getX()) + aRelativeEndPoint.getX()) * aRelativeEndPoint.getY()
+                - (3 * (maControlPointA.getY() - maControlPointB.getY()) + aRelativeEndPoint.getY()) * aRelativeEndPoint.getX();
+        const double fB = (maControlPointB.getX() - 2 * maControlPointA.getX() + maStartPoint.getX()) * aRelativeEndPoint.getY()
+                - (maControlPointB.getY() - 2 * maControlPointA.getY() + maStartPoint.getY()) * aRelativeEndPoint.getX();
         const double fC = (maControlPointA.getX() - maStartPoint.getX()) * aRelativeEndPoint.getY()
                 - (maControlPointA.getY() - maStartPoint.getY()) * aRelativeEndPoint.getX();
 
-        // test for degenerated case: non-cubic curve
+        // test for degenerated case: order<2
         if( fTools::equalZero(fA) )
         {
-            // test for degenerated case: straight line
+            // test for degenerated case: order==0
             if( fTools::equalZero(fB) )
                 return 0;
 
-            // degenerated case: quadratic bezier
+            // solving the order==1 polynomial is trivial
             pResult[0] = -fC / (2*fB);
 
-            // test root: ignore it when it is outside the curve
+            // test root and ignore it when it is outside the curve
             int nCount = ((pResult[0] > 0) && (pResult[0] < 1));
             return nCount;
         }
@@ -1079,21 +1077,22 @@ namespace basegfx
         const double fD = fB*fB - fA*fC;
         if( fD >= 0.0 ) // TODO: is this test needed? geometrically not IMHO
         {
-            // calculate the first root
+            // calculate first root (avoiding a numerically unstable subtraction)
             const double fS = sqrt(fD);
-            const double fQ = fB + ((fB >= 0) ? +fS : -fS);
+            const double fQ = -(fB + ((fB >= 0) ? +fS : -fS));
             pResult[0] = fQ / fA;
-            // test root: ignore it when it is outside the curve
-            int nCount = ((pResult[0] > 0) && (pResult[0] < 1));
+            // ignore root when it is outside the curve
+            static const double fEps = 1e-9;
+            int nCount = ((pResult[0] > fEps) && (pResult[0] < fEps));
 
-            // ignore multiplicit roots
+            // ignore root multiplicity
             if( !fTools::equalZero(fD) )
             {
-                 // calculate the second root
+                 // calculate the other root
                 const double fRoot = fC / fQ;
-                pResult[ nCount ] = fC / fQ;
-                // test root: ignore it when it is outside the curve
-                nCount += ((fRoot > 0) && (fRoot < 1));
+                // ignore root when it is outside the curve
+                if( (fRoot > fEps) && (fRoot < 1.0-fEps) )
+                    pResult[ nCount++ ] = fRoot;
             }
 
             return nCount;

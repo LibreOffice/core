@@ -106,7 +106,7 @@ StartDrag()         Dieser Handler wird gerufen, wenn Draggen gestartet
                     wird, bzw. wenn ein Item angeklickt wurde.
                     In diesem Handler sollte spaetestens mit SetDragSize()
                     die Groesse der Size-Linie gesetzt werden, wenn
-                    IsItemMode() FALSE zurueckliefert.
+                    IsItemMode() sal_False zurueckliefert.
 Drag()              Dieser Handler wird gerufen, wenn gedraggt wird. Wenn
                     mit SetDragSize() keine Groesse gesetzt wird, kann
                     dieser Handler dafuer benutzt werden, um die
@@ -117,12 +117,12 @@ Drag()              Dieser Handler wird gerufen, wenn gedraggt wird. Wenn
 EndDrag()           Dieser Handler wird gerufen, wenn ein Drag-Vorgang
                     beendet wurde. Wenn im EndDrag-Handler GetCurItemId()
                     0 zurueckliefert, wurde der Drag-Vorgang abgebrochen.
-                    Wenn dies nicht der Fall ist und IsItemMode() FALSE
+                    Wenn dies nicht der Fall ist und IsItemMode() sal_False
                     zurueckliefert, sollte von dem gedraggten Item
                     die neue Groesse mit GetItemSize() abgefragt werden
                     und entsprechend im dazugehoerigem Control uebernommen
-                    werden. Wenn IsItemMode() TRUE, GetCurItemId() eine Id
-                    und IsItemDrag() TRUE zurueckliefert, wurde dieses
+                    werden. Wenn IsItemMode() sal_True, GetCurItemId() eine Id
+                    und IsItemDrag() sal_True zurueckliefert, wurde dieses
                     Item verschoben. Es sollte dann mit GetItemPos() die
                     neue Position abgefragt werden und auch die Daten
                     im dazugehoerigem Control angepasst werden. Ansonsten
@@ -144,12 +144,12 @@ GetItemDragPos()    Liefert die Position zurueck, an der ein Item verschoben
                     oder wenn kein ItemDrag aktiv ist.
 IsItemMode()        Mit dieser Methode kann abgefragt werden, ob fuer ein
                     Item oder einen Trenner der Handler gerufen wurde.
-                    TRUE    - Handler wurde fuer das Item gerufen
-                    FALSE   - Handler wurde fuer den Trenner gerufen
+                    sal_True    - Handler wurde fuer das Item gerufen
+                    sal_False   - Handler wurde fuer den Trenner gerufen
 IsItemDrag()        Mit dieser Methode kann abgefragt werden, ob ein
                     Item gedragt oder selektiert wurde.
-                    TRUE    - Item wird verschoben
-                    FALSE   - Item wird selektiert
+                    sal_True    - Item wird verschoben
+                    sal_False   - Item wird selektiert
 SetDragSize()       Mit dieser Methode wird gesetzt, wir gross der
                     Trennstrich sein soll, der vom Control gemalt wird.
                     Dies sollte so gross sein, wie das angrenzende Fenster
@@ -203,7 +203,7 @@ typedef ::std::vector< ImplHeadItem* > ImplHeadItemList;
 // - HeaderBarItemBits -
 // ---------------------
 
-typedef USHORT HeaderBarItemBits;
+typedef sal_uInt16 HeaderBarItemBits;
 
 // ----------------------------
 // - Bits fuer HeaderBarItems -
@@ -230,8 +230,8 @@ typedef USHORT HeaderBarItemBits;
 // - HeaderBar-Types -
 // -------------------
 
-#define HEADERBAR_APPEND            ((USHORT)0xFFFF)
-#define HEADERBAR_ITEM_NOTFOUND     ((USHORT)0xFFFF)
+#define HEADERBAR_APPEND            ((sal_uInt16)0xFFFF)
+#define HEADERBAR_ITEM_NOTFOUND     ((sal_uInt16)0xFFFF)
 #define HEADERBAR_FULLSIZE          ((long)1000000000)
 
 #define HEADERBAR_TEXTOFF           2
@@ -253,14 +253,14 @@ private:
     long                mnStartPos;
     long                mnDragPos;
     long                mnMouseOff;
-    USHORT              mnCurItemId;
-    USHORT              mnItemDragPos;
-    BOOL                mbDragable;
-    BOOL                mbDrag;
-    BOOL                mbItemDrag;
-    BOOL                mbOutDrag;
-    BOOL                mbButtonStyle;
-    BOOL                mbItemMode;
+    sal_uInt16              mnCurItemId;
+    sal_uInt16              mnItemDragPos;
+    sal_Bool                mbDragable;
+    sal_Bool                mbDrag;
+    sal_Bool                mbItemDrag;
+    sal_Bool                mbOutDrag;
+    sal_Bool                mbButtonStyle;
+    sal_Bool                mbItemMode;
     Link                maStartDragHdl;
     Link                maDragHdl;
     Link                maEndDragHdl;
@@ -275,25 +275,25 @@ private:
 #ifdef _SV_HEADBAR_CXX
     using Window::ImplInit;
     SVT_DLLPRIVATE void             ImplInit( WinBits nWinStyle );
-    SVT_DLLPRIVATE void             ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground );
-    SVT_DLLPRIVATE long             ImplGetItemPos( USHORT nPos ) const;
-    SVT_DLLPRIVATE Rectangle            ImplGetItemRect( USHORT nPos ) const;
+    SVT_DLLPRIVATE void             ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
+    SVT_DLLPRIVATE long             ImplGetItemPos( sal_uInt16 nPos ) const;
+    SVT_DLLPRIVATE Rectangle            ImplGetItemRect( sal_uInt16 nPos ) const;
     using Window::ImplHitTest;
-    SVT_DLLPRIVATE USHORT               ImplHitTest( const Point& rPos, long& nMouseOff, USHORT& nPos ) const;
-    SVT_DLLPRIVATE void             ImplInvertDrag( USHORT nStartPos, USHORT nEndPos );
+    SVT_DLLPRIVATE sal_uInt16               ImplHitTest( const Point& rPos, long& nMouseOff, sal_uInt16& nPos ) const;
+    SVT_DLLPRIVATE void             ImplInvertDrag( sal_uInt16 nStartPos, sal_uInt16 nEndPos );
     SVT_DLLPRIVATE void             ImplDrawItem( OutputDevice* pDev,
-                                      USHORT nPos, BOOL bHigh, BOOL bDrag,
+                                      sal_uInt16 nPos, sal_Bool bHigh, sal_Bool bDrag,
                                       const Rectangle& rItemRect,
                                       const Rectangle* pRect,
-                                      ULONG nFlags );
-    SVT_DLLPRIVATE void             ImplDrawItem( USHORT nPos, BOOL bHigh = FALSE,
-                                      BOOL bDrag = FALSE,
+                                      sal_uLong nFlags );
+    SVT_DLLPRIVATE void             ImplDrawItem( sal_uInt16 nPos, sal_Bool bHigh = sal_False,
+                                      sal_Bool bDrag = sal_False,
                                       const Rectangle* pRect = NULL );
-    SVT_DLLPRIVATE void             ImplUpdate( USHORT nPos,
-                                    BOOL bEnd = FALSE, BOOL bDirect = FALSE );
-    SVT_DLLPRIVATE void             ImplStartDrag( const Point& rPos, BOOL bCommand );
+    SVT_DLLPRIVATE void             ImplUpdate( sal_uInt16 nPos,
+                                    sal_Bool bEnd = sal_False, sal_Bool bDirect = sal_False );
+    SVT_DLLPRIVATE void             ImplStartDrag( const Point& rPos, sal_Bool bCommand );
     SVT_DLLPRIVATE void             ImplDrag( const Point& rPos );
-    SVT_DLLPRIVATE void             ImplEndDrag( BOOL bCancel );
+    SVT_DLLPRIVATE void             ImplEndDrag( sal_Bool bCancel );
 #endif
 
 public:
@@ -305,7 +305,7 @@ public:
     virtual void        MouseMove( const MouseEvent& rMEvt );
     virtual void        Tracking( const TrackingEvent& rTEvt );
     virtual void        Paint( const Rectangle& rRect );
-    virtual void        Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG nFlags );
+    virtual void        Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
     virtual void        Resize();
     virtual void        Command( const CommandEvent& rCEvt );
     virtual void        RequestHelp( const HelpEvent& rHEvt );
@@ -319,18 +319,18 @@ public:
     virtual void        Select();
     virtual void        DoubleClick();
 
-    void                InsertItem( USHORT nItemId, const Image& rImage,
+    void                InsertItem( sal_uInt16 nItemId, const Image& rImage,
                                     long nSize, HeaderBarItemBits nBits = HIB_STDSTYLE,
-                                    USHORT nPos = HEADERBAR_APPEND );
-    void                InsertItem( USHORT nItemId, const XubString& rText,
+                                    sal_uInt16 nPos = HEADERBAR_APPEND );
+    void                InsertItem( sal_uInt16 nItemId, const XubString& rText,
                                     long nSize, HeaderBarItemBits nBits = HIB_STDSTYLE,
-                                    USHORT nPos = HEADERBAR_APPEND );
-    void                InsertItem( USHORT nItemId,
+                                    sal_uInt16 nPos = HEADERBAR_APPEND );
+    void                InsertItem( sal_uInt16 nItemId,
                                     const Image& rImage, const XubString& rText,
                                     long nSize, HeaderBarItemBits nBits = HIB_STDSTYLE,
-                                    USHORT nPos = HEADERBAR_APPEND );
-    void                RemoveItem( USHORT nItemId );
-    void                MoveItem( USHORT nItemId, USHORT nNewPos );
+                                    sal_uInt16 nPos = HEADERBAR_APPEND );
+    void                RemoveItem( sal_uInt16 nItemId );
+    void                MoveItem( sal_uInt16 nItemId, sal_uInt16 nNewPos );
     void                Clear();
 
     void                SetOffset( long nNewOffset = 0 );
@@ -338,40 +338,40 @@ public:
     inline void         SetDragSize( long nNewSize = 0 ) { mnDragSize = nNewSize; }
     long                GetDragSize() const { return mnDragSize; }
 
-    USHORT              GetItemCount() const;
-    USHORT              GetItemPos( USHORT nItemId ) const;
-    USHORT              GetItemId( USHORT nPos ) const;
-    USHORT              GetItemId( const Point& rPos ) const;
-    Rectangle           GetItemRect( USHORT nItemId ) const;
-    USHORT              GetCurItemId() const { return mnCurItemId; }
+    sal_uInt16              GetItemCount() const;
+    sal_uInt16              GetItemPos( sal_uInt16 nItemId ) const;
+    sal_uInt16              GetItemId( sal_uInt16 nPos ) const;
+    sal_uInt16              GetItemId( const Point& rPos ) const;
+    Rectangle           GetItemRect( sal_uInt16 nItemId ) const;
+    sal_uInt16              GetCurItemId() const { return mnCurItemId; }
     long                GetDragPos() const { return mnDragPos; }
-    USHORT              GetItemDragPos() const { return mnItemDragPos; }
-    BOOL                IsItemMode() const { return mbItemMode; }
-    BOOL                IsItemDrag() const { return mbItemDrag; }
+    sal_uInt16              GetItemDragPos() const { return mnItemDragPos; }
+    sal_Bool                IsItemMode() const { return mbItemMode; }
+    sal_Bool                IsItemDrag() const { return mbItemDrag; }
 
-    void                SetItemSize( USHORT nItemId, long nNewSize );
-    long                GetItemSize( USHORT nItemId ) const;
-    void                SetItemBits( USHORT nItemId, HeaderBarItemBits nNewBits );
-    HeaderBarItemBits   GetItemBits( USHORT nItemId ) const;
-    void                SetItemData( USHORT nItemId, void* pNewData );
-    void*               GetItemData( USHORT nItemId ) const;
+    void                SetItemSize( sal_uInt16 nItemId, long nNewSize );
+    long                GetItemSize( sal_uInt16 nItemId ) const;
+    void                SetItemBits( sal_uInt16 nItemId, HeaderBarItemBits nNewBits );
+    HeaderBarItemBits   GetItemBits( sal_uInt16 nItemId ) const;
+    void                SetItemData( sal_uInt16 nItemId, void* pNewData );
+    void*               GetItemData( sal_uInt16 nItemId ) const;
 
-    void                SetItemImage( USHORT nItemId, const Image& rImage );
-    Image               GetItemImage( USHORT nItemId ) const;
-    void                SetItemText( USHORT nItemId, const XubString& rText );
-    XubString           GetItemText( USHORT nItemId ) const;
+    void                SetItemImage( sal_uInt16 nItemId, const Image& rImage );
+    Image               GetItemImage( sal_uInt16 nItemId ) const;
+    void                SetItemText( sal_uInt16 nItemId, const XubString& rText );
+    XubString           GetItemText( sal_uInt16 nItemId ) const;
 
-    void                SetHelpText( USHORT nItemId, const XubString& rText );
-    XubString           GetHelpText( USHORT nItemId ) const;
-    void                SetHelpId( USHORT nItemId, ULONG nHelpId );
-    ULONG               GetHelpId( USHORT nItemId ) const;
+    void                SetHelpText( sal_uInt16 nItemId, const XubString& rText );
+    XubString           GetHelpText( sal_uInt16 nItemId ) const;
+    void                SetHelpId( sal_uInt16 nItemId, const rtl::OString& nHelpId );
+    rtl::OString        GetHelpId( sal_uInt16 nItemId ) const;
 
     Size                CalcWindowSizePixel() const;
 
     inline void             SetHelpText( const String& rText )      { Window::SetHelpText( rText ); }
     inline const String&    GetHelpText() const                     { return Window::GetHelpText(); }
-    inline void             SetHelpId( ULONG nId )                  { Window::SetHelpId( nId ); }
-    inline ULONG            GetHelpId() const                       { return Window::GetHelpId(); }
+    inline void             SetHelpId( const rtl::OString& rId )    { Window::SetHelpId( rId ); }
+    inline const rtl::OString& GetHelpId() const                    { return Window::GetHelpId(); }
 
     inline void         SetStartDragHdl( const Link& rLink )        { maStartDragHdl = rLink; }
     inline const Link&  GetStartDragHdl() const                     { return maStartDragHdl; }
@@ -386,7 +386,7 @@ public:
     inline void         SetCreateAccessibleHdl( const Link& rLink ) { maCreateAccessibleHdl = rLink; }
     inline const Link&  GetCreateAccessibleHdl() const              { return maCreateAccessibleHdl; }
 
-    inline BOOL         IsDragable() const                          { return mbDragable; }
+    inline sal_Bool         IsDragable() const                          { return mbDragable; }
 
     /** Creates and returns the accessible object of the header bar. */
     virtual ::com::sun::star::uno::Reference<

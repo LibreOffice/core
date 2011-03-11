@@ -100,35 +100,6 @@ void SAL_CALL component_getImplementationEnvironment(
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-//-------------------------------------------------------------------------
-// component_writeInfo - to register a UNO-Service
-// to register a UNO-Service use: regcomp -register -r *.rdb -c *.dll
-// to view the registry use: regview *.rdb /SERVICES/ServiceName
-// (you must use the full services name e.g. com.sun.star.frame.FilePicker
-//-------------------------------------------------------------------------
-
-sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, void* pRegistryKey )
-{
-    sal_Bool bRetVal = sal_False;
-
-    if ( pRegistryKey )
-    {
-        try
-        {
-            Reference< XRegistryKey > pXNewKey( static_cast< XRegistryKey* >( pRegistryKey ) );
-            pXNewKey->createKey( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMECONTENTTYPEFACTORY_REGKEY_NAME ) ) );
-            bRetVal = sal_True;
-        }
-        catch( InvalidRegistryException& )
-        {
-            OSL_ENSURE(sal_False, "InvalidRegistryException caught");
-            bRetVal = sal_False;
-        }
-    }
-
-    return bRetVal;
-}
-
 //----------------------------------------------------------------------
 // component_getFactory
 // returns a factory to create XFilePicker-Services

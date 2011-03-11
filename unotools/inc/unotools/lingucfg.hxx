@@ -53,89 +53,89 @@ struct UNOTOOLS_DLLPUBLIC SvtLinguOptions
     ::com::sun::star::uno::Sequence< rtl::OUString >    aActiveDics;
     ::com::sun::star::uno::Sequence< rtl::OUString >    aActiveConvDics;
 
-    BOOL                                                bROActiveDics;
-    BOOL                                                bROActiveConvDics;
+    sal_Bool                                                bROActiveDics;
+    sal_Bool                                                bROActiveConvDics;
 
     // Hyphenator service specific options
-    INT16   nHyphMinLeading,
+    sal_Int16   nHyphMinLeading,
             nHyphMinTrailing,
             nHyphMinWordLength;
 
-    BOOL    bROHyphMinLeading,
+    sal_Bool    bROHyphMinLeading,
             bROHyphMinTrailing,
             bROHyphMinWordLength;
 
     // misc options (non-service specific)
-    INT16   nDefaultLanguage;
-    INT16   nDefaultLanguage_CJK;
-    INT16   nDefaultLanguage_CTL;
+    sal_Int16   nDefaultLanguage;
+    sal_Int16   nDefaultLanguage_CJK;
+    sal_Int16   nDefaultLanguage_CTL;
 
-    BOOL    bRODefaultLanguage;
-    BOOL    bRODefaultLanguage_CJK;
-    BOOL    bRODefaultLanguage_CTL;
+    sal_Bool    bRODefaultLanguage;
+    sal_Bool    bRODefaultLanguage_CJK;
+    sal_Bool    bRODefaultLanguage_CTL;
 
     // spelling options (non-service specific)
-    BOOL    bIsSpellSpecial;
-    BOOL    bIsSpellAuto;
-    BOOL    bIsSpellReverse;
+    sal_Bool    bIsSpellSpecial;
+    sal_Bool    bIsSpellAuto;
+    sal_Bool    bIsSpellReverse;
 
-    BOOL    bROIsSpellSpecial;
-    BOOL    bROIsSpellAuto;
-    BOOL    bROIsSpellReverse;
+    sal_Bool    bROIsSpellSpecial;
+    sal_Bool    bROIsSpellAuto;
+    sal_Bool    bROIsSpellReverse;
 
     // hyphenation options (non-service specific)
-    BOOL    bIsHyphSpecial;
-    BOOL    bIsHyphAuto;
+    sal_Bool    bIsHyphSpecial;
+    sal_Bool    bIsHyphAuto;
 
-    BOOL    bROIsHyphSpecial;
-    BOOL    bROIsHyphAuto;
+    sal_Bool    bROIsHyphSpecial;
+    sal_Bool    bROIsHyphAuto;
 
     // common to SpellChecker, Hyphenator and Thesaurus service
-    BOOL    bIsUseDictionaryList;
-    BOOL    bIsIgnoreControlCharacters;
+    sal_Bool    bIsUseDictionaryList;
+    sal_Bool    bIsIgnoreControlCharacters;
 
-    BOOL    bROIsUseDictionaryList;
-    BOOL    bROIsIgnoreControlCharacters;
+    sal_Bool    bROIsUseDictionaryList;
+    sal_Bool    bROIsIgnoreControlCharacters;
 
     // SpellChecker service specific options
-    BOOL    bIsSpellWithDigits,
+    sal_Bool    bIsSpellWithDigits,
             bIsSpellUpperCase,
             bIsSpellCapitalization;
 
-    BOOL    bROIsSpellWithDigits,
+    sal_Bool    bROIsSpellWithDigits,
             bROIsSpellUpperCase,
             bROIsSpellCapitalization;
 
     // text conversion specific options
-    BOOL    bIsIgnorePostPositionalWord;
-    BOOL    bIsAutoCloseDialog;
-    BOOL    bIsShowEntriesRecentlyUsedFirst;
-    BOOL    bIsAutoReplaceUniqueEntries;
-    BOOL    bIsDirectionToSimplified;
-    BOOL    bIsUseCharacterVariants;
-    BOOL    bIsTranslateCommonTerms;
-    BOOL    bIsReverseMapping;
+    sal_Bool    bIsIgnorePostPositionalWord;
+    sal_Bool    bIsAutoCloseDialog;
+    sal_Bool    bIsShowEntriesRecentlyUsedFirst;
+    sal_Bool    bIsAutoReplaceUniqueEntries;
+    sal_Bool    bIsDirectionToSimplified;
+    sal_Bool    bIsUseCharacterVariants;
+    sal_Bool    bIsTranslateCommonTerms;
+    sal_Bool    bIsReverseMapping;
 
-    BOOL    bROIsIgnorePostPositionalWord;
-    BOOL    bROIsAutoCloseDialog;
-    BOOL    bROIsShowEntriesRecentlyUsedFirst;
-    BOOL    bROIsAutoReplaceUniqueEntries;
-    BOOL    bROIsDirectionToSimplified;
-    BOOL    bROIsUseCharacterVariants;
-    BOOL    bROIsTranslateCommonTerms;
-    BOOL    bROIsReverseMapping;
+    sal_Bool    bROIsIgnorePostPositionalWord;
+    sal_Bool    bROIsAutoCloseDialog;
+    sal_Bool    bROIsShowEntriesRecentlyUsedFirst;
+    sal_Bool    bROIsAutoReplaceUniqueEntries;
+    sal_Bool    bROIsDirectionToSimplified;
+    sal_Bool    bROIsUseCharacterVariants;
+    sal_Bool    bROIsTranslateCommonTerms;
+    sal_Bool    bROIsReverseMapping;
 
     // check value need to determine if the configuration needs to updatet
     // or not (used for a quick check if data files have been changed/added
     // or deleted
-    INT32   nDataFilesChangedCheckValue;
-    BOOL    bRODataFilesChangedCheckValue;
+    sal_Int32   nDataFilesChangedCheckValue;
+    sal_Bool    bRODataFilesChangedCheckValue;
 
-    BOOL    bIsGrammarAuto;
-    BOOL    bIsGrammarInteractive;
+    sal_Bool    bIsGrammarAuto;
+    sal_Bool    bIsGrammarInteractive;
 
-    BOOL    bROIsGrammarAuto;
-    BOOL    bROIsGrammarInteractive;
+    sal_Bool    bROIsGrammarAuto;
+    sal_Bool    bROIsGrammarInteractive;
 
     SvtLinguOptions();
 };
@@ -197,29 +197,29 @@ public:
     com::sun::star::uno::Any
             GetProperty( const rtl::OUString &rPropertyName ) const;
     com::sun::star::uno::Any
-            GetProperty( INT32 nPropertyHandle ) const;
+            GetProperty( sal_Int32 nPropertyHandle ) const;
 
-    BOOL    SetProperty( const rtl::OUString &rPropertyName,
+    sal_Bool    SetProperty( const rtl::OUString &rPropertyName,
                          const com::sun::star::uno::Any &rValue );
-    BOOL    SetProperty( INT32 nPropertyHandle,
+    sal_Bool    SetProperty( sal_Int32 nPropertyHandle,
                          const com::sun::star::uno::Any &rValue );
 
-    BOOL    GetOptions( SvtLinguOptions &rOptions ) const;
-    BOOL    SetOptions( const SvtLinguOptions &rOptions );
+    sal_Bool    GetOptions( SvtLinguOptions &rOptions ) const;
+    sal_Bool    SetOptions( const SvtLinguOptions &rOptions );
 
-    BOOL    IsReadOnly( const rtl::OUString &rPropertyName ) const;
-    BOOL    IsReadOnly( INT32 nPropertyHandle ) const;
+    sal_Bool    IsReadOnly( const rtl::OUString &rPropertyName ) const;
+    sal_Bool    IsReadOnly( sal_Int32 nPropertyHandle ) const;
 
     //!
     //! the following functions work on the 'ServiceManager' sub node of the
     //! linguistic configuration only
     //!
-    BOOL GetElementNamesFor( const rtl::OUString &rNodeName, com::sun::star::uno::Sequence< rtl::OUString > &rElementNames ) const;
+    sal_Bool GetElementNamesFor( const rtl::OUString &rNodeName, com::sun::star::uno::Sequence< rtl::OUString > &rElementNames ) const;
     //
-    BOOL GetSupportedDictionaryFormatsFor( const rtl::OUString &rSetName, const rtl::OUString &rSetEntry, com::sun::star::uno::Sequence< rtl::OUString > &rFormatList ) const;
+    sal_Bool GetSupportedDictionaryFormatsFor( const rtl::OUString &rSetName, const rtl::OUString &rSetEntry, com::sun::star::uno::Sequence< rtl::OUString > &rFormatList ) const;
     void SetOrCreateSupportedDictionaryFormatsFor( const rtl::OUString &rSetName, const rtl::OUString &rSetEntry, const com::sun::star::uno::Sequence< rtl::OUString > &rFormatList  ) const;
     //
-    BOOL GetDictionaryEntry( const rtl::OUString &rNodeName, SvtLinguConfigDictionaryEntry &rDicEntry ) const;
+    sal_Bool GetDictionaryEntry( const rtl::OUString &rNodeName, SvtLinguConfigDictionaryEntry &rDicEntry ) const;
     void SetOrCreateDictionaryEntry( const rtl::OUString &rNodeName, const SvtLinguConfigDictionaryEntry &rDicEntry ) const;
     //
     com::sun::star::uno::Sequence< rtl::OUString > GetDisabledDictionaries() const;

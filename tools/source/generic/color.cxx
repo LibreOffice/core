@@ -61,10 +61,10 @@ Color::Color( const ResId& rResId )
         pResMgr->Increment( sizeof( RSHEADER_TYPE ) );
 
         // Daten laden
-        USHORT nRed     = pResMgr->ReadShort();
-        USHORT nGreen   = pResMgr->ReadShort();
-        USHORT nBlue    = pResMgr->ReadShort();
-        // one more historical ULONG
+        sal_uInt16 nRed     = pResMgr->ReadShort();
+        sal_uInt16 nGreen   = pResMgr->ReadShort();
+        sal_uInt16 nBlue    = pResMgr->ReadShort();
+        // one more historical sal_uIntPtr
         pResMgr->ReadLong();
 
         // RGB-Farbe
@@ -75,60 +75,60 @@ Color::Color( const ResId& rResId )
         mnColor = RGB_COLORDATA( 0, 0, 0 );
     }
 }
-UINT8 Color::GetColorError( const Color& rCompareColor ) const
+sal_uInt8 Color::GetColorError( const Color& rCompareColor ) const
 {
     const long nErrAbs = labs( (long) rCompareColor.GetRed() - GetRed() ) +
                          labs( (long) rCompareColor.GetGreen() - GetGreen() ) +
                          labs( (long) rCompareColor.GetBlue() - GetBlue() );
 
-    return (UINT8) _FRound( nErrAbs * 0.3333333333 );
+    return (sal_uInt8) _FRound( nErrAbs * 0.3333333333 );
 }
 
 // -----------------------------------------------------------------------
 
-void Color::IncreaseLuminance( UINT8 cLumInc )
+void Color::IncreaseLuminance( sal_uInt8 cLumInc )
 {
-    SetRed( (UINT8) SAL_BOUND( (long) COLORDATA_RED( mnColor ) + cLumInc, 0L, 255L ) );
-    SetGreen( (UINT8) SAL_BOUND( (long) COLORDATA_GREEN( mnColor ) + cLumInc, 0L, 255L ) );
-    SetBlue( (UINT8) SAL_BOUND( (long) COLORDATA_BLUE( mnColor ) + cLumInc, 0L, 255L ) );
+    SetRed( (sal_uInt8) SAL_BOUND( (long) COLORDATA_RED( mnColor ) + cLumInc, 0L, 255L ) );
+    SetGreen( (sal_uInt8) SAL_BOUND( (long) COLORDATA_GREEN( mnColor ) + cLumInc, 0L, 255L ) );
+    SetBlue( (sal_uInt8) SAL_BOUND( (long) COLORDATA_BLUE( mnColor ) + cLumInc, 0L, 255L ) );
 }
 
 // -----------------------------------------------------------------------
 
-void Color::DecreaseLuminance( UINT8 cLumDec )
+void Color::DecreaseLuminance( sal_uInt8 cLumDec )
 {
-    SetRed( (UINT8) SAL_BOUND( (long) COLORDATA_RED( mnColor ) - cLumDec, 0L, 255L ) );
-    SetGreen( (UINT8) SAL_BOUND( (long) COLORDATA_GREEN( mnColor ) - cLumDec, 0L, 255L ) );
-    SetBlue( (UINT8) SAL_BOUND( (long) COLORDATA_BLUE( mnColor ) - cLumDec, 0L, 255L ) );
+    SetRed( (sal_uInt8) SAL_BOUND( (long) COLORDATA_RED( mnColor ) - cLumDec, 0L, 255L ) );
+    SetGreen( (sal_uInt8) SAL_BOUND( (long) COLORDATA_GREEN( mnColor ) - cLumDec, 0L, 255L ) );
+    SetBlue( (sal_uInt8) SAL_BOUND( (long) COLORDATA_BLUE( mnColor ) - cLumDec, 0L, 255L ) );
 }
 
 // -----------------------------------------------------------------------
 
-void Color::IncreaseContrast( UINT8 cContInc )
+void Color::IncreaseContrast( sal_uInt8 cContInc )
 {
     if( cContInc)
     {
         const double fM = 128.0 / ( 128.0 - 0.4985 * cContInc );
         const double fOff = 128.0 - fM * 128.0;
 
-        SetRed( (UINT8) SAL_BOUND( _FRound( COLORDATA_RED( mnColor ) * fM + fOff ), 0L, 255L ) );
-        SetGreen( (UINT8) SAL_BOUND( _FRound( COLORDATA_GREEN( mnColor ) * fM + fOff ), 0L, 255L ) );
-        SetBlue( (UINT8) SAL_BOUND( _FRound( COLORDATA_BLUE( mnColor ) * fM + fOff ), 0L, 255L ) );
+        SetRed( (sal_uInt8) SAL_BOUND( _FRound( COLORDATA_RED( mnColor ) * fM + fOff ), 0L, 255L ) );
+        SetGreen( (sal_uInt8) SAL_BOUND( _FRound( COLORDATA_GREEN( mnColor ) * fM + fOff ), 0L, 255L ) );
+        SetBlue( (sal_uInt8) SAL_BOUND( _FRound( COLORDATA_BLUE( mnColor ) * fM + fOff ), 0L, 255L ) );
     }
 }
 
 // -----------------------------------------------------------------------
 
-void Color::DecreaseContrast( UINT8 cContDec )
+void Color::DecreaseContrast( sal_uInt8 cContDec )
 {
     if( cContDec )
     {
         const double fM = ( 128.0 - 0.4985 * cContDec ) / 128.0;
         const double fOff = 128.0 - fM * 128.0;
 
-        SetRed( (UINT8) SAL_BOUND( _FRound( COLORDATA_RED( mnColor ) * fM + fOff ), 0L, 255L ) );
-        SetGreen( (UINT8) SAL_BOUND( _FRound( COLORDATA_GREEN( mnColor ) * fM + fOff ), 0L, 255L ) );
-        SetBlue( (UINT8) SAL_BOUND( _FRound( COLORDATA_BLUE( mnColor ) * fM + fOff ), 0L, 255L ) );
+        SetRed( (sal_uInt8) SAL_BOUND( _FRound( COLORDATA_RED( mnColor ) * fM + fOff ), 0L, 255L ) );
+        SetGreen( (sal_uInt8) SAL_BOUND( _FRound( COLORDATA_GREEN( mnColor ) * fM + fOff ), 0L, 255L ) );
+        SetBlue( (sal_uInt8) SAL_BOUND( _FRound( COLORDATA_BLUE( mnColor ) * fM + fOff ), 0L, 255L ) );
     }
 }
 
@@ -143,14 +143,14 @@ void Color::Invert()
 
 // -----------------------------------------------------------------------
 
-BOOL Color::IsDark() const
+sal_Bool Color::IsDark() const
 {
     return GetLuminance() <= 38;
 }
 
 // -----------------------------------------------------------------------
 
-BOOL Color::IsBright() const
+sal_Bool Color::IsBright() const
 {
     return GetLuminance() >= 245;
 }
@@ -159,10 +159,10 @@ BOOL Color::IsBright() const
 // color space conversion
 // -----------------------------------------------------------------------
 
-void Color::RGBtoHSB( USHORT& nHue, USHORT& nSat, USHORT& nBri ) const
+void Color::RGBtoHSB( sal_uInt16& nHue, sal_uInt16& nSat, sal_uInt16& nBri ) const
 {
-    UINT8 c[3];
-    UINT8 cMax, cMin;
+    sal_uInt8 c[3];
+    sal_uInt8 cMax, cMin;
 
     c[0] = GetRed();
     c[1] = GetGreen();
@@ -183,7 +183,7 @@ void Color::RGBtoHSB( USHORT& nHue, USHORT& nSat, USHORT& nBri ) const
     if( c[2] < cMin )
         cMin = c[2];
 
-    UINT8 cDelta = cMax - cMin;
+    sal_uInt8 cDelta = cMax - cMin;
 
     // Saturation = max - min / max
     if( nBri > 0 )
@@ -214,14 +214,14 @@ void Color::RGBtoHSB( USHORT& nHue, USHORT& nSat, USHORT& nBri ) const
         if( dHue < 0.0 )
             dHue += 360.0;
 
-        nHue = (UINT16) dHue;
+        nHue = (sal_uInt16) dHue;
     }
 }
 
-ColorData Color::HSBtoRGB( USHORT nHue, USHORT nSat, USHORT nBri )
+ColorData Color::HSBtoRGB( sal_uInt16 nHue, sal_uInt16 nSat, sal_uInt16 nBri )
 {
-    UINT8 cR=0,cG=0,cB=0;
-    UINT8 nB = (UINT8) ( nBri * 255 / 100 );
+    sal_uInt8 cR=0,cG=0,cB=0;
+    sal_uInt8 nB = (sal_uInt8) ( nBri * 255 / 100 );
 
     if( nSat == 0 )
     {
@@ -233,17 +233,17 @@ ColorData Color::HSBtoRGB( USHORT nHue, USHORT nSat, USHORT nBri )
     {
         double dH = nHue;
         double f;
-        UINT16 n;
+        sal_uInt16 n;
         if( dH == 360.0 )
             dH = 0.0;
 
         dH /= 60.0;
-        n = (UINT16) dH;
+        n = (sal_uInt16) dH;
         f = dH - n;
 
-        UINT8 a = (UINT8) ( nB * ( 100 - nSat ) / 100 );
-        UINT8 b = (UINT8) ( nB * ( 100 - ( (double)nSat * f + 0.5 ) ) / 100 );
-        UINT8 c = (UINT8) ( nB * ( 100 - ( (double)nSat * ( 1.0 - f ) + 0.5 ) ) / 100 );
+        sal_uInt8 a = (sal_uInt8) ( nB * ( 100 - nSat ) / 100 );
+        sal_uInt8 b = (sal_uInt8) ( nB * ( 100 - ( (double)nSat * f ) ) / 100 );
+        sal_uInt8 c = (sal_uInt8) ( nB * ( 100 - ( (double)nSat * ( 1.0 - f ) ) ) / 100 );
 
         switch( n )
         {
@@ -261,7 +261,7 @@ ColorData Color::HSBtoRGB( USHORT nHue, USHORT nSat, USHORT nBri )
 
 // -----------------------------------------------------------------------
 
-SvStream& Color::Read( SvStream& rIStm, BOOL bNewFormat )
+SvStream& Color::Read( SvStream& rIStm, sal_Bool bNewFormat )
 {
     if ( bNewFormat )
         rIStm >> mnColor;
@@ -273,7 +273,7 @@ SvStream& Color::Read( SvStream& rIStm, BOOL bNewFormat )
 
 // -----------------------------------------------------------------------
 
-SvStream& Color::Write( SvStream& rOStm, BOOL bNewFormat )
+SvStream& Color::Write( SvStream& rOStm, sal_Bool bNewFormat )
 {
     if ( bNewFormat )
         rOStm << mnColor;
@@ -285,13 +285,13 @@ SvStream& Color::Write( SvStream& rOStm, BOOL bNewFormat )
 
 // -----------------------------------------------------------------------
 
-#define COL_NAME_USER       ((USHORT)0x8000)
-#define COL_RED_1B          ((USHORT)0x0001)
-#define COL_RED_2B          ((USHORT)0x0002)
-#define COL_GREEN_1B        ((USHORT)0x0010)
-#define COL_GREEN_2B        ((USHORT)0x0020)
-#define COL_BLUE_1B         ((USHORT)0x0100)
-#define COL_BLUE_2B         ((USHORT)0x0200)
+#define COL_NAME_USER       ((sal_uInt16)0x8000)
+#define COL_RED_1B          ((sal_uInt16)0x0001)
+#define COL_RED_2B          ((sal_uInt16)0x0002)
+#define COL_GREEN_1B        ((sal_uInt16)0x0010)
+#define COL_GREEN_2B        ((sal_uInt16)0x0020)
+#define COL_BLUE_1B         ((sal_uInt16)0x0100)
+#define COL_BLUE_2B         ((sal_uInt16)0x0200)
 
 // -----------------------------------------------------------------------
 
@@ -299,10 +299,10 @@ SvStream& operator>>( SvStream& rIStream, Color& rColor )
 {
     DBG_ASSERTWARNING( rIStream.GetVersion(), "Color::>> - Solar-Version not set on rIStream" );
 
-    USHORT      nColorName;
-    USHORT      nRed;
-    USHORT      nGreen;
-    USHORT      nBlue;
+    sal_uInt16      nColorName;
+    sal_uInt16      nRed;
+    sal_uInt16      nGreen;
+    sal_uInt16      nBlue;
 
     rIStream >> nColorName;
 
@@ -311,7 +311,7 @@ SvStream& operator>>( SvStream& rIStream, Color& rColor )
         if ( rIStream.GetCompressMode() == COMPRESSMODE_FULL )
         {
             unsigned char   cAry[6];
-            USHORT          i = 0;
+            sal_uInt16          i = 0;
 
             nRed    = 0;
             nGreen  = 0;
@@ -437,10 +437,10 @@ SvStream& operator<<( SvStream& rOStream, const Color& rColor )
 {
     DBG_ASSERTWARNING( rOStream.GetVersion(), "Color::<< - Solar-Version not set on rOStream" );
 
-    USHORT nColorName   = COL_NAME_USER;
-    USHORT nRed         = rColor.GetRed();
-    USHORT nGreen       = rColor.GetGreen();
-    USHORT nBlue        = rColor.GetBlue();
+    sal_uInt16 nColorName   = COL_NAME_USER;
+    sal_uInt16 nRed         = rColor.GetRed();
+    sal_uInt16 nGreen       = rColor.GetGreen();
+    sal_uInt16 nBlue        = rColor.GetBlue();
     nRed    = (nRed<<8) + nRed;
     nGreen  = (nGreen<<8) + nGreen;
     nBlue   = (nBlue<<8) + nBlue;
@@ -448,7 +448,7 @@ SvStream& operator<<( SvStream& rOStream, const Color& rColor )
     if ( rOStream.GetCompressMode() == COMPRESSMODE_FULL )
     {
         unsigned char   cAry[6];
-        USHORT          i = 0;
+        sal_uInt16          i = 0;
 
         if ( nRed & 0x00FF )
         {

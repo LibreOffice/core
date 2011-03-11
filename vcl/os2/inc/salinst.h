@@ -85,12 +85,9 @@ public:
     virtual osl::SolarMutex*    GetYieldMutex();
     virtual ULONG               ReleaseYieldMutex();
     virtual void                AcquireYieldMutex( ULONG nCount );
+    virtual bool                CheckYieldMutex();
     virtual void                Yield( bool, bool );
     virtual bool                AnyInput( USHORT nType );
-    virtual SalMenu*                CreateMenu( BOOL bMenuBar );
-    virtual void                DestroyMenu( SalMenu* );
-    virtual SalMenuItem*            CreateMenuItem( const SalItemParams* pItemData );
-    virtual void                DestroyMenuItem( SalMenuItem* );
     virtual SalSession*                         CreateSalSession();
     virtual void*               GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes );
     virtual void                AddToRecentDocumentList(const rtl::OUString& rFileUrl, const rtl::OUString& rMimeType);

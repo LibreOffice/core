@@ -81,26 +81,26 @@ void CppDep::Execute()
     }
 }
 
-BOOL CppDep::AddSearchPath( const char* aPath )
+sal_Bool CppDep::AddSearchPath( const char* aPath )
 {
     ByteString *pStr = new ByteString( aPath );
     pSearchPath->push_back( pStr );
-    return FALSE;
+    return sal_False;
 }
 
-BOOL CppDep::AddSource( const char* aSource )
+sal_Bool CppDep::AddSource( const char* aSource )
 {
     ByteString *pStr = new ByteString( aSource );
     pSources->push_back( pStr );
-    return FALSE;
+    return sal_False;
 }
 
-BOOL CppDep::Search( ByteString aFileName )
+sal_Bool CppDep::Search( ByteString aFileName )
 {
 #ifdef DEBUG_VERBOSE
     fprintf( stderr, "SEARCH : %s\n", aFileName.GetBuffer());
 #endif
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
 
     SvFileStream aFile;
     ByteString aReadLine;
@@ -110,7 +110,7 @@ BOOL CppDep::Search( ByteString aFileName )
     aFile.Open( suFileName, STREAM_READ );
     while ( aFile.ReadLine( aReadLine ))
     {
-        USHORT nPos = aReadLine.Search( "include" );
+        sal_uInt16 nPos = aReadLine.Search( "include" );
         if ( nPos != STRING_NOTFOUND  )
         {
 #ifdef DEBUG_VERBOSE
@@ -125,13 +125,13 @@ BOOL CppDep::Search( ByteString aFileName )
             if ( aResult !="")
             if ( (aNewFile = Exists( aResult )) != "" )
             {
-                BOOL bFound = FALSE;
+                sal_Bool bFound = sal_False;
                 size_t nCount = pFileList->size();
                 for ( size_t i = 0; i < nCount; i++ )
                 {
                     ByteString *pStr = (*pFileList)[ i ];
                     if ( *pStr == aNewFile )
-                        bFound = TRUE;
+                        bFound = sal_True;
                 }
 #ifdef DEBUG_VERBOSE
                 fprintf( stderr, "not in list : %d %s\n", nPos, aReadLine.GetBuffer() );
@@ -227,7 +227,7 @@ ByteString CppDep::IsIncludeStatement( ByteString aLine )
     if ( aTmpStr.Equals("#include") )
     {
         aTmpStr = aLine.Erase( 0, 8 );
-        USHORT nLen = aLine.Len();
+        sal_uInt16 nLen = aLine.Len();
         aLine.Erase( nLen-1, 1 );
         aLine.Erase( 0, 1 );
 #ifdef DEBUG_VERBOSE

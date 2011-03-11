@@ -79,6 +79,18 @@ GlyphCache::~GlyphCache()
 
 void GlyphCache::InvalidateAllGlyphs()
 {
+    // an application about to exit can omit garbage collecting the heap
+    // since it makes things slower and introduces risks if the heap was not perfect
+    // for debugging, for memory grinding or leak checking the env allows to force GC
+    const char* pEnv = getenv( "SAL_FORCE_GC_ON_EXIT" );
+    if( pEnv && (*pEnv != '0') )
+    {
+        // uncache of all glyph shapes and metrics
+        for( FontList::iterator it = maFontList.begin(); it != maFontList.end(); ++it )
+            delete const_cast<ServerFont*>( it->second );
+        maFontList.clear();
+        mpCurrentGCFont = NULL;
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -283,9 +295,9 @@ void GlyphCache::UncacheFont( ServerFont& rServerFont )
 
 // -----------------------------------------------------------------------
 
-ULONG GlyphCache::CalcByteCount() const
+sal_uLong GlyphCache::CalcByteCount() const
 {
-    ULONG nCacheSize = sizeof(*this);
+    sal_uLong nCacheSize = sizeof(*this);
     for( FontList::const_iterator it = maFontList.begin(); it != maFontList.end(); ++it )
     {
         const ServerFont* pSF = it->second;

@@ -37,14 +37,14 @@ int _cdecl main( int argc, char *argv[] )
     }
 
     ByteString sLine;
-    BOOL bFirst = TRUE;
+    sal_Bool bFirst = sal_True;
     while ( !aInput.IsEof()) {
         aInput.ReadLine( sLine );
         ByteString sLangId = sLine.GetToken( 0, '\t' );
         ByteString sFile = sLine.GetToken( 1, '\t' );
         ByteString sText = sLine.Copy( sLangId.Len() + sFile.Len() + 2 );
 
-        USHORT nLangId = sLangId.ToInt32();
+        sal_uInt16 nLangId = sLangId.ToInt32();
         CharSet aCharSet = Export::GetCharSet( nLangId );
         if ( aCharSet != 0xFFFF && sText.Len()) {
             sText = UTF8Converter::ConvertToUTF8( sText, aCharSet );
@@ -56,7 +56,7 @@ int _cdecl main( int argc, char *argv[] )
                 aOutput.WriteLine( sEmpty );
             }
             else
-                bFirst = FALSE;
+                bFirst = sal_False;
             aOutput.Write( sOutput.GetBuffer(), sOutput.Len());
         }
     }

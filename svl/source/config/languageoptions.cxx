@@ -203,7 +203,7 @@ sal_uInt16 SvtLanguageOptions::GetScriptTypeOfLanguage( sal_uInt16 nLang )
         nLang = SvtSysLocale().GetLanguage();
 
     sal_Int16 nScriptType = MsLangId::getScriptType( nLang );
-    USHORT nScript;
+    sal_uInt16 nScript;
     switch (nScriptType)
     {
         case ::com::sun::star::i18n::ScriptType::ASIAN:

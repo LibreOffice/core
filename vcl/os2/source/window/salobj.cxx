@@ -551,3 +551,9 @@ const SystemChildData* Os2SalObject::GetSystemData() const
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+// -----------------------------------------------------------------------
+
+void Os2SalObject::InterceptChildWindowKeyDown( sal_Bool /*bIntercept*/ )
+{
+}
+

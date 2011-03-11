@@ -31,157 +31,14 @@
 
 #include <sal/types.h>
 #include <tools/solar.h>
-
-// ---------------
-// - Window-Bits -
-// ---------------
-
-// from vcl/inc/wintypes.hxx
-typedef sal_Int64 WinBits;
-
-// Window-Bits fuer Window
-#define WB_CLIPCHILDREN         ((WinBits)0x00000001)
-#define WB_DIALOGCONTROL        ((WinBits)0x00000002)
-#define WB_NODIALOGCONTROL      ((WinBits)0x00000004)
-#define WB_BORDER               ((WinBits)0x00000008)
-#define WB_NOBORDER             ((WinBits)0x00000010)
-#define WB_SIZEABLE             ((WinBits)0x00000020)
-#define WB_3DLOOK               ((WinBits)0x00000040)
-#define WB_AUTOSIZE             ((WinBits)0x00000080)
-
-// Window-Bits fuer SystemWindows
-#define WB_MOVEABLE             ((WinBits)0x00000100)
-#define WB_ROLLABLE             ((WinBits)0x00000200)
-#define WB_CLOSEABLE            ((WinBits)0x00000400)
-#define WB_STANDALONE           ((WinBits)0x00000800)
-#define WB_APP                  ((WinBits)0x00001000)
-#define WB_PINABLE              ((WinBits)0x00002000)
-#define WB_SYSTEMWINDOW         ((WinBits)0x40000000)
-#define WB_SIZEMOVE             (WB_SIZEABLE | WB_MOVEABLE)
-
-// Standard-Window-Bits fuer ChildWindows
-#define WB_TABSTOP              ((WinBits)0x00000100)
-#define WB_NOTABSTOP            ((WinBits)0x00000200)
-#define WB_GROUP                ((WinBits)0x00000400)
-#define WB_NOGROUP              ((WinBits)0x00000800)
-#define WB_HORZ                 ((WinBits)0x00001000)
-#define WB_VERT                 ((WinBits)0x00002000)
-#define WB_LEFT                 ((WinBits)0x00004000)
-#define WB_CENTER               ((WinBits)0x00008000)
-#define WB_RIGHT                ((WinBits)0x00010000)
-#define WB_TOP                  ((WinBits)0x00020000)
-#define WB_VCENTER              ((WinBits)0x00040000)
-#define WB_BOTTOM               ((WinBits)0x00080000)
-#define WB_DRAG                 ((WinBits)0x00100000)
-#define WB_SPIN                 ((WinBits)0x00200000)
-#define WB_REPEAT               ((WinBits)0x00400000)
-#define WB_NOPOINTERFOCUS       ((WinBits)0x00800000)
-#define WB_WORDBREAK            ((WinBits)0x01000000)
-#define WB_NOLABEL              ((WinBits)0x02000000)
-#define WB_SORT                 ((WinBits)0x04000000)
-#define WB_DROPDOWN             ((WinBits)0x08000000)
-#define WB_AUTOHSCROLL          ((WinBits)0x10000000)
-#define WB_DOCKABLE             ((WinBits)0x20000000)
-#define WB_AUTOVSCROLL          ((WinBits)0x40000000)
-
-#define WB_HIDE                 ((WinBits)0x80000000)
+#include <tools/wintypes.hxx>
+#include <tools/fldunit.hxx>
+#include <tools/mapunit.hxx>
 
 // system floating window
 #define WB_POPUP                ((WinBits)0x20000000)
 
-#define WB_HSCROLL              WB_HORZ
-#define WB_VSCROLL              WB_VERT
-#define WB_TOPIMAGE             WB_TOP
-
-// Window-Bits for PushButtons
-#define WB_DEFBUTTON            ((WinBits)0x10000000)
-#define WB_NOLIGHTBORDER        ((WinBits)0x20000000)
-#define WB_RECTSTYLE            ((WinBits)0x08000000)
-#define WB_SMALLSTYLE           ((WinBits)0x04000000)
-
-// Window-Bits for FixedText
-#define WB_INFO                 ((WinBits)0x20000000)
-#define WB_PATHELLIPSIS         ((WinBits)0x00100000)
-
-// Window-Bits for Edit
-#define WB_PASSWORD             ((WinBits)0x01000000)
-#define WB_READONLY             ((WinBits)0x02000000)
-#define WB_NOHIDESELECTION      ((WinBits)SAL_CONST_INT64(0x1000000000))
-
-// Window-Bits for MultiLineEdit
-#define WB_IGNORETAB            ((WinBits)0x20000000)
-
-// Window-Bits for ListBox and MultiListBox
-#define WB_SIMPLEMODE           ((WinBits)0x20000000)
-
-// Window-Bits for FixedBitmap
-#define WB_FAST                 ((WinBits)0x04000000)
-#define WB_SCALE                ((WinBits)0x08000000)
-#define WB_TOPLEFTVISIBLE       ((WinBits)0x10000000)
-
-// Window-Bits for ToolBox
-#define WB_LINESPACING          ((WinBits)0x01000000)
-#define WB_SCROLL               ((WinBits)0x02000000)
-
-// Window-Bits for TabControl
-#define WB_SINGLELINE           ((WinBits)0x02000000)
-
-// Window-Bits for DockingWindows
-#define WB_DOCKBORDER           ((WinBits)0x00001000)
-
-// Window-Bits for SplitWindow
-#define WB_NOSPLITDRAW          ((WinBits)0x01000000)
-#define WB_FLATSPLITDRAW        ((WinBits)0x02000000)
-
-// Window-Bits for MessageBoxen
-#define WB_OK                   ((WinBits)0x00100000)
-#define WB_OK_CANCEL            ((WinBits)0x00200000)
-#define WB_YES_NO               ((WinBits)0x00400000)
-#define WB_YES_NO_CANCEL        ((WinBits)0x00800000)
-#define WB_RETRY_CANCEL         ((WinBits)0x01000000)
-#define WB_DEF_OK               ((WinBits)0x02000000)
-#define WB_DEF_CANCEL           ((WinBits)0x04000000)
-#define WB_DEF_RETRY            ((WinBits)0x08000000)
-#define WB_DEF_YES              ((WinBits)0x10000000)
-#define WB_DEF_NO               ((WinBits)0x20000000)
-#define WB_ABORT_RETRY_IGNORE  ((WinBits)SAL_CONST_INT64(0x1000000000))
-#define WB_DEF_IGNORE          ((WinBits)SAL_CONST_INT64(0x2000000000))
-
-// Standard-WinBits
-#define WB_STDWORK              (WB_SIZEMOVE | WB_CLOSEABLE)
-#define WB_STDMDI               (WB_CLOSEABLE)
-#define WB_STDDOCKWIN           (WB_DOCKABLE | WB_MOVEABLE | WB_CLOSEABLE)
-#define WB_STDFLOATWIN          (WB_SIZEMOVE | WB_CLOSEABLE | WB_ROLLABLE)
-#define WB_STDDIALOG            (WB_MOVEABLE | WB_CLOSEABLE)
-#define WB_STDMODELESS          (WB_STDDIALOG)
-#define WB_STDMODAL             (WB_STDDIALOG)
-#define WB_STDTABDIALOG         (WB_STDDIALOG)
-#define WB_STDTABCONTROL        0
 #define WB_STDPOPUP             (WB_BORDER | WB_POPUP | WB_SYSTEMWINDOW | WB_3DLOOK | WB_DIALOGCONTROL)
-
-// For TreeListBox
-#define WB_HASBUTTONS           ((WinBits)0x00800000)
-#define WB_HASLINES             ((WinBits)0x01000000)
-#define WB_HASLINESATROOT       ((WinBits)0x02000000)
-
-// --------------
-// - Help-Types -
-// --------------
-
-// from vcl/inc/help.hxx
-#define OOO_HELP_INDEX          ((ULONG)0xFFFFFFFF)
-#define OOO_HELP_HELPONHELP     ((ULONG)0xFFFFFFFE)
-
-// --------------
-// - FieldTypes -
-// --------------
-
-// from vcl/inc/fldunit.hxx
-enum FieldUnit { FUNIT_NONE, FUNIT_MM, FUNIT_CM, FUNIT_M, FUNIT_KM,
-                 FUNIT_TWIP, FUNIT_POINT, FUNIT_PICA,
-                 FUNIT_INCH, FUNIT_FOOT, FUNIT_MILE, FUNIT_CHAR, FUNIT_LINE, FUNIT_CUSTOM,
-                 FUNIT_PERCENT, FUNIT_100TH_MM };
-
 
 // from vcl/inc/vclenum.hxx
 #ifndef ENUM_TIMEFIELDFORMAT_DECLARED
@@ -221,25 +78,6 @@ enum KeyFuncType { KEYFUNC_DONTKNOW, KEYFUNC_NEW, KEYFUNC_OPEN, KEYFUNC_SAVE,
 
 #endif
 
-// ------------
-// - TriState -
-// ------------
-
-// from vcl/inc/wintypes.hxx
-enum TriState { STATE_NOCHECK, STATE_CHECK, STATE_DONTKNOW };
-
-// -----------------
-// - MapMode-Types -
-// -----------------
-
-// from vcl/inc/mapmod.hxx
-enum MapUnit { MAP_100TH_MM, MAP_10TH_MM, MAP_MM, MAP_CM,
-               MAP_1000TH_INCH, MAP_100TH_INCH, MAP_10TH_INCH, MAP_INCH,
-               MAP_POINT, MAP_TWIP, MAP_PIXEL, MAP_SYSFONT, MAP_APPFONT,
-               MAP_RELATIVE, MAP_REALAPPFONT };
-
-// Das Resourcesystem benutzt den Wert 0xFFFF (freihalten)
-
 
 // --------------------------
 // - Bits fuer ToolBoxItems -
@@ -275,14 +113,6 @@ typedef sal_uInt16 WindowBorderStyle;
 #define WINDOW_BORDER_DOUBLEOUT         ((WindowBorderStyle)0x0008)
 #define WINDOW_BORDER_MENU              ((WindowBorderStyle)0x0010)
 #define WINDOW_BORDER_NOBORDER          ((WindowBorderStyle)0x1000)
-
-// ---------------
-// - WindowAlign -
-// ---------------
-
-// from vcl/inc/wintypes.hxx
-enum WindowAlign { WINDOWALIGN_LEFT, WINDOWALIGN_TOP, WINDOWALIGN_RIGHT, WINDOWALIGN_BOTTOM };
-enum ImageAlign { IMAGEALIGN_LEFT, IMAGEALIGN_TOP, IMAGEALIGN_RIGHT, IMAGEALIGN_BOTTOM };
 
 // --------------
 // - Menu-Types -
@@ -342,9 +172,6 @@ typedef sal_uInt16 SymbolType;
 #define SYMBOL_DOCK             ((SymbolType)32)
 #define SYMBOL_HIDE             ((SymbolType)33)
 #define SYMBOL_HELP             ((SymbolType)34)
-#define SYMBOL_OS2CLOSE         ((SymbolType)35)
-#define SYMBOL_OS2FLOAT         ((SymbolType)36)
-#define SYMBOL_OS2HIDE          ((SymbolType)37)
 
 #define SYMBOL_NOSYMBOL         (SYMBOL_DONTKNOW)
 

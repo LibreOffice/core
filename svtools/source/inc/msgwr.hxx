@@ -30,9 +30,9 @@
 #define _MSGWR_HXX
 
 
-BOOL ConvertGraphicToMSG(const Graphic & rGraphic, SvStream & rTargetStream,
-                         BOOL(*pCallback)(void *, USHORT), void * pCallerData,
-                         ULONG nMinPercent, ULONG nMaxPercent);
+sal_Bool ConvertGraphicToMSG(const Graphic & rGraphic, SvStream & rTargetStream,
+                         sal_Bool(*pCallback)(void *, sal_uInt16), void * pCallerData,
+                         sal_uLong nMinPercent, sal_uLong nMaxPercent);
 
 
 #endif // _MSGWR_HXX

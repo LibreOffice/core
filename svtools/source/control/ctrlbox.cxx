@@ -39,8 +39,8 @@
 
 #include <svtools/svtdata.hxx>
 #include <svtools/svtools.hrc>
-#include <ctrlbox.hxx>
-#include <ctrltool.hxx>
+#include <svtools/ctrlbox.hxx>
+#include <svtools/ctrltool.hxx>
 #include <borderhelper.hxx>
 
 #include <vcl/i18nhelp.hxx>
@@ -66,10 +66,10 @@ using namespace ::com::sun::star;
 struct ImplColorListData
 {
     Color       aColor;
-    BOOL        bColor;
+    sal_Bool        bColor;
 
-                ImplColorListData() : aColor( COL_BLACK ) { bColor = FALSE; }
-                ImplColorListData( const Color& rColor ) : aColor( rColor ) { bColor = TRUE; }
+                ImplColorListData() : aColor( COL_BLACK ) { bColor = sal_False; }
+                ImplColorListData( const Color& rColor ) : aColor( rColor ) { bColor = sal_True; }
 };
 
 // -----------------------------------------------------------------------
@@ -81,7 +81,7 @@ void ColorListBox::ImplInit()
     aImageSize.Height() = GetTextHeight();
     aImageSize.Height() -= 2;
 
-    EnableUserDraw( TRUE );
+    EnableUserDraw( sal_True );
     SetUserItemSize( aImageSize );
 }
 
@@ -120,7 +120,7 @@ ColorListBox::~ColorListBox()
 
 // -----------------------------------------------------------------------
 
-USHORT ColorListBox::InsertEntry( const XubString& rStr, USHORT nPos )
+sal_uInt16 ColorListBox::InsertEntry( const XubString& rStr, sal_uInt16 nPos )
 {
     nPos = ListBox::InsertEntry( rStr, nPos );
     if ( nPos != LISTBOX_ERROR )
@@ -143,8 +143,8 @@ USHORT ColorListBox::InsertEntry( const XubString& rStr, USHORT nPos )
 
 // -----------------------------------------------------------------------
 
-USHORT ColorListBox::InsertEntry( const Color& rColor, const XubString& rStr,
-                                USHORT nPos )
+sal_uInt16 ColorListBox::InsertEntry( const Color& rColor, const XubString& rStr,
+                                sal_uInt16 nPos )
 {
     nPos = ListBox::InsertEntry( rStr, nPos );
     if ( nPos != LISTBOX_ERROR )
@@ -175,7 +175,7 @@ void ColorListBox::InsertAutomaticEntry()
 
 // -----------------------------------------------------------------------
 
-void ColorListBox::RemoveEntry( USHORT nPos )
+void ColorListBox::RemoveEntry( sal_uInt16 nPos )
 {
     ListBox::RemoveEntry( nPos );
     if ( nPos < pColorList->size() )
@@ -207,7 +207,7 @@ void ColorListBox::CopyEntries( const ColorListBox& rBox )
     for ( size_t n = 0; n < nCount; n++ )
     {
         ImplColorListData* pData = (*rBox.pColorList)[ n ];
-        USHORT nPos = InsertEntry( rBox.GetEntry( n ), LISTBOX_APPEND );
+        sal_uInt16 nPos = InsertEntry( rBox.GetEntry( n ), LISTBOX_APPEND );
         if ( nPos != LISTBOX_ERROR )
         {
             if ( nPos < pColorList->size() )
@@ -226,9 +226,9 @@ void ColorListBox::CopyEntries( const ColorListBox& rBox )
 
 // -----------------------------------------------------------------------
 
-USHORT ColorListBox::GetEntryPos( const Color& rColor ) const
+sal_uInt16 ColorListBox::GetEntryPos( const Color& rColor ) const
 {
-    for( USHORT n = (USHORT) pColorList->size(); n; )
+    for( sal_uInt16 n = (sal_uInt16) pColorList->size(); n; )
     {
         ImplColorListData* pData = (*pColorList)[ --n ];
         if ( pData->bColor && ( pData->aColor == rColor ) )
@@ -239,7 +239,7 @@ USHORT ColorListBox::GetEntryPos( const Color& rColor ) const
 
 // -----------------------------------------------------------------------
 
-Color ColorListBox::GetEntryColor( USHORT nPos ) const
+Color ColorListBox::GetEntryColor( sal_uInt16 nPos ) const
 {
     Color aColor;
     ImplColorListData* pData = ( nPos < pColorList->size() ) ? (*pColorList)[ nPos ] : NULL;
@@ -266,13 +266,13 @@ void ColorListBox::UserDraw( const UserDrawEvent& rUDEvt )
             rUDEvt.GetDevice()->SetLineColor( rUDEvt.GetDevice()->GetTextColor() );
             rUDEvt.GetDevice()->DrawRect( Rectangle( aPos, aImageSize ) );
             rUDEvt.GetDevice()->Pop();
-            ListBox::DrawEntry( rUDEvt, FALSE, TRUE, FALSE );
+            ListBox::DrawEntry( rUDEvt, sal_False, sal_True, sal_False );
         }
         else
-            ListBox::DrawEntry( rUDEvt, FALSE, TRUE, TRUE );
+            ListBox::DrawEntry( rUDEvt, sal_False, sal_True, sal_True );
     }
     else
-        ListBox::DrawEntry( rUDEvt, TRUE, TRUE, FALSE );
+        ListBox::DrawEntry( rUDEvt, sal_True, sal_True, sal_False );
 }
 
 // =======================================================================
@@ -539,7 +539,7 @@ LineListBox::~LineListBox()
 
 // -----------------------------------------------------------------------
 
-USHORT LineListBox::InsertEntry( const XubString& rStr, USHORT nPos )
+sal_uInt16 LineListBox::InsertEntry( const XubString& rStr, sal_uInt16 nPos )
 {
     nPos = ListBox::InsertEntry( rStr, nPos );
     if ( nPos != LISTBOX_ERROR ) {
@@ -556,8 +556,8 @@ USHORT LineListBox::InsertEntry( const XubString& rStr, USHORT nPos )
 
 // -----------------------------------------------------------------------
 
-USHORT LineListBox::InsertEntry( long nLine1, long nLine2, long nDistance,
-                                USHORT nStyle, USHORT nPos )
+sal_uInt16 LineListBox::InsertEntry( long nLine1, long nLine2, long nDistance,
+                                sal_uInt16 nStyle, sal_uInt16 nPos )
 {
     XubString   aStr;
     Bitmap      aBmp;
@@ -584,7 +584,7 @@ USHORT LineListBox::InsertEntry( long nLine1, long nLine2, long nDistance,
 
 // -----------------------------------------------------------------------
 
-void LineListBox::RemoveEntry( USHORT nPos )
+void LineListBox::RemoveEntry( sal_uInt16 nPos )
 {
     ListBox::RemoveEntry( nPos );
 
@@ -612,7 +612,7 @@ void LineListBox::Clear()
 
 // -----------------------------------------------------------------------
 
-USHORT LineListBox::GetEntryPos( long nLine1, long nLine2,
+sal_uInt16 LineListBox::GetEntryPos( long nLine1, long nLine2,
                                 long nDistance, USHORT nStyle ) const
 {
     for ( size_t i = 0, n = pLineList->size(); i < n; ++i ) {
@@ -633,7 +633,7 @@ USHORT LineListBox::GetEntryPos( long nLine1, long nLine2,
 
 // -----------------------------------------------------------------------
 
-long LineListBox::GetEntryLine1( USHORT nPos ) const
+long LineListBox::GetEntryLine1( sal_uInt16 nPos ) const
 {
     ImpLineListData* pData = (nPos < pLineList->size()) ? (*pLineList)[ nPos ] : NULL;
     return ( pData ) ? pData->nLine1 : 0;
@@ -641,7 +641,7 @@ long LineListBox::GetEntryLine1( USHORT nPos ) const
 
 // -----------------------------------------------------------------------
 
-long LineListBox::GetEntryLine2( USHORT nPos ) const
+long LineListBox::GetEntryLine2( sal_uInt16 nPos ) const
 {
     ImpLineListData* pData = (nPos < pLineList->size()) ? (*pLineList)[ nPos ] : NULL;
     return ( pData ) ? pData->nLine2 : 0;
@@ -677,7 +677,7 @@ void LineListBox::UpdateLineColors( void )
         Bitmap      aBmp;
 
         // exchange entries which containing lines
-        SetUpdateMode( FALSE );
+        SetUpdateMode( sal_False );
 
         USHORT nSelEntry = GetSelectEntryPos();
         for( size_t n = 0 ; n < nCount ; ++n )
@@ -686,26 +686,25 @@ void LineListBox::UpdateLineColors( void )
             if( pData )
             {
                 // exchange listbox data
-                ListBox::RemoveEntry( USHORT( n ) );
+                ListBox::RemoveEntry( sal_uInt16( n ) );
                 ImpGetLine( pData->nLine1, pData->nLine2, pData->nDistance,
                         pData->nStyle, aBmp, aStr );
-                ListBox::InsertEntry( aStr, aBmp, USHORT( n ) );
             }
         }
 
         if( nSelEntry != LISTBOX_ENTRY_NOTFOUND )
             SelectEntryPos( nSelEntry );
 
-        SetUpdateMode( TRUE );
+        SetUpdateMode( sal_True );
         Invalidate();
     }
 }
 
 // -----------------------------------------------------------------------
 
-BOOL LineListBox::UpdatePaintLineColor( void )
+sal_Bool LineListBox::UpdatePaintLineColor( void )
 {
-    BOOL                    bRet = TRUE;
+    sal_Bool                    bRet = sal_True;
     const StyleSettings&    rSettings = GetSettings().GetStyleSettings();
     Color                   aNewCol( rSettings.GetWindowColor().IsDark()? rSettings.GetLabelTextColor() : aColor );
 
@@ -734,10 +733,10 @@ void LineListBox::DataChanged( const DataChangedEvent& rDCEvt )
 struct ImplFontNameListData
 {
     FontInfo    maInfo;
-    USHORT      mnType;
+    sal_uInt16      mnType;
 
                 ImplFontNameListData( const FontInfo& rInfo,
-                                    USHORT nType ) :
+                                    sal_uInt16 nType ) :
                     maInfo( rInfo ),
                     mnType( nType )
                 {}
@@ -750,8 +749,8 @@ FontNameBox::FontNameBox( Window* pParent, WinBits nWinStyle ) :
 {
     InitBitmaps();
     mpFontList = NULL;
-    mbWYSIWYG = FALSE;
-    mbSymbols = FALSE;
+    mbWYSIWYG = sal_False;
+    mbSymbols = sal_False;
 }
 
 // -------------------------------------------------------------------
@@ -761,8 +760,8 @@ FontNameBox::FontNameBox( Window* pParent, const ResId& rResId ) :
 {
     InitBitmaps();
     mpFontList = NULL;
-    mbWYSIWYG = FALSE;
-    mbSymbols = FALSE;
+    mbWYSIWYG = sal_False;
+    mbSymbols = sal_False;
 }
 
 // -------------------------------------------------------------------
@@ -817,14 +816,14 @@ void FontNameBox::Fill( const FontList* pList )
     mpFontList = new ImplFontList;
 
     // insert fonts
-    USHORT nFontCount = pList->GetFontNameCount();
-    for ( USHORT i = 0; i < nFontCount; i++ )
+    sal_uInt16 nFontCount = pList->GetFontNameCount();
+    for ( sal_uInt16 i = 0; i < nFontCount; i++ )
     {
         const FontInfo& rFontInfo = pList->GetFontName( i );
-        ULONG nIndex = InsertEntry( rFontInfo.GetName() );
+        sal_uLong nIndex = InsertEntry( rFontInfo.GetName() );
         if ( nIndex != LISTBOX_ERROR )
         {
-            USHORT nType = pList->GetFontNameType( i );
+            sal_uInt16 nType = pList->GetFontNameType( i );
             ImplFontNameListData* pData = new ImplFontNameListData( rFontInfo, nType );
             if ( nIndex < mpFontList->size() ) {
                 ImplFontList::iterator it = mpFontList->begin();
@@ -845,7 +844,7 @@ void FontNameBox::Fill( const FontList* pList )
 
 // -------------------------------------------------------------------
 
-void FontNameBox::EnableWYSIWYG( BOOL bEnable )
+void FontNameBox::EnableWYSIWYG( sal_Bool bEnable )
 {
     if ( bEnable != mbWYSIWYG )
     {
@@ -857,7 +856,7 @@ void FontNameBox::EnableWYSIWYG( BOOL bEnable )
 
 // -------------------------------------------------------------------
 
-void FontNameBox::EnableSymbols( BOOL bEnable )
+void FontNameBox::EnableSymbols( sal_Bool bEnable )
 {
     if ( bEnable != mbSymbols )
     {
@@ -1713,7 +1712,7 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
 {
     ImplFontNameListData*   pData = (*mpFontList)[ rUDEvt.GetItemId() ];
     const FontInfo&         rInfo = pData->maInfo;
-    USHORT                  nType = pData->mnType;
+    sal_uInt16                  nType = pData->mnType;
     Point                   aTopLeft = rUDEvt.GetRect().TopLeft();
     long                    nX = aTopLeft.X();
     long                    nH = rUDEvt.GetRect().GetHeight();
@@ -1951,11 +1950,11 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
         }
 
         rUDEvt.GetDevice()->SetFont( aOldFont );
-        DrawEntry( rUDEvt, FALSE, FALSE);   // draw seperator
+        DrawEntry( rUDEvt, sal_False, sal_False);   // draw seperator
     }
     else
     {
-        DrawEntry( rUDEvt, TRUE, TRUE );
+        DrawEntry( rUDEvt, sal_True, sal_True );
     }
 }
 
@@ -2007,12 +2006,12 @@ void FontStyleBox::Modify()
     CharClass   aChrCls( ::comphelper::getProcessServiceFactory(),
                         GetSettings().GetLocale() );
     XubString   aStr = GetText();
-    USHORT      nEntryCount = GetEntryCount();
+    sal_uInt16      nEntryCount = GetEntryCount();
 
     if ( GetEntryPos( aStr ) == COMBOBOX_ENTRY_NOTFOUND )
     {
         aChrCls.toUpper( aStr );
-        for ( USHORT i = 0; i < nEntryCount; i++ )
+        for ( sal_uInt16 i = 0; i < nEntryCount; i++ )
         {
             XubString aEntryText = GetEntry( i );
             aChrCls.toUpper( aEntryText );
@@ -2036,7 +2035,7 @@ void FontStyleBox::Fill( const XubString& rName, const FontList* pList )
     //   else aLastStyle will overwritten
     // store prior selection position and clear box
     XubString aOldText = GetText();
-    USHORT nPos = GetEntryPos( aOldText );
+    sal_uInt16 nPos = GetEntryPos( aOldText );
     Clear();
 
     // does a font with this name already exist?
@@ -2047,11 +2046,11 @@ void FontStyleBox::Fill( const XubString& rName, const FontList* pList )
         FontWeight  eLastWeight = WEIGHT_DONTKNOW;
         FontItalic  eLastItalic = ITALIC_NONE;
         FontWidth   eLastWidth = WIDTH_DONTKNOW;
-        BOOL        bNormal = FALSE;
-        BOOL        bItalic = FALSE;
-        BOOL        bBold = FALSE;
-        BOOL        bBoldItalic = FALSE;
-        BOOL        bInsert = FALSE;
+        sal_Bool        bNormal = sal_False;
+        sal_Bool        bItalic = sal_False;
+        sal_Bool        bBold = sal_False;
+        sal_Bool        bBoldItalic = sal_False;
+        sal_Bool        bInsert = sal_False;
         FontInfo    aInfo;
         while ( hFontInfo )
         {
@@ -2071,16 +2070,16 @@ void FontStyleBox::Fill( const XubString& rName, const FontList* pList )
                 if ( eWeight <= WEIGHT_NORMAL )
                 {
                     if ( eItalic != ITALIC_NONE )
-                        bItalic = TRUE;
+                        bItalic = sal_True;
                     else
-                        bNormal = TRUE;
+                        bNormal = sal_True;
                 }
                 else
                 {
                     if ( eItalic != ITALIC_NONE )
-                        bBoldItalic = TRUE;
+                        bBoldItalic = sal_True;
                     else
-                        bBold = TRUE;
+                        bBold = sal_True;
                 }
 
                 // For wrong StyleNames we replace this with the correct once
@@ -2114,11 +2113,11 @@ void FontStyleBox::Fill( const XubString& rName, const FontList* pList )
             }
 
             if ( !bItalic && (aStyleText == pList->GetItalicStr()) )
-                bItalic = TRUE;
+                bItalic = sal_True;
             else if ( !bBold && (aStyleText == pList->GetBoldStr()) )
-                bBold = TRUE;
+                bBold = sal_True;
             else if ( !bBoldItalic && (aStyleText == pList->GetBoldItalicStr()) )
-                bBoldItalic = TRUE;
+                bBoldItalic = sal_True;
 
             hFontInfo = pList->GetNextFontInfo( hFontInfo );
         }
@@ -2197,15 +2196,15 @@ FontSizeBox::~FontSizeBox()
 
 void FontSizeBox::ImplInit()
 {
-    EnableAutocomplete( FALSE );
+    EnableAutocomplete( sal_False );
 
-    bRelativeMode   = FALSE;
-    bPtRelative     = FALSE;
-    bRelative       = FALSE;
-    bStdSize        = FALSE;
+    bRelativeMode   = sal_False;
+    bPtRelative     = sal_False;
+    bRelative       = sal_False;
+    bStdSize        = sal_False;
     pFontList       = NULL;
 
-    SetShowTrailingZeros( FALSE );
+    SetShowTrailingZeros( sal_False );
     SetDecimalDigits( 1 );
     SetMin( 20 );
     SetMax( 9999 );
@@ -2241,24 +2240,24 @@ void FontSizeBox::Modify()
         XubString aStr = GetText();
         aStr.EraseLeadingChars();
 
-        BOOL bNewMode = bRelative;
-        BOOL bOldPtRelMode = bPtRelative;
+        sal_Bool bNewMode = bRelative;
+        sal_Bool bOldPtRelMode = bPtRelative;
 
         if ( bRelative )
         {
-            bPtRelative = FALSE;
+            bPtRelative = sal_False;
             const xub_Unicode* pStr = aStr.GetBuffer();
             while ( *pStr )
             {
                 if ( ((*pStr < '0') || (*pStr > '9')) && (*pStr != '%') )
                 {
                     if ( ('-' == *pStr || '+' == *pStr) && !bPtRelative )
-                        bPtRelative = TRUE;
+                        bPtRelative = sal_True;
                     else if ( bPtRelative && 'p' == *pStr && 't' == *++pStr )
                         ;
                     else
                     {
-                        bNewMode = FALSE;
+                        bNewMode = sal_False;
                         break;
                     }
                 }
@@ -2269,14 +2268,14 @@ void FontSizeBox::Modify()
         {
             if ( STRING_NOTFOUND != aStr.Search( '%' ) )
             {
-                bNewMode = TRUE;
-                bPtRelative = FALSE;
+                bNewMode = sal_True;
+                bPtRelative = sal_False;
             }
 
             if ( '-' == aStr.GetChar( 0 ) || '+' == aStr.GetChar( 0 ) )
             {
-                bNewMode = TRUE;
-                bPtRelative = TRUE;
+                bNewMode = sal_True;
+                bPtRelative = sal_True;
             }
         }
 
@@ -2317,24 +2316,24 @@ void FontSizeBox::Fill( const FontInfo* pInfo, const FontList* pList )
         // for standard sizes we don't need to bother
         if ( bStdSize && GetEntryCount() && aFontSizeNames.IsEmpty() )
             return;
-        bStdSize = TRUE;
+        bStdSize = sal_True;
     }
     else
-        bStdSize = FALSE;
+        bStdSize = sal_False;
 
     Selection aSelection = GetSelection();
     XubString aStr = GetText();
 
     Clear();
-    USHORT nPos = 0;
+    sal_uInt16 nPos = 0;
 
     if ( !aFontSizeNames.IsEmpty() )
     {
         if ( pAry == pList->GetStdSizeAry() )
         {
             // for scalable fonts all font size names
-            ULONG nCount = aFontSizeNames.Count();
-            for( ULONG i = 0; i < nCount; i++ )
+            sal_uLong nCount = aFontSizeNames.Count();
+            for( sal_uLong i = 0; i < nCount; i++ )
             {
                 String  aSizeName = aFontSizeNames.GetIndexName( i );
                 long    nSize = aFontSizeNames.GetIndexSize( i );
@@ -2377,9 +2376,9 @@ void FontSizeBox::Fill( const FontInfo* pInfo, const FontList* pList )
 
 // -----------------------------------------------------------------------
 
-void FontSizeBox::EnableRelativeMode( USHORT nMin, USHORT nMax, USHORT nStep )
+void FontSizeBox::EnableRelativeMode( sal_uInt16 nMin, sal_uInt16 nMax, sal_uInt16 nStep )
 {
-    bRelativeMode = TRUE;
+    bRelativeMode = sal_True;
     nRelMin       = nMin;
     nRelMax       = nMax;
     nRelStep      = nStep;
@@ -2390,7 +2389,7 @@ void FontSizeBox::EnableRelativeMode( USHORT nMin, USHORT nMax, USHORT nStep )
 
 void FontSizeBox::EnablePtRelativeMode( short nMin, short nMax, short nStep )
 {
-    bRelativeMode = TRUE;
+    bRelativeMode = sal_True;
     nPtRelMin     = nMin;
     nPtRelMax     = nMax;
     nPtRelStep    = nStep;
@@ -2399,7 +2398,7 @@ void FontSizeBox::EnablePtRelativeMode( short nMin, short nMax, short nStep )
 
 // -----------------------------------------------------------------------
 
-void FontSizeBox::SetRelative( BOOL bNewRelative )
+void FontSizeBox::SetRelative( sal_Bool bNewRelative )
 {
     if ( bRelativeMode )
     {
@@ -2409,8 +2408,8 @@ void FontSizeBox::SetRelative( BOOL bNewRelative )
 
         if ( bNewRelative )
         {
-            bRelative = TRUE;
-            bStdSize = FALSE;
+            bRelative = sal_True;
+            bStdSize = sal_False;
 
             if ( bPtRelative )
             {
@@ -2438,7 +2437,7 @@ void FontSizeBox::SetRelative( BOOL bNewRelative )
                 SetUnit( FUNIT_CUSTOM );
 
                 Clear();
-                USHORT i = nRelMin;
+                sal_uInt16 i = nRelMin;
                 while ( i <= nRelMax )
                 {
                     InsertValue( i );
@@ -2448,7 +2447,7 @@ void FontSizeBox::SetRelative( BOOL bNewRelative )
         }
         else
         {
-            bRelative = bPtRelative = FALSE;
+            bRelative = bPtRelative = sal_False;
             SetDecimalDigits( 1 );
             SetMin( 20 );
             SetMax( 9999 );
@@ -2488,7 +2487,7 @@ void FontSizeBox::SetValue( sal_Int64 nNewValue, FieldUnit eInUnit )
             mnLastValue = nTempValue;
             SetText( aName );
             mnFieldValue = mnLastValue;
-            SetEmptyFieldValueData( FALSE );
+            SetEmptyFieldValueData( sal_False );
             return;
         }
     }
@@ -2505,7 +2504,7 @@ void FontSizeBox::SetValue( sal_Int64 nNewValue )
 
 // -----------------------------------------------------------------------
 
-sal_Int64 FontSizeBox::GetValue( USHORT nPos, FieldUnit eOutUnit ) const
+sal_Int64 FontSizeBox::GetValue( sal_uInt16 nPos, FieldUnit eOutUnit ) const
 {
     if ( !bRelative )
     {

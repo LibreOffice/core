@@ -85,6 +85,7 @@ EXCEPTIONSFILES=	$(SLO)$/salmisc.obj 	\
                     $(SLO)$/pdffontcache.obj\
                     $(SLO)$/pdfwriter.obj	\
                     $(SLO)$/pdfwriter_impl.obj	\
+                    $(SLO)$/pdfwriter_impl2.obj	\
                     $(SLO)$/pngread.obj		\
                     $(SLO)$/pngwrite.obj    \
                     $(SLO)$/print.obj		\

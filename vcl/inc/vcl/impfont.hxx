@@ -82,7 +82,7 @@ private:
     FontType            meType;         // used by metrics only
     short               mnOrientation;
     FontKerning         mnKerning;
-    BOOL                mbWordLine:1,
+    sal_Bool                mbWordLine:1,
                         mbOutline:1,
                         mbConfigLookup:1,   // there was a config lookup
                         mbShadow:1,
@@ -108,8 +108,8 @@ private:
     long    mnExtLeading;  // External Leading
     long    mnLineHeight;  // Ascent+Descent+EmphasisMark
     long    mnSlant;       // Slant
-    USHORT  mnMiscFlags;   // Misc Flags
-    UINT32  mnRefCount;    // Reference Counter
+    sal_uInt16  mnMiscFlags;   // Misc Flags
+    sal_uInt32  mnRefCount;    // Reference Counter
 
     enum { DEVICE_FLAG=1, SCALABLE_FLAG=2, LATIN_FLAG=4, CJK_FLAG=8, CTL_FLAG=16 };
 
@@ -175,7 +175,7 @@ public:
 
 class CmapResult;
 
-class VCL_DLLPUBLIC ImplFontCharMap
+class VCL_PLUGIN_PUBLIC ImplFontCharMap
 {
 public:
     explicit             ImplFontCharMap( const CmapResult& );
@@ -197,8 +197,8 @@ public:
     int                 GetIndexFromChar( sal_uInt32 ) const;
     sal_uInt32          GetCharFromIndex( int ) const;
 
-    void                AddReference();
-    void                DeReference();
+    void                AddReference() const;
+    void                DeReference() const;
 
     int                 GetGlyphIndex( sal_uInt32 ) const;
 
@@ -212,27 +212,23 @@ private:
 private:
     const sal_uInt32*   mpRangeCodes;     // pairs of StartCode/(EndCode+1)
     const int*          mpStartGlyphs;    // range-specific mapper to glyphs
-    const USHORT*       mpGlyphIds;       // individual glyphid mappings
+    const sal_uInt16*       mpGlyphIds;       // individual glyphid mappings
     int                 mnRangeCount;
-    int                 mnCharCount;
-    int                 mnRefCount;
+    int                 mnCharCount;      // covered codepoints
+    mutable int         mnRefCount;
 };
 
 // CmapResult is a normalized version of the many CMAP formats
-class
-#ifdef UNX
-    VCL_DLLPUBLIC // vcl-plugins need it
-#endif // UNX
-CmapResult
+class VCL_PLUGIN_PUBLIC CmapResult
 {
 public:
     explicit    CmapResult( bool bSymbolic = false,
                     const sal_uInt32* pRangeCodes = NULL, int nRangeCount = 0,
-                    const int* pStartGlyphs = 0, const USHORT* pGlyphIds = NULL );
+                    const int* pStartGlyphs = 0, const sal_uInt16* pGlyphIds = NULL );
 
     const sal_uInt32* mpRangeCodes;
     const int*        mpStartGlyphs;
-    const USHORT*     mpGlyphIds;
+    const sal_uInt16*     mpGlyphIds;
     int               mnRangeCount;
     bool              mbSymbolic;
     bool              mbRecoded;

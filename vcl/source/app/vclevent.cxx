@@ -41,7 +41,7 @@ TYPEINIT0(VclSimpleEvent);
 TYPEINIT1(VclWindowEvent, VclSimpleEvent);
 TYPEINIT1(VclMenuEvent, VclSimpleEvent);
 
-VclAccessibleEvent::VclAccessibleEvent( ULONG n, const Reference<XAccessible>& rxAccessible ) :
+VclAccessibleEvent::VclAccessibleEvent( sal_uLong n, const Reference<XAccessible>& rxAccessible ) :
     VclSimpleEvent(n),
     mxAccessible(rxAccessible)
 {
@@ -84,12 +84,12 @@ void VclEventListeners::Call( VclSimpleEvent* pEvent ) const
     }
 }
 
-BOOL VclEventListeners::Process( VclSimpleEvent* pEvent ) const
+sal_Bool VclEventListeners::Process( VclSimpleEvent* pEvent ) const
 {
     if ( m_aListeners.empty() )
-        return FALSE;
+        return sal_False;
 
-    BOOL bProcessed = FALSE;
+    sal_Bool bProcessed = sal_False;
     // Copy the list, because this can be destroyed when calling a Link...
     std::list<Link> aCopy( m_aListeners );
     std::list<Link>::iterator aIter( aCopy.begin() );
@@ -97,7 +97,7 @@ BOOL VclEventListeners::Process( VclSimpleEvent* pEvent ) const
     {
         if( (*aIter).Call( pEvent ) != 0 )
         {
-            bProcessed = TRUE;
+            bProcessed = sal_True;
             break;
         }
         aIter++;

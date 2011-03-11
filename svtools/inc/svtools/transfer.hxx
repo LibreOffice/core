@@ -572,11 +572,11 @@ public:
     void                CopyImageMap( const ImageMap& rImgMap );
     void                CopyGraphic( const Graphic& rGrf );
     void                CopyString( const String& rStr );
-    void                CopyString( USHORT nFmt, const String& rStr );
-    void                CopyAny( USHORT nFmt, const ::com::sun::star::uno::Any& rAny );
+    void                CopyString( sal_uInt16 nFmt, const String& rStr );
+    void                CopyAny( sal_uInt16 nFmt, const ::com::sun::star::uno::Any& rAny );
 
-    void                CopyByteString( ULONG nFormatId, const ByteString& rStr );
-    void                CopyAnyData( ULONG nFormatId, const sal_Char* pData, ULONG nLen );
+    void                CopyByteString( sal_uLong nFormatId, const ByteString& rStr );
+    void                CopyAnyData( sal_uLong nFormatId, const sal_Char* pData, sal_uLong nLen );
 
     sal_Bool            HasAnyData() const;
 

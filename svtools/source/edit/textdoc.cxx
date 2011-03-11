@@ -28,7 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
-
 #include <textdoc.hxx>
 
 #include <stdlib.h>
@@ -67,7 +66,7 @@ CompareStart( const void* pFirst, const void* pSecond )
 // -------------------------------------------------------------------------
 // (+) class TextCharAttrib
 // -------------------------------------------------------------------------
-TextCharAttrib::TextCharAttrib( const TextAttrib& rAttr, USHORT nStart, USHORT nEnd )
+TextCharAttrib::TextCharAttrib( const TextAttrib& rAttr, sal_uInt16 nStart, sal_uInt16 nEnd )
 {
     mpAttr = rAttr.Clone();
     mnStart = nStart,
@@ -92,7 +91,7 @@ TextCharAttrib::~TextCharAttrib()
 
 TextCharAttribList::TextCharAttribList()
 {
-    mbHasEmptyAttribs = FALSE;
+    mbHasEmptyAttribs = sal_False;
 }
 
 TextCharAttribList::~TextCharAttribList()
@@ -100,7 +99,7 @@ TextCharAttribList::~TextCharAttribList()
     // PTRARR_DEL
 }
 
-void TextCharAttribList::Clear( BOOL bDestroyAttribs )
+void TextCharAttribList::Clear( sal_Bool bDestroyAttribs )
 {
     if ( bDestroyAttribs )
         TextCharAttribs::DeleteAndDestroy( 0, Count() );
@@ -112,18 +111,18 @@ void TextCharAttribList::Clear( BOOL bDestroyAttribs )
 void TextCharAttribList::InsertAttrib( TextCharAttrib* pAttrib )
 {
     if ( pAttrib->IsEmpty() )
-        mbHasEmptyAttribs = TRUE;
+        mbHasEmptyAttribs = sal_True;
 
-    const USHORT nCount = Count();
-    const USHORT nStart = pAttrib->GetStart(); // vielleicht besser fuer Comp.Opt.
-    BOOL bInserted = FALSE;
-    for ( USHORT x = 0; x < nCount; x++ )
+    const sal_uInt16 nCount = Count();
+    const sal_uInt16 nStart = pAttrib->GetStart(); // vielleicht besser fuer Comp.Opt.
+    sal_Bool bInserted = sal_False;
+    for ( sal_uInt16 x = 0; x < nCount; x++ )
     {
         TextCharAttrib* pCurAttrib = GetObject( x );
         if ( pCurAttrib->GetStart() > nStart )
         {
             Insert( pAttrib, x );
-            bInserted = TRUE;
+            bInserted = sal_True;
             break;
         }
     }
@@ -137,12 +136,12 @@ void TextCharAttribList::ResortAttribs()
         qsort( (void*)GetData(), Count(), sizeof( TextCharAttrib* ), CompareStart );
 }
 
-TextCharAttrib* TextCharAttribList::FindAttrib( USHORT nWhich, USHORT nPos )
+TextCharAttrib* TextCharAttribList::FindAttrib( sal_uInt16 nWhich, sal_uInt16 nPos )
 {
     // Rueckwaerts, falls eins dort endet, das naechste startet.
     // => Das startende gilt...
 
-    for ( USHORT nAttr = Count(); nAttr; )
+    for ( sal_uInt16 nAttr = Count(); nAttr; )
     {
         TextCharAttrib* pAttr = GetObject( --nAttr );
 
@@ -155,11 +154,11 @@ TextCharAttrib* TextCharAttribList::FindAttrib( USHORT nWhich, USHORT nPos )
     return NULL;
 }
 
-TextCharAttrib* TextCharAttribList::FindNextAttrib( USHORT nWhich, USHORT nFromPos, USHORT nMaxPos ) const
+TextCharAttrib* TextCharAttribList::FindNextAttrib( sal_uInt16 nWhich, sal_uInt16 nFromPos, sal_uInt16 nMaxPos ) const
 {
     DBG_ASSERT( nWhich, "FindNextAttrib: Which?" );
-    const USHORT nAttribs = Count();
-    for ( USHORT nAttr = 0; nAttr < nAttribs; nAttr++ )
+    const sal_uInt16 nAttribs = Count();
+    for ( sal_uInt16 nAttr = 0; nAttr < nAttribs; nAttr++ )
     {
         TextCharAttrib* pAttr = GetObject( nAttr );
         if ( ( pAttr->GetStart() >= nFromPos ) &&
@@ -170,41 +169,41 @@ TextCharAttrib* TextCharAttribList::FindNextAttrib( USHORT nWhich, USHORT nFromP
     return NULL;
 }
 
-BOOL TextCharAttribList::HasAttrib( USHORT nWhich ) const
+sal_Bool TextCharAttribList::HasAttrib( sal_uInt16 nWhich ) const
 {
-    for ( USHORT nAttr = Count(); nAttr; )
+    for ( sal_uInt16 nAttr = Count(); nAttr; )
     {
         const TextCharAttrib* pAttr = GetObject( --nAttr );
         if ( pAttr->Which() == nWhich )
-            return TRUE;
+            return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
-BOOL TextCharAttribList::HasBoundingAttrib( USHORT nBound )
+sal_Bool TextCharAttribList::HasBoundingAttrib( sal_uInt16 nBound )
 {
     // Rueckwaerts, falls eins dort endet, das naechste startet.
     // => Das startende gilt...
-    for ( USHORT nAttr = Count(); nAttr; )
+    for ( sal_uInt16 nAttr = Count(); nAttr; )
     {
         TextCharAttrib* pAttr = GetObject( --nAttr );
 
         if ( pAttr->GetEnd() < nBound )
-            return FALSE;
+            return sal_False;
 
         if ( ( pAttr->GetStart() == nBound ) || ( pAttr->GetEnd() == nBound ) )
-            return TRUE;
+            return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
-TextCharAttrib* TextCharAttribList::FindEmptyAttrib( USHORT nWhich, USHORT nPos )
+TextCharAttrib* TextCharAttribList::FindEmptyAttrib( sal_uInt16 nWhich, sal_uInt16 nPos )
 {
     if ( !mbHasEmptyAttribs )
         return 0;
 
-    const USHORT nAttribs = Count();
-    for ( USHORT nAttr = 0; nAttr < nAttribs; nAttr++ )
+    const sal_uInt16 nAttribs = Count();
+    for ( sal_uInt16 nAttr = 0; nAttr < nAttribs; nAttr++ )
     {
         TextCharAttrib* pAttr = GetObject( nAttr );
         if ( pAttr->GetStart() > nPos )
@@ -218,7 +217,7 @@ TextCharAttrib* TextCharAttribList::FindEmptyAttrib( USHORT nWhich, USHORT nPos 
 
 void TextCharAttribList::DeleteEmptyAttribs()
 {
-    for ( USHORT nAttr = 0; nAttr < Count(); nAttr++ )
+    for ( sal_uInt16 nAttr = 0; nAttr < Count(); nAttr++ )
     {
         TextCharAttrib* pAttr = GetObject( nAttr );
         if ( pAttr->IsEmpty() )
@@ -228,19 +227,19 @@ void TextCharAttribList::DeleteEmptyAttribs()
             nAttr--;
         }
     }
-    mbHasEmptyAttribs = FALSE;
+    mbHasEmptyAttribs = sal_False;
 }
 
 #ifdef  DBG_UTIL
-BOOL TextCharAttribList::DbgCheckAttribs()
+sal_Bool TextCharAttribList::DbgCheckAttribs()
 {
-    BOOL bOK = TRUE;
-    for ( USHORT nAttr = 0; nAttr < Count(); nAttr++ )
+    sal_Bool bOK = sal_True;
+    for ( sal_uInt16 nAttr = 0; nAttr < Count(); nAttr++ )
     {
         TextCharAttrib* pAttr = GetObject( nAttr );
         if ( pAttr->GetStart() > pAttr->GetEnd() )
         {
-            bOK = FALSE;
+            bOK = sal_False;
             OSL_FAIL( "Attr verdreht" );
         }
     }
@@ -257,14 +256,14 @@ TextNode::TextNode( const String& rText ) :
 {
 }
 
-void TextNode::ExpandAttribs( USHORT nIndex, USHORT nNew )
+void TextNode::ExpandAttribs( sal_uInt16 nIndex, sal_uInt16 nNew )
 {
     if ( !nNew )
         return;
 
-    BOOL bResort = FALSE;
-    USHORT nAttribs = maCharAttribs.Count();
-    for ( USHORT nAttr = 0; nAttr < nAttribs; nAttr++ )
+    sal_Bool bResort = sal_False;
+    sal_uInt16 nAttribs = maCharAttribs.Count();
+    for ( sal_uInt16 nAttr = 0; nAttr < nAttribs; nAttr++ )
     {
         TextCharAttrib* pAttrib = maCharAttribs.GetAttrib( nAttr );
         if ( pAttrib->GetEnd() >= nIndex )
@@ -295,7 +294,7 @@ void TextNode::ExpandAttribs( USHORT nIndex, USHORT nNew )
                     pAttrib->Expand( nNew );
                 }
                 else
-                    bResort = TRUE;
+                    bResort = sal_True;
             }
             // 2: Attribut startet davor, geht hinter Index...
             else if ( ( pAttrib->GetStart() < nIndex ) && ( pAttrib->GetEnd() > nIndex ) )
@@ -308,7 +307,7 @@ void TextNode::ExpandAttribs( USHORT nIndex, USHORT nNew )
                 if ( nIndex == 0 )
                 {
                     pAttrib->Expand( nNew );
-//                  bResort = TRUE;     // es gibt ja keine Features mehr...
+//                  bResort = sal_True;     // es gibt ja keine Features mehr...
                 }
                 else
                     pAttrib->MoveForward( nNew );
@@ -328,18 +327,18 @@ void TextNode::ExpandAttribs( USHORT nIndex, USHORT nNew )
 #endif
 }
 
-void TextNode::CollapsAttribs( USHORT nIndex, USHORT nDeleted )
+void TextNode::CollapsAttribs( sal_uInt16 nIndex, sal_uInt16 nDeleted )
 {
     if ( !nDeleted )
         return;
 
-    BOOL bResort = FALSE;
-    USHORT nEndChanges = nIndex+nDeleted;
+    sal_Bool bResort = sal_False;
+    sal_uInt16 nEndChanges = nIndex+nDeleted;
 
-    for ( USHORT nAttr = 0; nAttr < maCharAttribs.Count(); nAttr++ )
+    for ( sal_uInt16 nAttr = 0; nAttr < maCharAttribs.Count(); nAttr++ )
     {
         TextCharAttrib* pAttrib = maCharAttribs.GetAttrib( nAttr );
-        BOOL bDelAttr = FALSE;
+        sal_Bool bDelAttr = sal_False;
         if ( pAttrib->GetEnd() >= nIndex )
         {
             // Alles Attribute hinter der Einfuegeposition verschieben...
@@ -355,7 +354,7 @@ void TextNode::CollapsAttribs( USHORT nIndex, USHORT nDeleted )
                 if ( ( pAttrib->GetStart() == nIndex ) && ( pAttrib->GetEnd() == nEndChanges ) )
                     pAttrib->GetEnd() = nIndex; // leer
                 else
-                    bDelAttr = TRUE;
+                    bDelAttr = sal_True;
             }
             // 2. Attribut beginnt davor, endet drinnen oder dahinter...
             else if ( ( pAttrib->GetStart() <= nIndex ) && ( pAttrib->GetEnd() > nIndex ) )
@@ -378,13 +377,13 @@ void TextNode::CollapsAttribs( USHORT nIndex, USHORT nDeleted )
         DBG_ASSERT( ( pAttrib->GetEnd() <= maText.Len()) || bDelAttr, "Collaps: Attrib groesser als Absatz!" );
         if ( bDelAttr /* || pAttrib->IsEmpty() */ )
         {
-            bResort = TRUE;
+            bResort = sal_True;
             maCharAttribs.RemoveAttrib( nAttr );
             delete pAttrib;
             nAttr--;
         }
         else if ( pAttrib->IsEmpty() )
-            maCharAttribs.HasEmptyAttribs() = TRUE;
+            maCharAttribs.HasEmptyAttribs() = sal_True;
     }
 
     if ( bResort )
@@ -395,25 +394,25 @@ void TextNode::CollapsAttribs( USHORT nIndex, USHORT nDeleted )
 #endif
 }
 
-void TextNode::InsertText( USHORT nPos, const String& rText )
+void TextNode::InsertText( sal_uInt16 nPos, const String& rText )
 {
     maText.Insert( rText, nPos );
     ExpandAttribs( nPos, rText.Len() );
 }
 
-void TextNode::InsertText( USHORT nPos, sal_Unicode c )
+void TextNode::InsertText( sal_uInt16 nPos, sal_Unicode c )
 {
     maText.Insert( c, nPos );
     ExpandAttribs( nPos, 1 );
 }
 
-void TextNode::RemoveText( USHORT nPos, USHORT nChars )
+void TextNode::RemoveText( sal_uInt16 nPos, sal_uInt16 nChars )
 {
     maText.Erase( nPos, nChars );
     CollapsAttribs( nPos, nChars );
 }
 
-TextNode* TextNode::Split( USHORT nPos, BOOL bKeepEndingAttribs )
+TextNode* TextNode::Split( sal_uInt16 nPos, sal_Bool bKeepEndingAttribs )
 {
     String aNewText;
     if ( nPos < maText.Len() )
@@ -423,7 +422,7 @@ TextNode* TextNode::Split( USHORT nPos, BOOL bKeepEndingAttribs )
     }
     TextNode* pNew = new TextNode( aNewText );
 
-    for ( USHORT nAttr = 0; nAttr < maCharAttribs.Count(); nAttr++ )
+    for ( sal_uInt16 nAttr = 0; nAttr < maCharAttribs.Count(); nAttr++ )
     {
         TextCharAttrib* pAttrib = maCharAttribs.GetAttrib( nAttr );
         if ( pAttrib->GetEnd() < nPos )
@@ -471,7 +470,7 @@ TextNode* TextNode::Split( USHORT nPos, BOOL bKeepEndingAttribs )
 
 void TextNode::Append( const TextNode& rNode )
 {
-    USHORT nOldLen = maText.Len();
+    sal_uInt16 nOldLen = maText.Len();
 
     maText += rNode.GetText();
 
@@ -479,16 +478,16 @@ void TextNode::Append( const TextNode& rNode )
     DBG_ASSERT( maCharAttribs.DbgCheckAttribs(), "Attribute VOR AppendAttribs kaputt" );
 #endif
 
-    const USHORT nAttribs = rNode.GetCharAttribs().Count();
-    for ( USHORT nAttr = 0; nAttr < nAttribs; nAttr++ )
+    const sal_uInt16 nAttribs = rNode.GetCharAttribs().Count();
+    for ( sal_uInt16 nAttr = 0; nAttr < nAttribs; nAttr++ )
     {
         TextCharAttrib* pAttrib = rNode.GetCharAttribs().GetAttrib( nAttr );
-        BOOL bMelted = FALSE;
+        sal_Bool bMelted = sal_False;
         if ( pAttrib->GetStart() == 0 )
         {
             // Evtl koennen Attribute zusammengefasst werden:
-            USHORT nTmpAttribs = maCharAttribs.Count();
-            for ( USHORT nTmpAttr = 0; nTmpAttr < nTmpAttribs; nTmpAttr++ )
+            sal_uInt16 nTmpAttribs = maCharAttribs.Count();
+            for ( sal_uInt16 nTmpAttr = 0; nTmpAttr < nTmpAttribs; nTmpAttr++ )
             {
                 TextCharAttrib* pTmpAttrib = maCharAttribs.GetAttrib( nTmpAttr );
 
@@ -499,7 +498,7 @@ void TextNode::Append( const TextNode& rNode )
                     {
                         pTmpAttrib->GetEnd() =
                             pTmpAttrib->GetEnd() + pAttrib->GetLen();
-                        bMelted = TRUE;
+                        bMelted = sal_True;
                         break;  // es kann nur eins von der Sorte an der Stelle geben
                     }
                 }
@@ -541,15 +540,15 @@ void TextDoc::Clear()
 
 void TextDoc::DestroyTextNodes()
 {
-    for ( ULONG nNode = 0; nNode < maTextNodes.Count(); nNode++ )
+    for ( sal_uLong nNode = 0; nNode < maTextNodes.Count(); nNode++ )
         delete maTextNodes.GetObject( nNode );
     maTextNodes.clear();
 }
 
 String TextDoc::GetText( const sal_Unicode* pSep ) const
 {
-    ULONG nLen = GetTextLen( pSep );
-    ULONG nNodes = maTextNodes.Count();
+    sal_uLong nLen = GetTextLen( pSep );
+    sal_uLong nNodes = maTextNodes.Count();
 
     if ( nLen > STRING_MAXLEN )
     {
@@ -558,8 +557,8 @@ String TextDoc::GetText( const sal_Unicode* pSep ) const
     }
 
     String aASCIIText;
-    ULONG nLastNode = nNodes-1;
-    for ( ULONG nNode = 0; nNode < nNodes; nNode++ )
+    sal_uLong nLastNode = nNodes-1;
+    for ( sal_uLong nNode = 0; nNode < nNodes; nNode++ )
     {
         TextNode* pNode = maTextNodes.GetObject( nNode );
         String aTmp( pNode->GetText() );
@@ -571,7 +570,7 @@ String TextDoc::GetText( const sal_Unicode* pSep ) const
     return aASCIIText;
 }
 
-XubString TextDoc::GetText( ULONG nPara ) const
+XubString TextDoc::GetText( sal_uLong nPara ) const
 {
     XubString aText;
     TextNode* pNode = ( nPara < maTextNodes.Count() ) ? maTextNodes.GetObject( nPara ) : 0;
@@ -582,26 +581,26 @@ XubString TextDoc::GetText( ULONG nPara ) const
 }
 
 
-ULONG TextDoc::GetTextLen( const xub_Unicode* pSep, const TextSelection* pSel ) const
+sal_uLong TextDoc::GetTextLen( const xub_Unicode* pSep, const TextSelection* pSel ) const
 {
-    ULONG nLen = 0;
-    ULONG nNodes = maTextNodes.Count();
+    sal_uLong nLen = 0;
+    sal_uLong nNodes = maTextNodes.Count();
     if ( nNodes )
     {
-        ULONG nStartNode = 0;
-        ULONG nEndNode = nNodes-1;
+        sal_uLong nStartNode = 0;
+        sal_uLong nEndNode = nNodes-1;
         if ( pSel )
         {
             nStartNode = pSel->GetStart().GetPara();
             nEndNode = pSel->GetEnd().GetPara();
         }
 
-        for ( ULONG nNode = nStartNode; nNode <= nEndNode; nNode++ )
+        for ( sal_uLong nNode = nStartNode; nNode <= nEndNode; nNode++ )
         {
             TextNode* pNode = maTextNodes.GetObject( nNode );
 
-            USHORT nS = 0;
-            ULONG nE = pNode->GetText().Len();
+            sal_uInt16 nS = 0;
+            sal_uLong nE = pNode->GetText().Len();
             if ( pSel && ( nNode == pSel->GetStart().GetPara() ) )
                 nS = pSel->GetStart().GetIndex();
             if ( pSel && ( nNode == pSel->GetEnd().GetPara() ) )
@@ -641,7 +640,7 @@ TextPaM TextDoc::InsertText( const TextPaM& rPaM, const XubString& rStr )
     return aPaM;
 }
 
-TextPaM TextDoc::InsertParaBreak( const TextPaM& rPaM, BOOL bKeepEndingAttribs )
+TextPaM TextDoc::InsertParaBreak( const TextPaM& rPaM, sal_Bool bKeepEndingAttribs )
 {
     TextNode* pNode = maTextNodes.GetObject( rPaM.GetPara() );
     TextNode* pNew = pNode->Split( rPaM.GetIndex(), bKeepEndingAttribs );
@@ -654,20 +653,20 @@ TextPaM TextDoc::InsertParaBreak( const TextPaM& rPaM, BOOL bKeepEndingAttribs )
 
 TextPaM TextDoc::ConnectParagraphs( TextNode* pLeft, TextNode* pRight )
 {
-    USHORT nPrevLen = pLeft->GetText().Len();
+    sal_uInt16 nPrevLen = pLeft->GetText().Len();
     pLeft->Append( *pRight );
 
     // der rechte verschwindet.
-    ULONG nRight = maTextNodes.GetPos( pRight );
+    sal_uLong nRight = maTextNodes.GetPos( pRight );
     maTextNodes.Remove( nRight );
     delete pRight;
 
-    ULONG nLeft = maTextNodes.GetPos( pLeft );
+    sal_uLong nLeft = maTextNodes.GetPos( pLeft );
     TextPaM aPaM( nLeft, nPrevLen );
     return aPaM;
 }
 
-TextPaM TextDoc::RemoveChars( const TextPaM& rPaM, USHORT nChars )
+TextPaM TextDoc::RemoveChars( const TextPaM& rPaM, sal_uInt16 nChars )
 {
     TextNode* pNode = maTextNodes.GetObject( rPaM.GetPara() );
     pNode->RemoveText( rPaM.GetIndex(), nChars );
@@ -675,20 +674,20 @@ TextPaM TextDoc::RemoveChars( const TextPaM& rPaM, USHORT nChars )
     return rPaM;
 }
 
-BOOL TextDoc::IsValidPaM( const TextPaM& rPaM )
+sal_Bool TextDoc::IsValidPaM( const TextPaM& rPaM )
 {
     if ( rPaM.GetPara() >= maTextNodes.Count() )
     {
         OSL_FAIL( "PaM: Para out of range" );
-        return FALSE;
+        return sal_False;
     }
     TextNode * pNode = maTextNodes.GetObject( rPaM.GetPara() );
     if ( rPaM.GetIndex() > pNode->GetText().Len() )
     {
         OSL_FAIL( "PaM: Index out of range" );
-        return FALSE;
+        return sal_False;
     }
-    return TRUE;
+    return sal_True;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

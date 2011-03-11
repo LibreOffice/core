@@ -34,6 +34,8 @@ TARGETTYPE=GUI
 
 ENABLE_EXCEPTIONS=TRUE
 
+my_components = i18npool i18nsearch
+
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	settings.mk
@@ -132,16 +134,18 @@ APP5STDLIBS+=-lsocket
 .ENDIF
 
 .INCLUDE :	target.mk
-.IF "$(L10N_framework)"==""
 
-ALLTAR : $(BIN)$/applicat.rdb
+ALLTAR : $(BIN)/applicat.rdb $(BIN)/types.rdb
 
+$(BIN)/applicat.rdb .ERRREMOVE : $(SOLARENV)/bin/packcomponents.xslt \
+        $(MISC)/applicat.input $(my_components:^"$(SOLARXMLDIR)/":+".component")
+    $(XSLTPROC) --nonet --stringparam prefix $(SOLARXMLDIR)/ -o $@ \
+        $(SOLARENV)/bin/packcomponents.xslt $(MISC)/applicat.input
 
-$(BIN)$/applicat.rdb : makefile.mk $(UNOUCRRDB)
-    rm -f $@
-    $(GNUCOPY) $(UNOUCRRDB) $@
-     cd $(BIN) && \
-         $(REGCOMP) -register -r applicat.rdb \
-             -c i18nsearch.uno$(DLLPOST) \
-             -c i18npool.uno$(DLLPOST)
-.ENDIF
+$(MISC)/applicat.input :
+    echo \
+        '<list>$(my_components:^"<filename>":+".component</filename>")</list>' \
+        > $@
+
+$(BIN)/types.rdb : $(SOLARBINDIR)/types.rdb
+    $(COPY) $< $@

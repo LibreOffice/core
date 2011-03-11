@@ -41,32 +41,32 @@ class SVL_DLLPUBLIC SfxAllEnumItem: public SfxEnumItem
     SvUShorts*              pDisabledValues;
 
 protected:
-    USHORT                  _GetPosByValue( USHORT nValue ) const;
+    sal_uInt16                  _GetPosByValue( sal_uInt16 nValue ) const;
 
 public:
     TYPEINFO();
                             SfxAllEnumItem();
-                            SfxAllEnumItem( USHORT nWhich);
-                            SfxAllEnumItem( USHORT nWhich, USHORT nVal );
-                            SfxAllEnumItem( USHORT nWhich, USHORT nVal, const XubString &rText );
-                            SfxAllEnumItem( USHORT nWhich, SvStream &rStream );
+                            SfxAllEnumItem( sal_uInt16 nWhich);
+                            SfxAllEnumItem( sal_uInt16 nWhich, sal_uInt16 nVal );
+                            SfxAllEnumItem( sal_uInt16 nWhich, sal_uInt16 nVal, const XubString &rText );
+                            SfxAllEnumItem( sal_uInt16 nWhich, SvStream &rStream );
                             SfxAllEnumItem( const SfxAllEnumItem & );
                             ~SfxAllEnumItem();
 
-    void                    InsertValue( USHORT nValue );
-    void                    InsertValue( USHORT nValue, const XubString &rText );
-    void                    RemoveValue( USHORT nValue );
+    void                    InsertValue( sal_uInt16 nValue );
+    void                    InsertValue( sal_uInt16 nValue, const XubString &rText );
+    void                    RemoveValue( sal_uInt16 nValue );
     void                    RemoveAllValues();
 
-    USHORT                  GetPosByValue( USHORT nValue ) const;
+    sal_uInt16                  GetPosByValue( sal_uInt16 nValue ) const;
 
-    virtual USHORT          GetValueCount() const;
-    virtual USHORT          GetValueByPos( USHORT nPos ) const;
-    virtual XubString       GetValueTextByPos( USHORT nPos ) const;
+    virtual sal_uInt16          GetValueCount() const;
+    virtual sal_uInt16          GetValueByPos( sal_uInt16 nPos ) const;
+    virtual XubString       GetValueTextByPos( sal_uInt16 nPos ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*    Create(SvStream &, USHORT nVersion) const;
-    virtual BOOL            IsEnabled( USHORT ) const;
-    void                    DisableValue( USHORT );
+    virtual SfxPoolItem*    Create(SvStream &, sal_uInt16 nVersion) const;
+    virtual sal_Bool            IsEnabled( sal_uInt16 ) const;
+    void                    DisableValue( sal_uInt16 );
 };
 
 #endif

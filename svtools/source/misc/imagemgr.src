@@ -27,11 +27,26 @@
  // includes ******************************************************************
 
 #include <svtools/svtools.hrc>
-#include "imagemgr.hrc"
+#include <svtools/imagemgr.hrc>
 
  // images ********************************************************************
 
 #define X_IMAGE_LIST \
+    IMG_IMPRESS ;           \
+    IMG_CALC ;              \
+    IMG_CALCTEMPLATE ;      \
+    IMG_CHART ;             \
+    IMG_IMPRESSTEMPLATE ;   \
+    IMG_HTML ;              \
+    IMG_MATH ;              \
+    IMG_WRITER ;            \
+    IMG_WRITERTEMPLATE ;    \
+    IMG_MACROLIB ;          \
+    IMG_GLOBAL_DOC ;        \
+    IMG_DRAW ;              \
+    IMG_DRAWTEMPLATE ;      \
+    IMG_NEWFROMTEMPLATE ;   \
+    IMG_DATABASE;           \
     IMG_BITMAP ; \
     IMG_CALC ; \
     IMG_CALCTEMPLATE ; \
@@ -95,7 +110,7 @@ ImageList RID_SVTOOLS_IMAGELIST_BIG
     };
     IdCount =
     {
-        51 ;
+        66 ;
     };
 };
 
@@ -109,7 +124,7 @@ ImageList RID_SVTOOLS_IMAGELIST_SMALL
     };
     IdCount =
     {
-        51;
+        66;
     };
 };
 

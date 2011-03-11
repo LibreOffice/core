@@ -33,13 +33,13 @@
 
 REResourceList :: REResourceList()
 {
-    bVisible  = FALSE;
+    bVisible  = sal_False;
     pParent   = NULL;
 }
 
 REResourceList :: REResourceList( REResourceList* pParentList,
                                   ByteString& rClassName,
-                                  const RscId & rResourceID, BOOL bVis )
+                                  const RscId & rResourceID, sal_Bool bVis )
 {
     pParent    = pParentList;
     aClassName = rClassName;

@@ -449,6 +449,10 @@ typedef struct {
     sal_Int16 script;
 } UBlock2Script;
 
+// for a list of the UBLOCK_... values see:
+// http://icu-project.org/apiref/icu4c/uchar_8h.html
+// where enum UBlockCode is defined.
+// See also http://www.unicode.org/charts/ for general reference
 static UBlock2Script scriptList[] = {
     {UBLOCK_NO_BLOCK, UBLOCK_NO_BLOCK, ScriptType::WEAK},
     {UBLOCK_BASIC_LATIN, UBLOCK_ARMENIAN, ScriptType::LATIN},
@@ -489,6 +493,10 @@ sal_Int16  BreakIteratorImpl::getScriptClass(sal_uInt32 currentChar)
                 nRet = ScriptType::WEAK;
             // workaround for Coptic
             else if ( 0x2C80 <= currentChar && 0x2CE3 >= currentChar)
+                nRet = ScriptType::LATIN;
+            // work-around for ligatures (see http://www.unicode.org/charts/PDF/UFB00.pdf)
+            else if ((0xFB00 <= currentChar && currentChar <= 0xFB06) ||
+                     (0xFB13 <= currentChar && currentChar <= 0xFB17))
                 nRet = ScriptType::LATIN;
             else {
                 UBlockCode block=ublock_getCode(currentChar);

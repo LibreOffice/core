@@ -51,6 +51,7 @@ struct JobData
     int                     m_nColorDepth;
     int                     m_nPSLevel;     // 0: no override, else languaglevel to use
     int                     m_nColorDevice; // 0: no override, -1 grey scale, +1 color
+    int                     m_nPDFDevice;   // 0: PostScript, 1: PDF
     orientation::type       m_eOrientation;
     ::rtl::OUString         m_aPrinterName;
     const PPDParser*        m_pParser;
@@ -65,6 +66,7 @@ struct JobData
             m_nColorDepth( 24 ),
             m_nPSLevel( 0 ),
             m_nColorDevice( 0 ),
+            m_nPDFDevice( 0 ),
             m_eOrientation( orientation::Portrait ),
             m_pParser( NULL ) {}
 
@@ -73,6 +75,8 @@ struct JobData
     JobData( const JobData& rData ) { *this = rData; }
 
     void setCollate( bool bCollate );
+    bool setPaper( int nWidth, int nHeight ); // dimensions in pt
+    bool setPaperBin( int nPaperBin ); // dimensions in pt
 
     // creates a new buffer using new
     // it is up to the user to delete it again

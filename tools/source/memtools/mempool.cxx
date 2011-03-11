@@ -41,7 +41,7 @@
 *************************************************************************/
 
 FixedMemPool::FixedMemPool (
-    USHORT _nTypeSize, USHORT, USHORT)
+    sal_uInt16 _nTypeSize, sal_uInt16, sal_uInt16)
 {
     char name[RTL_CACHE_NAME_LENGTH + 1];
     snprintf (name, sizeof(name), "FixedMemPool_%d", (int)_nTypeSize);

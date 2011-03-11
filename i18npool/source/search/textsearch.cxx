@@ -988,25 +988,6 @@ void SAL_CALL component_getImplementationEnvironment(
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-sal_Bool SAL_CALL component_writeInfo(
-        void* /*_pServiceManager*/, void* _pRegistryKey )
-{
-    if (_pRegistryKey)
-    {
-        ::com::sun::star::registry::XRegistryKey * pRegistryKey =
-            reinterpret_cast< ::com::sun::star::registry::XRegistryKey* >(
-                                _pRegistryKey );
-        ::com::sun::star::uno::Reference<
-                        ::com::sun::star::registry::XRegistryKey > xNewKey;
-
-        xNewKey = pRegistryKey->createKey( getImplementationName_Static() );
-        xNewKey = xNewKey->createKey(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES")) );
-        xNewKey->createKey( getServiceName_Static() );
-    }
-    return sal_True;
-}
-
 void* SAL_CALL component_getFactory( const sal_Char* sImplementationName,
         void* _pServiceManager, void* /*_pRegistryKey*/ )
 {

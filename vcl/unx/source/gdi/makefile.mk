@@ -47,42 +47,25 @@ dummy:
 .ELSE		# "$(GUIBASE)"!="unx"
 
 SLOFILES=	\
-        $(SLO)$/dtint.obj		\
-        $(SLO)$/gcach_xpeer.obj		\
-        $(SLO)$/pspgraphics.obj		\
-        $(SLO)$/salbmp.obj		\
-        $(SLO)$/salcvt.obj		\
-        $(SLO)$/salgdi.obj		\
         $(SLO)$/salgdi2.obj		\
-        $(SLO)$/salgdi3.obj		\
+        $(SLO)$/salbmp.obj		\
+        $(SLO)$/salgdi.obj		\
         $(SLO)$/salvd.obj		\
-        $(SLO)$/xfont.obj		\
-        $(SLO)$/xlfd_attr.obj		\
-        $(SLO)$/xlfd_extd.obj		\
-        $(SLO)$/xlfd_smpl.obj		\
-        $(SLO)$/xrender_peer.obj
+        $(SLO)$/dtint.obj		\
+        $(SLO)$/salcvt.obj		\
+        $(SLO)$/salgdi3.obj		\
+        $(SLO)$/gcach_xpeer.obj		\
+        $(SLO)$/xrender_peer.obj	\
+        $(SLO)$/pspgraphics.obj
         
 EXCEPTIONSFILES=\
-        $(SLO)$/dtint.obj		\
-        $(SLO)$/gcach_xpeer.obj		\
-        $(SLO)$/pspgraphics.obj		\
-        $(SLO)$/salbmp.obj		\
-        $(SLO)$/salcvt.obj		\
         $(SLO)$/salgdi.obj		\
-        $(SLO)$/salgdi2.obj		\
+        $(SLO)$/salbmp.obj		\
         $(SLO)$/salgdi3.obj		\
-        $(SLO)$/salvd.obj		\
-        $(SLO)$/xfont.obj		\
-        $(SLO)$/xlfd_attr.obj		\
-        $(SLO)$/xlfd_extd.obj
+        $(SLO)$/salcvt.obj
 
-.IF "$(USE_XPRINT)" == "TRUE"
-CFLAGS+=-D_USE_PRINT_EXTENSION_=1
-SLOFILES+=$(SLO)$/xprintext.obj
-.ELSE
 SLOFILES+=$(SLO)$/salprnpsp.obj
 EXCEPTIONSFILES+=$(SLO)$/salprnpsp.obj
-.ENDIF
 
 .IF "$(OS)"=="SOLARIS"
 SLOFILES+=$(SLO)$/cdeint.obj

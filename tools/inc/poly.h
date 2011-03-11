@@ -31,7 +31,7 @@
 
 #include <tools/gen.hxx>
 
-#define MAX_64KPOINTS       ((((USHORT)0xFFFF)-32)/sizeof(Point))
+#define MAX_64KPOINTS       ((((sal_uInt16)0xFFFF)-32)/sizeof(Point))
 
 // -------------------
 // - ImplPolygonData -
@@ -40,17 +40,10 @@
 class ImplPolygonData
 {
 public:
-#ifdef WIN
-    Point huge*     mpPointAry;
-    BYTE*           mpFlagAry;
-    GLOBALHANDLE    mhPoints;
-#else
     Point*          mpPointAry;
-    BYTE*           mpFlagAry;
-#endif
-
-    USHORT          mnPoints;
-    ULONG           mnRefCount;
+    sal_uInt8*           mpFlagAry;
+    sal_uInt16          mnPoints;
+    sal_uIntPtr           mnRefCount;
 };
 
 // ---------------
@@ -60,22 +53,22 @@ public:
 class ImplPolygon  : public ImplPolygonData
 {
 public:
-                    ImplPolygon( USHORT nInitSize, BOOL bFlags = FALSE );
-                    ImplPolygon( USHORT nPoints, const Point* pPtAry, const BYTE* pInitFlags = NULL );
+                    ImplPolygon( sal_uInt16 nInitSize, sal_Bool bFlags = sal_False );
+                    ImplPolygon( sal_uInt16 nPoints, const Point* pPtAry, const sal_uInt8* pInitFlags = NULL );
                     ImplPolygon( const ImplPolygon& rImplPoly );
                     ~ImplPolygon();
 
-    void            ImplSetSize( USHORT nSize, BOOL bResize = TRUE );
+    void            ImplSetSize( sal_uInt16 nSize, sal_Bool bResize = sal_True );
     void            ImplCreateFlagArray();
-    void            ImplSplit( USHORT nPos, USHORT nSpace, ImplPolygon* pInitPoly = NULL );
-    void            ImplRemove( USHORT nPos, USHORT nCount );
+    void            ImplSplit( sal_uInt16 nPos, sal_uInt16 nSpace, ImplPolygon* pInitPoly = NULL );
+    void            ImplRemove( sal_uInt16 nPos, sal_uInt16 nCount );
 };
 
 // -------------------
 // - ImplPolyPolygon -
 // -------------------
 
-#define MAX_POLYGONS        ((USHORT)0x3FF0)
+#define MAX_POLYGONS        ((sal_uInt16)0x3FF0)
 
 class Polygon;
 typedef Polygon* SVPPOLYGON;
@@ -84,15 +77,15 @@ class ImplPolyPolygon
 {
 public:
     SVPPOLYGON*     mpPolyAry;
-    ULONG           mnRefCount;
-    USHORT          mnCount;
-    USHORT          mnSize;
-    USHORT          mnResize;
+    sal_uIntPtr           mnRefCount;
+    sal_uInt16          mnCount;
+    sal_uInt16          mnSize;
+    sal_uInt16          mnResize;
 
-                    ImplPolyPolygon( USHORT nInitSize, USHORT nResize )
+                    ImplPolyPolygon( sal_uInt16 nInitSize, sal_uInt16 nResize )
                         { mpPolyAry = NULL; mnCount = 0; mnRefCount = 1;
                           mnSize = nInitSize; mnResize = nResize; }
-                    ImplPolyPolygon( USHORT nInitSize );
+                    ImplPolyPolygon( sal_uInt16 nInitSize );
                     ImplPolyPolygon( const ImplPolyPolygon& rImplPolyPoly );
                     ~ImplPolyPolygon();
 };

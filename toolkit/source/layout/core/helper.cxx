@@ -365,7 +365,7 @@ Window* WidgetFactory::sfx2CreateWindow (VCLXWindow** component, Window* parent,
 
     if (!mSfx2Library)
     {
-        OUString libraryName = ::vcl::unohelper::CreateLibraryName ("sfx", TRUE);
+        OUString libraryName = ::vcl::unohelper::CreateLibraryName ("sfx", sal_True);
         mSfx2Library = osl_loadModuleRelative (&thisModule, libraryName.pData, SAL_LOADMODULE_DEFAULT);
         if (mSfx2Library)
         {

@@ -40,7 +40,7 @@
 void FixedBorder::ImplInit( Window* pParent, WinBits nStyle )
 {
     mnType          = FIXEDBORDER_TYPE_DOUBLEOUT;
-    mbTransparent   = TRUE;
+    mbTransparent   = sal_True;
 
     nStyle = ImplInitStyle( nStyle );
     Control::ImplInit( pParent, nStyle, NULL );
@@ -65,18 +65,18 @@ void FixedBorder::ImplInitSettings()
           !(pParent->GetStyle() & WB_CLIPCHILDREN) ) &&
          !IsControlBackground() && mbTransparent )
     {
-        SetMouseTransparent( TRUE );
-        EnableChildTransparentMode( TRUE );
+        SetMouseTransparent( sal_True );
+        EnableChildTransparentMode( sal_True );
         SetParentClipMode( PARENTCLIPMODE_NOCLIP );
-        SetPaintTransparent( TRUE );
+        SetPaintTransparent( sal_True );
         SetBackground();
     }
     else
     {
-        SetMouseTransparent( FALSE );
-        EnableChildTransparentMode( FALSE );
+        SetMouseTransparent( sal_False );
+        EnableChildTransparentMode( sal_False );
         SetParentClipMode( 0 );
-        SetPaintTransparent( FALSE );
+        SetPaintTransparent( sal_False );
 
         if ( IsControlBackground() )
             SetBackground( GetControlBackground() );
@@ -115,12 +115,12 @@ FixedBorder::~FixedBorder()
 
 // -----------------------------------------------------------------------
 
-void FixedBorder::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
+void FixedBorder::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
                             const Point& rPos, const Size& rSize )
 {
     const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
     Rectangle               aRect( rPos, rSize );
-    USHORT                  nBorderStyle = mnType;
+    sal_uInt16                  nBorderStyle = mnType;
 
     if ( (nDrawFlags & WINDOW_DRAW_MONO) ||
          (rStyleSettings.GetOptions() & STYLE_OPTION_MONO) )
@@ -158,7 +158,7 @@ void FixedBorder::Paint( const Rectangle& )
 // -----------------------------------------------------------------------
 
 void FixedBorder::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
-                        ULONG nFlags )
+                        sal_uLong nFlags )
 {
     Point   aPos  = pDev->LogicToPixel( rPos );
     Size    aSize = pDev->LogicToPixel( rSize );
@@ -213,7 +213,7 @@ void FixedBorder::DataChanged( const DataChangedEvent& rDCEvt )
 
 // -----------------------------------------------------------------------
 
-void FixedBorder::SetTransparent( BOOL bTransparent )
+void FixedBorder::SetTransparent( sal_Bool bTransparent )
 {
     if ( mbTransparent != bTransparent )
     {
@@ -225,7 +225,7 @@ void FixedBorder::SetTransparent( BOOL bTransparent )
 
 // -----------------------------------------------------------------------
 
-void FixedBorder::SetBorderType( USHORT nType )
+void FixedBorder::SetBorderType( sal_uInt16 nType )
 {
     if ( mnType != nType )
     {

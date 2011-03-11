@@ -66,13 +66,13 @@ class XBMReader : public GraphicReader
     long                nLastPos;
     long                nWidth;
     long                nHeight;
-    BOOL                bStatus;
+    sal_Bool                bStatus;
 
     void                InitTable();
     ByteString          FindTokenLine( SvStream* pInStm, const char* pTok1,
                                        const char* pTok2 = NULL, const char* pTok3 = NULL );
     long                ParseDefine( const sal_Char* pDefine );
-    BOOL                ParseData( SvStream* pInStm, const ByteString& aLastLine, XBMFormat eFormat );
+    sal_Bool                ParseData( SvStream* pInStm, const ByteString& aLastLine, XBMFormat eFormat );
 
 
 public:
@@ -89,7 +89,7 @@ public:
 // - ImportXBM -
 // -------------
 
-BOOL ImportXBM( SvStream& rStream, Graphic& rGraphic );
+sal_Bool ImportXBM( SvStream& rStream, Graphic& rGraphic );
 
 #endif // _XBMREAD_HXX
 

@@ -135,7 +135,7 @@ void KDEXLib::Init()
             "http://artax.karlin.mff.cuni.cz/~kendy" );
 
     m_nFakeCmdLineArgs = 1;
-    USHORT nIdx;
+    sal_uInt16 nIdx;
     int nParams = osl_getCommandArgCount();
     rtl::OString aDisplay;
     rtl::OUString aParam, aBin;

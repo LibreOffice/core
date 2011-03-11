@@ -126,7 +126,7 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
     com::sun::star::java::RestartRequiredException e5;
     // Try to recover the Exception type in the any and
     // react accordingly.
-    USHORT      nResult = RET_CANCEL;
+    sal_uInt16      nResult = RET_CANCEL;
     ::rtl::OUString    aParameter;
 
     if ( anyExc >>= e1 )
@@ -136,28 +136,10 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
            // No suitable JRE found
             SolarMutexGuard aSolarGuard;
             m_bJavaNotFound_Handled = true;
-            //We first try to get the patch resource svp680xxx.res
-            //If the resource is not found then svt680xxx.res is used
-            ResId idWBX = SvtResId(WARNINGBOX_JAVANOTFOUND);
-            SvpResId pidPatchWBX(WARNINGBOX_JAVANOTFOUND);
-            pidPatchWBX.SetRT(RSC_WARNINGBOX);
-            ResMgr *pMgrWB = pidPatchWBX.GetResMgr();
-            if (pMgrWB && pMgrWB->IsAvailable(pidPatchWBX))
-                idWBX = pidPatchWBX;
-            WarningBox aWarningBox( NULL, idWBX);
-
-            String aTitle;
-            SvpResId pidString(STR_WARNING_JAVANOTFOUND);
-            pidString.SetRT(RSC_STRING);
-            ResMgr *pmgr = pidString.GetResMgr();
-            if ( pmgr && pmgr->IsAvailable(pidString))
-                aTitle = String(pidString);
-            else
-                aTitle = String( SvtResId( STR_WARNING_JAVANOTFOUND ));
-
+            WarningBox aWarningBox( NULL, SvtResId( WARNINGBOX_JAVANOTFOUND ) );
+            String aTitle( SvtResId( STR_WARNING_JAVANOTFOUND ) );
             aWarningBox.SetText( aTitle );
             nResult = aWarningBox.Execute();
-
         }
         else
         {
@@ -171,25 +153,8 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
            // javavendors.xml was updated and Java has not been configured yet
             SolarMutexGuard aSolarGuard;
             m_bInvalidSettings_Handled = true;
-            //We first try to get the patch resource svp680xxx.res
-            //If the resource is not found then svt680xxx.res is used
-            ResId idWBX = SvtResId(WARNINGBOX_INVALIDJAVASETTINGS);
-            SvpResId pidPatchWBX(WARNINGBOX_INVALIDJAVASETTINGS);
-            pidPatchWBX.SetRT(RSC_WARNINGBOX);
-            ResMgr *pMgrWB = pidPatchWBX.GetResMgr();
-            if (pMgrWB && pMgrWB->IsAvailable(pidPatchWBX))
-                idWBX = pidPatchWBX;
-            WarningBox aWarningBox( NULL, idWBX);
-
-            String aTitle;
-            SvpResId pidString(STR_WARNING_INVALIDJAVASETTINGS);
-            pidString.SetRT(RSC_STRING);
-            ResMgr *pmgr = pidString.GetResMgr();
-            if ( pmgr && pmgr->IsAvailable(pidString))
-                aTitle = String(pidString);
-            else
-                aTitle = String( SvtResId(STR_WARNING_INVALIDJAVASETTINGS));
-
+            WarningBox aWarningBox( NULL, SvtResId( WARNINGBOX_INVALIDJAVASETTINGS ) );
+            String aTitle( SvtResId(STR_WARNING_INVALIDJAVASETTINGS));
             aWarningBox.SetText( aTitle );
             nResult = aWarningBox.Execute();
         }
@@ -205,28 +170,8 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
             SolarMutexGuard aSolarGuard;
             m_bJavaDisabled_Handled = true;
             // Java disabled. Give user a chance to enable Java inside Office.
-            //We first try to get the patch resource svp680xxx.res
-            //If the resource is not found then svt680xxx.res is used
-            ResId idQBX = SvtResId( QBX_JAVADISABLED );
-            SvpResId pidPatchQBX(QBX_JAVADISABLED);
-            pidPatchQBX.SetRT(RSC_QUERYBOX);
-            ResMgr *pMgrQB = pidPatchQBX.GetResMgr();
-
-            if (pMgrQB && pMgrQB->IsAvailable(pidPatchQBX))
-                idQBX = pidPatchQBX;
-
-            QueryBox aQueryBox(NULL, idQBX);
-
-            String aTitle;
-
-            SvpResId pidString(STR_QUESTION_JAVADISABLED);
-            pidString.SetRT(RSC_STRING);
-            ResMgr *pmgr = pidString.GetResMgr();
-            if ( pmgr && pmgr->IsAvailable(pidString))
-                aTitle = String(pidString);
-            else
-                aTitle = String( SvtResId( STR_QUESTION_JAVADISABLED ));
-
+            QueryBox aQueryBox( NULL, SvtResId( QBX_JAVADISABLED ) );
+            String aTitle( SvtResId( STR_QUESTION_JAVADISABLED ) );
             aQueryBox.SetText( aTitle );
             nResult = aQueryBox.Execute();
             if ( nResult == RET_YES )
@@ -249,25 +194,8 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
             // Java not correctly installed, or damaged
             SolarMutexGuard aSolarGuard;
             m_bVMCreationFailure_Handled = true;
-            //We first try to get the patch resource svp680xxx.res
-            //If the resource is not found then svt680xxx.res is used
-            ResId idEBX = SvtResId(ERRORBOX_JVMCREATIONFAILED);
-            SvpResId pidPatchEBX(ERRORBOX_JVMCREATIONFAILED);
-            pidPatchEBX.SetRT(RSC_ERRORBOX);
-            ResMgr *pMgrEB = pidPatchEBX.GetResMgr();
-            if (pMgrEB && pMgrEB->IsAvailable(pidPatchEBX))
-                idEBX = pidPatchEBX;
-            ErrorBox aErrorBox( NULL, idEBX);
-
-            String aTitle;
-            SvpResId pidString(STR_ERROR_JVMCREATIONFAILED);
-            pidString.SetRT(RSC_STRING);
-            ResMgr *pmgr = pidString.GetResMgr();
-            if ( pmgr && pmgr->IsAvailable(pidString))
-                aTitle = String(pidString);
-            else
-                aTitle = String( SvtResId(STR_ERROR_JVMCREATIONFAILED));
-
+            ErrorBox aErrorBox( NULL, SvtResId( ERRORBOX_JVMCREATIONFAILED ) );
+            String aTitle( SvtResId( STR_ERROR_JVMCREATIONFAILED ) );
             aErrorBox.SetText( aTitle );
             nResult = aErrorBox.Execute();
         }
@@ -284,25 +212,8 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
             //before it can be used.
             SolarMutexGuard aSolarGuard;
             m_bRestartRequired_Handled = true;
-            //We first try to get the patch resource svp680xxx.res
-            //If the resource is not found then svt680xxx.res is used
-            ResId idEBX = SvtResId(ERRORBOX_RESTARTREQUIRED);
-            SvpResId pidPatchEBX(ERRORBOX_RESTARTREQUIRED);
-            pidPatchEBX.SetRT(RSC_ERRORBOX);
-            ResMgr *pMgrEB = pidPatchEBX.GetResMgr();
-            if (pMgrEB && pMgrEB->IsAvailable(pidPatchEBX))
-                idEBX = pidPatchEBX;
-            ErrorBox aErrorBox(NULL, idEBX);
-
-            String aTitle;
-            SvpResId pidString(STR_ERROR_RESTARTREQUIRED);
-            pidString.SetRT(RSC_STRING);
-            ResMgr *pmgr = pidString.GetResMgr();
-            if ( pmgr && pmgr->IsAvailable(pidString))
-                aTitle = String(pidString);
-            else
-                aTitle = String( SvtResId(STR_ERROR_RESTARTREQUIRED));
-
+            ErrorBox aErrorBox(NULL, SvtResId( ERRORBOX_RESTARTREQUIRED ) );
+            String aTitle( SvtResId( STR_ERROR_RESTARTREQUIRED ) );
             aErrorBox.SetText( aTitle );
             nResult = aErrorBox.Execute();
         }

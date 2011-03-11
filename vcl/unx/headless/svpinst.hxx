@@ -52,7 +52,7 @@
 class SvpSalYieldMutex : public ::vcl::SolarMutexObject
 {
 protected:
-    ULONG                                       mnCount;
+    sal_uLong                                       mnCount;
     oslThreadIdentifier mnThreadId;
 
 public:
@@ -62,7 +62,7 @@ public:
     virtual void                                release();
     virtual sal_Bool                            tryToAcquire();
 
-    ULONG                                       GetAcquireCount() const { return mnCount; }
+    sal_uLong                                       GetAcquireCount() const { return mnCount; }
     oslThreadIdentifier GetThreadId() const { return mnThreadId; }
 };
 
@@ -78,7 +78,7 @@ public:
     virtual ~SvpSalTimer();
 
     // overload all pure virtual methods
-    virtual void Start( ULONG nMS );
+    virtual void Start( sal_uLong nMS );
     virtual void Stop();
 };
 
@@ -89,7 +89,7 @@ class SvpSalFrame;
 class SvpSalInstance : public SalInstance
 {
     timeval             m_aTimeout;
-    ULONG               m_nTimeoutMS;
+    sal_uLong               m_nTimeoutMS;
     int                 m_pTimeoutFDS[2];
     SvpSalYieldMutex    m_aYieldMutex;
 
@@ -98,9 +98,9 @@ class SvpSalInstance : public SalInstance
     {
         const SalFrame*     m_pFrame;
         void*               m_pData;
-        USHORT             m_nEvent;
+        sal_uInt16         m_nEvent;
 
-        SalUserEvent( const SalFrame* pFrame, void* pData, USHORT nEvent = SALEVENT_USEREVENT )
+        SalUserEvent( const SalFrame* pFrame, void* pData, sal_uInt16 nEvent = SALEVENT_USEREVENT )
                 : m_pFrame( pFrame ),
                   m_pData( pData ),
                   m_nEvent( nEvent )
@@ -120,10 +120,10 @@ public:
     SvpSalInstance();
     virtual ~SvpSalInstance();
 
-    void PostEvent( const SalFrame* pFrame, void* pData, USHORT nEvent );
-    void CancelEvent( const SalFrame* pFrame, void* pData, USHORT nEvent );
+    void PostEvent( const SalFrame* pFrame, void* pData, sal_uInt16 nEvent );
+    void CancelEvent( const SalFrame* pFrame, void* pData, sal_uInt16 nEvent );
 
-    void StartTimer( ULONG nMS );
+    void StartTimer( sal_uLong nMS );
     void StopTimer();
     void Wakeup();
 
@@ -134,12 +134,12 @@ public:
     bool            CheckTimeout( bool bExecuteTimers = true );
 
     // Frame
-    virtual SalFrame*       CreateChildFrame( SystemParentData* pParent, ULONG nStyle );
-    virtual SalFrame*       CreateFrame( SalFrame* pParent, ULONG nStyle );
+    virtual SalFrame*       CreateChildFrame( SystemParentData* pParent, sal_uLong nStyle );
+    virtual SalFrame*       CreateFrame( SalFrame* pParent, sal_uLong nStyle );
     virtual void            DestroyFrame( SalFrame* pFrame );
 
     // Object (System Child Window)
-    virtual SalObject*      CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, BOOL bShow = TRUE );
+    virtual SalObject*      CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, sal_Bool bShow = sal_True );
     virtual void            DestroyObject( SalObject* pObject );
 
     // VirtualDevice
@@ -148,7 +148,7 @@ public:
     // pData allows for using a system dependent graphics or device context
     virtual SalVirtualDevice*   CreateVirtualDevice( SalGraphics* pGraphics,
                                                      long nDX, long nDY,
-                                                     USHORT nBitCount, const SystemGraphicsData *pData = NULL );
+                                                     sal_uInt16 nBitCount, const SystemGraphicsData *pData = NULL );
     virtual void                DestroyVirtualDevice( SalVirtualDevice* pDevice );
 
     // Printer
@@ -177,20 +177,15 @@ public:
 
     // YieldMutex
     virtual osl::SolarMutex* GetYieldMutex();
-    virtual ULONG           ReleaseYieldMutex();
-    virtual void            AcquireYieldMutex( ULONG nCount );
+    virtual sal_uLong           ReleaseYieldMutex();
+    virtual void            AcquireYieldMutex( sal_uLong nCount );
+    virtual bool            CheckYieldMutex();
 
     // wait next event and dispatch
     // must returned by UserEvent (SalFrame::PostEvent)
     // and timer
     virtual void            Yield( bool bWait, bool bHandleAllCurrentEvents );
-    virtual bool            AnyInput( USHORT nType );
-
-                            // Menues
-    virtual SalMenu*        CreateMenu( BOOL bMenuBar );
-    virtual void            DestroyMenu( SalMenu* pMenu);
-    virtual SalMenuItem*    CreateMenuItem( const SalItemParams* pItemData );
-    virtual void            DestroyMenuItem( SalMenuItem* pItem );
+    virtual bool            AnyInput( sal_uInt16 nType );
 
     // may return NULL to disable session management
     virtual SalSession*     CreateSalSession();

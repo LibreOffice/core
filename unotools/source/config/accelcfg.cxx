@@ -72,7 +72,7 @@ public:
     bool            bModified;
 
                     SvtAcceleratorConfig_Impl()
-                        : bModified( FALSE )
+                        : bModified( sal_False )
                     {}
 
                     SvtAcceleratorConfig_Impl( Reference< XInputStream >& xInputStream );

@@ -87,10 +87,10 @@ class SVL_DLLPUBLIC SvCommandList
 {
                     PRV_SV_DECL_OWNER_LIST(SvCommandList,SvCommand);
     SvCommand &     Append( const String & rCommand, const String & rArg );
-    BOOL            AppendCommands( const String & rCmd, USHORT * pEaten );
+    sal_Bool            AppendCommands( const String & rCmd, sal_uInt16 * pEaten );
     String          GetCommands() const;
 
-    BOOL FillFromSequence( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& );
+    sal_Bool FillFromSequence( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& );
     void FillSequence( com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& );
 
     SVL_DLLPUBLIC friend SvStream& operator >> ( SvStream& rStm, SvCommandList & );

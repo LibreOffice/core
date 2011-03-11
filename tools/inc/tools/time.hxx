@@ -47,28 +47,28 @@ public:
                     Time( const ResId & rResId );
                     Time( sal_Int32 _nTime ) { Time::nTime = _nTime; }
                     Time( const Time& rTime );
-                    Time( ULONG nHour, ULONG nMin,
-                          ULONG nSec = 0, ULONG n100Sec = 0 );
+                    Time( sal_uIntPtr nHour, sal_uIntPtr nMin,
+                          sal_uIntPtr nSec = 0, sal_uIntPtr n100Sec = 0 );
 
     void            SetTime( sal_Int32 nNewTime ) { nTime = nNewTime; }
     sal_Int32       GetTime() const { return nTime; }
 
-    void            SetHour( USHORT nNewHour );
-    void            SetMin( USHORT nNewMin );
-    void            SetSec( USHORT nNewSec );
-    void            Set100Sec( USHORT nNew100Sec );
-    USHORT          GetHour() const
-                        { ULONG nTempTime = (nTime >= 0) ? nTime : nTime*-1;
-                          return (USHORT)(nTempTime / 1000000); }
-    USHORT          GetMin() const
-                        { ULONG nTempTime = (nTime >= 0) ? nTime : nTime*-1;
-                          return (USHORT)((nTempTime / 10000) % 100); }
-    USHORT          GetSec() const
-                        { ULONG nTempTime = (nTime >= 0) ? nTime : nTime*-1;
-                          return (USHORT)((nTempTime / 100) % 100); }
-    USHORT          Get100Sec() const
-                        { ULONG nTempTime = (nTime >= 0) ? nTime : nTime*-1;
-                          return (USHORT)(nTempTime % 100); }
+    void            SetHour( sal_uInt16 nNewHour );
+    void            SetMin( sal_uInt16 nNewMin );
+    void            SetSec( sal_uInt16 nNewSec );
+    void            Set100Sec( sal_uInt16 nNew100Sec );
+    sal_uInt16          GetHour() const
+                        { sal_uIntPtr nTempTime = (nTime >= 0) ? nTime : nTime*-1;
+                          return (sal_uInt16)(nTempTime / 1000000); }
+    sal_uInt16          GetMin() const
+                        { sal_uIntPtr nTempTime = (nTime >= 0) ? nTime : nTime*-1;
+                          return (sal_uInt16)((nTempTime / 10000) % 100); }
+    sal_uInt16          GetSec() const
+                        { sal_uIntPtr nTempTime = (nTime >= 0) ? nTime : nTime*-1;
+                          return (sal_uInt16)((nTempTime / 100) % 100); }
+    sal_uInt16          Get100Sec() const
+                        { sal_uIntPtr nTempTime = (nTime >= 0) ? nTime : nTime*-1;
+                          return (sal_uInt16)(nTempTime % 100); }
 
     sal_Int32       GetMSFromTime() const;
     void            MakeTimeFromMS( sal_Int32 nMS );
@@ -76,27 +76,27 @@ public:
                     /// 12 hours == 0.5 days
     double          GetTimeInDays() const;
 
-    BOOL            IsBetween( const Time& rFrom, const Time& rTo ) const
+    sal_Bool            IsBetween( const Time& rFrom, const Time& rTo ) const
                         { return ((nTime >= rFrom.nTime) && (nTime <= rTo.nTime)); }
 
-    BOOL            IsEqualIgnore100Sec( const Time& rTime ) const;
+    sal_Bool            IsEqualIgnore100Sec( const Time& rTime ) const;
 
-    BOOL            operator ==( const Time& rTime ) const
+    sal_Bool            operator ==( const Time& rTime ) const
                         { return (nTime == rTime.nTime); }
-    BOOL            operator !=( const Time& rTime ) const
+    sal_Bool            operator !=( const Time& rTime ) const
                         { return (nTime != rTime.nTime); }
-    BOOL            operator  >( const Time& rTime ) const
+    sal_Bool            operator  >( const Time& rTime ) const
                         { return (nTime > rTime.nTime); }
-    BOOL            operator  <( const Time& rTime ) const
+    sal_Bool            operator  <( const Time& rTime ) const
                         { return (nTime < rTime.nTime); }
-    BOOL            operator >=( const Time& rTime ) const
+    sal_Bool            operator >=( const Time& rTime ) const
                         { return (nTime >= rTime.nTime); }
-    BOOL            operator <=( const Time& rTime ) const
+    sal_Bool            operator <=( const Time& rTime ) const
                         { return (nTime <= rTime.nTime); }
 
     static Time     GetUTCOffset();
-    static ULONG    GetSystemTicks();       // Elapsed time
-    static ULONG    GetProcessTicks();      // CPU time
+    static sal_uIntPtr  GetSystemTicks();       // Elapsed time
+    static sal_uIntPtr  GetProcessTicks();      // CPU time
 
     void            ConvertToUTC()       { *this -= Time::GetUTCOffset(); }
     void            ConvertToLocalTime() { *this += Time::GetUTCOffset(); }

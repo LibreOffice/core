@@ -126,13 +126,13 @@ namespace /* private */
 }
 
 
--(MacOSBOOL)prepareForDragOperation:(id <NSDraggingInfo>)sender
+-(BOOL)prepareForDragOperation:(id <NSDraggingInfo>)sender
 {
   return mDropTarget->prepareForDragOperation(sender);
 }
 
 
--(MacOSBOOL)performDragOperation:(id <NSDraggingInfo>)sender
+-(BOOL)performDragOperation:(id <NSDraggingInfo>)sender
 {
   return mDropTarget->performDragOperation(sender);
 }
@@ -321,13 +321,13 @@ NSDragOperation DropTarget::draggingUpdated(id sender)
   }
 
 
-  MacOSBOOL DropTarget::prepareForDragOperation(id sender)
+  BOOL DropTarget::prepareForDragOperation(id sender)
   {
     return 1;
   }
 
 
-MacOSBOOL DropTarget::performDragOperation(id sender)
+BOOL DropTarget::performDragOperation(id sender)
 {
   bool bSuccess = false;
 

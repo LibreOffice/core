@@ -102,7 +102,7 @@ SAL_THROW (())
         if ( findAndRemove( "help-id", aProps, aHelpId ) )
         {
             OSL_TRACE("Setting help-id: %s", OUSTRING_CSTR( aHelpId ) );
-            xDialog->setHelpId( aHelpId.toInt32 () );
+            xDialog->setHelpId( aHelpId );
         }
     } // DEBUG:
     else if ( pParent == NULL )

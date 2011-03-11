@@ -90,6 +90,17 @@ class SequenceAsVector : public ::std::vector< TElementType >
         {}
 
         //---------------------------------------
+        /** @short  creates a new vector with the given length.
+
+            @param  nLength
+                    the number of elements for the new vector.
+         */
+        explicit SequenceAsVector(sal_Int32 nLength) :
+            ::std::vector< TElementType >( static_cast< size_t >( nLength ) )
+        {
+        }
+
+        //---------------------------------------
         /** @short  creates a new deque from the given uno sequence.
 
             @param  lSource

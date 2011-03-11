@@ -45,7 +45,7 @@
 #include <rtl/logfile.hxx>
 #include "itemholder2.hxx"
 
-#include <imgdef.hxx>
+#include <svtools/imgdef.hxx>
 #include <vcl/svapp.hxx>
 
 #include <list>
@@ -93,7 +93,7 @@ using namespace ::com::sun::star;
 
 #define PROPERTYCOUNT                       11
 
-#define VCL_TOOLBOX_STYLE_FLAT              ((USHORT)0x0004) // from <vcl/toolbox.hxx>
+#define VCL_TOOLBOX_STYLE_FLAT              ((sal_uInt16)0x0004) // from <vcl/toolbox.hxx>
 
 //_________________________________________________________________________________________________________________
 //  private declarations!
@@ -889,7 +889,7 @@ sal_Int16 SvtMiscOptions::GetCurrentSymbolsSize() const
     {
         // Use system settings, we have to retrieve the toolbar icon size from the
         // Application class
-        ULONG nStyleIconSize = Application::GetSettings().GetStyleSettings().GetToolbarIconSize();
+        sal_uLong nStyleIconSize = Application::GetSettings().GetStyleSettings().GetToolbarIconSize();
         if ( nStyleIconSize == STYLE_TOOLBAR_ICONSIZE_LARGE )
             eOptSymbolsSize = SFX_SYMBOLS_SIZE_LARGE;
         else

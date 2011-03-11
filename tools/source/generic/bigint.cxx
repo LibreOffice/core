@@ -50,7 +50,7 @@ static const long MY_MINSHORT = -MY_MAXSHORT;
  * sind diese Algorithmen im Kapitel 4.3.1. The Classical Algorithms.
  */
 
-// Muss auf UINT16/INT16/UINT32/INT32 umgestellt werden !!! W.P.
+// Muss auf sal_uInt16/INT16/sal_uInt32/sal_Int32 umgestellt werden !!! W.P.
 
 // -----------------------------------------------------------------------
 
@@ -645,7 +645,7 @@ BigInt::BigInt( sal_uInt32 nValue )
 
 // -----------------------------------------------------------------------
 
-BigInt::operator ULONG() const
+BigInt::operator sal_uIntPtr() const
 {
     if ( !bIsBig )
         return (sal_uInt32)nVal;

@@ -31,7 +31,7 @@
 #include "contentenumeration.hxx"
 #include <svl/urlfilter.hxx>
 #include <svtools/inettbc.hxx>
-#include "imagemgr.hxx"
+#include <svtools/imagemgr.hxx>
 
 /** === begin UNO includes === **/
 #include <com/sun/star/beans/XPropertySet.hpp>

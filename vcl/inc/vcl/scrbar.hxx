@@ -68,12 +68,12 @@ private:
     long            mnLineSize;
     long            mnPageSize;
     long            mnDelta;
-    USHORT          mnDragDraw;
-    USHORT          mnStateFlags;
+    sal_uInt16          mnDragDraw;
+    sal_uInt16          mnStateFlags;
     ScrollType      meScrollType;
     ScrollType      meDDScrollType;
-    BOOL            mbCalcSize;
-    BOOL            mbFullDrag;
+    sal_Bool            mbCalcSize;
+    sal_Bool            mbFullDrag;
     Link            maScrollHdl;
     Link            maEndScrollHdl;
 
@@ -82,17 +82,17 @@ private:
     SAL_DLLPRIVATE void         ImplInit( Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE void         ImplInitStyle( WinBits nStyle );
     SAL_DLLPRIVATE void         ImplLoadRes( const ResId& rResId );
-    SAL_DLLPRIVATE void         ImplUpdateRects( BOOL bUpdate = TRUE );
+    SAL_DLLPRIVATE void         ImplUpdateRects( sal_Bool bUpdate = sal_True );
     SAL_DLLPRIVATE long         ImplCalcThumbPos( long nPixPos );
     SAL_DLLPRIVATE long         ImplCalcThumbPosPix( long nPos );
-    SAL_DLLPRIVATE void         ImplCalc( BOOL bUpdate = TRUE );
-    SAL_DLLPRIVATE void         ImplDraw( USHORT nDrawFlags, OutputDevice* pOutDev  );
+    SAL_DLLPRIVATE void         ImplCalc( sal_Bool bUpdate = sal_True );
+    SAL_DLLPRIVATE void         ImplDraw( sal_uInt16 nDrawFlags, OutputDevice* pOutDev  );
     using Window::ImplScroll;
-    SAL_DLLPRIVATE long         ImplScroll( long nNewPos, BOOL bCallEndScroll );
-    SAL_DLLPRIVATE long         ImplDoAction( BOOL bCallEndScroll );
-    SAL_DLLPRIVATE void         ImplDoMouseAction( const Point& rPos, BOOL bCallAction = TRUE );
+    SAL_DLLPRIVATE long         ImplScroll( long nNewPos, sal_Bool bCallEndScroll );
+    SAL_DLLPRIVATE long         ImplDoAction( sal_Bool bCallEndScroll );
+    SAL_DLLPRIVATE void         ImplDoMouseAction( const Point& rPos, sal_Bool bCallAction = sal_True );
     SAL_DLLPRIVATE void         ImplInvert();
-    SAL_DLLPRIVATE BOOL         ImplDrawNative( USHORT nDrawFlags );
+    SAL_DLLPRIVATE sal_Bool         ImplDrawNative( sal_uInt16 nDrawFlags );
     SAL_DLLPRIVATE void         ImplDragThumb( const Point& rMousePos );
     DECL_DLLPRIVATE_LINK(       ImplTimerHdl, Timer* );
     DECL_DLLPRIVATE_LINK(       ImplAutoTimerHdl, AutoTimer* );
@@ -106,7 +106,7 @@ public:
     virtual void    Tracking( const TrackingEvent& rTEvt );
     virtual void    KeyInput( const KeyEvent& rKEvt );
     virtual void    Paint( const Rectangle& rRect );
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG nFlags );
+    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
     virtual void    Resize();
     virtual void    StateChanged( StateChangedType nType );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
@@ -121,9 +121,9 @@ public:
     long            DoScroll( long nNewPos );
     long            DoScrollAction( ScrollType eScrollType );
 
-    void            EnableDrag( BOOL bEnable = TRUE )
+    void            EnableDrag( sal_Bool bEnable = sal_True )
                         { mbFullDrag = bEnable; }
-    BOOL            IsDragEnabled() const { return mbFullDrag; }
+    sal_Bool            IsDragEnabled() const { return mbFullDrag; }
 
     void            SetRangeMin( long nNewRange );
     long            GetRangeMin() const { return mnMinRange; }

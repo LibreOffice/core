@@ -153,13 +153,13 @@ int X11SalSystem::ShowNativeDialog( const String& rTitle, const String& rMessage
     aWarn.SetText( rTitle );
     aWarn.Clear();
 
-    USHORT nButton = 0;
+    sal_uInt16 nButton = 0;
     for( std::list< String >::const_iterator it = rButtons.begin(); it != rButtons.end(); ++it )
     {
-            aWarn.AddButton( *it, nButton+1, nButton == (USHORT)nDefButton ? BUTTONDIALOG_DEFBUTTON : 0 );
+            aWarn.AddButton( *it, nButton+1, nButton == (sal_uInt16)nDefButton ? BUTTONDIALOG_DEFBUTTON : 0 );
             nButton++;
     }
-    aWarn.SetFocusButton( (USHORT)nDefButton+1 );
+    aWarn.SetFocusButton( (sal_uInt16)nDefButton+1 );
 
     nRet = ((int)aWarn.Execute()) - 1;
 

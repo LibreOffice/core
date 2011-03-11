@@ -432,7 +432,7 @@ Any SAL_CALL TransferableHelper::getTransferData( const DataFlavor& rFlavor ) th
                         SvMemoryStream  aDstStm( 65535, 65535 );
 
                         // taking wmf without file header
-                        if ( ConvertGDIMetaFileToWMF( aMtf, aDstStm, NULL, FALSE ) )
+                        if ( ConvertGDIMetaFileToWMF( aMtf, aDstStm, NULL, sal_False ) )
                         {
                             maAny <<= ( aSeq = Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( aDstStm.GetData() ),
                                                                      aDstStm.Seek( STREAM_SEEK_TO_END ) ) );
@@ -936,7 +936,7 @@ sal_Bool TransferableHelper::SetINetBookmark( const INetBookmark& rBmk,
             rFDesc1.dwFlags = FD_LINKUI;
 
             ByteString aStr( rBmk.GetDescription(), eSysCSet );
-            for( USHORT nChar = 0; nChar < aStr.Len(); ++nChar )
+            for( sal_uInt16 nChar = 0; nChar < aStr.Len(); ++nChar )
                 if( strchr( "\\/:*?\"<>|", aStr.GetChar( nChar ) ) )
                     aStr.Erase( nChar--, 1 );
 
@@ -1843,7 +1843,7 @@ sal_Bool TransferableDataHelper::GetGDIMetaFile( const DataFlavor& rFlavor, GDIM
         if( GraphicConverter::Import( *xStm, aGraphic ) == ERRCODE_NONE )
         {
             rMtf = aGraphic.GetGDIMetaFile();
-            bRet = TRUE;
+            bRet = sal_True;
         }
     }
 
@@ -1857,7 +1857,7 @@ sal_Bool TransferableDataHelper::GetGDIMetaFile( const DataFlavor& rFlavor, GDIM
         if( GraphicConverter::Import( *xStm, aGraphic ) == ERRCODE_NONE )
         {
             rMtf = aGraphic.GetGDIMetaFile();
-            bRet = TRUE;
+            bRet = sal_True;
         }
     }
 

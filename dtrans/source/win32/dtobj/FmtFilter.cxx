@@ -535,4 +535,47 @@ ByteSequence_t CF_HDROPToFileList(HGLOBAL hGlobal)
     return FileListToByteSequence(files);
 }
 
+//------------------------------------------------------------------------
+// convert a windows bitmap handle into a openoffice bitmap
+//------------------------------------------------------------------------
+
+Sequence< sal_Int8 > SAL_CALL WinBITMAPToOOBMP( HBITMAP aHBMP )
+{
+    Sequence< sal_Int8 > ooBmpStream;
+
+    SIZE aBmpSize;
+    if( GetBitmapDimensionEx( aHBMP, &aBmpSize ) )
+    {
+        // fill bitmap info header
+        size_t nDataBytes = 4 * aBmpSize.cy * aBmpSize.cy;
+        Sequence< sal_Int8 > aBitmapStream(
+            sizeof(BITMAPINFO) +
+            nDataBytes
+            );
+        PBITMAPINFOHEADER pBmp = (PBITMAPINFOHEADER)aBitmapStream.getArray();
+        pBmp->biSize = sizeof( BITMAPINFOHEADER );
+        pBmp->biWidth  = aBmpSize.cx;
+        pBmp->biHeight = aBmpSize.cy;
+        pBmp->biPlanes = 1;
+        pBmp->biBitCount = 32;
+        pBmp->biCompression = BI_RGB;
+        pBmp->biSizeImage = (DWORD)nDataBytes;
+        pBmp->biXPelsPerMeter = 1000;
+        pBmp->biYPelsPerMeter = 1000;
+        pBmp->biClrUsed = 0;
+        pBmp->biClrImportant = 0;
+        if( GetDIBits( 0, // DC, 0 is a default GC, basically that of the desktop
+                       aHBMP,
+                       0, aBmpSize.cy,
+                       aBitmapStream.getArray() + sizeof(BITMAPINFO),
+                       (LPBITMAPINFO)pBmp,
+                       DIB_RGB_COLORS ) )
+        {
+            ooBmpStream = WinDIBToOOBMP( aBitmapStream );
+        }
+    }
+
+    return ooBmpStream;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

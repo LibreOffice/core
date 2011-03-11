@@ -107,7 +107,7 @@ CntUnencodedStringItem::GetPresentation(SfxItemPresentation, SfxMapUnit,
 
 //============================================================================
 // virtual
-bool CntUnencodedStringItem::QueryValue(com::sun::star::uno::Any& rVal, BYTE)
+bool CntUnencodedStringItem::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8)
     const
 {
     rVal <<= rtl::OUString(m_aValue);
@@ -117,7 +117,7 @@ bool CntUnencodedStringItem::QueryValue(com::sun::star::uno::Any& rVal, BYTE)
 //============================================================================
 // virtual
 bool CntUnencodedStringItem::PutValue(const com::sun::star::uno::Any& rVal,
-                                         BYTE)
+                                         sal_uInt8)
 {
     rtl::OUString aTheValue;
     if (rVal >>= aTheValue)

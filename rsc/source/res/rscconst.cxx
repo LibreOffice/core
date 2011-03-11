@@ -84,7 +84,7 @@ RSCCLASS_TYPE RscConst::GetClassType() const
 |*    RscConst::SetConstance()
 |*
 *************************************************************************/
-ERRTYPE RscConst::SetConstant( Atom nVarName, INT32 lValue ){
+ERRTYPE RscConst::SetConstant( Atom nVarName, sal_Int32 lValue ){
     if( pVarArray )
         pVarArray = (VarEle *)
             rtl_reallocateMemory( (void *)pVarArray,
@@ -115,7 +115,7 @@ Atom RscConst::GetConstant( sal_uInt32 nPos ){
 |*    RscConst::GetConstValue()
 |*
 *************************************************************************/
-BOOL RscConst::GetConstValue( Atom nConst, INT32 * pValue ) const
+sal_Bool RscConst::GetConstValue( Atom nConst, sal_Int32 * pValue ) const
 {
     sal_uInt32 i = 0;
 
@@ -123,9 +123,9 @@ BOOL RscConst::GetConstValue( Atom nConst, INT32 * pValue ) const
         if( pVarArray[ i ].nId == nConst )
         {
             *pValue = pVarArray[ i ].lValue;
-            return TRUE;
+            return sal_True;
         }
-    return FALSE;
+    return sal_False;
 }
 
 /*************************************************************************
@@ -133,7 +133,7 @@ BOOL RscConst::GetConstValue( Atom nConst, INT32 * pValue ) const
 |*    RscConst::GetValueConst()
 |*
 *************************************************************************/
-BOOL RscConst::GetValueConst( INT32 lValue, Atom * pConst ) const
+sal_Bool RscConst::GetValueConst( sal_Int32 lValue, Atom * pConst ) const
 {
     sal_uInt32 i = 0;
 
@@ -141,9 +141,9 @@ BOOL RscConst::GetValueConst( INT32 lValue, Atom * pConst ) const
         if( pVarArray[ i ].lValue == lValue )
         {
             *pConst = pVarArray[ i ].nId;
-            return TRUE;
+            return sal_True;
         }
-    return FALSE;
+    return sal_False;
 }
 
 /*************************************************************************
@@ -219,14 +219,14 @@ RscEnum::RscEnum( Atom nId, sal_uInt32 nTypeId )
 |*    RscEnum::SetConst()
 |*
 *************************************************************************/
-ERRTYPE RscEnum::SetConst( const RSCINST & rInst, Atom nConst, INT32 /*nVal*/ )
+ERRTYPE RscEnum::SetConst( const RSCINST & rInst, Atom nConst, sal_Int32 /*nVal*/ )
 {
     sal_uInt32 i = 0;
 
     if( nEntries != (i = GetConstPos( nConst )) )
     {
         ((RscEnumInst *)rInst.pData)->nValue = i;
-        ((RscEnumInst *)rInst.pData)->bDflt = FALSE;
+        ((RscEnumInst *)rInst.pData)->bDflt = sal_False;
         return( ERR_OK );
     };
 
@@ -238,12 +238,12 @@ ERRTYPE RscEnum::SetConst( const RSCINST & rInst, Atom nConst, INT32 /*nVal*/ )
 |*    RscEnum::SetNumber()
 |*
 *************************************************************************/
-ERRTYPE RscEnum::SetNumber( const RSCINST & rInst, INT32 lValue )
+ERRTYPE RscEnum::SetNumber( const RSCINST & rInst, sal_Int32 lValue )
 {
     sal_uInt32  i = 0;
 
     for( i = 0; i < nEntries; i++ ){
-        if( (INT32)pVarArray[ i ].lValue == lValue )
+        if( (sal_Int32)pVarArray[ i ].lValue == lValue )
             return( SetConst( rInst, pVarArray[ i ].nId, lValue ) );
     };
 
@@ -265,7 +265,7 @@ ERRTYPE RscEnum::GetConst( const RSCINST & rInst, Atom * pH ){
 |*    RscEnum::GetNumber()
 |*
 *************************************************************************/
-ERRTYPE RscEnum::GetNumber( const RSCINST & rInst, INT32 * pNumber ){
+ERRTYPE RscEnum::GetNumber( const RSCINST & rInst, sal_Int32 * pNumber ){
     *pNumber = pVarArray[ ((RscEnumInst *)rInst.pData)->nValue ].lValue;
     return( ERR_OK );
 }
@@ -275,7 +275,7 @@ ERRTYPE RscEnum::GetNumber( const RSCINST & rInst, INT32 * pNumber ){
 |*    RscEnum::Create()
 |*
 *************************************************************************/
-RSCINST RscEnum::Create( RSCINST * pInst, const RSCINST & rDflt, BOOL bOwnClass ){
+RSCINST RscEnum::Create( RSCINST * pInst, const RSCINST & rDflt, sal_Bool bOwnClass ){
     RSCINST aInst;
 
     if( !pInst ){
@@ -292,7 +292,7 @@ RSCINST RscEnum::Create( RSCINST * pInst, const RSCINST & rDflt, BOOL bOwnClass 
         memmove( aInst.pData, rDflt.pData, Size() );
     else{
         ((RscEnumInst *)aInst.pData)->nValue = 0;
-        ((RscEnumInst *)aInst.pData)->bDflt = TRUE;
+        ((RscEnumInst *)aInst.pData)->bDflt = sal_True;
     }
 
     return( aInst );
@@ -303,16 +303,16 @@ RSCINST RscEnum::Create( RSCINST * pInst, const RSCINST & rDflt, BOOL bOwnClass 
 |*    RscEnum::IsValueDefault()
 |*
 *************************************************************************/
-BOOL RscEnum::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ){
+sal_Bool RscEnum::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ){
     if( pDef ){
         if( ((RscEnumInst*)rInst.pData)->nValue ==
           ((RscEnumInst*)pDef)->nValue )
         {
-            return TRUE;
+            return sal_True;
         }
     }
 
-    return FALSE;
+    return sal_False;
 }
 
 /*************************************************************************
@@ -333,9 +333,9 @@ void RscEnum::WriteSrc( const RSCINST & rInst, FILE * fOutput,
 |*
 *************************************************************************/
 ERRTYPE RscEnum::WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
-                          RscTypCont *, sal_uInt32, BOOL )
+                          RscTypCont *, sal_uInt32, sal_Bool )
 {
-    aMem.Put( (INT32)pVarArray[ ((RscEnumInst *)rInst.pData)->nValue ].lValue );
+    aMem.Put( (sal_Int32)pVarArray[ ((RscEnumInst *)rInst.pData)->nValue ].lValue );
     return( ERR_OK );
 }
 

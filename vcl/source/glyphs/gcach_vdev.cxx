@@ -138,7 +138,7 @@ void VirtDevServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor 
     rTo.meWeight        = aFSD.meWeight;
     rTo.meItalic        = aFSD.meItalic;
     rTo.mePitch         = aFSD.mePitch;
-    rTo.mbDevice        = FALSE;
+    rTo.mbDevice        = sal_False;
 }
 
 // -----------------------------------------------------------------------
@@ -195,7 +195,7 @@ bool VirtDevServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& ) const
     String aGlyphStr( &aChar, 1 );
 
     // draw bitmap
-    vdev.SetOutputSizePixel( aSize, TRUE );
+    vdev.SetOutputSizePixel( aSize, sal_True );
     vdev.DrawText( Point(0,0)-rGD.GetMetric().GetOffset(), aGlyphStr );
 
     // create new glyph item
@@ -223,7 +223,7 @@ int VirtDevServerFont::GetGlyphKernValue( int, int ) const
 
 // -----------------------------------------------------------------------
 
-ULONG VirtDevServerFont::GetKernPairs( ImplKernPairData** ppImplKernPairs ) const
+sal_uLong VirtDevServerFont::GetKernPairs( ImplKernPairData** ppImplKernPairs ) const
 {
     Font aFont;
     aFont.SetName       ( GetFontSelData().maName );
@@ -236,7 +236,7 @@ ULONG VirtDevServerFont::GetKernPairs( ImplKernPairData** ppImplKernPairs ) cons
     VirtualDevice vdev( 1 );
     vdev.SetFont( aFont );
 
-    ULONG nPairs = vdev.GetKerningPairCount();
+    sal_uLong nPairs = vdev.GetKerningPairCount();
     if( nPairs > 0 )
     {
         KerningPair* const pKernPairs = new KerningPair[ nPairs ];
@@ -245,7 +245,7 @@ ULONG VirtDevServerFont::GetKernPairs( ImplKernPairData** ppImplKernPairs ) cons
         *ppImplKernPairs = new ImplKernPairData[ nPairs ];
         ImplKernPairData* pTo = *ppImplKernPairs;
         KerningPair* pFrom = pKernPairs;
-        for ( ULONG n = 0; n < nPairs; n++ )
+        for ( sal_uLong n = 0; n < nPairs; n++ )
         {
             pTo->mnChar1    = pFrom->nChar1;
             pTo->mnChar2    = pFrom->nChar2;

@@ -40,7 +40,7 @@ SvpSalFrame* SvpSalFrame::s_pFocusFrame = NULL;
 
 SvpSalFrame::SvpSalFrame( SvpSalInstance* pInstance,
                           SalFrame* pParent,
-                          ULONG nSalFrameStyle,
+                          sal_uLong nSalFrameStyle,
                           SystemParentData* ) :
     m_pInstance( pInstance ),
     m_pParent( static_cast<SvpSalFrame*>(pParent) ),
@@ -147,10 +147,10 @@ void SvpSalFrame::ReleaseGraphics( SalGraphics* pGraphics )
     delete pSvpGraphics;
 }
 
-BOOL SvpSalFrame::PostEvent( void* pData )
+sal_Bool SvpSalFrame::PostEvent( void* pData )
 {
     m_pInstance->PostEvent( this, pData, SALEVENT_USEREVENT );
-    return TRUE;
+    return sal_True;
 }
 
 void SvpSalFrame::PostPaint() const
@@ -166,7 +166,7 @@ void SvpSalFrame::SetTitle( const XubString& )
 {
 }
 
-void SvpSalFrame::SetIcon( USHORT )
+void SvpSalFrame::SetIcon( sal_uInt16 )
 {
 }
 
@@ -182,7 +182,7 @@ void SvpSalFrame::SetExtendedFrameStyle( SalExtStyle )
 {
 }
 
-void SvpSalFrame::Show( BOOL bVisible, BOOL bNoActivate )
+void SvpSalFrame::Show( sal_Bool bVisible, sal_Bool bNoActivate )
 {
     if( bVisible && ! m_bVisible )
     {
@@ -199,7 +199,7 @@ void SvpSalFrame::Show( BOOL bVisible, BOOL bNoActivate )
     }
 }
 
-void SvpSalFrame::Enable( BOOL )
+void SvpSalFrame::Enable( sal_Bool )
 {
 }
 
@@ -215,7 +215,7 @@ void SvpSalFrame::SetMaxClientSize( long nWidth, long nHeight )
     m_nMaxHeight = nHeight;
 }
 
-void SvpSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, USHORT nFlags )
+void SvpSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags )
 {
     if( (nFlags & SAL_FRAME_POSSIZE_X) != 0 )
         maGeometry.nX = nX;
@@ -312,7 +312,7 @@ void SvpSalFrame::SetWindowState( const SalFrameState *pState )
     }
 }
 
-BOOL SvpSalFrame::GetWindowState( SalFrameState* pState )
+sal_Bool SvpSalFrame::GetWindowState( SalFrameState* pState )
 {
     pState->mnState = SAL_FRAMESTATE_NORMAL;
     pState->mnX      = maGeometry.nX;
@@ -321,24 +321,24 @@ BOOL SvpSalFrame::GetWindowState( SalFrameState* pState )
     pState->mnHeight = maGeometry.nHeight;
     pState->mnMask   = _FRAMESTATE_MASK_GEOMETRY | SAL_FRAMESTATE_MASK_STATE;
 
-    return TRUE;
+    return sal_True;
 }
 
-void SvpSalFrame::ShowFullScreen( BOOL, sal_Int32 )
+void SvpSalFrame::ShowFullScreen( sal_Bool, sal_Int32 )
 {
     SetPosSize( 0, 0, VIRTUAL_DESKTOP_WIDTH, VIRTUAL_DESKTOP_HEIGHT,
                 SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT );
 }
 
-void SvpSalFrame::StartPresentation( BOOL )
+void SvpSalFrame::StartPresentation( sal_Bool )
 {
 }
 
-void SvpSalFrame::SetAlwaysOnTop( BOOL )
+void SvpSalFrame::SetAlwaysOnTop( sal_Bool )
 {
 }
 
-void SvpSalFrame::ToTop( USHORT )
+void SvpSalFrame::ToTop( sal_uInt16 )
 {
     GetFocus();
 }
@@ -347,7 +347,7 @@ void SvpSalFrame::SetPointer( PointerStyle )
 {
 }
 
-void SvpSalFrame::CaptureMouse( BOOL )
+void SvpSalFrame::CaptureMouse( sal_Bool )
 {
 }
 
@@ -367,23 +367,23 @@ void SvpSalFrame::SetInputContext( SalInputContext* )
 {
 }
 
-void SvpSalFrame::EndExtTextInput( USHORT )
+void SvpSalFrame::EndExtTextInput( sal_uInt16 )
 {
 }
 
-String SvpSalFrame::GetKeyName( USHORT )
+String SvpSalFrame::GetKeyName( sal_uInt16 )
 {
     return String();
 }
 
-String SvpSalFrame::GetSymbolKeyName( const XubString&, USHORT )
+String SvpSalFrame::GetSymbolKeyName( const XubString&, sal_uInt16 )
 {
     return String();
 }
 
-BOOL SvpSalFrame::MapUnicodeToKeyCode( sal_Unicode, LanguageType, KeyCode& )
+sal_Bool SvpSalFrame::MapUnicodeToKeyCode( sal_Unicode, LanguageType, KeyCode& )
 {
-    return FALSE;
+    return sal_False;
 }
 
 LanguageType SvpSalFrame::GetInputLanguage()
@@ -423,7 +423,7 @@ SalFrame::SalIndicatorState SvpSalFrame::GetIndicatorState()
     return aState;
 }
 
-void SvpSalFrame::SimulateKeyPress( USHORT /*nKeyCode*/ )
+void SvpSalFrame::SimulateKeyPress( sal_uInt16 /*nKeyCode*/ )
 {
 }
 
@@ -447,7 +447,7 @@ void SvpSalFrame::ResetClipRegion()
 {
 }
 
-void SvpSalFrame::BeginSetClipRegion( ULONG )
+void SvpSalFrame::BeginSetClipRegion( sal_uLong )
 {
 }
 

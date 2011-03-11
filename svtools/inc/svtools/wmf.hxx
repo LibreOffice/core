@@ -32,17 +32,17 @@
 #include "svtools/svtdllapi.h"
 #include <svtools/fltcall.hxx>
 
-BOOL ConvertWMFToGDIMetaFile( SvStream & rStreamWMF, GDIMetaFile & rGDIMetaFile, FilterConfigItem* pConfigItem = NULL );
+sal_Bool ConvertWMFToGDIMetaFile( SvStream & rStreamWMF, GDIMetaFile & rGDIMetaFile, FilterConfigItem* pConfigItem = NULL );
 
-SVT_DLLPUBLIC BOOL ReadWindowMetafile( SvStream& rStream, GDIMetaFile& rMTF, FilterConfigItem* pConfigItem );
+SVT_DLLPUBLIC sal_Bool ReadWindowMetafile( SvStream& rStream, GDIMetaFile& rMTF, FilterConfigItem* pConfigItem );
 
-SVT_DLLPUBLIC BOOL ConvertGDIMetaFileToWMF( const GDIMetaFile & rMTF, SvStream & rTargetStream, FilterConfigItem* pConfigItem = NULL, BOOL bPlaceable = TRUE );
+SVT_DLLPUBLIC sal_Bool ConvertGDIMetaFileToWMF( const GDIMetaFile & rMTF, SvStream & rTargetStream, FilterConfigItem* pConfigItem = NULL, sal_Bool bPlaceable = sal_True );
 
-BOOL ConvertGDIMetaFileToEMF( const GDIMetaFile & rMTF, SvStream & rTargetStream, FilterConfigItem* pConfigItem = NULL );
+sal_Bool ConvertGDIMetaFileToEMF( const GDIMetaFile & rMTF, SvStream & rTargetStream, FilterConfigItem* pConfigItem = NULL );
 
-SVT_DLLPUBLIC BOOL WriteWindowMetafile( SvStream& rStream, const GDIMetaFile& rMTF );
+SVT_DLLPUBLIC sal_Bool WriteWindowMetafile( SvStream& rStream, const GDIMetaFile& rMTF );
 
-SVT_DLLPUBLIC BOOL WriteWindowMetafileBits( SvStream& rStream, const GDIMetaFile& rMTF );
+SVT_DLLPUBLIC sal_Bool WriteWindowMetafileBits( SvStream& rStream, const GDIMetaFile& rMTF );
 
 #endif
 

@@ -42,7 +42,7 @@
 
 // =======================================================================
 
-#define MAX_TIMER_PERIOD    ((ULONG)0xFFFFFFFF)
+#define MAX_TIMER_PERIOD    ((sal_uLong)0xFFFFFFFF)
 
 // ---------------------
 // - TimeManager-Types -
@@ -52,10 +52,10 @@ struct ImplTimerData
 {
     ImplTimerData*  mpNext;         // Pointer to the next Instance
     Timer*          mpSVTimer;      // Pointer to SV Timer instance
-    ULONG           mnUpdateTime;   // Last Update Time
-    ULONG           mnTimerUpdate;  // TimerCallbackProcs on stack
-    BOOL            mbDelete;       // Wurde Timer waehren Update() geloescht
-    BOOL            mbInTimeout;    // Befinden wir uns im Timeout-Handler
+    sal_uLong           mnUpdateTime;   // Last Update Time
+    sal_uLong           mnTimerUpdate;  // TimerCallbackProcs on stack
+    sal_Bool            mbDelete;       // Wurde Timer waehren Update() geloescht
+    sal_Bool            mbInTimeout;    // Befinden wir uns im Timeout-Handler
 };
 
 // =======================================================================
@@ -72,7 +72,7 @@ void Timer::ImplDeInitTimer()
             ImplTimerData* pTempTimerData = pTimerData;
             if ( pTimerData->mpSVTimer )
             {
-                pTimerData->mpSVTimer->mbActive = FALSE;
+                pTimerData->mpSVTimer->mbActive = sal_False;
                 pTimerData->mpSVTimer->mpTimerData = NULL;
             }
             pTimerData = pTimerData->mpNext;
@@ -89,7 +89,7 @@ void Timer::ImplDeInitTimer()
 
 // -----------------------------------------------------------------------
 
-static void ImplStartTimer( ImplSVData* pSVData, ULONG nMS )
+static void ImplStartTimer( ImplSVData* pSVData, sal_uLong nMS )
 {
     if ( !nMS )
         nMS = 1;
@@ -108,15 +108,15 @@ void Timer::ImplTimerCallbackProc()
     ImplSVData*     pSVData = ImplGetSVData();
     ImplTimerData*  pTimerData;
     ImplTimerData*  pPrevTimerData;
-    ULONG           nMinPeriod = MAX_TIMER_PERIOD;
-    ULONG           nDeltaTime;
-    ULONG           nTime = Time::GetSystemTicks();
+    sal_uLong           nMinPeriod = MAX_TIMER_PERIOD;
+    sal_uLong           nDeltaTime;
+    sal_uLong           nTime = Time::GetSystemTicks();
 
     if ( pSVData->mbNoCallTimer )
         return;
 
     pSVData->mnTimerUpdate++;
-    pSVData->mbNotAllTimerCalled = TRUE;
+    pSVData->mbNotAllTimerCalled = sal_True;
 
     // Suche Timer raus, wo der Timeout-Handler gerufen werden muss
     pTimerData = pSVData->mpFirstTimerData;
@@ -137,14 +137,14 @@ void Timer::ImplTimerCallbackProc()
                 // kein AutoTimer, dann anhalten
                 if ( !pTimerData->mpSVTimer->mbAuto )
                 {
-                    pTimerData->mpSVTimer->mbActive = FALSE;
-                    pTimerData->mbDelete = TRUE;
+                    pTimerData->mpSVTimer->mbActive = sal_False;
+                    pTimerData->mbDelete = sal_True;
                 }
 
                 // call Timeout
-                pTimerData->mbInTimeout = TRUE;
+                pTimerData->mbInTimeout = sal_True;
                 pTimerData->mpSVTimer->Timeout();
-                pTimerData->mbInTimeout = FALSE;
+                pTimerData->mbInTimeout = sal_False;
             }
         }
 
@@ -152,7 +152,7 @@ void Timer::ImplTimerCallbackProc()
     }
 
     // Neue Zeit ermitteln
-    ULONG nNewTime = Time::GetSystemTicks();
+    sal_uLong nNewTime = Time::GetSystemTicks();
     pPrevTimerData = NULL;
     pTimerData = pSVData->mpFirstTimerData;
     while ( pTimerData )
@@ -213,7 +213,7 @@ void Timer::ImplTimerCallbackProc()
         ImplStartTimer( pSVData, nMinPeriod );
 
     pSVData->mnTimerUpdate--;
-    pSVData->mbNotAllTimerCalled = FALSE;
+    pSVData->mbNotAllTimerCalled = sal_False;
 }
 
 // =======================================================================
@@ -222,8 +222,8 @@ Timer::Timer()
 {
     mpTimerData     = NULL;
     mnTimeout       = 1;
-    mbAuto          = FALSE;
-    mbActive        = FALSE;
+    mbAuto          = sal_False;
+    mbActive        = sal_False;
 }
 
 // -----------------------------------------------------------------------
@@ -232,8 +232,8 @@ Timer::Timer( const Timer& rTimer )
 {
     mpTimerData     = NULL;
     mnTimeout       = rTimer.mnTimeout;
-    mbAuto          = FALSE;
-    mbActive        = FALSE;
+    mbAuto          = sal_False;
+    mbActive        = sal_False;
     maTimeoutHdl    = rTimer.maTimeoutHdl;
 
     if ( rTimer.IsActive() )
@@ -246,7 +246,7 @@ Timer::~Timer()
 {
     if ( mpTimerData )
     {
-        mpTimerData->mbDelete = TRUE;
+        mpTimerData->mbDelete = sal_True;
         mpTimerData->mpSVTimer = NULL;
     }
 }
@@ -260,7 +260,7 @@ void Timer::Timeout()
 
 // -----------------------------------------------------------------------
 
-void Timer::SetTimeout( ULONG nNewTimeout )
+void Timer::SetTimeout( sal_uLong nNewTimeout )
 {
     mnTimeout = nNewTimeout;
 
@@ -277,7 +277,7 @@ void Timer::SetTimeout( ULONG nNewTimeout )
 
 void Timer::Start()
 {
-    mbActive = TRUE;
+    mbActive = sal_True;
 
     ImplSVData* pSVData = ImplGetSVData();
     if ( !mpTimerData )
@@ -297,8 +297,8 @@ void Timer::Start()
         mpTimerData->mpSVTimer      = this;
         mpTimerData->mnUpdateTime   = Time::GetSystemTicks();
         mpTimerData->mnTimerUpdate  = pSVData->mnTimerUpdate;
-        mpTimerData->mbDelete       = FALSE;
-        mpTimerData->mbInTimeout    = FALSE;
+        mpTimerData->mbDelete       = sal_False;
+        mpTimerData->mbInTimeout    = sal_False;
 
         // !!!!! Wegen SFX hinten einordnen !!!!!
         ImplTimerData* pPrev = NULL;
@@ -325,7 +325,7 @@ void Timer::Start()
     {
         mpTimerData->mnUpdateTime    = Time::GetSystemTicks();
         mpTimerData->mnTimerUpdate   = pSVData->mnTimerUpdate;
-        mpTimerData->mbDelete        = FALSE;
+        mpTimerData->mbDelete        = sal_False;
     }
 }
 
@@ -333,10 +333,10 @@ void Timer::Start()
 
 void Timer::Stop()
 {
-    mbActive = FALSE;
+    mbActive = sal_False;
 
     if ( mpTimerData )
-        mpTimerData->mbDelete = TRUE;
+        mpTimerData->mbDelete = sal_True;
 }
 
 // -----------------------------------------------------------------------
@@ -346,7 +346,7 @@ Timer& Timer::operator=( const Timer& rTimer )
     if ( IsActive() )
         Stop();
 
-    mbActive        = FALSE;
+    mbActive        = sal_False;
     mnTimeout       = rTimer.mnTimeout;
     maTimeoutHdl    = rTimer.maTimeoutHdl;
 
@@ -360,14 +360,14 @@ Timer& Timer::operator=( const Timer& rTimer )
 
 AutoTimer::AutoTimer()
 {
-    mbAuto = TRUE;
+    mbAuto = sal_True;
 }
 
 // -----------------------------------------------------------------------
 
 AutoTimer::AutoTimer( const AutoTimer& rTimer ) : Timer( rTimer )
 {
-    mbAuto = TRUE;
+    mbAuto = sal_True;
 }
 
 // -----------------------------------------------------------------------

@@ -277,12 +277,12 @@ NameNode* NameNode::Search( const void * pSearch ) const{
 |*    NameNode::Insert()
 |*
 *************************************************************************/
-BOOL NameNode::Insert( NameNode * pTN, sal_uInt32* pnDepth ){
+sal_Bool NameNode::Insert( NameNode * pTN, sal_uInt32* pnDepth ){
 // Ein Knoten wird in den Baum eingefuegt
-// Gibt es einen Knoten mit dem gleichen Namen, dann return FALSE
-// sonst return TRUE. Der Knoten wird auf jeden Fall eingefuegt.
+// Gibt es einen Knoten mit dem gleichen Namen, dann return sal_False
+// sonst return sal_True. Der Knoten wird auf jeden Fall eingefuegt.
 
-    BOOL bRet = TRUE;
+    sal_Bool bRet = sal_True;
     int nCmp = Compare( pTN );
 
     *pnDepth += 1;
@@ -298,7 +298,7 @@ BOOL NameNode::Insert( NameNode * pTN, sal_uInt32* pnDepth ){
         else
             pRight = pTN;
         if( nCmp == EQUAL )
-            bRet = FALSE;
+            bRet = sal_False;
     };
     return( bRet );
 }
@@ -308,12 +308,12 @@ BOOL NameNode::Insert( NameNode * pTN, sal_uInt32* pnDepth ){
 |*    NameNode::Insert()
 |*
 *************************************************************************/
-BOOL NameNode::Insert( NameNode * pTN ){
+sal_Bool NameNode::Insert( NameNode * pTN ){
 // insert a node in the tree.
-// if the node with the same name is in, return FALSE and no insert.
+// if the node with the same name is in, return sal_False and no insert.
 // if not return true.
     sal_uInt32  nDepth = 0;
-    BOOL        bRet;
+    sal_Bool        bRet;
 
     bRet = Insert( pTN, &nDepth );
     if( bRet ){
@@ -361,14 +361,14 @@ void NameNode::SubOrderTree( NameNode * pOrderNode ){
 |*
 *************************************************************************/
 class OrderCtrl {
-    BOOL       bOrder;
+    sal_Bool       bOrder;
     NameNode * pName;
     DECL_LINK( CallBackFunc, NameNode * );
 public:
-            OrderCtrl() { bOrder = FALSE; pName = NULL; }
-    BOOL    IsOrder( const NameNode * pRoot )
+            OrderCtrl() { bOrder = sal_False; pName = NULL; }
+    sal_Bool    IsOrder( const NameNode * pRoot )
     {
-            bOrder = TRUE;
+            bOrder = sal_True;
             pName  = NULL;
             pRoot->EnumNodes( LINK( this, OrderCtrl, CallBackFunc ) );
             return bOrder;
@@ -377,13 +377,13 @@ public:
 IMPL_LINK_INLINE_START( OrderCtrl, CallBackFunc, NameNode *, pNext )
 {
     if( pName && pName->Compare( pNext ) != LESS )
-        bOrder = FALSE;
+        bOrder = sal_False;
     pName = pNext;
     return 0;
 }
 IMPL_LINK_INLINE_END( OrderCtrl, CallBackFunc, NameNode *, pNext )
 
-BOOL NameNode::IsOrderTree() const{
+sal_Bool NameNode::IsOrderTree() const{
     OrderCtrl aOrder;
 
     return aOrder.IsOrder( this );

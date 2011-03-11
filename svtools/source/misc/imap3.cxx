@@ -41,7 +41,7 @@
 |*
 \******************************************************************************/
 
-IMapCompat::IMapCompat( SvStream& rStm, const USHORT nStreamMode ) :
+IMapCompat::IMapCompat( SvStream& rStm, const sal_uInt16 nStreamMode ) :
             pRWStm      ( &rStm ),
             nStmMode    ( nStreamMode )
 {
@@ -57,7 +57,7 @@ IMapCompat::IMapCompat( SvStream& rStm, const USHORT nStreamMode ) :
         }
         else
         {
-            UINT32 nTotalSizeTmp;
+            sal_uInt32 nTotalSizeTmp;
             *pRWStm >> nTotalSizeTmp;
             nTotalSize = nTotalSizeTmp;
             nCompatPos = pRWStm->Tell();
@@ -78,15 +78,15 @@ IMapCompat::~IMapCompat()
     {
         if ( nStmMode == STREAM_WRITE )
         {
-            const ULONG nEndPos = pRWStm->Tell();
+            const sal_uLong nEndPos = pRWStm->Tell();
 
             pRWStm->Seek( nCompatPos );
-            *pRWStm << (UINT32) ( nEndPos - nTotalSize );
+            *pRWStm << (sal_uInt32) ( nEndPos - nTotalSize );
             pRWStm->Seek( nEndPos );
         }
         else
         {
-            const ULONG nReadSize = pRWStm->Tell() - nCompatPos;
+            const sal_uLong nReadSize = pRWStm->Tell() - nCompatPos;
 
             if ( nTotalSize > nReadSize )
                 pRWStm->SeekRel( nTotalSize - nReadSize );

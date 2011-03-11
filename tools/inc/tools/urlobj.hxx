@@ -82,6 +82,7 @@ namespace com { namespace sun { namespace star { namespace util {
 #define INET_DB_SCHEME "db:"
 #define INET_BUGID_SCHEME "bugid:"
 #define INET_TELNET_SCHEME "telnet://"
+#define INET_HID_SCHEME "hid:"
 
 #define URL_PREFIX_PRIV_SOFFICE "private:"
 enum
@@ -140,8 +141,9 @@ enum INetProtocol
     INET_PROT_VND_SUN_STAR_TDOC = 29,
     INET_PROT_GENERIC = 30,
     INET_PROT_SMB = 31,
-    INET_PROT_SFTP = 32,
-    INET_PROT_END = 33
+    INET_PROT_HID = 32,
+    INET_PROT_SFTP = 33,
+    INET_PROT_END = 34
 };
 
 //============================================================================

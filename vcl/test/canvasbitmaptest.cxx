@@ -115,7 +115,7 @@ class TestApp : public Application
 {
 public:
     virtual void   Main();
-    virtual USHORT Exception( USHORT nError );
+    virtual sal_uInt16 Exception( sal_uInt16 nError );
 };
 
 class TestWindow : public Dialog

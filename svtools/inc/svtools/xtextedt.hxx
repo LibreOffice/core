@@ -32,10 +32,6 @@
 #include <svtools/texteng.hxx>
 #include <svtools/textview.hxx>
 
-#define XTEXTUNDO_REPLACEALL    (XTEXTUNDO_START+1)
-#define XTEXTUNDO_INDENTBLOCK       122
-#define XTEXTUNDO_UNINDENTBLOCK     123
-
 namespace com {
 namespace sun {
 namespace star {
@@ -56,25 +52,25 @@ public:
     void                SetGroupChars( const String& r ) { maGroupChars = r; }
     TextSelection       MatchGroup( const TextPaM& rCursor ) const;
 
-    BOOL                Search( TextSelection& rSel, const ::com::sun::star::util::SearchOptions& rSearchOptions, BOOL bForward = TRUE );
+    sal_Bool                Search( TextSelection& rSel, const ::com::sun::star::util::SearchOptions& rSearchOptions, sal_Bool bForward = sal_True );
 };
 
 class SVT_DLLPUBLIC ExtTextView : public TextView
 {
 protected:
-    BOOL                ImpIndentBlock( BOOL bRight );
+    sal_Bool                ImpIndentBlock( sal_Bool bRight );
 
 public:
                         ExtTextView( ExtTextEngine* pEng, Window* pWindow );
                         ~ExtTextView();
 
-    BOOL                MatchGroup();
+    sal_Bool                MatchGroup();
 
-    BOOL                Search( const ::com::sun::star::util::SearchOptions& rSearchOptions, BOOL bForward );
-    USHORT              Replace( const ::com::sun::star::util::SearchOptions& rSearchOptions, BOOL bAll, BOOL bForward );
+    sal_Bool                Search( const ::com::sun::star::util::SearchOptions& rSearchOptions, sal_Bool bForward );
+    sal_uInt16              Replace( const ::com::sun::star::util::SearchOptions& rSearchOptions, sal_Bool bAll, sal_Bool bForward );
 
-    BOOL                IndentBlock();
-    BOOL                UnindentBlock();
+    sal_Bool                IndentBlock();
+    sal_Bool                UnindentBlock();
 };
 
 #endif // _XTEXTEDT_HXX

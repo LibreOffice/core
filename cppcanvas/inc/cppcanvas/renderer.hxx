@@ -33,7 +33,7 @@
 #include <rtl/ustring.hxx>
 
 #include <boost/shared_ptr.hpp>
-#include <comphelper/optionalvalue.hxx>
+#include <boost/optional.hpp>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <cppcanvas/canvasgraphic.hxx>
 #include <cppcanvas/color.hxx>
@@ -110,16 +110,16 @@ namespace cppcanvas
         struct Parameters
         {
             /// Optionally forces the fill color attribute for all actions
-            ::comphelper::OptionalValue< Color::IntSRGBA >          maFillColor;
+            ::boost::optional< Color::IntSRGBA >            maFillColor;
 
             /// Optionally forces the line color attribute for all actions
-            ::comphelper::OptionalValue< Color::IntSRGBA >          maLineColor;
+            ::boost::optional< Color::IntSRGBA >        maLineColor;
 
             /// Optionally forces the text color attribute for all actions
-            ::comphelper::OptionalValue< Color::IntSRGBA >          maTextColor;
+            ::boost::optional< Color::IntSRGBA >        maTextColor;
 
             /// Optionally forces the given fontname for all text actions
-            ::comphelper::OptionalValue< ::rtl::OUString >          maFontName;
+            ::boost::optional< ::rtl::OUString >        maFontName;
 
             /** Optionally transforms all text output actions with the
                 given matrix (in addition to the overall canvas
@@ -129,19 +129,19 @@ namespace cppcanvas
                 rect coordinate system, i.e. the metafile is assumed
                 to be contained in the unit rect.
              */
-            ::comphelper::OptionalValue< ::basegfx::B2DHomMatrix >  maTextTransformation;
+            ::boost::optional< ::basegfx::B2DHomMatrix >    maTextTransformation;
 
             /// Optionally forces the given font weight for all text actions
-            ::comphelper::OptionalValue< sal_Int8 >                 maFontWeight;
+            ::boost::optional< sal_Int8 >                   maFontWeight;
 
             /// Optionally forces the given font letter form (italics etc.) for all text actions
-            ::comphelper::OptionalValue< sal_Int8 >                 maFontLetterForm;
+            ::boost::optional< sal_Int8 >                   maFontLetterForm;
 
             /// Optionally forces the given font proportion (condensed, monospaced etc.) for all text actions
             ::comphelper::OptionalValue< sal_Int8 >                 maFontProportion;
 
             /// Optionally forces underlining for all text actions
-            ::comphelper::OptionalValue< bool >                     maFontUnderline;
+            ::boost::optional< bool >                       maFontUnderline;
         };
     };
 

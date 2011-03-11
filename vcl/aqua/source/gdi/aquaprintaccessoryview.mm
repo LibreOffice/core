@@ -112,7 +112,7 @@ class ControllerProperties
       maLocalizedStrings( VclResId( SV_PRINT_NATIVE_STRINGS ) )
     {
         mpState->bNeedRestart = false;
-        DBG_ASSERT( maLocalizedStrings.Count() >= 4, "resources not found !" );
+        DBG_ASSERT( maLocalizedStrings.Count() >= 5, "resources not found !" );
     }
     
     rtl::OUString getMoreString()
@@ -120,6 +120,13 @@ class ControllerProperties
         return maLocalizedStrings.Count() >= 4
                ? rtl::OUString( maLocalizedStrings.GetString( 3 ) )
                : rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "More" ) );
+    }
+    
+    rtl::OUString getPrintSelectionString()
+    {
+        return maLocalizedStrings.Count() >= 5
+               ? rtl::OUString( maLocalizedStrings.GetString( 4 ) )
+               : rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Print selection only" ) );
     }
     
     void updatePrintJob()
@@ -246,7 +253,11 @@ class ControllerProperties
             PropertyValue* pVal = mpController->getValue( name_it->second );
             if( pVal )
             {
-                pVal->Value <<= i_bValue;
+                // ugly
+                if( name_it->second.equalsAscii( "PrintContent" ) )
+                   pVal->Value <<= i_bValue ? sal_Int32(2) : sal_Int32(0);
+               else
+                   pVal->Value <<= i_bValue;
                 updatePrintJob(); 
             }
         }
@@ -283,9 +294,9 @@ class ControllerProperties
                        -1;
             
             std::map< int, rtl::OUString >::const_iterator name_it = maTagToPropertyName.find( nTag );
-            if( name_it != maTagToPropertyName.end() )
+            if( name_it != maTagToPropertyName.end() && ! name_it->second.equalsAscii( "PrintContent" ) )
             {
-                MacOSBOOL bEnabled = mpController->isUIOptionEnabled( name_it->second ) ? YES : NO;
+                BOOL bEnabled = mpController->isUIOptionEnabled( name_it->second ) ? YES : NO;
                 if( pCtrl )
                 {
                     [pCtrl setEnabled: bEnabled];
@@ -311,6 +322,9 @@ class ControllerProperties
             GDIMetaFile aMtf;
             PrinterController::PageSize aPageSize( mpController->getFilteredPageFile( i_nPage, aMtf, false ) );
             VirtualDevice aDev;
+            if( mpController->getPrinter()->GetPrinterOptions().IsConvertToGreyscales() )
+                aDev.SetDrawMode( aDev.GetDrawMode() | ( DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL | DRAWMODE_GRAYTEXT | 
+                                                         DRAWMODE_GRAYBITMAP | DRAWMODE_GRAYGRADIENT ) );
             // see salprn.cxx, currently we pretend to be a 720dpi device on printers
             aDev.SetReferenceDevice( 720, 720 );
             aDev.EnableOutput( TRUE );
@@ -768,6 +782,325 @@ static void linebreakCell( NSCell* pBtn, const rtl::OUString& i_rText )
     }
 }
 
+static void addSubgroup( NSView* pCurParent, long& rCurY, const rtl::OUString& rText )
+{
+    NSControl* pTextView = createLabel( rText );
+    [pCurParent addSubview: [pTextView autorelease]];                
+    NSRect aTextRect = [pTextView frame];
+    // move to nCurY
+    aTextRect.origin.y = rCurY - aTextRect.size.height;
+    [pTextView setFrame: aTextRect];
+    
+    NSRect aSepRect = { { aTextRect.size.width + 1, aTextRect.origin.y }, { 100, 6 } };
+    NSBox* pBox = [[NSBox alloc] initWithFrame: aSepRect];
+    [pBox setBoxType: NSBoxSeparator];
+    [pCurParent addSubview: [pBox autorelease]];
+    
+    // update nCurY
+    rCurY = aTextRect.origin.y - 5;
+}
+
+static void addBool( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachOffset,
+                    const rtl::OUString& rText, sal_Bool bEnabled,
+                    const rtl::OUString& rProperty, sal_Bool bValue,
+                    std::vector<ColumnItem >& rRightColumn,
+                    ControllerProperties* pControllerProperties,
+                    ControlTarget* pCtrlTarget
+                    )
+{
+    NSRect aCheckRect = { { rCurX + nAttachOffset, 0 }, { 0, 15 } };
+    NSButton* pBtn = [[NSButton alloc] initWithFrame: aCheckRect];
+    [pBtn setButtonType: NSSwitchButton];                
+    [pBtn setState: bValue ? NSOnState : NSOffState];
+    if( ! bEnabled )
+        [pBtn setEnabled: NO];
+    linebreakCell( [pBtn cell], rText );
+    [pBtn sizeToFit];
+    
+    rRightColumn.push_back( ColumnItem( pBtn ) );
+    
+    // connect target
+    [pBtn setTarget: pCtrlTarget];
+    [pBtn setAction: @selector(triggered:)];
+    int nTag = pControllerProperties->addNameTag( rProperty );
+    pControllerProperties->addObservedControl( pBtn );
+    [pBtn setTag: nTag];
+    
+    aCheckRect = [pBtn frame];
+    // #i115837# add a murphy factor; it can apparently occasionally happen
+    // that sizeToFit does not a perfect job and that the button linebreaks again
+    // if - and only if - there is already a '\n' contained in the text and the width
+    // is minimally of
+    aCheckRect.size.width += 1;
+    
+    // move to rCurY
+    aCheckRect.origin.y = rCurY - aCheckRect.size.height;
+    [pBtn setFrame: aCheckRect];
+
+    [pCurParent addSubview: [pBtn autorelease]];
+    
+    // update rCurY
+    rCurY = aCheckRect.origin.y - 5;
+}
+
+static void addRadio( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachOffset,
+                     const rtl::OUString& rText,
+                     const rtl::OUString& rProperty, Sequence< rtl::OUString > rChoices, sal_Int32 nSelectValue,
+                     std::vector<ColumnItem >& rLeftColumn,
+                     std::vector<ColumnItem >& rRightColumn,
+                     ControllerProperties* pControllerProperties,
+                     ControlTarget* pCtrlTarget
+                     )
+{
+    sal_Int32 nOff = 0;
+    if( rText.getLength() )
+    {
+        // add a label
+        NSControl* pTextView = createLabel( rText );
+        NSRect aTextRect = [pTextView frame];
+        aTextRect.origin.x = rCurX + nAttachOffset;
+        [pCurParent addSubview: [pTextView autorelease]];
+        
+        rLeftColumn.push_back( ColumnItem( pTextView ) );
+        
+        // move to nCurY
+        aTextRect.origin.y = rCurY - aTextRect.size.height;
+        [pTextView setFrame: aTextRect];
+        
+        // update nCurY
+        rCurY = aTextRect.origin.y - 5;
+        
+        // indent the radio group relative to the text
+        // nOff = 20;
+    }
+    
+    // setup radio matrix
+    NSButtonCell* pProto = [[NSButtonCell alloc] init];
+    
+    NSRect aRadioRect = { { rCurX + nOff, 0 }, { 280 - rCurX, 5*rChoices.getLength() } };
+    [pProto setTitle: @"RadioButtonGroup"];
+    [pProto setButtonType: NSRadioButton];
+    NSMatrix* pMatrix = [[NSMatrix alloc] initWithFrame: aRadioRect
+                                          mode: NSRadioModeMatrix
+                                          prototype: (NSCell*)pProto
+                                          numberOfRows: rChoices.getLength()
+                                          numberOfColumns: 1];
+    // set individual titles
+    NSArray* pCells = [pMatrix cells];
+    for( sal_Int32 m = 0; m < rChoices.getLength(); m++ )
+    {
+        NSCell* pCell = [pCells objectAtIndex: m];
+        filterAccelerator( rChoices[m] );
+        linebreakCell( pCell, rChoices[m] );
+        // connect target and action
+        [pCell setTarget: pCtrlTarget];
+        [pCell setAction: @selector(triggered:)];
+        int nTag = pControllerProperties->addNameAndValueTag( rProperty, m );
+        pControllerProperties->addObservedControl( pCell );
+        [pCell setTag: nTag];
+        // set current selection
+        if( nSelectValue == m )
+            [pMatrix selectCellAtRow: m column: 0];
+    }
+    [pMatrix sizeToFit];
+    aRadioRect = [pMatrix frame];
+    
+    // move it down, so it comes to the correct position
+    aRadioRect.origin.y = rCurY - aRadioRect.size.height;
+    [pMatrix setFrame: aRadioRect];
+    [pCurParent addSubview: [pMatrix autorelease]];
+    
+    rRightColumn.push_back( ColumnItem( pMatrix ) );
+    
+    // update nCurY
+    rCurY = aRadioRect.origin.y - 5;
+    
+    [pProto release];
+}
+
+static void addList( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachOffset,
+                    const rtl::OUString& rText,
+                    const rtl::OUString& rProperty, const Sequence< rtl::OUString > rChoices, sal_Int32 nSelectValue,
+                    std::vector<ColumnItem >& rLeftColumn,
+                    std::vector<ColumnItem >& rRightColumn,
+                    ControllerProperties* pControllerProperties,
+                    ControlTarget* pCtrlTarget
+                    )
+{
+    // don't indent attached lists, looks bad in the existing cases
+    NSControl* pTextView = createLabel( rText );
+    [pCurParent addSubview: [pTextView autorelease]];
+    rLeftColumn.push_back( ColumnItem( pTextView ) );
+    NSRect aTextRect = [pTextView frame];
+    aTextRect.origin.x = rCurX /* + nAttachOffset*/;
+
+    // don't indent attached lists, looks bad in the existing cases
+    NSRect aBtnRect = { { rCurX /*+ nAttachOffset*/ + aTextRect.size.width, 0 }, { 0, 15 } };
+    NSPopUpButton* pBtn = [[NSPopUpButton alloc] initWithFrame: aBtnRect pullsDown: NO];
+
+    // iterate options
+    for( sal_Int32 m = 0; m < rChoices.getLength(); m++ )
+    {
+        NSString* pItemText = CreateNSString( rChoices[m] );
+        [pBtn addItemWithTitle: pItemText];
+        NSMenuItem* pItem = [pBtn itemWithTitle: pItemText];
+        int nTag = pControllerProperties->addNameAndValueTag( rProperty, m );
+        [pItem setTag: nTag];
+        [pItemText release];
+    }
+
+    [pBtn selectItemAtIndex: nSelectValue];
+    
+    // add the button to observed controls for enabled state changes
+    // also add a tag just for this purpose
+    pControllerProperties->addObservedControl( pBtn );
+    [pBtn setTag: pControllerProperties->addNameTag( rProperty )];
+
+    [pBtn sizeToFit];
+    [pCurParent addSubview: [pBtn autorelease]];
+    
+    rRightColumn.push_back( ColumnItem( pBtn ) );
+
+    // connect target and action
+    [pBtn setTarget: pCtrlTarget];
+    [pBtn setAction: @selector(triggered:)];
+    
+    // move to nCurY
+    aBtnRect = [pBtn frame];
+    aBtnRect.origin.y = rCurY - aBtnRect.size.height;
+    [pBtn setFrame: aBtnRect];
+    
+    // align label
+    aTextRect.origin.y = aBtnRect.origin.y + (aBtnRect.size.height - aTextRect.size.height)/2;
+    [pTextView setFrame: aTextRect];
+
+    // update rCurY
+    rCurY = aBtnRect.origin.y - 5;
+}
+
+static void addEdit( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachOffset,
+                    const rtl::OUString rCtrlType,
+                    const rtl::OUString& rText,
+                    const rtl::OUString& rProperty, const PropertyValue* pValue,
+                    sal_Int64 nMinValue, sal_Int64 nMaxValue,
+                    std::vector<ColumnItem >& rLeftColumn,
+                    std::vector<ColumnItem >& rRightColumn,
+                    ControllerProperties* pControllerProperties,
+                    ControlTarget* pCtrlTarget
+                    )
+{
+    sal_Int32 nOff = 0;
+    if( rText.getLength() )
+    {
+        // add a label
+        NSControl* pTextView = createLabel( rText );
+        [pCurParent addSubview: [pTextView autorelease]];
+        
+        rLeftColumn.push_back( ColumnItem( pTextView ) );
+        
+        // move to nCurY
+        NSRect aTextRect = [pTextView frame];
+        aTextRect.origin.x = rCurX + nAttachOffset;
+        aTextRect.origin.y = rCurY - aTextRect.size.height;
+        [pTextView setFrame: aTextRect];
+        
+        // update nCurY
+        rCurY = aTextRect.origin.y - 5;
+        
+        // and set the offset for the real edit field
+        nOff = aTextRect.size.width + 5;
+    }
+    
+    NSRect aFieldRect = { { rCurX + nOff +  nAttachOffset, 0 }, { 100, 25 } };
+    NSTextField* pFieldView = [[NSTextField alloc] initWithFrame: aFieldRect];
+    [pFieldView setEditable: YES];
+    [pFieldView setSelectable: YES];
+    [pFieldView setDrawsBackground: YES];
+    [pFieldView sizeToFit]; // FIXME: this does nothing
+    [pCurParent addSubview: [pFieldView autorelease]];
+    
+    rRightColumn.push_back( ColumnItem( pFieldView ) );
+    
+    // add the field to observed controls for enabled state changes
+    // also add a tag just for this purpose
+    pControllerProperties->addObservedControl( pFieldView );
+    int nTag = pControllerProperties->addNameTag( rProperty );
+    [pFieldView setTag: nTag];
+    // pControllerProperties->addNamedView( pFieldView, aPropertyName );
+
+    // move to nCurY
+    aFieldRect.origin.y = rCurY - aFieldRect.size.height;
+    [pFieldView setFrame: aFieldRect];
+
+    if( rCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Range" ) ) )
+    {
+        // add a stepper control
+        NSRect aStepFrame = { { aFieldRect.origin.x + aFieldRect.size.width + 5,
+                                aFieldRect.origin.y },
+                            { 15, aFieldRect.size.height } };
+        NSStepper* pStep = [[NSStepper alloc] initWithFrame: aStepFrame];
+        [pStep setIncrement: 1];
+        [pStep setValueWraps: NO];
+        [pStep setTag: nTag];
+        [pCurParent addSubview: [pStep autorelease]];
+        
+        rRightColumn.back().pSubControl = pStep;
+        
+        pControllerProperties->addObservedControl( pStep );
+        [pStep setTarget: pCtrlTarget];
+        [pStep setAction: @selector(triggered:)];
+        
+        // constrain the text field to decimal numbers
+        NSNumberFormatter* pFormatter = [[NSNumberFormatter alloc] init];
+        [pFormatter setFormatterBehavior: NSNumberFormatterBehavior10_4];
+        [pFormatter setNumberStyle: NSNumberFormatterDecimalStyle];
+        [pFormatter setAllowsFloats: NO];
+        [pFormatter setMaximumFractionDigits: 0];
+        if( nMinValue != nMaxValue )
+        {
+            [pFormatter setMinimum: [[NSNumber numberWithInt: nMinValue] autorelease]];
+            [pStep setMinValue: nMinValue];
+            [pFormatter setMaximum: [[NSNumber numberWithInt: nMaxValue] autorelease]];
+            [pStep setMaxValue: nMaxValue];
+        }
+        [pFieldView setFormatter: pFormatter];
+
+        sal_Int64 nSelectVal = 0;
+        if( pValue && pValue->Value.hasValue() )
+            pValue->Value >>= nSelectVal;
+        
+        [pFieldView setIntValue: nSelectVal];
+        [pStep setIntValue: nSelectVal];
+
+        pControllerProperties->addViewPair( pFieldView, pStep );
+        // connect target and action
+        [pFieldView setTarget: pCtrlTarget];
+        [pFieldView setAction: @selector(triggeredNumeric:)];
+        [pStep setTarget: pCtrlTarget];
+        [pStep setAction: @selector(triggeredNumeric:)];
+    }
+    else
+    {
+        // connect target and action
+        [pFieldView setTarget: pCtrlTarget];
+        [pFieldView setAction: @selector(triggered:)];
+
+        if( pValue && pValue->Value.hasValue() )
+        {
+            rtl::OUString aValue;
+            pValue->Value >>= aValue;
+            if( aValue.getLength() )
+            {
+                NSString* pText = CreateNSString( aValue );
+                [pFieldView setStringValue: pText];
+                [pText release];
+            }
+        }
+    }
+
+    // update nCurY
+    rCurY = aFieldRect.origin.y - 5;
+}
 
 @implementation AquaPrintAccessoryView
 +(NSObject*)setupPrinterPanel: (NSPrintOperation*)pOp withController: (vcl::PrinterController*)pController  withState: (PrintAccessoryViewState*)pState;
@@ -792,6 +1125,54 @@ static void linebreakCell( NSCell* pBtn, const rtl::OUString& i_rText )
     ControlTarget* pCtrlTarget = [[ControlTarget alloc] initWithControllerMap: pControllerProperties];
     
     std::vector< ColumnItem > aLeftColumn, aRightColumn;
+    
+    // ugly:
+    // prepend a "selection" checkbox if the properties have such a selection in PrintContent
+    bool bAddSelectionCheckBox = false, bSelectionBoxEnabled = false, bSelectionBoxChecked = false;
+    for( int i = 0; i < rOptions.getLength(); i++ )
+    {
+        Sequence< beans::PropertyValue > aOptProp;
+        rOptions[i].Value >>= aOptProp;
+
+        rtl::OUString aCtrlType;
+        rtl::OUString aPropertyName;
+        Sequence< rtl::OUString > aChoices;
+        Sequence< sal_Bool > aChoicesDisabled;
+        sal_Int32 aSelectionChecked = 0;
+        for( int n = 0; n < aOptProp.getLength(); n++ )
+        {
+            const beans::PropertyValue& rEntry( aOptProp[ n ] );
+            if( rEntry.Name.equalsAscii( "ControlType" ) )
+            {
+                rEntry.Value >>= aCtrlType;
+            }
+            else if( rEntry.Name.equalsAscii( "Choices" ) )
+            {
+                rEntry.Value >>= aChoices;
+            }
+            else if( rEntry.Name.equalsAscii( "ChoicesDisabled" ) )
+            {
+                rEntry.Value >>= aChoicesDisabled;
+            }
+            else if( rEntry.Name.equalsAscii( "Property" ) )
+            {
+                PropertyValue aVal;
+                rEntry.Value >>= aVal;
+                aPropertyName = aVal.Name;
+                if( aPropertyName.equalsAscii( "PrintContent" ) )
+                    aVal.Value >>= aSelectionChecked;
+            }
+        }
+        if( aCtrlType.equalsAscii( "Radio" ) &&
+            aPropertyName.equalsAscii( "PrintContent" ) &&
+            aChoices.getLength() > 2 )
+        {
+            bAddSelectionCheckBox = true;
+            bSelectionBoxEnabled = aChoicesDisabled.getLength() < 2 || ! aChoicesDisabled[2];
+            bSelectionBoxChecked = (aSelectionChecked==2);
+            break;
+        }
+    }
 
     for( int i = 0; i < rOptions.getLength(); i++ )
     {
@@ -803,6 +1184,7 @@ static void linebreakCell( NSCell* pBtn, const rtl::OUString& i_rText )
         rtl::OUString aCtrlType;
         rtl::OUString aText;
         rtl::OUString aPropertyName;
+        rtl::OUString aGroupHint;
         Sequence< rtl::OUString > aChoices;
         sal_Int64 nMinValue = 0, nMaxValue = 0;
         long nAttachOffset = 0;
@@ -811,66 +1193,70 @@ static void linebreakCell( NSCell* pBtn, const rtl::OUString& i_rText )
         for( int n = 0; n < aOptProp.getLength(); n++ )
         {
             const beans::PropertyValue& rEntry( aOptProp[ n ] );
-            if( rEntry.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Text" ) ) )
+            if( rEntry.Name.equalsAscii( "Text" ) )
             {
                 rEntry.Value >>= aText;
                 filterAccelerator( aText );
             }
-            else if( rEntry.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ControlType" ) ) )
+            else if( rEntry.Name.equalsAscii( "ControlType" ) )
             {
                 rEntry.Value >>= aCtrlType;
             }
-            else if( rEntry.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Choices" ) ) )
+            else if( rEntry.Name.equalsAscii( "Choices" ) )
             {
                 rEntry.Value >>= aChoices;
             }
-            else if( rEntry.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Property" ) ) )
+            else if( rEntry.Name.equalsAscii( "Property" ) )
             {
                 PropertyValue aVal;
                 rEntry.Value >>= aVal;
                 aPropertyName = aVal.Name;
             }
-            else if( rEntry.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Enabled" ) ) )
+            else if( rEntry.Name.equalsAscii( "Enabled" ) )
             {
                 sal_Bool bValue = sal_True;
                 rEntry.Value >>= bValue;
                 bEnabled = bValue;
             }
-            else if( rEntry.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MinValue" ) ) )
+            else if( rEntry.Name.equalsAscii( "MinValue" ) )
             {
                 rEntry.Value >>= nMinValue;
             }
-            else if( rEntry.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MaxValue" ) ) )
+            else if( rEntry.Name.equalsAscii( "MaxValue" ) )
             {
                 rEntry.Value >>= nMaxValue;
             }
-            else if( rEntry.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "AttachToDependency" ) ) )
+            else if( rEntry.Name.equalsAscii( "AttachToDependency" ) )
             {
                 nAttachOffset = 20;
             }
-            else if( rEntry.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "InternalUIOnly" ) ) )
+            else if( rEntry.Name.equalsAscii( "InternalUIOnly" ) )
             {
                 rEntry.Value >>= bIgnore;
             }
+            else if( rEntry.Name.equalsAscii( "GroupingHint" ) )
+            {
+                rEntry.Value >>= aGroupHint;
+            }
         }
 
-        if( aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Group" ) ) ||
-            aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Subgroup" ) ) ||
-            aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Radio" ) ) ||
-            aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "List" ) )  ||
-            aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Edit" ) )  ||
-            aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Range" ) )  ||
-            aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Bool" ) ) )
+        if( aCtrlType.equalsAscii( "Group" ) ||
+            aCtrlType.equalsAscii( "Subgroup" ) ||
+            aCtrlType.equalsAscii( "Radio" ) ||
+            aCtrlType.equalsAscii( "List" )  ||
+            aCtrlType.equalsAscii( "Edit" )  ||
+            aCtrlType.equalsAscii( "Range" )  ||
+            aCtrlType.equalsAscii( "Bool" ) )
         {
             // since our build target is MacOSX 10.4 we can have only one accessory view
             // so we have a single accessory view that is tabbed for grouping
-            if( aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Group" ) )
+            if( aCtrlType.equalsAscii( "Group" )
                 || ! pCurParent
-                || ( aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Subgroup" ) ) && nCurY < -250 && ! bIgnore ) 
+                || ( aCtrlType.equalsAscii( "Subgroup" ) && nCurY < -250 && ! bIgnore ) 
                )
             {
                 rtl::OUString aGroupTitle( aText );
-                if( aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Subgroup" ) ) )
+                if( aCtrlType.equalsAscii( "Subgroup" ) )
                     aGroupTitle = pControllerProperties->getMoreString();
                 // set size of current parent
                 if( pCurParent )
@@ -894,310 +1280,73 @@ static void linebreakCell( NSCell* pBtn, const rtl::OUString& i_rText )
                 // clear columns
                 aLeftColumn.clear();
                 aRightColumn.clear();
+
+                if( bAddSelectionCheckBox )
+                {
+                    addBool( pCurParent, nCurX, nCurY, 0,
+                             pControllerProperties->getPrintSelectionString(), bSelectionBoxEnabled,
+                             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintContent" ) ), bSelectionBoxChecked,
+                             aRightColumn, pControllerProperties, pCtrlTarget );
+                    bAddSelectionCheckBox = false;
+                }
             }
             
-            if( aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Subgroup" ) ) && pCurParent )
+            if( aCtrlType.equalsAscii( "Subgroup" ) && pCurParent )
             {
                 bIgnoreSubgroup = bIgnore;
                 if( bIgnore )
                     continue;
                 
-                NSControl* pTextView = createLabel( aText );
-                [pCurParent addSubview: [pTextView autorelease]];                
-                NSRect aTextRect = [pTextView frame];
-                // move to nCurY
-                aTextRect.origin.y = nCurY - aTextRect.size.height;
-                [pTextView setFrame: aTextRect];
-
-                NSRect aSepRect = { { aTextRect.size.width + 1, aTextRect.origin.y }, { 100, 6 } };
-                NSBox* pBox = [[NSBox alloc] initWithFrame: aSepRect];
-                [pBox setBoxType: NSBoxSeparator];
-                [pCurParent addSubview: [pBox autorelease]];
-                
-                // update nCurY
-                nCurY = aTextRect.origin.y - 5;
+                addSubgroup( pCurParent, nCurY, aText );
             }
             else if( bIgnoreSubgroup || bIgnore )
-                continue;
-            else if( aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Bool" ) ) && pCurParent )
             {
-                NSRect aCheckRect = { { nCurX + nAttachOffset, 0 }, { 0, 15 } };
-                NSButton* pBtn = [[NSButton alloc] initWithFrame: aCheckRect];
-                [pBtn setButtonType: NSSwitchButton];                
+                continue;
+            }
+            else if( aCtrlType.equalsAscii( "Bool" ) && pCurParent )
+            {
                 sal_Bool bVal = sal_False;                
                 PropertyValue* pVal = pController->getValue( aPropertyName );
                 if( pVal )
                     pVal->Value >>= bVal;
-                [pBtn setState: bVal ? NSOnState : NSOffState];
-                linebreakCell( [pBtn cell], aText );
-                [pBtn sizeToFit];
-                [pCurParent addSubview: [pBtn autorelease]];
-                
-                aRightColumn.push_back( ColumnItem( pBtn ) );
-                
-                // connect target
-                [pBtn setTarget: pCtrlTarget];
-                [pBtn setAction: @selector(triggered:)];
-                int nTag = pControllerProperties->addNameTag( aPropertyName );
-                pControllerProperties->addObservedControl( pBtn );
-                [pBtn setTag: nTag];
-
-                aCheckRect = [pBtn frame];
-
-                // move to nCurY
-                aCheckRect.origin.y = nCurY - aCheckRect.size.height;
-                [pBtn setFrame: aCheckRect];
-
-                // update nCurY
-                nCurY = aCheckRect.origin.y - 5;
+                addBool( pCurParent, nCurX, nCurY, nAttachOffset,
+                         aText, true, aPropertyName, bVal,
+                         aRightColumn, pControllerProperties, pCtrlTarget );
             }
-            else if( aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Radio" ) ) && pCurParent )
+            else if( aCtrlType.equalsAscii( "Radio" ) && pCurParent )
             {
-                sal_Int32 nOff = 0;
-                if( aText.getLength() )
-                {
-                    // add a label
-                    NSControl* pTextView = createLabel( aText );
-                    NSRect aTextRect = [pTextView frame];
-                    aTextRect.origin.x = nCurX + nAttachOffset;
-                    [pCurParent addSubview: [pTextView autorelease]];
-                    
-                    aLeftColumn.push_back( ColumnItem( pTextView ) );
-    
-                    // move to nCurY
-                    aTextRect.origin.y = nCurY - aTextRect.size.height;
-                    [pTextView setFrame: aTextRect];
-                    
-                    // update nCurY
-                    nCurY = aTextRect.origin.y - 5;
-                    
-                    // indent the radio group relative to the text
-                    // nOff = 20;
-                }
-                
-                // setup radio matrix
-                NSButtonCell* pProto = [[NSButtonCell alloc] init];
-                
-                NSRect aRadioRect = { { nCurX + nOff, 0 }, { 280 - nCurX, 5*aChoices.getLength() } };
-                [pProto setTitle: @"RadioButtonGroup"];
-                [pProto setButtonType: NSRadioButton];
-                NSMatrix* pMatrix = [[NSMatrix alloc] initWithFrame: aRadioRect
-                                                      mode: NSRadioModeMatrix
-                                                      prototype: (NSCell*)pProto
-                                                      numberOfRows: aChoices.getLength()
-                                                      numberOfColumns: 1];
                 // get currently selected value
                 sal_Int32 nSelectVal = 0;
                 PropertyValue* pVal = pController->getValue( aPropertyName );
                 if( pVal && pVal->Value.hasValue() )
                     pVal->Value >>= nSelectVal;
-                // set individual titles
-                NSArray* pCells = [pMatrix cells];
-                for( sal_Int32 m = 0; m < aChoices.getLength(); m++ )
-                {
-                    NSCell* pCell = [pCells objectAtIndex: m];
-                    filterAccelerator( aChoices[m] );
-                    linebreakCell( pCell, aChoices[m] );
-                    //NSString* pTitle = CreateNSString( aChoices[m] );
-                    //[pCell setTitle: pTitle];
-                    // connect target and action
-                    [pCell setTarget: pCtrlTarget];
-                    [pCell setAction: @selector(triggered:)];
-                    int nTag = pControllerProperties->addNameAndValueTag( aPropertyName, m );
-                    pControllerProperties->addObservedControl( pCell );
-                    [pCell setTag: nTag];
-                    //[pTitle release];
-                    // set current selection
-                    if( nSelectVal == m )
-                        [pMatrix selectCellAtRow: m column: 0];
-                }
-                [pMatrix sizeToFit];
-                aRadioRect = [pMatrix frame];
 
-                // move it down, so it comes to the correct position
-                aRadioRect.origin.y = nCurY - aRadioRect.size.height;
-                [pMatrix setFrame: aRadioRect];
-                [pCurParent addSubview: [pMatrix autorelease]];
-
-                aRightColumn.push_back( ColumnItem( pMatrix ) );
-
-                // update nCurY
-                nCurY = aRadioRect.origin.y - 5;
-                
-                [pProto release];
+                addRadio( pCurParent, nCurX, nCurY, nAttachOffset,
+                          aText, aPropertyName, aChoices, nSelectVal,
+                          aLeftColumn, aRightColumn,
+                          pControllerProperties, pCtrlTarget );
             }
-            else if( aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "List" ) ) && pCurParent )
+            else if( aCtrlType.equalsAscii( "List" ) && pCurParent )
             {
-                // don't indent attached lists, looks bad in the existing cases
-                NSControl* pTextView = createLabel( aText );
-                [pCurParent addSubview: [pTextView autorelease]];
-                aLeftColumn.push_back( ColumnItem( pTextView ) );
-                NSRect aTextRect = [pTextView frame];
-                aTextRect.origin.x = nCurX /* + nAttachOffset*/;
-
-                // don't indent attached lists, looks bad in the existing cases
-                NSRect aBtnRect = { { nCurX /*+ nAttachOffset*/ + aTextRect.size.width, 0 }, { 0, 15 } };
-                NSPopUpButton* pBtn = [[NSPopUpButton alloc] initWithFrame: aBtnRect pullsDown: NO];
-
-                // iterate options
-                for( sal_Int32 m = 0; m < aChoices.getLength(); m++ )
-                {
-                    NSString* pItemText = CreateNSString( aChoices[m] );
-                    [pBtn addItemWithTitle: pItemText];
-                    NSMenuItem* pItem = [pBtn itemWithTitle: pItemText];
-                    int nTag = pControllerProperties->addNameAndValueTag( aPropertyName, m );
-                    [pItem setTag: nTag];
-                    [pItemText release];
-                }
-
                 PropertyValue* pVal = pController->getValue( aPropertyName );
                 sal_Int32 aSelectVal = 0;
                 if( pVal && pVal->Value.hasValue() )
                     pVal->Value >>= aSelectVal;
-                [pBtn selectItemAtIndex: aSelectVal];
-                
-                // add the button to observed controls for enabled state changes
-                // also add a tag just for this purpose
-                pControllerProperties->addObservedControl( pBtn );
-                [pBtn setTag: pControllerProperties->addNameTag( aPropertyName )];
 
-                [pBtn sizeToFit];
-                [pCurParent addSubview: [pBtn autorelease]];
-                
-                aRightColumn.push_back( ColumnItem( pBtn ) );
-
-                // connect target and action
-                [pBtn setTarget: pCtrlTarget];
-                [pBtn setAction: @selector(triggered:)];
-                
-                // move to nCurY
-                aBtnRect = [pBtn frame];
-                aBtnRect.origin.y = nCurY - aBtnRect.size.height;
-                [pBtn setFrame: aBtnRect];
-                
-                // align label
-                aTextRect.origin.y = aBtnRect.origin.y + (aBtnRect.size.height - aTextRect.size.height)/2;
-                [pTextView setFrame: aTextRect];
-
-                // update nCurY
-                nCurY = aBtnRect.origin.y - 5;
+                addList( pCurParent, nCurX, nCurY, nAttachOffset,
+                         aText, aPropertyName, aChoices, aSelectVal,
+                         aLeftColumn, aRightColumn,
+                         pControllerProperties, pCtrlTarget );
             }
-            else if( (aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Edit" ) ) || aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Range" ) )) && pCurParent )
+            else if( (aCtrlType.equalsAscii( "Edit" ) || aCtrlType.equalsAscii( "Range" )) && pCurParent )
             {
-                sal_Int32 nOff = 0;
-                if( aText.getLength() )
-                {
-                    // add a label
-                    NSControl* pTextView = createLabel( aText );
-                    [pCurParent addSubview: [pTextView autorelease]];
-                    
-                    aLeftColumn.push_back( ColumnItem( pTextView ) );
-                    
-                    // move to nCurY
-                    NSRect aTextRect = [pTextView frame];
-                    aTextRect.origin.x = nCurX + nAttachOffset;
-                    aTextRect.origin.y = nCurY - aTextRect.size.height;
-                    [pTextView setFrame: aTextRect];
-                    
-                    // update nCurY
-                    nCurY = aTextRect.origin.y - 5;
-                    
-                    // and set the offset for the real edit field
-                    nOff = aTextRect.size.width + 5;
-                }
-                
-                NSRect aFieldRect = { { nCurX + nOff +  nAttachOffset, 0 }, { 100, 25 } };
-                NSTextField* pFieldView = [[NSTextField alloc] initWithFrame: aFieldRect];
-                [pFieldView setEditable: YES];
-                [pFieldView setSelectable: YES];
-                [pFieldView setDrawsBackground: YES];
-                [pFieldView sizeToFit]; // FIXME: this does nothing
-                [pCurParent addSubview: [pFieldView autorelease]];
-                
-                aRightColumn.push_back( ColumnItem( pFieldView ) );
-                
-                // add the field to observed controls for enabled state changes
-                // also add a tag just for this purpose
-                pControllerProperties->addObservedControl( pFieldView );
-                int nTag = pControllerProperties->addNameTag( aPropertyName );
-                [pFieldView setTag: nTag];
-                // pControllerProperties->addNamedView( pFieldView, aPropertyName );
-
-                // move to nCurY
-                aFieldRect.origin.y = nCurY - aFieldRect.size.height;
-                [pFieldView setFrame: aFieldRect];
-
                 // current value
                 PropertyValue* pVal = pController->getValue( aPropertyName );
-                if( aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Range" ) ) )
-                {
-                    // add a stepper control
-                    NSRect aStepFrame = { { aFieldRect.origin.x + aFieldRect.size.width + 5,
-                                            aFieldRect.origin.y },
-                                        { 15, aFieldRect.size.height } };
-                    NSStepper* pStep = [[NSStepper alloc] initWithFrame: aStepFrame];
-                    [pStep setIncrement: 1];
-                    [pStep setValueWraps: NO];
-                    [pStep setTag: nTag];
-                    [pCurParent addSubview: [pStep autorelease]];
-                    
-                    aRightColumn.back().pSubControl = pStep;
-                    
-                    pControllerProperties->addObservedControl( pStep );
-                    [pStep setTarget: pCtrlTarget];
-                    [pStep setAction: @selector(triggered:)];
-                    
-                    // constrain the text field to decimal numbers
-                    NSNumberFormatter* pFormatter = [[NSNumberFormatter alloc] init];
-                    [pFormatter setFormatterBehavior: NSNumberFormatterBehavior10_4];
-                    [pFormatter setNumberStyle: NSNumberFormatterDecimalStyle];
-                    [pFormatter setAllowsFloats: NO];
-                    [pFormatter setMaximumFractionDigits: 0];
-                    if( nMinValue != nMaxValue )
-                    {
-                        [pFormatter setMinimum: [[NSNumber numberWithInt: nMinValue] autorelease]];
-                        [pStep setMinValue: nMinValue];
-                        [pFormatter setMaximum: [[NSNumber numberWithInt: nMaxValue] autorelease]];
-                        [pStep setMaxValue: nMaxValue];
-                    }
-                    [pFieldView setFormatter: pFormatter];
-
-                    sal_Int64 nSelectVal = 0;
-                    if( pVal && pVal->Value.hasValue() )
-                        pVal->Value >>= nSelectVal;
-                    
-                    [pFieldView setIntValue: nSelectVal];
-                    [pStep setIntValue: nSelectVal];
-
-                    pControllerProperties->addViewPair( pFieldView, pStep );
-                    // connect target and action
-                    [pFieldView setTarget: pCtrlTarget];
-                    [pFieldView setAction: @selector(triggeredNumeric:)];
-                    [pStep setTarget: pCtrlTarget];
-                    [pStep setAction: @selector(triggeredNumeric:)];
-                }
-                else
-                {
-                    // connect target and action
-                    [pFieldView setTarget: pCtrlTarget];
-                    [pFieldView setAction: @selector(triggered:)];
-
-                    if( pVal && pVal->Value.hasValue() )
-                    {
-                        rtl::OUString aValue;
-                        pVal->Value >>= aValue;
-                        if( aValue.getLength() )
-                        {
-                            NSString* pText = CreateNSString( aValue );
-                            [pFieldView setStringValue: pText];
-                            [pText release];
-                        }
-                    }
-                }
-
-                // update nCurY
-                nCurY = aFieldRect.origin.y - 5;
-                
+                addEdit( pCurParent, nCurX, nCurY, nAttachOffset,
+                         aCtrlType, aText, aPropertyName, pVal,
+                         nMinValue, nMaxValue,
+                         aLeftColumn, aRightColumn,
+                         pControllerProperties, pCtrlTarget );
             }
         }
         else
@@ -1205,7 +1354,7 @@ static void linebreakCell( NSCell* pBtn, const rtl::OUString& i_rText )
             DBG_ERROR( "Unsupported UI option" );
         }
     }
-    
+        
     pControllerProperties->updateEnableState();
     adjustViewAndChildren( pCurParent, aMaxTabSize, aLeftColumn, aRightColumn );
     

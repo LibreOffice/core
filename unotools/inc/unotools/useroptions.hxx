@@ -36,23 +36,23 @@
 
 // define ----------------------------------------------------------------
 
-#define USER_OPT_CITY               ((USHORT)0)
-#define USER_OPT_COMPANY            ((USHORT)1)
-#define USER_OPT_COUNTRY            ((USHORT)2)
-#define USER_OPT_EMAIL              ((USHORT)3)
-#define USER_OPT_FAX                ((USHORT)4)
-#define USER_OPT_FIRSTNAME          ((USHORT)5)
-#define USER_OPT_LASTNAME           ((USHORT)6)
-#define USER_OPT_POSITION           ((USHORT)7)
-#define USER_OPT_STATE              ((USHORT)8)
-#define USER_OPT_STREET             ((USHORT)9)
-#define USER_OPT_TELEPHONEHOME      ((USHORT)10)
-#define USER_OPT_TELEPHONEWORK      ((USHORT)11)
-#define USER_OPT_TITLE              ((USHORT)12)
-#define USER_OPT_ID                 ((USHORT)13)
-#define USER_OPT_ZIP                ((USHORT)14)
-#define USER_OPT_FATHERSNAME        ((USHORT)15)
-#define USER_OPT_APARTMENT          ((USHORT)16)
+#define USER_OPT_CITY               ((sal_uInt16)0)
+#define USER_OPT_COMPANY            ((sal_uInt16)1)
+#define USER_OPT_COUNTRY            ((sal_uInt16)2)
+#define USER_OPT_EMAIL              ((sal_uInt16)3)
+#define USER_OPT_FAX                ((sal_uInt16)4)
+#define USER_OPT_FIRSTNAME          ((sal_uInt16)5)
+#define USER_OPT_LASTNAME           ((sal_uInt16)6)
+#define USER_OPT_POSITION           ((sal_uInt16)7)
+#define USER_OPT_STATE              ((sal_uInt16)8)
+#define USER_OPT_STREET             ((sal_uInt16)9)
+#define USER_OPT_TELEPHONEHOME      ((sal_uInt16)10)
+#define USER_OPT_TELEPHONEWORK      ((sal_uInt16)11)
+#define USER_OPT_TITLE              ((sal_uInt16)12)
+#define USER_OPT_ID                 ((sal_uInt16)13)
+#define USER_OPT_ZIP                ((sal_uInt16)14)
+#define USER_OPT_FATHERSNAME        ((sal_uInt16)15)
+#define USER_OPT_APARTMENT          ((sal_uInt16)16)
 
 // class SvtUserOptions --------------------------------------------------
 
@@ -112,8 +112,8 @@ public:
     void            SetFathersName( const ::rtl::OUString& rNewToken );
     void            SetApartment( const ::rtl::OUString& rNewToken );
 
-    sal_Bool        IsTokenReadonly( USHORT nToken ) const;
-    ::rtl::OUString GetToken(USHORT nToken) const;
+    sal_Bool        IsTokenReadonly( sal_uInt16 nToken ) const;
+    ::rtl::OUString GetToken(sal_uInt16 nToken) const;
 };
 
 #endif // #ifndef INCLUDED_unotools_USEROPTIONS_HXX

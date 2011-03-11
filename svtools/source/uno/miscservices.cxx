@@ -102,55 +102,6 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment (
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo (
-    void * pServiceManager, void * _pRegistryKey )
-{
-    if (_pRegistryKey)
-    {
-        Reference< XRegistryKey > xRegistryKey (
-            reinterpret_cast< XRegistryKey* >( _pRegistryKey ));
-        Reference< XRegistryKey > xNewKey;
-        uno::Sequence< ::rtl::OUString >            aServices;
-
-        xNewKey = xRegistryKey->createKey (
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "/com.sun.star.comp.svtools.OAddressBookSourceDialogUno/UNO/SERVICES" )) );
-        xNewKey->createKey(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.AddressBookSourceDialog" )) );
-
-        xNewKey = xRegistryKey->createKey (
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "/com.sun.star.svtools.SvFilterOptionsDialog/UNO/SERVICES" )) );
-        xNewKey->createKey (
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FilterOptionsDialog" )) );
-
-        // GraphicProvider
-        xNewKey = reinterpret_cast< registry::XRegistryKey * >( _pRegistryKey )->createKey(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) +
-                    GraphicProvider::getImplementationName_Static() +
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") ) );
-
-        aServices = GraphicProvider::getSupportedServiceNames_Static();
-        int i;
-        for( i = 0; i < aServices.getLength(); i++ )
-            xNewKey->createKey( aServices.getConstArray()[ i ] );
-
-        // GraphicRendererVCL
-        xNewKey = reinterpret_cast< registry::XRegistryKey * >( _pRegistryKey )->createKey(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) +
-                    GraphicRendererVCL::getImplementationName_Static() +
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") ) );
-
-        aServices = ( GraphicRendererVCL::getSupportedServiceNames_Static() );
-        for( i = 0; i < aServices.getLength(); i++ )
-            xNewKey->createKey( aServices.getConstArray()[ i ] );
-
-        if ( !component_writeInfoHelper( reinterpret_cast< lang::XMultiServiceFactory* >( pServiceManager ), reinterpret_cast< registry::XRegistryKey* >( _pRegistryKey ), serviceDecl ) )
-            return false;
-
-        return ::cppu::component_writeInfoHelper( pServiceManager, _pRegistryKey, s_aServiceEntries );
-    }
-    return sal_False;
-}
-
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory (
     const sal_Char * pImplementationName, void * _pServiceManager, void * pRegistryKey)
 {

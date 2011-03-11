@@ -40,7 +40,7 @@ class PspGraphics;
 class SvpSalInfoPrinter : public PspSalInfoPrinter
 {
 public:
-    virtual BOOL                    Setup( SalFrame* pFrame, ImplJobSetup* pSetupData );
+    virtual sal_Bool                    Setup( SalFrame* pFrame, ImplJobSetup* pSetupData );
 };
 
 class SvpSalPrinter : public PspSalPrinter
@@ -48,8 +48,8 @@ class SvpSalPrinter : public PspSalPrinter
 public:
     SvpSalPrinter( SalInfoPrinter* pInfoPrinter ) : PspSalPrinter(pInfoPrinter) {}
 
-    virtual BOOL StartJob( const XubString* pFileName, const XubString& rJobName,
-                           const XubString& rAppName, ULONG nCopies, bool bCollate,
+    virtual sal_Bool StartJob( const XubString* pFileName, const XubString& rJobName,
+                           const XubString& rAppName, sal_uLong nCopies, bool bCollate,
                            bool /*bDirect*/, ImplJobSetup* pSetupData )
     {
         return SvpSalPrinter::StartJob( pFileName, rJobName, rAppName, nCopies, bCollate, false, pSetupData );

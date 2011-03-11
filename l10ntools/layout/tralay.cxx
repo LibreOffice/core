@@ -114,7 +114,7 @@ static ByteString ConvertSystemPath( const ByteString& rPath )
 
 ByteString TranslateLayout::GetCommandLineParam( int i )
 {
-    return ByteString( OUSTRING_CSTR( Application::GetCommandLineParam( sal::static_int_cast< USHORT >( i ) ) ) );
+    return ByteString( OUSTRING_CSTR( Application::GetCommandLineParam( sal::static_int_cast< sal_uInt16 >( i ) ) ) );
 }
 
 ByteString TranslateLayout::GetOptionArgument( int const i )
@@ -274,7 +274,7 @@ void TranslateLayout::MergeLanguage( ByteString const& language )
     ByteString xmlFile = mFiles.front();
 
     MergeDataFile mergeData( mLocalize, xmlFile,
-                             FALSE, RTL_TEXTENCODING_MS_1252 );
+                             sal_False, RTL_TEXTENCODING_MS_1252 );
 
     DirEntry aFile( xmlFile );
     SimpleXMLParser aParser;

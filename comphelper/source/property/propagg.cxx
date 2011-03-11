@@ -88,20 +88,36 @@ OPropertyArrayAggregationHelper::OPropertyArrayAggregationHelper(
     const   Property* pDelegateProps    = _rProperties.getConstArray();
             Property* pMergedProps = m_aProperties.getArray();
 
+    // if properties are present both at the delegatee and the aggregate, then the former are supposed to win.
+    // So, we'll need an existence check.
+    ::std::set< ::rtl::OUString > aDelegatorProps;
+
     // create the map for the delegator properties
     sal_Int32 nMPLoop = 0;
     for ( ; nMPLoop < nDelegatorProps; ++nMPLoop, ++pDelegateProps )
+    {
         m_aPropertyAccessors[ pDelegateProps->Handle ] = OPropertyAccessor( -1, nMPLoop, sal_False );
+        OSL_ENSURE( aDelegatorProps.find( pDelegateProps->Name ) == aDelegatorProps.end(),
+            "OPropertyArrayAggregationHelper::OPropertyArrayAggregationHelper: duplicate delegatee property!" );
+        aDelegatorProps.insert( pDelegateProps->Name );
+    }
 
     // create the map for the aggregate properties
     sal_Int32 nAggregateHandle = _nFirstAggregateId;
     pMergedProps += nDelegatorProps;
-    for ( ; nMPLoop < nMergedProps; ++nMPLoop, ++pMergedProps, ++pAggregateProps )
+    for ( ; nMPLoop < nMergedProps; ++pAggregateProps )
     {
+        // if the aggregate property is present at the delegatee already, ignore it
+        if ( aDelegatorProps.find( pAggregateProps->Name ) != aDelegatorProps.end() )
+        {
+            --nMergedProps;
+            continue;
+        }
+
         // next aggregate property - remember it
         *pMergedProps = *pAggregateProps;
 
-        // determine the handle for the property which we will expose to the ourside world
+        // determine the handle for the property which we will expose to the outside world
         sal_Int32 nHandle = -1;
         // ask the infor service first
         if ( _pInfoService )
@@ -124,7 +140,11 @@ OPropertyArrayAggregationHelper::OPropertyArrayAggregationHelper(
         // remember the accessor for this property
         m_aPropertyAccessors[ nHandle ] = OPropertyAccessor( pMergedProps->Handle, nMPLoop, sal_True );
         pMergedProps->Handle = nHandle;
+
+        ++nMPLoop;
+        ++pMergedProps;
     }
+    m_aProperties.realloc( nMergedProps );
     pMergedProps = m_aProperties.getArray();    // reset, needed again below
 
     // sortieren der Properties nach Namen

@@ -83,7 +83,7 @@ public:
 class ImplGraphicItem : public SvLBoxBmp
 {
 public:
-    ImplGraphicItem( SvLBoxEntry* pEntry, USHORT nFlags, Image& aImage ) : SvLBoxBmp( pEntry, nFlags, aImage ) {}
+    ImplGraphicItem( SvLBoxEntry* pEntry, sal_uInt16 nFlags, Image& aImage ) : SvLBoxBmp( pEntry, nFlags, aImage ) {}
 
     OUString msGraphicURL;
 };
@@ -93,7 +93,7 @@ public:
 class ImplContextGraphicItem : public SvLBoxContextBmp
 {
 public:
-    ImplContextGraphicItem( SvLBoxEntry* pEntry,USHORT nFlags,Image& rI1,Image& rI2, USHORT nEntryFlagsBmp1)
+    ImplContextGraphicItem( SvLBoxEntry* pEntry,sal_uInt16 nFlags,Image& rI1,Image& rI2, sal_uInt16 nEntryFlagsBmp1)
         : SvLBoxContextBmp( pEntry, nFlags, rI1, rI2, nEntryFlagsBmp1 ) {}
 
     OUString msExpandedGraphicURL;
@@ -108,12 +108,12 @@ public:
     UnoTreeListBoxImpl( TreeControlPeer* pPeer, Window* pParent, WinBits nWinStyle );
     ~UnoTreeListBoxImpl();
 
-    sal_uInt32 insert( SvLBoxEntry* pEntry,SvLBoxEntry* pParent,ULONG nPos=LIST_APPEND );
+    sal_uInt32 insert( SvLBoxEntry* pEntry,SvLBoxEntry* pParent,sal_uLong nPos=LIST_APPEND );
 
     virtual void    RequestingChilds( SvLBoxEntry* pParent );
 
-    virtual BOOL    EditingEntry( SvLBoxEntry* pEntry, Selection& );
-    virtual BOOL    EditedEntry( SvLBoxEntry* pEntry, const XubString& rNewText );
+    virtual sal_Bool    EditingEntry( SvLBoxEntry* pEntry, Selection& );
+    virtual sal_Bool    EditedEntry( SvLBoxEntry* pEntry, const XubString& rNewText );
 
     DECL_LINK( OnSelectionChangeHdl, UnoTreeListBoxImpl* );
     DECL_LINK( OnExpandingHdl, UnoTreeListBoxImpl* );
@@ -131,7 +131,7 @@ public:
                     UnoTreeListItem( SvLBoxEntry* );
                     UnoTreeListItem();
     virtual         ~UnoTreeListItem();
-    virtual USHORT  IsA();
+    virtual sal_uInt16  IsA();
     void            InitViewData( SvLBox*,SvLBoxEntry*,SvViewDataItem* );
     OUString        GetText() const;
     void            SetText( const OUString& rText );
@@ -139,7 +139,7 @@ public:
     void            SetImage( const Image& rImage );
     OUString        GetGraphicURL() const;
     void            SetGraphicURL( const OUString& rGraphicURL );
-    void            Paint( const Point&, SvLBox& rDev, USHORT nFlags,SvLBoxEntry* );
+    void            Paint( const Point&, SvLBox& rDev, sal_uInt16 nFlags,SvLBoxEntry* );
     SvLBoxItem*     Create() const;
     void            Clone( SvLBoxItem* pSource );
 
@@ -261,7 +261,7 @@ void TreeControlPeer::SetWindow( Window* pWindow )
 
 // --------------------------------------------------------------------
 
-UnoTreeListEntry* TreeControlPeer::createEntry( const Reference< XTreeNode >& xNode, UnoTreeListEntry* pParent, ULONG nPos /* = LIST_APPEND */ )
+UnoTreeListEntry* TreeControlPeer::createEntry( const Reference< XTreeNode >& xNode, UnoTreeListEntry* pParent, sal_uLong nPos /* = LIST_APPEND */ )
 {
     UnoTreeListEntry* pEntry = 0;
     if( mpTreeImpl )
@@ -328,9 +328,9 @@ bool TreeControlPeer::updateEntry( UnoTreeListEntry* pEntry )
             }
         }
 
-        if( (pEntry->mxNode->hasChildrenOnDemand() == sal_True) != (pEntry->HasChildsOnDemand() == TRUE) )
+        if( (pEntry->mxNode->hasChildrenOnDemand() == sal_True) != (pEntry->HasChildsOnDemand() == sal_True) )
         {
-            pEntry->EnableChildsOnDemand( pEntry->mxNode->hasChildrenOnDemand() ? TRUE : FALSE );
+            pEntry->EnableChildsOnDemand( pEntry->mxNode->hasChildrenOnDemand() ? sal_True : sal_False );
             bChanged = true;
         }
 
@@ -532,14 +532,14 @@ void TreeControlPeer::ChangeNodesSelection( const Any& rSelection, bool bSelect,
     }
 
     if( bSetSelection )
-        rTree.SelectAll( FALSE );
+        rTree.SelectAll( sal_False );
 
     if( pNodes && nCount )
     {
         while( nCount-- )
         {
             UnoTreeListEntry* pEntry = getEntry( *pNodes++ );
-            rTree.Select( pEntry, bSelect ? TRUE : FALSE );
+            rTree.Select( pEntry, bSelect ? sal_True : sal_False );
         }
     }
 }
@@ -565,7 +565,7 @@ Any SAL_CALL TreeControlPeer::getSelection() throw (RuntimeException)
 
     Any aRet;
 
-    ULONG nSelectionCount = rTree.GetSelectionCount();
+    sal_uLong nSelectionCount = rTree.GetSelectionCount();
     if( nSelectionCount == 1 )
     {
         UnoTreeListEntry* pEntry = dynamic_cast< UnoTreeListEntry* >( rTree.FirstSelected() );
@@ -627,7 +627,7 @@ void SAL_CALL TreeControlPeer::removeSelection( const Any& rSelection ) throw (I
 void SAL_CALL TreeControlPeer::clearSelection() throw (RuntimeException)
 {
     SolarMutexGuard aGuard;
-    getTreeListBoxOrThrow().SelectAll( FALSE );
+    getTreeListBoxOrThrow().SelectAll( sal_False );
 }
 
 // -------------------------------------------------------------------
@@ -893,7 +893,7 @@ Reference< XTreeNode > SAL_CALL TreeControlPeer::getNodeForLocation( sal_Int32 x
     Reference< XTreeNode > xNode;
 
     const Point aPos( x, y );
-    UnoTreeListEntry* pEntry = dynamic_cast< UnoTreeListEntry* >( rTree.GetEntry( aPos, TRUE ) );
+    UnoTreeListEntry* pEntry = dynamic_cast< UnoTreeListEntry* >( rTree.GetEntry( aPos, sal_True ) );
     if( pEntry )
         xNode = pEntry->mxNode;
 
@@ -911,7 +911,7 @@ Reference< XTreeNode > SAL_CALL TreeControlPeer::getClosestNodeForLocation( sal_
     Reference< XTreeNode > xNode;
 
     const Point aPos( x, y );
-    UnoTreeListEntry* pEntry = dynamic_cast< UnoTreeListEntry* >( rTree.GetEntry( aPos, TRUE ) );
+    UnoTreeListEntry* pEntry = dynamic_cast< UnoTreeListEntry* >( rTree.GetEntry( aPos, sal_True ) );
     if( pEntry )
         xNode = pEntry->mxNode;
 
@@ -950,7 +950,7 @@ sal_Bool SAL_CALL TreeControlPeer::stopEditing() throw (RuntimeException)
     UnoTreeListBoxImpl& rTree = getTreeListBoxOrThrow();
     if( rTree.IsEditingActive() )
     {
-        rTree.EndEditing(FALSE);
+        rTree.EndEditing(sal_False);
         return sal_True;
     }
     else
@@ -966,7 +966,7 @@ void SAL_CALL TreeControlPeer::cancelEditing(  ) throw (RuntimeException)
     SolarMutexGuard aGuard;
 
     UnoTreeListBoxImpl& rTree = getTreeListBoxOrThrow();
-    rTree.EndEditing(FALSE);
+    rTree.EndEditing(sal_False);
 }
 
 // -------------------------------------------------------------------
@@ -1106,7 +1106,7 @@ void TreeControlPeer::updateNode( UnoTreeListBoxImpl& rTree, const Reference< XT
         {
             Reference< XTreeNode > xParentNode( xNode->getParent() );
             UnoTreeListEntry* pParentEntry = 0;
-            ULONG nChild = LIST_APPEND;
+            sal_uLong nChild = LIST_APPEND;
 
             if( xParentNode.is() )
             {
@@ -1329,12 +1329,12 @@ void TreeControlPeer::setProperty( const ::rtl::OUString& PropertyName, const An
             sal_Bool bEnabled = sal_False;
             if ( aValue >>= bEnabled )
             {
-                WinBits nStyle = rTree.GetWindowBits();
+                WinBits nStyle = rTree.GetStyle();
                 if ( bEnabled )
                     nStyle |= WB_HIDESELECTION;
                 else
                     nStyle &= ~WB_HIDESELECTION;
-                rTree.SetWindowBits( nStyle );
+                rTree.SetStyle( nStyle );
             }
         }
         break;
@@ -1362,7 +1362,7 @@ void TreeControlPeer::setProperty( const ::rtl::OUString& PropertyName, const An
         case BASEPROPERTY_TREE_DATAMODEL:
             onChangeDataModel( rTree, Reference< XTreeDataModel >( aValue, UNO_QUERY ) );
             break;
-        case BASEPROPERTY_TREE_ROWHEIGHT:
+        case BASEPROPERTY_ROW_HEIGHT:
         {
             sal_Int32 nHeight = 0;
             if( aValue >>= nHeight )
@@ -1373,7 +1373,7 @@ void TreeControlPeer::setProperty( const ::rtl::OUString& PropertyName, const An
         {
             sal_Bool bEnabled = false;
             if( aValue >>= bEnabled )
-                rTree.EnableInplaceEditing( bEnabled ? TRUE : FALSE );
+                rTree.EnableInplaceEditing( bEnabled ? sal_True : sal_False );
             break;
         }
         case BASEPROPERTY_TREE_INVOKESSTOPNODEEDITING:
@@ -1392,11 +1392,11 @@ void TreeControlPeer::setProperty( const ::rtl::OUString& PropertyName, const An
             sal_Bool bEnabled = false;
             if( aValue >>= bEnabled )
             {
-                WinBits nBits = rTree.GetWindowBits() & (~WB_HASLINES);
+                WinBits nBits = rTree.GetStyle() & (~WB_HASLINES);
                 if( bEnabled )
                     nBits |= WB_HASLINES;
-                if( nBits != rTree.GetWindowBits() )
-                    rTree.SetWindowBits( nBits );
+                if( nBits != rTree.GetStyle() )
+                    rTree.SetStyle( nBits );
             }
             break;
         }
@@ -1405,11 +1405,11 @@ void TreeControlPeer::setProperty( const ::rtl::OUString& PropertyName, const An
             sal_Bool bEnabled = false;
             if( aValue >>= bEnabled )
             {
-                WinBits nBits = rTree.GetWindowBits() & (~WB_HASLINESATROOT);
+                WinBits nBits = rTree.GetStyle() & (~WB_HASLINESATROOT);
                 if( bEnabled )
                     nBits |= WB_HASLINESATROOT;
-                if( nBits != rTree.GetWindowBits() )
-                    rTree.SetWindowBits( nBits );
+                if( nBits != rTree.GetStyle() )
+                    rTree.SetStyle( nBits );
             }
             break;
         }
@@ -1430,7 +1430,7 @@ Any TreeControlPeer::getProperty( const ::rtl::OUString& PropertyName ) throw(Ru
         switch(nPropId)
         {
         case BASEPROPERTY_HIDEINACTIVESELECTION:
-            return Any( ( rTree.GetWindowBits() & WB_HIDESELECTION ) != 0 ? sal_True : sal_False );
+            return Any( ( rTree.GetStyle() & WB_HIDESELECTION ) != 0 ? sal_True : sal_False );
 
         case BASEPROPERTY_TREE_SELECTIONTYPE:
         {
@@ -1447,7 +1447,7 @@ Any TreeControlPeer::getProperty( const ::rtl::OUString& PropertyName ) throw(Ru
             }
             return Any( eSelectionType );
         }
-        case BASEPROPERTY_TREE_ROWHEIGHT:
+        case BASEPROPERTY_ROW_HEIGHT:
             return Any( (sal_Int32)rTree.GetEntryHeight() );
         case BASEPROPERTY_TREE_DATAMODEL:
             return Any( mxDataModel );
@@ -1458,9 +1458,9 @@ Any TreeControlPeer::getProperty( const ::rtl::OUString& PropertyName ) throw(Ru
         case BASEPROPERTY_TREE_ROOTDISPLAYED:
             return Any( mbIsRootDisplayed );
         case BASEPROPERTY_TREE_SHOWSHANDLES:
-            return Any( (rTree.GetWindowBits() & WB_HASLINES) != 0 ? sal_True : sal_False );
+            return Any( (rTree.GetStyle() & WB_HASLINES) != 0 ? sal_True : sal_False );
         case BASEPROPERTY_TREE_SHOWSROOTHANDLES:
-            return Any( (rTree.GetWindowBits() & WB_HASLINESATROOT) != 0 ? sal_True : sal_False );
+            return Any( (rTree.GetStyle() & WB_HASLINESATROOT) != 0 ? sal_True : sal_False );
         }
     }
     return VCLXWindow::getProperty( PropertyName );
@@ -1529,7 +1529,7 @@ UnoTreeListBoxImpl::UnoTreeListBoxImpl( TreeControlPeer* pPeer, Window* pParent,
 : SvTreeListBox( pParent, nWinStyle )
 , mxPeer( pPeer )
 {
-    SetWindowBits( WB_BORDER | WB_HASLINES |WB_HASBUTTONS | WB_HASLINESATROOT | WB_HASBUTTONSATROOT | WB_HSCROLL );
+    SetStyle( WB_BORDER | WB_HASLINES |WB_HASBUTTONS | WB_HASLINESATROOT | WB_HASBUTTONSATROOT | WB_HSCROLL );
     SetNodeDefaultImages();
     SetSelectHdl( LINK(this, UnoTreeListBoxImpl, OnSelectionChangeHdl) );
     SetDeselectHdl( LINK(this, UnoTreeListBoxImpl, OnSelectionChangeHdl) );
@@ -1583,7 +1583,7 @@ IMPL_LINK(UnoTreeListBoxImpl, OnExpandedHdl, UnoTreeListBoxImpl*, EMPTYARG )
 
 // --------------------------------------------------------------------
 
-sal_uInt32 UnoTreeListBoxImpl::insert( SvLBoxEntry* pEntry,SvLBoxEntry* pParent,ULONG nPos )
+sal_uInt32 UnoTreeListBoxImpl::insert( SvLBoxEntry* pEntry,SvLBoxEntry* pParent,sal_uLong nPos )
 {
     if( pParent )
         return SvTreeListBox::Insert( pEntry, pParent, nPos );
@@ -1602,14 +1602,14 @@ void UnoTreeListBoxImpl::RequestingChilds( SvLBoxEntry* pParent )
 
 // --------------------------------------------------------------------
 
-BOOL UnoTreeListBoxImpl::EditingEntry( SvLBoxEntry* pEntry, Selection& )
+sal_Bool UnoTreeListBoxImpl::EditingEntry( SvLBoxEntry* pEntry, Selection& )
 {
     return mxPeer.is() ? mxPeer->onEditingEntry( dynamic_cast< UnoTreeListEntry* >( pEntry ) ) : false;
 }
 
 // --------------------------------------------------------------------
 
-BOOL UnoTreeListBoxImpl::EditedEntry( SvLBoxEntry* pEntry, const XubString& rNewText )
+sal_Bool UnoTreeListBoxImpl::EditedEntry( SvLBoxEntry* pEntry, const XubString& rNewText )
 {
     return mxPeer.is() ? mxPeer->onEditedEntry( dynamic_cast< UnoTreeListEntry* >( pEntry ), rNewText ) : false;
 }
@@ -1638,14 +1638,14 @@ UnoTreeListItem::~UnoTreeListItem()
 
 // --------------------------------------------------------------------
 
-USHORT UnoTreeListItem::IsA()
+sal_uInt16 UnoTreeListItem::IsA()
 {
     return 0;
 }
 
 // --------------------------------------------------------------------
 
-void UnoTreeListItem::Paint( const Point& rPos, SvLBox& rDev, USHORT /* nFlags */, SvLBoxEntry* _pEntry)
+void UnoTreeListItem::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 /* nFlags */, SvLBoxEntry* _pEntry)
 {
     Point aPos( rPos );
     if( _pEntry )

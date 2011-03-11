@@ -131,7 +131,7 @@ sal_Int32 vcl::I18nHelper::CompareString( const String& rStr1, const String& rSt
     {
         // Change mbTransliterateIgnoreCase and destroy the warpper, next call to
         // ImplGetTransliterationWrapper() will create a wrapper with the correct bIgnoreCase
-        ((vcl::I18nHelper*)this)->mbTransliterateIgnoreCase = FALSE;
+        ((vcl::I18nHelper*)this)->mbTransliterateIgnoreCase = sal_False;
         delete ((vcl::I18nHelper*)this)->mpTransliterationWrapper;
         ((vcl::I18nHelper*)this)->mpTransliterationWrapper = NULL;
     }
@@ -150,7 +150,7 @@ sal_Bool vcl::I18nHelper::MatchString( const String& rStr1, const String& rStr2 
     {
         // Change mbTransliterateIgnoreCase and destroy the warpper, next call to
         // ImplGetTransliterationWrapper() will create a wrapper with the correct bIgnoreCase
-        ((vcl::I18nHelper*)this)->mbTransliterateIgnoreCase = TRUE;
+        ((vcl::I18nHelper*)this)->mbTransliterateIgnoreCase = sal_True;
         delete ((vcl::I18nHelper*)this)->mpTransliterationWrapper;
         ((vcl::I18nHelper*)this)->mpTransliterationWrapper = NULL;
     }
@@ -164,8 +164,8 @@ sal_Bool vcl::I18nHelper::MatchMnemonic( const String& rString, sal_Unicode cMne
 {
     ::osl::Guard< ::osl::Mutex > aGuard( ((vcl::I18nHelper*)this)->maMutex );
 
-    BOOL bEqual = FALSE;
-    USHORT n = rString.Search( '~' );
+    sal_Bool bEqual = sal_False;
+    sal_uInt16 n = rString.Search( '~' );
     if ( n != STRING_NOTFOUND )
     {
         String aMatchStr( rString, n+1, STRING_LEN );   // not only one char, because of transliteration...
@@ -182,7 +182,7 @@ String vcl::I18nHelper::GetDate( const Date& rDate ) const
     return ImplGetLocaleDataWrapper().getDate( rDate );
 }
 
-String vcl::I18nHelper::GetNum( long nNumber, USHORT nDecimals, BOOL bUseThousandSep, BOOL bTrailingZeros ) const
+String vcl::I18nHelper::GetNum( long nNumber, sal_uInt16 nDecimals, sal_Bool bUseThousandSep, sal_Bool bTrailingZeros ) const
 {
     return ImplGetLocaleDataWrapper().getNum( nNumber, nDecimals, bUseThousandSep, bTrailingZeros );
 }

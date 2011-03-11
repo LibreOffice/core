@@ -64,7 +64,7 @@ enum MeasurementSystem {
 
 class UNOTOOLS_DLLPUBLIC LocaleDataWrapper
 {
-    static  BYTE                nLocaleDataChecking;    // 0:=dontknow, 1:=yes, 2:=no
+    static  sal_uInt8                nLocaleDataChecking;    // 0:=dontknow, 1:=yes, 2:=no
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    xSMgr;
     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XLocaleData2 >            xLD;
@@ -80,11 +80,11 @@ class UNOTOOLS_DLLPUBLIC LocaleDataWrapper
     String                      aCurrBankSymbol;
     int                         nDateFormat;
     int                         nLongDateFormat;
-    USHORT                      nCurrPositiveFormat;
-    USHORT                      nCurrNegativeFormat;
-    USHORT                      nCurrDigits;
-    BOOL                        bLocaleDataItemValid;
-    BOOL                        bReservedWordValid;
+    sal_uInt16                      nCurrPositiveFormat;
+    sal_uInt16                      nCurrNegativeFormat;
+    sal_uInt16                      nCurrDigits;
+    sal_Bool                        bLocaleDataItemValid;
+    sal_Bool                        bReservedWordValid;
     mutable ::utl::ReadWriteMutex   aMutex;
 
     // dummies, to be implemented or provided by XML locale data
@@ -118,8 +118,8 @@ class UNOTOOLS_DLLPUBLIC LocaleDataWrapper
             void                getDefaultCalendarImpl();
 
             sal_Unicode*        ImplAddFormatNum( sal_Unicode* pBuf,
-                                    sal_Int64 nNumber, USHORT nDecimals,
-                                    BOOL bUseThousandSep, BOOL bTrailingZeros ) const;
+                                    sal_Int64 nNumber, sal_uInt16 nDecimals,
+                                    sal_Bool bUseThousandSep, sal_Bool bTrailingZeros ) const;
 
             void                getDigitGroupingImpl();
 
@@ -241,19 +241,19 @@ public:
     // currency
             const String&       getCurrSymbol() const;
             const String&       getCurrBankSymbol() const;
-            USHORT              getCurrPositiveFormat() const;
-            USHORT              getCurrNegativeFormat() const;
-            USHORT              getCurrDigits() const;
+            sal_uInt16              getCurrPositiveFormat() const;
+            sal_uInt16              getCurrNegativeFormat() const;
+            sal_uInt16              getCurrDigits() const;
 
     // simple date and time formatting
             DateFormat          getDateFormat() const;
             DateFormat          getLongDateFormat() const;
                                 /// only numerical values of Gregorian calendar
             String              getDate( const Date& rDate ) const;
-            String              getTime( const Time& rTime, BOOL bSec = TRUE,
-                                    BOOL b100Sec = FALSE ) const;
+            String              getTime( const Time& rTime, sal_Bool bSec = sal_True,
+                                    sal_Bool b100Sec = sal_False ) const;
             String              getDuration( const Time& rTime,
-                                    BOOL bSec = TRUE, BOOL b100Sec = FALSE ) const;
+                                    sal_Bool bSec = sal_True, sal_Bool b100Sec = sal_False ) const;
 
                                 /** The CalendarWrapper already <b>MUST</b>
                                     have loaded a calendar.
@@ -282,37 +282,37 @@ public:
                                     @param nNumber
                                         value * 10**nDecimals
                                     @param bTrailingZeros
-                                    </TRUE>  := always display trailing zeros in
+                                    </sal_True>  := always display trailing zeros in
                                         decimal places, even if integer value.
-                                    </FALSE> := trailing zeros are only displayed
+                                    </sal_False> := trailing zeros are only displayed
                                         if the value is not an integer value.
                                  */
-            String              getNum( sal_Int64 nNumber, USHORT nDecimals,
-                                    BOOL bUseThousandSep = TRUE,
-                                    BOOL bTrailingZeros = TRUE ) const;
+            String              getNum( sal_Int64 nNumber, sal_uInt16 nDecimals,
+                                    sal_Bool bUseThousandSep = sal_True,
+                                    sal_Bool bTrailingZeros = sal_True ) const;
 
                                 /// "Secure" currency formatted string.
-            String              getCurr( sal_Int64 nNumber, USHORT nDecimals,
+            String              getCurr( sal_Int64 nNumber, sal_uInt16 nDecimals,
                                     const String& rCurrencySymbol,
-                                    BOOL bUseThousandSep = TRUE ) const;
+                                    sal_Bool bUseThousandSep = sal_True ) const;
                                 /** Default currency formatted string, use with
                                     care as default currency may change in any
                                     locale, for example, DEM -> EUR */
-            String              getCurr( sal_Int64 nNumber, USHORT nDecimals,
-                                        BOOL bUseThousandSep = TRUE ) const
+            String              getCurr( sal_Int64 nNumber, sal_uInt16 nDecimals,
+                                        sal_Bool bUseThousandSep = sal_True ) const
                                     { return getCurr( nNumber, nDecimals,
                                         getCurrSymbol(), bUseThousandSep ); }
 
     // dummy returns, to be implemented
     inline  sal_Unicode         getCurrZeroChar() const
                                     { return cCurrZeroChar; }
-    inline  BOOL                isNumLeadingZero() const
-                                    { return TRUE; }
+    inline  sal_Bool                isNumLeadingZero() const
+                                    { return sal_True; }
                                 /// standard decimal places
-    inline  USHORT              getNumDigits() const
+    inline  sal_uInt16              getNumDigits() const
                                     { return 2; }
-    inline  BOOL                isNumTrailingZeros() const
-                                    { return TRUE; }
+    inline  sal_Bool                isNumTrailingZeros() const
+                                    { return sal_True; }
 
 
     // reserved words

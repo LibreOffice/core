@@ -71,7 +71,7 @@ class CUPSManager : public PrinterInfoManager
 
     virtual void initialize();
 
-    void getOptionsFromDocumentSetup( const JobData& rJob, int& rNumOptions, void** rOptions ) const;
+    void getOptionsFromDocumentSetup( const JobData& rJob, bool bBanner, int& rNumOptions, void** rOptions ) const;
     void runDests();
 public:
     // public for stub
@@ -85,7 +85,7 @@ public:
     const char* authenticateUser( const char* );
 
     virtual FILE* startSpool( const rtl::OUString& rPrinterName, bool bQuickCommand );
-    virtual int endSpool( const rtl::OUString& rPrinterName, const rtl::OUString& rJobTitle, FILE* pFile, const JobData& rDocumentJobData );
+    virtual int endSpool( const rtl::OUString& rPrinterName, const rtl::OUString& rJobTitle, FILE* pFile, const JobData& rDocumentJobData, bool bBanner );
     virtual void setupJobContextData( JobData& rData );
 
     // changes the info about a named printer

@@ -30,10 +30,6 @@
 #define _PREX_H
 
 #define Window      XLIB_Window
-#define BYTE        XLIB_BYTE
-#define INT8        XLIB_INT8
-#define INT64       XLIB_INT64
-#define BOOL        XLIB_BOOL
 #define Font        XLIB_Font
 #define Cursor      XLIB_Cursor
 #define String      XLIB_String

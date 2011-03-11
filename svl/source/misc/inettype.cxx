@@ -340,7 +340,7 @@ MediaTypeEntry const aStaticTypeNameMap[CONTENT_TYPE_LAST + 1]
 //============================================================================
 /** A mapping from type IDs to presentation resource IDs.  Sorted by type ID.
  */
-USHORT const aStaticResourceIDMap[CONTENT_TYPE_LAST + 1]
+sal_uInt16 const aStaticResourceIDMap[CONTENT_TYPE_LAST + 1]
     = { STR_SVT_MIMETYPE_APP_OCTSTREAM, // CONTENT_TYPE_UNKNOWN
         STR_SVT_MIMETYPE_APP_OCTSTREAM, // CONTENT_TYPE_APP_OCTSTREAM
         STR_SVT_MIMETYPE_APP_PDF, // CONTENT_TYPE_APP_PDF
@@ -639,19 +639,19 @@ Registration * Registration::m_pRegistration = 0;
 //============================================================================
 Registration::~Registration()
 {
-    {for (ULONG i = 0; i < m_aTypeIDMap.Count(); ++i)
+    {for (sal_uLong i = 0; i < m_aTypeIDMap.Count(); ++i)
         delete static_cast< TypeIDMapEntry * >(m_aTypeIDMap.GetObject(i));
     }
     m_aTypeIDMap.Clear();
-    {for (USHORT i = 0; i < m_aTypeNameMap.Count(); ++i)
+    {for (sal_uInt16 i = 0; i < m_aTypeNameMap.Count(); ++i)
         delete static_cast< TypeNameMapEntry * >(m_aTypeNameMap.GetObject(i));
     }
-    m_aTypeNameMap.Remove(USHORT(0), m_aTypeNameMap.Count());
-    {for (USHORT i = 0; i < m_aExtensionMap.Count(); ++i)
+    m_aTypeNameMap.Remove(sal_uInt16(0), m_aTypeNameMap.Count());
+    {for (sal_uInt16 i = 0; i < m_aExtensionMap.Count(); ++i)
         delete
             static_cast< ExtensionMapEntry * >(m_aExtensionMap.GetObject(i));
     }
-    m_aExtensionMap.Remove(USHORT(0), m_aExtensionMap.Count());
+    m_aExtensionMap.Remove(sal_uInt16(0), m_aExtensionMap.Count());
 }
 
 //============================================================================
@@ -663,7 +663,7 @@ TypeNameMapEntry * Registration::getExtensionEntry(UniString const &
     {
         UniString aTheTypeName = rTypeName;
         aTheTypeName.ToLowerAscii();
-        USHORT nPos;
+        sal_uInt16 nPos;
         if (m_pRegistration->m_aTypeNameMap.Seek_Entry(&aTheTypeName, &nPos))
             return static_cast< TypeNameMapEntry * >(m_pRegistration->
                                                          m_aTypeNameMap.
@@ -726,7 +726,7 @@ INetContentType Registration::GetContentType(UniString const & rTypeName)
 
     UniString aTheTypeName = rTypeName;
     aTheTypeName.ToLowerAscii();
-    USHORT nPos;
+    sal_uInt16 nPos;
     return m_pRegistration->m_aTypeNameMap.Seek_Entry(&aTheTypeName, &nPos) ?
                static_cast< TypeNameMapEntry * >(m_pRegistration->
                                                      m_aTypeNameMap.
@@ -770,7 +770,7 @@ UniString Registration::GetExtension(UniString const & rTypeName)
 
     UniString aTheTypeName = rTypeName;
     aTheTypeName.ToLowerAscii();
-    USHORT nPos;
+    sal_uInt16 nPos;
     return m_pRegistration->m_aTypeNameMap.Seek_Entry(&aTheTypeName, &nPos) ?
                static_cast< TypeNameMapEntry * >(m_pRegistration->
                                                      m_aTypeNameMap.
@@ -787,7 +787,7 @@ INetContentType Registration::GetContentType4Extension(UniString const &
     if (!m_pRegistration)
         m_pRegistration = new Registration;
 
-    USHORT nPos;
+    sal_uInt16 nPos;
     return m_pRegistration->
                    m_aExtensionMap.
                        Seek_Entry(const_cast< UniString * >(&rExtension),
@@ -949,7 +949,7 @@ UniString INetContentTypes::GetContentType(INetContentType eTypeID)
 UniString INetContentTypes::GetPresentation(INetContentType eTypeID,
                                             const ::com::sun::star::lang::Locale& aLocale)
 {
-    USHORT nResID = USHORT();
+    sal_uInt16 nResID = sal_uInt16();
     if (eTypeID <= CONTENT_TYPE_LAST)
         nResID = aStaticResourceIDMap[eTypeID];
     else

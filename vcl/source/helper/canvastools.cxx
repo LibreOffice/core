@@ -117,11 +117,11 @@ namespace vcl
         {
             RTL_LOGFILE_CONTEXT( aLog, "::vcl::unotools::polygonFromPoint2DSequence()" );
 
-            const USHORT nCurrSize( sal::static_int_cast<USHORT>(points.getLength()) );
+            const sal_uInt16 nCurrSize( sal::static_int_cast<sal_uInt16>(points.getLength()) );
 
             ::Polygon aPoly( nCurrSize );
 
-            USHORT nCurrPoint;
+            sal_uInt16 nCurrPoint;
             for( nCurrPoint=0; nCurrPoint<nCurrSize; ++nCurrPoint )
                 aPoly[nCurrPoint] = pointFromRealPoint2D( points[nCurrPoint] );
 
@@ -255,7 +255,7 @@ namespace vcl
                             {
                                 const rendering::ARGBColor& rColor=aARGBColors[x];
                                 rWriteAcc->SetPixel( aRect.Y1, x,
-                                                     (BYTE)rWriteAcc->GetBestPaletteIndex(
+                                                     (sal_uInt8)rWriteAcc->GetBestPaletteIndex(
                                                          BitmapColor( toByteColor(rColor.Red),
                                                                       toByteColor(rColor.Green),
                                                                       toByteColor(rColor.Blue))) );
@@ -287,7 +287,7 @@ namespace vcl
                             {
                                 const rendering::RGBColor& rColor=aRGBColors[x];
                                 rWriteAcc->SetPixel( aRect.Y1, x,
-                                                     (BYTE)rWriteAcc->GetBestPaletteIndex(
+                                                     (sal_uInt8)rWriteAcc->GetBestPaletteIndex(
                                                          BitmapColor( toByteColor(rColor.Red),
                                                                       toByteColor(rColor.Green),
                                                                       toByteColor(rColor.Blue))) );
@@ -385,8 +385,8 @@ namespace vcl
                         else
                             nDepth = 8;
 
-                        const USHORT nPaletteEntries(
-                            sal::static_int_cast<USHORT>(
+                        const sal_uInt16 nPaletteEntries(
+                            sal::static_int_cast<sal_uInt16>(
                                 std::min(sal_Int32(255), nEntryCount)));
 
                         // copy palette entries
@@ -395,7 +395,7 @@ namespace vcl
                         uno::Reference<rendering::XColorSpace>    xPalColorSpace( xPalette->getColorSpace() );
 
                         uno::Sequence<double> aPaletteEntry;
-                        for( USHORT j=0; j<nPaletteEntries; ++j )
+                        for( sal_uInt16 j=0; j<nPaletteEntries; ++j )
                         {
                             if( !xPalette->getIndex(aPaletteEntry,j) &&
                                 nAlphaDepth == 0 )
@@ -423,14 +423,14 @@ namespace vcl
                     ( nDepth <= 8 ) ? 8 : 24;
 
                 ::Bitmap aBitmap( aPixelSize,
-                                  sal::static_int_cast<USHORT>(nDepth),
+                                  sal::static_int_cast<sal_uInt16>(nDepth),
                                   aLayout.Palette.is() ? &aPalette : NULL );
                 ::Bitmap aAlpha;
                 if( nAlphaDepth )
                     aAlpha = ::Bitmap( aPixelSize,
-                                       sal::static_int_cast<USHORT>(nAlphaDepth),
+                                       sal::static_int_cast<sal_uInt16>(nAlphaDepth),
                                        &::Bitmap::GetGreyPalette(
-                                           sal::static_int_cast<USHORT>(1L << nAlphaDepth)) );
+                                           sal::static_int_cast<sal_uInt16>(1L << nAlphaDepth)) );
 
                 { // limit scoped access
                     ScopedBitmapWriteAccess pWriteAccess( aBitmap.AcquireWriteAccess(),

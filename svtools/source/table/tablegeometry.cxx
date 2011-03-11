@@ -28,107 +28,141 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-
 #include "tablegeometry.hxx"
 #include "tablecontrol_impl.hxx"
 
 #include <tools/debug.hxx>
 
-//........................................................................
+//......................................................................................................................
 namespace svt { namespace table
 {
-//........................................................................
+//......................................................................................................................
 
-    //====================================================================
+    //==================================================================================================================
     //= TableRowGeometry
-    //====================================================================
-    //--------------------------------------------------------------------
-    TableRowGeometry::TableRowGeometry( const TableControl_Impl& _rControl, const Rectangle& _rBoundaries,
-            RowPos _nRow )
+    //==================================================================================================================
+    //------------------------------------------------------------------------------------------------------------------
+    TableRowGeometry::TableRowGeometry( TableControl_Impl const & _rControl, Rectangle const & _rBoundaries,
+            RowPos const _nRow, bool const i_allowVirtualRows )
         :TableGeometry( _rControl, _rBoundaries )
         ,m_nRowPos( _nRow )
+        ,m_bAllowVirtualRows( i_allowVirtualRows )
     {
         if ( m_nRowPos == ROW_COL_HEADERS )
         {
-            //DBG_ASSERT( m_rControl.m_pModel->hasColumnHeaders(),
-            //    "TableRowGeometry::TableRowGeometry: why asking for the geoemtry of the non-existent column header row?" );
             m_aRect.Top() = 0;
             m_aRect.Bottom() = m_rControl.m_nColHeaderHeightPixel - 1;
         }
         else
         {
-            if ( ( m_nRowPos >= m_rControl.m_nTopRow ) && ( m_nRowPos < m_rControl.m_pModel->getRowCount() ) )
-            {
-                m_aRect.Top() = m_rControl.m_nColHeaderHeightPixel + ( m_nRowPos - m_rControl.m_nTopRow ) * m_rControl.m_nRowHeightPixel;
-                m_aRect.Bottom() = m_aRect.Top() + m_rControl.m_nRowHeightPixel - 1;
-            }
-            else
-                m_aRect.SetEmpty();
+            impl_initRect();
         }
     }
 
-    //--------------------------------------------------------------------
-    bool TableRowGeometry::moveDown()
+    //------------------------------------------------------------------------------------------------------------------
+    void TableRowGeometry::impl_initRect()
     {
-        if ( ++m_nRowPos < m_rControl.m_pModel->getRowCount() )
-            m_aRect.Move( 0, m_rControl.m_nRowHeightPixel );
+        if ( ( m_nRowPos >= m_rControl.m_nTopRow ) && impl_isValidRow( m_nRowPos ) )
+        {
+            m_aRect.Top() = m_rControl.m_nColHeaderHeightPixel + ( m_nRowPos - m_rControl.m_nTopRow ) * m_rControl.m_nRowHeightPixel;
+            m_aRect.Bottom() = m_aRect.Top() + m_rControl.m_nRowHeightPixel - 1;
+        }
         else
             m_aRect.SetEmpty();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    bool TableRowGeometry::impl_isValidRow( RowPos const i_row ) const
+    {
+        return m_bAllowVirtualRows || ( i_row < m_rControl.m_pModel->getRowCount() );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    bool TableRowGeometry::moveDown()
+    {
+        if ( m_nRowPos == ROW_COL_HEADERS )
+        {
+            m_nRowPos = m_rControl.m_nTopRow;
+            impl_initRect();
+        }
+        else
+        {
+            if ( impl_isValidRow( ++m_nRowPos ) )
+                m_aRect.Move( 0, m_rControl.m_nRowHeightPixel );
+            else
+                m_aRect.SetEmpty();
+        }
         return isValid();
     }
 
-    //====================================================================
+    //==================================================================================================================
     //= TableColumnGeometry
-    //====================================================================
-    //--------------------------------------------------------------------
-    TableColumnGeometry::TableColumnGeometry( const TableControl_Impl& _rControl, const Rectangle& _rBoundaries,
-            ColPos _nCol )
+    //==================================================================================================================
+    //------------------------------------------------------------------------------------------------------------------
+    TableColumnGeometry::TableColumnGeometry( TableControl_Impl const & _rControl, Rectangle const & _rBoundaries,
+            ColPos const _nCol, bool const i_allowVirtualColumns )
         :TableGeometry( _rControl, _rBoundaries )
         ,m_nColPos( _nCol )
+        ,m_bAllowVirtualColumns( i_allowVirtualColumns )
     {
         if ( m_nColPos == COL_ROW_HEADERS )
         {
-/*            DBG_ASSERT( m_rControl.m_pModel->hasRowHeaders(),
-                "TableColumnGeometry::TableColumnGeometry: why asking for the geoemtry of the non-existent row header column?" )*/;
             m_aRect.Left() = 0;
             m_aRect.Right() = m_rControl.m_nRowHeaderWidthPixel - 1;
         }
         else
         {
-            ColPos nLeftColumn = m_rControl.m_nLeftColumn;
-            if ( ( m_nColPos >= nLeftColumn ) && ( m_nColPos < (ColPos)m_rControl.m_aColumnWidthsPixel.size() ) )
-            {
-                m_aRect.Left() = m_rControl.m_nRowHeaderWidthPixel;
-                // TODO: take into account any possibly frozen columns
+            impl_initRect();
+        }
+    }
 
-                for ( ColPos col = nLeftColumn; col < m_nColPos; ++col )
-                    m_aRect.Left() += m_rControl.m_aColumnWidthsPixel[ col ];
-                m_aRect.Right() = m_aRect.Left() + m_rControl.m_aColumnWidthsPixel[ m_nColPos ] - 1;
+    //------------------------------------------------------------------------------------------------------------------
+    void TableColumnGeometry::impl_initRect()
+    {
+        ColPos nLeftColumn = m_rControl.m_nLeftColumn;
+        if ( ( m_nColPos >= nLeftColumn ) && impl_isValidColumn( m_nColPos ) )
+        {
+            m_aRect.Left() = m_rControl.m_nRowHeaderWidthPixel;
+            // TODO: take into account any possibly frozen columns
+
+            for ( ColPos col = nLeftColumn; col < m_nColPos; ++col )
+                m_aRect.Left() += m_rControl.m_aColumnWidths[ col ].getWidth();
+            m_aRect.Right() = m_aRect.Left() + m_rControl.m_aColumnWidths[ m_nColPos ].getWidth() - 1;
+        }
+        else
+            m_aRect.SetEmpty();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    bool TableColumnGeometry::impl_isValidColumn( ColPos const i_column ) const
+    {
+        return m_bAllowVirtualColumns || ( i_column < ColPos( m_rControl.m_aColumnWidths.size() ) );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    bool TableColumnGeometry::moveRight()
+    {
+        if ( m_nColPos == COL_ROW_HEADERS )
+        {
+            m_nColPos = m_rControl.m_nLeftColumn;
+            impl_initRect();
+        }
+        else
+        {
+            if ( impl_isValidColumn( ++m_nColPos ) )
+            {
+                m_aRect.Left() = m_aRect.Right() + 1;
+                m_aRect.Right() += m_rControl.m_aColumnWidths[ m_nColPos ].getWidth();
             }
             else
                 m_aRect.SetEmpty();
         }
-    }
-
-    //--------------------------------------------------------------------
-    bool TableColumnGeometry::moveRight()
-    {
-        DBG_ASSERT( m_nColPos != COL_ROW_HEADERS, "TableColumnGeometry::moveRight: cannot move the row header column!" );
-            // what would be COL_ROW_HEADERS + 1?
-
-        if ( ++m_nColPos < (ColPos)m_rControl.m_aColumnWidthsPixel.size() )
-        {
-            m_aRect.Left() = m_aRect.Right() + 1;
-            m_aRect.Right() += m_rControl.m_aColumnWidthsPixel[ m_nColPos ];
-        }
-        else
-            m_aRect.SetEmpty();
 
         return isValid();
     }
 
-//........................................................................
+//......................................................................................................................
 } } // namespace svt::table
-//........................................................................
+//......................................................................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -112,7 +112,7 @@ class INetMessage
 {
     List           m_aHeaderList;
 
-    ULONG          m_nDocSize;
+    sal_uIntPtr          m_nDocSize;
     UniString      m_aDocName;
     SvLockBytesRef m_xDocLB;
 
@@ -121,7 +121,7 @@ class INetMessage
 
 protected:
     UniString GetHeaderName_Impl (
-        ULONG nIndex, rtl_TextEncoding eEncoding) const
+        sal_uIntPtr nIndex, rtl_TextEncoding eEncoding) const
     {
         INetMessageHeader *p =
             (INetMessageHeader*)(m_aHeaderList.GetObject(nIndex));
@@ -132,7 +132,7 @@ protected:
     }
 
     UniString GetHeaderValue_Impl (
-        ULONG nIndex, INetMIME::HeaderFieldType eType) const
+        sal_uIntPtr nIndex, INetMIME::HeaderFieldType eType) const
     {
         INetMessageHeader *p =
             (INetMessageHeader*)(m_aHeaderList.GetObject(nIndex));
@@ -143,7 +143,7 @@ protected:
     }
 
     void SetHeaderField_Impl (
-        const INetMessageHeader &rHeader, ULONG &rnIndex)
+        const INetMessageHeader &rHeader, sal_uIntPtr &rnIndex)
     {
         INetMessageHeader *p = new INetMessageHeader (rHeader);
         if (m_aHeaderList.Count() <= rnIndex)
@@ -162,7 +162,7 @@ protected:
         INetMIME::HeaderFieldType  eType,
         const ByteString          &rName,
         const UniString           &rValue,
-        ULONG                     &rnIndex);
+        sal_uIntPtr                     &rnIndex);
 
     virtual SvStream& operator<< (SvStream& rStrm) const;
     virtual SvStream& operator>> (SvStream& rStrm);
@@ -188,19 +188,19 @@ public:
         return *this;
     }
 
-    ULONG GetHeaderCount (void) const { return m_aHeaderList.Count(); }
+    sal_uIntPtr GetHeaderCount (void) const { return m_aHeaderList.Count(); }
 
-    UniString GetHeaderName (ULONG nIndex) const
+    UniString GetHeaderName (sal_uIntPtr nIndex) const
     {
         return GetHeaderName_Impl (nIndex, RTL_TEXTENCODING_ASCII_US);
     }
 
-    UniString GetHeaderValue (ULONG nIndex) const
+    UniString GetHeaderValue (sal_uIntPtr nIndex) const
     {
         return GetHeaderValue_Impl (nIndex, INetMIME::HEADER_FIELD_TEXT);
     }
 
-    INetMessageHeader GetHeaderField (ULONG nIndex) const
+    INetMessageHeader GetHeaderField (sal_uIntPtr nIndex) const
     {
         INetMessageHeader *p =
             (INetMessageHeader*)(m_aHeaderList.GetObject(nIndex));
@@ -210,16 +210,16 @@ public:
             return INetMessageHeader();
     }
 
-    ULONG SetHeaderField (
+    sal_uIntPtr SetHeaderField (
         const UniString& rName,
         const UniString& rValue,
-        ULONG            nIndex = LIST_APPEND);
+        sal_uIntPtr            nIndex = LIST_APPEND);
 
-    virtual ULONG SetHeaderField (
-        const INetMessageHeader &rField, ULONG nIndex = LIST_APPEND);
+    virtual sal_uIntPtr SetHeaderField (
+        const INetMessageHeader &rField, sal_uIntPtr nIndex = LIST_APPEND);
 
-    ULONG GetDocumentSize (void) const { return m_nDocSize; }
-    void  SetDocumentSize (ULONG nSize) { m_nDocSize = nSize; }
+    sal_uIntPtr GetDocumentSize (void) const { return m_nDocSize; }
+    void  SetDocumentSize (sal_uIntPtr nSize) { m_nDocSize = nSize; }
 
     const UniString& GetDocumentName (void) const { return m_aDocName; }
     void  SetDocumentName (const UniString& rName) { m_aDocName = rName; }
@@ -247,7 +247,7 @@ public:
  *=====================================================================*/
 class INetMessageHeaderIterator
 {
-    ULONG     nValueCount;
+    sal_uIntPtr     nValueCount;
     List      aValueList;
     UniString aEmptyString;
 
@@ -256,8 +256,8 @@ public:
         const INetMessage& rMsg, const UniString& rHdrName);
     virtual ~INetMessageHeaderIterator (void);
 
-    ULONG GetValueCount (void) const { return nValueCount; }
-    const UniString& GetValue (ULONG nIndex) const
+    sal_uIntPtr GetValueCount (void) const { return nValueCount; }
+    const UniString& GetValue (sal_uIntPtr nIndex) const
     {
         if (nIndex < nValueCount)
         {
@@ -297,7 +297,7 @@ public:
 
 class TOOLS_DLLPUBLIC INetRFC822Message : public INetMessage
 {
-    ULONG m_nIndex[INETMSG_RFC822_NUMHDR];
+    sal_uIntPtr m_nIndex[INETMSG_RFC822_NUMHDR];
 
 protected:
     virtual SvStream& operator<< (SvStream& rStrm) const;
@@ -310,14 +310,14 @@ public:
 
     INetRFC822Message& operator= (const INetRFC822Message& rMsg);
 
-    static BOOL GenerateDateField (
+    static sal_Bool GenerateDateField (
         const DateTime& rDateTime, UniString& rDateField);
-    static BOOL ParseDateField (
+    static sal_Bool ParseDateField (
         const UniString& rDateField, DateTime& rDateTime);
 
     using INetMessage::SetHeaderField;
-    virtual ULONG SetHeaderField (
-        const INetMessageHeader &rHeader, ULONG nIndex = LIST_APPEND);
+    virtual sal_uIntPtr SetHeaderField (
+        const INetMessageHeader &rHeader, sal_uIntPtr nIndex = LIST_APPEND);
 
     /** Header fields.
      */
@@ -491,23 +491,23 @@ enum INetMessageContainerType
 
 class TOOLS_DLLPUBLIC INetMIMEMessage : public INetRFC822Message
 {
-    ULONG           m_nIndex[INETMSG_MIME_NUMHDR];
+    sal_uIntPtr           m_nIndex[INETMSG_MIME_NUMHDR];
 
     INetMIMEMessage *pParent;
-    ULONG           nNumChildren;
+    sal_uIntPtr           nNumChildren;
     List            aChildren;
     ByteString      m_aBoundary;
-    BOOL            bHeaderParsed;
+    sal_Bool            bHeaderParsed;
 
     friend class INetMIMEMessageStream;
 
-    void SetChildCount (ULONG nCount) { nNumChildren = nCount; }
+    void SetChildCount (sal_uIntPtr nCount) { nNumChildren = nCount; }
     const ByteString& GetMultipartBoundary (void) const { return m_aBoundary; }
     void SetMultipartBoundary (const ByteString& rBnd) { m_aBoundary = rBnd; }
 
     void CleanupImp (void);
     void CopyImp    (const INetMIMEMessage& rMsg);
-    void SetHeaderParsed() { bHeaderParsed = TRUE; }
+    void SetHeaderParsed() { bHeaderParsed = sal_True; }
 
 protected:
     virtual SvStream& operator<< (SvStream& rStrm) const;
@@ -520,14 +520,14 @@ public:
 
     INetMIMEMessage& operator= (const INetMIMEMessage& rMsg);
 
-    BOOL HeaderParsed() const { return bHeaderParsed; }
+    sal_Bool HeaderParsed() const { return bHeaderParsed; }
 
     virtual INetMIMEMessage* CreateMessage (
         const INetMIMEMessage& rMsg) const;
 
     using INetRFC822Message::SetHeaderField;
-    virtual ULONG SetHeaderField (
-        const INetMessageHeader &rHeader, ULONG nIndex = LIST_APPEND);
+    virtual sal_uIntPtr SetHeaderField (
+        const INetMessageHeader &rHeader, sal_uIntPtr nIndex = LIST_APPEND);
 
     /** Header fields.
      */
@@ -571,34 +571,34 @@ public:
 
     /** Message container methods.
      */
-    BOOL IsContainer (void) const
+    sal_Bool IsContainer (void) const
     {
         return (IsMessage() || IsMultipart());
     }
-    BOOL IsMessage (void) const
+    sal_Bool IsMessage (void) const
     {
         UniString aType (GetContentType());
         return (aType.CompareIgnoreCaseToAscii("message/", 8) == 0);
     }
-    BOOL IsMultipart (void) const
+    sal_Bool IsMultipart (void) const
     {
         UniString aType (GetContentType());
         return (aType.CompareIgnoreCaseToAscii("multipart/", 10) == 0);
     }
 
-    ULONG GetChildCount (void) const { return nNumChildren; }
-    INetMIMEMessage* GetChild (ULONG nIndex) const
+    sal_uIntPtr GetChildCount (void) const { return nNumChildren; }
+    INetMIMEMessage* GetChild (sal_uIntPtr nIndex) const
     {
         return ((INetMIMEMessage *)(aChildren.GetObject (nIndex)));
     }
     INetMIMEMessage* GetParent (void) const { return pParent; }
 
-    BOOL EnableAttachChild (
+    sal_Bool EnableAttachChild (
         INetMessageContainerType eType = INETMSG_MULTIPART_MIXED);
-    BOOL AttachChild (
-        INetMIMEMessage& rChildMsg, BOOL bOwner = TRUE);
-    BOOL DetachChild (
-        ULONG nIndex, INetMIMEMessage& rChildMsg) const;
+    sal_Bool AttachChild (
+        INetMIMEMessage& rChildMsg, sal_Bool bOwner = sal_True);
+    sal_Bool DetachChild (
+        sal_uIntPtr nIndex, INetMIMEMessage& rChildMsg) const;
 
     /** Stream operators.
      */

@@ -45,8 +45,8 @@ class CheckBox;
 // Return-Werte von Execute
 //!!! bei Aenderungen \basic\source\runtime\methods.cxx msgbox anpassen
 
-#define RET_OK               TRUE
-#define RET_CANCEL           FALSE
+#define RET_OK               sal_True
+#define RET_CANCEL           sal_False
 #define RET_YES              2
 #define RET_NO               3
 #define RET_RETRY            4
@@ -71,12 +71,12 @@ protected:
     FixedImage*         mpFixedImage;
     XubString           maMessText;
     Image               maImage;
-    USHORT              mnSoundType;
-    BOOL                mbHelpBtn;
-    BOOL                mbSound;
+    sal_uInt16              mnSoundType;
+    sal_Bool                mbHelpBtn;
+    sal_Bool                mbSound;
     CheckBox*           mpCheckBox;
     XubString           maCheckBoxText;
-    BOOL                mbCheck;
+    sal_Bool                mbCheck;
 
     SAL_DLLPRIVATE void ImplInitMessBoxData();
     SAL_DLLPRIVATE void ImplInitButtons();
@@ -100,14 +100,14 @@ public:
     void                SetImage( const Image& rImage ) { maImage = rImage; }
     const Image&        GetImage() const { return maImage; }
 
-    BOOL                SetModeImage( const Image& rImage );
+    sal_Bool            SetModeImage( const Image& rImage );
     const Image&        GetModeImage( ) const;
 
     void                SetDefaultCheckBoxText();
     void                SetCheckBoxText( const XubString& rText ) { maCheckBoxText = rText;}
     const XubString&    GetCheckBoxText() const { return maCheckBoxText;}
-    void                SetCheckBoxState( BOOL bCheck );
-    BOOL                GetCheckBoxState() const;
+    void                SetCheckBoxState( sal_Bool bCheck );
+    sal_Bool                GetCheckBoxState() const;
 
     virtual Size        GetOptimalSize(WindowSizeType eType) const;
 };

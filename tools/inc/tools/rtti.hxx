@@ -39,25 +39,25 @@ typedef void* (*TypeId)();
 #define TYPEINFO() \
         static  void*  CreateType(); \
         static  TypeId StaticType(); \
-        static  BOOL   IsOf( TypeId aSameOrSuperType ); \
+        static  sal_Bool   IsOf( TypeId aSameOrSuperType ); \
         virtual TypeId Type() const; \
-        virtual BOOL   IsA( TypeId aSameOrSuperType ) const
+        virtual sal_Bool   IsA( TypeId aSameOrSuperType ) const
 
 #define TYPEINFO_VISIBILITY(visibility) \
         visibility static  void*  CreateType(); \
         visibility static  TypeId StaticType(); \
-        visibility static  BOOL   IsOf( TypeId aSameOrSuperType ); \
+        visibility static  sal_Bool   IsOf( TypeId aSameOrSuperType ); \
         visibility virtual TypeId Type() const; \
-        visibility virtual BOOL   IsA( TypeId aSameOrSuperType ) const
+        visibility virtual sal_Bool   IsA( TypeId aSameOrSuperType ) const
 
 #define TYPEINIT_FACTORY(sType, Factory ) \
         void*  sType::CreateType() { return Factory; } \
         TypeId sType::StaticType() { return &CreateType; } \
         TypeId sType::Type() const { return &CreateType; } \
-        BOOL sType::IsOf( TypeId aSameOrSuperType ) \
+        sal_Bool sType::IsOf( TypeId aSameOrSuperType ) \
         { \
             if ( aSameOrSuperType == StaticType() ) \
-                return TRUE
+                return sal_True
 
 #define STATICTYPE(sType) (sType::StaticType())
 
@@ -68,12 +68,12 @@ typedef void* (*TypeId)();
 
 #define SUPERTYPE(sSuper) \
             if ( sSuper::IsOf(aSameOrSuperType ) ) \
-                return TRUE
+                return sal_True
 
 #define TYPEINIT_END(sType) \
-            return FALSE; \
+            return sal_False; \
         } \
-        BOOL sType::IsA( TypeId aSameOrSuperType ) const \
+        sal_Bool sType::IsA( TypeId aSameOrSuperType ) const \
         { return IsOf( aSameOrSuperType ); }
 
 #define TYPEINIT0_FACTORY(sType, Factory) \
@@ -122,16 +122,16 @@ typedef void* (*TypeId)();
 
 #define TYPEINFO_ID(id) \
         static  TypeId StaticType() { return (TypeId) ( id | 0xF000000L ); } \
-        static  BOOL   IsOf( TypeId aSameOrSuperType ); \
+        static  sal_Bool   IsOf( TypeId aSameOrSuperType ); \
         virtual TypeId Type() const; \
-        virtual BOOL   IsA( TypeId aSameOrSuperType ) const
+        virtual sal_Bool   IsA( TypeId aSameOrSuperType ) const
 
 #define TYPEINIT_ID(sType) \
         TypeId sType::Type() const { return StaticType(); } \
-        BOOL   sType::IsOf( TypeId aSameOrSuperType ) \
+        sal_Bool   sType::IsOf( TypeId aSameOrSuperType ) \
         { \
             if ( aSameOrSuperType == StaticType() ) \
-                return TRUE
+                return sal_True
 
 #define TYPEINIT0_ID(sType) \
         TYPEINIT_ID(sType); \

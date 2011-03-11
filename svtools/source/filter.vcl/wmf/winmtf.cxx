@@ -316,7 +316,7 @@ WinMtf::WinMtf( WinMtfOutput* pWinMtfOutput, SvStream& rStreamWMF, FilterConfigI
 
     SvLockBytes *pLB = pWMF->GetLockBytes();
     if ( pLB )
-        pLB->SetSynchronMode( TRUE );
+        pLB->SetSynchronMode( sal_True );
 
     nStartPos = pWMF->Tell();
 
@@ -344,7 +344,7 @@ WinMtf::~WinMtf()
 
 // ------------------------------------------------------------------------
 
-void WinMtf::Callback( USHORT nPercent )
+void WinMtf::Callback( sal_uInt16 nPercent )
 {
     if ( xStatusIndicator.is() )
         xStatusIndicator->setValue( nPercent );
@@ -354,9 +354,9 @@ void WinMtf::Callback( USHORT nPercent )
 
 Color WinMtf::ReadColor()
 {
-    UINT32 nColor;
+    sal_uInt32 nColor;
     *pWMF >> nColor;
-    return Color( (BYTE)nColor, (BYTE)( nColor >> 8 ), (BYTE)( nColor >> 16 ) );
+    return Color( (sal_uInt8)nColor, (sal_uInt8)( nColor >> 8 ), (sal_uInt8)( nColor >> 16 ) );
 };
 
 //-----------------------------------------------------------------------------------
@@ -522,8 +522,8 @@ void WinMtfOutput::ImplMap( Font& rFont )
 
 Polygon& WinMtfOutput::ImplMap( Polygon& rPolygon )
 {
-    UINT16 nPoints = rPolygon.GetSize();
-    for ( UINT16 i = 0; i < nPoints; i++ )
+    sal_uInt16 nPoints = rPolygon.GetSize();
+    for ( sal_uInt16 i = 0; i < nPoints; i++ )
     {
         rPolygon[ i ] = ImplMap( rPolygon[ i ] );
     }
@@ -534,14 +534,14 @@ Polygon& WinMtfOutput::ImplMap( Polygon& rPolygon )
 
 PolyPolygon& WinMtfOutput::ImplMap( PolyPolygon& rPolyPolygon )
 {
-    UINT16 nPolys = rPolyPolygon.Count();
-    for ( UINT16 i = 0; i < nPolys; ImplMap( rPolyPolygon[ i++ ] ) ) ;
+    sal_uInt16 nPolys = rPolyPolygon.Count();
+    for ( sal_uInt16 i = 0; i < nPolys; ImplMap( rPolyPolygon[ i++ ] ) ) ;
     return rPolyPolygon;
 }
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfOutput::SelectObject( INT32 nIndex )
+void WinMtfOutput::SelectObject( sal_Int32 nIndex )
 {
     GDIObj* pGDIObj = NULL;
 
@@ -551,7 +551,7 @@ void WinMtfOutput::SelectObject( INT32 nIndex )
     {
         nIndex &= 0xffff;       // zur Sicherheit: mehr als 65535 nicht zulassen
 
-        if ( (UINT32)nIndex < vGDIObj.size() )
+        if ( (sal_uInt32)nIndex < vGDIObj.size() )
             pGDIObj = vGDIObj[ nIndex ];
     }
 
@@ -560,7 +560,7 @@ void WinMtfOutput::SelectObject( INT32 nIndex )
 
     if ( nIndex & ENHMETA_STOCK_OBJECT )
     {
-        UINT16 nStockId = (BYTE)nIndex;
+        sal_uInt16 nStockId = (sal_uInt8)nIndex;
         switch( nStockId )
         {
             case WHITE_BRUSH :
@@ -586,7 +586,7 @@ void WinMtfOutput::SelectObject( INT32 nIndex )
             break;
             case NULL_BRUSH :
             {
-                pGDIObj->Set( GDI_BRUSH, new WinMtfFillStyle( Color( COL_TRANSPARENT ), TRUE ) );
+                pGDIObj->Set( GDI_BRUSH, new WinMtfFillStyle( Color( COL_TRANSPARENT ), sal_True ) );
             }
             break;
             case WHITE_PEN :
@@ -601,7 +601,7 @@ void WinMtfOutput::SelectObject( INT32 nIndex )
             break;
             case NULL_PEN :
             {
-                pGDIObj->Set( GDI_PEN, new WinMtfLineStyle( Color( COL_TRANSPARENT ), TRUE ) );
+                pGDIObj->Set( GDI_PEN, new WinMtfLineStyle( Color( COL_TRANSPARENT ), sal_True ) );
             }
             break;
             default:
@@ -662,7 +662,7 @@ sal_uInt32 WinMtfOutput::GetTextLayoutMode() const
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfOutput::SetBkMode( UINT32 nMode )
+void WinMtfOutput::SetBkMode( sal_uInt32 nMode )
 {
     mnBkMode = nMode;
 }
@@ -683,14 +683,14 @@ void WinMtfOutput::SetTextColor( const Color& rColor )
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfOutput::SetTextAlign( UINT32 nAlign )
+void WinMtfOutput::SetTextAlign( sal_uInt32 nAlign )
 {
     mnTextAlign = nAlign;
 }
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfOutput::ImplResizeObjectArry( UINT32 nNewEntrys )
+void WinMtfOutput::ImplResizeObjectArry( sal_uInt32 nNewEntrys )
 {
     sal_uInt32 i = vGDIObj.size();
     vGDIObj.resize( nNewEntrys );
@@ -756,7 +756,7 @@ void WinMtfOutput::CreateObject( GDIObjectType eType, void* pStyle )
             }
         }
     }
-    UINT32 nIndex;
+    sal_uInt32 nIndex;
     for ( nIndex = 0; nIndex < vGDIObj.size(); nIndex++ )
     {
         if ( vGDIObj[ nIndex ] == NULL )
@@ -770,7 +770,7 @@ void WinMtfOutput::CreateObject( GDIObjectType eType, void* pStyle )
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfOutput::CreateObject( INT32 nIndex, GDIObjectType eType, void* pStyle )
+void WinMtfOutput::CreateObject( sal_Int32 nIndex, GDIObjectType eType, void* pStyle )
 {
     if ( ( nIndex & ENHMETA_STOCK_OBJECT ) == 0 )
     {
@@ -793,7 +793,7 @@ void WinMtfOutput::CreateObject( INT32 nIndex, GDIObjectType eType, void* pStyle
                 }
             }
         }
-        if ( (UINT32)nIndex >= vGDIObj.size() )
+        if ( (sal_uInt32)nIndex >= vGDIObj.size() )
             ImplResizeObjectArry( nIndex + 16 );
 
         if ( vGDIObj[ nIndex ] != NULL )
@@ -935,7 +935,7 @@ WinMtfOutput::~WinMtfOutput()
     else
         mpGDIMetaFile->SetPrefSize( mrclFrame.GetSize() );
 
-    for ( UINT32 i = 0; i < vGDIObj.size(); i++ )
+    for ( sal_uInt32 i = 0; i < vGDIObj.size(); i++ )
         delete vGDIObj[ i ];
 };
 
@@ -971,7 +971,7 @@ void WinMtfOutput::UpdateClipRegion()
 void WinMtfOutput::ImplSetNonPersistentLineColorTransparenz()
 {
     Color aColor(  COL_TRANSPARENT);
-    WinMtfLineStyle aTransparentLine( aColor, TRUE );
+    WinMtfLineStyle aTransparentLine( aColor, sal_True );
     if ( ! ( maLatestLineStyle == aTransparentLine ) )
     {
         maLatestLineStyle = aTransparentLine;
@@ -1006,7 +1006,7 @@ void WinMtfOutput::UpdateFillStyle()
 
 //-----------------------------------------------------------------------------------
 
-sal_uInt32 WinMtfOutput::SetRasterOp( UINT32 nRasterOp )
+sal_uInt32 WinMtfOutput::SetRasterOp( sal_uInt32 nRasterOp )
 {
     sal_uInt32 nRetROP = mnRop;
     if ( nRasterOp != mnRop )
@@ -1039,8 +1039,8 @@ sal_uInt32 WinMtfOutput::SetRasterOp( UINT32 nRasterOp )
                 {
                     aNopFillStyle = maFillStyle;
                     aNopLineStyle = maLineStyle;
-                    maFillStyle = WinMtfFillStyle( Color( COL_TRANSPARENT ), TRUE );
-                    maLineStyle = WinMtfLineStyle( Color( COL_TRANSPARENT ), TRUE );
+                    maFillStyle = WinMtfFillStyle( Color( COL_TRANSPARENT ), sal_True );
+                    maLineStyle = WinMtfLineStyle( Color( COL_TRANSPARENT ), sal_True );
                     mbNopMode = sal_True;
                 }
             }
@@ -1070,7 +1070,7 @@ void WinMtfOutput::StrokeAndFillPath( sal_Bool bStroke, sal_Bool bFill )
             if ( !bStroke )
             {
                 mpGDIMetaFile->AddAction( new MetaPushAction( PUSH_LINECOLOR ) );
-                mpGDIMetaFile->AddAction( new MetaLineColorAction( Color(), FALSE ) );
+                mpGDIMetaFile->AddAction( new MetaLineColorAction( Color(), sal_False ) );
             }
             if ( aPathObj.Count() == 1 )
                 mpGDIMetaFile->AddAction( new MetaPolygonAction( aPathObj.GetObject( 0 ) ) );
@@ -1135,7 +1135,7 @@ void WinMtfOutput::DrawLine( const Point& rSource, const Point& rDest )
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfOutput::DrawRect( const Rectangle& rRect, BOOL bEdge )
+void WinMtfOutput::DrawRect( const Rectangle& rRect, sal_Bool bEdge )
 {
     UpdateClipRegion();
     UpdateFillStyle();
@@ -1209,7 +1209,7 @@ void WinMtfOutput::DrawEllipse( const Rectangle& rRect )
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfOutput::DrawArc( const Rectangle& rRect, const Point& rStart, const Point& rEnd, BOOL bTo )
+void WinMtfOutput::DrawArc( const Rectangle& rRect, const Point& rStart, const Point& rEnd, sal_Bool bTo )
 {
     UpdateClipRegion();
     UpdateLineStyle();
@@ -1311,7 +1311,7 @@ void WinMtfOutput::DrawPolygon( Polygon& rPolygon, sal_Bool bRecordPath )
         {
             if ( maLineStyle.aLineInfo.GetWidth() || ( maLineStyle.aLineInfo.GetStyle() == LINE_DASH ) )
             {
-                USHORT nCount = rPolygon.GetSize();
+                sal_uInt16 nCount = rPolygon.GetSize();
                 if ( nCount )
                 {
                     if ( rPolygon[ nCount - 1 ] != rPolygon[ 0 ] )
@@ -1554,7 +1554,7 @@ void WinMtfOutput::DrawText( Point& rPosition, String& rText, sal_Int32* pDXArry
         pVDev->SetFont( maFont );
         if( pDXArry )
         {
-            UINT32 nLen = rText.Len();
+            sal_uInt32 nLen = rText.Len();
             nTextWidth = pVDev->GetTextWidth( rText.GetChar( (sal_uInt16)( nLen - 1 ) ) );
             if( nLen > 1 )
                 nTextWidth += pDXArry[ nLen - 2 ];
@@ -1634,7 +1634,7 @@ void WinMtfOutput::ImplDrawBitmap( const Point& rPos, const Size& rSize, const B
         const Point aEmptyPoint;
 
         // #i50672# Extract whole VDev content (to match size of rBitmap)
-        aVDev.EnableMapMode( FALSE );
+        aVDev.EnableMapMode( sal_False );
         Bitmap aMask( aVDev.GetBitmap( aEmptyPoint, aSizePixel ).CreateMask( Color( COL_WHITE ) ) );
 
         if ( aBmpEx.IsTransparent() )
@@ -1703,7 +1703,7 @@ void WinMtfOutput::ResolveBitmapActions( List& rSaveList )
             {   // patterns aren't well supported yet
                 sal_uInt32 nOldRop = SetRasterOp( ROP_OVERPAINT );  // in this case nRasterOperation is either 0 or 0xff
                 UpdateFillStyle();
-                DrawRect( aRect, FALSE );
+                DrawRect( aRect, sal_False );
                 SetRasterOp( nOldRop );
             }
             else
@@ -1768,7 +1768,7 @@ void WinMtfOutput::ResolveBitmapActions( List& rSaveList )
                             if ( nOperation == 0x1 )
                             {
                                 SetRasterOp( R2_NOT );
-                                DrawRect( aRect, FALSE );
+                                DrawRect( aRect, sal_False );
                             }
                         }
                         break;
@@ -1786,7 +1786,7 @@ void WinMtfOutput::ResolveBitmapActions( List& rSaveList )
                             if ( nOperation == 0x7 )
                             {
                                 SetRasterOp( R2_NOT );
-                                DrawRect( aRect, FALSE );
+                                DrawRect( aRect, sal_False );
                             }
                         }
                         break;
@@ -1795,7 +1795,7 @@ void WinMtfOutput::ResolveBitmapActions( List& rSaveList )
                         case 0xb :
                         {
                             SetRasterOp( R2_NOT );
-                            DrawRect( aRect, FALSE );
+                            DrawRect( aRect, sal_False );
                             SetRasterOp( R2_COPYPEN );
                             Bitmap  aMask( aBitmap );
                             aBitmap.Invert();
@@ -1806,7 +1806,7 @@ void WinMtfOutput::ResolveBitmapActions( List& rSaveList )
                             if ( nOperation == 0xb )
                             {
                                 SetRasterOp( R2_NOT );
-                                DrawRect( aRect, FALSE );
+                                DrawRect( aRect, sal_False );
                             }
                         }
                         break;
@@ -1823,7 +1823,7 @@ void WinMtfOutput::ResolveBitmapActions( List& rSaveList )
                             if ( nOperation == 0xd )
                             {
                                 SetRasterOp( R2_NOT );
-                                DrawRect( aRect, FALSE );
+                                DrawRect( aRect, sal_False );
                             }
                         }
                         break;
@@ -1835,7 +1835,7 @@ void WinMtfOutput::ResolveBitmapActions( List& rSaveList )
                             if ( nOperation == 0x9 )
                             {
                                 SetRasterOp( R2_NOT );
-                                DrawRect( aRect, FALSE );
+                                DrawRect( aRect, sal_False );
                             }
                         }
                         break;
@@ -1845,7 +1845,7 @@ void WinMtfOutput::ResolveBitmapActions( List& rSaveList )
                         {                                                   // in this case nRasterOperation is either 0 or 0xff
                             maFillStyle = WinMtfFillStyle( Color( nRasterOperation, nRasterOperation, nRasterOperation ) );
                             UpdateFillStyle();
-                            DrawRect( aRect, FALSE );
+                            DrawRect( aRect, sal_False );
                         }
                         break;
 
@@ -1861,7 +1861,7 @@ void WinMtfOutput::ResolveBitmapActions( List& rSaveList )
                         case 0x5 :  // only destination is used
                         {
                             SetRasterOp( R2_NOT );
-                            DrawRect( aRect, FALSE );
+                            DrawRect( aRect, sal_False );
                         }
                         case 0xa :  // no operation
                         break;
@@ -1890,7 +1890,7 @@ void WinMtfOutput::SetDevOrg( const Point& rPoint )
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfOutput::SetDevOrgOffset( INT32 nXAdd, INT32 nYAdd )
+void WinMtfOutput::SetDevOrgOffset( sal_Int32 nXAdd, sal_Int32 nYAdd )
 {
     mnDevOrgX += nXAdd;
     mnDevOrgY += nYAdd;
@@ -1932,7 +1932,7 @@ void WinMtfOutput::SetWinOrg( const Point& rPoint )
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfOutput::SetWinOrgOffset( INT32 nXAdd, INT32 nYAdd )
+void WinMtfOutput::SetWinOrgOffset( sal_Int32 nXAdd, sal_Int32 nYAdd )
 {
     mnWinOrgX += nXAdd;
     mnWinOrgY += nYAdd;
@@ -2026,7 +2026,7 @@ void WinMtfOutput::SetWorldTransform( const XForm& rXForm )
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfOutput::ModifyWorldTransform( const XForm& rXForm, UINT32 nMode )
+void WinMtfOutput::ModifyWorldTransform( const XForm& rXForm, sal_uInt32 nMode )
 {
     switch( nMode )
     {

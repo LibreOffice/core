@@ -65,8 +65,9 @@ protected:
     void                                    ImplActivateTabControllers();
 
 public:
-                UnoControlContainer();
-                UnoControlContainer( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >  xPeer );
+                UnoControlContainer( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
+                UnoControlContainer( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory,
+                                     const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& xPeer );
                 ~UnoControlContainer();
 
 

@@ -28,14 +28,13 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
-#include <roadmap.hxx>
+#include <svtools/roadmap.hxx>
 
 #ifndef _STRING_HXX
 #define _STRING_HXX
 #endif
 
 #include <vector>
-
 #include <algorithm>
 #include <vcl/bitmap.hxx>
 #include <tools/color.hxx>
@@ -123,9 +122,9 @@ namespace svt
 
         void                    SetClickHdl( const Link& rLink );
         const Link&             GetClickHdl() const;
-        void                    SetZOrder( RoadmapItem* pRefRoadmapHyperLabel, USHORT nFlags );
-        void                    Enable( BOOL bEnable = TRUE);
-        BOOL                    IsEnabled() const;
+        void                    SetZOrder( RoadmapItem* pRefRoadmapHyperLabel, sal_uInt16 nFlags );
+        void                    Enable( sal_Bool bEnable = sal_True);
+        sal_Bool                    IsEnabled() const;
         void                    GrabFocus();
 
         bool                    Contains( const Window* _pWindow ) const;
@@ -887,7 +886,7 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    void RoadmapItem::SetZOrder( RoadmapItem* pRefRoadmapHyperLabel, USHORT nFlags )
+    void RoadmapItem::SetZOrder( RoadmapItem* pRefRoadmapHyperLabel, sal_uInt16 nFlags )
     {
         if (pRefRoadmapHyperLabel == NULL)
             mpDescription->SetZOrder( NULL, nFlags); //WINDOW_ZORDER_FIRST );
@@ -896,14 +895,14 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    void RoadmapItem::Enable( BOOL _bEnable)
+    void RoadmapItem::Enable( sal_Bool _bEnable)
     {
         mpID->Enable(_bEnable);
         mpDescription->Enable(_bEnable);
     }
 
     //---------------------------------------------------------------------
-    BOOL RoadmapItem::IsEnabled() const
+    sal_Bool RoadmapItem::IsEnabled() const
     {
         return mpID->IsEnabled();
     }

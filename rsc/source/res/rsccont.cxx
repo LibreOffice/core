@@ -63,7 +63,7 @@ void ENTRY_STRUCT::Destroy()
 |*
 *************************************************************************/
 RscBaseCont::RscBaseCont( Atom nId, sal_uInt32 nTypeId, RscTop * pSuper,
-                          BOOL bNoIdent )
+                          sal_Bool bNoIdent )
     : RscTop( nId, nTypeId, pSuper ),
       nSize( 0 )
 {
@@ -118,7 +118,7 @@ void RscBaseCont::DestroyElements( RscBaseContInst * pClassData )
 |*
 *************************************************************************/
 RSCINST RscBaseCont::Create( RSCINST * pInst, const RSCINST & rDflt,
-                             BOOL bOwnClass )
+                             sal_Bool bOwnClass )
 {
     sal_uInt32  i = 0;
     RSCINST aInst;
@@ -138,7 +138,7 @@ RSCINST RscBaseCont::Create( RSCINST * pInst, const RSCINST & rDflt,
     pClassData = (RscBaseContInst *)(aInst.pData + nOffInstData);
     pClassData->nEntries = 0;
     pClassData->pEntries = NULL;
-    pClassData->bDflt = TRUE;
+    pClassData->bDflt = sal_True;
 
     if( bOwnClass ){
         RscBaseContInst *   pDfltClassData;
@@ -251,7 +251,7 @@ ERRTYPE RscBaseCont::GetElement( const RSCINST & rInst, const RscId & rEleName,
     else
         pCreateClass = pTypeClass;
 
-    pClassData->bDflt = FALSE;
+    pClassData->bDflt = sal_False;
     if( !bNoId )
         aTmpI = SearchEle( rInst, rEleName, pCreateClass );
     // Eintrag gefunden
@@ -446,11 +446,11 @@ else
 |*    RscBaseCont::SetNumber()
 |*
 *************************************************************************/
-ERRTYPE RscBaseCont::SetNumber( const RSCINST & rInst, INT32 lValue ){
+ERRTYPE RscBaseCont::SetNumber( const RSCINST & rInst, sal_Int32 lValue ){
     RscBaseContInst * pClassData;
     RSCINST aTmpI;
     ERRTYPE aError;
-    INT32   lNumber;
+    sal_Int32   lNumber;
 
     pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
 
@@ -482,13 +482,13 @@ else
 ERRTYPE RscBaseCont::SetBool
 (
     const RSCINST & rInst,
-    BOOL bValue
+    sal_Bool bValue
 )
 {
     RscBaseContInst * pClassData;
     RSCINST aTmpI;
     ERRTYPE aError;
-    BOOL    bBool;
+    sal_Bool    bBool;
 
     pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
 
@@ -522,7 +522,7 @@ ERRTYPE RscBaseCont::SetConst
 (
     const RSCINST & rInst,
     Atom nValueId,
-    INT32 lValue
+    sal_Int32 lValue
 )
 {
     RscBaseContInst * pClassData;
@@ -598,10 +598,10 @@ else
 |*    RscBaseCont::IsConsistent()
 |*
 *************************************************************************/
-BOOL RscBaseCont::IsConsistent( const RSCINST & rInst ) {
+sal_Bool RscBaseCont::IsConsistent( const RSCINST & rInst ) {
     sal_uInt32  i = 0;
     RscBaseContInst * pClassData;
-    BOOL    bRet;
+    sal_Bool    bRet;
 
     bRet = RscTop::IsConsistent( rInst );
 
@@ -611,19 +611,19 @@ BOOL RscBaseCont::IsConsistent( const RSCINST & rInst ) {
     // Komplexitaet = n^2 / 2
     for( i = 0; i < pClassData->nEntries; i++ ){
         if( !bNoId ){
-            if( (INT32)pClassData->pEntries[ i ].aName > 0x7FFF
-              || (INT32)pClassData->pEntries[ i ].aName < 1 ){
-                bRet = FALSE;
+            if( (sal_Int32)pClassData->pEntries[ i ].aName > 0x7FFF
+              || (sal_Int32)pClassData->pEntries[ i ].aName < 1 ){
+                bRet = sal_False;
             }
             else if( SearchElePos( rInst, pClassData->pEntries[ i ].aName,
                 pClassData->pEntries[ i ].aInst.pClass, i +1 ).IsInst() )
             {
-                 bRet = FALSE;
+                 bRet = sal_False;
              };
         }
         if( ! pClassData->pEntries[ i ].aInst.pClass->
               IsConsistent( pClassData->pEntries[ i ].aInst ) )
-            bRet = FALSE;
+            bRet = sal_False;
     };
 
     return( bRet );
@@ -655,20 +655,20 @@ void RscBaseCont::SetToDefault( const RSCINST & rInst )
 |*    RscBaseCont::IsDefault()
 |*
 *************************************************************************/
-BOOL RscBaseCont::IsDefault( const RSCINST & rInst ){
+sal_Bool RscBaseCont::IsDefault( const RSCINST & rInst ){
     sal_uInt32  i = 0;
     RscBaseContInst * pClassData;
 
     pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
 
     if( !pClassData->bDflt )
-        return FALSE;
+        return sal_False;
 
     for( i = 0; i < pClassData->nEntries; i++ ){
         if( ! pClassData->pEntries[ i ].aInst.pClass->
                   IsDefault( pClassData->pEntries[ i ].aInst ) )
         {
-            return( FALSE );
+            return( sal_False );
         };
     };
 
@@ -680,19 +680,19 @@ BOOL RscBaseCont::IsDefault( const RSCINST & rInst ){
 |*    RscBaseCont::IsValueDefault()
 |*
 *************************************************************************/
-BOOL RscBaseCont::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
+sal_Bool RscBaseCont::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
 {
     RscBaseContInst * pClassData;
 
     if( !RscTop::IsValueDefault( rInst, pDef ) )
-        return FALSE;
+        return sal_False;
 
     pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
 
     if( pClassData->nEntries )
-        return FALSE;
+        return sal_False;
     else
-        return TRUE;
+        return sal_True;
 }
 
 /*************************************************************************
@@ -775,14 +775,14 @@ void RscBaseCont::ContWriteSrc( const RSCINST & rInst, FILE * fOutput,
 |*
 *************************************************************************/
 ERRTYPE RscBaseCont::ContWriteRc( const RSCINST & rInst, RscWriteRc & rMem,
-                              RscTypCont * pTC, sal_uInt32 nDeep, BOOL bExtra )
+                              RscTypCont * pTC, sal_uInt32 nDeep, sal_Bool bExtra )
 {
     sal_uInt32        i = 0;
     RscBaseContInst * pClassData;
     ERRTYPE       aError;
 
     if( bExtra || bNoId )
-    { // Nur Subresourcen schreiben, wenn bExtra == TRUE
+    { // Nur Subresourcen schreiben, wenn bExtra == sal_True
         pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
 
         for( i = 0; i < pClassData->nEntries && aError.IsOk(); i++ ){
@@ -803,7 +803,7 @@ void RscBaseCont::ContWriteRcAccess
     FILE * fOutput,
     RscTypCont * pTC,
     const char * pName,
-    BOOL bWriteSize
+    sal_Bool bWriteSize
 )
 {
     if( (bNoId || bWriteSize) && !pTypeClass1 )
@@ -846,7 +846,7 @@ void RscBaseCont::WriteSrc( const RSCINST & rInst, FILE * fOutput,
 |*
 *************************************************************************/
 ERRTYPE RscBaseCont::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
-                              RscTypCont * pTC, sal_uInt32 nDeep, BOOL bExtra )
+                              RscTypCont * pTC, sal_uInt32 nDeep, sal_Bool bExtra )
 {
     ERRTYPE       aError;
 
@@ -926,7 +926,7 @@ ERRTYPE RscBaseCont::WriteCxx( const RSCINST & rInst, FILE * fOutput,
 |*
 *************************************************************************/
 RscContWriteSrc::RscContWriteSrc( Atom nId, sal_uInt32 nTypeId,
-                                 RscTop * pSuper, BOOL bNoIdent )
+                                 RscTop * pSuper, sal_Bool bNoIdent )
                   : RscBaseCont( nId, nTypeId, pSuper, bNoIdent )
 {}
 
@@ -961,7 +961,7 @@ void RscContWriteSrc::WriteSrc( const RSCINST & rInst, FILE * fOutput,
 |*    RscCont::RscCont()
 |*
 *************************************************************************/
-RscCont::RscCont( Atom nId, sal_uInt32 nTypeId, RscTop * pSuper, BOOL bNoIdent )
+RscCont::RscCont( Atom nId, sal_uInt32 nTypeId, RscTop * pSuper, sal_Bool bNoIdent )
               : RscContWriteSrc( nId, nTypeId, pSuper, bNoIdent )
 {}
 
@@ -971,7 +971,7 @@ RscCont::RscCont( Atom nId, sal_uInt32 nTypeId, RscTop * pSuper, BOOL bNoIdent )
 |*
 *************************************************************************/
 ERRTYPE RscCont::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
-                                 RscTypCont * pTC, sal_uInt32 nDeep, BOOL bExtra )
+                                 RscTypCont * pTC, sal_uInt32 nDeep, sal_Bool bExtra )
 {
     RscBaseContInst * pClassData;
     ERRTYPE aError;
@@ -996,7 +996,7 @@ void RscCont::WriteRcAccess
     const char * pName
 )
 {
-    ContWriteRcAccess( fOutput, pTC, pName, TRUE );
+    ContWriteRcAccess( fOutput, pTC, pName, sal_True );
 }
 
 /*************************************************************************
@@ -1005,7 +1005,7 @@ void RscCont::WriteRcAccess
 |*
 *************************************************************************/
 RscContExtraData::RscContExtraData( Atom nId, sal_uInt32 nTypeId,
-                             RscTop * pSuper, BOOL bNoIdent )
+                             RscTop * pSuper, sal_Bool bNoIdent )
                      : RscContWriteSrc( nId, nTypeId, pSuper, bNoIdent )
 {}
 
@@ -1015,7 +1015,7 @@ RscContExtraData::RscContExtraData( Atom nId, sal_uInt32 nTypeId,
 |*
 *************************************************************************/
 ERRTYPE RscContExtraData::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
-                             RscTypCont * pTC, sal_uInt32 nDeep, BOOL bExtra )
+                             RscTypCont * pTC, sal_uInt32 nDeep, sal_Bool bExtra )
 {
     ERRTYPE aError;
 

@@ -64,9 +64,9 @@ RscTypCont :: RscTypCont( RscError * pErrHdl,
       nSourceCharSet( RTL_TEXTENCODING_UTF8 ),
       nByteOrder( nOrder ),
       aSearchPath( rSearchPath ),
-      aBool( pHS->getID( "BOOL" ), RSC_NOTYPE ),
+      aBool( pHS->getID( "sal_Bool" ), RSC_NOTYPE ),
       aShort( pHS->getID( "short" ), RSC_NOTYPE ),
-      aUShort( pHS->getID( "USHORT" ), RSC_NOTYPE ),
+      aUShort( pHS->getID( "sal_uInt16" ), RSC_NOTYPE ),
       aLong( pHS->getID( "long" ), RSC_NOTYPE ),
       aEnumLong( pHS->getID( "enum_long" ), RSC_NOTYPE ),
       aIdUShort( pHS->getID( "IDUSHORT" ), RSC_NOTYPE ),
@@ -80,6 +80,7 @@ RscTypCont :: RscTypCont( RscError * pErrHdl,
       a0to9999Short( pHS->getID( "YearShort" ), RSC_NOTYPE ),
       aIdLong( pHS->getID( "IDLONG" ), RSC_NOTYPE ),
       aString( pHS->getID( "Chars" ), RSC_NOTYPE ),
+      aStringLiteral( pHS->getID( "Chars" ), RSC_NOTYPE ),
       aWinBits( pHS->getID( "WinBits" ), RSC_NOTYPE ),
       aLangType(),
       aLangString( pHS->getID( "Lang_Chars" ), RSC_NOTYPE, &aString, &aLangType ),
@@ -124,7 +125,7 @@ static sal_uInt32 getLangIdAndShortenLocale( RscTypCont* pTypCont,
     else
         rLang = rtl::OString();
 #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, " %s (0x%hx)", aL.getStr(), nRet );
+        fprintf( stderr, " %s (0x%hx)", aL.getStr(), (int)nRet );
 #endif
     return nRet;
 }
@@ -368,17 +369,17 @@ void RscTypCont :: Delete( Atom nRT, const RscId & rId ){
 |*
 *************************************************************************/
 sal_uInt32 RscTypCont :: PutSysName( sal_uInt32 nRscTyp, char * pFileName,
-                                 sal_uInt32 nConst, sal_uInt32 nId, BOOL bFirst )
+                                 sal_uInt32 nConst, sal_uInt32 nId, sal_Bool bFirst )
 {
     RscSysEntry *pSysEntry;
     RscSysEntry *pFoundEntry = NULL;
-    BOOL         bId1 = FALSE;
+    sal_Bool            bId1 = sal_False;
 
     for ( size_t i = 0, n = aSysLst.size(); i < n; ++i )
     {
         pSysEntry = aSysLst[ i ];
         if( pSysEntry->nKey == 1 )
-            bId1 = TRUE;
+            bId1 = sal_True;
         if( !strcmp( pSysEntry->aFileName.GetBuffer(), pFileName ) )
             if(  pSysEntry->nRscTyp == nRscTyp
               && pSysEntry->nTyp    == nConst
@@ -415,7 +416,7 @@ sal_uInt32 RscTypCont :: PutSysName( sal_uInt32 nRscTyp, char * pFileName,
 |*    RscTypCont :: WriteInc
 |*
 *************************************************************************/
-void RscTypCont :: WriteInc( FILE * fOutput, ULONG lFileKey )
+void RscTypCont :: WriteInc( FILE * fOutput, sal_uLong lFileKey )
 {
     RscFile   * pFName;
 
@@ -472,7 +473,7 @@ private:
     ERRTYPE     aError;     // Enthaelt den ersten Fehler
     RscTypCont* pTypCont;
     FILE *      fOutput;    // AusgabeDatei
-    ULONG       lFileKey;   // Welche src-Datei
+    sal_uLong       lFileKey;   // Welche src-Datei
     RscTop *    pClass;
 
     DECL_LINK( CallBackWriteRc, ObjNode * );
@@ -520,7 +521,7 @@ IMPL_LINK( RscEnumerateObj, CallBackWriteRc, ObjNode *, pObjNode )
 
     aError = pClass->WriteRcHeader( RSCINST( pClass, pObjNode->GetRscObj() ),
                                      aMem, pTypCont,
-                                     pObjNode->GetRscId(), 0, TRUE );
+                                     pObjNode->GetRscId(), 0, sal_True );
     if( aError.IsError() || aError.IsWarning() )
         pTypCont->pEH->Error( aError, pClass, pObjNode->GetRscId() );
 
@@ -599,18 +600,18 @@ void RscEnumerateObj :: WriteRcFile( RscWriteRc & rMem, FILE * fOut ){
 
     if( nRT == RSC_VERSIONCONTROL )
     { // kommt immmer als letztes
-        INT32 nCount = pTypCont->aIdTranslator.size();
+        sal_Int32 nCount = pTypCont->aIdTranslator.size();
         // groesse der Tabelle
-        UINT32 nSize = (nCount * (sizeof(sal_uInt64)+sizeof(INT32))) + sizeof(INT32);
+        sal_uInt32 nSize = (nCount * (sizeof(sal_uInt64)+sizeof(sal_Int32))) + sizeof(sal_Int32);
 
         rMem.Put( nCount ); //Anzahl speichern
-        for( std::map< sal_uInt64, ULONG >::const_iterator it =
+        for( std::map< sal_uInt64, sal_uLong >::const_iterator it =
              pTypCont->aIdTranslator.begin(); it != pTypCont->aIdTranslator.end(); ++it )
         {
             // Schluessel schreiben
             rMem.Put( it->first );
             // Objekt Id oder Position schreiben
-            rMem.Put( (INT32)it->second );
+            rMem.Put( (sal_Int32)it->second );
         }
         rMem.Put( nSize ); // Groesse hinten Speichern
     }
@@ -652,7 +653,7 @@ public:
         return aEnumObj.aError;
     };
 
-    ERRTYPE WriteSrc( ULONG lFileKey )
+    ERRTYPE WriteSrc( sal_uLong lFileKey )
     {
         aEnumObj.lFileKey = lFileKey;
 
@@ -661,7 +662,7 @@ public:
         return aEnumObj.aError;
     }
 
-    ERRTYPE WriteCxx( ULONG lFileKey )
+    ERRTYPE WriteCxx( sal_uLong lFileKey )
     {
         aEnumObj.lFileKey = lFileKey;
 
@@ -670,7 +671,7 @@ public:
         return aEnumObj.aError;
     }
 
-    ERRTYPE WriteHxx(  ULONG lFileKey )
+    ERRTYPE WriteHxx(  sal_uLong lFileKey )
     {
         aEnumObj.lFileKey = lFileKey;
 
@@ -755,7 +756,7 @@ ERRTYPE RscTypCont::WriteRc( WriteRcContext& rContext )
 
     // version control
     RscWriteRc aMem( nByteOrder );
-    aVersion.pClass->WriteRcHeader( aVersion, aMem, this, RscId( RSCVERSION_ID ), 0, TRUE );
+    aVersion.pClass->WriteRcHeader( aVersion, aMem, this, RscId( RSCVERSION_ID ), 0, sal_True );
     aEnumRef.aEnumObj.WriteRcFile( aMem, rContext.fOutput );
 
     return aError;
@@ -766,8 +767,8 @@ ERRTYPE RscTypCont::WriteRc( WriteRcContext& rContext )
 |*    RscTypCont :: WriteSrc
 |*
 *************************************************************************/
-void RscTypCont :: WriteSrc( FILE * fOutput, ULONG nFileKey,
-                             CharSet /*nCharSet*/, BOOL bName )
+void RscTypCont :: WriteSrc( FILE * fOutput, sal_uLong nFileKey,
+                             CharSet /*nCharSet*/, sal_Bool bName )
 {
     RscFile     *   pFName;
     RscEnumerateRef aEnumRef( this, pRoot, fOutput );
@@ -799,7 +800,7 @@ void RscTypCont :: WriteSrc( FILE * fOutput, ULONG nFileKey,
     }
     else
     {
-        RscId::SetNames( FALSE );
+        RscId::SetNames( sal_False );
         if( NOFILE_INDEX == nFileKey )
         {
             pFName = aFileTab.First();
@@ -820,7 +821,7 @@ void RscTypCont :: WriteSrc( FILE * fOutput, ULONG nFileKey,
 |*    RscTypCont :: WriteHxx
 |*
 *************************************************************************/
-ERRTYPE RscTypCont :: WriteHxx( FILE * fOutput, ULONG nFileKey )
+ERRTYPE RscTypCont :: WriteHxx( FILE * fOutput, sal_uLong nFileKey )
 {
     fprintf( fOutput, "#include <tools/rc.hxx>\n" );
     fprintf( fOutput, "#include <tools/resid.hxx>\n" );
@@ -836,7 +837,7 @@ ERRTYPE RscTypCont :: WriteHxx( FILE * fOutput, ULONG nFileKey )
     fprintf( fOutput, "#include <vcl/fixed.hxx>\n" );
     fprintf( fOutput, "#include <vcl/group.hxx>\n" );
     fprintf( fOutput, "#include <vcl/image.hxx>\n" );
-    fprintf( fOutput, "#include <vcl/imagebtn.hxx>\n" );
+    fprintf( fOutput, "#include <vcl/button.hxx>\n" );
     fprintf( fOutput, "#include <vcl/keycod.hxx>\n" );
     fprintf( fOutput, "#include <vcl/lstbox.hxx>\n" );
     fprintf( fOutput, "#include <vcl/mapmod.hxx>\n" );
@@ -882,7 +883,7 @@ ERRTYPE RscTypCont :: WriteHxx( FILE * fOutput, ULONG nFileKey )
 |*    RscTypCont :: WriteCxx
 |*
 *************************************************************************/
-ERRTYPE RscTypCont::WriteCxx( FILE * fOutput, ULONG nFileKey,
+ERRTYPE RscTypCont::WriteCxx( FILE * fOutput, sal_uLong nFileKey,
                               const ByteString & rHxxName )
 {
     RscEnumerateRef aEnumRef( this, pRoot, fOutput );
@@ -940,14 +941,14 @@ void RscTypCont::WriteRcCtor
 *************************************************************************/
 class RscDel
 {
-    ULONG lFileKey;
+    sal_uLong lFileKey;
     DECL_LINK( Delete, RscTop * );
 public:
-    RscDel( RscTop * pRoot, ULONG lKey );
+    RscDel( RscTop * pRoot, sal_uLong lKey );
 };
 
 
-inline RscDel::RscDel( RscTop * pRoot, ULONG lKey )
+inline RscDel::RscDel( RscTop * pRoot, sal_uLong lKey )
 {
     lFileKey = lKey;
     pRoot->EnumNodes( LINK( this, RscDel, Delete ) );
@@ -961,7 +962,7 @@ IMPL_LINK_INLINE_START( RscDel, Delete, RscTop *, pNode )
 }
 IMPL_LINK_INLINE_END( RscDel, Delete, RscTop *, pNode )
 
-void RscTypCont :: Delete( ULONG lFileKey ){
+void RscTypCont :: Delete( sal_uLong lFileKey ){
     // Resourceinstanzen loeschen
     RscDel aDel( pRoot, lFileKey );
     // Defines loeschen
@@ -973,54 +974,54 @@ void RscTypCont :: Delete( ULONG lFileKey ){
 |*    RscTypCont :: MakeConsistent()
 |*
 *************************************************************************/
-BOOL IsInstConsistent( ObjNode * pObjNode, RscTop * pRscTop )
+sal_Bool IsInstConsistent( ObjNode * pObjNode, RscTop * pRscTop )
 {
-    BOOL bRet = TRUE;
+    sal_Bool bRet = sal_True;
 
     if( pObjNode ){
         RSCINST aTmpI;
 
         if( ! IsInstConsistent( (ObjNode*)pObjNode->Left(), pRscTop ) )
-            bRet = FALSE;
+            bRet = sal_False;
 
         aTmpI.pClass = pRscTop;
         aTmpI.pData = pObjNode->GetRscObj();
         if( ! aTmpI.pClass->IsConsistent( aTmpI ) )
-            bRet = FALSE;
+            bRet = sal_False;
 
         if( ! IsInstConsistent( (ObjNode*)pObjNode->Right(), pRscTop ) )
-            bRet = FALSE;
+            bRet = sal_False;
     };
 
     return( bRet );
 }
 
-BOOL MakeConsistent( RscTop * pRscTop )
+sal_Bool MakeConsistent( RscTop * pRscTop )
 {
-    BOOL bRet = TRUE;
+    sal_Bool bRet = sal_True;
 
     if( pRscTop ){
         if( ! ::MakeConsistent( (RscTop*)pRscTop->Left() ) )
-            bRet = FALSE;
+            bRet = sal_False;
 
         if( pRscTop->GetObjNode() ){
             if( ! pRscTop->GetObjNode()->IsConsistent() ){
                 pRscTop->GetObjNode()->OrderTree();
                 if( ! pRscTop->GetObjNode()->IsConsistent() )
-                    bRet = FALSE;
+                    bRet = sal_False;
             }
             if( ! IsInstConsistent( pRscTop->GetObjNode(), pRscTop ) )
-                bRet = FALSE;
+                bRet = sal_False;
         }
 
         if( ! ::MakeConsistent( (RscTop*)pRscTop->Right() ) )
-            bRet = FALSE;
+            bRet = sal_False;
     };
 
     return bRet;
 }
 
-BOOL RscTypCont :: MakeConsistent(){
+sal_Bool RscTypCont :: MakeConsistent(){
     return( ::MakeConsistent( pRoot ) );
 }
 

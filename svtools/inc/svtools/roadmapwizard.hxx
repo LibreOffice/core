@@ -91,8 +91,8 @@ namespace svt
         void            SetRoadmapBitmap( const BitmapEx& _rBitmap );
         const BitmapEx& GetRoadmapBitmap( ) const;
 
-        void            SetRoadmapSmartHelpId( const SmartId& _rId, SmartIdUpdateMode _aMode = SMART_SET_SMART );
-        SmartId         GetRoadmapSmartHelpId() const;
+        void            SetRoadmapHelpId( const rtl::OString& _rId );
+        const rtl::OString& GetRoadmapHelpId() const;
 
         void            SetRoadmapInteractive( sal_Bool _bInteractive );
         sal_Bool        IsRoadmapInteractive();

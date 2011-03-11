@@ -38,7 +38,7 @@
 
 // Modules
 
-class VCL_DLLPUBLIC GraphiteLayoutImpl : public GraphiteLayout
+class VCL_PLUGIN_PUBLIC GraphiteLayoutImpl : public GraphiteLayout
 {
 public:
     GraphiteLayoutImpl(const gr::Font & font, const grutils::GrFeatureParser * features, GraphiteFontAdaptor * pFont) throw()
@@ -52,14 +52,14 @@ private:
 // This class implments the server font specific parts.
 // @author tse
 //
-class VCL_DLLPUBLIC GraphiteServerFontLayout : public ServerFontLayout
+class VCL_PLUGIN_PUBLIC GraphiteServerFontLayout : public ServerFontLayout
 {
 private:
         mutable GraphiteFontAdaptor * mpFont;
         // mutable so that the DrawOffset/DrawBase can be set
         mutable GraphiteLayoutImpl maImpl;
 public:
-        GraphiteServerFontLayout(GraphiteFontAdaptor * font) throw();
+        explicit GraphiteServerFontLayout( GraphiteFontAdaptor* font ) throw();
 
         virtual bool  LayoutText( ImplLayoutArgs& rArgs) { SalLayout::AdjustLayout(rArgs); return maImpl.LayoutText(rArgs); };    // first step of layout
         virtual void  AdjustLayout( ImplLayoutArgs& rArgs)
@@ -94,8 +94,6 @@ public:
         int getMinCharPos() const { return mnMinCharPos; }
         int getMaxCharPos() const { return mnEndCharPos; }
 };
-
-
 
 #endif
 #endif //_SV_GRAPHITESERVERFONT_HXX

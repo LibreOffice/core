@@ -29,6 +29,9 @@
 #ifndef _SV_SALCTYPE_HXX
 #define _SV_SALCTYPE_HXX
 
+#include <com/sun/star/script/XInvocation.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+
 #include <vcl/graph.hxx>
 
 // -----------
@@ -63,9 +66,9 @@ public:
 
     Graphic             maGraphic;
     SvStream&           mrStm;
-    ULONG               mnFormat;
+    sal_uLong               mnFormat;
 
-                        ConvertData( const Graphic& rGraphic, SvStream& rStm, ULONG nFormat ) :
+                        ConvertData( const Graphic& rGraphic, SvStream& rStm, sal_uLong nFormat ) :
                             maGraphic( rGraphic ), mrStm( rStm ), mnFormat( nFormat ) {}
                         ~ConvertData() {}
 };
@@ -74,9 +77,18 @@ public:
 // - Callback -
 // ------------
 
-typedef ULONG (*SALGRFCVTPROC)( void* pInst,
-                                ULONG nInFormat, void* pInBuffer, ULONG nInBufSize,
-                                ULONG nOutFormat, void** ppOutBuffer );
+typedef sal_uLong (*SALGRFCVTPROC)( void* pInst,
+                                sal_uLong nInFormat, void* pInBuffer, sal_uLong nInBufSize,
+                                sal_uLong nOutFormat, void** ppOutBuffer );
+
+// -------------------
+// - BitmapConverter -
+// -------------------
+
+namespace vcl
+{
+com::sun::star::uno::Reference< com::sun::star::script::XInvocation > createBmpConverter();
+}
 
 #endif // _SV_SALCTYPE_HXX
 

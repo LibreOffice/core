@@ -36,12 +36,12 @@
 // - FontToSubsFont -
 // ------------------
 
-#define FONTTOSUBSFONT_IMPORT                   ((ULONG)0x00000001)
-#define FONTTOSUBSFONT_EXPORT                   ((ULONG)0x00000002)
-#define FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS     ((ULONG)0x00000004)
+#define FONTTOSUBSFONT_IMPORT                   ((sal_uLong)0x00000001)
+#define FONTTOSUBSFONT_EXPORT                   ((sal_uLong)0x00000002)
+#define FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS     ((sal_uLong)0x00000004)
 
 typedef void* FontToSubsFontConverter;
-UNOTOOLS_DLLPUBLIC FontToSubsFontConverter     CreateFontToSubsFontConverter( const String& rFontName, ULONG nFlags );
+UNOTOOLS_DLLPUBLIC FontToSubsFontConverter     CreateFontToSubsFontConverter( const String& rFontName, sal_uLong nFlags );
 UNOTOOLS_DLLPUBLIC void                        DestroyFontToSubsFontConverter( FontToSubsFontConverter hConverter );
 UNOTOOLS_DLLPUBLIC sal_Unicode                 ConvertFontToSubsFontChar( FontToSubsFontConverter hConverter, sal_Unicode c );
 UNOTOOLS_DLLPUBLIC String                      GetFontToSubsFontName( FontToSubsFontConverter hConverter );

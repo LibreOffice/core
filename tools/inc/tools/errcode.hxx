@@ -94,14 +94,14 @@ Warning           ||   ||      |
 
 #else
 
-typedef ULONG ErrCode;
+typedef sal_uIntPtr ErrCode;
 
-inline ULONG ERRCODE_TOERRID( ULONG x )
+inline sal_uIntPtr ERRCODE_TOERRID( sal_uIntPtr x )
 {
     return x & ~ERRCODE_DYNAMIC_MASK;
 }
 
-inline ULONG ERRCODE_TOERROR( ULONG x )
+inline sal_uIntPtr ERRCODE_TOERROR( sal_uIntPtr x )
 {
     return ((x & ERRCODE_WARNING_MASK) ? 0 : (x & ERRCODE_ERROR_MASK));
 }

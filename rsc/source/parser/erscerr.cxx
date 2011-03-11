@@ -77,10 +77,8 @@ void RscError::StdOut( const char * pStr, const RscVerbosity _verbosityLevel )
 *************************************************************************/
 void RscError::StdErr( const char * pStr )
 {
-#ifndef WIN
     if( pStr )
         fprintf( stderr, "%s", pStr );
-#endif
 }
 
 /*************************************************************************

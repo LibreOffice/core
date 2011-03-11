@@ -29,6 +29,7 @@
 #define DIFF 3
 ModalDialog DLG_COLOR
 {
+    HelpID = "svtools:ModalDialog:DLG_COLOR";
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 260 , 165 + DIFF ) ;
@@ -93,6 +94,7 @@ ModalDialog DLG_COLOR
     };
     MetricField NUM_CYAN
     {
+        HelpID = "svtools:MetricField:DLG_COLOR:NUM_CYAN";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 42 , 109 + DIFF ) ;
         Size = MAP_APPFONT ( 26 , 12 ) ;
@@ -106,6 +108,7 @@ ModalDialog DLG_COLOR
     };
     MetricField NUM_MAGENTA
     {
+        HelpID = "svtools:MetricField:DLG_COLOR:NUM_MAGENTA";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 42 , 122 + DIFF ) ;
         Size = MAP_APPFONT ( 26 , 12 ) ;
@@ -119,6 +122,7 @@ ModalDialog DLG_COLOR
     };
     MetricField NUM_YELLOW
     {
+        HelpID = "svtools:MetricField:DLG_COLOR:NUM_YELLOW";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 42 , 135 + DIFF ) ;
         Size = MAP_APPFONT ( 26 , 12 ) ;
@@ -132,6 +136,7 @@ ModalDialog DLG_COLOR
     };
     MetricField NUM_KEY
     {
+        HelpID = "svtools:MetricField:DLG_COLOR:NUM_KEY";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 42 , 148 + DIFF ) ;
         Size = MAP_APPFONT ( 26 , 12 ) ;
@@ -163,6 +168,7 @@ ModalDialog DLG_COLOR
     };
     NumericField NUM_RED
     {
+        HelpID = "svtools:NumericField:DLG_COLOR:NUM_RED";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 106 , 122 + DIFF ) ;
         Size = MAP_APPFONT ( 26 , 12 ) ;
@@ -174,6 +180,7 @@ ModalDialog DLG_COLOR
     };
     NumericField NUM_GREEN
     {
+        HelpID = "svtools:NumericField:DLG_COLOR:NUM_GREEN";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 106 , 135 + DIFF ) ;
         Size = MAP_APPFONT ( 26 , 12 ) ;
@@ -185,6 +192,7 @@ ModalDialog DLG_COLOR
     };
     NumericField NUM_BLUE
     {
+        HelpID = "svtools:NumericField:DLG_COLOR:NUM_BLUE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 106 , 148 + DIFF ) ;
         Size = MAP_APPFONT ( 26 , 12 ) ;
@@ -202,6 +210,7 @@ ModalDialog DLG_COLOR
     };
     NumericField NUM_HUE
     {
+        HelpID = "svtools:NumericField:DLG_COLOR:NUM_HUE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 171 , 122 + DIFF ) ;
         Size = MAP_APPFONT ( 26 , 12 ) ;
@@ -219,6 +228,7 @@ ModalDialog DLG_COLOR
     };
     NumericField NUM_SATURATION
     {
+        HelpID = "svtools:NumericField:DLG_COLOR:NUM_SATURATION";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 171 , 135 + DIFF ) ;
         Size = MAP_APPFONT ( 26 , 12 ) ;
@@ -236,6 +246,7 @@ ModalDialog DLG_COLOR
     };
     NumericField NUM_LUMINANCE
     {
+        HelpID = "svtools:NumericField:DLG_COLOR:NUM_LUMINANCE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 171 , 148 + DIFF ) ;
         Size = MAP_APPFONT ( 26 , 12 ) ;
@@ -247,6 +258,7 @@ ModalDialog DLG_COLOR
     };
     PushButton BTN_1
     {
+        HelpID = "svtools:PushButton:DLG_COLOR:BTN_1";
         Pos = MAP_APPFONT ( 80 , 109 ) ;
         Size = MAP_APPFONT ( 17 , 12 ) ;
         Text = "~<--" ;
@@ -254,6 +266,7 @@ ModalDialog DLG_COLOR
     };
     PushButton BTN_2
     {
+        HelpID = "svtools:PushButton:DLG_COLOR:BTN_2";
         Pos = MAP_APPFONT ( 100 , 109 ) ;
         Size = MAP_APPFONT ( 17 , 12 ) ;
         Text = "--~>" ;
@@ -264,13 +277,18 @@ ModalDialog DLG_COLOR
         Border = TRUE ;
         Pos = MAP_APPFONT ( 200 , 109 ) ;
         Size = MAP_APPFONT ( 26 , 51 + DIFF ) ;
-        TabStop = TRUE ;
+        TabStop = FALSE ;
     };
     Control CTL_PREVIEW
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 229 , 109 ) ;
         Size = MAP_APPFONT ( 26 , 51 + DIFF ) ;
-        TabStop = TRUE ;
+        TabStop = FALSE ;
     };
+};
+
+String STR_COLORDES
+{
+    Text [ en-US ] = "RGB(%1, %2, %3) Hue:%4 Saturation:%5 Brightness:%6";
 };

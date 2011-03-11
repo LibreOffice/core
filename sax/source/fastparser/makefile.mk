@@ -70,5 +70,10 @@ DEF1NAME=		$(SHL1TARGET)
 
 .INCLUDE :	target.mk
 
+ALLTAR : $(MISC)/fastsax.component
 
-
+$(MISC)/fastsax.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        fastsax.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt fastsax.component

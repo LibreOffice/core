@@ -33,8 +33,8 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/window.hxx>
 #include <svtools/headbar.hxx>
-#include "fileview.hxx"
-#include "ivctrl.hxx"
+#include <svtools/fileview.hxx>
+#include <svtools/ivctrl.hxx>
 #include <svtools/svmedit2.hxx>
 #include <svl/restrictedpaths.hxx>
 #include <com/sun/star/frame/XDispatch.hpp>
@@ -95,13 +95,13 @@ public:
     String              GetCursorPosIconURL() const;
     String              GetIconText( const String& rURL ) const;
     void                InvalidateIconControl();
-    void                SetCursorPos( ULONG nPos );
-    ULONG               GetCursorPos() const;
-    ULONG               GetSelectEntryPos() const;
+    void                SetCursorPos( sal_uLong nPos );
+    sal_uLong               GetCursorPos() const;
+    sal_uLong               GetSelectEntryPos() const;
     void                SetFocus();
     long                CalcHeight() const;
     sal_Bool            IsRootURL( const String& rURL ) const;
-    ULONG               GetRootPos( const String& rURL ) const;
+    sal_uLong               GetRootPos( const String& rURL ) const;
     void                UpdateIcons();
 
     inline sal_Bool         ProcessKeyEvent( const KeyEvent& rKEvt );
@@ -269,9 +269,9 @@ private:
     DECL_LINK(          ResizeHdl_Impl, SplitWindow* );     // used for split and initial setting of toolbar pos
 
     void                PrintFile( const String& rURL );
-    void                AppendHistoryURL( const String& rURL, ULONG nGroup );
+    void                AppendHistoryURL( const String& rURL, sal_uLong nGroup );
     void                OpenHistory();
-    void                DoAction( USHORT nAction );
+    void                DoAction( sal_uInt16 nAction );
     void                InitToolBoxes();
     void                InitToolBoxImages();
     void                UpdateIcons();

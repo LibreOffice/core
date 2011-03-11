@@ -128,7 +128,8 @@
 #include <com/sun/star/frame/XModel.hpp>
 // #i28749#
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
-#include <com/sun/star/graphic/XGraphicProvider.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -225,6 +226,7 @@ namespace comphelper
             case CPPUTYPE_SEQNAMEDVALUE:    pType = &::getCppuType( (Sequence<beans::NamedValue>*)0 ); break;
             case CPPUTYPE_REFXGRAPHIC:      pType = &::getCppuType( (Reference< graphic::XGraphic >*)0); break;
             case CPPUTYPE_TABLEBORDERDISTANCES:     pType = &::getCppuType( (table::TableBorderDistances*)0 ); break;
+            case CPPUTPYE_REFEMBEDDEDOBJECT:        pType = &embed::XEmbeddedObject::static_type(); break;
             default:
                 OSL_FAIL( "Unknown CPPU type" );
         }

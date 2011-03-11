@@ -33,8 +33,7 @@
 #include <tools/string.hxx>
 #include <ucbhelper/content.hxx>
 #include <com/sun/star/util/DateTime.hpp>
-
-#include <fstathelper.hxx>
+#include <svl/fstathelper.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -44,7 +43,7 @@ using namespace ::rtl;
 sal_Bool FStatHelper::GetModifiedDateTimeOfFile( const UniString& rURL,
                                         Date* pDate, Time* pTime )
 {
-    sal_Bool bRet = FALSE;
+    sal_Bool bRet = sal_False;
     try
     {
         ::ucbhelper::Content aTestContent( rURL,
@@ -71,7 +70,7 @@ sal_Bool FStatHelper::GetModifiedDateTimeOfFile( const UniString& rURL,
 
 sal_Bool FStatHelper::IsDocument( const UniString& rURL )
 {
-    BOOL bExist = FALSE;
+    sal_Bool bExist = sal_False;
     try
     {
         ::ucbhelper::Content aTestContent( rURL,
@@ -86,7 +85,7 @@ sal_Bool FStatHelper::IsDocument( const UniString& rURL )
 
 sal_Bool FStatHelper::IsFolder( const UniString& rURL )
 {
-    BOOL bExist = FALSE;
+    sal_Bool bExist = sal_False;
     try
     {
         ::ucbhelper::Content aTestContent( rURL,

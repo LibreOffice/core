@@ -426,6 +426,8 @@ static INetURLObject::SchemeInfo const aSchemeInfoMap[INET_PROT_END]
         { "", "", 0, false, false, false, false, true, true, true, false },
         { "smb", "smb://", 139, true, true, false, true, true, true, true,
           true },
+        { "hid", "hid:", 0, false, false, false, false, false, false,
+          false, true },
         { "sftp", "sftp://", 22, true, true, false, true, true, true, true,
           true } };
 
@@ -2136,6 +2138,8 @@ INetURLObject::getPrefix(sal_Unicode const *& rBegin,
             { "db:", "staroffice.db:", INET_PROT_DB, PrefixInfo::INTERNAL },
             { "file:", 0, INET_PROT_FILE, PrefixInfo::OFFICIAL },
             { "ftp:", 0, INET_PROT_FTP, PrefixInfo::OFFICIAL },
+            { "hid:", "staroffice.hid:", INET_PROT_HID,
+              PrefixInfo::INTERNAL },
             { "http:", 0, INET_PROT_HTTP, PrefixInfo::OFFICIAL },
             { "https:", 0, INET_PROT_HTTPS, PrefixInfo::OFFICIAL },
             { "imap:", 0, INET_PROT_IMAP, PrefixInfo::OFFICIAL },
@@ -2170,6 +2174,8 @@ INetURLObject::getPrefix(sal_Unicode const *& rBegin,
             { "staroffice.factory:", "private:factory/",
               INET_PROT_PRIV_SOFFICE, PrefixInfo::EXTERNAL },
             { "staroffice.helpid:", "private:helpid/", INET_PROT_PRIV_SOFFICE,
+              PrefixInfo::EXTERNAL },
+            { "staroffice.hid:", "hid:", INET_PROT_HID,
               PrefixInfo::EXTERNAL },
             { "staroffice.java:", "private:java/", INET_PROT_PRIV_SOFFICE,
               PrefixInfo::EXTERNAL },
@@ -3164,6 +3170,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
 
         case INET_PROT_PRIV_SOFFICE:
         case INET_PROT_SLOT:
+        case INET_PROT_HID:
         case INET_PROT_MACRO:
         case INET_PROT_UNO:
         case INET_PROT_COMPONENT:

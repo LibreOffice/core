@@ -63,33 +63,33 @@ public:
     int                     mnFullScreenShowState;  // fullscreen restore show state
     UINT                    mnInputLang;            // current Input Language
     UINT                    mnInputCodePage;        // current Input CodePage
-    ULONG                   mnStyle;                // style
-    BOOL                    mbGraphics;             // is Graphics used
-    BOOL                    mbCaption;              // has window a caption
-    BOOL                    mbBorder;               // has window a border
-    BOOL                    mbFixBorder;            // has window a fixed border
-    BOOL                    mbSizeBorder;           // has window a sizeable border
-    BOOL                    mbNoIcon;               // is an window without an icon
-    BOOL                    mbFloatWin;             // is a FloatingWindow
-    BOOL                    mbFullScreen;           // TRUE: in full screen mode
-    BOOL                    mbPresentation;         // TRUE: Presentation Mode running
-    BOOL                    mbInShow;               // innerhalb eines Show-Aufrufs
-    BOOL                    mbRestoreMaximize;      // Restore-Maximize
-    BOOL                    mbInMoveMsg;            // Move-Message wird verarbeitet
-    BOOL                    mbInSizeMsg;            // Size-Message wird verarbeitet
-    BOOL                    mbFullScreenToolWin;    // WS_EX_TOOLWINDOW reset in FullScreenMode
-    BOOL                    mbDefPos;               // default-position
-    BOOL                    mbOverwriteState;       // TRUE: WindowState darf umgesetzt werden
-    BOOL                    mbIME;                  // TRUE: We are in IME Mode
-    BOOL                    mbHandleIME;            // TRUE: Wir handeln die IME-Messages
-    BOOL                    mbSpezIME;              // TRUE: Spez IME
-    BOOL                    mbAtCursorIME;          // TRUE: Wir behandeln nur einige IME-Messages
-    BOOL                    mbCandidateMode;        // TRUE: Wir befinden uns im Candidate-Modus
-    static BOOL             mbInReparent;           // TRUE: ignore focus lost and gain due to reparenting
+    sal_uIntPtr                   mnStyle;                // style
+    sal_Bool                    mbGraphics;             // is Graphics used
+    sal_Bool                    mbCaption;              // has window a caption
+    sal_Bool                    mbBorder;               // has window a border
+    sal_Bool                    mbFixBorder;            // has window a fixed border
+    sal_Bool                    mbSizeBorder;           // has window a sizeable border
+    sal_Bool                    mbNoIcon;               // is an window without an icon
+    sal_Bool                    mbFloatWin;             // is a FloatingWindow
+    sal_Bool                    mbFullScreen;           // TRUE: in full screen mode
+    sal_Bool                    mbPresentation;         // TRUE: Presentation Mode running
+    sal_Bool                    mbInShow;               // innerhalb eines Show-Aufrufs
+    sal_Bool                    mbRestoreMaximize;      // Restore-Maximize
+    sal_Bool                    mbInMoveMsg;            // Move-Message wird verarbeitet
+    sal_Bool                    mbInSizeMsg;            // Size-Message wird verarbeitet
+    sal_Bool                    mbFullScreenToolWin;    // WS_EX_TOOLWINDOW reset in FullScreenMode
+    sal_Bool                    mbDefPos;               // default-position
+    sal_Bool                    mbOverwriteState;       // TRUE: WindowState darf umgesetzt werden
+    sal_Bool                    mbIME;                  // TRUE: We are in IME Mode
+    sal_Bool                    mbHandleIME;            // TRUE: Wir handeln die IME-Messages
+    sal_Bool                    mbSpezIME;              // TRUE: Spez IME
+    sal_Bool                    mbAtCursorIME;          // TRUE: Wir behandeln nur einige IME-Messages
+    sal_Bool                    mbCandidateMode;        // TRUE: Wir befinden uns im Candidate-Modus
+    static sal_Bool             mbInReparent;           // TRUE: ignore focus lost and gain due to reparenting
 
     RGNDATA*                mpClipRgnData;
     RECT*                   mpNextClipRect;
-    BOOL                    mbFirstClipRect;
+    sal_Bool                    mbFirstClipRect;
     sal_Int32               mnDisplay;              // Display used for Fullscreen, 0 is primary monitor
 
     void updateScreenNumber();
@@ -99,37 +99,37 @@ public:
 
     virtual SalGraphics*        GetGraphics();
     virtual void                ReleaseGraphics( SalGraphics* pGraphics );
-    virtual BOOL                PostEvent( void* pData );
+    virtual sal_Bool                PostEvent( void* pData );
     virtual void                SetTitle( const XubString& rTitle );
-    virtual void                SetIcon( USHORT nIcon );
+    virtual void                SetIcon( sal_uInt16 nIcon );
     virtual void                                SetMenu( SalMenu* pSalMenu );
     virtual void                                DrawMenuBar();
     virtual void                SetExtendedFrameStyle( SalExtStyle nExtStyle );
-    virtual void                Show( BOOL bVisible, BOOL bNoActivate = FALSE );
-    virtual void                Enable( BOOL bEnable );
+    virtual void                Show( sal_Bool bVisible, sal_Bool bNoActivate = FALSE );
+    virtual void                Enable( sal_Bool bEnable );
     virtual void                SetMinClientSize( long nWidth, long nHeight );
     virtual void                SetMaxClientSize( long nWidth, long nHeight );
-    virtual void                SetPosSize( long nX, long nY, long nWidth, long nHeight, USHORT nFlags );
+    virtual void                SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags );
     virtual void                GetClientSize( long& rWidth, long& rHeight );
     virtual void                GetWorkArea( Rectangle& rRect );
     virtual SalFrame*           GetParent() const;
     virtual void                SetWindowState( const SalFrameState* pState );
-    virtual BOOL                GetWindowState( SalFrameState* pState );
-    virtual void                ShowFullScreen( BOOL bFullScreen, sal_Int32 nDisplay );
-    virtual void                StartPresentation( BOOL bStart );
-    virtual void                SetAlwaysOnTop( BOOL bOnTop );
-    virtual void                ToTop( USHORT nFlags );
+    virtual sal_Bool                GetWindowState( SalFrameState* pState );
+    virtual void                ShowFullScreen( sal_Bool bFullScreen, sal_Int32 nDisplay );
+    virtual void                StartPresentation( sal_Bool bStart );
+    virtual void                SetAlwaysOnTop( sal_Bool bOnTop );
+    virtual void                ToTop( sal_uInt16 nFlags );
     virtual void                SetPointer( PointerStyle ePointerStyle );
-    virtual void                CaptureMouse( BOOL bMouse );
+    virtual void                CaptureMouse( sal_Bool bMouse );
     virtual void                SetPointerPos( long nX, long nY );
     using SalFrame::Flush;
     virtual void                Flush();
     virtual void                Sync();
     virtual void                SetInputContext( SalInputContext* pContext );
-    virtual void                EndExtTextInput( USHORT nFlags );
-    virtual String              GetKeyName( USHORT nKeyCode );
-    virtual String              GetSymbolKeyName( const XubString& rFontName, USHORT nKeyCode );
-    virtual BOOL                MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, KeyCode& rKeyCode );
+    virtual void                EndExtTextInput( sal_uInt16 nFlags );
+    virtual String              GetKeyName( sal_uInt16 nKeyCode );
+    virtual String              GetSymbolKeyName( const XubString& rFontName, sal_uInt16 nKeyCode );
+    virtual sal_Bool                MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, KeyCode& rKeyCode );
     virtual LanguageType        GetInputLanguage();
     virtual SalBitmap*          SnapShot();
     virtual void                UpdateSettings( AllSettings& rSettings );
@@ -137,14 +137,14 @@ public:
     virtual const SystemEnvData*    GetSystemData() const;
     virtual SalPointerState     GetPointerState();
     virtual SalIndicatorState   GetIndicatorState();
-    virtual void                SimulateKeyPress( USHORT nKeyCode );
+    virtual void                SimulateKeyPress( sal_uInt16 nKeyCode );
     virtual void                SetParent( SalFrame* pNewParent );
     virtual bool                SetPluginParent( SystemParentData* pNewParent );
     virtual void                SetBackgroundBitmap( SalBitmap* );
     virtual void                SetScreenNumber( unsigned int );
     virtual void                SetApplicationID( const rtl::OUString &rApplicationID );
     virtual void                ResetClipRegion();
-    virtual void                BeginSetClipRegion( ULONG nRects );
+    virtual void                BeginSetClipRegion( sal_uIntPtr nRects );
     virtual void                UnionClipRegion( long nX, long nY, long nWidth, long nHeight );
     virtual void                EndSetClipRegion();
 };

@@ -30,3 +30,20 @@ String STR_FILECTRL_BUTTONTEXT
 {
     Text [ en-US ] = "Browse..." ;
 };
+
+String STR_TABBAR_PUSHBUTTON_MOVET0HOME
+{
+    Text [ en-US ] = "Move To Home" ;
+};
+String STR_TABBAR_PUSHBUTTON_MOVELEFT
+{
+    Text [ en-US ] = "Move Left" ;
+};
+String STR_TABBAR_PUSHBUTTON_MOVERIGHT
+{
+    Text [ en-US ] = "Move Right" ;
+};
+String STR_TABBAR_PUSHBUTTON_MOVETOEND
+{
+    Text [ en-US ] = "Move To End" ;
+};

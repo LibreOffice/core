@@ -196,7 +196,7 @@ namespace svt
         if (_nButtonFlags & WZB_PREVIOUS)
         {
             m_pPrevPage = new PushButton(this, WB_TABSTOP);
-            m_pPrevPage->SetSmartHelpId( SmartId(HID_WIZARD_PREVIOUS) );
+            m_pPrevPage->SetHelpId( HID_WIZARD_PREVIOUS );
             m_pPrevPage->SetSizePixel( LogicToPixel( Size( 50, 14 ), MAP_APPFONT ) );
             m_pPrevPage->SetText(String(SvtResId(STR_WIZDLG_PREVIOUS)));
             m_pPrevPage->Show();
@@ -213,7 +213,7 @@ namespace svt
         if (_nButtonFlags & WZB_NEXT)
         {
             m_pNextPage = new PushButton(this, WB_TABSTOP);
-            m_pNextPage->SetSmartHelpId( SmartId(HID_WIZARD_NEXT) );
+            m_pNextPage->SetHelpId( HID_WIZARD_NEXT );
             m_pNextPage->SetSizePixel( LogicToPixel( Size( 50, 14 ), MAP_APPFONT ) );
             m_pNextPage->SetText(String(SvtResId(STR_WIZDLG_NEXT)));
             m_pNextPage->Show();

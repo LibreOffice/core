@@ -49,9 +49,9 @@
 // - Bitmap -
 // ----------
 
-BOOL Bitmap::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam, const Link* pProgress )
+sal_Bool Bitmap::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam, const Link* pProgress )
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
 
     switch( eFilter )
     {
@@ -107,11 +107,11 @@ BOOL Bitmap::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam, cons
 
 // -----------------------------------------------------------------------------
 
-BOOL Bitmap::ImplConvolute3( const long* pMatrix, long nDivisor,
+sal_Bool Bitmap::ImplConvolute3( const long* pMatrix, long nDivisor,
                              const BmpFilterParam* /*pFilterParam*/, const Link* /*pProgress*/ )
 {
     BitmapReadAccess*   pReadAcc = AcquireReadAccess();
-    BOOL                bRet = FALSE;
+    sal_Bool                bRet = sal_False;
 
     if( pReadAcc )
     {
@@ -124,9 +124,9 @@ BOOL Bitmap::ImplConvolute3( const long* pMatrix, long nDivisor,
             const long      nHeight = pWriteAcc->Height(), nHeight2 = nHeight + 2;
             long*           pColm = new long[ nWidth2 ];
             long*           pRows = new long[ nHeight2 ];
-            BitmapColor*    pColRow1 = (BitmapColor*) new BYTE[ sizeof( BitmapColor ) * nWidth2 ];
-            BitmapColor*    pColRow2 = (BitmapColor*) new BYTE[ sizeof( BitmapColor ) * nWidth2 ];
-            BitmapColor*    pColRow3 = (BitmapColor*) new BYTE[ sizeof( BitmapColor ) * nWidth2 ];
+            BitmapColor*    pColRow1 = (BitmapColor*) new sal_uInt8[ sizeof( BitmapColor ) * nWidth2 ];
+            BitmapColor*    pColRow2 = (BitmapColor*) new sal_uInt8[ sizeof( BitmapColor ) * nWidth2 ];
+            BitmapColor*    pColRow3 = (BitmapColor*) new sal_uInt8[ sizeof( BitmapColor ) * nWidth2 ];
             BitmapColor*    pRowTmp1 = pColRow1;
             BitmapColor*    pRowTmp2 = pColRow2;
             BitmapColor*    pRowTmp3 = pColRow3;
@@ -205,9 +205,9 @@ BOOL Bitmap::ImplConvolute3( const long* pMatrix, long nDivisor,
                     nSumB += pTmp[ pColor->GetBlue() ];
 
                     // calculate destination color
-                    pWriteAcc->SetPixel( nY, nX, BitmapColor( (BYTE) MinMax( nSumR / nDivisor, 0, 255 ),
-                                                              (BYTE) MinMax( nSumG / nDivisor, 0, 255 ),
-                                                              (BYTE) MinMax( nSumB / nDivisor, 0, 255 ) ) );
+                    pWriteAcc->SetPixel( nY, nX, BitmapColor( (sal_uInt8) MinMax( nSumR / nDivisor, 0, 255 ),
+                                                              (sal_uInt8) MinMax( nSumG / nDivisor, 0, 255 ),
+                                                              (sal_uInt8) MinMax( nSumB / nDivisor, 0, 255 ) ) );
                 }
 
                 if( ++nY < nHeight )
@@ -225,15 +225,15 @@ BOOL Bitmap::ImplConvolute3( const long* pMatrix, long nDivisor,
             }
 
             delete[] pKoeff;
-            delete[] (BYTE*) pColRow1;
-            delete[] (BYTE*) pColRow2;
-            delete[] (BYTE*) pColRow3;
+            delete[] (sal_uInt8*) pColRow1;
+            delete[] (sal_uInt8*) pColRow2;
+            delete[] (sal_uInt8*) pColRow3;
             delete[] pColm;
             delete[] pRows;
 
             aNewBmp.ReleaseAccess( pWriteAcc );
 
-            bRet = TRUE;
+            bRet = sal_True;
         }
 
         ReleaseAccess( pReadAcc );
@@ -255,10 +255,10 @@ BOOL Bitmap::ImplConvolute3( const long* pMatrix, long nDivisor,
 
 // -----------------------------------------------------------------------------
 
-BOOL Bitmap::ImplMedianFilter( const BmpFilterParam* /*pFilterParam*/, const Link* /*pProgress*/ )
+sal_Bool Bitmap::ImplMedianFilter( const BmpFilterParam* /*pFilterParam*/, const Link* /*pProgress*/ )
 {
     BitmapReadAccess*   pReadAcc = AcquireReadAccess();
-    BOOL                bRet = FALSE;
+    sal_Bool                bRet = sal_False;
 
     if( pReadAcc )
     {
@@ -271,9 +271,9 @@ BOOL Bitmap::ImplMedianFilter( const BmpFilterParam* /*pFilterParam*/, const Lin
             const long      nHeight = pWriteAcc->Height(), nHeight2 = nHeight + 2;
             long*           pColm = new long[ nWidth2 ];
             long*           pRows = new long[ nHeight2 ];
-            BitmapColor*    pColRow1 = (BitmapColor*) new BYTE[ sizeof( BitmapColor ) * nWidth2 ];
-            BitmapColor*    pColRow2 = (BitmapColor*) new BYTE[ sizeof( BitmapColor ) * nWidth2 ];
-            BitmapColor*    pColRow3 = (BitmapColor*) new BYTE[ sizeof( BitmapColor ) * nWidth2 ];
+            BitmapColor*    pColRow1 = (BitmapColor*) new sal_uInt8[ sizeof( BitmapColor ) * nWidth2 ];
+            BitmapColor*    pColRow2 = (BitmapColor*) new sal_uInt8[ sizeof( BitmapColor ) * nWidth2 ];
+            BitmapColor*    pColRow3 = (BitmapColor*) new sal_uInt8[ sizeof( BitmapColor ) * nWidth2 ];
             BitmapColor*    pRowTmp1 = pColRow1;
             BitmapColor*    pRowTmp2 = pColRow2;
             BitmapColor*    pRowTmp3 = pColRow3;
@@ -339,7 +339,7 @@ BOOL Bitmap::ImplMedianFilter( const BmpFilterParam* /*pFilterParam*/, const Lin
                     MNMX3( nB9, nB2, nB3 );
 
                     // set destination color
-                    pWriteAcc->SetPixel( nY, nX, BitmapColor( (BYTE) nR2, (BYTE) nG2, (BYTE) nB2 ) );
+                    pWriteAcc->SetPixel( nY, nX, BitmapColor( (sal_uInt8) nR2, (sal_uInt8) nG2, (sal_uInt8) nB2 ) );
                 }
 
                 if( ++nY < nHeight )
@@ -356,15 +356,15 @@ BOOL Bitmap::ImplMedianFilter( const BmpFilterParam* /*pFilterParam*/, const Lin
                 }
             }
 
-            delete[] (BYTE*) pColRow1;
-            delete[] (BYTE*) pColRow2;
-            delete[] (BYTE*) pColRow3;
+            delete[] (sal_uInt8*) pColRow1;
+            delete[] (sal_uInt8*) pColRow2;
+            delete[] (sal_uInt8*) pColRow3;
             delete[] pColm;
             delete[] pRows;
 
             aNewBmp.ReleaseAccess( pWriteAcc );
 
-            bRet = TRUE;
+            bRet = sal_True;
         }
 
         ReleaseAccess( pReadAcc );
@@ -386,13 +386,13 @@ BOOL Bitmap::ImplMedianFilter( const BmpFilterParam* /*pFilterParam*/, const Lin
 
 // -----------------------------------------------------------------------------
 
-BOOL Bitmap::ImplSobelGrey( const BmpFilterParam* /*pFilterParam*/, const Link* /*pProgress*/ )
+sal_Bool Bitmap::ImplSobelGrey( const BmpFilterParam* /*pFilterParam*/, const Link* /*pProgress*/ )
 {
-    BOOL bRet = ImplMakeGreyscales( 256 );
+    sal_Bool bRet = ImplMakeGreyscales( 256 );
 
     if( bRet )
     {
-        bRet = FALSE;
+        bRet = sal_False;
 
         BitmapReadAccess* pReadAcc = AcquireReadAccess();
 
@@ -403,7 +403,7 @@ BOOL Bitmap::ImplSobelGrey( const BmpFilterParam* /*pFilterParam*/, const Link* 
 
             if( pWriteAcc )
             {
-                BitmapColor aGrey( (BYTE) 0 );
+                BitmapColor aGrey( (sal_uInt8) 0 );
                 const long  nWidth = pWriteAcc->Width();
                 const long  nHeight = pWriteAcc->Height();
                 const long  nMask111 = -1, nMask121 =  0, nMask131 =  1;
@@ -474,7 +474,7 @@ BOOL Bitmap::ImplSobelGrey( const BmpFilterParam* /*pFilterParam*/, const Link* 
                         nSum2 += nMask332 * nGrey33;
 
                         nSum1 = (long) sqrt( (double)( nSum1 * nSum1 + nSum2 * nSum2 ) );
-                        aGrey.SetIndex( ~(BYTE) SAL_BOUND( nSum1, 0, 255 ) );
+                        aGrey.SetIndex( ~(sal_uInt8) SAL_BOUND( nSum1, 0, 255 ) );
                         pWriteAcc->SetPixel( nY, nX, aGrey );
 
                         if( nX < ( nWidth - 1 ) )
@@ -491,7 +491,7 @@ BOOL Bitmap::ImplSobelGrey( const BmpFilterParam* /*pFilterParam*/, const Link* 
                 delete[] pHMap;
                 delete[] pVMap;
                 aNewBmp.ReleaseAccess( pWriteAcc );
-                bRet = TRUE;
+                bRet = sal_True;
             }
 
             ReleaseAccess( pReadAcc );
@@ -514,13 +514,13 @@ BOOL Bitmap::ImplSobelGrey( const BmpFilterParam* /*pFilterParam*/, const Link* 
 
 // -----------------------------------------------------------------------------
 
-BOOL Bitmap::ImplEmbossGrey( const BmpFilterParam* pFilterParam, const Link* /*pProgress*/ )
+sal_Bool Bitmap::ImplEmbossGrey( const BmpFilterParam* pFilterParam, const Link* /*pProgress*/ )
 {
-    BOOL bRet = ImplMakeGreyscales( 256 );
+    sal_Bool bRet = ImplMakeGreyscales( 256 );
 
     if( bRet )
     {
-        bRet = FALSE;
+        bRet = sal_False;
 
         BitmapReadAccess* pReadAcc = AcquireReadAccess();
 
@@ -531,7 +531,7 @@ BOOL Bitmap::ImplEmbossGrey( const BmpFilterParam* pFilterParam, const Link* /*p
 
             if( pWriteAcc )
             {
-                BitmapColor aGrey( (BYTE) 0 );
+                BitmapColor aGrey( (sal_uInt8) 0 );
                 const long  nWidth = pWriteAcc->Width();
                 const long  nHeight = pWriteAcc->Height();
                 long        nGrey11, nGrey12, nGrey13;
@@ -549,7 +549,7 @@ BOOL Bitmap::ImplEmbossGrey( const BmpFilterParam* pFilterParam, const Link* /*p
                 const long  nLz = FRound( sin( fElev ) * 255.0 );
                 const long  nZ2 = ( ( 6 * 255 ) / 4 ) * ( ( 6 * 255 ) / 4 );
                 const long  nNzLz = ( ( 6 * 255 ) / 4 ) * nLz;
-                const BYTE  cLz = (BYTE) SAL_BOUND( nLz, 0, 255 );
+                const sal_uInt8 cLz = (sal_uInt8) SAL_BOUND( nLz, 0, 255 );
 
                 // fill mapping tables
                 pHMap[ 0 ] = 0;
@@ -586,7 +586,7 @@ BOOL Bitmap::ImplEmbossGrey( const BmpFilterParam* pFilterParam, const Link* /*p
                         else
                         {
                             const double fGrey = nDotL / sqrt( (double)(nNx * nNx + nNy * nNy + nZ2) );
-                            aGrey.SetIndex( (BYTE) SAL_BOUND( fGrey, 0, 255 ) );
+                            aGrey.SetIndex( (sal_uInt8) SAL_BOUND( fGrey, 0, 255 ) );
                         }
 
                         pWriteAcc->SetPixel( nY, nX, aGrey );
@@ -605,7 +605,7 @@ BOOL Bitmap::ImplEmbossGrey( const BmpFilterParam* pFilterParam, const Link* /*p
                 delete[] pHMap;
                 delete[] pVMap;
                 aNewBmp.ReleaseAccess( pWriteAcc );
-                bRet = TRUE;
+                bRet = sal_True;
             }
 
             ReleaseAccess( pReadAcc );
@@ -628,21 +628,21 @@ BOOL Bitmap::ImplEmbossGrey( const BmpFilterParam* pFilterParam, const Link* /*p
 
 // -----------------------------------------------------------------------------
 
-BOOL Bitmap::ImplSolarize( const BmpFilterParam* pFilterParam, const Link* /*pProgress*/ )
+sal_Bool Bitmap::ImplSolarize( const BmpFilterParam* pFilterParam, const Link* /*pProgress*/ )
 {
-    BOOL                bRet = FALSE;
+    sal_Bool                bRet = sal_False;
     BitmapWriteAccess*  pWriteAcc = AcquireWriteAccess();
 
     if( pWriteAcc )
     {
-        const BYTE cThreshold = ( pFilterParam && pFilterParam->meFilter == BMP_FILTER_SOLARIZE ) ?
+        const sal_uInt8 cThreshold = ( pFilterParam && pFilterParam->meFilter == BMP_FILTER_SOLARIZE ) ?
                                 pFilterParam->mcSolarGreyThreshold : 128;
 
         if( pWriteAcc->HasPalette() )
         {
             const BitmapPalette& rPal = pWriteAcc->GetPalette();
 
-            for( USHORT i = 0, nCount = rPal.GetEntryCount(); i < nCount; i++ )
+            for( sal_uInt16 i = 0, nCount = rPal.GetEntryCount(); i < nCount; i++ )
             {
                 if( rPal[ i ].GetLuminance() >= cThreshold )
                 {
@@ -670,7 +670,7 @@ BOOL Bitmap::ImplSolarize( const BmpFilterParam* pFilterParam, const Link* /*pPr
         }
 
         ReleaseAccess( pWriteAcc );
-        bRet = TRUE;
+        bRet = sal_True;
     }
 
     return bRet;
@@ -678,10 +678,10 @@ BOOL Bitmap::ImplSolarize( const BmpFilterParam* pFilterParam, const Link* /*pPr
 
 // -----------------------------------------------------------------------------
 
-BOOL Bitmap::ImplSepia( const BmpFilterParam* pFilterParam, const Link* /*pProgress*/ )
+sal_Bool Bitmap::ImplSepia( const BmpFilterParam* pFilterParam, const Link* /*pProgress*/ )
 {
     BitmapReadAccess*   pReadAcc = AcquireReadAccess();
-    BOOL                bRet = FALSE;
+    sal_Bool                bRet = sal_False;
 
     if( pReadAcc )
     {
@@ -692,12 +692,12 @@ BOOL Bitmap::ImplSepia( const BmpFilterParam* pFilterParam, const Link* /*pProgr
 
         DBG_ASSERT( nSepiaPercent <= 100, "Bitmap::ImplSepia(): sepia value out of range; defaulting to 100%" );
 
-        for( USHORT i = 0; i < 256; i++ )
+        for( sal_uInt16 i = 0; i < 256; i++ )
         {
             BitmapColor&    rCol = aSepiaPal[ i ];
-            const BYTE      cSepiaValue = (BYTE) ( ( nSepia * i ) / 10000 );
+            const sal_uInt8     cSepiaValue = (sal_uInt8) ( ( nSepia * i ) / 10000 );
 
-            rCol.SetRed( (BYTE) i );
+            rCol.SetRed( (sal_uInt8) i );
             rCol.SetGreen( cSepiaValue );
             rCol.SetBlue( cSepiaValue );
         }
@@ -707,7 +707,7 @@ BOOL Bitmap::ImplSepia( const BmpFilterParam* pFilterParam, const Link* /*pProgr
 
         if( pWriteAcc )
         {
-            BitmapColor aCol( (BYTE) 0 );
+            BitmapColor aCol( (sal_uInt8) 0 );
             const long  nWidth = pWriteAcc->Width();
             const long  nHeight = pWriteAcc->Height();
 
@@ -715,10 +715,10 @@ BOOL Bitmap::ImplSepia( const BmpFilterParam* pFilterParam, const Link* /*pProgr
             {
                 for( long nY = 0; nY < nHeight ; nY++ )
                 {
-                    const USHORT    nPalCount = pReadAcc->GetPaletteEntryCount();
-                    BYTE*           pIndexMap = new BYTE[ nPalCount ];
+                    const sal_uInt16    nPalCount = pReadAcc->GetPaletteEntryCount();
+                    sal_uInt8*          pIndexMap = new sal_uInt8[ nPalCount ];
 
-                    for( USHORT i = 0; i < nPalCount; i++ )
+                    for( sal_uInt16 i = 0; i < nPalCount; i++ )
                         pIndexMap[ i ] = pReadAcc->GetPaletteColor( i ).GetLuminance();
 
                     for( long nX = 0; nX < nWidth; nX++ )
@@ -743,7 +743,7 @@ BOOL Bitmap::ImplSepia( const BmpFilterParam* pFilterParam, const Link* /*pProgr
             }
 
             aNewBmp.ReleaseAccess( pWriteAcc );
-            bRet = TRUE;
+            bRet = sal_True;
         }
 
         ReleaseAccess( pReadAcc );
@@ -765,13 +765,13 @@ BOOL Bitmap::ImplSepia( const BmpFilterParam* pFilterParam, const Link* /*pProgr
 
 // -----------------------------------------------------------------------------
 
-BOOL Bitmap::ImplMosaic( const BmpFilterParam* pFilterParam, const Link* /*pProgress*/ )
+sal_Bool Bitmap::ImplMosaic( const BmpFilterParam* pFilterParam, const Link* /*pProgress*/ )
 {
-    ULONG               nTileWidth = ( pFilterParam && pFilterParam->meFilter == BMP_FILTER_MOSAIC ) ?
+    sal_uLong               nTileWidth = ( pFilterParam && pFilterParam->meFilter == BMP_FILTER_MOSAIC ) ?
                                      pFilterParam->maMosaicTileSize.mnTileWidth : 4;
-    ULONG               nTileHeight = ( pFilterParam && pFilterParam->meFilter == BMP_FILTER_MOSAIC ) ?
+    sal_uLong               nTileHeight = ( pFilterParam && pFilterParam->meFilter == BMP_FILTER_MOSAIC ) ?
                                       pFilterParam->maMosaicTileSize.mnTileHeight : 4;
-    BOOL                bRet = FALSE;
+    sal_Bool                bRet = sal_False;
 
     if( !nTileWidth )
         nTileWidth = 1;
@@ -834,9 +834,9 @@ BOOL Bitmap::ImplMosaic( const BmpFilterParam* pFilterParam, const Link* /*pProg
                             }
                         }
 
-                        aCol.SetRed( (BYTE) ( nSumR * fArea_1 ) );
-                        aCol.SetGreen( (BYTE) ( nSumG * fArea_1 ) );
-                        aCol.SetBlue( (BYTE) ( nSumB * fArea_1 ) );
+                        aCol.SetRed( (sal_uInt8) ( nSumR * fArea_1 ) );
+                        aCol.SetGreen( (sal_uInt8) ( nSumG * fArea_1 ) );
+                        aCol.SetBlue( (sal_uInt8) ( nSumB * fArea_1 ) );
 
                         for( nY = nY1; nY <= nY2; nY++ )
                             for( nX = nX1; nX <= nX2; nX++ )
@@ -860,16 +860,16 @@ BOOL Bitmap::ImplMosaic( const BmpFilterParam* pFilterParam, const Link* /*pProg
                         {
                             for( nX = nX1; nX <= nX2; nX++ )
                             {
-                                const BitmapColor& rCol = pReadAcc->GetPaletteColor( (BYTE) pReadAcc->GetPixel( nY, nX ) );
+                                const BitmapColor& rCol = pReadAcc->GetPaletteColor( (sal_uInt8) pReadAcc->GetPixel( nY, nX ) );
                                 nSumR += rCol.GetRed();
                                 nSumG += rCol.GetGreen();
                                 nSumB += rCol.GetBlue();
                             }
                         }
 
-                        aCol.SetRed( (BYTE) ( nSumR * fArea_1 ) );
-                        aCol.SetGreen( (BYTE) ( nSumG * fArea_1 ) );
-                        aCol.SetBlue( (BYTE) ( nSumB * fArea_1 ) );
+                        aCol.SetRed( (sal_uInt8) ( nSumR * fArea_1 ) );
+                        aCol.SetGreen( (sal_uInt8) ( nSumG * fArea_1 ) );
+                        aCol.SetBlue( (sal_uInt8) ( nSumB * fArea_1 ) );
 
                         for( nY = nY1; nY <= nY2; nY++ )
                             for( nX = nX1; nX <= nX2; nX++ )
@@ -893,7 +893,7 @@ BOOL Bitmap::ImplMosaic( const BmpFilterParam* pFilterParam, const Link* /*pProg
             }
             while( nY1 < nHeight );
 
-            bRet = TRUE;
+            bRet = sal_True;
         }
 
         ReleaseAccess( pReadAcc );
@@ -917,7 +917,7 @@ BOOL Bitmap::ImplMosaic( const BmpFilterParam* pFilterParam, const Link* /*pProg
         }
     }
     else
-        bRet = TRUE;
+        bRet = sal_True;
 
     return bRet;
 }
@@ -948,13 +948,13 @@ extern "C" int __LOADONCALLAPI ImplPopArtCmpFnc( const void* p1, const void* p2 
 
 // ------------------------------------------------------------------------
 
-BOOL Bitmap::ImplPopArt( const BmpFilterParam* /*pFilterParam*/, const Link* /*pProgress*/ )
+sal_Bool Bitmap::ImplPopArt( const BmpFilterParam* /*pFilterParam*/, const Link* /*pProgress*/ )
 {
-    BOOL bRet = ( GetBitCount() > 8 ) ? Convert( BMP_CONVERSION_8BIT_COLORS ) : TRUE;
+    sal_Bool bRet = ( GetBitCount() > 8 ) ? Convert( BMP_CONVERSION_8BIT_COLORS ) : sal_True;
 
     if( bRet )
     {
-        bRet = FALSE;
+        bRet = sal_False;
 
         BitmapWriteAccess* pWriteAcc = AcquireWriteAccess();
 
@@ -962,8 +962,8 @@ BOOL Bitmap::ImplPopArt( const BmpFilterParam* /*pFilterParam*/, const Link* /*p
         {
             const long      nWidth = pWriteAcc->Width();
             const long      nHeight = pWriteAcc->Height();
-            const ULONG     nEntryCount = 1 << pWriteAcc->GetBitCount();
-            ULONG           n;
+            const sal_uLong     nEntryCount = 1 << pWriteAcc->GetBitCount();
+            sal_uLong           n;
             PopArtEntry*    pPopArtTable = new PopArtEntry[ nEntryCount ];
 
             for( n = 0; n < nEntryCount; n++ )
@@ -982,26 +982,26 @@ BOOL Bitmap::ImplPopArt( const BmpFilterParam* /*pFilterParam*/, const Link* /*p
             qsort( pPopArtTable, nEntryCount, sizeof( PopArtEntry ), ImplPopArtCmpFnc );
 
             // get last used entry
-            ULONG nFirstEntry;
-            ULONG nLastEntry = 0;
+            sal_uLong nFirstEntry;
+            sal_uLong nLastEntry = 0;
 
             for( n = 0; n < nEntryCount; n++ )
                 if( pPopArtTable[ n ].mnCount )
                     nLastEntry = n;
 
             // rotate palette (one entry)
-            const BitmapColor aFirstCol( pWriteAcc->GetPaletteColor( sal::static_int_cast<USHORT>(pPopArtTable[ 0 ].mnIndex) ) );
+            const BitmapColor aFirstCol( pWriteAcc->GetPaletteColor( sal::static_int_cast<sal_uInt16>(pPopArtTable[ 0 ].mnIndex) ) );
             for( nFirstEntry = 0; nFirstEntry < nLastEntry; nFirstEntry++ )
             {
-                pWriteAcc->SetPaletteColor( sal::static_int_cast<USHORT>(pPopArtTable[ nFirstEntry ].mnIndex),
-                                            pWriteAcc->GetPaletteColor( sal::static_int_cast<USHORT>(pPopArtTable[ nFirstEntry + 1 ].mnIndex) ) );
+                pWriteAcc->SetPaletteColor( sal::static_int_cast<sal_uInt16>(pPopArtTable[ nFirstEntry ].mnIndex),
+                                            pWriteAcc->GetPaletteColor( sal::static_int_cast<sal_uInt16>(pPopArtTable[ nFirstEntry + 1 ].mnIndex) ) );
             }
-            pWriteAcc->SetPaletteColor( sal::static_int_cast<USHORT>(pPopArtTable[ nLastEntry ].mnIndex), aFirstCol );
+            pWriteAcc->SetPaletteColor( sal::static_int_cast<sal_uInt16>(pPopArtTable[ nLastEntry ].mnIndex), aFirstCol );
 
             // cleanup
             delete[] pPopArtTable;
             ReleaseAccess( pWriteAcc );
-            bRet = TRUE;
+            bRet = sal_True;
         }
     }
 

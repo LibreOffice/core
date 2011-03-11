@@ -530,12 +530,18 @@ void CUPSManager::initialize()
     // introduced in dests with 1.2
     // this is needed to check for %%IncludeFeature support
     // (#i65684#, #i65491#)
+    bool bUsePDF = false;
     cups_dest_t* pDest = ((cups_dest_t*)m_pDests);
     const char* pOpt = m_pCUPSWrapper->cupsGetOption( "printer-info",
                                                       pDest->num_options,
                                                       pDest->options );
     if( pOpt )
+    {
         m_bUseIncludeFeature = true;
+        bUsePDF = true;
+        if( m_aGlobalDefaults.m_nPSLevel == 0 && m_aGlobalDefaults.m_nPDFDevice == 0 )
+            m_aGlobalDefaults.m_nPDFDevice = 1;
+    }
     // do not send include JobPatch; CUPS will insert that itself
     // TODO: currently unknwon which versions of CUPS insert JobPatches
     // so currently it is assumed CUPS = don't insert JobPatch files
@@ -599,6 +605,8 @@ void CUPSManager::initialize()
             aPrinter.m_aInfo.m_pParser = c_it->second.getParser();
             aPrinter.m_aInfo.m_aContext = c_it->second;
         }
+        if( bUsePDF && aPrinter.m_aInfo.m_nPSLevel == 0 && aPrinter.m_aInfo.m_nPDFDevice == 0 )
+            aPrinter.m_aInfo.m_nPDFDevice = 1;
         aPrinter.m_aInfo.m_aDriverName = aBuf.makeStringAndClear();
         aPrinter.m_bModified = false;
 
@@ -832,8 +840,15 @@ void CUPSManager::setupJobContextData(
 
 FILE* CUPSManager::startSpool( const OUString& rPrintername, bool bQuickCommand )
 {
+    OSL_TRACE( "endSpool: %s, %s",
+               rtl::OUStringToOString( rPrintername, RTL_TEXTENCODING_UTF8 ).getStr(),
+              bQuickCommand ? "true" : "false" );
+
     if( m_aCUPSDestMap.find( rPrintername ) == m_aCUPSDestMap.end() )
+    {
+        OSL_TRACE( "defer to PrinterInfoManager::startSpool" );
         return PrinterInfoManager::startSpool( rPrintername, bQuickCommand );
+    }
 
 #ifdef ENABLE_CUPS
     OUString aTmpURL, aTmpFile;
@@ -856,7 +871,7 @@ struct less_ppd_key : public ::std::binary_function<double, double, bool>
     { return left->getOrderDependency() < right->getOrderDependency(); }
 };
 
-void CUPSManager::getOptionsFromDocumentSetup( const JobData& rJob, int& rNumOptions, void** rOptions ) const
+void CUPSManager::getOptionsFromDocumentSetup( const JobData& rJob, bool bBanner, int& rNumOptions, void** rOptions ) const
 {
     rNumOptions = 0;
     *rOptions = NULL;
@@ -886,10 +901,26 @@ void CUPSManager::getOptionsFromDocumentSetup( const JobData& rJob, int& rNumOpt
             }
         }
     }
+
+    if( rJob.m_nPDFDevice > 0 && rJob.m_nCopies > 1 )
+    {
+        rtl::OString aVal( rtl::OString::valueOf( sal_Int32( rJob.m_nCopies ) ) );
+        rNumOptions = m_pCUPSWrapper->cupsAddOption( "copies", aVal.getStr(), rNumOptions, (cups_option_t**)rOptions );
+    }
+    if( ! bBanner )
+    {
+        rNumOptions = m_pCUPSWrapper->cupsAddOption( "job-sheets", "none", rNumOptions, (cups_option_t**)rOptions );
+    }
 }
 
-int CUPSManager::endSpool( const OUString& rPrintername, const OUString& rJobTitle, FILE* pFile, const JobData& rDocumentJobData )
+int CUPSManager::endSpool( const OUString& rPrintername, const OUString& rJobTitle, FILE* pFile, const JobData& rDocumentJobData, bool bBanner )
 {
+    OSL_TRACE( "endSpool: %s, %s, copy count = %d",
+               rtl::OUStringToOString( rPrintername, RTL_TEXTENCODING_UTF8 ).getStr(),
+               rtl::OUStringToOString( rJobTitle, RTL_TEXTENCODING_UTF8 ).getStr(),
+               rDocumentJobData.m_nCopies
+               );
+
     int nJobID = 0;
 
     osl::MutexGuard aGuard( m_aCUPSMutex );
@@ -897,7 +928,10 @@ int CUPSManager::endSpool( const OUString& rPrintername, const OUString& rJobTit
     boost::unordered_map< OUString, int, OUStringHash >::iterator dest_it =
         m_aCUPSDestMap.find( rPrintername );
     if( dest_it == m_aCUPSDestMap.end() )
-        return PrinterInfoManager::endSpool( rPrintername, rJobTitle, pFile, rDocumentJobData );
+    {
+        OSL_TRACE( "defer to PrinterInfoManager::endSpool" );
+        return PrinterInfoManager::endSpool( rPrintername, rJobTitle, pFile, rDocumentJobData, bBanner );
+    }
 
     #ifdef ENABLE_CUPS
     boost::unordered_map< FILE*, OString, FPtrHash >::const_iterator it = m_aSpoolFiles.find( pFile );
@@ -909,7 +943,7 @@ int CUPSManager::endSpool( const OUString& rPrintername, const OUString& rJobTit
         // setup cups options
         int nNumOptions = 0;
         cups_option_t* pOptions = NULL;
-        getOptionsFromDocumentSetup( rDocumentJobData, nNumOptions, (void**)&pOptions );
+        getOptionsFromDocumentSetup( rDocumentJobData, bBanner, nNumOptions, (void**)&pOptions );
 
         cups_dest_t* pDest = ((cups_dest_t*)m_pDests) + dest_it->second;
         nJobID = m_pCUPSWrapper->cupsPrintFile( pDest->name,

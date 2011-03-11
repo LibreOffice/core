@@ -82,16 +82,16 @@ class AquaSalInfoPrinter : public SalInfoPrinter
 
     virtual SalGraphics*        GetGraphics();
     virtual void                ReleaseGraphics( SalGraphics* i_pGraphics );
-    virtual BOOL                Setup( SalFrame* i_pFrame, ImplJobSetup* i_pSetupData );
-    virtual BOOL                SetPrinterData( ImplJobSetup* pSetupData );
-    virtual BOOL                SetData( ULONG i_nFlags, ImplJobSetup* i_pSetupData );
+    virtual sal_Bool                Setup( SalFrame* i_pFrame, ImplJobSetup* i_pSetupData );
+    virtual sal_Bool                SetPrinterData( ImplJobSetup* pSetupData );
+    virtual sal_Bool                SetData( sal_uLong i_nFlags, ImplJobSetup* i_pSetupData );
     virtual void                GetPageInfo( const ImplJobSetup* i_pSetupData,
                                              long& o_rOutWidth, long& o_rOutHeight,
                                              long& o_rPageOffX, long& o_rPageOffY,
                                              long& o_rPageWidth, long& o_rPageHeight );
-    virtual ULONG               GetCapabilities( const ImplJobSetup* i_pSetupData, USHORT i_nType );
-    virtual ULONG               GetPaperBinCount( const ImplJobSetup* i_pSetupData );
-    virtual String              GetPaperBinName( const ImplJobSetup* i_pSetupData, ULONG i_nPaperBin );
+    virtual sal_uLong               GetCapabilities( const ImplJobSetup* i_pSetupData, sal_uInt16 i_nType );
+    virtual sal_uLong               GetPaperBinCount( const ImplJobSetup* i_pSetupData );
+    virtual String              GetPaperBinName( const ImplJobSetup* i_pSetupData, sal_uLong i_nPaperBin );
     virtual void                InitPaperFormats( const ImplJobSetup* i_pSetupData );
     virtual int                 GetLandscapeAngle( const ImplJobSetup* i_pSetupData );
 
@@ -100,16 +100,16 @@ class AquaSalInfoPrinter : public SalInfoPrinter
     // so let's make AquaSalPrinter just a forwarder to AquaSalInfoPrinter
     // and concentrate the real work in one class
     // implement pull model print system
-    BOOL                        StartJob( const String* i_pFileName,
+    sal_Bool                        StartJob( const String* i_pFileName,
                                           const String& rJobName,
                                           const String& i_rAppName,
                                           ImplJobSetup* i_pSetupData,
                                           vcl::PrinterController& i_rController );
-    BOOL                        EndJob();
-    BOOL                        AbortJob();
-    SalGraphics*                StartPage( ImplJobSetup* i_pSetupData, BOOL i_bNewJobData );
-    BOOL                        EndPage();
-    ULONG                       GetErrorCode() const;
+    sal_Bool                        EndJob();
+    sal_Bool                        AbortJob();
+    SalGraphics*                StartPage( ImplJobSetup* i_pSetupData, sal_Bool i_bNewJobData );
+    sal_Bool                        EndPage();
+    sal_uLong                       GetErrorCode() const;
 
     NSPrintInfo* getPrintInfo() const { return mpPrintInfo; }
     void setStartPageOffset( int nOffsetX, int nOffsetY ) { mnStartPageOffsetX = nOffsetX; mnStartPageOffsetY = nOffsetY; }
@@ -136,25 +136,25 @@ class AquaSalPrinter : public SalPrinter
     AquaSalPrinter( AquaSalInfoPrinter* i_pInfoPrinter );
     virtual ~AquaSalPrinter();
 
-    virtual BOOL                    StartJob( const XubString* i_pFileName,
+    virtual sal_Bool                    StartJob( const XubString* i_pFileName,
                                               const XubString& i_rJobName,
                                               const XubString& i_rAppName,
-                                              ULONG i_nCopies,
+                                              sal_uLong i_nCopies,
                                               bool i_bCollate,
                                               bool i_bDirect,
                                               ImplJobSetup* i_pSetupData );
     // implement pull model print system
-    virtual BOOL                    StartJob( const String* i_pFileName,
+    virtual sal_Bool                    StartJob( const String* i_pFileName,
                                               const String& rJobName,
                                               const String& i_rAppName,
                                               ImplJobSetup* i_pSetupData,
                                               vcl::PrinterController& i_rListener );
 
-    virtual BOOL                    EndJob();
-    virtual BOOL                    AbortJob();
-    virtual SalGraphics*            StartPage( ImplJobSetup* i_pSetupData, BOOL i_bNewJobData );
-    virtual BOOL                    EndPage();
-    virtual ULONG                   GetErrorCode();
+    virtual sal_Bool                    EndJob();
+    virtual sal_Bool                    AbortJob();
+    virtual SalGraphics*            StartPage( ImplJobSetup* i_pSetupData, sal_Bool i_bNewJobData );
+    virtual sal_Bool                    EndPage();
+    virtual sal_uLong                   GetErrorCode();
 
     private:
     AquaSalPrinter( const AquaSalPrinter& );

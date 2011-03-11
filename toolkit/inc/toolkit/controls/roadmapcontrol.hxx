@@ -46,37 +46,37 @@
 #include <cppuhelper/implbase4.hxx>
 
 
-
 #include <comphelper/uno3.hxx>
 
-typedef GraphicControlModel UnoControlRoadmapModel_Base;
-
-
-typedef ::cppu::ImplHelper3 <   ::com::sun::star::lang::XSingleServiceFactory
-                            ,   ::com::sun::star::container::XContainer
-                            ,   ::com::sun::star::container::XIndexContainer
-                            >   UnoControlRoadmapModel_IBase;
-
-
-
-typedef UnoControlBase  UnoControlRoadmap_Base;
-typedef ::cppu::ImplHelper4 <   ::com::sun::star::awt::XItemEventBroadcaster
-                            ,   ::com::sun::star::container::XContainerListener
-                            ,   ::com::sun::star::awt::XItemListener
-                            ,   ::com::sun::star::beans::XPropertyChangeListener
-                            >   UnoControlRoadmap_IBase;
-
-
-
-
-typedef ::cppu::ImplHelper2< ::com::sun::star::container::XContainerListener,
-                             ::com::sun::star::awt::XItemEventBroadcaster>    SVTXRoadmap_Base;
-
-
+//........................................................................
+namespace toolkit
+{
 //........................................................................
 
-namespace toolkit{
-//........................................................................
+    typedef GraphicControlModel UnoControlRoadmapModel_Base;
+
+
+    typedef ::cppu::ImplHelper3 <   ::com::sun::star::lang::XSingleServiceFactory
+                                ,   ::com::sun::star::container::XContainer
+                                ,   ::com::sun::star::container::XIndexContainer
+                                >   UnoControlRoadmapModel_IBase;
+
+
+
+    typedef UnoControlBase  UnoControlRoadmap_Base;
+    typedef ::cppu::ImplHelper4 <   ::com::sun::star::awt::XItemEventBroadcaster
+                                ,   ::com::sun::star::container::XContainerListener
+                                ,   ::com::sun::star::awt::XItemListener
+                                ,   ::com::sun::star::beans::XPropertyChangeListener
+                                >   UnoControlRoadmap_IBase;
+
+
+
+
+    typedef ::cppu::ImplHelper2< ::com::sun::star::container::XContainerListener,
+                                 ::com::sun::star::awt::XItemEventBroadcaster>    SVTXRoadmap_Base;
+
+
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::awt;
     using namespace ::com::sun::star::lang;
@@ -111,7 +111,7 @@ namespace toolkit{
         ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
 
     public:
-        UnoControlRoadmapModel();
+        UnoControlRoadmapModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
         UnoControlRoadmapModel( const UnoControlRoadmapModel& rModel ) :
             UnoControlRoadmapModel_Base( rModel ),
             UnoControlRoadmapModel_IBase( rModel ),
@@ -168,7 +168,7 @@ namespace toolkit{
     private:
         ItemListenerMultiplexer                 maItemListeners;
     public:
-                            UnoRoadmapControl();
+                            UnoRoadmapControl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
         ::rtl::OUString     GetComponentServiceName();
 
     void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException) { UnoControlBase::disposing( Source ); }

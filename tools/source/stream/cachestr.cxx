@@ -40,13 +40,13 @@
 |*
 *************************************************************************/
 
-SvCacheStream::SvCacheStream( ULONG nMaxMemSize )
+SvCacheStream::SvCacheStream( sal_uIntPtr nMaxMemSize )
 {
     if( !nMaxMemSize )
         nMaxMemSize = 20480;
-    SvStream::bIsWritable = TRUE;
+    SvStream::bIsWritable = sal_True;
     nMaxSize        = nMaxMemSize;
-    bPersistent     = FALSE;
+    bPersistent     = sal_False;
     pSwapStream     = 0;
     pCurrentStream  = new SvMemoryStream( nMaxMemSize );
     pTempFile       = 0;
@@ -59,8 +59,8 @@ SvCacheStream::SvCacheStream( ULONG nMaxMemSize )
 *************************************************************************/
 
 SvCacheStream::SvCacheStream( const String &rFileName,
-                              ULONG nExpectedSize,
-                              ULONG nMaxMemSize )
+                              sal_uIntPtr nExpectedSize,
+                              sal_uIntPtr nMaxMemSize )
 {
     if( !nMaxMemSize )
         nMaxMemSize = 20480;
@@ -70,9 +70,9 @@ SvCacheStream::SvCacheStream( const String &rFileName,
     else if( !nExpectedSize )
         nExpectedSize = 4096;
 
-    SvStream::bIsWritable = TRUE;
+    SvStream::bIsWritable = sal_True;
     nMaxSize        = nMaxMemSize;
-    bPersistent     = TRUE;
+    bPersistent     = sal_True;
     aFileName       = rFileName;
     pSwapStream     = 0;
     pCurrentStream  = new SvMemoryStream( nExpectedSize );
@@ -94,7 +94,7 @@ SvCacheStream::~SvCacheStream()
     if( pSwapStream && !bPersistent && pTempFile )
     {
         // temporaeres File loeschen
-        pTempFile->EnableKillingFile( TRUE );
+        pTempFile->EnableKillingFile( sal_True );
     }
 
     delete pTempFile;
@@ -130,7 +130,7 @@ void SvCacheStream::SwapOut()
             }
         }
 
-        ULONG nPos = pCurrentStream->Tell();
+        sal_uIntPtr nPos = pCurrentStream->Tell();
         pCurrentStream->Seek( 0 );
         if( !pSwapStream )
             pSwapStream = new SvFileStream( aFileName, STREAM_READWRITE | STREAM_TRUNC );
@@ -148,7 +148,7 @@ void SvCacheStream::SwapOut()
 |*
 *************************************************************************/
 
-ULONG SvCacheStream::GetData( void* pData, ULONG nSize )
+sal_uIntPtr SvCacheStream::GetData( void* pData, sal_uIntPtr nSize )
 {
     return pCurrentStream->Read( pData, nSize );
 }
@@ -159,7 +159,7 @@ ULONG SvCacheStream::GetData( void* pData, ULONG nSize )
 |*
 *************************************************************************/
 
-ULONG SvCacheStream::PutData( const void* pData, ULONG nSize )
+sal_uIntPtr SvCacheStream::PutData( const void* pData, sal_uIntPtr nSize )
 {
     // lieber unnoetig auslagern als unnoetig umkopieren
     if( pCurrentStream != pSwapStream
@@ -174,7 +174,7 @@ ULONG SvCacheStream::PutData( const void* pData, ULONG nSize )
 |*
 *************************************************************************/
 
-ULONG SvCacheStream::SeekPos( ULONG nPos )
+sal_uIntPtr SvCacheStream::SeekPos( sal_uIntPtr nPos )
 {
     return pCurrentStream->Seek( nPos );
 }
@@ -214,7 +214,7 @@ const void* SvCacheStream::GetBuffer()
 |*
 *************************************************************************/
 
-void SvCacheStream::SetSize( ULONG nSize )
+void SvCacheStream::SetSize( sal_uIntPtr nSize )
 {
     pCurrentStream->SetStreamSize( nSize );
 }
@@ -225,13 +225,13 @@ void SvCacheStream::SetSize( ULONG nSize )
 |*
 *************************************************************************/
 
-ULONG SvCacheStream::GetSize()
+sal_uIntPtr SvCacheStream::GetSize()
 {
     // ACHTUNG: SvMemoryStream::GetSize() gibt Groesse
     // des allozierten Buffers zurueck
     Flush();
-    ULONG nTemp = Tell();
-    ULONG nLength = Seek( STREAM_SEEK_TO_END );
+    sal_uIntPtr nTemp = Tell();
+    sal_uIntPtr nLength = Seek( STREAM_SEEK_TO_END );
     Seek( nTemp );
     return nLength;
 }

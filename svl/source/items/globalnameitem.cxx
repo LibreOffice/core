@@ -53,7 +53,7 @@ SfxGlobalNameItem::SfxGlobalNameItem()
 
 // -----------------------------------------------------------------------
 
-SfxGlobalNameItem::SfxGlobalNameItem( USHORT nW, const SvGlobalName& rName )
+SfxGlobalNameItem::SfxGlobalNameItem( sal_uInt16 nW, const SvGlobalName& rName )
 :   SfxPoolItem( nW ),
     m_aName( rName )
 {
@@ -81,7 +81,7 @@ SfxPoolItem* SfxGlobalNameItem::Clone(SfxItemPool *) const
 
 //----------------------------------------------------------------------------
 // virtual
-bool SfxGlobalNameItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE )
+bool SfxGlobalNameItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 )
 {
     com::sun::star::uno::Reference < com::sun::star::script::XTypeConverter > xConverter
             ( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.Converter"))),
@@ -104,7 +104,7 @@ bool SfxGlobalNameItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE )
 
 //----------------------------------------------------------------------------
 // virtual
-bool SfxGlobalNameItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE ) const
+bool SfxGlobalNameItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 ) const
 {
        com::sun::star::uno::Sequence< sal_Int8 > aSeq( 16 );
     void* pData = ( void* ) &m_aName.GetCLSID();

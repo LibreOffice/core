@@ -39,7 +39,7 @@ using namespace std;
 // class LngParser
 //
 /*****************************************************************************/
-LngParser::LngParser( const ByteString &rLngFile, BOOL bUTF8, BOOL bULFFormat )
+LngParser::LngParser( const ByteString &rLngFile, sal_Bool bUTF8, sal_Bool bULFFormat )
 /*****************************************************************************/
                 :
                 nError( LNG_OK ),
@@ -101,7 +101,7 @@ void LngParser::FillInFallbacks( ByteStringHashMap Text )
 }
 
 /*****************************************************************************/
-BOOL LngParser::CreateSDF(
+sal_Bool LngParser::CreateSDF(
     const ByteString &rSDFFile, const ByteString &rPrj,
     const ByteString &rRoot )
 /*****************************************************************************/
@@ -127,7 +127,7 @@ BOOL LngParser::CreateSDF(
     sActFileName.SearchAndReplaceAll( "/", "\\" );
 
     size_t nPos  = 0;
-    BOOL bStart = true;
+    sal_Bool bStart = true;
     ByteString sGroup;
     ByteStringHashMap Text;
     ByteString sID;
@@ -157,7 +157,7 @@ BOOL LngParser::CreateSDF(
      const ByteString &sActFileName , const ByteString &sID )
  {
 
-    BOOL bExport = true;
+    sal_Bool bExport = true;
     if ( bExport ) {
            ByteString sTimeStamp( Export::GetTimeStamp());
         ByteString sCur;
@@ -203,7 +203,7 @@ BOOL LngParser::CreateSDF(
  }
 
 /*****************************************************************************/
-BOOL LngParser::Merge(
+sal_Bool LngParser::Merge(
     const ByteString &rSDFFile, const ByteString &rDestinationFile , const ByteString& rPrj )
 /*****************************************************************************/
 {
@@ -217,14 +217,14 @@ BOOL LngParser::Merge(
     }
     nError = LNG_OK;
 
-    MergeDataFile aMergeDataFile( rSDFFile, sSource , FALSE, RTL_TEXTENCODING_MS_1252);//, bDBIsUTF8 );
+    MergeDataFile aMergeDataFile( rSDFFile, sSource , sal_False, RTL_TEXTENCODING_MS_1252);//, bDBIsUTF8 );
     ByteString sTmp( Export::sLanguages );
     if( sTmp.ToUpperAscii().Equals("ALL") )
         Export::SetLanguages( aMergeDataFile.GetLanguages() );
     aLanguages = Export::GetLanguages();
 
     size_t nPos = 0;
-    BOOL bGroup = FALSE;
+    sal_Bool bGroup = sal_False;
     ByteString sGroup;
 
     // seek to next group
@@ -238,7 +238,7 @@ BOOL LngParser::Merge(
             sGroup = sLine.GetToken( 1, '[' ).GetToken( 0, ']' );
             sGroup.EraseLeadingChars( ' ' );
             sGroup.EraseTrailingChars( ' ' );
-            bGroup = TRUE;
+            bGroup = sal_True;
         }
         nPos ++;
     }
@@ -246,13 +246,13 @@ BOOL LngParser::Merge(
     while ( nPos < pLines->size()) {
         ByteStringHashMap Text;
         ByteString sID( sGroup );
-        ULONG nLastLangPos = 0;
+        sal_uLong nLastLangPos = 0;
 
         ResData  *pResData = new ResData( "", sID , sSource );
         pResData->sResTyp = "LngText";
         PFormEntrys *pEntrys = aMergeDataFile.GetPFormEntrys( pResData );
         // read languages
-        bGroup = FALSE;
+        bGroup = sal_False;
 
         ByteString sLanguagesDone;
 
@@ -266,7 +266,7 @@ BOOL LngParser::Merge(
                 sGroup = sLine.GetToken( 1, '[' ).GetToken( 0, ']' );
                 sGroup.EraseLeadingChars( ' ' );
                 sGroup.EraseTrailingChars( ' ' );
-                bGroup = TRUE;
+                bGroup = sal_True;
                 nPos ++;
                 sLanguagesDone = "";
             }
@@ -290,7 +290,7 @@ BOOL LngParser::Merge(
                     ByteString sText = sLine.GetToken( 1, '\"' ).GetToken( 0, '\"' );
                     if( sLang.Len() ){
                         ByteString sNewText;
-                        pEntrys->GetText( sNewText, STRING_TYP_TEXT, sLang, TRUE );
+                        pEntrys->GetText( sNewText, STRING_TYP_TEXT, sLang, sal_True );
 
                         if ( sNewText.Len()) {
                             ByteString *pLine = (*pLines)[ nPos ];
@@ -323,7 +323,7 @@ BOOL LngParser::Merge(
                 if( !sCur.EqualsIgnoreCaseAscii("en-US") && !Text[ sCur ].Len() && pEntrys ) {
 
                     ByteString sNewText;
-                    pEntrys->GetText( sNewText, STRING_TYP_TEXT, sCur, TRUE );
+                    pEntrys->GetText( sNewText, STRING_TYP_TEXT, sCur, sal_True );
                     if (( sNewText.Len()) &&
                         !(( sCur.Equals("x-comment") ) && ( sNewText == "-" )))
                     {
@@ -355,7 +355,7 @@ BOOL LngParser::Merge(
         aDestination.WriteLine( *(*pLines)[ i ] );
 
     aDestination.Close();
-    return TRUE;
+    return sal_True;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

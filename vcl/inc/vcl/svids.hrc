@@ -31,11 +31,7 @@
 #include "svl/solar.hrc"
 
 #define SV_RESID_STDOFFSET                  0
-#define SV_RESID_WINOFFSET                  1
-#define SV_RESID_OS2OFFSET                  2
-#define SV_RESID_MACOFFSET                  3
-#define SV_RESID_UNIXOFFSET                 4
-#define SV_RESID_MONOOFFSET                 5
+#define SV_RESID_MONOOFFSET                 1
 
 // Achtung: Diese Id's muessen min. 10 Werte auseinanderliegen, da
 // je nach Style noch ein Offset aufgerechnet wird
@@ -57,6 +53,8 @@
 
 #define SV_DISCLOSURE_PLUS                  1060
 #define SV_DISCLOSURE_MINUS                 1061
+
+#define RID_STR_PAPERNAMES                  1070
 
 #define SV_RESID_MENU_EDIT                  2000
 #define SV_MENU_EDIT_UNDO                   1
@@ -118,8 +116,10 @@
 #define SV_PRINT_PRT_NUP_ORIENTATION_PORTRAIT     1
 #define SV_PRINT_PRT_NUP_ORIENTATION_LANDSCAPE    2
 
-#define SV_PRINT_PRT_NUP_ORDER_LRTD               0
-#define SV_PRINT_PRT_NUP_ORDER_TDLR               1
+#define SV_PRINT_PRT_NUP_ORDER_LRTB               0
+#define SV_PRINT_PRT_NUP_ORDER_TBLR               1
+#define SV_PRINT_PRT_NUP_ORDER_TBRL               2
+#define SV_PRINT_PRT_NUP_ORDER_RLTB               3
 
 #define SV_PRINT_TAB_JOB                    2
 #define SV_PRINT_PRINTERS_FL                1
@@ -143,12 +143,12 @@
 #define SV_PRINT_LOCATION_TXT               21
 #define SV_PRINT_COMMENT_TXT                22
 #define SV_PRINT_DETAILS_BTN                23
+#define SV_PRINT_OPT_REVERSE                24
 
 #define SV_PRINT_TAB_OPT                    3
 #define SV_PRINT_OPT_PRINT_FL               1
 #define SV_PRINT_OPT_TOFILE                 2
 #define SV_PRINT_OPT_SINGLEJOBS             3
-#define SV_PRINT_OPT_REVERSE                4
 
 #define SV_DLG_PRINT_PROGRESS             2049
 #define SV_PRINT_PROGRESS_CANCEL            1
@@ -206,7 +206,8 @@
 #define SV_ACCESSERROR_JAVA_NOT_CONFIGURED  10507
 #define SV_ACCESSERROR_JAVA_DISABLED        10508
 #define SV_ACCESSERROR_TURNAROUND_MSG       10509
-#define SV_ACCESSERROR_LAST                 SV_ACCESSERROR_TURNAROUND_MSG
+#define SV_ACCESSERROR_NO_FONTS             10510
+#define SV_ACCESSERROR_LAST                 SV_ACCESSERROR_NO_FONTS
 
 #define SV_SHORTCUT_HELP                    10600
 #define SV_SHORTCUT_CONTEXTHELP             10601

@@ -78,7 +78,7 @@ void RscHrcDep::Execute()
     CppDep::Execute();
 }
 
-SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
+int main( int argc, char** argv )
 {
     int c;
     char aBuf[255];
@@ -86,7 +86,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
     char pOutputFileName[255];
     char pSrsFileName[255];
     String aSrsBaseName;
-    BOOL bSource = FALSE;
+    sal_Bool bSource = sal_False;
     ByteString aRespArg;
 //  who needs anything but '/' ?
 //  String aDelim = String(DirEntry::GetAccessDelimiter());
@@ -160,7 +160,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
                     pDep->AddSource( &aBuf2[0] );
                     aRespArg += " ";
                     aRespArg += &aBuf2[0];
-                    bSource = TRUE;
+                    bSource = sal_True;
                 }
             }
         }
@@ -193,7 +193,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
             case 'h' :
             case 'H' :
             case '?' :
-                printf("RscDep 1.0 (c)2000 StarOffice\n");
+                printf("RscDep 1.0\n");
                 break;
 
             default:

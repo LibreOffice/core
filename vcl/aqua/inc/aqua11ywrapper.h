@@ -63,16 +63,16 @@ struct ReferenceWrapper
     ReferenceWrapper * mpReferenceWrapper;
     NSString * mpDefaultFontname;
     float mDefaultFontsize;
-    MacOSBOOL mActsAsRadioGroup;
-    MacOSBOOL mIsTableCell;
+    BOOL mActsAsRadioGroup;
+    BOOL mIsTableCell;
 }
 // NSAccessibility Protocol
 -(id)accessibilityAttributeValue:(NSString *)attribute;
--(MacOSBOOL)accessibilityIsIgnored;
+-(BOOL)accessibilityIsIgnored;
 -(NSArray *)accessibilityAttributeNames;
--(MacOSBOOL)accessibilityIsAttributeSettable:(NSString *)attribute;
+-(BOOL)accessibilityIsAttributeSettable:(NSString *)attribute;
 -(NSArray *)accessibilityParameterizedAttributeNames;
--(MacOSBOOL)accessibilitySetOverrideValue:(id)value forAttribute:(NSString *)attribute;
+-(BOOL)accessibilitySetOverrideValue:(id)value forAttribute:(NSString *)attribute;
 -(void)accessibilitySetValue:(id)value forAttribute:(NSString *)attribute;
 -(id)accessibilityAttributeValue:(NSString *)attribute forParameter:(id)parameter;
 -(id)accessibilityFocusedUIElement;
@@ -93,8 +93,8 @@ struct ReferenceWrapper
 -(id)orientationAttribute;
 -(id)windowAttribute;
 // Wrapper-specific
--(void)setActsAsRadioGroup:(MacOSBOOL)actsAsRadioGroup;
--(MacOSBOOL)actsAsRadioGroup;
+-(void)setActsAsRadioGroup:(BOOL)actsAsRadioGroup;
+-(BOOL)actsAsRadioGroup;
 -(NSView *)viewElementForParent;
 -(id)initWithAccessibleContext: (::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessibleContext >) anAccessibleContext;
 -(void) setDefaults: (::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessibleContext >) rxAccessibleContext;
@@ -103,7 +103,7 @@ struct ReferenceWrapper
 -(NSString *)defaultFontname;
 -(void)setDefaultFontsize:(float)fontsize;
 -(float)defaultFontsize;
-+(void)setPopupMenuOpen:(MacOSBOOL)popupMenuOpen;
++(void)setPopupMenuOpen:(BOOL)popupMenuOpen;
 -(::com::sun::star::accessibility::XAccessibleAction *)accessibleAction;
 -(::com::sun::star::accessibility::XAccessibleContext *)accessibleContext;
 -(::com::sun::star::accessibility::XAccessibleComponent *)accessibleComponent;

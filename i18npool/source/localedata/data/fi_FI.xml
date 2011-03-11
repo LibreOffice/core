@@ -185,7 +185,7 @@
   <LC_COLLATION ref="en_US" />
   <LC_SEARCH ref="en_US"/>
   <LC_INDEX>
-    <IndexKey phonetic="false" default="true" unoid="alphanumeric">A-V X-Z Ä Ö</IndexKey>
+    <IndexKey phonetic="false" default="true" unoid="alphanumeric">A-Z Ä Ö</IndexKey>
     <UnicodeScript>0</UnicodeScript>
     <UnicodeScript>1</UnicodeScript>
     <FollowPageWord>p.</FollowPageWord>

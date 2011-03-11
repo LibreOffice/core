@@ -68,7 +68,7 @@ namespace vclcanvas
         // switch off AA for WIN32 and UNIX, the VCLCanvas does not look good with it and
         // is not required to do AA. It would need to be adapted to use it correctly
         // (especially gradient painting). This will need extra work.
-        mpBackBuffer->getOutDev().SetAntialiasing(mpBackBuffer->getOutDev().GetAntialiasing() & !ANTIALIASING_ENABLE_B2DDRAW);
+        mpBackBuffer->getOutDev().SetAntialiasing(mpBackBuffer->getOutDev().GetAntialiasing() & ~ANTIALIASING_ENABLE_B2DDRAW);
 #endif
     }
 
@@ -148,7 +148,7 @@ namespace vclcanvas
             SvFileStream aStream( aFilename, STREAM_STD_READWRITE );
 
             const ::Point aEmptyPoint;
-            mpBackBuffer->getOutDev().EnableMapMode( FALSE );
+            mpBackBuffer->getOutDev().EnableMapMode( sal_False );
             aStream << mpBackBuffer->getOutDev().GetBitmap(aEmptyPoint,
                                                             mpBackBuffer->getOutDev().GetOutputSizePixel());
         }

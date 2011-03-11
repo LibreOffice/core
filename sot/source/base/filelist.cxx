@@ -33,7 +33,7 @@
 #include <tools/string.hxx>
 #include <tools/rtti.hxx>
 #include <sot/exchange.hxx>
-#include <filelist.hxx>
+#include<sot/filelist.hxx>
 #include <osl/thread.h>
 
 TYPEINIT1_AUTOFACTORY( FileList, SvDataCopyStream );
@@ -75,7 +75,7 @@ FileList& FileList::operator=( const FileList& rFileList )
 |*
 \*************************************************************************/
 
-ULONG FileList::GetFormat()
+sal_uLong FileList::GetFormat()
 {
     return FORMAT_FILE_LIST;
 }

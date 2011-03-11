@@ -29,12 +29,12 @@
 #ifndef SVTOOLS_ACCESSIBLE_FACTORY_HXX
 #define SVTOOLS_ACCESSIBLE_FACTORY_HXX
 
+#include "AccessibleBrowseBoxObjType.hxx"
+#include "accessibletableprovider.hxx"
+
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <rtl/ref.hxx>
-#include "AccessibleBrowseBoxObjType.hxx"
-#include "accessibletableprovider.hxx"
-#include "accessibletable.hxx"
 
 namespace com { namespace sun { namespace star {
     namespace accessibility {
@@ -61,6 +61,11 @@ namespace svt
     class ToolPanelDeck;
     class IToolPanelDeck;
     class PanelTabBar;
+    namespace table
+    {
+        class IAccessibleTable;
+        class IAccessibleTableControl;
+    }
 
     /** a function which is able to create a factory for the standard Accessible/Context
         components needed for standard toolkit controls

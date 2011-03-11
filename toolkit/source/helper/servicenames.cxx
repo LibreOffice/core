@@ -96,6 +96,9 @@ const sal_Char szServiceName_UnoMultiPageModel[] = "com.sun.star.awt.UnoMultiPag
 const sal_Char szServiceName_UnoPageControl[] = "com.sun.star.awt.UnoControlPage";
 const sal_Char szServiceName_UnoPageModel[] = "com.sun.star.awt.UnoPageModel";
 const sal_Char szServiceName_UnoFrameControl[] = "com.sun.star.awt.UnoControlFrame";
+const sal_Char szServiceName_AnimatedImagesControl[] = "com.sun.star.awt.AnimatedImagesControl";
+const sal_Char szServiceName_AnimatedImagesControlModel[] = "com.sun.star.awt.AnimatedImagesControlModel";
+const sal_Char szServiceName_SpinningProgressControlModel[] = "com.sun.star.awt.SpinningProgressControlModel";
 const sal_Char szServiceName_UnoFrameModel[] = "com.sun.star.awt.UnoFrameModel";
 const sal_Char szServiceName_TreeControl[] = "com.sun.star.awt.tree.TreeControl";
 const sal_Char szServiceName_TreeControlModel[] = "com.sun.star.awt.tree.TreeControlModel";
@@ -111,5 +114,10 @@ const sal_Char szServiceName_GridControlModel[] = "com.sun.star.awt.grid.UnoCont
 const sal_Char szServiceName_DefaultGridDataModel[] = "com.sun.star.awt.grid.DefaultGridDataModel";
 const sal_Char szServiceName_DefaultGridColumnModel[] = "com.sun.star.awt.grid.DefaultGridColumnModel";
 const sal_Char szServiceName_GridColumn[] = "com.sun.star.awt.grid.GridColumn";
+const sal_Char szServiceName_UnoControlTabPage[] = "com.sun.star.awt.tab.UnoControlTabPage";
+const sal_Char szServiceName_UnoControlTabPageModel[] = "com.sun.star.awt.tab.UnoControlTabPageModel";
+const sal_Char szServiceName_UnoControlTabPageContainerModel[] = "com.sun.star.awt.tab.UnoControlTabPageContainerModel";
+const sal_Char szServiceName_UnoControlTabPageContainer[] = "com.sun.star.awt.tab.UnoControlTabPageContainer";
+const sal_Char szServiceName_SortableGridDataModel[] = "com.sun.star.awt.grid.SortableGridDataModel";
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -43,12 +43,12 @@ namespace basegfx { class B2DPolyPolygon; }
 
 struct ImplLineInfo
 {
-    ULONG                   mnRefCount;
+    sal_uLong                   mnRefCount;
     LineStyle               meStyle;
     long                    mnWidth;
-    USHORT                  mnDashCount;
+    sal_uInt16                  mnDashCount;
     long                    mnDashLen;
-    USHORT                  mnDotCount;
+    sal_uInt16                  mnDotCount;
     long                    mnDotLen;
     long                    mnDistance;
 
@@ -56,6 +56,8 @@ struct ImplLineInfo
 
                         ImplLineInfo();
                         ImplLineInfo( const ImplLineInfo& rImplLineInfo );
+
+    bool operator==( const ImplLineInfo& ) const;
 
     friend SvStream&    operator>>( SvStream& rIStm, ImplLineInfo& rImplLineInfo );
     friend SvStream&    operator<<( SvStream& rOStm, const ImplLineInfo& rImplLineInfo );
@@ -83,9 +85,9 @@ public:
                     ~LineInfo();
 
     LineInfo&       operator=( const LineInfo& rLineInfo );
-    BOOL            operator==( const LineInfo& rLineInfo ) const;
-    BOOL            operator!=( const LineInfo& rLineInfo ) const { return !(LineInfo::operator==( rLineInfo ) ); }
-    BOOL            IsSameInstance( const LineInfo& rLineInfo ) const { return( mpImplLineInfo == rLineInfo.mpImplLineInfo ); }
+    sal_Bool            operator==( const LineInfo& rLineInfo ) const;
+    sal_Bool            operator!=( const LineInfo& rLineInfo ) const { return !(LineInfo::operator==( rLineInfo ) ); }
+    sal_Bool            IsSameInstance( const LineInfo& rLineInfo ) const { return( mpImplLineInfo == rLineInfo.mpImplLineInfo ); }
 
     void            SetStyle( LineStyle eStyle );
     LineStyle       GetStyle() const { return mpImplLineInfo->meStyle; }
@@ -93,14 +95,14 @@ public:
     void            SetWidth( long nWidth );
     long            GetWidth() const { return mpImplLineInfo->mnWidth; }
 
-    void            SetDashCount( USHORT nDashCount );
-    USHORT          GetDashCount() const { return mpImplLineInfo->mnDashCount; }
+    void            SetDashCount( sal_uInt16 nDashCount );
+    sal_uInt16          GetDashCount() const { return mpImplLineInfo->mnDashCount; }
 
     void            SetDashLen( long nDashLen );
     long            GetDashLen() const { return mpImplLineInfo->mnDashLen; }
 
-    void            SetDotCount( USHORT nDotCount );
-    USHORT          GetDotCount() const { return mpImplLineInfo->mnDotCount; }
+    void            SetDotCount( sal_uInt16 nDotCount );
+    sal_uInt16          GetDotCount() const { return mpImplLineInfo->mnDotCount; }
 
     void            SetDotLen( long nDotLen );
     long            GetDotLen() const { return mpImplLineInfo->mnDotLen; }
@@ -111,7 +113,7 @@ public:
     void SetLineJoin(basegfx::B2DLineJoin eLineJoin);
     basegfx::B2DLineJoin GetLineJoin() const { return mpImplLineInfo->meLineJoin; }
 
-    BOOL            IsDefault() const { return( !mpImplLineInfo->mnWidth && ( LINE_SOLID == mpImplLineInfo->meStyle ) ); }
+    sal_Bool            IsDefault() const { return( !mpImplLineInfo->mnWidth && ( LINE_SOLID == mpImplLineInfo->meStyle ) ); }
 
     friend VCL_DLLPUBLIC SvStream& operator>>( SvStream& rIStm, LineInfo& rLineInfo );
     friend VCL_DLLPUBLIC SvStream& operator<<( SvStream& rOStm, const LineInfo& rLineInfo );

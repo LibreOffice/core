@@ -50,6 +50,9 @@ bool WinSalGraphics::supportsOperation( OutDevSupportType eType ) const
     case OutDevSupport_TransparentRect:
         bRet = mbVirDev || mbWindow;
         break;
+    case OutDevSupport_B2DClip:
+        bRet = true;
+        break;
     case OutDevSupport_B2DDraw:
         bRet = bAllowForTest;
     default: break;
@@ -146,7 +149,7 @@ void ImplCalcOutSideRgn( const RECT& rSrcRect,
 void WinSalGraphics::copyArea( long nDestX, long nDestY,
                             long nSrcX, long nSrcY,
                             long nSrcWidth, long nSrcHeight,
-                            USHORT nFlags )
+                            sal_uInt16 nFlags )
 {
     bool    bRestoreClipRgn = false;
     HRGN    hOldClipRgn = 0;
@@ -343,14 +346,14 @@ void WinSalGraphics::copyArea( long nDestX, long nDestY,
 
 void ImplDrawBitmap( HDC hDC,
                      const SalTwoRect* pPosAry, const WinSalBitmap& rSalBitmap,
-                     BOOL bPrinter, int nDrawMode )
+                     sal_Bool bPrinter, int nDrawMode )
 {
     if( hDC )
     {
         HGLOBAL     hDrawDIB;
         HBITMAP     hDrawDDB = rSalBitmap.ImplGethDDB();
         WinSalBitmap*   pTmpSalBmp = NULL;
-        BOOL        bPrintDDB = ( bPrinter && hDrawDDB );
+        sal_Bool        bPrintDDB = ( bPrinter && hDrawDDB );
 
         if( bPrintDDB )
         {
@@ -384,7 +387,7 @@ void ImplDrawBitmap( HDC hDC,
             HDC         hBmpDC = ImplGetCachedDC( CACHED_HDC_DRAW, hDrawDDB );
             COLORREF    nOldBkColor = RGB(0xFF,0xFF,0xFF);
             COLORREF    nOldTextColor = RGB(0,0,0);
-            BOOL        bMono = ( rSalBitmap.GetBitCount() == 1 );
+            sal_Bool        bMono = ( rSalBitmap.GetBitCount() == 1 );
 
             if( bMono )
             {
@@ -666,7 +669,7 @@ SalBitmap* WinSalGraphics::getBitmap( long nX, long nY, long nDX, long nDY )
     HDC     hDC = mhDC;
     HBITMAP hBmpBitmap = CreateCompatibleBitmap( hDC, nDX, nDY );
     HDC     hBmpDC = ImplGetCachedDC( CACHED_HDC_1, hBmpBitmap );
-    BOOL    bRet;
+    sal_Bool    bRet;
     DWORD err = 0;
 
     bRet = BitBlt( hBmpDC, 0, 0, (int) nDX, (int) nDY, hDC, (int) nX, (int) nY, SRCCOPY ) ? TRUE : FALSE;
@@ -753,7 +756,7 @@ void WinSalGraphics::invert( long nX, long nY, long nWidth, long nHeight, SalInv
 
 // -----------------------------------------------------------------------
 
-void WinSalGraphics::invert( ULONG nPoints, const SalPoint* pPtAry, SalInvert nSalFlags )
+void WinSalGraphics::invert( sal_uLong nPoints, const SalPoint* pPtAry, SalInvert nSalFlags )
 {
     HPEN        hPen;
     HPEN        hOldPen;

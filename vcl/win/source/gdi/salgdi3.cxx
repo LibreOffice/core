@@ -128,7 +128,7 @@ private:
     FontAttrMap     aFontAttributes;
     rtl::OUString   aCacheFileName;
     String          aBaseURL;
-    BOOL            bModified;
+    sal_Bool            bModified;
 
 protected:
     String  OptimizeURL( const String& rURL ) const;
@@ -533,9 +533,10 @@ bool WinGlyphFallbackSubstititution::HasMissingChars( const ImplFontData* pFace,
     // avoid fonts with unknown CMAP subtables for glyph fallback
     if( !pCharMap || pCharMap->IsDefaultMap() )
         return false;
+        pCharMap->AddReference();
 
     int nMatchCount = 0;
-    // static const int nMaxMatchCount = 1; // TODO: check more missing characters?
+    // static const int nMaxMatchCount = 1; // TODO: tolerate more missing characters?
     const sal_Int32 nStrLen = rMissingChars.getLength();
     for( sal_Int32 nStrIdx = 0; nStrIdx < nStrLen; ++nStrIdx )
     {
@@ -543,6 +544,7 @@ bool WinGlyphFallbackSubstititution::HasMissingChars( const ImplFontData* pFace,
         nMatchCount += pCharMap->HasChar( uChar );
         break; // for now
     }
+        pCharMap->DeReference();
 
     const bool bHasMatches = (nMatchCount > 0);
     return bHasMatches;
@@ -644,7 +646,7 @@ static CharSet ImplCharSetToSal( BYTE nCharSet )
 
     if ( nCharSet == OEM_CHARSET )
     {
-        UINT nCP = (USHORT)GetOEMCP();
+        UINT nCP = (sal_uInt16)GetOEMCP();
         switch ( nCP )
         {
             // It is unclear why these two (undefined?) code page numbers are
@@ -1093,7 +1095,7 @@ void ImplSalLogFontToFontW( HDC hDC, const LOGFONTW& rLogFont, Font& rFont )
 // =======================================================================
 
 ImplWinFontData::ImplWinFontData( const ImplDevFontAttributes& rDFS,
-    int nHeight, WIN_BYTE eWinCharSet, WIN_BYTE nPitchAndFamily )
+    int nHeight, BYTE eWinCharSet, BYTE nPitchAndFamily )
 :   ImplFontData( rDFS, 0 ),
     meWinCharSet( eWinCharSet ),
     mnPitchAndFamily( nPitchAndFamily ),
@@ -1201,11 +1203,10 @@ bool ImplWinFontData::IsGSUBstituted( sal_UCS4 cChar ) const
 
 // -----------------------------------------------------------------------
 
-ImplFontCharMap* ImplWinFontData::GetImplFontCharMap() const
+const ImplFontCharMap* ImplWinFontData::GetImplFontCharMap() const
 {
     if( !mpUnicodeMap )
         return NULL;
-    mpUnicodeMap->AddReference();
     return mpUnicodeMap;
 }
 
@@ -1317,6 +1318,7 @@ void ImplWinFontData::ReadCmapTable( HDC hDC ) const
 
     if( !mpUnicodeMap )
         mpUnicodeMap = ImplFontCharMap::GetDefaultMap( bIsSymbolFont );
+    mpUnicodeMap->AddReference();
 }
 
 void ImplWinFontData::GetFontCapabilities( HDC hDC ) const
@@ -1383,8 +1385,6 @@ int CALLBACK SalEnumQueryFontProcExW( const ENUMLOGFONTEXW*,
 
 bool ImplIsFontAvailable( HDC hDC, const UniString& rName )
 {
-    bool bAvailable = false;
-
     // Test, if Font available
     LOGFONTW aLogFont;
     memset( &aLogFont, 0, sizeof( aLogFont ) );
@@ -1396,6 +1396,7 @@ bool ImplIsFontAvailable( HDC hDC, const UniString& rName )
     memcpy( aLogFont.lfFaceName, rName.GetBuffer(), nNameLen*sizeof( wchar_t ) );
     aLogFont.lfFaceName[nNameLen] = 0;
 
+    bool bAvailable = false;
     EnumFontFamiliesExW( hDC, &aLogFont, (FONTENUMPROCW)SalEnumQueryFontProcExW,
                          (LPARAM)(void*)&bAvailable, 0 );
 
@@ -1550,7 +1551,7 @@ HFONT WinSalGraphics::ImplDoSetFont( ImplFontSelectData* i_pFont, float& o_rFont
     return hNewFont;
 }
 
-USHORT WinSalGraphics::SetFont( ImplFontSelectData* pFont, int nFallbackLevel )
+sal_uInt16 WinSalGraphics::SetFont( ImplFontSelectData* pFont, int nFallbackLevel )
 {
     // return early if there is no new font
     if( !pFont )
@@ -1737,12 +1738,12 @@ static void ImplGetAllFontCharSets( WinSalGraphics* pData )
 
 static void ImplAddKerningPairs( WinSalGraphics* pData )
 {
-    ULONG nPairs = ::GetKerningPairsA( pData->mhDC, 0, NULL );
+    sal_uLong nPairs = ::GetKerningPairsA( pData->mhDC, 0, NULL );
     if ( !nPairs )
         return;
 
     CHARSETINFO aInfo;
-    if ( !TranslateCharsetInfo( (DWORD*)(ULONG)GetTextCharset( pData->mhDC ), &aInfo, TCI_SRCCHARSET ) )
+    if ( !TranslateCharsetInfo( (DWORD*)(sal_uLong)GetTextCharset( pData->mhDC ), &aInfo, TCI_SRCCHARSET ) )
         return;
 
     if ( !pData->mpFontKernPairs )
@@ -1757,15 +1758,15 @@ static void ImplAddKerningPairs( WinSalGraphics* pData )
     }
 
     UINT            nCP = aInfo.ciACP;
-    ULONG           nOldPairs = pData->mnFontKernPairCount;
+    sal_uLong           nOldPairs = pData->mnFontKernPairCount;
     KERNINGPAIR*    pTempPair = pData->mpFontKernPairs+pData->mnFontKernPairCount;
     nPairs = ::GetKerningPairsA( pData->mhDC, nPairs, pTempPair );
-    for ( ULONG i = 0; i < nPairs; i++ )
+    for ( sal_uLong i = 0; i < nPairs; i++ )
     {
         unsigned char   aBuf[2];
         wchar_t         nChar;
         int             nLen;
-        BOOL            bAdd = TRUE;
+        sal_Bool            bAdd = TRUE;
 
         // None-ASCII?, then we must convert the char
         if ( (pTempPair->wFirst > 125) || (pTempPair->wFirst == 92) )
@@ -1809,7 +1810,7 @@ static void ImplAddKerningPairs( WinSalGraphics* pData )
 
         // TODO: get rid of linear search!
         KERNINGPAIR* pTempPair2 = pData->mpFontKernPairs;
-        for ( ULONG j = 0; j < nOldPairs; j++ )
+        for ( sal_uLong j = 0; j < nOldPairs; j++ )
         {
             if ( (pTempPair2->wFirst == pTempPair->wFirst) &&
                  (pTempPair2->wSecond == pTempPair->wSecond) )
@@ -1834,7 +1835,7 @@ static void ImplAddKerningPairs( WinSalGraphics* pData )
 
 // -----------------------------------------------------------------------
 
-ULONG WinSalGraphics::GetKernPairs( ULONG nPairs, ImplKernPairData* pKernPairs )
+sal_uLong WinSalGraphics::GetKernPairs( sal_uLong nPairs, ImplKernPairData* pKernPairs )
 {
     DBG_ASSERT( sizeof( KERNINGPAIR ) == sizeof( ImplKernPairData ),
                 "WinSalGraphics::GetKernPairs(): KERNINGPAIR != ImplKernPairData" );
@@ -1852,17 +1853,17 @@ ULONG WinSalGraphics::GetKernPairs( ULONG nPairs, ImplKernPairData* pKernPairs )
         int nCount = ::GetKerningPairsW( mhDC, 0, NULL );
         if( nCount )
         {
-#ifdef GCP_KERN_HACK
+            #ifdef GCP_KERN_HACK
             pPairs = new KERNINGPAIR[ nCount+1 ];
             mpFontKernPairs = pPairs;
             mnFontKernPairCount = nCount;
             ::GetKerningPairsW( mhDC, nCount, pPairs );
-#else // GCP_KERN_HACK
+            #else // GCP_KERN_HACK
             pPairs = pKernPairs;
             nCount = (nCount < nPairs) : nCount : nPairs;
             ::GetKerningPairsW( mhDC, nCount, pPairs );
             return nCount;
-#endif // GCP_KERN_HACK
+            #endif // GCP_KERN_HACK
         }
 
         mbFontKernInit = FALSE;
@@ -1886,7 +1887,7 @@ ULONG WinSalGraphics::GetKernPairs( ULONG nPairs, ImplKernPairData* pKernPairs )
 
 // -----------------------------------------------------------------------
 
-ImplFontCharMap* WinSalGraphics::GetImplFontCharMap() const
+const ImplFontCharMap* WinSalGraphics::GetImplFontCharMap() const
 {
     if( !mpWinFontData[0] )
         return ImplFontCharMap::GetDefaultMap();
@@ -2262,8 +2263,8 @@ bool WinSalGraphics::AddTempDevFont( ImplDevFontList* pFontList,
     */
 
     ImplWinFontData* pFontData = new ImplWinFontData( aDFA, 0,
-        sal::static_int_cast<WIN_BYTE>(nPreferedCharSet),
-        sal::static_int_cast<WIN_BYTE>(TMPF_VECTOR|TMPF_TRUETYPE) );
+        sal::static_int_cast<BYTE>(nPreferedCharSet),
+        sal::static_int_cast<BYTE>(TMPF_VECTOR|TMPF_TRUETYPE) );
     pFontData->SetFontId( reinterpret_cast<sal_IntPtr>(pFontData) );
     pFontList->Add( pFontData );
     return true;
@@ -2374,7 +2375,7 @@ void WinSalGraphics::GetDevFontSubstList( OutputDevice* )
 
 // -----------------------------------------------------------------------
 
-BOOL WinSalGraphics::GetGlyphBoundRect( long nIndex, Rectangle& rRect )
+sal_Bool WinSalGraphics::GetGlyphBoundRect( long nIndex, Rectangle& rRect )
 {
     HDC hDC = mhDC;
 
@@ -2391,9 +2392,7 @@ BOOL WinSalGraphics::GetGlyphBoundRect( long nIndex, Rectangle& rRect )
     GLYPHMETRICS aGM;
     aGM.gmptGlyphOrigin.x = aGM.gmptGlyphOrigin.y = 0;
     aGM.gmBlackBoxX = aGM.gmBlackBoxY = 0;
-    DWORD nSize = GDI_ERROR;
-    nSize = ::GetGlyphOutlineW( hDC, nIndex, nGGOFlags, &aGM, 0, NULL, &aMat );
-
+    DWORD nSize = ::GetGlyphOutlineW( hDC, nIndex, nGGOFlags, &aGM, 0, NULL, &aMat );
     if( nSize == GDI_ERROR )
         return false;
 
@@ -2408,12 +2407,11 @@ BOOL WinSalGraphics::GetGlyphBoundRect( long nIndex, Rectangle& rRect )
 
 // -----------------------------------------------------------------------
 
-BOOL WinSalGraphics::GetGlyphOutline( long nIndex,
+sal_Bool WinSalGraphics::GetGlyphOutline( long nIndex,
     ::basegfx::B2DPolyPolygon& rB2DPolyPoly )
 {
     rB2DPolyPoly.clear();
 
-    BOOL bRet = FALSE;
     HDC  hDC = mhDC;
 
     // use unity matrix
@@ -2427,163 +2425,159 @@ BOOL WinSalGraphics::GetGlyphOutline( long nIndex,
     nIndex &= GF_IDXMASK;
 
     GLYPHMETRICS aGlyphMetrics;
-    DWORD nSize1 = GDI_ERROR;
-    nSize1 = ::GetGlyphOutlineW( hDC, nIndex, nGGOFlags, &aGlyphMetrics, 0, NULL, &aMat );
-
+    const DWORD nSize1 = ::GetGlyphOutlineW( hDC, nIndex, nGGOFlags, &aGlyphMetrics, 0, NULL, &aMat );
     if( !nSize1 )       // blank glyphs are ok
-        bRet = TRUE;
-    else if( nSize1 != GDI_ERROR )
+        return TRUE;
+    else if( nSize1 == GDI_ERROR )
+        return FALSE;
+
+    BYTE*   pData = new BYTE[ nSize1 ];
+    const DWORD nSize2 = ::GetGlyphOutlineW( hDC, nIndex, nGGOFlags,
+              &aGlyphMetrics, nSize1, pData, &aMat );
+
+    if( nSize1 != nSize2 )
+        return FALSE;
+
+    // TODO: avoid tools polygon by creating B2DPolygon directly
+    int     nPtSize = 512;
+    Point*  pPoints = new Point[ nPtSize ];
+    BYTE*   pFlags = new BYTE[ nPtSize ];
+
+    TTPOLYGONHEADER* pHeader = (TTPOLYGONHEADER*)pData;
+    while( (BYTE*)pHeader < pData+nSize2 )
     {
-        BYTE*   pData = new BYTE[ nSize1 ];
-        DWORD   nSize2;
-        nSize2 = ::GetGlyphOutlineW( hDC, nIndex, nGGOFlags,
-                                     &aGlyphMetrics, nSize1, pData, &aMat );
+        // only outline data is interesting
+        if( pHeader->dwType != TT_POLYGON_TYPE )
+            break;
 
-        if( nSize1 == nSize2 )
+        // get start point; next start points are end points
+        // of previous segment
+        sal_uInt16 nPnt = 0;
+
+        long nX = IntTimes256FromFixed( pHeader->pfxStart.x );
+        long nY = IntTimes256FromFixed( pHeader->pfxStart.y );
+        pPoints[ nPnt ] = Point( nX, nY );
+        pFlags[ nPnt++ ] = POLY_NORMAL;
+
+        bool bHasOfflinePoints = false;
+        TTPOLYCURVE* pCurve = (TTPOLYCURVE*)( pHeader + 1 );
+        pHeader = (TTPOLYGONHEADER*)( (BYTE*)pHeader + pHeader->cb );
+        while( (BYTE*)pCurve < (BYTE*)pHeader )
         {
-            bRet = TRUE;
-
-            int     nPtSize = 512;
-            Point*  pPoints = new Point[ nPtSize ];
-            BYTE*   pFlags = new BYTE[ nPtSize ];
-
-            TTPOLYGONHEADER* pHeader = (TTPOLYGONHEADER*)pData;
-            while( (BYTE*)pHeader < pData+nSize2 )
+            int nNeededSize = nPnt + 16 + 3 * pCurve->cpfx;
+            if( nPtSize < nNeededSize )
             {
-                // only outline data is interesting
-                if( pHeader->dwType != TT_POLYGON_TYPE )
-                    break;
-
-                // get start point; next start points are end points
-                // of previous segment
-                USHORT nPnt = 0;
-
-                long nX = IntTimes256FromFixed( pHeader->pfxStart.x );
-                long nY = IntTimes256FromFixed( pHeader->pfxStart.y );
-                pPoints[ nPnt ] = Point( nX, nY );
-                pFlags[ nPnt++ ] = POLY_NORMAL;
-
-                bool bHasOfflinePoints = false;
-                TTPOLYCURVE* pCurve = (TTPOLYCURVE*)( pHeader + 1 );
-                pHeader = (TTPOLYGONHEADER*)( (BYTE*)pHeader + pHeader->cb );
-                while( (BYTE*)pCurve < (BYTE*)pHeader )
+                Point* pOldPoints = pPoints;
+                BYTE* pOldFlags = pFlags;
+                nPtSize = 2 * nNeededSize;
+                pPoints = new Point[ nPtSize ];
+                pFlags = new BYTE[ nPtSize ];
+                for( sal_uInt16 i = 0; i < nPnt; ++i )
                 {
-                    int nNeededSize = nPnt + 16 + 3 * pCurve->cpfx;
-                    if( nPtSize < nNeededSize )
-                    {
-                        Point* pOldPoints = pPoints;
-                        BYTE* pOldFlags = pFlags;
-                        nPtSize = 2 * nNeededSize;
-                        pPoints = new Point[ nPtSize ];
-                        pFlags = new BYTE[ nPtSize ];
-                        for( USHORT i = 0; i < nPnt; ++i )
-                        {
-                            pPoints[ i ] = pOldPoints[ i ];
-                            pFlags[ i ] = pOldFlags[ i ];
-                        }
-                        delete[] pOldPoints;
-                        delete[] pOldFlags;
-                    }
-
-                    int i = 0;
-                    if( TT_PRIM_LINE == pCurve->wType )
-                    {
-                        while( i < pCurve->cpfx )
-                        {
-                            nX = IntTimes256FromFixed( pCurve->apfx[ i ].x );
-                            nY = IntTimes256FromFixed( pCurve->apfx[ i ].y );
-                            ++i;
-                            pPoints[ nPnt ] = Point( nX, nY );
-                            pFlags[ nPnt ] = POLY_NORMAL;
-                            ++nPnt;
-                        }
-                    }
-                    else if( TT_PRIM_QSPLINE == pCurve->wType )
-                    {
-                        bHasOfflinePoints = true;
-                        while( i < pCurve->cpfx )
-                        {
-                            // get control point of quadratic bezier spline
-                            nX = IntTimes256FromFixed( pCurve->apfx[ i ].x );
-                            nY = IntTimes256FromFixed( pCurve->apfx[ i ].y );
-                            ++i;
-                            Point aControlP( nX, nY );
-
-                            // calculate first cubic control point
-                            // P0 = 1/3 * (PBeg + 2 * PQControl)
-                            nX = pPoints[ nPnt-1 ].X() + 2 * aControlP.X();
-                            nY = pPoints[ nPnt-1 ].Y() + 2 * aControlP.Y();
-                            pPoints[ nPnt+0 ] = Point( (2*nX+3)/6, (2*nY+3)/6 );
-                            pFlags[ nPnt+0 ] = POLY_CONTROL;
-
-                            // calculate endpoint of segment
-                            nX = IntTimes256FromFixed( pCurve->apfx[ i ].x );
-                            nY = IntTimes256FromFixed( pCurve->apfx[ i ].y );
-
-                            if ( i+1 >= pCurve->cpfx )
-                            {
-                                // endpoint is either last point in segment => advance
-                                ++i;
-                            }
-                            else
-                            {
-                                // or endpoint is the middle of two control points
-                                nX += IntTimes256FromFixed( pCurve->apfx[ i-1 ].x );
-                                nY += IntTimes256FromFixed( pCurve->apfx[ i-1 ].y );
-                                nX = (nX + 1) / 2;
-                                nY = (nY + 1) / 2;
-                                // no need to advance, because the current point
-                                // is the control point in next bezier spline
-                            }
-
-                            pPoints[ nPnt+2 ] = Point( nX, nY );
-                            pFlags[ nPnt+2 ] = POLY_NORMAL;
-
-                            // calculate second cubic control point
-                            // P1 = 1/3 * (PEnd + 2 * PQControl)
-                            nX = pPoints[ nPnt+2 ].X() + 2 * aControlP.X();
-                            nY = pPoints[ nPnt+2 ].Y() + 2 * aControlP.Y();
-                            pPoints[ nPnt+1 ] = Point( (2*nX+3)/6, (2*nY+3)/6 );
-                            pFlags[ nPnt+1 ] = POLY_CONTROL;
-
-                            nPnt += 3;
-                        }
-                    }
-
-                    // next curve segment
-                    pCurve = (TTPOLYCURVE*)&pCurve->apfx[ i ];
+                    pPoints[ i ] = pOldPoints[ i ];
+                    pFlags[ i ] = pOldFlags[ i ];
                 }
-
-                // end point is start point for closed contour
-                // disabled, because Polygon class closes the contour itself
-                // pPoints[nPnt++] = pPoints[0];
-                // #i35928#
-                // Added again, but add only when not yet closed
-                if(pPoints[nPnt - 1] != pPoints[0])
-                {
-                    if( bHasOfflinePoints )
-                        pFlags[nPnt] = pFlags[0];
-
-                    pPoints[nPnt++] = pPoints[0];
-                }
-
-                // convert y-coordinates W32 -> VCL
-                for( int i = 0; i < nPnt; ++i )
-                    pPoints[i].Y() = -pPoints[i].Y();
-
-                // insert into polypolygon
-                Polygon aPoly( nPnt, pPoints, (bHasOfflinePoints ? pFlags : NULL) );
-                // convert to B2DPolyPolygon
-                // TODO: get rid of the intermediate PolyPolygon
-                rB2DPolyPoly.append( aPoly.getB2DPolygon() );
+                delete[] pOldPoints;
+                delete[] pOldFlags;
             }
 
-            delete[] pPoints;
-            delete[] pFlags;
+            int i = 0;
+            if( TT_PRIM_LINE == pCurve->wType )
+            {
+                while( i < pCurve->cpfx )
+                {
+                    nX = IntTimes256FromFixed( pCurve->apfx[ i ].x );
+                    nY = IntTimes256FromFixed( pCurve->apfx[ i ].y );
+                    ++i;
+                    pPoints[ nPnt ] = Point( nX, nY );
+                    pFlags[ nPnt ] = POLY_NORMAL;
+                    ++nPnt;
+                }
+            }
+            else if( TT_PRIM_QSPLINE == pCurve->wType )
+            {
+                bHasOfflinePoints = true;
+                while( i < pCurve->cpfx )
+                {
+                    // get control point of quadratic bezier spline
+                    nX = IntTimes256FromFixed( pCurve->apfx[ i ].x );
+                    nY = IntTimes256FromFixed( pCurve->apfx[ i ].y );
+                    ++i;
+                    Point aControlP( nX, nY );
+
+                    // calculate first cubic control point
+                    // P0 = 1/3 * (PBeg + 2 * PQControl)
+                    nX = pPoints[ nPnt-1 ].X() + 2 * aControlP.X();
+                    nY = pPoints[ nPnt-1 ].Y() + 2 * aControlP.Y();
+                    pPoints[ nPnt+0 ] = Point( (2*nX+3)/6, (2*nY+3)/6 );
+                    pFlags[ nPnt+0 ] = POLY_CONTROL;
+
+                    // calculate endpoint of segment
+                    nX = IntTimes256FromFixed( pCurve->apfx[ i ].x );
+                    nY = IntTimes256FromFixed( pCurve->apfx[ i ].y );
+
+                    if ( i+1 >= pCurve->cpfx )
+                    {
+                        // endpoint is either last point in segment => advance
+                        ++i;
+                    }
+                    else
+                    {
+                        // or endpoint is the middle of two control points
+                        nX += IntTimes256FromFixed( pCurve->apfx[ i-1 ].x );
+                        nY += IntTimes256FromFixed( pCurve->apfx[ i-1 ].y );
+                        nX = (nX + 1) / 2;
+                        nY = (nY + 1) / 2;
+                        // no need to advance, because the current point
+                        // is the control point in next bezier spline
+                    }
+
+                    pPoints[ nPnt+2 ] = Point( nX, nY );
+                    pFlags[ nPnt+2 ] = POLY_NORMAL;
+
+                    // calculate second cubic control point
+                    // P1 = 1/3 * (PEnd + 2 * PQControl)
+                    nX = pPoints[ nPnt+2 ].X() + 2 * aControlP.X();
+                    nY = pPoints[ nPnt+2 ].Y() + 2 * aControlP.Y();
+                    pPoints[ nPnt+1 ] = Point( (2*nX+3)/6, (2*nY+3)/6 );
+                    pFlags[ nPnt+1 ] = POLY_CONTROL;
+
+                    nPnt += 3;
+                }
+            }
+
+            // next curve segment
+            pCurve = (TTPOLYCURVE*)&pCurve->apfx[ i ];
         }
 
-        delete[] pData;
+        // end point is start point for closed contour
+        // disabled, because Polygon class closes the contour itself
+        // pPoints[nPnt++] = pPoints[0];
+        // #i35928#
+        // Added again, but add only when not yet closed
+        if(pPoints[nPnt - 1] != pPoints[0])
+        {
+            if( bHasOfflinePoints )
+                pFlags[nPnt] = pFlags[0];
+
+            pPoints[nPnt++] = pPoints[0];
+        }
+
+        // convert y-coordinates W32 -> VCL
+        for( int i = 0; i < nPnt; ++i )
+            pPoints[i].Y() = -pPoints[i].Y();
+
+        // insert into polypolygon
+        Polygon aPoly( nPnt, pPoints, (bHasOfflinePoints ? pFlags : NULL) );
+        // convert to B2DPolyPolygon
+        // TODO: get rid of the intermediate PolyPolygon
+        rB2DPolyPoly.append( aPoly.getB2DPolygon() );
     }
+
+    delete[] pPoints;
+    delete[] pFlags;
+
+    delete[] pData;
 
     // rescaling needed for the PolyPolygon conversion
     if( rB2DPolyPoly.count() )
@@ -2592,7 +2586,7 @@ BOOL WinSalGraphics::GetGlyphOutline( long nIndex,
         rB2DPolyPoly.transform(basegfx::tools::createScaleB2DHomMatrix(fFactor, fFactor));
     }
 
-    return bRet;
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------
@@ -2655,7 +2649,7 @@ int ScopedTrueTypeFont::open(void * pBuffer, sal_uInt32 nLen,
     return OpenTTFontBuffer(pBuffer, nLen, nFaceNum, &m_pFont);
 }
 
-BOOL WinSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
+sal_Bool WinSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
     const ImplFontData* pFont, long* pGlyphIDs, sal_uInt8* pEncoding,
     sal_Int32* pGlyphWidths, int nGlyphCount, FontSubsetInfo& rInfo )
 {
@@ -2673,8 +2667,6 @@ BOOL WinSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
     ImplDoSetFont( &aIFSD, fScale, hOldFont );
 
     ImplWinFontData* pWinFontData = (ImplWinFontData*)aIFSD.mpFontData;
-    pWinFontData->UpdateFromHDC( mhDC );
-/*const*/ ImplFontCharMap* pImplFontCharMap = pWinFontData->GetImplFontCharMap();
 
 #if OSL_DEBUG_LEVEL > 1
     // get font metrics
@@ -2697,6 +2689,10 @@ BOOL WinSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
     const RawFontData aRawCffData( mhDC, nCffTag );
     if( aRawCffData.get() )
     {
+        pWinFontData->UpdateFromHDC( mhDC );
+        const ImplFontCharMap* pCharMap = pWinFontData->GetImplFontCharMap();
+        pCharMap->AddReference();
+
         long nRealGlyphIds[ 256 ];
         for( int i = 0; i < nGlyphCount; ++i )
         {
@@ -2704,12 +2700,14 @@ BOOL WinSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
             // TODO: use GDI's GetGlyphIndices instead? Does it handle GSUB properly?
             sal_uInt32 nGlyphIdx = pGlyphIDs[i] & GF_IDXMASK;
             if( pGlyphIDs[i] & GF_ISCHAR ) // remaining pseudo-glyphs need to be translated
-                nGlyphIdx = pImplFontCharMap->GetGlyphIndex( nGlyphIdx );
+                nGlyphIdx = pCharMap->GetGlyphIndex( nGlyphIdx );
             if( (pGlyphIDs[i] & (GF_ROTMASK|GF_GSUB)) != 0) // TODO: vertical substitution
                 {/*####*/}
 
             nRealGlyphIds[i] = nGlyphIdx;
         }
+
+        pCharMap->DeReference(); // TODO: and and use a RAII object
 
         // provide a font subset from the CFF-table
         FILE* pOutFile = fopen( aToFile.GetBuffer(), "wb" );
@@ -2748,7 +2746,7 @@ BOOL WinSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
     // subset TTF-glyphs and get their properties
     // take care that subset fonts require the NotDef glyph in pos 0
     int nOrigCount = nGlyphCount;
-    USHORT    aShortIDs[ 256 ];
+    sal_uInt16    aShortIDs[ 256 ];
     sal_uInt8 aTempEncs[ 256 ];
 
     int nNotDef=-1, i;
@@ -2768,7 +2766,7 @@ BOOL WinSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
                 nGlyphIdx = ::MapChar( aSftTTF.get(), cChar, bVertical );
             }
         }
-        aShortIDs[i] = static_cast<USHORT>( nGlyphIdx );
+        aShortIDs[i] = static_cast<sal_uInt16>( nGlyphIdx );
         if( !nGlyphIdx )
             if( nNotDef < 0 )
                 nNotDef = i; // first NotDef glyph found
@@ -2839,7 +2837,7 @@ const void* WinSalGraphics::GetEmbedFontData( const ImplFontData* pFont,
         nFNLen--;
     if( nFNLen == 0 )
         *pDataLen = 0;
-    rInfo.m_aPSName     = String( reinterpret_cast<const sal_Unicode*>(aFaceName), sal::static_int_cast<USHORT>(nFNLen) );
+    rInfo.m_aPSName     = String( reinterpret_cast<const sal_Unicode*>(aFaceName), sal::static_int_cast<sal_uInt16>(nFNLen) );
     rInfo.m_nAscent     = +aTm.tmAscent;
     rInfo.m_nDescent    = -aTm.tmDescent;
     rInfo.m_aFontBBox   = Rectangle( Point( -aTm.tmOverhang, -aTm.tmDescent ),
@@ -2951,8 +2949,9 @@ void WinSalGraphics::GetGlyphWidths( const ImplFontData* pFont,
                 rUnicodeEnc.clear();
             }
             const ImplWinFontData* pWinFont = static_cast<const ImplWinFontData*>(pFont);
-            ImplFontCharMap* pMap = pWinFont->GetImplFontCharMap();
+            const ImplFontCharMap* pMap = pWinFont->GetImplFontCharMap();
             DBG_ASSERT( pMap && pMap->GetCharCount(), "no map" );
+            pMap->AddReference();
 
             int nCharCount = pMap->GetCharCount();
             sal_uInt32 nChar = pMap->GetFirstChar();
@@ -2968,6 +2967,8 @@ void WinSalGraphics::GetGlyphWidths( const ImplFontData* pFont,
                 }
                 nChar = pMap->GetNextChar( nChar );
             }
+
+            pMap->DeReference(); // TODO: and and use a RAII object
         }
     }
     else if( pFont->IsEmbeddable() )

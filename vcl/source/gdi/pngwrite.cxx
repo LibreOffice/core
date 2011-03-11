@@ -89,35 +89,35 @@ private:
     sal_Int32           mnCompLevel;
     sal_Int32           mnInterlaced;
     sal_uInt32          mnMaxChunkSize;
-    BOOL                mbStatus;
+    sal_Bool                mbStatus;
 
     BitmapReadAccess*   mpAccess;
     BitmapReadAccess*   mpMaskAccess;
     ZCodec*             mpZCodec;
 
-    BYTE*               mpDeflateInBuf;         // as big as the size of a scanline + alphachannel + 1
-    BYTE*               mpPreviousScan;         // as big as mpDeflateInBuf
-    BYTE*               mpCurrentScan;
-    ULONG               mnDeflateInSize;
+    sal_uInt8*              mpDeflateInBuf;         // as big as the size of a scanline + alphachannel + 1
+    sal_uInt8*              mpPreviousScan;         // as big as mpDeflateInBuf
+    sal_uInt8*              mpCurrentScan;
+    sal_uLong               mnDeflateInSize;
 
-    ULONG               mnWidth, mnHeight;
-    BYTE                mnBitsPerPixel;
-    BYTE                mnFilterType;           // 0 oder 4;
-    ULONG               mnBBP;                  // bytes per pixel ( needed for filtering )
-    BOOL                mbTrueAlpha;
-    ULONG               mnCRC;
+    sal_uLong               mnWidth, mnHeight;
+    sal_uInt8               mnBitsPerPixel;
+    sal_uInt8               mnFilterType;           // 0 oder 4;
+    sal_uLong               mnBBP;                  // bytes per pixel ( needed for filtering )
+    sal_Bool                mbTrueAlpha;
+    sal_uLong               mnCRC;
     long                mnChunkDatSize;
-    ULONG               mnLastPercent;
+    sal_uLong               mnLastPercent;
 
     void                ImplWritepHYs( const BitmapEx& rBitmapEx );
     void                ImplWriteIDAT();
-    ULONG               ImplGetFilter( ULONG nY, ULONG nXStart=0, ULONG nXAdd=1 );
+    sal_uLong               ImplGetFilter( sal_uLong nY, sal_uLong nXStart=0, sal_uLong nXAdd=1 );
     void                ImplClearFirstScanline();
     void                ImplWriteTransparent();
-    BOOL                ImplWriteHeader();
+    sal_Bool                ImplWriteHeader();
     void                ImplWritePalette();
-    void                ImplOpenChunk( ULONG nChunkType );
-    void                ImplWriteChunk( BYTE nNumb );
+    void                ImplOpenChunk( sal_uLong nChunkType );
+    void                ImplWriteChunk( sal_uInt8 nNumb );
     void                ImplWriteChunk( sal_uInt32 nNumb );
     void                ImplWriteChunk( unsigned char* pSource, sal_uInt32 nDatSize );
     void                ImplCloseChunk( void ) const;
@@ -128,7 +128,7 @@ private:
 PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
     const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >* pFilterData ) :
         mnCompLevel     ( PNG_DEF_COMPRESSION ),
-        mbStatus        ( TRUE ),
+        mbStatus        ( sal_True ),
         mpAccess        ( NULL ),
         mpMaskAccess    ( NULL ),
         mpZCodec        ( new ZCodec( DEFAULT_IN_BUFSIZE, DEFAULT_OUT_BUFSIZE, MAX_MEM_USAGE ) ),
@@ -161,7 +161,7 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
                 }
             }
         }
-        mnBitsPerPixel = (BYTE)aBmp.GetBitCount();
+        mnBitsPerPixel = (sal_uInt8)aBmp.GetBitCount();
 
         if( rBmpEx.IsTransparent() )
         {
@@ -189,14 +189,14 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
                     aBmp.ReleaseAccess( mpAccess );
                 }
                 else
-                    mbStatus = FALSE;
+                    mbStatus = sal_False;
             }
             else
             {
-                mpAccess = aBmp.AcquireReadAccess();    // TRUE RGB with alphachannel
+                mpAccess = aBmp.AcquireReadAccess();    // sal_True RGB with alphachannel
                 if( mpAccess )
                 {
-                    if ( ( mbTrueAlpha = rBmpEx.IsAlpha() ) != FALSE )
+                    if ( ( mbTrueAlpha = rBmpEx.IsAlpha() ) != sal_False )
                     {
                         AlphaMask aMask( rBmpEx.GetAlpha() );
                         mpMaskAccess = aMask.AcquireReadAccess();
@@ -210,7 +210,7 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
                             aMask.ReleaseAccess( mpMaskAccess );
                         }
                         else
-                            mbStatus = FALSE;
+                            mbStatus = sal_False;
                     }
                     else
                     {
@@ -226,12 +226,12 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
                             aMask.ReleaseAccess( mpMaskAccess );
                         }
                         else
-                            mbStatus = FALSE;
+                            mbStatus = sal_False;
                     }
                     aBmp.ReleaseAccess( mpAccess );
                 }
                 else
-                    mbStatus = FALSE;
+                    mbStatus = sal_False;
             }
         }
         else
@@ -250,7 +250,7 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
                 aBmp.ReleaseAccess( mpAccess );
             }
             else
-                mbStatus = FALSE;
+                mbStatus = sal_False;
         }
         if ( mbStatus )
         {
@@ -309,7 +309,7 @@ std::vector< vcl::PNGWriter::ChunkData >& PNGWriterImpl::GetChunks()
 
 // ------------------------------------------------------------------------
 
-BOOL PNGWriterImpl::ImplWriteHeader()
+sal_Bool PNGWriterImpl::ImplWriteHeader()
 {
     ImplOpenChunk(PNGCHUNK_IHDR);
     ImplWriteChunk( sal_uInt32( mnWidth =  mpAccess->Width() ) );
@@ -317,13 +317,13 @@ BOOL PNGWriterImpl::ImplWriteHeader()
 
     if ( mnWidth && mnHeight && mnBitsPerPixel && mbStatus )
     {
-        BYTE nBitDepth = mnBitsPerPixel;
+        sal_uInt8 nBitDepth = mnBitsPerPixel;
         if ( mnBitsPerPixel <= 8 )
             mnFilterType = 0;
         else
             mnFilterType = 4;
 
-        BYTE nColorType = 2;                    // colortype:
+        sal_uInt8 nColorType = 2;                   // colortype:
                                                 // bit 0 -> palette is used
         if ( mpAccess->HasPalette() )           // bit 1 -> color is used
             nColorType |= 1;                    // bit 2 -> alpha channel is used
@@ -335,13 +335,13 @@ BOOL PNGWriterImpl::ImplWriteHeader()
 
         ImplWriteChunk( nBitDepth );
         ImplWriteChunk( nColorType );           // colortype
-        ImplWriteChunk((BYTE) 0 );              // compression type
-        ImplWriteChunk((BYTE) 0 );              // filter type - is not supported in this version
-        ImplWriteChunk((BYTE) mnInterlaced );   // interlace type
+        ImplWriteChunk((sal_uInt8) 0 );             // compression type
+        ImplWriteChunk((sal_uInt8) 0 );             // filter type - is not supported in this version
+        ImplWriteChunk((sal_uInt8) mnInterlaced );  // interlace type
         ImplCloseChunk();
     }
     else
-        mbStatus = FALSE;
+        mbStatus = sal_False;
     return mbStatus;
 }
 
@@ -349,13 +349,13 @@ BOOL PNGWriterImpl::ImplWriteHeader()
 
 void PNGWriterImpl::ImplWritePalette()
 {
-    const ULONG nCount = mpAccess->GetPaletteEntryCount();
-    BYTE*       pTempBuf = new BYTE[ nCount*3 ];
-    BYTE*       pTmp = pTempBuf;
+    const sal_uLong nCount = mpAccess->GetPaletteEntryCount();
+    sal_uInt8*      pTempBuf = new sal_uInt8[ nCount*3 ];
+    sal_uInt8*      pTmp = pTempBuf;
 
     ImplOpenChunk( PNGCHUNK_PLTE );
 
-    for ( USHORT i = 0; i < nCount; i++ )
+    for ( sal_uInt16 i = 0; i < nCount; i++ )
     {
         const BitmapColor& rColor = mpAccess->GetPaletteColor( i );
         *pTmp++ = rColor.GetRed();
@@ -371,12 +371,12 @@ void PNGWriterImpl::ImplWritePalette()
 
 void PNGWriterImpl::ImplWriteTransparent ()
 {
-    const ULONG nTransIndex = mpAccess->GetBestMatchingColor( BMP_COL_TRANS );
+    const sal_uLong nTransIndex = mpAccess->GetBestMatchingColor( BMP_COL_TRANS );
 
     ImplOpenChunk( PNGCHUNK_tRNS );
 
-    for ( ULONG n = 0UL; n <= nTransIndex; n++ )
-        ImplWriteChunk( ( nTransIndex == n ) ? (BYTE) 0x0 : (BYTE) 0xff );
+    for ( sal_uLong n = 0UL; n <= nTransIndex; n++ )
+        ImplWriteChunk( ( nTransIndex == n ) ? (sal_uInt8) 0x0 : (sal_uInt8) 0xff );
 
     ImplCloseChunk();
 }
@@ -415,12 +415,12 @@ void PNGWriterImpl::ImplWriteIDAT ()
 
     mnDeflateInSize = mnBBP * mnWidth + 1;
 
-    mpDeflateInBuf = new BYTE[ mnDeflateInSize ];
+    mpDeflateInBuf = new sal_uInt8[ mnDeflateInSize ];
 
     if ( mnFilterType )         // using filter type 4 we need memory for the scanline 3 times
     {
-        mpPreviousScan = new BYTE[ mnDeflateInSize ];
-        mpCurrentScan = new BYTE[ mnDeflateInSize ];
+        mpPreviousScan = new sal_uInt8[ mnDeflateInSize ];
+        mpCurrentScan = new sal_uInt8[ mnDeflateInSize ];
         ImplClearFirstScanline();
     }
     mpZCodec->BeginCompression( ZCODEC_PNG_DEFAULT + mnCompLevel );
@@ -428,13 +428,13 @@ void PNGWriterImpl::ImplWriteIDAT ()
     SvMemoryStream aOStm;
     if ( mnInterlaced == 0 )
     {
-        for ( ULONG nY = 0; nY < mnHeight; nY++ )
+        for ( sal_uLong nY = 0; nY < mnHeight; nY++ )
             mpZCodec->Write( aOStm, mpDeflateInBuf, ImplGetFilter( nY ) );
     }
     else
     {
         // interlace mode
-        ULONG nY;
+        sal_uLong nY;
         for ( nY = 0; nY < mnHeight; nY+=8 )                                                // pass 1
             mpZCodec->Write( aOStm, mpDeflateInBuf, ImplGetFilter ( nY, 0, 8 ) );
         ImplClearFirstScanline();
@@ -498,9 +498,9 @@ void PNGWriterImpl::ImplWriteIDAT ()
 // appends to the currently used pass
 // the complete size of scanline will be returned - in interlace mode zero is possible!
 
-ULONG PNGWriterImpl::ImplGetFilter ( ULONG nY, ULONG nXStart, ULONG nXAdd )
+sal_uLong PNGWriterImpl::ImplGetFilter ( sal_uLong nY, sal_uLong nXStart, sal_uLong nXAdd )
 {
-    BYTE* pDest;
+    sal_uInt8* pDest;
 
     if ( mnFilterType )
         pDest = mpCurrentScan;
@@ -517,16 +517,16 @@ ULONG PNGWriterImpl::ImplGetFilter ( ULONG nY, ULONG nXStart, ULONG nXAdd )
             {
                 case( 1 ):
                 {
-                    ULONG nX, nXIndex;
+                    sal_uLong nX, nXIndex;
                     for ( nX = nXStart, nXIndex = 0; nX < mnWidth; nX+=nXAdd, nXIndex++ )
                     {
-                        ULONG nShift = ( nXIndex & 7 ) ^ 7;
+                        sal_uLong nShift = ( nXIndex & 7 ) ^ 7;
                         if ( nShift == 7)
-                            *pDest = (BYTE)(mpAccess->GetPixel( nY, nX ) << nShift);
+                            *pDest = (sal_uInt8)(mpAccess->GetPixel( nY, nX ) << nShift);
                         else if  ( nShift == 0 )
-                            *pDest++ |= (BYTE) mpAccess->GetPixel( nY, nX ) << nShift;
+                            *pDest++ |= (sal_uInt8) mpAccess->GetPixel( nY, nX ) << nShift;
                         else
-                            *pDest |= (BYTE) mpAccess->GetPixel( nY, nX ) << nShift;
+                            *pDest |= (sal_uInt8) mpAccess->GetPixel( nY, nX ) << nShift;
                     }
                     if ( ( nXIndex & 7 ) != 0 ) pDest++;    // byte is not completely used, so the
                 }                                           // bufferpointer is to correct
@@ -534,13 +534,13 @@ ULONG PNGWriterImpl::ImplGetFilter ( ULONG nY, ULONG nXStart, ULONG nXAdd )
 
                 case( 4 ):
                 {
-                    ULONG nX, nXIndex;
+                    sal_uLong nX, nXIndex;
                     for ( nX = nXStart, nXIndex = 0; nX < mnWidth; nX+= nXAdd, nXIndex++ )
                     {
                         if( nXIndex & 1 )
-                            *pDest++ |= (BYTE) mpAccess->GetPixel( nY, nX );
+                            *pDest++ |= (sal_uInt8) mpAccess->GetPixel( nY, nX );
                         else
-                            *pDest = (BYTE) mpAccess->GetPixel( nY, nX ) << 4;
+                            *pDest = (sal_uInt8) mpAccess->GetPixel( nY, nX ) << 4;
                     }
                     if ( nXIndex & 1 ) pDest++;
                 }
@@ -548,13 +548,13 @@ ULONG PNGWriterImpl::ImplGetFilter ( ULONG nY, ULONG nXStart, ULONG nXAdd )
 
                 case( 8 ):
                 {
-                    for ( ULONG nX = nXStart; nX < mnWidth; nX+=nXAdd )
+                    for ( sal_uLong nX = nXStart; nX < mnWidth; nX+=nXAdd )
                         *pDest++ = mpAccess->GetPixel( nY, nX );
                 }
                 break;
 
                 default :
-                    mbStatus = FALSE;
+                    mbStatus = sal_False;
                 break;
             }
         }
@@ -564,7 +564,7 @@ ULONG PNGWriterImpl::ImplGetFilter ( ULONG nY, ULONG nXStart, ULONG nXAdd )
             {
                 if ( mbTrueAlpha )
                 {
-                    for ( ULONG nX = nXStart; nX < mnWidth; nX += nXAdd )
+                    for ( sal_uLong nX = nXStart; nX < mnWidth; nX += nXAdd )
                     {
                         const BitmapColor& rColor = mpAccess->GetPixel( nY, nX );
                         *pDest++ = rColor.GetRed();
@@ -577,7 +577,7 @@ ULONG PNGWriterImpl::ImplGetFilter ( ULONG nY, ULONG nXStart, ULONG nXAdd )
                 {
                     const BitmapColor aTrans( mpMaskAccess->GetBestMatchingColor( Color( COL_WHITE ) ) );
 
-                    for ( ULONG nX = nXStart; nX < mnWidth; nX+=nXAdd )
+                    for ( sal_uLong nX = nXStart; nX < mnWidth; nX+=nXAdd )
                     {
                         const BitmapColor& rColor = mpAccess->GetPixel( nY, nX );
                         *pDest++ = rColor.GetRed();
@@ -593,7 +593,7 @@ ULONG PNGWriterImpl::ImplGetFilter ( ULONG nY, ULONG nXStart, ULONG nXAdd )
             }
             else
             {
-                for ( ULONG nX = nXStart; nX < mnWidth; nX+=nXAdd )
+                for ( sal_uLong nX = nXStart; nX < mnWidth; nX+=nXAdd )
                 {
                     const BitmapColor& rColor = mpAccess->GetPixel( nY, nX );
                     *pDest++ = rColor.GetRed();
@@ -610,13 +610,13 @@ ULONG PNGWriterImpl::ImplGetFilter ( ULONG nY, ULONG nXStart, ULONG nXAdd )
         pDest = mpDeflateInBuf;
         *pDest++ = 4;                                   // filter type
 
-        ULONG na, nb, nc;
+        sal_uLong na, nb, nc;
         long  np, npa, npb, npc;
 
-        BYTE* p1 = mpCurrentScan + 1;                   // Current Pixel
-        BYTE* p2 = p1 - mnBBP;                          // left pixel
-        BYTE* p3 = mpPreviousScan;                      // upper pixel
-        BYTE* p4 = p3 - mnBBP;                          // upperleft Pixel;
+        sal_uInt8* p1 = mpCurrentScan + 1;                  // Current Pixel
+        sal_uInt8* p2 = p1 - mnBBP;                         // left pixel
+        sal_uInt8* p3 = mpPreviousScan;                     // upper pixel
+        sal_uInt8* p4 = p3 - mnBBP;                         // upperleft Pixel;
 
         while ( pDest < mpDeflateInBuf + mnDeflateInSize )
         {
@@ -640,9 +640,9 @@ ULONG PNGWriterImpl::ImplGetFilter ( ULONG nY, ULONG nXStart, ULONG nXAdd )
                 npb =-npb;
             if ( npc < 0 )
                 npc =-npc;
-            if ( ( npa <= npb ) && ( npa <= npc ) ) *pDest++ = *p1++ - (BYTE)na;
-            else if ( npb <= npc ) *pDest++ = *p1++ - (BYTE)nb;
-            else *pDest++ = *p1++ - (BYTE)nc;
+            if ( ( npa <= npb ) && ( npa <= npc ) ) *pDest++ = *p1++ - (sal_uInt8)na;
+            else if ( npb <= npc ) *pDest++ = *p1++ - (sal_uInt8)nb;
+            else *pDest++ = *p1++ - (sal_uInt8)nc;
             p4++;
             p2++;
         }
@@ -664,7 +664,7 @@ void PNGWriterImpl::ImplClearFirstScanline()
 
 // ------------------------------------------------------------------------
 
-void PNGWriterImpl::ImplOpenChunk ( ULONG nChunkType )
+void PNGWriterImpl::ImplOpenChunk ( sal_uLong nChunkType )
 {
     maChunkSeq.resize( maChunkSeq.size() + 1 );
     maChunkSeq.back().nType = nChunkType;
@@ -672,7 +672,7 @@ void PNGWriterImpl::ImplOpenChunk ( ULONG nChunkType )
 
 // ------------------------------------------------------------------------
 
-void PNGWriterImpl::ImplWriteChunk ( BYTE nSource )
+void PNGWriterImpl::ImplWriteChunk ( sal_uInt8 nSource )
 {
     maChunkSeq.back().aData.push_back( nSource );
 }

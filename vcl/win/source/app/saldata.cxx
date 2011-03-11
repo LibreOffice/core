@@ -55,7 +55,7 @@ rtl_TextEncoding ImplSalGetSystemEncoding()
 
 // -----------------------------------------------------------------------
 
-ByteString ImplSalGetWinAnsiString( const UniString& rStr, BOOL bFileName )
+ByteString ImplSalGetWinAnsiString( const UniString& rStr, sal_Bool bFileName )
 {
     rtl_TextEncoding eEncoding = ImplSalGetSystemEncoding();
     if ( bFileName )
@@ -118,28 +118,28 @@ int ImplSalWICompareAscii( const wchar_t* pStr1, const char* pStr2 )
 
 // =======================================================================
 
-WIN_BOOL ImplPostMessage( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
+BOOL ImplPostMessage( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
 {
     return PostMessageW( hWnd, nMsg, wParam, lParam );
 }
 
 // -----------------------------------------------------------------------
 
-WIN_BOOL ImplSendMessage( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
+BOOL ImplSendMessage( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
 {
     return SendMessageW( hWnd, nMsg, wParam, lParam );
 }
 
 // -----------------------------------------------------------------------
 
-WIN_BOOL ImplGetMessage( LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax )
+BOOL ImplGetMessage( LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax )
 {
     return GetMessageW( lpMsg, hWnd, wMsgFilterMin, wMsgFilterMax );
 }
 
 // -----------------------------------------------------------------------
 
-WIN_BOOL ImplPeekMessage( LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax, UINT wRemoveMsg )
+BOOL ImplPeekMessage( LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax, UINT wRemoveMsg )
 {
     return PeekMessageW( lpMsg, hWnd, wMsgFilterMin, wMsgFilterMax, wRemoveMsg );
 }

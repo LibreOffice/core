@@ -172,9 +172,9 @@ static void ImplRotate1_180( unsigned char* p1, const unsigned char* p2,
 
 bool RawBitmap::Rotate( int nAngle )
 {
-    ULONG nNewScanlineSize = 0;
-    ULONG nNewHeight = 0;
-    ULONG nNewWidth = 0;
+    sal_uLong nNewScanlineSize = 0;
+    sal_uLong nNewHeight = 0;
+    sal_uLong nNewWidth = 0;
 
     // do inplace rotation or prepare double buffered rotation
     switch( nAngle )

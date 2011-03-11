@@ -41,9 +41,9 @@ struct SystemParentData;
 // ----------------------
 
 // Presentation Flags
-#define PRESENTATION_HIDEALLAPPS    ((USHORT)0x0001)
-#define PRESENTATION_NOFULLSCREEN   ((USHORT)0x0002)
-#define PRESENTATION_NOAUTOSHOW     ((USHORT)0x0004)
+#define PRESENTATION_HIDEALLAPPS    ((sal_uInt16)0x0001)
+#define PRESENTATION_NOFULLSCREEN   ((sal_uInt16)0x0002)
+#define PRESENTATION_NOAUTOSHOW     ((sal_uInt16)0x0004)
 
 // --------------
 // - WorkWindow -
@@ -52,8 +52,8 @@ struct SystemParentData;
 class VCL_DLLPUBLIC WorkWindow : public SystemWindow
 {
 private:
-    USHORT          mnPresentationFlags;
-    BOOL            mbPresentationMode:1,
+    sal_uInt16          mnPresentationFlags;
+    sal_Bool            mbPresentationMode:1,
                     mbPresentationVisible:1,
                     mbPresentationFull:1,
                     mbFullScreenMode:1;
@@ -69,7 +69,7 @@ protected:
                         WorkWindow( WindowType nType );
     SAL_DLLPRIVATE void ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData = NULL );
     SAL_DLLPRIVATE void ImplLoadRes( const ResId& rResId );
-    SAL_DLLPRIVATE void ImplSetFrameState( ULONG aFrameState );
+    SAL_DLLPRIVATE void ImplSetFrameState( sal_uLong aFrameState );
 
 public:
                     WorkWindow( Window* pParent, const ResId& rResId );
@@ -78,7 +78,7 @@ public:
                     WorkWindow( SystemParentData* pParent ); // Not in the REMOTE-Version
                     ~WorkWindow();
 
-    virtual BOOL    Close();
+    virtual sal_Bool    Close();
 
     /** The default value of nDisplay = -1 means "don't care" and
         allows to backends to use any screen [** or display? terminology!]
@@ -87,23 +87,23 @@ public:
         NOTE: The default value cannot be 0, because 0 is a legitimate
         screen number.
      */
-    void            ShowFullScreenMode( BOOL bFullScreenMode = TRUE, sal_Int32 nDisplay = -1 );
-    void            EndFullScreenMode() { ShowFullScreenMode( FALSE ); }
-    BOOL            IsFullScreenMode() const { return mbFullScreenMode; }
+    void            ShowFullScreenMode( sal_Bool bFullScreenMode = sal_True, sal_Int32 nDisplay = -1 );
+    void            EndFullScreenMode() { ShowFullScreenMode( sal_False ); }
+    sal_Bool            IsFullScreenMode() const { return mbFullScreenMode; }
 
-    void            StartPresentationMode( BOOL bPresentation = TRUE, USHORT nFlags = 0, sal_Int32 nDisplay = 0 );
-    void            EndPresentationMode() {  StartPresentationMode( FALSE ); }
-    BOOL            IsPresentationMode() const { return mbPresentationMode; }
+    void            StartPresentationMode( sal_Bool bPresentation = sal_True, sal_uInt16 nFlags = 0, sal_Int32 nDisplay = 0 );
+    void            EndPresentationMode() {  StartPresentationMode( sal_False ); }
+    sal_Bool            IsPresentationMode() const { return mbPresentationMode; }
 
-    BOOL            IsMinimized() const;
+    sal_Bool            IsMinimized() const;
 
-    BOOL            SetPluginParent( SystemParentData* pParent );
+    sal_Bool            SetPluginParent( SystemParentData* pParent );
 
     void            Minimize();
     void            Restore();
 
-    void            Maximize( BOOL bMaximize = TRUE );
-    BOOL            IsMaximized() const;
+    void            Maximize( sal_Bool bMaximize = sal_True );
+    sal_Bool            IsMaximized() const;
 };
 
 #endif // _SV_WRKWIN_HXX

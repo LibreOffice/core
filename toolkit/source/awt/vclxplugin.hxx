@@ -30,7 +30,7 @@
 #define LAYOUT_AWT_VCLXPLUGIN_HXX
 
 #include <toolkit/awt/vclxwindow.hxx>
-#include <vcl/wintypes.hxx>
+#include <tools/wintypes.hxx>
 
 class Control;
 namespace layoutimpl

@@ -60,6 +60,8 @@ class ImplFontSelectData;
 class ImplFontMetricData;
 class FontSubsetInfo;
 class ZCodec;
+class EncHashTransporter;
+struct BitStreamState;
 
 // the maximum password length
 #define ENCRYPTED_PWD_SIZE     32
@@ -448,7 +450,7 @@ public:
         rtl::OString                m_aName;
         rtl::OUString               m_aDescription;
         rtl::OUString               m_aText;
-        USHORT                      m_nTextStyle;
+        sal_uInt16                      m_nTextStyle;
         rtl::OUString               m_aValue;
         rtl::OString                m_aDAString;
         rtl::OString                m_aDRDict;
@@ -597,7 +599,6 @@ private:
 
     MapMode                             m_aMapMode; // PDFWriterImpl scaled units
     std::vector< PDFPage >              m_aPages;
-    PDFDocInfo                          m_aDocInfo;
     /* maps object numbers to file offsets (needed for xref) */
     std::vector< sal_uInt64 >           m_aObjects;
     /* contains Bitmaps until they are written to the
@@ -798,116 +799,37 @@ i12626
 /* used to cipher the stream data and for password management */
     rtlCipher                               m_aCipher;
     rtlDigest                               m_aDigest;
-/* pad string used for password in Standard security handler */
-    sal_uInt8                               m_nPadString[ENCRYPTED_PWD_SIZE];
-/* the owner password, in clear text */
-    rtl::OUString                           m_aOwnerPassword;
-/* the padded owner password */
-    sal_uInt8                               m_nPaddedOwnerPassword[ENCRYPTED_PWD_SIZE];
-/* the encryption dictionary owner password, according to algorithm 3.3 */
-    sal_uInt8                               m_nEncryptedOwnerPassword[ENCRYPTED_PWD_SIZE];
-/* the user password, in clear text */
-    rtl::OUString                           m_aUserPassword;
-/* the padded user password */
-    sal_uInt8                               m_nPaddedUserPassword[ENCRYPTED_PWD_SIZE];
-/* the encryption dictionary user password, according to algorithm 3.4 or 3.5 depending on the
-   security handler revision */
-    sal_uInt8                               m_nEncryptedUserPassword[ENCRYPTED_PWD_SIZE];
+    /* pad string used for password in Standard security handler */
+    static const sal_uInt8                  s_nPadString[ENCRYPTED_PWD_SIZE];
 
-/* the encryption key, formed with the user password according to algorithm 3.2, maximum length is 16 bytes + 3 + 2
-   for 128 bit security   */
-    sal_uInt8                               m_nEncryptionKey[MAXIMUM_RC4_KEY_LENGTH];
+    /* the encryption key, formed with the user password according to algorithm 3.2, maximum length is 16 bytes + 3 + 2
+    for 128 bit security   */
     sal_Int32                               m_nKeyLength; // key length, 16 or 5
     sal_Int32                               m_nRC4KeyLength; // key length, 16 or 10, to be input to the algorith 3.1
 
-/* set to true if the following stream must be encrypted, used inside writeBuffer() */
+    /* set to true if the following stream must be encrypted, used inside writeBuffer() */
     sal_Bool                                m_bEncryptThisStream;
 
-/* the numerical value of the access permissions, according to PDF spec, must be signed */
+    /* the numerical value of the access permissions, according to PDF spec, must be signed */
     sal_Int32                               m_nAccessPermissions;
-/* the document ID, the raw MD5 hash */
-    sal_uInt8                               m_nDocID[MD5_DIGEST_SIZE];
-/* string buffer to hold document ID, this is the output string */
-    rtl::OStringBuffer                      m_aDocID;
-/* string to hold the PDF creation date */
-    rtl::OStringBuffer                      m_aCreationDateString;
-/* string to hold the PDF creation date, for PDF/A metadata */
-    rtl::OStringBuffer                      m_aCreationMetaDateString;
-/* the buffer where the data are encrypted, dynamically allocated */
+    /* string to hold the PDF creation date */
+    rtl::OString                            m_aCreationDateString;
+    /* string to hold the PDF creation date, for PDF/A metadata */
+    rtl::OString                            m_aCreationMetaDateString;
+    /* the buffer where the data are encrypted, dynamically allocated */
     sal_uInt8                               *m_pEncryptionBuffer;
-/* size of the buffer */
+    /* size of the buffer */
     sal_Int32                               m_nEncryptionBufferSize;
 
-/* check and reallocate the buffer for encryption */
-    sal_Bool checkEncryptionBufferSize( register sal_Int32 newSize )
-        {
-            if( m_nEncryptionBufferSize < newSize )
-            {
-/* reallocate the buffer, the used function allocate as rtl_allocateMemory
-   if the pointer parameter is NULL */
-                m_pEncryptionBuffer = (sal_uInt8*)rtl_reallocateMemory( m_pEncryptionBuffer, newSize );
-                if( m_pEncryptionBuffer )
-                    m_nEncryptionBufferSize = newSize;
-                else
-                    m_nEncryptionBufferSize = 0;
-            }
-            return ( m_nEncryptionBufferSize != 0 );
-        }
-/* init the internal pad string */
-    void initPadString()
-        {
-            static const sal_uInt8 nPadString[32] =
-                {
-                    0x28, 0xBF, 0x4E, 0x5E, 0x4E, 0x75, 0x8A, 0x41, 0x64, 0x00, 0x4E, 0x56, 0xFF, 0xFA, 0x01, 0x08,
-                    0x2E, 0x2E, 0x00, 0xB6, 0xD0, 0x68, 0x3E, 0x80, 0x2F, 0x0C, 0xA9, 0xFE, 0x64, 0x53, 0x69, 0x7A
-                };
-
-            for(sal_uInt32 i = 0; i < sizeof( nPadString ); i++ )
-                m_nPadString[i] = nPadString[i];
-
-        };
-/* initialize the encryption engine */
-    void initEncryption();
-
-/* this function implements part of the PDF spec algorithm 3.1 in encryption, the rest (the actual encryption) is in PDFWriterImpl::writeBuffer */
-    void checkAndEnableStreamEncryption( register sal_Int32 nObject )
-        {
-            if( m_aContext.Encrypt )
-            {
-                m_bEncryptThisStream = true;
-                register sal_Int32 i = m_nKeyLength;
-                m_nEncryptionKey[i++] = (sal_uInt8)nObject;
-                m_nEncryptionKey[i++] = (sal_uInt8)( nObject >> 8 );
-                m_nEncryptionKey[i++] = (sal_uInt8)( nObject >> 16 );
-//the other location of m_nEncryptionKey are already set to 0, our fixed generation number
-// do the MD5 hash
-                sal_uInt8 nMD5Sum[ RTL_DIGEST_LENGTH_MD5 ];
-                // the i+2 to take into account the generation number, always zero
-                rtl_digest_MD5( &m_nEncryptionKey, i+2, nMD5Sum, sizeof(nMD5Sum) );
-// initialize the RC4 with the key
-// key legth: see algoritm 3.1, step 4: (N+5) max 16
-                rtl_cipher_initARCFOUR( m_aCipher, rtl_Cipher_DirectionEncode, nMD5Sum, m_nRC4KeyLength, NULL, 0 );
-            }
-        };
+    /* check and reallocate the buffer for encryption */
+    sal_Bool checkEncryptionBufferSize( register sal_Int32 newSize );
+    /* this function implements part of the PDF spec algorithm 3.1 in encryption, the rest (the actual encryption) is in PDFWriterImpl::writeBuffer */
+    void checkAndEnableStreamEncryption( register sal_Int32 nObject );
 
     void disableStreamEncryption() { m_bEncryptThisStream = false; };
 
-/* */
-    void enableStringEncryption( register sal_Int32 nObject )
-        {
-            register sal_Int32 i = m_nKeyLength;
-            m_nEncryptionKey[i++] = (sal_uInt8)nObject;
-            m_nEncryptionKey[i++] = (sal_uInt8)( nObject >> 8 );
-            m_nEncryptionKey[i++] = (sal_uInt8)( nObject >> 16 );
-//the other location of m_nEncryptionKey are already set to 0, our fixed generation number
-// do the MD5 hash
-            sal_uInt8 nMD5Sum[ RTL_DIGEST_LENGTH_MD5 ];
-            // the i+2 to take into account the generation number, always zero
-            rtl_digest_MD5( &m_nEncryptionKey, i+2, nMD5Sum, sizeof(nMD5Sum) );
-// initialize the RC4 with the key
-// key legth: see algoritm 3.1, step 4: (N+5) max 16
-            rtl_cipher_initARCFOUR( m_aCipher, rtl_Cipher_DirectionEncode, nMD5Sum, m_nRC4KeyLength, NULL, 0 );
-        };
+    /* */
+    void enableStringEncryption( register sal_Int32 nObject );
 
 // test if the encryption is active, if yes than encrypt the unicode string  and add to the OStringBuffer parameter
     void appendUnicodeTextStringEncrypt( const rtl::OUString& rInString, const sal_Int32 nInObjectNumber, rtl::OStringBuffer& rOutBuffer );
@@ -1093,27 +1015,67 @@ i12626
     bool checkEmitStructure();
 
     /* draws an emphasis mark */
-    void drawEmphasisMark(  long nX, long nY, const PolyPolygon& rPolyPoly, BOOL bPolyLine, const Rectangle& rRect1, const Rectangle& rRect2 );
+    void drawEmphasisMark(  long nX, long nY, const PolyPolygon& rPolyPoly, sal_Bool bPolyLine, const Rectangle& rRect1, const Rectangle& rRect2 );
 
     /* true if PDF/A-1a or PDF/A-1b is output */
     sal_Bool        m_bIsPDF_A1;
+    PDFWriter&      m_rOuterFace;
 
-/*
-i12626
-methods for PDF security
+    /*
+    i12626
+    methods for PDF security
 
- pad a password according  algorithm 3.2, step 1 */
-    void padPassword( const rtl::OUString aPassword, sal_uInt8 *paPasswordTarget );
-/* algorithm 3.2: compute an encryption key */
-    void computeEncryptionKey( sal_uInt8 *paThePaddedPassword, sal_uInt8 *paEncryptionKey );
-/* algorithm 3.3: computing the encryption dictionary'ss owner password value ( /O ) */
-    void computeODictionaryValue();
-/* algorithm 3.4 or 3.5: computing the encryption dictionary's user password value ( /U ) revision 2 or 3 of the standard security handler */
-    void computeUDictionaryValue();
+    pad a password according  algorithm 3.2, step 1 */
+    static void padPassword( const rtl::OUString& i_rPassword, sal_uInt8* o_pPaddedPW );
+    /* algorithm 3.2: compute an encryption key */
+    static bool computeEncryptionKey( EncHashTransporter*,
+                                      vcl::PDFWriter::PDFEncryptionProperties& io_rProperties,
+                                      sal_Int32 i_nAccessPermissions
+                                     );
+    /* algorithm 3.3: computing the encryption dictionary'ss owner password value ( /O ) */
+    static bool computeODictionaryValue( const sal_uInt8* i_pPaddedOwnerPassword, const sal_uInt8* i_pPaddedUserPassword,
+                                         std::vector< sal_uInt8 >& io_rOValue,
+                                         sal_Int32 i_nKeyLength
+                                        );
+    /* algorithm 3.4 or 3.5: computing the encryption dictionary's user password value ( /U ) revision 2 or 3 of the standard security handler */
+    static bool computeUDictionaryValue( EncHashTransporter* i_pTransporter,
+                                         vcl::PDFWriter::PDFEncryptionProperties& io_rProperties,
+                                         sal_Int32 i_nKeyLength,
+                                         sal_Int32 i_nAccessPermissions
+                                        );
 
+    static void computeDocumentIdentifier( std::vector< sal_uInt8 >& o_rIdentifier,
+                                           const vcl::PDFWriter::PDFDocInfo& i_rDocInfo,
+                                           rtl::OString& o_rCString1,
+                                           rtl::OString& o_rCString2
+                                          );
+    static sal_Int32 computeAccessPermissions( const vcl::PDFWriter::PDFEncryptionProperties& i_rProperties,
+                                               sal_Int32& o_rKeyLength, sal_Int32& o_rRC4KeyLength );
+    void setupDocInfo();
+    bool prepareEncryption( const com::sun::star::uno::Reference< com::sun::star::beans::XMaterialHolder >& );
+
+    // helper for playMetafile
+    void implWriteGradient( const PolyPolygon& rPolyPoly, const Gradient& rGradient,
+                            VirtualDevice* pDummyVDev, const vcl::PDFWriter::PlayMetafileContext& );
+    void implWriteBitmapEx( const Point& rPoint, const Size& rSize, const BitmapEx& rBitmapEx,
+                           VirtualDevice* pDummyVDev, const vcl::PDFWriter::PlayMetafileContext& );
+
+    // helpers for CCITT 1bit bitmap stream
+    void putG4Bits( sal_uInt32 i_nLength, sal_uInt32 i_nCode, BitStreamState& io_rState );
+    void putG4Span( long i_nSpan, bool i_bWhitePixel, BitStreamState& io_rState );
+    void writeG4Stream( BitmapReadAccess* i_pBitmap );
+
+    // color helper functions
+    void appendStrokingColor( const Color& rColor, rtl::OStringBuffer& rBuffer );
+    void appendNonStrokingColor( const Color& rColor, rtl::OStringBuffer& rBuffer );
 public:
-    PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext );
+    PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext, const com::sun::star::uno::Reference< com::sun::star::beans::XMaterialHolder >&, PDFWriter& );
     ~PDFWriterImpl();
+
+    static com::sun::star::uno::Reference< com::sun::star::beans::XMaterialHolder >
+           initEncryption( const rtl::OUString& i_rOwnerPassword,
+                           const rtl::OUString& i_rUserPassword,
+                           bool b128Bit );
 
     /*  for OutputDevice so the reference device can have a list
      *  that contains only suitable fonts (subsettable or builtin)
@@ -1136,6 +1098,7 @@ public:
     bool emit();
     std::set< PDFWriter::ErrorCode > getErrors();
     void insertError( PDFWriter::ErrorCode eErr ) { m_aErrors.insert( eErr ); }
+    void playMetafile( const GDIMetaFile&, vcl::PDFExtOutDevData*, const vcl::PDFWriter::PlayMetafileContext&, VirtualDevice* pDummyDev = NULL );
 
     Size getCurPageSize() const
     {
@@ -1146,8 +1109,6 @@ public:
     }
 
     PDFWriter::PDFVersion getVersion() const { return m_aContext.Version; }
-    void setDocInfo( const PDFDocInfo& rInfo );
-    const PDFDocInfo& getDocInfo() const { return m_aDocInfo; }
 
     void setDocumentLocale( const com::sun::star::lang::Locale& rLoc )
     { m_aContext.DocumentLocale = rLoc; }
@@ -1204,13 +1165,13 @@ public:
     void setTextFillColor( const Color& rColor )
     {
         m_aGraphicsStack.front().m_aFont.SetFillColor( rColor );
-        m_aGraphicsStack.front().m_aFont.SetTransparent( ImplIsColorTransparent( rColor ) ? TRUE : FALSE );
+        m_aGraphicsStack.front().m_aFont.SetTransparent( ImplIsColorTransparent( rColor ) ? sal_True : sal_False );
         m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateFont;
     }
     void setTextFillColor()
     {
         m_aGraphicsStack.front().m_aFont.SetFillColor( Color( COL_TRANSPARENT ) );
-        m_aGraphicsStack.front().m_aFont.SetTransparent( TRUE );
+        m_aGraphicsStack.front().m_aFont.SetTransparent( sal_True );
         m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateFont;
     }
     void setTextColor( const Color& rColor )
@@ -1261,10 +1222,10 @@ public:
     /* actual drawing functions */
     void drawText( const Point& rPos, const String& rText, xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN, bool bTextLines = true );
     void drawTextArray( const Point& rPos, const String& rText, const sal_Int32* pDXArray = NULL, xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN, bool bTextLines = true );
-    void drawStretchText( const Point& rPos, ULONG nWidth, const String& rText,
+    void drawStretchText( const Point& rPos, sal_uLong nWidth, const String& rText,
                           xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN,
                           bool bTextLines = true  );
-    void drawText( const Rectangle& rRect, const String& rOrigStr, USHORT nStyle, bool bTextLines = true  );
+    void drawText( const Rectangle& rRect, const String& rOrigStr, sal_uInt16 nStyle, bool bTextLines = true  );
     void drawTextLine( const Point& rPos, long nWidth, FontStrikeout eStrikeout, FontUnderline eUnderline, FontUnderline eOverline, bool bUnderlineAbove );
     void drawWaveTextLine( rtl::OStringBuffer& aLine, long nWidth, FontUnderline eTextLine, Color aColor, bool bIsAbove );
     void drawStraightTextLine( rtl::OStringBuffer& aLine, long nWidth, FontUnderline eTextLine, Color aColor, bool bIsAbove );

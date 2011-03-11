@@ -32,6 +32,7 @@
 #include "hatchwindowfactory.hxx"
 #include "hatchwindow.hxx"
 #include "cppuhelper/factory.hxx"
+#include <vcl/svapp.hxx>
 
 #include "documentcloser.hxx"
 
@@ -70,6 +71,7 @@ uno::Reference< embed::XHatchWindow > SAL_CALL OHatchWindowFactory::createHatchW
     if ( !xParent.is() )
         throw lang::IllegalArgumentException(); // TODO
 
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     VCLXHatchWindow* pResult = new VCLXHatchWindow();
     pResult->initializeWindow( xParent, aBounds, aHandlerSize );
     return uno::Reference< embed::XHatchWindow >( static_cast< embed::XHatchWindow* >( pResult ) );
@@ -111,45 +113,6 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment (
     const sal_Char ** ppEnvTypeName, uno_Environment ** /* ppEnv */)
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
-SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo (
-    void * /* pServiceManager */, void * pRegistryKey)
-{
-    if (pRegistryKey)
-    {
-        uno::Reference< registry::XRegistryKey> xRegistryKey (
-            reinterpret_cast< registry::XRegistryKey* >(pRegistryKey));
-        uno::Reference< registry::XRegistryKey> xNewKey;
-
-        // OHatchWindowFactory registration
-
-        xNewKey = xRegistryKey->createKey (
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) +
-            OHatchWindowFactory::impl_staticGetImplementationName() +
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") ) );
-
-        uno::Sequence< ::rtl::OUString > aServices =
-            OHatchWindowFactory::impl_staticGetSupportedServiceNames();
-        for (sal_Int32 i = 0, n = aServices.getLength(); i < n; i++ )
-            xNewKey->createKey( aServices.getConstArray()[i] );
-
-
-        // ODocumentCloser registration
-
-        xNewKey = xRegistryKey->createKey (
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) +
-            ODocumentCloser::impl_staticGetImplementationName() +
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") ) );
-
-        aServices = ODocumentCloser::impl_staticGetSupportedServiceNames();
-        for (sal_Int32 i = 0, n = aServices.getLength(); i < n; i++ )
-            xNewKey->createKey( aServices.getConstArray()[i] );
-
-
-        return sal_True;
-    }
-    return sal_False;
 }
 
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory (

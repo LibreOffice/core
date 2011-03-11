@@ -33,7 +33,7 @@
 #include "osl/diagnose.h"
 #include "canvas/elapsedtime.hxx"
 
-#if defined(WIN) || defined(WNT)
+#if defined(WNT)
 
 #if defined _MSC_VER
 #pragma warning(push,1)
@@ -59,7 +59,7 @@ namespace canvas {
 namespace tools {
 
 
-#if defined(WIN) || defined(WNT)
+#if defined(WNT)
 // TODO(Q2): is 0 okay for the failure case here?
 double ElapsedTime::getSystemTime()
 {

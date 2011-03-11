@@ -55,7 +55,7 @@
     p.Paper.RandO =SWAPSHORT(p.Paper.RandO ); \
     p.Paper.RandU =SWAPSHORT(p.Paper.RandU ); \
     SWAPPOINT(p.U);                           \
-    UINT16 iTemp;                             \
+    sal_uInt16 iTemp;                             \
     for (iTemp=0;iTemp<20;iTemp++) {          \
         rPage.HlpLnH[iTemp]=SWAPSHORT(rPage.HlpLnH[iTemp]);       \
         rPage.HlpLnV[iTemp]=SWAPSHORT(rPage.HlpLnV[iTemp]);      }}
@@ -107,58 +107,49 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#if defined( WIN ) && defined( MSC )
-#pragma code_seg( "svtools", "AUTO_CODE" )
-#endif
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Fuer Fontuebersetzung ///////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 SgfFontLst* pSgfFonts = 0;
 
-#if defined( WIN ) && defined( MSC )
-#pragma code_seg( "SVTOOLS_FILTER3", "SVTOOLS_CODE" )
-static void AntiMscBug() {}
-#endif
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Fuer Kreisunterarten, Text und gedrehte Rechtecke ///////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void RotatePoint(PointType& P, INT16 cx, INT16 cy, double sn, double cs)
+void RotatePoint(PointType& P, sal_Int16 cx, sal_Int16 cy, double sn, double cs)
 {
-    INT16  dx,dy;
+    sal_Int16  dx,dy;
     double x1,y1;
     dx=P.x-cx;
     dy=P.y-cy;
     x1=dx*cs-dy*sn;
     y1=dy*cs+dx*sn;
-    P.x=cx+INT16(x1);
-    P.y=cy+INT16(y1);
+    P.x=cx+sal_Int16(x1);
+    P.y=cy+sal_Int16(y1);
 }
 
-void RotatePoint(Point& P, INT16 cx, INT16 cy, double sn, double cs)
+void RotatePoint(Point& P, sal_Int16 cx, sal_Int16 cy, double sn, double cs)
 {
-    INT16  dx,dy;
+    sal_Int16  dx,dy;
     double x1,y1;
-    dx=(INT16)(P.X()-cx);
-    dy=(INT16)(P.Y()-cy);
+    dx=(sal_Int16)(P.X()-cx);
+    dy=(sal_Int16)(P.Y()-cy);
     x1=dx*cs-dy*sn;
     y1=dy*cs+dx*sn;
-    P=Point(cx+INT16(x1),cy+INT16(y1));
+    P=Point(cx+sal_Int16(x1),cy+sal_Int16(y1));
 }
 
-INT16 iMulDiv(INT16 a, INT16 Mul, INT16 Div)
+sal_Int16 iMulDiv(sal_Int16 a, sal_Int16 Mul, sal_Int16 Div)
 {
-    INT32 Temp;
-    Temp=INT32(a)*INT32(Mul)/INT32(Div);
-    return INT16(Temp);
+    sal_Int32 Temp;
+    Temp=sal_Int32(a)*sal_Int32(Mul)/sal_Int32(Div);
+    return sal_Int16(Temp);
 }
 
-UINT16 MulDiv(UINT16 a, UINT16 Mul, UINT16 Div)
+sal_uInt16 MulDiv(sal_uInt16 a, sal_uInt16 Mul, sal_uInt16 Div)
 {
-    UINT32 Temp;
-    Temp=UINT32(a)*UINT32(Mul)/UINT32(Div);
-    return UINT16(Temp);
+    sal_uInt32 Temp;
+    Temp=sal_uInt32(a)*sal_uInt32(Mul)/sal_uInt32(Div);
+    return sal_uInt16(Temp);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -173,10 +164,10 @@ SvStream& operator>>(SvStream& rIStream, DtHdType& rDtHd)
 
 void DtHdOverSeek(SvStream& rInp)
 {
-    ULONG FPos=rInp.Tell();
-    FPos+=(ULONG)DtHdSize;
+    sal_uLong FPos=rInp.Tell();
+    FPos+=(sal_uLong)DtHdSize;
     rInp.Seek(FPos);
-//    rInp.seekg(rInp.tellg()+(ULONG)DtHdSize);
+//    rInp.seekg(rInp.tellg()+(sal_uLong)DtHdSize);
 }
 
 
@@ -191,21 +182,21 @@ SvStream& operator>>(SvStream& rIStream, PageType& rPage)
 
 void ObjkOverSeek(SvStream& rInp, ObjkType& rObjk)
 {
-    ULONG Siz;
-    Siz=(ULONG)rObjk.MemSize+rObjk.Last;  // ObjSize+ObjAnhSize
+    sal_uLong Siz;
+    Siz=(sal_uLong)rObjk.MemSize+rObjk.Last;  // ObjSize+ObjAnhSize
     rInp.Seek(rInp.Tell()+Siz);
 }
 
 SvStream& operator>>(SvStream& rInp, ObjkType& rObjk)
 {   // Die Fileposition im Stream bleibt unveraendert!
-    ULONG nPos;
+    sal_uLong nPos;
     nPos=rInp.Tell();
     rInp.Read((char*)&rObjk.Last,ObjkSize);
 #if defined OSL_BIGENDIAN
     SWAPOBJK(rObjk);
 #endif
 #ifdef InArbeit
-    ULONG nPos1=rInp.Tell();
+    sal_uLong nPos1=rInp.Tell();
     if(nPos == nPos1) InfoBox( NULL, "tellg funkt nich" ).Execute();
 #endif
     rInp.Seek(nPos);
@@ -333,10 +324,10 @@ SvStream& operator>>(SvStream& rInp, GrupType& rGrup)
 |*    Sgv2SvFarbe()
 |*
 *************************************************************************/
-Color Sgv2SvFarbe(BYTE nFrb1, BYTE nFrb2, BYTE nInts)
+Color Sgv2SvFarbe(sal_uInt8 nFrb1, sal_uInt8 nFrb2, sal_uInt8 nInts)
 {
-    UINT16 r1=0,g1=0,b1=0,r2=0,g2=0,b2=0;
-    BYTE   nInt2=100-nInts;
+    sal_uInt16 r1=0,g1=0,b1=0,r2=0,g2=0,b2=0;
+    sal_uInt8   nInt2=100-nInts;
     switch(nFrb1 & 0x07) {
         case 0:  r1=0xFF; g1=0xFF; b1=0xFF; break;
         case 1:  r1=0xFF; g1=0xFF;            break;
@@ -357,9 +348,9 @@ Color Sgv2SvFarbe(BYTE nFrb1, BYTE nFrb2, BYTE nInts)
         case 6:                    b2=0xFF; break;
         case 7:                                   break;
     }
-    r1=(UINT16)((UINT32)r1*nInts/100+(UINT32)r2*nInt2/100);
-    g1=(UINT16)((UINT32)g1*nInts/100+(UINT32)g2*nInt2/100);
-    b1=(UINT16)((UINT32)b1*nInts/100+(UINT32)b2*nInt2/100);
+    r1=(sal_uInt16)((sal_uInt32)r1*nInts/100+(sal_uInt32)r2*nInt2/100);
+    g1=(sal_uInt16)((sal_uInt32)g1*nInts/100+(sal_uInt32)g2*nInt2/100);
+    b1=(sal_uInt16)((sal_uInt32)b1*nInts/100+(sal_uInt32)b2*nInt2/100);
     Color aColor( (sal_uInt8)r1, (sal_uInt8)g1, (sal_uInt8)b1 );
     return aColor;
 }
@@ -448,7 +439,7 @@ void StrkType::Draw(OutputDevice& rOut)
 |*    RectType::DrawObjekt()
 |*
 *************************************************************************/
-void SgfAreaColorIntens(UINT16 Muster, BYTE Col1, BYTE Col2, BYTE Int, OutputDevice& rOut)
+void SgfAreaColorIntens(sal_uInt16 Muster, sal_uInt8 Col1, sal_uInt8 Col2, sal_uInt8 Int, OutputDevice& rOut)
 {
     ObjAreaType F;
     F.FMuster=Muster;
@@ -458,15 +449,15 @@ void SgfAreaColorIntens(UINT16 Muster, BYTE Col1, BYTE Col2, BYTE Int, OutputDev
     SetArea(F,rOut);
 }
 
-void DrawSlideRect(INT16 x1, INT16 y1, INT16 x2, INT16 y2, ObjAreaType& F, OutputDevice& rOut)
+void DrawSlideRect(sal_Int16 x1, sal_Int16 y1, sal_Int16 x2, sal_Int16 y2, ObjAreaType& F, OutputDevice& rOut)
 {
-    INT16 i,i0,b,b0;
-    INT16 Int1,Int2;
-    INT16 Col1,Col2;
+    sal_Int16 i,i0,b,b0;
+    sal_Int16 Int1,Int2;
+    sal_Int16 Col1,Col2;
     //     ClipMerk: HgdClipRec;
-    INT16 cx,cy;
-    INT16 MaxR;
-    INT32 dx,dy;
+    sal_Int16 cx,cy;
+    sal_Int16 MaxR;
+    sal_Int32 dx,dy;
 
     rOut.SetLineColor();
     if (x1>x2) { i=x1; x1=x2; x2=i; }
@@ -474,7 +465,7 @@ void DrawSlideRect(INT16 x1, INT16 y1, INT16 x2, INT16 y2, ObjAreaType& F, Outpu
     Col1=F.FBFarbe & 0x87; Col2=F.FFarbe & 0x87;
     Int1=100-F.FIntens; Int2=F.FIntens;
     if (Int1==Int2) {
-        SgfAreaColorIntens(F.FMuster,(BYTE)Col1,(BYTE)Col2,(BYTE)Int2,rOut);
+        SgfAreaColorIntens(F.FMuster,(sal_uInt8)Col1,(sal_uInt8)Col2,(sal_uInt8)Int2,rOut);
         rOut.DrawRect(Rectangle(x1,y1,x2,y2));
     } else {
         b0=Int1;
@@ -483,30 +474,30 @@ void DrawSlideRect(INT16 x1, INT16 y1, INT16 x2, INT16 y2, ObjAreaType& F, Outpu
                 i0=y1;
                 i=y1;
                 while (i<=y2) {
-                    b=Int1+INT16((INT32)(Int2-Int1)*(INT32)(i-y1) /(INT32)(y2-y1+1));
+                    b=Int1+sal_Int16((sal_Int32)(Int2-Int1)*(sal_Int32)(i-y1) /(sal_Int32)(y2-y1+1));
                     if (b!=b0) {
-                        SgfAreaColorIntens(F.FMuster,(BYTE)Col1,(BYTE)Col2,(BYTE)b0,rOut);
+                        SgfAreaColorIntens(F.FMuster,(sal_uInt8)Col1,(sal_uInt8)Col2,(sal_uInt8)b0,rOut);
                         rOut.DrawRect(Rectangle(x1,i0,x2,i-1));
                         i0=i; b0=b;
                     }
                     i++;
                 }
-                SgfAreaColorIntens(F.FMuster,(BYTE)Col1,(BYTE)Col2,(BYTE)Int2,rOut);
+                SgfAreaColorIntens(F.FMuster,(sal_uInt8)Col1,(sal_uInt8)Col2,(sal_uInt8)Int2,rOut);
                 rOut.DrawRect(Rectangle(x1,i0,x2,y2));
             } break;
             case 0x28: { // horizontal
                 i0=x1;
                 i=x1;
                 while (i<=x2) {
-                    b=Int1+INT16((INT32)(Int2-Int1)*(INT32)(i-x1) /(INT32)(x2-x1+1));
+                    b=Int1+sal_Int16((sal_Int32)(Int2-Int1)*(sal_Int32)(i-x1) /(sal_Int32)(x2-x1+1));
                     if (b!=b0) {
-                        SgfAreaColorIntens(F.FMuster,(BYTE)Col1,(BYTE)Col2,(BYTE)b0,rOut);
+                        SgfAreaColorIntens(F.FMuster,(sal_uInt8)Col1,(sal_uInt8)Col2,(sal_uInt8)b0,rOut);
                         rOut.DrawRect(Rectangle(i0,y1,i-1,y2));
                         i0=i; b0=b;
                     }
                     i++;
                 }
-                SgfAreaColorIntens(F.FMuster,(BYTE)Col1,(BYTE)Col2,(BYTE)Int2,rOut);
+                SgfAreaColorIntens(F.FMuster,(sal_uInt8)Col1,(sal_uInt8)Col2,(sal_uInt8)Int2,rOut);
                 rOut.DrawRect(Rectangle(i0,y1,x2,y2));
             } break;
 
@@ -520,14 +511,14 @@ void DrawSlideRect(INT16 x1, INT16 y1, INT16 x2, INT16 y2, ObjAreaType& F, Outpu
                 dx=x2-x1+1;
                 dy=y2-y1+1;
                 a=sqrt((double)(dx*dx+dy*dy));
-                MaxR=INT16(a) /2 +1;
+                MaxR=sal_Int16(a) /2 +1;
                 b0=Int2;
                 i0=MaxR; if (MaxR<1) MaxR=1;
                 i=MaxR;
                 while (i>=0) {
-                    b=Int1+INT16((INT32(Int2-Int1)*INT32(i)) /INT32(MaxR));
+                    b=Int1+sal_Int16((sal_Int32(Int2-Int1)*sal_Int32(i)) /sal_Int32(MaxR));
                     if (b!=b0) {
-                        SgfAreaColorIntens(F.FMuster,(BYTE)Col1,(BYTE)Col2,(BYTE)b0,rOut);
+                        SgfAreaColorIntens(F.FMuster,(sal_uInt8)Col1,(sal_uInt8)Col2,(sal_uInt8)b0,rOut);
                         //if (i0>200 || (Col1 & $80)!=0 || (Col2 & $80)!=0) {
                         //  then begin { Fallunterscheidung fuer etwas bessere Performance }
                         //    s2:=i0-i+2;
@@ -540,7 +531,7 @@ void DrawSlideRect(INT16 x1, INT16 y1, INT16 x2, INT16 y2, ObjAreaType& F, Outpu
                     }
                     i--;
                 }
-                SgfAreaColorIntens(F.FMuster,(BYTE)Col1,(BYTE)Col2,(BYTE)Int1,rOut);
+                SgfAreaColorIntens(F.FMuster,(sal_uInt8)Col1,(sal_uInt8)Col2,(sal_uInt8)Int1,rOut);
                 rOut.DrawEllipse(Rectangle(cx-i0,cy-i0,cx+i0,cy+i0));
                 rOut.SetClipRegion(ClipMerk);
             } break; // Kreis
@@ -567,7 +558,7 @@ void RectType::Draw(OutputDevice& rOut)
         }
     } else {
         Point  aPts[4];
-        USHORT i;
+        sal_uInt16 i;
         double sn,cs;
         sn=sin(double(DrehWink)*3.14159265359/18000);
         cs=cos(double(DrehWink)*3.14159265359/18000);
@@ -594,7 +585,7 @@ void PolyType::Draw(OutputDevice& rOut)
     if ((Flags & PolyClosBit) !=0) SetArea(F,rOut);
     SetLine(L,rOut);
     Polygon aPoly(nPoints);
-    USHORT i;
+    sal_uInt16 i;
     for(i=0;i<nPoints;i++) aPoly.SetPoint(Point(EckP[i].x,EckP[i].y),i);
     if ((Flags & PolyClosBit) !=0) {
         rOut.DrawPolygon(aPoly);
@@ -614,13 +605,13 @@ void SplnType::Draw(OutputDevice& rOut)
     SetLine(L,rOut);
     Polygon aPoly(0);
     Polygon aSpln(nPoints);
-    USHORT i;
+    sal_uInt16 i;
     for(i=0;i<nPoints;i++) aSpln.SetPoint(Point(EckP[i].x,EckP[i].y),i);
     if ((Flags & PolyClosBit) !=0) {
-        Spline2Poly(aSpln,TRUE,aPoly);
+        Spline2Poly(aSpln,sal_True,aPoly);
         if (aPoly.GetSize()>0) rOut.DrawPolygon(aPoly);
     } else {
-        Spline2Poly(aSpln,FALSE,aPoly);
+        Spline2Poly(aSpln,sal_False,aPoly);
         if (aPoly.GetSize()>0) rOut.DrawPolyLine(aPoly);
     }
 }
@@ -630,22 +621,22 @@ void SplnType::Draw(OutputDevice& rOut)
 |*    CircType::Draw()
 |*
 *************************************************************************/
-void DrawSlideCirc(INT16 cx, INT16 cy, INT16 rx, INT16 ry, ObjAreaType& F, OutputDevice& rOut)
+void DrawSlideCirc(sal_Int16 cx, sal_Int16 cy, sal_Int16 rx, sal_Int16 ry, ObjAreaType& F, OutputDevice& rOut)
 {
-    INT16 x1=cx-rx;
-    INT16 y1=cy-ry;
-    INT16 x2=cx+rx;
-    INT16 y2=cy+ry;
+    sal_Int16 x1=cx-rx;
+    sal_Int16 y1=cy-ry;
+    sal_Int16 x2=cx+rx;
+    sal_Int16 y2=cy+ry;
 
-    INT16 i,i0,b,b0;
-    INT16 Int1,Int2;
-    INT16 Col1,Col2;
+    sal_Int16 i,i0,b,b0;
+    sal_Int16 Int1,Int2;
+    sal_Int16 Col1,Col2;
 
     rOut.SetLineColor();
     Col1=F.FBFarbe & 0x87; Col2=F.FFarbe & 0x87;
     Int1=100-F.FIntens; Int2=F.FIntens;
     if (Int1==Int2) {
-        SgfAreaColorIntens(F.FMuster,(BYTE)Col1,(BYTE)Col2,(BYTE)Int2,rOut);
+        SgfAreaColorIntens(F.FMuster,(sal_uInt8)Col1,(sal_uInt8)Col2,(sal_uInt8)Int2,rOut);
         rOut.DrawEllipse(Rectangle(x1,y1,x2,y2));
     } else {
         b0=Int1;
@@ -655,16 +646,16 @@ void DrawSlideCirc(INT16 cx, INT16 cy, INT16 rx, INT16 ry, ObjAreaType& F, Outpu
                 i0=y1;
                 i=y1;
                 while (i<=y2) {
-                    b=Int1+INT16((INT32)(Int2-Int1)*(INT32)(i-y1) /(INT32)(y2-y1+1));
+                    b=Int1+sal_Int16((sal_Int32)(Int2-Int1)*(sal_Int32)(i-y1) /(sal_Int32)(y2-y1+1));
                     if (b!=b0) {
-                        SgfAreaColorIntens(F.FMuster,(BYTE)Col1,(BYTE)Col2,(BYTE)b0,rOut);
+                        SgfAreaColorIntens(F.FMuster,(sal_uInt8)Col1,(sal_uInt8)Col2,(sal_uInt8)b0,rOut);
                         rOut.SetClipRegion(Rectangle(x1,i0,x2,i-1));
                         rOut.DrawEllipse(Rectangle(x1,y1,x2,y2));
                         i0=i; b0=b;
                     }
                     i++;
                 }
-                SgfAreaColorIntens(F.FMuster,(BYTE)Col1,(BYTE)Col2,(BYTE)Int2,rOut);
+                SgfAreaColorIntens(F.FMuster,(sal_uInt8)Col1,(sal_uInt8)Col2,(sal_uInt8)Int2,rOut);
                 rOut.SetClipRegion(Rectangle(x1,i0,x2,y2));
                 rOut.DrawEllipse(Rectangle(x1,y1,x2,y2));
                 rOut.SetClipRegion(ClipMerk);
@@ -674,23 +665,23 @@ void DrawSlideCirc(INT16 cx, INT16 cy, INT16 rx, INT16 ry, ObjAreaType& F, Outpu
                 i0=x1;
                 i=x1;
                 while (i<=x2) {
-                    b=Int1+INT16((INT32)(Int2-Int1)*(INT32)(i-x1) /(INT32)(x2-x1+1));
+                    b=Int1+sal_Int16((sal_Int32)(Int2-Int1)*(sal_Int32)(i-x1) /(sal_Int32)(x2-x1+1));
                     if (b!=b0) {
-                        SgfAreaColorIntens(F.FMuster,(BYTE)Col1,(BYTE)Col2,(BYTE)b0,rOut);
+                        SgfAreaColorIntens(F.FMuster,(sal_uInt8)Col1,(sal_uInt8)Col2,(sal_uInt8)b0,rOut);
                         rOut.SetClipRegion(Rectangle(i0,y1,i-1,y2));
                         rOut.DrawEllipse(Rectangle(x1,y1,x2,y2));
                         i0=i; b0=b;
                     }
                     i++;
                 }
-                SgfAreaColorIntens(F.FMuster,(BYTE)Col1,(BYTE)Col2,(BYTE)Int2,rOut);
+                SgfAreaColorIntens(F.FMuster,(sal_uInt8)Col1,(sal_uInt8)Col2,(sal_uInt8)Int2,rOut);
                 rOut.SetClipRegion(Rectangle(i0,y1,x2,y2));
                 rOut.DrawEllipse(Rectangle(x1,y1,x2,y2));
                 rOut.SetClipRegion(ClipMerk);
             } break;
 
             case 0x18: case 0x38: { // Kreis
-                INT16 MaxR;
+                sal_Int16 MaxR;
 
                 if (rx<1) rx=1;
                 if (ry<1) ry=1;
@@ -699,17 +690,17 @@ void DrawSlideCirc(INT16 cx, INT16 cy, INT16 rx, INT16 ry, ObjAreaType& F, Outpu
                 i0=MaxR; if (MaxR<1) MaxR=1;
                 i=MaxR;
                 while (i>=0) {
-                    b=Int1+INT16((INT32(Int2-Int1)*INT32(i)) /INT32(MaxR));
+                    b=Int1+sal_Int16((sal_Int32(Int2-Int1)*sal_Int32(i)) /sal_Int32(MaxR));
                     if (b!=b0) {
-                        INT32 temp=INT32(i0)*INT32(ry)/INT32(rx);
-                        INT16 j0=INT16(temp);
-                        SgfAreaColorIntens(F.FMuster,(BYTE)Col1,(BYTE)Col2,(BYTE)b0,rOut);
+                        sal_Int32 temp=sal_Int32(i0)*sal_Int32(ry)/sal_Int32(rx);
+                        sal_Int16 j0=sal_Int16(temp);
+                        SgfAreaColorIntens(F.FMuster,(sal_uInt8)Col1,(sal_uInt8)Col2,(sal_uInt8)b0,rOut);
                         rOut.DrawEllipse(Rectangle(cx-i0,cy-j0,cx+i0,cy+j0));
                         i0=i; b0=b;
                     }
                     i--;
                 }
-                SgfAreaColorIntens(F.FMuster,(BYTE)Col1,(BYTE)Col2,(BYTE)Int1,rOut);
+                SgfAreaColorIntens(F.FMuster,(sal_uInt8)Col1,(sal_uInt8)Col2,(sal_uInt8)Int1,rOut);
                 rOut.DrawEllipse(Rectangle(cx-i0,cy-i0,cx+i0,cy+i0));
             } break; // Kreis
         }
@@ -778,7 +769,7 @@ void BmapType::Draw(OutputDevice& rOut)
 {
     //ifstream aInp;
     unsigned char   nSgfTyp;
-    USHORT          nVersion;
+    sal_uInt16          nVersion;
     String          aStr(
         reinterpret_cast< char const * >(&Filename[ 1 ]),
         (xub_StrLen)Filename[ 0 ], RTL_TEXTENCODING_UTF8 );
@@ -803,7 +794,7 @@ void BmapType::Draw(OutputDevice& rOut)
                 SgfVectYmul=Pos2.y-Pos1.y;
                 SgfVectXdiv=0;
                 SgfVectYdiv=0;
-                SgfVectScal=TRUE;
+                SgfVectScal=sal_True;
                 SgfVectFilter(*pInp,aMtf);
                 SgfVectXofs=0;
                 SgfVectYofs=0;
@@ -811,7 +802,7 @@ void BmapType::Draw(OutputDevice& rOut)
                 SgfVectYmul=0;
                 SgfVectXdiv=0;
                 SgfVectYdiv=0;
-                SgfVectScal=FALSE;
+                SgfVectScal=sal_False;
                 aMtf.Play(&rOut);
             } break;
         }
@@ -825,9 +816,9 @@ void BmapType::Draw(OutputDevice& rOut)
 |*    GrupType::...
 |*
 *************************************************************************/
-UINT32 GrupType::GetSubPtr()
+sal_uInt32 GrupType::GetSubPtr()
 {
-    return UINT32(SbLo)+0x00010000*UINT32(SbHi);
+    return sal_uInt32(SbLo)+0x00010000*sal_uInt32(SbHi);
 }
 
 /*************************************************************************
@@ -838,8 +829,8 @@ UINT32 GrupType::GetSubPtr()
 void DrawObjkList( SvStream& rInp, OutputDevice& rOut )
 {
     ObjkType aObjk;
-    USHORT nGrpCnt=0;
-    BOOL bEnde=FALSE;
+    sal_uInt16 nGrpCnt=0;
+    sal_Bool bEnde=sal_False;
     do {
         rInp>>aObjk;
         if (!rInp.GetError()) {
@@ -906,11 +897,11 @@ void DrawObjkList( SvStream& rInp, OutputDevice& rOut )
         } // if rInp
         if (!rInp.GetError()) {
             if (aObjk.Next==0L) {
-                if (nGrpCnt==0) bEnde=TRUE;
+                if (nGrpCnt==0) bEnde=sal_True;
                 else nGrpCnt--;
             }
         } else {
-            bEnde=TRUE;  // Lesefehler
+            bEnde=sal_True;  // Lesefehler
         }
     } while (!bEnde);
 }
@@ -942,15 +933,15 @@ void SkipObjkList(SvStream& rInp)
 |*    SgfFilterSDrw()
 |*
 *************************************************************************/
-BOOL SgfFilterSDrw( SvStream& rInp, SgfHeader&, SgfEntry&, GDIMetaFile& rMtf )
+sal_Bool SgfFilterSDrw( SvStream& rInp, SgfHeader&, SgfEntry&, GDIMetaFile& rMtf )
 {
-    BOOL          bRet = FALSE;
+    sal_Bool          bRet = sal_False;
     PageType      aPage;
     VirtualDevice aOutDev;
     OutputDevice* pOutDev;
-    ULONG         nStdPos;
-    ULONG         nZchPos;
-    USHORT        Num;
+    sal_uLong         nStdPos;
+    sal_uLong         nZchPos;
+    sal_uInt16        Num;
 
     pOutDev=&aOutDev;
     DtHdOverSeek(rInp); // DataHeader weglesen
@@ -986,8 +977,8 @@ BOOL SgfFilterSDrw( SvStream& rInp, SgfHeader&, SgfEntry&, GDIMetaFile& rMtf )
     rMtf.WindStart();
     MapMode aMap(MAP_10TH_MM,Point(),Fraction(1,4),Fraction(1,4));
     rMtf.SetPrefMapMode(aMap);
-    rMtf.SetPrefSize(Size((INT16)aPage.Paper.Size.x,(INT16)aPage.Paper.Size.y));
-    bRet=TRUE;
+    rMtf.SetPrefSize(Size((sal_Int16)aPage.Paper.Size.x,(sal_Int16)aPage.Paper.Size.y));
+    bRet=sal_True;
     return bRet;
 }
 
@@ -998,18 +989,18 @@ BOOL SgfFilterSDrw( SvStream& rInp, SgfHeader&, SgfEntry&, GDIMetaFile& rMtf )
 |*    SgfSDrwFilter()
 |*
 *************************************************************************/
-BOOL SgfSDrwFilter(SvStream& rInp, GDIMetaFile& rMtf, INetURLObject aIniPath )
+sal_Bool SgfSDrwFilter(SvStream& rInp, GDIMetaFile& rMtf, INetURLObject aIniPath )
 {
 #if OSL_DEBUG_LEVEL > 1 // Recordgroessen checken. Neuer Compiler hat vielleichte anderes Alignment!
-    if (sizeof(ObjTextType)!=ObjTextTypeSize)  return FALSE;
+    if (sizeof(ObjTextType)!=ObjTextTypeSize)  return sal_False;
 #endif
 
-    ULONG     nFileStart;            // Offset des SgfHeaders. Im allgemeinen 0.
+    sal_uLong     nFileStart;            // Offset des SgfHeaders. Im allgemeinen 0.
     SgfHeader aHead;
     SgfEntry  aEntr;
-    ULONG     nNext;
-    BOOL      bRdFlag=FALSE;         // Grafikentry gelesen ?
-    BOOL      bRet=FALSE;            // Returncode
+    sal_uLong     nNext;
+    sal_Bool      bRdFlag=sal_False;         // Grafikentry gelesen ?
+    sal_Bool      bRet=sal_False;            // Returncode
 
     aIniPath.Append( String::CreateFromAscii( "sgf.ini", 7 ) );
 //  aIniPath.ToAbs();
@@ -1030,7 +1021,7 @@ BOOL SgfSDrwFilter(SvStream& rInp, GDIMetaFile& rMtf, INetURLObject aIniPath )
             }
         } // while(nNext)
         if (bRdFlag) {
-            if (!rInp.GetError()) bRet=TRUE;  // Scheinbar Ok
+            if (!rInp.GetError()) bRet=sal_True;  // Scheinbar Ok
         }
     }
     delete pSgfFonts;
@@ -1038,7 +1029,7 @@ BOOL SgfSDrwFilter(SvStream& rInp, GDIMetaFile& rMtf, INetURLObject aIniPath )
 }
 
 /*
-Bitmap Dither(BYTE Intens)
+Bitmap Dither(sal_uInt8 Intens)
 {
     Bitmap aBmp;
     BmpInfoHeader Info;
@@ -1080,9 +1071,5 @@ for n:=0 to 63 do
  if plotbal<=dmatrix0[n] then cmatrix0[n]:=col0 else cmatrix0[n]:=col1;
 end;
 */
-
-#if defined( WIN ) && defined( MSC )
-#pragma code_seg( "svtools", "AUTO_CODE" )
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

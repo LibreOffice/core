@@ -199,19 +199,19 @@ String ConstructTempDir_Impl( const String* pParent )
 void CreateTempName_Impl( String& rName, sal_Bool bKeep, sal_Bool bDir = sal_True )
 {
     // add a suitable tempname
-    // Prefix can have 5 chars, leaving 3 for numbers. 26 ** 3 == 17576
-    // ER 13.07.00  why not radix 36 [0-9A-Z] ?!?
-    const unsigned nRadix = 26;
+    // 36 ** 6 == 2176782336
+    unsigned const nRadix = 36;
+    unsigned long const nMax = (nRadix*nRadix*nRadix*nRadix*nRadix*nRadix);
     String aName( rName );
     aName += String::CreateFromAscii( "lu" );
 
     rName.Erase();
-    static unsigned long u = Time::GetSystemTicks();
-    for ( unsigned long nOld = u; ++u != nOld; )
+    unsigned long nSeed = Time::GetSystemTicks() % nMax;
+    for ( unsigned long u = nSeed; ++u != nSeed; )
     {
-        u %= (nRadix*nRadix*nRadix);
+        u %= nMax;
         String aTmp( aName );
-        aTmp += String::CreateFromInt32( (sal_Int32) (unsigned) u, nRadix );
+        aTmp += String::CreateFromInt64( static_cast<sal_Int64>(u), nRadix );
         aTmp += String::CreateFromAscii( ".tmp" );
 
         if ( bDir )
@@ -243,7 +243,7 @@ void CreateTempName_Impl( String& rName, sal_Bool bKeep, sal_Bool bDir = sal_Tru
 #ifdef UNX /* RW permission for the user only! */
             mode_t old_mode = umask(077);
 #endif
-            FileBase::RC err = aFile.open(osl_File_OpenFlag_Create);
+            FileBase::RC err = aFile.open( osl_File_OpenFlag_Create | osl_File_OpenFlag_NoLock );
 #ifdef UNX
             umask(old_mode);
 #endif

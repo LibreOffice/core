@@ -73,7 +73,7 @@ int SfxFontItem::operator ==(const SfxPoolItem & rItem) const
 
 //============================================================================
 // virtual
-SfxPoolItem * SfxFontItem::Create(SvStream & rStream, USHORT) const
+SfxPoolItem * SfxFontItem::Create(SvStream & rStream, sal_uInt16) const
 {
     VersionCompat aItemCompat(rStream, STREAM_READ);
     SfxFontItem * pItem = new SfxFontItem(Which());
@@ -105,8 +105,8 @@ SfxPoolItem * SfxFontItem::Create(SvStream & rStream, USHORT) const
         rStream >> nKerning;
         pItem->m_bKerning = nKerning != 0;
     }
-    pItem->m_aColor.Read(rStream, TRUE);
-    pItem->m_aFillColor.Read(rStream, TRUE);
+    pItem->m_aColor.Read(rStream, sal_True);
+    pItem->m_aFillColor.Read(rStream, sal_True);
     sal_Int16 nFlags = 0;
     rStream >> nFlags;
     pItem->m_bHasFont = (nFlags & 4) != 0;
@@ -117,7 +117,7 @@ SfxPoolItem * SfxFontItem::Create(SvStream & rStream, USHORT) const
 
 //============================================================================
 // virtual
-SvStream & SfxFontItem::Store(SvStream & rStream, USHORT) const
+SvStream & SfxFontItem::Store(SvStream & rStream, sal_uInt16) const
 {
     VersionCompat aItemCompat(rStream, STREAM_WRITE, 1);
     {
@@ -131,8 +131,8 @@ SvStream & SfxFontItem::Store(SvStream & rStream, USHORT) const
                 << sal_Int8(m_bOutline) << sal_Int8(m_bShadow)
                 << sal_Int8(m_bKerning);
     }
-    SAL_CONST_CAST(Color &, m_aColor).Write(rStream, TRUE);
-    SAL_CONST_CAST(Color &, m_aFillColor).Write(rStream, TRUE);
+    SAL_CONST_CAST(Color &, m_aColor).Write(rStream, sal_True);
+    SAL_CONST_CAST(Color &, m_aFillColor).Write(rStream, sal_True);
     rStream << sal_Int16(m_bHasFont << 2 | m_bHasColor
                           | m_bHasFillColor << 1);
     return rStream;

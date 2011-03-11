@@ -58,33 +58,6 @@ void * SAL_CALL comp_Layout_component_getFactory( const char * pImplName, void *
         return pRet;
     }
 
-sal_Bool SAL_CALL comp_Layout_component_writeInfo( void * /*serviceManager*/, void * pRegistryKey )
-    {
-        if ( pRegistryKey )
-        {
-            try
-            {
-                uno::Reference< registry::XRegistryKey > xKey( reinterpret_cast< registry::XRegistryKey* >( pRegistryKey ) );
-                uno::Reference< registry::XRegistryKey >  xNewKey;
-
-                xNewKey = xKey->createKey( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) +
-                                           LayoutFactory::impl_staticGetImplementationName() +
-                                           ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") )  );
-
-                const uno::Sequence< ::rtl::OUString > aServices = LayoutFactory::impl_staticGetSupportedServiceNames();
-                for ( sal_Int32 i = 0; i < aServices.getLength(); i++ )
-                    xNewKey->createKey( aServices.getConstArray()[i] );
-
-                return sal_True;
-            }
-            catch (registry::InvalidRegistryException &)
-        {
-            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
-        }
-        }
-        return sal_False;
-    }
-
 // Component registration
 ::rtl::OUString SAL_CALL LayoutFactory::impl_staticGetImplementationName()
 {

@@ -49,7 +49,7 @@
 // Die Funktion GetGGT berechnet den groessten gemeinsamen Teiler der
 // beiden als Parameter uebergebenen Werte nVal1 und nVal2 nach dem
 // Algorithmus von Euklid. Hat einer der beiden Parameter den Wert 0 oder
-// 1, so wird als Ergebnis der Wert 1 zurŸckgegeben. Da der Algorithmus
+// 1, so wird als Ergebnis der Wert 1 zurï¿½ckgegeben. Da der Algorithmus
 // nur mit positiven Zahlen arbeitet, werden die beiden Parameter
 // entsprechend umgewandelt.
 // Zum Algorithmus: die beiden Parameter werden solange ducheinander
@@ -594,7 +594,7 @@ void Fraction::ReduceInaccurate( unsigned nSignificantBits )
 bool operator == ( const Fraction& rVal1, const Fraction& rVal2 )
 {
     if ( !rVal1.IsValid() || !rVal2.IsValid() )
-        return FALSE;
+        return false;
 
     return rVal1.nNumerator == rVal2.nNumerator
            && rVal1.nDenominator == rVal2.nDenominator;
@@ -616,7 +616,7 @@ bool operator == ( const Fraction& rVal1, const Fraction& rVal2 )
 bool operator < ( const Fraction& rVal1, const Fraction& rVal2 )
 {
     if ( !rVal1.IsValid() || !rVal2.IsValid() )
-        return FALSE;
+        return false;
 
     BigInt nN( rVal1.nNumerator );
     nN *= BigInt( rVal2.nDenominator );
@@ -642,7 +642,7 @@ bool operator < ( const Fraction& rVal1, const Fraction& rVal2 )
 bool operator > ( const Fraction& rVal1, const Fraction& rVal2 )
 {
     if ( !rVal1.IsValid() || !rVal2.IsValid() )
-        return FALSE;
+        return false;
 
     BigInt nN( rVal1.nNumerator );
     nN *= BigInt( rVal2.nDenominator );

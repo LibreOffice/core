@@ -40,7 +40,7 @@
 
 #include <cppuhelper/exc_hlp.hxx>
 
-#include <storinfo.hxx>
+#include <sot/storinfo.hxx>
 
 #include "xolesimplestorage.hxx"
 

@@ -44,22 +44,22 @@ public:
                 ImplImageBmp();
                 ~ImplImageBmp();
 
-    void        Create( long nItemWidth, long nItemHeight, USHORT nInitSize );
-    void        Create( const BitmapEx& rBmpEx, long nItemWidth, long nItemHeight,USHORT nInitSize );
+    void        Create( long nItemWidth, long nItemHeight, sal_uInt16 nInitSize );
+    void        Create( const BitmapEx& rBmpEx, long nItemWidth, long nItemHeight,sal_uInt16 nInitSize );
 
-    void        Expand( USHORT nGrowSize );
+    void        Expand( sal_uInt16 nGrowSize );
 
-    void        Replace( USHORT nPos, USHORT nSrcPos );
-    void        Replace( USHORT nPos, const ImplImageBmp& rImageBmp, USHORT nSrcPos );
-    void        Replace( USHORT nPos, const BitmapEx& rBmpEx );
+    void        Replace( sal_uInt16 nPos, sal_uInt16 nSrcPos );
+    void        Replace( sal_uInt16 nPos, const ImplImageBmp& rImageBmp, sal_uInt16 nSrcPos );
+    void        Replace( sal_uInt16 nPos, const BitmapEx& rBmpEx );
 
-    void        ReplaceColors( const Color* pSrcColors, const Color* pDstColors, ULONG nColorCount );
+    void        ReplaceColors( const Color* pSrcColors, const Color* pDstColors, sal_uIntPtr nColorCount );
     void        ColorTransform();
     void            Invert();
 
-    BitmapEx    GetBitmapEx( USHORT nPosCount, USHORT* pPosAry ) const;
+    BitmapEx    GetBitmapEx( sal_uInt16 nPosCount, sal_uInt16* pPosAry ) const;
 
-    void        Draw( USHORT nPos, OutputDevice* pDev, const Point& rPos, USHORT nStyle, const Size* pSize = NULL );
+    void        Draw( sal_uInt16 nPos, OutputDevice* pDev, const Point& rPos, sal_uInt16 nStyle, const Size* pSize = NULL );
 
 private:
 
@@ -67,8 +67,8 @@ private:
     BitmapEx    maDisabledBmpEx;
     BitmapEx*   mpDisplayBmp;
     Size        maSize;
-    BYTE*       mpInfoAry;
-    USHORT      mnSize;
+    sal_uInt8*      mpInfoAry;
+    sal_uInt16      mnSize;
 
     void        ImplUpdateDisplayBmp( OutputDevice* pOutDev );
     void        ImplUpdateDisabledBmpEx( int nPos );
@@ -92,12 +92,12 @@ struct ImageAryData
 {
     ::rtl::OUString maName;
     // Images identified by either name, or by id
-    USHORT          mnId;
+    sal_uInt16          mnId;
     BitmapEx        maBitmapEx;
 
     ImageAryData();
     ImageAryData( const rtl::OUString &aName,
-                  USHORT nId, const BitmapEx &aBitmap );
+                  sal_uInt16 nId, const BitmapEx &aBitmap );
     ImageAryData( const ImageAryData& rData );
     ~ImageAryData();
 
@@ -119,16 +119,16 @@ struct ImplImageList
     ImageAryDataNameHash        maNameHash;
     rtl::OUString               maPrefix;
     Size                        maImageSize;
-    ULONG                       mnRefCount;
+    sal_uIntPtr                       mnRefCount;
 
     ImplImageList();
     ImplImageList( const ImplImageList &aSrc );
     ~ImplImageList();
 
     void AddImage( const ::rtl::OUString &aName,
-                   USHORT nId, const BitmapEx &aBitmapEx );
-    void RemoveImage( USHORT nPos );
-    USHORT GetImageCount() const;
+                   sal_uInt16 nId, const BitmapEx &aBitmapEx );
+    void RemoveImage( sal_uInt16 nPos );
+    sal_uInt16 GetImageCount() const;
 };
 
 // --------------------
@@ -138,12 +138,12 @@ struct ImplImageList
 struct ImplImageRefData
 {
     ImplImageList*  mpImplData;
-    USHORT          mnIndex;
+    sal_uInt16          mnIndex;
 
                     ImplImageRefData() {}    // Um Warning zu umgehen
                     ~ImplImageRefData();
 
-    BOOL            IsEqual( const ImplImageRefData& rData );
+    sal_Bool            IsEqual( const ImplImageRefData& rData );
 };
 
 // ----------------
@@ -158,7 +158,7 @@ struct ImplImageData
                     ImplImageData( const BitmapEx& rBmpEx );
                     ~ImplImageData();
 
-    BOOL            IsEqual( const ImplImageData& rData );
+    sal_Bool            IsEqual( const ImplImageData& rData );
 };
 
 // -------------
@@ -167,7 +167,7 @@ struct ImplImageData
 
 struct ImplImage
 {
-    ULONG           mnRefCount;
+    sal_uIntPtr         mnRefCount;
     // TODO: use inheritance to get rid of meType+mpData
     void*           mpData;
     ImageType       meType;

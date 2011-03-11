@@ -37,10 +37,10 @@
 #include <com/sun/star/lang/XComponent.hpp>
 
 #include <svtools/accessibilityoptions.hxx>
-#include <apearcfg.hxx>
+#include <svtools/apearcfg.hxx>
 #include <svtools/menuoptions.hxx>
 #include <svtools/colorcfg.hxx>
-#include <fontsubstconfig.hxx>
+#include <svtools/fontsubstconfig.hxx>
 #include <svtools/helpopt.hxx>
 #include <svtools/printoptions.hxx>
 #include <unotools/options.hxx>

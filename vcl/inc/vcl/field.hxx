@@ -35,7 +35,7 @@
 #include <tools/time.hxx>
 #include <vcl/spinfld.hxx>
 #include <vcl/combobox.hxx>
-#include <vcl/fldunit.hxx>
+#include <tools/fldunit.hxx>
 
 namespace com { namespace sun { namespace star { namespace lang { struct Locale; } } } }
 
@@ -52,21 +52,21 @@ private:
     Edit*                   mpField;
     LocaleDataWrapper*      mpLocaleDataWrapper;
     Link                    maErrorLink;
-    BOOL                    mbReformat;
-    BOOL                    mbStrictFormat;
-    BOOL                    mbEmptyFieldValue;
-    BOOL                    mbEmptyFieldValueEnabled;
-    BOOL                    mbDefaultLocale;
+    sal_Bool                    mbReformat;
+    sal_Bool                    mbStrictFormat;
+    sal_Bool                    mbEmptyFieldValue;
+    sal_Bool                    mbEmptyFieldValueEnabled;
+    sal_Bool                    mbDefaultLocale;
 
 protected:
     SAL_DLLPRIVATE void     ImplSetText( const XubString& rText, Selection* pNewSel = NULL );
-    SAL_DLLPRIVATE BOOL     ImplGetEmptyFieldValue() const  { return mbEmptyFieldValue; }
+    SAL_DLLPRIVATE sal_Bool     ImplGetEmptyFieldValue() const  { return mbEmptyFieldValue; }
 
-    void                    SetFieldText( const XubString& rText, BOOL bKeepSelection );
-    void                    SetEmptyFieldValueData( BOOL bValue ) { mbEmptyFieldValue = bValue; }
+    void                    SetFieldText( const XubString& rText, sal_Bool bKeepSelection );
+    void                    SetEmptyFieldValueData( sal_Bool bValue ) { mbEmptyFieldValue = bValue; }
 
     SAL_DLLPRIVATE LocaleDataWrapper& ImplGetLocaleDataWrapper() const;
-    BOOL                    IsDefaultLocale() const { return mbDefaultLocale; }
+    sal_Bool                    IsDefaultLocale() const { return mbDefaultLocale; }
 
 public:
                             FormatterBase( Edit* pField = NULL );
@@ -77,11 +77,11 @@ public:
     void                    SetField( Edit* pField )    { mpField = pField; }
     Edit*                   GetField() const            { return mpField; }
 
-    BOOL                    MustBeReformatted() const   { return mbReformat; }
-    void                    MarkToBeReformatted( BOOL b ) { mbReformat = b; }
+    sal_Bool                    MustBeReformatted() const   { return mbReformat; }
+    void                    MarkToBeReformatted( sal_Bool b ) { mbReformat = b; }
 
-    void                    SetStrictFormat( BOOL bStrict );
-    BOOL                    IsStrictFormat() const { return mbStrictFormat; }
+    void                    SetStrictFormat( sal_Bool bStrict );
+    sal_Bool                    IsStrictFormat() const { return mbStrictFormat; }
 
     virtual void            Reformat();
     virtual void            ReformatAll();
@@ -95,10 +95,10 @@ public:
     const Link&             GetErrorHdl() const                 { return maErrorLink; }
 
     void                    SetEmptyFieldValue();
-    BOOL                    IsEmptyFieldValue() const;
+    sal_Bool                    IsEmptyFieldValue() const;
 
-    void                    EnableEmptyFieldValue( BOOL bEnable )   { mbEmptyFieldValueEnabled = bEnable; }
-    BOOL                    IsEmptyFieldValueEnabled() const        { return mbEmptyFieldValueEnabled; }
+    void                    EnableEmptyFieldValue( sal_Bool bEnable )   { mbEmptyFieldValueEnabled = bEnable; }
+    sal_Bool                    IsEmptyFieldValueEnabled() const        { return mbEmptyFieldValueEnabled; }
 };
 
 
@@ -106,7 +106,7 @@ public:
 // - PatternFormatter -
 // --------------------
 
-#define PATTERN_FORMAT_EMPTYLITERALS    ((USHORT)0x0001)
+#define PATTERN_FORMAT_EMPTYLITERALS    ((sal_uInt16)0x0001)
 
 class VCL_DLLPUBLIC PatternFormatter : public FormatterBase
 {
@@ -114,17 +114,17 @@ private:
     ByteString              maEditMask;
     XubString               maFieldString;
     XubString               maLiteralMask;
-    USHORT                  mnFormatFlags;
-    BOOL                    mbSameMask;
-    BOOL                    mbInPattKeyInput;
+    sal_uInt16                  mnFormatFlags;
+    sal_Bool                    mbSameMask;
+    sal_Bool                    mbInPattKeyInput;
 
 protected:
                             PatternFormatter();
 
     SAL_DLLPRIVATE void     ImplLoadRes( const ResId& rResId );
     SAL_DLLPRIVATE void     ImplSetMask( const ByteString& rEditMask, const XubString& rLiteralMask );
-    SAL_DLLPRIVATE BOOL     ImplIsSameMask() const { return mbSameMask; }
-    SAL_DLLPRIVATE BOOL&    ImplGetInPattKeyInput() { return mbInPattKeyInput; }
+    SAL_DLLPRIVATE sal_Bool     ImplIsSameMask() const { return mbSameMask; }
+    SAL_DLLPRIVATE sal_Bool&    ImplGetInPattKeyInput() { return mbInPattKeyInput; }
 
 public:
                            ~PatternFormatter();
@@ -136,12 +136,12 @@ public:
     const ByteString&       GetEditMask() const     { return maEditMask; }
     const XubString&        GetLiteralMask() const  { return maLiteralMask; }
 
-    void                    SetFormatFlags( USHORT nFlags ) { mnFormatFlags = nFlags; }
-    USHORT                  GetFormatFlags() const { return mnFormatFlags; }
+    void                    SetFormatFlags( sal_uInt16 nFlags ) { mnFormatFlags = nFlags; }
+    sal_uInt16                  GetFormatFlags() const { return mnFormatFlags; }
 
     void                    SetString( const XubString& rStr );
     XubString               GetString() const;
-    BOOL                    IsStringModified() const { return !(GetString().Equals( maFieldString )); }
+    sal_Bool                    IsStringModified() const { return !(GetString().Equals( maFieldString )); }
 
     void                    SelectFixedFont();
 };
@@ -161,10 +161,10 @@ protected:
     sal_Int64               mnMin;
     sal_Int64               mnMax;
     sal_Int64               mnCorrectedValue;
-    USHORT                  mnType;
-    USHORT                  mnDecimalDigits;
-    BOOL                    mbThousandSep;
-    BOOL                    mbShowTrailingZeros;
+    sal_uInt16                  mnType;
+    sal_uInt16                  mnDecimalDigits;
+    sal_Bool                    mbThousandSep;
+    sal_Bool                    mbShowTrailingZeros;
 
     // the members below are used in all derivatives of NumericFormatter
     // not in NumericFormatter itself.
@@ -183,7 +183,7 @@ protected:
     void                    FieldLast();
 
     SAL_DLLPRIVATE void     ImplLoadRes( const ResId& rResId );
-    SAL_DLLPRIVATE BOOL     ImplNumericReformat( const XubString& rStr, double& rValue, XubString& rOutStr );
+    SAL_DLLPRIVATE sal_Bool     ImplNumericReformat( const XubString& rStr, double& rValue, XubString& rOutStr );
     SAL_DLLPRIVATE void     ImplNewFieldValue( sal_Int64 nNewValue );
     SAL_DLLPRIVATE void     ImplSetUserValue( sal_Int64 nNewValue, Selection* pNewSelection = NULL );
 
@@ -204,20 +204,20 @@ public:
     void                    SetSpinSize( sal_Int64 nNewSize ) { mnSpinSize = nNewSize; }
     sal_Int64               GetSpinSize() const               { return mnSpinSize; }
 
-    void                    SetDecimalDigits( USHORT nDigits );
-    USHORT                  GetDecimalDigits() const;
+    void                    SetDecimalDigits( sal_uInt16 nDigits );
+    sal_uInt16                  GetDecimalDigits() const;
 
-    void                    SetUseThousandSep( BOOL b );
-    BOOL                    IsUseThousandSep() const { return mbThousandSep; }
+    void                    SetUseThousandSep( sal_Bool b );
+    sal_Bool                    IsUseThousandSep() const { return mbThousandSep; }
 
-    void                    SetShowTrailingZeros( BOOL bShowTrailingZeros );
-    BOOL                    IsShowTrailingZeros() const { return mbShowTrailingZeros; }
+    void                    SetShowTrailingZeros( sal_Bool bShowTrailingZeros );
+    sal_Bool                    IsShowTrailingZeros() const { return mbShowTrailingZeros; }
 
 
     void                    SetUserValue( sal_Int64 nNewValue );
     virtual void            SetValue( sal_Int64 nNewValue );
     virtual sal_Int64       GetValue() const;
-    BOOL                    IsValueModified() const;
+    sal_Bool                    IsValueModified() const;
     sal_Int64               GetCorrectedValue() const { return mnCorrectedValue; }
 
     Fraction                ConvertToFraction( sal_Int64 nValue );
@@ -248,7 +248,7 @@ protected:
     virtual XubString       CreateFieldText( sal_Int64 nValue ) const;
 
     SAL_DLLPRIVATE void     ImplLoadRes( const ResId& rResId );
-    SAL_DLLPRIVATE BOOL     ImplMetricReformat( const XubString& rStr, double& rValue, XubString& rOutStr );
+    SAL_DLLPRIVATE sal_Bool     ImplMetricReformat( const XubString& rStr, double& rValue, XubString& rOutStr );
 
 public:
                             ~MetricFormatter();
@@ -301,7 +301,7 @@ private:
 protected:
                             CurrencyFormatter();
     virtual XubString       CreateFieldText( sal_Int64 nValue ) const;
-    SAL_DLLPRIVATE BOOL     ImplCurrencyReformat( const XubString& rStr, XubString& rOutStr );
+    SAL_DLLPRIVATE sal_Bool     ImplCurrencyReformat( const XubString& rStr, XubString& rOutStr );
 
 public:
                             ~CurrencyFormatter();
@@ -329,12 +329,12 @@ private:
     Date                    maMin;
     Date                    maMax;
     Date                    maCorrectedDate;
-    BOOL                    mbLongFormat;
-    BOOL                    mbEmptyDate;
-    BOOL                    mbShowDateCentury;
-    USHORT                  mnDateFormat;
-    ULONG                   mnExtDateFormat;
-    BOOL                    mbEnforceValidValue;
+    sal_Bool                    mbLongFormat;
+    sal_Bool                    mbEmptyDate;
+    sal_Bool                    mbShowDateCentury;
+    sal_uInt16                  mnDateFormat;
+    sal_uLong                   mnExtDateFormat;
+    sal_Bool                    mbEnforceValidValue;
 
     SAL_DLLPRIVATE void     ImplInit();
 
@@ -343,7 +343,7 @@ protected:
 
     SAL_DLLPRIVATE void     ImplLoadRes( const ResId& rResId );
     SAL_DLLPRIVATE const Date& ImplGetFieldDate() const    { return maFieldDate; }
-    SAL_DLLPRIVATE BOOL     ImplDateReformat( const XubString& rStr, XubString& rOutStr,
+    SAL_DLLPRIVATE sal_Bool     ImplDateReformat( const XubString& rStr, XubString& rOutStr,
                                               const AllSettings& rSettings );
     SAL_DLLPRIVATE void     ImplSetUserDate( const Date& rNewDate,
                                              Selection* pNewSelection = NULL );
@@ -352,7 +352,7 @@ protected:
     SAL_DLLPRIVATE void     ImplNewFieldValue( const Date& rDate );
     CalendarWrapper&        GetCalendarWrapper() const;
 
-    SAL_DLLPRIVATE BOOL     ImplAllowMalformedInput() const;
+    SAL_DLLPRIVATE sal_Bool     ImplAllowMalformedInput() const;
 
 public:
                             ~DateFormatter();
@@ -364,7 +364,7 @@ public:
 
 
     void                    SetExtDateFormat( ExtDateFieldFormat eFormat );
-    ExtDateFieldFormat      GetExtDateFormat( BOOL bResolveSystemFormat = FALSE ) const;
+    ExtDateFieldFormat      GetExtDateFormat( sal_Bool bResolveSystemFormat = sal_False ) const;
 
     void                    SetMin( const Date& rNewMin );
     const Date&             GetMin() const { return maMin; }
@@ -375,27 +375,27 @@ public:
 
     // --------------------------------------------------------------
     // MT: Remove these methods too, ExtDateFormat should be enough!
-    //     What should happen if using DDMMYYYY, but ShowCentury=FALSE?
+    //     What should happen if using DDMMYYYY, but ShowCentury=sal_False?
     // --------------------------------------------------------------
-    void                    SetLongFormat( BOOL bLong );
-    BOOL                    IsLongFormat() const { return mbLongFormat; }
-    void                    SetShowDateCentury( BOOL bShowCentury );
-    BOOL                    IsShowDateCentury() const { return mbShowDateCentury; }
+    void                    SetLongFormat( sal_Bool bLong );
+    sal_Bool                    IsLongFormat() const { return mbLongFormat; }
+    void                    SetShowDateCentury( sal_Bool bShowCentury );
+    sal_Bool                    IsShowDateCentury() const { return mbShowDateCentury; }
     // --------------------------------------------------------------
 
     void                    SetDate( const Date& rNewDate );
     void                    SetUserDate( const Date& rNewDate );
     Date                    GetDate() const;
     Date                    GetRealDate() const;
-    BOOL                    IsDateModified() const;
+    sal_Bool                    IsDateModified() const;
     void                    SetEmptyDate();
-    BOOL                    IsEmptyDate() const;
+    sal_Bool                    IsEmptyDate() const;
     Date                    GetCorrectedDate() const { return maCorrectedDate; }
 
     void                    ResetLastDate() { maLastDate = Date( 0, 0, 0 ); }
 
     static void             ExpandCentury( Date& rDate );
-    static void             ExpandCentury( Date& rDate, USHORT nTwoDigitYearStart );
+    static void             ExpandCentury( Date& rDate, sal_uInt16 nTwoDigitYearStart );
 
     static Date             GetInvalidDate() { return Date( 0, 0, 0 ); }
 
@@ -411,8 +411,8 @@ public:
         In addition, if this is set to <FALSE/>, the text in the field will <em>not</em> be corrected
         when the control loses the focus - instead, the invalid input will be preserved.
     */
-    void                    EnforceValidValue( BOOL _bEnforce ) { mbEnforceValidValue = _bEnforce; }
-    inline BOOL             IsEnforceValidValue( ) const { return mbEnforceValidValue; }
+    void                    EnforceValidValue( sal_Bool _bEnforce ) { mbEnforceValidValue = _bEnforce; }
+    inline sal_Bool             IsEnforceValidValue( ) const { return mbEnforceValidValue; }
 };
 
 
@@ -428,10 +428,10 @@ private:
     Time                    maMax;
     Time                    maCorrectedTime;
     TimeFieldFormat         meFormat;
-    USHORT                  mnTimeFormat;
-    BOOL                    mbDuration;
-    BOOL                    mbEmptyTime;
-    BOOL                    mbEnforceValidValue;
+    sal_uInt16                  mnTimeFormat;
+    sal_Bool                    mbDuration;
+    sal_Bool                    mbEmptyTime;
+    sal_Bool                    mbEnforceValidValue;
 
     SAL_DLLPRIVATE void     ImplInit();
 
@@ -441,10 +441,10 @@ protected:
                             TimeFormatter();
 
     SAL_DLLPRIVATE void     ImplLoadRes( const ResId& rResId );
-    SAL_DLLPRIVATE BOOL     ImplTimeReformat( const XubString& rStr, XubString& rOutStr );
+    SAL_DLLPRIVATE sal_Bool     ImplTimeReformat( const XubString& rStr, XubString& rOutStr );
     SAL_DLLPRIVATE void     ImplNewFieldValue( const Time& rTime );
     SAL_DLLPRIVATE void     ImplSetUserTime( const Time& rNewTime, Selection* pNewSelection = NULL );
-    SAL_DLLPRIVATE BOOL     ImplAllowMalformedInput() const;
+    SAL_DLLPRIVATE sal_Bool     ImplAllowMalformedInput() const;
 
 public:
 
@@ -469,16 +469,16 @@ public:
     void                    SetFormat( TimeFieldFormat eNewFormat );
     TimeFieldFormat         GetFormat() const { return meFormat; }
 
-    void                    SetDuration( BOOL mbDuration );
-    BOOL                    IsDuration() const { return mbDuration; }
+    void                    SetDuration( sal_Bool mbDuration );
+    sal_Bool                    IsDuration() const { return mbDuration; }
 
     void                    SetTime( const Time& rNewTime );
     void                    SetUserTime( const Time& rNewTime );
     Time                    GetTime() const;
     Time                    GetRealTime() const;
-    BOOL                    IsTimeModified() const;
+    sal_Bool                    IsTimeModified() const;
     void                    SetEmptyTime() { FormatterBase::SetEmptyFieldValue(); }
-    BOOL                    IsEmptyTime() const { return FormatterBase::IsEmptyFieldValue(); }
+    sal_Bool                    IsEmptyTime() const { return FormatterBase::IsEmptyFieldValue(); }
     Time                    GetCorrectedTime() const { return maCorrectedTime; }
 
     static Time             GetInvalidTime() { return Time( 99, 99, 99 ); }
@@ -495,8 +495,8 @@ public:
         In addition, if this is set to <FALSE/>, the text in the field will <em>not</em> be corrected
         when the control loses the focus - instead, the invalid input will be preserved.
     */
-    void                    EnforceValidValue( BOOL _bEnforce ) { mbEnforceValidValue = _bEnforce; }
-    inline BOOL             IsEnforceValidValue( ) const { return mbEnforceValidValue; }
+    void                    EnforceValidValue( sal_Bool _bEnforce ) { mbEnforceValidValue = _bEnforce; }
+    inline sal_Bool             IsEnforceValidValue( ) const { return mbEnforceValidValue; }
 };
 
 
@@ -583,31 +583,31 @@ public:
 
     static void             SetDefaultUnit( FieldUnit eDefaultUnit );
     static FieldUnit        GetDefaultUnit();
-    static sal_Int64        ConvertValue( sal_Int64 nValue, sal_Int64 mnBaseValue, USHORT nDecDigits,
+    static sal_Int64        ConvertValue( sal_Int64 nValue, sal_Int64 mnBaseValue, sal_uInt16 nDecDigits,
                                           FieldUnit eInUnit, FieldUnit eOutUnit );
-    static sal_Int64        ConvertValue( sal_Int64 nValue, USHORT nDecDigits,
+    static sal_Int64        ConvertValue( sal_Int64 nValue, sal_uInt16 nDecDigits,
                                           FieldUnit eInUnit, MapUnit eOutUnit );
-    static sal_Int64        ConvertValue( sal_Int64 nValue, USHORT nDecDigits,
+    static sal_Int64        ConvertValue( sal_Int64 nValue, sal_uInt16 nDecDigits,
                                           MapUnit eInUnit, FieldUnit eOutUnit );
 
     // for backwards compatibility
     // caution: conversion to double loses precision
-    static double           ConvertDoubleValue( double nValue, sal_Int64 mnBaseValue, USHORT nDecDigits,
+    static double           ConvertDoubleValue( double nValue, sal_Int64 mnBaseValue, sal_uInt16 nDecDigits,
                                                 FieldUnit eInUnit, FieldUnit eOutUnit );
-    static double           ConvertDoubleValue( double nValue, USHORT nDecDigits,
+    static double           ConvertDoubleValue( double nValue, sal_uInt16 nDecDigits,
                                                 FieldUnit eInUnit, MapUnit eOutUnit );
-    static double           ConvertDoubleValue( double nValue, USHORT nDecDigits,
+    static double           ConvertDoubleValue( double nValue, sal_uInt16 nDecDigits,
                                                 MapUnit eInUnit, FieldUnit eOutUnit );
 
     // for backwards compatibility
     // caution: conversion to double loses precision
-    static double           ConvertDoubleValue( sal_Int64 nValue, sal_Int64 nBaseValue, USHORT nDecDigits,
+    static double           ConvertDoubleValue( sal_Int64 nValue, sal_Int64 nBaseValue, sal_uInt16 nDecDigits,
                                                 FieldUnit eInUnit, FieldUnit eOutUnit )
     { return ConvertDoubleValue( static_cast<double>(nValue), nBaseValue, nDecDigits, eInUnit, eOutUnit ); }
-    static double           ConvertDoubleValue( sal_Int64 nValue, USHORT nDecDigits,
+    static double           ConvertDoubleValue( sal_Int64 nValue, sal_uInt16 nDecDigits,
                                                 FieldUnit eInUnit, MapUnit eOutUnit )
     { return ConvertDoubleValue( static_cast<double>(nValue), nDecDigits, eInUnit, eOutUnit ); }
-    static double           ConvertDoubleValue( sal_Int64 nValue, USHORT nDecDigits,
+    static double           ConvertDoubleValue( sal_Int64 nValue, sal_uInt16 nDecDigits,
                                                 MapUnit eInUnit, FieldUnit eOutUnit )
     { return ConvertDoubleValue( static_cast<double>(nValue), nDecDigits, eInUnit, eOutUnit ); }
 };
@@ -651,7 +651,7 @@ private:
     Date                    maLast;
 
 protected:
-    SAL_DLLPRIVATE void     ImplDateSpinArea( BOOL bUp );
+    SAL_DLLPRIVATE void     ImplDateSpinArea( sal_Bool bUp );
     SAL_DLLPRIVATE void     ImplLoadRes( const ResId& rResId );
 
 public:
@@ -687,7 +687,7 @@ private:
     Time                    maLast;
 
 protected:
-    SAL_DLLPRIVATE void     ImplTimeSpinArea( BOOL bUp );
+    SAL_DLLPRIVATE void     ImplTimeSpinArea( sal_Bool bUp );
     SAL_DLLPRIVATE void     ImplLoadRes( const ResId& rResId );
 
 public:
@@ -734,11 +734,11 @@ public:
     virtual void            ReformatAll();
 
     void                    InsertString( const XubString& rStr,
-                                          USHORT nPos = COMBOBOX_APPEND );
+                                          sal_uInt16 nPos = COMBOBOX_APPEND );
     void                    RemoveString( const XubString& rStr );
     using PatternFormatter::GetString;
-    XubString               GetString( USHORT nPos ) const;
-    USHORT                  GetStringPos( const XubString& rStr ) const;
+    XubString               GetString( sal_uInt16 nPos ) const;
+    sal_uInt16                  GetStringPos( const XubString& rStr ) const;
 };
 
 
@@ -761,11 +761,11 @@ public:
 
     virtual void            ReformatAll();
 
-    void                    InsertValue( sal_Int64 nValue, USHORT nPos = COMBOBOX_APPEND );
+    void                    InsertValue( sal_Int64 nValue, sal_uInt16 nPos = COMBOBOX_APPEND );
     void                    RemoveValue( sal_Int64 nValue );
     using NumericFormatter::GetValue;
-    sal_Int64               GetValue( USHORT nPos ) const;
-    USHORT                  GetValuePos( sal_Int64 nPos ) const;
+    sal_Int64               GetValue( sal_uInt16 nPos ) const;
+    sal_uInt16                  GetValuePos( sal_Int64 nPos ) const;
 };
 
 
@@ -790,10 +790,10 @@ public:
     virtual void            ReformatAll();
 
     void                    InsertValue( sal_Int64 nValue, FieldUnit eInUnit = FUNIT_NONE,
-                                         USHORT nPos = COMBOBOX_APPEND );
+                                         sal_uInt16 nPos = COMBOBOX_APPEND );
     void                    RemoveValue( sal_Int64 nValue, FieldUnit eInUnit = FUNIT_NONE );
-    sal_Int64               GetValue( USHORT nPos, FieldUnit eOutUnit = FUNIT_NONE ) const;
-    USHORT                  GetValuePos( sal_Int64 nValue,
+    sal_Int64               GetValue( sal_uInt16 nPos, FieldUnit eOutUnit = FUNIT_NONE ) const;
+    sal_uInt16                  GetValuePos( sal_Int64 nValue,
                                          FieldUnit eInUnit = FUNIT_NONE ) const;
 
     // Needed, because GetValue() with nPos hide these functions
@@ -821,10 +821,10 @@ public:
 
     virtual void            ReformatAll();
 
-    void                    InsertValue( sal_Int64 nValue, USHORT nPos = COMBOBOX_APPEND );
+    void                    InsertValue( sal_Int64 nValue, sal_uInt16 nPos = COMBOBOX_APPEND );
     void                    RemoveValue( sal_Int64 nValue );
-    sal_Int64               GetValue( USHORT nPos ) const;
-    USHORT                  GetValuePos( sal_Int64 nValue ) const;
+    sal_Int64               GetValue( sal_uInt16 nPos ) const;
+    sal_uInt16                  GetValuePos( sal_Int64 nValue ) const;
 
     // Needed, because GetValue() with nPos hide this function
     virtual sal_Int64       GetValue() const;
@@ -850,11 +850,11 @@ public:
 
     virtual void            ReformatAll();
 
-    void                    InsertDate( const Date& rDate, USHORT nPos = COMBOBOX_APPEND );
+    void                    InsertDate( const Date& rDate, sal_uInt16 nPos = COMBOBOX_APPEND );
     void                    RemoveDate( const Date& rDate );
     using DateFormatter::GetDate;
-    Date                    GetDate( USHORT nPos ) const;
-    USHORT                  GetDatePos( const Date& rDate ) const;
+    Date                    GetDate( sal_uInt16 nPos ) const;
+    sal_uInt16                  GetDatePos( const Date& rDate ) const;
 };
 
 
@@ -877,11 +877,11 @@ public:
 
     virtual void            ReformatAll();
 
-    void                    InsertTime( const Time& rTime, USHORT nPos = COMBOBOX_APPEND );
+    void                    InsertTime( const Time& rTime, sal_uInt16 nPos = COMBOBOX_APPEND );
     void                    RemoveTime( const Time& rTime );
     using TimeFormatter::GetTime;
-    Time                    GetTime( USHORT nPos ) const;
-    USHORT                  GetTimePos( const Time& rTime ) const;
+    Time                    GetTime( sal_uInt16 nPos ) const;
+    sal_uInt16                  GetTimePos( const Time& rTime ) const;
 };
 
 #endif // _SV_FIELD_HXX

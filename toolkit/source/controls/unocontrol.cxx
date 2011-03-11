@@ -51,6 +51,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <comphelper/stl_types.hxx>
+#include <comphelper/processfactory.hxx>
 #include <toolkit/helper/property.hxx>
 #include <toolkit/helper/servicenames.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -163,7 +164,26 @@ struct UnoControl_Data
 //  ----------------------------------------------------
 DBG_NAME( UnoControl )
 UnoControl::UnoControl()
-    : maDisposeListeners( *this )
+    :maContext( ::comphelper::getProcessServiceFactory() )
+    ,maDisposeListeners( *this )
+    ,maWindowListeners( *this )
+    ,maFocusListeners( *this )
+    ,maKeyListeners( *this )
+    ,maMouseListeners( *this )
+    ,maMouseMotionListeners( *this )
+    ,maPaintListeners( *this )
+    ,maModeChangeListeners( GetMutex() )
+    ,mpData( new UnoControl_Data )
+{
+    DBG_CTOR( UnoControl, NULL );
+    OSL_ENSURE( false, "UnoControl::UnoControl: not implemented. Well, not really." );
+    // just implemented to let the various FooImplInheritanceHelper compile, you should use the
+    // version taking a service factory
+}
+
+UnoControl::UnoControl( const Reference< XMultiServiceFactory >& i_factory )
+    : maContext( i_factory )
+    , maDisposeListeners( *this )
     , maWindowListeners( *this )
     , maFocusListeners( *this )
     , maKeyListeners( *this )

@@ -56,11 +56,12 @@ typedef unsigned int pthread_t;
 class VCL_DLLPUBLIC X11SalData : public SalData
 {
 protected:
-            BOOL                bNoExceptions_;
+            sal_Bool                bNoExceptions_;
             SalXLib            *pXLib_;
             SalDisplay         *m_pSalDisplay;
             pthread_t           hMainThread_;
             rtl::OUString       maLocalHostName;
+            rtl::OUString       maUnicodeAccumulator;
 
 public:
     X11SalData();
@@ -82,11 +83,12 @@ public:
     inline  SalXLib*        GetLib() const { return pXLib_; }
     inline  pthread_t       GetMainThread() const { return hMainThread_; }
 
-    void                    StartTimer( ULONG nMS );
+    void                    StartTimer( sal_uLong nMS );
     inline  void            StopTimer();
     void                    Timeout() const;
 
     const rtl::OUString&    GetLocalHostName();
+    rtl::OUString&          GetUnicodeAccumulator() { return maUnicodeAccumulator; }
 
     static int XErrorHdl( Display*, XErrorEvent* );
     static int XIOErrorHdl( Display* );
@@ -109,7 +111,7 @@ inline void X11SalData::XError( Display *pDisplay,  XErrorEvent *pEvent ) const
 
 class YieldMutexReleaser
 {
-    ULONG               m_nYieldCount;
+    sal_uLong               m_nYieldCount;
 public:
     inline YieldMutexReleaser();
     inline ~YieldMutexReleaser();

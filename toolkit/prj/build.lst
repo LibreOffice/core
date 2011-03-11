@@ -1,14 +1,3 @@
-ti	toolkit	:	vcl NULL
-ti	toolkit									usr1	-	all	ti_mkout NULL
-ti	toolkit\prj								get		-	all	ti_prj NULL
-ti	toolkit\inc								nmake	-	all	ti_inc NULL
-ti	toolkit\uiconfig\layout									nmake	-	all	ti_uiconfig_layout NULL
-ti	toolkit\source\helper					nmake	-	all	ti_helper  ti_inc NULL
-ti	toolkit\source\awt						nmake	-	all	ti_awt  ti_inc NULL
-ti	toolkit\source\controls					nmake	-	all	ti_controls  ti_inc NULL
-ti	toolkit\source\controls\tree			nmake	-	all	ti_tree  NULL
-ti	toolkit\source\controls\grid			nmake	-	all	ti_grid  NULL
-ti	toolkit\source\layout\core			nmake	-	all	ti_layout_core  NULL
-ti	toolkit\source\layout\vcl			nmake	-	all	ti_layout_vcl  NULL
-ti	toolkit\util							nmake	-	all	ti_util ti_awt ti_controls ti_layout_core ti_helper ti_tree ti_grid ti_layout_vcl NULL
-ti toolkit\qa\unoapi nmake - all ti_qa_unoapi NULL
+ti toolkit : LIBXSLT:libxslt vcl qadevOOo test NULL
+ti toolkit\prj					nmake - all ti_prj NULL
+ti toolkit\qa\complex\toolkit   nmake - all ti_complex_toolkit NULL

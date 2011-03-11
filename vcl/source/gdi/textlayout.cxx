@@ -110,7 +110,7 @@ namespace vcl
     public:
         // equivalents to the respective OutputDevice methods, which take the reference device into account
         long        GetTextArray( const XubString& _rText, sal_Int32* _pDXAry, xub_StrLen _nStartIndex, xub_StrLen _nLength ) const;
-        Rectangle   DrawText( const Rectangle& _rRect, const XubString& _rText, USHORT _nStyle, MetricVector* _pVector, String* _pDisplayText );
+        Rectangle   DrawText( const Rectangle& _rRect, const XubString& _rText, sal_uInt16 _nStyle, MetricVector* _pVector, String* _pDisplayText );
 
     protected:
         void onBeginDrawText()
@@ -310,13 +310,13 @@ namespace vcl
     }
 
     //--------------------------------------------------------------------
-    Rectangle ReferenceDeviceTextLayout::DrawText( const Rectangle& _rRect, const XubString& _rText, USHORT _nStyle, MetricVector* _pVector, String* _pDisplayText )
+    Rectangle ReferenceDeviceTextLayout::DrawText( const Rectangle& _rRect, const XubString& _rText, sal_uInt16 _nStyle, MetricVector* _pVector, String* _pDisplayText )
     {
         if ( !_rText.Len() )
             return Rectangle();
 
         // determine text layout mode from the RTL-ness of the control whose text we render
-        ULONG nTextLayoutMode = m_bRTLEnabled ? TEXT_LAYOUT_BIDI_RTL : TEXT_LAYOUT_BIDI_LTR;
+        sal_uLong nTextLayoutMode = m_bRTLEnabled ? TEXT_LAYOUT_BIDI_RTL : TEXT_LAYOUT_BIDI_LTR;
         m_rReferenceDevice.SetLayoutMode( nTextLayoutMode );
         m_rTargetDevice.SetLayoutMode( nTextLayoutMode | TEXT_LAYOUT_TEXTORIGIN_LEFT );
             // TEXT_LAYOUT_TEXTORIGIN_LEFT is because when we do actually draw the text (in DrawText( Point, ... )), then
@@ -376,7 +376,7 @@ namespace vcl
     }
 
     //--------------------------------------------------------------------
-    Rectangle ControlTextRenderer::DrawText( const Rectangle& _rRect, const XubString& _rText, USHORT _nStyle,
+    Rectangle ControlTextRenderer::DrawText( const Rectangle& _rRect, const XubString& _rText, sal_uInt16 _nStyle,
         MetricVector* _pVector, String* _pDisplayText )
     {
         return m_pImpl->DrawText( _rRect, _rText, _nStyle, _pVector, _pDisplayText );

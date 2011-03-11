@@ -1046,13 +1046,13 @@ void GraphiteLayout::expandOrCondense(ImplLayoutArgs &rArgs)
             {
                 if (mvGlyphs[i].IsClusterStart())
                 {
-                    nOffset = fExtraPerCluster * nCluster;
+                    nOffset = FRound( fExtraPerCluster * nCluster );
                     size_t nCharIndex = mvGlyph2Char[i];
                     mvCharDxs[nCharIndex] += nOffset;
                     // adjust char dxs for rest of characters in cluster
                     while (++nCharIndex < mvGlyph2Char.size())
                     {
-                        int nChar2Base = (mvChar2BaseGlyph[nCharIndex] == -1)? -1 : mvChar2BaseGlyph[nCharIndex] & GLYPH_INDEX_MASK;
+                        int nChar2Base = (mvChar2BaseGlyph[nCharIndex] == -1)? -1 : (int)(mvChar2BaseGlyph[nCharIndex] & GLYPH_INDEX_MASK);
                         if (nChar2Base == -1 || nChar2Base == static_cast<int>(i))
                             mvCharDxs[nCharIndex] += nOffset;
                     }
@@ -1075,12 +1075,12 @@ void GraphiteLayout::expandOrCondense(ImplLayoutArgs &rArgs)
         Glyphs::iterator iGlyph = mvGlyphs.begin();
         while (iGlyph != iLastGlyph)
         {
-            iGlyph->maLinearPos.X() = static_cast<float>(iGlyph->maLinearPos.X()) * fXFactor;
+            iGlyph->maLinearPos.X() = FRound( fXFactor * iGlyph->maLinearPos.X() );
             ++iGlyph;
         }
         for (size_t i = 0; i < mvCharDxs.size(); i++)
         {
-            mvCharDxs[i] = fXFactor * static_cast<float>(mvCharDxs[i]);
+            mvCharDxs[i] = FRound( fXFactor * mvCharDxs[i] );
         }
     }
     mnWidth = rArgs.mnLayoutWidth;
@@ -1106,7 +1106,7 @@ void GraphiteLayout::ApplyDXArray(ImplLayoutArgs &args, std::vector<int> & rDelt
     int nPrevClusterLastChar = -1;
     for (size_t i = 0; i < nChars; i++)
     {
-        int nChar2Base = (mvChar2BaseGlyph[i] == -1)? -1 : mvChar2BaseGlyph[i] & GLYPH_INDEX_MASK;
+        int nChar2Base = (mvChar2BaseGlyph[i] == -1)? -1 : (int)(mvChar2BaseGlyph[i] & GLYPH_INDEX_MASK);
         if ((nChar2Base > -1) && (nChar2Base != nPrevClusterGlyph))
         {
             assert((nChar2Base > -1) && (nChar2Base < (signed)mvGlyphs.size()));
@@ -1120,11 +1120,11 @@ void GraphiteLayout::ApplyDXArray(ImplLayoutArgs &args, std::vector<int> & rDelt
             int nLastGlyph = nChar2Base;
             for (; j < nChars; j++)
             {
-                int nChar2BaseJ = (mvChar2BaseGlyph[j] == -1)? -1 : mvChar2BaseGlyph[j] & GLYPH_INDEX_MASK;
+                int nChar2BaseJ = (mvChar2BaseGlyph[j] == -1)? -1 : (int)(mvChar2BaseGlyph[j] & GLYPH_INDEX_MASK);
                 assert((nChar2BaseJ >= -1) && (nChar2BaseJ < (signed)mvGlyphs.size()));
                 if (nChar2BaseJ != -1 && mvGlyphs[nChar2BaseJ].IsClusterStart())
                 {
-                    nLastGlyph = nChar2BaseJ + ((bRtl)? 1 : -1);
+                    nLastGlyph = nChar2BaseJ + ((bRtl)? +1 : -1);
                     nLastChar = j - 1;
                     break;
                 }

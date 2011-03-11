@@ -90,11 +90,8 @@
 #include "rtl/strbuf.hxx"
 #endif
 
-using namespace ::rtl;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-
-
+using ::rtl::OUString;
+using namespace ::com::sun::star;
 
 // =======================================================================
 
@@ -165,27 +162,23 @@ int ImplSVMain()
 
     DBG_ASSERT( pSVData->mpApp, "no instance of class Application" );
 
-    Reference<XMultiServiceFactory> xMS;
+    uno::Reference<lang::XMultiServiceFactory> xMS;
 
     int nReturn = EXIT_FAILURE;
 
-    BOOL bInit = InitVCL( xMS );
+    sal_Bool bInit = InitVCL( xMS );
 
     if( bInit )
     {
         // Application-Main rufen
-        pSVData->maAppData.mbInAppMain = TRUE;
+        pSVData->maAppData.mbInAppMain = sal_True;
         nReturn = pSVData->mpApp->Main();
-        pSVData->maAppData.mbInAppMain = FALSE;
+        pSVData->maAppData.mbInAppMain = sal_False;
     }
 
     if( pSVData->mxDisplayConnection.is() )
     {
-        vcl::DisplayConnection* pConnection =
-            dynamic_cast<vcl::DisplayConnection*>(pSVData->mxDisplayConnection.get());
-
-        if( pConnection )
-            pConnection->dispatchDowningEvent();
+        pSVData->mxDisplayConnection->terminate();
         pSVData->mxDisplayConnection.clear();
     }
 
@@ -194,10 +187,10 @@ int ImplSVMain()
     // be some events in the AWT EventQueue, which need the SolarMutex which
     // - on the other hand - is destroyed in DeInitVCL(). So empty the queue
     // here ..
-    Reference< XComponent > xComponent(pSVData->mxAccessBridge, UNO_QUERY);
+    uno::Reference< lang::XComponent > xComponent(pSVData->mxAccessBridge, uno::UNO_QUERY);
     if( xComponent.is() )
     {
-      ULONG nCount = Application::ReleaseSolarMutex();
+      sal_uLong nCount = Application::ReleaseSolarMutex();
       xComponent->dispose();
       Application::AcquireSolarMutex(nCount);
       pSVData->mxAccessBridge.clear();
@@ -210,7 +203,7 @@ int ImplSVMain()
 int SVMain()
 {
     // #i47888# allow for alternative initialization as required for e.g. MacOSX
-    extern BOOL ImplSVMainHook( int* );
+    extern sal_Bool ImplSVMainHook( int* );
 
     int nRet;
     if( ImplSVMainHook( &nRet ) )
@@ -244,13 +237,13 @@ private:
     com::sun::star::uno::Reference< com::sun::star::uno::XCurrentContext > m_xNextContext;
 };
 
-Any SAL_CALL DesktopEnvironmentContext::getValueByName( const rtl::OUString& Name) throw (RuntimeException)
+uno::Any SAL_CALL DesktopEnvironmentContext::getValueByName( const rtl::OUString& Name) throw (uno::RuntimeException)
 {
-    Any retVal;
+    uno::Any retVal;
 
     if (Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("system.desktop-environment")))
     {
-        retVal = makeAny( Application::GetDesktopEnvironment() );
+        retVal = uno::makeAny( Application::GetDesktopEnvironment() );
     }
     else if( m_xNextContext.is() )
     {
@@ -260,12 +253,12 @@ Any SAL_CALL DesktopEnvironmentContext::getValueByName( const rtl::OUString& Nam
     return retVal;
 }
 
-BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr )
+sal_Bool InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr )
 {
     RTL_LOGFILE_CONTEXT( aLog, "vcl (ss112471) ::InitVCL" );
 
     if( pExceptionHandler != NULL )
-        return FALSE;
+        return sal_False;
 
     if( ! ImplGetSVData() )
         ImplInitSVData();
@@ -294,7 +287,7 @@ BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XM
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ ::CreateSalInstance" );
     pSVData->mpDefInst = CreateSalInstance();
     if ( !pSVData->mpDefInst )
-        return FALSE;
+        return sal_False;
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "} ::CreateSalInstance" );
 
     // Desktop Environment context (to be able to get value of "system.desktop-environment" as soon as possible)
@@ -319,7 +312,7 @@ BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XM
 
     // Initialize global data
     pSVData->maGDIData.mpScreenFontList     = new ImplDevFontList;
-    pSVData->maGDIData.mpScreenFontCache    = new ImplFontCache( FALSE );
+    pSVData->maGDIData.mpScreenFontCache    = new ImplFontCache( sal_False );
     pSVData->maGDIData.mpGrfConverter       = new GraphicConverter;
 
     // Exception-Handler setzen
@@ -328,7 +321,7 @@ BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XM
     // Debug-Daten initialisieren
     DBGGUI_INIT();
 
-    return TRUE;
+    return sal_True;
 }
 
 namespace
@@ -341,12 +334,12 @@ namespace
  */
 class VCLUnoWrapperDeleter : public cppu::WeakImplHelper1<com::sun::star::lang::XEventListener>
 {
-    virtual void SAL_CALL disposing(EventObject const& rSource) throw(RuntimeException);
+    virtual void SAL_CALL disposing(lang::EventObject const& rSource) throw(uno::RuntimeException);
 };
 
 void
-VCLUnoWrapperDeleter::disposing(EventObject const& /* rSource */)
-    throw(RuntimeException)
+VCLUnoWrapperDeleter::disposing(lang::EventObject const& /* rSource */)
+    throw(uno::RuntimeException)
 {
     ImplSVData* const pSVData = ImplGetSVData();
     if (pSVData && pSVData->mpUnoWrapper)
@@ -361,7 +354,7 @@ VCLUnoWrapperDeleter::disposing(EventObject const& /* rSource */)
 void DeInitVCL()
 {
     ImplSVData* pSVData = ImplGetSVData();
-    pSVData->mbDeInit = TRUE;
+    pSVData->mbDeInit = sal_True;
 
     vcl::DeleteOnDeinitBase::ImplDeleteOnDeInit();
 
@@ -475,14 +468,14 @@ void DeInitVCL()
     {
         try
         {
-            Reference<XComponent> const xDesktop(
+            uno::Reference<lang::XComponent> const xDesktop(
                     comphelper::createProcessComponent(
                         OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"))),
-                    UNO_QUERY_THROW)
+                    uno::UNO_QUERY_THROW)
                 ;
             xDesktop->addEventListener(new VCLUnoWrapperDeleter());
         }
-        catch (Exception const&)
+        catch (uno::Exception const&)
         {
             // ignore
         }

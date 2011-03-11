@@ -255,7 +255,7 @@ namespace svt
         if ( lcl_checkDisposed( *m_pData ) )
             return NULL;
 
-        return m_pData->pTabBar->GetAccessible( TRUE );
+        return m_pData->pTabBar->GetAccessible( sal_True );
     }
 
 //........................................................................

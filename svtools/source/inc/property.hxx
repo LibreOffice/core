@@ -72,13 +72,13 @@ public:
         virtual SvXPropertyCtrListener* GetSvXPropertyCtrListener()=0;
         virtual void                    SetProperty(const String &rString)=0;
         virtual String                  GetProperty()const=0;
-        virtual BOOL                    HasList()=0;
+        virtual sal_Bool                    HasList()=0;
         virtual void                    ClearList()=0;
         virtual void                    InsertEntry( const String& rString,
-                                                USHORT nPos = LISTBOX_APPEND )=0;
+                                                sal_uInt16 nPos = LISTBOX_APPEND )=0;
 
         virtual void                    SetCtrSize(const Size& rSize)=0;
-        virtual void                    SetLocked(BOOL bLocked=TRUE)=0;
+        virtual void                    SetLocked(sal_Bool bLocked=sal_True)=0;
 
         virtual void                    SetMyName(const String &rString)=0;
         virtual String                  GetMyName()const=0;
@@ -122,13 +122,13 @@ public:
         virtual void                    SetProperty(const String &rString);
         virtual String                  GetProperty()const;
 
-        virtual BOOL                    HasList();
+        virtual sal_Bool                    HasList();
         virtual void                    ClearList();
         virtual void                    InsertEntry( const String& rString,
-                                                USHORT nPos = LISTBOX_APPEND );
+                                                sal_uInt16 nPos = LISTBOX_APPEND );
 
         virtual void                    SetCtrSize(const Size& rSize);
-        virtual void                    SetLocked(BOOL bLocked=TRUE);
+        virtual void                    SetLocked(sal_Bool bLocked=sal_True);
 
         virtual void                    SetMyName(const String &rString);
         virtual String                  GetMyName()const;
@@ -165,13 +165,13 @@ public:
         virtual void                    SetProperty(const String &rString);
         virtual String                  GetProperty()const;
 
-        virtual BOOL                    HasList();
+        virtual sal_Bool                    HasList();
         virtual void                    ClearList();
         virtual void                    InsertEntry( const String& rString,
-                                                USHORT nPos = LISTBOX_APPEND );
+                                                sal_uInt16 nPos = LISTBOX_APPEND );
 
         virtual void                    SetCtrSize(const Size& rSize);
-        virtual void                    SetLocked(BOOL bLocked=TRUE);
+        virtual void                    SetLocked(sal_Bool bLocked=sal_True);
 
         virtual void                    SetMyName(const String &rString);
         virtual String                  GetMyName()const;
@@ -207,13 +207,13 @@ public:
         virtual void                    SetProperty(const String &rString);
         virtual String                  GetProperty()const;
 
-        virtual BOOL                    HasList();
+        virtual sal_Bool                    HasList();
         virtual void                    ClearList();
         virtual void                    InsertEntry( const String& rString,
-                                                USHORT nPos = LISTBOX_APPEND );
+                                                sal_uInt16 nPos = LISTBOX_APPEND );
 
         virtual void                    SetCtrSize(const Size& rSize);
-        virtual void                    SetLocked(BOOL bLocked=TRUE);
+        virtual void                    SetLocked(sal_Bool bLocked=sal_True);
 
         virtual void                    SetMyName(const String &rString);
         virtual String                  GetMyName()const;
@@ -228,14 +228,14 @@ class SvPropertyLine : public Control
 {
 private:
             FixedText           aName;
-            USHORT              nNameWidth;
-            BOOL                bNeedsRepaint;
+            sal_uInt16              nNameWidth;
+            sal_Bool                bNeedsRepaint;
             SvXPropertyControl* pSvXPropertyControl;
 
             PushButton          aXButton;
-            BOOL                bIsLocked;
-            BOOL                bHasXButton;
-            BOOL                bIsHyperlink;
+            sal_Bool                bIsLocked;
+            sal_Bool                bHasXButton;
+            sal_Bool                bIsHyperlink;
             eKindOfControl      eKindOfCtr;
 
 protected:
@@ -247,8 +247,8 @@ public:
             SvPropertyLine( Window* pParent,
                             const ResId& rResId );
 
-            BOOL                NeedsRepaint();
-            void                SetNeedsRepaint(BOOL bFlag);
+            sal_Bool                NeedsRepaint();
+            void                SetNeedsRepaint(sal_Bool bFlag);
             void                SetSvXPropertyControl(SvXPropertyControl*);
             SvXPropertyControl* GetSvXPropertyControl();
 
@@ -257,16 +257,16 @@ public:
 
             void                SetName(const String& rString );
             String              GetName() const;
-            void                SetNameWidth(USHORT);
+            void                SetNameWidth(sal_uInt16);
 
             void                ShowXButton();
             void                HideXButton();
-            BOOL                IsVisibleXButton();
-            void                ShowAsHyperLink(BOOL nFlag=TRUE);
-            BOOL                IsShownAsHyperlink();
+            sal_Bool                IsVisibleXButton();
+            void                ShowAsHyperLink(sal_Bool nFlag=sal_True);
+            sal_Bool                IsShownAsHyperlink();
 
-            void                Locked(BOOL nFlag=TRUE);
-            BOOL                IsLineLocked();
+            void                Locked(sal_Bool nFlag=sal_True);
+            sal_Bool                IsLineLocked();
 
             void                SetClickHdl(const Link&);
 
@@ -281,9 +281,9 @@ public:
         String                  aValue;
         SvStrings               theValues; // ???
 
-        BOOL                    bHasVisibleXButton;
-        BOOL                    bIsHyperLink;
-        BOOL                    bIsLocked;
+        sal_Bool                    bHasVisibleXButton;
+        sal_Bool                    bIsHyperLink;
+        sal_Bool                    bIsLocked;
         void*                   pDataPtr;
         SvXPropertyControl*     pControl;
 };
@@ -365,9 +365,9 @@ private:
             ScrollBar               aVScroll;
             SvPropLineArray         PLineArray;
             SvPropertyDataControl*  pPropDataControl;
-            USHORT                  nRowHeight;
-            BOOL                    bUpdate;
-            USHORT                  nTheNameSize;
+            sal_uInt16                  nRowHeight;
+            sal_Bool                    bUpdate;
+            sal_uInt16                  nTheNameSize;
             long                    nYOffset;
 
             DECL_LINK(   ScrollHdl,ScrollBar*);
@@ -392,7 +392,7 @@ public:
 
                                     ~SvListBoxForProperties();
 
-            virtual USHORT          CalcVisibleLines();
+            virtual sal_uInt16          CalcVisibleLines();
             virtual void            EnableUpdate();
             virtual void            DisableUpdate();
 
@@ -400,19 +400,19 @@ public:
 
             virtual void            Clear();
 
-            virtual USHORT          InsertEntry( const SvPropertyData&, USHORT nPos = LISTBOX_APPEND );
+            virtual sal_uInt16          InsertEntry( const SvPropertyData&, sal_uInt16 nPos = LISTBOX_APPEND );
 
-            virtual void            ChangeEntry( const SvPropertyData&, USHORT nPos);
+            virtual void            ChangeEntry( const SvPropertyData&, sal_uInt16 nPos);
 
-            virtual USHORT          AppendEntry( const SvPropertyData&);
+            virtual sal_uInt16          AppendEntry( const SvPropertyData&);
 
             virtual void            SetPropertyValue( const String & rEntryName, const String & rValue );
 
-            virtual void            SetFirstVisibleEntry(USHORT nPos);
-            virtual USHORT          GetFirstVisibleEntry();
+            virtual void            SetFirstVisibleEntry(sal_uInt16 nPos);
+            virtual sal_uInt16          GetFirstVisibleEntry();
 
-            virtual void            SetSelectedEntry(USHORT nPos);
-            virtual USHORT          GetSelectedEntry();
+            virtual void            SetSelectedEntry(sal_uInt16 nPos);
+            virtual sal_uInt16          GetSelectedEntry();
 };
 
 class SvTabPageForProperties: public TabPage
@@ -437,7 +437,7 @@ class SvBasicPropertyDataControl: public SvPropertyDataControl
 {
 private:
 
-        BOOL                            bCorrectness;
+        sal_Bool                            bCorrectness;
         String                          aEntryName;
         String                          aEntryProperty;
         String                          aCorrectProperty;
@@ -468,7 +468,7 @@ public:
         virtual void                    LinkClicked(const String& aName,
                                                     void* pData);
 
-        virtual void                    SetIsCorrect(BOOL nFlag);
+        virtual void                    SetIsCorrect(sal_Bool nFlag);
 
         //virtual String                    GetTheCorrectProperty()const;
         virtual void                    SetTheCorrectProperty(const String& aName);
@@ -508,30 +508,30 @@ public:
 
                                         ~SvPropertyBox();
 
-            virtual USHORT              CalcVisibleLines();
+            virtual sal_uInt16              CalcVisibleLines();
             virtual void                EnableUpdate();     // auch IDL?
             virtual void                DisableUpdate();    // auch IDL?
 
             // AB: Hier beginnt das 'offizielle' Interface, das in IDL uebernommen werden soll
             virtual void                SetController(SvPropertyDataControl *);
 
-            virtual USHORT              AppendPage( const String & r );
-            virtual void                SetPage( USHORT );
-            virtual USHORT              GetCurPage();
+            virtual sal_uInt16              AppendPage( const String & r );
+            virtual void                SetPage( sal_uInt16 );
+            virtual sal_uInt16              GetCurPage();
             virtual void                ClearAll();
             virtual void                ClearTable();
 
             virtual void                SetPropertyValue( const String & rEntryName, const String & rValue );
 
-            virtual USHORT              InsertEntry( const SvPropertyData&, USHORT nPos = LISTBOX_APPEND );
-            virtual void                ChangeEntry( const SvPropertyData&, USHORT nPos);
-            virtual USHORT              AppendEntry( const SvPropertyData&);
+            virtual sal_uInt16              InsertEntry( const SvPropertyData&, sal_uInt16 nPos = LISTBOX_APPEND );
+            virtual void                ChangeEntry( const SvPropertyData&, sal_uInt16 nPos);
+            virtual sal_uInt16              AppendEntry( const SvPropertyData&);
 
-            virtual void                SetFirstVisibleEntry(USHORT nPos);
-            virtual USHORT              GetFirstVisibleEntry();
+            virtual void                SetFirstVisibleEntry(sal_uInt16 nPos);
+            virtual sal_uInt16              GetFirstVisibleEntry();
 
-            virtual void                SetSelectedEntry(USHORT nPos);
-            virtual USHORT              GetSelectedEntry();
+            virtual void                SetSelectedEntry(sal_uInt16 nPos);
+            virtual sal_uInt16              GetSelectedEntry();
 };
 
 
@@ -543,8 +543,8 @@ private:
             SvBasicPropertyDataControl  aBaProDatCtr;
             OKButton                    anOk;
             CancelButton                aCancel;
-            USHORT                      nCount;
-            USHORT                      nClickCount;
+            sal_uInt16                      nCount;
+            sal_uInt16                      nClickCount;
 
             SvPropertyData              aProperty;
             SvPropertyBox               aPropListBox;

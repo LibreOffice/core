@@ -71,15 +71,15 @@ public:
             NameNode*   Right() const{ return (NameNode *)pRight ; };
             NameNode*   Search( const NameNode * pName ) const;
                         // insert a new node in the b-tree
-            BOOL        Insert( NameNode * pTN, sal_uInt32 * nDepth );
-            BOOL        Insert( NameNode* pTN );
+            sal_Bool        Insert( NameNode * pTN, sal_uInt32 * nDepth );
+            sal_Bool        Insert( NameNode* pTN );
     virtual COMPARE     Compare( const NameNode * ) const;
     virtual COMPARE     Compare( const void * ) const;
             NameNode*   SearchParent( const NameNode * ) const;
                         // return ist neue Root
             NameNode*   Remove( NameNode * );
             void        OrderTree();
-            BOOL        IsOrderTree() const;
+            sal_Bool        IsOrderTree() const;
 
 };
 

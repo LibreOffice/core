@@ -44,7 +44,7 @@ SvpSalBitmap::~SvpSalBitmap()
 }
 
 bool SvpSalBitmap::Create( const Size& rSize,
-                           USHORT nBitCount,
+                           sal_uInt16 nBitCount,
                            const BitmapPalette& rPalette )
 {
     sal_uInt32 nFormat = SVP_DEFAULT_BITMAP_FORMAT;
@@ -112,7 +112,7 @@ bool SvpSalBitmap::Create( const SalBitmap& /*rSalBmp*/,
 }
 
 bool SvpSalBitmap::Create( const SalBitmap& /*rSalBmp*/,
-                           USHORT /*nNewBitCount*/ )
+                           sal_uInt16 /*nNewBitCount*/ )
 {
     return false;
 }
@@ -139,9 +139,9 @@ Size SvpSalBitmap::GetSize() const
     return aSize;
 }
 
-USHORT SvpSalBitmap::GetBitCount() const
+sal_uInt16 SvpSalBitmap::GetBitCount() const
 {
-    USHORT nDepth = 0;
+    sal_uInt16 nDepth = 0;
     if( m_aBitmap.get() )
         nDepth = getBitCountFromScanlineFormat( m_aBitmap->getScanlineFormat() );
     return nDepth;
@@ -153,7 +153,7 @@ BitmapBuffer* SvpSalBitmap::AcquireBuffer( bool )
     if( m_aBitmap.get() )
     {
         pBuf = new BitmapBuffer();
-        USHORT nBitCount = 1;
+        sal_uInt16 nBitCount = 1;
         switch( m_aBitmap->getScanlineFormat() )
         {
             case Format::ONE_BIT_MSB_GREY:
@@ -222,7 +222,7 @@ BitmapBuffer* SvpSalBitmap::AcquireBuffer( bool )
         pBuf->mnHeight          = aSize.getY();
         pBuf->mnScanlineSize    = m_aBitmap->getScanlineStride();
         pBuf->mnBitCount        = nBitCount;
-        pBuf->mpBits            = (BYTE*)m_aBitmap->getBuffer().get();
+        pBuf->mpBits            = (sal_uInt8*)m_aBitmap->getBuffer().get();
         if( nBitCount <= 8 )
         {
             if( m_aBitmap->getScanlineFormat() == Format::EIGHT_BIT_GREY ||
@@ -261,7 +261,7 @@ void SvpSalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly )
     {
         // palette might have changed, clone device (but recycle
         // memory)
-        USHORT nBitCount = 0;
+        sal_uInt16 nBitCount = 0;
         switch( m_aBitmap->getScanlineFormat() )
         {
             case Format::ONE_BIT_MSB_GREY:

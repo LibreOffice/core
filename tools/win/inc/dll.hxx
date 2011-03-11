@@ -29,10 +29,6 @@
 #ifndef _DLL_HXX
 #define _DLL_HXX
 
-// -------------------------------
-// - Sonstige Funktionen fuer SV -
-// -------------------------------
-
 // Um Resourcen wieder freizugeben
 inline void ImpDeInitWinTools() {}
 

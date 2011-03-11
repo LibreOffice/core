@@ -102,7 +102,7 @@ public:
     // Window
     virtual Rectangle GetWindowExtentsRelative( Window *pRelativeWindow ) const = 0;
     virtual void GrabFocus()= 0;
-    virtual XACC GetAccessible( BOOL bCreate = TRUE )= 0;
+    virtual XACC GetAccessible( sal_Bool bCreate = sal_True )= 0;
     virtual Window* GetAccessibleParentWindow() const= 0;
     virtual Window* GetWindowInstance()= 0;
     virtual sal_Int32 GetAccessibleControlCount() const = 0;
@@ -110,11 +110,9 @@ public:
     virtual long GetRowCount() const= 0;
     virtual long GetColumnCount() const= 0;
     virtual sal_Bool HasRowHeader() const= 0;
-    virtual sal_Int32 GetSelectedRowCount() const= 0;
-    virtual bool IsRowSelected( long _nRow ) const= 0;
     virtual sal_Bool ConvertPointToCellAddress( sal_Int32& _rnRow, sal_Int32& _rnColPos, const Point& _rPoint )= 0;
-    virtual Rectangle calcHeaderRect( sal_Bool _bIsColumnBar, BOOL _bOnScreen = TRUE ) = 0;
-    virtual Rectangle calcTableRect( BOOL _bOnScreen = TRUE ) = 0;
+    virtual Rectangle calcHeaderRect( sal_Bool _bIsColumnBar, sal_Bool _bOnScreen = sal_True ) = 0;
+    virtual Rectangle calcTableRect( sal_Bool _bOnScreen = sal_True ) = 0;
     virtual Rectangle GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex)= 0;
     virtual sal_Int32 GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint)= 0;
     virtual void FillAccessibleStateSetForCell( ::utl::AccessibleStateSetHelper& _rStateSet, sal_Int32 _nRow, sal_uInt16 _nColumnPos ) const= 0;
@@ -123,9 +121,13 @@ public:
     virtual ::rtl::OUString GetColumnDescription( sal_uInt16 _nColumnPos ) const = 0;
     virtual ::rtl::OUString GetColumnName( sal_Int32 _nIndex ) const = 0;
     virtual ::com::sun::star::uno::Any GetCellContent( sal_Int32 _nRowPos, sal_Int32 _nColPos) const = 0;
-    virtual std::vector<sal_Int32>& GetSelectedRows() = 0;
-    virtual void RemoveSelectedRow(sal_Int32 _nRowPos) = 0;
     virtual ::rtl::OUString GetAccessibleCellText(sal_Int32 _nRowPos, sal_Int32 _nColPos) const = 0;
+
+    virtual sal_Int32 GetSelectedRowCount() const = 0;
+    virtual sal_Int32 GetSelectedRowIndex( sal_Int32 const i_selectionIndex ) const = 0;
+    virtual bool IsRowSelected( sal_Int32 const i_rowIndex ) const = 0;
+    virtual void SelectRow( sal_Int32 const i_rowIndex, bool const i_select ) = 0;
+    virtual void SelectAllRows( bool const i_select ) = 0;
 };
 
 // ----------------------------------------------------------------------------

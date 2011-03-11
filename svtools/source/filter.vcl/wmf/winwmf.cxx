@@ -157,7 +157,7 @@ Size WMFReader::ReadYXExt()
 
 // ------------------------------------------------------------------------
 
-void WMFReader::ReadRecordParams( USHORT nFunc )
+void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
 {
     switch( nFunc )
     {
@@ -169,7 +169,7 @@ void WMFReader::ReadRecordParams( USHORT nFunc )
 
         case W_META_SETBKMODE:
         {
-            USHORT nDat;
+            sal_uInt16 nDat;
             *pWMF >> nDat;
             pOut->SetBkMode( nDat );
         }
@@ -186,7 +186,7 @@ void WMFReader::ReadRecordParams( USHORT nFunc )
 
         case W_META_SETROP2:
         {
-            UINT16 nROP2;
+            sal_uInt16 nROP2;
             *pWMF >> nROP2;
             pOut->SetRasterOp( nROP2 );
         }
@@ -323,7 +323,7 @@ void WMFReader::ReadRecordParams( USHORT nFunc )
 
         case W_META_POLYGON:
         {
-            USHORT i,nPoints;
+            sal_uInt16 i,nPoints;
             *pWMF >> nPoints;
             Polygon aPoly( nPoints );
             for( i = 0; i < nPoints; i++ )
@@ -334,13 +334,13 @@ void WMFReader::ReadRecordParams( USHORT nFunc )
 
         case W_META_POLYPOLYGON:
         {
-            USHORT  i, nPoly, nPoints;
-            USHORT* pnPoints;
+            sal_uInt16  i, nPoly, nPoints;
+            sal_uInt16* pnPoints;
             Point*  pPtAry;
             // Anzahl der Polygone:
             *pWMF >> nPoly;
             // Anzahl der Punkte eines jeden Polygons holen, Gesammtzahl der Punkte ermitteln:
-            pnPoints = new USHORT[ nPoly ];
+            pnPoints = new sal_uInt16[ nPoly ];
             nPoints = 0;
             for( i = 0; i < nPoly; i++ )
             {
@@ -361,7 +361,7 @@ void WMFReader::ReadRecordParams( USHORT nFunc )
 
         case W_META_POLYLINE:
         {
-            USHORT i,nPoints;
+            sal_uInt16 i,nPoints;
             *pWMF >> nPoints;
             Polygon aPoly( nPoints );
             for( i = 0; i < nPoints; i++ )
@@ -397,7 +397,7 @@ void WMFReader::ReadRecordParams( USHORT nFunc )
 
         case W_META_TEXTOUT:
         {
-            USHORT nLength;
+            sal_uInt16 nLength;
             *pWMF >> nLength;
             if ( nLength )
             {
@@ -454,7 +454,7 @@ void WMFReader::ReadRecordParams( USHORT nFunc )
                     sal_uInt32  nMaxStreamPos = nRecordPos + ( nRecordSize << 1 );
                     sal_Int32   nDxArySize =  nMaxStreamPos - pWMF->Tell();
                     sal_Int32   nDxAryEntries = nDxArySize >> 1;
-                    sal_Bool    bUseDXAry = FALSE;
+                    sal_Bool    bUseDXAry = sal_False;
 
                     if ( ( ( nDxAryEntries % nOriginalTextLen ) == 0 ) && ( nNewTextLen <= nOriginalTextLen ) )
                     {
@@ -482,7 +482,7 @@ void WMFReader::ReadRecordParams( USHORT nFunc )
                             pDXAry[ i ] = nDx;
                         }
                         if ( i == nNewTextLen )
-                            bUseDXAry = TRUE;
+                            bUseDXAry = sal_True;
                     }
                     if ( pDXAry && bUseDXAry )
                         pOut->DrawText( aPosition, aText, pDXAry );
@@ -497,7 +497,7 @@ void WMFReader::ReadRecordParams( USHORT nFunc )
 
         case W_META_SELECTOBJECT:
         {
-            INT16   nObjIndex;
+            sal_Int16   nObjIndex;
             *pWMF >> nObjIndex;
             pOut->SelectObject( nObjIndex );
         }
@@ -505,7 +505,7 @@ void WMFReader::ReadRecordParams( USHORT nFunc )
 
         case W_META_SETTEXTALIGN:
         {
-            UINT16  nAlign;
+            sal_uInt16  nAlign;
             *pWMF >> nAlign;
             pOut->SetTextAlign( nAlign );
         }
@@ -603,14 +603,14 @@ void WMFReader::ReadRecordParams( USHORT nFunc )
             {
                 if ( nWinROP == PATCOPY )
                     *pWMF >> nUsage;    // i don't know anything of this parameter, so its called nUsage
-                                        // pOut->DrawRect( Rectangle( ReadYX(), aDestSize ), FALSE );
+                                        // pOut->DrawRect( Rectangle( ReadYX(), aDestSize ), sal_False );
 
                 Size aDestSize( ReadYXExt() );
                 if ( aDestSize.Width() && aDestSize.Height() )  // #92623# do not try to read buggy bitmaps
                 {
                     Rectangle aDestRect( ReadYX(), aDestSize );
                     if ( nWinROP != PATCOPY )
-                        aBmp.Read( *pWMF, FALSE );
+                        aBmp.Read( *pWMF, sal_False );
 
                     // test if it is sensible to crop
                     if ( nSye && nSxe &&
@@ -630,18 +630,18 @@ void WMFReader::ReadRecordParams( USHORT nFunc )
         {
             Bitmap  aBmp;
             BitmapReadAccess* pBmp;
-            UINT32  nRed = 0, nGreen = 0, nBlue = 0, nCount = 1;
-            UINT16  nFunction;
+            sal_uInt32  nRed = 0, nGreen = 0, nBlue = 0, nCount = 1;
+            sal_uInt16  nFunction;
 
             *pWMF >> nFunction >> nFunction;
 
-            aBmp.Read( *pWMF, FALSE );
+            aBmp.Read( *pWMF, sal_False );
             pBmp = aBmp.AcquireReadAccess();
             if ( pBmp )
             {
-                for ( INT32 y = 0; y < pBmp->Height(); y++ )
+                for ( sal_Int32 y = 0; y < pBmp->Height(); y++ )
                 {
-                    for ( INT32 x = 0; x < pBmp->Width(); x++ )
+                    for ( sal_Int32 x = 0; x < pBmp->Width(); x++ )
                     {
                         const BitmapColor aColor( pBmp->GetColor( y, x ) );
 
@@ -655,14 +655,14 @@ void WMFReader::ReadRecordParams( USHORT nFunc )
                     nCount++;
                 aBmp.ReleaseAccess( pBmp );
             }
-            Color aColor( (BYTE)( nRed / nCount ), (BYTE)( nGreen / nCount ), (BYTE)( nBlue / nCount ) );
-            pOut->CreateObject( GDI_BRUSH, new WinMtfFillStyle( aColor, FALSE ) );
+            Color aColor( (sal_uInt8)( nRed / nCount ), (sal_uInt8)( nGreen / nCount ), (sal_uInt8)( nBlue / nCount ) );
+            pOut->CreateObject( GDI_BRUSH, new WinMtfFillStyle( aColor, sal_False ) );
         }
         break;
 
         case W_META_DELETEOBJECT:
         {
-            INT16 nIndex;
+            sal_Int16 nIndex;
             *pWMF >> nIndex;
             pOut->DeleteObject( nIndex );
         }
@@ -676,29 +676,29 @@ void WMFReader::ReadRecordParams( USHORT nFunc )
 
         case W_META_CREATEBRUSH:
         {
-            pOut->CreateObject( GDI_BRUSH, new WinMtfFillStyle( Color( COL_WHITE ), FALSE ) );
+            pOut->CreateObject( GDI_BRUSH, new WinMtfFillStyle( Color( COL_WHITE ), sal_False ) );
         }
         break;
 
         case W_META_CREATEPATTERNBRUSH:
         {
-            pOut->CreateObject( GDI_BRUSH, new WinMtfFillStyle( Color( COL_WHITE ), FALSE ) );
+            pOut->CreateObject( GDI_BRUSH, new WinMtfFillStyle( Color( COL_WHITE ), sal_False ) );
         }
         break;
 
         case W_META_CREATEPENINDIRECT:
         {
             LineInfo    aLineInfo;
-            USHORT      nStyle, nWidth, nHeight;
+            sal_uInt16      nStyle, nWidth, nHeight;
 
             *pWMF >> nStyle >> nWidth >> nHeight;
 
             if ( nWidth )
                 aLineInfo.SetWidth( nWidth );
 
-            BOOL bTransparent = FALSE;
-            UINT16 nDashCount = 0;
-            UINT16 nDotCount = 0;
+            sal_Bool bTransparent = sal_False;
+            sal_uInt16 nDashCount = 0;
+            sal_uInt16 nDotCount = 0;
             switch( nStyle )
             {
                 case PS_DASHDOTDOT :
@@ -712,7 +712,7 @@ void WMFReader::ReadRecordParams( USHORT nFunc )
                     nDashCount++;
                 break;
                 case PS_NULL :
-                    bTransparent = TRUE;
+                    bTransparent = sal_True;
                     aLineInfo.SetStyle( LINE_NONE );
                 break;
                 default :
@@ -732,9 +732,9 @@ void WMFReader::ReadRecordParams( USHORT nFunc )
 
         case W_META_CREATEBRUSHINDIRECT:
         {
-            USHORT  nStyle;
+            sal_uInt16  nStyle;
             *pWMF >> nStyle;
-            pOut->CreateObject( GDI_BRUSH, new WinMtfFillStyle( ReadColor(), ( nStyle == BS_HOLLOW ) ? TRUE : FALSE ) );
+            pOut->CreateObject( GDI_BRUSH, new WinMtfFillStyle( ReadColor(), ( nStyle == BS_HOLLOW ) ? sal_True : sal_False ) );
         }
         break;
 
@@ -742,7 +742,7 @@ void WMFReader::ReadRecordParams( USHORT nFunc )
         {
             Size    aFontSize;
             char    lfFaceName[ LF_FACESIZE ];
-            INT16   lfEscapement, lfOrientation, lfWeight;  // ( ehemals USHORT )
+            sal_Int16   lfEscapement, lfOrientation, lfWeight;  // ( ehemals sal_uInt16 )
 
             LOGFONTW aLogFont;
             aFontSize = ReadYXExt();
@@ -797,11 +797,11 @@ void WMFReader::ReadRecordParams( USHORT nFunc )
 
         case W_META_PATBLT:
         {
-            UINT32 nROP, nOldROP;
+            sal_uInt32 nROP, nOldROP;
             *pWMF >> nROP;
             Size aSize = ReadYXExt();
             nOldROP = pOut->SetRasterOp( nROP );
-            pOut->DrawRect( Rectangle( ReadYX(), aSize ), FALSE );
+            pOut->DrawRect( Rectangle( ReadYX(), aSize ), sal_False );
             pOut->SetRasterOp( nOldROP );
         }
         break;
@@ -997,7 +997,7 @@ void WMFReader::ReadRecordParams( USHORT nFunc )
 
 // ------------------------------------------------------------------------
 
-BOOL WMFReader::ReadHeader()
+sal_Bool WMFReader::ReadHeader()
 {
     Rectangle   aPlaceableBound;
     sal_uInt32  nl, nStrmPos = pWMF->Tell();
@@ -1008,7 +1008,7 @@ BOOL WMFReader::ReadHeader()
     Size aWMFSize;
     if ( nl == 0x9ac6cdd7L )
     {
-        INT16 nVal;
+        sal_Int16 nVal;
 
         // hmf (Unused) ueberlesen wir
         pWMF->SeekRel(2);
@@ -1056,7 +1056,7 @@ BOOL WMFReader::ReadHeader()
     if( nl != 0x00090001 )
     {
         pWMF->SetError( SVSTREAM_FILEFORMAT_ERROR );
-        return FALSE;
+        return sal_False;
     }
 
     pWMF->SeekRel( 2 ); // Version (von Windows)
@@ -1065,13 +1065,13 @@ BOOL WMFReader::ReadHeader()
     pWMF->SeekRel( 4 ); // MaxRecord (Groesse des groessten Records in Words)
     pWMF->SeekRel( 2 ); // NoParameters (Unused
 
-    return TRUE;
+    return sal_True;
 }
 
 void WMFReader::ReadWMF()
 {
-    USHORT  nFunction;
-    ULONG   nPos, nPercent, nLastPercent;
+    sal_uInt16  nFunction;
+    sal_uLong   nPos, nPercent, nLastPercent;
 
     nSkipActions = 0;
     nCurrentAction = 0;
@@ -1091,7 +1091,7 @@ void WMFReader::ReadWMF()
 
     nEndPos=pWMF->Seek( STREAM_SEEK_TO_END );
     pWMF->Seek( nStartPos );
-    Callback( (USHORT) ( nLastPercent = 0 ) );
+    Callback( (sal_uInt16) ( nLastPercent = 0 ) );
 
     if ( ReadHeader() )
     {
@@ -1100,14 +1100,14 @@ void WMFReader::ReadWMF()
 
         if( nEndPos - nStartPos )
         {
-            while( TRUE )
+            while( sal_True )
             {
                 nCurrentAction++;
                 nPercent = ( nPos - nStartPos ) * 100 / ( nEndPos - nStartPos );
 
                 if( nLastPercent + 4 <= nPercent )
                 {
-                    Callback( (USHORT) nPercent );
+                    Callback( (sal_uInt16) nPercent );
                     nLastPercent = nPercent;
                 }
                 *pWMF >> nRecSize >> nFunction;
@@ -1289,7 +1289,7 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pSt
 
                 case W_META_POLYGON:
                 {
-                    USHORT i,nPoints;
+                    sal_uInt16 i,nPoints;
                     *pStm >> nPoints;
                     for( i = 0; i < nPoints; i++ )
                         GetWinExtMax( ReadPoint(), rPlaceableBound, nMapMode );
@@ -1298,7 +1298,7 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pSt
 
                 case W_META_POLYPOLYGON:
                 {
-                    USHORT  i, nPoly, nPoints = 0;
+                    sal_uInt16  i, nPoly, nPoints = 0;
                     *pStm >> nPoly;
                     for( i = 0; i < nPoly; i++ )
                     {
@@ -1313,7 +1313,7 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pSt
 
                 case W_META_POLYLINE:
                 {
-                    USHORT i,nPoints;
+                    sal_uInt16 i,nPoints;
                     *pStm >> nPoints;
                     for( i = 0; i < nPoints; i++ )
                         GetWinExtMax( ReadPoint(), rPlaceableBound, nMapMode );
@@ -1329,7 +1329,7 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pSt
 
                 case W_META_TEXTOUT:
                 {
-                    USHORT nLength;
+                    sal_uInt16 nLength;
                     *pStm >> nLength;
                     // todo: we also have to take care of the text width
                     if ( nLength )
@@ -1383,7 +1383,7 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pSt
                     {
                         if ( nWinROP == PATCOPY )
                             *pStm >> nUsage;    // i don't know anything of this parameter, so its called nUsage
-                                                // pOut->DrawRect( Rectangle( ReadYX(), aDestSize ), FALSE );
+                                                // pOut->DrawRect( Rectangle( ReadYX(), aDestSize ), sal_False );
 
                         Size aDestSize( ReadYXExt() );
                         if ( aDestSize.Width() && aDestSize.Height() )  // #92623# do not try to read buggy bitmaps
@@ -1397,7 +1397,7 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pSt
 
                 case W_META_PATBLT:
                 {
-                    UINT32 nROP;
+                    sal_uInt32 nROP;
                     *pStm >> nROP;
                     Size aSize = ReadYXExt();
                     GetWinExtMax( Rectangle( ReadYX(), aSize ), rPlaceableBound, nMapMode );

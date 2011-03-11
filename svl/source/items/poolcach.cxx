@@ -33,23 +33,11 @@
 
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
-#include "poolcach.hxx"
+#include <svl/poolcach.hxx>
 
 // STATIC DATA -----------------------------------------------------------
 
 DBG_NAME(SfxItemPoolCache)
-
-
-//------------------------------------------------------------------------
-
-struct SfxItemModifyImpl
-{
-    const SfxSetItem  *pOrigItem;
-    SfxSetItem        *pPoolItem;
-};
-
-SV_DECL_VARARR( SfxItemModifyArr_Impl, SfxItemModifyImpl, 8, 8 )
-SV_IMPL_VARARR( SfxItemModifyArr_Impl, SfxItemModifyImpl);
 
 //------------------------------------------------------------------------
 
@@ -82,7 +70,7 @@ SfxItemPoolCache::SfxItemPoolCache( SfxItemPool *pItemPool,
 SfxItemPoolCache::~SfxItemPoolCache()
 {
     DBG_DTOR(SfxItemPoolCache, 0);
-    for ( USHORT nPos = 0; nPos < pCache->Count(); ++nPos ) {
+    for ( size_t nPos = 0; nPos < pCache->size(); ++nPos ) {
         pPool->Remove( *(*pCache)[nPos].pPoolItem );
         pPool->Remove( *(*pCache)[nPos].pOrigItem );
     }
@@ -94,15 +82,15 @@ SfxItemPoolCache::~SfxItemPoolCache()
 
 //------------------------------------------------------------------------
 
-const SfxSetItem& SfxItemPoolCache::ApplyTo( const SfxSetItem &rOrigItem, BOOL bNew )
+const SfxSetItem& SfxItemPoolCache::ApplyTo( const SfxSetItem &rOrigItem, sal_Bool bNew )
 {
     DBG_CHKTHIS(SfxItemPoolCache, 0);
     DBG_ASSERT( pPool == rOrigItem.GetItemSet().GetPool(), "invalid Pool" );
     DBG_ASSERT( IsDefaultItem( &rOrigItem ) || IsPooledItem( &rOrigItem ),
                 "original not in pool" );
 
-    // Suchen, ob diese Transformations schon einmal vorkam
-    for ( USHORT nPos = 0; nPos < pCache->Count(); ++nPos )
+    // Find whether this Transformations ever occurred
+    for ( size_t nPos = 0; nPos < pCache->size(); ++nPos )
     {
         SfxItemModifyImpl &rMapEntry = (*pCache)[nPos];
         if ( rMapEntry.pOrigItem == &rOrigItem )
@@ -141,7 +129,7 @@ const SfxSetItem& SfxItemPoolCache::ApplyTo( const SfxSetItem &rOrigItem, BOOL b
     SfxItemModifyImpl aModify;
     aModify.pOrigItem = &rOrigItem;
     aModify.pPoolItem = (SfxSetItem*) pNewPoolItem;
-    pCache->Insert( aModify, pCache->Count() );
+    pCache->push_back( aModify );
 
     DBG_ASSERT( !pItemToPut ||
                 &pNewPoolItem->GetItemSet().Get( pItemToPut->Which() ) == pItemToPut,

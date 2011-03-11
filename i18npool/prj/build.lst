@@ -1,4 +1,4 @@
-inp  i18npool    :   bridges sax stoc comphelper ICU:icu i18nutil regexp cpputools NULL
+inp  i18npool    :   bridges sax stoc comphelper ICU:icu i18nutil regexp cpputools LIBXSLT:libxslt NULL
 inp  i18npool                                   usr1    -   all inp_mkout NULL
 inp  i18npool\inc                               nmake   -   all inp_inc NULL
 inp  i18npool\source\registerservices           nmake   -   all inp_rserv inp_inc NULL
@@ -24,4 +24,4 @@ inp  i18npool\source\textconversion\data        nmake   -   all inp_textconv_dic
 inp  i18npool\source\search                     nmake   -   all inp_search inp_inc NULL
 inp  i18npool\source\ordinalsuffix              nmake   -   all inp_ordinalsuffix NULL
 inp  i18npool\util                              nmake   -   all inp_util inp_brkit inp_dict inp_chclass inp_translit inp_cal inp_dnum inp_natnum inp_localedata inp_locdata_data inp_numformat inp_rserv inp_index inp_index_data inp_collator inp_collator_data inp_inputchecker inp_textconversion inp_textconv_dict inp_search inp_isolang inp_paper inp_ordinalsuffix NULL
-inp  i18npool\qa\cppunit                        nmake   -   all inp_qa_cppunit inp_util NULL
+#FIXME (needs update for new component registration): inp  i18npool\qa\cppunit                        nmake   -   all inp_qa_cppunit inp_util NULL

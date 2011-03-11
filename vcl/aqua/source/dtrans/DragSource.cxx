@@ -39,6 +39,7 @@
 #include "DragSourceContext.hxx"
 #include "aqua_clipboard.hxx"
 #include "DragActionConversion.hxx"
+#include "salframe.h"
 
 #include <rtl/ustring.h>
 #include <memory>
@@ -46,6 +47,7 @@
 
 using namespace cppu;
 using namespace osl;
+using namespace com::sun::star;
 using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::datatransfer::clipboard;
 using namespace com::sun::star::datatransfer::dnd;
@@ -61,7 +63,7 @@ using ::rtl::OUString;
 
 // For OOo internal D&D we provide the Transferable without NSDragPboard
 // interference as a shortcut
-Reference<XTransferable> DragSource::g_XTransferable = Reference<XTransferable>();
+uno::Reference<XTransferable> DragSource::g_XTransferable;
 NSView* DragSource::g_DragSourceView = nil;
 bool DragSource::g_DropSuccessSet = false;
 bool DragSource::g_DropSuccess = false;
@@ -105,7 +107,7 @@ Sequence<OUString> dragSource_getSupportedServiceNames()
 }
 
 
--(unsigned int)draggingSourceOperationMaskForLocal: (MacOSBOOL)isLocal
+-(unsigned int)draggingSourceOperationMaskForLocal: (BOOL)isLocal
 {
   return mDragSource->getSupportedDragOperations(isLocal);
 }
@@ -138,7 +140,7 @@ Sequence<OUString> dragSource_getSupportedServiceNames()
                            bDropSuccess );
 
   mDragSource->mXDragSrcListener->dragDropEnd(dsde);
-  mDragSource->mXDragSrcListener = Reference<XDragSourceListener>();
+  mDragSource->mXDragSrcListener = uno::Reference<XDragSourceListener>();
 }
 
 
@@ -159,6 +161,7 @@ Sequence<OUString> dragSource_getSupportedServiceNames()
 DragSource::DragSource():
   WeakComponentImplHelper3<XDragSource, XInitialization, XServiceInfo>(m_aMutex),
   mView(NULL),
+  mpFrame(NULL),
   mLastMouseEventBeforeStartDrag(nil),
   m_MouseButton(0)
 {
@@ -167,8 +170,9 @@ DragSource::DragSource():
 
 DragSource::~DragSource()
 {
-  [(id <MouseEventListener>)mView unregisterMouseEventListener: mDragSourceHelper];
-  [mDragSourceHelper release];
+    if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
+        [(id <MouseEventListener>)mView unregisterMouseEventListener: mDragSourceHelper];
+    [mDragSourceHelper release];
 }
 
 
@@ -198,6 +202,13 @@ void SAL_CALL DragSource::initialize(const Sequence< Any >& aArguments)
       throw Exception(OUString(RTL_CONSTASCII_USTRINGPARAM("DragSource::initialize: Provided view doesn't support mouse listener")),
                       static_cast<OWeakObject*>(this));
     }
+  NSWindow* pWin = [mView window];
+  if( ! pWin || ![pWin respondsToSelector: @selector(getSalFrame)] )
+  {
+      throw Exception(OUString(RTL_CONSTASCII_USTRINGPARAM("DragSource::initialize: Provided view is not attached to a vcl frame")),
+                      static_cast<OWeakObject*>(this));
+  }
+  mpFrame = (AquaSalFrame*)[pWin performSelector: @selector(getSalFrame)];
 
   mDragSourceHelper = [[DragSourceHelper alloc] initWithDragSource: this];
 
@@ -233,8 +244,8 @@ void SAL_CALL DragSource::startDrag(const DragGestureEvent& trigger,
                                     sal_Int8 sourceActions,
                                     sal_Int32 cursor,
                                     sal_Int32 image,
-                                    const Reference<XTransferable >& transferable,
-                                    const Reference<XDragSourceListener >& listener )
+                                    const uno::Reference<XTransferable >& transferable,
+                                    const uno::Reference<XDragSourceListener >& listener )
   throw( RuntimeException)
 {
   MutexGuard guard(m_aMutex);
@@ -248,7 +259,7 @@ void SAL_CALL DragSource::startDrag(const DragGestureEvent& trigger,
   mXCurrentContext = static_cast<XDragSourceContext*>(new DragSourceContext(this));
   auto_ptr<AquaClipboard> clipb(new AquaClipboard(NULL, false));
   g_XTransferable = transferable;
-  clipb->setContents(g_XTransferable, Reference<XClipboardOwner>());
+  clipb->setContents(g_XTransferable, uno::Reference<XClipboardOwner>());
   mDragSourceActions = sourceActions;
   g_DragSourceView = mView;
 
@@ -288,7 +299,7 @@ void SAL_CALL DragSource::startDrag(const DragGestureEvent& trigger,
 
   [dragImage release];
 
-  g_XTransferable = Reference<XTransferable>();
+  g_XTransferable = uno::Reference<XTransferable>();
   g_DragSourceView = nil;
 
   // reset drop success flags

@@ -229,7 +229,7 @@ const void* IcuFontFromServerFont::getFontTable( LETag nICUTableTag ) const
     pTagName[3] = (char)(nICUTableTag);
     pTagName[4] = 0;
 
-    ULONG nLength;
+    sal_uLong nLength;
     const unsigned char* pBuffer = mrServerFont.GetTable( pTagName, &nLength );
 #ifdef VERBOSE_DEBUG
     fprintf(stderr,"IcuGetTable(\"%s\") => %p\n", pTagName, pBuffer);

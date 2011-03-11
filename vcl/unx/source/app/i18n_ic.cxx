@@ -184,7 +184,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
     maClientData.aInputEv.mnCursorPos       = 0;
     maClientData.aInputEv.mnDeltaStart      = 0;
     maClientData.aInputEv.mnCursorFlags     = 0;
-    maClientData.aInputEv.mbOnlyCursor      = FALSE;
+    maClientData.aInputEv.mbOnlyCursor      = sal_False;
 
     SalI18N_InputMethod *pInputMethod;
     pInputMethod = GetX11SalData()->GetDisplay()->GetInputMethod();
@@ -760,7 +760,7 @@ SalI18N_InputContext::SetLanguage(LanguageType)
 }
 
 void
-SalI18N_InputContext::EndExtTextInput( USHORT /*nFlags*/ )
+SalI18N_InputContext::EndExtTextInput( sal_uInt16 /*nFlags*/ )
 {
     if ( mbUseable && (maContext != NULL) && maClientData.pFrame )
     {

@@ -39,7 +39,7 @@
 MouseEvent::MouseEvent( const ::com::sun::star::awt::MouseEvent& rEvent )
 : maPos( rEvent.X, rEvent.Y )
 , mnMode( 0 )
-, mnClicks( static_cast< USHORT >( rEvent.ClickCount ) )
+, mnClicks( static_cast< sal_uInt16 >( rEvent.ClickCount ) )
 , mnCode( 0 )
 {
     if( rEvent.Modifiers )

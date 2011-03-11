@@ -71,7 +71,7 @@ WinSalSystem::~WinSalSystem()
 
 // -----------------------------------------------------------------------
 
-static WIN_BOOL CALLBACK ImplEnumMonitorProc( HMONITOR hMonitor,
+static BOOL CALLBACK ImplEnumMonitorProc( HMONITOR hMonitor,
                                           HDC hDC,
                                           LPRECT lpRect,
                                           LPARAM dwData )
@@ -82,7 +82,7 @@ static WIN_BOOL CALLBACK ImplEnumMonitorProc( HMONITOR hMonitor,
                                         reinterpret_cast<sal_IntPtr>(lpRect) );
 }
 
-BOOL WinSalSystem::handleMonitorCallback( sal_IntPtr hMonitor, sal_IntPtr, sal_IntPtr )
+sal_Bool WinSalSystem::handleMonitorCallback( sal_IntPtr hMonitor, sal_IntPtr, sal_IntPtr )
 {
     MONITORINFOEXW aInfo;
     aInfo.cbSize = sizeof( aInfo );
@@ -107,7 +107,7 @@ BOOL WinSalSystem::handleMonitorCallback( sal_IntPtr hMonitor, sal_IntPtr, sal_I
                 m_nPrimary = it->second;
         }
     }
-    return TRUE;
+    return sal_True;
 }
 
 void WinSalSystem::clearMonitors()

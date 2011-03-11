@@ -181,6 +181,7 @@ struct SystemFontData
 // --------------------
 
 typedef std::vector<SystemGlyphData> SystemGlyphDataVector;
+
 struct SystemTextLayoutData
 {
     unsigned long         nSize;         // size in bytes of this structure

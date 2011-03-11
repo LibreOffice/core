@@ -30,7 +30,7 @@
 #include "precompiled_svtools.hxx"
 
 // this file contains code from filectrl.cxx which needs to be compiled with enabled exception hanling
-#include <filectrl.hxx>
+#include <svtools/filectrl.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <vcl/unohelp.hxx>

@@ -77,7 +77,7 @@ void BrowserHeader::EndDrag()
     Update();
 
     // not aborted?
-    USHORT nId = GetCurItemId();
+    sal_uInt16 nId = GetCurItemId();
     if ( nId )
     {
         // Handle-Column?
@@ -96,7 +96,7 @@ void BrowserHeader::EndDrag()
             // column drag
             // Hat sich die Position eigentlich veraendert
             // Handlecolumn beruecksichtigen
-            USHORT nOldPos = _pBrowseBox->GetColumnPos(nId),
+            sal_uInt16 nOldPos = _pBrowseBox->GetColumnPos(nId),
                 nNewPos = GetItemPos( nId );
 
             if (!_pBrowseBox->GetColumnId(0))   // Handle

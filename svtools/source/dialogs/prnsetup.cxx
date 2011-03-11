@@ -57,7 +57,7 @@ void ImplFillPrnDlgListBox( const Printer* pPrinter,
 
 // -----------------------------------------------------------------------
 
-void ImplFreePrnDlgListBox( ListBox* pBox, BOOL bClear )
+void ImplFreePrnDlgListBox( ListBox* pBox, sal_Bool bClear )
 {
     if ( bClear )
         pBox->Clear();
@@ -145,7 +145,7 @@ static void ImplPrnDlgAddString( XubString& rStr, const XubString& rAddStr )
 
 // -----------------------------------------------------------------------
 
-static void ImplPrnDlgAddResString( XubString& rStr, USHORT nResId )
+static void ImplPrnDlgAddResString( XubString& rStr, sal_uInt16 nResId )
 {
     SvtResId aResId( nResId );
     XubString aAddStr( aResId );
@@ -157,7 +157,7 @@ static void ImplPrnDlgAddResString( XubString& rStr, USHORT nResId )
 XubString ImplPrnDlgGetStatusText( const QueueInfo& rInfo )
 {
     XubString   aStr;
-    ULONG       nStatus = rInfo.GetStatus();
+    sal_uLong       nStatus = rInfo.GetStatus();
 
     // Default-Printer
     if ( rInfo.GetPrinterName().Len() &&
@@ -217,7 +217,7 @@ XubString ImplPrnDlgGetStatusText( const QueueInfo& rInfo )
         ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_POWER_SAVE );
 
     // Anzahl Jobs
-    ULONG nJobs = rInfo.GetJobs();
+    sal_uLong nJobs = rInfo.GetJobs();
     if ( nJobs && (nJobs != QUEUE_JOBS_DONTKNOW) )
     {
         XubString aJobStr( SvtResId( STR_SVT_PRNDLG_JOBCOUNT ) );
@@ -269,7 +269,7 @@ PrinterSetupDialog::PrinterSetupDialog( Window* pWindow ) :
 
 PrinterSetupDialog::~PrinterSetupDialog()
 {
-    ImplFreePrnDlgListBox( &maLbName, FALSE );
+    ImplFreePrnDlgListBox( &maLbName, sal_False );
     delete mpTempPrinter;
 }
 
@@ -374,7 +374,7 @@ short PrinterSetupDialog::Execute()
     if ( !mpPrinter || mpPrinter->IsPrinting() || mpPrinter->IsJobActive() )
     {
         DBG_ERRORFILE( "PrinterSetupDialog::Execute() - No Printer or printer is printing" );
-        return FALSE;
+        return sal_False;
     }
 
     Printer::updatePrinters();
@@ -387,7 +387,7 @@ short PrinterSetupDialog::Execute()
     short nRet = ModalDialog::Execute();
 
     // Wenn Dialog mit OK beendet wurde, dann die Daten updaten
-    if ( nRet == TRUE )
+    if ( nRet == sal_True )
     {
         if ( mpTempPrinter )
             mpPrinter->SetPrinterProps( mpTempPrinter );

@@ -94,8 +94,8 @@ public:
     operator        long()  const;
     operator        int()   const;
     operator        double() const;
-    operator        USHORT() const;
-    operator        ULONG() const;
+    operator        sal_uInt16() const;
+    operator        sal_uIntPtr() const;
 
     void            Set( sal_Bool bSet ) { bIsSet = bSet; }
     ByteString      GetByteString() const;
@@ -200,10 +200,10 @@ inline BigInt::operator int() const
         return 0;
 }
 
-inline BigInt::operator USHORT() const
+inline BigInt::operator sal_uInt16() const
 {
     if ( !bIsBig && nVal >= 0 && nVal <= USHRT_MAX )
-        return (USHORT)nVal;
+        return (sal_uInt16)nVal;
     else
         return 0;
 }

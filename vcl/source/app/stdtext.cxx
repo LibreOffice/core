@@ -38,7 +38,7 @@
 
 // =======================================================================
 
-XubString GetStandardText( USHORT nStdText )
+XubString GetStandardText( sal_uInt16 nStdText )
 {
     ResMgr* pResMgr = ImplGetResMgr();
     XubString aText;
@@ -50,7 +50,7 @@ XubString GetStandardText( USHORT nStdText )
 // =======================================================================
 
 void ShowServiceNotAvailableError( Window* pParent,
-                                   const XubString& rServiceName, BOOL bError )
+                                   const XubString& rServiceName, sal_Bool bError )
 {
     XubString aText( GetStandardText( STANDARD_TEXT_SERVICE_NOT_AVAILABLE ) );
     aText.SearchAndReplaceAscii( "%s", rServiceName );

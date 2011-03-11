@@ -39,22 +39,22 @@ class WinSalMenu : public SalMenu
 public:
     WinSalMenu();
     virtual ~WinSalMenu();
-    virtual BOOL VisibleMenuBar();  // must return TRUE to actually DISPLAY native menu bars
+    virtual sal_Bool VisibleMenuBar();  // must return TRUE to actually DISPLAY native menu bars
                             // otherwise only menu messages are processed (eg, OLE on Windows)
 
     virtual void InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos );
     virtual void RemoveItem( unsigned nPos );
     virtual void SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsigned nPos );
     virtual void SetFrame( const SalFrame* pFrame );
-    virtual void CheckItem( unsigned nPos, BOOL bCheck );
-    virtual void EnableItem( unsigned nPos, BOOL bEnable );
+    virtual void CheckItem( unsigned nPos, sal_Bool bCheck );
+    virtual void EnableItem( unsigned nPos, sal_Bool bEnable );
     virtual void SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const XubString& rText );
     virtual void SetItemImage( unsigned nPos, SalMenuItem* pSalMenuItem, const Image& rImage );
     virtual void SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const KeyCode& rKeyCode, const XubString& rKeyName );
     virtual void GetSystemMenuData( SystemMenuData* pData );
 
     HMENU mhMenu;           // the menu handle
-    BOOL  mbMenuBar;        // true for menu bars
+    sal_Bool  mbMenuBar;        // true for menu bars
     HWND  mhWnd;            // the window handle where the menubar is attached, may be NULL
     WinSalMenu *mpParentMenu;  // the parent menu
 };

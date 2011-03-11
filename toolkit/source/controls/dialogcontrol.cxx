@@ -36,15 +36,7 @@
 #include <toolkit/controls/dialogcontrol.hxx>
 #include <toolkit/helper/property.hxx>
 #include <toolkit/helper/unopropertyarrayhelper.hxx>
-#include <toolkit/controls/geometrycontrolmodel.hxx>
-#include <toolkit/controls/unocontrols.hxx>
-#include "toolkit/controls/formattedcontrol.hxx"
-#include "toolkit/controls/roadmapcontrol.hxx"
-#include "toolkit/controls/tkscrollbar.hxx"
 #include <toolkit/controls/stdtabcontroller.hxx>
-#include <toolkit/controls/tksimpleanimation.hxx>
-#include <toolkit/controls/tkthrobber.hxx>
-
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/WindowAttribute.hpp>
 #include <com/sun/star/resource/XStringResourceResolver.hpp>
@@ -52,20 +44,14 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
-#include <comphelper/types.hxx>
 
-#include <comphelper/componentcontext.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/image.hxx>
-
-#include "tree/treecontrol.hxx"
-#include "grid/gridcontrol.hxx"
-
 #include <map>
 #include <boost/unordered_map.hpp>
 #include <algorithm>
@@ -86,160 +72,15 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::script;
-using namespace toolkit;
 
-#define PROPERTY_RESOURCERESOLVER ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ResourceResolver" ))
 #define PROPERTY_DIALOGSOURCEURL ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DialogSourceURL" ))
 #define PROPERTY_IMAGEURL ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ImageURL" ))
 #define PROPERTY_GRAPHIC ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Graphic" ))
-
-//HELPER
+//
+////HELPER
 ::rtl::OUString getPhysicalLocation( const ::com::sun::star::uno::Any& rbase, const ::com::sun::star::uno::Any& rUrl );
 
 uno::Reference< graphic::XGraphic > getGraphicFromURL_nothrow( uno::Reference< graphic::XGraphicObject >& rxGrfObj, const ::rtl::OUString& _rURL );
-
-struct LanguageDependentProp
-{
-    const char* pPropName;
-    sal_Int32   nPropNameLength;
-};
-
-// ----------------------------------------------------------------------------
-namespace
-{
-    static const Sequence< ::rtl::OUString >& lcl_getLanguageDependentProperties()
-    {
-        static Sequence< ::rtl::OUString > s_aLanguageDependentProperties;
-        if ( s_aLanguageDependentProperties.getLength() == 0 )
-        {
-            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-            if ( s_aLanguageDependentProperties.getLength() == 0 )
-            {
-                s_aLanguageDependentProperties.realloc( 2 );
-                s_aLanguageDependentProperties[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HelpText" ) );
-                s_aLanguageDependentProperties[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) );
-                // note: properties must be sorted
-            }
-        }
-        return s_aLanguageDependentProperties;
-    }
-
-    static ::rtl::OUString lcl_GetStringProperty( const ::rtl::OUString& sProperty, const Reference< XPropertySet >& xSet )
-    {
-        ::rtl::OUString sValue;
-        Reference< XPropertySetInfo > xPSI;
-        if (xSet.is() && (xPSI = xSet->getPropertySetInfo()).is() &&
-                xPSI->hasPropertyByName( sProperty ) )
-        {
-            xSet->getPropertyValue( sProperty ) >>= sValue;
-        }
-        return sValue;
-    }
-
-}
-
-// ----------------------------------------------------------------------------
-// functor for disposing a control model
-struct DisposeControlModel : public ::std::unary_function< Reference< XControlModel >, void >
-{
-    void operator()( Reference< XControlModel >& _rxModel )
-    {
-        try
-        {
-            ::comphelper::disposeComponent( _rxModel );
-        }
-        catch( const Exception& )
-        {
-            OSL_FAIL( "DisposeControlModel::(): caught an exception while disposing a component!" );
-        }
-    }
-};
-
-// ----------------------------------------------------------------------------
-// functor for searching control model by name
-struct FindControlModel : public ::std::unary_function< UnoControlDialogModel::UnoControlModelHolder, bool >
-{
-private:
-    const ::rtl::OUString& m_rName;
-
-public:
-    FindControlModel( const ::rtl::OUString& _rName ) : m_rName( _rName ) { }
-
-    bool operator()( const UnoControlDialogModel::UnoControlModelHolder& _rCompare )
-    {
-        return ( _rCompare.second == m_rName ) ? true : false;
-    }
-};
-
-// ----------------------------------------------------------------------------
-// functor for cloning a control model, and insertion into a target list
-struct CloneControlModel : public ::std::unary_function< UnoControlDialogModel::UnoControlModelHolder, void >
-{
-private:
-    UnoControlDialogModel::UnoControlModelHolderList&   m_rTargetList;
-
-public:
-    CloneControlModel( UnoControlDialogModel::UnoControlModelHolderList& _rTargetList )
-        :m_rTargetList( _rTargetList )
-    {
-    }
-
-    void operator()( const UnoControlDialogModel::UnoControlModelHolder& _rSource )
-    {
-        // clone the source object
-        Reference< XCloneable > xCloneSource( _rSource.first, UNO_QUERY );
-        Reference< XControlModel > xClone( xCloneSource->createClone(), UNO_QUERY );
-        // add to target list
-        m_rTargetList.push_back( UnoControlDialogModel::UnoControlModelHolder( xClone, _rSource.second ) );
-    }
-};
-
-// ----------------------------------------------------------------------------
-// functor for comparing a XControlModel with a given reference
-struct CompareControlModel : public ::std::unary_function< UnoControlDialogModel::UnoControlModelHolder, bool >
-{
-private:
-    Reference< XControlModel > m_xReference;
-public:
-    CompareControlModel( const Reference< XControlModel >& _rxReference ) : m_xReference( _rxReference ) { }
-
-    bool operator()( const UnoControlDialogModel::UnoControlModelHolder& _rCompare )
-    {
-        return ( _rCompare.first.get() == m_xReference.get() ) ? true : false;
-    }
-};
-
-// ----------------------------------------------------------------------------
-static void lcl_throwIllegalArgumentException( )
-{   // throwing is expensive (in terms of code size), thus we hope the compiler does not inline this ....
-    throw IllegalArgumentException();
-}
-
-// ----------------------------------------------------------------------------
-static void lcl_throwNoSuchElementException( )
-{   // throwing is expensive (in terms of code size), thus we hope the compiler does not inline this ....
-    throw NoSuchElementException();
-}
-
-// ----------------------------------------------------------------------------
-static void lcl_throwElementExistException( )
-{   // throwing is expensive (in terms of code size), thus we hope the compiler does not inline this ....
-    throw ElementExistException();
-}
-
-// ----------------------------------------------------------------------------
-static const ::rtl::OUString& getTabIndexPropertyName( )
-{
-    static const ::rtl::OUString s_sTabIndexProperty( RTL_CONSTASCII_USTRINGPARAM( "TabIndex" ) );
-    return s_sTabIndexProperty;
-}
-
-// ----------------------------------------------------------------------------
-static const ::rtl::OUString& getStepPropertyName( )
-{
-    static const ::rtl::OUString s_sStepProperty( RTL_CONSTASCII_USTRINGPARAM( "Step" ) );
-    return s_sStepProperty;
-}
 
 // we probably will need both a hash of control models and hash of controls
 // => use some template magic
@@ -368,20 +209,14 @@ UnoControlDialogModel::~UnoControlDialogModel()
     mbGroupsUpToDate = sal_False;
 }
 
-Any UnoControlDialogModel::queryAggregation( const Type & rType ) throw(RuntimeException)
+UnoControlModel* UnoControlDialogModel::Clone() const
 {
-    Any aRet( UnoControlDialogModel_IBase::queryInterface( rType ) );
-    return (aRet.hasValue() ? aRet : UnoControlDialogModel_Base::queryAggregation( rType ));
-}
+    // clone the container itself
+    UnoControlDialogModel* pClone = new UnoControlDialogModel( *this );
 
-// XTypeProvider
-IMPL_IMPLEMENTATION_ID( UnoControlDialogModel )
-Sequence< Type > UnoControlDialogModel::getTypes() throw(RuntimeException)
-{
-    return ::comphelper::concatSequences(
-        UnoControlDialogModel_IBase::getTypes(),
-        UnoControlDialogModel_Base::getTypes()
-    );
+    Clone_Impl(*pClone);
+
+    return pClone;
 }
 
 ::rtl::OUString UnoControlDialogModel::getServiceName( ) throw(RuntimeException)
@@ -450,216 +285,11 @@ Any UnoControlDialogModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     return *pHelper;
 }
 
-void SAL_CALL UnoControlDialogModel::dispose(  ) throw(RuntimeException)
-{
-    // ====================================================================
-    // tell our listeners
-    {
-        ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
-        EventObject aDisposeEvent;
-        aDisposeEvent.Source = static_cast< XAggregation* >( static_cast< ::cppu::OWeakAggObject* >( this ) );
-
-        maContainerListeners.disposeAndClear( aDisposeEvent );
-        maChangeListeners.disposeAndClear( aDisposeEvent );
-    }
-
-    // ====================================================================
-    // call the base class
-    UnoControlModel::dispose();
-
-    // ====================================================================
-    // dispose our child models
-    // for this, collect the models (we collect them from maModels, and this is modified when disposing children)
-    ::std::vector< Reference< XControlModel > > aChildModels( maModels.size() );
-
-    ::std::transform(
-        maModels.begin(), maModels.end(),               // source range
-        aChildModels.begin(),                           // target location
-        ::o3tl::select1st< UnoControlModelHolder >( )   // operation to apply -> select the XControlModel part
-    );
-
-    // now dispose
-    ::std::for_each( aChildModels.begin(), aChildModels.end(), DisposeControlModel() );
-    aChildModels.clear();
-
-    mbGroupsUpToDate = sal_False;
-}
-
 // XMultiPropertySet
 Reference< XPropertySetInfo > UnoControlDialogModel::getPropertySetInfo(  ) throw(RuntimeException)
 {
     static Reference< XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
-}
-
-UnoControlModel* UnoControlDialogModel::Clone() const
-{
-    // clone the container itself
-    UnoControlDialogModel* pClone = new UnoControlDialogModel( *this );
-
-    // clone all children
-    ::std::for_each(
-        maModels.begin(), maModels.end(),
-        CloneControlModel( pClone->maModels )
-    );
-
-    return pClone;
-}
-
-UnoControlDialogModel::UnoControlModelHolderList::iterator UnoControlDialogModel::ImplFindElement( const ::rtl::OUString& rName )
-{
-    return ::std::find_if( maModels.begin(), maModels.end(), FindControlModel( rName ) );
-}
-
-// ::XMultiServiceFactory
-Reference< XInterface > UnoControlDialogModel::createInstance( const ::rtl::OUString& aServiceSpecifier ) throw(Exception, RuntimeException)
-{
-    SolarMutexGuard aSolarGuard;
-
-    OGeometryControlModel_Base* pNewModel = NULL;
-
-    if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlEditModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlEditModel >;
-    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlFormattedFieldModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlFormattedFieldModel >;
-    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlFileControlModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlFileControlModel >;
-    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlButtonModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlButtonModel >;
-    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlImageControlModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlImageControlModel >;
-    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlRadioButtonModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlRadioButtonModel >;
-    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlCheckBoxModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlCheckBoxModel >;
-    else if ( aServiceSpecifier.compareToAscii( szServiceName_UnoControlFixedHyperlinkModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlFixedHyperlinkModel >;
-    else if ( aServiceSpecifier.compareToAscii( szServiceName_UnoControlFixedTextModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlFixedTextModel >;
-    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlGroupBoxModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlGroupBoxModel >;
-    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlListBoxModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlListBoxModel >;
-    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlComboBoxModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlComboBoxModel >;
-    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlDateFieldModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlDateFieldModel >;
-    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlTimeFieldModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlTimeFieldModel >;
-    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlNumericFieldModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlNumericFieldModel >;
-    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlCurrencyFieldModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlCurrencyFieldModel >;
-    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlPatternFieldModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlPatternFieldModel >;
-    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlProgressBarModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlProgressBarModel >;
-    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlScrollBarModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlScrollBarModel >;
-    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlFixedLineModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlFixedLineModel >;
-    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlRoadmapModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlRoadmapModel >;
-    else if ( aServiceSpecifier.compareToAscii( szServiceName_TreeControlModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoTreeModel >;
-    else if ( aServiceSpecifier.compareToAscii( szServiceName_GridControlModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoGridModel >;
-    else if ( aServiceSpecifier.compareToAscii( szServiceName_UnoMultiPageModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoMultiPageModel >;
-    else if ( aServiceSpecifier.compareToAscii( szServiceName_UnoFrameModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoFrameModel >;
-    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoSimpleAnimationControlModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoSimpleAnimationControlModel >;
-    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoThrobberControlModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoThrobberControlModel >;
-
-    if ( !pNewModel )
-    {
-        Reference< XMultiServiceFactory > xORB( ::comphelper::getProcessServiceFactory() );
-        if ( xORB.is() )
-        {
-            Reference< XInterface > xObject = xORB->createInstance( aServiceSpecifier );
-            Reference< XServiceInfo > xSI( xObject, UNO_QUERY );
-            Reference< XCloneable > xCloneAccess( xSI, UNO_QUERY );
-            Reference< XAggregation > xAgg( xCloneAccess, UNO_QUERY );
-            if ( xAgg.is() )
-            {
-                if ( xSI->supportsService( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlModel")) ) )
-                {
-                    // release 3 of the 4 references we have to the object
-                    xAgg.clear();
-                    xSI.clear();
-                    xObject.clear();
-
-                    pNewModel = new OCommonGeometryControlModel( xCloneAccess, aServiceSpecifier );
-                }
-            }
-        }
-    }
-
-    Reference< XInterface > xNewModel = (::cppu::OWeakObject*)pNewModel;
-    return xNewModel;
-}
-
-Reference< XInterface > UnoControlDialogModel::createInstanceWithArguments( const ::rtl::OUString& ServiceSpecifier, const Sequence< Any >& /* Arguments */ ) throw(Exception, RuntimeException)
-{
-    return createInstance( ServiceSpecifier );
-}
-
-Sequence< ::rtl::OUString > UnoControlDialogModel::getAvailableServiceNames() throw(RuntimeException)
-{
-    static Sequence< ::rtl::OUString >* pNamesSeq = NULL;
-    if ( !pNamesSeq )
-    {
-        pNamesSeq = new Sequence< ::rtl::OUString >( 26 );
-        ::rtl::OUString* pNames = pNamesSeq->getArray();
-        pNames[0] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlEditModel );
-        pNames[1] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlFormattedFieldModel );
-        pNames[2] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlFileControlModel );
-        pNames[3] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlButtonModel );
-        pNames[4] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlImageControlModel );
-        pNames[5] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlRadioButtonModel );
-        pNames[6] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlCheckBoxModel );
-        pNames[7] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlFixedTextModel );
-        pNames[8] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlGroupBoxModel );
-        pNames[9] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlListBoxModel );
-        pNames[10] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlComboBoxModel );
-        pNames[11] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlDateFieldModel );
-        pNames[12] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlTimeFieldModel );
-        pNames[13] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlNumericFieldModel );
-        pNames[14] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlCurrencyFieldModel );
-        pNames[15] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlPatternFieldModel );
-        pNames[16] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlProgressBarModel );
-        pNames[17] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlScrollBarModel );
-        pNames[18] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlFixedLineModel );
-        pNames[19] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlRoadmapModel );
-        pNames[20] = ::rtl::OUString::createFromAscii( szServiceName_TreeControlModel );
-        pNames[21] = ::rtl::OUString::createFromAscii( szServiceName_GridControlModel );
-        pNames[22] = ::rtl::OUString::createFromAscii( szServiceName2_UnoSimpleAnimationControlModel );
-        pNames[23] = ::rtl::OUString::createFromAscii( szServiceName2_UnoThrobberControlModel );
-        pNames[24] = ::rtl::OUString::createFromAscii( szServiceName_UnoMultiPageModel );
-        pNames[25] = ::rtl::OUString::createFromAscii( szServiceName_UnoFrameModel );
-    }
-    return *pNamesSeq;
-}
-
-// XContainer
-void UnoControlDialogModel::addContainerListener( const Reference< XContainerListener >& l ) throw(RuntimeException)
-{
-    maContainerListeners.addInterface( l );
-}
-
-void UnoControlDialogModel::removeContainerListener( const Reference< XContainerListener >& l ) throw(RuntimeException)
-{
-    maContainerListeners.removeInterface( l );
-}
-
-// XElementAcces
-Type UnoControlDialogModel::getElementType() throw(RuntimeException)
-{
-    Type aType = getCppuType( ( Reference< XControlModel>* ) NULL );
-    return aType;
 }
 
 void UnoControlDialogModel::updateUserFormChildren( const Reference< XNameContainer >& xAllChildren, const rtl::OUString& aName, ChildOperation Operation, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& xTarget ) throw(IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException)
@@ -1575,119 +1205,21 @@ UnoDialogControl::UnoDialogControl() :
 // XInterface
 Any UnoDialogControl::queryAggregation( const Type & rType ) throw(RuntimeException)
 {
-    Any aRet( UnoDialogControl_IBase::queryInterface( rType ) );
-    return (aRet.hasValue() ? aRet : UnoControlContainer::queryAggregation( rType ));
+        uno::Any aRet = ::cppu::queryInterface( rType, SAL_STATIC_CAST( awt::XTopWindow*, this ) );
+        if ( !aRet.hasValue() )
+            aRet = ::cppu::queryInterface( rType, SAL_STATIC_CAST( awt::XDialog*, this ) );
+        if ( !aRet.hasValue() )
+            aRet = ::cppu::queryInterface( rType, SAL_STATIC_CAST( awt::XWindowListener*, this ) );
+    return (aRet.hasValue() ? aRet : ControlContainerBase::queryAggregation( rType ));
 }
 
-// XTypeProvider
-IMPL_IMPLEMENTATION_ID( UnoDialogControl )
-Sequence< Type > UnoDialogControl::getTypes() throw(RuntimeException)
-{
-    return ::comphelper::concatSequences(
-        UnoDialogControl_IBase::getTypes(),
-        UnoControlContainer::getTypes()
-    );
-}
-
-void UnoDialogControl::ImplInsertControl( Reference< XControlModel >& rxModel, const ::rtl::OUString& rName )
-{
-    Reference< XPropertySet > xP( rxModel, UNO_QUERY );
-
-    ::rtl::OUString aDefCtrl;
-    xP->getPropertyValue( GetPropertyName( BASEPROPERTY_DEFAULTCONTROL ) ) >>= aDefCtrl;
-
-    // Add our own resource resolver to a newly created control
-    Reference< resource::XStringResourceResolver > xStringResourceResolver;
-    rtl::OUString aPropName( PROPERTY_RESOURCERESOLVER );
-
-    Any aAny;
-    ImplGetPropertyValue( aPropName ) >>= xStringResourceResolver;
-
-    aAny <<= xStringResourceResolver;
-    xP->setPropertyValue( aPropName, aAny );
-
-    Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-    Reference < XControl > xCtrl( xMSF->createInstance( aDefCtrl ), UNO_QUERY );
-
-    DBG_ASSERT( xCtrl.is(), "UnoDialogControl::ImplInsertControl: could not create the control!" );
-    if ( xCtrl.is() )
-    {
-        xCtrl->setModel( rxModel );
-        addControl( rName, xCtrl );
-            // will implicitly call addingControl, where we can add the PropertiesChangeListener to the model
-            // (which we formerly did herein)
-
-        ImplSetPosSize( xCtrl );
-    }
-}
-
-void UnoDialogControl::ImplRemoveControl( Reference< XControlModel >& rxModel )
-{
-    Sequence< Reference< XControl > > aControls = getControls();
-    Reference< XControl > xCtrl = StdTabController::FindControl( aControls, rxModel );
-    if ( xCtrl.is() )
-        removeControl( xCtrl );
-}
-
-void UnoDialogControl::ImplSetPosSize( Reference< XControl >& rxCtrl )
-{
-    Reference< XPropertySet > xP( rxCtrl->getModel(), UNO_QUERY );
-
-    sal_Int32 nX = 0, nY = 0, nWidth = 0, nHeight = 0;
-    xP->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PositionX" ) ) ) >>= nX;
-    xP->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PositionY" ) ) ) >>= nY;
-    xP->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Width" ) ) ) >>= nWidth;
-    xP->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Height" ) ) ) >>= nHeight;
-
-    // Currentley we are simply using MAP_APPFONT
-    OutputDevice*pOutDev = Application::GetDefaultDevice();
-    DBG_ASSERT( pOutDev, "Missing Default Device!" );
-    if ( pOutDev )
-    {
-        ::Size aTmp( nX, nY );
-        aTmp = pOutDev->LogicToPixel( aTmp, MAP_APPFONT );
-        nX = aTmp.Width();
-        nY = aTmp.Height();
-        aTmp = ::Size( nWidth, nHeight );
-        aTmp = pOutDev->LogicToPixel( aTmp, MAP_APPFONT );
-        nWidth = aTmp.Width();
-        nHeight = aTmp.Height();
-    }
-    else
-    {
-        Reference< XWindowPeer > xPeer = ImplGetCompatiblePeer( sal_True );
-        Reference< XDevice > xD( xPeer, UNO_QUERY );
-
-        SimpleFontMetric aFM;
-        FontDescriptor aFD;
-        Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_FONTDESCRIPTOR ) );
-        aVal >>= aFD;
-        if ( aFD.StyleName.getLength() )
-        {
-            Reference< XFont > xFont = xD->getFont( aFD );
-            aFM = xFont->getFontMetric();
-        }
-        else
-        {
-            Reference< XGraphics > xG = xD->createGraphics();
-            aFM = xG->getFontMetric();
-        }
-
-        sal_Int16 nH = aFM.Ascent + aFM.Descent;
-        sal_Int16 nW = nH/2;    // calculate avarage width?!
-
-        nX *= nW;
-        nX /= 4;
-        nWidth *= nW;
-        nWidth /= 4;
-        nY *= nH;
-        nY /= 8;
-        nHeight *= nH;
-        nHeight /= 8;
-    }
-    Reference < XWindow > xW( rxCtrl, UNO_QUERY );
-    xW->setPosSize( nX, nY, nWidth, nHeight, PosSize::POSSIZE );
-}
+ //lang::XTypeProvider
+IMPL_XTYPEPROVIDER_START( UnoDialogControl)
+    getCppuType( ( uno::Reference< awt::XTopWindow>* ) NULL ),
+    getCppuType( ( uno::Reference< awt::XDialog>* ) NULL ),
+    getCppuType( ( uno::Reference< awt::XWindowListener>* ) NULL ),
+    ControlContainerBase::getTypes()
+IMPL_XTYPEPROVIDER_END
 
 void UnoDialogControl::dispose() throw(RuntimeException)
 {
@@ -1696,115 +1228,21 @@ void UnoDialogControl::dispose() throw(RuntimeException)
     EventObject aEvt;
     aEvt.Source = static_cast< ::cppu::OWeakObject* >( this );
     maTopWindowListeners.disposeAndClear( aEvt );
-
-    // Notify our listener helper about dispose
-    // --- SAFE ---
-    ::osl::ResettableGuard< ::osl::Mutex > aGuard( GetMutex() );
-    Reference< XEventListener > xListener( mxListener, UNO_QUERY );
-    mxListener.clear();
-    aGuard.clear();
-    // --- SAFE ---
-
-    if ( xListener.is() )
-        xListener->disposing( aEvt );
-
-    UnoControlContainer::dispose();
+    ControlContainerBase::dispose();
 }
 
 void SAL_CALL UnoDialogControl::disposing(
     const EventObject& Source )
 throw(RuntimeException)
 {
-    rtl::OUString aPropName( PROPERTY_RESOURCERESOLVER );
-    Reference< resource::XStringResourceResolver > xStringResourceResolver;
-
-    ImplGetPropertyValue( aPropName ) >>= xStringResourceResolver;
-    Reference< XInterface > xIfac( xStringResourceResolver, UNO_QUERY );
-
-    if ( Source.Source == xIfac )
-    {
-        Any aAny;
-
-        // Reset resource resolver reference
-        ImplSetPropertyValue( aPropName, aAny, sal_True );
-        ImplUpdateResourceResolver();
-    }
-    else
-    {
-        UnoControlContainer::disposing( Source );
-    }
+    ControlContainerBase::disposing( Source );
 }
 
 sal_Bool UnoDialogControl::setModel( const Reference< XControlModel >& rxModel ) throw(RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
-
-    // destroy the old tab controller, if existent
-    if ( mxTabController.is() )
-    {
-        mxTabController->setModel( NULL );                  // just to be sure, should not be necessary
-        removeTabController( mxTabController );
-        ::comphelper::disposeComponent( mxTabController );  // just to be sure, should not be necessary
-        mxTabController.clear();
-    }
-
-    if ( getModel().is() )
-    {
-        Sequence< Reference< XControl > > aControls = getControls();
-        const Reference< XControl >* pCtrls = aControls.getConstArray();
-        const Reference< XControl >* pCtrlsEnd = pCtrls + aControls.getLength();
-
-        for ( ; pCtrls < pCtrlsEnd; ++pCtrls )
-            removeControl( *pCtrls );
-                // will implicitly call removingControl, which will remove the PropertyChangeListener
-                // (which we formerly did herein)
-
-        Reference< XContainer > xC( getModel(), UNO_QUERY );
-        if ( xC.is() )
-            xC->removeContainerListener( this );
-
-        Reference< XChangesNotifier > xChangeNotifier( getModel(), UNO_QUERY );
-        if ( xChangeNotifier.is() )
-            xChangeNotifier->removeChangesListener( this );
-    }
-
-    sal_Bool bRet = UnoControl::setModel( rxModel );
-
-    if ( getModel().is() )
-    {
-        Reference< XNameAccess > xNA( getModel(), UNO_QUERY );
-        if ( xNA.is() )
-        {
-            Sequence< ::rtl::OUString > aNames = xNA->getElementNames();
-            const ::rtl::OUString* pNames = aNames.getConstArray();
-            sal_uInt32 nCtrls = aNames.getLength();
-
-            Reference< XControlModel > xCtrlModel;
-            for( sal_uInt32 n = 0; n < nCtrls; ++n, ++pNames )
-            {
-                xNA->getByName( *pNames ) >>= xCtrlModel;
-                ImplInsertControl( xCtrlModel, *pNames );
-            }
-        }
-
-        Reference< XContainer > xC( getModel(), UNO_QUERY );
-        if ( xC.is() )
-            xC->addContainerListener( this );
-
-        Reference< XChangesNotifier > xChangeNotifier( getModel(), UNO_QUERY );
-        if ( xChangeNotifier.is() )
-            xChangeNotifier->addChangesListener( this );
-    }
-
-    Reference< XTabControllerModel > xTabbing( getModel(), UNO_QUERY );
-    if ( xTabbing.is() )
-    {
-        mxTabController = new StdTabController;
-        mxTabController->setModel( xTabbing );
-        addTabController( mxTabController );
-    }
+        sal_Bool bRet = ControlContainerBase::setModel( rxModel );
     ImplStartListingForResourceEvents();
-
     return bRet;
 }
 
@@ -1969,13 +1407,11 @@ void UnoDialogControl::setMenuBar( const Reference< XMenuBar >& rxMenuBar ) thro
             xTW->setMenuBar( mxMenuBar );
     }
 }
-
 static ::Size ImplMapPixelToAppFont( OutputDevice* pOutDev, const ::Size& aSize )
 {
     ::Size aTmp = pOutDev->PixelToLogic( aSize, MAP_APPFONT );
     return aTmp;
 }
-
 // ::com::sun::star::awt::XWindowListener
 void SAL_CALL UnoDialogControl::windowResized( const ::com::sun::star::awt::WindowEvent& e )
 throw (::com::sun::star::uno::RuntimeException)
@@ -2315,6 +1751,7 @@ throw (RuntimeException)
     ImplUpdateResourceResolver();
 }
 
+void UnoDialogControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent >& rEvents ) throw(RuntimeException)
 //  ----------------------------------------------------
 //  Helper Method to convert relative url to physical location
 //  ----------------------------------------------------

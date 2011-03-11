@@ -57,13 +57,13 @@ class G2GApp
 {
 private:
 
-    BYTE            cExitCode;
+    sal_uInt8           cExitCode;
 
     void            ShowUsage();
-    BOOL            GetCommandOption( const ::std::vector< String >& rArgs, const String& rSwitch, String& rParam );
-    void            SetExitCode( BYTE cExit ) { if( ( EXIT_NOERROR == cExitCode ) || ( cExit != EXIT_NOERROR ) ) cExitCode = cExit; }
+    sal_Bool            GetCommandOption( const ::std::vector< String >& rArgs, const String& rSwitch, String& rParam );
+    void            SetExitCode( sal_uInt8 cExit ) { if( ( EXIT_NOERROR == cExitCode ) || ( cExit != EXIT_NOERROR ) ) cExitCode = cExit; }
 
-    virtual void    Message( const String& rText, BYTE cExitCode = EXIT_NOERROR );
+    virtual void    Message( const String& rText, sal_uInt8 cExitCode = EXIT_NOERROR );
 
 public:
 
@@ -87,9 +87,9 @@ G2GApp::~G2GApp()
 
 // -----------------------------------------------------------------------
 
-BOOL G2GApp::GetCommandOption( const ::std::vector< String >& rArgs, const String& rSwitch, String& rParam )
+sal_Bool G2GApp::GetCommandOption( const ::std::vector< String >& rArgs, const String& rSwitch, String& rParam )
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
 
     for( int i = 0, nCount = rArgs.size(); ( i < nCount ) && !bRet; i++ )
     {
@@ -101,7 +101,7 @@ BOOL G2GApp::GetCommandOption( const ::std::vector< String >& rArgs, const Strin
 
             if( aTestStr.CompareIgnoreCaseToAscii( rArgs[ i ] ) == COMPARE_EQUAL )
             {
-                bRet = TRUE;
+                bRet = sal_True;
 
                 if( i < ( nCount - 1 ) )
                     rParam = rArgs[ i + 1 ];
@@ -119,7 +119,7 @@ BOOL G2GApp::GetCommandOption( const ::std::vector< String >& rArgs, const Strin
 
 // -----------------------------------------------------------------------
 
-void G2GApp::Message( const String& rText, BYTE nExitCode )
+void G2GApp::Message( const String& rText, sal_uInt8 nExitCode )
 {
     if( EXIT_NOERROR != nExitCode )
         SetExitCode( nExitCode );
@@ -168,7 +168,7 @@ int G2GApp::Start( const ::std::vector< String >& rArgs )
 
         if( aInFile.Len() && aOutFile.Len() && aFilterStr.Len() )
         {
-            const USHORT nExportFilter = aFilter.GetExportFormatNumberForShortName( aFilterStr );
+            const sal_uInt16 nExportFilter = aFilter.GetExportFormatNumberForShortName( aFilterStr );
 
             if( GRFILTER_FORMAT_NOTFOUND == nExportFilter )
                 Message( String( RTL_CONSTASCII_USTRINGPARAM( "invalid graphic filter" ) ), EXIT_INVALID_GRAPHICFILTER );
@@ -199,9 +199,9 @@ int G2GApp::Start( const ::std::vector< String >& rArgs )
 
                             if( bHex )
                             {
-                                const BYTE cTransR = ( LOWERHEXTONUM( aHexStr.GetChar( 0 ) ) << 4 ) | LOWERHEXTONUM( aHexStr.GetChar( 1 ) );
-                                const BYTE cTransG = ( LOWERHEXTONUM( aHexStr.GetChar( 2 ) ) << 4 ) | LOWERHEXTONUM( aHexStr.GetChar( 3 ) );
-                                const BYTE cTransB = ( LOWERHEXTONUM( aHexStr.GetChar( 4 ) ) << 4 ) | LOWERHEXTONUM( aHexStr.GetChar( 5 ) );
+                                const sal_uInt8 cTransR = ( LOWERHEXTONUM( aHexStr.GetChar( 0 ) ) << 4 ) | LOWERHEXTONUM( aHexStr.GetChar( 1 ) );
+                                const sal_uInt8 cTransG = ( LOWERHEXTONUM( aHexStr.GetChar( 2 ) ) << 4 ) | LOWERHEXTONUM( aHexStr.GetChar( 3 ) );
+                                const sal_uInt8 cTransB = ( LOWERHEXTONUM( aHexStr.GetChar( 4 ) ) << 4 ) | LOWERHEXTONUM( aHexStr.GetChar( 5 ) );
 
                                 BitmapEx    aBmpEx( aGraphic.GetBitmapEx() );
                                 Bitmap      aOldBmp( aBmpEx.GetBitmap() );

@@ -126,8 +126,9 @@ namespace toolkit
     // = UnoControlFormattedFieldModel
     // ===================================================================
     // -------------------------------------------------------------------
-    UnoControlFormattedFieldModel::UnoControlFormattedFieldModel()
-        :m_bRevokedAsClient( false )
+    UnoControlFormattedFieldModel::UnoControlFormattedFieldModel( const Reference< XMultiServiceFactory >& i_factory )
+        :UnoControlModel( i_factory )
+        ,m_bRevokedAsClient( false )
         ,m_bSettingValueAndText( false )
     {
         ImplRegisterProperty( BASEPROPERTY_ALIGN );
@@ -434,7 +435,8 @@ namespace toolkit
     // = UnoFormattedFieldControl
     // ===================================================================
     // -------------------------------------------------------------------
-    UnoFormattedFieldControl::UnoFormattedFieldControl()
+    UnoFormattedFieldControl::UnoFormattedFieldControl( const Reference< XMultiServiceFactory >& i_factory )
+        :UnoSpinFieldControl( i_factory )
     {
     }
 
@@ -458,7 +460,7 @@ namespace toolkit
         aValues[0] = xPeer->getProperty( aNames[0] );
         aValues[1] = xPeer->getProperty( aNames[1] );
 
-        ImplSetPropertyValues( aNames, aValues, FALSE );
+        ImplSetPropertyValues( aNames, aValues, sal_False );
 
         if ( GetTextListeners().getLength() )
             GetTextListeners().textChanged( e );

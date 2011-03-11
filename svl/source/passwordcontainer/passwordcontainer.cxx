@@ -1544,24 +1544,6 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment (
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo (
-    void * /* pServiceManager */, void * pRegistryKey)
-{
-    if (pRegistryKey)
-    {
-        Reference< XRegistryKey > xRegistryKey (
-            reinterpret_cast< XRegistryKey* >( pRegistryKey ));
-        Reference< XRegistryKey > xNewKey;
-
-        xNewKey = xRegistryKey->createKey(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/stardiv.svl.PasswordContainer/UNO/SERVICES")));
-        xNewKey->createKey( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.PasswordContainer")));
-
-        return sal_True;
-    }
-    return sal_False;
-}
-
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory (
     const sal_Char * pImplementationName, void * pServiceManager, void * /* pRegistryKey */)
 {

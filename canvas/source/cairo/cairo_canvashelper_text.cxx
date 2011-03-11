@@ -319,7 +319,7 @@ namespace cairocanvas
                 return uno::Reference< rendering::XCachedPrimitive >(NULL); // no output necessary
 
                 // change text direction and layout mode
-            ULONG nLayoutMode(0);
+            sal_uLong nLayoutMode(0);
             switch( textDirection )
                 {
                 case rendering::TextDirection::WEAK_LEFT_TO_RIGHT:

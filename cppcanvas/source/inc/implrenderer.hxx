@@ -245,7 +245,7 @@ static float GetSwapFloat( SvStream& rSt )
 
             bool isActionContained( GDIMetaFile& rMtf,
                                     const char*  pCommentString,
-                                    USHORT       nType ) const;
+                                    sal_uInt16       nType ) const;
 
             void createGradientAction( const ::PolyPolygon&           rPoly,
                                        const ::Gradient&              rGradient,

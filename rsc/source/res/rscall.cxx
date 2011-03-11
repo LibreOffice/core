@@ -50,11 +50,11 @@ Atom    nRsc_EXTRADATA = InvalidAtom;
 
 void InitRscCompiler()
 {
-    pStdParType      = new ByteString( "( const ResId & rResId, BOOL" );
+    pStdParType      = new ByteString( "( const ResId & rResId, sal_Bool" );
     pStdPar1         = new ByteString( '(' );
     pStdPar2         = new ByteString( '(' );
 
-    pWinParType      = new ByteString( "( Window * pParent, const ResId & rResId, BOOL" );
+    pWinParType      = new ByteString( "( Window * pParent, const ResId & rResId, sal_Bool" );
     pWinPar1         = new ByteString( "( pParent," );
     pWinPar2         = new ByteString( "( this," );
     nRefDeep         = 10;

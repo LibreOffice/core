@@ -102,7 +102,7 @@ class XIMStatusWindow : public StatusWindow
     // for delayed showing
     bool                    m_bDelayedShow;
     I18NStatus::ShowReason  m_eDelayedReason;
-    ULONG                   m_nDelayedEvent;
+    sal_uLong                   m_nDelayedEvent;
     // for toggling
     bool                    m_bOn;
 
@@ -165,7 +165,7 @@ void XIMStatusWindow::layout()
 
     m_aStatusText.SetPosSizePixel( Point( 1, 1 ), aControlSize );
     m_aStatusText.SetFont( aFont );
-    m_aStatusText.Show( TRUE );
+    m_aStatusText.Show( sal_True );
 
     if (m_bAnchoredAtRight && IsVisible())
     {
@@ -257,7 +257,7 @@ void XIMStatusWindow::setPosition( SalFrame* pParent )
         {
             setText( String() );
             m_pLastParent = pParent;
-            Show( FALSE, SHOW_NOACTIVATE );
+            Show( sal_False, SHOW_NOACTIVATE );
         }
         if( IsVisible() )
         {
@@ -359,7 +359,7 @@ IIIMPStatusWindow::IIIMPStatusWindow( SalFrame* pParent, bool bOn ) :
 
     m_aStatusBtn.SetSelectHdl( LINK( this, IIIMPStatusWindow, SelectHdl ) );
     m_aStatusBtn.SetPopupMenu( &m_aMenu );
-    m_aStatusBtn.Show( TRUE );
+    m_aStatusBtn.Show( sal_True );
 
     const ::std::vector< I18NStatus::ChoiceData >& rChoices( I18NStatus::get().getChoices() );
     int i = 1;
@@ -384,7 +384,7 @@ IIIMPStatusWindow::IIIMPStatusWindow( SalFrame* pParent, bool bOn ) :
     else
         fprintf( stderr, "Warning: could not reposition status window since no frame\n" );
 #endif
-    EnableAlwaysOnTop( TRUE );
+    EnableAlwaysOnTop( sal_True );
 }
 
 IIIMPStatusWindow::~IIIMPStatusWindow()

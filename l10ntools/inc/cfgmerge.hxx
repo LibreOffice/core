@@ -113,7 +113,7 @@ protected:
     CfgStack aStack;
     CfgStackData *pStackData;
 
-    BOOL bLocalize;
+    sal_Bool bLocalize;
 
     virtual void WorkOnText(
         ByteString &rText,
@@ -133,7 +133,7 @@ private:
         const ByteString &rIsoLang,
         const ByteString &rResTyp );
 
-BOOL IsTokenClosed( const ByteString &rToken );
+sal_Bool IsTokenClosed( const ByteString &rToken );
 
 public:
     CfgParser();
@@ -194,7 +194,7 @@ private:
     ResData *pResData;
 
     ByteString sFilename;
-    BOOL bEnglish;
+    sal_Bool bEnglish;
 
 protected:
     void WorkOnText(

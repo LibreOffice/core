@@ -26,60 +26,68 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_toolkit.hxx"
-#include <com/sun/star/awt/grid/XGridDataModel.hpp>
-#include <com/sun/star/awt/grid/GridDataEvent.hpp>
-#include <com/sun/star/awt/grid/XGridDataListener.hpp>
-#include <com/sun/star/awt/XControl.hpp>
-#include <com/sun/star/lang/XEventListener.hpp>
+#include <com/sun/star/awt/grid/XMutableGridDataModel.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase3.hxx>
-#include <rtl/ref.hxx>
-#include <vector>
+
+#include <cppuhelper/basemutex.hxx>
+#include <cppuhelper/compbase2.hxx>
 #include <toolkit/helper/mutexandbroadcasthelper.hxx>
 
-using ::rtl::OUString;
+#include <vector>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::awt::grid;
 using namespace ::com::sun::star::lang;
 
+namespace comphelper
+{
+    class ComponentGuard;
+}
+
 namespace toolkit
 {
 
 enum broadcast_type { row_added, row_removed, data_changed};
 
-class DefaultGridDataModel : public ::cppu::WeakImplHelper2< XGridDataModel, XServiceInfo >,
-                             public MutexAndBroadcastHelper
+typedef ::cppu::WeakComponentImplHelper2    <   XMutableGridDataModel
+                                            ,   XServiceInfo
+                                            >   DefaultGridDataModel_Base;
+
+class DefaultGridDataModel  :public ::cppu::BaseMutex
+                            ,public DefaultGridDataModel_Base
 {
 public:
     DefaultGridDataModel();
+    DefaultGridDataModel( DefaultGridDataModel const & i_copySource );
     virtual ~DefaultGridDataModel();
 
+    // XMutableGridDataModel
+    virtual void SAL_CALL addRow( const Any& i_heading, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Data ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addRows( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>& Headings, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >& Data ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeRow( ::sal_Int32 RowIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeAllRows(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL updateCellData( ::sal_Int32 ColumnIndex, ::sal_Int32 RowIndex, const ::com::sun::star::uno::Any& Value ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL updateRowData( const ::com::sun::star::uno::Sequence< ::sal_Int32 >& ColumnIndexes, ::sal_Int32 RowIndex, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Values ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL updateRowHeading( ::sal_Int32 RowIndex, const ::com::sun::star::uno::Any& Heading ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL updateCellToolTip( ::sal_Int32 ColumnIndex, ::sal_Int32 RowIndex, const ::com::sun::star::uno::Any& Value ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL updateRowToolTip( ::sal_Int32 RowIndex, const ::com::sun::star::uno::Any& Value ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addGridDataListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridDataListener >& Listener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeGridDataListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridDataListener >& Listener ) throw (::com::sun::star::uno::RuntimeException);
+
     // XGridDataModel
-    virtual ::sal_Int32 SAL_CALL getRowHeight() throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setRowHeight(::sal_Int32 the_value) throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getRowCount() throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getRowHeaders() throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setRowHeaders(const ::com::sun::star::uno::Sequence< ::rtl::OUString > & value) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< Any > > SAL_CALL getData() throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL addRow(const ::rtl::OUString & headername, const ::com::sun::star::uno::Sequence< Any > & data) throw (::com::sun::star::uno::RuntimeException);
-       virtual void SAL_CALL removeRow(::sal_Int32 index) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL addDataListener( const Reference< XGridDataListener >& xListener ) throw (RuntimeException);
-    virtual void SAL_CALL removeDataListener( const Reference< XGridDataListener >& xListener ) throw (RuntimeException);
-    virtual void SAL_CALL removeAll() throw (RuntimeException);
-    virtual void SAL_CALL setRowHeaderWidth(sal_Int32 _value) throw (::com::sun::star::uno::RuntimeException);
-    virtual sal_Int32 SAL_CALL getRowHeaderWidth() throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL updateCell( ::sal_Int32 row, ::sal_Int32 column, const ::com::sun::star::uno::Any& value ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL updateRow( ::sal_Int32 row, const ::com::sun::star::uno::Sequence< ::sal_Int32 >& columns, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& values ) throw (::com::sun::star::uno::RuntimeException);
-    // XComponent
-    virtual void SAL_CALL dispose(  ) throw (RuntimeException);
-    virtual void SAL_CALL addEventListener( const Reference< XEventListener >& xListener ) throw (RuntimeException);
-    virtual void SAL_CALL removeEventListener( const Reference< XEventListener >& aListener ) throw (RuntimeException);
+    virtual ::sal_Int32 SAL_CALL getColumnCount() throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL getCellData( ::sal_Int32 Column, ::sal_Int32 Row ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL getCellToolTip( ::sal_Int32 Column, ::sal_Int32 Row ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL getRowHeading( ::sal_Int32 RowIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+
+    // OComponentHelper
+    virtual void SAL_CALL disposing();
+
+    // XCloneable
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (RuntimeException);
@@ -87,16 +95,25 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException);
 
 private:
+    typedef ::std::pair< Any, Any >     CellData;
+    typedef ::std::vector< CellData >   RowData;
+    typedef ::std::vector< RowData >    GridData;
 
-    void broadcast( broadcast_type eType, const GridDataEvent& aEvent ) throw (::com::sun::star::uno::RuntimeException);
-    void broadcast_changed( ::rtl::OUString name, sal_Int32 index, Any oldValue, Any newValue ) throw (::com::sun::star::uno::RuntimeException);
-    void broadcast_add( sal_Int32 index, const ::rtl::OUString & headerName,  const ::com::sun::star::uno::Sequence< Any  > rowData ) throw (::com::sun::star::uno::RuntimeException);
-    void broadcast_remove( sal_Int32 index, const ::rtl::OUString & headerName, const ::com::sun::star::uno::Sequence< Any  > rowData ) throw (::com::sun::star::uno::RuntimeException);
+    void broadcast(
+        GridDataEvent const & i_event,
+        void ( SAL_CALL ::com::sun::star::awt::grid::XGridDataListener::*i_listenerMethod )( ::com::sun::star::awt::grid::GridDataEvent const & ),
+        ::comphelper::ComponentGuard & i_instanceLock
+    );
 
-    sal_Int32 rowHeight;
-    std::vector< std::vector < Any > > data;
-    std::vector< ::rtl::OUString > rowHeaders;
-    sal_Int32 m_nRowHeaderWidth;
+    void    impl_addRow( Sequence< Any > const & i_rowData, sal_Int32 const i_assumedColCount = -1 );
+
+    CellData const &    impl_getCellData_throw( sal_Int32 const i_columnIndex, sal_Int32 const i_rowIndex ) const;
+    CellData&           impl_getCellDataAccess_throw( sal_Int32 const i_columnIndex, sal_Int32 const i_rowIndex );
+    RowData&            impl_getRowDataAccess_throw( sal_Int32 const i_rowIndex, size_t const i_requiredColumnCount );
+
+    GridData                                    m_aData;
+    ::std::vector< ::com::sun::star::uno::Any > m_aRowHeaders;
+    sal_Int32                                   m_nColumnCount;
 };
 
 }

@@ -282,12 +282,12 @@ Preedit_UpdateAttributes ( preedit_text_t* ptext, XIMFeedback* feedback,
 // Convert the XIM feedback values into appropriate VCL
 // SAL_EXTTEXTINPUT_ATTR values
 // returns an allocate list of attributes, which must be freed by caller
-USHORT*
-Preedit_FeedbackToSAL ( XIMFeedback* pfeedback, int nlength, std::vector<USHORT>& rSalAttr )
+sal_uInt16*
+Preedit_FeedbackToSAL ( XIMFeedback* pfeedback, int nlength, std::vector<sal_uInt16>& rSalAttr )
 {
-      USHORT *psalattr;
-      USHORT  nval;
-      USHORT  noldval = 0;
+      sal_uInt16 *psalattr;
+      sal_uInt16  nval;
+      sal_uInt16  noldval = 0;
       XIMFeedback nfeedback;
 
       // only work with reasonable length
@@ -297,7 +297,7 @@ Preedit_FeedbackToSAL ( XIMFeedback* pfeedback, int nlength, std::vector<USHORT>
         psalattr = &rSalAttr[0];
     }
       else
-        return (USHORT*)NULL;
+        return (sal_uInt16*)NULL;
 
       for (int npos = 0; npos < nlength; npos++)
     {

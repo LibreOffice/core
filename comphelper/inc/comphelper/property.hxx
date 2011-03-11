@@ -151,11 +151,11 @@ COMPHELPER_DLLPUBLIC void copyProperties(const staruno::Reference<starbeans::XPr
                     sal_False, if the value could be converted and has not changed
     @exception      InvalidArgumentException thrown if the value could not be converted to the requested type (which is the template argument)
 */
-template <class TYPE>
-sal_Bool tryPropertyValue(staruno::Any& /*out*/_rConvertedValue, staruno::Any& /*out*/_rOldValue, const staruno::Any& _rValueToSet, const TYPE& _rCurrentValue)
+template <typename T>
+sal_Bool tryPropertyValue(staruno::Any& /*out*/_rConvertedValue, staruno::Any& /*out*/_rOldValue, const staruno::Any& _rValueToSet, const T& _rCurrentValue)
 {
     sal_Bool bModified(sal_False);
-    TYPE aNewValue;
+    T aNewValue = T();
     ::cppu::convertPropertyValue(aNewValue, _rValueToSet);
     if (aNewValue != _rCurrentValue)
     {
@@ -208,7 +208,7 @@ sal_Bool tryPropertyValueEnum(staruno::Any& /*out*/_rConvertedValue, staruno::An
 inline sal_Bool tryPropertyValue(staruno::Any& /*out*/_rConvertedValue, staruno::Any& /*out*/_rOldValue, const staruno::Any& _rValueToSet, sal_Bool _bCurrentValue)
 {
     sal_Bool bModified(sal_False);
-    sal_Bool bNewValue;
+    sal_Bool bNewValue(sal_False);
     ::cppu::convertPropertyValue(bNewValue, _rValueToSet);
     if (bNewValue != _bCurrentValue)
     {

@@ -44,10 +44,10 @@ enum DdeItemType
 
 struct DdeItemImpData
 {
-    ULONG nHCnv;
-    USHORT nCnt;
+    sal_uLong nHCnv;
+    sal_uInt16 nCnt;
 
-    DdeItemImpData( ULONG nH ) : nHCnv( nH ), nCnt( 1 ) {}
+    DdeItemImpData( sal_uLong nH ) : nHCnv( nH ), nCnt( 1 ) {}
 };
 
 SV_DECL_VARARR( DdeItemImp, DdeItemImpData, 1, 1 )
@@ -102,7 +102,7 @@ HDDEDATA CALLBACK _export DdeInternal::SvrCallback(
                     {
                         if( hText1 )
                         {
-                            USHORT n = 0;
+                            sal_uInt16 n = 0;
                             while( STRING_NOTFOUND != n )
                             {
                                 String s( sTopics.GetToken( 0, '\t', n ));
@@ -155,7 +155,7 @@ HDDEDATA CALLBACK _export DdeInternal::SvrCallback(
                     }
 #else
                     String sTopics( pService->Topics() );
-                    USHORT n = 0;
+                    sal_uInt16 n = 0;
                     while( STRING_NOTFOUND != n )
                     {
                         String s( sTopics.GetToken( 0, '\t', n ));
@@ -245,7 +245,7 @@ found:
         return (HDDEDATA)NULL;
     }
 
-    BOOL bExec = BOOL(nCode == XTYP_EXECUTE);
+    sal_Bool bExec = sal_Bool(nCode == XTYP_EXECUTE);
     pTopic = pC->pTopic;
     if ( pTopic && !bExec )
         pItem = FindItem( *pTopic, hText2 );
@@ -261,7 +261,7 @@ found:
     else
         pTopic->aItem.Erase();
 
-    BOOL bRes = FALSE;
+    sal_Bool bRes = sal_False;
     pInst->hCurConvSvr = (long)hConv;
     switch( nCode )
     {
@@ -350,14 +350,14 @@ found:
                 pItem->IncMonitor( (long)hConv );
                 pInst->hCurConvSvr = NULL;
             }
-            return (HDDEDATA)TRUE;
+            return (HDDEDATA)sal_True;
 
         case XTYP_ADVSTOP:
             pItem->DecMonitor( (long)hConv );
             if( !pItem->pImpData )
                 pTopic->StopAdviseLoop();
             pInst->hCurConvSvr = NULL;
-            return (HDDEDATA)TRUE;
+            return (HDDEDATA)sal_True;
 
         case XTYP_EXECUTE:
             {
@@ -405,7 +405,7 @@ DdeTopic* DdeInternal::FindTopic( DdeService& rService, HSZ hTopic )
 {
     DdeTopic* s;
     DdeTopics& rTopics = rService.aTopics;
-    int bWeiter = FALSE;
+    int bWeiter = sal_False;
     DdeInstData* pInst = ImpGetInstData();
     DBG_ASSERT(pInst,"SVDDE:No instance data");
 
@@ -438,7 +438,7 @@ DdeItem* DdeInternal::FindItem( DdeTopic& rTopic, HSZ hItem )
     DdeItems& rItems = rTopic.aItems;
     DdeInstData* pInst = ImpGetInstData();
     DBG_ASSERT(pInst,"SVDDE:No instance data");
-    int bWeiter = FALSE;
+    int bWeiter = sal_False;
 
     do {            // middle check loop
 
@@ -592,7 +592,7 @@ void DdeService::RemoveTopic( const DdeTopic& rTopic )
 
 // --- DdeService::HasCbFormat() -----------------------------------
 
-BOOL DdeService::HasCbFormat( USHORT nFmt )
+sal_Bool DdeService::HasCbFormat( sal_uInt16 nFmt )
 {
     for ( size_t i = 0, n = aFormats.size(); i < n; ++i )
         if ( aFormats[ i ] == nFmt )
@@ -602,14 +602,14 @@ BOOL DdeService::HasCbFormat( USHORT nFmt )
 
 // --- DdeService::HasFormat() -------------------------------------
 
-BOOL DdeService::HasFormat( ULONG nFmt )
+sal_Bool DdeService::HasFormat( sal_uLong nFmt )
 {
-    return HasCbFormat( (USHORT)DdeData::GetExternalFormat( nFmt ));
+    return HasCbFormat( (sal_uInt16)DdeData::GetExternalFormat( nFmt ));
 }
 
 // --- DdeService::AddFormat() -------------------------------------
 
-void DdeService::AddFormat( ULONG nFmt )
+void DdeService::AddFormat( sal_uLong nFmt )
 {
     nFmt = DdeData::GetExternalFormat( nFmt );
     for ( size_t i = 0, n = aFormats.size(); i < n; ++i )
@@ -620,7 +620,7 @@ void DdeService::AddFormat( ULONG nFmt )
 
 // --- DdeService::RemoveFormat() ----------------------------------
 
-void DdeService::RemoveFormat( ULONG nFmt )
+void DdeService::RemoveFormat( sal_uLong nFmt )
 {
     nFmt = DdeData::GetExternalFormat( nFmt );
     for ( DdeFormats::iterator it = aFormats.begin(); it < aFormats.end(); ++it ) {
@@ -663,9 +663,9 @@ const String& DdeTopic::GetName() const
 
 // --- DdeTopic::IsSystemTopic() -----------------------------------
 
-BOOL DdeTopic::IsSystemTopic()
+sal_Bool DdeTopic::IsSystemTopic()
 {
-    return BOOL (GetName() == reinterpret_cast<const sal_Unicode*>(SZDDESYS_TOPIC));
+    return sal_Bool (GetName() == reinterpret_cast<const sal_Unicode*>(SZDDESYS_TOPIC));
 }
 
 // --- DdeTopic::AddItem() -----------------------------------------
@@ -759,7 +759,7 @@ void DdeTopic::_Disconnect( long nId )
 
 // --- DdeTopic::Get() ---------------------------------------------
 
-DdeData* DdeTopic::Get( ULONG nFmt )
+DdeData* DdeTopic::Get( sal_uLong nFmt )
 {
     if ( aGetLink.IsSet() )
         return (DdeData*)aGetLink.Call( (void*)nFmt );
@@ -769,22 +769,22 @@ DdeData* DdeTopic::Get( ULONG nFmt )
 
 // --- DdeTopic::Put() ---------------------------------------------
 
-BOOL DdeTopic::Put( const DdeData* r )
+sal_Bool DdeTopic::Put( const DdeData* r )
 {
     if ( aPutLink.IsSet() )
-        return (BOOL)aPutLink.Call( (void*) r );
+        return (sal_Bool)aPutLink.Call( (void*) r );
     else
-        return FALSE;
+        return sal_False;
 }
 
 // --- DdeTopic::Execute() -----------------------------------------
 
-BOOL DdeTopic::Execute( const String* r )
+sal_Bool DdeTopic::Execute( const String* r )
 {
     if ( aExecLink.IsSet() )
-        return (BOOL)aExecLink.Call( (void*)r );
+        return (sal_Bool)aExecLink.Call( (void*)r );
     else
-        return FALSE;
+        return sal_False;
 }
 
 // --- DdeTopic::GetConvId() ---------------------------------------
@@ -798,16 +798,16 @@ long DdeTopic::GetConvId()
 
 // --- DdeTopic::StartAdviseLoop() ---------------------------------
 
-BOOL DdeTopic::StartAdviseLoop()
+sal_Bool DdeTopic::StartAdviseLoop()
 {
-    return FALSE;
+    return sal_False;
 }
 
 // --- DdeTopic::StopAdviseLoop() ----------------------------------
 
-BOOL DdeTopic::StopAdviseLoop()
+sal_Bool DdeTopic::StopAdviseLoop()
 {
-    return FALSE;
+    return sal_False;
 }
 
 // --- DdeItem::DdeItem() ------------------------------------------
@@ -877,17 +877,17 @@ void DdeItem::NotifyClient()
 
 // --- DdeItem::IncMonitor() ------------------------------------------
 
-void DdeItem::IncMonitor( ULONG nHCnv )
+void DdeItem::IncMonitor( sal_uLong nHCnv )
 {
     if( !pImpData )
     {
         pImpData = new DdeItemImp;
         if( DDEGETPUTITEM == nType )
-            ((DdeGetPutItem*)this)->AdviseLoop( TRUE );
+            ((DdeGetPutItem*)this)->AdviseLoop( sal_True );
     }
     else
     {
-        for( USHORT n = pImpData->Count(); n; )
+        for( sal_uInt16 n = pImpData->Count(); n; )
             if( (*pImpData)[ --n ].nHCnv == nHCnv )
             {
                 ++(*pImpData)[ n ].nHCnv;
@@ -900,12 +900,12 @@ void DdeItem::IncMonitor( ULONG nHCnv )
 
 // --- DdeItem::DecMonitor() ------------------------------------------
 
-void DdeItem::DecMonitor( ULONG nHCnv )
+void DdeItem::DecMonitor( sal_uLong nHCnv )
 {
     if( pImpData )
     {
         DdeItemImpData* pData = (DdeItemImpData*)pImpData->GetData();
-        for( USHORT n = pImpData->Count(); n; --n, ++pData )
+        for( sal_uInt16 n = pImpData->Count(); n; --n, ++pData )
             if( pData->nHCnv == nHCnv )
             {
                 if( !pData->nCnt || !--pData->nCnt )
@@ -916,7 +916,7 @@ void DdeItem::DecMonitor( ULONG nHCnv )
                     {
                         delete pImpData, pImpData = 0;
                         if( DDEGETPUTITEM == nType )
-                            ((DdeGetPutItem*)this)->AdviseLoop( FALSE );
+                            ((DdeGetPutItem*)this)->AdviseLoop( sal_False );
                     }
                 }
                 return ;
@@ -930,7 +930,7 @@ short DdeItem::GetLinks()
 {
     short nCnt = 0;
     if( pImpData )
-        for( USHORT n = pImpData->Count(); n; )
+        for( sal_uInt16 n = pImpData->Count(); n; )
             nCnt = nCnt + (*pImpData)[ --n ].nCnt;
     return nCnt;
 }
@@ -962,21 +962,21 @@ DdeGetPutItem::DdeGetPutItem( const DdeItem& rItem )
 
 // --- DdeGetPutData::Get() ----------------------------------------
 
-DdeData* DdeGetPutItem::Get( ULONG )
+DdeData* DdeGetPutItem::Get( sal_uLong )
 {
     return 0;
 }
 
 // --- DdeGetPutData::Put() ----------------------------------------
 
-BOOL DdeGetPutItem::Put( const DdeData* )
+sal_Bool DdeGetPutItem::Put( const DdeData* )
 {
-    return FALSE;
+    return sal_False;
 }
 
 // --- DdeGetPutData::AdviseLoop() ---------------------------------
 
-void DdeGetPutItem::AdviseLoop( BOOL )
+void DdeGetPutItem::AdviseLoop( sal_Bool )
 {
 }
 
@@ -1042,7 +1042,7 @@ String DdeService::Formats()
             s += '\t';
         p = buf;
 
-        switch( (USHORT)f )
+        switch( (sal_uInt16)f )
         {
             case CF_TEXT:
                 p = reinterpret_cast<LPCTSTR>(String::CreateFromAscii("TEXT").GetBuffer());
@@ -1089,9 +1089,9 @@ String DdeService::Status()
 
 // --- DdeService::IsBusy() ----------------------------------------
 
-BOOL DdeService::IsBusy()
+sal_Bool DdeService::IsBusy()
 {
-    return FALSE;
+    return sal_False;
 }
 
 // --- DdeService::GetHelp() ----------------------------------------
@@ -1101,14 +1101,14 @@ String DdeService::GetHelp()
     return String();
 }
 
-BOOL DdeTopic::MakeItem( const String& )
+sal_Bool DdeTopic::MakeItem( const String& )
 {
-    return FALSE;
+    return sal_False;
 }
 
-BOOL DdeService::MakeTopic( const String& )
+sal_Bool DdeService::MakeTopic( const String& )
 {
-    return FALSE;
+    return sal_False;
 }
 
 String DdeService::SysTopicGet( const String& )
@@ -1116,9 +1116,9 @@ String DdeService::SysTopicGet( const String& )
     return String();
 }
 
-BOOL DdeService::SysTopicExecute( const String* )
+sal_Bool DdeService::SysTopicExecute( const String* )
 {
-    return FALSE;
+    return sal_False;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

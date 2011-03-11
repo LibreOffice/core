@@ -610,7 +610,7 @@ namespace svt
             {
                 while ( GetSelectColumnCount( ) )
                     SelectColumnPos(
-                        sal::static_int_cast< USHORT >(FirstSelectedColumn()),
+                        sal::static_int_cast< sal_uInt16 >(FirstSelectedColumn()),
                         sal_False );
                 Select();
             }

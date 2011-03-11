@@ -214,10 +214,11 @@ Polygon VCLUnoHelper::CreatePolygon( const ::com::sun::star::uno::Sequence< sal_
 
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer> VCLUnoHelper::CreateControlContainer( Window* pWindow )
 {
-    UnoControlContainer* pContainer = new UnoControlContainer( pWindow->GetComponentInterface( sal_True ) );
+    const uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
+    UnoControlContainer* pContainer = new UnoControlContainer( xFactory, pWindow->GetComponentInterface( sal_True ) );
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer > x = pContainer;
 
-    UnoControlModel* pContainerModel = new UnoControlContainerModel;
+    UnoControlModel* pContainerModel = new UnoControlContainerModel( xFactory );
     pContainer->setModel( (::com::sun::star::awt::XControlModel*)pContainerModel );
 
     return x;

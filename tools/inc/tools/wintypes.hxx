@@ -35,7 +35,7 @@
 // - Window-Types -
 // ----------------
 
-typedef USHORT WindowType;
+typedef sal_uInt16 WindowType;
 #define WINDOW_BASE                 0x0100
 #define WINDOW_FIRST                (WINDOW_BASE + 0x30)
 #define WINDOW_MESSBOX              (WINDOW_FIRST)
@@ -118,14 +118,14 @@ typedef USHORT WindowType;
 #define WINDOW_INTROWINDOW          (WINDOW_FIRST + 0x4f)
 #define WINDOW_LISTBOXWINDOW        (WINDOW_FIRST + 0x50)
 #define WINDOW_DOCKINGAREA          (WINDOW_FIRST + 0x51)
-#define WINDOW_LAST                 (WINDOW_DOCKINGAREA)
+#define WINDOW_RULER                (WINDOW_FIRST + 0x52)
+#define WINDOW_LAST                 (WINDOW_RULER)
 
 
 // ---------------
 // - Window-Bits -
 // ---------------
 
-// By changes you must also change: rsc/vclrsc.hxx
 typedef sal_Int64 WinBits;
 
 // Window-Bits fuer Window
@@ -241,9 +241,6 @@ typedef sal_Int64 WinBits;
 #define WB_SCROLL               ((WinBits)0x02000000)
 #define WB_FORCETABCYCLE        ((WinBits)0x04000000)
 
-// Window-Bits for TabControl
-#define WB_SINGLELINE           ((WinBits)0x02000000)
-
 // Window-Bits for DockingWindows
 #define WB_DOCKBORDER           ((WinBits)0x00001000)
 
@@ -277,9 +274,16 @@ typedef sal_Int64 WinBits;
 #define WB_STDPOPUP             (WB_BORDER | WB_POPUP | WB_SYSTEMWINDOW | WB_3DLOOK | WB_DIALOGCONTROL)
 
 // For TreeListBox
-#define WB_HASBUTTONS           ((WinBits)0x00800000)
-#define WB_HASLINES             ((WinBits)0x01000000)
-#define WB_HASLINESATROOT       ((WinBits)0x02000000)
+#define WB_HASBUTTONS           ((WinBits)SAL_CONST_INT64(0x000100000000))
+#define WB_HASLINES             ((WinBits)SAL_CONST_INT64(0x000200000000))
+#define WB_HASLINESATROOT       ((WinBits)SAL_CONST_INT64(0x000400000000))
+#define WB_HASBUTTONSATROOT     ((WinBits)SAL_CONST_INT64(0x000800000000))
+#define WB_NOINITIALSELECTION   ((WinBits)SAL_CONST_INT64(0x001000000000))
+#define WB_HIDESELECTION        ((WinBits)SAL_CONST_INT64(0x002000000000))
+#define WB_FORCE_MAKEVISIBLE    ((WinBits)SAL_CONST_INT64(0x004000000000))
+// DO NOT USE: 0x008000000000, that's WB_SYSTEMCHILDWINDOW
+#define WB_QUICK_SEARCH         ((WinBits)SAL_CONST_INT64(0x010000000000))
+
 
 // For FileOpen Dialog
 #define WB_PATH                 ((WinBits)0x00100000)
@@ -301,7 +305,6 @@ typedef sal_Int64 WinBits;
 // - WindowAlign -
 // ---------------
 
-// By changes you must also change: rsc/vclrsc.hxx
 enum WindowAlign { WINDOWALIGN_LEFT, WINDOWALIGN_TOP, WINDOWALIGN_RIGHT, WINDOWALIGN_BOTTOM };
 enum ImageAlign { IMAGEALIGN_LEFT, IMAGEALIGN_TOP, IMAGEALIGN_RIGHT, IMAGEALIGN_BOTTOM,
                   IMAGEALIGN_LEFT_TOP, IMAGEALIGN_LEFT_BOTTOM, IMAGEALIGN_TOP_LEFT,
@@ -313,7 +316,6 @@ enum SymbolAlign { SYMBOLALIGN_LEFT, SYMBOLALIGN_RIGHT };
 // - TriState -
 // ------------
 
-// By changes you must also change: rsc/vclrsc.hxx
 enum TriState { STATE_NOCHECK, STATE_CHECK, STATE_DONTKNOW };
 
 
@@ -321,7 +323,7 @@ enum TriState { STATE_NOCHECK, STATE_CHECK, STATE_DONTKNOW };
 // - ButtonDialog-Types -
 // ----------------------
 
-typedef USHORT StandardButtonType;
+typedef sal_uInt16 StandardButtonType;
 #define BUTTON_OK           ((StandardButtonType)0)
 #define BUTTON_CANCEL       ((StandardButtonType)1)
 #define BUTTON_YES          ((StandardButtonType)2)

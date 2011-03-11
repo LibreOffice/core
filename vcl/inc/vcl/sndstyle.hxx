@@ -35,7 +35,7 @@
 // - Sound-Types -
 // ---------------
 
-typedef USHORT SoundType;
+typedef sal_uInt16 SoundType;
 #define SOUND_DEFAULT                   ((SoundType)0)
 #define SOUND_INFO                      ((SoundType)1)
 #define SOUND_WARNING                   ((SoundType)2)

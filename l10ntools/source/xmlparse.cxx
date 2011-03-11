@@ -248,14 +248,14 @@ XMLElement *XMLParentNode::GetChildElement( XMLElement *pRefElement )
                 if ( !pList )
                     return ( XMLElement * ) pChild;
 
-                BOOL bMatch = FALSE;
+                sal_Bool bMatch = sal_False;
                 for ( size_t j = 0; j < pList->size() && bMatch; j++ ) {
                     XMLAttribute *pAttribute = (*pList)[ j ];
                     XMLAttribute *pCandidate =
                         (( XMLElement * ) pChild )->GetAttribute(
                             *pAttribute );
                     if ( !pCandidate || !pAttribute->IsEqual( *pCandidate ))
-                        bMatch = FALSE;
+                        bMatch = sal_False;
                 }
                 if ( bMatch )
                     return ( XMLElement * ) pChild;
@@ -269,14 +269,14 @@ XMLElement *XMLParentNode::GetChildElement( XMLElement *pRefElement )
 //
 
 /*****************************************************************************/
-USHORT XMLFile::GetNodeType()
+sal_uInt16 XMLFile::GetNodeType()
 /*****************************************************************************/
 {
     return XML_NODE_TYPE_FILE;
 }
 
 /*****************************************************************************/
-BOOL XMLFile::Write( ByteString &aFilename )
+sal_Bool XMLFile::Write( ByteString &aFilename )
 /*****************************************************************************/
 {
 
@@ -331,7 +331,7 @@ void XMLFile::WriteString( ofstream &rStream, const String &sString )
 }
 
 
-BOOL XMLFile::Write( ofstream &rStream , XMLNode *pCur )
+sal_Bool XMLFile::Write( ofstream &rStream , XMLNode *pCur )
 {
     XMLUtil& xmlutil = XMLUtil::Instance();
     (void) xmlutil;
@@ -395,11 +395,11 @@ BOOL XMLFile::Write( ofstream &rStream , XMLNode *pCur )
             break;
         }
     }
-    return TRUE;
+    return sal_True;
 }
 
 
-void XMLFile::Print( XMLNode *pCur, USHORT nLevel )
+void XMLFile::Print( XMLNode *pCur, sal_uInt16 nLevel )
 {
 
     if ( !pCur )
@@ -477,13 +477,13 @@ XMLFile::XMLFile( const String &rFileName ) // the file name, empty if created f
                   XMLStrings   ( NULL )
 
 {
-    nodes_localize.insert( TagMap::value_type(ByteString(String::CreateFromAscii("bookmark"),RTL_TEXTENCODING_ASCII_US) , TRUE) );
-    nodes_localize.insert( TagMap::value_type(ByteString(String::CreateFromAscii("variable"),RTL_TEXTENCODING_ASCII_US) , TRUE) );
-    nodes_localize.insert( TagMap::value_type(ByteString(String::CreateFromAscii("paragraph"),RTL_TEXTENCODING_ASCII_US) , TRUE) );
-    nodes_localize.insert( TagMap::value_type(ByteString(String::CreateFromAscii("alt"),RTL_TEXTENCODING_ASCII_US) , TRUE) );
-    nodes_localize.insert( TagMap::value_type(ByteString(String::CreateFromAscii("caption"),RTL_TEXTENCODING_ASCII_US) , TRUE) );
-    nodes_localize.insert( TagMap::value_type(ByteString(String::CreateFromAscii("title"),RTL_TEXTENCODING_ASCII_US) , TRUE) );
-    nodes_localize.insert( TagMap::value_type(ByteString(String::CreateFromAscii("link"),RTL_TEXTENCODING_ASCII_US) , TRUE) );
+    nodes_localize.insert( TagMap::value_type(ByteString(String::CreateFromAscii("bookmark"),RTL_TEXTENCODING_ASCII_US) , sal_True) );
+    nodes_localize.insert( TagMap::value_type(ByteString(String::CreateFromAscii("variable"),RTL_TEXTENCODING_ASCII_US) , sal_True) );
+    nodes_localize.insert( TagMap::value_type(ByteString(String::CreateFromAscii("paragraph"),RTL_TEXTENCODING_ASCII_US) , sal_True) );
+    nodes_localize.insert( TagMap::value_type(ByteString(String::CreateFromAscii("alt"),RTL_TEXTENCODING_ASCII_US) , sal_True) );
+    nodes_localize.insert( TagMap::value_type(ByteString(String::CreateFromAscii("caption"),RTL_TEXTENCODING_ASCII_US) , sal_True) );
+    nodes_localize.insert( TagMap::value_type(ByteString(String::CreateFromAscii("title"),RTL_TEXTENCODING_ASCII_US) , sal_True) );
+    nodes_localize.insert( TagMap::value_type(ByteString(String::CreateFromAscii("link"),RTL_TEXTENCODING_ASCII_US) , sal_True) );
 }
 /*****************************************************************************/
 void XMLFile::Extract( XMLFile *pCur )
@@ -750,7 +750,7 @@ bool XMLFile::CheckExportStatus( XMLParentNode *pCur )
 }
 
 /*****************************************************************************/
-USHORT XMLElement::GetNodeType()
+sal_uInt16 XMLElement::GetNodeType()
 /*****************************************************************************/
 {
     return XML_NODE_TYPE_ELEMENT;
@@ -1012,7 +1012,7 @@ void XMLData::AddData( const String &rData) {
 }
 
 /*****************************************************************************/
-USHORT XMLData::GetNodeType()
+sal_uInt16 XMLData::GetNodeType()
 /*****************************************************************************/
 {
     return XML_NODE_TYPE_DATA;
@@ -1023,7 +1023,7 @@ USHORT XMLData::GetNodeType()
 //
 
 /*****************************************************************************/
-USHORT XMLComment::GetNodeType()
+sal_uInt16 XMLComment::GetNodeType()
 /*****************************************************************************/
 {
     return XML_NODE_TYPE_COMMENT;
@@ -1049,7 +1049,7 @@ XMLComment& XMLComment::operator=(const XMLComment& obj){
 //
 
 /*****************************************************************************/
-USHORT XMLDefault::GetNodeType()
+sal_uInt16 XMLDefault::GetNodeType()
 /*****************************************************************************/
 {
     return XML_NODE_TYPE_DEFAULT;
@@ -1247,7 +1247,7 @@ XMLFile *SimpleXMLParser::Execute( SvMemoryStream *pStream )
     pCurNode = pXMLFile;
     pCurData = NULL;
 
-    ULONG nPos = pStream->Tell();
+    sal_uLong nPos = pStream->Tell();
     pStream->Seek( STREAM_SEEK_TO_END );
 
     aErrorInformation.eCode = XML_ERROR_NONE;
@@ -1262,7 +1262,7 @@ XMLFile *SimpleXMLParser::Execute( SvMemoryStream *pStream )
         aErrorInformation.sMessage = String::CreateFromAscii( "XML-File parsed successfully" );
 
     if ( !XML_Parse(
-        aParser, ( char * ) pStream->GetData() + nPos, pStream->Tell() - nPos, TRUE ))
+        aParser, ( char * ) pStream->GetData() + nPos, pStream->Tell() - nPos, sal_True ))
     {
         aErrorInformation.eCode = XML_GetErrorCode( aParser );
         aErrorInformation.nLine = XML_GetErrorLineNumber( aParser );
@@ -1332,7 +1332,7 @@ void XMLUtil::QuotHTML( String &rString )
     static const String QAMP(String::CreateFromAscii("&amp;"));
     static const String SLASH(String::CreateFromAscii("\\"));
 
-    for ( USHORT i = 0; i < rString.Len(); i++) {
+    for ( sal_uInt16 i = 0; i < rString.Len(); i++) {
         if ( i < rString.Len()) {
             switch ( rString.GetChar( i )) {
                 case '\\': if( i+1 <= rString.Len() ){
@@ -1443,7 +1443,7 @@ XMLUtil&  XMLUtil::Instance(){
 XMLUtil::~XMLUtil(){}
 /*****************************************************************************/
 /*****************************************************************************/
-ByteString XMLUtil::GetIsoLangByIndex( USHORT nIndex )
+ByteString XMLUtil::GetIsoLangByIndex( sal_uInt16 nIndex )
 /*****************************************************************************/
 {
     if(nIndex > 0 && MAX_LANGUAGES >= nIndex )
