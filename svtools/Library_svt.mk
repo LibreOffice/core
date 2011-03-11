@@ -60,6 +60,7 @@ $(eval $(call gb_Library_add_linked_libs,svt,\
     i18nutil \
     icuuc \
     jvmfwk \
+    salhelper \
     sal \
     sot \
     svl \
@@ -225,6 +226,7 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/misc/imap3 \
     svtools/source/misc/itemdel \
     svtools/source/misc/langtab \
+    svtools/source/misc/langhelp \
     svtools/source/misc/stringtransfer \
     svtools/source/misc/svtaccessiblefactory \
     svtools/source/misc/svtdata \

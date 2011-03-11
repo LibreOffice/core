@@ -47,9 +47,9 @@ typedef ::std::vector< ImplColorListData*    > ImpColorList;
 typedef ::std::vector< ImpLineListData*      > ImpLineList;
 typedef ::std::vector< ImplFontNameListData* > ImplFontList;
 
-#define STYLE_SOLID     ( ( USHORT ) 0 )
-#define STYLE_DOTTED    ( ( USHORT ) 1 )
-#define STYLE_DASHED    ( ( USHORT ) 2 )
+#define STYLE_SOLID     ( ( sal_uInt16 ) 0 )
+#define STYLE_DOTTED    ( ( sal_uInt16 ) 1 )
+#define STYLE_DASHED    ( ( sal_uInt16 ) 2 )
 
 /*************************************************************************
 
@@ -253,7 +253,7 @@ class SVT_DLLPUBLIC LineListBox : public ListBox
     FieldUnit       eSourceUnit;
 
     SVT_DLLPRIVATE void         ImpGetLine( long nLine1, long nLine2, long nDistance,
-                                    USHORT nStyle, Bitmap& rBmp, XubString& rStr );
+                                    sal_uInt16 nStyle, Bitmap& rBmp, XubString& rStr );
     using Window::ImplInit;
     SVT_DLLPRIVATE void         ImplInit();
     void            UpdateLineColors( void );
@@ -277,9 +277,10 @@ public:
     using ListBox::GetEntryPos;
     sal_uInt16          GetEntryPos( long nLine1, long nLine2 = 0, long nDistance = 0,
                                  sal_uInt16 nStyle = STYLE_SOLID ) const;
+    long            GetEntryLine1( sal_uInt16 nPos ) const;
     long            GetEntryLine2( sal_uInt16 nPos ) const;
     long            GetEntryDistance( sal_uInt16 nPos ) const;
-    USHORT          GetEntryStyle( USHORT nPos ) const;
+    sal_uInt16          GetEntryStyle( sal_uInt16 nPos ) const;
 
     inline void     SelectEntry( const XubString& rStr, sal_Bool bSelect = sal_True ) { ListBox::SelectEntry( rStr, bSelect ); }
     void            SelectEntry( long nLine1, long nLine2 = 0, long nDistance = 0,

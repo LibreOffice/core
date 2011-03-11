@@ -3235,7 +3235,7 @@ const RulerIndent*  Ruler::GetIndents() const { return mpData->pIndents; }
  * ---------------------------------------------------*/
 void Ruler::DrawTicks()
 {
-    mbFormat = TRUE;
+    mbFormat = sal_True;
     ImplDraw();
 }
 

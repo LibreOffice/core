@@ -2098,7 +2098,7 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
             // Ueber die Zeilen des Absatzes...
             // --------------------------------------------------
             sal_uInt16 nLines = pPortion->GetLines().Count();
-            USHORT nIndex = 0;
+            sal_uInt16 nIndex = 0;
             for ( sal_uInt16 nLine = 0; nLine < nLines; nLine++ )
             {
                 TextLine* pLine = pPortion->GetLines().GetObject(nLine);

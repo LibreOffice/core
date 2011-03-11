@@ -88,7 +88,7 @@ public:
     virtual sal_Bool                HasRowHeader() const = 0; //GetColumnId
     /** @return  <TRUE/>, if the object can focus a cell. */
     virtual sal_Bool                IsCellFocusable() const = 0;
-    virtual BOOL                    GoToCell( sal_Int32 _nRow, sal_uInt16 _nColumnPos ) = 0;
+    virtual sal_Bool                GoToCell( sal_Int32 _nRow, sal_uInt16 _nColumnPos ) = 0;
 
     virtual void                    SetNoSelection() = 0;
     virtual void                    SelectAll() = 0;

@@ -156,7 +156,7 @@ SvxIconChoiceCtrlEntry* SvtIconChoiceCtrl::InsertEntry( const String& rText, con
 
 sal_Bool SvtIconChoiceCtrl::EditedEntry( SvxIconChoiceCtrlEntry*, const XubString&, sal_Bool )
 {
-    return TRUE;
+    return sal_True;
 }
 
 sal_Bool SvtIconChoiceCtrl::EditingEntry( SvxIconChoiceCtrlEntry* )

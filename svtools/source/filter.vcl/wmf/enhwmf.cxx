@@ -272,8 +272,8 @@ void EnhWMFReader::ReadEMFPlusComment(sal_uInt32 length, sal_Bool& bHaveDC)
     length -= 4;
 
     while (length > 0) {
-        UINT16 type, flags;
-        UINT32 size, dataSize;
+        sal_uInt16 type, flags;
+        sal_uInt32 size, dataSize;
         sal_uInt32 next;
 
         *pWMF >> type >> flags >> size >> dataSize;
@@ -384,7 +384,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
             EMFP_DEBUG(printf ("\tGDI comment\n\t\tlength: %d\n", length));
 
             if( length >= 4 ) {
-                UINT32 id;
+                sal_uInt32 id;
 
                 *pWMF >> id;
 
@@ -1337,14 +1337,14 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
 
             case EMR_CREATEDIBPATTERNBRUSHPT :
             {
-                UINT32  nStart = pWMF->Tell() - 8;
+                sal_uInt32  nStart = pWMF->Tell() - 8;
                 Bitmap aBitmap;
 
                 *pWMF >> nIndex;
 
                 if ( ( nIndex & ENHMETA_STOCK_OBJECT ) == 0 )
                 {
-                    UINT32 usage, offBmi, cbBmi, offBits, cbBits;
+                    sal_uInt32 usage, offBmi, cbBmi, offBits, cbBits;
 
                     *pWMF >> usage;
                     *pWMF >> offBmi;
@@ -1353,28 +1353,28 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                     *pWMF >> cbBits;
 
                     if ( (cbBits > (SAL_MAX_UINT32 - 14)) || ((SAL_MAX_UINT32 - 14) - cbBits < cbBmi) )
-                       bStatus = FALSE;
+                       bStatus = sal_False;
                     else if ( offBmi )
                     {
-                        UINT32  nSize = cbBmi + cbBits + 14;
+                        sal_uInt32  nSize = cbBmi + cbBits + 14;
                         if ( nSize <= ( nEndPos - nStartPos ) )
                         {
                             char*   pBuf = new char[ nSize ];
 
                             SvMemoryStream aTmp( pBuf, nSize, STREAM_READ | STREAM_WRITE );
-                            aTmp.ObjectOwnsMemory( TRUE );
-                            aTmp << (BYTE)'B'
-                                 << (BYTE)'M'
-                                 << (UINT32)cbBits
-                                 << (UINT16)0
-                                 << (UINT16)0
-                                 << (UINT32)cbBmi + 14;
+                            aTmp.ObjectOwnsMemory( sal_True );
+                            aTmp << (sal_uInt8)'B'
+                                 << (sal_uInt8)'M'
+                                 << (sal_uInt32)cbBits
+                                 << (sal_uInt16)0
+                                 << (sal_uInt16)0
+                                 << (sal_uInt32)cbBmi + 14;
                             pWMF->Seek( nStart + offBmi );
                             pWMF->Read( pBuf + 14, cbBmi );
                             pWMF->Seek( nStart + offBits );
                             pWMF->Read( pBuf + 14 + cbBmi, cbBits );
                             aTmp.Seek( 0 );
-                            aBitmap.Read( aTmp, TRUE );
+                            aBitmap.Read( aTmp, sal_True );
                         }
                     }
                 }
@@ -1457,13 +1457,13 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
 
 sal_Bool EnhWMFReader::ReadHeader()
 {
-    sal_uInt32      nUINT32, nHeaderSize, nPalEntries;
+    sal_uInt32      nsal_uInt32, nHeaderSize, nPalEntries;
     sal_Int32       nLeft, nTop, nRight, nBottom;
 
     // METAFILEHEADER SPARE ICH MIR HIER
     // Einlesen des METAHEADER
-    *pWMF >> nUINT32 >> nHeaderSize;
-    if ( nUINT32 != 1 )         // Typ
+    *pWMF >> nsal_uInt32 >> nHeaderSize;
+    if ( nsal_uInt32 != 1 )         // Typ
         return sal_False;
 
     // bound size
@@ -1482,12 +1482,12 @@ sal_Bool EnhWMFReader::ReadHeader()
     rclFrame.Right() = nRight;
     rclFrame.Bottom() = nBottom;
 
-    *pWMF >> nUINT32;                                   // signature
+    *pWMF >> nsal_uInt32;                                   // signature
 
-    if ( nUINT32 != 0x464d4520 )
+    if ( nsal_uInt32 != 0x464d4520 )
         return sal_False;
 
-    *pWMF >> nUINT32;                                   // nVersion
+    *pWMF >> nsal_uInt32;                                   // nVersion
     *pWMF >> nEndPos;                                   // size of metafile
     nEndPos += nStartPos;
 

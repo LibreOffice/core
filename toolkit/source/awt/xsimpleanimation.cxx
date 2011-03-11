@@ -61,7 +61,7 @@ namespace toolkit
     //--------------------------------------------------------------------
     void SAL_CALL XSimpleAnimation::start() throw ( uno::RuntimeException )
     {
-        ::osl::MutexGuard aGuard( GetMutex() );
+        SolarMutexGuard aGuard;
         Throbber* pThrobber( dynamic_cast< Throbber* >( GetWindow() ) );
         if ( pThrobber != NULL)
             pThrobber->start();
@@ -70,7 +70,7 @@ namespace toolkit
     //--------------------------------------------------------------------
     void SAL_CALL XSimpleAnimation::stop() throw ( uno::RuntimeException )
     {
-        ::osl::MutexGuard aGuard( GetMutex() );
+        SolarMutexGuard aGuard;
         Throbber* pThrobber( dynamic_cast< Throbber* >( GetWindow() ) );
         if ( pThrobber != NULL)
             pThrobber->stop();
@@ -80,7 +80,7 @@ namespace toolkit
     void SAL_CALL XSimpleAnimation::setImageList( const uno::Sequence< uno::Reference< graphic::XGraphic > >& rImageList )
         throw ( uno::RuntimeException )
     {
-        ::osl::MutexGuard aGuard( GetMutex() );
+        SolarMutexGuard aGuard;
         Throbber* pThrobber( dynamic_cast< Throbber* >( GetWindow() ) );
         if ( pThrobber != NULL)
             pThrobber->setImageList( rImageList );

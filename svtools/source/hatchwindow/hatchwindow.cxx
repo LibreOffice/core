@@ -34,7 +34,7 @@
 #include "ipwin.hxx"
 
 #include <toolkit/helper/convert.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;
@@ -53,7 +53,7 @@ void VCLXHatchWindow::initializeWindow( const uno::Reference< awt::XWindowPeer >
                 const awt::Rectangle& aBounds,
                 const awt::Size& aSize )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     Window* pParent = NULL;
     VCLXWindow* pParentComponent = VCLXWindow::GetImplementation( xParent );

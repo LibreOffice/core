@@ -30,7 +30,7 @@
 #include "precompiled_vcl.hxx"
 
 #define _SV_SALNATIVEWIDGETS_KDE_CXX
-#include <shell/kde_headers.h>
+#include <kde_headers.h>
 
 #include <salunx.h>
 #include <saldata.hxx>

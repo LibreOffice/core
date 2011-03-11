@@ -32,13 +32,16 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/wall.hxx>
+#include <osl/mutex.hxx>
 #include <toolkit/helper/property.hxx>
 #include <toolkit/helper/unopropertyarrayhelper.hxx>
 #include <toolkit/controls/geometrycontrolmodel.hxx>
 #include <toolkit/controls/unocontrols.hxx>
 #include "toolkit/controls/formattedcontrol.hxx"
 #include "toolkit/controls/roadmapcontrol.hxx"
+#ifndef TOOLKIT_INC_TOOLKIT_CONTROLS_TKSCROLLBAR_HXX
 #include "toolkit/controls/tkscrollbar.hxx"
+#endif
 #include <toolkit/controls/stdtabcontroller.hxx>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/WindowAttribute.hpp>
@@ -64,13 +67,13 @@
 #include "grid/gridcontrol.hxx"
 #include <toolkit/controls/tabpagecontainer.hxx>
 
+#include <boost/bind.hpp>
+
 #include <map>
 #include <algorithm>
 #include <functional>
 #include "tools/urlobj.hxx"
 #include "osl/file.hxx"
-
-#include <boost/bind.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -335,7 +338,7 @@ ControlModelContainerBase::UnoControlModelHolderList::iterator ControlModelConta
 // ::XMultiServiceFactory
 Reference< XInterface > ControlModelContainerBase::createInstance( const ::rtl::OUString& aServiceSpecifier ) throw(Exception, RuntimeException)
 {
-    SolarMutexGuard aSolarGuard;
+    SolarMutexGuard aGuard;
 
     OGeometryControlModel_Base* pNewModel = NULL;
 
@@ -482,7 +485,7 @@ sal_Bool ControlModelContainerBase::hasElements() throw(RuntimeException)
 // XNameContainer, XNameReplace, XNameAccess
 void ControlModelContainerBase::replaceByName( const ::rtl::OUString& aName, const Any& aElement ) throw(IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException)
 {
-    SolarMutexGuard aSolarGuard;
+    SolarMutexGuard aGuard;
 
     Reference< XControlModel > xNewModel;
     aElement >>= xNewModel;
@@ -542,7 +545,7 @@ sal_Bool ControlModelContainerBase::hasByName( const ::rtl::OUString& aName ) th
 
 void ControlModelContainerBase::insertByName( const ::rtl::OUString& aName, const Any& aElement ) throw(IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException)
 {
-    SolarMutexGuard aSolarGuard;
+    SolarMutexGuard aGuard;
 
     Reference< XControlModel > xM;
     aElement >>= xM;
@@ -595,7 +598,7 @@ void ControlModelContainerBase::insertByName( const ::rtl::OUString& aName, cons
 
 void ControlModelContainerBase::removeByName( const ::rtl::OUString& aName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException)
 {
-    SolarMutexGuard aSolarGuard;
+    SolarMutexGuard aGuard;
 
     UnoControlModelHolderList::iterator aElementPos = ImplFindElement( aName );
     if ( maModels.end() == aElementPos )
@@ -638,7 +641,7 @@ void SAL_CALL ControlModelContainerBase::setGroupControl( sal_Bool ) throw (Runt
 // ----------------------------------------------------------------------------
 void SAL_CALL ControlModelContainerBase::setControlModels( const Sequence< Reference< XControlModel > >& _rControls ) throw (RuntimeException)
 {
-    SolarMutexGuard aSolarGuard;
+    SolarMutexGuard aGuard;
 
     // set the tab indexes according to the order of models in the sequence
     const Reference< XControlModel >* pControls = _rControls.getConstArray( );
@@ -675,7 +678,7 @@ typedef ::std::multimap< sal_Int32, Reference< XControlModel >, ::std::less< sal
 // ----------------------------------------------------------------------------
 Sequence< Reference< XControlModel > > SAL_CALL ControlModelContainerBase::getControlModels(  ) throw (RuntimeException)
 {
-    SolarMutexGuard aSolarGuard;
+    SolarMutexGuard aGuard;
 
     MapIndexToModel aSortedModels;
         // will be the sorted container of all models which have a tab index property
@@ -757,7 +760,7 @@ void SAL_CALL ControlModelContainerBase::setEnabled( ::sal_Bool _enabled ) throw
 }
 ::rtl::OUString SAL_CALL ControlModelContainerBase::getTitle() throw (::com::sun::star::uno::RuntimeException)
 {
-    SolarMutexGuard aSolarGuard;
+    SolarMutexGuard aGuard;
     Reference<XPropertySet> xThis(*this,UNO_QUERY);
     ::rtl::OUString sTitle;
     xThis->getPropertyValue(GetPropertyName(BASEPROPERTY_TITLE)) >>= sTitle;
@@ -766,7 +769,7 @@ void SAL_CALL ControlModelContainerBase::setEnabled( ::sal_Bool _enabled ) throw
 }
 void SAL_CALL ControlModelContainerBase::setTitle( const ::rtl::OUString& _title ) throw (::com::sun::star::uno::RuntimeException)
 {
-    SolarMutexGuard aSolarGuard;
+    SolarMutexGuard aGuard;
     Reference<XPropertySet> xThis(*this,UNO_QUERY);
     xThis->setPropertyValue(GetPropertyName(BASEPROPERTY_TITLE),makeAny(_title));
 }
@@ -816,7 +819,7 @@ namespace
 // ----------------------------------------------------------------------------
 sal_Int32 SAL_CALL ControlModelContainerBase::getGroupCount(  ) throw (RuntimeException)
 {
-    SolarMutexGuard aSolarGuard;
+    SolarMutexGuard aGuard;
 
     implUpdateGroupStructure();
 
@@ -826,7 +829,7 @@ sal_Int32 SAL_CALL ControlModelContainerBase::getGroupCount(  ) throw (RuntimeEx
 // ----------------------------------------------------------------------------
 void SAL_CALL ControlModelContainerBase::getGroup( sal_Int32 _nGroup, Sequence< Reference< XControlModel > >& _rGroup, ::rtl::OUString& _rName ) throw (RuntimeException)
 {
-    SolarMutexGuard aSolarGuard;
+    SolarMutexGuard aGuard;
 
     implUpdateGroupStructure();
 
@@ -850,7 +853,7 @@ void SAL_CALL ControlModelContainerBase::getGroup( sal_Int32 _nGroup, Sequence< 
 // ----------------------------------------------------------------------------
 void SAL_CALL ControlModelContainerBase::getGroupByName( const ::rtl::OUString& _rName, Sequence< Reference< XControlModel > >& _rGroup ) throw (RuntimeException)
 {
-    SolarMutexGuard aSolarGuard;
+    SolarMutexGuard aGuard;
 
     ::rtl::OUString sDummyName;
     getGroup( _rName.toInt32( ), _rGroup, sDummyName );
@@ -1030,7 +1033,7 @@ void ControlModelContainerBase::implUpdateGroupStructure()
 // ----------------------------------------------------------------------------
 void SAL_CALL ControlModelContainerBase::propertyChange( const PropertyChangeEvent& _rEvent ) throw (RuntimeException)
 {
-    SolarMutexGuard aSolarGuard;
+    SolarMutexGuard aGuard;
 
     DBG_ASSERT( 0 == _rEvent.PropertyName.compareToAscii( "TabIndex" ),
         "UnoControlDialogModel::propertyChange: not listening for this property!" );
@@ -1061,7 +1064,7 @@ void SAL_CALL ControlModelContainerBase::disposing( const EventObject& /*rEvent*
 // ----------------------------------------------------------------------------
 void ControlModelContainerBase::startControlListening( const Reference< XControlModel >& _rxChildModel )
 {
-    SolarMutexGuard aSolarGuard;
+    SolarMutexGuard aGuard;
 
     Reference< XPropertySet > xModelProps( _rxChildModel, UNO_QUERY );
     Reference< XPropertySetInfo > xPSI;
@@ -1075,7 +1078,7 @@ void ControlModelContainerBase::startControlListening( const Reference< XControl
 // ----------------------------------------------------------------------------
 void ControlModelContainerBase::stopControlListening( const Reference< XControlModel >& _rxChildModel )
 {
-    SolarMutexGuard aSolarGuard;
+    SolarMutexGuard aGuard;
 
     Reference< XPropertySet > xModelProps( _rxChildModel, UNO_QUERY );
     Reference< XPropertySetInfo > xPSI;
@@ -1330,7 +1333,7 @@ ControlContainerBase::~ControlContainerBase()
 
 void ControlContainerBase::createPeer( const Reference< XToolkit > & rxToolkit, const Reference< XWindowPeer >  & rParentPeer ) throw(RuntimeException)
 {
-    SolarMutexGuard aSolarGuard;
+    SolarMutexGuard aGuard;
     UnoControlContainer::createPeer( rxToolkit, rParentPeer );
 }
 
@@ -1435,13 +1438,12 @@ void ControlContainerBase::ImplSetPosSize( Reference< XControl >& rxCtrl )
 
 void ControlContainerBase::dispose() throw(RuntimeException)
 {
-    SolarMutexGuard aSolarGuard;
-
     EventObject aEvt;
     aEvt.Source = static_cast< ::cppu::OWeakObject* >( this );
     // Notify our listener helper about dispose
     // --- SAFE ---
-    ::osl::ResettableGuard< ::osl::Mutex > aGuard( GetMutex() );
+
+    SolarMutexClearableGuard aGuard;
     Reference< XEventListener > xListener( mxListener, UNO_QUERY );
     mxListener.clear();
     aGuard.clear();
@@ -1461,7 +1463,7 @@ throw(RuntimeException)
 
 sal_Bool ControlContainerBase::setModel( const Reference< XControlModel >& rxModel ) throw(RuntimeException)
 {
-    SolarMutexGuard aSolarGuard;
+    SolarMutexGuard aGuard;
 
     // destroy the old tab controller, if existent
     if ( mxTabController.is() )
@@ -1534,8 +1536,7 @@ sal_Bool ControlContainerBase::setModel( const Reference< XControlModel >& rxMod
 }
 void ControlContainerBase::setDesignMode( sal_Bool bOn ) throw(RuntimeException)
 {
-    SolarMutexGuard aSolarGuard;
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     UnoControl::setDesignMode( bOn );
 
@@ -1554,7 +1555,7 @@ void ControlContainerBase::setDesignMode( sal_Bool bOn ) throw(RuntimeException)
 
 void ControlContainerBase::elementInserted( const ContainerEvent& Event ) throw(RuntimeException)
 {
-    SolarMutexGuard aSolarGuard;
+    SolarMutexGuard aGuard;
 
     Reference< XControlModel > xModel;
     ::rtl::OUString aName;
@@ -1575,7 +1576,7 @@ void ControlContainerBase::elementInserted( const ContainerEvent& Event ) throw(
 
 void ControlContainerBase::elementRemoved( const ContainerEvent& Event ) throw(RuntimeException)
 {
-    SolarMutexGuard aSolarGuard;
+    SolarMutexGuard aGuard;
 
     Reference< XControlModel > xModel;
     Event.Element >>= xModel;
@@ -1593,7 +1594,7 @@ void ControlContainerBase::elementRemoved( const ContainerEvent& Event ) throw(R
 
 void ControlContainerBase::elementReplaced( const ContainerEvent& Event ) throw(RuntimeException)
 {
-    SolarMutexGuard aSolarGuard;
+    SolarMutexGuard aGuard;
 
     Reference< XControlModel > xModel;
     Event.ReplacedElement >>= xModel;
@@ -1670,7 +1671,7 @@ void ControlContainerBase::ImplModelPropertiesChanged( const Sequence< PropertyC
 
 void ControlContainerBase::addingControl( const Reference< XControl >& _rxControl )
 {
-    SolarMutexGuard aSolarGuard;
+    SolarMutexGuard aGuard;
     UnoControlContainer::addingControl( _rxControl );
 
     if ( _rxControl.is() )
@@ -1692,7 +1693,7 @@ void ControlContainerBase::addingControl( const Reference< XControl >& _rxContro
 
 void ControlContainerBase::removingControl( const Reference< XControl >& _rxControl )
 {
-    SolarMutexGuard aSolarGuard;
+    SolarMutexGuard aGuard;
     UnoControlContainer::removingControl( _rxControl );
 
     if ( _rxControl.is() )
@@ -1706,7 +1707,7 @@ void ControlContainerBase::removingControl( const Reference< XControl >& _rxCont
 
 void SAL_CALL ControlContainerBase::changesOccurred( const ChangesEvent& ) throw (RuntimeException)
 {
-    SolarMutexGuard aSolarGuard;
+    SolarMutexGuard aGuard;
     // a tab controller model may have changed
 
     // #109067# in design mode don't notify the tab controller

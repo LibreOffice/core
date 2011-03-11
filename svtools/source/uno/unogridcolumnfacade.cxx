@@ -44,7 +44,7 @@
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 // .....................................................................................................................
 namespace svt { namespace table
@@ -150,7 +150,7 @@ namespace svt { namespace table
     {
         if ( i_event.AttributeName.equalsAscii( "DataColumnIndex" ) )
         {
-            ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
             if ( m_pColumnImplementation != NULL )
                 m_pColumnImplementation->dataColumnIndexChanged();
             return;
@@ -173,7 +173,7 @@ namespace svt { namespace table
         OSL_ENSURE( nChangedAttributes != COL_ATTRS_NONE,
             "ColumnChangeMultiplexer::columnChanged: unknown column attributed changed!" );
 
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
         if ( m_pColumnImplementation != NULL )
             m_pColumnImplementation->columnChanged( nChangedAttributes );
     }

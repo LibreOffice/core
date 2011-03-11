@@ -1216,7 +1216,7 @@ void ImpFileDialog::SetCurFilter( const UniString& rFilter )
 
     for ( size_t i = 0, n = aFilterList.size(); i < n; ++i ) {
         if ( aFilterList[ i ]->aName == rFilter ) {
-            pTypeList->SelectEntryPos( USHORT( i ) );
+            pTypeList->SelectEntryPos( sal_uInt16( i ) );
             return;
         }
     }

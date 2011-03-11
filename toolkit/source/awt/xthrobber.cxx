@@ -66,7 +66,7 @@ namespace toolkit
     //--------------------------------------------------------------------
     void SAL_CALL XThrobber::start() throw ( uno::RuntimeException )
     {
-        ::osl::MutexGuard aGuard( GetMutex() );
+        SolarMutexGuard aGuard;
         Throbber* pThrobber( dynamic_cast< Throbber* >( GetWindow() ) );
         if ( pThrobber != NULL)
             pThrobber->start();
@@ -92,7 +92,7 @@ namespace toolkit
     void SAL_CALL XThrobber::InitImageList()
         throw( uno::RuntimeException )
     {
-        ::osl::MutexGuard aGuard( GetMutex() );
+        SolarMutexGuard aGuard;
 
         Throbber* pThrobber( dynamic_cast< Throbber* >( GetWindow() ) );
         if ( pThrobber == NULL)

@@ -1352,7 +1352,7 @@ void WinMtfOutput::DrawPolygon( Polygon& rPolygon, sal_Bool bRecordPath )
                     aMemStm << aFill;
 
                     mpGDIMetaFile->AddAction( new MetaCommentAction( "XPATHFILL_SEQ_BEGIN", 0,
-                                                            static_cast<const BYTE*>(aMemStm.GetData()),
+                                                            static_cast<const sal_uInt8*>(aMemStm.GetData()),
                                                             aMemStm.Seek( STREAM_SEEK_TO_END ) ) );
                     mpGDIMetaFile->AddAction( new MetaCommentAction( "XPATHFILL_SEQ_END" ) );
                 }
@@ -2216,14 +2216,14 @@ void WinMtfOutput::PassEMFPlusHeaderInfo()
     // rotate and scale operations
     mem << one << zero << zero << one << zero << zero;
 
-    mpGDIMetaFile->AddAction( new MetaCommentAction( "EMF_PLUS_HEADER_INFO", 0, (const BYTE*) mem.GetData(), mem.GetEndOfData() ) );
-    mpGDIMetaFile->UseCanvas( TRUE );
+    mpGDIMetaFile->AddAction( new MetaCommentAction( "EMF_PLUS_HEADER_INFO", 0, (const sal_uInt8*) mem.GetData(), mem.GetEndOfData() ) );
+    mpGDIMetaFile->UseCanvas( sal_True );
 }
 
-void WinMtfOutput::PassEMFPlus( void* pBuffer, UINT32 nLength )
+void WinMtfOutput::PassEMFPlus( void* pBuffer, sal_uInt32 nLength )
 {
     EMFP_DEBUG(printf ("\t\t\tadd EMF_PLUS comment length %d\n", nLength));
-    mpGDIMetaFile->AddAction( new MetaCommentAction( "EMF_PLUS", 0, static_cast<const BYTE*>(pBuffer), nLength ) );
+    mpGDIMetaFile->AddAction( new MetaCommentAction( "EMF_PLUS", 0, static_cast<const sal_uInt8*>(pBuffer), nLength ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

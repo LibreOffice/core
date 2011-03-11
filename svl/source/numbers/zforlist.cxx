@@ -573,7 +573,7 @@ bool SvNumberFormatter::PutandConvertEntry(String& rString,
 }
 
 
-sal_Bool SvNumberFormatter::PutandConvertEntrySystem(String& rString,
+bool SvNumberFormatter::PutandConvertEntrySystem(String& rString,
                                            xub_StrLen& nCheckPos,
                                            short& nType,
                                            sal_uInt32& nKey,
@@ -2755,7 +2755,7 @@ void SvNumberFormatter::GenerateFormat(String& sString,
     const String& rThSep = GetNumThousandSep();
 
     SvNumberformat* pFormat = (SvNumberformat*) aFTable.Get(nIndex);
-    BOOL insertBrackets = pFormat->IsNegativeInBracket();
+    sal_Bool insertBrackets = pFormat->IsNegativeInBracket();
 
     if (nAnzLeading == 0)
     {

@@ -425,7 +425,7 @@ public:
     /** Same as <method>PutEntry</method> but the format code string is
          considered to be of language/country eLnge and is converted to
         language/country eNewLnge */
-    sal_Bool PutandConvertEntry( String& rString, xub_StrLen& nCheckPos,
+    bool PutandConvertEntry( String& rString, xub_StrLen& nCheckPos,
                              short& nType, sal_uInt32& nKey,
                              LanguageType eLnge, LanguageType eNewLnge );
 
@@ -433,7 +433,7 @@ public:
          is considered to be of the System language/country eLnge and is
         converted to another System language/country eNewLnge. In this case
          the automatic currency is converted too. */
-    sal_Bool PutandConvertEntrySystem( String& rString, xub_StrLen& nCheckPos,
+    bool PutandConvertEntrySystem( String& rString, xub_StrLen& nCheckPos,
                              short& nType, sal_uInt32& nKey,
                              LanguageType eLnge, LanguageType eNewLnge );
 

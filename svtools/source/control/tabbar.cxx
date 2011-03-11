@@ -38,9 +38,11 @@
 #include <vcl/decoview.hxx>
 #include <vcl/button.hxx>
 #include <vcl/edit.hxx>
+#include <vcl/image.hxx>
 #include "svtaccessiblefactory.hxx"
 #include <filectrl.hrc>
 #include <svtools/svtdata.hxx>
+#include <svtools/svtools.hrc>
 #include <limits>
 
 // =======================================================================
@@ -371,7 +373,7 @@ struct TabBar_Impl
 
 const sal_uInt16 TabBar::APPEND         = ::std::numeric_limits<sal_uInt16>::max();
 const sal_uInt16 TabBar::PAGE_NOT_FOUND = ::std::numeric_limits<sal_uInt16>::max();
-const sal_uInt16 TabBar::INSERT_TAB_POS = ::std::numeric_limits<USHORT>::max() - 1;
+const sal_uInt16 TabBar::INSERT_TAB_POS = ::std::numeric_limits<sal_uInt16>::max() - 1;
 
 void TabBar::ImplInit( WinBits nWinStyle )
 {
@@ -1249,7 +1251,8 @@ public:
 
     void drawPlusImage()
     {
-        Image aPlusImg( SvtResId(BMP_LIST_ADD) );
+        SvtResId id( BMP_LIST_ADD );
+        Image aPlusImg( id );
         // Center the image within the bounding rectangle.
         Size aSize = aPlusImg.GetSizePixel();
         Point pt = maRect.TopLeft();
@@ -1330,7 +1333,7 @@ private:
 void TabBar::Paint( const Rectangle& )
 {
     // Items berechnen und ausgeben
-    USHORT nItemCount = (USHORT)mpItemList->size();
+    sal_uInt16 nItemCount = (sal_uInt16)mpItemList->size();
     if (!nItemCount)
         return;
 
@@ -1700,7 +1703,7 @@ long TabBar::ImplDeactivatePage()
 
 void TabBar::ImplPrePaint()
 {
-    USHORT nItemCount = (USHORT)mpItemList->size();
+    sal_uInt16 nItemCount = (sal_uInt16)mpItemList->size();
     if (!nItemCount)
         return;
 
@@ -1713,7 +1716,7 @@ void TabBar::ImplPrePaint()
     // sichtbar wird
     if ( mbFirstFormat )
     {
-        mbFirstFormat = FALSE;
+        mbFirstFormat = sal_False;
 
         if ( mnCurPageId && (mnFirstPos == 0) && !mbDropPos )
         {
@@ -1722,9 +1725,9 @@ void TabBar::ImplPrePaint()
             {
                 // mbDropPos setzen (bzw. misbrauchen) um Invalidate()
                 // zu unterbinden
-                mbDropPos = TRUE;
+                mbDropPos = sal_True;
                 SetFirstPageId( mnCurPageId );
-                mbDropPos = FALSE;
+                mbDropPos = sal_False;
                 if ( mnFirstPos != 0 )
                     ImplFormat();
             }
@@ -1732,10 +1735,10 @@ void TabBar::ImplPrePaint()
     }
 }
 
-ImplTabBarItem* TabBar::ImplGetLastTabBarItem( USHORT nItemCount )
+ImplTabBarItem* TabBar::ImplGetLastTabBarItem( sal_uInt16 nItemCount )
 {
     // letzten sichtbaren Eintrag suchen
-    USHORT n = mnFirstPos+1;
+    sal_uInt16 n = mnFirstPos+1;
     if ( n >= nItemCount )
         n = nItemCount-1;
     ImplTabBarItem* pItem = seek( n );
@@ -2060,7 +2063,7 @@ sal_uInt16 TabBar::GetPagePos( sal_uInt16 nPageId ) const
 {
     for ( size_t i = 0, n = mpItemList->size(); i < n; ++i ) {
         if ( (*mpItemList)[ i ]->mnId == nPageId ) {
-            return USHORT( i );
+            return sal_uInt16( i );
         }
     }
     return PAGE_NOT_FOUND;

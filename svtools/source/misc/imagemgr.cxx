@@ -529,77 +529,6 @@ static sal_uInt16 GetFolderDescriptionId_Impl( const String& rURL )
     return nRet;
 }
 
-/*
-static ResMgr* GetIsoResMgr_Impl()
-{
-    static ResMgr* pIsoResMgr = NULL;
-
-    if ( !pIsoResMgr )
-    {
-        ByteString aResMgrName( "iso" );
-        pIsoResMgr = ResMgr::CreateResMgr(
-            aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
-        if ( !pIsoResMgr )
-        {
-            // no "iso" resource -> search for "ooo" resource
-            aResMgrName = ByteString( "ooo" );
-            pIsoResMgr = ResMgr::CreateResMgr(
-                aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
-        }
-    }
-
-    return pIsoResMgr;
-}
-
-static ImageList* CreateImageList_Impl( sal_uInt16 nResId )
-{
-    ImageList* pList = NULL;
-    ResMgr* pResMgr = GetIsoResMgr_Impl();
-    DBG_ASSERT( pResMgr, "SvFileInformationManager::CreateImageList_Impl(): no resmgr" );
-    ResId aResId( nResId, *pResMgr );
-    aResId.SetRT( RSC_IMAGELIST );
-    if ( pResMgr->IsAvailable( aResId ) )
-        pList = new ImageList( aResId );
-    else
-        pList = new ImageList();
-    return pList;
-}
-
-static Image GetOfficeImageFromList_Impl( sal_uInt16 nImageId, sal_Bool bBig )
-{
-    ImageList* pList = NULL;
-
-    static ImageList* _pSmallOfficeImgList = NULL;
-    static ImageList* _pBigOfficeImgList = NULL;
-    static sal_uLong nStyle = Application::GetSettings().GetStyleSettings().GetSymbolsStyle();
-
-    // If the style has been changed, throw away our cache of the older images
-    if ( nStyle != Application::GetSettings().GetStyleSettings().GetSymbolsStyle() )
-    {
-        delete _pSmallOfficeImgList, _pSmallOfficeImgList = NULL;
-        delete _pBigOfficeImgList, _pBigOfficeImgList = NULL;
-        nStyle = Application::GetSettings().GetStyleSettings().GetSymbolsStyle();
-    }
-
-    if ( bBig )
-    {
-        if ( !_pBigOfficeImgList )
-            _pBigOfficeImgList = CreateImageList_Impl( RID_SVTOOLS_IMAGELIST_BIG );
-        pList = _pBigOfficeImgList;
-    }
-    else
-    {
-        if ( !_pSmallOfficeImgList )
-            _pSmallOfficeImgList = CreateImageList_Impl( RID_SVTOOLS_IMAGELIST_SMALL );
-        pList = _pSmallOfficeImgList;
-    }
-
-    Image aImage = pList->GetImage( nImageId );
-
-    return aImage;
-}
-*/
-
 static Image GetImageFromList_Impl( sal_uInt16 nImageId, sal_Bool bBig )
 {
     if ( !bBig && IMG_FOLDER == nImageId )
@@ -636,7 +565,8 @@ static Image GetImageFromList_Impl( sal_uInt16 nImageId, sal_Bool bBig )
     if ( pList->HasImageAtPos( nImageId ) )
         return pList->GetImage( nImageId );
     else
-        return GetOfficeImageFromList_Impl( nImageId, bBig );
+        return Image();
+//      return GetOfficeImageFromList_Impl( nImageId, bBig );
 }
 
 String SvFileInformationManager::GetDescription_Impl( const INetURLObject& rObject, sal_Bool bDetectFolder )

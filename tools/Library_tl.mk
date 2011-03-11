@@ -113,6 +113,7 @@ $(eval $(call gb_Library_add_exception_objects,tl,\
     tools/source/string/tenccvt \
     tools/source/string/tstring \
     tools/source/string/tustring \
+    tools/source/string/reversemap \
     tools/source/testtoolloader/testtoolloader \
     tools/source/zcodec/zcodec \
 ))

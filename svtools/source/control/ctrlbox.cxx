@@ -41,7 +41,7 @@
 #include <svtools/svtools.hrc>
 #include <svtools/ctrlbox.hxx>
 #include <svtools/ctrltool.hxx>
-#include <borderhelper.hxx>
+#include <svtools/borderhelper.hxx>
 
 #include <vcl/i18nhelp.hxx>
 #include <vcl/fontcapabilities.hxx>
@@ -288,7 +288,7 @@ struct ImpLineListData
     long    nLine1;
     long    nLine2;
     long    nDistance;
-    USHORT  nStyle;
+    sal_uInt16  nStyle;
 };
 
 // -----------------------------------------------------------------------
@@ -301,9 +301,9 @@ inline const Color& LineListBox::GetPaintColor( void ) const
 // -----------------------------------------------------------------------
 
 
-inline void lclDrawPolygon( OutputDevice& rDev, const basegfx::B2DPolygon& rPolygon, long nWidth, USHORT nDashing )
+inline void lclDrawPolygon( OutputDevice& rDev, const basegfx::B2DPolygon& rPolygon, long nWidth, sal_uInt16 nDashing )
 {
-    USHORT nOldAA = rDev.GetAntialiasing();
+    sal_uInt16 nOldAA = rDev.GetAntialiasing();
     rDev.SetAntialiasing( nOldAA & !ANTIALIASING_ENABLE_B2DDRAW );
 
     Color aOldColor = rDev.GetFillColor( );
@@ -337,7 +337,7 @@ inline void lclDrawPolygon( OutputDevice& rDev, const basegfx::B2DPolygon& rPoly
 
 namespace svtools
 {
-    basegfx::B2DPolyPolygon ApplyLineDashing( const basegfx::B2DPolygon& rPolygon, USHORT nDashing, MapUnit eUnit )
+    basegfx::B2DPolyPolygon ApplyLineDashing( const basegfx::B2DPolygon& rPolygon, sal_uInt16 nDashing, MapUnit eUnit )
     {
         ::std::vector < double >aPattern;
         switch ( nDashing )
@@ -390,7 +390,7 @@ namespace svtools
     }
 
     void DrawLine( OutputDevice& rDev, const Point& rP1, const Point& rP2,
-        sal_uInt32 nWidth, USHORT nDashing )
+        sal_uInt32 nWidth, sal_uInt16 nDashing )
     {
         basegfx::B2DPolygon aPolygon;
         aPolygon.append( basegfx::B2DPoint( rP1.X(), rP1.Y() ) );
@@ -400,7 +400,7 @@ namespace svtools
 }
 
 void LineListBox::ImpGetLine( long nLine1, long nLine2, long nDistance,
-                            USHORT nStyle, Bitmap& rBmp, XubString& rStr )
+                            sal_uInt16 nStyle, Bitmap& rBmp, XubString& rStr )
 {
     Size aSize = GetOutputSizePixel();
     aSize.Width() -= 20;
@@ -613,7 +613,7 @@ void LineListBox::Clear()
 // -----------------------------------------------------------------------
 
 sal_uInt16 LineListBox::GetEntryPos( long nLine1, long nLine2,
-                                long nDistance, USHORT nStyle ) const
+                                long nDistance, sal_uInt16 nStyle ) const
 {
     for ( size_t i = 0, n = pLineList->size(); i < n; ++i ) {
         ImpLineListData* pData = (*pLineList)[ i ];
@@ -624,7 +624,7 @@ sal_uInt16 LineListBox::GetEntryPos( long nLine1, long nLine2,
                && (pData->nDistance == nDistance)
                && (pData->nStyle    == nStyle)
             ) {
-                return (USHORT)i;
+                return (sal_uInt16)i;
             }
         }
     }
@@ -649,7 +649,7 @@ long LineListBox::GetEntryLine2( sal_uInt16 nPos ) const
 
 // -----------------------------------------------------------------------
 
-long LineListBox::GetEntryDistance( USHORT nPos ) const
+long LineListBox::GetEntryDistance( sal_uInt16 nPos ) const
 {
     ImpLineListData* pData = (nPos < pLineList->size()) ? (*pLineList)[ nPos ] : NULL;
     return ( pData ) ? pData->nDistance : 0;
@@ -657,7 +657,7 @@ long LineListBox::GetEntryDistance( USHORT nPos ) const
 
 // -----------------------------------------------------------------------
 
-USHORT LineListBox::GetEntryStyle( USHORT nPos ) const
+sal_uInt16 LineListBox::GetEntryStyle( sal_uInt16 nPos ) const
 {
     ImpLineListData* pData = (nPos < pLineList->size()) ? (*pLineList)[ nPos ] : NULL;
     return ( pData ) ? pData->nStyle : STYLE_SOLID;
@@ -679,7 +679,7 @@ void LineListBox::UpdateLineColors( void )
         // exchange entries which containing lines
         SetUpdateMode( sal_False );
 
-        USHORT nSelEntry = GetSelectEntryPos();
+        sal_uInt16 nSelEntry = GetSelectEntryPos();
         for( size_t n = 0 ; n < nCount ; ++n )
         {
             ImpLineListData* pData = (*pLineList)[ n ];

@@ -45,6 +45,7 @@
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 #include <vcl/throbber.hxx>
+#include <vcl/svapp.hxx>
 
 #include <limits>
 
@@ -318,7 +319,7 @@ namespace toolkit
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL AnimatedImagesPeer::startAnimation(  ) throw (RuntimeException)
     {
-        ::osl::MutexGuard aGuard( GetMutex() );
+        SolarMutexGuard aGuard;
         Throbber* pThrobber( dynamic_cast< Throbber* >( GetWindow() ) );
         if ( pThrobber != NULL)
             pThrobber->start();
@@ -327,7 +328,7 @@ namespace toolkit
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL AnimatedImagesPeer::stopAnimation(  ) throw (RuntimeException)
     {
-        ::osl::MutexGuard aGuard( GetMutex() );
+        SolarMutexGuard aGuard;
         Throbber* pThrobber( dynamic_cast< Throbber* >( GetWindow() ) );
         if ( pThrobber != NULL)
             pThrobber->stop();
@@ -336,7 +337,7 @@ namespace toolkit
     //------------------------------------------------------------------------------------------------------------------
     ::sal_Bool SAL_CALL AnimatedImagesPeer::isAnimationRunning(  ) throw (RuntimeException)
     {
-        ::osl::MutexGuard aGuard( GetMutex() );
+        SolarMutexGuard aGuard;
         Throbber* pThrobber( dynamic_cast< Throbber* >( GetWindow() ) );
         if ( pThrobber != NULL)
             return pThrobber->isRunning();
@@ -346,7 +347,7 @@ namespace toolkit
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL AnimatedImagesPeer::setProperty( const ::rtl::OUString& i_propertyName, const Any& i_value ) throw(RuntimeException)
     {
-        ::osl::MutexGuard aGuard( GetMutex() );
+        SolarMutexGuard aGuard;
 
         Throbber* pThrobber( dynamic_cast< Throbber* >( GetWindow() ) );
         if ( pThrobber == NULL )
@@ -393,7 +394,7 @@ namespace toolkit
     //------------------------------------------------------------------------------------------------------------------
     Any SAL_CALL AnimatedImagesPeer::getProperty( const ::rtl::OUString& i_propertyName ) throw(RuntimeException)
     {
-        ::osl::MutexGuard aGuard( GetMutex() );
+        SolarMutexGuard aGuard;
 
         Any aReturn;
 
@@ -443,7 +444,7 @@ namespace toolkit
     //------------------------------------------------------------------------------------------------------------------
     void AnimatedImagesPeer::impl_updateImages_nolck( const Reference< XInterface >& i_animatedImages )
     {
-        ::osl::MutexGuard aGuard( GetMutex() );
+        SolarMutexGuard aGuard;
 
         lcl_updateImageList_nothrow( *m_pData, Reference< XAnimatedImages >( i_animatedImages, UNO_QUERY_THROW ) );
     }
@@ -451,7 +452,7 @@ namespace toolkit
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL AnimatedImagesPeer::elementInserted( const ContainerEvent& i_event ) throw (RuntimeException)
     {
-        ::osl::MutexGuard aGuard( GetMutex() );
+        SolarMutexGuard aGuard;
         Reference< XAnimatedImages > xAnimatedImages( i_event.Source, UNO_QUERY_THROW );
 
         sal_Int32 nPosition(0);
@@ -474,7 +475,7 @@ namespace toolkit
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL AnimatedImagesPeer::elementRemoved( const ContainerEvent& i_event ) throw (RuntimeException)
     {
-        ::osl::MutexGuard aGuard( GetMutex() );
+        SolarMutexGuard aGuard;
         Reference< XAnimatedImages > xAnimatedImages( i_event.Source, UNO_QUERY_THROW );
 
         sal_Int32 nPosition(0);
@@ -493,7 +494,7 @@ namespace toolkit
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL AnimatedImagesPeer::elementReplaced( const ContainerEvent& i_event ) throw (RuntimeException)
     {
-        ::osl::MutexGuard aGuard( GetMutex() );
+        SolarMutexGuard aGuard;
         Reference< XAnimatedImages > xAnimatedImages( i_event.Source, UNO_QUERY_THROW );
 
         sal_Int32 nPosition(0);
@@ -529,7 +530,7 @@ namespace toolkit
     void SAL_CALL AnimatedImagesPeer::dispose(  ) throw(RuntimeException)
     {
         AnimatedImagesPeer_Base::dispose();
-        ::osl::MutexGuard aGuard( GetMutex() );
+        SolarMutexGuard aGuard;
         m_pData->aCachedImageSets.resize(0);
     }
 

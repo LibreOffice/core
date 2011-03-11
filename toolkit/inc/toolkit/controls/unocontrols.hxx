@@ -72,17 +72,6 @@
 #define UNO_NAME_GRAPHOBJ_URLPREFIX                             "vnd.sun.star.GraphicObject:"
 #define UNO_NAME_GRAPHOBJ_URLPKGPREFIX                  "vnd.sun.star.Package:"
 
-class ImageHelper
-{
-public:
-    // The routine will always attempt to return a valid XGraphic for the passed _rURL
-    // additionallly xOutGraphicObject will container the associated XGraphicObject ( if url
-    // is valid for that )
-    // and is set appropriately ( e.g. NULL if non GraphicObject scheme ) or valid object
-    // if the rURL points to a valid object
-    static ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > getGraphicAndGraphicObjectFromURL_nothrow( ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphicObject >& xOutGraphicObject, const ::rtl::OUString& _rURL );
-};
-
 //  ----------------------------------------------------
 //  class UnoControlEditModel
 //  ----------------------------------------------------
@@ -234,6 +223,7 @@ private:
     bool                                                                                    mbAdjustingGraphic;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphicObject > mxGrfObj;
+    ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > getGraphicFromURL_nothrow( const ::rtl::OUString& _rURL );
 
 protected:
     GraphicControlModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory )

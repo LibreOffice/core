@@ -72,6 +72,7 @@ public:
 private:
     typedef ::std::list< UnoControlModelHolder >        UnoControlModelHolderList;
 
+public:
     // for grouping control models (XTabControllerModel::getGroupXXX)
     typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > >
                                                         ModelGroup;

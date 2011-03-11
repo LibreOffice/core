@@ -594,7 +594,6 @@ namespace svt { namespace table
     {
         ImplCallEventListenersAndHandler( VCLEVENT_TABLEROW_SELECT, m_pImpl->getSelectHandler(), this );
     }
-}} // namespace svt::table
 //........................................................................
 
     //------------------------------------------------------------------------------------------------------------------
@@ -608,6 +607,7 @@ namespace svt { namespace table
     {
         return m_pImpl->getSelectHandler();
     }
+}} // namespace svt::table
 
 //......................................................................................................................
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -541,7 +541,7 @@ uno::Any GraphicControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     return UnoControlModel::ImplGetDefaultValue( nPropId );
 }
 
-    uno::Reference< graphic::XGraphic > ImageHelper::getGraphicAndGraphicObjectFromURL_nothrow( uno::Reference< graphic::XGraphicObject >& xOutGraphicObj, const ::rtl::OUString& _rURL )
+    uno::Reference< graphic::XGraphic > GraphicControlModel::getGraphicFromURL_nothrow( const ::rtl::OUString& _rURL )
     {
         uno::Reference< graphic::XGraphic > xGraphic;
 
@@ -550,10 +550,10 @@ uno::Any GraphicControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
             // graphic manager uniqueid
             rtl::OUString sID = _rURL.copy( sizeof( UNO_NAME_GRAPHOBJ_URLPREFIX ) - 1 );
             // get the DefaultContext
-            xOutGraphicObj = graphic::GraphicObject::createWithId( aContext.getUNOContext(), sID );
+            mxGrfObj = graphic::GraphicObject::createWithId( maContext.getUNOContext(), sID );
         }
         else // linked
-            xOutGraphicObj = NULL; // release the GraphicObject
+            mxGrfObj = NULL; // release the GraphicObject
 
         if ( !_rURL.getLength() )
             return xGraphic;
@@ -577,7 +577,6 @@ uno::Any GraphicControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
         return xGraphic;
     }
 
-
 void SAL_CALL GraphicControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue ) throw (::com::sun::star::uno::Exception)
 {
     UnoControlModel::setFastPropertyValue_NoBroadcast( nHandle, rValue );
@@ -594,7 +593,7 @@ void SAL_CALL GraphicControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 n
                 mbAdjustingGraphic = true;
                 ::rtl::OUString sImageURL;
                 OSL_VERIFY( rValue >>= sImageURL );
-                setDependentFastPropertyValue( BASEPROPERTY_GRAPHIC, uno::makeAny( ImageHelper::getGraphicAndGraphicObjectFromURL_nothrow( mxGrfObj, sImageURL ) ) );
+                setDependentFastPropertyValue( BASEPROPERTY_GRAPHIC, uno::makeAny( getGraphicFromURL_nothrow( sImageURL ) ) );
                 mbAdjustingGraphic = false;
             }
             break;

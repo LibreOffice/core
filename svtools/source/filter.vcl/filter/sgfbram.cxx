@@ -308,7 +308,7 @@ sal_Bool SgfFilterBMap(SvStream& rInp, SvStream& rOut, SgfHeader& rHead, SgfEntr
             rOut.Write((char*)pBuf,nWdtOut);
         }
     } else if (nColors==16) {
-        BYTE pl2= 0;     // Masken fuer die Planes
+        sal_uInt8 pl2= 0;     // Masken fuer die Planes
 
         rOut<<RGBQuad(0x00,0x00,0x00); // Schwarz
         rOut<<RGBQuad(0x24,0x24,0x24); // Grau 80%

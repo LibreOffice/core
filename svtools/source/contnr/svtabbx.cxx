@@ -838,7 +838,7 @@ sal_Bool SvHeaderTabListBox::IsCellFocusable() const
     return IsCellFocusEnabled();
 }
 // -----------------------------------------------------------------------
-BOOL SvHeaderTabListBox::GoToCell( sal_Int32 _nRow, sal_uInt16 _nColumn )
+sal_Bool SvHeaderTabListBox::GoToCell( sal_Int32 _nRow, sal_uInt16 _nColumn )
 {
     sal_Bool bRet = ( IsCellFocusEnabled() == sal_True );
     if ( bRet )

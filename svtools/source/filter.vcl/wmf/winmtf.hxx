@@ -682,7 +682,7 @@ class WinMtfOutput
         void                UpdateClipRegion();
         void                AddFromGDIMetaFile( GDIMetaFile& rGDIMetaFile );
 
-        void                PassEMFPlus( void* pBuffer, UINT32 nLength );
+        void                PassEMFPlus( void* pBuffer, sal_uInt32 nLength );
         void                PassEMFPlusHeaderInfo();
 
                             WinMtfOutput( GDIMetaFile& rGDIMetaFile );
@@ -723,7 +723,7 @@ class EnhWMFReader : public WinMtf
 {
     sal_Bool        bRecordPath;
     sal_Int32       nRecordCount;
-    BOOL            bEMFPlus;
+    sal_Bool        bEMFPlus;
 
 
     sal_Bool            ReadHeader();
@@ -732,7 +732,7 @@ class EnhWMFReader : public WinMtf
 
 public:
                     EnhWMFReader( SvStream& rStreamWMF, GDIMetaFile& rGDIMetaFile, FilterConfigItem* pConfigItem = NULL )
-                                    : WinMtf( new WinMtfOutput( rGDIMetaFile ), rStreamWMF, pConfigItem ), bRecordPath( sal_False ), bEMFPlus (FALSE) {};
+                                    : WinMtf( new WinMtfOutput( rGDIMetaFile ), rStreamWMF, pConfigItem ), bRecordPath( sal_False ), bEMFPlus( sal_False ) {};
                     ~EnhWMFReader();
 
     sal_Bool            ReadEnhWMF();

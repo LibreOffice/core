@@ -397,7 +397,7 @@ IMPL_LINK_INLINE_END( SvTreeListBox, CheckButtonClick, SvLBoxButtonData *, pData
 SvLBoxEntry* SvTreeListBox::InsertEntry(
     const XubString& aText,
     SvLBoxEntry* pParent,
-    BOOL bChildsOnDemand, ULONG nPos,
+    sal_Bool bChildsOnDemand, sal_uLong nPos,
     void* pUser,
     SvLBoxButtonKind eButtonKind
 )

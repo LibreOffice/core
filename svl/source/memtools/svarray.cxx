@@ -67,6 +67,7 @@ sal_uInt16 SvPtrarr::GetPos( const VoidPtr& aElement ) const
 }
 
 SV_IMPL_VARARR( SvULongs, sal_uLong )
+SV_IMPL_VARARR( SvUShorts, sal_uInt16 )
 SV_IMPL_VARARR( SvLongs, long)
 
 SV_IMPL_VARARR_SORT( SvULongsSort, sal_uLong )
