@@ -209,7 +209,6 @@ GraphiteLayout::fillFrom(gr_segment * pSegment, ImplLayoutArgs &rArgs, float fSc
 
     if (bRtl)
     {
-        const gr_slot* prevBase = NULL;
         const gr_slot* baseSlot = gr_seg_last_slot(pSegment);
         // find first base
         while (baseSlot && (gr_slot_attached_to(baseSlot) != NULL))
@@ -281,13 +280,11 @@ GraphiteLayout::fillFrom(gr_segment * pSegment, ImplLayoutArgs &rArgs, float fSc
             }
             if (mnSegCharOffset + nLastCharInCluster < mnMinCharPos)
                 break;
-            prevBase = baseSlot;
             baseSlot = gr_slot_next_sibling_attachment(baseSlot);
         }
     }
     else
     {
-        const gr_slot* prevBase = NULL;
         const gr_slot* baseSlot = gr_seg_first_slot(pSegment);
         // find first base
         while (baseSlot && (gr_slot_attached_to(baseSlot) != NULL))
@@ -360,7 +357,6 @@ GraphiteLayout::fillFrom(gr_segment * pSegment, ImplLayoutArgs &rArgs, float fSc
             }
             if (mnSegCharOffset + nFirstCharInCluster >= mnEndCharPos)
                 break;
-            prevBase = baseSlot;
             baseSlot = gr_slot_next_sibling_attachment(baseSlot);
         }
     }
