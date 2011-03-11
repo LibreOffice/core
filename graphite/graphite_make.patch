@@ -1,6 +1,6 @@
 --- misc/build/graphite2-0.9.2/src/makefile.mk  Fri Mar  4 10:20:30 2011 +0700
 +++ misc/build/graphite2-0.9.2/src/makefile.mk  Fri Mar  4 10:20:30 2011 +0700
-@@ -0,0 +1,53 @@
+@@ -0,0 +1,54 @@
 +EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
 +
 +PRJ=..$/..$/..$/..$/..
@@ -20,6 +20,7 @@
 +VMACHINE=call
 +.IF "$(COM)"=="GCC"
 +VMACHINE=direct
++CFLAGSCXX+=-fpermissive
 +.ENDIF
 +
 +SLOFILES= \
