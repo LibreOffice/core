@@ -2646,8 +2646,15 @@ bool SwDoc::DelFullPara( SwPaM& rPam )
                 return sal_False;
             }
         }
-            // text::Bookmarks usw. verschieben
-        CorrAbs( aRg.aStart, aRg.aEnd, *rPam.GetPoint(), sal_True );
+        // move bookmarks, redlines etc.
+        if (aRg.aStart == aRg.aEnd) // only first CorrAbs variant handles this
+        {
+            CorrAbs( aRg.aStart, *rPam.GetPoint(), 0, sal_True );
+        }
+        else
+        {
+            CorrAbs( aRg.aStart, aRg.aEnd, *rPam.GetPoint(), sal_True );
+        }
 
             // was ist mit Fly's ??
         {

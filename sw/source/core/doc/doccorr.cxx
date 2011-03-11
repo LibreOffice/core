@@ -212,10 +212,22 @@ void SwDoc::CorrAbs(const SwNodeIndex& rOldNode,
     getIDocumentMarkAccess()->correctMarksAbsolute(rOldNode, rNewPos, nOffset);
     {   // fix redlines
         SwRedlineTbl& rTbl = *pRedlineTbl;
-        for( sal_uInt16 n = 0; n < rTbl.Count(); ++n )
+        for (sal_uInt16 n = 0; n < rTbl.Count(); )
         {
             // is on position ??
-            lcl_PaMCorrAbs(*rTbl[ n ], *aPam.Start(), *aPam.End(), aNewPos);
+            SwRedline *const pRedline( rTbl[ n ] );
+            bool const bChanged =
+                lcl_PaMCorrAbs(*pRedline, *aPam.Start(), *aPam.End(), aNewPos);
+            // clean up empty redlines: docredln.cxx asserts these as invalid
+            if (bChanged && (*pRedline->GetPoint() == *pRedline->GetMark())
+                         && (pRedline->GetContentIdx() == NULL))
+            {
+                rTbl.DeleteAndDestroy(n);
+            }
+            else
+            {
+                ++n;
+            }
         }
     }
 
