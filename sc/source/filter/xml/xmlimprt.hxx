@@ -54,6 +54,7 @@
 
 #include <vector>
 #include <boost/unordered_map.hpp>
+#include <boost/ptr_container/ptr_list.hpp>
 
 class ScRangeList;
 class ScMyStyleNumberFormats;
@@ -632,7 +633,7 @@ struct ScMyNamedExpression
     sal_Bool           bIsExpression;
 };
 
-typedef std::list<const ScMyNamedExpression*> ScMyNamedExpressions;
+typedef ::boost::ptr_list<ScMyNamedExpression> ScMyNamedExpressions;
 
 struct ScMyLabelRange
 {
@@ -908,10 +909,13 @@ public:
     const SvXMLTokenMap& GetDataPilotMemberAttrTokenMap();
     const SvXMLTokenMap& GetConsolidationAttrTokenMap();
 
-    void    AddNamedExpression(const ScMyNamedExpression* pMyNamedExpression) {
+    void AddNamedExpression(ScMyNamedExpression* pMyNamedExpression)
+    {
         if (!pMyNamedExpressions)
             pMyNamedExpressions = new ScMyNamedExpressions();
-        pMyNamedExpressions->push_back(pMyNamedExpression); }
+        pMyNamedExpressions->push_back(pMyNamedExpression);
+    }
+
     ScMyNamedExpressions* GetNamedExpressions() { return pMyNamedExpressions; }
 
     void    AddLabelRange(const ScMyLabelRange* pMyLabelRange) {

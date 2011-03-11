@@ -77,6 +77,10 @@ void ScXMLNamedExpressionsContext::SheetLocalInserter::insert(ScMyNamedExpressio
 
         if (bSuccess)
         {
+            ::rtl::OUString aContent = p->sContent;
+            if (!p->bIsExpression)
+                ScXMLConverter::ParseFormula(aContent, false);
+
             ScRangeData* pData = new ScRangeData(
                 mpDoc, p->sName, p->sContent, aPos, RT_NAME, p->eGrammar);
             pData->SetIndex(-1);

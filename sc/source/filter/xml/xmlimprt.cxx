@@ -2791,7 +2791,7 @@ void ScXMLImport::SetNamedRanges()
     {
         sal_Int32 nOffset = 0;
         bool bSuccess = ScRangeStringConverter::GetAddressFromString(
-            aCellAddress, (*aItr)->sBaseCellAddress, GetDocument(), FormulaGrammar::CONV_OOO, nOffset);
+            aCellAddress, aItr->sBaseCellAddress, GetDocument(), FormulaGrammar::CONV_OOO, nOffset);
 
         if (!bSuccess)
             // Conversion of base cell address failed.  Skip this.
@@ -2800,7 +2800,7 @@ void ScXMLImport::SetNamedRanges()
         try
         {
             xNamedRanges->addNewByName(
-                (*aItr)->sName, sTempContent, aCellAddress, GetRangeType((*aItr)->sRangeType));
+                aItr->sName, sTempContent, aCellAddress, GetRangeType(aItr->sRangeType));
         }
         catch( uno::RuntimeException& )
         {
@@ -2811,7 +2811,7 @@ void ScXMLImport::SetNamedRanges()
                 sal_Int32 nMax = xIndex->getCount();
                 bool bInserted = false;
                 sal_Int32 nCount = 1;
-                OUStringBuffer sName((*aItr)->sName);
+                OUStringBuffer sName(aItr->sName);
                 sName.append(sal_Unicode('_'));
                 while (!bInserted && nCount <= nMax)
                 {
@@ -2821,7 +2821,7 @@ void ScXMLImport::SetNamedRanges()
                     {
                         xNamedRanges->addNewByName(
                             sTemp.makeStringAndClear(), sTempContent, aCellAddress,
-                            GetRangeType((*aItr)->sRangeType));
+                            GetRangeType(aItr->sRangeType));
                         bInserted = true;
                     }
                     catch( uno::RuntimeException& )
@@ -2839,24 +2839,23 @@ void ScXMLImport::SetNamedRanges()
     {
         sal_Int32 nOffset(0);
         if (ScRangeStringConverter::GetAddressFromString(
-            aCellAddress, (*aItr)->sBaseCellAddress, GetDocument(), FormulaGrammar::CONV_OOO, nOffset ))
+            aCellAddress, aItr->sBaseCellAddress, GetDocument(), FormulaGrammar::CONV_OOO, nOffset ))
         {
-            uno::Reference <sheet::XNamedRange> xNamedRange(xNamedRanges->getByName((*aItr)->sName), uno::UNO_QUERY);
+            uno::Reference <sheet::XNamedRange> xNamedRange(xNamedRanges->getByName(aItr->sName), uno::UNO_QUERY);
             if (xNamedRange.is())
             {
                 ScXMLImport::MutexGuard aGuard(*this);
                 ScNamedRangeObj* pNamedRangeObj = ScNamedRangeObj::getImplementation( xNamedRange);
                 if (pNamedRangeObj)
                 {
-                    sTempContent = (*aItr)->sContent;
+                    sTempContent = aItr->sContent;
                     // Get rid of leading sheet dots in simple ranges.
-                    if (!(*aItr)->bIsExpression)
+                    if (!aItr->bIsExpression)
                         ScXMLConverter::ParseFormula( sTempContent, false);
-                    pNamedRangeObj->SetContentWithGrammar( sTempContent, (*aItr)->eGrammar);
+                    pNamedRangeObj->SetContentWithGrammar( sTempContent, aItr->eGrammar);
                 }
             }
         }
-        delete *aItr;
         aItr = pNamedExpressions->erase(aItr);
     }
 }
