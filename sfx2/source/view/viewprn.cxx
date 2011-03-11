@@ -625,7 +625,9 @@ void SfxViewShell::ExecPrint( const uno::Sequence < beans::PropertyValue >& rPro
     {
         if( pVal[i].Name.equalsAscii( "PrinterName" ) )
         {
-            aPrt.reset( new Printer( pVal[i].Name ) );
+            rtl::OUString aPrinterName;
+            pVal[i].Value >>= aPrinterName;
+            aPrt.reset( new Printer( aPrinterName ) );
             break;
         }
     }
