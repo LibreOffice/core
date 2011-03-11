@@ -1147,6 +1147,14 @@ namespace
                 sSampleText = rtl::OUString(aTagalog, SAL_N_ELEMENTS(aTagalog));
                 break;
             }
+            case vcl::UnicodeCoverage::NEW_TAI_LUE:
+            {
+                const sal_Unicode aTalu[] = {
+                    0x1991, 0x19BA, 0x199F, 0x19B9, 0x19C9
+                };
+                sSampleText = rtl::OUString(aTalu, SAL_N_ELEMENTS(aTalu));
+                break;
+            }
             case TRADITIONAL_CHINESE:
             {
                 const sal_Unicode aTraditionalChinese[] = {
