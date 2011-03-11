@@ -996,7 +996,8 @@ SwTxtAttr* MakeRedlineTxtAttr( SwDoc & rDoc, SfxPoolItem & rAttr )
 
 // create new text attribute
 SwTxtAttr* MakeTxtAttr( SwDoc & rDoc, SfxPoolItem& rAttr,
-                        xub_StrLen nStt, xub_StrLen nEnd )
+        xub_StrLen const nStt, xub_StrLen const nEnd,
+        CopyOrNew_t const bIsCopy, SwTxtNode *const pTxtNode)
 {
     if ( isCHRATR(rAttr.Which()) )
     {
@@ -1077,7 +1078,8 @@ SwTxtAttr* MakeTxtAttr( SwDoc & rDoc, SfxPoolItem& rAttr,
         break;
     case RES_TXTATR_META:
     case RES_TXTATR_METAFIELD:
-        pNew = new SwTxtMeta( static_cast<SwFmtMeta&>(rNew), nStt, nEnd );
+        pNew = SwTxtMeta::CreateTxtMeta( rDoc.GetMetaFieldManager(), pTxtNode,
+                static_cast<SwFmtMeta&>(rNew), nStt, nEnd, bIsCopy );
         break;
     default:
         ASSERT(RES_TXTATR_AUTOFMT == rNew.Which(), "unknown attribute");
@@ -1211,7 +1213,8 @@ SwTxtNode::InsertItem( SfxPoolItem& rAttr,
     ASSERT( !isCHRATR(rAttr.Which()), "AUTOSTYLES - "
         "SwTxtNode::InsertItem should not be called with character attributes");
 
-    SwTxtAttr* const pNew = MakeTxtAttr( *GetDoc(), rAttr, nStart, nEnd );
+    SwTxtAttr *const pNew = MakeTxtAttr( *GetDoc(), rAttr, nStart, nEnd,
+            (nMode & nsSetAttrMode::SETATTR_IS_COPY) ? COPY : NEW, this );
 
     if ( pNew )
     {

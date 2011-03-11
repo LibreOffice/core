@@ -1435,15 +1435,10 @@ void lcl_CopyHint( const sal_uInt16 nWhich, const SwTxtAttr * const pHt,
         }
         case RES_TXTATR_META:
         case RES_TXTATR_METAFIELD:
-            ASSERT(pNewHt, "copying META should not fail! cannot call DoCopy");
-            ASSERT(pDest && (CH_TXTATR_INWORD ==
+            OSL_ENSURE(pNewHt, "copying Meta should not fail!");
+            OSL_ENSURE(pDest && (CH_TXTATR_INWORD ==
                                 pDest->GetTxt().GetChar(*pNewHt->GetStart())),
                    "missing CH_TXTATR?");
-            if (pNewHt)
-            {
-                SwFmtMeta & rMeta(static_cast<SwFmtMeta&>(pNewHt->GetAttr()));
-                rMeta.DoCopy( const_cast<SwFmtMeta&>(pHt->GetMeta()) );
-            }
             break;
     }
 }
@@ -1484,7 +1479,8 @@ void SwTxtNode::CopyAttr( SwTxtNode *pDest, const xub_StrLen nTxtStartIdx,
                     {
                         // attribute in the area => copy
                         SwTxtAttr *const pNewHt = pDest->InsertItem(
-                                pHt->GetAttr(), nOldPos, nOldPos );
+                                pHt->GetAttr(), nOldPos, nOldPos,
+                                nsSetAttrMode::SETATTR_IS_COPY);
                         if ( pNewHt )
                         {
                             lcl_CopyHint( nWhich, pHt, pNewHt,
@@ -1495,7 +1491,8 @@ void SwTxtNode::CopyAttr( SwTxtNode *pDest, const xub_StrLen nTxtStartIdx,
                                         : 0 == pOtherDoc->GetRefMark(
                                         pHt->GetRefMark().GetRefName() ) )
                     {
-                        pDest->InsertItem( pHt->GetAttr(), nOldPos, nOldPos );
+                        pDest->InsertItem( pHt->GetAttr(), nOldPos, nOldPos,
+                                nsSetAttrMode::SETATTR_IS_COPY);
                     }
                 }
             }
@@ -1718,9 +1715,9 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
 
         if( pDest == this )
         {
-            // die Daten kopieren
+            // copy the hint here, but insert it later
             pNewHt = MakeTxtAttr( *GetDoc(), pHt->GetAttr(),
-                    nAttrStt, nAttrEnd );
+                    nAttrStt, nAttrEnd, COPY, pDest );
 
             lcl_CopyHint(nWhich, pHt, pNewHt, 0, pDest);
             aArr.C40_INSERT( SwTxtAttr, pNewHt, aArr.Count() );
@@ -1728,7 +1725,9 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
         else
         {
             pNewHt = pDest->InsertItem( pHt->GetAttr(), nAttrStt - nDeletedDummyChars,
-                nAttrEnd - nDeletedDummyChars, nsSetAttrMode::SETATTR_NOTXTATRCHR );
+                nAttrEnd - nDeletedDummyChars,
+                      nsSetAttrMode::SETATTR_NOTXTATRCHR
+                    | nsSetAttrMode::SETATTR_IS_COPY);
             if (pNewHt)
             {
                 lcl_CopyHint( nWhich, pHt, pNewHt, pOtherDoc, pDest );
@@ -2208,7 +2207,8 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
             {
                 const bool bSuccess( pDest->InsertHint( pNewHt,
                               nsSetAttrMode::SETATTR_NOTXTATRCHR
-                            | nsSetAttrMode::SETATTR_DONTREPLACE ) );
+                            | nsSetAttrMode::SETATTR_DONTREPLACE
+                            | nsSetAttrMode::SETATTR_IS_COPY) );
                 if (bSuccess)
                 {
                     lcl_CopyHint( nWhich, pHt, pNewHt, pOtherDoc, pDest );

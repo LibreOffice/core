@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2000, 2011 Oracle and/or its affiliates.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -25,23 +25,26 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_Module_Module,sw))
+.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
+nothing .PHONY:
+.ELSE
 
-$(eval $(call gb_Module_add_targets,sw,\
-    AllLangResTarget_sw \
-    Library_msword \
-    Library_sw \
-    Library_swd \
-    Library_swui \
-    Library_vbaswobj \
-    Package_misc \
-    Package_uiconfig \
-    Package_xml \
-))
+PRJ = ../../..
+PRJNAME = sw
+TARGET = qa_complex_accessibility
 
-$(eval $(call gb_Module_add_subsequentcheck_targets,sw,\
-    JunitTest_sw_complex \
-    JunitTest_sw_unoapi \
-))
+.IF "$(OOO_JUNIT_JAR)" != ""
+PACKAGE = complex/accessibility
+JAVATESTFILES = AccessibleRelationSet.java
+JAVAFILES = $(JAVATESTFILES)
+JARFILES = OOoRunner.jar ridl.jar test.jar unoil.jar
+EXTRAJARFILES = $(OOO_JUNIT_JAR)
+.END
 
-# vim: set noet ts=4 sw=4:
+.INCLUDE: settings.mk
+.INCLUDE: target.mk
+.INCLUDE: installationtest.mk
+
+ALLTAR : javatest
+
+.END

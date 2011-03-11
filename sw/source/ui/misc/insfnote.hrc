@@ -39,3 +39,7 @@
 #define BT_HELP             102
 #define BT_PREV             103
 #define BT_NEXT             104
+
+//IAccessibility2 Implementation 2009-----
+#define STR_CHAR            105
+//-----IAccessibility2 Implementation 2009

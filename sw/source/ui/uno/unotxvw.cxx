@@ -421,8 +421,8 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArg
             {
                 rSh.EnterStdMode();
                 rSh.GotoMark(pMark);
+                return sal_True;
             }
-            return sal_True;
         }
         // IndexMark, Index, TextField, Draw, Section, Footnote, Paragraph
         //

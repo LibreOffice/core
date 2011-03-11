@@ -738,7 +738,28 @@ String STR_POOLCHR_RUBYTEXT
 {
     Text [ en-US ] = "Rubies";
 };
-
+//IAccessibility2 Implementation 2009-----
+String STR_COLUMN_VALUESET_ITEM0
+{
+    Text [ en-US ] = "1 column";
+};
+String STR_COLUMN_VALUESET_ITEM1
+{
+    Text [ en-US ] = "2 columns with equal size";
+};
+String STR_COLUMN_VALUESET_ITEM2
+{
+    Text [ en-US ] = "3 columns with equal size";
+};
+String STR_COLUMN_VALUESET_ITEM3
+{
+    Text [ en-US ] = "2 columns with different size (left > right)";
+};
+String STR_COLUMN_VALUESET_ITEM4
+{
+    Text [ en-US ] = "2 columns with different size (left < right)";
+};
+//-----IAccessibility2 Implementation 2009
 String STR_POOLCHR_VERT_NUM
 {
     Text [ en-US ] = "Vertical Numbering Symbols";

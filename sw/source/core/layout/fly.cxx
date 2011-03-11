@@ -154,9 +154,21 @@ SwFlyFrm::SwFlyFrm( SwFlyFrmFmt *pFmt, SwFrm *pAnch ) :
         bDerivedR2L = 0;
         if( FRMDIR_HORI_LEFT_TOP == nDir || FRMDIR_HORI_RIGHT_TOP == nDir
                                          || pFmt->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
+        //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+        {
             bVertical = 0;
+            bVertLR = 0;
+        }
         else
+        //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+        {
             bVertical = 1;
+            if ( FRMDIR_VERT_TOP_LEFT == nDir )
+                bVertLR = 1;
+            else
+                bVertLR = 0;
+        }
+
         bVert = bVertical;
         bInvalidR2L = 0;
         if( FRMDIR_HORI_RIGHT_TOP == nDir )

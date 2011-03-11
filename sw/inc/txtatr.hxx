@@ -34,6 +34,11 @@
 class SwTxtNode;    // fuer SwTxtFld
 class SwCharFmt;
 
+namespace sw {
+    class MetaFieldManager;
+}
+
+
 // ATT_CHARFMT *********************************************
 
 class SwTxtCharFmt : public SwTxtAttrEnd
@@ -61,7 +66,7 @@ public:
 
 class SwTxtAttrNesting : public SwTxtAttrEnd
 {
-public:
+protected:
     SwTxtAttrNesting( SfxPoolItem & i_rAttr,
         const xub_StrLen i_nStart, const xub_StrLen i_nEnd );
     virtual ~SwTxtAttrNesting();
@@ -70,16 +75,20 @@ public:
 class SwTxtMeta : public SwTxtAttrNesting
 {
 private:
-    SwTxtNode * m_pTxtNode;
-
-public:
     SwTxtMeta( SwFmtMeta & i_rAttr,
         const xub_StrLen i_nStart, const xub_StrLen i_nEnd );
+
+public:
+    static SwTxtMeta * CreateTxtMeta(
+        ::sw::MetaFieldManager & i_rTargetDocManager,
+        SwTxtNode *const i_pTargetTxtNode,
+        SwFmtMeta & i_rAttr,
+        xub_StrLen const i_nStart, xub_StrLen const i_nEnd,
+        bool const i_bIsCopy);
+
     virtual ~SwTxtMeta();
 
     void ChgTxtNode(SwTxtNode * const pNode);
-    SwTxtNode * GetTxtNode() const { return m_pTxtNode; }
-
 };
 
 

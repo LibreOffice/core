@@ -72,6 +72,7 @@ class SwDropCapsPage : public SfxTabPage
 {
 friend class SwDropCapsPict;
 
+    FixedLine       aSettingsFL;
     CheckBox        aDropCapsBox;
     CheckBox        aWholeWordCB;
     FixedText       aSwitchText;
@@ -80,13 +81,12 @@ friend class SwDropCapsPict;
     NumericField    aLinesField;
     FixedText       aDistanceText;
     MetricField     aDistanceField;
-    FixedLine       aSettingsFL;
 
+    FixedLine       aContentFL;
     FixedText       aTextText;
     Edit            aTextEdit;
     FixedText       aTemplateText;
     ListBox         aTemplateBox;
-    FixedLine       aContentFL;
 
     SwDropCapsPict  *pPict;
 

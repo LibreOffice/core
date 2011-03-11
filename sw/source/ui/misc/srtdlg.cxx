@@ -133,11 +133,12 @@ sal_Bool lcl_GetSelTbl( SwWrtShell &rSh, sal_uInt16& rX, sal_uInt16& rY )
 SwSortDlg::SwSortDlg(Window* pParent, SwWrtShell &rShell) :
 
     SvxStandardDialog(pParent, SW_RES(DLG_SORTING)),
+
     aColLbl(this,       SW_RES(FT_COL   )),
     aTypLbl(this,       SW_RES(FT_KEYTYP)),
     aDirLbl(this,       SW_RES(FT_DIR   )),
+    aSortFL(this,      SW_RES(FL_SORT_2  )),
 
-    aDirFL(this,       SW_RES(FL_DIR   )),
 
     aKeyCB1(this,       SW_RES(CB_KEY1  )),
     aColEdt1(this,      SW_RES(ED_KEY1  )),
@@ -156,8 +157,8 @@ SwSortDlg::SwSortDlg(Window* pParent, SwWrtShell &rShell) :
     aTypDLB3(this,      SW_RES(DLB_KEY3 )),
     aSortUp3RB(this,    SW_RES(RB_UP3    )),
     aSortDn3RB(this,    SW_RES(RB_DN3    )),
+    aDirFL(this,       SW_RES(FL_DIR   )),
 
-    aSortFL(this,      SW_RES(FL_SORT_2  )),
     aColumnRB(this,     SW_RES(RB_COL   )),
     aRowRB(this,        SW_RES(RB_ROW   )),
 
@@ -185,6 +186,19 @@ SwSortDlg::SwSortDlg(Window* pParent, SwWrtShell &rShell) :
     nX( 99 ),
     nY( 99 )
 {
+    aColEdt1.SetAccessibleName(aColLbl.GetText());
+    aColEdt2.SetAccessibleName(aColLbl.GetText());
+    aColEdt3.SetAccessibleName(aColLbl.GetText());
+    aTypDLB1.SetAccessibleName(aTypLbl.GetText());
+    aTypDLB2.SetAccessibleName(aTypLbl.GetText());
+    aTypDLB3.SetAccessibleName(aTypLbl.GetText());
+    aSortUpRB.SetAccessibleRelationMemberOf( &aKeyCB1 );
+    aSortDnRB.SetAccessibleRelationMemberOf( &aKeyCB1 );
+    aSortUp2RB.SetAccessibleRelationMemberOf( &aKeyCB2 );
+    aSortDn2RB.SetAccessibleRelationMemberOf( &aKeyCB2 );
+    aSortUp3RB.SetAccessibleRelationMemberOf( &aKeyCB3 );
+    aSortDn3RB.SetAccessibleRelationMemberOf( &aKeyCB3 );
+
     aDelimEdt.SetMaxTextLen( 1 );
     if(rSh.GetSelectionType() &
             (nsSelectionType::SEL_TBL|nsSelectionType::SEL_TBL_CELLS) )
@@ -262,6 +276,25 @@ SwSortDlg::SwSortDlg(Window* pParent, SwWrtShell &rShell) :
         aColEdt2.SetMax(nMax);
         aColEdt3.SetMax(nMax);
     }
+
+    aDelimEdt.SetAccessibleRelationLabeledBy(&aDelimFreeRB);
+    aDelimPB.SetAccessibleRelationLabeledBy(&aDelimFreeRB);
+    aDelimPB.SetAccessibleRelationMemberOf(&aDelimFL);
+
+    aColEdt1.SetAccessibleRelationMemberOf(&aKeyCB1);
+    aColEdt1.SetAccessibleRelationLabeledBy(&aColLbl);
+    aTypDLB1.SetAccessibleRelationMemberOf(&aKeyCB1);
+    aTypDLB1.SetAccessibleRelationLabeledBy(&aTypLbl);
+
+    aColEdt2.SetAccessibleRelationMemberOf(&aKeyCB2);
+    aColEdt2.SetAccessibleRelationLabeledBy(&aColLbl);
+    aTypDLB2.SetAccessibleRelationMemberOf(&aKeyCB2);
+    aTypDLB2.SetAccessibleRelationLabeledBy(&aTypLbl);
+
+    aColEdt3.SetAccessibleRelationMemberOf(&aKeyCB3);
+    aColEdt3.SetAccessibleRelationLabeledBy(&aColLbl);
+    aTypDLB3.SetAccessibleRelationMemberOf(&aKeyCB3);
+    aTypDLB3.SetAccessibleRelationLabeledBy(&aTypLbl);
 }
 
 SwSortDlg::~SwSortDlg()
@@ -416,6 +449,9 @@ IMPL_LINK( SwSortDlg, CheckHdl, CheckBox *, pCheck )
         aColEdt2.SetMax(nY);
         aColEdt3.SetMax(nY);
 
+        aColEdt1.SetAccessibleName(aColTxt);
+        aColEdt2.SetAccessibleName(aColTxt);
+        aColEdt3.SetAccessibleName(aColTxt);
     }
     else if( pCheck == ( CheckBox* ) &aColumnRB)
     {
@@ -423,6 +459,10 @@ IMPL_LINK( SwSortDlg, CheckHdl, CheckBox *, pCheck )
         aColEdt1.SetMax(nX);
         aColEdt2.SetMax(nX);
         aColEdt3.SetMax(nX);
+
+        aColEdt1.SetAccessibleName(aRowTxt);
+        aColEdt2.SetAccessibleName(aRowTxt);
+        aColEdt3.SetAccessibleName(aRowTxt);
     }
     else if(!aKeyCB1.IsChecked() &&
                 !aKeyCB2.IsChecked() &&

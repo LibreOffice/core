@@ -82,23 +82,21 @@ SfxTabPage *  SwDocStatPage::Create(Window *pParent, const SfxItemSet &rSet)
 SwDocStatPage::SwDocStatPage(Window *pParent, const SfxItemSet &rSet) :
 
     SfxTabPage  (pParent, SW_RES(TP_DOC_STAT), rSet),
-
-    aTableLbl   (this, SW_RES( FT_TABLE      )),
-    aGrfLbl     (this, SW_RES( FT_GRF        )),
-    aOLELbl     (this, SW_RES( FT_OLE        )),
     aPageLbl    (this, SW_RES( FT_PAGE       )),
-    aParaLbl    (this, SW_RES( FT_PARA       )),
-    aWordLbl    (this, SW_RES( FT_WORD       )),
-    aCharLbl    (this, SW_RES( FT_CHAR       )),
-    aLineLbl    (this, SW_RES( FT_LINE       )),
-
-    aTableNo    (this, SW_RES( FT_TABLE_COUNT)),
-    aGrfNo      (this, SW_RES( FT_GRF_COUNT  )),
-    aOLENo      (this, SW_RES( FT_OLE_COUNT  )),
     aPageNo     (this, SW_RES( FT_PAGE_COUNT )),
+    aTableLbl   (this, SW_RES( FT_TABLE      )),
+    aTableNo    (this, SW_RES( FT_TABLE_COUNT)),
+    aGrfLbl     (this, SW_RES( FT_GRF        )),
+    aGrfNo      (this, SW_RES( FT_GRF_COUNT  )),
+    aOLELbl     (this, SW_RES( FT_OLE        )),
+    aOLENo      (this, SW_RES( FT_OLE_COUNT  )),
+    aParaLbl    (this, SW_RES( FT_PARA       )),
     aParaNo     (this, SW_RES( FT_PARA_COUNT )),
+    aWordLbl    (this, SW_RES( FT_WORD       )),
     aWordNo     (this, SW_RES( FT_WORD_COUNT )),
-    aCharNo     (this, SW_RES( FT_CHAR_COUNT )),
+    aCharLbl    (this, SW_RES( FT_CHAR       )),
+       aCharNo      (this, SW_RES( FT_CHAR_COUNT )),
+    aLineLbl    (this, SW_RES( FT_LINE       )),
     aLineNo     (this, SW_RES( FT_LINE_COUNT )),
     aUpdatePB   (this, SW_RES( PB_PDATE      ))
 {
