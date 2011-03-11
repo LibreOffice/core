@@ -214,8 +214,9 @@ void SdStartPresentationDlg::InitMonitorSettings()
             {
             }
 
-            sal_Int32 nSelected (nPrimaryIndex);
-            const sal_Int32 nDefaultValue (
+            sal_Int32 nSelectedIndex (-1);
+            sal_Int32 nDefaultExternalIndex (-1);
+            const sal_Int32 nDefaultSelectedDisplay (
                 ( ( const SfxInt32Item& ) rOutAttrs.Get( ATTR_PRESENT_DISPLAY ) ).GetValue());
             const String sPlaceHolder( RTL_CONSTASCII_USTRINGPARAM( "%1" ) );
             for( sal_Int32 nDisplay = 0; nDisplay < mnMonitors; nDisplay++ )
@@ -229,25 +230,33 @@ void SdStartPresentationDlg::InitMonitorSettings()
                 const sal_uInt32 nEntryIndex (maLBMonitor.GetEntryCount()-1);
                 maLBMonitor.SetEntryData(nEntryIndex, (void*)nDisplay);
 
-                // Remember to select the default display.
-                if (nDefaultValue == nDisplay)
-                    nSelected = nEntryIndex;
+                // Remember the index of the default selection.
+                if (nDefaultSelectedDisplay == nDisplay)
+                    nSelectedIndex = nEntryIndex;
+
+                // Remember index of the default display.
+                if (nDisplay == nExternalIndex)
+                    nDefaultExternalIndex = nEntryIndex;
             }
 
             if( !bUnifiedDisplay )
+            {
                 maLBMonitor.InsertEntry( msAllMonitors );
                 const sal_uInt32 nEntryIndex (maLBMonitor.GetEntryCount()-1);
                 maLBMonitor.SetEntryData(nEntryIndex, (void*)-1);
-                if (nDefaultValue == -1)
-                    nSelected = nEntryIndex;
+                if (nDefaultSelectedDisplay == -1)
+                    nSelectedIndex = nEntryIndex;
             }
 
-            if( nSelected <= 0 )
-                nSelected = nExternalIndex;
-            else
-                nSelected--;
+            if (nSelectedIndex < 0)
+            {
+                if (nExternalIndex < 0)
+                    nSelectedIndex = 0;
+                else
+                    nSelectedIndex = nDefaultExternalIndex;
+            }
 
-            maLBMonitor.SelectEntryPos( (sal_uInt16)nSelected );
+            maLBMonitor.SelectEntryPos((sal_uInt16)nSelectedIndex);
         }
     }
     catch( Exception& )
