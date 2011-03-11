@@ -177,27 +177,27 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
             myConfig.cp_PrivateLetter.cp_Norm = oL;
             initializeTemplates(xMSF);
 
-            if (myConfig.cp_BusinessLetter.cp_Greeting.equals(""))
+            if (myConfig.cp_BusinessLetter.cp_Greeting.equals(PropertyNames.EMPTY_STRING))
             {
                 myConfig.cp_BusinessLetter.cp_Greeting = resources.GreetingLabels[0];
             }
-            if (myConfig.cp_BusinessLetter.cp_Salutation.equals(""))
+            if (myConfig.cp_BusinessLetter.cp_Salutation.equals(PropertyNames.EMPTY_STRING))
             {
                 myConfig.cp_BusinessLetter.cp_Salutation = resources.SalutationLabels[0];
             }
-            if (myConfig.cp_PrivateOfficialLetter.cp_Greeting.equals(""))
+            if (myConfig.cp_PrivateOfficialLetter.cp_Greeting.equals(PropertyNames.EMPTY_STRING))
             {
                 myConfig.cp_PrivateOfficialLetter.cp_Greeting = resources.GreetingLabels[1];
             }
-            if (myConfig.cp_PrivateOfficialLetter.cp_Salutation.equals(""))
+            if (myConfig.cp_PrivateOfficialLetter.cp_Salutation.equals(PropertyNames.EMPTY_STRING))
             {
                 myConfig.cp_PrivateOfficialLetter.cp_Salutation = resources.SalutationLabels[1];
             }
-            if (myConfig.cp_PrivateLetter.cp_Greeting.equals(""))
+            if (myConfig.cp_PrivateLetter.cp_Greeting.equals(PropertyNames.EMPTY_STRING))
             {
                 myConfig.cp_PrivateLetter.cp_Greeting = resources.GreetingLabels[2];
             }
-            if (myConfig.cp_PrivateLetter.cp_Salutation.equals(""))
+            if (myConfig.cp_PrivateLetter.cp_Salutation.equals(PropertyNames.EMPTY_STRING))
             {
                 myConfig.cp_PrivateLetter.cp_Salutation = resources.SalutationLabels[2];
             }
@@ -205,7 +205,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
             //update the dialog UI according to the loaded Configuration
             updateUI();
 
-            if (myPathSelection.xSaveTextBox.getText().equalsIgnoreCase(""))
+            if (myPathSelection.xSaveTextBox.getText().equalsIgnoreCase(PropertyNames.EMPTY_STRING))
             {
                 myPathSelection.initializePath();
             }
@@ -258,7 +258,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
             //myLetterDoc.xTextDocument.lockControllers();
             FileAccess fileAccess = new FileAccess(xMSF);
             sPath = myPathSelection.getSelectedPath();
-            if (sPath.equals(""))
+            if (sPath.equals(PropertyNames.EMPTY_STRING))
             {
                 myPathSelection.triggerPathPicker();
                 sPath = myPathSelection.getSelectedPath();
@@ -383,7 +383,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
         lstBusinessStyleItemChanged();
         enableSenderReceiver();
         setPossibleFooter(true);
-        if (myPathSelection.xSaveTextBox.getText().equalsIgnoreCase(""))
+        if (myPathSelection.xSaveTextBox.getText().equalsIgnoreCase(PropertyNames.EMPTY_STRING))
         {
             myPathSelection.initializePath();
         }
@@ -403,7 +403,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
         disableBusinessPaper();
         enableSenderReceiver();
         setPossibleFooter(true);
-        if (myPathSelection.xSaveTextBox.getText().equalsIgnoreCase(""))
+        if (myPathSelection.xSaveTextBox.getText().equalsIgnoreCase(PropertyNames.EMPTY_STRING))
         {
             myPathSelection.initializePath();
         }
@@ -423,7 +423,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
         disableBusinessPaper();
         disableSenderReceiver();
         setPossibleFooter(false);
-        if (myPathSelection.xSaveTextBox.getText().equalsIgnoreCase(""))
+        if (myPathSelection.xSaveTextBox.getText().equalsIgnoreCase(PropertyNames.EMPTY_STRING))
         {
             myPathSelection.initializePath();
         }
@@ -687,7 +687,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
 
                 //Height of the Company Address in the Receiver Field
                 int iReceiverHeight = (int) (0.5 * 1000);
-                BusCompanyAddressReceiver = myLetterDoc.new BusinessPaperObject(" ", iFrameWidth, iReceiverHeight, iFrameX, (iFrameY - iReceiverHeight));
+                BusCompanyAddressReceiver = myLetterDoc.new BusinessPaperObject(PropertyNames.SPACE, iFrameWidth, iReceiverHeight, iFrameX, (iFrameY - iReceiverHeight));
 
                 setPossibleAddressReceiver(false);
             }
@@ -941,12 +941,12 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
     {
         XTextComponent xTextComponent;
         xTextComponent = (XTextComponent) UnoRuntime.queryInterface(XTextComponent.class, lstSalutation);
-        if (xTextComponent.getText().equals(""))
+        if (xTextComponent.getText().equals(PropertyNames.EMPTY_STRING))
         {
             xTextComponent.setText(resources.SalutationLabels[0]);
         }
         xTextComponent = (XTextComponent) UnoRuntime.queryInterface(XTextComponent.class, lstGreeting);
-        if (xTextComponent.getText().equals(""))
+        if (xTextComponent.getText().equals(PropertyNames.EMPTY_STRING))
         {
             xTextComponent.setText(resources.GreetingLabels[0]);
         }
@@ -1099,12 +1099,12 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
 
     public void initializeSalutation()
     {
-        setControlProperty("lstSalutation", "StringItemList", resources.SalutationLabels);
+        setControlProperty("lstSalutation", PropertyNames.STRING_ITEM_LIST, resources.SalutationLabels);
     }
 
     public void initializeGreeting()
     {
-        setControlProperty("lstGreeting", "StringItemList", resources.GreetingLabels);
+        setControlProperty("lstGreeting", PropertyNames.STRING_ITEM_LIST, resources.GreetingLabels);
     }
 
     public void initializeNorms()
@@ -1114,19 +1114,19 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
         String[] allLocales = lc.getIDs();
         Object[] nameList =
         {
-            "", ""
+            PropertyNames.EMPTY_STRING, PropertyNames.EMPTY_STRING
         };
         String[] nameList1 =
         {
-            "", ""
+            PropertyNames.EMPTY_STRING, PropertyNames.EMPTY_STRING
         };
         String[] nameList1b =
         {
-            "", ""
+            PropertyNames.EMPTY_STRING, PropertyNames.EMPTY_STRING
         };
         String[] nameList2 =
         {
-            "", ""
+            PropertyNames.EMPTY_STRING, PropertyNames.EMPTY_STRING
         };
         Vector allPaths = new Vector();
         String sLetterSubPath = "/wizard/letter/";
@@ -1135,7 +1135,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
         {
             sTemplatePath = FileAccess.deleteLastSlashfromUrl(sTemplatePath);
             String[] PathParts = sTemplatePath.split("/");
-            String nuString = "";
+            String nuString = PropertyNames.EMPTY_STRING;
             String sMainPath;
             for (int i = 0; i < (PathParts.length - 1); i++)
             {
@@ -1212,8 +1212,8 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
         String[] LanguageLabels;
 
         boolean found = false;
-        String cIsoCode = "";
-        String MSID = "";
+        String cIsoCode = PropertyNames.EMPTY_STRING;
+        String MSID = PropertyNames.EMPTY_STRING;
         int z = 0;
         for (int i = 0; i < nameList.length; i++)
         {
@@ -1221,7 +1221,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
             cIsoCode = FileAccess.getFilename((String) nameList[i]);
             for (int t = 0; t < allLocales.length; t++)
             {
-                String[] aLang = allLocales[t].split(";");
+                String[] aLang = allLocales[t].split(PropertyNames.SEMI_COLON);
                 if (cIsoCode.equalsIgnoreCase(aLang[1]))
                 {
                     MSID = aLang[2];
@@ -1233,7 +1233,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
             {
                 for (int t = 0; t < allLocales.length; t++)
                 {
-                    String[] aLang = allLocales[t].split(";");
+                    String[] aLang = allLocales[t].split(PropertyNames.SEMI_COLON);
                     if (cIsoCode.equalsIgnoreCase(aLang[1].substring(0, 2)))
                     {
                         MSID = aLang[2];
@@ -1271,7 +1271,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
         //NormPaths = new String[nameList.length];
         //LanguageLabels = new String[Norms.length];
 
-        setControlProperty("lstLetterNorm", "StringItemList", LanguageLabels);
+        setControlProperty("lstLetterNorm", PropertyNames.STRING_ITEM_LIST, LanguageLabels);
     }
 
     private CGLetter getCurrentLetter()
@@ -1294,7 +1294,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
         try
         {
             sTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "share", "/wizard");
-            sUserTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "user", "");
+            sUserTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "user", PropertyNames.EMPTY_STRING);
             sBitmapPath = FileAccess.combinePaths(xMSF, sTemplatePath, "/../wizard/bitmap");
         }
         catch (NoValidPathException e)
@@ -1315,19 +1315,19 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
         OfficialFiles = FileAccess.getFolderTitles(xMSF, "off", sLetterPath);
         PrivateFiles = FileAccess.getFolderTitles(xMSF, "pri", sLetterPath);
 
-        setControlProperty("lstBusinessStyle", "StringItemList", BusinessFiles[0]);
-        setControlProperty("lstPrivOfficialStyle", "StringItemList", OfficialFiles[0]);
-        setControlProperty("lstPrivateStyle", "StringItemList", PrivateFiles[0]);
+        setControlProperty("lstBusinessStyle", PropertyNames.STRING_ITEM_LIST, BusinessFiles[0]);
+        setControlProperty("lstPrivOfficialStyle", PropertyNames.STRING_ITEM_LIST, OfficialFiles[0]);
+        setControlProperty("lstPrivateStyle", PropertyNames.STRING_ITEM_LIST, PrivateFiles[0]);
 
-        setControlProperty("lstBusinessStyle", "SelectedItems", new short[]
+        setControlProperty("lstBusinessStyle", PropertyNames.SELECTED_ITEMS, new short[]
                 {
                     0
                 });
-        setControlProperty("lstPrivOfficialStyle", "SelectedItems", new short[]
+        setControlProperty("lstPrivOfficialStyle", PropertyNames.SELECTED_ITEMS, new short[]
                 {
                     0
                 });
-        setControlProperty("lstPrivateStyle", "SelectedItems", new short[]
+        setControlProperty("lstPrivateStyle", PropertyNames.SELECTED_ITEMS, new short[]
                 {
                     0
                 });

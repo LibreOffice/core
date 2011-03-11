@@ -240,7 +240,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
         lblImageText = dialog.insertLabel(name + "_imageText", pNames1, new Object[]
                 {
                     new Integer(imageTextHeight),
-                    "",
+                    PropertyNames.EMPTY_STRING,
                     new Integer(pos.Width + 1),
                     new Integer(pos.Height + (imageSize.Height + gap.Height) * rows + gap.Height),
                     step,
@@ -281,7 +281,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
             lblCounter = dialog.insertLabel(name + "_lblCounter", pNames1, new Object[]
                     {
                         new Integer(LINE_HEIGHT),
-                        "",
+                        PropertyNames.EMPTY_STRING,
                         new Integer(pos.Width + btnSize.intValue() + 1),
                         new Integer(pos.Height + (imageSize.Height + gap.Height) * rows + gap.Height + imageTextHeight + ((btnSize.intValue() - LINE_HEIGHT) / 2)),
                         step,
@@ -818,7 +818,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
     private void refreshImageText()
     {
         Object item = selected >= 0 ? getListModel().getElementAt(selected) : null;
-        Helper.setUnoPropertyValue(getModel(lblImageText), PropertyNames.PROPERTY_LABEL, " " + renderer.render(item));
+        Helper.setUnoPropertyValue(getModel(lblImageText), PropertyNames.PROPERTY_LABEL, PropertyNames.SPACE + renderer.render(item));
     }
 
     /**
@@ -945,7 +945,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
 
         public String render(Object counter)
         {
-            return "" + ((Counter) counter).start + ".." + ((Counter) counter).end + "/" + ((Counter) counter).max;
+            return PropertyNames.EMPTY_STRING + ((Counter) counter).start + ".." + ((Counter) counter).end + "/" + ((Counter) counter).max;
         }
     }
 

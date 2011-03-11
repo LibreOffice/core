@@ -79,7 +79,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener,
     private ReportLayouter CurReportLayouter;
     private ReportFinalizer CurReportFinalizer;
     private int nReportMode = ReportFinalizer.SOCREATEDOCUMENT;
-    private String m_sReportName = "";
+    private String m_sReportName = PropertyNames.EMPTY_STRING;
     protected static final String SOREPORTFORMNAME = "ReportSource";
     private static final int SOMAINPAGE = 1;
     private static final int SOTITLEPAGE = 2;
@@ -272,10 +272,17 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener,
         final SQLQueryComposer sqlQueryComposer = recordParser.getSQLQueryComposer();
         if (this.CurDBCommandFieldSelection.getSelectedCommandType() == CommandType.TABLE)
         {
-            bQueryCreated = sqlQueryComposer.setQueryCommand(this.xWindow, false, false);
-            m_reportDocument.setCommandType(CommandType.COMMAND);
-            String sQuery = sqlQueryComposer.getQuery();
-            m_reportDocument.setCommand(sQuery);
+            if (m_reportDocument instanceof ReportTextImplementation)
+            {
+                bQueryCreated = sqlQueryComposer.setQueryCommand(this.xWindow, false, false);
+                m_reportDocument.setCommandType(CommandType.COMMAND);
+                String sQuery = sqlQueryComposer.getQuery();
+                m_reportDocument.setCommand(sQuery);
+            }
+            else
+            {
+                bQueryCreated = true;
+            }
         }
         else
         {
@@ -284,24 +291,25 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener,
                 String sQueryName = CurDBCommandFieldSelection.getSelectedCommandName();
                 DBMetaData.CommandObject oCommand = recordParser.getQueryByName(sQueryName);
                 bHasEscapeProcessing = recordParser.hasEscapeProcessing(oCommand.getPropertySet());
-                String sCommand = (String) oCommand.getPropertySet().getPropertyValue("Command");
+                String sCommand = (String) oCommand.getPropertySet().getPropertyValue(PropertyNames.COMMAND);
                 if (bHasEscapeProcessing)
                 {
-                    // String sCommand = (String) oCommand.xPropertySet.getPropertyValue("Command");
-                    bQueryCreated = (!sCommand.equals(""));
-                    sqlQueryComposer.m_xQueryAnalyzer.setQuery(sCommand);
-                    sqlQueryComposer.prependSortingCriteria();
-// TODO: check with query
-                    m_reportDocument.setCommandType(CommandType.COMMAND);
-                    m_reportDocument.setCommand(sqlQueryComposer.getQuery());
-                    bQueryCreated = true;
+                    // String sCommand = (String) oCommand.xPropertySet.getPropertyValue(PropertyNames.COMMAND);
+                    bQueryCreated = (!sCommand.equals(PropertyNames.EMPTY_STRING));
+                    if (m_reportDocument instanceof ReportTextImplementation)
+                    {
+                        sqlQueryComposer.m_xQueryAnalyzer.setQuery(sCommand);
+                        sqlQueryComposer.prependSortingCriteria();
+                        m_reportDocument.setCommandType(CommandType.COMMAND);
+                        m_reportDocument.setCommand(sqlQueryComposer.getQuery());
+                    }
                 }
                 else
                 {
                     m_reportDocument.setCommandType(CommandType.COMMAND);
                     m_reportDocument.setCommand(sCommand);
-                    bQueryCreated = true;
                 }
+                bQueryCreated = true;
             }
             catch (Exception e)
             {
@@ -589,7 +597,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener,
 
     public static String getBlindTextNote(Object _aDocument, Resource _oResource)
     {
-        String sBlindTextNote = "";
+        String sBlindTextNote = PropertyNames.EMPTY_STRING;
         if (_aDocument instanceof ReportTextImplementation)
         {
             sBlindTextNote = _oResource.getResText(UIConsts.RID_REPORT + 75);
@@ -698,7 +706,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener,
             m_nID = 1;
             if (sIncSuffix != null)
             {
-                if ((!sIncSuffix.equals("")) && (!sIncSuffix.equals("_")))
+                if ((!sIncSuffix.equals(PropertyNames.EMPTY_STRING)) && (!sIncSuffix.equals("_")))
                 {
                     String sID = JavaTools.ArrayoutofString(sIncSuffix, "_")[1];
                     m_nID = Integer.parseInt(sID);
@@ -717,7 +725,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener,
             else
             {
                 boolean bEnabled = (CurGroupFieldSelection.getSelectedFieldNames().length > 0);
-                Helper.setUnoPropertyValue(getRoadmapItemByID(SOGROUPPAGE), PropertyNames.PROPERTY_ENABLED, new Boolean(bEnabled));
+                Helper.setUnoPropertyValue(getRoadmapItemByID(SOGROUPPAGE), PropertyNames.PROPERTY_ENABLED, bEnabled);
             }
         }
 
@@ -732,7 +740,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener,
             else
             {
                 boolean bEnabled = (CurGroupFieldSelection.getSelectedFieldNames().length > 0);
-                Helper.setUnoPropertyValue(getRoadmapItemByID(SOGROUPPAGE), PropertyNames.PROPERTY_ENABLED, new Boolean(bEnabled));
+                Helper.setUnoPropertyValue(getRoadmapItemByID(SOGROUPPAGE), PropertyNames.PROPERTY_ENABLED, bEnabled);
             }
         }
 

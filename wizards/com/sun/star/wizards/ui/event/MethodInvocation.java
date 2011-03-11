@@ -28,7 +28,6 @@ package com.sun.star.wizards.ui.event;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import com.sun.star.wizards.common.PropertyNames;
 
 /**
  * Encapsulate a Method invocation.

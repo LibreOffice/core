@@ -191,7 +191,7 @@ public class UIControlArranger
         {
             if (listItem == null)
             {
-                return "";
+                return PropertyNames.EMPTY_STRING;
             }
             return HelpTexts[((Integer) listItem).intValue()];
 

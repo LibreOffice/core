@@ -126,7 +126,7 @@ public class UnoDataAware extends DataAware
         {
             return ((short[]) value).length != 0 ? Boolean.TRUE : Boolean.FALSE;
         }
-        else if (value.equals(""))
+        else if (value.equals(PropertyNames.EMPTY_STRING))
         {
             return Boolean.FALSE;
         }
@@ -179,7 +179,7 @@ public class UnoDataAware extends DataAware
 
     public static UnoDataAware attachEditControl(Object data, String prop, Object unoControl, Listener listener, boolean field)
     {
-        return attachTextControl(data, prop, unoControl, listener, "Text", field, "");
+        return attachTextControl(data, prop, unoControl, listener, "Text", field, PropertyNames.EMPTY_STRING);
     }
 
     public static UnoDataAware attachDateControl(Object data, String prop, Object unoControl, Listener listener, boolean field)
@@ -232,7 +232,7 @@ public class UnoDataAware extends DataAware
     public static UnoDataAware attachLabel(Object data, String prop, Object label, final Listener listener, boolean field)
     {
         return new UnoDataAware(data,
-                field ? DataAwareFields.getFieldValueFor(data, prop, "")
+                field ? DataAwareFields.getFieldValueFor(data, prop, PropertyNames.EMPTY_STRING)
                 : new DataAware.PropertyValue(prop, data),
                 label, PropertyNames.PROPERTY_LABEL);
     }
@@ -244,7 +244,7 @@ public class UnoDataAware extends DataAware
                 field
                 ? DataAwareFields.getFieldValueFor(data, prop, new short[0])
                 : new DataAware.PropertyValue(prop, data),
-                listBox, "SelectedItems");
+                listBox, PropertyNames.SELECTED_ITEMS);
         xListBox.addItemListener(itemListener(uda, listener));
         return uda;
     }

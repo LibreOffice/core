@@ -74,6 +74,7 @@ import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.JavaTools;
 import com.sun.star.wizards.common.Helper.DateUtils;
+import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.document.OfficeDocument;
 
 public class TextDocument
@@ -210,7 +211,7 @@ public class TextDocument
         {
             XStatusIndicatorFactory xStatusIndicatorFactory = (XStatusIndicatorFactory) UnoRuntime.queryInterface(XStatusIndicatorFactory.class, xFrame);
             xProgressBar = xStatusIndicatorFactory.createStatusIndicator();
-            xProgressBar.start("", 100);
+            xProgressBar.start(PropertyNames.EMPTY_STRING, 100);
             xProgressBar.setValue(5);
         }
         xWindowPeer = (XWindowPeer) UnoRuntime.queryInterface(XWindowPeer.class, xFrame.getComponentWindow());
@@ -239,7 +240,7 @@ public class TextDocument
     {
         XStatusIndicatorFactory xStatusIndicatorFactory = (XStatusIndicatorFactory) UnoRuntime.queryInterface(XStatusIndicatorFactory.class, xFrame);
         xProgressBar = xStatusIndicatorFactory.createStatusIndicator();
-        xProgressBar.start("", 100);
+        xProgressBar.start(PropertyNames.EMPTY_STRING, 100);
         xProgressBar.setValue(5);
     }
 
@@ -248,7 +249,7 @@ public class TextDocument
         PropertyValue loadValues[] = new PropertyValue[3];
         //      open document in the Preview mode
         loadValues[0] = new PropertyValue();
-        loadValues[0].Name = "ReadOnly";
+        loadValues[0].Name = PropertyNames.READ_ONLY;
         loadValues[0].Value = Boolean.TRUE;
         loadValues[1] = new PropertyValue();
         loadValues[1].Name = "AsTemplate";
@@ -365,7 +366,7 @@ public class TextDocument
         iScale = (iLastPos - iFirstPos) / iScaleLen;
         xTextCursor.gotoStart(false);
         xTextCursor.gotoEnd(true);
-        xTextCursor.setString("");
+        xTextCursor.setString(PropertyNames.EMPTY_STRING);
         unlockallControllers();
         return iScale;
     }
@@ -399,7 +400,7 @@ public class TextDocument
             XNameAccess xNA = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, uD);
             Object gn = xNA.getByName("givenname");
             Object sn = xNA.getByName("sn");
-            String fullname = (String) gn + " " + (String) sn;
+            String fullname = (String) gn + PropertyNames.SPACE + (String) sn;
 
             Calendar cal = new GregorianCalendar();
             int year = cal.get(Calendar.YEAR);
@@ -418,7 +419,7 @@ public class TextDocument
             xDocProps2.setAuthor(fullname);
             xDocProps2.setModifiedBy(fullname);
             String description = xDocProps2.getDescription();
-            description = description + " " + TemplateDescription;
+            description = description + PropertyNames.SPACE + TemplateDescription;
             description = JavaTools.replaceSubString(description, WizardName, "<wizard_name>");
             description = JavaTools.replaceSubString(description, myDate, "<current_date>");
             xDocProps2.setDescription(description);

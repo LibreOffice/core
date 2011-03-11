@@ -129,7 +129,7 @@ public class PeerConfig implements XWindowListener
             for (int i = 0; i < this.aImageUrlTasks.size(); i++)
             {
                 ImageUrlTask aImageUrlTask = (ImageUrlTask) aImageUrlTasks.elementAt(i);
-                String sImageUrl = "";
+                String sImageUrl = PropertyNames.EMPTY_STRING;
                 if (AnyConverter.isInt(aImageUrlTask.oResource))
                 {
                     sImageUrl = oUnoDialog.getWizardImageUrl(((Integer) aImageUrlTask.oResource).intValue(), ((Integer) aImageUrlTask.oHCResource).intValue());
@@ -138,7 +138,7 @@ public class PeerConfig implements XWindowListener
                 {
                     sImageUrl = oUnoDialog.getImageUrl(((String) aImageUrlTask.oResource), ((String) aImageUrlTask.oHCResource));
                 }
-                if (!sImageUrl.equals(""))
+                if (!sImageUrl.equals(PropertyNames.EMPTY_STRING))
                 {
                     Helper.setUnoPropertyValue(aImageUrlTask.oModel, PropertyNames.PROPERTY_IMAGEURL, sImageUrl);
                 }

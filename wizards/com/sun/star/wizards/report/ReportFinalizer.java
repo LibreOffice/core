@@ -176,15 +176,15 @@ public class ReportFinalizer
      */
     public void toggleSubTemplateControls()
     {
-        // String sStorePath = "";
+        // String sStorePath = PropertyNames.EMPTY_STRING;
         Short iState = (Short) CurUnoDialog.getControlProperty("optCreateReportTemplate", PropertyNames.PROPERTY_STATE);
         boolean bDoTemplateEnable = iState.shortValue() == 1;
-        CurUnoDialog.setControlProperty("optEditTemplate", PropertyNames.PROPERTY_ENABLED, new Boolean(bDoTemplateEnable));
-        CurUnoDialog.setControlProperty("optUseTemplate", PropertyNames.PROPERTY_ENABLED, new Boolean(bDoTemplateEnable));
-        CurUnoDialog.setControlProperty("lblHowProceed", PropertyNames.PROPERTY_ENABLED, new Boolean(bDoTemplateEnable));
+        CurUnoDialog.setControlProperty("optEditTemplate", PropertyNames.PROPERTY_ENABLED, bDoTemplateEnable);
+        CurUnoDialog.setControlProperty("optUseTemplate", PropertyNames.PROPERTY_ENABLED, bDoTemplateEnable);
+        CurUnoDialog.setControlProperty("lblHowProceed", PropertyNames.PROPERTY_ENABLED, bDoTemplateEnable);
 
         String sTitle = xTitleTextBox.getText();
-        boolean bDoEnable = sTitle.equals("");
+        boolean bDoEnable = sTitle.equals(PropertyNames.EMPTY_STRING);
         CurUnoDialog.enableFinishButton(!bDoEnable);
     }
 //  private boolean fileexists(XMultiServiceFactory _xMSF, String _spath){
@@ -212,7 +212,7 @@ public class ReportFinalizer
         if (CurUnoDialog != null)
         {
             String LocStoreName = xTitleTextBox.getText();
-            if (!LocStoreName.equals(""))
+            if (!LocStoreName.equals(PropertyNames.EMPTY_STRING))
             {
                 StoreName = LocStoreName;
             }
@@ -234,7 +234,7 @@ public class ReportFinalizer
         catch (Exception e)
         {
             e.printStackTrace(System.out);
-            return "";
+            return PropertyNames.EMPTY_STRING;
         }
     }
 
@@ -242,7 +242,7 @@ public class ReportFinalizer
     {
         final String TitleName = xTitleTextBox.getText();
         CurReportDocument.liveupdate_updateReportTitle(TitleName);
-        CurUnoDialog.enableFinishButton(!"".equals(TitleName));
+        CurUnoDialog.enableFinishButton(!PropertyNames.EMPTY_STRING.equals(TitleName));
     }
 
     public int getReportOpenMode()

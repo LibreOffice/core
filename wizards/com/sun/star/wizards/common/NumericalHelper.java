@@ -411,7 +411,7 @@ public class NumericalHelper
 //        return toInt(_aValue);
 //    }
 //    catch(com.sun.star.lang.IllegalArgumentException e) {
-//        DebugHelper.exception(BasicErrorCode.SbERR_CONVERSION, "");
+//        DebugHelper.exception(BasicErrorCode.SbERR_CONVERSION, PropertyNames.EMPTY_STRING);
 //        return 0;
 //    }}
 //
@@ -421,8 +421,8 @@ public class NumericalHelper
 //        return toString(_aValue);
 //    }
 //    catch(com.sun.star.lang.IllegalArgumentException e) {
-//        DebugHelper.exception(BasicErrorCode.SbERR_CONVERSION, "");
-//        return "";
+//        DebugHelper.exception(BasicErrorCode.SbERR_CONVERSION, PropertyNames.EMPTY_STRING);
+//        return PropertyNames.EMPTY_STRING;
 //    }}
 //
 //
@@ -431,7 +431,7 @@ public class NumericalHelper
 //        return toInt(_aValue, _ndefaultValue);
 //    }
 //    catch(com.sun.star.uno.Exception e) {
-//        DebugHelper.exception(BasicErrorCode.SbERR_CONVERSION, "");
+//        DebugHelper.exception(BasicErrorCode.SbERR_CONVERSION, PropertyNames.EMPTY_STRING);
 //        return 0;
 //    }}
 //
@@ -445,7 +445,7 @@ public class NumericalHelper
 //            return toBoolean(_oObject);
 //        }
 //        catch (java.lang.Exception e){
-//           DebugHelper.exception(BasicErrorCode.SbERR_BAD_ARGUMENT, "");
+//           DebugHelper.exception(BasicErrorCode.SbERR_BAD_ARGUMENT, PropertyNames.EMPTY_STRING);
 //           return false;
 //        }
 //    }
@@ -461,11 +461,11 @@ public class NumericalHelper
 //           return false;
 //        }
 //        else{
-//            DebugHelper.exception(BasicErrorCode.SbERR_OUT_OF_RANGE, "");
+//            DebugHelper.exception(BasicErrorCode.SbERR_OUT_OF_RANGE, PropertyNames.EMPTY_STRING);
 //            return false;
 //        }
 //    }catch (java.lang.Exception e){
-//       DebugHelper.exception(BasicErrorCode.SbERR_OUT_OF_RANGE, "");
+//       DebugHelper.exception(BasicErrorCode.SbERR_OUT_OF_RANGE, PropertyNames.EMPTY_STRING);
 //        return false;
 //    }}
 //
@@ -489,12 +489,12 @@ public class NumericalHelper
 //               return false;
 //            }
 //            else{
-//                DebugHelper.exception(BasicErrorCode.SbERR_OUT_OF_RANGE, "");
+//                DebugHelper.exception(BasicErrorCode.SbERR_OUT_OF_RANGE, PropertyNames.EMPTY_STRING);
 //                return false;
 //            }
 //        }
 //    }catch (java.lang.Exception e){
-//       DebugHelper.exception(BasicErrorCode.SbERR_OUT_OF_RANGE, "");
+//       DebugHelper.exception(BasicErrorCode.SbERR_OUT_OF_RANGE, PropertyNames.EMPTY_STRING);
 //        return false;
 //    }}
     /**
@@ -983,13 +983,13 @@ public class NumericalHelper
                 }
                 else
                 {
-                    DebugHelper.exception(1/* BasicErrorCode.SbERR_CONVERSION*/, "");
+                    DebugHelper.exception(1/* BasicErrorCode.SbERR_CONVERSION*/, PropertyNames.EMPTY_STRING);
                 }
             }
         }
         catch (com.sun.star.uno.Exception e)
         {
-            DebugHelper.exception(1 /*BasicErrorCode.SbERR_METHOD_FAILED*/, "");
+            DebugHelper.exception(1 /*BasicErrorCode.SbERR_METHOD_FAILED*/, PropertyNames.EMPTY_STRING);
         }
         return nreturn;
     }
@@ -1511,7 +1511,7 @@ public class NumericalHelper
 //        }
 //    }
 //    catch (com.sun.star.uno.Exception e){
-//        DebugHelper.exception(1 /*BasicErrorCode.SbERR_METHOD_FAILED*/, "");
+//        DebugHelper.exception(1 /*BasicErrorCode.SbERR_METHOD_FAILED*/, PropertyNames.EMPTY_STRING);
 //        return false;
 //    }}
     /**
@@ -1554,7 +1554,7 @@ public class NumericalHelper
             {
                 if (n > MAX_NUMBER || n < MIN_NUMBER)
                 {
-                    DebugHelper.exception(1 /*BasicErrorCode.SbERR_OUT_OF_RANGE*/, "");
+                    DebugHelper.exception(1 /*BasicErrorCode.SbERR_OUT_OF_RANGE*/, PropertyNames.EMPTY_STRING);
                 }
                 String number = NumericalHelper.toString(new Integer(n));
                 /* converison idea: every digit is written with a maximum of two
