@@ -700,7 +700,10 @@ int GraphiteLayout::GetTextBreak(long maxmnWidth, long char_extra, int factor) c
         if (nWidth > maxmnWidth) break;
         if (mvChar2BaseGlyph[i] != -1)
         {
-            if ((mvCharBreaks[i] > -25 || mvCharBreaks[i-1] > 0 && mvCharBreaks[i-1] < 25) && (mvCharBreaks[i-1] < 25 || mvCharBreaks[i] < 0 && mvCharBreaks[i] > -25))
+            if (
+                (mvCharBreaks[i] > -25 || (mvCharBreaks[i-1] > 0 && mvCharBreaks[i-1] < 25)) &&
+                (mvCharBreaks[i-1] < 25 || (mvCharBreaks[i] < 0 && mvCharBreaks[i] > -25))
+               )
             {
                 nLastBreak = static_cast<int>(i);
                 wLastBreak = nWidth;
