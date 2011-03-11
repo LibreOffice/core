@@ -42,7 +42,7 @@
 #endif
 
 #ifndef _FETCLIST_HXX_
-#include "FEtcList.hxx"
+#include "FetcList.hxx"
 #endif
 
 #if defined _MSC_VER

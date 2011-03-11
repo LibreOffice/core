@@ -40,6 +40,7 @@
 #include <unotools/charclass.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/textsearch.hxx>
+#include <rtl/instance.hxx>
 
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::uno;
@@ -90,13 +91,6 @@ SearchParam::SearchParam( const SearchParam& rParam )
     nTransliterationFlags = rParam.nTransliterationFlags;
 }
 
-//  Klasse zum Suchen eines Strings in einem Text. Es wird genau nach
-//  dem String gesucht.
-//  ( Die Unterscheidung der Gross/Klein-Schreibung kann mit einen Flag
-//  unterdrueckt werden )
-
-TextSearch::CachedTextSearch TextSearch::maCache;
-
 static bool lcl_Equals( const SearchOptions& rSO1, const SearchOptions& rSO2 )
 {
     return rSO1.algorithmType == rSO2.algorithmType &&
@@ -112,27 +106,42 @@ static bool lcl_Equals( const SearchOptions& rSO1, const SearchOptions& rSO2 )
         rSO1.transliterateFlags == rSO2.transliterateFlags;
 }
 
+namespace
+{
+    struct CachedTextSearch
+    {
+        ::osl::Mutex mutex;
+        ::com::sun::star::util::SearchOptions Options;
+        ::com::sun::star::uno::Reference< ::com::sun::star::util::XTextSearch > xTextSearch;
+    };
+
+    struct theCachedTextSearch
+        : public rtl::Static< CachedTextSearch, theCachedTextSearch > {};
+}
+
 Reference<XTextSearch> TextSearch::getXTextSearch( const SearchOptions& rPara )
 {
-    osl::MutexGuard aGuard(maCache.mutex);
+    CachedTextSearch &rCache = theCachedTextSearch::get();
 
-    if ( lcl_Equals(maCache.Options, rPara) )
-        return maCache.xTextSearch;
+    osl::MutexGuard aGuard(rCache.mutex);
+
+    if ( lcl_Equals(rCache.Options, rPara) )
+        return rCache.xTextSearch;
 
     try
     {
         Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-        maCache.xTextSearch.set( xMSF->createInstance(
+        rCache.xTextSearch.set( xMSF->createInstance(
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
                         "com.sun.star.util.TextSearch" ) ) ), UNO_QUERY_THROW );
-        maCache.xTextSearch->setOptions( rPara );
-        maCache.Options = rPara;
+        rCache.xTextSearch->setOptions( rPara );
+        rCache.Options = rPara;
     }
     catch ( Exception& )
     {
         DBG_ERRORFILE( "TextSearch ctor: Exception caught!" );
     }
-    return maCache.xTextSearch;
+    return rCache.xTextSearch;
 }
 
 TextSearch::TextSearch(const SearchParam & rParam, LanguageType eLang )

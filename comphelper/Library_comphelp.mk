@@ -113,6 +113,7 @@ $(eval $(call gb_Library_add_exception_objects,comphelper,\
     comphelper/source/misc/serviceinfohelper \
     comphelper/source/misc/sharedmutex \
     comphelper/source/misc/stillreadwriteinteraction \
+    comphelper/source/misc/anycompare \
     comphelper/source/misc/storagehelper \
     comphelper/source/misc/string \
     comphelper/source/misc/synchronousdispatch \

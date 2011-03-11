@@ -460,9 +460,20 @@ public:
 
                 /// Switch to no endian swapping and write 0xfeff
     sal_Bool        StartWritingUnicodeText();
-                /// Read 16bit, if 0xfeff do nothing, if 0xfffe switch
-                /// endian swapping, if none of them put back
-    sal_Bool        StartReadingUnicodeText();
+
+                /** If eReadBomCharSet==RTL_TEXTENCODING_DONTKNOW: read 16bit,
+                    if 0xfeff do nothing (UTF-16), if 0xfffe switch endian
+                    swapping (UTF-16), if 0xefbb or 0xbbef read another byte
+                    and check for UTF-8. If no UTF-* BOM was detected put all
+                    read bytes back. This means that if 2 bytes were read it
+                    was an UTF-16 BOM, if 3 bytes were read it was an UTF-8
+                    BOM. There is no UTF-7, UTF-32 or UTF-EBCDIC BOM detection!
+
+                    If eReadBomCharSet!=RTL_TEXTENCODING_DONTKNOW: only read a
+                    BOM of that encoding and switch endian swapping if UTF-16
+                    and 0xfffe.
+                 */
+    sal_Bool        StartReadingUnicodeText( rtl_TextEncoding eReadBomCharSet );
 
                 /// Read a line of Unicode
     sal_Bool        ReadUniStringLine( String& rStr );

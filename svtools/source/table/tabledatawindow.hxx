@@ -55,8 +55,12 @@ namespace svt { namespace table
         Link                m_aMouseButtonDownHdl;
          Link               m_aMouseButtonUpHdl;
         Link                m_aSelectHdl;
+        sal_uLong           m_nTipWindowHandle;
+
     public:
         TableDataWindow( TableControl_Impl& _rTableControl );
+        ~TableDataWindow();
+
         inline void         SetMouseButtonDownHdl( const Link& rLink )  { m_aMouseButtonDownHdl = rLink; }
         inline const Link&  GetMouseButtonDownHdl() const               { return m_aMouseButtonDownHdl; }
         inline void         SetMouseButtonUpHdl( const Link& rLink )    { m_aMouseButtonUpHdl = rLink; }
@@ -69,15 +73,16 @@ namespace svt { namespace table
         virtual void        MouseMove( const MouseEvent& rMEvt);
         virtual void        MouseButtonDown( const MouseEvent& rMEvt);
         virtual void        MouseButtonUp( const MouseEvent& rMEvt);
-        virtual void        SetPointer( const Pointer& rPointer );
-        virtual void        CaptureMouse();
-        virtual void        ReleaseMouse();
         virtual long        Notify(NotifyEvent& rNEvt);
         virtual void        SetControlBackground(const Color& rColor);
         virtual void        SetControlBackground();
+        virtual void        RequestHelp( const HelpEvent& rHEvt );
 
         void                SetBackground(const Wallpaper& rColor);
         void                SetBackground();
+
+    private:
+        void    impl_hideTipWindow();
     };
 //........................................................................
 } } // namespace svt::table

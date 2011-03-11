@@ -72,7 +72,7 @@ class ImplFontData;
 // -----------------
 
 // used for managing runs e.g. for BiDi, glyph and script fallback
-class VCL_DLLPUBLIC ImplLayoutRuns
+class VCL_PLUGIN_PUBLIC ImplLayoutRuns
 {
 private:
     int                 mnRunIndex;
@@ -148,7 +148,7 @@ sal_UCS4 GetVerticalChar( sal_UCS4 );
 // #i80090# GetMirroredChar also needed outside vcl, moved to svapp.hxx
 // VCL_DLLPUBLIC sal_UCS4 GetMirroredChar( sal_UCS4 );
 sal_UCS4 GetLocalizedChar( sal_UCS4, LanguageType );
-VCL_DLLPUBLIC const char* GetAutofallback( sal_UCS4 ) ;
+VCL_PLUGIN_PUBLIC const char* GetAutofallback( sal_UCS4 ) ;
 
 // -------------
 // - SalLayout -
@@ -179,7 +179,7 @@ typedef sal_uInt32 sal_GlyphId;
 // all positions/widths are in font units
 // one exception: drawposition is in pixel units
 
-class VCL_DLLPUBLIC SalLayout
+class VCL_PLUGIN_PUBLIC SalLayout
 {
 public:
     // used by upper layers
@@ -258,7 +258,7 @@ protected:
 // - MultiSalLayout -
 // ------------------
 
-class VCL_DLLPUBLIC MultiSalLayout : public SalLayout
+class VCL_PLUGIN_PUBLIC MultiSalLayout : public SalLayout
 {
 public:
     virtual void    DrawText( SalGraphics& ) const;
@@ -271,7 +271,7 @@ public:
     virtual bool    GetBoundRect( SalGraphics&, Rectangle& ) const;
 
     // used only by OutputDevice::ImplLayout, TODO: make friend
-                    MultiSalLayout( SalLayout& rBaseLayout,
+    explicit        MultiSalLayout( SalLayout& rBaseLayout,
                          const ImplFontData* pBaseFont = NULL );
     virtual bool    AddFallback( SalLayout& rFallbackLayout,
                          ImplLayoutRuns&, const ImplFontData* pFallbackFont );
@@ -341,7 +341,7 @@ typedef std::vector<GlyphItem> GlyphVector;
 
 // ---------------
 
-class VCL_DLLPUBLIC GenericSalLayout : public SalLayout
+class VCL_PLUGIN_PUBLIC GenericSalLayout : public SalLayout
 {
 public:
     // used by layout engines

@@ -65,7 +65,8 @@ public:
 
     const String&       GetHelpText() const { return maHelpText; }
     void                SetHelpText( const String& rHelpText );
-    sal_uInt16              GetWinStyle() const { return mnHelpWinStyle; }
+    sal_uInt16          GetWinStyle() const { return mnHelpWinStyle; }
+    sal_uInt16          GetStyle() const { return mnStyle; }
 
     // Nur merken:
     void                SetStatusText( const String& rStatusText ) { maStatusText = rStatusText; }

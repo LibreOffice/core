@@ -28,15 +28,21 @@
 #define SVTOOLS_INC_TABLE_TABLEMODEL_HXX
 
 #include "svtools/svtdllapi.h"
-#include <svtools/table/tabletypes.hxx>
-#include <svtools/table/tablerenderer.hxx>
-#include <svtools/table/tableinputhandler.hxx>
-#include <rtl/ref.hxx>
-#include <sal/types.h>
+#include "svtools/table/tabletypes.hxx"
+#include "svtools/table/tablerenderer.hxx"
+#include "svtools/table/tableinputhandler.hxx"
+#include "svtools/table/tablesort.hxx"
+
 #include <com/sun/star/util/Color.hpp>
-#include <boost/shared_ptr.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <com/sun/star/style/HorizontalAlignment.hpp>
+
+#include <rtl/ref.hxx>
+#include <sal/types.h>
+
+#include <boost/shared_ptr.hpp>
+#include <boost/optional.hpp>
+#include <boost/enable_shared_from_this.hpp>
 
 //........................................................................
 namespace svt { namespace table
@@ -44,19 +50,6 @@ namespace svt { namespace table
 //........................................................................
 
 
-    //====================================================================
-    //= cell data
-    //====================================================================
-    struct TableContentType
-    {
-        ::rtl::OUString sContent;
-        Image*  pImage;
-        TableContentType() :
-            sContent(),
-            pImage(  )
-            {
-            }
-     };
     //====================================================================
     //= ScrollbarVisibility
     //====================================================================
@@ -78,13 +71,24 @@ namespace svt { namespace table
     //====================================================================
     //= ITableModelListener
     //====================================================================
+    typedef sal_Int32   ColumnAttributeGroup;
+    #define COL_ATTRS_NONE          (0x00000000)
+    /// denotes column attributes related to the width of the column
+    #define COL_ATTRS_WIDTH         (0x00000001)
+    /// denotes column attributes related to the appearance of the column, i.e. those relevant for rendering
+    #define COL_ATTRS_APPEARANCE    (0x00000002)
+    /// denotes the entirety of column attributes
+    #define COL_ATTRS_ALL           (0x7FFFFFFF)
+
+    //====================================================================
+    //= ITableModelListener
+    //====================================================================
     /** declares an interface to be implemented by components interested in
         changes in an ->ITableModel
     */
-    class SAL_NO_VTABLE ITableModelListener
+    class SAL_NO_VTABLE ITableModelListener : public ::boost::enable_shared_from_this< ITableModelListener >
     {
     public:
-        //virtual void  onTableModelChanged(PTableModel pTableModel) = 0;
         /** notifies the listener that one or more rows have been inserted into
             the table
 
@@ -100,7 +104,8 @@ namespace svt { namespace table
             the table
 
             @param first
-                the old index of the first removed row
+                the old index of the first removed row. If this is <code>-1</code>, then all
+                rows have been removed from the model.
             @param last
                 the old index of the last removed row. Must not be smaller
                 than ->first
@@ -116,27 +121,19 @@ namespace svt { namespace table
                 the index of the last newly inserted row. Must not be smaller
                 than ->first
         */
-        virtual void    columnsInserted( ColPos first, ColPos last ) = 0;
+        virtual void    columnInserted( ColPos const i_colIndex ) = 0;
 
         /** notifies the listener that one or more columns have been removed from
             the table
 
-            @param first
-                the old index of the first removed row
-            @param last
-                the old index of the last removed row. Must not be smaller
-                than ->first
+            @param i_colIndex
+                the old index of the removed column
         */
-        virtual void    columnsRemoved( ColPos first, ColPos last ) = 0;
+        virtual void    columnRemoved( ColPos const i_colIndex ) = 0;
 
-        /** notifies the listener that a column in the table has moved
-
-            @param oldIndex
-                the old index of the column within the model
-            @param newIndex
-                the new index of the column within the model
+        /** notifies the listener that all columns have been removed form the model
         */
-        virtual void    columnMoved( ColPos oldIndex, ColPos newIndex ) = 0;
+        virtual void    allColumnsRemoved() = 0;
 
         /** notifies the listener that a rectangular cell range in the table
             has been updated
@@ -145,7 +142,24 @@ namespace svt { namespace table
             they have about the cells in question, in particular any possibly
             cached cell values.
         */
-        virtual void    cellsUpdated( ColPos firstCol, ColPos lastCol, RowPos firstRow, RowPos lastRow ) = 0;
+        virtual void    cellsUpdated( ColPos const i_firstCol, ColPos i_lastCol, RowPos const i_firstRow, RowPos const i_lastRow ) = 0;
+
+        /** notifies the listener that attributes of a given column changed
+
+            @param i_column
+                the position of the column whose attributes changed
+            @param i_attributeGroup
+                a combination of one or more <code>COL_ATTRS_*</code> flags, denoting the attribute group(s)
+                in which changes occurred.
+        */
+        virtual void    columnChanged( ColPos const i_column, ColumnAttributeGroup const i_attributeGroup ) = 0;
+
+        /** notifies the listener that the metrics of the table changed.
+
+            Metrics here include the column header height, the row header width, the row height, and the presence
+            of both the row and column header.
+        */
+        virtual void    tableMetricsChanged() = 0;
 
         /// deletes the listener instance
         virtual ~ITableModelListener(){};
@@ -172,7 +186,8 @@ namespace svt { namespace table
 
             @see setID
         */
-        virtual ColumnID    getID() const = 0;
+        virtual ::com::sun::star::uno::Any
+                            getID() const = 0;
 
         /** sets a new column ID
 
@@ -183,7 +198,7 @@ namespace svt { namespace table
 
             @see getID
         */
-        virtual bool        setID( const ColumnID _nID ) = 0;
+        virtual void        setID( const ::com::sun::star::uno::Any& _nID ) = 0;
 
         /** returns the name of the column
 
@@ -200,7 +215,15 @@ namespace svt { namespace table
         */
         virtual void        setName( const String& _rName ) = 0;
 
-        /** determines whether the column can be resized
+        /** retrieves the help text to be displayed for the column.
+        */
+        virtual String      getHelpText() const = 0;
+
+        /** sets a new the help text to be displayed for the column.
+        */
+        virtual void        setHelpText( const String& i_helpText ) = 0;
+
+        /** determines whether the column can be interactively resized
 
             @see getMinWidth
             @see getMaxWidth
@@ -216,40 +239,41 @@ namespace svt { namespace table
         */
         virtual void        setResizable( bool _bResizable ) = 0;
 
-        /** returns the width of the column, in 1/100 millimeters
+        /** denotes the relative flexibility of the column
+
+            This flexibility is taken into account when a table control auto-resizes its columns, because the available
+            space changed. In this case, the columns grow or shrink according to their flexibility.
+
+            A value of 0 means the column is not auto-resized at all.
+        */
+        virtual sal_Int32   getFlexibility() const = 0;
+
+        /** sets a new flexibility value for the column
+
+            @see getFlexibility
+        */
+        virtual void        setFlexibility( sal_Int32 const i_flexibility ) = 0;
+
+        /** returns the width of the column, in app-font unitss
 
             The returned value must be a positive ->TableMetrics value.
-
-            It can also be COLWIDTH_FIT_TO_VIEW, to indicate that the width of the column
-            should automatically be adjusted to completely fit the view. For instance, a
-            model's last column could return this value, to indicate that it is to occupy
-            all horizontal space remaining in the view, after all other columns have been
-            layouted.
-
-            If there is more than one column with width COLWIDTH_FIT_TO_VIEW in a model,
-            they're all layouted equal-width.
-
-            If the columns with a read width (i.e. other than COLWIDTH_FIT_TO_VIEW) are,
-            in sum, wider than the view, then the view is free to choose a real width for any
-            columns which return COLWIDTH_FIT_TO_VIEW here.
 
             @see setWidth
             @see getMinWidth
             @see getMaxWidth
-            @see COLWIDTH_FIT_TO_VIEW
         */
         virtual TableMetrics    getWidth() const = 0;
 
         /** sets a new width for the column
 
             @param _nWidth
-                the new width, in 1/100 millimeters
+                the new width, app-font units
 
             @see getWidth
         */
         virtual void            setWidth( TableMetrics _nWidth ) = 0;
 
-        /** returns the minimum width of the column, in 1/100 millimeters, or 0 if the column
+        /** returns the minimum width of the column, in app-font units, or 0 if the column
             does not have a minimal width
 
             @see setMinWidth
@@ -258,7 +282,7 @@ namespace svt { namespace table
         */
         virtual TableMetrics    getMinWidth() const = 0;
 
-        /** sets the minimum width of the column, in 1/100 millimeters
+        /** sets the minimum width of the column, in app-font units
 
             @see getMinWidth
             @see setMaxWidth
@@ -266,7 +290,7 @@ namespace svt { namespace table
         */
         virtual void            setMinWidth( TableMetrics _nMinWidth ) = 0;
 
-        /** returns the maximum width of the column, in 1/100 millimeters, or 0 if the column
+        /** returns the maximum width of the column, in app-font units, or 0 if the column
             does not have a minimal width
 
             @see setMaxWidth
@@ -275,7 +299,7 @@ namespace svt { namespace table
         */
         virtual TableMetrics    getMaxWidth() const = 0;
 
-        /** sets the maximum width of the column, in 1/100 millimeters
+        /** sets the maximum width of the column, in app-font units
 
             @see getMaxWidth
             @see setMinWidth
@@ -283,24 +307,14 @@ namespace svt { namespace table
         */
         virtual void            setMaxWidth( TableMetrics _nMaxWidth ) = 0;
 
-        /** returns the preferred width of the column,  or 0 if the column
-            does not have a preferred width.
-
-            @see setMaxWidth
-            @see getMinWidth
-            @see getWidth
+        /** retrieves the horizontal alignment to be used for content in this cell
         */
-        virtual TableMetrics    getPreferredWidth() const = 0;
-         /** sets the preferred width of the column, to be used when user resizes column
-
-            @see getMaxWidth
-            @see setMinWidth
-            @see setWidth
-        */
-        virtual void            setPreferredWidth( TableMetrics _nPrefWidth ) = 0;
-
         virtual ::com::sun::star::style::HorizontalAlignment getHorizontalAlign() = 0;
+
+        /** sets a new the horizontal alignment to be used for content in this cell
+        */
         virtual void setHorizontalAlign(::com::sun::star::style::HorizontalAlignment _xAlign) = 0;
+
         /// deletes the column model instance
         virtual ~IColumnModel() { }
     };
@@ -322,9 +336,6 @@ namespace svt { namespace table
         */
         virtual TableSize   getRowCount() const = 0;
 
-        SVT_DLLPRIVATE virtual void     setColumnCount(TableSize _nColCount) = 0;
-        SVT_DLLPRIVATE virtual void     setRowCount(TableSize _nRowCount) = 0;
-
         /** determines whether the table has column headers
 
             If this method returns <TRUE/>, the renderer returned by
@@ -333,15 +344,6 @@ namespace svt { namespace table
             @see IColumnRenderer
         */
         virtual bool        hasColumnHeaders() const = 0;
-        /** sets whether the table should have row headers
-            @see IColumnRenderer
-        */
-        SVT_DLLPRIVATE virtual void     setRowHeaders( bool rowHeaders) = 0;
-
-        /** sets whether the table should have column headers
-            @see IColumnRenderer
-        */
-        SVT_DLLPRIVATE virtual void     setColumnHeaders( bool columnHeaders) = 0;
 
         /** determines whether the table has row headers
 
@@ -359,14 +361,6 @@ namespace svt { namespace table
         */
         virtual bool        isCellEditable( ColPos col, RowPos row ) const = 0;
 
-        /** adds the given listener to the list of ->ITableModelListener's
-        */
-        SVT_DLLPRIVATE virtual void        addTableModelListener( const PTableModelListener& listener ) = 0;
-
-        /** revokes the given listener from the list of ->ITableModelListener's
-        */
-        SVT_DLLPRIVATE virtual void        removeTableModelListener( const PTableModelListener& listener ) = 0;
-
         /** returns a model for a certain column
 
             @param column
@@ -375,27 +369,15 @@ namespace svt { namespace table
 
             @return
                 the model of the column in question. Must not be <NULL/>
-
-            @see getColumnModelByID
         */
         virtual PColumnModel    getColumnModel( ColPos column ) = 0;
-
-        /** finds a column model by ID
-
-            @param id
-                the id of the column which is to be looked up
-            @return
-                the column model with the given ID, or <NULL/> if there is
-                no such column
-        */
-        virtual PColumnModel    getColumnModelByID( ColumnID id ) = 0;
 
         /** returns a renderer which is able to paint the table represented
             by this table model
 
             @return the renderer to use. Must not be <NULL/>
         */
-        SVT_DLLPRIVATE virtual PTableRenderer  getRenderer() const = 0;
+        virtual PTableRenderer  getRenderer() const = 0;
 
         /** returns the component handling input in a view associated with the model
         */
@@ -404,12 +386,10 @@ namespace svt { namespace table
         /** determines the height of rows in the table.
 
             @return
-                the logical height of rows in the table, in 1/100 millimeters. The height must be
+                the logical height of rows in the table, in app-font units. The height must be
                 greater 0.
         */
-        SVT_DLLPRIVATE virtual TableMetrics    getRowHeight() const = 0;
-
-        SVT_DLLPRIVATE virtual void         setRowHeight(TableMetrics _nRowHeight) = 0;
+        virtual TableMetrics    getRowHeight() const = 0;
 
         /** determines the height of the column header row
 
@@ -417,10 +397,10 @@ namespace svt { namespace table
             returned <FALSE/>.
 
             @return
-                the logical height of the column header row, in 1/100 millimeters.
+                the logical height of the column header row, in app-font units.
                 Must be greater than 0.
         */
-        SVT_DLLPRIVATE virtual TableMetrics    getColumnHeaderHeight() const = 0;
+        virtual TableMetrics    getColumnHeaderHeight() const = 0;
 
         /** determines the width of the row header column
 
@@ -428,48 +408,105 @@ namespace svt { namespace table
             returned <FALSE/>.
 
             @return
-                the logical width of the row header column, in 1/100 millimeters.
+                the logical width of the row header column, in app-font units.
                 Must be greater than 0.
         */
-        SVT_DLLPRIVATE virtual TableMetrics    getRowHeaderWidth() const = 0;
+        virtual TableMetrics    getRowHeaderWidth() const = 0;
 
-        /** determines the visibility of the vertical scrollbar of the table control
-            @param overAllHeight the height of the table with all rows
-            @param actHeight the given height of the table
+        /** returns the visibilit mode of the vertical scrollbar
         */
-        virtual ScrollbarVisibility getVerticalScrollbarVisibility(int overAllHeight,int actHeight) const = 0;
+        virtual ScrollbarVisibility getVerticalScrollbarVisibility() const = 0;
 
-        /** determines the visibility of the horizontal scrollbar of the table control
-            @param overAllWidth the width of the table with all columns
-            @param actWidth the given width of the table
+        /** returns the visibilit mode of the horizontal scrollbar
         */
-        virtual ScrollbarVisibility getHorizontalScrollbarVisibility(int overAllWidth, int actWidth) const = 0;
-    virtual bool hasVerticalScrollbar() =0;
-    virtual bool hasHorizontalScrollbar() = 0;
-    /** fills cells with content
-    */
-    virtual void setCellContent(const std::vector< std::vector< ::com::sun::star::uno::Any > >& cellContent)=0;
-    /** gets the content of the cells
-    */
-    virtual std::vector< std::vector< ::com::sun::star::uno::Any > >&   getCellContent() = 0;
-    /**sets title of header rows
-    */
-    SVT_DLLPRIVATE virtual void setRowHeaderName(const std::vector<rtl::OUString>& cellColumnContent)=0;
-    /** gets title of header rows
-    */
-    virtual std::vector<rtl::OUString>&   getRowHeaderName() = 0;
-    SVT_DLLPRIVATE virtual ::com::sun::star::util::Color getLineColor() = 0;
-    SVT_DLLPRIVATE virtual void setLineColor(::com::sun::star::util::Color _rColor) = 0;
-    SVT_DLLPRIVATE virtual ::com::sun::star::util::Color getHeaderBackgroundColor() = 0;
-    SVT_DLLPRIVATE virtual void setHeaderBackgroundColor(::com::sun::star::util::Color _rColor) = 0;
-    SVT_DLLPRIVATE virtual ::com::sun::star::util::Color getTextColor() = 0;
-    SVT_DLLPRIVATE virtual void setTextColor(::com::sun::star::util::Color _rColor) = 0;
-    SVT_DLLPRIVATE virtual ::com::sun::star::util::Color getOddRowBackgroundColor() = 0;
-    SVT_DLLPRIVATE virtual void setOddRowBackgroundColor(::com::sun::star::util::Color _rColor) = 0;
-    SVT_DLLPRIVATE virtual ::com::sun::star::util::Color getEvenRowBackgroundColor() = 0;
-    SVT_DLLPRIVATE virtual void setEvenRowBackgroundColor(::com::sun::star::util::Color _rColor) = 0;
-    SVT_DLLPRIVATE virtual ::com::sun::star::style::VerticalAlignment getVerticalAlign() = 0;
-    SVT_DLLPRIVATE virtual void setVerticalAlign(::com::sun::star::style::VerticalAlignment _xAlign) = 0;
+        virtual ScrollbarVisibility getHorizontalScrollbarVisibility() const = 0;
+
+        /** adds a listener to be notified of changes in the table model
+        */
+        virtual void addTableModelListener( const PTableModelListener& i_listener ) = 0;
+
+        /** remove a listener to be notified of changes in the table model
+        */
+        virtual void removeTableModelListener( const PTableModelListener& i_listener ) = 0;
+
+        /** retrieves the content of the given cell
+        */
+        virtual void getCellContent( ColPos const i_col, RowPos const i_row, ::com::sun::star::uno::Any& o_cellContent ) = 0;
+
+        /** returns an object which should be displayed as tooltip for the given cell
+
+            At the moment, only string-convertible values are supported here. In the future, one might imagine displaying
+            scaled-down versions of a graphic in a cell, and a larger version of that very graphic as tooltip.
+
+            If no tooltip object is provided, then the cell content is used, and displayed as tooltip for the cell
+            if and only if it doesn't fit into the cell's space itself.
+
+            @param i_col
+                The column index of the cell in question. COL_ROW_HEADERS is a valid argument here.
+            @param i_row
+                The row index of the cell in question.
+            @param o_cellToolTip
+                takes the tooltip object upon return.
+        */
+        virtual void getCellToolTip( ColPos const i_col, RowPos const i_row, ::com::sun::star::uno::Any & o_cellToolTip ) = 0;
+
+        /** retrieves title of a given row
+        */
+        virtual ::com::sun::star::uno::Any      getRowHeading( RowPos const i_rowPos ) const = 0;
+
+        /** returns the color to be used for rendering the grid lines.
+
+            If this value is not set, a default color from the style settings will be used.
+        */
+        virtual ::boost::optional< ::Color >    getLineColor() const = 0;
+
+        /** returns the color to be used for rendering the header background.
+
+            If this value is not set, a default color from the style settings will be used.
+        */
+        virtual ::boost::optional< ::Color >    getHeaderBackgroundColor() const = 0;
+
+        /** returns the color to be used for rendering the header text.
+
+            If this value is not set, a default color from the style settings will be used.
+        */
+        virtual ::boost::optional< ::Color >    getHeaderTextColor() const = 0;
+
+        /** returns the color to be used for rendering cell texts.
+
+            If this value is not set, a default color from the style settings will be used.
+        */
+        virtual ::boost::optional< ::Color >    getTextColor() const = 0;
+
+        /** returns the color to be used for text lines (underline, strikethrough) when rendering cell text.
+
+            If this value is not set, a default color from the style settings will be used.
+        */
+        virtual ::boost::optional< ::Color >    getTextLineColor() const = 0;
+
+        /** returns the colors to be used for the row backgrounds.
+
+            If this value is not set, every second row will have a background color derived from the style settings's
+            selection color, the other rows will not have a special background at all.
+
+            If this value is an empty sequence, the rows will not have a special background at all, instead the
+            normal background of the complete control will be used.
+
+            If value is a non-empty sequence, then rows will have the background colors as specified in the sequence,
+            in alternating order.
+        */
+        virtual ::boost::optional< ::std::vector< ::Color > >
+                                                getRowBackgroundColors() const = 0;
+
+        /** determines the vertical alignment of content within a cell
+        */
+        virtual ::com::sun::star::style::VerticalAlignment getVerticalAlign() const = 0;
+
+        /** returns an adapter to the sorting functionality of the model
+
+            It is legitimate to return <NULL/> here, in this case, the table model does not support sorting.
+        */
+        virtual ITableDataSort* getSortAdapter() = 0;
 
         /// destroys the table model instance
         virtual ~ITableModel() { }
