@@ -269,6 +269,19 @@ ScOptSolverDlg::ScOptSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pP
     mpOperator[3]    = &maLbOp4;
     mpDelButton[3]   = &maBtnDel4;
 
+    maRbMax.SetAccessibleRelationMemberOf(&maFtDirection);
+    maRbMin.SetAccessibleRelationMemberOf(&maFtDirection);
+    maRbValue.SetAccessibleRelationMemberOf(&maFtDirection);
+    maEdLeft2.SetAccessibleName(maFtCellRef.GetText());
+    maLbOp2.SetAccessibleName(maFtOperator.GetText());
+    maEdRight2.SetAccessibleName(maFtConstraint.GetText());
+    maEdLeft3.SetAccessibleName(maFtCellRef.GetText());
+    maLbOp3.SetAccessibleName(maFtOperator.GetText());
+    maEdRight3.SetAccessibleName(maFtConstraint.GetText());
+    maEdLeft4.SetAccessibleName(maFtCellRef.GetText());
+    maLbOp4.SetAccessibleName(maFtOperator.GetText());
+    maEdRight4.SetAccessibleName(maFtConstraint.GetText());
+
     Init( aCursorPos );
     FreeResource();
 }

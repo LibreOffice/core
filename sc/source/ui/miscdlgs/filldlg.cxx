@@ -65,6 +65,16 @@ ScFillSeriesDlg::ScFillSeriesDlg( Window*       pParent,
 
     :   ModalDialog     ( pParent, ScResId( RID_SCDLG_FILLSERIES ) ),
 
+        aFtStartVal     ( this, ScResId( FT_START_VALUE ) ),
+        aEdStartVal     ( this, ScResId( ED_START_VALUES ) ),
+        aStartStrVal    ( aStartStr),
+
+        aFtEndVal       ( this, ScResId( FT_END_VALUE ) ),
+        aEdEndVal       ( this, ScResId( ED_END_VALUES ) ),
+
+        aFtIncrement    ( this, ScResId( FT_INCREMENT ) ),
+        aEdIncrement    ( this, ScResId( ED_INCREMENT ) ),
+
         aFlDirection    ( this, ScResId( FL_DIRECTION ) ),
         aBtnDown        ( this, ScResId( BTN_BOTTOM ) ),
         aBtnRight       ( this, ScResId( BTN_RIGHT ) ),
@@ -82,14 +92,6 @@ ScFillSeriesDlg::ScFillSeriesDlg( Window*       pParent,
         aBtnDayOfWeek   ( this, ScResId( BTN_DAY_OF_WEEK ) ),
         aBtnMonth       ( this, ScResId( BTN_MONTH ) ),
         aBtnYear        ( this, ScResId( BTN_YEAR ) ),
-
-        aFtStartVal     ( this, ScResId( FT_START_VALUE ) ),
-        aEdStartVal     ( this, ScResId( ED_START_VALUES ) ),
-        aStartStrVal    ( aStartStr),
-        aFtEndVal       ( this, ScResId( FT_END_VALUE ) ),
-        aEdEndVal       ( this, ScResId( ED_END_VALUES ) ),
-        aFtIncrement    ( this, ScResId( FT_INCREMENT ) ),
-        aEdIncrement    ( this, ScResId( ED_INCREMENT ) ),
 
         aBtnOk          ( this, ScResId( BTN_OK ) ),
         aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),

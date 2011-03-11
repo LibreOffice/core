@@ -1,4 +1,4 @@
-scc	sccomp	:    l10n offuh comphelper LPSOLVE:lpsolve tools rsc LIBXSLT:libxslt NULL
+scc	sccomp	:    L10N:l10n offuh comphelper LPSOLVE:lpsolve tools rsc LIBXSLT:libxslt NULL
 scc	sccomp									usr1	-	all	scc_mkout NULL
 scc	sccomp\prj								get		-	all	scc_prj NULL
 scc	sccomp\source\solver					nmake	-	all	scc_solver NULL

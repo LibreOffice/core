@@ -126,6 +126,7 @@ class XclRoot;
 #define EXC_CHPROP_PERSPECTIVE              CREATE_OUSTRING( "Perspective" )
 #define EXC_CHPROP_POSITIVEERROR            CREATE_OUSTRING( "PositiveError" )
 #define EXC_CHPROP_RELATIVEPOSITION         CREATE_OUSTRING( "RelativePosition" )
+#define EXC_CHPROP_RELATIVESIZE             CREATE_OUSTRING( "RelativeSize" )
 #define EXC_CHPROP_RIGHTANGLEDAXES          CREATE_OUSTRING( "RightAngledAxes" )
 #define EXC_CHPROP_ROLE                     CREATE_OUSTRING( "Role" )
 #define EXC_CHPROP_ROTATIONHORIZONTAL       CREATE_OUSTRING( "RotationHorizontal" )

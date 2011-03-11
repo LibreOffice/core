@@ -185,6 +185,7 @@ ScDbNameDlg::ScDbNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
                         aBtnDoSize, aBtnKeepFmt, aBtnStripData, theCurArea );
     Init();
     FreeResource();
+    aRbAssign.SetAccessibleRelationMemberOf(&aFlAssign);
 }
 
 

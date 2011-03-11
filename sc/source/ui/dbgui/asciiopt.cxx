@@ -312,6 +312,10 @@ void ScAsciiOptions::ReadFromString( const String& rString )
         aToken = rString.GetToken(7, ',');
         bDetectSpecialNumber = aToken.EqualsAscii("true") ? true : false;
     }
+    else
+        bDetectSpecialNumber = sal_True;    // default of versions that didn't add the parameter
+
+    // 9th token is used for "Save as shown" in export options
 }
 
 
@@ -398,6 +402,8 @@ String ScAsciiOptions::WriteToString() const
 
     // Detect special nubmers.
     aOutStr += String::CreateFromAscii(bDetectSpecialNumber ? "true" : "false");
+
+    // 9th token is used for "Save as shown" in export options
 
     return aOutStr;
 }

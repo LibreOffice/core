@@ -209,8 +209,8 @@ void ScDPFunctionListBox::FillFunctionNames()
 // ============================================================================
 
 ScDPFunctionDlg::ScDPFunctionDlg(
-        Window* pParent, const ScDPLabelDataVec& rLabelVec,
-        const ScDPLabelData& rLabelData, const ScDPFuncData& rFuncData ) :
+        Window* pParent, const ScDPLabelDataVector& rLabelVec,
+        const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData ) :
     ModalDialog     ( pParent, ScResId( RID_SCDLG_DPDATAFIELD ) ),
     maFlFunc        ( this, ScResId( FL_FUNC ) ),
     maLbFunc        ( this, ScResId( LB_FUNC ) ),
@@ -267,7 +267,7 @@ DataPilotFieldReference ScDPFunctionDlg::GetFieldRef() const
     return aRef;
 }
 
-void ScDPFunctionDlg::Init( const ScDPLabelData& rLabelData, const ScDPFuncData& rFuncData )
+void ScDPFunctionDlg::Init( const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData )
 {
     // list box
     sal_uInt16 nFuncMask = (rFuncData.mnFuncMask == PIVOT_FUNC_NONE) ? PIVOT_FUNC_SUM : rFuncData.mnFuncMask;
@@ -291,7 +291,7 @@ void ScDPFunctionDlg::Init( const ScDPLabelData& rLabelData, const ScDPFuncData&
     maLbBaseField.SetSelectHdl( LINK( this, ScDPFunctionDlg, SelectHdl ) );
 
     // base field list box
-    for( ScDPLabelDataVec::const_iterator aIt = mrLabelVec.begin(), aEnd = mrLabelVec.end(); aIt != aEnd; ++aIt )
+    for( ScDPLabelDataVector::const_iterator aIt = mrLabelVec.begin(), aEnd = mrLabelVec.end(); aIt != aEnd; ++aIt )
         maLbBaseField.InsertEntry(aIt->getDisplayName());
 
     // base item list box
@@ -393,7 +393,7 @@ IMPL_LINK( ScDPFunctionDlg, DblClickHdl, MultiListBox*, EMPTYARG )
 // ============================================================================
 
 ScDPSubtotalDlg::ScDPSubtotalDlg( Window* pParent, ScDPObject& rDPObj,
-        const ScDPLabelData& rLabelData, const ScDPFuncData& rFuncData,
+        const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData,
         const ScDPNameVec& rDataFields, bool bEnableLayout ) :
     ModalDialog     ( pParent, ScResId( RID_SCDLG_PIVOTSUBT ) ),
     maFlSubt        ( this, ScResId( FL_FUNC ) ),
@@ -440,7 +440,7 @@ void ScDPSubtotalDlg::FillLabelData( ScDPLabelData& rLabelData ) const
     rLabelData.maShowInfo = maLabelData.maShowInfo;
 }
 
-void ScDPSubtotalDlg::Init( const ScDPLabelData& rLabelData, const ScDPFuncData& rFuncData )
+void ScDPSubtotalDlg::Init( const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData )
 {
     // field name
     maFtName.SetText(rLabelData.getDisplayName());
@@ -748,8 +748,11 @@ ScDPShowDetailDlg::ScDPShowDetailDlg( Window* pParent, ScDPObject& rDPObj, sal_u
                     if (pLayoutName)
                         aName = *pLayoutName;
                 }
-                maLbDims.InsertEntry( aName );
-                maNameIndexMap.insert(DimNameIndexMap::value_type(aName, nDim));
+                if ( aName.Len() )
+                {
+                    maLbDims.InsertEntry( aName );
+                    maNameIndexMap.insert(DimNameIndexMap::value_type(aName, nDim));
+                }
             }
         }
     }

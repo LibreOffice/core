@@ -2,7 +2,7 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * Copyright 2000, 2011 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
@@ -59,6 +59,7 @@
 #include "sheetevents.hxx"
 #include "globstr.hrc"
 #include "segmenttree.hxx"
+#include "dbcolect.hxx"
 
 #include <math.h>
 
@@ -2487,8 +2488,22 @@ sal_uLong ScTable::GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow, double fS
             {
                 if (nLastRow > nEndRow)
                     nLastRow = nEndRow;
-                sal_uInt32 nThisHeight = mpRowHeights->getSumValue(nRow, nLastRow);
-                nHeight += static_cast<sal_uLong>(nThisHeight * fScale);
+
+                // #i117315# can't use getSumValue, because individual values must be rounded
+                while (nRow <= nLastRow)
+                {
+                    ScFlatUInt16RowSegments::RangeData aData;
+                    if (!mpRowHeights->getRangeData(nRow, aData))
+                        return nHeight;   // shouldn't happen
+
+                    SCROW nSegmentEnd = std::min( nLastRow, aData.mnRow2 );
+
+                    // round-down a single height value, multiply resulting (pixel) values
+                    sal_uLong nOneHeight = static_cast<sal_uLong>( aData.mnValue * fScale );
+                    nHeight += nOneHeight * ( nSegmentEnd + 1 - nRow );
+
+                    nRow = nSegmentEnd + 1;
+                }
             }
             nRow = nLastRow + 1;
         }
@@ -2772,6 +2787,19 @@ void ScTable::ShowRows(SCROW nRow1, SCROW nRow2, bool bShow)
     DecRecalcLevel();
 }
 
+sal_Bool ScTable::IsDataFiltered() const
+{
+    sal_Bool bAnyQuery = sal_False;
+    ScDBData* pDBData = pDocument->GetFilterDBAtTable(nTab);
+    if ( pDBData )
+    {
+        ScQueryParam aParam;
+        pDBData->GetQueryParam( aParam );
+        if ( aParam.GetEntry(0).bDoQuery )
+            bAnyQuery = sal_True;
+    }
+    return bAnyQuery;
+}
 
 void ScTable::SetColFlags( SCCOL nCol, sal_uInt8 nNewFlags )
 {

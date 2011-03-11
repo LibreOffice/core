@@ -67,7 +67,7 @@ ScSheetDPData::ScSheetDPData( ScDocument* pD, const ScSheetSourceDesc& rDesc , l
     pSpecial(NULL),
     bIgnoreEmptyRows( sal_False ),
     bRepeatIfEmpty(sal_False),
-    aCacheTable( pD, rDesc.GetCacheId( pD, nCacheId))
+    aCacheTable( pD, GetCacheId() )     // base class ID is initialized with the GetCacheId call above
 {
     SCSIZE nEntryCount( aQuery.GetEntryCount());
     pSpecial = new sal_Bool[nEntryCount];
@@ -291,12 +291,10 @@ sal_uLong ScSheetSourceDesc::CheckValidate( ScDocument* pDoc ) const
     ScRange aSrcRange( aSourceRange);
     if ( !pDoc )
         return STR_ERR_DATAPILOTSOURCE;
-    for(sal_uInt16 i= aSrcRange.aStart.Col();i <= aSrcRange.aEnd.Col();i++)
-    {
-        if ( pDoc->IsBlockEmpty( aSrcRange.aStart.Tab(),
-            i, aSrcRange.aStart.Row(),i, aSrcRange.aStart.Row()))
-            return STR_PIVOT_FIRSTROWEMPTYERR;
-    }
+
+    // #i116457# Empty column titles were allowed before 3.3, and might be useful for hidden columns with annotations.
+    // Be compatible with 3.2: Allow empty titles, create columns with empty names, hide them in the dialogs.
+
     if( pDoc->IsBlockEmpty( aSrcRange.aStart.Tab(), aSrcRange.aStart.Col(), aSrcRange.aStart.Row()+1, aSrcRange.aEnd.Col(), aSrcRange.aEnd.Row() ) )
     {
         return STR_PIVOT_ONLYONEROWERR;

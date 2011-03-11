@@ -937,23 +937,28 @@ void ScDPTableDataCache::AddLabel(ScDPItemData *pData)
 
     //reset name if needed
     String strNewName = pData->aString;
-    sal_Bool bFound = sal_False;
-    long nIndex = 1;
-    do
+
+    // #i116457# don't modify empty column titles
+    if ( strNewName.Len() )
     {
-        for ( long i= mrLabelNames.size()-1; i>=0; i-- )
+        sal_Bool bFound = sal_False;
+        long nIndex = 1;
+        do
         {
-            if( mrLabelNames[i]->aString == strNewName )
+            for ( long i= mrLabelNames.size()-1; i>=0; i-- )
             {
-                strNewName  =  pData->aString;
-                strNewName += String::CreateFromInt32( nIndex );
-                nIndex ++ ;
-                bFound = sal_True;
+                if( mrLabelNames[i]->aString == strNewName )
+                {
+                    strNewName  =  pData->aString;
+                    strNewName += String::CreateFromInt32( nIndex );
+                    nIndex ++ ;
+                    bFound = sal_True;
+                }
             }
+            bFound = !bFound;
         }
-        bFound = !bFound;
+        while ( !bFound );
     }
-    while ( !bFound );
 
     pData->aString = strNewName;
     mrLabelNames.push_back( pData );
