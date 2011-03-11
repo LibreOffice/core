@@ -39,6 +39,7 @@
 #include "xmlcoli.hxx"
 #include "xmlsceni.hxx"
 #include "xmlexternaltabi.hxx"
+#include "xmlnexpi.hxx"
 #include "document.hxx"
 #include "docuno.hxx"
 #include "olinetab.hxx"
@@ -279,6 +280,22 @@ SvXMLImportContext *ScXMLTableContext::CreateChildContext( USHORT nPrefix,
 
     switch (nToken)
     {
+    case XML_TOK_TABLE_NAMED_EXPRESSIONS:
+    {
+        ScDocument* pDoc = GetScImport().GetDocument();
+        if (pDoc)
+        {
+            sal_Int32 nTab = GetScImport().GetTables().GetCurrentSheet();
+            ScRangeName* pRN = pDoc->GetRangeName(static_cast<SCTAB>(nTab));
+            if (pRN)
+            {
+                pContext = new ScXMLNamedExpressionsContext(
+                    GetScImport(), nPrefix, rLName, xAttrList,
+                    new ScXMLNamedExpressionsContext::SheetLocalInserter(pDoc, *pRN));
+            }
+        }
+    }
+        break;
     case XML_TOK_TABLE_COL_GROUP:
         pContext = new ScXMLTableColsContext( GetScImport(), nPrefix,
                                                    rLName, xAttrList,

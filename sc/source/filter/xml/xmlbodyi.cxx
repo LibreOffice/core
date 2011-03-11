@@ -201,8 +201,9 @@ SvXMLImportContext *ScXMLBodyContext::CreateChildContext( USHORT nPrefix,
         }
         break;
     case XML_TOK_BODY_NAMED_EXPRESSIONS:
-        pContext = new ScXMLNamedExpressionsContext ( GetScImport(), nPrefix, rLocalName,
-                                                        xAttrList );
+        pContext = new ScXMLNamedExpressionsContext (
+            GetScImport(), nPrefix, rLocalName, xAttrList,
+            new ScXMLNamedExpressionsContext::GlobalInserter(GetScImport()) );
         break;
     case XML_TOK_BODY_DATABASE_RANGES:
         pContext = new ScXMLDatabaseRangesContext ( GetScImport(), nPrefix, rLocalName,
