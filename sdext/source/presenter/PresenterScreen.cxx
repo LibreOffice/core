@@ -476,6 +476,13 @@ sal_Int32 PresenterScreen::GetPresenterScreenNumber (
         sal_Int32 nDisplayNumber (-1);
         if ( ! (xProperties->getPropertyValue(A2S("Display")) >>= nDisplayNumber))
             return -1;
+        if (nDisplayNumber == -1)
+        {
+            // The special value -1 indicates that the slide show
+            // spans all available displays.  That leaves no room for
+            // the presenter screen.
+            return -1;
+        }
 
         Reference<beans::XPropertySet> xDisplayProperties = GetDisplayAccess();
         if (nDisplayNumber > 0)
