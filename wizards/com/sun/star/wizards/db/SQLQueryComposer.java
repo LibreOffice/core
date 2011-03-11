@@ -239,11 +239,16 @@ public class SQLQueryComposer
 
     private PropertyValue[][] replaceConditionsByAlias(PropertyValue _filterconditions[][])
     {
+        XColumnsSupplier columnSup = UnoRuntime.queryInterface(XColumnsSupplier.class, m_xQueryAnalyzer);
+        XNameAccess columns = columnSup.getColumns();
         for (int n = 0; n < _filterconditions.length; n++)
         {
             for (int m = 0; m < _filterconditions[n].length; m++)
             {
                 _filterconditions[n][m].Name = getComposedAliasFieldName(_filterconditions[n][m].Name);
+                final String aliasName = getComposedAliasFieldName(_filterconditions[n][m].Name);
+                if ( columns.hasByName(aliasName))
+                    _filterconditions[n][m].Name = aliasName;
             }
         }
         return _filterconditions;
