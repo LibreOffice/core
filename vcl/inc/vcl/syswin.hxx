@@ -85,7 +85,7 @@ class TaskPaneList;
 #define WINDOWSTATE_STATE_MAXIMIZED_HORZ ((sal_uLong)0x00000010)
 #define WINDOWSTATE_STATE_MAXIMIZED_VERT ((sal_uLong)0x00000020)
 
-class VCL_DLLPUBLIC WindowStateData
+class VCL_PLUGIN_PUBLIC WindowStateData
 {
 private:
     sal_uInt32          mnValidMask;

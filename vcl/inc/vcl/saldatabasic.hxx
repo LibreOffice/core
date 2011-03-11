@@ -37,7 +37,7 @@ namespace psp
     class PrinterInfoManager;
 }
 
-class VCL_DLLPUBLIC SalData
+class VCL_PLUGIN_PUBLIC SalData
 {
 public:
     SalInstance*                  m_pInstance; // pointer to instance

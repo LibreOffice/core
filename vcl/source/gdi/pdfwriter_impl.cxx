@@ -54,6 +54,7 @@
 #include <vcl/metric.hxx>
 #include <vcl/fontsubset.hxx>
 #include <vcl/textlayout.hxx>
+#include <vcl/cvtgrf.hxx>
 #include <svsys.h>
 #include <vcl/salgdi.hxx>
 #include <vcl/svapp.hxx>
@@ -887,34 +888,44 @@ static void appendDouble( double fValue, OStringBuffer& rBuffer, sal_Int32 nPrec
 }
 
 
-static void appendColor( const Color& rColor, OStringBuffer& rBuffer )
+static void appendColor( const Color& rColor, OStringBuffer& rBuffer, bool bConvertToGrey = false )
 {
 
     if( rColor != Color( COL_TRANSPARENT ) )
     {
-        appendDouble( (double)rColor.GetRed() / 255.0, rBuffer );
-        rBuffer.append( ' ' );
-        appendDouble( (double)rColor.GetGreen() / 255.0, rBuffer );
-        rBuffer.append( ' ' );
-        appendDouble( (double)rColor.GetBlue() / 255.0, rBuffer );
+        if( bConvertToGrey )
+        {
+            sal_uInt8 cByte = rColor.GetLuminance();
+            appendDouble( (double)cByte / 255.0, rBuffer );
+        }
+        else
+        {
+            appendDouble( (double)rColor.GetRed() / 255.0, rBuffer );
+            rBuffer.append( ' ' );
+            appendDouble( (double)rColor.GetGreen() / 255.0, rBuffer );
+            rBuffer.append( ' ' );
+            appendDouble( (double)rColor.GetBlue() / 255.0, rBuffer );
+        }
     }
 }
 
-static void appendStrokingColor( const Color& rColor, OStringBuffer& rBuffer )
+void PDFWriterImpl::appendStrokingColor( const Color& rColor, OStringBuffer& rBuffer )
 {
     if( rColor != Color( COL_TRANSPARENT ) )
     {
-        appendColor( rColor, rBuffer );
-        rBuffer.append( " RG" );
+        bool bGrey = m_aContext.ColorMode == PDFWriter::DrawGreyscale;
+        appendColor( rColor, rBuffer, bGrey );
+        rBuffer.append( bGrey ? " G" : " RG" );
     }
 }
 
-static void appendNonStrokingColor( const Color& rColor, OStringBuffer& rBuffer )
+void PDFWriterImpl::appendNonStrokingColor( const Color& rColor, OStringBuffer& rBuffer )
 {
     if( rColor != Color( COL_TRANSPARENT ) )
     {
-        appendColor( rColor, rBuffer );
-        rBuffer.append( " rg" );
+        bool bGrey = m_aContext.ColorMode == PDFWriter::DrawGreyscale;
+        appendColor( rColor, rBuffer, bGrey );
+        rBuffer.append( bGrey ? " g" : " rg" );
     }
 }
 
@@ -2037,9 +2048,25 @@ inline void PDFWriterImpl::appendLiteralStringEncrypt( const rtl::OString& rInSt
     appendLiteralStringEncrypt( aBufferString, nInObjectNumber, rOutBuffer);
 }
 
-inline void PDFWriterImpl::appendLiteralStringEncrypt( const rtl::OUString& rInString, const sal_Int32 nInObjectNumber, rtl::OStringBuffer& rOutBuffer )
+void PDFWriterImpl::appendLiteralStringEncrypt( const rtl::OUString& rInString, const sal_Int32 nInObjectNumber, rtl::OStringBuffer& rOutBuffer, rtl_TextEncoding nEnc )
 {
-    rtl::OString aBufferString( rtl::OUStringToOString( rInString, RTL_TEXTENCODING_ASCII_US ) );
+    rtl::OString aBufferString( rtl::OUStringToOString( rInString, nEnc ) );
+    sal_Int32 nLen = aBufferString.getLength();
+    rtl::OStringBuffer aBuf( nLen );
+    const sal_Char* pT = aBufferString.getStr();
+
+    for( sal_Int32 i = 0; i < nLen; i++, pT++ )
+    {
+        if( (*pT & 0x80) == 0 )
+            aBuf.append( *pT );
+        else
+        {
+            aBuf.append( '<' );
+            appendHex( *pT, aBuf );
+            aBuf.append( '>' );
+        }
+    }
+    aBufferString = aBuf.makeStringAndClear();
     appendLiteralStringEncrypt( aBufferString, nInObjectNumber, rOutBuffer);
 }
 
@@ -2946,12 +2973,9 @@ bool PDFWriterImpl::emitTilings()
 
         aTilingObj.setLength( 0 );
 
-#if OSL_DEBUG_LEVEL > 1
-        {
-            OStringBuffer aLine( "PDFWriterImpl::emitTilings" );
-            emitComment( aLine.getStr() );
-        }
-#endif
+        #if OSL_DEBUG_LEVEL > 1
+        emitComment( "PDFWriterImpl::emitTilings" );
+        #endif
 
         sal_Int32 nX = (sal_Int32)it->m_aRectangle.Left();
         sal_Int32 nY = (sal_Int32)it->m_aRectangle.Top();
@@ -3439,10 +3463,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const ImplFont
 
                     // now we can actually write the font stream !
                     #if OSL_DEBUG_LEVEL > 1
-                    {
-                        OStringBuffer aLine( " PDFWriterImpl::emitEmbeddedFont" );
-                        emitComment( aLine.getStr() );
-                    }
+                    emitComment( " PDFWriterImpl::emitEmbeddedFont" );
                     #endif
                     OStringBuffer aLine( 512 );
                     nStreamObject = createObject();
@@ -3868,12 +3889,9 @@ sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8* pEncoding,
     delete pCodec;
 #endif
 
-#if OSL_DEBUG_LEVEL > 1
-    {
-        OStringBuffer aLine( " PDFWriterImpl::createToUnicodeCMap" );
-        emitComment( aLine.getStr() );
-    }
-#endif
+    #if OSL_DEBUG_LEVEL > 1
+    emitComment( "PDFWriterImpl::createToUnicodeCMap" );
+    #endif
     OStringBuffer aLine( 40 );
 
     aLine.append( nStream );
@@ -4060,10 +4078,7 @@ bool PDFWriterImpl::emitFonts()
                 CHECK_RETURN( (osl_File_E_None == osl_setFilePos( aFontFile, osl_Pos_Absolut, 0 ) ) );
 
                 #if OSL_DEBUG_LEVEL > 1
-                {
-                    OStringBuffer aLine1( " PDFWriterImpl::emitFonts" );
-                    emitComment( aLine1.getStr() );
-                }
+                emitComment( "PDFWriterImpl::emitFonts" );
                 #endif
                 sal_Int32 nFontStream = createObject();
                 sal_Int32 nStreamLengthObject = createObject();
@@ -4634,18 +4649,20 @@ we check in the following sequence:
             {
                 aLine.append( "/Launch/Win<</F" );
                 // INetURLObject is not good with UNC paths, use original path
-                appendLiteralStringEncrypt(  rLink.m_aURL, rLink.m_nObject, aLine );
+                appendLiteralStringEncrypt(  rLink.m_aURL, rLink.m_nObject, aLine, osl_getThreadTextEncoding() );
                 aLine.append( ">>" );
             }
             else
             {
-                sal_Int32 nSetRelative = 0;
+                bool bSetRelative = false;
+                bool bFileSpec = false;
 //check if relative file link is requested and if the protocol is 'file://'
                 if( m_aContext.RelFsys && eBaseProtocol == eTargetProtocol && eTargetProtocol == INET_PROT_FILE )
-                    nSetRelative++;
+                    bSetRelative = true;
 
                 rtl::OUString aFragment = aTargetURL.GetMark( INetURLObject::NO_DECODE /*DECODE_WITH_CHARSET*/ ); //fragment as is,
                 if( nSetGoToRMode == 0 )
+                {
                     switch( m_aContext.DefaultLinkAction )
                     {
                     default:
@@ -4665,19 +4682,24 @@ we check in the following sequence:
                                         eTargetProtocol != INET_PROT_FILE )
                             aLine.append( "/URI/URI" );
                         else
+                        {
                             aLine.append( "/Launch/F" );
+                            bFileSpec = true;
+                        }
                         break;
                     }
+                }
 //fragment are encoded in the same way as in the named destination processing
-                rtl::OUString aURLNoMark = aTargetURL.GetURLNoMark( INetURLObject::DECODE_WITH_CHARSET );
                 if( nSetGoToRMode )
                 {//add the fragment
+                    rtl::OUString aURLNoMark = aTargetURL.GetURLNoMark( INetURLObject::DECODE_WITH_CHARSET );
                     aLine.append("/GoToR");
                     aLine.append("/F");
-                    appendLiteralStringEncrypt( nSetRelative ? INetURLObject::GetRelURL( m_aContext.BaseURL, aURLNoMark,
+                    bFileSpec = true;
+                    appendLiteralStringEncrypt( bSetRelative ? INetURLObject::GetRelURL( m_aContext.BaseURL, aURLNoMark,
                                                                                          INetURLObject::WAS_ENCODED,
                                                                                          INetURLObject::DECODE_WITH_CHARSET ) :
-                                                                   aURLNoMark, rLink.m_nObject, aLine );
+                                                                   aURLNoMark, rLink.m_nObject, aLine, osl_getThreadTextEncoding() );
                     if( aFragment.getLength() > 0 )
                     {
                         aLine.append("/D/");
@@ -4696,13 +4718,16 @@ we check in the following sequence:
 //substitute the fragment
                         aTargetURL.SetMark( aLineLoc.getStr() );
                     }
-                    rtl::OUString aURL = aTargetURL.GetMainURL( (nSetRelative || eTargetProtocol == INET_PROT_FILE) ? INetURLObject::DECODE_WITH_CHARSET : INetURLObject::NO_DECODE );
+                    rtl::OUString aURL = aTargetURL.GetMainURL( bFileSpec ? INetURLObject::DECODE_WITH_CHARSET : INetURLObject::NO_DECODE );
 // check if we have a URL available, if the string is empty, set it as the original one
 //                 if( aURL.getLength() == 0 )
 //                     appendLiteralStringEncrypt( rLink.m_aURL , rLink.m_nObject, aLine );
 //                 else
-                        appendLiteralStringEncrypt( nSetRelative ? INetURLObject::GetRelURL( m_aContext.BaseURL, aURL ) :
-                                                                   aURL , rLink.m_nObject, aLine );
+                        appendLiteralStringEncrypt( bSetRelative ? INetURLObject::GetRelURL( m_aContext.BaseURL, aURL,
+                                                                                            INetURLObject::WAS_ENCODED,
+                                                                                            bFileSpec ? INetURLObject::DECODE_WITH_CHARSET : INetURLObject::NO_DECODE
+                                                                                            ) :
+                                                                   aURL , rLink.m_nObject, aLine, osl_getThreadTextEncoding() );
                 }
 //<--- i56629
             }
@@ -5358,12 +5383,9 @@ bool PDFWriterImpl::emitAppearances( PDFWidget& rWidget, OStringBuffer& rAnnotDi
                 pApppearanceStream->Seek( STREAM_SEEK_TO_BEGIN );
                 sal_Int32 nObject = createObject();
                 CHECK_RETURN( updateObject( nObject ) );
-#if OSL_DEBUG_LEVEL > 1
-                {
-                    OStringBuffer aLine( " PDFWriterImpl::emitAppearances" );
-                    emitComment( aLine.getStr() );
-                }
-#endif
+                #if OSL_DEBUG_LEVEL > 1
+                emitComment( "PDFWriterImpl::emitAppearances" );
+                #endif
                 OStringBuffer aLine;
                 aLine.append( nObject );
 
@@ -5606,7 +5628,7 @@ bool PDFWriterImpl::emitWidgetAnnotations()
                 {
                     // create a submit form action
                     aLine.append( "/AA<</D<</Type/Action/S/SubmitForm/F" );
-                    appendLiteralStringEncrypt( rWidget.m_aListEntries.front(), rWidget.m_nObject, aLine );
+                    appendLiteralStringEncrypt( rWidget.m_aListEntries.front(), rWidget.m_nObject, aLine, osl_getThreadTextEncoding() );
                     aLine.append( "/Flags " );
 
                     sal_Int32 nFlags = 0;
@@ -9251,12 +9273,9 @@ bool PDFWriterImpl::writeTransparentObject( TransparencyEmit& rObject )
     rObject.m_pContentStream->Seek( STREAM_SEEK_TO_END );
     sal_uLong nSize = rObject.m_pContentStream->Tell();
     rObject.m_pContentStream->Seek( STREAM_SEEK_TO_BEGIN );
-#if OSL_DEBUG_LEVEL > 1
-    {
-        OStringBuffer aLine( " PDFWriterImpl::writeTransparentObject" );
-        emitComment( aLine.getStr() );
-    }
-#endif
+    #if OSL_DEBUG_LEVEL > 1
+    emitComment( "PDFWriterImpl::writeTransparentObject" );
+    #endif
     OStringBuffer aLine( 512 );
     CHECK_RETURN( updateObject( rObject.m_nObject ) );
     aLine.append( rObject.m_nObject );
@@ -9400,28 +9419,25 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit& rObject )
     sal_Int32 nFunctionObject = createObject();
     CHECK_RETURN( updateObject( nFunctionObject ) );
 
-    OutputDevice* pRefDevice = getReferenceDevice();
-    pRefDevice->Push( PUSH_ALL );
-    if( rObject.m_aSize.Width() > pRefDevice->GetOutputSizePixel().Width() )
-        rObject.m_aSize.Width() = pRefDevice->GetOutputSizePixel().Width();
-    if( rObject.m_aSize.Height() > pRefDevice->GetOutputSizePixel().Height() )
-        rObject.m_aSize.Height() = pRefDevice->GetOutputSizePixel().Height();
-    pRefDevice->SetMapMode( MapMode( MAP_PIXEL ) );
-    pRefDevice->DrawGradient( Rectangle( Point( 0, 0 ), rObject.m_aSize ), rObject.m_aGradient );
+    VirtualDevice aDev;
+    aDev.SetOutputSizePixel( rObject.m_aSize );
+    aDev.SetMapMode( MapMode( MAP_PIXEL ) );
+    if( m_aContext.ColorMode == PDFWriter::DrawGreyscale )
+        aDev.SetDrawMode( aDev.GetDrawMode() |
+                          ( DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL | DRAWMODE_GRAYTEXT |
+                            DRAWMODE_GRAYBITMAP | DRAWMODE_GRAYGRADIENT ) );
+    aDev.DrawGradient( Rectangle( Point( 0, 0 ), rObject.m_aSize ), rObject.m_aGradient );
 
-    Bitmap aSample = pRefDevice->GetBitmap( Point( 0, 0 ), rObject.m_aSize );
+    Bitmap aSample = aDev.GetBitmap( Point( 0, 0 ), rObject.m_aSize );
     BitmapReadAccess* pAccess = aSample.AcquireReadAccess();
     AccessReleaser aReleaser( pAccess );
 
     Size aSize = aSample.GetSizePixel();
 
     sal_Int32 nStreamLengthObject = createObject();
-#if OSL_DEBUG_LEVEL > 1
-    {
-        OStringBuffer aLine( " PDFWriterImpl::writeGradientFunction" );
-        emitComment( aLine.getStr() );
-    }
-#endif
+    #if OSL_DEBUG_LEVEL > 1
+    emitComment( "PDFWriterImpl::writeGradientFunction" );
+    #endif
     OStringBuffer aLine( 120 );
     aLine.append( nFunctionObject );
     aLine.append( " 0 obj\n"
@@ -9434,6 +9450,7 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit& rObject )
     aLine.append( " ]\n"
                   "/BitsPerSample 8\n"
                   "/Range[ 0 1 0 1 0 1 ]\n"
+                  "/Order 3\n"
                   "/Length " );
     aLine.append( nStreamLengthObject );
     aLine.append( " 0 R\n"
@@ -9449,7 +9466,7 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit& rObject )
 
     checkAndEnableStreamEncryption( nFunctionObject );
     beginCompression();
-    for( int y = 0; y < aSize.Height(); y++ )
+    for( int y = aSize.Height()-1; y >= 0; y-- )
     {
         for( int x = 0; x < aSize.Width(); x++ )
         {
@@ -9500,8 +9517,6 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit& rObject )
                   "endobj\n\n" );
     CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
 
-    pRefDevice->Pop();
-
     return true;
 }
 
@@ -9530,12 +9545,9 @@ bool PDFWriterImpl::writeJPG( JPGEmit& rObject )
             m_aErrors.insert( PDFWriter::Warning_Transparency_Omitted_PDF13 );
 
     }
-#if OSL_DEBUG_LEVEL > 1
-    {
-        OStringBuffer aLine( " PDFWriterImpl::writeJPG" );
-        emitComment( aLine.getStr() );
-    }
-#endif
+    #if OSL_DEBUG_LEVEL > 1
+    emitComment( "PDFWriterImpl::writeJPG" );
+    #endif
 
     OStringBuffer aLine(200);
     aLine.append( rObject.m_nObject );
@@ -9655,26 +9667,32 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
     sal_Int32 nStreamLengthObject   = createObject();
     sal_Int32 nMaskObject           = 0;
 
-#if OSL_DEBUG_LEVEL > 1
-    {
-        OStringBuffer aLine( " PDFWriterImpl::writeBitmapObject" );
-        emitComment( aLine.getStr() );
-    }
-#endif
+    #if OSL_DEBUG_LEVEL > 1
+    emitComment( "PDFWriterImpl::writeBitmapObject" );
+    #endif
     OStringBuffer aLine(1024);
     aLine.append( rObject.m_nObject );
     aLine.append( " 0 obj\n"
                   "<</Type/XObject/Subtype/Image/Width " );
     aLine.append( (sal_Int32)aBitmap.GetSizePixel().Width() );
-    aLine.append( " /Height " );
+    aLine.append( "/Height " );
     aLine.append( (sal_Int32)aBitmap.GetSizePixel().Height() );
-    aLine.append( " /BitsPerComponent " );
+    aLine.append( "/BitsPerComponent " );
     aLine.append( nBitsPerComponent );
-    aLine.append( " /Length " );
+    aLine.append( "/Length " );
     aLine.append( nStreamLengthObject );
     aLine.append( " 0 R\n" );
 #ifndef DEBUG_DISABLE_PDFCOMPRESSION
-    aLine.append( "/Filter/FlateDecode" );
+    if( nBitsPerComponent != 1 )
+    {
+        aLine.append( "/Filter/FlateDecode" );
+    }
+    else
+    {
+        aLine.append( "/Filter/CCITTFaxDecode/DecodeParms<</K -1/BlackIs1 true/Columns " );
+        aLine.append( (sal_Int32)aBitmap.GetSizePixel().Width() );
+        aLine.append( ">>\n" );
+    }
 #endif
     if( ! bMask )
     {
@@ -9742,7 +9760,7 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
     {
         if( aBitmap.GetBitCount() == 1 )
         {
-            aLine.append( " /ImageMask true\n" );
+            aLine.append( "/ImageMask true\n" );
             sal_Int32 nBlackIndex = pAccess->GetBestPaletteIndex( BitmapColor( Color( COL_BLACK ) ) );
             DBG_ASSERT( nBlackIndex == 0 || nBlackIndex == 1, "wrong black index" );
             if( nBlackIndex )
@@ -9804,33 +9822,42 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
     CHECK_RETURN( (osl_File_E_None == osl_getFilePos( m_aFile, &nStartPos )) );
 
     checkAndEnableStreamEncryption( rObject.m_nObject );
-    beginCompression();
-    if( ! bTrueColor || pAccess->GetScanlineFormat() == BMP_FORMAT_24BIT_TC_RGB )
+#ifndef DEBUG_DISABLE_PDFCOMPRESSION
+    if( nBitsPerComponent == 1 )
     {
-        const int nScanLineBytes = 1 + ( pAccess->GetBitCount() * ( pAccess->Width() - 1 ) / 8U );
-
-        for( int i = 0; i < pAccess->Height(); i++ )
-        {
-            CHECK_RETURN( writeBuffer( pAccess->GetScanline( i ), nScanLineBytes ) );
-        }
+        writeG4Stream( pAccess );
     }
     else
+#endif
     {
-        const int nScanLineBytes = pAccess->Width()*3;
-        boost::shared_array<sal_uInt8> pCol( new sal_uInt8[ nScanLineBytes ] );
-        for( int y = 0; y < pAccess->Height(); y++ )
+        beginCompression();
+        if( ! bTrueColor || pAccess->GetScanlineFormat() == BMP_FORMAT_24BIT_TC_RGB )
         {
-            for( int x = 0; x < pAccess->Width(); x++ )
+            const int nScanLineBytes = 1 + ( pAccess->GetBitCount() * ( pAccess->Width() - 1 ) / 8U );
+
+            for( int i = 0; i < pAccess->Height(); i++ )
             {
-                BitmapColor aColor = pAccess->GetColor( y, x );
-                pCol[3*x+0] = aColor.GetRed();
-                pCol[3*x+1] = aColor.GetGreen();
-                pCol[3*x+2] = aColor.GetBlue();
+                CHECK_RETURN( writeBuffer( pAccess->GetScanline( i ), nScanLineBytes ) );
             }
-            CHECK_RETURN( writeBuffer( pCol.get(), nScanLineBytes ) );
         }
+        else
+        {
+            const int nScanLineBytes = pAccess->Width()*3;
+            boost::shared_array<sal_uInt8> pCol( new sal_uInt8[ nScanLineBytes ] );
+            for( int y = 0; y < pAccess->Height(); y++ )
+            {
+                for( int x = 0; x < pAccess->Width(); x++ )
+                {
+                    BitmapColor aColor = pAccess->GetColor( y, x );
+                    pCol[3*x+0] = aColor.GetRed();
+                    pCol[3*x+1] = aColor.GetGreen();
+                    pCol[3*x+2] = aColor.GetBlue();
+                }
+                CHECK_RETURN( writeBuffer( pCol.get(), nScanLineBytes ) );
+            }
+        }
+        endCompression();
     }
-    endCompression();
     disableStreamEncryption();
 
     sal_uInt64 nEndPos = 0;
@@ -9870,8 +9897,25 @@ void PDFWriterImpl::drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const 
     if( ! (rSizePixel.Width() && rSizePixel.Height()) )
         return;
 
-    SvMemoryStream* pStream = new SvMemoryStream;
     rDCTData.Seek( 0 );
+    if( bIsTrueColor && m_aContext.ColorMode == PDFWriter::DrawGreyscale )
+    {
+        // need to convert to grayscale;
+        // load stream to bitmap and draw the bitmap instead
+        Graphic aGraphic;
+        GraphicConverter::Import( rDCTData, aGraphic, CVT_JPG );
+        Bitmap aBmp( aGraphic.GetBitmap() );
+        if( !!rMask && rMask.GetSizePixel() == aBmp.GetSizePixel() )
+        {
+            BitmapEx aBmpEx( aBmp, rMask );
+            drawBitmap( rTargetArea.TopLeft(), rTargetArea.GetSize(), aBmpEx );
+        }
+        else
+            drawBitmap( rTargetArea.TopLeft(), rTargetArea.GetSize(), aBmp );
+        return;
+    }
+
+    SvMemoryStream* pStream = new SvMemoryStream;
     *pStream << rDCTData;
     pStream->Seek( STREAM_SEEK_TO_END );
 
@@ -9962,18 +10006,28 @@ void PDFWriterImpl::drawBitmap( const Point& rDestPoint, const Size& rDestSize, 
     writeBuffer( aLine.getStr(), aLine.getLength() );
 }
 
-const PDFWriterImpl::BitmapEmit& PDFWriterImpl::createBitmapEmit( const BitmapEx& rBitmap, bool bDrawMask )
+const PDFWriterImpl::BitmapEmit& PDFWriterImpl::createBitmapEmit( const BitmapEx& i_rBitmap, bool bDrawMask )
 {
+    BitmapEx aBitmap( i_rBitmap );
+    if( m_aContext.ColorMode == PDFWriter::DrawGreyscale )
+    {
+        BmpConversion eConv = BMP_CONVERSION_8BIT_GREYS;
+        int nDepth = aBitmap.GetBitmap().GetBitCount();
+        if( nDepth <= 4 )
+            eConv = BMP_CONVERSION_4BIT_GREYS;
+        if( nDepth > 1 )
+            aBitmap.Convert( eConv );
+    }
     BitmapID aID;
-    aID.m_aPixelSize        = rBitmap.GetSizePixel();
-    aID.m_nSize             = rBitmap.GetBitCount();
-    aID.m_nChecksum         = rBitmap.GetBitmap().GetChecksum();
+    aID.m_aPixelSize        = aBitmap.GetSizePixel();
+    aID.m_nSize             = aBitmap.GetBitCount();
+    aID.m_nChecksum         = aBitmap.GetBitmap().GetChecksum();
     aID.m_nMaskChecksum     = 0;
-    if( rBitmap.IsAlpha() )
-        aID.m_nMaskChecksum = rBitmap.GetAlpha().GetChecksum();
+    if( aBitmap.IsAlpha() )
+        aID.m_nMaskChecksum = aBitmap.GetAlpha().GetChecksum();
     else
     {
-        Bitmap aMask = rBitmap.GetMask();
+        Bitmap aMask = aBitmap.GetMask();
         if( ! aMask.IsEmpty() )
             aID.m_nMaskChecksum = aMask.GetChecksum();
     }
@@ -9987,7 +10041,7 @@ const PDFWriterImpl::BitmapEmit& PDFWriterImpl::createBitmapEmit( const BitmapEx
     {
         m_aBitmaps.push_front( BitmapEmit() );
         m_aBitmaps.front().m_aID        = aID;
-        m_aBitmaps.front().m_aBitmap    = rBitmap;
+        m_aBitmaps.front().m_aBitmap    = aBitmap;
         m_aBitmaps.front().m_nObject    = createObject();
         m_aBitmaps.front().m_bDrawMask  = bDrawMask;
         it = m_aBitmaps.begin();
@@ -10050,15 +10104,16 @@ sal_Int32 PDFWriterImpl::createGradient( const Gradient& rGradient, const Size& 
                                rSize ) );
     // check if we already have this gradient
     std::list<GradientEmit>::iterator it;
+    // rounding to point will generally lose some pixels
+    // round up to point boundary
+    aPtSize.Width()++;
+    aPtSize.Height()++;
     for( it = m_aGradients.begin(); it != m_aGradients.end(); ++it )
     {
         if( it->m_aGradient == rGradient )
         {
-            if( it->m_aSize.Width() < aPtSize.Width() )
-                it->m_aSize.Width() = aPtSize.Width();
-            if( it->m_aSize.Height() <= aPtSize.Height() )
-                it->m_aSize.Height() = aPtSize.Height();
-           break;
+            if( it->m_aSize == aPtSize )
+                break;
         }
     }
     if( it == m_aGradients.end() )
@@ -10133,12 +10188,12 @@ void PDFWriterImpl::drawGradient( const PolyPolygon& rPolyPoly, const Gradient& 
         return;
     }
 
-    sal_Int32 nGradient = createGradient( rGradient, rPolyPoly.GetBoundRect().GetSize() );
+    Rectangle aBoundRect = rPolyPoly.GetBoundRect();
+    sal_Int32 nGradient = createGradient( rGradient, aBoundRect.GetSize() );
 
     updateGraphicsState();
 
-    Rectangle aBoundRect = rPolyPoly.GetBoundRect();
-    Point aTranslate = aBoundRect.BottomLeft() + Point( 0, 1 );
+    Point aTranslate = aBoundRect.BottomLeft();
     int nPolygons = rPolyPoly.Count();
 
     OStringBuffer aLine( 80*nPolygons );

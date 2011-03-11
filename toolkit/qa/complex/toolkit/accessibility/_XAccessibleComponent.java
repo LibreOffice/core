@@ -25,9 +25,8 @@
  *
  ************************************************************************/
 
-package complex.toolkit;
+package complex.toolkit.accessibility;
 
-// import share.LogWriter;
 import com.sun.star.awt.Point;
 import com.sun.star.awt.Rectangle;
 import com.sun.star.awt.Size;

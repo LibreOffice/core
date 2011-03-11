@@ -1003,9 +1003,11 @@ Calendar_gregorian::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 
                 sprintf(aStr, "%02d", value);   // #100211# - checked
                 break;
             case CalendarDisplayCode::SHORT_YEAR:
-                // Take last 2 digits, or only one if vallue<10, for example,
+                // Take last 2 digits, or only one if value<10, for example,
                 // in case of the Gengou calendar.
-                if (value < 100)
+                // #i116701# For values in non-Gregorian era years use all
+                // digits.
+                if (value < 100 || eraArray)
                     sprintf(aStr, "%d", value); // #100211# - checked
                 else
                     sprintf(aStr, "%02d", value % 100); // #100211# - checked

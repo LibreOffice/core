@@ -56,6 +56,8 @@ struct ImplLineInfo
                         ImplLineInfo();
                         ImplLineInfo( const ImplLineInfo& rImplLineInfo );
 
+    bool operator==( const ImplLineInfo& ) const;
+
     friend SvStream&    operator>>( SvStream& rIStm, ImplLineInfo& rImplLineInfo );
     friend SvStream&    operator<<( SvStream& rOStm, const ImplLineInfo& rImplLineInfo );
 };

@@ -44,7 +44,7 @@ namespace vcl { class PrinterController; }
 // - SalPrinterQueueInfo -
 // -----------------------
 
-struct VCL_DLLPUBLIC SalPrinterQueueInfo
+struct VCL_PLUGIN_PUBLIC SalPrinterQueueInfo
 {
     XubString               maPrinterName;
     XubString               maDriver;
@@ -62,7 +62,7 @@ struct VCL_DLLPUBLIC SalPrinterQueueInfo
 // - SalInfoPrinter -
 // ------------------
 
-class VCL_DLLPUBLIC SalInfoPrinter
+class VCL_PLUGIN_PUBLIC SalInfoPrinter
 {
 public:
     std::vector< PaperInfo  >           m_aPaperFormats;    // all printer supported formats
@@ -104,7 +104,7 @@ public:
 // - SalPrinter -
 // --------------
 
-class VCL_DLLPUBLIC SalPrinter
+class VCL_PLUGIN_PUBLIC SalPrinter
 {
 public:                     // public for Sal Implementation
     SalPrinter() {}

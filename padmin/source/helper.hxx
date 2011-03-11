@@ -46,6 +46,13 @@
 #endif
 #include <vcl/combobox.hxx>
 
+#if defined SPA_DLLIMPLEMENTATION
+#define SPA_DLLPUBLIC SAL_DLLPUBLIC_EXPORT
+#else
+#define SPA_DLLPUBLIC SAL_DLLPUBLIC_IMPORT
+#endif
+
+
 class Config;
 
 #define PSPRINT_PPDDIR "driver"

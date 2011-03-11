@@ -29,6 +29,7 @@
 #include "svpbmp.hxx"
 
 #include <vcl/sysdata.hxx>
+#include <vcl/region.h>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/b2irange.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
@@ -152,11 +153,16 @@ void SvpSalGraphics::ResetClipRegion()
     m_aClipMap.reset();
 }
 
-void SvpSalGraphics::BeginSetClipRegion( sal_uLong n )
+bool SvpSalGraphics::setClipRegion( const Region& i_rClip )
 {
-    if( n <= 1 )
+    if( i_rClip.IsEmpty() )
+        m_aClipMap.reset();
+    else if( i_rClip.GetRectCount() == 1 )
     {
         m_aClipMap.reset();
+        Rectangle aBoundRect( i_rClip.GetBoundRect() );
+        m_aDevice = basebmp::subsetBitmapDevice( m_aOrigDevice,
+                                                 basegfx::B2IRange(aBoundRect.Left(),aBoundRect.Top(),aBoundRect.Right(),aBoundRect.Bottom()) );
     }
     else
     {
@@ -164,34 +170,22 @@ void SvpSalGraphics::BeginSetClipRegion( sal_uLong n )
         B2IVector aSize = m_aDevice->getSize();
         m_aClipMap = createBitmapDevice( aSize, false, Format::ONE_BIT_MSB_GREY );
         m_aClipMap->clear( basebmp::Color(0xFFFFFFFF) );
+
+        ImplRegionInfo aInfo;
+        long nX, nY, nW, nH;
+        bool bRegionRect = i_rClip.ImplGetFirstRect(aInfo, nX, nY, nW, nH );
+        while( bRegionRect )
+        {
+            if ( nW && nH )
+            {
+                B2DPolyPolygon aFull;
+                aFull.append( tools::createPolygonFromRect( B2DRectangle( nX, nY, nX+nW, nY+nH ) ) );
+                m_aClipMap->fillPolyPolygon( aFull, basebmp::Color(0), DrawMode_PAINT );
+            }
+            bRegionRect = i_rClip.ImplGetNextRect( aInfo, nX, nY, nW, nH );
+        }
     }
-}
-
-sal_Bool SvpSalGraphics::unionClipRegion( long nX, long nY, long nWidth, long nHeight )
-{
-    if( m_aClipMap )
-    {
-        B2DPolyPolygon aFull;
-        aFull.append( tools::createPolygonFromRect( B2DRectangle( nX, nY, nX+nWidth, nY+nHeight ) ) );
-        m_aClipMap->fillPolyPolygon( aFull, basebmp::Color(0), DrawMode_PAINT );
-    }
-    else
-    {
-        m_aDevice = basebmp::subsetBitmapDevice( m_aOrigDevice,
-                                                 basegfx::B2IRange(nX,nY,nX+nWidth,nY+nHeight) );
-    }
-
-    return sal_True;
-}
-
-bool SvpSalGraphics::unionClipRegion( const ::basegfx::B2DPolyPolygon& )
-{
-        // TODO: implement and advertise OutDevSupport_B2DClip support
-        return false;
-}
-
-void SvpSalGraphics::EndSetClipRegion()
-{
+    return true;
 }
 
 void SvpSalGraphics::SetLineColor()
