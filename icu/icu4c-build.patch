@@ -1,0 +1,117 @@
+--- misc/icu/source/common/putil.c	2008-07-01 03:41:12.000000000 +0200
++++ misc/build/icu/source/common/putil.c	2008-09-02 07:01:29.335795765 +0200
+@@ -52,7 +52,7 @@
+ Poorly upgraded Solaris machines can't have this defined.
+ Cleanly installed Solaris can use this #define.
+ */
+-#if !defined(_XOPEN_SOURCE_EXTENDED) && ((!defined(__STDC_VERSION__) || __STDC_VERSION__ >= 199901L) || defined(__xlc__))
++#if !defined(_XOPEN_SOURCE_EXTENDED) && ((!defined(__STDC_VERSION__) || __STDC_VERSION__ < 199901L) || defined(__xlc__))
+ #define _XOPEN_SOURCE_EXTENDED 1
+ #endif
+ 
+--- misc/icu/source/config/mh-darwin	Tue Jul  1 03:41:24 2008
++++ misc/build/icu/source/config/mh-darwin	Tue Jan 20 18:33:16 2009
+@@ -25,7 +25,7 @@
+ SHLIB.cc=	$(CXX) -dynamiclib -dynamic $(CXXFLAGS) $(LDFLAGS) $(LD_SOOPTIONS)
+ 
+ ## Compiler switches to embed a library name and version information
+-LD_SONAME = -Wl,-compatibility_version -Wl,$(SO_TARGET_VERSION_MAJOR) -Wl,-current_version -Wl,$(SO_TARGET_VERSION) -install_name $(notdir $(MIDDLE_SO_TARGET))
++LD_SONAME = -Wl,-compatibility_version -Wl,$(SO_TARGET_VERSION_MAJOR) -Wl,-current_version -Wl,$(SO_TARGET_VERSION) -install_name @executable_path/$(notdir $(FINAL_SO_TARGET))
+ 
+ ## Compiler switch to embed a runtime search path
+ LD_RPATH=
+@@ -41,10 +41,6 @@
+ ## Non-shared intermediate object suffix
+ STATIC_O = ao
+ 
+-## Override Versioned target for a shared library.
+-FINAL_SO_TARGET=  $(basename $(SO_TARGET)).$(SO_TARGET_VERSION).$(SO)
+-MIDDLE_SO_TARGET= $(basename $(SO_TARGET)).$(SO_TARGET_VERSION_MAJOR).$(SO)
+-
+ ## Compilation rules
+ %.$(STATIC_O): $(srcdir)/%.c
+ 	$(COMPILE.c) $(STATICCPPFLAGS) $(STATICCFLAGS) -o $@ $<
+@@ -76,16 +72,10 @@
+ 
+ ## Versioned libraries rules
+ 
+-%.$(SO_TARGET_VERSION_MAJOR).$(SO): %.$(SO_TARGET_VERSION).$(SO)
++%.$(SO).$(SO_TARGET_VERSION_MAJOR): %.$(SO).$(SO_TARGET_VERSION)
+ 	$(RM) $@ && ln -s ${<F} $@
+-%.$(SO): %.$(SO_TARGET_VERSION_MAJOR).$(SO)
+-	$(RM) $@ && ln -s ${*F}.$(SO_TARGET_VERSION).$(SO) $@
+-
+-# tzcode option
+-TZORIG_EXTRA_CFLAGS=-DSTD_INSPIRED
+-
+-# genren opts
+-GENREN_PL_OPTS=-x Mach-O -n '-g' -p '| c++filt'
++%.$(SO): %.$(SO).$(SO_TARGET_VERSION_MAJOR)
++	$(RM) $@ && ln -s ${*F}.$(SO).$(SO_TARGET_VERSION) $@
+ 
+ ## Remove shared library 's'
+ STATIC_PREFIX_WHEN_USED = 
+--- misc/icu/source/config/mh-linux	2007-12-12 19:57:36.000000000 +0100
++++ misc/build/icu/source/config/mh-linux	2008-05-21 18:59:13.000000000 +0200
+@@ -20,6 +20,11 @@
+ LD_RPATH= -Wl,-zorigin,-rpath,'$$'ORIGIN 
+ LD_RPATH_PRE = -Wl,-rpath,
+ 
++## Force RPATH=$ORIGIN to locate own dependencies w/o need for LD_LIBRARY_PATH
++## (incl. the C++ runtime libs potentially found in the URE lib dir):
++ENABLE_RPATH=YES
++RPATHLDFLAGS=${LD_RPATH_PRE}'$$ORIGIN:$$ORIGIN/../ure-link/lib'
++
+ ## These are the library specific LDFLAGS
+ LDFLAGSICUDT=-nodefaultlibs -nostdlib
+ 
+--- misc/icu/source/config/mh-solaris	2008-07-01 03:41:26.000000000 +0200
++++ misc/build/icu/source/config/mh-solaris	2009-02-17 11:54:45.105890123 +0100
+@@ -36,17 +36,21 @@
+ 
+ ## Commands to link
+ ## For Sun Workshop, use CC to link to bring in C++ runtime
+-LINK.c=		$(CXX) $(CXXFLAGS) $(LDFLAGS)
+-LINK.cc=	$(CXX) $(CXXFLAGS) $(LDFLAGS)
++LINK.c=		$(CXX) $(CXXFLAGS) $(LDFLAGS) -norunpath
++LINK.cc=	$(CXX) $(CXXFLAGS) $(LDFLAGS) -norunpath
+ 
+ ## Commands to make a shared library
+ SHLIB.c=	$(CC) $(CFLAGS) $(LDFLAGS) -G
+-SHLIB.cc=	$(CXX) $(CXXFLAGS) $(LDFLAGS) -G
++SHLIB.cc=	$(CXX) $(CXXFLAGS) $(LDFLAGS) -G -norunpath
+ 
+ ## Compiler switch to embed a runtime search path
+ LD_RPATH=       -R'$$'ORIGIN 
+ LD_RPATH_PRE=   -R
+ 
++## Force RPATH=$ORIGIN to locate own dependencies w/o need for LD_LIBRARY_PATH
++ENABLE_RPATH=YES
++RPATHLDFLAGS=${LD_RPATH}'$$ORIGIN'
++
+ #LIBRARY_PATH_PREFIX=/usr/lib/lwp:
+ 
+ ## Compiler switch to embed a library name
+--- misc/icu/source/layout/ArabicShaping.cpp	2008-07-01 03:42:04.000000000 +0200
++++ misc/build/icu/source/layout/ArabicShaping.cpp	2009-02-17 12:04:34.264869737 +0100
+@@ -79,7 +79,6 @@
+ #define markFeatureMask 0x00040000UL
+ #define mkmkFeatureMask 0x00020000UL
+ 
+-#define NO_FEATURES   0
+ #define ISOL_FEATURES (isolFeatureMask | ligaFeatureMask | msetFeatureMask | markFeatureMask | ccmpFeatureMask | rligFeatureMask | caltFeatureMask | dligFeatureMask | cswhFeatureMask | cursFeatureMask | kernFeatureMask | mkmkFeatureMask)
+ 
+ #define SHAPE_MASK 0xF0000000UL
+@@ -174,11 +173,7 @@
+         LEUnicode c = chars[in];
+         ShapeType t = getShapeType(c);
+ 
+-        if (t == ST_NOSHAPE_NONE) {
+-            glyphStorage.setAuxData(out, NO_FEATURES, success);
+-        } else {
+-            glyphStorage.setAuxData(out, ISOL_FEATURES, success);
+-        }
++        glyphStorage.setAuxData(out, ISOL_FEATURES, success);
+ 
+         if ((t & MASK_TRANSPARENT) != 0) {
+             continue;

@@ -45,9 +45,9 @@ TARFILE_ROOTDIR=icu
 #http://bugs.icu-project.org/trac/ticket/8320 for crash with FreeSerif
 
 PATCH_FILES=\
+    icu4c-build.patch \
     icu4c.8320.freeserif.crash.patch \
     icu4c-aix.patch
-#    ${TARFILE_NAME}.patch \
 
 .IF "$(GUI)"=="UNX"
 

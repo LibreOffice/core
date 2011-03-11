@@ -1,6 +1,6 @@
 --- misc/icu/source/layout/LookupProcessor.h	2011-02-03 09:20:27.657005678 +0000
 +++ misc/build/icu/source/layout/LookupProcessor.h	2011-02-03 09:25:34.498396208 +0000
-@@ -58,6 +58,7 @@
+@@ -65,6 +65,7 @@
      const FeatureListTable  *featureListTable;
 
      FeatureMask            *lookupSelectArray;
@@ -31,7 +31,9 @@
          lookupSelectArray[lookupListIndex] |= featureMask;
          lookupOrderArray[store++] = lookupListIndex;
      }
-@@ -124,5 +131,5 @@
+@@ -122,7 +129,7 @@
+         Offset scriptListOffset, Offset featureListOffset, Offset lookupListOffset,
+         LETag scriptTag, LETag languageTag, const FeatureMap *featureMap, le_int32 featureMapCount, le_bool orderFeatures,
          LEErrorCode& success)
 -    : lookupListTable(NULL), featureListTable(NULL), lookupSelectArray(NULL),
 +    : lookupListTable(NULL), featureListTable(NULL), lookupSelectArray(NULL), lookupSelectCount(0),
@@ -47,7 +49,7 @@
      le_int32 count, order = 0;
      le_int32 featureReferences = 0;
      const FeatureTable *featureTable = NULL;
-@@ -186,6 +197,10 @@
+@@ -186,6 +195,10 @@
          le_uint16 featureIndex = SWAPW(langSysTable->featureIndexArray[feature]);
 
          featureTable = featureListTable->getFeatureTable(featureIndex, &featureTag);
