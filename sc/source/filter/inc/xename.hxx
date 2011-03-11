@@ -51,7 +51,7 @@ public:
     void                Initialize();
 
     /** Inserts the Calc name with the passed index and returns the Excel NAME index. */
-    sal_uInt16          InsertName( USHORT nScNameIdx );
+    sal_uInt16          InsertName( SCTAB nTab, USHORT nScNameIdx );
     /** Inserts the Calc database range with the passed index and returns the Excel NAME index. */
     sal_uInt16          InsertDBRange( USHORT nScDBRangeIdx );
 

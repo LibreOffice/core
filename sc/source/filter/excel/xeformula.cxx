@@ -2049,8 +2049,13 @@ void XclExpFmlaCompImpl::ProcessExternalRangeRef( const XclExpScToken& rTokData 
 
 void XclExpFmlaCompImpl::ProcessDefinedName( const XclExpScToken& rTokData )
 {
+    SCTAB nTab = SCTAB_GLOBAL;
+    bool bGlobal = static_cast<bool>(rTokData.mpScToken->GetByte());
+    if (!bGlobal && mxData->mpScBasePos)
+        nTab = mxData->mpScBasePos->Tab();
+
     XclExpNameManager& rNameMgr = GetNameManager();
-    sal_uInt16 nNameIdx = rNameMgr.InsertName( rTokData.mpScToken->GetIndex() );
+    sal_uInt16 nNameIdx = rNameMgr.InsertName(nTab, rTokData.mpScToken->GetIndex());
     if( nNameIdx != 0 )
     {
         // global names always with tName token, local names dependent on config
