@@ -14,13 +14,9 @@
  
  # Certain files don't compile in -ansi mode (e.g. umutex.c, toolutil.c, and cdatatst.c)
  CFLAGS += -D_ALL_SOURCE
-@@ 11,17 +8,13 @@
- 
- ## Commands to generate dependency files
--GEN_DEPS.c=	$(CC) -E -MM $(DEFS) $(CPPFLAGS)
--GEN_DEPS.cc=	$(CXX) -E -MM $(DEFS) $(CPPFLAGS)
-+GEN_DEPS.c=  $(CC) -E -MM $(DEFS) $(CPPFLAGS)
-+GEN_DEPS.cc= $(CXX) -E -MM $(DEFS) $(CPPFLAGS)
+@@ -13,84 +10,30 @@
+ GEN_DEPS.c=	$(CC) -E -MM $(DEFS) $(CPPFLAGS)
+ GEN_DEPS.cc=	$(CXX) -E -MM $(DEFS) $(CPPFLAGS)
  
 -## Commands to link
 -## We need to use the C++ linker, even when linking C programs, since
@@ -32,8 +28,8 @@
 -LD_SOOPTIONS= -Wl,-bsymbolic
 -
 -## Commands to make a shared library
--SHLIB.c=    $(AIX_PREDELETE) $(CC) $(CFLAGS) $(LDFLAGS) -shared -Wl,-bexpall $(LD_OPTIONS)
--SHLIB.cc=   $(AIX_PREDELETE) $(CXX) $(CXXFLAGS) $(LDFLAGS) -shared -Wl,-bexpall $(LD_OPTIONS)
+-SHLIB.c=    $(AIX_PREDELETE) $(CC) $(CFLAGS) $(LDFLAGS) -shared -Wl,-bexpall $(LD_SOOPTIONS)
+-SHLIB.cc=   $(AIX_PREDELETE) $(CXX) $(CXXFLAGS) $(LDFLAGS) -shared -Wl,-bexpall $(LD_SOOPTIONS)
 +## Flags for position independent code
 +SHAREDLIBCFLAGS = -fPIC
 +SHAREDLIBCXXFLAGS = -fPIC
@@ -42,23 +38,15 @@
 +## Additional flags when building libraries and with threads
 +THREADSCPPFLAGS = -D_REENTRANT -D_THREAD_SAFE
 +LIBCPPFLAGS =
-@@ -28,40 +21,24 @@
  
  ## Compiler switch to embed a runtime search path
 -LD_RPATH=	-I
 -LD_RPATH_PRE=	
-+LD_RPATH=	
-+LD_RPATH_PRE =
- 
+-
 -## enable the shared lib loader
 -LDFLAGS += -Wl,-bbigtoc
-+## Force RPATH=$ORIGIN to locate own dependencies w/o need for LD_LIBRARY_PATH
-+## (incl. the C++ runtime libs potentially found in the URE lib dir):
-+#ENABLE_RPATH=YES
-+#RPATHLDFLAGS=${LD_RPATH_PRE}'$$ORIGIN:$$ORIGIN/../ure-link/lib'
-+
-+#SH#  ENABLE_RPATH=YES
-+#SH#  RPATHLDFLAGS="${LD_RPATH_PRE}'$$ORIGIN:$$ORIGIN/../ure-link/lib'"
++LD_RPATH=
++LD_RPATH_PRE=
  
  ## These are the library specific LDFLAGS
  LDFLAGSICUDT=-nodefaultlibs -nostdlib
@@ -92,20 +80,14 @@
 -
 -## The type of assembly needed when pkgdata is used for generating shared libraries.
 -GENCCODE_ASSEMBLY=-a xlc
-+## Compiler switch to embed a library name
-+# The initial tab in the next line is to prevent icu-config from reading it.
-+	#LD_SONAME = -Wl,-soname -Wl,$(notdir $(MIDDLE_SO_TARGET))
-+#SH# # We can't depend on MIDDLE_SO_TARGET being set.
-+#SH# LD_SONAME=
-@@ -68,29 +44,8 @@
-  
+-
  ## Shared object suffix
 -SOBJ=   so
 -# without the -brtl option, the library names use .a. AIX is funny that way.
 -SO=	a
 -A=	a
--
 +SO = so
+ 
  ## Non-shared intermediate object suffix
 -STATIC_O = o
 -
@@ -129,4 +111,3 @@
  
  ## Compilation rules
  %.$(STATIC_O): $(srcdir)/%.c
-
