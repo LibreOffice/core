@@ -48,7 +48,7 @@ gb_Helper_REPOSITORYNAMES :=
 
 .PHONY : $(WORKDIR)/Misc/PHONY
 $(gb_Helper_MISCDUMMY) :
-    @mkdir -p $(dir $@) && touch $@
+	@mkdir -p $(dir $@) && touch $@
 
 define gb_Helper_abbreviate_dirs
 R=$(REPODIR) && \
@@ -74,19 +74,19 @@ endef
 
 define gb_Helper_make_clean_targets
 $(foreach targettype,$(1),\
-    $(call gb_Helper_make_clean_target,$(targettype)))
+	$(call gb_Helper_make_clean_target,$(targettype)))
 
 endef
 
 define gb_Helper_make_outdir_clean_targets
 $(foreach targettype,$(1),\
-    $(call gb_Helper_make_outdir_clean_target,$(targettype)))
+	$(call gb_Helper_make_outdir_clean_target,$(targettype)))
 
 endef
 
 define gb_Helper_make_dep_targets
 $(foreach targettype,$(1),\
-    $(call gb_Helper_make_dep_target,$(targettype)))
+	$(call gb_Helper_make_dep_target,$(targettype)))
 
 endef
 
@@ -165,4 +165,4 @@ gb_StaticLibrary_$(1) += $(2)
 
 endef
 
-# vim: set noet sw=4 ts=4:
+# vim: set noet sw=4:

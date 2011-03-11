@@ -29,7 +29,7 @@
 # PackagePart class
 
 $(foreach destination,$(call gb_PackagePart_get_destinations), $(destination)/%) :
-    $(call gb_Deliver_deliver,$<,$@)
+	$(call gb_Deliver_deliver,$<,$@)
 
 define gb_PackagePart_PackagePart
 $(OUTDIR)/$(1) : $(2)
@@ -43,16 +43,16 @@ endef
 
 .PHONY : $(call gb_Package_get_clean_target,%)
 $(call gb_Package_get_clean_target,%) :
-    $(call gb_Output_announce,$*,$(false),PKG,2)
-    -$(call gb_Helper_abbreviate_dirs,\
-        rm -f $(FILES))
+	$(call gb_Output_announce,$*,$(false),PKG,2)
+	-$(call gb_Helper_abbreviate_dirs,\
+		rm -f $(FILES))
 
 $(call gb_Package_get_preparation_target,%) :
-    mkdir -p $(dir $@) && touch $@
+	mkdir -p $(dir $@) && touch $@
 
 $(call gb_Package_get_target,%) :
-    $(call gb_Output_announce,$*,$(true),PKG,2)
-    mkdir -p $(dir $@) && touch $@
+	$(call gb_Output_announce,$*,$(true),PKG,2)
+	mkdir -p $(dir $@) && touch $@
 
 
 define gb_Package_Package
@@ -77,4 +77,4 @@ $(call gb_CustomTarget_CustomTarget,$(2))
 
 endef
 
-# vim: set noet sw=4 ts=4:
+# vim: set noet sw=4:

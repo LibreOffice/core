@@ -30,27 +30,27 @@ gb_JavaClassSet_JAVACCOMMAND := $(JAVACOMPILER)
 
 define gb_JavaClassSet__command
 $(call gb_Helper_abbreviate_dirs_native,\
-    mkdir -p $(dir $(1)) && \
-    $(gb_JavaClassSet_JAVACCOMMAND) -cp "$(CLASSPATH)" -d $(call gb_JavaClassSet_get_classdir,$(2)) $(3) && \
-    touch $(1))
+	mkdir -p $(dir $(1)) && \
+	$(gb_JavaClassSet_JAVACCOMMAND) -cp "$(CLASSPATH)" -d $(call gb_JavaClassSet_get_classdir,$(2)) $(3) && \
+	touch $(1))
 
 endef
 
 define gb_JavaClassSet__rules
 $$(call gb_JavaClassSet_get_repo_target,$(1),%) :
-    $$(call gb_JavaClassSet__command,$$@,$$*,$$?)
+	$$(call gb_JavaClassSet__command,$$@,$$*,$$?)
 
 $$(call gb_JavaClassSet_get_target,%) : $$(call gb_JavaClassSet_get_repo_target,$(1),%)
-    $$(call gb_Output_announce,$$*,$$(true),JCS,3)
-    $$(call gb_Helper_abbreviate_dirs,\
-        touch $$@)
+	$$(call gb_Output_announce,$$*,$$(true),JCS,3)
+	$$(call gb_Helper_abbreviate_dirs,\
+		touch $$@)
 
 endef
 
 $(call gb_JavaClassSet_get_clean_target,%) :
-    $(call gb_Output_announce,$*,$(false),JCS,3)
-    $(call gb_Helper_abbreviate_dirs,\
-        rm -rf $(dir $(call gb_JavaClassSet_get_target,$*)))
+	$(call gb_Output_announce,$*,$(false),JCS,3)
+	$(call gb_Helper_abbreviate_dirs,\
+		rm -rf $(dir $(call gb_JavaClassSet_get_target,$*)))
 
 
 $(foreach reponame,$(gb_JavaClassSet_REPOSITORYNAMES),$(eval $(call gb_JavaClassSet__rules,$(reponame))))
@@ -64,7 +64,7 @@ endef
 
 define gb_JavaClassSet_add_sourcefile
 $(foreach reponame,$(gb_JavaClassSet_REPOSITORYNAMES),\
-    $(eval $(call gb_JavaClassSet_get_repo_target,$(reponame),$(1)) : $(call gb_JavaClassSet__get_sourcefile,$($(reponame)),$(2))))
+	$(eval $(call gb_JavaClassSet_get_repo_target,$(reponame),$(1)) : $(call gb_JavaClassSet__get_sourcefile,$($(reponame)),$(2))))
 
 endef
 
@@ -78,4 +78,4 @@ $(call gb_JavaClassSet_get_target,$(1)) : CLASSPATH := $(2)
 
 endef
 
-# vim: set noet sw=4 ts=4:
+# vim: set noet sw=4:

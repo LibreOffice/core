@@ -28,18 +28,18 @@
 $(eval $(call gb_Executable_Executable,EXEC))
 
 $(eval $(call gb_Executable_set_include,EXEC,\
-    $$(INCLUDE) \
+	$$(INCLUDE) \
 ))
 
 $(eval $(call gb_Executable_set_cxxflags,EXEC,\
-    $$(CXXFLAGS) \
+	$$(CXXFLAGS) \
 ))
 
 $(eval $(call gb_Executable_add_linked_libs,EXEC,\
-    $(gb_STDLIBS) \
+	$(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,EXEC,\
 ))
 
-# vim: set noet sw=4 ts=4:
+# vim: set noet sw=4:

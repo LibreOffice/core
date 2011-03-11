@@ -37,15 +37,15 @@ gb_CppunitTest__get_linktargetname = CppunitTest/$(call gb_CppunitTest_get_filen
 
 .PHONY : $(call gb_CppunitTest_get_clean_target,%)
 $(call gb_CppunitTest_get_clean_target,%) :
-    $(call gb_Helper_abbreviate_dirs,\
-        rm -f $(call gb_CppunitTest_get_target,$*) $(call gb_CppunitTest_get_target,$*).log)
+	$(call gb_Helper_abbreviate_dirs,\
+		rm -f $(call gb_CppunitTest_get_target,$*) $(call gb_CppunitTest_get_target,$*).log)
 
 .PHONY : $(call gb_CppunitTest_get_target,%)
 $(call gb_CppunitTest_get_target,%) : $(gb_CppunitTest_CPPTESTTARGET)
-    $(call gb_Output_announce,$*,$(true),CUT,2)
-    $(call gb_Helper_abbreviate_dirs_native,\
-        mkdir -p $(dir $@) && \
-        $(gb_CppunitTest_CPPTESTCOMMAND) $(call gb_LinkTarget_get_target,CppunitTest/$(call gb_CppunitTest_get_libfilename,$*)) > $@.log 2>&1 || (cat $@.log && false))
+	$(call gb_Output_announce,$*,$(true),CUT,2)
+	$(call gb_Helper_abbreviate_dirs_native,\
+		mkdir -p $(dir $@) && \
+		$(gb_CppunitTest_CPPTESTCOMMAND) $(call gb_LinkTarget_get_target,CppunitTest/$(call gb_CppunitTest_get_libfilename,$*)) > $@.log 2>&1 || (cat $@.log && false))
 
 define gb_CppunitTest_CppunitTest
 $(call gb_CppunitTest__CppunitTest_impl,$(1),$(call gb_CppunitTest__get_linktargetname,$(1)))
@@ -69,28 +69,28 @@ gb_CppunitTest_$(1) = $$(call gb_LinkTarget_$(1),$$(call gb_CppunitTest__get_lin
 endef
 
 $(eval $(foreach method,\
-    add_cobject \
-    add_cobjects \
-    add_cxxobject \
-    add_cxxobjects \
-    add_objcxxobject \
-    add_objcxxobjects \
-    add_exception_objects \
-    add_noexception_objects \
-    set_cflags \
-    set_cxxflags \
-    set_objcxxflags \
-    set_defs \
-    set_include \
-    set_ldflags \
-    set_library_path_flags \
-    add_linked_libs \
-    add_linked_static_libs \
-    add_package_headers \
-    add_sdi_headers \
-    add_precompiled_header \
+	add_cobject \
+	add_cobjects \
+	add_cxxobject \
+	add_cxxobjects \
+	add_objcxxobject \
+	add_objcxxobjects \
+	add_exception_objects \
+	add_noexception_objects \
+	set_cflags \
+	set_cxxflags \
+	set_objcxxflags \
+	set_defs \
+	set_include \
+	set_ldflags \
+	set_library_path_flags \
+	add_linked_libs \
+	add_linked_static_libs \
+	add_package_headers \
+	add_sdi_headers \
+	add_precompiled_header \
 ,\
-    $(call gb_CppunitTest__forward_to_Linktarget,$(method))\
+	$(call gb_CppunitTest__forward_to_Linktarget,$(method))\
 ))
 
-# vim: set noet sw=4 ts=4:
+# vim: set noet sw=4:

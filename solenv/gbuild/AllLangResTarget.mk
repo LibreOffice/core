@@ -37,19 +37,19 @@ gb_SrsPartMergeTarget_REPOS := $(gb_REPOS)
 define gb_SrsPartMergeTarget__command
 $(call gb_Output_announce,$(3),$(true),srs,1)
 $(call gb_Helper_abbreviate_dirs_native,\
-    mkdir -p $(dir $(1)) && \
-    $(gb_SrsPartMergeTarget_TRANSEXCOMMAND) \
-        -p $(firstword $(subst /, ,$(2))) \
-        -i $(3) \
-        -o $(1) \
-        -m $(SDF) \
-        -l all)
+	mkdir -p $(dir $(1)) && \
+	$(gb_SrsPartMergeTarget_TRANSEXCOMMAND) \
+		-p $(firstword $(subst /, ,$(2))) \
+		-i $(3) \
+		-o $(1) \
+		-m $(SDF) \
+		-l all)
 
 endef
 
 define gb_SrsPartMergeTarget__rules
 $$(call gb_SrsPartMergeTarget_get_target,%) : $(1)/% $$(gb_Helper_MISCDUMMY) | $$(gb_SrsPartMergeTarget_TRANSEXTARGET)
-    $$(if $$(SDF),$$(call gb_SrsPartMergeTarget__command,$$@,$$*,$$<),mkdir -p $$(dir $$@) && cp $$< $$@)
+	$$(if $$(SDF),$$(call gb_SrsPartMergeTarget__command,$$@,$$*,$$<),mkdir -p $$(dir $$@) && cp $$< $$@)
 
 endef
 
@@ -65,29 +65,29 @@ gb_SrsPartTarget_REPOS := $(gb_REPOS)
 
 define gb_SrsPartTarget__command
 $(call gb_Helper_abbreviate_dirs_native,\
-    mkdir -p $(dir $(1)) && \
-    RESPONSEFILE=`$(gb_MKTEMP)` && \
-    echo "-s \
-        $(INCLUDE) \
-        -I$(dir $(3)) \
-        $(DEFS) \
-        -fp=$(1) \
-        $(if $<,$<,$(MERGEDFILE))" > $${RESPONSEFILE} && \
-    $(gb_SrsPartTarget_RSCCOMMAND) -presponse @$${RESPONSEFILE} && \
-    rm -rf $${RESPONSEFILE})
+	mkdir -p $(dir $(1)) && \
+	RESPONSEFILE=`$(gb_MKTEMP)` && \
+	echo "-s \
+		$(INCLUDE) \
+		-I$(dir $(3)) \
+		$(DEFS) \
+		-fp=$(1) \
+		$(if $<,$<,$(MERGEDFILE))" > $${RESPONSEFILE} && \
+	$(gb_SrsPartTarget_RSCCOMMAND) -presponse @$${RESPONSEFILE} && \
+	rm -rf $${RESPONSEFILE})
 
 endef
 
 define gb_SrsPartTarget__rules
 $$(call gb_SrsPartTarget_get_target,%) : $(1)/% $$(gb_Helper_MISCDUMMY) | $$(gb_SrsPartTarget_RSCTARGET)
-    $$(call gb_SrsPartTarget__command_dep,$$*,$$<)
-    $$(call gb_SrsPartTarget__command,$$@,$$*,$$<)
+	$$(call gb_SrsPartTarget__command_dep,$$*,$$<)
+	$$(call gb_SrsPartTarget__command,$$@,$$*,$$<)
 
 ifeq ($(gb_FULLDEPS),$(true))
 $$(call gb_SrsPartTarget_get_dep_target,%) : $(1)/% $$(gb_Helper_MISCDUMMY)
-    $$(call gb_Helper_abbreviate_dirs,\
-        mkdir -p $$(dir $$@) && \
-        echo '$$(call gb_SrsPartTarget_get_target,$$*) : $$(gb_Helper_PHONY)' > $$@)
+	$$(call gb_Helper_abbreviate_dirs,\
+		mkdir -p $$(dir $$@) && \
+		echo '$$(call gb_SrsPartTarget_get_target,$$*) : $$(gb_Helper_PHONY)' > $$@)
 endif
 
 endef
@@ -96,7 +96,7 @@ $(foreach repo,$(gb_SrsPartTarget_REPOS),$(eval $(call gb_SrsPartTarget__rules,$
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_SrsPartTarget_get_dep_target,%) :
-    $(eval $(call gb_Output_error,Unable to find resource definition file $* in repositories: $(gb_SrsPartTarget_REPOS)))
+	$(eval $(call gb_Output_error,Unable to find resource definition file $* in repositories: $(gb_SrsPartTarget_REPOS)))
 endif
 
 
@@ -118,33 +118,33 @@ gb_SrsTarget_DEFAULTDEFS := $(gb_GLOBALDEFS)
 
 .PHONY : $(call gb_SrsTarget_get_clean_target,%)
 $(call gb_SrsTarget_get_clean_target,%) :
-    $(call gb_Output_announce,$*,$(false),SRS,1)
-    -$(call gb_Helper_abbreviate_dirs,\
-        rm -f $(call gb_SrsTarget_get_target,$*) \
-            $(call gb_SrsTarget_get_dep_target,$*) \
-            $(foreach part,$(PARTS),$(call gb_SrsPartTarget_get_target,$(part))) \
-            $(foreach part,$(PARTS),$(call gb_SrsPartTarget_get_dep_target,$(part))) \
-            $(foreach part,$(PARTS),$(call gb_SrsPartMergeTarget_get_target,$(part))))
+	$(call gb_Output_announce,$*,$(false),SRS,1)
+	-$(call gb_Helper_abbreviate_dirs,\
+		rm -f $(call gb_SrsTarget_get_target,$*) \
+			$(call gb_SrsTarget_get_dep_target,$*) \
+			$(foreach part,$(PARTS),$(call gb_SrsPartTarget_get_target,$(part))) \
+			$(foreach part,$(PARTS),$(call gb_SrsPartTarget_get_dep_target,$(part))) \
+			$(foreach part,$(PARTS),$(call gb_SrsPartMergeTarget_get_target,$(part))))
 
 ifeq ($(gb_FULLDEPS),$(true))
 define gb_SrsTarget__command_dep
 $(call gb_Output_announce,SRS:$(2),$(true),DEP,1)
 $(call gb_Helper_abbreviate_dirs,\
-    mkdir -p $(dir $(1)) && \
-    cat $(3) > $(1))
+	mkdir -p $(dir $(1)) && \
+	cat $(3) > $(1))
 endef
 endif
 
 $(call gb_SrsTarget_get_target,%) :
-    $(call gb_SrsTarget__command_dep,$(call gb_SrsTarget_get_dep_target,$*),$*,$(foreach part,$(PARTS),$(call gb_SrsPartTarget_get_dep_target,$(part))))
-    $(call gb_Output_announce,$*,$(true),SRS,1)
-    $(call gb_Helper_abbreviate_dirs,\
-        mkdir -p $(dir $@) && \
-        cat $^ > $@)
+	$(call gb_SrsTarget__command_dep,$(call gb_SrsTarget_get_dep_target,$*),$*,$(foreach part,$(PARTS),$(call gb_SrsPartTarget_get_dep_target,$(part))))
+	$(call gb_Output_announce,$*,$(true),SRS,1)
+	$(call gb_Helper_abbreviate_dirs,\
+		mkdir -p $(dir $@) && \
+		cat $^ > $@)
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_SrsTarget_get_dep_target,%) :
-    $(call gb_SrsTarget__command_dep,$@,$*,$^)
+	$(call gb_SrsTarget__command_dep,$@,$*,$^)
 endif
 
 define gb_SrsTarget_SrsTarget
@@ -202,38 +202,38 @@ gb_ResTarget_RSCCOMMAND := $(gb_SrsPartTarget_RSCCOMMAND)
 gb_ResTarget_DEFIMAGESLOCATION := $(SRCDIR)/default_images/
 
 $(call gb_ResTarget_get_clean_target,%) :
-    $(call gb_Output_announce,$*,$(false),RES,2)
-    $(call gb_Helper_abbreviate_dirs,\
-        rm -f $(call gb_ResTarget_get_target,$*) $(call gb_ResTarget_get_imagelist_target,$*) $(call gb_ResTarget_get_outdir_target,$*) $(call gb_ResTarget_get_outdir_imagelist_target,$*))
+	$(call gb_Output_announce,$*,$(false),RES,2)
+	$(call gb_Helper_abbreviate_dirs,\
+		rm -f $(call gb_ResTarget_get_target,$*) $(call gb_ResTarget_get_imagelist_target,$*) $(call gb_ResTarget_get_outdir_target,$*) $(call gb_ResTarget_get_outdir_imagelist_target,$*))
 
 $(call gb_ResTarget_get_target,%) : $(gb_Helper_MISCDUMMY) | $(gb_ResTarget_RSCTARGET)
-    $(call gb_Output_announce,$*,$(true),RES,2)
-    $(call gb_Helper_abbreviate_dirs_native,\
-        mkdir -p $(dir $@) $(OUTDIR)/bin \
-            $(dir $(call gb_ResTarget_get_imagelist_target,$*)) && \
-        RESPONSEFILE=`$(gb_MKTEMP)` && \
-        echo "-r -p \
-            -lg$(LANGUAGE) \
-            -fs=$@ \
-            -lip=$(realpath $(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/$(LIBRARY)) \
-            -lip=$(realpath $(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/imglst/$(LANGUAGE)) \
-            -lip=$(realpath $(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/imglst) \
-            -lip=$(realpath $(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/res/$(LANGUAGE)) \
-            -lip=$(realpath $(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/res) \
-            -lip=$(realpath $(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)) \
-            -lip=$(gb_ResTarget_DEFIMAGESLOCATION)res/$(LANGUAGE) \
-            -lip=$(gb_ResTarget_DEFIMAGESLOCATION)res \
-            -subMODULE=$(dir $(realpath $(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION))) \
-            -subGLOBALRES=$(gb_ResTarget_DEFIMAGESLOCATION)res \
-            -oil=$(dir $(call gb_ResTarget_get_imagelist_target,$*)) \
-            $(filter-out $(gb_Helper_MISCDUMMY),$^)" > $${RESPONSEFILE} && \
-        $(gb_ResTarget_RSCCOMMAND) @$${RESPONSEFILE} && \
-        rm -f $${RESPONSEFILE})
+	$(call gb_Output_announce,$*,$(true),RES,2)
+	$(call gb_Helper_abbreviate_dirs_native,\
+		mkdir -p $(dir $@) $(OUTDIR)/bin \
+			$(dir $(call gb_ResTarget_get_imagelist_target,$*)) && \
+		RESPONSEFILE=`$(gb_MKTEMP)` && \
+		echo "-r -p \
+			-lg$(LANGUAGE) \
+			-fs=$@ \
+			-lip=$(realpath $(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/$(LIBRARY)) \
+			-lip=$(realpath $(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/imglst/$(LANGUAGE)) \
+			-lip=$(realpath $(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/imglst) \
+			-lip=$(realpath $(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/res/$(LANGUAGE)) \
+			-lip=$(realpath $(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/res) \
+			-lip=$(realpath $(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)) \
+			-lip=$(gb_ResTarget_DEFIMAGESLOCATION)res/$(LANGUAGE) \
+			-lip=$(gb_ResTarget_DEFIMAGESLOCATION)res \
+			-subMODULE=$(dir $(realpath $(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION))) \
+			-subGLOBALRES=$(gb_ResTarget_DEFIMAGESLOCATION)res \
+			-oil=$(dir $(call gb_ResTarget_get_imagelist_target,$*)) \
+			$(filter-out $(gb_Helper_MISCDUMMY),$^)" > $${RESPONSEFILE} && \
+		$(gb_ResTarget_RSCCOMMAND) @$${RESPONSEFILE} && \
+		rm -f $${RESPONSEFILE})
 
 $(call gb_ResTarget_get_outdir_target,%) :
-    $(call gb_Helper_abbreviate_dirs,\
-        $(call gb_Deliver_deliver,$<,$@) && \
-        $(call gb_Deliver_deliver,$(dir $<)/$(notdir $(ILSTTARGET)),$(ILSTTARGET)))
+	$(call gb_Helper_abbreviate_dirs,\
+		$(call gb_Deliver_deliver,$<,$@) && \
+		$(call gb_Deliver_deliver,$(dir $<)/$(notdir $(ILSTTARGET)),$(ILSTTARGET)))
 
 define gb_ResTarget_ResTarget
 $(call gb_ResTarget_get_target,$(1)) : LIBRARY = $(2)
@@ -263,13 +263,13 @@ endef
 
 define gb_ResTarget_add_files
 $(foreach file,$(2),\
-    $(call gb_ResTarget_add_file,$(1),$(file)))
+	$(call gb_ResTarget_add_file,$(1),$(file)))
 
 endef
 
 define gb_ResTarget_add_srs
 $(foreach srs,$(2),\
-    $(call gb_ResTarget_add_one_srs,$(1),$(srs)))
+	$(call gb_ResTarget_add_one_srs,$(1),$(srs)))
 
 endef
 
@@ -288,36 +288,36 @@ gb_AllLangResTarget_LANGS := $(1)
 endef
 
 $(call gb_AllLangResTarget_get_clean_target,%) :
-    $(call gb_Helper_abbreviate_dirs,\
-        rm -f $(call gb_AllLangResTarget_get_target,$*))
+	$(call gb_Helper_abbreviate_dirs,\
+		rm -f $(call gb_AllLangResTarget_get_target,$*))
 
 $(call gb_AllLangResTarget_get_target,%) :
-    $(call gb_Helper_abbreviate_dirs,\
-        mkdir -p $(dir $@) && touch $@)
+	$(call gb_Helper_abbreviate_dirs,\
+		mkdir -p $(dir $@) && touch $@)
 
 define gb_AllLangResTarget_AllLangResTarget
 $(foreach lang,$(gb_AllLangResTarget_LANGS),\
-    $(call gb_ResTarget_ResTarget,$(1)$(lang),$(1),$(lang)))
+	$(call gb_ResTarget_ResTarget,$(1)$(lang),$(1),$(lang)))
 $$(eval $$(call gb_Module_register_target,$(call gb_AllLangResTarget_get_target,$(1)),$(call gb_AllLangResTarget_get_clean_target,$(1))))
 
 endef
 
 define gb_AllLangResTarget_add_one_srs
 $(foreach lang,$(gb_AllLangResTarget_LANGS),\
-    $(call gb_ResTarget_add_one_srs,$(1)$(lang),$(2)))
+	$(call gb_ResTarget_add_one_srs,$(1)$(lang),$(2)))
 
 endef
 
 define gb_AllLangResTarget_add_srs
 $(foreach srs,$(2),\
-    $(call gb_AllLangResTarget_add_one_srs,$(1),$(srs)))
+	$(call gb_AllLangResTarget_add_one_srs,$(1),$(srs)))
 
 endef
 
 define gb_AllLangResTarget_set_reslocation
 $(foreach lang,$(gb_AllLangResTarget_LANGS),\
-    $(call gb_ResTarget_set_reslocation,$(1)$(lang),$(2)))
+	$(call gb_ResTarget_set_reslocation,$(1)$(lang),$(2)))
 
 endef
 
-# vim: set noet sw=4 ts=4:
+# vim: set noet sw=4:

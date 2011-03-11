@@ -32,14 +32,14 @@
 
 .PHONY : $(call gb_Executable_get_clean_target,%)
 $(call gb_Executable_get_clean_target,%) :
-    $(call gb_Helper_abbreviate_dirs,\
-        rm -f $(call gb_Executable_get_target,$*) \
-            $(AUXTARGETS))
+	$(call gb_Helper_abbreviate_dirs,\
+		rm -f $(call gb_Executable_get_target,$*) \
+			$(AUXTARGETS))
 
 $(call gb_Executable_get_target,%) :
-    $(call gb_Helper_abbreviate_dirs,\
-        $(call gb_Deliver_deliver,$<,$@) \
-            $(foreach target,$(AUXTARGETS), && $(call gb_Deliver_deliver,$(dir $<)/$(notdir $(target)),$(target))))
+	$(call gb_Helper_abbreviate_dirs,\
+		$(call gb_Deliver_deliver,$<,$@) \
+			$(foreach target,$(AUXTARGETS), && $(call gb_Deliver_deliver,$(dir $<)/$(notdir $(target)),$(target))))
 
 define gb_Executable_Executable
 $(call gb_Executable__Executable_impl,$(1),Executable/$(1)$(gb_Executable_EXT))
@@ -63,29 +63,29 @@ gb_Executable_$(1) = $$(call gb_LinkTarget_$(1),Executable/$$(1)$$(gb_Executable
 endef
 
 $(eval $(foreach method,\
-    add_cobject \
-    add_cobjects \
-    add_cxxobject \
-    add_cxxobjects \
-    add_objcxxobject \
-    add_objcxxobjects \
-    add_exception_objects \
-    add_noexception_objects \
-    add_generated_exception_objects \
-    set_cflags \
-    set_cxxflags \
-    set_objcxxflags \
-    set_defs \
-    set_include \
-    set_ldflags \
-    set_library_path_flags \
-    add_linked_libs \
-    add_linked_static_libs \
-    add_package_headers \
-    add_sdi_headers \
-    add_precompiled_header \
+	add_cobject \
+	add_cobjects \
+	add_cxxobject \
+	add_cxxobjects \
+	add_objcxxobject \
+	add_objcxxobjects \
+	add_exception_objects \
+	add_noexception_objects \
+	add_generated_exception_objects \
+	set_cflags \
+	set_cxxflags \
+	set_objcxxflags \
+	set_defs \
+	set_include \
+	set_ldflags \
+	set_library_path_flags \
+	add_linked_libs \
+	add_linked_static_libs \
+	add_package_headers \
+	add_sdi_headers \
+	add_precompiled_header \
 ,\
-    $(call gb_Executable_forward_to_Linktarget,$(method))\
+	$(call gb_Executable_forward_to_Linktarget,$(method))\
 ))
 
-# vim: set noet sw=4 ts=4:
+# vim: set noet sw=4:

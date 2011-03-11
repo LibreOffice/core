@@ -39,7 +39,7 @@ gb_CObject_get_source = $(1)/$(2).c
 ifeq ($(gb_FULLDEPS),$(true))
 define gb_CObject__command_dep
 mkdir -p $(dir $(1)) && \
-    echo '$(call gb_CObject_get_target,$(2)) : $$(gb_Helper_PHONY)' > $(1)
+	echo '$(call gb_CObject_get_target,$(2)) : $$(gb_Helper_PHONY)' > $(1)
 
 endef
 else
@@ -48,11 +48,11 @@ endif
 
 define gb_CObject__rules
 $$(call gb_CObject_get_target,%) : $$(call gb_CObject_get_source,$(1),%)
-    $$(call gb_CObject__command,$$@,$$*,$$<,$$(DEFS),$$(CFLAGS),$$(INCLUDE))
+	$$(call gb_CObject__command,$$@,$$*,$$<,$$(DEFS),$$(CFLAGS),$$(INCLUDE))
 
 ifeq ($(gb_FULLDEPS),$(true))
 $$(call gb_CObject_get_dep_target,%) : $$(call gb_CObject_get_source,$(1),%)
-    $$(call gb_CObject__command_dep,$$@,$$*,$$<,$$(DEFS),$$(CFLAGS),$$(INCLUDE))
+	$$(call gb_CObject__command_dep,$$@,$$*,$$<,$$(DEFS),$$(CFLAGS),$$(INCLUDE))
 endif
 
 endef
@@ -60,7 +60,7 @@ endef
 $(foreach repo,$(gb_CObject_REPOS),$(eval $(call gb_CObject__rules,$(repo))))
 
 $(call gb_CObject_get_dep_target,%) :
-    $(eval $(call gb_Output_error,Unable to find plain C file $(call gb_CObject_get_source,,$*) in the repositories: $(gb_CObject_REPOS)))
+	$(eval $(call gb_Output_error,Unable to find plain C file $(call gb_CObject_get_source,,$*) in the repositories: $(gb_CObject_REPOS)))
 
 gb_CObject_CObject =
 
@@ -79,7 +79,7 @@ gb_CxxObject_get_source = $(1)/$(2).cxx
 ifeq ($(gb_FULLDEPS),$(true))
 define gb_CxxObject__command_dep
 mkdir -p $(dir $(1)) && \
-    echo '$(call gb_CxxObject_get_target,$(2)) : $$(gb_Helper_PHONY)' > $(1)
+	echo '$(call gb_CxxObject_get_target,$(2)) : $$(gb_Helper_PHONY)' > $(1)
 
 endef
 else
@@ -106,7 +106,7 @@ else
 $$(info No precompiled header available for $$*.)
 $$(info precompiled header flags (  ex) : $$(sort $$(PCH_CXXFLAGS) $$(PCH_DEFS) $$(gb_LinkTarget_EXCEPTIONFLAGS)))
 $$(info precompiled header flags (noex) : $$(sort $$(PCH_CXXFLAGS) $$(PCH_DEFS) $$(gb_LinkTarget_NOEXCEPTIONFLAGS)))
-$$(info .           object flags        : $$(sort $$(CXXFLAGS) $$(DEFS)))
+$$(info .		   object flags		: $$(sort $$(CXXFLAGS) $$(DEFS)))
 $$@ : PCHFLAGS := 
 endif
 endif
@@ -116,13 +116,13 @@ endef
 
 define gb_CxxObject__rules
 $$(call gb_CxxObject_get_target,%) : $$(call gb_CxxObject_get_source,$(1),%)
-    $$(eval $$(gb_CxxObject__set_pchflags))
-    $$(call gb_CxxObject__command,$$@,$$*,$$<)
+	$$(eval $$(gb_CxxObject__set_pchflags))
+	$$(call gb_CxxObject__command,$$@,$$*,$$<)
 
 ifeq ($(gb_FULLDEPS),$(true))
 $$(call gb_CxxObject_get_dep_target,%) : $$(call gb_CxxObject_get_source,$(1),%)
-    $$(eval $$(gb_CxxObject__set_pchflags))
-    $$(call gb_CxxObject__command_dep,$$@,$$*,$$<)
+	$$(eval $$(gb_CxxObject__set_pchflags))
+	$$(call gb_CxxObject__command_dep,$$@,$$*,$$<)
 endif
 
 endef
@@ -131,7 +131,7 @@ $(foreach repo,$(gb_CxxObject_REPOS),$(eval $(call gb_CxxObject__rules,$(repo)))
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_CxxObject_get_dep_target,%) :
-    $(eval $(call gb_Output_error,Unable to find C++ file $(call gb_CxxObject_get_source,,$*) in repositories: $(gb_CxxObject_REPOS)))
+	$(eval $(call gb_Output_error,Unable to find C++ file $(call gb_CxxObject_get_source,,$*) in repositories: $(gb_CxxObject_REPOS)))
 
 endif
 
@@ -150,21 +150,21 @@ gb_GenCxxObject_get_source = $(WORKDIR)/$(1).cxx
 ifeq ($(gb_FULLDEPS),$(true))
 define gb_GenCxxObject__command_dep
 mkdir -p $(dir $(1)) && \
-    echo '$(call gb_GenCxxObject_get_target,$(2)) : $$(gb_Helper_PHONY)' > $(1)
+	echo '$(call gb_GenCxxObject_get_target,$(2)) : $$(gb_Helper_PHONY)' > $(1)
 endef
 else
 gb_GenCxxObject__command_dep =
 endif
 
 $(call gb_GenCxxObject_get_target,%) : $(call gb_GenCxxObject_get_source,%)
-    $(call gb_CxxObject__command,$@,$*,$<)
+	$(call gb_CxxObject__command,$@,$*,$<)
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_GenCxxObject_get_dep_target,%) : $(call gb_GenCxxObject_get_source,%)
-    $(call gb_GenCxxObject__command_dep,$@,$*,$<)
+	$(call gb_GenCxxObject__command_dep,$@,$*,$<)
 
 $(call gb_GenCxxObject_get_dep_target,%) :
-    $(eval $(call gb_Output_error,Unable to find generated C++ file $(call gb_GenCxxObject_get_source,$*) in WORKDIR.))
+	$(eval $(call gb_Output_error,Unable to find generated C++ file $(call gb_GenCxxObject_get_source,$*) in WORKDIR.))
 endif
 
 gb_GenCxxObject_GenCxxObject =
@@ -183,7 +183,7 @@ gb_ObjCxxObject_get_source = $(1)/$(2).mm
 ifeq ($(gb_FULLDEPS),$(true))
 define gb_ObjCxxObject__command_dep
 mkdir -p $(dir $(1)) && \
-    echo '$(call gb_ObjCxxObject_get_target,$(2)) : $$(gb_Helper_PHONY)' > $(1)
+	echo '$(call gb_ObjCxxObject_get_target,$(2)) : $$(gb_Helper_PHONY)' > $(1)
 
 endef
 else
@@ -192,11 +192,11 @@ endif
 
 define gb_ObjCxxObject__rules
 $$(call gb_ObjCxxObject_get_target,%) : $$(call gb_ObjCxxObject_get_source,$(1),%)
-    $$(call gb_ObjCxxObject__command,$$@,$$*,$$<,$$(DEFS),$$(OBJCXXFLAGS),$$(INCLUDE_STL) $$(INCLUDE))
+	$$(call gb_ObjCxxObject__command,$$@,$$*,$$<,$$(DEFS),$$(OBJCXXFLAGS),$$(INCLUDE_STL) $$(INCLUDE))
 
 ifeq ($(gb_FULLDEPS),$(true))
 $$(call gb_ObjCxxObject_get_dep_target,%) : $$(call gb_ObjCxxObject_get_source,$(1),%)
-    $$(call gb_ObjCxxObject__command_dep,$$@,$$*,$$<,$$(DEFS),$$(OBJCXXFLAGS),$$(INCLUDE_STL) $$(INCLUDE))
+	$$(call gb_ObjCxxObject__command_dep,$$@,$$*,$$<,$$(DEFS),$$(OBJCXXFLAGS),$$(INCLUDE_STL) $$(INCLUDE))
 endif
 
 endef
@@ -205,7 +205,7 @@ $(foreach repo,$(gb_ObjCxxObject_REPOS),$(eval $(call gb_ObjCxxObject__rules,$(r
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_ObjCxxObject_get_dep_target,%) :
-    $(eval $(call gb_Output_error,Unable to find Objective C++ file $(call gb_ObjCxxObject_get_source,,$*) in repositories: $(gb_ObjCxxObject_REPOS)))
+	$(eval $(call gb_Output_error,Unable to find Objective C++ file $(call gb_ObjCxxObject_get_source,,$*) in repositories: $(gb_ObjCxxObject_REPOS)))
 endif
 
 gb_ObjCxxObject_ObjCxxObject =
@@ -223,49 +223,49 @@ gb_LinkTarget_DEFAULTDEFS := $(gb_GLOBALDEFS)
 
 .PHONY : $(call gb_LinkTarget_get_clean_target,%)
 $(call gb_LinkTarget_get_clean_target,%) :
-    $(call gb_Output_announce,$*,$(false),LNK,4)
-    RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),200,\
-        $(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
-        $(foreach object,$(COBJECTS),$(call gb_CObject_get_dep_target,$(object))) \
-        $(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
-        $(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_dep_target,$(object))) \
-        $(foreach object,$(OBJCXXOBJECTS),$(call gb_ObjCxxObject_get_target,$(object))) \
-        $(foreach object,$(OBJCXXOBJECTS),$(call gb_ObjCxxObject_get_dep_target,$(object))) \
-        $(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
-        $(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_dep_target,$(object))) \
-        $(call gb_LinkTarget_get_target,$*) \
-        $(call gb_LinkTarget_get_dep_target,$*) \
-        $(call gb_LinkTarget_get_headers_target,$*) \
-        $(call gb_LinkTarget_get_external_headers_target,$*) \
-        $(DLLTARGET) \
-        $(AUXTARGETS)) && \
-    cat $${RESPONSEFILE} |xargs -n 200 rm -f && \
-    rm -f $${RESPONSEFILE}
+	$(call gb_Output_announce,$*,$(false),LNK,4)
+	RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),200,\
+		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
+		$(foreach object,$(COBJECTS),$(call gb_CObject_get_dep_target,$(object))) \
+		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
+		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_dep_target,$(object))) \
+		$(foreach object,$(OBJCXXOBJECTS),$(call gb_ObjCxxObject_get_target,$(object))) \
+		$(foreach object,$(OBJCXXOBJECTS),$(call gb_ObjCxxObject_get_dep_target,$(object))) \
+		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
+		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_dep_target,$(object))) \
+		$(call gb_LinkTarget_get_target,$*) \
+		$(call gb_LinkTarget_get_dep_target,$*) \
+		$(call gb_LinkTarget_get_headers_target,$*) \
+		$(call gb_LinkTarget_get_external_headers_target,$*) \
+		$(DLLTARGET) \
+		$(AUXTARGETS)) && \
+	cat $${RESPONSEFILE} |xargs -n 200 rm -f && \
+	rm -f $${RESPONSEFILE}
 
 
 # cat the deps of all objects in one file, then we need only open that one file
 define gb_LinkTarget__command_dep
 $(call gb_Output_announce,LNK:$(2),$(true),DEP,1)
 $(call gb_Helper_abbreviate_dirs,\
-    mkdir -p $(dir $(1)) && \
-    RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),200,\
-        $(foreach object,$(3),$(call gb_CObject_get_dep_target,$(object))) \
-        $(foreach object,$(4),$(call gb_CxxObject_get_dep_target,$(object))) \
-        $(foreach object,$(5),$(call gb_ObjCxxObject_get_dep_target,$(object)))\
-         $(foreach object,$(6),$(call gb_GenCxxObject_get_dep_target,$(object)))\
-        ) && \
-    cat $${RESPONSEFILE} |xargs -n 200 cat > $(1)) && \
-    rm -f $${RESPONSEFILE}
+	mkdir -p $(dir $(1)) && \
+	RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),200,\
+		$(foreach object,$(3),$(call gb_CObject_get_dep_target,$(object))) \
+		$(foreach object,$(4),$(call gb_CxxObject_get_dep_target,$(object))) \
+		$(foreach object,$(5),$(call gb_ObjCxxObject_get_dep_target,$(object)))\
+		 $(foreach object,$(6),$(call gb_GenCxxObject_get_dep_target,$(object)))\
+		) && \
+	cat $${RESPONSEFILE} |xargs -n 200 cat > $(1)) && \
+	rm -f $${RESPONSEFILE}
 
 endef
 
 $(call gb_LinkTarget_get_target,%) : $(call gb_LinkTarget_get_headers_target,%) $(gb_Helper_MISCDUMMY)
-    $(call gb_LinkTarget__command,$@,$*)
+	$(call gb_LinkTarget__command,$@,$*)
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_target,%) : $(call gb_LinkTarget_get_dep_target,%)
 $(call gb_LinkTarget_get_dep_target,%) : | $(call gb_LinkTarget_get_headers_target,%)
-    $(call gb_LinkTarget__command_dep,$@,$*,$(COBJECTS),$(CXXOBJECTS),$(OBJCXXOBJECTS),$(GENCXXOBJECTS))
+	$(call gb_LinkTarget__command_dep,$@,$*,$(COBJECTS),$(CXXOBJECTS),$(OBJCXXOBJECTS),$(GENCXXOBJECTS))
 endif
 
 # Ok, this is some dark voodoo: When declaring a linktarget with
@@ -287,12 +287,12 @@ $$@ : COMMAND := $$(call gb_Helper_abbreviate_dirs, mkdir -p $$(dir $$@) && touc
 endef
 
 $(call gb_LinkTarget_get_external_headers_target,%) :
-    $(eval $(gb_LinkTarget__get_external_headers_check))
-    $(COMMAND)
+	$(eval $(gb_LinkTarget__get_external_headers_check))
+	$(COMMAND)
 
 $(call gb_LinkTarget_get_headers_target,%) : $(call gb_LinkTarget_get_external_headers_target,%)
-    $(call gb_Helper_abbreviate_dirs,\
-        mkdir -p $(dir $@) && touch $@)
+	$(call gb_Helper_abbreviate_dirs,\
+		mkdir -p $(dir $@) && touch $@)
 
 # Explanation of some of the targets:
 # - gb_LinkTarget_get_external_headers_target is the targets that guarantees all
@@ -623,8 +623,8 @@ $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : PCH_DEFS = $$(DEFS)
 ifeq ($(gb_FULLDEPS),$(true))
 -include \
-    $(call gb_PrecompiledHeader_get_dep_target,$(3)) \
-    $(call gb_NoexPrecompiledHeader_get_dep_target,$(3))
+	$(call gb_PrecompiledHeader_get_dep_target,$(3)) \
+	$(call gb_NoexPrecompiledHeader_get_dep_target,$(3))
 $(call gb_LinkTarget_get_dep_target,$(1)) : DEFS := $$(DEFS) -DPRECOMPILED_HEADERS
 $(call gb_LinkTarget_get_dep_target,$(1)) : PCH_DEFS = $$(DEFS)
 endif
@@ -638,4 +638,4 @@ endif
 
 endef
 
-# vim: set noet sw=4 ts=4:
+# vim: set noet sw=4:

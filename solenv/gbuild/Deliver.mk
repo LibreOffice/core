@@ -66,7 +66,7 @@ deliverlog : COMMAND := \
  mkdir -p $$(OUTDIR)/inc/$$(strip $$(gb_Module_ALLMODULES)) \
  && RESPONSEFILE=$$(call var2file,$(shell $(gb_MKTEMP)),100,$$(sort $$(gb_Deliver_DELIVERABLES))) \
  && $(gb_AWK) -f $$(GBUILDDIR)/processdelivered.awk < $$$${RESPONSEFILE} \
-        > $$(OUTDIR)/inc/$$(strip $(gb_Module_ALLMODULES))/gb_deliver.log \
+		> $$(OUTDIR)/inc/$$(strip $(gb_Module_ALLMODULES))/gb_deliver.log \
  && rm -f $$$${RESPONSEFILE}
 else
 $$(eval $$(call gb_Output_announce,more than one module - creating no deliver.log,$$(true),LOG,1))
@@ -78,8 +78,8 @@ endef
 # deliver.log format is broken in that case anyway
 .PHONY : deliverlog showdeliverables
 deliverlog:
-    $(eval $(call gb_Deliver_setdeliverlogcommand))
-    $(call gb_Helper_abbreviate_dirs, $(COMMAND))
+	$(eval $(call gb_Deliver_setdeliverlogcommand))
+	$(call gb_Helper_abbreviate_dirs, $(COMMAND))
 
 # all : deliverlog
 
@@ -88,8 +88,8 @@ $(info $(1) $(patsubst $(OUTDIR)/%,%,$(2)))
 endef
 
 showdeliverables :
-    $(eval MAKEFLAGS := s)
-    $(foreach deliverable,$(sort $(gb_Deliver_DELIVERABLES)),\
-            $(call gb_Deliver_print_deliverable,$(REPODIR)/$(firstword $(subst :, ,$(deliverable))),$(REPODIR)/$(lastword $(subst :, ,$(deliverable)))))
-    true
-# vim: set noet sw=4 ts=4:
+	$(eval MAKEFLAGS := s)
+	$(foreach deliverable,$(sort $(gb_Deliver_DELIVERABLES)),\
+			$(call gb_Deliver_print_deliverable,$(REPODIR)/$(firstword $(subst :, ,$(deliverable))),$(REPODIR)/$(lastword $(subst :, ,$(deliverable)))))
+	true
+# vim: set noet sw=4:

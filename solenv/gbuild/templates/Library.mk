@@ -44,19 +44,19 @@ $(eval $(call gb_Library_set_componentfile,LIB,MODULE/COMPONENT_FILE))
 
 # add any additional include paths for this library here
 $(eval $(call gb_Library_set_include,LIB,\
-    $$(INCLUDE) \
+	$$(INCLUDE) \
 ))
 
 # add any additional definitions to be set for compilation here
 # (e.g. -DLIB_DLLIMPLEMENTATION)
 $(eval $(call gb_Library_set_defs,LIB,\
-    $$(DEFS) \
+	$$(DEFS) \
 ))
 
 # add libraries to be linked to LIB; again these names need to be given as
 # specified in Repository.mk
 $(eval $(call gb_Library_add_linked_libs,LIB,\
-    $(gb_STDLIBS) \
+	$(gb_STDLIBS) \
 ))
 
 # add all source files that shall be compiled with exceptions enabled
@@ -71,16 +71,16 @@ $(eval $(call gb_SdiTarget_SdiTarget,MODULE/sdi/ROOT_SDI_FILE,MODULE/sdi/LIB))
 
 # add any additional include paths for sdi processing here
 $(eval $(call gb_SdiTarget_set_include,MODULE/sdi/ROOT_SDI_FILE,\
-    $$(INCLUDE) \
+	$$(INCLUDE) \
 ))
 
 # this is an example how files can be added that require special compiler settings, e.g. building without optimizing
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_add_cxxobjects,LIB,\
-    MODULE/source/foo/bar \
-    , $(gb_COMPILERNOOPTFLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS) \
+	MODULE/source/foo/bar \
+	, $(gb_COMPILERNOOPTFLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS) \
 ))
 
 endif
 
-# vim: set noet sw=4 ts=4:
+# vim: set noet sw=4:

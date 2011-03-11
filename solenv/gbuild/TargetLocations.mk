@@ -99,36 +99,36 @@ $(patsubst $(1):%,$(WORKDIR)/Headers/StaticLibrary/%,$(filter $(1):%,$(gb_Static
 endef
 
 $(eval $(call gb_Helper_make_clean_targets,\
-    AllLangResTarget \
-    ComponentTarget \
-    JavaClassSet \
-    JunitTest \
-    LinkTarget \
-    Module \
-    NoexPrecompiledHeader \
-    PackagePart \
-    PrecompiledHeader \
-    ResTarget \
-    SdiTarget \
-    SrsTarget \
-    CppunitTest \
-    CustomTarget \
+	AllLangResTarget \
+	ComponentTarget \
+	JavaClassSet \
+	JunitTest \
+	LinkTarget \
+	Module \
+	NoexPrecompiledHeader \
+	PackagePart \
+	PrecompiledHeader \
+	ResTarget \
+	SdiTarget \
+	SrsTarget \
+	CppunitTest \
+	CustomTarget \
 ))
 
 $(eval $(call gb_Helper_make_outdir_clean_targets,\
-    Executable \
-    Library \
-    Package \
-    StaticLibrary \
+	Executable \
+	Library \
+	Package \
+	StaticLibrary \
 ))
 
 $(eval $(call gb_Helper_make_dep_targets,\
-    CObject \
-    CxxObject \
-    ObjCxxObject \
-    LinkTarget \
-    SrsPartTarget \
-    SrsTarget \
+	CObject \
+	CxxObject \
+	ObjCxxObject \
+	LinkTarget \
+	SrsPartTarget \
+	SrsTarget \
 ))
 # needs to use same dep target because we use gb_CxxObject__command
 gb_GenCxxObject_get_dep_target = $(gb_CxxObject_get_dep_target)
@@ -159,4 +159,4 @@ gb_Library_DLLDIR = $(WORKDIR)/LinkTarget/Library
 gb_CppunitTest_DLLDIR = $(WORKDIR)/LinkTarget/CppunitTest
 gb_StaticLibrary_OUTDIRLOCATION = $(OUTDIR)/lib
 
-# vim: set noet sw=4 ts=4:
+# vim: set noet sw=4:

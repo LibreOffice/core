@@ -42,8 +42,8 @@ endif
 endef
 
 packmodule : all deliverlog
-    $(eval $(call gb_PackModule_setpackmodulecommand))
-    $(COMMAND)
+	$(eval $(call gb_PackModule_setpackmodulecommand))
+	$(COMMAND)
 
 define gb_PackModule_setcleanpackmodulecommand
 ifeq ($$(words $(gb_Module_ALLMODULES)),1)
@@ -56,7 +56,7 @@ endif
 endef
 
 cleanpackmodule : clean
-    $(eval $(call gb_PackModule_setcleanpackmodulecommand))
-    $(COMMAND)
-    
+	$(eval $(call gb_PackModule_setcleanpackmodulecommand))
+	$(COMMAND)
+	
 # vim: set noet ts=4 sw=4:

@@ -35,28 +35,28 @@ gb_SdiTarget_SVIDLTARGET := $(call gb_Executable_get_target,svidl)
 gb_SdiTarget_SVIDLCOMMAND := $(gb_SdiTarget_SVIDLPRECOMMAND) $(gb_SdiTarget_SVIDLTARGET)
 
 $(call gb_SdiTarget_get_target,%) : $(SRCDIR)/%.sdi | $(gb_SdiTarget_SVIDLTARGET)
-    $(call gb_Output_announce,$*,$(true),SDI,1)
-    $(call gb_Helper_abbreviate_dirs,\
-        mkdir -p $(dir $@))
-    $(call gb_Helper_abbreviate_dirs_native,\
-        cd $(dir $<) && \
-        $(gb_SdiTarget_SVIDLCOMMAND) -quiet \
-            $(INCLUDE) \
-            -fs$@.hxx \
-            -fd$@.ilb \
-            -fl$@.lst \
-            -fz$@.sid \
-            -fx$(EXPORTS) \
-            -fm$@ \
-            $<)
+	$(call gb_Output_announce,$*,$(true),SDI,1)
+	$(call gb_Helper_abbreviate_dirs,\
+		mkdir -p $(dir $@))
+	$(call gb_Helper_abbreviate_dirs_native,\
+		cd $(dir $<) && \
+		$(gb_SdiTarget_SVIDLCOMMAND) -quiet \
+			$(INCLUDE) \
+			-fs$@.hxx \
+			-fd$@.ilb \
+			-fl$@.lst \
+			-fz$@.sid \
+			-fx$(EXPORTS) \
+			-fm$@ \
+			$<)
 
 .PHONY : $(call gb_SdiTarget_get_clean_target,%)
 $(call gb_SdiTarget_get_clean_target,%) :
-    $(call gb_Output_announce,$*,$(false),SDI,1)
-    -$(call gb_Helper_abbreviate_dirs,\
-        rm -f $(foreach ext,.hxx .ilb .lst .sid,\
-            $(call gb_SdiTarget_get_target,$*)$(ext)) \
-            $(call gb_SdiTarget_get_target,$*))
+	$(call gb_Output_announce,$*,$(false),SDI,1)
+	-$(call gb_Helper_abbreviate_dirs,\
+		rm -f $(foreach ext,.hxx .ilb .lst .sid,\
+			$(call gb_SdiTarget_get_target,$*)$(ext)) \
+			$(call gb_SdiTarget_get_target,$*))
 
 define gb_SdiTarget_SdiTarget
 $(call gb_SdiTarget_get_target,$(1)) : INCLUDE := $$(subst -I. ,-I$$(dir $(SRCDIR)/$(1)) ,$$(SOLARINC))
@@ -68,4 +68,4 @@ $(call gb_SdiTarget_get_target,$(1)) : INCLUDE := $(2)
 
 endef
 
-# vim: set noet sw=4 ts=4:
+# vim: set noet sw=4:

@@ -142,40 +142,40 @@ include $(foreach repo,$(gb_REPOS),$(repo)/RepositoryFixes.mk)
 $(eval $(call gb_Helper_collect_knownlibs))
 
 gb_GLOBALDEFS := \
-    -D_REENTRANT \
-    -DCUI \
-    -DENABLE_LAYOUT_EXPERIMENTAL=0 \
-    -DENABLE_LAYOUT=0 \
-    -DOSL_DEBUG_LEVEL=$(gb_DEBUGLEVEL) \
-    -DSOLAR_JAVA \
-    -DSTLPORT_VERSION=$(STLPORT_VER) \
-    -DSUPD=$(UPD) \
-    -DVCL \
-    $(gb_OSDEFS) \
-    $(gb_COMPILERDEFS) \
-    $(gb_CPUDEFS) \
+	-D_REENTRANT \
+	-DCUI \
+	-DENABLE_LAYOUT_EXPERIMENTAL=0 \
+	-DENABLE_LAYOUT=0 \
+	-DOSL_DEBUG_LEVEL=$(gb_DEBUGLEVEL) \
+	-DSOLAR_JAVA \
+	-DSTLPORT_VERSION=$(STLPORT_VER) \
+	-DSUPD=$(UPD) \
+	-DVCL \
+	$(gb_OSDEFS) \
+	$(gb_COMPILERDEFS) \
+	$(gb_CPUDEFS) \
 
 ifeq ($(gb_PRODUCT),$(true))
 gb_GLOBALDEFS += \
-    -DPRODUCT \
-    -DPRODUCT_FULL \
+	-DPRODUCT \
+	-DPRODUCT_FULL \
 
 else
 gb_GLOBALDEFS += \
-    -DDBG_UTIL \
-    -D_STLP_DEBUG \
-    -D_DEBUG \
+	-DDBG_UTIL \
+	-D_STLP_DEBUG \
+	-D_DEBUG \
 
 endif
 
 ifeq ($(gb_DEBUGLEVEL),2)
 gb_GLOBALDEFS += \
-    -DDEBUG \
+	-DDEBUG \
 
 else
 gb_GLOBALDEFS += \
-    -DOPTIMIZE \
-    -DNDEBUG \
+	-DOPTIMIZE \
+	-DNDEBUG \
 
 endif
 
@@ -219,20 +219,20 @@ $(eval $(call gb_Deliver_init))
 # is not available everywhere by default.
 
 include $(foreach class, \
-    ComponentTarget \
-    AllLangResTarget \
-    LinkTarget \
-    Library \
-    StaticLibrary \
-    Executable \
-    SdiTarget \
-    Package \
-    CustomTarget \
-    PrecompiledHeaders \
-    CppunitTest \
-    JavaClassSet \
-    JunitTest \
-    Module \
+	ComponentTarget \
+	AllLangResTarget \
+	LinkTarget \
+	Library \
+	StaticLibrary \
+	Executable \
+	SdiTarget \
+	Package \
+	CustomTarget \
+	PrecompiledHeaders \
+	CppunitTest \
+	JavaClassSet \
+	JunitTest \
+	Module \
 ,$(GBUILDDIR)/$(class).mk)
 
 # optional extensions that should never be essential
@@ -251,4 +251,4 @@ endif
 export gb_AWK
 export gb_XSLTPROC
 
-# vim: set noet sw=4 ts=4:
+# vim: set noet sw=4:

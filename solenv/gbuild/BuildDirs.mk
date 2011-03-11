@@ -56,4 +56,4 @@ $(eval $(call gb_Output_error,The initial makefile $(realpath $(firstword $(MAKE
 endif
 endif
 
-# vim: set noet sw=4 ts=4:
+# vim: set noet sw=4:
