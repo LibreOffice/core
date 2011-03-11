@@ -64,7 +64,11 @@ $(eval $(call gb_JunitTest_add_classes,sw_complex,\
     complex.writer.TextPortionEnumerationTest \
 ))
 
-# currently fails (should run again in os146) (except on windows)
-#	complex.writer.CheckBookmarks \
+# CheckBookmarks currently fails on windows because the hashes are different
+ifneq ($(OS),WNT)
+$(eval $(call gb_JunitTest_add_classes,sw_complex,\
+    complex.writer.CheckBookmarks \
+))
+endif
 
 # vim: set noet sw=4 ts=4:
