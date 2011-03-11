@@ -2180,6 +2180,8 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                     aFrmSet.Put( SwFmtAnchor( FLY_AT_PAGE, 1 ));
                 }
 
+                aPam.DeleteMark(); // mark position node will be deleted!
+                aIntPam.DeleteMark(); // mark position node will be deleted!
                 pFmt = pDoc->MakeFlyAndMove( *m_pCopySource, aFrmSet,
                                0,
                                pParentFrmFmt );
