@@ -29,6 +29,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_cppuhelper.hxx"
 
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/plugin/TestPlugIn.h>
+
 #include "sal/config.h"
 
 #include "com/sun/star/lang/DisposedException.hpp"
@@ -39,7 +43,6 @@
 #include "com/sun/star/uno/XWeak.hpp"
 #include "cppuhelper/implbase1.hxx"
 #include "cppuhelper/weak.hxx"
-#include "testshl/simpleheader.hxx"
 #include "rtl/ref.hxx"
 #include "sal/types.h"
 
@@ -103,10 +106,10 @@ void Test::testReferenceDispose() {
     CPPUNIT_ASSERT(r3->isDisposed());
 }
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(Test, "alltests");
+CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
 }
 
-NOADDITIONAL;
+CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

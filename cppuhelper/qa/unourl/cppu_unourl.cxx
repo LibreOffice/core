@@ -26,7 +26,9 @@
  *
  ************************************************************************/
 
-#include <testshl/simpleheader.hxx>
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/plugin/TestPlugIn.h>
 
 #include "cppuhelper/unourl.hxx"
 #include "rtl/malformeduriexception.hxx"
@@ -77,7 +79,7 @@ namespace cppu_unourl
                     { "abc,def=%22", true },
                     { "abc,def=\"", true },
                     { "abc,def=%ed%a0%80", true } };
-            for (int i = 0; i < sizeof aTests / sizeof (Test); ++i)
+            for (unsigned int i = 0; i < SAL_N_ELEMENTS(aTests); ++i)
             {
                 bool bValid = false;
                 try
@@ -126,7 +128,7 @@ namespace cppu_unourl
                    { "abc,def=%22", "abc,def=%22" },
                    { "abc,def=\"", "abc,def=\"" },
                    { "abc,def=%ed%a0%80", "abc,def=%ed%a0%80" } };
-            for (int i = 0; i < sizeof aTests / sizeof (Test); ++i)
+            for (unsigned int i = 0; i < SAL_N_ELEMENTS(aTests); ++i)
             {
                 bool bValid = false;
                 rtl::OUString aDescriptor;
@@ -174,7 +176,7 @@ namespace cppu_unourl
                     { "abc,def=%22", "abc" },
                     { "abc,def=\"", "abc" },
                     { "abc,def=%ed%a0%80", "abc" } };
-            for (int i = 0; i < sizeof aTests / sizeof (Test); ++i)
+            for (unsigned int i = 0; i < SAL_N_ELEMENTS(aTests); ++i)
             {
                 bool bValid = false;
                 rtl::OUString aName;
@@ -219,7 +221,7 @@ namespace cppu_unourl
                     { "abc,def=xxx,ghi=xxx", "def", true },
                     { "abc,def=xxx,ghi=xxx", "ghi", true },
                     { "abc,def=xxx,ghi=xxx", "jkl", false } };
-            for (int i = 0; i < sizeof aTests / sizeof (Test); ++i)
+            for (unsigned int i = 0; i < SAL_N_ELEMENTS(aTests); ++i)
             {
                 bool bValid = false;
                 bool bPresent = false;
@@ -289,7 +291,7 @@ namespace cppu_unourl
                     { "abc,abc=,def=Abc", "def", "Abc" },
                     { "abc,abc=,def=aBC", "def", "aBC" },
                     { "abc,abc=,def=ABC", "def", "ABC" } };
-            for (int i = 0; i < sizeof aTests / sizeof (Test); ++i)
+            for (unsigned int i = 0; i < SAL_N_ELEMENTS(aTests); ++i)
             {
                 bool bValid = false;
                 rtl::OUString aValue;
@@ -332,7 +334,7 @@ namespace cppu_unourl
                     { "uno:abc;def;1", true },
                     { "uno:abc;def;$&+,/:=?@", true },
                     { "uno:abc;def;%24&+,/:=?@", false } };
-            for (int i = 0; i < sizeof aTests / sizeof (Test); ++i)
+            for (unsigned int i = 0; i < SAL_N_ELEMENTS(aTests); ++i)
             {
                 bool bValid = false;
                 try
@@ -369,7 +371,7 @@ namespace cppu_unourl
                     { "uno:ABC;def;ghi", "ABC" },
                     { "uno:abc,def=xxx,ghi=xxx;def,ghi=xxx,jkl=xxx;ghi",
                       "abc,def=xxx,ghi=xxx" } };
-            for (int i = 0; i < sizeof aTests / sizeof (Test); ++i)
+            for (unsigned int i = 0; i < SAL_N_ELEMENTS(aTests); ++i)
             {
                 bool bValid = false;
                 rtl::OUString aConnection;
@@ -403,7 +405,7 @@ namespace cppu_unourl
                     { "uno:abc;DEF;ghi", "DEF" },
                     { "uno:abc,def=xxx,ghi=xxx;def,ghi=xxx,jkl=xxx;ghi",
                       "def,ghi=xxx,jkl=xxx" } };
-            for (int i = 0; i < sizeof aTests / sizeof (Test); ++i)
+            for (unsigned int i = 0; i < SAL_N_ELEMENTS(aTests); ++i)
             {
                 bool bValid = false;
                 rtl::OUString aProtocol;
@@ -440,7 +442,7 @@ namespace cppu_unourl
                     { "uno:abc;def;A", "A" },
                     { "uno:abc;def;1", "1" },
                     { "uno:abc;def;$&+,/:=?@", "$&+,/:=?@" } };
-            for (int i = 0; i < sizeof aTests / sizeof (Test); ++i)
+            for (unsigned int i = 0; i < SAL_N_ELEMENTS(aTests); ++i)
             {
                 bool bValid = false;
                 rtl::OUString aObjectName;
@@ -474,9 +476,8 @@ namespace cppu_unourl
     };
 } // namespace cppu_ifcontainer
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(cppu_unourl::UrlTest,
-                                      "cppu_unourl");
+CPPUNIT_TEST_SUITE_REGISTRATION(cppu_unourl::UrlTest);
 
-NOADDITIONAL;
+CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
