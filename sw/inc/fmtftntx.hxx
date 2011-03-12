@@ -39,7 +39,7 @@ enum SwFtnEndPosEnum
     FTNEND_ATPGORDOCEND,                // at page or document end
     FTNEND_ATTXTEND,                    // at end of the current text end
     FTNEND_ATTXTEND_OWNNUMSEQ,          // -""- and with own number sequence
-    FTNEND_ATTXTEND_OWNNUMANDFMT,       // -""- and with onw numberformat
+    FTNEND_ATTXTEND_OWNNUMANDFMT,       // -""- and with own numberformat
     FTNEND_ATTXTEND_END
 };
 

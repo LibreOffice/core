@@ -1948,7 +1948,7 @@ BOOL SwTxtNode::GetAttr( SfxItemSet& rSet, xub_StrLen nStt, xub_StrLen nEnd,
                     {
                         const USHORT nHintWhich = pItem->Which();
                         OSL_ENSURE(!isUNKNOWNATR(nHintWhich),
-                                "SwTxtNode::GetAttr(): unkonwn attribute?");
+                                "SwTxtNode::GetAttr(): unknown attribute?");
 
                         if ( !pAttrArr.get() )
                         {
