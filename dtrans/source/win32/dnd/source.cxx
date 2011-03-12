@@ -214,8 +214,6 @@ void SAL_CALL DragSource::startDrag(
     }
     else
     {
-        //OSL_ENSURE(false, "Overlapping Drag&Drop operation rejected!");
-
         cnt = InterlockedDecrement(&m_RunningDndOperationCount);
 
         DragSourceDropEvent dsde;
