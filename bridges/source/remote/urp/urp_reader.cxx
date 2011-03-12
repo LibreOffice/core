@@ -566,8 +566,8 @@ void OReaderThread::run()
                     if ( !ok )
                     {
                         OSL_FAIL(
-                            ("urp_bridge: error while unpacking current"
-                             " context") );
+                            "urp_bridge: error while unpacking current"
+                             " context" );
                         disposeEnvironment();
                         break;
                     }
