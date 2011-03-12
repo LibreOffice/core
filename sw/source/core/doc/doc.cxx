@@ -1769,7 +1769,7 @@ void SwDoc::UpdateDocStat( SwDocStat& rStat )
         rStat.bModified = FALSE;
         SetDocStat( rStat );
 
-        com::sun::star::uno::Sequence < com::sun::star::beans::NamedValue > aStat( rStat.nPage ? 7 : 6);
+        com::sun::star::uno::Sequence < com::sun::star::beans::NamedValue > aStat( rStat.nPage ? 8 : 7);
         sal_Int32 n=0;
         aStat[n].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TableCount"));
         aStat[n++].Value <<= (sal_Int32)rStat.nTbl;
@@ -1788,6 +1788,8 @@ void SwDoc::UpdateDocStat( SwDocStat& rStat )
         aStat[n++].Value <<= (sal_Int32)rStat.nWord;
         aStat[n].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharacterCount"));
         aStat[n++].Value <<= (sal_Int32)rStat.nChar;
+        aStat[n].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NonWhitespaceCharacterCount"));
+        aStat[n++].Value <<= (sal_Int32)rStat.nCharExcludingSpaces;
 
         // For e.g. autotext documents there is no pSwgInfo (#i79945)
         SfxObjectShell * const pObjShell( GetDocShell() );
