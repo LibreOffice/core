@@ -84,8 +84,8 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
     if( IS_OUTLINE(ePO))
     {
         // Leider sind die Itemsets unserer Stylesheets nicht discret..
-        const USHORT* pPtr = pOrgSet->GetRanges();
-        USHORT p1, p2;
+        const sal_uInt16* pPtr = pOrgSet->GetRanges();
+        sal_uInt16 p1, p2;
         while( *pPtr )
         {
             p1 = pPtr[0];
@@ -115,14 +115,14 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
 
         // Fals in diesem Stylesheet kein Bullet Item ist, holen wir uns
         // das aus dem 'Outline 1' Stylesheet.
-        if( SFX_ITEM_SET != aInputSet.GetItemState(EE_PARA_NUMBULLET, FALSE, &pItem ))
+        if( SFX_ITEM_SET != aInputSet.GetItemState(EE_PARA_NUMBULLET, sal_False, &pItem ))
         {
             String aStyleName((SdResId(STR_PSEUDOSHEET_OUTLINE)));
             aStyleName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " 1" ) );
             SfxStyleSheetBase* pFirstStyleSheet = pSSPool->Find( aStyleName, SD_STYLE_FAMILY_PSEUDO);
 
             if(pFirstStyleSheet)
-                if( SFX_ITEM_SET == pFirstStyleSheet->GetItemSet().GetItemState(EE_PARA_NUMBULLET, FALSE, &pItem) )
+                if( SFX_ITEM_SET == pFirstStyleSheet->GetItemSet().GetItemState(EE_PARA_NUMBULLET, sal_False, &pItem) )
                     aInputSet.Put( *pItem );
         }
 
@@ -255,7 +255,7 @@ SdPresLayoutTemplateDlg::~SdPresLayoutTemplateDlg()
 
 // -----------------------------------------------------------------------
 
-void SdPresLayoutTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
+void SdPresLayoutTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {   SfxAllItemSet aSet(*(aInputSet.GetPool()));
     switch( nId )
     {
@@ -324,7 +324,7 @@ const SfxItemSet* SdPresLayoutTemplateDlg::GetOutputItemSet() const
         pOutSet->Put( *SfxTabDialog::GetOutputItemSet() );
 
         const SvxNumBulletItem *pSvxNumBulletItem = NULL;
-        if( SFX_ITEM_SET == pOutSet->GetItemState(EE_PARA_NUMBULLET, FALSE, (const SfxPoolItem**)&pSvxNumBulletItem ))
+        if( SFX_ITEM_SET == pOutSet->GetItemState(EE_PARA_NUMBULLET, sal_False, (const SfxPoolItem**)&pSvxNumBulletItem ))
             SdBulletMapper::MapFontsInNumRule( *pSvxNumBulletItem->GetNumRule(), *pOutSet );
         return pOutSet;
     }
@@ -334,7 +334,7 @@ const SfxItemSet* SdPresLayoutTemplateDlg::GetOutputItemSet() const
 
 // ---------------------------------------------------------------------
 // ---------------------------------------------------------------------
-USHORT SdPresLayoutTemplateDlg::GetOutlineLevel() const
+sal_uInt16 SdPresLayoutTemplateDlg::GetOutlineLevel() const
 {
     switch( ePO )
     {
@@ -348,7 +348,7 @@ USHORT SdPresLayoutTemplateDlg::GetOutlineLevel() const
     case PO_OUTLINE_8: return 7;
     case PO_OUTLINE_9: return 8;
     default:
-        DBG_ASSERT( FALSE, "Falscher Po! [CL]");
+        DBG_ASSERT( sal_False, "Falscher Po! [CL]");
     }
     return 0;
 }

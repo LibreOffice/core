@@ -121,7 +121,7 @@ public:
             <const>OUTLINERMODE_OUTLINEVIEW</const> are defined in
             editeng/outliner.hxx.
     */
-    Outliner( SdDrawDocument* pDoc, USHORT nMode );
+    Outliner( SdDrawDocument* pDoc, sal_uInt16 nMode );
     virtual ~Outliner();
 
     /** Despite the name this method is called prior to spell cheking *and*
@@ -142,8 +142,8 @@ public:
 
     /** Initiate a find and/or replace on the next relevant text object.
         @return
-            Returns </TRUE> when the search/replace is finished (as
-            indicated by user input to the search dialog).  A </FALSE> value
+            Returns </sal_True> when the search/replace is finished (as
+            indicated by user input to the search dialog).  A </sal_False> value
             indicates that another call to this method is required.
     */
     bool StartSearchAndReplace (const SvxSearchItem* pSearchItem);
@@ -164,8 +164,8 @@ public:
 
     /** Starts the text conversion (hangul/hanja or Chinese simplified/traditional)
     for the current viewshell */
-    void StartConversion( INT16 nSourceLanguage,  INT16 nTargetLanguage,
-                const Font *pTargetFont, INT32 nOptions, BOOL bIsInteractive );
+    void StartConversion( sal_Int16 nSourceLanguage,  sal_Int16 nTargetLanguage,
+                const Font *pTargetFont, sal_Int32 nOptions, sal_Bool bIsInteractive );
 
     /** This is called internaly when text conversion is started.
         The position of current view mode/page/object/caret position
@@ -204,7 +204,7 @@ private:
     /** this is the language that is used for current text conversion.
         Only valid if meMode is TEXT_CONVERSION.
     */
-    INT16 mnConversionLanguage;
+    sal_Int16 mnConversionLanguage;
 
     /** While the value of this flag is greater than 0 changes of the current page
         do not lead to selecting the corresponding text in the outliner.
@@ -216,17 +216,17 @@ private:
 
     /** This flag indicates whether there may exist a match of the search
         string before/after the current position in the document.  It can be
-        set to </FALSE> only when starting from the beginning/end of the
+        set to </sal_False> only when starting from the beginning/end of the
         document.  When reaching the end/beginning with it still be set to
-        </FALSE> then there exists no match and the search can be terminated.
+        </sal_False> then there exists no match and the search can be terminated.
     */
     bool mbMatchMayExist;
 
     /// The number of pages in the current view.
-    USHORT mnPageCount;
+    sal_uInt16 mnPageCount;
 
     /// Number of objects on the current page / in the current selection.
-    INT32 mnObjectCount;
+    sal_Int32 mnObjectCount;
 
     /** A <TRUE/> value indicates that the end of the find&replace or spell
         check has been reached.
@@ -235,7 +235,7 @@ private:
 
     /** Set to <TRUE/> when an object has been prepared successfully for
         searching/spell checking.  This flag directs the internal iteration
-        which stops when set to </TRUE>.
+        which stops when set to </sal_True>.
     */
     bool mbFoundObject;
 
@@ -297,7 +297,7 @@ private:
     EditMode meStartEditMode;
 
     /// The current page index on starting to search/spell check.
-    USHORT mnStartPageIndex;
+    sal_uInt16 mnStartPageIndex;
 
     /// The object in edit mode when searching /spell checking was started
     /// (if any).
@@ -370,8 +370,8 @@ private:
 
     /** Do search and replace for next match.
         @return
-            The return value specifies whether the search ended (</TRUE>) or
-            another call to this method is required (</FALSE>).
+            The return value specifies whether the search ended (</sal_True>) or
+            another call to this method is required (</sal_False>).
     */
     bool SearchAndReplaceOnce (void);
 
@@ -410,7 +410,7 @@ private:
 
     /** Handle the situation that the iterator has reached the last object.
         This may result in setting the <member>mbEndOfSearch</member> flag
-        back to </FALSE>.  This method may show either the end-of-search
+        back to </sal_False>.  This method may show either the end-of-search
         dialog or the wrap-arround dialog.
     */
     void EndOfSearch (void);
@@ -470,11 +470,11 @@ private:
         @param nPageIndex
             The new page index.
     */
-    void SetPage (EditMode eEditMode, USHORT nPageIndex);
+    void SetPage (EditMode eEditMode, sal_uInt16 nPageIndex);
 
     /** Switch on edit mode for the currently selected text object.
     */
-    void EnterEditMode (BOOL bGrabFocus=TRUE);
+    void EnterEditMode (sal_Bool bGrabFocus=sal_True);
 
     /** Return the position at which a new search is started with respect to
         the search direction as specified by the argument.
@@ -538,14 +538,14 @@ private:
             required.  When all text objects have been processed then
             <FALSE/> is returned.
     */
-    virtual BOOL SpellNextDocument (void);
+    virtual sal_Bool SpellNextDocument (void);
 
     /** Show the given message box and make it modal.  It is assumed that
         the parent of the given dialog is NULL, i.e. the application
         window.  This function makes sure that the otherwise non-modal
         search dialog, if visible, is locked, too.
     */
-    USHORT ShowModalMessageBox (Dialog& rMessageBox);
+    sal_uInt16 ShowModalMessageBox (Dialog& rMessageBox);
 };
 
 } // end of namespace sd

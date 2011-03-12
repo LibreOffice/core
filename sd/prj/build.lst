@@ -1,4 +1,4 @@
-sd      sd      :    filter l10n animations svx sfx2 stoc canvas oox NULL
+sd      sd      :    filter L10N:l10n animations svx sfx2 stoc canvas LIBXSLT:libxslt oox NULL
 sd	sd										usr1	-	all	sd_mkout NULL
 sd	sd\inc									nmake		-	all	sd_inc NULL
 sd	sd\prj									get		-	all	sd_prj NULL
@@ -28,7 +28,7 @@ sd	sd\source\ui\slidesorter\controller		nmake	-	all	sd_slscontroller sd_sdi sd_i
 sd	sd\source\ui\slidesorter\cache			nmake	-	all	sd_slscache sd_inc NULL
 sd	sd\source\ui\controller					nmake	-	all	sd_controller sd_inc NULL
 sd	sd\source\ui\notes						nmake	-	all	sd_notes sd_inc NULL
-sd	sd\source\ui\table						nmake	-	all	sd_table sd_inc NULL
+sd	sd\source\ui\table						nmake	-	all	sd_table sd_sdi sd_inc NULL
 sd	sd\source\filter\ppt					nmake	-	all	sd_ppt sd_inc NULL
 sd	sd\source\filter						nmake	-	all	sd_filt sd_sdi sd_ppt sd_inc NULL
 sd	sd\source\filter\cgm					nmake	-	all	sd_cgm sd_inc NULL

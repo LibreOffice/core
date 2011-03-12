@@ -77,14 +77,14 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
 {
     EndListening(*pDrawDoc);
 
-    EnableExtendedKeyInputDispatcher(FALSE);
-    EnableExtendedMouseEventDispatcher(FALSE);
-    EnableExtendedCommandEventDispatcher(FALSE);
+    EnableExtendedKeyInputDispatcher(sal_False);
+    EnableExtendedMouseEventDispatcher(sal_False);
+    EnableExtendedCommandEventDispatcher(sal_False);
 
-    SetGridFront( FALSE );
-    SetHlplFront( FALSE );
-    SetOConSnap( FALSE );
-    SetFrameDragSingles( TRUE );
+    SetGridFront( sal_False );
+    SetHlplFront( sal_False );
+    SetOConSnap( sal_False );
+    SetFrameDragSingles( sal_True );
     SetSlidesPerRow(4);
 
     if( NULL == pFrameView )
@@ -96,7 +96,7 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
             /**********************************************************************
             * Das Dokument wurde geladen, ist eine FrameView vorhanden?
             **********************************************************************/
-            ULONG nSdViewShellCount = 0;
+            sal_uLong nSdViewShellCount = 0;
             ViewShellBase* pBase = NULL;
             SfxViewShell* pSfxViewSh = NULL;
             SfxViewFrame* pSfxViewFrame = SfxViewFrame::GetFirst(pDocShell);
@@ -231,8 +231,8 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
         SetGridCoarse( Size( 1000, 1000 ) );
         SetSnapGridWidth(Fraction(1000, 1), Fraction(1000, 1));
         SetActiveLayer( String( SdResId(STR_LAYER_LAYOUT) ) );
-        mbNoColors = TRUE;
-        mbNoAttribs = FALSE;
+        mbNoColors = sal_True;
+        mbNoAttribs = sal_False;
         maVisArea = Rectangle( Point(), Size(0, 0) );
         mePageKind = PK_STANDARD;
         mePageKindOnLoad = PK_STANDARD;
@@ -242,11 +242,11 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
         meNotesEditMode = EM_PAGE;
         meHandoutEditMode = EM_MASTERPAGE;
         SetViewShEditModeOnLoad(EM_PAGE);
-        mbLayerMode = FALSE;
-        SetEliminatePolyPoints(FALSE);
-        mbBigHandles = FALSE;
-        mbDoubleClickTextEdit = FALSE;
-        mbClickChangeRotation = FALSE;
+        mbLayerMode = sal_False;
+        SetEliminatePolyPoints(sal_False);
+        mbBigHandles = sal_False;
+        mbDoubleClickTextEdit = sal_False;
+        mbClickChangeRotation = sal_False;
         mnSlidesPerRow = 4;
 
         {
@@ -443,8 +443,8 @@ static OUString createHelpLinesString( const SdrHelpLineList& rHelpLines )
 {
     ::rtl::OUStringBuffer aLines;
 
-    const USHORT nCount = rHelpLines.GetCount();
-    for( USHORT nHlpLine = 0; nHlpLine < nCount; nHlpLine++ )
+    const sal_uInt16 nCount = rHelpLines.GetCount();
+    for( sal_uInt16 nHlpLine = 0; nHlpLine < nCount; nHlpLine++ )
     {
         const SdrHelpLine& rHelpLine = rHelpLines[nHlpLine];
         const Point& rPos = rHelpLine.GetPos();
@@ -704,9 +704,9 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
                 {
                     SdDrawDocument* pDoc = dynamic_cast< SdDrawDocument* >( GetModel() );
                     if( pDoc && pDoc->GetDocSh() && ( SFX_CREATE_MODE_EMBEDDED == pDoc->GetDocSh()->GetCreateMode() ) )
-                        SetSelectedPage( (USHORT)nInt16 );
+                        SetSelectedPage( (sal_uInt16)nInt16 );
 
-                    SetSelectedPageOnLoad( (USHORT)nInt16 );
+                    SetSelectedPageOnLoad( (sal_uInt16)nInt16 );
                 }
             }
             else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_IsLayerMode ) ) )
@@ -741,7 +741,7 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
             {
                 if( pValue->Value >>= nInt16 )
                 {
-                    SetSlidesPerRow( (USHORT)nInt16 );
+                    SetSlidesPerRow( (sal_uInt16)nInt16 );
                 }
             }
             else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_EditModeStandard ) ) )
@@ -1048,7 +1048,7 @@ ViewShell::ShellType FrameView::GetViewShellTypeOnLoad (void) const
 
 
 
-void FrameView::SetSelectedPage(USHORT nPage)
+void FrameView::SetSelectedPage(sal_uInt16 nPage)
 {
     mnSelectedPage = nPage;
 }
@@ -1056,7 +1056,7 @@ void FrameView::SetSelectedPage(USHORT nPage)
 
 
 
-USHORT FrameView::GetSelectedPage (void) const
+sal_uInt16 FrameView::GetSelectedPage (void) const
 {
     return mnSelectedPage;
 }

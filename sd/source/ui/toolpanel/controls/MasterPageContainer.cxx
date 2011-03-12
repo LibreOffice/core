@@ -189,7 +189,7 @@ private:
         const String& sFileName,
         SfxObjectShellLock& rxDocumentShell);
 
-    Image GetPreviewSubstitution (USHORT nId, PreviewSize ePreviewSize);
+    Image GetPreviewSubstitution (sal_uInt16 nId, PreviewSize ePreviewSize);
 
     void CleanContainer (void);
 };
@@ -1066,7 +1066,7 @@ SdDrawDocument* MasterPageContainer::Implementation::GetDocument (void)
 
 
 Image MasterPageContainer::Implementation::GetPreviewSubstitution (
-    USHORT nId,
+    sal_uInt16 nId,
     PreviewSize ePreviewSize)
 {
     const ::osl::MutexGuard aGuard (maMutex);

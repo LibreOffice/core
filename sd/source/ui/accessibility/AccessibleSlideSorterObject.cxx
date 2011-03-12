@@ -38,6 +38,8 @@
 #include "model/SlideSorterModel.hxx"
 #include "model/SlsPageDescriptor.hxx"
 #include "view/SlideSorterView.hxx"
+#include "view/SlsLayouter.hxx"
+#include "view/SlsPageObjectLayouter.hxx"
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <comphelper/accessibleeventnotifier.hxx>
@@ -386,10 +388,11 @@ awt::Rectangle SAL_CALL AccessibleSlideSorterObject::getBounds (void)
 
     const SolarMutexGuard aSolarGuard;
 
-    Rectangle aBBox (mrSlideSorter.GetView().GetPageBoundingBox (
-        mnPageNumber,
-        ::sd::slidesorter::view::SlideSorterView::CS_SCREEN,
-        ::sd::slidesorter::view::SlideSorterView::BBT_INFO));
+    Rectangle aBBox (
+        mrSlideSorter.GetView().GetLayouter().GetPageObjectLayouter()->GetBoundingBox(
+            mrSlideSorter.GetModel().GetPageDescriptor(mnPageNumber),
+            ::sd::slidesorter::view::PageObjectLayouter::PageObject,
+            ::sd::slidesorter::view::PageObjectLayouter::WindowCoordinateSystem));
 
     if (mxParent.is())
     {
@@ -477,7 +480,7 @@ sal_Int32 SAL_CALL AccessibleSlideSorterObject::getForeground (void)
 {
     ThrowIfDisposed ();
     svtools::ColorConfig aColorConfig;
-    UINT32 nColor = aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor;
+    sal_uInt32 nColor = aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor;
     return static_cast<sal_Int32>(nColor);
 }
 
@@ -488,7 +491,7 @@ sal_Int32 SAL_CALL AccessibleSlideSorterObject::getBackground (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
     ThrowIfDisposed ();
-    UINT32 nColor = Application::GetSettings().GetStyleSettings().GetWindowColor().GetColor();
+    sal_uInt32 nColor = Application::GetSettings().GetStyleSettings().GetWindowColor().GetColor();
     return static_cast<sal_Int32>(nColor);
 }
 

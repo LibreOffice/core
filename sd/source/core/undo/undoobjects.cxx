@@ -245,7 +245,7 @@ void UndoObjectSetText::Redo()
         if( mpUndoAnimation )
             mpUndoAnimation->Redo();
         SdrUndoObjSetText::Redo();
-        mxSdrObject->SetEmptyPresObj(mbNewEmptyPresObj ? TRUE : FALSE );
+        mxSdrObject->SetEmptyPresObj(mbNewEmptyPresObj ? sal_True : sal_False );
     }
 }
 
@@ -348,7 +348,7 @@ void UndoAutoLayoutPosAndSize::Redo()
 {
     SdPage* pPage = static_cast< SdPage* >( mxPage.get() );
     if( pPage )
-        pPage->SetAutoLayout( pPage->GetAutoLayout(), FALSE, FALSE );
+        pPage->SetAutoLayout( pPage->GetAutoLayout(), sal_False, sal_False );
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -403,7 +403,7 @@ void UndoGeoObject::Redo()
 //////////////////////////////////////////////////////////////////////////////
 
 UndoAttrObject::UndoAttrObject( SdrObject& rObject, bool bStyleSheet1, bool bSaveText )
-: SdrUndoAttrObj( rObject, bStyleSheet1 ? TRUE : FALSE, bSaveText ? TRUE : FALSE )
+: SdrUndoAttrObj( rObject, bStyleSheet1 ? sal_True : sal_False, bSaveText ? sal_True : sal_False )
 , mxPage( rObject.GetPage() )
 , mxSdrObject( &rObject )
 {

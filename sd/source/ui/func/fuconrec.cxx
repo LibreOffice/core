@@ -120,10 +120,10 @@ void FuConstructRectangle::DoExecute( SfxRequest& rReq )
         {
             case SID_DRAW_ELLIPSE :
             {
-                SFX_REQUEST_ARG (rReq, pCenterX, SfxUInt32Item, ID_VAL_CENTER_X, FALSE);
-                SFX_REQUEST_ARG (rReq, pCenterY, SfxUInt32Item, ID_VAL_CENTER_Y, FALSE);
-                SFX_REQUEST_ARG (rReq, pAxisX, SfxUInt32Item, ID_VAL_AXIS_X, FALSE);
-                SFX_REQUEST_ARG (rReq, pAxisY, SfxUInt32Item, ID_VAL_AXIS_Y, FALSE);
+                SFX_REQUEST_ARG (rReq, pCenterX, SfxUInt32Item, ID_VAL_CENTER_X, sal_False);
+                SFX_REQUEST_ARG (rReq, pCenterY, SfxUInt32Item, ID_VAL_CENTER_Y, sal_False);
+                SFX_REQUEST_ARG (rReq, pAxisX, SfxUInt32Item, ID_VAL_AXIS_X, sal_False);
+                SFX_REQUEST_ARG (rReq, pAxisY, SfxUInt32Item, ID_VAL_AXIS_Y, sal_False);
 
                 Rectangle   aNewRectangle (pCenterX->GetValue () - pAxisX->GetValue () / 2,
                                            pCenterY->GetValue () - pAxisY->GetValue () / 2,
@@ -138,10 +138,10 @@ void FuConstructRectangle::DoExecute( SfxRequest& rReq )
 
             case SID_DRAW_RECT :
             {
-                SFX_REQUEST_ARG (rReq, pMouseStartX, SfxUInt32Item, ID_VAL_MOUSESTART_X, FALSE);
-                SFX_REQUEST_ARG (rReq, pMouseStartY, SfxUInt32Item, ID_VAL_MOUSESTART_Y, FALSE);
-                SFX_REQUEST_ARG (rReq, pMouseEndX, SfxUInt32Item, ID_VAL_MOUSEEND_X, FALSE);
-                SFX_REQUEST_ARG (rReq, pMouseEndY, SfxUInt32Item, ID_VAL_MOUSEEND_Y, FALSE);
+                SFX_REQUEST_ARG (rReq, pMouseStartX, SfxUInt32Item, ID_VAL_MOUSESTART_X, sal_False);
+                SFX_REQUEST_ARG (rReq, pMouseStartY, SfxUInt32Item, ID_VAL_MOUSESTART_Y, sal_False);
+                SFX_REQUEST_ARG (rReq, pMouseEndX, SfxUInt32Item, ID_VAL_MOUSEEND_X, sal_False);
+                SFX_REQUEST_ARG (rReq, pMouseEndY, SfxUInt32Item, ID_VAL_MOUSEEND_Y, sal_False);
 
                 Rectangle   aNewRectangle (pMouseStartX->GetValue (),
                                            pMouseStartY->GetValue (),
@@ -202,16 +202,16 @@ void FuConstructRectangle::DoExecute( SfxRequest& rReq )
 |*
 \************************************************************************/
 
-BOOL FuConstructRectangle::MouseButtonDown(const MouseEvent& rMEvt)
+sal_Bool FuConstructRectangle::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    BOOL bReturn = FuConstruct::MouseButtonDown(rMEvt);
+    sal_Bool bReturn = FuConstruct::MouseButtonDown(rMEvt);
 
     if ( rMEvt.IsLeft() && !mpView->IsAction() )
     {
         Point aPnt( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
 
         mpWindow->CaptureMouse();
-        USHORT nDrgLog = USHORT ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
+        sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
 
         if (mpView->GetCurrentObjIdentifier() == OBJ_CAPTION)
         {
@@ -235,7 +235,7 @@ BOOL FuConstructRectangle::MouseButtonDown(const MouseEvent& rMEvt)
             pObj->SetMergedItemSet(aAttr);
 
             if( nSlotId == SID_DRAW_CAPTION_VERTICAL )
-                ( (SdrTextObj*) pObj)->SetVerticalWriting( TRUE );
+                ( (SdrTextObj*) pObj)->SetVerticalWriting( sal_True );
         }
     }
     return bReturn;
@@ -247,7 +247,7 @@ BOOL FuConstructRectangle::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BOOL FuConstructRectangle::MouseMove(const MouseEvent& rMEvt)
+sal_Bool FuConstructRectangle::MouseMove(const MouseEvent& rMEvt)
 {
     return FuConstruct::MouseMove(rMEvt);
 }
@@ -258,7 +258,7 @@ BOOL FuConstructRectangle::MouseMove(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BOOL FuConstructRectangle::MouseButtonUp(const MouseEvent& rMEvt)
+sal_Bool FuConstructRectangle::MouseButtonUp(const MouseEvent& rMEvt)
 {
     sal_Bool bReturn(sal_False);
 
@@ -272,7 +272,7 @@ BOOL FuConstructRectangle::MouseButtonUp(const MouseEvent& rMEvt)
             {
                 SdrLayerAdmin& rAdmin = mpDoc->GetLayerAdmin();
                 String aStr(SdResId(STR_LAYER_MEASURELINES));
-                pObj->SetLayer(rAdmin.GetLayerID(aStr, FALSE));
+                pObj->SetLayer(rAdmin.GetLayerID(aStr, sal_False));
             }
 
             // init text position when vertica caption object is created
@@ -308,14 +308,14 @@ BOOL FuConstructRectangle::MouseButtonUp(const MouseEvent& rMEvt)
 |*
 |* Tastaturereignisse bearbeiten
 |*
-|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert TRUE, andernfalls
-|* FALSE.
+|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert sal_True, andernfalls
+|* sal_False.
 |*
 \************************************************************************/
 
-BOOL FuConstructRectangle::KeyInput(const KeyEvent& rKEvt)
+sal_Bool FuConstructRectangle::KeyInput(const KeyEvent& rKEvt)
 {
-    BOOL bReturn = FuConstruct::KeyInput(rKEvt);
+    sal_Bool bReturn = FuConstruct::KeyInput(rKEvt);
     return(bReturn);
 }
 
@@ -421,7 +421,7 @@ void FuConstructRectangle::Activate()
         break;
     }
 
-    mpView->SetCurrentObj((UINT16)aObjKind);
+    mpView->SetCurrentObj((sal_uInt16)aObjKind);
 
     FuConstruct::Activate();
 }
@@ -470,7 +470,7 @@ void FuConstructRectangle::Deactivate()
         nSlotId == SID_LINE_ARROW_SQUARE            ||
         nSlotId == SID_LINE_SQUARE_ARROW )
     {
-        mpView->SetGlueVisible( FALSE );
+        mpView->SetGlueVisible( sal_False );
     }
     FuConstruct::Deactivate();
 }
@@ -541,8 +541,8 @@ void FuConstructRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
         Size aSize(pObj->GetLogicRect().GetSize());
         rAttr.Put( SdrTextMinFrameHeightItem( aSize.Height() ) );
         rAttr.Put( SdrTextMinFrameWidthItem( aSize.Width() ) );
-        rAttr.Put( SdrTextAutoGrowHeightItem( TRUE ) );
-        rAttr.Put( SdrTextAutoGrowWidthItem( TRUE ) );
+        rAttr.Put( SdrTextAutoGrowHeightItem( sal_True ) );
+        rAttr.Put( SdrTextAutoGrowWidthItem( sal_True ) );
 
         // Support full with for vertical caption objects, too
         if(SID_DRAW_CAPTION == nSlotId)
@@ -570,12 +570,12 @@ void FuConstructRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
 
         if (pSheet)
         {
-            pObj->SetStyleSheet(pSheet, FALSE);
+            pObj->SetStyleSheet(pSheet, sal_False);
         }
 
         SdrLayerAdmin& rAdmin = mpDoc->GetLayerAdmin();
         String aStr(SdResId(STR_LAYER_MEASURELINES));
-        pObj->SetLayer(rAdmin.GetLayerID(aStr, FALSE));
+        pObj->SetLayer(rAdmin.GetLayerID(aStr, sal_False));
     }
     else if (nSlotId == OBJ_CUSTOMSHAPE )
     {
@@ -956,8 +956,8 @@ SdrObject* FuConstructRectangle::CreateDefaultObject(const sal_uInt16 nID, const
             {
                 if(pObj->ISA(SdrEdgeObj))
                 {
-                    ((SdrEdgeObj*)pObj)->SetTailPoint(FALSE, aStart);
-                    ((SdrEdgeObj*)pObj)->SetTailPoint(TRUE, aEnd);
+                    ((SdrEdgeObj*)pObj)->SetTailPoint(sal_False, aStart);
+                    ((SdrEdgeObj*)pObj)->SetTailPoint(sal_True, aEnd);
                 }
                 else
                 {

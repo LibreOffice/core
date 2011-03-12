@@ -88,8 +88,8 @@ private:
     const int mnBorderHeight;
     const int mnMaxColumnCount;
 
-    USHORT CalculateColumnCount (int nWidth) const;
-    USHORT CalculateRowCount (USHORT nColumnCount) const;
+    sal_uInt16 CalculateColumnCount (int nWidth) const;
+    sal_uInt16 CalculateRowCount (sal_uInt16 nColumnCount) const;
 };
 
 } } } // end of namespace ::sd::toolpanel::controls

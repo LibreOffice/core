@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 
-#include "SlsTransferable.hxx"
+#include "controller/SlsTransferable.hxx"
 
 #include "SlideSorterViewShell.hxx"
 #include "View.hxx"
@@ -39,14 +39,17 @@ namespace sd { namespace slidesorter { namespace controller {
 Transferable::Transferable (
     SdDrawDocument* pSrcDoc,
     ::sd::View* pWorkView,
-    BOOL bInitOnGetData,
-    SlideSorterViewShell* pViewShell)
+    sal_Bool bInitOnGetData,
+    SlideSorterViewShell* pViewShell,
+    const ::std::vector<Representative>& rRepresentatives)
     : SdTransferable (pSrcDoc, pWorkView, bInitOnGetData),
-      mpViewShell(pViewShell)
+      mpViewShell(pViewShell),
+      maRepresentatives(rRepresentatives)
 {
     if (mpViewShell != NULL)
         StartListening(*mpViewShell);
 }
+
 
 
 
@@ -88,6 +91,12 @@ void Transferable::Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint)
 }
 
 
+
+
+const ::std::vector<Transferable::Representative>& Transferable::GetRepresentatives (void) const
+{
+    return maRepresentatives;
+}
 
 
 } } } // end of namespace ::sd::slidesorter::controller

@@ -33,9 +33,9 @@ class SdrPage;
 
 #include <vcl/bitmapex.hxx>
 #include <osl/mutex.hxx>
-#include <memory>
 #include <boost/shared_ptr.hpp>
 #include <boost/unordered_map.hpp>
+#include <boost/scoped_ptr.hpp>
 
 namespace sd { namespace slidesorter { namespace cache {
 
@@ -45,10 +45,14 @@ class BitmapCompressor;
 
 /** This low level cache is the actual bitmap container.  It supports a
     precious flag for every preview bitmap and keeps track of total sizes
-    for all previews with as well as those without the flag.  The precious
-    flag is used by compaction algorithms to determine which previews may be
-    compressed or even discarded and which have to remain in their original
-    form.  The precious flag is usually set for the visible previews.
+    for all previews with/without this flag.  The precious flag is used by
+    compaction algorithms to determine which previews may be compressed or
+    even discarded and which have to remain in their original form.  The
+    precious flag is usually set for the visible previews.
+
+    Additionally to the actual preview there is an optional marked preview.
+    This is used for slides excluded from the slide show which have a preview
+    that shows a mark (some sort of bitmap overlay) to that effect.
 */
 class BitmapCache
 {
@@ -103,11 +107,25 @@ public:
 
     /** Return the preview bitmap for the given contact object.
     */
-    ::boost::shared_ptr<BitmapEx> GetBitmap (const CacheKey& rKey);
+    Bitmap GetBitmap (const CacheKey& rKey);
 
-    /** Mark the specified preview bitmap as not being up-to-date anymore.
+    /** Return the marked preview bitmap for the given contact object.
     */
-    void InvalidateBitmap (const CacheKey& rKey);
+    Bitmap GetMarkedBitmap (const CacheKey& rKey);
+
+    /** Release the reference to the preview bitmap that is associated with
+        the given key.
+    */
+    void ReleaseBitmap (const CacheKey& rKey);
+
+    /** Mark the specified preview bitmap as not being up-to-date
+        anymore.
+        @return
+            When the key references a page in the cache then
+            return <TRUE/>.  When the key is not known then <FALSE/>
+            is returned.
+    */
+    bool InvalidateBitmap (const CacheKey& rKey);
 
     /** Mark all preview bitmaps as not being up-to-date anymore.
     */
@@ -117,8 +135,14 @@ public:
     */
     void SetBitmap (
         const CacheKey& rKey,
-        const ::boost::shared_ptr<BitmapEx>& rpPreview,
+        const Bitmap& rPreview,
         bool bIsPrecious);
+
+    /** Add or replace a marked bitmap for the given key.
+    */
+    void SetMarkedBitmap (
+        const CacheKey& rKey,
+        const Bitmap& rPreview);
 
     /** Mark the specified preview bitmap as precious, i.e. that it must not
         be compressed or otherwise removed from the cache.
@@ -162,7 +186,7 @@ public:
 private:
     mutable ::osl::Mutex maMutex;
 
-    ::std::auto_ptr<CacheBitmapContainer> mpBitmapContainer;
+    ::boost::scoped_ptr<CacheBitmapContainer> mpBitmapContainer;
 
     /** Total size of bytes that are occupied by bitmaps in the cache for
         whom the slides are currently not inside the visible area.

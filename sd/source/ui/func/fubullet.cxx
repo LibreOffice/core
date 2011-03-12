@@ -139,19 +139,19 @@ void FuBullet::InsertFormattingMark( sal_Unicode cMark )
     {
         // prevent flickering
         pOV->HideCursor();
-        pOL->SetUpdateMode(FALSE);
+        pOL->SetUpdateMode(sal_False);
 
         // remove old selected text
         pOV->InsertText( aEmptyStr );
 
         // prepare undo
-        SfxUndoManager& rUndoMgr =  pOL->GetUndoManager();
+        ::svl::IUndoManager& rUndoMgr =  pOL->GetUndoManager();
         rUndoMgr.EnterListAction(String(SdResId(STR_UNDO_INSERT_SPECCHAR)),
                                     aEmptyStr );
 
         // insert given text
         String aStr( cMark );
-        pOV->InsertText( cMark, TRUE);
+        pOV->InsertText( cMark, sal_True);
 
         ESelection aSel = pOV->GetSelection();
         aSel.nStartPara = aSel.nEndPara;
@@ -161,7 +161,7 @@ void FuBullet::InsertFormattingMark( sal_Unicode cMark )
         rUndoMgr.LeaveListAction();
 
         // restart repainting
-        pOL->SetUpdateMode(TRUE);
+        pOL->SetUpdateMode(sal_True);
         pOV->ShowCursor();
     }
 }
@@ -171,7 +171,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
     const SfxItemSet *pArgs = rReq.GetArgs();
     const SfxPoolItem* pItem = 0;
     if( pArgs )
-        pArgs->GetItemState(mpDoc->GetPool().GetWhich(SID_CHARMAP), FALSE, &pItem);
+        pArgs->GetItemState(mpDoc->GetPool().GetWhich(SID_CHARMAP), sal_False, &pItem);
 
     String aChars, aFontName;
     Font aFont;
@@ -179,7 +179,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
     {
         aChars = ((const SfxStringItem*)pItem)->GetValue();
         const SfxPoolItem* pFtItem = NULL;
-        pArgs->GetItemState( mpDoc->GetPool().GetWhich(SID_ATTR_SPECIALCHAR), FALSE, &pFtItem);
+        pArgs->GetItemState( mpDoc->GetPool().GetWhich(SID_ATTR_SPECIALCHAR), sal_False, &pFtItem);
         const SfxStringItem* pFontItem = PTR_CAST( SfxStringItem, pFtItem );
         if ( pFontItem )
         {
@@ -199,7 +199,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
     if (!aChars.Len() )
     {
         SfxAllItemSet aSet( mpDoc->GetPool() );
-        aSet.Put( SfxBoolItem( FN_PARAM_1, FALSE ) );
+        aSet.Put( SfxBoolItem( FN_PARAM_1, sal_False ) );
 
         SfxItemSet aFontAttr( mpDoc->GetPool() );
         mpView->GetAttributes( aFontAttr );
@@ -217,11 +217,11 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
         // Wenn Zeichen selektiert ist kann es angezeigt werden
         // pDLg->SetFont( );
         // pDlg->SetChar( );
-        USHORT nResult = pDlg->Execute();
+        sal_uInt16 nResult = pDlg->Execute();
         if( nResult == RET_OK )
         {
-            SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pCItem, SfxStringItem, SID_CHARMAP, FALSE );
-            SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pFItem, SvxFontItem, SID_ATTR_CHAR_FONT, FALSE );
+            SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pCItem, SfxStringItem, SID_CHARMAP, sal_False );
+            SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pFItem, SvxFontItem, SID_ATTR_CHAR_FONT, sal_False );
             if ( pFItem )
             {
                 aFont.SetName( pFItem->GetFamilyName() );
@@ -263,7 +263,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
         {
             // nicht flackern
             pOV->HideCursor();
-            pOL->SetUpdateMode(FALSE);
+            pOL->SetUpdateMode(sal_False);
 
             // alte Attributierung merken;
             // dazu vorher selektierten Bereich loeschen, denn der muss eh weg
@@ -275,10 +275,10 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
             SfxItemSet aOldSet( mpDoc->GetPool(), EE_CHAR_FONTINFO, EE_CHAR_FONTINFO, 0 );
             aOldSet.Put( pOV->GetAttribs() );
 
-            SfxUndoManager& rUndoMgr =  pOL->GetUndoManager();
+            ::svl::IUndoManager& rUndoMgr =  pOL->GetUndoManager();
             rUndoMgr.EnterListAction(String(SdResId(STR_UNDO_INSERT_SPECCHAR)),
                                      aEmptyStr );
-            pOV->InsertText(aChars, TRUE);
+            pOV->InsertText(aChars, sal_True);
 
             // attributieren (Font setzen)
             SfxItemSet aSet(pOL->GetEmptyItemSet());
@@ -302,7 +302,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
             rUndoMgr.LeaveListAction();
 
             // ab jetzt wieder anzeigen
-            pOL->SetUpdateMode(TRUE);
+            pOL->SetUpdateMode(sal_True);
             pOV->ShowCursor();
         }
     }

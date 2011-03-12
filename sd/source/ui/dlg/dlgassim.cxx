@@ -50,10 +50,10 @@ SdPageListControl::SdPageListControl(
     : SvTreeListBox(pParent, rResId)
 {
     // Tree-ListBox mit Linien versehen
-    SetWindowBits( WinBits( WB_TABSTOP | WB_BORDER | WB_HASLINES |
+    SetStyle( GetStyle() | WB_TABSTOP | WB_BORDER | WB_HASLINES |
                             WB_HASBUTTONS |  WB_HASLINESATROOT |
                             WB_HSCROLL |
-                            WB_HASBUTTONSATROOT ) );
+                            WB_HASBUTTONSATROOT );
 
     SetNodeDefaultImages ();
     m_pCheckButton = new SvLBoxButtonData(this);
@@ -117,8 +117,8 @@ void SdPageListControl::Fill( SdDrawDocument* pDoc )
 {
     Outliner* pOutliner = pDoc->GetInternalOutliner();
 
-    USHORT nPage = 0;
-    const USHORT nMaxPages = pDoc->GetPageCount();
+    sal_uInt16 nPage = 0;
+    const sal_uInt16 nMaxPages = pDoc->GetPageCount();
     while( nPage < nMaxPages )
     {
         SdPage* pPage = (SdPage*) pDoc->GetPage( nPage );
@@ -131,8 +131,8 @@ void SdPageListControl::Fill( SdDrawDocument* pDoc )
             if(!pTO)
             {
                 // Ermittelt das SdrTextObject mit dem Layout Text dieser Seite
-                const ULONG nObjectCount = pPage->GetObjCount();
-                for (ULONG nObject = 0; nObject < nObjectCount; nObject++)
+                const sal_uLong nObjectCount = pPage->GetObjCount();
+                for (sal_uLong nObject = 0; nObject < nObjectCount; nObject++)
                 {
                     SdrObject* pObject = pPage->GetObj(nObject);
                     if (pObject->GetObjInventor() == SdrInventor && pObject->GetObjIdentifier() == OBJ_OUTLINETEXT)
@@ -151,14 +151,14 @@ void SdPageListControl::Fill( SdDrawDocument* pDoc )
                     pOutliner->Clear();
                     pOutliner->SetText( *pOPO );
 
-                    ULONG nCount = pOutliner->GetParagraphCount();
+                    sal_uLong nCount = pOutliner->GetParagraphCount();
 
                     Paragraph* pPara = NULL;
 
-                    for (ULONG nPara = 0; nPara < nCount; nPara++)
+                    for (sal_uLong nPara = 0; nPara < nCount; nPara++)
                     {
                         pPara = pOutliner->GetParagraph(nPara);
-                        if(pPara && pOutliner->GetDepth( (USHORT) nPara ) == 0 )
+                        if(pPara && pOutliner->GetDepth( (sal_uInt16) nPara ) == 0 )
                         {
                             String aParaText = pOutliner->GetText(pPara);
                             if(aParaText.Len() != 0)
@@ -174,10 +174,10 @@ void SdPageListControl::Fill( SdDrawDocument* pDoc )
     pOutliner->Clear();
 }
 
-USHORT SdPageListControl::GetSelectedPage()
+sal_uInt16 SdPageListControl::GetSelectedPage()
 {
     SvLBoxEntry* pSelEntry = GetCurEntry();
-    USHORT nPage = 0;
+    sal_uInt16 nPage = 0;
 
     if ( pSelEntry )
     {
@@ -197,10 +197,10 @@ USHORT SdPageListControl::GetSelectedPage()
     return nPage;
 }
 
-BOOL SdPageListControl::IsPageChecked( USHORT nPage )
+sal_Bool SdPageListControl::IsPageChecked( sal_uInt16 nPage )
 {
     SvLBoxEntry* pEntry = GetModel()->GetEntry(nPage);
-    return pEntry?(BOOL)(GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED): FALSE;
+    return pEntry?(sal_Bool)(GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED): sal_False;
 }
 
 void SdPageListControl::DataChanged( const DataChangedEvent& rDCEvt )

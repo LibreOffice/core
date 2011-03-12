@@ -142,6 +142,10 @@ public:
     virtual PolyPolygonVector getPolygons();
     virtual void drawPolygons() const;
     virtual bool isPaintOverlayActive() const;
+    virtual void enablePaintOverlay();
+    virtual void disablePaintOverlay();
+    virtual void update_settings( bool bUserPaintEnabled, RGBColor const& aUserPaintColor, double dUserPaintStrokeWidth );
+
 
     // TODO(F2): Rework SlideBitmap to no longer be based on XBitmap,
     // but on canvas-independent basegfx bitmaps
@@ -159,6 +163,9 @@ private:
     virtual bool requestCursor( sal_Int16 nCursorShape );
     virtual void resetCursor();
 
+    void activatePaintOverlay();
+    void deactivatePaintOverlay();
+
     /** Query whether the slide has animations at all
 
         If the slide doesn't have animations, show() displays
@@ -170,9 +177,6 @@ private:
         otherwise
     */
     bool isAnimated();
-
-    void enablePaintOverlay();
-    void disablePaintOverlay();
 
     /// Set all Shapes to their initial attributes for slideshow
     bool applyInitialShapeAttributes( const ::com::sun::star::uno::Reference<
@@ -416,6 +420,13 @@ SlideImpl::SlideImpl( const uno::Reference< drawing::XDrawPage >&           xDra
     maContext.mrScreenUpdater.addViewUpdate(mpShapeManager);
 }
 
+void SlideImpl::update_settings( bool bUserPaintEnabled, RGBColor const& aUserPaintColor, double dUserPaintStrokeWidth )
+{
+    maUserPaintColor = aUserPaintColor;
+    mdUserPaintStrokeWidth = dUserPaintStrokeWidth;
+    mbUserPaintOverlayEnabled = bUserPaintEnabled;
+}
+
 SlideImpl::~SlideImpl()
 {
     if( mpShapeManager )
@@ -451,9 +462,7 @@ void SlideImpl::dispose()
     mpShapeManager.reset();
     mxRootNode.clear();
     mxDrawPage.clear();
-#ifndef ENABLE_PRESENTER_EXTRA_UI
     mxDrawPagesSupplier.clear();
-#endif
 }
 
 bool SlideImpl::prefetch()
@@ -539,7 +548,7 @@ bool SlideImpl::show( bool bSlideBackgoundPainted )
     // ---------------------------------------------------------------
 
     // enable paint overlay, if maUserPaintColor is valid
-    enablePaintOverlay();
+    activatePaintOverlay();
 
     // ---------------------------------------------------------------
 
@@ -563,7 +572,7 @@ void SlideImpl::hide()
 
     // disable user paint overlay under all circumstances,
     // this slide now ceases to be active.
-    disablePaintOverlay();
+    deactivatePaintOverlay();
 
     // ---------------------------------------------------------------
 
@@ -880,19 +889,33 @@ bool SlideImpl::implPrefetchShow()
 
 void SlideImpl::enablePaintOverlay()
 {
-    if( mbUserPaintOverlayEnabled )
+    if( !mbUserPaintOverlayEnabled || !mbPaintOverlayActive )
+    {
+        mbUserPaintOverlayEnabled = true;
+        activatePaintOverlay();
+    }
+}
+
+void SlideImpl::disablePaintOverlay()
+{
+}
+
+void SlideImpl::activatePaintOverlay()
+{
+    if( mbUserPaintOverlayEnabled || !maPolygons.empty() )
     {
         mpPaintOverlay = UserPaintOverlay::create( maUserPaintColor,
                                                    mdUserPaintStrokeWidth,
                                                    maContext,
-                                                   maPolygons );
+                                                   maPolygons,
+                                                   mbUserPaintOverlayEnabled );
         mbPaintOverlayActive = true;
     }
 }
 
 void SlideImpl::drawPolygons() const
 {
-    if( mbUserPaintOverlayEnabled )
+    if( mpPaintOverlay  )
         mpPaintOverlay->drawPolygons();
 }
 
@@ -915,7 +938,7 @@ bool SlideImpl::isPaintOverlayActive() const
     return mbPaintOverlayActive;
 }
 
-void SlideImpl::disablePaintOverlay()
+void SlideImpl::deactivatePaintOverlay()
 {
     if(mbPaintOverlayActive)
         maPolygons = mpPaintOverlay->getPolygons();
@@ -1251,12 +1274,7 @@ SlideSharedPtr createSlide( const uno::Reference< drawing::XDrawPage >&         
                             bool                                                bIntrinsicAnimationsAllowed,
                             bool                                                bDisableAnimationZOrder )
 {
-#ifdef ENABLE_PRESENTER_EXTRA_UI
     boost::shared_ptr<SlideImpl> pRet( new SlideImpl( xDrawPage, xDrawPages, xRootNode, rEventQueue,
-#else
-    (void)xDrawPages;
-    boost::shared_ptr<SlideImpl> pRet( new SlideImpl( xDrawPage, NULL, xRootNode, rEventQueue,
-#endif
                                                       rEventMultiplexer, rScreenUpdater,
                                                       rActivitiesQueue, rUserEventQueue,
                                                       rCursorManager, rViewContainer,

@@ -776,7 +776,7 @@
         MenuItem
         {
             Identifier = SID_FORMAT_TABLE_DLG;
-            HelpID = SID_FORMAT_TABLE_DLG;
+            HelpId = CMD_SID_FORMAT_TABLE_DLG;
             Text [ en-US ] = "~Table...";
         };
         MenuItem
@@ -791,32 +791,32 @@
                     MenuItem
                     {
                         Identifier = SID_TABLE_MERGE_CELLS;
-                        HelpID = SID_TABLE_MERGE_CELLS;
+                        HelpId = CMD_SID_TABLE_MERGE_CELLS;
                         Text [ en-US ] = "~Merge";
                     };
                     MenuItem
                     {
                         Identifier = SID_TABLE_SPLIT_CELLS;
-                        HelpID = SID_TABLE_SPLIT_CELLS;
+                        HelpId = CMD_SID_TABLE_SPLIT_CELLS;
                         Text [ en-US ] = "~Split...";
                     };
                     SEPARATOR
                     MenuItem
                     {
                         Identifier = SID_TABLE_VERT_NONE;
-                        HelpID = SID_TABLE_VERT_NONE;
+                        HelpId = CMD_SID_TABLE_VERT_NONE;
                         Text [ en-US ] = "~Top";
                     };
                     MenuItem
                     {
                         Identifier = SID_TABLE_VERT_CENTER;
-                        HelpID = SID_TABLE_VERT_CENTER;
+                        HelpId = CMD_SID_TABLE_VERT_CENTER;
                         Text [ en-US ] = "C~enter";
                     };
                     MenuItem
                     {
                         Identifier = SID_TABLE_VERT_BOTTOM;
-                        HelpID = SID_TABLE_VERT_BOTTOM;
+                        HelpId = CMD_SID_TABLE_VERT_BOTTOM;
                         Text [ en-US ] = "~Bottom";
                     };
                 };
@@ -834,26 +834,26 @@
                     MenuItem
                     {
                         Identifier = SID_TABLE_DISTRIBUTE_ROWS;
-                        HelpID = SID_TABLE_DISTRIBUTE_ROWS;
+                        HelpId = CMD_SID_TABLE_DISTRIBUTE_ROWS;
                         Text [ en-US ] = "Space ~Equally";
                     };
                     SEPARATOR
                     MenuItem
                     {
                         Identifier = SID_TABLE_SELECT_ROW;
-                        HelpID = SID_TABLE_SELECT_ROW;
+                        HelpId = CMD_SID_TABLE_SELECT_ROW;
                         Text [ en-US ] = "~Select";
                     };
                     MenuItem
                     {
                         Identifier = SID_TABLE_INSERT_ROW_DLG;
-                        HelpID = SID_TABLE_INSERT_ROW_DLG;
+                        HelpId = CMD_SID_TABLE_INSERT_ROW_DLG;
                         Text [ en-US ] = "~Insert...";
                     };
                     MenuItem
                     {
                         Identifier = SID_TABLE_DELETE_ROW;
-                        HelpID = SID_TABLE_DELETE_ROW;
+                        HelpId = CMD_SID_TABLE_DELETE_ROW;
                         Text [ en-US ] = "~Delete";
                     };
                 };
@@ -871,26 +871,26 @@
                     MenuItem
                     {
                         Identifier = SID_TABLE_DISTRIBUTE_COLUMNS;
-                        HelpID = SID_TABLE_DISTRIBUTE_COLUMNS;
+                        HelpId = CMD_SID_TABLE_DISTRIBUTE_COLUMNS;
                         Text [ en-US ] = "Space ~Equally";
                     };
                     SEPARATOR
                     MenuItem
                     {
                         Identifier = SID_TABLE_SELECT_COL;
-                        HelpID = SID_TABLE_SELECT_COL;
+                        HelpId = CMD_SID_TABLE_SELECT_COL;
                         Text [ en-US ] = "~Select";
                     };
                     MenuItem
                     {
                         Identifier = SID_TABLE_INSERT_COL_DLG;
-                        HelpID = SID_TABLE_INSERT_COL_DLG;
+                        HelpId = CMD_SID_TABLE_INSERT_COL_DLG;
                         Text [ en-US ] = "~Insert...";
                     };
                     MenuItem
                     {
                         Identifier = SID_TABLE_DELETE_COL;
-                        HelpID = SID_TABLE_DELETE_COL;
+                        HelpId = CMD_SID_TABLE_DELETE_COL;
                         Text [ en-US ] = "~Delete";
                     };
                 };

@@ -43,8 +43,8 @@ TYPEINIT1(SdUndoGroup, SdUndoAction);
 
 SdUndoGroup::~SdUndoGroup()
 {
-    ULONG nLast = aCtn.Count();
-    for (ULONG nAction = 0; nAction < nLast; nAction++)
+    sal_uLong nLast = aCtn.Count();
+    for (sal_uLong nAction = 0; nAction < nLast; nAction++)
     {
         delete (SdUndoAction*) aCtn.GetObject(nAction);
     }
@@ -57,9 +57,9 @@ SdUndoGroup::~SdUndoGroup()
 |*
 \************************************************************************/
 
-BOOL SdUndoGroup::Merge( SfxUndoAction* pNextAction )
+sal_Bool SdUndoGroup::Merge( SfxUndoAction* pNextAction )
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
 
     if( pNextAction && pNextAction->ISA( SdUndoAction ) )
     {
@@ -68,7 +68,7 @@ BOOL SdUndoGroup::Merge( SfxUndoAction* pNextAction )
         if( pClone )
         {
             AddAction( pClone );
-            bRet = TRUE;
+            bRet = sal_True;
         }
     }
 
@@ -86,7 +86,7 @@ void SdUndoGroup::Undo()
     long nLast = aCtn.Count();
     for (long nAction = nLast - 1; nAction >= 0; nAction--)
     {
-        ((SdUndoAction*)aCtn.GetObject((ULONG)nAction))->Undo();
+        ((SdUndoAction*)aCtn.GetObject((sal_uLong)nAction))->Undo();
     }
 
 }
@@ -99,8 +99,8 @@ void SdUndoGroup::Undo()
 
 void SdUndoGroup::Redo()
 {
-    ULONG nLast = aCtn.Count();
-    for (ULONG nAction = 0; nAction < nLast; nAction++)
+    sal_uLong nLast = aCtn.Count();
+    for (sal_uLong nAction = 0; nAction < nLast; nAction++)
     {
         ((SdUndoAction*)aCtn.GetObject(nAction))->Redo();
     }

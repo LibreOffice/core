@@ -280,7 +280,7 @@ void DialogListBox::StateChanged( StateChangedType nType )
     }
     else if ( ( nType == STATE_CHANGE_UPDATEMODE ) || ( nType == STATE_CHANGE_DATA ) )
     {
-        BOOL bUpdate = IsUpdateMode();
+        sal_Bool bUpdate = IsUpdateMode();
         mpChild->SetUpdateMode( bUpdate );
         if ( bUpdate && IsReallyVisible() )
             ImplCheckScrollBars();

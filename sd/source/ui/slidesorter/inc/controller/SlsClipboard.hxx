@@ -25,11 +25,12 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef SD_SLIDESORTER_CLIPBOARD
 #define SD_SLIDESORTER_CLIPBOARD
 
 #include "ViewClipboard.hxx"
-
+#include "controller/SlsSelectionObserver.hxx"
 #include <sal/types.h>
 #include <tools/solar.h>
 #include <svx/svdpage.hxx>
@@ -87,23 +88,25 @@ public:
         const AcceptDropEvent& rEvt,
         DropTargetHelper& rTargetHelper,
         ::sd::Window* pTargetWindow = NULL,
-        USHORT nPage = SDRPAGE_NOTFOUND,
-        USHORT nLayer = SDRPAGE_NOTFOUND );
+        sal_uInt16 nPage = SDRPAGE_NOTFOUND,
+        sal_uInt16 nLayer = SDRPAGE_NOTFOUND );
 
     sal_Int8 ExecuteDrop (
         const ExecuteDropEvent& rEvt,
         DropTargetHelper& rTargetHelper,
         ::sd::Window* pTargetWindow = NULL,
-        USHORT nPage = SDRPAGE_NOTFOUND,
-        USHORT nLayer = SDRPAGE_NOTFOUND);
+        sal_uInt16 nPage = SDRPAGE_NOTFOUND,
+        sal_uInt16 nLayer = SDRPAGE_NOTFOUND);
+
+    void Abort (void);
 
 protected:
-    virtual USHORT DetermineInsertPosition (
+    virtual sal_uInt16 DetermineInsertPosition (
         const SdTransferable& rTransferable);
 
-    virtual USHORT InsertSlides (
+    virtual sal_uInt16 InsertSlides (
         const SdTransferable& rTransferable,
-        USHORT nInsertPosition);
+        sal_uInt16 nInsertPosition);
 
 private:
     SlideSorter& mrSlideSorter;
@@ -124,9 +127,18 @@ private:
 
     /** When pages are moved or copied then the selection of the slide
         sorter has to be updated.  This flag is used to remember whether the
-        selection has to be updated or can stay as it is (FALSE).
+        selection has to be updated or can stay as it is (sal_False).
     */
     bool mbUpdateSelectionPending;
+
+    /** Used when a drop is executed to combine all undo actions into one.
+        Typically created in ExecuteDrop() and released in DragFinish().
+    */
+    class UndoContext;
+    ::boost::scoped_ptr<UndoContext> mpUndoContext;
+
+    ::boost::scoped_ptr<SelectionObserver::Context> mpSelectionObserverContext;
+    sal_uLong mnDragFinishedUserEventId;
 
     void CreateSlideTransferable (
         ::Window* pWindow,
@@ -207,8 +219,13 @@ private:
         const void* pDropEvent ,
         DropTargetHelper& rTargetHelper,
         ::sd::Window* pTargetWindow,
-        USHORT nPage,
-        USHORT nLayer);
+        sal_uInt16 nPage,
+        sal_uInt16 nLayer);
+
+    /** Asynchronous part of DragFinished.  The argument is the sal_Int8
+        nDropAction, disguised as void*.
+    */
+    DECL_LINK(ProcessDragFinished, void*);
 };
 
 } } } // end of namespace ::sd::slidesorter::controller

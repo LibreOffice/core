@@ -65,7 +65,7 @@ SdCharDlg::SdCharDlg( Window* pParent, const SfxItemSet* pAttr,
 
 // -----------------------------------------------------------------------
 
-void SdCharDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
+void SdCharDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
     switch( nId )

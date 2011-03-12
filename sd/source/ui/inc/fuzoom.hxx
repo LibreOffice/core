@@ -34,7 +34,7 @@
 
 namespace sd {
 
-extern USHORT SidArrayZoom[];
+extern sal_uInt16 SidArrayZoom[];
 
 class FuZoom
     : public FuPoor
@@ -45,9 +45,9 @@ public:
     static FunctionReference Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
 
     // Mouse- & Key-Events
-    virtual BOOL MouseMove(const MouseEvent& rMEvt);
-    virtual BOOL MouseButtonUp(const MouseEvent& rMEvt);
-    virtual BOOL MouseButtonDown(const MouseEvent& rMEvt);
+    virtual sal_Bool MouseMove(const MouseEvent& rMEvt);
+    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt);
+    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt);
 
     virtual void Activate();        // Function aktivieren
     virtual void Deactivate();      // Function deaktivieren
@@ -59,8 +59,8 @@ protected:
     Point       aBeginPos;
     Point       aEndPos;
     Rectangle   aZoomRect;
-    BOOL        bVisible;
-    BOOL        bStartDrag;
+    sal_Bool        bVisible;
+    sal_Bool        bStartDrag;
     Pointer     aPtr;
 
 private:

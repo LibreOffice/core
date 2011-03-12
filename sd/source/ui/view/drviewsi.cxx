@@ -80,13 +80,13 @@ void DrawViewShell::ExecEffectWin( SfxRequest& rReq )
 {
     CheckLineTo (rReq);
 
-    USHORT nSId = rReq.GetSlot();
+    sal_uInt16 nSId = rReq.GetSlot();
 
     switch( nSId )
     {
         case SID_3D_INIT:
         {
-            USHORT nId = Svx3DChildWindow::GetChildWindowId();
+            sal_uInt16 nId = Svx3DChildWindow::GetChildWindowId();
             SfxChildWindow* pWindow = GetViewFrame()->GetChildWindow( nId );
             if( pWindow )
             {
@@ -119,7 +119,7 @@ void DrawViewShell::ExecEffectWin( SfxRequest& rReq )
 \************************************************************************/
 void DrawViewShell::Update3DWindow()
 {
-    USHORT nId = Svx3DChildWindow::GetChildWindowId();
+    sal_uInt16 nId = Svx3DChildWindow::GetChildWindowId();
     SfxChildWindow* pWindow = GetViewFrame()->GetChildWindow( nId );
     if( pWindow )
     {
@@ -136,7 +136,7 @@ void DrawViewShell::Update3DWindow()
 
 void DrawViewShell::AssignFrom3DWindow()
 {
-    USHORT nId = Svx3DChildWindow::GetChildWindowId();
+    sal_uInt16 nId = Svx3DChildWindow::GetChildWindowId();
     SfxChildWindow* pWin = GetViewFrame()->GetChildWindow( nId );
     if( pWin )
     {
@@ -158,12 +158,12 @@ void DrawViewShell::AssignFrom3DWindow()
                     // Nur TextAttribute zuweisen
                     SfxItemSet aTextSet( GetDoc()->GetPool(),
                         EE_ITEMS_START, EE_ITEMS_END, 0 );
-                    aTextSet.Put( aSet, FALSE );
+                    aTextSet.Put( aSet, sal_False );
                     GetView()->SetAttributes( aTextSet );
 
                     // Text in 3D umwandeln
-                    USHORT nSId = SID_CONVERT_TO_3D;
-                    SfxBoolItem aItem( nSId, TRUE );
+                    sal_uInt16 nSId = SID_CONVERT_TO_3D;
+                    SfxBoolItem aItem( nSId, sal_True );
                     GetViewFrame()->GetDispatcher()->Execute(
                         nSId, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
 

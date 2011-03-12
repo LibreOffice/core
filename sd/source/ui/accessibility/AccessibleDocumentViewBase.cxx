@@ -152,7 +152,7 @@ void AccessibleDocumentViewBase::Init (void)
 
         pWindow->AddChildEventListener (maWindowLink);
 
-        USHORT nCount = pWindow->GetChildCount();
+        sal_uInt16 nCount = pWindow->GetChildCount();
         for (sal_uInt16 i=0; i<nCount; i++)
         {
             Window* pChildWindow = pWindow->GetChild (i);

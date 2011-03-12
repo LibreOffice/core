@@ -165,7 +165,7 @@ bool Ppt97Animation::HasAfterEffect_DimAfterEffect() const
     return m_aAtom.nAfterEffect == 3;
 }
 #endif
-UINT32 Ppt97Animation::GetSoundRef() const
+sal_uInt32 Ppt97Animation::GetSoundRef() const
 {
     return m_aAtom.nSoundRef;
 }

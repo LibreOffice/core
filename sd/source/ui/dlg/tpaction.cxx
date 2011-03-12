@@ -45,7 +45,7 @@
 #include <com/sun/star/embed/VerbAttributes.hpp>
 
 #include "sdattr.hxx"
-
+#include <sfx2/sfxresid.hxx>
 
 #include <vcl/waitobj.hxx>
 #include <osl/file.hxx>
@@ -141,8 +141,11 @@ SdTPAction::SdTPAction( Window* pWindow, const SfxItemSet& rInAttrs ) :
         rOutAttrs       ( rInAttrs ),
         mpView          ( NULL ),
         mpDoc           ( NULL ),
-        bTreeUpdated    ( FALSE )
+        bTreeUpdated    ( sal_False )
 {
+    aEdtSound.SetAccessibleName(String(SdResId(STR_PATHNAME)));
+    aBtnSeek.SetAccessibleRelationMemberOf( &aFlSeparator );
+
     FreeResource();
 
     aBtnSearch.SetClickHdl( LINK( this, SdTPAction, ClickSearchHdl ) );
@@ -202,7 +205,7 @@ void SdTPAction::Construct()
     // OLE-Actionlistbox auffuellen
     SdrOle2Obj* pOleObj = NULL;
     SdrGrafObj* pGrafObj = NULL;
-    BOOL        bOLEAction = FALSE;
+    sal_Bool        bOLEAction = sal_False;
 
     if ( mpView->AreObjectsMarked() )
     {
@@ -214,8 +217,8 @@ void SdTPAction::Construct()
             SdrMark* pMark = rMarkList.GetMark(0);
             pObj = pMark->GetMarkedSdrObj();
 
-            UINT32 nInv = pObj->GetObjInventor();
-            UINT16 nSdrObjKind = pObj->GetObjIdentifier();
+            sal_uInt32 nInv = pObj->GetObjInventor();
+            sal_uInt16 nSdrObjKind = pObj->GetObjIdentifier();
 
             if (nInv == SdrInventor && nSdrObjKind == OBJ_OLE2)
             {
@@ -228,13 +231,13 @@ void SdTPAction::Construct()
 //          // VCXControl ?
 //          else if( pObj->IsA( TYPE( VCSbxDrawObject ) ) )
 //          {
-//              bDisableAll = TRUE;
+//              bDisableAll = sal_True;
 //          }
         }
     }
     if( pGrafObj )
     {
-        bOLEAction = TRUE;
+        bOLEAction = sal_True;
 
         aVerbVector.push_back( 0 );
         aLbOLEAction.InsertEntry( MnemonicGenerator::EraseAllMnemonicChars( String( SdResId( STR_EDIT_OBJ ) ) ) );
@@ -244,7 +247,7 @@ void SdTPAction::Construct()
         uno::Reference < embed::XEmbeddedObject > xObj = pOleObj->GetObjRef();
         if ( xObj.is() )
         {
-            bOLEAction = TRUE;
+            bOLEAction = sal_True;
             uno::Sequence < embed::VerbDescriptor > aVerbs;
             try
             {
@@ -270,24 +273,24 @@ void SdTPAction::Construct()
     }
 
     pCurrentActions = new List;
-    pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_NONE, LIST_APPEND);
-    pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_PREVPAGE, LIST_APPEND);
-    pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_NEXTPAGE, LIST_APPEND);
-    pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_FIRSTPAGE, LIST_APPEND);
-    pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_LASTPAGE, LIST_APPEND);
-    pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_BOOKMARK, LIST_APPEND);
-    pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_DOCUMENT, LIST_APPEND);
-    pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_SOUND, LIST_APPEND);
+    pCurrentActions->Insert((void*)(sal_uIntPtr)presentation::ClickAction_NONE, LIST_APPEND);
+    pCurrentActions->Insert((void*)(sal_uIntPtr)presentation::ClickAction_PREVPAGE, LIST_APPEND);
+    pCurrentActions->Insert((void*)(sal_uIntPtr)presentation::ClickAction_NEXTPAGE, LIST_APPEND);
+    pCurrentActions->Insert((void*)(sal_uIntPtr)presentation::ClickAction_FIRSTPAGE, LIST_APPEND);
+    pCurrentActions->Insert((void*)(sal_uIntPtr)presentation::ClickAction_LASTPAGE, LIST_APPEND);
+    pCurrentActions->Insert((void*)(sal_uIntPtr)presentation::ClickAction_BOOKMARK, LIST_APPEND);
+    pCurrentActions->Insert((void*)(sal_uIntPtr)presentation::ClickAction_DOCUMENT, LIST_APPEND);
+    pCurrentActions->Insert((void*)(sal_uIntPtr)presentation::ClickAction_SOUND, LIST_APPEND);
     if( bOLEAction && aLbOLEAction.GetEntryCount() )
-        pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_VERB, LIST_APPEND );
-    pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_PROGRAM, LIST_APPEND);
-    pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_MACRO, LIST_APPEND);
-    pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_STOPPRESENTATION, LIST_APPEND);
+        pCurrentActions->Insert((void*)(sal_uIntPtr)presentation::ClickAction_VERB, LIST_APPEND );
+    pCurrentActions->Insert((void*)(sal_uIntPtr)presentation::ClickAction_PROGRAM, LIST_APPEND);
+    pCurrentActions->Insert((void*)(sal_uIntPtr)presentation::ClickAction_MACRO, LIST_APPEND);
+    pCurrentActions->Insert((void*)(sal_uIntPtr)presentation::ClickAction_STOPPRESENTATION, LIST_APPEND);
 
     // Action-Listbox fuellen
-    for (ULONG nAction = 0; nAction < pCurrentActions->Count(); nAction++)
+    for (sal_uLong nAction = 0; nAction < pCurrentActions->Count(); nAction++)
     {
-        USHORT nRId = GetClickActionSdResId((presentation::ClickAction)(ULONG)pCurrentActions->GetObject(nAction));
+        sal_uInt16 nRId = GetClickActionSdResId((presentation::ClickAction)(sal_uLong)pCurrentActions->GetObject(nAction));
         aLbAction.InsertEntry( String( SdResId( nRId ) ) );
     }
 
@@ -295,9 +298,9 @@ void SdTPAction::Construct()
 
 // -----------------------------------------------------------------------
 
-BOOL SdTPAction::FillItemSet( SfxItemSet& rAttrs )
+sal_Bool SdTPAction::FillItemSet( SfxItemSet& rAttrs )
 {
-    BOOL bModified = FALSE;
+    sal_Bool bModified = sal_False;
     presentation::ClickAction eCA = presentation::ClickAction_NONE;
 
     if( aLbAction.GetSelectEntryCount() )
@@ -305,13 +308,13 @@ BOOL SdTPAction::FillItemSet( SfxItemSet& rAttrs )
 
     if( aLbAction.GetSavedValue() != aLbAction.GetSelectEntryPos() )
     {
-        rAttrs.Put( SfxAllEnumItem( ATTR_ACTION, (USHORT)eCA ) );
-        bModified = TRUE;
+        rAttrs.Put( SfxAllEnumItem( ATTR_ACTION, (sal_uInt16)eCA ) );
+        bModified = sal_True;
     }
     else
         rAttrs.InvalidateItem( ATTR_ACTION );
 
-    String aFileName = GetEditText( TRUE );
+    String aFileName = GetEditText( sal_True );
     if( aFileName.Len() == 0 )
         rAttrs.InvalidateItem( ATTR_ACTION_FILENAME );
     else
@@ -327,7 +330,7 @@ BOOL SdTPAction::FillItemSet( SfxItemSet& rAttrs )
                                                         INetURLObject::DECODE_UNAMBIGUOUS );
 
             rAttrs.Put( SfxStringItem( ATTR_ACTION_FILENAME, aFileName ) );
-            bModified = TRUE;
+            bModified = sal_True;
         }
         else
         {
@@ -367,7 +370,7 @@ void SdTPAction::Reset( const SfxItemSet& rAttrs )
         case presentation::ClickAction_BOOKMARK:
         {
             if( !aLbTree.SelectEntry( aFileName ) )
-                aLbTree.SelectAll( FALSE );
+                aLbTree.SelectAll( sal_False );
         }
         break;
 
@@ -418,8 +421,8 @@ void SdTPAction::UpdateTree()
     if( !bTreeUpdated && mpDoc && mpDoc->GetDocSh() && mpDoc->GetDocSh()->GetMedium() )
     {
         //aLbTree.Clear();
-        aLbTree.Fill( mpDoc, TRUE, mpDoc->GetDocSh()->GetMedium()->GetName() );
-        bTreeUpdated = TRUE;
+        aLbTree.Fill( mpDoc, sal_True, mpDoc->GetDocSh()->GetMedium()->GetName() );
+        bTreeUpdated = sal_True;
     }
 }
 
@@ -429,11 +432,11 @@ void SdTPAction::OpenFileDialog()
 {
     // Soundpreview nur fuer Interaktionen mit Sound
     presentation::ClickAction eCA = GetActualClickAction();
-    BOOL bSound = ( eCA == presentation::ClickAction_SOUND );
-    BOOL bPage = ( eCA == presentation::ClickAction_BOOKMARK );
-    BOOL bDocument = ( eCA == presentation::ClickAction_DOCUMENT ||
+    sal_Bool bSound = ( eCA == presentation::ClickAction_SOUND );
+    sal_Bool bPage = ( eCA == presentation::ClickAction_BOOKMARK );
+    sal_Bool bDocument = ( eCA == presentation::ClickAction_DOCUMENT ||
                        eCA == presentation::ClickAction_PROGRAM );
-    BOOL bMacro = ( eCA == presentation::ClickAction_MACRO );
+    sal_Bool bMacro = ( eCA == presentation::ClickAction_MACRO );
 
     if( bPage )
     {
@@ -488,7 +491,7 @@ void SdTPAction::OpenFileDialog()
             // filter makes the (Windows system) open file dialog follow
             // links on the desktop to directories.
             aFileDialog.AddFilter (
-                String (SdResId (STR_SFX_FILTERNAME_ALL)),
+                String (SfxResId (STR_SFX_FILTERNAME_ALL)),
                 String (RTL_CONSTASCII_USTRINGPARAM("*.*")));
 
 
@@ -708,7 +711,7 @@ IMPL_LINK( SdTPAction, CheckFileHdl, void *, EMPTYARG )
         // Ueberpruefen, ob es eine gueltige Draw-Datei ist
         SfxMedium aMedium( aFile,
                     STREAM_READ | STREAM_NOCREATE,
-                    TRUE );               // Download
+                    sal_True );               // Download
 
         if( aMedium.IsStorage() )
         {
@@ -730,7 +733,7 @@ IMPL_LINK( SdTPAction, CheckFileHdl, void *, EMPTYARG )
                     aLastFile = aFile;
 
                     aLbTreeDocument.Clear();
-                    aLbTreeDocument.Fill( pBookmarkDoc, TRUE, aFile );
+                    aLbTreeDocument.Fill( pBookmarkDoc, sal_True, aFile );
                     mpDoc->CloseBookmarkDoc();
                     aLbTreeDocument.Show();
                 }
@@ -753,10 +756,10 @@ IMPL_LINK( SdTPAction, CheckFileHdl, void *, EMPTYARG )
 presentation::ClickAction SdTPAction::GetActualClickAction()
 {
     presentation::ClickAction eCA = presentation::ClickAction_NONE;
-    USHORT nPos = aLbAction.GetSelectEntryPos();
+    sal_uInt16 nPos = aLbAction.GetSelectEntryPos();
 
     if (nPos != LISTBOX_ENTRY_NOTFOUND)
-        eCA = (presentation::ClickAction)(ULONG)pCurrentActions->GetObject((ULONG)nPos);
+        eCA = (presentation::ClickAction)(sal_uLong)pCurrentActions->GetObject((sal_uLong)nPos);
     return( eCA );
 }
 
@@ -764,7 +767,7 @@ presentation::ClickAction SdTPAction::GetActualClickAction()
 
 void SdTPAction::SetActualClickAction( presentation::ClickAction eCA )
 {
-    USHORT nPos = (USHORT)pCurrentActions->GetPos((void*)(ULONG)eCA);
+    sal_uInt16 nPos = (sal_uInt16)pCurrentActions->GetPos((void*)(sal_uLong)eCA);
     DBG_ASSERT(nPos != 0xffff, "unbekannte Interaktion");
     aLbAction.SelectEntryPos(nPos);
 }
@@ -834,7 +837,7 @@ void SdTPAction::SetEditText( String const & rStr )
 
 //------------------------------------------------------------------------
 
-String SdTPAction::GetEditText( BOOL bFullDocDestination )
+String SdTPAction::GetEditText( sal_Bool bFullDocDestination )
 {
     String aStr;
     presentation::ClickAction eCA = GetActualClickAction();
@@ -846,7 +849,7 @@ String SdTPAction::GetEditText( BOOL bFullDocDestination )
             break;
         case presentation::ClickAction_VERB:
             {
-                const USHORT nPos = aLbOLEAction.GetSelectEntryPos();
+                const sal_uInt16 nPos = aLbOLEAction.GetSelectEntryPos();
                 if( nPos < aVerbVector.size() )
                     aStr = UniString::CreateFromInt32( aVerbVector[ nPos ] );
                 return aStr;
@@ -901,7 +904,7 @@ String SdTPAction::GetEditText( BOOL bFullDocDestination )
 
 //------------------------------------------------------------------------
 
-USHORT SdTPAction::GetClickActionSdResId( presentation::ClickAction eCA )
+sal_uInt16 SdTPAction::GetClickActionSdResId( presentation::ClickAction eCA )
 {
     switch( eCA )
     {

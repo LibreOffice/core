@@ -43,12 +43,12 @@ class FuHangulHanjaConversion : public FuPoor
 
     static FunctionReference Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
 
-    void StartConversion( INT16 nSourceLanguage,  INT16 nTargetLanguage,
-                          const Font *pTargetFont, INT32 nOptions, BOOL bIsInteractive );
+    void StartConversion( sal_Int16 nSourceLanguage,  sal_Int16 nTargetLanguage,
+                          const Font *pTargetFont, sal_Int32 nOptions, sal_Bool bIsInteractive );
 
     void StartChineseConversion();
 
-    void ConvertStyles( INT16 nTargetLanguage, const Font *pTargetFont );
+    void ConvertStyles( sal_Int16 nTargetLanguage, const Font *pTargetFont );
 
     Outliner* GetOutliner() const { return pSdOutliner; }
 
@@ -56,7 +56,7 @@ class FuHangulHanjaConversion : public FuPoor
     ~FuHangulHanjaConversion();
 
     Outliner*   pSdOutliner;
-    BOOL            bOwnOutliner;
+    sal_Bool            bOwnOutliner;
 
 private:
     FuHangulHanjaConversion (

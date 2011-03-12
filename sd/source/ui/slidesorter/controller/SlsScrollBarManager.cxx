@@ -32,11 +32,12 @@
 
 #include "SlideSorter.hxx"
 #include "controller/SlideSorterController.hxx"
+#include "controller/SlsVisibleAreaManager.hxx"
 #include "model/SlideSorterModel.hxx"
 #include "model/SlsPageDescriptor.hxx"
 #include "view/SlideSorterView.hxx"
 #include "view/SlsLayouter.hxx"
-#include "view/SlsViewOverlay.hxx"
+#include "view/SlsTheme.hxx"
 #include "Window.hxx"
 #include "sdpage.hxx"
 
@@ -52,11 +53,15 @@ ScrollBarManager::ScrollBarManager (SlideSorter& rSlideSorter)
       mpVerticalScrollBar(mrSlideSorter.GetVerticalScrollBar()),
       mnHorizontalPosition (0),
       mnVerticalPosition (0),
-      maScrollBorder (10,10),
-      mnHorizontalScrollFactor (0.1),
-      mnVerticalScrollFactor (0.1),
+      maScrollBorder (20,20),
+      mnHorizontalScrollFactor (0.15),
+      mnVerticalScrollFactor (0.25),
       mpScrollBarFiller(mrSlideSorter.GetScrollBarFiller()),
-      mpContentWindow(mrSlideSorter.GetContentWindow())
+      maAutoScrollTimer(),
+      maAutoScrollOffset(0,0),
+      mbIsAutoScrollActive(false),
+      mpContentWindow(mrSlideSorter.GetContentWindow()),
+      maAutoScrollFunctor()
 {
     // Hide the scroll bars by default to prevent display errors while
     // switching between view shells:  In the short time between initiating
@@ -67,7 +72,7 @@ ScrollBarManager::ScrollBarManager (SlideSorter& rSlideSorter)
     mpVerticalScrollBar->Hide();
     mpScrollBarFiller->Hide();
 
-    maAutoScrollTimer.SetTimeout(50);
+    maAutoScrollTimer.SetTimeout(25);
     maAutoScrollTimer.SetTimeoutHdl (
         LINK(this, ScrollBarManager, AutoScrollTimeoutHandler));
 }
@@ -92,17 +97,15 @@ void ScrollBarManager::LateInitialization (void)
 void ScrollBarManager::Connect (void)
 {
     if (mpVerticalScrollBar != NULL)
+    {
         mpVerticalScrollBar->SetScrollHdl (
-            LINK(
-                this,
-                ScrollBarManager,
-                VerticalScrollBarHandler));
+            LINK(this, ScrollBarManager, VerticalScrollBarHandler));
+    }
     if (mpHorizontalScrollBar != NULL)
-        mpHorizontalScrollBar->SetScrollHdl (
-            LINK(
-                this,
-                ScrollBarManager,
-                HorizontalScrollBarHandler));
+    {
+        mpHorizontalScrollBar->SetScrollHdl(
+            LINK(this, ScrollBarManager, HorizontalScrollBarHandler));
+    }
 }
 
 
@@ -111,9 +114,13 @@ void ScrollBarManager::Connect (void)
 void ScrollBarManager::Disconnect (void)
 {
     if (mpVerticalScrollBar != NULL)
+    {
         mpVerticalScrollBar->SetScrollHdl (Link());
+    }
     if (mpHorizontalScrollBar != NULL)
+    {
         mpHorizontalScrollBar->SetScrollHdl (Link());
+    }
 }
 
 
@@ -130,12 +137,24 @@ void ScrollBarManager::Disconnect (void)
     window changes and a second call to the layouter becomes necessary.
     That call is made anyway after this method returns.
 */
-Rectangle ScrollBarManager::PlaceScrollBars (const Rectangle& rAvailableArea)
+Rectangle ScrollBarManager::PlaceScrollBars (
+    const Rectangle& rAvailableArea,
+    const bool bIsHorizontalScrollBarAllowed,
+    const bool bIsVerticalScrollBarAllowed)
 {
-    Rectangle aRemainingSpace (DetermineScrollBarVisibilities(rAvailableArea));
-    PlaceHorizontalScrollBar (rAvailableArea);
-    PlaceVerticalScrollBar (rAvailableArea);
-    PlaceFiller (rAvailableArea);
+    Rectangle aRemainingSpace (DetermineScrollBarVisibilities(
+        rAvailableArea,
+        bIsHorizontalScrollBarAllowed,
+        bIsVerticalScrollBarAllowed));
+
+    if (mpHorizontalScrollBar!=NULL && mpHorizontalScrollBar->IsVisible())
+        PlaceHorizontalScrollBar (rAvailableArea);
+
+    if (mpVerticalScrollBar!=NULL && mpVerticalScrollBar->IsVisible())
+        PlaceVerticalScrollBar (rAvailableArea);
+
+    if (mpScrollBarFiller!=NULL && mpScrollBarFiller->IsVisible())
+        PlaceFiller (rAvailableArea);
 
     return aRemainingSpace;
 }
@@ -145,25 +164,21 @@ Rectangle ScrollBarManager::PlaceScrollBars (const Rectangle& rAvailableArea)
 
 void ScrollBarManager::PlaceHorizontalScrollBar (const Rectangle& aAvailableArea)
 {
-    if (mpHorizontalScrollBar != NULL
-        && mpHorizontalScrollBar->IsVisible())
-    {
-        // Save the current relative position.
-        mnHorizontalPosition = double(mpHorizontalScrollBar->GetThumbPos())
-            / double(mpHorizontalScrollBar->GetRange().Len());
+    // Save the current relative position.
+    mnHorizontalPosition = double(mpHorizontalScrollBar->GetThumbPos())
+        / double(mpHorizontalScrollBar->GetRange().Len());
 
-        // Place the scroll bar.
-        Size aScrollBarSize (mpHorizontalScrollBar->GetSizePixel());
-        mpHorizontalScrollBar->SetPosSizePixel (
-            Point(aAvailableArea.Left(),
-                aAvailableArea.Bottom()-aScrollBarSize.Height()+1),
-            Size (aAvailableArea.GetWidth() - GetVerticalScrollBarWidth(),
-                aScrollBarSize.Height()));
+    // Place the scroll bar.
+    Size aScrollBarSize (mpHorizontalScrollBar->GetSizePixel());
+    mpHorizontalScrollBar->SetPosSizePixel (
+        Point(aAvailableArea.Left(),
+            aAvailableArea.Bottom()-aScrollBarSize.Height()+1),
+        Size (aAvailableArea.GetWidth() - GetVerticalScrollBarWidth(),
+            aScrollBarSize.Height()));
 
-        // Restore the relative position.
-        mpHorizontalScrollBar->SetThumbPos(
-            (long)(0.5 + mnHorizontalPosition * mpHorizontalScrollBar->GetRange().Len()));
-    }
+    // Restore the relative position.
+    mpHorizontalScrollBar->SetThumbPos(
+        (long)(0.5 + mnHorizontalPosition * mpHorizontalScrollBar->GetRange().Len()));
 }
 
 
@@ -171,26 +186,17 @@ void ScrollBarManager::PlaceHorizontalScrollBar (const Rectangle& aAvailableArea
 
 void ScrollBarManager::PlaceVerticalScrollBar (const Rectangle& aArea)
 {
-    if (mpVerticalScrollBar != NULL
-        && mpVerticalScrollBar->IsVisible())
-    {
-        view::Layouter::DoublePoint aLayouterPosition
-            = mrSlideSorter.GetView().GetLayouter().ConvertModelToLayouterCoordinates (
-                Point (0, mpVerticalScrollBar->GetThumbPos()));
+    const double nThumbPosition (mpVerticalScrollBar->GetThumbPos());
 
-        // Place the scroll bar.
-        Size aScrollBarSize (mpVerticalScrollBar->GetSizePixel());
-        Point aPosition (aArea.Right()-aScrollBarSize.Width()+1, aArea.Top());
-        Size aSize (aScrollBarSize.Width(), aArea.GetHeight() - GetHorizontalScrollBarHeight());
-        mpVerticalScrollBar->SetPosSizePixel(aPosition, aSize);
+    // Place the scroll bar.
+    Size aScrollBarSize (mpVerticalScrollBar->GetSizePixel());
+    Point aPosition (aArea.Right()-aScrollBarSize.Width()+1, aArea.Top());
+    Size aSize (aScrollBarSize.Width(), aArea.GetHeight() - GetHorizontalScrollBarHeight());
+    mpVerticalScrollBar->SetPosSizePixel(aPosition, aSize);
 
-        // Restore the position.
-        mpVerticalScrollBar->SetThumbPos(
-            mrSlideSorter.GetView().GetLayouter().ConvertLayouterToModelCoordinates(
-                aLayouterPosition).Y());
-        mnVerticalPosition = double(mpVerticalScrollBar->GetThumbPos())
-            / double(mpVerticalScrollBar->GetRange().Len());
-    }
+    // Restore the position.
+    mpVerticalScrollBar->SetThumbPos(nThumbPosition);
+    mnVerticalPosition = nThumbPosition / double(mpVerticalScrollBar->GetRange().Len());
 }
 
 
@@ -198,23 +204,13 @@ void ScrollBarManager::PlaceVerticalScrollBar (const Rectangle& aArea)
 
 void ScrollBarManager::PlaceFiller (const Rectangle& aArea)
 {
-    // Place the filler when both scroll bars are visible.
-    if (mpHorizontalScrollBar != NULL
-        && mpVerticalScrollBar != NULL
-        && mpHorizontalScrollBar->IsVisible()
-        && mpVerticalScrollBar->IsVisible())
-    {
-        mpScrollBarFiller->SetPosSizePixel(
-            Point(
-                aArea.Right()-mpVerticalScrollBar->GetSizePixel().Width()+1,
-                aArea.Bottom()-mpHorizontalScrollBar->GetSizePixel().Height()+1),
-            Size (
-                mpVerticalScrollBar->GetSizePixel().Width(),
-                mpHorizontalScrollBar->GetSizePixel().Height()));
-        mpScrollBarFiller->Show();
-    }
-    else
-        mpScrollBarFiller->Hide();
+    mpScrollBarFiller->SetPosSizePixel(
+        Point(
+            aArea.Right()-mpVerticalScrollBar->GetSizePixel().Width()+1,
+            aArea.Bottom()-mpHorizontalScrollBar->GetSizePixel().Height()+1),
+        Size (
+            mpVerticalScrollBar->GetSizePixel().Width(),
+            mpHorizontalScrollBar->GetSizePixel().Height()));
 }
 
 
@@ -223,7 +219,7 @@ void ScrollBarManager::PlaceFiller (const Rectangle& aArea)
 void ScrollBarManager::UpdateScrollBars (bool bResetThumbPosition, bool bUseScrolling)
 {
     Rectangle aModelArea (mrSlideSorter.GetView().GetModelArea());
-    ::sd::Window* pWindow = mrSlideSorter.GetView().GetWindow();
+    SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
     Size aWindowModelSize (pWindow->PixelToLogic(pWindow->GetSizePixel()));
 
     // The horizontal scroll bar is only shown when the window is
@@ -307,16 +303,15 @@ IMPL_LINK(ScrollBarManager, VerticalScrollBarHandler, ScrollBar*, pScrollBar)
     if (pScrollBar!=NULL
         && pScrollBar==mpVerticalScrollBar.get()
         && pScrollBar->IsVisible()
-        && mrSlideSorter.GetView().GetWindow()!=NULL)
+        && mrSlideSorter.GetContentWindow()!=NULL)
     {
         double nRelativePosition = double(pScrollBar->GetThumbPos())
             / double(pScrollBar->GetRange().Len());
         mrSlideSorter.GetView().InvalidatePageObjectVisibilities();
-        mrSlideSorter.GetView().GetWindow()->SetVisibleXY (
-            -1,
-            nRelativePosition);
+        mrSlideSorter.GetContentWindow()->SetVisibleXY(-1, nRelativePosition);
+        mrSlideSorter.GetController().GetVisibleAreaManager().DeactivateCurrentSlideTracking();
     }
-    return TRUE;
+    return sal_True;
 }
 
 
@@ -327,14 +322,15 @@ IMPL_LINK(ScrollBarManager, HorizontalScrollBarHandler, ScrollBar*, pScrollBar)
     if (pScrollBar!=NULL
         && pScrollBar==mpHorizontalScrollBar.get()
         && pScrollBar->IsVisible()
-        && mrSlideSorter.GetView().GetWindow()!=NULL)
+        && mrSlideSorter.GetContentWindow()!=NULL)
     {
         double nRelativePosition = double(pScrollBar->GetThumbPos())
             / double(pScrollBar->GetRange().Len());
         mrSlideSorter.GetView().InvalidatePageObjectVisibilities();
-        mrSlideSorter.GetView().GetWindow()->SetVisibleXY (nRelativePosition, -1);
+        mrSlideSorter.GetContentWindow()->SetVisibleXY(nRelativePosition, -1);
+        mrSlideSorter.GetController().GetVisibleAreaManager().DeactivateCurrentSlideTracking();
     }
-    return TRUE;
+    return sal_True;
 }
 
 
@@ -347,7 +343,7 @@ void ScrollBarManager::SetWindowOrigin (
     mnHorizontalPosition = nHorizontalPosition;
     mnVerticalPosition = nVerticalPosition;
 
-    ::sd::Window* pWindow = mrSlideSorter.GetView().GetWindow();
+    SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
     Size aViewSize (pWindow->GetViewSize());
     Point aOrigin (
         (long int) (mnHorizontalPosition * aViewSize.Width()),
@@ -372,31 +368,42 @@ void ScrollBarManager::SetWindowOrigin (
     b) when not showing a scroll bar the area used by the page objects fits
     into the available area in the scroll bars orientation.
 */
-Rectangle ScrollBarManager::DetermineScrollBarVisibilities (const Rectangle& rAvailableArea)
+Rectangle ScrollBarManager::DetermineScrollBarVisibilities (
+    const Rectangle& rAvailableArea,
+    const bool bIsHorizontalScrollBarAllowed,
+    const bool bIsVerticalScrollBarAllowed)
 {
     // Test which combination of scroll bars is the best.
     bool bShowHorizontal = false;
     bool bShowVertical = false;
-    do
+    if (mrSlideSorter.GetModel().GetPageCount() == 0)
     {
-        if (mrSlideSorter.GetModel().GetPageCount() == 0)
-            // No pages => no scroll bars.
-            break;
-
-        if (TestScrollBarVisibilities(bShowHorizontal=false, bShowVertical=false, rAvailableArea))
-            break;
-        if (TestScrollBarVisibilities(bShowHorizontal=true, bShowVertical=false, rAvailableArea))
-            break;
-        if (TestScrollBarVisibilities(bShowHorizontal=false, bShowVertical=true, rAvailableArea))
-            break;
-        if (TestScrollBarVisibilities(bShowHorizontal=true, bShowVertical=true, rAvailableArea))
-            break;
+        // No pages => no scroll bars.
     }
-    while (false);
+    else if (TestScrollBarVisibilities(false, false, rAvailableArea))
+    {
+        // Nothing to be done.
+    }
+    else if (bIsHorizontalScrollBarAllowed
+        && TestScrollBarVisibilities(true, false, rAvailableArea))
+    {
+        bShowHorizontal = true;
+    }
+    else if (bIsVerticalScrollBarAllowed
+        && TestScrollBarVisibilities(false, true, rAvailableArea))
+    {
+        bShowVertical = true;
+    }
+    else
+    {
+        bShowHorizontal = true;
+        bShowVertical = true;
+    }
 
     // Make the visibility of the scroll bars permanent.
     mpVerticalScrollBar->Show(bShowVertical);
     mpHorizontalScrollBar->Show(bShowHorizontal);
+    mpScrollBarFiller->Show(bShowVertical && bShowHorizontal);
 
     // Adapt the remaining space accordingly.
     Rectangle aRemainingSpace (rAvailableArea);
@@ -416,7 +423,7 @@ bool ScrollBarManager::TestScrollBarVisibilities (
     bool bVerticalScrollBarVisible,
     const Rectangle& rAvailableArea)
 {
-    bool bAreVisibilitiesOK = true;
+    model::SlideSorterModel& rModel (mrSlideSorter.GetModel());
 
     // Adapt the available size by subtracting the sizes of the scroll bars
     // visible in this combination.
@@ -428,74 +435,81 @@ bool ScrollBarManager::TestScrollBarVisibilities (
 
     // Tell the view to rearrange its page objects and check whether the
     // page objects can be shown without clipping.
-    bool bRearrangeSuccess (false);
-    if (mrSlideSorter.GetView().GetOrientation() == view::SlideSorterView::HORIZONTAL)
-    {
-        bRearrangeSuccess = mrSlideSorter.GetView().GetLayouter().RearrangeHorizontal (
-            aBrowserSize,
-            mrSlideSorter.GetModel().GetPageDescriptor(0)->GetPage()->GetSize(),
-            mpContentWindow.get(),
-            mrSlideSorter.GetModel().GetPageCount());
-    }
-    else
-    {
-        bRearrangeSuccess =  mrSlideSorter.GetView().GetLayouter().RearrangeVertical (
-            aBrowserSize,
-            mrSlideSorter.GetModel().GetPageDescriptor(0)->GetPage()->GetSize(),
-            mpContentWindow.get());
-    }
+    bool bRearrangeSuccess (mrSlideSorter.GetView().GetLayouter().Rearrange (
+        mrSlideSorter.GetView().GetOrientation(),
+        aBrowserSize,
+        rModel.GetPageDescriptor(0)->GetPage()->GetSize(),
+        rModel.GetPageCount()));
 
     if (bRearrangeSuccess)
     {
-        Size aPageSize = mrSlideSorter.GetView().GetLayouter().GetPageBox (
-            mrSlideSorter.GetModel().GetPageCount()).GetSize();
+        Size aPageSize = mrSlideSorter.GetView().GetLayouter().GetTotalBoundingBox().GetSize();
         Size aWindowModelSize = mpContentWindow->PixelToLogic(aBrowserSize);
 
-        bool bHorizontallyClipped = (aPageSize.Width() > aWindowModelSize.Width());
-        bool bVerticallyClipped = (aPageSize.Height() > aWindowModelSize.Height());
-        bAreVisibilitiesOK = (bHorizontallyClipped == bHorizontalScrollBarVisible)
-            && (bVerticallyClipped == bVerticalScrollBarVisible);
+        // The content may be clipped, i.e. not fully visible, in one
+        // direction only when the scroll bar is visible in that direction.
+        if (aPageSize.Width() > aWindowModelSize.Width())
+            if ( ! bHorizontalScrollBarVisible)
+                return false;
+        if (aPageSize.Height() > aWindowModelSize.Height())
+            if ( ! bVerticalScrollBarVisible)
+                return false;
+
+        return true;
     }
     else
-        bAreVisibilitiesOK = false;
-
-    return bAreVisibilitiesOK;
+        return false;
 }
 
 
 
 
-void ScrollBarManager::SetTop (const sal_Int32 nNewTop)
+void ScrollBarManager::SetTopLeft (const Point aNewTopLeft)
 {
-    if (mpVerticalScrollBar != NULL
-        && mpVerticalScrollBar->GetThumbPos() != nNewTop)
-    {
-        // Flush pending repaints before scrolling to avoid temporary artifacts.
-        mrSlideSorter.GetView().GetWindow()->Update();
+    if (( ! mpVerticalScrollBar
+            || mpVerticalScrollBar->GetThumbPos() == aNewTopLeft.Y())
+        && ( ! mpHorizontalScrollBar
+            || mpHorizontalScrollBar->GetThumbPos() == aNewTopLeft.X()))
+        return;
 
-        mpVerticalScrollBar->SetThumbPos(nNewTop);
-        mnVerticalPosition = double(nNewTop) / double(mpVerticalScrollBar->GetRange().Len());
-        mrSlideSorter.GetView().GetWindow()->SetVisibleXY (
-            mnHorizontalPosition, mnVerticalPosition);
+    // Flush pending repaints before scrolling to avoid temporary artifacts.
+    mrSlideSorter.GetContentWindow()->Update();
+
+    if (mpVerticalScrollBar)
+    {
+        mpVerticalScrollBar->SetThumbPos(aNewTopLeft.Y());
+        mnVerticalPosition = aNewTopLeft.Y() / double(mpVerticalScrollBar->GetRange().Len());
     }
+    if (mpHorizontalScrollBar)
+    {
+        mpHorizontalScrollBar->SetThumbPos(aNewTopLeft.X());
+        mnHorizontalPosition = aNewTopLeft.X() / double(mpHorizontalScrollBar->GetRange().Len());
+    }
+
+    mrSlideSorter.GetContentWindow()->SetVisibleXY(mnHorizontalPosition, mnVerticalPosition);
+    mrSlideSorter.GetView().InvalidatePageObjectVisibilities();
 }
 
 
 
 
-void ScrollBarManager::SetLeft (const sal_Int32 nNewLeft)
+sal_Int32 ScrollBarManager::GetTop (void) const
 {
-    if (mpHorizontalScrollBar != NULL
-        && mpHorizontalScrollBar->GetThumbPos() != nNewLeft)
-    {
-        // Flush pending repaints before scrolling to avoid temporary artifacts.
-        mrSlideSorter.GetView().GetWindow()->Update();
+    if (mpVerticalScrollBar != NULL)
+        return mpVerticalScrollBar->GetThumbPos();
+    else
+        return 0;
+}
 
-        mpHorizontalScrollBar->SetThumbPos(nNewLeft);
-        mnHorizontalPosition = double(nNewLeft) / double(mpHorizontalScrollBar->GetRange().Len());
-        mrSlideSorter.GetView().GetWindow()->SetVisibleXY (
-            mnHorizontalPosition, mnVerticalPosition);
-    }
+
+
+
+sal_Int32 ScrollBarManager::GetLeft (void) const
+{
+    if (mpHorizontalScrollBar != NULL)
+        return mpHorizontalScrollBar->GetThumbPos();
+    else
+        return 0;
 }
 
 
@@ -525,7 +539,7 @@ int ScrollBarManager::GetHorizontalScrollBarHeight (void) const
 
 void ScrollBarManager::CalcAutoScrollOffset (const Point& rMouseWindowPosition)
 {
-    ::sd::Window* pWindow = mrSlideSorter.GetView().GetWindow();
+    SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
 
     int nDx = 0;
     int nDy = 0;
@@ -580,14 +594,16 @@ void ScrollBarManager::CalcAutoScrollOffset (const Point& rMouseWindowPosition)
 
 
 
-bool ScrollBarManager::AutoScroll (const Point& rMouseWindowPosition)
+bool ScrollBarManager::AutoScroll (
+    const Point& rMouseWindowPosition,
+    const ::boost::function<void(void)>& rAutoScrollFunctor)
 {
-    CalcAutoScrollOffset (rMouseWindowPosition);
-    bool bResult = RepeatAutoScroll();
-    if (bResult)
-    {
-        maAutoScrollTimer.Start();
-    }
+    maAutoScrollFunctor = rAutoScrollFunctor;
+    CalcAutoScrollOffset(rMouseWindowPosition);
+    bool bResult (true);
+    if ( ! mbIsAutoScrollActive)
+        bResult = RepeatAutoScroll();
+
     return bResult;
 }
 
@@ -597,6 +613,7 @@ bool ScrollBarManager::AutoScroll (const Point& rMouseWindowPosition)
 void ScrollBarManager::StopAutoScroll (void)
 {
     maAutoScrollTimer.Stop();
+    mbIsAutoScrollActive = false;
 }
 
 
@@ -608,13 +625,23 @@ bool ScrollBarManager::RepeatAutoScroll (void)
     {
         if (mrSlideSorter.GetViewShell() != NULL)
         {
-            mrSlideSorter.GetViewShell()->ScrollLines(
+            mrSlideSorter.GetViewShell()->Scroll(
                 maAutoScrollOffset.Width(),
-                    maAutoScrollOffset.Height());
+                maAutoScrollOffset.Height());
+            mrSlideSorter.GetView().InvalidatePageObjectVisibilities();
+
+            if (maAutoScrollFunctor)
+                maAutoScrollFunctor();
+
+            mbIsAutoScrollActive = true;
+            maAutoScrollTimer.Start();
+
             return true;
         }
     }
 
+    maAutoScrollFunctor = ::boost::function<void(void)>();
+    mbIsAutoScrollActive = false;
     return false;
 }
 
@@ -626,6 +653,85 @@ IMPL_LINK(ScrollBarManager, AutoScrollTimeoutHandler, Timer *, EMPTYARG)
     RepeatAutoScroll();
 
     return 0;
+}
+
+
+
+
+void ScrollBarManager::Scroll(
+    const Orientation eOrientation,
+    const Unit eUnit,
+    const sal_Int32 nDistance)
+{
+    bool bIsVertical (false);
+    switch (eOrientation)
+    {
+        case Orientation_Horizontal: bIsVertical = false; break;
+        case Orientation_Vertical: bIsVertical = true; break;
+        default:
+            OSL_ASSERT(eOrientation==Orientation_Horizontal || eOrientation==Orientation_Vertical);
+            return;
+    }
+
+    Point aNewTopLeft (
+        mpHorizontalScrollBar ? mpHorizontalScrollBar->GetThumbPos() : 0,
+        mpVerticalScrollBar ? mpVerticalScrollBar->GetThumbPos() : 0);
+    switch (eUnit)
+    {
+        case Unit_Pixel:
+            if (bIsVertical)
+                aNewTopLeft.Y() += nDistance;
+            else
+                aNewTopLeft.X() += nDistance;
+            break;
+
+        case Unit_Slide:
+        {
+            view::Layouter& rLayouter (mrSlideSorter.GetView().GetLayouter());
+
+            // Calculate estimate of new location.
+            if (bIsVertical)
+                aNewTopLeft.Y() += nDistance * rLayouter.GetPageObjectSize().Height();
+            else
+                aNewTopLeft.X() += nDistance * rLayouter.GetPageObjectSize().Width();
+
+            // Adapt location to show whole slides.
+            if (bIsVertical)
+                if (nDistance > 0)
+                {
+                    const sal_Int32 nIndex (rLayouter.GetIndexAtPoint(
+                        Point(aNewTopLeft.X(), aNewTopLeft.Y()+mpVerticalScrollBar->GetVisibleSize()),
+                        true));
+                    aNewTopLeft.Y() = rLayouter.GetPageObjectBox(nIndex,true).Bottom()
+                        - mpVerticalScrollBar->GetVisibleSize();
+                }
+                else
+                {
+                    const sal_Int32 nIndex (rLayouter.GetIndexAtPoint(
+                        Point(aNewTopLeft.X(), aNewTopLeft.Y()),
+                        true));
+                    aNewTopLeft.Y() = rLayouter.GetPageObjectBox(nIndex,true).Top();
+                }
+            else
+                if (nDistance > 0)
+                {
+                    const sal_Int32 nIndex (rLayouter.GetIndexAtPoint(
+                        Point(aNewTopLeft.X()+mpVerticalScrollBar->GetVisibleSize(), aNewTopLeft.Y()),
+                        true));
+                    aNewTopLeft.X() = rLayouter.GetPageObjectBox(nIndex,true).Right()
+                        - mpVerticalScrollBar->GetVisibleSize();
+                }
+                else
+                {
+                    const sal_Int32 nIndex (rLayouter.GetIndexAtPoint(
+                        Point(aNewTopLeft.X(), aNewTopLeft.Y()),
+                            true));
+                    aNewTopLeft.X() = rLayouter.GetPageObjectBox(nIndex,true).Left();
+                }
+        }
+    }
+    mrSlideSorter.GetController().GetVisibleAreaManager().DeactivateCurrentSlideTracking();
+    SetTopLeft(aNewTopLeft);
 }
 
 

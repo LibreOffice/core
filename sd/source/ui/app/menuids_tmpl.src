@@ -27,6 +27,8 @@
 #include <svx/dialogs.hrc>
 #include "app.hrc"
 #include "res_bmp.hrc"
+#include "helpids.h"
+
 #define SEPARATOR       MenuItem { Separator = TRUE; };
  // DUMMY ist eine ID wo ein SubMenu folgt
  // (muss jeweils immer erhoeht werden!)
@@ -37,7 +39,7 @@
     MenuItem\
     {\
         Identifier = SID_DISTRIBUTE_DLG ; \
-        HelpID = SID_DISTRIBUTE_DLG ; \
+        HelpId = CMD_SID_DISTRIBUTE_DLG ; \
         Text [ en-US ] = "~Distribution..." ; \
     };
 
@@ -45,7 +47,7 @@
     MenuItem\
     {\
         Identifier = SID_DRAWINGMODE ; \
-        HelpID = SID_DRAWINGMODE ; \
+        HelpId = CMD_SID_DRAWINGMODE ; \
         Check = TRUE ; \
         Text [ en-US ] = "~Drawing View" ; \
     };
@@ -54,7 +56,7 @@
     MenuItem\
     {\
         Identifier = SID_OUTLINEMODE ; \
-        HelpID = SID_OUTLINEMODE ; \
+        HelpId = CMD_SID_OUTLINEMODE ; \
         Check = TRUE ; \
         Text [ en-US ] = "~Outline View" ; \
     };
@@ -63,7 +65,7 @@
     MenuItem\
     {\
         Identifier = SID_DIAMODE ; \
-        HelpID = SID_DIAMODE ; \
+        HelpId = CMD_SID_DIAMODE ; \
         Check = TRUE ; \
         Text [ en-US ] = "~Slide Sorter" ; \
     };
@@ -72,7 +74,7 @@
     MenuItem\
     {\
         Identifier = SID_PRESENTATION ; \
-        HelpID = SID_PRESENTATION ; \
+        HelpId = CMD_SID_PRESENTATION ; \
         Text [ en-US ] = "Slide Sho~w" ; \
     };
 
@@ -80,7 +82,7 @@
     MenuItem\
     {\
         Identifier = SID_CAPTUREPOINT ; \
-        HelpID = SID_CAPTUREPOINT ; \
+        HelpId = CMD_SID_CAPTUREPOINT ; \
         Text [ en-US ] = "~Insert Snap Point/Line..." ; \
     };
 
@@ -88,7 +90,7 @@
     MenuItem\
     {\
         Identifier = SID_SET_SNAPITEM ; \
-        HelpID = SID_SET_SNAPITEM ; \
+        HelpId = CMD_SID_SET_SNAPITEM ; \
         Text [ en-US ] = "~Edit..." ; \
     };
 
@@ -96,7 +98,7 @@
     MenuItem\
     {\
         Identifier = SID_DELETE_SNAPITEM ; \
-        HelpID = SID_DELETE_SNAPITEM ; \
+        HelpId = CMD_SID_DELETE_SNAPITEM ; \
         Text [ en-US ] = "~Delete" ; \
     };
 
@@ -105,7 +107,7 @@
     MenuItem\
     {\
         Identifier = SID_MODIFYPAGE ; \
-        HelpID = SID_MODIFYPAGE ; \
+        HelpId = CMD_SID_MODIFYPAGE ; \
         Text [ en-US ] = "Slide ~Layout" ; \
     };
 
@@ -113,7 +115,7 @@
     MenuItem\
     {\
         Identifier = SID_PAGESETUP ; \
-        HelpID = SID_PAGESETUP ; \
+        HelpId = CMD_SID_PAGESETUP ; \
         Text [ en-US ] = "~Page Setup..." ; \
     };
 
@@ -122,7 +124,7 @@
     MenuItem\
     {\
         Identifier = SID_INSERTPAGE ; \
-        HelpID = SID_INSERTPAGE ; \
+        HelpId = CMD_SID_INSERTPAGE ; \
         Text [ en-US ] = "~New Slide" ; \
     };
 
@@ -130,7 +132,7 @@
     MenuItem\
     {\
         Identifier = SID_INSERT_MASTER_PAGE ; \
-        HelpID = SID_INSERT_MASTER_PAGE ; \
+        HelpId = CMD_SID_INSERT_MASTER_PAGE ; \
         Text [ en-US ] = "~New Master" ; \
     };
 
@@ -138,28 +140,28 @@
     MenuItem\
     {\
         Identifier = SID_INSERTPAGE ; \
-        HelpID = SID_INSERTPAGE ; \
+        HelpId = CMD_SID_INSERTPAGE ; \
         Text [ en-US ] = "~New Page" ; \
     };
 #define MN_SELECT_BACKGROUND \
     MenuItem\
     {\
         Identifier = SID_SELECT_BACKGROUND ; \
-        HelpID = SID_SELECT_BACKGROUND ; \
+        HelpId = CMD_SID_SELECT_BACKGROUND ; \
         Text [ en-US ] = "Set Background Picture for Slide ..." ; \
     };
 #define MN_DISPLAY_MASTER_BACKGROUND \
     MenuItem\
     {\
         Identifier = SID_DISPLAY_MASTER_BACKGROUND ; \
-        HelpID = SID_DISPLAY_MASTER_BACKGROUND ; \
+        HelpId = CMD_SID_DISPLAY_MASTER_BACKGROUND ; \
         Text [ en-US ] = "Display Background of Master" ; \
     };
 #define MN_DISPLAY_MASTER_OBJECTS \
     MenuItem\
     {\
         Identifier = SID_DISPLAY_MASTER_OBJECTS ; \
-        HelpID = SID_DISPLAY_MASTER_OBJECTS ; \
+        HelpId = CMD_SID_DISPLAY_MASTER_OBJECTS ; \
         Text [ en-US ] = "Display Objects from Master" ; \
     };
 
@@ -214,7 +216,7 @@
     MenuItem\
     {\
         Identifier = SID_RENAMELAYER ; \
-        HelpID = SID_RENAMELAYER ; \
+        HelpId = CMD_SID_RENAMELAYER ; \
         Text [ en-US ] = "~Rename Layer..." ; \
     };
 
@@ -222,7 +224,7 @@
     MenuItem\
     {\
         Identifier = SID_DELETE_PAGE ; \
-        HelpID = SID_DELETE_PAGE ; \
+        HelpId = CMD_SID_DELETE_PAGE ; \
         Text [ en-US ] = "D~elete Slide" ; \
     };
 
@@ -230,7 +232,7 @@
     MenuItem\
     {\
         Identifier = SID_DELETE_MASTER_PAGE ; \
-        HelpID = SID_DELETE_MASTER_PAGE ; \
+        HelpId = CMD_SID_DELETE_MASTER_PAGE ; \
         Text [ en-US ] = "D~elete Master" ; \
     };
 
@@ -240,7 +242,7 @@
     MenuItem\
     {\
         Identifier = SID_DELETE_PAGE ; \
-        HelpID = SID_DELETE_PAGE ; \
+        HelpId = CMD_SID_DELETE_PAGE ; \
         Text [ en-US ] = "D~elete Page" ; \
     };
 
@@ -248,7 +250,7 @@
     MenuItem\
     {\
         Identifier = SID_RENAMEPAGE ; \
-        HelpID = SID_RENAMEPAGE ; \
+        HelpId = CMD_SID_RENAMEPAGE ; \
         Text [ en-US ] = "~Rename Slide" ; \
     };
 
@@ -256,7 +258,7 @@
     MenuItem\
     {\
         Identifier = SID_RENAME_MASTER_PAGE ; \
-        HelpID = SID_RENAME_MASTER_PAGE ; \
+        HelpId = CMD_SID_RENAME_MASTER_PAGE ; \
         Text [ en-US ] = "~Rename Master" ; \
     };
 
@@ -264,7 +266,7 @@
     MenuItem\
     {\
         Identifier = SID_RENAMEPAGE ; \
-        HelpID = SID_RENAMEPAGE ; \
+        HelpId = CMD_SID_RENAMEPAGE ; \
         Text [ en-US ] = "~Rename Page" ; \
     };
 
@@ -273,7 +275,7 @@
     MenuItem\
     {\
         Identifier = SID_ATTRIBUTES_LINE ; \
-        HelpID = SID_ATTRIBUTES_LINE ; \
+        HelpId = CMD_SID_ATTRIBUTES_LINE ; \
         Text [ en-US ] = "L~ine..." ; \
     };
 
@@ -281,7 +283,7 @@
     MenuItem\
     {\
         Identifier = SID_ATTRIBUTES_AREA ; \
-        HelpID = SID_ATTRIBUTES_AREA ; \
+        HelpId = CMD_SID_ATTRIBUTES_AREA ; \
         Text [ en-US ] = "~Area..." ; \
     };
 
@@ -289,7 +291,7 @@
     MenuItem\
     {\
         Identifier = SID_TEXTATTR_DLG ; \
-        HelpID = SID_TEXTATTR_DLG ; \
+        HelpId = CMD_SID_TEXTATTR_DLG ; \
         Text [ en-US ] = "~Text..." ; \
     };
 
@@ -305,7 +307,7 @@
     MenuItem\
     {\
         Identifier = SID_CONNECTION_DLG ; \
-        HelpID = SID_CONNECTION_DLG ; \
+        HelpId = CMD_SID_CONNECTION_DLG ; \
         Text [ en-US ] = "~Connector..." ; \
     };
 
@@ -313,7 +315,7 @@
     MenuItem\
     {\
         Identifier = SID_CONNECTION_NEW_ROUTING ; \
-        HelpID = SID_CONNECTION_NEW_ROUTING ; \
+        HelpId = CMD_SID_CONNECTION_NEW_ROUTING ; \
         Text [ en-US ] = "Reset ~Routing" ; \
     };
 
@@ -321,7 +323,7 @@
     MenuItem\
     {\
         Identifier = SID_MEASURE_DLG ; \
-        HelpID = SID_MEASURE_DLG ; \
+        HelpId = CMD_SID_MEASURE_DLG ; \
         Text [ en-US ] = "Dimen~sions..." ; \
     };
 
@@ -329,7 +331,7 @@
     MenuItem\
     {\
         Identifier = SID_ATTR_TRANSFORM ; \
-        HelpID = SID_ATTR_TRANSFORM ; \
+        HelpId = CMD_SID_ATTR_TRANSFORM ; \
         Text [ en-US ] = "Position and Si~ze..." ; \
     };
 
@@ -337,7 +339,7 @@
     MenuItem\
     {\
         Identifier = SID_BEZIER_EDIT ; \
-        HelpID = SID_BEZIER_EDIT ; \
+        HelpId = CMD_SID_BEZIER_EDIT ; \
         Text [ en-US ] = "Edit ~Points" ; \
     };
 
@@ -346,7 +348,7 @@
     MenuItem\
     {\
         Identifier = SID_POSITION ; \
-        HelpID = SID_POSITION ; \
+        HelpId = CMD_SID_POSITION ; \
         Command = ".uno:ObjectPosition"; \
         Text [ en-US ] = "Arra~nge" ; \
         SubMenu = Menu\
@@ -356,25 +358,25 @@
                 MenuItem\
                 {\
                     Identifier = SID_FRAME_TO_TOP ; \
-                    HelpID = SID_FRAME_TO_TOP ; \
+                    HelpId = CMD_SID_FRAME_TO_TOP ; \
                     Text [ en-US ] = "~Bring to Front" ; \
                 };\
                 MenuItem\
                 {\
                     Identifier = SID_MOREFRONT ; \
-                    HelpID = SID_MOREFRONT ; \
+                    HelpId = CMD_SID_MOREFRONT ; \
                     Text [ en-US ] = "Bring ~Forward" ; \
                 };\
                 MenuItem\
                 {\
                     Identifier = SID_MOREBACK ; \
-                    HelpID = SID_MOREBACK ; \
+                    HelpId = CMD_SID_MOREBACK ; \
                     Text [ en-US ] = "Send Back~ward" ; \
                 };\
                 MenuItem\
                 {\
                     Identifier = SID_FRAME_TO_BOTTOM ; \
-                    HelpID = SID_FRAME_TO_BOTTOM ; \
+                    HelpId = CMD_SID_FRAME_TO_BOTTOM ; \
                     Text [ en-US ] = "~Send to Back" ; \
                 };\
                 MenuItem\
@@ -384,13 +386,13 @@
                 MenuItem\
                 {\
                     Identifier = SID_BEFORE_OBJ ; \
-                    HelpID = SID_BEFORE_OBJ ; \
+                    HelpId = CMD_SID_BEFORE_OBJ ; \
                     Text [ en-US ] = "In Front of ~Object" ; \
                 };\
                 MenuItem\
                 {\
                     Identifier = SID_BEHIND_OBJ ; \
-                    HelpID = SID_BEHIND_OBJ ; \
+                    HelpId = CMD_SID_BEHIND_OBJ ; \
                     Text [ en-US ] = "Be~hind Object" ; \
                 };\
                 MenuItem\
@@ -400,7 +402,7 @@
                 MenuItem\
                 {\
                     Identifier = SID_REVERSE_ORDER ; \
-                    HelpID = SID_REVERSE_ORDER ; \
+                    HelpId = CMD_SID_REVERSE_ORDER ; \
                     Text [ en-US ] = "~Reverse" ; \
                 };\
             };\
@@ -412,7 +414,7 @@
     MenuItem\
     {\
         Identifier = SID_CHAR_DLG ; \
-        HelpID = SID_CHAR_DLG ; \
+        HelpId = CMD_SID_CHAR_DLG ; \
         Text [ en-US ] = "C~haracter..." ; \
     };
 
@@ -420,7 +422,7 @@
     MN_CHAR \
     MenuItem {\
         Identifier = SID_PARA_DLG;\
-        HelpID = SID_PARA_DLG;\
+        HelpId = CMD_SID_PARA_DLG;\
         Text [ en-US ] = "P~aragraph...";\
     };
 
@@ -428,13 +430,13 @@
     MenuItem\
     {\
         Identifier = SID_ATTR_CHAR_FONT ; \
-        HelpID = SID_ATTR_CHAR_FONT ; \
+        HelpId = CMD_SID_ATTR_CHAR_FONT ; \
         Text [ en-US ] = "~Font" ; \
     };\
     MenuItem\
     {\
         Identifier = SID_ATTR_CHAR_FONTHEIGHT ; \
-        HelpID = SID_ATTR_CHAR_FONTHEIGHT ; \
+        HelpId = CMD_SID_ATTR_CHAR_FONTHEIGHT ; \
         Text [ en-US ] = "~Size" ; \
     };\
     MenuItem\
@@ -449,43 +451,43 @@
                 MenuItem\
                 {\
                     Identifier = SID_ATTR_CHAR_WEIGHT ; \
-                    HelpID = SID_ATTR_CHAR_WEIGHT ; \
+                    HelpId = CMD_SID_ATTR_CHAR_WEIGHT ; \
                     Text [ en-US ] = "Bold" ; \
                 };\
                 MenuItem\
                 {\
                     Identifier = SID_ATTR_CHAR_POSTURE ; \
-                    HelpID = SID_ATTR_CHAR_POSTURE ; \
+                    HelpId = CMD_SID_ATTR_CHAR_POSTURE ; \
                     Text [ en-US ] = "Italic" ; \
                 };\
                 MenuItem\
                 {\
                     Identifier = SID_ATTR_CHAR_OVERLINE ; \
-                    HelpID = SID_ATTR_CHAR_OVERLINE ; \
+                    HelpId = CMD_SID_ATTR_CHAR_OVERLINE ; \
                     Text [ en-US ] = "Overline" ; \
                 };\
                 MenuItem\
                 {\
                     Identifier = SID_ATTR_CHAR_UNDERLINE ; \
-                    HelpID = SID_ATTR_CHAR_UNDERLINE ; \
+                    HelpId = CMD_SID_ATTR_CHAR_UNDERLINE ; \
                     Text [ en-US ] = "Underline" ; \
                 };\
                 MenuItem\
                 {\
                     Identifier = SID_ATTR_CHAR_STRIKEOUT ; \
-                    HelpID = SID_ATTR_CHAR_STRIKEOUT ; \
+                    HelpId = CMD_SID_ATTR_CHAR_STRIKEOUT ; \
                     Text [ en-US ] = "Strikethrough" ; \
                 };\
                 MenuItem\
                 {\
                     Identifier = SID_ATTR_CHAR_SHADOWED ; \
-                    HelpID = SID_ATTR_CHAR_SHADOWED ; \
+                    HelpId = CMD_SID_ATTR_CHAR_SHADOWED ; \
                     Text [ en-US ] = "Shadow" ; \
                 };\
                 MenuItem\
                 {\
                     Identifier = SID_ATTR_CHAR_CONTOUR ; \
-                    HelpID = SID_ATTR_CHAR_CONTOUR ; \
+                    HelpId = CMD_SID_ATTR_CHAR_CONTOUR ; \
                     Text [ en-US ] = "~Contour" ; \
                 };\
             };\
@@ -505,21 +507,21 @@
                 MenuItem\
                 {\
                     Identifier = SID_ATTR_PARA_LINESPACE_10 ; \
-                    HelpID = SID_ATTR_PARA_LINESPACE_10 ; \
+                    HelpId = CMD_SID_ATTR_PARA_LINESPACE_10 ; \
                     RadioCheck = TRUE ; \
                     Text [ en-US ] = "Single Line Spacing" ; \
                 };\
                 MenuItem\
                 {\
                     Identifier = SID_ATTR_PARA_LINESPACE_15 ; \
-                    HelpID = SID_ATTR_PARA_LINESPACE_15 ; \
+                    HelpId = CMD_SID_ATTR_PARA_LINESPACE_15 ; \
                     RadioCheck = TRUE ; \
                     Text [ en-US ] = "1.5 Lines" ; \
                 };\
                 MenuItem\
                 {\
                     Identifier = SID_ATTR_PARA_LINESPACE_20 ; \
-                    HelpID = SID_ATTR_PARA_LINESPACE_20 ; \
+                    HelpId = CMD_SID_ATTR_PARA_LINESPACE_20 ; \
                     RadioCheck = TRUE ; \
                     Text [ en-US ] = "~Double" ; \
                 };\
@@ -531,7 +533,7 @@
     MenuItem\
     {\
         Identifier = SID_CHARMAP ; \
-        HelpID = SID_CHARMAP ; \
+        HelpId = CMD_SID_CHARMAP ; \
         Text [ en-US ] = "S~pecial Character..." ; \
     };
 
@@ -549,28 +551,28 @@
                 MenuItem\
                 {\
                     Identifier = SID_ATTR_PARA_ADJUST_LEFT ; \
-                    HelpID = SID_ATTR_PARA_ADJUST_LEFT ; \
+                    HelpId = CMD_SID_ATTR_PARA_ADJUST_LEFT ; \
                     RadioCheck = TRUE ; \
                     Text [ en-US ] = "~Left" ; \
                 };\
                 MenuItem\
                 {\
                     Identifier = SID_ATTR_PARA_ADJUST_RIGHT ; \
-                    HelpID = SID_ATTR_PARA_ADJUST_RIGHT ; \
+                    HelpId = CMD_SID_ATTR_PARA_ADJUST_RIGHT ; \
                     RadioCheck = TRUE ; \
                     Text [ en-US ] = "~Right" ; \
                 };\
                 MenuItem\
                 {\
                     Identifier = SID_ATTR_PARA_ADJUST_CENTER ; \
-                    HelpID = SID_ATTR_PARA_ADJUST_CENTER ; \
+                    HelpId = CMD_SID_ATTR_PARA_ADJUST_CENTER ; \
                     RadioCheck = TRUE ; \
                     Text [ en-US ] = "~Centered" ; \
                 };\
                 MenuItem\
                 {\
                     Identifier = SID_ATTR_PARA_ADJUST_BLOCK ; \
-                    HelpID = SID_ATTR_PARA_ADJUST_BLOCK ; \
+                    HelpId = CMD_SID_ATTR_PARA_ADJUST_BLOCK ; \
                     RadioCheck = TRUE ; \
                     Text [ en-US ] = "Justified" ; \
                 };\
@@ -584,7 +586,7 @@
     {\
         Identifier = SID_OBJECT_ALIGN ; \
         Command = ".uno:AlignObjetMenu" ; \
-        HelpID = SID_OBJECT_ALIGN ; \
+        HelpId = CMD_SID_OBJECT_ALIGN ; \
         Text [ en-US ] = "Al~ignment" ; \
         SubMenu = Menu\
         {\
@@ -593,38 +595,38 @@
                 MenuItem\
                 {\
                     Identifier = SID_OBJECT_ALIGN_LEFT ; \
-                    HelpID = SID_OBJECT_ALIGN_LEFT ; \
+                    HelpId = CMD_SID_OBJECT_ALIGN_LEFT ; \
                     Text [ en-US ] = "~Left" ; \
                 };\
                 MenuItem\
                 {\
                     Identifier = SID_OBJECT_ALIGN_CENTER ; \
-                    HelpID = SID_OBJECT_ALIGN_CENTER ; \
+                    HelpId = CMD_SID_OBJECT_ALIGN_CENTER ; \
                     Text [ en-US ] = "~Centered" ; \
                 };\
                 MenuItem\
                 {\
                     Identifier = SID_OBJECT_ALIGN_RIGHT ; \
-                    HelpID = SID_OBJECT_ALIGN_RIGHT ; \
+                    HelpId = CMD_SID_OBJECT_ALIGN_RIGHT ; \
                     Text [ en-US ] = "~Right" ; \
                 };\
                 SEPARATOR\
                 MenuItem\
                 {\
                     Identifier = SID_OBJECT_ALIGN_UP ; \
-                    HelpID = SID_OBJECT_ALIGN_UP ; \
+                    HelpId = CMD_SID_OBJECT_ALIGN_UP ; \
                     Text [ en-US ] = "~Top" ; \
                 };\
                 MenuItem\
                 {\
                     Identifier = SID_OBJECT_ALIGN_MIDDLE ; \
-                    HelpID = SID_OBJECT_ALIGN_MIDDLE ; \
+                    HelpId = CMD_SID_OBJECT_ALIGN_MIDDLE ; \
                     Text [ en-US ] = "C~enter" ; \
                 };\
                 MenuItem\
                 {\
                     Identifier = SID_OBJECT_ALIGN_DOWN ; \
-                    HelpID = SID_OBJECT_ALIGN_DOWN ; \
+                    HelpId = CMD_SID_OBJECT_ALIGN_DOWN ; \
                     Text [ en-US ] = "~Bottom" ; \
                 };\
             };\
@@ -636,7 +638,7 @@
     MenuItem\
     {\
         Identifier = SID_OBJECT_CLOSE ; \
-        HelpID = SID_OBJECT_CLOSE ; \
+        HelpId = CMD_SID_OBJECT_CLOSE ; \
         Text [ en-US ] = "Close ~Object" ; \
     };
 
@@ -644,71 +646,71 @@
     MenuItem\
     {\
         Identifier = SID_BEZIER_EDIT ; \
-        HelpID = SID_BEZIER_EDIT ; \
+        HelpId = CMD_SID_BEZIER_EDIT ; \
         Text [ en-US ] = "Edit ~Points" ; \
     };\
     SEPARATOR\
     MenuItem\
     {\
         Identifier = SID_BEZIER_MOVE ; \
-        HelpID = SID_BEZIER_MOVE ; \
+        HelpId = CMD_SID_BEZIER_MOVE ; \
         Text [ en-US ] = "~Move Points" ; \
     };\
     MenuItem\
     {\
         Identifier = SID_BEZIER_INSERT ; \
-        HelpID = SID_BEZIER_INSERT ; \
+        HelpId = CMD_SID_BEZIER_INSERT ; \
         Text [ en-US ] = "Insert ~Points" ; \
     };\
     MenuItem\
     {\
         Identifier = SID_BEZIER_DELETE ; \
-        HelpID = SID_BEZIER_DELETE ; \
+        HelpId = CMD_SID_BEZIER_DELETE ; \
         Text [ en-US ] = "~Delete Points" ; \
     };\
     SEPARATOR\
     MenuItem\
     {\
         Identifier = SID_BEZIER_CLOSE ; \
-        HelpID = SID_BEZIER_CLOSE ; \
+        HelpId = CMD_SID_BEZIER_CLOSE ; \
         Text [ en-US ] = "Close ~Object" ; \
     };\
     MenuItem\
     {\
         Identifier = SID_BEZIER_CUTLINE ; \
-        HelpID = SID_BEZIER_CUTLINE ; \
+        HelpId = CMD_SID_BEZIER_CUTLINE ; \
         Text [ en-US ] = "~Split Curve" ; \
     };\
     MenuItem\
     {\
         Identifier = SID_BEZIER_CONVERT ; \
-        HelpID = SID_BEZIER_CONVERT ; \
+        HelpId = CMD_SID_BEZIER_CONVERT ; \
         Text [ en-US ] = "Con~vert to Curve" ; \
     };\
     SEPARATOR\
     MenuItem\
     {\
         Identifier = SID_BEZIER_EDGE ; \
-        HelpID = SID_BEZIER_EDGE ; \
+        HelpId = CMD_SID_BEZIER_EDGE ; \
         Text [ en-US ] = "~Corner" ; \
     };\
     MenuItem\
     {\
         Identifier = SID_BEZIER_SMOOTH ; \
-        HelpID = SID_BEZIER_SMOOTH ; \
+        HelpId = CMD_SID_BEZIER_SMOOTH ; \
         Text [ en-US ] = "Smoot~h" ; \
     };\
     MenuItem\
     {\
         Identifier = SID_BEZIER_SYMMTR ; \
-        HelpID = SID_BEZIER_SYMMTR ; \
+        HelpId = CMD_SID_BEZIER_SYMMTR ; \
         Text [ en-US ] = "S~ymmetric" ; \
     };\
     SEPARATOR\
     MenuItem\
     {\
         Identifier = SID_BEZIER_ELIMINATE_POINTS ; \
-        HelpID = SID_BEZIER_ELIMINATE_POINTS ; \
+        HelpId = CMD_SID_BEZIER_ELIMINATE_POINTS ; \
         Text [ en-US ] = "~Reduce Points" ; \
     };
 
@@ -717,7 +719,7 @@
     MenuItem\
     {\
         Identifier = SID_GROUP ; \
-        HelpID = SID_GROUP ; \
+        HelpId = CMD_SID_GROUP ; \
         Text [ en-US ] = "~Group" ; \
     };
 
@@ -725,7 +727,7 @@
     MenuItem\
     {\
         Identifier = SID_UNGROUP ; \
-        HelpID = SID_UNGROUP ; \
+        HelpId = CMD_SID_UNGROUP ; \
         Text [ en-US ] = "~Ungroup" ; \
     };
 
@@ -733,7 +735,7 @@
     MenuItem\
     {\
         Identifier = SID_COMBINE ; \
-        HelpID = SID_COMBINE ; \
+        HelpId = CMD_SID_COMBINE ; \
         Text [ en-US ] = "Comb~ine" ; \
     };
 
@@ -741,7 +743,7 @@
     MenuItem\
     {\
         Identifier = SID_DISMANTLE ; \
-        HelpID = SID_DISMANTLE ; \
+        HelpId = CMD_SID_DISMANTLE ; \
         Text [ en-US ] = "~Split" ; \
     };
 
@@ -749,7 +751,7 @@
     MenuItem\
     {\
         Identifier = SID_ENTER_GROUP ; \
-        HelpID = SID_ENTER_GROUP ; \
+        HelpId = CMD_SID_ENTER_GROUP ; \
         Text [ en-US ] = "~Enter Group" ; \
     };
 
@@ -757,7 +759,7 @@
     MenuItem\
     {\
         Identifier = SID_LEAVE_GROUP ; \
-        HelpID = SID_LEAVE_GROUP ; \
+        HelpId = CMD_SID_LEAVE_GROUP ; \
         Text [ en-US ] = "E~xit Group" ; \
     };
 
@@ -765,7 +767,7 @@
     MenuItem\
     {\
         Identifier = SID_NAME_GROUP ; \
-        HelpID = SID_NAME_GROUP ; \
+        HelpId = CMD_SID_NAME_GROUP ; \
         Text [ en-US ] = "Name..." ; \
     };
 
@@ -774,7 +776,7 @@
     MenuItem\
     {\
         Identifier = SID_OBJECT_TITLE_DESCRIPTION; \
-        HelpID = SID_OBJECT_TITLE_DESCRIPTION; \
+        HelpId = CMD_SID_OBJECT_TITLE_DESCRIPTION; \
         Text [ en-US ] = "Description..." ; \
     };
 
@@ -783,7 +785,7 @@
     MenuItem\
     {\
         Identifier = SID_REHEARSE_TIMINGS ; \
-        HelpID = SID_REHEARSE_TIMINGS ; \
+        HelpId = CMD_SID_REHEARSE_TIMINGS ; \
         Text [ en-US ] = "~Rehearse Timings" ; \
     };
 
@@ -791,7 +793,7 @@
     MenuItem\
     {\
         Identifier = SID_CUSTOM_ANIMATION_PANEL ; \
-        HelpID = SID_CUSTOM_ANIMATION_PANEL ; \
+        HelpId = CMD_SID_CUSTOM_ANIMATION_PANEL ; \
         Text [ en-US ] = "Custom Animation..." ; \
     };
 
@@ -799,7 +801,7 @@
     MenuItem\
     {\
         Identifier = SID_ANIMATION_EFFECTS ; \
-        HelpID = SID_ANIMATION_EFFECTS ; \
+        HelpId = CMD_SID_ANIMATION_EFFECTS ; \
         Text [ en-US ] = "Int~eraction..." ; \
     };
 
@@ -807,7 +809,7 @@
     MenuItem\
     {\
         Identifier = SID_PRESENTATIONOBJECT ; \
-        HelpID = SID_PRESENTATIONOBJECT ; \
+        HelpId = CMD_SID_PRESENTATIONOBJECT ; \
         Text [ en-US ] = "Presentation ~Object..." ; \
     };
 
@@ -816,7 +818,7 @@
     MenuItem\
     {\
         Identifier = SID_DELETE ; \
-        HelpID = SID_DELETE ; \
+        HelpId = CMD_SID_DELETE ; \
         Text [ en-US ] = "~Delete" ; \
     };
 
@@ -825,7 +827,7 @@
     MenuItem\
     {\
         Identifier = SID_SET_DEFAULT ; \
-        HelpID = SID_SET_DEFAULT ; \
+        HelpId = CMD_SID_SET_DEFAULT ; \
         Text [ en-US ] = "~Default" ; \
     };
 
@@ -833,7 +835,7 @@
     MenuItem\
     {\
         Identifier = SID_FONTWORK ; \
-        HelpID = SID_FONTWORK ; \
+        HelpId = CMD_SID_FONTWORK ; \
         Text [ en-US ] = "F~ontwork" ; \
     };
 
@@ -841,7 +843,7 @@
     MenuItem\
     {\
         Identifier = SID_OBJECT ; \
-        HelpID = SID_OBJECT ; \
+        HelpId = CMD_SID_OBJECT ; \
         Text [ en-US ] = "~OLE Object" ; \
     };
 
@@ -849,7 +851,7 @@
     MenuItem\
     {\
         Identifier = SID_ORIGINAL_SIZE ; \
-        HelpID = SID_ORIGINAL_SIZE ; \
+        HelpId = CMD_SID_ORIGINAL_SIZE ; \
         Text [ en-US ] = "~Original Size" ; \
     };
 
@@ -857,7 +859,7 @@
     MenuItem\
     {\
         Identifier = SID_SAVEGRAPHIC ; \
-        HelpID = SID_SAVEGRAPHIC ; \
+        HelpId = CMD_SID_SAVEGRAPHIC ; \
         Text [ en-US ] = "Save as Picture..." ; \
     };
 
@@ -865,7 +867,7 @@
     MenuItem\
     {\
         Identifier = SID_ATTR_GRAF_CROP ; \
-        HelpID = SID_ATTR_GRAF_CROP ; \
+        HelpId = CMD_SID_ATTR_GRAF_CROP ; \
         Text [ en-US ] = "Crop Picture..." ; \
     };
 
@@ -874,7 +876,7 @@
     {\
         Identifier = SID_NAVIGATOR ; \
         Command = ".uno:Navigator" ; \
-        HelpID = SID_NAVIGATOR ; \
+        HelpId = CMD_SID_NAVIGATOR ; \
         Text [ en-US ] = "Na~vigator" ; \
     };
 
@@ -882,7 +884,7 @@
     MenuItem\
     {\
         Identifier = SID_GLUE_INSERT_POINT ; \
-        HelpID = SID_GLUE_INSERT_POINT ; \
+        HelpId = CMD_SID_GLUE_INSERT_POINT ; \
         Text [ en-US ] = "Insert ~Point" ; \
     };
 
@@ -890,7 +892,7 @@
     MenuItem\
     {\
         Identifier = SID_GLUE_ESCDIR_LEFT ; \
-        HelpID = SID_GLUE_ESCDIR_LEFT ; \
+        HelpId = CMD_SID_GLUE_ESCDIR_LEFT ; \
         Text [ en-US ] = "~Left" ; \
     };
 
@@ -898,7 +900,7 @@
     MenuItem\
     {\
         Identifier = SID_GLUE_ESCDIR_TOP ; \
-        HelpID = SID_GLUE_ESCDIR_TOP ; \
+        HelpId = CMD_SID_GLUE_ESCDIR_TOP ; \
         Text [ en-US ] = "~Top" ; \
     };
 
@@ -906,7 +908,7 @@
     MenuItem\
     {\
         Identifier = SID_GLUE_ESCDIR_RIGHT ; \
-        HelpID = SID_GLUE_ESCDIR_RIGHT ; \
+        HelpId = CMD_SID_GLUE_ESCDIR_RIGHT ; \
         Text [ en-US ] = "~Right" ; \
     };
 
@@ -914,7 +916,7 @@
     MenuItem\
     {\
         Identifier = SID_GLUE_ESCDIR_BOTTOM ; \
-        HelpID = SID_GLUE_ESCDIR_BOTTOM ; \
+        HelpId = CMD_SID_GLUE_ESCDIR_BOTTOM ; \
         Text [ en-US ] = "~Bottom" ; \
     };
 
@@ -922,7 +924,7 @@
     MenuItem\
     {\
         Identifier = SID_GLUE_PERCENT ; \
-        HelpID = SID_GLUE_PERCENT ; \
+        HelpId = CMD_SID_GLUE_PERCENT ; \
         Text [ en-US ] = "~Adapt Position to Object" ; \
     };
 
@@ -930,7 +932,7 @@
     MenuItem\
     {\
         Identifier = SID_GLUE_HORZALIGN_LEFT ; \
-        HelpID = SID_GLUE_HORZALIGN_LEFT ; \
+        HelpId = CMD_SID_GLUE_HORZALIGN_LEFT ; \
         RadioCheck = TRUE ; \
         Text [ en-US ] = "Fixed ~Horizontal Left" ; \
     };
@@ -939,7 +941,7 @@
     MenuItem\
     {\
         Identifier = SID_GLUE_HORZALIGN_CENTER ; \
-        HelpID = SID_GLUE_HORZALIGN_CENTER ; \
+        HelpId = CMD_SID_GLUE_HORZALIGN_CENTER ; \
         RadioCheck = TRUE ; \
         Text [ en-US ] = "Fixed Horizontal ~Center" ; \
     };
@@ -948,7 +950,7 @@
     MenuItem\
     {\
         Identifier = SID_GLUE_HORZALIGN_RIGHT ; \
-        HelpID = SID_GLUE_HORZALIGN_RIGHT ; \
+        HelpId = CMD_SID_GLUE_HORZALIGN_RIGHT ; \
         RadioCheck = TRUE ; \
         Text [ en-US ] = "Fixed Hori~zontal Right" ; \
     };
@@ -957,7 +959,7 @@
     MenuItem\
     {\
         Identifier = SID_GLUE_VERTALIGN_TOP ; \
-        HelpID = SID_GLUE_VERTALIGN_TOP ; \
+        HelpId = CMD_SID_GLUE_VERTALIGN_TOP ; \
         RadioCheck = TRUE ; \
         Text [ en-US ] = "Fixed ~Vertical Top" ; \
     };
@@ -966,7 +968,7 @@
     MenuItem\
     {\
         Identifier = SID_GLUE_VERTALIGN_CENTER ; \
-        HelpID = SID_GLUE_VERTALIGN_CENTER ; \
+        HelpId = CMD_SID_GLUE_VERTALIGN_CENTER ; \
         RadioCheck = TRUE ; \
         Text [ en-US ] = "Fixed V~ertical Center" ; \
     };
@@ -975,7 +977,7 @@
     MenuItem\
     {\
         Identifier = SID_GLUE_VERTALIGN_BOTTOM ; \
-        HelpID = SID_GLUE_VERTALIGN_BOTTOM ; \
+        HelpId = CMD_SID_GLUE_VERTALIGN_BOTTOM ; \
         RadioCheck = TRUE ; \
         Text [ en-US ] = "Fixed Ver~tical Bottom" ; \
     };
@@ -984,7 +986,7 @@
     MenuItem\
     {\
         Identifier = SID_GRID_VISIBLE ; \
-        HelpID = SID_GRID_VISIBLE ; \
+        HelpId = CMD_SID_GRID_VISIBLE ; \
         Text [ en-US ] = "~Visible Grid" ; \
     };
 
@@ -992,7 +994,7 @@
     MenuItem\
     {\
         Identifier = SID_GRID_USE ; \
-        HelpID = SID_GRID_USE; \
+        HelpId = CMD_SID_GRID_USE; \
         Text [ en-US ] = "Snap to Grid"; \
     };
 
@@ -1000,7 +1002,7 @@
     MenuItem\
     {\
         Identifier = SID_GRID_FRONT ; \
-        HelpID = SID_GRID_FRONT ; \
+        HelpId = CMD_SID_GRID_FRONT ; \
         Text [ en-US ] = "Grid to ~Front" ; \
     };
 
@@ -1025,7 +1027,7 @@
     MenuItem\
     {\
         Identifier = SID_HELPLINES_VISIBLE ; \
-        HelpID = SID_HELPLINES_VISIBLE ; \
+        HelpId = CMD_SID_HELPLINES_VISIBLE ; \
         Text [ en-US ] = "~Snap Lines Visible" ; \
     };
 
@@ -1033,7 +1035,7 @@
     MenuItem\
     {\
         Identifier = SID_HELPLINES_USE ; \
-        HelpID = SID_HELPLINES_USE ; \
+        HelpId = CMD_SID_HELPLINES_USE ; \
         Text [ en-US ] = "Snap to Snap Lines"; \
     };
 
@@ -1041,7 +1043,7 @@
     MenuItem\
     {\
         Identifier = SID_HELPLINES_FRONT ; \
-        HelpID = SID_HELPLINES_FRONT ; \
+        HelpId = CMD_SID_HELPLINES_FRONT ; \
         Text [ en-US ] = "Snap Lines to Front" ; \
     };
 
@@ -1066,7 +1068,7 @@
     MenuItem\
     {\
         Identifier = SID_SHOW_BROWSER ; \
-        HelpID = SID_SHOW_BROWSER ; \
+        HelpId = CMD_SID_SHOW_BROWSER ; \
         Text [ en-US ] = "Propert~ies..." ; \
     };
 
@@ -1074,7 +1076,7 @@
     MenuItem\
     {\
         Identifier = SID_CONVERT_TO_1BIT_THRESHOLD ; \
-        HelpID = SID_CONVERT_TO_1BIT_THRESHOLD ; \
+        HelpId = CMD_SID_CONVERT_TO_1BIT_THRESHOLD ; \
         Text [ en-US ] = "1Bit ~Threshold" ; \
     };
 
@@ -1082,7 +1084,7 @@
     MenuItem\
     {\
         Identifier = SID_CONVERT_TO_1BIT_MATRIX ; \
-        HelpID = SID_CONVERT_TO_1BIT_MATRIX ; \
+        HelpId = CMD_SID_CONVERT_TO_1BIT_MATRIX ; \
         Text [ en-US ] = "1 Bit ~Dithering" ; \
     };
 
@@ -1090,7 +1092,7 @@
     MenuItem\
     {\
         Identifier = SID_CONVERT_TO_4BIT_GRAYS ; \
-        HelpID = SID_CONVERT_TO_4BIT_GRAYS ; \
+        HelpId = CMD_SID_CONVERT_TO_4BIT_GRAYS ; \
         Text [ en-US ] = "4 Bit G~rayscales" ; \
     };
 
@@ -1098,7 +1100,7 @@
     MenuItem\
     {\
         Identifier = SID_CONVERT_TO_4BIT_COLORS ; \
-        HelpID = SID_CONVERT_TO_4BIT_COLORS ; \
+        HelpId = CMD_SID_CONVERT_TO_4BIT_COLORS ; \
         Text [ en-US ] = "4 Bit ~Color Palette" ; \
     };
 
@@ -1106,7 +1108,7 @@
     MenuItem\
     {\
         Identifier = SID_CONVERT_TO_8BIT_GRAYS ; \
-        HelpID = SID_CONVERT_TO_8BIT_GRAYS ; \
+        HelpId = CMD_SID_CONVERT_TO_8BIT_GRAYS ; \
         Text [ en-US ] = "8 Bit Gr~ayscales" ; \
     };
 
@@ -1114,7 +1116,7 @@
     MenuItem\
     {\
         Identifier = SID_CONVERT_TO_8BIT_COLORS ; \
-        HelpID = SID_CONVERT_TO_8BIT_COLORS ; \
+        HelpId = CMD_SID_CONVERT_TO_8BIT_COLORS ; \
         Text [ en-US ] = "8 Bit C~olor Palette" ; \
     };
 
@@ -1122,7 +1124,7 @@
     MenuItem\
     {\
         Identifier = SID_CONVERT_TO_24BIT ; \
-        HelpID = SID_CONVERT_TO_24BIT ; \
+        HelpId = CMD_SID_CONVERT_TO_24BIT ; \
         Text [ en-US ] = "24 Bit ~True Colors" ; \
     };
 
@@ -1152,7 +1154,7 @@
     {\
         Identifier = SID_CONVERT ; \
         Command = ".uno:ConvertMenu" ; \
-        HelpID = SID_CONVERT ; \
+        HelpId = HID_MN_SUB_CONVERT ; \
         Text [ en-US ] = "Con~vert" ; \
         SubMenu = Menu\
         {\
@@ -1173,7 +1175,7 @@
     MenuItem\
     {\
         Identifier = SID_MIRROR ; \
-        HelpID = SID_MIRROR ; \
+        HelpId = HID_MN_SUB_MIRROR ; \
         Command = ".uno:MirrorMenu" ; \
         Text [ en-US ] = "~Flip" ; \
         SubMenu = Menu\
@@ -1190,7 +1192,7 @@
     MenuItem\
     {\
         Identifier = SID_OBJECT_ROTATE ; \
-        HelpID = SID_OBJECT_ROTATE ; \
+        HelpId = CMD_SID_OBJECT_ROTATE ; \
         Text [ en-US ] = "~Rotate";\
     };
 
@@ -1198,7 +1200,7 @@
     MenuItem\
     {\
         Identifier = SID_CONNECT ; \
-        HelpID = SID_CONNECT ; \
+        HelpId = CMD_SID_CONNECT ; \
         Text [ en-US ] = "C~onnect" ; \
     };
 
@@ -1206,7 +1208,7 @@
     MenuItem\
     {\
         Identifier = SID_BREAK ; \
-        HelpID = SID_BREAK ; \
+        HelpId = CMD_SID_BREAK ; \
         Text [ en-US ] = "~Break" ; \
     };
 
@@ -1214,7 +1216,7 @@
     MenuItem\
     {\
         Identifier = SID_STYLE_EDIT ; \
-        HelpID = SID_STYLE_EDIT ; \
+        HelpId = CMD_SID_STYLE_EDIT ; \
         Text [ en-US ] = "Edit Style..." ; \
     };
 
@@ -1222,7 +1224,7 @@
     MenuItem\
     {\
         Identifier = SID_EDIT_HYPERLINK ; \
-        HelpID = SID_EDIT_HYPERLINK ; \
+        HelpId = CMD_SID_EDIT_HYPERLINK ; \
         Text [ en-US ] = "H~yperlink..." ; \
     };
 
@@ -1230,7 +1232,7 @@
     MenuItem\
     {\
         Identifier = SID_BEZIER_EDIT ; \
-        HelpID = SID_BEZIER_EDIT ; \
+        HelpId = CMD_SID_BEZIER_EDIT ; \
         Text [ en-US ] = "Poi~nts";\
     };
 
@@ -1238,7 +1240,7 @@
     MenuItem\
     {\
         Identifier = SID_GLUE_EDITMODE ; \
-        HelpID = SID_GLUE_EDITMODE ; \
+        HelpId = CMD_SID_GLUE_EDITMODE ; \
         Text [ en-US ] = "~Glue Points";\
     };
 
@@ -1255,25 +1257,25 @@
                 MenuItem \
                 {\
                     Identifier = SID_INSERTLAYER ; \
-                    HelpID = SID_INSERTLAYER ; \
+                    HelpId = CMD_SID_INSERTLAYER ; \
                     Text [ en-US ] = "~Insert";\
                 };\
                 MenuItem \
                 {\
                     Identifier = SID_MODIFYLAYER ; \
-                    HelpID = SID_MODIFYLAYER ; \
+                    HelpId = CMD_SID_MODIFYLAYER ; \
                     Text [ en-US ] = "~Modify";\
                 };\
                 MenuItem \
                 {\
                     Identifier = SID_DELETE_LAYER ; \
-                    HelpID = SID_DELETE_LAYER ; \
+                    HelpId = CMD_SID_DELETE_LAYER ; \
                     Text [ en-US ] = "Delete";\
                 };\
                 MenuItem \
                 {\
                     Identifier = SID_RENAMELAYER ; \
-                    HelpID = SID_RENAMELAYER ; \
+                    HelpId = CMD_SID_RENAMELAYER ; \
                     Text [ en-US ] = "~Rename";\
                 }; \
             };\

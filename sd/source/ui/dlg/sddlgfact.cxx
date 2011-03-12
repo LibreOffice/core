@@ -91,18 +91,18 @@ void AbstractCopyDlg_Impl::GetAttr( SfxItemSet& rOutAttrs )
 // AbstractCopyDlg_Impl end
 
 //AbstractSdCustomShowDlg_Impl begin
-BOOL AbstractSdCustomShowDlg_Impl::IsModified() const
+sal_Bool AbstractSdCustomShowDlg_Impl::IsModified() const
 {
     return pDlg->IsModified();
 }
-BOOL AbstractSdCustomShowDlg_Impl::IsCustomShow() const
+sal_Bool AbstractSdCustomShowDlg_Impl::IsCustomShow() const
 {
     return pDlg->IsCustomShow();
 }
 // AbstractSdCustomShowDlg_Impl end
 
 // AbstractTabDialog_Impl begin
-void AbstractTabDialog_Impl::SetCurPageId( USHORT nId )
+void AbstractTabDialog_Impl::SetCurPageId( sal_uInt16 nId )
 {
     pDlg->SetCurPageId( nId );
 }
@@ -110,7 +110,7 @@ const SfxItemSet* AbstractTabDialog_Impl::GetOutputItemSet() const
 {
     return pDlg->GetOutputItemSet();
 }
-const USHORT* AbstractTabDialog_Impl::GetInputRanges(const SfxItemPool& pItem )
+const sal_uInt16* AbstractTabDialog_Impl::GetInputRanges(const SfxItemPool& pItem )
 {
     return pDlg->GetInputRanges( pItem );
 }
@@ -132,7 +132,7 @@ String AbstractTabDialog_Impl::GetText() const
 // --------------------------------------------------------------------
 
 // AbstractBulletDialog_Impl begin
-void AbstractBulletDialog_Impl::SetCurPageId( USHORT nId )
+void AbstractBulletDialog_Impl::SetCurPageId( sal_uInt16 nId )
 {
     static_cast< ::sd::OutlineBulletDlg*>(pDlg)->SetCurPageId( nId );
 }
@@ -140,7 +140,7 @@ const SfxItemSet* AbstractBulletDialog_Impl::GetOutputItemSet() const
 {
     return static_cast< ::sd::OutlineBulletDlg*>(pDlg)->GetOutputItemSet();
 }
-const USHORT* AbstractBulletDialog_Impl::GetInputRanges(const SfxItemPool& pItem )
+const sal_uInt16* AbstractBulletDialog_Impl::GetInputRanges(const SfxItemPool& pItem )
 {
     return static_cast< ::sd::OutlineBulletDlg*>(pDlg)->GetInputRanges( pItem );
 }
@@ -161,7 +161,7 @@ String AbstractBulletDialog_Impl::GetText() const
 
 // --------------------------------------------------------------------
 
-void SdPresLayoutTemplateDlg_Impl::SetCurPageId( USHORT nId )
+void SdPresLayoutTemplateDlg_Impl::SetCurPageId( sal_uInt16 nId )
 {
     pDlg->SetCurPageId( nId );
 }
@@ -171,7 +171,7 @@ const SfxItemSet* SdPresLayoutTemplateDlg_Impl::GetOutputItemSet() const
     return pDlg->GetOutputItemSet();
 }
 
-const USHORT* SdPresLayoutTemplateDlg_Impl::GetInputRanges(const SfxItemPool& pItem )
+const sal_uInt16* SdPresLayoutTemplateDlg_Impl::GetInputRanges(const SfxItemPool& pItem )
 {
     return pDlg->GetInputRanges( pItem );
 }
@@ -202,7 +202,7 @@ OutputType AbstractAssistentDlg_Impl::GetOutputMedium() const
 {
     return pDlg->GetOutputMedium();
 }
-BOOL AbstractAssistentDlg_Impl::IsSummary() const
+sal_Bool AbstractAssistentDlg_Impl::IsSummary() const
 {
     return pDlg->IsSummary();
 }
@@ -214,11 +214,11 @@ String AbstractAssistentDlg_Impl::GetDocPath() const
 {
     return pDlg->GetDocPath();
 }
-BOOL AbstractAssistentDlg_Impl::GetStartWithFlag() const
+sal_Bool AbstractAssistentDlg_Impl::GetStartWithFlag() const
 {
     return pDlg->GetStartWithFlag();
 }
-BOOL AbstractAssistentDlg_Impl::IsDocEmpty() const
+sal_Bool AbstractAssistentDlg_Impl::IsDocEmpty() const
 {
     return pDlg->IsDocEmpty();
 }
@@ -252,7 +252,7 @@ void AbstractSdSnapLineDlg_Impl::HideDeleteBtn()
 {
     pDlg->HideDeleteBtn();
 }
-void AbstractSdSnapLineDlg_Impl::SetInputFields(BOOL bEnableX, BOOL bEnableY)
+void AbstractSdSnapLineDlg_Impl::SetInputFields(sal_Bool bEnableX, sal_Bool bEnableY)
 {
     pDlg->SetInputFields(bEnableX, bEnableY);
 }
@@ -267,14 +267,14 @@ void AbstractSdInsertLayerDlg_Impl::GetAttr( SfxItemSet& rOutAttrs )
 {
     pDlg->GetAttr( rOutAttrs );
 }
-void AbstractSdInsertLayerDlg_Impl::SetHelpId( ULONG nHelpId )
+void AbstractSdInsertLayerDlg_Impl::SetHelpId( const rtl::OString& rHelpId )
 {
-    pDlg->SetHelpId( nHelpId );
+    pDlg->SetHelpId( rHelpId );
 }
 // AbstractSdInsertLayerDlg_Impl end
 
 //AbstractSdInsertPasteDlg_Impl begin
-BOOL AbstractSdInsertPasteDlg_Impl::IsInsertBefore() const
+sal_Bool AbstractSdInsertPasteDlg_Impl::IsInsertBefore() const
 {
     return pDlg->IsInsertBefore();
 }
@@ -285,15 +285,15 @@ BOOL AbstractSdInsertPasteDlg_Impl::IsInsertBefore() const
 {
     return (::Window*)pDlg;
 }
-List* AbstractSdInsertPagesObjsDlg_Impl::GetList( USHORT nType )
+List* AbstractSdInsertPagesObjsDlg_Impl::GetList( sal_uInt16 nType )
 {
     return pDlg->GetList( nType );
 }
-BOOL AbstractSdInsertPagesObjsDlg_Impl::IsLink()
+sal_Bool AbstractSdInsertPagesObjsDlg_Impl::IsLink()
 {
     return pDlg->IsLink();
 }
-BOOL AbstractSdInsertPagesObjsDlg_Impl::IsRemoveUnnessesaryMasterPages() const
+sal_Bool AbstractSdInsertPagesObjsDlg_Impl::IsRemoveUnnessesaryMasterPages() const
 {
     return pDlg->IsRemoveUnnessesaryMasterPages();
 }
@@ -304,15 +304,15 @@ void AbstractMorphDlg_Impl::SaveSettings() const
 {
     pDlg->SaveSettings();
 }
-USHORT AbstractMorphDlg_Impl::GetFadeSteps() const
+sal_uInt16 AbstractMorphDlg_Impl::GetFadeSteps() const
 {
     return pDlg->GetFadeSteps();
 }
-BOOL AbstractMorphDlg_Impl::IsAttributeFade() const
+sal_Bool AbstractMorphDlg_Impl::IsAttributeFade() const
 {
     return pDlg->IsAttributeFade();
 }
-BOOL AbstractMorphDlg_Impl::IsOrientationFade() const
+sal_Bool AbstractMorphDlg_Impl::IsOrientationFade() const
 {
     return pDlg->IsOrientationFade();
 }
@@ -386,8 +386,8 @@ VclAbstractDialog * SdAbstractDialogFactory_Impl::CreateBreakDlg(
                                             ::Window* pWindow,
                                             ::sd::DrawView* pDrView,
                                             ::sd::DrawDocShell* pShell,
-                                            ULONG nSumActionCount,
-                                            ULONG nObjCount ) //add for BreakDlg
+                                            sal_uLong nSumActionCount,
+                                            sal_uLong nObjCount ) //add for BreakDlg
 {
     return new VclAbstractDialog_Impl( new ::sd::BreakDlg( pWindow, pDrView, pShell, nSumActionCount, nObjCount ) );
 }
@@ -416,14 +416,14 @@ SfxAbstractTabDialog *  SdAbstractDialogFactory_Impl::CreateSdTabCharDialog( ::W
 }
 
 
-SfxAbstractTabDialog *  SdAbstractDialogFactory_Impl::CreateSdTabPageDialog( ::Window* pParent, const SfxItemSet* pAttr, SfxObjectShell* pDocShell, BOOL bAreaPage )
+SfxAbstractTabDialog *  SdAbstractDialogFactory_Impl::CreateSdTabPageDialog( ::Window* pParent, const SfxItemSet* pAttr, SfxObjectShell* pDocShell, sal_Bool bAreaPage )
 {
     return new AbstractTabDialog_Impl( new SdPageDlg( pDocShell, pParent, pAttr, bAreaPage ) );
 }
 // add for SdCharDlg end
 
 //add for AssistentDlg begin
-AbstractAssistentDlg * SdAbstractDialogFactory_Impl::CreateAssistentDlg( ::Window* pParent, BOOL bAutoPilot)
+AbstractAssistentDlg * SdAbstractDialogFactory_Impl::CreateAssistentDlg( ::Window* pParent, sal_Bool bAutoPilot)
 {
     return new AbstractAssistentDlg_Impl( new AssistentDlg( pParent, bAutoPilot ) );
 }

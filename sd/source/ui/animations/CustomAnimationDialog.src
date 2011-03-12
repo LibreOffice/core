@@ -96,6 +96,7 @@ TabDialog DLG_CUSTOMANIMATION
 
 TabPage RID_TP_CUSTOMANIMATION_EFFECT
 {
+    HelpID = "sd:TabPage:RID_TP_CUSTOMANIMATION_EFFECT";
     Hide = TRUE;
     Size = MAP_APPFONT ( WIDTH , 159 );
     Text [ en-US ] = "Effect";
@@ -120,6 +121,7 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
 
     ListBox LB_PROPERTY_1
     {
+        HelpID = "sd:ListBox:RID_TP_CUSTOMANIMATION_EFFECT:LB_PROPERTY_1";
         Pos = MAP_APPFONT ( X2+6 , 14  ) ;
         Size = MAP_APPFONT ( W2, 100 );
         Hide = TRUE;
@@ -139,6 +141,7 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
 
     ListBox LB_PROPERTY_2
     {
+        HelpID = "sd:ListBox:RID_TP_CUSTOMANIMATION_EFFECT:LB_PROPERTY_2";
         Pos = MAP_APPFONT ( X2+6 , 14  ) ;
         Size = MAP_APPFONT ( W2, 100 );
         Hide = TRUE;
@@ -149,6 +152,7 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
 
     CheckBox CB_SMOOTH_START
     {
+        HelpID = "sd:CheckBox:RID_TP_CUSTOMANIMATION_EFFECT:CB_SMOOTH_START";
         Pos = MAP_APPFONT( X1+6, 14 );
         Size = MAP_APPFONT ( (W0 / 2) , 10 ) ;
         Hide = TRUE;
@@ -158,6 +162,7 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
 
     CheckBox CB_SMOOTH_END
     {
+        HelpID = "sd:CheckBox:RID_TP_CUSTOMANIMATION_EFFECT:CB_SMOOTH_END";
         Pos = MAP_APPFONT( X1 + (W0 / 2) + 3, 14 );
         Size = MAP_APPFONT ( (W0 / 2) , 10 ) ;
         Hide = TRUE;
@@ -167,6 +172,7 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
 
     CheckBox CB_AUTORESTART
     {
+        HelpID = "sd:CheckBox:RID_TP_CUSTOMANIMATION_EFFECT:CB_AUTORESTART";
         Pos = MAP_APPFONT( X1+6, 14 );
         Size = MAP_APPFONT ( W0 , 10 ) ;
         Hide = TRUE;
@@ -190,6 +196,7 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
 
     RadioButton RB_FROM_START
     {
+        HelpID = "sd:RadioButton:RID_TP_CUSTOMANIMATION_EFFECT:RB_FROM_START";
         OutputSize = TRUE;
         Pos = MAP_APPFONT ( X1 , 16  ) ;
         Size = MAP_APPFONT( W0, 10 );
@@ -201,6 +208,7 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
 
     RadioButton RB_FROM_LAST
     {
+        HelpID = "sd:RadioButton:RID_TP_CUSTOMANIMATION_EFFECT:RB_FROM_LAST";
         OutputSize = TRUE;
         Pos = MAP_APPFONT ( X1 , 29  ) ;
         Size = MAP_APPFONT( W0, 10 );
@@ -212,6 +220,7 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
 
     RadioButton RB_FROM_TIME
     {
+        HelpID = "sd:RadioButton:RID_TP_CUSTOMANIMATION_EFFECT:RB_FROM_TIME";
         OutputSize = TRUE;
         Pos = MAP_APPFONT ( X1 , 42  ) ;
         Size = MAP_APPFONT( W0, 10 );
@@ -223,6 +232,7 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
 
     MetricField MF_START_TIME
     {
+        HelpID = "sd:MetricField:RID_TP_CUSTOMANIMATION_EFFECT:MF_START_TIME";
         OutputSize = TRUE;
         Pos = MAP_APPFONT ( X1 , 55  ) ;
         Size = MAP_APPFONT ( W1, 12 );
@@ -253,6 +263,7 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
 
     RadioButton RB_STOP_ON_CLICK
     {
+        HelpID = "sd:RadioButton:RID_TP_CUSTOMANIMATION_EFFECT:RB_STOP_ON_CLICK";
         OutputSize = TRUE;
         Pos = MAP_APPFONT ( X1 , 81  ) ;
         Size = MAP_APPFONT( W0, 10 );
@@ -264,6 +275,7 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
 
     RadioButton RB_STOP_ON_NEXT_SLIDE
     {
+        HelpID = "sd:RadioButton:RID_TP_CUSTOMANIMATION_EFFECT:RB_STOP_ON_NEXT_SLIDE";
         OutputSize = TRUE;
         Pos = MAP_APPFONT ( X1 , 94 ) ;
         Size = MAP_APPFONT( W0, 10 );
@@ -275,6 +287,7 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
 
     RadioButton RB_STOP_AFTER_N_SLIDES
     {
+        HelpID = "sd:RadioButton:RID_TP_CUSTOMANIMATION_EFFECT:RB_STOP_AFTER_N_SLIDES";
         OutputSize = TRUE;
         Pos = MAP_APPFONT ( X1 , 107  ) ;
         Size = MAP_APPFONT( W0, 10 );
@@ -286,6 +299,7 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
 
     MetricField MF_STOP_AFTER_SLIDES
     {
+        HelpID = "sd:MetricField:RID_TP_CUSTOMANIMATION_EFFECT:MF_STOP_AFTER_SLIDES";
         OutputSize = TRUE;
         Pos = MAP_APPFONT ( X1 , 55  ) ;
         Size = MAP_APPFONT ( W1, 12 );
@@ -329,6 +343,7 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
 
     ListBox LB_SOUND
     {
+        HelpID = "sd:ListBox:RID_TP_CUSTOMANIMATION_EFFECT:LB_SOUND";
         Pos = MAP_APPFONT ( X2 , 3  ) ;
         Size = MAP_APPFONT ( W2 - 19, 100 );
         TabStop = TRUE ;
@@ -338,6 +353,7 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
 
     PushButton PB_SOUND_PREVIEW
     {
+        HelpID = "sd:PushButton:RID_TP_CUSTOMANIMATION_EFFECT:PB_SOUND_PREVIEW";
         Pos = MAP_APPFONT ( X2 + W2 - 16 , 2  ) ;
         Size = MAP_APPFONT( 16, 14 );
         OutputSize = TRUE;
@@ -355,6 +371,7 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
 
     ListBox LB_AFTER_EFFECT
     {
+        HelpID = "sd:ListBox:RID_TP_CUSTOMANIMATION_EFFECT:LB_AFTER_EFFECT";
         Pos = MAP_APPFONT ( X2 , 18  ) ;
         Size = MAP_APPFONT ( W2, 100 );
         TabStop = TRUE ;
@@ -379,6 +396,7 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
 
     ListBox CLB_DIMCOLOR
     {
+        HelpID = "sd:ListBox:RID_TP_CUSTOMANIMATION_EFFECT:CLB_DIMCOLOR";
         Pos = MAP_APPFONT( X2, 33 );
         Size = MAP_APPFONT ( W2, 100 );
         TabStop = TRUE ;
@@ -397,6 +415,7 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
 
     ListBox LB_TEXT_ANIM
     {
+        HelpID = "sd:ListBox:RID_TP_CUSTOMANIMATION_EFFECT:LB_TEXT_ANIM";
         Pos = MAP_APPFONT ( X2 , 48  ) ;
         Size = MAP_APPFONT ( W2, 100 );
         TabStop = TRUE ;
@@ -422,6 +441,7 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
 
     MetricField MF_TEXT_DELAY
     {
+        HelpID = "sd:MetricField:RID_TP_CUSTOMANIMATION_EFFECT:MF_TEXT_DELAY";
         Pos = MAP_APPFONT ( X2, 64  ) ;
         Size = MAP_APPFONT ( 42, 12 );
         TabStop = TRUE ;
@@ -440,6 +460,7 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
 
 TabPage RID_TP_CUSTOMANIMATION_DURATION
 {
+    HelpID = "sd:TabPage:RID_TP_CUSTOMANIMATION_DURATION";
     Hide = TRUE;
     Size = MAP_APPFONT ( WIDTH , 159 );
     Text [ en-US ] = "Timing";
@@ -455,6 +476,7 @@ TabPage RID_TP_CUSTOMANIMATION_DURATION
 
     ListBox LB_START
     {
+        HelpID = "sd:ListBox:RID_TP_CUSTOMANIMATION_DURATION:LB_START";
         Pos = MAP_APPFONT ( X2 , 3  ) ;
         Size = MAP_APPFONT ( W2, 48 );
         TabStop = TRUE ;
@@ -480,6 +502,7 @@ TabPage RID_TP_CUSTOMANIMATION_DURATION
 
     MetricField MF_START_DELAY
     {
+        HelpID = "sd:MetricField:RID_TP_CUSTOMANIMATION_DURATION:MF_START_DELAY";
         Pos = MAP_APPFONT ( X2 , 18  ) ;
         Size = MAP_APPFONT ( W2, 12 );
         Border = TRUE ;
@@ -506,6 +529,7 @@ TabPage RID_TP_CUSTOMANIMATION_DURATION
 
     ComboBox CB_DURATION
     {
+        HelpID = "sd:ComboBox:RID_TP_CUSTOMANIMATION_DURATION:CB_DURATION";
         Pos = MAP_APPFONT ( X2 , 33  ) ;
         Size = MAP_APPFONT ( W2, 48 );
         TabStop = TRUE ;
@@ -524,6 +548,7 @@ TabPage RID_TP_CUSTOMANIMATION_DURATION
 
     ComboBox CB_REPEAT
     {
+        HelpID = "sd:ComboBox:RID_TP_CUSTOMANIMATION_DURATION:CB_REPEAT";
         Pos = MAP_APPFONT ( X2 , 48 ) ;
         Size = MAP_APPFONT ( W2, 48 );
         TabStop = TRUE ;
@@ -533,6 +558,7 @@ TabPage RID_TP_CUSTOMANIMATION_DURATION
 
     CheckBox CBX_REWIND
     {
+        HelpID = "sd:CheckBox:RID_TP_CUSTOMANIMATION_DURATION:CBX_REWIND";
         Pos = MAP_APPFONT ( X0 , 66  ) ;
         Size = MAP_APPFONT ( W0 , 10 ) ;
         TabStop = TRUE ;
@@ -550,6 +576,7 @@ TabPage RID_TP_CUSTOMANIMATION_DURATION
 
     RadioButton RB_CLICKSEQUENCE
     {
+        HelpID = "sd:RadioButton:RID_TP_CUSTOMANIMATION_DURATION:RB_CLICKSEQUENCE";
         Pos = MAP_APPFONT ( X1+6, 92  ) ;
         Size = MAP_APPFONT ( W0 , 10 ) ;
         Text [ en-US ] = "Animate as part of click sequence" ;
@@ -558,6 +585,7 @@ TabPage RID_TP_CUSTOMANIMATION_DURATION
 
     RadioButton RB_INTERACTIVE
     {
+        HelpID = "sd:RadioButton:RID_TP_CUSTOMANIMATION_DURATION:RB_INTERACTIVE";
         Pos = MAP_APPFONT ( X1+6, 105  ) ;
         Size = MAP_APPFONT ( W0 , 10 ) ;
         Text [ en-US ] = "Start effect on click of" ;
@@ -566,6 +594,7 @@ TabPage RID_TP_CUSTOMANIMATION_DURATION
 
     ListBox LB_TRIGGER
     {
+        HelpID = "sd:ListBox:RID_TP_CUSTOMANIMATION_DURATION:LB_TRIGGER";
         Pos = MAP_APPFONT ( X1+18 , 118  );
         Size = MAP_APPFONT ( W2, 80 );
         TabStop = TRUE ;
@@ -576,6 +605,7 @@ TabPage RID_TP_CUSTOMANIMATION_DURATION
 
 TabPage RID_TP_CUSTOMANIMATION_TEXT
 {
+    HelpID = "sd:TabPage:RID_TP_CUSTOMANIMATION_TEXT";
     Hide = TRUE;
     Size = MAP_APPFONT ( WIDTH , 159 );
     Text [ en-US ] = "Text Animation";
@@ -591,6 +621,7 @@ TabPage RID_TP_CUSTOMANIMATION_TEXT
 
     ListBox LB_GROUP_TEXT
     {
+        HelpID = "sd:ListBox:RID_TP_CUSTOMANIMATION_TEXT:LB_GROUP_TEXT";
         Pos = MAP_APPFONT ( X2 , 3 ) ;
         Size = MAP_APPFONT ( W2, 48 );
         TabStop = TRUE ;
@@ -609,8 +640,9 @@ TabPage RID_TP_CUSTOMANIMATION_TEXT
         };
     };
 
-    Checkbox CBX_GROUP_AUTO
+    CheckBox CBX_GROUP_AUTO
     {
+        HelpID = "sd:CheckBox:RID_TP_CUSTOMANIMATION_TEXT:CBX_GROUP_AUTO";
         Pos = MAP_APPFONT ( X0 , 20  ) ;
         Size = MAP_APPFONT ( W0 , 10 ) ;
         TabStop = TRUE ;
@@ -620,6 +652,7 @@ TabPage RID_TP_CUSTOMANIMATION_TEXT
 
     MetricField MF_GROUP_AUTO
     {
+        HelpID = "sd:MetricField:RID_TP_CUSTOMANIMATION_TEXT:MF_GROUP_AUTO";
         Pos = MAP_APPFONT ( X2 , 18 ) ;
         Size = MAP_APPFONT ( W2, 12 );
         Border = TRUE ;
@@ -635,16 +668,18 @@ TabPage RID_TP_CUSTOMANIMATION_TEXT
         SpinSize = 5 ;
     };
 
-    Checkbox CBX_ANIMATE_FORM
+    CheckBox CBX_ANIMATE_FORM
     {
+        HelpID = "sd:CheckBox:RID_TP_CUSTOMANIMATION_TEXT:CBX_ANIMATE_FORM";
         Pos = MAP_APPFONT ( X0 , 33  ) ;
         Size = MAP_APPFONT ( W0 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "Animate attached shape" ;
     };
 
-    Checkbox CBX_REVERSE
+    CheckBox CBX_REVERSE
     {
+        HelpID = "sd:CheckBox:RID_TP_CUSTOMANIMATION_TEXT:CBX_REVERSE";
         Pos = MAP_APPFONT ( X0 , 46  ) ;
         Size = MAP_APPFONT ( W0 , 10 ) ;
         TabStop = TRUE ;

@@ -60,8 +60,8 @@ public:
         ::Window* pWindow,
         DrawView* pDrView,
         DrawDocShell* pShell,
-        ULONG nSumActionCount,
-        ULONG nObjCount);
+        sal_uLong nSumActionCount,
+        sal_uLong nObjCount);
     virtual ~BreakDlg();
 
     short Execute();
@@ -78,7 +78,7 @@ private:
     CancelButton    aBtnCancel;
     DrawView*   pDrView;
 
-    BOOL            bCancel;
+    sal_Bool            bCancel;
 
     Timer           aTimer;
     SvdProgressInfo *pProgrInfo;

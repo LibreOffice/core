@@ -67,7 +67,7 @@ extern void NotifyDocumentEvent( SdDrawDocument* pDocument, const rtl::OUString&
 
 /*************************************************************************
 |*
-|* SetPresentationLayout, setzt: Layoutnamen, Masterpage-Verknpfung und
+|* SetPresentationLayout, setzt: Layoutnamen, Masterpage-Verknï¿½pfung und
 |* Vorlagen fuer Praesentationsobjekte
 |*
 |* Vorraussetzungen: - Die Seite muss bereits das richtige Model kennen!
@@ -75,20 +75,20 @@ extern void NotifyDocumentEvent( SdDrawDocument* pDocument, const rtl::OUString&
 |*                   - Die entsprechenden StyleSheets muessen bereits im
 |*                     im StyleSheetPool sein.
 |*
-|*  bReplaceStyleSheets = TRUE : Benannte StyleSheets werden ausgetauscht
-|*                        FALSE: Alle StyleSheets werden neu zugewiesen
+|*  bReplaceStyleSheets = sal_True : Benannte StyleSheets werden ausgetauscht
+|*                        sal_False: Alle StyleSheets werden neu zugewiesen
 |*
-|*  bSetMasterPage      = TRUE : MasterPage suchen und zuweisen
+|*  bSetMasterPage      = sal_True : MasterPage suchen und zuweisen
 |*
-|*  bReverseOrder       = FALSE: MasterPages von vorn nach hinten suchen
-|*                        TRUE : MasterPages von hinten nach vorn suchen (fuer Undo-Action)
+|*  bReverseOrder       = sal_False: MasterPages von vorn nach hinten suchen
+|*                        sal_True : MasterPages von hinten nach vorn suchen (fuer Undo-Action)
 |*
 \************************************************************************/
 
 void SdPage::SetPresentationLayout(const String& rLayoutName,
-                                   BOOL bReplaceStyleSheets,
-                                   BOOL bSetMasterPage,
-                                   BOOL bReverseOrder)
+                                   sal_Bool bReplaceStyleSheets,
+                                   sal_Bool bSetMasterPage,
+                                   sal_Bool bReverseOrder)
 {
     /*********************************************************************
     |* Layoutname der Seite
@@ -105,8 +105,8 @@ void SdPage::SetPresentationLayout(const String& rLayoutName,
     {
         SdPage* pMaster;
         SdPage* pFoundMaster = 0;
-        USHORT nMaster = 0;
-        USHORT nMasterCount = pModel->GetMasterPageCount();
+        sal_uInt16 nMaster = 0;
+        sal_uInt16 nMasterCount = pModel->GetMasterPageCount();
 
         if( !bReverseOrder )
         {
@@ -154,9 +154,9 @@ void SdPage::SetPresentationLayout(const String& rLayoutName,
     boost::ptr_vector<StyleReplaceData> aReplList;
     bool bListsFilled = false;
 
-    ULONG nObjCount = GetObjCount();
+    sal_uLong nObjCount = GetObjCount();
 
-    for (ULONG nObj = 0; nObj < nObjCount; nObj++)
+    for (sal_uLong nObj = 0; nObj < nObjCount; nObj++)
     {
         SdrTextObj* pObj = (SdrTextObj*) GetObj(nObj);
 
@@ -252,14 +252,14 @@ void SdPage::SetPresentationLayout(const String& rLayoutName,
             SfxStyleSheet* pSheet = GetStyleSheetForPresObj(PRESOBJ_TITLE);
 
             if (pSheet)
-                pObj->SetStyleSheet(pSheet, TRUE);
+                pObj->SetStyleSheet(pSheet, sal_True);
         }
         else
         {
             SfxStyleSheet* pSheet = GetStyleSheetForPresObj(GetPresObjKind(pObj));
 
             if (pSheet)
-                pObj->SetStyleSheet(pSheet, TRUE);
+                pObj->SetStyleSheet(pSheet, sal_True);
         }
     }
 }
@@ -395,7 +395,7 @@ SdPage::SdPage(const SdPage& rSrcPage)
     while((pObj = rSrcPage.maPresentationShapeList.getNextShape(pObj)) != 0)
         InsertPresObj(GetObj(pObj->GetOrdNum()), rSrcPage.GetPresObjKind(pObj));
 
-    mbSelected           = FALSE;
+    mbSelected           = sal_False;
     mnTransitionType    = rSrcPage.mnTransitionType;
     mnTransitionSubtype = rSrcPage.mnTransitionSubtype;
     mbTransitionDirection = rSrcPage.mbTransitionDirection;

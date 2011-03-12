@@ -104,12 +104,12 @@ SdPage* ViewClipboard::GetFirstMasterPage (const SdTransferable& rTransferable)
             for (int nIndex=0; nIndex<nBookmarkCount; nIndex++)
             {
                 String sName (*(String*) pBookmarks->GetObject(nIndex));
-                BOOL bIsMasterPage;
+                sal_Bool bIsMasterPage;
 
-                // SdPage* GetMasterSdPage(USHORT nPgNum, PageKind ePgKind);
-                // USHORT GetMasterSdPageCount(PageKind ePgKind) const;
+                // SdPage* GetMasterSdPage(sal_uInt16 nPgNum, PageKind ePgKind);
+                // sal_uInt16 GetMasterSdPageCount(PageKind ePgKind) const;
 
-                USHORT nBMPage = pDocument->GetPageByName (
+                sal_uInt16 nBMPage = pDocument->GetPageByName (
                     sName, bIsMasterPage);
                 if ( ! bIsMasterPage)
                 {
@@ -171,7 +171,7 @@ void ViewClipboard::AssignMasterPage (
     // appended again by SetMasterPage() to the given name.  Don't ask.
     String sLayoutSuffix (RTL_CONSTASCII_USTRINGPARAM(SD_LT_SEPARATOR));
     sLayoutSuffix.Append (SdResId(STR_LAYOUT_OUTLINE));
-    USHORT nLength = sLayoutSuffix.Len();
+    sal_uInt16 nLength = sLayoutSuffix.Len();
     String sLayoutName (pMasterPage->GetLayoutName());
     if (String(sLayoutName, sLayoutName.Len()-nLength, nLength).Equals (
         sLayoutSuffix))
@@ -181,24 +181,24 @@ void ViewClipboard::AssignMasterPage (
         pPage->GetPageNum() / 2,
         sLayoutName,
         pSourceDocument,
-        FALSE, // Exchange the master page of only the target page.
-        FALSE // Keep unused master pages.
+        sal_False, // Exchange the master page of only the target page.
+        sal_False // Keep unused master pages.
         );
 }
 
 
 
 
-USHORT ViewClipboard::DetermineInsertPosition  (
+sal_uInt16 ViewClipboard::DetermineInsertPosition  (
     const SdTransferable& )
 {
     SdDrawDocument* pDoc = mrView.GetDoc();
-    USHORT nPgCnt = pDoc->GetSdPageCount( PK_STANDARD );
+    sal_uInt16 nPgCnt = pDoc->GetSdPageCount( PK_STANDARD );
 
     // Insert position is the behind the last selected page or behind the
     // last page when the selection is empty.
-    USHORT nInsertPos = pDoc->GetSdPageCount( PK_STANDARD ) * 2 + 1;
-    for( USHORT nPage = 0; nPage < nPgCnt; nPage++ )
+    sal_uInt16 nInsertPos = pDoc->GetSdPageCount( PK_STANDARD ) * 2 + 1;
+    for( sal_uInt16 nPage = 0; nPage < nPgCnt; nPage++ )
     {
         SdPage* pPage = pDoc->GetSdPage( nPage, PK_STANDARD );
 
@@ -212,14 +212,14 @@ USHORT ViewClipboard::DetermineInsertPosition  (
 
 
 
-USHORT ViewClipboard::InsertSlides (
+sal_uInt16 ViewClipboard::InsertSlides (
     const SdTransferable& rTransferable,
-    USHORT nInsertPosition)
+    sal_uInt16 nInsertPosition)
 {
     SdDrawDocument* pDoc = mrView.GetDoc();
 
-    USHORT nInsertPgCnt = 0;
-    BOOL bMergeMasterPages = !rTransferable.HasSourceDoc( pDoc );
+    sal_uInt16 nInsertPgCnt = 0;
+    sal_Bool bMergeMasterPages = !rTransferable.HasSourceDoc( pDoc );
 
     // Prepare the insertion.
     const List* pBookmarkList;
@@ -230,7 +230,7 @@ USHORT ViewClipboard::InsertSlides (
         // pages are inserted.
         pBookmarkList = &rTransferable.GetPageBookmarks();
         pDataDocSh = rTransferable.GetPageDocShell();
-        nInsertPgCnt = (USHORT)pBookmarkList->Count();
+        nInsertPgCnt = (sal_uInt16)pBookmarkList->Count();
     }
     else
     {
@@ -247,7 +247,7 @@ USHORT ViewClipboard::InsertSlides (
     {
         const SolarMutexGuard aGuard;
         ::sd::Window* pWin = mrView.GetViewShell()->GetActiveWindow();
-        const BOOL bWait = pWin && pWin->IsWait();
+        const sal_Bool bWait = pWin && pWin->IsWait();
 
         if( bWait )
             pWin->LeaveWait();
@@ -255,14 +255,14 @@ USHORT ViewClipboard::InsertSlides (
         pDoc->InsertBookmarkAsPage(
             const_cast<List*>(pBookmarkList),
             NULL,
-            FALSE,
-            FALSE,
+            sal_False,
+            sal_False,
             nInsertPosition,
             (&rTransferable == SD_MOD()->pTransferDrag),
             pDataDocSh,
-            TRUE,
+            sal_True,
             bMergeMasterPages,
-            FALSE);
+            sal_False);
 
         if( bWait )
             pWin->EnterWait();

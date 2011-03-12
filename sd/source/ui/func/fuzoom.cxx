@@ -47,7 +47,7 @@
 
 namespace sd {
 
-USHORT SidArrayZoom[] = {
+sal_uInt16 SidArrayZoom[] = {
                     SID_ATTR_ZOOM,
                     SID_ZOOM_OUT,
                     SID_ZOOM_IN,
@@ -68,8 +68,8 @@ FuZoom::FuZoom(
     SdDrawDocument* pDoc,
     SfxRequest& rReq)
     : FuPoor(pViewSh, pWin, pView, pDoc, rReq),
-      bVisible(FALSE),
-      bStartDrag(FALSE)
+      bVisible(sal_False),
+      bStartDrag(sal_False)
 {
 }
 
@@ -86,8 +86,8 @@ FuZoom::~FuZoom()
         // Hide ZoomRect
         mpViewShell->DrawMarkRect(aZoomRect);
 
-        bVisible = FALSE;
-        bStartDrag = FALSE;
+        bVisible = sal_False;
+        bStartDrag = sal_False;
     }
 }
 
@@ -103,18 +103,18 @@ FunctionReference FuZoom::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::
 |*
 \************************************************************************/
 
-BOOL FuZoom::MouseButtonDown(const MouseEvent& rMEvt)
+sal_Bool FuZoom::MouseButtonDown(const MouseEvent& rMEvt)
 {
     // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
     mpWindow->CaptureMouse();
-    bStartDrag = TRUE;
+    bStartDrag = sal_True;
 
     aBeginPosPix = rMEvt.GetPosPixel();
     aBeginPos = mpWindow->PixelToLogic(aBeginPosPix);
 
-    return TRUE;
+    return sal_True;
 }
 
 /*************************************************************************
@@ -123,7 +123,7 @@ BOOL FuZoom::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BOOL FuZoom::MouseMove(const MouseEvent& rMEvt)
+sal_Bool FuZoom::MouseMove(const MouseEvent& rMEvt)
 {
     if (bStartDrag)
     {
@@ -166,7 +166,7 @@ BOOL FuZoom::MouseMove(const MouseEvent& rMEvt)
             mpViewShell->DrawMarkRect(aZoomRect);
         }
 
-        bVisible = TRUE;
+        bVisible = sal_True;
     }
 
     return bStartDrag;
@@ -178,7 +178,7 @@ BOOL FuZoom::MouseMove(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BOOL FuZoom::MouseButtonUp(const MouseEvent& rMEvt)
+sal_Bool FuZoom::MouseButtonUp(const MouseEvent& rMEvt)
 {
     // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
@@ -187,7 +187,7 @@ BOOL FuZoom::MouseButtonUp(const MouseEvent& rMEvt)
     {
         // Hide ZoomRect
         mpViewShell->DrawMarkRect(aZoomRect);
-        bVisible = FALSE;
+        bVisible = sal_False;
     }
 
     Point aPosPix = rMEvt.GetPosPixel();
@@ -196,7 +196,7 @@ BOOL FuZoom::MouseButtonUp(const MouseEvent& rMEvt)
     {
         // Zoom
         Size aZoomSizePixel = mpWindow->LogicToPixel(aZoomRect).GetSize();
-        ULONG nTol = DRGPIX + DRGPIX;
+        sal_uLong nTol = DRGPIX + DRGPIX;
 
         if ( aZoomSizePixel.Width() < (long) nTol && aZoomSizePixel.Height() < (long) nTol )
         {
@@ -218,11 +218,11 @@ BOOL FuZoom::MouseButtonUp(const MouseEvent& rMEvt)
                                            mpWindow->GetOutputSizePixel()));
     mpViewShell->GetZoomList()->InsertZoomRect(aVisAreaWin);
 
-    bStartDrag = FALSE;
+    bStartDrag = sal_False;
     mpWindow->ReleaseMouse();
     mpViewShell->Cancel();
 
-    return TRUE;
+    return sal_True;
 }
 
 /*************************************************************************

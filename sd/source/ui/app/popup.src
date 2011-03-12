@@ -35,6 +35,7 @@
 #ifndef _GLOBLMN_HRC
 #include <svx/globlmn.hrc>
 #endif
+#include "helpids.h"
 
 #define DEFINE_SLOTID_FOR_NUMBER_BULLETS    SID_OUTLINE_BULLET
 
@@ -82,7 +83,7 @@ Menu RID_DRAW_TABLEOBJ_INSIDE_POPUP
         MenuItem
         {
             Identifier = SID_FORMAT_TABLE_DLG;
-            HelpID = SID_FORMAT_TABLE_DLG;
+            HelpId = CMD_SID_FORMAT_TABLE_DLG;
             Text [ en-US ] = "~Table...";
         };
         MenuItem
@@ -97,32 +98,32 @@ Menu RID_DRAW_TABLEOBJ_INSIDE_POPUP
                     MenuItem
                     {
                         Identifier = SID_TABLE_MERGE_CELLS;
-                        HelpID = SID_TABLE_MERGE_CELLS;
+                        HelpId = CMD_SID_TABLE_MERGE_CELLS;
                         Text [ en-US ] = "~Merge";
                     };
                     MenuItem
                     {
                         Identifier = SID_TABLE_SPLIT_CELLS;
-                        HelpID = SID_TABLE_SPLIT_CELLS;
+                        HelpId = CMD_SID_TABLE_SPLIT_CELLS;
                         Text [ en-US ] = "~Split...";
                     };
                     SEPARATOR
                     MenuItem
                     {
                         Identifier = SID_TABLE_VERT_NONE;
-                        HelpID = SID_TABLE_VERT_NONE;
+                        HelpId = CMD_SID_TABLE_VERT_NONE;
                         Text [ en-US ] = "~Top";
                     };
                     MenuItem
                     {
                         Identifier = SID_TABLE_VERT_CENTER;
-                        HelpID = SID_TABLE_VERT_CENTER;
+                        HelpId = CMD_SID_TABLE_VERT_CENTER;
                         Text [ en-US ] = "C~enter";
                     };
                     MenuItem
                     {
                         Identifier = SID_TABLE_VERT_BOTTOM;
-                        HelpID = SID_TABLE_VERT_BOTTOM;
+                        HelpId = CMD_SID_TABLE_VERT_BOTTOM;
                         Text [ en-US ] = "~Bottom";
                     };
                 };
@@ -140,26 +141,26 @@ Menu RID_DRAW_TABLEOBJ_INSIDE_POPUP
                     MenuItem
                     {
                         Identifier = SID_TABLE_DISTRIBUTE_ROWS;
-                        HelpID = SID_TABLE_DISTRIBUTE_ROWS;
+                        HelpId = CMD_SID_TABLE_DISTRIBUTE_ROWS;
                         Text [ en-US ] = "Space ~Equally";
                     };
                     SEPARATOR
                     MenuItem
                     {
                         Identifier = SID_TABLE_SELECT_ROW;
-                        HelpID = SID_TABLE_SELECT_ROW;
+                        HelpId = CMD_SID_TABLE_SELECT_ROW;
                         Text [ en-US ] = "~Select";
                     };
                     MenuItem
                     {
                         Identifier = SID_TABLE_INSERT_ROW_DLG;
-                        HelpID = SID_TABLE_INSERT_ROW_DLG;
+                        HelpId = CMD_SID_TABLE_INSERT_ROW_DLG;
                         Text [ en-US ] = "~Insert...";
                     };
                     MenuItem
                     {
                         Identifier = SID_TABLE_DELETE_ROW;
-                        HelpID = SID_TABLE_DELETE_ROW;
+                        HelpId = CMD_SID_TABLE_DELETE_ROW;
                         Text [ en-US ] = "~Delete";
                     };
                 };
@@ -177,26 +178,26 @@ Menu RID_DRAW_TABLEOBJ_INSIDE_POPUP
                     MenuItem
                     {
                         Identifier = SID_TABLE_DISTRIBUTE_COLUMNS;
-                        HelpID = SID_TABLE_DISTRIBUTE_COLUMNS;
+                        HelpId = CMD_SID_TABLE_DISTRIBUTE_COLUMNS;
                         Text [ en-US ] = "Space ~Equally";
                     };
                     SEPARATOR
                     MenuItem
                     {
                         Identifier = SID_TABLE_SELECT_COL;
-                        HelpID = SID_TABLE_SELECT_COL;
+                        HelpId = CMD_SID_TABLE_SELECT_COL;
                         Text [ en-US ] = "~Select";
                     };
                     MenuItem
                     {
                         Identifier = SID_TABLE_INSERT_COL_DLG;
-                        HelpID = SID_TABLE_INSERT_COL_DLG;
+                        HelpId = CMD_SID_TABLE_INSERT_COL_DLG;
                         Text [ en-US ] = "~Insert...";
                     };
                     MenuItem
                     {
                         Identifier = SID_TABLE_DELETE_COL;
-                        HelpID = SID_TABLE_DELETE_COL;
+                        HelpId = CMD_SID_TABLE_DELETE_COL;
                         Text [ en-US ] = "~Delete";
                     };
                 };
@@ -428,19 +429,19 @@ Menu RID_LAYERTAB_POPUP
         MenuItem
         {
             Identifier = SID_INSERTLAYER ;
-            HelpID = SID_INSERTLAYER ;
+            HelpId = CMD_SID_INSERTLAYER ;
             Text [ en-US ] = "~Insert Layer..." ;
         };
         MenuItem
         {
             Identifier = SID_MODIFYLAYER ;
-            HelpID = SID_MODIFYLAYER ;
+            HelpId = CMD_SID_MODIFYLAYER ;
             Text [ en-US ] = "Modify La~yer..." ;
         };
         MenuItem
         {
             Identifier = SID_DELETE_LAYER ;
-            HelpID = SID_DELETE_LAYER ;
+            HelpId = CMD_SID_DELETE_LAYER ;
             Text [ en-US ] = "Delete ~Layer..." ;
         };
         MN_RENAME_LAYER
@@ -454,13 +455,13 @@ Menu RID_TASKPANE_MASTERPAGESSELECTOR_POPUP
         MenuItem
         {
             Identifier = SID_TP_APPLY_TO_ALL_SLIDES;
-            HelpID = SID_TP_APPLY_TO_ALL_SLIDES;
+            HelpId = CMD_SID_TP_APPLY_TO_ALL_SLIDES;
             Text [ en-US ] = "~Apply to All Slides";
         };
         MenuItem
         {
             Identifier = SID_TP_APPLY_TO_SELECTED_SLIDES;
-            HelpID = SID_TP_APPLY_TO_SELECTED_SLIDES;
+            HelpId = CMD_SID_TP_APPLY_TO_SELECTED_SLIDES;
             Text [ en-US ] = "Apply to ~Selected Slides";
         };
 
@@ -469,13 +470,13 @@ Menu RID_TASKPANE_MASTERPAGESSELECTOR_POPUP
         MenuItem
         {
             Identifier = SID_TP_SHOW_LARGE_PREVIEW;
-            HelpID = SID_TP_SHOW_LARGE_PREVIEW;
+            HelpId = CMD_SID_TP_SHOW_LARGE_PREVIEW;
             Text[ en-US ] = "Show ~Large Preview";
         };
         MenuItem
         {
             Identifier = SID_TP_SHOW_SMALL_PREVIEW;
-            HelpID = SID_TP_SHOW_SMALL_PREVIEW;
+            HelpId = CMD_SID_TP_SHOW_SMALL_PREVIEW;
             Text[ en-US ] = "Show S~mall Preview";
         };
     };
@@ -488,13 +489,13 @@ Menu RID_TASKPANE_CURRENT_MASTERPAGESSELECTOR_POPUP
         MenuItem
         {
             Identifier = SID_TP_APPLY_TO_ALL_SLIDES;
-            HelpID = SID_TP_APPLY_TO_ALL_SLIDES;
+            HelpId = CMD_SID_TP_APPLY_TO_ALL_SLIDES;
             Text [ en-US ] = "~Apply to All Slides";
         };
         MenuItem
         {
             Identifier = SID_TP_APPLY_TO_SELECTED_SLIDES;
-            HelpID = SID_TP_APPLY_TO_SELECTED_SLIDES;
+            HelpId = CMD_SID_TP_APPLY_TO_SELECTED_SLIDES;
             Text [ en-US ] = "Apply to ~Selected Slides";
         };
 
@@ -504,7 +505,7 @@ Menu RID_TASKPANE_CURRENT_MASTERPAGESSELECTOR_POPUP
         MenuItem
         {
             Identifier = SID_TP_EDIT_MASTER;
-            HelpID = SID_TP_EDIT_MASTER;
+            HelpId = CMD_SID_TP_EDIT_MASTER;
             Text[ en-US ] = "~Edit Master...";
         };
 
@@ -515,13 +516,13 @@ Menu RID_TASKPANE_CURRENT_MASTERPAGESSELECTOR_POPUP
         MenuItem
         {
             Identifier = SID_TP_SHOW_LARGE_PREVIEW;
-            HelpID = SID_TP_SHOW_LARGE_PREVIEW;
+            HelpId = CMD_SID_TP_SHOW_LARGE_PREVIEW;
             Text[ en-US ] = "Show ~Large Preview";
         };
         MenuItem
         {
             Identifier = SID_TP_SHOW_SMALL_PREVIEW;
-            HelpID = SID_TP_SHOW_SMALL_PREVIEW;
+            HelpId = CMD_SID_TP_SHOW_SMALL_PREVIEW;
             Text[ en-US ] = "Show S~mall Preview";
         };
     };
@@ -534,7 +535,7 @@ Menu RID_TASKPANE_LAYOUTMENU_POPUP
         MenuItem
         {
             Identifier = SID_TP_APPLY_TO_SELECTED_SLIDES;
-            HelpID = SID_TP_APPLY_TO_SELECTED_SLIDES;
+            HelpId = CMD_SID_TP_APPLY_TO_SELECTED_SLIDES;
             Text [ en-US ] = "Apply to ~Selected Slides";
         };
 
@@ -543,7 +544,7 @@ Menu RID_TASKPANE_LAYOUTMENU_POPUP
         MenuItem
         {
             Identifier = SID_INSERTPAGE_LAYOUT_MENU;
-            HelpID = SID_INSERTPAGE_LAYOUT_MENU;
+            HelpId = CMD_SID_INSERTPAGE_LAYOUT_MENU;
             Text [ en-US ] = "~Insert Slide";
         };
     };

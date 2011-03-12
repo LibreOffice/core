@@ -97,30 +97,6 @@ public:
         const ::rtl::OUString& rsDescription,
         sal_Int16 eRole);
 
-    /** Use this variant of the constructor when the accessible parent is
-        non-standard.
-        @param rxParent
-            The accessible parent that will be returned by
-            getAccessibleParent() and that is used for computing relative
-            coordinates.
-        @param rNode
-            The TreeNode to make accessible.
-        @param rsName
-            The accessible name that will be returned by getAccessibleName().
-        @param rsDescription
-            The accessible description that will be returned by
-            getAccessibleDescription().
-        @param eRole
-            The role that will be returned by getAccessibleRole().
-    */
-    AccessibleTreeNode(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::accessibility::XAccessible> & rxParent,
-        ::sd::toolpanel::TreeNode& rNode,
-        const ::rtl::OUString& rsName,
-        const ::rtl::OUString& rsDescription,
-        sal_Int16 eRole);
-
     void FireAccessibleEvent (
         short nEventId,
         const ::com::sun::star::uno::Any& rOldValue,

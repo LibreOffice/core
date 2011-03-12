@@ -114,7 +114,7 @@ EditWindow::~EditWindow (void)
 
 
 void SmGetLeftSelectionPart(const ESelection aSel,
-                            USHORT &nPara, USHORT &nPos)
+                            sal_uInt16 &nPara, sal_uInt16 &nPos)
     // returns paragraph number and position of the selections left part
 {
     // compare start and end of selection and use the one that comes first
@@ -158,10 +158,10 @@ EditEngine* EditWindow::CreateEditEngine (void)
         SvtLinguConfig().GetOptions( aOpt );
         //
         struct FontDta {
-            INT16       nFallbackLang;
-            INT16       nLang;
-            USHORT      nFontType;
-            USHORT      nFontInfoId;
+            sal_Int16       nFallbackLang;
+            sal_Int16       nLang;
+            sal_uInt16      nFontType;
+            sal_uInt16      nFontInfoId;
             } aTable[3] =
         {
             // info to get western font to be used
@@ -208,8 +208,8 @@ EditEngine* EditWindow::CreateEditEngine (void)
 
         pEditEngine = new EditEngine (mpEditEngineItemPool);
 
-        pEditEngine->EnableUndo (TRUE);
-        pEditEngine->SetDefTab (USHORT(
+        pEditEngine->EnableUndo (sal_True);
+        pEditEngine->SetDefTab (sal_uInt16(
             Application::GetDefaultDevice()->GetTextWidth(
                 UniString::CreateFromAscii("XXXX"))));
 
@@ -250,9 +250,9 @@ void EditWindow::DataChanged (const DataChangedEvent&)
         //! see also SmDocShell::GetEditEngine() !
         //!
 
-        //      pEditEngine->SetDefTab( USHORT( GetTextWidth( C2S("XXXX") ) ) );
+        //      pEditEngine->SetDefTab( sal_uInt16( GetTextWidth( C2S("XXXX") ) ) );
 
-        USHORT aFntInfoId[3] = {
+        sal_uInt16 aFntInfoId[3] = {
                 EE_CHAR_FONTINFO, EE_CHAR_FONTINFO_CJK, EE_CHAR_FONTINFO_CTL };
         for (int i = 0;  i < 3;  ++i)
         {
@@ -412,7 +412,7 @@ void EditWindow::CreateEditView (void)
 
         mpEditView->SetSelection(eSelection);
         Update();
-        mpEditView->ShowCursor(TRUE, TRUE);
+        mpEditView->ShowCursor(sal_True, sal_True);
 
         pEditEngine->SetStatusEventHdl(
             LINK(this, EditWindow, EditStatusHdl));
@@ -551,7 +551,7 @@ void EditWindow::SetText(const XubString& rText)
         pEditEngine->SetText(rText);
         pEditEngine->ClearModifyFlag();
 
-        //! Hier die Timer neu zu starten verhindert, dass die Handler für andere
+        //! Hier die Timer neu zu starten verhindert, dass die Handler fï¿½r andere
         //! (im Augenblick nicht mehr aktive) Math Tasks aufgerufen werden.
         maModifyTimer.Start();
         maCursorMoveTimer.Start();
@@ -582,16 +582,16 @@ void EditWindow::LoseFocus()
 }
 
 
-BOOL EditWindow::IsAllSelected() const
+sal_Bool EditWindow::IsAllSelected() const
 {
-    BOOL bRes = FALSE;
+    sal_Bool bRes = sal_False;
     EditEngine *pEditEngine = ((EditWindow *) this)->GetEditEngine();
     DBG_ASSERT( mpEditView, "NULL pointer" );
     DBG_ASSERT( pEditEngine, "NULL pointer" );
     if (pEditEngine  &&  mpEditView)
     {
         ESelection eSelection( mpEditView->GetSelection() );
-        INT32 nParaCnt = pEditEngine->GetParagraphCount();
+        sal_Int32 nParaCnt = pEditEngine->GetParagraphCount();
         if (!(nParaCnt - 1))
         {
             String Text( pEditEngine->GetText( LINEEND_LF ) );
@@ -624,7 +624,7 @@ void EditWindow::MarkError(const Point &rPos)
         const int Col = rPos.X();
         const int Row = rPos.Y() - 1;
 
-        mpEditView->SetSelection(ESelection ( (USHORT)Row, (USHORT)(Col - 1), (USHORT)Row, (USHORT)Col));
+        mpEditView->SetSelection(ESelection ( (sal_uInt16)Row, (sal_uInt16)(Col - 1), (sal_uInt16)Row, (sal_uInt16)Col));
         GrabFocus();
     }
 }
@@ -637,10 +637,10 @@ void EditWindow::SelNextMark()
     if (pEditEngine  &&  mpEditView)
     {
         ESelection eSelection = mpEditView->GetSelection();
-        USHORT     Pos        = eSelection.nEndPos;
+        sal_uInt16     Pos        = eSelection.nEndPos;
         String     aMark (UniString::CreateFromAscii("<?>"));
         String     aText;
-        USHORT     nCounts    = pEditEngine->GetParagraphCount();
+        sal_uInt16     nCounts    = pEditEngine->GetParagraphCount();
 
         while (eSelection.nEndPara < nCounts)
         {
@@ -667,15 +667,15 @@ void EditWindow::SelPrevMark()
     if (pEditEngine  &&  mpEditView)
     {
         ESelection eSelection = mpEditView->GetSelection();
-        USHORT     Pos        = STRING_NOTFOUND;
+        sal_uInt16     Pos        = STRING_NOTFOUND;
         xub_StrLen Max        = eSelection.nStartPos;
         String     Text( pEditEngine->GetText( eSelection.nStartPara ) );
         String     aMark (UniString::CreateFromAscii("<?>"));
-        USHORT     nCounts    = pEditEngine->GetParagraphCount();
+        sal_uInt16     nCounts    = pEditEngine->GetParagraphCount();
 
         do
         {
-            USHORT Fnd = Text.Search(aMark, 0);
+            sal_uInt16 Fnd = Text.Search(aMark, 0);
 
             while ((Fnd < Max) && (Fnd != STRING_NOTFOUND))
             {
@@ -700,7 +700,7 @@ void EditWindow::SelPrevMark()
     }
 }
 
-BOOL EditWindow::HasMark(const String& rText) const
+sal_Bool EditWindow::HasMark(const String& rText) const
     // returns true iff 'rText' contains a mark
 {
     return rText.SearchAscii("<?>", 0) != STRING_NOTFOUND;
@@ -740,15 +740,15 @@ void EditWindow::SetSelection(const ESelection &rSel)
         mpEditView->SetSelection(rSel);
 }
 
-BOOL EditWindow::IsEmpty() const
+sal_Bool EditWindow::IsEmpty() const
 {
     EditEngine *pEditEngine = ((EditWindow *) this)->GetEditEngine();
-    return (pEditEngine && (pEditEngine->GetTextLen() == 0)) ? TRUE : FALSE;
+    return (pEditEngine && (pEditEngine->GetTextLen() == 0)) ? sal_True : sal_False;
 }
 
-BOOL EditWindow::IsSelected() const
+sal_Bool EditWindow::IsSelected() const
 {
-    return mpEditView ? mpEditView->HasSelection() : FALSE;
+    return mpEditView ? mpEditView->HasSelection() : sal_False;
 }
 
 void EditWindow::Cut()

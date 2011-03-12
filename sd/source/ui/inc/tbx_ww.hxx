@@ -48,7 +48,7 @@ private:
     DECL_LINK( TbxSelectHdl, ToolBox * );
 
 public:
-    SdPopupWindowTbx( USHORT nId, WindowAlign eAlign,
+    SdPopupWindowTbx( sal_uInt16 nId, WindowAlign eAlign,
                       SdResId aRIdWin, SdResId aRIdTbx, SfxBindings& rBindings );
     ~SdPopupWindowTbx();
 
@@ -72,17 +72,17 @@ private:
 class SdTbxControl : public SfxToolBoxControl
 {
 private:
-    BOOL    IsCheckable( USHORT nSId );
+    sal_Bool    IsCheckable( sal_uInt16 nSId );
 
 public:
             SFX_DECL_TOOLBOX_CONTROL();
 
-            SdTbxControl(USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+            SdTbxControl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
             ~SdTbxControl() {}
 
     virtual SfxPopupWindowType  GetPopupWindowType() const;
     virtual SfxPopupWindow*     CreatePopupWindow();
-    virtual void StateChanged( USHORT nSId, SfxItemState eState,
+    virtual void StateChanged( sal_uInt16 nSId, SfxItemState eState,
                                 const SfxPoolItem* pState );
 };
 

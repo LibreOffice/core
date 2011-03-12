@@ -567,12 +567,27 @@ Reference<XResourceId> FrameworkHelper::RequestView (
 
 
 void FrameworkHelper::RequestTaskPanel (
-    const OUString& rsTaskPanelURL)
+    const OUString& rsTaskPanelURL,
+    const bool bEnsureTaskPaneIsVisible)
 {
     try
     {
         if (mxConfigurationController.is())
         {
+            // Check the existence of the task pane.
+            if ( ! bEnsureTaskPaneIsVisible)
+            {
+                Reference<XConfiguration> xConfiguration (
+                    mxConfigurationController->getCurrentConfiguration());
+            if (xConfiguration.is())
+                if ( ! xConfiguration->hasResource(
+                    CreateResourceId(msTaskPaneURL, msRightPaneURL)))
+                {
+                    // Task pane does is not active.  Do not force it.
+                    return;
+                }
+            }
+
             // Create the resource id from URLs for the pane, the task pane
             // view, and the task panel.
             mxConfigurationController->requestResourceActivation(
@@ -641,10 +656,10 @@ ViewShell::ShellType FrameworkHelper::GetViewId (const rtl::OUString& rsViewURL)
 
 
 void FrameworkHelper::HandleModeChangeSlot (
-    ULONG nSlotId,
+    sal_uLong nSlotId,
     SfxRequest& rRequest)
 {
-    BOOL bIsActive = TRUE;
+    sal_Bool bIsActive = sal_True;
 
     if ( ! mxConfigurationController.is())
         return;
@@ -663,8 +678,8 @@ void FrameworkHelper::HandleModeChangeSlot (
                 SFX_REQUEST_ARG (rRequest,
                     pIsActive,
                     SfxBoolItem,
-                    (USHORT)nSlotId,
-                    FALSE);
+                    (sal_uInt16)nSlotId,
+                    sal_False);
                 bIsActive = pIsActive->GetValue ();
             }
         }

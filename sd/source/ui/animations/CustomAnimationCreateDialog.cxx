@@ -88,7 +88,7 @@ public:
 
     virtual void        MouseButtonUp( const MouseEvent& rMEvt );
 
-    USHORT          InsertCategory( const XubString& rStr, USHORT nPos = LISTBOX_APPEND );
+    sal_uInt16          InsertCategory( const XubString& rStr, sal_uInt16 nPos = LISTBOX_APPEND );
 
     void            SetDoubleClickLink( const Link& rDoubleClickHdl ) { maDoubleClickHdl = rDoubleClickHdl; }
 
@@ -103,7 +103,7 @@ private:
 CategoryListBox::CategoryListBox( Window* pParent, const ResId& rResId )
 : ListBox( pParent, rResId )
 {
-    EnableUserDraw( TRUE );
+    EnableUserDraw( sal_True );
     SetDoubleClickHdl( LINK( this, CategoryListBox, implDoubleClickHdl ) );
 }
 
@@ -111,9 +111,9 @@ CategoryListBox::~CategoryListBox()
 {
 }
 
-USHORT CategoryListBox::InsertCategory( const XubString& rStr, USHORT nPos /* = LISTBOX_APPEND */ )
+sal_uInt16 CategoryListBox::InsertCategory( const XubString& rStr, sal_uInt16 nPos /* = LISTBOX_APPEND */ )
 {
-    USHORT n = ListBox::InsertEntry( rStr, nPos );
+    sal_uInt16 n = ListBox::InsertEntry( rStr, nPos );
     if( n != LISTBOX_ENTRY_NOTFOUND )
         ListBox::SetEntryFlags( n, ListBox::GetEntryFlags(n) | LISTBOX_ENTRY_FLAG_DISABLE_SELECTION );
 
@@ -122,7 +122,7 @@ USHORT CategoryListBox::InsertCategory( const XubString& rStr, USHORT nPos /* = 
 
 void CategoryListBox::UserDraw( const UserDrawEvent& rUDEvt )
 {
-    const USHORT nItem = rUDEvt.GetItemId();
+    const sal_uInt16 nItem = rUDEvt.GetItemId();
 
     if( ListBox::GetEntryFlags(nItem) & LISTBOX_ENTRY_FLAG_DISABLE_SELECTION )
     {
@@ -148,7 +148,7 @@ void CategoryListBox::UserDraw( const UserDrawEvent& rUDEvt )
     }
     else
     {
-        DrawEntry( rUDEvt, TRUE, TRUE );
+        DrawEntry( rUDEvt, sal_True, sal_True );
     }
 }
 
@@ -210,9 +210,9 @@ private:
 
     CustomAnimationCreateDialog*        mpParent;
 
-    USHORT mnCurvePathPos;
-    USHORT mnPolygonPathPos;
-    USHORT mnFreeformPathPos;
+    sal_uInt16 mnCurvePathPos;
+    sal_uInt16 mnPolygonPathPos;
+    sal_uInt16 mnFreeformPathPos;
 
 };
 
@@ -261,7 +261,7 @@ CustomAnimationCreateTabPage::CustomAnimationCreateTabPage( Window* pParent, Cus
 
     FreeResource();
 
-    USHORT nFirstEffect = LISTBOX_ENTRY_NOTFOUND;
+    sal_uInt16 nFirstEffect = LISTBOX_ENTRY_NOTFOUND;
 
     if( nTabId == MOTIONPATH )
     {
@@ -293,7 +293,7 @@ CustomAnimationCreateTabPage::CustomAnimationCreateTabPage( Window* pParent, Cus
                 CustomAnimationPresetPtr pDescriptor = (*aIter++);
                 if( pDescriptor.get() && (bHasText || !pDescriptor->isTextOnly() ) )
                 {
-                    USHORT nPos = mpLBEffects->InsertEntry( pDescriptor->getLabel() );
+                    sal_uInt16 nPos = mpLBEffects->InsertEntry( pDescriptor->getLabel() );
                     mpLBEffects->SetEntryData( nPos, static_cast<void*>( new CustomAnimationPresetPtr( pDescriptor ) ) );
 
                     if( nFirstEffect == LISTBOX_ENTRY_NOTFOUND )
@@ -336,7 +336,7 @@ IMPL_LINK( CustomAnimationCreateTabPage, implDoubleClickHdl, Control*, pControl 
     if( pControl == mpLBEffects )
     {
         if( mpLBEffects->GetSelectEntryCount() )
-            mpParent->EndDialog( TRUE );
+            mpParent->EndDialog( sal_True );
     }
     return 0;
 }
@@ -351,7 +351,7 @@ void CustomAnimationCreateTabPage::onSelectEffect()
     CustomAnimationPresetPtr pPreset( *p );
 
     const double fDuration = pPreset->getDuration();
-    USHORT nPos = 0xffff;
+    sal_uInt16 nPos = 0xffff;
 
     if( fDuration == 5.0 )
         nPos = 0;
@@ -378,7 +378,7 @@ void CustomAnimationCreateTabPage::onSelectEffect()
 
 void CustomAnimationCreateTabPage::clearEffects()
 {
-    USHORT nPos = mpLBEffects->GetEntryCount();
+    sal_uInt16 nPos = mpLBEffects->GetEntryCount();
     while( nPos-- )
         delete static_cast< CustomAnimationPresetPtr* >( mpLBEffects->GetEntryData( nPos ) );
 
@@ -405,7 +405,7 @@ PathKind CustomAnimationCreateTabPage::getCreatePathKind() const
 
     if( mpLBEffects->GetSelectEntryCount() == 1 )
     {
-        const USHORT nPos = mpLBEffects->GetSelectEntryPos();
+        const sal_uInt16 nPos = mpLBEffects->GetSelectEntryPos();
         if( nPos == mnCurvePathPos )
         {
             eKind = CURVE;
@@ -427,7 +427,7 @@ PathKind CustomAnimationCreateTabPage::getCreatePathKind() const
 
 double CustomAnimationCreateTabPage::getDuration() const
 {
-    USHORT nPos = mpCBSpeed->GetSelectEntryPos();
+    sal_uInt16 nPos = mpCBSpeed->GetSelectEntryPos();
     if( (nPos == 0xffff) || !mpCBSpeed->IsEnabled() )
     {
         CustomAnimationPresetPtr pPreset = getSelectedPreset();
@@ -449,7 +449,7 @@ double CustomAnimationCreateTabPage::getDuration() const
 
 void CustomAnimationCreateTabPage::setDuration( double fDuration )
 {
-    USHORT nPos = 0;
+    sal_uInt16 nPos = 0;
     if( fDuration < 2.0f )
     {
         if( fDuration < 1.0f )
@@ -483,12 +483,12 @@ bool CustomAnimationCreateTabPage::getIsPreview() const
 
 void CustomAnimationCreateTabPage::setIsPreview( bool bIsPreview )
 {
-    mpCBXPReview->Check( bIsPreview ? TRUE : FALSE );
+    mpCBXPReview->Check( bIsPreview ? sal_True : sal_False );
 }
 
 bool CustomAnimationCreateTabPage::select( const OUString& rsPresetId )
 {
-    USHORT nPos = mpLBEffects->GetEntryCount();
+    sal_uInt16 nPos = mpLBEffects->GetEntryCount();
     while( nPos-- )
     {
         void* pEntryData = mpLBEffects->GetEntryData( nPos );

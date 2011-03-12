@@ -85,44 +85,6 @@ SdrObject* ShapeList::removeShape( SdrObject& rObject )
     return 0;
 }
 
-void ShapeList::replaceShape( SdrObject& rOldObject, SdrObject& rNewObject )
-{
-    if( &rOldObject == &rNewObject )
-        return;
-
-    ListImpl::iterator aIter( std::find( maShapeList.begin(), maShapeList.end(), &rNewObject ) );
-    if( aIter != maShapeList.end() )
-    {
-        bool bIterErased = aIter == maIter;
-        (*aIter)->RemoveObjectUser(*this);
-        aIter = maShapeList.erase( aIter );
-
-        if( bIterErased )
-            maIter = aIter;
-    }
-
-    aIter = std::find( maShapeList.begin(), maShapeList.end(), &rOldObject );
-    if( aIter != maShapeList.end() )
-    {
-        bool bIterErased = aIter == maIter;
-
-        ListImpl::iterator iNew( maShapeList.insert( aIter, &rNewObject ) );
-
-        (*aIter)->RemoveObjectUser(*this);
-        aIter = maShapeList.erase( aIter );
-
-        rNewObject.AddObjectUser( *this );
-
-        if( bIterErased )
-            maIter = iNew;
-    }
-    else
-    {
-        OSL_FAIL("sd::ShapeList::replaceShape(), given shape not part of list!");
-        addShape( rNewObject );
-    }
-}
-
 /** removes all shapes from this list
     NOTE: iterators will become invalid */
 void ShapeList::clear()

@@ -266,22 +266,22 @@ bool View::InsertMetaFile( TransferableDataHelper& rDataHelper, const Point& rPo
     return true;
 }
 
-BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
-                         const Point& rPos, sal_Int8& rDnDAction, BOOL bDrag,
-                         ULONG nFormat, USHORT nPage, USHORT nLayer )
+sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
+                         const Point& rPos, sal_Int8& rDnDAction, sal_Bool bDrag,
+                         sal_uLong nFormat, sal_uInt16 nPage, sal_uInt16 nLayer )
 {
     maDropPos = rPos;
     mnAction = rDnDAction;
-    mbIsDropAllowed = FALSE;
+    mbIsDropAllowed = sal_False;
 
     TransferableDataHelper  aDataHelper( rDataHelper );
     SdrObject*              pPickObj = NULL;
     SdPage*                 pPage = NULL;
     ImageMap*               pImageMap = NULL;
-    BOOL                    bReturn = FALSE;
-    BOOL                    bLink = ( ( mnAction & DND_ACTION_LINK ) != 0 );
-    BOOL                    bCopy = ( ( ( mnAction & DND_ACTION_COPY ) != 0 ) || bLink );
-    ULONG                   nPasteOptions = SDRINSERT_SETDEFLAYER;
+    sal_Bool                    bReturn = sal_False;
+    sal_Bool                    bLink = ( ( mnAction & DND_ACTION_LINK ) != 0 );
+    sal_Bool                    bCopy = ( ( ( mnAction & DND_ACTION_COPY ) != 0 ) || bLink );
+    sal_uLong                   nPasteOptions = SDRINSERT_SETDEFLAYER;
 
     if (mpViewSh != NULL)
     {
@@ -380,10 +380,10 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
 
                     if( !pPV->IsLayerLocked( aLayer ) )
                     {
-                        pOwnData->SetInternalMove( TRUE );
+                        pOwnData->SetInternalMove( sal_True );
                         SortMarkedObjects();
 
-                        for( ULONG nM = 0; nM < GetMarkedObjectCount(); nM++ )
+                        for( sal_uLong nM = 0; nM < GetMarkedObjectCount(); nM++ )
                         {
                             SdrMark*    pM = GetSdrMarkByIndex( nM );
                             SdrObject*  pO = pM->GetMarkedSdrObj();
@@ -402,18 +402,18 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
                             }
                         }
 
-                        bReturn = TRUE;
+                        bReturn = sal_True;
                     }
                 }
                 else
                 {
                     SdrPageView*    pPV = GetSdrPageView();
-                    BOOL            bDropOnTabBar = TRUE;
+                    sal_Bool            bDropOnTabBar = sal_True;
 
                     if( !pPage && pPV->GetPage()->GetPageNum() != mnDragSrcPgNum )
                     {
                         pPage = (SdPage*) pPV->GetPage();
-                        bDropOnTabBar = FALSE;
+                        bDropOnTabBar = sal_False;
                     }
 
                     if( pPage )
@@ -505,7 +505,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
                                             SdrEdgeObj* pCloneEdge = (SdrEdgeObj*)pRem->pClone;
 
                                             // test first connection
-                                            SdrObjConnection& rConn0 = pOrigEdge->GetConnection(FALSE);
+                                            SdrObjConnection& rConn0 = pOrigEdge->GetConnection(sal_False);
                                             SdrObject* pConnObj = rConn0.GetObject();
                                             if(pConnObj)
                                             {
@@ -513,8 +513,8 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
                                                 if(pConnClone)
                                                 {
                                                     // if dest obj was cloned, too, re-establish connection
-                                                    pCloneEdge->ConnectToNode(FALSE, pConnClone);
-                                                    pCloneEdge->GetConnection(FALSE).SetConnectorId(rConn0.GetConnectorId());
+                                                    pCloneEdge->ConnectToNode(sal_False, pConnClone);
+                                                    pCloneEdge->GetConnection(sal_False).SetConnectorId(rConn0.GetConnectorId());
                                                 }
                                                 else
                                                 {
@@ -530,14 +530,14 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
                                                             Point aPosition = rGluePoint.GetAbsolutePos(*pConnObj);
                                                             aPosition.X() += aVector.A();
                                                             aPosition.Y() += aVector.B();
-                                                            pCloneEdge->SetTailPoint(FALSE, aPosition);
+                                                            pCloneEdge->SetTailPoint(sal_False, aPosition);
                                                         }
                                                     }
                                                 }
                                             }
 
                                             // test second connection
-                                            SdrObjConnection& rConn1 = pOrigEdge->GetConnection(TRUE);
+                                            SdrObjConnection& rConn1 = pOrigEdge->GetConnection(sal_True);
                                             pConnObj = rConn1.GetObject();
                                             if(pConnObj)
                                             {
@@ -545,8 +545,8 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
                                                 if(pConnClone)
                                                 {
                                                     // if dest obj was cloned, too, re-establish connection
-                                                    pCloneEdge->ConnectToNode(TRUE, pConnClone);
-                                                    pCloneEdge->GetConnection(TRUE).SetConnectorId(rConn1.GetConnectorId());
+                                                    pCloneEdge->ConnectToNode(sal_True, pConnClone);
+                                                    pCloneEdge->GetConnection(sal_True).SetConnectorId(rConn1.GetConnectorId());
                                                 }
                                                 else
                                                 {
@@ -562,7 +562,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
                                                             Point aPosition = rGluePoint.GetAbsolutePos(*pConnObj);
                                                             aPosition.X() += aVector.A();
                                                             aPosition.Y() += aVector.B();
-                                                            pCloneEdge->SetTailPoint(TRUE, aPosition);
+                                                            pCloneEdge->SetTailPoint(sal_True, aPosition);
                                                         }
                                                     }
                                                 }
@@ -578,21 +578,21 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
                                 if( pMarkList != mpDragSrcMarkList )
                                     delete pMarkList;
 
-                                bReturn = TRUE;
+                                bReturn = sal_True;
                             }
                             else
                             {
                                 maDropErrorTimer.Start();
-                                bReturn = FALSE;
+                                bReturn = sal_False;
                             }
                         }
                     }
                     else
                     {
-                        pOwnData->SetInternalMove( TRUE );
+                        pOwnData->SetInternalMove( sal_True );
                         MoveAllMarked( Size( maDropPos.X() - pOwnData->GetStartPos().X(),
                                              maDropPos.Y() - pOwnData->GetStartPos().Y() ), bCopy );
-                        bReturn = TRUE;
+                        bReturn = sal_True;
                     }
                 }
             }
@@ -612,13 +612,13 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
 
                     String aLayout( pPage->GetLayoutName() );
                     aLayout.Erase( aLayout.SearchAscii( SD_LT_SEPARATOR ) );
-                    pPage->SetPresentationLayout( aLayout, FALSE, FALSE );
+                    pPage->SetPresentationLayout( aLayout, sal_False, sal_False );
                     pSourceDoc->CreatingDataObj( NULL );
                 }
                 else
                 {
                     maDropErrorTimer.Start();
-                    bReturn = FALSE;
+                    bReturn = sal_False;
                 }
             }
         }
@@ -638,10 +638,10 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
             // delete pages, that are not of any interest for us
             for( long i = ( pWorkModel->GetPageCount() - 1 ); i >= 0; i-- )
             {
-                SdPage* pP = static_cast< SdPage* >( pWorkModel->GetPage( (USHORT) i ) );
+                SdPage* pP = static_cast< SdPage* >( pWorkModel->GetPage( (sal_uInt16) i ) );
 
                 if( pP->GetPageKind() != PK_STANDARD )
-                    pWorkModel->DeletePage( (USHORT) i );
+                    pWorkModel->DeletePage( (sal_uInt16) i );
             }
 
             bReturn = Paste( *pWorkModel, maDropPos, pPage, nPasteOptions );
@@ -651,7 +651,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
 
             String aLayout(pPage->GetLayoutName());
             aLayout.Erase(aLayout.SearchAscii(SD_LT_SEPARATOR));
-            pPage->SetPresentationLayout( aLayout, FALSE, FALSE );
+            pPage->SetPresentationLayout( aLayout, sal_False, sal_False );
        }
     }
     else if( CHECK_FORMAT_TRANS( SOT_FORMATSTR_ID_DRAWING ) )
@@ -660,7 +660,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
 
         if( aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_DRAWING, xStm ) )
         {
-            BOOL bChanged = FALSE;
+            sal_Bool bChanged = sal_False;
 
             DrawDocShellRef xShell = new DrawDocShell(SFX_CREATE_MODE_INTERNAL);
             xShell->DoInitNew(0);
@@ -729,7 +729,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
                             {
                                 SdrObject::Free(pPickObj2 );
                             }
-                            bChanged = TRUE;
+                            bChanged = sal_True;
                             mnAction = DND_ACTION_COPY;
                         }
                         else if( ( mnAction & DND_ACTION_LINK ) && pPickObj && pObj && !pPickObj->ISA( SdrGrafObj ) && !pPickObj->ISA( SdrOle2Obj ) )
@@ -763,13 +763,13 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
                                 aNewSet.Put( pObj->GetMergedItemSet() );
 
                                 if( bUndo )
-                                    AddUndo( new E3dAttributesUndoAction( *mpDoc, this, (E3dObject*) pPickObj, aNewSet, aOldSet, FALSE ) );
+                                    AddUndo( new E3dAttributesUndoAction( *mpDoc, this, (E3dObject*) pPickObj, aNewSet, aOldSet, sal_False ) );
                                 pPickObj->SetMergedItemSetAndBroadcast( aNewSet );
                             }
 
                             if( bUndo )
                                 EndUndo();
-                            bChanged = TRUE;
+                            bChanged = sal_True;
                         }
                     }
                 }
@@ -815,7 +815,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
                 aRect.SetPos( maDropPos );
                 pObj->SetLogicRect( aRect );
                 InsertObjectAtView( pObj, *GetSdrPageView(), SDRINSERT_SETDEFLAYER );
-                bReturn = TRUE;
+                bReturn = sal_True;
             }
         }
     }
@@ -835,7 +835,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
             if( mpDoc->GetDocSh() && ( mpDoc->GetDocSh()->GetClassName() == aObjDesc.maClassName ) )
             {
                 uno::Reference < embed::XStorage > xStore( ::comphelper::OStorageHelper::GetStorageFromInputStream( xStm ) );
-                ::sd::DrawDocShellRef xDocShRef( new ::sd::DrawDocShell( SFX_CREATE_MODE_EMBEDDED, TRUE, mpDoc->GetDocumentType() ) );
+                ::sd::DrawDocShellRef xDocShRef( new ::sd::DrawDocShell( SFX_CREATE_MODE_EMBEDDED, sal_True, mpDoc->GetDocumentType() ) );
 
                 // mba: BaseURL doesn't make sense for clipboard functionality
                 SfxMedium *pMedium = new SfxMedium( xStore, String() );
@@ -858,10 +858,10 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
                     // delete pages, that are not of any interest for us
                     for( long i = ( pModel->GetPageCount() - 1 ); i >= 0; i-- )
                     {
-                        SdPage* pP = static_cast< SdPage* >( pModel->GetPage( (USHORT) i ) );
+                        SdPage* pP = static_cast< SdPage* >( pModel->GetPage( (sal_uInt16) i ) );
 
                         if( pP->GetPageKind() != PK_STANDARD )
-                            pModel->DeletePage( (USHORT) i );
+                            pModel->DeletePage( (sal_uInt16) i );
                     }
 
                     bReturn = Paste( *pModel, maDropPos, pPage, nPasteOptions );
@@ -871,7 +871,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
 
                     String aLayout(pPage->GetLayoutName());
                     aLayout.Erase(aLayout.SearchAscii(SD_LT_SEPARATOR));
-                    pPage->SetPresentationLayout( aLayout, FALSE, FALSE );
+                    pPage->SetPresentationLayout( aLayout, sal_False, sal_False );
                 }
 
                 xDocShRef->DoClose();
@@ -888,7 +888,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
 
                     // try to get the replacement image from the clipboard
                     Graphic aGraphic;
-                    ULONG nGrFormat = 0;
+                    sal_uLong nGrFormat = 0;
 
 // (wg. Selection Manager bei Trustet Solaris)
 #ifndef SOLARIS
@@ -965,7 +965,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
                     Rectangle       aRect( maDropPos, aSize );
                     SdrOle2Obj*     pObj = new SdrOle2Obj( aObjRef, aName, aRect );
                     SdrPageView*    pPV = GetSdrPageView();
-                    ULONG           nOptions = SDRINSERT_SETDEFLAYER;
+                    sal_uLong           nOptions = SDRINSERT_SETDEFLAYER;
 
                     if (mpViewSh!=NULL)
                     {
@@ -981,7 +981,28 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
                     if( pImageMap )
                         pObj->InsertUserData( new SdIMapInfo( *pImageMap ) );
 
-                    bReturn = TRUE;
+                    if ( pObj && pObj->IsChart() )
+                    {
+                        bool bDisableDataTableDialog = false;
+                        svt::EmbeddedObjectRef::TryRunningState( xObj );
+                        uno::Reference< beans::XPropertySet > xProps( xObj->getComponent(), uno::UNO_QUERY );
+                        if ( xProps.is() &&
+                             ( xProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DisableDataTableDialog" ) ) ) >>= bDisableDataTableDialog ) &&
+                             bDisableDataTableDialog )
+                        {
+                            xProps->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DisableDataTableDialog" ) ),
+                                uno::makeAny( sal_False ) );
+                            xProps->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DisableComplexChartTypes" ) ),
+                                uno::makeAny( sal_False ) );
+                            uno::Reference< util::XModifiable > xModifiable( xProps, uno::UNO_QUERY );
+                            if ( xModifiable.is() )
+                            {
+                                xModifiable->setModified( sal_True );
+                            }
+                        }
+                    }
+
+                    bReturn = sal_True;
                 }
             }
         }
@@ -1038,7 +1059,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
 
                     // try to get the replacement image from the clipboard
                     Graphic aGraphic;
-                    ULONG nGrFormat = 0;
+                    sal_uLong nGrFormat = 0;
 
 // (wg. Selection Manager bei Trustet Solaris)
 #ifndef SOLARIS
@@ -1114,7 +1135,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
                     Rectangle       aRect( maDropPos, aSize );
                     SdrOle2Obj*     pObj = new SdrOle2Obj( aObjRef, aName, aRect );
                     SdrPageView*    pPV = GetSdrPageView();
-                    ULONG           nOptions = SDRINSERT_SETDEFLAYER;
+                    sal_uLong           nOptions = SDRINSERT_SETDEFLAYER;
 
                     if (mpViewSh!=NULL)
                     {
@@ -1132,7 +1153,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
 
                     // let the object stay in loaded state after insertion
                     pObj->Unload();
-                    bReturn = TRUE;
+                    bReturn = sal_True;
                 }
             }
         }
@@ -1177,7 +1198,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
             ImpCheckInsertPos(aInsertPos, aImageMapSize, GetWorkArea());
 
             InsertGraphic( aGraphic, mnAction, aInsertPos, NULL, pImageMap );
-            bReturn = TRUE;
+            bReturn = sal_True;
         }
     }
     else if( ( !bLink || pPickObj ) && CHECK_FORMAT_TRANS( FORMAT_GDIMETAFILE ) )
@@ -1201,7 +1222,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
             aInsertPos.Y() = pOwnData->GetStartPos().Y() + ( aSize.Height() >> 1 );
         }
 
-        bReturn = InsertMetaFile( aDataHelper, aInsertPos, pImageMap, nFormat == 0 ? true : false ) ? TRUE : FALSE;
+        bReturn = InsertMetaFile( aDataHelper, aInsertPos, pImageMap, nFormat == 0 ? true : false ) ? sal_True : sal_False;
     }
     else if( ( !bLink || pPickObj ) && CHECK_FORMAT_TRANS( FORMAT_BITMAP ) )
     {
@@ -1232,7 +1253,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
             ImpCheckInsertPos(aInsertPos, aImageMapSize, GetWorkArea());
 
             InsertGraphic( aBmp, mnAction, aInsertPos, NULL, pImageMap );
-            bReturn = TRUE;
+            bReturn = sal_True;
         }
     }
     else if( pPickObj && CHECK_FORMAT_TRANS( SOT_FORMATSTR_ID_XFA ) )
@@ -1262,9 +1283,9 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
                 Color                   aColor( rColItem.GetColorValue() );
                 String                  aName( rColItem.GetName() );
                 SfxItemSet              aSet( mpDoc->GetPool() );
-                BOOL                    bClosed = pPickObj->IsClosedObj();
+                sal_Bool                    bClosed = pPickObj->IsClosedObj();
                 ::sd::Window* pWin = mpViewSh->GetActiveWindow();
-                USHORT nHitLog = (USHORT) pWin->PixelToLogic(
+                sal_uInt16 nHitLog = (sal_uInt16) pWin->PixelToLogic(
                     Size(FuPoor::HITPIX, 0 ) ).Width();
                 const long              n2HitLog = nHitLog << 1;
                 Point                   aHitPosR( rPos );
@@ -1327,8 +1348,8 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
                 if( aRect.IsInside( aPos ) || ( !bDrag && IsTextEdit() ) )
                 {
                     // mba: clipboard always must contain absolute URLs (could be from alien source)
-                    pOLV->Read( *xStm, String(), EE_FORMAT_BIN, FALSE, mpDocSh->GetHeaderAttributes() );
-                    bReturn = TRUE;
+                    pOLV->Read( *xStm, String(), EE_FORMAT_BIN, sal_False, mpDocSh->GetHeaderAttributes() );
+                    bReturn = sal_True;
                 }
             }
 
@@ -1361,8 +1382,8 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
                     if( aRect.IsInside( aPos ) || ( !bDrag && IsTextEdit() ) )
                     {
                         // mba: clipboard always must contain absolute URLs (could be from alien source)
-                        pOLV->Read( *xStm, String(), EE_FORMAT_RTF, FALSE, mpDocSh->GetHeaderAttributes() );
-                        bReturn = TRUE;
+                        pOLV->Read( *xStm, String(), EE_FORMAT_RTF, sal_False, mpDocSh->GetHeaderAttributes() );
+                        bReturn = sal_True;
                     }
                 }
 
@@ -1380,13 +1401,13 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
         {
             maDropFileVector.clear();
 
-            for( ULONG i = 0, nCount = aDropFileList.Count(); i < nCount; i++ )
+            for( sal_uLong i = 0, nCount = aDropFileList.Count(); i < nCount; i++ )
                 maDropFileVector.push_back( aDropFileList.GetFile( i ) );
 
             maDropInsertFileTimer.Start();
         }
 
-        bReturn = TRUE;
+        bReturn = sal_True;
     }
     else if( CHECK_FORMAT_TRANS( FORMAT_FILE ) )
     {
@@ -1399,7 +1420,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
             maDropInsertFileTimer.Start();
         }
 
-        bReturn = TRUE;
+        bReturn = sal_True;
     }
     else if( !bLink && CHECK_FORMAT_TRANS( FORMAT_STRING ) )
     {
@@ -1417,7 +1438,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
                 if( pOLV )
                 {
                     pOLV->InsertText( aOUString );
-                    bReturn = TRUE;
+                    bReturn = sal_True;
                 }
 
                 if( !bReturn )
@@ -1427,7 +1448,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
     }
 
     MarkListHasChanged();
-    mbIsDropAllowed = TRUE;
+    mbIsDropAllowed = sal_True;
     rDnDAction = mnAction;
     delete pImageMap;
 
@@ -1436,7 +1457,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
 
 extern void CreateTableFromRTF( SvStream& rStream, SdDrawDocument* pModel  );
 
-bool View::PasteRTFTable( SotStorageStreamRef xStm, SdrPage* pPage, ULONG nPasteOptions )
+bool View::PasteRTFTable( SotStorageStreamRef xStm, SdrPage* pPage, sal_uLong nPasteOptions )
 {
     SdDrawDocument* pModel = new SdDrawDocument( DOCUMENT_TYPE_IMPRESS, mpDocSh );
     pModel->NewOrLoadCompleted(NEW_DOC);

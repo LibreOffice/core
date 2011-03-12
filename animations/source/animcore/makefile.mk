@@ -63,5 +63,12 @@ DEF1NAME=		$(SHL1TARGET)
 .ENDIF # L10N_framework
 
 # --- Targets ------------------------------------------------------
-
 .INCLUDE :	target.mk
+
+ALLTAR : $(MISC)/animcore.component
+
+$(MISC)/animcore.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        animcore.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt animcore.component

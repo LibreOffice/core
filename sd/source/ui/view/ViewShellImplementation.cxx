@@ -110,18 +110,18 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
 {
     SdDrawDocument* pDocument = mrViewShell.GetDoc();
     SdrLayerAdmin& rLayerAdmin = pDocument->GetLayerAdmin();
-    BYTE aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE);
-    BYTE aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE);
+    sal_uInt8 aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), sal_False);
+    sal_uInt8 aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), sal_False);
     SetOfByte aVisibleLayers;
-    BOOL bHandoutMode = FALSE;
+    sal_Bool bHandoutMode = sal_False;
     SdPage* pHandoutMPage = NULL;
     String aNewName;
     String aOldName;
 
     AutoLayout aNewAutoLayout;
 
-    BOOL bBVisible;
-    BOOL bBObjsVisible;
+    sal_Bool bBVisible;
+    sal_Bool bBObjsVisible;
     const SfxItemSet* pArgs = rRequest.GetArgs();
 
     if (pCurrentPage != NULL && pCurrentPage->TRG_HasMasterPage())
@@ -143,14 +143,14 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
                 // dialog.  We could select that layout in the
                 // layout panel instead.
                 /*
-                    SFX_REQUEST_ARG (rRequest, pNewAutoLayout, SfxUInt32Item, ID_VAL_WHATLAYOUT, FALSE);
+                    SFX_REQUEST_ARG (rRequest, pNewAutoLayout, SfxUInt32Item, ID_VAL_WHATLAYOUT, sal_False);
                     eNewAutoLayout = (AutoLayout) pNewAutoLayout->GetValue
                     ();
                 */
             }
 
             // Make the layout menu visible in the tool pane.
-            SfxBoolItem aMakeToolPaneVisible (ID_VAL_ISVISIBLE, TRUE);
+            SfxBoolItem aMakeToolPaneVisible (ID_VAL_ISVISIBLE, sal_True);
             SfxUInt32Item aPanelId (ID_VAL_PANEL_INDEX,
                 ::sd::toolpanel::PID_LAYOUT);
             SfxViewFrame* pFrame = mrViewShell.GetViewFrame();
@@ -176,10 +176,10 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
         }
         else if (pArgs->Count() == 4)
         {
-            SFX_REQUEST_ARG (rRequest, pNewName, SfxStringItem, ID_VAL_PAGENAME, FALSE);
-            SFX_REQUEST_ARG (rRequest, pNewAutoLayout, SfxUInt32Item, ID_VAL_WHATLAYOUT, FALSE);
-            SFX_REQUEST_ARG (rRequest, pBVisible, SfxBoolItem, ID_VAL_ISPAGEBACK, FALSE);
-            SFX_REQUEST_ARG (rRequest, pBObjsVisible, SfxBoolItem, ID_VAL_ISPAGEOBJ, FALSE);
+            SFX_REQUEST_ARG (rRequest, pNewName, SfxStringItem, ID_VAL_PAGENAME, sal_False);
+            SFX_REQUEST_ARG (rRequest, pNewAutoLayout, SfxUInt32Item, ID_VAL_WHATLAYOUT, sal_False);
+            SFX_REQUEST_ARG (rRequest, pBVisible, SfxBoolItem, ID_VAL_ISPAGEBACK, sal_False);
+            SFX_REQUEST_ARG (rRequest, pBObjsVisible, SfxBoolItem, ID_VAL_ISPAGEOBJ, sal_False);
             AutoLayout aLayout ((AutoLayout)pNewAutoLayout->GetValue ());
             if (aLayout >= AUTOLAYOUT__START
                 && aLayout < AUTOLAYOUT__END)
@@ -197,7 +197,7 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
             }
             if (ePageKind == PK_HANDOUT)
             {
-                bHandoutMode = TRUE;
+                bHandoutMode = sal_True;
                 pHandoutMPage = pDocument->GetMasterSdPage(0, PK_HANDOUT);
             }
         }
@@ -211,7 +211,7 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
         SdPage* pUndoPage =
             bHandoutMode ? pHandoutMPage : pCurrentPage;
 
-        SfxUndoManager* pUndoManager = mrViewShell.GetDocSh()->GetUndoManager();
+        ::svl::IUndoManager* pUndoManager = mrViewShell.GetDocSh()->GetUndoManager();
         DBG_ASSERT(pUndoManager, "No UNDO MANAGER ?!?");
 
         if( pUndoManager )
@@ -219,7 +219,7 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
             String aComment( SdResId(STR_UNDO_MODIFY_PAGE) );
             pUndoManager->EnterListAction(aComment, aComment);
             ModifyPageUndoAction* pAction = new ModifyPageUndoAction(
-                pUndoManager, pDocument, pUndoPage, aNewName, aNewAutoLayout, bBVisible, bBObjsVisible);
+                pDocument, pUndoPage, aNewName, aNewAutoLayout, bBVisible, bBObjsVisible);
             pUndoManager->AddUndoAction(pAction);
 
             // Clear the selection because the selectec object may be removed as
@@ -234,34 +234,34 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
 
                     if (ePageKind == PK_STANDARD)
                     {
-                        USHORT nPage = (pCurrentPage->GetPageNum()-1) / 2;
+                        sal_uInt16 nPage = (pCurrentPage->GetPageNum()-1) / 2;
                         SdPage* pNotesPage = pDocument->GetSdPage(nPage, PK_NOTES);
                         if (pNotesPage != NULL)
                             pNotesPage->SetName(aNewName);
                     }
                 }
 
-                pCurrentPage->SetAutoLayout(aNewAutoLayout, TRUE);
+                pCurrentPage->SetAutoLayout(aNewAutoLayout, sal_True);
 
-                aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE);
-                aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE);
+                aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), sal_False);
+                aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), sal_False);
                 aVisibleLayers.Set(aBckgrnd, bBVisible);
                 aVisibleLayers.Set(aBckgrndObj, bBObjsVisible);
                 pCurrentPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
             }
             else
             {
-                pHandoutMPage->SetAutoLayout(aNewAutoLayout, TRUE);
+                pHandoutMPage->SetAutoLayout(aNewAutoLayout, sal_True);
             }
 
             mrViewShell.GetViewFrame()->GetDispatcher()->Execute(SID_SWITCHPAGE,
                 SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
 
-            BOOL bSetModified = TRUE;
+            sal_Bool bSetModified = sal_True;
 
             if (pArgs && pArgs->Count() == 1)
             {
-                bSetModified = (BOOL) ((SfxBoolItem&) pArgs->Get(SID_MODIFYPAGE)).GetValue();
+                bSetModified = (sal_Bool) ((SfxBoolItem&) pArgs->Get(SID_MODIFYPAGE)).GetValue();
             }
 
             pUndoManager->AddUndoAction( new UndoAutoLayoutPosAndSize( *pUndoPage ) );
@@ -278,8 +278,8 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
 
 void ViewShell::Implementation::AssignLayout ( SfxRequest& rRequest, PageKind ePageKind )
 {
-    const SfxUInt32Item* pWhatPage = static_cast< const SfxUInt32Item*  > ( rRequest.GetArg( ID_VAL_WHATPAGE, FALSE, TYPE(SfxUInt32Item) ) );
-    const SfxUInt32Item* pWhatLayout = static_cast< const SfxUInt32Item*  > ( rRequest.GetArg( ID_VAL_WHATLAYOUT, FALSE, TYPE(SfxUInt32Item) ) );
+    const SfxUInt32Item* pWhatPage = static_cast< const SfxUInt32Item*  > ( rRequest.GetArg( ID_VAL_WHATPAGE, sal_False, TYPE(SfxUInt32Item) ) );
+    const SfxUInt32Item* pWhatLayout = static_cast< const SfxUInt32Item*  > ( rRequest.GetArg( ID_VAL_WHATLAYOUT, sal_False, TYPE(SfxUInt32Item) ) );
 
     SdDrawDocument* pDocument = mrViewShell.GetDoc();
     if( !pDocument )
@@ -288,7 +288,7 @@ void ViewShell::Implementation::AssignLayout ( SfxRequest& rRequest, PageKind eP
     SdPage* pPage = 0;
     if( pWhatPage )
     {
-        pPage = pDocument->GetSdPage(static_cast<USHORT>(pWhatPage->GetValue()), ePageKind);
+        pPage = pDocument->GetSdPage(static_cast<sal_uInt16>(pWhatPage->GetValue()), ePageKind);
     }
 
     if( pPage == 0 )
@@ -304,8 +304,8 @@ void ViewShell::Implementation::AssignLayout ( SfxRequest& rRequest, PageKind eP
         // Transform the given request into the four argument form that is
         // understood by ProcessModifyPageSlot().
         SdrLayerAdmin& rLayerAdmin (mrViewShell.GetViewShellBase().GetDocument()->GetLayerAdmin());
-        BYTE aBackground (rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE));
-        BYTE aBackgroundObject (rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE));
+        sal_uInt8 aBackground (rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), sal_False));
+        sal_uInt8 aBackgroundObject (rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), sal_False));
 
         SetOfByte aVisibleLayers;
 

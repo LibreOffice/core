@@ -99,12 +99,12 @@ void DrawViewShell::ExecFormText(SfxRequest& rReq)
         if ( mpDrawView->IsTextEdit() )
             mpDrawView->SdrEndTextEdit();
 
-        if ( rSet.GetItemState(XATTR_FORMTXTSTDFORM, TRUE, &pItem) ==
+        if ( rSet.GetItemState(XATTR_FORMTXTSTDFORM, sal_True, &pItem) ==
              SFX_ITEM_SET &&
             ((const XFormTextStdFormItem*) pItem)->GetValue() != XFTFORM_NONE )
         {
 
-            USHORT nId = SvxFontWorkChildWindow::GetChildWindowId();
+            sal_uInt16 nId = SvxFontWorkChildWindow::GetChildWindowId();
 
             SvxFontWorkDialog* pDlg = (SvxFontWorkDialog*)GetViewFrame()->
                                         GetChildWindow(nId)->GetWindow();
@@ -137,7 +137,7 @@ void DrawViewShell::GetFormTextState(SfxItemSet& rSet)
     const SdrObject* pObj = NULL;
     SvxFontWorkDialog* pDlg = NULL;
 
-    USHORT nId = SvxFontWorkChildWindow::GetChildWindowId();
+    sal_uInt16 nId = SvxFontWorkChildWindow::GetChildWindowId();
 
     if ( GetViewFrame()->HasChildWindow(nId) )
         pDlg = (SvxFontWorkDialog*)(GetViewFrame()->GetChildWindow(nId)->GetWindow());
@@ -190,7 +190,7 @@ void DrawViewShell::ExecAnimationWin( SfxRequest& rReq )
 
     CheckLineTo (rReq);
 
-    USHORT nSId = rReq.GetSlot();
+    sal_uInt16 nSId = rReq.GetSlot();
 
     switch( nSId )
     {
@@ -199,7 +199,7 @@ void DrawViewShell::ExecAnimationWin( SfxRequest& rReq )
         case SID_ANIMATOR_CREATE:
         {
             AnimationWindow* pAnimWin;
-            USHORT nId = AnimationChildWindow::GetChildWindowId();
+            sal_uInt16 nId = AnimationChildWindow::GetChildWindowId();
 
             pAnimWin = static_cast<AnimationWindow*>(
                 GetViewFrame()->GetChildWindow(nId)->GetWindow());
@@ -233,10 +233,10 @@ void DrawViewShell::ExecAnimationWin( SfxRequest& rReq )
 void DrawViewShell::GetAnimationWinState( SfxItemSet& rSet )
 {
     // Hier koennten Buttons etc. disabled werden
-    UINT16 nValue;
+    sal_uInt16 nValue;
 
     const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
-    ULONG nMarkCount = rMarkList.GetMarkCount();
+    sal_uLong nMarkCount = rMarkList.GetMarkCount();
 
     if( nMarkCount == 0 )
         nValue = 0;
@@ -245,14 +245,14 @@ void DrawViewShell::GetAnimationWinState( SfxItemSet& rSet )
     else // 1 Objekt
     {
         const SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
-        UINT32 nInv = pObj->GetObjInventor();
-        UINT16 nId  = pObj->GetObjIdentifier();
+        sal_uInt32 nInv = pObj->GetObjInventor();
+        sal_uInt16 nId  = pObj->GetObjIdentifier();
         // 1 selektiertes Gruppenobjekt
         if( nInv == SdrInventor && nId == OBJ_GRUP )
             nValue = 3;
         else if( nInv == SdrInventor && nId == OBJ_GRAF ) // Anim. GIF ?
         {
-            USHORT nCount = 0;
+            sal_uInt16 nCount = 0;
 
             if( ( (SdrGrafObj*) pObj )->IsAnimated() )
                 nCount = ( (SdrGrafObj*) pObj )->GetGraphic().GetAnimation().Count();
@@ -278,52 +278,52 @@ void DrawViewShell::SetChildWindowState( SfxItemSet& rSet )
     // Stati der SfxChild-Windows (Animator, Fontwork etc.)
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_FONTWORK ) )
     {
-        USHORT nId = SvxFontWorkChildWindow::GetChildWindowId();
+        sal_uInt16 nId = SvxFontWorkChildWindow::GetChildWindowId();
         rSet.Put(SfxBoolItem(SID_FONTWORK, GetViewFrame()->HasChildWindow(nId)));
     }
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_COLOR_CONTROL ) )
     {
-        USHORT nId = SvxColorChildWindow::GetChildWindowId();
+        sal_uInt16 nId = SvxColorChildWindow::GetChildWindowId();
         rSet.Put(SfxBoolItem(SID_COLOR_CONTROL, GetViewFrame()->HasChildWindow(nId)));
     }
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_ANIMATION_OBJECTS ) )
     {
-        USHORT nId = AnimationChildWindow::GetChildWindowId();
+        sal_uInt16 nId = AnimationChildWindow::GetChildWindowId();
         rSet.Put( SfxBoolItem( SID_ANIMATION_OBJECTS, GetViewFrame()->HasChildWindow( nId ) ) );
     }
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_NAVIGATOR ) )
     {
-        USHORT nId = SID_NAVIGATOR;
+        sal_uInt16 nId = SID_NAVIGATOR;
         rSet.Put( SfxBoolItem( SID_NAVIGATOR, GetViewFrame()->HasChildWindow( nId ) ) );
     }
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_BMPMASK ) )
     {
-        USHORT nId = SvxBmpMaskChildWindow::GetChildWindowId();
+        sal_uInt16 nId = SvxBmpMaskChildWindow::GetChildWindowId();
         rSet.Put( SfxBoolItem( SID_BMPMASK, GetViewFrame()->HasChildWindow( nId ) ) );
     }
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_GALLERY ) )
     {
-        USHORT nId = GalleryChildWindow::GetChildWindowId();
+        sal_uInt16 nId = GalleryChildWindow::GetChildWindowId();
         rSet.Put( SfxBoolItem( SID_GALLERY, GetViewFrame()->HasChildWindow( nId ) ) );
     }
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_IMAP ) )
     {
-        USHORT nId = SvxIMapDlgChildWindow::GetChildWindowId();
+        sal_uInt16 nId = SvxIMapDlgChildWindow::GetChildWindowId();
         rSet.Put( SfxBoolItem( SID_IMAP, GetViewFrame()->HasChildWindow( nId ) ) );
     }
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_LAYER_DIALOG_WIN ) )
     {
-        USHORT nId = LayerDialogChildWindow::GetChildWindowId();
+        sal_uInt16 nId = LayerDialogChildWindow::GetChildWindowId();
         rSet.Put( SfxBoolItem( SID_LAYER_DIALOG_WIN, GetViewFrame()->HasChildWindow( nId ) ) );
     }
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_3D_WIN ) )
     {
-        USHORT nId = Svx3DChildWindow::GetChildWindowId();
+        sal_uInt16 nId = Svx3DChildWindow::GetChildWindowId();
         rSet.Put( SfxBoolItem( SID_3D_WIN, GetViewFrame()->HasChildWindow( nId ) ) );
     }
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_AVMEDIA_PLAYER ) )
     {
-        USHORT nId = ::avmedia::MediaPlayer::GetChildWindowId();
+        sal_uInt16 nId = ::avmedia::MediaPlayer::GetChildWindowId();
         rSet.Put( SfxBoolItem( SID_AVMEDIA_PLAYER, GetViewFrame()->HasChildWindow( nId ) ) );
     }
 }
@@ -359,7 +359,7 @@ void DrawViewShell::ExecBmpMask( SfxRequest& rReq )
             if ( pObj && !mpDrawView->IsTextEdit() )
             {
                 SdrGrafObj* pNewObj = (SdrGrafObj*) pObj->Clone();
-                BOOL        bCont = TRUE;
+                sal_Bool        bCont = sal_True;
 
                 if( pNewObj->IsLinkedGraphic() )
                 {
@@ -371,7 +371,7 @@ void DrawViewShell::ExecBmpMask( SfxRequest& rReq )
                     else
                     {
                         delete pNewObj;
-                        bCont = FALSE;
+                        bCont = sal_False;
                     }
                 }
 
@@ -386,7 +386,7 @@ void DrawViewShell::ExecBmpMask( SfxRequest& rReq )
                     {
                         SdrPageView* pPV = mpDrawView->GetSdrPageView();
 
-                        pNewObj->SetEmptyPresObj( FALSE );
+                        pNewObj->SetEmptyPresObj( sal_False );
                         pNewObj->SetGraphic( ( (SvxBmpMask*) GetViewFrame()->GetChildWindow(
                                              SvxBmpMaskChildWindow::GetChildWindowId() )->GetWindow() )->
                                              Mask( pNewObj->GetGraphic() ) );
@@ -412,9 +412,9 @@ void DrawViewShell::GetBmpMaskState( SfxItemSet& rSet )
 {
     const SdrMarkList&  rMarkList = mpDrawView->GetMarkedObjectList();
     const SdrObject*    pObj = NULL;
-    USHORT              nId = SvxBmpMaskChildWindow::GetChildWindowId();
+    sal_uInt16              nId = SvxBmpMaskChildWindow::GetChildWindowId();
     SvxBmpMask*         pDlg = NULL;
-    BOOL                bEnable = FALSE;
+    sal_Bool                bEnable = sal_False;
 
     if ( GetViewFrame()->HasChildWindow( nId ) )
     {
@@ -429,7 +429,7 @@ void DrawViewShell::GetBmpMaskState( SfxItemSet& rSet )
 
     // valid graphic object?
     if( pObj && pObj->ISA( SdrGrafObj ) && !( (SdrGrafObj*) pObj )->IsEPS() && !mpDrawView->IsTextEdit() )
-        bEnable = TRUE;
+        bEnable = sal_True;
 
     // put value
     rSet.Put( SfxBoolItem( SID_BMPMASK_EXEC, bEnable ) );
@@ -443,7 +443,7 @@ void DrawViewShell::GetBmpMaskState( SfxItemSet& rSet )
 
 void DrawViewShell::FuTemp04(SfxRequest& rReq)
 {
-    USHORT nSId = rReq.GetSlot();
+    sal_uInt16 nSId = rReq.GetSlot();
     switch( nSId )
     {
         case SID_FONTWORK:
@@ -611,13 +611,13 @@ void DrawViewShell::FuTemp04(SfxRequest& rReq)
         case SID_CONVERT_TO_3D_LATHE_FAST:
         {
             // Der Aufruf ist ausreichend. Die Initialisierung per Start3DCreation und CreateMirrorPolygons
-            // ist nicht mehr noetig, falls der Parameter TRUE uebergeben wird. Dann wird sofort und
+            // ist nicht mehr noetig, falls der Parameter sal_True uebergeben wird. Dann wird sofort und
             // ohne Benutzereingriff ein gekippter Rotationskoerper mit einer Achse links neben dem
             // Umschliessenden Rechteck der slektierten Objekte gezeichnet.
             mpDrawView->SdrEndTextEdit();
             if(GetActiveWindow())
                 GetActiveWindow()->EnterWait();
-            mpDrawView->End3DCreation(TRUE);
+            mpDrawView->End3DCreation(sal_True);
             Cancel();
             rReq.Ignore();
             if(GetActiveWindow())
@@ -695,11 +695,11 @@ void DrawViewShell::FuTemp04(SfxRequest& rReq)
             {
                 SetOfByte aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
                 SdrLayerAdmin& rLayerAdmin = GetDoc()->GetLayerAdmin();
-                BYTE aLayerId;
+                sal_uInt8 aLayerId;
                 if (nSId == SID_DISPLAY_MASTER_BACKGROUND)
-                    aLayerId = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE);
+                    aLayerId = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), sal_False);
                 else
-                    aLayerId = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE);
+                    aLayerId = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), sal_False);
                 aVisibleLayers.Set(aLayerId, !aVisibleLayers.IsSet(aLayerId));
                 pPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
             }

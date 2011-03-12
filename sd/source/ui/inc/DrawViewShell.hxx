@@ -133,7 +133,7 @@ public:
 
     void            HidePage();
 
-    virtual BOOL    KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin);
+    virtual sal_Bool    KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin);
     virtual void    MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin);
     virtual void    MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin);
     virtual void    MouseButtonDown(const MouseEvent& rMEvt, ::sd::Window* pWin);
@@ -160,12 +160,12 @@ public:
 
     void            SelectionHasChanged();
     void            ModelHasChanged();
-    virtual void    Activate(BOOL bIsMDIActivate);
-    virtual void    Deactivate(BOOL IsMDIActivate);
+    virtual void    Activate(sal_Bool bIsMDIActivate);
+    virtual void    Deactivate(sal_Bool IsMDIActivate);
     virtual void    UIActivating( SfxInPlaceClient* );
     virtual void    UIDeactivated( SfxInPlaceClient* );
-    virtual String  GetSelectionText( BOOL bCompleteWords = FALSE );
-    virtual BOOL    HasSelection( BOOL bText = TRUE ) const;
+    virtual String  GetSelectionText( sal_Bool bCompleteWords = sal_False );
+    virtual sal_Bool    HasSelection( sal_Bool bText = sal_True ) const;
 
     void            ExecCtrl(SfxRequest& rReq);
     void            GetCtrlState(SfxItemSet& rSet);
@@ -230,13 +230,13 @@ public:
         const Ruler& rRuler,
         const MouseEvent& rMEvt);
 
-    virtual USHORT  PrepareClose( BOOL bUI = TRUE, BOOL bForBrowsing = FALSE );
+    virtual sal_uInt16  PrepareClose( sal_Bool bUI = sal_True, sal_Bool bForBrowsing = sal_False );
 
     PageKind        GetPageKind() { return mePageKind; }
 
     Point           GetMousePos() { return maMousePos; }
-    BOOL            IsMousePosFreezed() { return mbMousePosFreezed; }
-    void            SetMousePosFreezed( BOOL bIn ) { mbMousePosFreezed = bIn; }
+    sal_Bool            IsMousePosFreezed() { return mbMousePosFreezed; }
+    void            SetMousePosFreezed( sal_Bool bIn ) { mbMousePosFreezed = bIn; }
 
     EditMode        GetEditMode() const { return meEditMode; }
     virtual SdPage* GetActualPage() { return mpActualPage; }
@@ -246,20 +246,20 @@ public:
 
     void            ResetActualPage();
     void            ResetActualLayer();
-    BOOL            SwitchPage(USHORT nPage);
-    BOOL            IsSwitchPageAllowed() const;
+    sal_Bool            SwitchPage(sal_uInt16 nPage);
+    sal_Bool            IsSwitchPageAllowed() const;
 
-    BOOL            GotoBookmark(const String& rBookmark);
+    sal_Bool            GotoBookmark(const String& rBookmark);
     void            MakeVisible(const Rectangle& rRect, ::Window& rWin);
 
     virtual void    ReadFrameViewData(FrameView* pView);
     virtual void    WriteFrameViewData();
 
     virtual ErrCode DoVerb(long nVerb);
-    virtual BOOL    ActivateObject(SdrOle2Obj* pObj, long nVerb);
+    virtual sal_Bool    ActivateObject(SdrOle2Obj* pObj, long nVerb);
 
-    void            SetZoomOnPage( BOOL bZoom = TRUE ) { mbZoomOnPage = bZoom; }
-    BOOL            IsZoomOnPage() { return mbZoomOnPage; }
+    void            SetZoomOnPage( sal_Bool bZoom = sal_True ) { mbZoomOnPage = bZoom; }
+    sal_Bool            IsZoomOnPage() { return mbZoomOnPage; }
     void            CheckLineTo (SfxRequest& rReq);
     void            FuTemp01(SfxRequest& rReq);
     void            FuTemp02(SfxRequest& rReq);
@@ -271,9 +271,9 @@ public:
 
     void            LockInput();
     void            UnlockInput();
-    BOOL            IsInputLocked() const { return mnLockCount > 0UL; }
+    sal_Bool            IsInputLocked() const { return mnLockCount > 0UL; }
 
-    USHORT          GetCurPageId() { return( maTabControl.GetCurPageId() ); }
+    sal_uInt16          GetCurPageId() { return( maTabControl.GetCurPageId() ); }
 
     /** Show controls of the UI or hide them, depending on the given flag.
         Do not call this method directly.  Call the method at ViewShellBase
@@ -285,12 +285,12 @@ public:
 
     bool IsLayerModeActive (void) const;
 
-    USHORT*         GetSlotArray() const { return mpSlotArray; }
+    sal_uInt16*         GetSlotArray() const { return mpSlotArray; }
 
     virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTargetHelper,
-                                    ::sd::Window* pTargetWindow, USHORT nPage, USHORT nLayer );
+                                    ::sd::Window* pTargetWindow, sal_uInt16 nPage, sal_uInt16 nLayer );
     virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTargetHelper,
-                                    ::sd::Window* pTargetWindow, USHORT nPage, USHORT nLayer );
+                                    ::sd::Window* pTargetWindow, sal_uInt16 nPage, sal_uInt16 nLayer );
 
     virtual void    WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse = sal_False );
     virtual void    ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse = sal_False );
@@ -354,7 +354,7 @@ public:
 
         <p>Implemented in <code>drviews8.cxx</code>.</p>
      */
-    bool RenameSlide( USHORT nPageId, const String & rName );
+    bool RenameSlide( sal_uInt16 nPageId, const String & rName );
 
     /** modifies the given layer with the given values */
     void ModifyLayer( SdrLayer* pLayer, const String& rLayerName, const String& rLayerTitle, const String& rLayerDesc, bool bIsVisible, bool bIsLocked, bool bIsPrintable );
@@ -373,18 +373,18 @@ protected:
     SdPage*         mpActualPage;
     Rectangle       maMarkRect;
     Point           maMousePos;
-    BOOL            mbMousePosFreezed;
+    sal_Bool            mbMousePosFreezed;
     TabControl      maTabControl;
     EditMode        meEditMode;
     PageKind        mePageKind;
-    BOOL            mbZoomOnPage;
-    BOOL            mbIsRulerDrag;
-    ULONG           mnLockCount;
+    sal_Bool            mbZoomOnPage;
+    sal_Bool            mbIsRulerDrag;
+    sal_uLong           mnLockCount;
     Timer           maCloseTimer;
-    BOOL            mbReadOnly;
-    USHORT*         mpSlotArray;
+    sal_Bool            mbReadOnly;
+    sal_uInt16*         mpSlotArray;
 
-    static BOOL     mbPipette;
+    static sal_Bool     mbPipette;
 
                     DECL_LINK( ClipboardChanged, TransferableDataHelper* );
                     DECL_LINK( CloseHdl, Timer* pTimer );
@@ -395,7 +395,7 @@ protected:
     void            DeleteActualPage();
     void            DeleteActualLayer();
 
-    virtual SvxRuler* CreateHRuler(::sd::Window* pWin, BOOL bIsFirst);
+    virtual SvxRuler* CreateHRuler(::sd::Window* pWin, sal_Bool bIsFirst);
     virtual SvxRuler* CreateVRuler(::sd::Window* pWin);
     virtual void    UpdateHRuler();
     virtual void    UpdateVRuler();
@@ -404,13 +404,13 @@ protected:
     virtual Size    GetOptimalSizePixel() const;
 
     void            SetupPage( Size &rSize, long nLeft, long nRight, long nUpper, long nLower,
-                               BOOL bSize, BOOL bMargin, BOOL bScaleAll );
+                               sal_Bool bSize, sal_Bool bMargin, sal_Bool bScaleAll );
 
-    USHORT          GetIdBySubId( USHORT nSId );
-    void            MapSlot( USHORT nSId );
-    void            UpdateToolboxImages( SfxItemSet &rSet, BOOL bPermanent = TRUE );
-    USHORT          GetMappedSlot( USHORT nSId );
-    USHORT          GetArrayId( USHORT nSId );
+    sal_uInt16          GetIdBySubId( sal_uInt16 nSId );
+    void            MapSlot( sal_uInt16 nSId );
+    void            UpdateToolboxImages( SfxItemSet &rSet, sal_Bool bPermanent = sal_True );
+    sal_uInt16          GetMappedSlot( sal_uInt16 nSId );
+    sal_uInt16          GetArrayId( sal_uInt16 nSId );
 
     void            GetMenuStateSel(SfxItemSet& rSet);
 
@@ -444,12 +444,13 @@ private:
     virtual SdPage* CreateOrDuplicatePage (
         SfxRequest& rRequest,
         PageKind ePageKind,
-        SdPage* pPage);
+        SdPage* pPage,
+        const sal_Int32 nInsertPosition = -1);
 
     ::com::sun::star::uno::Reference< ::com::sun::star::scanner::XScannerManager >  mxScannerManager;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >      mxScannerListener;
     TransferableClipboardListener*                                                  mpClipEvtLstnr;
-    BOOL                                                                            mbPastePossible;
+    sal_Bool                                                                            mbPastePossible;
 
     virtual void Notify (SfxBroadcaster& rBC, const SfxHint& rHint);
 
@@ -484,7 +485,7 @@ private:
     */
     void ShowSnapLineContextMenu (
         SdrPageView& rPageView,
-        const USHORT nSnapLineIndex,
+        const sal_uInt16 nSnapLineIndex,
         const Point& rMouseLocation);
 
     using ViewShell::Notify;

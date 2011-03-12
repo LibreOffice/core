@@ -34,7 +34,10 @@
 #include "SlideSorterViewShell.hxx"
 #include "controller/SlideSorterController.hxx"
 #include "controller/SlsScrollBarManager.hxx"
+#include "controller/SlsProperties.hxx"
+#include "controller/SlsAnimator.hxx"
 #include "view/SlideSorterView.hxx"
+#include "view/SlsTheme.hxx"
 #include "model/SlideSorterModel.hxx"
 
 #include "glob.hrc"
@@ -133,10 +136,13 @@ SlideSorter::SlideSorter (
       mpViewShell(&rViewShell),
       mpViewShellBase(&rViewShell.GetViewShellBase()),
       mpContentWindow(rpContentWindow),
+      mbOwnesContentWindow(false),
       mpHorizontalScrollBar(rpHorizontalScrollBar),
       mpVerticalScrollBar(rpVerticalScrollBar),
       mpScrollBarBox(rpScrollBarBox),
-      mbLayoutPending(true)
+      mbLayoutPending(true),
+      mpProperties(new controller::Properties()),
+      mpTheme(new view::Theme(mpProperties))
 {
 }
 
@@ -155,10 +161,13 @@ SlideSorter::SlideSorter (
       mpViewShell(pViewShell),
       mpViewShellBase(&rBase),
       mpContentWindow(new ContentWindow(rParentWindow,*this )),
+      mbOwnesContentWindow(true),
       mpHorizontalScrollBar(new ScrollBar(&rParentWindow,WinBits(WB_HSCROLL | WB_DRAG))),
       mpVerticalScrollBar(new ScrollBar(&rParentWindow,WinBits(WB_VSCROLL | WB_DRAG))),
       mpScrollBarBox(new ScrollBarBox(&rParentWindow)),
-      mbLayoutPending(true)
+      mbLayoutPending(true),
+      mpProperties(new controller::Properties()),
+      mpTheme(new view::Theme(mpProperties))
 {
 }
 
@@ -170,24 +179,37 @@ void SlideSorter::Init (void)
     if (mpViewShellBase != NULL)
         mxControllerWeak = mpViewShellBase->GetController();
 
+    // Reinitialize colors in Properties with window specific values.
+    if (mpContentWindow)
+    {
+        mpProperties->SetBackgroundColor(
+            mpContentWindow->GetSettings().GetStyleSettings().GetWindowColor());
+        mpProperties->SetTextColor(
+            mpContentWindow->GetSettings().GetStyleSettings().GetWindowTextColor());
+        mpProperties->SetSelectionColor(
+            mpContentWindow->GetSettings().GetStyleSettings().GetMenuHighlightColor());
+        mpProperties->SetHighlightColor(
+            mpContentWindow->GetSettings().GetStyleSettings().GetMenuHighlightColor());
+    }
+
     CreateModelViewController ();
 
     SetupListeners ();
 
     // Initialize the window.
-    ::sd::Window* pWindow = GetActiveWindow();
-    if (pWindow != NULL)
+    SharedSdWindow pContentWindow (GetContentWindow());
+    if (pContentWindow)
     {
-        ::Window* pParentWindow = pWindow->GetParent();
+        ::Window* pParentWindow = pContentWindow->GetParent();
         if (pParentWindow != NULL)
             pParentWindow->SetBackground(Wallpaper());
-        pWindow->SetBackground(Wallpaper());
-        pWindow->SetViewOrigin (Point(0,0));
+        pContentWindow->SetBackground(Wallpaper());
+        pContentWindow->SetViewOrigin (Point(0,0));
         // We do our own scrolling while dragging a page selection.
-        pWindow->SetUseDropScroll (false);
+        pContentWindow->SetUseDropScroll (false);
         // Change the winbits so that the active window accepts the focus.
-        pWindow->SetStyle ((pWindow->GetStyle() & ~WB_DIALOGCONTROL) | WB_TABSTOP);
-        pWindow->Hide();
+        pContentWindow->SetStyle ((pContentWindow->GetStyle() & ~WB_DIALOGCONTROL) | WB_TABSTOP);
+        pContentWindow->Hide();
 
         // Set view pointer of base class.
         SetupControls(pParentWindow);
@@ -205,6 +227,12 @@ SlideSorter::~SlideSorter (void)
 
     ReleaseListeners();
 
+    // Dispose model, view and controller to avoid calls between them when
+    // they are being destructed and one or two of them are already gone.
+    mpSlideSorterController->Dispose();
+    mpSlideSorterView->Dispose();
+    mpSlideSorterModel->Dispose();
+
     // Reset the auto pointers explicitly to control the order of destruction.
     mpSlideSorterController.reset();
     mpSlideSorterView.reset();
@@ -213,6 +241,17 @@ SlideSorter::~SlideSorter (void)
     mpHorizontalScrollBar.reset();
     mpVerticalScrollBar.reset();
     mpScrollBarBox.reset();
+
+    if (mbOwnesContentWindow)
+    {
+        OSL_ASSERT(mpContentWindow.unique());
+    }
+    else
+    {
+        // Assume that outside this class only the owner holds a reference
+        // to the content window.
+        OSL_ASSERT(mpContentWindow.use_count()==2);
+    }
     mpContentWindow.reset();
 }
 
@@ -298,20 +337,9 @@ void SlideSorter::Paint (const Rectangle& rRepaintArea)
 
 
 
-::boost::shared_ptr<sd::Window> SlideSorter::GetContentWindow (void) const
+::SharedSdWindow SlideSorter::GetContentWindow (void) const
 {
     return mpContentWindow;
-}
-
-
-
-
-::sd::Window* SlideSorter::GetActiveWindow (void) const
-{
-    if (mpViewShell != NULL)
-        return mpViewShell->GetActiveWindow();
-    else
-        return mpContentWindow.get();
 }
 
 
@@ -344,8 +372,8 @@ void SlideSorter::SetupControls (::Window* )
 
 void SlideSorter::SetupListeners (void)
 {
-    ::sd::Window* pWindow = GetActiveWindow();
-    if (pWindow != NULL)
+    SharedSdWindow pWindow (GetContentWindow());
+    if (pWindow)
     {
         ::Window* pParentWindow = pWindow->GetParent();
         if (pParentWindow != NULL)
@@ -376,10 +404,9 @@ void SlideSorter::ReleaseListeners (void)
 {
     mpSlideSorterController->GetScrollBarManager().Disconnect();
 
-    ::sd::Window* pWindow = GetActiveWindow();
-    if (pWindow != NULL)
+    SharedSdWindow pWindow (GetContentWindow());
+    if (pWindow)
     {
-
         pWindow->RemoveEventListener(
             LINK(mpSlideSorterController.get(),
                 controller::SlideSorterController,
@@ -414,7 +441,12 @@ void SlideSorter::CreateModelViewController (void)
     mpSlideSorterController.reset(CreateController());
     DBG_ASSERT (mpSlideSorterController.get()!=NULL,
         "Can not create controller for slide browser");
+
+    // Now that model, view, and controller are constructed, do the
+    // initialization that relies on all three being in place.
+    mpSlideSorterModel->Init();
     mpSlideSorterController->Init();
+    mpSlideSorterView->Init();
 }
 
 
@@ -461,26 +493,21 @@ void SlideSorter::ArrangeGUIElements (
 {
     Point aOrigin (rOffset);
 
-    if (rSize.Width()!=0 && rSize.Height()!=0)
+    if (rSize.Width()>0
+        && rSize.Height()>0
+        && GetContentWindow()
+        && GetContentWindow()->IsVisible())
     {
         // Prevent untimely redraws while the view is not yet correctly
         // resized.
-        mpSlideSorterView->LockRedraw (TRUE);
-        if (GetActiveWindow() != NULL)
-            GetActiveWindow()->EnablePaint (FALSE);
+        view::SlideSorterView::DrawLock aLock (*this);
+        GetContentWindow()->EnablePaint (sal_False);
 
-        //        maAllWindowRectangle =
         mpSlideSorterController->Resize (Rectangle(aOrigin, rSize));
 
-        if (GetActiveWindow() != NULL)
-            GetActiveWindow()->EnablePaint (TRUE);
+        GetContentWindow()->EnablePaint (sal_True);
 
         mbLayoutPending = false;
-        mpSlideSorterView->LockRedraw (FALSE);
-    }
-    else
-    {
-        //        maAllWindowRectangle = Rectangle();
     }
 }
 
@@ -507,6 +534,9 @@ SvBorder SlideSorter::GetBorder (void)
 
 bool SlideSorter::RelocateToWindow (::Window* pParentWindow)
 {
+   // Stop all animations for they have been started for the old window.
+    mpSlideSorterController->GetAnimator()->RemoveAllAnimations();
+
     ReleaseListeners();
 
     if (mpViewShell != NULL)
@@ -518,8 +548,8 @@ bool SlideSorter::RelocateToWindow (::Window* pParentWindow)
     // For accessibility we have to shortly hide the content window.  This
     // triggers the construction of a new accessibility object for the new
     // view shell.  (One is created earlier while the construtor of the base
-    // class is executed.  At that time the correct accessibility object can
-    // not be constructed.)
+    // class is executed.  But because at that time the correct
+    // accessibility object can not be constructed we do that now.)
     if (mpContentWindow.get() !=NULL)
     {
         mpContentWindow->Hide();
@@ -541,11 +571,28 @@ void SlideSorter::SetCurrentFunction (const FunctionReference& rpFunction)
     }
     else
     {
-        ::boost::shared_ptr<ContentWindow> pWindow
-            = ::boost::dynamic_pointer_cast<ContentWindow>(GetContentWindow());
-        if (pWindow.get() != NULL)
+        ContentWindow* pWindow = dynamic_cast<ContentWindow*>(GetContentWindow().get());
+        if (pWindow != NULL)
             pWindow->SetCurrentFunction(rpFunction);
     }
+}
+
+
+
+
+::boost::shared_ptr<controller::Properties> SlideSorter::GetProperties (void) const
+{
+    OSL_ASSERT(mpProperties);
+    return mpProperties;
+}
+
+
+
+
+::boost::shared_ptr<view::Theme> SlideSorter::GetTheme (void) const
+{
+    OSL_ASSERT(mpTheme);
+    return mpTheme;
 }
 
 
@@ -645,8 +692,10 @@ long ContentWindow::Notify (NotifyEvent& rEvent)
 
 
 
-
 } // end of anonymous namespace
+
+
+
 
 
 } } // end of namespace ::sd::slidesorter

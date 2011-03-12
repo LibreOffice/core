@@ -61,8 +61,8 @@ BreakDlg::BreakDlg(
     ::Window* pWindow,
     DrawView* _pDrView,
     DrawDocShell* pShell,
-    ULONG nSumActionCount,
-    ULONG nObjCount )
+    sal_uLong nSumActionCount,
+    sal_uLong nObjCount )
     : SfxModalDialog     ( pWindow, SdResId( DLG_BREAK ) ),
       aFtObjInfo            ( this, SdResId( FT_OBJ_INFO ) ),
       aFtActInfo            ( this, SdResId( FT_ACT_INFO ) ),
@@ -83,7 +83,7 @@ BreakDlg::BreakDlg(
     pProgrInfo->Init( nSumActionCount*3, nObjCount );
 
     pDrView = _pDrView;
-    bCancel = FALSE;
+    bCancel = sal_False;
 
     FreeResource();
 }
@@ -100,7 +100,7 @@ BreakDlg::~BreakDlg()
 // Control-Handler fuer den Abbruch Button
 IMPL_LINK( BreakDlg, CancelButtonHdl, void *, EMPTYARG )
 {
-  bCancel = TRUE;
+  bCancel = sal_True;
   aBtnCancel.Disable();
   return( 0L );
 }
@@ -181,7 +181,7 @@ short BreakDlg::Execute()
 IMPL_LINK( BreakDlg, InitialUpdate, Timer*, EMPTYARG )
 {
     pDrView->DoImportMarkedMtf(pProgrInfo);
-    EndDialog(TRUE);
+    EndDialog(sal_True);
     return 0L;
 }
 

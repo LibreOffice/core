@@ -51,18 +51,18 @@ public:
     virtual void DoExecute( SfxRequest& rReq );
 
     // Mouse- & Key-Events
-    virtual BOOL KeyInput(const KeyEvent& rKEvt);
-    virtual BOOL MouseMove(const MouseEvent& rMEvt);
-    virtual BOOL MouseButtonUp(const MouseEvent& rMEvt);
-    virtual BOOL MouseButtonDown(const MouseEvent& rMEvt);
+    virtual sal_Bool KeyInput(const KeyEvent& rKEvt);
+    virtual sal_Bool MouseMove(const MouseEvent& rMEvt);
+    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt);
+    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt);
 
     virtual void Activate();           // Function aktivieren
     virtual void Deactivate();         // Function deaktivieren
 
     virtual void SelectionHasChanged();
 
-    void    SetEditMode(USHORT nMode);
-    USHORT  GetEditMode() { return nEditMode; }
+    void    SetEditMode(sal_uInt16 nMode);
+    sal_uInt16  GetEditMode() { return nEditMode; }
 
     virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle);
 
@@ -74,7 +74,7 @@ protected:
         SdDrawDocument* pDoc,
         SfxRequest& rReq);
 
-    USHORT      nEditMode;
+    sal_uInt16      nEditMode;
 
     ::com::sun::star::uno::Any maTargets;   // used for creating a path for custom animations
 };

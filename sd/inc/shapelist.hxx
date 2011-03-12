@@ -48,8 +48,6 @@ namespace sd
             a pointer to the next shape in list or 0*/
         SdrObject* removeShape( SdrObject& rObject );
 
-        void replaceShape( SdrObject& rOldObject, SdrObject& rNewObject );
-
         /** removes all shapes from this list */
         void clear();
 

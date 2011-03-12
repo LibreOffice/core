@@ -76,16 +76,16 @@ public:
     virtual void DoCopy();
     virtual void DoPaste();
 
-    // Mouse- & Key-Events; Returnwert=TRUE: Event wurde bearbeitet
-    virtual BOOL KeyInput(const KeyEvent& rKEvt);
-    virtual BOOL MouseMove(const MouseEvent& );
-    virtual BOOL MouseButtonUp(const MouseEvent& rMEvt);
+    // Mouse- & Key-Events; Returnwert=sal_True: Event wurde bearbeitet
+    virtual sal_Bool KeyInput(const KeyEvent& rKEvt);
+    virtual sal_Bool MouseMove(const MouseEvent& );
+    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt);
 
     // moved from inline to *.cxx
-    virtual BOOL MouseButtonDown(const MouseEvent& rMEvt);
+    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt);
 
-    virtual BOOL Command(const CommandEvent& rCEvt);
-    virtual BOOL RequestHelp(const HelpEvent& rHEvt);
+    virtual sal_Bool Command(const CommandEvent& rCEvt);
+    virtual sal_Bool RequestHelp(const HelpEvent& rHEvt);
     virtual void Paint(const Rectangle&, ::sd::Window* );
     virtual void ReceiveRequest(SfxRequest& rReq);
 
@@ -99,10 +99,10 @@ public:
 
     virtual void SelectionHasChanged();
 
-    USHORT  GetSlotID() const { return( nSlotId ); }
-    USHORT  GetSlotValue() const { return( nSlotValue ); }
+    sal_uInt16  GetSlotID() const { return( nSlotId ); }
+    sal_uInt16  GetSlotValue() const { return( nSlotValue ); }
 
-    void    SetNoScrollUntilInside(BOOL bNoScroll = TRUE)
+    void    SetNoScrollUntilInside(sal_Bool bNoScroll = sal_True)
             { bNoScrollUntilInside = bNoScroll; }
 
     void StartDelayToScrollTimer ();
@@ -167,8 +167,8 @@ protected:
     DrawDocShell* mpDocSh;
     SdDrawDocument* mpDoc;
 
-    USHORT          nSlotId;
-    USHORT          nSlotValue;
+    sal_uInt16          nSlotId;
+    sal_uInt16          nSlotValue;
 
     Dialog*         pDialog;
 
@@ -178,19 +178,19 @@ protected:
 
     Timer           aDragTimer;             // fuer Drag&Drop
     DECL_LINK( DragHdl, Timer * );
-    BOOL            bIsInDragMode;
+    sal_Bool            bIsInDragMode;
     Point           aMDPos;                 // Position von MouseButtonDown
 
     // Flag, um AutoScrolling zu verhindern, bis von ausserhalb in das
     // Fenster hinein gedragt wurde
-    BOOL            bNoScrollUntilInside;
+    sal_Bool            bNoScrollUntilInside;
 
     // Timer um das scrolling zu verzoegern, wenn aus dem fenster
     // herausgedraggt wird (ca. 1 sec.)
     Timer           aDelayToScrollTimer;    // fuer Verzoegerung bis scroll
-    BOOL            bScrollable;
-    BOOL            bDelayActive;
-    BOOL            bFirstMouseMove;
+    sal_Bool            bScrollable;
+    sal_Bool            bDelayActive;
+    sal_Bool            bFirstMouseMove;
 
     // member to hold state of the mouse buttons for creation
     // of own MouseEvents (like in ScrollHdl)

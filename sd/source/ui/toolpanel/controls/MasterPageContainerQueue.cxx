@@ -158,7 +158,7 @@ bool MasterPageContainerQueue::RequestPreview (const SharedMasterPageDescriptor&
             PreviewCreationRequest::CompareToken(rpDescriptor->maToken)));
         // When a request for the same token exists then the lowest of the
         // two priorities is used.
-        if (HasRequest(rpDescriptor->maToken))
+        if (iRequest != mpRequestQueue->end())
             if (iRequest->mnPriority < nPriority)
             {
                 mpRequestQueue->erase(iRequest);

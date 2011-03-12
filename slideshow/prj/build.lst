@@ -1,4 +1,4 @@
-pe	slideshow	:	tools sal cppu vcl comphelper cppuhelper offuh cppcanvas basegfx svtools unotools toolkit animations avmedia MESA:Mesa NULL
+pe	slideshow	:	tools sal cppu vcl comphelper cppuhelper offuh cppcanvas basegfx svtools unotools toolkit animations avmedia MESA:Mesa LIBXSLT:libxslt NULL
 pe	slideshow								usr1	-	all	pe_mkout NULL
 pe	slideshow\inc							nmake	-	all	pe_inc NULL
 pe	slideshow\source\engine					nmake	-	all	pe_engine pe_inc NULL

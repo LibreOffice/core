@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
+
 #include "SlsListener.hxx"
 
 #include "SlideSorter.hxx"
@@ -36,9 +36,15 @@
 #include "controller/SlideSorterController.hxx"
 #include "controller/SlsPageSelector.hxx"
 #include "controller/SlsCurrentSlideManager.hxx"
+#include "controller/SlsSelectionManager.hxx"
+#include "controller/SlsSelectionObserver.hxx"
 #include "model/SlideSorterModel.hxx"
+#include "model/SlsPageEnumerationProvider.hxx"
 #include "view/SlideSorterView.hxx"
+#include "cache/SlsPageCache.hxx"
+#include "cache/SlsPageCacheManager.hxx"
 #include "drawdoc.hxx"
+#include "DrawDocShell.hxx"
 
 #include "glob.hrc"
 #include "ViewShellBase.hxx"
@@ -76,7 +82,8 @@ Listener::Listener (
       mxFrameWeak(),
       mpModelChangeLock()
 {
-    StartListening (*mrSlideSorter.GetModel().GetDocument());
+    StartListening(*mrSlideSorter.GetModel().GetDocument());
+    StartListening(*mrSlideSorter.GetModel().GetDocument()->GetDocSh());
     mbListeningToDocument = true;
 
     // Connect to the UNO document.
@@ -128,7 +135,7 @@ Listener::Listener (
         if (pMainViewShell != NULL
             && pMainViewShell!=pViewShell)
         {
-            StartListening (*pMainViewShell);
+            StartListening(*pMainViewShell);
         }
 
         Link aLink (LINK(this, Listener, EventMultiplexerCallback));
@@ -158,7 +165,8 @@ void Listener::ReleaseListeners (void)
 {
     if (mbListeningToDocument)
     {
-        EndListening (*mrSlideSorter.GetModel().GetDocument());
+        EndListening(*mrSlideSorter.GetModel().GetDocument()->GetDocSh());
+        EndListening(*mrSlideSorter.GetModel().GetDocument());
         mbListeningToDocument = false;
     }
 
@@ -304,18 +312,15 @@ void Listener::Notify (
     if (rHint.ISA(SdrHint))
     {
         SdrHint& rSdrHint (*PTR_CAST(SdrHint,&rHint));
-        if(rSdrHint.GetKind() == HINT_PAGEORDERCHG )
+        switch (rSdrHint.GetKind())
         {
-            if (rBroadcaster.ISA(SdDrawDocument))
-            {
-                SdDrawDocument& rDocument (
-                    static_cast<SdDrawDocument&>(rBroadcaster));
-                if (rDocument.GetMasterSdPageCount(PK_STANDARD)
-                    == rDocument.GetMasterSdPageCount(PK_NOTES))
-                {
-                    mrController.HandleModelChange();
-                }
-            }
+            case HINT_PAGEORDERCHG:
+                if (&rBroadcaster == mrSlideSorter.GetModel().GetDocument())
+                    HandleModelChange(rSdrHint.GetPage());
+                break;
+
+            default:
+                break;
         }
     }
     else if (rHint.ISA(ViewShellHint))
@@ -349,6 +354,16 @@ void Listener::Notify (
 
             case ViewShellHint::HINT_COMPLEX_MODEL_CHANGE_END:
                 mpModelChangeLock.reset();
+                break;
+        }
+    }
+    else if (rHint.ISA(SfxSimpleHint))
+    {
+        SfxSimpleHint& rSfxSimpleHint (*PTR_CAST(SfxSimpleHint,&rHint));
+        switch (rSfxSimpleHint.GetId())
+        {
+            case SFX_HINT_DOCCHANGED:
+                mrController.CheckForMasterPageAssignment();
                 break;
         }
     }
@@ -393,7 +408,7 @@ IMPL_LINK(Listener, EventMultiplexerCallback, ::sd::tools::EventMultiplexerEvent
         case tools::EventMultiplexerEvent::EID_CONTROLLER_ATTACHED:
         {
             ConnectToController();
-            mrController.GetPageSelector().UpdateAllPages();
+            //            mrController.GetPageSelector().GetCoreSelection();
             UpdateEditMode();
         }
         break;
@@ -401,6 +416,12 @@ IMPL_LINK(Listener, EventMultiplexerCallback, ::sd::tools::EventMultiplexerEvent
 
         case tools::EventMultiplexerEvent::EID_CONTROLLER_DETACHED:
             DisconnectFromController();
+            break;
+
+        case tools::EventMultiplexerEvent::EID_SHAPE_CHANGED:
+        case tools::EventMultiplexerEvent::EID_SHAPE_INSERTED:
+        case tools::EventMultiplexerEvent::EID_SHAPE_REMOVED:
+            HandleShapeModification(static_cast<const SdrPage*>(pEvent->mpUserData));
             break;
 
         default:
@@ -464,7 +485,7 @@ void SAL_CALL Listener::propertyChange (
     static const ::rtl::OUString sEditModePropertyName (
         RTL_CONSTASCII_USTRINGPARAM("IsMasterPageMode"));
 
-    if (rEvent.PropertyName.equals (sCurrentPagePropertyName))
+    if (rEvent.PropertyName.equals(sCurrentPagePropertyName))
     {
         Any aCurrentPage = rEvent.NewValue;
         Reference<beans::XPropertySet> xPageSet (aCurrentPage, UNO_QUERY);
@@ -476,13 +497,13 @@ void SAL_CALL Listener::propertyChange (
                     String(RTL_CONSTASCII_USTRINGPARAM("Number")));
                 sal_Int32 nCurrentPage = 0;
                 aPageNumber >>= nCurrentPage;
-                mrController.GetPageSelector().UpdateAllPages ();
+                mrController.GetPageSelector().GetCoreSelection();
                 // The selection is already set but we call SelectPage()
                 // nevertheless in order to make the new current page the
                 // last recently selected page of the PageSelector.  This is
                 // used when making the selection visible.
                 mrController.GetPageSelector().SelectPage(nCurrentPage-1);
-                mrController.GetCurrentSlideManager()->CurrentSlideHasChanged(nCurrentPage-1);
+                mrController.GetCurrentSlideManager()->NotifyCurrentSlideChange(nCurrentPage-1);
             }
             catch (beans::UnknownPropertyException&)
             {
@@ -521,7 +542,7 @@ void SAL_CALL Listener::frameAction (const frame::FrameActionEvent& rEvent)
         case frame::FrameAction_COMPONENT_REATTACHED:
         {
             ConnectToController();
-            mrController.GetPageSelector().UpdateAllPages();
+            mrController.GetPageSelector().GetCoreSelection();
             UpdateEditMode();
         }
         break;
@@ -577,6 +598,84 @@ void Listener::UpdateEditMode (void)
     }
     mrController.ChangeEditMode (
         bIsMasterPageMode ? EM_MASTERPAGE : EM_PAGE);
+}
+
+
+
+void Listener::HandleModelChange (const SdrPage* pPage)
+{
+    // Notify model and selection observer about the page.  The return value
+    // of the model call acts as filter as to which events to pass to the
+    // selection observer.
+    if (mrSlideSorter.GetModel().NotifyPageEvent(pPage))
+    {
+        // The page of the hint belongs (or belonged) to the model.
+
+        // Tell the cache manager that the preview bitmaps for a deleted
+        // page can be removed from all caches.
+        if (pPage!=NULL && ! pPage->IsInserted())
+            cache::PageCacheManager::Instance()->ReleasePreviewBitmap(pPage);
+
+        mrController.GetSelectionManager()->GetSelectionObserver()->NotifyPageEvent(pPage);
+    }
+
+    // Tell the controller about the model change only when the document is
+    // in a sane state, not just in the middle of a larger change.
+    SdDrawDocument* pDocument (mrSlideSorter.GetModel().GetDocument());
+    if (pDocument != NULL
+        && pDocument->GetMasterSdPageCount(PK_STANDARD) == pDocument->GetMasterSdPageCount(PK_NOTES))
+    {
+        // A model change can make updates of some text fields necessary
+        // (like page numbers and page count.)  Invalidate all previews in
+        // the cache to cope with this.  Doing this on demand would be a
+        // nice optimization.
+        cache::PageCacheManager::Instance()->InvalidateAllPreviewBitmaps(pDocument->getUnoModel());
+
+        mrController.HandleModelChange();
+    }
+}
+
+
+
+void Listener::HandleShapeModification (const SdrPage* pPage)
+{
+    if (pPage == NULL)
+        return;
+
+    // Invalidate the preview of the page (in all slide sorters that display
+    // it.)
+    ::boost::shared_ptr<cache::PageCacheManager> pCacheManager (cache::PageCacheManager::Instance());
+    if ( ! pCacheManager)
+        return;
+    SdDrawDocument* pDocument = mrSlideSorter.GetModel().GetDocument();
+    if (pDocument == NULL)
+    {
+        OSL_ASSERT(pDocument!=NULL);
+        return;
+    }
+    pCacheManager->InvalidatePreviewBitmap(pDocument->getUnoModel(), pPage);
+    mrSlideSorter.GetView().GetPreviewCache()->RequestPreviewBitmap(pPage);
+
+    // When the page is a master page then invalidate the previews of all
+    // pages that are linked to this master page.
+    if (pPage->IsMasterPage())
+    {
+        for (sal_uInt16 nIndex=0,nCount=pDocument->GetSdPageCount(PK_STANDARD);
+             nIndex<nCount;
+             ++nIndex)
+        {
+            const SdPage* pCandidate = pDocument->GetSdPage(nIndex, PK_STANDARD);
+            if (pCandidate!=NULL && pCandidate->TRG_HasMasterPage())
+            {
+                if (&pCandidate->TRG_GetMasterPage() == pPage)
+                    pCacheManager->InvalidatePreviewBitmap(pDocument->getUnoModel(), pCandidate);
+            }
+            else
+            {
+                OSL_ASSERT(pCandidate!=NULL && pCandidate->TRG_HasMasterPage());
+            }
+        }
+    }
 }
 
 

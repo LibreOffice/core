@@ -28,10 +28,11 @@
 
 #include "app.hrc"
 #include "vectdlg.hrc"
+#include "helpids.h"
 
 ModalDialog DLG_VECTORIZE
 {
-    HelpID = SID_VECTORIZE;
+    HelpID = HID_VECTORIZE_DLG;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 200, 237 ) ;
@@ -64,6 +65,7 @@ ModalDialog DLG_VECTORIZE
 
     PushButton BTN_PREVIEW
     {
+        HelpID = "sd:PushButton:DLG_VECTORIZE:BTN_PREVIEW";
         Pos = MAP_APPFONT ( 144 , 63 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -86,6 +88,7 @@ ModalDialog DLG_VECTORIZE
 
     NumericField NM_LAYERS
     {
+        HelpID = "sd:NumericField:DLG_VECTORIZE:NM_LAYERS";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 92 , 14 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -109,6 +112,7 @@ ModalDialog DLG_VECTORIZE
 
     MetricField MT_REDUCE
     {
+        HelpID = "sd:MetricField:DLG_VECTORIZE:MT_REDUCE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 92 , 29 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -127,6 +131,7 @@ ModalDialog DLG_VECTORIZE
 
     CheckBox CB_FILLHOLES
     {
+        HelpID = "sd:CheckBox:DLG_VECTORIZE:CB_FILLHOLES";
         Pos = MAP_APPFONT ( 12 , 44 ) ;
         Size = MAP_APPFONT ( 79 , 12 ) ;
         TabStop = TRUE ;
@@ -142,6 +147,7 @@ ModalDialog DLG_VECTORIZE
 
     MetricField MT_FILLHOLES
     {
+        HelpID = "sd:MetricField:DLG_VECTORIZE:MT_FILLHOLES";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 92 , 59 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -170,6 +176,7 @@ ModalDialog DLG_VECTORIZE
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6, 98 ) ;
         Size = MAP_APPFONT ( 92, 100 ) ;
+        Text [ en-US ] = "Source picture" ;
     };
 
     FixedText FT_VECTORIZED
@@ -184,6 +191,7 @@ ModalDialog DLG_VECTORIZE
         Border = TRUE ;
         Pos = MAP_APPFONT ( 101, 98 ) ;
         Size = MAP_APPFONT ( 93, 100 ) ;
+        Text [ en-US ] = "Vectorized image" ;
     };
 
     FixedText GRP_PRGS
@@ -199,6 +207,7 @@ ModalDialog DLG_VECTORIZE
         SVLook = TRUE ;
         Pos = MAP_APPFONT ( 6, 215 ) ;
         Size = MAP_APPFONT ( 188, 10 ) ;
+        Text [ en-US ] = "Progress" ;
     };
 };
 

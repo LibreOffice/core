@@ -79,7 +79,7 @@ public:
 
     void SelectNextAnnotation(bool bForeward);
 
-    void SelectAnnotation( ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation > xAnnotation, bool bEdit = FALSE );
+    void SelectAnnotation( ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation > xAnnotation, bool bEdit = sal_False );
     void GetSelectedAnnotation( ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation >& xAnnotation );
 
     void InsertAnnotation();
@@ -133,7 +133,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation > mxSelectedAnnotation;
 
     bool mbShowAnnotations;
-    ULONG mnUpdateTagsEvent;
+    sal_uLong mnUpdateTagsEvent;
     Font maFont;
 };
 

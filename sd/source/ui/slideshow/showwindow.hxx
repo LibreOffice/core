@@ -76,9 +76,9 @@ public:
     ShowWindow ( const ::rtl::Reference< ::sd::SlideshowImpl >& xController, ::Window* pParent );
     virtual ~ShowWindow (void);
 
-       BOOL         SetEndMode();
-    BOOL            SetPauseMode( sal_Int32 nPageIndexToRestart, sal_Int32 nTimeoutSec = SLIDE_NO_TIMEOUT, Graphic* pLogo = NULL );
-    BOOL            SetBlankMode( sal_Int32 nPageIndexToRestart, const Color& rBlankColor );
+       sal_Bool         SetEndMode();
+    sal_Bool            SetPauseMode( sal_Int32 nPageIndexToRestart, sal_Int32 nTimeoutSec = SLIDE_NO_TIMEOUT, Graphic* pLogo = NULL );
+    sal_Bool            SetBlankMode( sal_Int32 nPageIndexToRestart, const Color& rBlankColor );
 
     const Color&        GetBlankColor() const { return maShowBackground.GetColor(); }
 
@@ -107,7 +107,7 @@ public:
     void            RestartShow();
 
 private:
-    void            DrawPauseScene( BOOL bTimeoutOnly );
+    void            DrawPauseScene( sal_Bool bTimeoutOnly );
     void            DrawEndScene();
     void            DrawBlankScene();
 
@@ -119,14 +119,14 @@ private:
     Timer           maMouseTimer;
     Wallpaper       maShowBackground;
     Graphic         maLogo;
-    ULONG           mnPauseTimeout;
+    sal_uLong           mnPauseTimeout;
     sal_Int32       mnRestartPageIndex;
     ShowWindowMode  meShowWindowMode;
-    BOOL            mbShowNavigatorAfterSpecialMode;
+    sal_Bool            mbShowNavigatorAfterSpecialMode;
     Rectangle       maPresArea;
     bool            mbMouseAutoHide;
     bool            mbMouseCursorHidden;
-    ULONG           mnFirstMouseMove;
+    sal_uLong           mnFirstMouseMove;
 
                     DECL_LINK( PauseTimeoutHdl, Timer* pTimer );
                     DECL_LINK( MouseTimeoutHdl, Timer* pTimer );

@@ -80,16 +80,16 @@ FuHangulHanjaConversion::FuHangulHanjaConversion (
     SfxRequest& rReq )
        : FuPoor(pViewSh, pWin, pView, pDocument, rReq),
     pSdOutliner(NULL),
-    bOwnOutliner(FALSE)
+    bOwnOutliner(sal_False)
 {
     if ( mpViewShell->ISA(DrawViewShell) )
     {
-        bOwnOutliner = TRUE;
+        bOwnOutliner = sal_True;
         pSdOutliner = new Outliner( mpDoc, OUTLINERMODE_TEXTOBJECT );
     }
     else if ( mpViewShell->ISA(OutlineViewShell) )
     {
-        bOwnOutliner = FALSE;
+        bOwnOutliner = sal_False;
         pSdOutliner = mpDoc->GetOutliner();
     }
 
@@ -126,8 +126,8 @@ FunctionReference FuHangulHanjaConversion::Create( ViewShell* pViewSh, ::sd::Win
 |*
 \************************************************************************/
 
-void FuHangulHanjaConversion::StartConversion( INT16 nSourceLanguage, INT16 nTargetLanguage,
-        const Font *pTargetFont, INT32 nOptions, BOOL bIsInteractive )
+void FuHangulHanjaConversion::StartConversion( sal_Int16 nSourceLanguage, sal_Int16 nTargetLanguage,
+        const Font *pTargetFont, sal_Int32 nOptions, sal_Bool bIsInteractive )
 {
 
     String aString( SdResId(STR_UNDO_HANGULHANJACONVERSION) );
@@ -143,7 +143,7 @@ void FuHangulHanjaConversion::StartConversion( INT16 nSourceLanguage, INT16 nTar
         {
             pSdOutliner->EndConversion();
 
-            bOwnOutliner = TRUE;
+            bOwnOutliner = sal_True;
             pSdOutliner = new Outliner( mpDoc, OUTLINERMODE_TEXTOBJECT );
             pSdOutliner->BeginConversion();
         }
@@ -152,7 +152,7 @@ void FuHangulHanjaConversion::StartConversion( INT16 nSourceLanguage, INT16 nTar
             pSdOutliner->EndConversion();
             delete pSdOutliner;
 
-            bOwnOutliner = FALSE;
+            bOwnOutliner = sal_False;
             pSdOutliner = mpDoc->GetOutliner();
             pSdOutliner->BeginConversion();
         }
@@ -180,7 +180,7 @@ void FuHangulHanjaConversion::StartConversion( INT16 nSourceLanguage, INT16 nTar
 }
 
 
-void FuHangulHanjaConversion::ConvertStyles( INT16 nTargetLanguage, const Font *pTargetFont )
+void FuHangulHanjaConversion::ConvertStyles( sal_Int16 nTargetLanguage, const Font *pTargetFont )
 {
     if( !mpDoc )
         return;
@@ -196,11 +196,11 @@ void FuHangulHanjaConversion::ConvertStyles( INT16 nTargetLanguage, const Font *
 
         const bool bHasParent = pStyle->GetParent().Len() != 0;
 
-        if( !bHasParent || rSet.GetItemState( EE_CHAR_LANGUAGE_CJK, FALSE ) == SFX_ITEM_SET )
+        if( !bHasParent || rSet.GetItemState( EE_CHAR_LANGUAGE_CJK, sal_False ) == SFX_ITEM_SET )
             rSet.Put( SvxLanguageItem( nTargetLanguage, EE_CHAR_LANGUAGE_CJK ) );
 
         if( pTargetFont &&
-            ( !bHasParent || rSet.GetItemState( EE_CHAR_FONTINFO_CJK, FALSE ) == SFX_ITEM_SET ) )
+            ( !bHasParent || rSet.GetItemState( EE_CHAR_FONTINFO_CJK, sal_False ) == SFX_ITEM_SET ) )
         {
             // set new font attribute
             SvxFontItem aFontItem( (SvxFontItem&) rSet.Get( EE_CHAR_FONTINFO_CJK ) );

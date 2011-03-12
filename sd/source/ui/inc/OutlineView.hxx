@@ -122,12 +122,12 @@ public:
     DECL_LINK( EndDropHdl, void * );
     DECL_LINK( PaintingFirstLineHdl, PaintFirstLineInfo* );
 
-    ULONG         GetPaperWidth() const { return 2*21000; }  // DIN A4 Breite
+    sal_uLong         GetPaperWidth() const { return 2*21000; }  // DIN A4 Breite
 
-    BOOL          PrepareClose(BOOL bUI = TRUE);
+    sal_Bool          PrepareClose(sal_Bool bUI = sal_True);
 
-    virtual BOOL    GetAttributes( SfxItemSet& rTargetSet, BOOL bOnlyHardAttr=FALSE ) const;
-    virtual BOOL    SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll = FALSE);
+    virtual sal_Bool    GetAttributes( SfxItemSet& rTargetSet, sal_Bool bOnlyHardAttr=sal_False ) const;
+    virtual sal_Bool    SetAttributes(const SfxItemSet& rSet, sal_Bool bReplaceAll = sal_False);
 
     void               FillOutliner();
     void               SetLinks();
@@ -141,14 +141,14 @@ public:
         const AcceptDropEvent& rEvt,
         DropTargetHelper& rTargetHelper,
         ::sd::Window* pTargetWindow = NULL,
-        USHORT nPage = SDRPAGE_NOTFOUND,
-        USHORT nLayer = SDRPAGE_NOTFOUND);
+        sal_uInt16 nPage = SDRPAGE_NOTFOUND,
+        sal_uInt16 nLayer = SDRPAGE_NOTFOUND);
     virtual sal_Int8 ExecuteDrop (
         const ExecuteDropEvent& rEvt,
         DropTargetHelper& rTargetHelper,
         ::sd::Window* pTargetWindow = NULL,
-        USHORT nPage = SDRPAGE_NOTFOUND,
-        USHORT nLayer = SDRPAGE_NOTFOUND);
+        sal_uInt16 nPage = SDRPAGE_NOTFOUND,
+        sal_uInt16 nLayer = SDRPAGE_NOTFOUND);
 
 
     // Re-implement GetScriptType for this view to get correct results
@@ -166,7 +166,7 @@ public:
     /** creates and inserts an empty slide for the given paragraph. */
     SdPage* InsertSlideForParagraph( Paragraph* pPara );
 
-    void UpdateParagraph( USHORT nPara );
+    void UpdateParagraph( sal_uInt16 nPara );
 
 protected:
     virtual void OnBeginPasteOrDrop( PasteOrDropInfos* pInfos );
@@ -194,10 +194,10 @@ private:
     List*               mpOldParaOrder;
     List*               mpSelectedParas;
 
-    USHORT              mnPagesToProcess;    // fuer die Fortschrittsanzeige
-    USHORT              mnPagesProcessed;
+    sal_uInt16              mnPagesToProcess;    // fuer die Fortschrittsanzeige
+    sal_uInt16              mnPagesProcessed;
 
-    BOOL                mbFirstPaint;
+    sal_Bool                mbFirstPaint;
 
     SfxProgress*        mpProgress;
 

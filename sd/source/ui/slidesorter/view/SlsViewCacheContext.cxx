@@ -25,18 +25,16 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sd.hxx"
 
 #include "precompiled_sd.hxx"
 
 #include "SlsViewCacheContext.hxx"
 
+#include "SlideSorter.hxx"
 #include "model/SlideSorterModel.hxx"
 #include "model/SlsPageDescriptor.hxx"
 #include "model/SlsPageEnumerationProvider.hxx"
 #include "view/SlideSorterView.hxx"
-#include "view/SlsPageObjectViewObjectContact.hxx"
 #include "sdpage.hxx"
 #include "Window.hxx"
 #include "drawdoc.hxx"
@@ -49,11 +47,9 @@
 namespace sd { namespace slidesorter { namespace view {
 
 
-ViewCacheContext::ViewCacheContext (
-    model::SlideSorterModel& rModel,
-    SlideSorterView& rView)
-    : mrModel(rModel),
-      mrView(rView)
+ViewCacheContext::ViewCacheContext (SlideSorter& rSlideSorter)
+    : mrModel(rSlideSorter.GetModel()),
+      mrSlideSorter(rSlideSorter)
 {
 }
 
@@ -69,22 +65,17 @@ ViewCacheContext::~ViewCacheContext (void)
 
 void ViewCacheContext::NotifyPreviewCreation (
     cache::CacheKey aKey,
-    const ::boost::shared_ptr<BitmapEx>& rPreview)
+    const Bitmap&)
 {
-    (void)rPreview;
     const model::SharedPageDescriptor pDescriptor (GetDescriptor(aKey));
     if (pDescriptor.get() != NULL)
     {
-        // Use direct view-invalidate here and no ActionChanged() at the VC
-        // since the VC is a PageObjectViewObjectContact and in its ActionChanged()
-        // implementation invalidates the cache entry again.
-        view::PageObjectViewObjectContact* pContact = pDescriptor->GetViewObjectContact();
-        if (pContact != NULL)
-            pContact->GetObjectContact().InvalidatePartOfView(pContact->getObjectRange());
+        // Force a repaint that will trigger their re-creation.
+        mrSlideSorter.GetView().RequestRepaint(pDescriptor);
     }
     else
     {
-        OSL_ASSERT(pDescriptor.get() != NULL);
+        OSL_ASSERT(pDescriptor);
     }
 }
 
@@ -93,7 +84,7 @@ void ViewCacheContext::NotifyPreviewCreation (
 
 bool ViewCacheContext::IsIdle (void)
 {
-    sal_Int32 nIdleState (tools::IdleDetection::GetIdleState(mrView.GetWindow()));
+    sal_Int32 nIdleState (tools::IdleDetection::GetIdleState(mrSlideSorter.GetContentWindow().get()));
     if (nIdleState == tools::IdleDetection::IDET_IDLE)
         return true;
     else
@@ -105,7 +96,8 @@ bool ViewCacheContext::IsIdle (void)
 
 bool ViewCacheContext::IsVisible (cache::CacheKey aKey)
 {
-    return GetDescriptor(aKey)->IsVisible();
+    const model::SharedPageDescriptor pDescriptor (GetDescriptor(aKey));
+    return pDescriptor && pDescriptor->HasState(model::PageDescriptor::ST_Visible);
 }
 
 

@@ -42,7 +42,7 @@ class LayerDialogChildWindow
 public:
     LayerDialogChildWindow (
         ::Window*,
-        USHORT,
+        sal_uInt16,
         SfxBindings*,
         SfxChildWinInfo*);
     virtual ~LayerDialogChildWindow (void);

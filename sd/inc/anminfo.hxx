@@ -55,24 +55,24 @@ public:
     ::com::sun::star::presentation::AnimationEffect         meEffect;       // Animationseffekt
     ::com::sun::star::presentation::AnimationEffect         meTextEffect;   // Animationseffekt fuer Textinhalt
     ::com::sun::star::presentation::AnimationSpeed          meSpeed;            // Geschwindigkeit der Animation
-    BOOL                    mbActive;       // eingeschaltet ?
-    BOOL                    mbDimPrevious;  // Objekt abblenden
-    BOOL                    mbIsMovie;      // wenn Gruppenobjekt, dann Sequenz aus den
-    BOOL                    mbDimHide;      // verstecken statt abblenden
+    sal_Bool                    mbActive;       // eingeschaltet ?
+    sal_Bool                    mbDimPrevious;  // Objekt abblenden
+    sal_Bool                    mbIsMovie;      // wenn Gruppenobjekt, dann Sequenz aus den
+    sal_Bool                    mbDimHide;      // verstecken statt abblenden
     Color                   maBlueScreen;   // identifiziert "Hintergrundpixel"
     Color                   maDimColor;     // zum Abblenden des Objekts
     String                  maSoundFile;        // Pfad zum Soundfile in MSDOS-Notation
-    BOOL                    mbSoundOn;      // Sound ein/aus
-    BOOL                    mbPlayFull;     // Sound ganz abspielen
+    sal_Bool                    mbSoundOn;      // Sound ein/aus
+    sal_Bool                    mbPlayFull;     // Sound ganz abspielen
     SdrPathObj*             mpPathObj;      // das Pfadobjekt
     ::com::sun::star::presentation::ClickAction             meClickAction;  // Aktion bei Mausklick
     ::com::sun::star::presentation::AnimationEffect         meSecondEffect; // fuer Objekt ausblenden
     ::com::sun::star::presentation::AnimationSpeed          meSecondSpeed;  // fuer Objekt ausblenden
     String                  maSecondSoundFile; // fuer Objekt ausblenden
-    BOOL                    mbSecondSoundOn;    // fuer Objekt ausblenden
-    BOOL                    mbSecondPlayFull;// fuer Objekt ausblenden
-    USHORT                  mnVerb;         // fuer OLE-Objekt
-    ULONG                   mnPresOrder;
+    sal_Bool                    mbSecondSoundOn;    // fuer Objekt ausblenden
+    sal_Bool                    mbSecondPlayFull;// fuer Objekt ausblenden
+    sal_uInt16                  mnVerb;         // fuer OLE-Objekt
+    sal_uLong                   mnPresOrder;
     SdrObject&              mrObject;
 
     SD_DLLPUBLIC void                    SetBookmark( const String& rBookmark );

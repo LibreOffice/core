@@ -54,7 +54,7 @@ class SdTransferable : public TransferableHelper, public SfxListener
 {
 public:
 
-                                    SdTransferable( SdDrawDocument* pSrcDoc, ::sd::View* pWorkView, BOOL bInitOnGetData );
+                                    SdTransferable( SdDrawDocument* pSrcDoc, ::sd::View* pWorkView, sal_Bool bInitOnGetData );
                                     ~SdTransferable();
 
     void                            SetDocShell( const SfxObjectShellRef& rRef ) { maDocShellRef = rRef; }
@@ -71,14 +71,14 @@ public:
     void                            SetStartPos( const Point& rStartPos ) { maStartPos = rStartPos; }
     const Point&                    GetStartPos() const { return maStartPos; }
 
-    void                            SetInternalMove( BOOL bSet ) { mbInternalMove = bSet; }
-    BOOL                            IsInternalMove() const { return mbInternalMove; }
+    void                            SetInternalMove( sal_Bool bSet ) { mbInternalMove = bSet; }
+    sal_Bool                            IsInternalMove() const { return mbInternalMove; }
 
-    BOOL                            HasSourceDoc( const SdDrawDocument* pDoc ) const { return( mpSourceDoc == pDoc ); }
+    sal_Bool                            HasSourceDoc( const SdDrawDocument* pDoc ) const { return( mpSourceDoc == pDoc ); }
 
-    void                            SetPageBookmarks( const List& rPageBookmarks, BOOL bPersistent );
-    BOOL                            IsPageTransferable() const { return mbPageTransferable; }
-    BOOL                            HasPageBookmarks() const { return( mpPageDocShell && ( maPageBookmarks.Count() > 0 ) ); }
+    void                            SetPageBookmarks( const List& rPageBookmarks, sal_Bool bPersistent );
+    sal_Bool                            IsPageTransferable() const { return mbPageTransferable; }
+    sal_Bool                            HasPageBookmarks() const { return( mpPageDocShell && ( maPageBookmarks.Count() > 0 ) ); }
     const List&                     GetPageBookmarks() const { return maPageBookmarks; }
     ::sd::DrawDocShell*                 GetPageDocShell() const { return mpPageDocShell; }
 
@@ -118,12 +118,12 @@ private:
     ImageMap*                       mpImageMap;
     Rectangle                       maVisArea;
     Point                           maStartPos;
-    BOOL                            mbInternalMove               : 1;
-    BOOL                            mbOwnDocument                : 1;
-    BOOL                            mbOwnView                    : 1;
-    BOOL                            mbLateInit                   : 1;
-    BOOL                            mbPageTransferable           : 1;
-    BOOL                            mbPageTransferablePersistent : 1;
+    sal_Bool                            mbInternalMove               : 1;
+    sal_Bool                            mbOwnDocument                : 1;
+    sal_Bool                            mbOwnView                    : 1;
+    sal_Bool                            mbLateInit                   : 1;
+    sal_Bool                            mbPageTransferable           : 1;
+    sal_Bool                            mbPageTransferablePersistent : 1;
     bool                            mbIsUnoObj                  : 1;
 
                                     // not available

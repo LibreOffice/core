@@ -45,7 +45,7 @@ class ICustomAnimationListController
 public:
     virtual void onSelect() = 0;
     virtual void onDoubleClick() = 0;
-    virtual void onContextMenu( USHORT nSelectedPopupEntry ) = 0;
+    virtual void onContextMenu( sal_uInt16 nSelectedPopupEntry ) = 0;
     virtual ~ICustomAnimationListController() {}
 };
 
@@ -76,12 +76,12 @@ public:
 
     // overrides
     virtual void    SelectHdl();
-    virtual BOOL    DoubleClickHdl();
+    virtual sal_Bool    DoubleClickHdl();
 
     virtual void    Paint( const Rectangle& rRect );
 
     virtual PopupMenu* CreateContextMenu( void );
-    virtual void    ExcecuteContextMenuAction( USHORT nSelectedPopupEntry );
+    virtual void    ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry );
 
     virtual void KeyInput( const KeyEvent& rKEvt );
 
@@ -89,7 +89,7 @@ public:
 
     virtual void notify_change();
 
-    const Image& getImage( USHORT nId );
+    const Image& getImage( sal_uInt16 nId );
 
     bool isExpanded( const CustomAnimationEffectPtr& pEffect ) const;
 

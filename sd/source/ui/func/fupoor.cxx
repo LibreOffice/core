@@ -95,11 +95,11 @@ FuPoor::FuPoor (
       nSlotId( rReq.GetSlot() ),
       nSlotValue(0),
       pDialog(NULL),
-      bIsInDragMode(FALSE),
-      bNoScrollUntilInside (TRUE),
-      bScrollable (FALSE),
-      bDelayActive (FALSE),
-      bFirstMouseMove (FALSE),
+      bIsInDragMode(sal_False),
+      bNoScrollUntilInside (sal_True),
+      bScrollable (sal_False),
+      bDelayActive (sal_False),
+      bFirstMouseMove (sal_False),
       // remember MouseButton state
       mnCode(0)
 {
@@ -157,7 +157,7 @@ void FuPoor::Deactivate()
     aScrollTimer.Stop();
     aDelayToScrollTimer.Stop ();
         bScrollable  =
-        bDelayActive = FALSE;
+        bDelayActive = sal_False;
 
     if (pDialog)
     {
@@ -195,7 +195,7 @@ void FuPoor::ForceScroll(const Point& aPixPos)
         if ( bNoScrollUntilInside )
         {
             if ( rRect.IsInside(aPos) )
-                bNoScrollUntilInside = FALSE;
+                bNoScrollUntilInside = sal_False;
         }
         else
         {
@@ -244,16 +244,16 @@ IMPL_LINK_INLINE_END( FuPoor, ScrollHdl, Timer *, pTimer )
 |*
 |* Tastaturereignisse bearbeiten
 |*
-|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert TRUE, andernfalls
-|* FALSE.
+|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert sal_True, andernfalls
+|* sal_False.
 |*
 \************************************************************************/
 
-BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
+sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
 {
-    USHORT          nCode = rKEvt.GetKeyCode().GetCode();
-    BOOL            bReturn = FALSE;
-    BOOL            bSlideShow = SlideShow::IsRunning( mpViewShell->GetViewShellBase() );
+    sal_uInt16          nCode = rKEvt.GetKeyCode().GetCode();
+    sal_Bool            bReturn = sal_False;
+    sal_Bool            bSlideShow = SlideShow::IsRunning( mpViewShell->GetViewShellBase() );
 
     switch (nCode)
     {
@@ -306,7 +306,7 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
                     }
 
                     // consumed
-                    bReturn = TRUE;
+                    bReturn = sal_True;
                 }
             }
             else
@@ -334,7 +334,7 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
                     }
 
                     // consumed
-                    bReturn = TRUE;
+                    bReturn = sal_True;
                 }
             }
         }
@@ -362,7 +362,7 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
                 }
 
                 // consumed
-                bReturn = TRUE;
+                bReturn = sal_True;
             }
         }
         break;
@@ -382,9 +382,9 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
 
                 if (mpViewShell->ISA(DrawViewShell))
                     static_cast<DrawViewShell*>(mpViewShell)
-                        ->SetZoomOnPage(FALSE);
+                        ->SetZoomOnPage(sal_False);
 
-                bReturn = TRUE;
+                bReturn = sal_True;
             }
         }
         break;
@@ -398,9 +398,9 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
 
                 if (mpViewShell->ISA(DrawViewShell))
                     static_cast<DrawViewShell*>(mpViewShell)
-                        ->SetZoomOnPage(FALSE);
+                        ->SetZoomOnPage(sal_False);
 
-                bReturn = TRUE;
+                bReturn = sal_True;
             }
         }
         break;
@@ -412,7 +412,7 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
                 // Zoom auf Seite
                 mpViewShell->GetViewFrame()->GetDispatcher()->
                 Execute(SID_SIZE_PAGE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
-                bReturn = TRUE;
+                bReturn = sal_True;
             }
         }
         break;
@@ -424,7 +424,7 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
                 // Zoom auf selektierte Objekte
                 mpViewShell->GetViewFrame()->GetDispatcher()->
                 Execute(SID_SIZE_OPTIMAL, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
-                bReturn = TRUE;
+                bReturn = sal_True;
             }
         }
         break;
@@ -437,7 +437,7 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
             {
                 // Naechstes ZoomRect einstellen
                 mpViewShell->SetZoomRect(pZoomList->GetNextZoomRect());
-                bReturn = TRUE;
+                bReturn = sal_True;
             }
         }
         break;
@@ -450,7 +450,7 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
             {
                 // Vorheriges ZoomRect einstellen
                 mpViewShell->SetZoomRect(pZoomList->GetPreviousZoomRect());
-                bReturn = TRUE;
+                bReturn = sal_True;
             }
         }
         break;
@@ -463,7 +463,7 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
             {
                // Sprung zu erster Seite
                static_cast<DrawViewShell*>(mpViewShell)->SwitchPage(0);
-               bReturn = TRUE;
+               bReturn = sal_True;
             }
         }
         break;
@@ -480,7 +480,7 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
                 static_cast<DrawViewShell*>(mpViewShell)
                     ->SwitchPage(mpDoc->GetSdPageCount(
                         pPage->GetPageKind()) - 1);
-                bReturn = TRUE;
+                bReturn = sal_True;
             }
         }
         break;
@@ -501,9 +501,9 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
                     mpView->SdrEndTextEdit();
 
                     // Previous page.
-                    bReturn = TRUE;
+                    bReturn = sal_True;
                     SdPage* pPage = static_cast<DrawViewShell*>(mpViewShell)->GetActualPage();
-                    USHORT nSdPage = (pPage->GetPageNum() - 1) / 2;
+                    sal_uInt16 nSdPage = (pPage->GetPageNum() - 1) / 2;
 
                     if (nSdPage > 0)
                     {
@@ -547,9 +547,9 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
                     mpView->SdrEndTextEdit();
 
                     // Next page.
-                    bReturn = TRUE;
+                    bReturn = sal_True;
                     SdPage* pPage = static_cast<DrawViewShell*>(mpViewShell)->GetActualPage();
-                    USHORT nSdPage = (pPage->GetPageNum() - 1) / 2;
+                    sal_uInt16 nSdPage = (pPage->GetPageNum() - 1) / 2;
 
                     if (nSdPage < mpDoc->GetSdPageCount(pPage->GetPageKind()) - 1)
                     {
@@ -634,7 +634,7 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
                         }
                     }
 
-                    bReturn = TRUE;
+                    bReturn = sal_True;
                 }
             }
         }
@@ -809,13 +809,13 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
                             if(mpView->IsDragObj())
                             {
                                 bool bWasNoSnap = rDragStat.IsNoSnap();
-                                BOOL bWasSnapEnabled = mpView->IsSnapEnabled();
+                                sal_Bool bWasSnapEnabled = mpView->IsSnapEnabled();
 
                                 // switch snapping off
                                 if(!bWasNoSnap)
-                                    ((SdrDragStat&)rDragStat).SetNoSnap(TRUE);
+                                    ((SdrDragStat&)rDragStat).SetNoSnap(sal_True);
                                 if(bWasSnapEnabled)
-                                    mpView->SetSnapEnabled(FALSE);
+                                    mpView->SetSnapEnabled(sal_False);
 
                                 mpView->MovAction(aEndPoint);
                                 mpView->EndDragObj();
@@ -847,7 +847,7 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
                     ScrollEnd();
                 }
 
-                bReturn = TRUE;
+                bReturn = sal_True;
             }
         }
         break;
@@ -888,7 +888,7 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
                             0L);
 
                         // consumed
-                        bReturn = TRUE;
+                        bReturn = sal_True;
                     }
                 }
             }
@@ -939,7 +939,7 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
                             0L);
 
                         // consumed
-                        bReturn = TRUE;
+                        bReturn = sal_True;
                     }
                 }
             }
@@ -949,9 +949,9 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
     return(bReturn);
 }
 
-BOOL FuPoor::MouseMove(const MouseEvent& )
+sal_Bool FuPoor::MouseMove(const MouseEvent& )
 {
-    return FALSE;
+    return sal_False;
 }
 
 void FuPoor::SelectionHasChanged()
@@ -1012,14 +1012,14 @@ IMPL_LINK( FuPoor, DragHdl, Timer *, EMPTYARG )
 {
     if( mpView )
     {
-        USHORT nHitLog = USHORT ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
+        sal_uInt16 nHitLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
         SdrHdl* pHdl = mpView->PickHandle(aMDPos);
 
         if ( pHdl==NULL && mpView->IsMarkedHit(aMDPos, nHitLog)
-             && !mpView->IsPresObjSelected(FALSE, TRUE) )
+             && !mpView->IsPresObjSelected(sal_False, sal_True) )
         {
             mpWindow->ReleaseMouse();
-            bIsInDragMode = TRUE;
+            bIsInDragMode = sal_True;
             mpView->StartDrag( aMDPos, mpWindow );
         }
     }
@@ -1032,7 +1032,7 @@ IMPL_LINK( FuPoor, DragHdl, Timer *, EMPTYARG )
 |*
 \************************************************************************/
 
-BOOL FuPoor::Command(const CommandEvent& rCEvt)
+sal_Bool FuPoor::Command(const CommandEvent& rCEvt)
 {
     return( mpView->Command(rCEvt,mpWindow) );
 }
@@ -1046,7 +1046,7 @@ BOOL FuPoor::Command(const CommandEvent& rCEvt)
 IMPL_LINK_INLINE_START( FuPoor, DelayHdl, Timer *, EMPTYARG )
 {
     aDelayToScrollTimer.Stop ();
-    bScrollable = TRUE;
+    bScrollable = sal_True;
 
     Point aPnt(mpWindow->GetPointerPosPixel());
 
@@ -1064,22 +1064,22 @@ IMPL_LINK_INLINE_END( FuPoor, DelayHdl, Timer *, pTimer )
 |*
 \************************************************************************/
 
-BOOL FuPoor::MouseButtonUp (const MouseEvent& rMEvt)
+sal_Bool FuPoor::MouseButtonUp (const MouseEvent& rMEvt)
 {
     // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
     aDelayToScrollTimer.Stop ();
     return bScrollable  =
-        bDelayActive = FALSE;
+        bDelayActive = sal_False;
 }
 
-BOOL FuPoor::MouseButtonDown(const MouseEvent& rMEvt)
+sal_Bool FuPoor::MouseButtonDown(const MouseEvent& rMEvt)
 {
     // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
-    return FALSE;
+    return sal_False;
 }
 
 /*************************************************************************
@@ -1090,7 +1090,7 @@ BOOL FuPoor::MouseButtonDown(const MouseEvent& rMEvt)
 
 void FuPoor::StartDelayToScrollTimer ()
 {
-    bDelayActive = TRUE;
+    bDelayActive = sal_True;
     aDelayToScrollTimer.Start ();
 }
 
@@ -1100,9 +1100,9 @@ void FuPoor::StartDelayToScrollTimer ()
 |*
 \************************************************************************/
 
-BOOL FuPoor::RequestHelp(const HelpEvent& rHEvt)
+sal_Bool FuPoor::RequestHelp(const HelpEvent& rHEvt)
 {
-    BOOL bReturn = FALSE;
+    sal_Bool bReturn = sal_False;
 
     SdrPageView* pPV = mpView->GetSdrPageView();
 

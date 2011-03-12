@@ -27,6 +27,8 @@
 
 #include "app.hrc"
 #include "morphdlg.hrc"
+#include "helpids.h"
+
 /******************************************************************************
 |*
 |*
@@ -34,7 +36,8 @@
 \******************************************************************************/
 ModalDialog DLG_MORPH
 {
-    HelpID = SID_POLYGON_MORPHING ;
+    HelpID = CMD_SID_POLYGON_MORPHING ;
+    HelpID = ".uno:Morphing" ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 196 , 68 ) ;
@@ -73,6 +76,7 @@ ModalDialog DLG_MORPH
     };
     MetricField MTF_STEPS
     {
+        HelpID = "sd:MetricField:DLG_MORPH:MTF_STEPS";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 56 , 14 ) ;
         Size = MAP_APPFONT ( 30 , 12 ) ;
@@ -86,6 +90,7 @@ ModalDialog DLG_MORPH
     };
     CheckBox CBX_ATTRIBUTES
     {
+        HelpID = "sd:CheckBox:DLG_MORPH:CBX_ATTRIBUTES";
         Pos = MAP_APPFONT ( 12 , 29 ) ;
         Size = MAP_APPFONT ( 121 , 12 ) ;
         TabStop = TRUE ;
@@ -93,6 +98,7 @@ ModalDialog DLG_MORPH
     };
     CheckBox CBX_ORIENTATION
     {
+        HelpID = "sd:CheckBox:DLG_MORPH:CBX_ORIENTATION";
         Pos = MAP_APPFONT ( 12 , 44 ) ;
         Size = MAP_APPFONT ( 121 , 12 ) ;
         TabStop = TRUE ;

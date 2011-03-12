@@ -48,7 +48,7 @@ public:
     virtual sal_Bool        Export();
 
 private:
-    DECL_LINK( IOProgressHdl, USHORT* );
+    DECL_LINK( IOProgressHdl, sal_uInt16* );
 
 };
 

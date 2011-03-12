@@ -58,7 +58,7 @@ public:
             given id or an error occurred.  Should not happen under normal
             circumstances.
     */
-    Image GetIcon (USHORT nResourceId);
+    Image GetIcon (sal_uInt16 nResourceId);
 
 private:
     class Implementation;

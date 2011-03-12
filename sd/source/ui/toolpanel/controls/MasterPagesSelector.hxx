@@ -88,7 +88,7 @@ public:
     static SdPage* AddMasterPage (
         SdDrawDocument* pTargetDocument,
         SdPage* pMasterPage,
-        USHORT nInsertionIndex);
+        sal_uInt16 nInsertionIndex);
 
     virtual Size GetPreferredSize (void);
     virtual sal_Int32 GetPreferredWidth (sal_Int32 nHeight);
@@ -122,7 +122,8 @@ public:
     */
     void ClearPageSet (void);
 
-    void SetSmartHelpId( const SmartId& aId, SmartIdUpdateMode aMode = SMART_SET_SMART );
+    using SfxShell::SetHelpId;
+    void SetHelpId( const rtl::OString& aId );
 
     /** Mark the preview that belongs to the given index as not up-to-date
         anymore with respect to page content or preview size.
@@ -152,7 +153,7 @@ protected:
         eventually.  Filled by InvalidatePreview() and operated upon by
         UpdatePreviews().
     */
-    ::std::queue<USHORT> maPreviewUpdateQueue;
+    ::std::queue<sal_uInt16> maPreviewUpdateQueue;
 
     virtual SdPage* GetSelectedMasterPage (void);
 
@@ -221,13 +222,13 @@ private:
     DECL_LINK(ContainerChangeListener, MasterPageContainerChangeEvent*);
 
     void SetItem (
-        USHORT nIndex,
+        sal_uInt16 nIndex,
         MasterPageContainer::Token aToken);
     void AddTokenToIndexEntry (
-        USHORT nIndex,
+        sal_uInt16 nIndex,
         MasterPageContainer::Token aToken);
     void RemoveTokenToIndexEntry (
-        USHORT nIndex,
+        sal_uInt16 nIndex,
         MasterPageContainer::Token aToken);
 };
 

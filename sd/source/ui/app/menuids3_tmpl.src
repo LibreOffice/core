@@ -32,7 +32,7 @@
     MenuItem\
     {\
         Identifier = SID_CHANGEBEZIER ; \
-        HelpID = SID_CHANGEBEZIER ; \
+        HelpId = CMD_SID_CHANGEBEZIER ; \
         Text [ en-US ] = "To ~Curve" ; \
     };
 
@@ -40,7 +40,7 @@
     MenuItem\
     {\
         Identifier = SID_CHANGEPOLYGON ; \
-        HelpID = SID_CHANGEPOLYGON ; \
+        HelpId = CMD_SID_CHANGEPOLYGON ; \
         Text [ en-US ] = "To ~Polygon" ; \
     };
 
@@ -48,7 +48,7 @@
     MenuItem\
     {\
         Identifier = SID_CONVERT_TO_CONTOUR ; \
-        HelpID = SID_CONVERT_TO_CONTOUR ; \
+        HelpId = CMD_SID_CONVERT_TO_CONTOUR ; \
         Text [ en-US ] = "To C~ontour";\
     };
 
@@ -56,7 +56,7 @@
     MenuItem\
     {\
         Identifier = SID_CONVERT_TO_3D ; \
-        HelpID = SID_CONVERT_TO_3D ; \
+        HelpId = CMD_SID_CONVERT_TO_3D ; \
         Text [ en-US ] = "To 3~D" ; \
     };
 
@@ -64,7 +64,7 @@
     MenuItem\
     {\
         Identifier = SID_CONVERT_TO_BITMAP ; \
-        HelpID = SID_CONVERT_TO_BITMAP ; \
+        HelpId = CMD_SID_CONVERT_TO_BITMAP ; \
         Text [ en-US ] = "To ~Bitmap" ; \
     };
 
@@ -72,7 +72,7 @@
     MenuItem\
     {\
         Identifier = SID_CONVERT_TO_METAFILE ; \
-        HelpID = SID_CONVERT_TO_METAFILE ; \
+        HelpId = CMD_SID_CONVERT_TO_METAFILE ; \
         Text [ en-US ] = "To ~Metafile" ; \
     };
 
@@ -80,7 +80,7 @@
     MenuItem\
     {\
         Identifier = SID_CONVERT_TO_3D_LATHE_FAST ; \
-        HelpID = SID_CONVERT_TO_3D_LATHE_FAST ; \
+        HelpId = CMD_SID_CONVERT_TO_3D_LATHE_FAST ; \
         Text [ en-US ] = "To 3D ~Rotation Object" ; \
     };
 
@@ -88,7 +88,7 @@
     MenuItem\
     {\
         Identifier = SID_VERTICAL ; \
-        HelpID = SID_VERTICAL ; \
+        HelpId = CMD_SID_VERTICAL ; \
         Text [ en-US ] = "~Vertically" ; \
     };
 
@@ -96,7 +96,7 @@
     MenuItem\
     {\
         Identifier = SID_HORIZONTAL ; \
-        HelpID = SID_HORIZONTAL ; \
+        HelpId = CMD_SID_HORIZONTAL ; \
         Text [ en-US ] = "~Horizontally" ; \
     };
 
@@ -104,7 +104,7 @@
     MenuItem\
     {\
         Identifier = SID_3D_WIN ; \
-        HelpID = SID_3D_WIN ; \
+        HelpId = CMD_SID_3D_WIN ; \
         Text [ en-US ] = "~3D Effects" ; \
     };
 
@@ -112,7 +112,7 @@
     MenuItem\
     {\
         Identifier = SID_PRESENTATION_LAYOUT ; \
-        HelpID = SID_PRESENTATION_LAYOUT ; \
+        HelpId = CMD_SID_PRESENTATION_LAYOUT ; \
         Text [ en-US ] = "~Slide Design" ; \
     };
 
@@ -120,7 +120,7 @@
     MenuItem\
     {\
         Identifier = SID_SLIDE_TRANSITIONS_PANEL ; \
-        HelpID = SID_SLIDE_TRANSITIONS_PANEL ; \
+        HelpId = CMD_SID_SLIDE_TRANSITIONS_PANEL ; \
         Text [ en-US ] = "Slide ~Transition" ; \
     };
 
@@ -128,7 +128,7 @@
     MenuItem\
     {\
         Identifier = SID_SHOW_SLIDE ; \
-        HelpID = SID_SHOW_SLIDE ; \
+        HelpId = CMD_SID_SHOW_SLIDE ; \
         Text [ en-US ] = "~Show Slide" ; \
     };
 
@@ -136,7 +136,7 @@
     MenuItem\
     {\
         Identifier = SID_HIDE_SLIDE ; \
-        HelpID = SID_HIDE_SLIDE ; \
+        HelpId = CMD_SID_HIDE_SLIDE ; \
         Text [ en-US ] = "~Hide Slide" ; \
     };
 
@@ -144,7 +144,7 @@
     MenuItem\
     {\
         Identifier = SID_GROUP ; \
-        HelpID = SID_GROUP ; \
+        HelpId = CMD_SID_GROUP ; \
         Text [ en-US ] = "~Group" ; \
     };
 
@@ -152,7 +152,7 @@
     MenuItem\
     {\
         Identifier = SID_UNGROUP ; \
-        HelpID = SID_UNGROUP ; \
+        HelpId = CMD_SID_UNGROUP ; \
         Text [ en-US ] = "~Ungroup" ; \
     };
 
@@ -160,7 +160,7 @@
     MenuItem\
     {\
         Identifier = SID_ENTER_GROUP ; \
-        HelpID = SID_ENTER_GROUP ; \
+        HelpId = CMD_SID_ENTER_GROUP ; \
         Text [ en-US ] = "~Edit Group" ; \
     };
 
@@ -168,7 +168,7 @@
     MenuItem\
     {\
         Identifier = SID_LEAVE_GROUP ; \
-        HelpID = SID_LEAVE_GROUP ; \
+        HelpId = CMD_SID_LEAVE_GROUP ; \
         Text [ en-US ] = "E~xit group" ; \
     };
 
@@ -176,7 +176,7 @@
     MenuItem\
     {\
         Identifier = MN_SUB_GROUP ; \
-        HelpID = MN_SUB_GROUP ; \
+        HelpID = HID_MN_SUB_GROUP ; \
         Command = ".uno:GroupMenu" ; \
         Text [ en-US ] = "~Group" ; \
         SubMenu = Menu\

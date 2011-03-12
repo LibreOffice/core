@@ -37,7 +37,6 @@
 
 #include "viewlayer.hxx"
 
-class JavaChildWindow;
 class SystemChildWindow;
 
 namespace com { namespace sun { namespace star { namespace drawing {
@@ -157,11 +156,7 @@ namespace slideshow
                                                     const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rDXDeviceParams );
 
             ViewLayerSharedPtr                    mpViewLayer;
-#ifdef GSTREAMER
             ::std::auto_ptr< SystemChildWindow >    mpMediaWindow;
-#else
-            ::std::auto_ptr< JavaChildWindow >    mpMediaWindow;
-#endif
             mutable ::com::sun::star::awt::Point  maWindowOffset;
             mutable ::basegfx::B2DRectangle       maBounds;
 

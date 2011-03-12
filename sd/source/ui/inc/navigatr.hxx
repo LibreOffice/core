@@ -72,16 +72,16 @@ class NavDocInfo
 public:
             NavDocInfo() { mpDocShell = NULL; }
 
-    BOOL    HasName() { return( (BOOL) bName ); }
-    BOOL    IsActive() { return( (BOOL) bActive ); }
+    sal_Bool    HasName() { return( (sal_Bool) bName ); }
+    sal_Bool    IsActive() { return( (sal_Bool) bActive ); }
 
-    void    SetName( BOOL bOn = TRUE ) { bName = bOn; }
-    void    SetActive( BOOL bOn = TRUE ) { bActive = bOn; }
+    void    SetName( sal_Bool bOn = sal_True ) { bName = bOn; }
+    void    SetActive( sal_Bool bOn = sal_True ) { bActive = bOn; }
 
 private:
     friend class SdNavigatorWin;
-    BOOL            bName   : 1;
-    BOOL            bActive : 1;
+    sal_Bool            bName   : 1;
+    sal_Bool            bActive : 1;
     ::sd::DrawDocShell* mpDocShell;
 };
 
@@ -103,7 +103,7 @@ public:
     void                        InitTreeLB( const SdDrawDocument* pDoc );
     void                        RefreshDocumentLB( const String* pDocName = NULL );
 
-    BOOL                        InsertFile(const String& rFileName);
+    sal_Bool                        InsertFile(const String& rFileName);
 
     NavigatorDragType           GetNavigatorDragType();
     void                        SetNavigatorDragType(NavigatorDragType eType) { meDragType = eType; }
@@ -125,7 +125,7 @@ private:
     ::sd::NavigatorChildWindow*     mpChildWinContext;
     Size                        maSize;
     Size                        maMinSize;
-    BOOL                        mbDocImported;
+    sal_Bool                        mbDocImported;
     String                      maDropFileName;
     NavigatorDragType           meDragType;
     List*                       mpDocList;
@@ -140,7 +140,7 @@ private:
     */
     bool                        mbShowAllShapes;
 
-    USHORT                      GetDragTypeSdResId( NavigatorDragType eDT, BOOL bImage = FALSE );
+    sal_uInt16                      GetDragTypeSdResId( NavigatorDragType eDT, sal_Bool bImage = sal_False );
     NavDocInfo*                 GetDocInfo();
 
                                 DECL_LINK( GetFocusObjectsHdl, void * );
@@ -170,10 +170,10 @@ private:
 class SdNavigatorControllerItem : public SfxControllerItem
 {
 public:
-    SdNavigatorControllerItem( USHORT, SdNavigatorWin*, SfxBindings* );
+    SdNavigatorControllerItem( sal_uInt16, SdNavigatorWin*, SfxBindings* );
 
 protected:
-    virtual void StateChanged( USHORT nSId, SfxItemState eState,
+    virtual void StateChanged( sal_uInt16 nSId, SfxItemState eState,
                                 const SfxPoolItem* pState );
 
 private:
@@ -191,10 +191,10 @@ private:
 class SdPageNameControllerItem : public SfxControllerItem
 {
 public:
-    SdPageNameControllerItem( USHORT, SdNavigatorWin*, SfxBindings* );
+    SdPageNameControllerItem( sal_uInt16, SdNavigatorWin*, SfxBindings* );
 
 protected:
-    virtual void StateChanged( USHORT nSId, SfxItemState eState,
+    virtual void StateChanged( sal_uInt16 nSId, SfxItemState eState,
                                 const SfxPoolItem* pState );
 
 private:

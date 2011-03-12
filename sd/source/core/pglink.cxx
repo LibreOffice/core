@@ -105,21 +105,21 @@ void SdPageLink::DataChanged( const String& ,
 
             List aBookmarkList;
             aBookmarkList.Insert(&aBookmarkName);
-            USHORT nInsertPos = pPage->GetPageNum();
-            BOOL bLink = TRUE;
-            BOOL bReplace = TRUE;
-            BOOL bNoDialogs = FALSE;
-            BOOL bCopy = FALSE;
+            sal_uInt16 nInsertPos = pPage->GetPageNum();
+            sal_Bool bLink = sal_True;
+            sal_Bool bReplace = sal_True;
+            sal_Bool bNoDialogs = sal_False;
+            sal_Bool bCopy = sal_False;
 
             if( pDoc->pDocLockedInsertingLinks )
             {
                 // resolving links while loading pDoc
-                bNoDialogs = TRUE;
-                bCopy = TRUE;
+                bNoDialogs = sal_True;
+                bCopy = sal_True;
             }
 
             pDoc->InsertBookmarkAsPage(&aBookmarkList, NULL, bLink, bReplace,
-                                       nInsertPos, bNoDialogs, NULL, bCopy, TRUE, TRUE);
+                                       nInsertPos, bNoDialogs, NULL, bCopy, sal_True, sal_True);
 
             if( !pDoc->pDocLockedInsertingLinks )
                 pDoc->CloseBookmarkDoc();

@@ -59,7 +59,7 @@ private:
     // for xComponent
     ::osl::Mutex aDisposeContainerMutex;
     ::cppu::OInterfaceContainerHelper aDisposeListeners;
-    BOOL bDisposing;
+    sal_Bool bDisposing;
 
 public:
     SdXCustomPresentation() throw();

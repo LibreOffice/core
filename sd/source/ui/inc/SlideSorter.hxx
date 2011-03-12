@@ -30,12 +30,15 @@
 #define SD_SLIDESORTER_SLIDE_SORTER_HXX
 
 #include "fupoor.hxx"
+#include "Window.hxx"
 #include <com/sun/star/frame/XController.hpp>
 #include <cppuhelper/weakref.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/scoped_ptr.hpp>
+#include <boost/current_function.hpp>
+
 
 class ScrollBar;
 class ScrollBarBox;
@@ -54,17 +57,21 @@ class SlideSorterModel;
 
 namespace sd { namespace slidesorter { namespace view {
 class SlideSorterView;
+class Theme;
 } } }
 
 namespace sd { namespace slidesorter { namespace controller {
 class Listener;
 class SlideSorterController;
 class SlotManager;
+class Properties;
 } } }
 
 
-namespace sd { namespace slidesorter {
+typedef ::boost::shared_ptr<sd::Window> SharedSdWindow;
 
+
+namespace sd { namespace slidesorter {
 
 /** Show previews for all the slides in a document and allow the user to
     insert or delete slides and modify the order of the slides.
@@ -141,12 +148,7 @@ public:
     /** Return the content window.  This is a sibling and is geometrically
         enclosed by the scroll bars.
     */
-    ::boost::shared_ptr<sd::Window> GetContentWindow (void) const;
-
-    /** Return the active window as it is returned by a view shell.
-        Typically the content window.
-    */
-    ::sd::Window* GetActiveWindow (void) const;
+    SharedSdWindow GetContentWindow (void) const;
 
     model::SlideSorterModel& GetModel (void) const;
 
@@ -190,6 +192,15 @@ public:
     */
     void SetCurrentFunction (const FunctionReference& rpFunction);
 
+    /** Return a collection of properties that are used througout the slide
+        sorter.
+    */
+    ::boost::shared_ptr<controller::Properties> GetProperties (void) const;
+
+    /** Return the active theme wich gives access to colors and fonts.
+    */
+    ::boost::shared_ptr<view::Theme> GetTheme (void) const;
+
 protected:
     /** This virtual method makes it possible to create a specialization of
         the slide sorter view shell that works with its own implementation
@@ -226,7 +237,8 @@ private:
     ::com::sun::star::uno::WeakReference<com::sun::star::frame::XController> mxControllerWeak;
     ViewShell* mpViewShell;
     ViewShellBase* mpViewShellBase;
-    ::boost::shared_ptr<sd::Window> mpContentWindow;
+    SharedSdWindow mpContentWindow;
+    bool mbOwnesContentWindow;
     ::boost::shared_ptr<ScrollBar> mpHorizontalScrollBar;
     ::boost::shared_ptr<ScrollBar> mpVerticalScrollBar;
     ::boost::shared_ptr<ScrollBarBox> mpScrollBarBox;
@@ -235,6 +247,11 @@ private:
     */
     bool mbLayoutPending;
 
+    /** Some slide sorter wide properties that are used in different
+        classes.
+    */
+    ::boost::shared_ptr<controller::Properties> mpProperties;
+    ::boost::shared_ptr<view::Theme> mpTheme;
 
     SlideSorter (
         ViewShell& rViewShell,

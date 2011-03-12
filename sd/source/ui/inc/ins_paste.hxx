@@ -54,7 +54,7 @@ public:
                     SdInsertPasteDlg( Window* pWindow );
                     ~SdInsertPasteDlg();
 
-    BOOL            IsInsertBefore() const;
+    sal_Bool            IsInsertBefore() const;
 };
 
 #endif // _SD_INS_PASTE_HXX_

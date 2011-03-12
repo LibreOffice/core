@@ -115,13 +115,11 @@ public:
     void                    Execute(SfxRequest& rReq);
     void                    GetState(SfxItemSet&);
 
-    virtual void            FillStatusBar(StatusBar& rBar);
-
     SdOptions*              GetSdOptions(DocumentType eDocType);
     SD_DLLPUBLIC SvStorageStreamRef     GetOptionStream( const String& rOptionName, SdOptionStreamMode eMode );
 
-    BOOL                    GetWaterCan() const { return bWaterCan; }
-    void                    SetWaterCan( BOOL bWC ) { bWaterCan = bWC; }
+    sal_Bool                    GetWaterCan() const { return bWaterCan; }
+    void                    SetWaterCan( sal_Bool bWC ) { bWaterCan = bWC; }
 
     SvxSearchItem*          GetSearchItem() { return (pSearchItem); }
     void                    SetSearchItem(SvxSearchItem* pItem) { pSearchItem = pItem; }
@@ -143,9 +141,9 @@ public:
     SD_DLLPUBLIC SvNumberFormatter*     GetNumberFormatter();
 
     //virtuelle Methoden fuer den Optionendialog
-    virtual SfxItemSet*  CreateItemSet( USHORT nId );
-    virtual void         ApplyItemSet( USHORT nId, const SfxItemSet& rSet );
-    virtual SfxTabPage*  CreateTabPage( USHORT nId, Window* pParent, const SfxItemSet& rSet );
+    virtual SfxItemSet*  CreateItemSet( sal_uInt16 nId );
+    virtual void         ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet );
+    virtual SfxTabPage*  CreateTabPage( sal_uInt16 nId, Window* pParent, const SfxItemSet& rSet );
 
 protected:
 
@@ -154,8 +152,8 @@ protected:
     SvxSearchItem*          pSearchItem;
     SvNumberFormatter*      pNumberFormatter;
     SvStorageRef            xOptionStorage;
-    BOOL                    bAutoSave;
-    BOOL                    bWaterCan;
+    sal_Bool                    bAutoSave;
+    sal_Bool                    bWaterCan;
     SfxErrorHandler*        mpErrorHdl;
     /** This device is used for printer independent layout.  It is virtual
         in the sense that it does not represent a printer.  The pointer may

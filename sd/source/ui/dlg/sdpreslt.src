@@ -27,9 +27,11 @@
 
 #include "app.hrc"
 #include "sdpreslt.hrc"
+#include "sdcommands.h"
+
 ModalDialog DLG_PRESLT
 {
-    HelpID = SID_PRESENTATION_LAYOUT ;
+    HelpID = CMD_SID_PRESENTATION_LAYOUT ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 212 , 185 ) ;
@@ -63,6 +65,7 @@ ModalDialog DLG_PRESLT
     };
     CheckBox CBX_MASTER_PAGE
     {
+        HelpID = "sd:CheckBox:DLG_PRESLT:CBX_MASTER_PAGE";
         Pos = MAP_APPFONT ( 6 , 158 ) ;
         Size = MAP_APPFONT ( 120 , 12 ) ;
         TabStop = TRUE ;
@@ -70,6 +73,7 @@ ModalDialog DLG_PRESLT
     };
     CheckBox CBX_CHECK_MASTERS
     {
+        HelpID = "sd:CheckBox:DLG_PRESLT:CBX_CHECK_MASTERS";
         Pos = MAP_APPFONT ( 6 , 170 ) ;
         Size = MAP_APPFONT ( 140 , 12 ) ;
         TabStop = TRUE ;
@@ -77,6 +81,7 @@ ModalDialog DLG_PRESLT
     };
     PushButton BTN_LOAD
     {
+        HelpID = "sd:PushButton:DLG_PRESLT:BTN_LOAD";
         Pos = MAP_APPFONT ( 156 , 155 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;

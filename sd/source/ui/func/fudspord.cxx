@@ -92,12 +92,12 @@ FunctionReference FuDisplayOrder::Create( ViewShell* pViewSh, ::sd::Window* pWin
 |*
 \************************************************************************/
 
-BOOL FuDisplayOrder::MouseButtonDown(const MouseEvent& rMEvt)
+sal_Bool FuDisplayOrder::MouseButtonDown(const MouseEvent& rMEvt)
 {
     // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
-    return TRUE;
+    return sal_True;
 }
 
 /*************************************************************************
@@ -106,7 +106,7 @@ BOOL FuDisplayOrder::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BOOL FuDisplayOrder::MouseMove(const MouseEvent& rMEvt)
+sal_Bool FuDisplayOrder::MouseMove(const MouseEvent& rMEvt)
 {
     SdrObject* pPickObj;
     SdrPageView* pPV;
@@ -132,7 +132,7 @@ BOOL FuDisplayOrder::MouseMove(const MouseEvent& rMEvt)
         implClearOverlay();
     }
 
-    return TRUE;
+    return sal_True;
 }
 
 /*************************************************************************
@@ -141,7 +141,7 @@ BOOL FuDisplayOrder::MouseMove(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BOOL FuDisplayOrder::MouseButtonUp(const MouseEvent& rMEvt)
+sal_Bool FuDisplayOrder::MouseButtonUp(const MouseEvent& rMEvt)
 {
     // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
@@ -163,7 +163,7 @@ BOOL FuDisplayOrder::MouseButtonUp(const MouseEvent& rMEvt)
 
     mpViewShell->Cancel();
 
-    return TRUE;
+    return sal_True;
 }
 
 /*************************************************************************

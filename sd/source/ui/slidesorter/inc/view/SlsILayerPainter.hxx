@@ -1,4 +1,3 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -26,48 +25,36 @@
  *
  ************************************************************************/
 
-#ifndef SD_SLIDESORTER_TRANSFERABLE_HXX
-#define SD_SLIDESORTER_TRANSFERABLE_HXX
+#ifndef SD_SLIDESORTER_VIEW_LAYER_PAINTER_HXX
+#define SD_SLIDESORTER_VIEW_LAYER_PAINTER_HXX
 
-#include "sdxfer.hxx"
+#include <boost/shared_ptr.hpp>
+#include <sal/types.h>
 
-class SdDrawDocument;
-namespace sd
-{
-    class pWorkView;
-    namespace slidesorter
-    {
-        class SlideSorterViewShell;
-    }
-}
+class OutputDevice;
+class Rectangle;
 
-namespace sd { namespace slidesorter { namespace controller {
+namespace sd { namespace slidesorter { namespace view {
 
-/** This class exists to have DragFinished call the correct object: the
-    SlideSorterViewShell instead of the old SlideView.
-*/
-class Transferable
-    : public SdTransferable
+class ILayerInvalidator
 {
 public:
-    Transferable (
-        SdDrawDocument* pSrcDoc,
-        ::sd::View* pWorkView,
-        BOOL bInitOnGetData,
-        SlideSorterViewShell* pViewShell);
-
-    virtual ~Transferable (void);
-
-    virtual void DragFinished (sal_Int8 nDropAction);
-
-private:
-    SlideSorterViewShell* mpViewShell;
-
-    virtual void Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint);
+    virtual void Invalidate (const Rectangle& rInvalidationBox) = 0;
 };
+typedef ::boost::shared_ptr<ILayerInvalidator> SharedILayerInvalidator;
 
-} } } // end of namespace ::sd::slidesorter::controller
+class ILayerPainter
+{
+public:
+    virtual void SetLayerInvalidator (
+        const SharedILayerInvalidator& rpInvalidator) = 0;
+    virtual void Paint (
+        OutputDevice& rDevice,
+        const Rectangle& rRepaintArea) = 0;
+};
+typedef ::boost::shared_ptr<ILayerPainter> SharedILayerPainter;
+
+
+} } } // end of namespace ::sd::slidesorter::view
 
 #endif
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

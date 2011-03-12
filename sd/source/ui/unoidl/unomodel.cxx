@@ -466,8 +466,8 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, sal_Bool bDuplicate 
 {
     sal_uInt16 nPageCount = mpDoc->GetSdPageCount( PK_STANDARD );
     SdrLayerAdmin& rLayerAdmin = mpDoc->GetLayerAdmin();
-    BYTE aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), sal_False);
-    BYTE aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), sal_False);
+    sal_uInt8 aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), sal_False);
+    sal_uInt8 aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), sal_False);
 
     SdPage* pStandardPage = NULL;
 
@@ -1543,8 +1543,8 @@ sal_Int32 ImplPDFGetBookmarkPage( const String& rBookmark, SdDrawDocument& rDoc 
         aBookmark = rBookmark.Copy( 1 );
 
     // is the bookmark a page ?
-    BOOL        bIsMasterPage;
-    USHORT      nPgNum = rDoc.GetPageByName( aBookmark, bIsMasterPage );
+    sal_Bool        bIsMasterPage;
+    sal_uInt16      nPgNum = rDoc.GetPageByName( aBookmark, bIsMasterPage );
     SdrObject*  pObj = NULL;
 
     if ( nPgNum == SDRPAGE_NOTFOUND )
@@ -1855,7 +1855,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                 vcl::PDFExtOutDevData* pPDFExtOutDevData = PTR_CAST( vcl::PDFExtOutDevData, pOut->GetExtOutDevData() );
 
                 ::sd::ClientView* pView = new ::sd::ClientView( mpDocShell, pOut, NULL );
-                Rectangle               aVisArea = Rectangle( Point(), mpDoc->GetSdPage( (USHORT)nPageNumber - 1, ePageKind )->GetSize() );
+                Rectangle               aVisArea = Rectangle( Point(), mpDoc->GetSdPage( (sal_uInt16)nPageNumber - 1, ePageKind )->GetSize() );
                 Region                  aRegion( aVisArea );
                 Point                   aOrigin;
 
@@ -1881,7 +1881,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
 
                 if( xModel == mpDocShell->GetModel() )
                 {
-                    pView->ShowSdrPage( mpDoc->GetSdPage( (USHORT)nPageNumber - 1, ePageKind ));
+                    pView->ShowSdrPage( mpDoc->GetSdPage( (sal_uInt16)nPageNumber - 1, ePageKind ));
                     SdrPageView* pPV = pView->GetSdrPageView();
 
                     if( pOldSdView )
@@ -2081,7 +2081,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                             rBookmarks.clear();
                             //---> #i56629, #i40318
                             //get the page name, will be used as outline element in PDF bookmark pane
-                            String aPageName = mpDoc->GetSdPage( (USHORT)nPageNumber - 1 , PK_STANDARD )->GetName();
+                            String aPageName = mpDoc->GetSdPage( (sal_uInt16)nPageNumber - 1 , PK_STANDARD )->GetName();
                             if( aPageName.Len() > 0 )
                             {
                                 // insert the bookmark to this page into the NamedDestinations
@@ -2658,7 +2658,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
             bUnique = sal_True;
             for( sal_Int32 nMaster = 1; nMaster < nMPageCount; nMaster++ )
             {
-                SdPage* pPage = (SdPage*)mpDoc->GetMasterPage((USHORT)nMaster);
+                SdPage* pPage = (SdPage*)mpDoc->GetMasterPage((sal_uInt16)nMaster);
                 if( pPage && pPage->GetName() == aPrefix )
                 {
                     bUnique = sal_False;
@@ -2695,7 +2695,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
                            pPage->GetRgtBorder(),
                            pPage->GetLwrBorder() );
         pMPage->SetLayoutName( aLayoutName );
-        mpDoc->InsertMasterPage(pMPage,  (USHORT)nInsertPos);
+        mpDoc->InsertMasterPage(pMPage,  (sal_uInt16)nInsertPos);
 
         {
             // ensure default MasterPage fill
@@ -2713,7 +2713,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
                                 pRefNotesPage->GetRgtBorder(),
                                 pRefNotesPage->GetLwrBorder() );
         pMNotesPage->SetLayoutName( aLayoutName );
-        mpDoc->InsertMasterPage(pMNotesPage,  (USHORT)nInsertPos + 1);
+        mpDoc->InsertMasterPage(pMNotesPage,  (sal_uInt16)nInsertPos + 1);
         pMNotesPage->SetAutoLayout(AUTOLAYOUT_NOTES, sal_True, sal_True);
         mpModel->SetModified();
     }
