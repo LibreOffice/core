@@ -286,8 +286,7 @@ void PresentationFragmentHandler::endDocument() throw (SAXException, RuntimeExce
     }
     catch( uno::Exception& )
     {
-        OSL_ENSURE( false,
-            (rtl::OString("oox::ppt::PresentationFragmentHandler::EndDocument(), "
+        OSL_FAIL( (rtl::OString("oox::ppt::PresentationFragmentHandler::EndDocument(), "
                     "exception caught: ") +
             rtl::OUStringToOString(
                 comphelper::anyToString( cppu::getCaughtException() ),

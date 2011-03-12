@@ -259,7 +259,7 @@ void AxisConverter::convertFromModel( const Reference< XCoordinateSystem >& rxCo
             }
             break;
             default:
-                OSL_ENSURE( false, "AxisConverter::convertFromModel - unknown axis type" );
+                OSL_FAIL( "AxisConverter::convertFromModel - unknown axis type" );
         }
 
         /*  Do not set a value to the Origin member anymore (already done via
@@ -322,7 +322,7 @@ void AxisConverter::convertFromModel( const Reference< XCoordinateSystem >& rxCo
     }
     catch( Exception& )
     {
-        OSL_ENSURE( false, "AxisConverter::convertFromModel - cannot insert axis into coordinate system" );
+        OSL_FAIL( "AxisConverter::convertFromModel - cannot insert axis into coordinate system" );
     }
 }
 

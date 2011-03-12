@@ -169,7 +169,7 @@ sal_Int32 FIB::GetData( Id nName )
 {
     if( nName >= NS_rtf::LN_WIDENT && nName <= NS_rtf::LN_LCBSTTBFUSSR)
         return aFIBData[nName - NS_rtf::LN_WIDENT];
-    OSL_ENSURE( false, "invalid index in FIB");
+    OSL_FAIL( "invalid index in FIB");
     return -1;
 }
 
@@ -950,7 +950,7 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
         catch(const lang::IllegalArgumentException& rIllegal)
         {
             (void)rIllegal;
-            OSL_ENSURE( false, "IllegalArgumentException in DomainMapper_Impl::finishParagraph" );
+            OSL_FAIL( "IllegalArgumentException in DomainMapper_Impl::finishParagraph" );
         }
         catch(const uno::Exception& rEx)
         {
@@ -1003,12 +1003,12 @@ void DomainMapper_Impl::appendTextPortion( const ::rtl::OUString& rString, Prope
         catch(const lang::IllegalArgumentException& rEx)
         {
             (void)rEx;
-            OSL_ENSURE( false, "IllegalArgumentException in DomainMapper_Impl::appendTextPortion" );
+            OSL_FAIL( "IllegalArgumentException in DomainMapper_Impl::appendTextPortion" );
         }
         catch(const uno::Exception& rEx)
         {
             (void)rEx;
-            OSL_ENSURE( false, "Exception in DomainMapper_Impl::appendTextPortion" );
+            OSL_FAIL( "Exception in DomainMapper_Impl::appendTextPortion" );
         }
     }
 }
@@ -1078,7 +1078,7 @@ void DomainMapper_Impl::appendOLE( const ::rtl::OUString& rStreamName, OLEHandle
     catch( const uno::Exception& rEx )
     {
         (void)rEx;
-        OSL_ENSURE( false, "Exception in creation of OLE object" );
+        OSL_FAIL( "Exception in creation of OLE object" );
     }
 
 }
@@ -1237,7 +1237,7 @@ void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
     }
     catch( uno::Exception& )
     {
-        OSL_ENSURE( false, "exception in PushFootOrEndnote" );
+        OSL_FAIL( "exception in PushFootOrEndnote" );
     }
 }
 
@@ -1274,7 +1274,7 @@ void DomainMapper_Impl::CreateRedline( uno::Reference< text::XTextRange > xRange
         catch( const uno::Exception & rEx )
         {
             ( void ) rEx;
-            OSL_ENSURE( false, "Exception in makeRedline" );
+            OSL_FAIL( "Exception in makeRedline" );
         }
     }
 }
@@ -1332,7 +1332,7 @@ void DomainMapper_Impl::PushAnnotation()
     }
     catch( uno::Exception& )
     {
-        OSL_ENSURE( false, "exception in PushFootOrEndnote" );
+        OSL_FAIL( "exception in PushFootOrEndnote" );
     }
 }
 
@@ -2761,7 +2761,7 @@ void DomainMapper_Impl::CloseFieldCommand()
         catch( uno::Exception& rEx)
         {
             (void)rEx;
-            OSL_ENSURE( false, "Exception in CloseFieldCommand()" );
+            OSL_FAIL( "Exception in CloseFieldCommand()" );
         }
         pContext->SetCommandCompleted();
     }
@@ -2927,11 +2927,11 @@ void DomainMapper_Impl::PopFieldContext()
             }
             catch(const lang::IllegalArgumentException& )
             {
-                OSL_ENSURE( false, "IllegalArgumentException in PopFieldContext()" );
+                OSL_FAIL( "IllegalArgumentException in PopFieldContext()" );
             }
             catch(const uno::Exception& )
             {
-                OSL_ENSURE( false, "exception in PopFieldContext()" );
+                OSL_FAIL( "exception in PopFieldContext()" );
             }
         }
         //

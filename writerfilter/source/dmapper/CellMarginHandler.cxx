@@ -69,7 +69,7 @@ void CellMarginHandler::attribute(Id rName, Value & rVal)
             OSL_ENSURE( NS_ooxml::LN_Value_ST_TblWidth_dxa == sal::static_int_cast<Id>(nIntValue), "cell margins work for absolute values, only");
         break;
         default:
-            OSL_ENSURE( false, "unknown attribute");
+            OSL_FAIL( "unknown attribute");
     }
 }
 
@@ -98,7 +98,7 @@ void CellMarginHandler::sprm(Sprm & rSprm)
                 m_bRightMarginValid = true;
             break;
             default:
-                OSL_ENSURE( false, "unknown attribute");
+                OSL_FAIL( "unknown attribute");
         }
     }
     m_nValue = 0;

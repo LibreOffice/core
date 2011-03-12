@@ -120,7 +120,7 @@ void ShapeAnchor::importAnchor( sal_Int32 nElement, const AttributeList& rAttrib
             mnEditAs = rAttribs.getToken( XML_editAs, XML_twoCell );
         break;
         default:
-            OSL_ENSURE( false, "ShapeAnchor::importAnchor - unexpected element" );
+            OSL_FAIL( "ShapeAnchor::importAnchor - unexpected element" );
     }
 }
 
@@ -158,7 +158,7 @@ void ShapeAnchor::setCellPos( sal_Int32 nElement, sal_Int32 nParentContext, cons
             pAnchorCell = &maTo;
         break;
         default:
-            OSL_ENSURE( false, "ShapeAnchor::setCellPos - unexpected parent element" );
+            OSL_FAIL( "ShapeAnchor::setCellPos - unexpected parent element" );
     }
     if( pAnchorCell ) switch( nElement )
     {
@@ -166,7 +166,7 @@ void ShapeAnchor::setCellPos( sal_Int32 nElement, sal_Int32 nParentContext, cons
         case XDR_TOKEN( row ):      pAnchorCell->mnRow = rValue.toInt32();          break;
         case XDR_TOKEN( colOff ):   pAnchorCell->mnColOffset = rValue.toInt64();    break;
         case XDR_TOKEN( rowOff ):   pAnchorCell->mnRowOffset = rValue.toInt64();    break;
-        default:    OSL_ENSURE( false, "ShapeAnchor::setCellPos - unexpected element" );
+        default:    OSL_FAIL( "ShapeAnchor::setCellPos - unexpected element" );
     }
 }
 
@@ -217,7 +217,7 @@ bool ShapeAnchor::isValidAnchor() const
                 ((maFrom.mnRow < maTo.mnRow) || ((maFrom.mnRow == maTo.mnRow) && (maFrom.mnRowOffset < maTo.mnRowOffset)));
         break;
         case ANCHOR_INVALID:
-            OSL_ENSURE( false, "ShapeAnchor::isValidAnchor - invalid anchor" );
+            OSL_FAIL( "ShapeAnchor::isValidAnchor - invalid anchor" );
         break;
     }
     return bValid;
@@ -254,7 +254,7 @@ Rectangle ShapeAnchor::calcApiLocation( const Size& rApiSheetSize, const AnchorS
             }
         break;
         case ANCHOR_INVALID:
-            OSL_ENSURE( false, "ShapeAnchor::calcApiLocation - invalid anchor" );
+            OSL_FAIL( "ShapeAnchor::calcApiLocation - invalid anchor" );
         break;
     }
 
@@ -346,7 +346,7 @@ Rectangle ShapeAnchor::calcEmuLocation( const AnchorSizeModel& rEmuSheetSize ) c
             }
         break;
         case ANCHOR_INVALID:
-            OSL_ENSURE( false, "ShapeAnchor::calcEmuLocation - invalid anchor" );
+            OSL_FAIL( "ShapeAnchor::calcEmuLocation - invalid anchor" );
         break;
     }
 

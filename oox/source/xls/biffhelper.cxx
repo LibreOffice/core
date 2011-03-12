@@ -233,7 +233,7 @@ void lclImportImgDataDib( StreamDataSequence& orDataSeq, BiffInputStream& rStrm,
         case BIFF_ERR_NAME:     nApiError = 525;    break;
         case BIFF_ERR_NUM:      nApiError = 503;    break;
         case BIFF_ERR_NA:       nApiError = 0x7FFF; break;
-        default:    OSL_ENSURE( false, "BiffHelper::calcDoubleFromError - unknown error code" );
+        default:    OSL_FAIL( "BiffHelper::calcDoubleFromError - unknown error code" );
     }
     DecodedDouble aDecDbl;
     ::rtl::math::setNan( &aDecDbl.mfValue );
@@ -276,7 +276,7 @@ void lclImportImgDataDib( StreamDataSequence& orDataSeq, BiffInputStream& rStrm,
 //            case BIFF_IMGDATA_WMF:      /* TODO */                                              break;
             case BIFF_IMGDATA_DIB:      lclImportImgDataDib( orDataSeq, rStrm, nBytes, eBiff ); break;
 //            case BIFF_IMGDATA_NATIVE:   /* TODO */                                              break;
-            default:                    OSL_ENSURE( false, "BiffHelper::importImgData - unknown image format" );
+            default:                    OSL_FAIL( "BiffHelper::importImgData - unknown image format" );
         }
     }
 }

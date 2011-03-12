@@ -219,7 +219,7 @@ Reference< chart2::data::XLabeledDataSequence > lcl_getCategories( const Referen
     catch( uno::Exception & ex )
     {
         (void)ex; // avoid warning for pro build
-        OSL_ENSURE( false, rtl::OUStringToOString(
+        OSL_FAIL( rtl::OUStringToOString(
                         OUString( RTL_CONSTASCII_USTRINGPARAM( "Exception caught. Type: " )) +
                         OUString::createFromAscii( typeid( ex ).name()) +
                         OUString( RTL_CONSTASCII_USTRINGPARAM( ", Message: " )) +
@@ -337,7 +337,7 @@ bool lcl_isSeriesAttachedToFirstAxis(
     catch( uno::Exception & ex )
     {
         (void)ex; // avoid warning for pro build
-        OSL_ENSURE( false, rtl::OUStringToOString(
+        OSL_FAIL( rtl::OUStringToOString(
                         OUString( RTL_CONSTASCII_USTRINGPARAM( "Exception caught. Type: " )) +
                         OUString::createFromAscii( typeid( ex ).name()) +
                         OUString( RTL_CONSTASCII_USTRINGPARAM( ", Message: " )) +
@@ -814,7 +814,7 @@ void ChartExport::InitRangeSegmentationProperties( const Reference< chart2::XCha
         catch( uno::Exception & ex )
         {
             (void)ex; // avoid warning for pro build
-            OSL_ENSURE( false, rtl::OUStringToOString(
+            OSL_FAIL( rtl::OUStringToOString(
                             OUString( RTL_CONSTASCII_USTRINGPARAM( "Exception caught. Type: " )) +
                             OUString::createFromAscii( typeid( ex ).name()) +
                             OUString( RTL_CONSTASCII_USTRINGPARAM( ", Message: " )) +

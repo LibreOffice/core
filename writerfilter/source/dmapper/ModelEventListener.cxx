@@ -71,7 +71,7 @@ void ModelEventListener::notifyEvent( const document::EventObject& rEvent ) thro
         catch( const uno::Exception& rEx )
         {
             (void)rEx;
-            OSL_ENSURE( false, "exception while updating indexes" );
+            OSL_FAIL( "exception while updating indexes" );
         }
     }
 }

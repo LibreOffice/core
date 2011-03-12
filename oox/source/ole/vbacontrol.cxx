@@ -279,7 +279,7 @@ ControlModelRef VbaSiteModel::createControlModel( const AxClassTable& rClassTabl
             case VBA_SITE_FRAME:            xCtrlModel.reset( new AxFrameModel );           break;
             case VBA_SITE_MULTIPAGE:        xCtrlModel.reset( new AxMultiPageModel );       break;
             case VBA_SITE_FORM:             xCtrlModel.reset( new AxFormPageModel );        break;
-            default:    OSL_ENSURE( false, "VbaSiteModel::createControlModel - unknown type index" );
+            default:    OSL_FAIL( "VbaSiteModel::createControlModel - unknown type index" );
         }
     }
     else
@@ -481,7 +481,7 @@ bool VbaFormControl::convertProperties( const Reference< XControlModel >& rxCtrl
             }
             catch( Exception& )
             {
-                OSL_ENSURE( false, "VbaFormControl::convertProperties - cannot get control container interface" );
+                OSL_FAIL( "VbaFormControl::convertProperties - cannot get control container interface" );
             }
 
             return true;

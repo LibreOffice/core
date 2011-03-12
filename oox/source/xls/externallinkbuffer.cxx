@@ -385,7 +385,7 @@ bool ExternalName::getDdeLinkData( OUString& orDdeServer, OUString& orDdeTopic, 
         }
         catch( Exception& )
         {
-            OSL_ENSURE( false, "ExternalName::getDdeLinkData - cannot create DDE link" );
+            OSL_FAIL( "ExternalName::getDdeLinkData - cannot create DDE link" );
         }
         // get link data from created DDE link
         if( mxDdeLink.is() )
@@ -594,7 +594,7 @@ void ExternalLink::importExternalBook( const Relations& rRelations, RecordInputS
         }
         break;
         default:
-            OSL_ENSURE( false, "ExternalLink::importExternalBook - unknown link type" );
+            OSL_FAIL( "ExternalLink::importExternalBook - unknown link type" );
     }
 }
 

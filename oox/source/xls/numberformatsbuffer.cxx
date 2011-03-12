@@ -1840,8 +1840,7 @@ sal_Int32 lclCreatePredefinedFormat( const Reference< XNumberFormats >& rxNumFmt
     }
     catch( Exception& )
     {
-        OSL_ENSURE( false,
-            OStringBuffer( "lclCreatePredefinedFormat - cannot create predefined number format " ).
+        OSL_FAIL( OStringBuffer( "lclCreatePredefinedFormat - cannot create predefined number format " ).
             append( OString::valueOf( static_cast< sal_Int32 >( nPredefId ) ) ).getStr() );
     }
     return nIndex;
@@ -1865,8 +1864,7 @@ sal_Int32 lclCreateFormat( const Reference< XNumberFormats >& rxNumFmts,
         }
         else
         {
-            OSL_ENSURE( false,
-                OStringBuffer( "lclCreateFormat - cannot create number format '" ).
+            OSL_FAIL( OStringBuffer( "lclCreateFormat - cannot create number format '" ).
                 append( OUStringToOString( rFmtCode, osl_getThreadTextEncoding() ) ).
                 append( '\'' ).getStr() );
         }
@@ -1978,7 +1976,7 @@ NumberFormatsBuffer::NumberFormatsBuffer( const WorkbookHelper& rHelper ) :
     }
     catch( Exception& )
     {
-        OSL_ENSURE( false, "NumberFormatsBuffer::NumberFormatsBuffer - cannot get system locale" );
+        OSL_FAIL( "NumberFormatsBuffer::NumberFormatsBuffer - cannot get system locale" );
     }
 
     // create built-in formats for current locale

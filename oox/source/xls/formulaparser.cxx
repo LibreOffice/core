@@ -587,17 +587,17 @@ FormulaParserImpl::FormulaParserImpl( const FormulaParser& rParent ) :
 
 void FormulaParserImpl::importOoxFormula( FormulaContext&, const OUString& )
 {
-    OSL_ENSURE( false, "FormulaParserImpl::importOoxFormula - not implemented" );
+    OSL_FAIL( "FormulaParserImpl::importOoxFormula - not implemented" );
 }
 
 void FormulaParserImpl::importOobFormula( FormulaContext&, RecordInputStream& )
 {
-    OSL_ENSURE( false, "FormulaParserImpl::importOobFormula - not implemented" );
+    OSL_FAIL( "FormulaParserImpl::importOobFormula - not implemented" );
 }
 
 void FormulaParserImpl::importBiffFormula( FormulaContext&, BiffInputStream&, const sal_uInt16* )
 {
-    OSL_ENSURE( false, "FormulaParserImpl::importBiffFormula - not implemented" );
+    OSL_FAIL( "FormulaParserImpl::importBiffFormula - not implemented" );
 }
 
 void FormulaParserImpl::setFormula( FormulaContext& rContext, const ApiTokenSequence& rTokens )
@@ -1637,7 +1637,7 @@ bool OoxFormulaParserImpl::importArrayToken( RecordInputStream& rStrm )
                     rStrm.skip( 3 );
                 break;
                 default:
-                    OSL_ENSURE( false, "OoxFormulaParserImpl::importArrayToken - unknown data type" );
+                    OSL_FAIL( "OoxFormulaParserImpl::importArrayToken - unknown data type" );
                     appendRawToken( OPCODE_PUSH ) <<= BiffHelper::calcDoubleFromError( BIFF_ERR_NA );
             }
         }
@@ -2359,7 +2359,7 @@ bool BiffFormulaParserImpl::importArrayToken( BiffInputStream& rStrm )
                     rStrm.skip( 7 );
                 break;
                 default:
-                    OSL_ENSURE( false, "BiffFormulaParserImpl::importArrayToken - unknown data type" );
+                    OSL_FAIL( "BiffFormulaParserImpl::importArrayToken - unknown data type" );
                     appendRawToken( OPCODE_PUSH ) <<= BiffHelper::calcDoubleFromError( BIFF_ERR_NA );
             }
         }

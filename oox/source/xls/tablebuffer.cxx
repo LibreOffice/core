@@ -110,7 +110,7 @@ void Table::finalizeImport()
     }
     catch( Exception& )
     {
-        OSL_ENSURE( false, "Table::finalizeImport - cannot create database range" );
+        OSL_FAIL( "Table::finalizeImport - cannot create database range" );
     }
 }
 

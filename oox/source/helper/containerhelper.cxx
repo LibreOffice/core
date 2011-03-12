@@ -152,7 +152,7 @@ OUString ContainerHelper::insertByUnusedName(
         }
         catch( Exception& )
         {
-            OSL_ENSURE( false, "ContainerHelper::insertByUnusedName - cannot rename old object" );
+            OSL_FAIL( "ContainerHelper::insertByUnusedName - cannot rename old object" );
         }
     }
 

@@ -135,7 +135,7 @@ void ListLevel::SetValue( Id nId, sal_Int32 nValue )
             m_nTabstop = nValue;
         break;
         default:
-            OSL_ENSURE( false, "this line should never be reached");
+            OSL_FAIL( "this line should never be reached");
     }
 }
 
@@ -397,7 +397,7 @@ void AbstractListDef::SetValue( sal_uInt32 nSprmId, sal_Int32 nValue )
             m_nUnsigned = nValue;
         break;
         default:
-            OSL_ENSURE( false, "this line should never be reached");
+            OSL_FAIL( "this line should never be reached");
     }
 }
 
@@ -609,7 +609,7 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
         }
         catch( const uno::Exception& rEx)
         {
-            OSL_ENSURE( false, "ListTable::CreateNumberingRules");
+            OSL_FAIL( "ListTable::CreateNumberingRules");
         }
     }
 
@@ -744,7 +744,7 @@ void ListsManager::attribute( Id nName, Value& rVal )
             sMessage += ::rtl::OString::valueOf( sal_Int32( nIntValue ), 10 );
             sMessage += ::rtl::OString(" / 0x");
             sMessage += ::rtl::OString::valueOf( sal_Int32( nIntValue ), 16 );
-            OSL_ENSURE( false, sMessage.getStr()); //
+            OSL_FAIL( sMessage.getStr()); //
 #endif
         }
     }

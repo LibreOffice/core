@@ -1554,7 +1554,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     while (xIter->hasMoreElements()) {
         rdf::Statement stmt;
         if (!(xIter->nextElement() >>= stmt)) {
-            OSL_ENSURE(false, "getStatementRDFa: result of wrong type?");
+            OSL_FAIL("getStatementRDFa: result of wrong type?");
         } else {
             ret.push_back(stmt);
         }
@@ -2033,7 +2033,7 @@ librdf_node* librdf_TypeConverter::mkNode( librdf_world* i_pWorld,
                 (lang.getStr()), 0);
 
         } else {
-            OSL_ENSURE(false, "mkNode: invalid literal");
+            OSL_FAIL("mkNode: invalid literal");
             return 0;
         }
     }
@@ -2114,7 +2114,7 @@ librdf_TypeConverter::convertToXURI(librdf_node* i_pNode) const
         }
         return convertToXURI(pURI);
     } else {
-        OSL_ENSURE(false, "convertToXURI: unknown librdf_node");
+        OSL_FAIL("convertToXURI: unknown librdf_node");
         return 0;
     }
 }

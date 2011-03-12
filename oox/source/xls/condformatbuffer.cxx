@@ -403,7 +403,7 @@ void CondFormatRule::importCfRule( RecordInputStream& rStrm )
             maModel.mnType = XML_iconSet;
         break;
         default:
-            OSL_ENSURE( false, "CondFormatRule::importCfRule - unknown rule type" );
+            OSL_FAIL( "CondFormatRule::importCfRule - unknown rule type" );
     }
 }
 
@@ -528,7 +528,7 @@ void CondFormatRule::finalizeImport( const Reference< XSheetConditionalEntries >
                     aReplaceFormula = CREATE_OUSTRING( "OR(AND(MONTH(#B)=MONTH(TODAY())+1,YEAR(#B)=YEAR(TODAY())),AND(MONTH(#B)=1,MONTH(TODAY())=12,YEAR(#B)=YEAR(TODAY())+1))" );
                 break;
                 default:
-                    OSL_ENSURE( false, "CondFormatRule::finalizeImport - unknown time period type" );
+                    OSL_FAIL( "CondFormatRule::finalizeImport - unknown time period type" );
             }
         break;
         case XML_containsBlanks:
@@ -599,7 +599,7 @@ void CondFormatRule::finalizeImport( const Reference< XSheetConditionalEntries >
                     aReplaceFormula = aReplaceFormula.replaceAt( nStrPos, 2, aComp );
                 break;
                 default:
-                    OSL_ENSURE( false, "CondFormatRule::finalizeImport - unknown placeholder" );
+                    OSL_FAIL( "CondFormatRule::finalizeImport - unknown placeholder" );
             }
         }
 

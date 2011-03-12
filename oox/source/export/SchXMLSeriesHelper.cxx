@@ -81,7 +81,7 @@ using ::rtl::OUString;
     {
         (void)ex; // avoid warning for pro build
 
-        OSL_ENSURE( false, OUStringToOString( OUString(
+        OSL_FAIL( OUStringToOString( OUString(
                         OUString( RTL_CONSTASCII_USTRINGPARAM( "Exception caught. Type: " )) +
                         OUString::createFromAscii( typeid( ex ).name()) +
                         OUString( RTL_CONSTASCII_USTRINGPARAM( ", Message: " )) +
@@ -218,7 +218,7 @@ Reference< chart2::XDataSeries > SchXMLSeriesHelper::getFirstCandleStickSeries(
     }
     catch( const uno::Exception & )
     {
-        OSL_ENSURE( false, "Exception caught" );
+        OSL_FAIL( "Exception caught" );
     }
     return xResult;
 }

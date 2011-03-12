@@ -74,7 +74,7 @@ void SectionColumnHandler::attribute(Id rName, Value & rVal)
             aTempColumn.nSpace = ConversionHelper::convertTwipToMM100( nIntValue );
             break;
         default:
-            OSL_ENSURE( false, "SectionColumnHandler: unknown attribute");
+            OSL_FAIL( "SectionColumnHandler: unknown attribute");
     }
 }
 
@@ -94,7 +94,7 @@ void SectionColumnHandler::sprm(Sprm & rSprm)
         }
         break;
         default:
-            OSL_ENSURE( false, "SectionColumnHandler: unknown sprm");
+            OSL_FAIL( "SectionColumnHandler: unknown sprm");
     }
 }
 } //namespace dmapper

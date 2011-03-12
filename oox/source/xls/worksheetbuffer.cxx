@@ -240,7 +240,7 @@ WorksheetBuffer::IndexNamePair WorksheetBuffer::createSheet( const OUString& rPr
     }
     catch( Exception& )
     {
-        OSL_ENSURE( false, "WorksheetBuffer::createSheet - cannot insert or rename worksheet" );
+        OSL_FAIL( "WorksheetBuffer::createSheet - cannot insert or rename worksheet" );
     }
     return IndexNamePair( -1, OUString() );
 }

@@ -88,7 +88,7 @@ void CellColorHandler::attribute(Id rName, Value & rVal)
             // ignored
             break;
         default:
-            OSL_ENSURE( false, "unknown attribute");
+            OSL_FAIL( "unknown attribute");
     }
 }
 

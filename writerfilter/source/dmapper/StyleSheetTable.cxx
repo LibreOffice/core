@@ -822,7 +822,7 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                         }
                         catch( const uno::RuntimeException& )
                         {
-                            OSL_ENSURE( false, "Styles parent could not be set");
+                            OSL_FAIL( "Styles parent could not be set");
                         }
                     }
                     else if( bParaStyle )
@@ -991,12 +991,12 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                                 aMessage += sTemp;
                             }
 #endif
-                            OSL_ENSURE( false, aMessage.getStr());
+                            OSL_FAIL( aMessage.getStr());
                         }
                         catch( const uno::Exception& rEx)
                         {
                             (void) rEx;
-                            OSL_ENSURE( false, "Some style properties could not be set");
+                            OSL_FAIL( "Some style properties could not be set");
                         }
                     }
                     if(bInsert)
@@ -1017,7 +1017,7 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
     catch( uno::Exception& rEx)
     {
         (void)rEx;
-        OSL_ENSURE( false, "Styles could not be imported completely");
+        OSL_FAIL( "Styles could not be imported completely");
     }
 
 #ifdef DEBUG_DOMAINMAPPER
@@ -1309,7 +1309,7 @@ void StyleSheetTable::applyDefaults(bool bParaProperties)
                 }
                 catch( const uno::Exception& )
                 {
-                    OSL_ENSURE( false, "setPropertyValue exception");
+                    OSL_FAIL( "setPropertyValue exception");
                 }
             }
         }
@@ -1324,7 +1324,7 @@ void StyleSheetTable::applyDefaults(bool bParaProperties)
                 }
                 catch( const uno::Exception& )
                 {
-                    OSL_ENSURE( false, "setPropertyValue exception");
+                    OSL_FAIL( "setPropertyValue exception");
                 }
             }
         }
@@ -1383,7 +1383,7 @@ void StyleSheetTable::applyDefaults(bool bParaProperties)
             catch( const uno::Exception& rEx )
             {
                 (void)rEx;
-                OSL_ENSURE( false, "Exception in StyleSheetTable::getOrCreateCharStyle - Style::setPropertyValue");
+                OSL_FAIL( "Exception in StyleSheetTable::getOrCreateCharStyle - Style::setPropertyValue");
             }
             ++aCharPropIter;
         }
@@ -1393,7 +1393,7 @@ void StyleSheetTable::applyDefaults(bool bParaProperties)
     catch( const uno::Exception& rEx )
     {
         (void)rEx;
-        OSL_ENSURE( false, "Exception in StyleSheetTable::getOrCreateCharStyle");
+        OSL_FAIL( "Exception in StyleSheetTable::getOrCreateCharStyle");
     }
 
     return sListLabel;

@@ -161,7 +161,7 @@ void SAL_CALL ColorPropertySet::addPropertyChangeListener( const OUString& /* aP
            lang::WrappedTargetException,
            uno::RuntimeException)
 {
-    OSL_ENSURE( false, "Not Implemented" );
+    OSL_FAIL( "Not Implemented" );
     return;
 }
 
@@ -170,7 +170,7 @@ void SAL_CALL ColorPropertySet::removePropertyChangeListener( const OUString& /*
            lang::WrappedTargetException,
            uno::RuntimeException)
 {
-    OSL_ENSURE( false, "Not Implemented" );
+    OSL_FAIL( "Not Implemented" );
     return;
 }
 
@@ -179,7 +179,7 @@ void SAL_CALL ColorPropertySet::addVetoableChangeListener( const OUString& /* Pr
            lang::WrappedTargetException,
            uno::RuntimeException)
 {
-    OSL_ENSURE( false, "Not Implemented" );
+    OSL_FAIL( "Not Implemented" );
     return;
 }
 
@@ -188,7 +188,7 @@ void SAL_CALL ColorPropertySet::removeVetoableChangeListener( const OUString& /*
            lang::WrappedTargetException,
            uno::RuntimeException)
 {
-    OSL_ENSURE( false, "Not Implemented" );
+    OSL_FAIL( "Not Implemented" );
     return;
 }
 

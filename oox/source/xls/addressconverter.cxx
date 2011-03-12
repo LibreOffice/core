@@ -774,7 +774,7 @@ void AddressConverter::initializeMaxPos(
     }
     catch( Exception& )
     {
-        OSL_ENSURE( false, "AddressConverter::AddressConverter - cannot get sheet limits" );
+        OSL_FAIL( "AddressConverter::AddressConverter - cannot get sheet limits" );
     }
 }
 

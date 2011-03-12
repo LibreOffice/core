@@ -947,7 +947,7 @@ void GraphicImport::attribute(Id nName, Value & val)
             sMessage += ::rtl::OString::valueOf( sal_Int32( nName ), 10 );
             sMessage += ::rtl::OString(" / 0x");
             sMessage += ::rtl::OString::valueOf( sal_Int32( nName ), 16 );
-            OSL_ENSURE( false, sMessage.getStr())
+            OSL_FAIL( sMessage.getStr())
 #endif
             ;
     }
@@ -1110,7 +1110,7 @@ void GraphicImport::ProcessShapeOptions(Value& val)
         case NS_dff::LN_shpfPrint              /*959*/:
             break;  // rtf:shpfPrint
         default:
-            OSL_ENSURE( false, "shape option unsupported?");
+            OSL_FAIL( "shape option unsupported?");
     }
 }
 
@@ -1233,7 +1233,7 @@ void GraphicImport::sprm(Sprm & rSprm)
             sMessage += ::rtl::OString::valueOf( sal_Int32( nSprmId ), 10 );
             sMessage += ::rtl::OString(" / 0x");
             sMessage += ::rtl::OString::valueOf( sal_Int32( nSprmId ), 16 );
-            OSL_ENSURE( false, sMessage.getStr())
+            OSL_FAIL( sMessage.getStr())
 #endif
             ;
     }

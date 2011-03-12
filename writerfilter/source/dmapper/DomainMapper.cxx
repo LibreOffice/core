@@ -1412,7 +1412,7 @@ void DomainMapper::attribute(Id nName, Value & val)
             sMessage += ::rtl::OString::valueOf( sal_Int32( nIntValue ), 10 );
             sMessage += ::rtl::OString(" / 0x");
             sMessage += ::rtl::OString::valueOf( sal_Int32( nIntValue ), 16 );
-            OSL_ENSURE( false, sMessage.getStr()); //
+            OSL_FAIL( sMessage.getStr()); //
 #endif
             }
         }
@@ -1598,7 +1598,7 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
 
     case  23: //sprmPChgTabs
     case NS_sprm::LN_PChgTabs: // sprmPChgTabs
-        OSL_ENSURE( false, "unhandled");
+        OSL_FAIL( "unhandled");
         //tabs of list level?
         break;
     case 24: // "sprmPFInTable"
@@ -1694,7 +1694,7 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
                 switch( nSprmId )
                 {
                 case NS_sprm::LN_PBrcBetween:   // sprmPBrcBetween
-                    OSL_ENSURE( false, "TODO: inner border is not handled");
+                    OSL_FAIL( "TODO: inner border is not handled");
                     break;
                 case NS_sprm::LN_PBrcLeft:   // sprmPBrcLeft
                     eBorderId = PROP_LEFT_BORDER;
@@ -1722,7 +1722,7 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
     case NS_sprm::LN_PBorderLeft:
     case NS_sprm::LN_PBorderBottom:
     case NS_sprm::LN_PBorderRight:
-        OSL_ENSURE( false, "TODO: border color definition");
+        OSL_FAIL( "TODO: border color definition");
         break;
     case NS_sprm::LN_PBrcBar:
         break;  // sprmPBrcBar
@@ -1948,7 +1948,7 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
                     }
                     else
                     {
-                        OSL_ENSURE( false, "what type was it");
+                        OSL_FAIL( "what type was it");
                     }
                 }
 
@@ -2578,7 +2578,7 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
     }
     break;
     case 0x703a: //undocumented, grid related?
-        OSL_ENSURE( false, "TODO: not handled yet"); //nIntValue like 0x008a2373 ?
+        OSL_FAIL( "TODO: not handled yet"); //nIntValue like 0x008a2373 ?
         break;
     case NS_sprm::LN_SClm:
     {
@@ -2649,7 +2649,7 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
     case NS_sprm::LN_TTableHeader:
     case NS_sprm::LN_TTableBorders: // sprmTTableBorders
     {
-        OSL_ENSURE( false, "table propeties should be handled by the table manager");
+        OSL_FAIL( "table propeties should be handled by the table manager");
     }
     break;
     case NS_sprm::LN_TDefTable10:
@@ -3077,7 +3077,7 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
             case ooxml::OOXML_mod :
             case ooxml::OOXML_ins :
             case ooxml::OOXML_del : break;
-            default: OSL_ENSURE( false, "redline token other than mod, ins or del" );
+            default: OSL_FAIL( "redline token other than mod, ins or del" );
         }
         m_pImpl->EndParaChange( );
     }
@@ -3501,7 +3501,7 @@ void DomainMapper::table(Id name, writerfilter::Reference<Table>::Pointer_t ref)
         m_pImpl->ApplySettingsTable();
     break;
     default:
-        OSL_ENSURE( false, "which table is to be filled here?");
+        OSL_FAIL( "which table is to be filled here?");
     }
     m_pImpl->SetAnyTableImport(false);
 

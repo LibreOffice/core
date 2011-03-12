@@ -480,7 +480,7 @@ void ControlConverter::convertAxPicture( PropertyMap& rPropMap, const StreamData
         case AX_PICPOS_BELOWCENTER: nImagePos = AwtImagePos::BelowCenter;   break;
         case AX_PICPOS_BELOWRIGHT:  nImagePos = AwtImagePos::BelowRight;    break;
         case AX_PICPOS_CENTER:      nImagePos = AwtImagePos::Centered;      break;
-        default:    OSL_ENSURE( false, "ControlConverter::convertAxPicture - unknown picture position" );
+        default:    OSL_FAIL( "ControlConverter::convertAxPicture - unknown picture position" );
     }
     rPropMap.setProperty( PROP_ImagePosition, nImagePos );
 }
@@ -499,7 +499,7 @@ void ControlConverter::convertAxPicture( PropertyMap& rPropMap, const StreamData
         case AX_PICSIZE_CLIP:       nScaleMode = AwtScaleMode::None;        break;
         case AX_PICSIZE_STRETCH:    nScaleMode = AwtScaleMode::Anisotropic; break;
         case AX_PICSIZE_ZOOM:       nScaleMode = AwtScaleMode::Isotropic;   break;
-        default:    OSL_ENSURE( false, "ControlConverter::convertAxPicture - unknown picture size mode" );
+        default:    OSL_FAIL( "ControlConverter::convertAxPicture - unknown picture size mode" );
     }
     rPropMap.setProperty( PROP_ScaleMode, nScaleMode );
 }
@@ -538,7 +538,7 @@ void ControlConverter::convertAxOrientation( PropertyMap& rPropMap,
         case AX_ORIENTATION_AUTO:       bHorizontal = rSize.first > rSize.second;   break;
         case AX_ORIENTATION_VERTICAL:   bHorizontal = false;                        break;
         case AX_ORIENTATION_HORIZONTAL: bHorizontal = true;                         break;
-        default:    OSL_ENSURE( false, "ControlConverter::convertAxOrientation - unknown orientation" );
+        default:    OSL_FAIL( "ControlConverter::convertAxOrientation - unknown orientation" );
     }
     convertOrientation( rPropMap, bHorizontal );
 }
@@ -575,7 +575,7 @@ OUString ControlModelBase::getServiceName() const
         case API_CONTROL_PAGE:          return CREATE_OUSTRING( "com.sun.star.awt.UnoPageModel" );
         case API_CONTROL_MULTIPAGE:     return CREATE_OUSTRING( "com.sun.star.awt.UnoMultiPageModel" );
         case API_CONTROL_DIALOG:        return CREATE_OUSTRING( "com.sun.star.awt.UnoControlDialogModel" );
-        default:    OSL_ENSURE( false, "ControlModelBase::getServiceName - no AWT model service supported" );
+        default:    OSL_FAIL( "ControlModelBase::getServiceName - no AWT model service supported" );
     }
     else switch( eCtrlType )
     {
@@ -590,7 +590,7 @@ OUString ControlModelBase::getServiceName() const
         case API_CONTROL_SPINBUTTON:    return CREATE_OUSTRING( "com.sun.star.form.component.SpinButton" );
         case API_CONTROL_SCROLLBAR:     return CREATE_OUSTRING( "com.sun.star.form.component.ScrollBar" );
         case API_CONTROL_GROUPBOX:      return CREATE_OUSTRING( "com.sun.star.form.component.GroupBox" );
-        default:    OSL_ENSURE( false, "ControlModelBase::getServiceName - no form component service supported" );
+        default:    OSL_FAIL( "ControlModelBase::getServiceName - no form component service supported" );
     }
     return OUString();
 }
@@ -668,7 +668,7 @@ sal_uInt32 ComCtlModelBase::getDataPartId() const
         case 5: return mnDataPartId5;
         case 6: return mnDataPartId6;
     }
-    OSL_ENSURE( false, "ComCtlObjectBase::getDataPartId - unxpected version" );
+    OSL_FAIL( "ComCtlObjectBase::getDataPartId - unxpected version" );
     return SAL_MAX_UINT32;
 }
 
@@ -872,7 +872,7 @@ void AxFontDataModel::convertProperties( PropertyMap& rPropMap, const ControlCon
             case AX_FONTDATA_LEFT:      nAlign = cssa::TextAlign::LEFT;     break;
             case AX_FONTDATA_RIGHT:     nAlign = cssa::TextAlign::RIGHT;    break;
             case AX_FONTDATA_CENTER:    nAlign = cssa::TextAlign::CENTER;   break;
-            default:    OSL_ENSURE( false, "AxFontDataModel::convertProperties - unknown text alignment" );
+            default:    OSL_FAIL( "AxFontDataModel::convertProperties - unknown text alignment" );
         }
         // form controls expect short value
         rPropMap.setProperty( PROP_Align, static_cast< sal_Int16 >( nAlign ) );

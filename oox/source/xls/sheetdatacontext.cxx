@@ -253,7 +253,7 @@ void OoxSheetDataContext::onEndElement( const OUString& rChars )
                     break;
 
                     default:
-                        OSL_ENSURE( false, "OoxSheetDataContext::onEndElement - unknown formula type" );
+                        OSL_FAIL( "OoxSheetDataContext::onEndElement - unknown formula type" );
                 }
             }
             catch( Exception& )
@@ -766,7 +766,7 @@ void BiffSheetDataContext::importBoolErr()
                 setErrorCell( maCurrCell.mxCell, nValue );
             break;
             default:
-                OSL_ENSURE( false, "BiffSheetDataContext::importBoolErr - unknown cell type" );
+                OSL_FAIL( "BiffSheetDataContext::importBoolErr - unknown cell type" );
         }
     }
     setCellFormat( maCurrCell );
@@ -978,7 +978,7 @@ void BiffSheetDataContext::importDataTable()
             }
             break;
             default:
-                OSL_ENSURE( false, "BiffSheetDataContext::importDataTable - unknown record id" );
+                OSL_FAIL( "BiffSheetDataContext::importDataTable - unknown record id" );
         }
         aModel.maRef1 = FormulaProcessorBase::generateAddress2dString( aRef1, false );
         aModel.maRef2 = FormulaProcessorBase::generateAddress2dString( aRef2, false );

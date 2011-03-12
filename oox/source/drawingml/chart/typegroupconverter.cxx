@@ -171,7 +171,7 @@ TypeGroupConverter::TypeGroupConverter( const ConverterRoot& rParent, TypeGroupM
         case C_TOKEN( stockChart ):     ENSURE_AXESCOUNT( 2, 2 ); eTypeId = TYPEID_STOCK;     mb3dChart = false;  break;
         case C_TOKEN( surface3DChart ): ENSURE_AXESCOUNT( 3, 3 ); eTypeId = TYPEID_SURFACE;   mb3dChart = true;   break;
         case C_TOKEN( surfaceChart ):   ENSURE_AXESCOUNT( 2, 3 ); eTypeId = TYPEID_SURFACE;   mb3dChart = true;   break;    // 3D bar chart from all surface charts
-        default:    OSL_ENSURE( false, "TypeGroupConverter::TypeGroupConverter - unknown chart type" );
+        default:    OSL_FAIL( "TypeGroupConverter::TypeGroupConverter - unknown chart type" );
 #undef ENSURE_AXESCOUNT
     }
 
@@ -444,7 +444,7 @@ void TypeGroupConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
     }
     catch( Exception& )
     {
-        OSL_ENSURE( false, "TypeGroupConverter::convertFromModel - cannot add chart type" );
+        OSL_FAIL( "TypeGroupConverter::convertFromModel - cannot add chart type" );
     }
 }
 
@@ -506,7 +506,7 @@ void TypeGroupConverter::convertBarGeometry( PropertySet& rPropSet, sal_Int32 nO
             case XML_cylinder:      nGeom3d = cssc::DataPointGeometry3D::CYLINDER;  break;
             case XML_pyramid:       nGeom3d = cssc::DataPointGeometry3D::PYRAMID;   break;
             case XML_pyramidToMax:  nGeom3d = cssc::DataPointGeometry3D::PYRAMID;   break;
-            default:                OSL_ENSURE( false, "TypeGroupConverter::convertBarGeometry - unknown 3D bar shape type" );
+            default:                OSL_FAIL( "TypeGroupConverter::convertBarGeometry - unknown 3D bar shape type" );
         }
         rPropSet.setProperty( PROP_Geometry3D, nGeom3d );
     }
@@ -561,7 +561,7 @@ void TypeGroupConverter::insertDataSeries( const Reference< XChartType >& rxChar
         }
         catch( Exception& )
         {
-            OSL_ENSURE( false, "TypeGroupConverter::insertDataSeries - cannot add data series" );
+            OSL_FAIL( "TypeGroupConverter::insertDataSeries - cannot add data series" );
         }
     }
 }

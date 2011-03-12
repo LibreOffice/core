@@ -99,7 +99,7 @@ namespace oox { namespace ppt {
         catch( Exception& )
         {
             // should not happen
-            OSL_ENSURE( false, "exception raised" );
+            OSL_FAIL( "exception raised" );
         }
     }
 
@@ -116,7 +116,7 @@ namespace oox { namespace ppt {
         catch( Exception& )
         {
             // should not happen
-            OSL_ENSURE( false, "exception raised" );
+            OSL_FAIL( "exception raised" );
         }
     }
 

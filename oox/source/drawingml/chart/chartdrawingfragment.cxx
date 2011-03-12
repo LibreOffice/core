@@ -74,13 +74,13 @@ void ShapeAnchor::setPos( sal_Int32 nElement, sal_Int32 nParentContext, const OU
             pAnchorPos = &maTo;
         break;
         default:
-            OSL_ENSURE( false, "ShapeAnchor::setPos - unexpected parent element" );
+            OSL_FAIL( "ShapeAnchor::setPos - unexpected parent element" );
     }
     if( pAnchorPos ) switch( nElement )
     {
         case CDR_TOKEN( x ):    pAnchorPos->mfX = rValue.toDouble();    break;
         case CDR_TOKEN( y ):    pAnchorPos->mfY = rValue.toDouble();    break;
-        default:    OSL_ENSURE( false, "ShapeAnchor::setPos - unexpected element" );
+        default:    OSL_FAIL( "ShapeAnchor::setPos - unexpected element" );
     }
 }
 

@@ -118,8 +118,7 @@ BiffType BiffDetector::detectStreamBiffVersion( BinaryInputStream& rInStream )
                             case BIFF_BOF_BIFF4:    eBiff = BIFF4;  break;
                             case BIFF_BOF_BIFF5:    eBiff = BIFF5;  break;
                             case BIFF_BOF_BIFF8:    eBiff = BIFF8;  break;
-                            default:    OSL_ENSURE( false,
-                                OStringBuffer( "lclDetectStreamBiffVersion - unknown BIFF version: 0x" ).
+                            default:    OSL_FAIL( OStringBuffer( "lclDetectStreamBiffVersion - unknown BIFF version: 0x" ).
                                 append( static_cast< sal_Int32 >( nVersion ), 16 ).getStr() );
                         }
                     }

@@ -1398,7 +1398,7 @@ void WorksheetData::insertHyperlink( const CellAddress& rAddress, const OUString
                     }
                     catch( const Exception& )
                     {
-                        OSL_ENSURE( false, "WorksheetData::insertHyperlink - cannot insert text field" );
+                        OSL_FAIL( "WorksheetData::insertHyperlink - cannot insert text field" );
                     }
                 }
             }
@@ -1449,7 +1449,7 @@ void WorksheetData::finalizeValidationRanges() const
                 case XML_textLength:    eType = csss::ValidationType_TEXT_LEN;  break;
                 case XML_time:          eType = csss::ValidationType_TIME;      break;
                 case XML_whole:         eType = csss::ValidationType_WHOLE;     break;
-                default:    OSL_ENSURE( false, "WorksheetData::finalizeValidationRanges - unknown validation type" );
+                default:    OSL_FAIL( "WorksheetData::finalizeValidationRanges - unknown validation type" );
             }
             aValProps.setProperty( PROP_Type, eType );
 
@@ -1460,7 +1460,7 @@ void WorksheetData::finalizeValidationRanges() const
                 case XML_information:   eAlertStyle = csss::ValidationAlertStyle_INFO;      break;
                 case XML_stop:          eAlertStyle = csss::ValidationAlertStyle_STOP;      break;
                 case XML_warning:       eAlertStyle = csss::ValidationAlertStyle_WARNING;   break;
-                default:    OSL_ENSURE( false, "WorksheetData::finalizeValidationRanges - unknown error style" );
+                default:    OSL_FAIL( "WorksheetData::finalizeValidationRanges - unknown error style" );
             }
             aValProps.setProperty( PROP_ErrorAlertStyle, eAlertStyle );
 

@@ -105,7 +105,7 @@ void BorderHandler::attribute(Id rName, Value & rVal)
         case NS_ooxml::LN_CT_Border_themeTint: break;
         case NS_ooxml::LN_CT_Border_themeColor: break;
         default:
-            OSL_ENSURE( false, "unknown attribute");
+            OSL_FAIL( "unknown attribute");
     }
 }
 

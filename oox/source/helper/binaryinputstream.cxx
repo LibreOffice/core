@@ -204,7 +204,7 @@ void BinaryXInputStream::close()
     }
     catch( Exception& )
     {
-        OSL_ENSURE( false, "BinaryXInputStream::close - closing input stream failed" );
+        OSL_FAIL( "BinaryXInputStream::close - closing input stream failed" );
     }
 }
 

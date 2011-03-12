@@ -566,7 +566,7 @@ uno::Reference< text::XTextColumns > SectionPropertyMap::ApplyColumnProperties(
     }
     catch( const uno::Exception& )
     {
-        OSL_ENSURE( false, "Exception in SectionPropertyMap::ApplyColumnProperties");
+        OSL_FAIL( "Exception in SectionPropertyMap::ApplyColumnProperties");
     }
     return xColumns;
 }
@@ -789,7 +789,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             }
             catch( const uno::Exception& )
             {
-                OSL_ENSURE( false, "Exception in SectionPropertyMap::CloseSectionGroup");
+                OSL_FAIL( "Exception in SectionPropertyMap::CloseSectionGroup");
             }
         }
     }
@@ -956,7 +956,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         }
         catch( const uno::Exception& rEx)
         {
-            OSL_ENSURE( false, "Exception in SectionPropertyMap::CloseSectionGroup");
+            OSL_FAIL( "Exception in SectionPropertyMap::CloseSectionGroup");
             (void)rEx;
        }
     }
@@ -975,7 +975,7 @@ void SectionPropertyMap::_ApplyProperties( uno::Reference< beans::XPropertySet >
         }
         catch( const uno::Exception& )
         {
-            OSL_ENSURE( false, "Exception in <PageStyle>::setPropertyValue");
+            OSL_FAIL( "Exception in <PageStyle>::setPropertyValue");
         }
         ++aMapIter;
     }
@@ -1141,7 +1141,7 @@ bool TablePropertyMap::getValue( TablePropertyMapTarget eWhich, sal_Int32& nFill
     }
     else
     {
-        OSL_ENSURE( false, "invalid TablePropertyMapTarget");
+        OSL_FAIL( "invalid TablePropertyMapTarget");
         return false;
     }
 }
@@ -1155,7 +1155,7 @@ void TablePropertyMap::setValue( TablePropertyMapTarget eWhich, sal_Int32 nSet )
         m_aValidValues[eWhich].nValue = nSet;
     }
     else
-        OSL_ENSURE( false, "invalid TablePropertyMapTarget");
+        OSL_FAIL( "invalid TablePropertyMapTarget");
 }
 
 

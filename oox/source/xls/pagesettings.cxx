@@ -927,8 +927,7 @@ Reference< XTextContent > HeaderFooterParser::createField( const OUString& rServ
     }
     catch( Exception& )
     {
-        OSL_ENSURE( false,
-            OStringBuffer( "HeaderFooterParser::createField - error while creating text field \"" ).
+        OSL_FAIL( OStringBuffer( "HeaderFooterParser::createField - error while creating text field \"" ).
             append( OUStringToOString( rServiceName, RTL_TEXTENCODING_ASCII_US ) ).
             append( '"' ).getStr() );
     }

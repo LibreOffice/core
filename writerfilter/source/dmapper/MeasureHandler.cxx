@@ -84,7 +84,7 @@ void MeasureHandler::attribute(Id rName, Value & rVal)
         }
         break;
         default:
-            OSL_ENSURE( false, "unknown attribute");
+            OSL_FAIL( "unknown attribute");
     }
 }
 

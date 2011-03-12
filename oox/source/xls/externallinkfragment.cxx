@@ -521,7 +521,7 @@ void BiffExternalLinkFragment::importCrn()
                 mrStrm.skip( 7 );
             break;
             default:
-                OSL_ENSURE( false, "BiffExternalLinkFragment::importCrn - unknown data type" );
+                OSL_FAIL( "BiffExternalLinkFragment::importCrn - unknown data type" );
                 bLoop = false;
         }
     }

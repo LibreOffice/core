@@ -878,7 +878,7 @@ FunctionProviderImpl::FunctionProviderImpl( FilterType eFilter, BiffType eBiff, 
             nMaxParam = BIFF_MAX_PARAMCOUNT;
         break;
         case FILTER_UNKNOWN:
-            OSL_ENSURE( false, "FunctionProviderImpl::FunctionProviderImpl - invalid filter type" );
+            OSL_FAIL( "FunctionProviderImpl::FunctionProviderImpl - invalid filter type" );
         break;
     }
     OSL_ENSURE( eBiff != BIFF_UNKNOWN, "FunctionProviderImpl::FunctionProviderImpl - invalid BIFF type" );
@@ -1131,7 +1131,7 @@ OpCodeProviderImpl::OpCodeProviderImpl( const FunctionInfoVector& rFuncInfos,
     }
     catch( Exception& )
     {
-        OSL_ENSURE( false, "OpCodeProviderImpl::OpCodeProviderImpl - cannot receive formula opcode mapper" );
+        OSL_FAIL( "OpCodeProviderImpl::OpCodeProviderImpl - cannot receive formula opcode mapper" );
     }
 }
 
@@ -1184,8 +1184,7 @@ bool OpCodeProviderImpl::initOpCode( sal_Int32& ornOpCode, const OpCodeEntrySequ
         ornOpCode = rEntrySeq[ nSpecialId ].Token.OpCode;
         return true;
     }
-    OSL_ENSURE( false,
-        OStringBuffer( "OpCodeProviderImpl::initOpCode - opcode for special offset " ).
+    OSL_FAIL( OStringBuffer( "OpCodeProviderImpl::initOpCode - opcode for special offset " ).
         append( nSpecialId ).append( " not found" ).getStr() );
     return false;
 }
@@ -1205,8 +1204,7 @@ bool OpCodeProviderImpl::initOpCode( sal_Int32& ornOpCode, const ApiTokenMap& rT
         }
         return true;
     }
-    OSL_ENSURE( false,
-        OStringBuffer( "OpCodeProviderImpl::initOpCode - opcode for \"" ).
+    OSL_FAIL( OStringBuffer( "OpCodeProviderImpl::initOpCode - opcode for \"" ).
         append( OUStringToOString( rOdfName, RTL_TEXTENCODING_ASCII_US ) ).
         append( "\" not found" ).getStr() );
     return false;

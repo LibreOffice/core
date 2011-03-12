@@ -249,7 +249,7 @@ ContextHandlerRef OoxPivotCacheRecordsFragment::onCreateContext( sal_Int32 nElem
                 case XLS_TOKEN( b ):    aItem.readBool( rAttribs );                         break;
                 case XLS_TOKEN( e ):    aItem.readError( rAttribs, getUnitConverter() );    break;
                 case XLS_TOKEN( x ):    aItem.readIndex( rAttribs );                        break;
-                default:    OSL_ENSURE( false, "OoxPivotCacheRecordsFragment::onCreateContext - unexpected element" );
+                default:    OSL_FAIL( "OoxPivotCacheRecordsFragment::onCreateContext - unexpected element" );
             }
             mrPivotCache.writeSourceDataCell( *this, mnCol, mnRow, aItem );
             ++mnCol;
@@ -319,7 +319,7 @@ void OoxPivotCacheRecordsFragment::importPCRecordItem( sal_Int32 nRecId, RecordI
             case OOBIN_ID_PCITEM_BOOL:      aItem.readBool( rStrm );    break;
             case OOBIN_ID_PCITEM_ERROR:     aItem.readError( rStrm );   break;
             case OOBIN_ID_PCITEM_INDEX:     aItem.readIndex( rStrm );   break;
-            default:    OSL_ENSURE( false, "OoxPivotCacheRecordsFragment::importPCRecordItem - unexpected record" );
+            default:    OSL_FAIL( "OoxPivotCacheRecordsFragment::importPCRecordItem - unexpected record" );
         }
         mrPivotCache.writeSourceDataCell( *this, mnCol, mnRow, aItem );
         ++mnCol;

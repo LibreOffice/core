@@ -130,7 +130,7 @@ void OLEHandler::attribute(Id rName, Value & rVal)
         }
         break;
         default:
-            OSL_ENSURE( false, "unknown attribute");
+            OSL_FAIL( "unknown attribute");
     }
 }
 
@@ -180,7 +180,7 @@ void OLEHandler::sprm(Sprm & rSprm)
         break;
         default:
         {
-            OSL_ENSURE( false, "unknown attribute");
+            OSL_FAIL( "unknown attribute");
         }
     }
 }
@@ -230,7 +230,7 @@ void OLEHandler::sprm(Sprm & rSprm)
     catch( const uno::Exception& rEx)
     {
         (void)rEx;
-        OSL_ENSURE(false, "exception in OLEHandler::createOLEObject");
+        OSL_FAIL("exception in OLEHandler::createOLEObject");
     }
     return sRet;
 }

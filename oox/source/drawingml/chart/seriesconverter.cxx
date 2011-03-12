@@ -293,7 +293,7 @@ void ErrorBarConverter::convertFromModel( const Reference< XDataSeries >& rxData
                 aBarProp.setProperty( PROP_ErrorBarStyle, cssc::ErrorBarStyle::STANDARD_ERROR );
             break;
             default:
-                OSL_ENSURE( false, "ErrorBarConverter::convertFromModel - unknown error bar type" );
+                OSL_FAIL( "ErrorBarConverter::convertFromModel - unknown error bar type" );
                 xErrorBar.clear();
         }
 
@@ -307,13 +307,13 @@ void ErrorBarConverter::convertFromModel( const Reference< XDataSeries >& rxData
             {
                 case XML_x: aSeriesProp.setProperty( PROP_ErrorBarX, xErrorBar );   break;
                 case XML_y: aSeriesProp.setProperty( PROP_ErrorBarY, xErrorBar );   break;
-                default:    OSL_ENSURE( false, "ErrorBarConverter::convertFromModel - invalid error bar direction" );
+                default:    OSL_FAIL( "ErrorBarConverter::convertFromModel - invalid error bar direction" );
             }
         }
     }
     catch( Exception& )
     {
-        OSL_ENSURE( false, "ErrorBarConverter::convertFromModel - error while creating error bars" );
+        OSL_FAIL( "ErrorBarConverter::convertFromModel - error while creating error bars" );
     }
 }
 
@@ -385,7 +385,7 @@ void TrendlineConverter::convertFromModel( const Reference< XDataSeries >& rxDat
             case XML_movingAvg: /* #i66819# moving average trendlines not supported */                              break;
             case XML_poly:      /* #i20819# polynomial trendlines not supported */                                  break;
             case XML_power:     aServiceName = CREATE_OUSTRING( "com.sun.star.chart2.PotentialRegressionCurve" );   break;
-            default:            OSL_ENSURE( false, "TrendlineConverter::convertFromModel - unknown trendline type" );
+            default:            OSL_FAIL( "TrendlineConverter::convertFromModel - unknown trendline type" );
         }
         if( aServiceName.getLength() > 0 )
         {
@@ -416,7 +416,7 @@ void TrendlineConverter::convertFromModel( const Reference< XDataSeries >& rxDat
     }
     catch( Exception& )
     {
-        OSL_ENSURE( false, "TrendlineConverter::convertFromModel - error while creating trendline" );
+        OSL_FAIL( "TrendlineConverter::convertFromModel - error while creating trendline" );
     }
 }
 

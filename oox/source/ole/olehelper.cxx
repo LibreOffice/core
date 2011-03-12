@@ -158,7 +158,7 @@ StdFontInfo::StdFontInfo( const ::rtl::OUString& rName, sal_uInt32 nHeight,
         case OLE_COLORTYPE_SYSCOLOR:
             return rGraphicHelper.getSystemColor( STATIC_ARRAY_SELECT( spnSystemColors, nOleColor & OLE_SYSTEMCOLOR_MASK, XML_TOKEN_INVALID ), API_RGB_WHITE );
     }
-    OSL_ENSURE( false, "OleHelper::decodeOleColor - unknown color type" );
+    OSL_FAIL( "OleHelper::decodeOleColor - unknown color type" );
     return API_RGB_BLACK;
 }
 
@@ -281,7 +281,7 @@ StdFontInfo::StdFontInfo( const ::rtl::OUString& rName, sal_uInt32 nHeight,
             }
             else
             {
-                OSL_ENSURE( false, "OleHelper::importStdHlink - unsupported hyperlink moniker" );
+                OSL_FAIL( "OleHelper::importStdHlink - unsupported hyperlink moniker" );
                 return false;
             }
         }

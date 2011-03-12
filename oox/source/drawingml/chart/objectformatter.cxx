@@ -1178,8 +1178,7 @@ void ObjectFormatter::convertNumberFormat( PropertySet& rPropSet, const NumberFo
         }
         catch( Exception& )
         {
-            OSL_ENSURE( false,
-                OStringBuffer( "ObjectFormatter::convertNumberFormat - cannot create number format '" ).
+            OSL_FAIL( OStringBuffer( "ObjectFormatter::convertNumberFormat - cannot create number format '" ).
                 append( OUStringToOString( rNumberFormat.maFormatCode, osl_getThreadTextEncoding() ) ).append( '\'' ).getStr() );
         }
     }

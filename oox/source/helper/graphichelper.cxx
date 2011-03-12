@@ -141,7 +141,7 @@ GraphicHelper::GraphicHelper( const Reference< XMultiServiceFactory >& rxGlobalF
     }
     catch( Exception& )
     {
-        OSL_ENSURE( false, "GraphicHelper::GraphicHelper - cannot get output device info" );
+        OSL_FAIL( "GraphicHelper::GraphicHelper - cannot get output device info" );
     }
     mfPixelPerHmmX = maDeviceInfo.PixelPerMeterX / 100000.0;
     mfPixelPerHmmY = maDeviceInfo.PixelPerMeterY / 100000.0;
@@ -160,13 +160,13 @@ sal_Int32 GraphicHelper::getSystemColor( sal_Int32 nToken, sal_Int32 nDefaultRgb
 
 sal_Int32 GraphicHelper::getSchemeColor( sal_Int32 /*nToken*/ ) const
 {
-    OSL_ENSURE( false, "GraphicHelper::getSchemeColor - scheme colors not implemented" );
+    OSL_FAIL( "GraphicHelper::getSchemeColor - scheme colors not implemented" );
     return API_RGB_TRANSPARENT;
 }
 
 sal_Int32 GraphicHelper::getPaletteColor( sal_Int32 /*nPaletteIdx*/ ) const
 {
-    OSL_ENSURE( false, "GraphicHelper::getPaletteColor - palette colors not implemented" );
+    OSL_FAIL( "GraphicHelper::getPaletteColor - palette colors not implemented" );
     return API_RGB_TRANSPARENT;
 }
 

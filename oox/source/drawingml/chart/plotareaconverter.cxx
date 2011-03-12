@@ -303,7 +303,7 @@ void WallFloorConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
         {
             case OBJECTTYPE_FLOOR:  aPropSet.set( rxDiagram->getFloor() );  break;
             case OBJECTTYPE_WALL:   aPropSet.set( rxDiagram->getWall() );   break;
-            default:                OSL_ENSURE( false, "WallFloorConverter::convertFromModel - invalid object type" );
+            default:                OSL_FAIL( "WallFloorConverter::convertFromModel - invalid object type" );
         }
         if( aPropSet.is() )
             getFormatter().convertFrameFormatting( aPropSet, mrModel.mxShapeProp, mrModel.mxPicOptions.getOrCreate(), eObjType );
@@ -440,7 +440,7 @@ void PlotAreaConverter::convertPositionFromModel()
                 xPositioning->setDiagramPositionIncludingAxes( aDiagramRect );
             break;
             default:
-                OSL_ENSURE( false, "PlotAreaConverter::convertPositionFromModel - unknown positioning target" );
+                OSL_FAIL( "PlotAreaConverter::convertPositionFromModel - unknown positioning target" );
         }
     }
     catch( Exception& )

@@ -198,7 +198,7 @@ GraphicHelper::GraphicHelper( const uno::Reference< frame::XModel >& rxModel )
     }
     catch( uno::Exception& )
     {
-        OSL_ENSURE( false, "GraphicHelper::GraphicHelper - cannot get output device info" );
+        OSL_FAIL( "GraphicHelper::GraphicHelper - cannot get output device info" );
     }
     mfPixelPerHmmX = maDeviceInfo.PixelPerMeterX / 100000.0;
     mfPixelPerHmmY = maDeviceInfo.PixelPerMeterY / 100000.0;

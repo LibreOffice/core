@@ -377,7 +377,7 @@ void OoxAutoFilterContext::setAutoFilter()
     Reference< XDatabaseRanges > xDBRanges = getDatabaseRanges();
     if ( !xDBRanges.is() )
     {
-        OSL_ENSURE( false, "OoxAutoFilterContext::setAutoFilter: DBRange empty" );
+        OSL_FAIL( "OoxAutoFilterContext::setAutoFilter: DBRange empty" );
         return;
     }
 
@@ -404,7 +404,7 @@ void OoxAutoFilterContext::setAutoFilter()
     }
     else
     {
-        OSL_ENSURE(false, "OoxAutoFilterContext::setAutoFilter: descriptor is empty");
+        OSL_FAIL("OoxAutoFilterContext::setAutoFilter: descriptor is empty");
         return;
     }
 
@@ -413,7 +413,7 @@ void OoxAutoFilterContext::setAutoFilter()
     Reference< XExtendedSheetFilterDescriptor > xExtDescriptor( xDescriptor, UNO_QUERY );
     if ( !xExtDescriptor.is() )
     {
-        OSL_ENSURE(false, "OoxAutoFilterContext::setAutoFilter: extended descriptor is empty");
+        OSL_FAIL("OoxAutoFilterContext::setAutoFilter: extended descriptor is empty");
         return;
     }
 
@@ -742,7 +742,7 @@ void OoxAutoFilterContext::importCustomFilter( const AttributeList& rAttribs )
         }
         break;
         default:
-            OSL_ENSURE( false, "OoxAutoFilterContext::importCustomFilter: unhandled case" );
+            OSL_FAIL( "OoxAutoFilterContext::importCustomFilter: unhandled case" );
     }
 }
 

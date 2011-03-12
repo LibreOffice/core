@@ -73,7 +73,7 @@ void BinaryXOutputStream::writeData( const StreamDataSequence& rData )
     }
     catch( Exception& )
     {
-        OSL_ENSURE( false, "BinaryXOutputStream::writeData - stream read error" );
+        OSL_FAIL( "BinaryXOutputStream::writeData - stream read error" );
     }
 }
 
@@ -104,7 +104,7 @@ void BinaryXOutputStream::close()
     }
     catch( Exception& )
     {
-        OSL_ENSURE( false, "BinaryXOutputStream::close - closing output stream failed" );
+        OSL_FAIL( "BinaryXOutputStream::close - closing output stream failed" );
     }
 }
 

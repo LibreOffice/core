@@ -102,7 +102,7 @@ bool lclExtractDouble( double& orfValue, sal_Int32& ornEndPos, const OUString& r
     if( (nEndPos + 1 == rValue.getLength()) && (rValue[ nEndPos ] == '%') )
         return fValue / 100.0;
 
-    OSL_ENSURE( false, "ConversionHelper::decodePercent - unknown measure unit" );
+    OSL_FAIL( "ConversionHelper::decodePercent - unknown measure unit" );
     return fDefValue;
 }
 
@@ -116,7 +116,7 @@ bool lclExtractDouble( double& orfValue, sal_Int32& ornEndPos, const OUString& r
     // TODO: according to spec, value may contain "auto"
     if( rValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "auto" ) ) )
     {
-        OSL_ENSURE( false, "ConversionHelper::decodeMeasureToEmu - special value 'auto' must be handled by caller" );
+        OSL_FAIL( "ConversionHelper::decodeMeasureToEmu - special value 'auto' must be handled by caller" );
         return nRefValue;
     }
 
@@ -160,7 +160,7 @@ bool lclExtractDouble( double& orfValue, sal_Int32& ornEndPos, const OUString& r
     }
     else if( bDefaultAsPixel || (aUnit.getLength() > 0) )   // default as EMU and no unit -> do nothing
     {
-        OSL_ENSURE( false, "ConversionHelper::decodeMeasureToEmu - unknown measure unit" );
+        OSL_FAIL( "ConversionHelper::decodeMeasureToEmu - unknown measure unit" );
         fValue = nRefValue;
     }
     return static_cast< sal_Int32 >( fValue + 0.5 );
@@ -281,7 +281,7 @@ void lclGetColor( Color& orDmlColor, const GraphicHelper& rGraphicHelper,
         }
     }
 
-    OSL_ENSURE( false, OStringBuffer( "lclGetColor - invalid VML color name '" ).
+    OSL_FAIL( OStringBuffer( "lclGetColor - invalid VML color name '" ).
         append( OUStringToOString( roVmlColor.get(), RTL_TEXTENCODING_ASCII_US ) ).append( '\'' ).getStr() );
     orDmlColor.setSrgbClr( nDefaultRgb );
 }

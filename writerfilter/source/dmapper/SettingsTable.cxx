@@ -211,7 +211,7 @@ void SettingsTable::sprm(Sprm& rSprm)
         break;
     default:
     {
-        OSL_ENSURE( false, "unknown sprmid in SettingsTable::sprm()");
+        OSL_FAIL( "unknown sprmid in SettingsTable::sprm()");
     }
     }
 

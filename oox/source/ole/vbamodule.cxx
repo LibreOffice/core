@@ -147,7 +147,7 @@ void VbaModule::importDirRecords( BinaryInputStream& rDirStrm )
         {
 #define OOX_ENSURE_RECORDSIZE( cond ) OSL_ENSURE( cond, "VbaModule::importDirRecords - invalid record size" )
             case VBA_ID_MODULENAME:
-                OSL_ENSURE( false, "VbaModule::importDirRecords - unexpected MODULENAME record" );
+                OSL_FAIL( "VbaModule::importDirRecords - unexpected MODULENAME record" );
                 maName = aRecStrm.readCharArrayUC( nRecSize, meTextEnc );
             break;
             case VBA_ID_MODULENAMEUNICODE:
@@ -191,7 +191,7 @@ void VbaModule::importDirRecords( BinaryInputStream& rDirStrm )
                 mbPrivate = true;
             break;
             default:
-                OSL_ENSURE( false, "VbaModule::importDirRecords - unknown module record" );
+                OSL_FAIL( "VbaModule::importDirRecords - unknown module record" );
 #undef OOX_ENSURE_RECORDSIZE
         }
     }
@@ -353,7 +353,7 @@ void VbaModule::createModule( const OUString& rVBASourceCode,
     }
     catch( Exception& )
     {
-        OSL_ENSURE( false, "VbaModule::createModule - cannot insert module into library" );
+        OSL_FAIL( "VbaModule::createModule - cannot insert module into library" );
     }
 }
 

@@ -102,7 +102,7 @@ sal_Int64 BinaryXSeekableStream::getLength() const
     }
     catch( Exception& )
     {
-        OSL_ENSURE( false, "BinaryXSeekableStream::getLength - exception caught" );
+        OSL_FAIL( "BinaryXSeekableStream::getLength - exception caught" );
     }
     return -1;
 }
@@ -115,7 +115,7 @@ sal_Int64 BinaryXSeekableStream::tell() const
     }
     catch( Exception& )
     {
-        OSL_ENSURE( false, "BinaryXSeekableStream::tell - exception caught" );
+        OSL_FAIL( "BinaryXSeekableStream::tell - exception caught" );
     }
     return -1;
 }

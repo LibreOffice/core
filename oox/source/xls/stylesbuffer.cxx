@@ -372,7 +372,7 @@ void Color::importColor( const AttributeList& rAttribs )
         setIndexed( rAttribs.getInteger( XML_indexed, -1 ), rAttribs.getDouble( XML_tint, 0.0 ) );
     else
     {
-        OSL_ENSURE( false, "Color::importColor - unknown color type" );
+        OSL_FAIL( "Color::importColor - unknown color type" );
         setAuto();
     }
 }
@@ -408,7 +408,7 @@ void Color::importColor( RecordInputStream& rStrm )
             rStrm.skip( 4 );
         break;
         default:
-            OSL_ENSURE( false, "Color::importColor - unknown color type" );
+            OSL_FAIL( "Color::importColor - unknown color type" );
             setAuto();
             rStrm.skip( 4 );
     }
@@ -570,7 +570,7 @@ sal_Int32 ColorPalette::getColor( sal_Int32 nPaletteIdx ) const
         case OOX_COLOR_NOTEBACK:        nColor = getBaseFilter().getGraphicHelper().getSystemColor( XML_infoBk );       break;
         case OOX_COLOR_NOTETEXT:        nColor = getBaseFilter().getGraphicHelper().getSystemColor( XML_infoText );     break;
         case OOX_COLOR_FONTAUTO:        nColor = API_RGB_TRANSPARENT;                                                   break;
-        default:                        OSL_ENSURE( false, "ColorPalette::getColor - unknown color index" );
+        default:                        OSL_FAIL( "ColorPalette::getColor - unknown color index" );
     }
     return nColor;
 }
@@ -887,7 +887,7 @@ void Font::importDxfFlag( sal_Int32 nElement, RecordInputStream& rStrm )
             maUsedFlags.mbShadowUsed = true;
         break;
         default:
-            OSL_ENSURE( false, "Font::importDxfFlag - unexpected element identifier" );
+            OSL_FAIL( "Font::importDxfFlag - unexpected element identifier" );
     }
 }
 

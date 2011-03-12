@@ -112,7 +112,7 @@ void lclConvertPresetDash( LineDash& orLineDash, sal_Int32 nPresetDash )
         case XML_sysDashDotDot: lclSetDashData( orLineDash, 2, 1, 1, 3, 1 );    break;
 
         default:
-            OSL_ENSURE( false, "lclConvertPresetDash - unsupported preset dash" );
+            OSL_FAIL( "lclConvertPresetDash - unsupported preset dash" );
             lclSetDashData( orLineDash, 0, 0, 1, 4, 3 );
     }
 }
@@ -126,7 +126,7 @@ void lclConvertCustomDash( LineDash& orLineDash, const LineProperties::DashStopV
 {
     if( rCustomDash.empty() )
     {
-        OSL_ENSURE( false, "lclConvertCustomDash - unexpected empty custom dash" );
+        OSL_FAIL( "lclConvertCustomDash - unexpected empty custom dash" );
         lclSetDashData( orLineDash, 0, 0, 1, 4, 3 );
         return;
     }

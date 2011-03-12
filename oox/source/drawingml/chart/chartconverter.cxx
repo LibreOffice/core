@@ -153,7 +153,7 @@ Reference< XDataSequence > ChartConverter::createDataSequence( const Reference< 
         }
         catch( Exception& )
         {
-            OSL_ENSURE( false, "ExcelChartConverter::createDataSequence - cannot create data sequence" );
+            OSL_FAIL( "ExcelChartConverter::createDataSequence - cannot create data sequence" );
         }
     }
 

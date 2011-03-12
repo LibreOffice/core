@@ -283,13 +283,13 @@ BiffDecoderRef lclReadFilePassBiff8( BiffInputStream& rStrm )
                     xDecoder = lclReadFilePass_CryptoApi( rStrm );
                 break;
                 default:
-                    OSL_ENSURE( false, "lclReadFilePassBiff8 - unknown BIFF8 encryption sub mode" );
+                    OSL_FAIL( "lclReadFilePassBiff8 - unknown BIFF8 encryption sub mode" );
             }
         }
         break;
 
         default:
-            OSL_ENSURE( false, "lclReadFilePassBiff8 - unknown encryption mode" );
+            OSL_FAIL( "lclReadFilePassBiff8 - unknown encryption mode" );
     }
     return xDecoder;
 }

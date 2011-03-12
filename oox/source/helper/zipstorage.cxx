@@ -97,7 +97,7 @@ ZipStorage::ZipStorage(
     }
     catch( Exception& )
     {
-        OSL_ENSURE( false, "ZipStorage::ZipStorage - cannot open output storage" );
+        OSL_FAIL( "ZipStorage::ZipStorage - cannot open output storage" );
     }
 }
 

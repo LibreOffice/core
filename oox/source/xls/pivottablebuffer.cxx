@@ -694,7 +694,7 @@ void PivotTableField::convertDataField( const PTDataFieldModel& rDataField )
             case XML_stdDevp:   eAggFunc = GeneralFunction_STDEVP;      break;
             case XML_var:       eAggFunc = GeneralFunction_VAR;         break;
             case XML_varp:      eAggFunc = GeneralFunction_VARP;        break;
-            default:            OSL_ENSURE( false, "PivotTableField::convertDataField - unknown aggregation function" );
+            default:            OSL_FAIL( "PivotTableField::convertDataField - unknown aggregation function" );
         }
         aPropSet.setProperty( PROP_Function, eAggFunc );
 
@@ -1423,7 +1423,7 @@ void PivotTable::finalizeImport()
             }
             catch( Exception& )
             {
-                OSL_ENSURE( false, "PivotTable::finalizeImport - exception while creating the DataPilot table" );
+                OSL_FAIL( "PivotTable::finalizeImport - exception while creating the DataPilot table" );
             }
         }
     }

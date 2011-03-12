@@ -592,7 +592,7 @@ void Color::toRgb() const
         }
         break;
         default:
-            OSL_ENSURE( false, "Color::toRgb - unexpected color mode" );
+            OSL_FAIL( "Color::toRgb - unexpected color mode" );
     }
 }
 
@@ -613,7 +613,7 @@ void Color::toCrgb() const
             // nothing to do
         break;
         default:
-            OSL_ENSURE( false, "Color::toCrgb - unexpected color mode" );
+            OSL_FAIL( "Color::toCrgb - unexpected color mode" );
     }
 }
 
@@ -660,7 +660,7 @@ void Color::toHsl() const
             // nothing to do
         break;
         default:
-            OSL_ENSURE( false, "Color::toHsl - unexpected color mode" );
+            OSL_FAIL( "Color::toHsl - unexpected color mode" );
     }
 }
 

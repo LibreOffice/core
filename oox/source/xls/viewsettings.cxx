@@ -784,7 +784,7 @@ void ViewSettings::finalizeImport()
     }
     catch( Exception& )
     {
-        OSL_ENSURE( false, "ViewSettings::finalizeImport - cannot create document view settings" );
+        OSL_FAIL( "ViewSettings::finalizeImport - cannot create document view settings" );
     }
 
     /*  Set visible area to be used if this document is an embedded OLE object.

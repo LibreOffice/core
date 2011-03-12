@@ -551,7 +551,7 @@ void FilterBase::setMediaDescriptor( const Sequence< PropertyValue >& rMediaDesc
     switch( mxImpl->meDirection )
     {
         case FILTERDIRECTION_UNKNOWN:
-            OSL_ENSURE( false, "FilterBase::setMediaDescriptor - invalid filter direction" );
+            OSL_FAIL( "FilterBase::setMediaDescriptor - invalid filter direction" );
         break;
         case FILTERDIRECTION_IMPORT:
             mxImpl->maMediaDesc.addInputStream();
