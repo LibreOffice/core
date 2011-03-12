@@ -385,7 +385,7 @@ bool Model::setSimpleContent( const XNode_t& xConstNode,
 
         default:
         {
-            OSL_ENSURE( false, "bound to unknown node type?" );
+            OSL_FAIL( "bound to unknown node type?" );
         }
         break;
 

@@ -992,7 +992,7 @@ Any OControlModel::getPropertyDefaultByHandle( sal_Int32 _nHandle ) const
             if ( m_aPropertyBagHelper.hasDynamicPropertyByHandle( _nHandle ) )
                 m_aPropertyBagHelper.getDynamicPropertyDefaultByHandle( _nHandle, aReturn );
             else
-                OSL_ENSURE( false, "OControlModel::convertFastPropertyValue: unknown handle!" );
+                OSL_FAIL( "OControlModel::convertFastPropertyValue: unknown handle!" );
     }
     return aReturn;
 }
@@ -1050,7 +1050,7 @@ sal_Bool OControlModel::convertFastPropertyValue(
             if ( m_aPropertyBagHelper.hasDynamicPropertyByHandle( _nHandle ) )
                 bModified = m_aPropertyBagHelper.convertDynamicFastPropertyValue( _nHandle, _rValue, _rConvertedValue, _rOldValue );
             else
-                OSL_ENSURE( false, "OControlModel::convertFastPropertyValue: unknown handle!" );
+                OSL_FAIL( "OControlModel::convertFastPropertyValue: unknown handle!" );
             break;
     }
     return bModified;
@@ -1084,7 +1084,7 @@ void OControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const A
             if ( m_aPropertyBagHelper.hasDynamicPropertyByHandle( _nHandle ) )
                 m_aPropertyBagHelper.setDynamicFastPropertyValue( _nHandle, _rValue );
             else
-                OSL_ENSURE( false, "OControlModel::setFastPropertyValue_NoBroadcast: unknown handle!" );
+                OSL_FAIL( "OControlModel::setFastPropertyValue_NoBroadcast: unknown handle!" );
             break;
     }
 }

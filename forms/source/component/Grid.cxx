@@ -256,7 +256,7 @@ Reference< XRowSet > SAL_CALL OGridControlModel::getRowSet(  ) throw (RuntimeExc
 //------------------------------------------------------------------------------
 void SAL_CALL OGridControlModel::setRowSet( const Reference< XRowSet >& /*_rxDataSource*/ ) throw (RuntimeException)
 {
-    OSL_ENSURE( false, "OGridControlModel::setRowSet: not supported!" );
+    OSL_FAIL( "OGridControlModel::setRowSet: not supported!" );
 }
 
 //--------------------------------------------------------------------

@@ -1134,7 +1134,7 @@ namespace basctl
             }
         }
 
-        OSL_ENSURE( false, "ScriptDocument::getDocumentForBasicManager: did not find a document for this manager!" );
+        OSL_FAIL( "ScriptDocument::getDocumentForBasicManager: did not find a document for this manager!" );
         return ScriptDocument( NoDocument );
     }
 

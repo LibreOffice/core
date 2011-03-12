@@ -2003,7 +2003,7 @@ void Document::handleParagraphNotifications()
                 break;
             }
         default:
-            OSL_ENSURE(false, "bad buffered hint");
+            OSL_FAIL( "bad buffered hint");
             break;
         }
     }

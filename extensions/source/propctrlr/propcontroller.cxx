@@ -1257,7 +1257,7 @@ namespace pcr
                     ::rtl::OString sMessage( "OPropertyBrowserController::UpdateUI: empty category provided for property '" );
                     sMessage += ::rtl::OString( property->second.Name.getStr(), property->second.Name.getLength(), osl_getThreadTextEncoding() );
                     sMessage += "'!";
-                    OSL_ENSURE( false, sMessage );
+                    OSL_FAIL( sMessage );
                 }
             #endif
                 // finally insert this property control
@@ -1365,7 +1365,7 @@ namespace pcr
                 // also okay, we expect that the handler has disabled the UI as necessary
                 break;
             default:
-                OSL_ENSURE( false, "OPropertyBrowserController::Clicked: unknown result value!" );
+                OSL_FAIL( "OPropertyBrowserController::Clicked: unknown result value!" );
                 break;
             }
         }

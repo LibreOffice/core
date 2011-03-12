@@ -167,7 +167,7 @@ bool RenameModule( Window* pErrorParent, const ScriptDocument& rDocument, const 
 {
     if ( !rDocument.hasModule( rLibName, rOldName ) )
     {
-        OSL_ENSURE( false, "BasicIDE::RenameModule: old module name is invalid!" );
+        OSL_FAIL( "BasicIDE::RenameModule: old module name is invalid!" );
         return false;
     }
 
@@ -300,7 +300,7 @@ bool RenameModule( Window* pErrorParent, const ScriptDocument& rDocument, const 
                                             xLimitToDocument.set( xScripts, UNO_QUERY );
                                             if ( !xLimitToDocument.is() )
                                             {
-                                                OSL_ENSURE( false, "BasicIDE::ChooseMacro: a script container which is no document!?" );
+                                                OSL_FAIL( "BasicIDE::ChooseMacro: a script container which is no document!?" );
                                                 xLimitToDocument = rxLimitToDocument;
                                             }
                                         }

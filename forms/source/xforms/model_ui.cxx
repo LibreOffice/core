@@ -257,7 +257,7 @@ OUString Model::getDefaultBindingExpressionForNode(
 
         default:
             // unknown type? fail!
-            OSL_ENSURE( false, "unknown node type!" );
+            OSL_FAIL( "unknown node type!" );
             xCurrent.set( NULL );
             aBuffer.makeStringAndClear();
             // we'll remove the slash below
@@ -332,7 +332,7 @@ OUString Model::getNodeDisplayName( const XNode_t& xNode,
 
     default:
         // unknown type? fail!
-        OSL_ENSURE( false, "unknown node type!" );
+        OSL_FAIL( "unknown node type!" );
         break;
     }
 
@@ -355,7 +355,7 @@ OUString Model::getNodeName( const XNode_t& xNode )
     case NodeType_DOCUMENT_NODE:
     default:
         // unknown type? fail!
-        OSL_ENSURE( false, "no name for this node type!" );
+        OSL_FAIL( "no name for this node type!" );
         break;
     }
 
@@ -684,7 +684,7 @@ Model::XNode_t Model::renameNode( const XNode_t& xNode,
     }
     else
     {
-        OSL_ENSURE( false, "can't rename this node type" );
+        OSL_FAIL( "can't rename this node type" );
     }
 
     // adjust bindings (if necessary):

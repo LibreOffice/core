@@ -428,7 +428,7 @@ bool StringRepresentation::convertGenericValueToString( const uno::Any& _rValue,
 
     // some structs
     case uno::TypeClass_STRUCT:
-        OSL_ENSURE( false, "StringRepresentation::convertGenericValueToString(STRUCT): this is dead code - isn't it?" );
+        OSL_FAIL( "StringRepresentation::convertGenericValueToString(STRUCT): this is dead code - isn't it?" );
         if ( _rValue.getValueType().equals( ::getCppuType( static_cast< util::Date* >( NULL ) ) ) )
         {
             // weird enough, the string representation of dates, as used
@@ -572,7 +572,7 @@ bool StringRepresentation::convertStringToGenericValue( const ::rtl::OUString& _
     break;
 
     case uno::TypeClass_STRUCT:
-        OSL_ENSURE( false, "StringRepresentation::convertStringToGenericValue(STRUCT): this is dead code - isn't it?" );
+        OSL_FAIL( "StringRepresentation::convertStringToGenericValue(STRUCT): this is dead code - isn't it?" );
         if ( _rTargetType.equals( ::getCppuType( static_cast< util::Date* >( NULL ) ) ) )
         {
             // weird enough, the string representation of dates, as used

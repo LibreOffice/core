@@ -516,7 +516,7 @@ namespace pcr
             }
             catch( const UnknownPropertyException& )
             {
-                OSL_ENSURE( false, "GenericPropertyHandler::addPropertyChangeListener:\nThe inspected component does not allow registering for all properties at once! This violates the interface contract!" );
+                OSL_FAIL( "GenericPropertyHandler::addPropertyChangeListener:\nThe inspected component does not allow registering for all properties at once! This violates the interface contract!" );
             }
         }
     }
@@ -533,7 +533,7 @@ namespace pcr
             }
             catch( const UnknownPropertyException& )
             {
-                OSL_ENSURE( false, "GenericPropertyHandler::removePropertyChangeListener:\nThe inspected component does not allow de-registering for all properties at once! This violates the interface contract!" );
+                OSL_FAIL( "GenericPropertyHandler::removePropertyChangeListener:\nThe inspected component does not allow de-registering for all properties at once! This violates the interface contract!" );
             }
         }
         m_aPropertyListeners.removeInterface( _rxListener );

@@ -542,7 +542,7 @@ void _SvxMacroTabPage::DisplayAppEvents( bool appEvents)
         EventsHash::iterator h_it = eventsHash->find( sEventName );
         if( h_it == eventsHash->end() )
         {
-            OSL_ENSURE( false, "_SvxMacroTabPage::DisplayAppEvents: something's suspicious here!" );
+            OSL_FAIL( "_SvxMacroTabPage::DisplayAppEvents: something's suspicious here!" );
             continue;
         }
 

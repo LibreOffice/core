@@ -178,7 +178,7 @@ bool RenameDialog( Window* pErrorParent, const ScriptDocument& rDocument, const 
 {
     if ( !rDocument.hasDialog( rLibName, rOldName ) )
     {
-        OSL_ENSURE( false, "BasicIDE::RenameDialog: old module name is invalid!" );
+        OSL_FAIL( "BasicIDE::RenameDialog: old module name is invalid!" );
         return false;
     }
 

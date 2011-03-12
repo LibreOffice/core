@@ -102,7 +102,7 @@ namespace frm
             if ( pAsciiCommandName != NULL )
                 return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:" ) ) + ::rtl::OUString::createFromAscii( pAsciiCommandName );
 
-            OSL_ENSURE( false, "lcl_getCommandURL: unknown FormFeature!" );
+            OSL_FAIL( "lcl_getCommandURL: unknown FormFeature!" );
             return ::rtl::OUString();
         }
     }

@@ -488,7 +488,7 @@ sal_Bool OImageControlModel::impl_handleNewImageURL_lck( ValueChangeInstigator _
     break;
 
     case ImageStoreInvalid:
-        OSL_ENSURE( false, "OImageControlModel::impl_handleNewImageURL_lck: image storage type type!" );
+        OSL_FAIL( "OImageControlModel::impl_handleNewImageURL_lck: image storage type type!" );
         break;
     }
 
@@ -588,7 +588,7 @@ Any OImageControlModel::translateDbColumnToControlValue()
         return makeAny( sImageLink );
     }
     case ImageStoreInvalid:
-        OSL_ENSURE( false, "OImageControlModel::translateDbColumnToControlValue: invalid field type!" );
+        OSL_FAIL( "OImageControlModel::translateDbColumnToControlValue: invalid field type!" );
         break;
     }
     return Any();
@@ -630,7 +630,7 @@ void OImageControlModel::doSetControlValue( const Any& _rValue )
     break;
 
     case ImageStoreInvalid:
-        OSL_ENSURE( false, "OImageControlModel::doSetControlValue: invalid field type!" );
+        OSL_FAIL( "OImageControlModel::doSetControlValue: invalid field type!" );
         break;
 
     }   // switch ( lcl_getImageStoreType( getFieldType() ) )

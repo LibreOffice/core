@@ -339,7 +339,7 @@ namespace frm
         break;
 
         case PROPERTY_ID_VALUE_SEQ :
-            OSL_ENSURE( false, "ValueItemList is read-only!" );
+            OSL_FAIL( "ValueItemList is read-only!" );
             throw PropertyVetoException();
 
         case PROPERTY_ID_DEFAULT_SELECT_SEQ :
@@ -390,7 +390,7 @@ namespace frm
             break;
 
         case PROPERTY_ID_VALUE_SEQ :
-            OSL_ENSURE( false, "ValueItemList is read-only!" );
+            OSL_FAIL( "ValueItemList is read-only!" );
             throw PropertyVetoException();
 
         case PROPERTY_ID_DEFAULT_SELECT_SEQ :
@@ -894,7 +894,7 @@ namespace frm
                 }
                 break;
                 default:
-                    OSL_ENSURE( false, "OListBoxModel::loadData: unreachable!" );
+                    OSL_FAIL( "OListBoxModel::loadData: unreachable!" );
                     break;
             }
         }
@@ -996,7 +996,7 @@ namespace frm
         size_t selectedValue = aSelectedIndices[0];
         if ( selectedValue >= aValues.size() )
         {
-            OSL_ENSURE( false, "OListBoxModel::getFirstSelectedValue: inconsistent selection/valuelist!" );
+            OSL_FAIL( "OListBoxModel::getFirstSelectedValue: inconsistent selection/valuelist!" );
             return s_aEmptyVaue;
         }
 
@@ -1035,7 +1035,7 @@ namespace frm
         Reference< XPropertySet > xBoundField( getField() );
         if ( !xBoundField.is() )
         {
-            OSL_ENSURE( false, "OListBoxModel::translateDbColumnToControlValue: no field? How could that happen?!" );
+            OSL_FAIL( "OListBoxModel::translateDbColumnToControlValue: no field? How could that happen?!" );
             return Any();
         }
 
@@ -1143,7 +1143,7 @@ namespace frm
             default:
                 break;
             }
-            OSL_ENSURE( false, "lcl_getCurrentExchangeType: unsupported (unexpected) exchange type!" );
+            OSL_FAIL( "lcl_getCurrentExchangeType: unsupported (unexpected) exchange type!" );
             return eEntry;
         }
     }

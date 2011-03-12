@@ -282,7 +282,7 @@ bool checkForExtensionUpdates( const uno::Reference< uno::XComponentContext > & 
     }
     catch( const uno::Exception& )
     {
-        OSL_ENSURE( false, "checkForExtensionUpdates: could not create the PackageInformationProvider!" );
+        OSL_FAIL( "checkForExtensionUpdates: could not create the PackageInformationProvider!" );
     }
 
     if ( !xInfoProvider.is() ) return false;
@@ -308,7 +308,7 @@ bool checkForPendingUpdates( const uno::Reference< uno::XComponentContext > & rx
     }
     catch( const uno::Exception& )
     {
-        OSL_ENSURE( false, "checkForExtensionUpdates: could not create the PackageInformationProvider!" );
+        OSL_FAIL( "checkForExtensionUpdates: could not create the PackageInformationProvider!" );
     }
 
     if ( !xInfoProvider.is() ) return false;

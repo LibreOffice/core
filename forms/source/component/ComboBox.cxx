@@ -668,7 +668,7 @@ void OComboBoxModel::loadData( bool _bForce )
             }
             break;
             default:
-                OSL_ENSURE( false, "OComboBoxModel::loadData: unreachable!" );
+                OSL_FAIL( "OComboBoxModel::loadData: unreachable!" );
                 break;
         }
     }

@@ -208,7 +208,7 @@ namespace logging
                 sMessage.append( ::rtl::OString( m_sFileURL.getStr(), m_sFileURL.getLength(), osl_getThreadTextEncoding() ) );
                 sMessage.append( "\nerror code: " );
                 sMessage.append( (sal_Int32)res );
-                OSL_ENSURE( false, sMessage.makeStringAndClear() );
+                OSL_FAIL( sMessage.makeStringAndClear() );
             }
         #endif
             if ( m_eFileValidity == eValid )

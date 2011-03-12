@@ -1264,7 +1264,7 @@ namespace pcr
                         m_aOrderedLines[ nFocusControlPos ]->second.pLine->GrabFocus();
                     }
                     else
-                        OSL_ENSURE( false, "OBrowserListBox::PreNotify: internal error, invalid focus control position!" );
+                        OSL_FAIL( "OBrowserListBox::PreNotify: internal error, invalid focus control position!" );
                 }
             }
 

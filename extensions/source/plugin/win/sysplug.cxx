@@ -271,11 +271,11 @@ long PluginComm_Impl::doIt()
     break;
     case eNPP_Initialize:
         TRACE( "eNPP_Initialize" );
-        OSL_ENSURE( false, "NPP_Initialize: not implemented!" );
+        OSL_FAIL( "NPP_Initialize: not implemented!" );
         break;
     case eNPP_GetJavaClass:
         TRACE( "eNPP_GetJavaClass" );
-        OSL_ENSURE( false, "NPP_GetJavaClass: not implemented!" );
+        OSL_FAIL( "NPP_GetJavaClass: not implemented!" );
         break;
     }
     return nRet;

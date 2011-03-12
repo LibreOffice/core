@@ -618,7 +618,7 @@ namespace pcr
             case 1: nWritingMode = WritingMode2::RL_TB;      break;
             case 2: nWritingMode = WritingMode2::CONTEXT;    break;
             default:
-                OSL_ENSURE( false, "FormComponentPropertyHandler::convertToPropertyValue: unexpected 'normalized value' for WritingMode!" );
+                OSL_FAIL( "FormComponentPropertyHandler::convertToPropertyValue: unexpected 'normalized value' for WritingMode!" );
                 nWritingMode = WritingMode2::CONTEXT;
                 break;
             }
@@ -754,7 +754,7 @@ namespace pcr
             case WritingMode2::RL_TB:   nNormalized = 1;    break;
             case WritingMode2::CONTEXT: nNormalized = 2;    break;
             default:
-                OSL_ENSURE( false, "FormComponentPropertyHandler::convertToControlValue: unsupported API value for WritingMode!" );
+                OSL_FAIL( "FormComponentPropertyHandler::convertToControlValue: unsupported API value for WritingMode!" );
                 nNormalized = 2;
                 break;
             }
@@ -2015,7 +2015,7 @@ namespace pcr
             break;
 
             default:
-                OSL_ENSURE( false, "FormComponentPropertyHandler::impl_updateDependentProperty_nothrow: unexpected property to update!" );
+                OSL_FAIL( "FormComponentPropertyHandler::impl_updateDependentProperty_nothrow: unexpected property to update!" );
                 break;
 
             }   // switch
@@ -3140,7 +3140,7 @@ namespace pcr
                 return sValue;
             }
 
-            OSL_ENSURE( false, "ValueListCommandUI::getSQLCommand: unexpected property type!" );
+            OSL_FAIL( "ValueListCommandUI::getSQLCommand: unexpected property type!" );
             return sValue;
         }
 
@@ -3215,7 +3215,7 @@ namespace pcr
                 xCommandUI = new ValueListCommandUI( xComponentProperties );
                 break;
             default:
-                OSL_ENSURE( false, "FormComponentPropertyHandler::OnDesignerClosed: invalid property id!" );
+                OSL_FAIL( "FormComponentPropertyHandler::OnDesignerClosed: invalid property id!" );
                 return false;
             }
 
@@ -3296,7 +3296,7 @@ namespace pcr
             }
             catch( const Exception& )
             {
-                OSL_ENSURE( false, "FormComponentPropertyHandler::impl_hasValidDataSourceSignature_nothrow: caught an exception!" );
+                OSL_FAIL( "FormComponentPropertyHandler::impl_hasValidDataSourceSignature_nothrow: caught an exception!" );
             }
         }
         return bHas;

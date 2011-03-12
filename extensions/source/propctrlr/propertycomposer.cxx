@@ -355,7 +355,7 @@ namespace pcr
 
         case InteractiveSelectionResult_Success:
         case InteractiveSelectionResult_Pending:
-            OSL_ENSURE( false, "PropertyComposer::onInteractivePropertySelection: no chance to forward the new value to the other handlers!" );
+            OSL_FAIL( "PropertyComposer::onInteractivePropertySelection: no chance to forward the new value to the other handlers!" );
             // This means that we cannot know the new property value, which either has already been set
             // at the first component ("Success"), or will be set later on once the asynchronous input
             // is finished ("Pending"). So, we also cannot forward this new property value to the other
@@ -372,7 +372,7 @@ namespace pcr
             break;
 
         default:
-            OSL_ENSURE( false, "OPropertyBrowserController::onInteractivePropertySelection: unknown result value!" );
+            OSL_FAIL( "OPropertyBrowserController::onInteractivePropertySelection: unknown result value!" );
             break;
         }
 

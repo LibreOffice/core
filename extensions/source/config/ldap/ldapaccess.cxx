@@ -269,7 +269,7 @@ void LdapConnection::initConnection()
     }
     else
     {
-        OSL_ENSURE( false, "LdapConnection::findUserDn-could not get DN for User ");
+        OSL_FAIL( "LdapConnection::findUserDn-could not get DN for User ");
     }
 
     return userDn ;

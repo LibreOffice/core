@@ -503,7 +503,7 @@ namespace xforms
             break;
 
         default:
-            OSL_ENSURE( false, "OValueLimitedType::_explainInvalid: unknown reason!" );
+            OSL_FAIL( "OValueLimitedType::_explainInvalid: unknown reason!" );
             break;
         }
 
