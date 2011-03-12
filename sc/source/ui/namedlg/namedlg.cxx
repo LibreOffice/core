@@ -64,25 +64,24 @@
 
 struct ScNameDlgImpl
 {
-    ScNameDlgImpl()
-        : bCriteria(FALSE),bPrintArea(FALSE),
-          bColHeader(FALSE),bRowHeader(FALSE),
-          bDirty(FALSE) {}
+    ScNameDlgImpl() :
+        bCriteria(false), bPrintArea(false),
+        bColHeader(false), bRowHeader(false),
+        bDirty(false) {}
 
     void Clear()
-        {
-            aStrSymbol.Erase();
-            bCriteria  = bPrintArea =
-            bColHeader = bRowHeader = FALSE;
-            bDirty = TRUE;
-        }
+    {
+        aStrSymbol = ::rtl::OUString();
+        bCriteria  = bPrintArea = bColHeader = bRowHeader = false;
+        bDirty = true;
+    }
 
-    String  aStrSymbol;
-    BOOL    bCriteria:1;
-    BOOL    bPrintArea:1;
-    BOOL    bColHeader:1;
-    BOOL    bRowHeader:1;
-    BOOL    bDirty:1;
+    ::rtl::OUString aStrSymbol;
+    bool bCriteria:1;
+    bool bPrintArea:1;
+    bool bColHeader:1;
+    bool bRowHeader:1;
+    bool bDirty:1;
 };
 
 #define ERRORBOX(s) ErrorBox(this,WinBits(WB_OK|WB_DEF_OK),s).Execute();
