@@ -45,8 +45,7 @@ import sys, smtplib, imaplib, poplib
 dbg = False
 
 class PyMailSMTPService(unohelper.Base, XSmtpService):
-        def __init__( self, ctx ):
-	#def __init__( self, ctx ):
+	def __init__( self, ctx ):
 		self.ctx = ctx
 		self.listeners = []
 		self.supportedtypes = ('Insecure', 'Ssl')
@@ -232,6 +231,7 @@ class PyMailIMAPService(unohelper.Base, XMailService):
 		self.supportedtypes = ('Insecure', 'Ssl')
 		self.server = None
 		self.connectioncontext = None
+		self.notify = EventObject()
 		if dbg:
 			print >> sys.stderr, "PyMailIMAPService init"
 	def addConnectionListener(self, xListener):
@@ -300,6 +300,7 @@ class PyMailPOP3Service(unohelper.Base, XMailService):
 		self.supportedtypes = ('Insecure', 'Ssl')
 		self.server = None
 		self.connectioncontext = None
+		self.notify = EventObject()
 		if dbg:
 			print >> sys.stderr, "PyMailPOP3Service init"
 	def addConnectionListener(self, xListener):
