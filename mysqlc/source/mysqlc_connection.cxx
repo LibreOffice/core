@@ -245,7 +245,7 @@ void OConnection::construct(const OUString& url, const Sequence< PropertyValue >
     }
 
     m_settings.schema = aDbName;
-    OSL_TRACE(OUStringToOString(m_settings.schema, getConnectionEncoding()).getStr());
+    OSL_TRACE("%s", OUStringToOString(m_settings.schema, getConnectionEncoding()).getStr());
 
     // Check if the server is 4.1 or above
     if (this->getMysqlVersion() < 40100) {
