@@ -970,7 +970,7 @@ Primitive2DSequence PageObjectViewObjectContact::createPrimitive2DSequence(const
 #ifdef DBG_UTIL
     if(mbInDestructor)
     {
-        OSL_ENSURE(false, "Higher call inside PageObjectViewObjectContact in destructor (!)");
+        OSL_FAIL("Higher call inside PageObjectViewObjectContact in destructor (!)");
     }
 #endif
 

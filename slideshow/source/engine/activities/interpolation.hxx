@@ -56,8 +56,7 @@ namespace basegfx
                                                 const sal_Int16&    rTo,
                                                 double                     )
         {
-            OSL_ENSURE( false,
-                        "lerp<sal_Int16> called" );
+            OSL_FAIL( "lerp<sal_Int16> called" );
             return rTo;
         }
 
@@ -66,8 +65,7 @@ namespace basegfx
                                                             const ::rtl::OUString&  rTo,
                                                             double                       )
         {
-            OSL_ENSURE( false,
-                        "lerp<::rtl::OUString> called" );
+            OSL_FAIL( "lerp<::rtl::OUString> called" );
             return rTo;
         }
 
@@ -76,8 +74,7 @@ namespace basegfx
                                       const bool&   rTo,
                                       double             )
         {
-            OSL_ENSURE( false,
-                        "lerp<bool> called" );
+            OSL_FAIL( "lerp<bool> called" );
             return rTo;
         }
     }

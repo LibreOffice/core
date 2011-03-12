@@ -657,8 +657,7 @@ namespace slideshow
 
                 virtual void setPriority( const basegfx::B1DRange& /*rRange*/ )
                 {
-                    OSL_ENSURE( false,
-                                "BitmapView::setPriority(): This method is not supposed to be called!" );
+                    OSL_FAIL( "BitmapView::setPriority(): This method is not supposed to be called!" );
                 }
 
                 virtual ::basegfx::B2DHomMatrix getTransformation() const
@@ -668,21 +667,18 @@ namespace slideshow
 
                 virtual ::basegfx::B2DHomMatrix getSpriteTransformation() const
                 {
-                    OSL_ENSURE( false,
-                                "BitmapView::getSpriteTransformation(): This method is not supposed to be called!" );
+                    OSL_FAIL( "BitmapView::getSpriteTransformation(): This method is not supposed to be called!" );
                     return ::basegfx::B2DHomMatrix();
                 }
 
                 virtual void setClip( const ::basegfx::B2DPolyPolygon& /*rClip*/ )
                 {
-                    OSL_ENSURE( false,
-                                "BitmapView::setClip(): This method is not supposed to be called!" );
+                    OSL_FAIL( "BitmapView::setClip(): This method is not supposed to be called!" );
                 }
 
                 virtual bool resize( const ::basegfx::B2DRange& /*rArea*/ )
                 {
-                    OSL_ENSURE( false,
-                                "BitmapView::resize(): This method is not supposed to be called!" );
+                    OSL_FAIL( "BitmapView::resize(): This method is not supposed to be called!" );
                     return false;
                 }
 
@@ -717,8 +713,7 @@ namespace slideshow
                 {
                     // TODO(E1): Might be superfluous. Nowadays,
                     // addViewLayer swallows all errors, anyway.
-                    OSL_ENSURE( false,
-                                rtl::OUStringToOString(
+                    OSL_FAIL( rtl::OUStringToOString(
                                     comphelper::anyToString( cppu::getCaughtException() ),
                                     RTL_TEXTENCODING_UTF8 ).getStr() );
 

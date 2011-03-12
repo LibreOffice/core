@@ -217,7 +217,7 @@ bool AnimationBaseNode::init_st()
         mpActivity = createActivity();
     }
     catch (uno::Exception const&) {
-        OSL_ENSURE( false, rtl::OUStringToOString(
+        OSL_FAIL( rtl::OUStringToOString(
                         comphelper::anyToString(cppu::getCaughtException()),
                         RTL_TEXTENCODING_UTF8 ) );
         // catch and ignore. We later handle empty activities, but for

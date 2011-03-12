@@ -198,8 +198,7 @@ namespace slideshow
             }
             catch( uno::Exception& )
             {
-                OSL_ENSURE( false,
-                            rtl::OUStringToOString(
+                OSL_FAIL( rtl::OUStringToOString(
                                 comphelper::anyToString( cppu::getCaughtException() ),
                                 RTL_TEXTENCODING_UTF8 ).getStr() );
 

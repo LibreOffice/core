@@ -639,8 +639,7 @@ namespace slideshow
                     case DocTreeNode::NODETYPE_INVALID:
                         // FALLTHROUGH intended
                     default:
-                        OSL_ENSURE(false,
-                                   "DrawShapeSubsetting::mapDocTreeNode(): unexpected node type");
+                        OSL_FAIL("DrawShapeSubsetting::mapDocTreeNode(): unexpected node type");
                         return DrawShapeSubsetting::CLASS_NOOP;
 
                     case DocTreeNode::NODETYPE_LOGICAL_SHAPE:

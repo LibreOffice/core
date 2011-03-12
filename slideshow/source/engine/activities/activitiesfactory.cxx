@@ -661,8 +661,7 @@ AnimationActivitySharedPtr createActivity(
         catch( ParseError& )
         {
             // parse error, thus no formula
-            OSL_ENSURE( false,
-                        "createActivity(): Error parsing formula string" );
+            OSL_FAIL( "createActivity(): Error parsing formula string" );
         }
     }
 
@@ -728,7 +727,7 @@ AnimationActivitySharedPtr createActivity(
             }
 
             default:
-                OSL_ENSURE( false, "createActivity(): unexpected case" );
+                OSL_FAIL( "createActivity(): unexpected case" );
                 // FALLTHROUGH intended
             case animations::AnimationCalcMode::PACED:
                 // FALLTHROUGH intended
@@ -796,7 +795,7 @@ AnimationActivitySharedPtr createActivity(
             }
 
             default:
-                OSL_ENSURE( false, "createActivity(): unexpected case" );
+                OSL_FAIL( "createActivity(): unexpected case" );
                 // FALLTHROUGH intended
             case animations::AnimationCalcMode::PACED:
                 // FALLTHROUGH intended

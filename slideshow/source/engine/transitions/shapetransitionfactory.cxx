@@ -126,7 +126,7 @@ ClippingAnimation::~ClippingAnimation()
     }
     catch (uno::Exception &)
     {
-        OSL_ENSURE( false, rtl::OUStringToOString(
+        OSL_FAIL( rtl::OUStringToOString(
                         comphelper::anyToString(
                             cppu::getCaughtException() ),
                         RTL_TEXTENCODING_UTF8 ).getStr() );
@@ -252,8 +252,7 @@ AnimationActivitySharedPtr TransitionFactory::createShapeTransition(
         {
             default:
             case TransitionInfo::TRANSITION_INVALID:
-                OSL_ENSURE( false,
-                            "TransitionFactory::createShapeTransition(): Invalid transition type. "
+                OSL_FAIL( "TransitionFactory::createShapeTransition(): Invalid transition type. "
                             "Don't ask me for a 0 TransitionType, have no XTransitionFilter node instead!" );
                 return AnimationActivitySharedPtr();
 
@@ -396,8 +395,7 @@ AnimationActivitySharedPtr TransitionFactory::createShapeTransition(
             "combination encountered",
             xTransition->getTransition(),
             xTransition->getSubtype() );
-        OSL_ENSURE(
-            false,
+        OSL_FAIL(
             "TransitionFactory::createShapeTransition(): Unknown type/subtype "
             "combination encountered" );
     }

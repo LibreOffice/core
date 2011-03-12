@@ -303,8 +303,8 @@ void SAL_CALL SdXImpressDocument::release() throw ( )
             }
             catch (uno::RuntimeException const& exc)
             { // don't break throw ()
-                OSL_ENSURE(
-                    false, OUStringToOString(
+                OSL_FAIL(
+                    OUStringToOString(
                         exc.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
                 static_cast<void>(exc);
             }

@@ -272,7 +272,7 @@ void SAL_CALL TaskPanelFactory::releaseResource (
             }
             else
             {
-                OSL_ENSURE( false, "TaskPanelFactory::releaseResource: don't know what to do with this resource!" );
+                OSL_FAIL( "TaskPanelFactory::releaseResource: don't know what to do with this resource!" );
             }
         }
     }

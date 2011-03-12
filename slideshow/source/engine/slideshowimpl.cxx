@@ -1069,7 +1069,7 @@ public:
         }
         else
         {
-            OSL_ENSURE( false, rtl::OUStringToOString(
+            OSL_FAIL( rtl::OUStringToOString(
                             rProperty.Name, RTL_TEXTENCODING_UTF8 ).getStr() );
         }
     }
@@ -1314,7 +1314,7 @@ sal_Bool SlideShowImpl::startShapeActivity(
     DBG_TESTSOLARMUTEX();
 
     // TODO(F3): NYI
-    OSL_ENSURE( false, "not yet implemented!" );
+    OSL_FAIL( "not yet implemented!" );
     return false;
 }
 
@@ -1328,7 +1328,7 @@ sal_Bool SlideShowImpl::stopShapeActivity(
     DBG_TESTSOLARMUTEX();
 
     // TODO(F3): NYI
-    OSL_ENSURE( false, "not yet implemented!" );
+    OSL_FAIL( "not yet implemented!" );
     return false;
 }
 
@@ -2167,8 +2167,7 @@ sal_Bool SlideShowImpl::update( double & nNextTimeout )
                 }
                 catch( uno::Exception& )
                 {
-                    OSL_ENSURE( false,
-                                rtl::OUStringToOString(
+                    OSL_FAIL( rtl::OUStringToOString(
                                     comphelper::anyToString( cppu::getCaughtException() ),
                                     RTL_TEXTENCODING_UTF8 ).getStr() );
                 }

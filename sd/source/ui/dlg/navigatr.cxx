@@ -507,8 +507,8 @@ IMPL_LINK( SdNavigatorWin, ShapeFilterCallback, Menu *, pMenu )
                 break;
 
             default:
-                OSL_ENSURE(
-                    false, "SdNavigatorWin::ShapeFilterCallback called for unknown menu entry");
+                OSL_FAIL(
+                    "SdNavigatorWin::ShapeFilterCallback called for unknown menu entry");
                 break;
         }
 

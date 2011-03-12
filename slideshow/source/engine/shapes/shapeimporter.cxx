@@ -99,7 +99,7 @@ bool importShapeGraphic(
 
         if(nIndex >= aURL.getLength())
         {
-            OSL_ENSURE( false, "ShapeImporter::importShape(): "
+            OSL_FAIL( "ShapeImporter::importShape(): "
                         "embedded graphic has no graphic ID" );
             return false;
         }
@@ -137,7 +137,7 @@ bool importShapeGraphic(
                 STREAM_READ ) );
         if( !pGraphicStream )
         {
-            OSL_ENSURE( false, "ShapeImporter::importShape(): "
+            OSL_FAIL( "ShapeImporter::importShape(): "
                         "cannot create input stream for graphic" );
             return false;
         }
@@ -146,7 +146,7 @@ bool importShapeGraphic(
         if( GraphicConverter::Import(
                 *pGraphicStream, aTmpGraphic ) != ERRCODE_NONE )
         {
-            OSL_ENSURE( false, "ShapeImporter::importShape(): "
+            OSL_FAIL( "ShapeImporter::importShape(): "
                         "Failed to import shape graphic from given URL" );
             return false;
         }

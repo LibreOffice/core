@@ -196,8 +196,7 @@ namespace animcore
             {
                 if( !xNode.is() )
                 {
-                    OSL_ENSURE( false,
-                                "AnimCore: NodeFunctor::operator(): invalid XAnimationNode" );
+                    OSL_FAIL( "AnimCore: NodeFunctor::operator(): invalid XAnimationNode" );
                     return;
                 }
 
@@ -218,8 +217,7 @@ namespace animcore
                         // TODO(E1): I'm not too sure what to expect here...
                         if( !xIterNode->getTarget().hasValue() )
                         {
-                            OSL_ENSURE( false,
-                                        "animcore: NodeFunctor::operator(): no target on ITERATE node" );
+                            OSL_FAIL( "animcore: NodeFunctor::operator(): no target on ITERATE node" );
                             return;
                         }
 
@@ -233,8 +231,7 @@ namespace animcore
                             // no shape provided. Maybe a ParagraphTarget?
                             if( !(xIterNode->getTarget() >>= aTarget) )
                             {
-                                OSL_ENSURE( false,
-                                            "animcore: NodeFunctor::operator(): could not extract any "
+                                OSL_FAIL( "animcore: NodeFunctor::operator(): could not extract any "
                                             "target information" );
                                 return;
                             }
@@ -244,8 +241,7 @@ namespace animcore
 
                             if( !xTargetShape.is() )
                             {
-                                OSL_ENSURE( false,
-                                            "animcore: NodeFunctor::operator(): invalid shape in ParagraphTarget" );
+                                OSL_FAIL( "animcore: NodeFunctor::operator(): invalid shape in ParagraphTarget" );
                                 return;
                             }
                         }
@@ -261,8 +257,7 @@ namespace animcore
                         if( !::anim::for_each_childNode( xNode,
                                                          aFunctor ) )
                         {
-                            OSL_ENSURE( false,
-                                        "AnimCore: NodeFunctor::operator(): child node iteration failed, "
+                            OSL_FAIL( "AnimCore: NodeFunctor::operator(): child node iteration failed, "
                                         "or extraneous container nodes encountered" );
                         }
                     }
@@ -321,8 +316,7 @@ namespace animcore
 
                                 if( !(xAnimateNode->getTarget() >>= aUnoTarget) )
                                 {
-                                    OSL_ENSURE( false,
-                                                "AnimCore: NodeFunctor::operator(): unknown target type encountered" );
+                                    OSL_FAIL( "AnimCore: NodeFunctor::operator(): unknown target type encountered" );
                                     break;
                                 }
 
@@ -333,8 +327,7 @@ namespace animcore
 
                         if( !aTarget.mxRef.is() )
                         {
-                            OSL_ENSURE( false,
-                                        "AnimCore: NodeFunctor::operator(): Found target, but XShape is NULL" );
+                            OSL_FAIL( "AnimCore: NodeFunctor::operator(): Found target, but XShape is NULL" );
                             break; // invalid target XShape
                         }
 

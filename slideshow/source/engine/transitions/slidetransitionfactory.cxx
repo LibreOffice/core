@@ -729,8 +729,7 @@ NumberAnimationSharedPtr createPushWipeTransition(
     switch( nTransitionSubType )
     {
     default:
-        OSL_ENSURE(
-            false,
+        OSL_FAIL(
             "createPushWipeTransition(): Unexpected transition "
             "subtype for animations::TransitionType::PUSHWIPE "
             "transitions" );
@@ -821,8 +820,7 @@ NumberAnimationSharedPtr createSlideWipeTransition(
     switch( nTransitionSubType )
     {
     default:
-        OSL_ENSURE(
-            false,
+        OSL_FAIL(
             "createSlideWipeTransition(): Unexpected transition "
             "subtype for animations::TransitionType::SLIDEWIPE "
             "transitions" );
@@ -1022,8 +1020,7 @@ NumberAnimationSharedPtr TransitionFactory::createSlideTransition(
                 switch( nTransitionType )
                 {
                     default:
-                        OSL_ENSURE(
-                            false,
+                        OSL_FAIL(
                             "TransitionFactory::createSlideTransition(): "
                             "Unexpected transition type for "
                             "TRANSITION_SPECIAL transitions" );
@@ -1158,8 +1155,7 @@ NumberAnimationSharedPtr TransitionFactory::createSlideTransition(
         "Unknown type/subtype (%d/%d) combination encountered",
         nTransitionType,
         nTransitionSubType );
-    OSL_ENSURE(
-        false,
+    OSL_FAIL(
         "TransitionFactory::createSlideTransition(): "
         "Unknown type/subtype combination encountered" );
 

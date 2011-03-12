@@ -1199,7 +1199,7 @@ void ViewShell::AdaptDefaultsForChart(
         }
         catch( const uno::Exception & )
         {
-            OSL_ENSURE( false, "Exception caught in AdaptDefaultsForChart" );
+            OSL_FAIL( "Exception caught in AdaptDefaultsForChart" );
         }
     }
 }

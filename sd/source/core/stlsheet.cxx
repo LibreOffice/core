@@ -777,8 +777,8 @@ void SAL_CALL SdStyleSheet::release(  ) throw ()
         }
         catch (RuntimeException const& exc)
         { // don't break throw ()
-            OSL_ENSURE(
-                false, OUStringToOString(
+            OSL_FAIL(
+                OUStringToOString(
                     exc.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
             static_cast<void>(exc);
         }

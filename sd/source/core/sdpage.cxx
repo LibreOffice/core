@@ -239,7 +239,7 @@ void SdPage::EnsureMasterPageDefaultBackground()
         else
         {
             // no style found, assert and set at least XFILL_NONE
-            OSL_ENSURE(false, "No Style for MasterPageBackground fill found (!)");
+            OSL_FAIL("No Style for MasterPageBackground fill found (!)");
             getSdrPageProperties().PutItem(XFillStyleItem(XFILL_NONE));
         }
     }

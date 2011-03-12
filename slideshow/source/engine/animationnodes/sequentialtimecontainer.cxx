@@ -52,7 +52,7 @@ void SequentialTimeContainer::activate_st()
             break;
         else {
             // node still UNRESOLVED, no need to deactivate or end...
-            OSL_ENSURE( false, "### resolving child failed!" );
+            OSL_FAIL( "### resolving child failed!" );
         }
     }
 
@@ -94,7 +94,7 @@ void SequentialTimeContainer::skipEffect(
                 "SequentialTimeContainer::deactivate, skipEffect with delay") );
     }
     else
-        OSL_ENSURE( false, "unknown notifier!" );
+        OSL_FAIL( "unknown notifier!" );
 }
 
 void SequentialTimeContainer::rewindEffect(

@@ -72,7 +72,7 @@ EventSharedPtr generateEvent(
         case animations::Timing_INDEFINITE:
             break; // don't schedule no event
         case animations::Timing_MEDIA:
-            OSL_ENSURE( false, "MEDIA timing not yet implemented!" );
+            OSL_FAIL( "MEDIA timing not yet implemented!" );
             break;
         default:
             ENSURE_OR_THROW( false, "unexpected case!" );
@@ -83,7 +83,7 @@ EventSharedPtr generateEvent(
         // try to extract additional event delay
         double nDelay2 = 0.0;
         if (aEvent.Offset.hasValue() && !(aEvent.Offset >>= nDelay2)) {
-            OSL_ENSURE( false, "offset values apart from DOUBLE not "
+            OSL_FAIL( "offset values apart from DOUBLE not "
                         "recognized in animations::Event!" );
         }
 
@@ -101,10 +101,10 @@ EventSharedPtr generateEvent(
             // no event at all
             break;
         case animations::EventTrigger::ON_BEGIN:
-            OSL_ENSURE( false, "event trigger ON_BEGIN not yet implemented!" );
+            OSL_FAIL( "event trigger ON_BEGIN not yet implemented!" );
             break;
         case animations::EventTrigger::ON_END:
-            OSL_ENSURE( false, "event trigger ON_END not yet implemented!" );
+            OSL_FAIL( "event trigger ON_END not yet implemented!" );
             break;
         case animations::EventTrigger::BEGIN_EVENT:
             // try to extract XAnimationNode event source
@@ -116,7 +116,7 @@ EventSharedPtr generateEvent(
                     pEvent, xNode );
             }
             else {
-                OSL_ENSURE(false, "could not extract source XAnimationNode "
+                OSL_FAIL("could not extract source XAnimationNode "
                            "for BEGIN_EVENT!" );
             }
             break;
@@ -130,7 +130,7 @@ EventSharedPtr generateEvent(
                     pEvent, xNode );
             }
             else {
-                OSL_ENSURE( false, "could not extract source XAnimationNode "
+                OSL_FAIL( "could not extract source XAnimationNode "
                             "for END_EVENT!" );
             }
             break;
@@ -146,7 +146,7 @@ EventSharedPtr generateEvent(
                     pEvent, pShape );
             }
             else {
-                OSL_ENSURE( false, "could not extract source XAnimationNode "
+                OSL_FAIL( "could not extract source XAnimationNode "
                             "for ON_CLICK!" );
             }
             break;
@@ -162,7 +162,7 @@ EventSharedPtr generateEvent(
                     pEvent, pShape );
             }
             else {
-                OSL_ENSURE( false, "could not extract source XAnimationNode "
+                OSL_FAIL( "could not extract source XAnimationNode "
                             "for ON_DBL_CLICK!" );
             }
             break;
@@ -178,7 +178,7 @@ EventSharedPtr generateEvent(
                     pEvent, pShape );
             }
             else {
-                OSL_ENSURE( false, "could not extract source XAnimationNode "
+                OSL_FAIL( "could not extract source XAnimationNode "
                             "for ON_MOUSE_ENTER!" );
             }
             break;
@@ -194,12 +194,12 @@ EventSharedPtr generateEvent(
                     pEvent, pShape );
             }
             else {
-                OSL_ENSURE( false, "could not extract source XAnimationNode "
+                OSL_FAIL( "could not extract source XAnimationNode "
                             "for ON_MOUSE_LEAVE!" );
             }
             break;
         case animations::EventTrigger::ON_PREV:
-            OSL_ENSURE( false, "event trigger ON_PREV not yet implemented, "
+            OSL_FAIL( "event trigger ON_PREV not yet implemented, "
                         "mapped to ON_NEXT!" );
             // FALLTHROUGH intended
         case animations::EventTrigger::ON_NEXT:
@@ -218,17 +218,17 @@ EventSharedPtr generateEvent(
                     pEvent, xNode );
             }
             else {
-                OSL_ENSURE( false, "could not extract source XAnimationNode "
+                OSL_FAIL( "could not extract source XAnimationNode "
                             "for ON_STOP_AUDIO!" );
             }
             break;
         case animations::EventTrigger::REPEAT:
-            OSL_ENSURE( false, "event trigger REPEAT not yet implemented!" );
+            OSL_FAIL( "event trigger REPEAT not yet implemented!" );
             break;
         }
     }
     else if (rEventDescription >>= aSequence) {
-        OSL_ENSURE( false, "sequence of timing primitives "
+        OSL_FAIL( "sequence of timing primitives "
                     "not yet implemented!" );
     }
     else if (rEventDescription >>= nDelay1) {

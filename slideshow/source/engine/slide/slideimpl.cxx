@@ -834,8 +834,7 @@ bool SlideImpl::implPrefetchShow()
         {
             if( !maAnimations.importAnimations( mxRootNode ) )
             {
-                OSL_ENSURE( false,
-                            "SlideImpl::implPrefetchShow(): have animation nodes, "
+                OSL_FAIL( "SlideImpl::implPrefetchShow(): have animation nodes, "
                             "but import animations failed." );
 
                 // could not import animation framework,
@@ -865,8 +864,7 @@ bool SlideImpl::implPrefetchShow()
     }
     catch( uno::Exception& )
     {
-        OSL_ENSURE(
-            false,
+        OSL_FAIL(
             rtl::OUStringToOString(
                 comphelper::anyToString(cppu::getCaughtException()),
                 RTL_TEXTENCODING_UTF8 ) );
@@ -979,8 +977,7 @@ bool SlideImpl::applyInitialShapeAttributes(
     }
     catch( uno::Exception& )
     {
-        OSL_ENSURE(
-            false,
+        OSL_FAIL(
             rtl::OUStringToOString(
                 comphelper::anyToString(cppu::getCaughtException()),
                 RTL_TEXTENCODING_UTF8 ) );
@@ -1024,8 +1021,7 @@ bool SlideImpl::applyInitialShapeAttributes(
 
             if( !pShape )
             {
-                OSL_ENSURE( false,
-                            "SlideImpl::applyInitialShapeAttributes(): no shape found for given target" );
+                OSL_FAIL( "SlideImpl::applyInitialShapeAttributes(): no shape found for given target" );
                 continue;
             }
 
@@ -1034,8 +1030,7 @@ bool SlideImpl::applyInitialShapeAttributes(
 
             if( !pAttrShape )
             {
-                OSL_ENSURE( false,
-                            "SlideImpl::applyInitialShapeAttributes(): shape found does not "
+                OSL_FAIL( "SlideImpl::applyInitialShapeAttributes(): shape found does not "
                             "implement AttributableShape interface" );
                 continue;
             }
@@ -1053,8 +1048,7 @@ bool SlideImpl::applyInitialShapeAttributes(
 
                 if( !pAttrShape )
                 {
-                    OSL_ENSURE( false,
-                                "SlideImpl::applyInitialShapeAttributes(): shape found does not "
+                    OSL_FAIL( "SlideImpl::applyInitialShapeAttributes(): shape found does not "
                                 "provide a subset for requested paragraph index" );
                     continue;
                 }
@@ -1075,8 +1069,7 @@ bool SlideImpl::applyInitialShapeAttributes(
                 }
                 else
                 {
-                    OSL_ENSURE( false,
-                                "SlideImpl::applyInitialShapeAttributes(): Unexpected "
+                    OSL_FAIL( "SlideImpl::applyInitialShapeAttributes(): Unexpected "
                                 "(and unimplemented) property encountered" );
                 }
             }
@@ -1151,15 +1144,13 @@ bool SlideImpl::loadShapes()
             catch( ShapeLoadFailedException& )
             {
                 // TODO(E2): Error handling. For now, bail out
-                OSL_ENSURE( false,
-                            "SlideImpl::loadShapes(): caught ShapeLoadFailedException" );
+                OSL_FAIL( "SlideImpl::loadShapes(): caught ShapeLoadFailedException" );
                 return false;
 
             }
             catch( uno::Exception& )
             {
-                OSL_ENSURE( false,
-                            rtl::OUStringToOString(
+                OSL_FAIL( rtl::OUStringToOString(
                                 comphelper::anyToString( cppu::getCaughtException() ),
                                 RTL_TEXTENCODING_UTF8 ).getStr() );
 
@@ -1196,14 +1187,12 @@ bool SlideImpl::loadShapes()
     catch( ShapeLoadFailedException& )
     {
         // TODO(E2): Error handling. For now, bail out
-        OSL_ENSURE( false,
-                    "SlideImpl::loadShapes(): caught ShapeLoadFailedException" );
+        OSL_FAIL( "SlideImpl::loadShapes(): caught ShapeLoadFailedException" );
         return false;
     }
     catch( uno::Exception& )
     {
-        OSL_ENSURE( false,
-                    rtl::OUStringToOString(
+        OSL_FAIL( rtl::OUStringToOString(
                         comphelper::anyToString( cppu::getCaughtException() ),
                         RTL_TEXTENCODING_UTF8 ).getStr() );
 

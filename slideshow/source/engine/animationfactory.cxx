@@ -693,7 +693,7 @@ namespace slideshow
 
                 if( !rAny.hasValue() )
                 {
-                    OSL_ENSURE( false, "getDefault(): cannot get requested shape property" );
+                    OSL_FAIL( "getDefault(): cannot get requested shape property" );
                     OSL_TRACE( "getDefault(): cannot get '%s' shape property",
                                ::rtl::OUStringToOString( rPropertyName,
                                                          RTL_TEXTENCODING_ASCII_US ).getStr() );
@@ -705,7 +705,7 @@ namespace slideshow
 
                     if( !(rAny >>= aValue) )
                     {
-                        OSL_ENSURE( false, "getDefault(): cannot extract requested shape property" );
+                        OSL_FAIL( "getDefault(): cannot extract requested shape property" );
                         OSL_TRACE( "getDefault(): cannot extract '%s' shape property",
                                    ::rtl::OUStringToOString( rPropertyName,
                                                              RTL_TEXTENCODING_ASCII_US ).getStr() );
@@ -724,7 +724,7 @@ namespace slideshow
 
                 if( !rAny.hasValue() )
                 {
-                    OSL_ENSURE( false, "getDefault(): cannot get requested shape color property" );
+                    OSL_FAIL( "getDefault(): cannot get requested shape color property" );
                     OSL_TRACE( "getDefault(): cannot get '%s' shape color property",
                                ::rtl::OUStringToOString( rPropertyName,
                                                          RTL_TEXTENCODING_ASCII_US ).getStr() );
@@ -736,7 +736,7 @@ namespace slideshow
 
                     if( !(rAny >>= nValue) )
                     {
-                        OSL_ENSURE( false, "getDefault(): cannot extract requested shape color property" );
+                        OSL_FAIL( "getDefault(): cannot extract requested shape color property" );
                         OSL_TRACE( "getDefault(): cannot extract '%s' shape color property",
                                    ::rtl::OUStringToOString( rPropertyName,
                                                              RTL_TEXTENCODING_ASCII_US ).getStr() );

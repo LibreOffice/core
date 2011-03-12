@@ -191,8 +191,7 @@ namespace slideshow
                 {
                     if( !mpContext->mbParseAnimationFunction )
                     {
-                        OSL_ENSURE( false,
-                                    "ValueTFunctor::operator(): variable encountered, but we're not parsing a function here" );
+                        OSL_FAIL( "ValueTFunctor::operator(): variable encountered, but we're not parsing a function here" );
                         throw ParseError();
                     }
 
