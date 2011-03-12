@@ -511,8 +511,8 @@ public:
         if ( nRowCount && nMaxColCount && !mbOverflow )
             lcl_AddRef( mrTokenArr, nStartRow, nMaxColCount, nRowCount );
     }
-    bool getOverflow() { return mbOverflow; }
-    bool getArgError() { return mbArgError; }
+    bool getOverflow() const { return mbOverflow; }
+    bool getArgError() const { return mbArgError; }
 };
 
 template <class T>
