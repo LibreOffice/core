@@ -2191,7 +2191,7 @@ bool SelectionManager::handleDropEvent( XClientMessageEvent& rMessage )
         m_bDropWaitingForCompletion && m_aDropEnterEvent.data.l[0] )
     {
         bHandled = true;
-        OSL_ENSURE( 0, "someone forgot to call dropComplete ?" );
+        OSL_FAIL( "someone forgot to call dropComplete ?" );
         // some listener forgot to call dropComplete in the last operation
         // let us end it now and accept the new enter event
         aGuard.clear();
@@ -3373,7 +3373,7 @@ void SelectionManager::startDrag(
                     GetX11SalData()->GetDisplay()->CaptureMouse( pCaptureFrame );
 #if OSL_DEBUG_LEVEL > 0
                 else
-                    OSL_ENSURE( 0, "failed to acquire SolarMutex to reset capture frame" );
+                    OSL_FAIL( "failed to acquire SolarMutex to reset capture frame" );
 #endif
             }
             return;
@@ -3462,7 +3462,7 @@ void SelectionManager::startDrag(
                 GetX11SalData()->GetDisplay()->CaptureMouse( pCaptureFrame );
 #if OSL_DEBUG_LEVEL > 0
             else
-                OSL_ENSURE( 0, "failed to acquire SolarMutex to reset capture frame" );
+                OSL_FAIL( "failed to acquire SolarMutex to reset capture frame" );
 #endif
         }
 

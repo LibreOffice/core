@@ -1437,7 +1437,7 @@ bool PrinterController::isUIOptionEnabled( const rtl::OUString& i_rProperty ) co
                         else
                         {
                             // if the type does not match something is awry
-                            OSL_ENSURE( 0, "strange type in control dependency" );
+                            OSL_FAIL( "strange type in control dependency" );
                             bEnabled = false;
                         }
                     }
@@ -1491,7 +1491,7 @@ rtl::OUString PrinterController::makeEnabled( const rtl::OUString& i_rProperty )
                else
                {
                    // if the type does not match something is awry
-                   OSL_ENSURE( 0, "strange type in control dependency" );
+                   OSL_FAIL( "strange type in control dependency" );
                }
            }
         }

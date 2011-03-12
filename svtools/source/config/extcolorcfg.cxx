@@ -123,7 +123,7 @@ public:
         aMessage.append( ::rtl::OUStringToOString( _sComponentName, RTL_TEXTENCODING_UTF8 ) );
         aMessage.append( "\nname: " );
         aMessage.append( ::rtl::OUStringToOString( _sName, RTL_TEXTENCODING_UTF8 ) );
-        OSL_ENSURE( 0, aMessage.makeStringAndClear().getStr() );
+        OSL_FAIL( aMessage.makeStringAndClear().getStr() );
 #endif
         return ExtendedColorConfigValue();
     }

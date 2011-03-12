@@ -376,14 +376,14 @@ void TranslateLayout::Main()
             aStr += OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US );
         }
         fprintf( stderr, "error: parsing: '%s'\n", aStr.getStr() );
-        OSL_ENSURE( 0, aStr.getStr() );
+        OSL_FAIL( aStr.getStr() );
     }
     catch ( uno::Exception& rExc )
     {
         OString aStr( OUStringToOString( rExc.Message,
                                          RTL_TEXTENCODING_ASCII_US ) );
         fprintf( stderr, "error: UNO: '%s'\n", aStr.getStr() );
-        OSL_ENSURE( 0, aStr.getStr() );
+        OSL_FAIL( aStr.getStr() );
     }
 }
 

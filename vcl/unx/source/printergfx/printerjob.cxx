@@ -279,7 +279,7 @@ removeSpoolDir (const rtl::OUString& rSpoolDir)
     {
         // Conversion did not work, as this is quite a dangerous action,
         // we should abort here ....
-        OSL_ENSURE( 0, "psprint: couldn't remove spool directory" );
+        OSL_FAIL( "psprint: couldn't remove spool directory" );
         return;
     }
     rtl::OString aSysPathByte =
@@ -291,7 +291,7 @@ removeSpoolDir (const rtl::OUString& rSpoolDir)
     nChar += psp::appendStr (aSysPathByte.getStr(), pSystem + nChar);
 
     if (system (pSystem) == -1)
-        OSL_ENSURE( 0, "psprint: couldn't remove spool directory" );
+        OSL_FAIL( "psprint: couldn't remove spool directory" );
 }
 
 /* creates a spool directory with a "pidgin random" value based on

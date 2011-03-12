@@ -664,7 +664,7 @@ MRESULT EXPENTRY SalComWndProc( HWND hWnd, ULONG nMsg,
             //in the structure (GetWindowPtr()).
             if (WinDestroyWindow((HWND)nMP2) == 0)
             {
-                OSL_ENSURE(0, "DestroyWindow failed!");
+                OSL_FAIL("DestroyWindow failed!");
                 //Failure: We remove the SalFrame from the window structure. So we avoid that
                 // the window structure may contain an invalid pointer, once the SalFrame is deleted.
                SetWindowPtr((HWND)nMP2, 0);

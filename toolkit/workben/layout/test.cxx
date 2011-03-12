@@ -344,14 +344,14 @@ void LayoutTest::Main()
             aStr += OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US );
         }
         fprintf (stderr, "Parsing error: '%s'\n", aStr.getStr());
-        OSL_ENSURE( 0, aStr.getStr() );
+        OSL_FAIL( aStr.getStr() );
     }
     catch ( uno::Exception & rExc )
     {
         OString aStr( OUStringToOString( rExc.Message,
                                          RTL_TEXTENCODING_ASCII_US ) );
         fprintf (stderr, "UNO error: '%s'\n", aStr.getStr());
-        OSL_ENSURE( 0, aStr.getStr() );
+        OSL_FAIL( aStr.getStr() );
     }
 
     Reference< lang::XComponent > xComp( mxContext, UNO_QUERY );

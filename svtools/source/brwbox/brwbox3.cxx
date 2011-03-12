@@ -268,7 +268,7 @@ OUString BrowseBox::GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType e
 #endif
             break;
         default:
-            OSL_ENSURE(0,"BrowseBox::GetAccessibleName: invalid enum!");
+            OSL_FAIL("BrowseBox::GetAccessibleName: invalid enum!");
     }
     return aRetText;
 }
@@ -375,7 +375,7 @@ void BrowseBox::FillAccessibleStateSet(
         case ::svt::BBTYPE_ROWHEADERCELL:
         case ::svt::BBTYPE_COLUMNHEADERCELL:
         case ::svt::BBTYPE_CHECKBOXCELL:
-            OSL_ENSURE(0,"Illegal call here!");
+            OSL_FAIL("Illegal call here!");
             break;
     }
 }

@@ -316,7 +316,7 @@ namespace svt { namespace table
                 aRetText = GetColumnName(_nCol);
                 break;
             default:
-                OSL_ENSURE(0,"GridControl::GetAccessibleName: invalid enum!");
+                OSL_FAIL("GridControl::GetAccessibleName: invalid enum!");
         }
         return aRetText;
     }

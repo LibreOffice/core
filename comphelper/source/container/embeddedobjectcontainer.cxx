@@ -318,7 +318,7 @@ sal_Bool EmbeddedObjectContainer::HasInstantiatedEmbeddedObject( const ::rtl::OU
             aIt++;
     }
 
-    OSL_ENSURE( 0, "Unknown object!" );
+    OSL_FAIL( "Unknown object!" );
     return ::rtl::OUString();
 }
 
@@ -1009,13 +1009,13 @@ sal_Bool EmbeddedObjectContainer::MoveEmbeddedObject( const ::rtl::OUString& rNa
         }
         catch ( uno::Exception& )
         {
-            OSL_ENSURE(0,"Could not move object!");
+            OSL_FAIL("Could not move object!");
             return sal_False;
         }
 
     }
     else
-        OSL_ENSURE(0,"Unknown object!");
+        OSL_FAIL("Unknown object!");
     return sal_False;
 }
 

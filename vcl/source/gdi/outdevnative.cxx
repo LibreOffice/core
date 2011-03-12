@@ -202,7 +202,7 @@ static boost::shared_ptr< ImplControlValue > lcl_transformControlValue( const Im
             aResult.reset( new ImplControlValue( rVal ) );
             break;
     default:
-        OSL_ENSURE( 0, "unknown ImplControlValue type !" );
+        OSL_FAIL( "unknown ImplControlValue type !" );
         break;
     }
     return aResult;

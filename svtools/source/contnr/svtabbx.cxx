@@ -1115,7 +1115,7 @@ sal_Bool SvHeaderTabListBox::ConvertPointToColumnHeader( sal_uInt16&, const Poin
             break;
 
         default:
-            OSL_ENSURE(0,"BrowseBox::GetAccessibleName: invalid enum!");
+            OSL_FAIL("BrowseBox::GetAccessibleName: invalid enum!");
     }
     return aRetText;
 }

@@ -799,7 +799,7 @@ LRESULT CALLBACK SalComWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPar
             //in the structure (GetWindowPtr()).
             if (DestroyWindow((HWND)lParam) == 0)
             {
-                OSL_ENSURE(0, "DestroyWindow failed!");
+                OSL_FAIL("DestroyWindow failed!");
                 //Failure: We remove the SalFrame from the window structure. So we avoid that
                 // the window structure may contain an invalid pointer, once the SalFrame is deleted.
                SetWindowPtr((HWND)lParam, 0);

@@ -397,7 +397,7 @@ wrapper_get_n_children( AtkObject *atk_obj )
             n = obj->mpContext->getAccessibleChildCount();
         }
         catch(const uno::Exception& e) {
-            OSL_ENSURE(0, "Exception in getAccessibleChildCount()" );
+            OSL_FAIL("Exception in getAccessibleChildCount()" );
         }
     }
 
@@ -429,7 +429,7 @@ wrapper_ref_child( AtkObject *atk_obj,
             child = atk_object_wrapper_ref( xAccessible );
         }
         catch(const uno::Exception& e) {
-            OSL_ENSURE(0, "Exception in getAccessibleChild");
+            OSL_FAIL("Exception in getAccessibleChild");
         }
     }
 
