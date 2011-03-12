@@ -740,7 +740,7 @@ class ScAnnotationsObj : public cppu::WeakImplHelper3<
 {
 private:
     ScDocShell*             pDocShell;
-    SCTAB                   nTab;           // Collection haengt am Sheet
+    SCTAB                   nTab;           // Collection belongs to the sheet
 
     bool                    GetAddressByIndex_Impl( sal_Int32 nIndex, ScAddress& rPos ) const;
     ScAnnotationObj*        GetObjectByIndex_Impl( sal_Int32 nIndex ) const;

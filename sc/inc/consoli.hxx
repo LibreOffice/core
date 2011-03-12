@@ -34,8 +34,6 @@
 
 class ScDocument;
 
-// -----------------------------------------------------------------------
-
 struct ScReferenceEntry             // without constructor !
 {
     SCCOL   nCol;
@@ -63,9 +61,6 @@ public:
 
     void                    AddEntry( SCCOL nCol, SCROW nRow, SCTAB nTab );
 };
-
-// -----------------------------------------------------------------------
-
 
 //
 //  Sequence:

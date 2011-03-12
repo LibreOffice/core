@@ -200,15 +200,11 @@ struct ScDocStat
     USHORT  nPageCount;
 };
 
-// -----------------------------------------------------------------------
-
 // DDE link modes
 const BYTE SC_DDE_DEFAULT       = 0;
 const BYTE SC_DDE_ENGLISH       = 1;
 const BYTE SC_DDE_TEXT          = 2;
 const BYTE SC_DDE_IGNOREMODE    = 255;       /// For usage in FindDdeLink() only!
-
-// -----------------------------------------------------------------------
 
 class ScDocument
 {
@@ -418,7 +414,7 @@ public:
     SCSIZE          GetCellCount(SCTAB nTab, SCCOL nCol) const;
     ULONG           GetCodeCount() const;       // RPN-Code in formulas
     DECL_LINK( GetUserDefinedColor, USHORT * );
-                                                                // Numberformatter
+                                                                // number formatter
 
 public:
     SC_DLLPUBLIC                ScDocument( ScDocumentMode eMode = SCDOCMODE_DOCUMENT,

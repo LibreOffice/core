@@ -129,8 +129,6 @@ public:
                     }
 };
 
-// ============================================================================
-
 class ScDBQueryDataIterator
 {
 public:
@@ -215,8 +213,6 @@ public:
     /// Does NOT reset rValue if no value found!
     bool            GetNext(Value& rValue);
 };
-
-// ============================================================================
 
 class ScCellIterator            // walk through all cells in an area
 {                               // for SubTotal no hidden and no sub-total lines
@@ -514,8 +510,6 @@ public:
     const ScBaseCell*       GetCell() const         { return pFoundCell; }
 };
 
-// ============================================================================
-
 class ScRowBreakIterator
 {
 public:
@@ -530,8 +524,6 @@ private:
     ::std::set<SCROW>::const_iterator maItr;
     ::std::set<SCROW>::const_iterator maEnd;
 };
-
-// ============================================================================
 
 class ScDocRowHeightUpdater
 {

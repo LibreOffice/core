@@ -34,8 +34,6 @@
 
 class ScStyleSheet;
 
-//------------------------------------------------------------------------
-
 class SC_DLLPUBLIC ScDocumentPool: public SfxItemPool
 {
     SfxPoolItem**   ppPoolDefaults;

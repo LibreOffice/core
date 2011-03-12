@@ -37,11 +37,7 @@
 #include "address.hxx"
 #include "scdllapi.h"
 
-//------------------------------------------------------------------------
-
 class ScDocument;
-
-//------------------------------------------------------------------------
 
 class ScDBData : public ScDataObject, public ScRefreshTimer
 {
