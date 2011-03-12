@@ -2697,7 +2697,7 @@ void SfxDispatcher::DebugOutput_Impl() const
     {
         SfxShell *pShell = GetShell(nShell-1);
         const SfxInterface *pIFace = pShell->GetInterface();
-        OSL_TRACE("%s", pIFace->GetClassName().GetBuffer());
+        OSL_TRACE("%s", pIFace->GetClassName());
     }
 
     DbgGetData()->nTraceOut = nOld;
