@@ -42,11 +42,11 @@ from email.Utils import formatdate
 from email.Utils import parseaddr
 
 import sys, smtplib, imaplib, poplib
-
 dbg = False
 
 class PyMailSMTPService(unohelper.Base, XSmtpService):
-	def __init__( self, ctx ):
+        def __init__( self, ctx ):
+	#def __init__( self, ctx ):
 		self.ctx = ctx
 		self.listeners = []
 		self.supportedtypes = ('Insecure', 'Ssl')
