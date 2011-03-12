@@ -5402,7 +5402,7 @@ throw (RuntimeException)
     aStr += ByteString::CreateFromInt32((long)this);
     aStr += " - ";
     aStr += ByteString::CreateFromInt32(nLockCount);
-    OSL_TRACE( aStr.GetBuffer() );
+    OSL_TRACE( "%s", aStr.GetBuffer() );
 #endif
 
     Any a( nLockCount );
@@ -5424,7 +5424,7 @@ throw (RuntimeException)
     aStr += ByteString::CreateFromInt32((long)this);
     aStr += " - ";
     aStr += ByteString::CreateFromInt32(nLockCount);
-    OSL_TRACE( aStr.GetBuffer() );
+    OSL_TRACE( "%s", aStr.GetBuffer() );
 #endif
     // conform to documentation: unlock with lock count == 0 means force a layout
 
