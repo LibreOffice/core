@@ -2525,7 +2525,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
 
         }
         break;
-        default:OSL_ENSURE(false, "wrong Dispatcher (basesh.cxx)");
+        default:OSL_FAIL("wrong Dispatcher (basesh.cxx)");
     }
     if(!bDone)
         rReq.Done();
