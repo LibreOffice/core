@@ -122,6 +122,8 @@ ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
 
     :   ScAnyRefDlg ( pB, pCW, pParent, RID_SCDLG_NAMES ),
         //
+        maFtScope( this, ScResId(FT_SCOPE) ),
+        maLbScope( this, ScResId(LB_SCOPE) ),
         aFlName         ( this, ScResId( FL_NAME ) ),
         aEdName         ( this, ScResId( ED_NAME ) ),
         //

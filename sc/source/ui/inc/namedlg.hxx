@@ -33,6 +33,7 @@
 #include <vcl/combobox.hxx>
 #include <vcl/group.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/lstbox.hxx>
 #include "rangenam.hxx"
 #include "anyrefdg.hxx"
 
@@ -45,6 +46,8 @@ class ScDocument;
 class ScNameDlg : public ScAnyRefDlg
 {
 private:
+    FixedText       maFtScope;
+    ListBox         maLbScope;
     FixedLine       aFlName;
     ComboBox        aEdName;
 

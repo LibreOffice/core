@@ -34,6 +34,8 @@
 #define BTN_HELP        5
 #define BTN_MORE        6
 
+#define FT_SCOPE        7
+#define LB_SCOPE        8
 #define FL_NAME         11
 #define ED_NAME         12
 #define FL_ASSIGN       13
