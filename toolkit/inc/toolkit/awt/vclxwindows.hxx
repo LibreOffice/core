@@ -536,7 +536,7 @@ public:
     virtual void SAL_CALL removeTabListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabListener >& Listener ) throw (::com::sun::star::uno::RuntimeException);
     // C++
     TabControl*  getTabControl() const throw ( ::com::sun::star::uno::RuntimeException);
-    USHORT insertTab( TabPage*, rtl::OUString& sTitle );
+    sal_uInt16 insertTab( TabPage*, rtl::OUString& sTitle );
     static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
