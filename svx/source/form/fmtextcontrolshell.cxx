@@ -648,7 +648,7 @@ namespace svx
                     sMessage += sUnoSlotNameAscii;
                     if ( !bFeatureIsEnabled )
                         sMessage += " (disabled)";
-                    OSL_TRACE( sMessage.getStr() );
+                    OSL_TRACE( "%s", sMessage.getStr() );
                 #endif
 
                 lcl_translateUnoStateToItem( nSlotId, aFeature->second->getFeatureState(), _rSet );
@@ -659,7 +659,7 @@ namespace svx
                 ::rtl::OString sMessage( "FmTextControlShell::transferFeatureStatesToItemSet: found a feature state for " );
                 sMessage += sUnoSlotNameAscii;
                 sMessage += ", but could not translate it into an item!";
-                OSL_TRACE( sMessage.getStr() );
+                OSL_TRACE( "%s", sMessage.getStr() );
             }
             #endif
         }
@@ -1079,7 +1079,7 @@ namespace svx
 #if OSL_DEBUG_LEVEL > 0
         ::rtl::OString sTrace( "FmTextControlShell::formActivated: 0x" );
         sTrace += ::rtl::OString::valueOf( (sal_IntPtr)_rxController.get(), 16 );
-        OSL_TRACE( sTrace.getStr() );
+        OSL_TRACE( "%s", sTrace.getStr() );
 #endif
 
         DBG_ASSERT( _rxController.is(), "FmTextControlShell::formActivated: invalid controller!" );
@@ -1107,7 +1107,7 @@ namespace svx
 #if OSL_DEBUG_LEVEL > 0
         ::rtl::OString sTrace( "FmTextControlShell::formDeactivated: 0x" );
         sTrace += ::rtl::OString::valueOf( (sal_IntPtr)_rxController.get(), 16 );
-        OSL_TRACE( sTrace.getStr() );
+        OSL_TRACE( "%s", sTrace.getStr() );
 #endif
         (void)_rxController;
 
@@ -1360,7 +1360,7 @@ namespace svx
 #if OSL_DEBUG_LEVEL > 0
         ::rtl::OString sTrace( "FmTextControlShell::focusGained: 0x" );
         sTrace += ::rtl::OString::valueOf( (sal_IntPtr)xControl.get(), 16 );
-        OSL_TRACE( sTrace.getStr() );
+        OSL_TRACE( "%s", sTrace.getStr() );
 #endif
 
         DBG_ASSERT( xControl.is(), "FmTextControlShell::focusGained: suspicious focus event!" );
@@ -1376,7 +1376,7 @@ namespace svx
 #if OSL_DEBUG_LEVEL > 0
         ::rtl::OString sTrace( "FmTextControlShell::focusLost: 0x" );
         sTrace += ::rtl::OString::valueOf( (sal_IntPtr)xControl.get(), 16 );
-        OSL_TRACE( sTrace.getStr() );
+        OSL_TRACE( "%s", sTrace.getStr() );
 #endif
 
         m_bActiveControl = false;
