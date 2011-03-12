@@ -35,6 +35,9 @@ function update_hooks()
     if [ -z "$(git config push.default)" ] ; then
         git config push.default tracking
     fi
+    if [ "$PWD" != "$RAWBUILDDIR" -a ! -e .gitattributes ]; then
+        ln -s $RAWBUILDDIR/.gitattributes .
+    fi
 }
 
 # extra params for some commands, like log
