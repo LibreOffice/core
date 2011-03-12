@@ -62,9 +62,9 @@
 // Hilfsklasse: Merken der aktuellen Bereichsoptionen,
 // wenn ein Name in der ComboBox gefunden wird.
 
-struct SaveData
+struct ScNameDlgImpl
 {
-    SaveData()
+    ScNameDlgImpl()
         : bCriteria(FALSE),bPrintArea(FALSE),
           bColHeader(FALSE),bRowHeader(FALSE),
           bDirty(FALSE) {}
@@ -84,27 +84,6 @@ struct SaveData
     BOOL    bRowHeader:1;
     BOOL    bDirty:1;
 };
-
-static SaveData* pSaveObj = NULL;
-
-#define SAVE_DATA() \
-    pSaveObj->aStrSymbol = aEdAssign.GetText();         \
-    pSaveObj->bCriteria  = aBtnCriteria.IsChecked();    \
-    pSaveObj->bPrintArea = aBtnPrintArea.IsChecked();   \
-    pSaveObj->bColHeader = aBtnColHeader.IsChecked();   \
-    pSaveObj->bRowHeader = aBtnRowHeader.IsChecked();   \
-    pSaveObj->bDirty     = TRUE;
-
-#define RESTORE_DATA() \
-    if ( pSaveObj->bDirty )                             \
-    {                                                   \
-        aEdAssign.SetText( pSaveObj->aStrSymbol );      \
-        aBtnCriteria.Check( pSaveObj->bCriteria );      \
-        aBtnPrintArea.Check( pSaveObj->bPrintArea );    \
-        aBtnColHeader.Check( pSaveObj->bColHeader );    \
-        aBtnRowHeader.Check( pSaveObj->bRowHeader );    \
-        pSaveObj->bDirty = FALSE;                       \
-    }
 
 #define ERRORBOX(s) ErrorBox(this,WinBits(WB_OK|WB_DEF_OK),s).Execute();
 
@@ -150,16 +129,16 @@ ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
         pViewData       ( ptrViewData ),
         pDoc            ( ptrViewData->GetDocument() ),
         aLocalRangeName ( *(pDoc->GetRangeName()) ),
-        theCursorPos    ( aCursorPos )  // zum Berechnen der Referenzen
+        theCursorPos    ( aCursorPos ),
+        mpImpl(new ScNameDlgImpl)
 {
-    pSaveObj = new SaveData;
     Init();
     FreeResource();
 }
 
 ScNameDlg::~ScNameDlg()
 {
-    DELETEZ( pSaveObj );
+    delete mpImpl;
 }
 
 void ScNameDlg::Init()
@@ -209,7 +188,7 @@ void ScNameDlg::Init()
     EdModifyHdl( 0 );
 
     bSaved=TRUE;
-    SAVE_DATA()
+    SaveData();
 
     //@BugID 54702
     //SFX_APPWINDOW->Disable(FALSE);        //! allgemeine Methode im ScAnyRefDlg
@@ -337,6 +316,29 @@ void ScNameDlg::CalcCurTableAssign( String& aAssign, ScRangeData* pRangeData )
     }
 }
 
+void ScNameDlg::SaveData()
+{
+    mpImpl->aStrSymbol = aEdAssign.GetText();
+    mpImpl->bCriteria  = aBtnCriteria.IsChecked();
+    mpImpl->bPrintArea = aBtnPrintArea.IsChecked();
+    mpImpl->bColHeader = aBtnColHeader.IsChecked();
+    mpImpl->bRowHeader = aBtnRowHeader.IsChecked();
+    mpImpl->bDirty = true;
+}
+
+void ScNameDlg::RestoreData()
+{
+    if ( mpImpl->bDirty )
+    {
+        aEdAssign.SetText( mpImpl->aStrSymbol );
+        aBtnCriteria.Check( mpImpl->bCriteria );
+        aBtnPrintArea.Check( mpImpl->bPrintArea );
+        aBtnColHeader.Check( mpImpl->bColHeader );
+        aBtnRowHeader.Check( mpImpl->bRowHeader );
+        mpImpl->bDirty = false;
+    }
+}
+
 IMPL_LINK( ScNameDlg, OkBtnHdl, void *, EMPTYARG )
 {
     if ( aBtnAdd.IsEnabled() )
@@ -405,14 +407,14 @@ IMPL_LINK( ScNameDlg, AddBtnHdl, void *, EMPTYARG )
                         aLocalRangeName.erase(*pData);
                     }
                     else
-                        pSaveObj->Clear();
+                        mpImpl->Clear();
 
                     if ( !aLocalRangeName.insert( pNewEntry ) )
                         delete pNewEntry;
 
                     UpdateNames();
                     bSaved=FALSE;
-                    RESTORE_DATA()
+                    RestoreData();
                     aEdName.SetText(EMPTY_STRING);
                     aEdName.GrabFocus();
                     UpdateChecks();
@@ -465,7 +467,7 @@ IMPL_LINK( ScNameDlg, RemoveBtnHdl, void *, EMPTYARG )
             UpdateNames();
             UpdateChecks();
             bSaved=FALSE;
-            RESTORE_DATA()
+            RestoreData();
             theCurSel = Selection( 0, SELECTION_MAX );
             aBtnAdd.SetText( aStrAdd );
             aBtnAdd.Disable();
@@ -524,7 +526,7 @@ IMPL_LINK( ScNameDlg, EdModifyHdl, Edit *, pEd )
                 if(!bSaved)
                 {
                     bSaved=TRUE;
-                    SAVE_DATA()
+                    SaveData();
                 }
                 NameSelectHdl( 0 );
             }
@@ -535,7 +537,7 @@ IMPL_LINK( ScNameDlg, EdModifyHdl, Edit *, pEd )
                 aBtnRemove.Disable();
 
                 bSaved=FALSE;
-                RESTORE_DATA()
+                RestoreData();
             }
             theSymbol = aEdAssign.GetText();
 

@@ -39,7 +39,7 @@
 
 class ScViewData;
 class ScDocument;
-
+struct ScNameDlgImpl;
 
 //==================================================================
 
@@ -79,11 +79,16 @@ private:
     const ScAddress theCursorPos;
     Selection       theCurSel;
 
+    ScNameDlgImpl*  mpImpl;
+
 private:
     void Init();
     void UpdateChecks();
     void UpdateNames();
     void CalcCurTableAssign( String& aAssign, ScRangeData* pRangeData );
+
+    void SaveData();
+    void RestoreData();
 
     // Handler:
     DECL_LINK( OkBtnHdl, void * );
@@ -95,9 +100,7 @@ private:
     DECL_LINK( AssignGetFocusHdl, void * );
 
 protected:
-
     virtual void    RefInputDone( BOOL bForced = FALSE );
-
 
 public:
                     ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
