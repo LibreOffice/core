@@ -341,12 +341,12 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
         }
         catch ( ZipException& )
         {
-            OSL_ENSURE( 0, "Error writing ZipOutputStream" );
+            OSL_FAIL( "Error writing ZipOutputStream" );
             bWritingFailed = sal_True;
         }
         catch ( IOException& )
         {
-            OSL_ENSURE( 0, "Error writing ZipOutputStream" );
+            OSL_FAIL( "Error writing ZipOutputStream" );
             bWritingFailed = sal_True;
         }
     }
@@ -437,7 +437,7 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
 
                 if ( !xStream.is() )
                 {
-                    OSL_ENSURE( 0, "ZipPackageStream didn't have a stream associated with it, skipping!" );
+                    OSL_FAIL( "ZipPackageStream didn't have a stream associated with it, skipping!" );
                     bWritingFailed = sal_True;
                     continue;
                 }
@@ -490,14 +490,14 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                         }
                         else
                         {
-                            OSL_ENSURE( 0, "The package component requires that every stream either be FROM a package or it must support XSeekable!" );
+                            OSL_FAIL( "The package component requires that every stream either be FROM a package or it must support XSeekable!" );
                             continue;
                         }
                     }
                 }
                 catch ( Exception& )
                 {
-                    OSL_ENSURE( 0, "The stream provided to the package component has problems!" );
+                    OSL_FAIL( "The stream provided to the package component has problems!" );
                     bWritingFailed = sal_True;
                     continue;
                 }
@@ -560,7 +560,7 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                     if ( !xStream.is() )
                     {
                         // Make sure that we actually _got_ a new one !
-                        OSL_ENSURE( 0, "ZipPackageStream didn't have a stream associated with it, skipping!" );
+                        OSL_FAIL( "ZipPackageStream didn't have a stream associated with it, skipping!" );
                         continue;
                     }
                 }
@@ -588,12 +588,12 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                 }
                 catch ( ZipException& )
                 {
-                    OSL_ENSURE( 0, "Error writing ZipOutputStream" );
+                    OSL_FAIL( "Error writing ZipOutputStream" );
                     bWritingFailed = sal_True;
                 }
                 catch ( IOException& )
                 {
-                    OSL_ENSURE( 0, "Error writing ZipOutputStream" );
+                    OSL_FAIL( "Error writing ZipOutputStream" );
                     bWritingFailed = sal_True;
                 }
             }
@@ -615,7 +615,7 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                     if ( !xStream.is() )
                     {
                         // Make sure that we actually _got_ a new one !
-                        OSL_ENSURE( 0, "ZipPackageStream didn't have a stream associated with it, skipping!" );
+                        OSL_FAIL( "ZipPackageStream didn't have a stream associated with it, skipping!" );
                         continue;
                     }
                 }
@@ -645,12 +645,12 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                 }
                 catch ( ZipException& )
                 {
-                    OSL_ENSURE( 0, "Error writing ZipOutputStream" );
+                    OSL_FAIL( "Error writing ZipOutputStream" );
                     bWritingFailed = sal_True;
                 }
                 catch ( IOException& )
                 {
-                    OSL_ENSURE( 0, "Error writing ZipOutputStream" );
+                    OSL_FAIL( "Error writing ZipOutputStream" );
                     bWritingFailed = sal_True;
                 }
 

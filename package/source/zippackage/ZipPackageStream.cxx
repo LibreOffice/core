@@ -417,12 +417,12 @@ Reference< io::XInputStream > SAL_CALL ZipPackageStream::getRawData()
     }
     catch (ZipException &)//rException)
     {
-        OSL_ENSURE( 0, "ZipException thrown");//rException.Message);
+        OSL_FAIL( "ZipException thrown");//rException.Message);
         return Reference < io::XInputStream > ();
     }
     catch (Exception &)
     {
-        OSL_ENSURE( 0, "Exception is thrown during stream wrapping!\n");
+        OSL_FAIL( "Exception is thrown during stream wrapping!\n");
         return Reference < io::XInputStream > ();
     }
 }
@@ -448,12 +448,12 @@ Reference< io::XInputStream > SAL_CALL ZipPackageStream::getInputStream(  )
     }
     catch (ZipException &)//rException)
     {
-        OSL_ENSURE( 0,"ZipException thrown");//rException.Message);
+        OSL_FAIL( "ZipException thrown");//rException.Message);
         return Reference < io::XInputStream > ();
     }
     catch (Exception &)
     {
-        OSL_ENSURE( 0, "Exception is thrown during stream wrapping!\n");
+        OSL_FAIL( "Exception is thrown during stream wrapping!\n");
         return Reference < io::XInputStream > ();
     }
 }

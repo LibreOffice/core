@@ -332,7 +332,7 @@ void SAL_CALL IUnknownWrapper_Impl::setValue( const OUString& aPropertyName,
             OUString msg(OUSTR("[automation bridge] Property ") + aPropertyName +
                          OUSTR(" is read-only"));
             OString sMsg = OUStringToOString(msg, osl_getThreadTextEncoding());
-            OSL_ENSURE(0, sMsg.getStr());
+            OSL_FAIL(sMsg.getStr());
             // ignore silently
             return;
         }

@@ -988,7 +988,7 @@ void ZipPackage::WriteMimetypeMagicFile( ZipOutputStream& aZipOut )
     }
     catch ( ::com::sun::star::io::IOException & r )
     {
-        OSL_ENSURE( 0, "Error adding mimetype to the ZipOutputStream" );
+        OSL_FAIL( "Error adding mimetype to the ZipOutputStream" );
         throw WrappedTargetException(
                 OUString( RTL_CONSTASCII_USTRINGPARAM ( OSL_LOG_PREFIX "Error adding mimetype to the ZipOutputStream!" ) ),
                 static_cast < OWeakObject * > ( this ),
@@ -1033,7 +1033,7 @@ void ZipPackage::WriteManifest( ZipOutputStream& aZipOut, const vector< Sequence
     }
     else
     {
-                OSL_ENSURE ( 0, "Couldn't get a ManifestWriter!" );
+                OSL_FAIL( "Couldn't get a ManifestWriter!" );
         IOException aException;
         throw WrappedTargetException(
                 OUString( RTL_CONSTASCII_USTRINGPARAM ( OSL_LOG_PREFIX "Couldn't get a ManifestWriter!" ) ),

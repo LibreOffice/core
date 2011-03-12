@@ -640,7 +640,7 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
                         nValidCerts++;
 
                 } catch (css::uno::SecurityException& ) {
-                    OSL_ENSURE(0, "Verification of certificate failed");
+                    OSL_FAIL("Verification of certificate failed");
                     bCertValid = false;
                 }
 

@@ -340,7 +340,7 @@ DocumentDigitalSignatures::ImplVerifySignatures(
                     rSigInfo.CertificateStatus = xSecEnv->verifyCertificate(rSigInfo.Signer,
                         Sequence<Reference<css::security::XCertificate> >());
                 } catch (SecurityException& ) {
-                    OSL_ENSURE(0, "Verification of certificate failed");
+                    OSL_FAIL("Verification of certificate failed");
                     rSigInfo.CertificateStatus = css::security::CertificateValidity::INVALID;
                 }
             }
