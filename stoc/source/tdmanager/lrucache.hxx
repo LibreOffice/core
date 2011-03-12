@@ -170,7 +170,7 @@ inline t_Val LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::getValue(
         toFront( pEntry );
 #ifdef __CACHE_DIAGNOSE
         OSL_TRACE( "> retrieved element \"" );
-        OSL_TRACE( ::rtl::OUStringToOString( pEntry->aKey, RTL_TEXTENCODING_ASCII_US ).getStr() );
+        OSL_TRACE( "%s", ::rtl::OUStringToOString( pEntry->aKey, RTL_TEXTENCODING_ASCII_US ).getStr() );
         OSL_TRACE( "\" from cache <\n" );
 #endif
         return pEntry->aVal;
@@ -195,7 +195,7 @@ inline void LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::setValue(
             if (pEntry->aKey.getLength())
             {
                 OSL_TRACE( "> kicking element \"" );
-                OSL_TRACE( ::rtl::OUStringToOString( pEntry->aKey, RTL_TEXTENCODING_ASCII_US ).getStr() );
+                OSL_TRACE( "%s", ::rtl::OUStringToOString( pEntry->aKey, RTL_TEXTENCODING_ASCII_US ).getStr() );
                 OSL_TRACE( "\" from cache <\n" );
             }
 #endif
@@ -207,7 +207,7 @@ inline void LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::setValue(
             pEntry = (*iFind).second;
 #ifdef __CACHE_DIAGNOSE
             OSL_TRACE( "> replacing element \"" );
-            OSL_TRACE( ::rtl::OUStringToOString( pEntry->aKey, RTL_TEXTENCODING_ASCII_US ).getStr() );
+            OSL_TRACE( "%s", ::rtl::OUStringToOString( pEntry->aKey, RTL_TEXTENCODING_ASCII_US ).getStr() );
             OSL_TRACE( "\" in cache <\n" );
 #endif
         }

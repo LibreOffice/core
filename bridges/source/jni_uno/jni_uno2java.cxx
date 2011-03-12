@@ -135,7 +135,7 @@ void Bridge::handle_java_exc(
     OString cstr_trace(
         OUStringToOString(
             trace_buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
-    OSL_TRACE( cstr_trace.getStr() );
+    OSL_TRACE( "%s", cstr_trace.getStr() );
 #endif
 }
 
@@ -261,7 +261,7 @@ void Bridge::call_java(
     OString cstr_trace(
         OUStringToOString(
             trace_buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
-    OSL_TRACE( cstr_trace.getStr() );
+    OSL_TRACE( "%s", cstr_trace.getStr() );
 #endif
 
     // complex return value
@@ -558,7 +558,7 @@ void SAL_CALL UNO_proxy_free( uno_ExtEnvironment * env, void * proxy )
         OUStringToOString(
             OUSTR("freeing binary uno proxy: ") + that->m_oid,
             RTL_TEXTENCODING_ASCII_US ) );
-    OSL_TRACE( cstr_msg.getStr() );
+    OSL_TRACE( "%s", cstr_msg.getStr() );
 #endif
 
     try
@@ -628,7 +628,7 @@ void SAL_CALL UNO_proxy_dispatch(
     OString cstr_msg(
         OUStringToOString(
             trace_buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
-    OSL_TRACE( cstr_msg.getStr() );
+    OSL_TRACE( "%s", cstr_msg.getStr() );
 #endif
 
     try

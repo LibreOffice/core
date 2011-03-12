@@ -89,7 +89,7 @@ static inline sal_Int32 makeMask(
             buf.append( item );
             ::rtl::OString str( ::rtl::OUStringToOString(
                 buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
-            OSL_TRACE( str.getStr() );
+            OSL_TRACE( "%s", str.getStr() );
         }
 #endif
     }
@@ -580,7 +580,7 @@ static void demanded_diag(
     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" => ok.") );
     ::rtl::OString str(
         ::rtl::OUStringToOString( buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
-    OSL_TRACE( str.getStr() );
+    OSL_TRACE( "%s", str.getStr() );
 }
 #endif
 //--------------------------------------------------------------------------------------------------

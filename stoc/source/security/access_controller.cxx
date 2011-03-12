@@ -616,13 +616,13 @@ static void dumpPermissions(
             RTL_CONSTASCII_STRINGPARAM("> dumping default permissions:") );
     }
     OString str( ::rtl::OUStringToOString( buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
-    OSL_TRACE( str.getStr() );
+    OSL_TRACE( "%s", str.getStr() );
     Sequence< OUString > permissions( collection.toStrings() );
     OUString const * p = permissions.getConstArray();
     for ( sal_Int32 nPos = 0; nPos < permissions.getLength(); ++nPos )
     {
         OString str( ::rtl::OUStringToOString( p[ nPos ], RTL_TEXTENCODING_ASCII_US ) );
-        OSL_TRACE( str.getStr() );
+        OSL_TRACE( "%s", str.getStr() );
     }
     OSL_TRACE( "> permission dump done" );
 }
@@ -764,7 +764,7 @@ PermissionCollection AccessController::getEffectivePermissions(
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\"") );
         OString str(
             ::rtl::OUStringToOString( buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
-        OSL_TRACE( str.getStr() );
+        OSL_TRACE( "%s", str.getStr() );
 #endif
         return PermissionCollection( new AllPermission() );
     }

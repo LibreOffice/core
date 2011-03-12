@@ -276,7 +276,7 @@ inline Reference< XIdlClass > IdlReflectionServiceImpl::constructClass(
 #if OSL_DEBUG_LEVEL > 1
         OSL_TRACE( "### corereflection type unsupported: " );
         OString aName( OUStringToOString( pTypeDescr->pTypeName, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_TRACE( aName.getStr() );
+        OSL_TRACE( "%s", aName.getStr() );
         OSL_TRACE( "\n" );
 #endif
         return Reference< XIdlClass >();

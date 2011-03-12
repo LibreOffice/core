@@ -203,7 +203,7 @@ inline t_val const * lru_cache< t_key, t_val, t_hashKey, t_equalKey >::lookup(
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\" from cache") );
             ::rtl::OString str( ::rtl::OUStringToOString(
                 buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
-            OSL_TRACE( str.getStr() );
+            OSL_TRACE( "%s", str.getStr() );
 #endif
             return &entry->m_val;
         }
@@ -232,7 +232,7 @@ inline void lru_cache< t_key, t_val, t_hashKey, t_equalKey >::set(
                 buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\" from cache") );
                 ::rtl::OString str( ::rtl::OUStringToOString(
                     buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
-                OSL_TRACE( str.getStr() );
+                OSL_TRACE( "%s", str.getStr() );
             }
 #endif
             m_key2element.erase( entry->m_key );
@@ -253,7 +253,7 @@ inline void lru_cache< t_key, t_val, t_hashKey, t_equalKey >::set(
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\" in cache") );
             ::rtl::OString str( ::rtl::OUStringToOString(
                 buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
-            OSL_TRACE( str.getStr() );
+            OSL_TRACE( "%s", str.getStr() );
 #endif
         }
         entry->m_val = val;

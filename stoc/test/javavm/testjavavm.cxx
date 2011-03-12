@@ -158,7 +158,7 @@ SAL_IMPLEMENT_MAIN()
         OSL_ENSURE( sal_False, "### exception occurred!" );
         OString aMsg( OUStringToOString( rExc.Message, RTL_TEXTENCODING_ASCII_US ) );
         OSL_TRACE( "### exception occurred: " );
-        OSL_TRACE( aMsg.getStr() );
+        OSL_TRACE( "%s", aMsg.getStr() );
         OSL_TRACE( "\n" );
     }
 

@@ -118,7 +118,7 @@ void Bridge::handle_uno_exc( JNI_context const & jni, uno_Any * uno_exc ) const
         OString cstr_msg(
             OUStringToOString(
                 buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
-        OSL_TRACE( cstr_msg.getStr() );
+        OSL_TRACE( "%s", cstr_msg.getStr() );
         }
 #endif
         // signal exception
@@ -422,7 +422,7 @@ JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch_1call(
         OString cstr_msg(
             OUStringToOString(
                 trace_buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
-        OSL_TRACE( cstr_msg.getStr() );
+        OSL_TRACE( "%s", cstr_msg.getStr() );
         }
 #endif
 
@@ -688,7 +688,7 @@ JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_finalize__J(
         OUStringToOString(
             OUSTR("freeing java uno proxy: ") + oid,
             RTL_TEXTENCODING_ASCII_US ) );
-    OSL_TRACE( cstr_msg.getStr() );
+    OSL_TRACE( "%s", cstr_msg.getStr() );
     }
 #endif
     // revoke from uno env; has already been revoked from java env
