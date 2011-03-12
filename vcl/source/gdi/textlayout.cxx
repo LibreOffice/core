@@ -227,7 +227,7 @@ namespace vcl
                     aTrace.append( ", " );
             }
             aTrace.append( ")" );
-            OSL_TRACE( aTrace.makeStringAndClear().getStr() );
+            OSL_TRACE( "%s", aTrace.makeStringAndClear().getStr() );
         }
 #endif
         return nTextWidth;
