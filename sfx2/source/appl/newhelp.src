@@ -93,12 +93,14 @@ TabPage TP_HELP_INDEX
     };
     ComboBox CB_INDEX
     {
+        HelpID = "sfx2:ComboBox:TP_HELP_INDEX:CB_INDEX";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 17 ) ;
         Size = MAP_APPFONT ( 108 , 97 ) ;
     };
     PushButton PB_OPEN_INDEX
     {
+        HelpID = "sfx2:PushButton:TP_HELP_INDEX:PB_OPEN_INDEX";
         Pos = MAP_APPFONT ( 64 , 115 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Display" ;
@@ -119,6 +121,7 @@ TabPage TP_HELP_SEARCH
     };
     ComboBox ED_SEARCH
     {
+        HelpID = "sfx2:ComboBox:TP_HELP_SEARCH:ED_SEARCH";
         Border = TRUE ;
         DropDown = TRUE;
         Pos = MAP_APPFONT ( 6 , 17 ) ;
@@ -126,30 +129,35 @@ TabPage TP_HELP_SEARCH
     };
     PushButton PB_SEARCH
     {
+        HelpID = "sfx2:PushButton:TP_HELP_SEARCH:PB_SEARCH";
         Pos = MAP_APPFONT ( 101 , 17 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Find";
     };
     CheckBox CB_FULLWORDS
     {
+        HelpID = "sfx2:CheckBox:TP_HELP_SEARCH:CB_FULLWORDS";
         Pos = MAP_APPFONT ( 6, 34 ) ;
         Size = MAP_APPFONT ( 128 , 10 ) ;
         Text [ en-US ] = "~Complete words only";
     };
     CheckBox CB_SCOPE
     {
+        HelpID = "sfx2:CheckBox:TP_HELP_SEARCH:CB_SCOPE";
         Pos = MAP_APPFONT ( 6, 47 ) ;
         Size = MAP_APPFONT ( 128 , 10 ) ;
         Text [ en-US ] = "Find in ~headings only";
     };
     ListBox LB_RESULT
     {
+        HelpID = "sfx2:ListBox:TP_HELP_SEARCH:LB_RESULT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 60 ) ;
         Size = MAP_APPFONT ( 128 , 30 ) ;
     };
     PushButton PB_OPEN_SEARCH
     {
+        HelpID = "sfx2:PushButton:TP_HELP_SEARCH:PB_OPEN_SEARCH";
         Pos = MAP_APPFONT ( 84 , 182 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Display" ;
@@ -170,6 +178,7 @@ TabPage TP_HELP_BOOKMARKS
     };
     ListBox LB_BOOKMARKS
     {
+        HelpID = "sfx2:ListBox:TP_HELP_BOOKMARKS:LB_BOOKMARKS";
         Border = TRUE ;
         Sort = TRUE;
         Pos = MAP_APPFONT ( 6 , 19 ) ;
@@ -177,6 +186,7 @@ TabPage TP_HELP_BOOKMARKS
     };
     PushButton PB_BOOKMARKS
     {
+        HelpID = "sfx2:PushButton:TP_HELP_BOOKMARKS:PB_BOOKMARKS";
         Pos = MAP_APPFONT ( 64 , 119 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Display" ;
@@ -346,6 +356,7 @@ String STR_HELP_MENU_TEXT_COPY
 
 ModalDialog DLG_HELP_ADDBOOKMARK
 {
+    HelpID = "sfx2:ModalDialog:DLG_HELP_ADDBOOKMARK";
     Size = MAP_APPFONT ( 208 , 43 ) ;
     Text [ en-US ] = "Add to Bookmarks";
     MOVEABLE = TRUE ;
@@ -362,6 +373,7 @@ ModalDialog DLG_HELP_ADDBOOKMARK
     };
     Edit ED_BOOKMARK_TITLE
     {
+        HelpID = "sfx2:Edit:DLG_HELP_ADDBOOKMARK:ED_BOOKMARK_TITLE";
         PosSize = MAP_APPFONT ( 6 , 19 , 140 , 12 ) ;
         TABSTOP = TRUE ;
         BORDER = TRUE ;

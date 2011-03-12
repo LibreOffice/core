@@ -48,9 +48,9 @@ friend class ImpItemEdit;
     Link aSetDirtyHdl;
     ImpItemListRow* pAktChangeEntry;
     long   nLastWhichOfs;
-    USHORT nLastWhich;
-    USHORT nLastWhichOben;
-    USHORT nLastWhichUnten;
+    sal_uInt16 nLastWhich;
+    sal_uInt16 nLastWhichOben;
+    sal_uInt16 nLastWhichUnten;
     bool bWhichesButNames;
     bool bDontHideIneffectiveItems;
     bool bDontSortItems;
@@ -59,15 +59,15 @@ friend class ImpItemEdit;
 private:
 #if _SOLAR__PRIVATE
     void ImpCtor();
-    void ImpSetEntry(const ImpItemListRow& rEntry, ULONG nEntryNum);
-    ImpItemListRow* ImpGetEntry(ULONG nPos) const { return (ImpItemListRow*)aList.GetObject(nPos); }
+    void ImpSetEntry(const ImpItemListRow& rEntry, sal_uIntPtr nEntryNum);
+    ImpItemListRow* ImpGetEntry(sal_uIntPtr nPos) const { return (ImpItemListRow*)aList.GetObject(nPos); }
     void ImpSaveWhich();
     void ImpRestoreWhich();
 #endif // __PRIVATE
 protected:
     virtual long GetRowCount() const;
-    virtual BOOL SeekRow(long nRow);
-    virtual void PaintField(OutputDevice& rDev, const Rectangle& rRect, USHORT nColumnId) const;
+    virtual sal_Bool SeekRow(long nRow);
+    virtual void PaintField(OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColumnId) const;
     virtual void DoubleClick(const BrowserMouseEvent&);
     virtual void KeyInput(const KeyEvent& rEvt);
     virtual void Select();
@@ -79,8 +79,8 @@ public:
     virtual ~_SdrItemBrowserControl();
     void Clear();
     void SetAttributes(const SfxItemSet* pAttr, const SfxItemSet* p2ndSet=NULL);
-    ULONG GetCurrentPos() const;
-    USHORT GetCurrentWhich() const;
+    sal_uIntPtr GetCurrentPos() const;
+    sal_uInt16 GetCurrentWhich() const;
     virtual bool BegChangeEntry(ULONG nPos);
     virtual bool EndChangeEntry();
     virtual void     BrkChangeEntry();
@@ -93,7 +93,7 @@ public:
         @return
             the text out of the cell
     */
-    virtual String  GetCellText(long _nRow, USHORT _nColId) const;
+    virtual String  GetCellText(long _nRow, sal_uInt16 _nColId) const;
 
     const ImpItemListRow* GetAktChangeEntry() const { return pAktChangeEntry; }
     XubString GetNewEntryValue() const                 { return pEditControl->GetText(); }

@@ -15,6 +15,18 @@ mkdir: %_DEST%\bin%_EXT%\pyuno
 ..\source\storage\storage.xml %_DEST%\xml%_EXT%\storage.xml
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
+..\%__SRC%\misc\mailmerge.component %_DEST%\xml%_EXT%\mailmerge.component
+..\%__SRC%\misc\pythonscript.component %_DEST%\xml%_EXT%\pythonscript.component
+..\%__SRC%\misc\ScriptFramework.component %_DEST%\xml%_EXT%\ScriptFramework.component
+..\%__SRC%\misc\ScriptProviderForBeanShell.component %_DEST%\xml%_EXT%\ScriptProviderForBeanShell.component
+..\%__SRC%\misc\ScriptProviderForJava.component %_DEST%\xml%_EXT%\ScriptProviderForJava.component
+..\%__SRC%\misc\ScriptProviderForJavaScript.component %_DEST%\xml%_EXT%\ScriptProviderForJavaScript.component
+..\%__SRC%\misc\basprov.component %_DEST%\xml%_EXT%\basprov.component
+..\%__SRC%\misc\dlgprov.component %_DEST%\xml%_EXT%\dlgprov.component
+..\%__SRC%\misc\protocolhandler.component %_DEST%\xml%_EXT%\protocolhandler.component
+..\%__SRC%\misc\scriptframe.component %_DEST%\xml%_EXT%\scriptframe.component
+..\%__SRC%\misc\stringresource.component %_DEST%\xml%_EXT%\stringresource.component
+..\%__SRC%\misc\vbaevents.component %_DEST%\xml%_EXT%\vbaevents.component
 
 # Extensions
 ..\%__SRC%\bin\*.oxt %_DEST%\bin%_EXT%\*.oxt

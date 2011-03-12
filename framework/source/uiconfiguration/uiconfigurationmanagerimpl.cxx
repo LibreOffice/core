@@ -34,11 +34,11 @@
 #include <uielement/constitemcontainer.hxx>
 #include <uielement/rootitemcontainer.hxx>
 #include <uielement/uielementtypenames.hxx>
-#include <xml/menuconfiguration.hxx>
-#include <xml/toolboxconfiguration.hxx>
+#include <framework/menuconfiguration.hxx>
+#include <framework/toolboxconfiguration.hxx>
 #include <uiconfiguration/imagemanager.hxx>
 
-#include <xml/statusbarconfiguration.hxx>
+#include <framework/statusbarconfiguration.hxx>
 
 //_________________________________________________________________________________________________________________
 //  interface includes

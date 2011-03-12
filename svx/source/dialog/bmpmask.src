@@ -37,7 +37,7 @@
  // RID_SVXDLG_BMPMASK ----------------------------------------------------
 DockingWindow RID_SVXDLG_BMPMASK
 {
-    HelpId = SID_BMPMASK ;
+    HelpId = CMD_SID_BMPMASK ;
     OutputSize = TRUE ;
     Hide = TRUE ;
     SVLook = TRUE ;
@@ -78,6 +78,7 @@ DockingWindow RID_SVXDLG_BMPMASK
 
     CheckBox CBX_1
     {
+        HelpID = "svx:CheckBox:RID_SVXDLG_BMPMASK:CBX_1";
         Pos = MAP_APPFONT ( 12 , 50 ) ;
         Size = MAP_APPFONT ( 10 , 10 ) ;
         TabStop = TRUE ;
@@ -92,6 +93,7 @@ DockingWindow RID_SVXDLG_BMPMASK
     };
     MetricField SP_1
     {
+        HelpID = "svx:MetricField:RID_SVXDLG_BMPMASK:SP_1";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 58 , 48 ) ;
         Size = MAP_APPFONT ( 29 , 12 ) ;
@@ -106,6 +108,7 @@ DockingWindow RID_SVXDLG_BMPMASK
     };
     ListBox LB_1
     {
+        HelpID = "svx:ListBox:RID_SVXDLG_BMPMASK:LB_1";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 93 , 48 ) ;
         Size = MAP_APPFONT ( 64 , 75 ) ;
@@ -118,6 +121,7 @@ DockingWindow RID_SVXDLG_BMPMASK
 
     CheckBox CBX_2
     {
+        HelpID = "svx:CheckBox:RID_SVXDLG_BMPMASK:CBX_2";
         Pos = MAP_APPFONT ( 12 , 65 ) ;
         Size = MAP_APPFONT ( 10 , 10 ) ;
         TabStop = TRUE ;
@@ -132,6 +136,7 @@ DockingWindow RID_SVXDLG_BMPMASK
     };
     MetricField SP_2
     {
+        HelpID = "svx:MetricField:RID_SVXDLG_BMPMASK:SP_2";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 58 , 63 ) ;
         Size = MAP_APPFONT ( 29 , 12 ) ;
@@ -146,6 +151,7 @@ DockingWindow RID_SVXDLG_BMPMASK
     };
     ListBox LB_2
     {
+        HelpID = "svx:ListBox:RID_SVXDLG_BMPMASK:LB_2";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 93 , 63 ) ;
         Size = MAP_APPFONT ( 64 , 75 ) ;
@@ -158,6 +164,7 @@ DockingWindow RID_SVXDLG_BMPMASK
 
     CheckBox CBX_3
     {
+        HelpID = "svx:CheckBox:RID_SVXDLG_BMPMASK:CBX_3";
         Pos = MAP_APPFONT ( 12 , 80 ) ;
         Size = MAP_APPFONT ( 10 , 10 ) ;
         TabStop = TRUE ;
@@ -172,6 +179,7 @@ DockingWindow RID_SVXDLG_BMPMASK
     };
     MetricField SP_3
     {
+        HelpID = "svx:MetricField:RID_SVXDLG_BMPMASK:SP_3";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 58, 78 ) ;
         Size = MAP_APPFONT ( 29 , 12 ) ;
@@ -186,6 +194,7 @@ DockingWindow RID_SVXDLG_BMPMASK
     };
     ListBox LB_3
     {
+        HelpID = "svx:ListBox:RID_SVXDLG_BMPMASK:LB_3";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 93 , 78 ) ;
         Size = MAP_APPFONT ( 64 , 75 ) ;
@@ -198,6 +207,7 @@ DockingWindow RID_SVXDLG_BMPMASK
 
     CheckBox CBX_4
     {
+        HelpID = "svx:CheckBox:RID_SVXDLG_BMPMASK:CBX_4";
         Pos = MAP_APPFONT ( 12 , 95 ) ;
         Size = MAP_APPFONT ( 10 , 10 ) ;
         TabStop = TRUE ;
@@ -212,6 +222,7 @@ DockingWindow RID_SVXDLG_BMPMASK
     };
     MetricField SP_4
     {
+        HelpID = "svx:MetricField:RID_SVXDLG_BMPMASK:SP_4";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 58 , 93 ) ;
         Size = MAP_APPFONT ( 29 , 12 ) ;
@@ -226,6 +237,7 @@ DockingWindow RID_SVXDLG_BMPMASK
     };
     ListBox LB_4
     {
+        HelpID = "svx:ListBox:RID_SVXDLG_BMPMASK:LB_4";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 93 , 93 ) ;
         Size = MAP_APPFONT ( 64 , 75 ) ;
@@ -236,6 +248,7 @@ DockingWindow RID_SVXDLG_BMPMASK
 
     CheckBox CBX_TRANS
     {
+        HelpID = "svx:CheckBox:RID_SVXDLG_BMPMASK:CBX_TRANS";
         Pos = MAP_APPFONT ( 12 , 110 ) ;
         Size = MAP_APPFONT ( 71 , 10 ) ;
         TabStop = TRUE ;
@@ -244,6 +257,7 @@ DockingWindow RID_SVXDLG_BMPMASK
 
     PushButton BTN_EXEC
     {
+        HelpID = "svx:PushButton:RID_SVXDLG_BMPMASK:BTN_EXEC";
         Pos = MAP_APPFONT ( 93 , 6 ) ;
         Size = MAP_APPFONT ( 64 , 14 ) ;
         Text [ en-US ] = "~Replace" ;
@@ -251,6 +265,7 @@ DockingWindow RID_SVXDLG_BMPMASK
 
     ListBox LB_TRANS
     {
+        HelpID = "svx:ListBox:RID_SVXDLG_BMPMASK:LB_TRANS";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 93 , 108 ) ;
         Size = MAP_APPFONT ( 64 , 75 ) ;
@@ -274,7 +289,7 @@ DockingWindow RID_SVXDLG_BMPMASK
                     ImageBitmap = Bitmap { File = "sc10350.bmp" ; };
                     MASKCOLOR
                 };
-                Text [ en-US ] = "Eyedropper" ;
+                Text [ en-US ] = "Pipette" ;
             };
         };
     };
@@ -285,7 +300,7 @@ DockingWindow RID_SVXDLG_BMPMASK
         Pos = MAP_APPFONT ( 22 , 6 ) ;
         Size = MAP_APPFONT ( 43 , 14 ) ;
     };
-    Text [ en-US ] = "Eyedropper" ;
+    Text [ en-US ] = "Color Replacer" ;
 
     Image IMG_PIPETTE
     {
@@ -307,47 +322,16 @@ String RID_SVXDLG_BMPMASK_STR_SOURCECOLOR
     Text [ en-US ] = "Source Color";
 };
 
- // ********************************************************************** EOF
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+String RID_SVXDLG_BMPMASK_STR_PALETTE
+{
+    Text [ en-US ] = "Color Palette";
+};
+String RID_SVXDLG_BMPMASK_STR_TOLERANCE
+{
+    Text [ en-US ] = "Tolerance";
+};
+String RID_SVXDLG_BMPMASK_STR_REPLACEWITH
+{
+    Text [ en-US ] = "Replace with";
+};
 

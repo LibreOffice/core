@@ -32,10 +32,10 @@
 #include <stdio.h>
 #include <boost/unordered_map.hpp>
 
-#include "imgmgr.hxx"
+#include "sfx2/imgmgr.hxx"
 #include <sfx2/sfx.hrc>
 #include <sfx2/app.hxx>
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include <sfx2/bindings.hxx>
 #include "statcach.hxx"
 #include <sfx2/module.hxx>
@@ -54,7 +54,7 @@ const sal_uInt32 IMAGELIST_COUNT = 4; // small, small-hi, large, large-hi
 struct ToolBoxInf_Impl
 {
     ToolBox* pToolBox;
-    USHORT   nFlags;
+    sal_uInt16   nFlags;
 };
 
 class SfxImageManager_Impl
@@ -66,8 +66,8 @@ public:
     ImageList*                      m_pImageList[IMAGELIST_COUNT];
     SfxModule*                      m_pModule;
 
-    ImageList*              GetImageList( BOOL bBig );
-    Image                   GetImage( USHORT nId, BOOL bBig );
+    ImageList*              GetImageList( bool bBig );
+    Image                   GetImage( sal_uInt16 nId, bool bBig );
     void                    SetSymbolsSize_Impl( sal_Int16 );
 
     DECL_LINK( OptionsChanged_Impl, void* );
@@ -114,7 +114,7 @@ static SfxImageManager_Impl* GetImageManager( SfxModule* pModule )
 }
 
 // Global image list
-static ImageList* GetImageList( BOOL bBig )
+static ImageList* GetImageList( bool bBig )
 {
     SolarMutexGuard aGuard;
     ImageList* rpList = NULL;
@@ -169,7 +169,7 @@ SfxImageManager_Impl::~SfxImageManager_Impl()
 
 //-------------------------------------------------------------------------
 
-ImageList* SfxImageManager_Impl::GetImageList( BOOL bBig )
+ImageList* SfxImageManager_Impl::GetImageList( bool bBig )
 {
     sal_Int32 nIndex = impl_convertBools( bBig );
     if ( !m_pImageList[nIndex] )
@@ -185,7 +185,7 @@ ImageList* SfxImageManager_Impl::GetImageList( BOOL bBig )
 
 //-------------------------------------------------------------------------
 
-Image SfxImageManager_Impl::GetImage( USHORT nId, BOOL bBig )
+Image SfxImageManager_Impl::GetImage( sal_uInt16 nId, bool bBig )
 {
     ImageList* pImageList = GetImageList( bBig );
     if ( pImageList )
@@ -202,7 +202,7 @@ void SfxImageManager_Impl::SetSymbolsSize_Impl( sal_Int16 nNewSymbolsSize )
     if ( nNewSymbolsSize != m_nSymbolsSize )
     {
         m_nSymbolsSize = nNewSymbolsSize;
-        BOOL bLarge( m_nSymbolsSize == SFX_SYMBOLS_SIZE_LARGE );
+        sal_Bool bLarge( m_nSymbolsSize == SFX_SYMBOLS_SIZE_LARGE );
 
         for ( sal_uInt32 n=0; n < m_aToolBoxes.size(); n++ )
         {
@@ -210,10 +210,10 @@ void SfxImageManager_Impl::SetSymbolsSize_Impl( sal_Int16 nNewSymbolsSize )
             if ( pInf->nFlags & SFX_TOOLBOX_CHANGESYMBOLSET )
             {
                 ToolBox *pBox       = pInf->pToolBox;
-                USHORT  nCount      = pBox->GetItemCount();
-                for ( USHORT nPos=0; nPos<nCount; nPos++ )
+                sal_uInt16  nCount      = pBox->GetItemCount();
+                for ( sal_uInt16 nPos=0; nPos<nCount; nPos++ )
                 {
-                    USHORT nId = pBox->GetItemId( nPos );
+                    sal_uInt16 nId = pBox->GetItemId( nPos );
                     if ( pBox->GetItemType(nPos) == TOOLBOXITEM_BUTTON )
                     {
                         pBox->SetItemImage( nId, GetImage( nId, bLarge ) );
@@ -295,7 +295,7 @@ SfxImageManager* SfxImageManager::GetImageManager( SfxModule* pModule )
 
 //-------------------------------------------------------------------------
 
-Image SfxImageManager::GetImage( USHORT nId, BOOL bBig ) const
+Image SfxImageManager::GetImage( sal_uInt16 nId, bool bBig ) const
 {
     ImageList* pImageList = pImp->GetImageList( bBig );
     if ( pImageList && pImageList->HasImageAtPos( nId ) )
@@ -305,15 +305,15 @@ Image SfxImageManager::GetImage( USHORT nId, BOOL bBig ) const
 
 //-------------------------------------------------------------------------
 
-Image SfxImageManager::GetImage( USHORT nId ) const
+Image SfxImageManager::GetImage( sal_uInt16 nId ) const
 {
-    BOOL bLarge = SvtMiscOptions().AreCurrentSymbolsLarge();
+    sal_Bool bLarge = SvtMiscOptions().AreCurrentSymbolsLarge();
     return GetImage( nId, bLarge );
 }
 
 //-------------------------------------------------------------------------
 
-Image SfxImageManager::SeekImage( USHORT nId, BOOL bBig ) const
+Image SfxImageManager::SeekImage( sal_uInt16 nId, bool bBig ) const
 {
     sal_Bool bGlobal = ( pImp->m_pModule == 0 );
     ImageList* pImageList = pImp->GetImageList( bBig );
@@ -330,15 +330,15 @@ Image SfxImageManager::SeekImage( USHORT nId, BOOL bBig ) const
 
 //-------------------------------------------------------------------------
 
-Image SfxImageManager::SeekImage( USHORT nId ) const
+Image SfxImageManager::SeekImage( sal_uInt16 nId ) const
 {
-    BOOL bLarge = SvtMiscOptions().AreCurrentSymbolsLarge();
+    sal_Bool bLarge = SvtMiscOptions().AreCurrentSymbolsLarge();
     return SeekImage( nId, bLarge );
 }
 
 //-------------------------------------------------------------------------
 
-void SfxImageManager::RegisterToolBox( ToolBox *pBox, USHORT nFlags )
+void SfxImageManager::RegisterToolBox( ToolBox *pBox, sal_uInt16 nFlags )
 {
     SolarMutexGuard aGuard;
 
@@ -367,21 +367,21 @@ void SfxImageManager::ReleaseToolBox( ToolBox *pBox )
 
 //-------------------------------------------------------------------------
 
-void SfxImageManager::SetImages( ToolBox& rToolBox, BOOL bLarge )
+void SfxImageManager::SetImages( ToolBox& rToolBox, bool bLarge )
 {
     SetImagesForceSize( rToolBox, bLarge );
 }
 
 //-------------------------------------------------------------------------
 
-void SfxImageManager::SetImagesForceSize( ToolBox& rToolBox, BOOL bLarge )
+void SfxImageManager::SetImagesForceSize( ToolBox& rToolBox, bool bLarge )
 {
     ImageList* pImageList = pImp->GetImageList( bLarge );
 
-    USHORT nCount = rToolBox.GetItemCount();
-    for (USHORT n=0; n<nCount; n++)
+    sal_uInt16 nCount = rToolBox.GetItemCount();
+    for (sal_uInt16 n=0; n<nCount; n++)
     {
-        USHORT nId = rToolBox.GetItemId(n);
+        sal_uInt16 nId = rToolBox.GetItemId(n);
         switch ( rToolBox.GetItemType(n) )
         {
             case TOOLBOXITEM_BUTTON:
@@ -403,7 +403,7 @@ void SfxImageManager::SetImagesForceSize( ToolBox& rToolBox, BOOL bLarge )
 
 void SfxImageManager::SetImages( ToolBox& rToolBox )
 {
-    BOOL bLarge = ( pImp->m_nSymbolsSize == SFX_SYMBOLS_SIZE_LARGE );
+    sal_Bool bLarge = ( pImp->m_nSymbolsSize == SFX_SYMBOLS_SIZE_LARGE );
     SetImagesForceSize( rToolBox, bLarge );
 }
 

@@ -44,10 +44,10 @@
 #include <vcl/sound.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
-#include "tbxctl.hxx"
-#include "tbxdraw.hxx"
+#include "svx/tbxctl.hxx"
+#include "svx/tbxdraw.hxx"
 #include "tbxform.hxx"
-#include "fmresids.hrc"
+#include "svx/fmresids.hrc"
 #include "fmitems.hxx"
 #include "fmhelp.hrc"
 #include <sfx2/viewfrm.hxx>
@@ -76,7 +76,7 @@ SvxFmAbsRecWin::SvxFmAbsRecWin( Window* _pParent, SfxToolBoxControl* _pControlle
     SetSizePixel( Size(70,19) );
 
     SetDecimalDigits(0);
-    SetStrictFormat(TRUE);
+    SetStrictFormat(sal_True);
 }
 
 // -----------------------------------------------------------------------
@@ -96,7 +96,7 @@ void SvxFmAbsRecWin::FirePosition( sal_Bool _bForce )
             return;
         }
 
-        SfxInt32Item aPositionParam( FN_PARAM_1, static_cast<INT32>(nRecord) );
+        SfxInt32Item aPositionParam( FN_PARAM_1, static_cast<sal_Int32>(nRecord) );
 
         Any a;
         Sequence< PropertyValue > aArgs( 1 );
@@ -132,7 +132,7 @@ void SvxFmAbsRecWin::KeyInput( const KeyEvent& rKeyEvent )
 
 struct MapSlotToCmd
 {
-    USHORT      nSlotId;
+    sal_uInt16      nSlotId;
     const char* pCommand;
 };
 
@@ -165,7 +165,7 @@ static MapSlotToCmd SlotToCommands[] =
 SFX_IMPL_TOOLBOX_CONTROL( SvxFmTbxCtlConfig, SfxUInt16Item );
 
 //-----------------------------------------------------------------------
-SvxFmTbxCtlConfig::SvxFmTbxCtlConfig( USHORT nSlotId, USHORT nId, ToolBox& rTbx )
+SvxFmTbxCtlConfig::SvxFmTbxCtlConfig( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx )
     : SfxToolBoxControl( nSlotId, nId, rTbx )
     ,nLastSlot( 0 )
 {
@@ -173,11 +173,11 @@ SvxFmTbxCtlConfig::SvxFmTbxCtlConfig( USHORT nSlotId, USHORT nId, ToolBox& rTbx 
 }
 
 //-----------------------------------------------------------------------
-void SvxFmTbxCtlConfig::StateChanged(USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
+void SvxFmTbxCtlConfig::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
     if (nSID == SID_FM_CONFIG)
     {
-        UINT16 nSlot   = 0;
+        sal_uInt16 nSlot   = 0;
         if (eState >= SFX_ITEM_AVAILABLE)
             nSlot = ((SfxUInt16Item*)pState)->GetValue();
 
@@ -236,13 +236,13 @@ SfxPopupWindow* SvxFmTbxCtlConfig::CreatePopupWindow()
 }
 
 //-----------------------------------------------------------------------
-void SvxFmTbxCtlConfig::Select( USHORT /*nModifier*/ )
+void SvxFmTbxCtlConfig::Select( sal_uInt16 /*nModifier*/ )
 {
     //////////////////////////////////////////////////////////////////////
     // Click auf den Button SID_FM_CONFIG in der ObjectBar
     if ( nLastSlot )
     {
-        USHORT n = 0;
+        sal_uInt16 n = 0;
         while( SlotToCommands[n].nSlotId > 0 )
         {
             if ( SlotToCommands[n].nSlotId == nLastSlot )
@@ -267,7 +267,7 @@ void SvxFmTbxCtlConfig::Select( USHORT /*nModifier*/ )
 SFX_IMPL_TOOLBOX_CONTROL( SvxFmTbxCtlAbsRec, SfxInt32Item );
 DBG_NAME(SvxFmTbxCtlAbsRec);
 //-----------------------------------------------------------------------
-SvxFmTbxCtlAbsRec::SvxFmTbxCtlAbsRec( USHORT nSlotId, USHORT nId, ToolBox& rTbx )
+SvxFmTbxCtlAbsRec::SvxFmTbxCtlAbsRec( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx )
     :SfxToolBoxControl( nSlotId, nId, rTbx )
 {
     DBG_CTOR(SvxFmTbxCtlAbsRec,NULL);
@@ -280,9 +280,9 @@ SvxFmTbxCtlAbsRec::~SvxFmTbxCtlAbsRec()
 }
 
 //-----------------------------------------------------------------------
-void SvxFmTbxCtlAbsRec::StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
+void SvxFmTbxCtlAbsRec::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
-    USHORT              nId = GetId();
+    sal_uInt16              nId = GetId();
     ToolBox*            pToolBox = &GetToolBox();
     SvxFmAbsRecWin*     pWin = (SvxFmAbsRecWin*)( pToolBox->GetItemWindow(nId) );
 
@@ -295,7 +295,7 @@ void SvxFmTbxCtlAbsRec::StateChanged( USHORT nSID, SfxItemState eState, const Sf
         pWin->SetValue( pItem ? pItem->GetValue() : -1 );
     }
 
-    BOOL bEnable = SFX_ITEM_DISABLED != eState && pState;
+    sal_Bool bEnable = SFX_ITEM_DISABLED != eState && pState;
     if (!bEnable)
         pWin->SetText(String());
 
@@ -321,7 +321,7 @@ Window* SvxFmTbxCtlAbsRec::CreateItemWindow( Window* pParent )
 SFX_IMPL_TOOLBOX_CONTROL( SvxFmTbxCtlRecText, SfxBoolItem );
 DBG_NAME(SvxFmTbxCtlRecText);
 //-----------------------------------------------------------------------
-SvxFmTbxCtlRecText::SvxFmTbxCtlRecText( USHORT nSlotId, USHORT nId, ToolBox& rTbx )
+SvxFmTbxCtlRecText::SvxFmTbxCtlRecText( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx )
     :SfxToolBoxControl( nSlotId, nId, rTbx )
 {
     DBG_CTOR(SvxFmTbxCtlRecText,NULL);
@@ -355,7 +355,7 @@ Window* SvxFmTbxCtlRecText::CreateItemWindow( Window* pParent )
 SFX_IMPL_TOOLBOX_CONTROL( SvxFmTbxCtlRecFromText, SfxBoolItem );
 DBG_NAME(SvxFmTbxCtlRecFromText);
 //-----------------------------------------------------------------------
-SvxFmTbxCtlRecFromText::SvxFmTbxCtlRecFromText( USHORT nSlotId, USHORT nId, ToolBox& rTbx )
+SvxFmTbxCtlRecFromText::SvxFmTbxCtlRecFromText( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx )
     :SfxToolBoxControl( nSlotId, nId, rTbx )
 {
     DBG_CTOR(SvxFmTbxCtlRecFromText,NULL);
@@ -388,7 +388,7 @@ DBG_NAME(SvxFmTbxCtlRecTotal);
 SFX_IMPL_TOOLBOX_CONTROL( SvxFmTbxCtlRecTotal, SfxStringItem );
 
 //-----------------------------------------------------------------------
-SvxFmTbxCtlRecTotal::SvxFmTbxCtlRecTotal( USHORT nSlotId, USHORT nId, ToolBox& rTbx )
+SvxFmTbxCtlRecTotal::SvxFmTbxCtlRecTotal( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx )
     :SfxToolBoxControl( nSlotId, nId, rTbx )
     ,pFixedText( NULL )
 {
@@ -410,12 +410,12 @@ Window* SvxFmTbxCtlRecTotal::CreateItemWindow( Window* pParent )
     aSize.Width() += 12;
     pFixedText->SetSizePixel( aSize );
     pFixedText->SetBackground();
-    pFixedText->SetPaintTransparent(TRUE);
+    pFixedText->SetPaintTransparent(sal_True);
     return pFixedText;
 }
 
 //-----------------------------------------------------------------------
-void SvxFmTbxCtlRecTotal::StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
+void SvxFmTbxCtlRecTotal::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
     //////////////////////////////////////////////////////////////////////
     // Setzen des FixedTextes
@@ -441,7 +441,7 @@ void SvxFmTbxCtlRecTotal::StateChanged( USHORT nSID, SfxItemState eState, const 
 SFX_IMPL_TOOLBOX_CONTROL( SvxFmTbxNextRec, SfxBoolItem );
 
 //-----------------------------------------------------------------------
-SvxFmTbxNextRec::SvxFmTbxNextRec( USHORT nSlotId, USHORT nId, ToolBox& rTbx )
+SvxFmTbxNextRec::SvxFmTbxNextRec( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx )
     :SfxToolBoxControl( nSlotId, nId, rTbx )
 {
     rTbx.SetItemBits(nId, rTbx.GetItemBits(nId) | TIB_REPEAT);
@@ -450,7 +450,7 @@ SvxFmTbxNextRec::SvxFmTbxNextRec( USHORT nSlotId, USHORT nId, ToolBox& rTbx )
     MouseSettings aMouseSettings = aSettings.GetMouseSettings();
     aMouseSettings.SetButtonRepeat(aMouseSettings.GetButtonRepeat() / 4);
     aSettings.SetMouseSettings(aMouseSettings);
-    rTbx.SetSettings(aSettings, TRUE);
+    rTbx.SetSettings(aSettings, sal_True);
 }
 
 //========================================================================
@@ -459,7 +459,7 @@ SvxFmTbxNextRec::SvxFmTbxNextRec( USHORT nSlotId, USHORT nId, ToolBox& rTbx )
 SFX_IMPL_TOOLBOX_CONTROL( SvxFmTbxPrevRec, SfxBoolItem );
 
 //-----------------------------------------------------------------------
-SvxFmTbxPrevRec::SvxFmTbxPrevRec( USHORT nSlotId, USHORT nId, ToolBox& rTbx )
+SvxFmTbxPrevRec::SvxFmTbxPrevRec( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx )
     :SfxToolBoxControl( nSlotId, nId, rTbx )
 {
     rTbx.SetItemBits(nId, rTbx.GetItemBits(nId) | TIB_REPEAT);

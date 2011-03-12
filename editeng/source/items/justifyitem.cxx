@@ -86,7 +86,7 @@ SfxItemPresentation SvxHorJustifyItem::GetPresentation
 }
 
 
-bool SvxHorJustifyItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+bool SvxHorJustifyItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
@@ -129,7 +129,7 @@ bool SvxHorJustifyItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
     return true;
 }
 
-bool SvxHorJustifyItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
+bool SvxHorJustifyItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
@@ -244,7 +244,7 @@ SfxItemPresentation SvxVerJustifyItem::GetPresentation
 }
 
 
-bool SvxVerJustifyItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+bool SvxVerJustifyItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
@@ -281,7 +281,7 @@ bool SvxVerJustifyItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
     return true;
 }
 
-bool SvxVerJustifyItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
+bool SvxVerJustifyItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
@@ -391,7 +391,7 @@ SfxItemPresentation SvxJustifyMethodItem::GetPresentation
 }
 
 
-bool SvxJustifyMethodItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/ ) const
+bool SvxJustifyMethodItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     sal_Int32 nUno = table::CellJustifyMethod::AUTO;
     switch (static_cast<SvxCellJustifyMethod>(GetValue()))
@@ -404,7 +404,7 @@ bool SvxJustifyMethodItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/ ) cons
     return true;
 }
 
-bool SvxJustifyMethodItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
+bool SvxJustifyMethodItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     sal_Int32 nVal = table::CellJustifyMethod::AUTO;
     if (!(rVal >>= nVal))

@@ -715,7 +715,7 @@ inline Point lclToMapUnit( long nSubXPos, long nSubYPos )
 /** Returns a polygon constructed from a vector of points. */
 inline Polygon lclCreatePolygon( const PointVec& rPoints )
 {
-    return Polygon( static_cast< USHORT >( rPoints.size() ), &rPoints[ 0 ] );
+    return Polygon( static_cast< sal_uInt16 >( rPoints.size() ), &rPoints[ 0 ] );
 }
 
 /** Returns a polygon constructed from the four passed points. */
@@ -1133,9 +1133,9 @@ void Style::Set( const SvxBorderLine& rBorder, double fScale, sal_uInt16 nMaxWid
 {
     maColor = rBorder.GetColor();
 
-    USHORT nPrim = rBorder.GetOutWidth();
-    USHORT nDist = rBorder.GetDistance();
-    USHORT nSecn = rBorder.GetInWidth();
+    sal_uInt16 nPrim = rBorder.GetOutWidth();
+    sal_uInt16 nDist = rBorder.GetDistance();
+    sal_uInt16 nSecn = rBorder.GetInWidth();
 
     if( !nSecn )    // no or single frame border
     {

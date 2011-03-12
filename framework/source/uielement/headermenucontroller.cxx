@@ -79,7 +79,7 @@ using namespace com::sun::star::container;
 //#define RID_SW_SHELLRES (RID_SW_START + 1250 + 1)
 //#define STR_ALLPAGE_HEADFOOT 14
 
-const USHORT ALL_MENUITEM_ID = 1;
+const sal_uInt16 ALL_MENUITEM_ID = 1;
 
 namespace framework
 {
@@ -136,8 +136,8 @@ void HeaderMenuController::fillPopupMenu( const Reference< ::com::sun::star::fra
             {
                 Sequence< rtl::OUString > aSeqNames = xNameContainer->getElementNames();
 
-                USHORT   nId = 2;
-                USHORT  nCount = 0;
+                sal_uInt16   nId = 2;
+                sal_uInt16  nCount = 0;
                 sal_Bool bAllOneState( sal_True );
                 sal_Bool bLastCheck( sal_True );
                 sal_Bool bFirstChecked( sal_False );
@@ -180,7 +180,7 @@ void HeaderMenuController::fillPopupMenu( const Reference< ::com::sun::star::fra
 
                             // Check if all entries have the same state
                             if( bAllOneState && n && bHeaderIsOn != bLastCheck )
-                                bAllOneState = FALSE;
+                                bAllOneState = sal_False;
                             bLastCheck = bHeaderIsOn;
                             ++nCount;
                         }

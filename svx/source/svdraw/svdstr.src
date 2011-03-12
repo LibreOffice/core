@@ -26,7 +26,7 @@
  ************************************************************************/
 /* StarView resource file */
 
-#include "svdstr.hrc"
+#include "svx/svdstr.hrc"
  // Ab hier gecachte Strings
 String STR_ObjNameSingulNONE
 {
@@ -2745,6 +2745,11 @@ String SIP_SA_GRAFRESERVE4 { Text = "" ; };
 String SIP_SA_GRAFRESERVE5 { Text = "" ; };
 String SIP_SA_GRAFRESERVE6 { Text = "" ; };
 
+Bitmap SIP_SA_PAGESHADOW35X35
+{
+    File = "pageshadow35x35.png";
+};
+
 Bitmap SIP_SA_MARKERS
 {
     File = "markers.png";
@@ -2848,4 +2853,12 @@ Bitmap SIP_SA_CROP_FINE_MARKERS
     File = "cropmarkers2.png";
 };
 
-// ******************************************************************* EOF
+String STR_ObjNameSingulFONTWORK
+{
+    Text [ en-US ] = "font work" ;
+};
+String STR_ObjNamePluralFONTWORK
+{
+    Text [ en-US ] = "font works" ;
+};
+

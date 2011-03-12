@@ -77,6 +77,7 @@ Entry_Impl::Entry_Impl( const uno::Reference< deployment::XPackage > &xPackage,
         m_sTitle = xPackage->getDisplayName();
         m_sVersion = xPackage->getVersion();
         m_sDescription = xPackage->getDescription();
+    m_sLicenseText = xPackage->getLicenseText();
 
         beans::StringPair aInfo( m_xPackage->getPublisherInfo() );
         m_sPublisher = aInfo.First;
@@ -707,7 +708,7 @@ bool ExtensionBox_Impl::HandleTabKey( bool )
 }
 
 // -----------------------------------------------------------------------
-bool ExtensionBox_Impl::HandleCursorKey( USHORT nKeyCode )
+bool ExtensionBox_Impl::HandleCursorKey( sal_uInt16 nKeyCode )
 {
     if ( m_vEntries.empty() )
         return true;
@@ -872,7 +873,7 @@ long ExtensionBox_Impl::Notify( NotifyEvent& rNEvt )
     {
         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
         KeyCode         aKeyCode = pKEvt->GetKeyCode();
-        USHORT          nKeyCode = aKeyCode.GetCode();
+        sal_uInt16          nKeyCode = aKeyCode.GetCode();
 
         if ( nKeyCode == KEY_TAB )
             bHandled = HandleTabKey( aKeyCode.IsShift() );

@@ -46,7 +46,7 @@ class FmFormObj: public SdrUnoObj
                 // m_pEnvironmentHistory was created
 
     FmFormView*     m_pControlCreationView;
-    ULONG       m_nControlCreationEvent;
+    sal_uLong       m_nControlCreationEvent;
 
     // Informationen fuer die Controlumgebung
     // werden nur vorgehalten, wenn ein Object sich nicht in einer Objectliste befindet

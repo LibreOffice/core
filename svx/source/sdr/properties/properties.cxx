@@ -32,7 +32,7 @@
 #include <svx/sdr/properties/itemsettools.hxx>
 #include <svl/itemset.hxx>
 #include <svx/svdogrp.hxx>
-#include <svditer.hxx>
+#include <svx/svditer.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 

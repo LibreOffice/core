@@ -93,27 +93,6 @@ void SAL_CALL component_getImplementationEnvironment(
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-sal_Bool SAL_CALL component_writeInfo(
-    lang::XMultiServiceFactory * pServiceManager,
-    registry::XRegistryKey * pRegistryKey )
-{
-    return component_writeInfoHelper(
-        pServiceManager, pRegistryKey,
-        dp_registry::backend::configuration::serviceDecl,
-        dp_registry::backend::component::serviceDecl,
-        dp_registry::backend::help::serviceDecl,
-        dp_registry::backend::script::serviceDecl,
-        dp_registry::backend::sfwk::serviceDecl,
-        dp_registry::backend::executable::serviceDecl,
-        dp_manager::factory::serviceDecl,
-        dp_log::serviceDecl,
-        dp_info::serviceDecl,
-        dp_manager::serviceDecl) &&
-        dp_manager::factory::singleton_entries( pRegistryKey ) &&
-        dp_info::singleton_entries( pRegistryKey ) &&
-        dp_manager::singleton_entries( pRegistryKey);
-}
-
 void * SAL_CALL component_getFactory(
     sal_Char const * pImplName,
     lang::XMultiServiceFactory * pServiceManager,

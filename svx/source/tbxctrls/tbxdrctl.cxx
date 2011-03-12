@@ -43,9 +43,9 @@
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 
-#include "tbxctl.hxx"
-#include "tbxdraw.hxx"
-#include "tbxcolor.hxx"
+#include "svx/tbxctl.hxx"
+#include "svx/tbxdraw.hxx"
+#include "svx/tbxcolor.hxx"
 #include "tbxdraw.hrc"
 #include <com/sun/star/frame/XLayoutManager.hpp>
 
@@ -56,7 +56,7 @@ using namespace ::com::sun::star::frame;
 
 // -----------------------------------------------------------------------
 
-SvxTbxCtlDraw::SvxTbxCtlDraw( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
+SvxTbxCtlDraw::SvxTbxCtlDraw( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
 
     SfxToolBoxControl( nSlotId, nId, rTbx ),
 
@@ -69,7 +69,7 @@ SvxTbxCtlDraw::SvxTbxCtlDraw( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
 
 // -----------------------------------------------------------------------
 
-void SvxTbxCtlDraw::StateChanged( USHORT nSID, SfxItemState eState,
+void SvxTbxCtlDraw::StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                   const SfxPoolItem* pState )
 {
     GetToolBox().EnableItem( GetId(), ( eState != SFX_ITEM_DISABLED ) );
@@ -95,7 +95,7 @@ void SvxTbxCtlDraw::toggleToolbox()
     Reference< XLayoutManager > xLayoutMgr = getLayoutManager();
     if ( xLayoutMgr.is() )
     {
-        BOOL bCheck = FALSE;
+        sal_Bool bCheck = sal_False;
         if ( xLayoutMgr->isElementVisible( m_sToolboxName ) )
         {
             xLayoutMgr->hideElement( m_sToolboxName );
@@ -103,7 +103,7 @@ void SvxTbxCtlDraw::toggleToolbox()
         }
         else
         {
-            bCheck = TRUE;
+            bCheck = sal_True;
             xLayoutMgr->createElement( m_sToolboxName );
             xLayoutMgr->showElement( m_sToolboxName );
         }
@@ -114,7 +114,7 @@ void SvxTbxCtlDraw::toggleToolbox()
 
 // -----------------------------------------------------------------------
 
-void SvxTbxCtlDraw::Select( BOOL )
+void SvxTbxCtlDraw::Select( sal_Bool )
 {
     toggleToolbox();
 }

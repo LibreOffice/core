@@ -54,16 +54,16 @@ class SvxSuperContourDlg : public SvxContourDlg
     MetricField         aMtfTolerance;
     ContourWindow       aContourWnd;
     StatusBar           aStbStatus;
-    ULONG               nGrfChanged;
-    BOOL                bExecState;
-    BOOL                bPipetteMode;
-    BOOL                bWorkplaceMode;
-    BOOL                bUpdateGraphicLinked;
-    BOOL                bGraphicLinked;
+    sal_uIntPtr             nGrfChanged;
+    sal_Bool                bExecState;
+    sal_Bool                bPipetteMode;
+    sal_Bool                bWorkplaceMode;
+    sal_Bool                bUpdateGraphicLinked;
+    sal_Bool                bGraphicLinked;
     ImageList           maImageList;
 
     virtual void        Resize();
-    virtual BOOL        Close();
+    virtual sal_Bool        Close();
 
     void                DoAutoCreate();
     void                ReducePoints( const long nTol = 8 );
@@ -85,23 +85,23 @@ public:
                                             Window* pParent, const ResId& rResId );
                         ~SvxSuperContourDlg();
 
-    void                SetExecState( BOOL bEnable );
+    void                SetExecState( sal_Bool bEnable );
 
     void                SetGraphic( const Graphic& rGraphic );
-    void                SetGraphicLinked( BOOL bLinked ) { bGraphicLinked = bLinked; }
+    void                SetGraphicLinked( sal_Bool bLinked ) { bGraphicLinked = bLinked; }
     const Graphic&      GetGraphic() const { return aGraphic; }
-    BOOL                IsGraphicChanged() const { return nGrfChanged > 0UL; }
+    sal_Bool                IsGraphicChanged() const { return nGrfChanged > 0UL; }
 
     void                SetPolyPolygon( const PolyPolygon& rPolyPoly );
-    PolyPolygon         GetPolyPolygon( BOOL bRescaleToGraphic = TRUE );
+    PolyPolygon         GetPolyPolygon( sal_Bool bRescaleToGraphic = sal_True );
 
     void                SetEditingObject( void* pObj ) { pCheckObj = pObj; }
     const void*         GetEditingObject() const { return pCheckObj; }
 
-    BOOL                IsUndoPossible() const;
-    BOOL                IsRedoPossible() const;
+    sal_Bool                IsUndoPossible() const;
+    sal_Bool                IsRedoPossible() const;
 
-    void                UpdateGraphic( const Graphic& rGraphic, BOOL bGraphicLinked,
+    void                UpdateGraphic( const Graphic& rGraphic, sal_Bool bGraphicLinked,
                                 const PolyPolygon* pPolyPoly = NULL,
                                 void* pEditingObj = NULL );
 

@@ -56,15 +56,15 @@ enum SbxClassType {         // SBX-class-IDs (order is important!)
 enum SbxDataType {
     SbxEMPTY    =  0,    // * Uninitialized
     SbxNULL     =  1,    // * Contains no valid data
-    SbxINTEGER  =  2,    // * Integer (INT16)
-    SbxLONG     =  3,    // * Long integer (INT32)
+    SbxINTEGER  =  2,    // * Integer (sal_Int16)
+    SbxLONG     =  3,    // * Long integer (sal_Int32)
     SbxSINGLE   =  4,    // * Single-precision floating point number (float)
     SbxDOUBLE   =  5,    // * Double-precision floating point number (double)
-    SbxCURRENCY =  6,    //   Currency (INT64)
+    SbxCURRENCY =  6,    //   Currency (sal_Int64)
     SbxDATE     =  7,    // * Date (double)
     SbxSTRING   =  8,    // * String (StarView)
     SbxOBJECT   =  9,    // * SbxBase object pointer
-    SbxERROR    = 10,    // * Error (UINT16)
+    SbxERROR    = 10,    // * Error (sal_uInt16)
     SbxBOOL     = 11,    // * Boolean (0 or -1)
 
     SbxVARIANT    = 12,  // * Display for variant datatype
@@ -72,8 +72,8 @@ enum SbxDataType {
 
     SbxCHAR     = 16,    // * signed char
     SbxBYTE     = 17,    // * unsigned char
-    SbxUSHORT   = 18,    // * unsigned short (UINT16)
-    SbxULONG    = 19,    // * unsigned long (UINT32)
+    SbxUSHORT   = 18,    // * unsigned short (sal_uInt16)
+    SbxULONG    = 19,    // * unsigned long (sal_uInt32)
 
 //deprecated:  // old 64bit types kept for backward compatibility in file I/O
     SbxLONG64   = 20,    //   moved to SbxSALINT64  as 64bit int
@@ -111,8 +111,9 @@ enum SbxDataType {
     SbxUSERn  = 2047     // last user defined data type
 };
 
-const UINT32 SBX_TYPE_WITH_EVENTS_FLAG = 0x10000;
-const UINT32 SBX_FIXED_LEN_STRING_FLAG = 0x10000;    // same value as above as no conflict possible
+const sal_uInt32 SBX_TYPE_WITH_EVENTS_FLAG = 0x10000;
+const sal_uInt32 SBX_TYPE_DIM_AS_NEW_FLAG  = 0x20000;
+const sal_uInt32 SBX_FIXED_LEN_STRING_FLAG = 0x10000;   // same value as above as no conflict possible
 #endif
 
 #ifndef _SBX_OPERATOR
@@ -127,8 +128,8 @@ enum SbxOperator {
     SbxPLUS,    // this + var
     SbxMINUS,   // this - var
     SbxNEG,     // -this (var is ignored)
-    SbxIDIV,    // this / var       (max INT32!)
-
+    SbxIDIV,            // this / var (both operands max. sal_Int32!)
+                        // Boolean operators (max sal_Int32!):
     // Boolean operators (TODO deprecate this limit: max INT32!)
     SbxAND,     // this & var
     SbxOR,      // this | var
@@ -164,7 +165,7 @@ enum SbxNameType {          // Type of the questioned name of a variable
 #endif
 
 // from 1996/3/20: New error messages
-typedef ULONG SbxError;            // Preserve old type
+typedef sal_uIntPtr SbxError;           // Preserve old type
 
 #endif
 
@@ -258,6 +259,8 @@ typedef ULONG SbxError;            // Preserve old type
 #define SBX_REFERENCE 0x4000    // Parameter is Reference (DLL-call)
 #define SBX_NO_MODIFY 0x8000    // SetModified is suppressed
 #define SBX_WITH_EVENTS 0x0080  // Same value as unused SBX_HIDDEN
+#define SBX_DIM_AS_NEW  0x0800  // Same value as SBX_GBLSEARCH, cannot conflict as one
+                                // is used for objects, the other for variables only
 
 // Broadcaster-IDs:
 #define SBX_HINT_DYING          SFX_HINT_DYING
@@ -294,10 +297,10 @@ typedef ULONG SbxError;            // Preserve old type
 #define SbxMAXBYTE  ( 255)
 #define SbxMAXINT   ( 32767)
 #define SbxMININT   (-32768)
-#define SbxMAXUINT  ((UINT16) 65535)
+#define SbxMAXUINT  ((sal_uInt16) 65535)
 #define SbxMAXLNG   ( 2147483647)
-#define SbxMINLNG   ((INT32)(-2147483647-1))
-#define SbxMAXULNG  ((UINT32) 0xffffffff)
+#define SbxMINLNG   ((sal_Int32)(-2147483647-1))
+#define SbxMAXULNG  ((sal_uInt32) 0xffffffff)
 
 #define SbxMAXSALUINT64     SAL_MAX_UINT64
 #define SbxMAXSALINT64      SAL_MAX_INT64
@@ -323,7 +326,7 @@ typedef ULONG SbxError;            // Preserve old type
 #define SBX_MAXINDEX    0x3FF0
 #define SBX_MAXINDEX32  SbxMAXLNG
 
-
+// The numeric values of sal_True and FALSE
 enum SbxBOOL { SbxFALSE = 0, SbxTRUE = -1 };
 
 #endif //ifndef __RSC

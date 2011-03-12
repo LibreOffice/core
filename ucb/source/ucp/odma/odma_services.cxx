@@ -39,45 +39,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 
 //=========================================================================
-static sal_Bool writeInfo( void * pRegistryKey,
-                           const rtl::OUString & rImplementationName,
-                               Sequence< rtl::OUString > const & rServiceNames )
-{
-    rtl::OUString aKeyName( RTL_CONSTASCII_USTRINGPARAM("/") );
-    aKeyName += rImplementationName;
-    aKeyName += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
-
-    Reference< XRegistryKey > xKey;
-    try
-    {
-        xKey = static_cast< XRegistryKey * >(
-                                    pRegistryKey )->createKey( aKeyName );
-    }
-    catch ( InvalidRegistryException const & )
-    {
-    }
-
-    if ( !xKey.is() )
-        return sal_False;
-
-    sal_Bool bSuccess = sal_True;
-
-    for ( sal_Int32 n = 0; n < rServiceNames.getLength(); ++n )
-    {
-        try
-        {
-            xKey->createKey( rServiceNames[ n ] );
-        }
-        catch ( InvalidRegistryException const & )
-        {
-            bSuccess = sal_False;
-            break;
-        }
-    }
-    return bSuccess;
-}
-
-//=========================================================================
 extern "C" void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
 {

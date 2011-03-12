@@ -184,3 +184,11 @@ $(MISC)$/$(SHL2TARGET).flt: makefile.mk
     @echo _TI				>$@
     @echo _real				>>$@
 
+
+ALLTAR : $(MISC)/mozab.component
+
+$(MISC)/mozab.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        mozab.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt mozab.component

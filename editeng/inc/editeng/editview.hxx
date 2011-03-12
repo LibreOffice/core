@@ -98,33 +98,33 @@ public:
 
     void            Paint( const Rectangle& rRect );
     void            Invalidate();
-    Pair            Scroll( long nHorzScroll, long nVertScroll, BYTE nRangeCheck = RGCHK_NEG );
+    Pair            Scroll( long nHorzScroll, long nVertScroll, sal_uInt8 nRangeCheck = RGCHK_NEG );
 
-    void            ShowCursor( BOOL bGotoCursor = TRUE, BOOL bForceVisCursor = TRUE );
+    void            ShowCursor( sal_Bool bGotoCursor = sal_True, sal_Bool bForceVisCursor = sal_True );
     void            HideCursor();
 
     EESelectionMode GetSelectionMode() const;
     void            SetSelectionMode( EESelectionMode eMode );
 
-    void            SetReadOnly( BOOL bReadOnly );
-    BOOL            IsReadOnly() const;
+    void            SetReadOnly( sal_Bool bReadOnly );
+    sal_Bool            IsReadOnly() const;
 
-    BOOL            HasSelection() const;
+    sal_Bool            HasSelection() const;
     ESelection      GetSelection() const;
     void            SetSelection( const ESelection& rNewSel );
-    BOOL            SelectCurrentWord( sal_Int16 nWordType = ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES );
+    sal_Bool            SelectCurrentWord( sal_Int16 nWordType = ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES );
 
     void            IndentBlock();
     void            UnindentBlock();
 
-    BOOL            IsInsertMode() const;
-    void            SetInsertMode( BOOL bInsert );
+    sal_Bool            IsInsertMode() const;
+    void            SetInsertMode( sal_Bool bInsert );
 
     void            ReplaceSelected( const String& rStr );
     String          GetSelected();
     void            DeleteSelected();
 
-    USHORT          GetSelectedScriptType() const;
+    sal_uInt16          GetSelectedScriptType() const;
 
                         // VisArea position of the Output window.
                         // A size change also affects the VisArea
@@ -142,17 +142,17 @@ public:
     void            SetCursor( const Cursor& rCursor );
     Cursor*         GetCursor() const;
 
-    void            InsertText( const String& rNew, BOOL bSelect = FALSE );
+    void            InsertText( const String& rNew, sal_Bool bSelect = sal_False );
 
-    BOOL            PostKeyEvent( const KeyEvent& rKeyEvent, Window* pFrameWin = NULL );
+    sal_Bool            PostKeyEvent( const KeyEvent& rKeyEvent, Window* pFrameWin = NULL );
 
-    BOOL            MouseButtonUp( const MouseEvent& rMouseEvent );
-    BOOL            MouseButtonDown( const MouseEvent& rMouseEvent );
-    BOOL            MouseMove( const MouseEvent& rMouseEvent );
+    sal_Bool            MouseButtonUp( const MouseEvent& rMouseEvent );
+    sal_Bool            MouseButtonDown( const MouseEvent& rMouseEvent );
+    sal_Bool            MouseMove( const MouseEvent& rMouseEvent );
     void            Command( const CommandEvent& rCEvt );
 
-    BOOL            Drop( const DropEvent& rEvt );
-    BOOL            QueryDrop( DropEvent& rEvt );
+    sal_Bool            Drop( const DropEvent& rEvt );
+    sal_Bool            QueryDrop( DropEvent& rEvt );
     ESelection      GetDropPos();
 
     void            Cut();
@@ -160,28 +160,28 @@ public:
     void            Paste();
     void            PasteSpecial();
 
-    void            EnablePaste( BOOL bEnable );
-    BOOL            IsPasteEnabled() const;
+    void            EnablePaste( sal_Bool bEnable );
+    sal_Bool            IsPasteEnabled() const;
 
     void            Undo();
     void            Redo();
 
-    // especially for Olli
-    USHORT          GetParagraph( const Point& rMousePosPixel );
-    Point           GetWindowPosTopLeft( USHORT nParagraph );
-    void            MoveParagraphs( Range aParagraphs, USHORT nNewPos );
+    // especially for Oliver Specht
+    sal_uInt16          GetParagraph( const Point& rMousePosPixel );
+    Point           GetWindowPosTopLeft( sal_uInt16 nParagraph );
+    void            MoveParagraphs( Range aParagraphs, sal_uInt16 nNewPos );
     void            MoveParagraphs( long nDiff );
 
     const SfxItemSet&   GetEmptyItemSet();
     SfxItemSet          GetAttribs();
     void                SetAttribs( const SfxItemSet& rSet );
-    void                SetParaAttribs( const SfxItemSet& rSet, USHORT nPara );
-    void                RemoveAttribs( BOOL bRemoveParaAttribs = FALSE, USHORT nWhich = 0 );
-    void                RemoveCharAttribs( USHORT nPara, USHORT nWhich = 0 );
-    void                RemoveAttribsKeepLanguages( BOOL bRemoveParaAttribs = FALSE );
+    void                SetParaAttribs( const SfxItemSet& rSet, sal_uInt16 nPara );
+    void                RemoveAttribs( sal_Bool bRemoveParaAttribs = sal_False, sal_uInt16 nWhich = 0 );
+    void                RemoveCharAttribs( sal_uInt16 nPara, sal_uInt16 nWhich = 0 );
+    void                RemoveAttribsKeepLanguages( sal_Bool bRemoveParaAttribs = sal_False );
 
-    ULONG           Read( SvStream& rInput, const String& rBaseURL, EETextFormat eFormat, BOOL bSelect = FALSE, SvKeyValueIterator* pHTTPHeaderAttrs = NULL );
-    ULONG           Write( SvStream& rOutput, EETextFormat eFormat );
+    sal_uLong           Read( SvStream& rInput, const String& rBaseURL, EETextFormat eFormat, sal_Bool bSelect = sal_False, SvKeyValueIterator* pHTTPHeaderAttrs = NULL );
+    sal_uLong           Write( SvStream& rOutput, EETextFormat eFormat );
 
     void            SetBackgroundColor( const Color& rColor );
     Color           GetBackgroundColor() const;
@@ -191,12 +191,12 @@ public:
 
     EditTextObject* CreateTextObject();
     void            InsertText( const EditTextObject& rTextObject );
-    void            InsertText( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > xDataObj, const String& rBaseURL, BOOL bUseSpecial );
+    void            InsertText( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > xDataObj, const String& rBaseURL, sal_Bool bUseSpecial );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > GetTransferable();
 
     // An EditView, so that when TRUE the update will be free from flickering:
-    void            SetEditEngineUpdateMode( BOOL bUpdate );
+    void            SetEditEngineUpdateMode( sal_Bool bUpdate );
     void            ForceUpdate();
 
     SfxStyleSheet*  GetStyleSheet() const;
@@ -205,37 +205,37 @@ public:
     void            SetAnchorMode( EVAnchorMode eMode );
     EVAnchorMode    GetAnchorMode() const;
 
-    BOOL            MatchGroup();
+    sal_Bool            MatchGroup();
 
     void            CompleteAutoCorrect( Window* pFrameWin = NULL );
 
-    EESpellState    StartSpeller( BOOL bMultipleDoc = FALSE );
+    EESpellState    StartSpeller( sal_Bool bMultipleDoc = sal_False );
     EESpellState    StartThesaurus();
-    USHORT          StartSearchAndReplace( const SvxSearchItem& rSearchItem );
+    sal_uInt16          StartSearchAndReplace( const SvxSearchItem& rSearchItem );
 
     // for text conversion
-    void            StartTextConversion( LanguageType nSrcLang, LanguageType nDestLang, const Font *pDestFont, INT32 nOptions, BOOL bIsInteractive, BOOL bMultipleDoc );
+    void            StartTextConversion( LanguageType nSrcLang, LanguageType nDestLang, const Font *pDestFont, sal_Int32 nOptions, sal_Bool bIsInteractive, sal_Bool bMultipleDoc );
     sal_Bool        HasConvertibleTextPortion( LanguageType nLang );
 
     void            TransliterateText( sal_Int32 nTransliterationMode );
 
-    BOOL            IsCursorAtWrongSpelledWord( BOOL bMarkIfWrong = FALSE );
-    BOOL            IsWrongSpelledWordAtPos( const Point& rPosPixel, BOOL bMarkIfWrong = FALSE );
+    sal_Bool            IsCursorAtWrongSpelledWord( sal_Bool bMarkIfWrong = sal_False );
+    sal_Bool            IsWrongSpelledWordAtPos( const Point& rPosPixel, sal_Bool bMarkIfWrong = sal_False );
     void            SpellIgnoreWord();
     void            ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack = 0 );
 
     void                InsertField( const SvxFieldItem& rFld );
     const SvxFieldItem* GetFieldUnderMousePointer() const;
-    const SvxFieldItem* GetFieldUnderMousePointer( USHORT& nPara, xub_StrLen& nPos ) const;
-    const SvxFieldItem* GetField( const Point& rPos, USHORT* pnPara = NULL, xub_StrLen* pnPos = NULL ) const;
+    const SvxFieldItem* GetFieldUnderMousePointer( sal_uInt16& nPara, xub_StrLen& nPos ) const;
+    const SvxFieldItem* GetField( const Point& rPos, sal_uInt16* pnPara = NULL, xub_StrLen* pnPos = NULL ) const;
 
     const SvxFieldItem* GetFieldAtSelection() const;
 
     String          GetWordUnderMousePointer() const;
     String          GetWordUnderMousePointer( Rectangle& rWordRect ) const;
 
-    void            SetInvalidateMore( USHORT nPixel );
-    USHORT          GetInvalidateMore() const;
+    void            SetInvalidateMore( sal_uInt16 nPixel );
+    sal_uInt16          GetInvalidateMore() const;
 
     // grows or shrinks the font height for the current selection
     void            ChangeFontSize( bool bGrow, const FontList* pList );

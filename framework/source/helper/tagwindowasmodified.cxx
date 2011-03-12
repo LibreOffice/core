@@ -58,7 +58,7 @@
 #include <vcl/syswin.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
-#include <vcl/wintypes.hxx>
+#include <tools/wintypes.hxx>
 
 //_________________________________________________________________________________________________________________
 //  namespace

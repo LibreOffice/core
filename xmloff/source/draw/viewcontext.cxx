@@ -31,9 +31,9 @@
 #include "viewcontext.hxx"
 #include "sdxmlimp_impl.hxx"
 #include <xmloff/xmltoken.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>
-#include "VisAreaContext.hxx"
+#include "xmloff/VisAreaContext.hxx"
 
 using namespace com::sun::star;
 using ::xmloff::token::IsXMLToken;
@@ -44,7 +44,7 @@ using ::rtl::OUString;
 
 //------------------------------------------------------------------
 
-SdXMLViewSettingsContext::SdXMLViewSettingsContext( SdXMLImport& rImport, USHORT nPrfx, const OUString& rLName, const uno::Reference<xml::sax::XAttributeList>& ) :
+SdXMLViewSettingsContext::SdXMLViewSettingsContext( SdXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName, const uno::Reference<xml::sax::XAttributeList>& ) :
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
 }
@@ -53,7 +53,7 @@ SdXMLViewSettingsContext::~SdXMLViewSettingsContext()
 {
 }
 
-SvXMLImportContext *SdXMLViewSettingsContext::CreateChildContext( USHORT nPrefix,
+SvXMLImportContext *SdXMLViewSettingsContext::CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )

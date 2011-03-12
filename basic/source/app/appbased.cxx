@@ -56,10 +56,10 @@ AppBasEd::AppBasEd( BasicFrame* pParent, SbModule* p )
 
     pBreakpoints->Show();
 
-    ((TextEdit*)pDataEdit)->GetTextEditImp().pTextView->SetAutoIndentMode( TRUE );
+    ((TextEdit*)pDataEdit)->GetTextEditImp().pTextView->SetAutoIndentMode( sal_True );
     ((TextEdit*)pDataEdit)->GetTextEditImp().pTextEngine->SetMaxTextLen( STRING_MAXLEN );
-    ((TextEdit*)pDataEdit)->GetTextEditImp().SyntaxHighlight( TRUE );
-    ((TextEdit*)pDataEdit)->SaveAsUTF8( TRUE );
+    ((TextEdit*)pDataEdit)->GetTextEditImp().SyntaxHighlight( sal_True );
+    ((TextEdit*)pDataEdit)->SaveAsUTF8( sal_True );
 
     String aEmpty;
 
@@ -101,7 +101,7 @@ void AppBasEd::Notify( SfxBroadcaster&, const SfxHint& rHint )
     const SfxSimpleHint* p = PTR_CAST(SfxSimpleHint,&rHint);
     if( p )
     {
-        ULONG nHintId = p->GetId();
+        sal_uIntPtr nHintId = p->GetId();
         if( nHintId == SBX_HINT_LANGUAGE_EXTENSION_LOADED )
         {
             ((TextEdit*)pDataEdit)->GetTextEditImp().InvalidateSyntaxHighlight();
@@ -117,8 +117,8 @@ FileType AppBasEd::GetFileType()
 IMPL_LINK_INLINE_START( AppBasEd, EditChange, void *, p )
 {
     (void) p; /* avoid warning about unused parameter */
-    bCompiled = FALSE;
-    return TRUE;
+    bCompiled = sal_False;
+    return sal_True;
 }
 IMPL_LINK_INLINE_END( AppBasEd, EditChange, void *, p )
 
@@ -126,16 +126,16 @@ IMPL_LINK_INLINE_END( AppBasEd, EditChange, void *, p )
 long AppBasEd::InitMenu( Menu* pMenu )
 {
     AppEdit::InitMenu (pMenu );
-    BOOL bRunning = pFrame->Basic().IsRunning();
+    sal_Bool bRunning = pFrame->Basic().IsRunning();
     pMenu->EnableItem( RID_RUNCOMPILE,  !bCompiled && !bRunning );
-    return TRUE;
+    return sal_True;
 }
 
 long AppBasEd::DeInitMenu( Menu* pMenu )
 {
     AppEdit::DeInitMenu (pMenu );
     pMenu->EnableItem( RID_RUNCOMPILE );
-    return TRUE;
+    return sal_True;
 }
 
 // Menu Handler
@@ -177,13 +177,13 @@ void AppBasEd::PostLoad()
     pMod->SetName( GetText() );
     pMod->Clear();
     pMod->SetSource( pDataEdit->GetText() );
-    bCompiled = FALSE;  // because the code might have changed in the meantime
+    bCompiled = sal_False;  // because the code might have changed in the meantime
     AppEdit::PostLoad();
 
     pBreakpoints->LoadBreakpoints( GetText() );
 }
 
-USHORT AppBasEd::ImplSave()
+sal_uInt16 AppBasEd::ImplSave()
 {
     pBreakpoints->SaveBreakpoints( GetText() );
     return AppEdit::ImplSave();
@@ -199,7 +199,7 @@ void AppBasEd::Reload()
 // Reload source code file after change
 void AppBasEd::LoadSource()
 {
-    BOOL bErr;
+    sal_Bool bErr;
 
     String aName = pMod->GetName();
     bErr = !pDataEdit->Load( aName );
@@ -208,7 +208,7 @@ void AppBasEd::LoadSource()
         ErrorBox( this, SttResId( IDS_READERROR ) ).Execute();
     else
         UpdateFileInfo( HAS_BEEN_LOADED );
-    bCompiled = FALSE;  // because the code might have changed in the meantime
+    bCompiled = sal_False;  // because the code might have changed in the meantime
 }
 
 // Save as (new name)
@@ -219,15 +219,15 @@ void AppBasEd::PostSaveAs()
 }
 
 // Compile
-BOOL AppBasEd::Compile()
+sal_Bool AppBasEd::Compile()
 {
     if( !pDataEdit->HasText() || bCompiled )
-        return TRUE;
+        return sal_True;
     pMod->SetSource( pDataEdit->GetText() );
-    BOOL bRes = FALSE;
+    sal_Bool bRes = sal_False;
     if( pFrame->Basic().Compile( pMod ) )
     {
-        bRes = TRUE;
+        bRes = sal_True;
         if( pFrame->bDisas )
             Disassemble();
         TextSelection aSel( pDataEdit->GetSelection() );
@@ -257,7 +257,7 @@ void AppBasEd::Run()
 {
     pFrame->Basic().Reset();
     SbxArray* pAllModules = pFrame->Basic().GetModules();
-    for (USHORT i = 0; i < pAllModules->Count(); i++)
+    for (sal_uInt16 i = 0; i < pAllModules->Count(); i++)
     {
         if ( (pAllModules->Get(i)->GetName()).Copy(0,2).CompareToAscii( "--" ) == COMPARE_EQUAL )
         {

@@ -278,7 +278,7 @@ namespace sdr
                         ImpRemoveStyleSheet();
                     }
 
-                    mpItemSet = mpItemSet->Clone(FALSE, pDestPool);
+                    mpItemSet = mpItemSet->Clone(sal_False, pDestPool);
                     GetSdrObject().GetModel()->MigrateItemSet(pOldSet, mpItemSet, pNewModel);
 
                     // set stylesheet (if used)
@@ -381,7 +381,7 @@ namespace sdr
                             while(pSheet)
                             {
                                 pNewSheet = &pNewPool->Make(pSheet->GetName(), pSheet->GetFamily(), pSheet->GetMask());
-                                pNewSheet->GetItemSet().Put(pSheet->GetItemSet(), FALSE);
+                                pNewSheet->GetItemSet().Put(pSheet->GetItemSet(), sal_False);
 
                                 if(bScaleUnitChanged)
                                 {
@@ -452,7 +452,7 @@ namespace sdr
 
                                 while(nWhich)
                                 {
-                                    if(mpItemSet->GetItemState(nWhich, FALSE) == SFX_ITEM_SET)
+                                    if(mpItemSet->GetItemState(nWhich, sal_False) == SFX_ITEM_SET)
                                     {
                                         pNewSet->Put(mpItemSet->Get(nWhich));
                                     }

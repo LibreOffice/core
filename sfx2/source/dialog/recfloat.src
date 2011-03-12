@@ -33,6 +33,7 @@
 
 FloatingWindow SID_RECORDING_FLOATWINDOW
 {
+    HelpID = "sfx2:FloatingWindow:SID_RECORDING_FLOATWINDOW";
     Moveable = TRUE ;
     Closeable = TRUE ;
     Hide = TRUE ;

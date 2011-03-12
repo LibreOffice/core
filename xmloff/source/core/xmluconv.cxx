@@ -183,7 +183,7 @@ sal_Bool SvXMLUnitConverter::convertMeasure( sal_Int32& rValue,
     sal_Bool bNeg = sal_False;
     double nVal = 0;
 
-    sal_Int32 nPos = 0L;
+    sal_Int32 nPos = 0;
     const sal_Int32 nLen = rString.getLength();
 
     // skip white space
@@ -576,15 +576,15 @@ sal_Bool SvXMLUnitConverter::convertColor( Color& rColor,
         return sal_False;
 
     rColor.SetRed(
-        sal::static_int_cast< UINT8 >(
+        sal::static_int_cast< sal_uInt8 >(
             lcl_gethex( rValue[1] ) * 16 + lcl_gethex( rValue[2] ) ) );
 
     rColor.SetGreen(
-        sal::static_int_cast< UINT8 >(
+        sal::static_int_cast< sal_uInt8 >(
             lcl_gethex( rValue[3] ) * 16 + lcl_gethex( rValue[4] ) ) );
 
     rColor.SetBlue(
-        sal::static_int_cast< UINT8 >(
+        sal::static_int_cast< sal_uInt8 >(
             lcl_gethex( rValue[5] ) * 16 + lcl_gethex( rValue[6] ) ) );
 
     return sal_True;
@@ -646,7 +646,7 @@ sal_Bool SvXMLUnitConverter::convertNumber64( sal_Int64& rValue,
     sal_Bool bNeg = sal_False;
     rValue = 0;
 
-    sal_Int32 nPos = 0L;
+    sal_Int32 nPos = 0;
     const sal_Int32 nLen = rString.getLength();
 
     // skip white space
@@ -678,7 +678,7 @@ sal_Bool SvXMLUnitConverter::convertNumber64( sal_Int64& rValue,
 
 /** convert double number to string (using ::rtl::math) */
 void SvXMLUnitConverter::convertDouble(OUStringBuffer& rBuffer,
-    double fNumber, BOOL bWriteUnits) const
+    double fNumber, sal_Bool bWriteUnits) const
 {
     SvXMLUnitConverter::convertDouble(rBuffer, fNumber,
         bWriteUnits, meCoreMeasureUnit, meXMLMeasureUnit);
@@ -686,7 +686,7 @@ void SvXMLUnitConverter::convertDouble(OUStringBuffer& rBuffer,
 
 /** convert double number to string (using ::rtl::math) */
 void SvXMLUnitConverter::convertDouble( OUStringBuffer& rBuffer,
-    double fNumber, BOOL bWriteUnits, MapUnit eCoreUnit, MapUnit eDstUnit)
+    double fNumber, sal_Bool bWriteUnits, MapUnit eCoreUnit, MapUnit eDstUnit)
 {
     if(MAP_RELATIVE == eCoreUnit)
     {
@@ -715,7 +715,7 @@ void SvXMLUnitConverter::convertDouble( OUStringBuffer& rBuffer, double fNumber)
 
 /** convert string to double number (using ::rtl::math) */
 sal_Bool SvXMLUnitConverter::convertDouble(double& rValue,
-    const OUString& rString, BOOL bLookForUnits) const
+    const ::rtl::OUString& rString, sal_Bool bLookForUnits) const
 {
     if(bLookForUnits)
     {
@@ -841,32 +841,27 @@ void SvXMLUnitConverter::convertTime( OUStringBuffer& rBuffer,
 }
 
 /** convert ISO Time String to double; negative durations allowed */
-sal_Bool SvXMLUnitConverter::convertTime( double& fTime,
-                            const OUString& rString)
+static bool lcl_convertTime( const ::rtl::OUString& rString, sal_Int32& o_rDays, sal_Int32& o_rHours, sal_Int32& o_rMins,
+                        sal_Int32& o_rSecs, sal_Bool& o_rIsNegativeTime, double& o_rFractionalSecs )
 {
     OUString aTrimmed = rString.trim().toAsciiUpperCase();
     const sal_Unicode* pStr = aTrimmed.getStr();
 
     // negative time duration?
-    sal_Bool bIsNegativeDuration = sal_False;
     if ( sal_Unicode('-') == (*pStr) )
     {
-        bIsNegativeDuration = sal_True;
+        o_rIsNegativeTime = sal_True;
         pStr++;
     }
 
     if ( *(pStr++) != sal_Unicode('P') )            // duration must start with "P"
-        return sal_False;
+        return false;
 
-    OUString sDoubleStr;
-    sal_Bool bSuccess = sal_True;
+    ::rtl::OUString sDoubleStr;
+    sal_Bool bSuccess = true;
     sal_Bool bDone = sal_False;
     sal_Bool bTimePart = sal_False;
     sal_Bool bIsFraction = sal_False;
-    sal_Int32 nDays  = 0;
-    sal_Int32 nHours = 0;
-    sal_Int32 nMins  = 0;
-    sal_Int32 nSecs  = 0;
     sal_Int32 nTemp = 0;
 
     while ( bSuccess && !bDone )
@@ -877,7 +872,7 @@ sal_Bool SvXMLUnitConverter::convertTime( double& fTime,
         else if ( sal_Unicode('0') <= c && sal_Unicode('9') >= c )
         {
             if ( nTemp >= SAL_MAX_INT32 / 10 )
-                bSuccess = sal_False;
+                bSuccess = false;
             else
             {
                 if ( !bIsFraction )
@@ -895,17 +890,17 @@ sal_Bool SvXMLUnitConverter::convertTime( double& fTime,
         {
             if ( c == sal_Unicode('H') )
             {
-                nHours = nTemp;
+                o_rHours = nTemp;
                 nTemp = 0;
             }
             else if ( c == sal_Unicode('M') )
             {
-                nMins = nTemp;
+                o_rMins = nTemp;
                 nTemp = 0;
             }
             else if ( (c == sal_Unicode(',')) || (c == sal_Unicode('.')) )
             {
-                nSecs = nTemp;
+                o_rSecs = nTemp;
                 nTemp = 0;
                 bIsFraction = sal_True;
                 sDoubleStr = OUString(RTL_CONSTASCII_USTRINGPARAM("0."));
@@ -914,13 +909,13 @@ sal_Bool SvXMLUnitConverter::convertTime( double& fTime,
             {
                 if ( !bIsFraction )
                 {
-                    nSecs = nTemp;
+                    o_rSecs = nTemp;
                     nTemp = 0;
                     sDoubleStr = OUString(RTL_CONSTASCII_USTRINGPARAM("0.0"));
                 }
             }
             else
-                bSuccess = sal_False;               // invalid character
+                bSuccess = false;                   // invalid character
         }
         else
         {
@@ -928,7 +923,7 @@ sal_Bool SvXMLUnitConverter::convertTime( double& fTime,
                 bTimePart = sal_True;
             else if ( c == sal_Unicode('D') )
             {
-                nDays = nTemp;
+                o_rDays = nTemp;
                 nTemp = 0;
             }
             else if ( c == sal_Unicode('Y') || c == sal_Unicode('M') )
@@ -936,14 +931,28 @@ sal_Bool SvXMLUnitConverter::convertTime( double& fTime,
                 //! how many days is a year or month?
 
                 OSL_FAIL("years or months in duration: not implemented");
-                bSuccess = sal_False;
+                bSuccess = false;
             }
             else
-                bSuccess = sal_False;               // invalid character
+                bSuccess = false;                   // invalid character
         }
     }
 
     if ( bSuccess )
+        o_rFractionalSecs = sDoubleStr.toDouble();
+    return bSuccess;
+}
+
+sal_Bool SvXMLUnitConverter::convertTime( double& fTime,
+                            const ::rtl::OUString& rString)
+{
+    sal_Int32 nDays  = 0;
+    sal_Int32 nHours = 0;
+    sal_Int32 nMins  = 0;
+    sal_Int32 nSecs  = 0;
+    sal_Bool bIsNegativeDuration = sal_False;
+    double fFractionalSecs = 0.0;
+    if ( lcl_convertTime( rString, nDays, nHours, nMins, nSecs, bIsNegativeDuration, fFractionalSecs ) )
     {
         if ( nDays )
             nHours += nDays * 24;               // add the days to the hours part
@@ -952,12 +961,11 @@ sal_Bool SvXMLUnitConverter::convertTime( double& fTime,
         double fMin = nMins;
         double fSec = nSecs;
         double fSec100 = 0.0;
-        double fFraction = sDoubleStr.toDouble();
         fTempTime = fHour / 24;
         fTempTime += fMin / (24 * 60);
         fTempTime += fSec / (24 * 60 * 60);
         fTempTime += fSec100 / (24 * 60 * 60 * 60);
-        fTempTime += fFraction / (24 * 60 * 60);
+        fTempTime += fFractionalSecs / (24 * 60 * 60);
 
         // negative duration?
         if ( bIsNegativeDuration )
@@ -966,8 +974,9 @@ sal_Bool SvXMLUnitConverter::convertTime( double& fTime,
         }
 
         fTime = fTempTime;
+        return sal_True;
     }
-    return bSuccess;
+    return sal_False;
 }
 
 /** convert util::DateTime to ISO Time String */
@@ -989,33 +998,18 @@ void SvXMLUnitConverter::convertTime( OUStringBuffer& rBuffer,
 sal_Bool SvXMLUnitConverter::convertTime( ::com::sun::star::util::DateTime& rDateTime,
                              const OUString& rString )
 {
-    double fCalculatedTime = 0.0;
-    if( convertTime( fCalculatedTime, rString ) )
+    sal_Int32 nDays = 0, nHours = 0, nMins = 0, nSecs = 0;
+    sal_Bool bIsNegativeDuration = sal_False;
+    double fFractionalSecs = 0.0;
+    if ( lcl_convertTime( rString, nDays, nHours, nMins, nSecs, bIsNegativeDuration, fFractionalSecs ) )
     {
-        // #101357# declare as volatile to prevent optimization
-        // (gcc 3.0.1 Linux)
-        volatile double fTempTime = fCalculatedTime;
-        fTempTime *= 24;
-        double fHoursValue = ::rtl::math::approxFloor (fTempTime);
-        fTempTime -= fHoursValue;
-        fTempTime *= 60;
-        double fMinsValue = ::rtl::math::approxFloor (fTempTime);
-        fTempTime -= fMinsValue;
-        fTempTime *= 60;
-        double fSecsValue = ::rtl::math::approxFloor (fTempTime);
-        fTempTime -= fSecsValue;
-        double f100SecsValue = 0.0;
-
-        if( fTempTime > 0.00001 )
-            f100SecsValue = fTempTime;
-
         rDateTime.Year = 0;
         rDateTime.Month = 0;
         rDateTime.Day = 0;
-        rDateTime.Hours = static_cast < sal_uInt16 > ( fHoursValue );
-        rDateTime.Minutes = static_cast < sal_uInt16 > ( fMinsValue );
-        rDateTime.Seconds = static_cast < sal_uInt16 > ( fSecsValue );
-        rDateTime.HundredthSeconds = static_cast < sal_uInt16 > ( f100SecsValue * 100.0 );
+        rDateTime.Hours = static_cast < sal_uInt16 > ( nHours );
+        rDateTime.Minutes = static_cast < sal_uInt16 > ( nMins );
+        rDateTime.Seconds = static_cast < sal_uInt16 > ( nSecs );
+        rDateTime.HundredthSeconds = static_cast < sal_uInt16 > ( fFractionalSecs * 100.0 );
 
         return sal_True;
     }
@@ -1086,7 +1080,7 @@ void SvXMLUnitConverter::convertDateTime( OUStringBuffer& rBuffer,
     }
     rBuffer.append( sal_Int32( aDate.GetYear()));
     rBuffer.append( sal_Unicode('-'));
-    USHORT nTemp = aDate.GetMonth();
+    sal_uInt16 nTemp = aDate.GetMonth();
     if (nTemp < 10)
         rBuffer.append( sal_Unicode('0'));
     rBuffer.append( sal_Int32( nTemp));
@@ -2061,7 +2055,7 @@ bool SvXMLUnitConverter::convertTimeDuration( const OUString& rString, Time& rTi
         else
         {
             if ( c == sal_Unicode('T') )            // "T" starts time part
-                bTimePart = TRUE;
+                bTimePart = sal_True;
             else if ( c == sal_Unicode('D') )
             {
                 nDays = nTemp;

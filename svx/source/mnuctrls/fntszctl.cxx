@@ -44,7 +44,7 @@
 #include "editeng/fontitem.hxx"
 #include "editeng/flstitem.hxx"
 
-#include "dlgutil.hxx"
+#include "svx/dlgutil.hxx"
 #include <svx/dialmgr.hxx>
 
 #define LOGIC   OutputDevice::LogicToLogic
@@ -68,7 +68,7 @@ IMPL_LINK( SvxFontSizeMenuControl, MenuSelect, FontSizeMenu*, pMen )
         return 0;
 
     const SfxItemPool& rPool = pSh->GetPool();
-    USHORT nWhich = rPool.GetWhich( SID_ATTR_CHAR_FONTHEIGHT );
+    sal_uInt16 nWhich = rPool.GetWhich( SID_ATTR_CHAR_FONTHEIGHT );
     const SfxMapUnit eUnit = rPool.GetMetric( nWhich );
     long nH = LOGIC( pMen->GetCurHeight(), MAP_POINT, (MapUnit)eUnit ) / 10;
     SvxFontHeightItem aItem( nH, 100, GetId() );
@@ -88,7 +88,7 @@ IMPL_LINK( SvxFontSizeMenuControl, MenuSelect, FontSizeMenu*, pMen )
 
 void SvxFontSizeMenuControl::StateChanged(
 
-    USHORT, SfxItemState eState, const SfxPoolItem* pState )
+    sal_uInt16, SfxItemState eState, const SfxPoolItem* pState )
 
 {
     rParent.EnableItem( GetId(), SFX_ITEM_DISABLED != eState );
@@ -111,7 +111,7 @@ void SvxFontSizeMenuControl::StateChanged(
                     return;
 
                 const SfxItemPool& rPool = pSh->GetPool();
-                USHORT nWhich = rPool.GetWhich( SID_ATTR_CHAR_FONTHEIGHT );
+                sal_uInt16 nWhich = rPool.GetWhich( SID_ATTR_CHAR_FONTHEIGHT );
                 const SfxMapUnit eUnit = rPool.GetMetric( nWhich );
                 long nH = pItem->GetHeight() * 10;
                 nVal = LOGIC( nH, (MapUnit)eUnit, MAP_POINT );
@@ -170,7 +170,7 @@ void SvxFontSizeMenuControl::StateChanged(
 
 SvxFontSizeMenuControl::SvxFontSizeMenuControl
 (
-    USHORT          _nId,
+    sal_uInt16          _nId,
     Menu&           rMenu,
     SfxBindings&    rBindings
 ) :

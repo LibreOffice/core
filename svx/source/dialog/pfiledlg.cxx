@@ -36,7 +36,7 @@
 
 #include <comphelper/processfactory.hxx>
 
-#include "pfiledlg.hxx"
+#include "svx/pfiledlg.hxx"
 #include <svx/dialogs.hrc>
 
 #include <svx/dialmgr.hxx>
@@ -263,11 +263,6 @@ bool SvxPluginFileDlg::IsAvailable (sal_uInt16 nKind)
     }
 
     return bFound;
-}
-
-void SvxPluginFileDlg::SetDialogHelpId( const sal_Int32 _nHelpId )
-{
-    maFileDlg.SetDialogHelpId( _nHelpId );
 }
 
 void SvxPluginFileDlg::SetContext( sfx2::FileDialogHelper::Context _eNewContext )

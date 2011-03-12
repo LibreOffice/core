@@ -586,7 +586,6 @@ bool getDataSourceSetting( const Reference< XInterface >& _xChild, const ::rtl::
     try
     {
         const Reference< XPropertySet> xDataSourceProperties( findDataSource( _xChild ), UNO_QUERY );
-        OSL_ENSURE( xDataSourceProperties.is(), "getDataSourceSetting: invalid data source object!" );
         if ( !xDataSourceProperties.is() )
             return false;
 

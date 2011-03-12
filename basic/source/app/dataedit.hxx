@@ -42,9 +42,9 @@ class Font;
 #define DATA_FUNC_DEF( MemberName, MemberType )                                 \
 public:                                                                         \
     MemberType MemberName;                                                      \
-    BOOL Find( const String& rStr );                                            \
-    BOOL Load( const String& rStr );                                            \
-    BOOL Save( const String& rStr );                                            \
+    sal_Bool Find( const String& rStr );                                            \
+    sal_Bool Load( const String& rStr );                                            \
+    sal_Bool Save( const String& rStr );                                            \
                                                                                 \
     void GrabFocus(){ MemberName.GrabFocus(); }                                 \
     void Show(){ MemberName.Show(); }                                           \
@@ -63,13 +63,13 @@ public:                                                                         
     void Redo();                                                                \
     String GetText() const;                                                     \
     void SetText( const String& rStr );                                         \
-    BOOL HasText() const;                                                       \
+    sal_Bool HasText() const;                                                       \
     String GetSelected();                                                       \
     TextSelection GetSelection() const;                                         \
     void SetSelection( const TextSelection& rSelection );                       \
-    USHORT GetLineNr() const;                                                   \
+    sal_uInt16 GetLineNr() const;                                                   \
     void ReplaceSelected( const String& rStr );                                 \
-    BOOL IsModified();                                                          \
+    sal_Bool IsModified();                                                          \
     void SetModifyHdl( Link l );
 
 
@@ -86,19 +86,19 @@ public:
     virtual void Undo()=0;
     virtual void Redo()=0;
 
-    virtual BOOL Find( const String& )=0;         // Find and select text
-    virtual BOOL Load( const String& )=0;         // Load text from file
-    virtual BOOL Save( const String& )=0;         // Save text to file
+    virtual sal_Bool Find( const String& )=0;         // Find and select text
+    virtual sal_Bool Load( const String& )=0;         // Load text from file
+    virtual sal_Bool Save( const String& )=0;         // Save text to file
     virtual String GetSelected()=0;
     virtual void GrabFocus()=0;
     virtual TextSelection GetSelection() const=0;
     virtual void SetSelection( const TextSelection& rSelection )=0;
-    virtual USHORT GetLineNr() const=0;
+    virtual sal_uInt16 GetLineNr() const=0;
     virtual String GetText() const=0;
     virtual void SetText( const String& rStr )=0;
-    virtual BOOL HasText() const=0;               // to avoid GetText.Len()
+    virtual sal_Bool HasText() const=0;               // to avoid GetText.Len()
     virtual void ReplaceSelected( const String& rStr )=0;
-    virtual BOOL IsModified()=0;
+    virtual sal_Bool IsModified()=0;
     virtual void SetModifyHdl( Link )=0;
     virtual void Show()=0;
     virtual void SetPosPixel( const Point& rNewPos )=0;

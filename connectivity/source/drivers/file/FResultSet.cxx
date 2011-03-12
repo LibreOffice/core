@@ -76,11 +76,7 @@ using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::container;
 
 // Maximal number of Rows, that can be processed being sorted with ORDER BY:
-#if defined (WIN)
-#define MAX_KEYSET_SIZE 0x3ff0  // Somewhat less than a Segment, so there is still room for Memory-Debug-Information
-#else
 #define MAX_KEYSET_SIZE 0x40000 // 256K
-#endif
 
 namespace
 {
@@ -143,7 +139,7 @@ OResultSet::OResultSet(OStatement_Base* pStmt,OSQLParseTreeIterator&    _aSQLIte
 
     m_nResultSetConcurrency = isCount() ? ResultSetConcurrency::READ_ONLY : ResultSetConcurrency::UPDATABLE;
     construct();
-    m_aSkipDeletedSet.SetDeleted(m_bShowDeleted);
+    m_aSkipDeletedSet.SetDeletedVisible(m_bShowDeleted);
     osl_decrementInterlockedCount( &m_refCount );
 }
 
@@ -648,7 +644,7 @@ void SAL_CALL OResultSet::insertRow(  ) throw(SQLException, RuntimeException)
     // we know that we append new rows at the end
     // so we have to know where the end is
     m_aSkipDeletedSet.skipDeleted(IResultSetHelper::LAST,1,sal_False);
-    m_bRowInserted = m_pTable->InsertRow(*m_aInsertRow, TRUE, m_xColsIdx);
+    m_bRowInserted = m_pTable->InsertRow(*m_aInsertRow, sal_True, m_xColsIdx);
     if(m_bRowInserted && m_pFileSet.is())
     {
         sal_Int32 nPos = (m_aInsertRow->get())[0]->getValue();
@@ -904,20 +900,20 @@ IPropertyArrayHelper & OResultSet::getInfoHelper()
 }
 
 //------------------------------------------------------------------
-BOOL OResultSet::ExecuteRow(IResultSetHelper::Movement eFirstCursorPosition,
-                               INT32 nFirstOffset,
-                               BOOL bEvaluate,
-                               BOOL bRetrieveData)
+sal_Bool OResultSet::ExecuteRow(IResultSetHelper::Movement eFirstCursorPosition,
+                               sal_Int32 nFirstOffset,
+                               sal_Bool bEvaluate,
+                               sal_Bool bRetrieveData)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OResultSet::ExecuteRow" );
     OSL_ENSURE(m_pSQLAnalyzer,"OResultSet::ExecuteRow: Analyzer isn't set!");
 
     // For further Fetch-Operations this information may possibly be changed ...
     IResultSetHelper::Movement eCursorPosition = eFirstCursorPosition;
-    INT32  nOffset = nFirstOffset;
+    sal_Int32  nOffset = nFirstOffset;
 
     const OSQLColumns & rTableCols = *(m_pTable->getTableColumns());
-    BOOL bHasRestriction = m_pSQLAnalyzer->hasRestriction();
+    sal_Bool bHasRestriction = m_pSQLAnalyzer->hasRestriction();
 again:
 
     // protect from reading over the end when someboby is inserting while we are reading
@@ -940,8 +936,13 @@ again:
     {
         m_pTable->fetchRow(m_aEvaluateRow, rTableCols, sal_True,bRetrieveData || bHasRestriction);
 
-        if ((!m_bShowDeleted && m_aEvaluateRow->isDeleted())
-            || (bHasRestriction && !m_pSQLAnalyzer->evaluateRestriction()))
+        if  (   (   !m_bShowDeleted
+                &&  m_aEvaluateRow->isDeleted()
+                )
+            ||  (   bHasRestriction
+                &&  !m_pSQLAnalyzer->evaluateRestriction()
+                )
+            )
         {                                                // Evaluate the next record
             // delete current row in Keyset
             if (m_pEvaluationKeySet)
@@ -988,12 +989,14 @@ again:
 
     // Evaluate may only be set,
     // if the Keyset will be constructed further
-    if (m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT && !isCount() &&
-        (m_pFileSet.is() || m_pSortIndex) && bEvaluate)
+    if  (   ( m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT )
+        &&  !isCount()
+        &&  bEvaluate
+        )
     {
         if (m_pSortIndex)
         {
-            OKeyValue* pKeyValue = GetOrderbyKeyValue(m_aEvaluateRow);
+            OKeyValue* pKeyValue = GetOrderbyKeyValue( m_aSelectRow );
             m_pSortIndex->AddKeyValue(pKeyValue);
         }
         else if (m_pFileSet.is())
@@ -1008,7 +1011,7 @@ again:
         if (bEvaluate)
         {
             // read the actual result-row
-            bOK = m_pTable->fetchRow(m_aEvaluateRow, *(m_pTable->getTableColumns()), sal_True,TRUE);
+            bOK = m_pTable->fetchRow(m_aEvaluateRow, *(m_pTable->getTableColumns()), sal_True,sal_True);
         }
 
         if (bOK)
@@ -1023,7 +1026,7 @@ again:
         sal_Bool bOK = sal_True;
         if (bEvaluate)
         {
-            bOK = m_pTable->fetchRow(m_aEvaluateRow, *(m_pTable->getTableColumns()), sal_True,TRUE);
+            bOK = m_pTable->fetchRow(m_aEvaluateRow, *(m_pTable->getTableColumns()), sal_True,sal_True);
         }
         if (bOK)
         {
@@ -1035,13 +1038,13 @@ again:
 }
 
 //-------------------------------------------------------------------
-BOOL OResultSet::Move(IResultSetHelper::Movement eCursorPosition, INT32 nOffset, BOOL bRetrieveData)
+sal_Bool OResultSet::Move(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOffset, sal_Bool bRetrieveData)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OResultSet::Move" );
 
 //IgnoreDeletedRows:
 //
-    INT32 nTempPos = m_nRowPos;
+    sal_Int32 nTempPos = m_nRowPos;
 
     if (m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT &&
         !isCount())
@@ -1049,7 +1052,7 @@ BOOL OResultSet::Move(IResultSetHelper::Movement eCursorPosition, INT32 nOffset,
         if (!m_pFileSet.is()) //no Index available
         {
             // Normal FETCH
-            ExecuteRow(eCursorPosition,nOffset,FALSE,bRetrieveData);
+            ExecuteRow(eCursorPosition,nOffset,sal_False,bRetrieveData);
 
             // now set the bookmark for outside this is the logical pos  and not the file pos
             *(*m_aRow->get().begin()) = sal_Int32(m_nRowPos + 1);
@@ -1086,16 +1089,16 @@ BOOL OResultSet::Move(IResultSetHelper::Movement eCursorPosition, INT32 nOffset,
             // The FileCursor is outside of the valid range, if:
             // a.) m_nRowPos < 1
             // b.) a KeySet exists and m_nRowPos > m_pFileSet->size()
-            if (m_nRowPos < 0 || (m_pFileSet->isFrozen() && eCursorPosition != IResultSetHelper::BOOKMARK && m_nRowPos >= (INT32)m_pFileSet->get().size() ))
+            if (m_nRowPos < 0 || (m_pFileSet->isFrozen() && eCursorPosition != IResultSetHelper::BOOKMARK && m_nRowPos >= (sal_Int32)m_pFileSet->get().size() )) // && m_pFileSet->IsFrozen()
             {
                 goto Error;
             }
             else
             {
-                if (m_nRowPos < (INT32)m_pFileSet->get().size())
+                if (m_nRowPos < (sal_Int32)m_pFileSet->get().size())
                 {
                     // Fetch via Index
-                    ExecuteRow(IResultSetHelper::BOOKMARK,(m_pFileSet->get())[m_nRowPos],FALSE,bRetrieveData);
+                    ExecuteRow(IResultSetHelper::BOOKMARK,(m_pFileSet->get())[m_nRowPos],sal_False,bRetrieveData);
 
                     // now set the bookmark for outside
                     *(*m_aRow->get().begin()) = sal_Int32(m_nRowPos + 1);
@@ -1114,25 +1117,25 @@ BOOL OResultSet::Move(IResultSetHelper::Movement eCursorPosition, INT32 nOffset,
                     }
                     sal_Bool bOK = sal_True;
                     // Determine the number of further Fetches
-                    while (bOK && m_nRowPos >= (INT32)m_pFileSet->get().size())
+                    while (bOK && m_nRowPos >= (sal_Int32)m_pFileSet->get().size())
                     {
                         if (m_pEvaluationKeySet)
                         {
-                            if (m_nRowPos >= (INT32)m_pEvaluationKeySet->size())
+                            if (m_nRowPos >= (sal_Int32)m_pEvaluationKeySet->size())
                                 return sal_False;
                             else if (m_nRowPos == 0)
                             {
                                 m_aEvaluateIter = m_pEvaluationKeySet->begin();
-                                bOK = ExecuteRow(IResultSetHelper::BOOKMARK,*m_aEvaluateIter,TRUE, bRetrieveData);
+                                bOK = ExecuteRow(IResultSetHelper::BOOKMARK,*m_aEvaluateIter,sal_True, bRetrieveData);
                             }
                             else
                             {
                                 ++m_aEvaluateIter;
-                                bOK = ExecuteRow(IResultSetHelper::BOOKMARK,*m_aEvaluateIter,TRUE, bRetrieveData);
+                                bOK = ExecuteRow(IResultSetHelper::BOOKMARK,*m_aEvaluateIter,sal_True, bRetrieveData);
                             }
                         }
                         else
-                            bOK = ExecuteRow(IResultSetHelper::NEXT,1,TRUE, FALSE);//bRetrieveData);
+                            bOK = ExecuteRow(IResultSetHelper::NEXT,1,sal_True, sal_False);//bRetrieveData);
                     }
 
                     if (bOK)
@@ -1280,8 +1283,8 @@ void OResultSet::sortRows()
     ::std::vector<sal_Int32>::iterator aOrderByIter = m_aOrderbyColumnNumber.begin();
     for (::std::vector<sal_Int16>::size_type i=0;aOrderByIter != m_aOrderbyColumnNumber.end(); ++aOrderByIter,++i)
     {
-        OSL_ENSURE((sal_Int32)m_aRow->get().size() > *aOrderByIter,"Invalid Index");
-        switch ((*(m_aRow->get().begin()+*aOrderByIter))->getValue().getTypeKind())
+        OSL_ENSURE((sal_Int32)m_aSelectRow->get().size() > *aOrderByIter,"Invalid Index");
+        switch ((*(m_aSelectRow->get().begin()+*aOrderByIter))->getValue().getTypeKind())
         {
             case DataType::CHAR:
             case DataType::VARCHAR:
@@ -1310,7 +1313,7 @@ void OResultSet::sortRows()
                 OSL_FAIL("OFILECursor::Execute: Datentyp nicht implementiert");
                 break;
         }
-        (m_aEvaluateRow->get())[*aOrderByIter]->setBound(sal_True);
+        (m_aSelectRow->get())[*aOrderByIter]->setBound(sal_True);
     }
 
     m_pSortIndex = new OSortIndex(eKeyType,m_aOrderbyAscending);
@@ -1321,14 +1324,19 @@ void OResultSet::sortRows()
 
         while (m_aEvaluateIter != m_pEvaluationKeySet->end())
         {
-            ExecuteRow(IResultSetHelper::BOOKMARK,(*m_aEvaluateIter),TRUE);
+            ExecuteRow(IResultSetHelper::BOOKMARK,(*m_aEvaluateIter),sal_True);
             ++m_aEvaluateIter;
         }
     }
     else
     {
-        while (ExecuteRow(IResultSetHelper::NEXT,1,TRUE))
+        while ( ExecuteRow( IResultSetHelper::NEXT, 1, sal_False, sal_True ) )
         {
+            m_aSelectRow->get()[0]->setValue( m_aRow->get()[0]->getValue() );
+            if ( m_pSQLAnalyzer->hasFunctions() )
+                m_pSQLAnalyzer->setSelectionEvaluationResult( m_aSelectRow, m_aColMapping );
+            const sal_Int32 nBookmark = (*m_aRow->get().begin())->getValue();
+            ExecuteRow( IResultSetHelper::BOOKMARK, nBookmark, sal_True, sal_False );
         }
     }
 
@@ -1342,7 +1350,7 @@ void OResultSet::sortRows()
 
 
 // -------------------------------------------------------------------------
-BOOL OResultSet::OpenImpl()
+sal_Bool OResultSet::OpenImpl()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OResultSet::OpenImpl" );
     OSL_ENSURE(m_pSQLAnalyzer,"No analyzer set with setSqlAnalyzer!");
@@ -1410,9 +1418,9 @@ BOOL OResultSet::OpenImpl()
                     while (bOK)
                     {
                         if (m_pEvaluationKeySet)
-                            ExecuteRow(IResultSetHelper::BOOKMARK,(*m_aEvaluateIter),TRUE);
+                            ExecuteRow(IResultSetHelper::BOOKMARK,(*m_aEvaluateIter),sal_True);
                         else
-                            bOK = ExecuteRow(IResultSetHelper::NEXT,1,TRUE);
+                            bOK = ExecuteRow(IResultSetHelper::NEXT,1,sal_True);
 
                         if (bOK)
                         {
@@ -1432,8 +1440,8 @@ BOOL OResultSet::OpenImpl()
             }
             else
             {
-                BOOL bDistinct = FALSE;
-                BOOL bWasSorted = FALSE;
+                sal_Bool bDistinct = sal_False;
+                sal_Bool bWasSorted = sal_False;
                 OSQLParseNode *pDistinct = m_pParseTree->getChild(1);
                 ::std::vector<sal_Int32>                aOrderbyColumnNumberSave;
                 ::std::vector<TAscendingOrder>          aOrderbyAscendingSave;
@@ -1446,14 +1454,14 @@ BOOL OResultSet::OpenImpl()
                         aOrderbyColumnNumberSave = m_aOrderbyColumnNumber;
                         m_aOrderbyColumnNumber.clear();
                         aOrderbyAscendingSave.assign(m_aOrderbyAscending.begin(), m_aOrderbyAscending.end());
-                        bWasSorted = TRUE;
+                        bWasSorted = sal_True;
                     }
 
                     // the first column is the bookmark column
                     ::std::vector<sal_Int32>::iterator aColStart = (m_aColMapping.begin()+1);
                     ::std::copy(aColStart, m_aColMapping.end(),::std::back_inserter(m_aOrderbyColumnNumber));
                     m_aOrderbyAscending.assign(m_aColMapping.size()-1, SQL_ASC);
-                    bDistinct = TRUE;
+                    bDistinct = sal_True;
                 }
 
                 if (IsSorted())
@@ -1490,15 +1498,15 @@ BOOL OResultSet::OpenImpl()
                     if (nMaxRow)
                     {
     #if OSL_DEBUG_LEVEL > 1
-                        INT32 nFound=0;
+                        sal_Int32 nFound=0;
     #endif
-                        INT32 nPos;
-                        INT32 nKey;
+                        sal_Int32 nPos;
+                        sal_Int32 nKey;
 
                         for( size_t j = nMaxRow-1; j > 0; --j)
                         {
                             nPos = (m_pFileSet->get())[j];
-                            ExecuteRow(IResultSetHelper::BOOKMARK,nPos,FALSE);
+                            ExecuteRow(IResultSetHelper::BOOKMARK,nPos,sal_False);
                             m_pSQLAnalyzer->setSelectionEvaluationResult(m_aSelectRow,m_aColMapping);
                             { // copy row values
                                 OValueRefVector::Vector::iterator copyFrom = m_aSelectRow->get().begin();
@@ -1511,7 +1519,7 @@ BOOL OResultSet::OpenImpl()
 
                             // compare with next row
                             nKey = (m_pFileSet->get())[j-1];
-                            ExecuteRow(IResultSetHelper::BOOKMARK,nKey,FALSE);
+                            ExecuteRow(IResultSetHelper::BOOKMARK,nKey,sal_False);
                             m_pSQLAnalyzer->setSelectionEvaluationResult(m_aSelectRow,m_aColMapping);
                             OValueRefVector::Vector::iterator loopInRow = m_aSelectRow->get().begin();
                             OValueVector::Vector::iterator existentInSearchRow = aSearchRow->get().begin();
@@ -1574,9 +1582,9 @@ BOOL OResultSet::OpenImpl()
                 while (bOK)
                 {
                     if (m_pEvaluationKeySet)
-                        ExecuteRow(IResultSetHelper::BOOKMARK,(*m_aEvaluateIter),TRUE);
+                        ExecuteRow(IResultSetHelper::BOOKMARK,(*m_aEvaluateIter),sal_True);
                     else
-                        bOK = ExecuteRow(IResultSetHelper::NEXT,1,TRUE);
+                        bOK = ExecuteRow(IResultSetHelper::NEXT,1,sal_True);
 
                     if (bOK)
                     {
@@ -1598,7 +1606,7 @@ BOOL OResultSet::OpenImpl()
             m_nRowCountResult = 0;
 
             OSL_ENSURE(m_aAssignValues.is(),"No assign values set!");
-            if(!m_pTable->InsertRow(*m_aAssignValues, TRUE,m_xColsIdx))
+            if(!m_pTable->InsertRow(*m_aAssignValues, sal_True,m_xColsIdx))
             {
                 m_nFilePos  = 0;
                 return sal_False;
@@ -1652,7 +1660,7 @@ void OResultSet::setBoundedColumns(const OValueRefRow& _rRow,
                                    ::std::vector<sal_Int32>& _rColMapping)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OResultSet::setBoundedColumns" );
-    ::comphelper::UStringMixEqual aCase(_xMetaData->storesMixedCaseQuotedIdentifiers());
+    ::comphelper::UStringMixEqual aCase(_xMetaData->supportsMixedCaseQuotedIdentifiers());
 
     Reference<XPropertySet> xTableColumn;
     ::rtl::OUString sTableColumnName, sSelectColumnRealName;

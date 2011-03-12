@@ -35,7 +35,7 @@
 
 #include <uielement/toolbarwrapper.hxx>
 #include <threadhelp/resetableguard.hxx>
-#include <helper/actiontriggerhelper.hxx>
+#include <framework/actiontriggerhelper.hxx>
 #include <uielement/constitemcontainer.hxx>
 #include <uielement/rootitemcontainer.hxx>
 #include <uielement/toolbarmanager.hxx>
@@ -175,7 +175,7 @@ void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments ) th
                 Window* pWindow = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
                 if ( pWindow )
                 {
-                    ULONG nStyles = WB_LINESPACING | WB_BORDER | WB_SCROLL | WB_MOVEABLE | WB_3DLOOK | WB_DOCKABLE | WB_SIZEABLE | WB_CLOSEABLE;
+                    sal_uLong nStyles = WB_LINESPACING | WB_BORDER | WB_SCROLL | WB_MOVEABLE | WB_3DLOOK | WB_DOCKABLE | WB_SIZEABLE | WB_CLOSEABLE;
 
                     pToolBar = new ToolBar( pWindow, nStyles );
                     m_xToolBarWindow = VCLUnoHelper::GetInterface( pToolBar );
@@ -194,7 +194,7 @@ void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments ) th
                     // Fill toolbar with container contents
                     pToolBarManager->FillToolbar( m_xConfigData );
                     pToolBar->SetOutStyle( SvtMiscOptions().GetToolboxStyle() );
-                    pToolBar->EnableCustomize( TRUE );
+                    pToolBar->EnableCustomize( sal_True );
                     ::Size aActSize( pToolBar->GetSizePixel() );
                     ::Size aSize( pToolBar->CalcWindowSizePixel() );
                     aSize.Width() = aActSize.Width();
@@ -209,7 +209,7 @@ void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments ) th
                 if ( pToolBar && pToolBarManager )
                 {
                     pToolBar->SetOutStyle( SvtMiscOptions().GetToolboxStyle() );
-                    pToolBar->EnableCustomize( TRUE );
+                    pToolBar->EnableCustomize( sal_True );
                     ::Size aActSize( pToolBar->GetSizePixel() );
                     ::Size aSize( pToolBar->CalcWindowSizePixel() );
                     aSize.Width() = aActSize.Width();

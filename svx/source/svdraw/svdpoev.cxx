@@ -35,8 +35,8 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdundo.hxx>
-#include "svdstr.hrc"   // Namen aus der Resource
-#include "svdglob.hxx"  // StringCache
+#include "svx/svdstr.hrc"   // Namen aus der Resource
+#include "svx/svdglob.hxx"  // StringCache
 #include <svx/svdtrans.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -52,8 +52,8 @@ void SdrPolyEditView::ImpResetPolyPossibilityFlags()
 {
     eMarkedPointsSmooth=SDRPATHSMOOTH_DONTCARE;
     eMarkedSegmentsKind=SDRPATHSEGMENT_DONTCARE;
-    bSetMarkedPointsSmoothPossible=FALSE;
-    bSetMarkedSegmentsKindPossible=FALSE;
+    bSetMarkedPointsSmoothPossible=sal_False;
+    bSetMarkedSegmentsKindPossible=sal_False;
 }
 
 void SdrPolyEditView::ImpClearVars()
@@ -74,7 +74,7 @@ SdrPolyEditView::~SdrPolyEditView()
 void SdrPolyEditView::ImpCheckPolyPossibilities()
 {
     ImpResetPolyPossibilityFlags();
-    const ULONG nMarkAnz(GetMarkedObjectCount());
+    const sal_uIntPtr nMarkAnz(GetMarkedObjectCount());
 
     if(nMarkAnz && !ImpIsFrameHandles())
     {
@@ -85,7 +85,7 @@ void SdrPolyEditView::ImpCheckPolyPossibilities()
         bool bSegmFuz(false);
         basegfx::B2VectorContinuity eSmooth = basegfx::CONTINUITY_NONE;
 
-        for(ULONG nMarkNum(0L); nMarkNum < nMarkAnz; nMarkNum++)
+        for(sal_uIntPtr nMarkNum(0L); nMarkNum < nMarkAnz; nMarkNum++)
         {
             SdrMark* pM = GetSdrMarkByIndex(nMarkNum);
             CheckPolyPossibilitiesHelper( pM, b1stSmooth, b1stSegm, bCurve, bSmoothFuz, bSegmFuz, eSmooth );
@@ -215,9 +215,9 @@ void SdrPolyEditView::SetMarkedPointsSmooth(SdrPathSmoothKind eKind)
         const bool bUndo = IsUndoEnabled();
         if( bUndo )
             BegUndo(ImpGetResStr(STR_EditSetPointsSmooth), GetDescriptionOfMarkedPoints());
-        ULONG nMarkAnz(GetMarkedObjectCount());
+        sal_uIntPtr nMarkAnz(GetMarkedObjectCount());
 
-        for(ULONG nMarkNum(nMarkAnz); nMarkNum > 0L;)
+        for(sal_uIntPtr nMarkNum(nMarkAnz); nMarkNum > 0L;)
         {
             nMarkNum--;
             SdrMark* pM = GetSdrMarkByIndex(nMarkNum);
@@ -250,9 +250,9 @@ void SdrPolyEditView::SetMarkedSegmentsKind(SdrPathSegmentKind eKind)
         const bool bUndo = IsUndoEnabled();
         if( bUndo )
             BegUndo(ImpGetResStr(STR_EditSetSegmentsKind), GetDescriptionOfMarkedPoints());
-        ULONG nMarkAnz(GetMarkedObjectCount());
+        sal_uIntPtr nMarkAnz(GetMarkedObjectCount());
 
-        for(ULONG nMarkNum(nMarkAnz); nMarkNum > 0L;)
+        for(sal_uIntPtr nMarkNum(nMarkAnz); nMarkNum > 0L;)
         {
             nMarkNum--;
             SdrMark* pM = GetSdrMarkByIndex(nMarkNum);
@@ -276,7 +276,7 @@ void SdrPolyEditView::SetMarkedSegmentsKind(SdrPathSegmentKind eKind)
     }
 }
 
-BOOL SdrPolyEditView::IsSetMarkedPointsSmoothPossible() const
+sal_Bool SdrPolyEditView::IsSetMarkedPointsSmoothPossible() const
 {
     ForcePossibilities();
     return bSetMarkedPointsSmoothPossible;
@@ -288,7 +288,7 @@ SdrPathSmoothKind SdrPolyEditView::GetMarkedPointsSmooth() const
     return eMarkedPointsSmooth;
 }
 
-BOOL SdrPolyEditView::IsSetMarkedSegmentsKindPossible() const
+sal_Bool SdrPolyEditView::IsSetMarkedSegmentsKindPossible() const
 {
     ForcePossibilities();
     return bSetMarkedSegmentsKindPossible;
@@ -300,7 +300,7 @@ SdrPathSegmentKind SdrPolyEditView::GetMarkedSegmentsKind() const
     return eMarkedSegmentsKind;
 }
 
-BOOL SdrPolyEditView::IsDeleteMarkedPointsPossible() const
+sal_Bool SdrPolyEditView::IsDeleteMarkedPointsPossible() const
 {
     return HasMarkedPoints();
 }
@@ -311,7 +311,7 @@ void SdrPolyEditView::DeleteMarkedPoints()
     {
         BrkAction();
         SortMarkedObjects();
-        ULONG nMarkAnz=GetMarkedObjectCount();
+        sal_uIntPtr nMarkAnz=GetMarkedObjectCount();
 
         const bool bUndo = IsUndoEnabled();
         if( bUndo )
@@ -320,7 +320,7 @@ void SdrPolyEditView::DeleteMarkedPoints()
             BegUndo(ImpGetResStr(STR_EditDelete),GetDescriptionOfMarkedPoints(),SDRREPFUNC_OBJ_DELETE);
         }
 
-        for (ULONG nMarkNum=nMarkAnz; nMarkNum>0;)
+        for (sal_uIntPtr nMarkNum=nMarkAnz; nMarkNum>0;)
         {
             nMarkNum--;
             SdrMark* pM=GetSdrMarkByIndex(nMarkNum);
@@ -399,13 +399,13 @@ void SdrPolyEditView::RipUpAtMarkedPoints()
                         pM->GetPageView()->GetObjList()->InsertObject(pNeuObj, pObj->GetOrdNum() + 1, &aReason);
                         if( bUndo )
                             AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pNeuObj));
-                        MarkObj(pNeuObj, pM->GetPageView(), FALSE, TRUE);
+                        MarkObj(pNeuObj, pM->GetPageView(), sal_False, sal_True);
                     }
 
                     if(nNewPt0Idx)
                     {
                         // Korrektur notwendig?
-                        DBG_ASSERT(bKorregFlag==FALSE,"Mehrfache Indexkorrektur bei SdrPolyEditView::RipUp()");
+                        DBG_ASSERT(bKorregFlag==sal_False,"Mehrfache Indexkorrektur bei SdrPolyEditView::RipUp()");
                         if(!bKorregFlag)
                         {
                             bKorregFlag = sal_True;
@@ -554,7 +554,7 @@ void SdrPolyEditView::ShutMarkedObjects()
     CloseMarkedObjects();
 }
 
-void SdrPolyEditView::CloseMarkedObjects(BOOL bToggle, BOOL bOpen) // , long nOpenDistance)
+void SdrPolyEditView::CloseMarkedObjects(sal_Bool bToggle, sal_Bool bOpen) // , long nOpenDistance)
 {
     if (AreObjectsMarked())
     {
@@ -563,12 +563,12 @@ void SdrPolyEditView::CloseMarkedObjects(BOOL bToggle, BOOL bOpen) // , long nOp
             BegUndo(ImpGetResStr(STR_EditShut),GetDescriptionOfMarkedPoints());
 
         bool bChg=false;
-        ULONG nMarkAnz=GetMarkedObjectCount();
-        for (ULONG nm=0; nm<nMarkAnz; nm++)
+        sal_uIntPtr nMarkAnz=GetMarkedObjectCount();
+        for (sal_uIntPtr nm=0; nm<nMarkAnz; nm++)
         {
             SdrMark* pM=GetSdrMarkByIndex(nm);
             SdrObject* pO=pM->GetMarkedSdrObj();
-            BOOL bClosed=pO->IsClosedObj();
+            sal_Bool bClosed=pO->IsClosedObj();
             if ((pO->IsPolyObj() && (bClosed==bOpen)) || bToggle)
             {
                 if( bUndo )
@@ -604,13 +604,13 @@ void SdrPolyEditView::ImpTransformMarkedPoints(PPolyTrFunc pTrFunc, const void* 
 {
     const bool bUndo = IsUndoEnabled();
 
-    ULONG nMarkAnz=GetMarkedObjectCount();
-    for (ULONG nm=0; nm<nMarkAnz; nm++)
+    sal_uIntPtr nMarkAnz=GetMarkedObjectCount();
+    for (sal_uIntPtr nm=0; nm<nMarkAnz; nm++)
     {
         SdrMark* pM=GetSdrMarkByIndex(nm);
         SdrObject* pObj=pM->GetMarkedSdrObj();
         const SdrUShortCont* pPts=pM->GetMarkedPoints();
-        ULONG nPtAnz=pPts==NULL ? 0 : pPts->GetCount();
+        sal_uIntPtr nPtAnz=pPts==NULL ? 0 : pPts->GetCount();
         SdrPathObj* pPath=PTR_CAST(SdrPathObj,pObj);
         if (nPtAnz!=0 && pPath!=NULL)
         {
@@ -684,7 +684,7 @@ static void ImpMove(Point& rPt, Point* pC1, Point* pC2, const void* p1, const vo
 
 void SdrPolyEditView::MoveMarkedPoints(const Size& rSiz, bool bCopy)
 {
-    bCopy=FALSE; // noch nicht implementiert
+    bCopy=sal_False; // noch nicht implementiert
     ForceUndirtyMrkPnt();
     XubString aStr(ImpGetResStr(STR_EditMove));
     if (bCopy) aStr+=ImpGetResStr(STR_EditWithCopy);
@@ -706,7 +706,7 @@ static void ImpResize(Point& rPt, Point* pC1, Point* pC2, const void* p1, const 
 
 void SdrPolyEditView::ResizeMarkedPoints(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bCopy)
 {
-    bCopy=FALSE; // noch nicht implementiert
+    bCopy=sal_False; // noch nicht implementiert
     ForceUndirtyMrkPnt();
     XubString aStr(ImpGetResStr(STR_EditResize));
     if (bCopy) aStr+=ImpGetResStr(STR_EditWithCopy);
@@ -728,7 +728,7 @@ static void ImpRotate(Point& rPt, Point* pC1, Point* pC2, const void* p1, const 
 
 void SdrPolyEditView::RotateMarkedPoints(const Point& rRef, long nWink, bool bCopy)
 {
-    bCopy=FALSE; // noch nicht implementiert
+    bCopy=sal_False; // noch nicht implementiert
     ForceUndirtyMrkPnt();
     XubString aStr(ImpGetResStr(STR_EditResize));
     if (bCopy) aStr+=ImpGetResStr(STR_EditWithCopy);

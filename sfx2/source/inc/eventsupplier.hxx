@@ -58,6 +58,11 @@
 #include <svl/lstner.hxx>
 #include <unotools/eventcfg.hxx>
 
+namespace comphelper
+{
+    class NamedValueCollection;
+}
+
 //--------------------------------------------------------------------------------------------------------
 
 #define NOSUCHELEMENTEXCEPTION      ::com::sun::star::container::NoSuchElementException
@@ -126,8 +131,12 @@ public:
     virtual void SAL_CALL       disposing( const EVENTOBJECT& Source )
                                     throw( RUNTIMEEXCEPTION );
 
-    static SvxMacro*            ConvertToMacro( const ANY& rElement, SfxObjectShell* pDoc, BOOL bBlowUp );
-    static void                 BlowUpMacro( const ANY& rIn, ANY& rOut, SfxObjectShell* pDoc );
+    static SvxMacro*            ConvertToMacro( const ANY& rElement, SfxObjectShell* pDoc, sal_Bool bNormalizeMacro );
+    static void                 NormalizeMacro( const ANY& rIn, ANY& rOut, SfxObjectShell* pDoc );
+    static void                 NormalizeMacro(
+                                    const ::comphelper::NamedValueCollection& i_eventDescriptor,
+                                    ::comphelper::NamedValueCollection& o_normalizedDescriptor,
+                                    SfxObjectShell* i_document );
 };
 
 //=============================================================================

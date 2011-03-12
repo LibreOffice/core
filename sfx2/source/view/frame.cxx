@@ -135,14 +135,14 @@ SfxFrame::~SfxFrame()
 sal_Bool SfxFrame::DoClose()
 {
     // Eigentlich wird noch ein PrepareClose gebraucht !!!
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     if ( !pImp->bClosing )
     {
         pImp->bClosing = sal_True;
         CancelTransfers();
 
         // now close frame; it will be deleted if this call is successful, so don't use any members after that!
-        bRet = TRUE;
+        bRet = sal_True;
         try
         {
             Reference< XCloseable > xCloseable  ( pImp->xFrame, UNO_QUERY );
@@ -160,7 +160,7 @@ sal_Bool SfxFrame::DoClose()
         catch( ::com::sun::star::util::CloseVetoException& )
         {
             pImp->bClosing = sal_False;
-            bRet = FALSE;
+            bRet = sal_False;
         }
         catch( ::com::sun::star::lang::DisposedException& )
         {
@@ -224,7 +224,7 @@ sal_uInt16 SfxFrame::PrepareClose_Impl( sal_Bool bUI, sal_Bool bForBrowsing )
                 bOther = ( &pFrame->GetFrame() != this );
             }
 
-            SFX_APP()->NotifyEvent( SfxEventHint(SFX_EVENT_PREPARECLOSEVIEW, GlobalEventConfig::GetEventName( STR_EVENT_PREPARECLOSEVIEW ), pCur) );
+            SFX_APP()->NotifyEvent( SfxViewEventHint(SFX_EVENT_PREPARECLOSEVIEW, GlobalEventConfig::GetEventName( STR_EVENT_PREPARECLOSEVIEW ), pCur, GetController() ) );
 
             if ( bOther )
                 // if there are other views only the current view of this frame must be asked
@@ -237,7 +237,7 @@ sal_uInt16 SfxFrame::PrepareClose_Impl( sal_Bool bUI, sal_Bool bForBrowsing )
         if ( nRet == RET_OK )
         {
             // if this frame has child frames, ask them too
-            for( USHORT nPos = GetChildFrameCount(); nRet == RET_OK && nPos--; )
+            for( sal_uInt16 nPos = GetChildFrameCount(); nRet == RET_OK && nPos--; )
                 nRet = pChildArr->GetObject( nPos )->PrepareClose_Impl( bUI, bForBrowsing );
         }
 
@@ -286,7 +286,7 @@ sal_Bool SfxFrame::IsClosing_Impl() const
 
 void SfxFrame::SetIsClosing_Impl()
 {
-    pImp->bClosing = TRUE;
+    pImp->bClosing = sal_True;
 }
 
 sal_uInt16 SfxFrame::GetChildFrameCount() const
@@ -587,10 +587,10 @@ bool SfxFrameItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE ) const
     if ( wFrame )
     {
         rVal <<= wFrame->GetFrameInterface();
-        return TRUE;
+        return sal_True;
     }
 
-    return FALSE;
+    return sal_False;
 }
 
 bool SfxFrameItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE )
@@ -604,15 +604,15 @@ bool SfxFrameItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE )
             if ( pFr->GetFrameInterface() == xFrame )
             {
                 wFrame = pFrame = pFr;
-                return TRUE;
+                return sal_True;
             }
 
             pFr = SfxFrame::GetNext( *pFr );
         }
-        return TRUE;
+        return sal_True;
     }
 
-    return FALSE;
+    return sal_False;
 }
 
 
@@ -633,13 +633,13 @@ SfxPoolItem* SfxUsrAnyItem::Clone( SfxItemPool *) const
     return new SfxUsrAnyItem( Which(), aValue );
 }
 
-bool SfxUsrAnyItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ ) const
+bool SfxUsrAnyItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     rVal = aValue;
     return sal_True;
 }
 
-bool SfxUsrAnyItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ )
+bool SfxUsrAnyItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     aValue = rVal;
     return sal_True;
@@ -667,13 +667,13 @@ SfxPoolItem* SfxUnoFrameItem::Clone( SfxItemPool* ) const
     return new SfxUnoFrameItem( Which(), m_xFrame );
 }
 
-bool SfxUnoFrameItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ ) const
+bool SfxUnoFrameItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     rVal <<= m_xFrame;
     return sal_True;
 }
 
-bool SfxUnoFrameItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ )
+bool SfxUnoFrameItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     return ( rVal >>= m_xFrame );
 }
@@ -968,7 +968,7 @@ SfxFrame* SfxFrame::GetFirst()
 
 SfxFrame* SfxFrame::GetNext( SfxFrame& rFrame )
 {
-    USHORT nPos = pFramesArr_Impl->GetPos( &rFrame );
+    sal_uInt16 nPos = pFramesArr_Impl->GetPos( &rFrame );
     if ( nPos+1 < pFramesArr_Impl->Count() )
         return pFramesArr_Impl->GetObject(nPos+1);
     else

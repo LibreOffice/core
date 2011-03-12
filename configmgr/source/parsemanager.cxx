@@ -33,10 +33,11 @@
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "osl/diagnose.h"
 #include "sal/types.h"
+#include "xmlreader/span.hxx"
+#include "xmlreader/xmlreader.hxx"
 
 #include "parsemanager.hxx"
 #include "parser.hxx"
-#include "xmlreader.hxx"
 
 namespace configmgr {
 
@@ -53,28 +54,42 @@ ParseManager::ParseManager(
     reader_(url), parser_(parser)
 {
     OSL_ASSERT(parser.is());
+    int id;
+    id = reader_.registerNamespaceIri(
+        xmlreader::Span(
+            RTL_CONSTASCII_STRINGPARAM("http://openoffice.org/2001/registry")));
+    OSL_ASSERT(id == NAMESPACE_OOR);
+    id = reader_.registerNamespaceIri(
+        xmlreader::Span(
+            RTL_CONSTASCII_STRINGPARAM("http://www.w3.org/2001/XMLSchema")));
+    OSL_ASSERT(id == NAMESPACE_XS);
+    id = reader_.registerNamespaceIri(
+        xmlreader::Span(
+            RTL_CONSTASCII_STRINGPARAM(
+                "http://www.w3.org/2001/XMLSchema-instance")));
+    OSL_ASSERT(id == NAMESPACE_XSI);
 }
 
 bool ParseManager::parse() {
     for (;;) {
         switch (itemData_.is()
-                ? XmlReader::RESULT_BEGIN
+                ? xmlreader::XmlReader::RESULT_BEGIN
                 : reader_.nextItem(
-                    parser_->getTextMode(), &itemData_, &itemNamespace_))
+                    parser_->getTextMode(), &itemData_, &itemNamespaceId_))
         {
-        case XmlReader::RESULT_BEGIN:
-            if (!parser_->startElement(reader_, itemNamespace_, itemData_))
+        case xmlreader::XmlReader::RESULT_BEGIN:
+            if (!parser_->startElement(reader_, itemNamespaceId_, itemData_))
             {
                 return false;
             }
             break;
-        case XmlReader::RESULT_END:
+        case xmlreader::XmlReader::RESULT_END:
             parser_->endElement(reader_);
             break;
-        case XmlReader::RESULT_TEXT:
+        case xmlreader::XmlReader::RESULT_TEXT:
             parser_->characters(itemData_);
             break;
-        case XmlReader::RESULT_DONE:
+        case xmlreader::XmlReader::RESULT_DONE:
             return true;
         }
         itemData_.clear();

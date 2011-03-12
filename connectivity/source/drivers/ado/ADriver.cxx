@@ -166,6 +166,37 @@ void ODriver::impl_checkURL_throw(const ::rtl::OUString& _sUrl)
 Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& /*info*/ ) throw(SQLException, RuntimeException)
 {
     impl_checkURL_throw(url);
+    if ( acceptsURL(url) )
+    {
+        ::std::vector< DriverPropertyInfo > aDriverInfo;
+
+        Sequence< ::rtl::OUString > aBooleanValues(2);
+        aBooleanValues[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "false" ) );
+        aBooleanValues[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "true" ) );
+
+        aDriverInfo.push_back(DriverPropertyInfo(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IgnoreDriverPrivileges"))
+                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Ignore the privileges from the database driver."))
+                ,sal_False
+                ,::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "false" ) )
+                ,aBooleanValues)
+        );
+        aDriverInfo.push_back(DriverPropertyInfo(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EscapeDateTime"))
+                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Escape date time format."))
+                ,sal_False
+                ,::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "true" ) )
+                ,aBooleanValues)
+        );
+        aDriverInfo.push_back(DriverPropertyInfo(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TypeInfoSettings"))
+                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Defines how the type info of the database metadata should be manipulated."))
+                ,sal_False
+                ,::rtl::OUString( )
+                ,Sequence< ::rtl::OUString > ())
+        );
+        return Sequence< DriverPropertyInfo >(&aDriverInfo[0],aDriverInfo.size());
+    }
     return Sequence< DriverPropertyInfo >();
 }
 // --------------------------------------------------------------------------------

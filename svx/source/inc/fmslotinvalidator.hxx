@@ -36,7 +36,7 @@ namespace svx
 {
 //........................................................................
 
-    typedef USHORT SfxSlotId;
+    typedef sal_uInt16 SfxSlotId;
 
     //====================================================================
     //= ISlotInvalidator

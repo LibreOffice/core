@@ -88,12 +88,12 @@ public:
     String          GetModuleName() const;
     void            SetDocumentTypeNameResource( const ResId& rId );
     String          GetDocumentTypeName() const;
-    SfxFilterContainer *GetFilterContainer( BOOL bForceLoad = TRUE) const;
+    SfxFilterContainer *GetFilterContainer( sal_Bool bForceLoad = sal_True) const;
 
     // Views
     void            RegisterViewFactory(SfxViewFactory &rFactory);
-    USHORT          GetViewFactoryCount() const;
-    SfxViewFactory& GetViewFactory(USHORT i = 0) const;
+    sal_uInt16          GetViewFactoryCount() const;
+    SfxViewFactory& GetViewFactory(sal_uInt16 i = 0) const;
 
     /// returns the view factory whose GetAPIViewName or GetLegacyViewName delivers the requested logical name
     SfxViewFactory* GetViewFactoryByViewName( const String& i_rViewName ) const;

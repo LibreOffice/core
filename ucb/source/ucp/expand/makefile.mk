@@ -59,3 +59,11 @@ DEF1NAME = $(SHL1TARGET)
 .ENDIF # L10N_framework
 
 .INCLUDE : target.mk
+
+ALLTAR : $(MISC)/ucpexpand1.component
+
+$(MISC)/ucpexpand1.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        ucpexpand1.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt ucpexpand1.component

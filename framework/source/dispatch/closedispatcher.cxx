@@ -35,7 +35,7 @@
 #include <pattern/frame.hxx>
 #include <threadhelp/readguard.hxx>
 #include <threadhelp/writeguard.hxx>
-#include <classes/framelistanalyzer.hxx>
+#include <framework/framelistanalyzer.hxx>
 #include <services.h>
 #include <general.h>
 

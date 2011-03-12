@@ -47,10 +47,18 @@ class SbObjModule : public SbModule
 {
     SbObjModule( const SbObjModule& );
     SbObjModule();
+
+protected:
+    virtual ~SbObjModule();
+
 public:
     TYPEINFO();
     SbObjModule( const String& rName, const com::sun::star::script::ModuleInfo& mInfo, bool bIsVbaCompatible );
     virtual SbxVariable* Find( const XubString& rName, SbxClassType t );
+
+    virtual void SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
+                             const SfxHint& rHint, const TypeId& rHintType );
+
     using SbxValue::GetObject;
     SbxVariable* GetObject();
     void SetUnoObject( const com::sun::star::uno::Any& aObj )throw ( com::sun::star::uno::RuntimeException ) ;
@@ -76,7 +84,7 @@ public:
     SbUserFormModule( const String& rName, const com::sun::star::script::ModuleInfo& mInfo, bool bIsVBACompat );
     virtual ~SbUserFormModule();
     virtual SbxVariable* Find( const XubString& rName, SbxClassType t );
-    void ResetApiObj();
+    void ResetApiObj( bool bTriggerTerminateEvent = true );
     void Unload();
     void Load();
     void triggerMethod( const String& );
@@ -87,6 +95,11 @@ public:
     void triggerTerminateEvent();
     void triggerLayoutEvent();
     void triggerResizeEvent();
+
+    bool getInitState( void )
+        { return mbInit; }
+    void setInitState( bool bInit )
+        { mbInit = bInit; }
 
     class SbUserFormModuleInstance* CreateInstance();
 };
@@ -99,7 +112,7 @@ public:
     SbUserFormModuleInstance( SbUserFormModule* pParentModule, const String& rName,
         const com::sun::star::script::ModuleInfo& mInfo, bool bIsVBACompat );
 
-    virtual BOOL IsClass( const String& ) const;
+    virtual sal_Bool IsClass( const String& ) const;
     virtual SbxVariable* Find( const XubString& rName, SbxClassType t );
 };
 

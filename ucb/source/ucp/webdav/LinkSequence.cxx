@@ -167,11 +167,7 @@ bool LinkSequence::createFromXML( const rtl::OString & rInData,
                       rInData.getStr() + nStart,
                       nEnd - nStart + TOKEN_LENGTH );
 
-#if NEON_VERSION >= 0x0250
         success = !ne_xml_failed( parser );
-#else
-        success = !!ne_xml_valid( parser );
-#endif
 
         ne_xml_destroy( parser );
 

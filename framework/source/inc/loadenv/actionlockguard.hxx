@@ -123,8 +123,8 @@ class ActionLockGuard : private ThreadHelpBase
             @param  xLock
                     points to the outside resource, which should be locked.
 
-            @return TRUE, if new resource could be set and locked.
-                    FALSE otherwhise.
+            @return sal_True, if new resource could be set and locked.
+                    sal_False otherwhise.
          */
         virtual sal_Bool setResource(const css::uno::Reference< css::document::XActionLockable >& xLock)
         {
@@ -151,8 +151,8 @@ class ActionLockGuard : private ThreadHelpBase
             @param  xLock
                     points to the outside resource, which should be locked.
 
-            @return TRUE, if new resource could be set and locked.
-                    FALSE otherwhise.
+            @return sal_True, if new resource could be set and locked.
+                    sal_False otherwhise.
          */
         virtual void freeResource()
         {

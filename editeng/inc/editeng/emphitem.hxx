@@ -53,7 +53,7 @@ public:
     TYPEINFO();
 
     SvxEmphasisMarkItem(  const FontEmphasisMark eVal /*= EMPHASISMARK_NONE*/,
-                          const USHORT nId  );
+                          const sal_uInt16 nId  );
 
     // "pure virtual Methods" from SfxPoolItem + SfxEnumItem
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -63,14 +63,12 @@ public:
                                     const IntlWrapper * = 0 ) const;
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*    Create(SvStream &, USHORT) const;
-    virtual SvStream&       Store(SvStream &, USHORT nItemVersion) const;
-    virtual USHORT          GetVersion( USHORT nFileVersion ) const;
+    virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const;
+    virtual SvStream&       Store(SvStream &, sal_uInt16 nItemVersion) const;
+    virtual sal_uInt16          GetVersion( sal_uInt16 nFileVersion ) const;
 
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal,
-                                            BYTE nMemberId = 0 ) const;
-    virtual bool            PutValue( const com::sun::star::uno::Any& rVal,
-                                            BYTE nMemberId = 0 );
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     inline SvxEmphasisMarkItem& operator=(const SvxEmphasisMarkItem& rItem )
     {
@@ -82,7 +80,7 @@ public:
     FontEmphasisMark        GetEmphasisMark() const
                                 { return (FontEmphasisMark)GetValue(); }
     void                    SetEmphasisMark( FontEmphasisMark eNew )
-                                { SetValue( (USHORT)eNew ); }
+                                { SetValue( (sal_uInt16)eNew ); }
 };
 
 #endif // #ifndef _SVX_EMPHITEM_HXX

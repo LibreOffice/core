@@ -41,7 +41,7 @@
 #include <com/sun/star/linguistic2/XAvailableLocales.hpp>
 #include <unotools/configitem.hxx>
 
-#include "misc.hxx"
+#include "linguistic/misc.hxx"
 #include "defs.hxx"
 
 class SpellCheckerDispatcher;
@@ -111,7 +111,7 @@ class LngSvcMgr :
     SvcInfoArray *                                      pAvailHyphSvcs;
     SvcInfoArray *                                      pAvailThesSvcs;
 
-    BOOL bDisposing;
+    sal_Bool bDisposing;
 
     // disallow copy-constructor and assignment-operator for now
     LngSvcMgr(const LngSvcMgr &);
@@ -133,10 +133,12 @@ class LngSvcMgr :
     void    SetCfgServiceLists( HyphenatorDispatcher &rHyphDsp );
     void    SetCfgServiceLists( ThesaurusDispatcher &rThesDsp );
 
-    BOOL    SaveCfgSvcs( const String &rServiceName );
+    sal_Bool    SaveCfgSvcs( const String &rServiceName );
 
     void    SetAvailableCfgServiceLists( LinguDispatcher &rDispatcher,
                     const SvcInfoArray &rAvailSvcs );
+
+    static void clearSvcInfoArray(SvcInfoArray *pInfo);
 
     // utl::ConfigItem (to allow for listening of changes of relevant properties)
     virtual void    Notify( const com::sun::star::uno::Sequence< rtl::OUString > &rPropertyNames );
@@ -173,10 +175,10 @@ public:
     static inline ::rtl::OUString   getImplementationName_Static();
     static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static() throw();
 
-    BOOL    AddLngSvcEvtBroadcaster(
+    sal_Bool    AddLngSvcEvtBroadcaster(
                 const ::com::sun::star::uno::Reference<
                     ::com::sun::star::linguistic2::XLinguServiceEventBroadcaster > &rxBroadcaster );
-    BOOL    RemoveLngSvcEvtBroadcaster(
+    sal_Bool    RemoveLngSvcEvtBroadcaster(
                 const ::com::sun::star::uno::Reference<
                     ::com::sun::star::linguistic2::XLinguServiceEventBroadcaster > &rxBroadcaster );
 };

@@ -84,7 +84,7 @@ public:
     String          GetValueString() const;
 
     // the "old" operator==()
-    BOOL            IsEqual( const SvxTabStop& rTS ) const
+    sal_Bool            IsEqual( const SvxTabStop& rTS ) const
                         {
                             return ( nTabPos     == rTS.nTabPos     &&
                                      eAdjustment == rTS.eAdjustment &&
@@ -93,9 +93,9 @@ public:
                         }
 
     // For the SortedArray:
-    BOOL            operator==( const SvxTabStop& rTS ) const
+    sal_Bool            operator==( const SvxTabStop& rTS ) const
                         { return nTabPos == rTS.nTabPos; }
-    BOOL            operator <( const SvxTabStop& rTS ) const
+    sal_Bool            operator <( const SvxTabStop& rTS ) const
                         { return nTabPos < rTS.nTabPos; }
 
     SvxTabStop&     operator=( const SvxTabStop& rTS )
@@ -124,27 +124,27 @@ class EDITENG_DLLPUBLIC SvxTabStopItem : public SfxPoolItem, private SvxTabStopA
 public:
     TYPEINFO();
 
-    SvxTabStopItem( USHORT nWhich  );
-    SvxTabStopItem( const USHORT nTabs,
-                    const USHORT nDist,
+    SvxTabStopItem( sal_uInt16 nWhich  );
+    SvxTabStopItem( const sal_uInt16 nTabs,
+                    const sal_uInt16 nDist,
                     const SvxTabAdjust eAdjst /*= SVX_TAB_ADJUST_DEFAULT*/,
-                    USHORT nWhich  );
+                    sal_uInt16 nWhich  );
     SvxTabStopItem( const SvxTabStopItem& rTSI );
 
     // Returns index of the tab or TAB_NOTFOUND
-    USHORT          GetPos( const SvxTabStop& rTab ) const;
+    sal_uInt16          GetPos( const SvxTabStop& rTab ) const;
 
     // Returns index of the tab at nPos, or TAB_NOTFOUND
-    USHORT          GetPos( const long nPos ) const;
+    sal_uInt16          GetPos( const long nPos ) const;
 
     // unprivatized:
-    USHORT          Count() const { return SvxTabStopArr::Count(); }
-    BOOL            Insert( const SvxTabStop& rTab );
-    void            Insert( const SvxTabStopItem* pTabs, USHORT nStart = 0,
-                            USHORT nEnd = USHRT_MAX );
+    sal_uInt16          Count() const { return SvxTabStopArr::Count(); }
+    sal_Bool            Insert( const SvxTabStop& rTab );
+    void            Insert( const SvxTabStopItem* pTabs, sal_uInt16 nStart = 0,
+                            sal_uInt16 nEnd = USHRT_MAX );
     void            Remove( SvxTabStop& rTab )
                         { SvxTabStopArr::Remove( rTab ); }
-    void            Remove( const USHORT nPos, const USHORT nLen = 1 )
+    void            Remove( const sal_uInt16 nPos, const sal_uInt16 nLen = 1 )
                         { SvxTabStopArr::Remove( nPos, nLen ); }
 
     // Assignment operator, equality operator (caution: expensive!)
@@ -155,7 +155,7 @@ public:
     //                  { return !( operator==( rTSI ) ); }
 
     // SortedArrays returns only Stackobjects!
-    const SvxTabStop& operator[]( const USHORT nPos ) const
+    const SvxTabStop& operator[]( const sal_uInt16 nPos ) const
                         {
                             DBG_ASSERT( GetStart() &&
                                         nPos < Count(), "op[]" );
@@ -166,8 +166,8 @@ public:
 
     // "pure virtual Methods" from SfxPoolItem
     virtual int              operator==( const SfxPoolItem& ) const;
-    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -175,8 +175,8 @@ public:
                                     String &rText, const IntlWrapper * = 0 ) const;
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*     Create( SvStream&, USHORT ) const;
-    virtual SvStream&        Store( SvStream& , USHORT nItemVersion ) const;
+    virtual SfxPoolItem*     Create( SvStream&, sal_uInt16 ) const;
+    virtual SvStream&        Store( SvStream& , sal_uInt16 nItemVersion ) const;
 
     using SvxTabStopArr::Insert;
     using SvxTabStopArr::Remove;

@@ -38,7 +38,7 @@
 
 #define _SVX_SELCTRL_CXX
 
-#include "selctrl.hxx"
+#include "svx/selctrl.hxx"
 #include <svx/dialmgr.hxx>
 
 #include <svx/dialogs.hrc>
@@ -49,8 +49,8 @@ SFX_IMPL_STATUSBAR_CONTROL(SvxSelectionModeControl, SfxUInt16Item);
 
 // class SvxSelectionModeControl -----------------------------------------
 
-SvxSelectionModeControl::SvxSelectionModeControl( USHORT _nSlotId,
-                                                  USHORT _nId,
+SvxSelectionModeControl::SvxSelectionModeControl( sal_uInt16 _nSlotId,
+                                                  sal_uInt16 _nId,
                                                   StatusBar& rStb ) :
     SfxStatusBarControl( _nSlotId, _nId, rStb ),
     nState( 0 )
@@ -59,7 +59,7 @@ SvxSelectionModeControl::SvxSelectionModeControl( USHORT _nSlotId,
 
 // -----------------------------------------------------------------------
 
-void SvxSelectionModeControl::StateChanged( USHORT, SfxItemState eState,
+void SvxSelectionModeControl::StateChanged( sal_uInt16, SfxItemState eState,
                                             const SfxPoolItem* pState )
 {
     if ( SFX_ITEM_AVAILABLE != eState )
@@ -107,7 +107,7 @@ void SvxSelectionModeControl::Paint( const UserDrawEvent& )
 void SvxSelectionModeControl::DrawItemText_Impl()
 {
     String sTxt;
-    USHORT _nId = 0;
+    sal_uInt16 _nId = 0;
 
     switch ( nState )
     {
@@ -131,7 +131,7 @@ void SvxSelectionModeControl::DrawItemText_Impl()
     GetStatusBar().SetItemText( GetId(), sTxt );
 }
 
-ULONG SvxSelectionModeControl::GetDefItemWidth(const StatusBar& rStb)
+sal_uIntPtr SvxSelectionModeControl::GetDefItemWidth(const StatusBar& rStb)
 {
     long nWidth1 =  rStb.GetTextWidth(SVX_RESSTR(RID_SVXSTR_SELMODE_STD));
     long nWidth2 =  rStb.GetTextWidth(SVX_RESSTR(RID_SVXSTR_SELMODE_ER));

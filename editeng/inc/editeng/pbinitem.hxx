@@ -35,7 +35,7 @@
 
 // define ----------------------------------------------------------------
 
-#define PAPERBIN_PRINTER_SETTINGS   ((BYTE)0xFF)
+#define PAPERBIN_PRINTER_SETTINGS   ((sal_uInt8)0xFF)
 
 // class SvxPaperBinItem -------------------------------------------------
 
@@ -49,21 +49,21 @@ class EDITENG_DLLPUBLIC SvxPaperBinItem : public SfxByteItem
 public:
     TYPEINFO();
 
-    inline SvxPaperBinItem( const USHORT nId ,
-                            const BYTE nTray = PAPERBIN_PRINTER_SETTINGS );
+    inline SvxPaperBinItem( const sal_uInt16 nId ,
+                            const sal_uInt8 nTray = PAPERBIN_PRINTER_SETTINGS );
     inline SvxPaperBinItem &operator=( const SvxPaperBinItem &rCpy );
 
     // "pure virtual Methods" from SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*    Create( SvStream &, USHORT ) const;
-    virtual SvStream&       Store( SvStream &, USHORT nItemVersion ) const;
+    virtual SfxPoolItem*    Create( SvStream &, sal_uInt16 ) const;
+    virtual SvStream&       Store( SvStream &, sal_uInt16 nItemVersion ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                              SfxMapUnit eCoreMetric,
                                              SfxMapUnit ePresMetric,
                                              String &rText, const IntlWrapper * = 0 ) const;
 };
 
-inline SvxPaperBinItem::SvxPaperBinItem( const USHORT nId, const BYTE nT )
+inline SvxPaperBinItem::SvxPaperBinItem( const sal_uInt16 nId, const sal_uInt8 nT )
     : SfxByteItem( nId, nT )
 {}
 

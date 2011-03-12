@@ -45,7 +45,7 @@ namespace rtl
     class OUString;
 }
 
-#define BRUSH_GRAPHIC_VERSION   ((USHORT)0x0001)
+#define BRUSH_GRAPHIC_VERSION   ((sal_uInt16)0x0001)
 
 enum SvxGraphicPosition
 {
@@ -67,28 +67,28 @@ class EDITENG_DLLPUBLIC SvxBrushItem : public SfxPoolItem
     String*             pStrLink;
     String*             pStrFilter;
     SvxGraphicPosition  eGraphicPos;
-    BOOL                bLoadAgain;
+    sal_Bool                bLoadAgain;
 
     void        ApplyGraphicTransparency_Impl();
     DECL_STATIC_LINK( SvxBrushItem, DoneHdl_Impl, void *);
     // wird nur von Create benutzt
     SvxBrushItem( SvStream& rStrm,
-                  USHORT nVersion, USHORT nWhich  );
+                  sal_uInt16 nVersion, sal_uInt16 nWhich  );
 
 public:
     TYPEINFO();
 
-    SvxBrushItem( USHORT nWhich );
-    SvxBrushItem( const Color& rColor, USHORT nWhich  );
+    SvxBrushItem( sal_uInt16 nWhich );
+    SvxBrushItem( const Color& rColor, sal_uInt16 nWhich  );
 
     SvxBrushItem( const Graphic& rGraphic,
-                  SvxGraphicPosition ePos, USHORT nWhich );
+                  SvxGraphicPosition ePos, sal_uInt16 nWhich );
     SvxBrushItem( const GraphicObject& rGraphicObj,
-                  SvxGraphicPosition ePos, USHORT nWhich );
+                  SvxGraphicPosition ePos, sal_uInt16 nWhich );
     SvxBrushItem( const String& rLink, const String& rFilter,
-                  SvxGraphicPosition ePos, USHORT nWhich );
+                  SvxGraphicPosition ePos, sal_uInt16 nWhich );
     SvxBrushItem( const SvxBrushItem& );
-    SvxBrushItem( const CntWallpaperItem&, USHORT nWhich );
+    SvxBrushItem( const CntWallpaperItem&, sal_uInt16 nWhich );
 
     ~SvxBrushItem();
 
@@ -100,13 +100,13 @@ public:
                                     String &rText, const IntlWrapper * = 0 ) const;
 
     virtual int              operator==( const SfxPoolItem& ) const;
-    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*     Create( SvStream&, USHORT nVersion ) const;
-    virtual SvStream&        Store( SvStream& , USHORT nItemVersion ) const;
-    virtual USHORT           GetVersion( USHORT nFileVersion ) const;
+    virtual SfxPoolItem*     Create( SvStream&, sal_uInt16 nVersion ) const;
+    virtual SvStream&        Store( SvStream& , sal_uInt16 nItemVersion ) const;
+    virtual sal_uInt16           GetVersion( sal_uInt16 nFileVersion ) const;
 
     const Color&    GetColor() const                { return aColor; }
     Color&          GetColor()                      { return aColor; }

@@ -47,7 +47,7 @@
 #include <com/sun/star/i18n/NativeNumberXmlAttributes.hpp>
 
 #include <xmloff/xmlnumfe.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/attrlist.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -800,7 +800,7 @@ xub_StrLen lcl_FindSymbol( const String& sUpperStr, const String& sCurString )
 sal_Bool SvXMLNumFmtExport::WriteTextWithCurrency_Impl( const OUString& rString,
                             const ::com::sun::star::lang::Locale& rLocale )
 {
-    //  returns TRUE if currency element was written
+    //  returns sal_True if currency element was written
 
     sal_Bool bRet = sal_False;
 
@@ -834,7 +834,7 @@ sal_Bool SvXMLNumFmtExport::WriteTextWithCurrency_Impl( const OUString& rString,
     else
         AddToTextElement_Impl( rString );       // simple text
 
-    return bRet;        // TRUE: currency element written
+    return bRet;        // sal_True: currency element written
 }
 
 //-------------------------------------------------------------------------
@@ -876,7 +876,7 @@ sal_Bool lcl_IsInEmbedded( const SvXMLEmbeddedTextEntryArr& rEmbeddedEntries, sa
     return sal_False;       // not found
 }
 
-BOOL lcl_IsDefaultDateFormat( const SvNumberformat& rFormat, sal_Bool bSystemDate, NfIndexTableOffset eBuiltIn )
+sal_Bool lcl_IsDefaultDateFormat( const SvNumberformat& rFormat, sal_Bool bSystemDate, NfIndexTableOffset eBuiltIn )
 {
     //  make an extra loop to collect date elements, to check if it is a default format
     //  before adding the automatic-order attribute
@@ -937,7 +937,7 @@ BOOL lcl_IsDefaultDateFormat( const SvNumberformat& rFormat, sal_Bool bSystemDat
     }
 
     if ( bDateNoDefault )
-        return FALSE;                       // additional elements
+        return sal_False;                       // additional elements
     else
     {
         NfIndexTableOffset eFound = (NfIndexTableOffset) SvXMLNumFmtDefaults::GetDefaultDateFormat(
@@ -1046,7 +1046,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
 
     //  automatic ordering for currency and date formats
     //  only used for some built-in formats
-    BOOL bAutoOrder = ( eBuiltIn == NF_CURRENCY_1000INT     || eBuiltIn == NF_CURRENCY_1000DEC2 ||
+    sal_Bool bAutoOrder = ( eBuiltIn == NF_CURRENCY_1000INT     || eBuiltIn == NF_CURRENCY_1000DEC2 ||
                         eBuiltIn == NF_CURRENCY_1000INT_RED || eBuiltIn == NF_CURRENCY_1000DEC2_RED ||
                         eBuiltIn == NF_CURRENCY_1000DEC2_DASHED ||
                         eBuiltIn == NF_DATE_SYSTEM_SHORT    || eBuiltIn == NF_DATE_SYSTEM_LONG ||
@@ -1059,16 +1059,16 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
 
     //  format source (for date and time formats)
     //  only used for some built-in formats
-    BOOL bSystemDate = ( eBuiltIn == NF_DATE_SYSTEM_SHORT ||
+    sal_Bool bSystemDate = ( eBuiltIn == NF_DATE_SYSTEM_SHORT ||
                          eBuiltIn == NF_DATE_SYSTEM_LONG  ||
                          eBuiltIn == NF_DATETIME_SYSTEM_SHORT_HHMM );
-    BOOL bLongSysDate = ( eBuiltIn == NF_DATE_SYSTEM_LONG );
+    sal_Bool bLongSysDate = ( eBuiltIn == NF_DATE_SYSTEM_LONG );
 
     // check if the format definition matches the key
     if ( bAutoOrder && ( nFmtType == NUMBERFORMAT_DATE || nFmtType == NUMBERFORMAT_DATETIME ) &&
             !lcl_IsDefaultDateFormat( rFormat, bSystemDate, eBuiltIn ) )
     {
-        bAutoOrder = bSystemDate = bLongSysDate = FALSE;        // don't write automatic-order attribute then
+        bAutoOrder = bSystemDate = bLongSysDate = sal_False;        // don't write automatic-order attribute then
     }
 
     if ( bAutoOrder &&
@@ -1183,7 +1183,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                     if ( bExpFound && pElemStr )
                         nExpDigits += pElemStr->Len();
                     else if ( !bDecDashes && pElemStr && pElemStr->GetChar(0) == '-' )
-                        bDecDashes = TRUE;
+                        bDecDashes = sal_True;
                     else if ( !bVarDecimals && !bInInteger && pElemStr && pElemStr->GetChar(0) == '#' )
                     {
                         //  If the decimal digits string starts with a '#', variable
@@ -1206,7 +1206,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                     bInInteger = sal_False;
                     break;
                 case NF_SYMBOLTYPE_CURRENCY:
-                    bCurrFound = TRUE;
+                    bCurrFound = sal_True;
                     break;
                 case NF_SYMBOLTYPE_CURREXT:
                     if (pElemStr)

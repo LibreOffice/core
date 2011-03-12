@@ -35,7 +35,7 @@
 #include "AttrTransformerAction.hxx"
 #include "ElemTransformerAction.hxx"
 #include "IgnoreTContext.hxx"
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 
 using ::rtl::OUString;
 using namespace ::com::sun::star::uno;

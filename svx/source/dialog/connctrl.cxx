@@ -38,9 +38,9 @@
 
 #include <svx/svdpage.hxx> // SdrObjList
 
-#include "connctrl.hxx"
+#include "svx/connctrl.hxx"
 #include <svx/dialmgr.hxx>
-#include "dlgutil.hxx"
+#include "svx/dlgutil.hxx"
 
 #include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
 
@@ -69,33 +69,33 @@ void SvxXConnectionPreview::Construct()
     DBG_ASSERT( pView, "No valid view is passed on! ");
 
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-    ULONG nMarkCount = rMarkList.GetMarkCount();
+    sal_uIntPtr nMarkCount = rMarkList.GetMarkCount();
 
     if( nMarkCount >= 1 )
     {
-        BOOL bFound = FALSE;
+        sal_Bool bFound = sal_False;
         const SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 
 
-        for( USHORT i = 0; i < nMarkCount && !bFound; i++ )
+        for( sal_uInt16 i = 0; i < nMarkCount && !bFound; i++ )
         {
             pObj = rMarkList.GetMark( i )->GetMarkedSdrObj();
-            UINT32 nInv = pObj->GetObjInventor();
-            UINT16 nId = pObj->GetObjIdentifier();
+            sal_uInt32 nInv = pObj->GetObjInventor();
+            sal_uInt16 nId = pObj->GetObjIdentifier();
             if( nInv == SdrInventor && nId == OBJ_EDGE )
             {
-                bFound = TRUE;
+                bFound = sal_True;
                 SdrEdgeObj* pTmpEdgeObj = (SdrEdgeObj*) pObj;
                 pEdgeObj = (SdrEdgeObj*) pTmpEdgeObj->Clone();
 
-                SdrObjConnection& rConn1 = (SdrObjConnection&)pEdgeObj->GetConnection( TRUE );
-                SdrObjConnection& rConn2 = (SdrObjConnection&)pEdgeObj->GetConnection( FALSE );
+                SdrObjConnection& rConn1 = (SdrObjConnection&)pEdgeObj->GetConnection( sal_True );
+                SdrObjConnection& rConn2 = (SdrObjConnection&)pEdgeObj->GetConnection( sal_False );
 
-                rConn1 = pTmpEdgeObj->GetConnection( TRUE );
-                rConn2 = pTmpEdgeObj->GetConnection( FALSE );
+                rConn1 = pTmpEdgeObj->GetConnection( sal_True );
+                rConn2 = pTmpEdgeObj->GetConnection( sal_False );
 
-                SdrObject* pTmpObj1 = pTmpEdgeObj->GetConnectedNode( TRUE );
-                SdrObject* pTmpObj2 = pTmpEdgeObj->GetConnectedNode( FALSE );
+                SdrObject* pTmpObj1 = pTmpEdgeObj->GetConnectedNode( sal_True );
+                SdrObject* pTmpObj2 = pTmpEdgeObj->GetConnectedNode( sal_False );
 
                 // potential memory leak here (!). Create SdrObjList only when there is
                 // not yet one.
@@ -108,13 +108,13 @@ void SvxXConnectionPreview::Construct()
                 {
                     SdrObject* pObj1 = pTmpObj1->Clone();
                     pObjList->InsertObject( pObj1 );
-                    pEdgeObj->ConnectToNode( TRUE, pObj1 );
+                    pEdgeObj->ConnectToNode( sal_True, pObj1 );
                 }
                 if( pTmpObj2 )
                 {
                     SdrObject* pObj2 = pTmpObj2->Clone();
                     pObjList->InsertObject( pObj2 );
-                    pEdgeObj->ConnectToNode( FALSE, pObj2 );
+                    pEdgeObj->ConnectToNode( sal_False, pObj2 );
                 }
                 pObjList->InsertObject( pEdgeObj );
             }
@@ -223,7 +223,7 @@ void SvxXConnectionPreview::SetAttributes( const SfxItemSet& rInAttrs )
 
 // Get number of lines which are offset based on the preview object
 
-USHORT SvxXConnectionPreview::GetLineDeltaAnz()
+sal_uInt16 SvxXConnectionPreview::GetLineDeltaAnz()
 {
     const SfxItemSet& rSet = pEdgeObj->GetMergedItemSet();
     sal_uInt16 nCount(0);
@@ -236,9 +236,9 @@ USHORT SvxXConnectionPreview::GetLineDeltaAnz()
 
 void SvxXConnectionPreview::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    BOOL bZoomIn  = rMEvt.IsLeft() && !rMEvt.IsShift();
-    BOOL bZoomOut = rMEvt.IsRight() || rMEvt.IsShift();
-    BOOL bCtrl    = rMEvt.IsMod1();
+    sal_Bool bZoomIn  = rMEvt.IsLeft() && !rMEvt.IsShift();
+    sal_Bool bZoomOut = rMEvt.IsRight() || rMEvt.IsShift();
+    sal_Bool bCtrl    = rMEvt.IsMod1();
 
     if( bZoomIn || bZoomOut )
     {

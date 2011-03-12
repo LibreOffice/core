@@ -158,3 +158,11 @@ DEF1NAME=$(SHL1TARGET)
 # --- Targets ----------------------------------------------------------
 
 .INCLUDE: target.mk
+
+ALLTAR : $(MISC)/ucpdav1.component
+
+$(MISC)/ucpdav1.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        ucpdav1.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt ucpdav1.component

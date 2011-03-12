@@ -25,62 +25,49 @@
 #
 #*************************************************************************
 
-PRJ = ..$/..$/..
-TARGET  = TransientDocument
-PRJNAME = $(TARGET)
-PACKAGE = complex.tdoc
-
-# --- Settings -----------------------------------------------------
-.INCLUDE: settings.mk
-
-
-#----- compile .java files -----------------------------------------
-
-JARFILES = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar
-JAVAFILES = CheckContentProvider.java \
-            CheckTransientDocumentsContent.java \
-            CheckTransientDocumentsContentProvider.java \
-            CheckTransientDocumentsDocumentContent.java
-
-#            CheckSimpleFileAccess.java \
-#----- make a jar from compiled files ------------------------------
-
-MAXLINELENGTH = 100000
-
-JARCLASSDIRS  = $(PACKAGE)
-JARTARGET     = $(TARGET).jar
-JARCOMPRESS   = TRUE
-
-# --- Parameters for the test --------------------------------------
-
-# start an office if the parameter is set for the makefile
-.IF "$(OFFICE)" == ""
-CT_APPEXECCOMMAND =
+.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
+nothing .PHONY:
 .ELSE
-CT_APPEXECCOMMAND = -AppExecutionCommand \
-            "$(OFFICE)$/soffice -accept=socket,host=localhost,port=8100;urp;"
-.ENDIF
 
-# test base is java complex
-CT_TESTBASE = -TestBase java_complex
+PRJ = ../../..
+PRJNAME = sc
+TARGET = qa_complex_tdoc
 
-# replace $/ with . in package name
-CT_PACKAGE  = -o $(PACKAGE:s\$/\.\)
+.IF "$(OOO_JUNIT_JAR)" != ""
+PACKAGE = complex/tdoc
 
-# start the runner application
-CT_APP      = org.openoffice.Runner
+JAVATESTFILES = \
+   CheckContentProvider.java \
+   CheckTransientDocumentsContent.java \
+   CheckTransientDocumentsContentProvider.java \
+   CheckTransientDocumentsDocumentContent.java
 
-# test document path
-CT_TESTDOCS = -tdoc $(PWD)$/..$/test_documents
+JAVAFILES = $(JAVATESTFILES) \
+    TestDocument.java \
+    _XChild.java \
+    _XCommandInfoChangeNotifier.java \
+    _XCommandProcessor.java \
+    _XComponent.java \
+    _XContent.java \
+    _XPropertiesChangeNotifier.java \
+    _XPropertyContainer.java \
+    _XPropertySetInfoChangeNotifier.java \
+    _XServiceInfo.java \
+    _XTypeProvider.java
 
-# --- Targets ------------------------------------------------------
+JARFILES = OOoRunner.jar ridl.jar test.jar unoil.jar
+EXTRAJARFILES = $(OOO_JUNIT_JAR)
 
-run: ALLTAR
-    @echo .
-    @echo "The followig tests are available:"
-    @echo $(foreach,i,$(JAVAFILES) "dmake $(i:b)     ")
+# Sample how to debug
+# JAVAIFLAGS=-Xdebug  -Xrunjdwp:transport=dt_socket,server=y,address=9003,suspend=y
 
-.INCLUDE :  target.mk
+.END
 
-Check%:
-    +java -cp $(CLASSPATH) $(CT_APP) $(CT_TESTBASE) $(CT_TESTDOCS) $(CT_APPEXECCOMMAND) $(CT_PACKAGE).$@
+.INCLUDE: settings.mk
+.INCLUDE: target.mk
+.INCLUDE: installationtest.mk
+
+ALLTAR : javatest
+
+.END
+

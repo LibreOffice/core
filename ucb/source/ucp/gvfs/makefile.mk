@@ -37,8 +37,6 @@ NO_BSYMBOLIC=TRUE
 .INCLUDE: settings.mk
 .IF "$(L10N_framework)"==""
 
-UNIXTEXT=$(MISC)/$(TARGET)-ucd.txt
-
 .IF "$(ENABLE_GNOMEVFS)"!=""
 COMPILER_WARN_ALL=TRUE
 PKGCONFIG_MODULES=gnome-vfs-2.0
@@ -84,3 +82,10 @@ SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 
 .INCLUDE: target.mk
 
+ALLTAR : $(MISC)/ucpgvfs.component
+
+$(MISC)/ucpgvfs.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        ucpgvfs.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt ucpgvfs.component

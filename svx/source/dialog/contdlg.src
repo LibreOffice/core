@@ -33,6 +33,7 @@
  // RID_SVXDLG_CONTOUR ----------------------------------------------------
 FloatingWindow RID_SVXDLG_CONTOUR
 {
+    HelpID = "svx:FloatingWindow:RID_SVXDLG_CONTOUR";
     OutputSize = TRUE ;
     Hide = TRUE ;
     SVLook = TRUE ;
@@ -169,13 +170,14 @@ FloatingWindow RID_SVXDLG_CONTOUR
             {
                 Identifier = TBI_PIPETTE ;
                 HelpId = HID_CONTDLG_PIPETTE ;
-                Text [ en-US ] = "Eyedropper" ;
+                Text [ en-US ] = "Pipette" ;
                 AutoCheck = TRUE ;
             };
         };
     };
     MetricField MTF_TOLERANCE
     {
+        HelpID = "svx:MetricField:RID_SVXDLG_CONTOUR:MTF_TOLERANCE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 0 , 0 ) ;
         Size = MAP_APPFONT ( 28 , 12 ) ;

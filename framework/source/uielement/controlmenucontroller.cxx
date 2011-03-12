@@ -287,7 +287,7 @@ void SAL_CALL ControlMenuController::statusChanged( const FeatureStateEvent& Eve
 {
     osl::ResettableMutexGuard aLock( m_aMutex );
 
-    USHORT nMenuId = 0;
+    sal_uInt16 nMenuId = 0;
     for (sal_uInt32 i=0; i < SAL_N_ELEMENTS(aCommands); ++i)
     {
         if ( Event.FeatureURL.Complete.equalsAscii( aCommands[i] ))

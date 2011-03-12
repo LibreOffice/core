@@ -103,13 +103,13 @@ namespace sdr
 
                 while(nWhich)
                 {
-                    if(SFX_ITEM_DONTCARE == rSet.GetItemState(nWhich, FALSE))
+                    if(SFX_ITEM_DONTCARE == rSet.GetItemState(nWhich, sal_False))
                     {
                         mpItemSet->InvalidateItem(nWhich);
                     }
                     else
                     {
-                        mpItemSet->MergeValue(rSet.Get(nWhich), TRUE);
+                        mpItemSet->MergeValue(rSet.Get(nWhich), sal_True);
                     }
 
                     nWhich = aIter.NextWhich();

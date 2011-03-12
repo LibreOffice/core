@@ -45,8 +45,8 @@ namespace connectivity
             return 0;
 
         xub_StrLen nTokCount = 1;
-        BOOL bStart = TRUE;     // Are we on the first character in the Token?
-        BOOL bInString = FALSE; // Are we WITHIN a (cStrDel delimited) String?
+        sal_Bool bStart = sal_True;     // Are we on the first character in the Token?
+        sal_Bool bInString = sal_False; // Are we WITHIN a (cStrDel delimited) String?
 
         // Search for String-end after the first not matching character
         for( xub_StrLen i = 0; i < nLen; ++i )
@@ -54,11 +54,11 @@ namespace connectivity
             const sal_Unicode cChar = m_sString.GetChar(i);
             if (bStart)
             {
-                bStart = FALSE;
+                bStart = sal_False;
                 // First character a String-Delimiter?
                 if ( cChar == cStrDel )
                 {
-                    bInString = TRUE;   // then we are now WITHIN the string!
+                    bInString = sal_True;   // then we are now WITHIN the string!
                     continue;           // skip this character!
                 }
             }
@@ -76,7 +76,7 @@ namespace connectivity
                     else
                     {
                         // String-End
-                        bInString = FALSE;
+                        bInString = sal_False;
                     }
                 }
             } // if (bInString)
@@ -86,7 +86,7 @@ namespace connectivity
                 if ( cChar == cTok )
                 {
                     ++nTokCount;
-                    bStart = TRUE;
+                    bStart = sal_True;
                 }
             }
         }
@@ -103,7 +103,7 @@ namespace connectivity
         const xub_StrLen nLen = m_sString.Len();
         if ( nLen )
         {
-            BOOL bInString = (nStartPos < nLen) && (m_sString.GetChar(nStartPos) == cStrDel);   // are we WITHIN a (cStrDel delimited) String?
+            sal_Bool bInString = (nStartPos < nLen) && (m_sString.GetChar(nStartPos) == cStrDel);   // are we WITHIN a (cStrDel delimited) String?
 
             // First character a String-Delimiter?
             if (bInString )
@@ -132,7 +132,7 @@ namespace connectivity
                         else
                         {
                             //end of String
-                            bInString = FALSE;
+                            bInString = sal_False;
                             *pData = 0;
                         }
                     }

@@ -39,6 +39,7 @@
 #include <sfx2/app.hxx>
 
 #include <svx/dialogs.hrc>
+#include "svx/modctrl.hxx"
 #include <svx/dialmgr.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -66,8 +67,8 @@ struct SvxModifyControl::ImplData
     }
 };
 
-SvxModifyControl::SvxModifyControl( USHORT _nSlotId,
-                                    USHORT _nId,
+SvxModifyControl::SvxModifyControl( sal_uInt16 _nSlotId,
+                                    sal_uInt16 _nId,
                                     StatusBar& rStb ) :
 
     SfxStatusBarControl( _nSlotId, _nId, rStb ),
@@ -77,7 +78,7 @@ SvxModifyControl::SvxModifyControl( USHORT _nSlotId,
 
 // -----------------------------------------------------------------------
 
-void SvxModifyControl::StateChanged( USHORT, SfxItemState eState,
+void SvxModifyControl::StateChanged( sal_uInt16, SfxItemState eState,
                                      const SfxPoolItem* pState )
 {
     if ( SFX_ITEM_AVAILABLE != eState )
@@ -147,7 +148,7 @@ void SvxModifyControl::DoubleClick()
     execute(OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Save")), aArgs);
 }
 
-ULONG SvxModifyControl::GetDefItemWidth(const StatusBar& rStb)
+sal_uIntPtr SvxModifyControl::GetDefItemWidth(const StatusBar& rStb)
 {
     return rStb.GetTextWidth(String::CreateFromAscii("XX"));
 }

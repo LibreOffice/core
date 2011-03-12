@@ -43,7 +43,7 @@ using SbxVariable::GetInfo;
 public:
 #endif
     typedef void( ProcessWrapper::*pMeth )
-        ( SbxVariable* pThis, SbxArray* pArgs, BOOL bWrite );
+        ( SbxVariable* pThis, SbxArray* pArgs, sal_Bool bWrite );
 #if defined ( ICC )
 private:
 #endif
@@ -57,11 +57,11 @@ private:
     static Methods aProcessMethods[];   // Method table
     Methods *pMethods;  // Current method table
 
-    void PSetImage( SbxVariable* pVar, SbxArray* pPar, BOOL bWrite );
-    void PStart( SbxVariable* pVar, SbxArray* pPar, BOOL bWrite );
-    void PGetExitCode( SbxVariable* pVar, SbxArray* pPar, BOOL bWrite );
-    void PIsRunning( SbxVariable* pVar, SbxArray* pPar, BOOL bWrite );
-    void PWasGPF( SbxVariable* pVar, SbxArray* pPar, BOOL bWrite );
+    void PSetImage( SbxVariable* pVar, SbxArray* pPar, sal_Bool bWrite );
+    void PStart( SbxVariable* pVar, SbxArray* pPar, sal_Bool bWrite );
+    void PGetExitCode( SbxVariable* pVar, SbxArray* pPar, sal_Bool bWrite );
+    void PIsRunning( SbxVariable* pVar, SbxArray* pPar, sal_Bool bWrite );
+    void PWasGPF( SbxVariable* pVar, SbxArray* pPar, sal_Bool bWrite );
 
     // Internal members and methods
     Process *pProcess;

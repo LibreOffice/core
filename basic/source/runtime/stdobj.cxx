@@ -68,7 +68,7 @@ struct Methods {
     SbxDataType eType;      // Datentyp
     short       nArgs;      // Argumente und Flags
     RtlCall     pFunc;      // Function Pointer
-    USHORT      nHash;      // Hashcode
+    sal_uInt16      nHash;      // Hashcode
 };
 
 struct StringHashCode
@@ -135,6 +135,10 @@ static Methods aMethods[] = {
 { "Blue",        SbxINTEGER,   1 | _FUNCTION, RTLNAME(Blue),0               },
   { "RGB-Value",     SbxLONG, 0,NULL,0 },
 
+{ "CallByName",     SbxVARIANT,   3 | _FUNCTION, RTLNAME(CallByName),0 },
+  { "Object",       SbxOBJECT,  0,NULL,0 },
+  { "ProcedureName",SbxSTRING,  0,NULL,0 },
+  { "CallType",     SbxINTEGER, 0,NULL,0 },
 { "CBool",          SbxBOOL,      1 | _FUNCTION, RTLNAME(CBool),0           },
   { "expression",   SbxVARIANT, 0,NULL,0 },
 { "CByte",          SbxBYTE,      1 | _FUNCTION, RTLNAME(CByte),0           },
@@ -645,6 +649,10 @@ static Methods aMethods[] = {
 { "TimeValue",      SbxDATE,      1 | _FUNCTION, RTLNAME(TimeValue),0       },
   { "String",       SbxSTRING, 0,NULL,0 },
 { "TOGGLE",         SbxINTEGER,       _CPROP,    RTLNAME(TOGGLE),0          },
+#ifdef DBG_TRACE_BASIC
+{ "TraceCommand",   SbxNULL,      1 | _FUNCTION, RTLNAME(TraceCommand),0 },
+  { "Command",      SbxSTRING,  0,NULL,0 },
+#endif
 { "Trim",           SbxSTRING,    1 | _FUNCTION, RTLNAME(Trim),0            },
   { "String",       SbxSTRING, 0,NULL,0 },
 { "True",           SbxBOOL,          _CPROP,    RTLNAME(True),0            },
@@ -780,11 +788,11 @@ SbxVariable* SbiStdObject::Find( const String& rName, SbxClassType t )
     if( !pVar )
     {
         // sonst suchen
-        USHORT nHash_ = SbxVariable::MakeHashCode( rName );
+        sal_uInt16 nHash_ = SbxVariable::MakeHashCode( rName );
         Methods* p = aMethods;
-        BOOL bFound = FALSE;
+        sal_Bool bFound = sal_False;
         short nIndex = 0;
-        USHORT nSrchMask = _TYPEMASK;
+        sal_uInt16 nSrchMask = _TYPEMASK;
         switch( t )
         {
             case SbxCLASS_METHOD:   nSrchMask = _METHOD; break;
@@ -799,14 +807,14 @@ SbxVariable* SbiStdObject::Find( const String& rName, SbxClassType t )
              && ( rName.EqualsIgnoreCaseAscii( p->pName ) ) )
             {
                 SbiInstance* pInst = pINST;
-                bFound = TRUE;
+                bFound = sal_True;
                 if( p->nArgs & _COMPTMASK )
                 {
                     if( !pInst || !pInst->IsCompatibility() )
-                        bFound = FALSE;
+                        bFound = sal_False;
                 }
                 if ( pInst && pInst->IsCompatibility() && VBABlackListQuery::isBlackListed( rName ) )
-                            bFound = FALSE;
+                            bFound = sal_False;
                 break;
             }
             nIndex += ( p->nArgs & _ARGSMASK ) + 1;
@@ -834,8 +842,8 @@ SbxVariable* SbiStdObject::Find( const String& rName, SbxClassType t )
     return pVar;
 }
 
-// SetModified muß bei der RTL abgklemmt werden
-void SbiStdObject::SetModified( BOOL )
+// SetModified muï¿½ bei der RTL abgklemmt werden
+void SbiStdObject::SetModified( sal_Bool )
 {
 }
 
@@ -850,17 +858,17 @@ void SbiStdObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
     {
         SbxVariable* pVar = pHint->GetVar();
         SbxArray* pPar_ = pVar->GetParameters();
-        ULONG t = pHint->GetId();
-        USHORT nCallId = (USHORT) pVar->GetUserData();
+        sal_uIntPtr t = pHint->GetId();
+        sal_uInt16 nCallId = (sal_uInt16) pVar->GetUserData();
         if( nCallId )
         {
             if( t == SBX_HINT_INFOWANTED )
                 pVar->SetInfo( GetInfo( (short) pVar->GetUserData() ) );
             else
             {
-                BOOL bWrite = FALSE;
+                sal_Bool bWrite = sal_False;
                 if( t == SBX_HINT_DATACHANGED )
-                    bWrite = TRUE;
+                    bWrite = sal_True;
                 if( t == SBX_HINT_DATAWANTED || bWrite )
                 {
                     RtlCall p = (RtlCall) aMethods[ nCallId-1 ].pFunc;
@@ -895,7 +903,7 @@ SbxInfo* SbiStdObject::GetInfo( short nIdx )
     {
         p++;
         String aName_ = String::CreateFromAscii( p->pName );
-        USHORT nFlags_ = ( p->nArgs >> 8 ) & 0x03;
+        sal_uInt16 nFlags_ = ( p->nArgs >> 8 ) & 0x03;
         if( p->nArgs & _OPT )
             nFlags_ |= SBX_OPTIONAL;
         pInfo_->AddParam( aName_, p->eType, nFlags_ );

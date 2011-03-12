@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "DescriptionGenerator.hxx"
+#include "svx/DescriptionGenerator.hxx"
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
@@ -51,12 +51,12 @@
 
 // Includes for string resources.
 #include "accessibility.hrc"
-#include "svdstr.hrc"
+#include "svx/svdstr.hrc"
 #include <svx/dialmgr.hxx>
 #include <tools/string.hxx>
 
 #include <svx/xdef.hxx>
-#include "unoapi.hxx"
+#include "svx/unoapi.hxx"
 #include "accessibility.hrc"
 #include "DGColorNameLookUp.hxx"
 

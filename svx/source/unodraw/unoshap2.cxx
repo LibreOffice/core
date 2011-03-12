@@ -66,7 +66,7 @@
 #include "unopolyhelper.hxx"
 
 // #i29181#
-#include "svdviter.hxx"
+#include "svx/svdviter.hxx"
 #include <svx/svdview.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -1714,7 +1714,7 @@ bool SvxGraphicObject::setPropertyValueImpl( const ::rtl::OUString& rName, const
                 // normal link
                 String              aFilterName;
                 const SfxFilter*    pSfxFilter = NULL;
-                SfxMedium           aSfxMedium( aURL, STREAM_READ | STREAM_SHARE_DENYNONE, FALSE );
+                SfxMedium           aSfxMedium( aURL, STREAM_READ | STREAM_SHARE_DENYNONE, sal_False );
 
                 SFX_APP()->GetFilterMatcher().GuessFilter( aSfxMedium, &pSfxFilter, SFX_FILTER_IMPORT, SFX_FILTER_NOTINSTALLED | SFX_FILTER_EXECUTABLE );
 
@@ -1801,6 +1801,7 @@ bool SvxGraphicObject::getPropertyValueImpl( const ::rtl::OUString& rName, const
     {
     case OWN_ATTR_VALUE_FILLBITMAP:
     {
+        sal_Bool bSwapped = static_cast< SdrGrafObj* >( mpObj.get() )->IsSwappedOut();
         const Graphic& rGraphic = static_cast< SdrGrafObj*>( mpObj.get() )->GetGraphic();
 
         if(rGraphic.GetType() != GRAPHIC_GDIMETAFILE)
@@ -1819,6 +1820,8 @@ bool SvxGraphicObject::getPropertyValueImpl( const ::rtl::OUString& rName, const
                 aDestStrm.GetEndOfData());
             rValue <<= aSeq;
         }
+        if ( bSwapped )
+            static_cast< SdrGrafObj* >( mpObj.get() )->ForceSwapOut();
         break;
     }
 
@@ -1830,10 +1833,13 @@ bool SvxGraphicObject::getPropertyValueImpl( const ::rtl::OUString& rName, const
         }
         else
         {
+            sal_Bool bSwapped = static_cast< SdrGrafObj* >( mpObj.get() )->IsSwappedOut();
             const GraphicObject& rGrafObj = static_cast< SdrGrafObj*>( mpObj.get() )->GetGraphicObject(true);
             OUString aURL( RTL_CONSTASCII_USTRINGPARAM(UNO_NAME_GRAPHOBJ_URLPREFIX));
             aURL += OUString::createFromAscii( rGrafObj.GetUniqueID().GetBuffer() );
             rValue <<= aURL;
+            if ( bSwapped )
+                static_cast< SdrGrafObj* >( mpObj.get() )->ForceSwapOut();
         }
         break;
     }
@@ -1848,8 +1854,11 @@ bool SvxGraphicObject::getPropertyValueImpl( const ::rtl::OUString& rName, const
 
     case OWN_ATTR_VALUE_GRAPHIC:
     {
+        sal_Bool bSwapped = static_cast< SdrGrafObj* >( mpObj.get() )->IsSwappedOut();
         Reference< graphic::XGraphic > xGraphic( static_cast< SdrGrafObj* >( mpObj.get() )->GetGraphic().GetXGraphic() );
         rValue <<= xGraphic;
+        if ( bSwapped )
+            static_cast< SdrGrafObj* >( mpObj.get() )->ForceSwapOut();
         break;
     }
 
@@ -1985,8 +1994,8 @@ awt::Point SAL_CALL SvxCustomShape::getPosition() throw(uno::RuntimeException)
 
                 Point aRef1( ( aBoundRect.Left() + aBoundRect.Right() ) >> 1, aBoundRect.Top() );
                 Point aRef2( aRef1.X(), aRef1.Y() + 1000 );
-                USHORT i;
-                USHORT nPntAnz=aPol.GetSize();
+                sal_uInt16 i;
+                sal_uInt16 nPntAnz=aPol.GetSize();
                 for (i=0; i<nPntAnz; i++)
                 {
                     MirrorPoint(aPol[i],aRef1,aRef2);
@@ -2007,8 +2016,8 @@ awt::Point SAL_CALL SvxCustomShape::getPosition() throw(uno::RuntimeException)
 
                 Point aRef1( aBoundRect.Left(), ( aBoundRect.Top() + aBoundRect.Bottom() ) >> 1 );
                 Point aRef2( aRef1.X() + 1000, aRef1.Y() );
-                USHORT i;
-                USHORT nPntAnz=aPol.GetSize();
+                sal_uInt16 i;
+                sal_uInt16 nPntAnz=aPol.GetSize();
                 for (i=0; i<nPntAnz; i++)
                 {
                     MirrorPoint(aPol[i],aRef1,aRef2);

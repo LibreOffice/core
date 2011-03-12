@@ -342,7 +342,7 @@ SfxChildWinInfo SfxChildWindow::GetInfo() const
     aInfo.aSize = pWindow->GetSizePixel();
     if ( pWindow->IsSystemWindow() )
     {
-        ULONG nMask = WINDOWSTATE_MASK_POS | WINDOWSTATE_MASK_STATE;
+        sal_uIntPtr nMask = WINDOWSTATE_MASK_POS | WINDOWSTATE_MASK_STATE;
         if ( pWindow->GetStyle() & WB_SIZEABLE )
             nMask |= ( WINDOWSTATE_MASK_WIDTH | WINDOWSTATE_MASK_HEIGHT );
         aInfo.aWinState = ((SystemWindow*)pWindow)->GetWindowState( nMask );
@@ -415,7 +415,7 @@ void SfxChildWindow::InitializeChildWinFactory_Impl( sal_uInt16 nId, SfxChildWin
         nPos = aWinData.Search( cToken );
         if (nPos != STRING_NOTFOUND)
         {
-            USHORT nNextPos = aWinData.Search( cToken, 2 );
+            sal_uInt16 nNextPos = aWinData.Search( cToken, 2 );
             if ( nNextPos != STRING_NOTFOUND )
             {
                 // es gibt noch Extra-Information
@@ -594,7 +594,7 @@ sal_Bool SfxChildWindow::IsHideAtToggle() const
     return pImp->bHideAtToggle;
 }
 
-void SfxChildWindow::SetWantsFocus( BOOL bSet )
+void SfxChildWindow::SetWantsFocus( sal_Bool bSet )
 {
     pImp->bWantsFocus = bSet;
 }
@@ -701,18 +701,18 @@ void SfxChildWindow::Hide()
 
 
 
-void SfxChildWindow::Show( USHORT nFlags )
+void SfxChildWindow::Show( sal_uInt16 nFlags )
 {
     switch ( pWindow->GetType() )
     {
         case RSC_DOCKINGWINDOW :
-            ((DockingWindow*)pWindow)->Show( TRUE, nFlags );
+            ((DockingWindow*)pWindow)->Show( sal_True, nFlags );
             break;
         case RSC_TOOLBOX :
-            ((ToolBox*)pWindow)->Show( TRUE, nFlags );
+            ((ToolBox*)pWindow)->Show( sal_True, nFlags );
             break;
         default:
-            pWindow->Show( TRUE, nFlags );
+            pWindow->Show( sal_True, nFlags );
             break;
     }
 }
@@ -789,7 +789,7 @@ sal_Bool SfxChildWindow::CanGetFocus() const
     return !(pImp->pFact->aInfo.nFlags & SFX_CHILDWIN_CANTGETFOCUS);
 }
 
-void SfxChildWindowContext::RegisterChildWindowContext(SfxModule* pMod, USHORT nId, SfxChildWinContextFactory* pFact)
+void SfxChildWindowContext::RegisterChildWindowContext(SfxModule* pMod, sal_uInt16 nId, SfxChildWinContextFactory* pFact)
 {
     SFX_APP()->RegisterChildWindowContext_Impl( pMod, nId, pFact );
 }

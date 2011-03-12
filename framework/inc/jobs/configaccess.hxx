@@ -43,6 +43,7 @@
 //_______________________________________
 // other includes
 #include <rtl/ustring.hxx>
+#include <fwidllapi.h>
 
 //_______________________________________
 // namespace
@@ -59,7 +60,7 @@ namespace framework{
             instead of using soecialize config items of the svtools
             project. This class can wrapp such configuration access.
  */
-class ConfigAccess : public ThreadHelpBase
+class FWI_DLLPUBLIC ConfigAccess : public ThreadHelpBase
 {
     //___________________________________
     // const

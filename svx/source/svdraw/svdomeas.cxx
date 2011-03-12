@@ -31,7 +31,7 @@
 
 #include <svx/svdomeas.hxx>
 #include <math.h>
-#include "svditext.hxx" //
+#include "svx/svditext.hxx" //
 #include <svx/xpoly.hxx>
 #include <svx/svdtrans.hxx>
 #include <svx/svdhdl.hxx>
@@ -41,8 +41,8 @@
 #include <svx/svdattrx.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdview.hxx>
-#include "svdglob.hxx"   // StringCache
-#include "svdstr.hrc"    // Objektname
+#include "svx/svdglob.hxx"   // StringCache
+#include "svx/svdstr.hrc"    // Objektname
 #include <svl/style.hxx>
 #include <svl/smplhint.hxx>
 #include <editeng/eeitem.hxx>
@@ -80,8 +80,8 @@ void SdrMeasureObj::TakeRepresentation( XubString& rStr, SdrMeasureFieldKind eMe
 {
     rStr.Erase();
     Fraction aMeasureScale(1, 1);
-    BOOL bTextRota90(FALSE);
-    BOOL bShowUnit(FALSE);
+    sal_Bool bTextRota90(sal_False);
+    sal_Bool bShowUnit(sal_False);
     FieldUnit eMeasureUnit(FUNIT_NONE);
     FieldUnit eModUIUnit(FUNIT_NONE);
 
@@ -105,7 +105,7 @@ void SdrMeasureObj::TakeRepresentation( XubString& rStr, SdrMeasureFieldKind eMe
                 if(eMeasureUnit == FUNIT_NONE)
                     eMeasureUnit = eModUIUnit;
 
-                INT32 nLen(GetLen(aPt2 - aPt1));
+                sal_Int32 nLen(GetLen(aPt2 - aPt1));
                 Fraction aFact(1,1);
 
                 if(eMeasureUnit != eModUIUnit)
@@ -125,7 +125,7 @@ void SdrMeasureObj::TakeRepresentation( XubString& rStr, SdrMeasureFieldKind eMe
                     nLen = BigMulDiv(nLen, aFact.GetNumerator(), aFact.GetDenominator());
                 }
 
-                pModel->TakeMetricStr(nLen, rStr, TRUE, nNumDigits);
+                pModel->TakeMetricStr(nLen, rStr, sal_True, nNumDigits);
 
                 if(!aFact.IsValid())
                 {
@@ -216,7 +216,7 @@ sdr::contact::ViewContact* SdrMeasureObj::CreateObjectSpecificViewContact()
 TYPEINIT1(SdrMeasureObj,SdrTextObj);
 
 SdrMeasureObj::SdrMeasureObj():
-    bTextDirty(FALSE)
+    bTextDirty(sal_False)
 {
     // #i25616#
     mbSupportTextIndentingOnLineWidthChange = sal_False;
@@ -225,7 +225,7 @@ SdrMeasureObj::SdrMeasureObj():
 SdrMeasureObj::SdrMeasureObj(const Point& rPt1, const Point& rPt2):
     aPt1(rPt1),
     aPt2(rPt2),
-    bTextDirty(FALSE)
+    bTextDirty(sal_False)
 {
     // #i25616#
     mbSupportTextIndentingOnLineWidthChange = sal_False;
@@ -237,31 +237,31 @@ SdrMeasureObj::~SdrMeasureObj()
 
 void SdrMeasureObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
-    rInfo.bSelectAllowed    =TRUE;
-    rInfo.bMoveAllowed      =TRUE;
-    rInfo.bResizeFreeAllowed=TRUE;
-    rInfo.bResizePropAllowed=TRUE;
-    rInfo.bRotateFreeAllowed=TRUE;
-    rInfo.bRotate90Allowed  =TRUE;
-    rInfo.bMirrorFreeAllowed=TRUE;
-    rInfo.bMirror45Allowed  =TRUE;
-    rInfo.bMirror90Allowed  =TRUE;
-    rInfo.bTransparenceAllowed = FALSE;
-    rInfo.bGradientAllowed = FALSE;
-    rInfo.bShearAllowed     =TRUE;
-    rInfo.bEdgeRadiusAllowed=FALSE;
-    rInfo.bNoOrthoDesired   =TRUE;
-    rInfo.bNoContortion     =FALSE;
-    rInfo.bCanConvToPath    =FALSE;
-    rInfo.bCanConvToPoly    =TRUE;
-    rInfo.bCanConvToPathLineToArea=FALSE;
-    rInfo.bCanConvToPolyLineToArea=FALSE;
+    rInfo.bSelectAllowed    =sal_True;
+    rInfo.bMoveAllowed      =sal_True;
+    rInfo.bResizeFreeAllowed=sal_True;
+    rInfo.bResizePropAllowed=sal_True;
+    rInfo.bRotateFreeAllowed=sal_True;
+    rInfo.bRotate90Allowed  =sal_True;
+    rInfo.bMirrorFreeAllowed=sal_True;
+    rInfo.bMirror45Allowed  =sal_True;
+    rInfo.bMirror90Allowed  =sal_True;
+    rInfo.bTransparenceAllowed = sal_False;
+    rInfo.bGradientAllowed = sal_False;
+    rInfo.bShearAllowed     =sal_True;
+    rInfo.bEdgeRadiusAllowed=sal_False;
+    rInfo.bNoOrthoDesired   =sal_True;
+    rInfo.bNoContortion     =sal_False;
+    rInfo.bCanConvToPath    =sal_False;
+    rInfo.bCanConvToPoly    =sal_True;
+    rInfo.bCanConvToPathLineToArea=sal_False;
+    rInfo.bCanConvToPolyLineToArea=sal_False;
     rInfo.bCanConvToContour = (rInfo.bCanConvToPoly || LineGeometryUsageIsNecessary());
 }
 
-UINT16 SdrMeasureObj::GetObjIdentifier() const
+sal_uInt16 SdrMeasureObj::GetObjIdentifier() const
 {
-    return (UINT16)OBJ_MEASURE;
+    return (sal_uInt16)OBJ_MEASURE;
 }
 
 struct ImpMeasureRec : public SdrDragStatUserData
@@ -313,7 +313,7 @@ struct ImpMeasurePoly
     double                      nLineCos;
     double                      nHlpSin;
     double                      nHlpCos;
-    USHORT                      nMainlineAnz;
+    sal_uInt16                      nMainlineAnz;
     SdrMeasureTextHPos          eUsedTextHPos;
     SdrMeasureTextVPos          eUsedTextVPos;
     long                        nLineWdt2;  // Halbe Strichstaerke
@@ -426,7 +426,7 @@ void SdrMeasureObj::ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly&
         OutlinerParaObject* pOutlinerParaObject = SdrTextObj::GetOutlinerParaObject();
         if (pOutlinerParaObject!=NULL && pOutlinerParaObject->GetTextObject().GetParagraphCount()==1)
         {
-            bBrkLine=TRUE; // Unterbrochene Linie, wenn nur 1 Absatz.
+            bBrkLine=sal_True; // Unterbrochene Linie, wenn nur 1 Absatz.
         }
     }
     rPol.bBreakedLine=bBrkLine;
@@ -462,12 +462,12 @@ void SdrMeasureObj::ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly&
     rPol.nTextWink=rPol.nLineWink;
     if (rRec.bTextRota90) rPol.nTextWink+=9000;
 
-    rPol.bAutoUpsideDown=FALSE;
+    rPol.bAutoUpsideDown=sal_False;
     if (rRec.bTextAutoAngle) {
         long nTmpWink=NormAngle360(rPol.nTextWink-rRec.nTextAutoAngleView);
         if (nTmpWink>=18000) {
             rPol.nTextWink+=18000;
-            rPol.bAutoUpsideDown=TRUE;
+            rPol.bAutoUpsideDown=sal_True;
         }
     }
 
@@ -582,7 +582,7 @@ basegfx::B2DPolyPolygon SdrMeasureObj::ImpCalcXPoly(const ImpMeasurePoly& rPol) 
     return aRetval;
 }
 
-bool SdrMeasureObj::CalcFieldValue(const SvxFieldItem& rField, USHORT nPara, USHORT nPos,
+bool SdrMeasureObj::CalcFieldValue(const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos,
     bool bEdit,
     Color*& rpTxtColor, Color*& rpFldColor, XubString& rRet) const
 {
@@ -597,7 +597,7 @@ bool SdrMeasureObj::CalcFieldValue(const SvxFieldItem& rField, USHORT nPara, USH
                 rpFldColor=NULL;
             }
         }
-        return TRUE;
+        return sal_True;
     } else {
         return SdrTextObj::CalcFieldValue(rField,nPara,nPos,bEdit,rpTxtColor,rpFldColor,rRet);
     }
@@ -629,14 +629,14 @@ void SdrMeasureObj::UndirtyText() const
             rOutliner.SetText(*pOutlinerParaObject);
         }
 
-        rOutliner.SetUpdateMode(TRUE);
+        rOutliner.SetUpdateMode(sal_True);
         rOutliner.UpdateFields();
         Size aSiz(rOutliner.CalcTextSize());
         rOutliner.Clear();
         // 3x casting auf nonconst
         ((SdrMeasureObj*)this)->aTextSize=aSiz;
-        ((SdrMeasureObj*)this)->bTextSizeDirty=FALSE;
-        ((SdrMeasureObj*)this)->bTextDirty=FALSE;
+        ((SdrMeasureObj*)this)->bTextSizeDirty=sal_False;
+        ((SdrMeasureObj*)this)->bTextDirty=sal_False;
     }
 }
 
@@ -978,7 +978,7 @@ bool SdrMeasureObj::BegCreate(SdrDragStat& rStat)
     aPt1=rStat.GetStart();
     aPt2=rStat.GetNow();
     SetTextDirty();
-    return TRUE;
+    return sal_True;
 }
 
 bool SdrMeasureObj::MovCreate(SdrDragStat& rStat)
@@ -992,8 +992,8 @@ bool SdrMeasureObj::MovCreate(SdrDragStat& rStat)
     }
     SetTextDirty();
     SetBoundRectDirty();
-    bSnapRectDirty=TRUE;
-    return TRUE;
+    bSnapRectDirty=sal_True;
+    return sal_True;
 }
 
 bool SdrMeasureObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
@@ -1159,7 +1159,7 @@ void SdrMeasureObj::RestGeoData(const SdrObjGeoData& rGeo)
     SetTextDirty();
 }
 
-SdrObject* SdrMeasureObj::DoConvertToPolyObj(BOOL bBezier) const
+SdrObject* SdrMeasureObj::DoConvertToPolyObj(sal_Bool bBezier) const
 {
     // get XOR Poly as base
     XPolyPolygon aTmpPolyPolygon(TakeXorPoly());
@@ -1175,8 +1175,8 @@ SdrObject* SdrMeasureObj::DoConvertToPolyObj(BOOL bBezier) const
     // prepare parameters
     basegfx::B2DPolyPolygon aPolyPoly;
     SdrPathObj* pPath;
-    UINT16 nCount(aTmpPolyPolygon.Count());
-    UINT16 nLoopStart(0);
+    sal_uInt16 nCount(aTmpPolyPolygon.Count());
+    sal_uInt16 nLoopStart(0);
 
     if(nCount == 3)
     {
@@ -1197,8 +1197,8 @@ SdrObject* SdrMeasureObj::DoConvertToPolyObj(BOOL bBezier) const
     {
         // four lines, middle line with gap, so there are two lines used
         // which have one arrow each
-        //INT32 nStartWidth = ((const XLineStartWidthItem&)(aSet.Get(XATTR_LINESTARTWIDTH))).GetValue();
-        INT32 nEndWidth = ((const XLineEndWidthItem&)(aSet.Get(XATTR_LINEENDWIDTH))).GetValue();
+        //sal_Int32 nStartWidth = ((const XLineStartWidthItem&)(aSet.Get(XATTR_LINESTARTWIDTH))).GetValue();
+        sal_Int32 nEndWidth = ((const XLineEndWidthItem&)(aSet.Get(XATTR_LINEENDWIDTH))).GetValue();
         aSet.Put(XLineEndWidthItem(0L));
 
         aPolyPoly.clear();
@@ -1228,8 +1228,8 @@ SdrObject* SdrMeasureObj::DoConvertToPolyObj(BOOL bBezier) const
     else if(nCount == 5)
     {
         // five lines, first two are the outer ones
-        //INT32 nStartWidth = ((const XLineStartWidthItem&)(aSet.Get(XATTR_LINESTARTWIDTH))).GetValue();
-        INT32 nEndWidth = ((const XLineEndWidthItem&)(aSet.Get(XATTR_LINEENDWIDTH))).GetValue();
+        //sal_Int32 nStartWidth = ((const XLineStartWidthItem&)(aSet.Get(XATTR_LINESTARTWIDTH))).GetValue();
+        sal_Int32 nEndWidth = ((const XLineEndWidthItem&)(aSet.Get(XATTR_LINEENDWIDTH))).GetValue();
 
         aSet.Put(XLineEndWidthItem(0L));
 
@@ -1300,7 +1300,7 @@ void SdrMeasureObj::NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject)
 }
 
 void SdrMeasureObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, bool bNoEditText,
-    Rectangle* pAnchorRect, BOOL bLineWidth ) const
+    Rectangle* pAnchorRect, sal_Bool bLineWidth ) const
 {
     if (bTextDirty) UndirtyText();
     SdrTextObj::TakeTextRect( rOutliner, rTextRect, bNoEditText, pAnchorRect, bLineWidth );
@@ -1318,7 +1318,7 @@ void SdrMeasureObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle
     SdrTextObj::TakeTextEditArea(pPaperMin,pPaperMax,pViewInit,pViewMin);
 }
 
-USHORT SdrMeasureObj::GetOutlinerViewAnchorMode() const
+sal_uInt16 SdrMeasureObj::GetOutlinerViewAnchorMode() const
 {
     if (bTextDirty) UndirtyText();
     ImpMeasureRec aRec;
@@ -1331,7 +1331,6 @@ USHORT SdrMeasureObj::GetOutlinerViewAnchorMode() const
     SdrMeasureTextHPos eMH=aMPol.eUsedTextHPos;
     SdrMeasureTextVPos eMV=aMPol.eUsedTextVPos;
     bool bTextRota90=aRec.bTextRota90;
-    //bool bTextUpsideDown=aRec.bTextUpsideDown;
     bool bBelowRefEdge=aRec.bBelowRefEdge;
 
     // bTextUpsideDown muss hier noch ausgewertet werden!!!!
@@ -1370,7 +1369,7 @@ USHORT SdrMeasureObj::GetOutlinerViewAnchorMode() const
         else if (eTV==SDRTEXTVERTADJUST_BOTTOM) eRet=ANCHOR_BOTTOM_HCENTER;
         else eRet=ANCHOR_VCENTER_HCENTER;
     }
-    return (USHORT)eRet;
+    return (sal_uInt16)eRet;
 }
 
 //////////////////////////////////////////////////////////////////////////////

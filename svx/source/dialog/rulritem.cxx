@@ -31,7 +31,7 @@
 #include <tools/string.hxx>
 
 #include <svx/dialogs.hrc>
-#include "rulritem.hxx"
+#include "svx/rulritem.hxx"
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/frame/status/LeftRightMargin.hpp>
 #include <com/sun/star/frame/status/UpperLowerMargin.hpp>
@@ -64,7 +64,7 @@ String SvxLongLRSpaceItem::GetValueText() const
 #define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
 #define MM100_TO_TWIP(MM100)    ((MM100) >= 0 ? (((MM100)*72L+63L)/127L) : (((MM100)*72L-63L)/127L))
 
-bool SvxLongLRSpaceItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
+bool SvxLongLRSpaceItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -78,7 +78,7 @@ bool SvxLongLRSpaceItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMem
             aLeftRightMargin.Left = bConvert ? TWIP_TO_MM100( lLeft ) : lLeft;
             aLeftRightMargin.Right = bConvert ? TWIP_TO_MM100( lRight ) : lRight;
             rVal <<= aLeftRightMargin;
-            return TRUE;
+            return sal_True;
         }
 
         case MID_LEFT: nVal = lLeft; break;
@@ -94,7 +94,7 @@ bool SvxLongLRSpaceItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMem
 }
 
 // -----------------------------------------------------------------------
-bool SvxLongLRSpaceItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nMemberId )
+bool SvxLongLRSpaceItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -151,7 +151,7 @@ SfxPoolItem* SvxLongLRSpaceItem::Clone(SfxItemPool *) const
 
 //------------------------------------------------------------------------
 
-SvxLongLRSpaceItem::SvxLongLRSpaceItem(long lL, long lR, USHORT nId)
+SvxLongLRSpaceItem::SvxLongLRSpaceItem(long lL, long lR, sal_uInt16 nId)
     : SfxPoolItem(nId),
     lLeft(lL),
     lRight(lR)
@@ -190,7 +190,7 @@ String SvxLongULSpaceItem::GetValueText() const
     return String();
 }
 
-bool SvxLongULSpaceItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
+bool SvxLongULSpaceItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -220,7 +220,7 @@ bool SvxLongULSpaceItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMem
 }
 
 // -----------------------------------------------------------------------
-bool SvxLongULSpaceItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nMemberId )
+bool SvxLongULSpaceItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -276,7 +276,7 @@ SfxPoolItem* SvxLongULSpaceItem::Clone(SfxItemPool *) const
 
 //------------------------------------------------------------------------
 
-SvxLongULSpaceItem::SvxLongULSpaceItem(long lL, long lR, USHORT nId)
+SvxLongULSpaceItem::SvxLongULSpaceItem(long lL, long lR, sal_uInt16 nId)
     : SfxPoolItem(nId),
     lLeft(lL),
     lRight(lR)
@@ -308,7 +308,7 @@ int SvxPagePosSizeItem::operator==( const SfxPoolItem& rCmp) const
             lHeight == ((const SvxPagePosSizeItem &)rCmp).lHeight;
 }
 
-bool SvxPagePosSizeItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
+bool SvxPagePosSizeItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
 
@@ -338,7 +338,7 @@ bool SvxPagePosSizeItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMem
     return true;
 }
 
-bool SvxPagePosSizeItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nMemberId )
+bool SvxPagePosSizeItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
 
@@ -433,7 +433,7 @@ SvxPagePosSizeItem::SvxPagePosSizeItem()
 
 void SvxColumnItem::DeleteAndDestroyColumns()
 {
-    for( USHORT i = aColumns.Count(); i>0; )
+    for( sal_uInt16 i = aColumns.Count(); i>0; )
     {
         SvxColumnDescription *pTmp = (SvxColumnDescription *)aColumns[--i];
         aColumns.Remove( i );
@@ -451,19 +451,19 @@ int SvxColumnItem::operator==(const SfxPoolItem& rCmp) const
        nRight != ((const SvxColumnItem&)rCmp).nRight ||
        bTable != ((const SvxColumnItem&)rCmp).bTable ||
        Count() != ((const SvxColumnItem&)rCmp).Count())
-        return FALSE;
+        return sal_False;
 
-    const USHORT nCount = ((const SvxColumnItem&)rCmp).Count();
-    for(USHORT i = 0; i < nCount;++i) {
+    const sal_uInt16 nCount = ((const SvxColumnItem&)rCmp).Count();
+    for(sal_uInt16 i = 0; i < nCount;++i) {
 #if OSL_DEBUG_LEVEL > 1
         SvxColumnDescription *p1, *p2;
         p1 = (SvxColumnDescription *)aColumns[i];
         p2 = (SvxColumnDescription *)((const SvxColumnItem&)rCmp).aColumns[i];
 #endif
         if( (*this)[i] != ((const SvxColumnItem&)rCmp)[i] )
-            return FALSE;
+            return sal_False;
     }
-    return TRUE;
+    return sal_True;
 }
 
 //------------------------------------------------------------------------
@@ -495,30 +495,30 @@ SfxPoolItem* SvxColumnItem::Clone( SfxItemPool * ) const
 
 //------------------------------------------------------------------------
 
-SvxColumnItem::SvxColumnItem( USHORT nAct ) :
+SvxColumnItem::SvxColumnItem( sal_uInt16 nAct ) :
 
     SfxPoolItem( SID_RULER_BORDERS ),
 
     nLeft       ( 0 ),
     nRight      ( 0 ),
     nActColumn  ( nAct ),
-    bTable      ( FALSE ),
-    bOrtho      (TRUE )
+    bTable      ( sal_False ),
+    bOrtho      (sal_True )
 
 {
 }
 
 //------------------------------------------------------------------------
 
-SvxColumnItem::SvxColumnItem( USHORT nActCol, USHORT left, USHORT right ) :
+SvxColumnItem::SvxColumnItem( sal_uInt16 nActCol, sal_uInt16 left, sal_uInt16 right ) :
 
     SfxPoolItem( SID_RULER_BORDERS ),
 
     nLeft       ( left ),
     nRight      ( right ),
     nActColumn  ( nActCol ),
-    bTable      ( TRUE ),
-    bOrtho      ( TRUE )
+    bTable      ( sal_True ),
+    bOrtho      ( sal_True )
 {
 }
 
@@ -528,7 +528,7 @@ SvxColumnItem::SvxColumnItem( const SvxColumnItem& rCopy ) :
 
     SfxPoolItem( rCopy ),
 
-      aColumns  ( (BYTE)rCopy.Count() ),
+      aColumns  ( (sal_uInt8)rCopy.Count() ),
       nLeft     ( rCopy.nLeft ),
       nRight    ( rCopy.nRight ),
       nActColumn( rCopy.nActColumn ),
@@ -536,9 +536,9 @@ SvxColumnItem::SvxColumnItem( const SvxColumnItem& rCopy ) :
       bOrtho    ( rCopy.bOrtho )
 
 {
-    const USHORT nCount = rCopy.Count();
+    const sal_uInt16 nCount = rCopy.Count();
 
-    for ( USHORT i = 0; i < nCount; ++i )
+    for ( sal_uInt16 i = 0; i < nCount; ++i )
         Append( rCopy[i] );
 }
 
@@ -558,37 +558,37 @@ const SvxColumnItem &SvxColumnItem::operator=(const SvxColumnItem &rCopy)
     bTable = rCopy.bTable;
     nActColumn = rCopy.nActColumn;
     DeleteAndDestroyColumns();
-    const USHORT nCount = rCopy.Count();
-    for(USHORT i = 0; i < nCount;++i)
+    const sal_uInt16 nCount = rCopy.Count();
+    for(sal_uInt16 i = 0; i < nCount;++i)
         Insert(rCopy[i], i);
     return *this;
 }
 
 //------------------------------------------------------------------------
 
-BOOL SvxColumnItem::CalcOrtho() const
+sal_Bool SvxColumnItem::CalcOrtho() const
 {
-    const USHORT nCount = Count();
+    const sal_uInt16 nCount = Count();
     DBG_ASSERT(nCount >= 2, "no columns");
     if(nCount < 2)
-        return FALSE;
+        return sal_False;
 
     long nColWidth = (*this)[0].GetWidth();
-    for(USHORT i = 1; i < nCount; ++i) {
+    for(sal_uInt16 i = 1; i < nCount; ++i) {
         if( (*this)[i].GetWidth() != nColWidth)
-            return FALSE;
+            return sal_False;
     }
     //!! Wide divider
-    return TRUE;
+    return sal_True;
 }
 
 //------------------------------------------------------------------------
 
 long SvxColumnItem::GetVisibleRight() const
 {
-    USHORT nIdx = 0;
+    sal_uInt16 nIdx = 0;
 
-    for ( USHORT i = 0; i < nActColumn; ++i )
+    for ( sal_uInt16 i = 0; i < nActColumn; ++i )
     {
         if ( (*this)[i].bVisible )
             ++nIdx;
@@ -596,7 +596,7 @@ long SvxColumnItem::GetVisibleRight() const
     return (*this)[nIdx].nEnd;
 }
 
-bool SvxColumnItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
+bool SvxColumnItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
@@ -616,7 +616,7 @@ bool SvxColumnItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId )
     return true;
 }
 
-bool SvxColumnItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
+bool SvxColumnItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
     sal_Int32 nVal = 0;
@@ -628,9 +628,9 @@ bool SvxColumnItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMember
         }
         case MID_RIGHT: rVal >>= nRight; break;
         case MID_LEFT: rVal >>= nLeft; break;
-        case MID_ORTHO: rVal >>= nVal; bOrtho = (BOOL) nVal; break;
-        case MID_ACTUAL: rVal >>= nVal; nActColumn = (USHORT) nVal; break;
-        case MID_TABLE: rVal >>= nVal; bTable = (BOOL) nVal; break;
+        case MID_ORTHO: rVal >>= nVal; bOrtho = (sal_Bool) nVal; break;
+        case MID_ACTUAL: rVal >>= nVal; nActColumn = (sal_uInt16) nVal; break;
+        case MID_TABLE: rVal >>= nVal; bTable = (sal_Bool) nVal; break;
         default: OSL_FAIL("Wrong MemberId!"); return sal_False;
     }
 
@@ -679,7 +679,7 @@ SfxPoolItem* SvxObjectItem::Clone(SfxItemPool *) const
 //------------------------------------------------------------------------
 
 SvxObjectItem::SvxObjectItem( long nSX, long nEX,
-                              long nSY, long nEY, BOOL limits ) :
+                              long nSY, long nEY, sal_Bool limits ) :
 
     SfxPoolItem( SID_RULER_OBJECT ),
 
@@ -707,7 +707,7 @@ SvxObjectItem::SvxObjectItem( const SvxObjectItem& rCopy ) :
 {
 }
 
-bool SvxObjectItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
+bool SvxObjectItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
@@ -725,7 +725,7 @@ bool SvxObjectItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId )
     return true;
 }
 
-bool SvxObjectItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
+bool SvxObjectItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
     BOOL bRet = false;

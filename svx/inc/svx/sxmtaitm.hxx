@@ -34,7 +34,7 @@
 
 // Den Text automatisch zurechtdrehen (Automatisches UpsideDown).
 // TextUpsideDown bleibt trotzdem weiterhin wirksam und dreht
-// den Text bei TRUE nochmal.
+// den Text bei sal_True nochmal.
 class SdrMeasureTextAutoAngleItem: public SdrYesNoItem {
 public:
     SdrMeasureTextAutoAngleItem(bool bOn=true): SdrYesNoItem(SDRATTR_MEASURETEXTAUTOANGLE,bOn) {}

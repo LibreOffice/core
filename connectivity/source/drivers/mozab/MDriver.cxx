@@ -251,7 +251,7 @@ EDriverType MozabDriver::impl_classifyURL( const ::rtl::OUString& url )
         const sal_Char* pScheme;
     } aSchemeMap[] =
     {
-#if defined(WNT) || defined(WIN)
+#if defined(WNT)
         { Outlook,          "outlook" },
         { OutlookExpress,   "outlookexp" },
 #endif

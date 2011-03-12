@@ -148,13 +148,13 @@ throw (uno::RuntimeException)
                 pStatusBar->StartProgressMode( Text );
             else
             {
-                pStatusBar->SetUpdateMode( FALSE );
+                pStatusBar->SetUpdateMode( sal_False );
                 pStatusBar->EndProgressMode();
                 pStatusBar->StartProgressMode( Text );
-                pStatusBar->SetProgressValue( USHORT( nValue ));
-                pStatusBar->SetUpdateMode( TRUE );
+                pStatusBar->SetProgressValue( sal_uInt16( nValue ));
+                pStatusBar->SetUpdateMode( sal_True );
             }
-            pStatusBar->Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
+            pStatusBar->Show( sal_True, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
         }
     }
 }
@@ -214,11 +214,11 @@ throw (uno::RuntimeException)
             StatusBar* pStatusBar = (StatusBar *)pWindow;
             if( pStatusBar->IsProgressMode() )
             {
-                pStatusBar->SetUpdateMode( FALSE );
+                pStatusBar->SetUpdateMode( sal_False );
                 pStatusBar->EndProgressMode();
                 pStatusBar->StartProgressMode( Text );
-                pStatusBar->SetProgressValue( USHORT( nValue ));
-                pStatusBar->SetUpdateMode( TRUE );
+                pStatusBar->SetProgressValue( sal_uInt16( nValue ));
+                pStatusBar->SetUpdateMode( sal_True );
             }
             else
                 pStatusBar->SetText( Text );
@@ -267,7 +267,7 @@ throw (uno::RuntimeException)
             StatusBar* pStatusBar = (StatusBar *)pWindow;
             if ( !pStatusBar->IsProgressMode() )
                 pStatusBar->StartProgressMode( aText );
-            pStatusBar->SetProgressValue( USHORT( nValue ));
+            pStatusBar->SetProgressValue( sal_uInt16( nValue ));
         }
     }
 }

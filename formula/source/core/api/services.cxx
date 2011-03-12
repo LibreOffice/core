@@ -67,12 +67,6 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
     *envTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
-    void * serviceManager, void * registryKey)
-{
-    return cppu::component_writeInfoHelper(
-        serviceManager, registryKey, entries);
-}
 } // extern "C"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -90,6 +90,7 @@
 #include "newerverwarn.hxx"
 
 #include "iahndl.hxx"
+#include "nameclashdlg.hxx"
 
 /** === begin UNO using === **/
 using ::com::sun::star::uno::Sequence;
@@ -186,7 +187,7 @@ UUIInteractionHelper::handleRequest(
         HandleData aHD(rRequest);
         Link aLink(&aHD,handlerequest);
         pApp->PostUserEvent(aLink,this);
-        ULONG locks = Application::ReleaseSolarMutex();
+        sal_uLong locks = Application::ReleaseSolarMutex();
         aHD.wait();
         Application::AcquireSolarMutex(locks);
         return aHD.bHandled;
@@ -247,7 +248,7 @@ UUIInteractionHelper::getStringFromRequest(
         HandleData aHD(rRequest);
         Link aLink(&aHD,getstringfromrequest);
         pApp->PostUserEvent(aLink,this);
-        ULONG locks = Application::ReleaseSolarMutex();
+        sal_uLong locks = Application::ReleaseSolarMutex();
         aHD.wait();
         Application::AcquireSolarMutex(locks);
         return aHD.m_aResult;
@@ -868,6 +869,14 @@ UUIInteractionHelper::handleRequest_impl(
             if ( handleCertificateValidationRequest( rRequest ) )
                 return true;
 
+            ucb::NameClashResolveRequest aNameClashResolveRequest;
+            if (aAnyRequest >>= aNameClashResolveRequest)
+            {
+                handleNameClashResolveRequest(aNameClashResolveRequest,
+                                              rRequest->getContinuations());
+                return true;
+            }
+
             if ( handleMasterPasswordRequest( rRequest ) )
                 return true;
 
@@ -1144,7 +1153,7 @@ UUIInteractionHelper::getInteractionHandler()
 
 namespace {
 
-USHORT
+sal_uInt16
 executeMessageBox(
     Window * pParent,
     rtl::OUString const & rTitle,
@@ -1156,7 +1165,7 @@ executeMessageBox(
 
     MessBox xBox( pParent, nButtonMask, rTitle, rMessage );
 
-    USHORT aResult = xBox.Execute();
+    sal_uInt16 aResult = xBox.Execute();
     switch( aResult )
     {
     case BUTTONID_OK:
@@ -1179,7 +1188,82 @@ executeMessageBox(
     return aResult;
 }
 
+NameClashResolveDialogResult executeSimpleNameClashResolveDialog( Window *pParent,
+                                                                  rtl::OUString const & rTargetFolderURL,
+                                                                  rtl::OUString const & rClashingName,
+                                                                  rtl::OUString & rProposedNewName,
+                                                                  bool bAllowOverwrite )
+{
+    std::auto_ptr< ResMgr > xManager( ResMgr::CreateResMgr( CREATEVERSIONRESMGR_NAME( uui ) ) );
+    if ( !xManager.get() )
+        return ABORT;
+
+    NameClashDialog aDialog( pParent, xManager.get(), rTargetFolderURL,
+                             rClashingName, rProposedNewName, bAllowOverwrite );
+
+    NameClashResolveDialogResult eResult = (NameClashResolveDialogResult) aDialog.Execute();
+    rProposedNewName = aDialog.getNewName();
+    return eResult;
+}
+
 } // namespace
+
+void
+UUIInteractionHelper::handleNameClashResolveRequest(
+    ucb::NameClashResolveRequest const & rRequest,
+    uno::Sequence< uno::Reference<
+        task::XInteractionContinuation > > const & rContinuations)
+  SAL_THROW((uno::RuntimeException))
+{
+    OSL_ENSURE(
+        rRequest.TargetFolderURL.getLength() > 0,
+        "NameClashResolveRequest must not contain empty TargetFolderURL" );
+
+    OSL_ENSURE(
+        rRequest.ClashingName.getLength() > 0,
+        "NameClashResolveRequest must not contain empty ClashingName" );
+
+    uno::Reference< task::XInteractionAbort > xAbort;
+    uno::Reference< ucb::XInteractionSupplyName > xSupplyName;
+    uno::Reference< ucb::XInteractionReplaceExistingData > xReplaceExistingData;
+    getContinuations(
+        rContinuations, &xAbort, &xSupplyName, &xReplaceExistingData);
+
+    OSL_ENSURE( xAbort.is(),
+        "NameClashResolveRequest must contain Abort continuation" );
+
+    OSL_ENSURE( xSupplyName.is(),
+        "NameClashResolveRequest must contain SupplyName continuation" );
+
+    NameClashResolveDialogResult eResult = ABORT;
+    rtl::OUString aProposedNewName( rRequest.ProposedNewName );
+
+    eResult = executeSimpleNameClashResolveDialog( getParentProperty(),
+                    rRequest.TargetFolderURL,
+                    rRequest.ClashingName,
+                    aProposedNewName,
+                    xReplaceExistingData.is() );
+
+    switch ( eResult )
+    {
+    case ABORT:
+        xAbort->select();
+        break;
+
+    case RENAME:
+        xSupplyName->setName( aProposedNewName );
+        xSupplyName->select();
+        break;
+
+    case OVERWRITE:
+        OSL_ENSURE(
+            xReplaceExistingData.is(),
+            "Invalid NameClashResolveDialogResult: OVERWRITE - "
+            "No ReplaceExistingData continuation available!" );
+        xReplaceExistingData->select();
+        break;
+    }
+}
 
 void
 UUIInteractionHelper::handleGenericErrorRequest(
@@ -1493,7 +1577,7 @@ ErrorResource::getString(ErrCode nErrorCode, rtl::OUString * pString)
     const SAL_THROW(())
 {
     OSL_ENSURE(pString, "specification violation");
-    ResId aResId(static_cast< USHORT >(nErrorCode & ERRCODE_RES_MASK),
+    ResId aResId(static_cast< sal_uInt16 >(nErrorCode & ERRCODE_RES_MASK),
                  *m_pResMgr);
     aResId.SetRT(RSC_STRING);
     if (!IsAvailableRes(aResId))

@@ -28,12 +28,12 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
-#include "MarkerStyle.hxx"
+#include "xmloff/MarkerStyle.hxx"
 #include "xexptran.hxx"
 #include <xmloff/attrlist.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmlimp.hxx>
@@ -213,7 +213,7 @@ sal_Bool XMLMarkerStyleExport::exportXML(
             sal_Int32 a, b;
             sal_Bool bClosed(sal_False);
 
-            for(a = 0L; a < nOuterCnt; a++)
+            for (a = 0; a < nOuterCnt; a++)
             {
                 drawing::PointSequence* pSequence = pOuterSequence++;
                 const awt::Point *pPoints = pSequence->getConstArray();
@@ -230,7 +230,7 @@ sal_Bool XMLMarkerStyleExport::exportXML(
                     }
                 }
 
-                for(b = 0L; b < nPointCount; b++)
+                for (b = 0; b < nPointCount; b++)
                 {
                     const awt::Point aPoint = pPoints[b];
 
@@ -260,7 +260,7 @@ sal_Bool XMLMarkerStyleExport::exportXML(
             drawing::FlagSequence*  pOuterFlags = aBezier.Flags.getArray();
             SdXMLImExSvgDElement aSvgDElement(aViewBox);
 
-            for(a = 0L; a < nOuterCnt; a++)
+            for (a = 0; a < nOuterCnt; a++)
             {
                 drawing::PointSequence* pSequence = pOuterSequence++;
                 drawing::FlagSequence* pFlags = pOuterFlags++;

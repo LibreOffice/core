@@ -101,7 +101,7 @@ namespace basprov
                 sal_Int32 nRealCount = 0;
                 for ( sal_Int32 i = 0; i < nCount; ++i )
                 {
-                    SbMethod* pMethod = static_cast< SbMethod* >( pMethods->Get( static_cast< USHORT >( i ) ) );
+                    SbMethod* pMethod = static_cast< SbMethod* >( pMethods->Get( static_cast< sal_uInt16 >( i ) ) );
                     if ( pMethod && !pMethod->IsHidden() )
                         ++nRealCount;
                 }
@@ -111,7 +111,7 @@ namespace basprov
                 sal_Int32 iTarget = 0;
                 for ( sal_Int32 i = 0; i < nCount; ++i )
                 {
-                    SbMethod* pMethod = static_cast< SbMethod* >( pMethods->Get( static_cast< USHORT >( i ) ) );
+                    SbMethod* pMethod = static_cast< SbMethod* >( pMethods->Get( static_cast< sal_uInt16 >( i ) ) );
                     if ( pMethod && !pMethod->IsHidden() )
                         pChildNodes[iTarget++] = static_cast< browse::XBrowseNode* >( new BasicMethodNodeImpl( m_xContext, m_sScriptingContext, pMethod, m_bIsAppScript ) );
                 }

@@ -96,6 +96,8 @@
 #endif
 #include <comphelper/extract.hxx>
 
+#include <fwkdllapi.h>
+
 //_________________________________________________________________________________________________________________
 //  namespace
 //_________________________________________________________________________________________________________________
@@ -1527,7 +1529,7 @@ sal_Bool SAL_CALL Desktop::convertFastPropertyValue(       css::uno::Any&   aCon
     // Register transaction and reject wrong calls.
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
-    //  Initialize state with FALSE !!!
+    //  Initialize state with sal_False !!!
     //  (Handle can be invalid)
     sal_Bool bReturn = sal_False;
 

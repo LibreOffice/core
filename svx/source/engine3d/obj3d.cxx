@@ -29,14 +29,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "svdstr.hrc"
-#include "svdglob.hxx"
+#include "svx/svdstr.hrc"
+#include "svx/svdglob.hxx"
 #include <svx/svdview.hxx>
 #include <svx/svdattr.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdmodel.hxx>
-#include "svditer.hxx"
-#include "globl3d.hxx"
+#include "svx/svditer.hxx"
+#include "svx/globl3d.hxx"
 #include <svx/camera3d.hxx>
 #include <svx/scene3d.hxx>
 #include <svx/polysc3d.hxx>
@@ -118,7 +118,7 @@ E3dObjList::~E3dObjList()
 {
 }
 
-void E3dObjList::NbcInsertObject(SdrObject* pObj, ULONG nPos, const SdrInsertReason* pReason)
+void E3dObjList::NbcInsertObject(SdrObject* pObj, sal_uIntPtr nPos, const SdrInsertReason* pReason)
 {
     // Owner holen
     DBG_ASSERT(GetOwnerObj()->ISA(E3dObject), "AW: Einfuegen 3DObject in Parent != 3DObject");
@@ -137,7 +137,7 @@ void E3dObjList::NbcInsertObject(SdrObject* pObj, ULONG nPos, const SdrInsertRea
     }
 }
 
-void E3dObjList::InsertObject(SdrObject* pObj, ULONG nPos, const SdrInsertReason* pReason)
+void E3dObjList::InsertObject(SdrObject* pObj, sal_uIntPtr nPos, const SdrInsertReason* pReason)
 {
     OSL_ENSURE(GetOwnerObj()->ISA(E3dObject), "Insert 3DObject in non-3D Parent");
     //E3DModifySceneSnapRectUpdater aUpdater(GetOwnerObj());
@@ -152,7 +152,7 @@ void E3dObjList::InsertObject(SdrObject* pObj, ULONG nPos, const SdrInsertReason
     }
 }
 
-SdrObject* E3dObjList::NbcRemoveObject(ULONG nObjNum)
+SdrObject* E3dObjList::NbcRemoveObject(sal_uIntPtr nObjNum)
 {
     DBG_ASSERT(GetOwnerObj()->ISA(E3dObject), "AW: Entfernen 3DObject aus Parent != 3DObject");
     //E3DModifySceneSnapRectUpdater aUpdater(GetOwnerObj());
@@ -169,7 +169,7 @@ SdrObject* E3dObjList::NbcRemoveObject(ULONG nObjNum)
     return pRetval;
 }
 
-SdrObject* E3dObjList::RemoveObject(ULONG nObjNum)
+SdrObject* E3dObjList::RemoveObject(sal_uIntPtr nObjNum)
 {
     OSL_ENSURE(GetOwnerObj()->ISA(E3dObject), "3DObject is removed from non-3D Parent");
     //E3DModifySceneSnapRectUpdater aUpdater(GetOwnerObj());
@@ -257,9 +257,9 @@ void E3dObject::SetSelected(bool bNew)
 |*
 \************************************************************************/
 
-BOOL E3dObject::IsBreakObjPossible()
+sal_Bool E3dObject::IsBreakObjPossible()
 {
-    return FALSE;
+    return sal_False;
 }
 
 SdrAttrObj* E3dObject::GetBreakObj()
@@ -295,7 +295,7 @@ void E3dObject::SetRectsDirty(sal_Bool bNotMyself)
 |*
 \************************************************************************/
 
-UINT32 E3dObject::GetObjInventor() const
+sal_uInt32 E3dObject::GetObjInventor() const
 {
     return E3dInventor;
 }
@@ -306,7 +306,7 @@ UINT32 E3dObject::GetObjInventor() const
 |*
 \************************************************************************/
 
-UINT16 E3dObject::GetObjIdentifier() const
+sal_uInt16 E3dObject::GetObjIdentifier() const
 {
     return E3D_OBJECT_ID;
 }
@@ -319,19 +319,19 @@ UINT16 E3dObject::GetObjIdentifier() const
 
 void E3dObject::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
-    rInfo.bResizeFreeAllowed    = TRUE;
-    rInfo.bResizePropAllowed    = TRUE;
-    rInfo.bRotateFreeAllowed    = TRUE;
-    rInfo.bRotate90Allowed      = TRUE;
-    rInfo.bMirrorFreeAllowed    = FALSE;
-    rInfo.bMirror45Allowed      = FALSE;
-    rInfo.bMirror90Allowed      = FALSE;
-    rInfo.bShearAllowed         = FALSE;
-    rInfo.bEdgeRadiusAllowed    = FALSE;
-    rInfo.bCanConvToPath        = FALSE;
+    rInfo.bResizeFreeAllowed    = sal_True;
+    rInfo.bResizePropAllowed    = sal_True;
+    rInfo.bRotateFreeAllowed    = sal_True;
+    rInfo.bRotate90Allowed      = sal_True;
+    rInfo.bMirrorFreeAllowed    = sal_False;
+    rInfo.bMirror45Allowed      = sal_False;
+    rInfo.bMirror90Allowed      = sal_False;
+    rInfo.bShearAllowed         = sal_False;
+    rInfo.bEdgeRadiusAllowed    = sal_False;
+    rInfo.bCanConvToPath        = sal_False;
 
     // no transparence for 3d objects
-    rInfo.bTransparenceAllowed = FALSE;
+    rInfo.bTransparenceAllowed = sal_False;
 
     // gradient depends on fillstyle
     // BM *** check if SetItem is NULL ***
@@ -345,10 +345,10 @@ void E3dObject::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     // also bei Durchdringugnen auch gegeneinander geschnitten werden
     // muessten. Auch die Texturkoorinaten waeren ein ungeloestes
     // Problem.
-    rInfo.bCanConvToPoly = FALSE;
-    rInfo.bCanConvToContour = FALSE;
-    rInfo.bCanConvToPathLineToArea = FALSE;
-    rInfo.bCanConvToPolyLineToArea = FALSE;
+    rInfo.bCanConvToPoly = sal_False;
+    rInfo.bCanConvToContour = sal_False;
+    rInfo.bCanConvToPathLineToArea = sal_False;
+    rInfo.bCanConvToPolyLineToArea = sal_False;
 }
 
 /*************************************************************************
@@ -952,7 +952,7 @@ void E3dObject::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
     // Also derzeit sind die Klebepunkte relativ zum aOutRect der Szene definiert. Vor dem Drehen
     // werden die Klebepunkte relativ zur Seite definiert. Sie nehmen an der Drehung der Szene noch nicht Teil
     // dafuer gibt es den
-    SetGlueReallyAbsolute(TRUE);
+    SetGlueReallyAbsolute(sal_True);
 
     // SendRepaintBroadcast();
     double fWinkelInRad = nWink/100 * F_PI180;
@@ -964,7 +964,7 @@ void E3dObject::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
     SetRectsDirty();    // Veranlasst eine Neuberechnung aller BoundRects
     NbcRotateGluePoints(rRef,nWink,sn,cs);  // Rotiert die Klebepunkte (die haben noch Koordinaten relativ
                                             // zum Urpsung des Blattes
-    SetGlueReallyAbsolute(FALSE);  // ab jetzt sind sie wieder relativ zum BoundRect (also dem aOutRect definiert)
+    SetGlueReallyAbsolute(sal_False);  // ab jetzt sind sie wieder relativ zum BoundRect (also dem aOutRect definiert)
 }
 
 /*************************************************************************/
@@ -1128,7 +1128,7 @@ void E3dCompoundObject::AddToHdlList(SdrHdlList& rHdlList) const
 |*
 \************************************************************************/
 
-UINT16 E3dCompoundObject::GetObjIdentifier() const
+sal_uInt16 E3dCompoundObject::GetObjIdentifier() const
 {
     return E3D_COMPOUNDOBJ_ID;
 }
@@ -1208,7 +1208,7 @@ void E3dCompoundObject::operator=(const SdrObject& rObj)
 |*
 \************************************************************************/
 
-void E3dCompoundObject::SetCreateNormals(BOOL bNew)
+void E3dCompoundObject::SetCreateNormals(sal_Bool bNew)
 {
     if(bCreateNormals != bNew)
     {
@@ -1217,7 +1217,7 @@ void E3dCompoundObject::SetCreateNormals(BOOL bNew)
     }
 }
 
-void E3dCompoundObject::SetCreateTexture(BOOL bNew)
+void E3dCompoundObject::SetCreateTexture(sal_Bool bNew)
 {
     if(bCreateTexture != bNew)
     {

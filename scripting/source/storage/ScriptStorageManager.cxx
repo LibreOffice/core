@@ -46,6 +46,7 @@
 #include "ScriptStorageManager.hxx"
 #include <util/util.hxx>
 #include <util/scriptingconstants.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -66,31 +67,18 @@ static Sequence< OUString > s_serviceNames = Sequence< OUString >( &s_serviceNam
 // ScriptStorageManager Constructor
 ScriptStorageManager::ScriptStorageManager( const Reference<
         XComponentContext > & xContext ) SAL_THROW ( ( RuntimeException ) )
-        : m_xContext( xContext ), m_count( 0 ), m_securityMgr( xContext )
+        : m_xContext( xContext, UNO_SET_THROW ), m_count( 0 ), m_securityMgr( xContext )
 {
     OSL_TRACE( "< ScriptStorageManager ctor called >\n" );
 
-    validateXRef( m_xContext,
-                  "ScriptStorageManager::ScriptStorageManager : cannot get component context" );
-
-    m_xMgr = m_xContext->getServiceManager();
-    validateXRef( m_xMgr,
-                  "ScriptStorageManager::ScriptStorageManager : cannot get service manager" );
+    m_xMgr.set( m_xContext->getServiceManager(), UNO_SET_THROW );
 
     try
     {
         // obtain the macro expander singleton to use in determining the
         // location of the application script storage
-        Any aAny = m_xContext->getValueByName( OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                                   "/singletons/com.sun.star.util.theMacroExpander" )) );
-        Reference< util::XMacroExpander > xME;
-        if ( sal_False == ( aAny >>= xME ) )
-        {
-            throw RuntimeException(
-                OUSTR( "ScriptStorageManager::ScriptStorageManager: can't get XMacroExpander" ),
-                Reference< XInterface >() );
-        }
-        validateXRef( xME, "ScriptStorageManager constructor: can't get MacroExpander" );
+        Reference< util::XMacroExpander > xME( m_xContext->getValueByName( OUString::createFromAscii(
+                                                   "/singletons/com.sun.star.util.theMacroExpander" ) ), UNO_QUERY_THROW );
 
         OUString base(RTL_CONSTASCII_USTRINGPARAM(
                             SAL_CONFIGFILE( "${$BRAND_BASE_DIR/program/bootstrap" )) );
@@ -121,12 +109,13 @@ SAL_THROW ( ( RuntimeException ) )
 {
     try
     {
-        Reference< XInterface > xInterface =
+        Reference< ucb::XSimpleFileAccess > xSFA(
             m_xMgr->createInstanceWithContext(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess")), m_xContext );
-        validateXRef( xInterface,
-                      "ScriptStorageManager constructor: can't get SimpleFileAccess XInterface" );
-        Reference< ucb::XSimpleFileAccess > xSFA( xInterface, UNO_QUERY_THROW );
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess")),
+                m_xContext
+            ),
+            UNO_QUERY_THROW
+        );
 
         setupAnyStorage( xSFA, xME->expandMacros( storageStr ), appStr );
     }
@@ -163,13 +152,15 @@ SAL_THROW ( ( RuntimeException ) )
                    ::rtl::OUStringToOString( storageStr,
                                              RTL_TEXTENCODING_ASCII_US ).pData->buffer );
 
-        Reference< XInterface > xInterface =
+        Reference< XInterface > xInterface(
             m_xMgr->createInstanceWithArgumentsAndContext(
                 OUString(RTL_CONSTASCII_USTRINGPARAM(
                     "drafts.com.sun.star.script.framework.storage.ScriptStorage" )),
-                aArgs, m_xContext );
-
-        validateXRef( xInterface, "ScriptStorageManager:: setupAnyStorage: Can't create ScriptStorage for share" );
+                aArgs,
+                m_xContext
+            ),
+            UNO_QUERY_THROW
+        );
 
         // and place it in the boost::unordered_map. Increment the counter
         m_ScriptStorageMap[ m_count++ ] = xInterface;
@@ -209,8 +200,7 @@ ScriptStorageManager::createScriptStorage(
 throw ( RuntimeException )
 {
     OSL_TRACE( "** ==> ScriptStorageManager in createScriptingStorage\n" );
-    validateXRef( xSFA,
-                  "ScriptStorageManager::createScriptStorage: XSimpleFileAccess is not valid" );
+    ENSURE_OR_THROW( xSFA.is(), "ScriptStorageManager::createScriptStorage: XSimpleFileAccess is not valid" );
 
     return setupAnyStorage( xSFA, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")),
                             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")) );
@@ -223,7 +213,7 @@ ScriptStorageManager::createScriptStorageWithURI(
 throw ( RuntimeException )
 {
     OSL_TRACE( "** ==> ScriptStorageManager in createScriptingStorageWithURI\n" );
-    validateXRef( xSFA, "ScriptStorageManager::createScriptStorage: XSimpleFileAccess is not valid" );
+    ENSURE_OR_THROW( xSFA.is(), "ScriptStorageManager::createScriptStorage: XSimpleFileAccess is not valid" );
 
     // related to issue 11866
     // warning dialog gets launched when adding binding to script in doc
@@ -281,7 +271,7 @@ throw( RuntimeException )
             OUSTR( "ScriptStorageManager::getScriptStorage: invalid storage ID" ),
             Reference< XInterface >() );
     }
-    validateXRef( itr->second,
+    ENSURE_OR_THROW( itr->second.is(),
                   "ScriptStorageManager::getScriptStorage: Cannot get ScriptStorage from ScriptStorageHash" );
     return itr->second;
 }

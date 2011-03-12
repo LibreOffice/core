@@ -109,3 +109,11 @@ RESLIB1SRSFILES += $(SRS)$/deployment_misc.srs
 
 .INCLUDE : target.mk
 
+
+ALLTAR : $(MISC)/deployment.component
+
+$(MISC)/deployment.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        deployment.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt deployment.component

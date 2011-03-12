@@ -260,7 +260,7 @@ Reference< XDataSource> getDataSource_allowException(
             const ::rtl::OUString& _rsTitleOrPath,
             const Reference< XMultiServiceFactory >& _rxFactory )
 {
-    OSL_ENSURE( _rsTitleOrPath.getLength(), "getDataSource_allowException: invalid arg !" );
+    ENSURE_OR_RETURN( _rsTitleOrPath.getLength(), "getDataSource_allowException: invalid arg !", NULL );
 
     Reference< XNameAccess> xDatabaseContext(
         _rxFactory->createInstance(
@@ -280,8 +280,9 @@ Reference< XDataSource > getDataSource(
     {
         xDS = getDataSource_allowException( _rsTitleOrPath, _rxFactory );
     }
-    catch(Exception)
+    catch( const Exception& )
     {
+        DBG_UNHANDLED_EXCEPTION();
     }
 
     return xDS;

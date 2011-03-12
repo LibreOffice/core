@@ -73,7 +73,7 @@ sdbcx::ObjectType OColumns::createObject(const ::rtl::OUString& _rName)
                                             sal_False,
                                             sal_False,
                                             sal_False,
-                                            m_pTable->getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers());
+                                            m_pTable->getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers());
                 xRet = pRet;
                 break;
             }

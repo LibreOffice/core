@@ -50,11 +50,11 @@ private:
     DECL_LINK( MenuSelect, FontSizeMenu * );
 
 protected:
-    virtual void    StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                   const SfxPoolItem* pState );
 
 public:
-    SvxFontSizeMenuControl( USHORT nId, Menu&, SfxBindings& );
+    SvxFontSizeMenuControl( sal_uInt16 nId, Menu&, SfxBindings& );
     ~SvxFontSizeMenuControl();
 
     virtual PopupMenu*  GetPopup() const;

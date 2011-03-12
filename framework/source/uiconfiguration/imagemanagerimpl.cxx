@@ -30,7 +30,7 @@
 #include "precompiled_framework.hxx"
 #include <imagemanagerimpl.hxx>
 #include <threadhelp/resetableguard.hxx>
-#include <xml/imagesconfiguration.hxx>
+#include <framework/imagesconfiguration.hxx>
 #include <uiconfiguration/graphicnameaccess.hxx>
 #include <services.h>
 
@@ -511,7 +511,7 @@ sal_Bool ImageManagerImpl::implts_loadUserImages(
                 sal_Int32 nCount = pList->pImageItemList->Count();
                 std::vector< OUString > aUserImagesVector;
                 aUserImagesVector.reserve(nCount);
-                for ( USHORT i=0; i < nCount; i++ )
+                for ( sal_uInt16 i=0; i < nCount; i++ )
                 {
                     const ImageItemDescriptor* pItem = pList->pImageItemList->GetObject(i);
                     aUserImagesVector.push_back( pItem->aCommandURL );
@@ -584,7 +584,7 @@ sal_Bool ImageManagerImpl::implts_storeUserImages(
             aUserImageListInfo.pImageList->Insert( pList, 0 );
 
             pList->pImageItemList = new ImageItemListDescriptor;
-            for ( USHORT i=0; i < pImageList->GetImageCount(); i++ )
+            for ( sal_uInt16 i=0; i < pImageList->GetImageCount(); i++ )
             {
                 ImageItemDescriptor* pItem = new ::framework::ImageItemDescriptor;
 
@@ -996,7 +996,7 @@ throw ( ::com::sun::star::lang::IllegalArgumentException,
             if ( !implts_checkAndScaleGraphic( xGraphic, aGraphicsSequence[i], nIndex ))
                 continue;
 
-            USHORT nPos = pImageList->GetImagePos( aCommandURLSequence[i] );
+            sal_uInt16 nPos = pImageList->GetImagePos( aCommandURLSequence[i] );
             if ( nPos == IMAGELIST_IMAGE_NOTFOUND )
             {
                 pImageList->AddImage( aCommandURLSequence[i], xGraphic );
@@ -1080,11 +1080,11 @@ throw ( ::com::sun::star::lang::IllegalArgumentException,
 
         for ( sal_Int32 i = 0; i < aCommandURLSequence.getLength(); i++ )
         {
-            USHORT nPos = pImageList->GetImagePos( aCommandURLSequence[i] );
+            sal_uInt16 nPos = pImageList->GetImagePos( aCommandURLSequence[i] );
             if ( nPos != IMAGELIST_IMAGE_NOTFOUND )
             {
                 Image aImage = pImageList->GetImage( nPos );
-                USHORT nId   = pImageList->GetImageId( nPos );
+                sal_uInt16 nId   = pImageList->GetImageId( nPos );
                 pImageList->RemoveImage( nId );
 
                 if ( m_bUseGlobal )

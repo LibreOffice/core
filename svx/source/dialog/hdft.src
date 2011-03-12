@@ -46,12 +46,14 @@ TabPage RID_SVXPAGE_HEADER
     Size = MAP_APPFONT ( 260 , 185 ) ;
     CheckBox CB_TURNON
     {
+        HelpID = "svx:CheckBox:RID_SVXPAGE_HEADER:CB_TURNON";
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 152 , 10 ) ;
         Text [ en-US ] = "Hea~der on" ;
     };
     CheckBox CB_SHARED
     {
+        HelpID = "svx:CheckBox:RID_SVXPAGE_HEADER:CB_SHARED";
         Pos = MAP_APPFONT ( 12 , 30 ) ;
         Size = MAP_APPFONT ( 152 , 10 ) ;
         Text [ en-US ] = "Same ~content left/right" ;
@@ -65,6 +67,7 @@ TabPage RID_SVXPAGE_HEADER
     };
     MetricField ED_LMARGIN
     {
+        HelpID = "svx:MetricField:RID_SVXPAGE_HEADER:ED_LMARGIN";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 124 , 46 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -87,6 +90,7 @@ TabPage RID_SVXPAGE_HEADER
     };
     MetricField ED_RMARGIN
     {
+        HelpID = "svx:MetricField:RID_SVXPAGE_HEADER:ED_RMARGIN";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 124 , 62 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -109,6 +113,7 @@ TabPage RID_SVXPAGE_HEADER
     };
     MetricField ED_DIST
     {
+        HelpID = "svx:MetricField:RID_SVXPAGE_HEADER:ED_DIST";
         Disable = TRUE ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 124 , 80 ) ;
@@ -124,6 +129,7 @@ TabPage RID_SVXPAGE_HEADER
     };
     CheckBox CB_DYNSPACING
     {
+        HelpID = "svx:CheckBox:RID_SVXPAGE_HEADER:CB_DYNSPACING";
         Pos = MAP_APPFONT ( 12 , 96 ) ;
         Size = MAP_APPFONT ( 152 , 10 ) ;
         Hide = TRUE;
@@ -137,6 +143,7 @@ TabPage RID_SVXPAGE_HEADER
     };
     MetricField ED_HEIGHT
     {
+        HelpID = "svx:MetricField:RID_SVXPAGE_HEADER:ED_HEIGHT";
         Disable = TRUE ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 124 , 96 ) ;
@@ -154,6 +161,7 @@ TabPage RID_SVXPAGE_HEADER
     };
     CheckBox CB_HEIGHT_DYN
     {
+        HelpID = "svx:CheckBox:RID_SVXPAGE_HEADER:CB_HEIGHT_DYN";
         Pos = MAP_APPFONT ( 12 , 112 ) ;
         Size = MAP_APPFONT ( 152 , 10 ) ;
         Text [ en-US ] = "~AutoFit height" ;
@@ -171,6 +179,7 @@ TabPage RID_SVXPAGE_HEADER
     };
     PushButton BTN_EXTRAS
     {
+        HelpID = "svx:PushButton:RID_SVXPAGE_HEADER:BTN_EXTRAS";
         Pos = MAP_APPFONT ( 12 , 130 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~More..." ;
@@ -185,12 +194,14 @@ TabPage RID_SVXPAGE_FOOTER
     Size = MAP_APPFONT ( 260 , 185 ) ;
     CheckBox CB_TURNON
     {
+        HelpID = "svx:CheckBox:RID_SVXPAGE_FOOTER:CB_TURNON";
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 152 , 10 ) ;
         Text [ en-US ] = "~Footer on" ;
     };
     CheckBox CB_SHARED
     {
+        HelpID = "svx:CheckBox:RID_SVXPAGE_FOOTER:CB_SHARED";
         Pos = MAP_APPFONT ( 12 , 30 ) ;
         Size = MAP_APPFONT ( 152 , 10 ) ;
         Text [ en-US ] = "Same ~content left/right" ;
@@ -204,6 +215,7 @@ TabPage RID_SVXPAGE_FOOTER
     };
     MetricField ED_LMARGIN
     {
+        HelpID = "svx:MetricField:RID_SVXPAGE_FOOTER:ED_LMARGIN";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 124 , 46 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -226,6 +238,7 @@ TabPage RID_SVXPAGE_FOOTER
     };
     MetricField ED_RMARGIN
     {
+        HelpID = "svx:MetricField:RID_SVXPAGE_FOOTER:ED_RMARGIN";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 124 , 62 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -247,6 +260,7 @@ TabPage RID_SVXPAGE_FOOTER
     };
     MetricField ED_DIST
     {
+        HelpID = "svx:MetricField:RID_SVXPAGE_FOOTER:ED_DIST";
         Disable = TRUE ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 124 , 80 ) ;
@@ -262,6 +276,7 @@ TabPage RID_SVXPAGE_FOOTER
     };
     CheckBox CB_DYNSPACING
     {
+        HelpID = "svx:CheckBox:RID_SVXPAGE_FOOTER:CB_DYNSPACING";
         Pos = MAP_APPFONT ( 12 , 96 ) ;
         Size = MAP_APPFONT ( 152 , 10 ) ;
         Hide = TRUE;
@@ -276,6 +291,7 @@ TabPage RID_SVXPAGE_FOOTER
     };
     MetricField ED_HEIGHT
     {
+        HelpID = "svx:MetricField:RID_SVXPAGE_FOOTER:ED_HEIGHT";
         Disable = TRUE ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 124 , 96 ) ;
@@ -293,6 +309,7 @@ TabPage RID_SVXPAGE_FOOTER
     };
     CheckBox CB_HEIGHT_DYN
     {
+        HelpID = "svx:CheckBox:RID_SVXPAGE_FOOTER:CB_HEIGHT_DYN";
         Pos = MAP_APPFONT ( 12 , 112 ) ;
         Size = MAP_APPFONT ( 152 , 10 ) ;
         Text [ en-US ] = "~AutoFit height" ;
@@ -311,6 +328,7 @@ TabPage RID_SVXPAGE_FOOTER
     };
     PushButton BTN_EXTRAS
     {
+        HelpID = "svx:PushButton:RID_SVXPAGE_FOOTER:BTN_EXTRAS";
         Pos = MAP_APPFONT ( 12 , 130 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~More..." ;

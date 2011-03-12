@@ -47,7 +47,7 @@
 #include <tools/zcodec.hxx>
 
 #include "svtools/filter.hxx"
-#include "xmlgrhlp.hxx"
+#include "svx/xmlgrhlp.hxx"
 
 #include <algorithm>
 
@@ -329,8 +329,8 @@ const GraphicObject& SvXMLGraphicOutputStream::GetGraphicObject()
         Graphic aGraphic;
 
         mpOStm->Seek( 0 );
-        USHORT nFormat = GRFILTER_FORMAT_DONTKNOW;
-        USHORT pDeterminedFormat = GRFILTER_FORMAT_DONTKNOW;
+        sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW;
+        sal_uInt16 pDeterminedFormat = GRFILTER_FORMAT_DONTKNOW;
         GraphicFilter::GetGraphicFilter()->ImportGraphic( aGraphic, String(), *mpOStm ,nFormat,&pDeterminedFormat );
 
         if (pDeterminedFormat == GRFILTER_FORMAT_DONTKNOW)
@@ -338,17 +338,17 @@ const GraphicObject& SvXMLGraphicOutputStream::GetGraphicObject()
             //Read the first two byte to check whether it is a gzipped stream, is so it may be in wmz or emz format
             //unzip them and try again
 
-            BYTE    sFirstBytes[ 2 ];
+            sal_uInt8    sFirstBytes[ 2 ];
 
             mpOStm->Seek( STREAM_SEEK_TO_END );
-            ULONG nStreamLen = mpOStm->Tell();
+            sal_uIntPtr nStreamLen = mpOStm->Tell();
             mpOStm->Seek( 0 );
 
             if ( !nStreamLen )
             {
                 SvLockBytes* pLockBytes = mpOStm->GetLockBytes();
                 if ( pLockBytes  )
-                    pLockBytes->SetSynchronMode( TRUE );
+                    pLockBytes->SetSynchronMode( sal_True );
 
                 mpOStm->Seek( STREAM_SEEK_TO_END );
                 nStreamLen = mpOStm->Tell();
@@ -370,7 +370,7 @@ const GraphicObject& SvXMLGraphicOutputStream::GetGraphicObject()
                     if (aZCodec.EndCompression() && pDest )
                     {
                         pDest->Seek( STREAM_SEEK_TO_END );
-                        ULONG nStreamLen_ = pDest->Tell();
+                        sal_uIntPtr nStreamLen_ = pDest->Tell();
                         if (nStreamLen_)
                         {
                             pDest->Seek(0L);
@@ -500,7 +500,7 @@ uno::Reference < embed::XStorage > SvXMLGraphicHelper::ImplGetGraphicStorage( co
 
 SvxGraphicHelperStream_Impl SvXMLGraphicHelper::ImplGetGraphicStream( const ::rtl::OUString& rPictureStorageName,
                                                               const ::rtl::OUString& rPictureStreamName,
-                                                              BOOL bTruncate )
+                                                              sal_Bool bTruncate )
 {
     SvxGraphicHelperStream_Impl aRet;
     aRet.xStorage = ImplGetGraphicStorage( rPictureStorageName );
@@ -565,7 +565,7 @@ Graphic SvXMLGraphicHelper::ImplReadGraphic( const ::rtl::OUString& rPictureStor
                                              const ::rtl::OUString& rPictureStreamName )
 {
     Graphic             aGraphic;
-    SvxGraphicHelperStream_Impl aStream( ImplGetGraphicStream( rPictureStorageName, rPictureStreamName, FALSE ) );
+    SvxGraphicHelperStream_Impl aStream( ImplGetGraphicStream( rPictureStorageName, rPictureStreamName, sal_False ) );
     if( aStream.xStream.is() )
     {
         SvStream* pStream = utl::UcbStreamHelper::CreateStream( aStream.xStream );
@@ -588,7 +588,7 @@ sal_Bool SvXMLGraphicHelper::ImplWriteGraphic( const ::rtl::OUString& rPictureSt
 
     if( aGrfObject.GetType() != GRAPHIC_NONE )
     {
-        SvxGraphicHelperStream_Impl aStream( ImplGetGraphicStream( rPictureStorageName, rPictureStreamName, FALSE ) );
+        SvxGraphicHelperStream_Impl aStream( ImplGetGraphicStream( rPictureStorageName, rPictureStreamName, sal_False ) );
         if( aStream.xStream.is() )
         {
             Graphic         aGraphic( (Graphic&) aGrfObject.GetGraphic() );
@@ -637,7 +637,7 @@ sal_Bool SvXMLGraphicHelper::ImplWriteGraphic( const ::rtl::OUString& rPictureSt
                     if ( pComment )
                     {
                         sal_uInt32  nSize = pComment->GetDataSize();
-                        const BYTE* pData = pComment->GetData();
+                        const sal_uInt8* pData = pComment->GetData();
                         if ( nSize && pData )
                             pStream->Write( pData, nSize );
 
@@ -706,8 +706,8 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const ::rtl::OUString& rURLStr, s
         else
         {
             const String        aGraphicObjectId( aPictureStreamName );
-            const GraphicObject aGrfObject( ByteString( aGraphicObjectId, RTL_TEXTENCODING_ASCII_US ) );
-
+            const ByteString    aAsciiObjectID( aGraphicObjectId, RTL_TEXTENCODING_ASCII_US );
+            const GraphicObject aGrfObject( aAsciiObjectID );
             if( aGrfObject.GetType() != GRAPHIC_NONE )
             {
                 String          aStreamName( aGraphicObjectId );
@@ -781,6 +781,15 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const ::rtl::OUString& rURLStr, s
                 rURLPair.second = sPictures;
                 rURLPair.second += aStreamName;
             }
+#if OSL_DEBUG_LEVEL > 0
+            else
+            {
+                ByteString sMessage = "graphic object with ID '";
+                sMessage += aAsciiObjectID;
+                sMessage += "' has an unknown type";
+                OSL_ENSURE( false, sMessage.GetBuffer() );
+            }
+#endif
         }
 
         maURLSet.insert( aURLString );
@@ -791,7 +800,7 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const ::rtl::OUString& rURLStr, s
 
 void SvXMLGraphicHelper::Init( const uno::Reference < embed::XStorage >& rXMLStorage,
                                SvXMLGraphicHelperMode eCreateMode,
-                               BOOL bDirect )
+                               sal_Bool bDirect )
 {
     mxRootStorage = rXMLStorage;
     meCreateMode = eCreateMode;
@@ -802,7 +811,7 @@ void SvXMLGraphicHelper::Init( const uno::Reference < embed::XStorage >& rXMLSto
 
 SvXMLGraphicHelper* SvXMLGraphicHelper::Create( const uno::Reference < embed::XStorage >& rXMLStorage,
                                                 SvXMLGraphicHelperMode eCreateMode,
-                                                BOOL bDirect )
+                                                sal_Bool bDirect )
 {
     SvXMLGraphicHelper* pThis = new SvXMLGraphicHelper;
 

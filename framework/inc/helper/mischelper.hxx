@@ -42,6 +42,7 @@
 #include <i18npool/lang.h>
 #include <svl/languageoptions.hxx>
 #include <rtl/ustring.hxx>
+#include <fwidllapi.h>
 
 #include <set>
 
@@ -97,7 +98,7 @@ inline bool IsScriptTypeMatchingToLanguage( sal_Int16 nScriptType, LanguageType 
 }
 
 
-class LanguageGuessingHelper
+class FWI_DLLPUBLIC LanguageGuessingHelper
 {
     mutable ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XLanguageGuessing >    m_xLanguageGuesser;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager;
@@ -108,7 +109,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XLanguageGuessing >  GetGuesser() const;
 };
 
-::rtl::OUString RetrieveLabelFromCommand( const ::rtl::OUString& aCmdURL
+FWI_DLLPUBLIC ::rtl::OUString RetrieveLabelFromCommand( const ::rtl::OUString& aCmdURL
             ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&    _xServiceFactory
             ,::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >&        _xUICommandLabels
             ,const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _xFrame
@@ -116,7 +117,7 @@ public:
             ,sal_Bool& _rIni
             ,const sal_Char* _pName);
 
-void FillLangItems( std::set< ::rtl::OUString > &rLangItems,
+FWI_DLLPUBLIC void FillLangItems( std::set< ::rtl::OUString > &rLangItems,
         const SvtLanguageTable &rLanguageTable,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > &rxFrame,
         const LanguageGuessingHelper & rLangGuessHelper,

@@ -103,3 +103,11 @@ RESLIB1IMAGES=	$(PRJ)$/res
 
 .INCLUDE : target.mk
 
+
+ALLTAR : $(MISC)/deploymentgui.component
+
+$(MISC)/deploymentgui.component .ERRREMOVE : \
+        $(SOLARENV)/bin/createcomponent.xslt deploymentgui.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt deploymentgui.component

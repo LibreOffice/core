@@ -42,7 +42,7 @@
 #include <comphelper/extract.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlimp.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmluconv.hxx>
 /*
 #include <xmloff/xmlement.hxx>
@@ -413,7 +413,7 @@ public:
 
     virtual void EndElement();
 
-    virtual SvXMLImportContext * CreateChildContext( USHORT nPrefix, const OUString& rLocalName,
+    virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
         const Reference< XAttributeList >& xAttrList );
 };
 
@@ -532,13 +532,13 @@ XMLAnimationsEffectContext::XMLAnimationsEffectContext( SvXMLImport& rImport,  s
         case XML_NAMESPACE_PRESENTATION:
             if( IsXMLToken( aLocalName, XML_EFFECT ) )
             {
-                USHORT eEnum;
+                sal_uInt16 eEnum;
                 if( SvXMLUnitConverter::convertEnum( eEnum, sValue, aXML_AnimationEffect_EnumMap ) )
                     meEffect = (XMLEffect)eEnum;
             }
             else if( IsXMLToken(aLocalName, XML_DIRECTION ) )
             {
-                USHORT eEnum;
+                sal_uInt16 eEnum;
                 if( SvXMLUnitConverter::convertEnum( eEnum, sValue, aXML_AnimationDirection_EnumMap ) )
                     meDirection = (XMLEffectDirection)eEnum;
             }
@@ -550,7 +550,7 @@ XMLAnimationsEffectContext::XMLAnimationsEffectContext( SvXMLImport& rImport,  s
             }
             else if( IsXMLToken( aLocalName, XML_SPEED ) )
             {
-                USHORT eEnum;
+                sal_uInt16 eEnum;
                 if( SvXMLUnitConverter::convertEnum( eEnum, sValue, aXML_AnimationSpeed_EnumMap ) )
                     meSpeed = (AnimationSpeed)eEnum;
             }
@@ -567,7 +567,7 @@ XMLAnimationsEffectContext::~XMLAnimationsEffectContext()
 {
 }
 
-SvXMLImportContext * XMLAnimationsEffectContext::CreateChildContext( USHORT nPrefix, const OUString& rLocalName, const Reference< XAttributeList>& xAttrList )
+SvXMLImportContext * XMLAnimationsEffectContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList>& xAttrList )
 {
     return new XMLAnimationsSoundContext( GetImport(), nPrefix, rLocalName, xAttrList, this );
 }
@@ -688,7 +688,7 @@ XMLAnimationsContext::~XMLAnimationsContext()
     delete mpImpl;
 }
 
-SvXMLImportContext * XMLAnimationsContext::CreateChildContext( USHORT nPrefix, const ::rtl::OUString& rLocalName,
+SvXMLImportContext * XMLAnimationsContext::CreateChildContext( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
     return new XMLAnimationsEffectContext( GetImport(), nPrefix, rLocalName,  xAttrList, mpImpl );

@@ -31,7 +31,7 @@
 
 #include <sal/macros.h>
 #include "alienwarn.hxx"
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include <sfx2/sfxuno.hxx>
 
 #include "alienwarn.hrc"

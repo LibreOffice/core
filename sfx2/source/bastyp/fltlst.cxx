@@ -103,7 +103,7 @@ void SAL_CALL SfxFilterListener::refreshed( const lang::EventObject& aSource ) t
         (xContainer==m_xFilterCache)
       )
     {
-        SfxFilterContainer::ReadFilters_Impl( TRUE );
+        SfxFilterContainer::ReadFilters_Impl( sal_True );
     }
 }
 

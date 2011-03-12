@@ -59,9 +59,9 @@
 #include "controlpropertymap.hxx"
 #include "formevents.hxx"
 #include "formcellbinding.hxx"
-#include "xformsimport.hxx"
+#include "xmloff/xformsimport.hxx"
 #include <xmloff/xmltoken.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <rtl/logfile.hxx>
 #include <algorithm>
 
@@ -240,11 +240,6 @@ OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl(SvXMLImport& _rImporter)
         TabulatorCycle_RECORDS, OEnumMapper::getEnumMap(OEnumMapper::epTabCyle),
         &::getCppuType( static_cast<TabulatorCycle*>(NULL) ));
 
-    // initialize our style map
-    m_xPropertyHandlerFactory = new OControlPropertyHandlerFactory();
-        ::rtl::Reference< XMLPropertySetMapper > xStylePropertiesMapper = new XMLPropertySetMapper(getControlStylePropertyMap(), m_xPropertyHandlerFactory.get());
-        m_xImportMapper = new SvXMLImportPropertyMapper(xStylePropertiesMapper.get(), _rImporter);
-
     // 'initialize'
     m_aCurrentPageIds = m_aControlIds.end();
 }
@@ -416,12 +411,6 @@ void OFormLayerXMLImport_Impl::registerControlReferences(const Reference< XPrope
     OSL_ENSURE(_rReferringControls.getLength(), "OFormLayerXMLImport_Impl::registerControlReferences: invalid (empty) control id list!");
     OSL_ENSURE(_rxControl.is(), "OFormLayerXMLImport_Impl::registerControlReferences: invalid (NULL) control!");
     m_aControlReferences.push_back( ModelStringPair( _rxControl, _rReferringControls ) );
-}
-
-//---------------------------------------------------------------------
-::rtl::Reference< SvXMLImportPropertyMapper > OFormLayerXMLImport_Impl::getStylePropertyMapper() const
-{
-    return m_xImportMapper;
 }
 
 //---------------------------------------------------------------------

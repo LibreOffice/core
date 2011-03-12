@@ -41,20 +41,20 @@ xub_StrLen OEvoabString::GetTokenCount( sal_Unicode cTok, sal_Unicode cStrDel ) 
         return 0;
 
     xub_StrLen nTokCount = 1;
-    BOOL bStart = TRUE;     // Are we on the fist character of the token?
-    BOOL bInString = FALSE; // Are we within a (cStrDel delimited) string?
+    sal_Bool bStart = sal_True;     // Are we on the fist character of the token?
+    sal_Bool bInString = sal_False; // Are we within a (cStrDel delimited) string?
 
     // Search for the first not-matching character (search ends at the end of string)
     for( xub_StrLen i = 0; i < Len(); i++ )
     {
         if (bStart)
         {
-            bStart = FALSE;
+            bStart = sal_False;
             // First character a string delimiter?
             if ((*this).GetChar(i) == cStrDel)
             {
-                bInString = TRUE;   // then we are within a string!
-                continue;       // read next character!
+                bInString = sal_True;   // then we are within a string!
+                continue;           // read next character!
             }
         }
 
@@ -70,7 +70,7 @@ xub_StrLen OEvoabString::GetTokenCount( sal_Unicode cTok, sal_Unicode cStrDel ) 
                 else
                 {
                     // end of String
-                    bInString = FALSE;
+                    bInString = sal_False;
                 }
             }
         } else {
@@ -78,7 +78,7 @@ xub_StrLen OEvoabString::GetTokenCount( sal_Unicode cTok, sal_Unicode cStrDel ) 
             if ( (*this).GetChar(i) == cTok )
             {
                 nTokCount++;
-                bStart = TRUE;
+                bStart = sal_True;
             }
         }
     }
@@ -94,7 +94,7 @@ void OEvoabString::GetTokenSpecial( String& _rStr,xub_StrLen& nStartPos, sal_Uni
     xub_StrLen nLen = Len();
     if ( nLen )
     {
-        BOOL bInString = (nStartPos < nLen) && ((*this).GetChar(nStartPos) == cStrDel); // are we within a (cStrDel delimited) String?
+        sal_Bool bInString = (nStartPos < nLen) && ((*this).GetChar(nStartPos) == cStrDel); // are we within a (cStrDel delimited) String?
 
         // Is the first character a String-Delimiter?
         if (bInString )
@@ -116,7 +116,7 @@ void OEvoabString::GetTokenSpecial( String& _rStr,xub_StrLen& nStartPos, sal_Uni
                     else
                     {
                         // end of String
-                        bInString = FALSE;
+                        bInString = sal_False;
                     }
                 }
                 else
@@ -151,7 +151,7 @@ sal_Bool OEvoabTable::checkHeaderLine()
 {
     if (m_nFilePos == 0 && ((OEvoabConnection*)m_pConnection)->isHeaderLine())
     {
-        BOOL bRead2;
+        sal_Bool bRead2;
         do
         {
             bRead2 = m_pFileStream->ReadByteStringLine(m_aCurrentLine,m_pConnection->getTextEncoding());

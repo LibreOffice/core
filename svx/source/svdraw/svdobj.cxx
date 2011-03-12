@@ -48,8 +48,8 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdovirt.hxx>  // Fuer Add/Del Ref
 #include <svx/svdview.hxx>   // fuer Dragging (Ortho abfragen)
-#include "svdglob.hxx"   // StringCache
-#include "svdstr.hrc"    // Objektname
+#include "svx/svdglob.hxx"   // StringCache
+#include <svx/svdstr.hrc>    // Objektname
 #include <svx/svdogrp.hxx>   // Factory
 #include <svx/svdopath.hxx>  // Factory
 #include <svx/svdoedge.hxx>  // Factory
@@ -75,7 +75,7 @@
 #include <svx/xlndsit.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xflclit.hxx>
-#include "svditer.hxx"
+#include <svx/svditer.hxx>
 #include <svx/xlntrit.hxx>
 #include <svx/xfltrit.hxx>
 #include <svx/xfltrit.hxx>
@@ -151,12 +151,12 @@ void SdrObjUserData::operator=(const SdrObjUserData& /*rData*/)    // nicht impl
 
 sal_Bool SdrObjUserData::operator==(const SdrObjUserData& /*rData*/) const // nicht implementiert
 {
-    return FALSE;
+    return sal_False;
 }
 
 sal_Bool SdrObjUserData::operator!=(const SdrObjUserData& /*rData*/) const // nicht implementiert
 {
-    return FALSE;
+    return sal_False;
 }
 
 SdrObjUserData::~SdrObjUserData()
@@ -165,7 +165,7 @@ SdrObjUserData::~SdrObjUserData()
 
 bool SdrObjUserData::HasMacro(const SdrObject* /*pObj*/) const
 {
-    return FALSE;
+    return sal_False;
 }
 
 SdrObject* SdrObjUserData::CheckMacroHit(const SdrObjMacroHitRec& rRec, const SdrObject* pObj) const
@@ -209,7 +209,7 @@ void SdrObjUserData::PaintMacro(OutputDevice& rOut, const Rectangle& /*rDirtyRec
 
 bool SdrObjUserData::DoMacro(const SdrObjMacroHitRec& /*rRec*/, SdrObject* /*pObj*/)
 {
-    return FALSE;
+    return sal_False;
 }
 
 XubString SdrObjUserData::GetMacroPopupComment(const SdrObjMacroHitRec& /*rRec*/, const SdrObject* /*pObj*/) const
@@ -219,8 +219,8 @@ XubString SdrObjUserData::GetMacroPopupComment(const SdrObjMacroHitRec& /*rRec*/
 
 void SdrObjUserDataList::Clear()
 {
-    USHORT nAnz=GetUserDataCount();
-    for (USHORT i=0; i<nAnz; i++) {
+    sal_uInt16 nAnz=GetUserDataCount();
+    for (sal_uInt16 i=0; i<nAnz; i++) {
         delete GetUserData(i);
     }
     aList.Clear();
@@ -232,10 +232,10 @@ DBG_NAME(SdrObjGeoData);
 
 SdrObjGeoData::SdrObjGeoData():
     pGPL(NULL),
-    bMovProt(FALSE),
-    bSizProt(FALSE),
-    bNoPrint(FALSE),
-    bClosedObj(FALSE),
+    bMovProt(sal_False),
+    bSizProt(sal_False),
+    bNoPrint(sal_False),
+    bClosedObj(sal_False),
     mbVisible(true),
     mnLayerID(0)
 {
@@ -272,10 +272,10 @@ SdrObjPlusData* SdrObjPlusData::Clone(SdrObject* pObj1) const
 {
     SdrObjPlusData* pNeuPlusData=new SdrObjPlusData;
     if (pUserDataList!=NULL) {
-        USHORT nAnz=pUserDataList->GetUserDataCount();
+        sal_uInt16 nAnz=pUserDataList->GetUserDataCount();
         if (nAnz!=0) {
             pNeuPlusData->pUserDataList=new SdrObjUserDataList;
-            for (USHORT i=0; i<nAnz; i++) {
+            for (sal_uInt16 i=0; i<nAnz; i++) {
                 SdrObjUserData* pNeuUserData=pUserDataList->GetUserData(i)->Clone(pObj1);
                 if (pNeuUserData!=NULL) {
                     pNeuPlusData->pUserDataList->InsertUserData(pNeuUserData);
@@ -405,17 +405,17 @@ SdrObject::SdrObject()
     ,maWeakUnoShape()
 {
     DBG_CTOR(SdrObject,NULL);
-    bVirtObj         =FALSE;
-    bSnapRectDirty   =TRUE;
-    bNetLock         =FALSE;
-    bInserted        =FALSE;
-    bGrouped         =FALSE;
-    bMovProt         =FALSE;
-    bSizProt         =FALSE;
-    bNoPrint         =FALSE;
-    bEmptyPresObj    =FALSE;
-    bNotVisibleAsMaster=FALSE;
-    bClosedObj       =FALSE;
+    bVirtObj         =sal_False;
+    bSnapRectDirty   =sal_True;
+    bNetLock         =sal_False;
+    bInserted        =sal_False;
+    bGrouped         =sal_False;
+    bMovProt         =sal_False;
+    bSizProt         =sal_False;
+    bNoPrint         =sal_False;
+    bEmptyPresObj    =sal_False;
+    bNotVisibleAsMaster=sal_False;
+    bClosedObj       =sal_False;
     mbVisible        = true;
 
     // #i25616#
@@ -425,13 +425,13 @@ SdrObject::SdrObject()
     mbSupportTextIndentingOnLineWidthChange = sal_False;
 
     //#110094#-1
-    //bWriterFlyFrame  =FALSE;
+    //bWriterFlyFrame  =sal_False;
 
-    bNotMasterCachable=FALSE;
-    bIsEdge=FALSE;
-    bIs3DObj=FALSE;
-    bMarkProt=FALSE;
-    bIsUnoObj=FALSE;
+    bNotMasterCachable=sal_False;
+    bIsEdge=sal_False;
+    bIs3DObj=sal_False;
+    bMarkProt=sal_False;
+    bIsUnoObj=sal_False;
 }
 
 SdrObject::~SdrObject()
@@ -507,7 +507,7 @@ void SdrObject::SetRectsDirty(sal_Bool bNotMyself)
 {
     if (!bNotMyself) {
         SetBoundRectDirty();
-        bSnapRectDirty=TRUE;
+        bSnapRectDirty=sal_True;
     }
     if (pObjList!=NULL) {
         pObjList->SetRectsDirty();
@@ -587,29 +587,29 @@ SdrItemPool* SdrObject::GetObjectItemPool() const
     return &SdrObject::GetGlobalDrawObjectItemPool();
 }
 
-UINT32 SdrObject::GetObjInventor()   const
+sal_uInt32 SdrObject::GetObjInventor()   const
 {
     return SdrInventor;
 }
 
-UINT16 SdrObject::GetObjIdentifier() const
+sal_uInt16 SdrObject::GetObjIdentifier() const
 {
-    return UINT16(OBJ_NONE);
+    return sal_uInt16(OBJ_NONE);
 }
 
 void SdrObject::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
-    rInfo.bRotateFreeAllowed=FALSE;
-    rInfo.bMirrorFreeAllowed=FALSE;
-    rInfo.bTransparenceAllowed = FALSE;
-    rInfo.bGradientAllowed = FALSE;
-    rInfo.bShearAllowed     =FALSE;
-    rInfo.bEdgeRadiusAllowed=FALSE;
-    rInfo.bCanConvToPath    =FALSE;
-    rInfo.bCanConvToPoly    =FALSE;
-    rInfo.bCanConvToContour = FALSE;
-    rInfo.bCanConvToPathLineToArea=FALSE;
-    rInfo.bCanConvToPolyLineToArea=FALSE;
+    rInfo.bRotateFreeAllowed=sal_False;
+    rInfo.bMirrorFreeAllowed=sal_False;
+    rInfo.bTransparenceAllowed = sal_False;
+    rInfo.bGradientAllowed = sal_False;
+    rInfo.bShearAllowed     =sal_False;
+    rInfo.bEdgeRadiusAllowed=sal_False;
+    rInfo.bCanConvToPath    =sal_False;
+    rInfo.bCanConvToPoly    =sal_False;
+    rInfo.bCanConvToContour = sal_False;
+    rInfo.bCanConvToPathLineToArea=sal_False;
+    rInfo.bCanConvToPolyLineToArea=sal_False;
 }
 
 SdrLayerID SdrObject::GetLayer() const
@@ -622,8 +622,8 @@ void SdrObject::getMergedHierarchyLayerSet(SetOfByte& rSet) const
     rSet.Set(GetLayer());
     SdrObjList* pOL=GetSubList();
     if (pOL!=NULL) {
-        ULONG nObjAnz=pOL->GetObjCount();
-        for (ULONG nObjNum=0; nObjNum<nObjAnz; nObjNum++) {
+        sal_uIntPtr nObjAnz=pOL->GetObjCount();
+        for (sal_uIntPtr nObjNum=0; nObjNum<nObjAnz; nObjNum++) {
             pOL->GetObj(nObjNum)->getMergedHierarchyLayerSet(rSet);
         }
     }
@@ -681,7 +681,7 @@ AutoTimer* SdrObject::ForceAutoTimer()
 
 bool SdrObject::HasRefPoint() const
 {
-    return FALSE;
+    return sal_False;
 }
 
 Point SdrObject::GetRefPoint() const
@@ -859,7 +859,7 @@ String SdrObject::GetHTMLName() const
     return String();
 }
 
-UINT32 SdrObject::GetOrdNum() const
+sal_uInt32 SdrObject::GetOrdNum() const
 {
     if (pObjList!=NULL) {
         if (pObjList->IsObjOrdNumsDirty()) {
@@ -932,7 +932,7 @@ void SdrObject::RecalcBoundRect()
         if(xPrimitives.hasElements())
         {
             // use neutral ViewInformation and get the range of the primitives
-            const drawinglayer::geometry::ViewInformation2D aViewInformation2D(0);
+            const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
             const basegfx::B2DRange aRange(drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(xPrimitives, aViewInformation2D));
 
             if(!aRange.isEmpty())
@@ -998,7 +998,7 @@ sal_Bool SdrObject::SingleObjectPainter(OutputDevice& rOut) const
     return sal_True;
 }
 
-BOOL SdrObject::LineGeometryUsageIsNecessary() const
+sal_Bool SdrObject::LineGeometryUsageIsNecessary() const
 {
     XLineStyle eXLS = (XLineStyle)((const XLineStyleItem&)GetMergedItem(XATTR_LINESTYLE)).GetValue();
     return (eXLS != XLINE_NONE);
@@ -1049,7 +1049,7 @@ void SdrObject::operator=(const SdrObject& rObj)
     bEmptyPresObj =rObj.bEmptyPresObj;
     //NotVisibleAsMaster wird nicht kopiert: nun doch! (25-07-1995, Joe)
     bNotVisibleAsMaster=rObj.bNotVisibleAsMaster;
-    bSnapRectDirty=TRUE; //rObj.bSnapRectDirty;
+    bSnapRectDirty=sal_True; //rObj.bSnapRectDirty;
     bNotMasterCachable=rObj.bNotMasterCachable;
     if (pPlusData!=NULL) { delete pPlusData; pPlusData=NULL; }
     if (rObj.pPlusData!=NULL) {
@@ -1080,7 +1080,7 @@ void SdrObject::TakeObjNamePlural(XubString& rName) const
     rName=ImpGetResStr(STR_ObjNamePluralNONE);
 }
 
-void SdrObject::ImpTakeDescriptionStr(USHORT nStrCacheID, XubString& rStr, USHORT nVal) const
+void SdrObject::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, XubString& rStr, sal_uInt16 nVal) const
 {
     rStr = ImpGetResStr(nStrCacheID);
 
@@ -1160,17 +1160,17 @@ basegfx::B2DPolyPolygon SdrObject::TakeContour() const
         {
             // create connections if connector, will be cleaned up when
             // deleting the connector again
-            SdrObject* pLeft = pEdgeObj->GetConnectedNode(TRUE);
-            SdrObject* pRight = pEdgeObj->GetConnectedNode(FALSE);
+            SdrObject* pLeft = pEdgeObj->GetConnectedNode(sal_True);
+            SdrObject* pRight = pEdgeObj->GetConnectedNode(sal_False);
 
             if(pLeft)
             {
-                pClone->ConnectToNode(TRUE, pLeft);
+                pClone->ConnectToNode(sal_True, pLeft);
             }
 
             if(pRight)
             {
-                pClone->ConnectToNode(FALSE, pRight);
+                pClone->ConnectToNode(sal_False, pRight);
             }
         }
 
@@ -1194,7 +1194,7 @@ basegfx::B2DPolyPolygon SdrObject::TakeContour() const
         if(xSequence.hasElements())
         {
             // use neutral ViewInformation
-            const drawinglayer::geometry::ViewInformation2D aViewInformation2D(0);
+            const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
 
             // create extractor, process and get result
             drawinglayer::processor2d::ContourExtractor2D aExtractor(aViewInformation2D);
@@ -1400,7 +1400,7 @@ bool SdrObject::BegCreate(SdrDragStat& rStat)
     aRect1.Justify();
     rStat.SetActionRect(aRect1);
     aOutRect = aRect1;
-    return TRUE;
+    return sal_True;
 }
 
 bool SdrObject::MovCreate(SdrDragStat& rStat)
@@ -1415,9 +1415,9 @@ bool SdrObject::MovCreate(SdrDragStat& rStat)
     // cause no further prolems
     //
     // SetBoundRectDirty();
-    // bSnapRectDirty=TRUE;
+    // bSnapRectDirty=sal_True;
 
-    return TRUE;
+    return sal_True;
 }
 
 bool SdrObject::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
@@ -1438,7 +1438,7 @@ void SdrObject::BrkCreate(SdrDragStat& /*rStat*/)
 
 bool SdrObject::BckCreate(SdrDragStat& /*rStat*/)
 {
-    return FALSE;
+    return sal_False;
 }
 
 basegfx::B2DPolyPolygon SdrObject::TakeCreatePoly(const SdrDragStat& rDrag) const
@@ -1488,7 +1488,7 @@ void SdrObject::NbcResize(const Point& rRef, const Fraction& xFact, const Fracti
 
 void SdrObject::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
 {
-    SetGlueReallyAbsolute(TRUE);
+    SetGlueReallyAbsolute(sal_True);
     aOutRect.Move(-rRef.X(),-rRef.Y());
     Rectangle R(aOutRect);
     if (sn==1.0 && cs==0.0) { // 90deg
@@ -1511,12 +1511,12 @@ void SdrObject::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
     aOutRect.Justify(); // Sicherheitshalber
     SetRectsDirty();
     NbcRotateGluePoints(rRef,nWink,sn,cs);
-    SetGlueReallyAbsolute(FALSE);
+    SetGlueReallyAbsolute(sal_False);
 }
 
 void SdrObject::NbcMirror(const Point& rRef1, const Point& rRef2)
 {
-    SetGlueReallyAbsolute(TRUE);
+    SetGlueReallyAbsolute(sal_True);
     aOutRect.Move(-rRef1.X(),-rRef1.Y());
     Rectangle R(aOutRect);
     long dx=rRef2.X()-rRef1.X();
@@ -1542,14 +1542,14 @@ void SdrObject::NbcMirror(const Point& rRef1, const Point& rRef2)
     aOutRect.Justify(); // Sicherheitshalber
     SetRectsDirty();
     NbcMirrorGluePoints(rRef1,rRef2);
-    SetGlueReallyAbsolute(FALSE);
+    SetGlueReallyAbsolute(sal_False);
 }
 
 void SdrObject::NbcShear(const Point& rRef, long nWink, double tn, bool bVShear)
 {
-    SetGlueReallyAbsolute(TRUE);
+    SetGlueReallyAbsolute(sal_True);
     NbcShearGluePoints(rRef,nWink,tn,bVShear);
-    SetGlueReallyAbsolute(FALSE);
+    SetGlueReallyAbsolute(sal_False);
 }
 
 void SdrObject::Move(const Size& rSiz)
@@ -1758,12 +1758,12 @@ void SdrObject::NbcSetPoint(const Point& /*rPnt*/, sal_uInt32 /*i*/)
 
 bool SdrObject::HasTextEdit() const
 {
-    return FALSE;
+    return sal_False;
 }
 
 sal_Bool SdrObject::BegTextEdit(SdrOutliner& /*rOutl*/)
 {
-    return FALSE;
+    return sal_False;
 }
 
 void SdrObject::EndTextEdit(SdrOutliner& /*rOutl*/)
@@ -1815,8 +1815,8 @@ void SdrObject::BurnInStyleSheetAttributes()
 SdrObjUserData* SdrObject::ImpGetMacroUserData() const
 {
     SdrObjUserData* pData=NULL;
-    USHORT nAnz=GetUserDataCount();
-    for (USHORT nNum=nAnz; nNum>0 && pData==NULL;) {
+    sal_uInt16 nAnz=GetUserDataCount();
+    for (sal_uInt16 nNum=nAnz; nNum>0 && pData==NULL;) {
         nNum--;
         pData=GetUserData(nNum);
         if (!pData->HasMacro(this)) pData=NULL;
@@ -1827,7 +1827,7 @@ SdrObjUserData* SdrObject::ImpGetMacroUserData() const
 bool SdrObject::HasMacro() const
 {
     SdrObjUserData* pData=ImpGetMacroUserData();
-    return pData!=NULL ? pData->HasMacro(this) : FALSE;
+    return pData!=NULL ? pData->HasMacro(this) : sal_False;
 }
 
 SdrObject* SdrObject::CheckMacroHit(const SdrObjMacroHitRec& rRec) const
@@ -1889,7 +1889,7 @@ bool SdrObject::DoMacro(const SdrObjMacroHitRec& rRec)
     if (pData!=NULL) {
         return pData->DoMacro(rRec,this);
     }
-    return FALSE;
+    return sal_False;
 }
 
 XubString SdrObject::GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const
@@ -2052,41 +2052,41 @@ void SdrObject::NbcApplyNotPersistAttr(const SfxItemSet& rAttr)
     Point aRef1(rSnap.Center());
     Point aRef2(aRef1); aRef2.Y()++;
     const SfxPoolItem *pPoolItem=NULL;
-    if (rAttr.GetItemState(SDRATTR_TRANSFORMREF1X,TRUE,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_TRANSFORMREF1X,sal_True,&pPoolItem)==SFX_ITEM_SET) {
         aRef1.X()=((const SdrTransformRef1XItem*)pPoolItem)->GetValue();
     }
-    if (rAttr.GetItemState(SDRATTR_TRANSFORMREF1Y,TRUE,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_TRANSFORMREF1Y,sal_True,&pPoolItem)==SFX_ITEM_SET) {
         aRef1.Y()=((const SdrTransformRef1YItem*)pPoolItem)->GetValue();
     }
-    if (rAttr.GetItemState(SDRATTR_TRANSFORMREF2X,TRUE,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_TRANSFORMREF2X,sal_True,&pPoolItem)==SFX_ITEM_SET) {
         aRef2.X()=((const SdrTransformRef2XItem*)pPoolItem)->GetValue();
     }
-    if (rAttr.GetItemState(SDRATTR_TRANSFORMREF2Y,TRUE,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_TRANSFORMREF2Y,sal_True,&pPoolItem)==SFX_ITEM_SET) {
         aRef2.Y()=((const SdrTransformRef2YItem*)pPoolItem)->GetValue();
     }
 
     Rectangle aNewSnap(rSnap);
-    if (rAttr.GetItemState(SDRATTR_MOVEX,TRUE,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_MOVEX,sal_True,&pPoolItem)==SFX_ITEM_SET) {
         long n=((const SdrMoveXItem*)pPoolItem)->GetValue();
         aNewSnap.Move(n,0);
     }
-    if (rAttr.GetItemState(SDRATTR_MOVEY,TRUE,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_MOVEY,sal_True,&pPoolItem)==SFX_ITEM_SET) {
         long n=((const SdrMoveYItem*)pPoolItem)->GetValue();
         aNewSnap.Move(0,n);
     }
-    if (rAttr.GetItemState(SDRATTR_ONEPOSITIONX,TRUE,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_ONEPOSITIONX,sal_True,&pPoolItem)==SFX_ITEM_SET) {
         long n=((const SdrOnePositionXItem*)pPoolItem)->GetValue();
         aNewSnap.Move(n-aNewSnap.Left(),0);
     }
-    if (rAttr.GetItemState(SDRATTR_ONEPOSITIONY,TRUE,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_ONEPOSITIONY,sal_True,&pPoolItem)==SFX_ITEM_SET) {
         long n=((const SdrOnePositionYItem*)pPoolItem)->GetValue();
         aNewSnap.Move(0,n-aNewSnap.Top());
     }
-    if (rAttr.GetItemState(SDRATTR_ONESIZEWIDTH,TRUE,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_ONESIZEWIDTH,sal_True,&pPoolItem)==SFX_ITEM_SET) {
         long n=((const SdrOneSizeWidthItem*)pPoolItem)->GetValue();
         aNewSnap.Right()=aNewSnap.Left()+n;
     }
-    if (rAttr.GetItemState(SDRATTR_ONESIZEHEIGHT,TRUE,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_ONESIZEHEIGHT,sal_True,&pPoolItem)==SFX_ITEM_SET) {
         long n=((const SdrOneSizeHeightItem*)pPoolItem)->GetValue();
         aNewSnap.Bottom()=aNewSnap.Top()+n;
     }
@@ -2098,15 +2098,15 @@ void SdrObject::NbcApplyNotPersistAttr(const SfxItemSet& rAttr)
         }
     }
 
-    if (rAttr.GetItemState(SDRATTR_SHEARANGLE,TRUE,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_SHEARANGLE,sal_True,&pPoolItem)==SFX_ITEM_SET) {
         long n=((const SdrShearAngleItem*)pPoolItem)->GetValue();
         n-=GetShearAngle();
         if (n!=0) {
             double nTan=tan(n*nPi180);
-            NbcShear(aRef1,n,nTan,FALSE);
+            NbcShear(aRef1,n,nTan,sal_False);
         }
     }
-    if (rAttr.GetItemState(SDRATTR_ROTATEANGLE,TRUE,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_ROTATEANGLE,sal_True,&pPoolItem)==SFX_ITEM_SET) {
         long n=((const SdrRotateAngleItem*)pPoolItem)->GetValue();
         n-=GetRotateAngle();
         if (n!=0) {
@@ -2115,28 +2115,28 @@ void SdrObject::NbcApplyNotPersistAttr(const SfxItemSet& rAttr)
             NbcRotate(aRef1,n,nSin,nCos);
         }
     }
-    if (rAttr.GetItemState(SDRATTR_ROTATEONE,TRUE,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_ROTATEONE,sal_True,&pPoolItem)==SFX_ITEM_SET) {
         long n=((const SdrRotateOneItem*)pPoolItem)->GetValue();
         double nSin=sin(n*nPi180);
         double nCos=cos(n*nPi180);
         NbcRotate(aRef1,n,nSin,nCos);
     }
-    if (rAttr.GetItemState(SDRATTR_HORZSHEARONE,TRUE,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_HORZSHEARONE,sal_True,&pPoolItem)==SFX_ITEM_SET) {
         long n=((const SdrHorzShearOneItem*)pPoolItem)->GetValue();
         double nTan=tan(n*nPi180);
-        NbcShear(aRef1,n,nTan,FALSE);
+        NbcShear(aRef1,n,nTan,sal_False);
     }
-    if (rAttr.GetItemState(SDRATTR_VERTSHEARONE,TRUE,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_VERTSHEARONE,sal_True,&pPoolItem)==SFX_ITEM_SET) {
         long n=((const SdrVertShearOneItem*)pPoolItem)->GetValue();
         double nTan=tan(n*nPi180);
-        NbcShear(aRef1,n,nTan,TRUE);
+        NbcShear(aRef1,n,nTan,sal_True);
     }
 
-    if (rAttr.GetItemState(SDRATTR_OBJMOVEPROTECT,TRUE,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_OBJMOVEPROTECT,sal_True,&pPoolItem)==SFX_ITEM_SET) {
         bool b=((const SdrObjMoveProtectItem*)pPoolItem)->GetValue();
         SetMoveProtect(b);
     }
-    if (rAttr.GetItemState(SDRATTR_OBJSIZEPROTECT,TRUE,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_OBJSIZEPROTECT,sal_True,&pPoolItem)==SFX_ITEM_SET) {
         bool b=((const SdrObjSizeProtectItem*)pPoolItem)->GetValue();
         SetResizeProtect(b);
     }
@@ -2145,25 +2145,25 @@ void SdrObject::NbcApplyNotPersistAttr(const SfxItemSet& rAttr)
     if( IsMoveProtect() )
         SetResizeProtect( true );
 
-    if (rAttr.GetItemState(SDRATTR_OBJPRINTABLE,TRUE,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_OBJPRINTABLE,sal_True,&pPoolItem)==SFX_ITEM_SET) {
         bool b=((const SdrObjPrintableItem*)pPoolItem)->GetValue();
         SetPrintable(b);
     }
 
-    if (rAttr.GetItemState(SDRATTR_OBJVISIBLE,TRUE,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_OBJVISIBLE,sal_True,&pPoolItem)==SFX_ITEM_SET) {
         bool b=((const SdrObjVisibleItem*)pPoolItem)->GetValue();
         SetVisible(b);
     }
 
     SdrLayerID nLayer=SDRLAYER_NOTFOUND;
-    if (rAttr.GetItemState(SDRATTR_LAYERID,TRUE,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_LAYERID,sal_True,&pPoolItem)==SFX_ITEM_SET) {
         nLayer=((const SdrLayerIdItem*)pPoolItem)->GetValue();
     }
-    if (rAttr.GetItemState(SDRATTR_LAYERNAME,TRUE,&pPoolItem)==SFX_ITEM_SET && pModel!=NULL) {
+    if (rAttr.GetItemState(SDRATTR_LAYERNAME,sal_True,&pPoolItem)==SFX_ITEM_SET && pModel!=NULL) {
         XubString aLayerName=((const SdrLayerNameItem*)pPoolItem)->GetValue();
         const SdrLayerAdmin* pLayAd=pPage!=NULL ? &pPage->GetLayerAdmin() : pModel!=NULL ? &pModel->GetLayerAdmin() : NULL;
         if (pLayAd!=NULL) {
-            const SdrLayer* pLayer=pLayAd->GetLayer(aLayerName, TRUE);
+            const SdrLayer* pLayer=pLayAd->GetLayer(aLayerName, sal_True);
             if (pLayer!=NULL) {
                 nLayer=pLayer->GetID();
             }
@@ -2174,16 +2174,16 @@ void SdrObject::NbcApplyNotPersistAttr(const SfxItemSet& rAttr)
         NbcSetLayer(nLayer);
     }
 
-    if (rAttr.GetItemState(SDRATTR_OBJECTNAME,TRUE,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_OBJECTNAME,sal_True,&pPoolItem)==SFX_ITEM_SET) {
         XubString aName=((const SdrObjectNameItem*)pPoolItem)->GetValue();
         SetName(aName);
     }
     Rectangle aNewLogic(rLogic);
-    if (rAttr.GetItemState(SDRATTR_LOGICSIZEWIDTH,TRUE,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_LOGICSIZEWIDTH,sal_True,&pPoolItem)==SFX_ITEM_SET) {
         long n=((const SdrLogicSizeWidthItem*)pPoolItem)->GetValue();
         aNewLogic.Right()=aNewLogic.Left()+n;
     }
-    if (rAttr.GetItemState(SDRATTR_LOGICSIZEHEIGHT,TRUE,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_LOGICSIZEHEIGHT,sal_True,&pPoolItem)==SFX_ITEM_SET) {
         long n=((const SdrLogicSizeHeightItem*)pPoolItem)->GetValue();
         aNewLogic.Bottom()=aNewLogic.Top()+n;
     }
@@ -2192,10 +2192,10 @@ void SdrObject::NbcApplyNotPersistAttr(const SfxItemSet& rAttr)
     }
     Fraction aResizeX(1,1);
     Fraction aResizeY(1,1);
-    if (rAttr.GetItemState(SDRATTR_RESIZEXONE,TRUE,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_RESIZEXONE,sal_True,&pPoolItem)==SFX_ITEM_SET) {
         aResizeX*=((const SdrResizeXOneItem*)pPoolItem)->GetValue();
     }
-    if (rAttr.GetItemState(SDRATTR_RESIZEYONE,TRUE,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_RESIZEYONE,sal_True,&pPoolItem)==SFX_ITEM_SET) {
         aResizeY*=((const SdrResizeYOneItem*)pPoolItem)->GetValue();
     }
     if (aResizeX!=Fraction(1,1) || aResizeY!=Fraction(1,1)) {
@@ -2205,7 +2205,7 @@ void SdrObject::NbcApplyNotPersistAttr(const SfxItemSet& rAttr)
 
 void lcl_SetItem(SfxItemSet& rAttr, bool bMerge, const SfxPoolItem& rItem)
 {
-    if (bMerge) rAttr.MergeValue(rItem,TRUE);
+    if (bMerge) rAttr.MergeValue(rItem,sal_True);
     else rAttr.Put(rItem);
 }
 
@@ -2288,7 +2288,7 @@ bool SdrObject::IsNode() const
     return true;
 }
 
-SdrGluePoint SdrObject::GetVertexGluePoint(USHORT nPosNum) const
+SdrGluePoint SdrObject::GetVertexGluePoint(sal_uInt16 nPosNum) const
 {
     // #i41936# Use SnapRect for default GluePoints
     const Rectangle aR(GetSnapRect());
@@ -2304,12 +2304,12 @@ SdrGluePoint SdrObject::GetVertexGluePoint(USHORT nPosNum) const
 
     aPt -= aR.Center();
     SdrGluePoint aGP(aPt);
-    aGP.SetPercent(FALSE);
+    aGP.SetPercent(sal_False);
 
     return aGP;
 }
 
-SdrGluePoint SdrObject::GetCornerGluePoint(USHORT nPosNum) const
+SdrGluePoint SdrObject::GetCornerGluePoint(sal_uInt16 nPosNum) const
 {
     Rectangle aR(GetCurrentBoundRect());
     Point aPt;
@@ -2321,7 +2321,7 @@ SdrGluePoint SdrObject::GetCornerGluePoint(USHORT nPosNum) const
     }
     aPt-=GetSnapRect().Center();
     SdrGluePoint aGP(aPt);
-    aGP.SetPercent(FALSE);
+    aGP.SetPercent(sal_False);
     return aGP;
 }
 
@@ -2410,7 +2410,7 @@ SdrObject* SdrObject::GetConnectedNode(bool /*bTail1*/) const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, BOOL bForceLineDash) const
+SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, sal_Bool bForceLineDash) const
 {
     bool bNoChange(true);
 
@@ -2423,7 +2423,7 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, BOOL bForceLineDas
         if(xSequence.hasElements())
         {
             // use neutral ViewInformation
-            const drawinglayer::geometry::ViewInformation2D aViewInformation2D(0);
+            const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
 
             // create extractor, process and get result
             drawinglayer::processor2d::LineGeometryExtractor2D aExtractor(aViewInformation2D);
@@ -2471,7 +2471,7 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, BOOL bForceLineDas
                 aSet.Put(XLineWidthItem(0L));
                 aSet.Put(XLineStyleItem(XLINE_NONE));
                 Color aColorLine = ((const XLineColorItem&)(aSet.Get(XATTR_LINECOLOR))).GetColorValue();
-                UINT16 nTransLine = ((const XLineTransparenceItem&)(aSet.Get(XATTR_LINETRANSPARENCE))).GetValue();
+                sal_uInt16 nTransLine = ((const XLineTransparenceItem&)(aSet.Get(XATTR_LINETRANSPARENCE))).GetValue();
                 aSet.Put(XFillColorItem(XubString(), aColorLine));
                 aSet.Put(XFillStyleItem(XFILL_SOLID));
                 aSet.Put(XFillTransparenceItem(nTransLine));
@@ -2584,7 +2584,7 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, BOOL bForceLineDas
 }
 
 // convert this path object to contour object, even when it is a group
-SdrObject* SdrObject::ConvertToContourObj(SdrObject* pRet, BOOL bForceLineDash) const
+SdrObject* SdrObject::ConvertToContourObj(SdrObject* pRet, sal_Bool bForceLineDash) const
 {
     if(pRet->ISA(SdrObjGroup))
     {
@@ -2592,7 +2592,7 @@ SdrObject* SdrObject::ConvertToContourObj(SdrObject* pRet, BOOL bForceLineDash) 
         SdrObject* pGroup = new SdrObjGroup;
         pGroup->SetModel(pRet->GetModel());
 
-        for(UINT32 a=0;a<pObjList2->GetObjCount();a++)
+        for(sal_uInt32 a=0;a<pObjList2->GetObjCount();a++)
         {
             SdrObject* pIterObj = pObjList2->GetObj(a);
             pGroup->GetSubList()->NbcInsertObject(ConvertToContourObj(pIterObj, bForceLineDash));
@@ -2626,7 +2626,7 @@ SdrObject* SdrObject::ConvertToContourObj(SdrObject* pRet, BOOL bForceLineDash) 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-SdrObject* SdrObject::ConvertToPolyObj(BOOL bBezier, BOOL bLineToArea) const
+SdrObject* SdrObject::ConvertToPolyObj(sal_Bool bBezier, sal_Bool bLineToArea) const
 {
     SdrObject* pRet = DoConvertToPolyObj(bBezier);
 
@@ -2648,7 +2648,7 @@ SdrObject* SdrObject::ConvertToPolyObj(BOOL bBezier, BOOL bLineToArea) const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-SdrObject* SdrObject::DoConvertToPolyObj(BOOL /*bBezier*/) const
+SdrObject* SdrObject::DoConvertToPolyObj(sal_Bool /*bBezier*/) const
 {
     return NULL;
 }
@@ -2723,19 +2723,19 @@ void SdrObject::SetVisible(sal_Bool bVisible)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-USHORT SdrObject::GetUserDataCount() const
+sal_uInt16 SdrObject::GetUserDataCount() const
 {
     if (pPlusData==NULL || pPlusData->pUserDataList==NULL) return 0;
     return pPlusData->pUserDataList->GetUserDataCount();
 }
 
-SdrObjUserData* SdrObject::GetUserData(USHORT nNum) const
+SdrObjUserData* SdrObject::GetUserData(sal_uInt16 nNum) const
 {
     if (pPlusData==NULL || pPlusData->pUserDataList==NULL) return NULL;
     return pPlusData->pUserDataList->GetUserData(nNum);
 }
 
-void SdrObject::InsertUserData(SdrObjUserData* pData, USHORT nPos)
+void SdrObject::InsertUserData(SdrObjUserData* pData, sal_uInt16 nPos)
 {
     if (pData!=NULL) {
         ImpForcePlusData();
@@ -2746,9 +2746,9 @@ void SdrObject::InsertUserData(SdrObjUserData* pData, USHORT nPos)
     }
 }
 
-void SdrObject::DeleteUserData(USHORT nNum)
+void SdrObject::DeleteUserData(sal_uInt16 nNum)
 {
-    USHORT nAnz=GetUserDataCount();
+    sal_uInt16 nAnz=GetUserDataCount();
     if (nNum<nAnz) {
         pPlusData->pUserDataList->DeleteUserData(nNum);
         if (nAnz==1)  {
@@ -2848,7 +2848,7 @@ void SdrObject::MigrateItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, S
     }
 }
 
-sal_Bool SdrObject::IsTransparent( BOOL /*bCheckForAlphaChannel*/) const
+sal_Bool SdrObject::IsTransparent( sal_Bool /*bCheckForAlphaChannel*/) const
 {
     bool bRet = false;
 
@@ -2865,7 +2865,7 @@ sal_Bool SdrObject::IsTransparent( BOOL /*bCheckForAlphaChannel*/) const
                 ( ( rAttr.GetItemState( XATTR_FILLFLOATTRANSPARENCE ) == SFX_ITEM_SET ) &&
                   ( (const XFillFloatTransparenceItem&) rAttr.Get( XATTR_FILLFLOATTRANSPARENCE ) ).IsEnabled() ) )
             {
-                bRet = TRUE;
+                bRet = sal_True;
             }
             else if( pO->ISA( SdrGrafObj ) )
             {
@@ -2873,7 +2873,7 @@ sal_Bool SdrObject::IsTransparent( BOOL /*bCheckForAlphaChannel*/) const
                 if( ( (const SdrGrafTransparenceItem&) rAttr.Get( SDRATTR_GRAFTRANSPARENCE ) ).GetValue() ||
                     ( pGrafObj->GetGraphicType() == GRAPHIC_BITMAP && pGrafObj->GetGraphic().GetBitmapEx().IsAlpha() ) )
                 {
-                    bRet = TRUE;
+                    bRet = sal_True;
                 }
             }
         }
@@ -2887,7 +2887,7 @@ sal_Bool SdrObject::IsTransparent( BOOL /*bCheckForAlphaChannel*/) const
             ( ( rAttr.GetItemState( XATTR_FILLFLOATTRANSPARENCE ) == SFX_ITEM_SET ) &&
               ( (const XFillFloatTransparenceItem&) rAttr.Get( XATTR_FILLFLOATTRANSPARENCE ) ).IsEnabled() ) )
         {
-            bRet = TRUE;
+            bRet = sal_True;
         }
         else if( ISA( SdrGrafObj ) )
         {
@@ -3149,7 +3149,7 @@ void SdrObject::SetContextWritingMode( const sal_Int16 /*_nContextWritingMode*/ 
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-SdrObjFactory::SdrObjFactory(UINT32 nInvent, UINT16 nIdent, SdrPage* pNewPage, SdrModel* pNewModel)
+SdrObjFactory::SdrObjFactory(sal_uInt32 nInvent, sal_uInt16 nIdent, SdrPage* pNewPage, SdrModel* pNewModel)
 {
     nInventor=nInvent;
     nIdentifier=nIdent;
@@ -3160,7 +3160,7 @@ SdrObjFactory::SdrObjFactory(UINT32 nInvent, UINT16 nIdent, SdrPage* pNewPage, S
     pNewData=NULL;
 }
 
-SdrObjFactory::SdrObjFactory(UINT32 nInvent, UINT16 nIdent, SdrObject* pObj1)
+SdrObjFactory::SdrObjFactory(sal_uInt32 nInvent, sal_uInt16 nIdent, SdrObject* pObj1)
 {
     nInventor=nInvent;
     nIdentifier=nIdent;
@@ -3171,7 +3171,7 @@ SdrObjFactory::SdrObjFactory(UINT32 nInvent, UINT16 nIdent, SdrObject* pObj1)
     pNewData=NULL;
 }
 
-SdrObject* SdrObjFactory::MakeNewObject(UINT32 nInvent, UINT16 nIdent, SdrPage* pPage, SdrModel* pModel)
+SdrObject* SdrObjFactory::MakeNewObject(sal_uInt32 nInvent, sal_uInt16 nIdent, SdrPage* pPage, SdrModel* pModel)
 {
     if(pModel == NULL && pPage != NULL)
         pModel = pPage->GetModel();
@@ -3181,37 +3181,37 @@ SdrObject* SdrObjFactory::MakeNewObject(UINT32 nInvent, UINT16 nIdent, SdrPage* 
     {
         switch (nIdent)
         {
-            case USHORT(OBJ_NONE       ): pObj=new SdrObject;                   break;
-            case USHORT(OBJ_GRUP       ): pObj=new SdrObjGroup;                 break;
-            case USHORT(OBJ_LINE       ): pObj=new SdrPathObj(OBJ_LINE       ); break;
-            case USHORT(OBJ_POLY       ): pObj=new SdrPathObj(OBJ_POLY       ); break;
-            case USHORT(OBJ_PLIN       ): pObj=new SdrPathObj(OBJ_PLIN       ); break;
-            case USHORT(OBJ_PATHLINE   ): pObj=new SdrPathObj(OBJ_PATHLINE   ); break;
-            case USHORT(OBJ_PATHFILL   ): pObj=new SdrPathObj(OBJ_PATHFILL   ); break;
-            case USHORT(OBJ_FREELINE   ): pObj=new SdrPathObj(OBJ_FREELINE   ); break;
-            case USHORT(OBJ_FREEFILL   ): pObj=new SdrPathObj(OBJ_FREEFILL   ); break;
-            case USHORT(OBJ_PATHPOLY   ): pObj=new SdrPathObj(OBJ_POLY       ); break;
-            case USHORT(OBJ_PATHPLIN   ): pObj=new SdrPathObj(OBJ_PLIN       ); break;
-            case USHORT(OBJ_EDGE       ): pObj=new SdrEdgeObj;                  break;
-            case USHORT(OBJ_RECT       ): pObj=new SdrRectObj;                  break;
-            case USHORT(OBJ_CIRC       ): pObj=new SdrCircObj(OBJ_CIRC       ); break;
-            case USHORT(OBJ_SECT       ): pObj=new SdrCircObj(OBJ_SECT       ); break;
-            case USHORT(OBJ_CARC       ): pObj=new SdrCircObj(OBJ_CARC       ); break;
-            case USHORT(OBJ_CCUT       ): pObj=new SdrCircObj(OBJ_CCUT       ); break;
-            case USHORT(OBJ_TEXT       ): pObj=new SdrRectObj(OBJ_TEXT       ); break;
-            case USHORT(OBJ_TEXTEXT    ): pObj=new SdrRectObj(OBJ_TEXTEXT    ); break;
-            case USHORT(OBJ_TITLETEXT  ): pObj=new SdrRectObj(OBJ_TITLETEXT  ); break;
-            case USHORT(OBJ_OUTLINETEXT): pObj=new SdrRectObj(OBJ_OUTLINETEXT); break;
-            case USHORT(OBJ_MEASURE    ): pObj=new SdrMeasureObj;               break;
-            case USHORT(OBJ_GRAF       ): pObj=new SdrGrafObj;                  break;
-            case USHORT(OBJ_OLE2       ): pObj=new SdrOle2Obj;                  break;
-            case USHORT(OBJ_FRAME      ): pObj=new SdrOle2Obj(TRUE);            break;
-            case USHORT(OBJ_CAPTION    ): pObj=new SdrCaptionObj;               break;
-            case USHORT(OBJ_PAGE       ): pObj=new SdrPageObj;                  break;
-            case USHORT(OBJ_UNO        ): pObj=new SdrUnoObj(String());         break;
-            case USHORT(OBJ_CUSTOMSHAPE  ): pObj=new SdrObjCustomShape();       break;
-            case USHORT(OBJ_MEDIA      ): pObj=new SdrMediaObj();               break;
-            case USHORT(OBJ_TABLE      ): pObj=new ::sdr::table::SdrTableObj(pModel);   break;
+            case sal_uInt16(OBJ_NONE       ): pObj=new SdrObject;                   break;
+            case sal_uInt16(OBJ_GRUP       ): pObj=new SdrObjGroup;                 break;
+            case sal_uInt16(OBJ_LINE       ): pObj=new SdrPathObj(OBJ_LINE       ); break;
+            case sal_uInt16(OBJ_POLY       ): pObj=new SdrPathObj(OBJ_POLY       ); break;
+            case sal_uInt16(OBJ_PLIN       ): pObj=new SdrPathObj(OBJ_PLIN       ); break;
+            case sal_uInt16(OBJ_PATHLINE   ): pObj=new SdrPathObj(OBJ_PATHLINE   ); break;
+            case sal_uInt16(OBJ_PATHFILL   ): pObj=new SdrPathObj(OBJ_PATHFILL   ); break;
+            case sal_uInt16(OBJ_FREELINE   ): pObj=new SdrPathObj(OBJ_FREELINE   ); break;
+            case sal_uInt16(OBJ_FREEFILL   ): pObj=new SdrPathObj(OBJ_FREEFILL   ); break;
+            case sal_uInt16(OBJ_PATHPOLY   ): pObj=new SdrPathObj(OBJ_POLY       ); break;
+            case sal_uInt16(OBJ_PATHPLIN   ): pObj=new SdrPathObj(OBJ_PLIN       ); break;
+            case sal_uInt16(OBJ_EDGE       ): pObj=new SdrEdgeObj;                  break;
+            case sal_uInt16(OBJ_RECT       ): pObj=new SdrRectObj;                  break;
+            case sal_uInt16(OBJ_CIRC       ): pObj=new SdrCircObj(OBJ_CIRC       ); break;
+            case sal_uInt16(OBJ_SECT       ): pObj=new SdrCircObj(OBJ_SECT       ); break;
+            case sal_uInt16(OBJ_CARC       ): pObj=new SdrCircObj(OBJ_CARC       ); break;
+            case sal_uInt16(OBJ_CCUT       ): pObj=new SdrCircObj(OBJ_CCUT       ); break;
+            case sal_uInt16(OBJ_TEXT       ): pObj=new SdrRectObj(OBJ_TEXT       ); break;
+            case sal_uInt16(OBJ_TEXTEXT    ): pObj=new SdrRectObj(OBJ_TEXTEXT    ); break;
+            case sal_uInt16(OBJ_TITLETEXT  ): pObj=new SdrRectObj(OBJ_TITLETEXT  ); break;
+            case sal_uInt16(OBJ_OUTLINETEXT): pObj=new SdrRectObj(OBJ_OUTLINETEXT); break;
+            case sal_uInt16(OBJ_MEASURE    ): pObj=new SdrMeasureObj;               break;
+            case sal_uInt16(OBJ_GRAF       ): pObj=new SdrGrafObj;                  break;
+            case sal_uInt16(OBJ_OLE2       ): pObj=new SdrOle2Obj;                  break;
+            case sal_uInt16(OBJ_FRAME      ): pObj=new SdrOle2Obj(sal_True);            break;
+            case sal_uInt16(OBJ_CAPTION    ): pObj=new SdrCaptionObj;               break;
+            case sal_uInt16(OBJ_PAGE       ): pObj=new SdrPageObj;                  break;
+            case sal_uInt16(OBJ_UNO        ): pObj=new SdrUnoObj(String());         break;
+            case sal_uInt16(OBJ_CUSTOMSHAPE  ): pObj=new SdrObjCustomShape();       break;
+            case sal_uInt16(OBJ_MEDIA      ): pObj=new SdrMediaObj();               break;
+            case sal_uInt16(OBJ_TABLE      ): pObj=new ::sdr::table::SdrTableObj(pModel);   break;
         }
     }
 
@@ -3245,13 +3245,13 @@ SdrObject* SdrObjFactory::MakeNewObject(UINT32 nInvent, UINT16 nIdent, SdrPage* 
     return pObj;
 }
 
-SdrObjUserData* SdrObjFactory::MakeNewObjUserData(UINT32 nInvent, UINT16 nIdent, SdrObject* pObj1)
+SdrObjUserData* SdrObjFactory::MakeNewObjUserData(sal_uInt32 nInvent, sal_uInt16 nIdent, SdrObject* pObj1)
 {
     SdrObjUserData* pData=NULL;
     if (nInvent==SdrInventor) {
         switch (nIdent)
         {
-            case USHORT(SDRUSERDATA_OBJTEXTLINK) : pData=new ImpSdrObjTextLinkUserData((SdrTextObj*)pObj1); break;
+            case sal_uInt16(SDRUSERDATA_OBJTEXTLINK) : pData=new ImpSdrObjTextLinkUserData((SdrTextObj*)pObj1); break;
         }
     }
     if (pData==NULL) {

@@ -32,10 +32,11 @@
 #include "sal/config.h"
 
 #include "rtl/ref.hxx"
-#include "rtl/ustring.hxx"
 #include "salhelper/simplereferenceobject.hxx"
 
 #include "nodemap.hxx"
+
+namespace rtl { class OUString; }
 
 namespace configmgr {
 
@@ -69,8 +70,6 @@ protected:
 
     virtual ~Node();
     virtual void clear();
-
-    virtual rtl::Reference< Node > findMember(rtl::OUString const & name);
 
     int layer_;
     int finalized_;

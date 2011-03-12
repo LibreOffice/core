@@ -81,7 +81,7 @@ typedef uno::Reference< lang::XMultiServiceFactory > ConfigurationProvider;
 // Get a message string securely. There is a fallback string if the resource
 // is not available. Adapted from Desktop::GetMsgString()
 
-OUString getMsgString( USHORT nId, char const * aFallBackMsg )
+OUString getMsgString( sal_uInt16 nId, char const * aFallBackMsg )
 {
     ResMgr* pResMgr = Desktop::GetDesktopResManager();
     if ( !pResMgr || !nId )

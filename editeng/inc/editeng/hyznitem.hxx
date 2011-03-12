@@ -49,24 +49,24 @@ namespace rtl
 
 class EDITENG_DLLPUBLIC SvxHyphenZoneItem : public SfxPoolItem
 {
-    BOOL bHyphen:  1;
-    BOOL bPageEnd: 1;
-    BYTE nMinLead;
-    BYTE nMinTrail;
-    BYTE nMaxHyphens;
+    sal_Bool bHyphen:  1;
+    sal_Bool bPageEnd: 1;
+    sal_uInt8 nMinLead;
+    sal_uInt8 nMinTrail;
+    sal_uInt8 nMaxHyphens;
 
     friend SvStream & operator<<( SvStream & aS, SvxHyphenZoneItem & );
 
 public:
     TYPEINFO();
 
-    SvxHyphenZoneItem( const BOOL bHyph /*= FALSE*/,
-                       const USHORT nId  );
+    SvxHyphenZoneItem( const sal_Bool bHyph /*= sal_False*/,
+                       const sal_uInt16 nId  );
 
     // "pure virtual Methods" from SfxPoolItem
     virtual int              operator==( const SfxPoolItem& ) const;
-    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -74,23 +74,23 @@ public:
                                     String &rText, const IntlWrapper * = 0 ) const;
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*     Create(SvStream &, USHORT) const;
-    virtual SvStream&        Store(SvStream &, USHORT nItemVersion ) const;
+    virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const;
+    virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion ) const;
 
-    inline void SetHyphen( const BOOL bNew ) { bHyphen = bNew; }
-    inline BOOL IsHyphen() const { return bHyphen; }
+    inline void SetHyphen( const sal_Bool bNew ) { bHyphen = bNew; }
+    inline sal_Bool IsHyphen() const { return bHyphen; }
 
-    inline void SetPageEnd( const BOOL bNew ) { bPageEnd = bNew; }
-    inline BOOL IsPageEnd() const { return bPageEnd; }
+    inline void SetPageEnd( const sal_Bool bNew ) { bPageEnd = bNew; }
+    inline sal_Bool IsPageEnd() const { return bPageEnd; }
 
-    inline BYTE &GetMinLead() { return nMinLead; }
-    inline BYTE GetMinLead() const { return nMinLead; }
+    inline sal_uInt8 &GetMinLead() { return nMinLead; }
+    inline sal_uInt8 GetMinLead() const { return nMinLead; }
 
-    inline BYTE &GetMinTrail() { return nMinTrail; }
-    inline BYTE GetMinTrail() const { return nMinTrail; }
+    inline sal_uInt8 &GetMinTrail() { return nMinTrail; }
+    inline sal_uInt8 GetMinTrail() const { return nMinTrail; }
 
-    inline BYTE &GetMaxHyphens() { return nMaxHyphens; }
-    inline BYTE GetMaxHyphens() const { return nMaxHyphens; }
+    inline sal_uInt8 &GetMaxHyphens() { return nMaxHyphens; }
+    inline sal_uInt8 GetMaxHyphens() const { return nMaxHyphens; }
 
     inline SvxHyphenZoneItem &operator=( const SvxHyphenZoneItem &rNew )
     {

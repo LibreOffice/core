@@ -110,3 +110,11 @@ dummy:
 # --- Targets ----------------------------------
 .INCLUDE : $(PRJ)$/target.pmk
 
+
+ALLTAR : $(MISC)/ado.component
+
+$(MISC)/ado.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        ado.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt ado.component

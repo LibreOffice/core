@@ -108,7 +108,7 @@ void SAL_CALL DropTargetListener::drop( const css::datatransfer::dnd::DropTarget
             // at first check filelist format
             if ( aHelper.GetFileList( SOT_FORMAT_FILE_LIST, aFileList ) )
             {
-                ULONG i, nCount = aFileList.Count();
+                sal_uLong i, nCount = aFileList.Count();
                 for ( i = 0; i < nCount; ++i )
                     implts_OpenFile( aFileList.GetFile(i) );
                 bFormatFound = sal_True;

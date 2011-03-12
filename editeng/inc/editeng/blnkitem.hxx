@@ -52,12 +52,12 @@ class EDITENG_DLLPUBLIC SvxBlinkItem : public SfxBoolItem
 public:
     TYPEINFO();
 
-    SvxBlinkItem( const BOOL bBlink /*= FALSE*/, const USHORT nId  );
+    SvxBlinkItem( const sal_Bool bBlink /*= sal_False*/, const sal_uInt16 nId  );
 
     // "pure virtual Methods" from SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*    Create(SvStream &, USHORT) const;
-    virtual SvStream&       Store(SvStream &, USHORT nItemVersion) const;
+    virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const;
+    virtual SvStream&       Store(SvStream &, sal_uInt16 nItemVersion) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,

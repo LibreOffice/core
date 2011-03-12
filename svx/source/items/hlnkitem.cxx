@@ -37,7 +37,7 @@
 #include <svl/memberid.hrc>
 #include <basic/sbxvar.hxx>
 
-#include "hlnkitem.hxx"
+#include "svx/hlnkitem.hxx"
 
 // -----------------------------------------------------------------------
 
@@ -320,7 +320,7 @@ void SvxHyperlinkItem::SetMacroTable( const SvxMacroTableDtor& rTbl )
     pMacroTable = new SvxMacroTableDtor ( rTbl );
 }
 
-bool SvxHyperlinkItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
+bool SvxHyperlinkItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
 //    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -348,7 +348,7 @@ bool SvxHyperlinkItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberI
     return true;
 }
 
-bool SvxHyperlinkItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
+bool SvxHyperlinkItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
 {
 //    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;

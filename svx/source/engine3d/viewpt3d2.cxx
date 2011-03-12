@@ -186,7 +186,7 @@ void Viewport3D::MakeTransform(void)
             aViewTf *= aTemp;
         }
 
-        bTfValid = TRUE;
+        bTfValid = sal_True;
     }
 }
 
@@ -314,7 +314,7 @@ basegfx::B3DPoint Viewport3D::MapToDevice(const basegfx::B3DPoint& rVec) const
 void Viewport3D::SetVRP(const basegfx::B3DPoint& rNewVRP)
 {
     aVRP = rNewVRP;
-    bTfValid = FALSE;
+    bTfValid = sal_False;
 }
 
 /*************************************************************************
@@ -327,7 +327,7 @@ void Viewport3D::SetVPN(const basegfx::B3DVector& rNewVPN)
 {
     aVPN = rNewVPN;
     aVPN.normalize();
-    bTfValid = FALSE;
+    bTfValid = sal_False;
 }
 
 /*************************************************************************
@@ -339,7 +339,7 @@ void Viewport3D::SetVPN(const basegfx::B3DVector& rNewVPN)
 void Viewport3D::SetVUV(const basegfx::B3DVector& rNewVUV)
 {
     aVUV = rNewVUV;
-    bTfValid = FALSE;
+    bTfValid = sal_False;
 }
 
 /*************************************************************************
@@ -353,7 +353,7 @@ void Viewport3D::SetPRP(const basegfx::B3DPoint& rNewPRP)
     aPRP = rNewPRP;
     aPRP.setX(0.0);
     aPRP.setY(0.0);
-    bTfValid = FALSE;
+    bTfValid = sal_False;
 }
 
 /*************************************************************************
@@ -365,7 +365,7 @@ void Viewport3D::SetPRP(const basegfx::B3DPoint& rNewPRP)
 void Viewport3D::SetVPD(double fNewVPD)
 {
     fVPD = fNewVPD;
-    bTfValid = FALSE;
+    bTfValid = sal_False;
 }
 
 /*************************************************************************
@@ -377,7 +377,7 @@ void Viewport3D::SetVPD(double fNewVPD)
 void Viewport3D::SetNearClipDist(double fNewNCD)
 {
     fNearClipDist = fNewNCD;
-    bTfValid = FALSE;
+    bTfValid = sal_False;
 }
 
 /*************************************************************************
@@ -389,7 +389,7 @@ void Viewport3D::SetNearClipDist(double fNewNCD)
 void Viewport3D::SetFarClipDist(double fNewFCD)
 {
     fFarClipDist = fNewFCD;
-    bTfValid = FALSE;
+    bTfValid = sal_False;
 }
 
 // eof

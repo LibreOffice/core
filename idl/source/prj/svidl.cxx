@@ -38,19 +38,19 @@
 #include <tools/string.hxx>
 
 #define BR 0x8000
-BOOL FileMove_Impl( const String & rFile1, const String & rFile2, BOOL bImmerVerschieben )
+sal_Bool FileMove_Impl( const String & rFile1, const String & rFile2, sal_Bool bImmerVerschieben )
 {
     //printf( "Move from %s to %s\n", rFile2.GetStr(), rFile1.GetStr() );
-    ULONG nC1 = 0;
-    ULONG nC2 = 1;
+    sal_uLong nC1 = 0;
+    sal_uLong nC2 = 1;
     if( !bImmerVerschieben )
     {
         SvFileStream aOutStm1( rFile1, STREAM_STD_READ );
         SvFileStream aOutStm2( rFile2, STREAM_STD_READ );
         if( aOutStm1.GetError() == SVSTREAM_OK )
         {
-            BYTE * pBuf1 = new BYTE[ BR ];
-            BYTE * pBuf2 = new BYTE[ BR ];
+            sal_uInt8 * pBuf1 = new sal_uInt8[ BR ];
+            sal_uInt8 * pBuf2 = new sal_uInt8[ BR ];
             nC1 = aOutStm1.Read( pBuf1, BR );
             nC2 = aOutStm2.Read( pBuf2, BR );
             while( nC1 == nC2 )
@@ -83,9 +83,9 @@ BOOL FileMove_Impl( const String & rFile1, const String & rFile2, BOOL bImmerVer
             // delete both files
             aF1.Kill();
             aF2.Kill();
-            return FALSE;
+            return sal_False;
         }
-        return TRUE;
+        return sal_True;
     }
     return 0 == aF2.Kill();
 }
@@ -232,8 +232,8 @@ int cdecl main ( int argc, char ** argv)
 
     if( nExit == 0 )
     {
-        BOOL bErr = FALSE;
-        BOOL bDoMove = aCommand.aTargetFile.Len() == 0;
+        sal_Bool bErr = sal_False;
+        sal_Bool bDoMove = aCommand.aTargetFile.Len() == 0;
         String aErrFile, aErrFile2;
         if( !bErr && aCommand.aListFile.Len() )
         {

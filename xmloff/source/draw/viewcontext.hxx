@@ -40,12 +40,12 @@ class SdXMLViewSettingsContext : public SvXMLImportContext
     ::com::sun::star::awt::Rectangle maVisArea;
 
 public:
-    SdXMLViewSettingsContext( SdXMLImport& rImport, USHORT nPrfx, const rtl::OUString& rLName,
+    SdXMLViewSettingsContext( SdXMLImport& rImport, sal_uInt16 nPrfx, const rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList);
     virtual ~SdXMLViewSettingsContext();
 
-    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                                     const rtl::OUString& rLocalName,
                                                     const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );

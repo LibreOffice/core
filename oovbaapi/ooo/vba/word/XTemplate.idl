@@ -44,7 +44,7 @@ interface XTemplate
     [attribute, readonly] string Name;
     [attribute, readonly] string Path;
 
-    any AutoTextEntries( [in] any aIndex );
+    any AutoTextEntries( [in] any Index );
 };
 
 }; }; };

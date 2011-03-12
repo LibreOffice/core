@@ -130,7 +130,7 @@ sal_Bool LoadLibrary_ADABAS(::rtl::OUString &_rPath)
     }
     const sal_Char* pLibraryAsciiName = NULL;
 
-#if defined(WIN) || defined(WNT)
+#if defined(WNT)
     pLibraryAsciiName = "SQLOD32.DLL";
 #elif ( defined(SOLARIS) && defined(SPARC)) || defined(LINUX)
     pLibraryAsciiName = "odbclib.so";

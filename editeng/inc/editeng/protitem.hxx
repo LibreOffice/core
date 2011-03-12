@@ -50,14 +50,14 @@ namespace rtl
 
 class EDITENG_DLLPUBLIC SvxProtectItem : public SfxPoolItem
 {
-    BOOL bCntnt :1;     // Content protected
-    BOOL bSize  :1;     // Size protected
-    BOOL bPos   :1;     // Position protected
+    sal_Bool bCntnt :1;     // Content protected
+    sal_Bool bSize  :1;     // Size protected
+    sal_Bool bPos   :1;     // Position protected
 
 public:
     TYPEINFO();
 
-    inline SvxProtectItem( const USHORT nId  );
+    inline SvxProtectItem( const sal_uInt16 nId  );
     inline SvxProtectItem &operator=( const SvxProtectItem &rCpy );
 
     // "pure virtual Methods" from SfxPoolItem
@@ -70,24 +70,24 @@ public:
 
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*     Create(SvStream &, USHORT) const;
-    virtual SvStream&        Store(SvStream &, USHORT nItemVersion ) const;
+    virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const;
+    virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion ) const;
 
-    BOOL IsCntntProtected() const { return bCntnt; }
-    BOOL IsSizeProtected()  const { return bSize;  }
-    BOOL IsPosProtected()   const { return bPos;   }
-    void SetCntntProtect( BOOL bNew ) { bCntnt = bNew; }
-    void SetSizeProtect ( BOOL bNew ) { bSize  = bNew; }
-    void SetPosProtect  ( BOOL bNew ) { bPos   = bNew; }
+    sal_Bool IsCntntProtected() const { return bCntnt; }
+    sal_Bool IsSizeProtected()  const { return bSize;  }
+    sal_Bool IsPosProtected()   const { return bPos;   }
+    void SetCntntProtect( sal_Bool bNew ) { bCntnt = bNew; }
+    void SetSizeProtect ( sal_Bool bNew ) { bSize  = bNew; }
+    void SetPosProtect  ( sal_Bool bNew ) { bPos   = bNew; }
 
-    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 };
 
-inline SvxProtectItem::SvxProtectItem( const USHORT nId )
+inline SvxProtectItem::SvxProtectItem( const sal_uInt16 nId )
     : SfxPoolItem( nId )
 {
-    bCntnt = bSize = bPos = FALSE;
+    bCntnt = bSize = bPos = sal_False;
 }
 
 inline SvxProtectItem &SvxProtectItem::operator=( const SvxProtectItem &rCpy )

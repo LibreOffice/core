@@ -108,7 +108,7 @@ FrameSelFlags lclGetFlagFromType( FrameBorderType eBorder )
 }
 
 /** Converts an SvxBorderLine line width (in twips) to a pixel line width. */
-inline sal_uInt16 lclGetPixel( USHORT nWidth )
+inline sal_uInt16 lclGetPixel( sal_uInt16 nWidth )
 {
     // convert all core styles expect 0 to a visible UI style (at least 1 pixel), map 1pt to 1pixel
     return nWidth ? std::min< sal_uInt16 >( std::max< sal_uInt16 >( (nWidth + 5) / 20, 1 ), FRAMESEL_GEOM_WIDTH ) : 0;
@@ -216,7 +216,7 @@ void FrameBorder::SetKeyboardNeighbors(
     meKeyBottom = eBottom;
 }
 
-FrameBorderType FrameBorder::GetKeyboardNeighbor( USHORT nKeyCode ) const
+FrameBorderType FrameBorder::GetKeyboardNeighbor( sal_uInt16 nKeyCode ) const
 {
     FrameBorderType eBorder = FRAMEBORDER_NONE;
     switch( nKeyCode )
@@ -423,7 +423,7 @@ void FrameSelectorImpl::InitBorderGeometry()
             aFocusVec.push_back( Point( aRect.Right() + mnFocusOffs,     aRect.Bottom() - nDiagFocusOffsY ) );
             aFocusVec.push_back( Point( aRect.Right() + mnFocusOffs,     aRect.Bottom() + mnFocusOffs     ) );
             aFocusVec.push_back( Point( aRect.Right() - nDiagFocusOffsX, aRect.Bottom() + mnFocusOffs     ) );
-            maTLBR.AddFocusPolygon( Polygon( static_cast< USHORT >( aFocusVec.size() ), &aFocusVec[ 0 ] ) );
+            maTLBR.AddFocusPolygon( Polygon( static_cast< sal_uInt16 >( aFocusVec.size() ), &aFocusVec[ 0 ] ) );
 
             aFocusVec.clear();
             aFocusVec.push_back( Point( aRect.Right() + mnFocusOffs,     aRect.Top()    + nDiagFocusOffsY ) );
@@ -432,7 +432,7 @@ void FrameSelectorImpl::InitBorderGeometry()
             aFocusVec.push_back( Point( aRect.Left()  - mnFocusOffs,     aRect.Bottom() - nDiagFocusOffsY ) );
             aFocusVec.push_back( Point( aRect.Left()  - mnFocusOffs,     aRect.Bottom() + mnFocusOffs     ) );
             aFocusVec.push_back( Point( aRect.Left()  + nDiagFocusOffsX, aRect.Bottom() + mnFocusOffs     ) );
-            maBLTR.AddFocusPolygon( Polygon( static_cast< USHORT >( aFocusVec.size() ), &aFocusVec[ 0 ] ) );
+            maBLTR.AddFocusPolygon( Polygon( static_cast< sal_uInt16 >( aFocusVec.size() ), &aFocusVec[ 0 ] ) );
         }
     }
 
@@ -574,7 +574,7 @@ void FrameSelectorImpl::DrawArrows( const FrameBorder& rBorder )
     long nTLPos = 0;
     long nBRPos = mnCtrlSize - mnArrowSize;
     Point aPos1, aPos2;
-    USHORT nImgId1 = 0, nImgId2 = 0;
+    sal_uInt16 nImgId1 = 0, nImgId2 = 0;
     switch( rBorder.GetType() )
     {
         case FRAMEBORDER_LEFT:
@@ -603,7 +603,7 @@ void FrameSelectorImpl::DrawArrows( const FrameBorder& rBorder )
     }
 
     // Arrow or marker? Do not draw arrows into disabled control.
-    USHORT nSelectAdd = (mrFrameSel.IsEnabled() && rBorder.IsSelected()) ? 0 : 8;
+    sal_uInt16 nSelectAdd = (mrFrameSel.IsEnabled() && rBorder.IsSelected()) ? 0 : 8;
     maVirDev.DrawImage( aPos1, maILArrows.GetImage( nImgId1 + nSelectAdd ) );
     maVirDev.DrawImage( aPos2, maILArrows.GetImage( nImgId2 + nSelectAdd ) );
 }
@@ -697,7 +697,7 @@ void FrameSelectorImpl::DrawAllTrackingRects()
         aPPoly.Insert( Polygon( Rectangle( maVirDevPos, maVirDev.GetOutputSizePixel() ) ) );
 
     aPPoly.Optimize( POLY_OPTIMIZE_CLOSE );
-    for( USHORT nIdx = 0, nCount = aPPoly.Count(); nIdx < nCount; ++nIdx )
+    for( sal_uInt16 nIdx = 0, nCount = aPPoly.Count(); nIdx < nCount; ++nIdx )
         mrFrameSel.InvertTracking( aPPoly.GetObject( nIdx ), SHOWTRACK_SMALL | SHOWTRACK_WINDOW );
 }
 
@@ -879,7 +879,7 @@ void FrameSelector::HideAllBorders()
         mxImpl->SetBorderState( **aIt, FRAMESTATE_HIDE );
 }
 
-bool FrameSelector::GetVisibleWidth( USHORT& rnPrim, USHORT& rnDist, USHORT& rnSecn,
+bool FrameSelector::GetVisibleWidth( sal_uInt16& rnPrim, sal_uInt16& rnDist, sal_uInt16& rnSecn,
                         SvxBorderStyle& rnStyle ) const
 {
     VisFrameBorderCIter aIt( mxImpl->maEnabBorders );
@@ -961,7 +961,7 @@ void FrameSelector::SelectAllVisibleBorders( bool bSelect )
         mxImpl->SelectBorder( **aIt, bSelect );
 }
 
-void FrameSelector::SetStyleToSelection( USHORT nPrim, USHORT nDist, USHORT nSecn,
+void FrameSelector::SetStyleToSelection( sal_uInt16 nPrim, sal_uInt16 nDist, sal_uInt16 nSecn,
         SvxBorderStyle nStyle )
 {
     mxImpl->maCurrStyle.SetOutWidth( nPrim );
@@ -1133,7 +1133,7 @@ void FrameSelector::KeyInput( const KeyEvent& rKEvt )
     KeyCode aKeyCode = rKEvt.GetKeyCode();
     if( !aKeyCode.GetModifier() )
     {
-        USHORT nCode = aKeyCode.GetCode();
+        sal_uInt16 nCode = aKeyCode.GetCode();
         switch( nCode )
         {
             case KEY_SPACE:

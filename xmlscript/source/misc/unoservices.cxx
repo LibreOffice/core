@@ -114,15 +114,6 @@ extern "C"
 
     // -----------------------------------------------------------------------------
 
-    sal_Bool SAL_CALL component_writeInfo(
-        void * pServiceManager, void * pRegistryKey )
-    {
-        return ::cppu::component_writeInfoHelper(
-            pServiceManager, pRegistryKey, ::xmlscript::s_entries );
-    }
-
-    // -----------------------------------------------------------------------------
-
     void * SAL_CALL component_getFactory(
         const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
     {

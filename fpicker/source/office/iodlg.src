@@ -72,12 +72,14 @@ ModalDialog DLG_SVT_EXPLORERFILE
     };
     ImageButton BTN_EXPLORERFILE_NEWFOLDER
     {
+        HelpID = "fpicker:ImageButton:DLG_SVT_EXPLORERFILE:BTN_EXPLORERFILE_NEWFOLDER";
         TabStop = FALSE ;
         Pos = MAP_APPFONT ( 59 , 6 ) ;
         QuickHelpText [ en-US ] = "Create New Directory" ;
     };
     ImageButton BTN_EXPLORERFILE_LISTVIEW
     {
+        HelpID = "fpicker:ImageButton:DLG_SVT_EXPLORERFILE:BTN_EXPLORERFILE_LISTVIEW";
         TabStop = FALSE ;
         Pos = MAP_APPFONT ( 109 , 6 ) ;
         ButtonImage = Image
@@ -90,8 +92,10 @@ ModalDialog DLG_SVT_EXPLORERFILE
         };
         QuickHelpText [ en-US ] = "List";
     };
+        HelpID = "fpicker:ImageButton:DLG_SVT_EXPLORERFILE:BTN_EXPLORERFILE_DETAILSVIEW";
     MenuButton BTN_EXPLORERFILE_UP
     {
+        HelpID = "fpicker:MenuButton:DLG_SVT_EXPLORERFILE:BTN_EXPLORERFILE_UP";
         TabStop = FALSE ;
         Pos = MAP_APPFONT ( 109 , 6 ) ;
         QuickHelpText [ en-US ] = "Up One Level" ;
@@ -99,6 +103,7 @@ ModalDialog DLG_SVT_EXPLORERFILE
 
     MenuButton BTN_EXPLORERFILE_STANDARD
     {
+        HelpID = "fpicker:MenuButton:DLG_SVT_EXPLORERFILE:BTN_EXPLORERFILE_STANDARD";
         TabStop = FALSE ;
         Pos = MAP_APPFONT ( 59 , 6 ) ;
         QuickHelpText [ en-US ] = "Default Directory" ;
@@ -118,6 +123,7 @@ ModalDialog DLG_SVT_EXPLORERFILE
     };
     Edit ED_EXPLORERFILE_FILENAME
     {
+        HelpID = "fpicker:Edit:DLG_SVT_EXPLORERFILE:ED_EXPLORERFILE_FILENAME";
         Pos = MAP_APPFONT ( 59 , 117 ) ;
         Size = MAP_APPFONT ( 159 , 12 ) ;
         Border = TRUE ;
@@ -131,6 +137,7 @@ ModalDialog DLG_SVT_EXPLORERFILE
     };
     ListBox LB_EXPLORERFILE_SHARED_LISTBOX
     {
+        HelpID = "fpicker:ListBox:DLG_SVT_EXPLORERFILE:LB_EXPLORERFILE_SHARED_LISTBOX";
         Pos = MAP_APPFONT ( 59 , 132 ) ;
         Size = MAP_APPFONT ( 159 , 40 ) ;
         DropDown = TRUE ;
@@ -145,6 +152,7 @@ ModalDialog DLG_SVT_EXPLORERFILE
     };
     ListBox LB_EXPLORERFILE_FILETYPE
     {
+        HelpID = "fpicker:ListBox:DLG_SVT_EXPLORERFILE:LB_EXPLORERFILE_FILETYPE";
         Pos = MAP_APPFONT ( 59 , 147 ) ;
         Size = MAP_APPFONT ( 159 , 80 ) ;
         DropDown = TRUE ;
@@ -154,26 +162,31 @@ ModalDialog DLG_SVT_EXPLORERFILE
     };
     CheckBox CB_EXPLORERFILE_READONLY
     {
+        HelpID = "fpicker:CheckBox:DLG_SVT_EXPLORERFILE:CB_EXPLORERFILE_READONLY";
         Size = MAP_APPFONT ( 80 , 10 ) ;
         Text [ en-US ] = "~Read-only" ;
     };
     CheckBox CB_EXPLORERFILE_PASSWORD
     {
+        HelpID = "fpicker:CheckBox:DLG_SVT_EXPLORERFILE:CB_EXPLORERFILE_PASSWORD";
         Size = MAP_APPFONT ( 100, 10 ) ;
         Text [ en-US ] = "Save with password" ;
     };
     CheckBox CB_AUTO_EXTENSION
     {
+        HelpID = "fpicker:CheckBox:DLG_SVT_EXPLORERFILE:CB_AUTO_EXTENSION";
         Size = MAP_APPFONT ( 160 , 10 ) ;
         Text [ en-US ] = "~Automatic file name extension" ;
     };
     CheckBox CB_OPTIONS
     {
+        HelpID = "fpicker:CheckBox:DLG_SVT_EXPLORERFILE:CB_OPTIONS";
         Size = MAP_APPFONT ( 120 , 10 ) ;
         Text [ en-US ] = "Edit ~filter settings";
     };
     PushButton BTN_EXPLORERFILE_OPEN
     {
+        HelpID = "fpicker:PushButton:DLG_SVT_EXPLORERFILE:BTN_EXPLORERFILE_OPEN";
         Pos = MAP_APPFONT ( 224 , 117 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         DefButton = TRUE ;
@@ -217,11 +230,16 @@ ModalDialog DLG_SVT_EXPLORERFILE
     {
         Text [ en-US ] = "Current version";
     };
+    String STR_PREVIEW
+    {
+        Text [ en-US ] = "File Preview";
+    };
 };
 
 // QueryFolderNameDialog ----------------------------------------------------------
 ModalDialog DLG_SVT_QUERYFOLDERNAME
 {
+    HelpID = "fpicker:ModalDialog:DLG_SVT_QUERYFOLDERNAME";
     Border = TRUE ;
     Moveable = TRUE ;
     OutputSize = TRUE ;
@@ -236,6 +254,7 @@ ModalDialog DLG_SVT_QUERYFOLDERNAME
     };
     Edit ED_SVT_QUERYFOLDERNAME_DLG_NAME
     {
+        HelpID = "fpicker:Edit:DLG_SVT_QUERYFOLDERNAME:ED_SVT_QUERYFOLDERNAME_DLG_NAME";
         Pos = MAP_APPFONT ( 12 , 27 ) ;
         Size = MAP_APPFONT ( 138 , 12 ) ;
         Border = TRUE ;

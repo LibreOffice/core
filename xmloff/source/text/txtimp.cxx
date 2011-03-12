@@ -59,7 +59,7 @@
 #include <com/sun/star/ucb/XAnyCompareFactory.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <xmloff/xmltoken.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/txtstyli.hxx>
 #include <xmloff/families.hxx>
 #include <xmloff/xmlnumfi.hxx>
@@ -70,10 +70,10 @@
 #include "txtparai.hxx"
 #include <xmloff/txtimp.hxx>
 #include <xmloff/txtprmap.hxx>
-#include "txtimppr.hxx"
+#include "xmloff/txtimppr.hxx"
 #include <xmloff/xmlimp.hxx>
 #include "txtvfldi.hxx"
-#include "i18nmap.hxx"
+#include "xmloff/i18nmap.hxx"
 #include "XMLTextListItemContext.hxx"
 #include "XMLTextListBlockContext.hxx"
 #include "XMLTextFrameContext.hxx"

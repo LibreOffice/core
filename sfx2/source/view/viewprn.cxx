@@ -35,7 +35,6 @@
 
 #include <svl/itempool.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/printdlg.hxx>
 #include <svtools/prnsetup.hxx>
 #include <svl/flagitem.hxx>
 #include <svl/stritem.hxx>
@@ -51,7 +50,7 @@
 #include "viewimp.hxx"
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/prnmon.hxx>
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include <sfx2/request.hxx>
 #include <sfx2/objsh.hxx>
 #include "sfxtypes.hxx"
@@ -353,30 +352,6 @@ void SfxPrinterController::jobFinished( com::sun::star::view::PrintableState nSt
     }
 }
 
-// -----------------------------------------------------------------------
-
-void DisableRanges( PrintDialog& rDlg, SfxPrinter* pPrinter )
-
-/*      [Beschreibung]
-
-    Mit dieser Funktion werden die nicht verf"ugbaren Ranges
-    vom Printer zum PrintDialog geforwarded.
-*/
-
-{
-    if ( !pPrinter )
-        return;
-
-    if ( !pPrinter->IsRangeEnabled( PRINTDIALOG_ALL ) )
-        rDlg.DisableRange( PRINTDIALOG_ALL );
-    if ( !pPrinter->IsRangeEnabled( PRINTDIALOG_SELECTION ) )
-        rDlg.DisableRange( PRINTDIALOG_SELECTION );
-    if ( !pPrinter->IsRangeEnabled( PRINTDIALOG_FROMTO ) )
-        rDlg.DisableRange( PRINTDIALOG_FROMTO );
-    if ( !pPrinter->IsRangeEnabled( PRINTDIALOG_RANGE ) )
-        rDlg.DisableRange( PRINTDIALOG_RANGE );
-}
-
 //====================================================================
 
 class SfxDialogExecutor_Impl
@@ -393,7 +368,6 @@ class SfxDialogExecutor_Impl
 {
 private:
     SfxViewShell*           _pViewSh;
-    PrintDialog*            _pPrintParent;
     PrinterSetupDialog*     _pSetupParent;
     SfxItemSet*             _pOptions;
     sal_Bool                _bModified;
@@ -402,7 +376,6 @@ private:
     DECL_LINK( Execute, void * );
 
 public:
-            SfxDialogExecutor_Impl( SfxViewShell* pViewSh, PrintDialog* pParent );
             SfxDialogExecutor_Impl( SfxViewShell* pViewSh, PrinterSetupDialog* pParent );
             ~SfxDialogExecutor_Impl() { delete _pOptions; }
 
@@ -413,22 +386,9 @@ public:
 
 //--------------------------------------------------------------------
 
-SfxDialogExecutor_Impl::SfxDialogExecutor_Impl( SfxViewShell* pViewSh, PrintDialog* pParent ) :
-
-    _pViewSh        ( pViewSh ),
-    _pPrintParent   ( pParent ),
-    _pSetupParent   ( NULL ),
-    _pOptions       ( NULL ),
-    _bModified      ( sal_False ),
-    _bHelpDisabled  ( sal_False )
-
-{
-}
-
 SfxDialogExecutor_Impl::SfxDialogExecutor_Impl( SfxViewShell* pViewSh, PrinterSetupDialog* pParent ) :
 
     _pViewSh        ( pViewSh ),
-    _pPrintParent   ( NULL ),
     _pSetupParent   ( pParent ),
     _pOptions       ( NULL ),
     _bModified      ( sal_False ),
@@ -444,27 +404,13 @@ IMPL_LINK( SfxDialogExecutor_Impl, Execute, void *, EMPTYARG )
     // Options lokal merken
     if ( !_pOptions )
     {
-        DBG_ASSERT( _pPrintParent || _pSetupParent, "no dialog parent" );
-        if( _pPrintParent )
-            _pOptions = ( (SfxPrinter*)_pPrintParent->GetPrinter() )->GetOptions().Clone();
-        else if( _pSetupParent )
+        DBG_ASSERT( _pSetupParent, "no dialog parent" );
+        if( _pSetupParent )
             _pOptions = ( (SfxPrinter*)_pSetupParent->GetPrinter() )->GetOptions().Clone();
     }
 
-    if ( _pOptions && _pPrintParent && _pPrintParent->IsSheetRangeAvailable() )
-    {
-        SfxItemState eState = _pOptions->GetItemState( SID_PRINT_SELECTEDSHEET );
-        if ( eState != SFX_ITEM_UNKNOWN )
-        {
-            PrintSheetRange eRange = _pPrintParent->GetCheckedSheetRange();
-            BOOL bValue = ( PRINTSHEETS_ALL != eRange );
-            _pOptions->Put( SfxBoolItem( SID_PRINT_SELECTEDSHEET, bValue ) );
-        }
-    }
-
     // Dialog ausf"uhren
-    SfxPrintOptionsDialog* pDlg = new SfxPrintOptionsDialog( _pPrintParent ? static_cast<Window*>(_pPrintParent)
-                                                                           : static_cast<Window*>(_pSetupParent),
+    SfxPrintOptionsDialog* pDlg = new SfxPrintOptionsDialog( static_cast<Window*>(_pSetupParent),
                                                              _pViewSh, _pOptions );
     if ( _bHelpDisabled )
         pDlg->DisableHelp();
@@ -473,15 +419,6 @@ IMPL_LINK( SfxDialogExecutor_Impl, Execute, void *, EMPTYARG )
         delete _pOptions;
         _pOptions = pDlg->GetOptions().Clone();
 
-        if ( _pOptions && _pPrintParent && _pPrintParent->IsSheetRangeAvailable() )
-        {
-            const SfxPoolItem* pItem;
-            if ( SFX_ITEM_SET == _pOptions->GetItemState( SID_PRINT_SELECTEDSHEET, FALSE , &pItem ) )
-            {
-                _pPrintParent->CheckSheetRange( ( (const SfxBoolItem*)pItem )->GetValue()
-                    ? PRINTSHEETS_SELECTED_SHEETS : PRINTSHEETS_ALL );
-            }
-        }
     }
     delete pDlg;
 
@@ -505,11 +442,11 @@ SfxPrinter* SfxViewShell::SetPrinter_Impl( SfxPrinter *pNewPrinter )
     bool bSizeToDoc = false;
     if ( &pDocPrinter->GetOptions() )
     {
-        USHORT nWhich = GetPool().GetWhich(SID_PRINTER_CHANGESTODOC);
+        sal_uInt16 nWhich = GetPool().GetWhich(SID_PRINTER_CHANGESTODOC);
         const SfxFlagItem *pFlagItem = 0;
-        pDocPrinter->GetOptions().GetItemState( nWhich, FALSE, (const SfxPoolItem**) &pFlagItem );
-        bOriToDoc = pFlagItem ? (pFlagItem->GetValue() & SFX_PRINTER_CHG_ORIENTATION) : FALSE;
-        bSizeToDoc = pFlagItem ? (pFlagItem->GetValue() & SFX_PRINTER_CHG_SIZE) : FALSE;
+        pDocPrinter->GetOptions().GetItemState( nWhich, sal_False, (const SfxPoolItem**) &pFlagItem );
+        bOriToDoc = pFlagItem ? (pFlagItem->GetValue() & SFX_PRINTER_CHG_ORIENTATION) : sal_False;
+        bSizeToDoc = pFlagItem ? (pFlagItem->GetValue() & SFX_PRINTER_CHG_SIZE) : sal_False;
     }
 
     // vorheriges Format und Size feststellen
@@ -521,8 +458,8 @@ SfxPrinter* SfxViewShell::SetPrinter_Impl( SfxPrinter *pNewPrinter )
     Size aNewPgSz = pNewPrinter->GetPaperSizePixel();
 
     // "Anderungen am Seitenformat feststellen
-    BOOL bOriChg = (eOldOri != eNewOri) && bOriToDoc;
-    BOOL bPgSzChg = ( aOldPgSz.Height() !=
+    sal_Bool bOriChg = (eOldOri != eNewOri) && bOriToDoc;
+    sal_Bool bPgSzChg = ( aOldPgSz.Height() !=
             ( bOriChg ? aNewPgSz.Width() : aNewPgSz.Height() ) ||
             aOldPgSz.Width() !=
             ( bOriChg ? aNewPgSz.Height() : aNewPgSz.Width() ) ) &&
@@ -530,7 +467,7 @@ SfxPrinter* SfxViewShell::SetPrinter_Impl( SfxPrinter *pNewPrinter )
 
     // Message und Flags f"ur Seitenformat-"Anderung zusammenstellen
     String aMsg;
-    USHORT nNewOpt=0;
+    sal_uInt16 nNewOpt=0;
     if( bOriChg && bPgSzChg )
     {
         aMsg = String(SfxResId(STR_PRINT_NEWORISIZE));
@@ -548,7 +485,7 @@ SfxPrinter* SfxViewShell::SetPrinter_Impl( SfxPrinter *pNewPrinter )
     }
 
     // in dieser Variable sammeln, was sich so ge"aendert hat
-    USHORT nChangedFlags = 0;
+    sal_uInt16 nChangedFlags = 0;
 
     // ggf. Nachfrage, ob Seitenformat vom Drucker "ubernommen werden soll
     if ( ( bOriChg  || bPgSzChg ) &&
@@ -639,7 +576,7 @@ void SfxViewShell::ExecPrint( const uno::Sequence < beans::PropertyValue >& rPro
                         makeAny( rtl::OUString( pObjShell->GetTitle(0) ) ) );
 
     // FIXME: job setup
-    SfxPrinter* pDocPrt = GetPrinter(FALSE);
+    SfxPrinter* pDocPrt = GetPrinter(sal_False);
     JobSetup aJobSetup = pDocPrt ? pDocPrt->GetJobSetup() : GetJobSetup();
     if( bIsDirect )
         aJobSetup.SetValue( String( RTL_CONSTASCII_USTRINGPARAM( "IsQuickJob" ) ),
@@ -656,17 +593,16 @@ Printer* SfxViewShell::GetActivePrinter() const
 
 void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
 {
-    // USHORT                  nCopies=1;
-    USHORT                  nDialogRet = RET_CANCEL;
-    // BOOL                    bCollate=FALSE;
+    // sal_uInt16                  nCopies=1;
+    sal_uInt16                  nDialogRet = RET_CANCEL;
+    // sal_Bool                    bCollate=sal_False;
     SfxPrinter*             pPrinter = 0;
-    PrintDialog*            pPrintDlg = 0;
     SfxDialogExecutor_Impl* pExecutor = 0;
     bool                    bSilent = false;
-    BOOL bIsAPI = rReq.GetArgs() && rReq.GetArgs()->Count();
+    sal_Bool bIsAPI = rReq.GetArgs() && rReq.GetArgs()->Count();
     if ( bIsAPI )
     {
-        SFX_REQUEST_ARG(rReq, pSilentItem, SfxBoolItem, SID_SILENT, FALSE);
+        SFX_REQUEST_ARG(rReq, pSilentItem, SfxBoolItem, SID_SILENT, sal_False);
         bSilent = pSilentItem && pSilentItem->GetValue();
     }
 
@@ -679,7 +615,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
     const SfxFilter* pFilter = pMedium ? pMedium->GetFilter() : NULL;
     sal_Bool bPrintOnHelp = ( pFilter && pFilter->GetFilterName() == aHelpFilterName );
 
-    const USHORT nId = rReq.GetSlot();
+    const sal_uInt16 nId = rReq.GetSlot();
     switch( nId )
     {
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -691,7 +627,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
             // derived class may decide to abort this
             if( !pDoc->QuerySlotExecutable( nId ) )
             {
-                rReq.SetReturnValue( SfxBoolItem( 0, FALSE ) );
+                rReq.SetReturnValue( SfxBoolItem( 0, sal_False ) );
                 return;
             }
 
@@ -699,10 +635,10 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
             if ( bDetectHidden && pDoc->QueryHiddenInformation( WhenPrinting, NULL ) != RET_YES )
                 break;
 
-            SFX_REQUEST_ARG(rReq, pSelectItem, SfxBoolItem, SID_SELECTION, FALSE);
+            SFX_REQUEST_ARG(rReq, pSelectItem, SfxBoolItem, SID_SELECTION, sal_False);
             sal_Bool bSelection = pSelectItem && pSelectItem->GetValue();
             if( pSelectItem && rReq.GetArgs()->Count() == 1 )
-                bIsAPI = FALSE;
+                bIsAPI = sal_False;
 
             uno::Sequence < beans::PropertyValue > aProps;
             if ( bIsAPI )
@@ -757,10 +693,10 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
         case SID_PRINTER_NAME : // only for recorded macros
         {
             // get printer and printer settings from the document
-            SfxPrinter *pDocPrinter = GetPrinter(TRUE);
+            SfxPrinter *pDocPrinter = GetPrinter(sal_True);
 
             // look for printer in parameters
-            SFX_REQUEST_ARG( rReq, pPrinterItem, SfxStringItem, SID_PRINTER_NAME, FALSE );
+            SFX_REQUEST_ARG( rReq, pPrinterItem, SfxStringItem, SID_PRINTER_NAME, sal_False );
             if ( pPrinterItem )
             {
                 // use PrinterName parameter to create a printer
@@ -789,7 +725,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                 // no valid printer either in ItemSet or at the document
                 if ( bSilent )
                 {
-                    rReq.SetReturnValue(SfxBoolItem(0,FALSE));
+                    rReq.SetReturnValue(SfxBoolItem(0,sal_False));
                     break;
                 }
                 else
@@ -802,7 +738,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                 // if printer is busy, abort printing
                 if ( !bSilent )
                     InfoBox( NULL, String( SfxResId( STR_ERROR_PRINTER_BUSY ) ) ).Execute();
-                rReq.SetReturnValue(SfxBoolItem(0,FALSE));
+                rReq.SetReturnValue(SfxBoolItem(0,sal_False));
                 break;
             }
 
@@ -816,7 +752,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                 // execute PrinterSetupDialog
                 PrinterSetupDialog* pPrintSetupDlg = new PrinterSetupDialog( GetWindow() );
 
-                if ( pImp->bHasPrintOptions )
+                if (pImp->m_bHasPrintOptions)
                 {
                     // additional controls for dialog
                     pExecutor = new SfxDialogExecutor_Impl( this, pPrintSetupDlg );
@@ -865,19 +801,15 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                     // forget new printer, it was taken over (as pPrinter) or deleted
                     pDlgPrinter = NULL;
 
-                    /* Now lets reset the Dialog printer, since its freed */
-                    if (pPrintDlg)
-                        pPrintDlg->SetPrinter (pPrinter);
                 }
                 else
                 {
                     // PrinterDialog is used to transfer information on printing,
                     // so it will only be deleted here if dialog was cancelled
                     DELETEZ( pDlgPrinter );
-                    DELETEZ( pPrintDlg );
                     rReq.Ignore();
                     if ( SID_PRINTDOC == nId )
-                        rReq.SetReturnValue(SfxBoolItem(0,FALSE));
+                        rReq.SetReturnValue(SfxBoolItem(0,sal_False));
                     if ( nId == SID_SETUPPRINTER )
                     {
                         rReq.AppendItem( SfxBoolItem( SID_DIALOG_RETURN, FALSE ) );
@@ -897,52 +829,24 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
 
 //--------------------------------------------------------------------
 
-PrintDialog* SfxViewShell::CreatePrintDialog( Window* /*pParent*/ )
-
-/*  [Beschreibung]
-
-    Diese Methode kann "uberladen werden, um einen speziellen PrintDialog
-    zu erzeugen. Dies ist z.B. notwendig wenn spezielle <StarView> Features
-    wie drucken von Seitenbereichen.
-*/
-
+sal_Bool SfxViewShell::IsPrinterLocked() const
 {
-    return NULL;
+    return pImp->m_nPrinterLocks > 0;
 }
 
 //--------------------------------------------------------------------
 
-void SfxViewShell::PreparePrint( PrintDialog * )
+void SfxViewShell::LockPrinter( sal_Bool bLock)
 {
-}
-
-//--------------------------------------------------------------------
-
-
-ErrCode SfxViewShell::DoPrint( SfxPrinter* /*pPrinter*/,
-                               PrintDialog* /*pPrintDlg*/,
-                               BOOL /*bSilent*/, BOOL /*bIsAPI*/ )
-{
-    OSL_FAIL( "DoPrint called, dead code !" );
-    return ERRCODE_IO_NOTSUPPORTED;
-}
-
-//--------------------------------------------------------------------
-
-BOOL SfxViewShell::IsPrinterLocked() const
-{
-    return pImp->nPrinterLocks > 0;
-}
-
-//--------------------------------------------------------------------
-
-void SfxViewShell::LockPrinter( BOOL bLock)
-{
-    BOOL bChanged = FALSE;
+    sal_Bool bChanged = sal_False;
     if ( bLock )
-        bChanged = 1 == ++pImp->nPrinterLocks;
+    {
+        bChanged = 1 == ++pImp->m_nPrinterLocks;
+    }
     else
-        bChanged = 0 == --pImp->nPrinterLocks;
+    {
+        bChanged = 0 == --pImp->m_nPrinterLocks;
+    }
 
     if ( bChanged )
     {
@@ -954,21 +858,14 @@ void SfxViewShell::LockPrinter( BOOL bLock)
 
 //--------------------------------------------------------------------
 
-USHORT SfxViewShell::Print( SfxProgress& /*rProgress*/, BOOL /*bIsAPI*/, PrintDialog* /*pDlg*/ )
+SfxPrinter* SfxViewShell::GetPrinter( sal_Bool /*bCreate*/ )
 {
     return 0;
 }
 
 //--------------------------------------------------------------------
 
-SfxPrinter* SfxViewShell::GetPrinter( BOOL /*bCreate*/ )
-{
-    return 0;
-}
-
-//--------------------------------------------------------------------
-
-USHORT SfxViewShell::SetPrinter( SfxPrinter* /*pNewPrinter*/, USHORT /*nDiffFlags*/, bool )
+sal_uInt16 SfxViewShell::SetPrinter( SfxPrinter* /*pNewPrinter*/, sal_uInt16 /*nDiffFlags*/, bool )
 {
     return 0;
 }

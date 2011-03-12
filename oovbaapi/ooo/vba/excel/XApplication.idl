@@ -90,10 +90,10 @@ interface XApplication
     string LibraryPath() raises(com::sun::star::script::BasicErrorException);
     string TemplatesPath() raises(com::sun::star::script::BasicErrorException);
     string PathSeparator() raises(com::sun::star::script::BasicErrorException);
-    //any CommandBars( [in] any aIndex );
-    any Workbooks( [in] any aIndex );
-    any Worksheets( [in] any aIndex );
-    any Windows( [in] any aIndex );
+    //any CommandBars( [in] any Index );
+    any Workbooks( [in] any Index );
+    any Worksheets( [in] any Index );
+    any Windows( [in] any Index );
     any WorksheetFunction();
     any Evaluate( [in] string Name );
     any Dialogs( [in] any DialogIndex );
@@ -108,7 +108,7 @@ interface XApplication
     XRange Union([in] XRange Arg1, [in] XRange Arg2, [in] /*Optional*/ any Arg3, [in] /*Optional*/ any Arg4, [in] /*Optional*/ any Arg5, [in] /*Optional*/ any Arg6, [in] /*Optional*/ any Arg7, [in] /*Optional*/ any Arg8, [in] /*Optional*/ any Arg9, [in] /*Optional*/ any Arg10, [in] /*Optional*/ any Arg11, [in] /*Optional*/ any Arg12, [in] /*Optional*/ any Arg13, [in] /*Optional*/ any Arg14, [in] /*Optional*/ any Arg15, [in] /*Optional*/ any Arg16, [in] /*Optional*/ any Arg17, [in] /*Optional*/ any Arg18, [in] /*Optional*/ any Arg19, [in] /*Optional*/ any Arg20, [in] /*Optional*/ any Arg21, [in] /*Optional*/ any Arg22, [in] /*Optional*/ any Arg23, [in] /*Optional*/ any Arg24, [in] /*Optional*/ any Arg25, [in] /*Optional*/ any Arg26, [in] /*Optional*/ any Arg27, [in] /*Optional*/ any Arg28, [in] /*Optional*/ any Arg29, [in] /*Optional*/ any Arg30)
         raises(com::sun::star::script::BasicErrorException);
     void Volatile([in] any Volatile);
-    any Caller( [in] any aIndex );
+    any Caller( [in] any Index );
     any MenuBars( [in] any aIndex );
     any International([in] long Index);
     any GetSaveAsFilename( [in] any InitialFilename, [in] any FileFilter, [in] any FilterIndex, [in] any Title,[in] any ButtonText);

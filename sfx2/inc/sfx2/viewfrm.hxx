@@ -81,7 +81,7 @@ class SFX2_DLLPUBLIC SfxViewFrame: public SfxShell, public SfxListener
     SfxObjectShellRef           xObjSh;
     SfxDispatcher*              pDispatcher;
     SfxBindings*                pBindings;
-    USHORT                      nAdjustPosPixelLock;
+    sal_uInt16                      nAdjustPosPixelLock;
 
 private:
 #ifndef _SFX_HXX
@@ -105,21 +105,21 @@ public:
 
     static void             SetViewFrame( SfxViewFrame* );
 
-    static SfxViewFrame*    LoadHiddenDocument( SfxObjectShell& i_rDoc, const USHORT i_nViewId );
-    static SfxViewFrame*    LoadDocument( SfxObjectShell& i_rDoc, const USHORT i_nViewId );
-    static SfxViewFrame*    LoadDocumentIntoFrame( SfxObjectShell& i_rDoc, const SfxFrameItem* i_pFrameItem, const USHORT i_nViewId = 0 );
-    static SfxViewFrame*    LoadDocumentIntoFrame( SfxObjectShell& i_rDoc, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrameItem, const USHORT i_nViewId = 0 );
-    static SfxViewFrame*    DisplayNewDocument( SfxObjectShell& i_rDoc, const SfxRequest& i_rCreateDocRequest, const USHORT i_nViewId = 0 );
+    static SfxViewFrame*    LoadHiddenDocument( SfxObjectShell& i_rDoc, const sal_uInt16 i_nViewId );
+    static SfxViewFrame*    LoadDocument( SfxObjectShell& i_rDoc, const sal_uInt16 i_nViewId );
+    static SfxViewFrame*    LoadDocumentIntoFrame( SfxObjectShell& i_rDoc, const SfxFrameItem* i_pFrameItem, const sal_uInt16 i_nViewId = 0 );
+    static SfxViewFrame*    LoadDocumentIntoFrame( SfxObjectShell& i_rDoc, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrameItem, const sal_uInt16 i_nViewId = 0 );
+    static SfxViewFrame*    DisplayNewDocument( SfxObjectShell& i_rDoc, const SfxRequest& i_rCreateDocRequest, const sal_uInt16 i_nViewId = 0 );
 
     static SfxViewFrame*    Current();
-    static SfxViewFrame*    GetFirst( const SfxObjectShell* pDoc = 0, BOOL bOnlyVisible = TRUE );
-    static SfxViewFrame*    GetNext( const SfxViewFrame& rPrev, const SfxObjectShell* pDoc = 0, BOOL bOnlyVisible = TRUE );
-    static USHORT           Count();
+    static SfxViewFrame*    GetFirst( const SfxObjectShell* pDoc = 0, sal_Bool bOnlyVisible = sal_True );
+    static SfxViewFrame*    GetNext( const SfxViewFrame& rPrev, const SfxObjectShell* pDoc = 0, sal_Bool bOnlyVisible = sal_True );
+    static sal_uInt16           Count();
 
     static SfxViewFrame*    Get( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController>& i_rController, const SfxObjectShell* i_pDoc = NULL );
 
-            void            DoActivate(BOOL bMDI, SfxViewFrame *pOld=NULL);
-            void            DoDeactivate(BOOL bMDI, SfxViewFrame *pOld=NULL);
+            void            DoActivate(sal_Bool bMDI, SfxViewFrame *pOld=NULL);
+            void            DoDeactivate(sal_Bool bMDI, SfxViewFrame *pOld=NULL);
 
     SfxViewFrame*           GetParentViewFrame() const;
 
@@ -148,12 +148,12 @@ public:
                                         const Point &rPos, const Size &rSize );
     void                    Hide();
     void                    Show();
-    BOOL                    IsVisible() const;
+    sal_Bool                    IsVisible() const;
     void                    ToTop();
-    void                    Enable( BOOL bEnable );
-    virtual BOOL            Close();
-    virtual void            Activate( BOOL bUI );
-    virtual void            Deactivate( BOOL bUI );
+    void                    Enable( sal_Bool bEnable );
+    virtual sal_Bool            Close();
+    virtual void            Activate( sal_Bool bUI );
+    virtual void            Deactivate( sal_Bool bUI );
 
     // DDE-Interface
     virtual long            DdeExecute( const String& rCmd );
@@ -173,17 +173,17 @@ public:
     static void ActivateToolPanel( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame, const ::rtl::OUString& i_rPanelURL );
 
     // interne Handler
-    SAL_DLLPRIVATE virtual BOOL SetBorderPixelImpl( const SfxViewShell *pSh, const SvBorder &rBorder );
+    SAL_DLLPRIVATE virtual sal_Bool SetBorderPixelImpl( const SfxViewShell *pSh, const SvBorder &rBorder );
     SAL_DLLPRIVATE virtual const SvBorder& GetBorderPixelImpl( const SfxViewShell *pSh ) const;
     SAL_DLLPRIVATE virtual void InvalidateBorderImpl( const SfxViewShell *pSh );
 
     virtual SfxObjectShell* GetObjectShell();
-    USHORT                  GetCurViewId() const;
+    sal_uInt16                  GetCurViewId() const;
     SfxFrame&               GetFrame() const;
     SfxViewFrame*           GetTopViewFrame() const;
 
-    BOOL                    DoClose();
-    ULONG                   GetFrameType() const
+    sal_Bool                    DoClose();
+    sal_uIntPtr                 GetFrameType() const
                             { return GetFrame().GetFrameType(); }
     SfxFrame&               GetTopFrame() const
                             { return GetFrame().GetTopFrame(); }
@@ -192,46 +192,46 @@ public:
     void                    CancelTransfers()
                             { GetFrame().CancelTransfers(); }
 
-    void                    SetModalMode( BOOL );
-    BOOL                    IsInModalMode() const;
-    void                    Resize(BOOL bForce=FALSE);
+    void                    SetModalMode( sal_Bool );
+    sal_Bool                    IsInModalMode() const;
+    void                    Resize(sal_Bool bForce=sal_False);
 
-    //void                        SetChildWindow(USHORT nId, BOOL bVisible );
-    void                        SetChildWindow(USHORT nId, BOOL bVisible, BOOL bSetFocus=TRUE);
-    void                        ToggleChildWindow(USHORT);
-    BOOL                        HasChildWindow(USHORT);
-    BOOL                        KnowsChildWindow(USHORT);
-    void                        ShowChildWindow(USHORT,BOOL bVisible=TRUE);
-    SfxChildWindow*             GetChildWindow(USHORT);
+    //void                        SetChildWindow(sal_uInt16 nId, sal_Bool bVisible );
+    void                        SetChildWindow(sal_uInt16 nId, sal_Bool bVisible, sal_Bool bSetFocus=sal_True);
+    void                        ToggleChildWindow(sal_uInt16);
+    sal_Bool                        HasChildWindow(sal_uInt16);
+    sal_Bool                        KnowsChildWindow(sal_uInt16);
+    void                        ShowChildWindow(sal_uInt16,sal_Bool bVisible=sal_True);
+    SfxChildWindow*             GetChildWindow(sal_uInt16);
     void                        ChildWindowExecute(SfxRequest&);
     void                        ChildWindowState(SfxItemSet&);
 
     SAL_DLLPRIVATE void SetDowning_Impl();
     SAL_DLLPRIVATE void GetDocNumber_Impl();
-    SAL_DLLPRIVATE BOOL IsDowning_Impl() const;
+    SAL_DLLPRIVATE sal_Bool IsDowning_Impl() const;
     SAL_DLLPRIVATE void SetViewShell_Impl( SfxViewShell *pVSh );
     SAL_DLLPRIVATE void ReleaseObjectShell_Impl();
 
     SAL_DLLPRIVATE void GetState_Impl( SfxItemSet &rSet );
     SAL_DLLPRIVATE void ExecReload_Impl( SfxRequest &rReq );
-    SAL_DLLPRIVATE void ExecReload_Impl( SfxRequest &rReq, BOOL bAsync );
+    SAL_DLLPRIVATE void ExecReload_Impl( SfxRequest &rReq, sal_Bool bAsync );
     SAL_DLLPRIVATE void StateReload_Impl( SfxItemSet &rSet );
     SAL_DLLPRIVATE void ExecView_Impl( SfxRequest &rReq );
     SAL_DLLPRIVATE void StateView_Impl( SfxItemSet &rSet );
     SAL_DLLPRIVATE void ExecHistory_Impl( SfxRequest &rReq );
     SAL_DLLPRIVATE void StateHistory_Impl( SfxItemSet &rSet );
     SAL_DLLPRIVATE SfxViewFrame* GetParentViewFrame_Impl() const;
-    SAL_DLLPRIVATE void ForceOuterResize_Impl(BOOL bOn=TRUE);
-    SAL_DLLPRIVATE BOOL IsResizeInToOut_Impl() const;
-    SAL_DLLPRIVATE BOOL IsAdjustPosSizePixelLocked_Impl() const
+    SAL_DLLPRIVATE void ForceOuterResize_Impl(sal_Bool bOn=sal_True);
+    SAL_DLLPRIVATE sal_Bool IsResizeInToOut_Impl() const;
+    SAL_DLLPRIVATE sal_Bool IsAdjustPosSizePixelLocked_Impl() const
                             { return nAdjustPosPixelLock != 0; }
-    SAL_DLLPRIVATE void ForceInnerResize_Impl( BOOL bOn );
+    SAL_DLLPRIVATE void ForceInnerResize_Impl( sal_Bool bOn );
     SAL_DLLPRIVATE void UpdateDocument_Impl();
 
-    SAL_DLLPRIVATE void LockObjectShell_Impl(BOOL bLock=TRUE);
+    SAL_DLLPRIVATE void LockObjectShell_Impl(sal_Bool bLock=sal_True);
 
-    SAL_DLLPRIVATE void MakeActive_Impl( BOOL bActivate );
-    SAL_DLLPRIVATE void SetQuietMode_Impl( BOOL );
+    SAL_DLLPRIVATE void MakeActive_Impl( sal_Bool bActivate );
+    SAL_DLLPRIVATE void SetQuietMode_Impl( sal_Bool );
     SAL_DLLPRIVATE const Size& GetMargin_Impl() const;
     SAL_DLLPRIVATE void SetActiveChildFrame_Impl( SfxViewFrame* );
     SAL_DLLPRIVATE SfxViewFrame* GetActiveChildFrame_Impl() const;
@@ -239,20 +239,20 @@ public:
     SAL_DLLPRIVATE static void CloseHiddenFrames_Impl();
     SAL_DLLPRIVATE void MiscExec_Impl(SfxRequest &);
     SAL_DLLPRIVATE void MiscState_Impl(SfxItemSet &);
-    SAL_DLLPRIVATE SfxWorkWindow* GetWorkWindow_Impl( USHORT nId );
+    SAL_DLLPRIVATE SfxWorkWindow* GetWorkWindow_Impl( sal_uInt16 nId );
     SAL_DLLPRIVATE void AddDispatchMacroToBasic_Impl(const ::rtl::OUString& sMacro);
 
     SAL_DLLPRIVATE void Exec_Impl(SfxRequest &);
     SAL_DLLPRIVATE void INetExecute_Impl(SfxRequest &);
     SAL_DLLPRIVATE void INetState_Impl(SfxItemSet &);
 
-    SAL_DLLPRIVATE void SetCurViewId_Impl( const USHORT i_nID );
+    SAL_DLLPRIVATE void SetCurViewId_Impl( const sal_uInt16 i_nID );
     SAL_DLLPRIVATE void ActivateToolPanel_Impl( const ::rtl::OUString& i_rPanelURL );
 
 private:
-    SAL_DLLPRIVATE BOOL SwitchToViewShell_Impl( USHORT nNo, BOOL bIsIndex = FALSE );
+    SAL_DLLPRIVATE sal_Bool SwitchToViewShell_Impl( sal_uInt16 nNo, sal_Bool bIsIndex = sal_False );
     SAL_DLLPRIVATE void PopShellAndSubShells_Impl( SfxViewShell& i_rViewShell );
-    SAL_DLLPRIVATE void SaveCurrentViewData_Impl( const USHORT i_nNewViewId );
+    SAL_DLLPRIVATE void SaveCurrentViewData_Impl( const sal_uInt16 i_nNewViewId );
 
     /** loads the given existing document into the given frame
 
@@ -275,7 +275,7 @@ private:
                             const SfxObjectShell& i_rDoc,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame,
                             const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& i_rLoadArgs,
-                            const USHORT i_nViewId,
+                            const sal_uInt16 i_nViewId,
                             const bool i_bHidden
                         );
 
@@ -297,7 +297,7 @@ private:
     SAL_DLLPRIVATE static SfxViewFrame* LoadViewIntoFrame_Impl_NoThrow(
                             const SfxObjectShell& i_rDoc,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame,
-                            const USHORT i_nViewId,
+                            const sal_uInt16 i_nViewId,
                             const bool i_bHidden
                         );
 };
@@ -314,7 +314,7 @@ public:
                                 SfxPoolItem( 0 ),
                                 pFrame( pViewFrame)
                             {}
-                            SfxViewFrameItem( USHORT nWhichId, SfxViewFrame *pViewFrame ):
+                            SfxViewFrameItem( sal_uInt16 nWhichId, SfxViewFrame *pViewFrame ):
                                 SfxPoolItem( nWhichId ),
                                 pFrame( pViewFrame)
                             {}
@@ -333,16 +333,16 @@ class SfxVerbListItem : public SfxPoolItem
 
 public:
                             TYPEINFO();
-                            SfxVerbListItem( USHORT nWhichId = SID_OBJECT ) :
+                            SfxVerbListItem( sal_uInt16 nWhichId = SID_OBJECT ) :
                                 SfxPoolItem( nWhichId )
                             {}
 
-                            SfxVerbListItem( USHORT nWhichId, const com::sun::star::uno::Sequence < com::sun::star::embed::VerbDescriptor >& );
+                            SfxVerbListItem( sal_uInt16 nWhichId, const com::sun::star::uno::Sequence < com::sun::star::embed::VerbDescriptor >& );
 
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
 
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
     const com::sun::star::uno::Sequence < com::sun::star::embed::VerbDescriptor >& GetVerbList() const { return aVerbs; }
 };
 

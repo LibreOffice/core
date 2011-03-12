@@ -30,7 +30,6 @@
 #include "precompiled_sfx2.hxx"
 #include <svl/itempool.hxx>
 #include <svl/eitem.hxx>
-
 #include <sfx2/msg.hxx>
 
 //====================================================================
@@ -55,12 +54,24 @@ SfxSlotKind SfxSlot::GetKind() const
 
 //--------------------------------------------------------------------
 
-USHORT SfxSlot::GetWhich( const SfxItemPool &rPool ) const
+sal_uInt16 SfxSlot::GetWhich( const SfxItemPool &rPool ) const
 {
     if ( !nMasterSlotId || nMasterSlotId == USHRT_MAX )
         ((SfxSlot*) this) -> nMasterSlotId = rPool.GetWhich(nSlotId);
     return nMasterSlotId;
 }
 
+::rtl::OString SfxSlot::GetCommand() const
+{
+    rtl::OString sRet(".uno:");
+    sRet += pUnoName;
+    return sRet;
+}
+
+::rtl::OUString SfxSlot::GetCommandString() const
+{
+    rtl::OString aCmd(GetCommand());
+    return rtl::OUString( aCmd, aCmd.getLength(), RTL_TEXTENCODING_UTF8 );
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

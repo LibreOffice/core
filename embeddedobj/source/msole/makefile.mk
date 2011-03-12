@@ -129,3 +129,14 @@ DEF1NAME= $(SHL1TARGET)
 
 .INCLUDE :  target.mk
 
+ALLTAR : $(MISC)/emboleobj.component
+
+.IF "$(OS)" == "WNT"
+my_platform = .windows
+.END
+
+$(MISC)/emboleobj.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        emboleobj.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt emboleobj$(my_platform).component

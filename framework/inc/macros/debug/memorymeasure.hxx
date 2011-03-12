@@ -38,7 +38,7 @@
 
 #ifdef ENABLE_MEMORYMEASURE
 
-    #if !defined( WIN ) && !defined( WNT )
+    #if !defined( WNT )
         #error "Macros to measure memory access not available under platforms different from windows!"
     #endif
 

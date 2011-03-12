@@ -55,10 +55,7 @@ public:
     String                  GetCurrentFilter() const;
     void                    SetCurrentFilter(const String&);
 
-    /// Set dialog help id at FileDlgHelper
-    void                    SetControlHelpIds( const INT16* _pControlId, const INT32* _pHelpId );
-    /// Set control help ids at FileDlgHelper
-    void                    SetDialogHelpId( const INT32 _nHelpId );
+    void                    SetControlHelpIds( const sal_Int16* _pControlId, const char** _pHelpId );
 private:
     // disable copy and assignment
     SFX2_DLLPRIVATE SvxOpenGraphicDialog    (const SvxOpenGraphicDialog&);

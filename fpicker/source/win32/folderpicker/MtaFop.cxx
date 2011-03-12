@@ -280,7 +280,7 @@ sal_Bool CMtaFolderPicker::browseForFolder( )
         while ( bContinue )
         {
             DWORD dwResult = MsgWaitForMultipleObjects(
-                1, &aReqCtx.hEvent, FALSE, INFINITE, QS_ALLEVENTS );
+                1, &aReqCtx.hEvent, sal_False, INFINITE, QS_ALLEVENTS );
 
             switch ( dwResult )
             {
@@ -547,7 +547,7 @@ void SAL_CALL CMtaFolderPicker::onInitialized( )
         SendMessageA(
             m_hwnd,
             BFFM_SETSELECTION,
-            (WPARAM)FALSE,
+            (WPARAM)sal_False,
             (LPARAM) lpiidDisplayDir );
 
         releaseItemIdList( lpiidDisplayDir );

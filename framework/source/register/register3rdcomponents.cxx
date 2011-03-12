@@ -48,10 +48,6 @@
 
         COMPONENTGETIMPLEMENTATIONENVIRONMENT
 
-        COMPONENTWRITEINFO  (   COMPONENTINFO( Service1 )
-                                 COMPONENTINFO( Service2 )
-                            )
-
         COMPONENTGETFACTORY (   IFFACTORIE( Service1 )
                                  else
                                 IFFACTORIE( Service2 )
@@ -63,12 +59,6 @@
 #include <jobs/shelljob.hxx>
 
 COMPONENTGETIMPLEMENTATIONENVIRONMENT
-
-COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::HelpOnStartup   )
-                        COMPONENTINFO( ::framework::TabWinFactory   )
-                        COMPONENTINFO( ::framework::SystemExec      )
-                        COMPONENTINFO( ::framework::ShellJob        )
-                    )
 
 COMPONENTGETFACTORY (   IFFACTORY( ::framework::HelpOnStartup       ) else
                         IFFACTORY( ::framework::TabWinFactory       ) else

@@ -30,13 +30,11 @@
 #include "precompiled_connectivity.hxx"
 #include "mysql/YDriver.hxx"
 #include <cppuhelper/factory.hxx>
-#include <osl/diagnose.h>
 
 using namespace connectivity::mysql;
 using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::registry::XRegistryKey;
 using ::com::sun::star::lang::XSingleServiceFactory;
 using ::com::sun::star::lang::XMultiServiceFactory;
 
@@ -48,31 +46,6 @@ typedef Reference< XSingleServiceFactory > (SAL_CALL *createFactoryFunc)
             const Sequence< OUString > & rServiceNames,
             rtl_ModuleCount* _pT
         );
-
-//***************************************************************************************
-//
-// Die vorgeschriebene C-Api muss erfuellt werden!
-// Sie besteht aus drei Funktionen, die von dem Modul exportiert werden muessen.
-//
-
-//---------------------------------------------------------------------------------------
-void REGISTER_PROVIDER(
-        const OUString& aServiceImplName,
-        const Sequence< OUString>& Services,
-        const Reference< ::com::sun::star::registry::XRegistryKey > & xKey)
-{
-    OUString aMainKeyName;
-    aMainKeyName = OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
-    aMainKeyName += aServiceImplName;
-    aMainKeyName += OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
-
-    Reference< ::com::sun::star::registry::XRegistryKey >  xNewKey( xKey->createKey(aMainKeyName) );
-    OSL_ENSURE(xNewKey.is(), "ADABAS::component_writeInfo : could not create a registry key !");
-
-    for (sal_Int32 i=0; i<Services.getLength(); ++i)
-        xNewKey->createKey(Services[i]);
-}
-
 
 //---------------------------------------------------------------------------------------
 struct ProviderRequest
@@ -121,31 +94,6 @@ component_getImplementationEnvironment(
             )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
-//---------------------------------------------------------------------------------------
-extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
-                void* /*pServiceManager*/,
-                void* pRegistryKey
-            )
-{
-    if (pRegistryKey)
-    try
-    {
-        Reference< ::com::sun::star::registry::XRegistryKey > xKey(reinterpret_cast< ::com::sun::star::registry::XRegistryKey*>(pRegistryKey));
-
-        REGISTER_PROVIDER(
-            ODriverDelegator::getImplementationName_Static(),
-            ODriverDelegator::getSupportedServiceNames_Static(), xKey);
-
-        return sal_True;
-    }
-    catch (::com::sun::star::registry::InvalidRegistryException& )
-    {
-        OSL_ENSURE(sal_False, "ODBC::component_writeInfo : could not create a registry key ! ## InvalidRegistryException !");
-    }
-
-    return sal_False;
 }
 
 //---------------------------------------------------------------------------------------

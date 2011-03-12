@@ -84,7 +84,7 @@ class TaskCreatorService : public  css::lang::XTypeProvider
          */
         static const ::rtl::OUString ARGUMENT_FRAMENAME;
 
-        /// [sal_Bool] If its set to TRUE we will make the new created frame visible.
+        /// [sal_Bool] If its set to sal_True we will make the new created frame visible.
         static const ::rtl::OUString ARGUMENT_MAKEVISIBLE;
 
         /** [sal_Bool] If not "ContainerWindow" property is set it force creation of a

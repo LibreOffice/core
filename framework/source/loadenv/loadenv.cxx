@@ -33,9 +33,7 @@
 #include <loadenv/loadenv.hxx>
 
 #include <loadenv/targethelper.hxx>
-#include <classes/framelistanalyzer.hxx>
-
-#include <dispatch/interaction.hxx>
+#include <framework/framelistanalyzer.hxx>
 
 #include <constant/frameloader.hxx>
 
@@ -49,7 +47,8 @@
 #include <properties.h>
 #include <protocols.h>
 #include <services.h>
-#include <dispatch/interaction.hxx>
+#include <comphelper/interaction.hxx>
+#include <framework/interaction.hxx>
 
 //_______________________________________________
 // includes of uno interface
@@ -1009,7 +1008,7 @@ sal_Bool LoadEnv::impl_furtherDocsAllowed()
                                 ::comphelper::ConfigurationHelper::E_READONLY);
 
         // NIL means: count of allowed documents = infinite !
-        //     => return TRUE
+        //     => return sal_True
         if ( ! aVal.hasValue())
             bAllowed = sal_True;
         else
@@ -1049,8 +1048,8 @@ sal_Bool LoadEnv::impl_furtherDocsAllowed()
             css::uno::Any                                                                    aInteraction;
             css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > lContinuations(2);
 
-            ContinuationAbort*   pAbort   = new ContinuationAbort();
-            ContinuationApprove* pApprove = new ContinuationApprove();
+            comphelper::OInteractionAbort*   pAbort   = new comphelper::OInteractionAbort();
+            comphelper::OInteractionApprove* pApprove = new comphelper::OInteractionApprove();
 
             lContinuations[0] = css::uno::Reference< css::task::XInteractionContinuation >(
                                     static_cast< css::task::XInteractionContinuation* >(pAbort),
@@ -1062,13 +1061,7 @@ sal_Bool LoadEnv::impl_furtherDocsAllowed()
             css::task::ErrorCodeRequest aErrorCode;
             aErrorCode.ErrCode = ERRCODE_SFX_NOMOREDOCUMENTSALLOWED;
             aInteraction <<= aErrorCode;
-
-            InteractionRequest* pRequest = new InteractionRequest(aInteraction, lContinuations);
-            css::uno::Reference< css::task::XInteractionRequest > xRequest(
-                static_cast< css::task::XInteractionRequest* >(pRequest),
-                css::uno::UNO_QUERY_THROW);
-
-            xInteraction->handle(xRequest);
+            xInteraction->handle( InteractionRequest::CreateRequest(aInteraction, lContinuations) );
         }
     }
 
@@ -1705,7 +1698,7 @@ void LoadEnv::impl_reactForLoadingState()
     }
 
     // This max force an implicit closing of our target frame ...
-    // e.g. in case close(TRUE) was called before and the frame
+    // e.g. in case close(sal_True) was called before and the frame
     // kill itself if our external use-lock is released here!
     // Thats why we releas this lock AFTER ALL OPERATIONS on this frame
     // are finished. The frame itslef must handle then

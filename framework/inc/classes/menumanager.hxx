@@ -118,16 +118,16 @@ class MenuManager : public ThreadHelpBase           ,
         void UpdateSpecialWindowMenu( Menu* pMenu );
         void ClearMenuDispatch(const EVENTOBJECT& Source = EVENTOBJECT(),bool _bRemoveOnly = true);
         void SetHdl();
-        void AddMenu(PopupMenu* _pPopupMenu,const ::rtl::OUString& _sItemCommand,USHORT _nItemId,sal_Bool _bDelete,sal_Bool _bDeleteChildren);
-        USHORT FillItemCommand(::rtl::OUString& _rItemCommand,Menu* _pMenu,USHORT _nIndex) const;
+        void AddMenu(PopupMenu* _pPopupMenu,const ::rtl::OUString& _sItemCommand,sal_uInt16 _nItemId,sal_Bool _bDelete,sal_Bool _bDeleteChildren);
+        sal_uInt16 FillItemCommand(::rtl::OUString& _rItemCommand,Menu* _pMenu,sal_uInt16 _nIndex) const;
 
 
         struct MenuItemHandler
         {
-            MenuItemHandler( USHORT aItemId, MenuManager* pManager, REFERENCE< XDISPATCH >& rDispatch ) :
+            MenuItemHandler( sal_uInt16 aItemId, MenuManager* pManager, REFERENCE< XDISPATCH >& rDispatch ) :
                 nItemId( aItemId ), pSubMenuManager( pManager ), xMenuItemDispatch( rDispatch ) {}
 
-            USHORT                  nItemId;
+            sal_uInt16                  nItemId;
             ::rtl::OUString         aTargetFrame;
             ::rtl::OUString         aMenuItemURL;
             ::rtl::OUString         aFilter;
@@ -141,7 +141,7 @@ class MenuManager : public ThreadHelpBase           ,
                             ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgsList,
                             const MenuItemHandler* );
 
-        MenuItemHandler* GetMenuItemHandler( USHORT nItemId );
+        MenuItemHandler* GetMenuItemHandler( sal_uInt16 nItemId );
 
         sal_Bool                            m_bInitialized;
         sal_Bool                            m_bDeleteMenu;

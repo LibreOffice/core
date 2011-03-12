@@ -89,6 +89,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
             OUString const & identifier);
         // XPackage
         virtual OUString SAL_CALL getDescription() throw (RuntimeException);
+        virtual OUString SAL_CALL getLicenseText() throw (RuntimeException);
     };
     friend class PackageImpl;
 
@@ -100,6 +101,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
 
     const Reference<deployment::XPackageTypeInfo> m_xTypeInfo;
 
+
 public:
     BackendImpl(
         Sequence<Any> const & args,
@@ -108,6 +110,9 @@ public:
     // XPackageRegistry
     virtual Sequence< Reference<deployment::XPackageTypeInfo> > SAL_CALL
     getSupportedPackageTypes() throw (RuntimeException);
+    virtual void SAL_CALL packageRemoved(OUString const & url, OUString const & mediaType)
+        throw (deployment::DeploymentException,
+               uno::RuntimeException);
 };
 
 BackendImpl * BackendImpl::PackageImpl::getMyBackend() const
@@ -131,6 +136,12 @@ OUString BackendImpl::PackageImpl::getDescription() throw (RuntimeException)
         return Package::getDescription();
     else
         return m_descr;
+}
+
+//______________________________________________________________________________
+OUString BackendImpl::PackageImpl::getLicenseText() throw (RuntimeException)
+{
+    return Package::getDescription();
 }
 
 //______________________________________________________________________________
@@ -175,12 +186,20 @@ BackendImpl::BackendImpl(
     }
 }
 
+
+
 // XPackageRegistry
 //______________________________________________________________________________
 Sequence< Reference<deployment::XPackageTypeInfo> >
 BackendImpl::getSupportedPackageTypes() throw (RuntimeException)
 {
     return Sequence< Reference<deployment::XPackageTypeInfo> >(&m_xTypeInfo, 1);
+}
+
+void BackendImpl::packageRemoved(OUString const & /*url*/, OUString const & /*mediaType*/)
+        throw (deployment::DeploymentException,
+               uno::RuntimeException)
+{
 }
 
 // PackageRegistryBackend
@@ -295,6 +314,11 @@ void BackendImpl::PackageImpl:: initPackageHandler()
     {
         aContext  <<= OUSTR("bundled");
     }
+    else if ( that->m_eContext == CONTEXT_BUNDLED_PREREG )
+    {
+        aContext  <<= OUSTR("bundled_prereg");
+    }
+
     else
     {
         OSL_ASSERT( 0 );

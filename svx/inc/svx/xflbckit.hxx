@@ -43,12 +43,12 @@ class SVX_DLLPUBLIC XFillBackgroundItem : public SfxBoolItem
 public:
                             TYPEINFO();
 
-                            XFillBackgroundItem( BOOL bFill = FALSE );
+                            XFillBackgroundItem( sal_Bool bFill = sal_False );
                             SVX_DLLPRIVATE XFillBackgroundItem( SvStream& rIn );
 
 
     SVX_DLLPRIVATE virtual SfxPoolItem*    Clone( SfxItemPool* pPool = NULL ) const;
-    SVX_DLLPRIVATE virtual SfxPoolItem*    Create( SvStream& rIn, USHORT nVer ) const;
+    SVX_DLLPRIVATE virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const;
 
     SVX_DLLPRIVATE virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,

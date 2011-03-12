@@ -371,6 +371,24 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
         //No stamp file. We assume that bundled is always readonly. It must not be
         //modified from ExtensionManager but only by the installer
     }
+    else if (context.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("bundled_prereg") )) {
+        //This is a bundled repository but the registration data
+        //is in the brand layer: share/prereg
+        //It is special because the registration data are copied at the first startup
+        //into the user installation. The processed help and xcu files are not
+        //copied. Instead the backenddb.xml for the help backend references the help
+        //by using $BUNDLED_EXTENSION_PREREG instead $BUNDLED_EXTENSIONS_USER. The
+        //configmgr.ini also used $BUNDLED_EXTENSIONS_PREREG to refer to the xcu file
+        //which contain the replacement for %origin%.
+        that->m_activePackages = OUSTR(
+            "vnd.sun.star.expand:$BUNDLED_EXTENSIONS");
+        that->m_registrationData = OUSTR(
+            "vnd.sun.star.expand:$BUNDLED_EXTENSIONS_PREREG");
+        that->m_registryCache = OUSTR(
+            "vnd.sun.star.expand:$BUNDLED_EXTENSIONS_PREREG/registry");
+        logFile = OUSTR(
+            "vnd.sun.star.expand:$BUNDLED_EXTENSIONS_PREREG/log.txt");
+    }
     else if (context.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("tmp") )) {
         that->m_activePackages = OUSTR(
             "vnd.sun.star.expand:$TMP_EXTENSIONS/extensions");
@@ -950,6 +968,8 @@ void PackageManagerImpl::removePackage(
                 contentRemoved.writeStream( xData, true /* replace existing */ );
             }
             m_activePackagesDB->erase( id, fileName ); // to be removed upon next start
+            //remove any cached data hold by the backend
+            m_xRegistry->packageRemoved(xPackage->getURL(), xPackage->getPackageType()->getMediaType());
         }
         try_dispose( xPackage );
 
@@ -990,7 +1010,8 @@ OUString PackageManagerImpl::getDeployPath( ActivePackages::Data const & data )
     //The bundled extensions are not contained in an additional folder
     //with a unique name. data.temporaryName contains already the
     //UTF8 encoded folder name. See PackageManagerImpl::synchronize
-    if (!m_context.equals(OUSTR("bundled")))
+    if (!m_context.equals(OUSTR("bundled"))
+        && !m_context.equals(OUSTR("bundled_prereg")))
     {
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("_/") );
         buf.append( ::rtl::Uri::encode( data.fileName, rtl_UriCharClassPchar,
@@ -1342,6 +1363,8 @@ bool PackageManagerImpl::synchronizeAddedExtensions(
     Reference<css::ucb::XCommandEnvironment> const & xCmdEnv)
 {
     bool bModified = false;
+    OSL_ASSERT(!m_context.equals(OUSTR("user")));
+
     ActivePackages::Entries id2temp( m_activePackagesDB->getEntries() );
     //check if the folder exist at all. The shared extension folder
     //may not exist for a normal user.
@@ -1367,8 +1390,8 @@ bool PackageManagerImpl::synchronizeAddedExtensions(
             //The temporary folders of user and shared have an '_' at then end.
             //But the name in ActivePackages.temporaryName is saved without.
             OUString title2 = title;
-            bool bNotBundled = !m_context.equals(OUSTR("bundled"));
-            if (bNotBundled)
+            bool bShared = m_context.equals(OUSTR("shared"));
+            if (bShared)
             {
                 OSL_ASSERT(title2[title2.getLength() -1] == '_');
                 title2 = title2.copy(0, title2.getLength() -1);
@@ -1390,7 +1413,7 @@ bool PackageManagerImpl::synchronizeAddedExtensions(
                 // an added extension
                 OUString url(m_activePackages_expanded + OUSTR("/") + titleEncoded);
                 OUString sExtFolder;
-                if (bNotBundled) //that is, shared
+                if (bShared) //that is, shared
                 {
                     //Check if the extension was not "deleted" already which is indicated
                     //by a xxx.tmpremoved file
@@ -1412,7 +1435,7 @@ bool PackageManagerImpl::synchronizeAddedExtensions(
                     ActivePackages::Data dbData;
 
                     dbData.temporaryName = titleEncoded;
-                    if (bNotBundled)
+                    if (bShared)
                         dbData.fileName = sExtFolder;
                     else
                         dbData.fileName = title;

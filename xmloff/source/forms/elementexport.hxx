@@ -162,6 +162,13 @@ namespace xmloff
         */
         void exportSubTags() throw (::com::sun::star::uno::Exception);
 
+        /** adds the attributes which are handled via generic IPropertyHandlers
+
+            <p>In the future, this really should be *all* attribiutes, instead of this shitload of
+            hand-crafted code we have currently ...</p>
+        */
+        void exportGenericHandlerAttributes();
+
         /** adds common control attributes to the XMLExport context given
 
             <p>The attribute list of the context is not cleared initially, this is the responsibility of the caller.</p>

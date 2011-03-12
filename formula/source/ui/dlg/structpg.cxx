@@ -50,7 +50,7 @@ namespace formula
 StructListBox::StructListBox(Window* pParent, const ResId& rResId ):
     SvTreeListBox(pParent,rResId )
 {
-    bActiveFlag=FALSE;
+    bActiveFlag=sal_False;
 
     Font aFont( GetFont() );
     Size aSize = aFont.GetSize();
@@ -62,37 +62,37 @@ StructListBox::StructListBox(Window* pParent, const ResId& rResId ):
 SvLBoxEntry* StructListBox::InsertStaticEntry(
         const XubString& rText,
         const Image& rEntryImg,
-        SvLBoxEntry* pParent, ULONG nPos, IFormulaToken* pToken )
+        SvLBoxEntry* pParent, sal_uLong nPos, IFormulaToken* pToken )
 {
-    SvLBoxEntry* pEntry = InsertEntry( rText, rEntryImg, rEntryImg, pParent, FALSE, nPos, pToken );
+    SvLBoxEntry* pEntry = InsertEntry( rText, rEntryImg, rEntryImg, pParent, sal_False, nPos, pToken );
     return pEntry;
 }
 
-void StructListBox::SetActiveFlag(BOOL bFlag)
+void StructListBox::SetActiveFlag(sal_Bool bFlag)
 {
     bActiveFlag=bFlag;
 }
 
-BOOL StructListBox::GetActiveFlag()
+sal_Bool StructListBox::GetActiveFlag()
 {
     return bActiveFlag;
 }
 
 void StructListBox::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    bActiveFlag=TRUE;
+    bActiveFlag=sal_True;
     SvTreeListBox::MouseButtonDown(rMEvt);
 }
 
 void StructListBox::GetFocus()
 {
-    bActiveFlag=TRUE;
+    bActiveFlag=sal_True;
     SvTreeListBox::GetFocus();
 }
 
 void StructListBox::LoseFocus()
 {
-    bActiveFlag=FALSE;
+    bActiveFlag=sal_False;
     SvTreeListBox::LoseFocus();
 }
 
@@ -107,7 +107,7 @@ StructPage::StructPage(Window* pParent):
     maImgError      ( ModuleRes( BMP_STR_ERROR ) ),
     pSelectedToken  ( NULL )
 {
-    aTlbStruct.SetWindowBits(WB_HASLINES|WB_CLIPCHILDREN|
+    aTlbStruct.SetStyle(aTlbStruct.GetStyle()|WB_HASLINES|WB_CLIPCHILDREN|
                         WB_HASBUTTONS|WB_HSCROLL|WB_NOINITIALSELECTION);
 
     aTlbStruct.SetNodeDefaultImages();
@@ -121,20 +121,20 @@ StructPage::StructPage(Window* pParent):
 
 void StructPage::ClearStruct()
 {
-    aTlbStruct.SetActiveFlag(FALSE);
+    aTlbStruct.SetActiveFlag(sal_False);
     aTlbStruct.Clear();
 }
 
 SvLBoxEntry* StructPage::InsertEntry( const XubString& rText, SvLBoxEntry* pParent,
-                                       USHORT nFlag,ULONG nPos,IFormulaToken* pIFormulaToken)
+                                       sal_uInt16 nFlag,sal_uLong nPos,IFormulaToken* pIFormulaToken)
 {
-    aTlbStruct.SetActiveFlag( FALSE );
+    aTlbStruct.SetActiveFlag( sal_False );
 
     SvLBoxEntry* pEntry = NULL;
     switch( nFlag )
     {
         case STRUCT_FOLDER:
-            pEntry = aTlbStruct.InsertEntry( rText, pParent, FALSE, nPos, pIFormulaToken );
+            pEntry = aTlbStruct.InsertEntry( rText, pParent, sal_False, nPos, pIFormulaToken );
         break;
         case STRUCT_END:
             pEntry = aTlbStruct.InsertStaticEntry( rText, maImgEnd, pParent, nPos, pIFormulaToken );

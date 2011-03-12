@@ -72,7 +72,7 @@ SbxObject* SbStdFactory::CreateObject( const String& rClassName )
 
 
 
-void SbStdPicture::PropType( SbxVariable* pVar, SbxArray*, BOOL bWrite )
+void SbStdPicture::PropType( SbxVariable* pVar, SbxArray*, sal_Bool bWrite )
 {
     if( bWrite )
     {
@@ -81,7 +81,7 @@ void SbStdPicture::PropType( SbxVariable* pVar, SbxArray*, BOOL bWrite )
     }
 
     GraphicType eType = aGraphic.GetType();
-    INT16 nType = 0;
+    sal_Int16 nType = 0;
 
     if( eType == GRAPHIC_BITMAP )
         nType = 1;
@@ -93,7 +93,7 @@ void SbStdPicture::PropType( SbxVariable* pVar, SbxArray*, BOOL bWrite )
 }
 
 
-void SbStdPicture::PropWidth( SbxVariable* pVar, SbxArray*, BOOL bWrite )
+void SbStdPicture::PropWidth( SbxVariable* pVar, SbxArray*, sal_Bool bWrite )
 {
     if( bWrite )
     {
@@ -105,10 +105,10 @@ void SbStdPicture::PropWidth( SbxVariable* pVar, SbxArray*, BOOL bWrite )
     aSize = GetpApp()->GetAppWindow()->LogicToPixel( aSize, aGraphic.GetPrefMapMode() );
     aSize = GetpApp()->GetAppWindow()->PixelToLogic( aSize, MapMode( MAP_TWIP ) );
 
-    pVar->PutInteger( (INT16)aSize.Width() );
+    pVar->PutInteger( (sal_Int16)aSize.Width() );
 }
 
-void SbStdPicture::PropHeight( SbxVariable* pVar, SbxArray*, BOOL bWrite )
+void SbStdPicture::PropHeight( SbxVariable* pVar, SbxArray*, sal_Bool bWrite )
 {
     if( bWrite )
     {
@@ -120,7 +120,7 @@ void SbStdPicture::PropHeight( SbxVariable* pVar, SbxArray*, BOOL bWrite )
     aSize = GetpApp()->GetAppWindow()->LogicToPixel( aSize, aGraphic.GetPrefMapMode() );
     aSize = GetpApp()->GetAppWindow()->PixelToLogic( aSize, MapMode( MAP_TWIP ) );
 
-    pVar->PutInteger( (INT16)aSize.Height() );
+    pVar->PutInteger( (sal_Int16)aSize.Height() );
 }
 
 
@@ -170,8 +170,8 @@ void SbStdPicture::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
 
         SbxVariable* pVar   = pHint->GetVar();
         SbxArray*    pPar_  = pVar->GetParameters();
-        USHORT       nWhich = (USHORT)pVar->GetUserData();
-        BOOL         bWrite = pHint->GetId() == SBX_HINT_DATACHANGED;
+        sal_uInt16       nWhich = (sal_uInt16)pVar->GetUserData();
+        sal_Bool         bWrite = pHint->GetId() == SBX_HINT_DATACHANGED;
 
         // Propteries
         switch( nWhich )
@@ -187,7 +187,7 @@ void SbStdPicture::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
 
 //-----------------------------------------------------------------------------
 
-void SbStdFont::PropBold( SbxVariable* pVar, SbxArray*, BOOL bWrite )
+void SbStdFont::PropBold( SbxVariable* pVar, SbxArray*, sal_Bool bWrite )
 {
     if( bWrite )
         SetBold( pVar->GetBool() );
@@ -195,7 +195,7 @@ void SbStdFont::PropBold( SbxVariable* pVar, SbxArray*, BOOL bWrite )
         pVar->PutBool( IsBold() );
 }
 
-void SbStdFont::PropItalic( SbxVariable* pVar, SbxArray*, BOOL bWrite )
+void SbStdFont::PropItalic( SbxVariable* pVar, SbxArray*, sal_Bool bWrite )
 {
     if( bWrite )
         SetItalic( pVar->GetBool() );
@@ -203,7 +203,7 @@ void SbStdFont::PropItalic( SbxVariable* pVar, SbxArray*, BOOL bWrite )
         pVar->PutBool( IsItalic() );
 }
 
-void SbStdFont::PropStrikeThrough( SbxVariable* pVar, SbxArray*, BOOL bWrite )
+void SbStdFont::PropStrikeThrough( SbxVariable* pVar, SbxArray*, sal_Bool bWrite )
 {
     if( bWrite )
         SetStrikeThrough( pVar->GetBool() );
@@ -211,7 +211,7 @@ void SbStdFont::PropStrikeThrough( SbxVariable* pVar, SbxArray*, BOOL bWrite )
         pVar->PutBool( IsStrikeThrough() );
 }
 
-void SbStdFont::PropUnderline( SbxVariable* pVar, SbxArray*, BOOL bWrite )
+void SbStdFont::PropUnderline( SbxVariable* pVar, SbxArray*, sal_Bool bWrite )
 {
     if( bWrite )
         SetUnderline( pVar->GetBool() );
@@ -219,15 +219,15 @@ void SbStdFont::PropUnderline( SbxVariable* pVar, SbxArray*, BOOL bWrite )
         pVar->PutBool( IsUnderline() );
 }
 
-void SbStdFont::PropSize( SbxVariable* pVar, SbxArray*, BOOL bWrite )
+void SbStdFont::PropSize( SbxVariable* pVar, SbxArray*, sal_Bool bWrite )
 {
     if( bWrite )
-        SetSize( (USHORT)pVar->GetInteger() );
+        SetSize( (sal_uInt16)pVar->GetInteger() );
     else
-        pVar->PutInteger( (INT16)GetSize() );
+        pVar->PutInteger( (sal_Int16)GetSize() );
 }
 
-void SbStdFont::PropName( SbxVariable* pVar, SbxArray*, BOOL bWrite )
+void SbStdFont::PropName( SbxVariable* pVar, SbxArray*, sal_Bool bWrite )
 {
     if( bWrite )
         SetFontName( pVar->GetString() );
@@ -292,8 +292,8 @@ void SbStdFont::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
 
         SbxVariable* pVar   = pHint->GetVar();
         SbxArray*    pPar_  = pVar->GetParameters();
-        USHORT       nWhich = (USHORT)pVar->GetUserData();
-        BOOL         bWrite = pHint->GetId() == SBX_HINT_DATACHANGED;
+        sal_uInt16       nWhich = (sal_uInt16)pVar->GetUserData();
+        sal_Bool         bWrite = pHint->GetId() == SBX_HINT_DATACHANGED;
 
         // Propteries
         switch( nWhich )
@@ -349,7 +349,7 @@ sal_Bool TransferableHelperImpl::GetData( const ::com::sun::star::datatransfer::
 }
 */
 
-void SbStdClipboard::MethClear( SbxVariable*, SbxArray* pPar_, BOOL )
+void SbStdClipboard::MethClear( SbxVariable*, SbxArray* pPar_, sal_Bool )
 {
     if( pPar_ && (pPar_->Count() > 1) )
     {
@@ -360,7 +360,7 @@ void SbStdClipboard::MethClear( SbxVariable*, SbxArray* pPar_, BOOL )
     //Clipboard::Clear();
 }
 
-void SbStdClipboard::MethGetData( SbxVariable* pVar, SbxArray* pPar_, BOOL )
+void SbStdClipboard::MethGetData( SbxVariable* pVar, SbxArray* pPar_, sal_Bool )
 {
     (void)pVar;
 
@@ -370,7 +370,7 @@ void SbStdClipboard::MethGetData( SbxVariable* pVar, SbxArray* pPar_, BOOL )
         return;
     }
 
-    USHORT nFormat = pPar_->Get(1)->GetInteger();
+    sal_uInt16 nFormat = pPar_->Get(1)->GetInteger();
     if( !nFormat  || nFormat > 3 )
     {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
@@ -393,7 +393,7 @@ void SbStdClipboard::MethGetData( SbxVariable* pVar, SbxArray* pPar_, BOOL )
     */
 }
 
-void SbStdClipboard::MethGetFormat( SbxVariable* pVar, SbxArray* pPar_, BOOL )
+void SbStdClipboard::MethGetFormat( SbxVariable* pVar, SbxArray* pPar_, sal_Bool )
 {
     if( !pPar_ || (pPar_->Count() != 2) )
     {
@@ -401,18 +401,18 @@ void SbStdClipboard::MethGetFormat( SbxVariable* pVar, SbxArray* pPar_, BOOL )
         return;
     }
 
-    USHORT nFormat = pPar_->Get(1)->GetInteger();
+    sal_uInt16 nFormat = pPar_->Get(1)->GetInteger();
     if( !nFormat  || nFormat > 3 )
     {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
         return;
     }
 
-    pVar->PutBool( FALSE );
+    pVar->PutBool( sal_False );
     //pVar->PutBool( Clipboard::HasFormat( nFormat ) );
 }
 
-void SbStdClipboard::MethGetText( SbxVariable* pVar, SbxArray* pPar_, BOOL )
+void SbStdClipboard::MethGetText( SbxVariable* pVar, SbxArray* pPar_, sal_Bool )
 {
     if( pPar_ && (pPar_->Count() > 1) )
     {
@@ -424,7 +424,7 @@ void SbStdClipboard::MethGetText( SbxVariable* pVar, SbxArray* pPar_, BOOL )
     //pVar->PutString( Clipboard::PasteString() );
 }
 
-void SbStdClipboard::MethSetData( SbxVariable* pVar, SbxArray* pPar_, BOOL )
+void SbStdClipboard::MethSetData( SbxVariable* pVar, SbxArray* pPar_, sal_Bool )
 {
     (void)pVar;
 
@@ -434,7 +434,7 @@ void SbStdClipboard::MethSetData( SbxVariable* pVar, SbxArray* pPar_, BOOL )
         return;
     }
 
-    USHORT nFormat = pPar_->Get(2)->GetInteger();
+    sal_uInt16 nFormat = pPar_->Get(2)->GetInteger();
     if( !nFormat  || nFormat > 3 )
     {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
@@ -458,7 +458,7 @@ void SbStdClipboard::MethSetData( SbxVariable* pVar, SbxArray* pPar_, BOOL )
     */
 }
 
-void SbStdClipboard::MethSetText( SbxVariable* pVar, SbxArray* pPar_, BOOL )
+void SbStdClipboard::MethSetText( SbxVariable* pVar, SbxArray* pPar_, sal_Bool )
 {
     (void)pVar;
 
@@ -531,8 +531,8 @@ void SbStdClipboard::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
 
         SbxVariable* pVar   = pHint->GetVar();
         SbxArray*    pPar_  = pVar->GetParameters();
-        USHORT       nWhich = (USHORT)pVar->GetUserData();
-        BOOL         bWrite = pHint->GetId() == SBX_HINT_DATACHANGED;
+        sal_uInt16       nWhich = (sal_uInt16)pVar->GetUserData();
+        sal_Bool         bWrite = pHint->GetId() == SBX_HINT_DATACHANGED;
 
         // Methods
         switch( nWhich )

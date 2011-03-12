@@ -82,3 +82,11 @@ DEF1EXPORTFILE=	exports.dxp
 .INCLUDE : $(PRJ)$/target.pmk
 
 
+
+ALLTAR : $(MISC)/mysql.component
+
+$(MISC)/mysql.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        mysql.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt mysql.component

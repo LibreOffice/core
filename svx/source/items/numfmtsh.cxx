@@ -456,7 +456,7 @@ void SvxNumberFormatShell::MakePreviewString( const String& rFormatStr,
 {
     rpFontColor = NULL;
 
-    ULONG nExistingFormat = pFormatter->GetEntryKey( rFormatStr, eCurLanguage );
+    sal_uIntPtr nExistingFormat = pFormatter->GetEntryKey( rFormatStr, eCurLanguage );
     if ( nExistingFormat == NUMBERFORMAT_ENTRY_NOT_FOUND )
     {
         //  real preview - not implemented in NumberFormatter for text formats
@@ -469,7 +469,7 @@ void SvxNumberFormatShell::MakePreviewString( const String& rFormatStr,
         //  format exists
 
         //  #50441# if a string was set in addition to the value, use it for text formats
-        BOOL bUseText = ( eValType == SVX_VALUE_TYPE_STRING ||
+        sal_Bool bUseText = ( eValType == SVX_VALUE_TYPE_STRING ||
                             ( aValStr.Len() && ( pFormatter->GetType(nExistingFormat) & NUMBERFORMAT_TEXT ) ) );
         if ( bUseText )
             pFormatter->GetOutputString( aValStr, nExistingFormat,
@@ -1031,7 +1031,7 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( SvStrings& rList,short n
             aWSStringsDtor, *pTmpCurrencyEntry, bTmpBanking );
         if ( !bTmpBanking )
             pFormatter->GetCurrencyFormatStrings(
-                aWSStringsDtor, *pTmpCurrencyEntry, TRUE );
+                aWSStringsDtor, *pTmpCurrencyEntry, sal_True );
     }
     else
         nDefault = 0;
@@ -1045,8 +1045,8 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( SvStrings& rList,short n
             const NfCurrencyEntry* pCurr = rCurrencyTable[i];
             if ( pCurr->GetLanguage() == eLang && pTmpCurrencyEntry != pCurr )
             {
-                pFormatter->GetCurrencyFormatStrings( aWSStringsDtor, *pCurr, FALSE );
-                pFormatter->GetCurrencyFormatStrings( aWSStringsDtor, *pCurr, TRUE );
+                pFormatter->GetCurrencyFormatStrings( aWSStringsDtor, *pCurr, sal_False );
+                pFormatter->GetCurrencyFormatStrings( aWSStringsDtor, *pCurr, sal_True );
             }
         }
     }
@@ -1175,7 +1175,7 @@ void SvxNumberFormatShell::GetPreviewString_Impl( String& rString, Color*& rpCol
     rpColor = NULL;
 
     //  #50441# if a string was set in addition to the value, use it for text formats
-    BOOL bUseText = ( eValType == SVX_VALUE_TYPE_STRING ||
+    sal_Bool bUseText = ( eValType == SVX_VALUE_TYPE_STRING ||
                         ( aValStr.Len() && ( pFormatter->GetType(nCurFormatKey) & NUMBERFORMAT_TEXT ) ) );
 
     if ( bUseText )

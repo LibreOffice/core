@@ -66,16 +66,6 @@ namespace xmloff
                 }
                 break;
 
-            case FormComponentType::DATEFIELD:
-                _rpCurrentValuePropertyName = PROPERTY_DATE;
-                _rpValuePropertyName = PROPERTY_DEFAULT_DATE;
-                break;
-
-            case FormComponentType::TIMEFIELD:
-                _rpCurrentValuePropertyName = PROPERTY_TIME;
-                _rpValuePropertyName = PROPERTY_DEFAULT_TIME;
-                break;
-
             case FormComponentType::NUMERICFIELD:
             case FormComponentType::CURRENCYFIELD:
                 _rpCurrentValuePropertyName = PROPERTY_VALUE;
@@ -109,6 +99,10 @@ namespace xmloff
                 _rpCurrentValuePropertyName = PROPERTY_SPINVALUE;
                 _rpValuePropertyName = PROPERTY_DEFAULT_SPINVALUE;
                 break;
+
+            default:
+                OSL_ENSURE( false, "OValuePropertiesMetaData::getValuePropertyNames: unsupported component type!" );
+                break;
         }
     }
 
@@ -120,16 +114,6 @@ namespace xmloff
         _rpMinValuePropertyName = _rpMaxValuePropertyName = NULL;
         switch (_nFormComponentType)
         {
-            case FormComponentType::DATEFIELD:
-                _rpMinValuePropertyName = PROPERTY_DATE_MIN;
-                _rpMaxValuePropertyName = PROPERTY_DATE_MAX;
-                break;
-
-            case FormComponentType::TIMEFIELD:
-                _rpMinValuePropertyName = PROPERTY_TIME_MIN;
-                _rpMaxValuePropertyName = PROPERTY_TIME_MAX;
-                break;
-
             case FormComponentType::NUMERICFIELD:
             case FormComponentType::CURRENCYFIELD:
                 _rpMinValuePropertyName = PROPERTY_VALUE_MIN;
@@ -149,6 +133,10 @@ namespace xmloff
             case FormComponentType::SPINBUTTON:
                 _rpMinValuePropertyName = PROPERTY_SPINVALUE_MIN;
                 _rpMaxValuePropertyName = PROPERTY_SPINVALUE_MAX;
+                break;
+
+            default:
+                OSL_ENSURE( false, "OValuePropertiesMetaData::getValueLimitPropertyNames: unsupported component type!" );
                 break;
         }
     }
@@ -176,7 +164,15 @@ namespace xmloff
                 break;
 
             case FormComponentType::DATEFIELD:
+                _rpValuePropertyName = PROPERTY_DATE;
+                _rpDefaultValuePropertyName = PROPERTY_DEFAULT_DATE;
+                break;
+
             case FormComponentType::TIMEFIELD:
+                _rpValuePropertyName = PROPERTY_TIME;
+                _rpDefaultValuePropertyName = PROPERTY_DEFAULT_TIME;
+                break;
+
             case FormComponentType::NUMERICFIELD:
             case FormComponentType::CURRENCYFIELD:
             case FormComponentType::PATTERNFIELD:

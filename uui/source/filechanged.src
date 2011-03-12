@@ -33,7 +33,7 @@
 
 String STR_FILECHANGED_TITLE
 {
-    Text = "Document Has Been Changed by Others";
+    Text [ en-US ] = "Document Has Been Changed by Others";
 };
 String STR_FILECHANGED_MSG
 {

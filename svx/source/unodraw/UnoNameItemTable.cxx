@@ -40,13 +40,13 @@
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
-#include "unoapi.hxx"
+#include "svx/unoapi.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
 using namespace ::cppu;
 
-SvxUnoNameItemTable::SvxUnoNameItemTable( SdrModel* pModel, USHORT nWhich, BYTE nMemberId ) throw()
+SvxUnoNameItemTable::SvxUnoNameItemTable( SdrModel* pModel, sal_uInt16 nWhich, sal_uInt8 nMemberId ) throw()
 : mpModel( pModel ),
   mpModelPool( pModel ? &pModel->GetItemPool() : NULL ),
   mnWhich( nWhich ), mnMemberId( nMemberId )
@@ -93,11 +93,11 @@ sal_Bool SAL_CALL SvxUnoNameItemTable::supportsService( const  OUString& Service
     uno::Sequence< OUString > aSNL( getSupportedServiceNames() );
     const OUString * pArray = aSNL.getConstArray();
 
-    for( INT32 i = 0; i < aSNL.getLength(); i++ )
+    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
         if( pArray[i] == ServiceName )
-            return TRUE;
+            return sal_True;
 
-    return FALSE;
+    return sal_False;
 }
 
 void SAL_CALL SvxUnoNameItemTable::ImplInsertByName( const OUString& aName, const uno::Any& aElement )
@@ -201,11 +201,11 @@ void SAL_CALL SvxUnoNameItemTable::replaceByName( const OUString& aApiName, cons
     // if it is not in our own sets, modify the pool!
     sal_Bool bFound = sal_False;
 
-    USHORT nSurrogate;
-    USHORT nCount = mpModelPool ? mpModelPool->GetItemCount( mnWhich ) : 0;
+    sal_uInt32 nSurrogate;
+    sal_uInt32 nCount = mpModelPool ? mpModelPool->GetItemCount2( mnWhich ) : 0;
     for( nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
     {
-        pItem = (NameOrIndex*)mpModelPool->GetItem( mnWhich, nSurrogate);
+        pItem = (NameOrIndex*)mpModelPool->GetItem2( mnWhich, nSurrogate);
         if( pItem && pItem->GetName() == aSearchName )
         {
             pItem->PutValue( aElement, mnMemberId );
@@ -238,12 +238,12 @@ uno::Any SAL_CALL SvxUnoNameItemTable::getByName( const OUString& aApiName )
     {
         const String aSearchName( aName );
         NameOrIndex *pItem;
-        sal_Int32 nSurrogate;
+        sal_uInt32 nSurrogate;
 
-        sal_Int32 nSurrogateCount = mpModelPool ? (sal_Int32)mpModelPool->GetItemCount( mnWhich ) : 0;
+        sal_uInt32 nSurrogateCount = mpModelPool ? mpModelPool->GetItemCount2( mnWhich ) : 0;
         for( nSurrogate = 0; nSurrogate < nSurrogateCount; nSurrogate++ )
         {
-            pItem = (NameOrIndex*)mpModelPool->GetItem( mnWhich, (USHORT)nSurrogate );
+            pItem = (NameOrIndex*)mpModelPool->GetItem2( mnWhich, nSurrogate );
 
             if( isValid( pItem ) && (pItem->GetName() == aSearchName) )
             {
@@ -266,11 +266,11 @@ uno::Sequence< OUString > SAL_CALL SvxUnoNameItemTable::getElementNames(  )
     NameOrIndex *pItem;
     OUString aApiName;
 
-    const sal_Int32 nSurrogateCount = mpModelPool ? (sal_Int32)mpModelPool->GetItemCount( mnWhich ) : 0;
-    sal_Int32 nSurrogate;
+    const sal_uInt32 nSurrogateCount = mpModelPool ? mpModelPool->GetItemCount2( mnWhich ) : 0;
+    sal_uInt32 nSurrogate;
     for( nSurrogate = 0; nSurrogate < nSurrogateCount; nSurrogate++ )
     {
-        pItem = (NameOrIndex*)mpModelPool->GetItem( mnWhich, (USHORT)nSurrogate );
+        pItem = (NameOrIndex*)mpModelPool->GetItem2( mnWhich, nSurrogate );
 
         if( !isValid( pItem ) )
             continue;
@@ -305,14 +305,14 @@ sal_Bool SAL_CALL SvxUnoNameItemTable::hasByName( const OUString& aApiName )
         return sal_False;
 
     const String aSearchName( aName );
-    USHORT nSurrogate;
+    sal_uInt32 nSurrogate;
 
     const NameOrIndex *pItem;
 
-    USHORT nCount = mpModelPool ? mpModelPool->GetItemCount( mnWhich ) : 0;
+    sal_uInt32 nCount = mpModelPool ? mpModelPool->GetItemCount2( mnWhich ) : 0;
     for( nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
     {
-        pItem = (NameOrIndex*)mpModelPool->GetItem( mnWhich, nSurrogate );
+        pItem = (NameOrIndex*)mpModelPool->GetItem2( mnWhich, nSurrogate );
         if( isValid( pItem ) && (pItem->GetName() == aSearchName) )
             return sal_True;
     }
@@ -327,11 +327,11 @@ sal_Bool SAL_CALL SvxUnoNameItemTable::hasElements(  )
 
     const NameOrIndex *pItem;
 
-    sal_Int32 nSurrogate;
-    const sal_Int32 nSurrogateCount = mpModelPool ? (sal_Int32)mpModelPool->GetItemCount( mnWhich ) : 0;
+    sal_uInt32 nSurrogate;
+    const sal_uInt32 nSurrogateCount = mpModelPool ? mpModelPool->GetItemCount2( mnWhich ) : 0;
     for( nSurrogate = 0; nSurrogate < nSurrogateCount; nSurrogate++ )
     {
-        pItem = (NameOrIndex*)mpModelPool->GetItem( mnWhich, (USHORT)nSurrogate );
+        pItem = (NameOrIndex*)mpModelPool->GetItem2( mnWhich, nSurrogate );
 
         if( isValid( pItem ) )
             return sal_True;

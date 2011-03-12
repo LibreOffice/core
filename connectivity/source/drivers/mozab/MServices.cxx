@@ -40,7 +40,6 @@ using namespace connectivity::mozab;
 using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::registry::XRegistryKey;
 using ::com::sun::star::lang::XSingleServiceFactory;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::mozilla::XMozillaBootstrap;
@@ -53,31 +52,6 @@ typedef Reference< XSingleServiceFactory > (SAL_CALL *createFactoryFunc)
             const Sequence< OUString > & rServiceNames,
             rtl_ModuleCount* _pTemp
         );
-
-//***************************************************************************************
-//
-// Die vorgeschriebene C-Api muss erfuellt werden!
-// Sie besteht aus drei Funktionen, die von dem Modul exportiert werden muessen.
-//
-
-//---------------------------------------------------------------------------------------
-void REGISTER_PROVIDER(
-        const OUString& aServiceImplName,
-        const Sequence< OUString>& Services,
-        const Reference< ::com::sun::star::registry::XRegistryKey > & xKey)
-{
-    OUString aMainKeyName;
-    aMainKeyName = OUString( RTL_CONSTASCII_USTRINGPARAM("/"));
-    aMainKeyName += aServiceImplName;
-    aMainKeyName += OUString( RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
-
-    Reference< ::com::sun::star::registry::XRegistryKey >  xNewKey( xKey->createKey(aMainKeyName) );
-    OSL_ENSURE(xNewKey.is(), "MOZAB::component_writeInfo : could not create a registry key !");
-
-    for (sal_Int32 i=0; i<Services.getLength(); ++i)
-        xNewKey->createKey(Services[i]);
-}
-
 
 //---------------------------------------------------------------------------------------
 struct ProviderRequest
@@ -128,37 +102,6 @@ component_getImplementationEnvironment(
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-//---------------------------------------------------------------------------------------
-extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
-                void* /*pServiceManager*/,
-                void* pRegistryKey
-            )
-{
-    if (pRegistryKey)
-    try
-    {
-        Reference< ::com::sun::star::registry::XRegistryKey > xKey(reinterpret_cast< ::com::sun::star::registry::XRegistryKey*>(pRegistryKey));
-
-
-        REGISTER_PROVIDER(
-            MozabDriver::getImplementationName_Static(),
-            MozabDriver::getSupportedServiceNames_Static(), xKey);
-
-        Sequence< ::rtl::OUString > aSNS( 1 );
-        aSNS[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.mozilla.MozillaBootstrap"));
-        REGISTER_PROVIDER(
-             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.mozilla.MozillaBootstrap")),
-             aSNS, xKey);
-
-        return sal_True;
-    }
-    catch (::com::sun::star::registry::InvalidRegistryException& )
-    {
-        OSL_ENSURE(sal_False, "Mozab::component_writeInfo : could not create a registry key ! ## InvalidRegistryException !");
-    }
-
-    return sal_False;
-}
 typedef void* (SAL_CALL * OMozillaBootstrap_CreateInstanceFunction)(const Reference< XMultiServiceFactory >& _rxFactory );
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SAL_CALL createMozillaBootstrap(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception )
 {

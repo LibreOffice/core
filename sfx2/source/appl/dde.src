@@ -29,6 +29,7 @@
 
 ModalDialog MD_DDE_LINKEDIT
 {
+    HelpID = "sfx2:ModalDialog:MD_DDE_LINKEDIT";
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 223 , 74 ) ;
@@ -42,6 +43,7 @@ ModalDialog MD_DDE_LINKEDIT
     };
     Edit ED_DDE_APP
     {
+        HelpID = "sfx2:Edit:MD_DDE_LINKEDIT:ED_DDE_APP";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 55 , 14 ) ;
         Size = MAP_APPFONT ( 100 , 12 ) ;
@@ -54,6 +56,7 @@ ModalDialog MD_DDE_LINKEDIT
     };
     Edit ED_DDE_TOPIC
     {
+        HelpID = "sfx2:Edit:MD_DDE_LINKEDIT:ED_DDE_TOPIC";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 55 , 32 ) ;
         Size = MAP_APPFONT ( 100 , 12 ) ;
@@ -66,6 +69,7 @@ ModalDialog MD_DDE_LINKEDIT
     };
     Edit ED_DDE_ITEM
     {
+        HelpID = "sfx2:Edit:MD_DDE_LINKEDIT:ED_DDE_ITEM";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 55 , 50 ) ;
         Size = MAP_APPFONT ( 100 , 12 ) ;

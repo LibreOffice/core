@@ -40,9 +40,9 @@ class ContourWindow : public GraphCtrl
     Link                aPipetteLink;
     Link                aPipetteClickLink;
     Link                aWorkplaceClickLink;
-    BOOL                bPipetteMode;
-    BOOL                bWorkplaceMode;
-    BOOL                bClickValid;
+    sal_Bool                bPipetteMode;
+    sal_Bool                bWorkplaceMode;
+    sal_Bool                bClickValid;
 
 protected:
 
@@ -63,15 +63,15 @@ public:
     void                SetPolyPolygon( const PolyPolygon& rPolyPoly );
     const PolyPolygon&  GetPolyPolygon();
 
-    void                SetPipetteMode( const BOOL bPipette ) { bPipetteMode = bPipette; }
-    BOOL                IsPipetteMode() const { return bPipetteMode; }
+    void                SetPipetteMode( const sal_Bool bPipette ) { bPipetteMode = bPipette; }
+    sal_Bool                IsPipetteMode() const { return bPipetteMode; }
     const Color&        GetPipetteColor() const { return aPipetteColor; }
 
-    BOOL                IsClickValid() const { return bClickValid; }
-    BOOL                IsContourChanged() const;
+    sal_Bool                IsClickValid() const { return bClickValid; }
+    sal_Bool                IsContourChanged() const;
 
-    void                SetWorkplaceMode( const BOOL bWorkplace ) { bWorkplaceMode = bWorkplace; }
-    BOOL                IsWorkplaceMode() const { return bWorkplaceMode; }
+    void                SetWorkplaceMode( const sal_Bool bWorkplace ) { bWorkplaceMode = bWorkplace; }
+    sal_Bool                IsWorkplaceMode() const { return bWorkplaceMode; }
     const Rectangle&    GetWorkRect() const { return aWorkRect; }
 
     void                SetPipetteHdl( const Link& rLink ) { aPipetteLink = rLink; }

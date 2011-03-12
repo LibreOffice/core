@@ -53,14 +53,14 @@ public:
     // #100592#
     const ::rtl::OUString& GetFilterCLSID() const { return sCLSID; }
 
-    XMLEmbeddedObjectImportContext( SvXMLImport& rImport, USHORT nPrfx,
+    XMLEmbeddedObjectImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
                                     const ::rtl::OUString& rLName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
     virtual ~XMLEmbeddedObjectImportContext();
 
-    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                    const ::rtl::OUString& rLocalName,
                                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 

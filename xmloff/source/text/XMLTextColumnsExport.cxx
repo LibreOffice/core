@@ -39,7 +39,7 @@
 
 
 #include <xmloff/xmltoken.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlexp.hxx>
 #include "XMLTextColumnsExport.hxx"

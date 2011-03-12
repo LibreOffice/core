@@ -82,7 +82,7 @@ public:
     sal_Bool            IsObjectInPlaceActive() const;
     sal_Bool            IsObjectActive() const;
     void                DeactivateObject();
-    BOOL                SetObjArea( const Rectangle & );
+    sal_Bool                SetObjArea( const Rectangle & );
     Rectangle           GetObjArea() const;
     Rectangle           GetScaledObjArea() const;
     void                SetSizeScale( const Fraction & rScaleWidth, const Fraction & rScaleHeight );
@@ -97,11 +97,12 @@ public:
     ErrCode             DoVerb( long nVerb );
     void                VisAreaChanged();
     void                ResetObject();
-    BOOL                IsUIActive();
+    sal_Bool                IsUIActive();
 
     // used in Writer
     // Rectangle           PixelObjVisAreaToLogic( const Rectangle & rObjRect ) const;
     // Rectangle           LogicObjAreaToPixel( const Rectangle & rRect ) const;
+    virtual void        FormatChanged(); // object format was changed (used for StarMath formulas aligning)
 };
 
 #endif

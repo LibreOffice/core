@@ -276,22 +276,38 @@ namespace connectivity
                             if ( pStream.get() )
                             {
                                 ByteString sLine;
+                                ByteString sVersionString;
                                 while ( pStream->ReadLine(sLine) )
                                 {
-                                    if ( sLine.Equals("version=",0,sizeof("version=")-1) )
+                                    if ( sLine.Len() == 0 )
+                                        continue;
+                                    const ByteString sIniKey = sLine.GetToken( 0, '=' );
+                                    const ByteString sValue = sLine.GetToken( 1, '=' );
+                                    if ( sIniKey.Equals( "hsqldb.compatible_version" ) )
                                     {
-                                        sLine = sLine.GetToken(1,'=');
-                                        const sal_Int32 nMajor = sLine.GetToken(0,'.').ToInt32();
-                                        const sal_Int32 nMinor = sLine.GetToken(1,'.').ToInt32();
-                                        const sal_Int32 nMicro = sLine.GetToken(2,'.').ToInt32();
-                                        if (     nMajor > 1
-                                            || ( nMajor == 1 && nMinor > 8 )
-                                            || ( nMajor == 1 && nMinor == 8 && nMicro > 0 ) )
+                                        sVersionString = sValue;
+                                    }
+                                    else
+                                    {
+                                        if  (   sIniKey.Equals( "version" )
+                                            &&  ( sVersionString.Len() == 0 )
+                                            )
                                         {
-                                            ::connectivity::SharedResources aResources;
-                                            sMessage = aResources.getResourceString(STR_ERROR_NEW_VERSION);
+                                            sVersionString = sValue;
                                         }
-                                        break;
+                                    }
+                                }
+                                if ( sVersionString.Len() )
+                                {
+                                    const sal_Int32 nMajor = sVersionString.GetToken(0,'.').ToInt32();
+                                    const sal_Int32 nMinor = sVersionString.GetToken(1,'.').ToInt32();
+                                    const sal_Int32 nMicro = sVersionString.GetToken(2,'.').ToInt32();
+                                    if (     nMajor > 1
+                                        || ( nMajor == 1 && nMinor > 8 )
+                                        || ( nMajor == 1 && nMinor == 8 && nMicro > 0 ) )
+                                    {
+                                        ::connectivity::SharedResources aResources;
+                                        sMessage = aResources.getResourceString(STR_ERROR_NEW_VERSION);
                                     }
                                 }
                             }

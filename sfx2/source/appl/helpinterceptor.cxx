@@ -136,7 +136,7 @@ void HelpInterceptor_Impl::SetStartURL( const String& rURL )
     {
         m_pHistory = new HelpHistoryList_Impl;
         Any aEmptyViewData;
-        m_pHistory->insert( m_pHistory->begin(), new HelpHistoryEntry_Impl( rURL, aEmptyViewData ) );
+        m_pHistory->insert( m_pHistory->begin(), new HelpHistoryEntry_Impl( rURL, aEmptyViewData, (sal_uIntPtr)0x0 ) );
         m_nCurPos = m_pHistory->size() - 1;
 
         m_pWindow->UpdateToolbox();
@@ -277,7 +277,7 @@ void SAL_CALL HelpInterceptor_Impl::dispatch(
                 }
             }
 
-            ULONG nPos = ( bBack && m_nCurPos > 0 ) ? --m_nCurPos
+            sal_uIntPtr nPos = ( bBack && m_nCurPos > 0 ) ? --m_nCurPos
                                                     : ( !bBack && m_nCurPos < m_pHistory->size() - 1 )
                                                     ? ++m_nCurPos
                                                     : ULONG_MAX;

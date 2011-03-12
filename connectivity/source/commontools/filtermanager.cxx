@@ -36,6 +36,8 @@
 #include "TConnection.hxx"
 #include <osl/diagnose.h>
 #include "connectivity/dbtools.hxx"
+#include <tools/diagnose_ex.h>
+#include <rtl/ustrbuf.hxx>
 
 //........................................................................
 namespace dbtools
@@ -93,7 +95,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FilterManager::setFilterComponent: setting the filter failed!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 
@@ -114,44 +116,30 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FilterManager::setApplyPublicFilter: setting the filter failed!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 
     //--------------------------------------------------------------------
-    namespace
+    void FilterManager::appendFilterComponent( ::rtl::OUStringBuffer& io_appendTo, const ::rtl::OUString& i_component ) const
     {
-        void    lcl_ensureBracketed( ::rtl::OUString& /* [inout] */ _rExpression )
+        if ( io_appendTo.getLength() > 0 )
         {
-            OSL_ENSURE( _rExpression.getLength(), "lcl_ensureBracketed: expression is empty!" );
-            if ( _rExpression.getLength() )
-            {
-                if ( ( _rExpression.getStr()[0] != '(' ) || ( _rExpression.getStr()[ _rExpression.getLength() - 1 ] != ')' ) )
-                {
-                    ::rtl::OUString sComposed( RTL_CONSTASCII_USTRINGPARAM( "(" ) );
-                    sComposed += _rExpression;
-                    sComposed += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ")" ) );
-                    _rExpression = sComposed;
-                }
-            }
+            io_appendTo.insert( 0, sal_Unicode( '(' ) );
+            io_appendTo.insert( 1, sal_Unicode( ' ' ) );
+            io_appendTo.appendAscii( " ) AND " );
         }
-    }
-    //--------------------------------------------------------------------
-    void FilterManager::appendFilterComponent( ::rtl::OUString& /* [inout] */ _rAppendTo, const ::rtl::OUString& _rComponent ) const
-    {
-        if ( _rAppendTo.getLength() )
-            _rAppendTo += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " AND " ) );
 
-        ::rtl::OUString sComponent( _rComponent );
-        lcl_ensureBracketed( sComponent );
-        _rAppendTo += sComponent;
+        io_appendTo.appendAscii( "( " );
+        io_appendTo.append( i_component );
+        io_appendTo.appendAscii( " )" );
     }
 
     //--------------------------------------------------------------------
-    bool FilterManager::isThereAtMostOneComponent( ::rtl::OUString& _rOnlyComponent ) const
+    bool FilterManager::isThereAtMostOneComponent( ::rtl::OUStringBuffer& o_singleComponent ) const
     {
         sal_Int32 nOnlyNonEmpty = -1;
-    sal_Int32 i;
+        sal_Int32 i;
         for ( i = getFirstApplicableFilterIndex(); i < FC_COMPONENT_COUNT; ++i )
         {
             if ( m_aFilterComponents[ i ].getLength() )
@@ -165,14 +153,14 @@ namespace dbtools
         }
         if ( nOnlyNonEmpty == -1 )
         {
-            _rOnlyComponent = ::rtl::OUString();
+            o_singleComponent.makeStringAndClear();
             return true;
         }
 
         if ( i == FC_COMPONENT_COUNT )
         {
             // we found only one non-empty filter component
-            _rOnlyComponent = m_aFilterComponents[ nOnlyNonEmpty ];
+            o_singleComponent = m_aFilterComponents[ nOnlyNonEmpty ];
             return true;
         }
         return false;
@@ -181,17 +169,17 @@ namespace dbtools
     //--------------------------------------------------------------------
     ::rtl::OUString FilterManager::getComposedFilter( ) const
     {
-        ::rtl::OUString sComposedFilter;
+        ::rtl::OUStringBuffer aComposedFilter;
 
         // if we have only one non-empty component, then there's no need to compose anything
-        if ( isThereAtMostOneComponent( sComposedFilter ) )
-            return sComposedFilter;
+        if ( !isThereAtMostOneComponent( aComposedFilter ) )
+        {
+            // append the single components
+            for ( sal_Int32 i = getFirstApplicableFilterIndex(); i < FC_COMPONENT_COUNT; ++i )
+                appendFilterComponent( aComposedFilter, m_aFilterComponents[ i ] );
+        }
 
-        // append the single components
-        for ( sal_Int32 i = getFirstApplicableFilterIndex(); i < FC_COMPONENT_COUNT; ++i )
-            appendFilterComponent( sComposedFilter, m_aFilterComponents[ i ] );
-
-        return sComposedFilter;
+        return aComposedFilter.makeStringAndClear();
     }
 
 //........................................................................

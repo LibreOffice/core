@@ -61,7 +61,7 @@ SfxPoolItem* SfxObjectShellItem::Clone( SfxItemPool *) const
 
 //--------------------------------------------------------------------
 
-bool SfxObjectShellItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ ) const
+bool SfxObjectShellItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     if ( pObjSh )
     {
@@ -78,7 +78,7 @@ bool SfxObjectShellItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /*nMem
 
 //--------------------------------------------------------------------
 
-bool SfxObjectShellItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ )
+bool SfxObjectShellItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     // This item MUST have a model. Please don't change this, there are UNO-based
     // implementations which need it!!
@@ -111,7 +111,7 @@ bool SfxObjectShellItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE /*
 
 //=========================================================================
 
-SfxObjectItem::SfxObjectItem( USHORT nWhichId, SfxShell *pSh )
+SfxObjectItem::SfxObjectItem( sal_uInt16 nWhichId, SfxShell *pSh )
 :   SfxPoolItem( nWhichId ),
     _pSh( pSh )
 {}

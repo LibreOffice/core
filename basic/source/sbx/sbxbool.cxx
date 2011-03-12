@@ -86,15 +86,15 @@ enum SbxBOOL ImpGetBool( const SbxValues* p )
                 else if( !p->pOUString->equalsIgnoreAsciiCase( SbxRes( STRING_FALSE ) ) )
                 {
                     // Jetzt kann es noch in eine Zahl konvertierbar sein
-                    BOOL bError = TRUE;
+                    sal_Bool bError = sal_True;
                     double n;
                     SbxDataType t;
-                    USHORT nLen = 0;
+                    sal_uInt16 nLen = 0;
                     if( ImpScan( *p->pOUString, n, t, &nLen ) == SbxERR_OK )
                     {
                         if( nLen == p->pOUString->getLength() )
                         {
-                            bError = FALSE;
+                            bError = sal_False;
                             if( n != 0.0 )
                                 nRes = SbxTRUE;
                         }
@@ -146,7 +146,7 @@ enum SbxBOOL ImpGetBool( const SbxValues* p )
     return nRes;
 }
 
-void ImpPutBool( SbxValues* p, INT16 n )
+void ImpPutBool( SbxValues* p, sal_Int16 n )
 {
     if( n )
         n = SbxTRUE;
@@ -155,17 +155,17 @@ void ImpPutBool( SbxValues* p, INT16 n )
         case SbxCHAR:
             p->nChar = (xub_Unicode) n; break;
         case SbxUINT:
-            p->nByte = (BYTE) n; break;
+            p->nByte = (sal_uInt8) n; break;
         case SbxINTEGER:
         case SbxBOOL:
             p->nInteger = n; break;
         case SbxLONG:
             p->nLong = n; break;
         case SbxULONG:
-            p->nULong = (UINT32) n; break;
+            p->nULong = (sal_uInt32) n; break;
         case SbxERROR:
         case SbxUSHORT:
-            p->nUShort = (UINT16) n; break;
+            p->nUShort = (sal_uInt16) n; break;
         case SbxSINGLE:
             p->nSingle = n; break;
         case SbxDATE:
@@ -178,7 +178,7 @@ void ImpPutBool( SbxValues* p, INT16 n )
             p->uInt64 = (sal_uInt64) n; break;
         case SbxDECIMAL:
         case SbxBYREF | SbxDECIMAL:
-            ImpCreateDecimal( p )->setInt( (INT16)n );
+            ImpCreateDecimal( p )->setInt( (sal_Int16)n );
             break;
 
         case SbxBYREF | SbxSTRING:
@@ -194,7 +194,7 @@ void ImpPutBool( SbxValues* p, INT16 n )
         {
             SbxValue* pVal = PTR_CAST(SbxValue,p->pObj);
             if( pVal )
-                pVal->PutBool( BOOL( n != 0 ) );
+                pVal->PutBool( sal_Bool( n != 0 ) );
             else
                 SbxBase::SetError( SbxERR_NO_OBJECT );
             break;
@@ -202,17 +202,17 @@ void ImpPutBool( SbxValues* p, INT16 n )
         case SbxBYREF | SbxCHAR:
             *p->pChar = (xub_Unicode) n; break;
         case SbxBYREF | SbxBYTE:
-            *p->pByte = (BYTE) n; break;
+            *p->pByte = (sal_uInt8) n; break;
         case SbxBYREF | SbxINTEGER:
         case SbxBYREF | SbxBOOL:
-            *p->pInteger = (INT16) n; break;
+            *p->pInteger = (sal_Int16) n; break;
         case SbxBYREF | SbxERROR:
         case SbxBYREF | SbxUSHORT:
-            *p->pUShort = (UINT16) n; break;
+            *p->pUShort = (sal_uInt16) n; break;
         case SbxBYREF | SbxLONG:
             *p->pLong = n; break;
         case SbxBYREF | SbxULONG:
-            *p->pULong = (UINT32) n; break;
+            *p->pULong = (sal_uInt32) n; break;
         case SbxBYREF | SbxSINGLE:
             *p->pSingle = n; break;
         case SbxBYREF | SbxDATE:

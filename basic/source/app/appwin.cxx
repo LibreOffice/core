@@ -51,10 +51,10 @@ TYPEINIT0(AppWin);
 AppWin::AppWin( BasicFrame* pParent )
 : DockingWindow( pParent, WB_SIZEMOVE | WB_CLOSEABLE | WB_PINABLE )
 , nSkipReload(0)
-, bHasFile( FALSE )
-, bReloadAborted( FALSE )
+, bHasFile( sal_False )
+, bReloadAborted( sal_False )
 , pFrame( pParent )
-, bFind( TRUE )
+, bFind( sal_True )
 , pDataEdit(NULL)
 {
     // Load the Untitled string if not yet loaded
@@ -63,7 +63,7 @@ AppWin::AppWin( BasicFrame* pParent )
     nCount++;
 
     // Get maximized state from current window
-    USHORT nInitialWinState;
+    sal_uInt16 nInitialWinState;
     if ( pFrame->pWork )
     {
         nInitialWinState = pFrame->pWork->GetWinState();
@@ -97,7 +97,7 @@ void AppWin::SetText( const XubString& rStr )
     pFrame->WindowRenamed( this );
 }
 
-void AppWin::TitleButtonClick( USHORT nButton )
+void AppWin::TitleButtonClick( sal_uInt16 nButton )
 {
     if ( TITLE_BUTTON_DOCKING == nButton )
         if ( TT_WIN_STATE_MAX != nWinState )
@@ -105,7 +105,7 @@ void AppWin::TitleButtonClick( USHORT nButton )
         else
             Restore();
     else // if ( TITLE_BUTTON_HIDE == nButton )
-        Minimize( TRUE );
+        Minimize( sal_True );
 }
 
 void AppWin::Maximize()
@@ -115,7 +115,7 @@ void AppWin::Maximize()
         nNormalPos = GetPosPixel();
         nNormalSize = GetSizePixel();
 
-        SetFloatingMode( FALSE );
+        SetFloatingMode( sal_False );
 
         pFrame->nMaximizedWindows++;
         nWinState = TT_WIN_STATE_MAX;
@@ -137,7 +137,7 @@ void AppWin::Maximize()
 
 void AppWin::Restore()
 {
-    SetFloatingMode( TRUE );
+    SetFloatingMode( sal_True );
     SetPosSizePixel( nNormalPos, nNormalSize );
 
     if ( TT_WIN_STATE_MAX == nWinState )
@@ -147,7 +147,7 @@ void AppWin::Restore()
     pFrame->WinMax_Restore();
 }
 
-void AppWin::Minimize( BOOL bMinimize )
+void AppWin::Minimize( sal_Bool bMinimize )
 {
     if ( bMinimize )
         nWinState |= TT_WIN_STATE_HIDE;
@@ -156,7 +156,7 @@ void AppWin::Minimize( BOOL bMinimize )
     pFrame->WinMax_Restore();
 }
 
-void AppWin::Cascade( USHORT nNr )
+void AppWin::Cascade( sal_uInt16 nNr )
 {
     Restore();
 
@@ -228,7 +228,7 @@ long AppWin::PreNotify( NotifyEvent& rNEvt )
     if ( rNEvt.GetType() == EVENT_GETFOCUS )
         if ( pFrame->pList->back() != this )
             Activate();
-    return FALSE;       // Der event soll weiter verarbeitet werden
+    return sal_False;       // Der event soll weiter verarbeitet werden
 }
 
 void AppWin::Activate()
@@ -241,14 +241,14 @@ long AppWin::InitMenu( Menu* pMenu )
 {
 
     ::rtl::OUString aTemp;
-    BOOL bMarked;
+    sal_Bool bMarked;
     if( pDataEdit )
     {
         TextSelection r = pDataEdit->GetSelection();
         bMarked = r.HasRange();
     }
     else
-        bMarked = FALSE;
+        bMarked = sal_False;
     pMenu->EnableItem( RID_EDITREPEAT,  (aFind.Len() != 0 ) );
     pMenu->EnableItem( RID_EDITCUT,     bMarked );
     pMenu->EnableItem( RID_EDITCOPY,    bMarked );
@@ -256,20 +256,20 @@ long AppWin::InitMenu( Menu* pMenu )
     pMenu->EnableItem( RID_EDITDEL,     bMarked );
 //  pMenu->EnableItem( RID_HELPTOPIC,   bMarked );
 
-    BOOL bHasText;
+    sal_Bool bHasText;
     if( pDataEdit )
         bHasText = pDataEdit->HasText();
     else
-        bHasText = FALSE;
-    BOOL bRunning = pFrame->Basic().IsRunning();
-    BOOL bCanExecute = BOOL( (!bRunning && bHasText) || pFrame->bInBreak );
+        bHasText = sal_False;
+    sal_Bool bRunning = pFrame->Basic().IsRunning();
+    sal_Bool bCanExecute = sal_Bool( (!bRunning && bHasText) || pFrame->bInBreak );
     pMenu->EnableItem( RID_RUNSTART,    bCanExecute );
     pMenu->EnableItem( RID_RUNBREAK,    bRunning && !pFrame->bInBreak);
     pMenu->EnableItem( RID_RUNSTOP,     bRunning );
     pMenu->EnableItem( RID_RUNTOCURSOR, bCanExecute );
     pMenu->EnableItem( RID_RUNSTEPINTO, bCanExecute );
     pMenu->EnableItem( RID_RUNSTEPOVER, bCanExecute );
-    return TRUE;
+    return sal_True;
 }
 
 long AppWin::DeInitMenu( Menu* pMenu )
@@ -286,7 +286,7 @@ long AppWin::DeInitMenu( Menu* pMenu )
     pMenu->EnableItem( RID_RUNTOCURSOR );
     pMenu->EnableItem( RID_RUNSTEPINTO );
     pMenu->EnableItem( RID_RUNSTEPOVER );
-    return TRUE;
+    return sal_True;
 }
 
 // Menu Handler
@@ -294,7 +294,7 @@ long AppWin::DeInitMenu( Menu* pMenu )
 void AppWin::Command( const CommandEvent& rCEvt )
 {
     TextSelection r  = pDataEdit->GetSelection();
-    BOOL bHasMark = r.HasRange();
+    sal_Bool bHasMark = r.HasRange();
     switch( rCEvt.GetCommand() ) {
         case RID_FILESAVE:
             QuerySave( QUERY_DISK_CHANGED | SAVE_NOT_DIRTY ); break;
@@ -336,7 +336,7 @@ void AppWin::Command( const CommandEvent& rCEvt )
                 pDataEdit->BuildKontextMenu( pKontext );
                 if ( pKontext )
                 {
-                    USHORT nRes = pKontext->Execute( this, GetPointerPosPixel() );
+                    sal_uInt16 nRes = pKontext->Execute( this, GetPointerPosPixel() );
                     if ( nRes )
                         pFrame->Command( nRes );
                     delete pKontext;
@@ -347,12 +347,12 @@ void AppWin::Command( const CommandEvent& rCEvt )
 }
 
 
-BOOL AppWin::IsSkipReload()
+sal_Bool AppWin::IsSkipReload()
 {
     return nSkipReload != 0;
 }
 
-void AppWin::SkipReload( BOOL bSkip )
+void AppWin::SkipReload( sal_Bool bSkip )
 {
     DBG_ASSERT( bSkip || nSkipReload, "SkipReload aufgehoben ohne es zu aktivieren");
     if ( bSkip )
@@ -361,17 +361,17 @@ void AppWin::SkipReload( BOOL bSkip )
         nSkipReload--;
 }
 
-BOOL AppWin::DiskFileChanged( USHORT nWhat )
+sal_Bool AppWin::DiskFileChanged( sal_uInt16 nWhat )
 {
     if ( !bHasFile )
-        return FALSE;
+        return sal_False;
 
     switch ( nWhat )
     {
         case SINCE_LAST_LOAD:
             {
                 if ( bReloadAborted )
-                    return TRUE;
+                    return sal_True;
                 else
                     return DiskFileChanged( SINCE_LAST_ASK_RELOAD );
             }
@@ -392,16 +392,16 @@ BOOL AppWin::DiskFileChanged( USHORT nWhat )
         default:
             OSL_FAIL("Not Implemented in AppWin::DiskFileChanged");
     }
-    return TRUE;
+    return sal_True;
 }
 
-void AppWin::UpdateFileInfo( USHORT nWhat )
+void AppWin::UpdateFileInfo( sal_uInt16 nWhat )
 {
     switch ( nWhat )
     {
         case HAS_BEEN_LOADED:
             {
-                bReloadAborted = FALSE;
+                bReloadAborted = sal_False;
                 UpdateFileInfo( ASKED_RELOAD );
 
             }
@@ -446,7 +446,7 @@ void AppWin::CheckReload()
         }
         else
         {
-            bReloadAborted = TRUE;
+            bReloadAborted = sal_True;
         }
     }
 }
@@ -457,14 +457,14 @@ void AppWin::Reload()
     TextSelection aSelMemo = pDataEdit->GetSelection();
     Load( GetText() );
     pDataEdit->SetSelection( aSelMemo );
-    SkipReload( FALSE );
+    SkipReload( sal_False );
 }
 
 // Load file
-BOOL AppWin::Load( const String& aName )
+sal_Bool AppWin::Load( const String& aName )
 {
     SkipReload();
-    BOOL bErr;
+    sal_Bool bErr;
 
 //  if( !QuerySave() )
 //      return;
@@ -493,17 +493,17 @@ BOOL AppWin::Load( const String& aName )
         SetText( aModName );
         UpdateFileInfo( HAS_BEEN_LOADED );
         PostLoad();
-        bHasFile = TRUE;
+        bHasFile = sal_True;
     }
-    SkipReload( FALSE );
+    SkipReload( sal_False );
     return !bErr;
 }
 
 // Save file
-USHORT AppWin::ImplSave()
+sal_uInt16 AppWin::ImplSave()
 {
     SkipReload();
-    USHORT nResult = SAVE_RES_NOT_SAVED;
+    sal_uInt16 nResult = SAVE_RES_NOT_SAVED;
     String s1 = *pNoName;
     String s2 = GetText().Copy( 0, s1.Len() );
     if( s1 == s2 )
@@ -513,7 +513,7 @@ USHORT AppWin::ImplSave()
         if ( pDataEdit->Save( aName ) )
         {
             nResult = SAVE_RES_SAVED;
-            bHasFile = TRUE;
+            bHasFile = sal_True;
         }
         else
         {
@@ -522,38 +522,38 @@ USHORT AppWin::ImplSave()
         }
         UpdateFileInfo( HAS_BEEN_LOADED );
     }
-    SkipReload( FALSE );
+    SkipReload( sal_False );
     return nResult;
 }
 
 // Save to new file name
-USHORT AppWin::SaveAs()
+sal_uInt16 AppWin::SaveAs()
 {
     SkipReload();
     String s1 = *pNoName;
     String s2 = GetText().Copy( 0, s1.Len() );
     if( s1 == s2 ) s2.Erase();
     else s2 = GetText();
-    if( pFrame->QueryFileName( s2, GetFileType(), TRUE ) )
+    if( pFrame->QueryFileName( s2, GetFileType(), sal_True ) )
     {
         SetText( s2 );
         PostSaveAs();
-        SkipReload( FALSE );
+        SkipReload( sal_False );
         return ImplSave();
     }
     else
     {
-        SkipReload( FALSE );
+        SkipReload( sal_False );
         return SAVE_RES_CANCEL;
     }
 }
 
 // Should we save the file?
-USHORT AppWin::QuerySave( QueryBits nBits )
+sal_uInt16 AppWin::QuerySave( QueryBits nBits )
 {
-    BOOL bQueryDirty = ( nBits & QUERY_DIRTY ) != 0;
-    BOOL bQueryDiskChanged = ( nBits & QUERY_DISK_CHANGED ) != 0;
-    BOOL bSaveNotDirty = ( nBits & SAVE_NOT_DIRTY ) != 0;
+    sal_Bool bQueryDirty = ( nBits & QUERY_DIRTY ) != 0;
+    sal_Bool bQueryDiskChanged = ( nBits & QUERY_DISK_CHANGED ) != 0;
+    sal_Bool bSaveNotDirty = ( nBits & SAVE_NOT_DIRTY ) != 0;
 
     SkipReload();
     short nResult;
@@ -562,8 +562,8 @@ USHORT AppWin::QuerySave( QueryBits nBits )
     else
         nResult = RET_NO;
 
-    BOOL bAlwaysEnableInput = pFrame->IsAlwaysEnableInput();
-    pFrame->AlwaysEnableInput( FALSE );
+    sal_Bool bAlwaysEnableInput = pFrame->IsAlwaysEnableInput();
+    pFrame->AlwaysEnableInput( sal_False );
     if( ( ( IsModified() || bSaveNotDirty ) && bQueryDirty ) || ( DiskFileChanged( SINCE_LAST_LOAD ) && bQueryDiskChanged ) )
     {
         ToTop();
@@ -577,7 +577,7 @@ USHORT AppWin::QuerySave( QueryBits nBits )
     }
     pFrame->AlwaysEnableInput( bAlwaysEnableInput );
 
-    USHORT nReturn;
+    sal_uInt16 nReturn;
     switch( nResult )
     {
         case RET_YES:
@@ -593,11 +593,11 @@ USHORT AppWin::QuerySave( QueryBits nBits )
             OSL_FAIL("switch default where no default should be: Internal error");
             nReturn = SAVE_RES_CANCEL;
     }
-    SkipReload( FALSE );
+    SkipReload( sal_False );
     return nReturn;
 }
 
-BOOL AppWin::Close()
+sal_Bool AppWin::Close()
 {
     switch ( QuerySave( QUERY_DIRTY ) )
     {
@@ -606,21 +606,21 @@ BOOL AppWin::Close()
         {
             DockingWindow::Close();
             delete this;
-            return TRUE;
+            return sal_True;
         }
 // uncomment to avoid compiler warning
 //  break;
     case SAVE_RES_ERROR:
-        return FALSE;
+        return sal_False;
 // uncomment to avoid compiler warning
 //      break;
     case SAVE_RES_CANCEL:
-        return FALSE;
+        return sal_False;
 // uncomment to avoid compiler warning
 //      break;
     default:
         OSL_FAIL("Not Implemented in AppWin::Close");
-        return FALSE;
+        return sal_False;
     }
 }
 
@@ -630,7 +630,7 @@ void AppWin::Find()
     SttResId aResId( IDD_FIND_DIALOG );
     FindDialog aDlg( this, aResId, aFind );
     if( aDlg.Execute() ) {
-        bFind = TRUE;
+        bFind = sal_True;
         Repeat();
     }
 }
@@ -642,7 +642,7 @@ void AppWin::Replace()
     ReplaceDialog* pDlg = new ReplaceDialog
                         (this, aResId, aFind, aReplace );
     if( pDlg->Execute() ) {
-        bFind = FALSE;
+        bFind = sal_False;
         Repeat();
     }
 }
@@ -650,7 +650,7 @@ void AppWin::Replace()
 // Repeat search/replace operation
 void AppWin::Repeat()
 {
-    if( (aFind.Len() != 0 ) && ( pDataEdit->Find( aFind ) || (ErrorBox(this,SttResId(IDS_PATTERNNOTFOUND)).Execute() && FALSE) ) && !bFind )
+    if( (aFind.Len() != 0 ) && ( pDataEdit->Find( aFind ) || (ErrorBox(this,SttResId(IDS_PATTERNNOTFOUND)).Execute() && sal_False) ) && !bFind )
       pDataEdit->ReplaceSelected( aReplace );
 }
 

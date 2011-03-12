@@ -35,7 +35,7 @@
 #include <osl/diagnose.h>
 #include <comphelper/extract.hxx>
 #include "callbacks.hxx"
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <tools/date.hxx>
 #include <tools/time.hxx>
 #include <tools/datetime.hxx>
@@ -350,7 +350,7 @@ _rChars
 }
 
 //---------------------------------------------------------------------
-void OPropertyImport::handleAttribute(sal_uInt16 /*_nNamespaceKey*/, const ::rtl::OUString& _rLocalName, const ::rtl::OUString& _rValue)
+bool OPropertyImport::handleAttribute(sal_uInt16 /*_nNamespaceKey*/, const ::rtl::OUString& _rLocalName, const ::rtl::OUString& _rValue)
 {
     const OAttribute2Property::AttributeAssignment* pProperty = m_rContext.getAttributeMap().getAttributeTranslation(_rLocalName);
     if (pProperty)
@@ -362,18 +362,21 @@ void OPropertyImport::handleAttribute(sal_uInt16 /*_nNamespaceKey*/, const ::rtl
         // convert the value string into the target type
         aNewValue.Value = PropertyConversion::convertString(m_rContext.getGlobalContext(), pProperty->aPropertyType, _rValue, pProperty->pEnumMap, pProperty->bInverseSemantics);
         implPushBackPropertyValue( aNewValue );
+        return true;
     }
-#if OSL_DEBUG_LEVEL > 0
-    else if (!token::IsXMLToken(_rLocalName, token::XML_TYPE))  // xlink:type is valid but ignored for <form:form>
+    if (!token::IsXMLToken(_rLocalName, token::XML_TYPE))  // xlink:type is valid but ignored for <form:form>
     {
+#if OSL_DEBUG_LEVEL > 0
         ::rtl::OString sMessage( "OPropertyImport::handleAttribute: Can't handle the following:\n" );
         sMessage += ::rtl::OString( "  Attribute name: " );
         sMessage += ::rtl::OString( _rLocalName.getStr(), _rLocalName.getLength(), osl_getThreadTextEncoding() );
         sMessage += ::rtl::OString( "\n  value: " );
         sMessage += ::rtl::OString( _rValue.getStr(), _rValue.getLength(), osl_getThreadTextEncoding() );
         OSL_ENSURE( sal_False, sMessage.getStr() );
-    }
 #endif
+        return false;
+    }
+    return true;
 }
 
 //=====================================================================

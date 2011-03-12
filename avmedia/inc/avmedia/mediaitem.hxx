@@ -70,7 +70,7 @@ class MediaItem : public SfxPoolItem
 public:
                             TYPEINFO();
 
-                            MediaItem( USHORT nWhich = 0, sal_uInt32 nMaskSet = AVMEDIA_SETMASK_NONE );
+                            MediaItem( sal_uInt16 nWhich = 0, sal_uInt32 nMaskSet = AVMEDIA_SETMASK_NONE );
                             MediaItem( const MediaItem& rMediaItem );
     virtual                 ~MediaItem();
 
@@ -81,8 +81,8 @@ public:
                                                  SfxMapUnit ePresUnit,
                                                  XubString& rText,
                                                  const IntlWrapper *pIntl ) const;
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     void                    merge( const MediaItem& rMediaItem );
 

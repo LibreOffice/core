@@ -72,7 +72,7 @@
 #include "PropertySetMerger.hxx"
 #include <xmloff/families.hxx>
 #include "ximpstyl.hxx"
-#include"xmlnmspe.hxx"
+#include"xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include "EnhancedCustomShapeToken.hxx"
 #include "XMLReplacementImageContext.hxx"
@@ -83,7 +83,7 @@
 #include "descriptionimp.hxx"
 #include "ximpcustomshape.hxx"
 #include "XMLEmbeddedObjectImportContext.hxx"
-#include "xmlerror.hxx"
+#include "xmloff/xmlerror.hxx"
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <tools/string.hxx>
 #include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
@@ -159,9 +159,9 @@ SdXMLShapeContext::SdXMLShapeContext(
 ,   mxAttrList(xAttrList)
 ,   mbListContextPushed( false )
 ,   mnStyleFamily(XML_STYLE_FAMILY_SD_GRAPHICS_ID)
-,   mbIsPlaceholder(FALSE)
+,   mbIsPlaceholder(sal_False)
 ,   mbClearDefaultAttributes( true )
-,   mbIsUserTransformed(FALSE)
+,   mbIsUserTransformed(sal_False)
 ,   mnZOrder(-1)
 ,   maSize(1, 1)
 ,   maPosition(0, 0)
@@ -178,7 +178,7 @@ SdXMLShapeContext::~SdXMLShapeContext()
 
 //////////////////////////////////////////////////////////////////////////////
 
-SvXMLImportContext *SdXMLShapeContext::CreateChildContext( USHORT p_nPrefix,
+SvXMLImportContext *SdXMLShapeContext::CreateChildContext( sal_uInt16 p_nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList>& xAttrList )
 {
@@ -310,7 +310,7 @@ void SdXMLShapeContext::addGluePoint( const uno::Reference< xml::sax::XAttribute
             }
             else if( IsXMLToken( aLocalName, XML_ALIGN ) )
             {
-                USHORT eKind;
+                sal_uInt16 eKind;
                 if( SvXMLUnitConverter::convertEnum( eKind, sValue, aXML_GlueAlignment_EnumMap ) )
                 {
                     aGluePoint.PositionAlignment = (drawing::Alignment)eKind;
@@ -319,7 +319,7 @@ void SdXMLShapeContext::addGluePoint( const uno::Reference< xml::sax::XAttribute
             }
             else if( IsXMLToken( aLocalName, XML_ESCAPE_DIRECTION ) )
             {
-                USHORT eKind;
+                sal_uInt16 eKind;
                 if( SvXMLUnitConverter::convertEnum( eKind, sValue, aXML_GlueEscapeDirection_EnumMap ) )
                 {
                     aGluePoint.Escape = (drawing::EscapeDirection)eKind;
@@ -615,13 +615,13 @@ void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
                 break;
 
             const SvXMLStyleContext* pStyle = 0L;
-            sal_Bool bAutoStyle(FALSE);
+            sal_Bool bAutoStyle(sal_False);
 
             if(GetImport().GetShapeImport()->GetAutoStylesContext())
                 pStyle = GetImport().GetShapeImport()->GetAutoStylesContext()->FindStyleChildContext(mnStyleFamily, maDrawStyleName);
 
             if(pStyle)
-                bAutoStyle = TRUE;
+                bAutoStyle = sal_True;
 
             if(!pStyle && GetImport().GetShapeImport()->GetStylesContext())
                 pStyle = GetImport().GetShapeImport()->GetStylesContext()->FindStyleChildContext(mnStyleFamily, maDrawStyleName);
@@ -1189,7 +1189,7 @@ void SdXMLEllipseShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl
     {
         if( IsXMLToken( rLocalName, XML_KIND ) )
         {
-            USHORT eKind;
+            sal_uInt16 eKind;
             if( SvXMLUnitConverter::convertEnum( eKind, rValue, aXML_CircleKind_EnumMap ) )
             {
                 meKind = eKind;
@@ -1357,7 +1357,7 @@ SdXMLPathShapeContext::SdXMLPathShapeContext(
     uno::Reference< drawing::XShapes >& rShapes,
     sal_Bool bTemporaryShape)
 :   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
-    mbClosed( TRUE )
+    mbClosed( sal_True )
 {
 }
 
@@ -1578,7 +1578,7 @@ void SdXMLTextBoxShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
                 // XmlShapeTypePresTitleTextShape
                 pService = "com.sun.star.presentation.TitleTextShape";
             }
-            bIsPresShape = TRUE;
+            bIsPresShape = sal_True;
         }
     }
 
@@ -1742,7 +1742,7 @@ SdXMLConnectorShapeContext::SdXMLConnectorShapeContext(
 :   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
     maStart(0,0),
     maEnd(1,1),
-    mnType( (USHORT)drawing::ConnectorType_STANDARD ),
+    mnType( (sal_uInt16)drawing::ConnectorType_STANDARD ),
     mnStartGlueId(-1),
     mnEndGlueId(-1),
     mnDelta1(0),
@@ -2141,7 +2141,7 @@ void SdXMLPageShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
     {
         if(bIsPresentation && !IsXMLToken( maPresentationClass, XML_PRESENTATION_PAGE ) )
         {
-            bIsPresentation = FALSE;
+            bIsPresentation = sal_False;
         }
 
         if(bIsPresentation)
@@ -2425,7 +2425,7 @@ void SdXMLGraphicObjectShapeContext::EndElement()
 //////////////////////////////////////////////////////////////////////////////
 
 SvXMLImportContext* SdXMLGraphicObjectShapeContext::CreateChildContext(
-    USHORT nPrefix, const ::rtl::OUString& rLocalName,
+    sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName,
     const uno::Reference<xml::sax::XAttributeList>& xAttrList )
 {
     SvXMLImportContext* pContext = NULL;
@@ -2562,7 +2562,7 @@ void SdXMLChartShapeContext::Characters( const ::rtl::OUString& rChars )
         mpChartContext->Characters( rChars );
 }
 
-SvXMLImportContext * SdXMLChartShapeContext::CreateChildContext( USHORT nPrefix, const ::rtl::OUString& rLocalName,
+SvXMLImportContext * SdXMLChartShapeContext::CreateChildContext( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
     if( mpChartContext )
@@ -2726,7 +2726,7 @@ void SdXMLObjectShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl:
 }
 
 SvXMLImportContext* SdXMLObjectShapeContext::CreateChildContext(
-    USHORT nPrefix, const ::rtl::OUString& rLocalName,
+    sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName,
     const uno::Reference<xml::sax::XAttributeList>& xAttrList )
 {
     // #100592#
@@ -2892,7 +2892,7 @@ void SdXMLAppletShapeContext::EndElement()
     SdXMLShapeContext::EndElement();
 }
 
-SvXMLImportContext * SdXMLAppletShapeContext::CreateChildContext( USHORT p_nPrefix, const ::rtl::OUString& rLocalName, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList )
+SvXMLImportContext * SdXMLAppletShapeContext::CreateChildContext( sal_uInt16 p_nPrefix, const ::rtl::OUString& rLocalName, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
     if( p_nPrefix == XML_NAMESPACE_DRAW && IsXMLToken( rLocalName, XML_PARAM ) )
     {
@@ -3164,7 +3164,7 @@ void SdXMLPluginShapeContext::EndElement()
     SdXMLShapeContext::EndElement();
 }
 
-SvXMLImportContext * SdXMLPluginShapeContext::CreateChildContext( USHORT p_nPrefix, const ::rtl::OUString& rLocalName, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList )
+SvXMLImportContext * SdXMLPluginShapeContext::CreateChildContext( sal_uInt16 p_nPrefix, const ::rtl::OUString& rLocalName, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
     if( p_nPrefix == XML_NAMESPACE_DRAW && IsXMLToken( rLocalName, XML_PARAM ) )
     {
@@ -3328,7 +3328,7 @@ SdXMLFrameShapeContext::~SdXMLFrameShapeContext()
 {
 }
 
-SvXMLImportContext *SdXMLFrameShapeContext::CreateChildContext( USHORT nPrefix,
+SvXMLImportContext *SdXMLFrameShapeContext::CreateChildContext( sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList>& xAttrList )
 {
@@ -3604,7 +3604,7 @@ void SdXMLCustomShapeContext::EndElement()
 //////////////////////////////////////////////////////////////////////////////
 
 SvXMLImportContext* SdXMLCustomShapeContext::CreateChildContext(
-    USHORT nPrefix, const ::rtl::OUString& rLocalName,
+    sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName,
     const uno::Reference<xml::sax::XAttributeList>& xAttrList )
 {
     SvXMLImportContext* pContext = NULL;
@@ -3770,7 +3770,7 @@ void SdXMLTableShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::
     SdXMLShapeContext::processAttribute( nPrefix, rLocalName, rValue );
 }
 
-SvXMLImportContext* SdXMLTableShapeContext::CreateChildContext( USHORT nPrefix, const ::rtl::OUString& rLocalName, const uno::Reference<xml::sax::XAttributeList>& xAttrList )
+SvXMLImportContext* SdXMLTableShapeContext::CreateChildContext( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const uno::Reference<xml::sax::XAttributeList>& xAttrList )
 {
     if( mxTableImportContext.Is() && (nPrefix == XML_NAMESPACE_TABLE) )
         return mxTableImportContext->CreateChildContext(nPrefix, rLocalName, xAttrList);

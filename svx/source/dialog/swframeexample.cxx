@@ -34,7 +34,7 @@
 #include <vcl/metric.hxx>
 #include <vcl/svapp.hxx>
 #include <svtools/colorcfg.hxx>
-#include <swframeexample.hxx>
+#include <svx/swframeexample.hxx>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
@@ -58,7 +58,7 @@ SvxSwFrameExample::SvxSwFrameExample( Window *pParent, const ResId& rResID ) :
     nVRel       (RelOrientation::PRINT_AREA),
     nWrap       (WrapTextMode_NONE),
     nAnchor     (TextContentAnchorType_AT_PAGE),
-    bTrans      (FALSE),
+    bTrans      (sal_False),
     aRelPos     (Point(0,0))
 {
     InitColors_Impl();
@@ -74,7 +74,7 @@ void SvxSwFrameExample::InitColors_Impl( void )
     const StyleSettings& rSettings = GetSettings().GetStyleSettings();
     m_aBgCol = Color( rSettings.GetWindowColor() );
 
-    BOOL bHC = rSettings.GetHighContrastMode();
+    sal_Bool bHC = rSettings.GetHighContrastMode();
 
     m_aFrameColor = Color( COL_LIGHTGREEN );
     m_aAlignColor = Color( COL_LIGHTRED );
@@ -101,19 +101,19 @@ void SvxSwFrameExample::InitAllRects_Impl()
 {
     aPage.SetSize( GetOutputSizePixel() );
 
-    ULONG nOutWPix = aPage.GetWidth();
-    ULONG nOutHPix = aPage.GetHeight();
+    sal_uIntPtr nOutWPix = aPage.GetWidth();
+    sal_uIntPtr nOutHPix = aPage.GetHeight();
 
     // PrintArea
-    ULONG nLBorder;
-    ULONG nRBorder;
-    ULONG nTBorder;
-    ULONG nBBorder;
+    sal_uIntPtr nLBorder;
+    sal_uIntPtr nRBorder;
+    sal_uIntPtr nTBorder;
+    sal_uIntPtr nBBorder;
 
-    ULONG nLTxtBorder;
-    ULONG nRTxtBorder;
-    ULONG nTTxtBorder;
-    ULONG nBTxtBorder;
+    sal_uIntPtr nLTxtBorder;
+    sal_uIntPtr nRTxtBorder;
+    sal_uIntPtr nTTxtBorder;
+    sal_uIntPtr nBTxtBorder;
 
     if (nAnchor != TextContentAnchorType_AS_CHARACTER)
     {
@@ -150,7 +150,7 @@ void SvxSwFrameExample::InitAllRects_Impl()
     aTextLine.Move(0, nTTxtBorder);
 
     // Rectangle to edges including paragraph
-    USHORT nLines = (USHORT)((aPagePrtArea.GetHeight() / 2 - nTTxtBorder - nBTxtBorder)
+    sal_uInt16 nLines = (sal_uInt16)((aPagePrtArea.GetHeight() / 2 - nTTxtBorder - nBTxtBorder)
              / (aTextLine.GetHeight() + 2));
     aPara = aPagePrtArea;
     aPara.SetSize(Size(aPara.GetWidth(),
@@ -198,8 +198,8 @@ void SvxSwFrameExample::InitAllRects_Impl()
     // Size of the frame to be positioned
     if (nAnchor != TextContentAnchorType_AS_CHARACTER)
     {
-        ULONG nLFBorder = nAnchor == TextContentAnchorType_AT_PAGE ? nLBorder : nLTxtBorder;
-        ULONG nRFBorder = nAnchor == TextContentAnchorType_AT_PAGE ? nRBorder : nRTxtBorder;
+        sal_uIntPtr nLFBorder = nAnchor == TextContentAnchorType_AT_PAGE ? nLBorder : nLTxtBorder;
+        sal_uIntPtr nRFBorder = nAnchor == TextContentAnchorType_AT_PAGE ? nRBorder : nRTxtBorder;
 
         switch (nHRel)
         {
@@ -222,7 +222,7 @@ void SvxSwFrameExample::InitAllRects_Impl()
     }
     else
     {
-        ULONG nFreeWidth = aPagePrtArea.GetWidth() - GetTextWidth(C2S(DEMOTEXT));
+        sal_uIntPtr nFreeWidth = aPagePrtArea.GetWidth() - GetTextWidth(C2S(DEMOTEXT));
 
         aFrmSize = Size(nFreeWidth / 2, (aTextLine.GetHeight() + 2) * 3);
         aDrawObj.SetSize(Size(Max(5L, (long)nFreeWidth / 3L), Max(5L, aFrmSize.Height() * 3L)));
@@ -456,9 +456,9 @@ Rectangle SvxSwFrameExample::DrawInnerFrame_Impl(const Rectangle &rRect, const C
         // Testabsatz zeichnen
         Rectangle aTxt(aTextLine);
         sal_Int32 nStep = aTxt.GetHeight() + 2;
-        USHORT nLines = (USHORT)(aParaPrtArea.GetHeight() / (aTextLine.GetHeight() + 2));
+        sal_uInt16 nLines = (sal_uInt16)(aParaPrtArea.GetHeight() / (aTextLine.GetHeight() + 2));
 
-        for (USHORT i = 0; i < nLines; i++)
+        for (sal_uInt16 i = 0; i < nLines; i++)
         {
             if (i == nLines - 1)
                 aTxt.SetSize(Size(aTxt.GetWidth() / 2, aTxt.GetHeight()));
@@ -605,7 +605,7 @@ void SvxSwFrameExample::Paint(const Rectangle&)
     const long nTxtLineHeight = aTextLine.GetHeight();
     Rectangle aTxt(aTextLine);
     sal_Int32 nStep;
-    USHORT nLines;
+    sal_uInt16 nLines;
 
     if (nAnchor == TextContentAnchorType_AT_FRAME)
     {
@@ -615,13 +615,13 @@ void SvxSwFrameExample::Paint(const Rectangle&)
         aTxt.Bottom() = aTxt.Top() + aTextLine.GetHeight() - 1;
 
         nStep = aTxt.GetHeight() + 2;
-        nLines = (USHORT)(((aFrameAtFrame.GetHeight() - 2 * FLYINFLY_BORDER) * 2 / 3)
+        nLines = (sal_uInt16)(((aFrameAtFrame.GetHeight() - 2 * FLYINFLY_BORDER) * 2 / 3)
                  / (aTxt.GetHeight() + 2));
     }
     else
     {
         nStep = aTxt.GetHeight() + 2;
-        nLines = (USHORT)(aParaPrtArea.GetHeight() / (aTextLine.GetHeight() + 2));
+        nLines = (sal_uInt16)(aParaPrtArea.GetHeight() / (aTextLine.GetHeight() + 2));
     }
 
     if (nAnchor != TextContentAnchorType_AS_CHARACTER)
@@ -635,7 +635,7 @@ void SvxSwFrameExample::Paint(const Rectangle&)
                            ( nHRel == RelOrientation::CHAR || nVRel == RelOrientation::CHAR ||
                              nVRel == RelOrientation::TEXT_LINE );
 
-        for (USHORT i = 0; i < nLines; ++i)
+        for (sal_uInt16 i = 0; i < nLines; ++i)
         {
             if (i == (nLines - 1))
                 aTxt.SetSize(Size(aTxt.GetWidth() / 2, aTxt.GetHeight()));
@@ -670,7 +670,7 @@ void SvxSwFrameExample::Paint(const Rectangle&)
         if (nAnchor != TextContentAnchorType_AT_FRAME && aTxt.Bottom() > aParaPrtArea.Bottom())
         {
             // Text has been replaced by frame, so adjust parameters height
-            ULONG nDiff = aTxt.Bottom() - aParaPrtArea.Bottom();
+            sal_uIntPtr nDiff = aTxt.Bottom() - aParaPrtArea.Bottom();
             aParaPrtArea.Bottom() += nDiff;
             aPara.Bottom() += nDiff;
 
@@ -692,7 +692,7 @@ void SvxSwFrameExample::Paint(const Rectangle&)
     DrawRect_Impl(aRect, m_aTransColor, m_aAlignColor);
 
     // Frame View
-    BOOL bDontFill = (nAnchor == TextContentAnchorType_AT_CHARACTER && aFrmRect.IsOver(aAutoCharFrame)) ? TRUE : bTrans;
+    sal_Bool bDontFill = (nAnchor == TextContentAnchorType_AT_CHARACTER && aFrmRect.IsOver(aAutoCharFrame)) ? sal_True : bTrans;
     DrawRect_Impl( aFrmRect, bDontFill? m_aTransColor : m_aBgCol, m_aFrameColor );
 }
 

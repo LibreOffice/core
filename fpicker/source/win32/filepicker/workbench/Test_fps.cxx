@@ -178,7 +178,7 @@ void SAL_CALL FilePickerListener::fileSelectionChanged( const ::com::sun::star::
                  Sequence< sal_Int8 > aDIB( dwFileSize );
 
                  DWORD dwBytesRead;
-                 BOOL bSuccess = ReadFile (hFile, aDIB.getArray( ), dwFileSize, &dwBytesRead, NULL) ;
+                 sal_Bool bSuccess = ReadFile (hFile, aDIB.getArray( ), dwFileSize, &dwBytesRead, NULL) ;
                  CloseHandle (hFile);
 
                  BITMAPFILEHEADER* pbmfh = (BITMAPFILEHEADER*)aDIB.getConstArray( );

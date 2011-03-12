@@ -82,15 +82,19 @@ OUString ExtensionBackendDb::getKeyElementName()
 void ExtensionBackendDb::addEntry(::rtl::OUString const & url, Data const & data)
 {
     try{
-        Reference<css::xml::dom::XNode> extensionNodeNode = writeKeyElement(url);
-        writeVectorOfPair(
-            data.items,
-            OUSTR("extension-items"),
-            OUSTR("item"),
-            OUSTR("url"),
-            OUSTR("media-type"),
-            extensionNodeNode);
-        save();
+        //reactive revoked entry if possible.
+        if (!activateEntry(url))
+        {
+            Reference<css::xml::dom::XNode> extensionNodeNode = writeKeyElement(url);
+            writeVectorOfPair(
+                data.items,
+                OUSTR("extension-items"),
+                OUSTR("item"),
+                OUSTR("url"),
+                OUSTR("media-type"),
+                extensionNodeNode);
+            save();
+        }
     }
     catch(css::uno::Exception &)
     {

@@ -29,6 +29,7 @@
 #include "resids.hrc"
 
 ModalDialog RID_CALLDLG {
+    HelpID = "basic:ModalDialog:RID_CALLDLG";
   PosSize = MAP_SYSFONT (18,18,142,142);
   SVLook = TRUE;
   MOVEABLE = TRUE;
@@ -43,11 +44,13 @@ ModalDialog RID_CALLDLG {
     PosSize = MAP_SYSFONT (10,70,120,8);
   };
   Edit RID_RETVAL {
+      HelpID = "basic:Edit:RID_CALLDLG:RID_RETVAL";
     PosSize = MAP_SYSFONT (10,85,120,12);
     Border = TRUE;
     TabStop = TRUE;
   };
   ListBox RID_PARAMS {
+      HelpID = "basic:ListBox:RID_CALLDLG:RID_PARAMS";
     PosSize = MAP_SYSFONT (10,25,120,40);
     TabStop = TRUE;
     Border = TRUE;
@@ -61,6 +64,7 @@ ModalDialog RID_CALLDLG {
 };
 
 ModalDialog IDD_ABOUT_DIALOG {
+    HelpID = "basic:ModalDialog:IDD_ABOUT_DIALOG";
     Pos = MAP_APPFONT( 58, 17 );
     Size = MAP_APPFONT( 155, 106 );
     SVLook = TRUE;
@@ -107,6 +111,7 @@ ModalDialog IDD_ABOUT_DIALOG {
 };
 
 ModalDialog IDD_TT_ABOUT_DIALOG {
+    HelpID = "basic:ModalDialog:IDD_TT_ABOUT_DIALOG";
     Pos = MAP_APPFONT( 58, 17 );
     Size = MAP_APPFONT( 120, 81 );
     SVLook = TRUE;
@@ -138,6 +143,7 @@ ModalDialog IDD_TT_ABOUT_DIALOG {
 };
 
 ModalDialog IDD_FIND_DIALOG {
+    HelpID = "basic:ModalDialog:IDD_FIND_DIALOG";
     Pos = MAP_APPFONT( 69, 30 );
     Size = MAP_APPFONT( 185, 70 );
     SVLook = TRUE;
@@ -150,6 +156,7 @@ ModalDialog IDD_FIND_DIALOG {
         TEXT[ en-US ] = "~Text";
     };
     Edit RID_FIND {
+        HelpID = "basic:Edit:IDD_FIND_DIALOG:RID_FIND";
             BORDER = TRUE;
             Pos = MAP_APPFONT( 40, 8 );
             Size = MAP_APPFONT( 135, 12 );
@@ -172,6 +179,7 @@ ModalDialog IDD_FIND_DIALOG {
 };
 
 ModalDialog IDD_REPLACE_DIALOG {
+    HelpID = "basic:ModalDialog:IDD_REPLACE_DIALOG";
     Pos = MAP_APPFONT( 69, 30 );
     Size = MAP_APPFONT( 185, 88 );
     SVLook = TRUE;
@@ -188,12 +196,14 @@ ModalDialog IDD_REPLACE_DIALOG {
         TEXT[ en-US ] = "~Replace by";
     };
     Edit RID_FIND {
+        HelpID = "basic:Edit:IDD_REPLACE_DIALOG:RID_FIND";
             BORDER = TRUE;
             Pos = MAP_APPFONT( 65, 8 );
             Size = MAP_APPFONT( 110, 12 );
             TABSTOP = TRUE;
         };
     Edit RID_REPLACE {
+        HelpID = "basic:Edit:IDD_REPLACE_DIALOG:RID_REPLACE";
             BORDER = TRUE;
             Pos = MAP_APPFONT( 65, 28 );
             Size = MAP_APPFONT( 110, 12 );
@@ -718,6 +728,7 @@ Menu RID_HELP {
     };
 };
 ModelessDialog IDD_PRINT_DIALOG {
+    HelpID = "basic:ModelessDialog:IDD_PRINT_DIALOG";
     Pos = MAP_APPFONT( 83, 42 );
     Size = MAP_APPFONT( 171, 94 );
     MOVEABLE = TRUE;
@@ -784,6 +795,7 @@ TabDialog IDD_OPTIONS_DLG
 
 
 TabPage RID_TP_GENERIC {
+    HelpID = "basic:TabPage:RID_TP_GENERIC";
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT( 244, 100 );
@@ -793,6 +805,7 @@ TabPage RID_TP_GENERIC {
             Text[ en-US ] = "Area";
     };
     ComboBox RID_CB_AREA {
+        HelpID = "basic:ComboBox:RID_TP_GENERIC:RID_CB_AREA";
             HScroll              = TRUE;
             VScroll              = TRUE;
             AutoHScroll          = TRUE;
@@ -803,12 +816,14 @@ TabPage RID_TP_GENERIC {
             DropDown = TRUE;
         };
     PushButton RID_PB_NEW_AREA {
+        HelpID = "basic:PushButton:RID_TP_GENERIC:RID_PB_NEW_AREA";
             Pos = MAP_APPFONT( 144, 12 );
             Size = MAP_APPFONT( 40, 12 );
             TabStop = TRUE;
             Text[ en-US ] = "New";
     };
     PushButton RID_PD_DEL_AREA {
+        HelpID = "basic:PushButton:RID_TP_GENERIC:RID_PD_DEL_AREA";
             Pos = MAP_APPFONT( 188, 12 );
             Size = MAP_APPFONT( 40, 12 );
             TabStop = TRUE;
@@ -820,6 +835,7 @@ TabPage RID_TP_GENERIC {
             Text[ en-US ] = "Setting";
     };
     ComboBox RID_CB_VALUE {
+        HelpID = "basic:ComboBox:RID_TP_GENERIC:RID_CB_VALUE";
             HScroll              = TRUE;
             VScroll              = TRUE;
             AutoHScroll          = TRUE;
@@ -829,6 +845,7 @@ TabPage RID_TP_GENERIC {
             TabStop = TRUE;
     };
     PushButton RID_PB_SELECT_FILE {
+        HelpID = "basic:PushButton:RID_TP_GENERIC:RID_PB_SELECT_FILE";
             Pos = MAP_APPFONT( 188, 48 );
             Size = MAP_APPFONT( 40, 12 );
             TabStop = TRUE;
@@ -837,12 +854,14 @@ TabPage RID_TP_GENERIC {
             Hide = TRUE;
     };
     PushButton RID_PB_NEW_VALUE {
+        HelpID = "basic:PushButton:RID_TP_GENERIC:RID_PB_NEW_VALUE";
             Pos = MAP_APPFONT( 188, 48 );
             Size = MAP_APPFONT( 40, 12 );
             TabStop = TRUE;
             Text[ en-US ] = "New";
     };
     PushButton RID_PB_DEL_VALUE {
+        HelpID = "basic:PushButton:RID_TP_GENERIC:RID_PB_DEL_VALUE";
             Pos = MAP_APPFONT( 188, 64 );
             Size = MAP_APPFONT( 40, 12 );
             TabStop = TRUE;
@@ -852,6 +871,7 @@ TabPage RID_TP_GENERIC {
 
 
 TabPage RID_TP_PROFILE {
+    HelpID = "basic:TabPage:RID_TP_PROFILE";
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT( 244, 100 );
@@ -861,6 +881,7 @@ TabPage RID_TP_PROFILE {
             Text[ en-US ] = "Profile";
     };
     ComboBox RID_CB_PROFILE {
+        HelpID = "basic:ComboBox:RID_TP_PROFILE:RID_CB_PROFILE";
             HScroll              = TRUE;
             VScroll              = TRUE;
             AutoHScroll          = TRUE;
@@ -871,12 +892,14 @@ TabPage RID_TP_PROFILE {
             DropDown = TRUE;
         };
     PushButton RID_PB_NEW_PROFILE {
+        HelpID = "basic:PushButton:RID_TP_PROFILE:RID_PB_NEW_PROFILE";
             Pos = MAP_APPFONT( 144, 2 );
             Size = MAP_APPFONT( 40, 12 );
             TabStop = TRUE;
             Text[ en-US ] = "New";
     };
     PushButton RID_PD_DEL_PROFILE {
+        HelpID = "basic:PushButton:RID_TP_PROFILE:RID_PD_DEL_PROFILE";
             Pos = MAP_APPFONT( 188, 2 );
             Size = MAP_APPFONT( 40, 12 );
             TabStop = TRUE;
@@ -898,6 +921,7 @@ TabPage RID_TP_PROFILE {
             Text[ en-US ] = "Base directory";
     };
     CheckBox HID_CHECK {
+        HelpID = "basic:CheckBox:RID_TP_PROFILE:HID_CHECK";
             Pos = MAP_APPFONT( 7, 58 );
             Size = MAP_APPFONT( 86, 12 );
             Text[ en-US ] = "Default HID directory";
@@ -905,52 +929,61 @@ TabPage RID_TP_PROFILE {
             Hide = FALSE;
     };
     Edit LOG_NAME {
+        HelpID = "basic:Edit:RID_TP_PROFILE:LOG_NAME";
             Border = TRUE;
             Pos = MAP_APPFONT( 97, 26 );
             Size = MAP_APPFONT( 116, 12 );
             TabStop = TRUE;
         };
     Edit BASIS_NAME {
+        HelpID = "basic:Edit:RID_TP_PROFILE:BASIS_NAME";
             Border = TRUE;
             Pos = MAP_APPFONT( 97, 42 );
             Size = MAP_APPFONT( 116, 12 );
             TabStop = TRUE;
         };
     Edit HID_NAME {
+        HelpID = "basic:Edit:RID_TP_PROFILE:HID_NAME";
             Border = TRUE;
             Pos = MAP_APPFONT( 97, 58 );
             Size = MAP_APPFONT( 116, 12 );
             TabStop = TRUE;
         };
     PushButton LOG_SET {
+        HelpID = "basic:PushButton:RID_TP_PROFILE:LOG_SET";
             Pos = MAP_APPFONT( 217, 26 );
             Size = MAP_APPFONT( 12, 12 );
             TabStop = TRUE;
         Text[ en-US ] = "...";
     };
     PushButton BASIS_SET {
+        HelpID = "basic:PushButton:RID_TP_PROFILE:BASIS_SET";
             Pos = MAP_APPFONT( 217, 42 );
             Size = MAP_APPFONT( 12, 12 );
             TabStop = TRUE;
         Text[ en-US ] = "...";
     };
     PushButton HID_SET {
+        HelpID = "basic:PushButton:RID_TP_PROFILE:HID_SET";
             Pos = MAP_APPFONT( 217, 58 );
             Size = MAP_APPFONT( 12, 12 );
             TabStop = TRUE;
         Text[ en-US ] = "...";
     };
     CheckBox CB_AUTORELOAD {
+        HelpID = "basic:CheckBox:RID_TP_PROFILE:CB_AUTORELOAD";
             Pos = MAP_APPFONT( 7, 74 );
             Size = MAP_APPFONT( 115, 12 );
         Text[ en-US ] = "AutoReload";
     };
     CheckBox CB_AUTOSAVE {
+        HelpID = "basic:CheckBox:RID_TP_PROFILE:CB_AUTOSAVE";
             Pos = MAP_APPFONT( 7, 87 );
             Size = MAP_APPFONT( 115, 12 );
         Text[ en-US ] = "Save before execute";
     };
     CheckBox CB_STOPONSYNTAXERRORS {
+        HelpID = "basic:CheckBox:RID_TP_PROFILE:CB_STOPONSYNTAXERRORS";
             Pos = MAP_APPFONT( 132, 74 );
             Size = MAP_APPFONT( 115, 12 );
         Text[ en-US ] = "Stop on Syntax Errors";
@@ -958,6 +991,7 @@ TabPage RID_TP_PROFILE {
 };
 
 TabPage RID_TP_CRASH {
+    HelpID = "basic:TabPage:RID_TP_CRASH";
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT( 244, 100 );
@@ -967,6 +1001,7 @@ TabPage RID_TP_CRASH {
             Text[ en-US ] = "Crashreport";
     };
     CheckBox CB_USEPROXY {
+        HelpID = "basic:CheckBox:RID_TP_CRASH:CB_USEPROXY";
             Pos = MAP_APPFONT( 8, 12 );
             Size = MAP_APPFONT( 120, 12 );
             Text[ en-US ] = "Use Proxy";
@@ -977,6 +1012,7 @@ TabPage RID_TP_CRASH {
             Text[ en-US ] = "Host";
     };
     Edit ED_CRHOST {
+        HelpID = "basic:Edit:RID_TP_CRASH:ED_CRHOST";
             Border = TRUE;
             Pos = MAP_APPFONT( 43+12, 12+13 );
             Size = MAP_APPFONT( 80, 12 );
@@ -988,6 +1024,7 @@ TabPage RID_TP_CRASH {
             Text[ en-US ] = "Port";
     };
     NumericField NF_CRPORT {
+        HelpID = "basic:NumericField:RID_TP_CRASH:NF_CRPORT";
             Border = TRUE;
             Pos = MAP_APPFONT( 43+12, 12+13+16 );
             Size = MAP_APPFONT( 40, 12 );
@@ -1001,6 +1038,7 @@ TabPage RID_TP_CRASH {
             Last = 0xffff;
         };
     CheckBox CB_ALLOWCONTACT {
+        HelpID = "basic:CheckBox:RID_TP_CRASH:CB_ALLOWCONTACT";
             Pos = MAP_APPFONT( 8, 12+13+16+16 );
             Size = MAP_APPFONT( 120, 12 );
             Text[ en-US ] = "Allow Contact";
@@ -1011,6 +1049,7 @@ TabPage RID_TP_CRASH {
             Text[ en-US ] = "EMail";
     };
     Edit ED_EMAIL {
+        HelpID = "basic:Edit:RID_TP_CRASH:ED_EMAIL";
             Border = TRUE;
             Pos = MAP_APPFONT( 43+12, 12+13+16+16+13 );
             Size = MAP_APPFONT( 80, 12 );
@@ -1020,6 +1059,7 @@ TabPage RID_TP_CRASH {
 
 
 TabPage RID_TP_MISC {
+    HelpID = "basic:TabPage:RID_TP_MISC";
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT( 244, 100 );
@@ -1034,6 +1074,7 @@ TabPage RID_TP_MISC {
             Text[ en-US ] = "Host";
     };
     Edit ED_HOST {
+        HelpID = "basic:Edit:RID_TP_MISC:ED_HOST";
             Border = TRUE;
             Pos = MAP_APPFONT( 43, 12);
             Size = MAP_APPFONT( 80, 12 );
@@ -1045,6 +1086,7 @@ TabPage RID_TP_MISC {
             Text[ en-US ] = "Testtool Port";
     };
     NumericField NF_TTPORT {
+        HelpID = "basic:NumericField:RID_TP_MISC:NF_TTPORT";
             Border = TRUE;
             Pos = MAP_APPFONT( 191, 12);
             Size = MAP_APPFONT( 40, 12 );
@@ -1063,6 +1105,7 @@ TabPage RID_TP_MISC {
             Text[ en-US ] = "Remote UNO Port";
     };
     NumericField NF_UNOPORT {
+        HelpID = "basic:NumericField:RID_TP_MISC:NF_UNOPORT";
             Border = TRUE;
             Pos = MAP_APPFONT( 191, 12+15);
             Size = MAP_APPFONT( 40, 12 );
@@ -1087,6 +1130,7 @@ TabPage RID_TP_MISC {
             Text[ en-US ] = "Server Timeout";
     };
     TimeField SERVER_TIMEOUT {
+        HelpID = "basic:TimeField:RID_TP_MISC:SERVER_TIMEOUT";
             Border = TRUE;
             Pos = MAP_APPFONT( 83, 50 );
             Size = MAP_APPFONT( 40, 12 );
@@ -1102,6 +1146,7 @@ TabPage RID_TP_MISC {
             Text[ en-US ] = "Max LRU Files";
     };
     NumericField TF_MAX_LRU {
+        HelpID = "basic:NumericField:RID_TP_MISC:TF_MAX_LRU";
             Border = TRUE;
             Pos = MAP_APPFONT( 191, 50);
             Size = MAP_APPFONT( 40, 12 );
@@ -1118,12 +1163,14 @@ TabPage RID_TP_MISC {
             Text[ en-US ] = "OOo Program Dir";
     };
     Edit ED_PROGDIR {
+        HelpID = "basic:Edit:RID_TP_MISC:ED_PROGDIR";
             Border = TRUE;
             Pos = MAP_APPFONT( 83, 50+15 );
             Size = MAP_APPFONT( 219-83-4, 12 );
             TabStop = TRUE;
         };
     PushButton PB_PROGDIR {
+        HelpID = "basic:PushButton:RID_TP_MISC:PB_PROGDIR";
             Pos = MAP_APPFONT( 219, 50+15 );
             Size = MAP_APPFONT( 12, 12 );
             TabStop = TRUE;
@@ -1133,6 +1180,7 @@ TabPage RID_TP_MISC {
 
 
 TabPage RID_TP_FONT {
+    HelpID = "basic:TabPage:RID_TP_FONT";
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT( 244, 100 );
@@ -1142,6 +1190,7 @@ TabPage RID_TP_FONT {
         Text[ en-US ] = "Type";
     };
     ComboBox CB_FONTNAME {
+        HelpID = "basic:ComboBox:RID_TP_FONT:CB_FONTNAME";
         Pos = MAP_APPFONT( 4, 12 );
         Size = MAP_APPFONT( 123, 12*4 );
         Sort = TRUE;
@@ -1153,6 +1202,7 @@ TabPage RID_TP_FONT {
         Text[ en-US ] = "Typeface";
     };
     ComboBox CB_FONTSTYLE {
+        HelpID = "basic:ComboBox:RID_TP_FONT:CB_FONTSTYLE";
         Pos = MAP_APPFONT( 131, 12 );
         Size = MAP_APPFONT( 65, 12*4 );
         AutoHScroll = TRUE;
@@ -1163,6 +1213,7 @@ TabPage RID_TP_FONT {
         Text[ en-US ] = "Size";
     };
     MetricBox MB_FONTSIZE {
+        HelpID = "basic:MetricBox:RID_TP_FONT:MB_FONTSIZE";
         Pos = MAP_APPFONT( 200, 12 );
         Size = MAP_APPFONT( 29, 12*4 );
         AutoHScroll = TRUE;
@@ -1178,6 +1229,7 @@ TabPage RID_TP_FONT {
 
 
 FloatingWindow IDD_DISPLAY_HID {
+    HelpID = "basic:FloatingWindow:IDD_DISPLAY_HID";
     OutputSize = TRUE;
     SVLook = TRUE;
     Size = MAP_APPFONT( 261, 160 );
@@ -1204,6 +1256,7 @@ FloatingWindow IDD_DISPLAY_HID {
         Text[ en-US ] = "Controls";
     };
     MultiListBox RID_MLB_CONTROLS {
+        HelpID = "basic:MultiListBox:IDD_DISPLAY_HID:RID_MLB_CONTROLS";
             Border = TRUE;
             AutoHScroll = TRUE;
             Pos = MAP_APPFONT( 4, 28 );
@@ -1216,6 +1269,7 @@ FloatingWindow IDD_DISPLAY_HID {
         Text[ en-US ] = "Slots";
     };
     MultiListBox RID_MLB_SLOTS {
+        HelpID = "basic:MultiListBox:IDD_DISPLAY_HID:RID_MLB_SLOTS";
             Border = TRUE;
             AutoHScroll = TRUE;
             Pos = MAP_APPFONT( 4, 132 );
@@ -1223,12 +1277,14 @@ FloatingWindow IDD_DISPLAY_HID {
             TabStop = TRUE;
         };
     PushButton RID_PB_KOPIEREN {
+        HelpID = "basic:PushButton:IDD_DISPLAY_HID:RID_PB_KOPIEREN";
             Pos = MAP_APPFONT( 216, 28 );
             Size = MAP_APPFONT( 40, 12 );
             TabStop = TRUE;
         Text[ en-US ] = "Copy";
     };
     PushButton RID_PB_BENENNEN {
+        HelpID = "basic:PushButton:IDD_DISPLAY_HID:RID_PB_BENENNEN";
             Pos = MAP_APPFONT( 216, 44 );
             Size = MAP_APPFONT( 40, 12 );
             TabStop = TRUE;
@@ -1236,6 +1292,7 @@ FloatingWindow IDD_DISPLAY_HID {
         Text[ en-US ] = "Name";
     };
     PushButton RID_PB_SELECTALL {
+        HelpID = "basic:PushButton:IDD_DISPLAY_HID:RID_PB_SELECTALL";
             Pos = MAP_APPFONT( 216, 44 );
             Size = MAP_APPFONT( 40, 12 );
             TabStop = TRUE;
@@ -1356,6 +1413,7 @@ ImageList RID_IMGLST_LAYOUT
 };
 
 ModelessDialog IDD_EDIT_VAR {
+    HelpID = "basic:ModelessDialog:IDD_EDIT_VAR";
     Pos = MAP_APPFONT( 0, 0 );
     Size = MAP_APPFONT( 171, 87 );
     Moveable = TRUE;
@@ -1386,6 +1444,7 @@ ModelessDialog IDD_EDIT_VAR {
         Text[ en-US ] = "Previous contents";
     };
     RadioButton RID_RB_NEW_BOOL_T {
+        HelpID = "basic:RadioButton:IDD_EDIT_VAR:RID_RB_NEW_BOOL_T";
             Hide = TRUE;
             Pos = MAP_APPFONT( 53, 37 );
             Size = MAP_APPFONT( 40, 12 );
@@ -1393,6 +1452,7 @@ ModelessDialog IDD_EDIT_VAR {
         Text[ en-US ] = "True";
     };
     RadioButton RID_RB_NEW_BOOL_F {
+        HelpID = "basic:RadioButton:IDD_EDIT_VAR:RID_RB_NEW_BOOL_F";
             Hide = TRUE;
             Pos = MAP_APPFONT( 98, 37 );
             Size = MAP_APPFONT( 40, 12 );
@@ -1400,6 +1460,7 @@ ModelessDialog IDD_EDIT_VAR {
         Text[ en-US ] = "False";
     };
     NumericField RID_NF_NEW_INTEGER {
+        HelpID = "basic:NumericField:IDD_EDIT_VAR:RID_NF_NEW_INTEGER";
             Border = TRUE;
             Hide = TRUE;
             Pos = MAP_APPFONT( 53, 37 );
@@ -1414,6 +1475,7 @@ ModelessDialog IDD_EDIT_VAR {
             SpinSize = 10;
         };
     NumericField RID_NF_NEW_LONG {
+        HelpID = "basic:NumericField:IDD_EDIT_VAR:RID_NF_NEW_LONG";
             Border = TRUE;
             Hide = TRUE;
             Pos = MAP_APPFONT( 53, 37 );
@@ -1428,6 +1490,7 @@ ModelessDialog IDD_EDIT_VAR {
             SpinSize = 10;
         };
     Edit RID_ED_NEW_STRING {
+        HelpID = "basic:Edit:IDD_EDIT_VAR:RID_ED_NEW_STRING";
             Hide = TRUE;
             Border = TRUE;
             Pos = MAP_APPFONT( 53, 37 );
@@ -1449,6 +1512,7 @@ ModelessDialog IDD_EDIT_VAR {
 };
 
 FloatingWindow LOAD_CONF {
+    HelpID = "basic:FloatingWindow:LOAD_CONF";
     SVLook = TRUE;
     Pos = MAP_APPFONT( 66, 23 );
     Size = MAP_APPFONT( 156, 51 );

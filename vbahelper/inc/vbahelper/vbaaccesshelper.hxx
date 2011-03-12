@@ -33,7 +33,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>
-#define VBAHELPER_DLLIMPLEMENTATION
+//#define VBAHELPER_DLLIMPLEMENTATION
 #include <vbahelper/vbadllapi.h>
 #include <memory>
 namespace css = ::com::sun::star;

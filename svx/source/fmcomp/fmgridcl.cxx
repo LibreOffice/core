@@ -29,12 +29,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "dbexch.hrc"
-#include "fmgridif.hxx"
+#include "svx/dbexch.hrc"
+#include "svx/fmgridif.hxx"
 #include "fmitems.hxx"
 #include "fmprop.hrc"
 #include "svx/fmtools.hxx"
-#include "fmresids.hrc"
+#include "svx/fmresids.hrc"
 #include "fmservs.hxx"
 #include "fmurl.hxx"
 #include "formcontrolfactory.hxx"
@@ -987,7 +987,7 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
         if ( eInspectorAction != eNone )
         {
             FmInterfaceItem aIFaceItem( SID_FM_SHOW_PROPERTY_BROWSER, xColumnToInspect );
-            SfxBoolItem aShowItem( SID_FM_SHOW_PROPERTIES, eInspectorAction == eCloseInspector ? FALSE : TRUE );
+            SfxBoolItem aShowItem( SID_FM_SHOW_PROPERTIES, eInspectorAction == eCloseInspector ? sal_False : sal_True );
 
             pCurrentFrame->GetBindings().GetDispatcher()->Execute( SID_FM_SHOW_PROPERTY_BROWSER, SFX_CALLMODE_ASYNCHRON,
                                       &aIFaceItem, &aShowItem, 0L );
@@ -1060,7 +1060,7 @@ void FmGridControl::Command(const CommandEvent& _rEvt)
             if  ( 1 == GetSelectColumnCount() || IsDesignMode() )
             {
                 sal_uInt16 nSelId = GetColumnId(
-                    sal::static_int_cast< USHORT >( FirstSelectedColumn() ) );
+                    sal::static_int_cast< sal_uInt16 >( FirstSelectedColumn() ) );
                 ::Rectangle aColRect( GetFieldRectPixel( 0, nSelId, sal_False ) );
 
                 Point aRelativePos( pMyHeader->ScreenToOutputPixel( OutputToScreenPixel( aColRect.TopCenter() ) ) );
@@ -1272,7 +1272,7 @@ void FmGridControl::DeleteSelectedRows()
 
         // now delete the row
         Sequence <sal_Int32> aDeletedRows;
-        SetUpdateMode( FALSE );
+        SetUpdateMode( sal_False );
         try
         {
             aDeletedRows = xDeleteThem->deleteRows(aBookmarks);
@@ -1280,7 +1280,7 @@ void FmGridControl::DeleteSelectedRows()
         catch(SQLException&)
         {
         }
-        SetUpdateMode( TRUE );
+        SetUpdateMode( sal_True );
 
         // how many rows are deleted?
         sal_Int32 nDeletedRows = 0;

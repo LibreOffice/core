@@ -53,7 +53,6 @@
 using namespace ::com::sun::star;
 
 
-SV_IMPL_PTRARR( SvxRTFColorTbl, ColorPtr )
 SV_IMPL_PTRARR( SvxRTFItemStackList, SvxRTFItemStackType* )
 
 CharSet lcl_GetDefaultTextEncodingForRTF()
@@ -81,7 +80,6 @@ SvxRTFParser::SvxRTFParser( SfxItemPool& rPool, SvStream& rIn,
             int bReadNewDoc )
     : SvRTFParser( rIn, 5 ),
     rStrm(rIn),
-    aColorTbl( 16, 4 ),
     aFontTbl( 16, 4 ),
     pInsPos( 0 ),
     pAttrPool( &rPool ),
@@ -91,18 +89,18 @@ SvxRTFParser::SvxRTFParser( SfxItemPool& rPool, SvStream& rIn,
 {
     bNewDoc = bReadNewDoc;
 
-    bChkStyleAttr = bCalcValue = bReadDocInfo = bIsInReadStyleTab = FALSE;
-    bIsLeftToRightDef = TRUE;
+    bChkStyleAttr = bCalcValue = bReadDocInfo = bIsInReadStyleTab = sal_False;
+    bIsLeftToRightDef = sal_True;
 
     {
         RTFPlainAttrMapIds aTmp( rPool );
-        aPlainMap.Insert( (USHORT*)&aTmp,
-                    sizeof( RTFPlainAttrMapIds ) / sizeof(USHORT), 0 );
+        aPlainMap.Insert( (sal_uInt16*)&aTmp,
+                    sizeof( RTFPlainAttrMapIds ) / sizeof(sal_uInt16), 0 );
     }
     {
         RTFPardAttrMapIds aTmp( rPool );
-        aPardMap.Insert( (USHORT*)&aTmp,
-                    sizeof( RTFPardAttrMapIds ) / sizeof(USHORT), 0 );
+        aPardMap.Insert( (sal_uInt16*)&aTmp,
+                    sizeof( RTFPardAttrMapIds ) / sizeof(sal_uInt16), 0 );
     }
     pDfltFont = new Font;
     pDfltColor = new Color;
@@ -122,13 +120,13 @@ void SvxRTFParser::ResetPard()
 
 SvxRTFParser::~SvxRTFParser()
 {
-    if( aColorTbl.Count() )
+    if( !aColorTbl.empty() )
         ClearColorTbl();
     if( aFontTbl.Count() )
         ClearFontTbl();
     if( aStyleTbl.Count() )
         ClearStyleTbl();
-    if( aAttrStack.Count() )
+    if( !aAttrStack.empty() )
         ClearAttrStack();
 
     delete pRTFDefaults;
@@ -152,17 +150,17 @@ SvParserState SvxRTFParser::CallParser()
     if( !pInsPos )
         return SVPAR_ERROR;
 
-    if( aColorTbl.Count() )
+    if( !aColorTbl.empty() )
         ClearColorTbl();
     if( aFontTbl.Count() )
         ClearFontTbl();
     if( aStyleTbl.Count() )
         ClearStyleTbl();
-    if( aAttrStack.Count() )
+    if( !aAttrStack.empty() )
         ClearAttrStack();
 
-    bIsSetDfltTab = FALSE;
-    bNewGroup = FALSE;
+    bIsSetDfltTab = sal_False;
+    bNewGroup = sal_False;
     nDfltFont = 0;
 
     sBaseURL.Erase();
@@ -237,7 +235,7 @@ INSINGLECHAR:
         {
             InsertText();
             // all collected Attributes are set
-            for( USHORT n = aAttrSetList.Count(); n; )
+            for( sal_uInt16 n = aAttrSetList.Count(); n; )
             {
                 SvxRTFItemStackType* pStkSet = aAttrSetList[--n];
                 SetAttrSet( *pStkSet );
@@ -349,8 +347,8 @@ void SvxRTFParser::ReadStyleTable()
     SvxRTFStyleType* pStyle = new SvxRTFStyleType( *pAttrPool, aWhichMap.GetData() );
     pStyle->aAttrSet.Put( GetRTFDefaults() );
 
-    bIsInReadStyleTab = TRUE;
-    bChkStyleAttr = FALSE;      // Do not check Attribute against the Styles
+    bIsInReadStyleTab = sal_True;
+    bChkStyleAttr = sal_False;      // Do not check Attribute against the Styles
 
     while( _nOpenBrakets && IsParserWorking() )
     {
@@ -381,13 +379,13 @@ void SvxRTFParser::ReadStyleTable()
             }
             break;
 
-        case RTF_SBASEDON:  pStyle->nBasedOn = USHORT(nTokenValue); pStyle->bBasedOnIsSet=TRUE; break;
-        case RTF_SNEXT:     pStyle->nNext = USHORT(nTokenValue);    break;
+        case RTF_SBASEDON:  pStyle->nBasedOn = sal_uInt16(nTokenValue); pStyle->bBasedOnIsSet=sal_True; break;
+        case RTF_SNEXT:     pStyle->nNext = sal_uInt16(nTokenValue);    break;
         case RTF_OUTLINELEVEL:
-        case RTF_SOUTLVL:   pStyle->nOutlineNo = BYTE(nTokenValue); break;
+        case RTF_SOUTLVL:   pStyle->nOutlineNo = sal_uInt8(nTokenValue);    break;
         case RTF_S:         nStyleNo = (short)nTokenValue;          break;
         case RTF_CS:        nStyleNo = (short)nTokenValue;
-                            pStyle->bIsCharFmt = TRUE;
+                            pStyle->bIsCharFmt = sal_True;
                             break;
 
         case RTF_TEXTTOKEN:
@@ -439,21 +437,21 @@ void SvxRTFParser::ReadStyleTable()
 
     // Flag back to old state
     bChkStyleAttr = bSaveChkStyleAttr;
-    bIsInReadStyleTab = FALSE;
+    bIsInReadStyleTab = sal_False;
 }
 
 void SvxRTFParser::ReadColorTable()
 {
     int nToken;
-    BYTE nRed = 0xff, nGreen = 0xff, nBlue = 0xff;
+    sal_uInt8 nRed = 0xff, nGreen = 0xff, nBlue = 0xff;
 
     while( '}' != ( nToken = GetNextToken() ) && IsParserWorking() )
     {
         switch( nToken )
         {
-        case RTF_RED:   nRed = BYTE(nTokenValue);       break;
-        case RTF_GREEN: nGreen = BYTE(nTokenValue);     break;
-        case RTF_BLUE:  nBlue = BYTE(nTokenValue);      break;
+        case RTF_RED:   nRed = sal_uInt8(nTokenValue);      break;
+        case RTF_GREEN: nGreen = sal_uInt8(nTokenValue);        break;
+        case RTF_BLUE:  nBlue = sal_uInt8(nTokenValue);     break;
 
         case RTF_TEXTTOKEN:
             if( 1 == aToken.Len()
@@ -469,10 +467,10 @@ void SvxRTFParser::ReadColorTable()
                 // one color is finished, fill in the table
                 // try to map the values to SV internal names
                 ColorPtr pColor = new Color( nRed, nGreen, nBlue );
-                if( !aColorTbl.Count() &&
-                    BYTE(-1) == nRed && BYTE(-1) == nGreen && BYTE(-1) == nBlue )
+                if( aColorTbl.empty() &&
+                    sal_uInt8(-1) == nRed && sal_uInt8(-1) == nGreen && sal_uInt8(-1) == nBlue )
                     pColor->SetColor( COL_AUTO );
-                aColorTbl.Insert( pColor, aColorTbl.Count() );
+                aColorTbl.push_back( pColor );
                 nRed = 0, nGreen = 0, nBlue = 0;
 
                 // Color has been completely read,
@@ -492,7 +490,7 @@ void SvxRTFParser::ReadFontTable()
     Font* pFont = new Font();
     short nFontNo(0), nInsFontNo (0);
     String sAltNm, sFntNm;
-    BOOL bIsAltFntNm = FALSE, bCheckNewFont;
+    sal_Bool bIsAltFntNm = sal_False, bCheckNewFont;
 
     CharSet nSystemChar = lcl_GetDefaultTextEncodingForRTF();
     pFont->SetCharSet( nSystemChar );
@@ -500,16 +498,16 @@ void SvxRTFParser::ReadFontTable()
 
     while( _nOpenBrakets && IsParserWorking() )
     {
-        bCheckNewFont = FALSE;
+        bCheckNewFont = sal_False;
         switch( ( nToken = GetNextToken() ))
         {
             case '}':
-                bIsAltFntNm = FALSE;
+                bIsAltFntNm = sal_False;
                 // Style has been completely read,
                 // so this is still a stable status
                 if( --_nOpenBrakets <= 1 && IsParserWorking() )
                     SaveState( RTF_FONTTBL );
-                bCheckNewFont = TRUE;
+                bCheckNewFont = sal_True;
                 nInsFontNo = nFontNo;
                 break;
             case '{':
@@ -558,7 +556,7 @@ void SvxRTFParser::ReadFontTable()
                 if (-1 != nTokenValue)
                 {
                     CharSet nCharSet = rtl_getTextEncodingFromWindowsCharset(
-                        (BYTE)nTokenValue);
+                        (sal_uInt8)nTokenValue);
                     pFont->SetCharSet(nCharSet);
                     //When we're in a font, the fontname is in the font
                     //charset, except for symbol fonts I believe
@@ -579,12 +577,12 @@ void SvxRTFParser::ReadFontTable()
                 }
                 break;
             case RTF_F:
-                bCheckNewFont = TRUE;
+                bCheckNewFont = sal_True;
                 nInsFontNo = nFontNo;
                 nFontNo = (short)nTokenValue;
                 break;
             case RTF_FALT:
-                bIsAltFntNm = TRUE;
+                bIsAltFntNm = sal_True;
                 break;
             case RTF_TEXTTOKEN:
                 DelCharAtEnd( aToken, ';' );
@@ -672,19 +670,19 @@ String& SvxRTFParser::GetTextToEndGroup( String& rStr )
 util::DateTime SvxRTFParser::GetDateTimeStamp( )
 {
     util::DateTime aDT;
-    BOOL bWeiter = TRUE;
+    sal_Bool bWeiter = sal_True;
     int nToken;
     while( bWeiter && IsParserWorking() )
     {
         switch( nToken = GetNextToken() )
         {
-        case RTF_YR:    aDT.Year = (USHORT)nTokenValue;     break;
-        case RTF_MO:    aDT.Month = (USHORT)nTokenValue;    break;
-        case RTF_DY:    aDT.Day = (USHORT)nTokenValue;      break;
-        case RTF_HR:    aDT.Hours = (USHORT)nTokenValue;    break;
-        case RTF_MIN:   aDT.Minutes = (USHORT)nTokenValue;  break;
+        case RTF_YR:    aDT.Year = (sal_uInt16)nTokenValue;     break;
+        case RTF_MO:    aDT.Month = (sal_uInt16)nTokenValue;    break;
+        case RTF_DY:    aDT.Day = (sal_uInt16)nTokenValue;      break;
+        case RTF_HR:    aDT.Hours = (sal_uInt16)nTokenValue;    break;
+        case RTF_MIN:   aDT.Minutes = (sal_uInt16)nTokenValue;  break;
         default:
-            bWeiter = FALSE;
+            bWeiter = sal_False;
         }
     }
     SkipToken( -1 );        // the closing brace is evaluated "above"
@@ -799,27 +797,32 @@ void SvxRTFParser::ReadInfo( const sal_Char* pChkForVerNo )
 
 void SvxRTFParser::ClearColorTbl()
 {
-    aColorTbl.DeleteAndDestroy( 0, aColorTbl.Count() );
+    while ( !aColorTbl.empty() )
+    {
+        delete aColorTbl.back();
+        aColorTbl.pop_back();
+    }
 }
 
 void SvxRTFParser::ClearFontTbl()
 {
-    for( ULONG nCnt = aFontTbl.Count(); nCnt; )
+    for( sal_uInt32 nCnt = aFontTbl.Count(); nCnt; )
         delete aFontTbl.GetObject( --nCnt );
 }
 
 void SvxRTFParser::ClearStyleTbl()
 {
-    for( ULONG nCnt = aStyleTbl.Count(); nCnt; )
+    for( sal_uInt32 nCnt = aStyleTbl.Count(); nCnt; )
         delete aStyleTbl.GetObject( --nCnt );
 }
 
 void SvxRTFParser::ClearAttrStack()
 {
     SvxRTFItemStackType* pTmp;
-    for( ULONG nCnt = aAttrStack.Count(); nCnt; --nCnt )
+    for( size_t nCnt = aAttrStack.size(); nCnt; --nCnt )
     {
-        pTmp = aAttrStack.Pop();
+        pTmp = aAttrStack.back();
+        aAttrStack.pop_back();
         delete pTmp;
     }
 }
@@ -836,7 +839,7 @@ String& SvxRTFParser::DelCharAtEnd( String& rStr, const sal_Unicode cDel )
 }
 
 
-const Font& SvxRTFParser::GetFont( USHORT nId )
+const Font& SvxRTFParser::GetFont( sal_uInt16 nId )
 {
     const Font* pFont = aFontTbl.Get( nId );
     if( !pFont )
@@ -853,7 +856,7 @@ const Font& SvxRTFParser::GetFont( USHORT nId )
 
 SvxRTFItemStackType* SvxRTFParser::_GetAttrSet( int bCopyAttr )
 {
-    SvxRTFItemStackType* pAkt = aAttrStack.Top();
+    SvxRTFItemStackType* pAkt = aAttrStack.empty() ? 0 : aAttrStack.back();
     SvxRTFItemStackType* pNew;
     if( pAkt )
         pNew = new SvxRTFItemStackType( *pAkt, *pInsPos, bCopyAttr );
@@ -862,8 +865,8 @@ SvxRTFItemStackType* SvxRTFParser::_GetAttrSet( int bCopyAttr )
                                         *pInsPos );
     pNew->SetRTFDefaults( GetRTFDefaults() );
 
-    aAttrStack.Push( pNew );
-    bNewGroup = FALSE;
+    aAttrStack.push_back( pNew );
+    bNewGroup = sal_False;
     return pNew;
 }
 
@@ -882,10 +885,10 @@ void SvxRTFParser::_ClearStyleAttr( SvxRTFItemStackType& rStkType )
         !rStkType.GetAttrSet().Count() ||
         0 == ( pStyle = aStyleTbl.Get( rStkType.nStyleNo ) ))
     {
-        for( USHORT nWhich = aIter.GetCurWhich(); nWhich; nWhich = aIter.NextWhich() )
+        for( sal_uInt16 nWhich = aIter.GetCurWhich(); nWhich; nWhich = aIter.NextWhich() )
         {
             if( SFX_WHICH_MAX > nWhich &&
-                SFX_ITEM_SET == rSet.GetItemState( nWhich, FALSE, &pItem ) &&
+                SFX_ITEM_SET == rSet.GetItemState( nWhich, sal_False, &pItem ) &&
                      rPool.GetDefaultItem( nWhich ) == *pItem )
                 rSet.ClearItem( nWhich );       // delete
         }
@@ -896,16 +899,16 @@ void SvxRTFParser::_ClearStyleAttr( SvxRTFItemStackType& rStkType )
         // from the current AttrSet.
         SfxItemSet &rStyleSet = pStyle->aAttrSet;
         const SfxPoolItem* pSItem;
-        for( USHORT nWhich = aIter.GetCurWhich(); nWhich; nWhich = aIter.NextWhich() )
+        for( sal_uInt16 nWhich = aIter.GetCurWhich(); nWhich; nWhich = aIter.NextWhich() )
         {
-            if( SFX_ITEM_SET == rStyleSet.GetItemState( nWhich, TRUE, &pSItem ))
+            if( SFX_ITEM_SET == rStyleSet.GetItemState( nWhich, sal_True, &pSItem ))
             {
-                if( SFX_ITEM_SET == rSet.GetItemState( nWhich, FALSE, &pItem )
+                if( SFX_ITEM_SET == rSet.GetItemState( nWhich, sal_False, &pItem )
                     && *pItem == *pSItem )
                     rSet.ClearItem( nWhich );       // delete
             }
             else if( SFX_WHICH_MAX > nWhich &&
-                    SFX_ITEM_SET == rSet.GetItemState( nWhich, FALSE, &pItem ) &&
+                    SFX_ITEM_SET == rSet.GetItemState( nWhich, sal_False, &pItem ) &&
                      rPool.GetDefaultItem( nWhich ) == *pItem )
                 rSet.ClearItem( nWhich );       // delete
         }
@@ -914,13 +917,14 @@ void SvxRTFParser::_ClearStyleAttr( SvxRTFItemStackType& rStkType )
 
 void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
 {
-    if( aAttrStack.Count() )
+    if( !aAttrStack.empty() )
     {
-        SvxRTFItemStackType *pOld = aAttrStack.Pop();
-        SvxRTFItemStackType *pAkt = aAttrStack.Top();
+        SvxRTFItemStackType *pOld = aAttrStack.empty() ? 0 : aAttrStack.back();
+        aAttrStack.pop_back();
+        SvxRTFItemStackType *pAkt = aAttrStack.empty() ? 0 : aAttrStack.back();
 
         do {        // middle check loop
-            ULONG nOldSttNdIdx = pOld->pSttNd->GetIdx();
+            sal_uLong nOldSttNdIdx = pOld->pSttNd->GetIdx();
             if( !pOld->pChildList &&
                 ((!pOld->aAttrSet.Count() && !pOld->nStyleNo ) ||
                 (nOldSttNdIdx == pInsPos->GetNodeIdx() &&
@@ -932,10 +936,10 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
             {
                 SfxItemIter aIter( pOld->aAttrSet );
                 const SfxPoolItem* pItem = aIter.GetCurItem(), *pGet;
-                while( TRUE )
+                while( sal_True )
                 {
                     if( SFX_ITEM_SET == pAkt->aAttrSet.GetItemState(
-                        pItem->Which(), FALSE, &pGet ) &&
+                        pItem->Which(), sal_False, &pGet ) &&
                         *pItem == *pGet )
                         pOld->aAttrSet.ClearItem( pItem->Which() );
 
@@ -954,8 +958,8 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
             if( bCrsrBack )
             {
                 // at the beginning of a paragraph? Move back one position
-                ULONG nNd = pInsPos->GetNodeIdx();
-                MovePos( FALSE );
+                sal_uLong nNd = pInsPos->GetNodeIdx();
+                MovePos( sal_False );
                 // if can not move backward then later dont move forward !
                 bCrsrBack = nNd != pInsPos->GetNodeIdx();
             }
@@ -979,11 +983,11 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
                         // - all paragraph attributes to get the area
                         //   up to the previous paragraph
                         SvxRTFItemStackType* pNew = new SvxRTFItemStackType(
-                                    *pOld, *pInsPos, TRUE );
+                                    *pOld, *pInsPos, sal_True );
                         pNew->aAttrSet.SetParent( pOld->aAttrSet.GetParent() );
 
                         // Delete all paragraph attributes from pNew
-                        for( USHORT n = 0; n < aPardMap.Count() &&
+                        for( sal_uInt16 n = 0; n < aPardMap.Count() &&
                                             pNew->aAttrSet.Count(); ++n )
                             if( aPardMap[n] )
                                 pNew->aAttrSet.ClearItem( aPardMap[n] );
@@ -1049,19 +1053,19 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
                     if( bCrsrBack && 50 < pAkt->pChildList->Count() )
                     {
                         // at the beginning of a paragraph? Move back one position
-                        MovePos( TRUE );
-                        bCrsrBack = FALSE;
+                        MovePos( sal_True );
+                        bCrsrBack = sal_False;
 
                         // Open a new Group.
                         SvxRTFItemStackType* pNew = new SvxRTFItemStackType(
-                                                *pAkt, *pInsPos, TRUE );
+                                                *pAkt, *pInsPos, sal_True );
                         pNew->SetRTFDefaults( GetRTFDefaults() );
 
                         // Set all until here valid Attributes
                         AttrGroupEnd();
-                        pAkt = aAttrStack.Top();  // can be changed after AttrGroupEnd!
+                        pAkt = aAttrStack.empty() ? 0 : aAttrStack.back();  // can be changed after AttrGroupEnd!
                         pNew->aAttrSet.SetParent( pAkt ? &pAkt->aAttrSet : 0 );
-                        aAttrStack.Push( pNew );
+                        aAttrStack.push_back( pNew );
                         pAkt = pNew;
                     }
                 }
@@ -1075,24 +1079,24 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
 
             if( bCrsrBack )
                 // at the beginning of a paragraph? Move back one position
-                MovePos( TRUE );
+                MovePos( sal_True );
 
-        } while( FALSE );
+        } while( sal_False );
 
         if( pOld )
             delete pOld;
 
-        bNewGroup = FALSE;
+        bNewGroup = sal_False;
     }
 }
 
 void SvxRTFParser::SetAllAttrOfStk()        // end all Attr. and set it into doc
 {
-    // Yet to get all Attrbutes from the stack!
-    while( aAttrStack.Count() )
+    // repeat until all attributes will be taken from stack
+    while( !aAttrStack.empty() )
         AttrGroupEnd();
 
-    for( USHORT n = aAttrSetList.Count(); n; )
+    for( sal_uInt16 n = aAttrSetList.Count(); n; )
     {
         SvxRTFItemStackType* pStkSet = aAttrSetList[--n];
         SetAttrSet( *pStkSet );
@@ -1114,14 +1118,14 @@ void SvxRTFParser::SetAttrSet( SvxRTFItemStackType &rSet )
 
     // then process all the children
     if( rSet.pChildList )
-        for( USHORT n = 0; n < rSet.pChildList->Count(); ++n )
+        for( sal_uInt16 n = 0; n < rSet.pChildList->Count(); ++n )
             SetAttrSet( *(*rSet.pChildList)[ n ] );
 }
 
     // Has no Text been inserted yet? (SttPos from the top Stack entry!)
 int SvxRTFParser::IsAttrSttPos()
 {
-    SvxRTFItemStackType* pAkt = aAttrStack.Top();
+    SvxRTFItemStackType* pAkt = aAttrStack.empty() ? 0 : aAttrStack.back();
     return !pAkt || (pAkt->pSttNd->GetIdx() == pInsPos->GetNodeIdx() &&
         pAkt->nSttCnt == pInsPos->GetCntIdx());
 }
@@ -1135,13 +1139,13 @@ void SvxRTFParser::BuildWhichTbl()
 {
     if( aWhichMap.Count() )
         aWhichMap.Remove( 0, aWhichMap.Count() );
-    aWhichMap.Insert( (USHORT)0, (USHORT)0 );
+    aWhichMap.Insert( (sal_uInt16)0, (sal_uInt16)0 );
 
     // Building a Which-Map 'rWhichMap' from an Array of
     // 'pWhichIds' frm Which-Ids. It has the long 'nWhichIds'.
     // The Which-Map is not going to be deleted.
-    SvParser::BuildWhichTbl( aWhichMap, (USHORT*)aPardMap.GetData(), aPardMap.Count() );
-    SvParser::BuildWhichTbl( aWhichMap, (USHORT*)aPlainMap.GetData(), aPlainMap.Count() );
+    SvParser::BuildWhichTbl( aWhichMap, (sal_uInt16*)aPardMap.GetData(), aPardMap.Count() );
+    SvParser::BuildWhichTbl( aWhichMap, (sal_uInt16*)aPlainMap.GetData(), aPlainMap.Count() );
 }
 
 const SfxItemSet& SvxRTFParser::GetRTFDefaults()
@@ -1149,10 +1153,10 @@ const SfxItemSet& SvxRTFParser::GetRTFDefaults()
     if( !pRTFDefaults )
     {
         pRTFDefaults = new SfxItemSet( *pAttrPool, aWhichMap.GetData() );
-        USHORT nId;
+        sal_uInt16 nId;
         if( 0 != ( nId = ((RTFPardAttrMapIds*)aPardMap.GetData())->nScriptSpace ))
         {
-            SvxScriptSpaceItem aItem( FALSE, nId );
+            SvxScriptSpaceItem aItem( sal_False, nId );
             if( bNewDoc )
                 pAttrPool->SetPoolDefaultItem( aItem );
             else
@@ -1164,19 +1168,19 @@ const SfxItemSet& SvxRTFParser::GetRTFDefaults()
 
 /**/
 
-SvxRTFStyleType::SvxRTFStyleType( SfxItemPool& rPool, const USHORT* pWhichRange )
+SvxRTFStyleType::SvxRTFStyleType( SfxItemPool& rPool, const sal_uInt16* pWhichRange )
     : aAttrSet( rPool, pWhichRange )
 {
-    nOutlineNo = BYTE(-1);          // not set
+    nOutlineNo = sal_uInt8(-1);         // not set
     nBasedOn = 0;
-    bBasedOnIsSet = FALSE;
+    bBasedOnIsSet = sal_False;          //$flr #117411#
     nNext = 0;
-    bIsCharFmt = FALSE;
+    bIsCharFmt = sal_False;
 }
 
 
 SvxRTFItemStackType::SvxRTFItemStackType(
-        SfxItemPool& rPool, const USHORT* pWhichRange,
+        SfxItemPool& rPool, const sal_uInt16* pWhichRange,
         const SvxPosition& rPos )
     : aAttrSet( rPool, pWhichRange ),
     pChildList( 0 ),
@@ -1252,8 +1256,8 @@ void SvxRTFItemStackType::MoveFullNode(const SvxNodeIdx &rOldNode,
     }
 
     //And the same for all the children
-    USHORT nCount = pChildList ? pChildList->Count() : 0;
-    for (USHORT i = 0; i < nCount; ++i)
+    sal_uInt16 nCount = pChildList ? pChildList->Count() : 0;
+    for (sal_uInt16 i = 0; i < nCount; ++i)
     {
         SvxRTFItemStackType* pStk = (*pChildList)[i];
         pStk->MoveFullNode(rOldNode, rNewNode);
@@ -1269,7 +1273,7 @@ void SvxRTFItemStackType::Compress( const SvxRTFParser& rParser )
 {
     DBG_ASSERT( pChildList, "There is no child list" );
 
-    USHORT n;
+    sal_uInt16 n;
     SvxRTFItemStackType* pTmp = (*pChildList)[0];
 
     if( !pTmp->aAttrSet.Count() ||
@@ -1308,15 +1312,15 @@ void SvxRTFItemStackType::Compress( const SvxRTFParser& rParser )
             SfxItemIter aIter( aMrgSet );
             const SfxPoolItem* pItem;
             do {
-                USHORT nWhich = aIter.GetCurItem()->Which();
+                sal_uInt16 nWhich = aIter.GetCurItem()->Which();
                 if( SFX_ITEM_SET != pTmp->aAttrSet.GetItemState( nWhich,
-                      FALSE, &pItem ) || *pItem != *aIter.GetCurItem() )
+                      sal_False, &pItem ) || *pItem != *aIter.GetCurItem() )
                     aMrgSet.ClearItem( nWhich );
 
                 if( aIter.IsAtEnd() )
                     break;
                 aIter.NextItem();
-            } while( TRUE );
+            } while( sal_True );
 
             if( !aMrgSet.Count() )
                 return;
@@ -1357,14 +1361,14 @@ void SvxRTFItemStackType::SetRTFDefaults( const SfxItemSet& rDefaults )
     {
         SfxItemIter aIter( rDefaults );
         do {
-            USHORT nWhich = aIter.GetCurItem()->Which();
-            if( SFX_ITEM_SET != aAttrSet.GetItemState( nWhich, FALSE ))
+            sal_uInt16 nWhich = aIter.GetCurItem()->Which();
+            if( SFX_ITEM_SET != aAttrSet.GetItemState( nWhich, sal_False ))
                 aAttrSet.Put( *aIter.GetCurItem() );
 
             if( aIter.IsAtEnd() )
                 break;
             aIter.NextItem();
-        } while( TRUE );
+        } while( sal_True );
     }
 }
 
@@ -1372,62 +1376,62 @@ void SvxRTFItemStackType::SetRTFDefaults( const SfxItemSet& rDefaults )
 
 RTFPlainAttrMapIds::RTFPlainAttrMapIds( const SfxItemPool& rPool )
 {
-    nCaseMap = rPool.GetTrueWhich( SID_ATTR_CHAR_CASEMAP, FALSE );
-    nBgColor = rPool.GetTrueWhich( SID_ATTR_BRUSH_CHAR, FALSE );
-    nColor = rPool.GetTrueWhich( SID_ATTR_CHAR_COLOR, FALSE );
-    nContour = rPool.GetTrueWhich( SID_ATTR_CHAR_CONTOUR, FALSE );
-    nCrossedOut = rPool.GetTrueWhich( SID_ATTR_CHAR_STRIKEOUT, FALSE );
-    nEscapement = rPool.GetTrueWhich( SID_ATTR_CHAR_ESCAPEMENT, FALSE );
-    nFont = rPool.GetTrueWhich( SID_ATTR_CHAR_FONT, FALSE );
-    nFontHeight = rPool.GetTrueWhich( SID_ATTR_CHAR_FONTHEIGHT, FALSE );
-    nKering = rPool.GetTrueWhich( SID_ATTR_CHAR_KERNING, FALSE );
-    nLanguage = rPool.GetTrueWhich( SID_ATTR_CHAR_LANGUAGE, FALSE );
-    nPosture = rPool.GetTrueWhich( SID_ATTR_CHAR_POSTURE, FALSE );
-    nShadowed = rPool.GetTrueWhich( SID_ATTR_CHAR_SHADOWED, FALSE );
-    nUnderline = rPool.GetTrueWhich( SID_ATTR_CHAR_UNDERLINE, FALSE );
-    nOverline = rPool.GetTrueWhich( SID_ATTR_CHAR_OVERLINE, FALSE );
-    nWeight = rPool.GetTrueWhich( SID_ATTR_CHAR_WEIGHT, FALSE );
-    nWordlineMode = rPool.GetTrueWhich( SID_ATTR_CHAR_WORDLINEMODE, FALSE );
-    nAutoKerning = rPool.GetTrueWhich( SID_ATTR_CHAR_AUTOKERN, FALSE );
+    nCaseMap = rPool.GetTrueWhich( SID_ATTR_CHAR_CASEMAP, sal_False );
+    nBgColor = rPool.GetTrueWhich( SID_ATTR_BRUSH_CHAR, sal_False );
+    nColor = rPool.GetTrueWhich( SID_ATTR_CHAR_COLOR, sal_False );
+    nContour = rPool.GetTrueWhich( SID_ATTR_CHAR_CONTOUR, sal_False );
+    nCrossedOut = rPool.GetTrueWhich( SID_ATTR_CHAR_STRIKEOUT, sal_False );
+    nEscapement = rPool.GetTrueWhich( SID_ATTR_CHAR_ESCAPEMENT, sal_False );
+    nFont = rPool.GetTrueWhich( SID_ATTR_CHAR_FONT, sal_False );
+    nFontHeight = rPool.GetTrueWhich( SID_ATTR_CHAR_FONTHEIGHT, sal_False );
+    nKering = rPool.GetTrueWhich( SID_ATTR_CHAR_KERNING, sal_False );
+    nLanguage = rPool.GetTrueWhich( SID_ATTR_CHAR_LANGUAGE, sal_False );
+    nPosture = rPool.GetTrueWhich( SID_ATTR_CHAR_POSTURE, sal_False );
+    nShadowed = rPool.GetTrueWhich( SID_ATTR_CHAR_SHADOWED, sal_False );
+    nUnderline = rPool.GetTrueWhich( SID_ATTR_CHAR_UNDERLINE, sal_False );
+    nOverline = rPool.GetTrueWhich( SID_ATTR_CHAR_OVERLINE, sal_False );
+    nWeight = rPool.GetTrueWhich( SID_ATTR_CHAR_WEIGHT, sal_False );
+    nWordlineMode = rPool.GetTrueWhich( SID_ATTR_CHAR_WORDLINEMODE, sal_False );
+    nAutoKerning = rPool.GetTrueWhich( SID_ATTR_CHAR_AUTOKERN, sal_False );
 
-    nCJKFont = rPool.GetTrueWhich( SID_ATTR_CHAR_CJK_FONT, FALSE );
-    nCJKFontHeight = rPool.GetTrueWhich( SID_ATTR_CHAR_CJK_FONTHEIGHT, FALSE );
-    nCJKLanguage = rPool.GetTrueWhich( SID_ATTR_CHAR_CJK_LANGUAGE, FALSE );
-    nCJKPosture = rPool.GetTrueWhich( SID_ATTR_CHAR_CJK_POSTURE, FALSE );
-    nCJKWeight = rPool.GetTrueWhich( SID_ATTR_CHAR_CJK_WEIGHT, FALSE );
-    nCTLFont = rPool.GetTrueWhich( SID_ATTR_CHAR_CTL_FONT, FALSE );
-    nCTLFontHeight = rPool.GetTrueWhich( SID_ATTR_CHAR_CTL_FONTHEIGHT, FALSE );
-    nCTLLanguage = rPool.GetTrueWhich( SID_ATTR_CHAR_CTL_LANGUAGE, FALSE );
-    nCTLPosture = rPool.GetTrueWhich( SID_ATTR_CHAR_CTL_POSTURE, FALSE );
-    nCTLWeight = rPool.GetTrueWhich( SID_ATTR_CHAR_CTL_WEIGHT, FALSE );
-    nEmphasis = rPool.GetTrueWhich( SID_ATTR_CHAR_EMPHASISMARK, FALSE );
-    nTwoLines = rPool.GetTrueWhich( SID_ATTR_CHAR_TWO_LINES, FALSE );
-    nRuby = 0; //rPool.GetTrueWhich( SID_ATTR_CHAR_CJK_RUBY, FALSE );
-    nCharScaleX = rPool.GetTrueWhich( SID_ATTR_CHAR_SCALEWIDTH, FALSE );
-    nHorzVert = rPool.GetTrueWhich( SID_ATTR_CHAR_ROTATED, FALSE );
-    nRelief = rPool.GetTrueWhich( SID_ATTR_CHAR_RELIEF, FALSE );
-    nHidden = rPool.GetTrueWhich( SID_ATTR_CHAR_HIDDEN, FALSE );
+    nCJKFont = rPool.GetTrueWhich( SID_ATTR_CHAR_CJK_FONT, sal_False );
+    nCJKFontHeight = rPool.GetTrueWhich( SID_ATTR_CHAR_CJK_FONTHEIGHT, sal_False );
+    nCJKLanguage = rPool.GetTrueWhich( SID_ATTR_CHAR_CJK_LANGUAGE, sal_False );
+    nCJKPosture = rPool.GetTrueWhich( SID_ATTR_CHAR_CJK_POSTURE, sal_False );
+    nCJKWeight = rPool.GetTrueWhich( SID_ATTR_CHAR_CJK_WEIGHT, sal_False );
+    nCTLFont = rPool.GetTrueWhich( SID_ATTR_CHAR_CTL_FONT, sal_False );
+    nCTLFontHeight = rPool.GetTrueWhich( SID_ATTR_CHAR_CTL_FONTHEIGHT, sal_False );
+    nCTLLanguage = rPool.GetTrueWhich( SID_ATTR_CHAR_CTL_LANGUAGE, sal_False );
+    nCTLPosture = rPool.GetTrueWhich( SID_ATTR_CHAR_CTL_POSTURE, sal_False );
+    nCTLWeight = rPool.GetTrueWhich( SID_ATTR_CHAR_CTL_WEIGHT, sal_False );
+    nEmphasis = rPool.GetTrueWhich( SID_ATTR_CHAR_EMPHASISMARK, sal_False );
+    nTwoLines = rPool.GetTrueWhich( SID_ATTR_CHAR_TWO_LINES, sal_False );
+    nRuby = 0; //rPool.GetTrueWhich( SID_ATTR_CHAR_CJK_RUBY, sal_False );
+    nCharScaleX = rPool.GetTrueWhich( SID_ATTR_CHAR_SCALEWIDTH, sal_False );
+    nHorzVert = rPool.GetTrueWhich( SID_ATTR_CHAR_ROTATED, sal_False );
+    nRelief = rPool.GetTrueWhich( SID_ATTR_CHAR_RELIEF, sal_False );
+    nHidden = rPool.GetTrueWhich( SID_ATTR_CHAR_HIDDEN, sal_False );
 }
 
 RTFPardAttrMapIds ::RTFPardAttrMapIds ( const SfxItemPool& rPool )
 {
-    nLinespacing = rPool.GetTrueWhich( SID_ATTR_PARA_LINESPACE, FALSE );
-    nAdjust = rPool.GetTrueWhich( SID_ATTR_PARA_ADJUST, FALSE );
-    nTabStop = rPool.GetTrueWhich( SID_ATTR_TABSTOP, FALSE );
-    nHyphenzone = rPool.GetTrueWhich( SID_ATTR_PARA_HYPHENZONE, FALSE );
-    nLRSpace = rPool.GetTrueWhich( SID_ATTR_LRSPACE, FALSE );
-    nULSpace = rPool.GetTrueWhich( SID_ATTR_ULSPACE, FALSE );
-    nBrush = rPool.GetTrueWhich( SID_ATTR_BRUSH, FALSE );
-    nBox = rPool.GetTrueWhich( SID_ATTR_BORDER_OUTER, FALSE );
-    nShadow = rPool.GetTrueWhich( SID_ATTR_BORDER_SHADOW, FALSE );
-    nOutlineLvl = rPool.GetTrueWhich( SID_ATTR_PARA_OUTLLEVEL, FALSE );
-    nSplit = rPool.GetTrueWhich( SID_ATTR_PARA_SPLIT, FALSE );
-    nKeep = rPool.GetTrueWhich( SID_ATTR_PARA_KEEP, FALSE );
-    nFontAlign = rPool.GetTrueWhich( SID_PARA_VERTALIGN, FALSE );
-    nScriptSpace = rPool.GetTrueWhich( SID_ATTR_PARA_SCRIPTSPACE, FALSE );
-    nHangPunct = rPool.GetTrueWhich( SID_ATTR_PARA_HANGPUNCTUATION, FALSE );
-    nForbRule = rPool.GetTrueWhich( SID_ATTR_PARA_FORBIDDEN_RULES, FALSE );
-    nDirection = rPool.GetTrueWhich( SID_ATTR_FRAMEDIRECTION, FALSE );
+    nLinespacing = rPool.GetTrueWhich( SID_ATTR_PARA_LINESPACE, sal_False );
+    nAdjust = rPool.GetTrueWhich( SID_ATTR_PARA_ADJUST, sal_False );
+    nTabStop = rPool.GetTrueWhich( SID_ATTR_TABSTOP, sal_False );
+    nHyphenzone = rPool.GetTrueWhich( SID_ATTR_PARA_HYPHENZONE, sal_False );
+    nLRSpace = rPool.GetTrueWhich( SID_ATTR_LRSPACE, sal_False );
+    nULSpace = rPool.GetTrueWhich( SID_ATTR_ULSPACE, sal_False );
+    nBrush = rPool.GetTrueWhich( SID_ATTR_BRUSH, sal_False );
+    nBox = rPool.GetTrueWhich( SID_ATTR_BORDER_OUTER, sal_False );
+    nShadow = rPool.GetTrueWhich( SID_ATTR_BORDER_SHADOW, sal_False );
+    nOutlineLvl = rPool.GetTrueWhich( SID_ATTR_PARA_OUTLLEVEL, sal_False );
+    nSplit = rPool.GetTrueWhich( SID_ATTR_PARA_SPLIT, sal_False );
+    nKeep = rPool.GetTrueWhich( SID_ATTR_PARA_KEEP, sal_False );
+    nFontAlign = rPool.GetTrueWhich( SID_PARA_VERTALIGN, sal_False );
+    nScriptSpace = rPool.GetTrueWhich( SID_ATTR_PARA_SCRIPTSPACE, sal_False );
+    nHangPunct = rPool.GetTrueWhich( SID_ATTR_PARA_HANGPUNCTUATION, sal_False );
+    nForbRule = rPool.GetTrueWhich( SID_ATTR_PARA_FORBIDDEN_RULES, sal_False );
+    nDirection = rPool.GetTrueWhich( SID_ATTR_FRAMEDIRECTION, sal_False );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

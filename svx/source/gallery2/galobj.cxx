@@ -60,16 +60,16 @@ using namespace ::com::sun::star;
 // -------------
 
 SgaObject::SgaObject() :
-        bIsValid    ( FALSE ),
-        bIsThumbBmp ( TRUE )
+        bIsValid    ( sal_False ),
+        bIsThumbBmp ( sal_True )
 {
 }
 
 // ------------------------------------------------------------------------
 
-BOOL SgaObject::CreateThumb( const Graphic& rGraphic )
+sal_Bool SgaObject::CreateThumb( const Graphic& rGraphic )
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
 
     if( rGraphic.GetType() == GRAPHIC_BITMAP )
     {
@@ -105,7 +105,7 @@ BOOL SgaObject::CreateThumb( const Graphic& rGraphic )
             if( ( aBmpSize.Width() <= S_THUMB ) && ( aBmpSize.Height() <= S_THUMB ) )
             {
                 aThumbBmp.Convert( BMP_CONVERSION_8BIT_COLORS );
-                bRet = TRUE;
+                bRet = sal_True;
             }
             else
             {
@@ -117,7 +117,7 @@ BOOL SgaObject::CreateThumb( const Graphic& rGraphic )
                                      (double) aNewSize.Height() / aBmpSize.Height(), BMP_SCALE_INTERPOLATE ) )
                 {
                     aThumbBmp.Convert( BMP_CONVERSION_8BIT_COLORS );
-                    bRet = TRUE;
+                    bRet = sal_True;
                 }
             }
         }
@@ -138,7 +138,7 @@ BOOL SgaObject::CreateThumb( const Graphic& rGraphic )
         if( !aThumbBmp.IsEmpty() )
         {
             aThumbBmp.Convert( BMP_CONVERSION_8BIT_COLORS );
-            bRet = TRUE;
+            bRet = sal_True;
         }
     }
 
@@ -149,15 +149,15 @@ BOOL SgaObject::CreateThumb( const Graphic& rGraphic )
 
 void SgaObject::WriteData( SvStream& rOut, const String& rDestDir ) const
 {
-    static const UINT32 nInventor = COMPAT_FORMAT( 'S', 'G', 'A', '3' );
+    static const sal_uInt32 nInventor = COMPAT_FORMAT( 'S', 'G', 'A', '3' );
 
-    rOut << nInventor << (UINT16) 0x0004 << GetVersion() << (UINT16) GetObjKind();
+    rOut << nInventor << (sal_uInt16) 0x0004 << GetVersion() << (sal_uInt16) GetObjKind();
     rOut << bIsThumbBmp;
 
     if( bIsThumbBmp )
     {
-        const USHORT    nOldCompressMode = rOut.GetCompressMode();
-        const ULONG     nOldVersion = rOut.GetVersion();
+        const sal_uInt16    nOldCompressMode = rOut.GetCompressMode();
+        const sal_uIntPtr       nOldVersion = rOut.GetVersion();
 
         rOut.SetCompressMode( COMPRESSMODE_ZBITMAP );
         rOut.SetVersion( SOFFICE_FILEFORMAT_50 );
@@ -177,11 +177,11 @@ void SgaObject::WriteData( SvStream& rOut, const String& rDestDir ) const
 
 // ------------------------------------------------------------------------
 
-void SgaObject::ReadData(SvStream& rIn, UINT16& rReadVersion )
+void SgaObject::ReadData(SvStream& rIn, sal_uInt16& rReadVersion )
 {
     ByteString  aTmpStr;
-    UINT32      nTmp32;
-    UINT16      nTmp16;
+    sal_uInt32      nTmp32;
+    sal_uInt16      nTmp16;
 
     rIn >> nTmp32 >> nTmp16 >> rReadVersion >> nTmp16 >> bIsThumbBmp;
 
@@ -246,7 +246,7 @@ SvStream& operator<<( SvStream& rOut, const SgaObject& rObj )
 
 SvStream& operator>>( SvStream& rIn, SgaObject& rObj )
 {
-    UINT16 nReadVersion;
+    sal_uInt16 nReadVersion;
 
     rObj.ReadData( rIn, nReadVersion );
     rObj.bIsValid = ( rIn.GetError() == ERRCODE_NONE );
@@ -304,7 +304,7 @@ void SgaObjectBmp::WriteData( SvStream& rOut, const String& rDestDir ) const
 
 // ------------------------------------------------------------------------
 
-void SgaObjectBmp::ReadData( SvStream& rIn, UINT16& rReadVersion )
+void SgaObjectBmp::ReadData( SvStream& rIn, sal_uInt16& rReadVersion )
 {
     ByteString aTmpStr;
 
@@ -336,10 +336,10 @@ SgaObjectSound::SgaObjectSound( const INetURLObject& rURL ) :
     {
         aURL = rURL;
         aThumbBmp = Bitmap( Size( 1, 1 ), 1 );
-        bIsValid = TRUE;
+        bIsValid = sal_True;
     }
     else
-        bIsValid = FALSE;
+        bIsValid = sal_False;
 }
 
 // ------------------------------------------------------------------------
@@ -352,7 +352,7 @@ SgaObjectSound::~SgaObjectSound()
 
 Bitmap SgaObjectSound::GetThumbBmp() const
 {
-    USHORT nId;
+    sal_uInt16 nId;
 
     switch( eSoundType )
     {
@@ -381,19 +381,19 @@ Bitmap SgaObjectSound::GetThumbBmp() const
 void SgaObjectSound::WriteData( SvStream& rOut, const String& rDestDir ) const
 {
     SgaObject::WriteData( rOut, rDestDir );
-    rOut << (UINT16) eSoundType << ByteString( aTitle, RTL_TEXTENCODING_UTF8 );
+    rOut << (sal_uInt16) eSoundType << ByteString( aTitle, RTL_TEXTENCODING_UTF8 );
 }
 
 // ------------------------------------------------------------------------
 
-void SgaObjectSound::ReadData( SvStream& rIn, UINT16& rReadVersion )
+void SgaObjectSound::ReadData( SvStream& rIn, sal_uInt16& rReadVersion )
 {
     SgaObject::ReadData( rIn, rReadVersion );
 
     if( rReadVersion >= 5 )
     {
         ByteString  aTmpStr;
-        UINT16      nTmp16;
+        sal_uInt16      nTmp16;
 
         rIn >> nTmp16; eSoundType = (GalSoundType) nTmp16;
 
@@ -505,11 +505,11 @@ SgaObjectSvDraw::SgaObjectSvDraw( SvStream& rIStm, const INetURLObject& rURL )
 
 // ------------------------------------------------------------------------
 
-BOOL SgaObjectSvDraw::CreateThumb( const FmFormModel& rModel )
+sal_Bool SgaObjectSvDraw::CreateThumb( const FmFormModel& rModel )
 {
     Graphic     aGraphic;
     ImageMap    aImageMap;
-    BOOL        bRet = FALSE;
+    sal_Bool        bRet = sal_False;
 
     if ( CreateIMapGraphic( rModel, aGraphic, aImageMap ) )
         bRet = SgaObject::CreateThumb( aGraphic );
@@ -538,10 +538,10 @@ BOOL SgaObjectSvDraw::CreateThumb( const FmFormModel& rModel )
 
 // ------------------------------------------------------------------------
 
-BOOL SgaObjectSvDraw::DrawCentered( OutputDevice* pOut, const FmFormModel& rModel )
+sal_Bool SgaObjectSvDraw::DrawCentered( OutputDevice* pOut, const FmFormModel& rModel )
 {
     const FmFormPage*   pPage = static_cast< const FmFormPage* >( rModel.GetPage( 0 ) );
-    BOOL                bRet = FALSE;
+    sal_Bool                bRet = sal_False;
 
     if( pOut && pPage )
     {
@@ -567,11 +567,11 @@ BOOL SgaObjectSvDraw::DrawCentered( OutputDevice* pOut, const FmFormModel& rMode
             aOrigin.Y() += ( ( aDrawSize.Height() - aObjRect.GetHeight() ) >> 1 ) - aObjRect.Top();
             aMap.SetOrigin( aOrigin );
 
-            aView.SetPageVisible( FALSE );
-            aView.SetBordVisible( FALSE );
-            aView.SetGridVisible( FALSE );
-            aView.SetHlplVisible( FALSE );
-            aView.SetGlueVisible( FALSE );
+            aView.SetPageVisible( sal_False );
+            aView.SetBordVisible( sal_False );
+            aView.SetGridVisible( sal_False );
+            aView.SetHlplVisible( sal_False );
+            aView.SetGlueVisible( sal_False );
 
             pOut->Push();
             pOut->SetMapMode( aMap );
@@ -579,7 +579,7 @@ BOOL SgaObjectSvDraw::DrawCentered( OutputDevice* pOut, const FmFormModel& rMode
             aView.CompleteRedraw( pOut, Rectangle( pOut->PixelToLogic( Point() ), pOut->GetOutputSize() ) );
             pOut->Pop();
 
-            bRet = TRUE;
+            bRet = sal_True;
         }
     }
 
@@ -596,7 +596,7 @@ void SgaObjectSvDraw::WriteData( SvStream& rOut, const String& rDestDir ) const
 
 // ------------------------------------------------------------------------
 
-void SgaObjectSvDraw::ReadData( SvStream& rIn, UINT16& rReadVersion )
+void SgaObjectSvDraw::ReadData( SvStream& rIn, sal_uInt16& rReadVersion )
 {
     SgaObject::ReadData( rIn, rReadVersion );
 

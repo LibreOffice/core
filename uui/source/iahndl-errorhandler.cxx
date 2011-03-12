@@ -49,7 +49,7 @@ using namespace com::sun::star;
 
 namespace {
 
-USHORT
+sal_uInt16
 executeErrorDialog(
     Window * pParent,
     task::InteractionClassification eClassification,
@@ -113,7 +113,7 @@ executeErrorDialog(
             uno::Reference< uno::XInterface >());
     }
 
-    USHORT aResult = xBox->Execute();
+    sal_uInt16 aResult = xBox->Execute();
     switch( aResult )
     {
     case BUTTONID_OK:
@@ -165,7 +165,7 @@ UUIInteractionHelper::handleErrorHandlerRequest(
                 CREATEVERSIONRESMGR_NAME(cnt),
                 CREATEVERSIONRESMGR_NAME(svx),
                 CREATEVERSIONRESMGR_NAME(uui) };
-        static USHORT const aId[4]
+        static sal_uInt16 const aId[4]
             = { RID_ERRHDL,
                 RID_CHAOS_START + 12,
                 // cf. chaos/source/inc/cntrids.hrc, where
@@ -277,7 +277,7 @@ UUIInteractionHelper::handleErrorHandlerRequest(
             }
         }
 
-        USHORT nResult = executeErrorDialog(
+        sal_uInt16 nResult = executeErrorDialog(
             getParentProperty(), eClassification, aContext, aMessage, nButtonMask );
 
         switch (nResult)

@@ -38,10 +38,10 @@
 #include <globals.hxx>
 
 SvIdlDataBase::SvIdlDataBase( const SvCommand& rCmd )
-    : bExport( FALSE )
+    : bExport( sal_False )
     , nUniqueId( 0 )
     , nVerbosity( rCmd.nVerbosity )
-    , bIsModified( FALSE )
+    , bIsModified( sal_False )
     , aPersStream( *IDLAPP->pClassMgr, NULL )
     , pIdTable( NULL )
 {
@@ -88,18 +88,18 @@ SvMetaTypeMemberList & SvIdlDataBase::GetTypeList()
 
 SvMetaModule * SvIdlDataBase::GetModule( const ByteString & rName )
 {
-    for( ULONG n = 0; n < aModuleList.Count(); n++ )
+    for( sal_uLong n = 0; n < aModuleList.Count(); n++ )
         if( aModuleList.GetObject( n )->GetName() == rName )
             return aModuleList.GetObject( n );
     return NULL;
 }
 
-#define DATABASE_SIGNATURE  (UINT32)0x13B799F2
+#define DATABASE_SIGNATURE  (sal_uInt32)0x13B799F2
 #define DATABASE_VER 0x0006
-BOOL SvIdlDataBase::IsBinaryFormat( SvStream & rStm )
+sal_Bool SvIdlDataBase::IsBinaryFormat( SvStream & rStm )
 {
-    UINT32  nSig = 0;
-    ULONG   nPos = rStm.Tell();
+    sal_uInt32  nSig = 0;
+    sal_uLong   nPos = rStm.Tell();
     rStm >> nSig;
     rStm.Seek( nPos );
 
@@ -111,8 +111,8 @@ void SvIdlDataBase::Load( SvStream & rStm )
     DBG_ASSERT( aTypeList.Count() == 0, "type list already initialized" );
     SvPersistStream aPStm( *IDLAPP->pClassMgr, &rStm );
 
-    USHORT  nVersion = 0;
-    UINT32  nSig = 0;
+    sal_uInt16  nVersion = 0;
+    sal_uInt32  nSig = 0;
 
     aPStm >> nSig;
     aPStm >> nVersion;
@@ -136,22 +136,22 @@ void SvIdlDataBase::Load( SvStream & rStm )
         aPStm.SetError( SVSTREAM_GENERALERROR );
 }
 
-void SvIdlDataBase::Save( SvStream & rStm, UINT32 nFlags )
+void SvIdlDataBase::Save( SvStream & rStm, sal_uInt32 nFlags )
 {
     SvPersistStream aPStm( *IDLAPP->pClassMgr, &rStm );
     aPStm.SetContextFlags( nFlags );
 
-    aPStm << (UINT32)DATABASE_SIGNATURE;
-    aPStm << (USHORT)DATABASE_VER;
+    aPStm << (sal_uInt32)DATABASE_SIGNATURE;
+    aPStm << (sal_uInt16)DATABASE_VER;
 
-    BOOL bOnlyStreamedObjs = FALSE;
+    sal_Bool bOnlyStreamedObjs = sal_False;
     if( nFlags & IDL_WRITE_CALLING )
-        bOnlyStreamedObjs = TRUE;
+        bOnlyStreamedObjs = sal_True;
 
     if( bOnlyStreamedObjs )
     {
         SvMetaClassMemberList aList;
-        for( ULONG n = 0; n < GetModuleList().Count(); n++ )
+        for( sal_uLong n = 0; n < GetModuleList().Count(); n++ )
         {
             SvMetaModule * pModule = GetModuleList().GetObject( n );
             if( !pModule->IsImported() )
@@ -187,42 +187,42 @@ void SvIdlDataBase::Push( SvMetaObject * pObj )
 }
 
 #ifdef IDL_COMPILER
-BOOL SvIdlDataBase::FindId( const ByteString & rIdName, ULONG * pVal )
+sal_Bool SvIdlDataBase::FindId( const ByteString & rIdName, sal_uLong * pVal )
 {
     if( pIdTable )
     {
-        UINT32 nHash;
+        sal_uInt32 nHash;
         if( pIdTable->Test( rIdName, &nHash ) )
         {
             *pVal = pIdTable->Get( nHash )->GetValue();
-            return TRUE;
+            return sal_True;
         }
     }
-    return FALSE;
+    return sal_False;
 }
 
-BOOL SvIdlDataBase::InsertId( const ByteString & rIdName, ULONG nVal )
+sal_Bool SvIdlDataBase::InsertId( const ByteString & rIdName, sal_uLong nVal )
 {
     if( !pIdTable )
         pIdTable = new SvStringHashTable( 20003 );
 
-    UINT32 nHash;
+    sal_uInt32 nHash;
     if( pIdTable->Insert( rIdName, &nHash ) )
     {
         pIdTable->Get( nHash )->SetValue( nVal );
-        return TRUE;
+        return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
-BOOL SvIdlDataBase::ReadIdFile( const String & rFileName )
+sal_Bool SvIdlDataBase::ReadIdFile( const String & rFileName )
 {
     DirEntry aFullName( rFileName );
     aFullName.Find( GetPath() );
 
     for ( size_t i = 0, n = aIdFileList.size(); i < n; ++i )
         if ( *aIdFileList[ i ] == rFileName )
-            return TRUE;
+            return sal_True;
 
     aIdFileList.push_back( new String( rFileName ) );
 
@@ -248,21 +248,21 @@ BOOL SvIdlDataBase::ReadIdFile( const String & rFileName )
                         // set error
                         SetError( aStr, pTok );
                         WriteError( aTokStm );
-                        return FALSE;
+                        return sal_False;
                     }
 
-                    ULONG nVal = 0;
-                    BOOL bOk = TRUE;
+                    sal_uLong nVal = 0;
+                    sal_Bool bOk = sal_True;
                     while( bOk )
                     {
                         pTok = aTokStm.GetToken_Next();
                         if( pTok->IsIdentifier() )
                         {
-                            ULONG n;
+                            sal_uLong n;
                             if( FindId( pTok->GetString(), &n ) )
                                 nVal += n;
                             else
-                                bOk = FALSE;
+                                bOk = sal_False;
                         }
                         else if( pTok->IsChar() )
                         {
@@ -280,7 +280,7 @@ BOOL SvIdlDataBase::ReadIdFile( const String & rFileName )
                                 // set error
                                 SetError( aStr, pTok );
                                 WriteError( aTokStm );
-                                return FALSE;
+                                return sal_False;
                             }
                             if( pTok->GetChar() != '+'
                               && pTok->GetChar() != '('
@@ -303,7 +303,7 @@ BOOL SvIdlDataBase::ReadIdFile( const String & rFileName )
                             ByteString aStr = "hash table overflow: ";
                             SetError( aStr, pTok );
                             WriteError( aTokStm );
-                            return FALSE;
+                            return sal_False;
                         }
                     }
                 }
@@ -328,7 +328,7 @@ BOOL SvIdlDataBase::ReadIdFile( const String & rFileName )
                             // set error
                             SetError( aStr, pTok );
                             WriteError( aTokStm );
-                            return FALSE;
+                            return sal_False;
                         }
                     }
                     if( !ReadIdFile( String::CreateFromAscii(aName.GetBuffer()) ) )
@@ -337,7 +337,7 @@ BOOL SvIdlDataBase::ReadIdFile( const String & rFileName )
                         aStr += aName;
                         SetError( aStr, pTok );
                         WriteError( aTokStm );
-                        return FALSE;
+                        return sal_False;
                     }
                 }
             }
@@ -346,8 +346,8 @@ BOOL SvIdlDataBase::ReadIdFile( const String & rFileName )
         }
     }
     else
-        return FALSE;
-    return TRUE;
+        return sal_False;
+    return sal_True;
 }
 
 SvMetaType * SvIdlDataBase::FindType( const SvMetaType * pPType,
@@ -369,39 +369,39 @@ SvMetaType * SvIdlDataBase::FindType( const ByteString & rName )
 
 SvMetaType * SvIdlDataBase::ReadKnownType( SvTokenStream & rInStm )
 {
-    BOOL bIn    = FALSE;
-    BOOL bOut   = FALSE;
+    sal_Bool bIn    = sal_False;
+    sal_Bool bOut   = sal_False;
     int nCall0  = CALL_VALUE;
     int nCall1  = CALL_VALUE;
-    BOOL bSet   = FALSE; // any attribute set
+    sal_Bool bSet   = sal_False; // any attribute set
 
-    UINT32  nTokPos = rInStm.Tell();
+    sal_uInt32  nTokPos = rInStm.Tell();
     SvToken * pTok = rInStm.GetToken_Next();
 
     if( pTok->HasHash() )
     {
-        UINT32 nBeginPos = 0; // can not happen with Tell
+        sal_uInt32 nBeginPos = 0; // can not happen with Tell
         while( nBeginPos != rInStm.Tell() )
         {
             nBeginPos = rInStm.Tell();
             if( pTok->Is( SvHash_in() ) )
             {
-                bIn  = TRUE;
+                bIn  = sal_True;
                 pTok = rInStm.GetToken_Next();
-                bSet = TRUE;
+                bSet = sal_True;
             }
             if( pTok->Is( SvHash_out() ) )
             {
-                bOut = TRUE;
+                bOut = sal_True;
                 pTok = rInStm.GetToken_Next();
-                bSet = TRUE;
+                bSet = sal_True;
             }
             if( pTok->Is( SvHash_inout() ) )
             {
-                bIn  = TRUE;
-                bOut = TRUE;
+                bIn  = sal_True;
+                bOut = sal_True;
                 pTok = rInStm.GetToken_Next();
-                bSet = TRUE;
+                bSet = sal_True;
             }
         }
     }
@@ -434,7 +434,7 @@ SvMetaType * SvIdlDataBase::ReadKnownType( SvTokenStream & rInStm )
                                                             CALL_POINTER;
                         rInStm.GetToken_Next();
                     }
-                    bSet = TRUE;
+                    bSet = sal_True;
                 }
             }
 
@@ -465,7 +465,7 @@ SvMetaAttribute * SvIdlDataBase::ReadKnownAttr
                                still to be read. */
 )
 {
-    UINT32  nTokPos = rInStm.Tell();
+    sal_uInt32  nTokPos = rInStm.Tell();
 
     if( !pType )
         pType = ReadKnownType( rInStm );
@@ -476,10 +476,10 @@ SvMetaAttribute * SvIdlDataBase::ReadKnownAttr
         SvToken * pTok = rInStm.GetToken_Next();
         if( pTok->IsIdentifier() )
         {
-            ULONG n;
+            sal_uLong n;
             if( FindId( pTok->GetString(), &n ) )
             {
-                for( ULONG i = 0; i < aAttrList.Count(); i++ )
+                for( sal_uLong i = 0; i < aAttrList.Count(); i++ )
                 {
                     SvMetaAttribute * pAttr = aAttrList.GetObject( i );
                     if( pAttr->GetSlotId() == pTok->GetString() )
@@ -502,10 +502,10 @@ SvMetaAttribute* SvIdlDataBase::SearchKnownAttr
     const SvNumberIdentifier& rId
 )
 {
-    ULONG n;
+    sal_uLong n;
     if( FindId( rId, &n ) )
     {
-        for( ULONG i = 0; i < aAttrList.Count(); i++ )
+        for( sal_uLong i = 0; i < aAttrList.Count(); i++ )
         {
             SvMetaAttribute * pAttr = aAttrList.GetObject( i );
             if( pAttr->GetSlotId() == rId )
@@ -518,11 +518,11 @@ SvMetaAttribute* SvIdlDataBase::SearchKnownAttr
 
 SvMetaClass * SvIdlDataBase::ReadKnownClass( SvTokenStream & rInStm )
 {
-    UINT32  nTokPos = rInStm.Tell();
+    sal_uInt32  nTokPos = rInStm.Tell();
     SvToken * pTok = rInStm.GetToken_Next();
 
     if( pTok->IsIdentifier() )
-        for( ULONG n = 0; n < aClassList.Count(); n++ )
+        for( sal_uLong n = 0; n < aClassList.Count(); n++ )
         {
             SvMetaClass * pClass = aClassList.GetObject( n );
             if( pClass->GetName() == pTok->GetString() )
@@ -535,19 +535,16 @@ SvMetaClass * SvIdlDataBase::ReadKnownClass( SvTokenStream & rInStm )
 
 void SvIdlDataBase::Write( const ByteString & rText )
 {
-#ifndef W31
     if( nVerbosity != 0 )
         fprintf( stdout, "%s", rText.GetBuffer() );
-#endif
 }
 
 void SvIdlDataBase::WriteError( const ByteString & rErrWrn,
                                 const ByteString & rFileName,
                                 const ByteString & rErrorText,
-                                ULONG nRow, ULONG nColumn ) const
+                                sal_uLong nRow, sal_uLong nColumn ) const
 {
     // error treatment
-#ifndef W31
     fprintf( stderr, "\n%s --- %s: ( %ld, %ld )\n",
              rFileName.GetBuffer(), rErrWrn.GetBuffer(), nRow, nColumn );
 
@@ -555,16 +552,14 @@ void SvIdlDataBase::WriteError( const ByteString & rErrWrn,
     { // error set
         fprintf( stderr, "\t%s\n", rErrorText.GetBuffer() );
     }
-#endif
 }
 
 void SvIdlDataBase::WriteError( SvTokenStream & rInStm )
 {
     // error treatment
-#ifndef W31
     String aFileName( rInStm.GetFileName() );
     ByteString aErrorText;
-    ULONG   nRow = 0, nColumn = 0;
+    sal_uLong   nRow = 0, nColumn = 0;
 
     rInStm.SeekEnd();
     SvToken *pTok = rInStm.GetToken();
@@ -621,18 +616,17 @@ void SvIdlDataBase::WriteError( SvTokenStream & rInStm )
         if( aN.Len() )
             fprintf( stderr, "%s versus %s\n", pTok->GetString().GetBuffer(), aN.GetBuffer() );
     }
-#endif
 }
 
 SvIdlWorkingBase::SvIdlWorkingBase(const SvCommand& rCmd) : SvIdlDataBase(rCmd)
 {
 }
 
-BOOL SvIdlWorkingBase::ReadSvIdl( SvTokenStream & rInStm, BOOL bImported, const String & rPath )
+sal_Bool SvIdlWorkingBase::ReadSvIdl( SvTokenStream & rInStm, sal_Bool bImported, const String & rPath )
 {
     aPath = rPath; // only valid for this iteration
     SvToken * pTok;
-    BOOL bOk = TRUE;
+    sal_Bool bOk = sal_True;
         pTok = rInStm.GetToken();
         // only one import at the very beginning
         if( pTok->Is( SvHash_import() ) )
@@ -656,34 +650,34 @@ BOOL SvIdlWorkingBase::ReadSvIdl( SvTokenStream & rInStm, BOOL bImported, const 
                             aStr += ByteString( aFullName.GetFull(), RTL_TEXTENCODING_UTF8 );
                             SetError( aStr, pTok );
                             WriteError( rInStm );
-                            bOk = FALSE;
+                            bOk = sal_False;
                         }
                         else
                         {
                             aStm.Seek( 0 );
                             aStm.ResetError();
                             SvTokenStream aTokStm( aStm, aFullName.GetFull() );
-                            bOk = ReadSvIdl( aTokStm, TRUE, rPath );
+                            bOk = ReadSvIdl( aTokStm, sal_True, rPath );
                         }
                     }
                 }
                 else
-                    bOk = FALSE;
+                    bOk = sal_False;
             }
             else
-                bOk = FALSE;
+                bOk = sal_False;
         }
 
-    UINT32 nBeginPos = 0xFFFFFFFF; // can not happen with Tell
+    sal_uInt32 nBeginPos = 0xFFFFFFFF; // can not happen with Tell
 
     while( bOk && nBeginPos != rInStm.Tell() )
     {
         nBeginPos = rInStm.Tell();
         pTok = rInStm.GetToken();
         if( pTok->IsEof() )
-            return TRUE;
+            return sal_True;
         if( pTok->IsEmpty() )
-            bOk = FALSE;
+            bOk = sal_False;
 
         // only one import at the very beginning
         if( pTok->Is( SvHash_module() ) )
@@ -692,24 +686,24 @@ BOOL SvIdlWorkingBase::ReadSvIdl( SvTokenStream & rInStm, BOOL bImported, const 
             if( aModule->ReadSvIdl( *this, rInStm ) )
                 GetModuleList().Append( aModule );
             else
-                bOk = FALSE;
+                bOk = sal_False;
         }
         else
-            bOk = FALSE;
+            bOk = sal_False;
     }
     if( !bOk || !pTok->IsEof() )
     {
          // error treatment
          WriteError( rInStm );
-         return FALSE;
+         return sal_False;
     }
-    return TRUE;
+    return sal_True;
 }
 
-BOOL SvIdlWorkingBase::WriteSvIdl( SvStream & rOutStm )
+sal_Bool SvIdlWorkingBase::WriteSvIdl( SvStream & rOutStm )
 {
     if( rOutStm.GetError() != SVSTREAM_OK )
-        return FALSE;
+        return sal_False;
 
     SvStringHashList aList;
     if( GetIdTable() )
@@ -726,23 +720,23 @@ BOOL SvIdlWorkingBase::WriteSvIdl( SvStream & rOutStm )
         }
     }
 
-    for( ULONG n = 0; n < GetModuleList().Count(); n++ )
+    for( sal_uLong n = 0; n < GetModuleList().Count(); n++ )
     {
         SvMetaModule * pModule = GetModuleList().GetObject( n );
         pModule->WriteSvIdl( *this, rOutStm, 0 );
     }
-    return TRUE;
+    return sal_True;
 }
 
-BOOL SvIdlWorkingBase::WriteSfx( SvStream & rOutStm )
+sal_Bool SvIdlWorkingBase::WriteSfx( SvStream & rOutStm )
 {
     if( rOutStm.GetError() != SVSTREAM_OK )
-        return FALSE;
+        return sal_False;
 
     // reset all tmp variables for writing
     WriteReset();
     SvMemoryStream aTmpStm( 256000, 256000 );
-    ULONG n;
+    sal_uLong n;
     for( n = 0; n < GetModuleList().Count(); n++ )
     {
         SvMetaModule * pModule = GetModuleList().GetObject( n );
@@ -757,16 +751,16 @@ BOOL SvIdlWorkingBase::WriteSfx( SvStream & rOutStm )
     }
     aUsedTypes.Clear();
     rOutStm << aTmpStm;
-    return TRUE;
+    return sal_True;
 }
 
-BOOL SvIdlWorkingBase::WriteHelpIds( SvStream& rOutStm )
+sal_Bool SvIdlWorkingBase::WriteHelpIds( SvStream& rOutStm )
 {
     if( rOutStm.GetError() != SVSTREAM_OK )
-        return FALSE;
+        return sal_False;
 
     Table aIdTable;
-    ULONG n;
+    sal_uLong n;
     for( n = 0; n < GetModuleList().Count(); n++ )
     {
         SvMetaModule * pModule = GetModuleList().GetObject( n );
@@ -780,12 +774,12 @@ BOOL SvIdlWorkingBase::WriteHelpIds( SvStream& rOutStm )
         pAttr->WriteHelpId( *this, rOutStm, &aIdTable );
     }
 
-    return TRUE;
+    return sal_True;
 }
 
-BOOL SvIdlWorkingBase::WriteSfxItem( SvStream & )
+sal_Bool SvIdlWorkingBase::WriteSfxItem( SvStream & )
 {
-    return FALSE;
+    return sal_False;
 }
 
 void SvIdlDataBase::StartNewFile( const String& rName )
@@ -797,14 +791,14 @@ void SvIdlDataBase::AppendAttr( SvMetaAttribute *pAttr )
 {
     aAttrList.Append( pAttr );
     if ( bExport )
-        pAttr->SetNewAttribute( TRUE );
+        pAttr->SetNewAttribute( sal_True );
 }
 
-BOOL SvIdlWorkingBase::WriteCSV( SvStream& rStrm )
+sal_Bool SvIdlWorkingBase::WriteCSV( SvStream& rStrm )
 {
     SvMetaAttributeMemberList &rList = GetAttrList();
-    ULONG nCount = rList.Count();
-    for ( ULONG n=0; n<nCount; n++ )
+    sal_uLong nCount = rList.Count();
+    for ( sal_uLong n=0; n<nCount; n++ )
     {
         if ( rList.GetObject(n)->IsNewAttribute() )
         {
@@ -813,23 +807,23 @@ BOOL SvIdlWorkingBase::WriteCSV( SvStream& rStrm )
     }
 
     if ( rStrm.GetError() != SVSTREAM_OK )
-        return FALSE;
+        return sal_False;
     else
-        return TRUE;
+        return sal_True;
 }
 
-BOOL SvIdlWorkingBase::WriteDocumentation( SvStream & rOutStm )
+sal_Bool SvIdlWorkingBase::WriteDocumentation( SvStream & rOutStm )
 {
     if( rOutStm.GetError() != SVSTREAM_OK )
-        return FALSE;
+        return sal_False;
 
-    for( ULONG n = 0; n < GetModuleList().Count(); n++ )
+    for( sal_uLong n = 0; n < GetModuleList().Count(); n++ )
     {
         SvMetaModule * pModule = GetModuleList().GetObject( n );
         if( !pModule->IsImported() )
             pModule->Write( *this, rOutStm, 0, WRITE_DOCU );
     }
-    return TRUE;
+    return sal_True;
 }
 
 

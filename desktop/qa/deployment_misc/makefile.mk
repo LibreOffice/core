@@ -35,20 +35,22 @@ ENABLE_EXCEPTIONS := TRUE
 .INCLUDE: $(PRJ)$/source$/deployment$/inc$/dp_misc.mk
 
 CFLAGSCXX += $(CPPUNIT_CFLAGS)
-DLLPRE = # no leading "lib" on .so files
+
+# TODO:  On Windows, test_dp_version.cxx fails due to BOOL redefinition between
+# windef.h and tools/solar.h caused by including "precompiled_desktop.hxx"; this
+# hack to temporarily disable PCH will become unnecessary with the fix for issue
+# 112600:
+CFLAGSCXX += -DDISABLE_PCH_HACK
 
 SHL1TARGET = $(TARGET)
 SHL1OBJS = $(SLO)$/test_dp_version.obj
 SHL1STDLIBS = $(CPPUNITLIB) $(DEPLOYMENTMISCLIB) $(SALLIB)
 SHL1VERSIONMAP = version.map
+SHL1RPATH = NONE
 SHL1IMPLIB = i$(SHL1TARGET)
 DEF1NAME = $(SHL1TARGET)
 
 SLOFILES = $(SHL1OBJS)
 
 .INCLUDE: target.mk
-
-ALLTAR: test
-
-test .PHONY: $(SHL1TARGETN)
-    $(TESTSHL2) $(SHL1TARGETN)
+.INCLUDE : _cppunit.mk

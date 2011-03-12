@@ -25,12 +25,13 @@
  *
  ************************************************************************/
 
-#include "fmresids.hrc"
+#include "svx/fmresids.hrc"
 #include <svx/svxids.hrc>
 #include <svx/dialogs.hrc>
 #include <sfx2/sfxsids.hrc>
 #include "globlmn.hrc"
 #include "helpid.hrc"
+#include "fmhelp.hrc"
 
 Menu RID_FM_TEXTATTRIBUTE_MENU
 {
@@ -47,7 +48,7 @@ Menu RID_FM_TEXTATTRIBUTE_MENU
         MenuItem
         {
             Identifier = MENU_FM_TEXTATTRIBITES_STYLE;
-            HelpID = MENU_FM_TEXTATTRIBITES_STYLE;
+            HelpID = HID_MENU_FM_TEXTATTRIBUTES_STYLE;
             Text [ en-US ] = "St~yle";
             SubMenu = Menu
             {
@@ -96,7 +97,7 @@ Menu RID_FM_TEXTATTRIBUTE_MENU
         MenuItem
         {
             Identifier = MENU_FM_TEXTATTRIBITES_ALIGNMENT;
-            HelpID = MENU_FM_TEXTATTRIBITES_ALIGNMENT;
+            HelpID = HID_MENU_FM_TEXTATTRIBUTES_ALIGNMENT;
             Text [ en-US ] = "~Alignment";
             RadioCheck = TRUE;
             SubMenu = Menu
@@ -129,7 +130,7 @@ Menu RID_FM_TEXTATTRIBUTE_MENU
         MenuItem
         {
             Identifier = MENU_FM_TEXTATTRIBITES_SPACING;
-            HelpID = MENU_FM_TEXTATTRIBITES_SPACING;
+            HelpID = HID_MENU_FM_TEXTATTRIBUTES_SPACING;
             Text [ en-US ] = "~Line Spacing";
             _MenuItemFlags = MIB_RADIOCHECK;
             SubMenu = Menu

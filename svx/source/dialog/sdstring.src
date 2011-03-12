@@ -1182,103 +1182,26 @@ String RID_SVXSTR_COLOR_USER
     Text [ en-US ] = "User" ;
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+String RID_SVXSTR_GALLERYPROPS_GALTHEME
+{
+    Text [ en-US ] = "Gallery Theme" ;
+};
+
+//IAccessibility2 Implementation 2009-----
+String RID_SVXSTR_GALLERY_THEMEITEMS
+{
+    Text [ en-US ] = "Theme Items";
+};
+String RID_SVXSTR_GALLERY_THEMENAME
+{
+    Text [ en-US ] = "Theme Name";
+};
+String RID_SVXSTR_GALLERY_FILESFOUND
+{
+    Text [ en-US ] = "Files Found";
+};
+String RID_SVXSTR_GALLERY_PREVIEW
+{
+    Text [ en-US ] = "Preview";
+};
+//-----IAccessibility2 Implementation 2009

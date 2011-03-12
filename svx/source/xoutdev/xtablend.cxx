@@ -34,7 +34,7 @@
 #ifndef SVX_LIGHT
 
 #include <com/sun/star/container/XNameContainer.hpp>
-#include "XPropertyTable.hxx"
+#include "svx/XPropertyTable.hxx"
 #include <unotools/ucbstreamhelper.hxx>
 
 #include "xmlxtexp.hxx"
@@ -95,7 +95,7 @@ static char const aChckXML[]   = { '<', '?', 'x', 'm', 'l' };       // = 6.0
 
 XLineEndTable::XLineEndTable( const String& rPath,
                             XOutdevItemPool* pInPool,
-                            USHORT nInitSize, USHORT nReSize ) :
+                            sal_uInt16 nInitSize, sal_uInt16 nReSize ) :
                 XPropertyTable( rPath, pInPool, nInitSize, nReSize)
 {
     pBmpTable = new Table( nInitSize, nReSize );
@@ -130,37 +130,37 @@ XLineEndEntry* XLineEndTable::GetLineEnd(long nIndex) const
 
 /************************************************************************/
 
-BOOL XLineEndTable::Load()
+sal_Bool XLineEndTable::Load()
 {
-    return( FALSE );
+    return( sal_False );
 }
 
 /************************************************************************/
 
-BOOL XLineEndTable::Save()
+sal_Bool XLineEndTable::Save()
 {
-    return( FALSE );
+    return( sal_False );
 }
 
 /************************************************************************/
 
-BOOL XLineEndTable::Create()
+sal_Bool XLineEndTable::Create()
 {
-    return( FALSE );
+    return( sal_False );
 }
 
 /************************************************************************/
 
-Bitmap* XLineEndTable::CreateBitmapForUI( long /*nIndex*/, BOOL /*bDelete*/)
+Bitmap* XLineEndTable::CreateBitmapForUI( long /*nIndex*/, sal_Bool /*bDelete*/)
 {
     return( NULL );
 }
 
 /************************************************************************/
 
-BOOL XLineEndTable::CreateBitmapsForUI()
+sal_Bool XLineEndTable::CreateBitmapsForUI()
 {
-    return( FALSE );
+    return( sal_False );
 }
 
 // --------------------
@@ -277,18 +277,18 @@ XLineEndEntry* XLineEndList::GetLineEnd(long nIndex) const
     return (XLineEndEntry*) XPropertyList::Get(nIndex, 0);
 }
 
-BOOL XLineEndList::Load()
+sal_Bool XLineEndList::Load()
 {
     if( bListDirty )
     {
-        bListDirty = FALSE;
+        bListDirty = sal_False;
 
         INetURLObject aURL( aPath );
 
         if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
         {
             DBG_ASSERT( !aPath.Len(), "invalid URL" );
-            return FALSE;
+            return sal_False;
         }
 
         aURL.Append( aName );
@@ -299,17 +299,17 @@ BOOL XLineEndList::Load()
         uno::Reference< container::XNameContainer > xTable( SvxUnoXLineEndTable_createInstance( this ), uno::UNO_QUERY );
         return SvxXMLXTableImport::load( aURL.GetMainURL( INetURLObject::NO_DECODE ), xTable );
     }
-    return( FALSE );
+    return( sal_False );
 }
 
-BOOL XLineEndList::Save()
+sal_Bool XLineEndList::Save()
 {
     INetURLObject aURL( aPath );
 
     if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
     {
         DBG_ASSERT( !aPath.Len(), "invalid URL" );
-        return FALSE;
+        return sal_False;
     }
 
     aURL.Append( aName );
@@ -321,7 +321,7 @@ BOOL XLineEndList::Save()
     return SvxXMLXTableExportComponent::save( aURL.GetMainURL( INetURLObject::NO_DECODE ), xTable );
 }
 
-BOOL XLineEndList::Create()
+sal_Bool XLineEndList::Create()
 {
     basegfx::B2DPolygon aTriangle;
     aTriangle.append(basegfx::B2DPoint(10.0, 0.0));
@@ -341,16 +341,16 @@ BOOL XLineEndList::Create()
     basegfx::B2DPolygon aCircle(basegfx::tools::createPolygonFromCircle(basegfx::B2DPoint(0.0, 0.0), 100.0));
     Insert( new XLineEndEntry( basegfx::B2DPolyPolygon(aCircle), SVX_RESSTR( RID_SVXSTR_CIRCLE ) ) );
 
-    return( TRUE );
+    return( sal_True );
 }
 
-BOOL XLineEndList::CreateBitmapsForUI()
+sal_Bool XLineEndList::CreateBitmapsForUI()
 {
     impCreate();
 
     for( long i = 0; i < Count(); i++)
     {
-        Bitmap* pBmp = CreateBitmapForUI( i, FALSE );
+        Bitmap* pBmp = CreateBitmapForUI( i, sal_False );
         OSL_ENSURE(0 != pBmp, "XLineEndList: Bitmap(UI) could not be created!" );
 
         if( pBmp )
@@ -359,10 +359,10 @@ BOOL XLineEndList::CreateBitmapsForUI()
 
     impDestroy();
 
-    return( TRUE );
+    return( sal_True );
 }
 
-Bitmap* XLineEndList::CreateBitmapForUI( long nIndex, BOOL bDelete )
+Bitmap* XLineEndList::CreateBitmapForUI( long nIndex, sal_Bool bDelete )
 {
     impCreate();
     VirtualDevice* pVD = mpData->getVirtualDevice();

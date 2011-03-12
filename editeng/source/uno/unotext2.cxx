@@ -31,7 +31,7 @@
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 
-#define _SVSTDARR_USHORTS
+#define _SVSTDARR_sal_uIt16S
 #include <svl/svstdarr.hxx>
 
 #include <rtl/uuid.h>

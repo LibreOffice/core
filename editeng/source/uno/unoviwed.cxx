@@ -44,7 +44,7 @@ SvxEditEngineViewForwarder::~SvxEditEngineViewForwarder()
 {
 }
 
-BOOL SvxEditEngineViewForwarder::IsValid() const
+sal_Bool SvxEditEngineViewForwarder::IsValid() const
 {
     return sal_True;
 }

@@ -58,4 +58,18 @@ COMPONENT_FILES=$(EXTENSIONDIR)$/pythonscript.py
 
 .INCLUDE : target.mk
 
+ALLTAR : $(MISC)/mailmerge.component $(MISC)/pythonscript.component
+
+$(MISC)/mailmerge.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        mailmerge.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_PYTHON)mailmerge' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt mailmerge.component
+
+$(MISC)/pythonscript.component .ERRREMOVE : \
+        $(SOLARENV)/bin/createcomponent.xslt pythonscript.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_PYTHON)pythonscript' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt pythonscript.component
+
 .ENDIF

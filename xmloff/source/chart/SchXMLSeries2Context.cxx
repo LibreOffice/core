@@ -53,7 +53,7 @@
 // header for define DBG_ERROR1
 #include <tools/debug.hxx>
 #include <rtl/ustrbuf.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/nmspmap.hxx>
 #include "SchXMLImport.hxx"
@@ -116,7 +116,7 @@ void SchXMLDomain2Context::StartElement( const uno::Reference< xml::sax::XAttrib
     {
         rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
         rtl::OUString aLocalName;
-        USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         if( nPrefix == XML_NAMESPACE_TABLE &&
             IsXMLToken( aLocalName, XML_CELL_RANGE_ADDRESS ) )
@@ -317,7 +317,7 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
         rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
         rtl::OUString aLocalName;
         rtl::OUString aValue = xAttrList->getValueByIndex( i );
-        USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ))
         {
@@ -335,7 +335,7 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
                     for( sal_Int32 nCurrent = 0; nCurrent < nNumOfAxes; nCurrent++ )
                     {
                         if( aValue.equals( mrAxes[ nCurrent ].aName ) &&
-                            mrAxes[ nCurrent ].eClass == SCH_XML_AXIS_Y )
+                            mrAxes[ nCurrent ].eDimension == SCH_XML_AXIS_Y )
                         {
                             mpAttachedAxis = &( mrAxes[ nCurrent ] );
                         }
@@ -363,7 +363,7 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
 
     if( mpAttachedAxis )
     {
-        if( mpAttachedAxis->nIndexInCategory > 0 )
+        if( mpAttachedAxis->nAxisIndex > 0 )
         {
             // secondary axis => property has to be set (primary is default)
             mnAttachedAxis = 2;
@@ -634,7 +634,7 @@ void SchXMLSeries2Context::EndElement()
 }
 
 SvXMLImportContext* SchXMLSeries2Context::CreateChildContext(
-    USHORT nPrefix,
+    sal_uInt16 nPrefix,
     const rtl::OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >&  )
 {

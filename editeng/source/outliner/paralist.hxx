@@ -38,7 +38,7 @@ class Paragraph;
 class ParagraphList
 {
 public:
-    void            Clear( BOOL bDestroyParagraphs );
+    void            Clear( sal_Bool bDestroyParagraphs );
 
     sal_uInt32      GetParagraphCount() const
     {
@@ -50,8 +50,8 @@ public:
         return nPos < maEntries.size() ? maEntries[nPos] : NULL;
     }
 
-    ULONG           GetAbsPos( Paragraph* pParent ) const;
-    ULONG           GetVisPos( Paragraph* pParagraph ) const;
+    sal_uLong           GetAbsPos( Paragraph* pParent ) const;
+    sal_uLong           GetVisPos( Paragraph* pParagraph ) const;
 
     void            Append( Paragraph *pPara);
     void            Insert( Paragraph* pPara, ULONG nAbsPos);
@@ -62,11 +62,11 @@ public:
     Paragraph*      PrevVisible( Paragraph* ) const;
     Paragraph*      LastVisible() const;
 
-    Paragraph*      GetParent( Paragraph* pParagraph /*, USHORT& rRelPos */ ) const;
-    BOOL            HasChilds( Paragraph* pParagraph ) const;
-    BOOL            HasHiddenChilds( Paragraph* pParagraph ) const;
-    BOOL            HasVisibleChilds( Paragraph* pParagraph ) const;
-    ULONG           GetChildCount( Paragraph* pParagraph ) const;
+    Paragraph*      GetParent( Paragraph* pParagraph /*, sal_uInt16& rRelPos */ ) const;
+    sal_Bool            HasChilds( Paragraph* pParagraph ) const;
+    sal_Bool            HasHiddenChilds( Paragraph* pParagraph ) const;
+    sal_Bool            HasVisibleChilds( Paragraph* pParagraph ) const;
+    sal_uLong           GetChildCount( Paragraph* pParagraph ) const;
 
     void            Expand( Paragraph* pParent );
     void            Collapse( Paragraph* pParent );

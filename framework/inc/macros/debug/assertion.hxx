@@ -80,7 +80,7 @@
         LOG_ASSERT ( BCONDITION, STEXT )
         LOG_ASSERT2( BCONDITION, SMETHOD, STEXT )
 
-        Forward assertion to logfile (if condition is FALSE - like a DBG_ASSERT!) and continue with program.
+        Forward assertion to logfile (if condition is sal_False - like a DBG_ASSERT!) and continue with program.
         Set LOGTYPE to LOGTYPE_FILECONTINUE to do this.
         BCONDITION is inserted in "(...)" because user can call this macro with an complex expression!
     _____________________________________________________________________________________________________________*/

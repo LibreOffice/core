@@ -37,7 +37,7 @@
 #include "formcontrolling.hxx"
 #include "fmprop.hrc"
 #include "svx/dialmgr.hxx"
-#include "fmresids.hrc"
+#include "svx/fmresids.hrc"
 #include "fmservs.hxx"
 #include "svx/fmtools.hxx"
 #include "fmurl.hxx"
@@ -63,6 +63,7 @@
 #include <com/sun/star/sdb/RowChangeAction.hpp>
 #include <com/sun/star/sdb/XInteractionSupplyParameters.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
+#include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/form/runtime/FormOperations.hpp>
 #include <com/sun/star/form/runtime/FormFeature.hpp>
@@ -81,6 +82,7 @@
 #include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/uno3.hxx>
+#include <comphelper/flagguard.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <toolkit/controls/unocontrol.hxx>
@@ -210,6 +212,7 @@ namespace svxform
     namespace FocusChangeReason = ::com::sun::star::awt::FocusChangeReason;
     namespace RowChangeAction = ::com::sun::star::sdb::RowChangeAction;
     namespace FormFeature = ::com::sun::star::form::runtime::FormFeature;
+    namespace DataType = ::com::sun::star::sdbc::DataType;
 
 //==============================================================================
 // ColumnInfo
@@ -478,7 +481,10 @@ class FmXAutoControl: public UnoControl
     friend Reference< XInterface > SAL_CALL FmXAutoControl_NewInstance_Impl();
 
 public:
-    FmXAutoControl(){}
+    FmXAutoControl( const ::comphelper::ComponentContext& i_context )
+        :UnoControl( i_context.getLegacyServiceFactory() )
+    {
+    }
 
     virtual ::rtl::OUString GetComponentServiceName() {return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Edit"));}
     virtual void SAL_CALL createPeer( const Reference< XToolkit > & rxToolkit, const Reference< XWindowPeer >  & rParentPeer ) throw( RuntimeException );
@@ -585,6 +591,7 @@ FormController::FormController(const Reference< XMultiServiceFactory > & _rxORB 
                   ,m_bAttachEvents(sal_True)
                   ,m_bDetachEvents(sal_True)
                   ,m_bAttemptedHandlerCreation( false )
+                  ,m_bSuspendFilterTextListening( false )
 {
     DBG_CTOR( FormController, NULL );
 
@@ -784,6 +791,9 @@ namespace
 // -----------------------------------------------------------------------------
 void FormController::impl_setTextOnAllFilter_throw()
 {
+    m_bSuspendFilterTextListening = true;
+    ::comphelper::FlagGuard aResetFlag( m_bSuspendFilterTextListening );
+
     // reset the text for all controls
     ::std::for_each( m_aFilterComponents.begin(), m_aFilterComponents.end(), ResetComponentText() );
 
@@ -857,32 +867,38 @@ void FormController::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) cons
                         if ( rRow.empty() )
                             continue;
 
-                        if ( aFilter.getLength() )
-                            aFilter.appendAscii( " OR " );
-
-                        aFilter.appendAscii( "( " );
+                        ::rtl::OUStringBuffer aRowFilter;
                         for ( FmFilterRow::const_iterator condition = rRow.begin(); condition != rRow.end(); ++condition )
                         {
                             // get the field of the controls map
                             Reference< XControl > xControl( condition->first, UNO_QUERY_THROW );
                             Reference< XPropertySet > xModelProps( xControl->getModel(), UNO_QUERY_THROW );
                             Reference< XPropertySet > xField( xModelProps->getPropertyValue( FM_PROP_BOUNDFIELD ), UNO_QUERY_THROW );
-                            if ( condition != rRow.begin() )
-                                aFilter.appendAscii( " AND " );
 
                             ::rtl::OUString sFilterValue( condition->second );
 
                             ::rtl::OUString sErrorMsg, sCriteria;
-                            ::rtl::Reference< ISQLParseNode > xParseNode = predicateTree( sErrorMsg, sFilterValue, xFormatter, xField );
+                            const ::rtl::Reference< ISQLParseNode > xParseNode =
+                                predicateTree( sErrorMsg, sFilterValue, xFormatter, xField );
                             OSL_ENSURE( xParseNode.is(), "FormController::getFastPropertyValue: could not parse the field value predicate!" );
                             if ( xParseNode.is() )
                             {
                                 // don't use a parse context here, we need it unlocalized
                                 xParseNode->parseNodeToStr( sCriteria, xConnection, NULL );
-                                aFilter.append( sCriteria );
+                                if ( condition != rRow.begin() )
+                                    aRowFilter.appendAscii( " AND " );
+                                aRowFilter.append( sCriteria );
                             }
                         }
-                        aFilter.appendAscii( " )" );
+                        if ( aRowFilter.getLength() > 0 )
+                        {
+                            if ( aFilter.getLength() )
+                                aFilter.appendAscii( " OR " );
+
+                            aFilter.appendAscii( "( " );
+                            aFilter.append( aRowFilter.makeStringAndClear() );
+                            aFilter.appendAscii( " )" );
+                        }
                     }
                 }
                 catch( const Exception& )
@@ -1440,7 +1456,7 @@ void FormController::toggleAutoFields(sal_Bool bAutoFields)
                         &&  ::comphelper::getBOOL( xField->getPropertyValue( FM_PROP_AUTOINCREMENT ) )
                         )
                     {
-                        replaceControl( xControl, new FmXAutoControl );
+                        replaceControl( xControl, new FmXAutoControl( m_aContext ) );
                     }
                 }
             }
@@ -1496,50 +1512,54 @@ void SAL_CALL FormController::textChanged(const TextEvent& e) throw( RuntimeExce
     // SYNCHRONIZED -->
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FormController: already disposed!" );
-    if (m_bFiltering)
+    if ( !m_bFiltering )
     {
-        Reference< XTextComponent >  xText(e.Source,UNO_QUERY);
-        ::rtl::OUString aText = xText->getText();
-
-        if ( m_aFilterRows.empty() )
-            appendEmptyDisjunctiveTerm();
-
-        // Suchen der aktuellen Row
-        if ( ( (size_t)m_nCurrentFilterPosition >= m_aFilterRows.size() ) || ( m_nCurrentFilterPosition < 0 ) )
-        {
-            OSL_ENSURE( false, "FormController::textChanged: m_nCurrentFilterPosition is wrong!" );
-            return;
-        }
-
-        FmFilterRow& rRow = m_aFilterRows[ m_nCurrentFilterPosition ];
-
-        // do we have a new filter
-        if (aText.getLength())
-            rRow[xText] = aText;
-        else
-        {
-            // do we have the control in the row
-            FmFilterRow::iterator iter = rRow.find(xText);
-            // erase the entry out of the row
-            if (iter != rRow.end())
-                rRow.erase(iter);
-        }
-
-        // multiplex the event to our FilterControllerListeners
-        FilterEvent aEvent;
-        aEvent.Source = *this;
-        aEvent.FilterComponent = ::std::find( m_aFilterComponents.begin(), m_aFilterComponents.end(), xText ) - m_aFilterComponents.begin();
-        aEvent.DisjunctiveTerm = getActiveTerm();
-        aEvent.PredicateExpression = aText;
-
-        aGuard.clear();
-        // <-- SYNCHRONIZED
-
-        // notify the changed filter expression
-        m_aFilterListeners.notifyEach( &XFilterControllerListener::predicateExpressionChanged, aEvent );
-    }
-    else
         impl_onModify();
+        return;
+    }
+
+    if ( m_bSuspendFilterTextListening )
+        return;
+
+    Reference< XTextComponent >  xText(e.Source,UNO_QUERY);
+    ::rtl::OUString aText = xText->getText();
+
+    if ( m_aFilterRows.empty() )
+        appendEmptyDisjunctiveTerm();
+
+    // Suchen der aktuellen Row
+    if ( ( (size_t)m_nCurrentFilterPosition >= m_aFilterRows.size() ) || ( m_nCurrentFilterPosition < 0 ) )
+    {
+        OSL_ENSURE( false, "FormController::textChanged: m_nCurrentFilterPosition is wrong!" );
+        return;
+    }
+
+    FmFilterRow& rRow = m_aFilterRows[ m_nCurrentFilterPosition ];
+
+    // do we have a new filter
+    if (aText.getLength())
+        rRow[xText] = aText;
+    else
+    {
+        // do we have the control in the row
+        FmFilterRow::iterator iter = rRow.find(xText);
+        // erase the entry out of the row
+        if (iter != rRow.end())
+            rRow.erase(iter);
+    }
+
+    // multiplex the event to our FilterControllerListeners
+    FilterEvent aEvent;
+    aEvent.Source = *this;
+    aEvent.FilterComponent = ::std::find( m_aFilterComponents.begin(), m_aFilterComponents.end(), xText ) - m_aFilterComponents.begin();
+    aEvent.DisjunctiveTerm = getActiveTerm();
+    aEvent.PredicateExpression = aText;
+
+    aGuard.clear();
+    // <-- SYNCHRONIZED
+
+    // notify the changed filter expression
+    m_aFilterListeners.notifyEach( &XFilterControllerListener::predicateExpressionChanged, aEvent );
 }
 
 // XItemListener

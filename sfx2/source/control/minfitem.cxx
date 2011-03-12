@@ -31,7 +31,7 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#include "minfitem.hxx"
+#include "sfx2/minfitem.hxx"
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -40,7 +40,7 @@ TYPEINIT1(SfxMacroInfoItem, SfxPoolItem);
 // -----------------------------------------------------------------------
 
 SfxMacroInfoItem::SfxMacroInfoItem(
-    USHORT nWhichId,            // Slot-ID
+    sal_uInt16 nWhichId,        // Slot-ID
     const BasicManager* pMgr,
     const String &rLibName,
     const String &rModuleName,

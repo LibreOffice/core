@@ -844,8 +844,6 @@ void SAL_CALL OfficeIPCThread::run()
                     aHelpURLBuffer.appendAscii("&System=UNX");
 #elif defined WNT
                     aHelpURLBuffer.appendAscii("&System=WIN");
-#elif defined MAC
-                    aHelpURLBuffer.appendAscii("&System=MAC");
 #elif defined OS2
                     aHelpURLBuffer.appendAscii("&System=OS2");
 #endif

@@ -30,7 +30,7 @@
 #include "precompiled_svx.hxx"
 
 #include <svx/dialogs.hrc>
-#include <prtqry.hxx>
+#include <svx/prtqry.hxx>
 #include <svx/dialmgr.hxx>
 #include <tools/shl.hxx>
 

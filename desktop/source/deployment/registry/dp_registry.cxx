@@ -136,6 +136,10 @@ public:
                lang::IllegalArgumentException, RuntimeException);
     virtual Sequence< Reference<deployment::XPackageTypeInfo> > SAL_CALL
     getSupportedPackageTypes() throw (RuntimeException);
+    virtual void SAL_CALL packageRemoved(OUString const & url, OUString const & mediaType)
+                throw (deployment::DeploymentException,
+                RuntimeException);
+
 };
 
 //______________________________________________________________________________
@@ -185,6 +189,20 @@ OUString normalizeMediaType( OUString const & mediaType )
 }
 
 //______________________________________________________________________________
+
+void PackageRegistryImpl::packageRemoved(
+    ::rtl::OUString const & url, ::rtl::OUString const & mediaType)
+    throw (css::deployment::DeploymentException,
+           css::uno::RuntimeException)
+{
+    const t_string2registry::const_iterator i =
+        m_mediaType2backend.find(mediaType);
+
+    if (i != m_mediaType2backend.end())
+    {
+        i->second->packageRemoved(url, mediaType);
+    }
+}
 
 void PackageRegistryImpl::insertBackend(
     Reference<deployment::XPackageRegistry> const & xBackend )

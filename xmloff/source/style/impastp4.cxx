@@ -32,7 +32,7 @@
 #include <xmloff/xmlaustp.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/nmspmap.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/attrlist.hxx>
 #include "impastpl.hxx"
 #include <xmloff/xmlexppr.hxx>
@@ -66,7 +66,7 @@ SvXMLAutoStylePoolP_Impl::SvXMLAutoStylePoolP_Impl( SvXMLExport& rExp)
 SvXMLAutoStylePoolP_Impl::~SvXMLAutoStylePoolP_Impl()
 {
     for (;;) {
-        XMLFamilyData_Impl* pData = maFamilyList.Remove( ULONG(0) );
+        XMLFamilyData_Impl* pData = maFamilyList.Remove( sal_uLong(0) );
         if (pData == NULL) {
             break;
         }
@@ -87,7 +87,7 @@ void SvXMLAutoStylePoolP_Impl::AddFamily(
         sal_Bool bAsFamily )
 {
     // store family in a list if not already stored
-    ULONG nPos;
+    sal_uLong nPos;
 
     sal_uInt16 nExportFlags = GetExport().getExportFlags();
     sal_Bool bStylesOnly = (nExportFlags & EXPORT_STYLES) != 0 && (nExportFlags & EXPORT_CONTENT) == 0;
@@ -115,7 +115,7 @@ void SvXMLAutoStylePoolP_Impl::RegisterName( sal_Int32 nFamily, const OUString& 
 {
     SvXMLAutoStylePoolNamesP_Impl *pNames = 0;
 
-    ULONG nPos;
+    sal_uLong nPos;
     XMLFamilyData_Impl aTmp( nFamily );
     if( maFamilyList.Seek_Entry( &aTmp, &nPos ) )
         pNames = maFamilyList.GetObject( nPos )->mpNameList;
@@ -186,7 +186,7 @@ sal_Bool SvXMLAutoStylePoolP_Impl::Add(OUString& rName, sal_Int32 nFamily,
                 bool bDontSeek )
 {
     sal_Bool bRet(sal_False);
-    ULONG nPos;
+    sal_uLong nPos;
 
     XMLFamilyData_Impl *pFamily = 0;
     XMLFamilyData_Impl aTemporary( nFamily );
@@ -235,7 +235,7 @@ sal_Bool SvXMLAutoStylePoolP_Impl::AddNamed(const OUString& rName, sal_Int32 nFa
 {
     // get family and parent the same way as in Add()
     sal_Bool bRet(sal_False);
-    ULONG nPos;
+    sal_uLong nPos;
 
     XMLFamilyData_Impl *pFamily = 0;
     XMLFamilyData_Impl aTemporary( nFamily );
@@ -274,7 +274,7 @@ sal_Bool SvXMLAutoStylePoolP_Impl::AddNamed(const OUString& rName, sal_Int32 nFa
 OUString SvXMLAutoStylePoolP_Impl::AddToCache( sal_Int32 nFamily,
                                          const OUString& rParent )
 {
-    ULONG nPos;
+    sal_uLong nPos;
 
     XMLFamilyData_Impl *pFamily = 0;
     XMLFamilyData_Impl aTmp( nFamily );
@@ -305,7 +305,7 @@ OUString SvXMLAutoStylePoolP_Impl::Find( sal_Int32 nFamily,
 {
     OUString sName;
 
-    ULONG nPos;
+    sal_uLong nPos;
     XMLFamilyData_Impl aTemporary( nFamily );
     XMLFamilyData_Impl *pFamily = 0;
     if( maFamilyList.Seek_Entry( &aTemporary, &nPos ) )
@@ -332,7 +332,7 @@ OUString SvXMLAutoStylePoolP_Impl::FindAndRemoveCached( sal_Int32 nFamily ) cons
 {
     OUString sName;
 
-    ULONG nPos;
+    sal_uLong nPos;
     XMLFamilyData_Impl aTmp( nFamily );
     XMLFamilyData_Impl *pFamily = 0;
     if( maFamilyList.Seek_Entry( &aTmp, &nPos ) )
@@ -375,7 +375,7 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
     sal_uInt32 nCount = 0;
 
     // Get list of parents for current family (nFamily)
-    ULONG nPos;
+    sal_uLong nPos;
     XMLFamilyData_Impl aTmp( nFamily );
     XMLFamilyData_Impl *pFamily = 0;
     if( maFamilyList.Seek_Entry( &aTmp, &nPos ) )

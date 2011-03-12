@@ -42,10 +42,10 @@ class SVX_DLLPUBLIC XFillTransparenceItem: public SfxUInt16Item
 {
 public:
                             TYPEINFO();
-                            XFillTransparenceItem(USHORT nFillTransparence = 0);
+                            XFillTransparenceItem(sal_uInt16 nFillTransparence = 0);
                             XFillTransparenceItem(SvStream& rIn);
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = NULL) const;
-    virtual SfxPoolItem*    Create(SvStream& rIn, USHORT nVer) const;
+    virtual SfxPoolItem*    Create(SvStream& rIn, sal_uInt16 nVer) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,

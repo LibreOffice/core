@@ -49,11 +49,11 @@ class SvDDEObject : public SvLinkSource
     DdeRequest* pRequest;
     ::com::sun::star::uno::Any * pGetData;
 
-    BYTE bWaitForData : 1;  // waiting for data?
-    BYTE nError       : 7;  // Error code for dialogue
+    sal_uInt8 bWaitForData : 1;  // waiting for data?
+    sal_uInt8 nError       : 7;  // Error code for dialogue
 
 
-    BOOL ImplHasOtherFormat( DdeTransaction& );
+    sal_Bool ImplHasOtherFormat( DdeTransaction& );
     DECL_LINK( ImplGetDDEData, DdeData* );
     DECL_LINK( ImplDoneDDEData, void* );
 
@@ -63,15 +63,15 @@ protected:
 public:
     SvDDEObject();
 
-    virtual BOOL    GetData( ::com::sun::star::uno::Any & rData /*out param*/,
+    virtual sal_Bool    GetData( ::com::sun::star::uno::Any & rData /*out param*/,
                                 const String & aMimeType,
-                                BOOL bSynchron = FALSE );
+                                sal_Bool bSynchron = sal_False );
 
-    virtual BOOL    Connect( SvBaseLink * );
+    virtual sal_Bool    Connect( SvBaseLink * );
     virtual void    Edit( Window* pParent, sfx2::SvBaseLink* pBaseLink, const Link& rEndEditHdl );
 
-    virtual BOOL    IsPending() const;
-    virtual BOOL    IsDataComplete() const;
+    virtual sal_Bool    IsPending() const;
+    virtual sal_Bool    IsDataComplete() const;
 };
 
 }

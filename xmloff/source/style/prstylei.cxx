@@ -32,7 +32,7 @@
 
 #include <tools/debug.hxx>
 #include <set>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlprcon.hxx>
 #include <com/sun/star/style/XStyle.hpp>
@@ -46,7 +46,7 @@
 
 #include <xmloff/prstylei.hxx>
 #include <xmloff/attrlist.hxx>
-#include "xmlerror.hxx"
+#include "xmloff/xmlerror.hxx"
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;

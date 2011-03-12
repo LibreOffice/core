@@ -40,15 +40,17 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
-#include <com/sun/star/frame/XController.hpp>
+#include <com/sun/star/frame/XController2.hpp>
 #include <com/sun/star/document/XDocumentInfo.hpp>
 #include <com/sun/star/document/XDocumentInfoSupplier.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentRecovery.hpp>
+#include <com/sun/star/document/XUndoManagerSupplier.hpp>
 
 #include <com/sun/star/rdf/XDocumentMetadataAccess.hpp>
 
 #include <com/sun/star/document/XEventBroadcaster.hpp>
+#include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
 #include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
@@ -97,9 +99,9 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 
 //________________________________________________________________________________________________________
-#if ! defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_30)
-#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_30
-#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 30
+#if ! defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_32)
+#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_32
+#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 32
 #include <comphelper/implbase_var.hxx>
 #endif
 
@@ -144,6 +146,7 @@
 #define XDOCUMENTINFO           ::com::sun::star::document::XDocumentInfo
 #define XDOCUMENTINFOSUPPLIER   ::com::sun::star::document::XDocumentInfoSupplier
 #define XEVENTBROADCASTER       ::com::sun::star::document::XEventBroadcaster
+#define XDOCUMENTEVENTBROADCASTER   ::com::sun::star::document::XDocumentEventBroadcaster
 #define XEVENTSSUPPLIER         ::com::sun::star::document::XEventsSupplier
 #define XEMBEDDEDSCRIPTS        ::com::sun::star::document::XEmbeddedScripts
 #define XSCRIPTINVOCATIONCONTEXT    ::com::sun::star::document::XScriptInvocationContext
@@ -160,7 +163,6 @@
 #define EVENTOBJECT             ::com::sun::star::lang::EventObject
 #define PROPERTYVALUE           ::com::sun::star::beans::PropertyValue
 #define REFERENCE               ::com::sun::star::uno::Reference
-#define SEQUENCE                ::com::sun::star::uno::Sequence
 #define MUTEX                   ::osl::Mutex
 #define OUSTRING                ::rtl::OUString
 #define UNOTYPE                 ::com::sun::star::uno::Type
@@ -238,12 +240,14 @@ namespace sfx { namespace intern {
                  SfxListener
 */
 
-typedef ::comphelper::WeakImplHelper30  <   XCHILD
+typedef ::comphelper::WeakImplHelper32  <   XCHILD
                                         ,   XDOCUMENTINFOSUPPLIER
                                         ,   ::com::sun::star::document::XDocumentPropertiesSupplier
                                         ,   ::com::sun::star::rdf::XDocumentMetadataAccess
                                         ,   ::com::sun::star::document::XDocumentRecovery
+                                        ,   ::com::sun::star::document::XUndoManagerSupplier
                                         ,   XEVENTBROADCASTER
+                                        ,   XDOCUMENTEVENTBROADCASTER
                                         ,   XEVENTLISTENER
                                         ,   XEVENTSSUPPLIER
                                         ,   XEMBEDDEDSCRIPTS
@@ -383,7 +387,7 @@ public:
         @onerror    A RuntimeException is thrown.
     */
 
-    virtual SEQUENCE< UNOTYPE > SAL_CALL getTypes() throw( RUNTIMEEXCEPTION ) ;
+    virtual ::com::sun::star::uno::Sequence< UNOTYPE > SAL_CALL getTypes() throw( RUNTIMEEXCEPTION ) ;
 
     /**___________________________________________________________________________________________________
         @short      get implementation id
@@ -399,7 +403,7 @@ public:
         @onerror    A RuntimeException is thrown.
     */
 
-    virtual SEQUENCE< sal_Int8 > SAL_CALL getImplementationId() throw( RUNTIMEEXCEPTION ) ;
+    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw( RUNTIMEEXCEPTION ) ;
 
 
     //____________________________________________________________________________________________________
@@ -578,7 +582,7 @@ public:
     */
 
     virtual sal_Bool SAL_CALL attachResource(   const   OUSTRING&                   sURL    ,
-                                                const   SEQUENCE< PROPERTYVALUE >&  aArgs   )
+                                                const   ::com::sun::star::uno::Sequence< PROPERTYVALUE >&   aArgs   )
         throw (::com::sun::star::uno::RuntimeException);
 
     /**___________________________________________________________________________________________________
@@ -609,7 +613,7 @@ public:
         @onerror    -
     */
 
-    virtual SEQUENCE< PROPERTYVALUE > SAL_CALL getArgs() throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< PROPERTYVALUE > SAL_CALL getArgs() throw (::com::sun::star::uno::RuntimeException);
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -859,7 +863,7 @@ public:
         @onerror    -
     */
 
-    virtual SEQUENCE< PROPERTYVALUE > SAL_CALL getPrinter() throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< PROPERTYVALUE > SAL_CALL getPrinter() throw (::com::sun::star::uno::RuntimeException);
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -874,7 +878,7 @@ public:
         @onerror    -
     */
 
-    virtual void SAL_CALL setPrinter( const SEQUENCE< PROPERTYVALUE >& seqPrinter )
+    virtual void SAL_CALL setPrinter( const ::com::sun::star::uno::Sequence< PROPERTYVALUE >& seqPrinter )
         throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
     /**___________________________________________________________________________________________________
         @short      -
@@ -889,14 +893,14 @@ public:
         @onerror    -
     */
 
-    virtual void SAL_CALL print( const SEQUENCE< PROPERTYVALUE >& seqOptions )
+    virtual void SAL_CALL print( const ::com::sun::star::uno::Sequence< PROPERTYVALUE >& seqOptions )
         throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
     //____________________________________________________________________________________________________
     //  XStorable2
     //____________________________________________________________________________________________________
 
-    virtual void SAL_CALL storeSelf( const  SEQUENCE< PROPERTYVALUE >&  seqArguments    )
+    virtual void SAL_CALL storeSelf( const  ::com::sun::star::uno::Sequence< PROPERTYVALUE >&   seqArguments    )
         throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
     //____________________________________________________________________________________________________
@@ -977,7 +981,7 @@ public:
     */
 
     virtual void SAL_CALL storeAsURL(   const   OUSTRING&                   sURL            ,
-                                        const   SEQUENCE< PROPERTYVALUE >&  seqArguments    )
+                                        const   ::com::sun::star::uno::Sequence< PROPERTYVALUE >&   seqArguments    )
         throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException) ;
 
     /**___________________________________________________________________________________________________
@@ -994,7 +998,7 @@ public:
     */
 
     virtual void SAL_CALL storeToURL(   const   OUSTRING&                   sURL            ,
-                                        const   SEQUENCE< PROPERTYVALUE >&  seqArguments    )
+                                        const   ::com::sun::star::uno::Sequence< PROPERTYVALUE >&   seqArguments    )
         throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
 
@@ -1035,7 +1039,7 @@ public:
         @onerror    -
     */
 
-    virtual void SAL_CALL load( const   SEQUENCE< PROPERTYVALUE >&  seqArguments )
+    virtual void SAL_CALL load( const   ::com::sun::star::uno::Sequence< PROPERTYVALUE >&   seqArguments )
         throw (::com::sun::star::frame::DoubleInitializationException,
                ::com::sun::star::io::IOException,
                ::com::sun::star::uno::RuntimeException,
@@ -1056,7 +1060,7 @@ public:
     //____________________________________________________________________________________________________
 
     virtual void SAL_CALL loadFromStorage( const REFERENCE< XSTORAGE >& xStorage,
-                                            const SEQUENCE< PROPERTYVALUE >& aMediaDescriptor )
+                                            const ::com::sun::star::uno::Sequence< PROPERTYVALUE >& aMediaDescriptor )
         throw ( ILLEGALARGUMENTEXCEPTION,
                 DOUBLEINITIALIZATIONEXCEPTION,
                 IOEXCEPTION,
@@ -1064,7 +1068,7 @@ public:
                 RUNTIMEEXCEPTION );
 
     virtual void SAL_CALL storeToStorage( const REFERENCE< XSTORAGE >& xStorage,
-                                            const SEQUENCE< PROPERTYVALUE >& aMediaDescriptor )
+                                            const ::com::sun::star::uno::Sequence< PROPERTYVALUE >& aMediaDescriptor )
         throw ( ILLEGALARGUMENTEXCEPTION,
                 IOEXCEPTION,
                 EXCEPTION,
@@ -1162,7 +1166,7 @@ public:
     */
 
 
-    virtual SEQUENCE< DATAFLAVOR > SAL_CALL getTransferDataFlavors()
+    virtual ::com::sun::star::uno::Sequence< DATAFLAVOR > SAL_CALL getTransferDataFlavors()
         throw (::com::sun::star::uno::RuntimeException);
 
     /**___________________________________________________________________________________________________
@@ -1250,6 +1254,18 @@ public:
 
     virtual void SAL_CALL removeEventListener( const REFERENCE< XDOCEVENTLISTENER >& xListener ) throw( RUNTIMEEXCEPTION );
 
+    //____________________________________________________________________________________________________
+    //  XDocumentEventBroadcaster
+    //____________________________________________________________________________________________________
+
+    virtual void SAL_CALL addDocumentEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentEventListener >& _Listener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeDocumentEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentEventListener >& _Listener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL notifyDocumentEvent( const ::rtl::OUString& _EventName, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController2 >& _ViewController, const ::com::sun::star::uno::Any& _Supplement ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
+
+    //____________________________________________________________________________________________________
+    //  XUnoTunnel
+    //____________________________________________________________________________________________________
+
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
 
     // css.frame.XModule
@@ -1306,6 +1322,9 @@ public:
         throw ( ::com::sun::star::uno::RuntimeException,
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::lang::WrappedTargetException );
+
+    // css.document.XUndoManagerSupplier
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManager > SAL_CALL getUndoManager(  ) throw (::com::sun::star::uno::RuntimeException);
 
     //____________________________________________________________________________________________________
 
@@ -1471,22 +1490,11 @@ public:
     SfxObjectShell* GetObjectShell() const ;
     SAL_DLLPRIVATE SfxObjectShell* impl_getObjectShell() const ;
 
-    /**___________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
-
     SAL_DLLPRIVATE sal_Bool impl_isDisposed() const ;
-    sal_Bool IsDisposed() const ;
     sal_Bool IsInitialized() const;
+    sal_Bool IsDisposed() const { return impl_isDisposed(); }
+    void MethodEntryCheck( const bool i_mustBeInitialized ) const;
+    ::osl::Mutex& getMutex() const { return m_aMutex; }
 
     ::com::sun::star::uno::Reference < ::com::sun::star::container::XIndexAccess > SAL_CALL getViewData() throw (::com::sun::star::uno::RuntimeException);
     void SAL_CALL setViewData( const ::com::sun::star::uno::Reference < ::com::sun::star::container::XIndexAccess >& aData ) throw (::com::sun::star::uno::RuntimeException);
@@ -1531,9 +1539,11 @@ private:
     SAL_DLLPRIVATE ::rtl::OUString GetMediumFilterName_Impl();
 
     SAL_DLLPRIVATE void impl_store( const   OUSTRING&                   sURL            ,
-                        const   SEQUENCE< PROPERTYVALUE >&  seqArguments    ,
+                        const   ::com::sun::star::uno::Sequence< PROPERTYVALUE >&   seqArguments    ,
                                 sal_Bool                    bSaveTo         ) ;
-    SAL_DLLPRIVATE void postEvent_Impl( ::rtl::OUString );
+
+    SAL_DLLPRIVATE void postEvent_Impl( const ::rtl::OUString& aName, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController2 >& xController = ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController2 >() );
+
     SAL_DLLPRIVATE String getEventName_Impl( long nID );
     SAL_DLLPRIVATE void NotifyStorageListeners_Impl();
        SAL_DLLPRIVATE bool QuerySaveSizeExceededModules( const com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler >& xHandler );
@@ -1561,6 +1571,44 @@ private:
 
 } ; // class SfxBaseModel
 
+/** base class for sub components of an SfxBaseModel, which share their ref count and lifetime with the SfxBaseModel
+*/
+class SFX2_DLLPUBLIC SfxModelSubComponent
+{
+public:
+    /** checks whether the instance is alive, i.e. properly initialized, and not yet disposed
+    */
+    void    MethodEntryCheck()
+    {
+        m_rModel.MethodEntryCheck( true );
+    }
+
+    // called when the SfxBaseModel which the component is superordinate of is being disposed
+    virtual void disposing();
+
+protected:
+    SfxModelSubComponent( SfxBaseModel& i_model )
+        :m_rModel( i_model )
+    {
+    }
+    virtual ~SfxModelSubComponent();
+
+    // helpers for implementing XInterface - delegates ref counting to the SfxBaseModel
+    void acquire()  {   m_rModel.acquire(); }
+    void release()  {   m_rModel.release(); }
+
+    bool isDisposed() const {   return m_rModel.IsDisposed();   }
+
+protected:
+    const SfxBaseModel& getBaseModel() const { return m_rModel; }
+          SfxBaseModel& getBaseModel()       { return m_rModel; }
+
+          ::osl::Mutex&  getMutex()          { return m_rModel.getMutex(); }
+
+private:
+    SfxBaseModel&   m_rModel;
+};
+
 class SFX2_DLLPUBLIC SfxModelGuard
 {
 public:
@@ -1575,13 +1623,20 @@ public:
     SfxModelGuard( SfxBaseModel& i_rModel, const AllowedModelState i_eState = E_FULLY_ALIVE )
         : m_aGuard()
     {
-        if ( i_rModel.IsDisposed() )
-            throw ::com::sun::star::lang::DisposedException( ::rtl::OUString(), *&i_rModel );
-        if ( ( i_eState != E_INITIALIZING ) && !i_rModel.IsInitialized() )
-            throw ::com::sun::star::lang::NotInitializedException( ::rtl::OUString(), *&i_rModel );
+        i_rModel.MethodEntryCheck( i_eState != E_INITIALIZING );
+    }
+    SfxModelGuard( SfxModelSubComponent& i_rSubComponent )
+        :m_aGuard( Application::GetSolarMutex() )
+    {
+        i_rSubComponent.MethodEntryCheck();
     }
     ~SfxModelGuard()
     {
+    }
+
+    void reset()
+    {
+        m_aGuard.reset();
     }
 
     void clear()

@@ -69,19 +69,19 @@ class EDITENG_DLLPUBLIC SvxFieldItem : public SfxPoolItem
 private:
     SvxFieldData*           pField;
 
-                    EDITENG_DLLPRIVATE SvxFieldItem( SvxFieldData* pField, const USHORT nId );
+                    EDITENG_DLLPRIVATE SvxFieldItem( SvxFieldData* pField, const sal_uInt16 nId );
 
 public:
             TYPEINFO();
 
-            SvxFieldItem( const SvxFieldData& rField, const USHORT nId  );
+            SvxFieldItem( const SvxFieldData& rField, const sal_uInt16 nId  );
             SvxFieldItem( const SvxFieldItem& rItem );
             ~SvxFieldItem();
 
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*    Create( SvStream&, USHORT nVer ) const;
-    virtual SvStream&       Store( SvStream& , USHORT nItemVersion ) const;
+    virtual SfxPoolItem*    Create( SvStream&, sal_uInt16 nVer ) const;
+    virtual SvStream&       Store( SvStream& , sal_uInt16 nItemVersion ) const;
 
     const SvxFieldData*     GetField() const    { return pField; }
     static SvClassManager&  GetClassManager();

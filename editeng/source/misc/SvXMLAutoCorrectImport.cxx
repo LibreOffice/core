@@ -140,7 +140,7 @@ SvXMLWordContext::SvXMLWordContext(
     if (!sWrong.Len() || !sRight.Len() )
         return;
 
-    BOOL bOnlyTxt = sRight != sWrong;
+    sal_Bool bOnlyTxt = sRight != sWrong;
     if( !bOnlyTxt )
     {
         String sLongSave( sRight );
@@ -148,7 +148,7 @@ SvXMLWordContext::SvXMLWordContext(
             sLongSave.Len() )
         {
             sRight = sLongSave;
-            bOnlyTxt = TRUE;
+            bOnlyTxt = sal_True;
         }
     }
     SvxAutocorrWordPtr pNew = new SvxAutocorrWord( sWrong, sRight, bOnlyTxt );

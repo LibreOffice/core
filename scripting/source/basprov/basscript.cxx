@@ -93,13 +93,34 @@ namespace basprov
         ,m_documentBasicManager( &documentBasicManager )
         ,m_xDocumentScriptContext( documentScriptContext )
     {
-    //
+        StartListening( *m_documentBasicManager );
         registerProperty( BASSCRIPT_PROPERTY_CALLER, BASSCRIPT_PROPERTY_ID_CALLER, BASSCRIPT_DEFAULT_ATTRIBS(), &m_caller, ::getCppuType( &m_caller ) );
     }
 
     // -----------------------------------------------------------------------------
     BasicScriptImpl::~BasicScriptImpl()
     {
+        if ( m_documentBasicManager )
+            EndListening( *m_documentBasicManager );
+    }
+
+    // -----------------------------------------------------------------------------
+    // SfxListener
+    // -----------------------------------------------------------------------------
+    void BasicScriptImpl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+    {
+        if ( &rBC != m_documentBasicManager )
+        {
+            OSL_ENSURE( false, "BasicScriptImpl::Notify: where does this come from?" );
+            // not interested in
+            return;
+        }
+        const SfxSimpleHint* pSimpleHint = PTR_CAST( SfxSimpleHint, &rHint );
+        if ( pSimpleHint && ( pSimpleHint->GetId() == SFX_HINT_DYING ) )
+        {
+            m_documentBasicManager = NULL;
+            EndListening( rBC );    // prevent multiple notifications
+        }
     }
 
     // -----------------------------------------------------------------------------
@@ -171,7 +192,7 @@ namespace basprov
             if ( pInfo )
             {
                 sal_Int32 nSbxOptional = 0;
-                USHORT n = 1;
+                sal_uInt16 n = 1;
                 for ( const SbxParamInfo* pParamInfo = pInfo->GetParam( n ); pParamInfo; pParamInfo = pInfo->GetParam( ++n ) )
                 {
                     if ( ( pParamInfo->nFlags & SBX_OPTIONAL ) != 0 )
@@ -204,7 +225,7 @@ namespace basprov
                 {
                     SbxVariableRef xSbxVar = new SbxVariable( SbxVARIANT );
                     unoToSbxValue( static_cast< SbxVariable* >( xSbxVar ), pParams[i] );
-                    xSbxParams->Put( xSbxVar, static_cast< USHORT >( i ) + 1 );
+                    xSbxParams->Put( xSbxVar, static_cast< sal_uInt16 >( i ) + 1 );
 
                     // Enable passing by ref
                     if ( xSbxVar->GetType() != SbxVARIANT )
@@ -246,7 +267,7 @@ namespace basprov
                 if ( pInfo_ )
                 {
                     OutParamMap aOutParamMap;
-                    for ( USHORT n = 1, nCount = xSbxParams->Count(); n < nCount; ++n )
+                    for ( sal_uInt16 n = 1, nCount = xSbxParams->Count(); n < nCount; ++n )
                     {
                         const SbxParamInfo* pParamInfo = pInfo_->GetParam( n );
                         if ( pParamInfo && ( pParamInfo->eType & SbxBYREF ) != 0 )

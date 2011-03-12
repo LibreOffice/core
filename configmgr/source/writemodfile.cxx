@@ -46,6 +46,7 @@
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
+#include "xmlreader/span.hxx"
 
 #include "data.hxx"
 #include "groupnode.hxx"
@@ -55,7 +56,6 @@
 #include "node.hxx"
 #include "nodemap.hxx"
 #include "propertynode.hxx"
-#include "span.hxx"
 #include "type.hxx"
 #include "writemodfile.hxx"
 
@@ -342,22 +342,23 @@ void writeNode(
     rtl::Reference< Node > const & parent, rtl::OUString const & name,
     rtl::Reference< Node > const & node)
 {
-    static Span const typeNames[] = {
-        Span(), Span(), Span(), // TYPE_ERROR, TYPE_NIL, TYPE_ANY
-        Span(RTL_CONSTASCII_STRINGPARAM("xs:boolean")),
-        Span(RTL_CONSTASCII_STRINGPARAM("xs:short")),
-        Span(RTL_CONSTASCII_STRINGPARAM("xs:int")),
-        Span(RTL_CONSTASCII_STRINGPARAM("xs:long")),
-        Span(RTL_CONSTASCII_STRINGPARAM("xs:double")),
-        Span(RTL_CONSTASCII_STRINGPARAM("xs:string")),
-        Span(RTL_CONSTASCII_STRINGPARAM("xs:hexBinary")),
-        Span(RTL_CONSTASCII_STRINGPARAM("oor:boolean-list")),
-        Span(RTL_CONSTASCII_STRINGPARAM("oor:short-list")),
-        Span(RTL_CONSTASCII_STRINGPARAM("oor:int-list")),
-        Span(RTL_CONSTASCII_STRINGPARAM("oor:long-list")),
-        Span(RTL_CONSTASCII_STRINGPARAM("oor:double-list")),
-        Span(RTL_CONSTASCII_STRINGPARAM("oor:string-list")),
-        Span(RTL_CONSTASCII_STRINGPARAM("oor:hexBinary-list")) };
+    static xmlreader::Span const typeNames[] = {
+        xmlreader::Span(), xmlreader::Span(), xmlreader::Span(),
+            // TYPE_ERROR, TYPE_NIL, TYPE_ANY
+        xmlreader::Span(RTL_CONSTASCII_STRINGPARAM("xs:boolean")),
+        xmlreader::Span(RTL_CONSTASCII_STRINGPARAM("xs:short")),
+        xmlreader::Span(RTL_CONSTASCII_STRINGPARAM("xs:int")),
+        xmlreader::Span(RTL_CONSTASCII_STRINGPARAM("xs:long")),
+        xmlreader::Span(RTL_CONSTASCII_STRINGPARAM("xs:double")),
+        xmlreader::Span(RTL_CONSTASCII_STRINGPARAM("xs:string")),
+        xmlreader::Span(RTL_CONSTASCII_STRINGPARAM("xs:hexBinary")),
+        xmlreader::Span(RTL_CONSTASCII_STRINGPARAM("oor:boolean-list")),
+        xmlreader::Span(RTL_CONSTASCII_STRINGPARAM("oor:short-list")),
+        xmlreader::Span(RTL_CONSTASCII_STRINGPARAM("oor:int-list")),
+        xmlreader::Span(RTL_CONSTASCII_STRINGPARAM("oor:long-list")),
+        xmlreader::Span(RTL_CONSTASCII_STRINGPARAM("oor:double-list")),
+        xmlreader::Span(RTL_CONSTASCII_STRINGPARAM("oor:string-list")),
+        xmlreader::Span(RTL_CONSTASCII_STRINGPARAM("oor:hexBinary-list")) };
     switch (node->kind()) {
     case Node::KIND_PROPERTY:
         {

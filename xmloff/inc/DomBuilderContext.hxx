@@ -67,12 +67,12 @@ public:
 
     /** default constructor: create new DOM tree */
     DomBuilderContext( SvXMLImport& rImport,
-                       USHORT nPrefix,
+                       sal_uInt16 nPrefix,
                        const ::rtl::OUString& rLocalName );
 
     /** constructor: create DOM subtree under the given node */
     DomBuilderContext( SvXMLImport& rImport,
-                       USHORT nPrefix,
+                       sal_uInt16 nPrefix,
                        const ::rtl::OUString& rLocalName,
                        com::sun::star::uno::Reference<com::sun::star::xml::dom::XNode>& );
 
@@ -95,7 +95,7 @@ public:
     //
 
     virtual SvXMLImportContext* CreateChildContext(
-        USHORT nPrefix,
+        sal_uInt16 nPrefix,
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList >& xAttrList );
 

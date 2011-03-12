@@ -58,7 +58,7 @@
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdobj.hxx>
-#include "svditext.hxx"
+#include "svx/svditext.hxx"
 #include <svx/svdotext.hxx>
 #include <svx/svdorect.hxx>
 #include <svx/svdocirc.hxx>
@@ -83,10 +83,10 @@ ImpSdrGDIMetaFileImport::ImpSdrGDIMetaFileImport(SdrModel& rModel):
     maLineJoin(basegfx::B2DLINEJOIN_NONE),
     maDash(XDASH_RECT, 0, 0, 0, 0, 0),
     fScaleX(0.0),fScaleY(0.0),
-    bFntDirty(TRUE),
-    bLastObjWasPolyWithoutLine(FALSE),bNoLine(FALSE),bNoFill(FALSE),bLastObjWasLine(FALSE)
+    bFntDirty(sal_True),
+    bLastObjWasPolyWithoutLine(sal_False),bNoLine(sal_False),bNoFill(sal_False),bLastObjWasLine(sal_False)
 {
-    aVD.EnableOutput(FALSE);
+    aVD.EnableOutput(sal_False);
 
     // #i111954# init to no fill and no line initially
     aVD.SetLineColor();
@@ -106,15 +106,15 @@ ImpSdrGDIMetaFileImport::~ImpSdrGDIMetaFileImport()
     delete pTextAttr;
 }
 
-ULONG ImpSdrGDIMetaFileImport::DoImport(const GDIMetaFile& rMtf,
+sal_uIntPtr ImpSdrGDIMetaFileImport::DoImport(const GDIMetaFile& rMtf,
     SdrObjList& rOL,
-    ULONG nInsPos,
+    sal_uIntPtr nInsPos,
     SvdProgressInfo *pProgrInfo)
 {
     pPage = rOL.GetPage();
     GDIMetaFile* pTmpMtf=NULL;
     GDIMetaFile* pMtf = (GDIMetaFile*) &rMtf;
-    ULONG nActionAnz=pMtf->GetActionCount();
+    sal_uIntPtr nActionAnz=pMtf->GetActionCount();
     sal_Bool bError = sal_False;
 
 
@@ -150,13 +150,13 @@ ULONG ImpSdrGDIMetaFileImport::DoImport(const GDIMetaFile& rMtf,
     if(65000 < nActionAnz)
     {
         nActionAnz = 65000;
-        bError = TRUE;
+        bError = sal_True;
     }
 
     if(pProgrInfo)
         pProgrInfo->SetActionCount(nActionAnz);
 
-    ULONG nActionsToReport = 0;
+    sal_uIntPtr nActionsToReport = 0;
 
     for( MetaAction* pAct = pMtf->FirstAction(); pAct; pAct = pMtf->NextAction() )
     {
@@ -221,7 +221,7 @@ ULONG ImpSdrGDIMetaFileImport::DoImport(const GDIMetaFile& rMtf,
     // MapMode-Scaling  vornehmen
     MapScaling();
     // Objekte in vorgegebenes Rechteck hineinskalieren
-    ULONG nAnz=aTmpList.GetObjCount();
+    sal_uIntPtr nAnz=aTmpList.GetObjCount();
 
     // Beim berechnen der Fortschrittsanzeige wird GetActionCount()*3 benutzt.
     // Da in aTmpList allerdings weniger eintraege als GetActionCount()
@@ -241,7 +241,7 @@ ULONG ImpSdrGDIMetaFileImport::DoImport(const GDIMetaFile& rMtf,
     // alle in aTmpList zwischengespeicherten Objekte nun in rOL ab der Position nInsPos einfuegen
     if (nInsPos>rOL.GetObjCount()) nInsPos=rOL.GetObjCount();
     SdrInsertReason aReason(SDRREASON_VIEWCALL);
-    for (ULONG i=0; i<nAnz; i++)
+    for (sal_uIntPtr i=0; i<nAnz; i++)
     {
          SdrObject* pObj=aTmpList.GetObj(i);
          rOL.NbcInsertObject(pObj,nInsPos,&aReason);
@@ -272,7 +272,7 @@ ULONG ImpSdrGDIMetaFileImport::DoImport(const GDIMetaFile& rMtf,
 
 void ImpSdrGDIMetaFileImport::SetAttributes(SdrObject* pObj, bool bForceTextAttr)
 {
-    bNoLine = FALSE; bNoFill = FALSE;
+    bNoLine = sal_False; bNoFill = sal_False;
     bool bLine = !bForceTextAttr;
     bool bFill = (pObj==NULL) || (pObj->IsClosedObj() && !bForceTextAttr);
     bool bText = bForceTextAttr || (pObj!=NULL && pObj->GetOutlinerParaObject()!=NULL);
@@ -322,7 +322,7 @@ void ImpSdrGDIMetaFileImport::SetAttributes(SdrObject* pObj, bool bForceTextAttr
         }
     }
     else
-        bNoLine = TRUE;
+        bNoLine = sal_True;
 
     if ( bFill )
     {
@@ -335,7 +335,7 @@ void ImpSdrGDIMetaFileImport::SetAttributes(SdrObject* pObj, bool bForceTextAttr
             pFillAttr->Put(XFillStyleItem(XFILL_NONE));
     }
     else
-        bNoFill = TRUE;
+        bNoFill = sal_True;
 
     if ( bText && bFntDirty )
     {
@@ -362,7 +362,7 @@ void ImpSdrGDIMetaFileImport::SetAttributes(SdrObject* pObj, bool bForceTextAttr
         pTextAttr->Put(SvxContourItem(aFnt.IsOutline(), EE_CHAR_OUTLINE));
         pTextAttr->Put(SvxColorItem(aFnt.GetColor(), EE_CHAR_COLOR));
         //... svxfont textitem svditext
-        bFntDirty=FALSE;
+        bFntDirty=sal_False;
     }
     if (pObj!=NULL)
     {
@@ -439,8 +439,8 @@ void ImpSdrGDIMetaFileImport::InsertObj( SdrObject* pObj, sal_Bool bScale )
         }
         else
         {
-            bLastObjWasPolyWithoutLine = FALSE;
-            bLastObjWasLine = FALSE;
+            bLastObjWasPolyWithoutLine = sal_False;
+            bLastObjWasLine = sal_False;
         }
     }
 }
@@ -773,7 +773,7 @@ void ImpSdrGDIMetaFileImport::ImportText( const Point& rPos, const XubString& rS
     if ( aFnt.GetWidth() || ( rAct.GetType() == META_STRETCHTEXT_ACTION ) )
     {
         pText->ClearMergedItem( SDRATTR_TEXT_AUTOGROWWIDTH );
-        pText->SetMergedItem( SdrTextAutoGrowHeightItem( FALSE ) );
+        pText->SetMergedItem( SdrTextAutoGrowHeightItem( sal_False ) );
         // don't let the margins eat the space needed for the text
         pText->SetMergedItem ( SdrTextUpperDistItem (0));
         pText->SetMergedItem ( SdrTextLowerDistItem (0));
@@ -787,7 +787,7 @@ void ImpSdrGDIMetaFileImport::ImportText( const Point& rPos, const XubString& rS
     pText->SetModel( pModel );
     pText->SetLayer( nLayer );
     pText->NbcSetText( rStr );
-    SetAttributes( pText, TRUE );
+    SetAttributes( pText, sal_True );
     pText->SetSnapRect( aTextRect );
 
     if (!aFnt.IsTransparent())
@@ -928,8 +928,8 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaMapModeAction& rAct)
 {
     MapScaling();
     rAct.Execute(&aVD);
-    bLastObjWasPolyWithoutLine=FALSE;
-    bLastObjWasLine=FALSE;
+    bLastObjWasPolyWithoutLine=sal_False;
+    bLastObjWasLine=sal_False;
 }
 
 void ImpSdrGDIMetaFileImport::MapScaling()
@@ -979,7 +979,7 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaCommentAction& rAct, GDIMetaFile* pM
                     aXGradient.SetGradientStyle((XGradientStyle)rGrad.GetStyle());
                     aXGradient.SetStartColor(rGrad.GetStartColor());
                     aXGradient.SetEndColor(rGrad.GetEndColor());
-                    aXGradient.SetAngle((USHORT)rGrad.GetAngle());
+                    aXGradient.SetAngle((sal_uInt16)rGrad.GetAngle());
                     aXGradient.SetBorder(rGrad.GetBorder());
                     aXGradient.SetXOffset(rGrad.GetOfsX());
                     aXGradient.SetYOffset(rGrad.GetOfsY());

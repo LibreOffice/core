@@ -143,7 +143,7 @@ void SvxUnoFontDescriptor::FillFromItemSet( const SfxItemSet& rSet, awt::FontDes
 {
     const SfxPoolItem* pItem = NULL;
     {
-        SvxFontItem* pFontItem = (SvxFontItem*)&rSet.Get( EE_CHAR_FONTINFO, TRUE );
+        SvxFontItem* pFontItem = (SvxFontItem*)&rSet.Get( EE_CHAR_FONTINFO, sal_True );
         rDesc.Name      = pFontItem->GetFamilyName();
         rDesc.StyleName = pFontItem->GetStyleName();
         rDesc.Family    = sal::static_int_cast< sal_Int16 >(
@@ -153,37 +153,37 @@ void SvxUnoFontDescriptor::FillFromItemSet( const SfxItemSet& rSet, awt::FontDes
             pFontItem->GetPitch());
     }
     {
-        pItem = &rSet.Get( EE_CHAR_FONTHEIGHT, TRUE );
+        pItem = &rSet.Get( EE_CHAR_FONTHEIGHT, sal_True );
         uno::Any aHeight;
         if( pItem->QueryValue( aHeight, MID_FONTHEIGHT ) )
             aHeight >>= rDesc.Height;
     }
     {
-        pItem = &rSet.Get( EE_CHAR_ITALIC, TRUE );
+        pItem = &rSet.Get( EE_CHAR_ITALIC, sal_True );
         uno::Any aFontSlant;
         if(pItem->QueryValue( aFontSlant, MID_POSTURE ))
             aFontSlant >>= rDesc.Slant;
     }
     {
-        pItem = &rSet.Get( EE_CHAR_UNDERLINE, TRUE );
+        pItem = &rSet.Get( EE_CHAR_UNDERLINE, sal_True );
         uno::Any aUnderline;
         if(pItem->QueryValue( aUnderline, MID_TL_STYLE ))
             aUnderline >>= rDesc.Underline;
     }
     {
-        pItem = &rSet.Get( EE_CHAR_WEIGHT, TRUE );
+        pItem = &rSet.Get( EE_CHAR_WEIGHT, sal_True );
         uno::Any aWeight;
         if(pItem->QueryValue( aWeight, MID_WEIGHT ))
             aWeight >>= rDesc.Weight;
     }
     {
-        pItem = &rSet.Get( EE_CHAR_STRIKEOUT, TRUE );
+        pItem = &rSet.Get( EE_CHAR_STRIKEOUT, sal_True );
         uno::Any aStrikeOut;
         if(pItem->QueryValue( aStrikeOut, MID_CROSS_OUT ))
             aStrikeOut >>= rDesc.Strikeout;
     }
     {
-        SvxWordLineModeItem* pWLMItem = (SvxWordLineModeItem*)&rSet.Get( EE_CHAR_WLM, TRUE );
+        SvxWordLineModeItem* pWLMItem = (SvxWordLineModeItem*)&rSet.Get( EE_CHAR_WLM, sal_True );
         rDesc.WordLineMode = pWLMItem->GetValue();
     }
 }
@@ -201,13 +201,13 @@ void SvxUnoFontDescriptor::FillFromItemSet( const SfxItemSet& rSet, awt::FontDes
 
 beans::PropertyState SvxUnoFontDescriptor::getPropertyState( const SfxItemSet& rSet )
 {
-    CheckState(rSet.GetItemState( EE_CHAR_FONTINFO, FALSE ));
-    CheckState(rSet.GetItemState( EE_CHAR_FONTHEIGHT, FALSE ));
-    CheckState(rSet.GetItemState( EE_CHAR_ITALIC, FALSE ));
-    CheckState(rSet.GetItemState( EE_CHAR_UNDERLINE, FALSE ));
-    CheckState(rSet.GetItemState( EE_CHAR_WEIGHT, FALSE ));
-    CheckState(rSet.GetItemState( EE_CHAR_STRIKEOUT, FALSE ));
-    CheckState(rSet.GetItemState( EE_CHAR_WLM, FALSE ));
+    CheckState(rSet.GetItemState( EE_CHAR_FONTINFO, sal_False ));
+    CheckState(rSet.GetItemState( EE_CHAR_FONTHEIGHT, sal_False ));
+    CheckState(rSet.GetItemState( EE_CHAR_ITALIC, sal_False ));
+    CheckState(rSet.GetItemState( EE_CHAR_UNDERLINE, sal_False ));
+    CheckState(rSet.GetItemState( EE_CHAR_WEIGHT, sal_False ));
+    CheckState(rSet.GetItemState( EE_CHAR_STRIKEOUT, sal_False ));
+    CheckState(rSet.GetItemState( EE_CHAR_WLM, sal_False ));
 
     return beans::PropertyState_DEFAULT_VALUE;
 }

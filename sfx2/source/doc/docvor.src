@@ -37,7 +37,7 @@
 
 ModalDialog DLG_ORGANIZE
 {
-    HelpId = SID_ORGANIZER ;
+    HelpId = CMD_SID_ORGANIZER ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 271 , 162 ) ;
@@ -59,6 +59,7 @@ ModalDialog DLG_ORGANIZE
     };
     PushButton BTN_FILES
     {
+        HelpID = "sfx2:PushButton:DLG_ORGANIZE:BTN_FILES";
         Pos = MAP_APPFONT ( 205 , 143 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Text [ en-US ] = "~File..." ;
@@ -66,12 +67,14 @@ ModalDialog DLG_ORGANIZE
     };
     PushButton BTN_ADDRESSTEMPLATE
     {
+        HelpID = "sfx2:PushButton:DLG_ORGANIZE:BTN_ADDRESSTEMPLATE";
         Pos = MAP_APPFONT ( 205 , 124 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Text [ en-US ] = "~Address Book..." ;
     };
     ListBox LB_LEFT_TYP
     {
+        HelpID = "sfx2:ListBox:DLG_ORGANIZE:LB_LEFT_TYP";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 3 , 144 ) ;
         Size = MAP_APPFONT ( 94 , 55 ) ;
@@ -86,6 +89,7 @@ ModalDialog DLG_ORGANIZE
     };
     ListBox LB_RIGHT_TYP
     {
+        HelpID = "sfx2:ListBox:DLG_ORGANIZE:LB_RIGHT_TYP";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 103 , 144 ) ;
         Size = MAP_APPFONT ( 94 , 55 ) ;
@@ -140,6 +144,7 @@ ModalDialog DLG_ORGANIZE
     };
     MenuButton BTN_EDIT
     {
+        HelpID = "sfx2:MenuButton:DLG_ORGANIZE:BTN_EDIT";
         Pos = MAP_APPFONT ( 205 , 23 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Text [ en-US ] = "Commands" ;

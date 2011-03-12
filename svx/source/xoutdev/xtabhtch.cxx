@@ -34,7 +34,7 @@
 #ifndef SVX_LIGHT
 
 #include <com/sun/star/container/XNameContainer.hpp>
-#include "XPropertyTable.hxx"
+#include "svx/XPropertyTable.hxx"
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/svapp.hxx>
 
@@ -51,7 +51,7 @@
 #include <svx/dialmgr.hxx>
 #include <svx/xtable.hxx>
 #include <svx/xpool.hxx>
-#include "dlgutil.hxx"
+#include "svx/dlgutil.hxx"
 #include <svx/xflhtit.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xfillit0.hxx>
@@ -83,7 +83,7 @@ char const aChckXML[]    = { '<', '?', 'x', 'm', 'l' };     // = 6.0
 
 XHatchTable::XHatchTable( const String& rPath,
                             XOutdevItemPool* pInPool,
-                            USHORT nInitSize, USHORT nReSize ) :
+                            sal_uInt16 nInitSize, sal_uInt16 nReSize ) :
                 XPropertyTable( rPath, pInPool, nInitSize, nReSize)
 {
     pBmpTable = new Table( nInitSize, nReSize );
@@ -118,35 +118,35 @@ XHatchEntry* XHatchTable::GetHatch(long nIndex) const
 
 /************************************************************************/
 
-BOOL XHatchTable::Load()
+sal_Bool XHatchTable::Load()
 {
-    return( FALSE );
+    return( sal_False );
 }
 
 /************************************************************************/
 
-BOOL XHatchTable::Save()
+sal_Bool XHatchTable::Save()
 {
-    return( FALSE );
+    return( sal_False );
 }
 
 /************************************************************************/
 
-BOOL XHatchTable::Create()
+sal_Bool XHatchTable::Create()
 {
-    return( FALSE );
+    return( sal_False );
 }
 
 /************************************************************************/
 
-BOOL XHatchTable::CreateBitmapsForUI()
+sal_Bool XHatchTable::CreateBitmapsForUI()
 {
-    return( FALSE );
+    return( sal_False );
 }
 
 /************************************************************************/
 
-Bitmap* XHatchTable::CreateBitmapForUI( long /*nIndex*/, BOOL /*bDelete*/)
+Bitmap* XHatchTable::CreateBitmapForUI( long /*nIndex*/, sal_Bool /*bDelete*/)
 {
     return( NULL );
 }
@@ -265,18 +265,18 @@ XHatchEntry* XHatchList::GetHatch(long nIndex) const
     return (XHatchEntry*) XPropertyList::Get(nIndex, 0);
 }
 
-BOOL XHatchList::Load()
+sal_Bool XHatchList::Load()
 {
     if( bListDirty )
     {
-        bListDirty = FALSE;
+        bListDirty = sal_False;
 
         INetURLObject aURL( aPath );
 
         if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
         {
             DBG_ASSERT( !aPath.Len(), "invalid URL" );
-            return FALSE;
+            return sal_False;
         }
 
         aURL.Append( aName );
@@ -287,17 +287,17 @@ BOOL XHatchList::Load()
         uno::Reference< container::XNameContainer > xTable( SvxUnoXHatchTable_createInstance( this ), uno::UNO_QUERY );
         return SvxXMLXTableImport::load( aURL.GetMainURL( INetURLObject::NO_DECODE ), xTable );
     }
-    return( FALSE );
+    return( sal_False );
 }
 
-BOOL XHatchList::Save()
+sal_Bool XHatchList::Save()
 {
     INetURLObject aURL( aPath );
 
     if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
     {
         DBG_ASSERT( !aPath.Len(), "invalid URL" );
-        return FALSE;
+        return sal_False;
     }
 
     aURL.Append( aName );
@@ -309,7 +309,7 @@ BOOL XHatchList::Save()
     return SvxXMLXTableExportComponent::save( aURL.GetMainURL( INetURLObject::NO_DECODE ), xTable );
 }
 
-BOOL XHatchList::Create()
+sal_Bool XHatchList::Create()
 {
     XubString aStr( SVX_RES( RID_SVXSTR_HATCH ) );
     xub_StrLen nLen;
@@ -322,16 +322,16 @@ BOOL XHatchList::Create()
     aStr.SetChar(nLen, sal_Unicode('3'));
     Insert(new XHatchEntry(XHatch(RGB_Color(COL_BLUE ),XHATCH_TRIPLE,120,  0),aStr));
 
-    return( TRUE );
+    return( sal_True );
 }
 
-BOOL XHatchList::CreateBitmapsForUI()
+sal_Bool XHatchList::CreateBitmapsForUI()
 {
     impCreate();
 
     for( long i = 0; i < Count(); i++)
     {
-        Bitmap* pBmp = CreateBitmapForUI( i, FALSE );
+        Bitmap* pBmp = CreateBitmapForUI( i, sal_False );
         DBG_ASSERT( pBmp, "XHatchList: Bitmap(UI) konnte nicht erzeugt werden!" );
 
         if( pBmp )
@@ -340,10 +340,10 @@ BOOL XHatchList::CreateBitmapsForUI()
 
     impDestroy();
 
-    return( TRUE );
+    return( sal_True );
 }
 
-Bitmap* XHatchList::CreateBitmapForUI( long nIndex, BOOL bDelete )
+Bitmap* XHatchList::CreateBitmapForUI( long nIndex, sal_Bool bDelete )
 {
     impCreate();
     VirtualDevice* pVD = mpData->getVirtualDevice();

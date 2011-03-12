@@ -912,7 +912,8 @@ rtl::OUString Access::getImplementationName() throw (css::uno::RuntimeException)
     OSL_ASSERT(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
-    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "configmgr.Access" ) );
+    return rtl::OUString(
+        RTL_CONSTASCII_USTRINGPARAM("org.openoffice-configmgr::Access"));
 }
 
 sal_Bool Access::supportsService(rtl::OUString const & ServiceName)
@@ -1995,45 +1996,83 @@ rtl::Reference< ChildAccess > Access::getUnmodifiedChild(
 }
 
 rtl::Reference< ChildAccess > Access::getSubChild(rtl::OUString const & path) {
-    rtl::OUString name;
-    bool setElement;
-    rtl::OUString templateName;
-    sal_Int32 i = Data::parseSegment(
-        path, 0, &name, &setElement, &templateName);
-    if (i == -1 || (i != path.getLength() && path[i] != '/')) {
-        return rtl::Reference< ChildAccess >();
-    }
-    rtl::Reference< ChildAccess > child(getChild(name));
-    if (!child.is()) {
-        return rtl::Reference< ChildAccess >();
-    }
-    if (setElement) {
-        rtl::Reference< Node > p(getNode());
-        switch (p->kind()) {
-        case Node::KIND_LOCALIZED_PROPERTY:
-            if (!Components::allLocales(getRootAccess()->getLocale()) ||
-                templateName.getLength() != 0)
-            {
-                return rtl::Reference< ChildAccess >();
-            }
-            break;
-        case Node::KIND_SET:
-            if (templateName.getLength() != 0 &&
-                !dynamic_cast< SetNode * >(p.get())->isValidTemplate(
-                    templateName))
-            {
-                return rtl::Reference< ChildAccess >();
-            }
-            break;
-        default:
+    sal_Int32 i = 0;
+    // For backwards compatibility, allow absolute paths where meaningful:
+    if (path.getLength() != 0 && path[0] == '/') {
+        ++i;
+        if (!getRootAccess().is()) {
             return rtl::Reference< ChildAccess >();
         }
+        Path abs(getAbsolutePath());
+        for (Path::iterator j(abs.begin()); j != abs.end(); ++j) {
+            rtl::OUString name1;
+            bool setElement1;
+            rtl::OUString templateName1;
+            i = Data::parseSegment(
+                path, i, &name1, &setElement1, &templateName1);
+            if (i == -1 || (i != path.getLength() && path[i] != '/')) {
+                return rtl::Reference< ChildAccess >();
+            }
+            rtl::OUString name2;
+            bool setElement2;
+            rtl::OUString templateName2;
+            Data::parseSegment(*j, 0, &name2, &setElement2, &templateName2);
+            if (name1 != name2 || setElement1 != setElement2 ||
+                (setElement1 &&
+                 !Data::equalTemplateNames(templateName1, templateName2)))
+            {
+                return rtl::Reference< ChildAccess >();
+            }
+            if (i != path.getLength()) {
+                ++i;
+            }
+        }
     }
-    // For backwards compatibility, ignore a final slash after non-value nodes:
-    return child->isValue()
-        ? (i == path.getLength() ? child : rtl::Reference< ChildAccess >())
-        : (i >= path.getLength() - 1
-           ? child : child->getSubChild(path.copy(i + 1)));
+    for (rtl::Reference< Access > parent(this);;) {
+        rtl::OUString name;
+        bool setElement;
+        rtl::OUString templateName;
+        i = Data::parseSegment(path, i, &name, &setElement, &templateName);
+        if (i == -1 || (i != path.getLength() && path[i] != '/')) {
+            return rtl::Reference< ChildAccess >();
+        }
+        rtl::Reference< ChildAccess > child(parent->getChild(name));
+        if (!child.is()) {
+            return rtl::Reference< ChildAccess >();
+        }
+        if (setElement) {
+            rtl::Reference< Node > p(parent->getNode());
+            switch (p->kind()) {
+            case Node::KIND_LOCALIZED_PROPERTY:
+                if (!Components::allLocales(getRootAccess()->getLocale()) ||
+                    templateName.getLength() != 0)
+                {
+                    return rtl::Reference< ChildAccess >();
+                }
+                break;
+            case Node::KIND_SET:
+                if (templateName.getLength() != 0 &&
+                    !dynamic_cast< SetNode * >(p.get())->isValidTemplate(
+                        templateName))
+                {
+                    return rtl::Reference< ChildAccess >();
+                }
+                break;
+            default:
+                return rtl::Reference< ChildAccess >();
+            }
+        }
+        // For backwards compatibility, ignore a final slash after non-value
+        // nodes:
+        if (child->isValue()) {
+            return i == path.getLength()
+                ? child : rtl::Reference< ChildAccess >();
+        } else if (i >= path.getLength() - 1) {
+            return child;
+        }
+        ++i;
+        parent = child.get();
+    }
 }
 
 bool Access::setChildProperty(
@@ -2091,9 +2130,8 @@ css::beans::Property Access::asProperty() {
     default:
         type = cppu::UnoType< css::uno::XInterface >::get(); //TODO: correct?
         nillable = false;
-        removable = false;
-        if ( getParentNode() != NULL )
-            removable = getParentNode()->kind() == Node::KIND_SET;
+        rtl::Reference< Node > parent(getParentNode());
+        removable = parent.is() && parent->kind() == Node::KIND_SET;
         break;
     }
     return css::beans::Property(

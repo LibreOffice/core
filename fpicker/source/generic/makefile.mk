@@ -61,3 +61,11 @@ DEF1NAME=	$(SHL1TARGET)
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
+
+ALLTAR : $(MISC)/fpicker.component
+
+$(MISC)/fpicker.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        fpicker.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt fpicker.component

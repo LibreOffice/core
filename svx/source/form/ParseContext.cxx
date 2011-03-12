@@ -30,9 +30,9 @@
 #include "precompiled_svx.hxx"
 
 #include <sal/macros.h>
-#include "ParseContext.hxx"
+#include "svx/ParseContext.hxx"
 #include "stringlistresource.hxx"
-#include "fmresids.hrc"
+#include "svx/fmresids.hrc"
 
 #include <svx/dialmgr.hxx>
 

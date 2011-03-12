@@ -51,35 +51,6 @@ extern "C"
 }
 
 //---------------------------------------------------------------------------------------
-sal_Bool SAL_CALL component_writeInfo(void* /*_pServiceManager*/, com::sun::star::registry::XRegistryKey* _pRegistryKey)
-{
-    ::rtl::OUString sMainKeyName( RTL_CONSTASCII_USTRINGPARAM( "/" ));
-    sMainKeyName += OPoolCollection::getImplementationName_Static();
-    sMainKeyName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
-
-    try
-    {
-        Reference< XRegistryKey > xMainKey = _pRegistryKey->createKey(sMainKeyName);
-        if (!xMainKey.is())
-            return sal_False;
-
-        Sequence< ::rtl::OUString > sServices = OPoolCollection::getSupportedServiceNames_Static();
-        const ::rtl::OUString* pServices = sServices.getConstArray();
-        for (sal_Int32 i=0; i<sServices.getLength(); ++i, ++pServices)
-            xMainKey->createKey(*pServices);
-    }
-    catch(InvalidRegistryException&)
-    {
-        return sal_False;
-    }
-    catch(InvalidValueException&)
-    {
-        return sal_False;
-    }
-    return sal_True;
-}
-
-//---------------------------------------------------------------------------------------
 void* SAL_CALL component_getFactory(const sal_Char* _pImplName, ::com::sun::star::lang::XMultiServiceFactory* _pServiceManager, void* /*_pRegistryKey*/)
 {
     void* pRet = NULL;

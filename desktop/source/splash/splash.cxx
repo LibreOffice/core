@@ -102,7 +102,7 @@ void SAL_CALL SplashScreen::start(const OUString&, sal_Int32 nRange)
         _bProgressEnd = sal_False;
         SolarMutexGuard aSolarGuard;
         if ( _eBitmapMode == BM_FULLSCREEN )
-            ShowFullScreenMode( TRUE );
+            ShowFullScreenMode( sal_True );
         Show();
         Paint(Rectangle());
         Flush();
@@ -129,7 +129,7 @@ void SAL_CALL SplashScreen::reset()
     if (_bVisible && !_bProgressEnd )
     {
         if ( _eBitmapMode == BM_FULLSCREEN )
-            ShowFullScreenMode( TRUE );
+            ShowFullScreenMode( sal_True );
         Show();
         updateStatus();
     }
@@ -146,7 +146,7 @@ void SAL_CALL SplashScreen::setText(const OUString& rText)
         if (_bVisible && !_bProgressEnd)
         {
             if ( _eBitmapMode == BM_FULLSCREEN )
-                ShowFullScreenMode( TRUE );
+                ShowFullScreenMode( sal_True );
             Show();
             updateStatus();
         }
@@ -162,7 +162,7 @@ void SAL_CALL SplashScreen::setValue(sal_Int32 nValue)
     SolarMutexGuard aSolarGuard;
     if (_bVisible && !_bProgressEnd) {
         if ( _eBitmapMode == BM_FULLSCREEN )
-            ShowFullScreenMode( TRUE );
+            ShowFullScreenMode( sal_True );
         Show();
         if (nValue >= _iMax) _iProgress = _iMax;
     else _iProgress = nValue;
@@ -319,36 +319,36 @@ void SplashScreen::loadConfig()
 
     if ( sProgressFrameColor.getLength() )
     {
-        UINT8 nRed = 0;
+        sal_uInt8 nRed = 0;
         sal_Int32 idx = 0;
         sal_Int32 temp = sProgressFrameColor.getToken( 0, ',', idx ).toInt32();
         if ( idx != -1 )
         {
-            nRed = static_cast< UINT8 >( temp );
+            nRed = static_cast< sal_uInt8 >( temp );
             temp = sProgressFrameColor.getToken( 0, ',', idx ).toInt32();
         }
         if ( idx != -1 )
         {
-            UINT8 nGreen = static_cast< UINT8 >( temp );
-            UINT8 nBlue = static_cast< UINT8 >( sProgressFrameColor.getToken( 0, ',', idx ).toInt32() );
+            sal_uInt8 nGreen = static_cast< sal_uInt8 >( temp );
+            sal_uInt8 nBlue = static_cast< sal_uInt8 >( sProgressFrameColor.getToken( 0, ',', idx ).toInt32() );
             _cProgressFrameColor = Color( nRed, nGreen, nBlue );
         }
     }
 
     if ( sProgressBarColor.getLength() )
     {
-        UINT8 nRed = 0;
+        sal_uInt8 nRed = 0;
         sal_Int32 idx = 0;
         sal_Int32 temp = sProgressBarColor.getToken( 0, ',', idx ).toInt32();
         if ( idx != -1 )
         {
-            nRed = static_cast< UINT8 >( temp );
+            nRed = static_cast< sal_uInt8 >( temp );
             temp = sProgressBarColor.getToken( 0, ',', idx ).toInt32();
         }
         if ( idx != -1 )
         {
-            UINT8 nGreen = static_cast< UINT8 >( temp );
-            UINT8 nBlue = static_cast< UINT8 >( sProgressBarColor.getToken( 0, ',', idx ).toInt32() );
+            sal_uInt8 nGreen = static_cast< sal_uInt8 >( temp );
+            sal_uInt8 nBlue = static_cast< sal_uInt8 >( sProgressBarColor.getToken( 0, ',', idx ).toInt32() );
             _cProgressBarColor = Color( nRed, nGreen, nBlue );
         }
     }
@@ -500,7 +500,7 @@ void SplashScreen::Paint( const Rectangle&)
     if(!_bVisible) return;
 
     //native drawing
-    BOOL bNativeOK = FALSE;
+    sal_Bool bNativeOK = sal_False;
 
     // in case of native controls we need to draw directly to the window
     if( _bNativeProgress && IsNativeControlSupported( CTRL_INTROPROGRESS, PART_ENTIRE_CONTROL ) )
@@ -521,7 +521,7 @@ void SplashScreen::Paint( const Rectangle&)
         }
 
         if( (bNativeOK = DrawNativeControl( CTRL_INTROPROGRESS, PART_ENTIRE_CONTROL, aDrawRect,
-                                            CTRL_STATE_ENABLED, aValue, _sProgressText )) != FALSE )
+                                            CTRL_STATE_ENABLED, aValue, _sProgressText )) != sal_False )
         {
             return;
         }

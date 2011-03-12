@@ -64,7 +64,7 @@ public:
                                                    const SfxItemSet *rOptions );
     virtual                 ~SfxPrintOptionsDialog();
 
-    BOOL                    Construct();
+    sal_Bool                    Construct();
     virtual short           Execute();
     virtual long            Notify( NotifyEvent& rNEvt );
 

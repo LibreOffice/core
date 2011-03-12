@@ -103,7 +103,7 @@
 //________________________________________________________________________________________________________
 
 #include <sfx2/sfxbasecontroller.hxx>
-#include "viewfac.hxx"
+#include "sfx2/viewfac.hxx"
 #include "workwin.hxx"
 #include <sfx2/signaturestate.hxx>
 #include <sfx2/sfxuno.hxx>
@@ -115,7 +115,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/objuno.hxx>
 #include <sfx2/printer.hxx>
-#include <basmgr.hxx>
+#include <sfx2/basmgr.hxx>
 #include <sfx2/event.hxx>
 #include <eventsupplier.hxx>
 #include <sfx2/evntconf.hxx>
@@ -126,12 +126,13 @@
 #include <sfx2/docfac.hxx>
 #include <sfx2/fcontnr.hxx>
 #include "sfx2/docstoragemodifylistener.hxx"
-#include "brokenpackageint.hxx"
+#include "sfx2/brokenpackageint.hxx"
 #include "graphhelp.hxx"
+#include "docundomanager.hxx"
 #include <sfx2/msgpool.hxx>
 #include <sfx2/DocumentMetadataAccess.hxx>
 
-#include <sfxresid.hxx>
+#include <sfx2/sfxresid.hxx>
 
 //________________________________________________________________________________________________________
 //  namespaces
@@ -150,6 +151,10 @@ using ::com::sun::star::lang::WrappedTargetException;
 using ::com::sun::star::uno::Type;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::document::XDocumentRecovery;
+using ::com::sun::star::document::XUndoManager;
+using ::com::sun::star::document::XUndoAction;
+using ::com::sun::star::document::UndoFailedException;
+using ::com::sun::star::frame::XModel;
 
 /** This Listener is used to get notified when the XDocumentProperties of the
     XModel change.
@@ -218,15 +223,17 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
     sal_Bool                                                m_bSaving               ;
     sal_Bool                                                m_bSuicide              ;
     sal_Bool                                                m_bInitialized          ;
+    sal_Bool                                                m_bExternalTitle        ;
     sal_Bool                                                m_bModifiedSinceLastSave;
     uno::Reference< com::sun::star::view::XPrintable>       m_xPrintable            ;
     uno::Reference< script::provider::XScriptProvider >     m_xScriptProvider;
     uno::Reference< ui::XUIConfigurationManager >           m_xUIConfigurationManager;
     ::rtl::Reference< ::sfx2::DocumentStorageModifyListener >   m_pStorageModifyListen;
-    ::rtl::OUString                                 m_sModuleIdentifier;
+    ::rtl::OUString                                         m_sModuleIdentifier;
     css::uno::Reference< css::frame::XTitle >               m_xTitleHelper;
     css::uno::Reference< css::frame::XUntitledNumbers >     m_xNumberedControllers;
-    uno::Reference< rdf::XDocumentMetadataAccess>   m_xDocumentMetadata;
+    uno::Reference< rdf::XDocumentMetadataAccess>           m_xDocumentMetadata;
+    ::rtl::Reference< ::sfx2::DocumentUndoManager >         m_pDocumentUndoManager;
 
 
     IMPL_SfxBaseModel_DataContainer( ::osl::Mutex& rMutex, SfxObjectShell* pObjectShell )
@@ -238,11 +245,13 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
             ,   m_bSaving               ( sal_False     )
             ,   m_bSuicide              ( sal_False     )
             ,   m_bInitialized          ( sal_False     )
+            ,   m_bExternalTitle        ( sal_False     )
             ,   m_bModifiedSinceLastSave( sal_False     )
             ,   m_pStorageModifyListen  ( NULL          )
             ,   m_xTitleHelper          ()
             ,   m_xNumberedControllers  ()
             ,   m_xDocumentMetadata     () // lazy
+            ,   m_pDocumentUndoManager  ()
     {
         // increase global instance counter.
         ++g_nInstanceCounter;
@@ -499,10 +508,10 @@ SfxSaveGuard::~SfxSaveGuard()
     m_pData->m_bSaving = sal_False;
 
     // m_bSuicide was set e.g. in case somewhere tried to close a document, while it was used for
-    // storing at the same time. Further m_bSuicide was set to TRUE only if close(TRUE) was called.
+    // storing at the same time. Further m_bSuicide was set to sal_True only if close(sal_True) was called.
     // So the owner ship was delegated to the place where a veto exception was thrown.
     // Now we have to call close() again and delegate the owner ship to the next one, which
-    // cant accept that. Close(FALSE) cant work in this case. Because then the document will may be never closed ...
+    // cant accept that. Close(sal_False) cant work in this case. Because then the document will may be never closed ...
 
     if ( m_pData->m_bSuicide )
     {
@@ -783,6 +792,12 @@ void SAL_CALL SfxBaseModel::dispose() throw(::com::sun::star::uno::RuntimeExcept
         m_pData->m_pStorageModifyListen = NULL;
     }
 
+    if ( m_pData->m_pDocumentUndoManager.is() )
+    {
+        m_pData->m_pDocumentUndoManager->disposing();
+        m_pData->m_pDocumentUndoManager = NULL;
+    }
+
     lang::EventObject aEvent( (frame::XModel *)this );
     m_pData->m_aInterfaceContainer.disposeAndClear( aEvent );
 
@@ -982,6 +997,8 @@ sal_Bool SAL_CALL SfxBaseModel::attachResource( const   ::rtl::OUString&        
         aArgs.remove( "InputStream" );
         aArgs.remove( "URL" );
         aArgs.remove( "Frame" );
+        aArgs.remove( "Password" );
+        aArgs.remove( "EncryptionData" );
 
         // TODO/LATER: all the parameters that are accepted by ItemSet of the DocShell must be removed here
 
@@ -1183,6 +1200,51 @@ void SAL_CALL SfxBaseModel::disconnectController( const uno::Reference< frame::X
         m_pData->m_xCurrent = uno::Reference< frame::XController > ();
 }
 
+namespace
+{
+    typedef ::cppu::WeakImplHelper1< XUndoAction > ControllerLockUndoAction_Base;
+    class ControllerLockUndoAction : public ControllerLockUndoAction_Base
+    {
+    public:
+        ControllerLockUndoAction( const Reference< XModel >& i_model, const bool i_undoIsUnlock )
+            :m_xModel( i_model )
+            ,m_bUndoIsUnlock( i_undoIsUnlock )
+        {
+        }
+
+        // XUndoAction
+        virtual ::rtl::OUString SAL_CALL getTitle() throw (RuntimeException);
+        virtual void SAL_CALL undo(  ) throw (UndoFailedException, RuntimeException);
+        virtual void SAL_CALL redo(  ) throw (UndoFailedException, RuntimeException);
+
+    private:
+        const Reference< XModel >   m_xModel;
+        const bool                  m_bUndoIsUnlock;
+    };
+
+    ::rtl::OUString SAL_CALL ControllerLockUndoAction::getTitle() throw (RuntimeException)
+    {
+        // this action is intended to be used within an UndoContext only, so nobody will ever see this title ...
+        return ::rtl::OUString();
+    }
+
+    void SAL_CALL ControllerLockUndoAction::undo(  ) throw (UndoFailedException, RuntimeException)
+    {
+        if ( m_bUndoIsUnlock )
+            m_xModel->unlockControllers();
+        else
+            m_xModel->lockControllers();
+    }
+
+    void SAL_CALL ControllerLockUndoAction::redo(  ) throw (UndoFailedException, RuntimeException)
+    {
+        if ( m_bUndoIsUnlock )
+            m_xModel->lockControllers();
+        else
+            m_xModel->unlockControllers();
+    }
+}
+
 //________________________________________________________________________________________________________
 //  frame::XModel
 //________________________________________________________________________________________________________
@@ -1192,6 +1254,14 @@ void SAL_CALL SfxBaseModel::lockControllers() throw(::com::sun::star::uno::Runti
     SfxModelGuard aGuard( *this );
 
     ++m_pData->m_nControllerLockCount ;
+
+    if  (   m_pData->m_pDocumentUndoManager.is()
+        &&  m_pData->m_pDocumentUndoManager->isInContext()
+        &&  !m_pData->m_pDocumentUndoManager->isLocked()
+        )
+    {
+        m_pData->m_pDocumentUndoManager->addUndoAction( new ControllerLockUndoAction( this, true ) );
+    }
 }
 
 //________________________________________________________________________________________________________
@@ -1203,6 +1273,14 @@ void SAL_CALL SfxBaseModel::unlockControllers() throw(::com::sun::star::uno::Run
     SfxModelGuard aGuard( *this );
 
     --m_pData->m_nControllerLockCount ;
+
+    if  (   m_pData->m_pDocumentUndoManager.is()
+        &&  m_pData->m_pDocumentUndoManager->isInContext()
+        &&  !m_pData->m_pDocumentUndoManager->isLocked()
+        )
+    {
+        m_pData->m_pDocumentUndoManager->addUndoAction( new ControllerLockUndoAction( this, false ) );
+    }
 }
 
 //________________________________________________________________________________________________________
@@ -1635,7 +1713,23 @@ void SAL_CALL SfxBaseModel::storeAsURL( const   ::rtl::OUString&                
         uno::Sequence< beans::PropertyValue > aSequence ;
         TransformItems( SID_OPENDOC, *m_pData->m_pObjectShell->GetMedium()->GetItemSet(), aSequence );
         attachResource( rURL, aSequence );
+
+#if OSL_DEBUG_LEVEL > 0
+        SFX_ITEMSET_ARG( m_pData->m_pObjectShell->GetMedium()->GetItemSet(), pPasswdItem, SfxStringItem, SID_PASSWORD, sal_False);
+        OSL_ENSURE( !pPasswdItem, "There should be no Password property in the document MediaDescriptor!" );
+#endif
     }
+}
+
+//________________________________________________________________________________________________________
+//  XUndoManagerSupplier
+//________________________________________________________________________________________________________
+Reference< XUndoManager > SAL_CALL SfxBaseModel::getUndoManager(  ) throw (RuntimeException)
+{
+    SfxModelGuard aGuard( *this );
+    if ( !m_pData->m_pDocumentUndoManager.is() )
+        m_pData->m_pDocumentUndoManager.set( new ::sfx2::DocumentUndoManager( *this ) );
+    return m_pData->m_pDocumentUndoManager.get();
 }
 
 //________________________________________________________________________________________________________
@@ -1783,13 +1877,12 @@ void SAL_CALL SfxBaseModel::load(   const uno::Sequence< beans::PropertyValue >&
             if ( nError == ERRCODE_IO_BROKENPACKAGE && xHandler.is() )
             {
                 ::rtl::OUString aDocName = pMedium->GetURLObject().getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
-                SFX_ITEMSET_ARG( pMedium->GetItemSet(), pRepairItem, SfxBoolItem, SID_REPAIRPACKAGE, FALSE );
+                SFX_ITEMSET_ARG( pMedium->GetItemSet(), pRepairItem, SfxBoolItem, SID_REPAIRPACKAGE, sal_False );
                 if ( !pRepairItem || !pRepairItem->GetValue() )
                 {
-                    RequestPackageReparation* pRequest = new RequestPackageReparation( aDocName );
-                    com::sun::star::uno::Reference< com::sun::star::task::XInteractionRequest > xRequest ( pRequest );
-                    xHandler->handle( xRequest );
-                    if( pRequest->isApproved() )
+                    RequestPackageReparation aRequest( aDocName );
+                    xHandler->handle( aRequest.GetRequest() );
+                    if( aRequest.isApproved() )
                     {
                         // broken package: try second loading and allow repair
                         pMedium->GetItemSet()->Put( SfxBoolItem( SID_REPAIRPACKAGE, sal_True ) );
@@ -1809,9 +1902,8 @@ void SAL_CALL SfxBaseModel::load(   const uno::Sequence< beans::PropertyValue >&
                 if ( nError == ERRCODE_IO_BROKENPACKAGE )
                 {
                     // repair either not allowed or not successful
-                    NotifyBrokenPackage* pNotifyRequest = new NotifyBrokenPackage( aDocName );
-                    com::sun::star::uno::Reference< com::sun::star::task::XInteractionRequest > xRequest ( pNotifyRequest );
-                       xHandler->handle( xRequest );
+                    NotifyBrokenPackage aRequest( aDocName );
+                    xHandler->handle( aRequest.GetRequest() );
                 }
             }
         }
@@ -1844,12 +1936,12 @@ void SAL_CALL SfxBaseModel::load(   const uno::Sequence< beans::PropertyValue >&
 
         if ( nError )
         {
-            BOOL bSilent = FALSE;
+            sal_Bool bSilent = sal_False;
             SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSilentItem, SfxBoolItem, SID_SILENT, sal_False);
             if( pSilentItem )
                 bSilent = pSilentItem->GetValue();
 
-              BOOL bWarning = ((nError & ERRCODE_WARNING_MASK) == ERRCODE_WARNING_MASK);
+              sal_Bool bWarning = ((nError & ERRCODE_WARNING_MASK) == ERRCODE_WARNING_MASK);
             if ( nError != ERRCODE_IO_BROKENPACKAGE && !bSilent )
             {
                 // broken package was handled already
@@ -1875,10 +1967,15 @@ void SAL_CALL SfxBaseModel::load(   const uno::Sequence< beans::PropertyValue >&
             }
         }
 
-        BOOL bHidden = FALSE;
+        sal_Bool bHidden = sal_False;
         SFX_ITEMSET_ARG( pMedium->GetItemSet(), pHidItem, SfxBoolItem, SID_HIDDEN, sal_False);
         if ( pHidItem )
             bHidden = pHidItem->GetValue();
+
+#if OSL_DEBUG_LEVEL > 0
+        SFX_ITEMSET_ARG( pMedium->GetItemSet(), pPasswdItem, SfxStringItem, SID_PASSWORD, sal_False);
+        OSL_ENSURE( !pPasswdItem, "There should be no Password property in the document MediaDescriptor!" );
+#endif
         // !TODO: will be done by Framework!
         pMedium->SetUpdatePickList( !bHidden );
     }
@@ -1919,7 +2016,7 @@ uno::Any SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
                 aDesc.maSize = OutputDevice::LogicToLogic( aSize, aMapUnit, MAP_100TH_MM );
                 aDesc.maDragStartPos = Point();
                 aDesc.maDisplayName = String();
-                aDesc.mbCanLink = FALSE;
+                aDesc.mbCanLink = sal_False;
 
                 SvMemoryStream aMemStm( 1024, 1024 );
                 aMemStm << aDesc;
@@ -1935,7 +2032,7 @@ uno::Any SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
                 try
                 {
                     utl::TempFile aTmp;
-                    aTmp.EnableKillingFile( TRUE );
+                    aTmp.EnableKillingFile( sal_True );
                     storeToURL( aTmp.GetURL(), uno::Sequence < beans::PropertyValue >() );
                     SvStream* pStream = aTmp.GetStream( STREAM_READ );
                     const sal_uInt32 nLen = pStream->Seek( STREAM_SEEK_TO_END );
@@ -2361,6 +2458,32 @@ void SAL_CALL SfxBaseModel::removeEventListener( const uno::Reference< XDOCEVENT
     m_pData->m_aInterfaceContainer.removeInterface( ::getCppuType((const uno::Reference< XDOCEVENTLISTENER >*)0), aListener );
 }
 
+//--------------------------------------------------------------------------------------------------------
+//  XDocumentEventBroadcaster
+//--------------------------------------------------------------------------------------------------------
+// ---------------------------------
+void SAL_CALL SfxBaseModel::addDocumentEventListener( const uno::Reference< document::XDocumentEventListener >& aListener )
+    throw ( uno::RuntimeException )
+{
+    SfxModelGuard aGuard( *this, SfxModelGuard::E_INITIALIZING );
+    m_pData->m_aInterfaceContainer.addInterface( ::getCppuType((const uno::Reference< document::XDocumentEventListener >*)0), aListener );
+}
+
+// ---------------------------------
+void SAL_CALL SfxBaseModel::removeDocumentEventListener( const uno::Reference< document::XDocumentEventListener >& aListener )
+    throw ( uno::RuntimeException )
+{
+    SfxModelGuard aGuard( *this );
+    m_pData->m_aInterfaceContainer.removeInterface( ::getCppuType((const uno::Reference< document::XDocumentEventListener >*)0), aListener );
+}
+
+// ---------------------------------
+void SAL_CALL SfxBaseModel::notifyDocumentEvent( const ::rtl::OUString&, const uno::Reference< frame::XController2 >&, const uno::Any& )
+    throw ( lang::IllegalArgumentException, lang::NoSupportException, uno::RuntimeException )
+{
+    throw lang::NoSupportException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SfxBaseModel controlls all the sent notifications itself!" ) ), uno::Reference< uno::XInterface >() );
+}
+
 //________________________________________________________________________________________________________
 //  SfxListener
 //________________________________________________________________________________________________________
@@ -2499,7 +2622,9 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
             break;
             }
 
-            postEvent_Impl( pNamedHint->GetEventName() );
+
+            SfxViewEventHint* pViewHint = PTR_CAST( SfxViewEventHint, &rHint );
+            postEvent_Impl( pNamedHint->GetEventName(), pViewHint ? pViewHint->GetController() : uno::Reference< frame::XController2 >() );
         }
 
         if ( pSimpleHint )
@@ -2574,11 +2699,6 @@ SfxObjectShell* SfxBaseModel::impl_getObjectShell() const
 //  public impl.
 //________________________________________________________________________________________________________
 
-sal_Bool SfxBaseModel::IsDisposed() const
-{
-    return ( m_pData == NULL ) ;
-}
-
 sal_Bool SfxBaseModel::IsInitialized() const
 {
     if ( !m_pData || !m_pData->m_pObjectShell )
@@ -2588,6 +2708,14 @@ sal_Bool SfxBaseModel::IsInitialized() const
     }
 
     return m_pData->m_pObjectShell->GetMedium() != NULL;
+}
+
+void SfxBaseModel::MethodEntryCheck( const bool i_mustBeInitialized ) const
+{
+    if ( impl_isDisposed() )
+        throw ::com::sun::star::lang::DisposedException( ::rtl::OUString(), *const_cast< SfxBaseModel* >( this ) );
+    if ( i_mustBeInitialized && !IsInitialized() )
+        throw ::com::sun::star::lang::NotInitializedException( ::rtl::OUString(), *const_cast< SfxBaseModel* >( this ) );
 }
 
 sal_Bool SfxBaseModel::impl_isDisposed() const
@@ -2640,48 +2768,40 @@ void SfxBaseModel::impl_store(  const   ::rtl::OUString&                   sURL 
                     aArgHash.erase( aFilterString );
                     aArgHash.erase( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) ) );
 
-                    // if the password is changed SaveAs should be done
-                    // no password for encrypted document is also a change here
-                    sal_Bool bPassChanged = sal_False;
-
-                    ::comphelper::SequenceAsHashMap::iterator aNewPassIter
-                        = aArgHash.find( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Password" ) ) );
-                    SFX_ITEMSET_ARG( pMedium->GetItemSet(), pPasswordItem, SfxStringItem, SID_PASSWORD, sal_False );
-                    if ( pPasswordItem && aNewPassIter != aArgHash.end() )
+                    try
                     {
-                        ::rtl::OUString aNewPass;
-                        aNewPassIter->second >>= aNewPass;
-                        bPassChanged = !aNewPass.equals( pPasswordItem->GetValue() );
+                        storeSelf( aArgHash.getAsConstPropertyValueList() );
+                        bSaved = sal_True;
                     }
-                    else if ( pPasswordItem || aNewPassIter != aArgHash.end() )
-                        bPassChanged = sal_True;
-
-                    if ( !bPassChanged )
+                    catch( const lang::IllegalArgumentException& )
                     {
-                        try
+                        // some additional arguments do not allow to use saving, SaveAs should be done
+                        // but only for normal documents, the shared documents would be overwritten in this case
+                        // that would mean an information loss
+                        // TODO/LATER: need a new interaction for this case
+                        if ( m_pData->m_pObjectShell->IsDocShared() )
                         {
-                            storeSelf( aArgHash.getAsConstPropertyValueList() );
-                            bSaved = sal_True;
-                        }
-                        catch( const lang::IllegalArgumentException& )
-                        {
-                            // some additional arguments do not allow to use saving, SaveAs should be done
-                            // but only for normal documents, the shared documents would be overwritten in this case
-                            // that would mean an information loss
-                            // TODO/LATER: need a new interaction for this case
-                            if ( m_pData->m_pObjectShell->IsDocShared() )
-                            {
-                                m_pData->m_pObjectShell->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Can't store shared document!" ) ) );
-                                m_pData->m_pObjectShell->StoreLog();
+                            m_pData->m_pObjectShell->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Can't store shared document!" ) ) );
+                            m_pData->m_pObjectShell->StoreLog();
 
+                            uno::Sequence< beans::NamedValue > aNewEncryptionData = aArgHash.getUnpackedValueOrDefault( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "EncryptionData" ) ), uno::Sequence< beans::NamedValue >() );
+                            if ( !aNewEncryptionData.getLength() )
+                            {
+                                ::rtl::OUString aNewPassword = aArgHash.getUnpackedValueOrDefault( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Password" ) ), ::rtl::OUString() );
+                                aNewEncryptionData = ::comphelper::OStorageHelper::CreatePackageEncryptionData( aNewPassword );
+                            }
+
+                            uno::Sequence< beans::NamedValue > aOldEncryptionData;
+                            GetEncryptionData_Impl( pMedium->GetItemSet(), aOldEncryptionData );
+
+                            if ( !aOldEncryptionData.getLength() && !aNewEncryptionData.getLength() )
                                 throw;
+                            else
+                            {
+                                // if the password is changed a special error should be used in case of shared document
+                                throw task::ErrorCodeIOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Cant change password for shared document." ) ), uno::Reference< uno::XInterface >(), ERRCODE_SFX_SHARED_NOPASSWORDCHANGE );
                             }
                         }
-                    }
-                    else if ( m_pData->m_pObjectShell->IsDocShared() )
-                    {
-                        // if the password is changed a special error should be used in case of shared document
-                        throw task::ErrorCodeIOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Cant change password for shared document." ) ), uno::Reference< uno::XInterface >(), ERRCODE_SFX_SHARED_NOPASSWORDCHANGE );
                     }
                 }
             }
@@ -2839,8 +2959,32 @@ void SfxBaseModel::impl_store(  const   ::rtl::OUString&                   sURL 
 }
 
 //********************************************************************************************************
+namespace {
+template< typename ListenerT, typename EventT >
+class NotifySingleListenerIgnoreRE
+{
+private:
+    typedef void ( SAL_CALL ListenerT::*NotificationMethod )( const EventT& );
+    NotificationMethod  m_pMethod;
+    const EventT&       m_rEvent;
+public:
+    NotifySingleListenerIgnoreRE( NotificationMethod method, const EventT& event ) : m_pMethod( method ), m_rEvent( event ) { }
 
-void SfxBaseModel::postEvent_Impl( ::rtl::OUString aName )
+    void operator()( const uno::Reference<ListenerT>& listener ) const
+    {
+        try
+        {
+            (listener.get()->*m_pMethod)( m_rEvent );
+        }
+        catch( uno::RuntimeException& )
+        {
+            // this exception is ignored to avoid problems with invalid listeners, the listener should be probably thrown away in future
+        }
+    }
+};
+} // anonymous namespace
+
+void SfxBaseModel::postEvent_Impl( const ::rtl::OUString& aName, const uno::Reference< frame::XController2 >& xController )
 {
     // object already disposed?
     if ( impl_isDisposed() )
@@ -2850,34 +2994,41 @@ void SfxBaseModel::postEvent_Impl( ::rtl::OUString aName )
     if (!aName.getLength())
         return;
 
-    ::cppu::OInterfaceContainerHelper* pIC = m_pData->m_aInterfaceContainer.getContainer(
-                                        ::getCppuType((const uno::Reference< XDOCEVENTLISTENER >*)0) );
-    if( pIC )
-
+    ::cppu::OInterfaceContainerHelper* pIC =
+        m_pData->m_aInterfaceContainer.getContainer( ::getCppuType( (const uno::Reference< document::XDocumentEventListener >*)0 ) );
+    if ( pIC )
     {
 #ifdef DBG_UTIL
-        ByteString aTmp( "SfxEvent: ");
+        ByteString aTmp( "SfxDocumentEvent: " );
         aTmp += ByteString( String(aName), RTL_TEXTENCODING_UTF8 );
         DBG_TRACE( aTmp.GetBuffer() );
 #endif
-        document::EventObject aEvent( (frame::XModel *)this, aName );
-        ::cppu::OInterfaceContainerHelper aIC( m_aMutex );
-        uno::Sequence < uno::Reference < uno::XInterface > > aElements = pIC->getElements();
-        for ( sal_Int32 nElem=0; nElem<aElements.getLength(); nElem++ )
-            aIC.addInterface( aElements[nElem] );
-        ::cppu::OInterfaceIteratorHelper aIt( aIC );
-        while( aIt.hasMoreElements() )
-        {
-            try
-            {
-                ((XDOCEVENTLISTENER *)aIt.next())->notifyEvent( aEvent );
-            }
-            catch( uno::RuntimeException& )
-            {
-                aIt.remove();
-            }
-        }
+
+        document::DocumentEvent aDocumentEvent( (frame::XModel*)this, aName, xController, uno::Any() );
+
+        pIC->forEach< document::XDocumentEventListener, NotifySingleListenerIgnoreRE< document::XDocumentEventListener, document::DocumentEvent > >(
+            NotifySingleListenerIgnoreRE< document::XDocumentEventListener, document::DocumentEvent >(
+                &document::XDocumentEventListener::documentEventOccured,
+                aDocumentEvent ) );
     }
+
+    pIC = m_pData->m_aInterfaceContainer.getContainer( ::getCppuType( (const uno::Reference< document::XEventListener >*)0 ) );
+    if ( pIC )
+    {
+#ifdef DBG_UTIL
+        ByteString aTmp( "SfxEvent: " );
+        aTmp += ByteString( String(aName), RTL_TEXTENCODING_UTF8 );
+        DBG_TRACE( aTmp.GetBuffer() );
+#endif
+
+        document::EventObject aEvent( (frame::XModel*)this, aName );
+
+        pIC->forEach< document::XEventListener, NotifySingleListenerIgnoreRE< document::XEventListener, document::EventObject > >(
+            NotifySingleListenerIgnoreRE< document::XEventListener, document::EventObject >(
+                &document::XEventListener::notifyEvent,
+                aEvent ) );
+    }
+
 }
 
 uno::Reference < container::XIndexAccess > SAL_CALL SfxBaseModel::getViewData() throw(::com::sun::star::uno::RuntimeException)
@@ -2912,7 +3063,7 @@ uno::Reference < container::XIndexAccess > SAL_CALL SfxBaseModel::getViewData() 
         for ( SfxViewFrame *pFrame = SfxViewFrame::GetFirst( m_pData->m_pObjectShell ); pFrame;
                 pFrame = SfxViewFrame::GetNext( *pFrame, m_pData->m_pObjectShell ) )
         {
-            BOOL bIsActive = ( pFrame == pActFrame );
+            sal_Bool bIsActive = ( pFrame == pActFrame );
             pFrame->GetViewShell()->WriteUserDataSequence( aSeq );
             aAny <<= aSeq;
             xCont->insertByIndex( bIsActive ? 0 : nCount, aAny );
@@ -3179,7 +3330,7 @@ static void ConvertSlotsToCommands( SfxObjectShell* pDoc, uno::Reference< contai
                     rtl::OUString aSlot( aCommand.copy( 5 ));
 
                     // We have to replace the old "slot-Command" with our new ".uno:-Command"
-                    const SfxSlot* pSlot = pModule->GetSlotPool()->GetSlot( USHORT( aSlot.toInt32() ));
+                    const SfxSlot* pSlot = pModule->GetSlotPool()->GetSlot( sal_uInt16( aSlot.toInt32() ));
                     if ( pSlot )
                     {
                         rtl::OUStringBuffer aStrBuf( aUnoCmd );
@@ -3250,7 +3401,7 @@ uno::Reference< ui::XUIConfigurationManager > SAL_CALL SfxBaseModel::getUIConfig
                     uno::Reference< lang::XMultiServiceFactory > xServiceMgr( ::comphelper::getProcessServiceFactory() );
                     uno::Sequence< uno::Reference< container::XIndexContainer > > rToolbars;
 
-                    sal_Bool bImported = UIConfigurationImporterOOo1x::ImportCustomToolbars(
+                    sal_Bool bImported = framework::UIConfigurationImporterOOo1x::ImportCustomToolbars(
                                             xNewUIConfMan, rToolbars, xServiceMgr, xOOo1ConfigStorage );
                     if ( bImported )
                     {
@@ -3414,12 +3565,12 @@ void SAL_CALL SfxBaseModel::loadFromStorage( const uno::Reference< XSTORAGE >& x
     pMedium->GetItemSet()->Put( aSet );
 
     // allow to use an interactionhandler (if there is one)
-    pMedium->UseInteractionHandler( TRUE );
+    pMedium->UseInteractionHandler( sal_True );
 
     SFX_ITEMSET_ARG( &aSet, pTemplateItem, SfxBoolItem, SID_TEMPLATE, sal_False);
-    BOOL bTemplate = pTemplateItem && pTemplateItem->GetValue();
+    sal_Bool bTemplate = pTemplateItem && pTemplateItem->GetValue();
     m_pData->m_pObjectShell->SetActivateEvent_Impl( bTemplate ? SFX_EVENT_CREATEDOC : SFX_EVENT_OPENDOC );
-    m_pData->m_pObjectShell->Get_Impl()->bOwnsStorage = FALSE;
+    m_pData->m_pObjectShell->Get_Impl()->bOwnsStorage = sal_False;
 
     // load document
     if ( !m_pData->m_pObjectShell->DoLoad(pMedium) )
@@ -3472,11 +3623,11 @@ void SAL_CALL SfxBaseModel::storeToStorage( const uno::Reference< XSTORAGE >& xS
 
         // BaseURL is part of the ItemSet
         SfxMedium aMedium( xStorage, String(), &aSet );
-        aMedium.CanDisposeStorage_Impl( FALSE );
+        aMedium.CanDisposeStorage_Impl( sal_False );
         if ( aMedium.GetFilter() )
         {
             // storing without a valid filter will often crash
-            bSuccess = m_pData->m_pObjectShell->DoSaveObjectAs( aMedium, TRUE );
+            bSuccess = m_pData->m_pObjectShell->DoSaveObjectAs( aMedium, sal_True );
             m_pData->m_pObjectShell->DoSaveCompleted( NULL );
         }
     }
@@ -3646,7 +3797,7 @@ css::uno::Reference< css::frame::XUntitledNumbers > SfxBaseModel::impl_getUntitl
     SfxModelGuard aGuard( *this );
 
     ::rtl::OUString aResult = impl_getTitleHelper()->getTitle ();
-    if ( m_pData->m_pObjectShell )
+    if ( !m_pData->m_bExternalTitle && m_pData->m_pObjectShell )
     {
         SfxMedium* pMedium = m_pData->m_pObjectShell->GetMedium();
         if ( pMedium )
@@ -3656,7 +3807,7 @@ css::uno::Reference< css::frame::XUntitledNumbers > SfxBaseModel::impl_getUntitl
                 aResult += String( SfxResId(STR_REPAIREDDOCUMENT) );
         }
 
-        if ( m_pData->m_pObjectShell->IsReadOnlyUI() || (m_pData->m_pObjectShell->GetMedium() && m_pData->m_pObjectShell->GetMedium()->IsReadOnly()) )
+        if ( m_pData->m_pObjectShell->IsReadOnlyUI() || (pMedium && pMedium->IsReadOnly()) )
             aResult += ::rtl::OUString( String( SfxResId(STR_READONLY) ) );
         else if ( m_pData->m_pObjectShell->IsDocShared() )
             aResult += ::rtl::OUString( String( SfxResId(STR_SHARED) ) );
@@ -3677,6 +3828,7 @@ void SAL_CALL SfxBaseModel::setTitle( const ::rtl::OUString& sTitle )
     SfxModelGuard aGuard( *this );
 
     impl_getTitleHelper()->setTitle (sTitle);
+    m_pData->m_bExternalTitle = sal_True;
 }
 
 //=============================================================================
@@ -3848,9 +4000,9 @@ namespace sfx { namespace intern {
 SfxViewFrame* SfxBaseModel::FindOrCreateViewFrame_Impl( const Reference< XFrame >& i_rFrame, ::sfx::intern::ViewCreationGuard& i_rGuard ) const
 {
     SfxViewFrame* pViewFrame = NULL;
-    for (   pViewFrame = SfxViewFrame::GetFirst( GetObjectShell(), FALSE );
+    for (   pViewFrame = SfxViewFrame::GetFirst( GetObjectShell(), sal_False );
             pViewFrame;
-            pViewFrame= SfxViewFrame::GetNext( *pViewFrame, GetObjectShell(), FALSE )
+            pViewFrame= SfxViewFrame::GetNext( *pViewFrame, GetObjectShell(), sal_False )
         )
     {
         if ( pViewFrame->GetFrame().GetFrameInterface() == i_rFrame )
@@ -3957,18 +4109,18 @@ css::uno::Reference< css::frame::XController2 > SAL_CALL SfxBaseModel::createVie
     // some initial view settings, coming from our most recent attachResource call
     ::comphelper::NamedValueCollection aDocumentLoadArgs( getArgs() );
     if ( aDocumentLoadArgs.getOrDefault( "ViewOnly", false ) )
-        pViewFrame->GetFrame().SetMenuBarOn_Impl( FALSE );
+        pViewFrame->GetFrame().SetMenuBarOn_Impl( sal_False );
 
     const sal_Int16 nPluginMode = aDocumentLoadArgs.getOrDefault( "PluginMode", sal_Int16( 0 ) );
     if ( nPluginMode == 1 )
     {
-        pViewFrame->ForceOuterResize_Impl( FALSE );
-        pViewFrame->GetBindings().HidePopups( TRUE );
+        pViewFrame->ForceOuterResize_Impl( sal_False );
+        pViewFrame->GetBindings().HidePopups( sal_True );
 
         SfxFrame& rFrame = pViewFrame->GetFrame();
         // MBA: layoutmanager of inplace frame starts locked and invisible
-        rFrame.GetWorkWindow_Impl()->MakeVisible_Impl( FALSE );
-        rFrame.GetWorkWindow_Impl()->Lock_Impl( TRUE );
+        rFrame.GetWorkWindow_Impl()->MakeVisible_Impl( sal_False );
+        rFrame.GetWorkWindow_Impl()->Lock_Impl( sal_True );
 
         rFrame.GetWindow().SetBorderStyle( WINDOW_BORDER_NOBORDER );
         pViewFrame->GetWindow().SetBorderStyle( WINDOW_BORDER_NOBORDER );
@@ -4268,6 +4420,19 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     }
 
     return xDMA->storeMetadataToMedium(i_rMedium);
+}
+
+// =====================================================================================================================
+// = SfxModelSubComponent
+// =====================================================================================================================
+
+SfxModelSubComponent::~SfxModelSubComponent()
+{
+}
+
+void SfxModelSubComponent::disposing()
+{
+    // nothing to do here
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

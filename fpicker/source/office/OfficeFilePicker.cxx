@@ -476,7 +476,7 @@ sal_Int16 SvtFilePicker::implExecutePicker( )
 
     prepareExecute();
 
-    getDialog()->EnableAutocompletion( TRUE );
+    getDialog()->EnableAutocompletion( sal_True );
     // now we are ready to execute the dialog
     sal_Int16 nRet = getDialog()->Execute();
 
@@ -548,7 +548,7 @@ void SAL_CALL SvtFilePicker::startExecuteModal( const Reference< ::com::sun::sta
     m_xDlgClosedListener = xListener;
     prepareDialog();
     prepareExecute();
-    getDialog()->EnableAutocompletion( TRUE );
+    getDialog()->EnableAutocompletion( sal_True );
     getDialog()->StartExecuteModal( LINK( this, SvtFilePicker, DialogClosedHdl ) );
 }
 
@@ -624,8 +624,8 @@ Sequence< rtl::OUString > SAL_CALL SvtFilePicker::getFiles() throw( RuntimeExcep
     // files first and then the list of the selected entries
 
     SvStringsDtor* pPathList = getDialog()->GetPathList();
-    USHORT i, nCount = pPathList->Count();
-    USHORT nTotal = nCount > 1 ? nCount+1: nCount;
+    sal_uInt16 i, nCount = pPathList->Count();
+    sal_uInt16 nTotal = nCount > 1 ? nCount+1: nCount;
 
     Sequence< rtl::OUString > aPath( nTotal );
 

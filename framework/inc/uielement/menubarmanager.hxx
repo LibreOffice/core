@@ -73,7 +73,7 @@
 #include <toolkit/awt/vclxmenu.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
-#include <classes/addonsoptions.hxx>
+#include <framework/addonsoptions.hxx>
 
 namespace framework
 {
@@ -164,11 +164,11 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
         Menu*   GetMenuBar() const { return m_pVCLMenu; }
 
         // Configuration methods
-        static void FillMenuWithConfiguration( USHORT& nId, Menu* pMenu,
+        static void FillMenuWithConfiguration( sal_uInt16& nId, Menu* pMenu,
                                                const ::rtl::OUString& rModuleIdentifier,
                                                const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& rItemContainer,
                                                const ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer >& rTransformer );
-        static void FillMenu( USHORT& nId,
+        static void FillMenu( sal_uInt16& nId,
                               Menu* pMenu,
                               const ::rtl::OUString& rModuleIdentifier,
                               const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& rItemContainer,
@@ -203,7 +203,7 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
 
         struct MenuItemHandler
         {
-            MenuItemHandler( USHORT             aItemId,
+            MenuItemHandler( sal_uInt16             aItemId,
                              ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& xManager,
                              ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >& rDispatch ) :
                              nItemId( aItemId ),
@@ -211,7 +211,7 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
                              xSubMenuManager( xManager ),
                              xMenuItemDispatch( rDispatch ) {}
 
-            USHORT                                                                                      nItemId;
+            sal_uInt16                                                                                      nItemId;
             sal_Bool                                                                                    bCheckHide;
             ::rtl::OUString                                                                             aTargetFrame;
             ::rtl::OUString                                                                             aMenuItemURL;
@@ -235,10 +235,10 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
                                                                   std::vector< MenuItemHandler* >& aMenuShortCuts );
         static void      MergeAddonMenus( Menu* pMenuBar, const MergeMenuInstructionContainer&, const ::rtl::OUString& aModuleIdentifier );
 
-        MenuItemHandler* GetMenuItemHandler( USHORT nItemId );
+        MenuItemHandler* GetMenuItemHandler( sal_uInt16 nItemId );
         sal_Bool         CreatePopupMenuController( MenuItemHandler* pMenuItemHandler );
-        void             AddMenu(MenuBarManager* pSubMenuManager,const ::rtl::OUString& _sItemCommand,USHORT _nItemId);
-        USHORT           FillItemCommand(::rtl::OUString& _rItemCommand,Menu* _pMenu,USHORT _nIndex) const;
+        void             AddMenu(MenuBarManager* pSubMenuManager,const ::rtl::OUString& _sItemCommand,sal_uInt16 _nItemId);
+        sal_uInt16           FillItemCommand(::rtl::OUString& _rItemCommand,Menu* _pMenu,sal_uInt16 _nIndex) const;
         void             Init(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,AddonMenu* pAddonMenu,sal_Bool bDelete,sal_Bool bDeleteChildren,bool _bHandlePopUp = false);
         void             SetHdl();
 

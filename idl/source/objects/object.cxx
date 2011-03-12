@@ -46,7 +46,7 @@ SvClassElement::SvClassElement()
 
 void SvClassElement::Load( SvPersistStream & rStm )
 {
-    BYTE nMask;
+    sal_uInt8 nMask;
     rStm >> nMask;
     if( nMask >= 0x08 )
     {
@@ -67,7 +67,7 @@ void SvClassElement::Load( SvPersistStream & rStm )
 void SvClassElement::Save( SvPersistStream & rStm )
 {
     // create mask
-    BYTE nMask = 0;
+    sal_uInt8 nMask = 0;
     if( aAutomation.IsSet() )       nMask |= 0x1;
     if( aPrefix.Len() )             nMask |= 0x2;
     if( xClass.Is() )               nMask |= 0x4;
@@ -81,7 +81,7 @@ void SvClassElement::Save( SvPersistStream & rStm )
 
 SV_IMPL_META_FACTORY1( SvMetaClass, SvMetaType );
 SvMetaClass::SvMetaClass()
-    : aAutomation( TRUE, FALSE )
+    : aAutomation( sal_True, sal_False )
 {
 }
 
@@ -89,7 +89,7 @@ void SvMetaClass::Load( SvPersistStream & rStm )
 {
     SvMetaType::Load( rStm );
 
-    BYTE nMask;
+    sal_uInt8 nMask;
     rStm >> nMask;
     if( nMask >= 0x20 )
     {
@@ -119,7 +119,7 @@ void SvMetaClass::Save( SvPersistStream & rStm )
     SvMetaType::Save( rStm );
 
     // create mask
-    BYTE nMask = 0;
+    sal_uInt8 nMask = 0;
     if( aAttrList.Count() )         nMask |= 0x1;
     if( aSuperClass.Is() )          nMask |= 0x2;
     if( aClassList.Count() )        nMask |= 0x4;
@@ -144,7 +144,7 @@ void SvMetaClass::ReadAttributesSvIdl( SvIdlDataBase & rBase,
 }
 
 void SvMetaClass::WriteAttributesSvIdl( SvIdlDataBase & rBase,
-                                 SvStream & rOutStm, USHORT nTab )
+                                 SvStream & rOutStm, sal_uInt16 nTab )
 {
     SvMetaType::WriteAttributesSvIdl( rBase, rOutStm, nTab );
 
@@ -164,7 +164,7 @@ void SvMetaClass::WriteAttributesSvIdl( SvIdlDataBase & rBase,
 void SvMetaClass::ReadContextSvIdl( SvIdlDataBase & rBase,
                                     SvTokenStream & rInStm )
 {
-    UINT32  nTokPos = rInStm.Tell();
+    sal_uInt32  nTokPos = rInStm.Tell();
     SvToken * pTok = rInStm.GetToken_Next();
 
     if( pTok->Is( SvHash_import() ) )
@@ -191,7 +191,7 @@ void SvMetaClass::ReadContextSvIdl( SvIdlDataBase & rBase,
                             rBase.WriteError( rInStm );
                         }
                         xAutomationInterface = pClass;
-                        xEle->SetAutomation( TRUE );
+                        xEle->SetAutomation( sal_True );
                     }
                     else
                     {
@@ -228,7 +228,7 @@ void SvMetaClass::ReadContextSvIdl( SvIdlDataBase & rBase,
         rInStm.Seek( nTokPos );
         SvMetaType * pType = rBase.ReadKnownType( rInStm );
 
-        BOOL bOk = FALSE;
+        sal_Bool bOk = sal_False;
         SvMetaAttributeRef xAttr;
         if( !pType || pType->IsItem() )
         {
@@ -264,10 +264,10 @@ void SvMetaClass::WriteContextSvIdl
 (
     SvIdlDataBase & rBase,
     SvStream & rOutStm,
-    USHORT nTab
+    sal_uInt16 nTab
 )
 {
-    ULONG n;
+    sal_uLong n;
     for( n = 0; n < aAttrList.Count(); n++ )
     {
         WriteTab( rOutStm, nTab );
@@ -289,12 +289,12 @@ void SvMetaClass::WriteContextSvIdl
     }
 }
 
-BOOL SvMetaClass::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
+sal_Bool SvMetaClass::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
 {
-    ULONG nTokPos = rInStm.Tell();
+    sal_uLong nTokPos = rInStm.Tell();
     if( SvMetaType::ReadHeaderSvIdl( rBase, rInStm ) && GetType() == TYPE_CLASS )
     {
-        BOOL bOk = TRUE;
+        sal_Bool bOk = sal_True;
         if( rInStm.Read( ':' ) )
         {
             aSuperClass = rBase.ReadKnownClass( rInStm );
@@ -316,10 +316,10 @@ BOOL SvMetaClass::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
             return bOk;
     }
     rInStm.Seek( nTokPos );
-    return FALSE;
+    return sal_False;
 }
 
-BOOL SvMetaClass::TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInStm,
+sal_Bool SvMetaClass::TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInStm,
                                  SvMetaAttribute & rAttr ) const
 {
     if ( !rAttr.GetRef() && rAttr.IsA( TYPE( SvMetaSlot ) ) )
@@ -328,7 +328,7 @@ BOOL SvMetaClass::TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInStm,
         DBG_ERROR( rAttr.GetSlotId().GetBuffer() );
     }
 
-    for( ULONG n = 0; n < aAttrList.Count(); n++ )
+    for( sal_uLong n = 0; n < aAttrList.Count(); n++ )
     {
         SvMetaAttribute * pS = aAttrList.GetObject( n );
         if( pS->GetName() == rAttr.GetName() )
@@ -346,13 +346,13 @@ BOOL SvMetaClass::TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInStm,
                 aStr += " with different id's";
                 rBase.SetError( aStr, rInStm.GetToken() );
                 rBase.WriteError( rInStm );
-                return FALSE;
+                return sal_False;
              }
         }
         else
         {
-            UINT32 nId1 = pS->GetSlotId().GetValue();
-            UINT32 nId2 = rAttr.GetSlotId().GetValue();
+            sal_uInt32 nId1 = pS->GetSlotId().GetValue();
+            sal_uInt32 nId2 = rAttr.GetSlotId().GetValue();
             if( nId1 == nId2 && nId1 != 0 )
             {
                 OSL_FAIL( "Gleiche Id in MetaClass : " );
@@ -367,18 +367,18 @@ BOOL SvMetaClass::TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInStm,
                 aStr += " with equal id's";
                 rBase.SetError( aStr, rInStm.GetToken() );
                 rBase.WriteError( rInStm );
-                return FALSE;
+                return sal_False;
              }
         }
     }
     SvMetaClass * pSC = aSuperClass;
     if( pSC )
         return pSC->TestAttribute( rBase, rInStm, rAttr );
-    return TRUE;
+    return sal_True;
 }
 
 void SvMetaClass::WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm,
-                              USHORT nTab )
+                              sal_uInt16 nTab )
 {
     WriteHeaderSvIdl( rBase, rOutStm, nTab );
     if( aSuperClass.Is() )
@@ -389,7 +389,7 @@ void SvMetaClass::WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm,
 }
 
 void SvMetaClass::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
-                        USHORT nTab,
+                        sal_uInt16 nTab,
                          WriteType nT, WriteAttribute )
 {
     rBase.aIFaceName = GetName();
@@ -417,7 +417,7 @@ void SvMetaClass::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
             rOutStm << "</INTERFACE>" << endl << endl;
 
             // write all attributes
-            ULONG n;
+            sal_uLong n;
             for( n = 0; n < aAttrList.Count(); n++ )
             {
                 SvMetaAttribute * pAttr = aAttrList.GetObject( n );
@@ -438,12 +438,12 @@ void SvMetaClass::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
     }
 }
 
-USHORT SvMetaClass::WriteSlotParamArray( SvIdlDataBase & rBase,
+sal_uInt16 SvMetaClass::WriteSlotParamArray( SvIdlDataBase & rBase,
                                         SvSlotElementList & rSlotList,
                                         SvStream & rOutStm )
 {
-    USHORT nCount = 0;
-    for( ULONG n = 0; n < rSlotList.Count(); n++ )
+    sal_uInt16 nCount = 0;
+    for( sal_uLong n = 0; n < rSlotList.Count(); n++ )
     {
         SvSlotElement *pEle = rSlotList.GetObject( n );
         SvMetaSlot *pAttr = pEle->xSlot;
@@ -453,13 +453,13 @@ USHORT SvMetaClass::WriteSlotParamArray( SvIdlDataBase & rBase,
     return nCount;
 }
 
-USHORT SvMetaClass::WriteSlots( const ByteString & rShellName,
-                                USHORT nCount, SvSlotElementList & rSlotList,
+sal_uInt16 SvMetaClass::WriteSlots( const ByteString & rShellName,
+                                sal_uInt16 nCount, SvSlotElementList & rSlotList,
                                 SvIdlDataBase & rBase,
                                 SvStream & rOutStm )
 {
-    USHORT nSCount = 0;
-    for( ULONG n = 0; n < rSlotList.Count(); n++ )
+    sal_uInt16 nSCount = 0;
+    for( sal_uLong n = 0; n < rSlotList.Count(); n++ )
     {
         rSlotList.Seek(n);
         SvSlotElement * pEle = rSlotList.GetCurObject();
@@ -472,7 +472,7 @@ USHORT SvMetaClass::WriteSlots( const ByteString & rShellName,
     return nSCount;
 }
 
-void SvMetaClass::InsertSlots( SvSlotElementList& rList, std::vector<ULONG>& rSuperList,
+void SvMetaClass::InsertSlots( SvSlotElementList& rList, std::vector<sal_uLong>& rSuperList,
                             SvMetaClassList &rClassList,
                             const ByteString & rPrefix, SvIdlDataBase& rBase)
 {
@@ -484,14 +484,14 @@ void SvMetaClass::InsertSlots( SvSlotElementList& rList, std::vector<ULONG>& rSu
     rClassList.push_back( this );
 
     // write all direct attributes
-    ULONG n;
+    sal_uLong n;
     for( n = 0; n < aAttrList.Count(); n++ )
     {
         SvMetaAttribute * pAttr = aAttrList.GetObject( n );
 
-        ULONG nId = pAttr->GetSlotId().GetValue();
+        sal_uLong nId = pAttr->GetSlotId().GetValue();
 
-        std::vector<ULONG>::iterator iter = std::find(rSuperList.begin(),
+        std::vector<sal_uLong>::iterator iter = std::find(rSuperList.begin(),
                                                       rSuperList.end(),nId);
 
         if( iter == rSuperList.end() )
@@ -542,7 +542,7 @@ void SvMetaClass::FillClasses( SvMetaClassList & rList )
     rList.push_back( this );
 
     // my imports
-    for( ULONG n = 0; n < aClassList.Count(); n++ )
+    for( sal_uInt32 n = 0; n < aClassList.Count(); n++ )
     {
         SvClassElement * pEle = aClassList.GetObject( n );
         SvMetaClass * pCl = pEle->GetClass();
@@ -561,7 +561,7 @@ void SvMetaClass::WriteSlotStubs( const ByteString & rShellName,
                                 SvStream & rOutStm )
 {
     // write all attributes
-    for( ULONG n = 0; n < rSlotList.Count(); n++ )
+    for( sal_uLong n = 0; n < rSlotList.Count(); n++ )
     {
         SvSlotElement *pEle = rSlotList.GetObject( n );
         SvMetaSlot *pAttr = pEle->xSlot;
@@ -588,21 +588,21 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
     rOutStm << "SFX_ARGUMENTMAP(" << GetName().GetBuffer() << ')' << endl
         << '{' << endl;
 
-    std::vector<ULONG> aSuperList;
+    std::vector<sal_uLong> aSuperList;
     SvMetaClassList classList;
     SvSlotElementList aSlotList;
     InsertSlots(aSlotList, aSuperList, classList, ByteString(), rBase);
-    for (ULONG n=0; n<aSlotList.Count(); n++ )
+    for (sal_uInt32 n=0; n<aSlotList.Count(); n++ )
     {
         SvSlotElement *pEle = aSlotList.GetObject( n );
         SvMetaSlot *pSlot = pEle->xSlot;
         pSlot->SetListPos(n);
     }
 
-    ULONG nSlotCount = aSlotList.Count();
+    sal_uLong nSlotCount = aSlotList.Count();
 
     // write all attributes
-    USHORT nArgCount = WriteSlotParamArray( rBase, aSlotList, rOutStm );
+    sal_uInt16 nArgCount = WriteSlotParamArray( rBase, aSlotList, rOutStm );
     if( nArgCount )
         Back2Delemitter( rOutStm );
     else
@@ -641,7 +641,7 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
     }
     rOutStm << endl << "};" << endl << "#endif" << endl << endl;
 
-    for( ULONG n=0; n<aSlotList.Count(); n++ )
+    for( sal_uLong n=0; n<aSlotList.Count(); n++ )
     {
         aSlotList.Seek(n);
         SvSlotElement* pEle = aSlotList.GetCurObject();
@@ -649,14 +649,14 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
         pAttr->ResetSlotPointer();
     }
 
-    for ( ULONG n=0; n<aSlotList.Count(); n++ )
+    for ( sal_uLong n=0; n<aSlotList.Count(); n++ )
         delete aSlotList.GetObject(n);
 }
 
 void SvMetaClass::WriteHelpIds( SvIdlDataBase & rBase, SvStream & rOutStm,
                             Table* pTable )
 {
-    for( ULONG n=0; n<aAttrList.Count(); n++ )
+    for( sal_uLong n=0; n<aAttrList.Count(); n++ )
     {
         SvMetaAttribute * pAttr = aAttrList.GetObject( n );
         pAttr->WriteHelpId( rBase, rOutStm, pTable );
@@ -666,14 +666,14 @@ void SvMetaClass::WriteHelpIds( SvIdlDataBase & rBase, SvStream & rOutStm,
 void SvMetaClass::WriteSrc( SvIdlDataBase & rBase, SvStream & rOutStm,
                              Table * pTable )
 {
-    for( ULONG n=0; n<aAttrList.Count(); n++ )
+    for( sal_uLong n=0; n<aAttrList.Count(); n++ )
     {
         SvMetaAttribute * pAttr = aAttrList.GetObject( n );
         pAttr->WriteSrc( rBase, rOutStm, pTable );
     }
 }
 
-void SvMetaClass::WriteHxx( SvIdlDataBase &, SvStream & rOutStm, USHORT )
+void SvMetaClass::WriteHxx( SvIdlDataBase &, SvStream & rOutStm, sal_uInt16 )
 {
     ByteString aSuperName( "SvDispatch" );
     if( GetSuperClass() )
@@ -686,11 +686,11 @@ void SvMetaClass::WriteHxx( SvIdlDataBase &, SvStream & rOutStm, USHORT )
     << '{' << endl
     << "protected:" << endl
     << "\tvirtual SvGlobalName  GetTypeName() const;" << endl
-    << "\tvirtual BOOL          FillTypeLibInfo( SvGlobalName *, USHORT * pMajor," << endl
-    << "\t                                       USHORT * pMinor ) const;" << endl
-    << "\tvirtual BOOL          FillTypeLibInfo( ByteString * pName, USHORT * pMajor," << endl;
+    << "\tvirtual sal_Bool          FillTypeLibInfo( SvGlobalName *, sal_uInt16 * pMajor," << endl
+    << "\t                                       sal_uInt16 * pMinor ) const;" << endl
+    << "\tvirtual sal_Bool          FillTypeLibInfo( ByteString * pName, sal_uInt16 * pMajor," << endl;
     rOutStm
-    << "\t                                       USHORT * pMinor ) const;" << endl
+    << "\t                                       sal_uInt16 * pMinor ) const;" << endl
     << "\tvirtual void          Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) = 0;" << endl
     << "public:" << endl
     << "\t static SvGlobalName  ClassName()" << endl
@@ -698,7 +698,7 @@ void SvMetaClass::WriteHxx( SvIdlDataBase &, SvStream & rOutStm, USHORT )
     << "};" << endl;
 }
 
-void SvMetaClass::WriteCxx( SvIdlDataBase &, SvStream & rOutStm, USHORT )
+void SvMetaClass::WriteCxx( SvIdlDataBase &, SvStream & rOutStm, sal_uInt16 )
 {
     ByteString aSuperName( "SvDispatch" );
     if( GetSuperClass() )
@@ -714,26 +714,26 @@ void SvMetaClass::WriteCxx( SvIdlDataBase &, SvStream & rOutStm, USHORT )
 
     SvMetaModule * pMod = GetModule();
     // FillTypeLibInfo
-    rOutStm << "BOOL " << name.GetBuffer() << "::FillTypeLibInfo( SvGlobalName * pGN," << endl
-    << "\t                               USHORT * pMajor," << endl
-    << "\t                               USHORT * pMinor ) const" << endl
+    rOutStm << "sal_Bool " << name.GetBuffer() << "::FillTypeLibInfo( SvGlobalName * pGN," << endl
+    << "\t                               sal_uInt16 * pMajor," << endl
+    << "\t                               sal_uInt16 * pMinor ) const" << endl
     << '{' << endl
     << "\tSvGlobalName aN( " << ByteString( pMod->GetUUId().GetctorName(), RTL_TEXTENCODING_UTF8 ).GetBuffer() << " );" << endl;
     rOutStm << "\t*pGN = aN;" << endl
     << "\t*pMajor = " << ByteString::CreateFromInt32(pMod->GetVersion().GetMajorVersion()).GetBuffer() << ';' << endl
     << "\t*pMinor = " << ByteString::CreateFromInt32(pMod->GetVersion().GetMinorVersion()).GetBuffer() << ';' << endl
-    << "\treturn TRUE;" << endl
+    << "\treturn sal_True;" << endl
     << '}' << endl;
 
     // FillTypeLibInfo
-    rOutStm << "BOOL " << name.GetBuffer() << "::FillTypeLibInfo( ByteString * pName,"
-    << "\t                               USHORT * pMajor," << endl
-    << "\t                               USHORT * pMinor ) const" << endl;
+    rOutStm << "sal_Bool " << name.GetBuffer() << "::FillTypeLibInfo( ByteString * pName,"
+    << "\t                               sal_uInt16 * pMajor," << endl
+    << "\t                               sal_uInt16 * pMinor ) const" << endl;
     rOutStm << '{' << endl
     << "\t*pName = \"" << pMod->GetTypeLibFileName().GetBuffer()  << "\";" << endl
     << "\t*pMajor = " << ByteString::CreateFromInt32(pMod->GetVersion().GetMajorVersion()).GetBuffer() << ';' << endl
     << "\t*pMinor = " << ByteString::CreateFromInt32(pMod->GetVersion().GetMinorVersion()).GetBuffer() << ';' << endl
-    << "\treturn TRUE;" << endl
+    << "\treturn sal_True;" << endl
     << '}' << endl;
 
     rOutStm << "void " << name.GetBuffer() << "::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )" << endl

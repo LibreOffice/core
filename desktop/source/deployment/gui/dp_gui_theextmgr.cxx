@@ -166,7 +166,7 @@ void TheExtensionManager::SetText( const ::rtl::OUString &rTitle )
 }
 
 //------------------------------------------------------------------------------
-void TheExtensionManager::ToTop( USHORT nFlags )
+void TheExtensionManager::ToTop( sal_uInt16 nFlags )
 {
     const SolarMutexGuard guard;
 

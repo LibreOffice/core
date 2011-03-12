@@ -901,11 +901,6 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(const 
 }
 
 //---------------------------------------------------------------------------------------
-SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(void* serviceManager, com::sun::star::registry::XRegistryKey* registryKey)
-{
-    return cppu::component_writeInfoHelper(serviceManager, registryKey, entries);
-}
-//---------------------------------------------------------------------------------------
 SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(const sal_Char* implName, ::com::sun::star::lang::XMultiServiceFactory* serviceManager, void* registryKey)
 {
     return cppu::component_getFactoryHelper(implName, serviceManager, registryKey, entries);

@@ -35,13 +35,13 @@
 #include <svx/svdetc.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdpage.hxx>
-#include "svditer.hxx"
+#include "svx/svditer.hxx"
 #include <svx/svdpagv.hxx>
 #include <svx/svdopath.hxx> // zur Abschaltung
 #include <svx/svdogrp.hxx>  // des Cache bei
 #include <svx/svdorect.hxx> // GetMarkDescription
-#include "svdstr.hrc"   // Namen aus der Resource
-#include "svdglob.hxx"  // StringCache
+#include "svx/svdstr.hrc"   // Namen aus der Resource
+#include "svx/svdglob.hxx"  // StringCache
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <svx/obj3d.hxx>
@@ -75,7 +75,7 @@ void SdrUShortCont::Sort() const
     aSort.DoSort();
     ((SdrUShortCont*)this)->mbSorted = sal_True;
 
-    ULONG nNum(GetCount());
+    sal_uLong nNum(GetCount());
 
     if(nNum > 1)
     {
@@ -97,9 +97,9 @@ void SdrUShortCont::Sort() const
     }
 }
 
-void SdrUShortCont::CheckSort(ULONG nPos)
+void SdrUShortCont::CheckSort(sal_uLong nPos)
 {
-    ULONG nAnz(maArray.Count());
+    sal_uLong nAnz(maArray.Count());
 
     if(nPos > nAnz)
         nPos = nAnz;
@@ -344,7 +344,7 @@ int ImpSdrMarkListSorter::Compare(const void* pElem1, const void* pElem2) const
 
     if (pOL1 == pOL2)
     {
-        // AF: Note that I reverted a change from sal_uInt32 to ULONG (made
+        // AF: Note that I reverted a change from sal_uInt32 to sal_uLong (made
         // for 64bit compliance, #i78198#) because internally in SdrObject
         // both nOrdNum and mnNavigationPosition are stored as sal_uInt32.
         sal_uInt32 nObjOrd1((pObj1) ? pObj1->GetNavigationPosition() : 0);
@@ -373,7 +373,7 @@ void SdrMarkList::ImpForceSort()
     if(!mbSorted)
     {
         mbSorted = sal_True;
-        ULONG nAnz = maList.Count();
+        sal_uLong nAnz = maList.Count();
 
         // remove invalid
         if(nAnz > 0 )
@@ -432,7 +432,7 @@ void SdrMarkList::ImpForceSort()
 
 void SdrMarkList::Clear()
 {
-    for(ULONG i(0L); i < GetMarkCount(); i++)
+    for(sal_uLong i(0L); i < GetMarkCount(); i++)
     {
         SdrMark* pMark = GetMark(i);
         delete pMark;
@@ -446,7 +446,7 @@ void SdrMarkList::operator=(const SdrMarkList& rLst)
 {
     Clear();
 
-    for(ULONG i(0L); i < rLst.GetMarkCount(); i++)
+    for(sal_uLong i(0L); i < rLst.GetMarkCount(); i++)
     {
         SdrMark* pMark = rLst.GetMark(i);
         SdrMark* pNeuMark = new SdrMark(*pMark);
@@ -462,7 +462,7 @@ void SdrMarkList::operator=(const SdrMarkList& rLst)
     mbSorted = rLst.mbSorted;
 }
 
-ULONG SdrMarkList::FindObject(const SdrObject* pObj) const
+sal_uLong SdrMarkList::FindObject(const SdrObject* pObj) const
 {
     // #109658#
     //
@@ -477,7 +477,7 @@ ULONG SdrMarkList::FindObject(const SdrObject* pObj) const
     // less dangerous to change this method then changing SdrObject::GetOrdNum().
     if(pObj && maList.Count())
     {
-        for(ULONG a(0L); a < maList.Count(); a++)
+        for(sal_uLong a(0L); a < maList.Count(); a++)
         {
             if(((SdrMark*)(maList.GetObject(a)))->GetMarkedSdrObj() == pObj)
             {
@@ -492,7 +492,7 @@ ULONG SdrMarkList::FindObject(const SdrObject* pObj) const
 void SdrMarkList::InsertEntry(const SdrMark& rMark, sal_Bool bChkSort)
 {
     SetNameDirty();
-    ULONG nAnz(maList.Count());
+    sal_uLong nAnz(maList.Count());
 
     if(!bChkSort || !mbSorted || nAnz == 0)
     {
@@ -503,7 +503,7 @@ void SdrMarkList::InsertEntry(const SdrMark& rMark, sal_Bool bChkSort)
     }
     else
     {
-        SdrMark* pLast = GetMark(ULONG(nAnz - 1));
+        SdrMark* pLast = GetMark(sal_uLong(nAnz - 1));
         const SdrObject* pLastObj = pLast->GetMarkedSdrObj();
         const SdrObject* pNeuObj = rMark.GetMarkedSdrObj();
 
@@ -528,8 +528,8 @@ void SdrMarkList::InsertEntry(const SdrMark& rMark, sal_Bool bChkSort)
 
             if(pLastOL == pNeuOL)
             {
-                const ULONG nLastNum(pLastObj!=0L ? pLastObj->GetOrdNum() : 0);
-                const ULONG nNeuNum(pNeuObj !=0L ? pNeuObj ->GetOrdNum() : 0);
+                const sal_uLong nLastNum(pLastObj!=0L ? pLastObj->GetOrdNum() : 0);
+                const sal_uLong nNeuNum(pNeuObj !=0L ? pNeuObj ->GetOrdNum() : 0);
 
                 if(nNeuNum < nLastNum)
                 {
@@ -548,7 +548,7 @@ void SdrMarkList::InsertEntry(const SdrMark& rMark, sal_Bool bChkSort)
     return;
 }
 
-void SdrMarkList::DeleteMark(ULONG nNum)
+void SdrMarkList::DeleteMark(sal_uLong nNum)
 {
     SdrMark* pMark = GetMark(nNum);
     DBG_ASSERT(pMark!=0L,"DeleteMark: MarkEntry nicht gefunden");
@@ -561,7 +561,7 @@ void SdrMarkList::DeleteMark(ULONG nNum)
     }
 }
 
-void SdrMarkList::ReplaceMark(const SdrMark& rNewMark, ULONG nNum)
+void SdrMarkList::ReplaceMark(const SdrMark& rNewMark, sal_uLong nNum)
 {
     SdrMark* pMark = GetMark(nNum);
     DBG_ASSERT(pMark!=0L,"ReplaceMark: MarkEntry nicht gefunden");
@@ -578,7 +578,7 @@ void SdrMarkList::ReplaceMark(const SdrMark& rNewMark, ULONG nNum)
 
 void SdrMarkList::Merge(const SdrMarkList& rSrcList, sal_Bool bReverse)
 {
-    ULONG nAnz(rSrcList.maList.Count());
+    sal_uLong nAnz(rSrcList.maList.Count());
 
     if(rSrcList.mbSorted)
     {
@@ -588,7 +588,7 @@ void SdrMarkList::Merge(const SdrMarkList& rSrcList, sal_Bool bReverse)
 
     if(!bReverse)
     {
-        for(ULONG i(0L); i < nAnz; i++)
+        for(sal_uLong i(0L); i < nAnz; i++)
         {
             SdrMark* pM = (SdrMark*)(rSrcList.maList.GetObject(i));
             InsertEntry(*pM);
@@ -596,7 +596,7 @@ void SdrMarkList::Merge(const SdrMarkList& rSrcList, sal_Bool bReverse)
     }
     else
     {
-        for(ULONG i(nAnz); i > 0;)
+        for(sal_uLong i(nAnz); i > 0;)
         {
             i--;
             SdrMark* pM = (SdrMark*)(rSrcList.maList.GetObject(i));
@@ -609,7 +609,7 @@ sal_Bool SdrMarkList::DeletePageView(const SdrPageView& rPV)
 {
     sal_Bool bChgd(sal_False);
 
-    for(ULONG i(GetMarkCount()); i > 0; )
+    for(sal_uLong i(GetMarkCount()); i > 0; )
     {
         i--;
         SdrMark* pMark = GetMark(i);
@@ -632,9 +632,9 @@ sal_Bool SdrMarkList::InsertPageView(const SdrPageView& rPV)
     DeletePageView(rPV); // erstmal alle raus, dann die ganze Seite hinten dran
     SdrObject* pObj;
     const SdrObjList* pOL = rPV.GetObjList();
-    ULONG nObjAnz(pOL->GetObjCount());
+    sal_uLong nObjAnz(pOL->GetObjCount());
 
-    for(ULONG nO(0L); nO < nObjAnz; nO++)
+    for(sal_uLong nO(0L); nO < nObjAnz; nO++)
     {
         pObj = pOL->GetObj(nO);
         sal_Bool bDoIt(rPV.IsObjMarkable(pObj));
@@ -653,7 +653,7 @@ sal_Bool SdrMarkList::InsertPageView(const SdrPageView& rPV)
 
 const XubString& SdrMarkList::GetMarkDescription() const
 {
-    ULONG nAnz(GetMarkCount());
+    sal_uLong nAnz(GetMarkCount());
 
     if(mbNameOk && 1L == nAnz)
     {
@@ -691,7 +691,7 @@ const XubString& SdrMarkList::GetMarkDescription() const
                 XubString aStr1;
                 sal_Bool bEq(sal_True);
 
-                for(ULONG i = 1; i < GetMarkCount() && bEq; i++)
+                for(sal_uLong i = 1; i < GetMarkCount() && bEq; i++)
                 {
                     SdrMark* pMark2 = GetMark(i);
                     pMark2->GetMarkedSdrObj()->TakeObjNamePlural(aStr1);
@@ -719,16 +719,16 @@ const XubString& SdrMarkList::GetPointMarkDescription(sal_Bool bGlue) const
 {
     sal_Bool& rNameOk = (sal_Bool&)(bGlue ? mbGluePointNameOk : mbPointNameOk);
     XubString& rName = (XubString&)(bGlue ? maGluePointName : maPointName);
-    ULONG nMarkAnz(GetMarkCount());
-    ULONG nMarkPtAnz(0L);
-    ULONG nMarkPtObjAnz(0L);
-    ULONG n1stMarkNum(ULONG_MAX);
+    sal_uLong nMarkAnz(GetMarkCount());
+    sal_uLong nMarkPtAnz(0L);
+    sal_uLong nMarkPtObjAnz(0L);
+    sal_uLong n1stMarkNum(ULONG_MAX);
 
-    for(ULONG nMarkNum(0L); nMarkNum < nMarkAnz; nMarkNum++)
+    for(sal_uLong nMarkNum(0L); nMarkNum < nMarkAnz; nMarkNum++)
     {
         const SdrMark* pMark = GetMark(nMarkNum);
         const SdrUShortCont* pPts = bGlue ? pMark->GetMarkedGluePoints() : pMark->GetMarkedPoints();
-        ULONG nAnz(pPts ? pPts->GetCount() : 0);
+        sal_uLong nAnz(pPts ? pPts->GetCount() : 0);
 
         if(nAnz)
         {
@@ -787,7 +787,7 @@ const XubString& SdrMarkList::GetPointMarkDescription(sal_Bool bGlue) const
             XubString aStr1;
             sal_Bool bEq(sal_True);
 
-            for(ULONG i(n1stMarkNum + 1L); i < GetMarkCount() && bEq; i++)
+            for(sal_uLong i(n1stMarkNum + 1L); i < GetMarkCount() && bEq; i++)
             {
                 const SdrMark* pMark2 = GetMark(i);
                 const SdrUShortCont* pPts = bGlue ? pMark2->GetMarkedGluePoints() : pMark2->GetMarkedPoints();
@@ -833,7 +833,7 @@ sal_Bool SdrMarkList::TakeBoundRect(SdrPageView* pPV, Rectangle& rRect) const
     sal_Bool bFnd(sal_False);
     Rectangle aR;
 
-    for(ULONG i(0L); i < GetMarkCount(); i++)
+    for(sal_uLong i(0L); i < GetMarkCount(); i++)
     {
         SdrMark* pMark = GetMark(i);
 
@@ -863,7 +863,7 @@ sal_Bool SdrMarkList::TakeSnapRect(SdrPageView* pPV, Rectangle& rRect) const
 {
     sal_Bool bFnd(sal_False);
 
-    for(ULONG i(0L); i < GetMarkCount(); i++)
+    for(sal_uLong i(0L); i < GetMarkCount(); i++)
     {
         SdrMark* pMark = GetMark(i);
 
@@ -952,7 +952,7 @@ namespace sdr
             {
                 SdrObjList* pList = pObj->GetSubList();
 
-                for(ULONG a(0L); a < pList->GetObjCount(); a++)
+                for(sal_uLong a(0L); a < pList->GetObjCount(); a++)
                 {
                     SdrObject* pObj2 = pList->GetObj(a);
                     ImplCollectCompleteSelection(pObj2);
@@ -974,9 +974,9 @@ namespace sdr
             maAllMarkedObjects.clear();
 
             // #126320# GetMarkCount after ForceSort
-            const ULONG nMarkAnz(maMarkedObjectList.GetMarkCount());
+            const sal_uLong nMarkAnz(maMarkedObjectList.GetMarkCount());
 
-            for(ULONG a(0L); a < nMarkAnz; a++)
+            for(sal_uLong a(0L); a < nMarkAnz; a++)
             {
                 SdrObject* pCandidate = maMarkedObjectList.GetMark(a)->GetMarkedSdrObj();
 

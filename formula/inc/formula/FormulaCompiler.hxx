@@ -65,7 +65,7 @@ struct FormulaArrayStack
 {
     FormulaArrayStack*  pNext;
     FormulaTokenArray*  pArr;
-    BOOL bTemp;
+    sal_Bool bTemp;
 };
 
 
@@ -100,7 +100,7 @@ public:
         ExternalHashMap       * mpExternalHashMap;         /// Hash map of ocExternal, Filter String -> AddIn String
         ExternalHashMap       * mpReverseExternalHashMap;  /// Hash map of ocExternal, AddIn String -> Filter String
         FormulaGrammar::Grammar meGrammar;                  /// Grammar, language and reference convention
-        USHORT                  mnSymbols;                  /// Count of OpCode symbols
+        sal_uInt16                  mnSymbols;                  /// Count of OpCode symbols
         bool                    mbCore      : 1;            /// If mapping was setup by core, not filters
         bool                    mbEnglish   : 1;            /// If English symbols and external names
 
@@ -110,7 +110,7 @@ public:
 
     public:
 
-        OpCodeMap(USHORT nSymbols, bool bCore, FormulaGrammar::Grammar eGrammar ) :
+        OpCodeMap(sal_uInt16 nSymbols, bool bCore, FormulaGrammar::Grammar eGrammar ) :
             mpHashMap( new OpCodeHashMap( nSymbols)),
             mpTable( new String[ nSymbols ]),
             mpExternalHashMap( new ExternalHashMap),
@@ -137,8 +137,8 @@ public:
         /// Get the symbol string matching an OpCode.
         inline const String& getSymbol( const OpCode eOp ) const
         {
-            DBG_ASSERT( USHORT(eOp) < mnSymbols, "OpCodeMap::getSymbol: OpCode out of range");
-            if (USHORT(eOp) < mnSymbols)
+            DBG_ASSERT( sal_uInt16(eOp) < mnSymbols, "OpCodeMap::getSymbol: OpCode out of range");
+            if (sal_uInt16(eOp) < mnSymbols)
                 return mpTable[ eOp ];
             static String s_sEmpty;
             return s_sEmpty;
@@ -148,7 +148,7 @@ public:
         inline FormulaGrammar::Grammar getGrammar() const { return meGrammar; }
 
         /// Get the symbol count.
-        inline USHORT getSymbolCount() const { return mnSymbols; }
+        inline sal_uInt16 getSymbolCount() const { return mnSymbols; }
 
         /** Are these English symbols, as opposed to native language (which may
             be English as well)? */
@@ -218,25 +218,26 @@ public:
      */
     OpCode GetEnglishOpCode( const String& rName ) const;
 
-    void            SetCompileForFAP( BOOL bVal )
+    void            SetCompileForFAP( sal_Bool bVal )
                         { bCompileForFAP = bVal; bIgnoreErrors = bVal; }
 
     static bool IsOpCodeVolatile( OpCode eOp );
 
-    static BOOL DeQuote( String& rStr );
+    static sal_Bool DeQuote( String& rStr );
+
 
     static const String&    GetNativeSymbol( OpCode eOp );
-    static  BOOL            IsMatrixFunction(OpCode _eOpCode);   // if a function _always_ returns a Matrix
+    static  sal_Bool            IsMatrixFunction(OpCode _eOpCode);   // if a function _always_ returns a Matrix
 
     short GetNumFormatType() const { return nNumFmt; }
-    BOOL  CompileTokenArray();
+    sal_Bool  CompileTokenArray();
 
     void CreateStringFromTokenArray( String& rFormula );
     void CreateStringFromTokenArray( rtl::OUStringBuffer& rBuffer );
     FormulaToken* CreateStringFromToken( String& rFormula, FormulaToken* pToken,
-                                    BOOL bAllowArrAdvance = FALSE );
+                                    sal_Bool bAllowArrAdvance = sal_False );
     FormulaToken* CreateStringFromToken( rtl::OUStringBuffer& rBuffer, FormulaToken* pToken,
-                                    BOOL bAllowArrAdvance = FALSE );
+                                    sal_Bool bAllowArrAdvance = sal_False );
 
     void AppendBoolean( rtl::OUStringBuffer& rBuffer, bool bVal );
     void AppendDouble( rtl::OUStringBuffer& rBuffer, double fVal );
@@ -250,18 +251,18 @@ public:
     static void ResetNativeSymbols();
     static void SetNativeSymbols( const OpCodeMapPtr& xMap );
 protected:
-    virtual String FindAddInFunction( const String& rUpperName, BOOL bLocalFirst ) const;
+    virtual String FindAddInFunction( const String& rUpperName, sal_Bool bLocalFirst ) const;
     virtual void fillFromAddInCollectionUpperName( NonConstOpCodeMapPtr xMap ) const;
     virtual void fillFromAddInMap( NonConstOpCodeMapPtr xMap, FormulaGrammar::Grammar _eGrammar ) const;
     virtual void fillFromAddInCollectionEnglishName( NonConstOpCodeMapPtr xMap ) const;
     virtual void fillAddInToken(::std::vector< ::com::sun::star::sheet::FormulaOpCodeMapEntry >& _rVec,bool _bIsEnglish) const;
 
-    virtual void SetError(USHORT nError);
+    virtual void SetError(sal_uInt16 nError);
     virtual FormulaTokenRef ExtendRangeReference( FormulaToken & rTok1, FormulaToken & rTok2, bool bReuseDoubleRef );
-    virtual BOOL HandleExternalReference(const FormulaToken& _aToken);
-    virtual BOOL HandleRange();
-    virtual BOOL HandleSingleRef();
-    virtual BOOL HandleDbData();
+    virtual sal_Bool HandleExternalReference(const FormulaToken& _aToken);
+    virtual sal_Bool HandleRange();
+    virtual sal_Bool HandleSingleRef();
+    virtual sal_Bool HandleDbData();
 
     virtual void CreateStringFromExternal(rtl::OUStringBuffer& rBuffer, FormulaToken* pTokenP);
     virtual void CreateStringFromSingleRef(rtl::OUStringBuffer& rBuffer,FormulaToken* pTokenP);
@@ -269,9 +270,9 @@ protected:
     virtual void CreateStringFromMatrix(rtl::OUStringBuffer& rBuffer,FormulaToken* pTokenP);
     virtual void CreateStringFromIndex(rtl::OUStringBuffer& rBuffer,FormulaToken* pTokenP);
     virtual void LocalizeString( String& rName );   // modify rName - input: exact name
-    virtual BOOL IsImportingXML() const;
+    virtual sal_Bool IsImportingXML() const;
 
-    BOOL   GetToken();
+    sal_Bool   GetToken();
     OpCode NextToken();
     void PutCode( FormulaTokenRef& );
     void Factor();
@@ -288,7 +289,7 @@ protected:
     void NotLine();
     OpCode Expression();
     void PopTokenArray();
-    void PushTokenArray( FormulaTokenArray*, BOOL = FALSE );
+    void PushTokenArray( FormulaTokenArray*, sal_Bool = sal_False );
 
     bool MergeRangeReference( FormulaToken * * const pCode1, FormulaToken * const * const pCode2 );
 
@@ -308,18 +309,18 @@ protected:
     OpCode              eLastOp;
     short               nRecursion;                 // GetToken() recursions
     short               nNumFmt;                    // set during CompileTokenArray()
-    USHORT              pc;
+    sal_uInt16              pc;
 
     FormulaGrammar::Grammar
                         meGrammar;          // The grammar used, language plus convention.
 
-    BOOL                bAutoCorrect;               // whether to apply AutoCorrection
-    BOOL                bCorrected;                 // AutoCorrection was applied
-    BOOL                bCompileForFAP;             //! not real RPN but names, for FunctionAutoPilot,
+    sal_Bool                bAutoCorrect;               // whether to apply AutoCorrection
+    sal_Bool                bCorrected;                 // AutoCorrection was applied
+    sal_Bool                bCompileForFAP;             //! not real RPN but names, for FunctionAutoPilot,
                                                     // will not be resolved
-    BOOL                bIgnoreErrors;              // on AutoCorrect and CompileForFAP
+    sal_Bool                bIgnoreErrors;              // on AutoCorrect and CompileForFAP
                                                     // ignore errors and create RPN nevertheless
-    BOOL                glSubTotal;                 // if code contains one or more subtotal functions
+    sal_Bool                glSubTotal;                 // if code contains one or more subtotal functions
 private:
     void InitSymbolsNative() const;    /// only SymbolsNative, on first document creation
     void InitSymbolsEnglish() const;   /// only SymbolsEnglish, maybe later
@@ -327,7 +328,7 @@ private:
     void InitSymbolsODFF() const;      /// only SymbolsODFF, on demand
     void InitSymbolsEnglishXL() const; /// only SymbolsEnglishXL, on demand
 
-    void loadSymbols(USHORT _nSymbols,FormulaGrammar::Grammar _eGrammar,NonConstOpCodeMapPtr& _xMap) const;
+    void loadSymbols(sal_uInt16 _nSymbols,FormulaGrammar::Grammar _eGrammar,NonConstOpCodeMapPtr& _xMap) const;
 
     static inline void ForceArrayOperator( FormulaTokenRef& rCurr, const FormulaTokenRef& rPrev )
         {

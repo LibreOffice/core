@@ -107,14 +107,14 @@ namespace svx
     struct SvxShowCharSetItem
     {
         SvxShowCharSet&             mrParent;
-        USHORT                      mnId;
+        sal_uInt16                      mnId;
         XubString                   maText;
         Rectangle                   maRect;
         SvxShowCharSetItemAcc*      m_pItem;
         SvxShowCharSetAcc*          m_pParent;
         ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > m_xAcc;
 
-        SvxShowCharSetItem( SvxShowCharSet& rParent,SvxShowCharSetAcc*  _pParent,USHORT _nPos );
+        SvxShowCharSetItem( SvxShowCharSet& rParent,SvxShowCharSetAcc*  _pParent,sal_uInt16 _nPos );
         ~SvxShowCharSetItem();
 
         ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >    GetAccessible();

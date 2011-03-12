@@ -146,7 +146,7 @@ void SmartTagMgr::GetActionSequences( Sequence < rtl::OUString >& rSmartTagTypes
     rActionComponentsSequence.realloc( rSmartTagTypes.getLength() );
     rActionIndicesSequence.realloc( rSmartTagTypes.getLength() );
 
-    for ( USHORT j = 0; j < rSmartTagTypes.getLength(); ++j )
+    for ( sal_uInt16 j = 0; j < rSmartTagTypes.getLength(); ++j )
     {
         const rtl::OUString& rSmartTagType = rSmartTagTypes[j];
 
@@ -155,7 +155,7 @@ void SmartTagMgr::GetActionSequences( Sequence < rtl::OUString >& rSmartTagTypes
         Sequence< Reference< smarttags::XSmartTagAction > > aActions( nNumberOfActionRefs );
         Sequence< sal_Int32 > aIndices( nNumberOfActionRefs );
 
-        USHORT i = 0;
+        sal_uInt16 i = 0;
         SmartTagMapIter aActionsIter;
         SmartTagMapIter aEnd = maSmartTagMap.upper_bound( rSmartTagType );
 

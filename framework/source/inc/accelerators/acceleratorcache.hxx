@@ -137,7 +137,7 @@ class AcceleratorCache : public ThreadHelpBase // attention! Must be the first b
                     the key, which should be checked.
 
             @return [bool]
-                    TRUE if the speicfied key exists inside this container.
+                    sal_True if the speicfied key exists inside this container.
          */
         virtual sal_Bool hasKey(const css::awt::KeyEvent& aKey) const;
         virtual sal_Bool hasCommand(const ::rtl::OUString& sCommand) const;

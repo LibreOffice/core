@@ -116,7 +116,7 @@ int SvxZoomItem::operator==( const SfxPoolItem& rAttr ) const
              eType      == rItem.GetType()          );
 }
 
-bool SvxZoomItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
+bool SvxZoomItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
 //  sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -146,7 +146,7 @@ bool SvxZoomItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) c
     return true;
 }
 
-bool SvxZoomItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
+bool SvxZoomItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
 {
 //  sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -183,7 +183,7 @@ bool SvxZoomItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId
 
                 if ( bAllConverted && nConvertedCount == ZOOM_PARAMS )
                 {
-                    SetValue( (UINT16)nValueTmp );
+                    SetValue( (sal_uInt16)nValueTmp );
                     nValueSet = nValueSetTmp;
                     eType = SvxZoomType( nTypeTmp );
                     return true;
@@ -198,7 +198,7 @@ bool SvxZoomItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId
             sal_Int32 nVal = 0;
             if ( rVal >>= nVal )
             {
-                SetValue( (UINT16)nVal );
+                SetValue( (sal_uInt16)nVal );
                 return true;
             }
             else

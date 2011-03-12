@@ -49,9 +49,9 @@ Process::Process()
 , m_nEnvCount( 0 )
 , m_pEnvList( NULL )
 , m_aProcessName()
+, bWasGPF( sal_False )
+, bHasBeenStarted( sal_False )
 , m_pProcess( NULL )
-, bWasGPF( FALSE )
-, bHasBeenStarted( FALSE )
 {
 }
 
@@ -77,7 +77,7 @@ Process::~Process()
 }
 
 
-BOOL Process::ImplIsRunning()
+sal_Bool Process::ImplIsRunning()
 {
     if ( m_pProcess && bHasBeenStarted )
     {
@@ -85,12 +85,12 @@ BOOL Process::ImplIsRunning()
         aProcessInfo.Size = sizeof(oslProcessInfo);
         osl_getProcessInfo(m_pProcess, osl_Process_EXITCODE, &aProcessInfo );
         if ( !(aProcessInfo.Fields & osl_Process_EXITCODE) )
-            return TRUE;
+            return sal_True;
         else
-            return FALSE;
+            return sal_False;
     }
     else
-        return FALSE;
+        return sal_False;
 }
 
 long Process::ImplGetExitCode()
@@ -166,17 +166,17 @@ void Process::SetImage( const String &aAppPath, const String &aAppParams, const 
         ::rtl::OUString aNormalizedAppPath;
         osl::FileBase::getFileURLFromSystemPath( ::rtl::OUString(aAppPath), aNormalizedAppPath );
         m_aProcessName = aNormalizedAppPath;;
-        bHasBeenStarted = FALSE;
+        bHasBeenStarted = sal_False;
 
     }
 }
 
-BOOL Process::Start()
+sal_Bool Process::Start()
 { // Start program
-    BOOL bSuccess=FALSE;
+    sal_Bool bSuccess=sal_False;
     if ( m_aProcessName.getLength() && !ImplIsRunning() )
     {
-        bWasGPF = FALSE;
+        bWasGPF = sal_False;
 #ifdef WNT
         sal_uInt32 nErrorMode = SetErrorMode(SEM_NOOPENFILEERRORBOX | SEM_NOALIGNMENTFAULTEXCEPT | SEM_NOGPFAULTERRORBOX);
         try
@@ -199,7 +199,7 @@ BOOL Process::Start()
         }
         catch( ... )
         {
-            bWasGPF = TRUE;
+            bWasGPF = sal_True;
             // TODO: Output debug message !!
         }
         nErrorMode = SetErrorMode(nErrorMode);
@@ -211,17 +211,17 @@ BOOL Process::Start()
     return bSuccess;
 }
 
-ULONG Process::GetExitCode()
+sal_uIntPtr Process::GetExitCode()
 { // ExitCode of program after execution
     return ImplGetExitCode();
 }
 
-BOOL Process::IsRunning()
+sal_Bool Process::IsRunning()
 {
     return ImplIsRunning();
 }
 
-BOOL Process::WasGPF()
+sal_Bool Process::WasGPF()
 { // Did the process fail?
 #ifdef WNT
     return ImplGetExitCode() == 3221225477;
@@ -230,11 +230,11 @@ BOOL Process::WasGPF()
 #endif
 }
 
-BOOL Process::Terminate()
+sal_Bool Process::Terminate()
 {
     if ( ImplIsRunning() )
         return osl_terminateProcess(m_pProcess) == osl_Process_E_None;
-    return TRUE;
+    return sal_True;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -39,7 +39,7 @@ private:
     Outliner*   mpOutliner;
 
 public:
-                OutlinerUndoBase( USHORT nId, Outliner* pOutliner );
+                OutlinerUndoBase( sal_uInt16 nId, Outliner* pOutliner );
 
     Outliner*   GetOutliner() const { return mpOutliner; }
 };
@@ -88,12 +88,12 @@ class OutlinerUndoChangeDepth : public OutlinerUndoBase
 {
     using SfxUndoAction::Repeat;
 private:
-    USHORT          mnPara;
+    sal_uInt16          mnPara;
     sal_Int16       mnOldDepth;
     sal_Int16       mnNewDepth;
 
 public:
-                    OutlinerUndoChangeDepth( Outliner* pOutliner, USHORT nPara, sal_Int16 nOldDepth, sal_Int16 nNewDepth );
+                    OutlinerUndoChangeDepth( Outliner* pOutliner, sal_uInt16 nPara, sal_Int16 nOldDepth, sal_Int16 nNewDepth );
 
     virtual void    Undo();
     virtual void    Redo();
@@ -107,10 +107,10 @@ class OutlinerUndoCheckPara : public OutlinerUndoBase
 {
     using SfxUndoAction::Repeat;
 private:
-    USHORT          mnPara;
+    sal_uInt16          mnPara;
 
 public:
-                    OutlinerUndoCheckPara( Outliner* pOutliner, USHORT nPara );
+                    OutlinerUndoCheckPara( Outliner* pOutliner, sal_uInt16 nPara );
 
     virtual void    Undo();
     virtual void    Redo();
@@ -125,17 +125,17 @@ public:
 class OLUndoExpand : public EditUndo
 {
     using SfxUndoAction::Repeat;
-    void Restore( BOOL bUndo );
+    void Restore( sal_Bool bUndo );
 public:
-    OLUndoExpand( Outliner* pOut, USHORT nId );
+    OLUndoExpand( Outliner* pOut, sal_uInt16 nId );
     ~OLUndoExpand();
     virtual void Undo();
     virtual void Redo();
     virtual void Repeat();
 
-    USHORT* pParas;  // 0 == nCount contains paragraph number
+    sal_uInt16* pParas;  // 0 == nCount contains paragraph number
     Outliner* pOutliner;
-    USHORT nCount;
+    sal_uInt16 nCount;
 };
 
 #endif

@@ -50,32 +50,32 @@ class SFX2_DLLPUBLIC SfxHTMLParser : public HTMLParser
     SfxMedium*              pMedium;
     SfxMedium *pDLMedium;   // Medium fuer Download von Files
 
-    USHORT nMetaTags;       // Anzahl der bisher gelesenen Meta-Tags
+    sal_uInt16 nMetaTags;       // Anzahl der bisher gelesenen Meta-Tags
     ScriptType eScriptType;
 
     SAL_DLLPRIVATE void GetScriptType_Impl( SvKeyValueIterator* );
 
 protected:
 
-    SfxHTMLParser( SvStream& rStream, BOOL bNewDoc=TRUE, SfxMedium *pMedium=0 );
+    SfxHTMLParser( SvStream& rStream, sal_Bool bNewDoc=sal_True, SfxMedium *pMedium=0 );
 
     virtual ~SfxHTMLParser();
 
 public:
     // Lesen der Optionen einer Image-Map
-    // <MAP>: TRUE = Image-Map hat einen Namen
-    // <AREA>: TRUE = Image-Map hat jetzt einen Bereich mehr
-    static BOOL ParseMapOptions(ImageMap * pImageMap,
+    // <MAP>: sal_True = Image-Map hat einen Namen
+    // <AREA>: sal_True = Image-Map hat jetzt einen Bereich mehr
+    static sal_Bool ParseMapOptions(ImageMap * pImageMap,
                                 const HTMLOptions * pOptions );
-    BOOL ParseMapOptions(ImageMap * pImageMap)
+    sal_Bool ParseMapOptions(ImageMap * pImageMap)
     { return ParseMapOptions(pImageMap, GetOptions()); }
-    static BOOL ParseAreaOptions(ImageMap * pImageMap, const String& rBaseURL,
+    static sal_Bool ParseAreaOptions(ImageMap * pImageMap, const String& rBaseURL,
                                  const HTMLOptions * pOptions,
-                                 USHORT nEventMouseOver = 0,
-                                 USHORT nEventMouseOut = 0 );
-    inline BOOL ParseAreaOptions(ImageMap * pImageMap, const String& rBaseURL,
-                                 USHORT nEventMouseOver = 0,
-                                 USHORT nEventMouseOut = 0);
+                                 sal_uInt16 nEventMouseOver = 0,
+                                 sal_uInt16 nEventMouseOut = 0 );
+    inline sal_Bool ParseAreaOptions(ImageMap * pImageMap, const String& rBaseURL,
+                                 sal_uInt16 nEventMouseOver = 0,
+                                 sal_uInt16 nEventMouseOut = 0);
 
     // <TD SDVAL="..." SDNUM="...">
     static double GetTableDataOptionsValNum( sal_uInt32& nNumForm,
@@ -99,14 +99,14 @@ protected:
     void StartFileDownload( const String& rURL, int nToken,
                             SfxObjectShell *pSh=0 );
 
-    // Beenden eines asynchronen File-Downloads. Gibt TRUE zurueck, wenn
+    // Beenden eines asynchronen File-Downloads. Gibt sal_True zurueck, wenn
     // der Download geklappt hat. Das gelesene File befindet sich dann in
     // dem uebergeben String.
-    BOOL FinishFileDownload( String& rStr );
+    sal_Bool FinishFileDownload( String& rStr );
 
-    // Gibt TRUE zurueck, wenn ein File downloaded wurde und
+    // Gibt sal_True zurueck, wenn ein File downloaded wurde und
     // FileDownloadFinished noch nicht gerufen wurde.
-    BOOL ShouldFinishFileDownload() const { return pDLMedium != 0; }
+    sal_Bool ShouldFinishFileDownload() const { return pDLMedium != 0; }
 
     SfxMedium *GetMedium() { return pMedium; }
     const SfxMedium *GetMedium() const { return pMedium; }
@@ -116,9 +116,9 @@ protected:
     const String& GetScriptTypeString( SvKeyValueIterator* ) const;
 };
 
-inline BOOL SfxHTMLParser::ParseAreaOptions(ImageMap * pImageMap, const String& rBaseURL,
-                                            USHORT nEventMouseOver,
-                                            USHORT nEventMouseOut)
+inline sal_Bool SfxHTMLParser::ParseAreaOptions(ImageMap * pImageMap, const String& rBaseURL,
+                                            sal_uInt16 nEventMouseOver,
+                                            sal_uInt16 nEventMouseOut)
 {
     return ParseAreaOptions( pImageMap, rBaseURL, GetOptions(),
                              nEventMouseOver, nEventMouseOut );

@@ -144,7 +144,7 @@ bool writeOasis2OOoLibraryElement(
 
     if (! xSMgr.is())
     {
-        return FALSE;
+        return sal_False;
     }
 
     Reference< xml::sax::XParser > xParser(
@@ -166,7 +166,7 @@ bool writeOasis2OOoLibraryElement(
 
     if ( !xParser.is() || !xWriter.is() )
     {
-        return FALSE;
+        return sal_False;
     }
 
     Sequence<Any> aArgs( 1 );
@@ -187,7 +187,7 @@ bool writeOasis2OOoLibraryElement(
 
     xParser->parseStream( source );
 
-    return TRUE;
+    return sal_True;
 }
 
 void SAL_CALL SfxDialogLibraryContainer::writeLibraryElement
@@ -206,13 +206,13 @@ void SAL_CALL SfxDialogLibraryContainer::writeLibraryElement
 
     Reference< XInputStream > xInput( xISP->createInputStream() );
 
-    bool bComplete = FALSE;
+    bool bComplete = sal_False;
     if ( mbOasis2OOoFormat )
     {
         bComplete = writeOasis2OOoLibraryElement( xInput, xOutput );
     }
 
-    if ( bComplete == FALSE )
+    if ( bComplete == sal_False )
     {
         Sequence< sal_Int8 > bytes;
         sal_Int32 nRead = xInput->readBytes( bytes, xInput->available() );
@@ -280,7 +280,7 @@ void SfxDialogLibraryContainer::storeLibrariesToStorage( const uno::Reference< e
         {
             // if we cannot get the version then the
             // Oasis2OOoTransformer will not be used
-            OSL_ASSERT(FALSE);
+            OSL_ASSERT(sal_False);
         }
     }
 
@@ -411,7 +411,7 @@ Any SAL_CALL SfxDialogLibraryContainer::importLibraryElement
     {
         OSL_ENSURE( 0, "Parsing error\n" );
         SfxErrorContext aEc( ERRCTX_SFX_LOADBASIC, aFile );
-        ULONG nErrorCode = ERRCODE_IO_GENERAL;
+        sal_uIntPtr nErrorCode = ERRCODE_IO_GENERAL;
         ErrorHandler::HandleError( nErrorCode );
         return aRetAny;
     }

@@ -29,6 +29,7 @@
 #define INCLUDED_DP_GUI_UPDATEDATA_HXX
 
 #include "sal/config.h"
+#include "tools/solar.h"
 #include "rtl/ustring.hxx"
 #include "com/sun/star/uno/Reference.hxx"
 
@@ -81,6 +82,10 @@ struct UpdateData
     //are to be ignored.
     ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage >
     aUpdateSource;
+
+    // ID to find this entry in the update listbox
+    sal_uInt16  m_nID;
+    bool    m_bIgnored;
 };
 }
 

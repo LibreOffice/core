@@ -55,8 +55,8 @@ BasicDLL::BasicDLL()
     ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
     pSttResMgr = ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(stt), aLocale );
     pBasResMgr = ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(sb), aLocale );
-    bDebugMode = FALSE;
-    bBreakEnabled = TRUE;
+    bDebugMode = sal_False;
+    bBreakEnabled = sal_True;
 }
 
 BasicDLL::~BasicDLL()
@@ -65,7 +65,7 @@ BasicDLL::~BasicDLL()
     delete pBasResMgr;
 }
 
-void BasicDLL::EnableBreak( BOOL bEnable )
+void BasicDLL::EnableBreak( sal_Bool bEnable )
 {
     BasicDLL* pThis = *(BasicDLL**)GetAppData(SHL_BASIC);
     DBG_ASSERT( pThis, "BasicDLL::EnableBreak: Noch keine Instanz!" );
@@ -73,7 +73,7 @@ void BasicDLL::EnableBreak( BOOL bEnable )
         pThis->bBreakEnabled = bEnable;
 }
 
-void BasicDLL::SetDebugMode( BOOL bDebugMode )
+void BasicDLL::SetDebugMode( sal_Bool bDebugMode )
 {
     BasicDLL* pThis = *(BasicDLL**)GetAppData(SHL_BASIC);
     DBG_ASSERT( pThis, "BasicDLL::EnableBreak: Noch keine Instanz!" );
@@ -86,7 +86,7 @@ void BasicDLL::BasicBreak()
 {
     //bJustStopping: Wenn jemand wie wild x-mal STOP drueckt, aber das Basic
     // nicht schnell genug anhaelt, kommt die Box ggf. oefters...
-    static BOOL bJustStopping = FALSE;
+    static sal_Bool bJustStopping = sal_False;
 
     BasicDLL* pThis = *(BasicDLL**)GetAppData(SHL_BASIC);
     DBG_ASSERT( pThis, "BasicDLL::EnableBreak: Noch keine Instanz!" );
@@ -94,11 +94,11 @@ void BasicDLL::BasicBreak()
     {
         if ( StarBASIC::IsRunning() && !bJustStopping && ( pThis->bBreakEnabled || pThis->bDebugMode ) )
         {
-            bJustStopping = TRUE;
+            bJustStopping = sal_True;
             StarBASIC::Stop();
             String aMessageStr( BasResId( IDS_SBERR_TERMINATED ) );
             InfoBox( 0, aMessageStr ).Execute();
-            bJustStopping = FALSE;
+            bJustStopping = sal_False;
         }
     }
 }

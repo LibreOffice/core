@@ -37,7 +37,7 @@
 
 //------------------------------------------------------------------------------
 ::osl::Mutex Tracer::s_aMapSafety;
-::std::map< ::oslThreadIdentifier, INT32, ::std::less< oslThreadIdentifier > >
+::std::map< ::oslThreadIdentifier, sal_Int32, ::std::less< oslThreadIdentifier > >
         Tracer::s_aThreadIndents;
 
 //------------------------------------------------------------------------------
@@ -45,13 +45,13 @@ Tracer::Tracer(const char* _pBlockDescription)
     :m_sBlockDescription(_pBlockDescription)
 {
     ::osl::MutexGuard aGuard(s_aMapSafety);
-    INT32 nIndent = s_aThreadIndents[ ::osl::Thread::getCurrentIdentifier() ]++;
+    sal_uInt32 nIndent = s_aThreadIndents[ ::osl::Thread::getCurrentIdentifier() ]++;
 
     ByteString sIndent;
     while (nIndent--)
         sIndent += '\t';
 
-    ByteString sThread( ByteString::CreateFromInt32( (INT32)::osl::Thread::getCurrentIdentifier() ) );
+    ByteString sThread( ByteString::CreateFromInt32( (sal_Int32)::osl::Thread::getCurrentIdentifier() ) );
     sThread += '\t';
 
     ByteString sMessage(sThread);
@@ -65,13 +65,13 @@ Tracer::Tracer(const char* _pBlockDescription)
 Tracer::~Tracer()
 {
     ::osl::MutexGuard aGuard(s_aMapSafety);
-    INT32 nIndent = --s_aThreadIndents[ ::osl::Thread::getCurrentIdentifier() ];
+    sal_Int32 nIndent = --s_aThreadIndents[ ::osl::Thread::getCurrentIdentifier() ];
 
     ByteString sIndent;
     while (nIndent--)
         sIndent += '\t';
 
-    ByteString sThread( ByteString::CreateFromInt32( (INT32)::osl::Thread::getCurrentIdentifier() ) );
+    ByteString sThread( ByteString::CreateFromInt32( (sal_Int32)::osl::Thread::getCurrentIdentifier() ) );
     sThread += '\t';
 
     ByteString sMessage(sThread);
@@ -85,13 +85,13 @@ Tracer::~Tracer()
 void Tracer::TraceString(const char* _pMessage)
 {
     ::osl::MutexGuard aGuard(s_aMapSafety);
-    INT32 nIndent = s_aThreadIndents[ ::osl::Thread::getCurrentIdentifier() ];
+    sal_Int32 nIndent = s_aThreadIndents[ ::osl::Thread::getCurrentIdentifier() ];
 
     ByteString sIndent;
     while (nIndent--)
         sIndent += '\t';
 
-    ByteString sThread( ByteString::CreateFromInt32( (INT32)::osl::Thread::getCurrentIdentifier() ) );
+    ByteString sThread( ByteString::CreateFromInt32( (sal_Int32)::osl::Thread::getCurrentIdentifier() ) );
     sThread += '\t';
 
     ByteString sMessage(sThread);
@@ -106,13 +106,13 @@ void Tracer::TraceString(const char* _pMessage)
 void Tracer::TraceString1StringParam(const char* _pMessage, const char* _pParam)
 {
     ::osl::MutexGuard aGuard(s_aMapSafety);
-    INT32 nIndent = s_aThreadIndents[ ::osl::Thread::getCurrentIdentifier() ];
+    sal_Int32 nIndent = s_aThreadIndents[ ::osl::Thread::getCurrentIdentifier() ];
 
     ByteString sIndent;
     while (nIndent--)
         sIndent += '\t';
 
-    ByteString sThread( ByteString::CreateFromInt32( (INT32)::osl::Thread::getCurrentIdentifier() ) );
+    ByteString sThread( ByteString::CreateFromInt32( (sal_Int32)::osl::Thread::getCurrentIdentifier() ) );
     sThread += '\t';
 
     ByteString sMessage(sThread);

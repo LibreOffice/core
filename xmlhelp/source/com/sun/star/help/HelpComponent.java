@@ -31,10 +31,8 @@ import com.sun.star.lib.uno.helper.Factory;
 import com.sun.star.lang.XSingleComponentFactory;
 import com.sun.star.registry.XRegistryKey;
 
-/** This class capsulates the class, that implements the minimal component, a
- * factory for creating the service (<CODE>__getComponentFactory</CODE>) and a
- * method, that writes the information into the given registry key
- * (<CODE>__writeRegistryServiceInfo</CODE>).
+/** This class capsulates the class, that implements the minimal component and a
+ * factory for creating the service (<CODE>__getComponentFactory</CODE>).
  */
 public class HelpComponent
 {
@@ -61,25 +59,6 @@ public class HelpComponent
         return xFactory;
     }
 
-    /**
-     * Writes the service information into the given registry key.
-     * This method is called by the <code>JavaLoader</code>
-     * <p>
-     * @return  returns true if the operation succeeded
-     * @param   regKey the registryKey
-     * @see     com.sun.star.comp.loader.JavaLoader
-     */
-    public static boolean __writeRegistryServiceInfo(XRegistryKey regKey)
-    {
-        boolean bSuccessHelpSearch = Factory.writeRegistryServiceInfo
-            (HelpSearch._HelpSearch.class.getName(),
-             HelpSearch._HelpSearch.getServiceNames(), regKey);
-        boolean bSuccessHelpIndexer = Factory.writeRegistryServiceInfo
-            (HelpIndexer.class.getName(),
-             HelpIndexer.getServiceNames(), regKey);
-
-        return bSuccessHelpSearch && bSuccessHelpIndexer;
-    }
     /** This method is a member of the interface for initializing an object
      * directly after its creation.
      * @param object This array of arbitrary objects will be passed to the

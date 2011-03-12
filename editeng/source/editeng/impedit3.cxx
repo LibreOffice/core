@@ -36,7 +36,7 @@
 #include <vcl/metaact.hxx>
 #include <vcl/gdimtf.hxx>
 
-#define _SVSTDARR_USHORTS
+#define _SVSTDARR_sal_uIt16S
 #include <svl/svstdarr.hxx>
 
 #include <vcl/wrkwin.hxx>
@@ -102,15 +102,15 @@ SV_IMPL_VARARR_SORT( SortedPositions, sal_uInt32 );
 
 struct TabInfo
 {
-    BOOL        bValid;
+    sal_Bool        bValid;
 
     SvxTabStop  aTabStop;
     xub_StrLen  nCharPos;
-    USHORT      nTabPortion;
+    sal_uInt16      nTabPortion;
     long        nStartPosX;
     long        nTabPos;
 
-    TabInfo() { bValid = FALSE; }
+    TabInfo() { bValid = sal_False; }
 };
 
 Point Rotate( const Point& rPoint, short nOrientation, const Point& rOrigin )
@@ -135,7 +135,7 @@ Point Rotate( const Point& rPoint, short nOrientation, const Point& rOrigin )
     return aTranslatedPos;
 }
 
-BYTE GetCharTypeForCompression( xub_Unicode cChar )
+sal_uInt8 GetCharTypeForCompression( xub_Unicode cChar )
 {
     switch ( cChar )
     {
@@ -169,8 +169,8 @@ void lcl_DrawRedLines(
     WrongList* pWrongs,
     short nOrientation,
     const Point& rOrigin,
-    BOOL bVertical,
-    BOOL bIsRightToLeft )
+    sal_Bool bVertical,
+    sal_Bool bIsRightToLeft )
 {
 #ifndef SVX_LIGHT
     // Aber nur, wenn Font nicht zu klein...
@@ -539,9 +539,9 @@ void ImpEditEngine::CheckAutoPageSize()
 {
     Size aPrevPaperSize( GetPaperSize() );
     if ( GetStatus().AutoPageWidth() )
-        aPaperSize.Width() = (long) !IsVertical() ? CalcTextWidth( TRUE ) : GetTextHeight();
+        aPaperSize.Width() = (long) !IsVertical() ? CalcTextWidth( sal_True ) : GetTextHeight();
     if ( GetStatus().AutoPageHeight() )
-        aPaperSize.Height() = (long) !IsVertical() ? GetTextHeight() : CalcTextWidth( TRUE );
+        aPaperSize.Height() = (long) !IsVertical() ? GetTextHeight() : CalcTextWidth( sal_True );
 
     SetValidPaperSize( aPaperSize );    //Min, Max beruecksichtigen
 
@@ -596,7 +596,7 @@ static sal_Int32 ImplCalculateFontIndependentLineSpacing( const sal_Int32 nFontH
     return ( nFontHeight * 12 ) / 10;   // + 20%
 }
 
-sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
+sal_Bool ImpEditEngine::CreateLines( sal_uInt16 nPara, sal_uInt32 nStartPosY )
 {
     ParaPortion* pParaPortion = GetParaPortions().GetObject( nPara );
 
@@ -605,8 +605,8 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
     DBG_ASSERT( pParaPortion->IsVisible(), "Unsichtbare Absaetze nicht formatieren!" );
     DBG_ASSERT( pParaPortion->IsInvalid(), "CreateLines: Portion nicht invalid!" );
 
-    BOOL bProcessingEmptyLine = ( pParaPortion->GetNode()->Len() == 0 );
-    BOOL bEmptyNodeWithPolygon = ( pParaPortion->GetNode()->Len() == 0 ) && GetTextRanger();
+    sal_Bool bProcessingEmptyLine = ( pParaPortion->GetNode()->Len() == 0 );
+    sal_Bool bEmptyNodeWithPolygon = ( pParaPortion->GetNode()->Len() == 0 ) && GetTextRanger();
 
     // ---------------------------------------------------------------
     // Schnelle Sonderbehandlung fuer leere Absaetze...
@@ -640,7 +640,7 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
     // ---------------------------------------------------------------
     ContentNode* const pNode = pParaPortion->GetNode();
 
-    BOOL bRightToLeftPara = IsRightToLeft( nPara );
+    sal_Bool bRightToLeftPara = IsRightToLeft( nPara );
 
     SvxAdjust eJustification = GetJustification( nPara );
     sal_Bool bHyphenatePara = ((const SfxBoolItem&)pNode->GetContentAttribs().GetItem( EE_PARA_HYPHENATE )).GetValue();
@@ -649,7 +649,7 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
     sal_Int32 nSpaceBeforeAndMinLabelWidth = GetSpaceBeforeAndMinLabelWidth( pNode, &nSpaceBefore, &nMinLabelWidth );
     const SvxLRSpaceItem& rLRItem = GetLRSpaceItem( pNode );
     const SvxLineSpacingItem& rLSItem = (const SvxLineSpacingItem&) pNode->GetContentAttribs().GetItem( EE_PARA_SBL );
-    const BOOL bScriptSpace = ((const SvxScriptSpaceItem&) pNode->GetContentAttribs().GetItem( EE_PARA_ASIANCJKSPACING )).GetValue();
+    const sal_Bool bScriptSpace = ((const SvxScriptSpaceItem&) pNode->GetContentAttribs().GetItem( EE_PARA_ASIANCJKSPACING )).GetValue();
 
 //  const sal_uInt16 nInvalidEnd = ( pParaPortion->GetInvalidDiff() > 0 )
 //      ? pParaPortion->GetInvalidPosStart() + pParaPortion->GetInvalidDiff()
@@ -766,12 +766,12 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
     sal_Bool bSameLineAgain = sal_False;    // Fuer TextRanger, wenn sich die Hoehe aendert.
     TabInfo aCurrentTab;
 
-    BOOL bForceOneRun = bEmptyNodeWithPolygon;
-    BOOL bCompressedChars = FALSE;
+    sal_Bool bForceOneRun = bEmptyNodeWithPolygon;
+    sal_Bool bCompressedChars = sal_False;
 
     while ( ( nIndex < pNode->Len() ) || bForceOneRun )
     {
-        bForceOneRun = FALSE;
+        bForceOneRun = sal_False;
 
         sal_Bool bEOL = sal_False;
         sal_Bool bEOC = sal_False;
@@ -954,7 +954,7 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
                         short nAllSpaceBeforeText = static_cast< short >(rLRItem.GetTxtLeft()/* + rLRItem.GetTxtLeft()*/ + nSpaceBeforeAndMinLabelWidth);
                         aCurrentTab.aTabStop = pNode->GetContentAttribs().FindTabStop( nCurPos - nAllSpaceBeforeText /*rLRItem.GetTxtLeft()*/, aEditDoc.GetDefTab() );
                         aCurrentTab.nTabPos = GetXValue( (long) ( aCurrentTab.aTabStop.GetTabPos() + nAllSpaceBeforeText /*rLRItem.GetTxtLeft()*/ ) );
-                        aCurrentTab.bValid = FALSE;
+                        aCurrentTab.bValid = sal_False;
 
                         // Switch direction in R2L para...
                         if ( bRightToLeftPara )
@@ -970,7 +970,7 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
                              ( aCurrentTab.aTabStop.GetAdjustment() == SVX_TAB_ADJUST_DECIMAL ) )
                         {
                             // Bei LEFT/DEFAULT wird dieses Tab nicht mehr betrachtet.
-                            aCurrentTab.bValid = TRUE;
+                            aCurrentTab.bValid = sal_True;
                             aCurrentTab.nStartPosX = nTmpWidth;
                             aCurrentTab.nCharPos = nTmpPos;
                             aCurrentTab.nTabPortion = nTmpPortion;
@@ -1001,7 +1001,7 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
                             bBrokenLine = sal_True;
                         }
                         pLine->GetCharPosArray().Insert( pPortion->GetSize().Width(), nTmpPos-pLine->GetStart() );
-                        bCompressedChars = FALSE;
+                        bCompressedChars = sal_False;
                     }
                     break;
                     case EE_FEATURE_LINEBR:
@@ -1011,7 +1011,7 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
                         bEOL = sal_True;
                         bLineBreak = sal_True;
                         pPortion->GetKind() = PORTIONKIND_LINEBREAK;
-                        bCompressedChars = FALSE;
+                        bCompressedChars = sal_False;
                         pLine->GetCharPosArray().Insert( pPortion->GetSize().Width(), nTmpPos-pLine->GetStart() );
                     }
                     break;
@@ -1045,7 +1045,7 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
                         }
                         // Compression in Fields????
                         // I think this could be a little bit difficult and is not very usefull
-                        bCompressedChars = FALSE;
+                        bCompressedChars = sal_False;
                     }
                     break;
                     default:    OSL_FAIL( "Was fuer ein Feature ?" );
@@ -1081,20 +1081,20 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
 
                 // And now check for Compression:
                 if ( pPortion->GetLen() && GetAsianCompressionMode() )
-                    bCompressedChars |= ImplCalcAsianCompression( pNode, pPortion, nTmpPos, (sal_Int32*)pLine->GetCharPosArray().GetData() + (nTmpPos-pLine->GetStart()), 10000, FALSE );
+                    bCompressedChars |= ImplCalcAsianCompression( pNode, pPortion, nTmpPos, (sal_Int32*)pLine->GetCharPosArray().GetData() + (nTmpPos-pLine->GetStart()), 10000, sal_False );
 
                 nTmpWidth += pPortion->GetSize().Width();
 
                 pPortion->SetRightToLeft( GetRightToLeft( nPara, nTmpPos+1 ) );
 
-                USHORT _nPortionEnd = nTmpPos + pPortion->GetLen();
+                sal_uInt16 _nPortionEnd = nTmpPos + pPortion->GetLen();
                 if( bScriptSpace && ( _nPortionEnd < pNode->Len() ) && ( nTmpWidth < nXWidth ) && IsScriptChange( EditPaM( pNode, _nPortionEnd ) ) )
                 {
-                    BOOL bAllow = FALSE;
-                    USHORT nScriptTypeLeft = GetScriptType( EditPaM( pNode, _nPortionEnd ) );
-                    USHORT nScriptTypeRight = GetScriptType( EditPaM( pNode, _nPortionEnd+1 ) );
+                    sal_Bool bAllow = sal_False;
+                    sal_uInt16 nScriptTypeLeft = GetScriptType( EditPaM( pNode, _nPortionEnd ) );
+                    sal_uInt16 nScriptTypeRight = GetScriptType( EditPaM( pNode, _nPortionEnd+1 ) );
                     if ( ( nScriptTypeLeft == i18n::ScriptType::ASIAN ) || ( nScriptTypeRight == i18n::ScriptType::ASIAN ) )
-                        bAllow = TRUE;
+                        bAllow = sal_True;
 
                     // No spacing within L2R/R2L nesting
                     if ( bAllow )
@@ -1110,7 +1110,7 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
             if ( aCurrentTab.bValid && ( nTmpPortion != aCurrentTab.nTabPortion ) )
             {
                 long nWidthAfterTab = 0;
-                for ( USHORT n = aCurrentTab.nTabPortion+1; n <= nTmpPortion; n++  )
+                for ( sal_uInt16 n = aCurrentTab.nTabPortion+1; n <= nTmpPortion; n++  )
                 {
                     TextPortion* pTP = pParaPortion->GetTextPortions().GetObject( n );
                     nWidthAfterTab += pTP->GetSize().Width();
@@ -1129,12 +1129,12 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
 //                  nW = nWidthAfterTab;
                     String aText = GetSelected( EditSelection(  EditPaM( pParaPortion->GetNode(), nTmpPos ),
                                                                 EditPaM( pParaPortion->GetNode(), nTmpPos + pPortion->GetLen() ) ) );
-                    USHORT nDecPos = aText.Search( aCurrentTab.aTabStop.GetDecimal() );
+                    sal_uInt16 nDecPos = aText.Search( aCurrentTab.aTabStop.GetDecimal() );
                     if ( nDecPos != STRING_NOTFOUND )
                     {
                         nW -= pParaPortion->GetTextPortions().GetObject( nTmpPortion )->GetSize().Width();
                         nW += aTmpFont.QuickGetTextSize( GetRefDevice(), *pParaPortion->GetNode(), nTmpPos, nDecPos, NULL ).Width();
-                        aCurrentTab.bValid = FALSE;
+                        aCurrentTab.bValid = sal_False;
                     }
                 }
                 else
@@ -1145,7 +1145,7 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
                 if ( nW >= nMaxW )
                 {
                     nW = nMaxW;
-                    aCurrentTab.bValid = FALSE;
+                    aCurrentTab.bValid = sal_False;
                 }
                 TextPortion* pTabPortion = pParaPortion->GetTextPortions().GetObject( aCurrentTab.nTabPortion );
                 pTabPortion->GetSize().Width() = aCurrentTab.nTabPos - aCurrentTab.nStartPosX - nW - nStartX;
@@ -1161,7 +1161,7 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
 
         DBG_ASSERT( pPortion, "no portion!?" );
 
-        aCurrentTab.bValid = FALSE;
+        aCurrentTab.bValid = sal_False;
 
         // das war evtl. eine Portion zu weit:
         sal_Bool bFixedEnd = sal_False;
@@ -1256,7 +1256,7 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
             if ( bCompressedChars && pPortion && ( pPortion->GetLen() > 1 ) && pPortion->GetExtraInfos() && pPortion->GetExtraInfos()->bCompressed )
             {
                 // I need the manipulated DXArray for determining the break postion...
-                ImplCalcAsianCompression( pNode, pPortion, nPortionStart, const_cast<sal_Int32*>(( pLine->GetCharPosArray().GetData() + (nPortionStart-pLine->GetStart()) )), 10000, TRUE );
+                ImplCalcAsianCompression( pNode, pPortion, nPortionStart, const_cast<sal_Int32*>(( pLine->GetCharPosArray().GetData() + (nPortionStart-pLine->GetStart()) )), 10000, sal_True );
             }
             if( pPortion )
                 ImpBreakLine( pParaPortion, pLine, pPortion, nPortionStart,
@@ -1554,8 +1554,8 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
                     pParaPortion->GetTextPortions().Insert( pDummyPortion, pParaPortion->GetTextPortions().Count() );
                     pLine = new EditLine;
                     pParaPortion->GetLines().Insert( pLine, ++nLine );
-                    bForceOneRun = TRUE;
-                    bProcessingEmptyLine = TRUE;
+                    bForceOneRun = sal_True;
+                    bProcessingEmptyLine = sal_True;
                 }
             }
             if ( pLine )
@@ -1644,7 +1644,7 @@ void ImpEditEngine::CreateAndInsertEmptyLine( ParaPortion* pParaPortion, sal_uIn
 
     if ( !aStatus.IsOutliner() )
     {
-        USHORT nPara = GetParaPortions().GetPos( pParaPortion );
+        sal_uInt16 nPara = GetParaPortions().GetPos( pParaPortion );
         SvxAdjust eJustification = GetJustification( nPara );
         long nMaxLineWidth = !IsVertical() ? aPaperSize.Width() : aPaperSize.Height();
         nMaxLineWidth -= GetXValue( rLRItem.GetRight() );
@@ -1677,7 +1677,7 @@ void ImpEditEngine::CreateAndInsertEmptyLine( ParaPortion* pParaPortion, sal_uIn
         }
         else if ( rLSItem.GetInterLineSpaceRule() == SVX_INTER_LINE_SPACE_PROP )
         {
-            USHORT nPara = GetParaPortions().GetPos( pParaPortion );
+            sal_uInt16 nPara = GetParaPortions().GetPos( pParaPortion );
             if ( nPara || IsFixedCellHeight() || pTmpLine->GetStartPortion() ) // Nicht die aller erste Zeile
             {
                 // #100508# There are documents with PropLineSpace 0, why?
@@ -1768,8 +1768,8 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
     else
     {
         sal_uInt16 nMinBreakPos = pLine->GetStart();
-        USHORT nAttrs = pNode->GetCharAttribs().GetAttribs().Count();
-        for ( USHORT nAttr = nAttrs; nAttr; )
+        sal_uInt16 nAttrs = pNode->GetCharAttribs().GetAttribs().Count();
+        for ( sal_uInt16 nAttr = nAttrs; nAttr; )
         {
             EditCharAttrib* pAttr = pNode->GetCharAttribs().GetAttribs()[--nAttr];
             if ( pAttr->IsFeature() && ( pAttr->GetEnd() > nMinBreakPos ) && ( pAttr->GetEnd() <= nMaxBreakPos ) )
@@ -1789,15 +1789,15 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
         i18n::LineBreakHyphenationOptions aHyphOptions( xHyph, Sequence< PropertyValue >(), 1 );
         i18n::LineBreakUserOptions aUserOptions;
 
-        const i18n::ForbiddenCharacters* pForbidden = GetForbiddenCharsTable()->GetForbiddenCharacters( SvxLocaleToLanguage( aLocale ), TRUE );
+        const i18n::ForbiddenCharacters* pForbidden = GetForbiddenCharsTable()->GetForbiddenCharacters( SvxLocaleToLanguage( aLocale ), sal_True );
         aUserOptions.forbiddenBeginCharacters = pForbidden->beginLine;
         aUserOptions.forbiddenEndCharacters = pForbidden->endLine;
         aUserOptions.applyForbiddenRules = ((const SfxBoolItem&)pNode->GetContentAttribs().GetItem( EE_PARA_FORBIDDENRULES )).GetValue();
         aUserOptions.allowPunctuationOutsideMargin = ((const SfxBoolItem&)pNode->GetContentAttribs().GetItem( EE_PARA_HANGINGPUNCTUATION )).GetValue();
-        aUserOptions.allowHyphenateEnglish = FALSE;
+        aUserOptions.allowHyphenateEnglish = sal_False;
 
         i18n::LineBreakResults aLBR = _xBI->getLineBreak( *pNode, nMaxBreakPos, aLocale, nMinBreakPos, aHyphOptions, aUserOptions );
-        nBreakPos = (USHORT)aLBR.breakIndex;
+        nBreakPos = (sal_uInt16)aLBR.breakIndex;
 
         // BUG in I18N - under special condition (break behind field, #87327#) breakIndex is < nMinBreakPos
         if ( nBreakPos < nMinBreakPos )
@@ -1839,10 +1839,10 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
 //          sal_uInt16 nWordStart = nBreakPos;
 //          sal_uInt16 nBreakPos_OLD = nBreakPos;
             sal_uInt16 nWordStart = nBreakPos;
-            sal_uInt16 nWordEnd = (USHORT) aBoundary.endPos;
+            sal_uInt16 nWordEnd = (sal_uInt16) aBoundary.endPos;
             DBG_ASSERT( nWordEnd > nWordStart, "ImpBreakLine: Start >= End?" );
 
-            USHORT nWordLen = nWordEnd - nWordStart;
+            sal_uInt16 nWordLen = nWordEnd - nWordStart;
             if ( ( nWordEnd >= nMaxBreakPos ) && ( nWordLen > 3 ) )
             {
                 // #104415# May happen, because getLineBreak may differ from getWordBoudary with DICTIONARY_WORD
@@ -2000,16 +2000,16 @@ void ImpEditEngine::ImpAdjustBlocks( ParaPortion* pParaPortion, EditLine* pLine,
     if ( ( nRemainingSpace < 0 ) || pLine->IsEmpty() )
         return ;
 
-    const USHORT nFirstChar = pLine->GetStart();
-    const USHORT nLastChar = pLine->GetEnd() -1;    // Last zeigt dahinter
+    const sal_uInt16 nFirstChar = pLine->GetStart();
+    const sal_uInt16 nLastChar = pLine->GetEnd() -1;    // Last zeigt dahinter
     ContentNode* pNode = pParaPortion->GetNode();
 
     DBG_ASSERT( nLastChar < pNode->Len(), "AdjustBlocks: Out of range!" );
 
     // Search blanks or Kashidas...
     SvUShorts aPositions;
-    USHORT nLastScript = i18n::ScriptType::LATIN;
-    for ( USHORT nChar = nFirstChar; nChar <= nLastChar; nChar++ )
+    sal_uInt16 nLastScript = i18n::ScriptType::LATIN;
+    for ( sal_uInt16 nChar = nFirstChar; nChar <= nLastChar; nChar++ )
     {
         EditPaM aPaM( pNode, nChar+1 );
         LanguageType eLang = GetLanguage(aPaM);
@@ -2053,7 +2053,7 @@ void ImpEditEngine::ImpAdjustBlocks( ParaPortion* pParaPortion, EditLine* pLine,
     if ( ( pNode->GetChar( nLastChar ) == ' ' ) && ( aPositions.Count() > 1 ) && ( MsLangId::getPrimaryLanguage( GetLanguage( EditPaM( pNode, nLastChar ) ) ) != LANGUAGE_ARABIC_PRIMARY_ONLY ) )
     {
         aPositions.Remove( aPositions.Count()-1, 1 );
-        USHORT nPortionStart, nPortion;
+        sal_uInt16 nPortionStart, nPortion;
         nPortion = pParaPortion->GetTextPortions().FindPortion( nLastChar+1, nPortionStart );
         TextPortion* pLastPortion = pParaPortion->GetTextPortions()[ nPortion ];
         long nRealWidth = pLine->GetCharPosArray()[nLastChar-nFirstChar];
@@ -2072,7 +2072,7 @@ void ImpEditEngine::ImpAdjustBlocks( ParaPortion* pParaPortion, EditLine* pLine,
         pLine->GetCharPosArray()[nLastChar-nFirstChar] -= nBlankWidth;
     }
 
-    USHORT nGaps = aPositions.Count();
+    sal_uInt16 nGaps = aPositions.Count();
     const long nMore4Everyone = nRemainingSpace / nGaps;
     long nSomeExtraSpace = nRemainingSpace - nMore4Everyone*nGaps;
 
@@ -2081,12 +2081,12 @@ void ImpEditEngine::ImpAdjustBlocks( ParaPortion* pParaPortion, EditLine* pLine,
 
     // Die Positionen im Array und die Portion-Breiten korrigieren:
     // Letztes Zeichen wird schon nicht mehr beachtet...
-    for ( USHORT n = 0; n < aPositions.Count(); n++ )
+    for ( sal_uInt16 n = 0; n < aPositions.Count(); n++ )
     {
         USHORT nChar = aPositions[n];
         if ( nChar < nLastChar )
         {
-            USHORT nPortionStart, nPortion;
+            sal_uInt16 nPortionStart, nPortion;
             nPortion = pParaPortion->GetTextPortions().FindPortion( nChar, nPortionStart, true );
             TextPortion* pLastPortion = pParaPortion->GetTextPortions()[ nPortion ];
             USHORT nPortionEnd = nPortionStart + pLastPortion->GetLen();
@@ -2098,8 +2098,8 @@ void ImpEditEngine::ImpAdjustBlocks( ParaPortion* pParaPortion, EditLine* pLine,
 
             // Correct positions in array
             // Even for kashidas just change positions, VCL will then draw the kashida automaticly
-
-            for ( USHORT _n = nChar; _n < nPortionEnd; _n++ )
+            sal_uInt16 nPortionEnd = nPortionStart + pLastPortion->GetLen();
+            for ( sal_uInt16 _n = nChar; _n < nPortionEnd; _n++ )
             {
                 pLine->GetCharPosArray()[_n-nFirstChar] += nMore4Everyone;
                 if ( nSomeExtraSpace )
@@ -2115,7 +2115,7 @@ void ImpEditEngine::ImpAdjustBlocks( ParaPortion* pParaPortion, EditLine* pLine,
     pLine->SetTextWidth( pLine->GetTextWidth() + nRemainingSpace );
 }
 
-void ImpEditEngine::ImpFindKashidas( ContentNode* pNode, USHORT nStart, USHORT nEnd, SvUShorts& rArray )
+void ImpEditEngine::ImpFindKashidas( ContentNode* pNode, sal_uInt16 nStart, sal_uInt16 nEnd, SvUShorts& rArray )
 {
     // the search has to be performed on a per word base
 
@@ -2126,7 +2126,7 @@ void ImpEditEngine::ImpFindKashidas( ContentNode* pNode, USHORT nStart, USHORT n
 
     while ( ( aWordSel.Min().GetNode() == pNode ) && ( aWordSel.Min().GetIndex() < nEnd ) )
     {
-        USHORT nSavPos = aWordSel.Max().GetIndex();
+        sal_uInt16 nSavPos = aWordSel.Max().GetIndex();
         if ( aWordSel.Max().GetIndex() > nEnd )
            aWordSel.Max().GetIndex() = nEnd;
 
@@ -2281,7 +2281,7 @@ sal_uInt16 ImpEditEngine::SplitTextPortion( ParaPortion* pPortion, sal_uInt16 nP
         if ( pTextPortion->GetExtraInfos() && pTextPortion->GetExtraInfos()->bCompressed )
         {
             // We need the original size from the portion
-            USHORT nTxtPortionStart = pPortion->GetTextPortions().GetStartPos( nSplitPortion );
+            sal_uInt16 nTxtPortionStart = pPortion->GetTextPortions().GetStartPos( nSplitPortion );
                SvxFont aTmpFont( pPortion->GetNode()->GetCharAttribs().GetDefFont() );
             SeekCursor( pPortion->GetNode(), nTxtPortionStart+1, aTmpFont );
             aTmpFont.SetPhysFont( GetRefDevice() );
@@ -2320,15 +2320,15 @@ void ImpEditEngine::CreateTextPortions( ParaPortion* pParaPortion, sal_uInt16& r
     }
     aPositions.Insert( pNode->Len() );
 
-    if ( !pParaPortion->aScriptInfos.Count() )
+    if ( pParaPortion->aScriptInfos.empty() )
         ((ImpEditEngine*)this)->InitScriptTypes( GetParaPortions().GetPos( pParaPortion ) );
 
     const ScriptTypePosInfos& rTypes = pParaPortion->aScriptInfos;
-    for ( USHORT nT = 0; nT < rTypes.Count(); nT++ )
+    for ( size_t nT = 0; nT < rTypes.size(); nT++ )
         aPositions.Insert( rTypes[nT].nStartPos );
 
     const WritingDirectionInfos& rWritingDirections = pParaPortion->aWritingDirectionInfos;
-    for ( USHORT nD = 0; nD < rWritingDirections.Count(); nD++ )
+    for ( size_t nD = 0; nD < rWritingDirections.size(); nD++ )
         aPositions.Insert( rWritingDirections[nD].nStartPos );
 
     if ( mpIMEInfos && mpIMEInfos->nLen && mpIMEInfos->pAttribs && ( mpIMEInfos->aPos.GetNode() == pNode ) )
@@ -2419,7 +2419,7 @@ void ImpEditEngine::RecalcTextPortion( ParaPortion* pParaPortion, sal_uInt16 nSt
                     !pParaPortion->GetTextPortions()[nNewPortionPos]->GetLen() )
             {
                 DBG_ASSERT( pParaPortion->GetTextPortions()[nNewPortionPos]->GetKind() == PORTIONKIND_TEXT, "Leere Portion war keine TextPortion!" );
-                USHORT & r =
+                sal_uInt16 & r =
                     pParaPortion->GetTextPortions()[nNewPortionPos]->GetLen();
                 r = r + nNewChars;
             }
@@ -2468,7 +2468,7 @@ void ImpEditEngine::RecalcTextPortion( ParaPortion* pParaPortion, sal_uInt16 nSt
         if ( ( nPos == nStartPos ) && ( (nPos+pTP->GetLen()) == nEnd ) )
         {
             // Portion entfernen;
-            BYTE nType = pTP->GetKind();
+            sal_uInt8 nType = pTP->GetKind();
             pParaPortion->GetTextPortions().Remove( nPortion );
             delete pTP;
             if ( nType == PORTIONKIND_LINEBREAK )
@@ -2533,7 +2533,7 @@ void ImpEditEngine::SetTextRanger( TextRanger* pRanger )
     }
 }
 
-void ImpEditEngine::SetVertical( BOOL bVertical )
+void ImpEditEngine::SetVertical( sal_Bool bVertical )
 {
     if ( IsVertical() != bVertical )
     {
@@ -2548,7 +2548,7 @@ void ImpEditEngine::SetVertical( BOOL bVertical )
     }
 }
 
-void ImpEditEngine::SetFixedCellHeight( BOOL bUseFixedCellHeight )
+void ImpEditEngine::SetFixedCellHeight( sal_Bool bUseFixedCellHeight )
 {
     if ( IsFixedCellHeight() != bUseFixedCellHeight )
     {
@@ -2773,7 +2773,7 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_uInt16 nPos, SvxFont& rF
             const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
             rFont.SetColor( rStyleSettings.GetHighlightTextColor() );
             rFont.SetFillColor( rStyleSettings.GetHighlightColor() );
-            rFont.SetTransparent( FALSE );
+            rFont.SetTransparent( sal_False );
         }
         else if ( nAttr & EXTTEXTINPUT_ATTR_GRAYWAVELINE )
         {
@@ -3028,16 +3028,16 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                             {
                                 SeekCursor( pPortion->GetNode(), nIndex+1, aTmpFont, pOutDev );
 
-                                BOOL bDrawFrame = FALSE;
+                                sal_Bool bDrawFrame = sal_False;
 
                                 if ( ( pTextPortion->GetKind() == PORTIONKIND_FIELD ) && !aTmpFont.IsTransparent() &&
                                      ( GetBackgroundColor() != COL_AUTO ) && GetBackgroundColor().IsDark() &&
                                      ( IsAutoColorEnabled() && ( pOutDev->GetOutDevType() != OUTDEV_PRINTER ) ) )
                                 {
-                                    aTmpFont.SetTransparent( TRUE );
+                                    aTmpFont.SetTransparent( sal_True );
                                     pOutDev->SetFillColor();
                                     pOutDev->SetLineColor( GetAutoColor() );
-                                    bDrawFrame = TRUE;
+                                    bDrawFrame = sal_True;
                                 }
 
 #ifdef EDITDEBUG
@@ -3066,8 +3066,8 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                 ImplInitDigitMode( pOutDev, 0, 0, 0, aTmpFont.GetLanguage() );
 
                                 XubString aText;
-                                USHORT nTextStart = 0;
-                                USHORT nTextLen = 0;
+                                sal_uInt16 nTextStart = 0;
+                                sal_uInt16 nTextLen = 0;
                                 const sal_Int32* pDXArray = 0;
                                 sal_Int32* pTmpDXArray = 0;
 
@@ -3139,7 +3139,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                                 {
                                                     const String aSlash( '/' );
                                                     const short nOldEscapement = aTmpFont.GetEscapement();
-                                                    const BYTE nOldPropr = aTmpFont.GetPropr();
+                                                    const sal_uInt8 nOldPropr = aTmpFont.GetPropr();
 
                                                     aTmpFont.SetEscapement( -20 );
                                                     aTmpFont.SetPropr( 25 );
@@ -3390,7 +3390,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                             if ( bSpecialUnderline )
                                             {
                                                 Size aSz = aTmpFont.GetPhysTxtSize( pOutDev, aText, nTextStart, nTextLen );
-                                                BYTE nProp = aTmpFont.GetPropr();
+                                                sal_uInt8 nProp = aTmpFont.GetPropr();
                                                 aTmpFont.SetEscapement( 0 );
                                                 aTmpFont.SetPropr( 100 );
                                                 aTmpFont.SetPhysFont( pOutDev );
@@ -3553,7 +3553,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                         nChars = 3; // sieht besser aus
 
                                     String aText;
-                                    aText.Fill( (USHORT)nChars, pTextPortion->GetExtraValue() );
+                                    aText.Fill( (sal_uInt16)nChars, pTextPortion->GetExtraValue() );
                                     aTmpFont.QuickDrawText( pOutDev, aTmpPos, aText, 0, aText.Len(), NULL );
                                     pOutDev->DrawStretchText( aTmpPos, pTextPortion->GetSize().Width(), aText );
 
@@ -3684,7 +3684,7 @@ void ImpEditEngine::Paint( ImpEditView* pView, const Rectangle& rRec, sal_Bool b
                 }
             }
 
-            UINT8 nColorDiff = aFontColor.GetColorError( aBackgroundColor );
+            sal_uInt8 nColorDiff = aFontColor.GetColorError( aBackgroundColor );
             if( nColorDiff < 8 )
                 aBackgroundColor = aFontColor.IsDark() ? COL_WHITE : COL_BLACK;
             pVDev->SetBackground( aBackgroundColor );
@@ -4252,7 +4252,7 @@ void ImpEditEngine::DoStretchChars( sal_uInt16 nX, sal_uInt16 nY )
             // Fonthoehe
             for ( int nItem = 0; nItem < 3; nItem++ )
             {
-                USHORT nItemId = EE_CHAR_FONTHEIGHT;
+                sal_uInt16 nItemId = EE_CHAR_FONTHEIGHT;
                 if ( nItem == 1 )
                     nItemId = EE_CHAR_FONTHEIGHT_CJK;
                 else if ( nItem == 2 )
@@ -4360,7 +4360,7 @@ const SvxNumberFormat* ImpEditEngine::GetNumberFormat( const ContentNode *pNode 
     if (pNode)
     {
         // get index of paragraph
-        USHORT nPara = GetEditDoc().GetPos( const_cast< ContentNode * >(pNode) );
+        sal_uInt16 nPara = GetEditDoc().GetPos( const_cast< ContentNode * >(pNode) );
         DBG_ASSERT( nPara < USHRT_MAX, "node not found in array" );
         if (nPara < USHRT_MAX)
         {
@@ -4464,10 +4464,10 @@ void ImpEditEngine::ImplInitDigitMode( OutputDevice* pOutDev, String* pString, x
     }
 }
 
-void ImpEditEngine::ImplInitLayoutMode( OutputDevice* pOutDev, USHORT nPara, USHORT nIndex )
+void ImpEditEngine::ImplInitLayoutMode( OutputDevice* pOutDev, sal_uInt16 nPara, sal_uInt16 nIndex )
 {
-    BOOL bCTL = FALSE;
-    BYTE bR2L = FALSE;
+    sal_Bool bCTL = sal_False;
+    sal_uInt8 bR2L = sal_False;
     if ( nIndex == 0xFFFF )
     {
         bCTL = HasScriptType( nPara, i18n::ScriptType::COMPLEX );
@@ -4482,7 +4482,7 @@ void ImpEditEngine::ImplInitLayoutMode( OutputDevice* pOutDev, USHORT nPara, USH
                                                     // it also works for issue 55927
     }
 
-    ULONG nLayoutMode = pOutDev->GetLayoutMode();
+    sal_uLong nLayoutMode = pOutDev->GetLayoutMode();
 
     // We always use the left postion for DrawText()
     nLayoutMode &= ~(TEXT_LAYOUT_BIDI_RTL);
@@ -4562,7 +4562,7 @@ Color ImpEditEngine::GetAutoColor() const
 }
 
 
-BOOL ImpEditEngine::ImplCalcAsianCompression( ContentNode* pNode, TextPortion* pTextPortion, USHORT nStartPos, sal_Int32* pDXArray, USHORT n100thPercentFromMax, BOOL bManipulateDXArray )
+sal_Bool ImpEditEngine::ImplCalcAsianCompression( ContentNode* pNode, TextPortion* pTextPortion, sal_uInt16 nStartPos, sal_Int32* pDXArray, sal_uInt16 n100thPercentFromMax, sal_Bool bManipulateDXArray )
 {
     DBG_ASSERT( GetAsianCompressionMode(), "ImplCalcAsianCompression - Why?" );
     DBG_ASSERT( pTextPortion->GetLen(), "ImplCalcAsianCompression - Empty Portion?" );
@@ -4572,18 +4572,18 @@ BOOL ImpEditEngine::ImplCalcAsianCompression( ContentNode* pNode, TextPortion* p
     if ( n100thPercentFromMax == 10000 )
         pTextPortion->SetExtraInfos( NULL );
 
-    BOOL bCompressed = FALSE;
+    sal_Bool bCompressed = sal_False;
 
     if ( GetScriptType( EditPaM( pNode, nStartPos+1 ) ) == i18n::ScriptType::ASIAN )
     {
         long nNewPortionWidth = pTextPortion->GetSize().Width();
-        USHORT nPortionLen = pTextPortion->GetLen();
-        for ( USHORT n = 0; n < nPortionLen; n++ )
+        sal_uInt16 nPortionLen = pTextPortion->GetLen();
+        for ( sal_uInt16 n = 0; n < nPortionLen; n++ )
         {
-            BYTE nType = GetCharTypeForCompression( pNode->GetChar( n+nStartPos ) );
+            sal_uInt8 nType = GetCharTypeForCompression( pNode->GetChar( n+nStartPos ) );
 
-            BOOL bCompressPunctuation = ( nType == CHAR_PUNCTUATIONLEFT ) || ( nType == CHAR_PUNCTUATIONRIGHT );
-            BOOL bCompressKana = ( nType == CHAR_KANA ) && ( GetAsianCompressionMode() == text::CharacterCompressionType::PUNCTUATION_AND_KANA );
+            sal_Bool bCompressPunctuation = ( nType == CHAR_PUNCTUATIONLEFT ) || ( nType == CHAR_PUNCTUATIONRIGHT );
+            sal_Bool bCompressKana = ( nType == CHAR_KANA ) && ( GetAsianCompressionMode() == text::CharacterCompressionType::PUNCTUATION_AND_KANA );
 
             // create Extra infos only if needed...
             if ( bCompressPunctuation || bCompressKana )
@@ -4634,9 +4634,9 @@ BOOL ImpEditEngine::ImplCalcAsianCompression( ContentNode* pNode, TextPortion* p
 
                 if ( nCompress )
                 {
-                    bCompressed = TRUE;
+                    bCompressed = sal_True;
                     nNewPortionWidth -= nCompress;
-                    pTextPortion->GetExtraInfos()->bCompressed = TRUE;
+                    pTextPortion->GetExtraInfos()->bCompressed = sal_True;
 
 
                     // Special handling for rightpunctuation: For the 'compression' we must
@@ -4652,19 +4652,19 @@ BOOL ImpEditEngine::ImplCalcAsianCompression( ContentNode* pNode, TextPortion* p
                             if ( n )
                             {
                                 // -1: No entry for the last character
-                                for ( USHORT i = n-1; i < (nPortionLen-1); i++ )
+                                for ( sal_uInt16 i = n-1; i < (nPortionLen-1); i++ )
                                     pDXArray[i] -= nCompress;
                             }
                             else
                             {
-                                pTextPortion->GetExtraInfos()->bFirstCharIsRightPunktuation = TRUE;
+                                pTextPortion->GetExtraInfos()->bFirstCharIsRightPunktuation = sal_True;
                                 pTextPortion->GetExtraInfos()->nPortionOffsetX = -nCompress;
                             }
                         }
                         else
                         {
                             // -1: No entry for the last character
-                            for ( USHORT i = n; i < (nPortionLen-1); i++ )
+                            for ( sal_uInt16 i = n; i < (nPortionLen-1); i++ )
                                 pDXArray[i] -= nCompress;
                         }
                     }
@@ -4694,18 +4694,18 @@ BOOL ImpEditEngine::ImplCalcAsianCompression( ContentNode* pNode, TextPortion* p
 
 void ImpEditEngine::ImplExpandCompressedPortions( EditLine* pLine, ParaPortion* pParaPortion, long nRemainingWidth )
 {
-    BOOL bFoundCompressedPortion = FALSE;
+    sal_Bool bFoundCompressedPortion = sal_False;
     long nCompressed = 0;
 //    long nCompressWeight = 0;
     TextPortionList aCompressedPortions;
 
-    USHORT nPortion = pLine->GetEndPortion();
+    sal_uInt16 nPortion = pLine->GetEndPortion();
     TextPortion* pTP = pParaPortion->GetTextPortions()[ nPortion ];
     while ( pTP && ( pTP->GetKind() == PORTIONKIND_TEXT ) )
     {
         if ( pTP->GetExtraInfos() && pTP->GetExtraInfos()->bCompressed )
         {
-            bFoundCompressedPortion = TRUE;
+            bFoundCompressedPortion = sal_True;
             nCompressed += pTP->GetExtraInfos()->nOrgWidth - pTP->GetSize().Width();
             aCompressedPortions.Insert( pTP, aCompressedPortions.Count() );
         }
@@ -4723,20 +4723,20 @@ void ImpEditEngine::ImplExpandCompressedPortions( EditLine* pLine, ParaPortion* 
             nCompressPercent /= nCompressed;
         }
 
-        for ( USHORT n = 0; n < aCompressedPortions.Count(); n++ )
+        for ( sal_uInt16 n = 0; n < aCompressedPortions.Count(); n++ )
         {
             pTP = aCompressedPortions[n];
-            pTP->GetExtraInfos()->bCompressed = FALSE;
+            pTP->GetExtraInfos()->bCompressed = sal_False;
             pTP->GetSize().Width() = pTP->GetExtraInfos()->nOrgWidth;
             if ( nCompressPercent )
             {
-                USHORT nTxtPortion = pParaPortion->GetTextPortions().GetPos( pTP );
-                USHORT nTxtPortionStart = pParaPortion->GetTextPortions().GetStartPos( nTxtPortion );
+                sal_uInt16 nTxtPortion = pParaPortion->GetTextPortions().GetPos( pTP );
+                sal_uInt16 nTxtPortionStart = pParaPortion->GetTextPortions().GetStartPos( nTxtPortion );
                 DBG_ASSERT( nTxtPortionStart >= pLine->GetStart(), "Portion doesn't belong to the line!!!" );
                 sal_Int32* pDXArray = const_cast< sal_Int32* >( pLine->GetCharPosArray().GetData()+( nTxtPortionStart-pLine->GetStart() ) );
                 if ( pTP->GetExtraInfos()->pOrgDXArray )
                     memcpy( pDXArray, pTP->GetExtraInfos()->pOrgDXArray, (pTP->GetLen()-1)*sizeof(sal_Int32) );
-                ImplCalcAsianCompression( pParaPortion->GetNode(), pTP, nTxtPortionStart, pDXArray, (USHORT)nCompressPercent, TRUE );
+                ImplCalcAsianCompression( pParaPortion->GetNode(), pTP, nTxtPortionStart, pDXArray, (sal_uInt16)nCompressPercent, sal_True );
             }
         }
     }
@@ -4745,7 +4745,7 @@ void ImpEditEngine::ImplExpandCompressedPortions( EditLine* pLine, ParaPortion* 
 }
 
 // redesigned to work with TextMarkingVector
-void ImpEditEngine::ImplFillTextMarkingVector(const lang::Locale& rLocale, EEngineData::TextMarkingVector& rTextMarkingVector, const String& rTxt, const USHORT nIdx, const USHORT nLen) const
+void ImpEditEngine::ImplFillTextMarkingVector(const lang::Locale& rLocale, EEngineData::TextMarkingVector& rTextMarkingVector, const String& rTxt, const sal_uInt16 nIdx, const sal_uInt16 nLen) const
 {
     // determine relevant logical text elements for the just-rendered
     // string of characters.

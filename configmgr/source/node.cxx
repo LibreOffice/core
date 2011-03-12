@@ -102,10 +102,6 @@ Node::~Node() {}
 
 void Node::clear() {}
 
-rtl::Reference< Node > Node::findMember(rtl::OUString const &) {
-    return rtl::Reference< Node >();
-}
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

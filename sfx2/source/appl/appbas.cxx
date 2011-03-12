@@ -61,7 +61,7 @@
 #include "arrdecl.hxx"
 #include <sfx2/app.hxx>
 #include "sfxtypes.hxx"
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include <sfx2/msg.hxx>
 #include <sfx2/msgpool.hxx>
 #include <sfx2/progress.hxx>
@@ -70,17 +70,16 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/dispatch.hxx>
-#include "tplpitem.hxx"
-#include "minfitem.hxx"
+#include "sfx2/tplpitem.hxx"
+#include "sfx2/minfitem.hxx"
 #include "app.hrc"
 #include <sfx2/evntconf.hxx>
-#include <sfx2/macrconf.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/dinfdlg.hxx>
 #include "appdata.hxx"
 #include "appbas.hxx"
-#include "sfxhelp.hxx"
-#include "basmgr.hxx"
+#include "sfx2/sfxhelp.hxx"
+#include "sfx2/basmgr.hxx"
 #include "sorgitm.hxx"
 #include "appbaslib.hxx"
 #include <basic/basicmanagerrepository.hxx>
@@ -147,10 +146,6 @@ SbxVariable* MakeVariable( StarBASIC *pBas, SbxObject *pObject,
 
 BasicManager* SfxApplication::GetBasicManager()
 {
-    if ( pAppData_Impl->nBasicCallLevel == 0 )
-        // sicherheitshalber
-        EnterBasicCall();
-
     return BasicManagerRepository::getApplicationBasicManager( true );
 }
 
@@ -177,33 +172,6 @@ Reference< XLibraryContainer > SfxApplication::GetBasicContainer()
 StarBASIC* SfxApplication::GetBasic()
 {
     return GetBasicManager()->GetLib(0);
-}
-
-//--------------------------------------------------------------------
-
-bool SfxApplication::IsInBasicCall() const
-{
-    return 0 != pAppData_Impl->nBasicCallLevel;
-}
-
-//--------------------------------------------------------------------
-
-void SfxApplication::EnterBasicCall()
-{
-    if ( 1 == ++pAppData_Impl->nBasicCallLevel )
-    {
-        DBG_TRACE( "SfxShellObject: BASIC-on-demand" );
-
-        // zuerst das BASIC laden
-        GetBasic();
-    }
-}
-
-//--------------------------------------------------------------------
-
-void SfxApplication::LeaveBasicCall()
-{
-    --pAppData_Impl->nBasicCallLevel;
 }
 
 //-------------------------------------------------------------------------
@@ -253,10 +221,6 @@ void SfxApplication::PropExec_Impl( SfxRequest &rReq )
             break;
         }
 
-        case SID_PLAYMACRO:
-            PlayMacro_Impl( rReq, GetBasic() );
-            break;
-
         case SID_OFFICE_PRIVATE_USE:
         case SID_OFFICE_COMMERCIAL_USE:
         {
@@ -300,26 +264,12 @@ void SfxApplication::PropState_Impl( SfxItemSet &rSet )
                 break;
 
             case SID_ATTR_UNDO_COUNT:
-                rSet.Put( SfxUInt16Item( SID_ATTR_UNDO_COUNT, sal::static_int_cast< UINT16 >( SvtUndoOptions().GetUndoCount() ) ) );
+                rSet.Put( SfxUInt16Item( SID_ATTR_UNDO_COUNT, sal::static_int_cast< sal_uInt16 >( SvtUndoOptions().GetUndoCount() ) ) );
                 break;
 
             case SID_UPDATE_VERSION:
                 rSet.Put( SfxUInt32Item( SID_UPDATE_VERSION, SUPD ) );
                 break;
-
-            case SID_BUILD_VERSION:
-            {
-                String aVersion = lcl_GetVersionString();
-                rSet.Put( SfxUInt32Item( SID_BUILD_VERSION, (sal_uInt32) aVersion.ToInt32() ) );
-                break;
-            }
-
-            case SID_OFFICE_PRIVATE_USE:
-            case SID_OFFICE_COMMERCIAL_USE:
-            {
-                DBG_ASSERT( sal_False, "SfxApplication::PropState_Impl()\nSID_OFFICE_PRIVATE_USE & SID_OFFICE_COMMERCIAL_USE are obsolete!\n" );
-                break;
-            }
 
             case SID_OFFICE_CUSTOMERNUMBER:
             {
@@ -329,70 +279,5 @@ void SfxApplication::PropState_Impl( SfxItemSet &rSet )
         }
     }
 }
-
-//--------------------------------------------------------------------
-void SfxApplication::MacroExec_Impl( SfxRequest& rReq )
-{
-    DBG_MEMTEST();
-    if ( SfxMacroConfig::IsMacroSlot( rReq.GetSlot() ) )
-    {
-        // SlotId referenzieren, damit nicht im Execute der Slot abgeschossen
-        // werden kann
-        GetMacroConfig()->RegisterSlotId(rReq.GetSlot());
-        SFX_REQUEST_ARG(rReq, pArgs, SfxStringItem,
-                        rReq.GetSlot(), sal_False);
-        String aArgs;
-        if( pArgs ) aArgs = pArgs->GetValue();
-        if ( GetMacroConfig()->ExecuteMacro(rReq.GetSlot(), aArgs ) )
-            rReq.Done();
-        GetMacroConfig()->ReleaseSlotId(rReq.GetSlot());
-    }
-}
-
-//--------------------------------------------------------------------
-void SfxApplication::MacroState_Impl( SfxItemSet& )
-{
-    DBG_MEMTEST();
-}
-
-//-------------------------------------------------------------------------
-
-void SfxApplication::PlayMacro_Impl( SfxRequest &rReq, StarBASIC *pBasic )
-{
-    EnterBasicCall();
-    sal_Bool bOK = sal_False;
-
-    // Makro und asynch-Flag
-    SFX_REQUEST_ARG(rReq,pMacro,SfxStringItem,SID_STATEMENT,sal_False);
-    SFX_REQUEST_ARG(rReq,pAsynch,SfxBoolItem,SID_ASYNCHRON,sal_False);
-
-    if ( pAsynch && pAsynch->GetValue() )
-    {
-        // asynchron ausf"uhren
-        GetDispatcher_Impl()->Execute( SID_PLAYMACRO, SFX_CALLMODE_ASYNCHRON, pMacro, 0L );
-        rReq.Done();
-    }
-    else if ( pMacro )
-    {
-        // Statement aufbereiten
-        DBG_ASSERT( pBasic, "no BASIC found" ) ;
-        String aStatement( '[' );
-        aStatement += pMacro->GetValue();
-        aStatement += ']';
-
-        // P"aventiv den Request abschlie\sen, da er ggf. zerst"ort wird
-        rReq.Done();
-        rReq.ReleaseArgs();
-
-        // Statement ausf"uhren
-        pBasic->Execute( aStatement );
-        bOK = 0 == SbxBase::GetError();
-        SbxBase::ResetError();
-    }
-
-    LeaveBasicCall();
-    rReq.SetReturnValue(SfxBoolItem(0,bOK));
-}
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

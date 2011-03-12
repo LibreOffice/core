@@ -32,10 +32,10 @@
 #include <basic/sbx.hxx>
 #include "sbxconv.hxx"
 
-UINT32 ImpGetULong( const SbxValues* p )
+sal_uInt32 ImpGetULong( const SbxValues* p )
 {
     SbxValues aTmp;
-    UINT32 nRes;
+    sal_uInt32 nRes;
 start:
     switch( +p->eType )
     {
@@ -81,7 +81,7 @@ start:
                 SbxBase::SetError( SbxERR_OVERFLOW ); nRes = 0;
             }
             else
-                nRes = (UINT32) ( p->nSingle + 0.5 );
+                nRes = (sal_uInt32) ( p->nSingle + 0.5 );
             break;
         case SbxDATE:
         case SbxDOUBLE:
@@ -116,7 +116,7 @@ start:
                 SbxBase::SetError( SbxERR_OVERFLOW ); nRes = 0;
             }
             else
-                nRes = (UINT32) ( dVal + 0.5 );
+                nRes = (sal_uInt32) ( dVal + 0.5 );
             break;
             }
         case SbxBYREF | SbxSTRING:
@@ -139,7 +139,7 @@ start:
                     SbxBase::SetError( SbxERR_OVERFLOW ); nRes = 0;
                 }
                 else
-                    nRes = (UINT32) ( d + 0.5 );
+                    nRes = (sal_uInt32) ( d + 0.5 );
             }
             break;
         case SbxOBJECT:
@@ -190,7 +190,7 @@ start:
     return nRes;
 }
 
-void ImpPutULong( SbxValues* p, UINT32 n )
+void ImpPutULong( SbxValues* p, sal_uInt32 n )
 {
     SbxValues aTmp;
 start:
@@ -257,27 +257,27 @@ start:
             {
                 SbxBase::SetError( SbxERR_OVERFLOW ); n = SbxMAXBYTE;
             }
-            *p->pByte = (BYTE) n; break;
+            *p->pByte = (sal_uInt8) n; break;
         case SbxBYREF | SbxINTEGER:
         case SbxBYREF | SbxBOOL:
             if( n > SbxMAXINT )
             {
                 SbxBase::SetError( SbxERR_OVERFLOW ); n = SbxMAXINT;
             }
-            *p->pInteger = (INT16) n; break;
+            *p->pInteger = (sal_Int16) n; break;
         case SbxBYREF | SbxERROR:
         case SbxBYREF | SbxUSHORT:
             if( n > SbxMAXUINT )
             {
                 SbxBase::SetError( SbxERR_OVERFLOW ); n = SbxMAXUINT;
             }
-            *p->pUShort = (UINT16) n; break;
+            *p->pUShort = (sal_uInt16) n; break;
         case SbxBYREF | SbxLONG:
             if( n > SbxMAXLNG )
             {
                 SbxBase::SetError( SbxERR_OVERFLOW ); n = SbxMAXLNG;
             }
-            *p->pLong = (INT32) n; break;
+            *p->pLong = (sal_Int32) n; break;
         case SbxBYREF | SbxULONG:
             *p->pULong = n; break;
         case SbxBYREF | SbxSINGLE:

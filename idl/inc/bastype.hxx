@@ -42,16 +42,16 @@ class SvTokenStream;
 
 class SvUINT32
 {
-    UINT32  nVal;
+    sal_uInt32  nVal;
 public:
                 SvUINT32() { nVal = 0; }
-                SvUINT32( UINT32 n ) : nVal( n ) {}
-    SvUINT32 &  operator = ( UINT32 n ) { nVal = n; return *this; }
+                SvUINT32( sal_uInt32 n ) : nVal( n ) {}
+    SvUINT32 &  operator = ( sal_uInt32 n ) { nVal = n; return *this; }
 
-    operator    UINT32 &() { return nVal; }
+    operator    sal_uInt32 &() { return nVal; }
 
-    static UINT32  Read( SvStream & rStm );
-    static void    Write( SvStream & rStm, UINT32 nVal );
+    static sal_uInt32  Read( SvStream & rStm );
+    static void    Write( SvStream & rStm, sal_uInt32 nVal );
 
     friend SvStream& operator << (SvStream & rStm, const SvUINT32 & r )
                 { SvUINT32::Write( rStm, r.nVal ); return rStm; }
@@ -71,7 +71,7 @@ public:
     operator    short &() { return nVal; }
 
     friend SvStream& operator << (SvStream & rStm, const SvINT16 & r )
-                { SvUINT32::Write( rStm, (UINT32)r.nVal ); return rStm; }
+                { SvUINT32::Write( rStm, (sal_uInt32)r.nVal ); return rStm; }
     friend SvStream& operator >> (SvStream & rStm, SvINT16 & r )
                 { r.nVal = (short)SvUINT32::Read( rStm ); return rStm; }
 };
@@ -79,53 +79,53 @@ public:
 
 class SvUINT16
 {
-    USHORT  nVal;
+    sal_uInt16  nVal;
 public:
                 SvUINT16() { nVal = 0; }
-                SvUINT16( USHORT n ) : nVal( n ) {}
-    SvUINT16 &  operator = ( USHORT n ) { nVal = n; return *this; }
+                SvUINT16( sal_uInt16 n ) : nVal( n ) {}
+    SvUINT16 &  operator = ( sal_uInt16 n ) { nVal = n; return *this; }
 
-    operator    UINT16 &() { return nVal; }
+    operator    sal_uInt16 &() { return nVal; }
 
     friend SvStream& operator << (SvStream & rStm, const SvUINT16 & r )
-                { SvUINT32::Write( rStm, (UINT32)r.nVal ); return rStm; }
+                { SvUINT32::Write( rStm, (sal_uInt32)r.nVal ); return rStm; }
     friend SvStream& operator >> (SvStream & rStm, SvUINT16 & r )
-                { r.nVal = (USHORT)SvUINT32::Read( rStm ); return rStm; }
+                { r.nVal = (sal_uInt16)SvUINT32::Read( rStm ); return rStm; }
 };
 
 
 class SvINT32
 {
-    INT32   nVal;
+    sal_Int32   nVal;
 public:
                 SvINT32() { nVal = 0; }
-                SvINT32( INT32 n ) : nVal( n ) {}
-    SvINT32 &   operator = ( INT32 n ) { nVal = n; return *this; }
+                SvINT32( sal_Int32 n ) : nVal( n ) {}
+    SvINT32 &   operator = ( sal_Int32 n ) { nVal = n; return *this; }
 
-    operator    INT32 &() { return nVal; }
+    operator    sal_Int32 &() { return nVal; }
 
     friend SvStream& operator << (SvStream & rStm, const SvINT32 & r )
-                { SvUINT32::Write( rStm, (UINT32)r.nVal ); return rStm; }
+                { SvUINT32::Write( rStm, (sal_uInt32)r.nVal ); return rStm; }
     friend SvStream& operator >> (SvStream & rStm, SvINT32 & r )
-                { r.nVal = (INT32)SvUINT32::Read( rStm ); return rStm; }
+                { r.nVal = (sal_Int32)SvUINT32::Read( rStm ); return rStm; }
 };
 
 
 class Svint
 {
     int     nVal;
-    BOOL    bSet;
+    sal_Bool    bSet;
 public:
                 Svint() { nVal = bSet = 0; }
-                Svint( int n ) : nVal( n ), bSet( TRUE ) {}
-                Svint( int n, BOOL bSetP ) : nVal( n ), bSet( bSetP ) {}
-    Svint    &  operator = ( int n ) { nVal = n; bSet = TRUE; return *this; }
+                Svint( int n ) : nVal( n ), bSet( sal_True ) {}
+                Svint( int n, sal_Bool bSetP ) : nVal( n ), bSet( bSetP ) {}
+    Svint    &  operator = ( int n ) { nVal = n; bSet = sal_True; return *this; }
 
     operator    int ()const { return nVal; }
-    BOOL        IsSet() const { return bSet; }
+    sal_Bool        IsSet() const { return bSet; }
 
     friend SvStream& operator << (SvStream & rStm, const Svint & r )
-                { SvUINT32::Write( rStm, (UINT32)r.nVal ); rStm << r.bSet; return rStm; }
+                { SvUINT32::Write( rStm, (sal_uInt32)r.nVal ); rStm << r.bSet; return rStm; }
     friend SvStream& operator >> (SvStream & rStm, Svint & r )
                 { r.nVal = (int)SvUINT32::Read( rStm ); rStm >> r.bSet ; return rStm; }
 };
@@ -133,27 +133,27 @@ public:
 
 class SvBOOL
 {
-    BOOL  nVal:1,
+    sal_Bool  nVal:1,
           bSet:1;
 public:
-                SvBOOL() { bSet = nVal = FALSE; }
-                SvBOOL( BOOL n ) : nVal( n ), bSet( TRUE ) {}
-                SvBOOL( BOOL n, BOOL bSetP ) : nVal( n ), bSet( bSetP ) {}
-    SvBOOL &    operator = ( BOOL n ) { nVal = n; bSet = TRUE; return *this; }
+                SvBOOL() { bSet = nVal = sal_False; }
+                SvBOOL( sal_Bool n ) : nVal( n ), bSet( sal_True ) {}
+                SvBOOL( sal_Bool n, sal_Bool bSetP ) : nVal( n ), bSet( bSetP ) {}
+    SvBOOL &    operator = ( sal_Bool n ) { nVal = n; bSet = sal_True; return *this; }
 
-    operator    BOOL() const { return nVal; }
+    operator    sal_Bool() const { return nVal; }
 #ifdef STC
     operator    int() const { return nVal; }
 #endif
-    BOOL        Is() const { return nVal; }
-    BOOL        IsSet() const { return bSet; }
+    sal_Bool        Is() const { return nVal; }
+    sal_Bool        IsSet() const { return bSet; }
 
     friend SvStream& operator << (SvStream &, const SvBOOL &);
     friend SvStream& operator >> (SvStream &, SvBOOL &);
 
 #ifdef IDL_COMPILER
-    BOOL        ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm );
-    BOOL        WriteSvIdl( SvStringHashEntry * pName, SvStream & rOutStm );
+    sal_Bool        ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm );
+    sal_Bool        WriteSvIdl( SvStringHashEntry * pName, SvStream & rOutStm );
     ByteString      GetSvIdlString( SvStringHashEntry * pName );
 #endif
 };
@@ -168,34 +168,34 @@ public:
     friend SvStream& operator << (SvStream &, const SvIdentifier &);
     friend SvStream& operator >> (SvStream &, SvIdentifier &);
 
-    BOOL        IsSet() const { return Len() != 0; }
+    sal_Bool        IsSet() const { return Len() != 0; }
 #ifdef IDL_COMPILER
-    BOOL        ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm );
-    BOOL        WriteSvIdl( SvStringHashEntry * pName, SvStream & rOutStm,
-                            USHORT nTab );
+    sal_Bool        ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm );
+    sal_Bool        WriteSvIdl( SvStringHashEntry * pName, SvStream & rOutStm,
+                            sal_uInt16 nTab );
 #endif
 };
 
 
 class SvNumberIdentifier : public SvIdentifier
 {
-    UINT32  nValue;
+    sal_uInt32  nValue;
     // must not be used
-    BOOL    ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm );
+    sal_Bool    ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm );
 public:
                 SvNumberIdentifier() : nValue( 0 ) {};
-    BOOL        IsSet() const
+    sal_Bool        IsSet() const
                 {
                     return SvIdentifier::IsSet() || nValue != 0;
                 }
-    UINT32      GetValue() const { return nValue; }
-    void        SetValue( UINT32 nVal ) { nValue = nVal; }
+    sal_uInt32      GetValue() const { return nValue; }
+    void        SetValue( sal_uInt32 nVal ) { nValue = nVal; }
 
     friend SvStream& operator << (SvStream &, const SvNumberIdentifier &);
     friend SvStream& operator >> (SvStream &, SvNumberIdentifier &);
 #ifdef IDL_COMPILER
-    BOOL        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
-    BOOL        ReadSvIdl( SvIdlDataBase &, SvStringHashEntry * pName,
+    sal_Bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
+    sal_Bool        ReadSvIdl( SvIdlDataBase &, SvStringHashEntry * pName,
                            SvTokenStream & rInStm );
 #endif
 };
@@ -207,14 +207,14 @@ public:
                 SvString(){};
     SvString &  operator = ( const ByteString & rStr )
                 { ByteString::operator =( rStr ); return *this; }
-    BOOL        IsSet() const { return Len() != 0; }
+    sal_Bool        IsSet() const { return Len() != 0; }
     friend SvStream& operator << (SvStream &, const SvString &);
     friend SvStream& operator >> (SvStream &, SvString &);
 
 #ifdef IDL_COMPILER
-    BOOL        ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm );
-    BOOL        WriteSvIdl( SvStringHashEntry * pName, SvStream & rOutStm,
-                            USHORT nTab );
+    sal_Bool        ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm );
+    sal_Bool        WriteSvIdl( SvStringHashEntry * pName, SvStream & rOutStm,
+                            sal_uInt16 nTab );
 #endif
 };
 
@@ -224,9 +224,9 @@ class SvHelpText : public SvString
 public:
                 SvHelpText() {}
 #ifdef IDL_COMPILER
-    BOOL        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
-    BOOL        WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm,
-                            USHORT nTab );
+    sal_Bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
+    sal_Bool        WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm,
+                            sal_uInt16 nTab );
 #endif
 };
 
@@ -240,36 +240,36 @@ class SvUUId : public SvGlobalName
 public:
                 SvUUId() {}
 #ifdef IDL_COMPILER
-    BOOL        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
-    BOOL        WriteSvIdl( SvStream & rOutStm );
+    sal_Bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
+    sal_Bool        WriteSvIdl( SvStream & rOutStm );
 #endif
 };
 
 
 class SvVersion
 {
-    USHORT  nMajorVersion;
-    USHORT  nMinorVersion;
+    sal_uInt16  nMajorVersion;
+    sal_uInt16  nMinorVersion;
 public:
                 SvVersion() : nMajorVersion( 1 ), nMinorVersion( 0 ) {}
-    BOOL        operator == ( const SvVersion & r )
+    sal_Bool        operator == ( const SvVersion & r )
                 {
                     return (r.nMajorVersion == nMajorVersion)
                              && (r.nMinorVersion == nMinorVersion);
                 }
-    BOOL        operator != ( const SvVersion & r )
+    sal_Bool        operator != ( const SvVersion & r )
                 {
                     return !(*this == r);
                 }
 
-    USHORT      GetMajorVersion() const { return nMajorVersion; }
-    USHORT      GetMinorVersion() const { return nMinorVersion; }
+    sal_uInt16      GetMajorVersion() const { return nMajorVersion; }
+    sal_uInt16      GetMinorVersion() const { return nMinorVersion; }
 
     friend SvStream& operator << (SvStream &, const SvVersion &);
     friend SvStream& operator >> (SvStream &, SvVersion &);
 #ifdef IDL_COMPILER
-    BOOL        ReadSvIdl( SvTokenStream & rInStm );
-    BOOL        WriteSvIdl( SvStream & rOutStm );
+    sal_Bool        ReadSvIdl( SvTokenStream & rInStm );
+    sal_Bool        WriteSvIdl( SvStream & rOutStm );
 #endif
 };
 

@@ -91,7 +91,7 @@ MasterPasswordCreateDialog::MasterPasswordCreateDialog
     aHelpBtn                ( this, ResId( BTN_MASTERPASSCRT_HELP, *pResMgr ) ),
 
     pResourceMgr            ( pResMgr ),
-    nMinLen                 ( 5 )
+    nMinLen                 ( 1 )
 {
     FreeResource();
 

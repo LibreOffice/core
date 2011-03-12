@@ -49,14 +49,14 @@ class IntlWrapper;
 static const sal_Unicode cDelim = ',';
 static const sal_Unicode cpDelim[] = { ',' , ' ', '\0' };
 
-EDITENG_DLLPUBLIC String GetSvxString( USHORT nId );
+EDITENG_DLLPUBLIC String GetSvxString( sal_uInt16 nId );
 EDITENG_DLLPUBLIC String GetMetricText( long nVal, SfxMapUnit eSrcUnit, SfxMapUnit eDestUnit, const IntlWrapper * pIntl );
 String GetColorString( const Color& rCol );
-EDITENG_DLLPUBLIC USHORT GetMetricId( SfxMapUnit eUnit );
+EDITENG_DLLPUBLIC sal_uInt16 GetMetricId( SfxMapUnit eUnit );
 
 // -----------------------------------------------------------------------
 
-inline String GetBoolString( BOOL bVal )
+inline String GetBoolString( sal_Bool bVal )
 {
     return String( EditResId( bVal ? RID_SVXITEMS_TRUE : RID_SVXITEMS_FALSE ) );
 }

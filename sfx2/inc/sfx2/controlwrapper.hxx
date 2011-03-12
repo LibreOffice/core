@@ -49,9 +49,9 @@ namespace sfx {
 // ============================================================================
 
 /** List position type of VCL ListBox. */
-typedef USHORT ListBoxPosType;
+typedef sal_uInt16 ListBoxPosType;
 /** List position type of SVTOOLS ValueSet. */
-typedef USHORT ValueSetPosType;
+typedef sal_uInt16 ValueSetPosType;
 
 // ============================================================================
 // Helpers
@@ -246,7 +246,7 @@ public:
 
 /** A wrapper for the VCL CheckBox. */
 class SFX2_DLLPUBLIC CheckBoxWrapper:
-    public SingleControlWrapper< CheckBox, BOOL >
+    public SingleControlWrapper< CheckBox, sal_Bool >
 {
 public:
     explicit            CheckBoxWrapper( CheckBox& rCheckBox );
@@ -254,8 +254,8 @@ public:
     virtual bool        IsControlDontKnow() const;
     virtual void        SetControlDontKnow( bool bSet );
 
-    virtual BOOL        GetControlValue() const;
-    virtual void        SetControlValue( BOOL bValue );
+    virtual sal_Bool        GetControlValue() const;
+    virtual void        SetControlValue( sal_Bool bValue );
 };
 
 // ----------------------------------------------------------------------------
@@ -316,13 +316,13 @@ public:
 
 // ----------------------------------------------------------------------------
 
-typedef NumericFieldWrapper< INT16 >  Int16NumericFieldWrapper;
-typedef NumericFieldWrapper< UINT16 > UInt16NumericFieldWrapper;
-typedef NumericFieldWrapper< INT32 >  Int32NumericFieldWrapper;
-typedef NumericFieldWrapper< UINT32 > UInt32NumericFieldWrapper;
+typedef NumericFieldWrapper< sal_Int16 >  Int16NumericFieldWrapper;
+typedef NumericFieldWrapper< sal_uInt16 > UInt16NumericFieldWrapper;
+typedef NumericFieldWrapper< sal_Int32 >  Int32NumericFieldWrapper;
+typedef NumericFieldWrapper< sal_uInt32 > UInt32NumericFieldWrapper;
 
-typedef NumericFieldWrapper< USHORT > UShortNumericFieldWrapper;
-typedef NumericFieldWrapper< ULONG >  ULongNumericFieldWrapper;
+typedef NumericFieldWrapper< sal_uInt16 > UShortNumericFieldWrapper;
+typedef NumericFieldWrapper< sal_uIntPtr >  ULongNumericFieldWrapper;
 
 // ============================================================================
 
@@ -351,13 +351,13 @@ private:
 
 // ----------------------------------------------------------------------------
 
-typedef MetricFieldWrapper< INT16 >  Int16MetricFieldWrapper;
-typedef MetricFieldWrapper< UINT16 > UInt16MetricFieldWrapper;
-typedef MetricFieldWrapper< INT32 >  Int32MetricFieldWrapper;
-typedef MetricFieldWrapper< UINT32 > UInt32MetricFieldWrapper;
+typedef MetricFieldWrapper< sal_Int16 >  Int16MetricFieldWrapper;
+typedef MetricFieldWrapper< sal_uInt16 > UInt16MetricFieldWrapper;
+typedef MetricFieldWrapper< sal_Int32 >  Int32MetricFieldWrapper;
+typedef MetricFieldWrapper< sal_uInt32 > UInt32MetricFieldWrapper;
 
-typedef MetricFieldWrapper< USHORT > UShortMetricFieldWrapper;
-typedef MetricFieldWrapper< ULONG >  ULongMetricFieldWrapper;
+typedef MetricFieldWrapper< sal_uInt16 > UShortMetricFieldWrapper;
+typedef MetricFieldWrapper< sal_uIntPtr >  ULongMetricFieldWrapper;
 
 // ============================================================================
 
@@ -393,13 +393,13 @@ public:
 
 // ----------------------------------------------------------------------------
 
-typedef ListBoxWrapper< INT16 >  Int16ListBoxWrapper;
-typedef ListBoxWrapper< UINT16 > UInt16ListBoxWrapper;
-typedef ListBoxWrapper< INT32 >  Int32ListBoxWrapper;
-typedef ListBoxWrapper< UINT32 > UInt32ListBoxWrapper;
+typedef ListBoxWrapper< sal_Int16 >  Int16ListBoxWrapper;
+typedef ListBoxWrapper< sal_uInt16 > UInt16ListBoxWrapper;
+typedef ListBoxWrapper< sal_Int32 >  Int32ListBoxWrapper;
+typedef ListBoxWrapper< sal_uInt32 > UInt32ListBoxWrapper;
 
-typedef ListBoxWrapper< USHORT > UShortListBoxWrapper;
-typedef ListBoxWrapper< ULONG >  ULongListBoxWrapper;
+typedef ListBoxWrapper< sal_uInt16 > UShortListBoxWrapper;
+typedef ListBoxWrapper< sal_uIntPtr >  ULongListBoxWrapper;
 
 // ============================================================================
 
@@ -435,13 +435,13 @@ public:
 
 // ----------------------------------------------------------------------------
 
-typedef ValueSetWrapper< INT16 >  Int16ValueSetWrapper;
-typedef ValueSetWrapper< UINT16 > UInt16ValueSetWrapper;
-typedef ValueSetWrapper< INT32 >  Int32ValueSetWrapper;
-typedef ValueSetWrapper< UINT32 > UInt32ValueSetWrapper;
+typedef ValueSetWrapper< sal_Int16 >  Int16ValueSetWrapper;
+typedef ValueSetWrapper< sal_uInt16 > UInt16ValueSetWrapper;
+typedef ValueSetWrapper< sal_Int32 >  Int32ValueSetWrapper;
+typedef ValueSetWrapper< sal_uInt32 > UInt32ValueSetWrapper;
 
-typedef ValueSetWrapper< USHORT > UShortValueSetWrapper;
-typedef ValueSetWrapper< ULONG >  ULongValueSetWrapper;
+typedef ValueSetWrapper< sal_uInt16 > UShortValueSetWrapper;
+typedef ValueSetWrapper< sal_uIntPtr >  ULongValueSetWrapper;
 
 // ============================================================================
 // Multi control wrappers
@@ -640,7 +640,7 @@ ValueT ListBoxWrapper< ValueT >::GetControlValue() const
 template< typename ValueT >
 void ListBoxWrapper< ValueT >::SetControlValue( ValueT nValue )
 {
-    USHORT nPos = GetPosFromValue( nValue );
+    sal_uInt16 nPos = GetPosFromValue( nValue );
     if( nPos != this->GetNotFoundPos() )
         this->GetControl().SelectEntryPos( nPos );
 }
@@ -656,7 +656,7 @@ ValueT ValueSetWrapper< ValueT >::GetControlValue() const
 template< typename ValueT >
 void ValueSetWrapper< ValueT >::SetControlValue( ValueT nValue )
 {
-    USHORT nPos = GetPosFromValue( nValue );
+    sal_uInt16 nPos = GetPosFromValue( nValue );
     if( nPos != this->GetNotFoundPos() )
         this->GetControl().SelectItem( nPos );
 }

@@ -31,7 +31,7 @@
 
 #include <uielement/toolbarmerger.hxx>
 #include <uielement/generictoolbarcontroller.hxx>
-#include <helper/imageproducer.hxx>
+#include <framework/imageproducer.hxx>
 
 #include <svtools/miscopt.hxx>
 
@@ -87,7 +87,7 @@ static const char TOOLBARCONTROLLER_TOGGLEDDBTN[]         = "ToggleDropdownButto
 static const sal_uInt32 TOOLBARCONTROLLER_TOGGLEDDBTN_LEN = 20;
 
 static const char   TOOLBOXITEM_SEPARATOR_STR[]   = "private:separator";
-static const USHORT TOOLBOXITEM_SEPARATOR_STR_LEN = sizeof( TOOLBOXITEM_SEPARATOR_STR )-1;
+static const sal_uInt16 TOOLBOXITEM_SEPARATOR_STR_LEN = sizeof( TOOLBOXITEM_SEPARATOR_STR )-1;
 
 using namespace ::com::sun::star;
 
@@ -513,7 +513,6 @@ bool ToolBarMerger::MergeItems(
                 pToolbar->InsertSeparator( sal_uInt16( nInsPos ));
             else
             {
-                ToolBarMerger::CreateToolbarItem( pToolbar, sal_uInt16( nInsPos ), rItemId, rItem );
                 CommandToInfoMap::iterator pIter = rCommandMap.find( rItem.aCommandURL );
                 if ( pIter == rCommandMap.end())
                 {
@@ -525,6 +524,8 @@ bool ToolBarMerger::MergeItems(
                 {
                     pIter->second.aIds.push_back( rItemId );
                 }
+
+                ToolBarMerger::CreateToolbarItem( pToolbar, rCommandMap, sal_uInt16( nInsPos ), rItemId, rItem );
             }
 
             ++nIndex;
@@ -692,7 +693,7 @@ bool ToolBarMerger::RemoveItems(
     return pResult;
 }
 
-void ToolBarMerger::CreateToolbarItem( ToolBox* pToolbar, sal_uInt16 nPos, sal_uInt16 nItemId, const AddonToolbarItem& rItem )
+void ToolBarMerger::CreateToolbarItem( ToolBox* pToolbar, CommandToInfoMap& rCommandMap, sal_uInt16 nPos, sal_uInt16 nItemId, const AddonToolbarItem& rItem )
 {
     pToolbar->InsertItem( nItemId, rItem.aLabel, 0, nPos );
     pToolbar->SetItemCommand( nItemId, rItem.aCommandURL );
@@ -701,8 +702,9 @@ void ToolBarMerger::CreateToolbarItem( ToolBox* pToolbar, sal_uInt16 nPos, sal_u
     pToolbar->EnableItem( nItemId, sal_True );
     pToolbar->SetItemState( nItemId, STATE_NOCHECK );
 
-    // Use obsolete help id to transport the width of the item
-    pToolbar->SetHelpId( nItemId, rItem.nWidth );
+    CommandToInfoMap::iterator pIter = rCommandMap.find( rItem.aCommandURL );
+    if ( pIter != rCommandMap.end() )
+        pIter->second.nWidth = rItem.nWidth;
 
     // Use the user data to store add-on specific data with the toolbar item
     AddonsParams* pAddonParams = new AddonsParams;

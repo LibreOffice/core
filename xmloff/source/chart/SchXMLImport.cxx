@@ -40,7 +40,7 @@
 // header for class ByteString
 #include <tools/string.hxx>
 #include <comphelper/processfactory.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -144,12 +144,9 @@ SchXMLImportHelper::SchXMLImportHelper() :
         mpChartElemTokenMap( 0 ),
         mpPlotAreaElemTokenMap( 0 ),
         mpSeriesElemTokenMap( 0 ),
-        mpAxisElemTokenMap( 0 ),
 
         mpChartAttrTokenMap( 0 ),
         mpPlotAreaAttrTokenMap( 0 ),
-        mpAxisAttrTokenMap( 0 ),
-        mpLegendAttrTokenMap( 0 ),
         mpAutoStyleAttrTokenMap( 0 ),
         mpCellAttrTokenMap( 0 ),
         mpSeriesAttrTokenMap( 0 ),
@@ -170,17 +167,11 @@ SchXMLImportHelper::~SchXMLImportHelper()
         delete mpPlotAreaElemTokenMap;
     if( mpSeriesElemTokenMap )
         delete mpSeriesElemTokenMap;
-    if( mpAxisElemTokenMap )
-        delete mpAxisElemTokenMap;
 
     if( mpChartAttrTokenMap )
         delete mpChartAttrTokenMap;
     if( mpPlotAreaAttrTokenMap )
         delete mpPlotAreaAttrTokenMap;
-    if( mpAxisAttrTokenMap )
-        delete mpAxisAttrTokenMap;
-    if( mpLegendAttrTokenMap )
-        delete mpLegendAttrTokenMap;
     if( mpAutoStyleAttrTokenMap )
         delete mpAutoStyleAttrTokenMap;
     if( mpCellAttrTokenMap )
@@ -321,24 +312,6 @@ const SvXMLTokenMap& SchXMLImportHelper::GetSeriesElemTokenMap()
     return *mpSeriesElemTokenMap;
 }
 
-const SvXMLTokenMap& SchXMLImportHelper::GetAxisElemTokenMap()
-{
-    if( ! mpAxisElemTokenMap )
-    {
-        static SvXMLTokenMapEntry aAxisElemTokenMap[] =
-{
-    { XML_NAMESPACE_CHART,  XML_TITLE,                  XML_TOK_AXIS_TITLE      },
-    { XML_NAMESPACE_CHART,  XML_CATEGORIES,             XML_TOK_AXIS_CATEGORIES },
-    { XML_NAMESPACE_CHART,  XML_GRID,                   XML_TOK_AXIS_GRID       },
-    XML_TOKEN_MAP_END
-};
-
-        mpAxisElemTokenMap = new SvXMLTokenMap( aAxisElemTokenMap );
-    } // if( ! mpAxisElemTokenMap )
-
-    return *mpAxisElemTokenMap;
-}
-
 // ----------------------------------------
 
 const SvXMLTokenMap& SchXMLImportHelper::GetChartAttrTokenMap()
@@ -394,43 +367,6 @@ const SvXMLTokenMap& SchXMLImportHelper::GetPlotAreaAttrTokenMap()
     } // if( ! mpPlotAreaAttrTokenMap )
 
     return *mpPlotAreaAttrTokenMap;
-}
-
-const SvXMLTokenMap& SchXMLImportHelper::GetAxisAttrTokenMap()
-{
-    if( ! mpAxisAttrTokenMap )
-    {
-        static SvXMLTokenMapEntry aAxisAttrTokenMap[] =
-{
-    { XML_NAMESPACE_CHART,  XML_DIMENSION,              XML_TOK_AXIS_DIMENSION      },
-    { XML_NAMESPACE_CHART,  XML_NAME,                   XML_TOK_AXIS_NAME           },
-    { XML_NAMESPACE_CHART,  XML_STYLE_NAME,             XML_TOK_AXIS_STYLE_NAME     },
-    XML_TOKEN_MAP_END
-};
-
-        mpAxisAttrTokenMap = new SvXMLTokenMap( aAxisAttrTokenMap );
-    } // if( ! mpAxisAttrTokenMap )
-
-    return *mpAxisAttrTokenMap;
-}
-
-const SvXMLTokenMap& SchXMLImportHelper::GetLegendAttrTokenMap()
-{
-    if( ! mpLegendAttrTokenMap )
-    {
-        static SvXMLTokenMapEntry aLegendAttrTokenMap[] =
-{
-    { XML_NAMESPACE_CHART,  XML_LEGEND_POSITION,        XML_TOK_LEGEND_POSITION     },
-    { XML_NAMESPACE_SVG,    XML_X,                      XML_TOK_LEGEND_X            },
-    { XML_NAMESPACE_SVG,    XML_Y,                      XML_TOK_LEGEND_Y            },
-    { XML_NAMESPACE_CHART,  XML_STYLE_NAME,             XML_TOK_LEGEND_STYLE_NAME   },
-    XML_TOKEN_MAP_END
-};
-
-        mpLegendAttrTokenMap = new SvXMLTokenMap( aLegendAttrTokenMap );
-    } // if( ! mpLegendAttrTokenMap )
-
-    return *mpLegendAttrTokenMap;
 }
 
 const SvXMLTokenMap& SchXMLImportHelper::GetAutoStyleAttrTokenMap()
@@ -718,7 +654,7 @@ SchXMLImport::~SchXMLImport() throw ()
 
 // create the main context (subcontexts are created
 // by the one created here)
-SvXMLImportContext *SchXMLImport::CreateContext( USHORT nPrefix, const OUString& rLocalName,
+SvXMLImportContext *SchXMLImport::CreateContext( sal_uInt16 nPrefix, const OUString& rLocalName,
     const Reference< xml::sax::XAttributeList >& xAttrList )
 {
     SvXMLImportContext* pContext = 0;

@@ -34,19 +34,19 @@
 #include "type.hxx"
 
 namespace rtl { class OUString; }
+namespace xmlreader {
+    class XmlReader;
+    struct Span;
+}
 
 namespace configmgr {
 
-class XmlReader;
-struct Span;
-
 namespace xmldata {
 
-rtl::OUString convertFromUtf8(Span const & text);
+Type parseType(
+    xmlreader::XmlReader const & reader, xmlreader::Span const & text);
 
-Type parseType(XmlReader const & reader, Span const & text);
-
-bool parseBoolean(Span const & text);
+bool parseBoolean(xmlreader::Span const & text);
 
 rtl::OUString parseTemplateReference(
     rtl::OUString const & component, bool hasNodeType,

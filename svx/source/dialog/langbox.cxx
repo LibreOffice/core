@@ -55,7 +55,7 @@ using namespace ::com::sun::star::uno;
 
 // -----------------------------------------------------------------------
 
-String GetDicInfoStr( const String& rName, const USHORT nLang, BOOL bNeg )
+String GetDicInfoStr( const String& rName, const sal_uInt16 nLang, sal_Bool bNeg )
 {
     INetURLObject aURLObj;
     aURLObj.SetSmartProtocol( INET_PROT_FILE );
@@ -85,14 +85,14 @@ String GetDicInfoStr( const String& rName, const USHORT nLang, BOOL bNeg )
 //  misc local helper functions
 //========================================================================
 
-static Sequence< INT16 > lcl_LocaleSeqToLangSeq( Sequence< Locale > &rSeq )
+static Sequence< sal_Int16 > lcl_LocaleSeqToLangSeq( Sequence< Locale > &rSeq )
 {
     const Locale *pLocale = rSeq.getConstArray();
-    INT32 nCount = rSeq.getLength();
+    sal_Int32 nCount = rSeq.getLength();
 
-    Sequence< INT16 >   aLangs( nCount );
-    INT16 *pLang = aLangs.getArray();
-    for (INT32 i = 0;  i < nCount;  ++i)
+    Sequence< sal_Int16 >   aLangs( nCount );
+    sal_Int16 *pLang = aLangs.getArray();
+    for (sal_Int32 i = 0;  i < nCount;  ++i)
     {
         pLang[i] = SvxLocaleToLanguage( pLocale[i] );
 
@@ -102,13 +102,13 @@ static Sequence< INT16 > lcl_LocaleSeqToLangSeq( Sequence< Locale > &rSeq )
 }
 
 
-static BOOL lcl_SeqHasLang( const Sequence< INT16 > & rLangSeq, INT16 nLang )
+static sal_Bool lcl_SeqHasLang( const Sequence< sal_Int16 > & rLangSeq, sal_Int16 nLang )
 {
-    INT32 i = -1;
-    INT32 nLen = rLangSeq.getLength();
+    sal_Int32 i = -1;
+    sal_Int32 nLen = rLangSeq.getLength();
     if (nLen)
     {
-        const INT16 *pLang = rLangSeq.getConstArray();
+        const sal_Int16 *pLang = rLangSeq.getConstArray();
         for (i = 0;  i < nLen;  ++i)
         {
             if (nLang == pLang[i])
@@ -122,20 +122,20 @@ static BOOL lcl_SeqHasLang( const Sequence< INT16 > & rLangSeq, INT16 nLang )
 //  class SvxLanguageBox
 //========================================================================
 
-USHORT TypeToPos_Impl( LanguageType eType, const ListBox& rLb )
+sal_uInt16 TypeToPos_Impl( LanguageType eType, const ListBox& rLb )
 {
-    USHORT  nPos   = LISTBOX_ENTRY_NOTFOUND;
-    USHORT  nCount = rLb.GetEntryCount();
+    sal_uInt16  nPos   = LISTBOX_ENTRY_NOTFOUND;
+    sal_uInt16  nCount = rLb.GetEntryCount();
 
-    for ( USHORT i=0; nPos == LISTBOX_ENTRY_NOTFOUND && i<nCount; i++ )
-        if ( eType == LanguageType((ULONG)rLb.GetEntryData(i)) )
+    for ( sal_uInt16 i=0; nPos == LISTBOX_ENTRY_NOTFOUND && i<nCount; i++ )
+        if ( eType == LanguageType((sal_uIntPtr)rLb.GetEntryData(i)) )
             nPos = i;
 
     return nPos;
 }
 
 //-----------------------------------------------------------------------
-SvxLanguageBox::SvxLanguageBox( Window* pParent, WinBits nWinStyle, BOOL bCheck ) :
+SvxLanguageBox::SvxLanguageBox( Window* pParent, WinBits nWinStyle, sal_Bool bCheck ) :
     ListBox( pParent, nWinStyle ),
     m_pSpellUsedLang( NULL ),
     m_bWithCheckmark( bCheck )
@@ -143,7 +143,7 @@ SvxLanguageBox::SvxLanguageBox( Window* pParent, WinBits nWinStyle, BOOL bCheck 
     Init();
 }
 //------------------------------------------------------------------------
-SvxLanguageBox::SvxLanguageBox( Window* pParent, const ResId& rResId, BOOL bCheck ) :
+SvxLanguageBox::SvxLanguageBox( Window* pParent, const ResId& rResId, sal_Bool bCheck ) :
     ListBox( pParent, rResId ),
     m_pSpellUsedLang( NULL ),
     m_bWithCheckmark( bCheck )
@@ -158,8 +158,8 @@ void SvxLanguageBox::Init()
     m_aCheckedImage = Image( SVX_RES( RID_SVXIMG_CHECKED ) );
     m_aAllString            = String( SVX_RESSTR( RID_SVXSTR_LANGUAGE_ALL ) );
     m_nLangList             = LANG_LIST_EMPTY;
-    m_bHasLangNone          = FALSE;
-    m_bLangNoneIsLangAll    = FALSE;
+    m_bHasLangNone          = sal_False;
+    m_bLangNoneIsLangAll    = sal_False;
 
     // display entries sorted
     SetStyle( GetStyle() | WB_SORT );
@@ -172,12 +172,12 @@ void SvxLanguageBox::Init()
         {
             LanguageType nLangType = aLangTable.GetTypeAtIndex( i );
 
-            BOOL bInsert = TRUE;
+            sal_Bool bInsert = sal_True;
             if ((LANGUAGE_DONTKNOW == nLangType)  ||
                 (LANGUAGE_SYSTEM   == nLangType)  ||
                 (LANGUAGE_USER1 <= nLangType  &&  nLangType <= LANGUAGE_USER9))
             {
-                bInsert = FALSE;
+                bInsert = sal_False;
             }
 
             if ( bInsert )
@@ -196,9 +196,9 @@ SvxLanguageBox::~SvxLanguageBox()
 
 //------------------------------------------------------------------------
 
-USHORT SvxLanguageBox::ImplInsertImgEntry( const String& rEntry, USHORT nPos, bool bChecked )
+sal_uInt16 SvxLanguageBox::ImplInsertImgEntry( const String& rEntry, sal_uInt16 nPos, bool bChecked )
 {
-    USHORT nRet = 0;
+    sal_uInt16 nRet = 0;
     if( !bChecked )
         nRet = InsertEntry( rEntry, m_aNotCheckedImage, nPos );
     else
@@ -208,8 +208,8 @@ USHORT SvxLanguageBox::ImplInsertImgEntry( const String& rEntry, USHORT nPos, bo
 
 //------------------------------------------------------------------------
 
-void SvxLanguageBox::SetLanguageList( INT16 nLangList,
-        BOOL bHasLangNone, BOOL bLangNoneIsLangAll, BOOL bCheckSpellAvail )
+void SvxLanguageBox::SetLanguageList( sal_Int16 nLangList,
+        sal_Bool bHasLangNone, sal_Bool bLangNoneIsLangAll, sal_Bool bCheckSpellAvail )
 {
     Clear();
 
@@ -220,12 +220,12 @@ void SvxLanguageBox::SetLanguageList( INT16 nLangList,
 
     if ( LANG_LIST_EMPTY != nLangList )
     {
-        Sequence< INT16 > aSpellAvailLang;
-        Sequence< INT16 > aHyphAvailLang;
-        Sequence< INT16 > aThesAvailLang;
-        Sequence< INT16 > aSpellUsedLang;
-        Sequence< INT16 > aHyphUsedLang;
-        Sequence< INT16 > aThesUsedLang;
+        Sequence< sal_Int16 > aSpellAvailLang;
+        Sequence< sal_Int16 > aHyphAvailLang;
+        Sequence< sal_Int16 > aThesAvailLang;
+        Sequence< sal_Int16 > aSpellUsedLang;
+        Sequence< sal_Int16 > aHyphUsedLang;
+        Sequence< sal_Int16 > aThesUsedLang;
         Reference< XAvailableLocales > xAvail( LinguMgr::GetLngSvcMgr(), UNO_QUERY );
         if (xAvail.is())
         {
@@ -332,14 +332,14 @@ void SvxLanguageBox::SetLanguageList( INT16 nLangList,
 
 //------------------------------------------------------------------------
 
-USHORT SvxLanguageBox::InsertLanguage( const LanguageType nLangType, USHORT nPos )
+sal_uInt16 SvxLanguageBox::InsertLanguage( const LanguageType nLangType, sal_uInt16 nPos )
 {
     return ImplInsertLanguage( nLangType, nPos, ::com::sun::star::i18n::ScriptType::WEAK );
 }
 
 //------------------------------------------------------------------------
 
-USHORT SvxLanguageBox::ImplInsertLanguage( const LanguageType nLangType, USHORT nPos, sal_Int16 nType )
+sal_uInt16 SvxLanguageBox::ImplInsertLanguage( const LanguageType nLangType, sal_uInt16 nPos, sal_Int16 nType )
 {
     LanguageType nLang = MsLangId::getReplacementForObsoleteLanguage( nLangType);
     // For obsolete and to be replaced languages check whether an entry of the
@@ -347,7 +347,7 @@ USHORT SvxLanguageBox::ImplInsertLanguage( const LanguageType nLangType, USHORT 
     // string as would be returned by SvtLanguageTable::GetString().
     if (nLang != nLangType)
     {
-        USHORT nAt = TypeToPos_Impl( nLang, *this );
+        sal_uInt16 nAt = TypeToPos_Impl( nLang, *this );
         if ( nAt != LISTBOX_ENTRY_NOTFOUND )
             return nAt;
     }
@@ -366,7 +366,7 @@ USHORT SvxLanguageBox::ImplInsertLanguage( const LanguageType nLangType, USHORT 
 
     aStrEntry = ApplyLreOrRleEmbedding( aStrEntry );
 
-    USHORT nAt = 0;
+    sal_uInt16 nAt = 0;
     if ( m_bWithCheckmark )
     {
         sal_Bool bFound = sal_False;
@@ -375,31 +375,31 @@ USHORT SvxLanguageBox::ImplInsertLanguage( const LanguageType nLangType, USHORT 
         {
             Reference< XSpellChecker1 > xSpell( SvxGetSpellChecker(), UNO_QUERY );
             if ( xSpell.is() )
-                m_pSpellUsedLang = new Sequence< INT16 >( xSpell->getLanguages() );
+                m_pSpellUsedLang = new Sequence< sal_Int16 >( xSpell->getLanguages() );
         }
         bFound = m_pSpellUsedLang ?
-            lcl_SeqHasLang( *m_pSpellUsedLang, nRealLang ) : FALSE;
+            lcl_SeqHasLang( *m_pSpellUsedLang, nRealLang ) : sal_False;
 
         nAt = ImplInsertImgEntry( aStrEntry, nPos, bFound );
     }
     else
         nAt = InsertEntry( aStrEntry, nPos );
 
-    SetEntryData( nAt, (void*)(ULONG)nLangType );
+    SetEntryData( nAt, (void*)(sal_uIntPtr)nLangType );
     return nAt;
 }
 
 //------------------------------------------------------------------------
 
-USHORT SvxLanguageBox::InsertDefaultLanguage( sal_Int16 nType, USHORT nPos )
+sal_uInt16 SvxLanguageBox::InsertDefaultLanguage( sal_Int16 nType, sal_uInt16 nPos )
 {
     return ImplInsertLanguage( LANGUAGE_SYSTEM, nPos, nType );
 }
 
 //------------------------------------------------------------------------
 
-USHORT SvxLanguageBox::InsertLanguage( const LanguageType nLangType,
-        BOOL bCheckEntry, USHORT nPos )
+sal_uInt16 SvxLanguageBox::InsertLanguage( const LanguageType nLangType,
+        sal_Bool bCheckEntry, sal_uInt16 nPos )
 {
     LanguageType nLang = MsLangId::getReplacementForObsoleteLanguage( nLangType);
     // For obsolete and to be replaced languages check whether an entry of the
@@ -407,7 +407,7 @@ USHORT SvxLanguageBox::InsertLanguage( const LanguageType nLangType,
     // string as would be returned by SvtLanguageTable::GetString().
     if (nLang != nLangType)
     {
-        USHORT nAt = TypeToPos_Impl( nLang, *this );
+        sal_uInt16 nAt = TypeToPos_Impl( nLang, *this );
         if ( nAt != LISTBOX_ENTRY_NOTFOUND )
             return nAt;
     }
@@ -416,8 +416,8 @@ USHORT SvxLanguageBox::InsertLanguage( const LanguageType nLangType,
     if (LANGUAGE_NONE == nLang && m_bHasLangNone && m_bLangNoneIsLangAll)
         aStrEntry = m_aAllString;
 
-    USHORT nAt = ImplInsertImgEntry( aStrEntry, nPos, bCheckEntry );
-    SetEntryData( nAt, (void*)(ULONG)nLang );
+    sal_uInt16 nAt = ImplInsertImgEntry( aStrEntry, nPos, bCheckEntry );
+    SetEntryData( nAt, (void*)(sal_uIntPtr)nLang );
 
     return nAt;
 }
@@ -426,7 +426,7 @@ USHORT SvxLanguageBox::InsertLanguage( const LanguageType nLangType,
 
 void SvxLanguageBox::RemoveLanguage( const LanguageType eLangType )
 {
-    USHORT nAt = TypeToPos_Impl( eLangType, *this );
+    sal_uInt16 nAt = TypeToPos_Impl( eLangType, *this );
 
     if ( nAt != LISTBOX_ENTRY_NOTFOUND )
         RemoveEntry( nAt );
@@ -436,23 +436,23 @@ void SvxLanguageBox::RemoveLanguage( const LanguageType eLangType )
 
 LanguageType SvxLanguageBox::GetSelectLanguage() const
 {
-    USHORT       nPos   = GetSelectEntryPos();
+    sal_uInt16       nPos   = GetSelectEntryPos();
 
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
-        return LanguageType( (ULONG)GetEntryData(nPos) );
+        return LanguageType( (sal_uIntPtr)GetEntryData(nPos) );
     else
         return LanguageType( LANGUAGE_DONTKNOW );
 }
 
 //------------------------------------------------------------------------
 
-void SvxLanguageBox::SelectLanguage( const LanguageType eLangType, BOOL bSelect )
+void SvxLanguageBox::SelectLanguage( const LanguageType eLangType, sal_Bool bSelect )
 {
     // If the core uses a LangID of an imported MS document and wants to select
     // a language that is replaced, we need to select the replacement instead.
     LanguageType nLang = MsLangId::getReplacementForObsoleteLanguage( eLangType);
 
-    USHORT nAt = TypeToPos_Impl( nLang, *this );
+    sal_uInt16 nAt = TypeToPos_Impl( nLang, *this );
 
     if ( nAt != LISTBOX_ENTRY_NOTFOUND )
         SelectEntryPos( nAt, bSelect );
@@ -460,17 +460,17 @@ void SvxLanguageBox::SelectLanguage( const LanguageType eLangType, BOOL bSelect 
 
 //------------------------------------------------------------------------
 
-BOOL SvxLanguageBox::IsLanguageSelected( const LanguageType eLangType ) const
+sal_Bool SvxLanguageBox::IsLanguageSelected( const LanguageType eLangType ) const
 {
     // Same here, work on the replacement if applicable.
     LanguageType nLang = MsLangId::getReplacementForObsoleteLanguage( eLangType);
 
-    USHORT nAt = TypeToPos_Impl( nLang, *this );
+    sal_uInt16 nAt = TypeToPos_Impl( nLang, *this );
 
     if ( nAt != LISTBOX_ENTRY_NOTFOUND )
         return IsEntryPosSelected( nAt );
     else
-        return FALSE;
+        return sal_False;
 }
 
 #if ENABLE_LAYOUT
@@ -482,7 +482,7 @@ SvxLanguageBox::~SvxLanguageBox ()
 {
 }
 
-SvxLanguageBox::SvxLanguageBox( Context* pParent, const char* pFile, BOOL bCheck )
+SvxLanguageBox::SvxLanguageBox( Context* pParent, const char* pFile, sal_Bool bCheck )
 : ListBox ( pParent, pFile, bCheck )
 {
 }

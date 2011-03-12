@@ -91,12 +91,12 @@ class SFX2_DLLPUBLIC SfxFrameDescriptor
     long                    nWidth;
     ScrollingMode           eScroll;
     SizeSelector            eSizeSelector;
-    USHORT                  nHasBorder;
-    USHORT                  nItemId;
-    BOOL                    bResizeHorizontal;
-    BOOL                    bResizeVertical;
-    BOOL                    bHasUI;
-    BOOL                    bReadOnly;
+    sal_uInt16                  nHasBorder;
+    sal_uInt16                  nItemId;
+    sal_Bool                    bResizeHorizontal;
+    sal_Bool                    bResizeVertical;
+    sal_Bool                    bHasUI;
+    sal_Bool                    bReadOnly;
     SfxFrameDescriptor_Impl* pImp;
     SvStrings*              pScripts;
     SvStrings*              pComments;
@@ -118,13 +118,13 @@ public:
                             { return aActualURL; }
     void                    SetActualURL( const INetURLObject& rURL );
     void                    SetActualURL( const String& rURL );
-    BOOL                    CheckContent() const;
-    BOOL                    CompareOriginal( SfxFrameDescriptor& rSet ) const;
-    void                    UnifyContent( BOOL );
-    void                    SetReadOnly( BOOL bSet ) { bReadOnly = bSet;}
-    BOOL                    IsReadOnly(  ) const { return bReadOnly;}
-    void                    SetEditable( BOOL bSet );
-    BOOL                    IsEditable() const;
+    sal_Bool                    CheckContent() const;
+    sal_Bool                    CompareOriginal( SfxFrameDescriptor& rSet ) const;
+    void                    UnifyContent( sal_Bool );
+    void                    SetReadOnly( sal_Bool bSet ) { bReadOnly = bSet;}
+    sal_Bool                    IsReadOnly(  ) const { return bReadOnly;}
+    void                    SetEditable( sal_Bool bSet );
+    sal_Bool                    IsEditable() const;
 
                             // Size
     void                    SetWidth( long n )
@@ -139,9 +139,9 @@ public:
                             { return nWidth; }
     SizeSelector            GetSizeSelector() const
                             { return eSizeSelector; }
-    BOOL                    IsResizable() const
+    sal_Bool                    IsResizable() const
                             { return bResizeHorizontal && bResizeVertical; }
-    void                    SetResizable( BOOL bRes )
+    void                    SetResizable( sal_Bool bRes )
                             { bResizeHorizontal = bResizeVertical = bRes; }
 
                             // FrameName
@@ -163,38 +163,38 @@ public:
                             // FrameBorder
     void                    SetWallpaper( const Wallpaper& rWallpaper );
     const Wallpaper*        GetWallpaper() const;
-    BOOL                    HasFrameBorder() const;
+    sal_Bool                    HasFrameBorder() const;
 
-    BOOL                    IsFrameBorderOn() const
+    sal_Bool                    IsFrameBorderOn() const
                             { return ( nHasBorder & BORDER_YES ) != 0; }
 
-    void                    SetFrameBorder( BOOL bBorder )
+    void                    SetFrameBorder( sal_Bool bBorder )
                             {
                                 nHasBorder = bBorder ?
                                             BORDER_YES | BORDER_SET :
                                             BORDER_NO | BORDER_SET;
                             }
-    BOOL                    IsFrameBorderSet() const
+    sal_Bool                    IsFrameBorderSet() const
                             { return (nHasBorder & BORDER_SET) != 0; }
     void                    ResetBorder()
                             { nHasBorder = 0; }
 
-    BOOL                    HasUI() const
+    sal_Bool                    HasUI() const
                             { return bHasUI; }
-    void                    SetHasUI( BOOL bOn )
+    void                    SetHasUI( sal_Bool bOn )
                             { bHasUI = bOn; }
 
                             // Attribute f"ur das Splitwindow
-    USHORT                  GetItemId() const
+    sal_uInt16                  GetItemId() const
                             { return nItemId; }
-    void                    SetItemId( USHORT nId )
+    void                    SetItemId( sal_uInt16 nId )
                             { nItemId = nId; }
-    USHORT                  GetWinBits() const;
+    sal_uInt16                  GetWinBits() const;
     long                    GetSize() const;
-    USHORT                  GetItemPos() const;
+    sal_uInt16                  GetItemPos() const;
 
                             // Kopie z.B. f"ur die Views
-    SfxFrameDescriptor*     Clone( BOOL bWithIds = TRUE ) const;
+    SfxFrameDescriptor*     Clone( sal_Bool bWithIds = sal_True ) const;
 };
 
 // Kein Bock, einen operator= zu implementieren...
@@ -211,13 +211,13 @@ struct SfxFrameProperties
     ScrollingMode                       eScroll;
     SizeSelector                        eSizeSelector;
     SizeSelector                        eSetSizeSelector;
-    BOOL                                bHasBorder;
-    BOOL                                bBorderSet;
-    BOOL                                bResizable;
-    BOOL                                bSetResizable;
-    BOOL                                bIsRootSet;
-    BOOL                                bIsInColSet;
-    BOOL                                bHasBorderInherited;
+    sal_Bool                                bHasBorder;
+    sal_Bool                                bBorderSet;
+    sal_Bool                                bResizable;
+    sal_Bool                                bSetResizable;
+    sal_Bool                                bIsRootSet;
+    sal_Bool                                bIsInColSet;
+    sal_Bool                                bHasBorderInherited;
     SfxFrameDescriptor*                 pFrame;
 
 private:
@@ -233,13 +233,13 @@ public:
                                               eScroll( ScrollingAuto ),
                                               eSizeSelector( SIZE_REL ),
                                               eSetSizeSelector( SIZE_REL ),
-                                              bHasBorder( TRUE ),
-                                              bBorderSet( TRUE ),
-                                              bResizable( TRUE ),
-                                              bSetResizable( TRUE ),
-                                              bIsRootSet( FALSE ),
-                                              bIsInColSet( FALSE ),
-                                              bHasBorderInherited( TRUE ),
+                                              bHasBorder( sal_True ),
+                                              bBorderSet( sal_True ),
+                                              bResizable( sal_True ),
+                                              bSetResizable( sal_True ),
+                                              bIsRootSet( sal_False ),
+                                              bIsInColSet( sal_False ),
+                                              bHasBorderInherited( sal_True ),
                                               pFrame( 0 ) {}
 
                                         SfxFrameProperties( const SfxFrameDescriptor *pD );
@@ -255,12 +255,12 @@ class SfxFrameDescriptorItem : public SfxPoolItem
 public:
                                         TYPEINFO();
 
-                                        SfxFrameDescriptorItem ( const SfxFrameDescriptor *pD, const USHORT nId = SID_FRAMEDESCRIPTOR )
+                                        SfxFrameDescriptorItem ( const SfxFrameDescriptor *pD, const sal_uInt16 nId = SID_FRAMEDESCRIPTOR )
                                             : SfxPoolItem( nId )
                                             , aProperties( pD )
                                         {}
 
-                                        SfxFrameDescriptorItem ( const USHORT nId = SID_FRAMEDESCRIPTOR )
+                                        SfxFrameDescriptorItem ( const sal_uInt16 nId = SID_FRAMEDESCRIPTOR )
                                             : SfxPoolItem( nId )
                                         {}
 
@@ -281,9 +281,9 @@ public:
                                             UniString &rText, const IntlWrapper * = 0 ) const;
 
     virtual SfxPoolItem*                Clone( SfxItemPool *pPool = 0 ) const;
-    //virtual SfxPoolItem*              Create(SvStream &, USHORT) const;
-    //virtual SvStream&                 Store(SvStream &, USHORT nItemVersion ) const;
-    //virtual USHORT                        GetVersion( USHORT nFileFormatVersion ) const;
+    //virtual SfxPoolItem*              Create(SvStream &, sal_uInt16) const;
+    //virtual SvStream&                 Store(SvStream &, sal_uInt16 nItemVersion ) const;
+    //virtual sal_uInt16                        GetVersion( sal_uInt16 nFileFormatVersion ) const;
 
     const SfxFrameProperties&           GetProperties() const
                                         { return aProperties; }

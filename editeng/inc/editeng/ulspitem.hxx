@@ -45,26 +45,26 @@ namespace rtl
     This item describes the Upper- and Lower space of a page or paragraph.
 */
 
-#define ULSPACE_16_VERSION  ((USHORT)0x0001)
+#define ULSPACE_16_VERSION  ((sal_uInt16)0x0001)
 
 class EDITENG_DLLPUBLIC SvxULSpaceItem : public SfxPoolItem
 {
-    USHORT nUpper;  // Upper space
-    USHORT nLower;  // Lower space
-    USHORT nPropUpper, nPropLower;      // relative or absolute (=100%)
+    sal_uInt16 nUpper;  // Upper space
+    sal_uInt16 nLower;  // Lower space
+    sal_uInt16 nPropUpper, nPropLower;      // relative or absolute (=100%)
 public:
     TYPEINFO();
 
-    SvxULSpaceItem( const USHORT nId  );
-    SvxULSpaceItem( const USHORT nUp, const USHORT nLow,
-                    const USHORT nId  );
+    SvxULSpaceItem( const sal_uInt16 nId  );
+    SvxULSpaceItem( const sal_uInt16 nUp, const sal_uInt16 nLow,
+                    const sal_uInt16 nId  );
     inline SvxULSpaceItem& operator=( const SvxULSpaceItem &rCpy );
 
     // "pure virtual Methods" from SfxPoolItem
     virtual int              operator==( const SfxPoolItem& ) const;
 
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -72,24 +72,24 @@ public:
                                     String &rText, const IntlWrapper * = 0 ) const;
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*     Create(SvStream &, USHORT) const;
-    virtual SvStream&        Store(SvStream &, USHORT nItemVersion ) const;
-    virtual USHORT           GetVersion( USHORT nFileVersion ) const;
-    virtual bool             ScaleMetrics( long nMult, long nDiv );
-    virtual bool             HasMetrics() const;
+    virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const;
+    virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion ) const;
+    virtual sal_uInt16           GetVersion( sal_uInt16 nFileVersion ) const;
+    virtual bool                 ScaleMetrics( long nMult, long nDiv );
+    virtual bool                 HasMetrics() const;
 
-    inline void SetUpper( const USHORT nU, const USHORT nProp = 100 );
-    inline void SetLower( const USHORT nL, const USHORT nProp = 100 );
+    inline void SetUpper( const sal_uInt16 nU, const sal_uInt16 nProp = 100 );
+    inline void SetLower( const sal_uInt16 nL, const sal_uInt16 nProp = 100 );
 
-    void SetUpperValue( const USHORT nU ) { nUpper = nU; }
-    void SetLowerValue( const USHORT nL ) { nLower = nL; }
-    void SetPropUpper( const USHORT nU ) { nPropUpper = nU; }
-    void SetPropLower( const USHORT nL ) { nPropLower = nL; }
+    void SetUpperValue( const sal_uInt16 nU ) { nUpper = nU; }
+    void SetLowerValue( const sal_uInt16 nL ) { nLower = nL; }
+    void SetPropUpper( const sal_uInt16 nU ) { nPropUpper = nU; }
+    void SetPropLower( const sal_uInt16 nL ) { nPropLower = nL; }
 
-    USHORT GetUpper() const { return nUpper; }
-    USHORT GetLower() const { return nLower; }
-    USHORT GetPropUpper() const { return nPropUpper; }
-    USHORT GetPropLower() const { return nPropLower; }
+    sal_uInt16 GetUpper() const { return nUpper; }
+    sal_uInt16 GetLower() const { return nLower; }
+    sal_uInt16 GetPropUpper() const { return nPropUpper; }
+    sal_uInt16 GetPropLower() const { return nPropLower; }
 };
 
 inline SvxULSpaceItem &SvxULSpaceItem::operator=( const SvxULSpaceItem &rCpy )
@@ -101,13 +101,13 @@ inline SvxULSpaceItem &SvxULSpaceItem::operator=( const SvxULSpaceItem &rCpy )
     return *this;
 }
 
-inline void SvxULSpaceItem::SetUpper( const USHORT nU, const USHORT nProp )
+inline void SvxULSpaceItem::SetUpper( const sal_uInt16 nU, const sal_uInt16 nProp )
 {
-    nUpper = USHORT((ULONG(nU) * nProp ) / 100); nPropUpper = nProp;
+    nUpper = sal_uInt16((sal_uInt32(nU) * nProp ) / 100); nPropUpper = nProp;
 }
-inline void SvxULSpaceItem::SetLower( const USHORT nL, const USHORT nProp )
+inline void SvxULSpaceItem::SetLower( const sal_uInt16 nL, const sal_uInt16 nProp )
 {
-    nLower = USHORT((ULONG(nL) * nProp ) / 100); nPropLower = nProp;
+    nLower = sal_uInt16((sal_uInt32(nL) * nProp ) / 100); nPropLower = nProp;
 }
 
 #endif

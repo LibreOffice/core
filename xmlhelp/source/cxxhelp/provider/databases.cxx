@@ -42,6 +42,7 @@
 #include <string.h>
 
 // Extensible help
+#include "com/sun/star/deployment/ExtensionManager.hpp"
 #include "com/sun/star/deployment/thePackageManagerFactory.hpp"
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -1573,10 +1574,9 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextUserHelpPack
 
     if( !m_bUserPackagesLoaded )
     {
-        Reference< XPackageManager > xUserManager =
-            thePackageManagerFactory::get( m_xContext )->getPackageManager( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("user")) );
-        m_aUserPackagesSeq = xUserManager->getDeployedPackages
-            ( Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
+        Reference< XExtensionManager > xExtensionManager = ExtensionManager::get(m_xContext);
+        m_aUserPackagesSeq = xExtensionManager->getDeployedExtensions
+            ( rtl::OUString::createFromAscii("user"), Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
         m_bUserPackagesLoaded = true;
     }
 
@@ -1602,10 +1602,9 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextSharedHelpPa
 
     if( !m_bSharedPackagesLoaded )
     {
-        Reference< XPackageManager > xSharedManager =
-            thePackageManagerFactory::get( m_xContext )->getPackageManager( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("shared")) );
-        m_aSharedPackagesSeq = xSharedManager->getDeployedPackages
-            ( Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
+        Reference< XExtensionManager > xExtensionManager = ExtensionManager::get(m_xContext);
+        m_aSharedPackagesSeq = xExtensionManager->getDeployedExtensions
+            ( rtl::OUString::createFromAscii("shared"), Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
         m_bSharedPackagesLoaded = true;
     }
 
@@ -1631,10 +1630,9 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextBundledHelpP
 
     if( !m_bBundledPackagesLoaded )
     {
-        Reference< XPackageManager > xBundledManager =
-            thePackageManagerFactory::get( m_xContext )->getPackageManager( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bundled")) );
-        m_aBundledPackagesSeq = xBundledManager->getDeployedPackages
-            ( Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
+        Reference< XExtensionManager > xExtensionManager = ExtensionManager::get(m_xContext);
+        m_aBundledPackagesSeq = xExtensionManager->getDeployedExtensions
+            ( rtl::OUString::createFromAscii("bundled"), Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
         m_bBundledPackagesLoaded = true;
     }
 

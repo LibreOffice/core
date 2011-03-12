@@ -77,14 +77,14 @@ class LoadStateHelper
                             the failed load request
 
             @param      rReason
-                            in case this Method returns <TRUE/> the referred string object
+                            in case this Method returns <sal_True/> the referred string object
                             will be used to set the original message of the
                             aborted io exception on it.
-                            If method returns <FALSE/> rReason was not used.
+                            If method returns <sal_False/> rReason was not used.
 
             @return     [boolean]
-                            <TRUE/> in case it was an IO error
-                            <FALSE/> in case it wasn't an IO error or interaction was not used
+                            <sal_True/> in case it was an IO error
+                            <sal_False/> in case it wasn't an IO error or interaction was not used
         */
         static sal_Bool wasIOError( const css::uno::Any& aRequest ,
                                           rtl::OUString& rReason  )

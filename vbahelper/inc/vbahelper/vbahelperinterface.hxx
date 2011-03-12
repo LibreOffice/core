@@ -64,7 +64,7 @@
 const ::rtl::OUString sHelperServiceName( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.HelperServiceBase" ) );
 
 template< typename Ifc1 >
-class VBAHELPER_DLLPUBLIC InheritedHelperInterfaceImpl : public Ifc1
+class InheritedHelperInterfaceImpl : public Ifc1
 {
 protected:
     css::uno::WeakReference< ov::XHelperInterface > mxParent;
@@ -110,7 +110,7 @@ public:
  };
 
 template< typename Ifc1 >
-class VBAHELPER_DLLPUBLIC InheritedHelperInterfaceImpl1 : public InheritedHelperInterfaceImpl< ::cppu::WeakImplHelper1< Ifc1 > >
+class InheritedHelperInterfaceImpl1 : public InheritedHelperInterfaceImpl< ::cppu::WeakImplHelper1< Ifc1 > >
 {
     typedef InheritedHelperInterfaceImpl< ::cppu::WeakImplHelper1< Ifc1 > > Base;
 public:
@@ -120,7 +120,7 @@ public:
 };
 
 template< typename Ifc1, typename Ifc2 >
-class VBAHELPER_DLLPUBLIC InheritedHelperInterfaceImpl2 : public InheritedHelperInterfaceImpl< ::cppu::WeakImplHelper2< Ifc1, Ifc2 > >
+class InheritedHelperInterfaceImpl2 : public InheritedHelperInterfaceImpl< ::cppu::WeakImplHelper2< Ifc1, Ifc2 > >
 {
     typedef InheritedHelperInterfaceImpl< ::cppu::WeakImplHelper2< Ifc1, Ifc2 > > Base;
 public:
@@ -130,7 +130,7 @@ public:
 };
 
 template< typename Ifc1, typename Ifc2, typename Ifc3 >
-class VBAHELPER_DLLPUBLIC InheritedHelperInterfaceImpl3 : public InheritedHelperInterfaceImpl< ::cppu::WeakImplHelper3< Ifc1, Ifc2, Ifc3 > >
+class InheritedHelperInterfaceImpl3 : public InheritedHelperInterfaceImpl< ::cppu::WeakImplHelper3< Ifc1, Ifc2, Ifc3 > >
 {
     typedef InheritedHelperInterfaceImpl< ::cppu::WeakImplHelper3< Ifc1, Ifc2, Ifc3 > > Base;
 public:

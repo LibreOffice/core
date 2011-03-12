@@ -233,13 +233,6 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment (
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo (
-    void * pServiceManager, void * pRegistryKey)
-{
-    return cppu::component_writeInfoHelper (
-        pServiceManager, pRegistryKey, g_entries);
-}
-
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory (
     const sal_Char * pImplementationName, void * pServiceManager, void * pRegistryKey)
 {

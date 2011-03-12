@@ -41,7 +41,7 @@ class SVX_DLLPUBLIC SvxSubToolBoxControl : public SfxToolBoxControl
 public:
     SFX_DECL_TOOLBOX_CONTROL();
 
-    SvxSubToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+    SvxSubToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     ~SvxSubToolBoxControl();
 
     virtual SfxPopupWindowType  GetPopupWindowType() const;

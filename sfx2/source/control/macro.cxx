@@ -64,10 +64,10 @@ SfxMacroStatement::SfxMacroStatement
     const SfxShell& /*rShell*/,    // <SfxShell> which excexutes the Request
     const String&   /*rTarget*/,   // Name of the target object for the
                                    // excecution
-    BOOL            /*bAbsolute*/, // obsolete
+    sal_Bool        /*bAbsolute*/, // obsolete
     const SfxSlot&  rSlot,         // the <SfxSlot>, which can read the
                                    // statement
-    BOOL            bRequestDone,  // Was the Request really excecuted
+    sal_Bool          bRequestDone,  // Was the Request really excecuted
     ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rArgs
 )
 
@@ -97,7 +97,7 @@ SfxMacroStatement::SfxMacroStatement
     die Selektion auch deskriptiv z.B. als 'CellSelection("A5-D8")')
     angesprochen werden, dazu mu\ jedoch vom Anwendungsprogrammierer der
     Konstruktor <SfxMacroStatement::SfxMacroStatement(const String&,
-    const SfxSlot&,BOOL,SfxArguments*)> verwendet werden.
+    const SfxSlot&,sal_Bool,SfxArguments*)> verwendet werden.
 
     For the so-called object is then, depending on the type of slots,
     expressed as an assignment to one of its properties or calling its methods.
@@ -115,7 +115,7 @@ SfxMacroStatement::SfxMacroStatement
 
     [Cross-reference]
 
-    <SfxMacroStatement::SfxMacroStatement(const String&,const SfxSlot&,BOOL,SfxArguments*)>
+    <SfxMacroStatement::SfxMacroStatement(const String&,const SfxSlot&,sal_Bool,SfxArguments*)>
     <SfxMacroStatement::SfxMacroStatement(const String&)>
 */
 
@@ -140,7 +140,7 @@ SfxMacroStatement::SfxMacroStatement
 (
     const String&   rTarget,  // The Object which is addressed while playing
     const SfxSlot&  rSlot,    // The <SfxSlot>, which can playback the statement
-    BOOL            bRequestDone,  // was the Request actually performed
+    sal_Bool        bRequestDone,  // was the Request actually performed
     ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rArgs
 )
 
@@ -150,7 +150,7 @@ SfxMacroStatement::SfxMacroStatement
     [Cross-reference]
 
     <SfxMacroStatement::SfxMacroStatement(const String&)>
-    <SfxMacroStatement::SfxMacroStatement(const SfxShell&,BOOL,const SfxSlot&,BOOL,SfxArguments*)>
+    <SfxMacroStatement::SfxMacroStatement(const SfxShell&,sal_Bool,const SfxSlot&,sal_Bool,SfxArguments*)>
 */
 
 :       nSlotId( rSlot.GetSlotId() ),
@@ -180,13 +180,13 @@ SfxMacroStatement::SfxMacroStatement
 
     [Cross-reference]
 
-    <SfxMacroStatement::SfxMacroStatement(const String&,const SfxSlot&,BOOL,SfxArguments*)>
-    <SfxMacroStatement::SfxMacroStatement(const SfxShell&,BOOL,const SfxSlot&,BOOL,SfxArguments*)>
+    <SfxMacroStatement::SfxMacroStatement(const String&,const SfxSlot&,sal_Bool,SfxArguments*)>
+    <SfxMacroStatement::SfxMacroStatement(const SfxShell&,sal_Bool,const SfxSlot&,sal_Bool,SfxArguments*)>
 */
 
 :       nSlotId( 0 ),
        aStatement( rStatement ),
-    bDone( TRUE ),
+    bDone( sal_True ),
     pDummy( 0 )
 {
 }
@@ -230,7 +230,7 @@ void SfxMacroStatement::GenerateNameAndArgs_Impl
 (
     SfxMacro*        /*pMacro*/,   // in this is recorded
     const SfxSlot&   rSlot,        // the slot, which can playback the statement
-    BOOL             bRequestDone, // TRUE=was executed, FALSE=cancelled
+    sal_Bool         bRequestDone, // TRUE=was executed, FALSE=cancelled
     ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& /*rArgs*/
 )
 
@@ -255,7 +255,7 @@ void SfxMacroStatement::GenerateNameAndArgs_Impl
 
     // Print all required Parameters
     if ( aArgs.getLength() )
-        for ( USHORT nArg = 0; nArg < aArgs.getLength(); ++nArg )
+        for ( sal_uInt16 nArg = 0; nArg < aArgs.getLength(); ++nArg )
         {
             // represent the parameters textually
             String aArg;
@@ -286,8 +286,8 @@ void SfxMacroStatement::GenerateNameAndArgs_Impl
 
                 // Quotation marks are doubled
                 XubString aRecordable( sTemp );
-                USHORT nPos = 0;
-                while ( TRUE )
+                sal_uInt16 nPos = 0;
+                while ( sal_True )
                 {
                     nPos = aRecordable.SearchAndReplace( String('"'), DEFINE_CONST_UNICODE("\"\""), nPos );
                     if ( STRING_NOTFOUND == nPos )
@@ -297,7 +297,7 @@ void SfxMacroStatement::GenerateNameAndArgs_Impl
 
                 // non-printable characters are written as chr $(...)
                 bool bPrevReplaced = false;
-                for ( USHORT n = 0; n < aRecordable.Len(); ++n )
+                for ( sal_uInt16 n = 0; n < aRecordable.Len(); ++n )
                 {
                     sal_Unicode cChar = aRecordable.GetChar(n);
                     if ( !( cChar>=32 && cChar!=127 ) ) // As replacement for String::IsPrintable()!
@@ -579,7 +579,7 @@ String SfxMacro::GenerateSource() const
 {
     DBG_ASSERT( pImp->eMode != SFX_MACRO_EXISTING, "invalid call to non-recording SfxMacro" );
     String aSource;
-    for ( USHORT n = 0; n < pImp->aList.Count(); ++n )
+    for ( sal_uInt16 n = 0; n < pImp->aList.Count(); ++n )
     {
         aSource += pImp->aList.GetObject(n)->GetStatement();
         if ( (n+1) < pImp->aList.Count() )

@@ -82,9 +82,9 @@ namespace connectivity
             void dispose();
             void start(OSQLParseNode* pSQLParseNode);
             void clean();
-            virtual BOOL hasRestriction() const;
-            virtual BOOL hasFunctions() const;
-            inline BOOL evaluateRestriction()   { return m_aInterpreter->start(); }
+            virtual sal_Bool hasRestriction() const;
+            virtual sal_Bool hasFunctions() const;
+            inline sal_Bool evaluateRestriction()   { return m_aInterpreter->start(); }
             void setSelectionEvaluationResult(OValueRefRow& _pRow,const ::std::vector<sal_Int32>& _rColumnMapping);
             void setOrigColumns(const OFileColumns& rCols);
             virtual OOperandAttr* createOperandAttr(sal_Int32 _nPos,

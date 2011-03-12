@@ -41,7 +41,7 @@ class SVX_DLLPUBLIC SvxViewLayoutItem: public SfxUInt16Item
 public:
     TYPEINFO();
 
-    SvxViewLayoutItem( USHORT nColumns = 0, bool bBookMode = false, USHORT nWhich = SID_ATTR_VIEWLAYOUT );
+    SvxViewLayoutItem( sal_uInt16 nColumns = 0, bool bBookMode = false, sal_uInt16 nWhich = SID_ATTR_VIEWLAYOUT );
     SvxViewLayoutItem( const SvxViewLayoutItem& );
     ~SvxViewLayoutItem();
 
@@ -51,10 +51,10 @@ public:
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*    Create( SvStream& rStrm, USHORT nVersion ) const;                       // leer
-    virtual SvStream&       Store( SvStream& rStrm , USHORT nItemVersion ) const;                   // leer
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const; // leer
-    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );   // leer
+    virtual SfxPoolItem*    Create( SvStream& rStrm, sal_uInt16 nVersion ) const;                       // leer
+    virtual SvStream&       Store( SvStream& rStrm , sal_uInt16 nItemVersion ) const;                   // leer
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const; // leer
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );   // leer
 };
 
 //------------------------------------------------------------------------

@@ -47,10 +47,6 @@
 #include <svl/macitem.hxx>
 #include <vector>
 
-class SfxMacroInfo;
-class SfxMacroInfoArr_Impl;
-class SfxEventConfigItem_Impl;
-class SfxEventInfoArr_Impl;
 class SfxObjectShell;
 class SvxMacroTableDtor;
 
@@ -58,11 +54,11 @@ class SvxMacroTableDtor;
 
 struct SFX2_DLLPUBLIC SfxEventName
 {
-    USHORT  mnId;
+    sal_uInt16  mnId;
     String  maEventName;
     String  maUIName;
 
-            SfxEventName( USHORT nId,
+            SfxEventName( sal_uInt16 nId,
                              const String& rEventName,
                              const String& rUIName )
                 : mnId( nId )
@@ -99,7 +95,7 @@ class SFX2_DLLPUBLIC SfxEventNamesItem : public SfxPoolItem
 public:
     TYPEINFO();
 
-    SfxEventNamesItem ( const USHORT nId ) : SfxPoolItem( nId ) {}
+    SfxEventNamesItem ( const sal_uInt16 nId ) : SfxPoolItem( nId ) {}
 
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -108,13 +104,13 @@ public:
                                     XubString &rText,
                                     const IntlWrapper * = 0 ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*    Create(SvStream &, USHORT) const;
-    virtual SvStream&       Store(SvStream &, USHORT nItemVersion ) const;
-    virtual USHORT          GetVersion( USHORT nFileFormatVersion ) const;
+    virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const;
+    virtual SvStream&       Store(SvStream &, sal_uInt16 nItemVersion ) const;
+    virtual sal_uInt16          GetVersion( sal_uInt16 nFileFormatVersion ) const;
 
     const SfxEventNamesList& GetEvents() const { return aEventsList;}
     void SetEvents( const SfxEventNamesList& rList ) { aEventsList = rList; }
-    void                    AddEvent( const String&, const String&, USHORT );
+    void                    AddEvent( const String&, const String&, sal_uInt16 );
 };
 
 // -----------------------------------------------------------------------
@@ -129,7 +125,7 @@ class SFX2_DLLPUBLIC SfxEventConfiguration
 {
 public:
     static void                         ConfigureEvent( ::rtl::OUString aName, const SvxMacro&, SfxObjectShell* pObjSh);
-    static SvxMacro*                    ConvertToMacro( const com::sun::star::uno::Any& rElement, SfxObjectShell* pDoc, BOOL bBlowUp );
+    static SvxMacro*                    ConvertToMacro( const com::sun::star::uno::Any& rElement, SfxObjectShell* pDoc, sal_Bool bBlowUp );
 };
 
 #endif

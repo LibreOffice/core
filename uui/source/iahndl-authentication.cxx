@@ -53,7 +53,6 @@
 #include "logindlg.hxx"
 #include "masterpasscrtdlg.hxx"
 #include "masterpassworddlg.hxx"
-#include "passcrtdlg.hxx"
 #include "passworddlg.hxx"
 
 #include "iahndl.hxx"
@@ -519,7 +518,8 @@ executePasswordDialog(
     task::PasswordRequestMode nMode,
     ::rtl::OUString aDocName,
     bool bMSCryptoMode,
-    bool bIsPasswordToModify )
+    bool bIsPasswordToModify,
+    bool bIsSimplePasswordRequest )
        SAL_THROW((uno::RuntimeException))
 {
     try
@@ -530,21 +530,36 @@ executePasswordDialog(
             ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
         if( nMode == task::PasswordRequestMode_PASSWORD_CREATE )
         {
-            const sal_uInt16 nMaxPasswdLen = bMSCryptoMode ? 15 : 0;   // 0 -> allow any length
+            if (bIsSimplePasswordRequest)
+            {
+                std::auto_ptr< PasswordDialog > pDialog(
+                    new PasswordDialog( pParent, nMode, xManager.get(), aDocName,
+                    bIsPasswordToModify, bIsSimplePasswordRequest ) );
+                pDialog->SetMinLen(0);
 
-            VclAbstractDialogFactory * pFact = VclAbstractDialogFactory::Create();
-            AbstractPasswordToOpenModifyDialog *pTmp = pFact->CreatePasswordToOpenModifyDialog( pParent, 0, nMaxPasswdLen, bIsPasswordToModify );
-            std::auto_ptr< AbstractPasswordToOpenModifyDialog > pDialog( pTmp );
+                rInfo.SetResult( pDialog->Execute() == RET_OK ? ERRCODE_BUTTON_OK : ERRCODE_BUTTON_CANCEL );
+                rInfo.SetPassword( pDialog->GetPassword() );
+            }
+            else
+            {
+                const sal_uInt16 nMaxPasswdLen = bMSCryptoMode ? 15 : 0;   // 0 -> allow any length
 
-            rInfo.SetResult( pDialog->Execute() == RET_OK ? ERRCODE_BUTTON_OK : ERRCODE_BUTTON_CANCEL );
-            rInfo.SetPassword( pDialog->GetPasswordToOpen() );
-            rInfo.SetPasswordToModify( pDialog->GetPasswordToModify() );
-            rInfo.SetRecommendToOpenReadonly( pDialog->IsRecommendToOpenReadonly() );
+                VclAbstractDialogFactory * pFact = VclAbstractDialogFactory::Create();
+                AbstractPasswordToOpenModifyDialog *pTmp = pFact->CreatePasswordToOpenModifyDialog( pParent, 0, nMaxPasswdLen, bIsPasswordToModify );
+                std::auto_ptr< AbstractPasswordToOpenModifyDialog > pDialog( pTmp );
+
+                rInfo.SetResult( pDialog->Execute() == RET_OK ? ERRCODE_BUTTON_OK : ERRCODE_BUTTON_CANCEL );
+                rInfo.SetPassword( pDialog->GetPasswordToOpen() );
+                rInfo.SetPasswordToModify( pDialog->GetPasswordToModify() );
+                rInfo.SetRecommendToOpenReadonly( pDialog->IsRecommendToOpenReadonly() );
+            }
         }
-        else
+        else // enter password or reenter password
         {
             std::auto_ptr< PasswordDialog > pDialog(
-                new PasswordDialog( pParent, nMode, xManager.get(), aDocName, bIsPasswordToModify ) );
+                new PasswordDialog( pParent, nMode, xManager.get(), aDocName,
+                bIsPasswordToModify, bIsSimplePasswordRequest ) );
+            pDialog->SetMinLen(0);
 
             rInfo.SetResult( pDialog->Execute() == RET_OK ? ERRCODE_BUTTON_OK : ERRCODE_BUTTON_CANCEL );
             rInfo.SetPassword( bIsPasswordToModify ? String() : pDialog->GetPassword() );
@@ -567,7 +582,8 @@ handlePasswordRequest_(
         rContinuations,
     ::rtl::OUString aDocumentName,
     bool bMSCryptoMode,
-    bool bIsPasswordToModify )
+    bool bIsPasswordToModify,
+    bool bIsSimplePasswordRequest = false )
     SAL_THROW((uno::RuntimeException))
 {
     uno::Reference< task::XInteractionRetry > xRetry;
@@ -582,7 +598,7 @@ handlePasswordRequest_(
     LoginErrorInfo aInfo;
 
     executePasswordDialog( pParent, aInfo, nMode,
-            aDocumentName, bMSCryptoMode, bIsPasswordToModify );
+            aDocumentName, bMSCryptoMode, bIsPasswordToModify, bIsSimplePasswordRequest );
 
     switch (aInfo.GetResult())
     {
@@ -742,7 +758,8 @@ UUIInteractionHelper::handlePasswordRequest(
                                rRequest->getContinuations(),
                                rtl::OUString(),
                                false /* bool bMSCryptoMode */,
-                               false /* bool bIsPasswordToModify */);
+                               false /* bool bIsPasswordToModify */,
+                               true  /* bool bIsSimplePasswordRequest */ );
         return true;
     }
 

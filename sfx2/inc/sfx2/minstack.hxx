@@ -35,7 +35,7 @@ DECL_OBJARRAY( ARR##arr_, T, nI, nG ); \
 class ARR: private ARR##arr_ \
 { \
 public: \
-    ARR( BYTE nInitSize = nI, BYTE nGrowSize = nG ): \
+    ARR( sal_uInt8 nInitSize = nI, sal_uInt8 nGrowSize = nG ): \
         ARR##arr_( nInitSize, nGrowSize ) \
     {} \
 \
@@ -43,14 +43,14 @@ public: \
         ARR##arr_( rOrig ) \
     {} \
 \
-    USHORT      Count() const { return ARR##arr_::Count(); } \
+    sal_uInt16      Count() const { return ARR##arr_::Count(); } \
     void        Push( const T& rElem ) { Append( rElem ); } \
-    const T& Top( USHORT nLevel = 0 ) const \
+    const T& Top( sal_uInt16 nLevel = 0 ) const \
                 { return (*this)[Count()-nLevel-1]; } \
     const T& Bottom() const { return (*this)[0]; } \
     T        Pop(); \
     void        Clear() { ARR##arr_::Clear(); } \
-    BOOL        Contains( const T& rItem ) const \
+    sal_Bool        Contains( const T& rItem ) const \
                 { return ARR##arr_::Contains( rItem ); } \
 }
 
@@ -68,7 +68,7 @@ DECL_PTRARRAY( ARR##arr_, T, nI, nG ) \
 class ARR: private ARR##arr_ \
 { \
 public: \
-    ARR( BYTE nInitSize = nI, BYTE nGrowSize = nG ): \
+    ARR( sal_uInt8 nInitSize = nI, sal_uInt8 nGrowSize = nG ): \
         ARR##arr_( nInitSize, nGrowSize ) \
     {} \
 \
@@ -76,11 +76,11 @@ public: \
         ARR##arr_( rOrig ) \
     {} \
 \
-    USHORT      Count() const { return ARR##arr_::Count(); } \
+    sal_uInt16      Count() const { return ARR##arr_::Count(); } \
     void        Push( T rElem ) { Append( rElem ); } \
-    BOOL        Replace( T rOldElem, T rNewElem ) \
+    sal_Bool        Replace( T rOldElem, T rNewElem ) \
                 { return ARR##arr_::Replace( rOldElem, rNewElem ); } \
-    T           Top( USHORT nLevel = 0 ) const \
+    T           Top( sal_uInt16 nLevel = 0 ) const \
                 { return (*this)[Count()-nLevel-1]; } \
     T           Bottom() const { return (*this)[0]; } \
     T           Pop() \
@@ -91,7 +91,7 @@ public: \
     T*       operator*() \
                 { return &(*this)[Count()-1]; } \
     void        Clear() { ARR##arr_::Clear(); } \
-    BOOL        Contains( const T pItem ) const \
+    sal_Bool        Contains( const T pItem ) const \
                 { return ARR##arr_::Contains( pItem ); } \
 }
 

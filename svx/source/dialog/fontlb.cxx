@@ -28,7 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#include "fontlb.hxx"
+#include "svx/fontlb.hxx"
 #include <vcl/svapp.hxx>
 
 // ============================================================================
@@ -100,7 +100,7 @@ SvxFontListBox::SvxFontListBox( Window* pParent, const ResId& rResId ) :
     maStdFont( GetFont() ),
     mbUseFont( false )
 {
-    maStdFont.SetTransparent( TRUE );
+    maStdFont.SetTransparent( sal_True );
     maEntryFont = maStdFont;
 }
 
@@ -125,10 +125,10 @@ void SvxFontListBox::SelectEntryPos( sal_uInt16 nPos, bool bSelect )
 
 void SvxFontListBox::SetNoSelection()
 {
-    SelectAll( FALSE, TRUE );
+    SelectAll( sal_False, sal_True );
 }
 
-ULONG SvxFontListBox::GetSelectEntryPos() const
+sal_uLong SvxFontListBox::GetSelectEntryPos() const
 {
     SvLBoxEntry* pSvLBoxEntry = FirstSelected();
     return pSvLBoxEntry ? GetModel()->GetAbsPos( pSvLBoxEntry ) : LIST_APPEND;

@@ -148,8 +148,8 @@ class HelpAgentDispatcher : public  css::lang::XTypeProvider
                     in case a new dispatch occures or in case the timer expired.
 
             @return [sal_Bool]
-                    TRUE in case the member m_xAgentWindow is a valid reference;
-                    FALSE otherwise.
+                    sal_True in case the member m_xAgentWindow is a valid reference;
+                    sal_False otherwise.
         */
         css::uno::Reference< css::awt::XWindow > implts_ensureAgentWindow();
 

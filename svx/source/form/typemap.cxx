@@ -38,7 +38,7 @@
 #include <editeng/cntritem.hxx>
 #include <editeng/shdditem.hxx>
 #include <editeng/postitem.hxx>
-#include "clipfmtitem.hxx"
+#include "svx/clipfmtitem.hxx"
 #include <editeng/fhgtitem.hxx>
 #include "editeng/fontitem.hxx"
 #include <editeng/charreliefitem.hxx>

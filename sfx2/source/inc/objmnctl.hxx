@@ -43,10 +43,10 @@ class SfxObjectVerbsControl: public SfxMenuControl
 private:
     void                FillMenu();
     DECL_LINK( MenuSelect, Menu * );
-    virtual             void StateChanged( USHORT, SfxItemState, const SfxPoolItem* pState );
+    virtual             void StateChanged( sal_uInt16, SfxItemState, const SfxPoolItem* pState );
 
 public:
-                        SfxObjectVerbsControl(USHORT, Menu&, SfxBindings&);
+                        SfxObjectVerbsControl(sal_uInt16, Menu&, SfxBindings&);
                         ~SfxObjectVerbsControl();
     virtual PopupMenu*  GetPopup() const;
     SFX_DECL_MENU_CONTROL();

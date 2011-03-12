@@ -36,6 +36,9 @@
 
 #include <sfx2/tabdlg.hxx>
 
+#include <svtools/svmedit2.hxx>
+#include <svtools/svmedit.hxx>
+
 /* erwartet:
     SID_TEMPLATE_NAME   :   In: StringItem, Name der Vorlage
     SID_TEMPLATE_FAMILY :   In: Familie der Vorlage
@@ -53,6 +56,8 @@ class SfxManageStyleSheetPage : public SfxTabPage
 {
     FixedText aNameFt;
     Edit aNameEd;
+    ExtMultiLineEdit aNameMLE;
+
     CheckBox    aAutoCB;
 
     FixedText aFollowFt;
@@ -64,21 +69,21 @@ class SfxManageStyleSheetPage : public SfxTabPage
     FixedText aFilterFt;
     ListBox aFilterLb;
 
+    FixedLine aDescGb;
     FixedInfo aDescFt;
     MultiLineEdit aDescED;
-    FixedLine aDescGb;
 
     SfxStyleSheetBase *pStyle;
     SfxStyleFamilies *pFamilies;
     const SfxStyleFamilyItem *pItem;
     String aBuf;
-    BOOL bModified;
+    sal_Bool bModified;
 
         // initiale Daten des Styles
     String aName;
     String aFollow;
     String aParent;
-    USHORT nFlags;
+    sal_uInt16 nFlags;
 
 private:
 friend class SfxStyleDialog;
@@ -95,7 +100,7 @@ friend class SfxStyleDialog;
     static SfxTabPage*  Create(Window *pParent, const SfxItemSet &rAttrSet );
 
 protected:
-    virtual BOOL        FillItemSet(SfxItemSet &);
+    virtual sal_Bool        FillItemSet(SfxItemSet &);
     virtual void        Reset(const SfxItemSet &);
 
     using TabPage::ActivatePage;

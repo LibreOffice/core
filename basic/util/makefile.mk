@@ -137,4 +137,10 @@ $(MISC)$/$(SHL1TARGET).flt: makefile.mk
 $(SRS)$/basic.srs:
     $(TYPE) $(SRS)$/classes.srs + $(SRS)$/runtime.srs + $(SRS)$/sbx.srs > $@
 
+ALLTAR : $(MISC)/sb.component
 
+$(MISC)/sb.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        sb.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt sb.component

@@ -42,7 +42,7 @@
 
 #include <sfx2/imagemgr.hxx>
 #include <vcl/svapp.hxx>
-#include "tbxcustomshapes.hxx"
+#include "svx/tbxcustomshapes.hxx"
 
 SFX_IMPL_TOOLBOX_CONTROL(SvxTbxCtlCustomShapes, SfxBoolItem);
 
@@ -52,7 +52,7 @@ SFX_IMPL_TOOLBOX_CONTROL(SvxTbxCtlCustomShapes, SfxBoolItem);
 |*
 \************************************************************************/
 
-SvxTbxCtlCustomShapes::SvxTbxCtlCustomShapes( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
+SvxTbxCtlCustomShapes::SvxTbxCtlCustomShapes( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
     SfxToolBoxControl( nSlotId, nId, rTbx ),
     m_aSubTbxResName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/" ) )
 {
@@ -112,7 +112,7 @@ SvxTbxCtlCustomShapes::SvxTbxCtlCustomShapes( USHORT nSlotId, USHORT nId, ToolBo
 |*
 \************************************************************************/
 
-void SvxTbxCtlCustomShapes::StateChanged( USHORT nSID, SfxItemState eState,
+void SvxTbxCtlCustomShapes::StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                   const SfxPoolItem* pState )
 {
     SfxToolBoxControl::StateChanged( nSID, eState, pState );
@@ -145,7 +145,7 @@ SfxPopupWindow* SvxTbxCtlCustomShapes::CreatePopupWindow()
 
 // -----------------------------------------------------------------------
 
-void SvxTbxCtlCustomShapes::Select( BOOL /*bMod1*/ )
+void SvxTbxCtlCustomShapes::Select( sal_Bool /*bMod1*/ )
 {
      if ( m_aCommand.getLength() > 0 )
     {

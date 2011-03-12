@@ -479,7 +479,7 @@ void OPreparedStatement::setParameter(sal_Int32 parameterIndex, const ORowSetVal
         *((m_aParameterRow->get())[parameterIndex]) = x;
 }
 // -----------------------------------------------------------------------------
-UINT32 OPreparedStatement::AddParameter(OSQLParseNode * pParameter, const Reference<XPropertySet>& _xCol)
+sal_uInt32 OPreparedStatement::AddParameter(OSQLParseNode * pParameter, const Reference<XPropertySet>& _xCol)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OPreparedStatement::AddParameter" );
     OSL_UNUSED( pParameter );
@@ -493,7 +493,7 @@ UINT32 OPreparedStatement::AddParameter(OSQLParseNode * pParameter, const Refere
     ::rtl::OUString sParameterName;
     // set up Parameter-Column:
     sal_Int32 eType = DataType::VARCHAR;
-    UINT32 nPrecision = 255;
+    sal_uInt32 nPrecision = 255;
     sal_Int32 nScale = 0;
     sal_Int32 nNullable = ColumnValue::NULLABLE;
 
@@ -577,13 +577,13 @@ void OPreparedStatement::initializeResultSet(OResultSet* _pResult)
     if (!m_xParamColumns->get().empty())
     {
         // begin with AssignValues
-        USHORT nParaCount=0; // gives the current number of previously set Parameters
+        sal_uInt16 nParaCount=0; // gives the current number of previously set Parameters
 
         // search for parameters to be substituted:
         size_t nCount = m_aAssignValues.is() ? m_aAssignValues->get().size() : 1; // 1 is important for the Criteria
         for (size_t j = 1; j < nCount; j++)
         {
-            UINT32 nParameter = (*m_aAssignValues).getParameterIndex(j);
+            sal_uInt32 nParameter = (*m_aAssignValues).getParameterIndex(j);
             if (nParameter == SQL_NO_PARAMETER)
                 continue;   // this AssignValue is no Parameter
 
@@ -627,7 +627,7 @@ void OPreparedStatement::parseParamterElem(const String& _sColumnName,OSQLParseN
     if(nParameter == -1)
         nParameter = AddParameter(pRow_Value_Constructor_Elem,xCol);
     // Save number of parameter in the variable:
-    SetAssignValue(_sColumnName, String(), TRUE, nParameter);
+    SetAssignValue(_sColumnName, String(), sal_True, nParameter);
 }
 // -----------------------------------------------------------------------------
 

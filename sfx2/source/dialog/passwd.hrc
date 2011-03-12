@@ -42,11 +42,16 @@
 #define BTN_PASSWD_CANCEL 21
 #define BTN_PASSWD_HELP 22
 
-#define STR_PASSWD_CONFIRM 30
-#define STR_PASSWD_MIN_LEN  31
-#define STR_PASSWD_EMPTY    32
+#define FT_PASSWD_PASSWORD2 25
+#define ED_PASSWD_PASSWORD2 26
+#define FT_PASSWD_CONFIRM2 27
+#define ED_PASSWD_CONFIRM2 28
+
+#define STR_PASSWD_CONFIRM 29
+#define STR_PASSWD_MIN_LEN  30
+#define STR_PASSWD_EMPTY    31
+
+#define TEXT_PASSWD     32
 
 #endif
-
-// ******************************************************************* EOF
 

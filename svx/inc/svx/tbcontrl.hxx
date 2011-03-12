@@ -187,12 +187,12 @@ class SVX_DLLPUBLIC SvxStyleToolBoxControl : public SfxToolBoxControl
 public:
     SFX_DECL_TOOLBOX_CONTROL();
 
-    SvxStyleToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+    SvxStyleToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     ~SvxStyleToolBoxControl();
 
     virtual Window* CreateItemWindow( Window *pParent );
 
-    virtual void    StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                   const SfxPoolItem* pState );
 
     DECL_LINK( VisibilityNotification, void* );
@@ -214,11 +214,11 @@ private:
     SfxStyleControllerItem_Impl*        pBoundItems [MAX_FAMILIES];
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > m_xBoundItems[MAX_FAMILIES];
     SfxTemplateItem*                    pFamilyState[MAX_FAMILIES];
-    USHORT                              nActFamily; // Id in der ToolBox = Position - 1
-    USHORT                              nActFilter; // FilterIdx
-    USHORT                              nAppFilter; // Filter, den die App gesetzt hat
+    sal_uInt16                              nActFamily; // Id in der ToolBox = Position - 1
+    sal_uInt16                              nActFilter; // FilterIdx
+    sal_uInt16                              nAppFilter; // Filter, den die App gesetzt hat
     String                              aCurSel;
-    BOOL                                bListening;
+    sal_Bool                                bListening;
     Impl*                               pImpl;
 
     SVX_DLLPRIVATE void Update();
@@ -227,7 +227,7 @@ private:
 
 friend class SfxStyleControllerItem_Impl;
 
-    SVX_DLLPRIVATE void         SetFamilyState  ( USHORT nIdx, const SfxTemplateItem* pItem );
+    SVX_DLLPRIVATE void         SetFamilyState  ( sal_uInt16 nIdx, const SfxTemplateItem* pItem );
     SVX_DLLPRIVATE SfxStyleFamily   GetActFamily    ();
 };
 
@@ -240,9 +240,9 @@ class SVX_DLLPUBLIC SvxFontNameToolBoxControl : public SfxToolBoxControl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();
-    SvxFontNameToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+    SvxFontNameToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
 
-    virtual void    StateChanged        ( USHORT nSID, SfxItemState eState,
+    virtual void    StateChanged        ( sal_uInt16 nSID, SfxItemState eState,
                                           const SfxPoolItem* pState );
     virtual Window* CreateItemWindow    ( Window *pParent );
 };
@@ -265,7 +265,7 @@ class SVX_DLLPUBLIC SvxFontHeightToolBoxControl : public SfxToolBoxControl
 
 public:
     SFX_DECL_TOOLBOX_CONTROL();
-    SvxFontHeightToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+    SvxFontHeightToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     ~SvxFontHeightToolBoxControl();
 
     // new controller API
@@ -291,10 +291,10 @@ class SVX_DLLPUBLIC SvxFontColorToolBoxControl : public SfxToolBoxControl
 
 public:
     SFX_DECL_TOOLBOX_CONTROL();
-    SvxFontColorToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+    SvxFontColorToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     ~SvxFontColorToolBoxControl();
 
-    virtual void                StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                               const SfxPoolItem* pState );
     virtual SfxPopupWindowType  GetPopupWindowType() const;
     virtual SfxPopupWindow*     CreatePopupWindow();
@@ -319,14 +319,14 @@ class SVX_DLLPUBLIC SvxFontColorExtToolBoxControl : public SfxToolBoxControl
 
 public:
     SFX_DECL_TOOLBOX_CONTROL();
-    SvxFontColorExtToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+    SvxFontColorExtToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     ~SvxFontColorExtToolBoxControl();
 
-    virtual void                StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                               const SfxPoolItem* pState );
     virtual SfxPopupWindowType  GetPopupWindowType() const;
     virtual SfxPopupWindow*     CreatePopupWindow();
-    virtual void                Select( BOOL bMod1 = FALSE );
+    virtual void                Select( sal_Bool bMod1 = sal_False );
 
 };
 
@@ -344,10 +344,10 @@ class SVX_DLLPUBLIC SvxColorToolBoxControl : public SfxToolBoxControl
 
 public:
     SFX_DECL_TOOLBOX_CONTROL();
-    SvxColorToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+    SvxColorToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     ~SvxColorToolBoxControl();
 
-    virtual void                StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                               const SfxPoolItem* pState );
     virtual SfxPopupWindowType  GetPopupWindowType() const;
     virtual SfxPopupWindow*     CreatePopupWindow();
@@ -364,11 +364,11 @@ class SVX_DLLPUBLIC SvxFrameToolBoxControl : public SfxToolBoxControl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();
-    SvxFrameToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+    SvxFrameToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
 
     virtual SfxPopupWindowType  GetPopupWindowType() const;
     virtual SfxPopupWindow*     CreatePopupWindow();
-    virtual void                StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                               const SfxPoolItem* pState );
 
 };
@@ -384,11 +384,11 @@ class SVX_DLLPUBLIC SvxFrameLineStyleToolBoxControl : public SfxToolBoxControl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();
-    SvxFrameLineStyleToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+    SvxFrameLineStyleToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
 
     virtual SfxPopupWindowType  GetPopupWindowType() const;
     virtual SfxPopupWindow*     CreatePopupWindow();
-    virtual void                StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                               const SfxPoolItem* pState );
 };
 
@@ -406,12 +406,12 @@ class SVX_DLLPUBLIC SvxFrameLineColorToolBoxControl : public SfxToolBoxControl
 
 public:
     SFX_DECL_TOOLBOX_CONTROL();
-    SvxFrameLineColorToolBoxControl( USHORT nSlotId,
-                                     USHORT nId,
+    SvxFrameLineColorToolBoxControl( sal_uInt16 nSlotId,
+                                     sal_uInt16 nId,
                                      ToolBox& rTbx );
     ~SvxFrameLineColorToolBoxControl();
 
-    virtual void                StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                               const SfxPoolItem* pState );
     virtual SfxPopupWindowType  GetPopupWindowType() const;
     virtual SfxPopupWindow*     CreatePopupWindow();
@@ -427,13 +427,13 @@ private:
 
 public:
     SFX_DECL_TOOLBOX_CONTROL();
-    SvxReloadControllerItem( USHORT nSlotId,
-                             USHORT nId,
+    SvxReloadControllerItem( sal_uInt16 nSlotId,
+                             sal_uInt16 nId,
                              ToolBox& rTbx );
     ~SvxReloadControllerItem();
 
 protected:
-    virtual void StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                const SfxPoolItem* pState );
 };
 
@@ -444,10 +444,10 @@ private:
 
 public:
     SFX_DECL_TOOLBOX_CONTROL();
-    SvxSimpleUndoRedoController( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+    SvxSimpleUndoRedoController( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     ~SvxSimpleUndoRedoController();
 
-    virtual void                StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                               const SfxPoolItem* pState );
 };
 

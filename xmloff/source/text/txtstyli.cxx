@@ -30,7 +30,7 @@
 #include "precompiled_xmloff.hxx"
 
 #include "XMLTextPropertySetContext.hxx"
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include "xmloff/XMLEventsImportContext.hxx"
 #include "xmloff/attrlist.hxx"
 #include "xmloff/families.hxx"

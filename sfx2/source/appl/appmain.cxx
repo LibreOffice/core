@@ -51,7 +51,7 @@
 #include <sfx2/app.hxx>
 #include "arrdecl.hxx"
 #include <sfx2/dispatch.hxx>
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/viewsh.hxx>
 #include "intro.hxx"
@@ -114,21 +114,6 @@ void SfxApplication::Init
     <SfxApplication::OpenClients()>
 */
 {
-#ifdef DDE_AVAILABLE
-#ifndef DBG_UTIL
-    InitializeDde();
-#else
-    if( !InitializeDde() )
-    {
-        ByteString aStr( "Kein DDE-Service moeglich. Fehler: " );
-        if( GetDdeService() )
-            aStr += GetDdeService()->GetError();
-        else
-            aStr += '?';
-        DBG_ASSERT( sal_False, aStr.GetBuffer() )
-    }
-#endif
-#endif
 }
 
 //--------------------------------------------------------------------
@@ -156,35 +141,6 @@ void SfxApplication::Exit()
 
 void SfxApplication::PreInit( )
 {
-}
-
-//---------------------------------------------------------------------------
-bool SfxApplication::InitLabelResMgr( const char* _pLabelPrefix, bool _bException )
-{
-    bool bRet = false;
-    // Label-DLL mit diversen Resourcen fuer OEM-Ver. etc. (Intro, Titel, About)
-    DBG_ASSERT( _pLabelPrefix, "Wrong initialisation!" );
-    if ( _pLabelPrefix )
-    {
-        // versuchen, die Label-DLL zu erzeugen
-        pAppData_Impl->pLabelResMgr = CreateResManager( _pLabelPrefix );
-
-        // keine separate Label-DLL vorhanden?
-        if ( !pAppData_Impl->pLabelResMgr )
-        {
-            if ( _bException )
-            {
-                // maybe corrupted installation
-                throw (::com::sun::star::uno::RuntimeException(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("iso resource could not be loaded by SfxApplication")),
-                    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >()));
-            }
-        }
-        else
-            bRet = true;
-    }
-
-    return bRet;
 }
 
 void SfxApplication::Main( )

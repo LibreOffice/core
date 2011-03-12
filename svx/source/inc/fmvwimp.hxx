@@ -52,6 +52,7 @@
 #include <cppuhelper/implbase3.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/componentcontext.hxx>
+#include <rtl/ref.hxx>
 
 //class SdrPageViewWinRec;
 class SdrPageWindow;
@@ -80,13 +81,13 @@ namespace svx {
 }
 
 //==================================================================
-// FmXPageViewWinRec
+// FormViewPageWindowAdapter
 //==================================================================
 typedef ::cppu::WeakImplHelper2 <   ::com::sun::star::container::XIndexAccess
                                 ,   ::com::sun::star::form::runtime::XFormControllerContext
-                                >   FmXPageViewWinRec_Base;
+                                >   FormViewPageWindowAdapter_Base;
 
-class FmXPageViewWinRec : public FmXPageViewWinRec_Base
+class FormViewPageWindowAdapter : public FormViewPageWindowAdapter_Base
 {
     friend class FmXFormView;
 
@@ -97,10 +98,10 @@ class FmXPageViewWinRec : public FmXPageViewWinRec_Base
     Window*                     m_pWindow;
 
 protected:
-    ~FmXPageViewWinRec();
+    ~FormViewPageWindowAdapter();
 
 public:
-    FmXPageViewWinRec(  const ::comphelper::ComponentContext& _rContext,
+    FormViewPageWindowAdapter(  const ::comphelper::ComponentContext& _rContext,
         const SdrPageWindow&, FmXFormView* pView);
         //const SdrPageViewWinRec*, FmXFormView* pView);
 
@@ -131,7 +132,8 @@ protected:
     Window* getWindow() const {return m_pWindow;}
 };
 
-typedef ::std::vector<FmXPageViewWinRec*> FmWinRecList;
+typedef ::rtl::Reference< FormViewPageWindowAdapter >   PFormViewPageWindowAdapter;
+typedef ::std::vector< PFormViewPageWindowAdapter >     PageWindowAdapterList;
 typedef ::std::set  <   ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >
                     ,   ::comphelper::OInterfaceCompare< ::com::sun::star::form::XForm >
                     >   SetOfForms;
@@ -151,7 +153,7 @@ class FmXFormView : public ::cppu::WeakImplHelper3<
     friend class FmFormView;
     friend class FmFormShell;
     friend class FmXFormShell;
-    friend class FmXPageViewWinRec;
+    friend class FormViewPageWindowAdapter;
     class ObjectRemoveListener;
     friend class ObjectRemoveListener;
 
@@ -169,7 +171,8 @@ class FmXFormView : public ::cppu::WeakImplHelper3<
     ::com::sun::star::sdb::SQLErrorEvent
                     m_aAsyncError;          // error event which is to be displayed asyn. See m_nErrorMessageEvent.
 
-    FmWinRecList    m_aWinList;             // to be filled in alive mode only
+    PageWindowAdapterList
+                    m_aPageWindowAdapters;  // to be filled in alive mode only
     MapControlContainerToSetOfForms
                     m_aNeedTabOrderUpdate;
 
@@ -216,8 +219,7 @@ public:
     virtual void SAL_CALL focusLost( const ::com::sun::star::awt::FocusEvent& e ) throw (::com::sun::star::uno::RuntimeException);
 
     FmFormView* getView() const {return m_pView;}
-    FmWinRecList::const_iterator findWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& _rxCC ) const;
-    const FmWinRecList& getWindowList() const {return m_aWinList;}
+    PFormViewPageWindowAdapter  findWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& _rxCC ) const;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController >
             getFormController( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& _rxForm, const OutputDevice& _rDevice ) const;
@@ -247,12 +249,11 @@ public:
             );
 
 private:
-    FmWinRecList::iterator findWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& _rxCC );
     //void addWindow(const SdrPageViewWinRec*);
     void addWindow(const SdrPageWindow&);
     void removeWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& _rxCC );
     void Activate(sal_Bool bSync = sal_False);
-    void Deactivate(BOOL bDeactivateController = TRUE);
+    void Deactivate(sal_Bool bDeactivateController = sal_True);
 
     SdrObject*  implCreateFieldControl( const ::svx::ODataAccessDescriptor& _rColumnDescriptor );
     SdrObject*  implCreateXFormsControl( const ::svx::OXFormsDescriptor &_rDesc );
@@ -266,8 +267,8 @@ private:
         const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats >& _rxNumberFormats,
         sal_uInt16 _nControlObjectID,
         const ::rtl::OUString& _rFieldPostfix,
-        UINT32 _nInventor,
-        UINT16 _nLabelObjectID,
+        sal_uInt32 _nInventor,
+        sal_uInt16 _nLabelObjectID,
         SdrPage* _pLabelPage,
         SdrPage* _pControlPage,
         SdrModel* _pModel,

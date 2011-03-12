@@ -83,7 +83,7 @@ static void menu_deactivate_cb( GtkWidget *pMenu )
     gtk_menu_popdown( GTK_MENU( pMenu ) );
 }
 
-static GdkPixbuf * ResIdToPixbuf( USHORT nResId )
+static GdkPixbuf * ResIdToPixbuf( sal_uInt16 nResId )
 {
     ResId aResId( SV_ICON_SMALL_START + nResId, *pVCLResMgr );
     BitmapEx aIcon( aResId );
@@ -128,7 +128,7 @@ static GdkPixbuf * ResIdToPixbuf( USHORT nResId )
         pInSalAlpha.ReleaseAccess( pSalAlpha );
 
     return gdk_pixbuf_new_from_data( pPixbufData,
-        GDK_COLORSPACE_RGB, TRUE, 8,
+        GDK_COLORSPACE_RGB, sal_True, 8,
         aSize.Width(), aSize.Height(),
         aSize.Width() * 4,
         (GdkPixbufDestroyNotify) g_free,
@@ -146,7 +146,7 @@ static void oustring_delete (gpointer  data,
 
 static void add_item( GtkMenuShell *pMenuShell, const char *pAsciiURL,
                       OUString *pOverrideLabel,
-                      USHORT nResId, GCallback pFnCallback )
+                      sal_uInt16 nResId, GCallback pFnCallback )
 {
     OUString *pURL = new OUString (OStringToOUString( pAsciiURL,
                                                       RTL_TEXTENCODING_UTF8 ));
@@ -179,7 +179,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 
 static void add_ugly_db_item( GtkMenuShell *pMenuShell, const char *pAsciiURL,
-                              USHORT nResId, GCallback pFnCallback )
+                              sal_uInt16 nResId, GCallback pFnCallback )
 {
     SvtDynamicMenuOptions aOpt;
     Sequence < Sequence < PropertyValue > > aMenu = aOpt.GetMenu( E_NEWMENU );
@@ -304,7 +304,7 @@ static gboolean display_menu_cb( GtkWidget *,
                                  GdkEventButton *event, GtkWidget *pMenu )
 {
     if (event->button == 2)
-        return FALSE;
+        return sal_False;
 
     refresh_menu( pMenu );
 
@@ -312,7 +312,7 @@ static gboolean display_menu_cb( GtkWidget *,
                     gtk_status_icon_position_menu, pTrayIcon,
                     0, event->time );
 
-    return TRUE;
+    return sal_True;
 }
 
 #ifdef ENABLE_GIO

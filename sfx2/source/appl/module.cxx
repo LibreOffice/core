@@ -36,10 +36,10 @@
 #include <sfx2/module.hxx>
 #include <sfx2/app.hxx>
 #include "arrdecl.hxx"
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include <sfx2/msgpool.hxx>
 #include <sfx2/tbxctrl.hxx>
-#include "stbitem.hxx"
+#include "sfx2/stbitem.hxx"
 #include <sfx2/mnuitem.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/mnumgr.hxx>
@@ -69,7 +69,7 @@ public:
 
                                 SfxModule_Impl();
                                 ~SfxModule_Impl();
-    ImageList*                  GetImageList( ResMgr* pResMgr, BOOL bBig );
+    ImageList*                  GetImageList( ResMgr* pResMgr, bool bBig );
 };
 
 SfxModule_Impl::SfxModule_Impl()
@@ -88,7 +88,7 @@ SfxModule_Impl::~SfxModule_Impl()
     delete pImgListBig;
 }
 
-ImageList* SfxModule_Impl::GetImageList( ResMgr* pResMgr, BOOL bBig )
+ImageList* SfxModule_Impl::GetImageList( ResMgr* pResMgr, bool bBig )
 {
     ImageList*& rpList = bBig ? pImgListBig : pImgListSmall;
     if ( !rpList )
@@ -124,7 +124,7 @@ ResMgr* SfxModule::GetResMgr()
 
 //====================================================================
 
-SfxModule::SfxModule( ResMgr* pMgrP, BOOL bDummyP,
+SfxModule::SfxModule( ResMgr* pMgrP, sal_Bool bDummyP,
                       SfxObjectFactory* pFactoryP, ... )
     : pResMgr( pMgrP ), bDummy( bDummyP ), pImpl(0L)
 {
@@ -170,7 +170,7 @@ SfxModule::~SfxModule()
             // The module will be destroyed before the Deinitialize,
             // so remove from the array
             SfxModuleArr_Impl& rArr = GetModules_Impl();
-            for( USHORT nPos = rArr.Count(); nPos--; )
+            for( sal_uInt16 nPos = rArr.Count(); nPos--; )
             {
                 if( rArr[ nPos ] == this )
                 {
@@ -202,7 +202,7 @@ void SfxModule::RegisterChildWindow(SfxChildWinFactory *pFact)
     if (!pImpl->pFactArr)
         pImpl->pFactArr = new SfxChildWinFactArr_Impl;
 
-    for (USHORT nFactory=0; nFactory<pImpl->pFactArr->Count(); ++nFactory)
+    for (sal_uInt16 nFactory=0; nFactory<pImpl->pFactArr->Count(); ++nFactory)
     {
         if (pFact->nId ==  (*pImpl->pFactArr)[nFactory]->nId)
         {
@@ -218,13 +218,13 @@ void SfxModule::RegisterChildWindow(SfxChildWinFactory *pFact)
 
 //-------------------------------------------------------------------------
 
-void SfxModule::RegisterChildWindowContext( USHORT nId,
+void SfxModule::RegisterChildWindowContext( sal_uInt16 nId,
         SfxChildWinContextFactory *pFact)
 {
     DBG_ASSERT( pImpl, "No real Modul!" );
 
-    USHORT nCount = pImpl->pFactArr->Count();
-    for (USHORT nFactory=0; nFactory<nCount; ++nFactory)
+    sal_uInt16 nCount = pImpl->pFactArr->Count();
+    for (sal_uInt16 nFactory=0; nFactory<nCount; ++nFactory)
     {
         SfxChildWinFactory *pF = (*pImpl->pFactArr)[nFactory];
         if ( nId == pF->nId )
@@ -247,7 +247,7 @@ void SfxModule::RegisterToolBoxControl( SfxTbxCtrlFactory *pFact )
         pImpl->pTbxCtrlFac = new SfxTbxCtrlFactArr_Impl;
 
 #ifdef DBG_UTIL
-    for ( USHORT n=0; n<pImpl->pTbxCtrlFac->Count(); n++ )
+    for ( sal_uInt16 n=0; n<pImpl->pTbxCtrlFac->Count(); n++ )
     {
         SfxTbxCtrlFactory *pF = (*pImpl->pTbxCtrlFac)[n];
         if ( pF->nTypeId && pF->nTypeId == pFact->nTypeId &&
@@ -269,7 +269,7 @@ void SfxModule::RegisterStatusBarControl( SfxStbCtrlFactory *pFact )
         pImpl->pStbCtrlFac = new SfxStbCtrlFactArr_Impl;
 
 #ifdef DBG_UTIL
-    for ( USHORT n=0; n<pImpl->pStbCtrlFac->Count(); n++ )
+    for ( sal_uInt16 n=0; n<pImpl->pStbCtrlFac->Count(); n++ )
     {
         SfxStbCtrlFactory *pF = (*pImpl->pStbCtrlFac)[n];
         if ( pF->nTypeId && pF->nTypeId == pFact->nTypeId &&
@@ -291,7 +291,7 @@ void SfxModule::RegisterMenuControl( SfxMenuCtrlFactory *pFact )
         pImpl->pMenuCtrlFac = new SfxMenuCtrlFactArr_Impl;
 
 #ifdef DBG_UTIL
-    for ( USHORT n=0; n<pImpl->pMenuCtrlFac->Count(); n++ )
+    for ( sal_uInt16 n=0; n<pImpl->pMenuCtrlFac->Count(); n++ )
     {
         SfxMenuCtrlFactory *pF = (*pImpl->pMenuCtrlFac)[n];
         if ( pF->nTypeId && pF->nTypeId == pFact->nTypeId &&
@@ -333,12 +333,12 @@ SfxChildWinFactArr_Impl* SfxModule::GetChildWinFactories_Impl() const
     return pImpl->pFactArr;
 }
 
-ImageList* SfxModule::GetImageList_Impl( BOOL bBig )
+ImageList* SfxModule::GetImageList_Impl( sal_Bool bBig )
 {
     return pImpl->GetImageList( pResMgr, bBig );
 }
 
-SfxTabPage*     SfxModule::CreateTabPage( USHORT, Window*, const SfxItemSet& )
+SfxTabPage*     SfxModule::CreateTabPage( sal_uInt16 Window*, const SfxItemSet& )
 {
     return NULL;
 }
@@ -355,7 +355,7 @@ void SfxModule::DestroyModules_Impl()
     if ( pModules )
     {
         SfxModuleArr_Impl& rModules = *pModules;
-        for( USHORT nPos = rModules.Count(); nPos--; )
+        for( sal_uInt16 nPos = rModules.Count(); nPos--; )
     {
         SfxModule* pMod = rModules.GetObject(nPos);
         delete pMod;
@@ -363,22 +363,22 @@ void SfxModule::DestroyModules_Impl()
     }
 }
 
-void SfxModule::Invalidate( USHORT nId )
+void SfxModule::Invalidate( sal_uInt16 nId )
 {
     for( SfxViewFrame* pFrame = SfxViewFrame::GetFirst(); pFrame; pFrame = SfxViewFrame::GetNext( *pFrame ) )
         if ( pFrame->GetObjectShell()->GetModule() == this )
             Invalidate_Impl( pFrame->GetBindings(), nId );
 }
 
-BOOL SfxModule::IsActive() const
+sal_Bool SfxModule::IsActive() const
 {
     SfxViewFrame* pFrame = SfxViewFrame::Current();
     if ( pFrame && pFrame->GetObjectShell()->GetFactory().GetModule() == this )
-        return TRUE;
-    return FALSE;
+        return sal_True;
+    return sal_False;
 }
 
-bool SfxModule::IsChildWindowAvailable( const USHORT i_nId, const SfxViewFrame* i_pViewFrame ) const
+bool SfxModule::IsChildWindowAvailable( const sal_uInt16 i_nId, const SfxViewFrame* i_pViewFrame ) const
 {
     if ( i_nId != SID_TASKPANE )
         // by default, assume it is

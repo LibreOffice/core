@@ -101,9 +101,9 @@ uno::Reference< accessibility::XAccessible > SAL_CALL SvxShowCharSetVirtualAcc::
     ensureAlive();
 
     uno::Reference< accessibility::XAccessible >    xRet;
-    const USHORT nItemId = sal::static_int_cast<USHORT>(mpParent->PixelToMapIndex( Point( aPoint.X, aPoint.Y ) ));
+    const sal_uInt16 nItemId = sal::static_int_cast<sal_uInt16>(mpParent->PixelToMapIndex( Point( aPoint.X, aPoint.Y ) ));
 
-    if( USHORT(-1) != nItemId )
+    if( sal_uInt16(-1) != nItemId )
     {
         if ( !m_pTable )
             m_pTable = new SvxShowCharSetAcc(this);
@@ -250,7 +250,7 @@ void SAL_CALL SvxShowCharSetVirtualAcc::disposing()
 // - SvxShowCharSetItem -
 // ----------------
 
-SvxShowCharSetItem::SvxShowCharSetItem( SvxShowCharSet& rParent,SvxShowCharSetAcc*  _pParent,USHORT _nPos ) :
+SvxShowCharSetItem::SvxShowCharSetItem( SvxShowCharSet& rParent,SvxShowCharSetAcc*  _pParent,sal_uInt16 _nPos ) :
     mrParent( rParent )
     ,mnId( _nPos )
     ,m_pItem(NULL)
@@ -334,7 +334,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( SvxShowCharSetAcc, OAccessibleSelectionHelper,
 sal_Bool SvxShowCharSetAcc::implIsSelected( sal_Int32 nAccessibleChildIndex ) throw (RuntimeException)
 {
     return m_pParent && m_pParent->getCharSetControl()->IsSelected(
-        sal::static_int_cast<USHORT>(nAccessibleChildIndex));
+        sal::static_int_cast<sal_uInt16>(nAccessibleChildIndex));
 }
 // -----------------------------------------------------------------------------
         // select the specified child => watch for special ChildIndexes (ACCESSIBLE_SELECTION_CHILD_xxx)
@@ -386,7 +386,7 @@ uno::Reference< accessibility::XAccessible > SAL_CALL SvxShowCharSetAcc::getAcce
     OExternalLockGuard aGuard( this );
     ensureAlive();
     uno::Reference< accessibility::XAccessible >    xRet;
-    SvxShowCharSetItem* pItem = m_pParent->getCharSetControl()->ImplGetItem( static_cast< USHORT >( i ) );
+    SvxShowCharSetItem* pItem = m_pParent->getCharSetControl()->ImplGetItem( static_cast< sal_uInt16 >( i ) );
 
     if( pItem )
     {
@@ -484,10 +484,10 @@ uno::Reference< accessibility::XAccessible > SAL_CALL SvxShowCharSetAcc::getAcce
     ensureAlive();
 
     uno::Reference< accessibility::XAccessible >    xRet;
-    const USHORT nItemId = sal::static_int_cast<USHORT>(
+    const sal_uInt16 nItemId = sal::static_int_cast<sal_uInt16>(
         m_pParent->getCharSetControl()->PixelToMapIndex( Point( aPoint.X, aPoint.Y ) ));
 
-    if( USHORT(-1) != nItemId )
+    if( sal_uInt16(-1) != nItemId )
     {
         SvxShowCharSetItem* pItem = m_pParent->getCharSetControl()->ImplGetItem( nItemId );
         xRet = pItem->GetAccessible();
@@ -591,7 +591,7 @@ Reference< XAccessible > SAL_CALL SvxShowCharSetAcc::getAccessibleCellAt( sal_In
     OExternalLockGuard aGuard( this );
     ensureAlive();
     ::svx::SvxShowCharSetItem* pItem = m_pParent->getCharSetControl()->ImplGetItem(
-        sal::static_int_cast<USHORT>(getAccessibleIndex(nRow,nColumn) ));
+        sal::static_int_cast<sal_uInt16>(getAccessibleIndex(nRow,nColumn) ));
     if ( !pItem  )
         throw IndexOutOfBoundsException();
     return pItem->GetAccessible();
@@ -623,14 +623,14 @@ sal_Int32 SAL_CALL SvxShowCharSetAcc::getAccessibleRow( sal_Int32 nChildIndex ) 
 {
     OExternalLockGuard aGuard( this );
     ensureAlive();
-    return m_pParent->getCharSetControl()->GetRowPos(sal::static_int_cast<USHORT>(nChildIndex));
+    return m_pParent->getCharSetControl()->GetRowPos(sal::static_int_cast<sal_uInt16>(nChildIndex));
 }
 // -----------------------------------------------------------------------------
 sal_Int32 SAL_CALL SvxShowCharSetAcc::getAccessibleColumn( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     OExternalLockGuard aGuard( this );
     ensureAlive();
-    return m_pParent->getCharSetControl()->GetColumnPos(sal::static_int_cast<USHORT>(nChildIndex));
+    return m_pParent->getCharSetControl()->GetColumnPos(sal::static_int_cast<sal_uInt16>(nChildIndex));
 }
 // -----------------------------------------------------------------------------
 

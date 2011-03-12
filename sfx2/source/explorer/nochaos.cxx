@@ -73,7 +73,7 @@ public:
 class CntItemPool: public SfxItemPool
 {
     static CntItemPool* _pThePool;
-    USHORT              _nRefs;
+    sal_uInt16              _nRefs;
 
 protected:
              CntItemPool();
@@ -81,7 +81,7 @@ protected:
 
 public:
     static CntItemPool* Acquire();
-    static USHORT       Release();
+    static sal_uInt16       Release();
 };
 
 //----------------------------------------------------------------------------
@@ -96,7 +96,7 @@ SfxItemPool* NoChaos::GetItemPool()
 
 //----------------------------------------------------------------------------
 // static
-USHORT NoChaos::ReleaseItemPool()
+sal_uInt16 NoChaos::ReleaseItemPool()
 {
     // Release CHAOS item pool.
     return CntItemPool::Release();

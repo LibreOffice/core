@@ -49,33 +49,6 @@ extern "C" void SAL_CALL component_getImplementationEnvironment( const sal_Char 
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-// -----------------------
-// - component_writeInfo -
-// -----------------------
-
-extern "C" sal_Bool SAL_CALL component_writeInfo( void*, void* pRegistryKey )
-{
-    sal_Bool bRet = sal_False;
-
-    if( pRegistryKey )
-    {
-        try
-        {
-            uno::Reference< registry::XRegistryKey > xNewKey1(
-                static_cast< registry::XRegistryKey* >( pRegistryKey )->createKey(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/com.sun.star.comp.media.Manager_DirectX/UNO/SERVICES/com.sun.star.media.Manager_DirectX" )) ) );
-
-            bRet = sal_True;
-        }
-        catch( registry::InvalidRegistryException& )
-        {
-            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
-        }
-    }
-
-    return bRet;
-}
-
 // ------------------------
 // - component_getFactory -
 // ------------------------
@@ -85,13 +58,13 @@ extern "C" void* SAL_CALL component_getFactory( const sal_Char* pImplName, void*
     uno::Reference< lang::XSingleServiceFactory > xFactory;
     void*                                   pRet = 0;
 
-    if( rtl_str_compare( pImplName, "com.sun.star.comp.media.Manager_DirectX" ) == 0 )
+    if( rtl_str_compare( pImplName, "com.sun.star.comp.avmedia.Manager_DirectX" ) == 0 )
     {
         const ::rtl::OUString aServiceName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.media.Manager_DirectX" )) );
 
         xFactory = uno::Reference< lang::XSingleServiceFactory >( ::cppu::createSingleFactory(
                         reinterpret_cast< lang::XMultiServiceFactory* >( pServiceManager ),
-                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.media.Manager_DirectX" )),
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.avmedia.Manager_DirectX" )),
                         create_MediaPlayer, uno::Sequence< ::rtl::OUString >( &aServiceName, 1 ) ) );
     }
 

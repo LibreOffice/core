@@ -51,7 +51,7 @@ TYPEINIT1_AUTOFACTORY( MediaItem, ::SfxPoolItem );
 
 // ------------------------------------------------------------------------------
 
-MediaItem::MediaItem( USHORT _nWhich, sal_uInt32 nMaskSet ) :
+MediaItem::MediaItem( sal_uInt16 _nWhich, sal_uInt32 nMaskSet ) :
     SfxPoolItem( _nWhich ),
     mnMaskSet( nMaskSet ),
     meState( MEDIASTATE_STOP ),

@@ -185,11 +185,7 @@ struct NeonRequestContext
 // A simple Neon response_block_reader for use with an XInputStream
 // -------------------------------------------------------------------
 
-#if NEON_VERSION >= 0x0250
 extern "C" int NeonSession_ResponseBlockReader(void * inUserData,
-#else
-extern "C" void NeonSession_ResponseBlockReader(void * inUserData,
-#endif
                                                const char * inBuf,
                                                size_t inLen )
 {
@@ -205,9 +201,7 @@ extern "C" void NeonSession_ResponseBlockReader(void * inUserData,
         if ( xInputStream.is() )
             xInputStream->AddToStream( inBuf, inLen );
     }
-#if NEON_VERSION >= 0x0250
     return 0;
-#endif
 }
 
 // -------------------------------------------------------------------
@@ -215,11 +209,7 @@ extern "C" void NeonSession_ResponseBlockReader(void * inUserData,
 // A simple Neon response_block_reader for use with an XOutputStream
 // -------------------------------------------------------------------
 
-#if NEON_VERSION >= 0x0250
 extern "C" int NeonSession_ResponseBlockWriter( void * inUserData,
-#else
-extern "C" void NeonSession_ResponseBlockWriter( void * inUserData,
-#endif
                                                 const char * inBuf,
                                                 size_t inLen )
 {
@@ -237,9 +227,7 @@ extern "C" void NeonSession_ResponseBlockWriter( void * inUserData,
             xOutputStream->writeBytes( aSeq );
         }
     }
-#if NEON_VERSION >= 0x0250
     return 0;
-#endif
 }
 
 // -------------------------------------------------------------------
@@ -1923,11 +1911,6 @@ int NeonSession::GET( ne_session * sess,
     ne_request * req = ne_request_create( sess, "GET", uri );
     int ret;
 
-#if NEON_VERSION < 0x0250
-    if ( getheaders )
-        ne_add_response_header_catcher(
-            req, runResponseHeaderHandler, userdata );
-#endif
     ne_decompress * dc
         = ne_decompress_reader( req, ne_accept_2xx, reader, userdata );
 
@@ -1936,7 +1919,6 @@ int NeonSession::GET( ne_session * sess,
         ret = ne_request_dispatch( req );
     }
 
-#if NEON_VERSION >= 0x0250
     if ( getheaders )
     {
         void *cursor = NULL;
@@ -1950,7 +1932,7 @@ int NeonSession::GET( ne_session * sess,
             runResponseHeaderHandler(userdata, buffer);
         }
     }
-#endif
+
     if ( ret == NE_OK && ne_get_status( req )->klass != 2 )
         ret = NE_ERROR;
 

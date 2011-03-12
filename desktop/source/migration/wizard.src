@@ -1,0 +1,442 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+ /*
+  * encoding for resources: windows-1252
+  */
+
+#include "wizard.hrc"
+#include <svtools/controldims.hrc>
+
+ModalDialog DLG_FIRSTSTART_WIZARD
+{
+    Text [ en-US ] = "Welcome to %PRODUCTNAME %PRODUCTVERSION";
+
+    OutputSize      = TRUE ;
+    SVLook          = TRUE ;
+    Moveable        = TRUE ;
+    Closeable       = TRUE ;
+    Hide            = TRUE;
+    HelpID          = HID_FIRSTSTART_DIALOG;
+
+    FixedImage CTRL_THROBBER
+    {
+        Pos = MAP_APPFONT( 5, 210 );
+        Size = MAP_APPFONT( 11, 11 );
+        Hide = TRUE;
+    };
+};
+
+String STR_STATE_WELCOME
+{
+    Text [ en-US ] = "Welcome";
+};
+String STR_STATE_LICENSE
+{
+    Text [ en-US ] = "License Agreement";
+};
+String STR_STATE_MIGRATION
+{
+    Text [ en-US ] = "Personal Data";
+};
+String STR_STATE_USER
+{
+    Text [ en-US ] = "User name";
+};
+
+String STR_STATE_UPDATE_CHECK
+{
+    Text [ en-US ] = "Online Update";
+};
+
+String STR_STATE_REGISTRATION
+{
+    Text [ en-US ] = "Registration";
+};
+
+String STR_WELCOME_MIGRATION
+{
+    Text [ en-US ] = "This wizard will guide you through the license agreement, the transfer of user data from %OLD_VERSION and the registration of %PRODUCTNAME.\n\nClick 'Next' to continue.";
+
+};
+
+String STR_WELCOME_WITHOUT_LICENSE
+{
+    Text [ en-US ] = "This wizard will guide you through the registration of %PRODUCTNAME.\n\nClick 'Next' to continue.";
+};
+
+String STR_FINISH
+{
+    Text [ en-US ] = "~Finish";
+};
+
+String STR_REGISTRATION_OOO
+{
+    Text [ en-US ] = "You now have the opportunity to support and contribute to the fastest growing open source community in the world.\n\nHelp us prove that %PRODUCTNAME has already gained significant market share by registering.\n\nRegistering is voluntary and without obligation.";
+};
+
+ErrorBox ERRBOX_REG_NOSYSBROWSER
+{
+    BUTTONS = WB_OK ;
+    DEFBUTTON = WB_DEF_OK ;
+
+    Message [ en-US ] = "An error occurred in starting the web browser.\nPlease check the %PRODUCTNAME and web browser settings.";
+};
+
+QueryBox QB_ASK_DECLINE
+{
+    Buttons = WB_YES_NO;
+    DefButton = WB_DEF_NO;
+
+    Message [ en-US ] = "Do you really want to decline?";
+};
+
+
+#define ROWHEIGHT 8
+#define MARGINLEFT 10
+#define MARGINRIGHT 10
+#define BODYWIDTH TP_WIDTH-MARGINLEFT-MARGINRIGHT
+#define MARGINTOP 10
+#define MARGINBOTTOM 2
+#define BODYHEIGHT TP_HEIGHT-MARGINTOP-MARGINBOTTOM
+#define INDENT 10
+#define INDENT2 12
+
+TabPage TP_WELCOME
+{
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    Size = MAP_APPFONT(TP_WIDTH, TP_HEIGHT);
+    HelpID          = HID_FIRSTSTART_WELCOME;
+    // bold fixedtext for header
+    FixedText FT_WELCOME_HEADER
+    {
+        NoLabel = TRUE;
+        Pos = MAP_APPFONT(MARGINRIGHT, MARGINTOP);
+        Size = MAP_APPFONT( BODYWIDTH, ROWHEIGHT );
+        Text [ en-US ] = "Welcome to %PRODUCTNAME %PRODUCTVERSION";
+    };
+    FixedText FT_WELCOME_BODY
+    {
+        NoLabel = TRUE;
+        Pos = MAP_APPFONT(MARGINLEFT, MARGINTOP + 2*ROWHEIGHT);
+        Size = MAP_APPFONT( BODYWIDTH, BODYHEIGHT-MARGINTOP - 2*ROWHEIGHT );
+        WordBreak = TRUE;
+        Text [ en-US ] = "This wizard will guide you through the license agreement and the registration of %PRODUCTNAME.\n\nClick 'Next' to continue.";
+    };
+};
+
+TabPage TP_LICENSE
+{
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    Size = MAP_APPFONT(TP_WIDTH, TP_HEIGHT);
+    HelpID          = HID_FIRSTSTART_LICENSE;
+    FixedText FT_LICENSE_HEADER
+    {
+        Pos = MAP_APPFONT(MARGINLEFT, MARGINTOP);
+        Size = MAP_APPFONT( BODYWIDTH, ROWHEIGHT );
+        NoLabel = TRUE;
+        Text [ en-US ] = "Please follow these steps to accept the license";
+    };
+    FixedText FT_LICENSE_BODY_1
+    {
+        Pos = MAP_APPFONT(MARGINLEFT, MARGINTOP + 2*ROWHEIGHT);
+        Size = MAP_APPFONT( INDENT, ROWHEIGHT );
+        NoLabel = TRUE;
+        Text [ en-US ] = "1.";
+    };
+    FixedText FT_LICENSE_BODY_1_TXT
+    {
+        Pos = MAP_APPFONT(MARGINLEFT+INDENT, MARGINTOP +2*ROWHEIGHT);
+        Size = MAP_APPFONT( BODYWIDTH-INDENT, 3*ROWHEIGHT);
+        WordBreak = TRUE;
+        NoLabel = TRUE;
+        Text [ en-US ] = "View the complete License Agreement. Please use the scrollbar or the '%PAGEDOWN' button in this dialog to view the entire license text.";
+    };
+    FixedText FT_LICENSE_BODY_2
+    {
+        Pos = MAP_APPFONT(MARGINLEFT, MARGINTOP + 5*ROWHEIGHT);
+        Size = MAP_APPFONT(INDENT, ROWHEIGHT );
+        NoLabel = TRUE;
+        Text [ en-US ] = "2.";
+    };
+    FixedText FT_LICENSE_BODY_2_TXT
+    {
+        Pos = MAP_APPFONT(MARGINLEFT+INDENT, MARGINTOP + 5*ROWHEIGHT);
+        Size = MAP_APPFONT( BODYWIDTH-INDENT, 2*ROWHEIGHT);
+        WordBreak = TRUE;
+        NoLabel = TRUE;
+        Text [ en-US ] = "Click 'Accept' to accept the terms of the Agreement.";
+    };
+    MultiLineEdit ML_LICENSE
+    {
+        HelpID = "desktop:MultiLineEdit:TP_LICENSE:ML_LICENSE";
+        PosSize = MAP_APPFONT (MARGINLEFT+INDENT, MARGINTOP + 8*ROWHEIGHT, BODYWIDTH-INDENT , BODYHEIGHT - 8*ROWHEIGHT - 20-2*MARGINBOTTOM) ;
+        Border = TRUE;
+        VScroll = TRUE;
+        ReadOnly = TRUE;
+    };
+    PushButton PB_LICENSE_DOWN
+    {
+        HelpID = "desktop:PushButton:TP_LICENSE:PB_LICENSE_DOWN";
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( TP_WIDTH-MARGINRIGHT-50 , TP_HEIGHT-MARGINBOTTOM-18 ) ;
+        Size = MAP_APPFONT ( 50, 15 ) ;
+        Text [ en-US ] = "Scroll Do~wn";
+    };
+};
+
+String STR_LICENSE_ACCEPT
+{
+    Text [ en-US ] = "~Accept";
+};
+String STR_LICENSE_DECLINE
+{
+    Text [ en-US ] = "~Decline";
+};
+
+
+TabPage TP_MIGRATION
+{
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    Size = MAP_APPFONT(TP_WIDTH, TP_HEIGHT);
+    HelpID          = HID_FIRSTSTART_MIGRATION;
+
+    FixedText FT_MIGRATION_HEADER
+    {
+        NoLabel = TRUE;
+        Pos = MAP_APPFONT(MARGINLEFT, MARGINTOP);
+        Size = MAP_APPFONT( BODYWIDTH, ROWHEIGHT );
+        Text [ en-US ] = "Transfer personal data";
+
+    };
+
+    FixedText FT_MIGRATION_BODY
+    {
+        NoLabel = TRUE;
+        Pos = MAP_APPFONT(MARGINLEFT, MARGINTOP+ROWHEIGHT*2);
+        Size = MAP_APPFONT(BODYWIDTH, ROWHEIGHT*8);
+        WordBreak = TRUE;
+        Text [ en-US ] = "Most personal data from %OLDPRODUCT installation can be reused in %PRODUCTNAME %PRODUCTVERSION.\n\nIf you do not want to reuse any settings in %PRODUCTNAME %PRODUCTVERSION, unmark the check box.";
+
+    };
+
+    CheckBox CB_MIGRATION
+    {
+        HelpID = "desktop:CheckBox:TP_MIGRATION:CB_MIGRATION";
+        Pos = MAP_APPFONT(MARGINLEFT, MARGINTOP+ROWHEIGHT*10);
+        Size = MAP_APPFONT(BODYWIDTH, ROWHEIGHT*2);
+        Check = TRUE;
+        Text [ en-US ] = "Transfer personal data";
+    };
+};
+
+TabPage TP_UPDATE_CHECK
+{
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    Size = MAP_APPFONT(TP_WIDTH, TP_HEIGHT);
+    HelpID          = HID_FIRSTSTART_UPDATE_CHECK;
+
+    FixedText FT_UPDATE_CHECK_HEADER
+    {
+        NoLabel = TRUE;
+        Pos = MAP_APPFONT(MARGINLEFT, MARGINTOP);
+        Size = MAP_APPFONT( BODYWIDTH, ROWHEIGHT );
+        Text [ en-US ] = "Online Update";
+
+    };
+
+    FixedText FT_UPDATE_CHECK_BODY
+    {
+        NoLabel = TRUE;
+        Pos = MAP_APPFONT(MARGINLEFT, MARGINTOP+ROWHEIGHT*2);
+        Size = MAP_APPFONT(BODYWIDTH, ROWHEIGHT*8);
+        WordBreak = TRUE;
+        Text [ en-US ] = "%PRODUCTNAME searches automatically at regular intervals for new versions.\nIn doing so online update does not transfer personal data.\nAs soon as a new version is available, you will be notified.\n\nYou can configure this feature at Tools / Options... / %PRODUCTNAME / Online Update.";
+
+    };
+
+    CheckBox CB_UPDATE_CHECK
+    {
+        HelpID = "desktop:CheckBox:TP_UPDATE_CHECK:CB_UPDATE_CHECK";
+        Pos = MAP_APPFONT(MARGINLEFT, MARGINTOP+ROWHEIGHT*10);
+        Size = MAP_APPFONT(BODYWIDTH, ROWHEIGHT*2);
+        Check = TRUE;
+        Text [ en-US ] = "~Check for updates automatically";
+    };
+};
+
+#define USERINDENT 40
+#define EDHEIGHT 12
+#define INITIALSWIDTH 50
+#define FTADD 2
+
+TabPage TP_USER
+{
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    Size = MAP_APPFONT(TP_WIDTH, TP_HEIGHT);
+    HelpID = HID_FIRSTSTART_USER;
+
+    FixedText FT_USER_HEADER
+    {
+        NoLabel = TRUE;
+        Pos = MAP_APPFONT(MARGINLEFT, MARGINTOP);
+        Size = MAP_APPFONT( BODYWIDTH, ROWHEIGHT );
+        Text [ en-US ] = "Provide your full name and initials below";
+
+    };
+
+    FixedText FT_USER_BODY
+    {
+        NoLabel = TRUE;
+        Pos = MAP_APPFONT(MARGINLEFT, MARGINTOP+ROWHEIGHT*2);
+        Size = MAP_APPFONT(BODYWIDTH, ROWHEIGHT*3);
+        WordBreak = TRUE;
+        Text [ en-US ] = "The user name will be used in the document properties, templates and when you record changes made to documents.";
+    };
+
+
+    FixedText FT_USER_FIRST
+    {
+        Pos = MAP_APPFONT(MARGINLEFT, MARGINTOP+ROWHEIGHT*7+FTADD);
+        Size = MAP_APPFONT(USERINDENT, ROWHEIGHT);
+        Text [ en-US ] = "~First name";
+    };
+    Edit ED_USER_FIRST
+    {
+        HelpID = "desktop:Edit:TP_USER:ED_USER_FIRST";
+        Border = TRUE;
+        Pos = MAP_APPFONT(MARGINLEFT+USERINDENT, MARGINTOP+ROWHEIGHT*7);
+        Size = MAP_APPFONT(BODYWIDTH-USERINDENT, EDHEIGHT);
+    };
+    FixedText FT_USER_LAST
+    {
+        Pos = MAP_APPFONT(MARGINLEFT, MARGINTOP+ROWHEIGHT*9+FTADD);
+        Size = MAP_APPFONT(USERINDENT, ROWHEIGHT);
+        Text [ en-US ] = "~Last name";
+    };
+    Edit ED_USER_LAST
+    {
+        HelpID = "desktop:Edit:TP_USER:ED_USER_LAST";
+        Border = TRUE;
+        Pos = MAP_APPFONT(MARGINLEFT+USERINDENT, MARGINTOP+ROWHEIGHT*9);
+        Size = MAP_APPFONT(BODYWIDTH-USERINDENT, EDHEIGHT);
+    };
+    FixedText FT_USER_INITIALS
+    {
+        Pos = MAP_APPFONT(MARGINLEFT, MARGINTOP+ROWHEIGHT*11+FTADD);
+        Size = MAP_APPFONT(USERINDENT, ROWHEIGHT);
+        Text [ en-US ] = "~Initials";
+    };
+    Edit ED_USER_INITIALS
+    {
+        HelpID = "desktop:Edit:TP_USER:ED_USER_INITIALS";
+        Border = TRUE;
+        Pos = MAP_APPFONT(MARGINLEFT+USERINDENT, MARGINTOP+ROWHEIGHT*11);
+        Size = MAP_APPFONT(INITIALSWIDTH, EDHEIGHT);
+    };
+
+    FixedText FT_USER_FATHER
+    {
+        Hide = TRUE;
+        Pos = MAP_APPFONT(MARGINLEFT+USERINDENT+INITIALSWIDTH+10, MARGINTOP+ROWHEIGHT*11+FTADD);
+        Size = MAP_APPFONT(USERINDENT, ROWHEIGHT);
+        Text [ en-US ] = "~Father's name";
+    };
+    Edit ED_USER_FATHER
+    {
+        HelpID = "desktop:Edit:TP_USER:ED_USER_FATHER";
+        Border = TRUE;
+        Hide = TRUE;
+        Pos = MAP_APPFONT(MARGINLEFT+USERINDENT*2+INITIALSWIDTH+10, MARGINTOP+ROWHEIGHT*11);
+        Size = MAP_APPFONT(BODYWIDTH-10-USERINDENT*2-INITIALSWIDTH, EDHEIGHT);
+    };
+};
+
+#define RB_HEIGHT   (RSC_CD_CHECKBOX_HEIGHT+RSC_SP_GRP_SPACE_Y)
+
+TabPage TP_REGISTRATION
+{
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    Size = MAP_APPFONT(TP_WIDTH, TP_HEIGHT);
+    HelpID = HID_FIRSTSTART_REGISTRATION;
+    FixedText FT_REGISTRATION_HEADER
+    {
+        NoLabel = TRUE;
+        Text [ en-US ] = "%PRODUCTNAME Registration";
+        Pos = MAP_APPFONT(MARGINLEFT, MARGINRIGHT);
+        Size = MAP_APPFONT(BODYWIDTH, MARGINRIGHT);
+    };
+    FixedText FT_REGISTRATION_BODY
+    {
+        NoLabel = TRUE;
+        Text [ en-US ] = "You now have the opportunity to register as a %PRODUCTNAME user. Registration is voluntary and is without obligation.\n\nIf you register, we can inform you about new developments concerning this product.";
+        WordBreak = TRUE;
+        Pos = MAP_APPFONT(MARGINLEFT, MARGINTOP+ROWHEIGHT*2);
+        Size = MAP_APPFONT(BODYWIDTH, ROWHEIGHT*8);
+    };
+    RadioButton RB_REGISTRATION_NOW
+    {
+        HelpID = "desktop:RadioButton:TP_REGISTRATION:RB_REGISTRATION_NOW";
+        Text [ en-US ] = "I want to register ~now";
+        Pos = MAP_APPFONT(MARGINLEFT+INDENT2, ROWHEIGHT*12+2);
+        Size = MAP_APPFONT(BODYWIDTH-INDENT2, RSC_CD_CHECKBOX_HEIGHT);
+        Check = TRUE;
+    };
+    RadioButton RB_REGISTRATION_LATER
+    {
+        HelpID = "desktop:RadioButton:TP_REGISTRATION:RB_REGISTRATION_LATER";
+        Text [ en-US ] = "I want to register ~later";
+        Pos = MAP_APPFONT(MARGINLEFT+INDENT2, ROWHEIGHT*12+2+RB_HEIGHT);
+        Size = MAP_APPFONT(BODYWIDTH-INDENT2, RSC_CD_CHECKBOX_HEIGHT);
+    };
+    RadioButton RB_REGISTRATION_NEVER
+    {
+        HelpID = "desktop:RadioButton:TP_REGISTRATION:RB_REGISTRATION_NEVER";
+        Text [ en-US ] = "I do not want to ~register";
+        Pos = MAP_APPFONT(MARGINLEFT+INDENT2, ROWHEIGHT*12+2+RB_HEIGHT*2);
+        Size = MAP_APPFONT(BODYWIDTH-INDENT2, RSC_CD_CHECKBOX_HEIGHT);
+    };
+    FixedLine FL_REGISTRATION
+    {
+        Pos = MAP_APPFONT(MARGINLEFT, TP_HEIGHT-MARGINBOTTOM-ROWHEIGHT*6);
+        Size = MAP_APPFONT(BODYWIDTH, ROWHEIGHT);
+    };
+    FixedText FT_REGISTRATION_END
+    {
+        NoLabel = TRUE;
+        Text [ en-US ] = "We hope you enjoy working with %PRODUCTNAME.\n\nTo exit the wizard, click 'Finish'.";
+        Pos = MAP_APPFONT(MARGINLEFT, TP_HEIGHT-MARGINBOTTOM-ROWHEIGHT*4);
+        Size = MAP_APPFONT(BODYWIDTH, ROWHEIGHT*4);
+    };
+};
+

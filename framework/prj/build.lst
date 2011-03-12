@@ -1,23 +1,2 @@
-fr	framework	:    l10n svtools ucb NULL
-fr	framework								usr1	-	all	fr_mkout NULL
-fr  framework\inc			        	    nmake   -   all fr_inc NULL
-fr  framework\source\constant               nmake   -   all fr_constant fr_inc NULL
-fr  framework\source\threadhelp             nmake   -   all fr_threadhelp fr_constant fr_inc NULL
-fr  framework\source\loadenv                nmake   -   all fr_loadenv fr_threadhelp fr_constant fr_inc NULL
-fr  framework\source\classes                nmake   -   all fr_classes fr_threadhelp fr_constant fr_inc NULL
-fr  framework\source\jobs                   nmake   -   all fr_jobs fr_threadhelp fr_constant fr_inc NULL
-fr  framework\source\interaction            nmake   -   all fr_interaction fr_threadhelp fr_constant fr_inc NULL
-fr  framework\source\helper                 nmake   -   all fr_helper fr_threadhelp fr_constant fr_inc NULL
-fr  framework\source\dispatch               nmake   -   all fr_dispatch fr_threadhelp fr_constant fr_inc NULL
-fr  framework\source\services               nmake   -   all fr_services fr_threadhelp fr_constant fr_inc NULL
-fr  framework\source\register               nmake   -   all fr_register fr_threadhelp fr_constant fr_inc NULL
-fr  framework\source\recording              nmake   -   all fr_recording fr_threadhelp fr_constant fr_inc NULL
-fr  framework\source\xml					nmake   -  	all fr_xml fr_threadhelp fr_inc NULL
-fr  framework\source\layoutmanager			nmake   -   all fr_layoutmanager fr_threadhelp fr_inc NULL
-fr  framework\source\uielement              nmake   -   all fr_uielement fr_threadhelp fr_inc NULL
-fr  framework\source\uifactory              nmake   -   all fr_uifactory fr_threadhelp fr_inc NULL
-fr  framework\source\uiconfiguration        nmake   -   all fr_uiconfiguration fr_threadhelp fr_inc NULL
-fr  framework\source\accelerators           nmake   -   all fr_accelerators fr_threadhelp fr_inc NULL
-fr  framework\source\tabwin					nmake   -   all fr_tabwin fr_threadhelp fr_inc NULL
-fr  framework\util                          nmake   -   all fr_util fr_constant fr_threadhelp fr_classes fr_loadenv fr_jobs fr_interaction fr_helper fr_dispatch fr_services fr_register fr_recording fr_layoutmanager fr_uielement fr_uifactory fr_xml fr_uiconfiguration fr_accelerators fr_tabwin NULL
-fr framework\qa\unoapi nmake - all fr_qa_unoapi NULL
+fr framework : LIBXSLT:libxslt L10N:l10n svtools ucb NULL
+fr framework\prj nmake - all fr_all NULL

@@ -34,7 +34,7 @@
 #include <sfx2/shell.hxx>
 #include <sfx2/imgdef.hxx>
 #include <sal/types.h>
-#include <vcl/fldunit.hxx>
+#include <tools/fldunit.hxx>
 
 class ImageList;
 
@@ -89,10 +89,10 @@ public:
     virtual SfxTabPage*         CreateTabPage( sal_uInt16 nId,
                                                Window* pParent,
                                                const SfxItemSet& rSet );
-    virtual void                Invalidate(USHORT nId = 0);
-    BOOL                        IsActive() const;
+    virtual void                Invalidate(sal_uInt16 nId = 0);
+    sal_Bool                        IsActive() const;
 
-    /*virtual*/ bool            IsChildWindowAvailable( const USHORT i_nId, const SfxViewFrame* i_pViewFrame ) const;
+    /*virtual*/ bool            IsChildWindowAvailable( const sal_uInt16 i_nId, const SfxViewFrame* i_pViewFrame ) const;
 
     static SfxModule*           GetActiveModule( SfxViewFrame* pFrame=NULL );
     static FieldUnit            GetCurrentFieldUnit();
@@ -104,7 +104,7 @@ public:
     SAL_DLLPRIVATE SfxStbCtrlFactArr_Impl* GetStbCtrlFactories_Impl() const;
     SAL_DLLPRIVATE SfxMenuCtrlFactArr_Impl* GetMenuCtrlFactories_Impl() const;
     SAL_DLLPRIVATE SfxChildWinFactArr_Impl* GetChildWinFactories_Impl() const;
-    SAL_DLLPRIVATE ImageList* GetImageList_Impl( BOOL bBig );
+    SAL_DLLPRIVATE ImageList* GetImageList_Impl( sal_Bool bBig );
 };
 
 #endif

@@ -29,9 +29,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_linguistic.hxx"
 
-#include "hyphdta.hxx"
-#include "lngprops.hxx"
-#include "misc.hxx"
+#include "linguistic/hyphdta.hxx"
+#include "linguistic/lngprops.hxx"
+#include "linguistic/misc.hxx"
 #include <osl/mutex.hxx>
 
 
@@ -53,8 +53,8 @@ namespace linguistic
 ///////////////////////////////////////////////////////////////////////////
 
 
-HyphenatedWord::HyphenatedWord(const OUString &rWord, INT16 nLang, INT16 nHPos,
-                               const OUString &rHyphWord, INT16 nPos ) :
+HyphenatedWord::HyphenatedWord(const OUString &rWord, sal_Int16 nLang, sal_Int16 nHPos,
+                               const OUString &rHyphWord, sal_Int16 nPos ) :
     aWord           (rWord),
     aHyphenatedWord (rHyphWord),
     nHyphPos        (nPos),
@@ -136,9 +136,9 @@ sal_Bool SAL_CALL HyphenatedWord::isAlternativeSpelling()
 ///////////////////////////////////////////////////////////////////////////
 
 
-PossibleHyphens::PossibleHyphens(const OUString &rWord, INT16 nLang,
+PossibleHyphens::PossibleHyphens(const OUString &rWord, sal_Int16 nLang,
             const OUString &rHyphWord,
-            const Sequence< INT16 > &rPositions) :
+            const Sequence< sal_Int16 > &rPositions) :
     aWord           (rWord),
     aWordWithHyphens(rHyphWord),
     aOrigHyphenPos  (rPositions),

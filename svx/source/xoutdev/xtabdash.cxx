@@ -34,7 +34,7 @@
 #ifndef SVX_LIGHT
 
 #include <com/sun/star/container/XNameContainer.hpp>
-#include "XPropertyTable.hxx"
+#include "svx/XPropertyTable.hxx"
 #include <unotools/ucbstreamhelper.hxx>
 
 #include "xmlxtexp.hxx"
@@ -88,7 +88,7 @@ char const aChckXML[]   = { '<', '?', 'x', 'm', 'l' };      // = 6.0
 
 XDashTable::XDashTable( const String& rPath,
                             XOutdevItemPool* pInPool,
-                            USHORT nInitSize, USHORT nReSize ) :
+                            sal_uInt16 nInitSize, sal_uInt16 nReSize ) :
                 XPropertyTable( rPath, pInPool, nInitSize, nReSize)
 {
     pBmpTable = new Table( nInitSize, nReSize );
@@ -123,35 +123,35 @@ XDashEntry* XDashTable::GetDash(long nIndex) const
 
 /************************************************************************/
 
-BOOL XDashTable::Load()
+sal_Bool XDashTable::Load()
 {
-    return( FALSE );
+    return( sal_False );
 }
 
 /************************************************************************/
 
-BOOL XDashTable::Save()
+sal_Bool XDashTable::Save()
 {
-    return( FALSE );
+    return( sal_False );
 }
 
 /************************************************************************/
 
-BOOL XDashTable::Create()
+sal_Bool XDashTable::Create()
 {
-    return( FALSE );
+    return( sal_False );
 }
 
 /************************************************************************/
 
-BOOL XDashTable::CreateBitmapsForUI()
+sal_Bool XDashTable::CreateBitmapsForUI()
 {
-    return( FALSE );
+    return( sal_False );
 }
 
 /************************************************************************/
 
-Bitmap* XDashTable::CreateBitmapForUI( long /*nIndex*/, BOOL /*bDelete*/)
+Bitmap* XDashTable::CreateBitmapForUI( long /*nIndex*/, sal_Bool /*bDelete*/)
 {
     return( NULL );
 }
@@ -270,18 +270,18 @@ XDashEntry* XDashList::GetDash(long nIndex) const
     return (XDashEntry*) XPropertyList::Get(nIndex, 0);
 }
 
-BOOL XDashList::Load()
+sal_Bool XDashList::Load()
 {
     if( bListDirty )
     {
-        bListDirty = FALSE;
+        bListDirty = sal_False;
 
         INetURLObject aURL( aPath );
 
         if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
         {
             DBG_ASSERT( !aPath.Len(), "invalid URL" );
-            return FALSE;
+            return sal_False;
         }
 
         aURL.Append( aName );
@@ -292,17 +292,17 @@ BOOL XDashList::Load()
         uno::Reference< container::XNameContainer > xTable( SvxUnoXDashTable_createInstance( this ), uno::UNO_QUERY );
         return SvxXMLXTableImport::load( aURL.GetMainURL( INetURLObject::NO_DECODE ), xTable );
     }
-    return( FALSE );
+    return( sal_False );
 }
 
-BOOL XDashList::Save()
+sal_Bool XDashList::Save()
 {
     INetURLObject aURL( aPath );
 
     if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
     {
         DBG_ASSERT( !aPath.Len(), "invalid URL" );
-        return FALSE;
+        return sal_False;
     }
 
     aURL.Append( aName );
@@ -314,7 +314,7 @@ BOOL XDashList::Save()
     return SvxXMLXTableExportComponent::save( aURL.GetMainURL( INetURLObject::NO_DECODE ), xTable );
 }
 
-BOOL XDashList::Create()
+sal_Bool XDashList::Create()
 {
     XubString aStr( SVX_RES( RID_SVXSTR_LINESTYLE ) );
     xub_StrLen nLen;
@@ -327,16 +327,16 @@ BOOL XDashList::Create()
     aStr.SetChar(nLen, sal_Unicode('3'));
     Insert(new XDashEntry(XDash(XDASH_RECT,2, 50,3,250,120),aStr));
 
-    return( TRUE );
+    return( sal_True );
 }
 
-BOOL XDashList::CreateBitmapsForUI()
+sal_Bool XDashList::CreateBitmapsForUI()
 {
     impCreate();
 
     for( long i = 0; i < Count(); i++)
     {
-        Bitmap* pBmp = CreateBitmapForUI( i, FALSE );
+        Bitmap* pBmp = CreateBitmapForUI( i, sal_False );
         DBG_ASSERT( pBmp, "XDashList: Bitmap(UI) konnte nicht erzeugt werden!" );
 
         if( pBmp )
@@ -345,10 +345,10 @@ BOOL XDashList::CreateBitmapsForUI()
 
     impDestroy();
 
-    return( TRUE );
+    return( sal_True );
 }
 
-Bitmap* XDashList::CreateBitmapForUI( long nIndex, BOOL bDelete )
+Bitmap* XDashList::CreateBitmapForUI( long nIndex, sal_Bool bDelete )
 {
     impCreate();
     VirtualDevice* pVD = mpData->getVirtualDevice();

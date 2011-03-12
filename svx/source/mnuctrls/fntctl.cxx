@@ -54,7 +54,7 @@ SFX_IMPL_MENU_CONTROL(SvxFontMenuControl, SvxFontItem);
 
 SvxFontMenuControl::SvxFontMenuControl
 (
-    USHORT          _nId,
+    sal_uInt16          _nId,
     Menu&           rMenu,
     SfxBindings&    rBindings
 ) :
@@ -103,7 +103,7 @@ void SvxFontMenuControl::FillMenu()
 
 void SvxFontMenuControl::StateChanged(
 
-    USHORT, SfxItemState eState, const SfxPoolItem* pState )
+    sal_uInt16, SfxItemState eState, const SfxPoolItem* pState )
 
 {
     rParent.EnableItem( GetId(), SFX_ITEM_DISABLED != eState );

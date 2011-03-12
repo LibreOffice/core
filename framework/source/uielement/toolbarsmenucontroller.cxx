@@ -40,8 +40,8 @@
 #include <classes/resource.hrc>
 #include <classes/fwkresid.hxx>
 #include <uiconfiguration/windowstateconfiguration.hxx>
-#include <helper/imageproducer.hxx>
-#include <classes/sfxhelperfunctions.hxx>
+#include <framework/imageproducer.hxx>
+#include <framework/sfxhelperfunctions.hxx>
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -175,9 +175,9 @@ ToolbarsMenuController::~ToolbarsMenuController()
 }
 
 void ToolbarsMenuController::addCommand(
-    Reference< css::awt::XPopupMenu >& rPopupMenu, const rtl::OUString& rCommandURL, USHORT nHelpId, const rtl::OUString& rLabel )
+    Reference< css::awt::XPopupMenu >& rPopupMenu, const rtl::OUString& rCommandURL, const rtl::OUString& rLabel )
 {
-    USHORT        nItemId    = m_xPopupMenu->getItemCount()+1;
+    sal_uInt16        nItemId    = m_xPopupMenu->getItemCount()+1;
 
     rtl::OUString aLabel;
     if ( rLabel.getLength() == 0 )
@@ -202,7 +202,7 @@ void ToolbarsMenuController::addCommand(
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
 
     if ( rSettings.GetUseImagesInMenus() )
-        aImage = GetImageFromURL( m_xFrame, rCommandURL, FALSE );
+        aImage = GetImageFromURL( m_xFrame, rCommandURL, false );
 
     VCLXPopupMenu* pPopupMenu = (VCLXPopupMenu *)VCLXPopupMenu::GetImplementation( rPopupMenu );
     if ( pPopupMenu )
@@ -210,7 +210,6 @@ void ToolbarsMenuController::addCommand(
         PopupMenu* pVCLPopupMenu = (PopupMenu *)pPopupMenu->GetMenu();
         if ( !!aImage )
             pVCLPopupMenu->SetItemImage( nItemId, aImage );
-        pVCLPopupMenu->SetHelpId( nItemId, nHelpId );
     }
 
     m_aCommandVector.push_back( rCommandURL );
@@ -469,7 +468,7 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
         const sal_uInt32 nCount = aSortedTbs.size();
         for ( sal_uInt32 i = 0; i < nCount; i++ )
         {
-            USHORT nItemCount = m_xPopupMenu->getItemCount();
+            sal_uInt16 nItemCount = m_xPopupMenu->getItemCount();
             m_xPopupMenu->insertItem( nIndex, aSortedTbs[i].aUIName, css::awt::MenuItemStyle::CHECKABLE, nItemCount );
             if ( aSortedTbs[i].bVisible )
                 m_xPopupMenu->checkItem( nIndex, sal_True );
@@ -479,7 +478,7 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
                 VCLXPopupMenu* pXPopupMenu = (VCLXPopupMenu *)VCLXMenu::GetImplementation( m_xPopupMenu );
                 PopupMenu*     pVCLPopupMenu = (PopupMenu *)pXPopupMenu->GetMenu();
 
-                pVCLPopupMenu->SetUserValue( nIndex, ULONG( aSortedTbs[i].bContextSensitive ? 1L : 0L ));
+                pVCLPopupMenu->SetUserValue( nIndex, sal_uIntPtr( aSortedTbs[i].bContextSensitive ? 1L : 0L ));
             }
 
             // use VCL popup menu pointer to set vital information that are not part of the awt implementation
@@ -507,11 +506,11 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
         {
             if ( m_aModuleIdentifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.DrawingDocument" ) ) ||
                  m_aModuleIdentifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) ))
-                addCommand( m_xPopupMenu, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CMD_COLORBAR )), 10417, aEmptyString );
+                addCommand( m_xPopupMenu, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CMD_COLORBAR )), aEmptyString );
             else if ( m_aModuleIdentifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.sheet.SpreadsheetDocument" ) ))
-                addCommand( m_xPopupMenu, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CMD_INPUTLINEBAR )), 26241, aEmptyString );
+                addCommand( m_xPopupMenu, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CMD_INPUTLINEBAR )), aEmptyString );
             else
-                addCommand( m_xPopupMenu, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CMD_FORMULABAR )), 20128, aEmptyString );
+                addCommand( m_xPopupMenu, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CMD_FORMULABAR )), aEmptyString );
         }
 
         sal_Bool          bAddCommand( sal_True );
@@ -530,11 +529,11 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
             // Create command for configure
             if ( m_xPopupMenu->getItemCount() > 0 )
             {
-                USHORT        nItemCount = m_xPopupMenu->getItemCount();
+                sal_uInt16        nItemCount = m_xPopupMenu->getItemCount();
                 m_xPopupMenu->insertSeparator( nItemCount+1 );
             }
 
-            addCommand( m_xPopupMenu, aConfigureToolbar, 5904, aEmptyString );
+            addCommand( m_xPopupMenu, aConfigureToolbar, aEmptyString );
         }
 
         // Add separator if no configure has been added
@@ -543,14 +542,14 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
             // Create command for configure
             if ( m_xPopupMenu->getItemCount() > 0 )
             {
-                USHORT        nItemCount = m_xPopupMenu->getItemCount();
+                sal_uInt16        nItemCount = m_xPopupMenu->getItemCount();
                 m_xPopupMenu->insertSeparator( nItemCount+1 );
             }
         }
 
         String aLabelStr = String( FwkResId( STR_RESTORE_TOOLBARS ));
         rtl::OUString aRestoreCmd( RTL_CONSTASCII_USTRINGPARAM( CMD_RESTOREVISIBILITY ));
-        addCommand( m_xPopupMenu, aRestoreCmd, 9999, aLabelStr );
+        addCommand( m_xPopupMenu, aRestoreCmd, aLabelStr );
     }
 }
 
@@ -590,9 +589,9 @@ void SAL_CALL ToolbarsMenuController::statusChanged( const FeatureStateEvent& Ev
         VCLXPopupMenu* pXPopupMenu = (VCLXPopupMenu *)VCLXMenu::GetImplementation( xPopupMenu );
         PopupMenu*     pVCLPopupMenu = (PopupMenu *)pXPopupMenu->GetMenu();
 
-        for ( USHORT i = 0; i < pVCLPopupMenu->GetItemCount(); i++ )
+        for ( sal_uInt16 i = 0; i < pVCLPopupMenu->GetItemCount(); i++ )
         {
-            USHORT nId = pVCLPopupMenu->GetItemId( i );
+            sal_uInt16 nId = pVCLPopupMenu->GetItemId( i );
             if ( nId == 0 )
                 continue;
 

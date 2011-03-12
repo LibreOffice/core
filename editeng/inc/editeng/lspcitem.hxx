@@ -52,8 +52,8 @@ class EDITENG_DLLPUBLIC SvxLineSpacingItem : public SfxEnumItemInterface
     friend SvStream& operator<<( SvStream&, SvxLineSpacingItem& ); //$ ostream
 
     short nInterLineSpace;
-    USHORT nLineHeight;
-    BYTE nPropLineSpace;
+    sal_uInt16 nLineHeight;
+    sal_uInt8 nPropLineSpace;
     SvxLineSpace eLineSpace;
     SvxInterLineSpace eInterLineSpace;
 
@@ -65,12 +65,12 @@ public:
     // writer? => Rather have a crooked vales as the default, but the
     // programmer sees that there's something special happening.
 
-    SvxLineSpacingItem( USHORT nHeight /*= LINE_SPACE_DEFAULT_HEIGHT*/, const USHORT nId  );
+    SvxLineSpacingItem( sal_uInt16 nHeight /*= LINE_SPACE_DEFAULT_HEIGHT*/, const sal_uInt16 nId  );
 
     // "pure virtual Methods" from SfxPoolItem
     virtual int              operator==( const SfxPoolItem& ) const;
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -78,8 +78,8 @@ public:
                                     String &rText, const IntlWrapper * = 0 ) const;
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*     Create(SvStream &, USHORT) const;
-    virtual SvStream&        Store(SvStream &, USHORT nItemVersion ) const;
+    virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const;
+    virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion ) const;
 
     // Methods to query and edit. InterlineSpace is added to the height.
     inline short GetInterLineSpace() const { return nInterLineSpace; }
@@ -90,16 +90,16 @@ public:
     }
 
     // Determines the absolute or minimum row height.
-    inline USHORT GetLineHeight() const { return nLineHeight; }
-    inline void SetLineHeight( const USHORT nHeight )
+    inline sal_uInt16 GetLineHeight() const { return nLineHeight; }
+    inline void SetLineHeight( const sal_uInt16 nHeight )
     {
         nLineHeight = nHeight;
         eLineSpace = SVX_LINE_SPACE_MIN;
     }
 
     // To increase or decrease the row height.
-    BYTE GetPropLineSpace() const { return nPropLineSpace; }
-    inline void SetPropLineSpace( const BYTE nProp )
+    sal_uInt8 GetPropLineSpace() const { return nPropLineSpace; }
+    inline void SetPropLineSpace( const sal_uInt8 nProp )
     {
         nPropLineSpace = nProp;
         eInterLineSpace = SVX_INTER_LINE_SPACE_PROP;
@@ -111,10 +111,10 @@ public:
     inline SvxInterLineSpace &GetInterLineSpaceRule() { return eInterLineSpace; }
     inline SvxInterLineSpace GetInterLineSpaceRule() const { return eInterLineSpace; }
 
-    virtual USHORT          GetValueCount() const;
-    virtual String          GetValueTextByPos( USHORT nPos ) const;
-    virtual USHORT          GetEnumValue() const;
-    virtual void            SetEnumValue( USHORT nNewVal );
+    virtual sal_uInt16          GetValueCount() const;
+    virtual String          GetValueTextByPos( sal_uInt16 nPos ) const;
+    virtual sal_uInt16          GetEnumValue() const;
+    virtual void            SetEnumValue( sal_uInt16 nNewVal );
 };
 
 #endif

@@ -35,7 +35,7 @@
 #include "services.h"
 #include <classes/resource.hrc>
 #include <classes/fwkresid.hxx>
-#include <helper/imageproducer.hxx>
+#include <framework/imageproducer.hxx>
 #include <com/sun/star/awt/MenuItemStyle.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -49,6 +49,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <dispatch/uieventloghelper.hxx>
 #include "helper/mischelper.hxx"
+#include "helpid.hrc"
 #include <osl/mutex.hxx>
 
 using namespace com::sun::star::uno;
@@ -102,8 +103,6 @@ void MacrosMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPo
     String aDisplayName = RetrieveLabelFromCommand( aCommand );
     pPopupMenu->InsertItem( 2, aDisplayName );
     pPopupMenu->SetItemCommand( 2, aCommand );
-    //pPopupMenu->SetHelpId( 2, HID_SVX_BASIC_MACRO_ORGANIZER );
-    pPopupMenu->SetHelpId( 2, 40012 );
 
     // insert providers but not basic or java
     addScriptItems( pPopupMenu, 4);
@@ -184,13 +183,13 @@ String MacrosMenuController::RetrieveLabelFromCommand( const String& aCmdURL )
     return framework::RetrieveLabelFromCommand(aCmdURL,m_xServiceManager,m_xUICommandLabels,m_xFrame,m_aModuleIdentifier,bModuleIdentified,"Label");
 }
 
-void MacrosMenuController::addScriptItems( PopupMenu* pPopupMenu, USHORT startItemId )
+void MacrosMenuController::addScriptItems( PopupMenu* pPopupMenu, sal_uInt16 startItemId )
 {
     const String aCmdBase = String::CreateFromAscii( ".uno:ScriptOrganizer?ScriptOrganizer.Language:string=" );
     const String ellipsis = String::CreateFromAscii( "..." );
     const ::rtl::OUString providerKey(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.provider.ScriptProviderFor"));
     const ::rtl::OUString languageProviderName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.provider.LanguageScriptProvider"));
-    USHORT itemId = startItemId;
+    sal_uInt16 itemId = startItemId;
     Reference< XContentEnumerationAccess > xEnumAccess = Reference< XContentEnumerationAccess >( m_xServiceManager, UNO_QUERY_THROW );
     Reference< XEnumeration > xEnum = xEnumAccess->createContentEnumeration ( languageProviderName );
 
@@ -221,8 +220,6 @@ void MacrosMenuController::addScriptItems( PopupMenu* pPopupMenu, USHORT startIt
                     aDisplayName.Append( ellipsis );
                     pPopupMenu->InsertItem( itemId, aDisplayName );
                     pPopupMenu->SetItemCommand( itemId, aCommand );
-                    //pPopupMenu->SetHelpId( itemId, HID_SVX_COMMON_MACRO_ORGANIZER );
-                    pPopupMenu->SetHelpId( itemId, 40014 );
                     itemId++;
                     break;
                 }

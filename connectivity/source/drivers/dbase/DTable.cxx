@@ -208,12 +208,12 @@ void ODbaseTable::readHeader()
     m_pFileStream->RefreshBuffer(); // Make sure, that the header information actually is read again
     m_pFileStream->Seek(STREAM_SEEK_TO_BEGIN);
 
-    BYTE nType=0;
+    sal_uInt8 nType=0;
     (*m_pFileStream) >> nType;
     if(ERRCODE_NONE != m_pFileStream->GetErrorCode())
         throwInvalidDbaseFormat();
 
-    m_pFileStream->Read((char*)(&m_aHeader.db_aedat), 3*sizeof(BYTE));
+    m_pFileStream->Read((char*)(&m_aHeader.db_aedat), 3*sizeof(sal_uInt8));
     if(ERRCODE_NONE != m_pFileStream->GetErrorCode())
         throwInvalidDbaseFormat();
     (*m_pFileStream) >> m_aHeader.db_anz;
@@ -225,7 +225,7 @@ void ODbaseTable::readHeader()
     (*m_pFileStream) >> m_aHeader.db_slng;
     if(ERRCODE_NONE != m_pFileStream->GetErrorCode())
         throwInvalidDbaseFormat();
-    m_pFileStream->Read((char*)(&m_aHeader.db_frei), 20*sizeof(BYTE));
+    m_pFileStream->Read((char*)(&m_aHeader.db_frei), 20*sizeof(sal_uInt8));
     if(ERRCODE_NONE != m_pFileStream->GetErrorCode())
         throwInvalidDbaseFormat();
 
@@ -319,7 +319,7 @@ void ODbaseTable::fillColumns()
     aStrFieldName.AssignAscii("Column");
     ::rtl::OUString aTypeName;
     static const ::rtl::OUString sVARCHAR(RTL_CONSTASCII_USTRINGPARAM("VARCHAR"));
-    const sal_Bool bCase = getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers();
+    const sal_Bool bCase = getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers();
     const bool bFoxPro = m_aHeader.db_typ == VisualFoxPro || m_aHeader.db_typ == VisualFoxProAuto || m_aHeader.db_typ == FoxProMemo;
 
     sal_Int32 i = 0;
@@ -528,7 +528,7 @@ void ODbaseTable::construct()
         }
         fillColumns();
 
-        UINT32 nFileSize = lcl_getFileSize(*m_pFileStream);
+        sal_uInt32 nFileSize = lcl_getFileSize(*m_pFileStream);
         m_pFileStream->Seek(STREAM_SEEK_TO_BEGIN);
         if ( m_aHeader.db_anz == 0 && ((nFileSize-m_aHeader.db_kopf)/m_aHeader.db_slng) > 0) // seems to be empty or someone wrote bullshit into the dbase file
             m_aHeader.db_anz = ((nFileSize-m_aHeader.db_kopf)/m_aHeader.db_slng);
@@ -556,7 +556,7 @@ void ODbaseTable::construct()
     }
 }
 //------------------------------------------------------------------
-BOOL ODbaseTable::ReadMemoHeader()
+sal_Bool ODbaseTable::ReadMemoHeader()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::ReadMemoHeader" );
     m_pMemoStream->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
@@ -580,7 +580,7 @@ BOOL ODbaseTable::ReadMemoHeader()
                 m_pMemoStream->Seek(m_aMemoHeader.db_size);
                 m_pMemoStream->Read(sHeader,4);
 
-                if ((m_pMemoStream->GetErrorCode() != ERRCODE_NONE) || ((BYTE)sHeader[0]) != 0xFF || ((BYTE)sHeader[1]) != 0xFF || ((BYTE)sHeader[2]) != 0x08)
+                if ((m_pMemoStream->GetErrorCode() != ERRCODE_NONE) || ((sal_uInt8)sHeader[0]) != 0xFF || ((sal_uInt8)sHeader[1]) != 0xFF || ((sal_uInt8)sHeader[2]) != 0x08)
                     m_aMemoHeader.db_typ  = MemodBaseIII;
                 else
                     m_aMemoHeader.db_typ  = MemodBaseIV;
@@ -603,7 +603,7 @@ BOOL ODbaseTable::ReadMemoHeader()
             OSL_ENSURE( false, "ODbaseTable::ReadMemoHeader: unsupported memo type!" );
             break;
     }
-    return TRUE;
+    return sal_True;
 }
 // -------------------------------------------------------------------------
 String ODbaseTable::getEntry(OConnection* _pConnection,const ::rtl::OUString& _sName )
@@ -679,11 +679,11 @@ void ODbaseTable::refreshIndexes()
         aURL.setExtension(String::CreateFromAscii("inf"));
         Config aInfFile(aURL.getFSysPath(INetURLObject::FSYS_DETECT));
         aInfFile.SetGroup(dBASE_III_GROUP);
-        USHORT nKeyCnt = aInfFile.GetKeyCount();
+        sal_uInt16 nKeyCnt = aInfFile.GetKeyCount();
         ByteString aKeyName;
         ByteString aIndexName;
 
-        for (USHORT nKey = 0; nKey < nKeyCnt; nKey++)
+        for (sal_uInt16 nKey = 0; nKey < nKeyCnt; nKey++)
         {
             // Refences the key an index-file?
             aKeyName = aInfFile.GetKeyName( nKey );
@@ -786,7 +786,7 @@ sal_Bool ODbaseTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols, s
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::fetchRow" );
     // Read the data
-    BOOL bIsCurRecordDeleted = ((char)m_pBuffer[0] == '*') ? TRUE : sal_False;
+    bool bIsCurRecordDeleted = (char)m_pBuffer[0] == '*';
 
     // only read the bookmark
 
@@ -795,7 +795,7 @@ sal_Bool ODbaseTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols, s
     *(_rRow->get())[0] = m_nFilePos;
 
     if (!bRetrieveData)
-        return TRUE;
+        return sal_True;
 
     sal_Size nByteOffset = 1;
     // Fields:
@@ -968,13 +968,13 @@ sal_Bool ODbaseTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols, s
                 break;
                 case DataType::BIT:
                 {
-                    BOOL b;
+                    sal_Bool b;
                     switch (* ((const char *)pData))
                     {
                         case 'T':
                         case 'Y':
-                        case 'J':   b = TRUE; break;
-                        default:    b = FALSE; break;
+                        case 'J':   b = sal_True; break;
+                        default:    b = sal_False; break;
                     }
                     *(_rRow->get())[i] = b;
                 }
@@ -1019,7 +1019,7 @@ void ODbaseTable::FileClose()
     ODbaseTable_BASE::FileClose();
 }
 // -------------------------------------------------------------------------
-BOOL ODbaseTable::CreateImpl()
+sal_Bool ODbaseTable::CreateImpl()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::CreateImpl" );
     OSL_ENSURE(!m_pFileStream, "SequenceError");
@@ -1068,7 +1068,7 @@ BOOL ODbaseTable::CreateImpl()
     {
     }
 
-    BOOL bMemoFile = sal_False;
+    sal_Bool bMemoFile = sal_False;
 
     sal_Bool bOk = CreateFile(aURL, bMemoFile);
 
@@ -1131,7 +1131,7 @@ BOOL ODbaseTable::CreateImpl()
     else
         m_aHeader.db_typ = dBaseIII;
 
-    return TRUE;
+    return sal_True;
 }
 // -----------------------------------------------------------------------------
 void ODbaseTable::throwInvalidColumnType(const sal_uInt16 _nErrorId,const ::rtl::OUString& _sColumnName)
@@ -1154,7 +1154,7 @@ void ODbaseTable::throwInvalidColumnType(const sal_uInt16 _nErrorId,const ::rtl:
 }
 //------------------------------------------------------------------
 // creates in principle dBase IV file format
-BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
+sal_Bool ODbaseTable::CreateFile(const INetURLObject& aFile, sal_Bool& bCreateMemo)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::CreateFile" );
     bCreateMemo = sal_False;
@@ -1165,7 +1165,7 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
     if (!m_pFileStream)
         return sal_False;
 
-    BYTE nDbaseType = dBaseIII;
+    sal_uInt8 nDbaseType = dBaseIII;
     Reference<XIndexAccess> xColumns(getColumns(),UNO_QUERY);
     Reference<XPropertySet> xCol;
     const ::rtl::OUString sPropType = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE);
@@ -1207,19 +1207,19 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
     memset(aBuffer,0,sizeof(aBuffer));
 
     m_pFileStream->Seek(0L);
-    (*m_pFileStream) << (BYTE) nDbaseType;                              // dBase format
-    (*m_pFileStream) << (BYTE) (aDate.GetYear() % 100);                 // current date
+    (*m_pFileStream) << (sal_uInt8) nDbaseType;                              // dBase format
+    (*m_pFileStream) << (sal_uInt8) (aDate.GetYear() % 100);                 // current date
 
 
-    (*m_pFileStream) << (BYTE) aDate.GetMonth();
-    (*m_pFileStream) << (BYTE) aDate.GetDay();
+    (*m_pFileStream) << (sal_uInt8) aDate.GetMonth();
+    (*m_pFileStream) << (sal_uInt8) aDate.GetDay();
     (*m_pFileStream) << 0L;                                             // number of data records
-    (*m_pFileStream) << (USHORT)((m_pColumns->getCount()+1) * 32 + 1);  // header information,
+    (*m_pFileStream) << (sal_uInt16)((m_pColumns->getCount()+1) * 32 + 1);  // header information,
                                                                         // pColumns contains always an additional column
-    (*m_pFileStream) << (USHORT) 0;                                     // record length will be determined later
+    (*m_pFileStream) << (sal_uInt16) 0;                                     // record length will be determined later
     m_pFileStream->Write(aBuffer, 20);
 
-    USHORT nRecLength = 1;                                              // Length 1 for deleted flag
+    sal_uInt16 nRecLength = 1;                                              // Length 1 for deleted flag
     sal_Int32  nMaxFieldLength = m_pConnection->getMetaData()->getMaxColumnNameLength();
     ::rtl::OUString aName;
     const ::rtl::OUString sPropName = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME);
@@ -1312,9 +1312,9 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
                     {
                         throwInvalidColumnType(STR_INVALID_COLUMN_PRECISION, aName);
                     }
-                    (*m_pFileStream) << (BYTE) Min((unsigned)nPrecision, 255U);      // field length
-                    nRecLength = nRecLength + (USHORT)::std::min((USHORT)nPrecision, (USHORT)255UL);
-                    (*m_pFileStream) << (BYTE)0;                                                                // decimals
+                    (*m_pFileStream) << (sal_uInt8) Min((unsigned)nPrecision, 255U);      // field length
+                    nRecLength = nRecLength + (sal_uInt16)::std::min((sal_uInt16)nPrecision, (sal_uInt16)255UL);
+                    (*m_pFileStream) << (sal_uInt8)0;                                                                // decimals
                     break;
                 case 'F':
                 case 'N':
@@ -1326,41 +1326,41 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
                     }
                     if (getBOOL(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISCURRENCY)))) // Currency will be treated separately
                     {
-                        (*m_pFileStream) << (BYTE)10;          // standard length
-                        (*m_pFileStream) << (BYTE)4;
+                        (*m_pFileStream) << (sal_uInt8)10;          // standard length
+                        (*m_pFileStream) << (sal_uInt8)4;
                         nRecLength += 10;
                     }
                     else
                     {
                         sal_Int32 nPrec = SvDbaseConverter::ConvertPrecisionToDbase(nPrecision,nScale);
 
-                        (*m_pFileStream) << (BYTE)( nPrec);
-                        (*m_pFileStream) << (BYTE)nScale;
-                        nRecLength += (USHORT)nPrec;
+                        (*m_pFileStream) << (sal_uInt8)( nPrec);
+                        (*m_pFileStream) << (sal_uInt8)nScale;
+                        nRecLength += (sal_uInt16)nPrec;
                     }
                     break;
                 case 'L':
-                    (*m_pFileStream) << (BYTE)1;
-                    (*m_pFileStream) << (BYTE)0;
+                    (*m_pFileStream) << (sal_uInt8)1;
+                    (*m_pFileStream) << (sal_uInt8)0;
                     ++nRecLength;
                     break;
                 case 'I':
-                    (*m_pFileStream) << (BYTE)4;
-                    (*m_pFileStream) << (BYTE)0;
+                    (*m_pFileStream) << (sal_uInt8)4;
+                    (*m_pFileStream) << (sal_uInt8)0;
                     nRecLength += 4;
                     break;
                 case 'Y':
                 case 'B':
                 case 'T':
                 case 'D':
-                    (*m_pFileStream) << (BYTE)8;
-                    (*m_pFileStream) << (BYTE)0;
+                    (*m_pFileStream) << (sal_uInt8)8;
+                    (*m_pFileStream) << (sal_uInt8)0;
                     nRecLength += 8;
                     break;
                 case 'M':
-                    bCreateMemo = TRUE;
-                    (*m_pFileStream) << (BYTE)10;
-                    (*m_pFileStream) << (BYTE)0;
+                    bCreateMemo = sal_True;
+                    (*m_pFileStream) << (sal_uInt8)10;
+                    (*m_pFileStream) << (sal_uInt8)0;
                     nRecLength += 10;
                     if ( bBinary )
                         aBuffer[0] = 0x06;
@@ -1372,7 +1372,7 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
             aBuffer[0] = 0x00;
         }
 
-        (*m_pFileStream) << (BYTE)FIELD_DESCRIPTOR_TERMINATOR;              // end of header
+        (*m_pFileStream) << (sal_uInt8)FIELD_DESCRIPTOR_TERMINATOR;              // end of header
         (*m_pFileStream) << (char)DBF_EOL;
         m_pFileStream->Seek(10L);
         (*m_pFileStream) << nRecLength;                                     // set record length afterwards
@@ -1381,9 +1381,9 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
         {
             m_pFileStream->Seek(0L);
             if (nDbaseType == VisualFoxPro)
-                (*m_pFileStream) << (BYTE) FoxProMemo;
+                (*m_pFileStream) << (sal_uInt8) FoxProMemo;
             else
-                (*m_pFileStream) << (BYTE) dBaseIIIMemo;
+                (*m_pFileStream) << (sal_uInt8) dBaseIIIMemo;
         } // if (bCreateMemo)
     }
     catch ( const Exception& e )
@@ -1398,12 +1398,12 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
         catch(const Exception&) { }
         throw;
     }
-    return TRUE;
+    return sal_True;
 }
 
 //------------------------------------------------------------------
 // creates in principle dBase III file format
-BOOL ODbaseTable::CreateMemoFile(const INetURLObject& aFile)
+sal_Bool ODbaseTable::CreateMemoFile(const INetURLObject& aFile)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::CreateMemoFile" );
     // filehandling macro for table creation
@@ -1415,16 +1415,8 @@ BOOL ODbaseTable::CreateMemoFile(const INetURLObject& aFile)
     char aBuffer[512];              // write buffer
     memset(aBuffer,0,sizeof(aBuffer));
 
-#ifdef WIN
-    m_pMemoStream->Seek(0L);
-    for (UINT16 i = 0; i < 512; i++)
-    {
-        (*m_pMemoStream) << BYTE(0);
-    }
-#else
     m_pMemoStream->SetFiller('\0');
     m_pMemoStream->SetStreamSize(512);
-#endif
 
     m_pMemoStream->Seek(0L);
     (*m_pMemoStream) << long(1);                  // pointer to the first free block
@@ -1432,16 +1424,16 @@ BOOL ODbaseTable::CreateMemoFile(const INetURLObject& aFile)
     m_pMemoStream->Flush();
     delete m_pMemoStream;
     m_pMemoStream = NULL;
-    return TRUE;
+    return sal_True;
 }
 //------------------------------------------------------------------
-BOOL ODbaseTable::Drop_Static(const ::rtl::OUString& _sUrl,sal_Bool _bHasMemoFields,OCollection* _pIndexes )
+sal_Bool ODbaseTable::Drop_Static(const ::rtl::OUString& _sUrl,sal_Bool _bHasMemoFields,OCollection* _pIndexes )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::Drop_Static" );
     INetURLObject aURL;
     aURL.SetURL(_sUrl);
 
-    BOOL bDropped = ::utl::UCBContentHelper::Kill(aURL.GetMainURL(INetURLObject::NO_DECODE));
+    sal_Bool bDropped = ::utl::UCBContentHelper::Kill(aURL.GetMainURL(INetURLObject::NO_DECODE));
 
     if(bDropped)
     {
@@ -1484,7 +1476,7 @@ BOOL ODbaseTable::Drop_Static(const ::rtl::OUString& _sUrl,sal_Bool _bHasMemoFie
     return bDropped;
 }
 // -----------------------------------------------------------------------------
-BOOL ODbaseTable::DropImpl()
+sal_Bool ODbaseTable::DropImpl()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::DropImpl" );
     FileClose();
@@ -1492,7 +1484,7 @@ BOOL ODbaseTable::DropImpl()
     if(!m_pIndexes)
         refreshIndexes(); // look for indexes which must be deleted as well
 
-    BOOL bDropped = Drop_Static(getEntry(m_pConnection,m_Name),HasMemoFields(),m_pIndexes);
+    sal_Bool bDropped = Drop_Static(getEntry(m_pConnection,m_Name),HasMemoFields(),m_pIndexes);
     if(!bDropped)
     {// we couldn't drop the table so we have to reopen it
         construct();
@@ -1503,7 +1495,7 @@ BOOL ODbaseTable::DropImpl()
 }
 
 //------------------------------------------------------------------
-BOOL ODbaseTable::InsertRow(OValueRefVector& rRow, BOOL bFlush,const Reference<XIndexAccess>& _xCols)
+sal_Bool ODbaseTable::InsertRow(OValueRefVector& rRow, sal_Bool bFlush,const Reference<XIndexAccess>& _xCols)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::InsertRow" );
     // fill buffer with blanks
@@ -1513,13 +1505,13 @@ BOOL ODbaseTable::InsertRow(OValueRefVector& rRow, BOOL bFlush,const Reference<X
 
     // Copy new row completely:
     // ... and add at the end as new Record:
-    UINT32 nTempPos = m_nFilePos;
+    sal_uInt32 nTempPos = m_nFilePos;
 
-    m_nFilePos = (ULONG)m_aHeader.db_anz + 1;
-    BOOL bInsertRow = UpdateBuffer( rRow, NULL, _xCols );
+    m_nFilePos = (sal_uIntPtr)m_aHeader.db_anz + 1;
+    sal_Bool bInsertRow = UpdateBuffer( rRow, NULL, _xCols );
     if ( bInsertRow )
     {
-        UINT32 nFileSize = 0, nMemoFileSize = 0;
+        sal_uInt32 nFileSize = 0, nMemoFileSize = 0;
 
         nFileSize = lcl_getFileSize(*m_pFileStream);
 
@@ -1561,7 +1553,7 @@ BOOL ODbaseTable::InsertRow(OValueRefVector& rRow, BOOL bFlush,const Reference<X
 }
 
 //------------------------------------------------------------------
-BOOL ODbaseTable::UpdateRow(OValueRefVector& rRow, OValueRefRow& pOrgRow,const Reference<XIndexAccess>& _xCols)
+sal_Bool ODbaseTable::UpdateRow(OValueRefVector& rRow, OValueRefRow& pOrgRow,const Reference<XIndexAccess>& _xCols)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::UpdateRow" );
     // fill buffer with blanks
@@ -1572,7 +1564,7 @@ BOOL ODbaseTable::UpdateRow(OValueRefVector& rRow, OValueRefRow& pOrgRow,const R
     m_pFileStream->Seek(nPos);
     m_pFileStream->Read((char*)m_pBuffer, m_aHeader.db_slng);
 
-    UINT32 nMemoFileSize( 0 );
+    sal_uInt32 nMemoFileSize( 0 );
     if (HasMemoFields() && m_pMemoStream)
     {
         m_pMemoStream->Seek(STREAM_SEEK_TO_END);
@@ -1591,7 +1583,7 @@ BOOL ODbaseTable::UpdateRow(OValueRefVector& rRow, OValueRefRow& pOrgRow,const R
 }
 
 //------------------------------------------------------------------
-BOOL ODbaseTable::DeleteRow(const OSQLColumns& _rCols)
+sal_Bool ODbaseTable::DeleteRow(const OSQLColumns& _rCols)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::DeleteRow" );
     // Set the Delete-Flag (be it set or not):
@@ -1601,13 +1593,13 @@ BOOL ODbaseTable::DeleteRow(const OSQLColumns& _rCols)
 
     OValueRefRow aRow = new OValueRefVector(_rCols.get().size());
 
-    if (!fetchRow(aRow,_rCols,TRUE,TRUE))
+    if (!fetchRow(aRow,_rCols,sal_True,sal_True))
         return sal_False;
 
     Reference<XPropertySet> xCol;
     ::rtl::OUString aColName;
     ::comphelper::UStringMixEqual aCase(isCaseSensitive());
-    for (USHORT i = 0; i < m_pColumns->getCount(); i++)
+    for (sal_uInt16 i = 0; i < m_pColumns->getCount(); i++)
     {
         Reference<XPropertySet> xIndex = isUniqueByColumnName(i);
         if (xIndex.is())
@@ -1639,7 +1631,7 @@ BOOL ODbaseTable::DeleteRow(const OSQLColumns& _rCols)
     }
 
     m_pFileStream->Seek(nFilePos);
-    (*m_pFileStream) << (BYTE)'*'; // mark the row in the table as deleted
+    (*m_pFileStream) << (sal_uInt8)'*'; // mark the row in the table as deleted
     m_pFileStream->Flush();
     return sal_True;
 }
@@ -1679,18 +1671,18 @@ double toDouble(const ByteString& rString)
 }
 
 //------------------------------------------------------------------
-BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const Reference<XIndexAccess>& _xCols)
+sal_Bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const Reference<XIndexAccess>& _xCols)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::UpdateBuffer" );
     OSL_ENSURE(m_pBuffer,"Buffer is NULL!");
     if ( !m_pBuffer )
-        return FALSE;
+        return sal_False;
     sal_Int32 nByteOffset  = 1;
 
     // Update fields:
     Reference<XPropertySet> xCol;
     Reference<XPropertySet> xIndex;
-    USHORT i;
+    sal_uInt16 i;
     ::rtl::OUString aColName;
     const sal_Int32 nColumnCount = m_pColumns->getCount();
     ::std::vector< Reference<XPropertySet> > aIndexedCols(nColumnCount);
@@ -1956,7 +1948,7 @@ BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const
                     char cNext = pData[nLen]; // Mark's scratch and replaced by 0
                     pData[nLen] = '\0';       // This is because the buffer is always a sign of greater ...
 
-                    ULONG nBlockNo = strtol((const char *)pData,NULL,10);   // Block number read
+                    sal_uIntPtr nBlockNo = strtol((const char *)pData,NULL,10); // Block number read
 
                     // Next initial character restore again:
                     pData[nLen] = cNext;
@@ -2012,14 +2004,14 @@ BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const
 }
 
 // -----------------------------------------------------------------------------
-BOOL ODbaseTable::WriteMemo(ORowSetValue& aVariable, ULONG& rBlockNr)
+sal_Bool ODbaseTable::WriteMemo(ORowSetValue& aVariable, sal_uIntPtr& rBlockNr)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::WriteMemo" );
     // if the BlockNo 0 is given, the block will be appended at the end
-    ULONG nSize = 0;
+    sal_uIntPtr nSize = 0;
     ::rtl::OString aStr;
     ::com::sun::star::uno::Sequence<sal_Int8> aValue;
-    BYTE nHeader[4];
+    sal_uInt8 nHeader[4];
     const bool bBinary = aVariable.getTypeKind() == DataType::LONGVARBINARY && m_aMemoHeader.db_typ == MemoFoxPro;
     if ( bBinary )
     {
@@ -2032,7 +2024,7 @@ BOOL ODbaseTable::WriteMemo(ORowSetValue& aVariable, ULONG& rBlockNr)
     }
 
     // append or overwrite
-    BOOL bAppend = rBlockNr == 0;
+    sal_Bool bAppend = rBlockNr == 0;
 
     if (!bAppend)
     {
@@ -2049,7 +2041,7 @@ BOOL ODbaseTable::WriteMemo(ORowSetValue& aVariable, ULONG& rBlockNr)
                 m_pMemoStream->SeekRel(4L);
                 m_pMemoStream->Read(sHeader,4);
 
-                ULONG nOldSize;
+                sal_uIntPtr nOldSize;
                 if (m_aMemoHeader.db_typ == MemoFoxPro)
                     nOldSize = ((((unsigned char)sHeader[0]) * 256 +
                                  (unsigned char)sHeader[1]) * 256 +
@@ -2062,7 +2054,7 @@ BOOL ODbaseTable::WriteMemo(ORowSetValue& aVariable, ULONG& rBlockNr)
                                  (unsigned char)sHeader[0]  - 8;
 
                 // fits the new length in the used blocks
-                ULONG nUsedBlocks = ((nSize + 8) / m_aMemoHeader.db_size) + (((nSize + 8) % m_aMemoHeader.db_size > 0) ? 1 : 0),
+                sal_uIntPtr nUsedBlocks = ((nSize + 8) / m_aMemoHeader.db_size) + (((nSize + 8) % m_aMemoHeader.db_size > 0) ? 1 : 0),
                       nOldUsedBlocks = ((nOldSize + 8) / m_aMemoHeader.db_size) + (((nOldSize + 8) % m_aMemoHeader.db_size > 0) ? 1 : 0);
                 bAppend = nUsedBlocks > nOldUsedBlocks;
             }
@@ -2071,7 +2063,7 @@ BOOL ODbaseTable::WriteMemo(ORowSetValue& aVariable, ULONG& rBlockNr)
 
     if (bAppend)
     {
-        ULONG nStreamSize = m_pMemoStream->Seek(STREAM_SEEK_TO_END);
+        sal_uIntPtr nStreamSize = m_pMemoStream->Seek(STREAM_SEEK_TO_END);
         // fill last block
         rBlockNr = (nStreamSize / m_aMemoHeader.db_size) + ((nStreamSize % m_aMemoHeader.db_size) > 0 ? 1 : 0);
 
@@ -2096,30 +2088,30 @@ BOOL ODbaseTable::WriteMemo(ORowSetValue& aVariable, ULONG& rBlockNr)
         case MemodBaseIV: // dBase IV-Memofeld with length
         {
             if ( MemodBaseIV == m_aMemoHeader.db_typ )
-                (*m_pMemoStream) << (BYTE)0xFF
-                                 << (BYTE)0xFF
-                                 << (BYTE)0x08;
+                (*m_pMemoStream) << (sal_uInt8)0xFF
+                                 << (sal_uInt8)0xFF
+                                 << (sal_uInt8)0x08;
             else
-                (*m_pMemoStream) << (BYTE)0x00
-                                 << (BYTE)0x00
-                                 << (BYTE)0x00;
+                (*m_pMemoStream) << (sal_uInt8)0x00
+                                 << (sal_uInt8)0x00
+                                 << (sal_uInt8)0x00;
 
-            UINT32 nWriteSize = nSize;
+            sal_uInt32 nWriteSize = nSize;
             if (m_aMemoHeader.db_typ == MemoFoxPro)
             {
                 if ( bBinary )
-                    (*m_pMemoStream) << (BYTE) 0x00; // Picture
+                    (*m_pMemoStream) << (sal_uInt8) 0x00; // Picture
                 else
-                    (*m_pMemoStream) << (BYTE) 0x01; // Memo
+                    (*m_pMemoStream) << (sal_uInt8) 0x01; // Memo
                 for (int i = 4; i > 0; nWriteSize >>= 8)
-                    nHeader[--i] = (BYTE) (nWriteSize % 256);
+                    nHeader[--i] = (sal_uInt8) (nWriteSize % 256);
             }
             else
             {
-                (*m_pMemoStream) << (BYTE) 0x00;
+                (*m_pMemoStream) << (sal_uInt8) 0x00;
                 nWriteSize += 8;
                 for (int i = 0; i < 4; nWriteSize >>= 8)
-                    nHeader[i++] = (BYTE) (nWriteSize % 256);
+                    nHeader[i++] = (sal_uInt8) (nWriteSize % 256);
             }
 
             m_pMemoStream->Write(nHeader,4);
@@ -2135,7 +2127,7 @@ BOOL ODbaseTable::WriteMemo(ORowSetValue& aVariable, ULONG& rBlockNr)
     // Write the new block number
     if (bAppend)
     {
-        ULONG nStreamSize = m_pMemoStream->Seek(STREAM_SEEK_TO_END);
+        sal_uIntPtr nStreamSize = m_pMemoStream->Seek(STREAM_SEEK_TO_END);
         m_aMemoHeader.db_next = (nStreamSize / m_aMemoHeader.db_size) + ((nStreamSize % m_aMemoHeader.db_size) > 0 ? 1 : 0);
 
         // Write the new block number
@@ -2192,7 +2184,7 @@ void ODbaseTable::alterColumn(sal_Int32 index,
         if(xOldColumn.is())
             xCopyColumn = xOldColumn->createDataDescriptor();
         else
-            xCopyColumn = new OColumn(getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers());
+            xCopyColumn = new OColumn(getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers());
 
         ::comphelper::copyProperties(descriptor,xCopyColumn);
 
@@ -2217,7 +2209,7 @@ void ODbaseTable::alterColumn(sal_Int32 index,
             if(xColumn.is())
                 xCpy = xColumn->createDataDescriptor();
             else
-                xCpy = new OColumn(getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers());
+                xCpy = new OColumn(getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers());
             ::comphelper::copyProperties(xProp,xCpy);
             xAppend->appendByDescriptor(xCpy);
         }
@@ -2233,7 +2225,7 @@ void ODbaseTable::alterColumn(sal_Int32 index,
             if(xColumn.is())
                 xCpy = xColumn->createDataDescriptor();
             else
-                xCpy = new OColumn(getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers());
+                xCpy = new OColumn(getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers());
             ::comphelper::copyProperties(xProp,xCpy);
             xAppend->appendByDescriptor(xCpy);
         }
@@ -2374,7 +2366,7 @@ void ODbaseTable::addColumn(const Reference< XPropertySet >& _xNewColumn)
     pNewTable->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),makeAny(::rtl::OUString(sTempName)));
     {
         Reference<XAppend> xAppend(pNewTable->getColumns(),UNO_QUERY);
-        sal_Bool bCase = getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers();
+        sal_Bool bCase = getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers();
         // copy the structure
         for(sal_Int32 i=0;i < m_pColumns->getCount();++i)
         {
@@ -2407,7 +2399,7 @@ void ODbaseTable::addColumn(const Reference< XPropertySet >& _xNewColumn)
         ::dbtools::throwGenericSQLException( sError, *this );
     }
 
-    BOOL bAlreadyDroped = FALSE;
+    sal_Bool bAlreadyDroped = sal_False;
     try
     {
         pNewTable->construct();
@@ -2416,7 +2408,7 @@ void ODbaseTable::addColumn(const Reference< XPropertySet >& _xNewColumn)
         // drop the old table
         if(DropImpl())
         {
-            bAlreadyDroped = TRUE;
+            bAlreadyDroped = sal_True;
             pNewTable->renameImpl(m_Name);
             // release the temp file
         }
@@ -2447,7 +2439,7 @@ void ODbaseTable::dropColumn(sal_Int32 _nPos)
     pNewTable->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),makeAny(::rtl::OUString(sTempName)));
     {
         Reference<XAppend> xAppend(pNewTable->getColumns(),UNO_QUERY);
-        sal_Bool bCase = getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers();
+        sal_Bool bCase = getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers();
         // copy the structure
         for(sal_Int32 i=0;i < m_pColumns->getCount();++i)
         {
@@ -2680,10 +2672,10 @@ End:
     return sal_True;
 }
 // -----------------------------------------------------------------------------
-BOOL ODbaseTable::ReadMemo(ULONG nBlockNo, ORowSetValue& aVariable)
+sal_Bool ODbaseTable::ReadMemo(sal_uIntPtr nBlockNo, ORowSetValue& aVariable)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::ReadMemo" );
-    BOOL bIsText = TRUE;
+    bool bIsText = true;
 
     m_pMemoStream->Seek(nBlockNo * m_aMemoHeader.db_size);
     switch (m_aMemoHeader.db_typ)
@@ -2694,13 +2686,13 @@ BOOL ODbaseTable::ReadMemo(ULONG nBlockNo, ORowSetValue& aVariable)
             ByteString aBStr;
             static char aBuf[514];
             aBuf[512] = 0;          // avoid random value
-            BOOL bReady = sal_False;
+            sal_Bool bReady = sal_False;
 
             do
             {
                 m_pMemoStream->Read(&aBuf,512);
 
-                USHORT i = 0;
+                sal_uInt16 i = 0;
                 while (aBuf[i] != cEOF && ++i < 512)
                     ;
                 bReady = aBuf[i] == cEOF;
@@ -2724,7 +2716,7 @@ BOOL ODbaseTable::ReadMemo(ULONG nBlockNo, ORowSetValue& aVariable)
             {
                 bIsText = sHeader[3] != 0;
             }
-            else if (((BYTE)sHeader[0]) != 0xFF || ((BYTE)sHeader[1]) != 0xFF || ((BYTE)sHeader[2]) != 0x08)
+            else if (((sal_uInt8)sHeader[0]) != 0xFF || ((sal_uInt8)sHeader[1]) != 0xFF || ((sal_uInt8)sHeader[2]) != 0x08)
             {
                 return sal_False;
             }
@@ -2773,7 +2765,7 @@ BOOL ODbaseTable::ReadMemo(ULONG nBlockNo, ORowSetValue& aVariable)
 void ODbaseTable::AllocBuffer()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::AllocBuffer" );
-    UINT16 nSize = m_aHeader.db_slng;
+    sal_uInt16 nSize = m_aHeader.db_slng;
     OSL_ENSURE(nSize > 0, "Size too small");
 
     if (m_nBufferSize != nSize)
@@ -2786,11 +2778,11 @@ void ODbaseTable::AllocBuffer()
     if (m_pBuffer == NULL && nSize)
     {
         m_nBufferSize = nSize;
-        m_pBuffer       = new BYTE[m_nBufferSize+1];
+        m_pBuffer       = new sal_uInt8[m_nBufferSize+1];
     }
 }
 // -----------------------------------------------------------------------------
-BOOL ODbaseTable::WriteBuffer()
+sal_Bool ODbaseTable::WriteBuffer()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::WriteBuffer" );
     OSL_ENSURE(m_nFilePos >= 1,"SdbDBFCursor::FileFetchRow: ungueltige Record-Position");

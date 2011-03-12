@@ -43,14 +43,6 @@ QueryBox MSG_CONFIRM_OVERWRITE_TEMPLATE
     DefButton = WB_DEF_NO ;
     Message [ en-US ] = "Name already in use.\nDo you want to overwrite document template?" ;
 };
-QueryBox MSG_QUERY_LOAD_TEMPLATE
-{
-    BUTTONS = WB_YES_NO ;
-    DEFBUTTON = WB_DEF_NO ;
-    HelpId = MSG_QUERY_LOAD_TEMPLATE;
-
-    Message [ en-US ] = "The Styles in this document do not match your current Styles. Should your current Styles be applied to this document?";
-};
 String STR_DELETE_REGION
 {
     Text [ en-US ] = "Are you sure you want to delete the region \"$1\"?" ;
@@ -365,11 +357,6 @@ String STR_PACKNGO_NEWMEDIUM
 String STR_OBJECT
 {
     Text [ en-US ] = "Object" ;
-};
-
-String STR_EDITOBJECT
-{
-    Text [ en-US ] = "~Edit";
 };
 
 QueryBox DLG_MACROQUERY

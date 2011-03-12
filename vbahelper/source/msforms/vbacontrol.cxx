@@ -241,7 +241,6 @@ void SAL_CALL
 ScVbaControl::setLeft( double _left ) throw (uno::RuntimeException)
 {
     mpGeometryHelper->setLeft( _left );
-
 }
 
 double SAL_CALL

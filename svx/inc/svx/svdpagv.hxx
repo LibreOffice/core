@@ -129,7 +129,7 @@ private:
     SVX_DLLPRIVATE SdrPageWindow& CreateNewPageWindowEntry(SdrPaintWindow& rPaintWindow);
 
 protected:
-    void ImpInvalidateHelpLineArea(USHORT nNum) const;
+    void ImpInvalidateHelpLineArea(sal_uInt16 nNum) const;
 
 protected:
     void SetLayer(const String& rName, SetOfByte& rBS, sal_Bool bJa);
@@ -180,10 +180,13 @@ public:
     void InvalidateAllWin();
 
     // rRect bezieht sich auf die Page
-    void InvalidateAllWin(const Rectangle& rRect, sal_Bool bPlus1Pix=FALSE);
+    void InvalidateAllWin(const Rectangle& rRect, sal_Bool bPlus1Pix=sal_False);
 
     // PrePaint call forwarded from app windows
     void PrePaint();
+
+    // PostPaint call forwarded from app windows
+    void PostPaint();
 
     // rReg bezieht sich auf's OutDev, nicht auf die Page
     void CompleteRedraw(SdrPaintWindow& rPaintWindow, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0L) const;
@@ -247,13 +250,13 @@ public:
 
     const SdrHelpLineList& GetHelpLines() const { return aHelpLines; }
     void SetHelpLines(const SdrHelpLineList& rHLL);
-    //void SetHelpLinePos(USHORT nNum, const Point& rNewPos);
-    void SetHelpLine(USHORT nNum, const SdrHelpLine& rNewHelpLine);
-    void DeleteHelpLine(USHORT nNum);
-    void InsertHelpLine(const SdrHelpLine& rHL, USHORT nNum=0xFFFF);
-    void MoveHelpLine(USHORT nNum, USHORT nNewNum) { aHelpLines.Move(nNum,nNewNum); }
+    //void SetHelpLinePos(sal_uInt16 nNum, const Point& rNewPos);
+    void SetHelpLine(sal_uInt16 nNum, const SdrHelpLine& rNewHelpLine);
+    void DeleteHelpLine(sal_uInt16 nNum);
+    void InsertHelpLine(const SdrHelpLine& rHL, sal_uInt16 nNum=0xFFFF);
+    void MoveHelpLine(sal_uInt16 nNum, sal_uInt16 nNewNum) { aHelpLines.Move(nNum,nNewNum); }
 
-    // Liefert TRUE, wenn Layer des Obj sichtbar und nicht gesperrt.
+    // Liefert sal_True, wenn Layer des Obj sichtbar und nicht gesperrt.
     // Beim Gruppenobjekt muss wenigstens ein Member sichtbar sein,
     // gesperrt sein darf keiner.
     sal_Bool IsObjMarkable(SdrObject* pObj) const;
@@ -271,7 +274,7 @@ public:
     void LeaveAllGroup();
 
     // Feststellen, wie weit hinabgestiegen wurde (0=Root(Page))
-    USHORT GetEnteredLevel() const;
+    sal_uInt16 GetEnteredLevel() const;
 
     // Name der aktuellen Objektgruppe
     String GetActualGroupName() const;

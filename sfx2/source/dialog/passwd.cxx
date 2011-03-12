@@ -34,20 +34,21 @@
 
 #include <sfx2/passwd.hxx>
 #include "sfxtypes.hxx"
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 
 #include "dialog.hrc"
 #include "passwd.hrc"
 
 #include "vcl/sound.hxx"
+#include "vcl/arrange.hxx"
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK_INLINE_START( SfxPasswordDialog, EditModifyHdl, Edit *, EMPTYARG )
+IMPL_LINK_INLINE_START( SfxPasswordDialog, EditModifyHdl, Edit *, pEdit )
 {
-    if( mbAsciiOnly )
+    if( mbAsciiOnly && (pEdit == &maPasswordED || pEdit == &maPassword2ED) )
     {
-        rtl::OUString aTest( maPasswordED.GetText() );
+        rtl::OUString aTest( pEdit->GetText() );
         const sal_Unicode* pTest = aTest.getStr();
         sal_Int32 nLen = aTest.getLength();
         rtl::OUStringBuffer aFilter( nLen );
@@ -63,12 +64,15 @@ IMPL_LINK_INLINE_START( SfxPasswordDialog, EditModifyHdl, Edit *, EMPTYARG )
         if( bReset )
         {
             Sound::Beep( SOUND_ERROR );
-            maPasswordED.SetSelection( Selection( 0, nLen ) );
-            maPasswordED.ReplaceSelected( aFilter.makeStringAndClear() );
+            pEdit->SetSelection( Selection( 0, nLen ) );
+            pEdit->ReplaceSelected( aFilter.makeStringAndClear() );
         }
 
     }
-    maOKBtn.Enable( maPasswordED.GetText().Len() >= mnMinLen );
+    bool bEnable = maPasswordED.GetText().Len() >= mnMinLen;
+    if( maPassword2ED.IsVisible() )
+        bEnable = (bEnable && (maPassword2ED.GetText().Len() >= mnMinLen));
+    maOKBtn.Enable( bEnable );
     return 0;
 }
 IMPL_LINK_INLINE_END( SfxPasswordDialog, EditModifyHdl, Edit *, EMPTYARG )
@@ -77,8 +81,11 @@ IMPL_LINK_INLINE_END( SfxPasswordDialog, EditModifyHdl, Edit *, EMPTYARG )
 
 IMPL_LINK( SfxPasswordDialog, OKHdl, OKButton *, EMPTYARG )
 {
-    if ( ( ( mnExtras & SHOWEXTRAS_CONFIRM ) == SHOWEXTRAS_CONFIRM ) &&
-         ( GetConfirm() != GetPassword() ) )
+    bool bConfirmFailed = ( ( mnExtras & SHOWEXTRAS_CONFIRM ) == SHOWEXTRAS_CONFIRM ) &&
+                            ( GetConfirm() != GetPassword() );
+    if( ( mnExtras & SHOWEXTRAS_CONFIRM2 ) == SHOWEXTRAS_CONFIRM2 && ( GetConfirm2() != GetPassword2() ) )
+        bConfirmFailed = true;
+    if ( bConfirmFailed )
     {
         ErrorBox aBox( this, SfxResId( MSG_ERROR_WRONG_CONFIRM ) );
         aBox.Execute();
@@ -96,20 +103,24 @@ SfxPasswordDialog::SfxPasswordDialog( Window* pParent, const String* pGroupText 
 
     ModalDialog( pParent, SfxResId ( DLG_PASSWD ) ),
 
+    maPasswordBox   ( this, SfxResId( GB_PASSWD_PASSWORD ) ),
     maUserFT        ( this, SfxResId( FT_PASSWD_USER ) ),
     maUserED        ( this, SfxResId( ED_PASSWD_USER ) ),
     maPasswordFT    ( this, SfxResId( FT_PASSWD_PASSWORD ) ),
     maPasswordED    ( this, SfxResId( ED_PASSWD_PASSWORD ) ),
     maConfirmFT     ( this, SfxResId( FT_PASSWD_CONFIRM ) ),
     maConfirmED     ( this, SfxResId( ED_PASSWD_CONFIRM ) ),
+
     maMinLengthFT   ( this, SfxResId( FT_PASSWD_MINLEN ) ),
-    maPasswordBox   ( this, SfxResId( GB_PASSWD_PASSWORD ) ),
+    maPassword2Box  ( this, 0 ),
+    maPassword2FT   ( this, SfxResId( FT_PASSWD_PASSWORD2 ) ),
+    maPassword2ED   ( this, SfxResId( ED_PASSWD_PASSWORD2 ) ),
+    maConfirm2FT    ( this, SfxResId( FT_PASSWD_CONFIRM2 ) ),
+    maConfirm2ED    ( this, SfxResId( ED_PASSWD_CONFIRM2 ) ),
     maOKBtn         ( this, SfxResId( BTN_PASSWD_OK ) ),
     maCancelBtn     ( this, SfxResId( BTN_PASSWD_CANCEL ) ),
     maHelpBtn       ( this, SfxResId( BTN_PASSWD_HELP ) ),
-    maConfirmStr    (       SfxResId( STR_PASSWD_CONFIRM ) ),
 
-    mnMinLen        ( 5 ),
     maMinLenPwdStr  ( SfxResId( STR_PASSWD_MIN_LEN ) ),
     maEmptyPwdStr   ( SfxResId( STR_PASSWD_EMPTY ) ),
     maMainPwdStr    ( ),
@@ -117,10 +128,63 @@ SfxPasswordDialog::SfxPasswordDialog( Window* pParent, const String* pGroupText 
     mbAsciiOnly     ( false )
 
 {
+    maPasswordED.SetAccessibleName(String(SfxResId(TEXT_PASSWD)));
     FreeResource();
+
+    // setup layout
+    boost::shared_ptr<vcl::RowOrColumn> xLayout =
+        boost::dynamic_pointer_cast<vcl::RowOrColumn>( getLayout() );
+    xLayout->setOuterBorder( 0 );
+
+    // get edit size, should be used as minimum
+    Size aEditSize( maUserED.GetSizePixel() );
+
+    // add labelcolumn for the labeled edit fields
+    boost::shared_ptr<vcl::LabelColumn> xEdits( new vcl::LabelColumn( xLayout.get() ) );
+    size_t nChildIndex = xLayout->addChild( xEdits );
+    xLayout->setBorders( nChildIndex, -2, -2, -2, 0 );
+
+    // add group box
+    xEdits->addWindow( &maPasswordBox );
+
+    // add user line
+    xEdits->addRow( &maUserFT, &maUserED, -2, aEditSize );
+
+    // add password line
+    xEdits->addRow( &maPasswordFT, &maPasswordED, -2, aEditSize );
+
+    // add confirm line
+    xEdits->addRow( &maConfirmFT, &maConfirmED, -2, aEditSize );
+
+    // add second group box
+    xEdits->addWindow( &maPassword2Box );
+
+    // add second password line
+    xEdits->addRow( &maPassword2FT, &maPassword2ED, -2, aEditSize );
+
+    // add second confirm line
+    xEdits->addRow( &maConfirm2FT, &maConfirm2ED, -2, aEditSize );
+
+    // add a FixedLine
+    FixedLine* pLine = new FixedLine( this, 0 );
+    pLine->Show();
+    addWindow( pLine, true );
+    xLayout->addWindow( pLine );
+
+    // add button column
+    Size aBtnSize( maCancelBtn.GetSizePixel() );
+    boost::shared_ptr<vcl::RowOrColumn> xButtons( new vcl::RowOrColumn( xLayout.get(), false ) );
+    nChildIndex = xLayout->addChild( xButtons );
+    xLayout->setBorders( nChildIndex, -2, 0, -2, -2 );
+
+    size_t nBtnIndex = xButtons->addWindow( &maHelpBtn, 0, aBtnSize );
+    xButtons->addChild( new vcl::Spacer( xButtons.get() ) );
+    nBtnIndex = xButtons->addWindow( &maOKBtn, 0, aBtnSize );
+    nBtnIndex = xButtons->addWindow( &maCancelBtn, 0, aBtnSize );
 
     Link aLink = LINK( this, SfxPasswordDialog, EditModifyHdl );
     maPasswordED.SetModifyHdl( aLink );
+    maPassword2ED.SetModifyHdl( aLink );
     aLink = LINK( this, SfxPasswordDialog, OKHdl );
     maOKBtn.SetClickHdl( aLink );
 
@@ -149,7 +213,7 @@ void SfxPasswordDialog::SetPasswdText( )
 
 // -----------------------------------------------------------------------
 
-void SfxPasswordDialog::SetMinLen( USHORT nLen )
+void SfxPasswordDialog::SetMinLen( sal_uInt16 nLen )
 {
     mnMinLen = nLen;
     SetPasswdText();
@@ -158,7 +222,7 @@ void SfxPasswordDialog::SetMinLen( USHORT nLen )
 
 // -----------------------------------------------------------------------
 
-void SfxPasswordDialog::SetMaxLen( USHORT nLen )
+void SfxPasswordDialog::SetMaxLen( sal_uInt16 nLen )
 {
     maPasswordED.SetMaxTextLen( nLen );
     maConfirmED.SetMaxTextLen( nLen );
@@ -169,8 +233,23 @@ void SfxPasswordDialog::SetMaxLen( USHORT nLen )
 
 short SfxPasswordDialog::Execute()
 {
-    if ( mnExtras < SHOWEXTRAS_ALL )
+    maUserFT.Hide();
+    maUserED.Hide();
+    maConfirmFT.Hide();
+    maConfirmED.Hide();
+    maPasswordFT.Hide();
+    maPassword2Box.Hide();
+    maPassword2FT.Hide();
+    maPassword2ED.Hide();
+    maPassword2FT.Hide();
+    maConfirm2FT.Hide();
+    maConfirm2ED.Hide();
+
+    if( mnExtras != SHOWEXTRAS_NONE )
+        maPasswordFT.Show();
+    if( (mnExtras & SHOWEXTRAS_USER ) )
     {
+#warning Inevitably this layout logic will be wrong post merge until we can see the dialog to test it.
         Size a3Size = LogicToPixel( Size( 3, 3 ), MAP_APPFONT );
         Size a6Size = LogicToPixel( Size( 6, 6 ), MAP_APPFONT );
         long nMinHeight = maHelpBtn.GetPosPixel().Y() +
@@ -229,7 +308,30 @@ short SfxPasswordDialog::Execute()
         Size aDlgSize = GetOutputSizePixel();
         aDlgSize.Height() = nDlgHeight;
         SetOutputSizePixel( aDlgSize );
+
+        maUserFT.Show();
+        maUserED.Show();
     }
+    if( (mnExtras & SHOWEXTRAS_CONFIRM ) )
+    {
+        maConfirmFT.Show();
+        maConfirmED.Show();
+    }
+    if( (mnExtras & SHOWEXTRAS_PASSWORD2) )
+    {
+        maPassword2Box.Show();
+        maPassword2FT.Show();
+        maPassword2ED.Show();
+    }
+    if( (mnExtras & SHOWEXTRAS_CONFIRM2 ) )
+    {
+        maConfirm2FT.Show();
+        maConfirm2ED.Show();
+    }
+
+    boost::shared_ptr<vcl::RowOrColumn> xLayout =
+        boost::dynamic_pointer_cast<vcl::RowOrColumn>( getLayout() );
+    SetSizePixel( xLayout->getOptimalSize( WINDOWSIZE_PREFERRED ) );
 
     return ModalDialog::Execute();
 }

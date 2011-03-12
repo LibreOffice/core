@@ -61,8 +61,8 @@
 #include <svx/svdograf.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdtrans.hxx>
-#include "grafctrl.hxx"
-#include "tbxcolor.hxx"
+#include "svx/grafctrl.hxx"
+#include "svx/tbxcolor.hxx"
 
 // namespaces
 using ::rtl::OUString;
@@ -89,7 +89,7 @@ TYPEINIT1_AUTOFACTORY( TbxImageItem, SfxUInt16Item );
 
 //---------------------------------------------------------
 
-TbxImageItem::TbxImageItem( USHORT _nWhich, UINT16 nImage ) :
+TbxImageItem::TbxImageItem( sal_uInt16 _nWhich, sal_uInt16 nImage ) :
     SfxUInt16Item( _nWhich, nImage )
 {
 }
@@ -252,10 +252,10 @@ void ImplGrafMetricField::Update( const SfxPoolItem* pItem )
 struct CommandToRID
 {
     const char* pCommand;
-    USHORT      nResId;
+    sal_uInt16      nResId;
 };
 
-static USHORT ImplGetRID( const OUString& aCommand )
+static sal_uInt16 ImplGetRID( const OUString& aCommand )
 {
     static const CommandToRID aImplCommandToResMap[] =
     {
@@ -269,7 +269,7 @@ static USHORT ImplGetRID( const OUString& aCommand )
         { 0, 0 }
     };
 
-    USHORT nRID = 0;
+    sal_uInt16 nRID = 0;
 
     sal_Int32 i( 0 );
     while ( aImplCommandToResMap[ i ].pCommand )
@@ -300,7 +300,7 @@ protected:
 
 public:
 
-                            ImplGrafControl( Window* pParent, USHORT nSlotId, const rtl::OUString& rCmd, const Reference< XFrame >& rFrame );
+                            ImplGrafControl( Window* pParent, sal_uInt16 nSlotId, const rtl::OUString& rCmd, const Reference< XFrame >& rFrame );
                             ~ImplGrafControl();
 
     void                    Update( const SfxPoolItem* pItem ) { maField.Update( pItem ); }
@@ -311,7 +311,7 @@ public:
 
 ImplGrafControl::ImplGrafControl(
     Window* pParent,
-    USHORT nSlotId,
+    sal_uInt16 nSlotId,
     const rtl::OUString& rCmd,
     const Reference< XFrame >& rFrame
 )   : Control( pParent, WB_TABSTOP )
@@ -346,8 +346,7 @@ ImplGrafControl::ImplGrafControl(
 
     maImage.Show();
 
-    maField.SetHelpId( nSlotId );
-    maField.SetSmartHelpId( SmartId( rCmd ));
+    maField.SetHelpId( rtl::OUStringToOString( rCmd, RTL_TEXTENCODING_UTF8 ) );
     maField.Show();
 }
 
@@ -372,7 +371,7 @@ class ImplGrafModeControl : public ListBox
 {
     using Window::Update;
 private:
-    USHORT              mnCurPos;
+    sal_uInt16              mnCurPos;
     Reference< XFrame > mxFrame;
 
     virtual void    Select();
@@ -437,7 +436,7 @@ void ImplGrafModeControl::Select()
 
 long ImplGrafModeControl::PreNotify( NotifyEvent& rNEvt )
 {
-    USHORT nType = rNEvt.GetType();
+    sal_uInt16 nType = rNEvt.GetType();
 
     if( EVENT_MOUSEBUTTONDOWN == nType || EVENT_GETFOCUS == nType )
         mnCurPos = GetSelectEntryPos();
@@ -508,7 +507,7 @@ SFX_IMPL_TOOLBOX_CONTROL( SvxGrafFilterToolBoxControl, TbxImageItem );
 
 // -----------------------------------------------------------------------------
 
-SvxGrafFilterToolBoxControl::SvxGrafFilterToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
+SvxGrafFilterToolBoxControl::SvxGrafFilterToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
     SfxToolBoxControl( nSlotId, nId, rTbx )
 {
     rTbx.SetItemBits( nId, TIB_DROPDOWNONLY | rTbx.GetItemBits( nId ) );
@@ -523,7 +522,7 @@ SvxGrafFilterToolBoxControl::~SvxGrafFilterToolBoxControl()
 
 // -----------------------------------------------------------------------------
 
-void SvxGrafFilterToolBoxControl::StateChanged( USHORT, SfxItemState eState, const SfxPoolItem* )
+void SvxGrafFilterToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* )
 {
     GetToolBox().EnableItem( GetId(), ( eState != SFX_ITEM_DISABLED ) );
 }
@@ -554,7 +553,7 @@ SFX_IMPL_TOOLBOX_CONTROL( SvxGrafToolBoxControl, SfxVoidItem );
 
 // -----------------------------------------------------------------------------
 
-SvxGrafToolBoxControl::SvxGrafToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx) :
+SvxGrafToolBoxControl::SvxGrafToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx) :
     SfxToolBoxControl( nSlotId, nId, rTbx )
 {
     rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
@@ -569,7 +568,7 @@ SvxGrafToolBoxControl::~SvxGrafToolBoxControl()
 
 // -----------------------------------------------------------------------------
 
-void SvxGrafToolBoxControl::StateChanged( USHORT, SfxItemState eState, const SfxPoolItem* pState )
+void SvxGrafToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* pState )
 
 {
     ImplGrafControl* pCtrl = (ImplGrafControl*) GetToolBox().GetItemWindow( GetId() );
@@ -606,7 +605,7 @@ SFX_IMPL_TOOLBOX_CONTROL( SvxGrafRedToolBoxControl, SfxInt16Item );
 
 // -----------------------------------------------------------------------------
 
-SvxGrafRedToolBoxControl::SvxGrafRedToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
+SvxGrafRedToolBoxControl::SvxGrafRedToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
     SvxGrafToolBoxControl( nSlotId, nId, rTbx )
 {
 }
@@ -619,7 +618,7 @@ SFX_IMPL_TOOLBOX_CONTROL( SvxGrafGreenToolBoxControl, SfxInt16Item );
 
 // -----------------------------------------------------------------------------
 
-SvxGrafGreenToolBoxControl::SvxGrafGreenToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
+SvxGrafGreenToolBoxControl::SvxGrafGreenToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
     SvxGrafToolBoxControl( nSlotId, nId, rTbx )
 {
 }
@@ -632,7 +631,7 @@ SFX_IMPL_TOOLBOX_CONTROL( SvxGrafBlueToolBoxControl, SfxInt16Item );
 
 // -----------------------------------------------------------------------------
 
-SvxGrafBlueToolBoxControl::SvxGrafBlueToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
+SvxGrafBlueToolBoxControl::SvxGrafBlueToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
     SvxGrafToolBoxControl( nSlotId, nId, rTbx )
 {
 }
@@ -645,7 +644,7 @@ SFX_IMPL_TOOLBOX_CONTROL( SvxGrafLuminanceToolBoxControl, SfxInt16Item );
 
 // -----------------------------------------------------------------------------
 
-SvxGrafLuminanceToolBoxControl::SvxGrafLuminanceToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
+SvxGrafLuminanceToolBoxControl::SvxGrafLuminanceToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
     SvxGrafToolBoxControl( nSlotId, nId, rTbx )
 {
 }
@@ -658,7 +657,7 @@ SFX_IMPL_TOOLBOX_CONTROL( SvxGrafContrastToolBoxControl, SfxInt16Item );
 
 // -----------------------------------------------------------------------------
 
-SvxGrafContrastToolBoxControl::SvxGrafContrastToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
+SvxGrafContrastToolBoxControl::SvxGrafContrastToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
     SvxGrafToolBoxControl( nSlotId, nId, rTbx )
 {
 }
@@ -671,7 +670,7 @@ SFX_IMPL_TOOLBOX_CONTROL( SvxGrafGammaToolBoxControl, SfxUInt32Item );
 
 // -----------------------------------------------------------------------------
 
-SvxGrafGammaToolBoxControl::SvxGrafGammaToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
+SvxGrafGammaToolBoxControl::SvxGrafGammaToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
     SvxGrafToolBoxControl( nSlotId, nId, rTbx )
 {
 }
@@ -684,7 +683,7 @@ SFX_IMPL_TOOLBOX_CONTROL( SvxGrafTransparenceToolBoxControl, SfxUInt16Item );
 
 // -----------------------------------------------------------------------------
 
-SvxGrafTransparenceToolBoxControl::SvxGrafTransparenceToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
+SvxGrafTransparenceToolBoxControl::SvxGrafTransparenceToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
     SvxGrafToolBoxControl( nSlotId, nId, rTbx )
 {
 }
@@ -697,7 +696,7 @@ SFX_IMPL_TOOLBOX_CONTROL( SvxGrafModeToolBoxControl, SfxUInt16Item );
 
 // -----------------------------------------------------------------------------
 
-SvxGrafModeToolBoxControl::SvxGrafModeToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
+SvxGrafModeToolBoxControl::SvxGrafModeToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
     SfxToolBoxControl( nSlotId, nId, rTbx )
 {
 }
@@ -710,7 +709,7 @@ SvxGrafModeToolBoxControl::~SvxGrafModeToolBoxControl()
 
 // -----------------------------------------------------------------------------
 
-void SvxGrafModeToolBoxControl::StateChanged( USHORT, SfxItemState eState, const SfxPoolItem* pState )
+void SvxGrafModeToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* pState )
 
 {
     ImplGrafModeControl* pCtrl = (ImplGrafModeControl*) GetToolBox().GetItemWindow( GetId() );
@@ -760,9 +759,9 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
 
     const SfxItemSet*   pArgs = rReq.GetArgs();
     const SfxPoolItem*  pItem;
-    USHORT              nSlot = rReq.GetSlot();
+    sal_uInt16              nSlot = rReq.GetSlot();
 
-    if( !pArgs || SFX_ITEM_SET != pArgs->GetItemState( nSlot, FALSE, &pItem ))
+    if( !pArgs || SFX_ITEM_SET != pArgs->GetItemState( nSlot, sal_False, &pItem ))
         pItem = 0;
 
     switch( nSlot )
@@ -1030,13 +1029,13 @@ void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView& rView )
     SfxItemPool&    rPool = rView.GetModel()->GetItemPool();
     SfxItemSet      aAttrSet( rPool );
     SfxWhichIter    aIter( rSet );
-    USHORT          nWhich = aIter.FirstWhich();
+    sal_uInt16          nWhich = aIter.FirstWhich();
 
     rView.GetAttributes( aAttrSet );
 
     while( nWhich )
     {
-        USHORT nSlotId = SfxItemPool::IsWhich( nWhich ) ? rPool.GetSlotId( nWhich ) : nWhich;
+        sal_uInt16 nSlotId = SfxItemPool::IsWhich( nWhich ) ? rPool.GetSlotId( nWhich ) : nWhich;
 
         switch( nSlotId )
         {
@@ -1045,7 +1044,7 @@ void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView& rView )
                 if( SFX_ITEM_AVAILABLE <= aAttrSet.GetItemState( SDRATTR_GRAFMODE ) )
                 {
                     rSet.Put( SfxUInt16Item( nSlotId,
-                        sal::static_int_cast< UINT16 >( ITEMVALUE( aAttrSet, SDRATTR_GRAFMODE, SdrGrafModeItem ) ) ) );
+                        sal::static_int_cast< sal_uInt16 >( ITEMVALUE( aAttrSet, SDRATTR_GRAFMODE, SdrGrafModeItem ) ) ) );
                 }
             }
             break;
@@ -1115,9 +1114,9 @@ void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView& rView )
                 if( SFX_ITEM_AVAILABLE <= aAttrSet.GetItemState( SDRATTR_GRAFTRANSPARENCE ) )
                 {
                     const SdrMarkList&  rMarkList = rView.GetMarkedObjectList();
-                    BOOL                bEnable = TRUE;
+                    sal_Bool                bEnable = sal_True;
 
-                    for( USHORT i = 0, nCount = (USHORT) rMarkList.GetMarkCount();
+                    for( sal_uInt16 i = 0, nCount = (sal_uInt16) rMarkList.GetMarkCount();
                          ( i < nCount ) && bEnable; i++ )
                     {
                         SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
@@ -1126,7 +1125,7 @@ void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView& rView )
                             ( (SdrGrafObj*) pObj )->HasGDIMetaFile() ||
                             ( (SdrGrafObj*) pObj )->IsAnimated() )
                         {
-                            bEnable = FALSE;
+                            bEnable = sal_False;
                         }
                     }
 
@@ -1142,7 +1141,7 @@ void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView& rView )
             case( SID_ATTR_GRAF_CROP ):
             {
                 const SdrMarkList&  rMarkList = rView.GetMarkedObjectList();
-                BOOL                bDisable = TRUE;
+                sal_Bool                bDisable = sal_True;
 
                 if( 1 == rMarkList.GetMarkCount() )
                 {
@@ -1155,7 +1154,7 @@ void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView& rView )
                         if( ( pGrafObj->GetGraphicType() != GRAPHIC_NONE ) &&
                             ( pGrafObj->GetGraphicType() != GRAPHIC_DEFAULT ) )
                         {
-                            bDisable = FALSE;
+                            bDisable = sal_False;
                         }
                     }
                 }

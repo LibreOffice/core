@@ -32,12 +32,12 @@
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <svx/svdetc.hxx>
-#include "svditext.hxx"
+#include "svx/svditext.hxx"
 #include <svx/svdmodel.hxx>
 #include <svx/svdtrans.hxx>
-#include "svdglob.hxx"
-#include "svdstr.hrc"
-#include "svdviter.hxx"
+#include "svx/svdglob.hxx"
+#include "svx/svdstr.hrc"
+#include "svx/svdviter.hxx"
 #include <svx/svdview.hxx>
 #include <svx/svdoutl.hxx>
 #include <vcl/bmpacc.hxx>
@@ -152,8 +152,8 @@ void OLEObjCache::UnloadOnDemand()
     {
         // more objects than configured cache size try to remove objects
         // of course not the freshly inserted one at nIndex=0
-        ULONG nCount2 = Count();
-        ULONG nIndex = nCount2-1;
+        sal_uIntPtr nCount2 = Count();
+        sal_uIntPtr nIndex = nCount2-1;
         while( nIndex && nCount2 > nSize )
         {
             SdrOle2Obj* pUnloadObj = (SdrOle2Obj*) GetObject(nIndex--);
@@ -172,7 +172,7 @@ void OLEObjCache::UnloadOnDemand()
                         uno::Reference< frame::XModel > xUnloadModel( xUnloadObj->getComponent(), uno::UNO_QUERY );
                         if ( xUnloadModel.is() )
                         {
-                            for ( ULONG nCheckInd = 0; nCheckInd < Count(); nCheckInd++ )
+                            for ( sal_uIntPtr nCheckInd = 0; nCheckInd < Count(); nCheckInd++ )
                             {
                                 SdrOle2Obj* pCacheObj = (SdrOle2Obj*) GetObject(nCheckInd);
                                 if ( pCacheObj && pCacheObj != pUnloadObj )
@@ -196,7 +196,7 @@ void OLEObjCache::UnloadOnDemand()
     }
 }
 
-void OLEObjCache::SetSize(ULONG nNewSize)
+void OLEObjCache::SetSize(sal_uIntPtr nNewSize)
 {
     nSize = nNewSize;
 }
@@ -212,11 +212,11 @@ void OLEObjCache::InsertObj(SdrOle2Obj* pObj)
     }
 
     // get the old position of the object to know whether it is already in container
-    ULONG nOldPos = GetPos( pObj );
+    sal_uIntPtr nOldPos = GetPos( pObj );
 
     // insert object into first position
     Remove( nOldPos );
-    Insert(pObj, (ULONG) 0L);
+    Insert(pObj, (sal_uIntPtr) 0L);
 
     if ( nOldPos == CONTAINER_ENTRY_NOTFOUND )
     {
@@ -230,9 +230,9 @@ void OLEObjCache::RemoveObj(SdrOle2Obj* pObj)
     Remove(pObj);
 }
 
-BOOL OLEObjCache::UnloadObj(SdrOle2Obj* pObj)
+sal_Bool OLEObjCache::UnloadObj(SdrOle2Obj* pObj)
 {
-    BOOL bUnloaded = FALSE;
+    sal_Bool bUnloaded = sal_False;
     if (pObj)
     {
         //#i80528# The old mechanism is completely useless, only taking into account if
@@ -260,9 +260,9 @@ IMPL_LINK(OLEObjCache, UnloadCheckHdl, AutoTimer*, /*pTim*/)
     return 0;
 }
 
-void ContainerSorter::DoSort(ULONG a, ULONG b) const
+void ContainerSorter::DoSort(sal_uIntPtr a, sal_uIntPtr b) const
 {
-    ULONG nAnz=rCont.Count();
+    sal_uIntPtr nAnz=rCont.Count();
     if (b>nAnz) b=nAnz;
     if (b>0) b--;
     if (a<b) ImpSubSort(a,b);
@@ -307,8 +307,8 @@ public:
 
 int ImpUShortContainerSorter::Compare(const void* pElem1, const void* pElem2) const
 {
-    USHORT n1=USHORT(ULONG(pElem1));
-    USHORT n2=USHORT(ULONG(pElem2));
+    sal_uInt16 n1=sal_uInt16(sal_uIntPtr(pElem1));
+    sal_uInt16 n2=sal_uInt16(sal_uIntPtr(pElem2));
     return n1<n2 ? -1 : n1>n2 ? 1 : 0;
 }
 
@@ -330,10 +330,10 @@ public:
         // Kein Clipping in die Metafileaufzeichnung
         GDIMetaFile* pMtf=rOut.GetConnectMetaFile();
         if (pMtf!=NULL && (!pMtf->IsRecord() || pMtf->IsPause())) pMtf=NULL;
-        if (pMtf!=NULL) pMtf->Pause(TRUE);
+        if (pMtf!=NULL) pMtf->Pause(sal_True);
         if (bClip) rOut.SetClipRegion(aClip);
         else rOut.SetClipRegion();
-        if (pMtf!=NULL) pMtf->Pause(FALSE);
+        if (pMtf!=NULL) pMtf->Pause(sal_False);
     }
 };
 
@@ -349,7 +349,7 @@ public:
         aBckgrdColor( rOut.GetBackground().GetColor() ),
         aFont (rOut.GetFont()) {}
 
-    ImpColorMerk(const OutputDevice& rOut, USHORT nMode)
+    ImpColorMerk(const OutputDevice& rOut, sal_uInt16 nMode)
     {
         if ( (nMode & SDRHDC_SAVEPEN) == SDRHDC_SAVEPEN )
             aLineColor = rOut.GetLineColor();
@@ -364,7 +364,7 @@ public:
             aFont=rOut.GetFont();
     }
 
-    void Restore(OutputDevice& rOut, USHORT nMode=SDRHDC_SAVEPENANDBRUSHANDFONT)
+    void Restore(OutputDevice& rOut, sal_uInt16 nMode=SDRHDC_SAVEPENANDBRUSHANDFONT)
     {
         if ( (nMode & SDRHDC_SAVEPEN) == SDRHDC_SAVEPEN)
             rOut.SetLineColor( aLineColor );
@@ -386,7 +386,7 @@ public:
     const Color& GetLineColor() const { return aLineColor; }
 };
 
-ImpSdrHdcMerk::ImpSdrHdcMerk(const OutputDevice& rOut, USHORT nNewMode, bool bAutoMerk):
+ImpSdrHdcMerk::ImpSdrHdcMerk(const OutputDevice& rOut, sal_uInt16 nNewMode, bool bAutoMerk):
     pFarbMerk(NULL),
     pClipMerk(NULL),
     pLineColorMerk(NULL),
@@ -422,7 +422,7 @@ void ImpSdrHdcMerk::Save(const OutputDevice& rOut)
     if ((nMode & SDRHDC_SAVECLIPPING) ==SDRHDC_SAVECLIPPING)
         pClipMerk=new ImpClipMerk(rOut);
 
-    USHORT nCol=nMode & SDRHDC_SAVEPENANDBRUSHANDFONT;
+    sal_uInt16 nCol=nMode & SDRHDC_SAVEPENANDBRUSHANDFONT;
 
     if (nCol==SDRHDC_SAVEPEN)
         pLineColorMerk=new Color( rOut.GetLineColor() );
@@ -432,14 +432,14 @@ void ImpSdrHdcMerk::Save(const OutputDevice& rOut)
         pFarbMerk=new ImpColorMerk(rOut,nCol);
 }
 
-void ImpSdrHdcMerk::Restore(OutputDevice& rOut, USHORT nMask) const
+void ImpSdrHdcMerk::Restore(OutputDevice& rOut, sal_uInt16 nMask) const
 {
     nMask&=nMode; // nur restaurieren, was auch gesichert wurde
 
     if ((nMask & SDRHDC_SAVECLIPPING) ==SDRHDC_SAVECLIPPING && pClipMerk!=NULL)
         pClipMerk->Restore(rOut);
 
-    USHORT nCol=nMask & SDRHDC_SAVEPENANDBRUSHANDFONT;
+    sal_uInt16 nCol=nMask & SDRHDC_SAVEPENANDBRUSHANDFONT;
 
     if (nCol==SDRHDC_SAVEPEN)
     {
@@ -565,7 +565,7 @@ bool GetDraftFillColor(const SfxItemSet& rSet, Color& rCol)
                     for(sal_uInt32 nX(0L); nX < nWidth; nX += nXStep)
                     {
                         const BitmapColor& rCol2 = (pAccess->HasPalette())
-                            ? pAccess->GetPaletteColor((BYTE)pAccess->GetPixel(nY, nX))
+                            ? pAccess->GetPaletteColor((sal_uInt8)pAccess->GetPixel(nY, nX))
                             : pAccess->GetPixel(nY, nX);
 
                         nRt += rCol2.GetRed();
@@ -579,7 +579,7 @@ bool GetDraftFillColor(const SfxItemSet& rSet, Color& rCol)
                 nGn /= nAnz;
                 nBl /= nAnz;
 
-                rCol = Color(UINT8(nRt), UINT8(nGn), UINT8(nBl));
+                rCol = Color(sal_uInt8(nRt), sal_uInt8(nGn), sal_uInt8(nBl));
 
                 bRetval = true;
             }
@@ -631,7 +631,7 @@ void SdrEngineDefaults::LanguageHasChanged()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-SdrOutliner* SdrMakeOutliner( USHORT nOutlinerMode, SdrModel* pModel )
+SdrOutliner* SdrMakeOutliner( sal_uInt16 nOutlinerMode, SdrModel* pModel )
 {
     //SdrEngineDefaults& rDefaults = SdrEngineDefaults::GetDefaults();
 
@@ -697,47 +697,47 @@ String GetResourceString(sal_uInt16 nResID)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-BOOL SearchOutlinerItems(const SfxItemSet& rSet, BOOL bInklDefaults, BOOL* pbOnlyEE)
+sal_Bool SearchOutlinerItems(const SfxItemSet& rSet, sal_Bool bInklDefaults, sal_Bool* pbOnlyEE)
 {
-    BOOL bHas=FALSE;
-    BOOL bOnly=TRUE;
-    BOOL bLookOnly=pbOnlyEE!=NULL;
+    sal_Bool bHas=sal_False;
+    sal_Bool bOnly=sal_True;
+    sal_Bool bLookOnly=pbOnlyEE!=NULL;
     SfxWhichIter aIter(rSet);
-    USHORT nWhich=aIter.FirstWhich();
+    sal_uInt16 nWhich=aIter.FirstWhich();
     while (((bLookOnly && bOnly) || !bHas) && nWhich!=0) {
         // bei bInklDefaults ist der gesamte Which-Range
         // ausschlaggebend, ansonsten nur die gesetzten Items
         // Disabled und DontCare wird als Loch im Which-Range betrachtet
         SfxItemState eState=rSet.GetItemState(nWhich);
         if ((eState==SFX_ITEM_DEFAULT && bInklDefaults) || eState==SFX_ITEM_SET) {
-            if (nWhich<EE_ITEMS_START || nWhich>EE_ITEMS_END) bOnly=FALSE;
-            else bHas=TRUE;
+            if (nWhich<EE_ITEMS_START || nWhich>EE_ITEMS_END) bOnly=sal_False;
+            else bHas=sal_True;
         }
         nWhich=aIter.NextWhich();
     }
-    if (!bHas) bOnly=FALSE;
+    if (!bHas) bOnly=sal_False;
     if (pbOnlyEE!=NULL) *pbOnlyEE=bOnly;
     return bHas;
 }
 
-USHORT* RemoveWhichRange(const USHORT* pOldWhichTable, USHORT nRangeBeg, USHORT nRangeEnd)
+sal_uInt16* RemoveWhichRange(const sal_uInt16* pOldWhichTable, sal_uInt16 nRangeBeg, sal_uInt16 nRangeEnd)
 {
     // insgesamt sind 6 Faelle moeglich (je Range):
     //         [Beg..End]          zu entfernender Range
     // [b..e]    [b..e]    [b..e]  Fall 1,3,2: egal, ganz weg, egal  + Ranges
     // [b........e]  [b........e]  Fall 4,5  : Bereich verkleinern   | in
     // [b......................e]  Fall 6    : Splitting             + pOldWhichTable
-    USHORT nAnz=0;
+    sal_uInt16 nAnz=0;
     while (pOldWhichTable[nAnz]!=0) nAnz++;
     nAnz++; // nAnz muesste nun in jedem Fall eine ungerade Zahl sein (0 am Ende des Arrays)
     DBG_ASSERT((nAnz&1)==1,"Joe: RemoveWhichRange: WhichTable hat keine ungerade Anzahl von Eintraegen");
-    USHORT nAlloc=nAnz;
+    sal_uInt16 nAlloc=nAnz;
     // benoetigte Groesse des neuen Arrays ermitteln
-    USHORT nNum=nAnz-1;
+    sal_uInt16 nNum=nAnz-1;
     while (nNum!=0) {
         nNum-=2;
-        USHORT nBeg=pOldWhichTable[nNum];
-        USHORT nEnd=pOldWhichTable[nNum+1];
+        sal_uInt16 nBeg=pOldWhichTable[nNum];
+        sal_uInt16 nEnd=pOldWhichTable[nNum+1];
         if (nEnd<nRangeBeg)  /*nCase=1*/ ;
         else if (nBeg>nRangeEnd) /* nCase=2 */ ;
         else if (nBeg>=nRangeBeg && nEnd<=nRangeEnd) /* nCase=3 */ nAlloc-=2;
@@ -746,15 +746,15 @@ USHORT* RemoveWhichRange(const USHORT* pOldWhichTable, USHORT nRangeBeg, USHORT 
         else /* nCase=6 */ nAlloc+=2;
     }
 
-    USHORT* pNewWhichTable=new USHORT[nAlloc];
-    memcpy(pNewWhichTable,pOldWhichTable,nAlloc*sizeof(USHORT));
+    sal_uInt16* pNewWhichTable=new sal_uInt16[nAlloc];
+    memcpy(pNewWhichTable,pOldWhichTable,nAlloc*sizeof(sal_uInt16));
     pNewWhichTable[nAlloc-1]=0; // im Falle 3 fehlt die 0 am Ende
     // nun die unerwuenschten Ranges entfernen
     nNum=nAlloc-1;
     while (nNum!=0) {
         nNum-=2;
-        USHORT nBeg=pNewWhichTable[nNum];
-        USHORT nEnd=pNewWhichTable[nNum+1];
+        sal_uInt16 nBeg=pNewWhichTable[nNum];
+        sal_uInt16 nEnd=pNewWhichTable[nNum+1];
         unsigned nCase=0;
         if (nEnd<nRangeBeg) nCase=1;
         else if (nBeg>nRangeEnd) nCase=2;
@@ -764,14 +764,14 @@ USHORT* RemoveWhichRange(const USHORT* pOldWhichTable, USHORT nRangeBeg, USHORT 
         else nCase=6;
         switch (nCase) {
             case 3: {
-                unsigned nTailBytes=(nAnz-(nNum+2))*sizeof(USHORT);
+                unsigned nTailBytes=(nAnz-(nNum+2))*sizeof(sal_uInt16);
                 memcpy(&pNewWhichTable[nNum],&pNewWhichTable[nNum+2],nTailBytes);
                 nAnz-=2; // Merken: Array hat sich verkleinert
             } break;
             case 4: pNewWhichTable[nNum+1]=nRangeBeg-1; break;
             case 5: pNewWhichTable[nNum]=nRangeEnd+1;     break;
             case 6: {
-                unsigned nTailBytes=(nAnz-(nNum+2))*sizeof(USHORT);
+                unsigned nTailBytes=(nAnz-(nNum+2))*sizeof(sal_uInt16);
                 memcpy(&pNewWhichTable[nNum+4],&pNewWhichTable[nNum+2],nTailBytes);
                 nAnz+=2; // Merken: Array hat sich vergroessert
                 pNewWhichTable[nNum+2]=nRangeEnd+1;
@@ -803,13 +803,13 @@ SvdProgressInfo::SvdProgressInfo( Link *_pLink )
     nCurInsert   = 0;
 }
 
-void SvdProgressInfo::Init( ULONG _nSumActionCount, ULONG _nObjCount )
+void SvdProgressInfo::Init( sal_uIntPtr _nSumActionCount, sal_uIntPtr _nObjCount )
 {
     nSumActionCount = _nSumActionCount;
     nObjCount = _nObjCount;
 }
 
-BOOL SvdProgressInfo::ReportActions( ULONG nAnzActions )
+sal_Bool SvdProgressInfo::ReportActions( sal_uIntPtr nAnzActions )
 {
     nSumCurAction += nAnzActions;
     nCurAction += nAnzActions;
@@ -819,7 +819,7 @@ BOOL SvdProgressInfo::ReportActions( ULONG nAnzActions )
     return pLink->Call(NULL) == 1L;
 }
 
-BOOL SvdProgressInfo::ReportInserts( ULONG nAnzInserts )
+sal_Bool SvdProgressInfo::ReportInserts( sal_uIntPtr nAnzInserts )
 {
     nSumCurAction += nAnzInserts;
     nCurInsert += nAnzInserts;
@@ -827,23 +827,23 @@ BOOL SvdProgressInfo::ReportInserts( ULONG nAnzInserts )
     return pLink->Call(NULL) == 1L;
 }
 
-BOOL SvdProgressInfo::ReportRescales( ULONG nAnzRescales )
+sal_Bool SvdProgressInfo::ReportRescales( sal_uIntPtr nAnzRescales )
 {
     nSumCurAction += nAnzRescales;
     return pLink->Call(NULL) == 1L;
 }
 
-void SvdProgressInfo::SetActionCount( ULONG _nActionCount )
+void SvdProgressInfo::SetActionCount( sal_uIntPtr _nActionCount )
 {
     nActionCount = _nActionCount;
 }
 
-void SvdProgressInfo::SetInsertCount( ULONG _nInsertCount )
+void SvdProgressInfo::SetInsertCount( sal_uIntPtr _nInsertCount )
 {
     nInsertCount = _nInsertCount;
 }
 
-BOOL SvdProgressInfo::SetNextObject()
+sal_Bool SvdProgressInfo::SetNextObject()
 {
     nActionCount = 0;
     nCurAction   = 0;
@@ -879,7 +879,7 @@ namespace
         bool bRet(false);
         bool bMaster(rList.GetPage() ? rList.GetPage()->IsMasterPage() : false);
 
-        for(ULONG no(rList.GetObjCount()); !bRet && no > 0; )
+        for(sal_uIntPtr no(rList.GetObjCount()); !bRet && no > 0; )
         {
             no--;
             SdrObject* pObj = rList.GetObj(no);
@@ -963,17 +963,17 @@ namespace
         if(!rStyleSettings.GetHighContrastMode())
         {
             // search in page
-            const USHORT SPOTCOUNT(5);
+            const sal_uInt16 SPOTCOUNT(5);
             Point aSpotPos[SPOTCOUNT];
             Color aSpotColor[SPOTCOUNT];
-            ULONG nHeight( rArea.GetSize().Height() );
-            ULONG nWidth( rArea.GetSize().Width() );
-            ULONG nWidth14  = nWidth / 4;
-            ULONG nHeight14 = nHeight / 4;
-            ULONG nWidth34  = ( 3 * nWidth ) / 4;
-            ULONG nHeight34 = ( 3 * nHeight ) / 4;
+            sal_uIntPtr nHeight( rArea.GetSize().Height() );
+            sal_uIntPtr nWidth( rArea.GetSize().Width() );
+            sal_uIntPtr nWidth14  = nWidth / 4;
+            sal_uIntPtr nHeight14 = nHeight / 4;
+            sal_uIntPtr nWidth34  = ( 3 * nWidth ) / 4;
+            sal_uIntPtr nHeight34 = ( 3 * nHeight ) / 4;
 
-            USHORT i;
+            sal_uInt16 i;
             for ( i = 0; i < SPOTCOUNT; i++ )
             {
                 // five spots are used
@@ -1028,14 +1028,14 @@ namespace
                 impGetSdrPageFillColor(rPage, aSpotPos[i], rTextEditPV, rTextEditPV.GetVisibleLayers(), aSpotColor[i], false);
             }
 
-            USHORT aMatch[SPOTCOUNT];
+            sal_uInt16 aMatch[SPOTCOUNT];
 
             for ( i = 0; i < SPOTCOUNT; i++ )
             {
                 // were same spot colors found?
                 aMatch[i] = 0;
 
-                for ( USHORT j = 0; j < SPOTCOUNT; j++ )
+                for ( sal_uInt16 j = 0; j < SPOTCOUNT; j++ )
                 {
                     if( j != i )
                     {
@@ -1050,7 +1050,7 @@ namespace
             // highest weight to center spot
             aBackground = aSpotColor[0];
 
-            for ( USHORT nMatchCount = SPOTCOUNT - 1; nMatchCount > 1; nMatchCount-- )
+            for ( sal_uInt16 nMatchCount = SPOTCOUNT - 1; nMatchCount > 1; nMatchCount-- )
             {
                 // which spot color was found most?
                 for ( i = 0; i < SPOTCOUNT; i++ )

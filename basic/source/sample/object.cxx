@@ -74,7 +74,7 @@
 #define _BWRITE     0x0200  // kann as Lvalue verwendet werden
 #define _LVALUE     _BWRITE  // kann as Lvalue verwendet werden
 #define _READWRITE  0x0300  // beides
-#define _OPT        0x0400  // TRUE: optionaler Parameter
+#define _OPT        0x0400  // sal_True: optionaler Parameter
 #define _METHOD     0x1000  // Masken-Bit fuer eine Methode
 #define _PROPERTY   0x2000  // Masken-Bit fuer eine Property
 #define _COLL       0x4000  // Masken-Bit fuer eine Collection
@@ -130,12 +130,12 @@ SbxVariable* SampleObject::Find( const String& rName, SbxClassType t )
         // sonst suchen
         Methods* p = aMethods;
         short nIndex = 0;
-        BOOL bFound = FALSE;
+        sal_Bool bFound = sal_False;
         while( p->nArgs != -1 )
         {
             if( rName.EqualsIgnoreCaseAscii( p->pName ) )
             {
-                bFound = TRUE; break;
+                bFound = sal_True; break;
             }
             nIndex += ( p->nArgs & _ARGSMASK ) + 1;
             p = aMethods + nIndex;
@@ -172,22 +172,22 @@ void SampleObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCT,
     {
         SbxVariable* pVar = pHint->GetVar();
         SbxArray* pPar_ = pVar->GetParameters();
-        USHORT nIndex = (USHORT) pVar->GetUserData();
+        sal_uInt16 nIndex = (sal_uInt16) pVar->GetUserData();
         // kein Index: weiterreichen!
         if( nIndex )
         {
-            ULONG t = pHint->GetId();
+            sal_uIntPtr t = pHint->GetId();
             if( t == SBX_HINT_INFOWANTED )
                 pVar->SetInfo( GetInfo( (short) pVar->GetUserData() ) );
             else
             {
-                BOOL bWrite = FALSE;
+                sal_Bool bWrite = sal_False;
                 if( t == SBX_HINT_DATACHANGED )
-                    bWrite = TRUE;
+                    bWrite = sal_True;
                 if( t == SBX_HINT_DATAWANTED || bWrite )
                 {
                     // Parameter-Test fuer Methoden:
-                    USHORT nPar = aMethods[ --nIndex ].nArgs & 0x00FF;
+                    sal_uInt16 nPar = aMethods[ --nIndex ].nArgs & 0x00FF;
                     // Element 0 ist der Returnwert
                     if( ( !pPar_ && nPar )
                      || ( pPar_->Count() != nPar+1 ) )
@@ -217,7 +217,7 @@ SbxInfo* SampleObject::GetInfo( short nIdx )
     {
         p++;
         String aName_ = String::CreateFromAscii( p->pName );
-        USHORT nFlags_ = ( p->nArgs >> 8 ) & 0x03;
+        sal_uInt16 nFlags_ = ( p->nArgs >> 8 ) & 0x03;
         if( p->nArgs & _OPT )
             nFlags_ |= SBX_OPTIONAL;
         pInfo_->AddParam( aName_, p->eType, nFlags_ );
@@ -227,13 +227,13 @@ SbxInfo* SampleObject::GetInfo( short nIdx )
 
 ////////////////////////////////////////////////////////////////////////////
 
-// Properties und Methoden legen beim Get (bPut = FALSE) den Returnwert
-// im Element 0 des Argv ab; beim Put (bPut = TRUE) wird der Wert aus
+// Properties und Methoden legen beim Get (bPut = sal_False) den Returnwert
+// im Element 0 des Argv ab; beim Put (bPut = sal_True) wird der Wert aus
 // Element 0 gespeichert.
 
 // Die Methoden:
 
-void SampleObject::Display( SbxVariable*, SbxArray* pPar_, BOOL )
+void SampleObject::Display( SbxVariable*, SbxArray* pPar_, sal_Bool )
 {
     // GetString() loest u.U. auch einen Error aus!
     String s( pPar_->Get( 1 )->GetString() );
@@ -241,7 +241,7 @@ void SampleObject::Display( SbxVariable*, SbxArray* pPar_, BOOL )
         InfoBox( NULL, s ).Execute();
 }
 
-void SampleObject::Square( SbxVariable* pVar, SbxArray* pPar_, BOOL )
+void SampleObject::Square( SbxVariable* pVar, SbxArray* pPar_, sal_Bool )
 {
     double n = pPar_->Get( 1 )->GetDouble();
     pVar->PutDouble( n * n );
@@ -249,14 +249,14 @@ void SampleObject::Square( SbxVariable* pVar, SbxArray* pPar_, BOOL )
 
 // Callback nach BASIC:
 
-void SampleObject::Event( SbxVariable*, SbxArray* pPar_, BOOL )
+void SampleObject::Event( SbxVariable*, SbxArray* pPar_, sal_Bool )
 {
     Call( pPar_->Get( 1 )->GetString(), NULL );
 }
 
 // Neues Element anlegen
 
-void SampleObject::Create( SbxVariable* pVar, SbxArray* pPar_, BOOL )
+void SampleObject::Create( SbxVariable* pVar, SbxArray* pPar_, sal_Bool )
 {
     pVar->PutObject(
         MakeObject( pPar_->Get( 1 )->GetString(), String( RTL_CONSTASCII_USTRINGPARAM("SampleElement") ) ) );

@@ -52,10 +52,10 @@ Version 3           Changed Charset from CHARSET_IBMPC to RTL_TEXTENCODING_UTF8
 #include "basmsg.hrc"
 #include "basrid.hxx"
 
-USHORT MsgEdit::nMaxLogLen = 0;
-BOOL MsgEdit::bLimitLogLen = FALSE;
-BOOL MsgEdit::bPrintLogToStdout = FALSE;
-BOOL MsgEdit::bPrintLogToStdoutSet = FALSE;
+sal_uInt16 MsgEdit::nMaxLogLen = 0;
+sal_Bool MsgEdit::bLimitLogLen = sal_False;
+sal_Bool MsgEdit::bPrintLogToStdout = sal_False;
+sal_Bool MsgEdit::bPrintLogToStdoutSet = sal_False;
 
 #define WARNING_PREFIX String( SttResId( S_WARNING_PREFIX ) )
 #define VERSION_STRING CUniString("File Format Version: ")
@@ -69,8 +69,8 @@ MsgEdit::MsgEdit( AppError* pParent, BasicFrame *pBF, const WinBits& aBits )
 , pCurrentTestCase(NULL)
 , pCurrentAssertion( NULL )
 , pCurrentError(NULL)
-, bModified(FALSE)
-, bFileLoading(FALSE)
+, bModified(sal_False)
+, bFileLoading(sal_False)
 , nVersion(0)
 , pAppError( pParent )
 , aEditTree( pParent, pBF, aBits | WB_HASBUTTONS | WB_HASLINES | WB_HASBUTTONSATROOT )
@@ -83,15 +83,15 @@ MsgEdit::MsgEdit( AppError* pParent, BasicFrame *pBF, const WinBits& aBits )
 
     if ( !bPrintLogToStdoutSet )
     {
-        bPrintLogToStdoutSet = TRUE;
-        for ( USHORT i = 0 ; i < Application::GetCommandLineParamCount() ; i++ )
+        bPrintLogToStdoutSet = sal_True;
+        for ( sal_uInt16 i = 0 ; i < Application::GetCommandLineParamCount() ; i++ )
         {
             if ( Application::GetCommandLineParam( i ).Copy(0,9).CompareIgnoreCaseToAscii("-printlog") == COMPARE_EQUAL
     #ifndef UNX
               || Application::GetCommandLineParam( i ).Copy(0,9).CompareIgnoreCaseToAscii("/printlog") == COMPARE_EQUAL
     #endif
               )
-                bPrintLogToStdout = TRUE;
+                bPrintLogToStdout = sal_True;
         }
     }
 }
@@ -172,11 +172,11 @@ void MsgEdit::AddAnyMsg( TTLogMsg *LogMsg )
 
         if ( !bFileLoading )
         {   // Comes from Testtool and must be written immediately
-            BOOL bFileWasChanged = pAppError->DiskFileChanged( SINCE_LAST_LOAD );
+            sal_Bool bFileWasChanged = pAppError->DiskFileChanged( SINCE_LAST_LOAD );
 
             DBG_ASSERT( aLogFileName == LogMsg->aLogFileName, "Logging to different logfile as before" );
             DirEntry aEntry( LogMsg->aLogFileName );
-            BOOL bNewFile = !aEntry.Exists();
+            sal_Bool bNewFile = !aEntry.Exists();
             SvFileStream aStrm( LogMsg->aLogFileName, STREAM_STD_WRITE );
             if ( bNewFile )
             {
@@ -224,7 +224,7 @@ void MsgEdit::AddRun( String aMsg, TTDebugData aDebugData )
 {
     if ( !bFileLoading && bLimitLogLen )
     {
-        USHORT nSkip = nMaxLogLen;
+        sal_uInt16 nSkip = nMaxLogLen;
         SvLBoxEntry *pRun = aEditTree.First();
         while ( nSkip-- && pRun )
             pRun = aEditTree.NextSibling( pRun );
@@ -235,7 +235,7 @@ void MsgEdit::AddRun( String aMsg, TTDebugData aDebugData )
                 aEditTree.GetModel()->Remove( aEditTree.NextSibling( pRun ) );
 
             aEditTree.GetModel()->Remove( pRun );
-            bModified = TRUE;
+            bModified = sal_True;
             lModify.Call( NULL );
             Save( aLogFileName );
             pAppError->UpdateFileInfo( HAS_BEEN_LOADED );
@@ -244,9 +244,9 @@ void MsgEdit::AddRun( String aMsg, TTDebugData aDebugData )
 
     COPY_TTDEBUGDATA( LOG_RUN );
     if ( !bFileLoading || ( bFileLoading && nVersion >= 2 ) )
-        pCurrentRun = aEditTree.InsertEntry( aMsg, NULL, FALSE, 0, pTTDebugData );
+        pCurrentRun = aEditTree.InsertEntry( aMsg, NULL, sal_False, 0, pTTDebugData );
     else        // First file format
-        pCurrentRun = aEditTree.InsertEntry( aMsg, NULL, FALSE, LIST_APPEND, pTTDebugData );    // and therefor at the end
+        pCurrentRun = aEditTree.InsertEntry( aMsg, NULL, sal_False, LIST_APPEND, pTTDebugData );    // and therefor at the end
 
     aEditTree.ShowEntry( pCurrentRun );
     pCurrentTestCase = NULL;
@@ -265,7 +265,7 @@ void MsgEdit::AddTestCase( String aMsg, TTDebugData aDebugData )
         else
         {
             COPY_TTDEBUGDATA( LOG_TEST_CASE );
-            pCurrentTestCase = aEditTree.InsertEntry( aMsg, pCurrentRun, FALSE, LIST_APPEND, pTTDebugData );
+            pCurrentTestCase = aEditTree.InsertEntry( aMsg, pCurrentRun, sal_False, LIST_APPEND, pTTDebugData );
             aEditTree.ShowEntry( pCurrentTestCase );
         }
     }
@@ -287,7 +287,7 @@ void MsgEdit::AddError( String aMsg, TTDebugData aDebugData )
     if ( pCurrentTestCase )
     {
         COPY_TTDEBUGDATA( LOG_ERROR );
-        pCurrentError = aEditTree.InsertEntry( aMsg, pCurrentTestCase, FALSE, LIST_APPEND, pTTDebugData );
+        pCurrentError = aEditTree.InsertEntry( aMsg, pCurrentTestCase, sal_False, LIST_APPEND, pTTDebugData );
         aEditTree.ShowEntry( pCurrentError );
     }
 }
@@ -298,7 +298,7 @@ void MsgEdit::AddCallStack( String aMsg, TTDebugData aDebugData )
     if ( pCurrentError )
     {
         COPY_TTDEBUGDATA( LOG_CALL_STACK );
-        aEditTree.InsertEntry( aMsg, pCurrentError, FALSE, LIST_APPEND, pTTDebugData );
+        aEditTree.InsertEntry( aMsg, pCurrentError, sal_False, LIST_APPEND, pTTDebugData );
     }
 }
 
@@ -307,16 +307,16 @@ void MsgEdit::AddMessage( String aMsg, TTDebugData aDebugData )
     SvLBoxEntry *pThisEntry = NULL;
     COPY_TTDEBUGDATA( LOG_MESSAGE );
     if ( pCurrentTestCase )
-        pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentTestCase, FALSE, LIST_APPEND, pTTDebugData );
+        pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentTestCase, sal_False, LIST_APPEND, pTTDebugData );
     else if ( pCurrentRun )
     {
-        pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentRun, FALSE, LIST_APPEND, pTTDebugData );
+        pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentRun, sal_False, LIST_APPEND, pTTDebugData );
         aEditTree.ShowEntry( pThisEntry );
     }
     else
     {
         AddRun( aMsg, aDebugData );
-        pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentRun, FALSE, LIST_APPEND, pTTDebugData );
+        pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentRun, sal_False, LIST_APPEND, pTTDebugData );
         aEditTree.ShowEntry( pThisEntry );
     }
 }
@@ -329,16 +329,16 @@ void MsgEdit::AddWarning( String aMsg, TTDebugData aDebugData )
     COPY_TTDEBUGDATA( LOG_WARNING );
 
     if ( pCurrentTestCase )
-        pThisEntry = aEditTree.InsertEntry( aCompleteMsg, pCurrentTestCase, FALSE, LIST_APPEND, pTTDebugData );
+        pThisEntry = aEditTree.InsertEntry( aCompleteMsg, pCurrentTestCase, sal_False, LIST_APPEND, pTTDebugData );
     else if ( pCurrentRun )
     {
-        pThisEntry = aEditTree.InsertEntry( aCompleteMsg, pCurrentRun, FALSE, LIST_APPEND, pTTDebugData );
+        pThisEntry = aEditTree.InsertEntry( aCompleteMsg, pCurrentRun, sal_False, LIST_APPEND, pTTDebugData );
         aEditTree.ShowEntry( pThisEntry );
     }
     else
     {
         AddRun( aMsg, aDebugData );
-        pThisEntry = aEditTree.InsertEntry( aCompleteMsg, pCurrentRun, FALSE, LIST_APPEND, pTTDebugData );
+        pThisEntry = aEditTree.InsertEntry( aCompleteMsg, pCurrentRun, sal_False, LIST_APPEND, pTTDebugData );
         aEditTree.ShowEntry( pThisEntry );
     }
 
@@ -357,16 +357,16 @@ void MsgEdit::AddAssertion( String aMsg, TTDebugData aDebugData )
     SvLBoxEntry *pThisEntry = NULL;
     COPY_TTDEBUGDATA( LOG_ASSERTION );
     if ( pCurrentTestCase )
-        pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentTestCase, FALSE, LIST_APPEND, pTTDebugData );
+        pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentTestCase, sal_False, LIST_APPEND, pTTDebugData );
     else if ( pCurrentRun )
     {
-        pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentRun, FALSE, LIST_APPEND, pTTDebugData );
+        pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentRun, sal_False, LIST_APPEND, pTTDebugData );
         aEditTree.ShowEntry( pThisEntry );
     }
     else
     {
         AddRun( aMsg, aDebugData );
-        pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentRun, FALSE, LIST_APPEND, pTTDebugData );
+        pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentRun, sal_False, LIST_APPEND, pTTDebugData );
         aEditTree.ShowEntry( pThisEntry );
     }
 
@@ -381,18 +381,18 @@ void MsgEdit::AddAssertionStack( String aMsg, TTDebugData aDebugData )
     SvLBoxEntry *pThisEntry = NULL;
     COPY_TTDEBUGDATA( LOG_ASSERTION_STACK );
     if ( pCurrentAssertion )
-        pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentAssertion, FALSE, LIST_APPEND, pTTDebugData );
+        pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentAssertion, sal_False, LIST_APPEND, pTTDebugData );
     else if ( pCurrentTestCase )
-        pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentTestCase, FALSE, LIST_APPEND, pTTDebugData );
+        pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentTestCase, sal_False, LIST_APPEND, pTTDebugData );
     else if ( pCurrentRun )
     {
-        pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentRun, FALSE, LIST_APPEND, pTTDebugData );
+        pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentRun, sal_False, LIST_APPEND, pTTDebugData );
         aEditTree.ShowEntry( pThisEntry );
     }
     else
     {
         AddRun( aMsg, aDebugData );
-        pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentRun, FALSE, LIST_APPEND, pTTDebugData );
+        pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentRun, sal_False, LIST_APPEND, pTTDebugData );
         aEditTree.ShowEntry( pThisEntry );
     }
 
@@ -405,16 +405,16 @@ void MsgEdit::AddQAError( String aMsg, TTDebugData aDebugData )
     SvLBoxEntry *pThisEntry = NULL;
     COPY_TTDEBUGDATA( LOG_QA_ERROR );
     if ( pCurrentTestCase )
-        pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentTestCase, FALSE, LIST_APPEND, pTTDebugData );
+        pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentTestCase, sal_False, LIST_APPEND, pTTDebugData );
     else if ( pCurrentRun )
     {
-        pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentRun, FALSE, LIST_APPEND, pTTDebugData );
+        pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentRun, sal_False, LIST_APPEND, pTTDebugData );
         aEditTree.ShowEntry( pThisEntry );
     }
     else
     {
         AddRun( aMsg, aDebugData );
-        pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentRun, FALSE, LIST_APPEND, pTTDebugData );
+        pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentRun, sal_False, LIST_APPEND, pTTDebugData );
         aEditTree.ShowEntry( pThisEntry );
     }
 
@@ -423,8 +423,8 @@ void MsgEdit::AddQAError( String aMsg, TTDebugData aDebugData )
 }
 
 /*
-    SvLBoxEntry*    GetEntry( SvLBoxEntry* pParent, ULONG nPos ) const { return SvLBox::GetEntry(pParent,nPos); }
-    SvLBoxEntry*    GetEntry( ULONG nRootPos ) const { return SvLBox::GetEntry(nRootPos);}
+    SvLBoxEntry*    GetEntry( SvLBoxEntry* pParent, sal_uIntPtr nPos ) const { return SvLBox::GetEntry(pParent,nPos); }
+    SvLBoxEntry*    GetEntry( sal_uIntPtr nRootPos ) const { return SvLBox::GetEntry(nRootPos);}
 
 
 
@@ -437,16 +437,16 @@ void MsgEdit::AddQAError( String aMsg, TTDebugData aDebugData )
     SvLBoxEntry*    PrevSelected( SvLBoxEntry* pEntry ) const { return (SvLBoxEntry*)(SvListView::PrevSelected(pEntry)); }
     SvLBoxEntry*    LastSelected() const { return (SvLBoxEntry*)(SvListView::LastSelected()); }
 
-    SvLBoxEntry*    GetEntry( SvLBoxEntry* pParent, ULONG nPos ) const { return (SvLBoxEntry*)(pModel->GetEntry(pParent,nPos)); }
-    SvLBoxEntry*    GetEntry( ULONG nRootPos ) const { return (SvLBoxEntry*)(pModel->GetEntry(nRootPos)); }
+    SvLBoxEntry*    GetEntry( SvLBoxEntry* pParent, sal_uIntPtr nPos ) const { return (SvLBoxEntry*)(pModel->GetEntry(pParent,nPos)); }
+    SvLBoxEntry*    GetEntry( sal_uIntPtr nRootPos ) const { return (SvLBoxEntry*)(pModel->GetEntry(nRootPos)); }
 
     SvLBoxEntry*    GetParent( SvLBoxEntry* pEntry ) const { return (SvLBoxEntry*)(pModel->GetParent(pEntry)); }
     SvLBoxEntry*    GetRootLevelParent(SvLBoxEntry* pEntry ) const { return (SvLBoxEntry*)(pModel->GetRootLevelParent( pEntry ));}
 
-    BOOL            IsInChildList( SvListEntry* pParent, SvListEntry* pChild) const;
-    SvListEntry*    GetEntry( SvListEntry* pParent, ULONG nPos ) const;
-    SvListEntry*    GetEntry( ULONG nRootPos ) const;
-    SvListEntry*    GetEntryAtAbsPos( ULONG nAbsPos ) const;
+    sal_Bool            IsInChildList( SvListEntry* pParent, SvListEntry* pChild) const;
+    SvListEntry*    GetEntry( SvListEntry* pParent, sal_uIntPtr nPos ) const;
+    SvListEntry*    GetEntry( sal_uIntPtr nRootPos ) const;
+    SvListEntry*    GetEntryAtAbsPos( sal_uIntPtr nAbsPos ) const;
     SvListEntry*    GetParent( SvListEntry* pEntry ) const;
     SvListEntry*    GetRootLevelParent( SvListEntry* pEntry ) const;
 */
@@ -460,11 +460,11 @@ void MsgEdit::Delete()
     CHECK( pCurrentTestCase );
     CHECK( pCurrentAssertion );
     CHECK( pCurrentError );
-    bModified = TRUE;
+    bModified = sal_True;
     lModify.Call( NULL );
 }
 
-void MsgEdit::Cut(){ Copy(); Delete(); bModified = TRUE; lModify.Call( NULL ); }
+void MsgEdit::Cut(){ Copy(); Delete(); bModified = sal_True; lModify.Call( NULL ); }
 void MsgEdit::Copy(){ ::svt::OStringTransfer::CopyString( GetSelected(), &aEditTree ); }
 /**/void MsgEdit::Paste(){ Sound::Beep(); }
 void MsgEdit::Undo(){ Sound::Beep(); }
@@ -545,7 +545,7 @@ TextSelection MsgEdit::GetSelection() const
 {
     if ( aEditTree.FirstSelected() )
     {
-        ULONG nStart=0,nEnd=0;
+        sal_uIntPtr nStart=0,nEnd=0;
         nStart = aEditTree.GetModel()->GetAbsPos(aEditTree.FirstSelected() );
         if ( aEditTree.LastSelected() )
             nEnd = aEditTree.GetModel()->GetAbsPos(aEditTree.LastSelected() );
@@ -557,25 +557,25 @@ TextSelection MsgEdit::GetSelection() const
 
 void MsgEdit::SetSelection( const TextSelection& rSelection )
 {
-    ULONG nStart,nEnd;
+    sal_uIntPtr nStart,nEnd;
 
     while ( aEditTree.GetSelectionCount() )
-        aEditTree.Select( aEditTree.FirstSelected(), FALSE );
+        aEditTree.Select( aEditTree.FirstSelected(), sal_False );
 
     if ( rSelection.HasRange() )
     {
         nStart = rSelection.GetStart().GetPara();
         nEnd = rSelection.GetEnd().GetPara();
 
-        for ( ULONG i = nStart ; i <= nEnd ; i++ )
-            aEditTree.Select( aEditTree.GetModel()->GetEntryAtAbsPos( i ), TRUE );
+        for ( sal_uIntPtr i = nStart ; i <= nEnd ; i++ )
+            aEditTree.Select( aEditTree.GetModel()->GetEntryAtAbsPos( i ), sal_True );
     }
 }
 
-USHORT MsgEdit::GetLineNr() const
+sal_uInt16 MsgEdit::GetLineNr() const
 {
     if ( aEditTree.GetCurEntry() )
-        return (USHORT)aEditTree.GetModel()->GetAbsPos(aEditTree.GetCurEntry() ) + 1;
+        return (sal_uInt16)aEditTree.GetModel()->GetAbsPos(aEditTree.GetCurEntry() ) + 1;
     else
         return 0;
 }
@@ -587,7 +587,7 @@ void MsgEdit::ReplaceSelected( const String& rStr )
     OSL_FAIL("Not Implemented");
 }
 
-BOOL MsgEdit::IsModified(){ return bModified; }
+sal_Bool MsgEdit::IsModified(){ return bModified; }
 void MsgEdit::SetModifyHdl( Link l ){ lModify = l; }
 
 String MsgEdit::GetText() const
@@ -611,16 +611,16 @@ void MsgEdit::SetText( const String& rStr )
     OSL_FAIL("Not Implemented");
 }
 
-BOOL MsgEdit::HasText() const
+sal_Bool MsgEdit::HasText() const
 {
   return aEditTree.First() != NULL;
 }
 
 // Search from the beginning or mark start + 1
-BOOL MsgEdit::Find( const String& s )
+sal_Bool MsgEdit::Find( const String& s )
 {
     TextSelection r  = GetSelection();
-    USHORT bgn   = (USHORT) r.GetStart().GetPara() + 1;
+    sal_uInt16 bgn   = (sal_uInt16) r.GetStart().GetPara() + 1;
     if ( r.GetStart().GetPara() == 0 )
         bgn = 0;    // Search from the beginning
 
@@ -630,11 +630,11 @@ BOOL MsgEdit::Find( const String& s )
         if( aEditTree.GetEntryText( pEntry ).Search( s, 0 ) != STRING_NOTFOUND )
         {
             aEditTree.SetCurEntry( pEntry );
-            return TRUE;
+            return sal_True;
         }
         pEntry = aEditTree.Next( pEntry );
     }
-    return FALSE;
+    return sal_False;
 }
 
 /******************************************************************
@@ -647,17 +647,17 @@ BOOL MsgEdit::Find( const String& s )
 
 ******************************************************************/
 
-BOOL MsgEdit::Load( const String& aName )
+sal_Bool MsgEdit::Load( const String& aName )
 {
     aLogFileName = aName;
-    BOOL bOk = TRUE, bFirstLine = TRUE;
-    BOOL bLoadError = FALSE;
+    sal_Bool bOk = sal_True, bFirstLine = sal_True;
+    sal_Bool bLoadError = sal_False;
     SvFileStream aStrm( aName, STREAM_STD_READ );
     if( aStrm.IsOpen() )
     {
         aEditTree.Clear();
         String aLine;
-        bFileLoading = TRUE;  // To avoid logging to disk
+        bFileLoading = sal_True;  // To avoid logging to disk
         TTLogMsg *pLogMsg = new TTLogMsg;
         while( !aStrm.IsEof() && bOk )
         {
@@ -667,7 +667,7 @@ BOOL MsgEdit::Load( const String& aName )
                 aStrm.ReadByteStringLine( aLine, RTL_TEXTENCODING_IBM_850 );
 
             if( aStrm.GetError() != SVSTREAM_OK )
-                bOk = FALSE;
+                bOk = sal_False;
 
 #define TOKEN( n ) aLine.GetToken( n )
 
@@ -677,9 +677,9 @@ BOOL MsgEdit::Load( const String& aName )
                 TTDebugData aDebugData;
                 aDebugData.aLogType = TTLogType( TOKEN(0).ToInt32() );
                 aDebugData.aFilename = TOKEN(1);
-                aDebugData.nLine = USHORT( TOKEN(2).ToInt32() );
-                aDebugData.nCol1 = USHORT( TOKEN(3).ToInt32() );
-                aDebugData.nCol2 = USHORT( TOKEN(4).ToInt32() );
+                aDebugData.nLine = sal_uInt16( TOKEN(2).ToInt32() );
+                aDebugData.nCol1 = sal_uInt16( TOKEN(3).ToInt32() );
+                aDebugData.nCol2 = sal_uInt16( TOKEN(4).ToInt32() );
                 aDebugData.aMsg = aLine.GetQuotedToken( 5, CUniString("\"\"") );
 
                 // Remove leading and trailing quotes
@@ -692,13 +692,13 @@ BOOL MsgEdit::Load( const String& aName )
                 AddAnyMsg( pLogMsg );
             }
             else if ( bFirstLine && (aLine.Search( VERSION_STRING ) == 0) )
-                nVersion = USHORT( aLine.Copy( VERSION_STRING.Len() ).ToInt32() );
+                nVersion = sal_uInt16( aLine.Copy( VERSION_STRING.Len() ).ToInt32() );
             else if ( aLine.Len() )
-                bLoadError = TRUE;
+                bLoadError = sal_True;
 
-            bFirstLine = FALSE;
+            bFirstLine = sal_False;
         }
-        bFileLoading = FALSE;
+        bFileLoading = sal_False;
         delete pLogMsg;
         aStrm.Close();
         if ( nVersion < 2 && !bLoadError )
@@ -706,16 +706,16 @@ BOOL MsgEdit::Load( const String& aName )
 
     }
     else
-        bOk = FALSE;
+        bOk = sal_False;
     return bOk;
 }
 
-BOOL MsgEdit::Save( const String& aName )
+sal_Bool MsgEdit::Save( const String& aName )
 {
-    BOOL bOk = TRUE;
-    BOOL bIsText = DirEntry( aName ).GetExtension().CompareIgnoreCaseToAscii("TXT") == COMPARE_EQUAL;
+    sal_Bool bOk = sal_True;
+    sal_Bool bIsText = DirEntry( aName ).GetExtension().CompareIgnoreCaseToAscii("TXT") == COMPARE_EQUAL;
     if ( bIsText && !QueryBox( NULL, SttResId( IDS_LOSS_OF_INFORMATION ) ).Execute() )
-        return FALSE;
+        return sal_False;
     SvFileStream aStrm( aName, STREAM_STD_WRITE | STREAM_TRUNC );
     if( aStrm.IsOpen() )
     {
@@ -753,16 +753,16 @@ BOOL MsgEdit::Save( const String& aName )
             }
         }
         if( aStrm.GetError() != SVSTREAM_OK )
-            bOk = FALSE;
+            bOk = sal_False;
         else
         {
-            bModified = FALSE;
+            bModified = sal_False;
             lModify.Call( NULL );
         }
 
     }
     else
-        bOk = FALSE;
+        bOk = sal_False;
     return bOk;
 }
 
@@ -774,7 +774,7 @@ TTTreeListBox::TTTreeListBox( AppError* pParent, BasicFrame* pBF, WinBits nWinSt
 //, nDeselectParent(0)
 {}
 
-BOOL TTTreeListBox::JumpToSourcecode( SvLBoxEntry *pThisEntry )
+sal_Bool TTTreeListBox::JumpToSourcecode( SvLBoxEntry *pThisEntry )
 {
     if ( pThisEntry && pThisEntry->GetUserData() && ((TTDebugData*)pThisEntry->GetUserData())->aFilename.Len() > 0 )
     {
@@ -810,20 +810,20 @@ BOOL TTTreeListBox::JumpToSourcecode( SvLBoxEntry *pThisEntry )
 
         if ( pBasicFrame->pWork && pBasicFrame->pWork->ISA(AppEdit) )
             ((AppEdit*)pBasicFrame->pWork)->Highlight( aData->nLine, aData->nCol1, aData->nCol2 );
-        return FALSE;
+        return sal_False;
     }
-    return TRUE;
+    return sal_True;
 }
 
-BOOL TTTreeListBox::DoubleClickHdl()
+sal_Bool TTTreeListBox::DoubleClickHdl()
 {
     return JumpToSourcecode( GetHdlEntry() );
 }
 
-/*ULONG TTTreeListBox::SelectChildren( SvLBoxEntry* pParent, BOOL bSelect )
+/*sal_uIntPtr TTTreeListBox::SelectChildren( SvLBoxEntry* pParent, sal_Bool bSelect )
 {
     SvLBoxEntry *pEntry = FirstChild( pParent );
-    ULONG nRet = 0;
+    sal_uIntPtr nRet = 0;
     while ( pEntry )
     {
         nRet++;
@@ -838,8 +838,8 @@ void TTTreeListBox::SelectHdl()
 {
     SvLBoxEntry* pHdlEntry = GetHdlEntry();
 
-    SelectChildren( pHdlEntry, TRUE );
-    Select( pHdlEntry, TRUE );
+    SelectChildren( pHdlEntry, sal_True );
+    Select( pHdlEntry, sal_True );
 //  InitMenu(pApp->GetAppMenu()->GetPopupMenu( RID_APPEDIT ));  // so that delete works correct
 }
 
@@ -849,13 +849,13 @@ void TTTreeListBox::DeselectHdl()
     if ( GetParent( pHdlEntry ) )
     {
         nDeselectParent++;
-        Select( GetParent( pHdlEntry ), FALSE );
+        Select( GetParent( pHdlEntry ), sal_False );
         nDeselectParent--;
     }
     if ( !nDeselectParent )
     {
-        SelectChildren( pHdlEntry, FALSE );
-        Select( pHdlEntry, FALSE );
+        SelectChildren( pHdlEntry, sal_False );
+        Select( pHdlEntry, sal_False );
     }
     Invalidate();
 } */
@@ -926,15 +926,15 @@ class TTLBoxString : public SvLBoxString
 {
 public:
 
-    TTLBoxString( SvLBoxEntry* pEntry, USHORT nFlags,
+    TTLBoxString( SvLBoxEntry* pEntry, sal_uInt16 nFlags,
         const String& rStr ) : SvLBoxString(pEntry,nFlags,rStr) {}
 
-    virtual void Paint( const Point& rPos, SvLBox& rDev, USHORT nFlags,
+    virtual void Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags,
         SvLBoxEntry* pEntry);
 };
 
 
-void TTLBoxString::Paint( const Point& rPos, SvLBox& rDev, USHORT nFlags,
+void TTLBoxString::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags,
     SvLBoxEntry* pEntry )
 {
     TTFeatures aFeatures = ((TTTreeListBox*)&rDev)->GetFeatures( pEntry );
@@ -958,7 +958,7 @@ void TTLBoxString::Paint( const Point& rPos, SvLBox& rDev, USHORT nFlags,
         else
         {
             aFont.SetFillColor( aCol );
-            aFont.SetTransparent( FALSE );
+            aFont.SetTransparent( sal_False );
             Color aCol2( COL_BLACK );
             aFont.SetColor( aCol2 );
         }
@@ -984,7 +984,7 @@ void TTTreeListBox::InitEntry(SvLBoxEntry* pEntry,
     const String& rStr ,const Image& rImg1, const Image& rImg2,
     SvLBoxButtonKind eButtonKind )
 {
-    USHORT nColToHilite = 1; //0==Bitmap;1=="Column1";2=="Column2"
+    sal_uInt16 nColToHilite = 1; //0==Bitmap;1=="Column1";2=="Column2"
     SvTreeListBox::InitEntry( pEntry, rStr, rImg1, rImg2, eButtonKind );
     SvLBoxString* pCol = (SvLBoxString*)pEntry->GetItem( nColToHilite );
     TTLBoxString* pStr = new TTLBoxString( pEntry, 0, pCol->GetText() );

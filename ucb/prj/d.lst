@@ -36,5 +36,16 @@
 ..\source\ucp\gvfs\ucpgvfs.xml %_DEST%\xml%_EXT%\ucpgvfs.xml
 ..\source\ucp\tdoc\ucptdoc.xml %_DEST%\xml%_EXT%\ucptdoc.xml
 
-..\%__SRC%\misc\ucpgvfs-ucd.txt  %_DEST%\bin%_EXT%\ucpgvfs-ucd.txt
-..\%__SRC%\misc\ucpgio-ucd.txt  %_DEST%\bin%_EXT%\ucpgio-ucd.txt
+..\%__SRC%\misc\ucpgvfs.component  %_DEST%\xml%_EXT%\ucpgvfs.component
+..\%__SRC%\misc\ucpgio.component  %_DEST%\xml%_EXT%\ucpgio.component
+..\%__SRC%\misc\cached1.component %_DEST%\xml%_EXT%\cached1.component
+..\%__SRC%\misc\srtrs1.component %_DEST%\xml%_EXT%\srtrs1.component
+..\%__SRC%\misc\ucb1.component %_DEST%\xml%_EXT%\ucb1.component
+..\%__SRC%\misc\ucpdav1.component %_DEST%\xml%_EXT%\ucpdav1.component
+..\%__SRC%\misc\ucpexpand1.component %_DEST%\xml%_EXT%\ucpexpand1.component
+..\%__SRC%\misc\ucpext.component %_DEST%\xml%_EXT%\ucpext.component
+..\%__SRC%\misc\ucpfile1.component %_DEST%\xml%_EXT%\ucpfile1.component
+..\%__SRC%\misc\ucpftp1.component %_DEST%\xml%_EXT%\ucpftp1.component
+..\%__SRC%\misc\ucphier1.component %_DEST%\xml%_EXT%\ucphier1.component
+..\%__SRC%\misc\ucppkg1.component %_DEST%\xml%_EXT%\ucppkg1.component
+..\%__SRC%\misc\ucptdoc1.component %_DEST%\xml%_EXT%\ucptdoc1.component

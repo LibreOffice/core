@@ -219,7 +219,7 @@ namespace basprov
         if ( aFunctionName == BASPROV_PROPERTY_EDITABLE )
         {
             ::rtl::OUString sDocURL, sLibName, sModName;
-            USHORT nLine1 = 0, nLine2;
+            sal_uInt16 nLine1 = 0, nLine2;
 
             if ( !m_bIsAppScript )
             {

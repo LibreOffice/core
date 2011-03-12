@@ -29,13 +29,13 @@
 <oor:component-data oor:name="GenericCommands" oor:package="org.openoffice.Office.UI" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <node oor:name="UserInterface">
         <node oor:name="Commands">
-      <node oor:name=".uno:WebHtml" oor:op="replace">
+            <node oor:name=".uno:WebHtml" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Vorschau in Web-Browser</value>
                     <value xml:lang="en-US">Preview in Web Browser</value>
                 </prop>
             </node>
-      <node oor:name=".uno:NewPresentation" oor:op="replace">
+            <node oor:name=".uno:NewPresentation" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">New Presentation</value>
                 </prop>
@@ -2117,9 +2117,9 @@
                 </prop>
             </node>
             <node oor:name=".uno:LanguageStatus" oor:op="replace">
-                    <prop oor:name="Label" oor:type="xs:string">
-                            <value xml:lang="en-US">Language Status</value>
-                    </prop>
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Language Status</value>
+                </prop>
             </node>
             <node oor:name=".uno:ChooseControls" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -3006,7 +3006,7 @@
                     <value xml:lang="en-US">~Spelling and Grammar...</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
-                  <value>1</value>
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:SpellDialog" oor:op="replace">
@@ -3412,7 +3412,7 @@
             </node>
             <node oor:name=".uno:BmpMask" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">~Eyedropper</value>
+                    <value xml:lang="en-US">Color ~Replacer</value>
                 </prop>
             </node>
             <node oor:name=".uno:GoLeftBlock" oor:op="replace">
@@ -3453,12 +3453,12 @@
                     <value>9</value>
                 </prop>
             </node>
-      <node oor:name=".uno:TaskPane" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Task Pane</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:RestoreEditingView" oor:op="replace">
+            <node oor:name=".uno:TaskPane" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Task Pane</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:RestoreEditingView" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Restore Editing View</value>
                 </prop>
@@ -3472,10 +3472,10 @@
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Fit to Frame</value>
                 </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>8</value>
-        </prop>
-      </node>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>8</value>
+                </prop>
+            </node>
             <node oor:name=".uno:ImageMapDialog" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">ImageMap</value>
@@ -3732,10 +3732,10 @@
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Flash</value>
                 </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>8</value>
-        </prop>
-      </node>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>8</value>
+                </prop>
+            </node>
             <node oor:name=".uno:ToolsMacroEdit" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Edit Macros</value>
@@ -4039,12 +4039,12 @@
             </node>
             <node oor:name=".uno:RubyDialog" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">As~ian phonetic guide...</value>
+                    <value xml:lang="en-US">As~ian phonetic guide...</value>
                 </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>8</value>
-        </prop>
-      </node>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>8</value>
+                </prop>
+            </node>
             <node oor:name=".uno:InsertSymbol" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">S~pecial Character...</value>
@@ -4146,10 +4146,10 @@
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Status ~Bar</value>
                 </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>8</value>
-        </prop>
-      </node>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>8</value>
+                </prop>
+            </node>
             <node oor:name=".uno:MacroBarVisible" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Macro Toolbar On/Off</value>
@@ -5118,16 +5118,16 @@
                     <value xml:lang="en-US">~Extension Manager...</value>
                 </prop>
             </node>
-                        <node oor:name=".uno:Signature" oor:op="replace">
-                                <prop oor:name="Label" oor:type="xs:string">
-                                        <value xml:lang="en-US">Digital Signatu~res...</value>
-                                </prop>
-                        </node>
-                        <node oor:name=".uno:MacroSignature" oor:op="replace">
-                                <prop oor:name="Label" oor:type="xs:string">
-                                        <value xml:lang="en-US">Digital Signature...</value>
-                                </prop>
-                        </node>
+            <node oor:name=".uno:Signature" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Digital Signatu~res...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:MacroSignature" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Digital Signature...</value>
+                </prop>
+            </node>
             <node oor:name=".uno:CommonAlignLeft" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Left</value>
@@ -5184,22 +5184,27 @@
                     <value xml:lang="en-US">Find</value>
                 </prop>
             </node> -->
-      <node oor:name=".uno:DeleteAllNotes" oor:op="replace">
+            <node oor:name=".uno:DeleteAllNotes" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Delete All Comments</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:DeleteAuthor" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Delete All Comments by This Author</value>
+                </prop>
+            </node>
+      <node oor:name=".uno:ReplyComment" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Delete All Comments</value>
+          <value xml:lang="en-US">Reply Comment</value>
         </prop>
       </node>
-      <node oor:name=".uno:DeleteAuthor" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Delete All Comments by This Author</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:DeleteNote" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Delete Comment</value>
-        </prop>
-      </node>
-    </node>
+      <node oor:name=".uno:DeleteComment" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Delete Comment</value>
+                </prop>
+            </node>
+        </node>
         <node oor:name="Popups">
             <node oor:name=".uno:HelpMenu" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">

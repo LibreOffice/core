@@ -121,7 +121,7 @@ interface XRange
     void FillRight();
     void FillUp();
     void FillDown();
-    XRange Item([in] any row, [in] any column) raises(com::sun::star::script::BasicErrorException);
+    XRange Item([in] any RowIndex, [in] any ColumnIndex) raises(com::sun::star::script::BasicErrorException);
     XRange Offset([in] any RowOffset, [in] any ColumnOffset);
     XRange CurrentRegion();
     XRange CurrentArray();
@@ -154,7 +154,7 @@ interface XRange
     XCharacters characters([in] any Start, [in] any Length);
     void Delete( [in] any Shift );
 
-    any Areas( [in] any item );
+    any Areas( [in] any Item );
     any BorderAround( [in] any LineStyle, [in] any Weight, [in] any ColorIndex, [in] any Color );
         void AutoFilter([in ] any Field, [in] any Criteria1, [in] any Operator, [in] any Criteria2, [in] any VisibleDropDown);
         void Insert([in] any Shift, [in] any CopyOrigin);
@@ -173,7 +173,7 @@ interface XRange
     void RemoveSubtotal() raises ( com::sun::star::script::BasicErrorException );
     void    Subtotal( [in] long GroupBy, [in] long Function, [in]  /*Optional*/ sequence<long> TotalList, [in]  /*Optional*/ any Replace, [in]  /*Optional*/ any PageBreaks, [in] any SummaryBelowData ) raises ( com::sun::star::script::BasicErrorException );
     XRange MergeArea( ) raises ( com::sun::star::script::BasicErrorException );
-    any Hyperlinks( [in] any aIndex );
+    any Hyperlinks( [in] any Index );
     long   CopyFromRecordset([in] any Data, [in]  any MaxRows , [in]  any MaxColumns) raises ( com::sun::star::script::BasicErrorException );
     XPivotTable PivotTable();
     void TextToColumns([in] any Destination, [in] any DataType, [in] any TextQualifier, [in] any ConsecutiveDelimiter, [in] any Tab, [in] any Semicolon, [in] any Comma,

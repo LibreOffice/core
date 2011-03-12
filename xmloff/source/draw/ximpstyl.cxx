@@ -32,7 +32,7 @@
 
 #include "ximpstyl.hxx"
 #include <xmloff/XMLShapeStyleContext.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 #include "ximpnote.hxx"
@@ -56,7 +56,7 @@
 #include "layerimp.hxx"
 #include <xmloff/XMLGraphicsDefaultStyle.hxx>
 #include "XMLNumberStylesImport.hxx"
-#include "xmlerror.hxx"
+#include "xmloff/xmlerror.hxx"
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -84,7 +84,7 @@ public:
     virtual ~SdXMLDrawingPagePropertySetContext();
 
     using SvXMLPropertySetContext::CreateChildContext;
-    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                    const ::rtl::OUString& rLocalName,
                                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
                                    ::std::vector< XMLPropertyState > &rProperties,
@@ -1630,9 +1630,9 @@ SdXMLHeaderFooterDeclContext::SdXMLHeaderFooterDeclContext( SvXMLImport& rImport
     }
 }
 
-BOOL SdXMLHeaderFooterDeclContext::IsTransient() const
+sal_Bool SdXMLHeaderFooterDeclContext::IsTransient() const
 {
-    return TRUE;
+    return sal_True;
 }
 
 void SdXMLHeaderFooterDeclContext::EndElement()

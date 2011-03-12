@@ -98,7 +98,7 @@ class SfxViewVersionDialog_Impl : public SfxModalDialog
 
 public:
                                 SfxViewVersionDialog_Impl( Window *pParent,
-                                    SfxVersionInfo& rInfo, BOOL bEdit );
+                                    SfxVersionInfo& rInfo, sal_Bool bEdit );
  };
 
 #endif

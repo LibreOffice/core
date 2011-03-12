@@ -285,7 +285,7 @@ class PropHelper
     //___________________________________________
 
     /** checks if given property will be changed by this settings.
-     *  We compare the content of the given any values. If they are different we return TRUE - FALSE otherwhise.
+     *  We compare the content of the given any values. If they are different we return sal_True - sal_False otherwhise.
      *
      *  @param  aCurrentValue   contains the current value for this property
      *  @param  aNewValue       contains the new value for this property

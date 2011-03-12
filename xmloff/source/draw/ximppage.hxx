@@ -76,14 +76,14 @@ protected:
 public:
     TYPEINFO();
 
-    SdXMLGenericPageContext( SvXMLImport& rImport, USHORT nPrfx, const rtl::OUString& rLocalName,
+    SdXMLGenericPageContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes);
     virtual ~SdXMLGenericPageContext();
 
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual SvXMLImportContext *CreateChildContext(
-        USHORT nPrefix, const rtl::OUString& rLocalName,
+        sal_uInt16 nPrefix, const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList );
     virtual void EndElement();
 

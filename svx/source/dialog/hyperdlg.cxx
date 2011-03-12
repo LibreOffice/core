@@ -32,7 +32,7 @@
 // include ---------------------------------------------------------------
 #include <vcl/settings.hxx>
 #include <unotools/viewoptions.hxx>
-#include "hyperdlg.hxx"
+#include "svx/hyperdlg.hxx"
 #include <svx/svxdlg.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/sfxsids.hrc>
@@ -58,7 +58,7 @@ struct MyStruct
     SfxWorkWindow*      pWorkWin;
 };
 
-SvxHlinkDlgWrapper::SvxHlinkDlgWrapper( Window* _pParent, USHORT nId,
+SvxHlinkDlgWrapper::SvxHlinkDlgWrapper( Window* _pParent, sal_uInt16 nId,
                                                 SfxBindings* pBindings,
                                                 SfxChildWinInfo* pInfo ) :
     SfxChildWindow( _pParent, nId ),
@@ -71,7 +71,7 @@ SvxHlinkDlgWrapper::SvxHlinkDlgWrapper( Window* _pParent, USHORT nId,
     mpDlg = pFact->CreateSvxHpLinkDlg( _pParent, pBindings, SID_HYPERLINK_DIALOG );
     DBG_ASSERT(mpDlg, "Dialogdiet fail!");
     pWindow = mpDlg->GetWindow();
-    ((MyStruct*)pImp)->bVisible = FALSE;
+    ((MyStruct*)pImp)->bVisible = sal_False;
 
     Window* pTopWindow = 0;
     if ( pInfo->aSize.Width() != 0 && pInfo->aSize.Height() != 0 &&
@@ -92,7 +92,7 @@ SvxHlinkDlgWrapper::SvxHlinkDlgWrapper( Window* _pParent, USHORT nId,
 
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
 
-    SetHideNotDelete( TRUE );
+    SetHideNotDelete( sal_True );
 }
 
 SfxChildWinInfo SvxHlinkDlgWrapper::GetInfo() const

@@ -31,7 +31,7 @@
 #include <vcl/menu.hxx>
 #include <svl/lstner.hxx>
 #include <vector>
-#include "galbrws.hxx"
+#include "svx/galbrws.hxx"
 
 // -----------------
 // - GalleryButton -
@@ -100,10 +100,10 @@ private:
     Image                   aImgImported;
 
     void                    ImplAdjustControls();
-    ULONG                   ImplInsertThemeEntry( const GalleryThemeEntry* pEntry );
+    sal_uIntPtr                 ImplInsertThemeEntry( const GalleryThemeEntry* pEntry );
     void                    ImplFillExchangeData( const GalleryTheme* pThm, ExchangeData& rData );
-    ::std::vector< USHORT > ImplGetExecuteVector();
-    void                    ImplExecute( USHORT nId );
+    ::std::vector< sal_uInt16 > ImplGetExecuteVector();
+    void                    ImplExecute( sal_uInt16 nId );
     void                    ImplGalleryThemeProperties( const String & rThemeName, bool bCreateNew );
     void                    ImplEndGalleryThemeProperties( VclAbstractDialog2* pDialog, bool bCreateNew );
 
@@ -128,11 +128,11 @@ public:
                             ~GalleryBrowser1();
 
     void                    SelectTheme( const String& rThemeName ) { mpThemes->SelectEntry( rThemeName ); SelectThemeHdl( NULL ); }
-    void                    SelectTheme( ULONG nThemePos ) { mpThemes->SelectEntryPos( (USHORT) nThemePos ); SelectThemeHdl( NULL ); }
+    void                    SelectTheme( sal_uIntPtr nThemePos ) { mpThemes->SelectEntryPos( (sal_uInt16) nThemePos ); SelectThemeHdl( NULL ); }
     String                  GetSelectedTheme() { return mpThemes->GetEntryCount() ? mpThemes->GetEntry( mpThemes->GetSelectEntryPos() ) : String(); }
 
     void                    ShowContextMenu();
-    BOOL                    KeyInput( const KeyEvent& rKEvt, Window* pWindow );
+    sal_Bool                    KeyInput( const KeyEvent& rKEvt, Window* pWindow );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

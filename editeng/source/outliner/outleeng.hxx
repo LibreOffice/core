@@ -42,21 +42,21 @@ protected:
 
     // derived from EditEngine. Allows Outliner objetcs to provide
     // bullet access to the EditEngine.
-    virtual const SvxNumberFormat*  GetNumberFormat( USHORT nPara ) const;
+    virtual const SvxNumberFormat*  GetNumberFormat( sal_uInt16 nPara ) const;
 
 public:
                         OutlinerEditEng( Outliner* pOwner, SfxItemPool* pPool );
                         ~OutlinerEditEng();
 
-    virtual void        PaintingFirstLine( USHORT nPara, const Point& rStartPos, long nBaseLineY, const Point& rOrigin, short nOrientation, OutputDevice* pOutDev );
+    virtual void        PaintingFirstLine( sal_uInt16 nPara, const Point& rStartPos, long nBaseLineY, const Point& rOrigin, short nOrientation, OutputDevice* pOutDev );
 
-    virtual void        ParagraphInserted( USHORT nNewParagraph );
-    virtual void        ParagraphDeleted( USHORT nDeletedParagraph );
-    virtual void        ParagraphConnected( USHORT nLeftParagraph, USHORT nRightParagraph );
+    virtual void        ParagraphInserted( sal_uInt16 nNewParagraph );
+    virtual void        ParagraphDeleted( sal_uInt16 nDeletedParagraph );
+    virtual void        ParagraphConnected( sal_uInt16 nLeftParagraph, sal_uInt16 nRightParagraph );
 
     virtual void DrawingText(
-        const Point& rStartPos, const XubString& rText, USHORT nTextStart, USHORT nTextLen, const sal_Int32* pDXArray, const SvxFont& rFont,
-        USHORT nPara, USHORT nIndex, BYTE nRightToLeft,
+        const Point& rStartPos, const XubString& rText, sal_uInt16 nTextStart, sal_uInt16 nTextLen, const sal_Int32* pDXArray, const SvxFont& rFont,
+        sal_uInt16 nPara, sal_uInt16 nIndex, sal_uInt8 nRightToLeft,
         const EEngineData::WrongSpellVector* pWrongSpellVector,
         const SvxFieldData* pFieldData,
         bool bEndOfLine,
@@ -75,20 +75,20 @@ public:
         const Color& rTextLineColor);
 
     virtual void        StyleSheetChanged( SfxStyleSheet* pStyle );
-    virtual void        ParaAttribsChanged( USHORT nPara );
-    virtual BOOL        SpellNextDocument();
-    virtual XubString   GetUndoComment( USHORT nUndoId ) const;
+    virtual void        ParaAttribsChanged( sal_uInt16 nPara );
+    virtual sal_Bool        SpellNextDocument();
+    virtual XubString   GetUndoComment( sal_uInt16 nUndoId ) const;
 
     // for text conversion
-    virtual BOOL        ConvertNextDocument();
+    virtual sal_Bool        ConvertNextDocument();
 
-    virtual void        FieldClicked( const SvxFieldItem& rField, USHORT nPara, USHORT nPos );
-    virtual void        FieldSelected( const SvxFieldItem& rField, USHORT nPara, USHORT nPos );
-    virtual XubString   CalcFieldValue( const SvxFieldItem& rField, USHORT nPara, USHORT nPos, Color*& rTxtColor, Color*& rFldColor );
+    virtual void        FieldClicked( const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos );
+    virtual void        FieldSelected( const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos );
+    virtual XubString   CalcFieldValue( const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos, Color*& rTxtColor, Color*& rFldColor );
 
-    virtual Rectangle   GetBulletArea( USHORT nPara );
+    virtual Rectangle   GetBulletArea( sal_uInt16 nPara );
 
-       virtual void        SetParaAttribs( USHORT nPara, const SfxItemSet& rSet );
+       virtual void        SetParaAttribs( sal_uInt16 nPara, const SfxItemSet& rSet );
 
     // belongs into class Outliner, move there before incompatible update!
     Link                aOutlinerNotifyHdl;

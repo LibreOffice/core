@@ -349,7 +349,7 @@ sal_Bool OOp_COMPARE::operate(const OOperand* pLeft, const OOperand* pRight) con
         case DataType::LONGVARCHAR:
         {
             rtl::OUString sLH = aLH, sRH = aRH;
-            INT32 nRes = rtl_ustr_compareIgnoreAsciiCase_WithLength
+            sal_Int32 nRes = rtl_ustr_compareIgnoreAsciiCase_WithLength
                 (
                  sLH.pData->buffer,
                  sLH.pData->length,

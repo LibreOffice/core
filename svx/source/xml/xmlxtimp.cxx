@@ -59,7 +59,7 @@
 #include "xmloff/ImageStyle.hxx"
 #include "xmloff/MarkerStyle.hxx"
 #include <xmloff/xmlictxt.hxx>
-#include "xmlgrhlp.hxx"
+#include "svx/xmlgrhlp.hxx"
 #include "xmloff/attrlist.hxx"
 
 #include "xmlxtimp.hxx"
@@ -91,21 +91,21 @@ enum SvxXMLTableImportContextEnum { stice_unknown, stice_color, stice_marker, st
 class SvxXMLTableImportContext : public SvXMLImportContext
 {
 public:
-    SvxXMLTableImportContext( SvXMLImport& rImport, USHORT nPrfx, const OUString& rLName, const uno::Reference< XAttributeList >& xAttrList, SvxXMLTableImportContextEnum eContext, const uno::Reference< XNameContainer >& xTable,
+    SvxXMLTableImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName, const uno::Reference< XAttributeList >& xAttrList, SvxXMLTableImportContextEnum eContext, const uno::Reference< XNameContainer >& xTable,
         sal_Bool bOOoFormat );
     virtual ~SvxXMLTableImportContext();
 
-    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList );
+    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList );
 
     SvxXMLXTableImport& getImport() const { return *(SvxXMLXTableImport*)&GetImport(); }
 
 protected:
-    void importColor( USHORT nPrfx, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName );
-    void importMarker( USHORT nPrfx, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName );
-    void importDash( USHORT nPrfx, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName );
-    void importHatch( USHORT nPrfx, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName );
-    void importGradient( USHORT nPrfx, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName );
-    void importBitmap( USHORT nPrfx, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName );
+    void importColor( sal_uInt16 nPrfx, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName );
+    void importMarker( sal_uInt16 nPrfx, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName );
+    void importDash( sal_uInt16 nPrfx, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName );
+    void importHatch( sal_uInt16 nPrfx, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName );
+    void importGradient( sal_uInt16 nPrfx, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName );
+    void importBitmap( sal_uInt16 nPrfx, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName );
 
 private:
     uno::Reference< XNameContainer > mxTable;
@@ -115,7 +115,7 @@ private:
 
 ///////////////////////////////////////////////////////////////////////
 
-SvxXMLTableImportContext::SvxXMLTableImportContext( SvXMLImport& rImport, USHORT nPrfx, const OUString& rLName, const uno::Reference< XAttributeList >&, SvxXMLTableImportContextEnum eContext, const uno::Reference< XNameContainer >& xTable, sal_Bool bOOoFormat )
+SvxXMLTableImportContext::SvxXMLTableImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName, const uno::Reference< XAttributeList >&, SvxXMLTableImportContextEnum eContext, const uno::Reference< XNameContainer >& xTable, sal_Bool bOOoFormat )
 : SvXMLImportContext( rImport, nPrfx, rLName ), mxTable( xTable ), meContext( eContext ),
     mbOOoFormat( bOOoFormat )
 {
@@ -125,7 +125,7 @@ SvxXMLTableImportContext::~SvxXMLTableImportContext()
 {
 }
 
-SvXMLImportContext *SvxXMLTableImportContext::CreateChildContext( USHORT nPrefix, const OUString& rLocalName, const uno::Reference< XAttributeList >& rAttrList )
+SvXMLImportContext *SvxXMLTableImportContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< XAttributeList >& rAttrList )
 {
     if( XML_NAMESPACE_DRAW == nPrefix )
     {
@@ -222,7 +222,7 @@ SvXMLImportContext *SvxXMLTableImportContext::CreateChildContext( USHORT nPrefix
     return new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
 }
 
-void SvxXMLTableImportContext::importColor( USHORT nPrfx, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName )
+void SvxXMLTableImportContext::importColor( sal_uInt16 nPrfx, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName )
 {
     (void)nPrfx;
     (void)rLocalName;
@@ -251,7 +251,7 @@ void SvxXMLTableImportContext::importColor( USHORT nPrfx, const OUString& rLocal
     }
 }
 
-void SvxXMLTableImportContext::importMarker( USHORT nPrfx, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName )
+void SvxXMLTableImportContext::importMarker( sal_uInt16 nPrfx, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName )
 {
     (void)nPrfx;
     (void)rLocalName;
@@ -267,7 +267,7 @@ void SvxXMLTableImportContext::importMarker( USHORT nPrfx, const OUString& rLoca
     }
 }
 
-void SvxXMLTableImportContext::importDash( USHORT nPrfx, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName )
+void SvxXMLTableImportContext::importDash( sal_uInt16 nPrfx, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName )
 {
     (void)nPrfx;
     (void)rLocalName;
@@ -283,7 +283,7 @@ void SvxXMLTableImportContext::importDash( USHORT nPrfx, const OUString& rLocalN
     }
 }
 
-void SvxXMLTableImportContext::importHatch( USHORT nPrfx, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName )
+void SvxXMLTableImportContext::importHatch( sal_uInt16 nPrfx, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName )
 {
     (void)nPrfx;
     (void)rLocalName;
@@ -299,7 +299,7 @@ void SvxXMLTableImportContext::importHatch( USHORT nPrfx, const OUString& rLocal
     }
 }
 
-void SvxXMLTableImportContext::importGradient( USHORT nPrfx, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName )
+void SvxXMLTableImportContext::importGradient( sal_uInt16 nPrfx, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName )
 {
     (void)nPrfx;
     (void)rLocalName;
@@ -315,7 +315,7 @@ void SvxXMLTableImportContext::importGradient( USHORT nPrfx, const OUString& rLo
     }
 }
 
-void SvxXMLTableImportContext::importBitmap( USHORT nPrfx, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName )
+void SvxXMLTableImportContext::importBitmap( sal_uInt16 nPrfx, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName )
 {
     (void)nPrfx;
     (void)rLocalName;
@@ -372,7 +372,7 @@ sal_Bool SvxXMLXTableImport::load( const OUString& rUrl, const uno::Reference< X
     {
         do
         {
-            SfxMedium aMedium( rUrl, STREAM_READ | STREAM_NOCREATE, TRUE );
+            SfxMedium aMedium( rUrl, STREAM_READ | STREAM_NOCREATE, sal_True );
 
             uno::Reference<lang::XMultiServiceFactory> xServiceFactory( ::comphelper::getProcessServiceFactory() );
             if( !xServiceFactory.is() )

@@ -321,7 +321,7 @@ struct PropertySetRegistry_Impl
     sal_Bool                          m_bTriedToGetRootWriteAccess; // #82494#
 
     PropertySetRegistry_Impl( const Sequence< Any > &rInitArgs )
-        : m_aInitArgs( rInitArgs ),
+    : m_aInitArgs( rInitArgs ),
       m_bTriedToGetRootReadAccess( sal_False ),
       m_bTriedToGetRootWriteAccess( sal_False )
     {

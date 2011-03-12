@@ -69,26 +69,26 @@ namespace connectivity
         private:
             struct DBFHeader {                       /* Kopfsatz-Struktur            */
                                 DBFType db_typ;                         /* Dateityp                     */
-                                BYTE    db_aedat[3];                    /* Datum der letzen Aenderung   */
+                                sal_uInt8    db_aedat[3];                    /* Datum der letzen Aenderung   */
                                                                         /* JJ MM TT                     */
                                 sal_uInt32   db_anz;                         /* Anzahl der Saetze            */
-                                USHORT  db_kopf;                        /* laenge Kopfsatz-Struktur     */
-                                USHORT  db_slng;                        /* laenge der Daten-Saetze      */
-                                BYTE    db_frei[20];                    /* reserviert                   */
+                                sal_uInt16  db_kopf;                        /* laenge Kopfsatz-Struktur     */
+                                sal_uInt16  db_slng;                        /* laenge der Daten-Saetze      */
+                                sal_uInt8    db_frei[20];                    /* reserviert                   */
                             };
             struct DBFColumn {                       /* Feldbezeichner               */
-                                BYTE    db_fnm[11];                     /* Feldname                     */
-                                BYTE    db_typ;                         /* Feldtyp                      */
-                                UINT32  db_adr;                         /* Feldadresse                  */
-                                BYTE    db_flng;                        /* Feldlaenge                   */
-                                BYTE    db_dez;                         /* Dezimalstellen fuer N        */
-                                BYTE    db_frei2[14];                   /* reserviert                   */
+                                sal_uInt8    db_fnm[11];                     /* Feldname                     */
+                                sal_uInt8    db_typ;                         /* Feldtyp                      */
+                                sal_uInt32  db_adr;                         /* Feldadresse                  */
+                                sal_uInt8    db_flng;                        /* Feldlaenge                   */
+                                sal_uInt8    db_dez;                         /* Dezimalstellen fuer N        */
+                                sal_uInt8    db_frei2[14];                   /* reserviert                   */
                             };
             struct DBFMemoHeader
                             {
                                 DBFMemoType db_typ;                     /* Dateityp                     */
-                                UINT32  db_next;                        /* naechster freier Block       */
-                                USHORT  db_size;                        /* Blockgroesse: dBase 3 fest   */
+                                sal_uInt32  db_next;                        /* naechster freier Block       */
+                                sal_uInt16  db_size;                        /* Blockgroesse: dBase 3 fest   */
                             };
 
             ::std::vector<sal_Int32> m_aTypes;      // holds all type for columns just to avoid to ask the propertyset
@@ -108,15 +108,15 @@ namespace connectivity
             void fillColumns();
             String createTempFile();
             void copyData(ODbaseTable* _pNewTable,sal_Int32 _nPos);
-            BOOL CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo);
-            BOOL CreateMemoFile(const INetURLObject& aFile);
-            BOOL HasMemoFields() const { return m_aHeader.db_typ > dBaseIV;}
-            BOOL ReadMemoHeader();
-            BOOL ReadMemo(ULONG nBlockNo, ORowSetValue& aVariable);
+            sal_Bool CreateFile(const INetURLObject& aFile, sal_Bool& bCreateMemo);
+            sal_Bool CreateMemoFile(const INetURLObject& aFile);
+            sal_Bool HasMemoFields() const { return m_aHeader.db_typ > dBaseIV;}
+            sal_Bool ReadMemoHeader();
+            sal_Bool ReadMemo(sal_uIntPtr nBlockNo, ORowSetValue& aVariable);
 
-            BOOL WriteMemo(ORowSetValue& aVariable, ULONG& rBlockNr);
-            BOOL WriteBuffer();
-            BOOL UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols);
+            sal_Bool WriteMemo(ORowSetValue& aVariable, sal_uIntPtr& rBlockNr);
+            sal_Bool WriteBuffer();
+            sal_Bool UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols);
             ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> isUniqueByColumnName(sal_Int32 _nColumnPos);
             void AllocBuffer();
 
@@ -162,19 +162,19 @@ namespace connectivity
             // XRename
             virtual void SAL_CALL rename( const ::rtl::OUString& newName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException);
 
-            BOOL    DropImpl();
-            BOOL    CreateImpl();
+            sal_Bool    DropImpl();
+            sal_Bool    CreateImpl();
 
 
-            virtual BOOL InsertRow(OValueRefVector& rRow, BOOL bFlush,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols);
-            virtual BOOL DeleteRow(const OSQLColumns& _rCols);
-            virtual BOOL UpdateRow(OValueRefVector& rRow, OValueRefRow& pOrgRow,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols);
+            virtual sal_Bool InsertRow(OValueRefVector& rRow, sal_Bool bFlush,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols);
+            virtual sal_Bool DeleteRow(const OSQLColumns& _rCols);
+            virtual sal_Bool UpdateRow(OValueRefVector& rRow, OValueRefRow& pOrgRow,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols);
 
             virtual void addColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& descriptor);
             virtual void dropColumn(sal_Int32 _nPos);
 
             static String   getEntry(file::OConnection* _pConnection,const ::rtl::OUString& _sURL );
-            static BOOL     Drop_Static(const ::rtl::OUString& _sUrl,sal_Bool _bHasMemoFields,sdbcx::OCollection* _pIndexes );
+            static sal_Bool     Drop_Static(const ::rtl::OUString& _sUrl,sal_Bool _bHasMemoFields,sdbcx::OCollection* _pIndexes );
 
             virtual void refreshHeader();
 

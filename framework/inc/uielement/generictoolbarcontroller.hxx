@@ -50,7 +50,7 @@ class GenericToolbarController : public svt::ToolboxController
         GenericToolbarController( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager,
                                   const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
                                   ToolBox* pToolBar,
-                                  USHORT   nID,
+                                  sal_uInt16   nID,
                                   const rtl::OUString& aCommand );
         virtual ~GenericToolbarController();
 
@@ -83,7 +83,7 @@ class MenuToolbarController : public GenericToolbarController
         MenuToolbarController( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager,
                                   const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
                                   ToolBox* pToolBar,
-                                  USHORT   nID,
+                                  sal_uInt16   nID,
                                   const rtl::OUString& aCommand,
                                   const rtl::OUString& aModuleIdentifier,
                                   const com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess >& xMenuDesc );

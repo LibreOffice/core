@@ -62,7 +62,7 @@ class SchemaRestrictionContext : public TokenContext
 public:
 
     SchemaRestrictionContext( SvXMLImport& rImport,
-                              USHORT nPrfx,
+                              sal_uInt16 nPrfx,
                               const ::rtl::OUString& rLName,
                               com::sun::star::uno::Reference<com::sun::star::xforms::XDataTypeRepository>& rRepository,
                               const ::rtl::OUString& sTypeName );

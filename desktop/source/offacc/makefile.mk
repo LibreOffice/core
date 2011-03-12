@@ -60,3 +60,11 @@ SHL1STDLIBS=	\
 
 .INCLUDE :  target.mk
 
+
+ALLTAR : $(MISC)/offacc.component
+
+$(MISC)/offacc.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        offacc.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt offacc.component

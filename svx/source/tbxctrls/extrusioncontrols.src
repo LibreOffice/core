@@ -32,6 +32,7 @@
 
 DockingWindow RID_SVXFLOAT_EXTRUSION_DIRECTION
 {
+    HelpID = "svx:DockingWindow:RID_SVXFLOAT_EXTRUSION_DIRECTION";
     Border = FALSE ;
     Hide = TRUE ;
     SVLook = TRUE ;
@@ -147,6 +148,7 @@ DockingWindow RID_SVXFLOAT_EXTRUSION_DIRECTION
 
 DockingWindow RID_SVXFLOAT_EXTRUSION_DEPTH
 {
+    HelpID = "svx:DockingWindow:RID_SVXFLOAT_EXTRUSION_DEPTH";
     Border = FALSE ;
     Hide = TRUE ;
     SVLook = TRUE ;
@@ -207,6 +209,7 @@ DockingWindow RID_SVXFLOAT_EXTRUSION_DEPTH
 
 DockingWindow RID_SVXFLOAT_EXTRUSION_LIGHTING
 {
+    HelpID = "svx:DockingWindow:RID_SVXFLOAT_EXTRUSION_LIGHTING";
     Border = FALSE ;
     Hide = TRUE ;
     SVLook = TRUE ;
@@ -379,6 +382,7 @@ DockingWindow RID_SVXFLOAT_EXTRUSION_LIGHTING
 
 DockingWindow RID_SVXFLOAT_EXTRUSION_SURFACE
 {
+    HelpID = "svx:DockingWindow:RID_SVXFLOAT_EXTRUSION_SURFACE";
     Border = FALSE ;
     Hide = TRUE ;
     SVLook = TRUE ;
@@ -439,6 +443,7 @@ DockingWindow RID_SVXFLOAT_EXTRUSION_SURFACE
 
 ModalDialog RID_SVX_MDLG_EXTRUSION_DEPTH
 {
+    HelpID = "svx:ModalDialog:RID_SVX_MDLG_EXTRUSION_DEPTH";
     OutputSize = TRUE;
     SVLook = TRUE ;
     Moveable = TRUE;

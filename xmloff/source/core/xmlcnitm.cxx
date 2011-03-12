@@ -33,7 +33,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
 #include <xmloff/xmlcnimp.hxx>
-#include "unoatrcn.hxx"
+#include "xmloff/unoatrcn.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
@@ -53,8 +53,8 @@ SvXMLAttrContainerData::SvXMLAttrContainerData(
     pLNames( new SvXMLAttrContainerData_Impl ),
     pValues( new SvXMLAttrContainerData_Impl )
 {
-    USHORT nCount = rImpl.pLNames->Count();
-    for( USHORT i=0; i<nCount; i++ )
+    sal_uInt16 nCount = rImpl.pLNames->Count();
+    for( sal_uInt16 i=0; i<nCount; i++ )
     {
         aPrefixPoss.Insert( rImpl.aPrefixPoss[i], i );
         pLNames->Insert( new OUString( *(*rImpl.pLNames)[i] ), i );
@@ -77,12 +77,12 @@ SvXMLAttrContainerData::~SvXMLAttrContainerData()
 int SvXMLAttrContainerData::operator ==(
                         const SvXMLAttrContainerData& rCmp ) const
 {
-    BOOL bRet = pLNames->Count() == rCmp.pLNames->Count() &&
+    sal_Bool bRet = pLNames->Count() == rCmp.pLNames->Count() &&
                 aNamespaceMap == rCmp.aNamespaceMap;
     if( bRet )
     {
-        USHORT nCount = pLNames->Count();
-        USHORT i;
+        sal_uInt16 nCount = pLNames->Count();
+        sal_uInt16 i;
         for( i=0; bRet && i < nCount; i++ )
             bRet = aPrefixPoss[i] == rCmp.aPrefixPoss[i];
 
@@ -97,95 +97,95 @@ int SvXMLAttrContainerData::operator ==(
     return (int)bRet;
 }
 
-BOOL SvXMLAttrContainerData::AddAttr( const OUString& rLName,
+sal_Bool SvXMLAttrContainerData::AddAttr( const OUString& rLName,
                                               const OUString& rValue )
 {
     aPrefixPoss.Insert( USHRT_MAX, aPrefixPoss.Count() );
     pLNames->Insert( new OUString(rLName), pLNames->Count() );
     pValues->Insert( new OUString(rValue), pValues->Count() );
 
-    return TRUE;
+    return sal_True;
 }
 
-BOOL SvXMLAttrContainerData::AddAttr( const OUString& rPrefix,
+sal_Bool SvXMLAttrContainerData::AddAttr( const OUString& rPrefix,
                                               const OUString& rNamespace,
                                            const OUString& rLName,
                                             const OUString& rValue )
 {
-    USHORT nPos = aNamespaceMap.Add( rPrefix, rNamespace );
+    sal_uInt16 nPos = aNamespaceMap.Add( rPrefix, rNamespace );
     aPrefixPoss.Insert( nPos, aPrefixPoss.Count() );
     pLNames->Insert( new OUString(rLName), pLNames->Count() );
     pValues->Insert( new OUString(rValue), pValues->Count() );
 
-    return TRUE;
+    return sal_True;
 }
 
-BOOL SvXMLAttrContainerData::AddAttr( const OUString& rPrefix,
+sal_Bool SvXMLAttrContainerData::AddAttr( const OUString& rPrefix,
                                            const OUString& rLName,
                                             const OUString& rValue )
 {
-    USHORT nPos = aNamespaceMap.GetIndexByPrefix( rPrefix );
+    sal_uInt16 nPos = aNamespaceMap.GetIndexByPrefix( rPrefix );
     if( USHRT_MAX == nPos )
-        return FALSE;
+        return sal_False;
 
     aPrefixPoss.Insert( nPos, aPrefixPoss.Count() );
     pLNames->Insert( new OUString(rLName), pLNames->Count() );
     pValues->Insert( new OUString(rValue), pValues->Count() );
 
-    return TRUE;
+    return sal_True;
 }
 
-BOOL SvXMLAttrContainerData::SetAt( USHORT i,
+sal_Bool SvXMLAttrContainerData::SetAt( sal_uInt16 i,
             const rtl::OUString& rLName, const rtl::OUString& rValue )
 {
     if( i >= GetAttrCount() )
-        return FALSE;
+        return sal_False;
 
     *(*pLNames)[i] = rLName;
     *(*pValues)[i] = rValue;
     aPrefixPoss[i] = USHRT_MAX;
 
-    return TRUE;
+    return sal_True;
 }
 
-BOOL SvXMLAttrContainerData::SetAt( USHORT i,
+sal_Bool SvXMLAttrContainerData::SetAt( sal_uInt16 i,
             const rtl::OUString& rPrefix, const rtl::OUString& rNamespace,
             const rtl::OUString& rLName, const rtl::OUString& rValue )
 {
     if( i >= GetAttrCount() )
-        return FALSE;
+        return sal_False;
 
-    USHORT nPos = aNamespaceMap.Add( rPrefix, rNamespace );
+    sal_uInt16 nPos = aNamespaceMap.Add( rPrefix, rNamespace );
     if( USHRT_MAX == nPos )
-        return FALSE;
+        return sal_False;
 
     *(*pLNames)[i] = rLName;
     *(*pValues)[i] = rValue;
     aPrefixPoss[i] = nPos;
 
-    return TRUE;
+    return sal_True;
 }
 
-BOOL SvXMLAttrContainerData::SetAt( USHORT i,
+sal_Bool SvXMLAttrContainerData::SetAt( sal_uInt16 i,
             const rtl::OUString& rPrefix,
             const rtl::OUString& rLName,
             const rtl::OUString& rValue )
 {
     if( i >= GetAttrCount() )
-        return FALSE;
+        return sal_False;
 
-    USHORT nPos = aNamespaceMap.GetIndexByPrefix( rPrefix );
+    sal_uInt16 nPos = aNamespaceMap.GetIndexByPrefix( rPrefix );
     if( USHRT_MAX == nPos )
-        return FALSE;
+        return sal_False;
 
     *(*pLNames)[i] = rLName;
     *(*pValues)[i] = rValue;
     aPrefixPoss[i] = nPos;
 
-    return TRUE;
+    return sal_True;
 }
 
-void SvXMLAttrContainerData::Remove( USHORT i )
+void SvXMLAttrContainerData::Remove( sal_uInt16 i )
 {
     if( i < GetAttrCount() )
     {

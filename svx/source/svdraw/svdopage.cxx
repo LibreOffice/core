@@ -30,8 +30,8 @@
 #include "precompiled_svx.hxx"
 
 #include <svx/svdopage.hxx>
-#include "svdglob.hxx"  // Stringcache
-#include "svdstr.hrc"   // Objektname
+#include "svx/svdglob.hxx"  // Stringcache
+#include "svx/svdstr.hrc"   // Objektname
 #include <svx/svdtrans.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svdmodel.hxx>
@@ -145,27 +145,27 @@ void SdrPageObj::SetBoundRectDirty()
     // not re-creatable view data
 }
 
-UINT16 SdrPageObj::GetObjIdentifier() const
+sal_uInt16 SdrPageObj::GetObjIdentifier() const
 {
-    return UINT16(OBJ_PAGE);
+    return sal_uInt16(OBJ_PAGE);
 }
 
 void SdrPageObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
-    rInfo.bRotateFreeAllowed=FALSE;
-    rInfo.bRotate90Allowed  =FALSE;
-    rInfo.bMirrorFreeAllowed=FALSE;
-    rInfo.bMirror45Allowed  =FALSE;
-    rInfo.bMirror90Allowed  =FALSE;
-    rInfo.bTransparenceAllowed = FALSE;
-    rInfo.bGradientAllowed = FALSE;
-    rInfo.bShearAllowed     =FALSE;
-    rInfo.bEdgeRadiusAllowed=FALSE;
-    rInfo.bNoOrthoDesired   =FALSE;
-    rInfo.bCanConvToPath    =FALSE;
-    rInfo.bCanConvToPoly    =FALSE;
-    rInfo.bCanConvToPathLineToArea=FALSE;
-    rInfo.bCanConvToPolyLineToArea=FALSE;
+    rInfo.bRotateFreeAllowed=sal_False;
+    rInfo.bRotate90Allowed  =sal_False;
+    rInfo.bMirrorFreeAllowed=sal_False;
+    rInfo.bMirror45Allowed  =sal_False;
+    rInfo.bMirror90Allowed  =sal_False;
+    rInfo.bTransparenceAllowed = sal_False;
+    rInfo.bGradientAllowed = sal_False;
+    rInfo.bShearAllowed     =sal_False;
+    rInfo.bEdgeRadiusAllowed=sal_False;
+    rInfo.bNoOrthoDesired   =sal_False;
+    rInfo.bCanConvToPath    =sal_False;
+    rInfo.bCanConvToPoly    =sal_False;
+    rInfo.bCanConvToPathLineToArea=sal_False;
+    rInfo.bCanConvToPolyLineToArea=sal_False;
 }
 
 void SdrPageObj::operator=(const SdrObject& rObj)

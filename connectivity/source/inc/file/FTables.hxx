@@ -47,7 +47,7 @@ namespace connectivity
             virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException);
         public:
             OTables(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rMetaData,::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
-                const TStringVector &_rVector) : sdbcx::OCollection(_rParent,_rMetaData->storesMixedCaseQuotedIdentifiers(),_rMutex,_rVector)
+                const TStringVector &_rVector) : sdbcx::OCollection(_rParent,_rMetaData->supportsMixedCaseQuotedIdentifiers(),_rMutex,_rVector)
                 ,m_xMetaData(_rMetaData)
             {}
 

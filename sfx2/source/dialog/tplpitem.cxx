@@ -31,7 +31,7 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#include "tplpitem.hxx"
+#include "sfx2/tplpitem.hxx"
 #include <com/sun/star/frame/status/Template.hpp>
 
 
@@ -48,9 +48,9 @@ SfxTemplateItem::SfxTemplateItem() :
 
 SfxTemplateItem::SfxTemplateItem
 (
-    USHORT nWhichId,      // Slot-ID
+    sal_uInt16 nWhichId,      // Slot-ID
     const String& rStyle, // Name des aktuellen Styles
-    USHORT nValue         // Flags f"ur das Filtern bei automatischer Anzeige
+    sal_uInt16 nValue         // Flags f"ur das Filtern bei automatischer Anzeige
 ) : SfxFlagItem( nWhichId, nValue ),
     aStyle( rStyle )
 {
@@ -85,7 +85,7 @@ SfxPoolItem* SfxTemplateItem::Clone( SfxItemPool *) const
 }
 
 //-------------------------------------------------------------------------
-bool SfxTemplateItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ ) const
+bool SfxTemplateItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     ::com::sun::star::frame::status::Template aTemplate;
 
@@ -97,13 +97,13 @@ bool SfxTemplateItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /*nMember
 }
 
 //-------------------------------------------------------------------------
-bool SfxTemplateItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ )
+bool SfxTemplateItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     ::com::sun::star::frame::status::Template aTemplate;
 
     if ( rVal >>= aTemplate )
     {
-        SetValue( sal::static_int_cast< USHORT >( aTemplate.Value ) );
+        SetValue( sal::static_int_cast< sal_uInt16 >( aTemplate.Value ) );
         aStyle = aTemplate.StyleName;
         return true;
     }
@@ -113,9 +113,9 @@ bool SfxTemplateItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE /*nMe
 
 //-------------------------------------------------------------------------
 
-BYTE SfxTemplateItem::GetFlagCount() const
+sal_uInt8 SfxTemplateItem::GetFlagCount() const
 {
-    return sizeof(USHORT) * 8;
+    return sizeof(sal_uInt16) * 8;
 }
 
 

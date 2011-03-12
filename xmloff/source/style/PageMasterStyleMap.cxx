@@ -30,7 +30,7 @@
 #include "precompiled_xmloff.hxx"
 
 #include <xmloff/PageMasterStyleMap.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 
 using namespace ::xmloff::token;

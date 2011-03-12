@@ -42,7 +42,7 @@
 #include <sfx2/mgetempl.hxx>
 #include <sfx2/objsh.hxx>
 #include "sfxtypes.hxx"
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include <sfx2/module.hxx>
 
 #include <sfx2/sfx.hrc>
@@ -59,6 +59,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage( Window* pParent, const SfxItem
 
     aNameFt     ( this, SfxResId( FT_NAME ) ),
     aNameEd     ( this, SfxResId( ED_NAME ) ),
+    aNameMLE    ( this, SfxResId( MLE_NAME ) ),
     aAutoCB     ( this, SfxResId( CB_AUTO ) ),
 
     aFollowFt   ( this, SfxResId( FT_NEXT ) ),
@@ -70,14 +71,14 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage( Window* pParent, const SfxItem
     aFilterFt   ( this, SfxResId( FT_REGION ) ),
     aFilterLb   ( this, SfxResId( LB_REGION ) ),
 
+    aDescGb     ( this, SfxResId( GB_DESC ) ),
     aDescFt     ( this, SfxResId( FT_DESC ) ),
     aDescED     ( this, SfxResId( ED_DESC ) ),
-    aDescGb     ( this, SfxResId( GB_DESC ) ),
 
     pStyle( &( (SfxStyleDialog*)pParent->GetParent() )->GetStyleSheet() ),
 
     pItem       ( 0 ),
-    bModified   ( FALSE ),
+    bModified   ( sal_False ),
     aName       ( pStyle->GetName() ),
     aFollow     ( pStyle->GetFollow() ),
     aParent     ( pStyle->GetParent() ),
@@ -123,7 +124,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage( Window* pParent, const SfxItem
     {
         // NullString als Name -> Name generieren
         String aNoName( SfxResId( STR_NONAME ) );
-        USHORT nNo = 1;
+        sal_uInt16 nNo = 1;
         String aNo( aNoName );
         aNoName += String::CreateFromInt32( nNo );
         while ( pPool->Find( aNoName ) )
@@ -139,8 +140,17 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage( Window* pParent, const SfxItem
     }
     aNameEd.SetText(pStyle->GetName());
 
-    if ( !pStyle->IsUserDefined() )
+    // Set the field read-only if it is NOT an user-defined style
+    // but allow selecting and copying
+    if ( !pStyle->IsUserDefined() ) {
         aNameEd.SetReadOnly();
+        aNameEd.Hide();
+
+        aNameMLE.SetControlBackground( GetSettings().GetStyleSettings().GetDialogColor() );
+        aNameMLE.SetText( pStyle->GetName() );
+        aNameMLE.EnableCursor( sal_False );
+        aNameMLE.Show();
+    }
 
     if ( pStyle->HasFollowSupport() && pPool )
     {
@@ -203,12 +213,12 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage( Window* pParent, const SfxItem
 
     if ( i < nCount )
     {
-        USHORT nStyleFilterIdx = 0xffff;
+        sal_uInt16 nStyleFilterIdx = 0xffff;
         // Filterflags
         const SfxStyleFilter& rList = pItem->GetFilterList();
         nCount = rList.size();
-        USHORT nIdx = 0;
-        USHORT nMask = pStyle->GetMask() & ~SFXSTYLEBIT_USERDEF;
+        sal_uInt16 nIdx = 0;
+        sal_uInt16 nMask = pStyle->GetMask() & ~SFXSTYLEBIT_USERDEF;
 
         if ( !nMask )   // Benutzervorlage?
             nMask = pStyle->GetMask();
@@ -297,7 +307,7 @@ void SfxManageStyleSheetPage::UpdateName_Impl( ListBox* pBox,
     if ( pBox->IsEnabled() )
     {
         // ist der aktuelle Eintrag, dessen Namen modifizieren wurde
-        const BOOL bSelect = pBox->GetSelectEntry() == aBuf;
+        const sal_Bool bSelect = pBox->GetSelectEntry() == aBuf;
         pBox->RemoveEntry( aBuf );
         pBox->InsertEntry( rNew );
 
@@ -382,7 +392,7 @@ IMPL_LINK_INLINE_END( SfxManageStyleSheetPage, LoseFocusHdl, Edit *, pEdit )
 
 //-------------------------------------------------------------------------
 
-BOOL SfxManageStyleSheetPage::FillItemSet( SfxItemSet& rSet )
+sal_Bool SfxManageStyleSheetPage::FillItemSet( SfxItemSet& rSet )
 
 /*  [Beschreibung]
     Handler f"ur das Setzen der (modifizierten) Daten. Wird aus
@@ -392,9 +402,9 @@ BOOL SfxManageStyleSheetPage::FillItemSet( SfxItemSet& rSet )
     SfxItemSet &rAttrSet        das Set, das die Daten entgegennimmt.
 
     [R"uckgabewert]
-    BOOL                        TRUE:  es hat eine "Anderung der Daten
+    sal_Bool                        sal_True:  es hat eine "Anderung der Daten
                                        stattgefunden
-                                FALSE: es hat keine "Anderung der Daten
+                                    sal_False: es hat keine "Anderung der Daten
                                        stattgefunden
 
     [Querverweise]
@@ -402,7 +412,7 @@ BOOL SfxManageStyleSheetPage::FillItemSet( SfxItemSet& rSet )
 */
 
 {
-    const USHORT nFilterIdx = aFilterLb.GetSelectEntryPos();
+    const sal_uInt16 nFilterIdx = aFilterLb.GetSelectEntryPos();
 
     // Filter setzen
 
@@ -410,14 +420,14 @@ BOOL SfxManageStyleSheetPage::FillItemSet( SfxItemSet& rSet )
          nFilterIdx != aFilterLb.GetSavedValue()    &&
          aFilterLb.IsEnabled() )
     {
-        bModified = TRUE;
+        bModified = sal_True;
         DBG_ASSERT( pItem, "kein Item" );
         // geht nur bei Benutzervorlagen
 #if OSL_DEBUG_LEVEL > 1
-        USHORT nIdx = (USHORT)(long)aFilterLb.GetEntryData( nFilterIdx );
+        sal_uInt16 nIdx = (sal_uInt16)(long)aFilterLb.GetEntryData( nFilterIdx );
         SfxFilterTupel* p = pItem->GetFilterList()[ nIdx ];
 #endif
-        USHORT nMask = pItem->GetFilterList()[ (size_t)aFilterLb.GetEntryData( nFilterIdx ) ]->nFlags | SFXSTYLEBIT_USERDEF;
+        sal_uInt16 nMask = pItem->GetFilterList()[ (size_t)aFilterLb.GetEntryData( nFilterIdx ) ]->nFlags | SFXSTYLEBIT_USERDEF;
         pStyle->SetMask( nMask );
     }
     if(aAutoCB.IsVisible() &&
@@ -444,7 +454,7 @@ void SfxManageStyleSheetPage::Reset( const SfxItemSet& /*rAttrSet*/ )
 */
 
 {
-    bModified = FALSE;
+    bModified = sal_False;
     String sCmp( pStyle->GetName() );
 
     if ( sCmp != aName )
@@ -486,7 +496,7 @@ void SfxManageStyleSheetPage::Reset( const SfxItemSet& /*rAttrSet*/ )
 
     if ( aFilterLb.IsEnabled() )
     {
-        USHORT nCmp = pStyle->GetMask();
+        sal_uInt16 nCmp = pStyle->GetMask();
 
         if ( nCmp != nFlags )
             pStyle->SetMask( nFlags );
@@ -535,7 +545,7 @@ void SfxManageStyleSheetPage::ActivatePage( const SfxItemSet& rSet)
     const SfxPoolItem* pPoolItem;
 
     if ( SFX_ITEM_SET ==
-         rSet.GetItemState( SID_ATTR_AUTO_STYLE_UPDATE, FALSE, &pPoolItem ) )
+         rSet.GetItemState( SID_ATTR_AUTO_STYLE_UPDATE, sal_False, &pPoolItem ) )
         aAutoCB.Check( ( (const SfxBoolItem*)pPoolItem )->GetValue() );
     aAutoCB.SaveValue();
 }
@@ -574,7 +584,7 @@ int SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pItemSet )
             aNameEd.SetSelection( Selection( SELECTION_MIN, SELECTION_MAX ) );
             return SfxTabPage::KEEP_PAGE;
         }
-        bModified = TRUE;
+        bModified = sal_True;
     }
 
     if ( pStyle->HasFollowSupport() && aFollowLb.IsEnabled() )
@@ -590,7 +600,7 @@ int SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pItemSet )
                 aFollowLb.GrabFocus();
                 return SfxTabPage::KEEP_PAGE;
             }
-            bModified = TRUE;
+            bModified = sal_True;
         }
     }
 
@@ -610,7 +620,7 @@ int SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pItemSet )
                 aBaseLb.GrabFocus();
                 return SfxTabPage::KEEP_PAGE;
             }
-            bModified = TRUE;
+            bModified = sal_True;
             nRet |= (int)SfxTabPage::REFRESH_SET;
         }
     }

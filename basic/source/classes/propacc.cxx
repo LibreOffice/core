@@ -94,7 +94,7 @@ SbPropertyValues::~SbPropertyValues()
 {
     _xInfo = Reference< XPropertySetInfo >();
 
-    for ( USHORT n = 0; n < _aPropVals.Count(); ++n )
+    for ( sal_uInt16 n = 0; n < _aPropVals.Count(); ++n )
         delete _aPropVals.GetObject( n );
 }
 
@@ -113,7 +113,7 @@ Reference< XPropertySetInfo > SbPropertyValues::getPropertySetInfo(void) throw( 
 
 //-------------------------------------------------------------------------
 
-INT32 SbPropertyValues::GetIndex_Impl( const ::rtl::OUString &rPropName ) const
+sal_Int32 SbPropertyValues::GetIndex_Impl( const ::rtl::OUString &rPropName ) const
 {
     PropertyValue **ppPV;
     ppPV = (PropertyValue **)
@@ -134,9 +134,9 @@ void SbPropertyValues::setPropertyValue(
                     ::com::sun::star::lang::WrappedTargetException,
                     ::com::sun::star::uno::RuntimeException)
 {
-    INT32 nIndex = GetIndex_Impl( aPropertyName );
+    sal_Int32 nIndex = GetIndex_Impl( aPropertyName );
     PropertyValue *pPropVal = _aPropVals.GetObject(
-        sal::static_int_cast< USHORT >(nIndex));
+        sal::static_int_cast< sal_uInt16 >(nIndex));
     pPropVal->Value = aValue;
 }
 
@@ -148,10 +148,10 @@ Any SbPropertyValues::getPropertyValue(
                     ::com::sun::star::lang::WrappedTargetException,
                     ::com::sun::star::uno::RuntimeException)
 {
-    INT32 nIndex = GetIndex_Impl( aPropertyName );
+    sal_Int32 nIndex = GetIndex_Impl( aPropertyName );
     if ( nIndex != USHRT_MAX )
         return _aPropVals.GetObject(
-            sal::static_int_cast< USHORT >(nIndex))->Value;
+            sal::static_int_cast< sal_uInt16 >(nIndex))->Value;
     return Any();
 }
 
@@ -200,7 +200,7 @@ void SbPropertyValues::removeVetoableChangeListener(
 Sequence< PropertyValue > SbPropertyValues::getPropertyValues(void) throw (::com::sun::star::uno::RuntimeException)
 {
     Sequence<PropertyValue> aRet( _aPropVals.Count());
-    for ( USHORT n = 0; n < _aPropVals.Count(); ++n )
+    for ( sal_uInt16 n = 0; n < _aPropVals.Count(); ++n )
         aRet.getArray()[n] = *_aPropVals.GetObject(n);
     return aRet;
 }
@@ -232,14 +232,14 @@ PropertySetInfoImpl::PropertySetInfoImpl()
 {
 }
 
-INT32 PropertySetInfoImpl::GetIndex_Impl( const ::rtl::OUString &rPropName ) const
+sal_Int32 PropertySetInfoImpl::GetIndex_Impl( const ::rtl::OUString &rPropName ) const
 {
     Property *pP;
     pP = (Property*)
             bsearch( &rPropName, _aProps.getConstArray(), _aProps.getLength(),
                       sizeof( Property ),
                       SbCompare_UString_Property_Impl );
-    return pP ? sal::static_int_cast<INT32>( (pP-_aProps.getConstArray()) / sizeof(pP) ) : -1;
+    return pP ? sal::static_int_cast<sal_Int32>( (pP-_aProps.getConstArray()) / sizeof(pP) ) : -1;
 }
 
 Sequence< Property > PropertySetInfoImpl::getProperties(void) throw()
@@ -273,7 +273,7 @@ SbPropertySetInfo::SbPropertySetInfo()
 SbPropertySetInfo::SbPropertySetInfo( const SbPropertyValueArr_Impl &rPropVals )
 {
     aImpl._aProps.realloc( rPropVals.Count() );
-    for ( USHORT n = 0; n < rPropVals.Count(); ++n )
+    for ( sal_uInt16 n = 0; n < rPropVals.Count(); ++n )
     {
         Property &rProp = aImpl._aProps.getArray()[n];
         const PropertyValue &rPropVal = *rPropVals.GetObject(n);
@@ -303,7 +303,7 @@ Property SbPropertySetInfo::getPropertyByName(const ::rtl::OUString& Name)
     return aImpl.getPropertyByName( Name );
 }
 
-BOOL SbPropertySetInfo::hasPropertyByName(const ::rtl::OUString& Name)
+sal_Bool SbPropertySetInfo::hasPropertyByName(const ::rtl::OUString& Name)
     throw( RuntimeException )
 {
     return aImpl.hasPropertyByName( Name );
@@ -324,7 +324,7 @@ SbPropertyContainer::~SbPropertyContainer()
 
 //----------------------------------------------------------------------------
 void SbPropertyContainer::addProperty(const ::rtl::OUString& Name,
-                                      INT16 Attributes,
+                                      sal_Int16 Attributes,
                                       const Any& DefaultValue)
     throw(  PropertyExistException, IllegalTypeException,
             IllegalArgumentException, RuntimeException )
@@ -354,7 +354,7 @@ Property SbPropertyContainer::getPropertyByName(const ::rtl::OUString& Name)
     return aImpl.getPropertyByName( Name );
 }
 
-BOOL SbPropertyContainer::hasPropertyByName(const ::rtl::OUString& Name)
+sal_Bool SbPropertyContainer::hasPropertyByName(const ::rtl::OUString& Name)
     throw( RuntimeException )
 {
     return aImpl.hasPropertyByName( Name );
@@ -376,7 +376,7 @@ void SbPropertyContainer::setPropertyValues(const Sequence< PropertyValue >& Pro
 
 //----------------------------------------------------------------------------
 
-void RTL_Impl_CreatePropertySet( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
+void RTL_Impl_CreatePropertySet( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite )
 {
     (void)pBasic;
     (void)bWrite;

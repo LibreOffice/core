@@ -31,7 +31,7 @@
 
 #include <svx/svdoattr.hxx>
 #include <svx/xpool.hxx>
-#include "svditext.hxx"
+#include "svx/svditext.hxx"
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdattr.hxx>
@@ -140,7 +140,7 @@ void SdrAttrObj::SetModel(SdrModel* pNewModel)
 void SdrAttrObj::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
 {
     SfxSimpleHint *pSimple = PTR_CAST(SfxSimpleHint, &rHint);
-    BOOL bDataChg(pSimple && SFX_HINT_DATACHANGED == pSimple->GetId());
+    sal_Bool bDataChg(pSimple && SFX_HINT_DATACHANGED == pSimple->GetId());
 
     if(bDataChg)
     {
@@ -167,12 +167,12 @@ sal_Int32 SdrAttrObj::ImpGetLineWdt() const
     return nRetval;
 }
 
-BOOL SdrAttrObj::HasFill() const
+sal_Bool SdrAttrObj::HasFill() const
 {
     return bClosedObj && ((XFillStyleItem&)(GetProperties().GetObjectItemSet().Get(XATTR_FILLSTYLE))).GetValue()!=XFILL_NONE;
 }
 
-BOOL SdrAttrObj::HasLine() const
+sal_Bool SdrAttrObj::HasLine() const
 {
     return ((XLineStyleItem&)(GetProperties().GetObjectItemSet().Get(XATTR_LINESTYLE))).GetValue()!=XLINE_NONE;
 }

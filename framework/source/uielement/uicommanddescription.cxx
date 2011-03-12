@@ -145,6 +145,8 @@ class ConfigurationAccess_UICommand : // Order is neccessary for right initializ
         virtual void SAL_CALL disposing( const EventObject& aEvent ) throw(RuntimeException);
 
     protected:
+        virtual ::com::sun::star::uno::Any SAL_CALL getByNameImpl( const ::rtl::OUString& aName );
+
         struct CmdToInfoMap
         {
             CmdToInfoMap() : bPopup( false ),
@@ -255,9 +257,9 @@ ConfigurationAccess_UICommand::~ConfigurationAccess_UICommand()
         xContainer->removeContainerListener(m_xConfigAccessListener);
 }
 
+
 // XNameAccess
-Any SAL_CALL ConfigurationAccess_UICommand::getByName( const ::rtl::OUString& rCommandURL )
-throw ( NoSuchElementException, WrappedTargetException, RuntimeException)
+Any SAL_CALL ConfigurationAccess_UICommand::getByNameImpl( const ::rtl::OUString& rCommandURL )
 {
     static sal_Int32 nRequests  = 0;
 
@@ -282,19 +284,24 @@ throw ( NoSuchElementException, WrappedTargetException, RuntimeException)
         else if ( rCommandURL.equalsIgnoreAsciiCaseAscii( UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDMIRRORIMAGELIST ))
             return makeAny( m_aCommandMirrorImageList );
         else
-            throw NoSuchElementException();
+            return Any();
     }
     else
     {
         // SAFE
         ++nRequests;
-        Any a = getInfoFromCommand( rCommandURL );
-
-        if ( !a.hasValue() )
-            throw NoSuchElementException();
-
-        return a;
+        return getInfoFromCommand( rCommandURL );
     }
+}
+
+Any SAL_CALL ConfigurationAccess_UICommand::getByName( const ::rtl::OUString& rCommandURL )
+throw ( NoSuchElementException, WrappedTargetException, RuntimeException)
+{
+    Any aRet( getByNameImpl( rCommandURL ) );
+    if( !aRet.hasValue() )
+        throw NoSuchElementException();
+
+    return aRet;
 }
 
 Sequence< ::rtl::OUString > SAL_CALL ConfigurationAccess_UICommand::getElementNames()
@@ -306,7 +313,7 @@ throw ( RuntimeException )
 sal_Bool SAL_CALL ConfigurationAccess_UICommand::hasByName( const ::rtl::OUString& rCommandURL )
 throw (::com::sun::star::uno::RuntimeException)
 {
-    return getByName( rCommandURL ).hasValue();
+    return getByNameImpl( rCommandURL ).hasValue();
 }
 
 // XElementAccess
@@ -472,7 +479,7 @@ Any ConfigurationAccess_UICommand::getInfoFromCommand( const rtl::OUString& rCom
         {
             // First try to ask our global commands configuration access. It also caches maybe
             // we find the entry in its cache first.
-            if ( m_xGenericUICommands.is() )
+            if ( m_xGenericUICommands.is() && m_xGenericUICommands->hasByName( rCommandURL ) )
             {
                 try
                 {

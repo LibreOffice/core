@@ -72,14 +72,14 @@ SvxParaPrevWindow::SvxParaPrevWindow( Window* pParent, const ResId& rId ) :
 
 void SvxParaPrevWindow::Paint( const Rectangle& )
 {
-    DrawParagraph( TRUE );
+    DrawParagraph( sal_True );
 }
 
 // -----------------------------------------------------------------------
 
 #define DEF_MARGIN  120
 
-void SvxParaPrevWindow::DrawParagraph( BOOL bAll )
+void SvxParaPrevWindow::DrawParagraph( sal_Bool bAll )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     const Color& rWinColor = rStyleSettings.GetWindowColor();
@@ -98,7 +98,7 @@ void SvxParaPrevWindow::DrawParagraph( BOOL bAll )
     aPnt.X() = DEF_MARGIN / 2;
     SetFillColor( aGrayColor );
 
-    for ( USHORT i = 0; i < 9; ++i )
+    for ( sal_uInt16 i = 0; i < 9; ++i )
     {
         if ( 3 == i )
         {

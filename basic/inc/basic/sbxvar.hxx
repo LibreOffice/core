@@ -42,12 +42,12 @@ class SbxDecimal;
 struct SbxValues
 {
     union {
-        BYTE            nByte;
-        UINT16          nUShort;
+        sal_uInt8       nByte;
+        sal_uInt16      nUShort;
         sal_Unicode     nChar;
-        INT16           nInteger;
-        UINT32          nULong;
-        INT32           nLong;
+        sal_Int16       nInteger;
+        sal_uInt32      nULong;
+        sal_Int32       nLong;
         unsigned int    nUInt;
         int             nInt;
         sal_uInt64      uInt64;
@@ -61,12 +61,12 @@ struct SbxValues
 
         SbxBase*        pObj;
 
-        BYTE*           pByte;
-        UINT16*         pUShort;
+        sal_uInt8*      pByte;
+        sal_uInt16*     pUShort;
         sal_Unicode*    pChar;
-        INT16*          pInteger;
-        UINT32*         pULong;
-        INT32*          pLong;
+        sal_Int16*      pInteger;
+        sal_uInt32*     pULong;
+        sal_Int32*      pLong;
         unsigned int*   pUInt;
         int*            pInt;
         sal_uInt64*     puInt64;
@@ -82,11 +82,11 @@ struct SbxValues
     SbxValues(): pData( NULL ), eType(SbxEMPTY) {}
     SbxValues( SbxDataType e ): eType(e) {}
     SbxValues( char _nChar ): nChar( _nChar ), eType(SbxCHAR) {}
-    SbxValues( BYTE _nByte ): nByte( _nByte ), eType(SbxBYTE) {}
+    SbxValues( sal_uInt8 _nByte ): nByte( _nByte ), eType(SbxBYTE) {}
     SbxValues( short _nInteger ): nInteger( _nInteger ), eType(SbxINTEGER ) {}
     SbxValues( long _nLong ): nLong( _nLong ), eType(SbxLONG) {}
-    SbxValues( USHORT _nUShort ): nUShort( _nUShort ), eType(SbxUSHORT) {}
-    SbxValues( ULONG _nULong ): nULong( _nULong ), eType(SbxULONG) {}
+    SbxValues( sal_uInt16 _nUShort ): nUShort( _nUShort ), eType(SbxUSHORT) {}
+    SbxValues( sal_uIntPtr _nULong ): nULong( _nULong ), eType(SbxULONG) {}
     SbxValues( int _nInt ): nInt( _nInt ), eType(SbxINT) {}
     SbxValues( unsigned int _nUInt ): nUInt( _nUInt ), eType(SbxUINT) {}
     SbxValues( float _nSingle ): nSingle( _nSingle ), eType(SbxSINGLE) {}
@@ -112,17 +112,17 @@ class SbxValue : public SbxBase
     SbxValueImpl* mpSbxValueImplImpl;   // Impl data
 
     // #55226 Transport additional infos
-    SbxValue* TheRealValue( BOOL bObjInObjError ) const;
+    SbxValue* TheRealValue( sal_Bool bObjInObjError ) const;
     SbxValue* TheRealValue() const;
 protected:
     SbxValues aData; // Data
     ::rtl::OUString aPic;  // Picture-String
     String          aToolString;  // tool string copy
 
-    virtual void Broadcast( ULONG );    // Broadcast-Call
+    virtual void Broadcast( sal_uIntPtr );      // Broadcast-Call
     virtual ~SbxValue();
-    virtual BOOL LoadData( SvStream&, USHORT );
-    virtual BOOL StoreData( SvStream& ) const;
+    virtual sal_Bool LoadData( SvStream&, sal_uInt16 );
+    virtual sal_Bool StoreData( SvStream& ) const;
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_VALUE,1);
     TYPEINFO();
@@ -131,54 +131,47 @@ public:
     SbxValue( const SbxValue& );
     SbxValue& operator=( const SbxValue& );
     virtual void Clear();
-    virtual BOOL IsFixed() const;
+    virtual sal_Bool IsFixed() const;
 
-    BOOL IsInteger()    const { return BOOL( GetType() == SbxINTEGER  ); }
-    BOOL IsLong()       const { return BOOL( GetType() == SbxLONG     ); }
-    BOOL IsSingle()     const { return BOOL( GetType() == SbxSINGLE   ); }
-    BOOL IsDouble()     const { return BOOL( GetType() == SbxDOUBLE   ); }
-    BOOL IsString()     const { return BOOL( GetType() == SbxSTRING   ); }
-    BOOL IsDate()       const { return BOOL( GetType() == SbxDATE     ); }
-    BOOL IsCurrency()   const { return BOOL( GetType() == SbxCURRENCY ); }
-    BOOL IsObject()     const { return BOOL( GetType() == SbxOBJECT   ); }
-    BOOL IsDataObject() const { return BOOL( GetType() == SbxDATAOBJECT);}
-    BOOL IsBool()       const { return BOOL( GetType() == SbxBOOL     ); }
-    BOOL IsErr()        const { return BOOL( GetType() == SbxERROR    ); }
-    BOOL IsEmpty()      const { return BOOL( GetType() == SbxEMPTY    ); }
-    BOOL IsNull()       const { return BOOL( GetType() == SbxNULL     ); }
-    BOOL IsChar()       const { return BOOL( GetType() == SbxCHAR     ); }
-    BOOL IsByte()       const { return BOOL( GetType() == SbxBYTE     ); }
-    BOOL IsUShort()     const { return BOOL( GetType() == SbxUSHORT   ); }
-    BOOL IsULong()      const { return BOOL( GetType() == SbxULONG    ); }
-    BOOL IsInt()        const { return BOOL( GetType() == SbxINT      ); }
-    BOOL IsUInt()       const { return BOOL( GetType() == SbxUINT     ); }
-    BOOL IspChar()      const { return BOOL( GetType() == SbxLPSTR    ); }
-    BOOL IsNumeric()    const;
-    BOOL IsNumericRTL() const;          // #41692 Interface for Basic
-    BOOL ImpIsNumeric( BOOL bOnlyIntntl ) const;    // Implementation
+    sal_Bool IsInteger() const { return sal_Bool( GetType() == SbxINTEGER  ); }
+    sal_Bool IsLong()    const { return sal_Bool( GetType() == SbxLONG     ); }
+    sal_Bool IsSingle()  const { return sal_Bool( GetType() == SbxSINGLE   ); }
+    sal_Bool IsDouble()  const { return sal_Bool( GetType() == SbxDOUBLE   ); }
+    sal_Bool IsString()  const { return sal_Bool( GetType() == SbxSTRING   ); }
+    sal_Bool IsDate()    const { return sal_Bool( GetType() == SbxDATE     ); }
+    sal_Bool IsCurrency()const { return sal_Bool( GetType() == SbxCURRENCY ); }
+    sal_Bool IsObject()  const { return sal_Bool( GetType() == SbxOBJECT   ); }
+    sal_Bool IsDataObject()const{return sal_Bool( GetType() == SbxDATAOBJECT);}
+    sal_Bool IsBool()    const { return sal_Bool( GetType() == SbxBOOL     ); }
+    sal_Bool IsErr()     const { return sal_Bool( GetType() == SbxERROR    ); }
+    sal_Bool IsEmpty()   const { return sal_Bool( GetType() == SbxEMPTY    ); }
+    sal_Bool IsNull()    const { return sal_Bool( GetType() == SbxNULL     ); }
+    sal_Bool IsChar()    const { return sal_Bool( GetType() == SbxCHAR     ); }
+    sal_Bool IsByte()    const { return sal_Bool( GetType() == SbxBYTE     ); }
+    sal_Bool IsUShort()  const { return sal_Bool( GetType() == SbxUSHORT   ); }
+    sal_Bool IsULong()   const { return sal_Bool( GetType() == SbxULONG    ); }
+    sal_Bool IsInt()     const { return sal_Bool( GetType() == SbxINT      ); }
+    sal_Bool IsUInt()    const { return sal_Bool( GetType() == SbxUINT     ); }
+    sal_Bool IspChar()   const { return sal_Bool( GetType() == SbxLPSTR    ); }
+    sal_Bool IsNumeric() const;
+    sal_Bool IsNumericRTL() const;  // #41692 Interface for Basic
+    sal_Bool ImpIsNumeric( sal_Bool bOnlyIntntl ) const;    // Implementation
 
     virtual SbxClassType GetClass() const;
     virtual SbxDataType GetType() const;
     SbxDataType GetFullType() const;
-    BOOL SetType( SbxDataType );
+    sal_Bool SetType( SbxDataType );
 
-    virtual BOOL Get( SbxValues& ) const;
-    BOOL GetNoBroadcast( SbxValues& );
+    virtual sal_Bool Get( SbxValues& ) const;
+    sal_Bool GetNoBroadcast( SbxValues& );
     const SbxValues& GetValues_Impl() const { return aData; }
-    virtual BOOL Put( const SbxValues& );
+    virtual sal_Bool Put( const SbxValues& );
 
     inline SbxValues * data() { return &aData; }
 
-    UINT16      GetErr() const;
-
-    BOOL        GetBool() const;
-    BYTE        GetByte() const;
     sal_Unicode GetChar() const;
-    UINT16      GetUShort() const;
-    UINT32      GetULong() const;
-    int         GetInt() const;
-    INT16       GetInteger() const;
-    INT32       GetLong() const;
+    sal_Int16   GetInteger() const;
+    sal_Int32   GetLong() const;
     sal_Int64   GetInt64() const;
     sal_uInt64  GetUInt64() const;
 
@@ -189,55 +182,56 @@ public:
     double      GetDouble() const;
     double      GetDate() const;
 
+    sal_Bool   GetBool() const;
+    sal_uInt16 GetErr() const;
     const String&   GetString() const;
     const String&   GetCoreString() const;
     rtl::OUString   GetOUString() const;
 
     SbxBase*    GetObject() const;
-    BOOL        HasObject() const;
+    sal_Bool    HasObject() const;
     void*       GetData() const;
+    sal_uInt8   GetByte() const;
+    sal_uInt16 GetUShort() const;
+    sal_uInt32 GetULong() const;
+    int    GetInt() const;
 
-
-    BOOL PutEmpty();
-    BOOL PutNull();
-    BOOL PutErr( USHORT );
-
-    BOOL PutBool( BOOL );
-    BOOL PutByte( BYTE );
-    BOOL PutChar( sal_Unicode );
-    BOOL PutUShort( UINT16 );
-    BOOL PutULong( UINT32 );
-    BOOL PutInt( int );
-    BOOL PutInteger( INT16 );
-    BOOL PutLong( INT32 );
-    BOOL PutInt64( sal_Int64 );
-    BOOL PutUInt64( sal_uInt64 );
-
-    BOOL PutSingle( float );
-    BOOL PutDouble( double );
-    BOOL PutDate( double );
-
-            // with extended analysis (International, "TRUE"/"FALSE")
-    BOOL PutStringExt( const ::rtl::OUString& );
-    BOOL PutString( const ::rtl::OUString& );
-    BOOL PutString( const sal_Unicode* );   // Type = SbxSTRING
-    BOOL PutpChar( const sal_Unicode* );    // Type = SbxLPSTR
+    sal_Bool PutInteger( sal_Int16 );
+    sal_Bool PutLong( sal_Int32 );
+    sal_Bool PutSingle( float );
+    sal_Bool PutDouble( double );
+    sal_Bool PutDate( double );
+    sal_Bool PutBool( sal_Bool );
+    sal_Bool PutErr( sal_uInt16 );
+    sal_Bool PutStringExt( const ::rtl::OUString& );     // with extended analysis (International, "sal_True"/"sal_False")
+    sal_Bool PutInt64( sal_Int64 );
+    sal_Bool PutUInt64( sal_uInt64 );
+    sal_Bool PutString( const ::rtl::OUString& );
+    sal_Bool PutString( const sal_Unicode* );   // Type = SbxSTRING
+    sal_Bool PutpChar( const sal_Unicode* );    // Type = SbxLPSTR
+    sal_Bool PutChar( sal_Unicode );
+    sal_Bool PutByte( sal_uInt8 );
+    sal_Bool PutUShort( sal_uInt16 );
+    sal_Bool PutULong( sal_uInt32 );
+    sal_Bool PutInt( int );
+    sal_Bool PutEmpty();
+    sal_Bool PutNull();
 
             // Special methods
-    BOOL PutDecimal( com::sun::star::bridge::oleautomation::Decimal& rAutomationDec );
-    BOOL fillAutomationDecimal( com::sun::star::bridge::oleautomation::Decimal& rAutomationDec );
-    BOOL PutDecimal( SbxDecimal* pDecimal );
-    BOOL PutCurrency( const sal_Int64& );
+    sal_Bool PutDecimal( com::sun::star::bridge::oleautomation::Decimal& rAutomationDec );
+    sal_Bool fillAutomationDecimal( com::sun::star::bridge::oleautomation::Decimal& rAutomationDec );
+    sal_Bool PutDecimal( SbxDecimal* pDecimal );
+    sal_Bool PutCurrency( const sal_Int64& );
             // Interface for CDbl in Basic
-    static SbxError ScanNumIntnl( const String& rSrc, double& nVal, BOOL bSingle=FALSE );
+    static SbxError ScanNumIntnl( const String& rSrc, double& nVal, sal_Bool bSingle = sal_False );
 
-    BOOL PutObject( SbxBase* );
-    BOOL PutData( void* );
+    sal_Bool PutObject( SbxBase* );
+    sal_Bool PutData( void* );
 
-    virtual BOOL Convert( SbxDataType );
-    virtual BOOL Compute( SbxOperator, const SbxValue& );
-    virtual BOOL Compare( SbxOperator, const SbxValue& ) const;
-    BOOL Scan( const String&, USHORT* = NULL );
+    virtual sal_Bool Convert( SbxDataType );
+    virtual sal_Bool Compute( SbxOperator, const SbxValue& );
+    virtual sal_Bool Compare( SbxOperator, const SbxValue& ) const;
+    sal_Bool Scan( const String&, sal_uInt16* = NULL );
     void Format( String&, const String* = NULL ) const;
 
     // The following operators are definied for easier handling.
@@ -324,6 +318,7 @@ SV_DECL_REF(SbxInfo)
 class SfxBroadcaster;
 
 class SbxVariableImpl;
+class StarBASIC;
 
 class SbxVariable : public SbxValue
 {
@@ -333,7 +328,7 @@ class SbxVariable : public SbxValue
     SfxBroadcaster*  pCst;              // Broadcaster, if needed
     String           maName;            // Name, if available
     SbxArrayRef      mpPar;             // Parameter-Array, if set
-    USHORT           nHash;             // Hash-ID for search
+    sal_uInt16           nHash;             // Hash-ID for search
 
     SbxVariableImpl* getImpl( void );
 
@@ -342,8 +337,8 @@ protected:
     sal_uIntPtr nUserData;          // User data for Call()
     SbxObject* pParent;             // Currently attached object
     virtual ~SbxVariable();
-    virtual BOOL LoadData( SvStream&, USHORT );
-    virtual BOOL StoreData( SvStream& ) const;
+    virtual sal_Bool LoadData( SvStream&, sal_uInt16 );
+    virtual sal_Bool StoreData( SvStream& ) const;
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_VARIABLE,2);
     TYPEINFO();
@@ -352,13 +347,13 @@ public:
     SbxVariable( const SbxVariable& );
     SbxVariable& operator=( const SbxVariable& );
 
-    void Dump( SvStream&, BOOL bDumpAll=FALSE );
+    void Dump( SvStream&, sal_Bool bDumpAll=sal_False );
 
     virtual void SetName( const String& );
     virtual const String& GetName( SbxNameType = SbxNAME_NONE ) const;
-    USHORT GetHashCode() const          { return nHash; }
+    sal_uInt16 GetHashCode() const          { return nHash; }
 
-    virtual void SetModified( BOOL );
+    virtual void SetModified( sal_Bool );
 
     sal_uIntPtr GetUserData() const        { return nUserData; }
     void SetUserData( sal_uIntPtr n ) { nUserData = n;    }
@@ -375,8 +370,8 @@ public:
     // Sfx-Broadcasting-Support:
     // Due to data reduction and better DLL-hierarchie currently via casting
     SfxBroadcaster& GetBroadcaster();
-    BOOL IsBroadcaster() const { return BOOL( pCst != NULL ); }
-    virtual void Broadcast( ULONG nHintId );
+    sal_Bool IsBroadcaster() const { return sal_Bool( pCst != NULL ); }
+    virtual void Broadcast( sal_uIntPtr nHintId );
 
     inline const SbxObject* GetParent() const { return pParent; }
     inline SbxObject* GetParent() { return pParent; }
@@ -384,9 +379,11 @@ public:
 
     const String& GetDeclareClassName( void );
     void SetDeclareClassName( const String& );
-    void SetComListener( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xComListener );
+    void SetComListener( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xComListener,
+        StarBASIC* pParentBasic );
+    void ClearComListener( void );
 
-    static USHORT MakeHashCode( const String& rName );
+    static sal_uInt16 MakeHashCode( const String& rName );
 };
 
 #ifndef SBX_VARIABLE_DECL_DEFINED

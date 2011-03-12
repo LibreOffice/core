@@ -32,7 +32,7 @@
 #include <rtl/uuid.h>
 #include <rtl/ustrbuf.hxx>
 #include <xmloff/nmspmap.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include "DeepTContext.hxx"
 #include "MetaTContext.hxx"

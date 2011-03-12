@@ -39,7 +39,7 @@ class SfxNavigatorWrapper : public SfxChildWindow
 
 public:
                         SfxNavigatorWrapper( Window* pParent ,
-                                                USHORT nId ,
+                                                sal_uInt16 nId ,
                                                 SfxBindings* pBindings ,
                                                 SfxChildWinInfo* pInfo );
 
@@ -58,7 +58,7 @@ public:
 
     virtual void        Resize();
     virtual void        Resizing( Size& rSize );
-    virtual BOOL        Close();
+    virtual sal_Bool        Close();
 };
 
 #endif

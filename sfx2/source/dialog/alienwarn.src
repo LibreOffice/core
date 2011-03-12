@@ -81,6 +81,7 @@ ModalDialog RID_DLG_ALIEN_WARNING
     };
     CheckBox CB_WARNING_OFF
     {
+        HelpID = "sfx2:CheckBox:RID_DLG_ALIEN_WARNING:CB_WARNING_OFF";
         Pos = MAP_APPFONT( AW_COL_2, AW_ROW_4 );
         Size = MAP_APPFONT( DIALOG_WIDTH-AW_COL_2-RSC_SP_DLG_INNERBORDER_RIGHT, RSC_CD_CHECKBOX_HEIGHT );
         WordBreak = TRUE ;

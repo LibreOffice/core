@@ -42,7 +42,7 @@
 #include <outlundo.hxx>
 
 
-OutlinerUndoBase::OutlinerUndoBase( USHORT _nId, Outliner* pOutliner )
+OutlinerUndoBase::OutlinerUndoBase( sal_uInt16 _nId, Outliner* pOutliner )
     : EditUndo( _nId, NULL )
 {
     DBG_ASSERT( pOutliner, "Undo: Outliner?!" );
@@ -112,7 +112,7 @@ void OutlinerUndoChangeParaNumberingRestart::ImplApplyData( const ParaRestartDat
     pOutliner->SetParaIsNumberingRestart( mnPara, rData.mbParaIsNumberingRestart );
 }
 
-OutlinerUndoChangeDepth::OutlinerUndoChangeDepth( Outliner* pOutliner, USHORT nPara, sal_Int16 nOldDepth, sal_Int16 nNewDepth )
+OutlinerUndoChangeDepth::OutlinerUndoChangeDepth( Outliner* pOutliner, sal_uInt16 nPara, sal_Int16 nOldDepth, sal_Int16 nNewDepth )
     : OutlinerUndoBase( OLUNDO_DEPTH, pOutliner )
 {
     mnPara = nPara;
@@ -122,12 +122,12 @@ OutlinerUndoChangeDepth::OutlinerUndoChangeDepth( Outliner* pOutliner, USHORT nP
 
 void OutlinerUndoChangeDepth::Undo()
 {
-    GetOutliner()->ImplInitDepth( mnPara, mnOldDepth, FALSE );
+    GetOutliner()->ImplInitDepth( mnPara, mnOldDepth, sal_False );
 }
 
 void OutlinerUndoChangeDepth::Redo()
 {
-    GetOutliner()->ImplInitDepth( mnPara, mnNewDepth, FALSE );
+    GetOutliner()->ImplInitDepth( mnPara, mnNewDepth, sal_False );
 }
 
 void OutlinerUndoChangeDepth::Repeat()
@@ -136,7 +136,7 @@ void OutlinerUndoChangeDepth::Repeat()
 }
 
 
-OutlinerUndoCheckPara::OutlinerUndoCheckPara( Outliner* pOutliner, USHORT nPara )
+OutlinerUndoCheckPara::OutlinerUndoCheckPara( Outliner* pOutliner, sal_uInt16 nPara )
     : OutlinerUndoBase( OLUNDO_DEPTH, pOutliner )
 {
     mnPara = nPara;
@@ -146,14 +146,14 @@ void OutlinerUndoCheckPara::Undo()
 {
     Paragraph* pPara = GetOutliner()->GetParagraph( mnPara );
     pPara->Invalidate();
-    GetOutliner()->ImplCalcBulletText( mnPara, FALSE, FALSE );
+    GetOutliner()->ImplCalcBulletText( mnPara, sal_False, sal_False );
 }
 
 void OutlinerUndoCheckPara::Redo()
 {
     Paragraph* pPara = GetOutliner()->GetParagraph( mnPara );
     pPara->Invalidate();
-    GetOutliner()->ImplCalcBulletText( mnPara, FALSE, FALSE );
+    GetOutliner()->ImplCalcBulletText( mnPara, sal_False, sal_False );
 }
 
 void OutlinerUndoCheckPara::Repeat()
@@ -163,7 +163,7 @@ void OutlinerUndoCheckPara::Repeat()
 
 DBG_NAME(OLUndoExpand);
 
-OLUndoExpand::OLUndoExpand(Outliner* pOut, USHORT _nId )
+OLUndoExpand::OLUndoExpand(Outliner* pOut, sal_uInt16 _nId )
     : EditUndo( _nId, 0 )
 {
     DBG_CTOR(OLUndoExpand,0);
@@ -181,20 +181,20 @@ OLUndoExpand::~OLUndoExpand()
 }
 
 
-void OLUndoExpand::Restore( BOOL bUndo )
+void OLUndoExpand::Restore( sal_Bool bUndo )
 {
     DBG_CHKTHIS(OLUndoExpand,0);
     DBG_ASSERT(pOutliner,"Undo:No Outliner");
     DBG_ASSERT(pOutliner->pEditEngine,"Outliner already deleted");
     Paragraph* pPara;
 
-    BOOL bExpand = FALSE;
-    USHORT _nId = GetId();
+    sal_Bool bExpand = sal_False;
+    sal_uInt16 _nId = GetId();
     if((_nId == OLUNDO_EXPAND && !bUndo) || (_nId == OLUNDO_COLLAPSE && bUndo))
-        bExpand = TRUE;
+        bExpand = sal_True;
     if( !pParas )
     {
-        pPara = pOutliner->GetParagraph( (ULONG)nCount );
+        pPara = pOutliner->GetParagraph( (sal_uLong)nCount );
         if( bExpand )
             pOutliner->Expand( pPara );
         else
@@ -202,9 +202,9 @@ void OLUndoExpand::Restore( BOOL bUndo )
     }
     else
     {
-        for( USHORT nIdx = 0; nIdx < nCount; nIdx++ )
+        for( sal_uInt16 nIdx = 0; nIdx < nCount; nIdx++ )
         {
-            pPara = pOutliner->GetParagraph( (ULONG)(pParas[nIdx]) );
+            pPara = pOutliner->GetParagraph( (sal_uLong)(pParas[nIdx]) );
             if( bExpand )
                 pOutliner->Expand( pPara );
             else
@@ -217,14 +217,14 @@ void OLUndoExpand::Restore( BOOL bUndo )
 void OLUndoExpand::Undo()
 {
     DBG_CHKTHIS(OLUndoExpand,0);
-    Restore( TRUE );
+    Restore( sal_True );
 }
 
 
 void OLUndoExpand::Redo()
 {
     DBG_CHKTHIS(OLUndoExpand,0);
-    Restore( FALSE );
+    Restore( sal_False );
 }
 
 

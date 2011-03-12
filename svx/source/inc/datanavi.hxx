@@ -130,7 +130,7 @@ namespace svxform
         ~DataTreeListBox();
 
         virtual PopupMenu*      CreateContextMenu( void );
-        virtual void            ExcecuteContextMenuAction( USHORT _nSelectedPopupEntry );
+        virtual void            ExcecuteContextMenuAction( sal_uInt16 _nSelectedPopupEntry );
         virtual sal_Int8        AcceptDrop( const AcceptDropEvent& rEvt );
         virtual sal_Int8        ExecuteDrop( const ExecuteDropEvent& rEvt );
         virtual void            StartDrag( sal_Int8 nAction, const Point& rPosPixel );
@@ -166,7 +166,7 @@ namespace svxform
         void                        AddChildren( SvLBoxEntry* _pParent,
                                                  const ImageList& _rImgLst,
                                                  const XNode_ref& _xNode );
-        bool                        DoToolBoxAction( USHORT _nToolBoxID );
+        bool                        DoToolBoxAction( sal_uInt16 _nToolBoxID );
         SvLBoxEntry*                AddEntry( ItemNode* _pNewNode, bool _bIsElement );
         SvLBoxEntry*                AddEntry( const XPropertySet_ref& _rPropSet );
         void                        EditEntry( const XPropertySet_ref& _rPropSet );
@@ -182,12 +182,12 @@ namespace svxform
         virtual void                Resize();
 
         inline bool                 HasModel() const { return m_bHasModel; }
-        String                      SetModel( const XModel_ref& _xModel, USHORT _nPagePos );
+        String                      SetModel( const XModel_ref& _xModel, sal_uInt16 _nPagePos );
         void                        ClearModel();
         String                      LoadInstance( const PropertyValue_seq& _xPropSeq,
                                                   const ImageList& _rImgLst );
 
-        bool                        DoMenuAction( USHORT _nMenuID );
+        bool                        DoMenuAction( sal_uInt16 _nMenuID );
         void                        EnableMenuItems( Menu* _pMenu );
 
         inline SvLBoxEntry*         GetSelectedItem() const { return m_aItemList.FirstSelected(); }
@@ -227,7 +227,7 @@ namespace svxform
         long                        m_nMinWidth;
         long                        m_nMinHeight;
         long                        m_nBorderHeight;
-        USHORT                      m_nLastSelectedPos;
+        sal_uInt16                      m_nLastSelectedPos;
         bool                        m_bShowDetails;
         bool                        m_bIsNotifyDisabled;
         Size                        m_a2Size;
@@ -249,14 +249,14 @@ namespace svxform
         DECL_LINK(                  ActivatePageHdl, TabControl* );
         DECL_LINK(                  UpdateHdl, Timer* );
 
-        XFormsPage*                 GetCurrentPage( USHORT& rCurId );
+        XFormsPage*                 GetCurrentPage( sal_uInt16& rCurId );
         void                        LoadModels();
         void                        SetPageModel();
         void                        ClearAllPageModels( bool bClearPages );
         void                        InitPages();
         void                        CreateInstancePage( const PropertyValue_seq& _xPropSeq );
         bool                        HasFirstInstancePage() const;
-        USHORT                      GetNewPageId() const;
+        sal_uInt16                      GetNewPageId() const;
 
     protected:
         virtual void                Resize();
@@ -572,7 +572,7 @@ namespace svxform
         inline void             SetName( const String& _rName ) { m_aNameED.SetText( _rName );}
         inline String           GetURL() const { return m_aURLED.GetText(); }
         inline void             SetURL( const String& _rURL ) { m_aURLED.SetText( _rURL );}
-        inline bool             IsLinkInstance() const { return ( m_aLinkInstanceCB.IsChecked() != FALSE ); }
+        inline bool             IsLinkInstance() const { return ( m_aLinkInstanceCB.IsChecked() != sal_False ); }
         inline void             SetLinkInstance( bool _bLink ) { m_aLinkInstanceCB.Check( _bLink != false ); }
     };
 

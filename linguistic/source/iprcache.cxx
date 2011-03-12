@@ -32,13 +32,13 @@
 #include <string.h>
 
 #include "iprcache.hxx"
-#include "misc.hxx"
+#include "linguistic/misc.hxx"
 
 #include <com/sun/star/linguistic2/DictionaryListEventFlags.hpp>
 #include <tools/debug.hxx>
 #include <osl/mutex.hxx>
 #include <unotools/processfactory.hxx>
-#include <lngprops.hxx>
+#include <linguistic/lngprops.hxx>
 
 using namespace utl;
 using namespace osl;
@@ -60,7 +60,7 @@ namespace linguistic
 static const struct
 {
     const char *pPropName;
-    INT32       nPropHdl;
+    sal_Int32       nPropHdl;
 } aFlushProperties[ NUM_FLUSH_PROPS ] =
 {
     { UPN_IS_USE_DICTIONARY_LIST,         UPH_IS_USE_DICTIONARY_LIST },
@@ -101,7 +101,7 @@ static void lcl_RemoveAsPropertyChangeListener(
 }
 
 
-static BOOL lcl_IsFlushProperty( INT32 nHandle )
+static sal_Bool lcl_IsFlushProperty( sal_Int32 nHandle )
 {
     int i;
     for (i = 0;  i < NUM_FLUSH_PROPS;  ++i)
@@ -135,7 +135,7 @@ void FlushListener::SetDicList( Reference<XDictionaryList> &rDL )
 
         xDicList = rDL;
         if (xDicList.is())
-            xDicList->addDictionaryListEventListener( this, FALSE );
+            xDicList->addDictionaryListEventListener( this, sal_False );
     }
 }
 
@@ -182,13 +182,13 @@ void SAL_CALL FlushListener::processDictionaryListEvent(
 
     if (rDicListEvent.Source == xDicList)
     {
-        INT16 nEvt = rDicListEvent.nCondensedEvent;
-        INT16 nFlushFlags =
+        sal_Int16 nEvt = rDicListEvent.nCondensedEvent;
+        sal_Int16 nFlushFlags =
                 DictionaryListEventFlags::ADD_NEG_ENTRY     |
                 DictionaryListEventFlags::DEL_POS_ENTRY     |
                 DictionaryListEventFlags::ACTIVATE_NEG_DIC  |
                 DictionaryListEventFlags::DEACTIVATE_POS_DIC;
-        BOOL bFlush = 0 != (nEvt & nFlushFlags);
+        sal_Bool bFlush = 0 != (nEvt & nFlushFlags);
 
         DBG_ASSERT( pFlushObj, "missing object (NULL pointer)" );
         if (bFlush && pFlushObj != NULL)
@@ -205,7 +205,7 @@ void SAL_CALL FlushListener::propertyChange(
 
     if (rEvt.Source == xPropSet)
     {
-        BOOL bFlush = lcl_IsFlushProperty( rEvt.PropertyHandle );
+        sal_Bool bFlush = lcl_IsFlushProperty( rEvt.PropertyHandle );
 
         DBG_ASSERT( pFlushObj, "missing object (NULL pointer)" );
         if (bFlush && pFlushObj != NULL)

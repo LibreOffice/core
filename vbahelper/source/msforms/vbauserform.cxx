@@ -30,8 +30,10 @@
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/awt/XWindow2.hpp>
+#include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/beans/PropertyConcept.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/util/MeasureUnit.hpp>
 #include <basic/sbx.hxx>
 #include <basic/sbstar.hxx>
 #include <basic/sbmeth.hxx>
@@ -69,9 +71,28 @@ ScVbaUserForm::Show(  ) throw (uno::RuntimeException)
 {
     OSL_TRACE("ScVbaUserForm::Show(  )");
     short aRet = 0;
-        mbDispose = true;
+    mbDispose = true;
+
     if ( m_xDialog.is() )
+    {
+        // try to center dialog on model window
+        if( m_xModel.is() ) try
+        {
+            uno::Reference< frame::XController > xController( m_xModel->getCurrentController(), uno::UNO_SET_THROW );
+            uno::Reference< frame::XFrame > xFrame( xController->getFrame(), uno::UNO_SET_THROW );
+            uno::Reference< awt::XWindow > xWindow( xFrame->getContainerWindow(), uno::UNO_SET_THROW );
+            awt::Rectangle aPosSize = xWindow->getPosSize();    // already in pixel
+
+            uno::Reference< awt::XControl > xControl( m_xDialog, uno::UNO_QUERY_THROW );
+            uno::Reference< awt::XWindow > xControlWindow( xControl->getPeer(), uno::UNO_QUERY_THROW );
+            xControlWindow->setPosSize( (aPosSize.Width - getWidth()) / 2.0, (aPosSize.Height - getHeight()) / 2.0, 0, 0, awt::PosSize::POS );
+        }
+        catch( uno::Exception& )
+        {
+        }
+
         aRet = m_xDialog->execute();
+    }
     OSL_TRACE("ScVbaUserForm::Show() execute returned %d", aRet);
     if ( mbDispose )
     {
@@ -228,13 +249,16 @@ ScVbaUserForm::getValue( const ::rtl::OUString& aPropertyName ) throw (beans::Un
         uno::Reference< awt::XControlContainer > xContainer( m_xDialog, uno::UNO_QUERY_THROW );
         uno::Reference< awt::XControl > xControl = nestedSearch( aPropertyName, xContainer );
         xContainer->getControl( aPropertyName );
-        ScVbaControlFactory aFac( mxContext, xControl, m_xModel );
-            uno::Reference< msforms::XControl > xVBAControl( aFac.createControl( xDialogControl->getModel() ) );
-            ScVbaControl* pControl  = dynamic_cast< ScVbaControl* >( xVBAControl.get() );
-            pControl->setGeometryHelper( new UserFormGeometryHelper( mxContext, xControl ) );
-        if ( m_sLibName.getLength() )
-            pControl->setLibraryAndCodeName( m_sLibName.concat( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "." ) ) ).concat( getName() ) );
-        aResult = uno::makeAny( xVBAControl );
+        if ( xControl.is() )
+        {
+            ScVbaControlFactory aFac( mxContext, xControl, m_xModel );
+                uno::Reference< msforms::XControl > xVBAControl( aFac.createControl( xDialogControl->getModel() ) );
+                ScVbaControl* pControl  = dynamic_cast< ScVbaControl* >( xVBAControl.get() );
+                pControl->setGeometryHelper( new UserFormGeometryHelper( mxContext, xControl ) );
+            if ( m_sLibName.getLength() )
+                pControl->setLibraryAndCodeName( m_sLibName.concat( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "." ) ) ).concat( getName() ) );
+            aResult = uno::makeAny( xVBAControl );
+        }
     }
 
     return aResult;

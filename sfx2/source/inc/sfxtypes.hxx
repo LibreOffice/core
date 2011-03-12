@@ -53,12 +53,6 @@
 class SfxShell;
 class Timer;
 
-#if !defined(_SFX_APPCTOR_CXX) && defined(WNT)
-#ifndef _DLL_
-#error _DLL_ mal wieder nicht defined => GetpApp() == 0
-#endif
-#endif
-
 //------------------------------------------------------------------------
 
 // Macro fuer den Call-Profiler unter WinNT
@@ -152,29 +146,29 @@ struct StringList_Impl : private Resource
 
     ResId aResId;
 
-    StringList_Impl( const ResId& rErrIdP,  USHORT nId)
+    StringList_Impl( const ResId& rErrIdP,  sal_uInt16 nId)
         : Resource( rErrIdP ),aResId(nId, *rErrIdP.GetResMgr()){}
     ~StringList_Impl() { FreeResource(); }
 
     String GetString(){ return String( aResId ); }
-    operator BOOL(){return IsAvailableRes(aResId.SetRT(RSC_STRING));}
+    operator sal_Bool(){return IsAvailableRes(aResId.SetRT(RSC_STRING));}
 
 };
 
 #define SFX_DEL_PTRARR(pArr)                                    \
             {                                                   \
-                for ( USHORT n = (pArr)->Count(); n--; )        \
+                for ( sal_uInt16 n = (pArr)->Count(); n--; )        \
                     delete (pArr)->GetObject(n);                \
                 DELETEX(pArr);                                  \
             }
 
 class SfxBoolResetter
 {
-    BOOL&               _rVar;
-    BOOL                _bOld;
+    sal_Bool&               _rVar;
+    sal_Bool                _bOld;
 
 public:
-                        SfxBoolResetter( BOOL &rVar )
+                        SfxBoolResetter( sal_Bool &rVar )
                         :   _rVar( rVar ),
                             _bOld( rVar )
                         {}

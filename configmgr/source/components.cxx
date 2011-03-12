@@ -217,7 +217,7 @@ void Components::WriteThread::run() {
     reference_->clear();
 }
 
-void Components::initSingleton(
+Components & Components::getSingleton(
     css::uno::Reference< css::uno::XComponentContext > const & context)
 {
     OSL_ASSERT(context.is());
@@ -226,10 +226,6 @@ void Components::initSingleton(
         singleton = &theSingleton;
         singletonCreated = true;
     }
-}
-
-Components & Components::getSingleton() {
-    OSL_ASSERT(singletonCreated);
     if (singleton == 0) {
         throw css::uno::RuntimeException(
             rtl::OUString(
@@ -869,7 +865,7 @@ void Components::parseModificationLayer() {
             "configmgr user registrymodifications.xcu does not (yet) exist");
         // Migrate old user layer data (can be removed once migration is no
         // longer relevant, probably OOo 4; also see hack for xsi namespace in
-        // XmlReader constructor):
+        // xmlreader::XmlReader::registerNamespaceIri):
         parseFiles(
             Data::NO_LAYER, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".xcu")),
             &parseXcuFile,

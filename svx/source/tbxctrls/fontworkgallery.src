@@ -37,6 +37,7 @@
 
 ModalDialog RID_SVX_MDLG_FONTWORK_GALLERY
 {
+    HelpID = "svx:ModalDialog:RID_SVX_MDLG_FONTWORK_GALLERY";
     OutputSize = TRUE;
     SVLook = TRUE ;
     Moveable = TRUE;
@@ -94,6 +95,7 @@ ModalDialog RID_SVX_MDLG_FONTWORK_GALLERY
 
 DockingWindow RID_SVXFLOAT_FONTWORK_ALIGNMENT
 {
+    HelpID = "svx:DockingWindow:RID_SVXFLOAT_FONTWORK_ALIGNMENT";
     Border = FALSE ;
     Hide = TRUE ;
     SVLook = TRUE ;
@@ -179,6 +181,7 @@ DockingWindow RID_SVXFLOAT_FONTWORK_ALIGNMENT
 
 DockingWindow RID_SVXFLOAT_FONTWORK_CHARSPACING
 {
+    HelpID = "svx:DockingWindow:RID_SVXFLOAT_FONTWORK_CHARSPACING";
     Border = FALSE ;
     Hide = TRUE ;
     SVLook = TRUE ;
@@ -221,6 +224,7 @@ DockingWindow RID_SVXFLOAT_FONTWORK_CHARSPACING
 
 ModalDialog RID_SVX_MDLG_FONTWORK_CHARSPACING
 {
+    HelpID = "svx:ModalDialog:RID_SVX_MDLG_FONTWORK_CHARSPACING";
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 139 , 64 ) ;
@@ -256,6 +260,7 @@ ModalDialog RID_SVX_MDLG_FONTWORK_CHARSPACING
     };
     MetricField MF_VALUE
     {
+        HelpID = "svx:MetricField:RID_SVX_MDLG_FONTWORK_CHARSPACING:MF_VALUE";
         Border = FALSE ;
         Pos = MAP_APPFONT ( 6 , 17 ) ;
         Size = MAP_APPFONT ( 32 , 12 ) ;

@@ -39,7 +39,7 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdview.hxx>
 #include <svx/sdrpagewindow.hxx>
-#include "sdrpaintwindow.hxx"
+#include "svx/sdrpaintwindow.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -368,6 +368,10 @@ namespace sdr { namespace contact {
         ::basegfx::B2DTuple aViewScale, aViewTranslate;
         double nViewRotate(0), nViewShearX(0);
         _rViewTransformation.decompose( aViewScale, aViewTranslate, nViewRotate, nViewShearX );
+
+        ::basegfx::B2DTuple aZoomScale, aZoomTranslate;
+        double nZoomRotate(0), nZoomShearX(0);
+        _rZoomLevelNormalization.decompose( aZoomScale, aZoomTranslate, nZoomRotate, nZoomShearX );
     #endif
 
         // transform the logic bound rect, using the view transformation, to pixel coordinates
@@ -980,6 +984,10 @@ namespace sdr { namespace contact {
         aScaleNormalization.set( 0, 0, (double)aCurrentDeviceMapMode.GetScaleX() );
         aScaleNormalization.set( 1, 1, (double)aCurrentDeviceMapMode.GetScaleY() );
         m_aZoomLevelNormalization *= aScaleNormalization;
+
+    #if OSL_DEBUG_LEVEL > 1
+        m_aZoomLevelNormalization.decompose( aScale, aTranslate, fRotate, fShearX );
+    #endif
    }
 
     //--------------------------------------------------------------------
@@ -1815,6 +1823,10 @@ namespace sdr { namespace contact {
             // our control already died.
             // TODO: Is it worth re-creating the control? Finally, this is a pathological situation, it means some instance
             // disposed the control though it doesn't own it. So, /me thinks we should not bother here.
+            return drawinglayer::primitive2d::Primitive2DSequence();
+
+        if ( GetObjectContact().getViewInformation2D().getViewTransformation().isIdentity() )
+            // remove this when #i115754# is fixed
             return drawinglayer::primitive2d::Primitive2DSequence();
 
         // ignore existing controls which are in alive mode and manually switched to "invisible"

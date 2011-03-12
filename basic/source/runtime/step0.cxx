@@ -48,6 +48,7 @@ Reference< XInterface > createComListener( const Any& aControlAny, const ::rtl::
                                            const ::rtl::OUString& aPrefix, SbxObjectRef xScopeObj );
 
 #include <algorithm>
+#include <boost/unordered_map.hpp>
 
 // for a patch forward declaring these methods below makes sense
 // but, #FIXME lets really just move the methods to the top
@@ -121,7 +122,6 @@ void SbiRuntime::StepCompare( SbxOperator eOp )
         }
 
     }
-#ifndef WIN
     static SbxVariable* pTRUE = NULL;
     static SbxVariable* pFALSE = NULL;
     static SbxVariable* pNULL = NULL;
@@ -143,7 +143,7 @@ void SbiRuntime::StepCompare( SbxOperator eOp )
         if( !pTRUE )
         {
             pTRUE = new SbxVariable;
-            pTRUE->PutBool( TRUE );
+            pTRUE->PutBool( sal_True );
             pTRUE->AddRef();
         }
         PushVar( pTRUE );
@@ -153,22 +153,11 @@ void SbiRuntime::StepCompare( SbxOperator eOp )
         if( !pFALSE )
         {
             pFALSE = new SbxVariable;
-            pFALSE->PutBool( FALSE );
+            pFALSE->PutBool( sal_False );
             pFALSE->AddRef();
         }
         PushVar( pFALSE );
     }
-#else
-    SbxVariable* pRes = new SbxVariable;
-    if ( bVBAEnabled && ( p1->IsNull() || p2->IsNull() ) )
-        pRes->PutNull();
-    else
-    {
-        BOOL bRes = p2->Compare( eOp, *p1 );
-        pRes->PutBool( bRes );
-    }
-    PushVar( pRes );
-#endif
 }
 
 void SbiRuntime::StepEXP()      { StepArith( SbxEXP );      }
@@ -327,7 +316,7 @@ void SbiRuntime::StepIS()
         eType2 = refVar2->GetType();
     }
 
-    BOOL bRes = BOOL( eType1 == SbxOBJECT && eType2 == SbxOBJECT );
+    sal_Bool bRes = sal_Bool( eType1 == SbxOBJECT && eType2 == SbxOBJECT );
     if ( bVBAEnabled  && !bRes )
         Error( SbERR_INVALID_USAGE_OBJECT );
     bRes = ( bRes && refVar1->GetObject() == refVar2->GetObject() );
@@ -386,11 +375,11 @@ void SbiRuntime::StepPUT()
     SbxVariableRef refVal = PopVar();
     SbxVariableRef refVar = PopVar();
     // Store auf die eigene Methode (innerhalb einer Function)?
-    BOOL bFlagsChanged = FALSE;
-    USHORT n = 0;
+    sal_Bool bFlagsChanged = sal_False;
+    sal_uInt16 n = 0;
     if( (SbxVariable*) refVar == (SbxVariable*) pMeth )
     {
-        bFlagsChanged = TRUE;
+        bFlagsChanged = sal_True;
         n = refVar->GetFlags();
         refVar->SetFlag( SBX_WRITE );
     }
@@ -426,8 +415,53 @@ void SbiRuntime::StepPUT()
 }
 
 
+// VBA Dim As New behavior handling, save init object information
+struct DimAsNewRecoverItem
+{
+    String          m_aObjClass;
+    String          m_aObjName;
+    SbxObject*      m_pObjParent;
+    SbModule*       m_pClassModule;
+
+    DimAsNewRecoverItem( void )
+        : m_pObjParent( NULL )
+        , m_pClassModule( NULL )
+    {}
+
+    DimAsNewRecoverItem( const String& rObjClass, const String& rObjName,
+        SbxObject* pObjParent, SbModule* pClassModule )
+            : m_aObjClass( rObjClass )
+            , m_aObjName( rObjName )
+            , m_pObjParent( pObjParent )
+            , m_pClassModule( pClassModule )
+    {}
+
+};
+
+
+struct SbxVariablePtrHash
+{
+    size_t operator()( SbxVariable* pVar ) const
+        { return (size_t)pVar; }
+};
+
+typedef boost::unordered_map< SbxVariable*, DimAsNewRecoverItem,
+                              SbxVariablePtrHash >  DimAsNewRecoverHash;
+
+static DimAsNewRecoverHash      GaDimAsNewRecoverHash;
+
+void removeDimAsNewRecoverItem( SbxVariable* pVar )
+{
+    DimAsNewRecoverHash::iterator it = GaDimAsNewRecoverHash.find( pVar );
+    if( it != GaDimAsNewRecoverHash.end() )
+        GaDimAsNewRecoverHash.erase( it );
+}
+
+
 // Speichern Objektvariable
 // Nicht-Objekt-Variable fuehren zu Fehlern
+
+static const char pCollectionStr[] = "Collection";
 
 void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, bool bHandleDefaultProp )
 {
@@ -478,11 +512,11 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
     else
     {
         // Store auf die eigene Methode (innerhalb einer Function)?
-        BOOL bFlagsChanged = FALSE;
-        USHORT n = 0;
+        sal_Bool bFlagsChanged = sal_False;
+        sal_uInt16 n = 0;
         if( (SbxVariable*) refVar == (SbxVariable*) pMeth )
         {
-            bFlagsChanged = TRUE;
+            bFlagsChanged = sal_True;
             n = refVar->GetFlags();
             refVar->SetFlag( SBX_WRITE );
         }
@@ -531,8 +565,14 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
             }
         }
 
+        // Handle Dim As New
+        sal_Bool bDimAsNew = bVBAEnabled && refVar->IsSet( SBX_DIM_AS_NEW );
+        SbxBaseRef xPrevVarObj;
+        if( bDimAsNew )
+            xPrevVarObj = refVar->GetObject();
+
         // Handle withevents
-        BOOL bWithEvents = refVar->IsSet( SBX_WITH_EVENTS );
+        sal_Bool bWithEvents = refVar->IsSet( SBX_WITH_EVENTS );
         if ( bWithEvents )
         {
             Reference< XInterface > xComListener;
@@ -549,7 +589,7 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
                 xComListener = createComListener( aControlAny, aVBAType, aPrefix, xScopeObj );
 
                 refVal->SetDeclareClassName( aDeclareClassName );
-                refVal->SetComListener( xComListener );     // Hold reference
+                refVal->SetComListener( xComListener, &rBasic );        // Hold reference
             }
 
             *refVar = *refVal;
@@ -558,6 +598,68 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
         {
             *refVar = *refVal;
         }
+
+        if ( bDimAsNew )
+        {
+            if( !refVar->ISA(SbxObject) )
+            {
+                SbxBase* pValObjBase = refVal->GetObject();
+                if( pValObjBase == NULL )
+                {
+                    if( xPrevVarObj.Is() )
+                    {
+                        // Object is overwritten with NULL, instantiate init object
+                        DimAsNewRecoverHash::iterator it = GaDimAsNewRecoverHash.find( refVar );
+                        if( it != GaDimAsNewRecoverHash.end() )
+                        {
+                            const DimAsNewRecoverItem& rItem = it->second;
+                            if( rItem.m_pClassModule != NULL )
+                            {
+                                SbClassModuleObject* pNewObj = new SbClassModuleObject( rItem.m_pClassModule );
+                                pNewObj->SetName( rItem.m_aObjName );
+                                pNewObj->SetParent( rItem.m_pObjParent );
+                                refVar->PutObject( pNewObj );
+                            }
+                            else if( rItem.m_aObjClass.EqualsIgnoreCaseAscii( pCollectionStr ) )
+                            {
+                                BasicCollection* pNewCollection = new BasicCollection( String( RTL_CONSTASCII_USTRINGPARAM(pCollectionStr) ) );
+                                pNewCollection->SetName( rItem.m_aObjName );
+                                pNewCollection->SetParent( rItem.m_pObjParent );
+                                refVar->PutObject( pNewCollection );
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    // Does old value exist?
+                    bool bFirstInit = !xPrevVarObj.Is();
+                    if( bFirstInit )
+                    {
+                        // Store information to instantiate object later
+                        SbxObject* pValObj = PTR_CAST(SbxObject,pValObjBase);
+                        if( pValObj != NULL )
+                        {
+                            String aObjClass = pValObj->GetClassName();
+
+                            SbClassModuleObject* pClassModuleObj = PTR_CAST(SbClassModuleObject,pValObjBase);
+                            if( pClassModuleObj != NULL )
+                            {
+                                SbModule* pClassModule = pClassModuleObj->getClassModule();
+                                GaDimAsNewRecoverHash[refVar] =
+                                    DimAsNewRecoverItem( aObjClass, pValObj->GetName(), pValObj->GetParent(), pClassModule );
+                            }
+                            else if( aObjClass.EqualsIgnoreCaseAscii( "Collection" ) )
+                            {
+                                GaDimAsNewRecoverHash[refVar] =
+                                    DimAsNewRecoverItem( aObjClass, pValObj->GetName(), pValObj->GetParent(), NULL );
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
 
         // lhs is a property who's value is currently (Empty e.g. no broadcast yet)
         // in this case if there is a default prop involved the value of the
@@ -599,14 +701,14 @@ void SbiRuntime::StepLSET()
     else
     {
         // Store auf die eigene Methode (innerhalb einer Function)?
-        USHORT n = refVar->GetFlags();
+        sal_uInt16 n = refVar->GetFlags();
         if( (SbxVariable*) refVar == (SbxVariable*) pMeth )
             refVar->SetFlag( SBX_WRITE );
         String aRefVarString = refVar->GetString();
         String aRefValString = refVal->GetString();
 
-        USHORT nVarStrLen = aRefVarString.Len();
-        USHORT nValStrLen = aRefValString.Len();
+        sal_uInt16 nVarStrLen = aRefVarString.Len();
+        sal_uInt16 nValStrLen = aRefValString.Len();
         String aNewStr;
         if( nVarStrLen > nValStrLen )
         {
@@ -635,14 +737,14 @@ void SbiRuntime::StepRSET()
     else
     {
         // Store auf die eigene Methode (innerhalb einer Function)?
-        USHORT n = refVar->GetFlags();
+        sal_uInt16 n = refVar->GetFlags();
         if( (SbxVariable*) refVar == (SbxVariable*) pMeth )
             refVar->SetFlag( SBX_WRITE );
         String aRefVarString = refVar->GetString();
         String aRefValString = refVal->GetString();
 
-        USHORT nPos = 0;
-        USHORT nVarStrLen = aRefVarString.Len();
+        sal_uInt16 nPos = 0;
+        sal_uInt16 nVarStrLen = aRefVarString.Len();
         if( nVarStrLen > aRefValString.Len() )
         {
             aRefVarString.Fill(nVarStrLen,' ');
@@ -703,10 +805,10 @@ void SbiRuntime::DimImpl( SbxVariableRef refVar )
         // AB 2.4.1996, auch Arrays ohne Dimensionsangaben zulassen (VB-komp.)
         if( pDims )
         {
-            for( USHORT i = 1; i < pDims->Count(); )
+            for( sal_uInt16 i = 1; i < pDims->Count(); )
             {
-                INT32 lb = pDims->Get( i++ )->GetLong();
-                INT32 ub = pDims->Get( i++ )->GetLong();
+                sal_Int32 lb = pDims->Get( i++ )->GetLong();
+                sal_Int32 ub = pDims->Get( i++ )->GetLong();
                 if( ub < lb )
                     Error( SbERR_OUT_OF_RANGE ), ub = lb;
                 pArray->AddDim32( lb, ub );
@@ -720,7 +822,7 @@ void SbiRuntime::DimImpl( SbxVariableRef refVar )
             // Uno-Sequences der Laenge 0 eine Dimension anlegen
             pArray->unoAddDim( 0, -1 );
         }
-        USHORT nSavFlags = refVar->GetFlags();
+        sal_uInt16 nSavFlags = refVar->GetFlags();
         refVar->ResetFlag( SBX_FIXED );
         refVar->PutObject( pArray );
         refVar->SetFlags( nSavFlags );
@@ -782,7 +884,7 @@ void SbiRuntime::StepREDIMP()
             short nDimsNew = pNewArray->GetDims();
             short nDimsOld = pOldArray->GetDims();
             short nDims = nDimsNew;
-            BOOL bRangeError = FALSE;
+            sal_Bool bRangeError = sal_False;
 
             // Store dims to use them for copying later
             sal_Int32* pLowerBounds = new sal_Int32[nDims];
@@ -791,7 +893,7 @@ void SbiRuntime::StepREDIMP()
 
             if( nDimsOld != nDimsNew )
             {
-                bRangeError = TRUE;
+                bRangeError = sal_True;
             }
             else
             {
@@ -808,7 +910,7 @@ void SbiRuntime::StepREDIMP()
                     // All bounds but the last have to be the same
                     if( i < nDims && ( lBoundNew != lBoundOld || uBoundNew != uBoundOld ) )
                     {
-                        bRangeError = TRUE;
+                        bRangeError = sal_True;
                         break;
                     }
                     else
@@ -877,7 +979,7 @@ void SbiRuntime::StepREDIMP_ERASE()
 
 void lcl_clearImpl( SbxVariableRef& refVar, SbxDataType& eType )
 {
-    USHORT nSavFlags = refVar->GetFlags();
+    sal_uInt16 nSavFlags = refVar->GetFlags();
     refVar->ResetFlag( SBX_FIXED );
     refVar->SetType( SbxDataType(eType & 0x0FFF) );
     refVar->SetFlags( nSavFlags );
@@ -1046,7 +1148,7 @@ void SbiRuntime::StepINPUT()
         // zu fuellen, dann mit einem Stringwert
         if( !pVar->IsFixed() || pVar->IsNumeric() )
         {
-            USHORT nLen = 0;
+            sal_uInt16 nLen = 0;
             if( !pVar->Scan( s, &nLen ) )
             {
                 err = SbxBase::GetError();
@@ -1169,7 +1271,7 @@ void SbiRuntime::StepENDCASE()
 
 void SbiRuntime::StepSTDERROR()
 {
-    pError = NULL; bError = TRUE;
+    pError = NULL; bError = sal_True;
     pInst->aErrorMsg = String();
     pInst->nErr = 0L;
     pInst->nErl = 0;
@@ -1184,14 +1286,14 @@ void SbiRuntime::StepNOERROR()
     pInst->nErl = 0;
     nError = 0L;
     SbxErrObject::getUnoErrObject()->Clear();
-    bError = FALSE;
+    bError = sal_False;
 }
 
 // UP verlassen
 
 void SbiRuntime::StepLEAVE()
 {
-    bRun = FALSE;
+    bRun = sal_False;
         // If VBA and we are leaving an ErrorHandler then clear the error ( it's been processed )
     if ( bInError && pError )
         SbxErrObject::getUnoErrObject()->Clear();
@@ -1326,7 +1428,7 @@ void SbiRuntime::StepEMPTY()
 void SbiRuntime::StepERROR()
 {
     SbxVariableRef refCode = PopVar();
-    USHORT n = refCode->GetUShort();
+    sal_uInt16 n = refCode->GetUShort();
     SbError error = StarBASIC::GetSfxFromVBError( n );
     if ( bVBAEnabled )
         pInst->Error( error );

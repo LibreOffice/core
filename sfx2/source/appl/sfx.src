@@ -27,107 +27,21 @@
 
 #include <sfx2/sfx.hrc>
 
-String STR_NONAME
-{
-    Text [ en-US ] = "Untitled" ;
-};
-
-String STR_NONE
-{
-    Text [ en-US ] = "- None -" ;
-};
-
-String STR_CLOSE
-{
-    Text [ en-US ] = "Close" ;
-};
-
-String STR_STYLE_FILTER_AUTO
-{
-    Text [ en-US ] = "Automatic" ;
-};
-
 String STR_STYLE_FILTER_USED
 {
     Text [ en-US ] = "Applied Styles" ;
 };
-
-
-
 String STR_STYLE_FILTER_USERDEF
 {
     Text [ en-US ] = "Custom Styles" ;
 };
-
 String STR_STYLE_FILTER_ALL
 {
     Text [ en-US ] = "All Styles" ;
 };
 
-String STR_STANDARD
+String STR_ACCTITLE_PRODUCTIVITYTOOLS
 {
-    Text [ en-US ] = "Standard" ;
-};
-String STR_STANDARD_SHORTCUT
-{
-    Text [ en-US ] = "Standard" ;
-};
-
-String STR_SFX_FILTERNAME_ALL
-{
-    Text [ en-US ] = "All files (*.*)" ;
-};
-
-String STR_BYTES
-{
-    Text [ en-US ] = "Bytes" ;
-};
-
-String STR_KB
-{
-    Text [ en-US ] = "KB" ;
-};
-
-String STR_MB
-{
-    Text [ en-US ] = "MB" ;
-};
-
-
-String STR_GB
-{
-    Text [ en-US ] = "GB" ;
-};
-
-String STR_UNDO
-{
-    Text [ en-US ] = "Undo: " ;
-};
-
-String STR_REDO
-{
-    Text [ en-US ] = "Re~do: " ;
-};
-
-String STR_REPEAT
-{
-    Text [ en-US ] = "~Repeat: " ;
-};
-
-String RID_STR_NEW_TASK
-{
-    Text [ en-US ] = "New task";
-};
-QueryBox MSG_QUERY_LASTVERSION
-{
-    Buttons = WB_YES_NO ;
-    DefButton = WB_DEF_NO ;
-    Message [ en-US ] = "Cancel all changes?" ;
-};
-
-// i66948 used in project scripting
-String STR_ERRUNOEVENTBINDUNG
-{
-    Text [ en-US ] = "An appropriate component method %1\ncould not be found.\n\nCheck spelling of method name.";
+    Text [ en-US ] = "%PRODUCTNAME";
 };
 

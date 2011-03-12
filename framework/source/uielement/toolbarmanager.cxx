@@ -41,13 +41,13 @@
 #include "services.h"
 #include "general.h"
 #include "properties.h"
-#include <helper/imageproducer.hxx>
-#include <classes/sfxhelperfunctions.hxx>
+#include <framework/imageproducer.hxx>
+#include <framework/sfxhelperfunctions.hxx>
 #include <classes/fwkresid.hxx>
 #include <classes/resource.hrc>
-#include <classes/addonsoptions.hxx>
+#include <framework/addonsoptions.hxx>
 #include <uielement/toolbarmerger.hxx>
-#include <helper/acceleratorinfo.hxx>
+#include <framework/acceleratorinfo.hxx>
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -135,7 +135,7 @@ static const sal_Int32 ITEM_DESCRIPTOR_STYLE_LEN       = RTL_CONSTASCII_LENGTH(I
 
 static const char   HELPID_PREFIX[]                 = "helpid:";
 static const char   HELPID_PREFIX_TESTTOOL[]        = ".HelpId:";
-static const USHORT STARTID_CUSTOMIZE_POPUPMENU     = 1000;
+static const sal_uInt16 STARTID_CUSTOMIZE_POPUPMENU     = 1000;
 
 #define MENUPREFIX "private:resource/menubar/"
 
@@ -283,7 +283,7 @@ ToolBarManager::ToolBarManager( const Reference< XMultiServiceFactory >& rServic
 
     // enables a menu for clipped items and customization
     SvtCommandOptions aCmdOptions;
-    USHORT nMenuType = TOOLBOX_MENUTYPE_CLIPPEDITEMS;
+    sal_uInt16 nMenuType = TOOLBOX_MENUTYPE_CLIPPEDITEMS;
     if ( !aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CreateDialog"))))
          nMenuType |= TOOLBOX_MENUTYPE_CUSTOMIZE;
     //added for issue33668 by shizhoubo
@@ -297,10 +297,10 @@ ToolBarManager::ToolBarManager( const Reference< XMultiServiceFactory >& rServic
     // set name for testtool, the useful part is after the last '/'
     sal_Int32 idx = rResourceName.lastIndexOf('/');
     idx++; // will become 0 if '/' not found: use full string
-    ::rtl::OUString  aHelpIdAsString( RTL_CONSTASCII_USTRINGPARAM( HELPID_PREFIX_TESTTOOL ));
+    ::rtl::OString  aHelpIdAsString( HELPID_PREFIX_TESTTOOL );
     ::rtl::OUString  aToolbarName = rResourceName.copy( idx );
-    aHelpIdAsString += aToolbarName;
-    m_pToolBar->SetSmartHelpId( SmartId( aHelpIdAsString ) );
+    aHelpIdAsString += rtl::OUStringToOString( aToolbarName, RTL_TEXTENCODING_UTF8 );;
+    m_pToolBar->SetHelpId( aHelpIdAsString );
 
     m_aAsyncUpdateControllersTimer.SetTimeout( 50 );
     m_aAsyncUpdateControllersTimer.SetTimeoutHdl( LINK( this, ToolBarManager, AsyncUpdateControllersHdl ) );
@@ -390,9 +390,9 @@ void ToolBarManager::RefreshImages()
     ResetableGuard aGuard( m_aLock );
 
     sal_Bool  bBigImages( SvtMiscOptions().AreCurrentSymbolsLarge() );
-    for ( USHORT nPos = 0; nPos < m_pToolBar->GetItemCount(); nPos++ )
+    for ( sal_uInt16 nPos = 0; nPos < m_pToolBar->GetItemCount(); nPos++ )
     {
-        USHORT nId( m_pToolBar->GetItemId( nPos ) );
+        sal_uInt16 nId( m_pToolBar->GetItemId( nPos ) );
 
         if ( nId > 0 )
         {
@@ -442,9 +442,9 @@ void ToolBarManager::UpdateImageOrientation()
         }
     }
 
-    for ( USHORT nPos = 0; nPos < m_pToolBar->GetItemCount(); nPos++ )
+    for ( sal_uInt16 nPos = 0; nPos < m_pToolBar->GetItemCount(); nPos++ )
     {
-        USHORT nId = m_pToolBar->GetItemId( nPos );
+        sal_uInt16 nId = m_pToolBar->GetItemId( nPos );
         if ( nId > 0 )
         {
             rtl::OUString aCmd = m_pToolBar->GetItemCommand( nId );
@@ -454,7 +454,7 @@ void ToolBarManager::UpdateImageOrientation()
             {
                 if ( pIter->second.bRotated )
                 {
-                    m_pToolBar->SetItemImageMirrorMode( nId, FALSE );
+                    m_pToolBar->SetItemImageMirrorMode( nId, sal_False );
                     m_pToolBar->SetItemImageAngle( nId, m_lImageRotation );
                 }
                 if ( pIter->second.bMirrored )
@@ -796,7 +796,7 @@ void ToolBarManager::impl_elementChanged(bool _bRemove,const ::com::sun::star::u
 }
 void ToolBarManager::setToolBarImage(const Image& _aImage,const CommandToInfoMap::const_iterator& _pIter)
 {
-    const ::std::vector< USHORT >& _rIDs = _pIter->second.aIds;
+    const ::std::vector< sal_uInt16 >& _rIDs = _pIter->second.aIds;
     m_pToolBar->SetItemImage( _pIter->second.nId, _aImage );
     ::std::for_each(_rIDs.begin(),_rIDs.end(),::boost::bind(&ToolBar::SetItemImage,m_pToolBar,_1,_aImage));
 }
@@ -931,22 +931,22 @@ void ToolBarManager::CreateControllers()
     if ( xProps.is() )
         xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))) >>= xComponentContext;
 
-    for ( USHORT i = 0; i < m_pToolBar->GetItemCount(); i++ )
+    for ( sal_uInt16 i = 0; i < m_pToolBar->GetItemCount(); i++ )
     {
-        USHORT nId = m_pToolBar->GetItemId( i );
+        sal_uInt16 nId = m_pToolBar->GetItemId( i );
         if ( nId == 0 )
             continue;
 
-        sal_Int16                    nWidth( sal_Int16( m_pToolBar->GetHelpId( nId )));
         rtl::OUString                aLoadURL( RTL_CONSTASCII_USTRINGPARAM( ".uno:OpenUrl" ));
         rtl::OUString                aCommandURL( m_pToolBar->GetItemCommand( nId ));
         sal_Bool                     bInit( sal_True );
         sal_Bool                     bCreate( sal_True );
         Reference< XStatusListener > xController;
+        CommandToInfoMap::iterator pCommandIter = m_aCommandMap.find( aCommandURL );
+        sal_Int16 nWidth = ( pCommandIter != m_aCommandMap.end() ? pCommandIter->second.nWidth : 0 );
 
         svt::ToolboxController* pController( 0 );
 
-        m_pToolBar->SetHelpId( nId, 0 ); // reset value again
         if ( bHasDisabledEntries )
         {
             aURL.Complete = aCommandURL;
@@ -1228,7 +1228,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
     if ( m_bDisposed )
         return;
 
-    USHORT    nId( 1 );
+    sal_uInt16    nId( 1 );
     ::rtl::OUString  aHelpIdPrefix( RTL_CONSTASCII_USTRINGPARAM( HELPID_PREFIX ));
 
     Reference< XModuleManager > xModuleManager( Reference< XModuleManager >(
@@ -1395,15 +1395,13 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                     if ( pIter == m_aCommandMap.end())
                     {
                         aCmdInfo.nId = nId;
+                        aCmdInfo.nWidth = nWidth;
                         m_aCommandMap.insert( CommandToInfoMap::value_type( aCommandURL, aCmdInfo ));
                     }
                     else
                     {
                         pIter->second.aIds.push_back( nId );
                     }
-
-                    // Add additional information for the controller to the obsolete help id
-                    m_pToolBar->SetHelpId( ULONG( nWidth ));
 
                     if ( !bIsVisible )
                         m_pToolBar->HideItem( nId );
@@ -1619,7 +1617,7 @@ long ToolBarManager::HandleClick(void ( SAL_CALL XToolbarController::*_pClick )(
     if ( m_bDisposed )
         return 1;
 
-    USHORT nId( m_pToolBar->GetCurItemId() );
+    sal_uInt16 nId( m_pToolBar->GetCurItemId() );
     ToolBarControllerMap::const_iterator pIter = m_aControllerMap.find( nId );
     if ( pIter != m_aControllerMap.end() )
     {
@@ -1643,7 +1641,7 @@ IMPL_LINK( ToolBarManager, DropdownClick, ToolBox*, EMPTYARG )
     if ( m_bDisposed )
         return 1;
 
-    USHORT nId( m_pToolBar->GetCurItemId() );
+    sal_uInt16 nId( m_pToolBar->GetCurItemId() );
     ToolBarControllerMap::const_iterator pIter = m_aControllerMap.find( nId );
     if ( pIter != m_aControllerMap.end() )
     {
@@ -1683,7 +1681,7 @@ void ToolBarManager::ImplClearPopupMenu( ToolBox *pToolBar )
     }
 
     // remove all items that were not added by the toolbar itself
-    USHORT i;
+    sal_uInt16 i;
     for( i=0; i<pMenu->GetItemCount(); )
     {
         if( pMenu->GetItemId( i ) < TOOLBOX_MENUITEM_START )
@@ -1769,7 +1767,7 @@ PopupMenu * ToolBarManager::GetToolBarCustomMeun(ToolBox* pToolBar)
 
     if ( m_pToolBar->IsCustomize() )
     {
-        USHORT      nPos( 0 );
+        sal_uInt16      nPos( 0 );
         PopupMenu*  pItemMenu( aPopupMenu.GetPopupMenu( 1 ));
 
         sal_Bool    bIsFloating( sal_False );
@@ -1810,7 +1808,7 @@ PopupMenu * ToolBarManager::GetToolBarCustomMeun(ToolBox* pToolBar)
         {
             if ( m_pToolBar->GetItemType(nPos) == TOOLBOXITEM_BUTTON )
             {
-                USHORT nId = m_pToolBar->GetItemId(nPos);
+                sal_uInt16 nId = m_pToolBar->GetItemId(nPos);
                 ::rtl::OUString aCommandURL = m_pToolBar->GetItemCommand( nId );
                 pItemMenu->InsertItem( STARTID_CUSTOMIZE_POPUPMENU+nPos, m_pToolBar->GetItemText( nId ), MIB_CHECKABLE );
                 pItemMenu->CheckItem( STARTID_CUSTOMIZE_POPUPMENU+nPos, m_pToolBar->IsItemVisible( nId ) );
@@ -1827,7 +1825,7 @@ PopupMenu * ToolBarManager::GetToolBarCustomMeun(ToolBox* pToolBar)
     }
     else
     {
-        USHORT nPos = aPopupMenu.GetItemPos( MENUITEM_TOOLBAR_CUSTOMIZETOOLBAR );
+        sal_uInt16 nPos = aPopupMenu.GetItemPos( MENUITEM_TOOLBAR_CUSTOMIZETOOLBAR );
         if ( nPos != MENU_ITEM_NOTFOUND )
             aPopupMenu.RemoveItem( nPos );
     }
@@ -1836,7 +1834,7 @@ PopupMenu * ToolBarManager::GetToolBarCustomMeun(ToolBox* pToolBar)
     if( pMenu->GetItemCount() )
         pMenu->InsertSeparator();
 
-    USHORT i;
+    sal_uInt16 i;
     for( i=0; i< aPopupMenu.GetItemCount(); i++)
     {
         sal_uInt16 nId = aPopupMenu.GetItemId( i );
@@ -1995,7 +1993,7 @@ IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu )
 
             default:
             {
-                USHORT nId = pMenu->GetCurItemId();
+                sal_uInt16 nId = pMenu->GetCurItemId();
                 if(( nId > 0 ) && ( nId < TOOLBOX_MENUITEM_START ))
                 {
                     // toggle toolbar button visibility
@@ -2077,7 +2075,7 @@ IMPL_LINK( ToolBarManager, Select, ToolBox*, EMPTYARG )
         return 1;
 
     sal_Int16   nKeyModifier( (sal_Int16)m_pToolBar->GetModifier() );
-    USHORT      nId( m_pToolBar->GetCurItemId() );
+    sal_uInt16      nId( m_pToolBar->GetCurItemId() );
 
     ToolBarControllerMap::const_iterator pIter = m_aControllerMap.find( nId );
     if ( pIter != m_aControllerMap.end() )
@@ -2136,9 +2134,9 @@ IMPL_LINK( ToolBarManager, DataChanged, DataChangedEvent*, pDataChangedEvent  )
         CheckAndUpdateImages();
     }
 
-    for ( USHORT nPos = 0; nPos < m_pToolBar->GetItemCount(); ++nPos )
+    for ( sal_uInt16 nPos = 0; nPos < m_pToolBar->GetItemCount(); ++nPos )
     {
-        const USHORT nId = m_pToolBar->GetItemId(nPos);
+        const sal_uInt16 nId = m_pToolBar->GetItemId(nPos);
         Window* pWindow = m_pToolBar->GetItemWindow( nId );
         if ( pWindow )
         {

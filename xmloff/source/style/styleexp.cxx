@@ -34,7 +34,7 @@
 #include <svl/svstdarr.hxx>
 #endif
 #include <xmloff/nmspmap.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/attrlist.hxx>
@@ -439,7 +439,7 @@ void XMLStyleExport::exportStyleFamily(
         {
             if( !bUsed || xStyle->isInUse() )
             {
-                BOOL bExported = exportStyle( xStyle, rXMLFamily, rPropMapper,
+                sal_Bool bExported = exportStyle( xStyle, rXMLFamily, rPropMapper,
                                               xStyles,pPrefix );
                 if( bUsed && bFirstStyle && bExported  )
                 {

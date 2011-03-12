@@ -43,6 +43,7 @@ ModelessDialog RID_DLG_EXTENSION_MANAGER
 
     PushButton RID_EM_BTN_ADD
     {
+        HelpID = "desktop:PushButton:RID_DLG_EXTENSION_MANAGER:RID_EM_BTN_ADD";
         TabStop = TRUE;
         Text [ en-US ] = "~Add...";
         Size = MAP_APPFONT(RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
@@ -50,6 +51,7 @@ ModelessDialog RID_DLG_EXTENSION_MANAGER
 
     PushButton RID_EM_BTN_CHECK_UPDATES
     {
+        HelpID = "desktop:PushButton:RID_DLG_EXTENSION_MANAGER:RID_EM_BTN_CHECK_UPDATES";
         TabStop = TRUE;
         Text [ en-US ] = "Check for ~Updates...";
         Size = MAP_APPFONT(RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
@@ -131,6 +133,7 @@ ModalDialog RID_DLG_UPDATE_REQUIRED
 
     PushButton RID_EM_BTN_CHECK_UPDATES
     {
+        HelpID = "desktop:PushButton:RID_DLG_UPDATE_REQUIRED:RID_EM_BTN_CHECK_UPDATES";
         TabStop = TRUE;
         Text [ en-US ] = "Check for ~Updates...";
         Size = MAP_APPFONT(RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
@@ -138,6 +141,7 @@ ModalDialog RID_DLG_UPDATE_REQUIRED
 
     PushButton RID_EM_BTN_CLOSE
     {
+        HelpID = "desktop:PushButton:RID_DLG_UPDATE_REQUIRED:RID_EM_BTN_CLOSE";
         TabStop = TRUE;
         DefButton = TRUE;
         Text [ en-US ] = "Disable all";

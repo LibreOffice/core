@@ -49,6 +49,7 @@
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/document/XEventListener.hpp>
+#include <com/sun/star/frame/XModuleManager.hpp>
 
 //_______________________________________
 // other includes
@@ -85,6 +86,9 @@ class JobExecutor : public  css::lang::XTypeProvider
 
         /** reference to the uno service manager */
         css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
+
+        /** reference to the module info service */
+        css::uno::Reference< css::frame::XModuleManager > m_xModuleManager;
 
         /** cached list of all registered event names of cfg for call optimization. */
         OUStringList m_lEvents;

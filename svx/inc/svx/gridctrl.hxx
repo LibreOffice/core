@@ -285,7 +285,7 @@ private:
     sal_uInt16          m_nOptionMask;      // the mask of options to be enabled in setDataSource
                                         // (with respect to the data source capabilities)
                                         // defaults to (insert | update | delete)
-    USHORT              m_nLastColId;
+    sal_uInt16              m_nLastColId;
     long                m_nLastRowId;
 
     sal_Bool            m_bDesignMode : 1;      // default = sal_False
@@ -390,7 +390,7 @@ public:
         @return
             the text out of the cell
     */
-    virtual String  GetCellText(long _nRow, USHORT _nColId) const;
+    virtual String  GetCellText(long _nRow, sal_uInt16 _nColId) const;
 
     void RemoveRows(sal_Bool bNewCursor);
 

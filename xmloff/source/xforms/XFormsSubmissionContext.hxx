@@ -59,7 +59,7 @@ class XFormsSubmissionContext : public TokenContext
 public:
 
     XFormsSubmissionContext( SvXMLImport& rImport,
-                             USHORT nPrefix,
+                             sal_uInt16 nPrefix,
                              const rtl::OUString& rLocalName,
                              const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& xModel );
     virtual ~XFormsSubmissionContext();

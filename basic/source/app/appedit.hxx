@@ -43,7 +43,7 @@ public:
     ScrollBar *pVScroll;
     ScrollBar *pHScroll;
     void SetScrollBarRanges();
-    ULONG nCurTextWidth;
+    sal_uIntPtr nCurTextWidth;
 private:
     void InitScrollBars();
 protected:
@@ -52,7 +52,7 @@ public:
     TYPEINFO();
     AppEdit( BasicFrame* );
     ~AppEdit();
-    USHORT GetLineNr();                                 // Current line number
+    sal_uInt16 GetLineNr();                                 // Current line number
     FileType GetFileType();                             // Returns the file type
     virtual long InitMenu( Menu* );                     // Inits the menu
     virtual long DeInitMenu( Menu* );                   // Reset to enable all Shortcuts
@@ -61,8 +61,8 @@ public:
     void PostLoad();
     void PostSaveAs();
     void Mark( short, short, short );                   // Select text
-    void Highlight( USHORT nLine, USHORT nCol1, USHORT nCol2 );
-    virtual BOOL ReloadAllowed(){ return !StarBASIC::IsRunning(); }
+    void Highlight( sal_uInt16 nLine, sal_uInt16 nCol1, sal_uInt16 nCol2 );
+    virtual sal_Bool ReloadAllowed(){ return !StarBASIC::IsRunning(); }
     virtual void LoadIniFile();     // (re)load ini file after change
 };
 

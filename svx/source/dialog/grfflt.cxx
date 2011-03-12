@@ -44,10 +44,10 @@
 // - SvxGraphicFilter -
 // --------------------
 
-ULONG SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObject& rFilterObject )
+sal_uIntPtr SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObject& rFilterObject )
 {
     const Graphic&  rGraphic = rFilterObject.GetGraphic();
-    ULONG           nRet = SVX_GRAPHICFILTER_UNSUPPORTED_GRAPHICTYPE;
+    sal_uIntPtr         nRet = SVX_GRAPHICFILTER_UNSUPPORTED_GRAPHICTYPE;
 
     if( rGraphic.GetType() == GRAPHIC_BITMAP )
     {
@@ -61,7 +61,7 @@ ULONG SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObject& r
             case( SID_GRFFILTER_INVERT ):
             {
                 if( pShell )
-                    pShell->SetWaitCursor( TRUE );
+                    pShell->SetWaitCursor( sal_True );
 
                 if( rGraphic.IsAnimated() )
                 {
@@ -79,14 +79,14 @@ ULONG SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObject& r
                 }
 
                 if( pShell )
-                    pShell->SetWaitCursor( FALSE );
+                    pShell->SetWaitCursor( sal_False );
             }
             break;
 
             case( SID_GRFFILTER_SMOOTH ):
             {
                 if( pShell )
-                    pShell->SetWaitCursor( TRUE );
+                    pShell->SetWaitCursor( sal_True );
 
                 if( rGraphic.IsAnimated() )
                 {
@@ -104,14 +104,14 @@ ULONG SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObject& r
                 }
 
                 if( pShell )
-                    pShell->SetWaitCursor( FALSE );
+                    pShell->SetWaitCursor( sal_False );
             }
             break;
 
             case( SID_GRFFILTER_SHARPEN ):
             {
                 if( pShell )
-                    pShell->SetWaitCursor( TRUE );
+                    pShell->SetWaitCursor( sal_True );
 
                 if( rGraphic.IsAnimated() )
                 {
@@ -129,14 +129,14 @@ ULONG SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObject& r
                 }
 
                 if( pShell )
-                    pShell->SetWaitCursor( FALSE );
+                    pShell->SetWaitCursor( sal_False );
             }
             break;
 
             case( SID_GRFFILTER_REMOVENOISE ):
             {
                 if( pShell )
-                    pShell->SetWaitCursor( TRUE );
+                    pShell->SetWaitCursor( sal_True );
 
                 if( rGraphic.IsAnimated() )
                 {
@@ -154,14 +154,14 @@ ULONG SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObject& r
                 }
 
                 if( pShell )
-                    pShell->SetWaitCursor( FALSE );
+                    pShell->SetWaitCursor( sal_False );
             }
             break;
 
             case( SID_GRFFILTER_SOBEL ):
             {
                 if( pShell )
-                    pShell->SetWaitCursor( TRUE );
+                    pShell->SetWaitCursor( sal_True );
 
                 if( rGraphic.IsAnimated() )
                 {
@@ -179,7 +179,7 @@ ULONG SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObject& r
                 }
 
                 if( pShell )
-                    pShell->SetWaitCursor( FALSE );
+                    pShell->SetWaitCursor( sal_False );
             }
             break;
 
@@ -188,7 +188,7 @@ ULONG SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObject& r
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 if(pFact)
                 {
-                    AbstractGraphicFilterDialog* aDlg = pFact->CreateGraphicFilterMosaic( pWindow, rGraphic, 4, 4, FALSE, RID_SVX_GRFFILTER_DLG_MOSAIC);
+                    AbstractGraphicFilterDialog* aDlg = pFact->CreateGraphicFilterMosaic( pWindow, rGraphic, 4, 4, sal_False, RID_SVX_GRFFILTER_DLG_MOSAIC);
                     DBG_ASSERT(aDlg, "Dialogdiet fail!");
                     if( aDlg->Execute() == RET_OK )
                         aGraphic = aDlg->GetFilteredGraphic( rGraphic, 1.0, 1.0 );
@@ -228,7 +228,7 @@ ULONG SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObject& r
             case( SID_GRFFILTER_POPART  ):
             {
                 if( pShell )
-                    pShell->SetWaitCursor( TRUE );
+                    pShell->SetWaitCursor( sal_True );
 
                 if( rGraphic.IsAnimated() )
                 {
@@ -246,7 +246,7 @@ ULONG SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObject& r
                 }
 
                 if( pShell )
-                    pShell->SetWaitCursor( FALSE );
+                    pShell->SetWaitCursor( sal_False );
             }
             break;
 
@@ -269,7 +269,7 @@ ULONG SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObject& r
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 if(pFact)
                 {
-                    AbstractGraphicFilterDialog* aDlg = pFact->CreateGraphicFilterSolarize( pWindow, rGraphic, 128, FALSE, RID_SVX_GRFFILTER_DLG_SOLARIZE );
+                    AbstractGraphicFilterDialog* aDlg = pFact->CreateGraphicFilterSolarize( pWindow, rGraphic, 128, sal_False, RID_SVX_GRFFILTER_DLG_SOLARIZE );
                     DBG_ASSERT(aDlg, "Dialogdiet fail!");
                     if( aDlg->Execute() == RET_OK )
                         aGraphic = aDlg->GetFilteredGraphic( rGraphic, 1.0, 1.0 );

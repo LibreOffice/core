@@ -58,9 +58,9 @@ class SvStream;
 // Diese Records enthalten wiederum weitere Records. Jeder Record hat
 // den folgenden Header:
 
-//  UINT16 Kennung
-//  UINT32 Laenge des Records ohne Header
-//  UINT16 Anzahl Unterelemente
+//  sal_uInt16 Kennung
+//  sal_uInt32 Laenge des Records ohne Header
+//  sal_uInt16 Anzahl Unterelemente
 
 // Alle Datei-Offsets in Records sind relativ zum Start des Moduls!
 
@@ -85,33 +85,33 @@ class SvStream;
 #endif
 
 // Ein Library Record enthaelt nur Module Records
-//  UINT16 Kennung BL
-//  UINT32 Laenge des Records
-//  UINT16 Anzahl Module
+//  sal_uInt16 Kennung BL
+//  sal_uInt32 Laenge des Records
+//  sal_uInt16 Anzahl Module
 
 // Ein Modul-Record enthaelt alle anderen Recordtypen
-//  UINT16 Kennung BM
-//  UINT32 Laenge des Records
-//  UINT16 1
+//  sal_uInt16 Kennung BM
+//  sal_uInt32 Laenge des Records
+//  sal_uInt16 1
 // Daten:
-//  UINT32 Versionsnummer
-//  UINT32 Zeichensatz
-//  UINT32 Startadresse Initialisierungscode
-//  UINT32 Startadresse Sub Main
-//  UINT32 Reserviert
-//  UINT32 Reserviert
+//  sal_uInt32 Versionsnummer
+//  sal_uInt32 Zeichensatz
+//  sal_uInt32 Startadresse Initialisierungscode
+//  sal_uInt32 Startadresse Sub Main
+//  sal_uInt32 Reserviert
+//  sal_uInt32 Reserviert
 
 // Modulname, Kommentar und Quellcode:
-//  UINT16 Kennung MN, MC oder SC
-//  UINT32 Laenge des Records
-//  UINT16 1
+//  sal_uInt16 Kennung MN, MC oder SC
+//  sal_uInt32 Laenge des Records
+//  sal_uInt16 1
 // Daten:
 //  String-Instanz
 
 // P-Code:
-//  UINT16 Kennung PC
-//  UINT32 Laenge des Records
-//  UINT16 1
+//  sal_uInt16 Kennung PC
+//  sal_uInt32 Laenge des Records
+//  sal_uInt16 1
 // Daten:
 //  Der P-Code als Bytesack
 
@@ -119,62 +119,62 @@ class SvStream;
 // Verweise auf diese Strings sind in Form eines Indexes in diesen Pool.
 
 // Liste aller Publics:
-//  UINT16 Kennung PU oder Pu
-//  UINT32 Laenge des Records
-//  UINT16 Anzahl der Publics
+//  sal_uInt16 Kennung PU oder Pu
+//  sal_uInt32 Laenge des Records
+//  sal_uInt16 Anzahl der Publics
 // Daten fuer jeden Public-Eintrag:
-//  UINT16 String-Index
-//  UINT32 Startadresse im P-Code-Image (UINT16 fuer alte Publics)
-//  UINT16 Datentyp des Returnwertes (ab Version 2)
+//  sal_uInt16 String-Index
+//  sal_uInt32 Startadresse im P-Code-Image (sal_uInt16 fuer alte Publics)
+//  sal_uInt16 Datentyp des Returnwertes (ab Version 2)
 
 // Verzeichnis der Symbol-Tabellen:
-//  UINT16 Kennung SP
-//  UINT32 Laenge des Records
-//  UINT16 Anzahl der Symboltabellen
+//  sal_uInt16 Kennung SP
+//  sal_uInt32 Laenge des Records
+//  sal_uInt16 Anzahl der Symboltabellen
 // Daten fuer jede Symboltabelle:
-//  UINT16 Stringindex des Namens
-//  UINT16 Anzahl Symbole
-//  UINT16 Scope-Kennung
+//  sal_uInt16 Stringindex des Namens
+//  sal_uInt16 Anzahl Symbole
+//  sal_uInt16 Scope-Kennung
 
 // Symboltabelle:
-//  UINT16 Kennung SY
-//  UINT32 Laenge des Records
-//  UINT16 Anzahl der Symbole
+//  sal_uInt16 Kennung SY
+//  sal_uInt32 Laenge des Records
+//  sal_uInt16 Anzahl der Symbole
 // Daten:
-//  UINT16 Stringindex des Namens
-//  UINT16 Anzahl Symbole
+//  sal_uInt16 Stringindex des Namens
+//  sal_uInt16 Anzahl Symbole
 // Daten fuer jedes Symbol:
-//  UINT16 Stringindex des Namens
-//  UINT16 Datentyp
-//  UINT16 Laenge bei STRING*n-Symbolen (0x8000: STATIC-Variable)
+//  sal_uInt16 Stringindex des Namens
+//  sal_uInt16 Datentyp
+//  sal_uInt16 Laenge bei STRING*n-Symbolen (0x8000: STATIC-Variable)
 
 // Stringpool:
-//  UINT16 Kennung ST
-//  UINT32 Laenge des Records
-//  UINT16 Anzahl der Strings
+//  sal_uInt16 Kennung ST
+//  sal_uInt32 Laenge des Records
+//  sal_uInt16 Anzahl der Strings
 // Daten fuer jeden String:
-//  UINT32 Offset in den Block aller Strings
+//  sal_uInt32 Offset in den Block aller Strings
 // Danach folgt der Block aller Strings, die dort als ASCIIZ-Strings liegen.
 
 // Line Ranges:
-//  UINT16 Kennung LR
-//  UINT32 Laenge des Records
-//  UINT16 Anzahl der Strings
+//  sal_uInt16 Kennung LR
+//  sal_uInt32 Laenge des Records
+//  sal_uInt16 Anzahl der Strings
 // Daten fuer jedes Public:
-//  UINT16 1. Zeile (Sub XXX)
-//  UINT16 2. Zeile (End Sub)
+//  sal_uInt16 1. Zeile (Sub XXX)
+//  sal_uInt16 2. Zeile (End Sub)
 
 // SBX-Objekte:
-// UINT16 Anzahl Objekte
+// sal_uInt16 Anzahl Objekte
 // ....   Objektdaten
 
 ////////////////////////////////////////////////////////////////////////////
 
 // Service-Routinen (in IMAGE.CXX)
 
-BOOL  SbGood( SvStream& r );
-ULONG SbOpenRecord( SvStream&, UINT16 nSignature, UINT16 nElem );
-void  SbCloseRecord( SvStream&, ULONG );
+sal_Bool  SbGood( SvStream& r );
+sal_uIntPtr SbOpenRecord( SvStream&, sal_uInt16 nSignature, sal_uInt16 nElem );
+void  SbCloseRecord( SvStream&, sal_uIntPtr );
 
 #endif
 

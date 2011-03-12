@@ -218,7 +218,7 @@ sal_Bool SAL_CALL UIConfigElementWrapperBase::convertFastPropertyValue( Any&    
                                                                         sal_Int32  nHandle         ,
                                                                         const Any& aValue             ) throw( com::sun::star::lang::IllegalArgumentException )
 {
-    //  Initialize state with FALSE !!!
+    //  Initialize state with sal_False !!!
     //  (Handle can be invalid)
     sal_Bool bReturn = sal_False;
 

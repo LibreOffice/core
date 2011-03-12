@@ -30,7 +30,7 @@
 #include "precompiled_svx.hxx"
 #include <svx/polygn3d.hxx>
 #include <svx/svdpage.hxx>
-#include "globl3d.hxx"
+#include "svx/globl3d.hxx"
 #include <basegfx/point/b3dpoint.hxx>
 #include <svx/sdr/contact/viewcontactofe3dpolygon.hxx>
 #include <basegfx/polygon/b3dpolygon.hxx>
@@ -55,7 +55,7 @@ sdr::contact::ViewContact* E3dPolygonObj::CreateObjectSpecificViewContact()
 E3dPolygonObj::E3dPolygonObj(
     E3dDefaultAttributes& rDefault,
     const basegfx::B3DPolyPolygon& rPolyPoly3D,
-    BOOL bLinOnly)
+    sal_Bool bLinOnly)
 :   E3dCompoundObject(rDefault),
     bLineOnly(bLinOnly)
 {
@@ -79,7 +79,7 @@ E3dPolygonObj::E3dPolygonObj(
     E3dDefaultAttributes& rDefault,
     const basegfx::B3DPolyPolygon& rPolyPoly3D,
     const basegfx::B3DPolyPolygon& rPolyNormals3D,
-    BOOL bLinOnly)
+    sal_Bool bLinOnly)
 :   E3dCompoundObject(rDefault),
     bLineOnly(bLinOnly)
 {
@@ -102,7 +102,7 @@ E3dPolygonObj::E3dPolygonObj(
     const basegfx::B3DPolyPolygon& rPolyPoly3D,
     const basegfx::B3DPolyPolygon& rPolyNormals3D,
     const basegfx::B2DPolyPolygon& rPolyTexture2D,
-    BOOL bLinOnly)
+    sal_Bool bLinOnly)
 :   E3dCompoundObject(rDefault),
     bLineOnly(bLinOnly)
 {
@@ -189,7 +189,7 @@ void E3dPolygonObj::CreateDefaultTexture()
 
         // Entscheiden, welche Koordinaten als Source fuer das
         // Mapping benutzt werden sollen
-        UINT16 nSourceMode = 0;
+        sal_uInt16 nSourceMode = 0;
 
         // Groessten Freiheitsgrad ermitteln
         if(!(aNormal.getX() > aNormal.getY() && aNormal.getX() > aNormal.getZ()))
@@ -266,7 +266,7 @@ E3dPolygonObj::~E3dPolygonObj()
 |*
 \************************************************************************/
 
-UINT16 E3dPolygonObj::GetObjIdentifier() const
+sal_uInt16 E3dPolygonObj::GetObjIdentifier() const
 {
     return E3D_POLYGONOBJ_ID;
 }
@@ -319,7 +319,7 @@ void E3dPolygonObj::SetPolyTexture2D(const basegfx::B2DPolyPolygon& rNewPolyText
 |*
 \************************************************************************/
 
-SdrObject *E3dPolygonObj::DoConvertToPolyObj(BOOL /*bBezier*/) const
+SdrObject *E3dPolygonObj::DoConvertToPolyObj(sal_Bool /*bBezier*/) const
 {
     return NULL;
 }
@@ -350,7 +350,7 @@ void E3dPolygonObj::operator=(const SdrObject& rObj)
 |*
 \************************************************************************/
 
-void E3dPolygonObj::SetLineOnly(BOOL bNew)
+void E3dPolygonObj::SetLineOnly(sal_Bool bNew)
 {
     if(bNew != bLineOnly)
     {

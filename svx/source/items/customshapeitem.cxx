@@ -61,7 +61,7 @@ size_t SdrCustomShapeGeometryItem::PropertyPairHash::operator()( const SdrCustom
     return (size_t)r1.first.hashCode() + r1.second.hashCode();
 };
 
-TYPEINIT1_FACTORY( SdrCustomShapeGeometryItem, SfxPoolItem , new  SdrCustomShapeGeometryItem(0));
+TYPEINIT1_FACTORY( SdrCustomShapeGeometryItem, SfxPoolItem , new  SdrCustomShapeGeometryItem);
 SdrCustomShapeGeometryItem::SdrCustomShapeGeometryItem()
 :   SfxPoolItem( SDRATTR_CUSTOMSHAPE_GEOMETRY )
 {}
@@ -335,12 +335,12 @@ sal_uInt16 SdrCustomShapeGeometryItem::GetVersion( sal_uInt16 /*nFileFormatVersi
 {
     return 1;
 }
-bool SdrCustomShapeGeometryItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/ ) const
+bool SdrCustomShapeGeometryItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     rVal <<= aPropSeq;
     return true;
 }
-bool SdrCustomShapeGeometryItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
+bool SdrCustomShapeGeometryItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     if ( ! ( rVal >>= aPropSeq ) )
         return false;

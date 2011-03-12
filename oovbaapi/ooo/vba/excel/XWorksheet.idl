@@ -102,26 +102,26 @@ interface XWorksheet
     /*  The following form control related symbols do not refer to ActiveX form
         controls embedded in the sheet, but to the old-style drawing controls
         of Excel. This is an Excel-only feature. */
-    any Buttons( [in] any aIndex );
-    any CheckBoxes( [in] any aIndex );
-    any DropDowns( [in] any aIndex );
-    any GroupBoxes( [in] any aIndex );
-    any Labels( [in] any aIndex );
-    any ListBoxes( [in] any aIndex );
-    any OptionButtons( [in] any aIndex );
-    any ScrollBars( [in] any aIndex );
-    any Spinners( [in] any aIndex );
+    any Buttons( [in] any Index );
+    any CheckBoxes( [in] any Index );
+    any DropDowns( [in] any Index );
+    any GroupBoxes( [in] any Index );
+    any Labels( [in] any Index );
+    any ListBoxes( [in] any Index );
+    any OptionButtons( [in] any Index );
+    any ScrollBars( [in] any Index );
+    any Spinners( [in] any Index );
 
 // FIXME: should prolly inherit from Range somehow...
-    XRange Cells([in] any RowIndex, [in] any ColumnIndex);
-    XRange Rows([in] any aIndex);
-    XRange Columns([in] any aIndex);
-    any Hyperlinks( [in] any aIndex );
+    XRange Cells( [in] any RowIndex, [in] any ColumnIndex );
+    XRange Rows( [in] any Index );
+    XRange Columns( [in] any Index );
+    any Hyperlinks( [in] any Index );
     any Names( [in] any Index );
 
-    any Evaluate( [in] string Name);
+    any Evaluate( [in] string Name );
 
-    void setEnableCalculation([in] boolean EnableCalculation) raises(com::sun::star::script::BasicErrorException);
+    void setEnableCalculation( [in] boolean EnableCalculation ) raises(com::sun::star::script::BasicErrorException);
     boolean getEnableCalculation() raises(com::sun::star::script::BasicErrorException);
     void PrintOut( [in] any From, [in] any To, [in] any Copies, [in] any Preview, [in] any ActivePrinter, [in] any PrintToFile, [in] any Collate, [in] any PrToFileName, [in] any IgnorePrintAreas );
 };

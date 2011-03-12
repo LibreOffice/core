@@ -1743,7 +1743,7 @@
       <value xml:lang="es">.uno:Bold</value>
      </prop>
     </node>
-    <node oor:name="N_MOD1_MOD2" oor:op="replace">
+    <node oor:name="C_MOD1_MOD2" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:InsertAnnotation</value>
      </prop>
@@ -1938,7 +1938,7 @@
     </node>
    </node>
    <node oor:name="com.sun.star.presentation.PresentationDocument" oor:op="replace">
-     <node oor:name="N_MOD1_MOD2" oor:op="replace">
+     <node oor:name="C_MOD1_MOD2" oor:op="replace">
        <prop oor:name="Command">
          <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
          <value xml:lang="en-US">.uno:InsertAnnotation</value>
@@ -2784,7 +2784,7 @@
       <value xml:lang="es">.uno:Bold</value>
      </prop>
     </node>
-    <node oor:name="N_MOD1_MOD2" oor:op="replace">
+    <node oor:name="C_MOD1_MOD2" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:InsertAnnotation</value>
      </prop>
@@ -3424,7 +3424,7 @@
       <value xml:lang="es">.uno:Bold</value>
      </prop>
     </node>
-    <node oor:name="N_MOD1_MOD2" oor:op="replace">
+    <node oor:name="C_MOD1_MOD2" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:InsertAnnotation</value>
      </prop>
@@ -4034,7 +4034,7 @@
       <value xml:lang="es">.uno:Bold</value>
      </prop>
     </node>
-    <node oor:name="N_MOD1_MOD2" oor:op="replace">
+    <node oor:name="C_MOD1_MOD2" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:InsertAnnotation</value>
      </prop>
@@ -4644,7 +4644,7 @@
       <value xml:lang="es">.uno:Bold</value>
      </prop>
     </node>
-    <node oor:name="N_MOD1_MOD2" oor:op="replace">
+    <node oor:name="C_MOD1_MOD2" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:InsertAnnotation</value>
      </prop>
@@ -5259,7 +5259,7 @@
       <value xml:lang="es">.uno:Bold</value>
      </prop>
     </node>
-    <node oor:name="N_MOD1_MOD2" oor:op="replace">
+    <node oor:name="C_MOD1_MOD2" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:InsertAnnotation</value>
      </prop>
@@ -5622,7 +5622,7 @@
     </node>
    </node>
    <node oor:name="com.sun.star.drawing.DrawingDocument" oor:op="replace">
-     <node oor:name="N_MOD1_MOD2" oor:op="replace">
+     <node oor:name="C_MOD1_MOD2" oor:op="replace">
        <prop oor:name="Command">
          <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
          <value xml:lang="en-US">.uno:InsertAnnotation</value>

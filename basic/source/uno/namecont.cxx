@@ -738,7 +738,7 @@ sal_Bool SfxLibraryContainer::init_Impl(
                 if( nPass == 0 )
                 {
                     SfxErrorContext aEc( ERRCTX_SFX_LOADBASIC, aFileName );
-                    ULONG nErrorCode = ERRCODE_IO_GENERAL;
+                    sal_uIntPtr nErrorCode = ERRCODE_IO_GENERAL;
                     ErrorHandler::HandleError( nErrorCode );
                 }
             }
@@ -760,7 +760,7 @@ sal_Bool SfxLibraryContainer::init_Impl(
                 {
                     xInput.clear();
                     SfxErrorContext aEc( ERRCTX_SFX_LOADBASIC, aFileName );
-                    ULONG nErrorCode = ERRCODE_IO_GENERAL;
+                    sal_uIntPtr nErrorCode = ERRCODE_IO_GENERAL;
                     ErrorHandler::HandleError( nErrorCode );
                 }
             }
@@ -1489,7 +1489,7 @@ void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
                         throw;
 
                     SfxErrorContext aEc( ERRCTX_SFX_SAVEDOC, aElementPath );
-                    ULONG nErrorCode = ERRCODE_IO_GENERAL;
+                    sal_uIntPtr nErrorCode = ERRCODE_IO_GENERAL;
                     ErrorHandler::HandleError( nErrorCode );
                 }
             }
@@ -1601,7 +1601,7 @@ void SfxLibraryContainer::implStoreLibraryIndexFile( SfxLibrary* pLib,
                 throw;
 
             SfxErrorContext aEc( ERRCTX_SFX_SAVEDOC, aLibInfoPath );
-            ULONG nErrorCode = ERRCODE_IO_GENERAL;
+            sal_uIntPtr nErrorCode = ERRCODE_IO_GENERAL;
             ErrorHandler::HandleError( nErrorCode );
         }
     }
@@ -1676,7 +1676,7 @@ sal_Bool SfxLibraryContainer::implLoadLibraryIndexFile(  SfxLibrary* pLib,
             if( !GbMigrationSuppressErrors )
             {
                 SfxErrorContext aEc( ERRCTX_SFX_LOADBASIC, aLibInfoPath );
-                ULONG nErrorCode = ERRCODE_IO_GENERAL;
+                sal_uIntPtr nErrorCode = ERRCODE_IO_GENERAL;
                 ErrorHandler::HandleError( nErrorCode );
             }
         }
@@ -1700,7 +1700,7 @@ sal_Bool SfxLibraryContainer::implLoadLibraryIndexFile(  SfxLibrary* pLib,
     {
         OSL_ENSURE( 0, "Parsing error\n" );
         SfxErrorContext aEc( ERRCTX_SFX_LOADBASIC, aLibInfoPath );
-        ULONG nErrorCode = ERRCODE_IO_GENERAL;
+        sal_uIntPtr nErrorCode = ERRCODE_IO_GENERAL;
         ErrorHandler::HandleError( nErrorCode );
         return sal_False;
     }
@@ -2029,7 +2029,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
         }
         catch( uno::Exception& )
         {
-            ULONG nErrorCode = ERRCODE_IO_GENERAL;
+            sal_uIntPtr nErrorCode = ERRCODE_IO_GENERAL;
             ErrorHandler::HandleError( nErrorCode );
         }
     }
@@ -2051,7 +2051,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
         {
             xOut.clear();
             SfxErrorContext aEc( ERRCTX_SFX_SAVEDOC, aLibInfoPath );
-            ULONG nErrorCode = ERRCODE_IO_GENERAL;
+            sal_uIntPtr nErrorCode = ERRCODE_IO_GENERAL;
             ErrorHandler::HandleError( nErrorCode );
         }
 
@@ -2081,7 +2081,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
     catch( uno::Exception& )
     {
         OSL_ENSURE( sal_False, "Problem during storing of libraries!\n" );
-        ULONG nErrorCode = ERRCODE_IO_GENERAL;
+        sal_uIntPtr nErrorCode = ERRCODE_IO_GENERAL;
         ErrorHandler::HandleError( nErrorCode );
     }
 }
@@ -2808,19 +2808,37 @@ OUString SAL_CALL SfxLibraryContainer::getOriginalLibraryLinkURL( const OUString
 
 void SAL_CALL SfxLibraryContainer::setVBACompatibilityMode( ::sal_Bool _vbacompatmodeon ) throw (RuntimeException)
 {
-    BasicManager* pBasMgr = getBasicManager();
-    if( pBasMgr )
+    /*  The member variable mbVBACompat must be set first, the following call
+        to getBasicManager() may call getVBACompatibilityMode() which returns
+        this value. */
+    mbVBACompat = _vbacompatmodeon;
+    if( BasicManager* pBasMgr = getBasicManager() )
     {
         // get the standard library
-        String aLibName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
-                if ( pBasMgr->GetName().Len() )
-                    aLibName = pBasMgr->GetName();
+        String aLibName = pBasMgr->GetName();
+        if ( aLibName.Len() == 0 )
+            aLibName = String( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
 
-        StarBASIC* pBasic = pBasMgr->GetLib( aLibName );
-        if( pBasic )
+        if( StarBASIC* pBasic = pBasMgr->GetLib( aLibName ) )
             pBasic->SetVBAEnabled( _vbacompatmodeon );
+
+        /*  If in VBA compatibility mode, force creation of the VBA Globals
+            object. Each application will create an instance of its own
+            implementation and store it in its Basic manager. Implementations
+            will do all necessary additional initialization, such as
+            registering the global "This***Doc" UNO constant, starting the
+            document events processor etc.
+         */
+        if( mbVBACompat ) try
+        {
+            Reference< frame::XModel > xModel( mxOwnerDocument );   // weak-ref -> ref
+            Reference< XMultiServiceFactory > xFactory( xModel, UNO_QUERY_THROW );
+            xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAGlobals" ) ) );
+        }
+        catch( Exception& )
+        {
+        }
     }
-        mbVBACompat = _vbacompatmodeon;
 }
 
 void SAL_CALL SfxLibraryContainer::setProjectName( const ::rtl::OUString& _projectname ) throw (RuntimeException)

@@ -72,7 +72,7 @@ protected:
 
 public:
     void            SetMarkerPos( sal_uInt32 nLine, bool bErrorMarker = false );
-    virtual void    Scroll( long nHorzScroll, long nVertScroll, USHORT nFlags = 0 );
+    virtual void    Scroll( long nHorzScroll, long nVertScroll, sal_uInt16 nFlags = 0 );
     long&           GetCurYOffset()         { return nCurYOffset; }
 };
 
