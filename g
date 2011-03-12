@@ -231,7 +231,6 @@ for REPO in $DIRS ; do
             # do it!
 	    if [ "$COMMAND" != "clone" -o ! -d $DIR ] ; then
                 [ "$REPORT_REPOS" = "1" ] && echo "===== $NAME ====="
-                echo git $PAGER "$COMMAND" $EXTRA "${FILES[@]}"
                 git $PAGER "$COMMAND" $EXTRA "${FILES[@]}"
                 RETURN=$?
 	    fi
