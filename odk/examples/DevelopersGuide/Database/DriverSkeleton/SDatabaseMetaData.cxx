@@ -878,7 +878,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCrossReference(
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getUDTs( const Any& catalog, const ::rtl::OUString& schemaPattern, const ::rtl::OUString& typeNamePattern, const Sequence< sal_Int32 >& types ) throw(SQLException, RuntimeException)
 {
-    OSL_ENSURE(0,"Not implemented yet!");
+    OSL_FAIL("Not implemented yet!");
     throw SQLException();
     return NULL;
 }

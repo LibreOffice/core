@@ -136,7 +136,7 @@ void writeConstantData(typereg::Writer& rWriter, sal_uInt16 fieldIndex,
     }
     break;
     default:
-        OSL_ENSURE( 0, "unsupported constant type" );
+        OSL_FAIL( "unsupported constant type" );
         break;
     }
 
@@ -798,7 +798,7 @@ void* getTypeBlob(Reference< XHierarchicalNameAccess > xTDmgr,
     }
     break;
     default:
-        OSL_ENSURE( 0, "unsupported type" );
+        OSL_FAIL( "unsupported type" );
         break;
     }
 

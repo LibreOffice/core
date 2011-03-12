@@ -179,7 +179,7 @@ sal_Bool XFlatXml::importer(
     catch( Exception &exc)
     {
         // something went wrong
-        OSL_ENSURE(0, exc.Message);
+        OSL_FAIL(exc.Message);
         return sal_False;
     }
 
