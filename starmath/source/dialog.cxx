@@ -1789,7 +1789,7 @@ IMPL_LINK( SmSymDefineDialog, ModifyHdl, ComboBox *, pComboBox )
     else
     {
 #if OSL_DEBUG_LEVEL > 1
-        OSL_ENSURE(0, "Sm : wrong combobox argument");
+        OSL_FAIL("Sm : wrong combobox argument");
 #endif
     }
 

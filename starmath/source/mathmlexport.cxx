@@ -1179,7 +1179,7 @@ void SmXMLExport::ExportFont(const SmNode *pNode, int nLevel)
             case TSERIF     : nSansSerifFixed  = 1; break;
             case TFIXED     : nSansSerifFixed  = 2; break;
             default:
-                OSL_ENSURE( 0, "unexpected case" );
+                OSL_FAIL( "unexpected case" );
         }
         // According to the parser every node that is to be evaluated heres
         // has a single non-zero subnode at index 1!! Thus we only need to check
@@ -1313,7 +1313,7 @@ void SmXMLExport::ExportFont(const SmNode *pNode, int nLevel)
                     pText = "monospace";    // no modifiers allowed for monospace ...
                 else
                 {
-                    OSL_ENSURE( 0, "unexpected case" );
+                    OSL_FAIL( "unexpected case" );
                 }
                 AddAttribute(XML_NAMESPACE_MATH, XML_MATHVARIANT, A2OU(pText));
             }
@@ -1485,7 +1485,7 @@ void SmXMLExport::ExportNodes(const SmNode *pNode, int nLevel)
             ExportBlank(pNode, nLevel);
             break;
        default:
-            OSL_ENSURE( 0, "Warning: failed to export a node?" );
+            OSL_FAIL( "Warning: failed to export a node?" );
             break;
 
     }

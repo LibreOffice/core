@@ -208,7 +208,7 @@ bool SmSymbolManager::AddOrReplaceSymbol( const SmSym &rSymbol, bool bForceChang
         else if (pFound && !bForceChange && bSymbolConflict)
         {
                 // TODO: but what ...
-                OSL_ENSURE( 0, "symbol conflict, different symbol with same name found!" );
+                OSL_FAIL( "symbol conflict, different symbol with same name found!" );
         }
     }
 

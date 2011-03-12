@@ -1148,11 +1148,11 @@ void lcl_CpyAttr( SfxItemSet &rNewSet, const SfxItemSet &rOldSet, sal_uInt16 nWh
                     rNewSet.Put( *pOldItem );
             }
             else {
-                OSL_ENSURE(0, "What am I doing here?");
+                OSL_FAIL("What am I doing here?");
             }
         }
         else {
-            OSL_ENSURE(0, "What am I doing here?");
+            OSL_FAIL("What am I doing here?");
         }
     }
 

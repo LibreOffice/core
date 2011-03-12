@@ -39,7 +39,7 @@ sal_Unicode ConvertMathPrivateUseAreaToUnicode( sal_Unicode cChar )
     sal_Unicode cRes = cChar;
     if (IsInPrivateUseArea( cChar ))
     {
-        OSL_ENSURE( 0, "Error: private use area characters should no longer be in use!" );
+        OSL_FAIL( "Error: private use area characters should no longer be in use!" );
         cRes = (sal_Unicode) '@'; // just some character that should easily be notice as odd in the context
     }
     return cRes;

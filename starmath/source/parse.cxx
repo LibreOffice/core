@@ -1675,7 +1675,7 @@ void SmParser::Oper()
             break;
 
         default :
-            OSL_ENSURE(0, "Sm: unknown case");
+            OSL_FAIL("Sm: unknown case");
     }
     NodeStack.Push(pNode);
 
@@ -1836,7 +1836,7 @@ void SmParser::FontAttribut()
             break;
 
         default :
-            OSL_ENSURE(0, "Sm: unknown case");
+            OSL_FAIL("Sm: unknown case");
     }
 }
 
@@ -2040,7 +2040,7 @@ void SmParser::Brace()
                 case TLFLOOR :      eExpectedType = TRFLOOR;    break;
                 case TLCEIL :       eExpectedType = TRCEIL;     break;
                 default :
-                    OSL_ENSURE(0, "Sm: unknown case");
+                    OSL_FAIL("Sm: unknown case");
             }
 
             if (CurToken.eType == eExpectedType)

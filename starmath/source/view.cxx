@@ -1339,7 +1339,7 @@ void SmViewShell::Impl_Print(
 USHORT SmViewShell::Print(SfxProgress & /*rProgress*/, BOOL /*bIsAPI*/, PrintDialog * /*pPrintDialog*/)
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::Print" );
-    OSL_ENSURE( 0, "SmViewShell::Print: no longer used with new UI print dialog. Should be removed!!" );
+    OSL_FAIL( "SmViewShell::Print: no longer used with new UI print dialog. Should be removed!!" );
     return 0;
 }
 
