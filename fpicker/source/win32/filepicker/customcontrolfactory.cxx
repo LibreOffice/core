@@ -50,7 +50,7 @@ CCustomControl* CCustomControlFactory::CreateCustomControl(HWND aControlHandle, 
     TCHAR aClsName[256];
     ZeroMemory(aClsName,sizeof(aClsName));
     if (GetClassName(aControlHandle,aClsName,sizeof(aClsName)) == 0) {
-        OSL_ENSURE(false,"Invalid window handle");
+        OSL_FAIL("Invalid window handle");
     }
 
     if (0 == _tcsicmp(aClsName,TEXT("button")))

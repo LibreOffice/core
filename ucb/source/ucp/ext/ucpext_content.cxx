@@ -385,7 +385,7 @@ namespace ucb { namespace ucp { namespace ext
         }
 
         default:
-            OSL_ENSURE( false, "Content::getParentURL: unhandled case!" );
+            OSL_FAIL( "Content::getParentURL: unhandled case!" );
             break;
         }
         return ::rtl::OUString();
@@ -514,11 +514,11 @@ namespace ucb { namespace ucp { namespace ext
         }
 
         default:
-            OSL_ENSURE( false, "Content::getPropertyValues: unhandled case!" );
+            OSL_FAIL( "Content::getPropertyValues: unhandled case!" );
             break;
         }
 
-        OSL_ENSURE( false, "Content::getPropertyValues: unreachable!" );
+        OSL_FAIL( "Content::getPropertyValues: unreachable!" );
         return NULL;
     }
 

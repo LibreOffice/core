@@ -166,8 +166,7 @@ void SAL_CALL HierarchyContentProvider::initialize(
     throw( uno::Exception, uno::RuntimeException )
 {
     if ( aArguments.getLength() > 0 )
-        OSL_ENSURE( false,
-                    "HierarchyContentProvider::initialize : not supported!" );
+        OSL_FAIL( "HierarchyContentProvider::initialize : not supported!" );
 }
 
 //=========================================================================

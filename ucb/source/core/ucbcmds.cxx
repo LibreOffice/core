@@ -1438,7 +1438,7 @@ void globalTransfer_(
                         "BUG: UnsupportedNameClashException not allowed here!" );
 
             if (exc.NameClash != ucb::NameClash::ERROR) {
-                OSL_ENSURE( false, "BUG: NameClash::ERROR expected!" );
+                OSL_FAIL( "BUG: NameClash::ERROR expected!" );
             }
 
             // No chance to solve name clashes, because I'm not able to detect

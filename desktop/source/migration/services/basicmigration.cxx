@@ -235,7 +235,7 @@ namespace migration
             {
                 if ( !(aValue.Value >>= m_sSourceDir) )
                 {
-                    OSL_ENSURE( false, "BasicMigration::initialize: argument UserData has wrong type!" );
+                    OSL_FAIL( "BasicMigration::initialize: argument UserData has wrong type!" );
                 }
                 m_sSourceDir += sSourceUserBasic;
                 break;

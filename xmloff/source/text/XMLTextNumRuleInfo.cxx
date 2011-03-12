@@ -172,7 +172,7 @@ void XMLTextNumRuleInfo::Set(
         {
             if( !(xPropSet->getPropertyValue( msNumberingIsNumber ) >>= mbIsNumbered ) )
             {
-                OSL_ENSURE( false, "numbered paragraph without number info" );
+                OSL_FAIL( "numbered paragraph without number info" );
                 mbIsNumbered = sal_False;
             }
         }

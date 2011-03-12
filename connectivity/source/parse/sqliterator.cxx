@@ -376,7 +376,7 @@ OSQLTable OSQLParseTreeIterator::impl_locateRecordSource( const ::rtl::OUString&
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseTreeIterator::impl_locateRecordSource" );
     if ( !_rComposedName.getLength() )
     {
-        OSL_ENSURE( false, "OSQLParseTreeIterator::impl_locateRecordSource: no object name at all?" );
+        OSL_FAIL( "OSQLParseTreeIterator::impl_locateRecordSource: no object name at all?" );
         return OSQLTable();
     }
 
@@ -605,7 +605,7 @@ const OSQLParseNode* OSQLParseTreeIterator::getTableNode( OSQLTables& _rTables, 
                 }
                 else
                 {
-                    OSL_ENSURE( false, "OSQLParseTreeIterator::getTableNode: subquery which is no select_statement: not yet implemented!" );
+                    OSL_FAIL( "OSQLParseTreeIterator::getTableNode: subquery which is no select_statement: not yet implemented!" );
                 }
             }
         }
@@ -614,7 +614,7 @@ const OSQLParseNode* OSQLParseTreeIterator::getTableNode( OSQLTables& _rTables, 
             pTableNameNode = pTableRef->getChild(0);
         }
         else
-            OSL_ENSURE( false, "OSQLParseTreeIterator::getTableNode: unhandled case!" );
+            OSL_FAIL( "OSQLParseTreeIterator::getTableNode: unhandled case!" );
     }
 
     return pTableNameNode;

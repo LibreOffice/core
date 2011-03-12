@@ -77,7 +77,7 @@ void XMLTransformerOOoEventMap_Impl::AddMap( XMLTransformerEventMapEntry *pInit 
 
         if( !insert( aVal ).second )
         {
-            OSL_ENSURE( false, "duplicate OOo event name extry" );
+            OSL_FAIL( "duplicate OOo event name extry" );
         }
 
         ++pInit;

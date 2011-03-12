@@ -238,7 +238,7 @@ rtl::OUString SAL_CALL CFilePicker::helpRequested(FilePickerEvent aEvent) const
             }
             catch(uno::RuntimeException&)
             {
-                OSL_ENSURE( false, "RuntimeException during event dispatching" );
+                OSL_FAIL( "RuntimeException during event dispatching" );
             }
         }
     }

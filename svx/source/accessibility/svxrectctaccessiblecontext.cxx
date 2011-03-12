@@ -898,13 +898,13 @@ sal_Bool SAL_CALL SvxRectCtlChildAccessibleContext::isFocusTraversable() throw( 
 void SAL_CALL SvxRectCtlChildAccessibleContext::addFocusListener( const Reference< awt::XFocusListener >& /*xListener*/ )
     throw( RuntimeException )
 {
-    OSL_ENSURE( false, "SvxRectCtlChildAccessibleContext::addFocusListener: not implemented" );
+    OSL_FAIL( "SvxRectCtlChildAccessibleContext::addFocusListener: not implemented" );
 }
 
 void SAL_CALL SvxRectCtlChildAccessibleContext::removeFocusListener( const Reference< awt::XFocusListener >& /*xListener*/ )
     throw (RuntimeException)
 {
-    OSL_ENSURE( false, "SvxRectCtlChildAccessibleContext::removeFocusListener: not implemented" );
+    OSL_FAIL( "SvxRectCtlChildAccessibleContext::removeFocusListener: not implemented" );
 }
 
 void SAL_CALL SvxRectCtlChildAccessibleContext::grabFocus() throw( RuntimeException )

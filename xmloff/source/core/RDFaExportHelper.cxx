@@ -224,7 +224,7 @@ RDFaExportHelper::AddRDFa(
     }
     catch (uno::Exception &)
     {
-        OSL_ENSURE(false, "AddRDFa: exception");
+        OSL_FAIL("AddRDFa: exception");
     }
 }
 

@@ -197,7 +197,7 @@ namespace sdr { namespace contact {
                 m_xControlView.set( m_xControl, UNO_QUERY );
                 if ( !m_xControlWindow.is() || !m_xControlView.is() )
                 {
-                    OSL_ENSURE( false, "ControlHolder::operator=: invalid XControl, missing required interfaces!" );
+                    OSL_FAIL( "ControlHolder::operator=: invalid XControl, missing required interfaces!" );
                     clear();
                 }
             }
@@ -1055,7 +1055,7 @@ namespace sdr { namespace contact {
                 UnoControlContactHelper::adjustControlGeometry_throw( m_aControl, pUnoObject->GetLogicRect(), _rViewTransformation, m_aZoomLevelNormalization );
             }
             else
-                OSL_ENSURE( false, "ViewObjectContactOfUnoControl_Impl::positionAndZoomControl: no SdrUnoObj!" );
+                OSL_FAIL( "ViewObjectContactOfUnoControl_Impl::positionAndZoomControl: no SdrUnoObj!" );
         }
         catch( const Exception& )
         {
@@ -1135,7 +1135,7 @@ namespace sdr { namespace contact {
     {
         if ( m_bCreatingControl )
         {
-            OSL_ENSURE( false, "ViewObjectContactOfUnoControl_Impl::impl_ensureControl_nothrow: reentrance is not really good here!" );
+            OSL_FAIL( "ViewObjectContactOfUnoControl_Impl::impl_ensureControl_nothrow: reentrance is not really good here!" );
             // We once had a situation where this was called reentrantly, which lead to all kind of strange effects. All
             // those affected the grid control, which is the only control so far which is visible in design mode (and
             // not only in alive mode).

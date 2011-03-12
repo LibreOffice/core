@@ -168,7 +168,7 @@ void SfxObjectFactory::RegisterViewFactory
             ByteString sMessage( "SfxObjectFactory::RegisterViewFactory: duplicate view name '" );
             sMessage += ByteString( sViewName, RTL_TEXTENCODING_ASCII_US );
             sMessage += "'!";
-            OSL_ENSURE( false, sMessage.GetBuffer() );
+            OSL_FAIL( sMessage.GetBuffer() );
             break;
         }
     }

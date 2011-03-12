@@ -839,7 +839,7 @@ void OStatement_Base::setResultSetType(sal_Int32 _par0)
             nSet =  SQL_SENSITIVE;
             break;
         default:
-            OSL_ENSURE( false, "OStatement_Base::setResultSetType: invalid result set type!" );
+            OSL_FAIL( "OStatement_Base::setResultSetType: invalid result set type!" );
             break;
     }
 
@@ -1048,7 +1048,7 @@ void OStatement_Base::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const A
                 setEscapeProcessing( ::comphelper::getBOOL( rValue ) );
                 break;
             default:
-                OSL_ENSURE( false, "OStatement_Base::setFastPropertyValue_NoBroadcast: what property?" );
+                OSL_FAIL( "OStatement_Base::setFastPropertyValue_NoBroadcast: what property?" );
                 break;
         }
     }
@@ -1093,7 +1093,7 @@ void OStatement_Base::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
             rValue <<= getEscapeProcessing();
             break;
         default:
-            OSL_ENSURE( false, "OStatement_Base::getFastPropertyValue: what property?" );
+            OSL_FAIL( "OStatement_Base::getFastPropertyValue: what property?" );
             break;
     }
 }

@@ -464,7 +464,7 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
     catch( uno::Exception & ex )
     {
         (void)ex; // avoid warning for pro build
-        OSL_ENSURE( false, ::rtl::OUStringToOString(
+        OSL_FAIL( ::rtl::OUStringToOString(
                         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Exception caught. Type: " )) +
                         ::rtl::OUString::createFromAscii( typeid( ex ).name()) +
                         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ", Message: " )) +

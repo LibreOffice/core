@@ -419,7 +419,7 @@ void OO3ExtensionMigration::initialize( const Sequence< Any >& aArguments ) thro
         {
             if ( !(aValue.Value >>= m_sSourceDir) )
             {
-                OSL_ENSURE( false, "ExtensionMigration::initialize: argument UserData has wrong type!" );
+                OSL_FAIL( "ExtensionMigration::initialize: argument UserData has wrong type!" );
             }
         }
         else if ( aValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ExtensionBlackList" ) ) )

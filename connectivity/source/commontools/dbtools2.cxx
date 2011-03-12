@@ -469,7 +469,7 @@ namespace
                         }
                         catch(SQLException&)
                         {
-                            OSL_ENSURE( false, "lcl_createSDBCXColumn: caught an exception!" );
+                            OSL_FAIL( "lcl_createSDBCXColumn: caught an exception!" );
                         }
                     }
 

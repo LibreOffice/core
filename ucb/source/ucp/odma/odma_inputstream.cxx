@@ -77,11 +77,11 @@ OOdmaStream::~OOdmaStream()
     }
     catch (io::IOException const &)
     {
-        OSL_ENSURE(false, "unexpected situation");
+        OSL_FAIL("unexpected situation");
     }
     catch (uno::RuntimeException const &)
     {
-        OSL_ENSURE(false, "unexpected situation");
+        OSL_FAIL("unexpected situation");
     }
 }
 // -----------------------------------------------------------------------------

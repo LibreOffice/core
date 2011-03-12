@@ -538,7 +538,7 @@ void SAL_CALL FmFilterAdapter::disjunctiveTermAdded( const FilterEvent& _Event )
     bool bValidIndex = ( nInsertPos >= 0 ) && ( (size_t)nInsertPos <= pFormItem->GetChildren().size() );
     if ( !bValidIndex )
     {
-        OSL_ENSURE( false, "FmFilterAdapter::disjunctiveTermAdded: invalid index!" );
+        OSL_FAIL( "FmFilterAdapter::disjunctiveTermAdded: invalid index!" );
         return;
     }
 

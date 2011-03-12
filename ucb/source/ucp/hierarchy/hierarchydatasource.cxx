@@ -402,8 +402,7 @@ HierarchyDataSource::createInstanceWithArguments(
 
     if ( !bReadOnly && !bReadWrite )
     {
-        OSL_ENSURE( false,
-                    "HierarchyDataSource::createInstanceWithArguments - "
+        OSL_FAIL( "HierarchyDataSource::createInstanceWithArguments - "
                     "Unsupported service specifier!" );
         return uno::Reference< uno::XInterface >();
     }
@@ -434,8 +433,7 @@ HierarchyDataSource::createInstanceWithArguments(
                         rtl::OUString aConfigPath;
                         if ( !createConfigPath( aPath, aConfigPath ) )
                         {
-                            OSL_ENSURE( false,
-                                "HierarchyDataSource::"
+                            OSL_FAIL( "HierarchyDataSource::"
                                 "createInstanceWithArguments - "
                                 "Invalid node path!" );
                             return uno::Reference< uno::XInterface >();
@@ -451,8 +449,7 @@ HierarchyDataSource::createInstanceWithArguments(
                     }
                     else
                     {
-                        OSL_ENSURE( false,
-                            "HierarchyDataSource::createInstanceWithArguments - "
+                        OSL_FAIL( "HierarchyDataSource::createInstanceWithArguments - "
                             "Invalid type for property 'nodepath'!" );
                         return uno::Reference< uno::XInterface >();
                     }
@@ -470,8 +467,7 @@ HierarchyDataSource::createInstanceWithArguments(
                     }
                     else
                     {
-                        OSL_ENSURE( false,
-                            "HierarchyDataSource::createInstanceWithArguments - "
+                        OSL_FAIL( "HierarchyDataSource::createInstanceWithArguments - "
                             "Invalid type for property 'lazywrite'!" );
                         return uno::Reference< uno::XInterface >();
                     }
@@ -481,8 +477,7 @@ HierarchyDataSource::createInstanceWithArguments(
 
         if ( !bHasNodePath )
         {
-            OSL_ENSURE( false,
-                        "HierarchyDataSource::createInstanceWithArguments - "
+            OSL_FAIL( "HierarchyDataSource::createInstanceWithArguments - "
                         "No 'nodepath' property!" );
             return uno::Reference< uno::XInterface >();
         }
@@ -528,16 +523,14 @@ HierarchyDataSource::createInstanceWithArguments(
     }
     catch ( uno::Exception const & )
     {
-        OSL_ENSURE( false,
-                    "HierarchyDataSource::createInstanceWithArguments - "
+        OSL_FAIL( "HierarchyDataSource::createInstanceWithArguments - "
                     "Cannot instanciate configuration access!" );
         throw;
     }
 
     if ( !xConfigAccess.is() )
     {
-        OSL_ENSURE( false,
-                    "HierarchyDataSource::createInstanceWithArguments - "
+        OSL_FAIL( "HierarchyDataSource::createInstanceWithArguments - "
                     "Cannot instanciate configuration access!" );
         return xConfigAccess;
     }
@@ -572,8 +565,7 @@ HierarchyDataSource::getConfigProvider()
             }
             catch ( uno::Exception const & )
             {
-                OSL_ENSURE( false,
-                            "HierarchyDataSource::getConfigProvider - "
+                OSL_FAIL( "HierarchyDataSource::getConfigProvider - "
                                "caught exception!" );
             }
         }
@@ -590,16 +582,14 @@ bool HierarchyDataSource::createConfigPath(
     {
         if ( rInPath.indexOf( '/' ) == 0 )
         {
-            OSL_ENSURE( false,
-                        "HierarchyDataSource::createConfigPath - "
+            OSL_FAIL( "HierarchyDataSource::createConfigPath - "
                         "Leading slash in node path!" );
             return false;
         }
 
         if ( rInPath.lastIndexOf( '/' ) == rInPath.getLength() - 1 )
         {
-            OSL_ENSURE( false,
-                        "HierarchyDataSource::createConfigPath - "
+            OSL_FAIL( "HierarchyDataSource::createConfigPath - "
                         "Trailing slash in node path!" );
             return false;
         }

@@ -638,7 +638,7 @@ namespace connectivity
                 }
                 catch(Exception&)
                 {
-                    OSL_ENSURE( false, "ODriverDelegator::preCommit: caught an exception!" );
+                    OSL_FAIL( "ODriverDelegator::preCommit: caught an exception!" );
                 }
             }
         }
@@ -789,7 +789,7 @@ namespace connectivity
                 // second round, this time without matching the country
                 return lcl_getCollationForLocale( _rLocaleString, true );
 
-            OSL_ENSURE( false, "lcl_getCollationForLocale: unknown locale string, falling back to Latin1_General!" );
+            OSL_FAIL( "lcl_getCollationForLocale: unknown locale string, falling back to Latin1_General!" );
             return "Latin1_General";
         }
 

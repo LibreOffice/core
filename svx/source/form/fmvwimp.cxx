@@ -1669,7 +1669,7 @@ bool FmXFormView::createControlLabelPair( const ::comphelper::ComponentContext& 
             if ( xControlPropInfo->hasPropertyByName( FM_PROP_LABEL ) )
                 xControlSet->setPropertyValue( FM_PROP_LABEL, makeAny( sFieldName + _rFieldPostfix ) );
             else
-                OSL_ENSURE( false, "FmXFormView::createControlLabelPair: can't set a label for the control!" );
+                OSL_FAIL( "FmXFormView::createControlLabelPair: can't set a label for the control!" );
         }
     }
 

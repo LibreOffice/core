@@ -150,7 +150,7 @@ void XMLAxisOASISContext::StartElement(
             }
             else
             {
-                OSL_ENSURE( false, "ChartAxis: Invalid attribute value" );
+                OSL_FAIL( "ChartAxis: Invalid attribute value" );
             }
 
             if( eToken != XML_TOKEN_INVALID )

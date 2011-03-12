@@ -200,8 +200,7 @@ bool createContentProviderData(
         if ( !( rxHierNameAccess->getByHierarchicalName(
                     aKeyBuffer.makeStringAndClear() ) >>= aValue ) )
         {
-            OSL_ENSURE( false,
-                        "UniversalContentBroker::getContentProviderData - "
+            OSL_FAIL( "UniversalContentBroker::getContentProviderData - "
                         "Error getting item value!" );
         }
     }
@@ -219,8 +218,7 @@ bool createContentProviderData(
     if ( !( rxHierNameAccess->getByHierarchicalName(
                 aKeyBuffer.makeStringAndClear() ) >>= aValue ) )
     {
-        OSL_ENSURE( false,
-                    "UniversalContentBroker::getContentProviderData - "
+        OSL_FAIL( "UniversalContentBroker::getContentProviderData - "
                     "Error getting item value!" );
     }
 
@@ -233,8 +231,7 @@ bool createContentProviderData(
     if ( !( rxHierNameAccess->getByHierarchicalName(
                 aKeyBuffer.makeStringAndClear() ) >>= aValue ) )
     {
-        OSL_ENSURE( false,
-                    "UniversalContentBroker::getContentProviderData - "
+        OSL_FAIL( "UniversalContentBroker::getContentProviderData - "
                     "Error getting item value!" );
     }
 
@@ -786,14 +783,14 @@ bool UniversalContentBroker::configureUcb()
     if (m_aArguments.getLength() < 2
         || !(m_aArguments[0] >>= aKey1) || !(m_aArguments[1] >>= aKey2))
     {
-        OSL_ENSURE(false, "UniversalContentBroker::configureUcb(): Bad arguments");
+        OSL_FAIL("UniversalContentBroker::configureUcb(): Bad arguments");
         return false;
     }
 
     ContentProviderDataList aData;
     if (!getContentProviderData(aKey1, aKey2, aData))
     {
-        OSL_ENSURE(false, "UniversalContentBroker::configureUcb(): No configuration");
+        OSL_FAIL("UniversalContentBroker::configureUcb(): No configuration");
         return false;
     }
 
@@ -823,8 +820,7 @@ void UniversalContentBroker::prepareAndRegister(
 
         }
         else
-            OSL_ENSURE(false,
-                       "UniversalContentBroker::prepareAndRegister(): Bad argument placeholders");
+            OSL_FAIL("UniversalContentBroker::prepareAndRegister(): Bad argument placeholders");
     }
 }
 
@@ -836,8 +832,7 @@ bool UniversalContentBroker::getContentProviderData(
 {
     if ( !m_xSMgr.is() || !rKey1.getLength() || !rKey2.getLength() )
     {
-        OSL_ENSURE( false,
-            "UniversalContentBroker::getContentProviderData - Invalid argument!" );
+        OSL_FAIL( "UniversalContentBroker::getContentProviderData - Invalid argument!" );
         return false;
     }
 
@@ -913,8 +908,7 @@ bool UniversalContentBroker::getContentProviderData(
                 catch ( container::NoSuchElementException& )
                 {
                     // getByHierarchicalName
-                    OSL_ENSURE( false,
-                                "UniversalContentBroker::getContentProviderData - "
+                    OSL_FAIL( "UniversalContentBroker::getContentProviderData - "
                                 "caught NoSuchElementException!" );
                 }
             }
@@ -922,16 +916,14 @@ bool UniversalContentBroker::getContentProviderData(
     }
     catch ( uno::RuntimeException& )
     {
-        OSL_ENSURE( false,
-                    "UniversalContentBroker::getContentProviderData - caught RuntimeException!" );
+        OSL_FAIL( "UniversalContentBroker::getContentProviderData - caught RuntimeException!" );
         return false;
     }
     catch ( uno::Exception& )
     {
         // createInstance, createInstanceWithArguments
 
-        OSL_ENSURE( false,
-                    "UniversalContentBroker::getContentProviderData - caught Exception!" );
+        OSL_FAIL( "UniversalContentBroker::getContentProviderData - caught Exception!" );
         return false;
     }
 

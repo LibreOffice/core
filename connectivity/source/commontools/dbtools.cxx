@@ -1438,7 +1438,7 @@ namespace
             _xTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))        >>= _out_rName;
         }
         else
-            OSL_ENSURE( false, "::dbtools::lcl_getTableNameComponents: this is no table object!" );
+            OSL_FAIL( "::dbtools::lcl_getTableNameComponents: this is no table object!" );
     }
 }
 

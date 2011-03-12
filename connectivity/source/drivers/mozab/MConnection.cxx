@@ -573,11 +573,11 @@ void OConnection::throwSQLException( const ErrorDescriptor& _rError, const Refer
                 "$1$", sParameter
              ) );
             ::dbtools::throwGenericSQLException( sError, _rxContext );
-            OSL_ENSURE( false, "OConnection::throwSQLException: unreachable (1)!" );
+            OSL_FAIL( "OConnection::throwSQLException: unreachable (1)!" );
         }
 
         throwGenericSQLException( _rError.getResId(), _rxContext );
-        OSL_ENSURE( false, "OConnection::throwSQLException: unreachable (2)!" );
+        OSL_FAIL( "OConnection::throwSQLException: unreachable (2)!" );
     }
 
     if ( _rError.getErrorCondition() != 0 )
@@ -588,7 +588,7 @@ void OConnection::throwSQLException( const ErrorDescriptor& _rError, const Refer
             aErrorHelper.raiseException( _rError.getErrorCondition(), _rxContext, sParameter );
         else
             aErrorHelper.raiseException( _rError.getErrorCondition(), _rxContext);
-        OSL_ENSURE( false, "OConnection::throwSQLException: unreachable (3)!" );
+        OSL_FAIL( "OConnection::throwSQLException: unreachable (3)!" );
     }
 
     throwGenericSQLException( STR_UNSPECIFIED_ERROR, _rxContext );

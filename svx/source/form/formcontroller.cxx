@@ -1507,7 +1507,7 @@ void SAL_CALL FormController::textChanged(const TextEvent& e) throw( RuntimeExce
         // Suchen der aktuellen Row
         if ( ( (size_t)m_nCurrentFilterPosition >= m_aFilterRows.size() ) || ( m_nCurrentFilterPosition < 0 ) )
         {
-            OSL_ENSURE( false, "FormController::textChanged: m_nCurrentFilterPosition is wrong!" );
+            OSL_FAIL( "FormController::textChanged: m_nCurrentFilterPosition is wrong!" );
             return;
         }
 

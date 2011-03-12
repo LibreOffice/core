@@ -477,10 +477,10 @@ rtl::OUString OCommonStatement::getTableName()
                     OSQLParseNode::getTableComponents( pNodeForTableName, aCatalog, aSchema, aTableName,NULL);
             }
             else
-                OSL_ENSURE( false,  "odd table layout" );
+                OSL_FAIL( "odd table layout" );
         }
         else
-                OSL_ENSURE( false,  "unusual table layout" );
+                OSL_FAIL( "unusual table layout" );
     }
     return aTableName;
 }

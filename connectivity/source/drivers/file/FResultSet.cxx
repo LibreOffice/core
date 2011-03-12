@@ -1607,7 +1607,7 @@ BOOL OResultSet::OpenImpl()
             m_nRowCountResult = 1;
             break;
         default:
-            OSL_ENSURE( false, "OResultSet::OpenImpl: unsupported statement type!" );
+            OSL_FAIL( "OResultSet::OpenImpl: unsupported statement type!" );
             break;
     }
 

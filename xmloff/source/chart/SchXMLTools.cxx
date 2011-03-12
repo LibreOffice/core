@@ -493,7 +493,7 @@ void CreateCategories(
                                 catch( const lang::IllegalArgumentException & ex )
                                 {
                                     (void)ex; // avoid warning for pro build
-                                    OSL_ENSURE( false, ::rtl::OUStringToOString(
+                                    OSL_FAIL( ::rtl::OUStringToOString(
                                                     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IllegalArgumentException caught, Message: " )) +
                                                     ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
                                 }
@@ -515,7 +515,7 @@ void CreateCategories(
     }
     catch( uno::Exception & )
     {
-        OSL_ENSURE( false, "Exception caught while creating Categories" );
+        OSL_FAIL( "Exception caught while creating Categories" );
     }
 }
 
@@ -670,7 +670,7 @@ void setXMLRangePropertyAtDataSequence(
     catch( const uno::Exception & ex )
     {
         (void)ex; // avoid warning for pro build
-        OSL_ENSURE( false, ::rtl::OUStringToOString(
+        OSL_FAIL( ::rtl::OUStringToOString(
                         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Exception caught, Message: " )) +
                         ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
     }
@@ -700,7 +700,7 @@ bool getXMLRangePropertyFromDataSequence(
         catch( const uno::Exception & ex )
         {
             (void)ex; // avoid warning for pro build
-            OSL_ENSURE( false, ::rtl::OUStringToOString(
+            OSL_FAIL( ::rtl::OUStringToOString(
                             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Exception caught, Message: " )) +
                             ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
         }
@@ -735,7 +735,7 @@ void copyProperties(
     }
     catch( const uno::Exception & )
     {
-        OSL_ENSURE( false, "Copying property sets failed!" );
+        OSL_FAIL( "Copying property sets failed!" );
     }
 }
 

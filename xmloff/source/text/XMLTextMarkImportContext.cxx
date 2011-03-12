@@ -382,7 +382,7 @@ Reference<XTextContent> XMLTextMarkImportContext::CreateAndInsertMark(
 
         if (!xIfc.is())
         {
-            OSL_ENSURE(false, "CreateAndInsertMark: cannot create service?");
+            OSL_FAIL("CreateAndInsertMark: cannot create service?");
             return 0;
         }
 
@@ -396,7 +396,7 @@ Reference<XTextContent> XMLTextMarkImportContext::CreateAndInsertMark(
         {
             if (sMarkName.getLength())
             {
-                OSL_ENSURE(false, "name given, but XNamed not supported?");
+                OSL_FAIL("name given, but XNamed not supported?");
                 return 0;
             }
         }
@@ -419,7 +419,7 @@ Reference<XTextContent> XMLTextMarkImportContext::CreateAndInsertMark(
             }
             catch (com::sun::star::lang::IllegalArgumentException &)
             {
-                OSL_ENSURE(false, "CreateAndInsertMark: cannot insert?");
+                OSL_FAIL("CreateAndInsertMark: cannot insert?");
                 return 0;
             }
         }

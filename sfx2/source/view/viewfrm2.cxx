@@ -460,7 +460,7 @@ void SfxViewFrame::INetExecute_Impl( SfxRequest &rRequest )
     {
         case SID_BROWSE_FORWARD:
         case SID_BROWSE_BACKWARD:
-            OSL_ENSURE( false, "SfxViewFrame::INetExecute_Impl: SID_BROWSE_FORWARD/BACKWARD are dead!" );
+            OSL_FAIL( "SfxViewFrame::INetExecute_Impl: SID_BROWSE_FORWARD/BACKWARD are dead!" );
             break;
         case SID_CREATELINK:
         {

@@ -161,7 +161,7 @@ void lcl_MoveDataToCandleStickSeries(
     }
     catch( uno::Exception & )
     {
-        OSL_ENSURE( false, "Exception caught while moving data to candlestick series" );
+        OSL_FAIL( "Exception caught while moving data to candlestick series" );
     }
 }
 

@@ -314,7 +314,7 @@ void OSQLParseNode::parseNodeToStr(::rtl::OUString& rString,
         }
         catch( const SQLException& )
         {
-            OSL_ENSURE( false, "OSQLParseNode::parseNodeToStr: this should not throw!" );
+            OSL_FAIL( "OSQLParseNode::parseNodeToStr: this should not throw!" );
             // our callers don't expect this method to throw anything. The only known situation
             // where impl_parseNodeToString_throw can throw is when there is a cyclic reference
             // in the sub queries, but this cannot be the case here, as we do not parse to
@@ -702,7 +702,7 @@ void OSQLParseNode::impl_parseLikeNodeToString_throw( ::rtl::OUStringBuffer& rSt
         }
         catch ( Exception& )
         {
-            OSL_ENSURE( false, "OSQLParseNode::impl_parseLikeNodeToString_throw Exception occurred!" );
+            OSL_FAIL( "OSQLParseNode::impl_parseLikeNodeToString_throw Exception occurred!" );
         }
         if ( !m_aChildren[0]->isLeaf() )
         {
@@ -1980,7 +1980,7 @@ void OSQLParseNode::negateSearchCondition(OSQLParseNode*& pSearchCondition,sal_B
                 pNewComparison = new OSQLParseNode(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("=")),SQL_NODE_EQUAL,SQL_EQUAL);
                 break;
             default:
-                OSL_ENSURE( false, "OSQLParseNode::negateSearchCondition: unexpected node type!" );
+                OSL_FAIL( "OSQLParseNode::negateSearchCondition: unexpected node type!" );
                 break;
         }
         pSearchCondition->replace(pComparison, pNewComparison);
@@ -2369,7 +2369,7 @@ void OSQLParseNode::showParseTree( ::rtl::OUStringBuffer& _inout_rBuffer, sal_uI
 
         default:
             OSL_TRACE( "-- %i", int( m_eNodeType ) );
-            OSL_ENSURE( false, "OSQLParser::ShowParseTree: unzulaessiger NodeType" );
+            OSL_FAIL( "OSQLParser::ShowParseTree: unzulaessiger NodeType" );
         }
     }
 }

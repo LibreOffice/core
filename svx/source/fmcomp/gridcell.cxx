@@ -906,7 +906,7 @@ void DbCellControl::Init( Window& rParent, const Reference< XRowSet >& _rxCursor
                 case MouseWheelBehavior::SCROLL_FOCUS_ONLY: nVclSetting = MOUSE_WHEEL_FOCUS_ONLY; break;
                 case MouseWheelBehavior::SCROLL_ALWAYS:     nVclSetting = MOUSE_WHEEL_ALWAYS; break;
                 default:
-                    OSL_ENSURE( false, "DbCellControl::Init: invalid MouseWheelBehavior!" );
+                    OSL_FAIL( "DbCellControl::Init: invalid MouseWheelBehavior!" );
                     break;
                 }
 
@@ -3361,7 +3361,7 @@ void FmXGridCell::setLock(sal_Bool _bLock) throw( RuntimeException )
 //------------------------------------------------------------------
 void SAL_CALL FmXGridCell::setPosSize( ::sal_Int32 _XX, ::sal_Int32 _Y, ::sal_Int32 _Width, ::sal_Int32 _Height, ::sal_Int16 _Flags ) throw (RuntimeException)
 {
-    OSL_ENSURE( false, "FmXGridCell::setPosSize: not implemented" );
+    OSL_FAIL( "FmXGridCell::setPosSize: not implemented" );
     (void)_XX;
     (void)_Y;
     (void)_Width;
@@ -3373,14 +3373,14 @@ void SAL_CALL FmXGridCell::setPosSize( ::sal_Int32 _XX, ::sal_Int32 _Y, ::sal_In
 //------------------------------------------------------------------
 awt::Rectangle SAL_CALL FmXGridCell::getPosSize(  ) throw (RuntimeException)
 {
-    OSL_ENSURE( false, "FmXGridCell::getPosSize: not implemented" );
+    OSL_FAIL( "FmXGridCell::getPosSize: not implemented" );
     return awt::Rectangle();
 }
 
 //------------------------------------------------------------------
 void SAL_CALL FmXGridCell::setVisible( ::sal_Bool _Visible ) throw (RuntimeException)
 {
-    OSL_ENSURE( false, "FmXGridCell::setVisible: not implemented" );
+    OSL_FAIL( "FmXGridCell::setVisible: not implemented" );
     (void)_Visible;
     // not allowed to tamper with this for a grid cell
 }
@@ -3388,7 +3388,7 @@ void SAL_CALL FmXGridCell::setVisible( ::sal_Bool _Visible ) throw (RuntimeExcep
 //------------------------------------------------------------------
 void SAL_CALL FmXGridCell::setEnable( ::sal_Bool _Enable ) throw (RuntimeException)
 {
-    OSL_ENSURE( false, "FmXGridCell::setEnable: not implemented" );
+    OSL_FAIL( "FmXGridCell::setEnable: not implemented" );
     (void)_Enable;
     // not allowed to tamper with this for a grid cell
 }
@@ -3396,7 +3396,7 @@ void SAL_CALL FmXGridCell::setEnable( ::sal_Bool _Enable ) throw (RuntimeExcepti
 //------------------------------------------------------------------
 void SAL_CALL FmXGridCell::setFocus(  ) throw (RuntimeException)
 {
-    OSL_ENSURE( false, "FmXGridCell::setFocus: not implemented" );
+    OSL_FAIL( "FmXGridCell::setFocus: not implemented" );
     // not allowed to tamper with this for a grid cell
 }
 
@@ -3463,14 +3463,14 @@ void SAL_CALL FmXGridCell::removeMouseMotionListener( const Reference< awt::XMou
 //------------------------------------------------------------------
 void SAL_CALL FmXGridCell::addPaintListener( const Reference< awt::XPaintListener >& _rxListener ) throw (RuntimeException)
 {
-    OSL_ENSURE( false, "FmXGridCell::addPaintListener: not implemented" );
+    OSL_FAIL( "FmXGridCell::addPaintListener: not implemented" );
     (void)_rxListener;
 }
 
 //------------------------------------------------------------------
 void SAL_CALL FmXGridCell::removePaintListener( const Reference< awt::XPaintListener >& _rxListener ) throw (RuntimeException)
 {
-    OSL_ENSURE( false, "FmXGridCell::removePaintListener: not implemented" );
+    OSL_FAIL( "FmXGridCell::removePaintListener: not implemented" );
     (void)_rxListener;
 }
 

@@ -774,7 +774,7 @@ Reference< XLibraryContainer > SfxObjectShell::GetDialogContainer()
     if ( pBasMgr )
         return pBasMgr->GetDialogLibraryContainer().get();
 
-    OSL_ENSURE( false, "SfxObjectShell::GetDialogContainer: falling back to the application - is this really expected here?" );
+    OSL_FAIL( "SfxObjectShell::GetDialogContainer: falling back to the application - is this really expected here?" );
     return SFX_APP()->GetDialogContainer();
 }
 
@@ -789,7 +789,7 @@ Reference< XLibraryContainer > SfxObjectShell::GetBasicContainer()
     if ( pBasMgr )
         return pBasMgr->GetScriptLibraryContainer().get();
 
-    OSL_ENSURE( false, "SfxObjectShell::GetBasicContainer: falling back to the application - is this really expected here?" );
+    OSL_FAIL( "SfxObjectShell::GetBasicContainer: falling back to the application - is this really expected here?" );
     return SFX_APP()->GetBasicContainer();
 }
 

@@ -455,7 +455,7 @@ void SfxDocTplService_Impl::init_Impl()
             mxInfo = uno::Reference< XStandaloneDocumentInfo > (
                 mxFactory->createInstance( aService ), UNO_QUERY );
         } catch (uno::RuntimeException &) {
-            OSL_ENSURE(false, "SfxDocTplService_Impl::init_Impl: "
+            OSL_FAIL("SfxDocTplService_Impl::init_Impl: "
                 "cannot create DocumentProperties service");
         }
 
@@ -1037,7 +1037,7 @@ sal_Bool SfxDocTplService_Impl::setProperty( Content& rContent,
                 }
                 else
                 {
-                    OSL_ENSURE( false, "Unsupported property value type" );
+                    OSL_FAIL( "Unsupported property value type" );
                 }
             }
         }
@@ -1098,7 +1098,7 @@ sal_Bool SfxDocTplService_Impl::getProperty( Content& rContent,
                 }
                 else
                 {
-                    OSL_ENSURE( false, "Unsupported property value type" );
+                    OSL_FAIL( "Unsupported property value type" );
                 }
             }
         }

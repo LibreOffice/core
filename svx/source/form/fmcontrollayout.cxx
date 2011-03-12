@@ -163,7 +163,7 @@ namespace svxform
                     pCharLocalePropertyName = "CharLocaleComplex";
                     break;
                 default:
-                    OSL_ENSURE( false, "lcl_initializeControlFont: unexpected script type for system locale!" );
+                    OSL_FAIL( "lcl_initializeControlFont: unexpected script type for system locale!" );
                     break;
                 }
 

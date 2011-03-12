@@ -338,7 +338,7 @@ namespace xmloff
                         ::rtl::OString aMessage( "OElementImport::implImportGenericProperties: encountered an unknown property (" );
                         aMessage += ::rtl::OUStringToOString( aPropValues->Name, RTL_TEXTENCODING_ASCII_US );
                         aMessage += "), but component is no PropertyBag!";
-                        OSL_ENSURE( false, aMessage.getStr() );
+                        OSL_FAIL( aMessage.getStr() );
                     #endif
                         continue;
                     }
@@ -374,7 +374,7 @@ namespace xmloff
 
                 if ( bPropIsSequence != bValueIsSequence )
                 {
-                    OSL_ENSURE( false, "OElementImport::implImportGenericProperties: either both value and property should be a sequence, or none of them!" );
+                    OSL_FAIL( "OElementImport::implImportGenericProperties: either both value and property should be a sequence, or none of them!" );
                     continue;
                 }
 
@@ -428,13 +428,13 @@ namespace xmloff
                             aPropValues->Value <<= static_cast< sal_Int64 >( nVal );
                             break;
                         default:
-                            OSL_ENSURE( false, "OElementImport::implImportGenericProperties: unsupported value type!" );
+                            OSL_FAIL( "OElementImport::implImportGenericProperties: unsupported value type!" );
                             break;
                         }
                     }
                     break;
                     default:
-                        OSL_ENSURE( false, "OElementImport::implImportGenericProperties: non-double values not supported!" );
+                        OSL_FAIL( "OElementImport::implImportGenericProperties: non-double values not supported!" );
                         break;
                     }
                 }

@@ -285,7 +285,7 @@ public:
     virtual bool IsInContent() const { return m_isInContent; }
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::rdf::XMetadatable > MakeUnoObject()
-    { OSL_ENSURE(false, "MetadatableUndo::MakeUnoObject"); throw; }
+    { OSL_FAIL("MetadatableUndo::MakeUnoObject"); throw; }
 };
 
 // MetadatableClipboard ----------------------------------------------
@@ -310,7 +310,7 @@ public:
     virtual bool IsInContent() const { return m_isInContent; }
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::rdf::XMetadatable > MakeUnoObject()
-    { OSL_ENSURE(false, "MetadatableClipboard::MakeUnoObject"); throw; }
+    { OSL_FAIL("MetadatableClipboard::MakeUnoObject"); throw; }
     void OriginNoLongerInBusinessAnymore() { m_pReg = 0; }
 };
 
@@ -777,7 +777,7 @@ void XmlIdRegistryDocument::UnregisterMetadatable(const Metadatable& i_rObject)
     ::rtl::OUString idref;
     if (!m_pImpl->LookupXmlId(i_rObject, path, idref))
     {
-        OSL_ENSURE(false, "unregister: no xml id?");
+        OSL_FAIL("unregister: no xml id?");
         return;
     }
     const XmlIdMap_t::iterator iter( m_pImpl->m_XmlIdMap.find(idref) );
@@ -820,7 +820,7 @@ void XmlIdRegistryDocument::RegisterCopy(Metadatable const& i_rSource,
     ::rtl::OUString idref;
     if (!m_pImpl->LookupXmlId( i_rSource, path, idref ))
     {
-        OSL_ENSURE(false, "no xml id?");
+        OSL_FAIL("no xml id?");
         return;
     }
     XmlIdList_t * pList ( m_pImpl->LookupElementList(path, idref) );
@@ -887,7 +887,7 @@ XmlIdRegistryDocument::JoinMetadatables(
     }
     else
     {
-        OSL_ENSURE(false, "JoinMetadatables: no xmlid?");
+        OSL_FAIL("JoinMetadatables: no xmlid?");
         return;
     }
     if (!mergedOwnsRef)
@@ -1202,7 +1202,7 @@ void XmlIdRegistryClipboard::UnregisterMetadatable(const Metadatable& i_rObject)
     const MetadatableClipboard * pLink;
     if (!m_pImpl->LookupXmlId(i_rObject, path, idref, pLink))
     {
-        OSL_ENSURE(false, "unregister: no xml id?");
+        OSL_FAIL("unregister: no xml id?");
         return;
     }
     const ClipboardXmlIdMap_t::iterator iter( m_pImpl->m_XmlIdMap.find(idref) );
@@ -1309,7 +1309,7 @@ void Metadatable::RemoveMetadataReference()
     }
     catch (uno::Exception &)
     {
-        OSL_ENSURE(false, "Metadatable::RemoveMetadataReference: exception");
+        OSL_FAIL("Metadatable::RemoveMetadataReference: exception");
     }
 }
 
@@ -1465,13 +1465,13 @@ Metadatable::RegisterAsCopyOf(Metadatable const & i_rSource,
             }
             else
             {
-                OSL_ENSURE(false, "neither RegDoc nor RegClp cannot happen");
+                OSL_FAIL("neither RegDoc nor RegClp cannot happen");
             }
         }
     }
     catch (uno::Exception &)
     {
-        OSL_ENSURE(false, "Metadatable::RegisterAsCopyOf: exception");
+        OSL_FAIL("Metadatable::RegisterAsCopyOf: exception");
     }
 }
 
@@ -1494,7 +1494,7 @@ Metadatable::RegisterAsCopyOf(Metadatable const & i_rSource,
     }
     catch (uno::Exception &)
     {
-        OSL_ENSURE(false, "Metadatable::CreateUndo: exception");
+        OSL_FAIL("Metadatable::CreateUndo: exception");
     }
     return ::boost::shared_ptr<MetadatableUndo>();
 }
@@ -1564,7 +1564,7 @@ Metadatable::JoinMetadatable(Metadatable const & i_rOther,
     }
     catch (uno::Exception &)
     {
-        OSL_ENSURE(false, "Metadatable::JoinMetadatable: exception");
+        OSL_FAIL("Metadatable::JoinMetadatable: exception");
     }
 }
 

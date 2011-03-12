@@ -386,7 +386,7 @@ namespace sdr
                 {
                     // empty scene, no 3d action should be necessary. Prepare some
                     // fallback size
-                    OSL_ENSURE(false, "No need to get ViewInformation3D from an empty scene (!)");
+                    OSL_FAIL("No need to get ViewInformation3D from an empty scene (!)");
                     aContentRange.expand(basegfx::B3DPoint(-100.0, -100.0, -100.0));
                     aContentRange.expand(basegfx::B3DPoint( 100.0,  100.0,  100.0));
                 }

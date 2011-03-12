@@ -304,7 +304,7 @@ OUString LinguOptions::GetName( INT32 nWID )
     if (0 <= nWID && nWID < nLen && aWID_Name[ nWID ].nWID == nWID)
         aRes = OUString::createFromAscii(aWID_Name[nWID].pPropertyName);
     else
-        OSL_ENSURE(false, "lng : unknown WID");
+        OSL_FAIL("lng : unknown WID");
 
     return aRes;
 }

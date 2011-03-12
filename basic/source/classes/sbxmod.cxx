@@ -178,7 +178,7 @@ DocObjectWrapper::DocObjectWrapper( SbModule* pVar ) : m_pMod( pVar ), mName( pV
                 }
                 catch(  Exception& )
                 {
-                    OSL_ENSURE( false, "DocObjectWrapper::DocObjectWrapper: Caught exception!" );
+                    OSL_FAIL( "DocObjectWrapper::DocObjectWrapper: Caught exception!" );
                 }
             }
 

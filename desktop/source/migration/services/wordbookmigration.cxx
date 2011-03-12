@@ -283,7 +283,7 @@ bool IsUserWordbook( const ::rtl::OUString& rFile )
             {
                 if ( !(aValue.Value >>= m_sSourceDir) )
                 {
-                    OSL_ENSURE( false, "WordbookMigration::initialize: argument UserData has wrong type!" );
+                    OSL_FAIL( "WordbookMigration::initialize: argument UserData has wrong type!" );
                 }
                 m_sSourceDir += sSourceSubDir;
                 break;

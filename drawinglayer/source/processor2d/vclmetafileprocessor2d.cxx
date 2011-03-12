@@ -850,7 +850,7 @@ namespace drawinglayer
                         }
                         catch(const uno::Exception&)
                         {
-                            OSL_ENSURE(false, "VclMetafileProcessor2D: No access to printable flag of Control, caught an exception!");
+                            OSL_FAIL("VclMetafileProcessor2D: No access to printable flag of Control, caught an exception!");
                         }
                     }
 
@@ -927,7 +927,7 @@ namespace drawinglayer
                             }
                             catch( const uno::Exception& )
                             {
-                                OSL_ENSURE(false, "VclMetafileProcessor2D: Printing of Control failed, caught an exception!");
+                                OSL_FAIL("VclMetafileProcessor2D: Printing of Control failed, caught an exception!");
                             }
                         }
 

@@ -1789,7 +1789,7 @@ Db* DataBaseIterator::nextDb( rtl::OUString* o_pExtensionPath, rtl::OUString* o_
             }
 
             case END_REACHED:
-                OSL_ENSURE( false, "DataBaseIterator::nextDb(): Invalid case END_REACHED" );
+                OSL_FAIL( "DataBaseIterator::nextDb(): Invalid case END_REACHED" );
                 break;
         }
     }
@@ -1915,7 +1915,7 @@ rtl::OUString KeyDataBaseFileIterator::nextDbFile( bool& o_rbExtension )
             }
 
             case END_REACHED:
-                OSL_ENSURE( false, "DataBaseIterator::nextDbFile(): Invalid case END_REACHED" );
+                OSL_FAIL( "DataBaseIterator::nextDbFile(): Invalid case END_REACHED" );
                 break;
         }
     }
@@ -1989,7 +1989,7 @@ Reference< XHierarchicalNameAccess > JarFileIterator::nextJarFile
             }
 
             case END_REACHED:
-                OSL_ENSURE( false, "JarFileIterator::nextJarFile(): Invalid case END_REACHED" );
+                OSL_FAIL( "JarFileIterator::nextJarFile(): Invalid case END_REACHED" );
                 break;
         }
     }
@@ -2122,7 +2122,7 @@ rtl::OUString IndexFolderIterator::nextIndexFolder( bool& o_rbExtension, bool& o
             }
 
             case END_REACHED:
-                OSL_ENSURE( false, "IndexFolderIterator::nextIndexFolder(): Invalid case END_REACHED" );
+                OSL_FAIL( "IndexFolderIterator::nextIndexFolder(): Invalid case END_REACHED" );
                 break;
         }
     }

@@ -89,7 +89,7 @@ void TableEdgeHdl::SetEdge( sal_Int32 nEdge, sal_Int32 nStart, sal_Int32 nEnd, T
     }
     else
     {
-        OSL_ENSURE( false, "sdr::table::TableEdgeHdl::SetEdge(), invalid edge!" );
+        OSL_FAIL( "sdr::table::TableEdgeHdl::SetEdge(), invalid edge!" );
     }
 }
 

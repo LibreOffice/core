@@ -226,13 +226,13 @@ BOOL OFileTable::UpdateRow(OValueRefVector& /*rRow*/, OValueRefRow& /*pOrgRow*/,
 void OFileTable::addColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& /*descriptor*/)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OFileTable::addColumn" );
-    OSL_ENSURE( false, "OFileTable::addColumn: not implemented!" );
+    OSL_FAIL( "OFileTable::addColumn: not implemented!" );
 }
 // -----------------------------------------------------------------------------
 void OFileTable::dropColumn(sal_Int32 /*_nPos*/)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OFileTable::dropColumn" );
-    OSL_ENSURE( false, "OFileTable::addColumn: not implemented!" );
+    OSL_FAIL( "OFileTable::addColumn: not implemented!" );
 }
 
 // -----------------------------------------------------------------------------

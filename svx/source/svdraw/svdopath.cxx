@@ -2039,7 +2039,7 @@ SdrHdl* SdrPathObj::GetHdl(sal_uInt32 nHdlNum) const
 {
     // #i73248#
     // Warn the user that this is ineffective and show alternatives. Should not be used at all.
-    OSL_ENSURE(false, "SdrPathObj::GetHdl(): ineffective, use AddToHdlList instead (!)");
+    OSL_FAIL("SdrPathObj::GetHdl(): ineffective, use AddToHdlList instead (!)");
 
     // to have an alternative, get single handle using the ineffective way
     SdrHdl* pRetval = 0;

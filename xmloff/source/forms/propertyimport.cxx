@@ -542,8 +542,7 @@ void OListPropertyContext::StartElement( const Reference< sax::XAttributeList >&
         }
         else
         {
-            OSL_ENSURE( false,
-                    ::rtl::OString( "OListPropertyContext::StartElement: unknown child element (\"")
+            OSL_FAIL( ::rtl::OString( "OListPropertyContext::StartElement: unknown child element (\"")
                 +=  ::rtl::OString( sAttributeName.getStr(), sAttributeName.getLength(), RTL_TEXTENCODING_ASCII_US )
                 +=  ::rtl::OString( "\")!" ) );
         }
@@ -628,8 +627,7 @@ void OListValueContext::StartElement( const Reference< sax::XAttributeList >& _r
             }
         }
 
-        OSL_ENSURE( false,
-                ::rtl::OString( "OListValueContext::StartElement: unknown child element (\"")
+        OSL_FAIL( ::rtl::OString( "OListValueContext::StartElement: unknown child element (\"")
             +=  ::rtl::OString( sAttributeName.getStr(), sAttributeName.getLength(), RTL_TEXTENCODING_ASCII_US )
             +=  ::rtl::OString( "\")!" ) );
     }

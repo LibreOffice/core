@@ -2157,7 +2157,7 @@ void ORowSetValue::impl_fill( const sal_Int32 _nType, sal_Bool _bNullable, const
         setTypeKind(DataType::OTHER);
         break;
     default:
-        OSL_ENSURE( false, "ORowSetValue::fill: unsupported type!" );
+        OSL_FAIL( "ORowSetValue::fill: unsupported type!" );
         (*this) = _rValueSource.getObject();
         break;
     }
@@ -2275,7 +2275,7 @@ void ORowSetValue::fill(const Any& _rValue)
             if ( _rValue >>= aDummy )
                 (*this) = aDummy;
             else
-                OSL_ENSURE( false, "ORowSetValue::fill: unsupported sequence type!" );
+                OSL_FAIL( "ORowSetValue::fill: unsupported sequence type!" );
             break;
         }
 
@@ -2297,7 +2297,7 @@ void ORowSetValue::fill(const Any& _rValue)
                 (*this) = aDateTime;
             }
             else
-                OSL_ENSURE( false, "ORowSetValue::fill: unsupported structure!" );
+                OSL_FAIL( "ORowSetValue::fill: unsupported structure!" );
 
             break;
         }

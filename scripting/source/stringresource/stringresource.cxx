@@ -1558,7 +1558,7 @@ Reference< io::XInputStream > BinaryInput::getInputStreamForSection( sal_Int32 n
         }
     }
     else
-        OSL_ENSURE( false, "BinaryInput::getInputStreamForSection(): Read past end" );
+        OSL_FAIL( "BinaryInput::getInputStreamForSection(): Read past end" );
 
     return xIn;
 }
@@ -1568,7 +1568,7 @@ void BinaryInput::seek( sal_Int32 nPos )
     if( nPos <= m_nSize )
         m_nCurPos = nPos;
     else
-        OSL_ENSURE( false, "BinaryInput::seek(): Position past end" );
+        OSL_FAIL( "BinaryInput::seek(): Position past end" );
 }
 
 
@@ -1581,7 +1581,7 @@ sal_Int16 BinaryInput::readInt16( void )
         nRet += 256 * sal_Int16( sal_uInt8( m_pData[m_nCurPos++] ) );
     }
     else
-        OSL_ENSURE( false, "BinaryInput::readInt16(): Read past end" );
+        OSL_FAIL( "BinaryInput::readInt16(): Read past end" );
 
     return nRet;
 }
@@ -1599,7 +1599,7 @@ sal_Int32 BinaryInput::readInt32( void )
         }
     }
     else
-        OSL_ENSURE( false, "BinaryInput::readInt32(): Read past end" );
+        OSL_FAIL( "BinaryInput::readInt32(): Read past end" );
 
     return nRet;
 }
@@ -1613,7 +1613,7 @@ sal_Unicode BinaryInput::readUnicodeChar( void )
         nRet += 256 * sal_uInt8( m_pData[m_nCurPos++] );
     }
     else
-        OSL_ENSURE( false, "BinaryInput::readUnicodeChar(): Read past end" );
+        OSL_FAIL( "BinaryInput::readUnicodeChar(): Read past end" );
 
     sal_Unicode cRet = nRet;
     return cRet;

@@ -600,7 +600,7 @@ BOOL ODbaseTable::ReadMemoHeader()
             (*m_pMemoStream) >> m_aMemoHeader.db_size;
             break;
         default:
-            OSL_ENSURE( false, "ODbaseTable::ReadMemoHeader: unsupported memo type!" );
+            OSL_FAIL( "ODbaseTable::ReadMemoHeader: unsupported memo type!" );
             break;
     }
     return TRUE;

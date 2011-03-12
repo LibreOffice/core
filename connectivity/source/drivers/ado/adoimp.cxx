@@ -263,7 +263,7 @@ sal_Int32 ADOS::mapAdoType2Object(ObjectTypeEnum objType)
             nType = PrivilegeObject::COLUMN;
             break;
         default:
-            OSL_ENSURE( false, "ADOS::mapAdoType2Object: privilege type cannot be translated!" );
+            OSL_FAIL( "ADOS::mapAdoType2Object: privilege type cannot be translated!" );
             break;
     }
     return nType;

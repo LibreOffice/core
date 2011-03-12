@@ -546,14 +546,12 @@ BaseContent::getContentType()
                 }
                 else
                 {
-                    OSL_ENSURE( false,
-                                "BaseContent::getContentType - Property value was null!" );
+                    OSL_FAIL( "BaseContent::getContentType - Property value was null!" );
                 }
             }
             catch ( sdbc::SQLException const & )
             {
-                OSL_ENSURE( false,
-                            "BaseContent::getContentType - Caught SQLException!" );
+                OSL_FAIL( "BaseContent::getContentType - Caught SQLException!" );
             }
         }
     }
@@ -679,15 +677,13 @@ BaseContent::createNewContent(
         if ( xRow->wasNull() )
         {
             IsDocument = false;
-//              OSL_ENSURE( false,
-//                          "BaseContent::createNewContent - Property value was null!" );
+//              OSL_FAIL( //                          "BaseContent::createNewContent - Property value was null!" );
 //              return Reference< XContent >();
         }
     }
     catch ( sdbc::SQLException const & )
     {
-        OSL_ENSURE( false,
-                    "BaseContent::createNewContent - Caught SQLException!" );
+        OSL_FAIL( "BaseContent::createNewContent - Caught SQLException!" );
         return Reference< XContent >();
     }
 
@@ -1215,8 +1211,7 @@ void SAL_CALL BaseContent::insert( sal_Int32 nMyCommandIdentifier,
     }
     catch ( sdbc::SQLException const & )
     {
-        OSL_ENSURE( false,
-                    "BaseContent::insert - Caught SQLException!" );
+        OSL_FAIL( "BaseContent::insert - Caught SQLException!" );
         contentTypeSet = false;
     }
 

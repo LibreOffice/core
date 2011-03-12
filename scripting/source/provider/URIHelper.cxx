@@ -78,8 +78,7 @@ ScriptingFrameworkURIHelper::ScriptingFrameworkURIHelper(
     }
     catch (uno::Exception&)
     {
-        OSL_ENSURE(false,
-            "Scripting Framework error initialising XSimpleFileAccess");
+        OSL_FAIL("Scripting Framework error initialising XSimpleFileAccess");
     }
 
     try
@@ -92,8 +91,7 @@ ScriptingFrameworkURIHelper::ScriptingFrameworkURIHelper(
     }
     catch (uno::Exception&)
     {
-        OSL_ENSURE(false,
-            "Scripting Framework error initialising XUriReferenceFactory");
+        OSL_FAIL("Scripting Framework error initialising XUriReferenceFactory");
     }
 }
 

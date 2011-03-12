@@ -225,7 +225,7 @@ const ParagraphData& OutlinerParaObject::GetParagraphData(sal_uInt32 nIndex) con
     }
     else
     {
-        OSL_ENSURE(false, "OutlinerParaObject::GetParagraphData: Access out of range (!)");
+        OSL_FAIL("OutlinerParaObject::GetParagraphData: Access out of range (!)");
         static ParagraphData aEmptyParagraphData;
         return aEmptyParagraphData;
     }

@@ -755,12 +755,12 @@ namespace svxform
 
         case MID_INSERT_CONTROL:
         {
-            OSL_ENSURE( false, "XFormsPage::DoToolboxAction: MID_INSERT_CONTROL not implemented, yet!" );
+            OSL_FAIL( "XFormsPage::DoToolboxAction: MID_INSERT_CONTROL not implemented, yet!" );
         }
         break;
 
         default:
-            OSL_ENSURE( false, "XFormsPage::DoToolboxAction: unknown ID!" );
+            OSL_FAIL( "XFormsPage::DoToolboxAction: unknown ID!" );
             break;
         }
 

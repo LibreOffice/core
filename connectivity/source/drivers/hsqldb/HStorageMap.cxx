@@ -313,7 +313,7 @@ namespace connectivity
                             if ( _nMode < 16 )
                                 sMessage += "0";
                             sMessage += ::rtl::OString::valueOf( _nMode, 16 ).toAsciiUpperCase();
-                            OSL_ENSURE( false, sMessage.getStr() );
+                            OSL_FAIL( sMessage.getStr() );
 #endif
                             StorageContainer::throwJavaException(e,env);
                         }

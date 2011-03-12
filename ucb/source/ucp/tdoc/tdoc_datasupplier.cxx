@@ -440,7 +440,7 @@ bool ResultSetDataSupplier::queryNamesOfChildren()
                 m_pImpl->m_xContent->getIdentifier()->getContentIdentifier(),
                 *pNamesOfChildren ) )
         {
-            OSL_ENSURE( false, "Got no list of children!" );
+            OSL_FAIL( "Got no list of children!" );
             m_pImpl->m_bThrowException = sal_True;
             return false;
         }

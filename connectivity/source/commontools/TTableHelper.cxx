@@ -245,7 +245,7 @@ namespace
         // if that's not the case, normalize it
         if ( bGaps || bDuplicates )
         {
-            OSL_ENSURE( false, "lcl_sanitizeColumnDescs: database did provide invalid ORDINAL_POSITION values!" );
+            OSL_FAIL( "lcl_sanitizeColumnDescs: database did provide invalid ORDINAL_POSITION values!" );
 
             OrdinalPosition nNormalizedPosition = 1;
             for (   ::std::vector< ColumnDesc >::iterator normalize = _rColumns.begin();

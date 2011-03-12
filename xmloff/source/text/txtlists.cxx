@@ -352,7 +352,7 @@ XMLTextListsHelper::GetNumberedParagraphListId(
     const ::rtl::OUString i_StyleName)
 {
     if (!i_StyleName.getLength()) {
-        OSL_ENSURE(false, "invalid numbered-paragraph: no style-name");
+        OSL_FAIL("invalid numbered-paragraph: no style-name");
     }
     if (i_StyleName.getLength()
         && (i_Level < mLastNumberedParagraphs.size())

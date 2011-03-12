@@ -221,7 +221,7 @@ void initParameter(int argc, char* argv[])
     {
         if (!isKnownParameter(argv[i]))
         {
-            OSL_ENSURE(false, "Wrong parameter received");
+            OSL_FAIL("Wrong parameter received");
             continue;
         }
 
@@ -324,7 +324,7 @@ int main(int argc, char* argv[])
     #endif
     )
     {
-        OSL_ENSURE(false, ex.what());
+        OSL_FAIL(ex.what());
     }
     return ulRet;
 }

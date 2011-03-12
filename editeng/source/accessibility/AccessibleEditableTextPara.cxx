@@ -1963,7 +1963,7 @@ namespace accessibility
             PropertyState eState = aPropSet._getPropertyState( pProperties->Name, mnParagraphIndex );
             if ( eState == PropertyState_AMBIGUOUS_VALUE )
             {
-                OSL_ENSURE( false, "ambiguous property value encountered" );
+                OSL_FAIL( "ambiguous property value encountered" );
             }
 
             //if (eState == PropertyState_DIRECT_VALUE)

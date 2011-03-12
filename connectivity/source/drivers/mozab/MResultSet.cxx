@@ -172,7 +172,7 @@ void OResultSet::methodEntry()
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     if ( !m_pTable )
     {
-        OSL_ENSURE( false, "OResultSet::methodEntry: looks like we're disposed, but how is this possible?" );
+        OSL_FAIL( "OResultSet::methodEntry: looks like we're disposed, but how is this possible?" );
         throw DisposedException( ::rtl::OUString(), *this );
     }
 }
@@ -642,7 +642,7 @@ sal_Bool OResultSet::convertFastPropertyValue(
                             const Any& /*rValue*/ )
                                 throw (::com::sun::star::lang::IllegalArgumentException)
 {
-    OSL_ENSURE( false, "OResultSet::convertFastPropertyValue: not implemented!" );
+    OSL_FAIL( "OResultSet::convertFastPropertyValue: not implemented!" );
     switch(nHandle)
     {
         case PROPERTY_ID_ISBOOKMARKABLE:
@@ -663,7 +663,7 @@ void OResultSet::setFastPropertyValue_NoBroadcast(
                                                  )
                                                  throw (Exception)
 {
-    OSL_ENSURE( false, "OResultSet::setFastPropertyValue_NoBroadcast: not implemented!" );
+    OSL_FAIL( "OResultSet::setFastPropertyValue_NoBroadcast: not implemented!" );
     switch(nHandle)
     {
         case PROPERTY_ID_ISBOOKMARKABLE:

@@ -1487,14 +1487,14 @@ void SAL_CALL SvxShape::removePropertyChangeListener( const OUString& _propertyN
 
 void SAL_CALL SvxShape::addVetoableChangeListener( const OUString& , const Reference< beans::XVetoableChangeListener >&  ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OSL_ENSURE( false, "SvxShape::addVetoableChangeListener: don't have any vetoable properties, so why ...?" );
+    OSL_FAIL( "SvxShape::addVetoableChangeListener: don't have any vetoable properties, so why ...?" );
 }
 
 //----------------------------------------------------------------------
 
 void SAL_CALL SvxShape::removeVetoableChangeListener( const OUString& , const Reference< beans::XVetoableChangeListener >&  ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OSL_ENSURE( false, "SvxShape::removeVetoableChangeListener: don't have any vetoable properties, so why ...?" );
+    OSL_FAIL( "SvxShape::removeVetoableChangeListener: don't have any vetoable properties, so why ...?" );
 }
 
 //----------------------------------------------------------------------
@@ -3825,7 +3825,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
         }
         return *pSeq;
     }
-    OSL_ENSURE( false, "SvxShape::_getSupportedServiceNames: could not determine object type!" );
+    OSL_FAIL( "SvxShape::_getSupportedServiceNames: could not determine object type!" );
     uno::Sequence< OUString > aSeq;
     return aSeq;
 }

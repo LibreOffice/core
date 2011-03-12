@@ -246,7 +246,7 @@ namespace migration
             {
                 if ( !(aValue.Value >>= m_sSourceDir) )
                 {
-                    OSL_ENSURE( false, "AutocorrectionMigration::initialize: argument UserData has wrong type!" );
+                    OSL_FAIL( "AutocorrectionMigration::initialize: argument UserData has wrong type!" );
                 }
                 m_sSourceDir += sSourceSubDir;
                 break;

@@ -177,7 +177,7 @@ Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OIndex::getColumn
     }
     catch( const Exception& )
     {
-        OSL_ENSURE( false, "OIndex::getColumns: caught an exception!" );
+        OSL_FAIL( "OIndex::getColumns: caught an exception!" );
     }
 
     return const_cast<OIndex*>(this)->m_pColumns;

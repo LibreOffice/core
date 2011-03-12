@@ -2503,7 +2503,7 @@ SvXMLExport::AddAttributeXmlId(uno::Reference<uno::XInterface> const & i_xIfc)
                 }
                 else
                 {
-                    OSL_ENSURE(false, "SvXMLExport::AddAttributeXmlId: "
+                    OSL_FAIL("SvXMLExport::AddAttributeXmlId: "
                          "invalid stream name");
                 }
             }

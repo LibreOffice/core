@@ -255,7 +255,7 @@ OCommonStatement::StatementType OCommonStatement::parseSql( const ::rtl::OUStrin
     }
 
     getOwnConnection()->throwSQLException( STR_QUERY_TOO_COMPLEX, *this );
-    OSL_ENSURE( false, "OCommonStatement::parseSql: unreachable!" );
+    OSL_FAIL( "OCommonStatement::parseSql: unreachable!" );
     return eSelect;
 
 }

@@ -1119,7 +1119,7 @@ namespace sfx2
     // ---------------------------------------------------------------------------------------------------------------------
     void TaskPaneController_Impl::Dying()
     {
-        OSL_ENSURE( false, "TaskPaneController_Impl::Dying: unexpected call!" );
+        OSL_FAIL( "TaskPaneController_Impl::Dying: unexpected call!" );
         // We are expected to live longer than the ToolPanelDeck we work with. Since we remove ourself, in our dtor,
         // as listener from the panel deck, this method here should never be called.
     }

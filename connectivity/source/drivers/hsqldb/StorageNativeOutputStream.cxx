@@ -213,7 +213,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb
         }
         catch(Exception&)
         {
-            OSL_ENSURE( false, "StorageNativeOutputStream::sync: could not flush output stream!" );
+            OSL_FAIL( "StorageNativeOutputStream::sync: could not flush output stream!" );
         }
     }
 }

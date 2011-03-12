@@ -1392,13 +1392,13 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 pValue[nActProp].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sFrame));
                 if ( pItem->ISA( SfxUsrAnyItem ) )
                 {
-                    OSL_ENSURE( false, "TransformItems: transporting an XFrame via an SfxUsrAnyItem is not deprecated!" );
+                    OSL_FAIL( "TransformItems: transporting an XFrame via an SfxUsrAnyItem is not deprecated!" );
                     pValue[nActProp++].Value = static_cast< const SfxUsrAnyItem* >( pItem )->GetValue();
                 }
                 else if ( pItem->ISA( SfxUnoFrameItem ) )
                     pValue[nActProp++].Value <<= static_cast< const SfxUnoFrameItem* >( pItem )->GetFrame();
                 else
-                    OSL_ENSURE( false, "TransformItems: invalid item type for SID_FILLFRAME!" );
+                    OSL_FAIL( "TransformItems: invalid item type for SID_FILLFRAME!" );
             }
             if ( rSet.GetItemState( SID_TEMPLATE, sal_False, &pItem ) == SFX_ITEM_SET )
             {

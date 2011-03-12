@@ -267,7 +267,7 @@ namespace sfx2
             break;
 
             default:
-                OSL_ENSURE( false, "UserInputInterception::handleNotifyEvent: illegal event type!" );
+                OSL_FAIL( "UserInputInterception::handleNotifyEvent: illegal event type!" );
                 break;
         }
 

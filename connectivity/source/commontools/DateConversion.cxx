@@ -424,7 +424,7 @@ double DBTypeConversion::getValue(const Reference<XColumn>& xVariant,
     }
     catch (const Exception& )
     {
-        OSL_ENSURE(false, "DBTypeConversion::getValue: caught an exception while asking for the format key!");
+        OSL_FAIL("DBTypeConversion::getValue: caught an exception while asking for the format key!");
     }
 
     if (!nKey)

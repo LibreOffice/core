@@ -469,7 +469,7 @@ namespace svx
         else if ( aError.hasValue() )
             displayException( aError );
         else
-            OSL_ENSURE( false, "FormControllerHelper::impl_operateForm_nothrow: no success, but no error?" );
+            OSL_FAIL( "FormControllerHelper::impl_operateForm_nothrow: no success, but no error?" );
 
         return false;
     }

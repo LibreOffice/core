@@ -180,7 +180,7 @@ void SAL_CALL CAsyncEventNotifier::shutdown()
     // we are waiting infinite, so error will
     // be better detected in form of deadlocks
     if (WaitForSingleObject(m_hThread, INFINITE) == WAIT_FAILED) {
-        OSL_ENSURE(false, "Waiting for thread termination failed!");
+        OSL_FAIL("Waiting for thread termination failed!");
     }
 
     // lock mutex again to reset m_hThread

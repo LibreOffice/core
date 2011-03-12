@@ -609,7 +609,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                     bDouble = sal_False;
                     break;
                 default:
-                    OSL_ENSURE( false, "xmloff::XMLPropertiesOOoTContext_Impl::StartElement(), unknown underline token!" );
+                    OSL_FAIL( "xmloff::XMLPropertiesOOoTContext_Impl::StartElement(), unknown underline token!" );
                     break;
                 }
                 pContext->AddAttribute(
@@ -712,7 +712,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                         break;
 
                     default:
-                        OSL_ENSURE( false, "invalid spline type" );
+                        OSL_FAIL( "invalid spline type" );
                         pContext->AddAttribute(
                             aNewAttrName, GetXMLToken( XML_NONE ));
                         break;
@@ -773,7 +773,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                             eToken = XML_HOURGLASS;
                             break;
                         default:
-                            OSL_ENSURE( false, "invalid named symbol" );
+                            OSL_FAIL( "invalid named symbol" );
                             break;
                     }
 
@@ -804,7 +804,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                                 aNewAttrName, GetXMLToken( XML_IMAGE ));
                             break;
                         default:
-                            OSL_ENSURE( false, "invalid symbol type" );
+                            OSL_FAIL( "invalid symbol type" );
                             pContext->AddAttribute(
                                 aNewAttrName, GetXMLToken( XML_NONE ));
                             break;

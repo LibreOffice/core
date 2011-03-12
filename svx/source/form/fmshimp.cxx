@@ -742,7 +742,7 @@ bool FmXFormShell::impl_checkDisposed() const
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::impl_checkDisposed" );
     if ( !m_pShell )
     {
-        OSL_ENSURE( false, "FmXFormShell::impl_checkDisposed: already disposed!" );
+        OSL_FAIL( "FmXFormShell::impl_checkDisposed: already disposed!" );
         return true;
     }
     return false;

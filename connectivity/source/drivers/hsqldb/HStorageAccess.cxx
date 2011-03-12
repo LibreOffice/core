@@ -92,7 +92,7 @@ SAL_DLLPUBLIC_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStor
         }
         catch(Exception&)
         {
-            OSL_ENSURE( false, "NativeStorageAccess::close: caught an exception while flushing!" );
+            OSL_FAIL( "NativeStorageAccess::close: caught an exception while flushing!" );
         }
 #ifdef HSQLDB_DBG
     {

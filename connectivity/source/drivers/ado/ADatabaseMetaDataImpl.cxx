@@ -535,7 +535,7 @@ KeyTypeEnum OAdoKey::Map2KeyRule(const sal_Int32& _eNum)
             eNum = adKeyUnique;
             break;
         default:
-            OSL_ENSURE( false, "OAdoKey::Map2KeyRule: invalid key type!" );
+            OSL_FAIL( "OAdoKey::Map2KeyRule: invalid key type!" );
     }
     return eNum;
 }

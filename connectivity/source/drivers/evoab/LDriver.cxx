@@ -233,7 +233,7 @@ sal_Bool SAL_CALL OEvoabDriver::acceptsURL( const ::rtl::OUString& url )
             if ( nFileErr != osl_File_E_None )
             {
                 ::rtl::OUString sErr = translateFileErrorMessage( nFileErr);
-                OSL_ENSURE(false, ::rtl::OUStringToOString( sErr, RTL_TEXTENCODING_ASCII_US ).getStr());
+                OSL_FAIL(::rtl::OUStringToOString( sErr, RTL_TEXTENCODING_ASCII_US ).getStr());
             }
             ::rtl::OUString aVersionInfo;
             if ( nFileErr == osl_File_E_None && nBytesRead > 0 && nBytesRead <= 256)

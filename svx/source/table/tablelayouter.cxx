@@ -210,7 +210,7 @@ bool TableLayouter::isEdgeVisible( sal_Int32 nEdgeX, sal_Int32 nEdgeY, bool bHor
     }
     else
     {
-        OSL_ENSURE( false, "sdr::table::TableLayouter::getBorderLine(), invalid edge!" );
+        OSL_FAIL( "sdr::table::TableLayouter::getBorderLine(), invalid edge!" );
     }
 
     return false;
@@ -234,7 +234,7 @@ SvxBorderLine* TableLayouter::getBorderLine( sal_Int32 nEdgeX, sal_Int32 nEdgeY,
     }
     else
     {
-        OSL_ENSURE( false, "sdr::table::TableLayouter::getBorderLine(), invalid edge!" );
+        OSL_FAIL( "sdr::table::TableLayouter::getBorderLine(), invalid edge!" );
     }
 
     return pLine;

@@ -594,7 +594,7 @@ namespace basic
                 // a BasicManager which is still in our repository is being deleted.
                 // That's bad, since by definition, we *own* all instances in our
                 // repository.
-                OSL_ENSURE( false, "ImplRepository::Notify: nobody should tamper with the managers, except ourself!" );
+                OSL_FAIL( "ImplRepository::Notify: nobody should tamper with the managers, except ourself!" );
                 m_aStore.erase( loop );
                 break;
             }

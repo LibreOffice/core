@@ -239,7 +239,7 @@ void SQLExceptionInfo::append( TYPE _eType, const ::rtl::OUString& _rErrorMessag
     case SQL_WARNING:   aAppend <<= SQLWarning();   break;
     case SQL_CONTEXT:   aAppend <<= SQLContext();   break;
     default:
-        OSL_ENSURE( false, "SQLExceptionInfo::append: invalid exception type: this will crash!" );
+        OSL_FAIL( "SQLExceptionInfo::append: invalid exception type: this will crash!" );
         break;
     }
 

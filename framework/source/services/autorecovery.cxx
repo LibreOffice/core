@@ -1708,7 +1708,7 @@ void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame
         (!aNew.FactoryURL.getLength())
        )
     {
-        OSL_ENSURE( false, "AutoRecovery::implts_registerDocument: this should not happen anymore!" );
+        OSL_FAIL( "AutoRecovery::implts_registerDocument: this should not happen anymore!" );
         // nowadays, the Basic IDE should already die on the "supports XDocumentRecovery" check. And no other known
         // document type fits in here ...
         return;

@@ -327,7 +327,7 @@ void OCommonEmbeddedObject::EmbedAndReparentDoc_Impl( const uno::Reference< util
     }
     catch( const lang::NoSupportException & )
     {
-        OSL_ENSURE( false, "OCommonEmbeddedObject::EmbedAndReparentDoc: cannot set parent at document!" );
+        OSL_FAIL( "OCommonEmbeddedObject::EmbedAndReparentDoc: cannot set parent at document!" );
     }
 }
 
@@ -1061,7 +1061,7 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
                 m_pDocHolder->SetOutplaceFrameProperties( aOutFrameProps );
             }
             else
-                OSL_ENSURE( false, "OCommonEmbeddedObject::setPersistentEntry: illegal type for argument 'OutplaceFrameProperties'!" );
+                OSL_FAIL( "OCommonEmbeddedObject::setPersistentEntry: illegal type for argument 'OutplaceFrameProperties'!" );
         }
         else if ( lObjArgs[nObjInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ModuleName" ) ) )
         {

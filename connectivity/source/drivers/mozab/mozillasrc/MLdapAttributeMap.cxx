@@ -188,7 +188,7 @@ namespace connectivity { namespace mozab {
     // -------------------------------------------------------------------
     NS_IMETHODIMP MLdapAttributeMap::GetAttributes(const nsACString & aProperty, PRUint32* aCount, char*** aAttrs)
     {
-        OSL_ENSURE( false, "MLdapAttributeMap::GetAttributes: not implemented!" );
+        OSL_FAIL( "MLdapAttributeMap::GetAttributes: not implemented!" );
         (void)aProperty;
         (void)aCount;
         (void)aAttrs;
@@ -220,7 +220,7 @@ namespace connectivity { namespace mozab {
     // -------------------------------------------------------------------
     NS_IMETHODIMP MLdapAttributeMap::SetAttributeList(const nsACString & aProperty, const nsACString & aAttributeList, PRBool allowInconsistencies)
     {
-        OSL_ENSURE( false, "MLdapAttributeMap::SetAttributeList: not implemented!" );
+        OSL_FAIL( "MLdapAttributeMap::SetAttributeList: not implemented!" );
         (void)aProperty;
         (void)aAttributeList;
         (void)allowInconsistencies;
@@ -230,7 +230,7 @@ namespace connectivity { namespace mozab {
     // -------------------------------------------------------------------
     NS_IMETHODIMP MLdapAttributeMap::GetProperty(const nsACString & aAttribute, nsACString & _retval)
     {
-        OSL_ENSURE( false, "MLdapAttributeMap::GetProperty: not implemented!" );
+        OSL_FAIL( "MLdapAttributeMap::GetProperty: not implemented!" );
         (void)aAttribute;
         (void)_retval;
         return NS_ERROR_NOT_IMPLEMENTED;
@@ -266,7 +266,7 @@ namespace connectivity { namespace mozab {
     // -------------------------------------------------------------------
     NS_IMETHODIMP MLdapAttributeMap::SetFromPrefs(const nsACString & aPrefBranchName)
     {
-        OSL_ENSURE( false, "MLdapAttributeMap::SetFromPrefs: not implemented!" );
+        OSL_FAIL( "MLdapAttributeMap::SetFromPrefs: not implemented!" );
         (void)aPrefBranchName;
         return NS_ERROR_NOT_IMPLEMENTED;
     }
@@ -396,7 +396,7 @@ namespace connectivity { namespace mozab {
                     _card.SetPreferMailFormat(format);
                 }
                 else
-                    OSL_ENSURE( false, "MLdapAttributeMap::fillCardFromResult: unexpected property without default setters!" );
+                    OSL_FAIL( "MLdapAttributeMap::fillCardFromResult: unexpected property without default setters!" );
             }
         }
     }
@@ -439,7 +439,7 @@ namespace connectivity { namespace mozab {
                     }
                 }
                 else
-                    OSL_ENSURE( false, "MLdapAttributeMap::fillResultFromCard: unexpected property without default getters!" );
+                    OSL_FAIL( "MLdapAttributeMap::fillResultFromCard: unexpected property without default getters!" );
             }
 
             _result.insert( prop->first, resultValue );

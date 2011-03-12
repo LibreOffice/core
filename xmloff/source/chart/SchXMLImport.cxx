@@ -549,7 +549,7 @@ void SchXMLImportHelper::DeleteDataSeries(
     catch( uno::Exception & ex )
     {
         (void)ex; // avoid warning for pro build
-        OSL_ENSURE( false, OUStringToOString(
+        OSL_FAIL( OUStringToOString(
                         OUString( RTL_CONSTASCII_USTRINGPARAM( "Exception caught. Type: " )) +
                         OUString::createFromAscii( typeid( ex ).name()) +
                         OUString( RTL_CONSTASCII_USTRINGPARAM( ", Message: " )) +
@@ -632,7 +632,7 @@ Reference< chart2::XDataSeries > SchXMLImportHelper::GetNewDataSeries(
     catch( uno::Exception & ex )
     {
         (void)ex; // avoid warning for pro build
-        OSL_ENSURE( false, OUStringToOString(
+        OSL_FAIL( OUStringToOString(
                         OUString( RTL_CONSTASCII_USTRINGPARAM( "Exception caught. Type: " )) +
                         OUString::createFromAscii( typeid( ex ).name()) +
                         OUString( RTL_CONSTASCII_USTRINGPARAM( ", Message: " )) +
@@ -645,7 +645,7 @@ Reference< chart2::XDataSeries > SchXMLImportHelper::GetNewDataSeries(
 Reference< chart2::data::XLabeledDataSequence > SchXMLImportHelper::GetNewLabeledDataSequence()
 {
     // @todo: remove this asap
-    OSL_ENSURE( false, "Do not call this method" );
+    OSL_FAIL( "Do not call this method" );
     Reference< chart2::data::XLabeledDataSequence >  xResult;
     // DO NOT USED -- DEPRECATED. Use SchXMLTools::GetNewLabeledDataSequence() instead
     return xResult;

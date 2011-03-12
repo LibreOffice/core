@@ -301,8 +301,7 @@ void SAL_CALL JavaMigration::initialize( const css::uno::Sequence< css::uno::Any
         {
             if ( !(aValue.Value >>= m_sUserDir) )
             {
-                OSL_ENSURE(
-                    false,
+                OSL_FAIL(
                     "[Service implementation " IMPL_NAME
                     "] XInitialization::initialize: Argument UserData has wrong type.");
             }

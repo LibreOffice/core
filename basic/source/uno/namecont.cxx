@@ -884,7 +884,7 @@ sal_Bool SfxLibraryContainer::init_Impl(
                             aMessage.append( ::rtl::OUStringToOString( rLib.aName, osl_getThreadTextEncoding() ) );
                             aMessage.append( "'.\n\nException:" );
                             aMessage.append( ::rtl::OUStringToOString( ::comphelper::anyToString( aError ), osl_getThreadTextEncoding() ) );
-                            OSL_ENSURE( false, aMessage.makeStringAndClear().getStr() );
+                            OSL_FAIL( aMessage.makeStringAndClear().getStr() );
                         #endif
                         }
                     }
@@ -1379,7 +1379,7 @@ void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
                 aMessage.append( "invalid library element '" );
                 aMessage.append( ::rtl::OUStringToOString( aElementName, osl_getThreadTextEncoding() ) );
                 aMessage.append( "'." );
-                OSL_ENSURE( false, aMessage.makeStringAndClear().getStr() );
+                OSL_FAIL( aMessage.makeStringAndClear().getStr() );
             #endif
                 continue;
             }
@@ -1468,7 +1468,7 @@ void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
                     aMessage.append( "invalid library element '" );
                     aMessage.append( ::rtl::OUStringToOString( aElementName, osl_getThreadTextEncoding() ) );
                     aMessage.append( "'." );
-                    OSL_ENSURE( false, aMessage.makeStringAndClear().getStr() );
+                    OSL_FAIL( aMessage.makeStringAndClear().getStr() );
                 #endif
                     continue;
                 }
@@ -1893,7 +1893,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
                         aMessage.append( ::rtl::OUStringToOString( rLib.aName, osl_getThreadTextEncoding() ) );
                         aMessage.append( "'.\n\nException:" );
                         aMessage.append( ::rtl::OUStringToOString( ::comphelper::anyToString( aError ), osl_getThreadTextEncoding() ) );
-                        OSL_ENSURE( false, aMessage.makeStringAndClear().getStr() );
+                        OSL_FAIL( aMessage.makeStringAndClear().getStr() );
                     #endif
                         return;
                     }
@@ -2314,7 +2314,7 @@ void SAL_CALL SfxLibraryContainer::loadLibrary( const OUString& Name )
                 aMessage.append( ::rtl::OUStringToOString( Name, osl_getThreadTextEncoding() ) );
                 aMessage.append( "'.\n\nException:" );
                 aMessage.append( ::rtl::OUStringToOString( ::comphelper::anyToString( aError ), osl_getThreadTextEncoding() ) );
-                OSL_ENSURE( false, aMessage.makeStringAndClear().getStr() );
+                OSL_FAIL( aMessage.makeStringAndClear().getStr() );
             #endif
                 return;
             }
@@ -2364,7 +2364,7 @@ void SAL_CALL SfxLibraryContainer::loadLibrary( const OUString& Name )
                     aMessage.append( "couln't open library element stream - attempted to open library '" );
                     aMessage.append( ::rtl::OUStringToOString( Name, osl_getThreadTextEncoding() ) );
                     aMessage.append( "'." );
-                    OSL_ENSURE( false, aMessage.makeStringAndClear().getStr() );
+                    OSL_FAIL( aMessage.makeStringAndClear().getStr() );
                 #endif
                     return;
                 }
@@ -3188,7 +3188,7 @@ rtl::OUString ScriptExtensionIterator::nextBasicOrDialogLibrary( bool& rbPureDia
                 break;
             }
             case END_REACHED:
-                OSL_ENSURE( false, "ScriptExtensionIterator::nextBasicOrDialogLibrary(): Invalid case END_REACHED" );
+                OSL_FAIL( "ScriptExtensionIterator::nextBasicOrDialogLibrary(): Invalid case END_REACHED" );
                 break;
         }
     }

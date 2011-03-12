@@ -274,7 +274,7 @@ OOperand* OPredicateCompiler::execute_COMPARE(OSQLParseNode* pPredicateNode)  th
     else if (pPrec->getNodeType() == SQL_NODE_GREAT)
         ePredicateType = SQLFilterOperator::GREATER;
     else
-        OSL_ENSURE( false, "OPredicateCompiler::execute_COMPARE: unexpected node type!" );
+        OSL_FAIL( "OPredicateCompiler::execute_COMPARE: unexpected node type!" );
 
     execute(pPredicateNode->getChild(0));
     execute(pPredicateNode->getChild(2));

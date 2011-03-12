@@ -1341,7 +1341,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
         try {
             xBaseURI = createBaseURI(m_pImpl->m_xContext, xStorage, URL);
         } catch (uno::Exception &) {
-            OSL_ENSURE(false, "cannot create base URI");
+            OSL_FAIL("cannot create base URI");
         }
     }
     uno::Reference<task::XInteractionHandler> xIH;

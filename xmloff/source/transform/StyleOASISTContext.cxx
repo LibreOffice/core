@@ -707,7 +707,7 @@ OUString XMLPropertiesTContext_Impl::MergeUnderline(
             eUnderline = XML_BOLD_WAVE;
             break;
         default:
-            OSL_ENSURE( false, "xmloff::XMLPropertiesTContext_Impl::MergeUnderline(), missing underline case!" );
+            OSL_FAIL( "xmloff::XMLPropertiesTContext_Impl::MergeUnderline(), missing underline case!" );
             break;
         }
     }
@@ -722,7 +722,7 @@ OUString XMLPropertiesTContext_Impl::MergeUnderline(
             eUnderline = XML_NONE;
             break;
         default:
-            OSL_ENSURE( false, "xmloff::XMLPropertiesTContext_Impl::MergeUnderline(), missing underline case!" );
+            OSL_FAIL( "xmloff::XMLPropertiesTContext_Impl::MergeUnderline(), missing underline case!" );
             break;
         }
     }

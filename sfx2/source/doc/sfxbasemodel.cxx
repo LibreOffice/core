@@ -2583,7 +2583,7 @@ sal_Bool SfxBaseModel::IsInitialized() const
 {
     if ( !m_pData || !m_pData->m_pObjectShell )
     {
-        OSL_ENSURE( false, "SfxBaseModel::IsInitialized: this should have been caught earlier!" );
+        OSL_FAIL( "SfxBaseModel::IsInitialized: this should have been caught earlier!" );
         return sal_False;
     }
 
@@ -3874,7 +3874,7 @@ SfxViewFrame* SfxBaseModel::FindOrCreateViewFrame_Impl( const Reference< XFrame 
                     // destroyed later, and the new one, which we're going to create
                     continue;
 
-                OSL_ENSURE( false, "SfxBaseModel::FindOrCreateViewFrame_Impl: there already is an SfxFrame for the given XFrame, but no view in it!" );
+                OSL_FAIL( "SfxBaseModel::FindOrCreateViewFrame_Impl: there already is an SfxFrame for the given XFrame, but no view in it!" );
                     // nowadays, we're the only instance allowed to create an SfxFrame for an XFrame, so this case here should not happen
                 break;
             }

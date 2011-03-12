@@ -513,15 +513,15 @@ extern "C" void add_to_recently_used_file_list(const rtl::OUString& file_url, co
     }
     catch(const char* ex)
     {
-        OSL_ENSURE(false, ex);
+        OSL_FAIL(ex);
     }
     catch(const xml_parser_exception&)
     {
-        OSL_ENSURE(false, "XML parser error");
+        OSL_FAIL("XML parser error");
     }
     catch(const unknown_xml_format_exception&)
     {
-        OSL_ENSURE(false, "XML format unknown");
+        OSL_FAIL("XML format unknown");
     }
 }
 

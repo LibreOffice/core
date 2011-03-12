@@ -1225,7 +1225,7 @@ rtl::OUString TreeFileIterator::nextTreeFile( sal_Int32& rnFileSize )
             }
 
         case END_REACHED:
-                OSL_ENSURE( false, "DataBaseIterator::nextTreeFile(): Invalid case END_REACHED" );
+                OSL_FAIL( "DataBaseIterator::nextTreeFile(): Invalid case END_REACHED" );
                 break;
         }
     }

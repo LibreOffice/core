@@ -2460,13 +2460,13 @@ bool Content::loadData( ContentProvider* pProvider,
         catch ( lang::IllegalArgumentException const & )
         {
             // an illegal argument is provided
-            OSL_ENSURE( false, "Caught IllegalArgumentException!" );
+            OSL_FAIL( "Caught IllegalArgumentException!" );
             return false;
         }
         catch ( embed::InvalidStorageException const & )
         {
             // this storage is in invalid state for any reason
-            OSL_ENSURE( false, "Caught InvalidStorageException!" );
+            OSL_FAIL( "Caught InvalidStorageException!" );
             return false;
         }
     }
@@ -2485,7 +2485,7 @@ bool Content::storeData( const uno::Reference< io::XInputStream >& xData,
     ContentType eType = m_aProps.getType();
     if ( ( eType == ROOT ) || ( eType == DOCUMENT ) )
     {
-        OSL_ENSURE( false, "storeData not supported by root and documents!" );
+        OSL_FAIL( "storeData not supported by root and documents!" );
         return false;
     }
 
@@ -2519,22 +2519,22 @@ bool Content::storeData( const uno::Reference< io::XInputStream >& xData,
         }
         catch ( beans::UnknownPropertyException const & )
         {
-            OSL_ENSURE( false, "Property MediaType not supported!" );
+            OSL_FAIL( "Property MediaType not supported!" );
             return false;
         }
         catch ( beans::PropertyVetoException const & )
         {
-            OSL_ENSURE( false, "Caught PropertyVetoException!" );
+            OSL_FAIL( "Caught PropertyVetoException!" );
             return false;
         }
         catch ( lang::IllegalArgumentException const & )
         {
-            OSL_ENSURE( false, "Caught IllegalArgumentException!" );
+            OSL_FAIL( "Caught IllegalArgumentException!" );
             return false;
         }
         catch ( lang::WrappedTargetException const & )
         {
-            OSL_ENSURE( false, "Caught WrappedTargetException!" );
+            OSL_FAIL( "Caught WrappedTargetException!" );
             return false;
         }
 
@@ -2580,21 +2580,21 @@ bool Content::storeData( const uno::Reference< io::XInputStream >& xData,
             catch ( io::NotConnectedException const & )
             {
                 // readSomeBytes, writeBytes
-                OSL_ENSURE( false, "Caught NotConnectedException!" );
+                OSL_FAIL( "Caught NotConnectedException!" );
                 closeOutputStream( xOut );
                 return false;
             }
             catch ( io::BufferSizeExceededException const & )
             {
                 // readSomeBytes, writeBytes
-                OSL_ENSURE( false, "Caught BufferSizeExceededException!" );
+                OSL_FAIL( "Caught BufferSizeExceededException!" );
                 closeOutputStream( xOut );
                 return false;
             }
             catch ( io::IOException const & )
             {
                 // readSomeBytes, writeBytes
-                OSL_ENSURE( false, "Caught IOException!" );
+                OSL_FAIL( "Caught IOException!" );
                 closeOutputStream( xOut );
                 return false;
             }
@@ -2611,7 +2611,7 @@ bool Content::storeData( const uno::Reference< io::XInputStream >& xData,
     }
     else
     {
-        OSL_ENSURE( false, "Unknown content type!" );
+        OSL_FAIL( "Unknown content type!" );
         return false;
     }
     return true;
@@ -2627,7 +2627,7 @@ bool Content::renameData(
     ContentType eType = m_aProps.getType();
     if ( ( eType == ROOT ) || ( eType == DOCUMENT ) )
     {
-        OSL_ENSURE( false, "renameData not supported by root and documents!" );
+        OSL_FAIL( "renameData not supported by root and documents!" );
         return false;
     }
 
@@ -2648,37 +2648,37 @@ bool Content::renameData(
     catch ( embed::InvalidStorageException const & )
     {
         // this storage is in invalid state for eny reason
-        OSL_ENSURE( false, "Caught InvalidStorageException!" );
+        OSL_FAIL( "Caught InvalidStorageException!" );
         return false;
     }
     catch ( lang::IllegalArgumentException const & )
     {
         // an illegal argument is provided
-        OSL_ENSURE( false, "Caught IllegalArgumentException!" );
+        OSL_FAIL( "Caught IllegalArgumentException!" );
         return false;
     }
     catch ( container::NoSuchElementException const & )
     {
         // there is no element with old name in this storage
-        OSL_ENSURE( false, "Caught NoSuchElementException!" );
+        OSL_FAIL( "Caught NoSuchElementException!" );
         return false;
     }
     catch ( container::ElementExistException const & )
     {
         // an element with new name already exists in this storage
-        OSL_ENSURE( false, "Caught ElementExistException!" );
+        OSL_FAIL( "Caught ElementExistException!" );
         return false;
     }
     catch ( io::IOException const & )
     {
         // in case of io errors during renaming
-        OSL_ENSURE( false, "Caught IOException!" );
+        OSL_FAIL( "Caught IOException!" );
         return false;
     }
     catch ( embed::StorageWrappedTargetException const & )
     {
         // wraps other exceptions
-        OSL_ENSURE( false, "Caught StorageWrappedTargetException!" );
+        OSL_FAIL( "Caught StorageWrappedTargetException!" );
         return false;
     }
 
@@ -2693,7 +2693,7 @@ bool Content::removeData()
     ContentType eType = m_aProps.getType();
     if ( ( eType == ROOT ) || ( eType == DOCUMENT ) )
     {
-        OSL_ENSURE( false, "removeData not supported by root and documents!" );
+        OSL_FAIL( "removeData not supported by root and documents!" );
         return false;
     }
 
@@ -2712,31 +2712,31 @@ bool Content::removeData()
     catch ( embed::InvalidStorageException const & )
     {
         // this storage is in invalid state for eny reason
-        OSL_ENSURE( false, "Caught InvalidStorageException!" );
+        OSL_FAIL( "Caught InvalidStorageException!" );
         return false;
     }
     catch ( lang::IllegalArgumentException const & )
     {
         // an illegal argument is provided
-        OSL_ENSURE( false, "Caught IllegalArgumentException!" );
+        OSL_FAIL( "Caught IllegalArgumentException!" );
         return false;
     }
     catch ( container::NoSuchElementException const & )
     {
         // there is no element with this name in this storage
-        OSL_ENSURE( false, "Caught NoSuchElementException!" );
+        OSL_FAIL( "Caught NoSuchElementException!" );
         return false;
     }
     catch ( io::IOException const & )
     {
         // in case of io errors during renaming
-        OSL_ENSURE( false, "Caught IOException!" );
+        OSL_FAIL( "Caught IOException!" );
         return false;
     }
     catch ( embed::StorageWrappedTargetException const & )
     {
         // wraps other exceptions
-        OSL_ENSURE( false, "Caught StorageWrappedTargetException!" );
+        OSL_FAIL( "Caught StorageWrappedTargetException!" );
         return false;
     }
 
@@ -2751,7 +2751,7 @@ bool Content::copyData( const Uri & rSourceUri, const rtl::OUString & rNewName )
     ContentType eType = m_aProps.getType();
     if ( ( eType == ROOT ) || ( eType == STREAM ) )
     {
-        OSL_ENSURE( false, "copyData not supported by root and streams!" );
+        OSL_FAIL( "copyData not supported by root and streams!" );
         return false;
     }
 
@@ -2777,37 +2777,37 @@ bool Content::copyData( const Uri & rSourceUri, const rtl::OUString & rNewName )
     catch ( embed::InvalidStorageException const & )
     {
         // this storage is in invalid state for eny reason
-        OSL_ENSURE( false, "Caught InvalidStorageException!" );
+        OSL_FAIL( "Caught InvalidStorageException!" );
         return false;
     }
     catch ( lang::IllegalArgumentException const & )
     {
         // an illegal argument is provided
-        OSL_ENSURE( false, "Caught IllegalArgumentException!" );
+        OSL_FAIL( "Caught IllegalArgumentException!" );
         return false;
     }
     catch ( container::NoSuchElementException const & )
     {
         // there is no element with this name in this storage
-        OSL_ENSURE( false, "Caught NoSuchElementException!" );
+        OSL_FAIL( "Caught NoSuchElementException!" );
         return false;
     }
     catch ( container::ElementExistException const & )
     {
         // there is no element with this name in this storage
-        OSL_ENSURE( false, "Caught ElementExistException!" );
+        OSL_FAIL( "Caught ElementExistException!" );
         return false;
     }
     catch ( io::IOException const & )
     {
         // in case of io errors during renaming
-        OSL_ENSURE( false, "Caught IOException!" );
+        OSL_FAIL( "Caught IOException!" );
         return false;
     }
     catch ( embed::StorageWrappedTargetException const & )
     {
         // wraps other exceptions
-        OSL_ENSURE( false, "Caught StorageWrappedTargetException!" );
+        OSL_FAIL( "Caught StorageWrappedTargetException!" );
         return false;
     }
 
@@ -2829,12 +2829,12 @@ bool Content::commitStorage( const uno::Reference< embed::XStorage > & xStorage 
     }
     catch ( io::IOException const & )
     {
-        OSL_ENSURE( false, "Caught IOException!" );
+        OSL_FAIL( "Caught IOException!" );
         return false;
     }
     catch ( lang::WrappedTargetException const & )
     {
-        OSL_ENSURE( false, "Caught WrappedTargetException!" );
+        OSL_FAIL( "Caught WrappedTargetException!" );
         return false;
     }
 
@@ -2855,15 +2855,15 @@ bool Content::closeOutputStream(
         }
         catch ( io::NotConnectedException const & )
         {
-            OSL_ENSURE( false, "Caught NotConnectedException!" );
+            OSL_FAIL( "Caught NotConnectedException!" );
         }
         catch ( io::BufferSizeExceededException const & )
         {
-            OSL_ENSURE( false, "Caught BufferSizeExceededException!" );
+            OSL_FAIL( "Caught BufferSizeExceededException!" );
         }
         catch ( io::IOException const & )
         {
-            OSL_ENSURE( false, "Caught IOException!" );
+            OSL_FAIL( "Caught IOException!" );
         }
     }
     return false;

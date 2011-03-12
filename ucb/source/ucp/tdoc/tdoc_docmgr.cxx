@@ -118,7 +118,7 @@ getDocumentId( const uno::Reference< uno::XInterface > & xDoc )
         }
         catch ( lang::WrappedTargetException const & )
         {
-            OSL_ENSURE( false, "Caught WrappedTargetException!" );
+            OSL_FAIL( "Caught WrappedTargetException!" );
         }
     }
 
@@ -645,11 +645,11 @@ bool OfficeDocumentsManager::isBasicIDE(
         }
         catch ( lang::IllegalArgumentException const & )
         {
-            OSL_ENSURE( false, "Caught IllegalArgumentException!" );
+            OSL_FAIL( "Caught IllegalArgumentException!" );
         }
         catch ( frame::UnknownModuleException const & )
         {
-            OSL_ENSURE( false, "Caught UnknownModuleException!" );
+            OSL_FAIL( "Caught UnknownModuleException!" );
         }
 
         if ( aModule.getLength() > 0 )

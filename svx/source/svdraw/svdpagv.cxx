@@ -436,7 +436,7 @@ void SdrPageView::DrawLayer(SdrLayerID nID, OutputDevice* pGivenTarget, sdr::con
                 }
                 else
                 {
-                    OSL_ENSURE(false, "SdrPageView::DrawLayer: Creating temporary SdrPageWindow (ObjectContact), this should never be needed (!)");
+                    OSL_FAIL("SdrPageView::DrawLayer: Creating temporary SdrPageWindow (ObjectContact), this should never be needed (!)");
 
                     // None of the known OutputDevices is the target of this paint, use
                     // a temporary SdrPageWindow for this Redraw.

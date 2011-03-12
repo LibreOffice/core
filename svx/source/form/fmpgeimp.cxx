@@ -211,7 +211,7 @@ FmFormPageImpl::FmFormPageImpl( FmFormPage& _rPage, const FmFormPageImpl& rImpl 
 
             if ( bForeignIsForm != bOwnIsForm )
             {
-                OSL_ENSURE( false, "FmFormPageImpl::FmFormPageImpl: inconsistent ordering of objects!" );
+                OSL_FAIL( "FmFormPageImpl::FmFormPageImpl: inconsistent ordering of objects!" );
                 // don't attempt to do further assignments, something's completely messed up
                 break;
             }

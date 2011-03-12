@@ -352,7 +352,7 @@ namespace
             aMessage.append( "no type found for '" );
             aMessage.append( ::rtl::OUStringToOString( i_rTypeName, RTL_TEXTENCODING_UTF8 ) );
             aMessage.append( "'" );
-            OSL_ENSURE( false, aMessage.makeStringAndClear().getStr() );
+            OSL_FAIL( aMessage.makeStringAndClear().getStr() );
 #endif
             return false;
         }
@@ -1038,8 +1038,7 @@ UUIInteractionHelper::getInteractionHandlerList(
                     if ( !( xHierNameAccess->getByHierarchicalName(
                                 aKeyBuffer.makeStringAndClear() ) >>= aValue ) )
                     {
-                        OSL_ENSURE( false,
-                                    "GetInteractionHandlerList - "
+                        OSL_FAIL( "GetInteractionHandlerList - "
                                     "Error getting item value!" );
                         continue;
                     }
@@ -1053,8 +1052,7 @@ UUIInteractionHelper::getInteractionHandlerList(
                 {
                     // getByHierarchicalName
 
-                    OSL_ENSURE( false,
-                                "GetInteractionHandlerList - "
+                    OSL_FAIL( "GetInteractionHandlerList - "
                                 "caught NoSuchElementException!" );
                 }
             }
@@ -1066,7 +1064,7 @@ UUIInteractionHelper::getInteractionHandlerList(
     }
     catch ( uno::Exception const & )
     {
-        OSL_ENSURE( false, "GetInteractionHandlerList - Caught Exception!" );
+        OSL_FAIL( "GetInteractionHandlerList - Caught Exception!" );
     }
 }
 
@@ -1367,8 +1365,7 @@ UUIInteractionHelper::handleFutureDocumentVersionUpdateRequest(
         s_bDeferredToNextSession = true;
         break;
     default:
-        OSL_ENSURE( false,
-            "UUIInteractionHelper::handleFutureDocumentVersionUpdateRequest: "
+        OSL_FAIL( "UUIInteractionHelper::handleFutureDocumentVersionUpdateRequest: "
                     "unexpected dialog return value!" );
         break;
     }

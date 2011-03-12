@@ -174,7 +174,7 @@ void OColumnAlias::initialize( const ::com::sun::star::uno::Reference< ::com::su
     AliasMap::const_iterator pos = m_aAliasMap.find( _rAlias );
     if ( pos == m_aAliasMap.end() )
     {
-        OSL_ENSURE( false, "OColumnAlias::getProgrammaticNameOrFallbackToUTF8Alias: no programmatic name for this alias!" );
+        OSL_FAIL( "OColumnAlias::getProgrammaticNameOrFallbackToUTF8Alias: no programmatic name for this alias!" );
         return ::rtl::OUStringToOString( _rAlias, RTL_TEXTENCODING_UTF8 );
     }
     return pos->second.programmaticAsciiName;
