@@ -101,6 +101,7 @@ private:
     void OKPushed();
     void NameSelected();
     void ScopeChanged();
+    void NameModified(Edit* pEd);
 
     // Handler:
     DECL_LINK( OkBtnHdl, void * );

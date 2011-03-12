@@ -524,36 +524,7 @@ void ScNameDlg::ScopeChanged()
     UpdateNames();
 }
 
-IMPL_LINK( ScNameDlg, OkBtnHdl, void *, EMPTYARG )
-{
-    OKPushed();
-    return 0;
-}
-
-IMPL_LINK( ScNameDlg, CancelBtnHdl, void *, EMPTYARG )
-{
-    Close();
-    return 0;
-}
-
-IMPL_LINK( ScNameDlg, AddBtnHdl, void *, EMPTYARG )
-{
-    return AddPushed();
-}
-
-IMPL_LINK( ScNameDlg, RemoveBtnHdl, void *, EMPTYARG )
-{
-    RemovePushed();
-    return 0;
-}
-
-IMPL_LINK( ScNameDlg, NameSelectHdl, void *, EMPTYARG )
-{
-    NameSelected();
-    return 0;
-}
-
-IMPL_LINK( ScNameDlg, EdModifyHdl, Edit *, pEd )
+void ScNameDlg::NameModified(Edit* pEd)
 {
     String  theName     = aEdName.GetText();
     String  theSymbol   = aEdAssign.GetText();
@@ -625,6 +596,40 @@ IMPL_LINK( ScNameDlg, EdModifyHdl, Edit *, pEd )
             aBtnRemove.Disable();
         }
     }
+}
+
+IMPL_LINK( ScNameDlg, OkBtnHdl, void *, EMPTYARG )
+{
+    OKPushed();
+    return 0;
+}
+
+IMPL_LINK( ScNameDlg, CancelBtnHdl, void *, EMPTYARG )
+{
+    Close();
+    return 0;
+}
+
+IMPL_LINK( ScNameDlg, AddBtnHdl, void *, EMPTYARG )
+{
+    return AddPushed();
+}
+
+IMPL_LINK( ScNameDlg, RemoveBtnHdl, void *, EMPTYARG )
+{
+    RemovePushed();
+    return 0;
+}
+
+IMPL_LINK( ScNameDlg, NameSelectHdl, void *, EMPTYARG )
+{
+    NameSelected();
+    return 0;
+}
+
+IMPL_LINK( ScNameDlg, EdModifyHdl, Edit *, pEd )
+{
+    NameModified(pEd);
     return 0;
 }
 
