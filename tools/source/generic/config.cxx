@@ -799,7 +799,7 @@ Config::Config( const XubString& rFileName )
     ByteString aTraceStr( "Config::Config( " );
     aTraceStr += ByteString( maFileName, RTL_TEXTENCODING_UTF8 );
     aTraceStr += " )";
-    OSL_TRACE( aTraceStr.GetBuffer() );
+    OSL_TRACE( "%s", aTraceStr.GetBuffer() );
 #endif
 }
 
@@ -1000,7 +1000,7 @@ ByteString Config::ReadKey( const ByteString& rKey, const ByteString& rDefault )
     aTraceStr += GetGroup();
     aTraceStr += " in ";
     aTraceStr += ByteString( maFileName, RTL_TEXTENCODING_UTF8 );
-    OSL_TRACE( aTraceStr.GetBuffer() );
+    OSL_TRACE( "%s", aTraceStr.GetBuffer() );
 #endif
 
     // Config-Daten evt. updaten
@@ -1037,7 +1037,7 @@ void Config::WriteKey( const ByteString& rKey, const ByteString& rStr )
     aTraceStr += GetGroup();
     aTraceStr += " in ";
     aTraceStr += ByteString( maFileName, RTL_TEXTENCODING_UTF8 );
-    OSL_TRACE( aTraceStr.GetBuffer() );
+    OSL_TRACE( "%s", aTraceStr.GetBuffer() );
     DBG_ASSERTWARNING( rStr != ReadKey( rKey ), "Config::WriteKey() with the same Value" );
 #endif
 
@@ -1158,7 +1158,7 @@ USHORT Config::GetKeyCount() const
     aTraceStr += GetGroup();
     aTraceStr += " in ";
     aTraceStr += ByteString( maFileName, RTL_TEXTENCODING_UTF8 );
-    OSL_TRACE( aTraceStr.GetBuffer() );
+    OSL_TRACE( "%s", aTraceStr.GetBuffer() );
 #endif
 
     // Config-Daten evt. updaten
@@ -1194,7 +1194,7 @@ ByteString Config::GetKeyName( USHORT nKey ) const
     aTraceStr += GetGroup();
     aTraceStr += " in ";
     aTraceStr += ByteString( maFileName, RTL_TEXTENCODING_UTF8 );
-    OSL_TRACE( aTraceStr.GetBuffer() );
+    OSL_TRACE( "%s", aTraceStr.GetBuffer() );
 #endif
 
     // Key suchen und Name zurueckgeben
@@ -1229,7 +1229,7 @@ ByteString Config::ReadKey( USHORT nKey ) const
     aTraceStr += GetGroup();
     aTraceStr += " in ";
     aTraceStr += ByteString( maFileName, RTL_TEXTENCODING_UTF8 );
-    OSL_TRACE( aTraceStr.GetBuffer() );
+    OSL_TRACE( "%s", aTraceStr.GetBuffer() );
 #endif
 
     // Key suchen und Value zurueckgeben
