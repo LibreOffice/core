@@ -467,7 +467,7 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
 #endif
                     {
                         // something went wrong
-                        OSL_ENSURE(0, OUStringToOString(exc.Message, RTL_TEXTENCODING_ASCII_US).getStr());
+                        OSL_FAIL(OUStringToOString(exc.Message, RTL_TEXTENCODING_ASCII_US).getStr());
                         return sal_False;
                     }
             }

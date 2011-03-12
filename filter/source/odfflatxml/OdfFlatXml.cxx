@@ -167,7 +167,7 @@ OdfFlatXml::importer(
         {
             OString msg = OUStringToOString(exc.Message,
                                             RTL_TEXTENCODING_ASCII_US);
-            OSL_ENSURE(0, msg);
+            OSL_FAIL(msg);
             return sal_False;
         }
     return sal_True;
