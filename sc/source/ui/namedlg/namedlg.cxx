@@ -42,10 +42,8 @@
 #include "scresid.hxx"
 #include "globstr.hrc"
 #include "namedlg.hrc"
-
-#define _NAMEDLG_CXX
 #include "namedlg.hxx"
-#undef _NAMEDLG_CXX
+
 #include <vcl/msgbox.hxx>
 
 
@@ -159,16 +157,10 @@ ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
     FreeResource();
 }
 
-
-//----------------------------------------------------------------------------
-
 ScNameDlg::~ScNameDlg()
 {
     DELETEZ( pSaveObj );
 }
-
-
-//----------------------------------------------------------------------------
 
 void ScNameDlg::Init()
 {
@@ -223,7 +215,6 @@ void ScNameDlg::Init()
     //SFX_APPWINDOW->Disable(FALSE);        //! allgemeine Methode im ScAnyRefDlg
 }
 
-//----------------------------------------------------------------------------
 BOOL ScNameDlg::IsRefInputMode() const
 {
     return aEdAssign.IsEnabled();
@@ -252,24 +243,16 @@ void ScNameDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
     }
 }
 
-
-//----------------------------------------------------------------------------
 BOOL ScNameDlg::Close()
 {
     return DoClose( ScNameDlgWrapper::GetChildWindowId() );
 }
-
-
-//----------------------------------------------------------------------------
 
 void ScNameDlg::SetActive()
 {
     aEdAssign.GrabFocus();
     RefInputDone();
 }
-
-
-//----------------------------------------------------------------------------
 
 void ScNameDlg::UpdateChecks()
 {
@@ -311,9 +294,6 @@ void ScNameDlg::UpdateChecks()
     }
 }
 
-
-//----------------------------------------------------------------------------
-
 void ScNameDlg::UpdateNames()
 {
     aEdName.SetUpdateMode( FALSE );
@@ -343,9 +323,6 @@ void ScNameDlg::UpdateNames()
     aEdName.Invalidate();
 }
 
-
-//----------------------------------------------------------------------------
-
 void ScNameDlg::CalcCurTableAssign( String& aAssign, ScRangeData* pRangeData )
 {
     if ( pRangeData )
@@ -359,11 +336,6 @@ void ScNameDlg::CalcCurTableAssign( String& aAssign, ScRangeData* pRangeData )
         aAssign.Erase();
     }
 }
-
-
-//----------------------------------------------------------------------------
-// Handler:
-// ========
 
 IMPL_LINK( ScNameDlg, OkBtnHdl, void *, EMPTYARG )
 {
@@ -380,18 +352,11 @@ IMPL_LINK( ScNameDlg, OkBtnHdl, void *, EMPTYARG )
     return 0;
 }
 
-
-//----------------------------------------------------------------------------
-
-IMPL_LINK_INLINE_START( ScNameDlg, CancelBtnHdl, void *, EMPTYARG )
+IMPL_LINK( ScNameDlg, CancelBtnHdl, void *, EMPTYARG )
 {
     Close();
     return 0;
 }
-IMPL_LINK_INLINE_END( ScNameDlg, CancelBtnHdl, void *, EMPTYARG )
-
-
-//----------------------------------------------------------------------------
 
 IMPL_LINK( ScNameDlg, AddBtnHdl, void *, EMPTYARG )
 {
@@ -481,9 +446,6 @@ IMPL_LINK( ScNameDlg, AddBtnHdl, void *, EMPTYARG )
     return bAdded;
 }
 
-
-//----------------------------------------------------------------------------
-
 IMPL_LINK( ScNameDlg, RemoveBtnHdl, void *, EMPTYARG )
 {
     const String aStrEntry = aEdName.GetText();
@@ -513,9 +475,6 @@ IMPL_LINK( ScNameDlg, RemoveBtnHdl, void *, EMPTYARG )
     return 0;
 }
 
-
-//----------------------------------------------------------------------------
-
 IMPL_LINK( ScNameDlg, NameSelectHdl, void *, EMPTYARG )
 {
     ScRangeData* pData = aLocalRangeName.findByName(aEdName.GetText());
@@ -531,9 +490,6 @@ IMPL_LINK( ScNameDlg, NameSelectHdl, void *, EMPTYARG )
     UpdateChecks();
     return 0;
 }
-
-
-//----------------------------------------------------------------------------
 
 IMPL_LINK( ScNameDlg, EdModifyHdl, Edit *, pEd )
 {
@@ -614,14 +570,10 @@ IMPL_LINK( ScNameDlg, EdModifyHdl, Edit *, pEd )
     return 0;
 }
 
-//------------------------------------------------------------------------
-
-IMPL_LINK_INLINE_START( ScNameDlg, AssignGetFocusHdl, void *, EMPTYARG )
+IMPL_LINK( ScNameDlg, AssignGetFocusHdl, void *, EMPTYARG )
 {
     EdModifyHdl( &aEdAssign );
     return 0;
 }
-IMPL_LINK_INLINE_END( ScNameDlg, AssignGetFocusHdl, void *, EMPTYARG )
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

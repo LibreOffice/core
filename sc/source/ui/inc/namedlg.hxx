@@ -79,7 +79,6 @@ private:
     const ScAddress theCursorPos;
     Selection       theCurSel;
 
-#ifdef _NAMEDLG_CXX
 private:
     void Init();
     void UpdateChecks();
@@ -94,7 +93,6 @@ private:
     DECL_LINK( EdModifyHdl, Edit * );
     DECL_LINK( NameSelectHdl, void * );
     DECL_LINK( AssignGetFocusHdl, void * );
-#endif
 
 protected:
 
