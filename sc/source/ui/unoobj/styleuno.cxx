@@ -1024,13 +1024,13 @@ sal_Bool SAL_CALL ScStyleFamilyObj::hasByName( const rtl::OUString& aName )
 
 uno::Reference< beans::XPropertySetInfo > SAL_CALL ScStyleFamilyObj::getPropertySetInfo(  ) throw (uno::RuntimeException)
 {
-    OSL_ENSURE( 0, "###unexpected!" );
+    OSL_FAIL( "###unexpected!" );
     return uno::Reference< beans::XPropertySetInfo >();
 }
 
 void SAL_CALL ScStyleFamilyObj::setPropertyValue( const ::rtl::OUString&, const uno::Any& ) throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OSL_ENSURE( 0, "###unexpected!" );
+    OSL_FAIL( "###unexpected!" );
 }
 
 uno::Any SAL_CALL ScStyleFamilyObj::getPropertyValue( const ::rtl::OUString& sPropertyName ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
@@ -1048,7 +1048,7 @@ uno::Any SAL_CALL ScStyleFamilyObj::getPropertyValue( const ::rtl::OUString& sPr
             case SFX_STYLE_FAMILY_PAGE:
                 nResId = STR_STYLE_FAMILY_PAGE; break;
             default:
-                OSL_ENSURE( 0, "ScStyleFamilyObj::getPropertyValue(): invalid family" );
+                OSL_FAIL( "ScStyleFamilyObj::getPropertyValue(): invalid family" );
         }
         if ( nResId > 0 )
         {
@@ -1066,22 +1066,22 @@ uno::Any SAL_CALL ScStyleFamilyObj::getPropertyValue( const ::rtl::OUString& sPr
 
 void SAL_CALL ScStyleFamilyObj::addPropertyChangeListener( const ::rtl::OUString&, const uno::Reference< beans::XPropertyChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OSL_ENSURE( 0, "###unexpected!" );
+    OSL_FAIL( "###unexpected!" );
 }
 
 void SAL_CALL ScStyleFamilyObj::removePropertyChangeListener( const ::rtl::OUString&, const uno::Reference< beans::XPropertyChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OSL_ENSURE( 0, "###unexpected!" );
+    OSL_FAIL( "###unexpected!" );
 }
 
 void SAL_CALL ScStyleFamilyObj::addVetoableChangeListener( const ::rtl::OUString&, const uno::Reference< beans::XVetoableChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OSL_ENSURE( 0, "###unexpected!" );
+    OSL_FAIL( "###unexpected!" );
 }
 
 void SAL_CALL ScStyleFamilyObj::removeVetoableChangeListener( const ::rtl::OUString&, const uno::Reference< beans::XVetoableChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OSL_ENSURE( 0, "###unexpected!" );
+    OSL_FAIL( "###unexpected!" );
 }
 
 //------------------------------------------------------------------------

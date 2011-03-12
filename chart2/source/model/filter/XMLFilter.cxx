@@ -551,7 +551,7 @@ sal_Int32 XMLFilter::impl_ImportStream(
                     }
                     catch(uno::Exception&)
                     {
-                        OSL_ENSURE(0,"Exception caught!");
+                        OSL_FAIL("Exception caught!");
                     }
                 }
                 xParser->setDocumentHandler( xDocHandler );
@@ -649,7 +649,7 @@ sal_Int32 XMLFilter::impl_Export(
             }
             catch(uno::Exception&)
             {
-                OSL_ENSURE(0,"Exception caught!");
+                OSL_FAIL("Exception caught!");
             }
         }
 
