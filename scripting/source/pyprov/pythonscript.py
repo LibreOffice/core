@@ -48,7 +48,7 @@ def getLogTarget():
             if len( userInstallation ) > 0:
                 systemPath = uno.fileUrlToSystemPath( userInstallation + "/Scripts/python/log.txt" )
                 ret = file( systemPath , "a" )
-        except Exception,e:
+        except:
             print "Exception during creation of pythonscript logfile: "+ lastException2String() + "\n, delagating log to stdout\n"
     return ret
   
@@ -81,7 +81,7 @@ class Logger(LogLevel):
                     encfile(msg) +
                     "\n" )
                 self.target.flush()
-            except Exception,e:
+            except:
                 print "Error during writing to stdout: " +lastException2String() + "\n"
 
 log = Logger( getLogTarget() )
@@ -90,6 +90,8 @@ log.debug( "pythonscript loading" )
 
 #from com.sun.star.lang import typeOfXServiceInfo, typeOfXTypeProvider
 from com.sun.star.uno import RuntimeException
+from com.sun.star.lang import IllegalArgumentException
+from com.sun.star.container import NoSuchElementException
 from com.sun.star.lang import XServiceInfo
 from com.sun.star.io import IOException
 from com.sun.star.ucb import CommandAbortedException, XCommandEnvironment, XProgressHandler
@@ -437,7 +439,7 @@ class ScriptBrowseNode( unohelper.Base, XBrowseNode , XPropertySet, XInvocation,
                 ret = not self.provCtx.sfa.isReadOnly( self.uri )
         
             log.isDebugLevel() and log.debug( "ScriptBrowseNode.getPropertyValue called for " + name + ", returning " + str(ret) )
-        except Exception,e:
+        except:
             log.error( "ScriptBrowseNode.getPropertyValue error " + lastException2String())
             raise
                                               
@@ -451,7 +453,7 @@ class ScriptBrowseNode( unohelper.Base, XBrowseNode , XPropertySet, XInvocation,
     def getIntrospection( self ):
         return None
 
-    def invoke( self, name, params, outparamindex, outparams ):
+    def invoke( self, name ):
         if name == "Editable":
             servicename = "com.sun.star.awt.DialogProvider"
             ctx = self.provCtx.scriptContext.getComponentContext()
@@ -506,7 +508,7 @@ class ScriptBrowseNode( unohelper.Base, XBrowseNode , XPropertySet, XInvocation,
 #                log.isDebugLevel() and log.debug("Save is not implemented yet")
 #                text = self.editor.getControl("EditorTextField").getText()
 #                log.isDebugLevel() and log.debug("Would save: " + text)
-        except Exception,e:
+        except:
             # TODO: add an error box here !
             log.error( lastException2String() )
             
@@ -547,7 +549,7 @@ class FileBrowseNode( unohelper.Base, XBrowseNode ):
                     self.provCtx, self.uri, self.name, i ))
             ret = tuple( scriptNodeList )
             log.isDebugLevel() and log.debug( "returning " +str(len(ret)) + " ScriptChildNodes on " + self.uri )
-        except Exception, e:
+        except:
             text = lastException2String()
             log.error( "Error while evaluating " + self.uri + ":" + text )
             raise
@@ -556,7 +558,7 @@ class FileBrowseNode( unohelper.Base, XBrowseNode ):
     def hasChildNodes(self):
         try:
             return len(self.getChildNodes()) > 0
-        except Exception, e:
+        except:
             return False
     
     def getType( self):
@@ -659,7 +661,7 @@ def getPathesFromPackage( rootUrl, sfa ):
             if not isPyFileInPath( sfa, i ):
                 handler.urlList.remove(i)
         ret = tuple( handler.urlList )
-    except UnoException, e:
+    except UnoException:
         text = lastException2String()
         log.debug( "getPathesFromPackage " + fileUrl + " Exception: " +text )
         pass
@@ -685,7 +687,7 @@ class DummyProgressHandler( unohelper.Base, XProgressHandler ):
         log.isDebugLevel() and log.debug( "pythonscript: DummyProgressHandler.push " + str( status ) )
     def update( self,status ): 
         log.isDebugLevel() and log.debug( "pythonscript: DummyProgressHandler.update " + str( status ) )
-    def pop( self ): 
+    def pop( self, event ):
         log.isDebugLevel() and log.debug( "pythonscript: DummyProgressHandler.push " + str( event ) )
 
 class CommandEnvironment(unohelper.Base, XCommandEnvironment):
@@ -768,7 +770,7 @@ class PackageBrowseNode( unohelper.Base, XBrowseNode ):
         return tuple( browseNodeList )
 
     def hasChildNodes( self ):
-		return len( self.provCtx.mapPackageName2Path ) > 0
+        return len( self.provCtx.mapPackageName2Path ) > 0
 
     def getType( self ):
         return CONTAINER
@@ -784,7 +786,7 @@ class PythonScript( unohelper.Base, XScript ):
     def __init__( self, func, mod ):
         self.func = func
         self.mod = mod
-    def invoke(self, args, out, outindex ):
+    def invoke(self, args ):
         log.isDebugLevel() and log.debug( "PythonScript.invoke " + str( args ) )
         try:
             ret = self.func( *args )
@@ -902,7 +904,7 @@ class PythonScriptProvider( unohelper.Base, XBrowseNode, XScriptProvider, XNameC
 
             log.isDebugLevel() and log.debug( "got func " + str( func ) )
             return PythonScript( func, mod )
-        except Exception, e:
+        except:
             text = lastException2String()
             log.error( text )
             raise ScriptFrameworkErrorException( text, self, scriptUri, LANGUAGENAME, 0 )
@@ -934,7 +936,7 @@ class PythonScriptProvider( unohelper.Base, XBrowseNode, XScriptProvider, XNameC
             ret = self.provCtx.isUrlInPackage( uri )
             log.debug( "hasByName " + uri + " " +str( ret ) )
             return ret
-        except Exception, e:
+        except:
             text = lastException2String()
             log.debug( "Error in hasByName:" +  text )
             return False
@@ -962,8 +964,9 @@ class PythonScriptProvider( unohelper.Base, XBrowseNode, XScriptProvider, XNameC
 
     def replaceByName( self, name, value ):
         log.debug( "replaceByName called " + str( name ) + " " + str( value ))
-        removeByName( name )
-        insertByName( name )
+        uri = expandUri( name )
+        self.removeByName( name )
+        self.insertByName( name, value )
         log.debug( "replaceByName called" + str( uri ) + " successful" )
 
     def getElementType( self ):
