@@ -1667,7 +1667,7 @@ sal_Bool ImplementationRegistration::revokeImplementation(const OUString& locati
         {
             // no way to transport the error, as no exception is specified and a runtime
             // exception is not appropriate.
-            OSL_ENSURE( 0 , "InvalidRegistryException during revokeImplementation" );
+            OSL_FAIL( "InvalidRegistryException during revokeImplementation" );
         }
     }
 

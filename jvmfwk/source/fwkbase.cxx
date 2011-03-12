@@ -125,7 +125,7 @@ VendorSettings::VendorSettings():
     {
         OString sMsg("[Java framework] A vendor settings file was not specified."
                "Check the bootstrap parameter " UNO_JAVA_JFW_VENDOR_SETTINGS ".");
-        OSL_ENSURE(0, sMsg.getStr());
+        OSL_FAIL(sMsg.getStr());
         throw FrameworkException(JFW_E_CONFIGURATION, sMsg);
     }
     if (sSettingsPath.getLength() > 0)

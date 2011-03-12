@@ -152,7 +152,7 @@ inline void _destructAny(
         ::rtl_freeMemory( pAny->pData );
         break;
     case typelib_TypeClass_TYPEDEF:
-        OSL_ENSURE( 0, "### unexpected typedef!" );
+        OSL_FAIL( "### unexpected typedef!" );
         break;
     case typelib_TypeClass_STRUCT:
     case typelib_TypeClass_EXCEPTION:
@@ -381,7 +381,7 @@ inline void _destructData(
         _destructAny( (uno_Any *)pValue, release );
         break;
     case typelib_TypeClass_TYPEDEF:
-        OSL_ENSURE( 0, "### unexpected typedef!" );
+        OSL_FAIL( "### unexpected typedef!" );
         break;
     case typelib_TypeClass_STRUCT:
     case typelib_TypeClass_EXCEPTION:

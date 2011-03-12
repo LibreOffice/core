@@ -1376,7 +1376,7 @@ void OServiceManager::initialize( Sequence< Any > const & )
     throw (Exception)
 {
     check_undisposed();
-    OSL_ENSURE( 0, "not impl!" );
+    OSL_FAIL( "not impl!" );
 }
 
 // XServiceInfo

@@ -383,7 +383,7 @@ static void SAL_CALL RemoteEnvironment_thisDisposing(
 static void SAL_CALL RemoteEnvironment_thisComputeObjectIdentifier(
     uno_ExtEnvironment *, rtl_uString **, void *)
 {
-    OSL_ENSURE( 0, "RemoteEnvironment_thisComputeObjectIdentifier should never be called" );
+    OSL_FAIL( "RemoteEnvironment_thisComputeObjectIdentifier should never be called" );
 }
 
 static void SAL_CALL RemoteEnvironment_thisAcquireInterface(

@@ -179,7 +179,7 @@ Sequence<OUString> SAL_CALL DllComponentLoader::getSupportedServiceNames(  )
 void DllComponentLoader::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& )
     throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
 {
-    OSL_ENSURE( 0, "dllcomponentloader::initialize should not be called !" );
+    OSL_FAIL( "dllcomponentloader::initialize should not be called !" );
 //      if( aArgs.getLength() != 1 )
 //      {
 //          throw IllegalArgumentException();

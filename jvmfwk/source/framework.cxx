@@ -240,7 +240,7 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
     {
         retVal = e.errorCode;
         fprintf(stderr, "%s\n", e.message.getStr());
-        OSL_ENSURE(0, e.message.getStr());
+        OSL_FAIL(e.message.getStr());
     }
     return retVal;
 }
@@ -418,7 +418,7 @@ javaFrameworkError SAL_CALL jfw_startVM(JavaVMOption *arOptions, sal_Int32 cOpti
     {
         errcode = e.errorCode;
         fprintf(stderr, "%s\n", e.message.getStr());
-        OSL_ENSURE(0, e.message.getStr());
+        OSL_FAIL(e.message.getStr());
     }
 
     return errcode;
@@ -627,7 +627,7 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
     {
         errcode = e.errorCode;
         fprintf(stderr, "%s\n", e.message.getStr());
-        OSL_ENSURE(0, e.message.getStr());
+        OSL_FAIL(e.message.getStr());
     }
 
     return errcode;
@@ -716,7 +716,7 @@ javaFrameworkError SAL_CALL jfw_getSelectedJRE(JavaInfo **ppInfo)
     {
         errcode = e.errorCode;
         fprintf(stderr, "%s\n", e.message.getStr());
-        OSL_ENSURE(0, e.message.getStr());
+        OSL_FAIL(e.message.getStr());
     }
     return errcode;
 }
@@ -844,7 +844,7 @@ javaFrameworkError SAL_CALL jfw_getJavaInfoByPath(
     {
         errcode = e.errorCode;
         fprintf(stderr, "%s\n", e.message.getStr());
-        OSL_ENSURE(0, e.message.getStr());
+        OSL_FAIL(e.message.getStr());
     }
 
     return errcode;
@@ -878,7 +878,7 @@ javaFrameworkError SAL_CALL jfw_setSelectedJRE(JavaInfo const *pInfo)
     {
         errcode = e.errorCode;
         fprintf(stderr, "%s\n", e.message.getStr());
-        OSL_ENSURE(0, e.message.getStr());
+        OSL_FAIL(e.message.getStr());
     }
     return errcode;
 }
@@ -911,7 +911,7 @@ javaFrameworkError SAL_CALL jfw_setEnabled(sal_Bool bEnabled)
     {
         errcode = e.errorCode;
         fprintf(stderr, "%s\n", e.message.getStr());
-        OSL_ENSURE(0, e.message.getStr());
+        OSL_FAIL(e.message.getStr());
     }
     return errcode;
 }
@@ -933,7 +933,7 @@ javaFrameworkError SAL_CALL jfw_getEnabled(sal_Bool *pbEnabled)
     {
         errcode = e.errorCode;
         fprintf(stderr, "%s\n", e.message.getStr());
-        OSL_ENSURE(0, e.message.getStr());
+        OSL_FAIL(e.message.getStr());
     }
     return errcode;
 }
@@ -958,7 +958,7 @@ javaFrameworkError SAL_CALL jfw_setVMParameters(
     {
         errcode = e.errorCode;
         fprintf(stderr, "%s\n", e.message.getStr());
-        OSL_ENSURE(0, e.message.getStr());
+        OSL_FAIL(e.message.getStr());
     }
 
     return errcode;
@@ -983,7 +983,7 @@ javaFrameworkError SAL_CALL jfw_getVMParameters(
     {
         errcode = e.errorCode;
         fprintf(stderr, "%s\n", e.message.getStr());
-        OSL_ENSURE(0, e.message.getStr());
+        OSL_FAIL(e.message.getStr());
     }
     return errcode;
 }
@@ -1006,7 +1006,7 @@ javaFrameworkError SAL_CALL jfw_setUserClassPath(rtl_uString * pCp)
     {
         errcode = e.errorCode;
         fprintf(stderr, "%s\n", e.message.getStr());
-        OSL_ENSURE(0, e.message.getStr());
+        OSL_FAIL(e.message.getStr());
     }
     return errcode;
 }
@@ -1029,7 +1029,7 @@ javaFrameworkError SAL_CALL jfw_getUserClassPath(rtl_uString ** ppCP)
     {
         errcode = e.errorCode;
         fprintf(stderr, "%s\n", e.message.getStr());
-        OSL_ENSURE(0, e.message.getStr());
+        OSL_FAIL(e.message.getStr());
     }
     return errcode;
 }
@@ -1053,7 +1053,7 @@ javaFrameworkError SAL_CALL jfw_addJRELocation(rtl_uString * sLocation)
     {
         errcode = e.errorCode;
         fprintf(stderr, "%s\n", e.message.getStr());
-        OSL_ENSURE(0, e.message.getStr());
+        OSL_FAIL(e.message.getStr());
     }
 
     return errcode;
@@ -1079,7 +1079,7 @@ javaFrameworkError SAL_CALL jfw_setJRELocations(
     {
         errcode = e.errorCode;
         fprintf(stderr, "%s\n", e.message.getStr());
-        OSL_ENSURE(0, e.message.getStr());
+        OSL_FAIL(e.message.getStr());
     }
     return errcode;
 
@@ -1104,7 +1104,7 @@ javaFrameworkError SAL_CALL jfw_getJRELocations(
     {
         errcode = e.errorCode;
         fprintf(stderr, "%s\n", e.message.getStr());
-        OSL_ENSURE(0, e.message.getStr());
+        OSL_FAIL(e.message.getStr());
     }
 
     return errcode;

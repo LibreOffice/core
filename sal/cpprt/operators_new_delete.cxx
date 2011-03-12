@@ -93,7 +93,7 @@ struct AllocatorTraits
         p = static_cast<char*>(p) - sizeof(signature_type);
         if (memcmp (p, m_signature, sizeof(signature_type)) != 0)
         {
-            OSL_ENSURE(0, "operator delete mismatch");
+            OSL_FAIL("operator delete mismatch");
         }
 #endif  /* OSL_DEBUG_LEVEL */
         return p;

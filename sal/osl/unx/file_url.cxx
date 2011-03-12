@@ -138,7 +138,7 @@ static sal_Bool findWrongUsage( const sal_Unicode *path, sal_Int32 len )
 
 oslFileError SAL_CALL osl_getCanonicalName( rtl_uString* ustrFileURL, rtl_uString** pustrValidURL )
 {
-    OSL_ENSURE(0, "osl_getCanonicalName not implemented");
+    OSL_FAIL("osl_getCanonicalName not implemented");
 
     rtl_uString_newFromString(pustrValidURL, ustrFileURL);
     return osl_File_E_None;
@@ -160,7 +160,7 @@ oslFileError SAL_CALL osl_getSystemPathFromFileURL( rtl_uString *ustrFileURL, rt
     /*
     if( (sal_Unicode) '/' == ustrFileURL->buffer[0] )
     {
-        OSL_ENSURE( 0, "osl_getSystemPathFromFileURL: input is already system path" );
+        OSL_FAIL( "osl_getSystemPathFromFileURL: input is already system path" );
         rtl_uString_assign( pustrSystemPath, ustrFileURL );
         return osl_File_E_None;
     }
@@ -317,14 +317,14 @@ oslFileError SAL_CALL osl_getFileURLFromSystemPath( rtl_uString *ustrSystemPath,
     /*
         if( 0 == rtl_ustr_ascii_shortenedCompare_WithLength( ustrSystemPath->buffer, ustrSystemPath->length,"file://", 7 ) )
         {
-            OSL_ENSURE( 0, "osl_getFileURLFromSystemPath: input is already file URL" );
+            OSL_FAIL( "osl_getFileURLFromSystemPath: input is already file URL" );
             rtl_uString_assign( pustrFileURL, ustrSystemPath );
         }
         else
         {
             rtl_uString *pTmp2 = NULL;
 
-            OSL_ENSURE( 0, "osl_getFileURLFromSystemPath: input is wrong file URL" );
+            OSL_FAIL( "osl_getFileURLFromSystemPath: input is wrong file URL" );
             rtl_uString_newFromStr_WithLength( pustrFileURL, ustrSystemPath->buffer + 5, ustrSystemPath->length - 5 );
             rtl_uString_newFromAscii( &pTmp2, "file://" );
             rtl_uString_newConcat( pustrFileURL, *pustrFileURL, pTmp2 );

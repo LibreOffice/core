@@ -369,7 +369,7 @@ void SAL_CALL PropertyObject::thisDispatch(
     switch( pMethodType->aBase.nPosition )
     {
     case METHOD_QUERY_INTERFACE:
-        OSL_ENSURE( 0 , "not implemented yet !" );
+        OSL_FAIL( "not implemented yet !" );
         break;
     case METHOD_GET_PROPERTIES:
     {
@@ -388,7 +388,7 @@ void SAL_CALL PropertyObject::thisDispatch(
         break;
     }
     default:
-        OSL_ENSURE( 0 , "unkown method !" );
+        OSL_FAIL( "unkown method !" );
     }
 }
 
@@ -423,7 +423,7 @@ void SAL_CALL PropertyObject::localGetPropertiesFromRemote( struct Properties *p
 
     if( pException )
     {
-        OSL_ENSURE( 0 , "remote urp-bridge doesn't support property-object" );
+        OSL_FAIL( "remote urp-bridge doesn't support property-object" );
         uno_any_destruct( pException , 0 );
         return;
     }
@@ -433,7 +433,7 @@ void SAL_CALL PropertyObject::localGetPropertiesFromRemote( struct Properties *p
     {
         if( ! assignFromIdlToStruct( pR , pP[i] ) )
         {
-            OSL_ENSURE( 0 , "unknown property !!!!" );
+            OSL_FAIL( "unknown property !!!!" );
         }
     }
 

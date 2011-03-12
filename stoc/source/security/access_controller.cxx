@@ -689,7 +689,7 @@ void AccessController::checkAndClearPostPoned() SAL_THROW( (RuntimeException) )
             break;
         }
         default:
-            OSL_ENSURE( 0, "### this should never be called in this ac mode!" );
+            OSL_FAIL( "### this should never be called in this ac mode!" );
             break;
         }
     }
@@ -743,7 +743,7 @@ PermissionCollection AccessController::getEffectivePermissions(
         break;
     }
     default:
-        OSL_ENSURE( 0, "### this should never be called in this ac mode!" );
+        OSL_FAIL( "### this should never be called in this ac mode!" );
         return PermissionCollection();
     }
 

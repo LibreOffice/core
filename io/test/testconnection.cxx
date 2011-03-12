@@ -163,7 +163,7 @@ void testConnection( const OUString &sConnectionDescription  ,
         {
             Sequence < sal_Int8 > seq(10);
             r->write( seq );
-            OSL_ENSURE( 0 , "expected exception not thrown" );
+            OSL_FAIL( "expected exception not thrown" );
         }
         catch ( IOException & )
         {
@@ -171,7 +171,7 @@ void testConnection( const OUString &sConnectionDescription  ,
         }
         catch ( ... )
         {
-            OSL_ENSURE( 0 , "wrong exception was thrown" );
+            OSL_FAIL( "wrong exception was thrown" );
         }
 
         thread.join();
@@ -231,7 +231,7 @@ int __cdecl main( int argc, char * argv[] )
     try
     {
         rAcceptor->accept( OUString() );
-        OSL_ENSURE( 0 , "empty connection string" );
+        OSL_FAIL( "empty connection string" );
     }
     catch( IllegalArgumentException & )
     {
@@ -239,13 +239,13 @@ int __cdecl main( int argc, char * argv[] )
     }
     catch( ... )
     {
-        OSL_ENSURE( 0, "unexpected akexception with empty connection string" );
+        OSL_FAIL( "unexpected akexception with empty connection string" );
     }
 
     try
     {
         rConnector->connect( OUString() );
-        OSL_ENSURE( 0 , "empty connection string" );
+        OSL_FAIL( "empty connection string" );
     }
     catch( ConnectionSetupException & )
     {
@@ -253,7 +253,7 @@ int __cdecl main( int argc, char * argv[] )
     }
     catch( ... )
     {
-        OSL_ENSURE( 0, "unexpected exception with empty connection string" );
+        OSL_FAIL( "unexpected exception with empty connection string" );
     }
 
 
@@ -265,7 +265,7 @@ int __cdecl main( int argc, char * argv[] )
     try
     {
         rAcceptor->accept( OUString(RTL_CONSTASCII_USTRINGPARAM("socket,host=localhost,port=2001")) );
-        OSL_ENSURE( 0 , "already existing exception expected" );
+        OSL_FAIL( "already existing exception expected" );
     }
     catch( AlreadyAcceptingException & e)
     {
@@ -273,7 +273,7 @@ int __cdecl main( int argc, char * argv[] )
     }
     catch( ... )
     {
-        OSL_ENSURE( 0, "unknown exception, already existing existing expected" );
+        OSL_FAIL( "unknown exception, already existing existing expected" );
     }
 
     rAcceptor->stopAccepting();

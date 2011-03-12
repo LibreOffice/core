@@ -267,7 +267,7 @@ bool VendorBase::needsRestart() const
 
 int VendorBase::compareVersions(const rtl::OUString& /*sSecond*/) const
 {
-    OSL_ENSURE(0, "[Java framework] VendorBase::compareVersions must be "
+    OSL_FAIL("[Java framework] VendorBase::compareVersions must be "
                "overridden in derived class.");
     return 0;
 }

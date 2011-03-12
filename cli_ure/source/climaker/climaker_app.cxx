@@ -150,8 +150,8 @@ static OptionInfo const * get_option_info(
             }
         }
     }
-    OSL_ENSURE(
-        0, OUStringToOString( opt, osl_getThreadTextEncoding() ).getStr() );
+    OSL_FAIL(
+        OUStringToOString( opt, osl_getThreadTextEncoding() ).getStr() );
     return 0;
 }
 
@@ -449,7 +449,7 @@ SAL_IMPLEMENT_MAIN()
                         }
                         else
                         {
-                            OSL_ENSURE( 0, "unhandled valid option?!" );
+                            OSL_FAIL( "unhandled valid option?!" );
                             if (option_info->m_has_argument)
                                 ++nPos;
                         }

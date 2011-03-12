@@ -432,7 +432,7 @@ void cc50_solaris_intel_fillUnoException(
 #if OSL_DEBUG_LEVEL > 0
         OString cstr( OUStringToOString(
                           aRE.Message, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_ENSURE( 0, cstr.getStr() );
+        OSL_FAIL( cstr.getStr() );
 #endif
         return;
     }

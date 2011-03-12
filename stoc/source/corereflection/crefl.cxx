@@ -531,7 +531,7 @@ sal_Bool SAL_CALL component_writeInfo(
         {
 #if OSL_DEBUG_LEVEL > 0
             OString cstr( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
-            OSL_ENSURE( 0, cstr.getStr() );
+            OSL_FAIL( cstr.getStr() );
 #else
             (void) exc; // unused
 #endif

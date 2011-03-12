@@ -279,7 +279,7 @@ void fillUnoException( __cxa_exception * header, uno_Any * pUnoExc, uno_Mapping 
         uno_type_any_constructAndConvert( pUnoExc, &aRE, rType.getTypeLibType(), pCpp2Uno );
 #if OSL_DEBUG_LEVEL > 0
         OString cstr( OUStringToOString( aRE.Message, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_ENSURE( 0, cstr.getStr() );
+        OSL_FAIL( cstr.getStr() );
 #endif
         return;
     }
@@ -300,7 +300,7 @@ void fillUnoException( __cxa_exception * header, uno_Any * pUnoExc, uno_Mapping 
         uno_type_any_constructAndConvert( pUnoExc, &aRE, rType.getTypeLibType(), pCpp2Uno );
 #if OSL_DEBUG_LEVEL > 0
         OString cstr( OUStringToOString( aRE.Message, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_ENSURE( 0, cstr.getStr() );
+        OSL_FAIL( cstr.getStr() );
 #endif
     }
     else

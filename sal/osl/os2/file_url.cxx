@@ -783,7 +783,7 @@ oslFileError osl_getSystemPathFromFileURL_Ex(
 
             message = szBuffer;
         }
-        OSL_ENSURE( 0, message );
+        OSL_FAIL( message );
     }
 
 #endif // OSL_DEBUG_LEVEL > 0

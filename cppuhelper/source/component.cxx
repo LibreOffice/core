@@ -106,7 +106,7 @@ void OComponentHelper::release() throw()
                     // release should not throw exceptions
 #if OSL_DEBUG_LEVEL > 0
                     OString msg( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
-                    OSL_ENSURE( 0, msg.getStr() );
+                    OSL_FAIL( msg.getStr() );
 #else
                     (void) exc; // avoid warning about unused variable
 #endif

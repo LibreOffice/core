@@ -351,7 +351,7 @@ static inline bool idefaultConstructElements(
         }
         break;
     default:
-        OSL_ENSURE( 0, "### unexpected element type!" );
+        OSL_FAIL( "### unexpected element type!" );
         pSeq = 0;
         break;
     }
@@ -665,7 +665,7 @@ static inline bool icopyConstructFromElements(
         break;
     }
     default:
-        OSL_ENSURE( 0, "### unexpected element type!" );
+        OSL_FAIL( "### unexpected element type!" );
         pSeq = 0;
         break;
     }

@@ -310,8 +310,8 @@ bool UnoInterfaceProxy::CanCastTo(System::Type* fromType,
     catch (BridgeRuntimeError& e)
     {
         (void) e; // avoid warning
-        OSL_ENSURE(
-            0, OUStringToOString(
+        OSL_FAIL(
+            OUStringToOString(
                 e.m_message, RTL_TEXTENCODING_UTF8 ).getStr() );
     }
     catch (System::Exception* e)
@@ -321,14 +321,14 @@ bool UnoInterfaceProxy::CanCastTo(System::Type* fromType,
             S"UnoInterfaceProxy::CanCastTo().  Original"
             S"message: \n");
         msg= System::String::Concat(msg, e->get_Message());
-        OSL_ENSURE(
-            0, OUStringToOString(
+        OSL_FAIL(
+            OUStringToOString(
                 mapCliString(msg), RTL_TEXTENCODING_UTF8 ).getStr() );
     }
     catch (...)
     {
-        OSL_ENSURE(
-            0, "An unexpected native C++ exception occurred in "
+        OSL_FAIL(
+            "An unexpected native C++ exception occurred in "
             "UnoInterfaceProxy::CanCastTo()" );
     }
     __finally
@@ -1172,7 +1172,7 @@ void SAL_CALL cli_proxy_dispatch(
 #if OSL_DEBUG_LEVEL >= 1
         OString cstr_msg(OUStringToOString(exc.Message,
                                              RTL_TEXTENCODING_ASCII_US ) );
-        OSL_ENSURE(0, cstr_msg.getStr());
+        OSL_FAIL(cstr_msg.getStr());
 #endif
     }
 }

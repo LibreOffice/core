@@ -115,7 +115,7 @@ inline sal_Bool OReaderThread::getMemberTypeDescription(
         sMessage.appendAscii( "interface type is not of typeclass interface (" );
         sMessage.append( (sal_Int32) pITypeRef->eTypeClass );
         m_pBridgeImpl->addError( sMessage.makeStringAndClear() );
-        OSL_ENSURE( 0 , "type is not an interface" );
+        OSL_FAIL( "type is not an interface" );
         return sal_False;
     }
 
@@ -128,7 +128,7 @@ inline sal_Bool OReaderThread::getMemberTypeDescription(
         sMessage.appendAscii( "No typedescription can be retrieved for type " );
         sMessage.append( OUString( pITypeRef->pTypeName ) );
         m_pBridgeImpl->addError( sMessage.makeStringAndClear() );
-        OSL_ENSURE( 0 , "urp: unknown type " );
+        OSL_FAIL( "urp: unknown type " );
         return sal_False;
     }
 
@@ -147,7 +147,7 @@ inline sal_Bool OReaderThread::getMemberTypeDescription(
         sMessage.appendAscii( " )" );
         m_pBridgeImpl->addError( sMessage.makeStringAndClear() );
 
-        OSL_ENSURE( 0 , "vtable index out of range" );
+        OSL_FAIL( "vtable index out of range" );
         return sal_False;
     }
 
@@ -163,7 +163,7 @@ inline sal_Bool OReaderThread::getMemberTypeDescription(
         sMessage.appendAscii( " )" );
         m_pBridgeImpl->addError( sMessage.makeStringAndClear() );
 
-        OSL_ENSURE( 0 , "vtable index out of range" );
+        OSL_FAIL( "vtable index out of range" );
         return sal_False;
     }
 
@@ -181,7 +181,7 @@ inline sal_Bool OReaderThread::getMemberTypeDescription(
         sMessage.appendAscii( " )" );
         m_pBridgeImpl->addError( sMessage.makeStringAndClear() );
 
-        OSL_ENSURE( 0 , "unknown method type description" );
+        OSL_FAIL( "unknown method type description" );
         return sal_False;
     }
 
@@ -295,7 +295,7 @@ inline sal_Bool OReaderThread::readBlock( sal_Int32 *pnMessageCount )
         s.append( (sal_Int64) (sal_uInt32 ) nSize );
         s.append( sal_Unicode( ')' ) );
         m_pBridgeImpl->addError( s.makeStringAndClear() );
-        OSL_ENSURE( 0 , "urp bridge: Packet-size too big" );
+        OSL_FAIL( "urp bridge: Packet-size too big" );
         return sal_False;
     }
 
@@ -313,7 +313,7 @@ inline sal_Bool OReaderThread::readBlock( sal_Int32 *pnMessageCount )
         s.append( (sal_Int64) (sal_uInt32 ) nSize );
         s.append( sal_Unicode( ')' ) );
         m_pBridgeImpl->addError( s.makeStringAndClear() );
-        OSL_ENSURE( 0 , "urp bridge: messages size too large, terminating connection" );
+        OSL_FAIL( "urp bridge: messages size too large, terminating connection" );
         return sal_False;
     }
 
@@ -461,7 +461,7 @@ void OReaderThread::run()
             if( ! readFlags( &flags ) )
             {
                 m_pBridgeImpl->addError( "incomplete message, skipping block" );
-                OSL_ENSURE ( 0 , "urp-bridge : incomplete message, skipping block" );
+                OSL_FAIL( "urp-bridge : incomplete message, skipping block" );
                 break;
             }
 
@@ -494,7 +494,7 @@ void OReaderThread::run()
                 {
                     typelib_typedescriptionreference_release( pTypeRef );
                     m_pBridgeImpl->addError( "error during unpacking (maybe cached) interface type" );
-                    OSL_ENSURE( 0 , "urp-bridge : error during unpacking interface type, terminating connection" );
+                    OSL_FAIL( "urp-bridge : error during unpacking interface type, terminating connection" );
                     disposeEnvironment();
                     break;
                 }
@@ -504,7 +504,7 @@ void OReaderThread::run()
                     sMessage.appendAscii( "interface type is not of typeclass interface (" );
                     sMessage.append( (sal_Int32) m_pBridgeImpl->m_lastInType.getTypeClass() );
                     m_pBridgeImpl->addError( sMessage.makeStringAndClear() );
-                    OSL_ENSURE( 0 , "urp-bridge : not an interface type" );
+                    OSL_FAIL( "urp-bridge : not an interface type" );
                     disposeEnvironment();
                     break;
                 }
@@ -521,7 +521,7 @@ void OReaderThread::run()
                 {
                     rtl_uString_release( pOid );
                     m_pBridgeImpl->addError( "error during unpacking (maybe cached) oid" );
-                    OSL_ENSURE( 0 , "urp-bridge : error during unpacking cached data, terminating connection" );
+                    OSL_FAIL( "urp-bridge : error during unpacking cached data, terminating connection" );
                     disposeEnvironment();
                     break;
                 }
@@ -540,7 +540,7 @@ void OReaderThread::run()
                     rtl_byte_sequence_release( pSeq );
 
                     m_pBridgeImpl->addError( "error during unpacking (maybe cached) tid" );
-                    OSL_ENSURE( 0 , "urp-bridge : error during unpacking cached data, terminating connection" );
+                    OSL_FAIL( "urp-bridge : error during unpacking cached data, terminating connection" );
                     disposeEnvironment();
                     break;
                 }

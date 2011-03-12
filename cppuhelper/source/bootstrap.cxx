@@ -173,7 +173,7 @@ void addFactories(
             buf.append( ppNames[ -2 ] );
             buf.append( "\"!!!" );
             OString str( buf.makeStringAndClear() );
-            OSL_ENSURE( 0, str.getStr() );
+            OSL_FAIL( str.getStr() );
         }
 #endif
     }

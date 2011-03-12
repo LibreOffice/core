@@ -115,7 +115,7 @@ void * binuno_queryInterface( void * pUnoI, typelib_TypeDescriptionReference * p
         buf.append( * reinterpret_cast< OUString const * >( pExc->pData ) );
         OString cstr(
             OUStringToOString( buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
-        OSL_ENSURE( 0, cstr.getStr() );
+        OSL_FAIL( cstr.getStr() );
 #endif
         uno_any_destruct( pExc, 0 );
     }

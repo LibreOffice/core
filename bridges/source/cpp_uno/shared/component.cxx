@@ -148,8 +148,8 @@ static void s_stub_computeObjectIdentifier(va_list * pParam)
         }
         catch (::com::sun::star::uno::RuntimeException &)
         {
-            OSL_ENSURE(
-                0, "### RuntimeException occurred udring queryInterface()!" );
+            OSL_FAIL(
+                "### RuntimeException occurred udring queryInterface()!" );
         }
     }
 }

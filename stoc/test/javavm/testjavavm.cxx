@@ -79,7 +79,7 @@ sal_Bool testJavaVM(const Reference< XMultiServiceFactory > & xMgr )
     Any anyVM = xVM->getJavaVM( Sequence<sal_Int8>(arId, 16));
     if ( ! anyVM.hasValue())
     {
-        OSL_ENSURE(0,"could not get Java VM");
+        OSL_FAIL("could not get Java VM");
         return sal_False;
     }
 

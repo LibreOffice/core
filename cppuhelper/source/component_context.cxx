@@ -851,7 +851,7 @@ extern "C" { static void s_createComponentContext_v(va_list * pParam)
         catch (Exception & exc)
         {
             (void) exc; // avoid warning about unused variable
-            OSL_ENSURE( 0, OUStringToOString(
+            OSL_FAIL( OUStringToOString(
                             exc.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
             xContext.clear();
         }

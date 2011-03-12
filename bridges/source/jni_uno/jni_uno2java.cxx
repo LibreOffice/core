@@ -576,15 +576,14 @@ void SAL_CALL UNO_proxy_free( uno_ExtEnvironment * env, void * proxy )
 #if OSL_DEBUG_LEVEL > 0
         OString cstr_msg2(
             OUStringToOString( err.m_message, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_ENSURE( 0, cstr_msg2.getStr() );
+        OSL_FAIL( cstr_msg2.getStr() );
 #else
         (void) err; // unused
 #endif
     }
     catch (::jvmaccess::VirtualMachine::AttachGuard::CreationException &)
     {
-        OSL_ENSURE(
-            0,
+        OSL_FAIL(
             "[jni_uno bridge error] attaching current thread to java failed!" );
     }
 
@@ -865,7 +864,7 @@ void SAL_CALL UNO_proxy_dispatch(
 #if OSL_DEBUG_LEVEL > 0
         OString cstr_msg2(
             OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_ENSURE( 0, cstr_msg2.getStr() );
+        OSL_FAIL( cstr_msg2.getStr() );
 #endif
     }
 }

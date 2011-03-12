@@ -691,7 +691,7 @@ sal_Bool ORegistryFactoryHelper::convertFastPropertyValue(
     Any &, Any &, sal_Int32, Any const & )
     throw (lang::IllegalArgumentException)
 {
-    OSL_ENSURE( 0, "unexpected!" );
+    OSL_FAIL( "unexpected!" );
     return false;
 }
 
