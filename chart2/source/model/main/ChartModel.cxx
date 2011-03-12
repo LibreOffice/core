@@ -1034,7 +1034,7 @@ void SAL_CALL ChartModel::setVisualAreaSize( ::sal_Int64 nAspect, const awt::Siz
     }
     else
     {
-        OSL_ENSURE( false, "setVisualAreaSize: Aspect not implemented yet.");
+        OSL_FAIL( "setVisualAreaSize: Aspect not implemented yet.");
     }
 }
 

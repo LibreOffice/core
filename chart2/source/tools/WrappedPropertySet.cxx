@@ -142,7 +142,7 @@ void SAL_CALL WrappedPropertySet::setPropertyValue( const OUString& rPropertyNam
     }
     catch( uno::Exception& ex )
     {
-        OSL_ENSURE(false,"invalid exception caught in WrappedPropertySet::setPropertyValue");
+        OSL_FAIL("invalid exception caught in WrappedPropertySet::setPropertyValue");
         lang::WrappedTargetException aWrappedException;
         aWrappedException.TargetException = uno::makeAny( ex );
         throw aWrappedException;
@@ -183,7 +183,7 @@ Any SAL_CALL WrappedPropertySet::getPropertyValue( const OUString& rPropertyName
     }
     catch( uno::Exception& ex )
     {
-        OSL_ENSURE(false,"invalid exception caught in WrappedPropertySet::setPropertyValue");
+        OSL_FAIL("invalid exception caught in WrappedPropertySet::setPropertyValue");
         lang::WrappedTargetException aWrappedException;
         aWrappedException.TargetException = uno::makeAny( ex );
         throw aWrappedException;
@@ -299,19 +299,19 @@ Sequence< Any > SAL_CALL WrappedPropertySet::getPropertyValues( const Sequence< 
 void SAL_CALL WrappedPropertySet::addPropertiesChangeListener( const Sequence< OUString >& /* rNameSeq */, const Reference< beans::XPropertiesChangeListener >& /* xListener */ )
                                     throw (uno::RuntimeException)
 {
-    OSL_ENSURE(false,"not implemented yet");
+    OSL_FAIL("not implemented yet");
     //todo
 }
 void SAL_CALL WrappedPropertySet::removePropertiesChangeListener( const Reference< beans::XPropertiesChangeListener >& /* xListener */ )
                                     throw (uno::RuntimeException)
 {
-    OSL_ENSURE(false,"not implemented yet");
+    OSL_FAIL("not implemented yet");
     //todo
 }
 void SAL_CALL WrappedPropertySet::firePropertiesChangeEvent( const Sequence< OUString >& /* rNameSeq */, const Reference< beans::XPropertiesChangeListener >& /* xListener */ )
                                     throw (uno::RuntimeException)
 {
-    OSL_ENSURE(false,"not implemented yet");
+    OSL_FAIL("not implemented yet");
     //todo
 }
 
@@ -466,13 +466,13 @@ tWrappedPropertyMap& WrappedPropertySet::getWrappedPropertyMap()
 
                     if( nHandle == -1 )
                     {
-                        OSL_ENSURE( false, "missing property in property list" );
+                        OSL_FAIL( "missing property in property list" );
                         delete pProperty;//we are owner or the created WrappedProperties
                     }
                     else if( m_pWrappedPropertyMap->find( nHandle ) != m_pWrappedPropertyMap->end() )
                     {
                         //duplicate Wrapped property
-                        OSL_ENSURE( false, "duplicate Wrapped property" );
+                        OSL_FAIL( "duplicate Wrapped property" );
                         delete pProperty;//we are owner or the created WrappedProperties
                     }
                     else

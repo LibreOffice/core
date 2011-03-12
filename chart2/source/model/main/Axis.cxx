@@ -463,7 +463,7 @@ Sequence< Reference< beans::XPropertySet > > SAL_CALL Axis::getSubGridProperties
 Sequence< Reference< beans::XPropertySet > > SAL_CALL Axis::getSubTickProperties()
     throw (uno::RuntimeException)
 {
-    OSL_ENSURE( false, "Not implemented yet" );
+    OSL_FAIL( "Not implemented yet" );
     return Sequence< Reference< beans::XPropertySet > >();
 }
 

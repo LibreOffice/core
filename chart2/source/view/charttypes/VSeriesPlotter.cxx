@@ -229,7 +229,7 @@ void VSeriesPlotter::addSeries( VDataSeries* pSeries, sal_Int32 zSlot, sal_Int32
             {
                 //move all existing series in the xSlot to next slot
                 //@todo
-                OSL_ENSURE( false, "Not implemented yet");
+                OSL_FAIL( "Not implemented yet");
             }
             else if( ySlot == -1 || ySlot >= nYSlotCount)
             {
@@ -242,7 +242,7 @@ void VSeriesPlotter::addSeries( VDataSeries* pSeries, sal_Int32 zSlot, sal_Int32
                 //insert at given y and x position
 
                 //@todo
-                OSL_ENSURE( false, "Not implemented yet");
+                OSL_FAIL( "Not implemented yet");
             }
         }
     }

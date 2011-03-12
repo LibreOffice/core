@@ -1445,7 +1445,7 @@ void ScDPLayoutDlg::UpdateSrcRange()
             inSheet.SetRangeName(aSrcStr);
         break;
         default:
-            OSL_ENSURE(false, "Unknown source type.");
+            OSL_FAIL( "Unknown source type.");
             return;
     }
 

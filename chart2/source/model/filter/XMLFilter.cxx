@@ -285,7 +285,7 @@ sal_Bool SAL_CALL XMLFilter::filter(
     }
     else
     {
-        OSL_ENSURE( false, "filter() called with no document set" );
+        OSL_FAIL( "filter() called with no document set" );
     }
 
     return bResult;
@@ -346,7 +346,7 @@ sal_Int32 XMLFilter::impl_Import(
         Reference< lang::XServiceInfo > xServInfo( xDocumentComp, uno::UNO_QUERY_THROW );
         if( ! xServInfo->supportsService( C2U( "com.sun.star.chart2.ChartDocument" )))
         {
-            OSL_ENSURE( false, "Import: No ChartDocument" );
+            OSL_FAIL( "Import: No ChartDocument" );
             return ERRCODE_SFX_GENERAL;
         }
 
@@ -604,7 +604,7 @@ sal_Int32 XMLFilter::impl_Export(
         Reference< lang::XServiceInfo > xServInfo( xDocumentComp, uno::UNO_QUERY_THROW );
         if( ! xServInfo->supportsService( C2U( "com.sun.star.chart2.ChartDocument" )))
         {
-            OSL_ENSURE( false, "Export: No ChartDocument" );
+            OSL_FAIL( "Export: No ChartDocument" );
             return ERRCODE_SFX_GENERAL;
         }
 

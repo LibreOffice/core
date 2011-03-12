@@ -166,7 +166,7 @@ void AddPointToPoly( drawing::PolyPolygonShape3D& rPoly, const drawing::Position
 {
     if(nPolygonIndex<0)
     {
-        OSL_ENSURE( false, "The polygon index needs to be > 0");
+        OSL_FAIL( "The polygon index needs to be > 0");
         nPolygonIndex=0;
     }
 

@@ -304,7 +304,7 @@ bool StatisticsItemConverter::ApplySpecialItem(
         case SCHATTR_STAT_PERCENT:
         case SCHATTR_STAT_BIGERROR:
         {
-            OSL_ENSURE( false, "Deprectaed item" );
+            OSL_FAIL( "Deprectaed item" );
             uno::Reference< beans::XPropertySet > xErrorBarProp(
                 lcl_GetYErrorBar( GetPropertySet()));
             bool bOldHasErrorBar = xErrorBarProp.is();

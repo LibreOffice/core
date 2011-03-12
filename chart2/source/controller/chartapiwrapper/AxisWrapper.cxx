@@ -382,7 +382,7 @@ awt::Point SAL_CALL AxisWrapper::getPosition()
 void SAL_CALL AxisWrapper::setPosition( const awt::Point& /*aPosition*/ )
     throw (uno::RuntimeException)
 {
-    OSL_ENSURE( false, "trying to set position of Axis" );
+    OSL_FAIL( "trying to set position of Axis" );
 }
 
 awt::Size SAL_CALL AxisWrapper::getSize()
@@ -396,7 +396,7 @@ void SAL_CALL AxisWrapper::setSize( const awt::Size& /*aSize*/ )
     throw (beans::PropertyVetoException,
            uno::RuntimeException)
 {
-    OSL_ENSURE( false, "trying to set size of Axis" );
+    OSL_FAIL( "trying to set size of Axis" );
 }
 
 // ____ XShapeDescriptor (base of XShape) ____

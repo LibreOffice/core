@@ -423,7 +423,7 @@ Reference< XDataInterpreter > SAL_CALL ColumnLineChartTypeTemplate::getDataInter
     else
     {
         //todo...
-        OSL_ENSURE( false, "number of lines may not be valid anymore in the datainterpreter" );
+        OSL_FAIL( "number of lines may not be valid anymore in the datainterpreter" );
 
     }
 

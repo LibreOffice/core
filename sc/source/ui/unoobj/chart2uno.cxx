@@ -2114,7 +2114,7 @@ void SAL_CALL ScChart2DataProvider::addPropertyChangeListener(
             throw( beans::UnknownPropertyException,
                     lang::WrappedTargetException, uno::RuntimeException)
 {
-    OSL_ENSURE( false, "Not yet implemented" );
+    OSL_FAIL( "Not yet implemented" );
 }
 
 
@@ -2124,7 +2124,7 @@ void SAL_CALL ScChart2DataProvider::removePropertyChangeListener(
             throw( beans::UnknownPropertyException,
                     lang::WrappedTargetException, uno::RuntimeException)
 {
-    OSL_ENSURE( false, "Not yet implemented" );
+    OSL_FAIL( "Not yet implemented" );
 }
 
 
@@ -2134,7 +2134,7 @@ void SAL_CALL ScChart2DataProvider::addVetoableChangeListener(
             throw( beans::UnknownPropertyException,
                     lang::WrappedTargetException, uno::RuntimeException)
 {
-    OSL_ENSURE( false, "Not yet implemented" );
+    OSL_FAIL( "Not yet implemented" );
 }
 
 
@@ -2144,7 +2144,7 @@ void SAL_CALL ScChart2DataProvider::removeVetoableChangeListener(
             throw( beans::UnknownPropertyException,
                     lang::WrappedTargetException, uno::RuntimeException)
 {
-    OSL_ENSURE( false, "Not yet implemented" );
+    OSL_FAIL( "Not yet implemented" );
 }
 
 // DataSource ================================================================
@@ -3387,7 +3387,7 @@ void SAL_CALL ScChart2DataSequence::addPropertyChangeListener(
                     lang::WrappedTargetException, uno::RuntimeException)
 {
     // FIXME: real implementation
-    OSL_ENSURE( false, "Not yet implemented" );
+    OSL_FAIL( "Not yet implemented" );
 }
 
 
@@ -3398,7 +3398,7 @@ void SAL_CALL ScChart2DataSequence::removePropertyChangeListener(
                     lang::WrappedTargetException, uno::RuntimeException)
 {
     // FIXME: real implementation
-    OSL_ENSURE( false, "Not yet implemented" );
+    OSL_FAIL( "Not yet implemented" );
 }
 
 
@@ -3409,7 +3409,7 @@ void SAL_CALL ScChart2DataSequence::addVetoableChangeListener(
                     lang::WrappedTargetException, uno::RuntimeException)
 {
     // FIXME: real implementation
-    OSL_ENSURE( false, "Not yet implemented" );
+    OSL_FAIL( "Not yet implemented" );
 }
 
 
@@ -3420,7 +3420,7 @@ void SAL_CALL ScChart2DataSequence::removeVetoableChangeListener(
                     lang::WrappedTargetException, uno::RuntimeException)
 {
     // FIXME: real implementation
-    OSL_ENSURE( false, "Not yet implemented" );
+    OSL_FAIL( "Not yet implemented" );
 }
 
 void ScChart2DataSequence::setDataChangedHint(bool b)
@@ -3661,7 +3661,7 @@ void SAL_CALL ScChart2EmptyDataSequence::addPropertyChangeListener(
                     lang::WrappedTargetException, uno::RuntimeException)
 {
     // FIXME: real implementation
-    OSL_ENSURE( false, "Not yet implemented" );
+    OSL_FAIL( "Not yet implemented" );
 }
 
 
@@ -3672,7 +3672,7 @@ void SAL_CALL ScChart2EmptyDataSequence::removePropertyChangeListener(
                     lang::WrappedTargetException, uno::RuntimeException)
 {
     // FIXME: real implementation
-    OSL_ENSURE( false, "Not yet implemented" );
+    OSL_FAIL( "Not yet implemented" );
 }
 
 
@@ -3683,7 +3683,7 @@ void SAL_CALL ScChart2EmptyDataSequence::addVetoableChangeListener(
                     lang::WrappedTargetException, uno::RuntimeException)
 {
     // FIXME: real implementation
-    OSL_ENSURE( false, "Not yet implemented" );
+    OSL_FAIL( "Not yet implemented" );
 }
 
 
@@ -3694,7 +3694,7 @@ void SAL_CALL ScChart2EmptyDataSequence::removeVetoableChangeListener(
                     lang::WrappedTargetException, uno::RuntimeException)
 {
     // FIXME: real implementation
-    OSL_ENSURE( false, "Not yet implemented" );
+    OSL_FAIL( "Not yet implemented" );
 }
 
 #endif

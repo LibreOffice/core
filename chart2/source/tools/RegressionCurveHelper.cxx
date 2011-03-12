@@ -76,7 +76,7 @@ OUString lcl_getServiceNameForType( ::chart::RegressionCurveHelper::tRegressionT
             aServiceName = C2U( "com.sun.star.chart2.PotentialRegressionCurve" );
             break;
         default:
-            OSL_ENSURE(false,"unknown regression curve type - use linear instead");
+            OSL_FAIL("unknown regression curve type - use linear instead");
             aServiceName = C2U( "com.sun.star.chart2.LinearRegressionCurve" );
             break;
     }
@@ -372,7 +372,7 @@ void RegressionCurveHelper::addRegressionCurve(
 
     if( eType == REGRESSION_TYPE_NONE )
     {
-        OSL_ENSURE(false,"don't create a regression curve of type none");
+        OSL_FAIL("don't create a regression curve of type none");
         return;
     }
 
@@ -609,7 +609,7 @@ OUString RegressionCurveHelper::getUINameForRegressionCurve( const Reference< XR
     if( aServiceName.equalsAsciiL(
             RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart2.MeanValueRegressionCurve" )))
     {
-        OSL_ENSURE( false, "Meanvalue lines in legend not supported" );
+        OSL_FAIL( "Meanvalue lines in legend not supported" );
         aResult = OUString();
         // aResult = ::chart::SchResId::getResString( STR_OBJECT_AVERAGE_LINE );
     }

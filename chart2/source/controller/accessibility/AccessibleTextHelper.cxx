@@ -139,49 +139,49 @@ Reference< XAccessible > SAL_CALL AccessibleTextHelper::getAccessibleChild( ::sa
 Reference< XAccessible > SAL_CALL AccessibleTextHelper::getAccessibleParent()
     throw (uno::RuntimeException)
 {
-    OSL_ENSURE( false, "Not implemented in this helper" );
+    OSL_FAIL( "Not implemented in this helper" );
     return Reference< XAccessible >();
 }
 
 ::sal_Int32 SAL_CALL AccessibleTextHelper::getAccessibleIndexInParent()
     throw (uno::RuntimeException)
 {
-    OSL_ENSURE( false, "Not implemented in this helper" );
+    OSL_FAIL( "Not implemented in this helper" );
     return -1;
 }
 
 ::sal_Int16 SAL_CALL AccessibleTextHelper::getAccessibleRole()
     throw (uno::RuntimeException)
 {
-    OSL_ENSURE( false, "Not implemented in this helper" );
+    OSL_FAIL( "Not implemented in this helper" );
     return AccessibleRole::UNKNOWN;
 }
 
 OUString SAL_CALL AccessibleTextHelper::getAccessibleDescription()
     throw (uno::RuntimeException)
 {
-    OSL_ENSURE( false, "Not implemented in this helper" );
+    OSL_FAIL( "Not implemented in this helper" );
     return OUString();
 }
 
 OUString SAL_CALL AccessibleTextHelper::getAccessibleName()
     throw (uno::RuntimeException)
 {
-    OSL_ENSURE( false, "Not implemented in this helper" );
+    OSL_FAIL( "Not implemented in this helper" );
     return OUString();
 }
 
 Reference< XAccessibleRelationSet > SAL_CALL AccessibleTextHelper::getAccessibleRelationSet()
     throw (uno::RuntimeException)
 {
-    OSL_ENSURE( false, "Not implemented in this helper" );
+    OSL_FAIL( "Not implemented in this helper" );
     return Reference< XAccessibleRelationSet >();
 }
 
 Reference< XAccessibleStateSet > SAL_CALL AccessibleTextHelper::getAccessibleStateSet()
     throw (uno::RuntimeException)
 {
-    OSL_ENSURE( false, "Not implemented in this helper" );
+    OSL_FAIL( "Not implemented in this helper" );
     return Reference< XAccessibleStateSet >();
 }
 
@@ -189,7 +189,7 @@ lang::Locale SAL_CALL AccessibleTextHelper::getLocale()
     throw (IllegalAccessibleComponentStateException,
            uno::RuntimeException)
 {
-    OSL_ENSURE( false, "Not implemented in this helper" );
+    OSL_FAIL( "Not implemented in this helper" );
     return lang::Locale();
 }
 

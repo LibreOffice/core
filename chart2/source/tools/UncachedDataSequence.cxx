@@ -266,7 +266,7 @@ void SAL_CALL UncachedDataSequence::replaceByIndex( ::sal_Int32 Index, const uno
 ::sal_Int32 SAL_CALL UncachedDataSequence::getCount()
     throw (uno::RuntimeException)
 {
-    OSL_ENSURE( false, "Implement!" );
+    OSL_FAIL( "Implement!" );
     return 0;
 }
 
@@ -275,7 +275,7 @@ uno::Any SAL_CALL UncachedDataSequence::getByIndex( ::sal_Int32 )
            lang::WrappedTargetException,
            uno::RuntimeException)
 {
-    OSL_ENSURE( false, "Implement!" );
+    OSL_FAIL( "Implement!" );
     return uno::Any();
 }
 

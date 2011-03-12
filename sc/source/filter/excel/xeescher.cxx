@@ -251,12 +251,12 @@ void XclExpDffAnchorBase::WriteData( EscherEx& rEscherEx, const Rectangle& rRect
 
 void XclExpDffAnchorBase::ImplSetFlags( const SdrObject& )
 {
-    OSL_ENSURE( false, "XclExpDffAnchorBase::ImplSetFlags - not implemented" );
+    OSL_FAIL( "XclExpDffAnchorBase::ImplSetFlags - not implemented" );
 }
 
 void XclExpDffAnchorBase::ImplCalcAnchorRect( const Rectangle&, MapUnit )
 {
-    OSL_ENSURE( false, "XclExpDffAnchorBase::ImplCalcAnchorRect - not implemented" );
+    OSL_FAIL( "XclExpDffAnchorBase::ImplCalcAnchorRect - not implemented" );
 }
 
 // ----------------------------------------------------------------------------

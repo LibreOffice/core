@@ -204,7 +204,7 @@ namespace
             catch( const uno::Exception & ex )
             {
                 (void)(ex); // no warning in non-debug builds
-                OSL_ENSURE( false, ::rtl::OUStringToOString(
+                OSL_FAIL( ::rtl::OUStringToOString(
                                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Property Exception caught. Message: " )) +
                                 ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
             }
@@ -236,7 +236,7 @@ namespace
             catch( const uno::Exception & ex )
             {
                 (void)(ex); // no warning in non-debug builds
-                OSL_ENSURE( false, ::rtl::OUStringToOString(
+                OSL_FAIL( ::rtl::OUStringToOString(
                                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Property Exception caught. Message: " )) +
                                 ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
             }
@@ -255,7 +255,7 @@ namespace
         catch( const uno::Exception & ex )
         {
             (void)(ex); // no warning in non-debug builds
-            OSL_ENSURE( false, ::rtl::OUStringToOString(
+            OSL_FAIL( ::rtl::OUStringToOString(
                             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Property Exception caught. Message: " )) +
                             ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
         }
@@ -275,7 +275,7 @@ namespace
         catch( const uno::Exception & ex )
         {
             (void)(ex); // no warning in non-debug builds
-            OSL_ENSURE( false, ::rtl::OUStringToOString(
+            OSL_FAIL( ::rtl::OUStringToOString(
                             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Property Exception caught. Message: " )) +
                             ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
         }

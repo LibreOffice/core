@@ -689,7 +689,7 @@ bool DialogModel::setData(
     if( ! xDataProvider.is() ||
         ! m_xTemplate.is() )
     {
-        OSL_ENSURE( false, "Model objects missing" );
+        OSL_FAIL( "Model objects missing" );
         return false;
     }
 

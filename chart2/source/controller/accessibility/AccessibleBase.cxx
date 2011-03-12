@@ -395,7 +395,7 @@ awt::Point AccessibleBase::GetUpperLeftOnScreen() const
             aResult = pParent->GetUpperLeftOnScreen();
         }
         else
-            OSL_ENSURE( false, "Default position used is probably incorrect." );
+            OSL_FAIL( "Default position used is probably incorrect." );
     }
 
     return aResult;

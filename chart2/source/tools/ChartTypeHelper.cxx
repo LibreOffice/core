@@ -360,7 +360,7 @@ uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedLabelPlacements( const 
     }
     else
     {
-        OSL_ENSURE( false, "unknown charttype" );
+        OSL_FAIL( "unknown charttype" );
     }
 
     return aRet;
@@ -614,7 +614,7 @@ uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedMissingValueTreatments(
     }
     else
     {
-        OSL_ENSURE( false, "unknown charttype" );
+        OSL_FAIL( "unknown charttype" );
     }
 
     return aRet;

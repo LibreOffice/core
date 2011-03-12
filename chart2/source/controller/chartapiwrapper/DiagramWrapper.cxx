@@ -563,7 +563,7 @@ OUString lcl_getDiagramType( const OUString & rTemplateServiceName )
         if( aName.indexOf( C2U("Line") ) != -1 || aName.indexOf( C2U("Symbol") ) != -1 )
             return C2U( "com.sun.star.chart.LineDiagram" );
 
-        OSL_ENSURE( false, "unknown template" );
+        OSL_FAIL( "unknown template" );
     }
 
     return OUString();
@@ -1349,7 +1349,7 @@ WrappedStackingProperty::WrappedStackingProperty( StackMode eStackMode, ::boost:
         m_aOuterName = C2U( "Deep" );
         break;
     default:
-        OSL_ENSURE( false, "unexpected stack mode" );
+        OSL_FAIL( "unexpected stack mode" );
         break;
     }
 }

@@ -422,7 +422,7 @@ void ScParameterClassification::MergeArgumentsFromFunctionResource()
             aBuf.append(rtl::OUStringToOString(*(pDesc->pFuncName), RTL_TEXTENCODING_UTF8));
             aBuf.append(": ");
             aBuf.append(nArgs);
-            OSL_ENSURE(false, aBuf.getStr());
+            OSL_FAIL( aBuf.getStr());
             nArgs = CommonData::nMaxParams;
             pRun->aData.bRepeatLast = true;
         }

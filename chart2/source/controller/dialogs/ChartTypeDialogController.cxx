@@ -269,7 +269,7 @@ rtl::OUString ChartTypeDialogController::getServiceNameForParameter( const Chart
             return (*aIter).first;
     }
 
-    OSL_ENSURE( false, "ChartType not implemented yet - use fallback to similar type" );
+    OSL_FAIL( "ChartType not implemented yet - use fallback to similar type" );
     for( sal_Int32 nMatchPrecision=1; nMatchPrecision<8; nMatchPrecision++ )
     {
         for( aIter = rMap.begin(); aIter != aEnd; ++aIter )

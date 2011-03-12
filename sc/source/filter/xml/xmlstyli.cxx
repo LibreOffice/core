@@ -394,7 +394,7 @@ void XMLTableStyleContext::SetFormula( uno::Sequence< beans::PropertyValue >& rP
             lclAppendProperty( rProps, OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_GRAMMAR2 ) ), nGrammar );
         break;
         default:
-            OSL_ENSURE( false, "XMLTableStyleContext::SetFormula - invalid formula index" );
+            OSL_FAIL( "XMLTableStyleContext::SetFormula - invalid formula index" );
     }
 }
 

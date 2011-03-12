@@ -204,7 +204,7 @@ void UndoManager::impl_undoRedo(
     }
     else
     {
-        OSL_ENSURE( false, "Can't Undo/Redo" );
+        OSL_FAIL( "Can't Undo/Redo" );
     }
 }
 

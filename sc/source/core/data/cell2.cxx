@@ -460,7 +460,7 @@ lcl_refListFormsOneRange(
         }
         else
         {
-            OSL_ENSURE(false, "lcl_checkRangeDimensions shouldn't allow that!");
+            OSL_FAIL( "lcl_checkRangeDimensions shouldn't allow that!");
             aWhich = lcl_GetRow;    // initialize to avoid warning
         }
         // Sort the references by start of range

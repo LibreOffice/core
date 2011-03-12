@@ -374,7 +374,7 @@ void ChartModel::impl_store(
     }
     else
     {
-        OSL_ENSURE( false, "No filter" );
+        OSL_FAIL( "No filter" );
     }
 
     setModified( sal_False );
@@ -605,7 +605,7 @@ void ChartModel::impl_load(
     }
     else
     {
-        OSL_ENSURE( false, "loadFromStorage cannot create filter" );
+        OSL_FAIL( "loadFromStorage cannot create filter" );
     }
 
     if( xStorage.is() )

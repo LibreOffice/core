@@ -352,7 +352,7 @@ int ScaleTabPage::DeactivatePage(SfxItemSet* pItemSet)
         nIndex = static_cast< sal_uInt32 >( static_cast< const SfxInt32Item* >(pPoolItem)->GetValue());
     else
     {
-        OSL_ENSURE( false, "Using Standard Language" );
+        OSL_FAIL( "Using Standard Language" );
     }
 
     Edit* pEdit = NULL;

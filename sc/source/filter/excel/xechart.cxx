@@ -2277,7 +2277,7 @@ void XclExpChLegend::Convert( const ScfPropertySet& rPropSet )
         }
         catch( Exception& )
         {
-            OSL_ENSURE( false, "XclExpChLegend::Convert - cannot get legend shape" );
+            OSL_FAIL( "XclExpChLegend::Convert - cannot get legend shape" );
             maData.mnDockMode = EXC_CHLEGEND_RIGHT;
         }
     }
@@ -2292,7 +2292,7 @@ void XclExpChLegend::Convert( const ScfPropertySet& rPropSet )
             case cssc2::LegendPosition_PAGE_START:   maData.mnDockMode = EXC_CHLEGEND_TOP;       break;
             case cssc2::LegendPosition_PAGE_END:     maData.mnDockMode = EXC_CHLEGEND_BOTTOM;    break;
             default:
-                OSL_ENSURE( false, "XclExpChLegend::Convert - unrecognized legend position" );
+                OSL_FAIL( "XclExpChLegend::Convert - unrecognized legend position" );
                 maData.mnDockMode = EXC_CHLEGEND_RIGHT;
         }
     }

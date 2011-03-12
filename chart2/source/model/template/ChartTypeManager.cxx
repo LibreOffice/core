@@ -563,7 +563,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartTypeManager::createInstanceWithA
     throw (uno::Exception,
            uno::RuntimeException)
 {
-    OSL_ENSURE( false, "createInstanceWithArguments: No arguments supported" );
+    OSL_FAIL( "createInstanceWithArguments: No arguments supported" );
     return createInstance( ServiceSpecifier );
 }
 

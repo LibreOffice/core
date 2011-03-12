@@ -246,7 +246,7 @@ void RangeChooserTabPage::changeDialogModelAccordingToControls()
             m_xCurrentChartTypeTemplate.set( m_pTemplateProvider->getCurrentTemplate());
         if( !m_xCurrentChartTypeTemplate.is())
         {
-            OSL_ENSURE( false, "Need a template to change data source" );
+            OSL_FAIL( "Need a template to change data source" );
             return;
         }
     }

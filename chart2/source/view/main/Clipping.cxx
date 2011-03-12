@@ -165,7 +165,7 @@ void lcl_addPointToPoly( drawing::PolyPolygonShape3D& rPoly
 {
     if(nPolygonIndex<0)
     {
-        OSL_ENSURE( false, "The polygon index needs to be > 0");
+        OSL_FAIL( "The polygon index needs to be > 0");
         nPolygonIndex=0;
     }
 

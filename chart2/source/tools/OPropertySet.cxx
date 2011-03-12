@@ -365,14 +365,14 @@ void SAL_CALL OPropertySet::getFastPropertyValue
                         }
                         else
                         {
-                            OSL_ENSURE( false,  "HandleCheck: Handle not found in Style" );
+                            OSL_FAIL(  "HandleCheck: Handle not found in Style" );
                         }
                     }
                     else
-                        OSL_ENSURE( false, "HandleCheck: Invalid XPropertySetInfo returned" );
+                        OSL_FAIL( "HandleCheck: Invalid XPropertySetInfo returned" );
                 }
                 else
-                    OSL_ENSURE( false, "HandleCheck: XPropertySet not supported" );
+                    OSL_FAIL( "HandleCheck: XPropertySet not supported" );
             }
 #endif
             rValue = xStylePropSet->getFastPropertyValue( nHandle );

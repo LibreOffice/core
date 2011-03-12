@@ -395,7 +395,7 @@ IMPL_LINK( ErrorBarResources, CategoryChosen, void *,  )
     }
     else
     {
-        OSL_ENSURE( false, "Unknown category chosen" );
+        OSL_FAIL( "Unknown category chosen" );
         m_bErrorKindUnique = false;
     }
 

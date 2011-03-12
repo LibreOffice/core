@@ -159,7 +159,7 @@ XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
     }
     catch( Exception& )
     {
-        OSL_ENSURE( false, "XclRootData::XclRootData - cannot get output device info" );
+        OSL_FAIL( "XclRootData::XclRootData - cannot get output device info" );
     }
 }
 

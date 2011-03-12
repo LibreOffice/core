@@ -38,7 +38,7 @@
 */
 #if OSL_DEBUG_LEVEL > 0
 #define ASSERT_EXCEPTION(ex)                   \
-  OSL_ENSURE( false, ::rtl::OUStringToOString( \
+  OSL_FAIL( ::rtl::OUStringToOString( \
     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Exception caught. Type: " )) +\
     ::rtl::OUString::createFromAscii( typeid( ex ).name()) +\
     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ", Message: " )) +\

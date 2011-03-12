@@ -456,7 +456,7 @@ void SAL_CALL Diagram::addCoordinateSystem(
 
         if( m_aCoordSystems.size()>=1 )
         {
-            OSL_ENSURE( false, "more than one coordinatesystem is not supported yet by the fileformat" );
+            OSL_FAIL( "more than one coordinatesystem is not supported yet by the fileformat" );
             return;
         }
         m_aCoordSystems.push_back( aCoordSys );

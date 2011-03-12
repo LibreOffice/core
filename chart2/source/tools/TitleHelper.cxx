@@ -93,7 +93,7 @@ uno::Reference< XTitled > lcl_getTitleParentFromDiagram(
 
         case TitleHelper::MAIN_TITLE:
         default:
-            OSL_ENSURE( false, "Unsupported Title-Type requested" );
+            OSL_FAIL( "Unsupported Title-Type requested" );
             break;
     }
 
@@ -125,7 +125,7 @@ uno::Reference< XTitled > lcl_getTitleParent( TitleHelper::eTitleType nTitleInde
             xResult.set( lcl_getTitleParentFromDiagram( nTitleIndex, xDiagram ));
             break;
         default:
-            OSL_ENSURE( false, "Unsupported Title-Type requested" );
+            OSL_FAIL( "Unsupported Title-Type requested" );
             break;
     }
 

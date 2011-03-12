@@ -263,7 +263,7 @@ void SAL_CALL TitleWrapper::setSize( const awt::Size& /*aSize*/ )
     throw (beans::PropertyVetoException,
            uno::RuntimeException)
 {
-    OSL_ENSURE( false, "trying to set size of title" );
+    OSL_FAIL( "trying to set size of title" );
 }
 
 // ____ XShapeDescriptor (base of XShape) ____

@@ -690,7 +690,7 @@ bool ControllerCommandDispatch::commandAvailable( const OUString & rCommand )
     ::std::map< OUString, bool >::const_iterator aIt( m_aCommandAvailability.find( rCommand ));
     if( aIt != m_aCommandAvailability.end())
         return aIt->second;
-    OSL_ENSURE( false, "commandAvailable: command not in availability map" );
+    OSL_FAIL( "commandAvailable: command not in availability map" );
     return false;
 }
 

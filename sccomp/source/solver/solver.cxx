@@ -470,7 +470,7 @@ void SAL_CALL SolverComponent::solve() throw(uno::RuntimeException)
                 case sheet::SolverConstraintOperator_GREATER_EQUAL: nConstrType = GE; break;
                 case sheet::SolverConstraintOperator_EQUAL:         nConstrType = EQ; break;
                 default:
-                    OSL_ENSURE( false, "unexpected enum type" );
+                    OSL_FAIL( "unexpected enum type" );
             }
             add_constraint( lp, pValues, nConstrType, fRightValue );
 

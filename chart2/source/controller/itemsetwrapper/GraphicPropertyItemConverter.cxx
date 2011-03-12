@@ -733,7 +733,7 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
                     }
                     else
                     {
-                        OSL_ENSURE( false, "Wrong type in Transparency Any" );
+                        OSL_FAIL( "Wrong type in Transparency Any" );
                     }
                 }
             }
@@ -778,7 +778,7 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
                     }
                     else
                     {
-                        OSL_ENSURE( false, "Wrong type in Transparency Any" );
+                        OSL_FAIL( "Wrong type in Transparency Any" );
                     }
                 }
             }

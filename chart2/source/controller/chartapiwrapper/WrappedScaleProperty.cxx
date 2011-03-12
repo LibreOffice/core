@@ -99,7 +99,7 @@ WrappedScaleProperty::WrappedScaleProperty( tScaleProperty eScaleProperty
             m_aOuterName = C2U("ReverseDirection");
             break;
         default:
-            OSL_ENSURE(false,"unknown scale property");
+            OSL_FAIL("unknown scale property");
             break;
     }
 }
@@ -300,7 +300,7 @@ void WrappedScaleProperty::setPropertyValue( tScaleProperty eScaleProperty, cons
         }
         default:
         {
-            OSL_ENSURE(false,"unknown scale property");
+            OSL_FAIL("unknown scale property");
             break;
         }
     }
@@ -499,7 +499,7 @@ Any WrappedScaleProperty::getPropertyValue( tScaleProperty eScaleProperty, const
         }
         default:
         {
-            OSL_ENSURE(false,"unknown scale property");
+            OSL_FAIL("unknown scale property");
             break;
         }
     }

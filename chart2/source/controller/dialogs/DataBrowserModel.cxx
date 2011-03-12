@@ -441,7 +441,7 @@ void DataBrowserModel::insertComplexCategoryLevel( sal_Int32 nAfterColumnIndex )
 
         if(nAfterColumnIndex<0)
         {
-            OSL_ENSURE( false, "wrong index for category level insertion" );
+            OSL_FAIL( "wrong index for category level insertion" );
             return;
         }
 

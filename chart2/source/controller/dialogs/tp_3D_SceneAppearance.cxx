@@ -317,7 +317,7 @@ IMPL_LINK( ThreeD_SceneAppearance_TabPage, SelectSchemeHdl, void*, EMPTYARG )
             ThreeDHelper::setScheme( xDiagram, ThreeDLookScheme_Simple );
         else
         {
-            OSL_ENSURE( false, "Invalid Entry selected" );
+            OSL_FAIL( "Invalid Entry selected" );
         }
     }
 

@@ -110,7 +110,7 @@ awt::Point SAL_CALL AreaWrapper::getPosition()
 void SAL_CALL AreaWrapper::setPosition( const awt::Point& /*aPosition*/ )
     throw (uno::RuntimeException)
 {
-    OSL_ENSURE( false, "trying to set position of chart area" );
+    OSL_FAIL( "trying to set position of chart area" );
 }
 
 awt::Size SAL_CALL AreaWrapper::getSize()
@@ -123,7 +123,7 @@ void SAL_CALL AreaWrapper::setSize( const awt::Size& /*aSize*/ )
     throw (beans::PropertyVetoException,
            uno::RuntimeException)
 {
-    OSL_ENSURE( false, "trying to set size of chart area" );
+    OSL_FAIL( "trying to set size of chart area" );
 }
 
 // ____ XShapeDescriptor (base of XShape) ____
@@ -166,7 +166,7 @@ Reference< beans::XPropertySet > AreaWrapper::getInnerPropertySet()
     Reference< chart2::XChartDocument > xChartDoc( m_spChart2ModelContact->getChart2Document() );
     if( xChartDoc.is() )
         return xChartDoc->getPageBackground();
-    OSL_ENSURE(false,"AreaWrapper::getInnerPropertySet() is NULL");
+    OSL_FAIL("AreaWrapper::getInnerPropertySet() is NULL");
     return 0;
 }
 

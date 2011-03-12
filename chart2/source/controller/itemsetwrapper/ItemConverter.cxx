@@ -143,7 +143,7 @@ void ItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
                     catch( beans::UnknownPropertyException &ex )
                     {
                         delete pItem;
-                        OSL_ENSURE( false,
+                        OSL_FAIL(
                                     ::rtl::OUStringToOString(
                                         ex.Message +
                                         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
@@ -175,14 +175,14 @@ void ItemConverter::FillSpecialItem(
     USHORT /*nWhichId*/, SfxItemSet & /*rOutItemSet*/ ) const
     throw( uno::Exception )
 {
-    OSL_ENSURE( false, "ItemConverter: Unhandled special item found!" );
+    OSL_FAIL( "ItemConverter: Unhandled special item found!" );
 }
 
 bool ItemConverter::ApplySpecialItem(
     USHORT /*nWhichId*/, const SfxItemSet & /*rItemSet*/ )
     throw( uno::Exception )
 {
-    OSL_ENSURE( false, "ItemConverter: Unhandled special item found!" );
+    OSL_FAIL( "ItemConverter: Unhandled special item found!" );
     return false;
 }
 
@@ -214,7 +214,7 @@ bool ItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
                 }
                 catch( beans::UnknownPropertyException &ex )
                 {
-                    OSL_ENSURE( false,
+                    OSL_FAIL(
                                 ::rtl::OUStringToOString(
                                     ex.Message +
                                     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
@@ -223,7 +223,7 @@ bool ItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
                 }
                 catch( uno::Exception &ex )
                 {
-                    OSL_ENSURE( false, ::rtl::OUStringToOString(
+                    OSL_FAIL( ::rtl::OUStringToOString(
                                     ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
                 }
             }
