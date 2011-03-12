@@ -85,7 +85,7 @@ namespace connectivity
                     catch(const Exception& e)
                     {
                         OSL_UNUSED( e );
-                        OSL_ENSURE(0,"Could not dispose OutputStream");
+                        OSL_FAIL("Could not dispose OutputStream");
                     }
                     m_xOutputStream.clear();
                 }
@@ -93,7 +93,7 @@ namespace connectivity
             catch(Exception& ex)
             {
                 OSL_UNUSED( ex );
-                OSL_ENSURE(0,"Exception catched!");
+                OSL_FAIL("Exception catched!");
             }
         }
         // -----------------------------------------------------------------------------
@@ -158,7 +158,7 @@ namespace connectivity
             if (JNI_FALSE != env->ExceptionCheck())
             {
                 env->ExceptionClear();
-                OSL_ENSURE(0,"ExceptionClear");
+                OSL_FAIL("ExceptionClear");
             }
             ::rtl::OUString aStr;
             if ( jstr )
@@ -175,7 +175,7 @@ namespace connectivity
             if (JNI_FALSE != env->ExceptionCheck())
             {
                 env->ExceptionClear();
-                OSL_ENSURE(0,"ExceptionClear");
+                OSL_FAIL("ExceptionClear");
             }
             return aStr;
         }

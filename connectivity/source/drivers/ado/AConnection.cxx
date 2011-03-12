@@ -355,7 +355,7 @@ void SAL_CALL OConnection::setTransactionIsolation( sal_Int32 level ) throw(SQLE
             eIso = adXactSerializable;
             break;
         default:
-            OSL_ENSURE(0,"OConnection::setTransactionIsolation invalid level");
+            OSL_FAIL("OConnection::setTransactionIsolation invalid level");
             return;
     }
     m_pAdoConnection->put_IsolationLevel(eIso);
@@ -387,7 +387,7 @@ sal_Int32 SAL_CALL OConnection::getTransactionIsolation(  ) throw(SQLException, 
             nRet = TransactionIsolation::SERIALIZABLE;
             break;
         default:
-            OSL_ENSURE(0,"OConnection::setTransactionIsolation invalid level");
+            OSL_FAIL("OConnection::setTransactionIsolation invalid level");
     }
     ADOS::ThrowException(*m_pAdoConnection,*this);
     return nRet;

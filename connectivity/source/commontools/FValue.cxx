@@ -260,7 +260,7 @@ void ORowSetValue::setTypeKind(sal_Int32 _eType)
                 break;
             default:
                 (*this) = getAny();
-                OSL_ENSURE(0,"ORowSetValue:operator==(): UNSPUPPORTED TYPE!");
+                OSL_FAIL("ORowSetValue:operator==(): UNSPUPPORTED TYPE!");
         }
     }
 
@@ -865,7 +865,7 @@ bool ORowSetValue::operator==(const ORowSetValue& _rRH) const
             break;
         default:
             bRet = false;
-            OSL_ENSURE(0,"ORowSetValue::operator==(): UNSPUPPORTED TYPE!");
+            OSL_FAIL("ORowSetValue::operator==(): UNSPUPPORTED TYPE!");
             break;
     }
     return bRet;
@@ -958,7 +958,7 @@ Any ORowSetValue::makeAny() const
                 }
                 break;
             default:
-                OSL_ENSURE(0,"ORowSetValue::makeAny(): UNSPUPPORTED TYPE!");
+                OSL_FAIL("ORowSetValue::makeAny(): UNSPUPPORTED TYPE!");
                 rValue = getAny();
                 break;
         }
@@ -2326,7 +2326,7 @@ void ORowSetValue::fill(const Any& _rValue)
             break;
 
         default:
-            OSL_ENSURE(0,"Unknown type");
+            OSL_FAIL("Unknown type");
             break;
     }
 }

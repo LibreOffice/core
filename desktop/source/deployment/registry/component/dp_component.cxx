@@ -1340,7 +1340,7 @@ void BackendImpl::ComponentPackageImpl::processPackage_(
                     xSet->insert( Any(xFactory) );
                 } // ignore if factory has already been inserted:
                 catch (container::ElementExistException &) {
-                    OSL_ENSURE( 0, "### factory already registered?" );
+                    OSL_FAIL( "### factory already registered?" );
                 }
             }
 
@@ -1375,8 +1375,8 @@ void BackendImpl::ComponentPackageImpl::processPackage_(
                             xRootContext->insertByName( name, Any() );
                         } catch (container::ElementExistException & exc) {
                             (void) exc; // avoid warnings
-                            OSL_ENSURE(
-                                0, OUStringToOString(
+                            OSL_FAIL(
+                                OUStringToOString(
                                     exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
                             xRootContext->replaceByName( name, Any() );
                         }
@@ -1460,8 +1460,8 @@ void BackendImpl::ComponentPackageImpl::processPackage_(
                         }
                         catch (container::NoSuchElementException & exc) {
                             (void) exc; // avoid warnings
-                            OSL_ENSURE(
-                                0, OUStringToOString(
+                            OSL_FAIL(
+                                OUStringToOString(
                                     exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
                         }
                     }

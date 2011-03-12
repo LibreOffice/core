@@ -603,7 +603,7 @@ OUString PackageManagerImpl::detectMediaType(
             if (throw_exc)
                 throw;
             (void) exc;
-            OSL_ENSURE( 0, ::rtl::OUStringToOString(
+            OSL_FAIL( ::rtl::OUStringToOString(
                             exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
         }
     }
@@ -1076,13 +1076,13 @@ PackageManagerImpl::getDeployedPackages_(
         catch (lang::IllegalArgumentException & exc) {
             // ignore
             (void) exc; // avoid warnings
-            OSL_ENSURE( 0, ::rtl::OUStringToOString(
+            OSL_FAIL( ::rtl::OUStringToOString(
                             exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
         }
         catch (deployment::DeploymentException& exc) {
             // ignore
             (void) exc; // avoid warnings
-            OSL_ENSURE( 0, ::rtl::OUStringToOString(
+            OSL_FAIL( ::rtl::OUStringToOString(
                             exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
         }
     }

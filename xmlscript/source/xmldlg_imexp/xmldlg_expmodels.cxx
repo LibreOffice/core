@@ -256,7 +256,7 @@ void ElementDescriptor::readButtonModel( StyleBag * all_styles )
                           OUString( RTL_CONSTASCII_USTRINGPARAM("true") ) );
             break;
         default:
-            OSL_ENSURE( 0, "### unexpected radio state!" );
+            OSL_FAIL( "### unexpected radio state!" );
             break;
         }
     }
@@ -325,7 +325,7 @@ void ElementDescriptor::readCheckBoxModel( StyleBag * all_styles )
             OSL_ENSURE( bTriState, "### detected tristate value, but TriState is not set!" );
             break;
         default:
-            OSL_ENSURE( 0, "### unexpected checkbox state!" );
+            OSL_FAIL( "### unexpected checkbox state!" );
             break;
         }
     }
@@ -532,7 +532,7 @@ void ElementDescriptor::readRadioButtonModel( StyleBag * all_styles  )
                           OUString( RTL_CONSTASCII_USTRINGPARAM("true") ) );
             break;
         default:
-            OSL_ENSURE( 0, "### unexpected radio state!" );
+            OSL_FAIL( "### unexpected radio state!" );
             break;
         }
     }

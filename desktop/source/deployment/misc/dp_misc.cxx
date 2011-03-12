@@ -160,7 +160,7 @@ bool compareExtensionFolderWithLastSynchronizedFile(
     }
     else if (err1 != ::osl::File::E_None)
     {
-        OSL_ENSURE(0, "Cannot access extension folder");
+        OSL_FAIL("Cannot access extension folder");
         return true; //sync just in case
     }
 
@@ -174,7 +174,7 @@ bool compareExtensionFolderWithLastSynchronizedFile(
     }
     else if (err2 != ::osl::File::E_None)
     {
-        OSL_ENSURE(0, "Cannot access file lastsynchronized");
+        OSL_FAIL("Cannot access file lastsynchronized");
         return true; //sync just in case
     }
 
@@ -389,7 +389,7 @@ bool office_is_running()
     }
     else
     {
-        OSL_ENSURE(0, "NOT osl_Process_E_None ");
+        OSL_FAIL("NOT osl_Process_E_None ");
         //if osl_getExecutable file than we take the risk of creating a pipe
         ret =  existsOfficePipe();
     }

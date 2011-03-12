@@ -198,7 +198,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
             }
             else
             {
-                OSL_ENSURE(0,"OConnection::construct: ::ucbhelper::Content isn't a folde nor a document! How that?!");
+                OSL_FAIL("OConnection::construct: ::ucbhelper::Content isn't a folde nor a document! How that?!");
                 throw SQLException();
             }
         }

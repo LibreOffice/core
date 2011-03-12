@@ -894,7 +894,7 @@ void ExtensionCmdQueue::Thread::_addExtension( ::rtl::Reference< ProgressCmdEnv 
     OUString sName;
     if ( ! (anyTitle >>= sName) )
     {
-        OSL_ENSURE(0, "Could not get file name for extension.");
+        OSL_FAIL("Could not get file name for extension.");
         return;
     }
 

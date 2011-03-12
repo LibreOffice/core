@@ -344,7 +344,7 @@ void JavaMigration::migrateJavarc()
         {
             if (jfw_setSelectedJRE(aInfo) != JFW_E_NONE)
             {
-                OSL_ENSURE(0, "[Service implementation " IMPL_NAME
+                OSL_FAIL("[Service implementation " IMPL_NAME
                            "] XJob::execute: jfw_setSelectedJRE failed.");
                 fprintf(stderr, "\nCannot migrate Java. An error occurred.\n");
             }

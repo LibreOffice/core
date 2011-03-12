@@ -2352,7 +2352,7 @@ IMPL_LINK(FmXFormShell, OnFoundData, FmFoundRecordInformation*, pfriWhere)
     }
     catch(const SQLException&)
     {
-        OSL_ENSURE(0,"Can position on bookmark!");
+        OSL_FAIL("Can position on bookmark!");
     }
 
     LoopGrids(GA_FORCE_SYNC);
@@ -2435,7 +2435,7 @@ IMPL_LINK(FmXFormShell, OnCanceledNotFound, FmFoundRecordInformation*, pfriWhere
     }
     catch(const SQLException&)
     {
-        OSL_ENSURE(0,"Can position on bookmark!");
+        OSL_FAIL("Can position on bookmark!");
     }
 
 

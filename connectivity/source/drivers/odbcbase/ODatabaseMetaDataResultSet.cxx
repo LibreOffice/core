@@ -795,7 +795,7 @@ void ODatabaseMetaDataResultSet::setFastPropertyValue_NoBroadcast( sal_Int32 nHa
         case PROPERTY_ID_FETCHSIZE:
             throw Exception();
         default:
-            OSL_ENSURE(0,"setFastPropertyValue_NoBroadcast: Illegal handle value!");
+            OSL_FAIL("setFastPropertyValue_NoBroadcast: Illegal handle value!");
     }
 }
 // -------------------------------------------------------------------------

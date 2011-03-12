@@ -216,7 +216,7 @@ using namespace ::com::sun::star::beans;
         }
         catch ( const Exception&  )
         {
-            OSL_ENSURE(0,"TypeConversion Error");
+            OSL_FAIL("TypeConversion Error");
         }
     }
     else

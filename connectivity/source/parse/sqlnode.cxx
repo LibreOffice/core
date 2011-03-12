@@ -775,7 +775,7 @@ sal_Bool OSQLParseNode::getTableComponents(const OSQLParseNode* _pTableNode,
         }
         else
         {
-            OSL_ENSURE(0,"Error in parse tree!");
+            OSL_FAIL("Error in parse tree!");
         }
     }
     return _rTable.getLength() != 0;
@@ -1216,7 +1216,7 @@ OSQLParseNode* OSQLParser::predicateTree(::rtl::OUString& rErrorMessage, const :
             }
             catch ( Exception& )
             {
-                OSL_ENSURE(0,"DateFormatKey");
+                OSL_FAIL("DateFormatKey");
             }
         }
 

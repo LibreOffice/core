@@ -512,7 +512,7 @@ void SAL_CALL OPoolCollection::disposing( const EventObject& Source ) throw (Run
         }
         catch(const Exception&)
         {
-            OSL_ENSURE(0,"Exception caught");
+            OSL_FAIL("Exception caught");
         }
     }
 }

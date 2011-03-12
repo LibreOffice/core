@@ -1119,7 +1119,7 @@ Reference< XResultSet > SAL_CALL MacabDatabaseMetaData::getCrossReference(
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL MacabDatabaseMetaData::getUDTs( const Any&, const ::rtl::OUString&, const ::rtl::OUString&, const Sequence< sal_Int32 >& ) throw(SQLException, RuntimeException)
 {
-    OSL_ENSURE(0,"Not implemented yet!");
+    OSL_FAIL("Not implemented yet!");
     throw SQLException();
 }
 // -----------------------------------------------------------------------------

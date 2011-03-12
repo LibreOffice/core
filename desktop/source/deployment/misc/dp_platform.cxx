@@ -202,7 +202,7 @@ namespace
             ret = checkOSandCPU(OUSTR("DragonFly"), OUSTR("X86_64"));
         else
         {
-            OSL_ENSURE(0, "Extension Manager: The extension supports an unknown platform. "
+            OSL_FAIL("Extension Manager: The extension supports an unknown platform. "
             "Check the platform element in the description.xml");
             ret = false;
         }

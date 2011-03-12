@@ -247,7 +247,7 @@ sal_Int32 OSkipDeletedSet::getMappedPosition(sal_Int32 _nPos) const
     /*TInt2IntMap::const_iterator aFind = m_aBookmarks.find(_nPos);
     OSL_ENSURE(aFind != m_aBookmarks.end(),"OSkipDeletedSet::getMappedPosition() invalid bookmark!");
     return aFind->second;*/
-    OSL_ENSURE(0,"Why!");
+    OSL_FAIL("Why!");
     return -1;
 }
 // -----------------------------------------------------------------------------

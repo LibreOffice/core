@@ -254,7 +254,7 @@ static bool impl_checkDependencies( const uno::Reference< uno::XComponentContext
 
     if ( !xExtensionManager.is() )
     {
-        OSL_ENSURE( 0, "Could not get the Extension Manager!" );
+        OSL_FAIL( "Could not get the Extension Manager!" );
         return true;
     }
 
@@ -301,7 +301,7 @@ static bool impl_checkDependencies( const uno::Reference< uno::XComponentContext
                 catch ( uno::RuntimeException & ) { throw; }
                 catch ( uno::Exception & exc) {
                     (void) exc;
-                    OSL_ENSURE( 0, ::rtl::OUStringToOString( exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+                    OSL_FAIL( ::rtl::OUStringToOString( exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
                 }
 
                 if ( bRegistered )

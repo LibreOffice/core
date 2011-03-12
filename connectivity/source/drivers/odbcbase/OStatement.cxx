@@ -64,7 +64,7 @@ using namespace ::comphelper;
     }                                   \
     catch(SQLException&)                \
     {                                   \
-        OSL_ENSURE(0,"Exception in odbc catched"); \
+        OSL_FAIL("Exception in odbc catched"); \
     }
 #endif
 

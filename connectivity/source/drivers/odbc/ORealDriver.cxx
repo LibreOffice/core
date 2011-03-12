@@ -330,7 +330,7 @@ oslGenericFunction ORealObdcDriver::getOdbcFunction(sal_Int32 _nIndex) const
             pFunction = (oslGenericFunction)pODBC3SQLNativeSql;
             break;
         default:
-            OSL_ENSURE(0,"Function unknown!");
+            OSL_FAIL("Function unknown!");
     }
     return pFunction;
 }

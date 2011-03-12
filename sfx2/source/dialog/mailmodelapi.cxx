@@ -392,7 +392,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocument( const ::rtl::OUString& _sAt
     }
     catch(Exception&)
     {
-        OSL_ENSURE(0,"Exception catched!");
+        OSL_FAIL("Exception catched!");
     }
 
     return eRet;
@@ -453,7 +453,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocAsPDF( const ::rtl::OUString& _sAt
     }
     catch(Exception&)
     {
-        OSL_ENSURE(0,"Exception catched!");
+        OSL_FAIL("Exception catched!");
     }
 
     return eRet;

@@ -70,7 +70,7 @@ ORowSetValue OOp_DayOfWeek::operate(const ORowSetValue& lhs) const
             nRet = 1;
             break;
         default:
-            OSL_ENSURE(0,"Error in enum values for date");
+            OSL_FAIL("Error in enum values for date");
     }
     return nRet;
 }
@@ -136,7 +136,7 @@ ORowSetValue OOp_DayName::operate(const ORowSetValue& lhs) const
             sRet = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Sunday"));
             break;
         default:
-            OSL_ENSURE(0,"Error in enum values for date");
+            OSL_FAIL("Error in enum values for date");
     }
     return sRet;
 }

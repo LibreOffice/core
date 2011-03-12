@@ -61,7 +61,7 @@ OCatalog::OCatalog(const Reference< XConnection> &_xConnection) : OCatalog_BASE(
     }
     catch(const Exception&)
     {
-        OSL_ENSURE(0,"No Metadata available!");
+        OSL_FAIL("No Metadata available!");
     }
 }
 //-----------------------------------------------------------------------------

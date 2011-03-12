@@ -464,7 +464,7 @@ static bool needsSynchronization(
     }
     else if (err1 != ::osl::File::E_None)
     {
-        OSL_ENSURE(0, "Cannot access lastsynchronized in user layer");
+        OSL_FAIL("Cannot access lastsynchronized in user layer");
         return true; //sync just in case
     }
 
@@ -478,7 +478,7 @@ static bool needsSynchronization(
     }
     else if (err2 != ::osl::File::E_None)
     {
-        OSL_ENSURE(0, "Cannot access file lastsynchronized in base layer");
+        OSL_FAIL("Cannot access file lastsynchronized in base layer");
         return true; //sync just in case
     }
 
@@ -674,7 +674,7 @@ void Desktop::Init()
     // We need to have service factory before going further.
     if( !::comphelper::getProcessServiceFactory().is())
     {
-        OSL_ENSURE(0, "Service factory should have been crated in soffice_main().");
+        OSL_FAIL("Service factory should have been crated in soffice_main().");
         SetBootstrapError( BE_UNO_SERVICEMANAGER );
     }
 

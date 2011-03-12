@@ -499,7 +499,7 @@ SharedConnection lcl_connectRowSet(const Reference< XRowSet>& _rxRowSet, const R
             }
             catch(Exception&)
             {
-                OSL_ENSURE(0,"EXception when we set the new active connection!");
+                OSL_FAIL("EXception when we set the new active connection!");
             }
         }
     }
@@ -1546,12 +1546,12 @@ void showError(const SQLExceptionInfo& _rInfo,
                 xErrorDialog->execute();
             else
             {
-                OSL_ENSURE(0,"dbtools::showError: no XExecutableDialog found!");
+                OSL_FAIL("dbtools::showError: no XExecutableDialog found!");
             }
         }
         catch(Exception&)
         {
-            OSL_ENSURE(0,"showError: could not display the error message!");
+            OSL_FAIL("showError: could not display the error message!");
         }
     }
 }

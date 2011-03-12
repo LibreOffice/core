@@ -61,7 +61,7 @@ void PersistentMap::throw_rtexc( int err, char const * pmsg ) const
     buf.append( OUString( msg.getStr(), msg.getLength(),
                           osl_getThreadTextEncoding() ) );
     const OUString msg_(buf.makeStringAndClear());
-    OSL_ENSURE( 0, rtl::OUStringToOString(
+    OSL_FAIL( rtl::OUStringToOString(
                     msg_, RTL_TEXTENCODING_UTF8 ).getStr() );
     throw RuntimeException( msg_, Reference<XInterface>() );
 }
@@ -74,7 +74,7 @@ PersistentMap::~PersistentMap()
     }
     catch (DbException & exc) {
         (void) exc; // avoid warnings
-        OSL_ENSURE( 0, DbEnv::strerror( exc.get_errno() ) );
+        OSL_FAIL( DbEnv::strerror( exc.get_errno() ) );
     }
 }
 

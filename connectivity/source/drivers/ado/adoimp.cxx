@@ -132,7 +132,7 @@ sal_Int32 ADOS::MapADOType2Jdbc(DataTypeEnum eType)
         case adVariant:
                                     nType = DataType::OTHER;        break;
         default:
-            OSL_ENSURE(0,"MapADOType2Jdbc: Unknown Type!");
+            OSL_FAIL("MapADOType2Jdbc: Unknown Type!");
             ;
     }
     return nType;
@@ -164,7 +164,7 @@ DataTypeEnum ADOS::MapJdbc2ADOType(sal_Int32 _nType,sal_Int32 _nJetEngine)
         case DataType::TINYINT:         return isJetEngine(_nJetEngine) ? adUnsignedTinyInt : adTinyInt;break;
         case DataType::OBJECT:          return adGUID;      break;
     default:
-        OSL_ENSURE(0,"MapJdbc2ADOType: Unknown Type!");
+        OSL_FAIL("MapJdbc2ADOType: Unknown Type!");
             ;
     }
     return adEmpty;

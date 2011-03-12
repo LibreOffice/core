@@ -101,7 +101,7 @@ struct ProviderRequest
         }
         catch(::com::sun::star::uno::Exception)
         {
-            OSL_ENSURE(0,"Service Creation Exception");
+            OSL_FAIL("Service Creation Exception");
         }
         return xRet.is();
     }

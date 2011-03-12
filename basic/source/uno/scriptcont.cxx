@@ -198,7 +198,7 @@ void SAL_CALL SfxScriptLibraryContainer::writeLibraryElement
             OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer") ) ), UNO_QUERY );
     if( !xHandler.is() )
     {
-        OSL_ENSURE( 0, "### couln't create sax-writer component\n" );
+        OSL_FAIL( "### couln't create sax-writer component\n" );
         return;
     }
 
@@ -255,7 +255,7 @@ Any SAL_CALL SfxScriptLibraryContainer::importLibraryElement
         OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser") ) ), UNO_QUERY );
     if( !xParser.is() )
     {
-        OSL_ENSURE( 0, "### couln't create sax parser component\n" );
+        OSL_FAIL( "### couln't create sax parser component\n" );
         return aRetAny;
     }
 
@@ -943,7 +943,7 @@ sal_Bool SfxScriptLibraryContainer::implLoadPasswordLibrary
             }
             catch( uno::Exception& )
             {
-                OSL_ENSURE( 0, "### couln't open sub storage for library\n" );
+                OSL_FAIL( "### couln't open sub storage for library\n" );
                 return sal_False;
             }
         }

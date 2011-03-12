@@ -443,7 +443,7 @@ void write_to_storage_stream_from_buffer( JNIEnv* env, jobject /*obj_this*/, jst
             if (JNI_FALSE != env->ExceptionCheck())
             {
                 env->ExceptionClear();
-                OSL_ENSURE(0,"ExceptionClear");
+                OSL_FAIL("ExceptionClear");
             }
             OSL_ENSURE(buf,"buf is NULL");
             if ( buf && len > 0 && len <= env->GetArrayLength(buffer))
@@ -466,7 +466,7 @@ void write_to_storage_stream_from_buffer( JNIEnv* env, jobject /*obj_this*/, jst
     }
     catch(Exception& e)
     {
-        OSL_ENSURE(0,"Exception caught! : write [BII)V");
+        OSL_FAIL("Exception caught! : write [BII)V");
         StorageContainer::throwJavaException(e,env);
     }
 }
@@ -525,7 +525,7 @@ void write_to_storage_stream( JNIEnv* env, jobject /*obj_this*/, jstring name, j
     }
     catch(Exception& e)
     {
-        OSL_ENSURE(0,"Exception catched! : writeBytes(aData);");
+        OSL_FAIL("Exception catched! : writeBytes(aData);");
         StorageContainer::throwJavaException(e,env);
     }
 }

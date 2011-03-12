@@ -874,7 +874,7 @@ void SfxFrame::CreateWorkWindow_Impl()
         }
         catch(Exception&)
         {
-            OSL_ENSURE(0,"SfxFrame::CreateWorkWindow_Impl: Exception cachted. Please try to submit a repoducable bug !");
+            OSL_FAIL("SfxFrame::CreateWorkWindow_Impl: Exception cachted. Please try to submit a repoducable bug !");
         }
     }
 

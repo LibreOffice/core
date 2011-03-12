@@ -763,7 +763,7 @@ sal_Int32 getTablePrivileges(const Reference< XDatabaseMetaData>& _xMetaData,
                             Privilege::INSERT       |
                             Privilege::SELECT;
         else
-            OSL_ENSURE(0,"Could not collect the privileges !");
+            OSL_FAIL("Could not collect the privileges !");
     }
     return nPrivileges;
 }

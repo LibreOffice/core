@@ -160,7 +160,7 @@ Reference< xml::sax::XAttributeList > Style::createElement()
             break;
         }
         default:
-            OSL_ENSURE( 0, "### unexpected border value!" );
+            OSL_FAIL( "### unexpected border value!" );
             break;
         }
     }
@@ -183,7 +183,7 @@ Reference< xml::sax::XAttributeList > Style::createElement()
                                   OUSTR("simple") );
             break;
         default:
-            OSL_ENSURE( 0, "### unexpected visual effect value!" );
+            OSL_FAIL( "### unexpected visual effect value!" );
             break;
         }
     }
@@ -247,7 +247,7 @@ Reference< xml::sax::XAttributeList > Style::createElement()
                                       OUString( RTL_CONSTASCII_USTRINGPARAM("system") ) );
                 break;
             default:
-                OSL_ENSURE( 0, "### unexpected font-family!" );
+                OSL_FAIL( "### unexpected font-family!" );
                 break;
             }
         }
@@ -297,7 +297,7 @@ Reference< xml::sax::XAttributeList > Style::createElement()
                                       OUString( RTL_CONSTASCII_USTRINGPARAM("symbol") ) );
                 break;
             default:
-                OSL_ENSURE( 0, "### unexpected font-charset!" );
+                OSL_FAIL( "### unexpected font-charset!" );
                 break;
             }
         }
@@ -315,7 +315,7 @@ Reference< xml::sax::XAttributeList > Style::createElement()
                                       OUString( RTL_CONSTASCII_USTRINGPARAM("variable") ) );
                 break;
             default:
-                OSL_ENSURE( 0, "### unexpected font-pitch!" );
+                OSL_FAIL( "### unexpected font-pitch!" );
                 break;
             }
         }
@@ -353,7 +353,7 @@ Reference< xml::sax::XAttributeList > Style::createElement()
                                       OUString( RTL_CONSTASCII_USTRINGPARAM("reverse_italic") ) );
                 break;
             default:
-                OSL_ENSURE( 0, "### unexpected font-slant!" );
+                OSL_FAIL( "### unexpected font-slant!" );
                 break;
             }
         }
@@ -431,7 +431,7 @@ Reference< xml::sax::XAttributeList > Style::createElement()
                                       OUString( RTL_CONSTASCII_USTRINGPARAM("boldwave") ) );
                 break;
             default:
-                OSL_ENSURE( 0, "### unexpected font-underline!" );
+                OSL_FAIL( "### unexpected font-underline!" );
                 break;
             }
         }
@@ -461,7 +461,7 @@ Reference< xml::sax::XAttributeList > Style::createElement()
                                       OUString( RTL_CONSTASCII_USTRINGPARAM("x") ) );
                 break;
             default:
-                OSL_ENSURE( 0, "### unexpected font-strikeout!" );
+                OSL_FAIL( "### unexpected font-strikeout!" );
                 break;
             }
         }
@@ -501,7 +501,7 @@ Reference< xml::sax::XAttributeList > Style::createElement()
                                       OUString( RTL_CONSTASCII_USTRINGPARAM("scalable") ) );
                 break;
             default:
-                OSL_ENSURE( 0, "### unexpected font-type!" );
+                OSL_FAIL( "### unexpected font-type!" );
                 break;
             }
         }
@@ -523,7 +523,7 @@ Reference< xml::sax::XAttributeList > Style::createElement()
                 OUString( RTL_CONSTASCII_USTRINGPARAM("engraved") ) );
             break;
         default:
-            OSL_ENSURE( 0, "### unexpected font-relief!" );
+            OSL_FAIL( "### unexpected font-relief!" );
             break;
         }
         // dialog:font-emphasismark (none|dot|circle|disc|accent|above|below) #IMPLIED
@@ -562,7 +562,7 @@ Reference< xml::sax::XAttributeList > Style::createElement()
                 OUString( RTL_CONSTASCII_USTRINGPARAM("below") ) );
             break;
         default:
-            OSL_ENSURE( 0, "### unexpected font-emphasismark!" );
+            OSL_FAIL( "### unexpected font-emphasismark!" );
             break;
         }
     }
@@ -626,7 +626,7 @@ void ElementDescriptor::readStringAttr(
         if (a >>= v)
             addAttribute( rAttrName, v );
         else
-            OSL_ENSURE( 0, "### unexpected property type!" );
+            OSL_FAIL( "### unexpected property type!" );
     }
 }
 
@@ -694,7 +694,7 @@ void ElementDescriptor::readDateFormatAttr( OUString const & rPropName, OUString
                 addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("short_YYYYMMDD_DIN5008") ) );
                 break;
             default:
-                OSL_ENSURE( 0, "### unexpected date format!" );
+                OSL_FAIL( "### unexpected date format!" );
                 break;
             }
         }
@@ -729,7 +729,7 @@ void ElementDescriptor::readTimeFormatAttr( OUString const & rPropName, OUString
                 addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("Duration_long") ) );
                 break;
             default:
-                OSL_ENSURE( 0, "### unexpected time format!" );
+                OSL_FAIL( "### unexpected time format!" );
                 break;
             }
         }
@@ -755,7 +755,7 @@ void ElementDescriptor::readAlignAttr( OUString const & rPropName, OUString cons
                 addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("right") ) );
                 break;
             default:
-                OSL_ENSURE( 0, "### illegal alignment value!" );
+                OSL_FAIL( "### illegal alignment value!" );
                 break;
             }
         }
@@ -783,7 +783,7 @@ void ElementDescriptor::readVerticalAlignAttr( OUString const & rPropName, OUStr
                 addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("bottom") ) );
                 break;
             default:
-                OSL_ENSURE( 0, "### illegal vertical alignment value!" );
+                OSL_FAIL( "### illegal vertical alignment value!" );
                 break;
             }
         }
@@ -839,7 +839,7 @@ void ElementDescriptor::readImageAlignAttr( OUString const & rPropName, OUString
                 addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("bottom") ) );
                 break;
             default:
-                OSL_ENSURE( 0, "### illegal image alignment value!" );
+                OSL_FAIL( "### illegal image alignment value!" );
                 break;
             }
         }
@@ -895,7 +895,7 @@ void ElementDescriptor::readImagePositionAttr( OUString const & rPropName, OUStr
                 addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("center") ) );
                 break;
             default:
-                OSL_ENSURE( 0, "### illegal image position value!" );
+                OSL_FAIL( "### illegal image position value!" );
                 break;
             }
         }
@@ -924,7 +924,7 @@ void ElementDescriptor::readButtonTypeAttr( OUString const & rPropName, OUString
                 addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("help") ) );
                 break;
             default:
-                OSL_ENSURE( 0, "### illegal button-type value!" );
+                OSL_FAIL( "### illegal button-type value!" );
                 break;
             }
         }
@@ -947,7 +947,7 @@ void ElementDescriptor::readOrientationAttr( OUString const & rPropName, OUStrin
                 addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("vertical") ) );
                 break;
             default:
-                OSL_ENSURE( 0, "### illegal orientation value!" );
+                OSL_FAIL( "### illegal orientation value!" );
                 break;
             }
         }
@@ -973,7 +973,7 @@ void ElementDescriptor::readLineEndFormatAttr( OUString const & rPropName, OUStr
                 addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("carriage-return-line-feed") ) );
                 break;
             default:
-                OSL_ENSURE( 0, "### illegal line end format value!" );
+                OSL_FAIL( "### illegal line end format value!" );
                 break;
             }
         }
@@ -1066,7 +1066,7 @@ void ElementDescriptor::readSelectionTypeAttr( OUString const & rPropName, OUStr
                     addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("range") ) );
                     break;
                 default:
-                    OSL_ENSURE( 0, "### illegal selection type value!" );
+                    OSL_FAIL( "### illegal selection type value!" );
                     break;
             }
         }
@@ -1114,7 +1114,7 @@ void ElementDescriptor::readDefaults( bool supportPrintable, bool supportVisible
     }
     else
     {
-        OSL_ENSURE( 0, "unexpected property type for \"Enabled\": not bool!" );
+        OSL_FAIL( "unexpected property type for \"Enabled\": not bool!" );
     }
 
     sal_Bool bVisible = sal_True;
@@ -1303,7 +1303,7 @@ void ElementDescriptor::readEvents()
                 }
                 else
                 {
-                    OSL_ENSURE( 0, "### unexpected event type in container!" );
+                    OSL_FAIL( "### unexpected event type in container!" );
                 }
             }
         }

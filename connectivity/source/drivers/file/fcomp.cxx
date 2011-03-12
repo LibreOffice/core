@@ -471,7 +471,7 @@ OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode* pPredicateNode) thr
         }
         catch(Exception &)
         {
-            OSL_ENSURE(0,"OPredicateCompiler::execute_Operand Exception");
+            OSL_FAIL("OPredicateCompiler::execute_Operand Exception");
         }
     }
     else if (SQL_ISRULE(pPredicateNode,parameter))
@@ -778,7 +778,7 @@ OOperand* OPredicateCompiler::executeFunction(OSQLParseNode* pPredicateNode)    
                     pOperator = new OOp_Second();
                     break;
                 default:
-                    OSL_ENSURE(0,"Error in switch!");
+                    OSL_FAIL("Error in switch!");
             }
             break;
         case SQL_TOKEN_CHAR:
@@ -866,7 +866,7 @@ OOperand* OPredicateCompiler::executeFunction(OSQLParseNode* pPredicateNode)    
                         pOperator = new OOp_Week();
                         break;
                     default:
-                        OSL_ENSURE(0,"Error in switch!");
+                        OSL_FAIL("Error in switch!");
                 }
             }
             break;

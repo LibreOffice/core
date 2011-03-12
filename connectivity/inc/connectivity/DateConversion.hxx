@@ -41,52 +41,52 @@ namespace connectivity
     public:
         static sal_Int32 toINT32(const ::com::sun::star::util::Date&)
         {
-            OSL_ENSURE(0,"Please use DBConversion instead!");
+            OSL_FAIL("Please use DBConversion instead!");
             return 0;
         }
         static sal_Int32 toINT32(const ::com::sun::star::util::Time&)
         {
-            OSL_ENSURE(0,"Please use DBConversion instead!");
+            OSL_FAIL("Please use DBConversion instead!");
             return 0;
         }
         static sal_Int64 toINT64(const ::com::sun::star::util::DateTime&)
         {
-            OSL_ENSURE(0,"Please use DBConversion instead!");
+            OSL_FAIL("Please use DBConversion instead!");
             return 0;
         }
         static sal_Int32 getMsFromTime(const ::com::sun::star::util::Time&)
         {
-            OSL_ENSURE(0,"Please use DBConversion instead!");
+            OSL_FAIL("Please use DBConversion instead!");
             return 0;
         }
         static double    toDouble(const ::com::sun::star::util::Date&)
         {
-            OSL_ENSURE(0,"Please use DBConversion instead!");
+            OSL_FAIL("Please use DBConversion instead!");
             return 0;
         }
         static double    toDouble(const ::com::sun::star::util::Time&)
         {
-            OSL_ENSURE(0,"Please use DBConversion instead!");
+            OSL_FAIL("Please use DBConversion instead!");
             return 0;
         }
         static double    toDouble(const ::com::sun::star::util::DateTime&)
         {
-            OSL_ENSURE(0,"Please use DBConversion instead!");
+            OSL_FAIL("Please use DBConversion instead!");
             return 0;
         }
         static ::com::sun::star::util::Date          toDate(double,const ::com::sun::star::util::Date& =::com::sun::star::util::Date(01,01,1900))
         {
-            OSL_ENSURE(0,"Please use DBConversion instead!");
+            OSL_FAIL("Please use DBConversion instead!");
             return ::com::sun::star::util::Date();
         }
         static ::com::sun::star::util::Time          toTime(double)
         {
-            OSL_ENSURE(0,"Please use DBConversion instead!");
+            OSL_FAIL("Please use DBConversion instead!");
             return ::com::sun::star::util::Time();
         }
         static ::com::sun::star::util::DateTime      toDateTime(double,const ::com::sun::star::util::Date& =::com::sun::star::util::Date(01,01,1900))
         {
-            OSL_ENSURE(0,"Please use DBConversion instead!");
+            OSL_FAIL("Please use DBConversion instead!");
             return ::com::sun::star::util::DateTime();
         }
     };

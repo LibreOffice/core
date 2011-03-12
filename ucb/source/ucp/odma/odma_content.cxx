@@ -394,7 +394,7 @@ uno::Any SAL_CALL Content::execute(
                     }
                     catch(uno::Exception&)
                     {
-                        OSL_ENSURE(0,"Exception occurred while creating the file content!");
+                        OSL_FAIL("Exception occurred while creating the file content!");
                     }
                     xDataSink->setInputStream( xIn );
                 }

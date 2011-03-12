@@ -722,7 +722,7 @@ void FormattedFieldElement::endElement()
         }
         catch (util::MalformedNumberFormatException & exc)
         {
-            OSL_ENSURE( 0, "### util::MalformedNumberFormatException occurred!" );
+            OSL_FAIL( "### util::MalformedNumberFormatException occurred!" );
             // rethrow
             throw xml::sax::SAXException( exc.Message, Reference< XInterface >(), Any() );
         }

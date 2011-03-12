@@ -251,7 +251,7 @@ void OSQLAnalyzer::describeParam(::rtl::Reference<OSQLColumns> rParameterColumns
     if (IS_TYPE(OOperandResult,pOperand))
         delete pOperand;
     else
-        OSL_ENSURE(0,"Illegal here!");
+        OSL_FAIL("Illegal here!");
 
     rParameterColumns = aNewParamColumns;
 }

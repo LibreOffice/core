@@ -897,7 +897,7 @@ void BackendImpl::PackageImpl::processPackage_(
                         }
                         catch (Exception &)
                         {
-                            OSL_ENSURE( 0, ::rtl::OUStringToOString(
+                            OSL_FAIL( ::rtl::OUStringToOString(
                                             ::comphelper::anyToString(
                                                 ::cppu::getCaughtException() ),
                                             RTL_TEXTENCODING_UTF8 ).getStr() );
@@ -988,7 +988,7 @@ OUString BackendImpl::PackageImpl::getDescription()
         }
         catch ( css::deployment::DeploymentException& )
         {
-            OSL_ENSURE( 0, ::rtl::OUStringToOString( ::comphelper::anyToString( ::cppu::getCaughtException() ), RTL_TEXTENCODING_UTF8 ).getStr() );
+            OSL_FAIL( ::rtl::OUStringToOString( ::comphelper::anyToString( ::cppu::getCaughtException() ), RTL_TEXTENCODING_UTF8 ).getStr() );
         }
     }
 
@@ -1091,14 +1091,14 @@ void BackendImpl::PackageImpl::exportTo(
         }
         // xxx todo: think about exception specs:
         catch (deployment::DeploymentException &) {
-            OSL_ENSURE( 0, ::rtl::OUStringToOString(
+            OSL_FAIL( ::rtl::OUStringToOString(
                             ::comphelper::anyToString(
                                 ::cppu::getCaughtException() ),
                             RTL_TEXTENCODING_UTF8 ).getStr() );
         }
         catch (lang::IllegalArgumentException & exc) {
             (void) exc;
-            OSL_ENSURE( 0, ::rtl::OUStringToOString(
+            OSL_FAIL( ::rtl::OUStringToOString(
                             exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
         }
 
@@ -1167,7 +1167,7 @@ void BackendImpl::PackageImpl::exportTo(
             makeURL( m_url_expanded, OUSTR("META-INF/manifest.xml") ),
             xCmdEnv, false ) )
         {
-            OSL_ENSURE( 0, "### missing META-INF/manifest.xml file!" );
+            OSL_FAIL( "### missing META-INF/manifest.xml file!" );
             return;
         }
 
@@ -1391,7 +1391,7 @@ void BackendImpl::PackageImpl::scanBundle(
             makeURL( m_url_expanded, OUSTR("META-INF/manifest.xml") ),
             xCmdEnv, false /* no throw */ ))
     {
-        OSL_ENSURE( 0, "### missing META-INF/manifest.xml file!" );
+        OSL_FAIL( "### missing META-INF/manifest.xml file!" );
         return;
     }
 

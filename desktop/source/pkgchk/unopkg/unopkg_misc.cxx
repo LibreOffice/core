@@ -105,7 +105,7 @@ OptionInfo const * getOptionInfo(
             }
         }
     }
-    OSL_ENSURE( 0, ::rtl::OUStringToOString(
+    OSL_FAIL( ::rtl::OUStringToOString(
                     opt, osl_getThreadTextEncoding() ).getStr() );
     return 0;
 }

@@ -89,7 +89,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
         const ::rtl::OUString& /*columnNamePattern*/ ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "ODatabaseMetaData::getColumns" );
-    OSL_ENSURE(0,"Should be overloaded!");
+    OSL_FAIL("Should be overloaded!");
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eColumns );
 }
 

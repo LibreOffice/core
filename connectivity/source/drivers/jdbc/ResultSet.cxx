@@ -865,7 +865,7 @@ void SAL_CALL java_sql_ResultSet::updateObject( sal_Int32 columnIndex, const ::c
 void SAL_CALL java_sql_ResultSet::updateNumericObject( sal_Int32 columnIndex, const ::com::sun::star::uno::Any& x, sal_Int32 scale ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::updateNumericObject" );
-    //  OSL_ENSURE(0,"java_sql_ResultSet::updateNumericObject: NYI");
+    //  OSL_FAIL("java_sql_ResultSet::updateNumericObject: NYI");
     try
     {
         SDBThreadAttach t;

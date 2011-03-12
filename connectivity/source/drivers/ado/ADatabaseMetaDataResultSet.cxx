@@ -763,7 +763,7 @@ void ODatabaseMetaDataResultSet::setFastPropertyValue_NoBroadcast(
             throw Exception();
             break;
         default:
-            OSL_ENSURE(0,"setFastPropertyValue_NoBroadcast: Illegal handle value!");
+            OSL_FAIL("setFastPropertyValue_NoBroadcast: Illegal handle value!");
     }
 }
 // -------------------------------------------------------------------------

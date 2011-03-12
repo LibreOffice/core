@@ -929,7 +929,7 @@ uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker()
             xFilterManager->appendFilter( iPos->first, iPos->second );
         }
         catch (lang::IllegalArgumentException & exc) {
-            OSL_ENSURE( 0, ::rtl::OUStringToOString(
+            OSL_FAIL( ::rtl::OUStringToOString(
                             exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
             (void) exc;
         }
@@ -957,7 +957,7 @@ IMPL_LINK( ExtMgrDialog, HandleCancelBtn, void*, EMPTYARG )
         }
         catch ( uno::RuntimeException & )
         {
-            OSL_ENSURE( 0, "### unexpected RuntimeException!" );
+            OSL_FAIL( "### unexpected RuntimeException!" );
         }
     }
     return 1;
@@ -1372,7 +1372,7 @@ IMPL_LINK( UpdateRequiredDialog, HandleCancelBtn, void*, EMPTYARG )
         }
         catch ( uno::RuntimeException & )
         {
-            OSL_ENSURE( 0, "### unexpected RuntimeException!" );
+            OSL_FAIL( "### unexpected RuntimeException!" );
         }
     }
     return 1;
@@ -1680,7 +1680,7 @@ bool UpdateRequiredDialog::isEnabled( const uno::Reference< deployment::XPackage
     catch ( uno::RuntimeException & ) { throw; }
     catch ( uno::Exception & exc) {
         (void) exc;
-        OSL_ENSURE( 0, ::rtl::OUStringToOString( exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+        OSL_FAIL( ::rtl::OUStringToOString( exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
         bRegistered = false;
     }
 

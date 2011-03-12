@@ -121,7 +121,7 @@ void ODatabaseMetaDataResultSet::setType(MetaDataResultSetType _eType)
         case eBestRowIdentifier:    setBestRowIdentifierMap(); break;
         case eVersionColumns:       setVersionColumnsMap(); break;
         default:
-            OSL_ENSURE(0,"Wrong type!");
+            OSL_FAIL("Wrong type!");
     }
 }
 // -------------------------------------------------------------------------

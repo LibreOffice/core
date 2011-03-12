@@ -589,7 +589,7 @@ sdbcx::TKeyProperties OTableHelper::getKeyProperties(const ::rtl::OUString& _sNa
     }
     else // only a fall back
     {
-        OSL_ENSURE(0,"No key with the given name found");
+        OSL_FAIL("No key with the given name found");
         pKeyProps.reset(new sdbcx::KeyProperties());
     }
 

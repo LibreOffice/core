@@ -1297,7 +1297,7 @@ sal_Bool ExtensionManager::synchronize(
         {
             //We catch the exception, so we can write the lastmodified file
             //so we will no repeat this everytime OOo starts.
-            OSL_ENSURE(0, "Extensions Manager: synchronize");
+            OSL_FAIL("Extensions Manager: synchronize");
         }
         OUString lastSyncBundled(RTL_CONSTASCII_USTRINGPARAM(
                                      "$BUNDLED_EXTENSIONS_USER/lastsynchronized"));
@@ -1455,7 +1455,7 @@ bool singleton_entries(
     }
     catch (registry::InvalidRegistryException & exc) {
         (void) exc; // avoid warnings
-        OSL_ENSURE( 0, ::rtl::OUStringToOString(
+        OSL_FAIL( ::rtl::OUStringToOString(
                         exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
         return false;
     }

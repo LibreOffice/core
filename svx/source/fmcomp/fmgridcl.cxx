@@ -1207,7 +1207,7 @@ void FmGridControl::DeleteSelectedRows()
         }
         catch(const Exception&)
         {
-            OSL_ENSURE(0,"Exception caught while deleting rows!");
+            OSL_FAIL("Exception caught while deleting rows!");
         }
         // An den DatenCursor anpassen
         AdjustDataSource(sal_True);
@@ -2120,7 +2120,7 @@ void FmGridControl::KeyInput( const KeyEvent& rKEvt )
                         }
                         catch(const Exception&)
                         {
-                            OSL_ENSURE(0,"exception occurred while deleting a column");
+                            OSL_FAIL("exception occurred while deleting a column");
                         }
                     }
                 }

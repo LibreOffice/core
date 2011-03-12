@@ -433,7 +433,7 @@ void OTools::ThrowException(OConnection* _pConnection,
         case SQL_ERROR:             break;
 
 
-        case SQL_INVALID_HANDLE:    OSL_ENSURE(0,"SdbODBC3_SetStatus: SQL_INVALID_HANDLE");
+        case SQL_INVALID_HANDLE:    OSL_FAIL("SdbODBC3_SetStatus: SQL_INVALID_HANDLE");
                                     throw SQLException();
     }
 

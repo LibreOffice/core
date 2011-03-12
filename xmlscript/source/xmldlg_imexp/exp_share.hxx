@@ -246,7 +246,7 @@ inline void ElementDescriptor::read(
         if (a >>= v)
             addAttribute( attrName, ::rtl::OUString::valueOf(v) );
         else
-            OSL_ENSURE( 0, "### unexpected property type!" );
+            OSL_FAIL( "### unexpected property type!" );
     }
 }
 

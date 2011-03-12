@@ -985,7 +985,7 @@ long ExtensionBox_Impl::addEntry( const uno::Reference< deployment::XPackage > &
         }
         else if ( !m_bInCheckMode )
         {
-            OSL_ENSURE( 0, "ExtensionBox_Impl::addEntry(): Will not add duplicate entries"  );
+            OSL_FAIL( "ExtensionBox_Impl::addEntry(): Will not add duplicate entries"  );
         }
     }
 

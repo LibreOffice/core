@@ -669,7 +669,7 @@ void Package::processPackage_impl(
             }
         }
         catch (RuntimeException &) {
-            OSL_ENSURE( 0, "### unexpected RuntimeException!" );
+            OSL_FAIL( "### unexpected RuntimeException!" );
             throw;
         }
         catch (CommandFailedException &) {
